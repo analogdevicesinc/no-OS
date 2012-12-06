@@ -59,7 +59,7 @@ int main()
 								 100000000,		//dacSamplingRate
 								 20000,			//rxGain1000
 								 2400000000ull, //rxFrequency
-								 2400000000ull};//rxFrequency
+								 2400000000ull};//txFrequency
     float retGain;
     uint64_t retFreqRx;
     uint64_t retFreqTx;
@@ -109,7 +109,7 @@ int main()
     xil_printf("Actual set Tx frequency: %lld%06lld\n\r", retFreqTx/(uint64_t)1e6, retFreqTx%(uint64_t)1e6);
 
     xil_printf("\n\rSetting up the DDS... \n\r");
-    dds_setup(IICSEL_B0LPC, 45, 45);
+    dds_setup(IICSEL_B0LPC, 5, 5);
     xil_printf("DDS setup complete.\n\r");
 
     xil_printf("\n\rReading data from air... \n\r");
