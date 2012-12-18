@@ -46,10 +46,12 @@
 /*****************************************************************************/
 #include <stdio.h>
 #include <stdint.h>
-#include "platform.h"
+#include "xil_cache.h"
 #include "xcomm.h"
 #include "xparameters.h"
 #include "test.h"
+
+extern void xil_printf(const char *ctrl1, ...);
 
 int main()
 {
@@ -64,7 +66,8 @@ int main()
     uint64_t retFreqRx;
     uint64_t retFreqTx;
 
-    init_platform();
+    Xil_ICacheEnable();
+    Xil_DCacheEnable();
 
     xil_printf("Running XCOMM Test Program\n\r");
 
@@ -122,7 +125,8 @@ int main()
 
     xil_printf("\n\rFinished XCOMM Test Program\n\r");
 
-	cleanup_platform();
+    Xil_DCacheDisable();
+    Xil_ICacheDisable();
 
     return 0;
 }
