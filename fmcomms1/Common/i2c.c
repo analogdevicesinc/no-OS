@@ -49,6 +49,8 @@
 #include "xil_io.h"
 #include "timer.h"
 
+#define AXI_IIC_BASEADDR XPAR_AXI_IIC_0_BASEADDR
+
 /*****************************************************************************/
 /******************* I2C Registers Definitions *******************************/
 /*****************************************************************************/
@@ -93,13 +95,13 @@ void delay_us(uint32_t us_count)
 uint32_t I2C_Init(uint32_t i2cAddr)
 {
 	//disable the I2C core
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x00);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x00);
 	//set the Rx FIFO depth to maximum
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + RX_FIFO_PIRQ), 0x0F);
+	Xil_Out32((AXI_IIC_BASEADDR + RX_FIFO_PIRQ), 0x0F);
 	//reset the I2C core and flush the Tx fifo
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x02);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x02);
 	//enable the I2C core
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x01);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x01);
 
 	return 0;
 }
@@ -121,45 +123,45 @@ uint32_t I2C_Read(uint32_t i2cAddr,
 	uint32_t timeout = I2C_TIMEOUT;
 
 	// Reset tx fifo
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x002);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x002);
 	// Enable iic
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x001);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x001);
 	delay_us(I2C_DELAY);
 
 	if(regAddr != -1)
 	{
 		// Set the slave I2C address
-		Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), (0x100 | (i2cAddr << 1)));
+		Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), (0x100 | (i2cAddr << 1)));
 		// Set the slave register address
-		Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), regAddr);
+		Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), regAddr);
 	}
 
 	// Set the slave I2C address
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), (0x101 | (i2cAddr << 1)));
+	Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), (0x101 | (i2cAddr << 1)));
 	// Start a read transaction
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), 0x200 + rxSize);
+	Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), 0x200 + rxSize);
 
 	// Read data from the I2C slave
 	while(rxCnt < rxSize)
 	{
 		//wait for data to be available in the RxFifo
-		while((Xil_In32(XPAR_AXI_IIC_0_BASEADDR + SR) & 0x00000040) && (timeout--));
+		while((Xil_In32(AXI_IIC_BASEADDR + SR) & 0x00000040) && (timeout--));
 		if(timeout == -1)
 		{
 			//disable the I2C core
-			Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x00);
+			Xil_Out32((AXI_IIC_BASEADDR + CR), 0x00);
 			//set the Rx FIFO depth to maximum
-			Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + RX_FIFO_PIRQ), 0x0F);
+			Xil_Out32((AXI_IIC_BASEADDR + RX_FIFO_PIRQ), 0x0F);
 			//reset the I2C core and flush the Tx fifo
-			Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x02);
+			Xil_Out32((AXI_IIC_BASEADDR + CR), 0x02);
 			//enable the I2C core
-			Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x01);			
+			Xil_Out32((AXI_IIC_BASEADDR + CR), 0x01);			
 			return rxCnt;
 		}
 		timeout = I2C_TIMEOUT;
 
 		//read the data
-		rxBuf[rxCnt] = Xil_In32(XPAR_AXI_IIC_0_BASEADDR + RX_FIFO) & 0xFFFF;
+		rxBuf[rxCnt] = Xil_In32(AXI_IIC_BASEADDR + RX_FIFO) & 0xFFFF;
 
 		//increment the receive counter
 		rxCnt++;
@@ -187,17 +189,17 @@ uint32_t I2C_Write(uint32_t i2cAddr,
 	uint32_t timeout = I2C_TIMEOUT;
 
 	// Reset tx fifo
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x002);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x002);
 	// enable iic
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + CR), 0x001);
+	Xil_Out32((AXI_IIC_BASEADDR + CR), 0x001);
 	delay_us(I2C_DELAY);
 
 	// Set the I2C address
-	Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), (0x100 | (i2cAddr << 1)));
+	Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), (0x100 | (i2cAddr << 1)));
 	if(regAddr != -1)
 	{
 		// Set the slave register address
-		Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), regAddr);
+		Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), regAddr);
 	}
 
 	// Write data to the I2C slave
@@ -205,8 +207,8 @@ uint32_t I2C_Write(uint32_t i2cAddr,
 	{
 		timeout = I2C_TIMEOUT;
 		// put the Tx data into the Tx FIFO
-		Xil_Out32((XPAR_AXI_IIC_0_BASEADDR + TX_FIFO), (txCnt == txSize - 1) ? (0x200 | txBuf[txCnt]) : txBuf[txCnt]);
-		while (((Xil_In32(XPAR_AXI_IIC_0_BASEADDR + SR) & 0x80) == 0x00) && (--timeout));
+		Xil_Out32((AXI_IIC_BASEADDR + TX_FIFO), (txCnt == txSize - 1) ? (0x200 | txBuf[txCnt]) : txBuf[txCnt]);
+		while (((Xil_In32(AXI_IIC_BASEADDR + SR) & 0x80) == 0x00) && (--timeout));
 		txCnt++;
 	}
 	delay_us(I2C_DELAY);
