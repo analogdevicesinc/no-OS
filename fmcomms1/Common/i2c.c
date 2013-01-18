@@ -91,8 +91,8 @@ static uint32_t axi_iic_baseaddr;
 void delay_us(uint32_t us_count)
 {
 #ifdef _XPARAMETERS_PS_H_
-	uint32_t i;
-	for(i = 0; i < us_count*50; i++);
+	volatile uint32_t i;
+	for(i = 0; i < us_count*500; i++);
 #else
 	TIMER0_WAIT(XPAR_AXI_TIMER_0_BASEADDR, us_count*1000);
 #endif
