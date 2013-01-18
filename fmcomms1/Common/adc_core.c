@@ -51,25 +51,40 @@
 /*****************************************************************************/
 /************************ Variables Definitions ******************************/
 /*****************************************************************************/
+static uint32_t adcCoreAxiAddr;
 
 /**************************************************************************//**
-* @brief Reads data from an I2C slave.
+* @brief Initializes the ADC Core.
+*
+* @param fmcPort - Set to 0 for LPC, set to 1 for HPC
+******************************************************************************/
+void ADC_Core_Init(uint32_t fmcPort)
+{
+#ifdef XPAR_AXI_ADC_2C_1_BASEADDR
+	adcCoreAxiAddr = fmcPort == 0 ? XPAR_AXI_ADC_2C_0_BASEADDR : XPAR_AXI_ADC_2C_1_BASEADDR;
+#else
+	adcCoreAxiAddr = XPAR_AXI_ADC_2C_0_BASEADDR;
+#endif
+}
+
+/**************************************************************************//**
+* @brief Reads data from the ADC Core.
 *
 * @param regAddr - Address of the ADC Core register to be read. 
 * @param data    - Buffer to store the register content.
 ******************************************************************************/
 void ADC_Core_Read(uint32_t regAddr, uint32_t *data)
 {
-    *data = Xil_In32(XPAR_AXI_ADC_2C_0_BASEADDR + regAddr);
+    *data = Xil_In32(adcCoreAxiAddr + regAddr);
 }
 
 /**************************************************************************//**
-* @brief Writes data to an I2C slave.
+* @brief Writes data to the ADC Core.
 *
 * @param regAddr - Address of the ADC Core register to be written. 
 * @param data    - Buffer to store the register content to be transmitted.
 ******************************************************************************/
 void ADC_Core_Write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(XPAR_AXI_ADC_2C_0_BASEADDR + regAddr, data);
+	Xil_Out32(adcCoreAxiAddr + regAddr, data);
 }

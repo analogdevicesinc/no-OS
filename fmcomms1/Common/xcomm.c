@@ -173,6 +173,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
         return -1;
 
 	/* Initialize the AD9643 */
+    ADC_Core_Init(pDefInit->fmcPort);
     if(ad9643_setup() < 0)
         return -1;
 

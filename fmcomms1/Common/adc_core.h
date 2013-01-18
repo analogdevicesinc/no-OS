@@ -118,6 +118,8 @@
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 
+/** Initializes the ADC Core */
+void ADC_Core_Init(uint32_t fmcPort);
 /** Reads ADC Core Register. */
 void ADC_Core_Read(uint32_t regAddr, uint32_t *data); 
 /** Writes ADC Core Register. */
