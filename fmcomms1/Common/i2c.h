@@ -49,12 +49,19 @@
 /*****************************************************************************/
 #include <stdint.h>
 
+/* IIC FMC Port selection */
+#define I2C_HPC 0x02
+#define I2C_LPC 0x04
+
+/* I2C Mux address */
+#define I2C_MUX_ADDR    0x74
+
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 
 /** Initializes the communication with the Microblaze I2C peripheral */
-uint32_t I2C_Init(uint32_t i2cAddr); 
+uint32_t I2C_Init(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux);
 /** Reads data from an I2C slave. */
 uint32_t I2C_Read(uint32_t i2cAddr, uint32_t regAddr, 
                   uint32_t rxSize, uint8_t* rxBuf); 

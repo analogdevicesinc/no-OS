@@ -46,6 +46,20 @@
 /*****************************************************************************/
 /******************* Constants ***********************************************/
 /*****************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
+	#define CFAD9122_0_BASEADDR     XPAR_AXI_DAC_4D_2C_0_BASEADDR
+	#define CFAD9643_0_BASEADDR     XPAR_AXI_ADC_2C_0_BASEADDR
+	#define VDMA9122_0_BASEADDR     XPAR_AXI_VDMA_1_BASEADDR
+	#define DMA9643_0_BASEADDR      XPAR_AXI_DMA_1_BASEADDR
+	#define CFAD9122_1_BASEADDR     XPAR_AXI_DAC_4D_2C_0_BASEADDR
+	#define CFAD9643_1_BASEADDR     XPAR_AXI_ADC_2C_0_BASEADDR
+	#define VDMA9122_1_BASEADDR     XPAR_AXI_VDMA_1_BASEADDR
+	#define DMA9643_1_BASEADDR      XPAR_AXI_DMA_1_BASEADDR
+	#define DDR_BASEADDR          	XPAR_DDR_MEM_BASEADDR + 128*1024*1024
+	#define UART_BASEADDR         	XPS_UART1_BASEADDR
+	#define CFFFT_BASEADDR        	DDR_BASEADDR
+	#define DMAFFT_BASEADDR       	DDR_BASEADDR
+#else
 #define CFAD9122_0_BASEADDR   XPAR_AXI_DAC_4D_2C_0_BASEADDR
 #define CFAD9643_0_BASEADDR   XPAR_AXI_ADC_2C_0_BASEADDR
 #define VDMA9122_0_BASEADDR   XPAR_AXI_VDMA_0_BASEADDR
@@ -62,6 +76,7 @@
 #define UART_BASEADDR         XPAR_RS232_UART_1_BASEADDR
 #define CFFFT_BASEADDR        XPAR_AXI_FFT_0_BASEADDR
 #define DMAFFT_BASEADDR       XPAR_AXI_DMA_2_BASEADDR
+#endif
 
 #define IICSEL_B0LPC          0x04
 #define IICSEL_B1HPC          0x02

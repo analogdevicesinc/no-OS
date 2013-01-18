@@ -1,5 +1,5 @@
 #ChipScope Pro Analyzer Project File, Version 3.0
-#Thu Dec 06 12:05:49 EET 2012
+#Fri Jan 18 16:15:11 EET 2013
 device.1.configFileDir=D\:\\AD\\AnalogSVN\\xilinx\\cf_xcomm\\implementation
 device.1.configFilename=download.bit
 device.1.inserterCDCFileDir=D\:\\AD\\AnalogSVN\\xilinx\\cf_xcomm\\implementation
@@ -801,10 +801,10 @@ unit.1.1.1.HEIGHT1=0.55163044
 unit.1.1.1.WIDTH1=0.9573092
 unit.1.1.1.X1=0.042690814
 unit.1.1.1.Y1=0.4035326
-unit.1.1.5.HEIGHT5=0.5964674
-unit.1.1.5.WIDTH5=0.97865456
-unit.1.1.5.X5=0.02457956
-unit.1.1.5.Y5=0.33695653
+unit.1.1.5.HEIGHT5=0.6888587
+unit.1.1.5.WIDTH5=1.0019405
+unit.1.1.5.X5=0.0012936611
+unit.1.1.5.Y5=0.3111413
 unit.1.1.MFBitsA0=1
 unit.1.1.MFBitsB0=0
 unit.1.1.MFCompareA0=0
@@ -846,10 +846,10 @@ unit.1.1.plotBusX=DataPort
 unit.1.1.plotBusY=DataPort
 unit.1.1.plotDataTimeMode=1
 unit.1.1.plotDisplayMode=line
-unit.1.1.plotMaxX=178.0835889570552
-unit.1.1.plotMaxY=4692.0
-unit.1.1.plotMinX=84.72699386503068
-unit.1.1.plotMinY=-4743.0
+unit.1.1.plotMaxX=0.0
+unit.1.1.plotMaxY=0.0
+unit.1.1.plotMinX=0.0
+unit.1.1.plotMinY=0.0
 unit.1.1.plotSelectedBus=3
 unit.1.1.port.-1.b.0.alias=DataPort
 unit.1.1.port.-1.b.0.channellist=0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15

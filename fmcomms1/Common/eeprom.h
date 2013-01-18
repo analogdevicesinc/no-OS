@@ -46,8 +46,11 @@
 
 #include <stdint.h>
 
-#define IICSEL_FRU  0x51
-#define IICSEL_CAL  0x55
+#define IICSEL_FRU_LPC  0x51
+#define IICSEL_CAL_LPC  0x55
+
+#define IICSEL_FRU_HPC  0x50
+#define IICSEL_CAL_HPC  0x54
 
 #define CURRENT_VERSION 0
 #define MAX_SIZE_CAL_EEPROM	254
@@ -93,6 +96,6 @@ int32_t EEPROM_Read(uint8_t i2cAddr, uint8_t eepromAddr,
 int32_t EEPROM_Write(uint8_t i2cAddr, uint8_t eepromAddr, 
                      uint8_t* pData, uint16_t size);
 /** Reads the calibration data from the calibration EEPROM */
-int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t* pSize);
+int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t* pSize, uint32_t fmcPort);
 
 #endif /* __XCOMM_EEPROM_H__ */

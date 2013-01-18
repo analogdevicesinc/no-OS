@@ -59,6 +59,7 @@
 /****** Global variables ******/
 struct fmcomms1_calib_data XCOMM_calData[16];
 uint8_t XCOMM_calDataSize;
+XCOMM_FmcPort XCOMM_boardFmcPort;
 
 /****** XCOMM state structure ******/
 struct stXCOMM_State
@@ -109,6 +110,8 @@ struct stXCOMM_State
 ******************************************************************************/
 int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
 {
+    /* Local variables */
+    uint32_t enableCommMux;
 
     /* Reset the XCOMM state variables */
     int32_t i = 0;
@@ -119,7 +122,22 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     }
 
     /* Initialize the SPI communication */
-    if(SPI_Init() < 0)
+    switch(pDefInit->carrierBoard)
+    {
+        case XILINX_KC705:
+        case XILINX_VC707:
+        case XILINX_ZC702:
+            enableCommMux = 1;
+            break;
+        case DIGILENT_ZED:
+        	pDefInit->fmcPort = FMC_HPC;
+        case XILINX_ML605:
+        default:
+            enableCommMux = 0;
+            break;
+    }
+    XCOMM_boardFmcPort = enableCommMux ? FMC_HPC : pDefInit->fmcPort;
+    if(SPI_Init(pDefInit->fmcPort, enableCommMux) < 0)
     	return -1;
 
     /* Initialize the AD9548 */
@@ -166,7 +184,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
         return -1;
 
     /* Read the calibration data from the EEPROM */
-    if(EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize) < 0)
+    if(EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort) < 0)
         return -1;
 
     return 0;
@@ -220,7 +238,9 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
     /* Read the FRU data */
     if((!XCOMM_State.fruDataValid) || (readMode == XCOMM_ReadMode_FromHW))
     {
-        ret = EEPROM_Read(IICSEL_FRU, 0x00, XCOMM_State.fruData, 255);
+        ret = EEPROM_Read(XCOMM_boardFmcPort == FMC_LPC ?
+        				  IICSEL_FRU_LPC : IICSEL_FRU_HPC,
+        				  0x00, XCOMM_State.fruData, 255);
         if((ret < 0) || (XCOMM_State.fruData[0] != 0x01))
             return ver;
         XCOMM_State.fruDataValid = 1;
@@ -472,7 +492,7 @@ XCOMM_RxIQCorrection XCOMM_GetRxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
 
     if(readMode == XCOMM_ReadMode_FromHW)
     {
-        EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize);
+        EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort);
     }
 
     if(!XCOMM_calDataSize)
@@ -613,7 +633,7 @@ XCOMM_TxIQCorrection XCOMM_GetTxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
 
     if(readMode == XCOMM_ReadMode_FromHW)
     {
-        EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize);
+        EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort);
     }
 
     if(!XCOMM_calDataSize)

@@ -53,23 +53,29 @@
 
 extern void xil_printf(const char *ctrl1, ...);
 
+/* Program main loop. */
 int main()
 {
-    int ret;
-    int mode = 0;
-	XCOMM_DefaultInit defInit = {100000000,		//adcSamplingRate
+    int32_t ret;
+    int32_t mode = 0;
+    float retGain;
+    uint64_t retFreqRx;
+    uint64_t retFreqTx;
+    int32_t fmcSel;
+    XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
+    							 XILINX_ML605,	//carrierBoard
+                                 100000000,		//adcSamplingRate
 								 100000000,		//dacSamplingRate
 								 20000,			//rxGain1000
 								 2400000000ull, //rxFrequency
 								 2400000000ull};//txFrequency
-    float retGain;
-    uint64_t retFreqRx;
-    uint64_t retFreqTx;
 
     Xil_ICacheEnable();
     Xil_DCacheEnable();
 
     xil_printf("Running XCOMM Test Program\n\r");
+
+    fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC : IICSEL_B1HPC);
 
     xil_printf("\n\rInitializing XCOMM Components...\n\r");
     ret = XCOMM_Init(&defInit);
@@ -84,19 +90,18 @@ int main()
 	}
 
     xil_printf("\n\rTesting the ADC communication... \n\r");
-    
     XCOMM_SetAdcTestMode(0x01, XCOMM_AdcChannel_All);
-    adc_capture(IICSEL_B0LPC, 1024, DDR_BASEADDR);
+    adc_capture(fmcSel, 1024, DDR_BASEADDR);
 
 	for (mode = 0x1; mode <= 0x7; mode++)
 	{
 		XCOMM_SetAdcTestMode(mode, XCOMM_AdcChannel_All);
-		adc_test(IICSEL_B0LPC, mode, 0x1);
+		adc_test(fmcSel, mode, 0x1);
 	}
     xil_printf("ADC test complete.\n\r");
 
     xil_printf("\n\rTesting the DAC communication... \n\r");
-    dac_test(IICSEL_B0LPC);
+    dac_test(fmcSel);
     xil_printf("DAC test complete.\n\r");
 
 	xil_printf("\n\rSetting the VGA gain to: %d.%d dB\n\r", (int)defInit.rxGain1000/1000, (int)((defInit.rxGain1000 - (int)(defInit.rxGain1000/1000)*1000)));
@@ -112,14 +117,14 @@ int main()
     xil_printf("Actual set Tx frequency: %lld%06lld\n\r", retFreqTx/(uint64_t)1e6, retFreqTx%(uint64_t)1e6);
 
     xil_printf("\n\rSetting up the DDS... \n\r");
-    dds_setup(IICSEL_B0LPC, 5, 5);
+    dds_setup(fmcSel, 5, 5);
     xil_printf("DDS setup complete.\n\r");
 
     xil_printf("\n\rReading data from air... \n\r");
     XCOMM_SetAdcTestMode(XCOMM_AdcTestMode_Off, XCOMM_AdcChannel_All);
     while(1)
     {
-    	adc_capture(IICSEL_B0LPC, 1024, DDR_BASEADDR);
+    	adc_capture(fmcSel, 1024, DDR_BASEADDR);
     }
     xil_printf("Read data from air complete. \n\r");
 

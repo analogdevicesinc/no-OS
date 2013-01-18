@@ -83,6 +83,23 @@ typedef enum
     XCOMM_ReadMode_FromHW     = 1,
 }XCOMM_ReadMode;
 
+/** FMC Ports Definitions */
+typedef enum
+{
+    FMC_LPC = 0,
+    FMC_HPC
+}XCOMM_FmcPort;
+
+/** Carrier Boards Definitions */
+typedef enum
+{
+    XILINX_ML605 = 0,
+    XILINX_KC705,
+    XILINX_VC707,
+    XILINX_ZC702,
+    DIGILENT_ZED,
+}XCOMM_CarrierBoard;
+
 /** Version Buffer Definitions */
 typedef struct
 {
@@ -118,11 +135,13 @@ typedef XCOMM_TxIQCorrection XCOMM_DacIQCorrection;
 /** XCOMM Default Initialization Structure */
 typedef struct 
 {	
-	uint64_t	adcSamplingRate;
-	uint64_t	dacSamplingRate;
-	int32_t		rxGain1000;
-	uint64_t	rxFrequency;
-	uint64_t	txFrequency;
+	XCOMM_FmcPort       fmcPort;
+    XCOMM_CarrierBoard  carrierBoard;
+    uint64_t	        adcSamplingRate;
+	uint64_t	        dacSamplingRate;
+	int32_t		        rxGain1000;
+	uint64_t	        rxFrequency;
+	uint64_t	        txFrequency;
 }XCOMM_DefaultInit;
 
 /*****************************************************************************/

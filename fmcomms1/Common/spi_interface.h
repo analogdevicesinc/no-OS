@@ -65,7 +65,8 @@ typedef struct _stDevConfig
 /*****************************************************************************/
 /* IIC addresses */
 #define IICSEL_XCOMM         0x20
-#define IICSEL_PIC           0x59
+#define IICSEL_PIC_0         0x59
+#define IICSEL_PIC_1         0x58
 
 /* SPI selections*/
 #define SPI_SEL_AD9122       0x00
@@ -107,7 +108,7 @@ typedef struct _stDevConfig
 /** Reads the PIC firmware version */
 int32_t PIC_ReadFwVersion();
 /** Initializes the communication with the PIC */
-int32_t SPI_Init(); 
+int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux); 
 /** Reads data from the selected device */
 int32_t SPI_Read(uint32_t spiSel, uint32_t regAddr, uint32_t* data); 
 /** Writes data to the selected device */

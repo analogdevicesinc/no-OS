@@ -110,6 +110,11 @@ static const stDevConfig devConfig[] =
     }
 };
 
+/*****************************************************************************/
+/************************ Variables Definitions ******************************/
+/*****************************************************************************/
+static uint32_t picI2cAddr;
+
 /**************************************************************************//**
 * @brief Configures the PIC for the next data transfer with the device
 *
@@ -138,7 +143,7 @@ void PIC_Config(uint32_t spiSel, uint32_t rxCnt, uint8_t csState)
     wrBuf[4] = (devConfig[spiSel].spiCS) & 0xFF;
 
     /* Write data to the PIC */
-    I2C_Write(IICSEL_PIC, -1, wrSize, wrBuf);
+    I2C_Write(picI2cAddr, -1, wrSize, wrBuf);
 }
 
 /**************************************************************************//**
@@ -166,7 +171,7 @@ uint32_t PIC_Write(uint32_t spiSel, uint8_t size, uint32_t data)
     }
 
     /* Write data to the  PIC */
-    return (I2C_Write(IICSEL_PIC, -1, wrSize, wrBuf) - 1);
+    return (I2C_Write(picI2cAddr, -1, wrSize, wrBuf) - 1);
 }
 
 /**************************************************************************//**
@@ -185,7 +190,7 @@ uint32_t PIC_Read(uint32_t spiSel, uint8_t size, uint32_t* data)
     uint8_t rdBuf[8];
 
     /* Read data from the  PIC */
-    rSize = I2C_Read(IICSEL_PIC, -1, size, rdBuf);
+    rSize = I2C_Read(picI2cAddr, -1, size, rdBuf);
     
     /* Build the result from the read data */
     *data = 0;
@@ -209,11 +214,11 @@ int32_t PIC_ReadFwVersion()
 	uint8_t wrBuf[1] = {REV_READ};
 	uint8_t rdBuf[PIC_FW_REV_LEN];
 
-	ret = I2C_Write(IICSEL_PIC, -1, 1, wrBuf);
+	ret = I2C_Write(picI2cAddr, -1, 1, wrBuf);
 	if(ret == 0)
 		return -1;
 
-	ret = I2C_Read(IICSEL_PIC, -1, PIC_FW_REV_LEN, rdBuf);
+	ret = I2C_Read(picI2cAddr, -1, PIC_FW_REV_LEN, rdBuf);
 	if(ret != PIC_FW_REV_LEN)
 		return -1;
 
@@ -233,14 +238,26 @@ int32_t PIC_ReadFwVersion()
 /**************************************************************************//**
 * @brief Initializes the communication with the PIC
 *
+* @param fmcPort - The FMC port on which the daughter board is connected
+* @param enableCommMux - Set to 1 if the carrier board has an I2C multiplexer,
+*                        set to 0 otherwise
+*
 * @return Returns -1 in case of error, 0 for success
 ******************************************************************************/
-int32_t SPI_Init()
+int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux)
 {
-	uint8_t wrBuf[1] = {0x02};
+	uint32_t ret;
+    uint8_t wrBuf[1] = {0x02};
 
-	int ret = I2C_Write(IICSEL_PIC, -1,
-						sizeof(wrBuf)/sizeof(unsigned char), wrBuf);
+    picI2cAddr = (enableCommMux || (fmcPort == 1)) ? 
+                 IICSEL_PIC_1 : IICSEL_PIC_0;
+
+    ret = I2C_Init(picI2cAddr, fmcPort, enableCommMux);
+    if(ret)
+        return -1;
+
+	ret = I2C_Write(picI2cAddr, -1,
+					sizeof(wrBuf)/sizeof(unsigned char), wrBuf);
 
 	return (ret == 0 ? -1 : 0);
 }

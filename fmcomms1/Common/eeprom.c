@@ -93,16 +93,17 @@ int32_t EEPROM_Write(uint8_t i2cAddr, uint8_t eepromAddr,
 * @param pData - Pointer to the buffer where to store the calibration data
 * @param pSize - Pointer to to a variable where to store the number of
 *				 existing calibration records
+* @param fmcPort - Set to 0 for LPC, set to 1 for HPC
 *
 * @return Returns -1 in case of error, 0 for success
 ******************************************************************************/
-int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t *pSize)
+int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t *pSize, uint32_t fmcPort)
 {
     int32_t ret;
     struct fmcomms1_calib_data* pCalData;
 
     *pSize = 0;
-    ret = EEPROM_Read(IICSEL_CAL, 0x00, 
+    ret = EEPROM_Read(fmcPort ? IICSEL_CAL_HPC : IICSEL_CAL_LPC, 0x00,
                       pData, MAX_SIZE_CAL_EEPROM);
     if(ret < 0)
         return ret;

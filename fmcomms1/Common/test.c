@@ -65,7 +65,12 @@ extern void xil_printf(const char *ctrl1, ...);
 ******************************************************************************/
 void delay_ms(uint32_t ms_count)
 {
+#ifdef _XPARAMETERS_PS_H_
+	uint32_t i;
+	for(i = 0; i < ms_count*1000; i++);
+#else
 	TIMER0_WAIT(XPAR_AXI_TIMER_0_BASEADDR, ms_count*1000000);
+#endif
 }
 
 /**************************************************************************//**
@@ -237,8 +242,12 @@ void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 		xil_printf("adc_capture: overflow occured, data may be corrupted\n\r");
 	}
 
+#ifdef _XPARAMETERS_PS_H_
+	Xil_DCacheFlush();
+#else
 	microblaze_flush_dcache();
 	microblaze_invalidate_dcache();
+#endif
 }
 
 /**************************************************************************//**
