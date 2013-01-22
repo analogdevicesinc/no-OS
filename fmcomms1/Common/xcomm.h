@@ -302,7 +302,6 @@ int64_t XCOMM_SetDacSamplingRate(uint64_t rate);
 /*  ** if error, return -1 */
 int64_t XCOMM_GetDacSamplingRate(XCOMM_ReadMode readMode);
 
-
 /** Sets offset and phase correction for I and Q in DAC*/
 /*  ** daciqCorrection: desired correction*/
 /*  ** if success, return IQCorrection struct with offset and phase correction and error set to 0 */
@@ -314,6 +313,11 @@ XCOMM_DacIQCorrection XCOMM_SetDacIqCorrection(XCOMM_DacIQCorrection daciqCorrec
 /*  ** if success, return IQCorrection struct with offset and phase correction and error set to 0 */
 /*  ** if error, return IQCorrection struct with error set to -1 */
 XCOMM_DacIQCorrection XCOMM_GetDacIqCorrection(XCOMM_ReadMode readMode);
+
+/** Calibrates the DAC DCI */
+/*  ** if success, returns 0 */
+/*  ** if error,return -1 */
+int32_t XCOMM_CalibrateDacDci(void);
 
 #endif /* __XCOMM_H__ */
 

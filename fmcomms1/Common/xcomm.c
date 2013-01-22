@@ -936,3 +936,14 @@ XCOMM_DacIQCorrection XCOMM_GetDacIqCorrection(XCOMM_ReadMode readMode)
 
     return XCOMM_State.dacIQCorrection;
 }
+
+/**************************************************************************//**
+* @brief Calibrates the DAC DCI
+*
+* @return If success, returns 0
+* 		  if error,returns -1
+******************************************************************************/
+int32_t XCOMM_CalibrateDacDci(void)
+{
+	return ad9122_dci_calibrate();
+}

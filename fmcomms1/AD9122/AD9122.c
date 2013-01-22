@@ -44,7 +44,59 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "spi_interface.h"
+#include "dac_core.h"
 #include "AD9122.h"
+
+extern void delay_us(uint32_t us_count);
+
+/******************************************************************************/
+/***************************** Local Types and Variables***********************/
+/******************************************************************************/
+struct cf_axi_dds_sed
+{
+	unsigned short i0;
+	unsigned short q0;
+	unsigned short i1;
+	unsigned short q1;
+};
+
+static struct cf_axi_dds_sed dac_sed_pattern[5] =
+{
+	{
+		.i0 = 0x5555,
+		.q0 = 0xAAAA,
+		.i1 = 0xAAAA,
+		.q1 = 0x5555,
+	},
+	{
+		.i0 = 0,
+		.q0 = 0,
+		.i1 = 0xFFFF,
+		.q1 = 0xFFFF,
+	},
+	{
+		.i0 = 0,
+		.q0 = 0,
+		.i1 = 0,
+		.q1 = 0,
+	},
+	{
+		.i0 = 0xFFFF,
+		.q0 = 0xFFFF,
+		.i1 = 0xFFFF,
+		.q1 = 0xFFFF,
+	},
+	{
+		.i0 = 0x1248,
+		.q0 = 0xEDC7,
+		.i1 = 0xEDC7,
+		.q1 = 0x1248,
+	}
+};
+
+#define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
+#define TEST_BIT(bit, val) (((val) & (1 << bit)) != 0)
+#define SET_BIT(bit, val) (val |= (1 << bit))
 
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
@@ -80,6 +132,139 @@ int32_t ad9122_read(uint8_t registerAddress)
     ret = SPI_Read(SPI_SEL_AD9122, regAddr, &registerValue);
 
 	return (ret < 0 ? ret : (int32_t)registerValue);
+}
+
+/***************************************************************************//**
+ * @brief Finds the DCI.
+ *
+ * @return Returns the DCI value
+*******************************************************************************/
+int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
+{
+	int32_t dci, cnt, start, max_start, max_cnt;
+	//int8_t str[33];
+	int32_t ret;
+
+	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
+		dci < entries; dci++)
+	{
+		if (TEST_BIT(dci, *err_field) == 0)
+		{
+			if (start == -1)
+				start = dci;
+			cnt++;
+			//str[dci] = 'o';
+		}
+		else
+		{
+			if (cnt > max_cnt)
+			{
+				max_cnt = cnt;
+				max_start = start;
+			}
+			start = -1;
+			cnt = 0;
+			//str[dci] = '-';
+		}
+	}
+	//str[dci] = 0;
+
+	if (cnt > max_cnt)
+	{
+		max_cnt = cnt;
+		max_start = start;
+	}
+
+	ret = max_start + ((max_cnt - 1) / 2);
+
+	//str[ret] = '|';
+
+	//xil_printf("%s DCI %d\n",str, ret);
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Calibrates the AD9122 DCI.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int32_t ad9122_dci_calibrate()
+{
+	unsigned reg, err_mask;
+	int i = 0, dci;
+	unsigned long err_bfield = 0;
+
+	for (dci = 0; dci < 4; dci++)
+	{
+		ad9122_write(AD9122_REG_DCI_DELAY, dci);
+		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++)
+		{
+			ad9122_write(AD9122_REG_SED_CTRL, 0);
+
+			DAC_Core_Write(CF_AXI_DDS_PAT_DATA1,
+				  (dac_sed_pattern[i].i1 << 16) |
+				  dac_sed_pattern[i].i0);
+			DAC_Core_Write(CF_AXI_DDS_PAT_DATA2,
+				  (dac_sed_pattern[i].q1 << 16) |
+				  dac_sed_pattern[i].q0);
+
+			DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
+			DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+				 CF_AXI_DDS_CTRL_PATTERN_EN);
+			DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+				 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
+
+			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
+						 dac_sed_pattern[i].i0 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_I0_MSBS,
+						 dac_sed_pattern[i].i0 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_Q0_LSBS,
+						 dac_sed_pattern[i].q0 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_Q0_MSBS,
+						 dac_sed_pattern[i].q0 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_I1_LSBS,
+						 dac_sed_pattern[i].i1 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_I1_MSBS,
+						 dac_sed_pattern[i].i1 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_Q1_LSBS,
+						 dac_sed_pattern[i].q1 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_Q1_MSBS,
+						 dac_sed_pattern[i].q1 >> 8);
+
+
+			ad9122_write(AD9122_REG_SED_CTRL,
+				    	 AD9122_SED_CTRL_SED_COMPARE_EN);
+
+			ad9122_write(AD9122_REG_EVENT_FLAG_2,
+						 AD9122_EVENT_FLAG_2_AED_COMPARE_PASS |
+						 AD9122_EVENT_FLAG_2_AED_COMPARE_FAIL |
+						 AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
+
+			ad9122_write(AD9122_REG_SED_CTRL,
+				    	 AD9122_SED_CTRL_SED_COMPARE_EN);
+
+			delay_us(1000);
+			reg = ad9122_read(AD9122_REG_SED_CTRL);
+			err_mask = ad9122_read(AD9122_REG_SED_I_LSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_I_MSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_Q_LSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_Q_MSBS);
+
+			if (err_mask || (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED))
+				SET_BIT(dci, err_bfield);
+		}
+	}
+
+	ad9122_write(AD9122_REG_DCI_DELAY,
+				 ad9122_find_dci(&err_bfield, 4));
+	ad9122_write(AD9122_REG_SED_CTRL, 0);
+	DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -151,7 +336,7 @@ int32_t ad9122_setup()
 	if(!timeout)
 		return -1;
 
-	return 0;
+	return ad9122_dci_calibrate();
 }
 
 /***************************************************************************//**

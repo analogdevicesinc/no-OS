@@ -329,6 +329,9 @@ int32_t ad9122_setup();
 /** Resets the device. */
 int32_t ad9122_reset();
 
+/** Calibrates the AD9122 DCI.*/
+int32_t ad9122_dci_calibrate();
+
 /** Sets the power state of the I DAC. */
 /*  ** Returns the set power state. */
 int32_t ad9122_powerdown_I_DAC(int32_t pd);
