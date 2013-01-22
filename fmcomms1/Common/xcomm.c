@@ -54,6 +54,7 @@
 #include "eeprom.h"
 #include "spi_interface.h"
 #include "adc_core.h"
+#include "dac_core.h"
 #include "xcomm.h"
 
 /****** Global variables ******/
@@ -169,6 +170,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
         return -1;
     
 	/* Initialize the AD9122 */
+    DAC_Core_Init(pDefInit->fmcPort);
     if(ad9122_setup() < 0)
         return -1;
 
