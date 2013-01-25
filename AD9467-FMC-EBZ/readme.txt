@@ -1,0 +1,1 @@
+The AD9467-FMC-EBZ reference design requires the AD9467 and AD9517 drivers.
