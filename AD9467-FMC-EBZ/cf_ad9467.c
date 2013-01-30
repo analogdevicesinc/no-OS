@@ -51,6 +51,11 @@ extern char inbyte(void);
 void Xil_DCacheFlush(void);
 void xil_printf(const char *ctrl1, ...);
 
+/*****************************************************************************/
+/************************ Private Functions Prototypes ***********************/
+/*****************************************************************************/
+void DisplayTestMode(u32 mode, u32 format);
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -212,7 +217,6 @@ u32 adc_delay(void)
 		return(1);
 	}
 	delay = startdelay + ((stopdelay - startdelay)/2);
-	xil_printf("adc_setup: setting zero error delay (%d)\n\r", delay);
 	adc_delay_1(delay);
 
 	return(0);
@@ -243,19 +247,19 @@ void adc_test(u32 mode, u32 format)
 {
 	u32 n;
 	u32 rdata;
-	u32 edata;
-	edata = 0;
+	u32 edata = 0;
+	u32 error = 0;
 
 	ad9467_output_format(format);
 	ad9467_test_mode(mode);
 	ad9467_transfer();
 	adc_capture(16, DDR_BASEADDR);
-	xil_printf("adc_test(): mode(%2d), format(%2d)\n\r", mode, format);
-	if ((mode == 0x5) || (mode == 0x6))
+	DisplayTestMode(mode, format);
+	if ((mode == PN_23_SEQUENCE) || (mode == PN_9_SEQUENCE))
 	{
-		if (format == 0x1) return;
+		if (format == TWOS_COMPLEMENT) return;
 		Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE),
-				  ((mode == 0x5) ? 0x01 : 0x00));
+				  ((mode == PN_23_SEQUENCE) ? 0x01 : 0x00));
 		delay_ms(10);
 		Xil_Out32((CF_BASEADDR + CF_REG_DATA_MONITOR),
 				   CF_DATA_MONITOR_PN_ERR |
@@ -275,25 +279,30 @@ void adc_test(u32 mode, u32 format)
 	for (n = 0; n < 32; n++)
 	{
 		rdata = Xil_In32(DDR_BASEADDR+(n*4));
-		if ((mode == 0x1) && (format == 0)) edata = 0x80008000;
-		if ((mode == 0x2) && (format == 0)) edata = 0xffffffff;
-		if ((mode == 0x3) && (format == 0)) edata = 0x00000000;
-		if ((mode == 0x1) && (format == 1)) edata = 0x00000000;
-		if ((mode == 0x2) && (format == 1)) edata = 0x7fff7fff;
-		if ((mode == 0x3) && (format == 1)) edata = 0x80008000;
-		if (((mode == 0x4) || (mode == 0x7)) && (n == 0))
+		if ((mode == MIDSCALE) && (format == OFFSET_BINARY)) edata = 0x80008000;
+		if ((mode == POS_FULLSCALE) && (format == OFFSET_BINARY)) edata = 0xffffffff;
+		if ((mode == NEG_FULLSCALE) && (format == OFFSET_BINARY)) edata = 0x00000000;
+		if ((mode == MIDSCALE) && (format == TWOS_COMPLEMENT)) edata = 0x00000000;
+		if ((mode == POS_FULLSCALE) && (format == TWOS_COMPLEMENT)) edata = 0x7fff7fff;
+		if ((mode == NEG_FULLSCALE) && (format == TWOS_COMPLEMENT)) edata = 0x80008000;
+		if (((mode == CHECKERBOARD) || (mode == ONE_ZERO_TOGGLE)) && (n == 0))
 		{
 			edata = (rdata & 0xffff);
 		}
-		if ((mode == 0x4) && (n == 0))
+		if ((mode == CHECKERBOARD) && (n == 0))
 			edata = (edata == 0xaaaa) ? 0x5555aaaa : 0xaaaa5555;
-		if ((mode == 0x7) && (n == 0))
+		if ((mode == ONE_ZERO_TOGGLE) && (n == 0))
 			edata = (edata == 0xffff) ? 0x0000ffff : 0xffff0000;
 		if (rdata != edata)
 		{
 			xil_printf("  ERROR[%2d]: rcv(%08x), exp(%08x)\n\r", n, rdata,
 					   edata);
+			error = 1;
 		}
+	}
+	if(error == 0)
+	{
+		xil_printf("          Test passed\r\n");
 	}
 }
 
@@ -315,17 +324,16 @@ void adc_setup(u32 dco_delay)
 	Xil_Out32((CF_BASEADDR + CF_REG_DELAY_CTRL), CF_DELAY_CTRL_SEL(1) |			// delay write
 											   CF_DELAY_CTRL_WR_ADDR(0xF) |
 											   CF_DELAY_CTRL_WR_DATA(0x1F));
-	ad9467_test_mode(5);			// Select PN 23 sequence test mode
-	ad9467_output_format(0);		// Select output format as offset binary
-	ad9467_transfer();				// Synchronously update registers
+	ad9467_test_mode(PN_23_SEQUENCE);		// Select PN 23 sequence test mode
+	ad9467_output_format(OFFSET_BINARY);	// Select output format as offset binary
+	ad9467_transfer();				  		// Synchronously update registers
 	Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE), CF_PN_TYPE_BIT(1));
-	ad9467_dco_clock_invert(0);		// Activates the non-inverted DCO clock
-	ad9467_transfer();				// Synchronously update registers
-	xil_printf("AD9467[REG_OUT_PHASE]: %02x\n\r", ad9467_dco_clock_invert(-1));	// reads the dco clock invert bit state
+	ad9467_dco_clock_invert(0);		  		// Activates the non-inverted DCO clock
+	ad9467_transfer();				  		// Synchronously update registers
 	delay_ms(10);
 	if (adc_delay())
 	{
-		ad9467_dco_clock_invert(1);		// Activates the inverted DCO clock
+		ad9467_dco_clock_invert(1); 	// Activates the inverted DCO clock
 		ad9467_transfer();				// Synchronously update registers
 		xil_printf("AD9467[REG_OUT_PHASE]: %02x\n\r",
 					ad9467_dco_clock_invert(-1));	 // reads the dco clock invert bit state
@@ -336,4 +344,57 @@ void adc_setup(u32 dco_delay)
 			adc_delay_1(0);
 		}
 	}
+}
+
+void DisplayTestMode(u32 mode, u32 format)
+{
+	char *sMode;
+	char *sFormat;
+
+	switch(format)
+	{
+		case OFFSET_BINARY:
+			sFormat = "OFFSET BINARY";
+			break;
+		case TWOS_COMPLEMENT:
+			sFormat = "TWOS_COMPLEMENT";
+			break;
+		case GRAY_CODE:
+			sFormat = "GRAY_CODE";
+			break;
+		default:
+			sFormat = "";
+			break;
+	}
+	switch(mode)
+		{
+			case TEST_DISABLE:
+				sMode = "TEST_DISABLE BINARY";
+				break;
+			case MIDSCALE:
+				sMode = "MIDSCALE";
+				break;
+			case POS_FULLSCALE:
+				sMode = "POS_FULLSCALE";
+				break;
+			case NEG_FULLSCALE:
+				sMode = "NEG_FULLSCALE BINARY";
+				break;
+			case CHECKERBOARD:
+				sMode = "CHECKERBOARD";
+				break;
+			case PN_23_SEQUENCE:
+				sMode = "PN_23_SEQUENCE";
+				break;
+			case PN_9_SEQUENCE:
+				sMode = "PN_9_SEQUENCE";
+				break;
+			case ONE_ZERO_TOGGLE:
+				sMode = "ONE_ZERO_TOGGLE";
+				break;
+			default:
+				sMode = "";
+				break;
+		}
+	xil_printf("ADC Test: mode - %s\r\n          format - %s\n\r", sMode, sFormat);
 }

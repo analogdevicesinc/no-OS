@@ -99,6 +99,30 @@
 /* CF_REG_DATA_SELECT bit definition. */
 #define CF_DATA_SELECT_BIT(x)		(((x) & 0x1) << 0)
 
+/******************************************************************************/
+/************************** Types Declarations ********************************/
+/******************************************************************************/
+typedef enum _TestModes
+{
+	TEST_DISABLE = 0,
+	MIDSCALE,
+	POS_FULLSCALE,
+	NEG_FULLSCALE,
+	CHECKERBOARD,
+	PN_23_SEQUENCE,
+	PN_9_SEQUENCE,
+	ONE_ZERO_TOGGLE
+
+}typeTestModes;
+
+typedef enum _OutputModes
+{
+	OFFSET_BINARY = 0,
+	TWOS_COMPLEMENT,
+	GRAY_CODE,
+
+}typeOutputModes;
+
 /*******************************************************************************/
 /************************ Functions Declarations *******************************/
 /*******************************************************************************/

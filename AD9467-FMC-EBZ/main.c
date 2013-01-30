@@ -73,19 +73,22 @@ int main(){
 	ad9517_update();							// Update registers
 
 	/* Read the device ID for AD9467 and AD9517. */
-	xil_printf("AD9467[REG_CHIP_ID]: %02x\n\r",
+	xil_printf("\n\r********************************************************************\r\n");
+	xil_printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
+	xil_printf("  AD9467 CHIP ID: 0x%02x\n\r",
 			   ad9467_read(AD9467_REG_CHIP_ID));
-	xil_printf("AD9467[REG_CHIP_GRADE]: %02x\n\r",
+	xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r",
 			    ad9467_read(AD9467_REG_CHIP_GRADE));
-	xil_printf("AD9517[REG_PART_ID]: %02x\n\r",
+	xil_printf("  AD9517 CHIP ID: 0x%02x",
 			    ad9517_read(AD9517_REG_PART_ID));
+	xil_printf("\n\r********************************************************************\r\n");
 
 	/* AD9467 test. */
 	adc_setup(0);
-	for (mode = 0x01; mode <= 0x07; mode++)		// Data pattern checks
+	for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++)		// Data pattern checks
 	{
-		adc_test(mode, 0x0);    // Data format is offset binary
-		adc_test(mode, 0x1);    // Data format is twos complement
+		adc_test(mode, OFFSET_BINARY);     // Data format is offset binary
+		adc_test(mode, TWOS_COMPLEMENT);   // Data format is twos complement
 	}
 	ad9467_output_invert(0);    // Output invert Off
 	ad9467_output_format(0);    // Offset binary
@@ -94,7 +97,7 @@ int main(){
 	ad9467_test_mode(0);        // Test mode Off
 	ad9467_transfer();          // Synchronously update registers
 
-	xil_printf("done\n\r");
+	xil_printf("Done\n\r");
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
