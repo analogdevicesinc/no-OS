@@ -256,7 +256,7 @@ int64_t adf4351_set_freq(struct adf4351_state *st, uint64_t freq,
 		(pdata->r2_user_settings & (ADF4351_REG2_PD_POLARITY_POS |
 		ADF4351_REG2_LDP_6ns | ADF4351_REG2_LDF_INT_N |
 		ADF4351_REG2_CHARGE_PUMP_CURR_uA(5000) |
-		ADF4351_REG2_MUXOUT(0x7) | ADF4351_REG2_NOISE_MODE(0x9)));
+		ADF4351_REG2_MUXOUT(0x7) | ADF4351_REG2_NOISE_MODE(0x3)));
 
 	st->regs[ADF4351_REG3] = pdata->r3_user_settings &
 				 (ADF4351_REG3_12BIT_CLKDIV(0xFFF) |
