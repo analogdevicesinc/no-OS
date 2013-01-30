@@ -45,24 +45,23 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include "AD9517.h"
+//#include "AD9517.h"
 
-struct ad9517_platform_data ad9517_pdata_lpc = 
+struct ad9517_platform_data ad9517_pdata_lpc =
 {
 	/* PLL Reference */
 	250000000, // ref_1_freq
 	250000000, // ref_2_freq
 	1, // diff_ref_en
-	0, // ref_1_power_on
-	0, // ref_2_power_on
+	1, // ref_1_power_on
+	1, // ref_2_power_on
 	0, // ref_sel_pin_en
 	1, // ref_sel_pin
 	0, // ref_2_en
 
 	250000000, // ext_clk_freq
-	1800000000, // int_vco_freq
+	1600000000, // int_vco_freq
 	0, // vco_clk_sel
-	0, // vco_divider_input
 	0, // power_down_vco_clk
 	"ad9517-lpc" // name[16]
 };
@@ -117,7 +116,7 @@ struct ad9517_lvds_cmos_channel_spec ad9517_lvds_cmos_channels[] =
 		6,			// channel_num - Output channel number.
 		0,			// out_invert
 		LVDS,		// logic_level - Select LVDS or CMOS logic levels.
-		0,			// cmos_b_en - In CMOS mode, turn on/off the CMOS B output.
+		1,			// cmos_b_en - In CMOS mode, turn on/off the CMOS B output.
 		LVDS_3_5mA,	// out_lvds_current - LVDS output current level.
 		"CH6"		// name[16] - Optional descriptive channel name.
 	},
