@@ -43,14 +43,14 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "spi.h"
 #include "AD9467.h"
+#include "spi.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-int32_t spiBaseAddress;
-int32_t spiSlaveSelect;
+ static int32_t spiBaseAddress = 0;
+ static int32_t spiSlaveSelect = 0;
 
 /***************************************************************************//**
  * @brief Configures the test mode and the output mode to a default state.
@@ -114,7 +114,8 @@ int32_t ad9467_write(uint16_t regAddr, uint8_t regVal)
 	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
 	write_buffer[2] = regVal;
 
-	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 0, NULL, 1);
+	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 0, NULL, 
+			spiSlaveSelect);
 
     return ret;
 }
@@ -138,7 +139,8 @@ int32_t ad9467_read(uint16_t regAddr)
 	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
 	write_buffer[2] = 0;
 
-	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 3, (char*)read_buffer, 1);
+	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 3, (char*)read_buffer, 
+			spiSlaveSelect);
 	if(ret < 0)
 	{
 		return ret;
