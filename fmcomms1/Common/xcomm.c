@@ -849,7 +849,10 @@ int32_t XCOMM_IsAdcDcoLocked(void)
 ******************************************************************************/
 int64_t XCOMM_SetDacSamplingRate(uint64_t rate)
 {
-    int64_t sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(rate);
+    int64_t sampleRate;
+
+    ad9523_out_altvoltage_DAC_DCO_CLK_frequency(rate);
+    sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(rate);
 
     if(sampleRate < 0)
         return -1;
