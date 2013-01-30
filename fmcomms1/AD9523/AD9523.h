@@ -470,53 +470,53 @@ int32_t ad9523_setup();
 /** Resets the device. */
 int32_t ad9523_reset();
 /** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage0_ZD_OUTPUT_frequency(int64_t Hz);
+int64_t ad9523_out_altvoltage_ZD_OUTPUT_frequency(int64_t Hz);
 /** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage0_ZD_OUTPUT_phase(int64_t rad);
+int64_t ad9523_out_altvoltage_ZD_OUTPUT_phase(int64_t rad);
 /** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage0_ZD_OUTPUT_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage1_DAC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage1_DAC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage1_DAC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage2_ADC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage2_ADC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage2_ADC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_raw(int64_t raw_data);
+int64_t ad9523_out_altvoltage_ZD_OUTPUT_raw(int64_t raw_data);
+/** Sets the output frequency for channel 12. */
+int64_t ad9523_out_altvoltage_DAC_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 12. */
+int64_t ad9523_out_altvoltage_DAC_CLK_phase(int64_t rad);
+/** Powers down / enables channel 12. */
+int64_t ad9523_out_altvoltage_DAC_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 2. */
+int64_t ad9523_out_altvoltage_ADC_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 2. */
+int64_t ad9523_out_altvoltage_ADC_CLK_phase(int64_t rad);
+/** Powers down / enables channel 2. */
+int64_t ad9523_out_altvoltage_ADC_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 10. */
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 10. */
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_phase(int64_t rad);
+/** Powers down / enables channel 10. */
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 5. */
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 5. */
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_phase(int64_t rad);
+/** Powers down / enables channel 5. */
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 6. */
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 6. */
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_phase(int64_t rad);
+/** Powers down / enables channel 6. */
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 7. */
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 7. */
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_phase(int64_t rad);
+/** Powers down / enables channel 7. */
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_raw(int64_t raw_data);
+/** Sets the output frequency for channel 9. */
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_frequency(int64_t Hz);
+/** Sets the phase for channel 9. */
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_phase(int64_t rad);
+/** Powers down / enables channel 9. */
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_raw(int64_t raw_data);
 /** Returns the state of the PLL2 feedback clock */
 int32_t ad9523_pll2_feedback_clk_present();
 /** Returns the state of the PLL2 reference clock */

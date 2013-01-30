@@ -693,7 +693,7 @@ XCOMM_TxIQCorrection XCOMM_GetTxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
 ******************************************************************************/
 int64_t XCOMM_SetAdcSamplingRate(uint64_t rate)
 {
-    int64_t sampleRate = ad9523_out_altvoltage2_ADC_CLK_frequency(rate);
+    int64_t sampleRate = ad9523_out_altvoltage_ADC_CLK_frequency(rate);
 
     if(sampleRate < 0)
         return -1;
@@ -718,7 +718,7 @@ int64_t XCOMM_GetAdcSamplingRate(XCOMM_ReadMode readMode)
 
     if(readMode == XCOMM_ReadMode_FromHW)
     {
-        sampleRate = ad9523_out_altvoltage2_ADC_CLK_frequency(INT64_MAX);
+        sampleRate = ad9523_out_altvoltage_ADC_CLK_frequency(INT64_MAX);
         if(sampleRate < 0)
             return -1;
         
@@ -849,7 +849,7 @@ int32_t XCOMM_IsAdcDcoLocked(void)
 ******************************************************************************/
 int64_t XCOMM_SetDacSamplingRate(uint64_t rate)
 {
-    int64_t sampleRate = ad9523_out_altvoltage1_DAC_CLK_frequency(rate);
+    int64_t sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(rate);
 
     if(sampleRate < 0)
         return -1;
@@ -874,7 +874,7 @@ int64_t XCOMM_GetDacSamplingRate(XCOMM_ReadMode readMode)
     
     if(readMode == XCOMM_ReadMode_FromHW)
     {
-		sampleRate = ad9523_out_altvoltage1_DAC_CLK_frequency(INT64_MAX);
+		sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(INT64_MAX);
 		if(sampleRate < 0)
 			return -1;
 

@@ -588,7 +588,7 @@ int32_t ad9523_status(int32_t status_bit)
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t AD9523_out_altvoltage0_ZD_OUTPUT_frequency(int64_t Hz)
+int64_t AD9523_out_altvoltage_ZD_OUTPUT_frequency(int64_t Hz)
 {
     return ad9523_out_frequency(0, Hz);
 }
@@ -600,7 +600,7 @@ int64_t AD9523_out_altvoltage0_ZD_OUTPUT_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage0_ZD_OUTPUT_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_ZD_OUTPUT_phase(int64_t rad)
 {
 	return ad9523_out_phase(0, rad);
 }
@@ -613,46 +613,46 @@ int64_t ad9523_out_altvoltage0_ZD_OUTPUT_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage0_ZD_OUTPUT_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_ZD_OUTPUT_raw(int64_t raw_data)
 {
     return ad9523_out_raw(0, raw_data);
 }
 
 /***************************************************************************//**
- * @brief Sets the output frequency for channel 1.
+ * @brief Sets the output frequency for channel 12.
  *
  * @param Hz - The output frequency for the selected channel.
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage1_DAC_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_DAC_CLK_frequency(int64_t Hz)
 {
-    return ad9523_out_frequency(1, Hz);
+    return ad9523_out_frequency(12, Hz);
 }
 
 /***************************************************************************//**
- * @brief Sets the phase for channel 1.
+ * @brief Sets the phase for channel 12.
  *
  * @param rad - The phase for the selected channel.
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage1_DAC_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_DAC_CLK_phase(int64_t rad)
 {
-	return ad9523_out_phase(1, rad);
+	return ad9523_out_phase(12, rad);
 }
 
 /***************************************************************************//**
- * @brief Powers down / enables channel 1.
+ * @brief Powers down / enables channel 12.
  *
  * @param data - '0' powers down channel 0, while any value > 0 enables the
  *				 channel.
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage1_DAC_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_DAC_CLK_raw(int64_t raw_data)
 {
-    return ad9523_out_raw(1, raw_data);
+    return ad9523_out_raw(12, raw_data);
 }
 
 /***************************************************************************//**
@@ -662,7 +662,7 @@ int64_t ad9523_out_altvoltage1_DAC_CLK_raw(int64_t raw_data)
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage2_ADC_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_ADC_CLK_frequency(int64_t Hz)
 {
     return ad9523_out_frequency(2, Hz);
 }
@@ -674,7 +674,7 @@ int64_t ad9523_out_altvoltage2_ADC_CLK_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage2_ADC_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_ADC_CLK_phase(int64_t rad)
 {
 	return ad9523_out_phase(2, rad);
 }
@@ -687,46 +687,46 @@ int64_t ad9523_out_altvoltage2_ADC_CLK_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage2_ADC_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_ADC_CLK_raw(int64_t raw_data)
 {
     return ad9523_out_raw(2, raw_data);
 }
 
 /***************************************************************************//**
- * @brief Sets the output frequency for channel 4.
+ * @brief Sets the output frequency for channel 10.
  *
  * @param Hz - The output frequency for the selected channel.
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_frequency(int64_t Hz)
 {
-    return ad9523_out_frequency(4, Hz);
+    return ad9523_out_frequency(10, Hz);
 }
 
 /***************************************************************************//**
- * @brief Sets the phase for channel 4.
+ * @brief Sets the phase for channel 10.
  *
  * @param rad - The phase for the selected channel.
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_phase(int64_t rad)
 {
-	return ad9523_out_phase(4, rad);
+	return ad9523_out_phase(10, rad);
 }
 
 /***************************************************************************//**
- * @brief Powers down / enables channel 4.
+ * @brief Powers down / enables channel 10.
  *
  * @param data - '0' powers down channel 0, while any value > 0 enables the
  *				 channel.
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage4_DAC_REF_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_DAC_REF_CLK_raw(int64_t raw_data)
 {
-    return ad9523_out_raw(4, raw_data);
+    return ad9523_out_raw(10, raw_data);
 }
 
 /***************************************************************************//**
@@ -736,7 +736,7 @@ int64_t ad9523_out_altvoltage4_DAC_REF_CLK_raw(int64_t raw_data)
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_frequency(int64_t Hz)
 {
     return ad9523_out_frequency(5, Hz);
 }
@@ -748,7 +748,7 @@ int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_phase(int64_t rad)
 {
 	return ad9523_out_phase(5, rad);
 }
@@ -761,7 +761,7 @@ int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_raw(int64_t raw_data)
 {
     return ad9523_out_raw(5, raw_data);
 }
@@ -773,7 +773,7 @@ int64_t ad9523_out_altvoltage5_TX_LO_REF_CLK_raw(int64_t raw_data)
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_frequency(int64_t Hz)
 {
     return ad9523_out_frequency(6, Hz);
 }
@@ -785,7 +785,7 @@ int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_phase(int64_t rad)
 {
 	return ad9523_out_phase(6, rad);
 }
@@ -798,21 +798,21 @@ int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage6_DAC_DCO_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_DAC_DCO_CLK_raw(int64_t raw_data)
 {
     return ad9523_out_raw(6, raw_data);
 }
 
 /***************************************************************************//**
- * @brief Sets the output frequency for channel 8.
+ * @brief Sets the output frequency for channel 7.
  *
  * @param Hz - The output frequency for the selected channel.
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_frequency(int64_t Hz)
 {
-    return ad9523_out_frequency(8, Hz);
+    return ad9523_out_frequency(7, Hz);
 }
 
 /***************************************************************************//**
@@ -822,9 +822,9 @@ int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_phase(int64_t rad)
 {
-	return ad9523_out_phase(8, rad);
+	return ad9523_out_phase(7, rad);
 }
 
 /***************************************************************************//**
@@ -835,9 +835,9 @@ int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_raw(int64_t raw_data)
 {
-    return ad9523_out_raw(8, raw_data);
+    return ad9523_out_raw(7, raw_data);
 }
 
 /***************************************************************************//**
@@ -847,7 +847,7 @@ int64_t ad9523_out_altvoltage8_ADC_SYNC_CLK_raw(int64_t raw_data)
  *
  * @return Returns negative error code, or the actual frequency in Hz.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_frequency(int64_t Hz)
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_frequency(int64_t Hz)
 {
     return ad9523_out_frequency(9, Hz);
 }
@@ -859,7 +859,7 @@ int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_frequency(int64_t Hz)
  *
  * @return Returns negative error code, or the actual phase in rad. 
 *******************************************************************************/
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_phase(int64_t rad)
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_phase(int64_t rad)
 {
 	return ad9523_out_phase(9, rad);
 }
@@ -872,7 +872,7 @@ int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_phase(int64_t rad)
  *
  * @return Returns the channel power status.
 *******************************************************************************/
-int64_t ad9523_out_altvoltage9_RX_LO_REF_CLK_raw(int64_t raw_data)
+int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_raw(int64_t raw_data)
 {
     return ad9523_out_raw(9, raw_data);
 }
