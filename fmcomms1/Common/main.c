@@ -65,7 +65,7 @@ int main()
     XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
     							 XILINX_ML605,	//carrierBoard
                                  100000000,		//adcSamplingRate
-								 100000000,		//dacSamplingRate
+								 400000000,		//dacSamplingRate
 								 20000,			//rxGain1000
 								 2400000000ull, //rxFrequency
 								 2400000000ull};//txFrequency
