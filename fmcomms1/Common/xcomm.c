@@ -149,12 +149,6 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     if(ad9523_setup() < 0)
         return -1;
 
-    if(XCOMM_SetAdcSamplingRate(pDefInit->adcSamplingRate) < 0)
-        return -1;
-
-    if(XCOMM_SetDacSamplingRate(pDefInit->dacSamplingRate) < 0)
-        return -1;
-	
 	/* Initialize the Rx ADF4351 */
     if(adf4351_setup(ADF4351_RX_CHANNEL) < 0)
         return -1;
@@ -172,6 +166,14 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
 	/* Initialize the AD9122 */
     DAC_Core_Init(pDefInit->fmcPort);
     if(ad9122_setup() < 0)
+        return -1;
+
+    /* Set the AD9643 sampling rate */
+    if(XCOMM_SetAdcSamplingRate(pDefInit->adcSamplingRate) < 0)
+        return -1;
+
+    /* Set the AD9122 sampling rate */
+    if(XCOMM_SetDacSamplingRate(pDefInit->dacSamplingRate) < 0)
         return -1;
 
 	/* Initialize the AD9643 */
