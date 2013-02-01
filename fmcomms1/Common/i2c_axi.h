@@ -1,6 +1,6 @@
 /**************************************************************************//**
-*   @file   spi_interface.h
-*   @brief  SPI interfrace header file.
+*   @file   i2c_axi.h
+*   @brief  I2C header file.
 *   @author acozma (andrei.cozma@analog.com)
 *
 *******************************************************************************
@@ -41,77 +41,33 @@
 *   SVN Revision: $WCREV$
 ******************************************************************************/
 
-#ifndef __SPI_INTERFACE_H__
-#define __SPI_INTERFACE_H__
+#ifndef __I2C_AXI_H__
+#define __I2C_AXI_H__
 
 /*****************************************************************************/
-/***************************** Include Files *********************************/
+/******************* Include Files *******************************************/
 /*****************************************************************************/
 #include <stdint.h>
+#include "xparameters.h"
 
-/*****************************************************************************/
-/************************** Types Declarations *******************************/
-/*****************************************************************************/
-typedef struct _stDevConfig
-{
-    uint32_t addrWidth; /*!< Registers address width in bits */
-    uint32_t dataWidth; /*!< Data width in bits */
-    uint32_t spiConfig; /*!< SPI configuration */
-    uint32_t spiCS;     /*!< SPI CS value */
-} stDevConfig;
+/* IIC FMC Port selection */
+#define I2C_HPC_AXI 0x02
+#define I2C_LPC_AXI 0x04
 
-/*****************************************************************************/
-/******************* I2C Addesses and SPI settings ***************************/
-/*****************************************************************************/
-/* IIC addresses */
-#define IICSEL_XCOMM         0x20
-#define IICSEL_PIC_0         0x59
-#define IICSEL_PIC_1         0x58
-
-/* SPI selections*/
-#define SPI_SEL_AD9122       0x00
-#define SPI_SEL_AD9643       0x01
-#define SPI_SEL_AD9548       0x02
-#define SPI_SEL_AD9523       0x03
-#define SPI_SEL_ADF4351_RX   0x04
-#define SPI_SEL_ADF4351_TX   0x05
-#define SPI_SEL_AD8366       0x06
-
-/* PIC control words*/
-#define REV_READ  	0x01
-#define CTRL_WRITE  0x03
-#define DATA_WRITE  0x04
-
-/* PIC Firmware Revision Size */
-#define PIC_FW_REV_LEN	32
-
-/* SPI configuration options */
-#define SPI_RX_TRANSFER_CNT(x)      ((x) << 10)
-#define SPI_3_WIRE_MODE             (1 << 6) 
-#define SPI_4_WIRE_MODE             (0 << 6)
-#define SPI_CS_HIGH_AT_TRANFER_END  (1 << 5)
-#define SPI_CS_LOW_AT_TRANFER_END   (0 << 5) 
-#define SPI_SAMPLE_AT_CLK_END       (1 << 4)
-#define SPI_SAMPLE_AT_CLK_MIDDLE    (0 << 4)
-#define SPI_TX_ON_CLK_FALL          (1 << 3)
-#define SPI_TX_ON_CLK_RISE          (0 << 3)
-#define SPI_CLK_IDLE_HIGH           (1 << 2)
-#define SPI_CLK_IDLE_LOW            (0 << 2)
-#define SPI_CLK_INVALID             0x03
-#define SPI_CLK_FOSC_DIV_64         0x02
-#define SPI_CLK_FOSC_DIV_16         0x01
-#define SPI_CLK_FOSC_DIV_4          0x00
+/* I2C Mux address */
+#define I2C_MUX_ADDR    0x74
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
-/** Reads the PIC firmware version */
-int32_t PIC_ReadFwVersion();
-/** Initializes the communication with the PIC */
-int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C);
-/** Reads data from the selected device */
-int32_t SPI_Read(uint32_t spiSel, uint32_t regAddr, uint32_t* data); 
-/** Writes data to the selected device */
-int32_t SPI_Write(uint32_t spiSel, uint32_t regAddr, uint32_t data); 
 
-#endif /* __SPI_INTERFACE_H__ */
+/** Initializes the communication with the Microblaze I2C peripheral */
+uint32_t I2C_Init_axi(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux);
+/** Reads data from an I2C slave. */
+uint32_t I2C_Read_axi(uint32_t i2cAddr, uint32_t regAddr,
+                  uint32_t rxSize, uint8_t* rxBuf); 
+/** Writes data to an I2C slave. */
+uint32_t I2C_Write_axi(uint32_t i2cAddr, uint32_t regAddr,
+                   uint32_t txSize, uint8_t* txBuf); 
+
+#endif /* __I2C_AXI_H__ */

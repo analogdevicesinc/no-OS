@@ -44,8 +44,14 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include "i2c.h"
+#include "i2c_ps7.h"
+#include "i2c_axi.h"
 #include "spi_interface.h"
+
+/* Pointer to functions - used depending on the type of I2C Core used (Hardware or Softcore) */
+uint32_t (*I2C_Write)(uint32_t, uint32_t, uint32_t, uint8_t*);
+uint32_t (*I2C_Read)(uint32_t, uint32_t, uint32_t, uint8_t*);
+uint32_t (*I2C_Init)(uint32_t, uint32_t, uint32_t);
 
 /*****************************************************************************/
 /************************ Constants Definitions ******************************/
@@ -241,10 +247,12 @@ int32_t PIC_ReadFwVersion()
 * @param fmcPort - The FMC port on which the daughter board is connected
 * @param enableCommMux - Set to 1 if the carrier board has an I2C multiplexer,
 *                        set to 0 otherwise
+* @param ps7I2C - Set to 1 if PS7 I2C Core is used
+*                   set to 0 if AXI I2C Core is used 
 *
 * @return Returns -1 in case of error, 0 for success
 ******************************************************************************/
-int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux)
+int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C)
 {
 	uint32_t ret;
     uint8_t wrBuf[1] = {0x02};
@@ -252,7 +260,22 @@ int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux)
     picI2cAddr = (enableCommMux || (fmcPort == 1)) ? 
                  IICSEL_PIC_1 : IICSEL_PIC_0;
 
+    // Assign I2C Functions according to type of I2C Core used (Hardware or Softcore)
+    if(ps7I2C == 1)
+    {
+    	I2C_Write	= &I2C_Write_ps7;
+    	I2C_Read	= &I2C_Read_ps7;
+    	I2C_Init	= &I2C_Init_ps7;
+    }
+    else
+    {
+    	I2C_Write	= &I2C_Write_axi;
+    	I2C_Read	= &I2C_Read_axi;
+    	I2C_Init	= &I2C_Init_axi;
+    }
+
     ret = I2C_Init(picI2cAddr, fmcPort, enableCommMux);
+
     if(ret)
         return -1;
 

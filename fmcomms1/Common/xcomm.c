@@ -113,6 +113,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
 {
     /* Local variables */
     uint32_t enableCommMux;
+    uint32_t ps7Interface;
 
     /* Reset the XCOMM state variables */
     int32_t i = 0;
@@ -125,9 +126,10 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     /* Initialize the SPI communication */
     switch(pDefInit->carrierBoard)
     {
+    	case XILINX_ZC702:
+            ps7Interface = 1;
         case XILINX_KC705:
         case XILINX_VC707:
-        case XILINX_ZC702:
             enableCommMux = 1;
             break;
         case DIGILENT_ZED:
@@ -137,8 +139,9 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
             enableCommMux = 0;
             break;
     }
+
     XCOMM_boardFmcPort = enableCommMux ? FMC_HPC : pDefInit->fmcPort;
-    if(SPI_Init(pDefInit->fmcPort, enableCommMux) < 0)
+    if(SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface) < 0)
     	return -1;
 
     /* Initialize the AD9548 */

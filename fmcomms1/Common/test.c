@@ -98,7 +98,7 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 {
 	uint32_t baddr;
 
-	baddr = (sel == IICSEL_B1HPC) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 	Xil_Out32((baddr + 0x04), 0x1);
 	Xil_Out32((baddr + 0x08), dds_pf(0, f1, 500));
 	Xil_Out32((baddr + 0x0c), dds_pf(0, f2, 500));
@@ -119,7 +119,7 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 	uint32_t baddr;
 	uint32_t rdata;
 
-	baddr = (sel == IICSEL_B1HPC) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
 	ad9122_write(0x68, ((s0>> 0) & 0xff));
 	ad9122_write(0x69, ((s0>> 8) & 0xff));
@@ -186,7 +186,7 @@ void dac_test(uint32_t sel)
 {
 	uint32_t baddr;
 
-	baddr = (sel == IICSEL_B1HPC) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
 	Xil_Out32((baddr + 0x04), 0x0);
 	Xil_Out32((baddr + 0x04), 0x1);
@@ -218,14 +218,15 @@ void dac_test(uint32_t sel)
 void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 {
 	uint32_t baddr;
-	baddr = (sel == IICSEL_B1HPC) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
 
 	Xil_Out32((baddr + 0x030), 0); // clear dma operations
 	Xil_Out32((baddr + 0x030), 1); // enable dma operations
 	Xil_Out32((baddr + 0x048), sa); // capture start address
 	Xil_Out32((baddr + 0x058), (qwcnt * 8)); // number of bytes
 
-	baddr = (sel == IICSEL_B1HPC) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
+	Xil_Out32((baddr + 0x008), 0x03); // channel enables
 	Xil_Out32((baddr + 0x00c), 0x0); // capture disable
 	Xil_Out32((baddr + 0x010), 0xf); // clear status
 	Xil_Out32((baddr + 0x014), 0xf); // clear status
@@ -266,7 +267,7 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 
 	Xil_Out32(XPAR_AXI_ADC_2C_0_BASEADDR + 0x2C, 0);
 
-	baddr = (sel == IICSEL_B1HPC) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
 	adc_capture(sel, 16, DDR_BASEADDR);
 	delay_ms(10);
 

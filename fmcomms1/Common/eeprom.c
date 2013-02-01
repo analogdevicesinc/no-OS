@@ -44,8 +44,10 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include "i2c.h"
 #include "eeprom.h"
+
+extern uint32_t (*I2C_Read)();
+extern uint32_t (*I2C_Write)();
 
 /**************************************************************************//**
 * @brief Reads data from the selected EEPROM device
@@ -100,13 +102,21 @@ int32_t EEPROM_Write(uint8_t i2cAddr, uint8_t eepromAddr,
 int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t *pSize, uint32_t fmcPort)
 {
     int32_t ret;
+    int32_t i = 0;
+
     struct fmcomms1_calib_data* pCalData;
 
     *pSize = 0;
-    ret = EEPROM_Read(fmcPort ? IICSEL_CAL_HPC : IICSEL_CAL_LPC, 0x00,
-                      pData, MAX_SIZE_CAL_EEPROM);
-    if(ret < 0)
-        return ret;
+
+    for(i = 0; i < MAX_SIZE_CAL_EEPROM; i += 16)
+    {
+		ret = EEPROM_Read(fmcPort ? IICSEL_CAL_HPC : IICSEL_CAL_LPC, 0x00,
+						  (pData + i),
+                          ((MAX_SIZE_CAL_EEPROM - i) > 16) ? 16 : (MAX_SIZE_CAL_EEPROM - i));
+
+		if(ret < 0)
+			return ret;
+    }
 
     pCalData = (struct fmcomms1_calib_data*)pData;
     

@@ -75,7 +75,14 @@ int main()
 
     xil_printf("Running XCOMM Test Program\n\r");
 
-    fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC : IICSEL_B1HPC);
+    if(defInit.carrierBoard == XILINX_ZC702)
+    {
+    	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_PS7 : IICSEL_B1HPC_PS7);
+    }
+    else
+    {
+    	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_AXI : IICSEL_B1HPC_AXI);
+    }
 
     xil_printf("\n\rInitializing XCOMM Components...\n\r");
     ret = XCOMM_Init(&defInit);

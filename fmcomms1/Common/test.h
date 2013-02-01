@@ -84,8 +84,10 @@
 	#define DMAFFT_BASEADDR       XPAR_AXI_DMA_2_BASEADDR
 #endif
 
-#define IICSEL_B0LPC          0x04
-#define IICSEL_B1HPC          0x02
+#define IICSEL_B0LPC_PS7      0x20
+#define IICSEL_B1HPC_PS7      0x20
+#define IICSEL_B0LPC_AXI      0x04
+#define IICSEL_B1HPC_AXI      0x02
 #define IICSEL_B0PIC          0x59
 #define IICSEL_B1PIC          0x58
 
