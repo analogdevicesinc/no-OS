@@ -49,8 +49,8 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
- static int32_t spiBaseAddress = 0;
- static int32_t spiSlaveSelect = 0;
+ static int32_t spiBaseAddress;
+ static int32_t spiSlaveSelect;
 
 /***************************************************************************//**
  * @brief Configures the test mode and the output mode to a default state.

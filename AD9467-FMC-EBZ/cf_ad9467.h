@@ -49,11 +49,19 @@
 /******************************************************************************/
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
-#define CF_BASEADDR   XPAR_AXI_ADC_1C_0_BASEADDR
-#define DDR_BASEADDR  XPAR_DDR_MEM_BASEADDR + 128*1024*1024
-#define DMA_BASEADDR  XPAR_AXI_DMA_0_BASEADDR
-#define UART_BASEADDR XPS_UART1_BASEADDR
-#define SPI_BASEADDR  XPAR_AXI_SPI_0_BASEADDR
+#ifdef _XPARAMETERS_PS_H_
+	#define CF_BASEADDR   XPAR_AXI_ADC_1C_0_BASEADDR
+	#define DDR_BASEADDR  XPAR_DDR_MEM_BASEADDR + 128*1024*1024
+	#define DMA_BASEADDR  XPAR_AXI_DMA_0_BASEADDR
+	#define UART_BASEADDR XPS_UART1_BASEADDR
+	#define SPI_BASEADDR  XPAR_AXI_SPI_0_BASEADDR
+#else
+	#define CF_BASEADDR   XPAR_AXI_ADC_1C_0_BASEADDR
+	#define DDR_BASEADDR  XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+	#define DMA_BASEADDR  XPAR_AXI_DMA_0_BASEADDR
+	#define UART_BASEADDR XPS_UART1_BASEADDR
+	#define SPI_BASEADDR  XPAR_AXI_SPI_0_BASEADDR
+#endif
 
 /* CF register map. */
 #define CF_REG_VERSION			0x00
@@ -81,7 +89,7 @@
 #define CF_DATA_MONITOR_PN_OVER_RNG	(1 << 0) // (Write 1 to clear)
 
 /* CF_REG_DATA_MODE bit definition. */
-#define CF_DATA_MODE_BITS(x)		(((x) & 0x2) << 0)
+#define CF_DATA_MODE_BITS(x)		(((x) & 0x3) << 0)
 
 /* CF_REG_DELAY_CTRL bit definition. */
 #define CF_DELAY_CTRL_SEL(x)		(((x) & 0x1) << 17)

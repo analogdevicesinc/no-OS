@@ -113,7 +113,12 @@ void adc_capture(u32 size, u32 address)
 	{
 		xil_printf("overflow occurred, capture may be corrupted\n\r");
 	}
+#ifdef _XPARAMETERS_PS_H_
 	Xil_DCacheFlush();
+#else
+	microblaze_flush_dcache();
+	microblaze_invalidate_dcache();
+#endif
 }
 
 /***************************************************************************//**
@@ -315,6 +320,7 @@ void adc_test(u32 mode, u32 format)
 *******************************************************************************/
 void adc_setup(u32 dco_delay)
 {
+	Xil_Out32((CF_BASEADDR + CF_REG_DATA_MODE), CF_DATA_MODE_BITS(0x1));		// Samples are interleaved rising edge first and then falling edge.
 	Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE), CF_PN_TYPE_BIT(0));			    // Select PN9
 	Xil_Out32((CF_BASEADDR + CF_REG_DATA_SELECT), CF_DATA_SELECT_BIT(0));		// First byte from DDR appears on rising edge
 	Xil_Out32((CF_BASEADDR + CF_REG_DELAY_CTRL), 0x00000);						// clear bits

@@ -75,12 +75,9 @@ int main(){
 	/* Read the device ID for AD9467 and AD9517. */
 	xil_printf("\n\r********************************************************************\r\n");
 	xil_printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
-	xil_printf("  AD9467 CHIP ID: 0x%02x\n\r",
-			   ad9467_read(AD9467_REG_CHIP_ID));
-	xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r",
-			    ad9467_read(AD9467_REG_CHIP_GRADE));
-	xil_printf("  AD9517 CHIP ID: 0x%02x",
-			    ad9517_read(AD9517_REG_PART_ID));
+	xil_printf("  AD9467 CHIP ID: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_ID));
+	xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_GRADE));
+	xil_printf("  AD9517 CHIP ID: 0x%02x", ad9517_read(AD9517_REG_PART_ID));
 	xil_printf("\n\r********************************************************************\r\n");
 
 	/* AD9467 test. */
