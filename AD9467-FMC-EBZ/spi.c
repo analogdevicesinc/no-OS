@@ -89,7 +89,7 @@ u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
 				(1 			<< MasterTranInh)    | // Master transactions disabled
 				(1 			<< ManualSlaveAssEn) | // Slave select output follows data in slave select register
 				(1 			<< RxFifoReset)      | // Receive FIFO normal operation
-				(1 			<< TxFifoReset)      | // Transmit FIFO normal operation
+				(0 			<< TxFifoReset)      | // Transmit FIFO normal operation
 				(cpha 		<< CHPA)             | // Data valid on first SCK edge
 				(cpol 		<< CPOL)             | // Active high clock, SCK idles low
 				(1 			<< Master)           | // SPI in Master configuration mode
@@ -106,9 +106,6 @@ u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
     		break;
     	}
     }
-
-	//reset the SPI core
-	//Xil_Out32(axiBaseAddr + SRR, 0x0000000A);
 
     //set the slave select register to all ones
     Xil_Out32(axiBaseAddr + SPISSR, 0xFFFFFFFF);
@@ -133,7 +130,7 @@ u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
 u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, char* rxBuf, char ssNo)
 {
     u32 i = 0;
-	u32 cfgValue  = 0;
+    u32 cfgValue  = 0;
     u32 SPIStatus = 0;
     u32 rxCnt = 0;
     u32 txCnt = 0;
@@ -167,9 +164,6 @@ u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, cha
 
     // Enable the master transactions
     cfgValue &= ~(1 << MasterTranInh);
-    cfgValue &= ~(1 << RxFifoReset);
-    cfgValue &= ~(1 << TxFifoReset);
-
     Xil_Out32(axiBaseAddr + SPICR, cfgValue);
 
     // Send and receive the data
@@ -180,8 +174,7 @@ u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, cha
     	{
     		SPIStatus = Xil_In32(axiBaseAddr + SPISR);
     	}
-    	//while(((SPIStatus & 0x01) == 1) && timeout--);
-    	while(((SPIStatus & 0x04) == 0) && timeout--);
+    	while(((SPIStatus & 0x01) == 1) && timeout--);
     	if(timeout == -1)
     	{
         	// Disable the master transactions
@@ -200,7 +193,6 @@ u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, cha
 			return FALSE;
     	}
     	timeout = 0xFFFF;
-    	Xil_Out32(axiBaseAddr + SPICR, 0x186);
 
     	// Read received data from SPI Core buffer
     	if(rxCnt < rxSize)
@@ -212,22 +204,21 @@ u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, cha
     	txCnt++;
     	if(txCnt < txSize)
     	{
+        	// Disable the master transactions
+    		cfgValue |= (1 << MasterTranInh);
+    		Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+
     		// Write data
     		Xil_Out32(axiBaseAddr + SPIDTR, txBuf[txCnt]);
 
-    		// Enable the master transactions
-    		cfgValue &= ~(1 << MasterTranInh);
-    		cfgValue &= ~(1 << RxFifoReset);
-    		cfgValue &= ~(1 << TxFifoReset);
-    		Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+    		/// Enable the master transactions
+			cfgValue &= ~(1 << MasterTranInh);
+			Xil_Out32(axiBaseAddr + SPICR, cfgValue);
     	}
     }
 
     // Disable the master transactions
     cfgValue |= (1 << MasterTranInh);
-    cfgValue &= ~(1 << Master);
-    // SPI disabled
-    cfgValue &= ~(1 << SPE);
     Xil_Out32(axiBaseAddr + SPICR, cfgValue);
 
     // Write all ones to SPISSR

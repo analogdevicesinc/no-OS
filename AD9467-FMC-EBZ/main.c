@@ -96,6 +96,11 @@ int main(){
 
 	xil_printf("Done\n\r");
 
+	while(1)
+	{
+		adc_capture(1024, DDR_BASEADDR);
+	}
+
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 

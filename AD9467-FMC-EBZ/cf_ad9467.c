@@ -44,7 +44,6 @@
 /******************************************************************************/
 #include "cf_ad9467.h"
 #include "xil_io.h"
-#include "xparameters.h"
 #include "AD9467.h"
 
 extern char inbyte(void);
