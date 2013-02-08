@@ -145,50 +145,48 @@ int32_t ad9643_testmode_set(uint32_t chan_mask, uint32_t mode)
  * @brief Calibrates the DCO clock delay
  *
  * @return Negative error code or DCO clock delay code in case of success.
+ * 		   If the DCO clock is inverted 0x100 is added to the returned DCO value
 *******************************************************************************/
 int32_t ad9643_dco_calibrate_2c()
 {
-	int32_t dco, ret, cnt, start, max_start, max_cnt;
-	uint32_t stat;
-	uint32_t regVal;
-	uint8_t err_field[33];
+    int32_t dco, cnt, start, max_start, max_cnt;
+    uint32_t stat, tm_mask, err_mask, regVal, inv_range = 0;
+    uint8_t err_field[66];
+
+restart:
+
+	ad9643_dco_clock_invert(inv_range);
 
 	ad9643_testmode_set(0x2, AD9643_TEST_MODE_PN23_SEQ);
-	ad9643_testmode_set(0x1, AD9643_TEST_MODE_PN9_SEQ);
+	tm_mask = ADC_CORE_PN23_1_EN | ADC_CORE_PN9_0_EN;
+	err_mask = ADC_CORE_ADC_STAT_PN_ERR0 |
+			   ADC_CORE_ADC_STAT_PN_ERR1 |
+			   ADC_CORE_ADC_STAT_PN_OOS0 |
+			   ADC_CORE_ADC_STAT_PN_OOS1;
 
-    ADC_Core_Write(ADC_CORE_PN_ERR_CTRL, ADC_CORE_PN23_1_EN | ADC_CORE_PN9_0_EN);
+	ad9643_testmode_set(0x1, AD9643_TEST_MODE_PN9_SEQ);
+	ADC_Core_Write(ADC_CORE_PN_ERR_CTRL, tm_mask);
 
 	for(dco = 0; dco <= 32; dco++)
     {
-		ret = -1;
-		ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY, dco > 0 ? ((dco - 1) | 0x80) : 0);
+    	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,
+                  	 dco > 0 ? ((dco - 1) | 0x80) : 0);
 		ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
-        ad9643_read(AD9643_REG_DCO_OUTPUT_DELAY);
-
         ADC_Core_Write(ADC_CORE_ADC_STAT, ADC_CORE_ADC_STAT_MASK);
 
 		delay_us(1000);
-
         ADC_Core_Read(ADC_CORE_ADC_STAT, &stat);
-
-        if(!( stat & 0x3c))
-        {
-                ret = 0;
-		}
-
-		err_field[dco] = !!ret;
+        err_field[dco + (inv_range * 33)] = !!(stat & err_mask);
 	}
 
-	ret = -1;
 	for(dco = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
-		dco <= 32; dco++) 
+        dco <= (32 + (inv_range * 33)); dco++)
     {
 		if (err_field[dco] == 0) 
         {
 			if (start == -1)
 				start = dco;
 			cnt++;
-			ret = 0;
 		} 
         else 
         {
@@ -208,14 +206,32 @@ int32_t ad9643_dco_calibrate_2c()
 		max_start = start;
 	}
 
+    if ((inv_range == 0) && ((max_cnt < 3) || (err_field[32] == 0)))
+    {
+        inv_range = 1;
+        goto restart;
+    }
+
 	dco = max_start + (max_cnt / 2);
+    if (dco > 32)
+    {
+        dco -= 33;
+        ad9643_dco_clock_invert(1);
+        cnt = 1;
+    }
+    else
+    {
+    	ad9643_dco_clock_invert(0);
+    	cnt = 0;
+    }
+
 	regVal = dco > 0 ? ((dco - 1) | 0x80) : 0;
 
 	ad9643_testmode_set(0x3, AD9643_TEST_MODE_OFF);
 	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,regVal);
 	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
 
-	return ret < 0 ? -1 : (regVal & 0x1F);
+	return dco < 0 ? -1 : (inv_range ? (0x0100 | (regVal & 0x1F)) : (regVal & 0x1F));
 }
 
 /***************************************************************************//**
@@ -225,7 +241,7 @@ int32_t ad9643_dco_calibrate_2c()
 *******************************************************************************/
 int32_t ad9643_is_dco_locked()
 {
-	int32_t ret = -1, cnt;
+	int32_t ret = -1;
 	uint32_t stat;
 
 	ad9643_testmode_set(0x2, AD9643_TEST_MODE_PN23_SEQ);
@@ -269,11 +285,6 @@ int32_t ad9643_setup()
 	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
 
 	ret = ad9643_dco_calibrate_2c();
-	if(ret < 0)
-	{
-		ad9643_dco_clock_invert(1);
-		ret = ad9643_dco_calibrate_2c();
-	}
 
     ADC_Core_Write(ADC_CORE_DMA_CHAN_SEL,0x02);
 

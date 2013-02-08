@@ -802,7 +802,8 @@ int32_t XCOMM_SetAdcUserTestPattern(uint8_t* pattern)
 /**************************************************************************//**
 * @brief Calibrates the ADC DCO clock delay 
 * 
-* @return If success, returns DCO clock delay code
+* @return If success, returns DCO clock delay code. If the DCO clock is
+* 		  inverted 0x100 is added to the returned DCO value
 *		  if error,return -1
 ******************************************************************************/
 int32_t XCOMM_CalibrateAdcDco(void)
@@ -813,17 +814,6 @@ int32_t XCOMM_CalibrateAdcDco(void)
 
 	ad9643_dco_clock_invert(0);
 	ret = ad9643_dco_calibrate_2c();
-
-	if(ret<0)
-	{
-		ad9643_dco_clock_invert(1);
-		ret = ad9643_dco_calibrate_2c();
-                if (!(ret<0))
-                {
-                    ret |= 0x0100;
-                }
-
-	}
 
 	ADC_Core_Write(ADC_CORE_DMA_CHAN_SEL,0x02);
 
