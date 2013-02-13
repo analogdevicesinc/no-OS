@@ -52,6 +52,9 @@ extern void delay_us(uint32_t us_count);
 extern struct cf_axi_dds_state dds_state;
 extern struct cf_axi_dds_converter dds_conv;
 
+int64_t (*pfnSetDataClk)(int64_t Hz);
+int64_t (*pfnSetDacClk)(int64_t Hz);
+
 /******************************************************************************/
 /***************************** Local Types and Variables***********************/
 /******************************************************************************/
@@ -204,13 +207,14 @@ static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
 /***************************************************************************//**
  * @brief Sets the value of the data clock.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct which contains the
- * 				 data clock value
+ * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param freq - Data clock value
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
 static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t freq)
 {
+	int64_t ret;
 	uint32_t dac_freq;
 
 	dac_freq = freq * conv->interp_factor;
@@ -219,8 +223,15 @@ static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t f
 		return -1;
 	}
 
-	conv->clk[CLK_DATA] = freq;
-	conv->clk[CLK_DAC]  = dac_freq;
+	ret = pfnSetDataClk(freq);
+	if(ret < 0)
+		return -1;
+	conv->clk[CLK_DATA] = (uint32_t)ret;
+
+	ret = pfnSetDacClk(dac_freq);
+	if(ret < 0)
+		return -1;
+	conv->clk[CLK_DAC]  = (uint32_t)ret;
 
 	return 0;
 }
@@ -342,9 +353,12 @@ int32_t ad9122_reset(void)
 /***************************************************************************//**
  * @brief Initializes the AD9122.
  *
+ * @param pfnSetDataClock - Pointer to a function which sets the DAC data clock
+ * @param pfnSetDacClock - Pointer to a function which sets the DAC clock
+ *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9122_setup()
+int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock)
 {
 	int32_t ret;
 	int32_t i;
@@ -353,6 +367,9 @@ int32_t ad9122_setup()
 
 	if(ad9122_reset() < 0)
 		return -1;
+
+	pfnSetDataClk = pfnSetDataClock;
+	pfnSetDacClk  = pfnSetDacClock;
 
 	conv->write 		= ad9122_write;
 	conv->read 			= ad9122_read;
@@ -397,6 +414,26 @@ int32_t ad9122_setup()
 int32_t ad9122_dci_calibrate()
 {
 	return cf_axi_dds_tune_dci(0);
+}
+
+/***************************************************************************//**
+ * @brief Sets the AD9122 data rate.
+ *
+ * @param rate - desired rate in Hz
+ *
+ * @return Returns the set data rate.
+*******************************************************************************/
+int32_t ad9122_set_data_rate(uint32_t rate)
+{
+	int32_t ret = 0;
+
+	ret = cf_axi_dds_write_raw(0, 0,
+							  (int32_t)rate, 0,
+							  IIO_CHAN_INFO_SAMP_FREQ);
+	if(ret < 0)
+		return ret;
+
+	return dds_state.dac_clk;
 }
 
 /***************************************************************************//**
@@ -532,7 +569,7 @@ int32_t ad9122_out_voltage1_calibscale(int32_t val)
 }
 
 /***************************************************************************//**
- * @brief Sets the interpolation value.
+ * @brief Sets the interpolation factor.
  *
  * @param val - Interpolation value. If the value equals INT32_MAX then
  *             the function returns the current set value.
@@ -554,7 +591,7 @@ int32_t ad9122_out_altvoltage_interpolation(int32_t val)
 }
 
 /***************************************************************************//**
- * @brief Sets the center shift value.
+ * @brief Sets the center frequency shift value.
  *
  * @param val - Center shift value. If the value equals INT32_MAX then
  *             the function returns the current set value.

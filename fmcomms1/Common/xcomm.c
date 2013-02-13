@@ -168,7 +168,8 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     
 	/* Initialize the AD9122 */
     DAC_Core_Init(pDefInit->fmcPort);
-    if(ad9122_setup() < 0)
+    if(ad9122_setup(ad9523_out_altvoltage_DAC_DCO_CLK_frequency,
+    				ad9523_out_altvoltage_DAC_CLK_frequency) < 0)
         return -1;
 
     /* Set the AD9643 sampling rate */
@@ -833,6 +834,30 @@ int32_t XCOMM_IsAdcDcoLocked(void)
 
 /************************ DAC Functions **************************************/
 
+/**************************************************************************//**
+* @brief Sets the DAC interpolation factor
+*
+* @param interp: interpolation factor
+*
+* @return If success, return the set value if error, return -1
+******************************************************************************/
+int32_t XCOMM_SetDacInterpolation(int32_t interp)
+{
+	return ad9122_out_altvoltage_interpolation(interp);
+}
+
+/**************************************************************************//**
+* @brief Sets the DAC center frequency shift
+*
+* @param shift: Center frequency shift
+*
+* @return If success, return the set value if error, return -1
+******************************************************************************/
+int32_t XCOMM_SetDacCenterShift(int32_t shift)
+{
+	return ad9122_out_altvoltage_interpolation_center_shift(shift);
+}
+
 
 /**************************************************************************//**
 * @brief Sets the sampling rate of the DAC
@@ -842,12 +867,11 @@ int32_t XCOMM_IsAdcDcoLocked(void)
 * @return If success, return exact calculated rate in Hz
 *         if error, return -1
 ******************************************************************************/
-int64_t XCOMM_SetDacSamplingRate(uint64_t rate)
+int32_t XCOMM_SetDacSamplingRate(uint32_t rate)
 {
-    int64_t sampleRate;
+    int32_t sampleRate;
 
-    ad9523_out_altvoltage_DAC_DCO_CLK_frequency(rate);
-    sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(rate);
+    sampleRate = ad9122_set_data_rate(rate);
 
     if(sampleRate < 0)
         return -1;

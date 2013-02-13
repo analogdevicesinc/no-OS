@@ -331,13 +331,25 @@
 /******************************************************************************/
 /** Initializes the AD9122. */
 /*  **Returns negative error code or 0 in case of success. */
-int32_t ad9122_setup();
+int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock);
 
 /** Resets the device. */
 int32_t ad9122_reset();
 
 /** Calibrates the AD9122 DCI.*/
 int32_t ad9122_dci_calibrate();
+
+/** Sets the AD9122 data rate.*/
+/*  ** Returns the set data rate. */
+int32_t ad9122_set_data_rate(uint32_t rate);
+
+/** Sets the interpolation factor. */
+/*  ** Returns the set interpolation factor. */
+int32_t ad9122_out_altvoltage_interpolation(int32_t val);
+
+/** Sets the center frequency shift value.*/
+/*  ** Returns the set center frequency shift. */
+int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val);
 
 /** Sets the full-scale current for I DAC. */
 /*  ** Returns the set full-scale current. */
