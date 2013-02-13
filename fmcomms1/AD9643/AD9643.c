@@ -213,6 +213,15 @@ restart:
     }
 
 	dco = max_start + (max_cnt / 2);
+
+#ifdef DCO_DEBUG
+    for(cnt = 0; cnt <= (32  + (inv_range * 33)); cnt++)
+        if (cnt == dco)
+            xil_printf("|");
+        else
+        	xil_printf("%c", err_field[cnt] ? '-' : 'o');
+#endif
+
     if (dco > 32)
     {
         dco -= 33;
@@ -224,6 +233,11 @@ restart:
     	ad9643_dco_clock_invert(0);
     	cnt = 0;
     }
+
+#ifdef DCO_DEBUG
+    xil_printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
+           dco > 0 ? ((dco - 1) | 0x80) : 0);
+#endif
 
 	regVal = dco > 0 ? ((dco - 1) | 0x80) : 0;
 
