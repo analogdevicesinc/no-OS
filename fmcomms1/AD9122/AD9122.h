@@ -331,7 +331,8 @@
 /******************************************************************************/
 /** Initializes the AD9122. */
 /*  **Returns negative error code or 0 in case of success. */
-int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock);
+int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
+					 void* pfnRoundRateDataClock, void* pfnRoundRateDacClock);
 
 /** Resets the device. */
 int32_t ad9122_reset();

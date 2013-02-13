@@ -469,6 +469,10 @@ struct ad9523_platform_data
 int32_t ad9523_setup();
 /** Resets the device. */
 int32_t ad9523_reset();
+/** Determines the achievable output frequency for the DAC CLK channel */
+uint32_t ad9523_clk_round_rate_DAC_CLK(uint32_t rate);
+/** Determines the achievable output frequency for the DAC DCO CLK channel */
+uint32_t ad9523_clk_round_rate_DAC_DCO_CLK(uint32_t rate);
 /** Sets the output frequency for channel 0. */
 int64_t ad9523_out_altvoltage_ZD_OUTPUT_frequency(int64_t Hz);
 /** Sets the phase for channel 0. */

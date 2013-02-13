@@ -54,6 +54,8 @@ extern struct cf_axi_dds_converter dds_conv;
 
 int64_t (*pfnSetDataClk)(int64_t Hz);
 int64_t (*pfnSetDacClk)(int64_t Hz);
+uint32_t (*pfnRoundRateDataClk)(int32_t rate);
+uint32_t (*pfnRoundRateDacClk)(int32_t rate);
 
 /******************************************************************************/
 /***************************** Local Types and Variables***********************/
@@ -215,11 +217,33 @@ static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
 static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t freq)
 {
 	int64_t ret;
-	uint32_t dac_freq;
+	uint32_t efreq, dac_freq;
+
+	efreq = pfnRoundRateDataClk(freq);
+	if (efreq != freq)
+	{
+#ifdef CLK_DEBUG
+		xil_printf("CLK_DATA: Requested Rate Mismatch %d != %d\n", freq, efreq);
+#endif
+		return -1;
+	}
 
 	dac_freq = freq * conv->interp_factor;
 	if (dac_freq > AD9122_MAX_DAC_RATE)
 	{
+#ifdef CLK_DEBUG
+		xil_printf("CLK_DAC: Requested Rate exceeds maximum %d (%d)\n",
+					dac_freq, AD9122_MAX_DAC_RATE);
+#endif
+		return -1;
+	}
+
+	efreq = pfnRoundRateDacClk(dac_freq);
+	if (efreq != dac_freq)
+	{
+#ifdef CLK_DEBUG
+		xil_printf("CLK_DAC: Requested Rate Mismatch %d != %d\n",	dac_freq, efreq);
+#endif
 		return -1;
 	}
 
@@ -355,10 +379,15 @@ int32_t ad9122_reset(void)
  *
  * @param pfnSetDataClock - Pointer to a function which sets the DAC data clock
  * @param pfnSetDacClock - Pointer to a function which sets the DAC clock
+ * @param pfnRoundRateDataClock - Pointer to a function which computes the
+ * 								  actual data clock for a desired clock value
+ * @param pfnRoundRateDacClock - Pointer to a function which computes the
+ * 								 actual DAC clock for a desired clock value
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock)
+int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
+					 void* pfnRoundRateDataClock, void* pfnRoundRateDacClock)
 {
 	int32_t ret;
 	int32_t i;
@@ -370,6 +399,8 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock)
 
 	pfnSetDataClk = pfnSetDataClock;
 	pfnSetDacClk  = pfnSetDacClock;
+	pfnRoundRateDataClk = pfnRoundRateDataClock;
+	pfnRoundRateDacClk  = pfnRoundRateDacClock;
 
 	conv->write 		= ad9122_write;
 	conv->read 			= ad9122_read;

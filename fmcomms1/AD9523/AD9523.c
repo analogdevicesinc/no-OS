@@ -95,6 +95,7 @@ extern void delay_us(uint32_t us_count);
 /* Helpers to avoid excess line breaks */
 #define AD_IFE(_pde, _a, _b) ((pdata->_pde) ? _a : _b)
 #define AD_IF(_pde, _a) AD_IFE(_pde, _a, 0)
+#define abs(x) ((x)< 0 ? -(x) : (x))
 
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
@@ -579,6 +580,76 @@ int32_t ad9523_status(int32_t status_bit)
         return ret;
 
     return ((ret & status_bit) != 0);
+}
+
+/***************************************************************************//**
+ * @brief Determines the achievable output frequency
+ * 		  given a desired output frequency.
+ *
+ * @param ch - Selected channel number.
+ * @param rate - Desired output frequency.
+ *
+ * @return Returns the achievable output frequency.
+*******************************************************************************/
+uint32_t ad9523_clk_round_rate(int32_t ch, uint32_t rate)
+{
+	struct ad9523_state *st = &ad9523_st;
+	unsigned long clk, tmp1, tmp2;
+
+	if (!rate)
+		return 0;
+
+	switch (ch)
+	{
+	case 0 ... 3:
+		if (rate == st->vco_out_freq[AD9523_VCXO])
+			clk = st->vco_out_freq[AD9523_VCXO];
+		else
+			clk = st->vco_out_freq[AD9523_VCO1];
+		break;
+	case 4 ... 9:
+		tmp1 = st->vco_out_freq[AD9523_VCO1] / rate;
+		tmp2 = st->vco_out_freq[AD9523_VCO2] / rate;
+		tmp1 *= rate;
+		tmp2 *= rate;
+		if (abs(tmp1 - rate) > abs(tmp2 - rate))
+			clk = st->vco_out_freq[AD9523_VCO2];
+		else
+			clk = st->vco_out_freq[AD9523_VCO1];
+		break;
+	default:
+		clk = st->vco_out_freq[AD9523_VCO1];
+		/* Ch 10..14: No action required, return success */
+	}
+
+	tmp1 = clk / rate;
+	tmp1 = tmp1 < 1UL ? 1UL : tmp1 > 1024UL ? 1024UL : tmp1;
+
+	return clk / tmp1;
+}
+
+/***************************************************************************//**
+ * @brief Determines the achievable output frequency for the DAC CLK channel
+ *
+ * @param rate - Desired output frequency.
+ *
+ * @return Returns the achievable output frequency.
+*******************************************************************************/
+uint32_t ad9523_clk_round_rate_DAC_CLK(uint32_t rate)
+{
+	return ad9523_clk_round_rate(12, rate);
+}
+
+/***************************************************************************//**
+ * @brief Determines the achievable output frequency for the DAC DCO CLK channel
+ *
+ * @param rate - Desired output frequency.
+ *
+ * @return Returns the achievable output frequency.
+*******************************************************************************/
+uint32_t ad9523_clk_round_rate_DAC_DCO_CLK(uint32_t rate)
+{
+	return ad9523_clk_round_rate(6, rate);
 }
 
 /***************************************************************************//**
