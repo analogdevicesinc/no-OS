@@ -45,58 +45,75 @@
 /******************************************************************************/
 #include "spi_interface.h"
 #include "dac_core.h"
+#include "cf_axi_dds.h"
 #include "AD9122.h"
 
 extern void delay_us(uint32_t us_count);
+extern struct cf_axi_dds_state dds_state;
+extern struct cf_axi_dds_converter dds_conv;
 
 /******************************************************************************/
 /***************************** Local Types and Variables***********************/
 /******************************************************************************/
-struct cf_axi_dds_sed
+static const uint32_t ad9122_reg_defaults[][2] =
 {
-	unsigned short i0;
-	unsigned short q0;
-	unsigned short i1;
-	unsigned short q1;
-};
-
-static struct cf_axi_dds_sed dac_sed_pattern[5] =
-{
-	{
-		.i0 = 0x5555,
-		.q0 = 0xAAAA,
-		.i1 = 0xAAAA,
-		.q1 = 0x5555,
-	},
-	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
-	},
-	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0,
-		.q1 = 0,
-	},
-	{
-		.i0 = 0xFFFF,
-		.q0 = 0xFFFF,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
-	},
-	{
-		.i0 = 0x1248,
-		.q0 = 0xEDC7,
-		.i1 = 0xEDC7,
-		.q1 = 0x1248,
-	}
+	{AD9122_REG_COMM, 0x00},
+	{AD9122_REG_COMM, AD9122_COMM_RESET},
+	{AD9122_REG_COMM, 0x00},
+	{AD9122_REG_POWER_CTRL, AD9122_POWER_CTRL_PD_AUX_ADC},
+	{AD9122_REG_DATA_FORMAT, AD9122_DATA_FORMAT_BINARY},
+	{AD9122_REG_INTERRUPT_EN_1, 0x00},
+	{AD9122_REG_INTERRUPT_EN_2, 0x00},
+	{AD9122_REG_CLK_REC_CTRL, AD9122_CLK_REC_CTRL_DACCLK_CROSS_CORRECTION |
+				  AD9122_CLK_REC_CTRL_REFCLK_CROSS_CORRECTION |
+				  0xF},
+	{AD9122_REG_PLL_CTRL_1, AD9122_PLL_CTRL_1_PLL_MANUAL_EN},
+	{AD9122_REG_PLL_CTRL_2, AD9122_PLL_CTRL_2_PLL_LOOP_BANDWIDTH(3) |
+				AD9122_PLL_CTRL_2_PLL_CHARGE_PUMP_CURRENT(0x11)},
+	{AD9122_REG_PLL_CTRL_3, AD9122_PLL_CTRL_3_N2(3) |
+				AD9122_PLL_CTRL_3_PLL_CROSS_CTRL_EN |
+				AD9122_PLL_CTRL_3_N0(1) |
+				AD9122_PLL_CTRL_3_N1(2)},
+	{AD9122_REG_SYNC_CTRL_1, AD9122_SYNC_CTRL_1_DATA_FIFO_RATE_TOGGLE |
+				 AD9122_SYNC_CTRL_1_RISING_EDGE_SYNC},
+	{AD9122_REG_SYNC_CTRL_2, 0x00},
+	{AD9122_REG_DCI_DELAY, 0x00},
+	{AD9122_REG_FIFO_CTRL, AD9122_FIFO_CTRL_FIFO_PHA_OFFSET(4)},
+	{AD9122_REG_FIFO_STATUS_1, 0x00},
+	{AD9122_REG_DATAPATH_CTRL, AD9122_DATAPATH_CTRL_BYPASS_PREMOD |
+				   AD9122_DATAPATH_CTRL_BYPASS_INV_SINC |
+				   AD9122_DATAPATH_CTRL_BYPASS_NCO},
+	{AD9122_REG_HB1_CTRL, AD9122_HB1_CTRL_BYPASS_HB1},
+	{AD9122_REG_HB2_CTRL, AD9122_HB2_CTRL_BYPASS_HB2},
+	{AD9122_REG_HB3_CTRL, AD9122_HB3_CTRL_BYPASS_HB3},
+	{AD9122_REG_FTW_7_0, 0x00},
+	{AD9122_REG_FTW_15_8, 0x00},
+	{AD9122_REG_FTW_23_16, 0x00},
+	{AD9122_REG_FTW_31_24, 0x00},
+	{AD9122_REG_NCO_PHA_OFFSET_LSB, 0x00},
+	{AD9122_REG_NCO_PHA_OFFSET_MSB, 0x00},
+	{AD9122_REG_NCO_FTW_UPDATE, 0x00},
+	{AD9122_REG_I_PHA_ADJ_LSB, 0x00},
+	{AD9122_REG_I_PHA_ADJ_MSB, 0x00},
+	{AD9122_REG_Q_PHA_ADJ_LSB, 0x00},
+	{AD9122_REG_Q_PHA_ADJ_MSB, 0x00},
+	{AD9122_REG_I_DAC_OFFSET_LSB, 0x00},
+	{AD9122_REG_I_DAC_OFFSET_MSB, 0x00},
+	{AD9122_REG_Q_DAC_OFFSET_LSB, 0x00},
+	{AD9122_REG_Q_DAC_OFFSET_MSB, 0x00},
+	{AD9122_REG_I_DAC_FS_ADJ, 0xF9},
+	{AD9122_REG_I_DAC_CTRL, 0x01},
+	{AD9122_REG_I_AUX_DAC_DATA, 0x00},
+	{AD9122_REG_I_AUX_DAC_CTRL, 0x00},
+	{AD9122_REG_Q_DAC_FS_ADJ, 0xF9},
+	{AD9122_REG_Q_DAC_CTRL, 0x01},
+	{AD9122_REG_Q_AUX_DAC_DATA, 0x00},
+	{AD9122_REG_Q_AUX_DAC_CTRL, 0x00},
+	{AD9122_REG_DIE_TEMP_RANGE_CTRL, AD9122_DIE_TEMP_RANGE_CTRL_REF_CURRENT(1)},
+	{AD9122_REG_FIFO_STATUS_1, AD9122_FIFO_STATUS_1_FIFO_SOFT_ALIGN_REQ},
 };
 
 #define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
-#define TEST_BIT(bit, val) (((val) & (1 << bit)) != 0)
-#define SET_BIT(bit, val) (val |= (1 << bit))
 
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
@@ -124,8 +141,8 @@ int32_t ad9122_write(uint8_t registerAddress,
 *******************************************************************************/
 int32_t ad9122_read(uint8_t registerAddress)
 {
-	uint8_t regAddr		= 0;
-	uint32_t registerValue = 0;
+	uint8_t regAddr			= 0;
+	uint32_t registerValue 	= 0;
 	int32_t ret;
 
 	regAddr = 0x80 + (0x7F & registerAddress);
@@ -135,208 +152,173 @@ int32_t ad9122_read(uint8_t registerAddress)
 }
 
 /***************************************************************************//**
- * @brief Finds the DCI.
- *
- * @return Returns the DCI value
-*******************************************************************************/
-int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
-{
-	int32_t dci, cnt, start, max_start, max_cnt;
-	//int8_t str[33];
-	int32_t ret;
-
-	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
-		dci < entries; dci++)
-	{
-		if (TEST_BIT(dci, *err_field) == 0)
-		{
-			if (start == -1)
-				start = dci;
-			cnt++;
-			//str[dci] = 'o';
-		}
-		else
-		{
-			if (cnt > max_cnt)
-			{
-				max_cnt = cnt;
-				max_start = start;
-			}
-			start = -1;
-			cnt = 0;
-			//str[dci] = '-';
-		}
-	}
-	//str[dci] = 0;
-
-	if (cnt > max_cnt)
-	{
-		max_cnt = cnt;
-		max_start = start;
-	}
-
-	ret = max_start + ((max_cnt - 1) / 2);
-
-	//str[ret] = '|';
-
-	//xil_printf("%s DCI %d\n",str, ret);
-
-	return ret;
-}
-
-/***************************************************************************//**
- * @brief Calibrates the AD9122 DCI.
+ * @brief Waits for the AD9122 to sync.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9122_dci_calibrate()
+int32_t ad9122_sync()
 {
-	unsigned reg, err_mask;
-	int i = 0, dci;
-	unsigned long err_bfield = 0;
+	int32_t ret, timeout;
 
-	for (dci = 0; dci < 4; dci++)
+	timeout = 255;
+	do
 	{
-		ad9122_write(AD9122_REG_DCI_DELAY, dci);
-		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++)
-		{
-			ad9122_write(AD9122_REG_SED_CTRL, 0);
+		delay_us(1000);
+		ret = ad9122_read(AD9122_REG_FIFO_STATUS_1);
+		if (ret < 0)
+			return ret;
 
-			DAC_Core_Write(CF_AXI_DDS_PAT_DATA1,
-				  (dac_sed_pattern[i].i1 << 16) |
-				  dac_sed_pattern[i].i0);
-			DAC_Core_Write(CF_AXI_DDS_PAT_DATA2,
-				  (dac_sed_pattern[i].q1 << 16) |
-				  dac_sed_pattern[i].q0);
+	} while (timeout-- && !(ret & AD9122_FIFO_STATUS_1_FIFO_SOFT_ALIGN_ACK));
 
-			DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
-			DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-				 CF_AXI_DDS_CTRL_PATTERN_EN);
-			DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-				 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
+	ad9122_write(AD9122_REG_FIFO_STATUS_1, 0x0);
+	ad9122_write(AD9122_REG_SYNC_CTRL_1,
+		     	 AD9122_SYNC_CTRL_1_SYNC_EN |
+		     	 AD9122_SYNC_CTRL_1_RISING_EDGE_SYNC);
 
-			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
-						 dac_sed_pattern[i].i0 & 0xFF);
-			ad9122_write(AD9122_REG_COMPARE_I0_MSBS,
-						 dac_sed_pattern[i].i0 >> 8);
+	timeout = 255;
+	do
+	{
+		delay_us(1000);
+		ret = ad9122_read(AD9122_REG_SYNC_STATUS_1);
+		if (ret < 0)
+			return ret;
 
-			ad9122_write(AD9122_REG_COMPARE_Q0_LSBS,
-						 dac_sed_pattern[i].q0 & 0xFF);
-			ad9122_write(AD9122_REG_COMPARE_Q0_MSBS,
-						 dac_sed_pattern[i].q0 >> 8);
-
-			ad9122_write(AD9122_REG_COMPARE_I1_LSBS,
-						 dac_sed_pattern[i].i1 & 0xFF);
-			ad9122_write(AD9122_REG_COMPARE_I1_MSBS,
-						 dac_sed_pattern[i].i1 >> 8);
-
-			ad9122_write(AD9122_REG_COMPARE_Q1_LSBS,
-						 dac_sed_pattern[i].q1 & 0xFF);
-			ad9122_write(AD9122_REG_COMPARE_Q1_MSBS,
-						 dac_sed_pattern[i].q1 >> 8);
-
-
-			ad9122_write(AD9122_REG_SED_CTRL,
-				    	 AD9122_SED_CTRL_SED_COMPARE_EN);
-
-			ad9122_write(AD9122_REG_EVENT_FLAG_2,
-						 AD9122_EVENT_FLAG_2_AED_COMPARE_PASS |
-						 AD9122_EVENT_FLAG_2_AED_COMPARE_FAIL |
-						 AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
-
-			ad9122_write(AD9122_REG_SED_CTRL,
-				    	 AD9122_SED_CTRL_SED_COMPARE_EN);
-
-			delay_us(1000);
-			reg = ad9122_read(AD9122_REG_SED_CTRL);
-			err_mask = ad9122_read(AD9122_REG_SED_I_LSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_I_MSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_Q_LSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_Q_MSBS);
-
-			if (err_mask || (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED))
-				SET_BIT(dci, err_bfield);
-		}
-	}
-
-	ad9122_write(AD9122_REG_DCI_DELAY,
-				 ad9122_find_dci(&err_bfield, 4));
-	ad9122_write(AD9122_REG_SED_CTRL, 0);
-	DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
+	} while (timeout-- && !(ret & AD9122_SYNC_STATUS_1_SYNC_LOCKED));
 
 	return 0;
 }
 
 /***************************************************************************//**
- * @brief Initializes the AD9643. 
+ * @brief Returns the value of the data clock.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct which contains the
+ * 				 data clock value
+ *
+ * @return eturns the value of the data clock.
+*******************************************************************************/
+static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
+{
+	return conv->clk[CLK_DATA];
+}
+
+/***************************************************************************//**
+ * @brief Sets the value of the data clock.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct which contains the
+ * 				 data clock value
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9122_setup()
+static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t freq)
 {
-	int32_t timeout;
+	uint32_t dac_freq;
 
-	ad9122_reset();
-	ad9122_powerdown_AUX_DAC(0);
-	ad9122_write(AD9122_REG_DATA_FORMAT,
-				 AD9122_DATA_FORMAT_BINARY);
-	ad9122_write(AD9122_REG_CLK_REC_CTRL,
-				 AD9122_CLK_REC_CTRL_DACCLK_CROSS_CORRECTION |
-				 AD9122_CLK_REC_CTRL_REFCLK_CROSS_CORRECTION |
-				 0xF);
-	ad9122_write(AD9122_REG_PLL_CTRL_1,
-				 AD9122_PLL_CTRL_1_PLL_MANUAL_EN);
-	ad9122_write(AD9122_REG_PLL_CTRL_2,
-				 AD9122_PLL_CTRL_2_PLL_LOOP_BANDWIDTH(3) |
-				 AD9122_PLL_CTRL_2_PLL_CHARGE_PUMP_CURRENT(0x11));
-	ad9122_write(AD9122_REG_PLL_CTRL_3,
-				 AD9122_PLL_CTRL_3_N2(3) |
-				 AD9122_PLL_CTRL_3_PLL_CROSS_CTRL_EN |
-				 AD9122_PLL_CTRL_3_N0(1) |
-				 AD9122_PLL_CTRL_3_N1(2));
-	ad9122_write(AD9122_REG_SYNC_CTRL_1,
-				 AD9122_SYNC_CTRL_1_DATA_FIFO_RATE_TOGGLE |
-				 AD9122_SYNC_CTRL_1_RISING_EDGE_SYNC);
-	ad9122_write(AD9122_REG_SYNC_CTRL_2, 0x00);
-	ad9122_write(AD9122_REG_FIFO_CTRL,
-				 AD9122_FIFO_CTRL_FIFO_PHA_OFFSET(4));
-	ad9122_write(AD9122_REG_FIFO_STATUS_1, 0x00);
-	ad9122_write(AD9122_REG_DATAPATH_CTRL,
-				 AD9122_DATAPATH_CTRL_BYPASS_PREMOD |
-				 AD9122_DATAPATH_CTRL_BYPASS_INV_SINC |
-				 AD9122_DATAPATH_CTRL_BYPASS_NCO);
-	ad9122_write(AD9122_REG_HB1_CTRL, AD9122_HB1_CTRL_BYPASS_HB1);
-	ad9122_write(AD9122_REG_HB2_CTRL, AD9122_HB2_CTRL_BYPASS_HB2);
-	ad9122_write(AD9122_REG_HB3_CTRL, AD9122_HB3_CTRL_BYPASS_HB3);
-	ad9122_offset_I_DAC(0x00AE);
-	ad9122_offset_Q_DAC(0x0000);
-	ad9122_fs_adj_I_DAC(0x0000);
-	ad9122_fs_adj_Q_DAC(0x0000);
-	ad9122_write(AD9122_REG_DIE_TEMP_RANGE_CTRL,
-				 AD9122_DIE_TEMP_RANGE_CTRL_REF_CURRENT(1));
-	ad9122_write(AD9122_REG_FIFO_STATUS_1,
-				 AD9122_FIFO_STATUS_1_FIFO_SOFT_ALIGN_REQ);
-
-	timeout = 0xFFFF;
-	while(((ad9122_read(AD9122_REG_FIFO_STATUS_1) &
-		   AD9122_FIFO_STATUS_1_FIFO_SOFT_ALIGN_ACK) == 0) &&
-		   --timeout);
-	if(!timeout)
+	dac_freq = freq * conv->interp_factor;
+	if (dac_freq > AD9122_MAX_DAC_RATE)
+	{
 		return -1;
+	}
 
-	ad9122_write(AD9122_REG_FIFO_STATUS_1, 0x00);
-	ad9122_write(AD9122_REG_SYNC_CTRL_1,
-				 AD9122_SYNC_CTRL_1_SYNC_EN |
-				 AD9122_SYNC_CTRL_1_RISING_EDGE_SYNC);
+	conv->clk[CLK_DATA] = freq;
+	conv->clk[CLK_DAC]  = dac_freq;
 
-	timeout = 0xFFFF;
-	while(((ad9122_read(AD9122_REG_SYNC_STATUS_1) &
-		  AD9122_SYNC_STATUS_1_SYNC_LOCKED) == 0) &&
-		  --timeout);
-	if(!timeout)
-		return -1;
+	return 0;
+}
 
-	return ad9122_dci_calibrate();
+/***************************************************************************//**
+ * @brief Validates the interpolation factor
+ *
+ * @return Returns a valid interpolation factor.
+*******************************************************************************/
+static uint32_t ad9122_validate_interp_factor(unsigned fact)
+{
+	switch (fact)
+	{
+		case 1:
+		case 2:
+		case 4:
+		case 8:
+			return fact;
+		default:
+			return 1;
+	}
+}
+
+/***************************************************************************//**
+ * @brief Sets the interpolation factor.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param interp - Interpolation factor
+ * @param fcent_shift - Center frequency shift in Hz
+ * @param data_rate - Data rate in Hz
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+static int32_t ad9122_set_interpol(struct cf_axi_dds_converter *conv,
+								   uint32_t interp,
+								   uint32_t fcent_shift,
+								   uint32_t data_rate)
+{
+	uint32_t hb1, hb2, hb3, tmp;
+	int32_t ret, cached;
+
+	hb1 = AD9122_HB1_CTRL_BYPASS_HB1;
+	hb2 = AD9122_HB2_CTRL_BYPASS_HB2;
+	hb3 = AD9122_HB3_CTRL_BYPASS_HB3;
+
+	switch (interp) {
+		case 1:
+			break;
+		case 2:
+			if (fcent_shift > 3)
+				return -1;
+			hb1 = AD9122_HB1_INTERP(fcent_shift);
+			break;
+		case 4:
+			if (fcent_shift > 7)
+				return -1;
+			hb1 = AD9122_HB1_INTERP(fcent_shift % 4);
+			hb2 = AD9122_HB23_INTERP(fcent_shift);
+			break;
+		case 8:
+			if (fcent_shift > 15)
+				return -1;
+			hb1 = AD9122_HB1_INTERP(fcent_shift % 4);
+			hb2 = AD9122_HB23_INTERP(fcent_shift % 8);
+			hb3 = AD9122_HB23_INTERP(fcent_shift / 2);
+			break;
+		default:
+			return -1;
+	}
+
+	cached = conv->interp_factor;
+	conv->interp_factor = interp;
+	ret = ad9122_set_data_clk(conv, data_rate ?
+				 data_rate : ad9122_get_data_clk(conv));
+
+	if (ret < 0) {
+		conv->interp_factor = cached;
+
+		return ret;
+	}
+
+	tmp = ad9122_read(AD9122_REG_DATAPATH_CTRL);
+	switch (hb1) {
+		case AD9122_HB1_INTERP(1):
+		case AD9122_HB1_INTERP(3):
+			tmp &= ~AD9122_DATAPATH_CTRL_BYPASS_PREMOD;
+			break;
+		default:
+			tmp |= AD9122_DATAPATH_CTRL_BYPASS_PREMOD;
+	}
+
+	ad9122_write(AD9122_REG_DATAPATH_CTRL, tmp);
+	ad9122_write(AD9122_REG_HB1_CTRL, hb1);
+	ad9122_write(AD9122_REG_HB2_CTRL, hb2);
+	ad9122_write(AD9122_REG_HB3_CTRL, hb3);
+	conv->fcenter_shift = fcent_shift;
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -358,436 +340,243 @@ int32_t ad9122_reset(void)
 }
 
 /***************************************************************************//**
- * @brief Sets the power state of the I DAC. 
+ * @brief Initializes the AD9122.
  *
- * @param pd - Power state: 0 - powered, 1 - power down. For any other 
- *             value the function reads back the power state from the hardware.                   
- *
- * @return Returns the set power state.
+ * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9122_powerdown_I_DAC(int32_t pd)
+int32_t ad9122_setup()
 {
 	int32_t ret;
-    int32_t regValue = 0;
-	
-	if(pd == 1)
+	int32_t i;
+	uint32_t datapath_ctrl, rate;
+	struct cf_axi_dds_converter *conv = &dds_conv;
+
+	if(ad9122_reset() < 0)
+		return -1;
+
+	conv->write 		= ad9122_write;
+	conv->read 			= ad9122_read;
+	conv->setup 		= ad9122_setup;
+	conv->get_data_clk 	= ad9122_get_data_clk;
+	conv->set_data_clk 	= ad9122_set_data_clk;
+	conv->set_interpol 	= ad9122_set_interpol;
+
+	for (i = 0; i < ARRAY_SIZE(ad9122_reg_defaults); i++)
 	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue |= AD9122_POWER_CTRL_PD_I_DAC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		ad9122_write(ad9122_reg_defaults[i][0],
+					 ad9122_reg_defaults[i][1]);
 	}
-    else if(pd == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue &= ~AD9122_POWER_CTRL_PD_I_DAC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_POWER_CTRL_PD_I_DAC);
+
+	if(ad9122_sync() < 0)
+		return -1;
+
+	conv->interp_factor = 1;
+	conv->interp_factor = ad9122_validate_interp_factor(conv->interp_factor);
+
+	conv->fcenter_shift = 0;
+
+	datapath_ctrl = AD9122_DATAPATH_CTRL_BYPASS_PREMOD |
+					AD9122_DATAPATH_CTRL_BYPASS_NCO |
+					AD9122_DATAPATH_CTRL_BYPASS_INV_SINC;
+	ad9122_write(AD9122_REG_DATAPATH_CTRL, datapath_ctrl);
+
+	rate = 491520000;
+	ret = ad9122_set_interpol(conv, conv->interp_factor,
+			  	  	  	  	  conv->fcenter_shift, rate);
+
+	cf_axi_dds_of_probe();
+
+	return ret;
 }
 
 /***************************************************************************//**
- * @brief Sets the power state of the Q DAC. 
+ * @brief Calibrates the AD9122 DCI.
  *
- * @param pd - Power state: 0 - powered, 1 - power down. For any other 
- *             value the function reads back the power state from the hardware.                   
- *
- * @return Returns the set power state.
+ * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t adD9122_powerdown_Q_DAC(int32_t pd)
+int32_t ad9122_dci_calibrate()
 {
-	int32_t ret;
-    int32_t regValue = 0;
-	
-	if(pd == 1)
-	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue |= AD9122_POWER_CTRL_PD_Q_DAC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-	else if(pd == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue &= ~AD9122_POWER_CTRL_PD_Q_DAC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_POWER_CTRL_PD_Q_DAC);
+	return cf_axi_dds_tune_dci(0);
 }
 
 /***************************************************************************//**
- * @brief Sets the power state of the data receiver. 
-  *
- * @param pd - Pwer state: 0 - powered, 1 - power down. For any other 
- *             value the function reads back the power state from the hardware.                   
+ * @brief Sets the phase adjustment of the I DAC.
  *
- * @return Returns the set power state.
+ * @param val - Phase adjustment value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
+ *
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_powerdown_DATA_REC(int32_t pd)
+int32_t ad9122_out_voltage0_phase(int32_t val)
 {
 	int32_t ret;
-    uint32_t regValue = 0;
-	
-	if(pd == 1)
+
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue |= AD9122_POWER_CTRL_PD_DATA_REC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_I_PHA_ADJ_MSB, val);
 	}
-	else if(pd == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue &= ~AD9122_POWER_CTRL_PD_DATA_REC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-    }
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_POWER_CTRL_PD_DATA_REC);
+
+	ret = ad9122_dds_show(AD9122_REG_I_PHA_ADJ_MSB, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Sets the power state of the aux DAC.
-  *
- * @param pd - Power state: 0 - powered, 1 - power down. For any other 
- *             value the function reads back the power state from the hardware.                   
+ * @brief Sets the phase adjustment of the Q DAC.
  *
- * @return Returns the set power state.
+ * @param val - Phase adjustment value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
+ *
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_powerdown_AUX_DAC(int32_t pd)
+int32_t ad9122_out_voltage1_phase(int32_t val)
 {
 	int32_t ret;
-    uint32_t regValue = 0;
-	
-	if(pd == 1)
+
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue |= AD9122_POWER_CTRL_PD_AUX_ADC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_Q_PHA_ADJ_MSB, val);
 	}
-	else if(pd == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-		regValue &= ~AD9122_POWER_CTRL_PD_AUX_ADC;
-		ret = ad9122_write(AD9122_REG_POWER_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_POWER_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_POWER_CTRL_PD_AUX_ADC);
+
+	ret = ad9122_dds_show(AD9122_REG_Q_PHA_ADJ_MSB, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the DACCLK duty correction. 
+ * @brief Sets the calibration bias of the I DAC.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Calibration bias value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
  *
- * @return Returns duty correction state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_duty_correction_DACCLK (int32_t en)
+int32_t ad9122_out_voltage0_calibbias(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue |= AD9122_CLK_REC_CTRL_DACCLK_DUTY_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_I_DAC_OFFSET_MSB, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue &= ~AD9122_CLK_REC_CTRL_DACCLK_DUTY_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_CLK_REC_CTRL_DACCLK_DUTY_CORRECTION);
+
+	ret = ad9122_dds_show(AD9122_REG_I_DAC_OFFSET_MSB, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the REFCLK duty correction. 
+ * @brief Sets the calibration bias of the Q DAC.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Calibration bias value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
  *
- * @return Returns duty correction state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_duty_correction_REFCLK (int32_t en)
+int32_t ad9122_out_voltage1_calibbias(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue |= AD9122_CLK_REC_CTRL_REFCLK_DUTY_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_Q_DAC_OFFSET_MSB, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue &= ~AD9122_CLK_REC_CTRL_REFCLK_DUTY_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_CLK_REC_CTRL_REFCLK_DUTY_CORRECTION);
+
+	ret = ad9122_dds_show(AD9122_REG_Q_DAC_OFFSET_MSB, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the DACCLK cross correction. 
+ * @brief Sets the calibration scale of the I DAC.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Calibration scale value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
  *
- * @return Returns cross correction state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_cross_correction_DACCLK (int32_t en)
+int32_t ad9122_out_voltage0_calibscale(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue |= AD9122_CLK_REC_CTRL_DACCLK_CROSS_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_I_DAC_CTRL, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue &= ~AD9122_CLK_REC_CTRL_DACCLK_CROSS_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_CLK_REC_CTRL_DACCLK_CROSS_CORRECTION);
+
+	ret = ad9122_dds_show(AD9122_REG_I_DAC_CTRL, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the REFCLK cross correction. 
+ * @brief Sets the calibration scale of the Q DAC.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Calibration scale value. If the value equals INT32_MAX then
+ *              the function returns the current set value.
  *
- * @return Returns cross correction state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_cross_correction_REFCLK (int32_t en)
+int32_t ad9122_out_voltage1_calibscale(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue |= AD9122_CLK_REC_CTRL_REFCLK_CROSS_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_store(AD9122_REG_Q_DAC_CTRL, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-		regValue &= ~AD9122_CLK_REC_CTRL_REFCLK_CROSS_CORRECTION;
-		ret = ad9122_write(AD9122_REG_CLK_REC_CTRL, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_CLK_REC_CTRL);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_CLK_REC_CTRL_REFCLK_CROSS_CORRECTION);
+
+	ret = ad9122_dds_show(AD9122_REG_Q_DAC_CTRL, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the PLL. 
+ * @brief Sets the interpolation value.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Interpolation value. If the value equals INT32_MAX then
+ *             the function returns the current set value.
  *
- * @return Returns the enable PLL state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_pll_enable(int32_t en)
+int32_t ad9122_out_altvoltage_interpolation(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-		regValue |= AD9122_PLL_CTRL_1_PLL_EN;
-		ret = ad9122_write(AD9122_REG_PLL_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_interpolation_store(0, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-		regValue &= ~AD9122_PLL_CTRL_1_PLL_EN;
-		ret = ad9122_write(AD9122_REG_PLL_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_PLL_CTRL_1_PLL_EN);
+
+	ret = ad9122_dds_interpolation_show(0, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the manual selection of the PLL band.
+ * @brief Sets the center shift value.
  *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
+ * @param val - Center shift value. If the value equals INT32_MAX then
+ *             the function returns the current set value.
  *
- * @return Returns the manual enable PLL state.
+ * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_pll_manual_enable(int32_t en)
+int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val)
 {
 	int32_t ret;
-    uint8_t regValue = 0;
 
-	if(en == 1)
+	if(val != INT32_MAX)
 	{
-		regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-		regValue |= AD9122_PLL_CTRL_1_PLL_MANUAL_EN;
-		ret = ad9122_write(AD9122_REG_PLL_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
+		return ad9122_dds_interpolation_store(1, val);
 	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-		regValue &= ~AD9122_PLL_CTRL_1_PLL_MANUAL_EN;
-		ret = ad9122_write(AD9122_REG_PLL_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_PLL_CTRL_1);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_PLL_CTRL_1_PLL_MANUAL_EN);
+
+	ret = ad9122_dds_interpolation_show(1, &val);
+
+	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Enables or disables the synchronization logic. 
- *
- * @param en - Enable state: 0 - disabled, 1 - enabled. For any other 
- *             value the function reads back the state from the hardware.                   
- *
- * @return Returns the enable synchronization logic state.
-*******************************************************************************/
-int32_t ad9122_sync_enable(int32_t en)
-{
-	int32_t ret;
-    uint8_t regValue = 0;
-
-	if(en == 1)
-	{
-		regValue = ad9122_read(AD9122_REG_SYNC_CTRL_1);
-		regValue |= AD9122_SYNC_CTRL_1_SYNC_EN;
-		ret = ad9122_write(AD9122_REG_SYNC_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
-	}
-	else if(en == 0)
-	{
-		regValue = ad9122_read(AD9122_REG_SYNC_CTRL_1);
-		regValue &= ~AD9122_SYNC_CTRL_1_SYNC_EN;
-		ret = ad9122_write(AD9122_REG_SYNC_CTRL_1, regValue);
-        if(ret < 0)
-            return ret;
-	}
-    else
-    {
-	    regValue = ad9122_read(AD9122_REG_SYNC_CTRL_1);
-        if(regValue < 0)
-            return regValue;
-    }
-	
-	return (regValue & AD9122_SYNC_CTRL_1_SYNC_EN);
-}
-
-/***************************************************************************//**
- * @brief Sets the full-scale current for I DAC. 
+ * @brief Sets the full-scale current for I DAC.
  *
  * @param fs_adj - Full scale current value. If the value equals INT32_MAX then
  *                 the function returns the current set value.
@@ -805,13 +594,13 @@ int32_t ad9122_fs_adj_I_DAC(int32_t fs_adj)
 		/* Read the current state of the sleep bit */
 		sleepBit = (ad9122_read(AD9122_REG_I_DAC_CTRL) &
 					AD9122_I_DAC_CTRL_I_DAC_SLEEP);
-		
+
         /* Set the full-scale value and keep the state of the sleep bit. */
 		regData1 = AD9122_I_DAC_CTRL_I_DAC_FS_ADJ_9_8((fs_adj & 0x0300) >> 8);
 		ad9122_write(AD9122_REG_I_DAC_CTRL, (sleepBit | regData1));
 		regData2 = AD9122_I_DAC_FS_ADJ_I_DAC_FS_ADJ_7_0((fs_adj & 0x00FF) >> 0);
 		ad9122_write(AD9122_REG_I_DAC_FS_ADJ, regData2);
-        
+
         /* Compute the set full scale current */
         fs_adj = ((regData1 & 0x3) << 8) + (regData2 << 0);
 	}
@@ -820,12 +609,12 @@ int32_t ad9122_fs_adj_I_DAC(int32_t fs_adj)
 	    fs_adj = ((ad9122_read(AD9122_REG_I_DAC_CTRL) & 0x3) << 8) +
 			     (ad9122_read(AD9122_REG_I_DAC_FS_ADJ) << 0);
     }
-	
+
 	return fs_adj;
 }
 
 /***************************************************************************//**
- * @brief Sets the full-scale current for Q DAC. 
+ * @brief Sets the full-scale current for Q DAC.
  *
  * @param fs_adj - Full scale current value. If the value equals INT32_MAX then
  *                 the function returns the current set value.
@@ -837,7 +626,7 @@ int32_t ad9122_fs_adj_Q_DAC(int32_t fs_adj)
 	uint8_t sleepBit	= 0;
 	uint8_t regData1	= 0;
     uint8_t regData2	= 0;
-	
+
 	if(fs_adj != INT32_MAX)
 	{
 		/* Read the current state of the sleep bit */
@@ -858,14 +647,14 @@ int32_t ad9122_fs_adj_Q_DAC(int32_t fs_adj)
 	    fs_adj = ((ad9122_read(AD9122_REG_Q_DAC_CTRL) & 0x3) << 8) +
 			     (ad9122_read(AD9122_REG_Q_DAC_FS_ADJ) << 0);
     }
-	
+
 	return fs_adj;
 }
 
 /***************************************************************************//**
- * @brief Sets the offset of the I DAC. 
+ * @brief Sets the offset of the I DAC.
  *
- * @param offset - The value that is added directly to the samples written 
+ * @param offset - The value that is added directly to the samples written
  *                 to the I DAC. If the value equals INT32_MAX then
  *                 the function returns the current set value.
  *
@@ -875,7 +664,7 @@ int32_t ad9122_offset_I_DAC(int32_t offset)
 {
 	uint8_t regData1 = 0;
     uint8_t regData2 = 0;
-	
+
 	if(offset != INT32_MAX)
 	{
 		regData1 = (offset & 0x00FF) >> 0;
@@ -888,14 +677,14 @@ int32_t ad9122_offset_I_DAC(int32_t offset)
 	    offset = (ad9122_read(AD9122_REG_I_DAC_OFFSET_MSB) << 8) +
 			     (ad9122_read(AD9122_REG_I_DAC_OFFSET_LSB) << 0);
     }
-	
+
 	return offset;
 }
 
 /***************************************************************************//**
- * @brief Sets the offset of the Q DAC. 
- *		  
- * @param offset - The value that is added directly to the samples written 
+ * @brief Sets the offset of the Q DAC.
+ *
+ * @param offset - The value that is added directly to the samples written
  *                 to the Q DAC. If the value equals INT32_MAX then
  *                 the function returns the current set value.
  *
@@ -905,7 +694,7 @@ int32_t ad9122_offset_Q_DAC(int32_t offset)
 {
 	uint8_t regData1 = 0;
     uint8_t regData2 = 0;
-	
+
 	if(offset != INT32_MAX)
 	{
 		regData1 = (offset & 0x00FF) >> 0;
@@ -918,14 +707,14 @@ int32_t ad9122_offset_Q_DAC(int32_t offset)
 	    offset = (ad9122_read(AD9122_REG_Q_DAC_OFFSET_MSB) << 8) +
 			     (ad9122_read(AD9122_REG_Q_DAC_OFFSET_LSB) << 0);
     }
-	
+
 	return offset;
 }
 
 /***************************************************************************//**
- * @brief Sets the phase adjustment of the I DAC. 
+ * @brief Sets the phase adjustment of the I DAC.
  *
- * @param offset - The value that is added directly to the samples written 
+ * @param offset - The value that is added directly to the samples written
  *                 to the I DAC. If the value equals INT32_MAX then
  *                 the function returns the current set value.
  *
@@ -935,7 +724,7 @@ int32_t ad9122_phaseAdj_I_DAC(int32_t phaseAdj)
 {
 	uint8_t regData1 = 0;
     uint8_t regData2 = 0;
-	
+
 	if(phaseAdj != INT32_MAX)
 	{
 		regData1 = (phaseAdj & 0x00FF) >> 0;
@@ -949,14 +738,14 @@ int32_t ad9122_phaseAdj_I_DAC(int32_t phaseAdj)
 	    phaseAdj = ((ad9122_read(AD9122_REG_I_PHA_ADJ_MSB) & 0x03) << 8) +
 			       (ad9122_read(AD9122_REG_I_PHA_ADJ_LSB) << 0);
     }
-	
+
 	return phaseAdj;
 }
 
 /***************************************************************************//**
- * @brief Sets the phase adjustment of the Q DAC. 
- *		  
- * @param offset - The value that is added directly to the samples written 
+ * @brief Sets the phase adjustment of the Q DAC.
+ *
+ * @param offset - The value that is added directly to the samples written
  *                 to the Q DAC. If the value equals INT32_MAX then
  *                 the function returns the current set value.
  *
@@ -966,7 +755,7 @@ int32_t ad9122_phaseAdj_Q_DAC(int32_t phaseAdj)
 {
 	uint8_t regData1 = 0;
     uint8_t regData2 = 0;
-	
+
 	if(phaseAdj != INT32_MAX)
 	{
 		regData1 = (phaseAdj & 0x00FF) >> 0;
@@ -980,63 +769,7 @@ int32_t ad9122_phaseAdj_Q_DAC(int32_t phaseAdj)
 	    phaseAdj = ((ad9122_read(AD9122_REG_Q_PHA_ADJ_MSB) & 0x03) << 8) +
 			       (ad9122_read(AD9122_REG_Q_PHA_ADJ_LSB) << 0);
     }
-	
+
 	return phaseAdj;
 }
 
-
-/***************************************************************************//**
- * @brief Returns the status of the PLL lock.
- *******************************************************************************/
-int32_t ad9122_status_pll_lock()
-{
-	uint8_t regValue	= 0;
-	uint8_t status	= 0;
-	
-	regValue = ad9122_read(AD9122_REG_EVENT_FLAG_1);
-	status = (regValue & AD9122_EVENT_FLAG_1_PLL_LOCKED) != 0;
-	
-	return status;
-}
-
-/***************************************************************************//**
- * @brief Returns the status of the sync lock.
- ******************************************************************************/
-int32_t ad9122_status_sync_lock()
-{
-	uint8_t regValue	= 0;
-	uint8_t status	= 0;
-	
-	regValue = ad9122_read(AD9122_REG_EVENT_FLAG_1);
-	status = (regValue & AD9122_EVENT_FLAG_1_SYNC_SIGNAL_LOCKED) != 0;
-	
-	return status;
-}
-
-/***************************************************************************//**
- * @brief Returns the FIFO warning 1 status.
- ******************************************************************************/
-int32_t ad9122_status_fifo_warn1()
-{
-	uint8_t regValue	= 0;
-	uint8_t status	= 0;
-	
-	regValue = ad9122_read(AD9122_REG_EVENT_FLAG_1);
-	status = (regValue & AD9122_EVENT_FLAG_1_FIFO_WARNING_1) != 0;
-	
-	return status;
-}
-
-/***************************************************************************//**
- * @brief Returns the FIFO warning 2 status.
- ******************************************************************************/
-int32_t ad9122_status_fifo_warn2()
-{
-	uint8_t regValue	= 0;
-	uint8_t status	= 0;
-	
-	regValue = ad9122_read(AD9122_REG_EVENT_FLAG_1);
-	status = (regValue & AD9122_EVENT_FLAG_1_FIFO_WARNING_2) != 0;
-	
-	return status;
-}
