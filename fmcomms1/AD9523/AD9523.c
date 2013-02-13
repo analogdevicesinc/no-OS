@@ -186,7 +186,7 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
 		mask = AD9523_PLL1_OUTP_CH_CTRL_VCXO_SRC_SEL_CH0 << ch;
 		if (out) {
 			ret |= mask;
-			out = 2;
+			out = AD9523_VCXO;
 		} else {
 			ret &= ~mask;
 		}
