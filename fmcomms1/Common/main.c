@@ -66,7 +66,7 @@ int main()
     							 XILINX_ML605,	//carrierBoard
                                  100000000,		//adcSamplingRate
 								 491520000,		//dacSamplingRate
-								 20000,			//rxGain1000
+								 10000,			//rxGain1000
 								 2400000000ull, //rxFrequency
 								 2400000000ull};//txFrequency
 
