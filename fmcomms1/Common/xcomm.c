@@ -113,7 +113,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
 {
     /* Local variables */
     uint32_t enableCommMux;
-    uint32_t ps7Interface;
+    uint32_t ps7Interface = 0;
 
     /* Reset the XCOMM state variables */
     int32_t i = 0;
