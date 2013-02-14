@@ -340,7 +340,7 @@ int32_t ad9122_reset();
 /** Calibrates the AD9122 DCI.*/
 int32_t ad9122_dci_calibrate();
 
-/** Sets the AD9122 data rate.*/
+/** Sets the data rate.*/
 /*  ** Returns the set data rate. */
 int32_t ad9122_set_data_rate(uint32_t rate);
 

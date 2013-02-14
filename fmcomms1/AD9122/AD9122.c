@@ -263,6 +263,8 @@ static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t f
 /***************************************************************************//**
  * @brief Validates the interpolation factor
  *
+ * @param fact - Interpolation factor
+ *
  * @return Returns a valid interpolation factor.
 *******************************************************************************/
 static uint32_t ad9122_validate_interp_factor(unsigned fact)
@@ -284,7 +286,7 @@ static uint32_t ad9122_validate_interp_factor(unsigned fact)
  *
  * @param conv - Pointer to a cf_axi_dds_converter struct.
  * @param interp - Interpolation factor
- * @param fcent_shift - Center frequency shift in Hz
+ * @param fcent_shift - Center frequency shift
  * @param data_rate - Data rate in Hz
  *
  * @return Returns negative error code or 0 in case of success.
@@ -377,7 +379,7 @@ int32_t ad9122_reset(void)
 /***************************************************************************//**
  * @brief Initializes the AD9122.
  *
- * @param pfnSetDataClock - Pointer to a function which sets the DAC data clock
+ * @param pfnSetDataClock - Pointer to a function which sets the data clock
  * @param pfnSetDacClock - Pointer to a function which sets the DAC clock
  * @param pfnRoundRateDataClock - Pointer to a function which computes the
  * 								  actual data clock for a desired clock value
@@ -450,7 +452,7 @@ int32_t ad9122_dci_calibrate()
 /***************************************************************************//**
  * @brief Sets the AD9122 data rate.
  *
- * @param rate - desired rate in Hz
+ * @param rate - Desired data rate in Hz
  *
  * @return Returns the set data rate.
 *******************************************************************************/
