@@ -62,10 +62,13 @@
 #define ADC_CORE_IDENT		    0x30
 #define ADC_CORE_CA_OFFS_SCALE	0x40
 #define ADC_CORE_CB_OFFS_SCALE	0x44
+#define ADC_CORE_USRL_DECIM		0x48
+#define ADC_CORE_USRL_DTYPE		0x4C
 
 /* ADC_CORE_DMA_CHAN_SEL */
 #define ADC_CORE_DMA_CHAN_SEL0	(1 << 0)
 #define ADC_CORE_DMA_CHAN_SEL1	(1 << 1)
+#define ADC_CORE_DMA_CHAN_USRL_SEL	(1 << 2)
 
 /* ADC_CORE_DMA_CTRL */
 #define ADC_CORE_DMA_CAP_EN		(1 << 16)
@@ -113,6 +116,12 @@
 #define ADC_CORE_OFFSET(x)		(((x) & 0xFFFF) << 16)
 #define ADC_CORE_SCALE(x)			((x) & 0xFFFF)
 
+/* ADC_CORE_USRL_DECIM Custom User Logic Decimation (M/N) */
+#define ADC_CORE_USRL_DECIM_NUM(x)		((x) >> 16)
+#define ADC_CORE_USRL_DECIM_DEN(x)		((x) & 0xFFFF)
+
+/* ADC_CORE_USRL_DTYPE Custom User Logic Data Type */
+#define ADC_CORE_USRL_DTYPE_NORM		(1 << 0)
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
