@@ -86,13 +86,20 @@ UCHAR							MuteState;
 *******************************************************************************/
 ATV_ERR ADIAPI_TransmitterInit(void)
 {
-    LastDetMode						= MODE_INVALID;
-    TransmitterParm.Changed			= TRUE;
-    TransmitterParm.Mode			= MODE_NONE;
-    TransmitterParm.ReqOutputMode	= OUT_MODE_HDMI;
-    TransmitterParm.AudInterface	= TX_SPDIF;
-    TransmitterParm.DebugControl	= 1;
-    MuteState						= MUTE_ENABLE;
+    LastDetMode							= MODE_INVALID;
+    TransmitterParm.Changed				= TRUE;
+    TransmitterParm.Mode				= MODE_NONE;
+    TransmitterParm.ReqOutputMode		= OUT_MODE_HDMI;
+    TransmitterParm.InPixelBitsPerColor = 8;
+    TransmitterParm.InPixelFormat 		= SDR_422_SEP_SYNC;
+    TransmitterParm.InPixelStyle 		= 2;
+    TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
+    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_YUV_422;
+    TransmitterParm.InColorSpace 		= TX_CS_RGB;
+    TransmitterParm.InColorSpace 		= TX_CS_RGB;
+    TransmitterParm.AudInterface		= TX_SPDIF;
+    TransmitterParm.DebugControl		= 1;
+    MuteState							= MUTE_ENABLE;
 
     TRANSMITTER_SoftwareInit();
     TRANSMITTER_HardwareInit();
@@ -120,7 +127,6 @@ void TRANSMITTER_SoftwareInit(void)
 *******************************************************************************/
 void TRANSMITTER_HardwareInit(void)
 {
-
 	/* Enable TX HPD line. */
     HAL_EnableTxHPD(TRUE);
 
@@ -134,23 +140,39 @@ void TRANSMITTER_HardwareInit(void)
     ADIAPI_TxSetAvmute(TX_AVMUTE_OFF);
     ADIAPI_TransmitterSetMuteState();
 
-    /* Enable audio interface. */
-    ADIAPI_TxSetAudioInterface(TransmitterParm.AudInterface, AUD_SAMP_PKT, 1);
-
-	/* Set input pixel data format. */
-	ADIAPI_TxSetInputPixelFormat(8, SDR_422_SEP_SYNC, 2, ALIGN_RIGHT, FALSE, FALSE);
-
     /* Set output mode. */
     ADIAPI_TxSetOutputMode(TransmitterParm.ReqOutputMode);
 
+	/* Set input pixel data format. */
+	ADIAPI_TxSetInputPixelFormat(TransmitterParm.InPixelBitsPerColor,
+								 TransmitterParm.InPixelFormat,
+								 TransmitterParm.InPixelStyle,
+								 TransmitterParm.InPixelAlignment,
+								 FALSE,
+								 FALSE);
+
     /* Set output pixel format. */
-    ADIAPI_TxSetOutputPixelFormat(OUT_ENC_YUV_422, TRUE);
+    ADIAPI_TxSetOutputPixelFormat(TransmitterParm.OutPixelEncFormat,
+    							  TRUE);
+
+    /* Set colour space conversion */
+    ADIAPI_TxSetCSC(TransmitterParm.InColorSpace,
+    				TransmitterParm.OutColorSpace);
+
+    /* Enable audio interface. */
+    ADIAPI_TxSetAudioInterface(TransmitterParm.AudInterface,
+    						   AUD_SAMP_PKT,
+    						   1);
 
     /* Set interrupt masks. */
     ADIAPI_TxSetEnabledEvents (TX_EVENT_ALL_EVENTS, FALSE);
-    ADIAPI_TxSetEnabledEvents ((TX_EVENT)(TX_EVENT_HPD_CHG | TX_EVENT_MSEN_CHG | TX_EVENT_EDID_READY), TRUE);
+    ADIAPI_TxSetEnabledEvents ((TX_EVENT)(TX_EVENT_HPD_CHG |
+    									  TX_EVENT_MSEN_CHG |
+    									  TX_EVENT_EDID_READY),
+    						   TRUE);
 
-	ADIAPI_TxEnablePackets(PKT_ALL_PACKETS, TRUE);
+	ADIAPI_TxEnablePackets(PKT_ALL_PACKETS,
+						   TRUE);
 }
 
 /***************************************************************************//**

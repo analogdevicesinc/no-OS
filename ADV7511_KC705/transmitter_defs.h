@@ -99,12 +99,18 @@ typedef enum
 typedef struct
 {
     BOOL						Changed;
-    UINT16						Flags;
-    TRANSMITTER_OUTPUT_MODE		ReqOutputMode;
-    UINT16						DebugControl;
     TRANSMITTER_OPER_MODE		Mode;
     TRANSMITTER_POWER_MODE		PowerMode;
+    TRANSMITTER_OUTPUT_MODE		ReqOutputMode;
+    UCHAR						InPixelBitsPerColor;
+    TX_IN_FORMAT				InPixelFormat;
+    UCHAR						InPixelStyle;
+    TX_CHAN_ALIGN				InPixelAlignment;
+    TX_OUT_ENCODING				OutPixelEncFormat;
+    TX_CS_MODE					InColorSpace;
+    TX_CS_MODE					OutColorSpace;
     TRANSMITTER_AUD_INTERFACE	AudInterface;
+    UINT16						DebugControl;
 } TRANSMITTER_OPER_PARAMS;
 
 typedef struct
