@@ -216,48 +216,49 @@ static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
 *******************************************************************************/
 static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t freq)
 {
+	uint32_t dac_freq;
+	int32_t dat_freq, r_dac_freq;
 	int64_t ret;
-	uint32_t efreq, dac_freq;
 
-	efreq = pfnRoundRateDataClk(freq);
-	if (efreq != freq)
-	{
+	dat_freq = pfnRoundRateDataClk(freq);
+	if (dat_freq < 0 || dat_freq > AD9122_MAX_DAC_RATE) {
 #ifdef CLK_DEBUG
-		xil_printf("CLK_DATA: Requested Rate Mismatch %d != %d\n", freq, efreq);
+		xil_printf("CLK_DATA: Error or requested rate exceeds maximum %ld (%lu)",
+				   dat_freq, AD9122_MAX_DAC_RATE);
 #endif
 		return -1;
 	}
 
-	dac_freq = freq * conv->interp_factor;
-	if (dac_freq > AD9122_MAX_DAC_RATE)
-	{
+	dac_freq = dat_freq * conv->interp_factor;
+	if (dac_freq > AD9122_MAX_DAC_RATE) {
 #ifdef CLK_DEBUG
-		xil_printf("CLK_DAC: Requested Rate exceeds maximum %d (%d)\n",
+		xil_printf("CLK_DAC: Requested Rate exceeds maximum %lu (%lu)",
 					dac_freq, AD9122_MAX_DAC_RATE);
 #endif
 		return -1;
 	}
 
-	efreq = pfnRoundRateDacClk(dac_freq);
-	if (efreq != dac_freq)
-	{
+	r_dac_freq = pfnRoundRateDacClk(dac_freq);
+	if (r_dac_freq != dac_freq) {
 #ifdef CLK_DEBUG
-		xil_printf("CLK_DAC: Requested Rate Mismatch %d != %d\n",	dac_freq, efreq);
+		xil_printf("CLK_DAC: Requested Rate mismatch %ld (%lu)",
+				   r_dac_freq, dac_freq);
 #endif
 		return -1;
 	}
 
-	ret = pfnSetDataClk(freq);
+	ret = pfnSetDataClk(dat_freq);
 	if(ret < 0)
-		return -1;
+		return ret;
 	conv->clk[CLK_DATA] = (uint32_t)ret;
 
 	ret = pfnSetDacClk(dac_freq);
 	if(ret < 0)
-		return -1;
+		return ret;
 	conv->clk[CLK_DAC]  = (uint32_t)ret;
 
 	return 0;
+
 }
 
 /***************************************************************************//**
