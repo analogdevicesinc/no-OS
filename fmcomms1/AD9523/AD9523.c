@@ -97,6 +97,20 @@ extern void delay_us(uint32_t us_count);
 #define AD_IF(_pde, _a) AD_IFE(_pde, _a, 0)
 #define abs(x) ((x)< 0 ? -(x) : (x))
 
+/*
+ * Divide positive or negative dividend by positive divisor and round
+ * to closest integer. Result is undefined for negative divisors.
+ */
+#define DIV_ROUND_CLOSEST(x, divisor)  \
+( {                                    \
+typeof(x) __x = x;                     \
+typeof(divisor) __d = divisor;         \
+(((typeof(x))-1) > 0 || (__x) > 0) ?   \
+(((__x) + ((__d) / 2)) / (__d)) :      \
+(((__x) - ((__d) / 2)) / (__d));       \
+} )
+
+
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
@@ -364,10 +378,7 @@ int32_t ad9523_write_raw(int32_t channel,
 		ret = ad9523_set_clock_provider(channel, val);
 		if (ret < 0)
 			goto out;
-		tmp = st->vco_out_freq[st->vco_out_map[channel]] / val;
-		if((st->vco_out_freq[st->vco_out_map[channel]] / tmp - val) >
-		   (val - st->vco_out_freq[st->vco_out_map[channel]] / (tmp + 1)))
-		   tmp++;
+		tmp = DIV_ROUND_CLOSEST(st->vco_out_freq[st->vco_out_map[channel]], val);
 		tmp = tmp < 1 ? 1 : tmp > 1024 ? 1024 : tmp;
 		ret_val = st->vco_out_freq[st->vco_out_map[channel]] / tmp;
         reg &= ~(0x3FF << 8);
@@ -622,7 +633,7 @@ uint32_t ad9523_clk_round_rate(int32_t ch, uint32_t rate)
 		/* Ch 10..14: No action required, return success */
 	}
 
-	tmp1 = clk / rate;
+	tmp1 = DIV_ROUND_CLOSEST(clk, rate);
 	tmp1 = tmp1 < 1UL ? 1UL : tmp1 > 1024UL ? 1024UL : tmp1;
 
 	return clk / tmp1;
