@@ -49,6 +49,8 @@
 #include <xil_io.h>
 #include "timer.h"
 #include "test.h"
+#include "adc_core.h"
+#include "dma.h"
 
 /*****************************************************************************/
 /***************************** External Functions ****************************/
@@ -220,25 +222,22 @@ void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 	uint32_t baddr;
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
 
-	Xil_Out32((baddr + 0x030), 0); // clear dma operations
-	Xil_Out32((baddr + 0x030), 1); // enable dma operations
-	Xil_Out32((baddr + 0x048), sa); // capture start address
-	Xil_Out32((baddr + 0x058), (qwcnt * 8)); // number of bytes
+	DMA_TransferDataRx(sa, qwcnt, baddr);
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
-	Xil_Out32((baddr + 0x008), 0x03); // channel enables
-	Xil_Out32((baddr + 0x00c), 0x0); // capture disable
-	Xil_Out32((baddr + 0x010), 0xf); // clear status
-	Xil_Out32((baddr + 0x014), 0xf); // clear status
-	Xil_Out32((baddr + 0x00c), (0x10000 | (qwcnt-1))); // start capture
+	Xil_Out32((baddr + ADC_CORE_DMA_CHAN_SEL), 0x03); // channel enables
+	Xil_Out32((baddr + ADC_CORE_DMA_CTRL), 0x0); // capture disable
+	Xil_Out32((baddr + ADC_CORE_DMA_STAT), 0xf); // clear status
+	Xil_Out32((baddr + ADC_CORE_ADC_STAT), 0xf); // clear status
+	Xil_Out32((baddr + ADC_CORE_DMA_CTRL), (0x10000000 | (qwcnt-1))); // start capture
 
 	do
 	{
 		delay_ms(1);
 	}
-	while ((Xil_In32(baddr + 0x010) & 0x1) == 1);
+	while ((Xil_In32(baddr + ADC_CORE_DMA_STAT) & ADC_CORE_DMA_STAT_BUSY) == 1);
 
-	if ((Xil_In32(baddr + 0x010) & 0x02) == 0x02)
+	if ((Xil_In32(baddr + ADC_CORE_DMA_STAT) & ADC_CORE_DMA_STAT_OVF) == 0x02)
 	{
 		xil_printf("adc_capture: overflow occured, data may be corrupted\n\r");
 	}
