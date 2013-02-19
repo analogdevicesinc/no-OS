@@ -53,7 +53,7 @@
 /******************* ADC Core Registers Definitions *******************************/
 /*****************************************************************************/
 #define ADC_CORE_VERSION		0x00
-#define ADC_CORE_DMA_CHAN_SEL	0x08 
+#define ADC_CORE_DMA_CHAN_SEL	0x04
 #define ADC_CORE_DMA_CTRL		0x0C
 #define ADC_CORE_DMA_STAT		0x10
 #define ADC_CORE_ADC_STAT		0x14
@@ -71,9 +71,8 @@
 #define ADC_CORE_DMA_CHAN_USRL_SEL	(1 << 2)
 
 /* ADC_CORE_DMA_CTRL */
-#define ADC_CORE_DMA_CAP_EN		(1 << 31) 
-#define ADC_CORE_DMA_CAP_STREAM	30
-#define ADC_CORE_DMA_CNT(x)		(((x) & 0x3FFFFFFF) << 0) // (((x) & 0xFFFF) << 0)
+#define ADC_CORE_DMA_CAP_EN		(1 << 16)
+#define ADC_CORE_DMA_CNT(x)		(((x) & 0xFFFF) << 0)
 
 /* ADC_CORE_DMA_STAT */
 #define ADC_CORE_DMA_STAT_BUSY		(1 << 0) /* W1C */
