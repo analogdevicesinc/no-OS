@@ -851,7 +851,8 @@ int32_t XCOMM_SetDacInterpolation(int32_t interp)
 /**************************************************************************//**
 * @brief Sets the DAC center frequency shift
 *
-* @param shift: Center frequency shift
+* @param shift: Center frequency shift as a multiplier of fData / 2. 
+*               The shift values should be in the range [0, 15].
 *
 * @return If success, return the set value if error, return -1
 ******************************************************************************/

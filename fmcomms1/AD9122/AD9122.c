@@ -287,7 +287,8 @@ static uint32_t ad9122_validate_interp_factor(unsigned fact)
  *
  * @param conv - Pointer to a cf_axi_dds_converter struct.
  * @param interp - Interpolation factor
- * @param fcent_shift - Center frequency shift
+ * @param fcent_shift - Center frequency shift as a multiplier of fData / 2. 
+*               		The shift values should be in the range [0, 15]
  * @param data_rate - Data rate in Hz
  *
  * @return Returns negative error code or 0 in case of success.
