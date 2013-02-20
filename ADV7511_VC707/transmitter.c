@@ -173,6 +173,8 @@ void TRANSMITTER_HardwareInit(void)
 
 	ADIAPI_TxEnablePackets(PKT_ALL_PACKETS,
 						   TRUE);
+	ADIAPI_TxEnablePackets(PKT_AV_INFO_FRAME,
+						   FALSE);
 }
 
 /***************************************************************************//**
@@ -373,6 +375,7 @@ ATV_ERR ADIAPI_TransmitterSetMuteState(void)
         	ADIAPI_TxMuteVideo(FALSE);
         }
     }
+	HAL_I2CWriteByte(0x72, 0x55, 0x00);
 
 	return ATVERR_OK;
 }
