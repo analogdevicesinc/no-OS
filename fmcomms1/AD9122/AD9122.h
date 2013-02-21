@@ -348,9 +348,17 @@ int32_t ad9122_set_data_rate(uint32_t rate);
 /*  ** Returns the set interpolation factor. */
 int32_t ad9122_out_altvoltage_interpolation(int32_t val);
 
+/** Stores the available interpolation frequencies in the array supplied as parameter. */
+/*  ** Returns 0 for success or negative error code. */
+int32_t out_altvoltage_interpolation_frequency_available(int32_t* val_array);
+
 /** Sets the center frequency shift value.*/
 /*  ** Returns the set center frequency shift. */
 int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val);
+
+/** Stores the available center shift frequencies in the array supplied as parameter. */
+/*  ** Returns 0 for success or negative error code. */
+int32_t out_altvoltage_interpolation_center_shift_frequency_available(int32_t* val_array);
 
 /** Sets the full-scale current for I DAC. */
 /*  ** Returns the set full-scale current. */

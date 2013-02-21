@@ -290,17 +290,29 @@ int32_t XCOMM_IsAdcDcoLocked(void);
 
 /************************ DAC Functions *****************************/
 
-/** Sets the DAC interpolation factor */
-/*  ** interp: interpolation factor */
+/** Gets the available interpolation frequencies */
+/*  ** valArray: Array to store the return values. */
+/*  ** if success, return 0 */
+/*  ** if error, return -1 */
+int32_t XCOMM_GetDacAvailableInterpolationFreq(int32_t* valArray);
+
+/** Sets the DAC interpolation frequency */
+/*  ** interp: Interpolation frequency in Hz */
 /*  ** if success, return the set value */
 /*  ** if error, return -1 */
-int32_t XCOMM_SetDacInterpolation(int32_t interp);
+int32_t XCOMM_SetDacInterpolationFreq(int32_t interp);
+
+/** Gets the available center shift frequencies */
+/*  ** valArray: Array to store the return values. */
+/*  ** if success, return 0 */
+/*  ** if error, return -1 */
+int32_t XCOMM_GetDacAvailableCenterShiftFreq(int32_t* valArray);
 
 /** Sets the DAC center frequency shift */
-/*  ** shift: Center frequency shift */
+/*  ** shift: Center frequency shift in Hz*/
 /*  ** if success, return the set value */
 /*  ** if error, return -1 */
-int32_t XCOMM_SetDacCenterShift(int32_t shift);
+int32_t XCOMM_SetDacCenterShiftFreq(int32_t shift);
 
 /** Sets the sampling rate of the DAC */
 /*  ** rate: desired rate in Hz */

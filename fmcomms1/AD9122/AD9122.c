@@ -207,6 +207,62 @@ static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
 }
 
 /***************************************************************************//**
+ * @brief Updates the available interpolation frequencies list.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param dat_freq - Data clock frequency in Hz
+ *
+ * @return None.
+*******************************************************************************/
+static void ad9122_update_avail_intp_modes(struct cf_axi_dds_converter *conv,
+					 	 	 	 	 	   uint32_t dat_freq)
+{
+	uint32_t dac_freq;
+	int32_t r_dac_freq;
+	int32_t intp, i;
+
+	for (i = 0, intp = 1; intp <= 8; intp *= 2) {
+		dac_freq = dat_freq * intp;
+		if (dac_freq > AD9122_MAX_DAC_RATE) {
+			break;
+		}
+		r_dac_freq = pfnRoundRateDacClk(dac_freq);
+		if (r_dac_freq != dac_freq)
+			continue;
+		else
+			conv->intp_modes[i++] = dac_freq;
+	}
+
+	conv->intp_modes[i] = 0;
+}
+
+/***************************************************************************//**
+ * @brief Updates the available center frequencies list.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param freq - Data clock value
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+static void ad9122_update_avail_fcent_modes(struct cf_axi_dds_converter *conv,
+					  	  	  	  	  	    uint32_t dat_freq)
+{
+	int32_t i;
+
+	if (conv->interp_factor == 1) {
+		conv->cs_modes[0] = 0;
+		conv->cs_modes[1] = -1;
+		return;
+	}
+
+	for (i = 0; i < (conv->interp_factor * 2); i++) {
+		conv->cs_modes[i] = (dat_freq * i) / 2;
+	}
+
+	conv->cs_modes[i] = -1;
+}
+
+/***************************************************************************//**
  * @brief Sets the value of the data clock.
  *
  * @param conv - Pointer to a cf_axi_dds_converter struct
@@ -257,8 +313,10 @@ static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t f
 		return ret;
 	conv->clk[CLK_DAC]  = (uint32_t)ret;
 
-	return 0;
+	ad9122_update_avail_fcent_modes(conv, dat_freq);
+	ad9122_update_avail_intp_modes(conv, dat_freq);
 
+	return 0;
 }
 
 /***************************************************************************//**
@@ -283,7 +341,7 @@ static uint32_t ad9122_validate_interp_factor(unsigned fact)
 }
 
 /***************************************************************************//**
- * @brief Sets the interpolation factor.
+ * @brief Sets the interpolation factor and the center shift frequency.
  *
  * @param conv - Pointer to a cf_axi_dds_converter struct.
  * @param interp - Interpolation factor
@@ -359,6 +417,59 @@ static int32_t ad9122_set_interpol(struct cf_axi_dds_converter *conv,
 
 	return 0;
 }
+/***************************************************************************//**
+ * @brief Sets the interpolation frequency.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param freq - Interpolation frequency in Hz
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+static int32_t ad9122_set_interpol_freq(struct cf_axi_dds_converter *conv,
+										uint32_t freq)
+{
+	return ad9122_set_interpol(conv, freq / ad9122_get_data_clk(conv),
+							   conv->fcenter_shift, 0);
+}
+
+/***************************************************************************//**
+ * @brief Sets the interpolation center frequency shift.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param freq - Center frequency shift in Hz
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+static int32_t ad9122_set_interpol_fcent_freq(struct cf_axi_dds_converter *conv,
+											  uint32_t freq)
+{
+	return ad9122_set_interpol(conv, conv->interp_factor,
+							  (freq * 2) / ad9122_get_data_clk(conv), 0);
+}
+
+/***************************************************************************//**
+ * @brief Returns the interpolation frequency.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct.
+ *
+ * @return Returns negative error code or the interpolation frequency.
+*******************************************************************************/
+static uint32_t ad9122_get_interpol_freq(struct cf_axi_dds_converter *conv)
+{
+	return ad9122_get_data_clk(conv) * conv->interp_factor;
+}
+
+/***************************************************************************//**
+ * @brief Returns the center frequency shift.
+ *
+ * @param conv - Pointer to a cf_axi_dds_converter struct.
+ *
+ * @return Returns negative error code or the center frequency shift.
+*******************************************************************************/
+static uint32_t ad9122_get_interpol_fcent_freq(struct cf_axi_dds_converter *conv)
+{
+	return (ad9122_get_data_clk(conv) * conv->fcenter_shift) / 2;
+}
 
 /***************************************************************************//**
  * @brief Resets the device.
@@ -411,7 +522,10 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 	conv->setup 		= ad9122_setup;
 	conv->get_data_clk 	= ad9122_get_data_clk;
 	conv->set_data_clk 	= ad9122_set_data_clk;
-	conv->set_interpol 	= ad9122_set_interpol;
+	conv->set_interpol 	= ad9122_set_interpol_freq;
+	conv->get_interpol 	= ad9122_get_interpol_freq;
+	conv->set_interpol_fcent = ad9122_set_interpol_fcent_freq;
+	conv->get_interpol_fcent = ad9122_get_interpol_fcent_freq;
 
 	for (i = 0; i < ARRAY_SIZE(ad9122_reg_defaults); i++)
 	{
@@ -606,7 +720,7 @@ int32_t ad9122_out_voltage1_calibscale(int32_t val)
 /***************************************************************************//**
  * @brief Sets the interpolation factor.
  *
- * @param val - Interpolation value. If the value equals INT32_MAX then
+ * @param val - Interpolation frequency in Hz. If the value equals INT32_MAX then
  *             the function returns the current set value.
  *
  * @return Returns the set value or negative error code.
@@ -626,9 +740,24 @@ int32_t ad9122_out_altvoltage_interpolation(int32_t val)
 }
 
 /***************************************************************************//**
+ * @brief Stores the available interpolation frequencies in the array
+ * 		  supplied as parameter.
+ *
+ * @param val_array - Array to store the return values.
+ * 					  The size of the array must be 5, the last valid value
+ * 					  in the array is followed by a 0.
+ *
+ * @return Returns 0 for success or negative error code.
+*******************************************************************************/
+int32_t out_altvoltage_interpolation_frequency_available(int32_t* val_array)
+{
+	return ad9122_dds_interpolation_show(2, val_array);
+}
+
+/***************************************************************************//**
  * @brief Sets the center frequency shift value.
  *
- * @param val - Center shift value. If the value equals INT32_MAX then
+ * @param val - Center frequency shift value in Hz. If the value equals INT32_MAX then
  *             the function returns the current set value.
  *
  * @return Returns the set value or negative error code.
@@ -645,6 +774,21 @@ int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val)
 	ret = ad9122_dds_interpolation_show(1, &val);
 
 	return ret > 0 ? val : ret;
+}
+
+/***************************************************************************//**
+ * @brief Stores the available center shift frequencies in the array
+ * 		  supplied as parameter.
+ *
+ * @param val_array - Array to store the return values.
+ * 					  The size of the array must be 17, the last valid value
+ * 					  in the array is followed by a -1.
+ *
+ * @return Returns 0 for success or negative error code.
+*******************************************************************************/
+int32_t out_altvoltage_interpolation_center_shift_frequency_available(int32_t* val_array)
+{
+	return ad9122_dds_interpolation_show(3, val_array);
 }
 
 /***************************************************************************//**

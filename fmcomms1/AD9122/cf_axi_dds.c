@@ -604,7 +604,7 @@ uint32_t ad9122_dds_interpolation_store(uint32_t address,
 	int32_t ret;
 
 
-	if (!conv->set_interpol)
+	if (!conv->set_interpol || !conv->set_interpol_fcent)
 		return -1;
 
 	ctrl_reg = dds_read(st, CF_AXI_DDS_CTRL);
@@ -612,13 +612,10 @@ uint32_t ad9122_dds_interpolation_store(uint32_t address,
 
 	switch (address) {
 	case 0:
-
-		ret = conv->set_interpol(conv, readin,
-					conv->fcenter_shift, 0);
+		ret = conv->set_interpol(conv, readin);
 		break;
 	case 1:
-		ret = conv->set_interpol(conv, conv->interp_factor,
-					readin, 0);
+		ret = conv->set_interpol_fcent(conv, readin);
 		break;
 	default:
 		ret = -1;
@@ -639,14 +636,24 @@ uint32_t ad9122_dds_interpolation_show(uint32_t address, int32_t* val)
 {
 	struct cf_axi_dds_converter *conv = &dds_conv;
 	int32_t ret = 0;
+	int32_t i;
 
 	switch (address) {
 	case 0:
-		*val = conv->interp_factor;
+		*val = conv->get_interpol(conv);
 		break;
 	case 1:
-		*val = conv->fcenter_shift;
+		*val = conv->get_interpol_fcent(conv);
 		break;
+	case 2:
+		for (i = 0; conv->intp_modes[i] != 0; i++)
+			val[i] = (int32_t)conv->intp_modes[i];
+		val[i] = 0;
+		break;
+	case 3:
+		for (i = 0; conv->cs_modes[i] != -1; i++)
+			val[i] = (int32_t)conv->cs_modes[i];
+		val[i] = -1;
 	default:
 		ret = -1;
 	}

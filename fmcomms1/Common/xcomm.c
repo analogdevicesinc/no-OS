@@ -837,30 +837,56 @@ int32_t XCOMM_IsAdcDcoLocked(void)
 /************************ DAC Functions **************************************/
 
 /**************************************************************************//**
-* @brief Sets the DAC interpolation factor
+* @brief Gets the available interpolation frequencies
 *
-* @param interp: interpolation factor
+* @param valArray: Array to store the return values.
+ * 				   The size of the array must be 5, the last valid value
+ * 				   in the array is followed by a 0.
+*
+* @return If success, return 0 if error, return -1
+******************************************************************************/
+int32_t XCOMM_GetDacAvailableInterpolationFreq(int32_t* valArray)
+{
+	return out_altvoltage_interpolation_frequency_available(valArray);
+}
+
+/**************************************************************************//**
+* @brief Sets the DAC interpolation frequency
+*
+* @param interp: Interpolation frequency in Hz
 *
 * @return If success, return the set value if error, return -1
 ******************************************************************************/
-int32_t XCOMM_SetDacInterpolation(int32_t interp)
+int32_t XCOMM_SetDacInterpolationFreq(int32_t interp)
 {
 	return ad9122_out_altvoltage_interpolation(interp);
 }
 
 /**************************************************************************//**
+* @brief Gets the available center shift frequencies
+*
+* @param valArray: Array to store the return values.
+ * 				   The size of the array must be 17, the last valid value
+ * 				   in the array is followed by a -1.
+*
+* @return If success, return 0 if error, return -1
+******************************************************************************/
+int32_t XCOMM_GetDacAvailableCenterShiftFreq(int32_t* valArray)
+{
+	return out_altvoltage_interpolation_center_shift_frequency_available(valArray);
+}
+
+/**************************************************************************//**
 * @brief Sets the DAC center frequency shift
 *
-* @param shift: Center frequency shift as a multiplier of fData / 2. 
-*               The shift values should be in the range [0, 15].
+* @param shift: Center frequency shift in Hz
 *
 * @return If success, return the set value if error, return -1
 ******************************************************************************/
-int32_t XCOMM_SetDacCenterShift(int32_t shift)
+int32_t XCOMM_SetDacCenterShiftFreq(int32_t shift)
 {
 	return ad9122_out_altvoltage_interpolation_center_shift(shift);
 }
-
 
 /**************************************************************************//**
 * @brief Sets the sampling rate of the DAC

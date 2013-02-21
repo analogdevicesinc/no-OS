@@ -114,14 +114,17 @@ struct cf_axi_dds_converter
 	uint32_t	id;
 	uint32_t	interp_factor;
 	uint32_t	fcenter_shift;
+	uint32_t 	intp_modes[5];
+	uint32_t 	cs_modes[17];
 	int32_t		(*read)(uint8_t reg);
 	int32_t		(*write)(uint8_t reg, uint8_t val);
 	int32_t		(*setup)();
 	uint32_t 	(*get_data_clk)(struct cf_axi_dds_converter *conv);
 	int32_t		(*set_data_clk)(struct cf_axi_dds_converter *conv, uint32_t freq);
-	int32_t		(*set_interpol)(struct cf_axi_dds_converter *conv, uint32_t interp,
-	uint32_t 	fcent_shift,
-	uint32_t 	data_rate);
+	uint32_t	(*get_interpol)(struct cf_axi_dds_converter *conv);
+	int32_t		(*set_interpol)(struct cf_axi_dds_converter *conv, uint32_t freq);
+	uint32_t	(*get_interpol_fcent)(struct cf_axi_dds_converter *conv);
+	int32_t		(*set_interpol_fcent)(struct cf_axi_dds_converter *conv, uint32_t freq);
 };
 
 /******************************************************************************/

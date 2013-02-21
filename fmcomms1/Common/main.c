@@ -62,6 +62,8 @@ int main()
     uint64_t retFreqRx;
     uint64_t retFreqTx;
     int32_t fmcSel;
+    int32_t i;
+    int32_t valArray[17];
     XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
     							 XILINX_ML605,	//carrierBoard
                                  100000000,		//adcSamplingRate
@@ -95,6 +97,34 @@ int main()
 	{
 		xil_printf("XCOMM Init OK!\n\r");
 	}
+
+	xil_printf("\n\rADC sampling rate [Hz]: ");
+	ret = XCOMM_GetAdcSamplingRate(XCOMM_ReadMode_FromHW);
+	xil_printf("%d \n\r", ret);
+
+	xil_printf("\n\rDAC sampling rate [Hz]: ");
+	ret = XCOMM_GetDacSamplingRate(XCOMM_ReadMode_FromHW);
+	xil_printf("%d \n\r", ret);
+
+	xil_printf("\n\rDAC available interpolation frequencies [Hz]: ");
+	XCOMM_GetDacAvailableInterpolationFreq(valArray);
+	i = 0;
+	while((valArray[i] != 0) && (i < 5))
+	{
+		xil_printf("%d ", valArray[i]);
+		i++;
+	}
+	xil_printf("\n\r");
+
+	xil_printf("\n\rDAC available center shift frequencies [Hz]: ");
+	XCOMM_GetDacAvailableCenterShiftFreq(valArray);
+	i = 0;
+	while((valArray[i] != -1) && (i < 17))
+	{
+		xil_printf("%d ", valArray[i]);
+		i++;
+	}
+	xil_printf("\n\r");
 
     xil_printf("\n\rTesting the ADC communication... \n\r");
     XCOMM_SetAdcTestMode(0x01, XCOMM_AdcChannel_All);
