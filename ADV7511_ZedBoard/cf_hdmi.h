@@ -49,14 +49,14 @@
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
-#define CF_CLKGEN_BASEADDR  0x66000000
-#define CFV_BASEADDR        0x6c000000
-#define CFA_BASEADDR        0x75c00000
-#define DDR_BASEADDR        0x00000000
-#define UART_BASEADDR       0xe0001000
-#define VDMA_BASEADDR       0x43000000
-#define ADMA_BASEADDR       0x40400000
-#define IIC_BASEADDR        0x41600000
+#define CF_CLKGEN_BASEADDR  XPAR_AXI_CLKGEN_0_BASEADDR
+#define CFV_BASEADDR        XPAR_AXI_HDMI_TX_16B_0_BASEADDR
+#define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
+#define DDR_BASEADDR        XPAR_DDR_MEM_BASEADDR
+#define UART_BASEADDR       XPS_UART1_BASEADDR
+#define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
+#define ADMA_BASEADDR       XPAR_AXI_DMA_SPDIF_BASEADDR
+#define IIC_BASEADDR        XPS_I2C0_BASEADDR
 #define H_STRIDE            1920
 #define H_COUNT             2200
 #define H_ACTIVE            1920

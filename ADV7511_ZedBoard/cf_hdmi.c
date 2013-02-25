@@ -87,8 +87,9 @@ void DDRAudioWr(void)
 	xil_printf("DDR audio write: started\n\r");
 	scnt = 0;
 	sincr = (65536*2)/AUDIO_LENGTH;
-	for (n = 0; n < 32; n++) {
-	  Xil_Out32((AUDIO_BASEADDR+(n*4)), 0x00); // init descriptors
+	for (n = 0; n < 32; n++)
+	{
+		Xil_Out32((AUDIO_BASEADDR+(n*4)), 0x00); // init descriptors
 	}
 	Xil_Out32((AUDIO_BASEADDR+0x00), (AUDIO_BASEADDR + 0x40)); // next descriptor
 	Xil_Out32((AUDIO_BASEADDR+0x08), (AUDIO_BASEADDR + 0x80)); // start address
@@ -98,9 +99,10 @@ void DDRAudioWr(void)
 	Xil_Out32((AUDIO_BASEADDR+0x58), (0x4000000 | (AUDIO_LENGTH*8))); // no. of bytes
 	Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
 	Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
-	for (n = 0; n < AUDIO_LENGTH; n++) {
-	Xil_Out32((AUDIO_BASEADDR+0x80+(n*4)), ((scnt << 16) | scnt));
-	scnt = (n > (AUDIO_LENGTH/2)) ? (scnt-sincr) : (scnt+sincr);
+	for (n = 0; n < AUDIO_LENGTH; n++)
+	{
+		Xil_Out32((AUDIO_BASEADDR+0x80+(n*4)), ((scnt << 16) | scnt));
+		scnt = (n > (AUDIO_LENGTH/2)) ? (scnt-sincr) : (scnt+sincr);
 	}
 	Xil_DCacheFlush();
 	xil_printf("DDR audio write: completed (total %d)\n\r", AUDIO_LENGTH);
@@ -154,6 +156,7 @@ void AudioClick(void)
     /* Generating audio clicks. */
     Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
     Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
+    Xil_DCacheFlush();
     Xil_Out32((ADMA_BASEADDR + 0x00), 0); // clear dma operations
     Xil_Out32((ADMA_BASEADDR + 0x08), AUDIO_BASEADDR); // head descr.
 	Xil_Out32((ADMA_BASEADDR + 0x00), 1); // enable dma operations
