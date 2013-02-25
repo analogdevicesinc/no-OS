@@ -46,6 +46,7 @@
 #include "xparameters.h"
 #include "cf_hdmi.h"
 #include "cf_hdmi_demo.h"
+#include "xil_cache.h"
 
 /***************************************************************************//**
  * @brief DDR write.
@@ -68,6 +69,7 @@ void DDRVideoWr(void)
 			dcnt = dcnt + 1;
 		}
 	}
+	Xil_DCacheFlush();
 	xil_printf("DDR write: completed (total %d)\n\r", dcnt);
 }
 
@@ -154,6 +156,7 @@ void AudioClick(void)
     /* Generating audio clicks. */
     Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
     Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
+    Xil_DCacheFlush();
     Xil_Out32((ADMA_BASEADDR + 0x00), 0); // clear dma operations
     Xil_Out32((ADMA_BASEADDR + 0x08), AUDIO_BASEADDR); // head descr.
 	Xil_Out32((ADMA_BASEADDR + 0x00), 1); // enable dma operations

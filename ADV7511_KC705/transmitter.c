@@ -171,7 +171,8 @@ void TRANSMITTER_HardwareInit(void)
     									  TX_EVENT_EDID_READY),
     						   TRUE);
 
-	ADIAPI_TxEnablePackets(PKT_ALL_PACKETS,
+    /* Enable AVI InfoFrame. */
+	ADIAPI_TxEnablePackets(PKT_AV_INFO_FRAME,
 						   TRUE);
 }
 
