@@ -313,7 +313,8 @@ int32_t adf4351_setup(int8_t channel)
 	st->regs[ADF4351_REG3] = ADF4351_REG3_12BIT_CLKDIV(150);
 	st->regs[ADF4351_REG2] = ADF4351_REG2_10BIT_R_CNT(4) +
                              ADF4351_REG2_CHARGE_PUMP_CURR_uA(2496) +
-                             ADF4351_REG2_PD_POLARITY_POS;
+                             ADF4351_REG2_PD_POLARITY_POS +
+                             ADF4351_REG2_POWER_DOWN_EN;
 	st->regs[ADF4351_REG1] = ADF4351_REG1_PRESCALER +
                              ADF4351_REG1_MOD(307);
 	st->regs[ADF4351_REG0] = ADF4351_REG0_FRACT(39) +

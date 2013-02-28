@@ -153,6 +153,16 @@ typedef struct
 /*  ** if error, return -1 */
 int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit);
 
+/** Initializes the Rx path */
+/*  ** if success, return 0 */
+/*  ** if error, return -1 */
+int32_t XCOMM_InitRx(XCOMM_DefaultInit* pDefInit);
+
+/** Initializes the Tx path */
+/*  ** if success, return 0 */
+/*  ** if error, return -1 */
+int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit);
+
 /** Resync driver cached values by reading the XCOMM board */
 /*  ** if success, return 0 */
 /*  ** if error, return -1 */

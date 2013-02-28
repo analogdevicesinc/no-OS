@@ -150,6 +150,6 @@ int32_t adf4351_out_altvoltage0_frequency_resolution(int32_t Hz, int8_t channel)
 /** Sets PLL 0 REFin frequency in Hz. */
 int64_t adf4351_out_altvoltage0_refin_frequency(int64_t Hz, int8_t channel);
 /** Powers down the PLL.  */
-int32_t adf351_out_altvoltage0_powerdown(int32_t pwd, int8_t channel);
+int32_t adf4351_out_altvoltage0_powerdown(int32_t pwd, int8_t channel);
 
 #endif // __ADF4351_H__

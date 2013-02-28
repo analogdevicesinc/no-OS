@@ -64,7 +64,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		LVPECL_8mA, //driver_mode
 		0,  //divider_phase
 		2,  //channel_divider
@@ -76,7 +76,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		LVDS_7mA, //driver_mode
 		0,  //divider_phase
 		4,  //channel_divider
@@ -88,7 +88,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		LVDS_4mA, //driver_mode
 		0,  //divider_phase
 		16, //channel_divider
@@ -100,7 +100,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		CMOS_CONF3, //driver_mode
 		0,  //divider_phase
 		8,  //channel_divider
@@ -112,7 +112,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		LVDS_7mA, //driver_mode
 		0,  //divider_phase
 		2,  //channel_divider
@@ -124,7 +124,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		CMOS_CONF3, //driver_mode
 		1,  //divider_phase
 		32, //channel_divider
@@ -136,7 +136,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		0,  //sync_ignore_en
 		0,  //low_power_mode_en
 		0,  //use_alt_clock_src
-		0,  //output_dis
+		1,  //output_dis
 		CMOS_CONF3, //driver_mode
 		0,  //divider_phase
 		8,  //channel_divider

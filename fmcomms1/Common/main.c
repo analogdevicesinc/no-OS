@@ -98,6 +98,30 @@ int main()
 		xil_printf("XCOMM Init OK!\n\r");
 	}
 
+	xil_printf("\n\rInitializing the Rx path...\n\r");
+	ret = XCOMM_InitRx(&defInit);
+	if(ret < 0)
+	{
+		xil_printf("XCOMM Rx Init Failed!\n\r");
+		return 0;
+	}
+	else
+	{
+		xil_printf("XCOMM Rx Init OK!\n\r");
+	}
+
+	xil_printf("\n\rInitializing the Tx path...\n\r");
+	ret = XCOMM_InitTx(&defInit);
+	if(ret < 0)
+	{
+		xil_printf("XCOMM Tx Init Failed!\n\r");
+		return 0;
+	}
+	else
+	{
+		xil_printf("XCOMM Tx Init OK!\n\r");
+	}
+
 	xil_printf("\n\rADC sampling rate [Hz]: ");
 	ret = XCOMM_GetAdcSamplingRate(XCOMM_ReadMode_FromHW);
 	xil_printf("%d \n\r", ret);

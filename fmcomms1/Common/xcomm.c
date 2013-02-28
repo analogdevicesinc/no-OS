@@ -102,7 +102,7 @@ struct stXCOMM_State
 }XCOMM_State;
 
 /**************************************************************************//**
-* @brief Initializes the XCOMM board
+* @brief Initializes the XCOMM board. The Rx and Tx path are disabled.
 *
 * @param pDefInit - pointer to initialization structure
 *
@@ -156,30 +156,42 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     if(adf4351_setup(ADF4351_RX_CHANNEL) < 0)
         return -1;
 
-    if(XCOMM_SetRxFrequency(pDefInit->rxFrequency) < 0)
-        return -1;
-
 	/* Initialize the Tx ADF4351 */
     if(adf4351_setup(ADF4351_TX_CHANNEL) < 0)
         return -1;
 
-    if(XCOMM_SetTxFrequency(pDefInit->txFrequency) < 0)
+    /* Read the calibration data from the EEPROM */
+    if(EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort) < 0)
         return -1;
     
-	/* Initialize the AD9122 */
-    DAC_Core_Init(pDefInit->fmcPort);
-    if(ad9122_setup(ad9523_out_altvoltage_DAC_DCO_CLK_frequency,
-    				ad9523_out_altvoltage_DAC_CLK_frequency,
-    				ad9523_clk_round_rate_DAC_DCO_CLK,
-    				ad9523_clk_round_rate_DAC_CLK) < 0)
+    return 0;
+}
+
+/**************************************************************************//**
+* @brief Initializes the Rx path
+*
+* @param pDefInit - pointer to initialization structure
+*
+* @return If success, return 0
+*         if error, return -1
+******************************************************************************/
+int32_t XCOMM_InitRx(XCOMM_DefaultInit* pDefInit)
+{
+	/* Power up all the Rx clocks */
+	ad9523_out_altvoltage_ADC_CLK_raw(1);
+	ad9523_out_altvoltage_ADC_SYNC_CLK_raw(1);
+	ad9523_out_altvoltage_RX_LO_REF_CLK_raw(1);
+
+	/* Power Up the Rx ADF4351 */
+	if(adf4351_out_altvoltage0_powerdown(0, ADF4351_RX_CHANNEL) < 0)
+        return -1;
+
+	/* Set the default Rx frequency */
+	if(XCOMM_SetRxFrequency(pDefInit->rxFrequency) < 0)
         return -1;
 
     /* Set the AD9643 sampling rate */
     if(XCOMM_SetAdcSamplingRate(pDefInit->adcSamplingRate) < 0)
-        return -1;
-
-    /* Set the AD9122 sampling rate */
-    if(XCOMM_SetDacSamplingRate(pDefInit->dacSamplingRate) < 0)
         return -1;
 
 	/* Initialize the AD9643 */
@@ -191,11 +203,47 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     if(ad8366_setup() < 0)
         return -1;
 
+    /* Set the default Rx gain */
     if(XCOMM_SetRxGain(pDefInit->rxGain1000) < 0)
         return -1;
 
-    /* Read the calibration data from the EEPROM */
-    if(EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort) < 0)
+    return 0;
+}
+
+/**************************************************************************//**
+* @brief Initializes the Tx path
+*
+* @param pDefInit - pointer to initialization structure
+*
+* @return If success, return 0
+*         if error, return -1
+******************************************************************************/
+int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
+{
+	/* Power up all the Tx clocks */
+	ad9523_out_altvoltage_DAC_CLK_raw(1);
+	ad9523_out_altvoltage_DAC_DCO_CLK_raw(1);
+	ad9523_out_altvoltage_DAC_REF_CLK_raw(1);
+	ad9523_out_altvoltage_TX_LO_REF_CLK_raw(1);
+
+	/* Power Up the Tx ADF4351 */
+	if(adf4351_out_altvoltage0_powerdown(0, ADF4351_TX_CHANNEL) < 0)
+		return -1;
+
+	/* Set the default Tx frequency */
+	if(XCOMM_SetTxFrequency(pDefInit->txFrequency) < 0)
+        return -1;
+
+	/* Initialize the AD9122 */
+    DAC_Core_Init(pDefInit->fmcPort);
+    if(ad9122_setup(ad9523_out_altvoltage_DAC_DCO_CLK_frequency,
+    				ad9523_out_altvoltage_DAC_CLK_frequency,
+    				ad9523_clk_round_rate_DAC_DCO_CLK,
+    				ad9523_clk_round_rate_DAC_CLK) < 0)
+        return -1;
+
+    /* Set the AD9122 sampling rate */
+    if(XCOMM_SetDacSamplingRate(pDefInit->dacSamplingRate) < 0)
         return -1;
 
     return 0;
