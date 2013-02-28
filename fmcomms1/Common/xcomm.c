@@ -178,9 +178,12 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
 int32_t XCOMM_InitRx(XCOMM_DefaultInit* pDefInit)
 {
 	/* Power up all the Rx clocks */
-	ad9523_out_altvoltage_ADC_CLK_raw(1);
-	ad9523_out_altvoltage_ADC_SYNC_CLK_raw(1);
-	ad9523_out_altvoltage_RX_LO_REF_CLK_raw(1);
+	if(ad9523_out_altvoltage_ADC_CLK_raw(1) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_ADC_SYNC_CLK_raw(1) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_RX_LO_REF_CLK_raw(1) < 0)
+		return -1;
 
 	/* Power Up the Rx ADF4351 */
 	if(adf4351_out_altvoltage0_powerdown(0, ADF4351_RX_CHANNEL) < 0)
@@ -221,10 +224,14 @@ int32_t XCOMM_InitRx(XCOMM_DefaultInit* pDefInit)
 int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
 {
 	/* Power up all the Tx clocks */
-	ad9523_out_altvoltage_DAC_CLK_raw(1);
-	ad9523_out_altvoltage_DAC_DCO_CLK_raw(1);
-	ad9523_out_altvoltage_DAC_REF_CLK_raw(1);
-	ad9523_out_altvoltage_TX_LO_REF_CLK_raw(1);
+	if(ad9523_out_altvoltage_DAC_CLK_raw(1) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_DAC_DCO_CLK_raw(1) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_DAC_REF_CLK_raw(1) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_TX_LO_REF_CLK_raw(1) < 0)
+		return -1;
 
 	/* Power Up the Tx ADF4351 */
 	if(adf4351_out_altvoltage0_powerdown(0, ADF4351_TX_CHANNEL) < 0)
@@ -247,6 +254,58 @@ int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
         return -1;
 
     return 0;
+}
+
+/**************************************************************************//**
+* @brief Stops the Rx path
+*
+* @param pDefInit - pointer to initialization structure
+*
+* @return If success, return 0
+*         if error, return -1
+******************************************************************************/
+int32_t XCOMM_StopRx(void)
+{
+	/* Power down all the Rx clocks */
+	if(ad9523_out_altvoltage_ADC_CLK_raw(0) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_ADC_SYNC_CLK_raw(0) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_RX_LO_REF_CLK_raw(0) < 0)
+		return -1;
+
+	/* Power Down the Rx ADF4351 */
+	if(adf4351_out_altvoltage0_powerdown(1, ADF4351_RX_CHANNEL) < 0)
+        return -1;
+
+	return 0;
+}
+
+/**************************************************************************//**
+* @brief Stops the Tx path
+*
+* @param pDefInit - pointer to initialization structure
+*
+* @return If success, return 0
+*         if error, return -1
+******************************************************************************/
+int32_t XCOMM_StopTx(void)
+{
+	/* Power down all the Tx clocks */
+	if(ad9523_out_altvoltage_DAC_CLK_raw(0) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_DAC_DCO_CLK_raw(0) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_DAC_REF_CLK_raw(0) < 0)
+		return -1;
+	if(ad9523_out_altvoltage_TX_LO_REF_CLK_raw(0) < 0)
+		return -1;
+
+	/* Power Down the Tx ADF4351 */
+	if(adf4351_out_altvoltage0_powerdown(1, ADF4351_TX_CHANNEL) < 0)
+		return -1;
+
+	return 0;
 }
 
 /**************************************************************************//**
