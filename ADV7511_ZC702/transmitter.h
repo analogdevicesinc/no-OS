@@ -55,6 +55,49 @@
 
 typedef struct
 {
+    UCHAR    Header[8];
+    UCHAR    ManID[2];
+    UCHAR    ProdCode[2];
+    UCHAR    Serial[4];
+    UCHAR    ManWeek;
+    UCHAR    ManYear;
+    UCHAR    EdidRev[2];
+    UCHAR    VidInpDef;
+    UCHAR    MaxHSizeCm;
+    UCHAR    MaxVSizeCm;
+    UCHAR    DispGamma;
+    UCHAR    FeatSupport;
+    UCHAR    ColorSpecs[10];
+    UCHAR    EstTiming[3];
+    UCHAR    StndTiming[16];
+    UCHAR    DetailedTiming[72];
+    UCHAR    ExtBlkCount;
+    UCHAR    Checksum;
+}EDID_STRUCT;
+
+typedef struct
+{
+    UCHAR    PixelClk[2];
+    UCHAR    HActive;
+    UCHAR    HBlanking;
+    UCHAR    HActBlnk44;
+    UCHAR    VActive;
+    UCHAR    VBlanking;
+    UCHAR    VActBlnk44;
+    UCHAR    HSyncOffs;
+    UCHAR    HSyncWidth;
+    UCHAR    VOffsPulse;
+    UCHAR    HVOffsPulse;
+    UCHAR    HSizemm;
+    UCHAR    VSizemm;
+    UCHAR    HVSizemm44;
+    UCHAR    HBorder;
+    UCHAR    VBorder;
+    UCHAR    Flags;
+}STD_TIMING;
+
+typedef struct
+{
     UCHAR			CurrMuteState;	/* Current mute state of A/V        */
     TX_STATUS_PKT	TxStatus;		/* State of TX hardware */
 } TRANSMITTER_TX_VARS;
@@ -63,7 +106,6 @@ TRANSMITTER_TX_VARS	TransmitterTxVars;
 
 #define CurrMuteState			TransmitterTxVars.CurrMuteState
 #define TxStatus				TransmitterTxVars.TxStatus
-
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

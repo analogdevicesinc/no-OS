@@ -48,14 +48,15 @@
 #include "cf_hdmi.h"
 #include "atv_platform.h"
 #include "transmitter.h"
+#include "xil_exception.h"
 
 extern void delay_ms(u32 ms_count);
 
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
-#define HDMI_CALL_INTERVAL_MS	10  /* Interval between two         */
-                                    /* iterations of the main loop  */
+#define HDMI_CALL_INTERVAL_MS	10			/* Interval between two         */
+											/* iterations of the main loop  */
 #define DBG_MSG                 xil_printf
 
 /******************************************************************************/
@@ -118,7 +119,6 @@ static void APP_PrintRevisions (void)
 int main()
 {
 	UINT32 StartCount;
-	UINT32 data = 0;
 
 	MajorRev     = 1;
 	MinorRev     = 1;
@@ -130,17 +130,23 @@ int main()
 	Xil_DCacheEnable();
 
 	HAL_PlatformInit(XPAR_AXI_IIC_0_BASEADDR,	/* Perform any required platform init */
-				 XPAR_AXI_TIMER_0_BASEADDR,	/* including hardware reset to HDMI devices */
+				 XPAR_AXI_TIMER_0_BASEADDR,		/* including hardware reset to HDMI devices */
 				 XPAR_AXI_TIMER_0_INTERRUPT_MASK,
 				 XPAR_AXI_INTC_0_BASEADDR);
 
-	data = Xil_In32(XPAR_AXI_CLKGEN_0_BASEADDR + (0x1f*4));
-	if ((data & 0x1) == 0x0)
-	{
-		xil_printf("CLKGEN (148.5MHz) out of lock (0x%04x)\n\r", data);
+	Xil_ExceptionEnable();
 
-		return(0);
-	}
+	/* Set the default values for 1080P 60Hz */
+	CLKGEN_SetRate(148500000, 200000000);
+	InitHdmiVideoPcore(1920,
+					   1080,
+					   280,
+					   45,
+					   44,
+					   5,
+					   88,
+					   4);
+	InitHdmiAudioPcore();
 
 	APP_PrintRevisions();       /* Display S/W and H/W revisions */
 
@@ -149,9 +155,6 @@ int main()
 	ADIAPI_TransmitterSetPowerMode(REP_POWER_UP);
 
 	StartCount = HAL_GetCurrentMsCount();
-
-	InitHdmiVideoPcore();
-	InitHdmiAudioPcore();
 
 	while(1)
 	{

@@ -50,6 +50,7 @@
 #include "tx_lib.h"
 #include "edid.h"
 #include "cf_hdmi.h"
+#include "xil_io.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -170,7 +171,7 @@ void TRANSMITTER_HardwareInit(void)
     									  TX_EVENT_MSEN_CHG |
     									  TX_EVENT_EDID_READY),
     						   TRUE);
-							   
+
     /* Enable AVI InfoFrame. */
 	ADIAPI_TxEnablePackets(PKT_AV_INFO_FRAME,
 						   TRUE);
@@ -418,7 +419,8 @@ UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, UCHAR *BufPtr)
 }
 
 /***************************************************************************//**
- * @brief Parse the new EDID segment.
+ * @brief Parse the new EDID segment and set the resolution and the pixel clock
+ * 		  according to EDID data.
  *
  * @param SegmentNum - Segment number.
  * @param SegPtr - Segment pointer.
@@ -427,20 +429,57 @@ UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, UCHAR *BufPtr)
 *******************************************************************************/
 void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 {
-	UCHAR  Edid[256];
-	UINT16 SpaOffset;
+	UCHAR  		EdidData[256];
+	UINT16 		SpaOffset;
+	EDID_STRUCT *Edid;
+	STD_TIMING *TDesc;
+
+	unsigned short hActive = 0;
+	unsigned short vActive = 0;
+	unsigned short hBlanking = 0;
+	unsigned short vBlanking = 0;
+	unsigned short hWidth = 0;
+	unsigned short vWidth = 0;
+	unsigned short hOffset = 0;
+	unsigned short vOffset = 0;
+	unsigned long pixelClk = 0;
 
     if (SegPtr)
     {
-        memcpy (Edid, SegPtr, 256);
+        memcpy (EdidData, SegPtr, 256);
     }
     else
     {
-        memset (Edid, 0, 256);
+        memset (EdidData, 0, 256);
     }
     if (SegPtr && (SegmentNum < 2))
     {
+    	Edid = (EDID_STRUCT *)EdidData;
+    	TDesc = (STD_TIMING *)(Edid->DetailedTiming);
+
+    	hActive = ((TDesc->HActBlnk44 & 0xf0) << 4) | TDesc->HActive;
+    	vActive = ((TDesc->VActBlnk44 & 0xf0) << 4) | TDesc->VActive;
+    	hBlanking = ((TDesc->HActBlnk44 & 0x0f) << 8) | TDesc->HBlanking;
+    	vBlanking = ((TDesc->VActBlnk44 & 0x0f) << 8) | TDesc->VBlanking;
+    	hWidth = ((TDesc->HVOffsPulse & 0x30) << 4) | TDesc->HSyncWidth;
+    	vWidth = ((TDesc->HVOffsPulse & 0x03) << 4) | (TDesc->VOffsPulse & 0x0f);
+    	hOffset = ((TDesc->HVOffsPulse & 0xC0) << 2) | TDesc->HSyncOffs;
+    	vOffset = ((TDesc->HVOffsPulse & 0x0C) << 2) | ((TDesc->VOffsPulse & 0xf0) >> 4);
+
+		InitHdmiVideoPcore(hActive,
+						   vActive,
+						   hBlanking,
+						   vBlanking,
+						   hWidth,
+						   vWidth,
+						   hOffset,
+						   vOffset);
+
+    	pixelClk = (TDesc->PixelClk[1] << 8) | TDesc->PixelClk[0];
+    	pixelClk = pixelClk * 10000;
+    	CLKGEN_SetRate(pixelClk, 200000000);
+
     	ADIAPI_MwEdidEnableDebugMsg(TRUE);
-    	ADIAPI_MwEdidParse (Edid, &SpaOffset, SegmentNum);
+    	ADIAPI_MwEdidParse(EdidData, &SpaOffset, SegmentNum);
     }
 }

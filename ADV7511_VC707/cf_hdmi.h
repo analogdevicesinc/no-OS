@@ -49,44 +49,63 @@
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
-#define AUDIO_FS       48000
-#define AUDIO_F         1400
-
+#define CF_CLKGEN_BASEADDR  XPAR_AXI_CLKGEN_0_BASEADDR
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_36B_0_BASEADDR
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
-#define CFC_BASEADDR        XPAR_AXI_CLKGEN_0_BASEADDR
 #define DDR_BASEADDR        XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+#define UART_BASEADDR       XPS_UART1_BASEADDR
 #define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
 #define ADMA_BASEADDR       XPAR_AXI_DMA_0_BASEADDR
 #define IIC_BASEADDR        XPAR_AXI_IIC_0_BASEADDR
-#define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
+#define VIDEO_BASEADDR		DDR_BASEADDR + 0x2000000
+#define AUDIO_BASEADDR		DDR_BASEADDR + 0x1000000
+#define A_SAMPLE_FREQ       48000
+#define A_FREQ              1400
+#define AUDIO_LENGTH		(A_SAMPLE_FREQ/A_FREQ)
 
-#define H_STRIDE         1920
-#define H_COUNT          2200
-#define H_ACTIVE         1920
-#define H_WIDTH          44
-#define H_FP             88
-#define H_BP             148
-#define V_COUNT          1125
-#define V_ACTIVE         1080
-#define V_WIDTH          5
-#define V_FP             4
-#define V_BP             36
+#define AXI_HDMI_REG_CTRL			0x04
+#define AXI_HDMI_REG_HTIMING1		0x08
+#define AXI_HDMI_REG_HTIMING2		0x0C
+#define AXI_HDMI_REG_VTIMING1		0x10
+#define AXI_HDMI_REG_VTIMING2		0x14
+#define AXI_HDMI_REG_STATUS			0x18
+#define AXI_HDMI_REG_COLOR_PATTERN	0x1c
 
-#define H_DE_MIN         (H_WIDTH + H_BP)
-#define H_DE_MAX         (H_WIDTH + H_BP + H_ACTIVE)
-#define V_DE_MIN         (V_WIDTH + V_BP)
-#define V_DE_MAX         (V_WIDTH + V_BP + V_ACTIVE)
-#define VIDEO_LENGTH     (H_ACTIVE * V_ACTIVE)
-#define AUDIO_LENGTH        (AUDIO_FS/AUDIO_F)
-#define VIDEO_BASEADDR      DDR_BASEADDR + 0x2000000
-#define AUDIO_BASEADDR      DDR_BASEADDR + 0x1000000
+#define AXI_VDMA_REG_DMA_CTRL		0x00
+#define AXI_VDMA_REG_V_SIZE			0x50
+#define AXI_VDMA_REG_H_SIZE			0x54
+#define AXI_VDMA_REG_FRMDLY_STRIDE	0x58
+#define AXI_VDMA_REG_START_1		0x5C
+#define AXI_VDMA_REG_START_2		0x60
+#define AXI_VDMA_REG_START_3		0x64
+
+#define AXI_CLKGEN_REG_UPDATE_ENABLE	0x04
+#define AXI_CLKGEN_REG_CLK_OUT1			0x08
+#define AXI_CLKGEN_REG_CLK_OUT2			0x0c
+#define AXI_CLKGEN_REG_CLK_DIV			0x10
+#define AXI_CLKGEN_REG_CLK_FB1			0x14
+#define AXI_CLKGEN_REG_CLK_FB2			0x18
+#define AXI_CLKGEN_REG_LOCK1			0x1c
+#define AXI_CLKGEN_REG_LOCK2			0x20
+#define AXI_CLKGEN_REG_LOCK3			0x24
+#define AXI_CLKGEN_REG_FILTER1			0x28
+#define AXI_CLKGEN_REG_FILTER2			0x2c
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void InitHdmiVideoPcore(void);
+void InitHdmiVideoPcore(unsigned short hActive,
+						unsigned short vActive,
+						unsigned short hBlanking,
+						unsigned short vBlanking,
+						unsigned short hWidth,
+						unsigned short vWidth,
+						unsigned short hOffset,
+						unsigned short vOffset);
 void InitHdmiAudioPcore(void);
 void AudioClick(void);
+int CLKGEN_SetRate(unsigned long rate,
+				   unsigned long parent_rate);
+unsigned long CLKGEN_GetRate(unsigned long parent_rate);
 
 #endif /* CF_HDMI_H_ */
