@@ -43,6 +43,10 @@
 #ifndef __ADI_AXI_DDS_H__
 #define __ADI_AXI_DDS_H__
 
+/* This define controls the use of the DDS module by the AD9122 driver */
+#define CF_AXI_DDS
+
+#ifdef CF_AXI_DDS
 /******************************************************************************/
 /************************ AD9122 AXI Core Registers ***************************/
 /******************************************************************************/
@@ -83,6 +87,8 @@
 /* debugfs direct register access */
 #define DEBUGFS_DRA_PCORE_REG_MAGIC		0x80000000
 
+#endif //CF_AXI_DDS
+
 /******************************************************************************/
 /************************ Data Types ******************************************/
 /******************************************************************************/
@@ -94,11 +100,6 @@ enum
 	IIO_CHAN_INFO_SAMP_FREQ
 };
 
-struct cf_axi_dds_state
-{
-	uint32_t	dac_clk;
-};
-
 enum
 {
 	CLK_DATA,
@@ -107,7 +108,14 @@ enum
 	CLK_NUM,
 };
 
-struct cf_axi_dds_converter
+#ifdef CF_AXI_DDS
+	struct cf_axi_dds_state
+	{
+		uint32_t	dac_clk;
+	};
+#endif //CF_AXI_DDS
+
+struct cf_axi_converter
 {
 	int32_t* 	spi;
 	uint32_t 	clk[CLK_NUM];
@@ -118,33 +126,31 @@ struct cf_axi_dds_converter
 	uint32_t 	cs_modes[17];
 	int32_t		(*read)(uint8_t reg);
 	int32_t		(*write)(uint8_t reg, uint8_t val);
-	int32_t		(*setup)();
-	uint32_t 	(*get_data_clk)(struct cf_axi_dds_converter *conv);
-	int32_t		(*set_data_clk)(struct cf_axi_dds_converter *conv, uint32_t freq);
-	uint32_t	(*get_interpol)(struct cf_axi_dds_converter *conv);
-	int32_t		(*set_interpol)(struct cf_axi_dds_converter *conv, uint32_t freq);
-	uint32_t	(*get_interpol_fcent)(struct cf_axi_dds_converter *conv);
-	int32_t		(*set_interpol_fcent)(struct cf_axi_dds_converter *conv, uint32_t freq);
+	int32_t		(*setup)(struct cf_axi_converter *conv);
+	int32_t		(*get_fifo_status)(struct cf_axi_converter *conv);
+	uint32_t 	(*get_data_clk)(struct cf_axi_converter *conv);
+	int32_t 	(*read_raw)(uint32_t channel,
+							int32_t *val,
+							int32_t *val2,
+							int32_t mask);
+	int32_t 	(*write_raw)(uint32_t channel,
+			 	 	 	 	 int32_t val,
+			 	 	 	 	 int32_t val2,
+			 	 	 	 	 int32_t mask);
+	void		(*pcore_set_sed_pattern)(unsigned pat1, unsigned pat2);
+	void		(*pcore_sync)();
 };
 
+#ifdef CF_AXI_DDS
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t  cf_axi_dds_of_probe();
-int32_t  cf_axi_dds_tune_dci(struct cf_axi_dds_state *st);
-uint32_t ad9122_dds_store(uint32_t address, int32_t readin);
-uint32_t ad9122_dds_show(uint32_t address, int32_t* val);
-uint32_t ad9122_dds_interpolation_store(uint32_t address, int32_t readin);
-uint32_t ad9122_dds_interpolation_show(uint32_t address, int32_t* val);
-int32_t  cf_axi_dds_read_raw(uint32_t channel,
-						uint32_t address,
-						int32_t *val,
-						int32_t *val2,
-						int32_t m);
 int32_t  cf_axi_dds_write_raw(uint32_t channel,
 						uint32_t address,
 						int32_t val,
 						int32_t val2,
 						int32_t mask);
+#endif //CF_AXI_DDS
 
 #endif //__ADI_AXI_DDS_H__

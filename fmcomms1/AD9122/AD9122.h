@@ -344,9 +344,9 @@ int32_t ad9122_dci_calibrate();
 /*  ** Returns the set data rate. */
 int32_t ad9122_set_data_rate(uint32_t rate);
 
-/** Sets the interpolation factor. */
-/*  ** Returns the set interpolation factor. */
-int32_t ad9122_out_altvoltage_interpolation(int32_t val);
+/** Sets the interpolation frequency. */
+/*  ** Returns the set interpolation frequency. */
+int32_t ad9122_out_altvoltage_interpolation_frequency(int32_t val);
 
 /** Stores the available interpolation frequencies in the array supplied as parameter. */
 /*  ** Returns 0 for success or negative error code. */
@@ -354,7 +354,7 @@ int32_t out_altvoltage_interpolation_frequency_available(int32_t* val_array);
 
 /** Sets the center frequency shift value.*/
 /*  ** Returns the set center frequency shift. */
-int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val);
+int32_t ad9122_out_altvoltage_interpolation_center_shift_frequency(int32_t val);
 
 /** Stores the available center shift frequencies in the array supplied as parameter. */
 /*  ** Returns 0 for success or negative error code. */

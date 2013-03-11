@@ -966,7 +966,7 @@ int32_t XCOMM_GetDacAvailableInterpolationFreq(int32_t* valArray)
 ******************************************************************************/
 int32_t XCOMM_SetDacInterpolationFreq(int32_t interp)
 {
-	return ad9122_out_altvoltage_interpolation(interp);
+	return ad9122_out_altvoltage_interpolation_frequency(interp);
 }
 
 /**************************************************************************//**
@@ -992,7 +992,7 @@ int32_t XCOMM_GetDacAvailableCenterShiftFreq(int32_t* valArray)
 ******************************************************************************/
 int32_t XCOMM_SetDacCenterShiftFreq(int32_t shift)
 {
-	return ad9122_out_altvoltage_interpolation_center_shift(shift);
+	return ad9122_out_altvoltage_interpolation_center_shift_frequency(shift);
 }
 
 /**************************************************************************//**

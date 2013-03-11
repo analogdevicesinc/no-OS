@@ -45,11 +45,13 @@
 #include "cf_axi_dds.h"
 #include "ad9122.h"
 
+#ifdef CF_AXI_DDS
+
 /******************************************************************************/
 /***************************** Global State Variables *************************/
 /******************************************************************************/
 struct cf_axi_dds_state 	dds_state;
-struct cf_axi_dds_converter dds_conv;
+extern struct cf_axi_converter dds_conv;
 
 /******************************************************************************/
 /***************************** Delay Functions ********************************/
@@ -69,51 +71,6 @@ extern void delay_us(uint32_t us_count);
 	((int32_t)(value << (31-index)) >> (31-index))
 #define ARRAY_SIZE(x) \
 	sizeof(x) / sizeof(x[0])
-
-/******************************************************************************/
-/***************************** DAC SED Patterns *******************************/
-/******************************************************************************/
-struct cf_axi_dds_sed
-{
-	uint16_t i0;
-	uint16_t q0;
-	uint16_t i1;
-	uint16_t q1;
-};
-
-static struct cf_axi_dds_sed dac_sed_pattern[5] =
-{
-	{
-		.i0 = 0x5555,
-		.q0 = 0xAAAA,
-		.i1 = 0xAAAA,
-		.q1 = 0x5555,
-	},
-	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
-	},
-	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0,
-		.q1 = 0,
-	},
-	{
-		.i0 = 0xFFFF,
-		.q0 = 0xFFFF,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
-	},
-	{
-		.i0 = 0x1248,
-		.q0 = 0xEDC7,
-		.i1 = 0xEDC7,
-		.q1 = 0x1248,
-	}
-};
 
 /***************************************************************************//**
  * @brief Computes the mod and integer division of two numbers.
@@ -160,7 +117,7 @@ uint32_t dds_read(struct cf_axi_dds_state* st, uint32_t reg)
 void cf_axi_dds_sync_frame()
 {
 	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_dds_converter *conv = &dds_conv;
+	struct cf_axi_converter *conv = &dds_conv;
 	uint32_t stat;
 	static int32_t retry = 0;
 
@@ -170,9 +127,8 @@ void cf_axi_dds_sync_frame()
 	dds_write(st, CF_AXI_DDS_FRAME, CF_AXI_DDS_FRAME_SYNC);
 
 	/* Check FIFO status */
-	stat = conv->read(AD9122_REG_FIFO_STATUS_1);
-	if (stat & (AD9122_FIFO_STATUS_1_FIFO_WARNING_1 |
-		AD9122_FIFO_STATUS_1_FIFO_WARNING_2)) {
+	stat = conv->get_fifo_status(conv);
+	if (stat) {
 		if (retry++ > 3) {
 			return;
 		}
@@ -181,6 +137,25 @@ void cf_axi_dds_sync_frame()
 	}
 
 	retry = 0;
+}
+
+/***************************************************************************//**
+ * @brief Configures the DDS with the DAC SED pattern.
+ *
+ * @return None.
+*******************************************************************************/
+static void cf_axi_dds_set_sed_pattern(unsigned pat1, unsigned pat2)
+{
+	struct cf_axi_dds_state *st = &dds_state;
+
+	dds_write(st, CF_AXI_DDS_PAT_DATA1, pat1);
+	dds_write(st, CF_AXI_DDS_PAT_DATA2, pat2);
+
+	dds_write(st, CF_AXI_DDS_CTRL, 0);
+	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+		 CF_AXI_DDS_CTRL_PATTERN_EN);
+	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+		 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
 }
 
 /***************************************************************************//**
@@ -216,149 +191,6 @@ static uint32_t cf_axi_dds_calc(uint32_t phase, uint32_t freq, uint32_t dac_clk)
 }
 
 /***************************************************************************//**
- * @brief Finds the DCI.
- *
- * @return Returns the DCI value
-*******************************************************************************/
-static int32_t cf_axi_dds_find_dci(uint32_t *err_field, uint32_t entries)
-{
-	int32_t dci, cnt, start, max_start, max_cnt;
-	int32_t ret;
-#ifdef DEBUG_DCI
-	int8_t str[33];
-#endif
-
-	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
-		dci < entries; dci++) {
-		if (test_bit(dci, err_field) == 0) {
-			if (start == -1)
-				start = dci;
-			cnt++;
-#ifdef DEBUG_DCI
-			str[dci] = 'o';
-#endif
-		} else {
-			if (cnt > max_cnt) {
-				max_cnt = cnt;
-				max_start = start;
-			}
-			start = -1;
-			cnt = 0;
-#ifdef DEBUG_DCI
-			str[dci] = '-';
-#endif
-		}
-	}
-#ifdef DEBUG_DCI
-	str[dci] = 0;
-#endif
-	if (cnt > max_cnt) {
-		max_cnt = cnt;
-		max_start = start;
-	}
-
-
-	ret = max_start + ((max_cnt - 1) / 2);
-
-#ifdef DEBUG_DCI
-	str[ret] = '|';
-	xil_printf("%s DCI %d\n",str, ret);
-#endif
-
-	return ret;
-}
-
-/***************************************************************************//**
- * @brief Calibrates the AD9122 DCI.
- *
- * @return Returns negative error code or 0 in case of success.
-*******************************************************************************/
-int32_t cf_axi_dds_tune_dci(struct cf_axi_dds_state *st)
-{
-	struct cf_axi_dds_converter *conv = &dds_conv;
-	uint32_t reg, err_mask, pwr;
-	int32_t i = 0, dci;
-	uint32_t err_bfield = 0;
-
-	pwr = conv->read(AD9122_REG_POWER_CTRL);
-	conv->write(AD9122_REG_POWER_CTRL, pwr |
-			AD9122_POWER_CTRL_PD_I_DAC |
-			AD9122_POWER_CTRL_PD_Q_DAC);
-
-	for (dci = 0; dci < 4; dci++) {
-		conv->write(AD9122_REG_DCI_DELAY, dci);
-		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++) {
-
-			conv->write(AD9122_REG_SED_CTRL, 0);
-
-			dds_write(st, CF_AXI_DDS_PAT_DATA1,
-				  (dac_sed_pattern[i].i1 << 16) |
-				  dac_sed_pattern[i].i0);
-			dds_write(st, CF_AXI_DDS_PAT_DATA2,
-				  (dac_sed_pattern[i].q1 << 16) |
-				  dac_sed_pattern[i].q0);
-
-			dds_write(st, CF_AXI_DDS_CTRL, 0);
-			dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-				 CF_AXI_DDS_CTRL_PATTERN_EN);
-			dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-				 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
-
-			conv->write(AD9122_REG_COMPARE_I0_LSBS,
-				dac_sed_pattern[i].i0 & 0xFF);
-			conv->write(AD9122_REG_COMPARE_I0_MSBS,
-				dac_sed_pattern[i].i0 >> 8);
-
-			conv->write(AD9122_REG_COMPARE_Q0_LSBS,
-				dac_sed_pattern[i].q0 & 0xFF);
-			conv->write(AD9122_REG_COMPARE_Q0_MSBS,
-				dac_sed_pattern[i].q0 >> 8);
-
-			conv->write(AD9122_REG_COMPARE_I1_LSBS,
-				dac_sed_pattern[i].i1 & 0xFF);
-			conv->write(AD9122_REG_COMPARE_I1_MSBS,
-				dac_sed_pattern[i].i1 >> 8);
-
-			conv->write(AD9122_REG_COMPARE_Q1_LSBS,
-				dac_sed_pattern[i].q1 & 0xFF);
-			conv->write(AD9122_REG_COMPARE_Q1_MSBS,
-				dac_sed_pattern[i].q1 >> 8);
-
-
-			conv->write(AD9122_REG_SED_CTRL,
-				    AD9122_SED_CTRL_SED_COMPARE_EN);
-
- 			conv->write(AD9122_REG_EVENT_FLAG_2,
- 				    AD9122_EVENT_FLAG_2_AED_COMPARE_PASS |
-				    AD9122_EVENT_FLAG_2_AED_COMPARE_FAIL |
-				    AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
-
-			conv->write(AD9122_REG_SED_CTRL,
-				    AD9122_SED_CTRL_SED_COMPARE_EN);
-
-			msleep(100);
-			reg = conv->read(AD9122_REG_SED_CTRL);
-			err_mask = conv->read(AD9122_REG_SED_I_LSBS);
-			err_mask |= conv->read(AD9122_REG_SED_I_MSBS);
-			err_mask |= conv->read(AD9122_REG_SED_Q_LSBS);
-			err_mask |= conv->read(AD9122_REG_SED_Q_MSBS);
-
-			if (err_mask || (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED))
-				set_bit(dci, &err_bfield);
-		}
-	}
-
-	conv->write(AD9122_REG_DCI_DELAY,
-		    cf_axi_dds_find_dci(&err_bfield, 4));
-	conv->write(AD9122_REG_SED_CTRL, 0);
-	conv->write(AD9122_REG_POWER_CTRL, pwr);
-
-	dds_write(st, CF_AXI_DDS_CTRL, 0);
-
-	return 0;
-}
-
-/***************************************************************************//**
  * @brief Reads parameters from the AD9122.
  *
  * @return Returns negative error code or 0 in case of success.
@@ -370,7 +202,7 @@ int32_t cf_axi_dds_read_raw(uint32_t channel,
 						int32_t m)
 {
 	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_dds_converter *conv = &dds_conv;
+	struct cf_axi_converter *conv = &dds_conv;
 	uint64_t val64;
 	uint32_t reg;
 
@@ -428,10 +260,10 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 						int32_t mask)
 {
 	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_dds_converter *conv = &dds_conv;
+	struct cf_axi_converter *conv = &dds_conv;
 	uint64_t val64;
 	uint32_t reg, ctrl_reg;
-	int32_t i, ret;
+	int32_t i;
 
 	ctrl_reg = dds_read(st, CF_AXI_DDS_CTRL);
 
@@ -486,20 +318,11 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_SAMP_FREQ:
-		if (!conv->set_data_clk)
+		if (!conv->write_raw)
 			return -1;
 
 		cf_axi_dds_stop(st);
-		ret = conv->set_data_clk(conv, val);
-		if (ret < 0) {
-			dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
-			return ret;
-		}
-
-		if (val != st->dac_clk) {
-			cf_axi_dds_tune_dci(st);
-		}
-
+		conv->write_raw(channel, val, val2, mask);
 		st->dac_clk = conv->get_data_clk(conv);
 		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
 		cf_axi_dds_sync_frame();
@@ -508,157 +331,8 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 	default:
 		return -1;
 	}
-//	cf_axi_dds_sync_frame(st);
 
 	return 0;
-}
-
-/***************************************************************************//**
- * @brief Writes data to the AD9122.
- *
- * @return Returns negative error code or the written value in case of success.
-*******************************************************************************/
-uint32_t ad9122_dds_store(uint32_t address, int32_t readin)
-{
-	struct cf_axi_dds_converter *conv = &dds_conv;
-	int32_t ret = 0;
-
-	switch (address) {
-	case AD9122_REG_I_DAC_OFFSET_MSB:
-	case AD9122_REG_Q_DAC_OFFSET_MSB:
-		if (readin < 0 || readin > 0xFFFF) {
-			ret = -1;
-			goto out;
-		}
-		break;
-	case AD9122_REG_I_PHA_ADJ_MSB:
-	case AD9122_REG_Q_PHA_ADJ_MSB:
-		if (readin < -512 || readin > 511) {
-			ret = -1;
-			goto out;
-		}
-		break;
-	default:
-		if (readin < 0 || readin > 0x3FF) {
-			ret = -1;
-			goto out;
-		}
-		break;
-	}
-
-	ret = conv->write((uint32_t)address, readin >> 8);
-	if (ret < 0)
-		goto out;
-
-	ret = conv->write((uint32_t)address - 1, readin & 0xFF);
-	if (ret < 0)
-		goto out;
-
-out:
-
-	return ret ? ret : readin;
-}
-
-/***************************************************************************//**
- * @brief Reads data from the AD9122.
- *
- * @return Returns negative error code or 0 in case of success.
-*******************************************************************************/
-uint32_t ad9122_dds_show(uint32_t address, int32_t* val)
-{
-	struct cf_axi_dds_converter *conv = &dds_conv;
-	int32_t ret = 0;
-
-	ret = conv->read((uint32_t)address);
-	if (ret < 0)
-		goto out;
-	*val = ret << 8;
-
-	ret = conv->read((uint32_t)address - 1);
-	if (ret < 0)
-		goto out;
-	*val |= ret & 0xFF;
-
-	switch ((uint32_t)address) {
-	case AD9122_REG_I_PHA_ADJ_MSB:
-	case AD9122_REG_Q_PHA_ADJ_MSB:
-		*val = sign_extend32(*val, 9);
-		break;
-	}
-
-out:
-	return ret;
-}
-
-/***************************************************************************//**
- * @brief Writes interpolation data to the AD9122.
- *
- * @return Returns negative error code or the written data in case of success.
-*******************************************************************************/
-uint32_t ad9122_dds_interpolation_store(uint32_t address,
-										int32_t readin)
-{
-	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_dds_converter *conv = &dds_conv;
-	uint32_t ctrl_reg;
-	int32_t ret;
-
-
-	if (!conv->set_interpol || !conv->set_interpol_fcent)
-		return -1;
-
-	ctrl_reg = dds_read(st, CF_AXI_DDS_CTRL);
-	cf_axi_dds_stop(st);
-
-	switch (address) {
-	case 0:
-		ret = conv->set_interpol(conv, readin);
-		break;
-	case 1:
-		ret = conv->set_interpol_fcent(conv, readin);
-		break;
-	default:
-		ret = -1;
-	}
-
-	dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
-	cf_axi_dds_sync_frame();
-
-	return ret ? ret : readin;
-}
-
-/***************************************************************************//**
- * @brief Reads interpolation data from the AD9122.
- *
- * @return Returns negative error code or 0 in case of success.
-*******************************************************************************/
-uint32_t ad9122_dds_interpolation_show(uint32_t address, int32_t* val)
-{
-	struct cf_axi_dds_converter *conv = &dds_conv;
-	int32_t ret = 0;
-	int32_t i;
-
-	switch (address) {
-	case 0:
-		*val = conv->get_interpol(conv);
-		break;
-	case 1:
-		*val = conv->get_interpol_fcent(conv);
-		break;
-	case 2:
-		for (i = 0; conv->intp_modes[i] != 0; i++)
-			val[i] = (int32_t)conv->intp_modes[i];
-		val[i] = 0;
-		break;
-	case 3:
-		for (i = 0; conv->cs_modes[i] != -1; i++)
-			val[i] = (int32_t)conv->cs_modes[i];
-		val[i] = -1;
-	default:
-		ret = -1;
-	}
-
-	return ret;
 }
 
 /***************************************************************************//**
@@ -669,11 +343,13 @@ uint32_t ad9122_dds_interpolation_show(uint32_t address, int32_t* val)
 int32_t  cf_axi_dds_of_probe()
 {
 	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_dds_converter *conv = &dds_conv;
+	struct cf_axi_converter *conv = &dds_conv;
+
+	conv->pcore_sync = cf_axi_dds_sync_frame;
+	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
+	conv->setup(conv);
 
 	st->dac_clk = conv->get_data_clk(conv);
-
-	cf_axi_dds_tune_dci(st);
 
 	dds_write(st, CF_AXI_DDS_INTERPOL_CTRL, 0x2aaa5555); /* Lin. Interp. */
 
@@ -695,3 +371,4 @@ int32_t  cf_axi_dds_of_probe()
 	return 0;
 }
 
+#endif //CF_AXI_DDS

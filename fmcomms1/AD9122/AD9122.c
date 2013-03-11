@@ -48,9 +48,9 @@
 #include "cf_axi_dds.h"
 #include "AD9122.h"
 
+struct cf_axi_converter dds_conv;
+
 extern void delay_us(uint32_t us_count);
-extern struct cf_axi_dds_state dds_state;
-extern struct cf_axi_dds_converter dds_conv;
 
 int64_t (*pfnSetDataClk)(int64_t Hz);
 int64_t (*pfnSetDacClk)(int64_t Hz);
@@ -118,7 +118,64 @@ static const uint32_t ad9122_reg_defaults[][2] =
 	{AD9122_REG_FIFO_STATUS_1, AD9122_FIFO_STATUS_1_FIFO_SOFT_ALIGN_REQ},
 };
 
-#define ARRAY_SIZE(x) sizeof(x) / sizeof(x[0])
+struct ad9122_sed {
+	unsigned short i0;
+	unsigned short q0;
+	unsigned short i1;
+	unsigned short q1;
+};
+
+static struct ad9122_sed dac_sed_pattern[5] = {
+	{
+		.i0 = 0x5555,
+		.q0 = 0xAAAA,
+		.i1 = 0xAAAA,
+		.q1 = 0x5555,
+	},
+	{
+		.i0 = 0,
+		.q0 = 0,
+		.i1 = 0xFFFF,
+		.q1 = 0xFFFF,
+	},
+	{
+		.i0 = 0,
+		.q0 = 0,
+		.i1 = 0,
+		.q1 = 0,
+	},
+	{
+		.i0 = 0xFFFF,
+		.q0 = 0xFFFF,
+		.i1 = 0xFFFF,
+		.q1 = 0xFFFF,
+	},
+	{
+		.i0 = 0x1248,
+		.q0 = 0xEDC7,
+		.i1 = 0xEDC7,
+		.q1 = 0x1248,
+	}
+};
+
+/******************************************************************************/
+/***************************** Delay Functions ********************************/
+/******************************************************************************/
+extern void delay_us(uint32_t us_count);
+#define mdelay(x) delay_us(x*1000)
+#define msleep(x) delay_us(x*1000)
+
+/******************************************************************************/
+/***************************** Macros *****************************************/
+/******************************************************************************/
+#define test_bit(bit, val) \
+	(((*val) & (1 << bit)) != 0)
+#define set_bit(bit, val) \
+	(*val |= (1 << bit))
+#define sign_extend32(value, index) \
+	((int32_t)(value << (31-index)) >> (31-index))
+#define ARRAY_SIZE(x) \
+	sizeof(x) / sizeof(x[0])
 
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
@@ -154,6 +211,155 @@ int32_t ad9122_read(uint8_t registerAddress)
     ret = SPI_Read(SPI_SEL_AD9122, regAddr, &registerValue);
 
 	return (ret < 0 ? ret : (int32_t)registerValue);
+}
+
+/***************************************************************************//**
+ * @brief Finds the DCI.
+ *
+ * @return Returns the DCI value
+*******************************************************************************/
+static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
+{
+	int32_t dci, cnt, start, max_start, max_cnt;
+	int32_t ret;
+#ifdef DEBUG_DCI
+	int8_t str[33];
+#endif
+
+	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
+		dci < entries; dci++) {
+		if (test_bit(dci, err_field) == 0) {
+			if (start == -1)
+				start = dci;
+			cnt++;
+#ifdef DEBUG_DCI
+			str[dci] = 'o';
+#endif
+		} else {
+			if (cnt > max_cnt) {
+				max_cnt = cnt;
+				max_start = start;
+			}
+			start = -1;
+			cnt = 0;
+#ifdef DEBUG_DCI
+			str[dci] = '-';
+#endif
+		}
+	}
+#ifdef DEBUG_DCI
+	str[dci] = 0;
+#endif
+	if (cnt > max_cnt) {
+		max_cnt = cnt;
+		max_start = start;
+	}
+
+
+	ret = max_start + ((max_cnt - 1) / 2);
+
+#ifdef DEBUG_DCI
+	str[ret] = '|';
+	xil_printf("%s DCI %d\n",str, ret);
+#endif
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Calibrates the AD9122 DCI.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
+{
+	uint32_t reg, err_mask, pwr;
+	int32_t i = 0, dci;
+	uint32_t err_bfield = 0;
+
+	pwr = ad9122_read(AD9122_REG_POWER_CTRL);
+	ad9122_write(AD9122_REG_POWER_CTRL, pwr |
+			AD9122_POWER_CTRL_PD_I_DAC |
+			AD9122_POWER_CTRL_PD_Q_DAC);
+
+	for (dci = 0; dci < 4; dci++) {
+		ad9122_write(AD9122_REG_DCI_DELAY, dci);
+		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++) {
+
+			ad9122_write(AD9122_REG_SED_CTRL, 0);
+
+			conv->pcore_set_sed_pattern(
+				(dac_sed_pattern[i].i1 << 16) | dac_sed_pattern[i].i0,
+				(dac_sed_pattern[i].q1 << 16) | dac_sed_pattern[i].q0);
+
+			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
+				dac_sed_pattern[i].i0 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_I0_MSBS,
+				dac_sed_pattern[i].i0 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_Q0_LSBS,
+				dac_sed_pattern[i].q0 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_Q0_MSBS,
+				dac_sed_pattern[i].q0 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_I1_LSBS,
+				dac_sed_pattern[i].i1 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_I1_MSBS,
+				dac_sed_pattern[i].i1 >> 8);
+
+			ad9122_write(AD9122_REG_COMPARE_Q1_LSBS,
+				dac_sed_pattern[i].q1 & 0xFF);
+			ad9122_write(AD9122_REG_COMPARE_Q1_MSBS,
+				dac_sed_pattern[i].q1 >> 8);
+
+
+			ad9122_write(AD9122_REG_SED_CTRL,
+				    AD9122_SED_CTRL_SED_COMPARE_EN);
+
+			ad9122_write(AD9122_REG_EVENT_FLAG_2,
+ 				    AD9122_EVENT_FLAG_2_AED_COMPARE_PASS |
+				    AD9122_EVENT_FLAG_2_AED_COMPARE_FAIL |
+				    AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
+
+			ad9122_write(AD9122_REG_SED_CTRL,
+				    AD9122_SED_CTRL_SED_COMPARE_EN);
+
+			msleep(100);
+			reg = ad9122_read(AD9122_REG_SED_CTRL);
+			err_mask = ad9122_read(AD9122_REG_SED_I_LSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_I_MSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_Q_LSBS);
+			err_mask |= ad9122_read(AD9122_REG_SED_Q_MSBS);
+
+			if (err_mask || (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED))
+				set_bit(dci, &err_bfield);
+		}
+	}
+
+	ad9122_write(AD9122_REG_DCI_DELAY,
+		    ad9122_find_dci(&err_bfield, 4));
+	ad9122_write(AD9122_REG_SED_CTRL, 0);
+	ad9122_write(AD9122_REG_POWER_CTRL, pwr);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief Gets the AD9122 FIFO status.
+ *
+ * @return Returns negative error code in case of FIFO warning
+ * 		   or 0 in case of success.
+*******************************************************************************/
+int32_t ad9122_get_fifo_status(struct cf_axi_converter *conv)
+{
+	uint32_t stat;
+
+	stat = ad9122_read(AD9122_REG_FIFO_STATUS_1);
+	if (stat & (AD9122_FIFO_STATUS_1_FIFO_WARNING_1 |
+		AD9122_FIFO_STATUS_1_FIFO_WARNING_2)) {
+		return -1;
+	}
+	return 0;
 }
 
 /***************************************************************************//**
@@ -196,12 +402,12 @@ int32_t ad9122_sync()
 /***************************************************************************//**
  * @brief Returns the value of the data clock.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct which contains the
+ * @param conv - Pointer to a cf_axi_converter struct which contains the
  * 				 data clock value
  *
  * @return eturns the value of the data clock.
 *******************************************************************************/
-static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
+static uint32_t ad9122_get_data_clk(struct cf_axi_converter *conv)
 {
 	return conv->clk[CLK_DATA];
 }
@@ -209,12 +415,12 @@ static uint32_t ad9122_get_data_clk(struct cf_axi_dds_converter *conv)
 /***************************************************************************//**
  * @brief Updates the available interpolation frequencies list.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param conv - Pointer to a cf_axi_converter struct
  * @param dat_freq - Data clock frequency in Hz
  *
  * @return None.
 *******************************************************************************/
-static void ad9122_update_avail_intp_modes(struct cf_axi_dds_converter *conv,
+static void ad9122_update_avail_intp_modes(struct cf_axi_converter *conv,
 					 	 	 	 	 	   uint32_t dat_freq)
 {
 	uint32_t dac_freq;
@@ -239,12 +445,12 @@ static void ad9122_update_avail_intp_modes(struct cf_axi_dds_converter *conv,
 /***************************************************************************//**
  * @brief Updates the available center frequencies list.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param conv - Pointer to a cf_axi_converter struct
  * @param freq - Data clock value
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-static void ad9122_update_avail_fcent_modes(struct cf_axi_dds_converter *conv,
+static void ad9122_update_avail_fcent_modes(struct cf_axi_converter *conv,
 					  	  	  	  	  	    uint32_t dat_freq)
 {
 	int32_t i;
@@ -265,12 +471,12 @@ static void ad9122_update_avail_fcent_modes(struct cf_axi_dds_converter *conv,
 /***************************************************************************//**
  * @brief Sets the value of the data clock.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct
+ * @param conv - Pointer to a cf_axi_converter struct
  * @param freq - Data clock value
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-static int32_t ad9122_set_data_clk(struct cf_axi_dds_converter *conv, uint32_t freq)
+static int32_t ad9122_set_data_clk(struct cf_axi_converter *conv, uint32_t freq)
 {
 	uint32_t dac_freq;
 	int32_t dat_freq, r_dac_freq;
@@ -343,7 +549,7 @@ static uint32_t ad9122_validate_interp_factor(unsigned fact)
 /***************************************************************************//**
  * @brief Sets the interpolation factor and the center shift frequency.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param conv - Pointer to a cf_axi_converter struct.
  * @param interp - Interpolation factor
  * @param fcent_shift - Center frequency shift as a multiplier of fData / 2. 
 *               		The shift values should be in the range [0, 15]
@@ -351,7 +557,7 @@ static uint32_t ad9122_validate_interp_factor(unsigned fact)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-static int32_t ad9122_set_interpol(struct cf_axi_dds_converter *conv,
+static int32_t ad9122_set_interpol(struct cf_axi_converter *conv,
 								   uint32_t interp,
 								   uint32_t fcent_shift,
 								   uint32_t data_rate)
@@ -420,12 +626,12 @@ static int32_t ad9122_set_interpol(struct cf_axi_dds_converter *conv,
 /***************************************************************************//**
  * @brief Sets the interpolation frequency.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param conv - Pointer to a cf_axi_converter struct.
  * @param freq - Interpolation frequency in Hz
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-static int32_t ad9122_set_interpol_freq(struct cf_axi_dds_converter *conv,
+static int32_t ad9122_set_interpol_freq(struct cf_axi_converter *conv,
 										uint32_t freq)
 {
 	return ad9122_set_interpol(conv, freq / ad9122_get_data_clk(conv),
@@ -435,12 +641,12 @@ static int32_t ad9122_set_interpol_freq(struct cf_axi_dds_converter *conv,
 /***************************************************************************//**
  * @brief Sets the interpolation center frequency shift.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param conv - Pointer to a cf_axi_converter struct.
  * @param freq - Center frequency shift in Hz
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-static int32_t ad9122_set_interpol_fcent_freq(struct cf_axi_dds_converter *conv,
+static int32_t ad9122_set_interpol_fcent_freq(struct cf_axi_converter *conv,
 											  uint32_t freq)
 {
 	return ad9122_set_interpol(conv, conv->interp_factor,
@@ -450,11 +656,11 @@ static int32_t ad9122_set_interpol_fcent_freq(struct cf_axi_dds_converter *conv,
 /***************************************************************************//**
  * @brief Returns the interpolation frequency.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param conv - Pointer to a cf_axi_converter struct.
  *
  * @return Returns negative error code or the interpolation frequency.
 *******************************************************************************/
-static uint32_t ad9122_get_interpol_freq(struct cf_axi_dds_converter *conv)
+static uint32_t ad9122_get_interpol_freq(struct cf_axi_converter *conv)
 {
 	return ad9122_get_data_clk(conv) * conv->interp_factor;
 }
@@ -462,13 +668,156 @@ static uint32_t ad9122_get_interpol_freq(struct cf_axi_dds_converter *conv)
 /***************************************************************************//**
  * @brief Returns the center frequency shift.
  *
- * @param conv - Pointer to a cf_axi_dds_converter struct.
+ * @param conv - Pointer to a cf_axi_converter struct.
  *
  * @return Returns negative error code or the center frequency shift.
 *******************************************************************************/
-static uint32_t ad9122_get_interpol_fcent_freq(struct cf_axi_dds_converter *conv)
+static uint32_t ad9122_get_interpol_fcent_freq(struct cf_axi_converter *conv)
 {
 	return (ad9122_get_data_clk(conv) * conv->fcenter_shift) / 2;
+}
+
+/***************************************************************************//**
+ * @brief Writes data to the AD9122.
+ *
+ * @return Returns negative error code or the written value in case of success.
+*******************************************************************************/
+uint32_t ad9122_store(uint32_t address, int32_t readin)
+{
+	int32_t ret = 0;
+
+	switch (address) {
+	case AD9122_REG_I_DAC_OFFSET_MSB:
+	case AD9122_REG_Q_DAC_OFFSET_MSB:
+		if (readin < 0 || readin > 0xFFFF) {
+			ret = -1;
+			goto out;
+		}
+		break;
+	case AD9122_REG_I_PHA_ADJ_MSB:
+	case AD9122_REG_Q_PHA_ADJ_MSB:
+		if (readin < -512 || readin > 511) {
+			ret = -1;
+			goto out;
+		}
+		break;
+	default:
+		if (readin < 0 || readin > 0x3FF) {
+			ret = -1;
+			goto out;
+		}
+		break;
+	}
+
+	ret = ad9122_write((uint32_t)address, readin >> 8);
+	if (ret < 0)
+		goto out;
+
+	ret = ad9122_write((uint32_t)address - 1, readin & 0xFF);
+	if (ret < 0)
+		goto out;
+
+out:
+
+	return ret ? ret : readin;
+}
+
+/***************************************************************************//**
+ * @brief Reads data from the AD9122.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+uint32_t ad9122_show(uint32_t address, int32_t* val)
+{
+	int32_t ret = 0;
+
+	ret = ad9122_read((uint32_t)address);
+	if (ret < 0)
+		goto out;
+	*val = ret << 8;
+
+	ret = ad9122_read((uint32_t)address - 1);
+	if (ret < 0)
+		goto out;
+	*val |= ret & 0xFF;
+
+	switch ((uint32_t)address) {
+	case AD9122_REG_I_PHA_ADJ_MSB:
+	case AD9122_REG_Q_PHA_ADJ_MSB:
+		*val = sign_extend32(*val, 9);
+		break;
+	}
+
+out:
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Writes interpolation data to the AD9122.
+ *
+ * @return Returns negative error code or the written data in case of success.
+*******************************************************************************/
+uint32_t ad9122_interpolation_store(uint32_t address, int32_t readin)
+{
+	struct cf_axi_converter *conv = &dds_conv;
+	unsigned pwr;
+	int32_t ret;
+
+	pwr = ad9122_read(AD9122_REG_POWER_CTRL);
+	ad9122_write(AD9122_REG_POWER_CTRL, pwr |
+				 AD9122_POWER_CTRL_PD_I_DAC |
+				 AD9122_POWER_CTRL_PD_Q_DAC);
+
+	switch (address) {
+	case 0:
+		ret = ad9122_set_interpol_freq(conv, readin);
+		break;
+	case 1:
+		ret = ad9122_set_interpol_fcent_freq(conv, readin);
+		break;
+	default:
+		ret = -1;
+	}
+
+	if (conv->pcore_sync)
+		conv->pcore_sync();
+	ad9122_write(AD9122_REG_POWER_CTRL, pwr);
+
+	return ret ? ret : readin;
+}
+
+/***************************************************************************//**
+ * @brief Reads interpolation data from the AD9122.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+uint32_t ad9122_interpolation_show(uint32_t address, int32_t* val)
+{
+	struct cf_axi_converter *conv = &dds_conv;
+	int32_t ret = 0;
+	int32_t i;
+
+	switch (address) {
+	case 0:
+		*val = ad9122_get_interpol_freq(conv);
+		break;
+	case 1:
+		*val = ad9122_get_interpol_fcent_freq(conv);
+		break;
+	case 2:
+		for (i = 0; conv->intp_modes[i] != 0; i++)
+			val[i] = (int32_t)conv->intp_modes[i];
+		val[i] = 0;
+		break;
+	case 3:
+		for (i = 0; conv->cs_modes[i] != -1; i++)
+			val[i] = (int32_t)conv->cs_modes[i];
+		val[i] = -1;
+	default:
+		ret = -1;
+	}
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -490,6 +839,61 @@ int32_t ad9122_reset(void)
 }
 
 /***************************************************************************//**
+ * @brief Reads parameters from the AD9122.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+int32_t ad9122_read_raw(uint32_t channel,
+		    	   	   	int32_t *val,
+			   	   	   	int32_t *val2,
+			   	   	   	int32_t m)
+{
+	struct cf_axi_converter *conv = &dds_conv;
+
+	switch (m) {
+	case IIO_CHAN_INFO_SAMP_FREQ:
+
+		*val = ad9122_get_data_clk(conv);
+		return 0;
+
+	}
+	return -1;
+}
+
+/***************************************************************************//**
+ * @brief Writes parameters to the AD9122.
+ *
+ * @return Returns negative error code or 0 in case of success.
+*******************************************************************************/
+ int32_t ad9122_write_raw(uint32_t channel,
+						  int32_t val,
+						  int32_t val2,
+						  int32_t mask)
+{
+	struct cf_axi_converter *conv = &dds_conv;
+	uint32_t rate;
+	int32_t ret;
+
+	switch (mask) {
+	case IIO_CHAN_INFO_SAMP_FREQ:
+		rate = ad9122_get_data_clk(conv);
+		ret = ad9122_set_data_clk(conv, val);
+		if (ret < 0) {
+			return ret;
+		}
+
+		if (val != rate) {
+			ad9122_tune_dci(conv);
+		}
+		break;
+	default:
+		return -1;
+	}
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief Initializes the AD9122.
  *
  * @param pfnSetDataClock - Pointer to a function which sets the data clock
@@ -507,7 +911,7 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 	int32_t ret;
 	int32_t i;
 	uint32_t datapath_ctrl, rate;
-	struct cf_axi_dds_converter *conv = &dds_conv;
+	struct cf_axi_converter *conv = &dds_conv;
 
 	if(ad9122_reset() < 0)
 		return -1;
@@ -519,13 +923,11 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 
 	conv->write 		= ad9122_write;
 	conv->read 			= ad9122_read;
-	conv->setup 		= ad9122_setup;
+	conv->setup = ad9122_tune_dci;
+	conv->get_fifo_status = ad9122_get_fifo_status;
 	conv->get_data_clk 	= ad9122_get_data_clk;
-	conv->set_data_clk 	= ad9122_set_data_clk;
-	conv->set_interpol 	= ad9122_set_interpol_freq;
-	conv->get_interpol 	= ad9122_get_interpol_freq;
-	conv->set_interpol_fcent = ad9122_set_interpol_fcent_freq;
-	conv->get_interpol_fcent = ad9122_get_interpol_fcent_freq;
+	conv->write_raw = ad9122_write_raw;
+	conv->read_raw = ad9122_read_raw;
 
 	for (i = 0; i < ARRAY_SIZE(ad9122_reg_defaults); i++)
 	{
@@ -550,7 +952,9 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 	ret = ad9122_set_interpol(conv, conv->interp_factor,
 			  	  	  	  	  conv->fcenter_shift, rate);
 
+#ifdef CF_AXI_DDS
 	cf_axi_dds_of_probe();
+#endif
 
 	return ret;
 }
@@ -562,7 +966,7 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 *******************************************************************************/
 int32_t ad9122_dci_calibrate()
 {
-	return cf_axi_dds_tune_dci(0);
+	return ad9122_tune_dci(&dds_conv);
 }
 
 /***************************************************************************//**
@@ -574,15 +978,23 @@ int32_t ad9122_dci_calibrate()
 *******************************************************************************/
 int32_t ad9122_set_data_rate(uint32_t rate)
 {
+	struct cf_axi_converter* conv = &dds_conv;
 	int32_t ret = 0;
 
+#ifdef CF_AXI_DDS
 	ret = cf_axi_dds_write_raw(0, 0,
 							  (int32_t)rate, 0,
 							  IIO_CHAN_INFO_SAMP_FREQ);
+#else
+	ret = ad9122_write_raw(0,
+						   (int32_t)rate, 0,
+					   	   IIO_CHAN_INFO_SAMP_FREQ);
+#endif
+
 	if(ret < 0)
 		return ret;
 
-	return dds_state.dac_clk;
+	return ad9122_get_data_clk(conv);
 }
 
 /***************************************************************************//**
@@ -599,10 +1011,10 @@ int32_t ad9122_out_voltage0_phase(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_I_PHA_ADJ_MSB, val);
+		return ad9122_store(AD9122_REG_I_PHA_ADJ_MSB, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_I_PHA_ADJ_MSB, &val);
+	ret = ad9122_show(AD9122_REG_I_PHA_ADJ_MSB, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -621,10 +1033,10 @@ int32_t ad9122_out_voltage1_phase(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_Q_PHA_ADJ_MSB, val);
+		return ad9122_store(AD9122_REG_Q_PHA_ADJ_MSB, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_Q_PHA_ADJ_MSB, &val);
+	ret = ad9122_show(AD9122_REG_Q_PHA_ADJ_MSB, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -643,10 +1055,10 @@ int32_t ad9122_out_voltage0_calibbias(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_I_DAC_OFFSET_MSB, val);
+		return ad9122_store(AD9122_REG_I_DAC_OFFSET_MSB, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_I_DAC_OFFSET_MSB, &val);
+	ret = ad9122_show(AD9122_REG_I_DAC_OFFSET_MSB, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -665,10 +1077,10 @@ int32_t ad9122_out_voltage1_calibbias(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_Q_DAC_OFFSET_MSB, val);
+		return ad9122_store(AD9122_REG_Q_DAC_OFFSET_MSB, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_Q_DAC_OFFSET_MSB, &val);
+	ret = ad9122_show(AD9122_REG_Q_DAC_OFFSET_MSB, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -687,10 +1099,10 @@ int32_t ad9122_out_voltage0_calibscale(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_I_DAC_CTRL, val);
+		return ad9122_store(AD9122_REG_I_DAC_CTRL, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_I_DAC_CTRL, &val);
+	ret = ad9122_show(AD9122_REG_I_DAC_CTRL, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -709,32 +1121,32 @@ int32_t ad9122_out_voltage1_calibscale(int32_t val)
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_store(AD9122_REG_Q_DAC_CTRL, val);
+		return ad9122_store(AD9122_REG_Q_DAC_CTRL, val);
 	}
 
-	ret = ad9122_dds_show(AD9122_REG_Q_DAC_CTRL, &val);
+	ret = ad9122_show(AD9122_REG_Q_DAC_CTRL, &val);
 
 	return ret > 0 ? val : ret;
 }
 
 /***************************************************************************//**
- * @brief Sets the interpolation factor.
+ * @brief Sets the interpolation frequency.
  *
  * @param val - Interpolation frequency in Hz. If the value equals INT32_MAX then
  *             the function returns the current set value.
  *
  * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_out_altvoltage_interpolation(int32_t val)
+int32_t ad9122_out_altvoltage_interpolation_frequency(int32_t val)
 {
 	int32_t ret;
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_interpolation_store(0, val);
+		return ad9122_interpolation_store(0, val);
 	}
 
-	ret = ad9122_dds_interpolation_show(0, &val);
+	ret = ad9122_interpolation_show(0, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -751,7 +1163,7 @@ int32_t ad9122_out_altvoltage_interpolation(int32_t val)
 *******************************************************************************/
 int32_t out_altvoltage_interpolation_frequency_available(int32_t* val_array)
 {
-	return ad9122_dds_interpolation_show(2, val_array);
+	return ad9122_interpolation_show(2, val_array);
 }
 
 /***************************************************************************//**
@@ -762,16 +1174,16 @@ int32_t out_altvoltage_interpolation_frequency_available(int32_t* val_array)
  *
  * @return Returns the set value or negative error code.
 *******************************************************************************/
-int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val)
+int32_t ad9122_out_altvoltage_interpolation_center_shift_frequency(int32_t val)
 {
 	int32_t ret;
 
 	if(val != INT32_MAX)
 	{
-		return ad9122_dds_interpolation_store(1, val);
+		return ad9122_interpolation_store(1, val);
 	}
 
-	ret = ad9122_dds_interpolation_show(1, &val);
+	ret = ad9122_interpolation_show(1, &val);
 
 	return ret > 0 ? val : ret;
 }
@@ -788,7 +1200,7 @@ int32_t ad9122_out_altvoltage_interpolation_center_shift(int32_t val)
 *******************************************************************************/
 int32_t out_altvoltage_interpolation_center_shift_frequency_available(int32_t* val_array)
 {
-	return ad9122_dds_interpolation_show(3, val_array);
+	return ad9122_interpolation_show(3, val_array);
 }
 
 /***************************************************************************//**
