@@ -288,6 +288,7 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 
 			ad9122_write(AD9122_REG_SED_CTRL, 0);
 
+			if(conv->pcore_set_sed_pattern)
 			conv->pcore_set_sed_pattern(
 				(dac_sed_pattern[i].i1 << 16) | dac_sed_pattern[i].i0,
 				(dac_sed_pattern[i].q1 << 16) | dac_sed_pattern[i].q0);
@@ -954,6 +955,8 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 
 #ifdef CF_AXI_DDS
 	cf_axi_dds_of_probe();
+#else
+	ret = ad9122_tune_dci(conv);
 #endif
 
 	return ret;
