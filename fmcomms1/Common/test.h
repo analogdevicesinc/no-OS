@@ -59,6 +59,7 @@
 	#define UART_BASEADDR         	XPS_UART1_BASEADDR
 	#define CFFFT_BASEADDR        	DDR_BASEADDR
 	#define DMAFFT_BASEADDR       	DDR_BASEADDR
+	#define DDRDAC_BASEADDR       	DDR_BASEADDR + 0x6000000
 #else
 	#define CFAD9122_0_BASEADDR   XPAR_AXI_DAC_4D_2C_0_BASEADDR
 	#define CFAD9643_0_BASEADDR   XPAR_AXI_ADC_2C_0_BASEADDR
@@ -82,6 +83,7 @@
 	#define UART_BASEADDR         XPAR_RS232_UART_1_BASEADDR
 	#define CFFFT_BASEADDR        XPAR_AXI_FFT_0_BASEADDR
 	#define DMAFFT_BASEADDR       XPAR_AXI_DMA_2_BASEADDR
+	#define DDRDAC_BASEADDR       DDR_BASEADDR + 0x00010000
 #endif
 
 #define IICSEL_B0LPC_PS7      0x20
@@ -96,6 +98,8 @@
 /*****************************************************************************/
 /** Initializes the DDS core */
 void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2);
+/** Initializes the DAC DMA **/
+void dac_dma_setup(uint32_t sel);
 /** Verifies the communication with the DAC */
 void dac_test(uint32_t sel);
 /** Captures data from the ADC */
