@@ -287,12 +287,12 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++) {
 
 			ad9122_write(AD9122_REG_SED_CTRL, 0);
-
+#ifdef CF_AXI_DDS
 			if(conv->pcore_set_sed_pattern)
 			conv->pcore_set_sed_pattern(
 				(dac_sed_pattern[i].i1 << 16) | dac_sed_pattern[i].i0,
 				(dac_sed_pattern[i].q1 << 16) | dac_sed_pattern[i].q0);
-
+#endif
 			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
 				dac_sed_pattern[i].i0 & 0xFF);
 			ad9122_write(AD9122_REG_COMPARE_I0_MSBS,
