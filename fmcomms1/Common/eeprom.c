@@ -110,7 +110,7 @@ int32_t EEPROM_GetCalData(uint8_t* pData, uint8_t *pSize, uint32_t fmcPort)
 
     for(i = 0; i < MAX_SIZE_CAL_EEPROM; i += 16)
     {
-		ret = EEPROM_Read(fmcPort ? IICSEL_CAL_HPC : IICSEL_CAL_LPC, 0x00,
+		ret = EEPROM_Read(fmcPort ? IICSEL_CAL_HPC : IICSEL_CAL_LPC, i,
 						  (pData + i),
                           ((MAX_SIZE_CAL_EEPROM - i) > 16) ? 16 : (MAX_SIZE_CAL_EEPROM - i));
 
