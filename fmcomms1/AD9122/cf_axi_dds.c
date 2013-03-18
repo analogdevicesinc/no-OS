@@ -229,13 +229,13 @@ int32_t cf_axi_dds_read_raw(uint32_t channel,
 		reg = dds_read(st, address);
 		val64 = (uint64_t)(reg & 0xFFFF) * (uint64_t)st->dac_clk;
 		do_div(&val64, 0xFFFF);
-		*val = val64;
+		*val = (int32_t)val64;
 		return 0;
 	case IIO_CHAN_INFO_PHASE:
 		reg = dds_read(st, address);
 		val64 = (uint64_t)(reg >> 16) * 360000ULL;
 		do_div(&val64, 0xFFFF);
-		*val = val64;
+		*val = (int32_t)val64;
 		return 0;
 	case IIO_CHAN_INFO_SAMP_FREQ:
 		if (!conv->get_data_clk)
@@ -294,7 +294,7 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_FREQUENCY:
-		if (val > (st->dac_clk / 2))
+		if (val > (int32_t)(st->dac_clk / 2))
 			return -1;
 		cf_axi_dds_stop(st);
 		reg = dds_read(st, address);

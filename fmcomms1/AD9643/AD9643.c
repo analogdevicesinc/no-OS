@@ -149,8 +149,8 @@ int32_t ad9643_testmode_set(uint32_t chan_mask, uint32_t mode)
 *******************************************************************************/
 int32_t ad9643_dco_calibrate_2c()
 {
-    int32_t dco, cnt, start, max_start, max_cnt;
-    uint32_t stat, tm_mask, err_mask, regVal, inv_range = 0;
+    int32_t dco, cnt, start, max_start, max_cnt, inv_range = 0;
+    uint32_t stat, tm_mask, err_mask, regVal;
     uint8_t err_field[66];
 
 restart:

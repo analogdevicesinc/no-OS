@@ -225,7 +225,7 @@ int64_t adf4351_set_freq(struct adf4351_state *st, uint64_t freq,
 		st->r0_fract = tmp % st->r1_mod;
 		tmp = tmp / st->r1_mod;
 		
-		st->r0_int = tmp;
+		st->r0_int = (uint32_t)tmp;
 	} while (mdiv > st->r0_int);
 
 	band_sel_div = st->fpfd % ADF4351_MAX_BANDSEL_CLK > ADF4351_MAX_BANDSEL_CLK / 2 ?
@@ -364,7 +364,7 @@ int64_t adf4351_out_altvoltage0_refin_frequency(int64_t Hz, int8_t channel)
 {
 	if(Hz != INT32_MAX)
 	{
-		adf4351_st[(int32_t)channel].clkin = Hz;
+		adf4351_st[(int32_t)channel].clkin = (uint32_t)Hz;
 	}
 	
 	return adf4351_st[(int32_t)channel].clkin;

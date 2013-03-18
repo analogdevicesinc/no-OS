@@ -102,13 +102,10 @@ extern void delay_us(uint32_t us_count);
  * to closest integer. Result is undefined for negative divisors.
  */
 #define DIV_ROUND_CLOSEST(x, divisor)  \
-( {                                    \
-typeof(x) __x = x;                     \
-typeof(divisor) __d = divisor;         \
-(((typeof(x))-1) > 0 || (__x) > 0) ?   \
-(((__x) + ((__d) / 2)) / (__d)) :      \
-(((__x) - ((__d) / 2)) / (__d));       \
-} )
+(((x) > 0) ?              			    \
+(((x) + ((divisor) / 2)) / (divisor)) : \
+(((x) - ((divisor) / 2)) / (divisor)));
+ 
 
 
 /***************************************************************************//**
@@ -612,18 +609,26 @@ uint32_t ad9523_clk_round_rate(int32_t ch, uint32_t rate)
 
 	switch (ch)
 	{
-	case 0 ... 3:
+    case 0:
+    case 1:
+    case 2:
+    case 3:
 		if (rate == st->vco_out_freq[AD9523_VCXO])
 			clk = st->vco_out_freq[AD9523_VCXO];
 		else
 			clk = st->vco_out_freq[AD9523_VCO1];
 		break;
-	case 4 ... 9:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
 		tmp1 = st->vco_out_freq[AD9523_VCO1] / rate;
 		tmp2 = st->vco_out_freq[AD9523_VCO2] / rate;
 		tmp1 *= rate;
 		tmp2 *= rate;
-		if (abs(tmp1 - rate) > abs(tmp2 - rate))
+		if (abs((int32_t)tmp1 - (int32_t)rate) > abs((int32_t)tmp2 - (int32_t)rate))
 			clk = st->vco_out_freq[AD9523_VCO2];
 		else
 			clk = st->vco_out_freq[AD9523_VCO1];

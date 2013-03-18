@@ -250,7 +250,7 @@ int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
         return -1;
 
     /* Set the AD9122 sampling rate */
-    if(XCOMM_SetDacSamplingRate(pDefInit->dacSamplingRate) < 0)
+    if(XCOMM_SetDacSamplingRate((uint32_t)pDefInit->dacSamplingRate) < 0)
         return -1;
 
     return 0;
@@ -1015,7 +1015,7 @@ int32_t XCOMM_SetDacSamplingRate(uint32_t rate)
     XCOMM_State.dacSampleRate = sampleRate;
     XCOMM_State.dacSampleRateValid = 1;
 
-    return XCOMM_State.dacSampleRate;
+    return (int32_t)XCOMM_State.dacSampleRate;
 }
 
 /**************************************************************************//**

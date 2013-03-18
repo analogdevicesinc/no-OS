@@ -147,7 +147,7 @@ uint32_t I2C_Read_ps7(uint32_t i2cAddr, uint32_t regAddr,
     // Write the desired register address if required
     if(regAddr != -1)
     {
-        I2C_Write_ps7(i2cAddr, regAddr, 0, NULL);
+        I2C_Write_ps7(i2cAddr, regAddr, 0, 0);
     }
     /* Write to the Control Register to set up SCL Speed and addressing mode
           Set the MS, ACKEN, CLR_FIFO and RW bit */

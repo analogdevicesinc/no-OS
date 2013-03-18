@@ -127,34 +127,34 @@ struct ad9122_sed {
 
 static struct ad9122_sed dac_sed_pattern[5] = {
 	{
-		.i0 = 0x5555,
-		.q0 = 0xAAAA,
-		.i1 = 0xAAAA,
-		.q1 = 0x5555,
+		0x5555,
+		0xAAAA,
+		0xAAAA,
+		0x5555,
 	},
 	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
+		0,
+		0,
+		0xFFFF,
+		0xFFFF,
 	},
 	{
-		.i0 = 0,
-		.q0 = 0,
-		.i1 = 0,
-		.q1 = 0,
+		0,
+		0,
+		0,
+		0,
 	},
 	{
-		.i0 = 0xFFFF,
-		.q0 = 0xFFFF,
-		.i1 = 0xFFFF,
-		.q1 = 0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
+		0xFFFF,
 	},
 	{
-		.i0 = 0x1248,
-		.q0 = 0xEDC7,
-		.i1 = 0xEDC7,
-		.q1 = 0x1248,
+		0x1248,
+		0xEDC7,
+		0xEDC7,
+		0x1248,
 	}
 };
 
@@ -227,7 +227,7 @@ static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
 #endif
 
 	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
-		dci < entries; dci++) {
+		dci < (int32_t)entries; dci++) {
 		if (test_bit(dci, err_field) == 0) {
 			if (start == -1)
 				start = dci;
@@ -454,7 +454,7 @@ static void ad9122_update_avail_intp_modes(struct cf_axi_converter *conv,
 static void ad9122_update_avail_fcent_modes(struct cf_axi_converter *conv,
 					  	  	  	  	  	    uint32_t dat_freq)
 {
-	int32_t i;
+	uint32_t i;
 
 	if (conv->interp_factor == 1) {
 		conv->cs_modes[0] = 0;
@@ -512,12 +512,12 @@ static int32_t ad9122_set_data_clk(struct cf_axi_converter *conv, uint32_t freq)
 
 	ret = pfnSetDataClk(dat_freq);
 	if(ret < 0)
-		return ret;
+		return (int32_t)ret;
 	conv->clk[CLK_DATA] = (uint32_t)ret;
 
 	ret = pfnSetDacClk(dac_freq);
 	if(ret < 0)
-		return ret;
+		return (int32_t)ret;
 	conv->clk[CLK_DAC]  = (uint32_t)ret;
 
 	ad9122_update_avail_fcent_modes(conv, dat_freq);
