@@ -171,7 +171,7 @@
 /* AD9122_REG_PLL_CTRL_1 definitions */
 #define AD9122_PLL_CTRL_1_PLL_EN					(1 << 7)
 #define AD9122_PLL_CTRL_1_PLL_MANUAL_EN				(1 << 6)
-#define AD9122_PLL_CTRL_1_MANUAL_VCO_BAND(x)		((x) & 0x3F) << 0)
+#define AD9122_PLL_CTRL_1_MANUAL_VCO_BAND(x)		(((x) & 0x3F) << 0)
 
 /* AD9122_REG_PLL_CTRL_2 definitions */
 #define AD9122_PLL_CTRL_2_PLL_LOOP_BANDWIDTH(x)			(((x) & 0x3) << 6)
