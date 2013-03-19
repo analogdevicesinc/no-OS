@@ -338,7 +338,7 @@ int32_t XCOMM_SetDacCenterShiftFreq(int32_t shift);
 /*  ** rate: desired rate in Hz */
 /*  ** if success, return exact calculated rate in Hz */
 /*  ** if error, return -1 */
-int32_t XCOMM_SetDacSamplingRate(uint32_t rate);
+int64_t XCOMM_SetDacSamplingRate(uint64_t rate);
 
 /** Gets the sampling rate of the DAC */
 /*  ** readMode: read rate from driver or HW */
