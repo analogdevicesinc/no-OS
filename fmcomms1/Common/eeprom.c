@@ -46,8 +46,8 @@
 /*****************************************************************************/
 #include "eeprom.h"
 
-extern uint32_t (*I2C_Read)();
-extern uint32_t (*I2C_Write)();
+extern uint32_t (*I2C_Write)(uint32_t, uint32_t, uint32_t, uint8_t*);
+extern uint32_t (*I2C_Read)(uint32_t, uint32_t, uint32_t, uint8_t*);
 
 /**************************************************************************//**
 * @brief Reads data from the selected EEPROM device
