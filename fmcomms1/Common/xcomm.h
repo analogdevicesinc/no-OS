@@ -148,6 +148,11 @@ typedef struct
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 
+/** Initializes the I2C peripheral */
+/*  ** if success, return 0 */
+/*  ** if error, return -1 */
+int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit);
+
 /** Initializes the XCOMM board */
 /*  ** if success, return 0 */
 /*  ** if error, return -1 */

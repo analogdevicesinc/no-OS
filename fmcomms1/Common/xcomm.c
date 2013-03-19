@@ -102,6 +102,40 @@ struct stXCOMM_State
 }XCOMM_State;
 
 /**************************************************************************//**
+* @brief Initializes the I2C peripheral.
+*
+* @param pDefInit - pointer to initialization structure
+*
+* @return Returns -1 in case of error, 0 for success
+******************************************************************************/
+int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit)
+{
+    /* Local variables */
+    uint32_t enableCommMux;
+    uint32_t ps7Interface = 0;
+    int32_t  ret;
+
+    /* Initialize the SPI communication */
+    switch(pDefInit->carrierBoard)
+    {
+    	case XILINX_ZC702:
+            ps7Interface = 1;
+        case XILINX_KC705:
+        case XILINX_VC707:
+            enableCommMux = 1;
+            break;
+        case DIGILENT_ZED:
+        	pDefInit->fmcPort = FMC_HPC;
+        case XILINX_ML605:
+        default:
+            enableCommMux = 0;
+            break;
+    }
+    ret = SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface);
+
+    return ret;
+}
+/**************************************************************************//**
 * @brief Initializes the XCOMM board. The Rx and Tx path are disabled.
 *
 * @param pDefInit - pointer to initialization structure
