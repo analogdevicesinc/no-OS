@@ -381,6 +381,7 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
 {
     int32_t ret;
     uint8_t len;
+	int32_t i;
     uint8_t idx = 0;
     uint8_t* ptr = XCOMM_State.fruData;
     XCOMM_Version ver;
@@ -390,11 +391,15 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
     /* Read the FRU data */
     if((!XCOMM_State.fruDataValid) || (readMode == XCOMM_ReadMode_FromHW))
     {
-        ret = EEPROM_Read(XCOMM_boardFmcPort == FMC_LPC ?
-        				  IICSEL_FRU_LPC : IICSEL_FRU_HPC,
-        				  0x00, XCOMM_State.fruData, 255);
-        if((ret < 0) || (XCOMM_State.fruData[0] != 0x01))
-            return ver;
+    	for(i = 0; i < 255; i += 16)
+    	{
+			ret = EEPROM_Read(XCOMM_boardFmcPort == FMC_LPC ?
+							  IICSEL_FRU_LPC : IICSEL_FRU_HPC,
+							  i, &XCOMM_State.fruData[i],
+							  ((255 - i) > 16) ? 16 : (255 - i));
+	        if((ret < 0) || (XCOMM_State.fruData[0] != 0x01))
+	            return ver;
+    	}
         XCOMM_State.fruDataValid = 1;
     }
 
