@@ -131,6 +131,7 @@ int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit)
             enableCommMux = 0;
             break;
     }
+	XCOMM_boardFmcPort = enableCommMux ? FMC_HPC : pDefInit->fmcPort;
     ret = SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface);
 
     return ret;
