@@ -1032,7 +1032,7 @@ int64_t XCOMM_GetDacSamplingRate(XCOMM_ReadMode readMode)
     
     if(readMode == XCOMM_ReadMode_FromHW)
     {
-		sampleRate = ad9523_out_altvoltage_DAC_CLK_frequency(INT64_MAX);
+		sampleRate = ad9523_out_altvoltage_DAC_DCO_CLK_frequency(INT64_MAX);
 		if(sampleRate < 0)
 			return -1;
 
