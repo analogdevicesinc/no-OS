@@ -172,6 +172,7 @@ restart:
     	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,
                   	 dco > 0 ? ((dco - 1) | 0x80) : 0);
 		ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
+		ad9643_read(AD9643_REG_DCO_OUTPUT_DELAY);	// Necessary on some systems.
         ADC_Core_Write(ADC_CORE_ADC_STAT, ADC_CORE_ADC_STAT_MASK);
 
 		delay_us(1000);
