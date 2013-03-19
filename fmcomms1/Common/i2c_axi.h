@@ -48,7 +48,6 @@
 /******************* Include Files *******************************************/
 /*****************************************************************************/
 #include <stdint.h>
-#include "xparameters.h"
 
 /* IIC FMC Port selection */
 #define I2C_HPC_AXI 0x02
