@@ -1007,7 +1007,7 @@ int64_t XCOMM_SetDacSamplingRate(uint64_t rate)
 {
     int32_t sampleRate;
 
-    sampleRate = ad9122_set_data_rate(rate);
+    sampleRate = ad9122_set_data_rate((uint32_t)rate);
 
     if(sampleRate < 0)
         return -1;
