@@ -64,6 +64,7 @@ int main()
     int32_t fmcSel;
     int32_t i;
     int32_t valArray[17];
+    XCOMM_Version boardVersion;
     XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
     							 XILINX_ML605,	//carrierBoard
                                  100000000,		//adcSamplingRate
@@ -84,6 +85,29 @@ int main()
     else
     {
     	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_AXI : IICSEL_B1HPC_AXI);
+    }
+
+    xil_printf("\n\rInitializing XCOMM I2C...\n\r");
+    ret = XCOMM_InitI2C(&defInit);
+	if(ret < 0)
+	{
+		xil_printf("XCOMM Init I2C Failed!\n\r");
+		return 0;
+	}
+	else
+	{
+		xil_printf("XCOMM Init I2C OK!\n\r");
+	}
+
+    xil_printf("\n\rGetting XCOMM Revision...\n\r");
+    boardVersion = XCOMM_GetBoardVersion(XCOMM_ReadMode_FromHW);
+    if(boardVersion.error == -1)
+    {
+    	xil_printf("\n\rGetting XCOMM Revision Failed!\n\r");
+    }
+    else
+    {
+    	xil_printf("Board Version: %s\n\r", boardVersion.value);
     }
 
     xil_printf("\n\rInitializing XCOMM Components...\n\r");

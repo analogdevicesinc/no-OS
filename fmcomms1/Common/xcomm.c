@@ -1055,7 +1055,7 @@ int64_t XCOMM_SetDacSamplingRate(uint64_t rate)
     XCOMM_State.dacSampleRate = sampleRate;
     XCOMM_State.dacSampleRateValid = 1;
 
-    return (int32_t)XCOMM_State.dacSampleRate;
+    return XCOMM_State.dacSampleRate;
 }
 
 /**************************************************************************//**

@@ -130,31 +130,31 @@ static struct ad9122_sed dac_sed_pattern[5] = {
 		0x5555,
 		0xAAAA,
 		0xAAAA,
-		0x5555,
+		0x5555
 	},
 	{
 		0,
 		0,
 		0xFFFF,
-		0xFFFF,
+		0xFFFF
 	},
 	{
 		0,
 		0,
 		0,
-		0,
+		0
 	},
 	{
 		0xFFFF,
 		0xFFFF,
 		0xFFFF,
-		0xFFFF,
+		0xFFFF
 	},
 	{
 		0x1248,
 		0xEDC7,
 		0xEDC7,
-		0x1248,
+		0x1248
 	}
 };
 
@@ -222,6 +222,7 @@ static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
 {
 	int32_t dci, cnt, start, max_start, max_cnt;
 	int32_t ret;
+	int32_t valid_dci = 0;
 #ifdef DEBUG_DCI
 	int8_t str[33];
 #endif
@@ -229,6 +230,7 @@ static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
 	for(dci = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
 		dci < (int32_t)entries; dci++) {
 		if (test_bit(dci, err_field) == 0) {
+			valid_dci = 1;
 			if (start == -1)
 				start = dci;
 			cnt++;
@@ -262,8 +264,14 @@ static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
 	str[ret] = '|';
 	xil_printf("%s DCI %d\n",str, ret);
 #endif
-
-	return ret;
+	if(valid_dci == 1)
+	{
+		return ret;
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 /***************************************************************************//**
@@ -273,26 +281,21 @@ static int32_t ad9122_find_dci(uint32_t *err_field, uint32_t entries)
 *******************************************************************************/
 int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 {
-	uint32_t reg, err_mask, pwr;
+	uint32_t reg;
 	int32_t i = 0, dci;
 	uint32_t err_bfield = 0;
-
-	pwr = ad9122_read(AD9122_REG_POWER_CTRL);
-	ad9122_write(AD9122_REG_POWER_CTRL, pwr |
-			AD9122_POWER_CTRL_PD_I_DAC |
-			AD9122_POWER_CTRL_PD_Q_DAC);
 
 	for (dci = 0; dci < 4; dci++) {
 		ad9122_write(AD9122_REG_DCI_DELAY, dci);
 		for (i = 0; i < ARRAY_SIZE(dac_sed_pattern); i++) {
 
 			ad9122_write(AD9122_REG_SED_CTRL, 0);
-#ifdef CF_AXI_DDS
+
 			if(conv->pcore_set_sed_pattern)
 			conv->pcore_set_sed_pattern(
 				(dac_sed_pattern[i].i1 << 16) | dac_sed_pattern[i].i0,
 				(dac_sed_pattern[i].q1 << 16) | dac_sed_pattern[i].q0);
-#endif
+
 			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
 				dac_sed_pattern[i].i0 & 0xFF);
 			ad9122_write(AD9122_REG_COMPARE_I0_MSBS,
@@ -313,7 +316,6 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 			ad9122_write(AD9122_REG_COMPARE_Q1_MSBS,
 				dac_sed_pattern[i].q1 >> 8);
 
-
 			ad9122_write(AD9122_REG_SED_CTRL,
 				    AD9122_SED_CTRL_SED_COMPARE_EN);
 
@@ -323,24 +325,26 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 				    AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
 
 			ad9122_write(AD9122_REG_SED_CTRL,
-				    AD9122_SED_CTRL_SED_COMPARE_EN);
+				    AD9122_SED_CTRL_SED_COMPARE_EN |
+				    AD9122_SED_CTRL_AUTOCLEAR_EN);
 
 			msleep(100);
 			reg = ad9122_read(AD9122_REG_SED_CTRL);
-			err_mask = ad9122_read(AD9122_REG_SED_I_LSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_I_MSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_Q_LSBS);
-			err_mask |= ad9122_read(AD9122_REG_SED_Q_MSBS);
-
-			if (err_mask || (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED))
+			if(!(reg & (AD9122_SED_CTRL_SAMPLE_ERR_DETECTED | AD9122_SED_CTRL_COMPARE_PASS)))
+			{
+				return -1;
+			}
+			if (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED)
 				set_bit(dci, &err_bfield);
 		}
 	}
-
-	ad9122_write(AD9122_REG_DCI_DELAY,
-		    ad9122_find_dci(&err_bfield, 4));
+	dci = ad9122_find_dci(&err_bfield, 4);
+	if(dci < 0)
+	{
+		return -1;
+	}
+	ad9122_write(AD9122_REG_DCI_DELAY, dci);
 	ad9122_write(AD9122_REG_SED_CTRL, 0);
-	ad9122_write(AD9122_REG_POWER_CTRL, pwr);
 
 	return 0;
 }
@@ -884,14 +888,14 @@ int32_t ad9122_read_raw(uint32_t channel,
 		}
 
 		if (val != rate) {
-			ad9122_tune_dci(conv);
+			ret = ad9122_tune_dci(conv);
 		}
 		break;
 	default:
 		return -1;
 	}
 
-	return 0;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -953,11 +957,7 @@ int32_t ad9122_setup(void* pfnSetDataClock, void* pfnSetDacClock,
 	ret = ad9122_set_interpol(conv, conv->interp_factor,
 			  	  	  	  	  conv->fcenter_shift, rate);
 
-#ifdef CF_AXI_DDS
 	cf_axi_dds_of_probe();
-#else
-	ret = ad9122_tune_dci(conv);
-#endif
 
 	return ret;
 }

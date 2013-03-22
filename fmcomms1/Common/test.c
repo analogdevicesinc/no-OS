@@ -47,6 +47,7 @@
 #include <stdint.h>
 #include <xparameters.h>
 #include <xil_io.h>
+#include <xil_cache.h>
 #include "timer.h"
 #include "test.h"
 
@@ -447,31 +448,54 @@ void dac_test(uint32_t sel)
 void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 {
 	uint32_t baddr;
-	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
+	uint32_t ba;
 
+	ba = sa + (qwcnt*8);
+	Xil_Out32((ba + 0x000), (ba + 0x40)); // next descriptor
+	Xil_Out32((ba + 0x004), 0x00); // reserved
+	Xil_Out32((ba + 0x008), sa); // start address
+	Xil_Out32((ba + 0x00c), 0x00); // reserved
+	Xil_Out32((ba + 0x010), 0x00); // reserved
+	Xil_Out32((ba + 0x014), 0x00); // reserved
+	Xil_Out32((ba + 0x018), (qwcnt*8)); // no. of bytes
+	Xil_Out32((ba + 0x01c), 0x00); // status
+	Xil_Out32((ba + 0x040), (ba + 0x00)); // next descriptor
+	Xil_Out32((ba + 0x044), 0x00); // reserved
+	Xil_Out32((ba + 0x048), sa); // start address
+	Xil_Out32((ba + 0x04c), 0x00); // reserved
+	Xil_Out32((ba + 0x050), 0x00); // reserved
+	Xil_Out32((ba + 0x054), 0x00); // reserved
+	Xil_Out32((ba + 0x058), (qwcnt*8)); // no. of bytes
+	Xil_Out32((ba + 0x05c), 0x00); // status
+#ifdef _XPARAMETERS_PS_H_
+	Xil_DCacheFlush();
+#else
+	microblaze_flush_dcache();
+	microblaze_invalidate_dcache();
+#endif
+
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
+	Xil_Out32((baddr + 0x030), 4); // reset dma
 	Xil_Out32((baddr + 0x030), 0); // clear dma operations
+	Xil_Out32((baddr + 0x038), ba); // head descr.
 	Xil_Out32((baddr + 0x030), 1); // enable dma operations
-	Xil_Out32((baddr + 0x048), sa); // capture start address
-	Xil_Out32((baddr + 0x058), (qwcnt * 8)); // number of bytes
+	Xil_Out32((baddr + 0x040), (ba+0x40)); // tail descr.
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
 	Xil_Out32((baddr + 0x008), 0x03); // channel enables
 	Xil_Out32((baddr + 0x00c), 0x0); // capture disable
 	Xil_Out32((baddr + 0x010), 0xf); // clear status
 	Xil_Out32((baddr + 0x014), 0xf); // clear status
-	Xil_Out32((baddr + 0x00c), (0x10000 | (qwcnt-1))); // start capture
-
+	Xil_Out32((baddr + 0x00c), (0x80000000 | (qwcnt-1))); // start capture
 	do
 	{
 		delay_ms(1);
 	}
 	while ((Xil_In32(baddr + 0x010) & 0x1) == 1);
-
 	if ((Xil_In32(baddr + 0x010) & 0x02) == 0x02)
 	{
 		xil_printf("adc_capture: overflow occured, data may be corrupted\n\r");
 	}
-
 #ifdef _XPARAMETERS_PS_H_
 	Xil_DCacheFlush();
 #else

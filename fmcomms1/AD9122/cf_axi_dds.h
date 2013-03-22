@@ -46,6 +46,10 @@
 /* This define controls the use of the DDS module by the AD9122 driver */
 #define CF_AXI_DDS
 
+#ifdef CUSTOM_DAC_PCORE
+#undef CF_AXI_DDS
+#endif
+
 #ifdef CF_AXI_DDS
 /******************************************************************************/
 /************************ AD9122 AXI Core Registers ***************************/
@@ -141,11 +145,12 @@ struct cf_axi_converter
 	void		(*pcore_sync)();
 };
 
-#ifdef CF_AXI_DDS
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t  cf_axi_dds_of_probe();
+#ifdef CF_AXI_DDS
 int32_t  cf_axi_dds_write_raw(uint32_t channel,
 						uint32_t address,
 						int32_t val,
