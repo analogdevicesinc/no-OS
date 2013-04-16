@@ -128,7 +128,7 @@ void cf_axi_dds_sync_frame()
 	/* Check FIFO status */
 	stat = conv->get_fifo_status(conv);
 	if (stat) {
-		if (retry++ > 3) {
+		if (retry++ > 10) {
 			return;
 		}
 

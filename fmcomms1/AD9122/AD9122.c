@@ -639,8 +639,15 @@ static int32_t ad9122_set_interpol(struct cf_axi_converter *conv,
 static int32_t ad9122_set_interpol_freq(struct cf_axi_converter *conv,
 										uint32_t freq)
 {
-	return ad9122_set_interpol(conv, freq / ad9122_get_data_clk(conv),
-							   conv->fcenter_shift, 0);
+	uint32_t dat_freq;
+	int32_t ret;
+
+	dat_freq = ad9122_get_data_clk(conv);
+	ret = ad9122_set_interpol(conv, freq / dat_freq,
+							  conv->fcenter_shift, 0);
+	ad9122_update_avail_fcent_modes(conv, dat_freq);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -765,13 +772,7 @@ out:
 uint32_t ad9122_interpolation_store(uint32_t address, int32_t readin)
 {
 	struct cf_axi_converter *conv = &dds_conv;
-	unsigned pwr;
 	int32_t ret;
-
-	pwr = ad9122_read(AD9122_REG_POWER_CTRL);
-	ad9122_write(AD9122_REG_POWER_CTRL, pwr |
-				 AD9122_POWER_CTRL_PD_I_DAC |
-				 AD9122_POWER_CTRL_PD_Q_DAC);
 
 	switch (address) {
 	case 0:
@@ -786,7 +787,6 @@ uint32_t ad9122_interpolation_store(uint32_t address, int32_t readin)
 
 	if (conv->pcore_sync)
 		conv->pcore_sync();
-	ad9122_write(AD9122_REG_POWER_CTRL, pwr);
 
 	return ret ? ret : readin;
 }
