@@ -68,14 +68,14 @@ static char emptyTxBuf[MAX_TX_SIZE];
 * @brief Initializes the communication with the Microblaze SPI peripheral.
 *
 * @param axiBaseAddr - Microblaze SPI peripheral AXI base address.
-* @param lsbFirst - Set to 1 if the data is transmitted LSB first.
-* @param cpha - Set to 1 if CPHA mode is used.
-* @param cpol - Set to 1 if CPOL mode is used.
+* @param lsbFirst    - Set to 1 if the data is transmitted LSB first.
+* @param cpha        - Set to 1 if CPHA mode is used.
+* @param cpol        - Set to 1 if CPOL mode is used.
 * @return TRUE
 ******************************************************************************/
 u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
 {
-    u32 i = 0;
+    u32 i        = 0;
 	u32 cfgValue = 0;
 
 	//set the empty Tx buffer to 0
@@ -120,21 +120,21 @@ u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
 * @brief Transfers data to and from a SPI slave.
 *
 * @param axiBaseAddr - Microblaze SPI peripheral AXI base address.
-* @param txSize - Number of bytes to transmit to the SPI slave.
-* @param txBuffer - Buffer which holds the data to be transmitted to the SPI slave.
-* @param rxSize - Number of bytes to receive from the SPI slave.
-* @param txBuffer - Buffer to store the data read to the SPI slave.
-* @param ssNo - Slave select line on which the slave is connected.
+* @param txSize      - Number of bytes to transmit to the SPI slave.
+* @param txBuffer    - Buffer which holds the data to be transmitted to the SPI slave.
+* @param rxSize      - Number of bytes to receive from the SPI slave.
+* @param txBuffer    - Buffer to store the data read to the SPI slave.
+* @param ssNo        - Slave select line on which the slave is connected.
 * @return TRUE.
 ******************************************************************************/
 u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, char* rxBuf, char ssNo)
 {
-    u32 i = 0;
+    u32 i         = 0;
     u32 cfgValue  = 0;
     u32 SPIStatus = 0;
-    u32 rxCnt = 0;
-    u32 txCnt = 0;
-    u32 timeout = 0xFFFF;
+    u32 rxCnt     = 0;
+    u32 txCnt     = 0;
+    u32 timeout   = 0xFFFF;
 
     // Get the configuration of the SPI core
     for(i = 0; i < sizeof(spiConfig) / sizeof(stSpiConfig); i++)

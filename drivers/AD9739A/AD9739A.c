@@ -68,7 +68,7 @@ struct ad9739a_state
  * @brief Writes a value to the selected register.
  *
  * @param registerAddress - The address of the register to write to.
- * @param registerValue - The value to write to the register.
+ * @param registerValue   - The value to write to the register.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -86,7 +86,7 @@ int32_t ad9739a_write(unsigned char registerAddress, unsigned char registerValue
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
- * @param regAddress - The address of the register to read.
+ * @param regAddress     - The address of the register to read.
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
@@ -267,7 +267,7 @@ int32_t delay_fdata_cycles(uint32_t cycles)
  * @brief Initializes the AD9739A. 
  *
  * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo - Slave select line on which the slave is connected.
+ * @param ssNo        - Slave select line on which the slave is connected.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/

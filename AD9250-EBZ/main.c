@@ -80,13 +80,19 @@ int main(void)
         adc_test(mode, TWOS_COMPLEMENT);    // Data format is twos complement
     }
 
-    ad9250_output_format(OFFSET_BINARY);    // Offset binary
-    ad9250_output_invert(0);                // Output invert Off
-    ad9250_output_disable(0);               // Output disable Off
-    ad9250_test_mode(TEST_DISABLE);         // Test mode Off
-    ad9250_transfer();                      // Synchronously update registers
+    xil_printf("Testing done.\n\r");
 
-    xil_printf("Done\n\r");
+    /* AD9250 Setup for data acquisition. */
+    ad9250_output_format(OFFSET_BINARY);    // Offset binary
+    ad9250_transfer();                      // Synchronously update register
+    ad9250_output_invert(0);                // Output invert Off
+    ad9250_transfer();                      // Synchronously update register
+    ad9250_output_disable(0);               // Output disable Off
+    ad9250_transfer();                      // Synchronously update register
+    ad9250_test_mode(TEST_DISABLE);         // Test mode Off
+    ad9250_transfer();                      // Synchronously update register
+
+    xil_printf("Start capturing data...\n\r");
 
     while(1)
     {

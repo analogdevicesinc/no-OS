@@ -56,7 +56,7 @@
  * @brief Configures the test mode and the output mode to a default state.
  *
  * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo - Slave select line on which the slave is connected.
+ * @param ssNo        - Slave select line on which the slave is connected.
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
@@ -99,7 +99,7 @@ int32_t ad9467_setup(int32_t spiBaseAddr, int32_t ssNo)
 * @brief Writes data into a register.
 *
 * @param regAddr - The address of the register to be written.
-* @param regVal - The value to be written into the register.
+* @param regVal  - The value to be written into the register.
 *
 * @return Returns 0 in case of success or negative error code.
 ******************************************************************************/
@@ -154,8 +154,8 @@ int32_t ad9467_read(uint16_t regAddr)
  *        the other bits.
  *
  * @param registerAddress - The address of the register to be written.
- * @param bitsValue - The value of the bit/bits.
- * @param mask - The bit/bits position in the register.
+ * @param bitsValue       - The value of the bit/bits.
+ * @param mask            - The bit/bits position in the register.
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/

@@ -126,7 +126,7 @@ int32_t adf4350_sync_config(struct adf4350_state *st)
  * @brief Increases the R counter value until the ADF4350_MAX_FREQ_PFD is
  *        greater than PFD frequency.
  *
- * @param st - The selected structure.
+ * @param st    - The selected structure.
  * @param r_cnt - Initial r_cnt value.
  *
  * @return Returns 0 in case of success or negative error code.
@@ -168,7 +168,7 @@ uint32_t gcd(uint32_t x, uint32_t y)
 /***************************************************************************//**
  * @brief Sets the ADF4350 frequency.
  *
- * @param st - The selected structure.
+ * @param st   - The selected structure.
  * @param freq - The desired frequency value.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
@@ -307,7 +307,7 @@ int64_t adf4350_set_freq(struct adf4350_state *st, uint64_t freq)
  * @brief Initializes the ADF4350.
  *
  * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo - Slave select line on which the slave is connected.
+ * @param ssNo        - Slave select line on which the slave is connected.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/

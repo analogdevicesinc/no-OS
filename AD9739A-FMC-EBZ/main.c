@@ -96,8 +96,8 @@ void DisplayStatus(uint8_t mu_status, uint8_t rc_status)
 	{
 		rcStatMsg2 = "Not tracking";
 	}
-	xil_printf("AD9739A: Mu is %s. Rc is %s and %s\r\n", muStatMsg, rcStatMsg1, rcStatMsg2);
-	xil_printf("press 'q' to exit loop\r\n");
+	xil_printf("AD9739A: Mu is %s. Rc is %s and %s.\r\n", muStatMsg, rcStatMsg1, rcStatMsg2);
+	xil_printf("Press [q] to exit loop.\r\n\n\r");
 }
 
 /***************************************************************************//**
@@ -110,6 +110,7 @@ int main(void)
 	uint32_t mu_status;
 	uint32_t rc_status;
 	int32_t  ret;
+	int32_t  error = 0;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -127,6 +128,7 @@ int main(void)
 
 	/* Configure AD9739A device. */
 	ret = ad9739a_setup(SPI_BASEADDR, 1);
+
 	/* Read the AD9739A part ID. */
 	xil_printf("\n\r********************************************************************\r\n");
 	xil_printf("  ADI AD9739A-FMC-EBZ Reference Design\n\r");
@@ -134,11 +136,21 @@ int main(void)
 	xil_printf("********************************************************************\r\n");
 	if(ret < 0)
 	{
-		xil_printf("error occurred during AD9739A setup.\r\n");
+		xil_printf("Error occurred during AD9739A setup.\n\r");
+		xil_printf("Possible reason: wrong position of switch S1.\n\r");
+		xil_printf("\n\rExit application.\n\r");
+		while (1)
+		{
+			;
+		}
+	}
+	else
+	{
+		xil_printf("AD9739A successfully configured.\n\r\n\r");
 	}
 
 	/* After Mu locked, program the dds/dma. */
-	xil_printf("Enter 'd' for dma ('s' to skip).\n\r");
+	xil_printf("Enter [d] for DMA or any other key for DDS.\n\r");
 	if (XUartLite_RecvByte(UART_BASEADDR) == 'd')
 	{
 		dma_setup();
@@ -148,6 +160,7 @@ int main(void)
 		dds_setup(300, 2500);
 	}
 
+
 	/* Continuously check the Mu controller status and RC status. */
 	while (user_exit() == 0)
 	{
@@ -155,13 +168,20 @@ int main(void)
 		if (mu_status != AD9739A_MU_STAT1_MU_LKD)
 		{
 			xil_printf("AD9739A: Mu controller is not locked. Mu Status: 0x%02x(0x01)\n\r", mu_status);
-			break;
+			error = 1;
+			//break;
 		}
 		rc_status = ad9739a_read(AD9739A_REG_LVDS_REC_STAT9);
 		if (rc_status != (AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON | AD9739A_LVDS_REC_STAT9_RCVR_LCK))
 		{
 			xil_printf("AD9739A: Tracking not established or controller not locked.\r\n"
-					   "Data Receiver Controller Status 0x%02x(0x09)\n\r", rc_status);
+					   "         Data Receiver Controller Status 0x%02x(0x09)\n\r", rc_status);
+			error = 1;
+			//break;
+		}
+		if (error == 1)
+		{
+			xil_printf("\n\rExit application.\n\r");
 			break;
 		}
 		DisplayStatus(mu_status, rc_status);

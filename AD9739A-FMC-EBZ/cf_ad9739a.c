@@ -85,7 +85,7 @@ void dds_setup(uint32_t sin_clk, uint32_t dac_clk)
 			   CF_DDS_CTRL_INTERPOL(0) |        // Disable DDS interpolation
 			   CF_DDS_CTRL_ENABLE(1) | 			// Enable DDS
 			   CF_DDS_CTRL_INCR(p_incr)));		// Set DDS phase increment
-	xil_printf("dac_dds: f(%dMHz).\n\r", sin_clk);
+	xil_printf("dac_dds: f(%dMHz).\n\r\n\r", sin_clk);
 }
 
 /***************************************************************************//**
@@ -136,7 +136,7 @@ void dma_setup()
 	Xil_Out32((VDMA_BASEADDR + 0x054), (index*4)); // h size (1920 * 4) bytes
 	Xil_Out32((VDMA_BASEADDR + 0x050), 1); // v size (1080)
 	Xil_Out32((CF_BASEADDR + 0x28), 0x3); // clear status
-	xil_printf("dac_dma: f(%dMHz).\n\r", (2500/(16*3*2)));
+	xil_printf("dac_dma: f(%dMHz).\n\r\n\r", (2500/(16*3*2)));
 	delay_ms(10);
 	status = Xil_In32((CF_BASEADDR + 0x28));
 	if (status != 0x0)

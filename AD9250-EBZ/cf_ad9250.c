@@ -97,7 +97,7 @@ void jesd_core_setup(void)
 /***************************************************************************//**
  * @brief Captures a specified number of samples from the ADC.
  *
- * @param size - number of bytes to read from the device
+ * @param size    - number of bytes to read from the device
  * @param address - capture start address
  *
  * @return None.
@@ -162,6 +162,7 @@ void adc_test(uint32_t mode, uint32_t format)
 {
     uint32_t i;
     uint32_t n;
+    uint32_t error = 0;
     uint32_t rdata_2;
     uint32_t rdata[2];
     uint32_t edata[2];
@@ -177,7 +178,8 @@ void adc_test(uint32_t mode, uint32_t format)
     {
         if (format == TWOS_COMPLEMENT)
         {
-            return;
+        	xil_printf("          Test skipped\r\n");
+        	return;
         }
         Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE),
                   ((mode == PN_23_SEQUENCE) ? CF_PN_TYPE_BIT(1) : CF_PN_TYPE_BIT(0)));
@@ -194,6 +196,10 @@ void adc_test(uint32_t mode, uint32_t format)
         {
             xil_printf("  ERROR: PN status(%04x).\n\r",
                        Xil_In32(CF_BASEADDR + CF_REG_DATA_MONITOR));
+        }
+        else
+        {
+        	xil_printf("          Test passed\r\n");
         }
         return;
     }
@@ -243,8 +249,13 @@ void adc_test(uint32_t mode, uint32_t format)
             if (rdata[i] != edata[i])
             {
                 xil_printf("  ERROR[%2d]: ch(%d), rcv(%08x), exp(%08x)\n\r", n, i, rdata[i], edata[i]);
+                error = 1;
             }
         }
+    }
+    if(error == 0)
+    {
+    	xil_printf("          Test passed\r\n");
     }
 }
 

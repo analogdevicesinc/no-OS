@@ -84,17 +84,23 @@ int main(){
 	adc_setup(0);
 	for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++)		// Data pattern checks
 	{
-		adc_test(mode, OFFSET_BINARY);     // Data format is offset binary
+		adc_test(mode, OFFSET_BINARY);	   // Data format is offset binary
 		adc_test(mode, TWOS_COMPLEMENT);   // Data format is twos complement
 	}
+	xil_printf("Testing done.\n\r");
+	/* AD9467 Setup for data acquisition */
 	ad9467_output_invert(0);    // Output invert Off
+	ad9467_transfer();          // Synchronously update registers
 	ad9467_output_format(0);    // Offset binary
+	ad9467_transfer();          // Synchronously update registers
 	ad9467_reset_PN9(0);        // Clear PN9 bit
+	ad9467_transfer();          // Synchronously update registers
 	ad9467_reset_PN23(0);       // Clear PN23 bit
+	ad9467_transfer();          // Synchronously update registers
 	ad9467_test_mode(0);        // Test mode Off
 	ad9467_transfer();          // Synchronously update registers
 
-	xil_printf("Done\n\r");
+	xil_printf("Start capturing data...\n\r");
 
 	while(1)
 	{

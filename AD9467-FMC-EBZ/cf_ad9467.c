@@ -79,7 +79,7 @@ void delay_ms(u32 ms_count)
 /***************************************************************************//**
  * @brief Captures a specified number of samples from the ADC.
  *
- * @param size - number of bytes to read from the device
+ * @param size    - number of bytes to read from the device
  * @param address - capture start address
  *
  * @return None.
@@ -181,9 +181,9 @@ u32 adc_delay(void)
 	u32 startdelay;
 	u32 stopdelay;
 
-	lasterr = 1;
+	lasterr    = 1;
 	startdelay = 32;
-	stopdelay = 31;
+	stopdelay  = 31;
 	for (delay = 0; delay < 32; delay++)
 	{
 		adc_delay_1(delay);
@@ -261,7 +261,11 @@ void adc_test(u32 mode, u32 format)
 	DisplayTestMode(mode, format);
 	if ((mode == PN_23_SEQUENCE) || (mode == PN_9_SEQUENCE))
 	{
-		if (format == TWOS_COMPLEMENT) return;
+		if (format == TWOS_COMPLEMENT)
+		{
+			xil_printf("          Test skipped\r\n");
+			return;
+		}
 		Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE),
 				  ((mode == PN_23_SEQUENCE) ? 0x01 : 0x00));
 		delay_ms(10);
@@ -277,6 +281,10 @@ void adc_test(u32 mode, u32 format)
 		{
 			xil_printf("  ERROR: PN status(%04x).\n\r",
 					   Xil_In32(CF_BASEADDR + CF_REG_DATA_MONITOR));
+		}
+		else
+		{
+			xil_printf("          Test passed\r\n");
 		}
 		return;
 	}

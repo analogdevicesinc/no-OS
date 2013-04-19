@@ -75,7 +75,7 @@ int32_t ad9250_set_bits_to_reg(uint32_t registerAddress,
  * @brief Configures the device.
  *
  * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo - Slave select line on which the slave is connected.
+ * @param ssNo        - Slave select line on which the slave is connected.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
@@ -86,6 +86,7 @@ int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo)
     
     spiBaseAddress = spiBaseAddr;
     spiSlaveSelect = ssNo;
+
     /* Initializes the SPI peripheral */
     ret = SPI_Init(spiBaseAddress, 0, 0, 0);
     if(ret < 0)
@@ -137,6 +138,8 @@ int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return ret;
     }
+
+    /* Synchronously update registers. */
     ret = ad9250_transfer();
     if(ret < 0)
     {
@@ -156,6 +159,8 @@ int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return ret;
     }
+
+    /* Synchronously update registers. */
     ret = ad9250_transfer();
 
     return ret;
@@ -166,7 +171,7 @@ int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo)
  *
  * @param registerAddress - The address of the register to read.
  *
- * @return registerValue - The register's value or negative error code.
+ * @return registerValue  - The register's value or negative error code.
 *******************************************************************************/
 int32_t ad9250_read(int32_t registerAddress)
 {
@@ -205,7 +210,7 @@ int32_t ad9250_read(int32_t registerAddress)
  * @brief Writes a value to the selected register.
  *
  * @param registerAddress - The address of the register to write to.
- * @param registerValue - The value to write to the register.
+ * @param registerValue   - The value to write to the register.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -238,7 +243,7 @@ int32_t ad9250_write(int32_t registerAddress, int32_t registerValue)
         regAddress--;
     }
 
-    return ret;
+    return (ret-1);
 }
 
 /***************************************************************************//**
@@ -305,14 +310,14 @@ int32_t ad9250_soft_reset(void)
  * @brief Sets a bit/group of bits inside a register without modifying other
  *        bits.
  * @param registerAddress - The address of the register to be written.
- * @param bitsValue - The value of the bit/bits.
- * @param mask - The bit/bits position in the register.
+ * @param bitsValue       - The value of the bit/bits.
+ * @param mask            - The bit/bits position in the register.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
 int32_t ad9250_set_bits_to_reg(uint32_t registerAddress,
-                               uint8_t bitsValue,
-                               uint8_t mask)
+                               uint8_t  bitsValue,
+                               uint8_t  mask)
 {
     uint8_t regValue = 0;
     int32_t ret      = 0;
@@ -552,7 +557,7 @@ int32_t ad9250_output_format(int32_t format)
     {
         ret = ad9250_set_bits_to_reg(AD9250_REG_OUT_MODE,
                                      AD9250_OUT_MODE_DATA_FORMAT(format),
-                                     AD9250_OUT_MODE_DATA_FORMAT(-1));
+                                     AD9250_OUT_MODE_DATA_FORMAT(1));
     }
     else
     {
@@ -561,7 +566,7 @@ int32_t ad9250_output_format(int32_t format)
         {
             return ret;
         }
-        return (ret & AD9250_OUT_MODE_DATA_FORMAT(-1)) >> 0;
+        return (ret & AD9250_OUT_MODE_DATA_FORMAT(1)) >> 0;
     }
 
     return ret;
@@ -634,7 +639,7 @@ int32_t ad9250_reset_PN23(int32_t rst)
 /***************************************************************************//**
  * @brief Configures a User Test Pattern.
  *
- * @param patternNo - Selects the patterns to be configured. Range 1..4.
+ * @param patternNo    - Selects the patterns to be configured. Range 1..4.
  * @param user_pattern - Users's pattern.
  *
  * @return Returns negative error code or the selected user pattern.
