@@ -40,17 +40,20 @@
  *   SVN Revision: $WCREV$
 *******************************************************************************/
 
+/*****************************************************************************/
+/***************************** Include Files *********************************/
+/*****************************************************************************/
 #include "spi_interface.h"
 #include "dac_core.h"
 #include "cf_axi_dds.h"
 
-#ifdef CF_AXI_DDS
-
 /******************************************************************************/
 /***************************** Global State Variables *************************/
 /******************************************************************************/
-struct cf_axi_dds_state 	dds_state;
 extern struct cf_axi_converter dds_conv;
+#ifdef CF_AXI_DDS
+struct cf_axi_dds_state 	dds_state;
+#endif
 
 /******************************************************************************/
 /***************************** Delay Functions ********************************/
@@ -59,6 +62,7 @@ extern void delay_us(uint32_t us_count);
 #define mdelay(x) delay_us(x*1000)
 #define msleep(x) delay_us(x*1000)
 
+#ifdef CF_AXI_DDS
 /******************************************************************************/
 /***************************** Macros *****************************************/
 /******************************************************************************/
@@ -70,6 +74,11 @@ extern void delay_us(uint32_t us_count);
 	((int32_t)(value << (31-index)) >> (31-index))
 #define ARRAY_SIZE(x) \
 	sizeof(x) / sizeof(x[0])
+
+/*****************************************************************************/
+/************************ Private Functions Prototypes ***********************/
+/*****************************************************************************/
+void cf_axi_dds_sync_frame();
 
 /***************************************************************************//**
  * @brief Computes the mod and integer division of two numbers.
@@ -106,55 +115,6 @@ uint32_t dds_read(struct cf_axi_dds_state* st, uint32_t reg)
 	DAC_Core_Read(reg, &data);
 
 	return data;
-}
-
-/***************************************************************************//**
- * @brief Waits for the AXI DAC core to sync.
- *
- * @return None.
-*******************************************************************************/
-void cf_axi_dds_sync_frame()
-{
-	struct cf_axi_dds_state *st = &dds_state;
-	struct cf_axi_converter *conv = &dds_conv;
-	uint32_t stat;
-	static int32_t retry = 0;
-
-	mdelay(10); /* Wait until clocks are stable */
-
-	dds_write(st, CF_AXI_DDS_FRAME, 0);
-	dds_write(st, CF_AXI_DDS_FRAME, CF_AXI_DDS_FRAME_SYNC);
-
-	/* Check FIFO status */
-	stat = conv->get_fifo_status(conv);
-	if (stat) {
-		if (retry++ > 10) {
-			return;
-		}
-
-		cf_axi_dds_sync_frame();
-	}
-
-	retry = 0;
-}
-
-/***************************************************************************//**
- * @brief Configures the DDS with the DAC SED pattern.
- *
- * @return None.
-*******************************************************************************/
-static void cf_axi_dds_set_sed_pattern(unsigned pat1, unsigned pat2)
-{
-	struct cf_axi_dds_state *st = &dds_state;
-
-	dds_write(st, CF_AXI_DDS_PAT_DATA1, pat1);
-	dds_write(st, CF_AXI_DDS_PAT_DATA2, pat2);
-
-	dds_write(st, CF_AXI_DDS_CTRL, 0);
-	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-		 CF_AXI_DDS_CTRL_PATTERN_EN);
-	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-		 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
 }
 
 /***************************************************************************//**
@@ -334,6 +294,54 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 	return 0;
 }
 
+#endif //CF_AXI_DDS
+
+/***************************************************************************//**
+ * @brief Waits for the AXI DAC core to sync.
+ *
+ * @return None.
+*******************************************************************************/
+void cf_axi_dds_sync_frame()
+{
+	struct cf_axi_converter *conv = &dds_conv;
+	uint32_t stat;
+	static int32_t retry = 0;
+
+	mdelay(10); /* Wait until clocks are stable */
+
+	DAC_Core_Write(CF_AXI_DDS_FRAME, 0);
+	DAC_Core_Write(CF_AXI_DDS_FRAME, CF_AXI_DDS_FRAME_SYNC);
+
+	/* Check FIFO status */
+	stat = conv->get_fifo_status(conv);
+	if (stat) {
+		if (retry++ > 10) {
+			return;
+		}
+
+		cf_axi_dds_sync_frame();
+	}
+
+	retry = 0;
+}
+
+/***************************************************************************//**
+ * @brief Configures the DDS with the DAC SED pattern.
+ *
+ * @return None.
+*******************************************************************************/
+static void cf_axi_dds_set_sed_pattern(unsigned pat1, unsigned pat2)
+{
+	DAC_Core_Write(CF_AXI_DDS_PAT_DATA1, pat1);
+	DAC_Core_Write(CF_AXI_DDS_PAT_DATA2, pat2);
+
+	DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
+	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+		 CF_AXI_DDS_CTRL_PATTERN_EN);
+	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
+		 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
+}
+
 /***************************************************************************//**
  * @brief Initializes the DAC AXI core.
  *
@@ -341,32 +349,36 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 *******************************************************************************/
 int32_t  cf_axi_dds_of_probe()
 {
+#ifdef CF_AXI_DDS
 	struct cf_axi_dds_state *st = &dds_state;
+#endif
 	struct cf_axi_converter *conv = &dds_conv;
 
 	conv->pcore_sync = cf_axi_dds_sync_frame;
 	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
+	conv->setup(conv);
 
+#ifdef CF_AXI_DDS
 	st->dac_clk = conv->get_data_clk(conv);
+	DAC_Core_Write(CF_AXI_DDS_INTERPOL_CTRL, 0x2aaa5555); /* Lin. Interp. */
+#endif
 
-	dds_write(st, CF_AXI_DDS_INTERPOL_CTRL, 0x2aaa5555); /* Lin. Interp. */
-
-	dds_write(st, CF_AXI_DDS_CTRL, 0x0);
-	dds_write(st, CF_AXI_DDS_SCALE, 0x1111); /* divide by 4 */
-	dds_write(st, CF_AXI_DDS_1A_OUTPUT_CTRL,
+	DAC_Core_Write(CF_AXI_DDS_CTRL, 0x0);
+#ifdef CF_AXI_DDS
+	DAC_Core_Write(CF_AXI_DDS_SCALE, 0x1111); /* divide by 4 */
+	DAC_Core_Write(CF_AXI_DDS_1A_OUTPUT_CTRL,
 		  cf_axi_dds_calc(90000, 40000000, st->dac_clk));
-	dds_write(st, CF_AXI_DDS_1B_OUTPUT_CTRL,
+	DAC_Core_Write(CF_AXI_DDS_1B_OUTPUT_CTRL,
 		  cf_axi_dds_calc(90000, 40000000, st->dac_clk));
-	dds_write(st, CF_AXI_DDS_2A_OUTPUT_CTRL,
+	DAC_Core_Write(CF_AXI_DDS_2A_OUTPUT_CTRL,
 		  cf_axi_dds_calc(0, 40000000, st->dac_clk));
-	dds_write(st, CF_AXI_DDS_2B_OUTPUT_CTRL,
+	DAC_Core_Write(CF_AXI_DDS_2B_OUTPUT_CTRL,
 		  cf_axi_dds_calc(0, 40000000, st->dac_clk));
-	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DATA_EN |
+#endif
+	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DATA_EN |
 		  CF_AXI_DDS_CTRL_DDS_CLK_EN_V2); /* clk, dds enable & ddsx select */
 
 	cf_axi_dds_sync_frame();
 
 	return 0;
 }
-
-#endif //CF_AXI_DDS
