@@ -878,7 +878,9 @@ int32_t ad9122_read_raw(uint32_t channel,
 	struct cf_axi_converter *conv = &dds_conv;
 	uint32_t rate;
 	int32_t ret;
+	uint32_t ctrl_reg;
 
+	DAC_Core_Read(CF_AXI_DDS_CTRL, &ctrl_reg);
 	switch (mask) {
 	case IIO_CHAN_INFO_SAMP_FREQ:
 		rate = ad9122_get_data_clk(conv);
@@ -894,6 +896,7 @@ int32_t ad9122_read_raw(uint32_t channel,
 	default:
 		return -1;
 	}
+	DAC_Core_Write(CF_AXI_DDS_CTRL, ctrl_reg);
 
 	return ret;
 }
