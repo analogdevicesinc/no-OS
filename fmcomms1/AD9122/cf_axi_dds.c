@@ -356,7 +356,6 @@ int32_t  cf_axi_dds_of_probe()
 
 	conv->pcore_sync = cf_axi_dds_sync_frame;
 	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
-	conv->setup(conv);
 
 #ifdef CF_AXI_DDS
 	st->dac_clk = conv->get_data_clk(conv);
