@@ -325,10 +325,15 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 				    AD9122_EVENT_FLAG_2_SED_COMPARE_FAIL);
 
 			ad9122_write(AD9122_REG_SED_CTRL,
-				    AD9122_SED_CTRL_SED_COMPARE_EN);
+				    AD9122_SED_CTRL_SED_COMPARE_EN |
+				    AD9122_SED_CTRL_AUTOCLEAR_EN);
 
 			msleep(100);
 			reg = ad9122_read(AD9122_REG_SED_CTRL);
+			if(!(reg & (AD9122_SED_CTRL_SAMPLE_ERR_DETECTED | AD9122_SED_CTRL_COMPARE_PASS)))
+			{
+				return -1;
+			}
 			if (reg & AD9122_SED_CTRL_SAMPLE_ERR_DETECTED)
 				set_bit(dci, &err_bfield);
 		}
