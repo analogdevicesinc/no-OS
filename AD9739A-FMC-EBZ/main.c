@@ -68,11 +68,11 @@ void DisplayStatus(uint8_t mu_status, uint8_t rc_status)
 	char* rcStatMsg1;
 	char* rcStatMsg2;
 
-	if(mu_status & AD9739A_MU_STAT1_MU_LKD)
+	if (mu_status & AD9739A_MU_STAT1_MU_LKD)
 	{
 		muStatMsg = "Locked";
 	}
-	else if(mu_status & AD9739A_MU_STAT1_MU_LST)
+	else if (mu_status & AD9739A_MU_STAT1_MU_LST)
 	{
 		muStatMsg = "Not locked";
 	}
@@ -80,7 +80,7 @@ void DisplayStatus(uint8_t mu_status, uint8_t rc_status)
 	{
 		muStatMsg = "";
 	}
-	if(rc_status & AD9739A_LVDS_REC_STAT9_RCVR_LCK)
+	if (rc_status & AD9739A_LVDS_REC_STAT9_RCVR_LCK)
 	{
 		rcStatMsg1 = "Locked";
 	}
@@ -88,7 +88,7 @@ void DisplayStatus(uint8_t mu_status, uint8_t rc_status)
 	{
 		rcStatMsg1 = "Not locked";
 	}
-	if(rc_status & AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON)
+	if (rc_status & AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON)
 	{
 		rcStatMsg2 = "Tracking";
 	}
@@ -134,7 +134,7 @@ int main(void)
 	xil_printf("  ADI AD9739A-FMC-EBZ Reference Design\n\r");
 	xil_printf("  AD9739A PART ID: 0x%02x\n\r", ad9739a_read(AD9739A_REG_PART_ID));
 	xil_printf("********************************************************************\r\n");
-	if(ret < 0)
+	if (ret < 0)
 	{
 		xil_printf("Error occurred during AD9739A setup.\n\r");
 		xil_printf("Possible reason: wrong position of switch S1.\n\r");
@@ -169,7 +169,6 @@ int main(void)
 		{
 			xil_printf("AD9739A: Mu controller is not locked. Mu Status: 0x%02x(0x01)\n\r", mu_status);
 			error = 1;
-			//break;
 		}
 		rc_status = ad9739a_read(AD9739A_REG_LVDS_REC_STAT9);
 		if (rc_status != (AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON | AD9739A_LVDS_REC_STAT9_RCVR_LCK))
@@ -177,7 +176,6 @@ int main(void)
 			xil_printf("AD9739A: Tracking not established or controller not locked.\r\n"
 					   "         Data Receiver Controller Status 0x%02x(0x09)\n\r", rc_status);
 			error = 1;
-			//break;
 		}
 		if (error == 1)
 		{
@@ -188,7 +186,7 @@ int main(void)
 		delay_ms(100);
 	}
 
-	while(1)
+	while (1)
 	{
 		;
 	}

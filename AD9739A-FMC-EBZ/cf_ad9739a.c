@@ -43,7 +43,9 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "cf_ad9739a.h"
+#include "xuartlite_l.h"
 #include "xil_io.h"
+#include "xaxivdma.h"
 
 void xil_printf(const char *ctrl1, ...);
 
@@ -95,8 +97,11 @@ void dds_setup(uint32_t sin_clk, uint32_t dac_clk)
 *******************************************************************************/
 void dma_setup()
 {
-	uint32_t index;
-	uint32_t status;
+	XAxiVdma          axiVdma;
+	XAxiVdma_DmaSetup dmaSetup;
+	XAxiVdma_Config   *axiVdmaConfig;
+	uint32_t          index;
+	uint32_t          status;
 
 	index = 0;
 	while (index < 256)
@@ -105,19 +110,7 @@ void dma_setup()
 		Xil_Out32((DDR_BASEADDR + ((index +  1) * 4)), 0x5a817fff);
 		Xil_Out32((DDR_BASEADDR + ((index +  2) * 4)), 0xa57f0000);
 		Xil_Out32((DDR_BASEADDR + ((index +  3) * 4)), 0xa57f8001);
-		Xil_Out32((DDR_BASEADDR + ((index +  4) * 4)), 0x5a810000);
-		Xil_Out32((DDR_BASEADDR + ((index +  5) * 4)), 0x5a817fff);
-		Xil_Out32((DDR_BASEADDR + ((index +  6) * 4)), 0xa57f0000);
-		Xil_Out32((DDR_BASEADDR + ((index +  7) * 4)), 0xa57f8001);
-		Xil_Out32((DDR_BASEADDR + ((index +  8) * 4)), 0x5a810000);
-		Xil_Out32((DDR_BASEADDR + ((index +  9) * 4)), 0x5a817fff);
-		Xil_Out32((DDR_BASEADDR + ((index + 10) * 4)), 0xa57f0000);
-		Xil_Out32((DDR_BASEADDR + ((index + 11) * 4)), 0xa57f8001);
-		Xil_Out32((DDR_BASEADDR + ((index + 12) * 4)), 0x5a810000);
-		Xil_Out32((DDR_BASEADDR + ((index + 13) * 4)), 0x5a817fff);
-		Xil_Out32((DDR_BASEADDR + ((index + 14) * 4)), 0xa57f0000);
-		Xil_Out32((DDR_BASEADDR + ((index + 15) * 4)), 0xa57f8001);
-		index = index + 16;
+		index = index + 4;
 	}
 	microblaze_flush_dcache();
 	microblaze_invalidate_dcache();
@@ -126,15 +119,53 @@ void dma_setup()
 	Xil_Out32((CF_BASEADDR + CF_REG_DDS_CTRL),
 			   (CF_DDS_CTRL_SELECT(1) |			// Select DDS DDR
 			    CF_DDS_CTRL_INTERPOL(1) |		// Enable DDS DDR interpolation
-			    CF_DDS_CTRL_ENABLE(1) |		    // Enable DDs
+			    CF_DDS_CTRL_ENABLE(1) |		    // Enable DDS
 			    CF_DDS_CTRL_INCR(0)));			// Set DDS phase increment
-	Xil_Out32((VDMA_BASEADDR + 0x000), 0x00000003); // enable circular mode
-	Xil_Out32((VDMA_BASEADDR + 0x05c), DDR_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + 0x060), DDR_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + 0x064), DDR_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + 0x058), (index*4)); // h offset (2048 * 4) bytes
-	Xil_Out32((VDMA_BASEADDR + 0x054), (index*4)); // h size (1920 * 4) bytes
-	Xil_Out32((VDMA_BASEADDR + 0x050), 1); // v size (1080)
+
+	/* Get the AXI VDMA configuration structure. */
+	axiVdmaConfig = XAxiVdma_LookupConfig(XPAR_AXIVDMA_0_DEVICE_ID);
+	axiVdmaConfig->HasMm2S = 1;
+	axiVdmaConfig->HasS2Mm = 0;
+	axiVdmaConfig->HasSG = 0;
+
+	/* Initialize the AXI VDMA driver and device. */
+	status = XAxiVdma_CfgInitialize(&axiVdma, axiVdmaConfig, VDMA_BASEADDR);
+	if (status == XST_FAILURE)
+	{
+		xil_printf("VDMA initialization failed\n\r");
+	}
+
+	/* Set the number of Start Address registers used for transfers. */
+	XAxiVdma_SetFrmStore(&axiVdma, 3, XAXIVDMA_READ);
+
+	/* Set up a DMA operation configuration. */
+	dmaSetup.EnableCircularBuf = 1;
+	dmaSetup.HoriSizeInput = 1024;
+	dmaSetup.VertSizeInput = 1;
+	dmaSetup.Stride = 1024;
+	dmaSetup.FrameDelay = 0;
+	dmaSetup.EnableSync = 0;
+	dmaSetup.EnableFrameCounter = 0;
+	dmaSetup.FixedFrameStoreAddr = 0;
+	dmaSetup.PointNum = 0;
+	status = XAxiVdma_DmaConfig(&axiVdma, XAXIVDMA_READ, &dmaSetup);
+	if (status != XST_SUCCESS)
+	{
+		xil_printf("VDMA channel configuration failed\n\r");
+	}
+
+	/* Set up the DMA buffers. */
+	dmaSetup.FrameStoreStartAddr[0] = DDR_BASEADDR;
+	dmaSetup.FrameStoreStartAddr[1] = DDR_BASEADDR;
+	dmaSetup.FrameStoreStartAddr[2] = DDR_BASEADDR;
+	XAxiVdma_DmaSetBufferAddr(&axiVdma, XAXIVDMA_READ, dmaSetup.FrameStoreStartAddr);
+
+	/* Start the DMA operation. */
+    if (XST_FAILURE == XAxiVdma_DmaStart(&axiVdma, XAXIVDMA_READ))
+    {
+    	xil_printf("DMA start failed\n\r");
+    }
+
 	Xil_Out32((CF_BASEADDR + 0x28), 0x3); // clear status
 	xil_printf("dac_dma: f(%dMHz).\n\r\n\r", (2500/(16*3*2)));
 	delay_ms(10);
