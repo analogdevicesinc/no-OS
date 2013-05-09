@@ -58,57 +58,57 @@ void xil_printf(const char *ctrl1, ...);
 *******************************************************************************/
 int main(){
 
-	u32 mode;
+    uint32_t mode;
 
-	Xil_ICacheEnable();
+    Xil_ICacheEnable();
     Xil_DCacheEnable();
 
     /* AD9467 Setup. */
     ad9467_setup(XPAR_AXI_SPI_0_BASEADDR, 1);
 
-	/* AD9517 Setup. */
-	ad9517_setup(XPAR_AXI_SPI_0_BASEADDR, 2);	// Initialize device.
-	ad9517_power_mode(3, 0);					// Set channel 3 for normal operation
-	ad9517_frequency(3, 250000000); 			// Set the channel 3 frequency to 250Mhz
-	ad9517_update();							// Update registers
+    /* AD9517 Setup. */
+    ad9517_setup(XPAR_AXI_SPI_0_BASEADDR, 2);    // Initialize device.
+    ad9517_power_mode(3, 0);                     // Set channel 3 for normal operation
+    ad9517_frequency(3, 250000000);              // Set the channel 3 frequency to 250Mhz
+    ad9517_update();                             // Update registers
 
-	/* Read the device ID for AD9467 and AD9517. */
-	xil_printf("\n\r********************************************************************\r\n");
-	xil_printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
-	xil_printf("  AD9467 CHIP ID: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_ID));
-	xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_GRADE));
-	xil_printf("  AD9517 CHIP ID: 0x%02x", ad9517_read(AD9517_REG_PART_ID));
-	xil_printf("\n\r********************************************************************\r\n");
+    /* Read the device ID for AD9467 and AD9517. */
+    xil_printf("\n\r********************************************************************\r\n");
+    xil_printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
+    xil_printf("  AD9467 CHIP ID: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_ID));
+    xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ad9467_read(AD9467_REG_CHIP_GRADE));
+    xil_printf("  AD9517 CHIP ID: 0x%02x", ad9517_read(AD9517_REG_PART_ID));
+    xil_printf("\n\r********************************************************************\r\n");
 
-	/* AD9467 test. */
-	adc_setup(0);
-	for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++)		// Data pattern checks
-	{
-		adc_test(mode, OFFSET_BINARY);	   // Data format is offset binary
-		adc_test(mode, TWOS_COMPLEMENT);   // Data format is twos complement
-	}
-	xil_printf("Testing done.\n\r");
-	/* AD9467 Setup for data acquisition */
-	ad9467_output_invert(0);    // Output invert Off
-	ad9467_transfer();          // Synchronously update registers
-	ad9467_output_format(0);    // Offset binary
-	ad9467_transfer();          // Synchronously update registers
-	ad9467_reset_PN9(0);        // Clear PN9 bit
-	ad9467_transfer();          // Synchronously update registers
-	ad9467_reset_PN23(0);       // Clear PN23 bit
-	ad9467_transfer();          // Synchronously update registers
-	ad9467_test_mode(0);        // Test mode Off
-	ad9467_transfer();          // Synchronously update registers
+    /* AD9467 test. */
+    adc_setup(0);
+    for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++)        // Data pattern checks
+    {
+        adc_test(mode, OFFSET_BINARY);       // Data format is offset binary
+        adc_test(mode, TWOS_COMPLEMENT);     // Data format is twos complement
+    }
+    xil_printf("Testing done.\n\r");
+    /* AD9467 Setup for data acquisition */
+    ad9467_output_invert(0);    // Output invert Off
+    ad9467_transfer();          // Synchronously update registers
+    ad9467_output_format(0);    // Offset binary
+    ad9467_transfer();          // Synchronously update registers
+    ad9467_reset_PN9(0);        // Clear PN9 bit
+    ad9467_transfer();          // Synchronously update registers
+    ad9467_reset_PN23(0);       // Clear PN23 bit
+    ad9467_transfer();          // Synchronously update registers
+    ad9467_test_mode(0);        // Test mode Off
+    ad9467_transfer();          // Synchronously update registers
 
-	xil_printf("Start capturing data...\n\r");
+    xil_printf("Start capturing data...\n\r");
 
-	while(1)
-	{
-		adc_capture(1024, DDR_BASEADDR);
-	}
+    while(1)
+    {
+        adc_capture(1024, DDR_BASEADDR);
+    }
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+    Xil_DCacheDisable();
+    Xil_ICacheDisable();
 
-	return 0;
+    return 0;
 }
