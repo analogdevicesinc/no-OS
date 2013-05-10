@@ -57,6 +57,45 @@ static struct ad9250_state
     struct ad9250_fast_detect_cfg *pFd;
     
 }ad9250_st;
+
+enum shadowRegisters
+{
+    AD9250_SHD_REG_CLOCK = 1,
+    AD9250_SHD_REG_CLOCK_DIV,
+    AD9250_SHD_REG_TEST,
+    AD9250_SHD_REG_BIST,
+    AD9250_SHD_REG_OFFSET,
+    AD9250_SHD_REG_OUT_MODE,
+    AD9250_SHD_REG_VREF,
+    AD9250_SHD_REG_SYS_CTRL,
+    AD9250_SHD_REG_DCC_CTRL,
+    AD9250_SHD_REG_DCC_VAL,
+    AD9250_SHD_REG_FAST_DETECT,
+    AD9250_SHD_REG_FD_UPPER_THD,
+    AD9250_SHD_REG_FD_LOWER_THD,
+    AD9250_SHD_REG_FD_DWELL_TIME,
+    SHADOW_REGISTER_COUNT
+};
+
+static int32_t shadowRegs[SHADOW_REGISTER_COUNT] =
+{
+    0,
+    0x01, // AD9250_SHD_REG_CLOCK
+    0x00, // AD9250_SHD_REG_CLOCK_DIV
+    0x00, // AD9250_SHD_REG_TEST
+    0x00, // AD9250_SHD_REG_BIST
+    0x00, // AD9250_SHD_REG_OFFSET
+    0x01, // AD9250_SHD_REG_OUT_MODE
+    0x00, // AD9250_SHD_REG_VREF
+    0x00, // AD9250_SHD_REG_SYS_CTRL
+    0x00, // AD9250_SHD_REG_DCC_CTRL
+    0x00, // AD9250_SHD_REG_DCC_VAL
+    0x00, // AD9250_SHD_REG_FAST_DETECT
+    0x00, // AD9250_SHD_REG_FD_UPPER_THD
+    0x00, // AD9250_SHD_REG_FD_LOWER_THD
+    0x00  // AD9250_SHD_REG_FD_DWELL_TIME
+};
+
 static int32_t spiBaseAddress;
 static int32_t spiSlaveSelect;
 
@@ -64,8 +103,10 @@ static int32_t spiSlaveSelect;
 /************************ Private Functions Prototypes ************************/
 /******************************************************************************/
 int32_t ad9250_set_bits_to_reg(uint32_t registerAddress,
-                               uint8_t bitsValue,
-                               uint8_t mask);
+                               uint8_t  bitsValue,
+                               uint8_t  mask);
+
+int32_t ad9250_is_shadow_register(int32_t registerAddress);
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -119,19 +160,22 @@ int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return ret;
     }
-    ret = ad9250_write(AD9250_REG_CLOCK_DIV,
+
+    ret = ad9250_write(AD9250_REG_CLOCK_DIV, 
                        AD9250_CLOCK_DIV_RATIO(st->pdata->clkDivRatio) |
                        AD9250_CLOCK_DIV_PHASE(st->pdata->clkDivPhase));
     if(ret < 0)
     {
         return ret;
     }
-    ret = ad9250_write(AD9250_REG_VREF,
+
+    ret = ad9250_write(AD9250_REG_VREF, 
                        AD9250_VREF_FS_ADJUST(st->pdata->adcVref));
     if(ret < 0)
     {
         return ret;
     }
+
     ret = ad9250_write(AD9250_REG_PLL_ENCODE,
                        AD9250_PLL_ENCODE(st->pdata->pllLowEncode));
     if(ret < 0)
@@ -222,6 +266,13 @@ int32_t ad9250_write(int32_t registerAddress, int32_t registerValue)
     char     regValue    = 0;
     char     txBuffer[3] = {0, 0, 0};
 
+    /* Check if the register is shadowed. */
+    ret = ad9250_is_shadow_register(registerAddress);
+    /* Synchronize shadow register with on-chip register. */
+    if(ret > 0)
+    {
+        shadowRegs[ret] = registerValue;
+    }
     regAddress = AD9250_WRITE + AD9250_ADDR(registerAddress);
     for(i = 0; i < AD9250_TRANSF_LEN(registerAddress); i++)
     {
@@ -243,11 +294,13 @@ int32_t ad9250_write(int32_t registerAddress, int32_t registerValue)
         regAddress--;
     }
 
-    return (ret-1);
+    return (ret - 1);
 }
 
 /***************************************************************************//**
  * @brief Initiates a transfer and waits for the operation to end.
+ *        Note: This function may be called after a shadowed register was written,
+ *              so that the internal update can actually take place.
  *
  * @return  Negative error code or 0 in case of success.
 *******************************************************************************/
@@ -322,12 +375,23 @@ int32_t ad9250_set_bits_to_reg(uint32_t registerAddress,
     uint8_t regValue = 0;
     int32_t ret      = 0;
 
-    ret = ad9250_read(registerAddress);
-    if(ret < 0)
+    /* Read from the shadow register instead of the on-chip register when
+       shadowed register is discovered. */
+    ret = ad9250_is_shadow_register(registerAddress);
+    if(ret > 0)
     {
-        return ret;
+        regValue = shadowRegs[ret];
     }
-    regValue = ret & (~mask);
+    else
+    {
+        ret = ad9250_read(registerAddress);
+        if(ret < 0)
+        {
+            return ret;
+        }
+        regValue = ret;
+    }
+    regValue &= (~mask);
     regValue |= bitsValue;
     ret = ad9250_write(registerAddress, regValue);
     if(ret < 0)
@@ -336,6 +400,18 @@ int32_t ad9250_set_bits_to_reg(uint32_t registerAddress,
     }
 
     return 0;
+}
+
+/***************************************************************************//**
+ * @brief Checks if the register is shadowed.
+ * @param registerAddress - The address of the register to be checked.
+ *
+ * @return Returns the index of the shadow register or 0 if the register is not
+ *         shadowed.
+*******************************************************************************/
+int32_t ad9250_is_shadow_register(int32_t registerAddress)
+{
+    return ((SHADOW(0xFF) & registerAddress) >> 16);
 }
 
 /***************************************************************************//**
@@ -668,7 +744,7 @@ int32_t ad9250_bist_enable(int32_t enable)
     
     if((enable == 0) || (enable == 1))
     {
-        ret = ad9250_set_bits_to_reg(AD9250_REG_BIST, 
+        ret = ad9250_set_bits_to_reg(AD9250_REG_BIST,
                                      enable * AD9250_BIST_ENABLE,
                                      AD9250_BIST_ENABLE);
     }
@@ -698,7 +774,7 @@ int32_t ad9250_bist_reset(int32_t reset)
     
     if((reset == 0) || (reset == 1))
     {
-        ret = ad9250_set_bits_to_reg(AD9250_REG_BIST, 
+        ret = ad9250_set_bits_to_reg(AD9250_REG_BIST,
                                      reset * AD9250_BIST_RESET,
                                      AD9250_BIST_RESET);
     }
@@ -818,9 +894,9 @@ int32_t ad9250_jesd204b_setup(void)
     {
         return ret;
     }
-    ret = ad9250_set_bits_to_reg(AD9250_REG_OUT_MODE, 
-                  AD9250_OUT_MODE_JTX_BIT_ASSIGN(st->pJesd204b->ctrlBitsAssign),
-                  AD9250_OUT_MODE_JTX_BIT_ASSIGN(-1));
+    ret = ad9250_set_bits_to_reg(AD9250_REG_OUT_MODE,
+                                 AD9250_OUT_MODE_JTX_BIT_ASSIGN(st->pJesd204b->ctrlBitsAssign),
+                                 AD9250_OUT_MODE_JTX_BIT_ASSIGN(-1));
     if(ret < 0)
     {
         return ret;

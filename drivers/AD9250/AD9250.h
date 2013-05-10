@@ -61,7 +61,8 @@
 #define AD9250_R1B                          (1 << 8)
 #define AD9250_R2B                          (2 << 8)
 #define AD9250_R3B                          (3 << 8)
-#define AD9250_TRANSF_LEN(x)                ((x) >> 8)
+#define AD9250_TRANSF_LEN(x)                (((x) >> 8) & 0xFF)
+#define SHADOW(x)                           ((x) << 16)
 
 /* Chip configuration registers */
 #define AD9250_REG_SPI_CFG                  (AD9250_R1B | 0x00)
@@ -74,28 +75,28 @@
 
 /* Program register map */
 #define AD9250_REG_PDWN                     (AD9250_R1B | 0x08)
-#define AD9250_REG_CLOCK                    (AD9250_R1B | 0x09)
+#define AD9250_REG_CLOCK                    (AD9250_R1B | 0x09 | SHADOW(1))
 #define AD9250_REG_PLL_STAT                 (AD9250_R1B | 0x0A)
-#define AD9250_REG_CLOCK_DIV                (AD9250_R1B | 0x0B)
-#define AD9250_REG_TEST                     (AD9250_R1B | 0x0D)
-#define AD9250_REG_BIST                     (AD9250_R1B | 0x0E)
-#define AD9250_REG_OFFSET                   (AD9250_R1B | 0x10)
-#define AD9250_REG_OUT_MODE                 (AD9250_R1B | 0x14)
+#define AD9250_REG_CLOCK_DIV                (AD9250_R1B | 0x0B | SHADOW(2))
+#define AD9250_REG_TEST                     (AD9250_R1B | 0x0D | SHADOW(3))
+#define AD9250_REG_BIST                     (AD9250_R1B | 0x0E | SHADOW(4))
+#define AD9250_REG_OFFSET                   (AD9250_R1B | 0x10 | SHADOW(5))
+#define AD9250_REG_OUT_MODE                 (AD9250_R1B | 0x14 | SHADOW(6))
 #define AD9250_REG_CML                      (AD9250_R1B | 0x15)
-#define AD9250_REG_VREF                     (AD9250_R1B | 0x18)
+#define AD9250_REG_VREF                     (AD9250_R1B | 0x18 | SHADOW(7))
 #define AD9250_REG_USER_TEST1               (AD9250_R2B | 0x1A)
 #define AD9250_REG_USER_TEST2               (AD9250_R2B | 0x1C)
 #define AD9250_REG_USER_TEST3               (AD9250_R2B | 0x1E)
 #define AD9250_REG_USER_TEST4               (AD9250_R2B | 0x20)
 #define AD9250_REG_PLL_ENCODE               (AD9250_R1B | 0x21)
 #define AD9250_REG_BIST_MISR                (AD9250_R2B | 0x25)
-#define AD9250_REG_SYS_CTRL                 (AD9250_R1B | 0x3A)
-#define AD9250_REG_DCC_CTRL                 (AD9250_R1B | 0x40)
-#define AD9250_REG_DCC_VAL                  (AD9250_R2B | 0x42)
-#define AD9250_REG_FAST_DETECT              (AD9250_R1B | 0x45)
-#define AD9250_REG_FD_UPPER_THD             (AD9250_R2B | 0x48)
-#define AD9250_REG_FD_LOWER_THD             (AD9250_R2B | 0x4A)
-#define AD9250_REG_FD_DWELL_TIME            (AD9250_R2B | 0x4C)
+#define AD9250_REG_SYS_CTRL                 (AD9250_R1B | 0x3A | SHADOW(8))
+#define AD9250_REG_DCC_CTRL                 (AD9250_R1B | 0x40 | SHADOW(9))
+#define AD9250_REG_DCC_VAL                  (AD9250_R2B | 0x42 | SHADOW(10))
+#define AD9250_REG_FAST_DETECT              (AD9250_R1B | 0x45 | SHADOW(11))
+#define AD9250_REG_FD_UPPER_THD             (AD9250_R2B | 0x48 | SHADOW(12))
+#define AD9250_REG_FD_LOWER_THD             (AD9250_R2B | 0x4A | SHADOW(13))
+#define AD9250_REG_FD_DWELL_TIME            (AD9250_R2B | 0x4C | SHADOW(14))
 #define AD9250_REG_204B_QUICK_CFG           (AD9250_R1B | 0x5E)
 #define AD9250_REG_204B_CTRL1               (AD9250_R1B | 0x5F)
 #define AD9250_REG_204B_CTRL2               (AD9250_R1B | 0x60)
@@ -490,4 +491,4 @@ int32_t ad9250_dcc_bandwidth(int32_t bw);
 /*! Freezes DC correction value. */
 int32_t ad9250_dcc_freeze(int32_t freeze);
 
-#endif // __AD9250_H__
+#endif /* __AD9250_H__ */
