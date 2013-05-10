@@ -51,27 +51,27 @@
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
-	#define CF_BASEADDR      XPAR_AXI_AD9250_0_BASEADDR
-	#define JESD_BASEADDR    XPAR_AXI_JESD204B_RX2_0_BASEADDR
-	#define DDR_BASEADDR     XPAR_DDR_MEM_BASEADDR + 128*1024*1024
-	#define DMA_BASEADDR     XPAR_AXI_DMA_0_BASEADDR
-	#define UART_BASEADDR    XPS_UART1_BASEADDR
-	#define SPI_BASEADDR     XPAR_AXI_SPI_0_BASEADDR
-	#define LCD_BASEADDR     XPAR_AXI_GPIO_0_BASEADDR
+    #define CF_BASEADDR      XPAR_AXI_AD9250_0_BASEADDR
+    #define JESD_BASEADDR    XPAR_AXI_JESD204B_RX2_0_BASEADDR
+    #define DDR_BASEADDR     XPAR_DDR_MEM_BASEADDR + 128*1024*1024
+    #define DMA_BASEADDR     XPAR_AXI_DMA_0_BASEADDR
+    #define UART_BASEADDR    XPS_UART1_BASEADDR
+    #define SPI_BASEADDR     XPAR_AXI_SPI_0_BASEADDR
+    #define LCD_BASEADDR     XPAR_AXI_GPIO_0_BASEADDR
 #else
-	#define CF_BASEADDR      XPAR_AXI_AD9250_0_BASEADDR
-	#define JESD_BASEADDR    XPAR_AXI_JESD204B_RX2_0_BASEADDR
-	#define DDR_BASEADDR     XPAR_DDR3_SDRAM_S_AXI_BASEADDR
-	#define DMA_BASEADDR     XPAR_AXI_DMA_0_BASEADDR
-	#define UART_BASEADDR    XPAR_RS232_UART_1_BASEADDR
-	#define SPI_BASEADDR     XPAR_AXI_SPI_0_BASEADDR
-	#define LCD_BASEADDR     XPAR_AXI_GPIO_0_BASEADDR
+    #define CF_BASEADDR      XPAR_AXI_AD9250_0_BASEADDR
+    #define JESD_BASEADDR    XPAR_AXI_JESD204B_RX2_0_BASEADDR
+    #define DDR_BASEADDR     XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+    #define DMA_BASEADDR     XPAR_AXI_DMA_0_BASEADDR
+    #define UART_BASEADDR    XPAR_RS232_UART_1_BASEADDR
+    #define SPI_BASEADDR     XPAR_AXI_SPI_0_BASEADDR
+    #define LCD_BASEADDR     XPAR_AXI_GPIO_0_BASEADDR
 #endif
 
 #ifdef _XPARAMETERS_PS_H_
-	#define CYCLES_FOR_1_MS     100000
+    #define CYCLES_FOR_1_MS     100000
 #else
-	#define CYCLES_FOR_1_MS     800000
+    #define CYCLES_FOR_1_MS     800000
 #endif
 
 /* CF register map. */
@@ -205,6 +205,9 @@ typedef enum _OutputModes
 
 /*! Initializes JESD FPGA core. */
 void jesd_core_setup(void);
+
+/*! Initializes DMA core. */
+void dma_core_setup(void);
 
 /*! Captures a specified number of samples from the ADC. */
 void adc_capture(uint32_t size, uint32_t address);

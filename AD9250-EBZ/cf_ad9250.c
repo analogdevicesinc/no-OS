@@ -45,8 +45,12 @@
 #include "xil_io.h"
 #include "cf_ad9250.h"
 #include "AD9250.h"
+#include "xaxidma.h"
 
-void Xil_DCacheFlush(void);
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+static    XAxiDma *axiDma;
 
 /******************************************************************************/
 /************************ Private Functions Prototypes ************************/
@@ -95,6 +99,23 @@ void jesd_core_setup(void)
 }
 
 /***************************************************************************//**
+ * @brief Initializes the DMA core.
+ *
+ * @return None.
+*******************************************************************************/
+void dma_core_setup(void)
+{
+    XAxiDma_Config *axiDmaCfg;
+
+    /* DMA initialization */
+    axiDmaCfg = XAxiDma_LookupConfig(XPAR_AXI_DMA_0_DEVICE_ID);
+    axiDmaCfg->HasMm2S = 0;
+    axiDmaCfg->HasS2Mm = 1;
+    axiDmaCfg->HasSg = 0;
+    XAxiDma_CfgInitialize(axiDma, axiDmaCfg);
+}
+
+/***************************************************************************//**
  * @brief Captures a specified number of samples from the ADC.
  *
  * @param size    - number of bytes to read from the device
@@ -104,10 +125,8 @@ void jesd_core_setup(void)
 *******************************************************************************/
 void adc_capture(uint32_t size, uint32_t address)
 {
-    Xil_Out32((DMA_BASEADDR + 0x030), 0);               // clear dma operations
-    Xil_Out32((DMA_BASEADDR + 0x030), 1);               // enable dma operations
-    Xil_Out32((DMA_BASEADDR + 0x048), address);         // capture start address
-    Xil_Out32((DMA_BASEADDR + 0x058), (size * 8));      // number of bytes
+    XAxiDma_SimpleTransfer(axiDma, address, (size * 8), XAXIDMA_DEVICE_TO_DMA);
+
     Xil_Out32((CF_BASEADDR + CF_REG_CAPTURE_CTRL),
                CF_CAPTURE_CTRL_CAPTURE_START(0));       // capture disable
     Xil_Out32((CF_BASEADDR + CF_REG_ADC_STATUS),
@@ -178,8 +197,8 @@ void adc_test(uint32_t mode, uint32_t format)
     {
         if (format == TWOS_COMPLEMENT)
         {
-        	xil_printf("          Test skipped\r\n");
-        	return;
+            xil_printf("          Test skipped\r\n");
+            return;
         }
         Xil_Out32((CF_BASEADDR + CF_REG_PN_TYPE),
                   ((mode == PN_23_SEQUENCE) ? CF_PN_TYPE_BIT(1) : CF_PN_TYPE_BIT(0)));
@@ -199,7 +218,7 @@ void adc_test(uint32_t mode, uint32_t format)
         }
         else
         {
-        	xil_printf("          Test passed\r\n");
+            xil_printf("          Test passed\r\n");
         }
         return;
     }
@@ -255,7 +274,7 @@ void adc_test(uint32_t mode, uint32_t format)
     }
     if(error == 0)
     {
-    	xil_printf("          Test passed\r\n");
+        xil_printf("          Test passed\r\n");
     }
 }
 

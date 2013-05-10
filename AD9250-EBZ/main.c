@@ -64,6 +64,9 @@ int main(void)
     /* Initialize JESD FPGA core. */
     jesd_core_setup();
 
+    /* Initialize DMA core. */
+    dma_core_setup();
+
     /* AD9250 Setup. */
     ad9250_setup(SPI_BASEADDR, 1);
 
@@ -84,11 +87,8 @@ int main(void)
 
     /* AD9250 Setup for data acquisition. */
     ad9250_output_format(OFFSET_BINARY);    // Offset binary
-    ad9250_transfer();                      // Synchronously update register
     ad9250_output_invert(0);                // Output invert Off
-    ad9250_transfer();                      // Synchronously update register
     ad9250_output_disable(0);               // Output disable Off
-    ad9250_transfer();                      // Synchronously update register
     ad9250_test_mode(TEST_DISABLE);         // Test mode Off
     ad9250_transfer();                      // Synchronously update register
 
