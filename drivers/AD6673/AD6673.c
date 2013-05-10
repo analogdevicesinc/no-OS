@@ -57,6 +57,49 @@ static struct ad6673_state
     struct ad6673_fast_detect_cfg *pFd;
     
 }ad6673_st;
+
+enum shadowRegisters
+{
+    AD6673_SHD_REG_CLOCK = 1,
+    AD6673_SHD_REG_CLOCK_DIV,
+    AD6673_SHD_REG_TEST,
+    AD6673_SHD_REG_BIST,
+    AD6673_SHD_REG_OFFSET,
+    AD6673_SHD_REG_OUT_MODE,
+    AD6673_SHD_REG_VREF,
+    AD6673_SHD_REG_SYS_CTRL,
+    AD6673_REG_SHD_NSR_CTRL,
+    AD6673_REG_SHD_NSR_TUNING,
+    AD6673_SHD_REG_DCC_CTRL,
+    AD6673_SHD_REG_DCC_VAL,
+    AD6673_SHD_REG_FAST_DETECT,
+    AD6673_SHD_REG_FD_UPPER_THD,
+    AD6673_SHD_REG_FD_LOWER_THD,
+    AD6673_SHD_REG_FD_DWELL_TIME,
+    SHADOW_REGISTER_COUNT
+};
+
+static int32_t shadowRegs[SHADOW_REGISTER_COUNT] =
+{
+    0,
+    0x01, // AD6673_SHD_REG_CLOCK
+    0x00, // AD6673_SHD_REG_CLOCK_DIV
+    0x00, // AD6673_SHD_REG_TEST
+    0x00, // AD6673_SHD_REG_BIST
+    0x00, // AD6673_SHD_REG_OFFSET
+    0x01, // AD6673_SHD_REG_OUT_MODE
+    0x00, // AD6673_SHD_REG_VREF
+    0x00, // AD6673_SHD_REG_SYS_CTRL
+    0x00, // AD6673_REG_SHD_NSR_CTRL
+    0x1C, // AD6673_REG_SHD_NSR_TUNING
+    0x00, // AD6673_SHD_REG_DCC_CTRL
+    0x00, // AD6673_SHD_REG_DCC_VAL
+    0x00, // AD6673_SHD_REG_FAST_DETECT
+    0x00, // AD6673_SHD_REG_FD_UPPER_THD
+    0x00, // AD6673_SHD_REG_FD_LOWER_THD
+    0x00  // AD6673_SHD_REG_FD_DWELL_TIME
+};
+
 static int32_t spiBaseAddress;
 static int32_t spiSlaveSelect;
 
@@ -64,8 +107,10 @@ static int32_t spiSlaveSelect;
 /************************ Private Functions Prototypes ************************/
 /******************************************************************************/
 int32_t ad6673_set_bits_to_reg(uint32_t registerAddress,
-                               uint8_t bitsValue,
-                               uint8_t mask);
+                               uint8_t  bitsValue,
+                               uint8_t  mask);
+
+int32_t ad6673_is_shadow_register(int32_t registerAddress);
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -75,7 +120,7 @@ int32_t ad6673_set_bits_to_reg(uint32_t registerAddress,
  * @brief Configures the device.
  *
  * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo - Slave select line on which the slave is connected.
+ * @param ssNo        - Slave select line on which the slave is connected.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
@@ -86,6 +131,7 @@ int32_t ad6673_setup(int32_t spiBaseAddr, int32_t ssNo)
     
     spiBaseAddress = spiBaseAddr;
     spiSlaveSelect = ssNo;
+
     /* Initializes the SPI peripheral */
     ret = SPI_Init(spiBaseAddress, 0, 0, 0);
     if(ret < 0)
@@ -137,6 +183,8 @@ int32_t ad6673_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return ret;
     }
+
+    /* Synchronously update registers. */
     ret = ad6673_transfer();
     if(ret < 0)
     {
@@ -156,6 +204,8 @@ int32_t ad6673_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return ret;
     }
+
+    /* Synchronously update registers. */
     ret = ad6673_transfer();
 
     return ret;
@@ -166,7 +216,7 @@ int32_t ad6673_setup(int32_t spiBaseAddr, int32_t ssNo)
  *
  * @param registerAddress - The address of the register to read.
  *
- * @return registerValue - The register's value or negative error code.
+ * @return registerValue  - The register's value or negative error code.
 *******************************************************************************/
 int32_t ad6673_read(int32_t registerAddress)
 {
@@ -205,7 +255,7 @@ int32_t ad6673_read(int32_t registerAddress)
  * @brief Writes a value to the selected register.
  *
  * @param registerAddress - The address of the register to write to.
- * @param registerValue - The value to write to the register.
+ * @param registerValue   - The value to write to the register.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -217,6 +267,13 @@ int32_t ad6673_write(int32_t registerAddress, int32_t registerValue)
     char     regValue    = 0;
     char     txBuffer[3] = {0, 0, 0};
 
+    /* Check if the register is shadowed. */
+    ret = ad6673_is_shadow_register(registerAddress);
+    /* Synchronize shadow register with on-chip register. */
+    if(ret > 0)
+    {
+        shadowRegs[ret] = registerValue;
+    }
     regAddress = AD6673_WRITE + AD6673_ADDR(registerAddress);
     for(i = 0; i < AD6673_TRANSF_LEN(registerAddress); i++)
     {
@@ -238,11 +295,13 @@ int32_t ad6673_write(int32_t registerAddress, int32_t registerValue)
         regAddress--;
     }
 
-    return ret;
+    return (ret - 1);
 }
 
 /***************************************************************************//**
  * @brief Initiates a transfer and waits for the operation to end.
+ *        Note: This function may be called after a shadowed register was written,
+ *              so that the internal update can actually take place.
  *
  * @return  Negative error code or 0 in case of success.
 *******************************************************************************/
@@ -305,24 +364,35 @@ int32_t ad6673_soft_reset(void)
  * @brief Sets a bit/group of bits inside a register without modifying other
  *        bits.
  * @param registerAddress - The address of the register to be written.
- * @param bitsValue - The value of the bit/bits.
- * @param mask - The bit/bits position in the register.
+ * @param bitsValue       - The value of the bit/bits.
+ * @param mask            - The bit/bits position in the register.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
 int32_t ad6673_set_bits_to_reg(uint32_t registerAddress,
-                               uint8_t bitsValue,
-                               uint8_t mask)
+                               uint8_t  bitsValue,
+                               uint8_t  mask)
 {
     uint8_t regValue = 0;
     int32_t ret      = 0;
 
-    ret = ad6673_read(registerAddress);
-    if(ret < 0)
+    /* Read from the shadow register instead of the on-chip register when
+       shadowed register is discovered. */
+    ret = ad6673_is_shadow_register(registerAddress);
+    if(ret > 0)
     {
-        return ret;
+        regValue = shadowRegs[ret];
     }
-    regValue = ret & (~mask);
+    else
+    {
+        ret = ad6673_read(registerAddress);
+        if(ret < 0)
+        {
+            return ret;
+        }
+        regValue = ret;
+    }
+    regValue &= (~mask);
     regValue |= bitsValue;
     ret = ad6673_write(registerAddress, regValue);
     if(ret < 0)
@@ -331,6 +401,18 @@ int32_t ad6673_set_bits_to_reg(uint32_t registerAddress,
     }
 
     return 0;
+}
+
+/***************************************************************************//**
+ * @brief Checks if the register is shadowed.
+ * @param registerAddress - The address of the register to be checked.
+ *
+ * @return Returns the index of the shadow register or 0 if the register is not
+ *         shadowed.
+*******************************************************************************/
+int32_t ad6673_is_shadow_register(int32_t registerAddress)
+{
+    return ((SHADOW(0xFF) & registerAddress) >> 16);
 }
 
 /***************************************************************************//**
@@ -634,7 +716,7 @@ int32_t ad6673_reset_PN23(int32_t rst)
 /***************************************************************************//**
  * @brief Configures a User Test Pattern.
  *
- * @param patternNo - Selects the patterns to be configured. Range 1..4.
+ * @param patternNo    - Selects the patterns to be configured. Range 1..4.
  * @param user_pattern - Users's pattern.
  *
  * @return Returns negative error code or the selected user pattern.
@@ -1284,10 +1366,10 @@ int32_t ad6673_nsr_bandwidth_mode(int32_t mode)
  * @brief Sets the NSR frequency range.
  *
  * @param tuneFreq - The center frequency of noise transfer function(NTF)
- * @param fAdc - ADC sample rate
- * @param pBand - A pointer to a ad6673_typeBand structure. This parameter acts
- *                as an output parameter that returns the values of the center
- *                frequency, f0 frequency and f1 frequency set by this function
+ * @param fAdc     - ADC sample rate
+ * @param pBand    - A pointer to a ad6673_typeBand structure. This parameter acts
+ *                   as an output parameter that returns the values of the center
+ *                   frequency, f0 frequency and f1 frequency set by this function
  *
  * @return Returns the set tune word.
 *******************************************************************************/
