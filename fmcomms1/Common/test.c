@@ -379,7 +379,7 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 		xil_printf("ERROR: Addr(0x67) Data(0x%02x)!\n\r", rdata);
 	}
 	rdata = ad9122_read(0x07);
-	if ((rdata & 0x02) == 0x02)
+	if ((rdata & 0x04) == 0x04)
 	{
 		xil_printf("ERROR: Addr(0x07) Data(0x%02x)!\n\r", rdata);
 	}
