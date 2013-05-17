@@ -429,20 +429,19 @@ UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, UCHAR *BufPtr)
 *******************************************************************************/
 void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 {
-	UCHAR  		EdidData[256];
-	UINT16 		SpaOffset;
-	EDID_STRUCT *Edid;
-	STD_TIMING *TDesc;
-
-	unsigned short hActive = 0;
-	unsigned short vActive = 0;
-	unsigned short hBlanking = 0;
-	unsigned short vBlanking = 0;
-	unsigned short hWidth = 0;
-	unsigned short vWidth = 0;
-	unsigned short hOffset = 0;
-	unsigned short vOffset = 0;
-	unsigned long pixelClk = 0;
+	UCHAR  		   EdidData[256];
+	UINT16 		   SpaOffset;
+	EDID_STRUCT    *Edid;
+	STD_TIMING     *TDesc;
+	unsigned short horizontalActiveTime     = 0;
+	unsigned short verticalActiveTime       = 0;
+	unsigned short horizontalBlankingTime   = 0;
+	unsigned short verticalBlankingTime     = 0;
+	unsigned short horizontalSyncPulseWidth = 0;
+	unsigned short verticalSyncPulseWidth   = 0;
+	unsigned short horizontalSyncOffset     = 0;
+	unsigned short verticalSyncOffset       = 0;
+	unsigned long  pixelClk                 = 0;
 
     if (SegPtr)
     {
@@ -457,27 +456,34 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
     	Edid = (EDID_STRUCT *)EdidData;
     	TDesc = (STD_TIMING *)(Edid->DetailedTiming);
 
-    	hActive = ((TDesc->HActBlnk44 & 0xf0) << 4) | TDesc->HActive;
-    	vActive = ((TDesc->VActBlnk44 & 0xf0) << 4) | TDesc->VActive;
-    	hBlanking = ((TDesc->HActBlnk44 & 0x0f) << 8) | TDesc->HBlanking;
-    	vBlanking = ((TDesc->VActBlnk44 & 0x0f) << 8) | TDesc->VBlanking;
-    	hWidth = ((TDesc->HVOffsPulse & 0x30) << 4) | TDesc->HSyncWidth;
-    	vWidth = ((TDesc->HVOffsPulse & 0x03) << 4) | (TDesc->VOffsPulse & 0x0f);
-    	hOffset = ((TDesc->HVOffsPulse & 0xC0) << 2) | TDesc->HSyncOffs;
-    	vOffset = ((TDesc->HVOffsPulse & 0x0C) << 2) | ((TDesc->VOffsPulse & 0xf0) >> 4);
-
-		InitHdmiVideoPcore(hActive,
-						   vActive,
-						   hBlanking,
-						   vBlanking,
-						   hWidth,
-						   vWidth,
-						   hOffset,
-						   vOffset);
-
     	pixelClk = (TDesc->PixelClk[1] << 8) | TDesc->PixelClk[0];
     	pixelClk = pixelClk * 10000;
     	CLKGEN_SetRate(pixelClk, 200000000);
+
+    	horizontalActiveTime = ((TDesc->HActBlnk44 & 0xf0) << 4) |
+    						   TDesc->HActive;
+    	verticalActiveTime = ((TDesc->VActBlnk44 & 0xf0) << 4) |
+    						 TDesc->VActive;
+    	horizontalBlankingTime = ((TDesc->HActBlnk44 & 0x0f) << 8) |
+    							 TDesc->HBlanking;
+    	verticalBlankingTime = ((TDesc->VActBlnk44 & 0x0f) << 8) |
+    						   TDesc->VBlanking;
+    	horizontalSyncPulseWidth = ((TDesc->HVOffsPulse & 0x30) << 4) |
+    							   TDesc->HSyncWidth;
+    	verticalSyncPulseWidth = ((TDesc->HVOffsPulse & 0x03) << 4) |
+    							 (TDesc->VOffsPulse & 0x0f);
+    	horizontalSyncOffset = ((TDesc->HVOffsPulse & 0xC0) << 2) |
+    						   TDesc->HSyncOffs;
+    	verticalSyncOffset = ((TDesc->HVOffsPulse & 0x0C) << 2) |
+    						 ((TDesc->VOffsPulse & 0xf0) >> 4);
+    	InitHdmiVideoPcore(horizontalActiveTime,
+						   horizontalBlankingTime,
+						   horizontalSyncOffset,
+						   horizontalSyncPulseWidth,
+						   verticalActiveTime,
+						   verticalBlankingTime,
+						   verticalSyncOffset,
+						   verticalSyncPulseWidth);
 
     	ADIAPI_MwEdidEnableDebugMsg(TRUE);
     	ADIAPI_MwEdidParse(EdidData, &SpaOffset, SegmentNum);

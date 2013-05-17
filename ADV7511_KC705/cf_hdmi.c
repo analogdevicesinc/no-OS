@@ -87,21 +87,70 @@ static const unsigned long clkgen_lock_table[] =
 	0x1f1f012c, 0x1f1f0113, 0x1f1f0113, 0x1f1f0113
 };
 
+enum detailedTimingElement
+{
+	PIXEL_CLOCK,
+	H_ACTIVE_TIME,
+	H_BLANKING_TIME,
+	H_SYNC_OFFSET,
+	H_SYNC_WIDTH_PULSE,
+	V_ACTIVE_TIME,
+	V_BLANKING_TIME,
+	V_SYNC_OFFSET,
+	V_SYNC_WIDTH_PULSE
+};
+
+static const unsigned long detailedTiming[7][9] =
+{
+	{25180000, 640, 144, 16, 96, 480, 29, 10, 2},
+	{40000000, 800, 256, 40, 128, 600, 28, 1, 4},
+	{65000000, 1024, 320, 136, 24, 768, 38, 3, 6},
+	{74250000, 1280, 370, 110, 40, 720, 30, 5, 5},
+	{84750000, 1360, 416, 136, 72, 768, 30, 3, 5},
+	{108000000, 1600, 400, 32, 48, 900, 12, 3, 6},
+	{148500000, 1920, 280, 44, 88, 1080, 45, 4, 5}
+};
+
 /***************************************************************************//**
  * @brief DDRVideoWr.
 *******************************************************************************/
-void DDRVideoWr(void)
+void DDRVideoWr(unsigned short horizontalActiveTime,
+				unsigned short verticalActiveTime)
 {
-	u32 n    = 0;
-	u32 d    = 0;
-	u32 dcnt = 0;
+	unsigned long  pixel      = 0;
+	unsigned long  backup     = 0;
+	unsigned short line       = 0;
+	unsigned long  index      = 0;
+	unsigned char  repetition = 0;
 
-	for (n = 0; n < IMG_LENGTH; n++)
+	while(line < verticalActiveTime)
 	{
-		for (d = 0; d < ((IMG_DATA[n]>>24) & 0xff); d++)
+		for(index = 0; index < IMG_LENGTH; index++)
 		{
-			Xil_Out32((VIDEO_BASEADDR+(dcnt*4)), (IMG_DATA[n] & 0xffffff));
-			dcnt = dcnt + 1;
+			for (repetition = 0; repetition < ((IMG_DATA[index]>>24) & 0xff); repetition++)
+			{
+				backup = pixel;
+				while((pixel - line*horizontalActiveTime) < horizontalActiveTime)
+				{
+					Xil_Out32((VIDEO_BASEADDR+(pixel*4)), (IMG_DATA[index] & 0xffffff));
+					pixel += 640;
+				}
+				pixel = backup;
+				if((pixel - line*horizontalActiveTime) < 639)
+				{
+					pixel++;
+				}
+				else
+				{
+					line++;
+					if(line == verticalActiveTime)
+					{
+						Xil_DCacheFlush();
+						return;
+					}
+					pixel = line*horizontalActiveTime;
+				}
+			}
 		}
 	}
 	Xil_DCacheFlush();
@@ -140,49 +189,88 @@ void DDRAudioWr(void)
 /***************************************************************************//**
  * @brief InitHdmiVideoPcore.
 *******************************************************************************/
-void InitHdmiVideoPcore(unsigned short hActive,
-						unsigned short vActive,
-						unsigned short hBlanking,
-						unsigned short vBlanking,
-						unsigned short hWidth,
-						unsigned short vWidth,
-						unsigned short hOffset,
-						unsigned short vOffset)
+void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
+						unsigned short horizontalBlankingTime,
+						unsigned short horizontalSyncOffset,
+						unsigned short horizontalSyncPulseWidth,
+						unsigned short verticalActiveTime,
+						unsigned short verticalBlankingTime,
+						unsigned short verticalSyncOffset,
+						unsigned short verticalSyncPulseWidth)
 {
-	unsigned short hCount	  = 0;
-	unsigned short vCount	  = 0;
-	unsigned short hBackPorch = 0;
-	unsigned short vBackPorch = 0;
-	unsigned short hDeMin	  = 0;
-	unsigned short hDeMax	  = 0;
-	unsigned short vDeMin	  = 0;
-	unsigned short vDeMax	  = 0;
+	unsigned short horizontalCount	   = 0;
+	unsigned short verticalCount	   = 0;
+	unsigned short horizontalBackPorch = 0;
+	unsigned short verticalBackPorch   = 0;
+	unsigned short horizontalDeMin	   = 0;
+	unsigned short horizontalDeMax	   = 0;
+	unsigned short verticalDeMin	   = 0;
+	unsigned short verticalDeMax	   = 0;
 
-	DDRVideoWr();
+	DDRVideoWr(horizontalActiveTime, verticalActiveTime);
 
-	hCount = hActive + hBlanking;
-	vCount = vActive + vBlanking;
-	hBackPorch = hBlanking - hOffset - hWidth;
-	vBackPorch = vBlanking - vOffset - vWidth;
-	hDeMin = hWidth + hBackPorch;
-	hDeMax = hDeMin + hActive;
-	vDeMin = vWidth + vBackPorch;
-	vDeMax = vDeMin + vActive;
+	horizontalCount = horizontalActiveTime +
+					  horizontalBlankingTime;
+	verticalCount = verticalActiveTime +
+					verticalBlankingTime;
+	horizontalBackPorch = horizontalBlankingTime -
+						  horizontalSyncOffset -
+						  horizontalSyncPulseWidth;
+	verticalBackPorch = verticalBlankingTime -
+						verticalSyncOffset -
+						verticalSyncPulseWidth;
+	horizontalDeMin = horizontalSyncPulseWidth +
+					  horizontalBackPorch;
+	horizontalDeMax = horizontalDeMin +
+					  horizontalActiveTime;
+	verticalDeMin = verticalSyncPulseWidth +
+					verticalBackPorch;
+	verticalDeMax = verticalDeMin +
+					verticalActiveTime;
 
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING1), ((hWidth << 16) | hCount));
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING2), ((hDeMin << 16) | hDeMax));
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING1), ((vWidth << 16) | vCount));
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING2), ((vDeMin << 16) | vDeMax));
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_CTRL), 0x00000000); // disable
-	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_CTRL), 0x00000001); // enable
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING1),
+			  ((horizontalSyncPulseWidth << 16) | horizontalCount));
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING2),
+			  ((horizontalDeMin << 16) | horizontalDeMax));
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING1),
+			  ((verticalSyncPulseWidth << 16) | verticalCount));
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING2),
+			  ((verticalDeMin << 16) | verticalDeMax));
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_CTRL),
+			  0x00000000); // disable
+	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_CTRL),
+			  0x00000001); // enable
 
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_DMA_CTRL), 0x00000003); // enable circular mode
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_1), VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_2), VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_3), VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_FRMDLY_STRIDE), (hActive*4)); // h offset
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_H_SIZE), (hActive*4)); // h size
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_V_SIZE), vActive); // v size
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_DMA_CTRL),
+			  0x00000003); // enable circular mode
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_1),
+			  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_2),
+			  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_3),
+			  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_FRMDLY_STRIDE),
+			  (horizontalActiveTime*4)); // h offset
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_H_SIZE),
+			  (horizontalActiveTime*4)); // h size
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_V_SIZE),
+			  verticalActiveTime); // v size
+}
+
+/***************************************************************************//**
+ * @brief SetVideoResolution.
+*******************************************************************************/
+void SetVideoResolution(unsigned char resolution)
+{
+	CLKGEN_SetRate(detailedTiming[resolution][PIXEL_CLOCK], 200000000);
+	InitHdmiVideoPcore(detailedTiming[resolution][H_ACTIVE_TIME],
+					   detailedTiming[resolution][H_BLANKING_TIME],
+					   detailedTiming[resolution][H_SYNC_OFFSET],
+					   detailedTiming[resolution][H_SYNC_WIDTH_PULSE],
+					   detailedTiming[resolution][V_ACTIVE_TIME],
+					   detailedTiming[resolution][V_BLANKING_TIME],
+					   detailedTiming[resolution][V_SYNC_OFFSET],
+					   detailedTiming[resolution][V_SYNC_WIDTH_PULSE]);
 }
 
 /***************************************************************************//**

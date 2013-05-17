@@ -53,7 +53,7 @@
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_16B_0_BASEADDR
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
 #define DDR_BASEADDR        XPAR_DDR3_SDRAM_S_AXI_BASEADDR
-#define UART_BASEADDR       XPS_UART1_BASEADDR
+#define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
 #define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
 #define ADMA_BASEADDR       XPAR_AXI_DMA_0_BASEADDR
 #define IIC_BASEADDR        XPAR_AXI_IIC_0_BASEADDR
@@ -91,17 +91,29 @@
 #define AXI_CLKGEN_REG_FILTER1			0x28
 #define AXI_CLKGEN_REG_FILTER2			0x2c
 
+enum videoResolution
+{
+	RESOLUTION_640x480,
+	RESOLUTION_800x600,
+	RESOLUTION_1024x768,
+	RESOLUTION_1280x720,
+	RESOLUTION_1360x768,
+	RESOLUTION_1600x900,
+	RESOLUTION_1920x1080
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void InitHdmiVideoPcore(unsigned short hActive,
-						unsigned short vActive,
-						unsigned short hBlanking,
-						unsigned short vBlanking,
-						unsigned short hWidth,
-						unsigned short vWidth,
-						unsigned short hOffset,
-						unsigned short vOffset);
+void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
+						unsigned short horizontalBlankingTime,
+						unsigned short horizontalSyncOffset,
+						unsigned short horizontalSyncPulseWidth,
+						unsigned short verticalActiveTime,
+						unsigned short verticalBlankingTime,
+						unsigned short verticalSyncOffset,
+						unsigned short verticalSyncPulseWidth);
+void SetVideoResolution(unsigned char resolution);
 void InitHdmiAudioPcore(void);
 void AudioClick(void);
 int CLKGEN_SetRate(unsigned long rate,

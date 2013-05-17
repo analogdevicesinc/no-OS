@@ -49,8 +49,10 @@
 #include "atv_platform.h"
 #include "transmitter.h"
 #include "xil_exception.h"
+#include "xuartlite_l.h"
 
 extern void delay_ms(u32 ms_count);
+extern char inbyte(void);
 
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
@@ -112,6 +114,35 @@ static void APP_PrintRevisions (void)
 }
 
 /***************************************************************************//**
+ * @brief Changes the video resolution.
+ *
+ * @return None.
+*******************************************************************************/
+static void APP_ChangeResolution (void)
+{
+	char *resolutions[7] = {"640x480", "800x600", "1024x768", "1280x720", "1360x768", "1600x900", "1920x1080"};
+	char receivedChar    = 0;
+
+	if(!XUartLite_IsReceiveEmpty(UART_BASEADDR))
+	{
+		receivedChar = inbyte();
+		if((receivedChar >= 0x30) && (receivedChar <= 0x36))
+		{
+			SetVideoResolution(receivedChar - 0x30);
+			DBG_MSG("Resolution was changed to %s \r\n", resolutions[receivedChar - 0x30]);
+		}
+		else
+		{
+			if((receivedChar != 0x0A) && (receivedChar != 0x0D))
+			{
+				SetVideoResolution(RESOLUTION_640x480);
+				DBG_MSG("Resolution was changed to %s \r\n", resolutions[0]);
+			}
+		}
+	}
+}
+
+/***************************************************************************//**
  * @brief Main function.
  *
  * @return Returns 0.
@@ -136,16 +167,7 @@ int main()
 
 	Xil_ExceptionEnable();
 
-	/* Set the default values for 1080P 60Hz */
-	CLKGEN_SetRate(148500000, 200000000);
-	InitHdmiVideoPcore(1920,
-					   1080,
-					   280,
-					   45,
-					   44,
-					   5,
-					   88,
-					   4);
+	SetVideoResolution(RESOLUTION_640x480);
 	InitHdmiAudioPcore();
 
 	APP_PrintRevisions();       /* Display S/W and H/W revisions */
@@ -166,6 +188,7 @@ int main()
 				ADIAPI_TransmitterMain();
 			}
 		}
+		APP_ChangeResolution();
 	}
 
 	Xil_DCacheDisable();
