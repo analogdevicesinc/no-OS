@@ -72,4 +72,4 @@ void AD7091R_PowerUp(void);
 /*! Converts a 12-bit raw sample to volts. */
 float AD7091R_ConvertToVolts(short rawSample, float vRef);
 
-#endif	/*__AD7091R_H__*/
+#endif /* __AD7091R_H__ */

@@ -43,7 +43,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "AD7091R.h"	
+#include "AD7091R.h"
 #include "Communication.h"
 
 /******************************************************************************/
@@ -54,8 +54,8 @@
  * @brief Initializes the SPI communication peripheral.
  *
  * @return Result of the initialization procedure.
- *				Example: -1 - SPI peripheral was not initialized.
- *					  0 - SPI peripheral is initialized.
+ *                   Example: -1 - SPI peripheral was not initialized.
+ *                             0 - SPI peripheral is initialized.
 *******************************************************************************/
 char AD7091R_Init(void)
 {
