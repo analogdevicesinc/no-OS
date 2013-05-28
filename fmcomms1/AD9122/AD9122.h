@@ -388,4 +388,9 @@ int32_t ad9122_phaseAdj_I_DAC(int32_t phaseAdj);
 /*  ** Returns the set phase adjustment. */
 int32_t ad9122_phaseAdj_Q_DAC(int32_t phaseAdj);
 
+/** Gets the AD9122 FIFO status registers. */
+/*  ** Returns negative error code in case of error or 0 in case of success.*/
+int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
+									uint8_t *status2);
+
 #endif // __AD9122_H__

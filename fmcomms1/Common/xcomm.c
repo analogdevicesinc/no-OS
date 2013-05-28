@@ -1149,3 +1149,34 @@ int32_t XCOMM_CalibrateDacDci(void)
 {
 	return ad9122_dci_calibrate();
 }
+
+/**************************************************************************//**
+* @brief Gets the DAC FIFO Status.
+*
+* @return If success, return XCOMM_DacFifoStatus struct with error set to 0
+*         If error, return XCOMM_DacFifoStatus struct with error set to -1
+******************************************************************************/
+XCOMM_DacFifoStatus XCOMM_GetDacFifoStatus(void)
+{
+	XCOMM_DacFifoStatus status;
+	int32_t ret     = 0;
+	uint8_t status1 = 0;
+	uint8_t status2 = 0;
+
+	ret = ad9122_get_fifo_status_regs(&status1, &status2);
+	if(ret < 0)
+	{
+		status.error = -1;
+	}
+	else
+	{
+		status.error = 0;
+	}
+	status.warning1     = ((status1 & 0x80) >> 7);
+	status.warning2     = ((status1 & 0x40) >> 6);
+	status.softAlignAck = ((status1 & 0x04) >> 2);
+	status.softAlignReq = ((status1 & 0x02) >> 1);
+	status.level        = status2;
+
+	return status;
+}

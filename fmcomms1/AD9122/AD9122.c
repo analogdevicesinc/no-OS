@@ -1433,3 +1433,38 @@ int32_t ad9122_phaseAdj_Q_DAC(int32_t phaseAdj)
 	return phaseAdj;
 }
 
+/***************************************************************************//**
+ * @brief Gets the AD9122 FIFO status registers.
+ *
+ * @param status1 - AD9122_REG_FIFO_STATUS_1 value.
+ * @param status2 - AD9122_REG_FIFO_STATUS_2 value.
+ *
+ * @return Returns negative error code in case of error
+ * 		   or 0 in case of success.
+*******************************************************************************/
+int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
+									uint8_t *status2)
+{
+	int32_t ret = 0;
+
+	ret = ad9122_read(AD9122_REG_FIFO_STATUS_1);
+	if (ret < 0)
+	{
+		return ret;
+	}
+	else
+	{
+		*status1 = (uint8_t)ret;
+	}
+	ret = ad9122_read(AD9122_REG_FIFO_STATUS_2);
+	if (ret < 0)
+	{
+		return ret;
+	}
+	else
+	{
+		*status2 = (uint8_t)ret;
+	}
+
+	return ret;
+}
