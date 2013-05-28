@@ -279,9 +279,11 @@ int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
 	/* Initialize the AD9122 */
     DAC_Core_Init(pDefInit->fmcPort);
     if(ad9122_setup(ad9523_out_altvoltage_DAC_DCO_CLK_frequency,
-    				ad9523_out_altvoltage_DAC_CLK_frequency,
-    				ad9523_clk_round_rate_DAC_DCO_CLK,
-    				ad9523_clk_round_rate_DAC_CLK) < 0)
+                    ad9523_out_altvoltage_DAC_CLK_frequency,
+                    ad9523_out_altvoltage_DAC_REF_CLK_frequency,
+                    ad9523_clk_round_rate_DAC_DCO_CLK,
+                    ad9523_clk_round_rate_DAC_CLK,
+                    ad9523_clk_round_rate_DAC_REF_CLK) < 0)
         return -1;
 
     /* Set the AD9122 sampling rate */

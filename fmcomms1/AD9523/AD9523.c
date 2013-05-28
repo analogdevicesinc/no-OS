@@ -669,6 +669,18 @@ uint32_t ad9523_clk_round_rate_DAC_DCO_CLK(uint32_t rate)
 }
 
 /***************************************************************************//**
+ * @brief Determines the achievable output frequency for the DAC REF CLK channel
+ *
+ * @param rate - Desired output frequency.
+ *
+ * @return Returns the achievable output frequency.
+*******************************************************************************/
+uint32_t ad9523_clk_round_rate_DAC_REF_CLK(uint32_t rate)
+{
+	return ad9523_clk_round_rate(10, rate);
+}
+
+/***************************************************************************//**
  * @brief Sets the output frequency for channel 0.
  *
  * @param Hz - The output frequency for the selected channel.
