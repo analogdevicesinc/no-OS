@@ -316,6 +316,9 @@ void cf_axi_dds_sync_frame()
 	stat = conv->get_fifo_status(conv);
 	if (stat) {
 		if (retry++ > 10) {
+#ifdef SYNC_FRAME_DEBUG
+			xil_printf("FRAME/FIFO Reset Retry cnt\n");
+#endif
 			return;
 		}
 
