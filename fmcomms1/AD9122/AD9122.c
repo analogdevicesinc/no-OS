@@ -534,7 +534,7 @@ static int32_t ad9122_set_data_clk(struct cf_axi_converter *conv, uint32_t freq)
 		return (int32_t)ret;
 	conv->clk[CLK_DATA] = (uint32_t)ret;
 
-	ret = pfnSetRefClk(dat_freq);
+	ret = pfnSetRefClk(r_ref_freq);
 	if(ret < 0)
 		return (int32_t)ret;
 	conv->clk[CLK_REF] = (uint32_t)ret;
@@ -1466,5 +1466,5 @@ int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
 		*status2 = (uint8_t)ret;
 	}
 
-	return ret;
+	return 0;
 }
