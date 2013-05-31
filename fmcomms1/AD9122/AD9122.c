@@ -1468,3 +1468,44 @@ int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
 
 	return 0;
 }
+
+/***************************************************************************//**
+ * @brief Sets the input data format.
+ *
+ * @param format - The input data format.
+ * 					Example: 0 - input data is in twos complement format.
+ * 						     1 - input data is in binary format.
+ *
+ * @return Returns negative error code in case of error or the set
+ *         input data format.
+*******************************************************************************/
+int32_t ad9122_set_data_format(uint8_t format)
+{
+	int32_t ret       = 0;
+	uint8_t reg_value = 0;
+
+	/* Read the current state of the AD9122_REG_DATA_FORMAT*/
+	ret = ad9122_read(AD9122_REG_DATA_FORMAT);
+	if(ret < 0)
+	{
+		return -1;
+	}
+	reg_value = (uint8_t)ret;
+
+	if((format == 0) || (format == 1))
+	{
+		reg_value &= ~AD9122_DATA_FORMAT_BINARY;
+		reg_value |= AD9122_DATA_FORMAT_BINARY * format;
+		ret = ad9122_write(AD9122_REG_DATA_FORMAT, reg_value);
+		if(ret < 0)
+		{
+			return -1;
+		}
+	}
+	else
+	{
+		format = (reg_value & AD9122_DATA_FORMAT_BINARY) >> 7;
+	}
+
+	return format;
+}

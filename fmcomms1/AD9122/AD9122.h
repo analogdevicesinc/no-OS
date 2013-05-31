@@ -392,5 +392,8 @@ int32_t ad9122_phaseAdj_Q_DAC(int32_t phaseAdj);
 /*  ** Returns negative error code in case of error or 0 in case of success.*/
 int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
 									uint8_t *status2);
+/** Sets the input data format. */
+/*  ** Returns negative error code in case of error or the set input data format.*/
+int32_t ad9122_set_data_format(uint8_t format);
 
 #endif // __AD9122_H__

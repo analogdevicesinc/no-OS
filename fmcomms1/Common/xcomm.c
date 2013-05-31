@@ -1180,3 +1180,18 @@ XCOMM_DacFifoStatus XCOMM_GetDacFifoStatus(void)
 
 	return status;
 }
+
+/**************************************************************************//**
+* @brief Sets the DAC input data format.
+*
+* @param format - The input data format.
+*    Example: TWOS_COMPLEMENT_FORMAT - input data is in twos complement format.
+*             BINARY_FORMAT - input data is in binary format.
+*
+* @return Returns negative error code in case of error or the set
+ *         input data format.
+******************************************************************************/
+int32_t XCOMM_SetDacDataFormat(uint8_t dataFormat)
+{
+	return ad9122_set_data_format(dataFormat);
+}

@@ -143,6 +143,10 @@ typedef struct
 	int8_t		error;
 }XCOMM_DacFifoStatus;
 
+/* DAC input data format definitions */
+#define TWOS_COMPLEMENT_FORMAT	0
+#define BINARY_FORMAT			1
+
 /** XCOMM Default Initialization Structure */
 typedef struct 
 {	
@@ -383,6 +387,11 @@ int32_t XCOMM_CalibrateDacDci(void);
 /*  ** if success, return XCOMM_DacFifoStatus with error set to 0*/
 /*  ** if error, return XCOMM_DacFifoStatus with error set to -1 */
 XCOMM_DacFifoStatus XCOMM_GetDacFifoStatus(void);
+
+/** Sets the DAC input data format. */
+/*  if success, return the set input data format.*/
+/*  if error, return -1 */
+int32_t XCOMM_SetDacDataFormat(uint8_t dataFormat);
 
 #endif /* __XCOMM_H__ */
 
