@@ -244,12 +244,12 @@ void ADXL345_GetGxyz(float* x,
     short zData = 0;  // Z-axis's output data.
  
     ADXL345_GetXyz(&xData, &yData, &zData);
-    *x = fullResolutionSet ? (xData * ADXL345_SCALE_FACTOR) :
-            (xData * ADXL345_SCALE_FACTOR * (selectedRange >> 1));
-    *y = fullResolutionSet ? (yData * ADXL345_SCALE_FACTOR) :
-            (yData * ADXL345_SCALE_FACTOR * (selectedRange >> 1));
-    *z = fullResolutionSet ? (zData * ADXL345_SCALE_FACTOR) :
-            (zData * ADXL345_SCALE_FACTOR * (selectedRange >> 1));
+    *x = (float)(fullResolutionSet ? (xData * ADXL345_SCALE_FACTOR) :
+            (xData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
+    *y = (float)(fullResolutionSet ? (yData * ADXL345_SCALE_FACTOR) :
+            (yData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
+    *z = (float)(fullResolutionSet ? (zData * ADXL345_SCALE_FACTOR) :
+            (zData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
 }
 
 /***************************************************************************//**
