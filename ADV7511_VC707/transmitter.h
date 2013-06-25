@@ -107,6 +107,8 @@ TRANSMITTER_TX_VARS	TransmitterTxVars;
 #define CurrMuteState			TransmitterTxVars.CurrMuteState
 #define TxStatus				TransmitterTxVars.TxStatus
 
+#define HDMI_IEEE_REG			0x000C03
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/

@@ -442,7 +442,9 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 	unsigned short horizontalSyncOffset     = 0;
 	unsigned short verticalSyncOffset       = 0;
 	unsigned long  pixelClk                 = 0;
-
+	unsigned char  edidIndex                = 0;
+	unsigned long  ieeeRegistration         = 0;
+	
     if (SegPtr)
     {
         memcpy (EdidData, SegPtr, 256);
@@ -453,6 +455,26 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
     }
     if (SegPtr && (SegmentNum < 2))
     {
+    	for(edidIndex = 128; edidIndex <= 253; edidIndex++)
+    	{
+			ieeeRegistration = ((unsigned long)EdidData[edidIndex + 2] << 16) |
+							   ((unsigned short)EdidData[edidIndex + 1] << 8) |
+							   EdidData[edidIndex];
+			if(ieeeRegistration == HDMI_IEEE_REG)
+			{
+				break;
+			}
+    	}
+    	if(ieeeRegistration == HDMI_IEEE_REG)
+    	{
+    		TRANSMITTER_DBG_MSG("HDMI device.\n\r");
+    		ADIAPI_TxSetOutputMode(OUT_MODE_HDMI);
+    	}
+    	else
+    	{
+    		TRANSMITTER_DBG_MSG("DVI device.\n\r");
+    		ADIAPI_TxSetOutputMode(OUT_MODE_DVI);
+    	}
     	Edid = (EDID_STRUCT *)EdidData;
     	TDesc = (STD_TIMING *)(Edid->DetailedTiming);
 

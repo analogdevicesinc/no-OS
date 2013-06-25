@@ -95,8 +95,8 @@ ATV_ERR ADIAPI_TransmitterInit(void)
     TransmitterParm.InPixelFormat 		= SDR_422_SEP_SYNC;
     TransmitterParm.InPixelStyle 		= 2;
     TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
-    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_YUV_422;
-    TransmitterParm.InColorSpace 		= TX_CS_RGB;
+    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_RGB_444;
+    TransmitterParm.InColorSpace 		= TX_CS_YUV_601;
     TransmitterParm.OutColorSpace 		= TX_CS_RGB;
     TransmitterParm.AudInterface		= TX_SPDIF;
     TransmitterParm.DebugControl		= 1;
@@ -442,7 +442,9 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 	unsigned short horizontalSyncOffset     = 0;
 	unsigned short verticalSyncOffset       = 0;
 	unsigned long  pixelClk                 = 0;
-
+	unsigned char  edidIndex                = 0;
+	unsigned long  ieeeRegistration         = 0;
+	
     if (SegPtr)
     {
         memcpy (EdidData, SegPtr, 256);
@@ -453,6 +455,26 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
     }
     if (SegPtr && (SegmentNum < 2))
     {
+    	for(edidIndex = 128; edidIndex <= 253; edidIndex++)
+    	{
+			ieeeRegistration = ((unsigned long)EdidData[edidIndex + 2] << 16) |
+							   ((unsigned short)EdidData[edidIndex + 1] << 8) |
+							   EdidData[edidIndex];
+			if(ieeeRegistration == HDMI_IEEE_REG)
+			{
+				break;
+			}
+    	}
+    	if(ieeeRegistration == HDMI_IEEE_REG)
+    	{
+    		TRANSMITTER_DBG_MSG("HDMI device.\n\r");
+    		ADIAPI_TxSetOutputMode(OUT_MODE_HDMI);
+    	}
+    	else
+    	{
+    		TRANSMITTER_DBG_MSG("DVI device.\n\r");
+    		ADIAPI_TxSetOutputMode(OUT_MODE_DVI);
+    	}
     	Edid = (EDID_STRUCT *)EdidData;
     	TDesc = (STD_TIMING *)(Edid->DetailedTiming);
 
