@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   Communication.h
- *   @brief  Header file of Communication Driver for PIC32MX320F128H.
+ *   @file   Console.h
+ *   @brief  Header file of Console Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,39 +36,34 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __CONSOLE_H__
 #define __CONSOLE_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/******************** Macros and Constants Definitions ************************/
 /******************************************************************************/
-#include <xc.h>
-#include <stdlib.h>
+#define UNKNOWN_CMD -1
+#define DO_CMD       0
+#define READ_CMD     1
+#define WRITE_CMD    2
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-/*! Initializes the UART communication peripheral. */
-unsigned char UART_Init(unsigned long baudRate);
+/*!< Initializes the serial console. */
+char CONSOLE_Init(unsigned long baudRate);
 
-/*! Writes one character to UART. */
-void UART_Write(unsigned char data);
+/*!< Prints formatted data to console. */
+void CONSOLE_Print(char* str, ...);
 
-/*! Reads one character from UART. */
-unsigned char UART_Read(void);
+/*!< Reads one command from console. */
+void CONSOLE_GetCommand(char* command);
 
-/*! Writes one string to UART. */
-void CONSOLE_WriteString(const char* string);
-
-/*! Reads one command from UART. */
-void CONSOLE_GetCommand(unsigned char* command);
-
-/*! Compares two commands and returns the type of the command. */
-unsigned char CONSOLE_CheckCommands(unsigned char* receivedCommand,
-                                    const char* expectedCommand,
-                                    double* commandParameter);
+/*!< Compares two commands and returns the type of the command. */
+char CONSOLE_CheckCommands(char*       receivedCmd,
+                           const char* expectedCmd,
+                           double*     param,
+                           char*       paramNo);
 
 #endif /*__CONSOLE_H__*/

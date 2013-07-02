@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   Console.c
- *   @brief  Implementation of Console Driver for PIC32MX320F128H.
+ *   @brief  Implementation of Console Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,17 +36,179 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdarg.h>
+#include <stdlib.h>
+#include "Communication.h"
 #include "Console.h"
 
 /***************************************************************************//**
- * @brief Initializes the UART communication peripheral.
+ * @brief Converts an integer number to a string of ASCII characters string.
+ *
+ * @param number - Integer number.
+ * @param base   - Numerical base used to represent the integer number as
+ *                 string.
+ *
+ * @return Pointer to the string of ASCII characters.
+*******************************************************************************/
+char *intToStr(long number, char base)
+{
+    unsigned long posNumber  = 0;
+    char          negSign    = 0;
+    const char    digits[17] = "0123456789ABCDEF";
+    static char   buffer[17] = "                ";
+    char*         bufferPtr  = &buffer[16];
+
+    if((number < 0) && (base == 10))
+    {
+        negSign = 1;
+        posNumber = -1 * number;
+    }
+    else
+    {
+        posNumber = (unsigned long)number;
+    }
+    do
+    {
+        *bufferPtr-- = digits[posNumber % base];
+        posNumber /= base;
+    }
+    while(posNumber != 0);
+    if(negSign)
+    {
+        *bufferPtr-- = '-';
+    }
+    *bufferPtr++;
+
+    return bufferPtr;
+}
+
+/***************************************************************************//**
+ * @brief Prints formatted data to console.
+ *
+ * @param str - String to be printed.
+ *
+ * @return None.
+*******************************************************************************/
+void CONSOLE_Print(char* str, ...)
+{
+    char*         stringPtr;
+    char          firstParam  = 0;
+    char          secondParam = 0;
+    unsigned long xMask       = 0;
+    unsigned long dMask       = 0;
+    char          chNumber    = 0;
+    unsigned long multiplier  = 1;
+    char*         strArg;
+    long          longArg;
+    double        doubleArg;
+    va_list       argp;
+    
+    va_start(argp, str);
+    for(stringPtr = str; *stringPtr != '\0'; stringPtr++)
+    {
+        if(*stringPtr!='%')
+        {
+            UART_WriteChar(*stringPtr);
+            continue;
+        }
+        stringPtr++;
+        firstParam = 0;
+        while((*stringPtr >= 0x30) & (*stringPtr <= 0x39))
+        {
+            firstParam *= 10;
+            firstParam += (*stringPtr - 0x30);
+            stringPtr++;
+        }
+        if(*stringPtr == '.')
+        {
+            stringPtr++;
+            secondParam = 0;
+            while((*stringPtr >= 0x30) & (*stringPtr <= 0x39))
+            {
+                secondParam *= 10;
+                secondParam += (*stringPtr - 0x30);
+                stringPtr++;
+            }
+        }
+        switch(*stringPtr)
+        {
+        case 'c':
+            longArg = va_arg(argp, long);
+            UART_WriteChar((char)longArg);
+            break;
+        case 's':
+            strArg = va_arg(argp, char*);
+            UART_WriteString(strArg);
+            break;
+        case 'd':
+            longArg = va_arg(argp, long);
+            UART_WriteString(intToStr(longArg, 10));
+            break;
+        case 'x':
+            longArg = va_arg(argp, long);
+            xMask = 268435456;
+            chNumber = 8;
+            while(xMask > longArg)
+            {
+                xMask /= 16;
+                chNumber--;
+            }
+            while(chNumber < firstParam)
+            {
+                UART_WriteChar('0');
+                chNumber++;
+            }
+            if(longArg != 0)
+            {
+                UART_WriteString(intToStr(longArg, 16));
+            }
+            break;
+        case 'f':
+            doubleArg = va_arg(argp, double);
+            chNumber = secondParam;
+            while(chNumber > 0)
+            {
+                multiplier *= 10;
+                chNumber--;
+            }
+            doubleArg *= multiplier;
+            if(doubleArg < 0)
+            {
+                doubleArg *= -1;
+                UART_WriteChar('-');
+            }
+            longArg = (long)doubleArg;
+            UART_WriteString(intToStr((longArg / multiplier), 10));
+            UART_WriteChar('.');
+            dMask = 1000000000;
+            chNumber = 10;
+            while(dMask > (long)(longArg % multiplier))
+            {
+                dMask /= 10;
+                chNumber--;
+            }
+            while(chNumber < secondParam)
+            {
+                UART_WriteChar('0');
+                chNumber++;
+            }
+            if((longArg % multiplier) != 0)
+            {
+                UART_WriteString(intToStr((longArg % multiplier), 10));
+            }
+            break;
+        }
+    }
+    va_end(argp);
+}
+
+/***************************************************************************//**
+ * @brief Initializes the serial console.
  *
  * @param baudRate - Baud rate value.
  *                   Example: 9600 - 9600 bps.
@@ -55,83 +217,26 @@
  *                   Example: -1 - if initialization was unsuccessful;
  *                             0 - if initialization was successful.
 *******************************************************************************/
-unsigned char UART_Init(unsigned long baudRate)
+char CONSOLE_Init(unsigned long baudRate)
 {
-    unsigned long   pbFrequency = 80000000;
-    unsigned short  brgValue    = 0;
-
-    /* BaudRate = Fpb / (16 * (UxBRG + 1)) */
-    brgValue = pbFrequency / (16 * baudRate) - 1;
-    U1MODE   = 0;             // Clear the content of U1MODE register
-    U1BRG    = brgValue;
-    U1MODEbits.PDSEL1 = 0;
-    U1MODEbits.PDSEL0 = 0;    // 8-bit data, no parity
-    U1MODEbits.STSEL  = 0;    // 1 Stop bit
-    U1STAbits.URXEN   = 1;    // Enable UART1 receiver
-    U1STAbits.UTXEN   = 1;    // Enable UART1 transmitter
-    U1MODEbits.ON     = 1;    // Enable UART1 peripheral
-    
-    return 0;
+    return UART_Init(baudRate);
 }
 
 /***************************************************************************//**
- * @brief Writes one character to UART.
- *
- * @param data - Character to write.
- *
- * @return None.
-*******************************************************************************/
-void UART_Write(unsigned char data)
-{
-    while(U1STAbits.TRMT == 0);
-    U1TXREG = data;
-}
-
-/***************************************************************************//**
- * @brief Reads one character from UART.
- *
- * @return receivedChar - Read character.
-*******************************************************************************/
-unsigned char UART_Read(void)
-{
-    unsigned char receivedChar = 0;
-
-    while(U1STAbits.URXDA == 0);
-    receivedChar = U1RXREG;
-
-    return receivedChar;
-}
-
-/***************************************************************************//**
- * @brief Writes one string to UART.
- *
- * @param string - String to write.
- *
- * @return None.
-*******************************************************************************/
-void CONSOLE_WriteString(const char* string)
-{
-    while(*string)
-    {
-        UART_Write(*string++);
-    }
-}
-
-/***************************************************************************//**
- * @brief Reads one command from UART.
+ * @brief Reads one command from console.
  *
  * @param command - Read command.
  *
  * @return None.
 *******************************************************************************/
-void CONSOLE_GetCommand(unsigned char* command)
+void CONSOLE_GetCommand(char* command)
 {
-    unsigned char receivedChar = 0;
-    unsigned char charNumber   = 0;
+    char receivedChar = 0;
+    char charNumber   = 0;
     
-    while(receivedChar != 0x0D)
+    while((receivedChar != '\n') && (receivedChar != '\r'))
     {
-        receivedChar = UART_Read();
+        UART_ReadChar(&receivedChar);
         command[charNumber++] = receivedChar;
     }
 }
@@ -139,67 +244,144 @@ void CONSOLE_GetCommand(unsigned char* command)
 /***************************************************************************//**
  * @brief Compares two commands and returns the type of the command.
  *
- * @param receivedCommand  - Received command.
- * @param expectedCommand  - Expected command.
- * @param commandParameter - Command parameter.
+ * @param receivedCmd - Received command.
+ * @param expectedCmd - Expected command.
+ * @param param       - Parameters' buffer.
+ * @param paramNo     - Nomber of parameters.
  *
- * @return commandType     - Type of the command.
- *                           Example: 0 - Commands don't match.
- *                                    1 - Write command.
- *                                    2 - Read command.
+ * @return cmdType    - Type of the command.
+ *                      Example: UNKNOWN_CMD - Commands don't match.
+ *                               DO_CMD      - Do command (!).
+ *                               READ_CMD    - Read command (?).
+ *                               WRITE_CMD   - Write command (=).
 *******************************************************************************/
-unsigned char CONSOLE_CheckCommands(unsigned char* receivedCommand,
-                                    const char* expectedCommand,
-                                    double* commandParameter)
+char CONSOLE_CheckCommands(char*       receivedCmd,
+                           const char* expectedCmd,
+                           double*     param,
+                           char*       paramNo)
 {
-    unsigned char commandType = 1;
-    unsigned char charIndex   = 0;
+    char cmdType         = 1;
+    char charIndex       = 0;
+    char paramString[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    char paramIndex      = 0;
+    char index           = 0;
+    const char digits[17] = "0123456789ABCDEF";
+    char digitIndex = 0;
 
-    unsigned char parameterString[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    unsigned char parameterIndex      = 0;
-
-    while((expectedCommand[charIndex] != '?') &
-          (expectedCommand[charIndex] != '=') &
-          (commandType != 0))
+    while((expectedCmd[charIndex] != '!') &&
+          (expectedCmd[charIndex] != '?') &&
+          (expectedCmd[charIndex] != '=') &&
+          (cmdType != UNKNOWN_CMD))
     {
-        if(expectedCommand[charIndex] != receivedCommand[charIndex])
+        if(expectedCmd[charIndex] != receivedCmd[charIndex])
         {
-            commandType = 0;
+            cmdType = UNKNOWN_CMD;
         }
         charIndex++;
     }
-    if(commandType != 0)
+    if(cmdType != UNKNOWN_CMD)
     {
-        if(expectedCommand[charIndex] == '=')
+        if(expectedCmd[charIndex] == '!')
         {
-            if(receivedCommand[charIndex] == '=')
+            if(receivedCmd[charIndex] == '!')
             {
-                charIndex++;
-                while(receivedCommand[charIndex] != 0x0D)
-                {
-                    parameterString[parameterIndex] = receivedCommand[charIndex];
-                    charIndex++;
-                    parameterIndex++;
-                }
-                *commandParameter = atof(parameterString);
+                cmdType = DO_CMD;
             }
             else
             {
-                commandType = 0;
+                cmdType = UNKNOWN_CMD;
             }
         }
-        if(expectedCommand[charIndex] == '?')
+        if(expectedCmd[charIndex] == '?')
         {
-            if(receivedCommand[charIndex] == '?')
+            if(receivedCmd[charIndex] == '?')
             {
-                    commandType = 2;
+                cmdType = READ_CMD;
             }
             else
             {
-                    commandType = 0;
+                cmdType = UNKNOWN_CMD;
+            }
+        }
+        if(expectedCmd[charIndex] == '=')
+        {
+            if(receivedCmd[charIndex] == '=')
+            {
+                cmdType = WRITE_CMD;
+            }
+            else
+            {
+                cmdType = UNKNOWN_CMD;
+            }
+        }
+        if((cmdType == WRITE_CMD) || (cmdType == READ_CMD))
+        {
+            charIndex++;
+            while((receivedCmd[charIndex] != '\n') &&
+                  (receivedCmd[charIndex] != '\r'))
+            {
+                if((receivedCmd[charIndex] == 0x20))
+                {
+                    *param = 0;
+                    if((paramString[0] == '0') && (paramString[1] == 'x'))
+                    {
+                        for(index = 2; index < paramIndex; index++)
+                        {
+                            for(digitIndex = 0; digitIndex < 16; digitIndex++)
+                            {
+                                if(paramString[index] == digits[digitIndex])
+                                {
+                                    *param = *param * 16;
+                                    *param = *param + digitIndex;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        *param = atof((const char*)paramString);
+                    }
+                    param++;
+                    *paramNo += 1;
+                    for(paramIndex = 0; paramIndex < 10; paramIndex++)
+                    {
+                        paramString[paramIndex] = 0;
+                    }
+                    paramIndex = 0;
+                    charIndex++;
+                }
+                else
+                {
+                    paramString[paramIndex] = receivedCmd[charIndex];
+                    charIndex++;
+                    paramIndex++;
+                }
+            }
+            if(paramIndex)
+            {
+                *param = 0;
+                if((paramString[0] == '0') && (paramString[1] == 'x'))
+                {
+                    for(index = 2; index < paramIndex; index++)
+                    {
+                        for(digitIndex = 0; digitIndex < 16; digitIndex++)
+                        {
+                            if(paramString[index] == digits[digitIndex])
+                            {
+                                *param *= 16;
+                                *param += digitIndex;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    *param = atof((const char*)paramString);
+                }
+                *paramNo += 1;
             }
         }
     }
 
-    return commandType;
+    return cmdType;
 }
