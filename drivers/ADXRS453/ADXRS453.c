@@ -3,7 +3,7 @@
  *   @brief  Implementation of ADXRS453 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -86,7 +84,7 @@ unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress)
 {
     unsigned char  dataBuffer[4] = {0, 0, 0, 0};
     unsigned long  command       = 0;
-    unsigned char  bit           = 0;
+    unsigned char  bitNo         = 0;
     unsigned char  sum           = 0;
     unsigned short registerValue = 0;
 
@@ -96,9 +94,9 @@ unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress)
               ((unsigned long)dataBuffer[1] << 16) |
               ((unsigned short)dataBuffer[2] << 8) |
               dataBuffer[3];
-    for(bit = 31; bit > 0; bit--)
+    for(bitNo = 31; bitNo > 0; bitNo--)
     {
-        sum += ((command >> bit) & 0x1);
+        sum += ((command >> bitNo) & 0x1);
     }
     if(!(sum % 2))
     {
@@ -126,7 +124,7 @@ void ADXRS453_SetRegisterValue(unsigned char registerAddress,
 {
     unsigned char dataBuffer[4] = {0, 0, 0, 0};
     unsigned long command       = 0;
-    unsigned char bit           = 0;
+    unsigned char bitNo         = 0;
     unsigned char sum           = 0;
     
     dataBuffer[0] = ADXRS453_WRITE | (registerAddress >> 7);
@@ -139,9 +137,9 @@ void ADXRS453_SetRegisterValue(unsigned char registerAddress,
               ((unsigned long)dataBuffer[1] << 16) |
               ((unsigned short)dataBuffer[2] << 8) |
               dataBuffer[3];
-    for(bit = 31; bit > 0; bit--)
+    for(bitNo = 31; bitNo > 0; bitNo--)
     {
-        sum += ((command >> bit) & 0x1);
+        sum += ((command >> bitNo) & 0x1);
     }
     if(!(sum % 2))
     {
@@ -161,7 +159,7 @@ unsigned long ADXRS453_GetSensorData(void)
 {
     unsigned char dataBuffer[4] = {0, 0, 0, 0};
     unsigned long command       = 0;
-    unsigned char bit           = 0;
+    unsigned char bitNo         = 0;
     unsigned char sum           = 0;
     unsigned long registerValue = 0;
     
@@ -170,9 +168,9 @@ unsigned long ADXRS453_GetSensorData(void)
               ((unsigned long)dataBuffer[1] << 16) |
               ((unsigned short)dataBuffer[2] << 8) |
               dataBuffer[3];
-    for(bit = 31; bit > 0; bit--)
+    for(bitNo = 31; bitNo > 0; bitNo--)
     {
-        sum += ((command >> bit) & 0x1);
+        sum += ((command >> bitNo) & 0x1);
     }
     if(!(sum % 2))
     {
@@ -195,13 +193,23 @@ unsigned long ADXRS453_GetSensorData(void)
  *
  * @return rate - The rate value in degrees/second.
 *******************************************************************************/
-short ADXRS453_GetRate(void)
+float ADXRS453_GetRate(void)
 {
     unsigned short registerValue = 0;
-    short          rate          = 0;
+    float          rate          = 0.0;
     
     registerValue = ADXRS453_GetRegisterValue(ADXRS453_REG_RATE);
-    rate = (short)registerValue / 80;
+   
+    /*!< If data received is in positive degree range */
+    if(registerValue < 0x8000)
+    {
+        rate = ((float)registerValue / 80);
+    }
+    /*!< If data received is in negative degree range */
+    else
+    {
+        rate = (-1) * ((float)(0xFFFF - registerValue + 1) / 80.0);
+    }
     
     return rate;
 }

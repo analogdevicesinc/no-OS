@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   Main.c
  *   @brief  Implementation of the program's main function.
- *   @author Mihai Bancisor(Mihai.Bancisor@analog.com)
+ *   @author Mihai Bancisor (Mihai.Bancisor@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
  *
@@ -64,7 +64,7 @@ __root const unsigned char opbyte3 = 0x85; // On-chip Debug Option Byte.
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-short adxrs453Rate        = 0;
+float adxrs453Rate        = 0;
 float adxrs453Temperature = 0;
 
 /***************************************************************************//**
@@ -117,8 +117,8 @@ void main(void)
     {
         /* Read and display the Rate data. */
         adxrs453Rate = ADXRS453_GetRate();
-        ST7579_String(3, 6, "Rate:     ", 0);
-        ST7579_Number(3, 42, adxrs453Rate, 0);
+        ST7579_String(3, 6, "Rate:        ", 0);
+        ST7579_FloatNumber(3, 42, adxrs453Rate, 2, 0);
         ST7579_String(4, 42, "deg/sec", 0);
         
         /* Read and display the Temperature data. */

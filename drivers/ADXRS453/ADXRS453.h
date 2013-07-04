@@ -3,7 +3,7 @@
  *   @brief  Header file of ADXRS453 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __ADXRS453_H__
 #define __ADXRS453_H__
@@ -80,7 +78,7 @@ void ADXRS453_SetRegisterValue(unsigned char registerAddress,
 unsigned long ADXRS453_GetSensorData(void);
 
 /*! Reads the rate data and converts it to degrees/second. */
-short ADXRS453_GetRate(void);
+float ADXRS453_GetRate(void);
 
 /*! Reads the temperature sensor data and converts it to degrees Celsius. */
 float ADXRS453_GetTemperature(void);
