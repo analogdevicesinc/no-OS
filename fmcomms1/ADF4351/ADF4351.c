@@ -104,9 +104,7 @@ int32_t adf4351_sync_config(struct adf4351_state *st,
 				break;
 			}
 
-			//st->val  = cpu_to_be32(st->regs[i] | i);
 			st->val = (st->regs[i] | i);
-			//ret = spi_write(st->spi, &st->val, 4);
 			ret = adf4351_write(st->val, channel);
 			if (ret < 0)
 				return ret;
