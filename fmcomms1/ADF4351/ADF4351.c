@@ -180,19 +180,19 @@ int64_t adf4351_set_freq(struct adf4351_state *st, uint64_t freq,
 	if ((freq > ADF4351_MAX_OUT_FREQ) || (freq < ADF4351_MIN_OUT_FREQ))
 		return -1;
 
+	st->r4_rf_div_sel = 0;
+
+	while (freq < ADF4351_MIN_VCO_FREQ) {
+		freq <<= 1;
+		st->r4_rf_div_sel++;
+	}
+
 	if (freq > ADF4351_MAX_FREQ_45_PRESC) {
 		prescaler = ADF4351_REG1_PRESCALER;
 		mdiv = 75;
 	} else {
 		prescaler = 0;
 		mdiv = 23;
-	}
-
-	st->r4_rf_div_sel = 0;
-
-	while (freq < ADF4351_MIN_VCO_FREQ) {
-		freq <<= 1;
-		st->r4_rf_div_sel++;
 	}
 
 	/*
