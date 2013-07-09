@@ -278,7 +278,7 @@ int64_t adf4351_set_freq(struct adf4351_state *st, uint64_t freq,
 		ADF4351_REG4_AUX_OUTPUT_FUND |
 		ADF4351_REG4_MUTE_TILL_LOCK_EN));
 
-	st->regs[ADF4351_REG5] = ADF4351_REG5_LD_PIN_MODE_DIGITAL;
+	st->regs[ADF4351_REG5] = ADF4351_REG5_LD_PIN_MODE_DIGITAL + 0x00180000;
 
 	ret = adf4351_sync_config(st, channel);
 	if(ret < 0)
