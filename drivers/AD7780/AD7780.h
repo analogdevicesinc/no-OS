@@ -96,6 +96,6 @@ char AD7780_WaitRdyGoLow(void);
 long AD7780_ReadSample(unsigned char* pStatus);
 
 /*! Converts the 24-bit raw value to volts. */
-float AD7780_ConvertToVoltage(long rawSample, float vRef, unsigned char gain);
+float AD7780_ConvertToVoltage(unsigned long rawSample, float vRef, unsigned char gain);
 
 #endif /* __AD7780_H__ */

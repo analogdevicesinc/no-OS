@@ -141,7 +141,7 @@ long AD7780_ReadSample(unsigned char* pStatus)
 }
 
 /***************************************************************************//**
- * @brief Converts the 24-bit raw value to volts.
+ * @brief Converts the 24-bit raw value to milivolts.
  *
  * @param rawSample - 24-bit raw sample(offset binary).
  * @param vRef      - The reference voltage.
@@ -149,11 +149,20 @@ long AD7780_ReadSample(unsigned char* pStatus)
  *
  * @return voltage  - The voltage obtained from the raw value.
 *******************************************************************************/
-float AD7780_ConvertToVoltage(long rawSample, float vRef, unsigned char gain)
+float AD7780_ConvertToVoltage(unsigned long rawSample, float vRef, unsigned char gain)
 {
     float voltage = 0;
     
-    voltage = (((float)rawSample / (1ul << 23)) - 1) * vRef / gain;
-    
+       voltage = 1000 * ((float)rawSample / (1ul << 23) - 1) * vRef / gain;
+
     return voltage;
 }
+
+
+
+
+
+
+
+
+

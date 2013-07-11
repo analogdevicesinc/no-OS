@@ -114,7 +114,7 @@ void main(void)
     }
     
     /* Display device information on LCD. */
-    ST7579_String(2, 0, "Volts:", 0);
+    ST7579_String(2, 0, "AIN:        [mV]", 0);
     ST7579_String(3, 0, "Gain:", 0);
     ST7579_String(4, 0, "Filter:", 0);
     ST7579_String(5, 0, "Conv Err:", 0);
@@ -137,8 +137,8 @@ void main(void)
         volts = AD7780_ConvertToVoltage(rawData, 3.3, 1);
 
         /* Display the voltage. */
-        ST7579_String(2, 36, "          ", 0);
-        ST7579_FloatNumber(2, 36, volts, 3, 0);
+        ST7579_String(2, 36, "      ", 0);
+        ST7579_FloatNumber(2, 24, volts, 2, 0);
         
         /* Check gain flag. */
         if(status & AD7780_STAT_GAIN)
@@ -155,13 +155,13 @@ void main(void)
         /* Check filter flag. */
         if(status & AD7780_STAT_FILTER)
         {
-            ST7579_String(4, 42, "       ", 0);
-            ST7579_String(4, 42, "10 Hz", 0);
+            ST7579_String(4, 42, "        ", 0);
+            ST7579_String(4, 42, "10[Hz]", 0);
         }
         else
         {
-            ST7579_String(4, 42, "       ", 0);
-            ST7579_String(4, 42, "16.7 Hz", 0);
+            ST7579_String(4, 42, "        ", 0);
+            ST7579_String(4, 42, "16.7[Hz]", 0);
         }
         
         /* Check for conversion error. */
