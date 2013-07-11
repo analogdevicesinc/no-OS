@@ -54,7 +54,7 @@
 /******************************************************************************/
 
 /*! Initializes the communication peripheral. */
-unsigned char AD7980_Init(void);
+char AD7980_Init(void);
 
 /*! Initiates conversion and reads data. */
 unsigned short AD7980_Conversion(void);

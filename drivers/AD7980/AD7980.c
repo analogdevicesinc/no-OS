@@ -57,7 +57,7 @@
  *                  Example: -1 - Initialization failed;
  *                            0 - Initialization succeeded.
 *******************************************************************************/
-unsigned char AD7980_Init(void)
+char AD7980_Init(void)
 {
     unsigned char status = 0;
     
