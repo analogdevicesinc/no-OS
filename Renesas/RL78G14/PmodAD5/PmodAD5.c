@@ -125,8 +125,8 @@ void main(void)
     
     while(1)
     {
-        /* Select unipolar operation and ADC's input range to +-2.5V. */
-        AD7193_RangeSetup(1, AD7193_CONF_GAIN_1);
+        /* Select bipolar operation and ADC's input range to +-2.5V. */
+        AD7193_RangeSetup(0, AD7193_CONF_GAIN_1);
 
         /* Select channel AIN1(+) - AIN2(-).*/
         AD7193_ChannelSelect(AD7193_CH_0);
@@ -135,20 +135,20 @@ void main(void)
         result = AD7193_SingleConversion();
         ST7579_String(2, 0, "CHANNEL 0:", 0);
         ST7579_String(3, 0, "RAW:          ", 0);
-        ST7579_String(4, 0, "1RD:       [V]", 0);
+        ST7579_String(4, 0, "1RD:        [mV]", 0);
         ST7579_HexNumber(3, 30, result, 0);
         
         /* The value of the voltage reference on PmodAD5 is 2.5V by default. */
         voltage = AD7193_ConvertToVolts(result, 2.5);
-        ST7579_FloatNumber(4, 30, voltage, 3, 0);
+        ST7579_FloatNumber(4, 24, voltage, 2, 0);
         
         /* Continuous reads. */
         result = AD7193_ContinuousReadAvg(10);
         voltage = AD7193_ConvertToVolts(result, 2.5);
         ST7579_String(5, 0, "RAW:        ", 0);
-        ST7579_String(6, 0, "AVG:       [V]", 0);
+        ST7579_String(6, 0, "AVG:        [mV]", 0);
         ST7579_HexNumber(5, 30, result, 0);
-        ST7579_FloatNumber(6, 30, voltage, 3, 0);    
+        ST7579_FloatNumber(6, 24, voltage, 2, 0);    
         
         /* Read the temperature. */
         degreesC = AD7193_TemperatureRead();

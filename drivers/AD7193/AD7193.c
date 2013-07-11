@@ -330,7 +330,7 @@ float AD7193_TemperatureRead(void)
 }
 
 /***************************************************************************//**
- * @brief Converts 24-bit raw data to volts.
+ * @brief Converts 24-bit raw data to milivolts.
  *
  * @param rawData  - 24-bit data sample.
  * @param vRef     - The value of the voltage reference used by the device.
@@ -343,11 +343,11 @@ float AD7193_ConvertToVolts(unsigned long rawData, float vRef)
     
     if(currentPolarity == 0 )   // Bipolar mode
     {
-        voltage = (((float)rawData / (1ul << 23)) - 1) * vRef / currentGain;
+        voltage = 1000 * (((float)rawData / (1ul << 23)) - 1) * vRef / currentGain;
     }
     else                        // Unipolar mode
     {
-        voltage = ((float)rawData * vRef) / (1ul << 24) / currentGain;
+        voltage = 1000 * ((float)rawData * vRef) / (1ul << 24) / currentGain;
     }
     
     return voltage;
