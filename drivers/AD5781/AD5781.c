@@ -173,7 +173,7 @@ long AD5781_DacOuputState(unsigned char state)
     oldCtrl = oldCtrl & ~(AD5781_CTRL_DACTRI | AD5781_CTRL_OPGND);
     /* Sets the new state provided by the user. */
     newCtrl = oldCtrl |
-              ((state << 1) & (AD5781_CTRL_DACTRI | AD5781_CTRL_OPGND));
+              ((state << 2) & (AD5781_CTRL_DACTRI | AD5781_CTRL_OPGND));
     status = AD5781_SetRegisterValue(AD5781_REG_CTRL, newCtrl);
 
     return status;
