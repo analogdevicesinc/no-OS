@@ -47,6 +47,7 @@
 #include "cf_hdmi.h"
 #include "cf_hdmi_demo.h"
 #include "xil_cache.h"
+#include "xdmaps.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -111,6 +112,48 @@ static const unsigned long detailedTiming[7][9] =
 	{148500000, 1920, 280, 44, 88, 1080, 45, 4, 5}
 };
 
+extern int XDmaPs_Instr_DMAEND(char *DmaProg);
+extern int XDmaPs_Instr_DMAMOV(char *DmaProg, unsigned Rd, u32 Imm);
+extern int XDmaPs_Instr_DMALD(char *DmaProg);
+extern int XDmaPs_Instr_DMALP(char *DmaProg, unsigned Lc, unsigned LoopIterations);
+extern int XDmaPs_Instr_DMALPEND(char *DmaProg, char *BodyStart, unsigned Lc);
+extern int XDmaPs_Instr_DMASEV(char *DmaProg, unsigned int EventNumber);
+extern int XDmaPs_Instr_DMAST(char *DmaProg);
+extern int XDmaPs_Instr_DMAWMB(char *DmaProg);
+extern u32 XDmaPs_ToCCRValue(XDmaPs_ChanCtrl *ChanCtrl);
+
+__inline int XDmaPs_Instr_DMAFLUSHP(char* DmaProg, short Periph)
+{
+	*DmaProg = 0x35;
+	*(DmaProg + 1) = Periph << 3;
+
+	return(2);
+}
+
+__inline int XDmaPs_Instr_DMAWFP(char* DmaProg, char periph, char bs, char p)
+{
+	*DmaProg = 0x30 | (bs << 1) | p;
+	*(DmaProg + 1) = periph << 3;
+
+	return(2);
+}
+
+__inline int XDmaPs_Instr_DMALDP(char* DmaProg, char periph, char bs)
+{
+	*DmaProg = 0x25 | (bs << 1);
+	*(DmaProg + 1) = periph << 3;
+
+	return(2);
+}
+
+__inline int XDmaPs_Instr_DMASTP(char* DmaProg, char periph, char bs)
+{
+	*DmaProg = 0x29 | (bs << 1);
+	*(DmaProg + 1) = periph << 3;
+
+	return(2);
+}
+
 /***************************************************************************//**
  * @brief DDRVideoWr.
 *******************************************************************************/
@@ -166,24 +209,92 @@ void DDRAudioWr(void)
 	u32 sincr = 0;
 
 	sincr = (65536*2)/AUDIO_LENGTH;
-	for (n = 0; n < 32; n++)
-	{
-		Xil_Out32((AUDIO_BASEADDR+(n*4)), 0x00); // init descriptors
-	}
-	Xil_Out32((AUDIO_BASEADDR+0x00), (AUDIO_BASEADDR + 0x40)); // next descriptor
-	Xil_Out32((AUDIO_BASEADDR+0x08), (AUDIO_BASEADDR + 0x80)); // start address
-	Xil_Out32((AUDIO_BASEADDR+0x40), (AUDIO_BASEADDR + 0x00)); // next descriptor
-	Xil_Out32((AUDIO_BASEADDR+0x48), (AUDIO_BASEADDR + 0x80)); // start address
-	Xil_Out32((AUDIO_BASEADDR+0x18), (0x8000000 | (AUDIO_LENGTH*8))); // no. of bytes
-	Xil_Out32((AUDIO_BASEADDR+0x58), (0x4000000 | (AUDIO_LENGTH*8))); // no. of bytes
-	Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
-	Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
 	for (n = 0; n < AUDIO_LENGTH; n++)
 	{
-		Xil_Out32((AUDIO_BASEADDR+0x80+(n*4)), ((scnt << 16) | scnt));
+		Xil_Out32((AUDIO_BASEADDR+(n*4)), ((scnt << 16) | scnt));
 		scnt = (n > (AUDIO_LENGTH/2)) ? (scnt-sincr) : (scnt+sincr);
 	}
 	Xil_DCacheFlush();
+}
+
+/***************************************************************************//**
+ * @brief AudioClick.
+*******************************************************************************/
+void AudioClick(void)
+{
+	static char		userDmaProgBuf[100];
+	char *			userDmaProg	= userDmaProgBuf;
+	u32 			CCRValue;
+	u32 			Status;
+	XDmaPs_Cmd		DmaCmd;
+	XDmaPs			DmaInstance;
+	XDmaPs			*DmaInst = &DmaInstance;
+	XDmaPs_Config	*DmaCfg;
+
+	memset(&DmaCmd, 0, sizeof(XDmaPs_Cmd));
+
+	DmaCmd.ChanCtrl.EndianSwapSize	= 0;
+	DmaCmd.ChanCtrl.DstCacheCtrl 	= 0;
+	DmaCmd.ChanCtrl.DstProtCtrl 	= 0;
+	DmaCmd.ChanCtrl.DstBurstLen 	= 1;
+	DmaCmd.ChanCtrl.DstBurstSize 	= 4;
+	DmaCmd.ChanCtrl.DstInc 			= 0;
+	DmaCmd.ChanCtrl.SrcCacheCtrl 	= 0;
+	DmaCmd.ChanCtrl.SrcProtCtrl 	= 0;
+	DmaCmd.ChanCtrl.SrcBurstLen 	= 1;
+	DmaCmd.ChanCtrl.SrcBurstSize 	= 4;
+	DmaCmd.ChanCtrl.SrcInc 			= 1;
+	DmaCmd.BD.SrcAddr = (u32) AUDIO_BASEADDR;
+	DmaCmd.BD.DstAddr = (u32) (CFA_BASEADDR + 0x0C);
+	DmaCmd.BD.Length = AUDIO_LENGTH * 4;
+
+	/* DMAC Program */
+
+	/* Set up for AXI burst transfer */
+	userDmaProg += XDmaPs_Instr_DMAMOV(userDmaProg, 0, AUDIO_BASEADDR);
+	userDmaProg += XDmaPs_Instr_DMAMOV(userDmaProg, 2, (u32)(CFA_BASEADDR + 0x0C));
+	CCRValue = XDmaPs_ToCCRValue(&DmaCmd.ChanCtrl);
+	userDmaProg += XDmaPs_Instr_DMAMOV(userDmaProg, 1, CCRValue);
+
+	/* Initialize peripheral */
+	userDmaProg += XDmaPs_Instr_DMAFLUSHP(userDmaProg, 0);
+
+	/* Set up loop */
+	userDmaProg += XDmaPs_Instr_DMALP(userDmaProg, 0, AUDIO_LENGTH);
+	userDmaProg += XDmaPs_Instr_DMALD(userDmaProg);
+	userDmaProg += XDmaPs_Instr_DMAST(userDmaProg);
+	userDmaProg += XDmaPs_Instr_DMALPEND(userDmaProg, userDmaProg - 2,0);
+
+	/* Flush the peripheral */
+	userDmaProg += XDmaPs_Instr_DMAFLUSHP(userDmaProg, 1);
+
+	/* Signals to  DMAC that the DMA sequence is complete */
+	userDmaProg += XDmaPs_Instr_DMAEND(userDmaProg);
+
+	DmaCmd.UserDmaProg = &userDmaProgBuf[0];
+	DmaCmd.UserDmaProgLength = (userDmaProg - &userDmaProgBuf[0]);
+
+	DmaCfg = XDmaPs_LookupConfig(ADMA_DEVICE_ID);
+	if (DmaCfg == NULL)
+	{
+		printf("XDmaPs_LookupConfig() Failed\n\r");
+	}
+
+	Status = XDmaPs_CfgInitialize(DmaInst,
+								  DmaCfg,
+								  DmaCfg->BaseAddress);
+	if (Status != XST_SUCCESS)
+	{
+		printf("XDmaPs_CfgInitialize() Failed\n\r");
+	}
+
+	DDRAudioWr();
+
+	Status = XDmaPs_Start(DmaInst, 0, &DmaCmd, 0);
+	if (Status != XST_SUCCESS)
+	{
+		printf("XDmaPs_Start() Failed\n\r");
+	}
 }
 
 /***************************************************************************//**
@@ -278,25 +389,8 @@ void SetVideoResolution(unsigned char resolution)
 *******************************************************************************/
 void InitHdmiAudioPcore(void)
 {
-	DDRAudioWr();
-
 	Xil_Out32((CFA_BASEADDR + 0x04), 0x040); // sample frequency
 	Xil_Out32((CFA_BASEADDR + 0x00), 0x103); // clock ratio, data enable & signal enable
-}
-
-/***************************************************************************//**
- * @brief AudioClick.
-*******************************************************************************/
-void AudioClick(void)
-{
-    /* Generating audio clicks. */
-    Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
-    Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
-    Xil_DCacheFlush();
-    Xil_Out32((ADMA_BASEADDR + 0x00), 0); // clear dma operations
-    Xil_Out32((ADMA_BASEADDR + 0x08), AUDIO_BASEADDR); // head descr.
-	Xil_Out32((ADMA_BASEADDR + 0x00), 1); // enable dma operations
-    Xil_Out32((ADMA_BASEADDR + 0x10), (AUDIO_BASEADDR+0x40)); // tail descr.
 }
 
 /***************************************************************************//**
