@@ -160,7 +160,7 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	HAL_PlatformInit(XPS_I2C0_BASEADDR,			/* Perform any required platform init */
+	HAL_PlatformInit(XPAR_AXI_IIC_0_BASEADDR,	/* Perform any required platform init */
 					 XPAR_SCUTIMER_DEVICE_ID,	/* including hardware reset to HDMI devices */
 					 XPAR_SCUGIC_SINGLE_DEVICE_ID,
 					 XPAR_SCUTIMER_INTR);
