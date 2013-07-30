@@ -112,47 +112,13 @@ static const unsigned long detailedTiming[7][9] =
 	{148500000, 1920, 280, 44, 88, 1080, 45, 4, 5}
 };
 
-extern int XDmaPs_Instr_DMAEND(char *DmaProg);
 extern int XDmaPs_Instr_DMAMOV(char *DmaProg, unsigned Rd, u32 Imm);
+extern int XDmaPs_Instr_DMAEND(char *DmaProg);
 extern int XDmaPs_Instr_DMALD(char *DmaProg);
 extern int XDmaPs_Instr_DMALP(char *DmaProg, unsigned Lc, unsigned LoopIterations);
-extern int XDmaPs_Instr_DMALPEND(char *DmaProg, char *BodyStart, unsigned Lc);
-extern int XDmaPs_Instr_DMASEV(char *DmaProg, unsigned int EventNumber);
 extern int XDmaPs_Instr_DMAST(char *DmaProg);
-extern int XDmaPs_Instr_DMAWMB(char *DmaProg);
+extern int XDmaPs_Instr_DMALPEND(char *DmaProg, char *BodyStart, unsigned Lc);
 extern u32 XDmaPs_ToCCRValue(XDmaPs_ChanCtrl *ChanCtrl);
-
-__inline int XDmaPs_Instr_DMAFLUSHP(char* DmaProg, short Periph)
-{
-	*DmaProg = 0x35;
-	*(DmaProg + 1) = Periph << 3;
-
-	return(2);
-}
-
-__inline int XDmaPs_Instr_DMAWFP(char* DmaProg, char periph, char bs, char p)
-{
-	*DmaProg = 0x30 | (bs << 1) | p;
-	*(DmaProg + 1) = periph << 3;
-
-	return(2);
-}
-
-__inline int XDmaPs_Instr_DMALDP(char* DmaProg, char periph, char bs)
-{
-	*DmaProg = 0x25 | (bs << 1);
-	*(DmaProg + 1) = periph << 3;
-
-	return(2);
-}
-
-__inline int XDmaPs_Instr_DMASTP(char* DmaProg, char periph, char bs)
-{
-	*DmaProg = 0x29 | (bs << 1);
-	*(DmaProg + 1) = periph << 3;
-
-	return(2);
-}
 
 /***************************************************************************//**
  * @brief DDRVideoWr.
@@ -354,17 +320,11 @@ void AudioClick(void)
 	CCRValue = XDmaPs_ToCCRValue(&DmaCmd.ChanCtrl);
 	userDmaProg += XDmaPs_Instr_DMAMOV(userDmaProg, 1, CCRValue);
 
-	/* Initialize peripheral */
-	userDmaProg += XDmaPs_Instr_DMAFLUSHP(userDmaProg, 0);
-
 	/* Set up loop */
 	userDmaProg += XDmaPs_Instr_DMALP(userDmaProg, 0, AUDIO_LENGTH);
 	userDmaProg += XDmaPs_Instr_DMALD(userDmaProg);
 	userDmaProg += XDmaPs_Instr_DMAST(userDmaProg);
 	userDmaProg += XDmaPs_Instr_DMALPEND(userDmaProg, userDmaProg - 2,0);
-
-	/* Flush the peripheral */
-	userDmaProg += XDmaPs_Instr_DMAFLUSHP(userDmaProg, 1);
 
 	/* Signals to  DMAC that the DMA sequence is complete */
 	userDmaProg += XDmaPs_Instr_DMAEND(userDmaProg);
@@ -375,7 +335,7 @@ void AudioClick(void)
 	DmaCfg = XDmaPs_LookupConfig(ADMA_DEVICE_ID);
 	if (DmaCfg == NULL)
 	{
-		printf("XDmaPs_LookupConfig() Failed\n\r");
+		xil_printf("XDmaPs_LookupConfig() Failed\n\r");
 	}
 
 	Status = XDmaPs_CfgInitialize(DmaInst,
@@ -383,7 +343,7 @@ void AudioClick(void)
 								  DmaCfg->BaseAddress);
 	if (Status != XST_SUCCESS)
 	{
-		printf("XDmaPs_CfgInitialize() Failed\n\r");
+		xil_printf("XDmaPs_CfgInitialize() Failed\n\r");
 	}
 
 	DDRAudioWr();
@@ -391,7 +351,7 @@ void AudioClick(void)
 	Status = XDmaPs_Start(DmaInst, 0, &DmaCmd, 0);
 	if (Status != XST_SUCCESS)
 	{
-		printf("XDmaPs_Start() Failed\n\r");
+		xil_printf("XDmaPs_Start() Failed\n\r");
 	}
 }
 
