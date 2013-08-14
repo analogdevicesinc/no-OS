@@ -66,7 +66,7 @@ static u32 configValue = 0;
  * @param clockPol  - SPI clock polarity (0 or 1).
  *                    Example: 0x0 - Idle state for clock is a low level; active
  *                                   state is a high level;
- *                         0x1 - Idle state for clock is a high level; active
+ *                             0x1 - Idle state for clock is a high level; active
  *                                   state is a low level.
  * @param clockEdg  - SPI clock edge (0 or 1).
  *                    Example: 0x0 - Serial output data changes on transition
@@ -90,7 +90,7 @@ char SPI_Init(unsigned char lsbFirst,
 				   (1 			<< ManualSlaveAssEn) | // Slave select output follows data in slave select register
 				   (1 			<< RxFifoReset)      | // Receive FIFO normal operation
 				   (0 			<< TxFifoReset)      | // Transmit FIFO normal operation
-				   (clockEdg	<< CHPA)             | // Data valid on first SCK edge
+				   (!clockEdg	<< CHPA)             | // Data valid on first SCK edge
 				   (clockPol    << CPOL)             | // Active high clock, SCK idles low
 				   (1 			<< Master)           | // SPI in Master configuration mode
 				   (1 			<< SPE)              | // SPI enabled
