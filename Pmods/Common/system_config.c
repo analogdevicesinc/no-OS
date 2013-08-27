@@ -218,7 +218,9 @@ void SystemConfiguration(void)
 		// I2C driver
 		if(USE_I2C == 1)
 		{
-
+			I2C_Init = &I2C_Init_axi;
+			I2C_Write = &I2C_Write_axi;
+			I2C_Read = &I2C_Read_axi;
 		}
 
 		// Timer driver
@@ -262,7 +264,9 @@ void SystemConfiguration(void)
 		// I2C driver
 		if(USE_I2C == 1)
 		{
-
+			I2C_Init = &I2C_Init_axi;
+			I2C_Write = &I2C_Write_axi;
+			I2C_Read = &I2C_Read_axi;
 		}
 
 		// Timer driver

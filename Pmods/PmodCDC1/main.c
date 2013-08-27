@@ -1,7 +1,7 @@
 /**************************************************************************//**
-*   @file   i2c_axi.h
-*   @brief  I2C header file.
-*   @author acozma (andrei.cozma@analog.com)
+*   @file   main.c
+*   @brief  main file
+*   @author ATofan (alexandru.tofan@analog.com)
 *
 *******************************************************************************
 * Copyright 2011(c) Analog Devices, Inc.
@@ -41,37 +41,25 @@
 *   SVN Revision: $WCREV$
 ******************************************************************************/
 
-#ifndef __I2C_AXI_H__
-#define __I2C_AXI_H__
+#include "ad7156.h"
+#include "system_config.h"
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include "xil_types.h"
+int main(void)
+{
+    // Configure system
+	SystemConfiguration();
 
-/*****************************************************************************/
-/******************* I2C Registers Definitions *******************************/
-/*****************************************************************************/
-#define GIE          0x01C
-#define ISR       	 0x020
-#define IER       	 0x028
-#define SOFTR      	 0x040
-#define CR      	 0x100
-#define SR      	 0x104
-#define TX_FIFO  	 0x108
-#define RX_FIFO  	 0x10C
-#define ADR       	 0x110
-#define TX_FIFO_OCY	 0x114
-#define RX_FIFO_OCY	 0x118
-#define TEN_ADDR     0x11C
-#define RX_FIFO_PIRQ 0x120
-#define GPO			 0x124
+    // Configure I2C
+	I2C_Init(I2C_BASEADDR, AD7156_I2C_ADDR);
 
-/*****************************************************************************/
-/************************ Functions Declarations *****************************/
-/*****************************************************************************/
-u32	I2C_Init_axi(u32 axiBaseAddr, u32 i2cAddr);
-u32 I2C_Read_axi(u32 axiBaseAddr, u32 i2cAddr, u32 regAddr, u32 rxSize, unsigned char* rxBuf);
-u32 I2C_Write_axi(u32 axiBaseAddr, u32 i2cAddr, u32 regAddr, u32 txSize, unsigned char* txBuf);
+    // Initialize ADXL345 specific settings
+	AD7156_Init();
 
-#endif /* __I2C_H__ */
+    // Initialize Interrupts
+	InterruptsInit();
+
+    // Run demo program
+	DemoProgram();
+
+	return(0);
+}

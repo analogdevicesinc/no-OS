@@ -784,6 +784,13 @@ void ADIExtIntrFunction(void)
 	}
 }
 
+/******************************************************************************
+* @brief Demo Program for ADXL345.
+*
+* @param None.
+*
+* @return None.
+******************************************************************************/
 void DemoProgram(void)
 {
 	// Display Main Menu

@@ -179,9 +179,11 @@ void Ps7ExtIntrEnable(void)
 {
 	/* Connect device driver handler to be called when interrupt occures */
 	XScuGic_Connect(&IntcInstance, XPS_FPGA11_INT_ID, (Xil_ExceptionHandler)Ps7ExtIntrHandler, (void *)0);
+	XScuGic_Connect(&IntcInstance, XPS_FPGA12_INT_ID, (Xil_ExceptionHandler)Ps7ExtIntrHandler, (void *)0);
 
 	/* Enable interrupts for the device */
 	XScuGic_Enable(&IntcInstance, XPS_FPGA11_INT_ID);
+	XScuGic_Enable(&IntcInstance, XPS_FPGA12_INT_ID);
 
 	/* Enable interrupts in the processor */
 	Xil_ExceptionEnable();

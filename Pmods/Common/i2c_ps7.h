@@ -48,13 +48,12 @@
 /******************* Include Files *******************************************/
 /*****************************************************************************/
 #include <stdint.h>
+#include "xparameters.h"
+#include "system_config.h"
 
-/* IIC FMC Port selection */
-#define I2C_HPC_PS7 0x20
-#define I2C_LPC_PS7 0x20
+#if(USE_PS7 == 0)
 
-/* I2C Mux address */
-#define I2C_MUX_ADDR    0x74
+#define I2C_BASEADDR				XPS_I2C1_BASEADDR
 
 /* ZYNQ Hardware I2C Registers */
 #define HW_I2C_CONTROL_REG          0x00
@@ -110,17 +109,14 @@
 // INTERRUPT ENABLE REG 0x24 - same bits as INTERRUPT STATUS REG
 // INTERRUPT DISABLE REG 0x28 - same bits as INTERRUPT STATUS REG
 
-
-
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 
-/** Initializes the communication with the Microblaze I2C peripheral */
-uint32_t I2C_Init_ps7(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux);
-/** Reads data from an I2C slave. */
-uint32_t I2C_Read_ps7(uint32_t i2cAddr, uint32_t regAddr, uint32_t rxSize, uint8_t* rxBuf);
-/** Writes data to an I2C slave. */
-uint32_t I2C_Write_ps7(uint32_t i2cAddr, uint32_t regAddr, uint32_t txSize, uint8_t* txBuf);
+uint32_t I2C_Init_ps7();
+uint32_t I2C_Read_ps7(int i2cBaseAddr, uint32_t i2cAddr, uint32_t regAddr, uint32_t rxSize, uint8_t* rxBuf);
+uint32_t I2C_Write_ps7(int i2cBaseAddr, uint32_t i2cAddr, uint32_t regAddr, uint32_t txSize, uint8_t* txBuf);
+
+#endif
 
 #endif /* __I2C_PS7_H__ */

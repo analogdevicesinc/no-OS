@@ -51,9 +51,9 @@
 // Select between PS7 or AXI Interface
 #define USE_PS7 	 1
 // SPI used in the design
-#define USE_SPI		 1
+#define USE_SPI		 0
 // I2C used in the design
-#define USE_I2C		 0
+#define USE_I2C		 1
 // Timer (+interrupts) used in the design
 #define USE_TIMER	 1
 // External interrupts used in the design
@@ -63,18 +63,23 @@
 
 #if(USE_PS7 == 1)
 	#include "spi_ps7.h"
+	#include "i2c_axi.h"
 	#include "ps7_interrupts.h"
 	#include "xscugic.h"
 	#include "xuartps.h"
 	#include "xil_exception.h"
 #else
 	#include "spi_axi.h"
+	#include "i2c_axi.h"
 	#include "axi_interrupts.h"
 #endif
 
 // Generic functions pointers
 u32 (*SPI_Init)(u32, char, char, char);
 u32 (*SPI_TransferData)(u32, char, char*, char, char*, char);
+u32	(*I2C_Init)(u32, u32);
+u32 (*I2C_Read)(u32, u32, u32, u32, unsigned char*);
+u32 (*I2C_Write)(u32, u32, u32, u32, unsigned char*);
 void (*InterruptsInit)(void);
 void (*DisableInterrupts)(int);
 void (*EnableInterrupts)(int);
@@ -93,6 +98,9 @@ void SystemConfiguration(void);
 // AXI Functions
 u32 SPI_Init_axi(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol);
 u32 SPI_TransferData_axi(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, char* rxBuf, char ssNo);
+u32	I2C_Init_axi(u32 axiBaseAddr, u32 i2cAddr);
+u32 I2C_Read_axi(u32 axiBaseAddr, u32 i2cAddr, u32 regAddr, u32 rxSize, unsigned char* rxBuf);
+u32 I2C_Write_axi(u32 axiBaseAddr, u32 i2cAddr, u32 regAddr, u32 txSize, unsigned char* txBuf);
 void AxiIntrInit(void);
 void AxiIntrEnable(int intrNr);
 void AxiIntrDisable(int intrNr);
@@ -116,6 +124,7 @@ void Ps7StopTimer(void);
 void Ps7LoadTimer(int value);
 void Ps7GpioOut(int addr, int value);
 
+// Interrupt Handlers
 void ADITimerIntrFunction(void);
 void ADIExtIntrFunction(void);
 
