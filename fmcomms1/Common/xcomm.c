@@ -485,6 +485,32 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
         {
             ver.value[idx++] = *ptr;
             ptr++;
+            if(!len)
+            {
+                ver.value[idx++] = ',';
+                ver.value[idx++] = ' ';
+            }
+        }
+    }
+
+    /* Read the BOM Revision */
+    len = *ptr & 0x3F;
+    ptr++;
+    if(*ptr == 0)
+    {
+        ptr++;
+        len--;
+        if(len)
+        {
+            ver.value[idx++] = 'B';
+            ver.value[idx++] = 'O';
+            ver.value[idx++] = 'M';
+            ver.value[idx++] = ':';
+        }
+        while(len--)
+        {
+            ver.value[idx++] = *ptr;
+            ptr++;
         }
     }
 
