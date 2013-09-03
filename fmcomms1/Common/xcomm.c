@@ -465,7 +465,7 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
         }
     }
 
-    /* Read the Board Revision */
+    /* Read the PCB Revision */
     len = *ptr & 0x3F;
     ptr += 1 + len;
     len = *ptr & 0x3F;
@@ -476,6 +476,10 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
         len--;
         if(len)
         {
+            ver.value[idx++] = 'P';
+            ver.value[idx++] = 'C';
+            ver.value[idx++] = 'B';
+            ver.value[idx++] = ' ';
             ver.value[idx++] = 'R';
             ver.value[idx++] = 'e';
             ver.value[idx++] = 'v';
@@ -496,7 +500,7 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
     /* Read the BOM Revision */
     len = *ptr & 0x3F;
     ptr++;
-    if(*ptr == 0)
+    if(*ptr == 2)
     {
         ptr++;
         len--;
@@ -505,7 +509,11 @@ XCOMM_Version XCOMM_GetBoardVersion(XCOMM_ReadMode readMode)
             ver.value[idx++] = 'B';
             ver.value[idx++] = 'O';
             ver.value[idx++] = 'M';
-            ver.value[idx++] = ':';
+            ver.value[idx++] = ' ';
+            ver.value[idx++] = 'R';
+            ver.value[idx++] = 'e';
+            ver.value[idx++] = 'v';
+            ver.value[idx++] = '.';
         }
         while(len--)
         {
