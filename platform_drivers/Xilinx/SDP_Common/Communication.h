@@ -50,10 +50,7 @@
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
 /*****************************************************************************/
-#define SPI_BASEADDR        XPAR_AXI_SPORT_0_BASEADDR
-#define I2C_BASEADDR		XPAR_AXI_IIC_0_BASEADDR
-#define GPIO_BASE_ADDR		XPAR_GPIO_0_BASEADDR
-
+#define AD5415
 /*****************************************************************************/
 /**************************** UART Definitions *******************************/
 /*****************************************************************************/
@@ -151,54 +148,125 @@
 /*****************************************************************************/
 #define GPIO_DATA		 0x00
 #define GPIO_TRI   		 0x04
-#define GPIO2_DATA  	 0x08
-#define GPIO2_TRI		 0x0C
 
 /****************************************************************************/
 /********************** GPIO macros redefinitions ***************************/
 /****************************************************************************/
-#define GPIO_SET_OUTPUT_PINS_OUT(GPIO_BASE_ADDR, cfgWord) \
+#define GPIO_SET_PINS_OUT(GPIO_BASEADDR, cfgWord) \
 { \
 	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASE_ADDR + GPIO_TRI)); \
-	Xil_Out32((GPIO_BASE_ADDR + GPIO_TRI), (currCfgWord & ~cfgWord)); \
+	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
+	Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord & ~cfgWord)); \
 }
-#define GPIO_CLEAR_BITS(GPIO_BASE_ADDR, cfgWord) \
+#define GPIO_SET_PINS_IN(GPIO_BASEADDR, cfgWord) \
 { \
 	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASE_ADDR + GPIO_DATA)); \
-	Xil_Out32((GPIO_BASE_ADDR + GPIO_DATA), currCfgWord & ~cfgWord); \
+	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
+	Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord | cfgWord)); \
 }
-#define GPIO_SET_BITS(GPIO_BASE_ADDR, cfgWord) \
+#define GPIO_CLEAR_BITS(GPIO_BASEADDR, cfgWord) \
 { \
 	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASE_ADDR + GPIO_DATA)); \
-	Xil_Out32((GPIO_BASE_ADDR + GPIO_DATA), currCfgWord | cfgWord); \
+	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
+	Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord & ~cfgWord); \
 }
+#define GPIO_SET_BITS(GPIO_BASEADDR, cfgWord) \
+{ \
+	int currCfgWord = 0; \
+	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
+	Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord | cfgWord); \
+}
+
+#ifdef AD5541A
+#define GPIO_1_MASK		0x01
+#define GPIO_2_MASK		0x04
+#define GPIO_3_MASK		0x08
+#else
+#ifdef AD5781
+#define GPIO_2_MASK		0x04
+#define GPIO_3_MASK		0x02
+#define GPIO_4_MASK		0x01
+#else
+#define GPIO_0_MASK		0x01
+#define GPIO_1_MASK		0x02
+#define GPIO_2_MASK		0x04
+#define GPIO_3_MASK		0x08
+#define GPIO_4_MASK		0x10
+#define GPIO_5_MASK		0x20
+#define GPIO_6_MASK		0x40
+#define GPIO_7_MASK		0x80
+#endif
+#endif
+
+/* GPIO[0] */
+#define GPIO0_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_0_MASK)
+#define GPIO0_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_0_MASK)
+#define GPIO0_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_0_MASK)
+#define GPIO0_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_0_MASK)
 
 /* GPIO[1] */
-#define GPIO1_PIN_OUT   GPIO_SET_OUTPUT_PINS_OUT(GPIO_BASE_ADDR, 0x02)
-#define GPIO1_LOW       GPIO_CLEAR_BITS(GPIO_BASE_ADDR, 0x02)
-#define GPIO1_HIGH      GPIO_SET_BITS(GPIO_BASE_ADDR, 0x02)
+#define GPIO1_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_1_MASK)
+#define GPIO1_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_1_MASK)
+#define GPIO1_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_1_MASK)
+#define GPIO1_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_1_MASK)
 
 /* GPIO[2] */
-#define GPIO2_PIN_OUT   GPIO_SET_OUTPUT_PINS_OUT(GPIO_BASE_ADDR, 0x10)
-#define GPIO2_LOW       GPIO_CLEAR_BITS(GPIO_BASE_ADDR, 0x10)
-#define GPIO2_HIGH      GPIO_SET_BITS(GPIO_BASE_ADDR, 0x10)
+#define GPIO2_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_2_MASK)
+#define GPIO2_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_2_MASK)
+#define GPIO2_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_2_MASK)
+#define GPIO2_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_2_MASK)
 
 /* GPIO[3] */
-#define GPIO3_PIN_OUT   GPIO_SET_OUTPUT_PINS_OUT(GPIO_BASE_ADDR, 0x08)
-#define GPIO3_LOW       GPIO_CLEAR_BITS(GPIO_BASE_ADDR, 0x08)
-#define GPIO3_HIGH      GPIO_SET_BITS(GPIO_BASE_ADDR, 0x08)
+#define GPIO3_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_3_MASK)
+#define GPIO3_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_3_MASK)
+#define GPIO3_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_3_MASK)
+#define GPIO3_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_3_MASK)
 
 /* GPIO[4] */
-#define GPIO4_PIN_OUT   GPIO_SET_OUTPUT_PINS_OUT(GPIO_BASE_ADDR, 0x40)
-#define GPIO4_LOW       GPIO_CLEAR_BITS(GPIO_BASE_ADDR, 0x40)
-#define GPIO4_HIGH      GPIO_SET_BITS(GPIO_BASE_ADDR, 0x40)
+#define GPIO4_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_4_MASK)
+#define GPIO4_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_4_MASK)
+#define GPIO4_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_4_MASK)
+#define GPIO4_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_4_MASK)
+
+/* GPIO[5] */
+#define GPIO5_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_5_MASK)
+#define GPIO5_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_5_MASK)
+#define GPIO5_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_5_MASK)
+#define GPIO5_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_5_MASK)
+
+/* GPIO[6] */
+#define GPIO6_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_6_MASK)
+#define GPIO6_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_6_MASK)
+#define GPIO6_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_6_MASK)
+#define GPIO6_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_6_MASK)
+
+/* GPIO[7] */
+#define GPIO7_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_7_MASK)
+#define GPIO7_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_7_MASK)
+#define GPIO7_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_7_MASK)
+#define GPIO7_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_7_MASK)
 
 /*****************************************************************************/
-/*************************** Functions Prototypes*****************************/
+/*************************** Types Declarations ******************************/
 /*****************************************************************************/
+typedef enum
+{
+    XILINX_KC705 = 1
+}platformBoard;
+
+/*****************************************************************************/
+/************************* Variables Declarations ****************************/
+/*****************************************************************************/
+u32 SPI_BASEADDR;
+u32 I2C_BASEADDR;
+u32 GPIO_BASEADDR;
+u32 UART_BAUDRATE;
+
+/*****************************************************************************/
+/************************* Functions Declarations ****************************/
+/*****************************************************************************/
+/*!< Initializes the selected platform. */
+char PLATFORM_Init(platformBoard);
 
 /*!< Initializes the SPI communication peripheral. */
 char SPI_Init(unsigned char lsbFirst,

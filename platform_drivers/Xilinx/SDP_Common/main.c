@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include "Console.h"
 #include "Command.h"
+#include "Communication.h"
 
 /******************************************************************************/
 /************************* Variables Definitions ******************************/
@@ -60,7 +61,8 @@ extern cmdFunction cmdFunctions[11];
 int main(void)
 {
 
-    char 		  receivedCmd[20] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    char 		  receivedCmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    								 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     								 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     unsigned char cmd			  =  0;
     double		  param[5]		  = {0, 0, 0, 0, 0};
@@ -68,8 +70,14 @@ int main(void)
     char		  cmdType		  = -1;
     char		  invalidCmd	  =  0;
 
-    /*!< Initialize the console. */
-    CONSOLE_Init(115200);
+
+    /*!< Select and initialize the platform. */
+    if (PLATFORM_Init(XILINX_KC705) < 0)
+	{
+		return -1;
+	}
+    /*!< Initialize the console with selected baud rate for the platform used. */
+    CONSOLE_Init(UART_BAUDRATE);
 	/*!< Initialize the device. */
 	DoDeviceInit();
 

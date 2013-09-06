@@ -55,6 +55,39 @@ static u32 configValue = 0;
 /******************************************************************************/
 
 /***************************************************************************//**
+ * @brief Initializes the selected platform.
+ *
+ * @return - The result of the initialization.
+ *              Example: -1 - the platform was not initialized or the specified
+ *                            platform is not present.
+ *                        0 - the platform was initialized and the specified
+ *                            platform is present.
+*******************************************************************************/
+char PLATFORM_Init(platformBoard platform)
+{
+	switch (platform )
+	{
+	 case XILINX_KC705:
+	 	SPI_BASEADDR  = XPAR_AXI_SPORT_0_BASEADDR;
+	 	I2C_BASEADDR  = XPAR_AXI_IIC_0_BASEADDR;
+	 	GPIO_BASEADDR = XPAR_GPIO_0_BASEADDR;
+	 	UART_BAUDRATE = 115200;
+	 	break;
+	 default :
+		 xil_printf("Selected platform is not supported\n");
+		return -1;
+	};
+#ifdef AD5541A
+	/* Activate DAC buffer */
+	GPIO2_PIN_OUT;
+	GPIO2_LOW;
+	/* Deactivate ADC buffer */
+	GPIO3_PIN_OUT;
+	GPIO3_HIGH;
+#endif
+	return 0;
+}
+/***************************************************************************//**
  * @brief Initializes the SPI communication peripheral.
  *
  * @param lsbFirst  - Transfer format (0 or 1).
