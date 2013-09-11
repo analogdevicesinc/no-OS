@@ -50,7 +50,19 @@
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
 /*****************************************************************************/
-#define AD5415
+/*!< Please uncomment the '#define' with the desired device name, before
+ * compilation */
+
+//#define AD5110
+//#define AD5415
+//#define AD5421
+//#define AD5425
+//#define AD5449
+//#define AD5541A
+//#define AD5781
+//#define AD5542A
+//#define AD5570
+
 /*****************************************************************************/
 /**************************** UART Definitions *******************************/
 /*****************************************************************************/
@@ -58,10 +70,10 @@
 #define UART_DEV_ID         XPAR_RS232_UART_1_DEVICE_ID
 
 /*!< UART registers*/
-#define UART_RX     		UART_BASEADDR + 0x0
-#define UART_TX     		UART_BASEADDR + 0x4
-#define UART_STAT   		UART_BASEADDR + 0x8
-#define UART_CNTRL  		UART_BASEADDR + 0xC
+#define UART_RX         UART_BASEADDR + 0x0
+#define UART_TX         UART_BASEADDR + 0x4
+#define UART_STAT       UART_BASEADDR + 0x8
+#define UART_CNTRL      UART_BASEADDR + 0xC
 
 /*!< UART Control Register */
 #define UART_RST_TX         (1 << 0x0)
@@ -82,17 +94,17 @@
 /***************************** SPI Definitions *******************************/
 /*****************************************************************************/
 /*!< Register address */
-#define SRR        		 0x40
-#define SPICR      		 0x60
-#define SPISR      		 0x64
-#define SPIDTR    		 0x68
-#define SPIDRR    		 0x6C
-#define SPISSR     		 0x70
-#define SPI_T_FIFO 		 0x74
-#define SPI_R_FIFO 		 0x78
-#define DGIER      		 0x1C
-#define IPISR      		 0x20
-#define IPIER      		 0x28
+#define SRR            0x40
+#define SPICR          0x60
+#define SPISR          0x64
+#define SPIDTR         0x68
+#define SPIDRR         0x6C
+#define SPISSR         0x70
+#define SPI_T_FIFO     0x74
+#define SPI_R_FIFO     0x78
+#define DGIER          0x1C
+#define IPISR          0x20
+#define IPIER          0x28
 
 /*!< SPI Control Register (SPICR) */
 #define LSBFirst            9
@@ -128,121 +140,121 @@
 /*****************************************************************************/
 /*********************** I2C Registers Definitions ***************************/
 /*****************************************************************************/
-#define GIE          	 0x01C
-#define ISR       		 0x020
-#define IER       		 0x028
-#define SOFTR      		 0x040
-#define CR      	 	 0x100
-#define SR      	 	 0x104
-#define TX_FIFO  		 0x108
-#define RX_FIFO  		 0x10C
-#define ADR       		 0x110
-#define TX_FIFO_OCY		 0x114
-#define RX_FIFO_OCY		 0x118
-#define TEN_ADDR    	 0x11C
-#define RX_FIFO_PIRQ 	 0x120
-#define GPO				 0x124
+#define GIE            0x01C
+#define ISR            0x020
+#define IER            0x028
+#define SOFTR          0x040
+#define CR           0x100
+#define SR           0x104
+#define TX_FIFO      0x108
+#define RX_FIFO      0x10C
+#define ADR            0x110
+#define TX_FIFO_OCY    0x114
+#define RX_FIFO_OCY    0x118
+#define TEN_ADDR       0x11C
+#define RX_FIFO_PIRQ   0x120
+#define GPO        0x124
 
 /*****************************************************************************/
 /*********************** GPIO Registers Definitions **************************/
 /*****************************************************************************/
-#define GPIO_DATA		 0x00
-#define GPIO_TRI   		 0x04
+#define GPIO_DATA    0x00
+#define GPIO_TRI       0x04
 
 /****************************************************************************/
 /********************** GPIO macros redefinitions ***************************/
 /****************************************************************************/
 #define GPIO_SET_PINS_OUT(GPIO_BASEADDR, cfgWord) \
 { \
-	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
-	Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord & ~cfgWord)); \
+  int currCfgWord = 0; \
+  currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
+  Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord & ~cfgWord)); \
 }
 #define GPIO_SET_PINS_IN(GPIO_BASEADDR, cfgWord) \
 { \
-	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
-	Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord | cfgWord)); \
+  int currCfgWord = 0; \
+  currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_TRI)); \
+  Xil_Out32((GPIO_BASEADDR + GPIO_TRI), (currCfgWord | cfgWord)); \
 }
 #define GPIO_CLEAR_BITS(GPIO_BASEADDR, cfgWord) \
 { \
-	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
-	Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord & ~cfgWord); \
+  int currCfgWord = 0; \
+  currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
+  Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord & ~cfgWord); \
 }
 #define GPIO_SET_BITS(GPIO_BASEADDR, cfgWord) \
 { \
-	int currCfgWord = 0; \
-	currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
-	Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord | cfgWord); \
+  int currCfgWord = 0; \
+  currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
+  Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord | cfgWord); \
 }
 
 #ifdef AD5541A
-#define GPIO_1_MASK		0x01
-#define GPIO_2_MASK		0x04
-#define GPIO_3_MASK		0x08
+#define GPIO_1_MASK   0x01
+#define GPIO_2_MASK   0x04
+#define GPIO_3_MASK   0x08
 #else
 #ifdef AD5781
-#define GPIO_2_MASK		0x04
-#define GPIO_3_MASK		0x02
-#define GPIO_4_MASK		0x01
+#define GPIO_2_MASK   0x04
+#define GPIO_3_MASK   0x02
+#define GPIO_4_MASK   0x01
 #else
-#define GPIO_0_MASK		0x01
-#define GPIO_1_MASK		0x02
-#define GPIO_2_MASK		0x04
-#define GPIO_3_MASK		0x08
-#define GPIO_4_MASK		0x10
-#define GPIO_5_MASK		0x20
-#define GPIO_6_MASK		0x40
-#define GPIO_7_MASK		0x80
+#define GPIO_0_MASK   0x01
+#define GPIO_1_MASK   0x02
+#define GPIO_2_MASK   0x04
+#define GPIO_3_MASK   0x08
+#define GPIO_4_MASK   0x10
+#define GPIO_5_MASK   0x20
+#define GPIO_6_MASK   0x40
+#define GPIO_7_MASK   0x80
 #endif
 #endif
 
 /* GPIO[0] */
 #define GPIO0_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_0_MASK)
-#define GPIO0_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_0_MASK)
+#define GPIO0_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_0_MASK)
 #define GPIO0_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_0_MASK)
 #define GPIO0_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_0_MASK)
 
 /* GPIO[1] */
 #define GPIO1_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_1_MASK)
-#define GPIO1_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_1_MASK)
+#define GPIO1_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_1_MASK)
 #define GPIO1_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_1_MASK)
 #define GPIO1_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_1_MASK)
 
 /* GPIO[2] */
 #define GPIO2_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_2_MASK)
-#define GPIO2_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_2_MASK)
+#define GPIO2_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_2_MASK)
 #define GPIO2_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_2_MASK)
 #define GPIO2_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_2_MASK)
 
 /* GPIO[3] */
 #define GPIO3_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_3_MASK)
-#define GPIO3_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_3_MASK)
+#define GPIO3_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_3_MASK)
 #define GPIO3_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_3_MASK)
 #define GPIO3_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_3_MASK)
 
 /* GPIO[4] */
 #define GPIO4_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_4_MASK)
-#define GPIO4_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_4_MASK)
+#define GPIO4_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_4_MASK)
 #define GPIO4_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_4_MASK)
 #define GPIO4_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_4_MASK)
 
 /* GPIO[5] */
 #define GPIO5_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_5_MASK)
-#define GPIO5_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_5_MASK)
+#define GPIO5_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_5_MASK)
 #define GPIO5_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_5_MASK)
 #define GPIO5_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_5_MASK)
 
 /* GPIO[6] */
 #define GPIO6_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_6_MASK)
-#define GPIO6_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_6_MASK)
+#define GPIO6_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_6_MASK)
 #define GPIO6_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_6_MASK)
 #define GPIO6_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_6_MASK)
 
 /* GPIO[7] */
 #define GPIO7_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_7_MASK)
-#define GPIO7_PIN_IN	GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_7_MASK)
+#define GPIO7_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_7_MASK)
 #define GPIO7_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_7_MASK)
 #define GPIO7_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_7_MASK)
 
