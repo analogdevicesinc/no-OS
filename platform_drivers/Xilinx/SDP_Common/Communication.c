@@ -85,6 +85,15 @@ char PLATFORM_Init(platformBoard platform)
 	GPIO3_PIN_OUT;
 	GPIO3_HIGH;
 #endif
+#ifdef AD5542A
+	/* Activate DAC buffer */
+	GPIO2_PIN_OUT;
+	GPIO2_LOW;
+	/* Deactivate ADC buffer */
+	GPIO3_PIN_OUT;
+	GPIO3_HIGH;
+#endif
+
 	return 0;
 }
 /***************************************************************************//**
