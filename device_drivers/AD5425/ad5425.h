@@ -62,7 +62,5 @@
 
 int AD5425_Init(void);
 void AD5425_SetRegister(unsigned char data);
-void AD5425_SetLoad(void);
-void AD5425_ResetLoad(void);
 
 #endif
