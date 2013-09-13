@@ -61,9 +61,9 @@ static uint32_t dacCoreAxiAddr;
 void DAC_Core_Init(uint32_t fmcPort)
 {
 #ifdef XPAR_AXI_DAC_4D_2C_1_BASEADDR
-	dacCoreAxiAddr = fmcPort == 0 ? XPAR_AXI_DAC_4D_2C_0_BASEADDR : XPAR_AXI_DAC_4D_2C_1_BASEADDR;
+	dacCoreAxiAddr = fmcPort == 0 ? XPAR_AXI_AD9122_0_BASEADDR : XPAR_AXI_AD9122_1_BASEADDR;
 #else
-	dacCoreAxiAddr = XPAR_AXI_DAC_4D_2C_0_BASEADDR;
+	dacCoreAxiAddr = XPAR_AXI_AD9122_0_BASEADDR;
 #endif
 }
 

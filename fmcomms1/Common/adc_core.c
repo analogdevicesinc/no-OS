@@ -61,9 +61,9 @@ static uint32_t adcCoreAxiAddr;
 void ADC_Core_Init(uint32_t fmcPort)
 {
 #ifdef XPAR_AXI_ADC_2C_1_BASEADDR
-	adcCoreAxiAddr = fmcPort == 0 ? XPAR_AXI_ADC_2C_0_BASEADDR : XPAR_AXI_ADC_2C_1_BASEADDR;
+	adcCoreAxiAddr = fmcPort == 0 ? XPAR_AXI_AD9643_0_BASEADDR : XPAR_AXI_AD9643_1_BASEADDR;
 #else
-	adcCoreAxiAddr = XPAR_AXI_ADC_2C_0_BASEADDR;
+	adcCoreAxiAddr = XPAR_AXI_AD9643_0_BASEADDR;
 #endif
 }
 

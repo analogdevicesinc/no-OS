@@ -278,13 +278,19 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 	uint32_t baddr;
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
-	Xil_Out32((baddr + 0x04), 0x1);
-	Xil_Out32((baddr + 0x08), dds_pf(0, f1, 500));
-	Xil_Out32((baddr + 0x0c), dds_pf(0, f2, 500));
-	Xil_Out32((baddr + 0x10), dds_pf(90, f1, 500));
-	Xil_Out32((baddr + 0x14), dds_pf(90, f2, 500));
-	Xil_Out32((baddr + 0x04), 0x3);
-
+	Xil_Out32((baddr + 0x4400), 0x1); // scale-1
+	Xil_Out32((baddr + 0x4404), dds_pf( 0, f1, 500)); //dds-1
+	Xil_Out32((baddr + 0x4408), 0x1); // scale-2
+	Xil_Out32((baddr + 0x440c), dds_pf( 0, f1, 500)); //dds-1
+	Xil_Out32((baddr + 0x4440), 0x1); // scale-1
+	Xil_Out32((baddr + 0x4444), dds_pf(90, f2, 500)); //dds-1
+	Xil_Out32((baddr + 0x4448), 0x1); // scale-2
+	Xil_Out32((baddr + 0x444c), dds_pf(90, f2, 500)); //dds-2
+	Xil_Out32((baddr + 0x4048), 0x10); // format, sel
+	Xil_Out32((baddr + 0x4044), 0x0); // enable
+	Xil_Out32((baddr + 0x4044), 0x1); // enable
+	Xil_Out32((baddr + 0x4050), 0x0); // enable
+	Xil_Out32((baddr + 0x4050), 0x1); // enable
 	xil_printf("dac_dds: f1(%dMHz), f2(%dMHz).\n\r", f1, f2);
 }
 
@@ -314,8 +320,9 @@ void dac_dma_setup(uint32_t sel)
 	microblaze_invalidate_dcache();
 #endif
 	xil_printf("dac_dma: buffer-count(%d).\n\r", index);
-	Xil_Out32((dac_baseaddr + 0x2c), (index/2));
-	Xil_Out32((dac_baseaddr + 0x04), 0x0);
+	Xil_Out32((dac_baseaddr + 0x4084), (index/2)); // vdma frame count
+	Xil_Out32((dac_baseaddr + 0x4048), 0x2); // format, sel
+	Xil_Out32((dac_baseaddr + 0x4044), 0x1); // enable
 	Xil_Out32((vdma_baseaddr + 0x000), 0x4); // reset
 	Xil_Out32((vdma_baseaddr + 0x000), 0x0); // reset
 	Xil_Out32((vdma_baseaddr + 0x000), 0x3); // enable circular mode
@@ -325,14 +332,11 @@ void dac_dma_setup(uint32_t sel)
 	Xil_Out32((vdma_baseaddr + 0x058), ((index/2)*4));
 	Xil_Out32((vdma_baseaddr + 0x054), ((index/2)*4));
 	Xil_Out32((vdma_baseaddr + 0x050), 2);
-	Xil_Out32((dac_baseaddr + 0x18), 0x2e715a01);
-	Xil_Out32((dac_baseaddr + 0x04), 0x0);
-	Xil_Out32((dac_baseaddr + 0x04), 0x1);
-	Xil_Out32((dac_baseaddr + 0x04), 0xf);
-	Xil_Out32((dac_baseaddr + 0x28), 0x3); // clear status
+	delay_ms(10);
+	Xil_Out32((dac_baseaddr + 0x4088), 0x3); // clear status
 	xil_printf("dac_dma: f(60MHz).\n\r");
 	delay_ms(10);
-	status = Xil_In32((dac_baseaddr + 0x28));
+	status = Xil_In32((dac_baseaddr + 0x4088));
 	if (status != 0x0)
 	{
 		xil_printf("dma_setup: status(%x)\n\r", status);
@@ -361,13 +365,11 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 	ad9122_write(0x6f, ((s1>>24) & 0xff));
 	ad9122_write(0x67, 0x00);
 	ad9122_write(0x67, 0x80);
-
-	Xil_Out32((baddr + 0x40), s0);
-	Xil_Out32((baddr + 0x44), s1);
-	Xil_Out32((baddr + 0x04), 0x11);
-	Xil_Out32((baddr + 0x04), 0x13);
+	Xil_Out32((baddr + 0x4410), s0); // pattern
+	Xil_Out32((baddr + 0x4450), s1); // pattern
+	Xil_Out32((baddr + 0x4048), 0x1); // format, sel
+	Xil_Out32((baddr + 0x4044), 0x1); // enable
 	delay_ms(10);
-
 	ad9122_write(0x67, 0xa3);
 	ad9122_write(0x07, 0x1c);
 	delay_ms(100);
@@ -414,17 +416,30 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 ******************************************************************************/
 void dac_test(uint32_t sel)
 {
+	u32 rdata;
+	u32 dac_clk_int;
+	u32 dac_clk_frac;
+	float dac_clk;
 	uint32_t baddr;
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
-
-	Xil_Out32((baddr + 0x04), 0x0);
-	Xil_Out32((baddr + 0x04), 0x1);
-	Xil_Out32((baddr + 0x20), 0x1111);
+	Xil_Out32((baddr + 0x4040), 0x3); // reset
+	delay_ms(10);
+	if (Xil_In32(baddr + 0x405c) == 0x0)
+	{
+		xil_printf("dac_setup: status NOT set!!\n\r");
+	}
+	rdata = Xil_In32(baddr + 0x4054);
+	dac_clk = (float) rdata;
+	rdata = Xil_In32(baddr + 0x4058);
+	dac_clk = dac_clk * (float) rdata * (float) 100.0;
+	dac_clk = dac_clk / (float) 65536.0;
+	dac_clk_int = (u32) dac_clk;
+	dac_clk_frac = (dac_clk - (float) dac_clk_int) * 1000;
+	xil_printf("dac_setup: dac_clock(%d.%3dMHz)\n\r", dac_clk_int, dac_clk_frac);
 
 	ad9122_write(0x16, 0x01);
 	ad9122_read(0x16);
-
 	dac_sed(sel, 0x0000aaaa, 0x00000000);
 	dac_sed(sel, 0x00005555, 0x00000000);
 	dac_sed(sel, 0xaaaa0000, 0x00000000);
@@ -482,17 +497,18 @@ void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 	Xil_Out32((baddr + 0x040), (ba+0x40)); // tail descr.
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
-	Xil_Out32((baddr + 0x008), 0x03); // channel enables
-	Xil_Out32((baddr + 0x00c), 0x0); // capture disable
-	Xil_Out32((baddr + 0x010), 0xf); // clear status
-	Xil_Out32((baddr + 0x014), 0xf); // clear status
-	Xil_Out32((baddr + 0x00c), (0x80000000 | (qwcnt-1))); // start capture
+
+	Xil_Out32((baddr + 0x084), (qwcnt*8)); // start capture
+	Xil_Out32((baddr + 0x080), 0x0); // capture disable
+	Xil_Out32((baddr + 0x080), 0x1); // capture disable
+	Xil_Out32((baddr + 0x088), 0xf); // clear status
+
 	do
 	{
 		delay_ms(1);
 	}
-	while ((Xil_In32(baddr + 0x010) & 0x1) == 1);
-	if ((Xil_In32(baddr + 0x010) & 0x02) == 0x02)
+	while ((Xil_In32(baddr + 0x088) & 0x1) == 1);
+	if (Xil_In32(baddr + 0x088) != 0x00)
 	{
 		xil_printf("adc_capture: overflow occured, data may be corrupted\n\r");
 	}
@@ -517,10 +533,34 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 	uint32_t bdata;
 	uint32_t edata;
 	uint32_t baddr;
-
-	Xil_Out32(XPAR_AXI_ADC_2C_0_BASEADDR + 0x2C, 0);
+	uint32_t adc_clk_int;
+	uint32_t adc_clk_frac;
+	float adc_clk;
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
+
+	Xil_Out32((baddr + 0x040), 0x3);
+	delay_ms(10);
+	if (Xil_In32(baddr + 0x05c) == 0x0)
+	{
+		xil_printf("adc_test: status NOT set!!\n\r");
+	}
+	if ((Xil_In32(baddr + 0x064) & 0x200) == 0x0)
+	{
+		xil_printf("adc_test: delay NOT locked!!\n\r");
+	}
+	rdata = Xil_In32(baddr + 0x054);
+	adc_clk = (float) rdata;
+	rdata = Xil_In32(baddr + 0x058);
+	adc_clk = adc_clk * (float) rdata * (float) 100.0;
+	adc_clk = adc_clk / (float) 65536.0;
+	adc_clk_int = (u32) adc_clk;
+	adc_clk_frac = (adc_clk - (float) adc_clk_int) * 1000;
+	xil_printf("adc_test: adc_clock(%d.%3dMHz)\n\r", adc_clk_int, adc_clk_frac);
+
+	Xil_Out32((baddr + 0x400), 0x1); // signextn, fmt & ch enable
+	Xil_Out32((baddr + 0x440), 0x1); // signextn, fmt & ch enable
+
 	adc_capture(sel, 16, DDR_BASEADDR);
 	delay_ms(10);
 
@@ -556,13 +596,19 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 	{
 		if (format == 0x1)
 			goto end;
-		Xil_Out32((baddr+0x24), ((mode == 0x5) ? 0x3 : 0x0));
+		Xil_Out32((baddr + 0x400), ((mode == 0x5) ? 0x2 : 0x0));
+		Xil_Out32((baddr + 0x440), ((mode == 0x5) ? 0x2 : 0x0));
 		delay_ms(10);
-		Xil_Out32((baddr+0x14), 0xff);
+		Xil_Out32((baddr + 0x404), 0xff);
+		Xil_Out32((baddr + 0x444), 0xff);
 		delay_ms(100);
-		if ((Xil_In32(baddr+0x14) & 0x3c) != 0)
+		if (Xil_In32(baddr + 0x404) != 0)
 		{
-			xil_printf("  ERROR: PN status(%02x).\n\r", Xil_In32(baddr+0x14));
+			xil_printf("  ERROR: PN status(%02x).\n\r", Xil_In32(baddr + 0x404));
+		}
+		if (Xil_In32(baddr + 0x444) != 0)
+		{
+	    	xil_printf("  ERROR: PN status(%02x).\n\r", Xil_In32(baddr + 0x444));
 		}
 		goto end;
 	}
@@ -640,5 +686,6 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 		}
 	}
 end:
-	Xil_Out32(XPAR_AXI_ADC_2C_0_BASEADDR + 0x2C, 0x02);
+	Xil_Out32((baddr + 0x400), 0x31);
+	Xil_Out32((baddr + 0x440), 0x31);
 }
