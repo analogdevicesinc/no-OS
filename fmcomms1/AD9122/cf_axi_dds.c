@@ -132,7 +132,6 @@ void cf_axi_dds_stop(struct cf_axi_dds_state *st)
  *
  * @return Returns the frequency divider and phase offset.
 *******************************************************************************/
-//static uint32_t cf_axi_dds_calc(uint32_t phase, uint32_t freq, uint32_t dac_clk)
 static int cf_axi_dds_default_setup(struct cf_axi_dds_state *st, uint32_t chan,
 		uint32_t phase, uint32_t freq, uint32_t scale)
 {
@@ -143,7 +142,7 @@ static int cf_axi_dds_default_setup(struct cf_axi_dds_state *st, uint32_t chan,
 	do_div(&val64, st->dac_clk);
 	val = ADI_DDS_INCR(val64) | 1;
 
-	val64 = (uint64_t) phase * 0xFFFFULL;
+	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
 	do_div(&val64, 360000);
 	val |= ADI_DDS_INIT(val64);
 
@@ -191,7 +190,7 @@ int32_t cf_axi_dds_read_raw(uint32_t channel,
 		return 0;
 	case IIO_CHAN_INFO_PHASE:
 		reg = dds_read(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel));
-		val64 = (uint64_t)ADI_TO_DDS_INIT(reg) * 360000ULL;
+		val64 = (uint64_t)ADI_TO_DDS_INIT(reg) * 360000ULL + (0x10000 / 2);
 		do_div(&val64, 0xFFFF);
 		*val = (int32_t)val64;
 		return 0;
@@ -356,7 +355,8 @@ int32_t  cf_axi_dds_of_probe()
 	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
 
 	DAC_Core_Write(ADI_REG_RSTN, 0x0);
-	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN);
+	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
+	DAC_Core_Write(ADI_REG_RATECNTRL, ADI_RATE(1));
 	DAC_Core_Write(ADI_REG_CNTRL_1, 0);
 #ifdef CF_AXI_DDS
 	DAC_Core_Write(ADI_REG_CNTRL_2,  ADI_DATA_SEL(DATA_SEL_DDS) | ADI_DATA_FORMAT);
