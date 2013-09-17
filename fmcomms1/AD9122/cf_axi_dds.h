@@ -50,49 +50,6 @@
 #undef CF_AXI_DDS
 #endif
 
-#ifdef CF_AXI_DDS
-/******************************************************************************/
-/************************ AD9122 AXI Core Registers ***************************/
-/******************************************************************************/
-#define CF_AXI_DDS_VERSION_ID		0x00
-#define CF_AXI_DDS_CTRL				0x04
-#define CF_AXI_DDS_1A_OUTPUT_CTRL	0x08
-#define CF_AXI_DDS_1B_OUTPUT_CTRL	0x0C
-#define CF_AXI_DDS_2A_OUTPUT_CTRL	0x10
-#define CF_AXI_DDS_2B_OUTPUT_CTRL	0x14
-#define CF_AXI_DDS_INTERPOL_CTRL	0x18
-#define CF_AXI_DDS_SCALE			0x20
-#define CF_AXI_DDS_FRAME			0x24
-#define CF_AXI_DDS_DMA_STAT			0x28
-#define CF_AXI_DDS_PAT_DATA1		0x40
-#define CF_AXI_DDS_PAT_DATA2		0x44
-#define CF_AXI_DDS_PCORE_IDENT		0x48
-
-/* CF_AXI_DDS_CTRL */
-#define CF_AXI_DDS_CTRL_PATTERN_EN		(1 << 4)
-#define CF_AXI_DDS_CTRL_INTERPOLATE		(1 << 3)
-#define CF_AXI_DDS_CTRL_DDS_SEL			(1 << 2)
-#define CF_AXI_DDS_CTRL_DATA_EN			(1 << 1)
-#define CF_AXI_DDS_CTRL_DDS_CLK_EN_V1	(1 << 8)
-#define CF_AXI_DDS_CTRL_DDS_CLK_EN_V2	(1 << 0)
-
-/* CF_AXI_DDS_FRAME */
-#define CF_AXI_DDS_FRAME_SYNC			0x1
-
-/* CF_AXI_DDS_PCORE_IDENT */
-#define CF_AXI_DDS_PCORE_IDENT_SLAVE	0x1
-
-/* CF_AXI_DDS_DMA_STAT W1C */
-#define CF_AXI_DDS_DMA_STAT_OVF			(1 << 0)
-#define CF_AXI_DDS_DMA_STAT_UNF			(1 << 1)
-
-#define AXIDDS_MAX_DMA_SIZE				(4 * 1024 * 1024) /* Randomly picked */
-
-/* debugfs direct register access */
-#define DEBUGFS_DRA_PCORE_REG_MAGIC		0x80000000
-
-#endif //CF_AXI_DDS
-
 /******************************************************************************/
 /************************ Data Types ******************************************/
 /******************************************************************************/
@@ -141,10 +98,11 @@ struct cf_axi_converter
 			 	 	 	 	 int32_t val,
 			 	 	 	 	 int32_t val2,
 			 	 	 	 	 int32_t mask);
-	void		(*pcore_set_sed_pattern)(unsigned pat1, unsigned pat2);
+	void		(*pcore_set_sed_pattern)(unsigned chan,
+										 unsigned pat1,
+										 unsigned pat2);
 	void		(*pcore_sync)();
 };
-
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

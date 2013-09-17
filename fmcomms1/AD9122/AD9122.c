@@ -294,9 +294,12 @@ int32_t ad9122_tune_dci(struct cf_axi_converter *conv)
 			ad9122_write(AD9122_REG_SED_CTRL, 0);
 
 			if(conv->pcore_set_sed_pattern)
-			conv->pcore_set_sed_pattern(
-				(dac_sed_pattern[i].i1 << 16) | dac_sed_pattern[i].i0,
-				(dac_sed_pattern[i].q1 << 16) | dac_sed_pattern[i].q0);
+			{
+				conv->pcore_set_sed_pattern(0,
+					dac_sed_pattern[i].i0, dac_sed_pattern[i].i1);
+				conv->pcore_set_sed_pattern(1,
+					dac_sed_pattern[i].q0, dac_sed_pattern[i].q1);
+			}
 
 			ad9122_write(AD9122_REG_COMPARE_I0_LSBS,
 				dac_sed_pattern[i].i0 & 0xFF);
@@ -898,9 +901,11 @@ int32_t ad9122_read_raw(uint32_t channel,
 	struct cf_axi_converter *conv = &dds_conv;
 	uint32_t rate;
 	int32_t ret;
-	uint32_t ctrl_reg;
+	uint32_t ctrl_reg_1;
+	uint32_t ctrl_reg_2;
 
-	DAC_Core_Read(CF_AXI_DDS_CTRL, &ctrl_reg);
+	DAC_Core_Read(ADI_REG_CNTRL_1, &ctrl_reg_1);
+	DAC_Core_Read(ADI_REG_CNTRL_2, &ctrl_reg_2);
 	switch (mask) {
 	case IIO_CHAN_INFO_SAMP_FREQ:
 		rate = ad9122_get_data_clk(conv);
@@ -916,7 +921,8 @@ int32_t ad9122_read_raw(uint32_t channel,
 	default:
 		return -1;
 	}
-	DAC_Core_Write(CF_AXI_DDS_CTRL, ctrl_reg);
+	DAC_Core_Write(ADI_REG_CNTRL_1, ctrl_reg_1);
+	DAC_Core_Write(ADI_REG_CNTRL_2, ctrl_reg_2);
 
 	return ret;
 }

@@ -124,7 +124,7 @@ uint32_t dds_read(struct cf_axi_dds_state* st, uint32_t reg)
 *******************************************************************************/
 void cf_axi_dds_stop(struct cf_axi_dds_state *st)
 {
-	dds_write(st, CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2);
+	dds_write(st, ADI_REG_CNTRL_1, 0);
 }
 
 /***************************************************************************//**
@@ -132,21 +132,25 @@ void cf_axi_dds_stop(struct cf_axi_dds_state *st)
  *
  * @return Returns the frequency divider and phase offset.
 *******************************************************************************/
-static uint32_t cf_axi_dds_calc(uint32_t phase, uint32_t freq, uint32_t dac_clk)
+//static uint32_t cf_axi_dds_calc(uint32_t phase, uint32_t freq, uint32_t dac_clk)
+static int cf_axi_dds_default_setup(struct cf_axi_dds_state *st, uint32_t chan,
+		uint32_t phase, uint32_t freq, uint32_t scale)
 {
-
 	uint64_t val64;
 	uint32_t val;
 
 	val64 = (uint64_t) freq * 0xFFFFULL;
-	do_div(&val64, dac_clk);
-	val = ((val64 & 0xFFFF) | 1);
+	do_div(&val64, st->dac_clk);
+	val = ADI_DDS_INCR(val64) | 1;
 
 	val64 = (uint64_t) phase * 0xFFFFULL;
 	do_div(&val64, 360000);
-	val |= val64 << 16;
+	val |= ADI_DDS_INIT(val64);
 
-	return val;
+	dds_write(st, ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
+	dds_write(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), val);
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -167,15 +171,10 @@ int32_t cf_axi_dds_read_raw(uint32_t channel,
 
 	switch (m) {
 	case 0:
-		reg = dds_read(st, CF_AXI_DDS_CTRL);
-		if (reg & CF_AXI_DDS_CTRL_DATA_EN)
-			*val = 1;
-		else
-			*val = 0;
+		*val = !!(dds_read(st, ADI_REG_CNTRL_1) & ADI_ENABLE);
 		return 0;
 	case IIO_CHAN_INFO_SCALE:
-		reg = dds_read(st, CF_AXI_DDS_SCALE);
-		reg = (reg >> (channel * 4)) & 0xF;
+		reg = ADI_TO_DDS_SCALE(dds_read(st, ADI_REG_CHAN_CNTRL_1_IIOCHAN(channel)));
 		if (!reg) {
 			*val = 1;
 			*val2 = 0;
@@ -185,14 +184,14 @@ int32_t cf_axi_dds_read_raw(uint32_t channel,
 		}
 		return 0;
 	case IIO_CHAN_INFO_FREQUENCY:
-		reg = dds_read(st, address);
-		val64 = (uint64_t)(reg & 0xFFFF) * (uint64_t)st->dac_clk;
+		reg = dds_read(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel));
+		val64 = (uint64_t)ADI_TO_DDS_INCR(reg) * (uint64_t)st->dac_clk;
 		do_div(&val64, 0xFFFF);
 		*val = (int32_t)val64;
 		return 0;
 	case IIO_CHAN_INFO_PHASE:
-		reg = dds_read(st, address);
-		val64 = (uint64_t)(reg >> 16) * 360000ULL;
+		reg = dds_read(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel));
+		val64 = (uint64_t)ADI_TO_DDS_INIT(reg) * 360000ULL;
 		do_div(&val64, 0xFFFF);
 		*val = (int32_t)val64;
 		return 0;
@@ -224,17 +223,14 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 	uint32_t reg, ctrl_reg;
 	int32_t i;
 
-	ctrl_reg = dds_read(st, CF_AXI_DDS_CTRL);
-
+	ctrl_reg = dds_read(st, ADI_REG_CNTRL_1);
 	switch (mask) {
 	case 0:
-
 		if (val)
-			ctrl_reg |= (CF_AXI_DDS_CTRL_DATA_EN |
-					CF_AXI_DDS_CTRL_DDS_CLK_EN_V2);
+		  ctrl_reg |= ADI_ENABLE;
 		else
-			ctrl_reg &= ~(CF_AXI_DDS_CTRL_DATA_EN);
-		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
+		  ctrl_reg &= ~ADI_ENABLE;
+		dds_write(st, ADI_REG_CNTRL_1, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_SCALE:
 		if (val == 1) {
@@ -245,47 +241,41 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 					break;
 		}
 		cf_axi_dds_stop(st);
-		reg = dds_read(st, CF_AXI_DDS_SCALE);
-
-		reg &= ~(0xF << (channel * 4));
-		reg |= (i << (channel * 4));
-		dds_write(st, CF_AXI_DDS_SCALE, reg);
-		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
+		dds_write(st, ADI_REG_CHAN_CNTRL_1_IIOCHAN(channel), ADI_DDS_SCALE(i));
+		dds_write(st, ADI_REG_CNTRL_1, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_FREQUENCY:
 		if (val > (int32_t)(st->dac_clk / 2))
 			return -1;
 		cf_axi_dds_stop(st);
-		reg = dds_read(st, address);
-		reg &= 0xFFFF0000;
+		reg = dds_read(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel));
+		reg &= ~ADI_DDS_INCR(~0);
 		val64 = (uint64_t) val * 0xFFFFULL;
 		do_div(&val64, st->dac_clk);
-		reg |= (val64 & 0xFFFF) | 1;
-		dds_write(st, address, reg);
-		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
+		reg |= ADI_DDS_INCR(val64) | 1;
+		dds_write(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel), reg);
+		dds_write(st, ADI_REG_CNTRL_1, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_PHASE:
 		if (val < 0 || val > 360000)
 			return -1;
 		cf_axi_dds_stop(st);
-		reg = dds_read(st, address);
-		reg &= 0x0000FFFF;
+		reg = dds_read(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel));
+		reg &= ~ADI_DDS_INIT(~0);
 		val64 = (uint64_t) val * 0xFFFFULL;
 		do_div(&val64, 360000);
-		reg |= val64 << 16;
-		dds_write(st, address, reg);
-		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
+		reg |= ADI_DDS_INIT(val64);
+		dds_write(st, ADI_REG_CHAN_CNTRL_2_IIOCHAN(channel), reg);
+		dds_write(st, ADI_REG_CNTRL_1, ctrl_reg);
 		break;
 	case IIO_CHAN_INFO_SAMP_FREQ:
 		if (!conv->write_raw)
 			return -1;
-
 		cf_axi_dds_stop(st);
 		conv->write_raw(channel, val, val2, mask);
 		st->dac_clk = conv->get_data_clk(conv);
-		dds_write(st, CF_AXI_DDS_CTRL, ctrl_reg);
+		dds_write(st, ADI_REG_CNTRL_1, ctrl_reg);
 		cf_axi_dds_sync_frame();
-
 		break;
 	default:
 		return -1;
@@ -293,7 +283,6 @@ int32_t cf_axi_dds_write_raw(uint32_t channel,
 
 	return 0;
 }
-
 #endif //CF_AXI_DDS
 
 /***************************************************************************//**
@@ -309,8 +298,8 @@ void cf_axi_dds_sync_frame()
 
 	mdelay(10); /* Wait until clocks are stable */
 
-	DAC_Core_Write(CF_AXI_DDS_FRAME, 0);
-	DAC_Core_Write(CF_AXI_DDS_FRAME, CF_AXI_DDS_FRAME_SYNC);
+	DAC_Core_Write(ADI_REG_FRAME, 0);
+	DAC_Core_Write(ADI_REG_FRAME, ADI_FRAME);
 
 	/* Check FIFO status */
 	stat = conv->get_fifo_status(conv);
@@ -333,16 +322,22 @@ void cf_axi_dds_sync_frame()
  *
  * @return None.
 *******************************************************************************/
-static void cf_axi_dds_set_sed_pattern(unsigned pat1, unsigned pat2)
+static void cf_axi_dds_set_sed_pattern(unsigned chan,
+									   unsigned pat1,
+									   unsigned pat2)
 {
-	DAC_Core_Write(CF_AXI_DDS_PAT_DATA1, pat1);
-	DAC_Core_Write(CF_AXI_DDS_PAT_DATA2, pat2);
+	uint32_t ctrl;
 
-	DAC_Core_Write(CF_AXI_DDS_CTRL, 0);
-	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-		 CF_AXI_DDS_CTRL_PATTERN_EN);
-	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DDS_CLK_EN_V2 |
-		 CF_AXI_DDS_CTRL_PATTERN_EN | CF_AXI_DDS_CTRL_DATA_EN);
+	DAC_Core_Write(ADI_REG_CHAN_CNTRL_5(chan),
+			ADI_TO_DDS_PATT_1(pat1) | ADI_DDS_PATT_2(pat2));
+
+	DAC_Core_Write(ADI_REG_CNTRL_1, 0);
+
+	DAC_Core_Read(ADI_REG_CNTRL_2, &ctrl);
+	ctrl &= ~ADI_DATA_SEL(~0);
+	DAC_Core_Write(ADI_REG_CNTRL_2, ctrl | ADI_DATA_SEL(DATA_SEL_SED) | ADI_DATA_FORMAT);
+
+	DAC_Core_Write(ADI_REG_CNTRL_1, ADI_ENABLE);
 }
 
 /***************************************************************************//**
@@ -360,25 +355,18 @@ int32_t  cf_axi_dds_of_probe()
 	conv->pcore_sync = cf_axi_dds_sync_frame;
 	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
 
+	DAC_Core_Write(ADI_REG_RSTN, 0x0);
+	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN);
+	DAC_Core_Write(ADI_REG_CNTRL_1, 0);
 #ifdef CF_AXI_DDS
-	st->dac_clk = conv->get_data_clk(conv);
-	DAC_Core_Write(CF_AXI_DDS_INTERPOL_CTRL, 0x2aaa5555); /* Lin. Interp. */
-#endif
+	DAC_Core_Write(ADI_REG_CNTRL_2,  ADI_DATA_SEL(DATA_SEL_DDS) | ADI_DATA_FORMAT);
+	cf_axi_dds_default_setup(st, 0, 90000, 40000000, 2);
+	cf_axi_dds_default_setup(st, 1, 90000, 40000000, 2);
 
-	DAC_Core_Write(CF_AXI_DDS_CTRL, 0x0);
-#ifdef CF_AXI_DDS
-	DAC_Core_Write(CF_AXI_DDS_SCALE, 0x1111); /* divide by 4 */
-	DAC_Core_Write(CF_AXI_DDS_1A_OUTPUT_CTRL,
-		  cf_axi_dds_calc(90000, 40000000, st->dac_clk));
-	DAC_Core_Write(CF_AXI_DDS_1B_OUTPUT_CTRL,
-		  cf_axi_dds_calc(90000, 40000000, st->dac_clk));
-	DAC_Core_Write(CF_AXI_DDS_2A_OUTPUT_CTRL,
-		  cf_axi_dds_calc(0, 40000000, st->dac_clk));
-	DAC_Core_Write(CF_AXI_DDS_2B_OUTPUT_CTRL,
-		  cf_axi_dds_calc(0, 40000000, st->dac_clk));
+	cf_axi_dds_default_setup(st, 2, 0, 40000000, 2);
+	cf_axi_dds_default_setup(st, 3, 0, 40000000, 2);
 #endif
-	DAC_Core_Write(CF_AXI_DDS_CTRL, CF_AXI_DDS_CTRL_DATA_EN |
-		  CF_AXI_DDS_CTRL_DDS_CLK_EN_V2); /* clk, dds enable & ddsx select */
+	DAC_Core_Write(ADI_REG_CNTRL_1, ADI_ENABLE);
 
 	cf_axi_dds_sync_frame();
 
