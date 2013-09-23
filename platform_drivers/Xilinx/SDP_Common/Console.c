@@ -107,7 +107,7 @@ void CONSOLE_Print(char* str, ...)
     long          longArg;
     double        doubleArg;
     va_list       argp;
-    
+
     va_start(argp, str);
     for(stringPtr = str; *stringPtr != '\0'; stringPtr++)
     {
@@ -339,7 +339,15 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                     }
                     else
                     {
-                        *param = atof((const char*)paramString);
+                    	if(paramString[0] == '-')
+                    	{
+                    		*param = atof((const char*)(&paramString[1]));
+                    		*param *= (-1);
+                    	}
+                    	else
+                    	{
+                    		*param = atof((const char*)paramString);
+                    	}
                     }
                     param++;
                     *paramNo += 1;
@@ -376,7 +384,15 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                 }
                 else
                 {
-                    *param = atof((const char*)paramString);
+                	if(paramString[0] == '-')
+                	{
+                		*param = atof((const char*)(&paramString[1]));
+                		*param *= (-1);
+                	}
+                	else
+                	{
+                		*param = atof((const char*)paramString);
+                	}
                 }
                 *paramNo += 1;
             }
