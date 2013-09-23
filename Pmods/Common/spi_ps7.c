@@ -136,6 +136,8 @@ u32 SPI_TransferData_ps7(u32 hwBaseAddr, char txSize, char* txBuf, char rxSize, 
     u32 SPIStatus 	= 0;
     u32 rxCnt 		= 0;
     u32 txCnt 		= 0;
+    u32 flushCnt	= 0;
+    u32 flush		= 0;
 
     // Get the configuration of the SPI core
     for(i = 0; i < sizeof(hwSpiConfig) / sizeof(stHwSpiConfig); i++)
@@ -198,6 +200,12 @@ u32 SPI_TransferData_ps7(u32 hwBaseAddr, char txSize, char* txBuf, char rxSize, 
 	{
 		rxBuf[rxCnt] = Xil_In32(hwBaseAddr + HW_SPI_RXDATA_REG);
 		rxCnt++;
+	}
+
+	while(flushCnt < txSize - rxSize)
+	{
+		flush = Xil_In32(hwBaseAddr + HW_SPI_RXDATA_REG);
+		flushCnt++;
 	}
 
 	// Disable SPI
