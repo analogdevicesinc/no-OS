@@ -1,0 +1,13 @@
+##############################################################################
+## Filename:          D:/AD/AnalogSVN/xilinx/cf_adv7x11/pcores/axi_spdif_tx_v1_00_a/data/axi_spdif_tx_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Wed Dec 14 09:56:11 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib axi_spdif_tx_v1_00_a axi_spdif_tx vhdl
+lib axi_spdif_tx_v1_00_a tx_package vhdl
+lib axi_spdif_tx_v1_00_a tx_encoder vhdl
+lib adi_common_v1_00_a axi_ctrlif vhdl
+lib adi_common_v1_00_a axi_streaming_dma_tx_fifo vhdl
+lib adi_common_v1_00_a pl330_dma_fifo vhdl
+lib adi_common_v1_00_a dma_fifo vhdl

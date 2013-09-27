@@ -1,0 +1,103 @@
+
+NET hdmi_clk        LOC = W18  | IOSTANDARD = LVCMOS33;
+NET hdmi_vsync      LOC = W17  | IOSTANDARD = LVCMOS33;
+NET hdmi_hsync      LOC = V17  | IOSTANDARD = LVCMOS33;
+NET hdmi_data_e     LOC = U16  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[0]    LOC = Y13  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[1]    LOC = AA13 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[2]    LOC = AA14 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[3]    LOC = Y14  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[4]    LOC = AB15 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[5]    LOC = AB16 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[6]    LOC = AA16 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[7]    LOC = AB17 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[8]    LOC = AA17 | IOSTANDARD = LVCMOS33;
+NET hdmi_data[9]    LOC = Y15  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[10]   LOC = W13  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[11]   LOC = W15  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[12]   LOC = V15  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[13]   LOC = U17  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[14]   LOC = V14  | IOSTANDARD = LVCMOS33;
+NET hdmi_data[15]   LOC = V13  | IOSTANDARD = LVCMOS33;
+NET hdmi_spdif      LOC = U15  | IOSTANDARD = LVCMOS33;
+NET hdmi_int        LOC = W16  | IOSTANDARD = LVCMOS33;
+
+NET util_i2c_mixer_0_downstream_scl_pin[0] LOC = AA18 | IOSTANDARD="LVCMOS33";
+NET util_i2c_mixer_0_downstream_sda_pin[0] LOC = Y16  | IOSTANDARD="LVCMOS33";
+NET util_i2c_mixer_0_downstream_scl_pin[1] LOC = "AB4" | IOSTANDARD = "LVCMOS33"; # AC-SCK
+NET util_i2c_mixer_0_downstream_sda_pin[1] LOC = "AB5" | IOSTANDARD = "LVCMOS33"; # AC-SDA
+
+NET axi_i2s_adi_0_BCLK_O_pin LOC = "AA6" | IOSTANDARD = "LVCMOS33"; # AC-GPIO2
+NET axi_i2s_adi_0_LRCLK_O_pin LOC = "Y6" | IOSTANDARD = "LVCMOS33"; # AC-GPIO3
+NET axi_i2s_adi_0_SDATA_I_pin LOC = "AA7" | IOSTANDARD = "LVCMOS33"; # AC-GPIO1 AA7
+NET axi_i2s_adi_0_SDATA_O_pin LOC = "Y8" | IOSTANDARD = "LVCMOS33"; # AC-GPIO0 Y8
+NET axi_i2s_adi_0_MCLK_pin LOC = "AB2" | IOSTANDARD = "LVCMOS33"; # AC-MCLK
+
+NET otg_reset         LOC = G17  | IOSTANDARD="LVCMOS25";
+NET otg_vbusoc         LOC = L16  | IOSTANDARD="LVCMOS25";
+
+#NET pmod_ja1       LOC = Y11  | IOSTANDARD="LVCMOS25";
+#NET pmod_ja2       LOC = AA11 | IOSTANDARD="LVCMOS25";
+#NET pmod_ja3       LOC = Y10  | IOSTANDARD="LVCMOS25";
+#NET pmod_ja4       LOC = AA9  | IOSTANDARD="LVCMOS25";
+#NET pmod_ja7       LOC = AB11 | IOSTANDARD="LVCMOS25";
+#NET pmod_ja8       LOC = AB10 | IOSTANDARD="LVCMOS25";
+#NET pmod_ja9       LOC = AB9  | IOSTANDARD="LVCMOS25";
+#NET pmod_ja10      LOC = AA8  | IOSTANDARD="LVCMOS25";
+
+NET processing_system7_0_SPI0_SS_O_pin		LOC = Y11  | IOSTANDARD = "LVCMOS33";	# JA1
+NET processing_system7_0_SPI0_MOSI_O_pin	LOC = AA11 | IOSTANDARD = "LVCMOS33";	# JA2
+NET processing_system7_0_SPI0_MISO_I_pin	LOC = Y10  | IOSTANDARD = "LVCMOS33";	# JA3
+NET processing_system7_0_SPI0_SCLK_O_pin	LOC = AA9  | IOSTANDARD = "LVCMOS33";	# JA4
+NET int_1_pin		LOC = AB11 | IOSTANDARD = "LVCMOS33";	# JA7
+NET int_2_pin		LOC = AB10 | IOSTANDARD = "LVCMOS33";	# JA8
+
+NET processing_system7_0_SPI1_SS_O_pin		LOC = W12  | IOSTANDARD = "LVCMOS33";	# JB1
+NET processing_system7_0_SPI1_MOSI_O_pin	LOC = W11  | IOSTANDARD = "LVCMOS33";	# JB2
+NET processing_system7_0_SPI1_MISO_I_pin	LOC = V10  | IOSTANDARD = "LVCMOS33";	# JB3
+NET processing_system7_0_SPI1_SCLK_O_pin	LOC = W8   | IOSTANDARD = "LVCMOS33";	# JB4
+NET int_3_pin		LOC = V12  | IOSTANDARD = "LVCMOS33";	# JB7
+NET int_4_pin		LOC = W10  | IOSTANDARD = "LVCMOS33";	# JB8
+
+NET axi_iic_1_Scl_pin   LOC = AB7  | IOSTANDARD = "LVCMOS33" | PULLUP;	# JC1_P
+NET axi_iic_1_Sda_pin   LOC = AB6  | IOSTANDARD = "LVCMOS33" | PULLUP;	# JC1_N
+
+NET axi_ad7980_0_adc_cnv_o_pin  LOC = W7 | IOSTANDARD = "LVCMOS33"; # JD2
+NET axi_ad7980_0_adc_sdo_i_pin  LOC = V5 | IOSTANDARD = "LVCMOS33"; # JD3
+NET axi_ad7980_0_adc_sclk_o_pin LOC = V4 | IOSTANDARD = "LVCMOS33"; # JD4
+
+
+NET processing_system7_0_GPIO_pin[0]	LOC = P16  | IOSTANDARD="LVCMOS25";  # "BTNC"
+NET processing_system7_0_GPIO_pin[1]	LOC = R16  | IOSTANDARD="LVCMOS25";  # "BTND"
+NET processing_system7_0_GPIO_pin[2]	LOC = N15  | IOSTANDARD="LVCMOS25";  # "BTNL"
+NET processing_system7_0_GPIO_pin[3]	LOC = R18  | IOSTANDARD="LVCMOS25";  # "BTNR"
+NET processing_system7_0_GPIO_pin[4]	LOC = T18  | IOSTANDARD="LVCMOS25";  # "BTNU"
+NET processing_system7_0_GPIO_pin[5]	LOC = U10  | IOSTANDARD="LVCMOS33";  # "OLED-DC"
+NET processing_system7_0_GPIO_pin[6]	LOC = U9   | IOSTANDARD="LVCMOS33";  # "OLED-RES"
+NET processing_system7_0_GPIO_pin[7]	LOC = AB12 | IOSTANDARD="LVCMOS33";  # "OLED-SCLK"
+NET processing_system7_0_GPIO_pin[8]	LOC = AA12 | IOSTANDARD="LVCMOS33";  # "OLED-SDIN"
+NET processing_system7_0_GPIO_pin[9]	LOC = U11  | IOSTANDARD="LVCMOS33";  # "OLED-VBAT"
+NET processing_system7_0_GPIO_pin[10]	LOC = U12  | IOSTANDARD="LVCMOS33";  # "OLED-VDD"
+
+NET processing_system7_0_GPIO_pin[11]	LOC = F22  | IOSTANDARD="LVCMOS25";  # "SW0"
+NET processing_system7_0_GPIO_pin[12]	LOC = G22  | IOSTANDARD="LVCMOS25";  # "SW1"
+NET processing_system7_0_GPIO_pin[13]	LOC = H22  | IOSTANDARD="LVCMOS25";  # "SW2"
+NET processing_system7_0_GPIO_pin[14]	LOC = F21  | IOSTANDARD="LVCMOS25";  # "SW3"
+NET processing_system7_0_GPIO_pin[15]	LOC = H19  | IOSTANDARD="LVCMOS25";  # "SW4"
+NET processing_system7_0_GPIO_pin[16]	LOC = H18  | IOSTANDARD="LVCMOS25";  # "SW5"
+NET processing_system7_0_GPIO_pin[17]	LOC = H17  | IOSTANDARD="LVCMOS25";  # "SW6"
+NET processing_system7_0_GPIO_pin[18]	LOC = M15  | IOSTANDARD="LVCMOS25";  # "SW7"
+
+NET processing_system7_0_GPIO_pin[19]	LOC = T22  | IOSTANDARD="LVCMOS33";  # "LD0"
+NET processing_system7_0_GPIO_pin[20]	LOC = T21  | IOSTANDARD="LVCMOS33";  # "LD1"
+NET processing_system7_0_GPIO_pin[21]	LOC = U22  | IOSTANDARD="LVCMOS33";  # "LD2"
+NET processing_system7_0_GPIO_pin[22]	LOC = U21  | IOSTANDARD="LVCMOS33";  # "LD3"
+NET processing_system7_0_GPIO_pin[23]	LOC = V22  | IOSTANDARD="LVCMOS33";  # "LD4"
+NET processing_system7_0_GPIO_pin[24]	LOC = W22  | IOSTANDARD="LVCMOS33";  # "LD5"
+NET processing_system7_0_GPIO_pin[25]	LOC = U19  | IOSTANDARD="LVCMOS33";  # "LD6"
+NET processing_system7_0_GPIO_pin[26]	LOC = U14  | IOSTANDARD="LVCMOS33";  # "LD7"
+
+NET processing_system7_0_GPIO_pin[27]	LOC = H15  | IOSTANDARD="LVCMOS25";  # "XADC-GIO0"
+NET processing_system7_0_GPIO_pin[28]	LOC = R15  | IOSTANDARD="LVCMOS25";  # "XADC-GIO1"
+NET processing_system7_0_GPIO_pin[29]	LOC = K15  | IOSTANDARD="LVCMOS25";  # "XADC-GIO2"
+NET processing_system7_0_GPIO_pin[30]	LOC = J15  | IOSTANDARD="LVCMOS25";  # "XADC-GIO3"

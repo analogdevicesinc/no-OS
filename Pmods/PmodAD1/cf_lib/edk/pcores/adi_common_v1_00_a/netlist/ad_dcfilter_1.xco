@@ -1,0 +1,120 @@
+##############################################################
+#
+# Xilinx Core Generator version 14.4
+# Date: Thu May 30 18:08:20 2013
+#
+##############################################################
+#
+#  This file contains the customisation parameters for a
+#  Xilinx CORE Generator IP GUI. It is strongly recommended
+#  that you do not manually alter this file as it may cause
+#  unexpected and unsupported behavior.
+#
+##############################################################
+#
+#  Generated from component: xilinx.com:ip:xbip_dsp48_macro:2.0
+#
+##############################################################
+#
+# BEGIN Project Options
+SET addpads = false
+SET asysymbol = true
+SET busformat = BusFormatAngleBracketNotRipped
+SET createndf = false
+SET designentry = Verilog
+SET device = xc6vlx240t
+SET devicefamily = virtex6
+SET flowvendor = Other
+SET formalverification = false
+SET foundationsym = false
+SET implementationfiletype = Ngc
+SET package = ff1156
+SET removerpms = false
+SET simulationfiles = Behavioral
+SET speedgrade = -1
+SET verilogsim = true
+SET vhdlsim = false
+# END Project Options
+# BEGIN Select
+SELECT DSP48_macro family Xilinx,_Inc. 2.0
+# END Select
+# BEGIN Parameters
+CSET a_binarywidth=0
+CSET a_width=16
+CSET areg_1=false
+CSET areg_2=false
+CSET areg_3=true
+CSET areg_4=true
+CSET b_binarywidth=0
+CSET b_width=16
+CSET breg_1=false
+CSET breg_2=false
+CSET breg_3=false
+CSET breg_4=true
+CSET c_binarywidth=0
+CSET c_width=16
+CSET cinreg_1=false
+CSET cinreg_2=false
+CSET cinreg_3=false
+CSET cinreg_4=false
+CSET cinreg_5=false
+CSET component_name=ad_dcfilter_1
+CSET concat_binarywidth=0
+CSET concat_width=48
+CSET concatreg_3=false
+CSET concatreg_4=false
+CSET concatreg_5=false
+CSET creg_1=false
+CSET creg_2=false
+CSET creg_3=true
+CSET creg_4=true
+CSET creg_5=true
+CSET d_binarywidth=0
+CSET d_width=16
+CSET dreg_1=false
+CSET dreg_2=false
+CSET dreg_3=false
+CSET gui_behaviour=Coregen
+CSET has_acout=false
+CSET has_bcout=false
+CSET has_carrycascout=false
+CSET has_carryout=false
+CSET has_ce=false
+CSET has_pcout=false
+CSET has_sclr=false
+CSET instruction1=(D-A)*B+C
+CSET instruction2=#
+CSET instruction3=#
+CSET instruction4=#
+CSET instruction5=#
+CSET instruction6=#
+CSET instruction7=#
+CSET instruction8=#
+CSET instruction_list=#
+CSET mreg_5=true
+CSET opreg_1=false
+CSET opreg_2=false
+CSET opreg_3=false
+CSET opreg_4=false
+CSET opreg_5=false
+CSET output_properties=Full_Precision
+CSET p_binarywidth=0
+CSET p_full_width=33
+CSET p_width=33
+CSET pcin_binarywidth=0
+CSET pipeline_options=Expert
+CSET preg_6=false
+CSET show_filtered=false
+CSET tier_1=false
+CSET tier_2=false
+CSET tier_3=false
+CSET tier_4=false
+CSET tier_5=false
+CSET tier_6=false
+CSET use_dsp48=true
+# END Parameters
+# BEGIN Extra information
+MISC pkg_timestamp=2012-12-18T05:23:34Z
+# END Extra information
+GENERATE
+# CRC: 5b5fb18d

@@ -169,7 +169,7 @@ void Ps7TimerIntrHandler(void)
 }
 
 /******************************************************************************
-* @brief Enable Timer Interrupts
+* @brief Enable External Interrupts
 *
 * @param None.
 *

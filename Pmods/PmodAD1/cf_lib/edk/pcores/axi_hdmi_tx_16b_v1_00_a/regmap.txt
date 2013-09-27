@@ -1,0 +1,109 @@
+// ***************************************************************************
+// ***************************************************************************
+// Copyright 2011(c) Analog Devices, Inc.
+// 
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//     - Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     - Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in
+//       the documentation and/or other materials provided with the
+//       distribution.
+//     - Neither the name of Analog Devices, Inc. nor the names of its
+//       contributors may be used to endorse or promote products derived
+//       from this software without specific prior written permission.
+//     - The use of this software may or may not infringe the patent rights
+//       of one or more patent holders.  This license does not release you
+//       from the requirement that you obtain separate licenses from these
+//       patent holders to use this software.
+//     - Use of the software either in source or binary form, must be run
+//       on or directly connected to an Analog Devices Inc. component.
+//    
+// THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+// INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A
+// PARTICULAR PURPOSE ARE DISCLAIMED.
+//
+// IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, INTELLECTUAL PROPERTY
+// RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR 
+// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF 
+// THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// ***************************************************************************
+// ***************************************************************************
+// ***************************************************************************
+// ***************************************************************************
+// REGISTER MAP
+// ***************************************************************************
+// ***************************************************************************
+// ---------------------------------------------------------------------------
+// Address
+// QW     Byte   Bits     Description
+// ---------------------------------------------------------------------------
+// 0x00   0x00   [31: 0]  version[31:0]         32'h00010061  (1.0a)
+// ---------------------------------------------------------------------------
+// 0x01   0x04   [ 3: 3]  crcb_init             Enable (0x1) Cb first for sub/super sampling
+//               [ 2: 2]  tpg_enable            Enable (0x1) test pattern video
+//               [ 1: 1]  csc_bypass            Bypass the CSC
+//               [ 0: 0]  enable                Video output enable (0->1).
+// ---------------------------------------------------------------------------
+// 0x02   0x08   [31:16]  hsync_width           HSYNC width (see below)
+//               [15: 0]  hsync_count           HSYNC count (see below)
+// ---------------------------------------------------------------------------
+// 0x03   0x0c   [31:16]  hsync_de_min          HSYNC DE minimum (see below)
+//               [15: 0]  hsync_de_max          HSYNC DE maximum (see below)
+// ---------------------------------------------------------------------------
+// The HSYNC parameters above are based on pixel clocks.
+//
+//              ___________                                                ___
+// HSYNC ______|           |______________________________________________|
+//             '           '                                              '
+//             '           '          ________________________________    '
+// DE    ______'___________'_________|                                |___'______
+//             '           '         '                                '   '
+//             |<- width ->|         '                                '   '
+//             |<- count ------------'--------------------------------'-->|
+//             |<- de-minimum ------>|                                '           '
+//             |<- de-maximum --------------------------------------->|
+//
+// de_minimum = hsync_width + hsync_back_porch;
+// de_maximum = de_minimum + h_active;
+//
+// For 1080p (1080x1920):
+//  hsync_width = 44;
+//  hsync_count = 2200;
+//  hsync_de_min = 192;
+//  hsync_de_max = 2112;
+// ---------------------------------------------------------------------------
+// 0x04   0x10   [31:16]  vsync_width           VSYNC width (see below)
+//               [15: 0]  vsync_count           VSYNC count (see below)
+// ---------------------------------------------------------------------------
+// 0x05   0x14   [31:16]  vsync_de_min          VSYNC DE minimum (see below)
+//               [15: 0]  vsync_de_max          VSYNC DE maximum (see below)
+// ---------------------------------------------------------------------------
+// The VSYNC parameters above are based on horizontal lines.
+// de_minimum = vsync_width + vsync_back_porch;
+// de_maximum = de_minimum + v_active;
+//
+// For 1080p (1080x1920):
+//  vsync_width = 5;
+//  vsync_count = 1125;
+//  vsync_de_min = 41;
+//  vsync_de_max = 1121;
+// ---------------------------------------------------------------------------
+// 0x06   0x18   [ 4: 4]  hdmi_tpm_oos          Indicates TPM OOS on HDMI side (W1C).
+//               [ 3: 3]  vdma_tpm_oos          Indicates TPM OOS on VDMA side (W1C).
+//               [ 2: 2]  vdma_be_error*        Indicates byte enable errors on VDMA side (W1C).
+//               [ 1: 1]  vdma_ovf              Indicates overflow on VDMA side (W1C).
+//               [ 0: 0]  vdma_unf              Indicates underfow on VDMA side (W1C).
+//
+// *The HDMI core expects VDMA byte enables to be all asserted (all 4 bytes valid) per clock.
+// ---------------------------------------------------------------------------
+// 0x067  0x1c   [24:24]  cp_enable             Color pattern enable (0->1).
+//               [23: 0]  cp_value              Color pattern value (RGB).         
+// ---------------------------------------------------------------------------
+// ***************************************************************************
+// ***************************************************************************

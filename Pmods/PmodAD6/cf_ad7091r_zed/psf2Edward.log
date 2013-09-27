@@ -1,0 +1,653 @@
+WARNING:EDK:4092 - IPNAME: processing_system7, INSTANCE: processing_system7_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 64 
+WARNING:EDK:4092 - IPNAME: axi_vdma, INSTANCE: axi_vdma_0 - Pre-Production
+   version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 209 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_1 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 232 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_2 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 240 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 290 
+WARNING:EDK:4092 - IPNAME: clock_generator, INSTANCE: clock_generator_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 317 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_1 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 384 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_3 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 396 
+WARNING:EDK:4092 - IPNAME: axi_dma, INSTANCE: axi_dma_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 404 
+WARNING:EDK:4092 - IPNAME: processing_system7, INSTANCE: processing_system7_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 64 
+WARNING:EDK:4092 - IPNAME: axi_vdma, INSTANCE: axi_vdma_0 - Pre-Production
+   version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 209 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_1 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 232 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_2 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 240 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 290 
+WARNING:EDK:4092 - IPNAME: clock_generator, INSTANCE: clock_generator_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 317 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_1 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 384 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_3 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 396 
+WARNING:EDK:4092 - IPNAME: axi_dma, INSTANCE: axi_dma_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 404 
+WARNING:EDK:4092 - IPNAME: processing_system7, INSTANCE: processing_system7_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 64 
+WARNING:EDK:4092 - IPNAME: axi_vdma, INSTANCE: axi_vdma_0 - Pre-Production
+   version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 209 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_1 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 232 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_2 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 240 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 290 
+WARNING:EDK:4092 - IPNAME: clock_generator, INSTANCE: clock_generator_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 317 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_1 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 384 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_3 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 396 
+WARNING:EDK:4092 - IPNAME: axi_dma, INSTANCE: axi_dma_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 404 
+WARNING:EDK:4092 - IPNAME: processing_system7, INSTANCE: processing_system7_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 64 
+WARNING:EDK:4092 - IPNAME: axi_vdma, INSTANCE: axi_vdma_0 - Pre-Production
+   version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 209 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_1 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 232 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_2 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 240 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 290 
+WARNING:EDK:4092 - IPNAME: clock_generator, INSTANCE: clock_generator_0 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 317 
+WARNING:EDK:4092 - IPNAME: axi_iic, INSTANCE: axi_iic_1 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 384 
+WARNING:EDK:4092 - IPNAME: axi_interconnect, INSTANCE: axi_interconnect_3 -
+   Pre-Production version not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 396 
+WARNING:EDK:4092 - IPNAME: axi_dma, INSTANCE: axi_dma_0 - Pre-Production version
+   not verified on hardware for architecture 'zynq' -
+   D:\Temp\fpgahdl_xilinx\cf_ad7091r_zed\system.mhs line 404 
+WARNING:EDK:2486 - The bitwidth 52 of new value 0xc00000000fe81 is greater than
+   32
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_BASE_ID -
+   Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   19 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_IS_ACLK_ASYNC - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   20 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_ACLK_RATIO
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   21 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_ARB_PRIORITY - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   22 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_AW_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   23 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_AR_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   24 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_W_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   25 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_R_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   26 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_B_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   27 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_WRITE_FIFO_DEPTH - Failure in evaluting ISVALID
+   expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   28 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_READ_FIFO_DEPTH - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   29 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_WRITE_ISSUING - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   30 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_READ_ISSUING - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   31 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ACLK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 119 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARESETN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 120 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 121 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWADDR - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 122 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWLEN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 123 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWSIZE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 124 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWBURST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 125 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWCACHE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 126 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWPROT - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 127 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWLOCK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 128 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 129 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 130 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WDATA - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 131 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WSTRB - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 132 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WLAST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 133 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 134 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 135 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BID - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 136 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BRESP - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 137 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 138 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 139 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 140 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARADDR - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 141 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARLEN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 142 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARSIZE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 143 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARBURST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 144 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARCACHE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 145 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARPROT - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 146 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARLOCK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 147 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 148 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 149 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RID - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 150 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RDATA - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 151 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RRESP - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 152 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RLAST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 153 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 154 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 155 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 73 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_I - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 102 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_O - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 103 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_T - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 104 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 122 
+
+Overriding IP level properties ...
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_BASE_ID -
+   Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   19 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_IS_ACLK_ASYNC - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   20 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_ACLK_RATIO
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   21 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_ARB_PRIORITY - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   22 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_AW_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   23 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_AR_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   24 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_W_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   25 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_R_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   26 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: C_INTERCONNECT_M_AXI_B_REGISTER
+   - Failure in evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   27 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_WRITE_FIFO_DEPTH - Failure in evaluting ISVALID
+   expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   28 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_READ_FIFO_DEPTH - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   29 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_WRITE_ISSUING - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   30 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY:
+   C_INTERCONNECT_M_AXI_READ_ISSUING - Failure in evaluting ISVALID expresion
+   "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\EDK\data\coremodel\axi\data\tools_axi_v1_01_a.txt line
+   31 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ACLK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 119 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARESETN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 120 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 121 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWADDR - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 122 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWLEN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 123 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWSIZE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 124 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWBURST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 125 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWCACHE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 126 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWPROT - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 127 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWLOCK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 128 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 129 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_AWREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 130 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WDATA - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 131 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WSTRB - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 132 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WLAST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 133 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 134 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_WREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 135 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BID - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 136 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BRESP - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 137 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 138 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_BREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 139 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 140 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARADDR - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 141 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARLEN - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 142 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARSIZE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 143 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARBURST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 144 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARCACHE - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 145 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARPROT - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 146 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARLOCK - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 147 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 148 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_ARREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 149 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RID - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 150 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RDATA - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 151 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RRESP - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 152 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RLAST - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 153 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RVALID - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 154 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI_RREADY - Failure in
+   evaluting ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 155 
+WARNING:EDK:4131 - IPNAME: ps7_usb_0, PROPERTY: M_AXI - Failure in evaluting
+   ISVALID expresion "(C_INCLUDE_DMA == 1)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_usb_v1_00_
+   a\data\ps7_usb_v2_1_0.mpd line 73 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_I - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 102 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_O - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 103 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK_T - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 104 
+WARNING:EDK:4131 - IPNAME: ps7_qspi_0, PROPERTY: SCK - Failure in evaluting
+   ISVALID expresion "(C_USE_STARTUP==0)" -
+   D:\Xilinx\14.4\ISE_DS\ISE\data\zynqconfig\ps7_internals\pcores\ps7_qspi_v1_00
+   _a\data\ps7_qspi_v2_1_0.mpd line 122 
+
+Computing clock values...
+
+Performing IP level DRCs on properties...
+
+Running DRC Tcl procedures for OPTION IPLEVEL_DRC_PROC...
+Address Map for Processor ps7_cortexa9_0
+  (0000000000-0x0002ffff) ps7_ram_0	ps7_axi_interconnect_0
+  (0x00100000-0x1fffffff) ps7_ddr_0	ps7_axi_interconnect_0
+  (0x40400000-0x4040ffff) axi_dma_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x41600000-0x4160ffff) axi_iic_1	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x41620000-0x4162ffff) axi_iic_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x43000000-0x4300ffff) axi_vdma_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x70e00000-0x70e0ffff)
+axi_hdmi_tx_16b_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x75c00000-0x75c0ffff)
+axi_spdif_tx_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x77600000-0x7760ffff)
+axi_i2s_adi_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x79000000-0x7900ffff)
+axi_clkgen_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x79020000-0x7902ffff)
+axi_ad7091r_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0xe0001000-0xe0001fff) ps7_uart_1	ps7_axi_interconnect_0
+  (0xe0002000-0xe0002fff) ps7_usb_0	ps7_axi_interconnect_0
+  (0xe0006000-0xe0006fff) ps7_spi_0	ps7_axi_interconnect_0
+  (0xe0007000-0xe0007fff) ps7_spi_1	ps7_axi_interconnect_0
+  (0xe000a000-0xe000afff) ps7_gpio_0	ps7_axi_interconnect_0
+  (0xe000b000-0xe000bfff) ps7_ethernet_0	ps7_axi_interconnect_0
+  (0xe000d000-0xe000dfff) ps7_qspi_0	ps7_axi_interconnect_0
+  (0xe0100000-0xe0100fff) ps7_sd_0	ps7_axi_interconnect_0
+  (0xe0200000-0xe0200fff) ps7_iop_bus_config_0	ps7_axi_interconnect_0
+  (0xf8000000-0xf8000fff) ps7_slcr_0	ps7_axi_interconnect_0
+  (0xf8003000-0xf8003fff) ps7_dma_s	ps7_axi_interconnect_0
+  (0xf8004000-0xf8004fff) ps7_dma_ns	ps7_axi_interconnect_0
+  (0xf8006000-0xf8006fff) ps7_ddrc_0	ps7_axi_interconnect_0
+  (0xf8007000-0xf8007fff) ps7_dev_cfg_0	ps7_axi_interconnect_0
+  (0xf8008000-0xf8008fff) ps7_afi_0	ps7_axi_interconnect_0
+  (0xf8009000-0xf8009fff) ps7_afi_1	ps7_axi_interconnect_0
+  (0xf800a000-0xf800afff) ps7_afi_2	ps7_axi_interconnect_0
+  (0xf800b000-0xf800bfff) ps7_afi_3	ps7_axi_interconnect_0
+  (0xf8f00100-0xf8f001ff) ps7_scugic_0	ps7_axi_interconnect_0
+  (0xf8f00600-0xf8f0061f) ps7_scutimer_0	ps7_axi_interconnect_0
+  (0xf8f00620-0xf8f006ff) ps7_scuwdt_0	ps7_axi_interconnect_0
+  (0xfc000000-0xfcffffff) ps7_qspi_linear_0	ps7_axi_interconnect_0
+  (0xffff0000-0xfffffdff) ps7_ram_1	ps7_axi_interconnect_0
+Address Map for Processor ps7_cortexa9_1
+  (0000000000-0x0002ffff) ps7_ram_0	ps7_axi_interconnect_0
+  (0x00100000-0x1fffffff) ps7_ddr_0	ps7_axi_interconnect_0
+  (0x40400000-0x4040ffff) axi_dma_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x41600000-0x4160ffff) axi_iic_1	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x41620000-0x4162ffff) axi_iic_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x43000000-0x4300ffff) axi_vdma_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x70e00000-0x70e0ffff)
+axi_hdmi_tx_16b_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x75c00000-0x75c0ffff)
+axi_spdif_tx_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x77600000-0x7760ffff)
+axi_i2s_adi_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x79000000-0x7900ffff)
+axi_clkgen_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0x79020000-0x7902ffff)
+axi_ad7091r_0	ps7_axi_interconnect_0->axi_interconnect_1
+  (0xe0001000-0xe0001fff) ps7_uart_1	ps7_axi_interconnect_0
+  (0xe0002000-0xe0002fff) ps7_usb_0	ps7_axi_interconnect_0
+  (0xe0006000-0xe0006fff) ps7_spi_0	ps7_axi_interconnect_0
+  (0xe0007000-0xe0007fff) ps7_spi_1	ps7_axi_interconnect_0
+  (0xe000a000-0xe000afff) ps7_gpio_0	ps7_axi_interconnect_0
+  (0xe000b000-0xe000bfff) ps7_ethernet_0	ps7_axi_interconnect_0
+  (0xe000d000-0xe000dfff) ps7_qspi_0	ps7_axi_interconnect_0
+  (0xe0100000-0xe0100fff) ps7_sd_0	ps7_axi_interconnect_0
+  (0xe0200000-0xe0200fff) ps7_iop_bus_config_0	ps7_axi_interconnect_0
+  (0xf8000000-0xf8000fff) ps7_slcr_0	ps7_axi_interconnect_0
+  (0xf8003000-0xf8003fff) ps7_dma_s	ps7_axi_interconnect_0
+  (0xf8004000-0xf8004fff) ps7_dma_ns	ps7_axi_interconnect_0
+  (0xf8006000-0xf8006fff) ps7_ddrc_0	ps7_axi_interconnect_0
+  (0xf8007000-0xf8007fff) ps7_dev_cfg_0	ps7_axi_interconnect_0
+  (0xf8008000-0xf8008fff) ps7_afi_0	ps7_axi_interconnect_0
+  (0xf8009000-0xf8009fff) ps7_afi_1	ps7_axi_interconnect_0
+  (0xf800a000-0xf800afff) ps7_afi_2	ps7_axi_interconnect_0
+  (0xf800b000-0xf800bfff) ps7_afi_3	ps7_axi_interconnect_0
+  (0xf8f00100-0xf8f001ff) ps7_scugic_0	ps7_axi_interconnect_0
+  (0xf8f00600-0xf8f0061f) ps7_scutimer_0	ps7_axi_interconnect_0
+  (0xf8f00620-0xf8f006ff) ps7_scuwdt_0	ps7_axi_interconnect_0
+  (0xfc000000-0xfcffffff) ps7_qspi_linear_0	ps7_axi_interconnect_0
+  (0xffff0000-0xfffffdff) ps7_ram_1	ps7_axi_interconnect_0
+
+Checking platform address map ...
+Conversion to XML complete.

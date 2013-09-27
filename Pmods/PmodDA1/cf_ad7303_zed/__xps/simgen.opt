@@ -1,0 +1,1 @@
+ -p zynq -lang vhdl$(PROJECT_SEARCHPATHOPT) $(GLOBAL_SEARCHPATHOPT) -msg __xps/ise/xmsgprops.lst -s isim -X D:/AD/GitHub/no-OS/Pmods/PmodDA1/cf_ad7303_zed/

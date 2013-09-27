@@ -1,0 +1,151 @@
+############################################################################
+##
+##  Xilinx, Inc. 2006            www.xilinx.com
+############################################################################
+##  File name :       data/ps7_constraints.ucf
+##
+##  Details :     Constraints file
+##                    FPGA family:       zynq
+##                    FPGA:              xc7z020clg484-1
+##                    Device Size:        xc7z020
+##                    Package:            clg484
+##                    Speedgrade:         -1
+##
+##Note: This is a generated file. Configuration settings should not be edited
+##
+############################################################################
+############################################################################
+############################################################################
+# I/O STANDARDS and Location Constraints                                   #
+############################################################################
+
+NET "MIO[53]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "C12" ; #  Enet 0 / mdio / MIO[53]
+NET "MIO[52]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "D10" ; #  Enet 0 / mdc / MIO[52]
+NET "MIO[51]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "C10" ; #  GPIO / gpio[51] / MIO[51]
+NET "MIO[50]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "D13" ; #  GPIO / gpio[50] / MIO[50]
+NET "MIO[49]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "C14" ; #  UART 1 / rx / MIO[49]
+NET "MIO[48]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "D11" ; #  UART 1 / tx / MIO[48]
+NET "MIO[47]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "B10" ; #  SD 0 / cd / MIO[47]
+NET "MIO[46]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "slow" | LOC = "D12" ; #  SD 0 / wp / MIO[46]
+NET "MIO[45]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "B9" ; #  SD 0 / data[3] / MIO[45]
+NET "MIO[44]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E13" ; #  SD 0 / data[2] / MIO[44]
+NET "MIO[43]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "B11" ; #  SD 0 / data[1] / MIO[43]
+NET "MIO[42]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "D8" ; #  SD 0 / data[0] / MIO[42]
+NET "MIO[41]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "C8" ; #  SD 0 / cmd / MIO[41]
+NET "MIO[40]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E14" ; #  SD 0 / clk / MIO[40]
+NET "MIO[39]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "C13" ; #  USB 0 / data[7] / MIO[39]
+NET "MIO[38]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "F13" ; #  USB 0 / data[6] / MIO[38]
+NET "MIO[37]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "B14" ; #  USB 0 / data[5] / MIO[37]
+NET "MIO[36]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A9" ; #  USB 0 / clk / MIO[36]
+NET "MIO[35]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "F14" ; #  USB 0 / data[3] / MIO[35]
+NET "MIO[34]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "B12" ; #  USB 0 / data[2] / MIO[34]
+NET "MIO[33]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "G13" ; #  USB 0 / data[1] / MIO[33]
+NET "MIO[32]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "C7" ; #  USB 0 / data[0] / MIO[32]
+NET "MIO[31]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "F9" ; #  USB 0 / nxt / MIO[31]
+NET "MIO[30]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A11" ; #  USB 0 / stp / MIO[30]
+NET "MIO[29]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E8" ; #  USB 0 / dir / MIO[29]
+NET "MIO[28]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A12" ; #  USB 0 / data[4] / MIO[28]
+NET "MIO[27]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "D7" ; #  Enet 0 / rx_ctl / MIO[27]
+NET "MIO[26]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A13" ; #  Enet 0 / rxd[3] / MIO[26]
+NET "MIO[25]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "F12" ; #  Enet 0 / rxd[2] / MIO[25]
+NET "MIO[24]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "B7" ; #  Enet 0 / rxd[1] / MIO[24]
+NET "MIO[23]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E11" ; #  Enet 0 / rxd[0] / MIO[23]
+NET "MIO[22]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A14" ; #  Enet 0 / rx_clk / MIO[22]
+NET "MIO[21]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "F11" ; #  Enet 0 / tx_ctl / MIO[21]
+NET "MIO[20]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A8" ; #  Enet 0 / txd[3] / MIO[20]
+NET "MIO[19]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E10" ; #  Enet 0 / txd[2] / MIO[19]
+NET "MIO[18]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "A7" ; #  Enet 0 / txd[1] / MIO[18]
+NET "MIO[17]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "E9" ; #  Enet 0 / txd[0] / MIO[17]
+NET "MIO[16]"   IOSTANDARD = LVCMOS18 | DRIVE = "8" | SLEW = "fast" | LOC = "D6" ; #  Enet 0 / tx_clk / MIO[16]
+NET "MIO[15]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "E6" ; #  GPIO / gpio[15] / MIO[15]
+NET "MIO[14]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "B6" ; #  GPIO / gpio[14] / MIO[14]
+NET "MIO[13]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "A6" ; #  GPIO / gpio[13] / MIO[13]
+NET "MIO[12]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "C5" ; #  GPIO / gpio[12] / MIO[12]
+NET "MIO[11]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "B4" ; #  GPIO / gpio[11] / MIO[11]
+NET "MIO[10]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "G7" ; #  GPIO / gpio[10] / MIO[10]
+NET "MIO[9]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "C4" ; #  GPIO / gpio[9] / MIO[9]
+NET "MIO[8]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "E5" ; #  Quad SPI Flash / qspi_fbclk / MIO[8]
+NET "MIO[7]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "D5" ; #  GPIO / gpio[7] / MIO[7]
+NET "MIO[6]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "A4" ; #  Quad SPI Flash / qspi0_sclk / MIO[6]
+NET "MIO[5]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "A3" ; #  Quad SPI Flash / qspi0_io[3] / MIO[5]
+NET "MIO[4]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "E4" ; #  Quad SPI Flash / qspi0_io[2] / MIO[4]
+NET "MIO[3]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "F6" ; #  Quad SPI Flash / qspi0_io[1] / MIO[3]
+NET "MIO[2]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "A2" ; #  Quad SPI Flash / qspi0_io[0] / MIO[2]
+NET "MIO[1]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "fast" | LOC = "A1" ; #  Quad SPI Flash / qspi0_ss_b / MIO[1]
+NET "MIO[0]"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "G6" ; #  GPIO / gpio[0] / MIO[0]
+NET "DDR_WEB"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "R4" ; 
+NET "DDR_VRP"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "N7" ; 
+NET "DDR_VRN"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "M7" ; 
+NET "DDR_RAS_n"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "R5" ; 
+NET "DDR_ODT"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "P5" ; 
+NET "DDR_DRSTB"   IOSTANDARD = SSTL15 | SLEW = "FAST" | LOC = "F3" ; 
+NET "DDR_DQS[3]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "V2" ; 
+NET "DDR_DQS[2]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "N2" ; 
+NET "DDR_DQS[1]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "H2" ; 
+NET "DDR_DQS[0]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "C2" ; 
+NET "DDR_DQS_n[3]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "W2" ; 
+NET "DDR_DQS_n[2]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "P2" ; 
+NET "DDR_DQS_n[1]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "J2" ; 
+NET "DDR_DQS_n[0]"   IOSTANDARD = DIFF_SSTL15_T_DCI | SLEW = "FAST" | LOC = "D2" ; 
+NET "DDR_DQ[9]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "G1" ; 
+NET "DDR_DQ[8]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "G2" ; 
+NET "DDR_DQ[7]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "F1" ; 
+NET "DDR_DQ[6]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "F2" ; 
+NET "DDR_DQ[5]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "E1" ; 
+NET "DDR_DQ[4]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "E3" ; 
+NET "DDR_DQ[3]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "D3" ; 
+NET "DDR_DQ[31]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "Y1" ; 
+NET "DDR_DQ[30]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "W3" ; 
+NET "DDR_DQ[2]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "B2" ; 
+NET "DDR_DQ[29]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "Y3" ; 
+NET "DDR_DQ[28]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "W1" ; 
+NET "DDR_DQ[27]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "U2" ; 
+NET "DDR_DQ[26]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "AA1" ; 
+NET "DDR_DQ[25]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "U1" ; 
+NET "DDR_DQ[24]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "AA3" ; 
+NET "DDR_DQ[23]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "R1" ; 
+NET "DDR_DQ[22]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "M2" ; 
+NET "DDR_DQ[21]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "T2" ; 
+NET "DDR_DQ[20]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "R3" ; 
+NET "DDR_DQ[1]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "C3" ; 
+NET "DDR_DQ[19]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "T1" ; 
+NET "DDR_DQ[18]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "N3" ; 
+NET "DDR_DQ[17]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "T3" ; 
+NET "DDR_DQ[16]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "M1" ; 
+NET "DDR_DQ[15]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "K3" ; 
+NET "DDR_DQ[14]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "J1" ; 
+NET "DDR_DQ[13]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "K1" ; 
+NET "DDR_DQ[12]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "L3" ; 
+NET "DDR_DQ[11]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "L2" ; 
+NET "DDR_DQ[10]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "L1" ; 
+NET "DDR_DQ[0]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "D1" ; 
+NET "DDR_DM[3]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "AA2" ; 
+NET "DDR_DM[2]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "P1" ; 
+NET "DDR_DM[1]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "H3" ; 
+NET "DDR_DM[0]"   IOSTANDARD = SSTL15_T_DCI | SLEW = "FAST" | LOC = "B1" ; 
+NET "DDR_CS_n"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "P6" ; 
+NET "DDR_CKE"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "V3" ; 
+NET "DDR_Clk"   IOSTANDARD = DIFF_SSTL15 | SLEW = "FAST" | LOC = "N4" ; 
+NET "DDR_Clk_n"   IOSTANDARD = DIFF_SSTL15 | SLEW = "FAST" | LOC = "N5" ; 
+NET "DDR_CAS_n"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "P3" ; 
+NET "DDR_BankAddr[2]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "M6" ; 
+NET "DDR_BankAddr[1]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "L6" ; 
+NET "DDR_BankAddr[0]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "L7" ; 
+NET "DDR_Addr[9]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "H5" ; 
+NET "DDR_Addr[8]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "J5" ; 
+NET "DDR_Addr[7]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "J6" ; 
+NET "DDR_Addr[6]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "J7" ; 
+NET "DDR_Addr[5]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "K5" ; 
+NET "DDR_Addr[4]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "K6" ; 
+NET "DDR_Addr[3]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "L4" ; 
+NET "DDR_Addr[2]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "K4" ; 
+NET "DDR_Addr[1]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "M5" ; 
+NET "DDR_Addr[14]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "G4" ; 
+NET "DDR_Addr[13]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "F4" ; 
+NET "DDR_Addr[12]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "H4" ; 
+NET "DDR_Addr[11]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "G5" ; 
+NET "DDR_Addr[10]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "J3" ; 
+NET "DDR_Addr[0]"   IOSTANDARD = SSTL15 | SLEW = "SLOW" | LOC = "M4" ; 
+NET "PS_PORB"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "B5" ; 
+NET "PS_SRSTB"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "C9" ; 
+NET "PS_CLK"   IOSTANDARD = LVCMOS33 | DRIVE = "8" | SLEW = "slow" | LOC = "F7" ; 

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/SVG/DTD/svg10.dtd">
+<svg width="280" height="92">
+  <defs>
+    <g id="AXI_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#0084AB; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="AXI_busconn_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXI_busconn_MASTER">
+      <rect x="0" y="0" width="24" height="24" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXIS_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#0084AB; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="AXIS_busconn_TARGET">
+      <circle cx="12" cy="12" r="12" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXIS_busconn_INITIATOR">
+      <rect x="0" y="0" width="24" height="24" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="KEY_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#444444; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="KEY_busconn_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MASTER">
+      <rect x="0" y="0" width="24" height="24" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MASTER_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+      <rect x="0" y="12" width="24" height="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="12" width="14" height="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_TARGET">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_INITIATOR">
+      <rect x="0" y="0" width="24" height="24" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MONITOR">
+      <rect x="0" y="0.5" width="24" height="7" style="fill:#444444; stroke:none;"/>
+      <rect x="0" y="16" width="24" height="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_USER">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_TRANSPARENT">
+      <circle cx="12" cy="12" r="12" style="fill:#FFFFFF; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#FFFFFF; stroke:none;"/>
+    </g>
+    <g id="HCurve" overflow="visible">
+      <path d="m 0  0,      a 16 16, 0,0,0, 32,0,     z" style="fill:#F0F0F0;fill-opacity:1;stroke:black;stroke-width:1.5"/>
+      <line x1="0" y1="0" x2="32" y2="0" style="stroke:#F0F0F0;stroke-width:3"/>
+    </g>
+    <g id="IPD_StandardBody">
+      <rect x="0" y="0" width="276" height="88" style="fill:#F0F0F0;fill-opacity: 1.0; stroke:#000000; stroke-width:1"/>
+      <rect x="48" y="16" width="180" height="56" style="fill:#FFFFFF; fill-opacity: 1.0; stroke:#000000; stroke-width:1.5"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="16" xlink:href="#HCurve"/>
+    </g>
+    <g id="IPD_PORT">
+      <rect width="8" height="8" style="fill:#888888;stroke-width:1;stroke:black;"/>
+    </g>
+    <g id="IPD_SPort">
+      <line x1="0" y1="0" x2="8" y2="0" style="stroke:#888888;stroke-width:2;stroke-opacity:1"/>
+    </g>
+    <g id="IPD_PortClk">
+      <line x1="0" y1="0" x2="7" y2="3" style="stroke:#000000;stroke-width:1;stroke-opacity:1"/>
+      <line x1="7" y1="3" x2="0" y2="7" style="stroke:#000000;stroke-width:1;stroke-opacity:1"/>
+    </g>
+  </defs>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#IPD_StandardBody"/>
+  <text x="138" y="48" fill="#AA0017" stroke="none" font-size="8pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_interconnect</text>
+  <text x="138" y="60" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_interconnect_2</text>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="40" y="24" xlink:href="#IPD_SPort"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="48" y="22" xlink:href="#IPD_PortClk"/>
+  <text x="60" y="30" fill="#000000" stroke="none" font-size="8pt" font-style="normal" font-weight="bold" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">0</text>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="40" y="48" xlink:href="#IPD_SPort"/>
+  <text x="60" y="54" fill="#000000" stroke="none" font-size="8pt" font-style="normal" font-weight="bold" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">1</text>
+</svg>

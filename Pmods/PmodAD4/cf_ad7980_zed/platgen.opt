@@ -1,0 +1,11 @@
+-p
+xc7z020clg484-1
+-lang
+vhdl
+-intstyle
+default
+-lp
+D:/Temp/fpgahdl_xilinx/cf_lib/
+-msg
+__xps/ise/xmsgprops.lst
+system.mhs

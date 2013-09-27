@@ -1,0 +1,27 @@
+##############################################################################
+## Filename:          pcores/axi_hdmi_tx_16b_v1_00_a/data/axi_hdmi_tx_16b_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Thu Aug 18 12:59:28 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v3_00_a proc_common_pkg vhdl
+lib proc_common_v3_00_a ipif_pkg vhdl
+lib proc_common_v3_00_a or_muxcy vhdl
+lib proc_common_v3_00_a or_gate128 vhdl
+lib proc_common_v3_00_a family_support vhdl
+lib proc_common_v3_00_a pselect_f vhdl
+lib proc_common_v3_00_a counter_f vhdl
+lib axi_lite_ipif_v1_01_a address_decoder vhdl
+lib axi_lite_ipif_v1_01_a slave_attachment vhdl
+lib axi_lite_ipif_v1_01_a axi_lite_ipif vhdl
+lib axi_hdmi_tx_16b_v1_00_a cf_mem verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_mul verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_add verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_csc_1 verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_csc_RGB2CrYCb verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_ss_444to422 verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_vdma verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_hdmi verilog
+lib axi_hdmi_tx_16b_v1_00_a cf_hdmi_tx_16b verilog
+lib axi_hdmi_tx_16b_v1_00_a user_logic verilog
+lib axi_hdmi_tx_16b_v1_00_a axi_hdmi_tx_16b vhdl

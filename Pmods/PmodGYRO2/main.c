@@ -1,6 +1,6 @@
 /***************************************************************************//**
 *   @file   main.c
-*   @brief  Main File for AD5628 Driver.
+*   @brief  Main File for ADXRS453 Driver.
 *   @author ATofan (alexandru.tofan@analog.com)
 ********************************************************************************
 * Copyright 2012(c) Analog Devices, Inc.
@@ -66,7 +66,7 @@ int main(void)
     // Initialize Interrupts
 	InterruptsInit();
 
-	// Initialize ADXL362
+	// Initialize ADXRS453
 	ADXRS453_Init();
 
     // Run demo program

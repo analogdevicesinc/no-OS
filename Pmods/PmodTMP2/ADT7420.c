@@ -143,7 +143,6 @@ void ADT7420_DisplayMainMenu(void)
 	xil_printf("	[f] Set Fault Queue\n\r");
 	xil_printf("	[s] Display Settings \n\r");
 	xil_printf("	[m] Stop the program and display this menu\n\r");
-	//xil_printf("\n\r");
 	xil_printf("Press key to select desired option\n\r");
 	xil_printf("Press [q] to exit the application\n\r");
 }
@@ -523,15 +522,10 @@ void ADT7420_PrintTHigh(void)
 
 	I2C_Read(I2C_BASEADDR, ADT7420_IIC_ADDR, TH_SETP_MSB, 2, rxBuffer);
 
-	//xil_printf("\n\r buf[0]=0x%x, %d",rxBuffer[0],rxBuffer[0]);
-	//xil_printf("\n\r buf[1]=0x%x, %d",rxBuffer[1],rxBuffer[1]);
-
 	if(ADT7420_GetResolution(0) == 0)
 		val = ( rxBuffer[0] << 5 ) | ( rxBuffer[1] >> 3);
 	else
 		val = (rxBuffer[0] << 8) | rxBuffer[1];
-
-	//xil_printf("\n\r val=%d, 0x%x\n\r",val, val);
 
 	xil_printf("THigh Setpoint ");
 	Display_Temp(val);

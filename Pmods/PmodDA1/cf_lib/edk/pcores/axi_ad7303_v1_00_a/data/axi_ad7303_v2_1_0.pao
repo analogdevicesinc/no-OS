@@ -1,0 +1,14 @@
+##############################################################################
+## Filename:          pcores/axi_ad7303_v1_00_a/data/axi_ad7303_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Aug 26 11:12:50 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib adi_common_v1_00_a mem verilog
+lib adi_common_v1_00_a mul_u16 verilog
+lib adi_common_v1_00_a axis_inf verilog
+lib adi_common_v1_00_a vdma_core verilog
+lib adi_common_v1_00_a up_axi verilog
+lib adi_common_v1_00_a up_dac_common verilog
+lib axi_ad7303_v1_00_a axi_ad7303_dev_if verilog
+lib axi_ad7303_v1_00_a axi_ad7303 verilog

@@ -1,6 +1,6 @@
 /***************************************************************************//**
 *   @file   main.c
-*   @brief  Main File for AD5628 Driver.
+*   @brief  Main File for ADXL362 Driver.
 *   @author ATofan (alexandru.tofan@analog.com)
 ********************************************************************************
 * Copyright 2012(c) Analog Devices, Inc.

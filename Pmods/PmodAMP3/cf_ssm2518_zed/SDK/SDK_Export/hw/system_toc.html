@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/SVG/DTD/svg10.dtd">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Table of Contents</TITLE>
+<BASE target="system_main">
+<STYLE type="text/css">
+	.trigger {
+		cursor : hand;
+		cursor : pointer;
+	}
+	
+	.branch {
+		display     : none;
+		margin-left : 16px;
+	}
+</STYLE>
+<SCRIPT type="text/javascript">
+	var openImg  = new Image();
+	var clseImg  = new Image();
+	
+	openImg.src   = "imgs/IMG_openBranch.png";
+	clseImg.src   = "imgs/IMG_closeBranch.png";
+		
+	function showBranch(iBranchId) {
+		
+		var branchObj = document.getElementById(iBranchId).style;
+			
+		if(branchObj.display== "block")
+		   branchObj.display = "none";
+		else   
+		   branchObj.display = "block";
+	}
+		
+	function swapBranchImg(iBranchImgId) {
+		
+		branchImg = document.getElementById(iBranchImgId);
+		
+		if(branchImg.src.indexOf('imgs/IMG_closeBranch.png') > -1)
+			branchImg.src = openImg.src;
+		else   
+		    branchImg.src = clseImg.src;
+	}
+</SCRIPT>
+</HEAD>
+<BODY class="main_body"><TABLE BGCOLOR="#FFFFFF" WIDTH="200" COLS="1" cellspacing="0" cellpadding="0" border="0"><TD COLSPAN="1" VALIGN="Top">
+<A HREF="system_main.html#ANCHOR_OVERVIEW" style="text-decoration:none"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif">Overview</SPAN></A><BR><A HREF="system_main.html#ANCHOR_BLOCKDIAGRAM" style="text-decoration:none"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif">Block Diagram</SPAN></A><BR><A HREF="system_main.html#ANCHOR_EXTERNALPORTS" style="text-decoration:none"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif">External Ports</SPAN></A><BR><DIV class="trigger" onClick="showBranch('Processors'); swapBranchImg('BranchImg_Processors');">
+<IMG src="imgs/IMG_openBranch.png" border="0" id="BranchImg_Processors"><SPAN style="color:#000000; font: bold 16px Verdana ArialHelvetica,sans-serif"> Processor</SPAN>
+</DIV>
+<SPAN class="branch" id="Processors"><A HREF="system_main.html#ANCHOR_processing_system7_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   processing_system7_0</SPAN></A><BR></SPAN><DIV class="trigger" onClick="showBranch('Busses'); swapBranchImg('BranchImg_Busses');">
+<IMG src="imgs/IMG_openBranch.png" border="0" id="BranchImg_Busses"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif"> Busses</SPAN>
+</DIV>
+<SPAN class="branch" id="Busses"><A HREF="system_main.html#ANCHOR_axi_interconnect_1" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_interconnect_1</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_interconnect_2" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_interconnect_2</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_interconnect_3" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_interconnect_3</SPAN></A><BR></SPAN><DIV class="trigger" onClick="showBranch('Peripherals'); swapBranchImg('BranchImg_Peripherals');">
+<IMG src="imgs/IMG_openBranch.png" border="0" id="BranchImg_Peripherals"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif"> Peripherals</SPAN>
+</DIV>
+<SPAN class="branch" id="Peripherals"><A HREF="system_main.html#ANCHOR_axi_clkgen_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_clkgen_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_hdmi_tx_16b_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_hdmi_tx_16b_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_i2s_adi_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_i2s_adi_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_iic_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_iic_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_iic_1" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_iic_1</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_spdif_tx_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_spdif_tx_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_ssm2518_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_ssm2518_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_vdma_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_vdma_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_axi_vdma_1" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   axi_vdma_1</SPAN></A><BR></SPAN><DIV class="trigger" onClick="showBranch('IP'); swapBranchImg('BranchImg_Ips');">
+<IMG src="imgs/IMG_openBranch.png" border="0" id="BranchImg_Ips"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif"> IP</SPAN>
+</DIV>
+<SPAN class="branch" id="IP"><A HREF="system_main.html#ANCHOR_clock_generator_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   clock_generator_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_util_i2c_mixer_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   util_i2c_mixer_0</SPAN></A><BR><A HREF="system_main.html#ANCHOR_util_vector_logic_0" style="text-decoration:none"><SPAN style="color:#AA0017; font: italic 14px Verdana Arial,Helvetica,sans-serif">   util_vector_logic_0</SPAN></A><BR></SPAN><A HREF="system_main.html#ANCHOR_TIMINGINFO" style="text-decoration:none"><SPAN style="color:#000000; font: bold 16px Verdana Arial,Helvetica,sans-serif">Timing Information</SPAN></A><BR>
+</TD></TABLE></BODY>
+</HTML>

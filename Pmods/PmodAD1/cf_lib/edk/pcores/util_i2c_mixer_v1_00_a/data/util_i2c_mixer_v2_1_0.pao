@@ -1,0 +1,7 @@
+##############################################################################
+## Filename:          pcores/util_i2c_mixer_v1_00_a/data/util_i2c_mixer_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Fri Aug 26 11:12:50 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib util_i2c_mixer_v1_00_a util_i2c_mixer vhdl

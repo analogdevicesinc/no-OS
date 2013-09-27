@@ -1,0 +1,9 @@
+##############################################################################
+## Filename:          pcores/axi_ad7476_v1_00_a/data/axi_ad7476_v2_1_0.bbd
+## Description:       Black Box Definition
+## Date:              Sat Oct 29 14:01:52 2011 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+Files
+################################################################################
+adi_common_v1_00_a:ad_dcfilter_1.ngc, adi_common_v1_00_a:ad_dds_1.ngc

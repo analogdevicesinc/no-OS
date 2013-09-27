@@ -1,0 +1,19 @@
+##############################################################################
+## Filename:          D:/Temp/I2S_Test/microblaze/pcores/axi_i2s_adi_v1_00_a/data/axi_i2s_adi_v2_1_0.pao
+## Description:       Peripheral Analysis Order
+## Date:              Thu Apr 26 17:49:16 2012 (by Create and Import Peripheral Wizard)
+##############################################################################
+
+lib proc_common_v3_00_a  all 
+lib axi_lite_ipif_v1_01_a  all 
+lib axi_i2s_adi_v1_00_a axi_i2s_adi vhdl
+lib axi_i2s_adi_v1_00_a i2s_controller vhdl
+lib axi_i2s_adi_v1_00_a i2s_rx vhdl
+lib axi_i2s_adi_v1_00_a i2s_tx vhdl
+lib axi_i2s_adi_v1_00_a i2s_clkgen vhdl
+lib axi_i2s_adi_v1_00_a fifo_synchronizer vhdl
+lib adi_common_v1_00_a axi_ctrlif vhdl
+lib adi_common_v1_00_a axi_streaming_dma_tx_fifo vhdl
+lib adi_common_v1_00_a axi_streaming_dma_rx_fifo vhdl
+lib adi_common_v1_00_a pl330_dma_fifo vhdl
+lib adi_common_v1_00_a dma_fifo vhdl

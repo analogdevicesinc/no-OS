@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/svg11-tiny.dtd">
+
+<svg width="1172" height="1445">
+  <defs>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="G_IOPort">
+      <rect x="0" y="0" width="16" height="16" fill="#CCCCFF" stroke="#000088" stroke-width="1"/>
+      <path d="M   0,0      L   16,8      L   0,16      Z" stroke="none" fill="#0000BB"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="G_BIPort">
+      <rect x="0" y="0" width="16" height="16" style="fill:#CCCCFF; stroke:#000088; stroke-width:1"/>
+      <path class="btop" d="M 0,8      8,0      16,8      Z" style="stroke:none; fill:#0000BB"/>
+      <path class="bbot" d="M 0,8      8,16      16,8      Z" style="stroke:none; fill:#0000BB"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="KEY_IOPort">
+      <rect x="0" y="0" width="16" height="16" style="fill:#888888; stroke:none;"/>
+      <path class="ioport" d="M   0,0      L   16,8      L   0,16      Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="KEY_BIPort">
+      <rect x="0" y="0" width="16" height="16" style="fill:#888888; stroke:none;"/>
+      <path class="btop" d="M 0,8      8,0      16,8      Z" style="stroke:none; fill:#444444"/>
+      <path class="bbot" d="M 0,8      8,16      16,8      Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="KEY_INPort">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_IOPort"/>
+      <rect x="16" y="0" width="8" height="16" style="fill:#0000BB; stroke:none;"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="KEY_OUTPort">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_IOPort" transform="scale(-1,1) translate(-16,0)"/>
+      <rect x="16" y="0" width="8" height="16" style="fill:#0000BB; stroke:none;"/>
+    </g>
+    <g xmlns:svg="http://www.w3.org/2000/svg" id="KEY_INOUTPort">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_BIPort"/>
+      <rect x="16" y="0" width="8" height="16" style="fill:#0000BB; stroke:none;"/>
+    </g>
+    <g id="AXI_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#0084AB; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="AXI_busconn_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXI_busconn_MASTER">
+      <rect x="0" y="0" width="24" height="24" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXIS_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#0084AB; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="AXIS_busconn_TARGET">
+      <circle cx="12" cy="12" r="12" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="AXIS_busconn_INITIATOR">
+      <rect x="0" y="0" width="24" height="24" style="fill:#D0E6EF; stroke:#0084AB; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#0084AB; stroke:none;"/>
+    </g>
+    <g id="KEY_BifLabel">
+      <rect x="0" y="0" rx="3" ry="3" width="32" height="16" style="fill:#444444; stroke:black; stroke-width:1"/>
+    </g>
+    <g id="KEY_busconn_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MASTER">
+      <rect x="0" y="0" width="24" height="24" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MASTER_SLAVE">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+      <rect x="0" y="12" width="24" height="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="12" width="14" height="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_TARGET">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_INITIATOR">
+      <rect x="0" y="0" width="24" height="24" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <rect x="5.5" y="5" width="14" height="14" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_MONITOR">
+      <rect x="0" y="0.5" width="24" height="7" style="fill:#444444; stroke:none;"/>
+      <rect x="0" y="16" width="24" height="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_USER">
+      <circle cx="12" cy="12" r="12" style="fill:#888888; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#444444; stroke:none;"/>
+    </g>
+    <g id="KEY_busconn_TRANSPARENT">
+      <circle cx="12" cy="12" r="12" style="fill:#FFFFFF; stroke:#444444; stroke-width:1"/>
+      <circle cx="12.5" cy="12" r="7" style="fill:#FFFFFF; stroke:none;"/>
+    </g>
+    <g id="AXI_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXI_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="AXI_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXI_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXI_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="AXI_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXI_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXI_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="AXI_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#0084AB"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXIS_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="AXIS_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXIS_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="AXIS_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXIS_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="AXIS_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXIS_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="AXIS_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#0084AB"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="XIL_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="XIL_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#XIL_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="XIL_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="XIL_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="XIL_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#XIL_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="XIL_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="XIL_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#XIL_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="XIL_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#XIL_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="XIL_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#990066"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#990066"/>
+    </g>
+    <g id="OCM_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OCM_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OCM_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="OCM_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OCM_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OCM_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OCM_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="OCM_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OCM_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OCM_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OCM_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OCM_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="OCM_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#0000DD"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#0000DD"/>
+    </g>
+    <g id="OPB_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="OPB_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OPB_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="OPB_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="OPB_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="OPB_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OPB_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="OPB_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="OPB_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OPB_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="OPB_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OPB_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="OPB_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#339900"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="LMB_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="LMB_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#LMB_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="LMB_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="LMB_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="LMB_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#LMB_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="LMB_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="LMB_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#LMB_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="LMB_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#LMB_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="LMB_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#7777FF"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#7777FF"/>
+    </g>
+    <g id="FSL_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="FSL_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FSL_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="FSL_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="FSL_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="FSL_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FSL_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="FSL_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="FSL_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FSL_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="FSL_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FSL_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="FSL_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#CC00CC"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#CC00CC"/>
+    </g>
+    <g id="DCR_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="DCR_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#DCR_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="DCR_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="DCR_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="DCR_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#DCR_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="DCR_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="DCR_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#DCR_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="DCR_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#DCR_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="DCR_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#6699FF"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#6699FF"/>
+    </g>
+    <g id="FCB_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="FCB_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FCB_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="FCB_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="FCB_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="FCB_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FCB_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="FCB_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="FCB_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FCB_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="FCB_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#FCB_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="FCB_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#8C00FF"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#8C00FF"/>
+    </g>
+    <g id="PLB_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLB_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLB_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="PLB_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLB_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLB_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLB_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="PLB_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLB_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLB_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLB_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLB_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="PLB_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#FF5500"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV34_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="PLBV34_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV34_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="PLBV34_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV34_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV34_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV34_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="PLBV34_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#FF5500"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV46_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="PLBV46_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="PLBV46_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="PLBV46_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#BB9955"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_P2P_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_P2P_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="PLBV46_P2P_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_P2P_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="PLBV46_P2P_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_P2P_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="PLBV46_P2P_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#BB9955"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="USER_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="USER_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#USER_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="USER_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="USER_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="USER_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#USER_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="USER_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="USER_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#USER_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="USER_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#USER_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="USER_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#009999"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#009999"/>
+    </g>
+    <g id="KEY_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="KEY_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="KEY_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="KEY_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="KEY_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="KEY_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="KEY_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="KEY_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="KEY_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#444444"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowEast">
+      <path class="bus" d="M   0,0      L     8, 6      L   0,12,       Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowWest">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#GRAYSCALE_BusArrowEast" transform="scale(-1,1) translate(-8,0)"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowHInitiator">
+      <rect x="0" y="2" width="8" height="8" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowSouth">
+      <path class="bus" d="M   0,0      L   12,0      L   6, 8      Z" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowNorth">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#GRAYSCALE_BusArrowSouth" transform="scale(1,-1) translate(0,-12)"/>
+    </g>
+    <g id="GRAYSCALE_BusArrowInitiator">
+      <rect x="2" y="0" width="4" height="12" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_SplitBus_EAST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#GRAYSCALE_BusArrowWest"/>
+      <rect x="8" y="2" width="24" height="8" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="GRAYSCALE_SplitBus_WEST">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#GRAYSCALE_SplitBus_EAST" transform="scale(-1,1) translate(-46,0)"/>
+    </g>
+    <g id="GRAYSCALE_SplitBus_OneWay">
+      <rect x="0" y="2" width="16" height="8" style="stroke:none; fill:#444444"/>
+      <rect x="16" y="0" width="12" height="12" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="AXI_SharedBus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_BusArrowWest"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="946" y="0" xlink:href="#AXI_BusArrowEast"/>
+      <rect x="8" y="2" width="938" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="OPB_SharedBus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#OPB_BusArrowWest"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="946" y="0" xlink:href="#OPB_BusArrowEast"/>
+      <rect x="8" y="2" width="938" height="8" style="stroke:none; fill:#339900"/>
+    </g>
+    <g id="PLB_SharedBus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLB_BusArrowWest"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="946" y="0" xlink:href="#PLB_BusArrowEast"/>
+      <rect x="8" y="2" width="938" height="8" style="stroke:none; fill:#FF5500"/>
+    </g>
+    <g id="PLBV46_SharedBus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#PLBV46_BusArrowWest"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="946" y="0" xlink:href="#PLBV46_BusArrowEast"/>
+      <rect x="8" y="2" width="938" height="8" style="stroke:none; fill:#BB9955"/>
+    </g>
+    <g id="group_sharedBusses">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#AXI_SharedBus"/>
+      <text x="8" y="22" fill="#000000" stroke="none" font-size="12pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Courier Arial Helvetica san-serif">axi_interconnect_1</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="106" xlink:href="#AXI_SharedBus"/>
+      <text x="8" y="128" fill="#000000" stroke="none" font-size="12pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Courier Arial Helvetica san-serif">axi_interconnect_2</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="212" xlink:href="#AXI_SharedBus"/>
+      <text x="8" y="234" fill="#000000" stroke="none" font-size="12pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Courier Arial Helvetica san-serif">axi_interconnect_3</text>
+    </g>
+    <g id="KEY_SharedBus">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" xlink:href="#KEY_BusArrowWest"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="30" y="0" xlink:href="#KEY_BusArrowEast"/>
+      <rect x="8" y="2" width="22" height="8" style="stroke:none; fill:#444444"/>
+    </g>
+    <g id="sbsbktmodule_axi_clkgen_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_clkgen</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_clkgen_0</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#AXI_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#AXI_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+    </g>
+    <g id="sbsbktmodule_axi_i2s_adi_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_i2s_adi</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_i2s_adi_0</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#AXI_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#AXI_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+    </g>
+    <g id="sbsbktmodule_axi_iic_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_iic</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_iic_0</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#AXI_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#AXI_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+    </g>
+    <g id="sbsbktmodule_axi_iic_1">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_iic</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_iic_1</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#AXI_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#AXI_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+    </g>
+    <g id="sbsbktmodule_axi_spdif_tx_0">
+      <rect x="0" y="24" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="56" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="64" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_spdif_tx</text>
+      <text x="45" y="74" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_spdif_tx_0</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="29" y="28" xlink:href="#AXI_BifLabel"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="33" y="0" xlink:href="#AXI_busconn_SLAVE"/>
+      <text x="45" y="39" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+    </g>
+    <g id="sbsbucket_axi_interconnect_1">
+      <rect x="0" y="0" rx="4" ry="4" width="334" height="244" style="stroke-width:2; stroke:#0084AB; fill:#D0E6EF"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="16" xlink:href="#sbsbktmodule_axi_clkgen_0"/>
+      <rect x="0" y="24" width="61" height="8" style="fill:#0084AB"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="16" xlink:href="#sbsbktmodule_axi_i2s_adi_0"/>
+      <rect x="61" y="24" width="106" height="8" style="fill:#0084AB"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="16" xlink:href="#sbsbktmodule_axi_iic_0"/>
+      <rect x="167" y="24" width="106" height="8" style="fill:#0084AB"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="130" xlink:href="#sbsbktmodule_axi_iic_1"/>
+      <rect x="0" y="138" width="61" height="8" style="fill:#0084AB"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="130" xlink:href="#sbsbktmodule_axi_spdif_tx_0"/>
+      <rect x="61" y="138" width="106" height="8" style="fill:#0084AB"/>
+      <rect x="0" y="24" width="8" height="114" style="fill:#0084AB"/>
+    </g>
+    <g id="ipbktmodule_clock_generator_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#000000; stroke-width:2"/>
+      <rect x="11" y="18" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="26" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">clock_generator</text>
+      <text x="45" y="38" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">clock_generator_0</text>
+    </g>
+    <g id="ipbktmodule_util_i2c_mixer_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#000000; stroke-width:2"/>
+      <rect x="11" y="18" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="26" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">util_i2c_mixer</text>
+      <text x="45" y="38" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">util_i2c_mixer_0</text>
+    </g>
+    <g id="ipbktmodule_util_vector_logic_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#000000; stroke-width:2"/>
+      <rect x="11" y="18" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="26" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">util_vector_logic</text>
+      <text x="45" y="38" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">util_vector_logic_0</text>
+    </g>
+    <g id="ipbucket">
+      <rect x="0" y="0" rx="4" ry="4" width="334" height="106" style="stroke-width:2; stroke:#000000; fill:#CCCCFF"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="16" y="16" xlink:href="#ipbktmodule_clock_generator_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="16" xlink:href="#ipbktmodule_util_vector_logic_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="228" y="16" xlink:href="#ipbktmodule_util_i2c_mixer_0"/>
+    </g>
+    <g id="symbol_STACK_0_SHAPE_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="114" style="fill:#666699; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="4" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="12" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">processing_system7</text>
+      <text x="45" y="20" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">processing_system7_0</text>
+      <line x1="79" y1="64" x2="91" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="63" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">M_AX</text>
+      <line x1="0" y1="92" x2="11" y2="92" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="82" xlink:href="#AXI_BifLabel"/>
+      <text x="27" y="93" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+      <line x1="0" y1="64" x2="11" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="27" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+    </g>
+    <g id="symbol_STACK_0">
+      <rect x="0" y="0" rx="6" ry="6" width="334" height="394" style="fill:#CCCCCC; stroke:none;"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="468" xlink:href="#sbsbucket_axi_interconnect_1"/>
+      <text x="0" y="464" fill="#000000" stroke="none" font-size="9pt" font-style="normal" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">SLAVES OF axi_interconnect_1</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="122" y="0" xlink:href="#symbol_STACK_0_SHAPE_0"/>
+      <text x="122" y="-4" fill="#000000" stroke="none" font-size="9pt" font-style="normal" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">PROCESSOR</text>
+    </g>
+    <g id="symbol_STACK_1_SHAPE_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="102" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="4" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="12" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_vdma</text>
+      <text x="45" y="20" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_vdma_0</text>
+      <line x1="79" y1="64" x2="91" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="63" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+      <line x1="79" y1="92" x2="91" y2="92" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="82" xlink:href="#AXI_BifLabel"/>
+      <text x="63" y="93" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">M_AX</text>
+      <line x1="0" y1="64" x2="11" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="54" xlink:href="#AXIS_BifLabel"/>
+      <text x="27" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">M_AX</text>
+    </g>
+    <g id="symbol_STACK_1_SHAPE_1">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="4" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="12" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_hdmi_tx_16b</text>
+      <text x="45" y="20" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_hdmi_tx_16b_0</text>
+      <line x1="79" y1="64" x2="91" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="63" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+      <line x1="0" y1="64" x2="11" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="54" xlink:href="#AXIS_BifLabel"/>
+      <text x="27" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">M_AX</text>
+    </g>
+    <g id="symbol_STACK_1">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="208" style="fill:#CCCCCC; stroke:none;"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="350" xlink:href="#symbol_STACK_1_SHAPE_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="468" xlink:href="#symbol_STACK_1_SHAPE_1"/>
+    </g>
+    <g id="symbol_STACK_2_SHAPE_0">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="102" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="4" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="12" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_dma</text>
+      <text x="45" y="20" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_dma_0</text>
+      <line x1="0" y1="92" x2="11" y2="92" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="82" xlink:href="#AXI_BifLabel"/>
+      <text x="27" y="93" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+      <line x1="0" y1="64" x2="11" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="27" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">M_AX</text>
+      <line x1="79" y1="64" x2="91" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="54" xlink:href="#AXIS_BifLabel"/>
+      <text x="63" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+    </g>
+    <g id="symbol_STACK_2_SHAPE_1">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="74" style="fill:#CCCCCC; stroke:#FFFFFF; stroke-width:2"/>
+      <rect x="11" y="4" rx="3" ry="3" width="68" height="38" style="fill:#FFFFFF; stroke:none;"/>
+      <text x="45" y="12" fill="#AA0017" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Arial Helvetica san-serif">axi_admp441</text>
+      <text x="45" y="20" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">axi_admp441_0</text>
+      <line x1="0" y1="64" x2="11" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="11" y="54" xlink:href="#AXI_BifLabel"/>
+      <text x="27" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AXI</text>
+      <line x1="79" y1="64" x2="91" y2="64" style="stroke:#0084AB;stroke-width:1"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="47" y="54" xlink:href="#AXIS_BifLabel"/>
+      <text x="63" y="65" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="middle" font-family="Verdana Courier Arial Helvetica san-serif">S_AX</text>
+    </g>
+    <g id="symbol_STACK_2">
+      <rect x="0" y="0" rx="6" ry="6" width="90" height="208" style="fill:#CCCCCC; stroke:none;"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="350" xlink:href="#symbol_STACK_2_SHAPE_0"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="468" xlink:href="#symbol_STACK_2_SHAPE_1"/>
+    </g>
+    <g id="symbol_SPACE_WEST_NONE_EAST_0">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="218" y="78" xlink:href="#AXI_busconn_SLAVE"/>
+      <rect x="72" y="92" width="8" height="170" style="stroke:none; fill:#0084AB"/>
+      <rect x="72" y="86" width="152" height="8" style="stroke:none; fill:#0084AB"/>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="218" y="50" xlink:href="#AXI_busconn_SLAVE"/>
+      <rect x="32" y="64" width="8" height="304" style="stroke:none; fill:#0084AB"/>
+      <rect x="32" y="58" width="192" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="symbol_SPACE_WEST_0_EAST_1">
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="45" y="50" xlink:href="#AXI_busconn_MASTER"/>
+      <rect x="223" y="64" width="8" height="92" style="stroke:none; fill:#0084AB"/>
+      <rect x="64" y="58" width="167" height="8" style="stroke:none; fill:#0084AB"/>
+    </g>
+    <g id="symbol_SPACE_WEST_1_EAST_2"/>
+    <g id="symbol_SPACE_WEST_2_EAST_NONE"/>
+    <g id="KEY_IntrCntrl">
+      <rect x="0" y="0" rx="3" ry="3" width="9" height="18" style="fill:#888888; stroke:none; stroke-width:1"/>
+      <line x1="0" y1="5" x2="9" y2="5" style="stroke:#000000;stroke-width:2"/>
+      <text x="1.5" y="16" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">x</text>
+    </g>
+    <g id="KEY_IntrdProc">
+      <rect x="0" y="0" rx="3" ry="3" width="9" height="18" style="fill:#888888; stroke:none; stroke-width:1"/>
+      <line x1="0" y1="3" x2="9" y2="3" style="stroke:#000000;stroke-width:1"/>
+      <line x1="0" y1="7" x2="9" y2="7" style="stroke:#000000;stroke-width:1"/>
+      <text x="1.5" y="16" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">x</text>
+    </g>
+    <g id="KEY_IntrSrc">
+      <rect x="0" y="0" rx="3" ry="3" width="18" height="9" style="fill:#888888; stroke:none; stroke-width:1"/>
+      <line x1="9" y1="0" x2="9" y2="9" style="stroke:#000000;stroke-width:1"/>
+      <text x="2" y="7" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">y</text>
+      <text x="11" y="7" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">x</text>
+    </g>
+    <g id="BlkDiagram_Key">
+      <rect x="0" y="0" width="468" height="250" style="fill:#CCCCCC; stroke:none;"/>
+      <rect x="0" y="0" width="468" height="16" style="fill:#CCCCCC; stroke:none;"/>
+      <text x="234" y="14" fill="#AA0017" stroke="none" font-size="14pt" font-weight="900" text-anchor="middle" font-family="Arial Helvetica san-serif">KEY</text>
+      <rect x="0" y="16" width="468" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="234" y="30" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="middle" font-family="Arial Helvetica san-serif">SYMBOLS</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="32" y="47" xlink:href="#KEY_BifLabel" transform="scale(0.75)"/>
+      <text x="12" y="60" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">bus interface</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="20" y="68" xlink:href="#KEY_SharedBus"/>
+      <text x="12" y="89" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">shared bus</text>
+      <text x="110" y="47" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="start" text-decoration="underline" font-family="Verdana Arial Helvetica san-serif">Bus connections</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="110" y="58" xlink:href="#KEY_busconn_MASTER"/>
+      <text x="140" y="72" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">master or initiator</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="110" y="86" xlink:href="#KEY_busconn_SLAVE"/>
+      <text x="140" y="100" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">slave or target</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="110" y="114" xlink:href="#KEY_busconn_MASTER_SLAVE"/>
+      <text x="140" y="128" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">master slave</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="110" y="142" xlink:href="#KEY_busconn_MONITOR"/>
+      <text x="140" y="156" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">monitor</text>
+      <text x="258" y="47" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="start" text-decoration="underline" font-family="Verdana Arial Helvetica san-serif">External Ports</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="258" y="58" xlink:href="#KEY_INPort"/>
+      <text x="288" y="72" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">input</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="258" y="78" xlink:href="#KEY_OUTPort"/>
+      <text x="288" y="92" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">output</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="258" y="98" xlink:href="#KEY_INOUTPort"/>
+      <text x="288" y="112" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">inout</text>
+      <text x="380" y="47" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="start" text-decoration="underline" font-family="Verdana Arial Helvetica san-serif">Interrupts</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="380" y="58" xlink:href="#KEY_IntrCntrl"/>
+      <text x="396" y="64" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Interrupt</text>
+      <text x="396" y="74" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Controller</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="380" y="88" xlink:href="#KEY_IntrdProc"/>
+      <text x="396" y="94" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Interrupt</text>
+      <text x="396" y="104" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Target</text>
+      <use xmlns:xlink="http://www.w3.org/1999/xlink" x="380" y="118" xlink:href="#KEY_IntrSrc"/>
+      <text x="400" y="124" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Interrupt</text>
+      <text x="400" y="134" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Source</text>
+      <text x="360" y="146" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">X = Controller ID</text>
+      <text x="360" y="156" fill="#000000" stroke="none" font-size="8pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Y = Interrupt Priority</text>
+      <rect x="0" y="160" width="468" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="234" y="172" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="middle" font-family="Arial Helvetica san-serif">COLORS</text>
+      <text x="110" y="190" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Bus Standard</text>
+      <rect x="12" y="200" width="24" height="24" style="fill:#6699FF; stroke:none;"/>
+      <text x="40" y="220" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">DCR</text>
+      <rect x="12" y="228" width="24" height="24" style="fill:#8C00FF; stroke:none;"/>
+      <text x="40" y="240" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">FCB</text>
+      <rect x="84" y="200" width="24" height="24" style="fill:#CC00CC; stroke:none;"/>
+      <text x="112" y="220" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">FSL</text>
+      <rect x="84" y="228" width="24" height="24" style="fill:#7777FF; stroke:none;"/>
+      <text x="112" y="240" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">LMB</text>
+      <rect x="156" y="200" width="24" height="24" style="fill:#339900; stroke:none;"/>
+      <text x="184" y="220" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">OPB</text>
+      <rect x="156" y="228" width="24" height="24" style="fill:#FF5500; stroke:none;"/>
+      <text x="184" y="240" fill="#000000" stroke="none" font-size="10pt" font-weight="900" text-anchor="middle" font-family="Arial Helvetica san-serif">PLB</text>
+      <rect x="228" y="200" width="24" height="24" style="fill:#0000DD; stroke:none;"/>
+      <text x="256" y="220" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">SOCM</text>
+      <rect x="228" y="228" width="24" height="24" style="fill:#990066; stroke:none;"/>
+      <text x="256" y="240" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">Xilinx P2P</text>
+      <rect x="300" y="200" width="24" height="24" style="fill:#009999; stroke:none;"/>
+      <text x="328" y="220" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="900" text-anchor="start" font-family="Verdana Arial Helvetica san-serif">USER P2P</text>
+    </g>
+    <g id="BlkDiagram_Specs">
+      <rect x="0" y="0" width="300" height="100" style="fill:#CCCCCC; stroke:none;"/>
+      <rect x="0" y="0" width="300" height="16" style="fill:#CCCCCC; stroke:none;"/>
+      <text x="150" y="14" fill="#AA0017" stroke="none" font-size="14pt" font-weight="900" text-anchor="middle" font-family="Arial Helvetica san-serif">SPECS</text>
+      <rect x="0" y="20" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="4" y="32" fill="#000000" stroke="none" font-size="10pt" font-weight="bold" text-anchor="start" font-family="Arial Helvetica san-serif">EDK VERSION</text>
+      <text x="241" y="32" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">14.4</text>
+      <rect x="0" y="40" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="4" y="52" fill="#000000" stroke="none" font-size="10pt" font-weight="bold" text-anchor="start" font-family="Arial Helvetica san-serif">ARCH</text>
+      <text x="241" y="52" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">zynq</text>
+      <rect x="0" y="60" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="4" y="72" fill="#000000" stroke="none" font-size="10pt" font-weight="bold" text-anchor="start" font-family="Arial Helvetica san-serif">PART</text>
+      <text x="241" y="72" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">xc7z020clg484-1</text>
+      <rect x="0" y="80" width="300" height="16" style="fill:#EEEEEE; stroke:none;"/>
+      <text x="4" y="92" fill="#000000" stroke="none" font-size="10pt" font-weight="bold" text-anchor="start" font-family="Arial Helvetica san-serif">GENERATED</text>
+      <text x="217" y="92" fill="#000000" stroke="none" font-size="10pt" font-style="italic" font-weight="bold" text-anchor="middle" font-family="Courier Arial Helvetica san-serif">Thu Sep 26 11:47:34 2013</text>
+    </g>
+  </defs>
+  <rect x="0" y="0" width="1172" height="1445" fill="#FFFFFF" stroke="#000000" stroke-width="4"/>
+  <rect x="48" y="40" width="1076" height="1104" style="fill:#000088"/>
+  <rect x="64" y="56" rx="8" ry="8" width="1044" height="1072" fill="#CCCCCC"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="389" y="101" xlink:href="#symbol_STACK_0"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="803" y="187" xlink:href="#symbol_STACK_1"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="933" y="187" xlink:href="#symbol_STACK_2"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="269" y="101" xlink:href="#symbol_SPACE_WEST_NONE_EAST_0"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="556" y="101" xlink:href="#symbol_SPACE_WEST_0_EAST_1"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="848" y="187" xlink:href="#symbol_SPACE_WEST_1_EAST_2"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="978" y="187" xlink:href="#symbol_SPACE_WEST_2_EAST_NONE"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="109" y="251" xlink:href="#group_sharedBusses"/>
+  <text x="419" y="915" fill="#000000" stroke="none" font-size="9pt" font-style="normal" font-weight="900" text-anchor="start" font-family="Arial Helvetica san-serif">IP</text>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="419" y="919" xlink:href="#ipbucket"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="656" y="1187" xlink:href="#BlkDiagram_Key"/>
+  <use xmlns:xlink="http://www.w3.org/1999/xlink" x="48" y="1187" xlink:href="#BlkDiagram_Specs"/>
+</svg>
