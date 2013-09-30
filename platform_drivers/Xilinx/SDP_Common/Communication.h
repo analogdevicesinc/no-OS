@@ -50,17 +50,37 @@
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
 /*****************************************************************************/
-/*!< Please uncomment the '#define' with the desired device name, before
+/* Please uncomment the '#define' with the desired device name, before
  * compilation */
 
-//#define AD5110
 //#define AD5415
+//#define AD5443
+//#define AD5449
 //#define AD5421
 //#define AD5425
-//#define AD5449
 //#define AD5541A
-//#define AD5781
 //#define AD5542A
+//#define AD5446
+//#define AD5453
+//#define AD5543
+//#define AD5553
+//#define AD5629R
+//#define AD5669R
+//#define AD5668
+//#define AD5648
+//#define AD5628
+//#define AD5684R
+//#define AD5686R
+//#define AD5694R
+//#define AD5696R
+//#define AD5755
+//#define AD5755_1
+//#define AD5757
+//#define AD5760
+//#define AD5780
+//#define AD5781
+//#define AD5790
+#define AD5791
 //#define AD5570
 
 /*****************************************************************************/
@@ -69,18 +89,18 @@
 #define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
 #define UART_DEV_ID         XPAR_RS232_UART_1_DEVICE_ID
 
-/*!< UART registers*/
+/* UART registers*/
 #define UART_RX         UART_BASEADDR + 0x0
 #define UART_TX         UART_BASEADDR + 0x4
 #define UART_STAT       UART_BASEADDR + 0x8
 #define UART_CNTRL      UART_BASEADDR + 0xC
 
-/*!< UART Control Register */
+/* UART Control Register */
 #define UART_RST_TX         (1 << 0x0)
 #define UART_RST_RX         (1 << 0x1)
 #define UART_EN_INTR        (1 << 0x4)
 
-/*!< UART Status Register */
+/* UART Status Register */
 #define UART_RX_VALID       (1 << 0x0)
 #define UART_RX_FULL        (1 << 0x1)
 #define UART_TX_EMPTY       (1 << 0x2)
@@ -93,7 +113,7 @@
 /*****************************************************************************/
 /***************************** SPI Definitions *******************************/
 /*****************************************************************************/
-/*!< Register address */
+/* Register address */
 #define SRR            0x40
 #define SPICR          0x60
 #define SPISR          0x64
@@ -106,7 +126,7 @@
 #define IPISR          0x20
 #define IPIER          0x28
 
-/*!< SPI Control Register (SPICR) */
+/* SPI Control Register (SPICR) */
 #define LSBFirst            9
 #define MasterTranInh       8
 #define ManualSlaveAssEn    7
@@ -118,7 +138,7 @@
 #define SPE                 1
 #define LOOP                0
 
-/*!< SPI Status Register (SPISR) */
+/* SPI Status Register (SPISR) */
 #define SlaveModeSel        5
 #define MODF                4
 #define TxFull              3
@@ -126,7 +146,7 @@
 #define RxFull              1
 #define RxEmpty             0
 
-/*!< IP Interrupt Status Register */
+/* IP Interrupt Status Register */
 #define DDRNotEmpty         8
 #define SlaveModeSel_int    7
 #define TxFifoHalfEmpty     6
@@ -144,21 +164,21 @@
 #define ISR            0x020
 #define IER            0x028
 #define SOFTR          0x040
-#define CR           0x100
-#define SR           0x104
-#define TX_FIFO      0x108
-#define RX_FIFO      0x10C
+#define CR             0x100
+#define SR             0x104
+#define TX_FIFO        0x108
+#define RX_FIFO        0x10C
 #define ADR            0x110
 #define TX_FIFO_OCY    0x114
 #define RX_FIFO_OCY    0x118
 #define TEN_ADDR       0x11C
 #define RX_FIFO_PIRQ   0x120
-#define GPO        0x124
+#define GPO            0x124
 
 /*****************************************************************************/
 /*********************** GPIO Registers Definitions **************************/
 /*****************************************************************************/
-#define GPIO_DATA    0x00
+#define GPIO_DATA      0x00
 #define GPIO_TRI       0x04
 
 /****************************************************************************/
@@ -189,12 +209,13 @@
   Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord | cfgWord); \
 }
 
-#ifdef AD5541A
+#if(defined(AD5541A) || defined(AD5542A))
+#define GPIO_0_MASK   0x02
 #define GPIO_1_MASK   0x01
 #define GPIO_2_MASK   0x04
 #define GPIO_3_MASK   0x08
 #else
-#ifdef AD5781
+#if (defined(AD5760) || defined(AD5780) || defined(AD5781) || defined(AD5790) || defined(AD5791))
 #define GPIO_2_MASK   0x04
 #define GPIO_3_MASK   0x02
 #define GPIO_4_MASK   0x01
@@ -212,49 +233,49 @@
 
 /* GPIO[0] */
 #define GPIO0_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_0_MASK)
-#define GPIO0_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_0_MASK)
+#define GPIO0_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_0_MASK)
 #define GPIO0_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_0_MASK)
 #define GPIO0_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_0_MASK)
 
 /* GPIO[1] */
 #define GPIO1_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_1_MASK)
-#define GPIO1_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_1_MASK)
+#define GPIO1_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_1_MASK)
 #define GPIO1_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_1_MASK)
 #define GPIO1_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_1_MASK)
 
 /* GPIO[2] */
 #define GPIO2_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_2_MASK)
-#define GPIO2_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_2_MASK)
+#define GPIO2_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_2_MASK)
 #define GPIO2_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_2_MASK)
 #define GPIO2_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_2_MASK)
 
 /* GPIO[3] */
 #define GPIO3_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_3_MASK)
-#define GPIO3_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_3_MASK)
+#define GPIO3_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_3_MASK)
 #define GPIO3_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_3_MASK)
 #define GPIO3_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_3_MASK)
 
 /* GPIO[4] */
 #define GPIO4_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_4_MASK)
-#define GPIO4_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_4_MASK)
+#define GPIO4_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_4_MASK)
 #define GPIO4_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_4_MASK)
 #define GPIO4_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_4_MASK)
 
 /* GPIO[5] */
 #define GPIO5_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_5_MASK)
-#define GPIO5_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_5_MASK)
+#define GPIO5_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_5_MASK)
 #define GPIO5_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_5_MASK)
 #define GPIO5_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_5_MASK)
 
 /* GPIO[6] */
 #define GPIO6_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_6_MASK)
-#define GPIO6_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_6_MASK)
+#define GPIO6_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_6_MASK)
 #define GPIO6_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_6_MASK)
 #define GPIO6_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_6_MASK)
 
 /* GPIO[7] */
 #define GPIO7_PIN_OUT   GPIO_SET_PINS_OUT(GPIO_BASEADDR, GPIO_7_MASK)
-#define GPIO7_PIN_IN  GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_7_MASK)
+#define GPIO7_PIN_IN    GPIO_SET_PINS_IN(GPIO_BASEADDR, GPIO_7_MASK)
 #define GPIO7_LOW       GPIO_CLEAR_BITS(GPIO_BASEADDR, GPIO_7_MASK)
 #define GPIO7_HIGH      GPIO_SET_BITS(GPIO_BASEADDR, GPIO_7_MASK)
 
@@ -277,47 +298,47 @@ u32 UART_BAUDRATE;
 /*****************************************************************************/
 /************************* Functions Declarations ****************************/
 /*****************************************************************************/
-/*!< Initializes the selected platform. */
+/* Initializes the selected platform. */
 char PLATFORM_Init(platformBoard);
 
-/*!< Initializes the SPI communication peripheral. */
+/* Initializes the SPI communication peripheral. */
 char SPI_Init(unsigned char lsbFirst,
               unsigned long clockFreq,
               unsigned char clockPol,
               unsigned char clockEdg);
 
-/*!< Writes multiple bytes to SPI. */
+/* Writes multiple bytes to SPI. */
 char SPI_Write(unsigned char   slaveDeviceId,
                unsigned char*  data,
                unsigned char   bytesNumber);
 
-/*!< Reads multiple bytes from SPI. */
+/* Reads multiple bytes from SPI. */
 char SPI_Read(unsigned char   slaveDeviceId,
               unsigned char*  data,
               unsigned char   bytesNumber);
 
-/*!< Initializes the UART communication peripheral. */
+/* Initializes the UART communication peripheral. */
 char UART_Init(unsigned long baudRate);
 
-/*!< Reads one character from UART.. */
+/* Reads one character from UART.. */
 void UART_ReadChar(char* data);
 
-/*!< Writes one character to UART. */
+/* Writes one character to UART. */
 void UART_WriteChar(char data);
 
-/*!< Writes one character string to UART. */
+/* Writes one character string to UART. */
 void UART_WriteString(const char* string);
 
-/*!< Initializes the I2C communication peripheral. */
+/* Initializes the I2C communication peripheral. */
 unsigned char I2C_Init(unsigned long clockFreq);
 
-/*!< Reads data from a slave device. */
+/* Reads data from a slave device. */
 unsigned char I2C_Read(unsigned char  slaveAddress,
                        unsigned char* dataBuffer,
                        unsigned char  bytesNumber,
                        unsigned char  stopBit);
 
-/*!< Writes data to a slave device. */
+/* Writes data to a slave device. */
 unsigned char I2C_Write(unsigned char  slaveAddress,
                         unsigned char* dataBuffer,
                         unsigned char  bytesNumber,

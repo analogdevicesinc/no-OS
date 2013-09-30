@@ -68,7 +68,7 @@ char PLATFORM_Init(platformBoard platform)
     switch (platform )
     {
      case XILINX_KC705:
-         SPI_BASEADDR  = XPAR_AXI_SPORT_0_BASEADDR;
+        SPI_BASEADDR  = XPAR_AXI_SPORT_0_BASEADDR;
         I2C_BASEADDR  = XPAR_AXI_IIC_0_BASEADDR;
         GPIO_BASEADDR = XPAR_GPIO_0_BASEADDR;
         UART_BAUDRATE = 115200;
@@ -77,7 +77,7 @@ char PLATFORM_Init(platformBoard platform)
          xil_printf("Selected platform is not supported\n");
         return -1;
     };
-#ifdef AD5541A
+#if(defined(AD5541A) || defined(AD5542A))
     /* Activate DAC buffer */
     GPIO2_PIN_OUT;
     GPIO2_LOW;
@@ -85,16 +85,31 @@ char PLATFORM_Init(platformBoard platform)
     GPIO3_PIN_OUT;
     GPIO3_HIGH;
 #endif
-#ifdef AD5542A
-    /* Activate DAC buffer */
-    GPIO2_PIN_OUT;
-    GPIO2_LOW;
-    /* Deactivate ADC buffer */
-    GPIO3_PIN_OUT;
-    GPIO3_HIGH;
+#if(defined(AD5443))
+    /* Select the SDO line for the device */
+    GPIO0_PIN_OUT;
+    GPIO0_HIGH;
 #endif
-#ifdef AD5570
+#if(defined(AD5570) || defined(AD5453) || defined(AD5446) || defined(AD5443))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
+#if(defined(AD5629R) || defined(AD5669R) || defined(AD5694R) || defined(AD5696R))
+	I2C_BASEADDR = XPAR_AXI_IIC_1_BASEADDR;
+#endif
+#if(defined(AD5668) || defined(AD5648) || defined(AD5628))
+	/* Activate DAC buffer */
+    GPIO2_PIN_OUT;
+    GPIO2_LOW;
+    /* Deactivate ADC buffer */
+    GPIO3_PIN_OUT;
+    GPIO3_HIGH;
+    /* Deactivate MUX */
+    GPIO4_PIN_OUT;
+    GPIO4_HIGH;
+#endif
+#if(defined(AD5686R) || defined(AD5684R))
+    GPIO0_PIN_OUT;
+    GPIO0_HIGH;
 #endif
 return 0;
 }
@@ -128,7 +143,7 @@ char SPI_Init(unsigned char lsbFirst,
               unsigned char clockPol,
               unsigned char clockEdg)
 {
-    /*!< Configuration Register Settings */
+    /* Configuration Register Settings */
     configValue |= (lsbFirst    << LSBFirst)         | // MSB First transfer format
                    (1           << MasterTranInh)    | // Master transactions disabled
                    (1           << ManualSlaveAssEn) | // Slave select output follows data in slave select register
@@ -140,10 +155,10 @@ char SPI_Init(unsigned char lsbFirst,
                    (1           << SPE)              | // SPI enabled
                    (0           << LOOP);              // Normal operation
 
-    /*!< Set the slave select register to all ones */
+    /* Set the slave select register to all ones */
     Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
 
-    /*!< Set corresponding value to the Configuration Register */
+    /* Set corresponding value to the Configuration Register */
     Xil_Out32(SPI_BASEADDR + SPICR, configValue);
 
     return 0;
@@ -169,23 +184,23 @@ char SPI_Write(unsigned char slaveDeviceId,
     u32 txCnt     = 0;
     u32 timeout   = 0xFFFF;
 
-    /*!< Write configuration data to master SPI device SPICR */
+    /* Write configuration data to master SPI device SPICR */
     Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-    /*!< Write to SPISSR to manually assert SSn */
-    Xil_Out32(SPI_BASEADDR + SPISSR, ~(0x00000001 << (0)));
+    /* Write to SPISSR to manually assert SSn */
+    Xil_Out32(SPI_BASEADDR + SPISSR, ~(0x00000001 << (slaveDeviceId-1)));
 
-    /*!< Write initial data to master SPIDTR register */
+    /* Write initial data to master SPIDTR register */
     Xil_Out32(SPI_BASEADDR + SPIDTR, data[0]);
 
-    /*!< Enable the master transactions */
+    /* Enable the master transactions */
     cfgValue &= ~(1 << MasterTranInh);
     Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-    /*!< Send and receive the data */
+    /* Send and receive the data */
     while(txCnt < bytesNumber)
     {
-        /*!< Poll status for completion */
+        /* Poll status for completion */
         do
         {
             SPIStatus = Xil_In32(SPI_BASEADDR + SPISR);
@@ -193,55 +208,55 @@ char SPI_Write(unsigned char slaveDeviceId,
         while(((SPIStatus & 0x01) == 1) && timeout--);
         if(timeout == -1)
         {
-            /*!< Disable the master transactions */
+            /* Disable the master transactions */
             cfgValue |= (1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Reset the SPI core */
+            /* Reset the SPI core */
             Xil_Out32(SPI_BASEADDR + SRR, 0x0000000A);
 
-            /*!< Set the slave select register to all ones */
+            /* Set the slave select register to all ones */
             Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
 
-            /*!< Set corresponding value to the Configuration Register */
+            /* Set corresponding value to the Configuration Register */
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Return error */
+            /* Return error */
             return -1;
         }
         timeout = 0xFFFF;
 
-        /*!< Read received data from SPI Core buffer */
+        /* Read received data from SPI Core buffer */
         if(rxCnt < bytesNumber)
         {
             data[rxCnt] = Xil_In32(SPI_BASEADDR + SPIDRR);
             rxCnt++;
         }
-        /*!< Send next data */
+        /* Send next data */
         txCnt++;
         if(txCnt < bytesNumber)
         {
-            /*!< Disable the master transactions */
+            /* Disable the master transactions */
             cfgValue |= (1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Write data */
+            /* Write data */
             Xil_Out32(SPI_BASEADDR + SPIDTR, data[txCnt]);
 
-            /*!< Enable the master transactions */
+            /* Enable the master transactions */
             cfgValue &= ~(1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
         }
     }
 
-    /*!< Disable the master transactions */
+    /* Disable the master transactions */
     cfgValue |= (1 << MasterTranInh);
     Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-    /*!< Write all ones to SPISSR */
+    /* Write all ones to SPISSR */
     Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
 
-    /*!< Return the number of bytes written */
+    /* Return the number of bytes written */
     return bytesNumber;
 }
 
@@ -264,23 +279,23 @@ char SPI_Read(unsigned char slaveDeviceId,
     u32 txCnt     = 0;
     u32 timeout   = 0xFFFF;
 
-    /*!< Write configuration data to master SPI device SPICR */
+    /* Write configuration data to master SPI device SPICR */
     Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-    /*!< Write to SPISSR to manually assert SSn */
-    Xil_Out32(SPI_BASEADDR + SPISSR, ~(0x00000001 << (0)));
+    /* Write to SPISSR to manually assert SSn */
+    Xil_Out32(SPI_BASEADDR + SPISSR, ~(0x00000001 << (slaveDeviceId-1)));
 
-    /*!< Write initial data to master SPIDTR register */
+    /* Write initial data to master SPIDTR register */
     Xil_Out32(SPI_BASEADDR + SPIDTR, data[0]);
 
-    /*!< Enable the master transactions */
+    /* Enable the master transactions */
     cfgValue &= ~(1 << MasterTranInh);
     Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-    /*!< Send and receive the data */
+    /* Send and receive the data */
     while(txCnt < bytesNumber)
     {
-        /*!< Poll status for completion */
+        /* Poll status for completion */
         do
         {
             SPIStatus = Xil_In32(SPI_BASEADDR + SPISR);
@@ -288,55 +303,55 @@ char SPI_Read(unsigned char slaveDeviceId,
         while(((SPIStatus & 0x01) == 1) && timeout--);
         if(timeout == -1)
         {
-            /*!< Disable the master transactions */
+            /* Disable the master transactions */
             cfgValue |= (1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Reset the SPI core */
+            /* Reset the SPI core */
             Xil_Out32(SPI_BASEADDR + SRR, 0x0000000A);
 
-            /*!< Set the slave select register to all ones */
+            /* Set the slave select register to all ones */
             Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
 
-            /*!< Set corresponding value to the Configuration Register */
+            /* Set corresponding value to the Configuration Register */
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Return error */
+            /* Return error */
             return -1;
         }
         timeout = 0xFFFF;
 
-        /*!< Read received data from SPI Core buffer */
+        /* Read received data from SPI Core buffer */
         if(rxCnt < bytesNumber)
         {
             data[rxCnt] = Xil_In32(SPI_BASEADDR + SPIDRR);
             rxCnt++;
         }
-        /*!< Send next data */
+        /* Send next data */
         txCnt++;
         if(txCnt < bytesNumber)
         {
-            /*!< Disable the master transactions */
+            /* Disable the master transactions */
             cfgValue |= (1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-            /*!< Write data */
+            /* Write data */
             Xil_Out32(SPI_BASEADDR + SPIDTR, data[txCnt]);
 
-            /*!< Enable the master transactions */
+            /* Enable the master transactions */
             cfgValue &= ~(1 << MasterTranInh);
             Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
         }
    }
 
-   /*!< Disable the master transactions */
+   /* Disable the master transactions */
    cfgValue |= (1 << MasterTranInh);
    Xil_Out32(SPI_BASEADDR + SPICR, cfgValue);
 
-   /*!< Write all ones to SPISSR */
+   /* Write all ones to SPISSR */
    Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
 
-   /*!< Return the number of bytes read */
+   /* Return the number of bytes read */
    return bytesNumber;
 }
 
@@ -355,7 +370,7 @@ char SPI_Read(unsigned char slaveDeviceId,
 *******************************************************************************/
 char UART_Init(unsigned long baudRate)
 {
-    /*!< Disable interrupt and reset the Rx and Tx FIFO */
+    /* Disable interrupt and reset the Rx and Tx FIFO */
     Xil_Out32(UART_CNTRL,  ( UART_RST_TX | \
                              UART_RST_RX | \
                              ~UART_EN_INTR) );
@@ -372,11 +387,11 @@ char UART_Init(unsigned long baudRate)
 *******************************************************************************/
 void UART_WriteChar(char data)
 {
-    /*!< Wait the Tx FIFO empty indication */
+    /* Wait the Tx FIFO empty indication */
     while( (Xil_In32(UART_STAT) & 0x4) == 0x0);
-    /*!< Put the data to the FIFO */
+    /* Put the data to the FIFO */
     Xil_Out32(UART_TX, data);
-    /*!< Wait the Tx FIFO empty indication */
+    /* Wait the Tx FIFO empty indication */
     while( (Xil_In32(UART_STAT) & 0x4) == 0x0);
 }
 
@@ -389,11 +404,11 @@ void UART_WriteChar(char data)
 *******************************************************************************/
 void UART_ReadChar(char * data)
 {
-    /*!< Wait for a valid data */
+    /* Wait for a valid data */
     while((Xil_In32(UART_STAT) & UART_RX_VALID) == 0x00);
-    /*!< Read the character */
+    /* Read the character */
     *data = (char)(Xil_In32(UART_RX) & 0xFF);
-    /*!< Flush the Rx FIFO at carriage return */
+    /* Flush the Rx FIFO at carriage return */
     if((*data == '\n') || (*data == '\r'))
     {
         Xil_Out32(UART_CNTRL, UART_RST_RX | UART_RST_TX);
@@ -426,13 +441,13 @@ void UART_WriteString(const char* string)
 *******************************************************************************/
 unsigned char I2C_Init(unsigned long clockFreq)
 {
-    /*!< Disable the I2C core */
+    /* Disable the I2C core */
     Xil_Out32((I2C_BASEADDR + CR), 0x00);
-    /*!< Set the Rx FIFO depth to maximum */
+    /* Set the Rx FIFO depth to maximum */
     Xil_Out32((I2C_BASEADDR + RX_FIFO_PIRQ), 0x0F);
-    /*!< Reset the I2C core and flush the Tx fifo */
+    /* Reset the I2C core and flush the Tx fifo */
     Xil_Out32((I2C_BASEADDR + CR), 0x02);
-    /*!< Enable the I2C core */
+    /* Enable the I2C core */
     Xil_Out32((I2C_BASEADDR + CR), 0x01);
 
     return 0;
@@ -459,40 +474,40 @@ unsigned char I2C_Read(unsigned char slaveAddress,
     u32 rxCnt = 0;
     u32 timeout = 0xFFFFFF;
 
-    /*!< Reset tx fifo */
+    /* Reset tx fifo */
     Xil_Out32((I2C_BASEADDR + CR), 0x002);
-    /*!< Enable iic */
+    /* Enable iic */
     Xil_Out32((I2C_BASEADDR + CR), 0x001);
     TIME_DelayMs(10);
 
-    /*!< Set the slave I2C address */
+    /* Set the slave I2C address */
     Xil_Out32((I2C_BASEADDR + TX_FIFO), (0x101 | (slaveAddress << 1)));
-    /*!< Start a read transaction */
+    /* Start a read transaction */
     Xil_Out32((I2C_BASEADDR + TX_FIFO), 0x200 + bytesNumber);
 
-    /*!< Read data from the I2C slave */
+    /* Read data from the I2C slave */
     while(rxCnt < bytesNumber)
     {
-        /*!< Wait for data to be available in the RxFifo */
+        /* Wait for data to be available in the RxFifo */
         while((Xil_In32(I2C_BASEADDR + SR) & 0x00000040) && (timeout--));
         if(timeout == -1)
         {
-            /*!< Disable the I2C core */
+            /* Disable the I2C core */
             Xil_Out32((I2C_BASEADDR + CR), 0x00);
-            /*!< Set the Rx FIFO depth to maximum */
+            /* Set the Rx FIFO depth to maximum */
             Xil_Out32((I2C_BASEADDR + RX_FIFO_PIRQ), 0x0F);
-            /*!< Reset the I2C core and flush the Tx fifo */
+            /* Reset the I2C core and flush the Tx fifo */
             Xil_Out32((I2C_BASEADDR + CR), 0x02);
-            /*!< Enable the I2C core */
+            /* Enable the I2C core */
             Xil_Out32((I2C_BASEADDR + CR), 0x01);
             return rxCnt;
         }
         timeout = 0xFFFFFF;
 
-        /*!< Read the data */
+        /* Read the data */
         dataBuffer[rxCnt] = Xil_In32(I2C_BASEADDR + RX_FIFO) & 0xFFFF;
 
-        /*!< Increment the receive counter */
+        /* Increment the receive counter */
         rxCnt++;
     }
 
@@ -521,19 +536,19 @@ unsigned char I2C_Write(unsigned char slaveAddress,
 {
     u32 txCnt = 0;
 
-    /*!< Reset tx fifo */
+    /* Reset tx fifo */
     Xil_Out32((I2C_BASEADDR + CR), 0x002);
-    /*!< Enable iic */
+    /* Enable iic */
     Xil_Out32((I2C_BASEADDR + CR), 0x001);
     TIME_DelayMs(10);
 
-    /*!< Set the I2C address */
+    /* Set the I2C address */
     Xil_Out32((I2C_BASEADDR + TX_FIFO), (0x100 | (slaveAddress << 1)));
 
-    /*!< Write data to the I2C slave */
+    /* Write data to the I2C slave */
     while(txCnt < bytesNumber)
     {
-        /*!< Put the Tx data into the Tx FIFO */
+        /* Put the Tx data into the Tx FIFO */
         Xil_Out32((I2C_BASEADDR + TX_FIFO), (txCnt == bytesNumber - 1) ?
                         (0x200 | dataBuffer[txCnt]) : dataBuffer[txCnt]);
         txCnt++;
