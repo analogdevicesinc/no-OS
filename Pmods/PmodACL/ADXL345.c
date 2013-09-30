@@ -159,22 +159,6 @@ void ADXL345_DisplayTapMenu(void)
 }
 
 /******************************************************************************
-* @brief Generates a delay in ms.
-*
-* @param ms_count - Number of ms desired.
-*
-* @return None.
-******************************************************************************/
-void delay_ms(u32 ms_count)
-{
-	u32 count;
-	for (count = 0; count < ((ms_count * 10000) + 1); count++)
-	{
-	  asm("nop");
-	}
-}
-
-/******************************************************************************
 * @brief Writes to a ADXL345 Internal Register.
 *
 * @param addr 	- Register address.
