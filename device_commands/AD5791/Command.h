@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   Main.c
- *   @brief  Implementation of the program's main function.
- *   @author DBogdan (Dragos.Bogdan@analog.com)
+ *   @file   Command.h
+ *   @brief  Header file of the commands driver.
+ *   @author Lucian Sin (Lucian.Sin@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -36,76 +36,77 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-******************************************************************************/
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Console.h"
-#include "Command.h"
-#include "Communication.h"
-
-/******************************************************************************/
-/************************* Variables Definitions ******************************/
-/******************************************************************************/
-extern const struct cmd_info cmdList[];
-extern const char* cmdDescription[];
-extern const char* cmdExample[];
-extern char cmdNo;
-extern cmdFunction cmdFunctions[11];
-
-/***************************************************************************//**
- * @brief Main function.
- *
- * @return None.
 *******************************************************************************/
-int main(void)
-{
+#ifndef __COMMAND_H__
+#define __COMMAND_H__
 
-    char          receivedCmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                     0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    unsigned char cmd             =  0;
-    double        param[5]        = {0, 0, 0, 0, 0};
-    char          paramNo         =  0;
-    char          cmdType         = -1;
-    char          invalidCmd      =  0;
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define NULL        ((void *)0)
+#define SUCCESS      0
+#define ERROR       -1
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef void (*cmdFunction)(double* param, char paramNo);
+struct cmd_info {
+    char* name;
+    char* description;
+    char* acceptedValue;
+    char* example;
+};
 
-    /*!< Select and initialize the platform. */
-    if (PLATFORM_Init(XILINX_KC705) < 0)
-    {
-        return -1;
-    }
-    /*!< Initialize the console with selected baud rate for the platform used. */
-    CONSOLE_Init(UART_BAUDRATE);
-    /*!< Initialize the device. */
-    DoDeviceInit();
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+/* Internal function for displaying error messages. */
+void DisplayError(unsigned char funcNo);
 
-    while(1)
-    {
-        /*!< Read the command entered by user through console. */
-        CONSOLE_GetCommand(receivedCmd);
-        invalidCmd = 0;
-        for(cmd = 0; cmd < cmdNo; cmd++)
-        {
-            paramNo = 0;
-            cmdType = CONSOLE_CheckCommands(receivedCmd, cmdList[cmd].name, \
-                                            param, &paramNo);
-            if(cmdType == UNKNOWN_CMD)
-            {
-                invalidCmd++;
-            }
-            else
-            {
-                cmdFunctions[cmd](param, paramNo);
-            }
-        }
-        /*!< Send feedback to user, if the command entered by user is not a valid one. */
-        if(invalidCmd == cmdNo)
-        {
-            CONSOLE_Print("Invalid command!\r\n");
-        }
-    }
+/* Internal function for displaying all the commands with their description. */
+void DisplayCmdList();
 
-    return 0;
-}
+/* Initializes the device. */
+void DoDeviceLock(void);
+
+/* Initializes the device. */
+char DoDeviceInit(void);
+
+/* Displays all available commands. */
+void GetHelp(double* param, char paramNo);
+
+/* Resets the AD5791 device. */
+void DoReset(double* param, char paramNo);
+
+/* Selects the coding style. */
+void SetCoding(double* param, char paramNo);
+
+/* Display the current coding style. */
+void GetCoding(double* param, char paramNo);
+
+/* Writes to the DAC register. */
+void SetRegister(double* param, char paramNo);
+
+/* Displays last written value to the DAC register. */
+void GetRegister(double* param, char paramNo);
+
+/* Sets the DAC output voltage. */
+void SetVoltage(double* param, char paramNo);
+
+/* Displays the output voltage. */
+void GetVoltage(double* param, char paramNo);
+
+/* Selects the DAC output state. */
+void SetOutput(double* param, char paramNo);
+
+/* Displays the DAC output state. */
+void GetOutput(double* param, char paramNo);
+
+/* Sets/resets the RBUF bit from control register. */
+void SetRbuf(double* param, char paramNo);
+
+/* Displays the value of RBUF bit from control register. */
+void GetRbuf(double* param, char paramNo);
+
+#endif  // __COMMAND_H__

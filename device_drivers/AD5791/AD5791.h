@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   AD5781.h
- *   @brief  Header file of AD5781 Driver.
+ *   @file   AD5791.h
+ *   @brief  Header file of AD5791 Driver.
  *   @author DNechita (Dan.Nechita@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -36,11 +36,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
-#ifndef __AD5781_H__
-#define __AD5781_H__
+#ifndef __AD5791_H__
+#define __AD5791_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -48,88 +46,97 @@
 #include "Communication.h"    // Communication definitions
 
 /******************************************************************************/
+/******************* Macros and Constants Definitions *************************/
+/******************************************************************************/
+/* Supported devices */
+typedef enum {
+    ID_AD5760,
+    ID_AD5780,
+    ID_AD5781,
+    ID_AD5790,
+    ID_AD5791,
+} AD5791_type;
+
+/******************************************************************************/
 /*********************************** GPIO *************************************/
 /******************************************************************************/
-#define AD5781_RESET_OUT       GPIO2_PIN_OUT
-#define AD5781_RESET_LOW       GPIO2_LOW
-#define AD5781_RESET_HIGH      GPIO2_HIGH
+#define AD5791_RESET_OUT       GPIO2_PIN_OUT
+#define AD5791_RESET_LOW       GPIO2_LOW
+#define AD5791_RESET_HIGH      GPIO2_HIGH
 
-#define AD5781_CLR_OUT         GPIO3_PIN_OUT
-#define AD5781_CLR_LOW         GPIO3_LOW
-#define AD5781_CLR_HIGH        GPIO3_HIGH
+#define AD5791_CLR_OUT         GPIO3_PIN_OUT
+#define AD5791_CLR_LOW         GPIO3_LOW
+#define AD5791_CLR_HIGH        GPIO3_HIGH
 
-#define AD5781_LDAC_OUT        GPIO4_PIN_OUT
-#define AD5781_LDAC_LOW        GPIO4_LOW
-#define AD5781_LDAC_HIGH       GPIO4_HIGH
+#define AD5791_LDAC_OUT        GPIO4_PIN_OUT
+#define AD5791_LDAC_LOW        GPIO4_LOW
+#define AD5791_LDAC_HIGH       GPIO4_HIGH
 
 /******************************************************************************/
-/********************************** AD5781 ************************************/
+/********************************** AD5791 ************************************/
 /******************************************************************************/
 
 /* SPI slave device ID */
-#define AD5781_SLAVE_ID    1
+#define AD5791_SLAVE_ID			1
+
+/* Maximum resolution */
+#define MAX_RESOLUTION			20
 
 /* Register Map */
-#define AD5781_NOP                 0  // No operation (NOP).
-#define AD5781_REG_DAC             1  // DAC register.
-#define AD5781_REG_CTRL            2  // Control register.
-#define AD5781_REG_CLR_CODE        3  // Clearcode register.
-#define AD5781_CMD_WR_SOFT_CTRL    4  // Software control register(Write only).
+#define AD5791_NOP                 0  // No operation (NOP).
+#define AD5791_REG_DAC             1  // DAC register.
+#define AD5791_REG_CTRL            2  // Control register.
+#define AD5791_REG_CLR_CODE        3  // Clearcode register.
+#define AD5791_CMD_WR_SOFT_CTRL    4  // Software control register(Write only).
 
 /* Input Shift Register bit definition. */
-#define AD5781_READ                (1ul << 23)
-#define AD5781_WRITE               (0ul << 23)
-#define AD5781_ADDR_REG(x)         (((unsigned long)(x) & 0x7) << 20)
-
-/* DAC Register bit definition */
-#define AD5781_DAC_DATA(x)         (((unsigned long)(x) & 0x3FFFF) << 2)
+#define AD5791_READ                (1ul << 23)
+#define AD5791_WRITE               (0ul << 23)
+#define AD5791_ADDR_REG(x)         (((unsigned long)(x) & 0x7) << 20)
 
 /* Control Register bit Definition */
-#define AD5781_CTRL_LINCOMP(x)   (((x) & 0xF) << 6) // Linearity error compensation.
-#define AD5781_CTRL_SDODIS       (1 << 5) // SDO pin enable/disable control.
-#define AD5781_CTRL_BIN2SC       (1 << 4) // DAC register coding selection.
-#define AD5781_CTRL_DACTRI       (1 << 3) // DAC tristate control.
-#define AD5781_CTRL_OPGND        (1 << 2) // Output ground clamp control.
-#define AD5781_CTRL_RBUF         (1 << 1) // Output amplifier configuration control.
-
-/* Clearcode Register bit definition */
-#define AD5781_CLR_CODE_DATA(x)    (((unsigned long)(x) & 0x3FFFF) << 2)
+#define AD5791_CTRL_LINCOMP(x)   (((x) & 0xF) << 6) // Linearity error compensation.
+#define AD5791_CTRL_SDODIS       (1 << 5) // SDO pin enable/disable control.
+#define AD5791_CTRL_BIN2SC       (1 << 4) // DAC register coding selection.
+#define AD5791_CTRL_DACTRI       (1 << 3) // DAC tristate control.
+#define AD5791_CTRL_OPGND        (1 << 2) // Output ground clamp control.
+#define AD5791_CTRL_RBUF         (1 << 1) // Output amplifier configuration control.
 
 /* Software Control Register bit definition */
-#define AD5781_SOFT_CTRL_RESET      (1 << 2) // RESET function.
-#define AD5781_SOFT_CTRL_CLR        (1 << 1) // CLR function.
-#define AD5781_SOFT_CTRL_LDAC       (1 << 0) // LDAC function.
+#define AD5791_SOFT_CTRL_RESET      (1 << 2) // RESET function.
+#define AD5791_SOFT_CTRL_CLR        (1 << 1) // CLR function.
+#define AD5791_SOFT_CTRL_LDAC       (1 << 0) // LDAC function.
 
 /* DAC OUTPUT STATES */
-#define AD5781_OUT_NORMAL            0x0
-#define AD5781_OUT_CLAMPED_6K        0x1
-#define AD5781_OUT_TRISTATE          0x2
+#define AD5791_OUT_NORMAL            0x0
+#define AD5791_OUT_CLAMPED_6K        0x1
+#define AD5791_OUT_TRISTATE          0x2
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication with the device. */
-long AD5781_Init(void);
+long AD5791_Init(AD5791_type device);
 
 /*! Writes data into a register. */
- long AD5781_SetRegisterValue(unsigned char registerAddress,
+ long AD5791_SetRegisterValue(unsigned char registerAddress,
                               unsigned long registerValue);
 
 /*! Reads the value of a register. */
-long AD5781_GetRegisterValue(unsigned char registerAddress);
+long AD5791_GetRegisterValue(unsigned char registerAddress);
 
 /*! Sets the DAC output in one of the three states. */
-long AD5781_DacOuputState(unsigned char state);
+long AD5791_DacOuputState(unsigned char state);
 
 /*! Writes to the DAC register. */
-long AD5781_SetDacValue(unsigned long value);
+long AD5791_SetDacValue(unsigned long value);
 
 /*! Asserts RESET, CLR or LDAC in a software manner. */
-long AD5781_SoftInstruction(unsigned char instructionBit);
+long AD5791_SoftInstruction(unsigned char instructionBit);
 
 /*! Configures the output amplifier, DAC coding, SDO state and the linearity
     error compensation. */
-long AD5781_Setup(unsigned long setupWord);
+long AD5791_Setup(unsigned long setupWord);
 
-#endif /* __AD5781_H__ */
+#endif /* __AD5791_H__ */
