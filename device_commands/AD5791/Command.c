@@ -50,88 +50,88 @@
 /******************************************************************************/
 const struct cmd_info cmdList[] = {
     [0] = {
-    	.name = "help?",
-    	.description = "Displays all available commands.",
-    	.acceptedValue = "",
-    	.example = "",
+        .name = "help?",
+        .description = "Displays all available commands.",
+        .acceptedValue = "",
+        .example = "",
     },
     [1] = {
-    		.name = "reset!",
-    		.description = "Resets the device.",
-    		.acceptedValue = "",
-    		.example = "",
+            .name = "reset!",
+            .description = "Resets the device.",
+            .acceptedValue = "",
+            .example = "",
     },
     [2] = {
-    		.name = "coding=",
-    		.description = "Selects the coding style.",
-    		.acceptedValue = "Accepted values:\r\n\
+            .name = "coding=",
+            .description = "Selects the coding style.",
+            .acceptedValue = "Accepted values:\r\n\
 \t0 - Two's complement coding.(default)\r\n\
 \t1 - Offset binary coding.",
-			.example = "To select two's complement coding, type: coding=0",
+            .example = "To select two's complement coding, type: coding=0",
     },
     [3] = {
-    		.name = "coding?",
-    		.description = " Display the current coding style.",
-    		.acceptedValue = "",
-    		.example = "",
+            .name = "coding?",
+            .description = " Display the current coding style.",
+            .acceptedValue = "",
+            .example = "",
     },
     [4] = {
-    		.name = "register=",
-    		.description = "Writes to the DAC register",
-    		.acceptedValue = "Accepted values:\r\n\
+            .name = "register=",
+            .description = "Writes to the DAC register",
+            .acceptedValue = "Accepted values:\r\n\
 \t0 .. (2^DacResolution)-1 - the value written to the DAC.",
-			.example = "To set the register value to 10000, type: \
+            .example = "To set the register value to 10000, type: \
 register=10000",
     },
     [5] ={
-    		.name = "register?",
-    		.description = " Displays last written value to the DAC \
+            .name = "register?",
+            .description = " Displays last written value to the DAC \
 register.",
-			.acceptedValue = "",
-			.example = "",
+            .acceptedValue = "",
+            .example = "",
     },
     [6] = {
-    		.name = "voltage=",
-    		.description = "Sets the DAC output voltage.",
-    		.acceptedValue = "Accepted values:\r\n\
+            .name = "voltage=",
+            .description = "Sets the DAC output voltage.",
+            .acceptedValue = "Accepted values:\r\n\
 \t-10 .. +10 - desired output voltage in volts.",
-			.example = "To set the output voltage to 5V, type: voltage=5",
+            .example = "To set the output voltage to 5V, type: voltage=5",
     },
     [7] = {
-    		.name =  "voltage?",
-    		.description = "Displays the output voltage.",
-    		.acceptedValue = "",
-    		.example = "",
+            .name =  "voltage?",
+            .description = "Displays the output voltage.",
+            .acceptedValue = "",
+            .example = "",
     },
     [8] = {
-    		.name = "output=",
-    		.description = "Selects the DAC output state.",
-    		.acceptedValue =  "Accepted values:\r\n\
+            .name = "output=",
+            .description = "Selects the DAC output state.",
+            .acceptedValue =  "Accepted values:\r\n\
 \t0 - Normal state.\r\n\
 \t1 - Clamped via 6KOhm to AGND.(default)\r\n\
 \t2 - Tristate.",
-			.example = "To set the DAC output state to normal, type: output=0",
+            .example = "To set the DAC output state to normal, type: output=0",
     },
     [9] = {
-    		.name = "output?",
-    		.description = "Displays the DAC output state.",
-    		.acceptedValue = "",
-    		.example = "",
+            .name = "output?",
+            .description = "Displays the DAC output state.",
+            .acceptedValue = "",
+            .example = "",
     },
     [10] = {
-    		.name = "rbuf=",
-    		.description = "Sets/resets the RBUF bit from control register.",
-    		.acceptedValue = "Accepted values:\r\n\
+            .name = "rbuf=",
+            .description = "Sets/resets the RBUF bit from control register.",
+            .acceptedValue = "Accepted values:\r\n\
 \t0 - RBUF is reset.\r\n\
 \t1 - RBUF is set.(default)",
-			.example = "To set the RBUF bit to 0, type: rbuf=0",
+            .example = "To set the RBUF bit to 0, type: rbuf=0",
     },
     [11] = {
-    		.name =  "rbuf?",
-    		.description = "Displays the value of RBUF bit from control \
+            .name =  "rbuf?",
+            .description = "Displays the value of RBUF bit from control \
 register.",
-			.acceptedValue = "",
-			.example = "",
+            .acceptedValue = "",
+            .example = "",
     }
 };
 
@@ -149,8 +149,8 @@ cmdFunction cmdFunctions[12] = {GetHelp, DoReset, SetCoding, GetCoding,
 /* Variables holding information about the device */
 AD5791_type   deviceType;
 unsigned long max_value     = 0; // Maximum DAC value
-unsigned long sign			= 0; // Sign bit
-unsigned char offset 		= 0; // Offset depending on device resolution
+unsigned long sign          = 0; // Sign bit
+unsigned char offset        = 0; // Offset depending on device resolution
 unsigned long registerValue = 0; // Last register value written to the device
 long          codingStyle   = 0; // Selected coding style
 unsigned char output        = 1; // Selected output state
@@ -291,14 +291,14 @@ your device!\r\n");
 *******************************************************************************/
 char DoDeviceInit(void)
 {
-	DoDeviceLock();
+    DoDeviceLock();
 
-	if(AD5791_Init(deviceType) == 0)
+    if(AD5791_Init(deviceType) == 0)
     {
         CONSOLE_Print("Device OK\r\n");
         DisplayCmdList();
         registerValue = (AD5791_GetRegisterValue(AD5791_REG_DAC) &
-        				~(AD5791_ADDR_REG(-1))) >> offset;
+                        ~(AD5791_ADDR_REG(-1))) >> offset;
         return SUCCESS;
     }
     else
@@ -323,7 +323,7 @@ void DoReset(double* param, char paramNo) // "reset!" command
     /* Send feedback to user */
     CONSOLE_Print("Device was reset.\r\n");
     registerValue = (AD5791_GetRegisterValue(AD5791_REG_DAC) &
-    				~(AD5791_ADDR_REG(-1))) >> offset;
+                    ~(AD5791_ADDR_REG(-1))) >> offset;
 }
 
 /***************************************************************************//**
@@ -352,7 +352,7 @@ void SetCoding(double* param, char paramNo) // "coding=" command
             /* Write to DAC register */
             AD5791_SetDacValue(registerValue);
             CONSOLE_Print("%s%d(two's complement)\r\n",cmdList[2].name,
-            				codingStyle);
+                            codingStyle);
         }
         else
         {
@@ -361,16 +361,16 @@ void SetCoding(double* param, char paramNo) // "coding=" command
             AD5791_SetDacValue(registerValue);
             /* Send feedback to user for coding change */
             CONSOLE_Print("%s%d(offset binary)\r\n",cmdList[2].name,
-            				codingStyle);
+                            codingStyle);
         }
 
         GetVoltage(0, 0);
     }
     else
-	{
-		/* Display error messages */
-		DisplayError(2);
-	}
+    {
+        /* Display error messages */
+        DisplayError(2);
+    }
 }
 
 /***************************************************************************//**
@@ -416,10 +416,10 @@ void SetRegister(double* param, char paramNo) // "register=" command
         CONSOLE_Print("%s%d\r\n",cmdList[4].name, registerValue);
     }
     else
-	{
-		/* Display error messages */
-		DisplayError(4);
-	}
+    {
+        /* Display error messages */
+        DisplayError(4);
+    }
 }
 
 /***************************************************************************//**
@@ -445,112 +445,112 @@ void SetVoltage(double* param, char paramNo) // "voltage=" command
     /* Check if the parameter is valid */
     if(paramNo >= 1)
     {
-    	/* Check which formula to use according to rbuf value */
-    	if (rbuf == 1)
-    	{
-    		/* Check if the limits of the parameter */
-    		if(param[0] < VREFN)
-			{
-				param[0] = VREFN;
-			}
-			if(param[0] > VREFP)
-			{
-				param[0] = VREFP;
-			}
-			volt = (float)param[0];
-			/* Calculate the register value */
-			registerValue = (unsigned long)((volt - VREFN) * max_value
-							 / (VREFP - VREFN));
+        /* Check which formula to use according to rbuf value */
+        if (rbuf == 1)
+        {
+            /* Check if the limits of the parameter */
+            if(param[0] < VREFN)
+            {
+                param[0] = VREFN;
+            }
+            if(param[0] > VREFP)
+            {
+                param[0] = VREFP;
+            }
+            volt = (float)param[0];
+            /* Calculate the register value */
+            registerValue = (unsigned long)((volt - VREFN) * max_value
+                             / (VREFP - VREFN));
 
-			volt = ((float)((VREFP - VREFN) * registerValue) / max_value) +
-					VREFN ;
+            volt = ((float)((VREFP - VREFN) * registerValue) / max_value) +
+                    VREFN ;
 
-			/* Make a correction to register value */
-			if (codingStyle == 0)
-			{
-				if (volt <= 0)
-				{
-					registerValue += sign;
-				}
-				else
-				{
-					registerValue -= sign;
-				}
-			}
-			/* Check the limits of the value to be written in register */
-			if (registerValue > max_value)
-			{
-				registerValue = max_value;
-			}
-			else
-			{
-				if (registerValue < 0)
-				{
-					registerValue = 0;
-				}
-			}
-			/* Write to DAC register */
-			AD5791_SetDacValue(registerValue);
-			/* Send feedback to user with the set voltage */
-			GetVoltage(0, 0);
+            /* Make a correction to register value */
+            if (codingStyle == 0)
+            {
+                if (volt <= 0)
+                {
+                    registerValue += sign;
+                }
+                else
+                {
+                    registerValue -= sign;
+                }
+            }
+            /* Check the limits of the value to be written in register */
+            if (registerValue > max_value)
+            {
+                registerValue = max_value;
+            }
+            else
+            {
+                if (registerValue < 0)
+                {
+                    registerValue = 0;
+                }
+            }
+            /* Write to DAC register */
+            AD5791_SetDacValue(registerValue);
+            /* Send feedback to user with the set voltage */
+            GetVoltage(0, 0);
 
-    	}
-    	else
-    	{
-    		/* Check which formula to use according to rbuf value */
-    		if (rbuf == 0)
-    		{
-    			/* Check if the limits of the parameter */
-    			if(param[0] < ((2 * VREFN) - VREFP))
-				{
-					param[0] = (2 * VREFN) - VREFP;
-				}
-				if(param[0] > VREFP)
-				{
-					param[0] = VREFP;
-				}
-				volt = (float)param[0];
-				/* Calculate the register value */
-				registerValue = (unsigned long)((volt - 2 * VREFN + VREFP)
-				        	    * max_value / (2 * (VREFP - VREFN)));
-				volt = ((float)(2 * (VREFP - VREFN) * registerValue) /
-						max_value) + 2 * VREFN - VREFP;
-				/* Make a correction to register value */
-				if (codingStyle == 0)
-				{
-					if (volt <= 0)
-					{
-						registerValue += sign;
-					}
-					else
-					{
-						registerValue -= sign;
-					}
-				}
-				/* Check the limits of the value to be written in register */
-				if (registerValue > max_value)
-				{
-					registerValue = max_value;
-				}
-				else
-				{
-					if (registerValue < 0)
-					{
-						registerValue = 0;
-					}
-				}
-				/* Write to DAC register */
-				AD5791_SetDacValue(registerValue);
-				/* Send feedback to user with the set voltage */
-				GetVoltage(0, 0);
-    		}
-    	}
+        }
+        else
+        {
+            /* Check which formula to use according to rbuf value */
+            if (rbuf == 0)
+            {
+                /* Check if the limits of the parameter */
+                if(param[0] < ((2 * VREFN) - VREFP))
+                {
+                    param[0] = (2 * VREFN) - VREFP;
+                }
+                if(param[0] > VREFP)
+                {
+                    param[0] = VREFP;
+                }
+                volt = (float)param[0];
+                /* Calculate the register value */
+                registerValue = (unsigned long)((volt - 2 * VREFN + VREFP)
+                                * max_value / (2 * (VREFP - VREFN)));
+                volt = ((float)(2 * (VREFP - VREFN) * registerValue) /
+                        max_value) + 2 * VREFN - VREFP;
+                /* Make a correction to register value */
+                if (codingStyle == 0)
+                {
+                    if (volt <= 0)
+                    {
+                        registerValue += sign;
+                    }
+                    else
+                    {
+                        registerValue -= sign;
+                    }
+                }
+                /* Check the limits of the value to be written in register */
+                if (registerValue > max_value)
+                {
+                    registerValue = max_value;
+                }
+                else
+                {
+                    if (registerValue < 0)
+                    {
+                        registerValue = 0;
+                    }
+                }
+                /* Write to DAC register */
+                AD5791_SetDacValue(registerValue);
+                /* Send feedback to user with the set voltage */
+                GetVoltage(0, 0);
+            }
+        }
     }
     else
-	{
-		/* Display error messages */
-		DisplayError(6);
-	}
+    {
+        /* Display error messages */
+        DisplayError(6);
+    }
 }
 
 /***************************************************************************//**
@@ -573,15 +573,15 @@ void GetVoltage(double* param, char paramNo) // "voltage?" command
     }
     if (rbuf == 1)
     {
-    	volt = ((float)((VREFP - VREFN) * regValue) / max_value) + VREFN ;
+        volt = ((float)((VREFP - VREFN) * regValue) / max_value) + VREFN ;
     }
     else
     {
-    	if (rbuf == 0)
-    	{
-    		volt = ((float)(2 * (VREFP - VREFN) * regValue) / max_value) + 2 *
-    				VREFN - VREFP;
-    	}
+        if (rbuf == 0)
+        {
+            volt = ((float)(2 * (VREFP - VREFN) * regValue) / max_value) + 2 *
+                    VREFN - VREFP;
+        }
     }
     /* Send the requested value to user */
     CONSOLE_Print("voltage=%.3f [V]\r\n",volt);
@@ -612,10 +612,10 @@ void SetOutput(double* param, char paramNo) // "output=" command
         CONSOLE_Print("%s%d\r\n",cmdList[8].name,output);
     }
      else
- 	{
- 		/* Display error messages */
- 		DisplayError(8);
- 	}
+    {
+        /* Display error messages */
+        DisplayError(8);
+    }
 }
 
 /***************************************************************************//**
@@ -661,10 +661,10 @@ void SetRbuf(double* param, char paramNo) // "rbuf=" command
         CONSOLE_Print("%s%d\r\n",cmdList[10].name,rbuf);
     }
       else
-  	{
-  		/* Display error messages */
-  		DisplayError(10);
-  	}
+    {
+        /* Display error messages */
+        DisplayError(10);
+    }
 }
 
 /***************************************************************************//**
