@@ -1,7 +1,7 @@
 /***************************************************************************//**
  *   @file   Command.h
  *   @brief  Header file of the commands driver.
- *   @author Lucian Sin (Lucian.Sin@analog.com)
+ *   @author Istvan Csomortani (istvan.csomortani@analog.com)
  *
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -53,12 +53,21 @@
 /******************************************************************************/
 typedef void (*cmdFunction)(double* param, char paramNo);
 
+struct cmd_info {
+    char* name;
+    char* description;
+    char* acceptedValue;
+    char* example;
+};
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initializes the device. */
 char DoDeviceInit(void);
+
+/* Set the current device type */
+void DoDeviceLock(void);
 
 /* Displays all available commands. */
 void GetHelp(double* param, char paramNo);
@@ -79,16 +88,16 @@ void SetClrPin(double* param, char paramNo);
 void GetReadback(double* param, char paramNo);
 
 /* Loads both DAC input registers with a given value. */
-void SetLoadBoth(double* param, char paramNo);
+void SetLoadAll(double* param, char paramNo);
 
 /* Updates both DAC outputs. */
-void DoUpdateBoth(double* param, char paramNo);
+void SetUpdateAll(double* param, char paramNo);
 
 /* Clears both DAC outputs to zero scale. */
-void DoClearToZero(double* param, char paramNo);
+void SetClearToZero(double* param, char paramNo);
 
 /* Clears both DAC outputs to midscale. */
-void DoClearToMid(double* param, char paramNo);
+void SetClearToMid(double* param, char paramNo);
 
 /* Displays the value of LDAC pin. */
 void GetLdacPin(double* param, char paramNo);
