@@ -46,7 +46,6 @@
 /*****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform.h"
 #include "xil_io.h"
 #include "xparameters.h"
 
@@ -109,6 +108,8 @@ void ReadAdcData(u32 buf, u32 size)
 
 }
 
+void AD7780_PrintVin(u32 value);
+
 /**************************************************************************//**
 * @brief Main function implementation.
 *
@@ -116,7 +117,6 @@ void ReadAdcData(u32 buf, u32 size)
 ******************************************************************************/
 int main()
 {
-    init_platform();
     int i;
 
     xil_printf("\n-------------------------------------\n\r");
@@ -125,14 +125,66 @@ int main()
     xil_printf("Starting a new data acquisition...\n\r");
 
     xil_printf("Reading data from the ADC...\n\r");
-    ReadAdcData( point , (8096) );
+    ReadAdcData( point , (256) );
 
-    for (i = 0 ; i < 8096;i++)
+    for (i = 0 ; i < 256; i++)
     {
-        xil_printf ("1 = %d\n\r",point[i]);
+    	AD7780_PrintVin(point[i]);
     }
 
-    cleanup_platform();
-
     return 0;
+}
+
+/******************************************************************************
+* @brief Display Vin.
+*
+* @param None.
+*
+* @return None.
+******************************************************************************/
+void AD7780_PrintVin(u32 data)
+{
+	unsigned char calcGain = 0x00;
+	unsigned int inputV = 0x00;
+	float value = 0x00;
+	float vref = 3300;
+	int whole = 0x00;
+	int thousands = 0x00;
+	int fullScale = 8388608;
+
+	calcGain = 1;
+
+	// Process Voltage data from 32 bit stream
+	inputV = (data & 0xFFFFFF00) >> 8;
+
+	// Calculate float value of Vin based on datasheet formula
+	value = (((float)(vref/1000) * ((float)inputV - fullScale)) / (calcGain * fullScale));
+
+	// If voltage is positive
+	if(value >= 0)
+	{
+		xil_printf("Vin = +");
+	}
+	// If voltage is negative
+	else
+	{
+		xil_printf("Vin = -");
+		value = value * (-1);
+	}
+	// Process whole and thousands
+	whole = (int) value;
+	thousands = (value - whole) * 1000;
+	// Properly display whole and thousands
+	if(thousands > 99)
+	{
+		xil_printf("%d.%d V\n\r", whole, thousands);
+	}
+	else if(thousands > 9)
+	{
+		xil_printf("%d.0%d V\n\r", whole, thousands);
+	}
+	else
+	{
+		xil_printf("%d.00%d V\n\r", whole, thousands);
+	}
 }

@@ -42,7 +42,6 @@
 ******************************************************************************/
 
 #include <stdio.h>
-#include "platform.h"
 #include "xparameters.h"
 #include "xil_io.h"
 #include "admp441.h"

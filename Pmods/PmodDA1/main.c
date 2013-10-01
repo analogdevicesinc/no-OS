@@ -40,7 +40,6 @@
 *   SVN Revision: $WCREV$
 *******************************************************************************/
 #include <stdio.h>
-#include "platform.h"
 #include "xparameters.h"
 #include "xil_cache.h"
 #include "xil_io.h"

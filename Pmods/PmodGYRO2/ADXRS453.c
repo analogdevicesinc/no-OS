@@ -115,19 +115,6 @@ int ADXRS453_ReadDegrees(void)
 }
 
 /******************************************************************************
-* @brief Generate a delay in miliseconds.
-*
-* @param ms_count - Number of miliseconds
-******************************************************************************/
-void delay_ms(u32 ms_count)
-{
-  u32 count;
-  for (count = 0; count < ((ms_count * 100000) + 1); count++) {
-    asm("nop");
-  }
-}
-
-/******************************************************************************
 * @brief Print the Degrees/Second.
 *
 * @param x - Degrees/Second

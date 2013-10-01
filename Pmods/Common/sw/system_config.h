@@ -51,22 +51,21 @@
 // Select between PS7 or AXI Interface
 #define USE_PS7 	 1
 // SPI used in the design
-#define USE_SPI		 0
+#define USE_SPI		 1
 // I2C used in the design
-#define USE_I2C		 1
+#define USE_I2C		 0
 // Timer (+interrupts) used in the design
 #define USE_TIMER	 1
 // External interrupts used in the design
-#define USE_EXTERNAL 1
+#define USE_EXTERNAL 0
 // GPIO used in the design
-#define USE_GPIO     1
+#define USE_GPIO     0
 
 #if(USE_PS7 == 1)
 	#include "spi_ps7.h"
 	#include "i2c_axi.h"
 	#include "ps7_interrupts.h"
 	#include "xscugic.h"
-	#include "xuartps.h"
 	#include "xil_exception.h"
 #else
 	#include "spi_axi.h"

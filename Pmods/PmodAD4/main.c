@@ -46,7 +46,6 @@
 /*****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform.h"
 #include "xil_io.h"
 #include "xparameters.h"
 
@@ -109,6 +108,8 @@ void ReadAdcData(u32 buf, u32 size)
 
 }
 
+void PrintVin(u32 data);
+
 /**************************************************************************//**
 * @brief Main function implementation.
 *
@@ -116,7 +117,6 @@ void ReadAdcData(u32 buf, u32 size)
 ******************************************************************************/
 int main()
 {
-    init_platform();
     int i;
 
     xil_printf("\n-------------------------------------\n\r");
@@ -129,10 +129,41 @@ int main()
 
     for (i = 0 ; i < 8096;i++)
     {
-        xil_printf ("%d\n\r",point[i]);
+    	PrintVin(point[i]);
     }
 
-    cleanup_platform();
-
     return 0;
+}
+
+/******************************************************************************
+* @brief Prints read voltage value on UART
+*
+* @param None.
+*
+* @return None.
+******************************************************************************/
+void PrintVin(u32 data)
+{
+	unsigned int whole;
+	unsigned int thousands;
+	float value;
+
+	value = (float)((data & 0xFFFF) * 2.5) / 65536;
+
+	whole = value;
+	thousands = (value - whole) * 1000;
+
+	if(thousands > 99)
+	{
+		xil_printf("Vin = %d.%d\n\r", whole, thousands);
+	}
+	else if(thousands > 9)
+	{
+		xil_printf("Vin = %d.0%d\n\r", whole, thousands);
+	}
+	else
+	{
+		xil_printf("Vin = %d.00%d\n\r", whole, thousands);
+	}
+
 }

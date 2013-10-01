@@ -46,7 +46,6 @@
 /*****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform.h"
 #include "xil_io.h"
 #include "xparameters.h"
 
@@ -109,6 +108,8 @@ void ReadAdcData(u32 buf, u32 size)
 
 }
 
+void printVin(u32 data);
+
 /**************************************************************************//**
 * @brief Main function implementation.
 *
@@ -116,7 +117,6 @@ void ReadAdcData(u32 buf, u32 size)
 ******************************************************************************/
 int main()
 {
-    init_platform();
     int i;
 
     xil_printf("\n-------------------------------------\n\r");
@@ -124,14 +124,41 @@ int main()
     xil_printf("Starting a new data acquisition...\n\r");
 
     xil_printf("Reading data from the ADC...\n\r");
+
     ReadAdcData( point , (8096) );
 
     for (i = 0 ; i < 8096;i++)
     {
-        xil_printf ("%d\n\r",point[i] );
+    	printVin(point[i]);
     }
 
-    cleanup_platform();
-
     return 0;
+}
+
+void printVin(u32 data)
+{
+	int rxData = 0;
+	float value = 0;
+	int whole = 0;
+	int thousands = 0;
+
+   	rxData = data & 0xFFF;
+
+   	// converting data for display
+   	value = ((float)rxData/4096)*2.5;
+   	whole = value;
+   	thousands = ((value - whole)*1000);
+
+	if(thousands > 99)
+	{
+		xil_printf("Vin = %d.%3d %c\n\r",whole, thousands,'V');
+	}
+	else if(thousands > 9)
+	{
+		xil_printf("Vin = %d.0%2d %c\n\r",whole, thousands,'V');
+	}
+	else
+	{
+		xil_printf("Vin = %d.00%1d %c\n\r",whole, thousands,'V');
+	}
 }
