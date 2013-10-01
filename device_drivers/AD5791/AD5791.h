@@ -77,10 +77,10 @@ typedef enum {
 /******************************************************************************/
 
 /* SPI slave device ID */
-#define AD5791_SLAVE_ID			1
+#define AD5791_SLAVE_ID         1
 
 /* Maximum resolution */
-#define MAX_RESOLUTION			20
+#define MAX_RESOLUTION          20
 
 /* Register Map */
 #define AD5791_NOP                 0  // No operation (NOP).
