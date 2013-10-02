@@ -49,33 +49,40 @@
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-/* List of available commands */
-const char* cmdList[] ={"help?",
-                        "register=",
-                        "ldacPin=",
-                        "ldacPin?",
-};
+#define MAX_VALUE       0xFF
 
-const char* cmdDescription[] = {
-"  -  Displays all available commands.",
-"  -  Loads the DAC input register with a given value. Accepted values:\r\n\
+const struct cmd_info cmdList[] = {
+    [0] = {
+        .name = "help?",
+        .description = "Displays all available commands.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [1] = {
+        .name = "register=",
+        .description = "Loads the DAC input register with a given value.",
+        .acceptedValue = "Accepted values:\r\n\
 \tvalue:\r\n \
 \t0 .. 256 - value to be written in register.",
-"  -  Sets the output value of LDAC pin. Accepted values:\r\n\
+        .example = "To load DAC B input register with 128, type: register=128",
+    },
+    [2] = {
+        .name = "ldacPin=",
+        .description = "Sets the output value of LDAC pin.",
+        .acceptedValue = "Accepted values:\r\n\
 \t0 - sets LDAC pin low.(default)\r\n\
 \t1 - sets LDAC pin high.",
-"  -  Displays the value of LDAC pin.",
+        .example = "To set the LDAC pin high, type: ldacPin=1",
+    },
+    [3] = {
+        .name = "ldacPin?",
+        .description = "Displays the value of LDAC pin.",
+        .acceptedValue = "",
+        .example = "",
+    }
 };
 
-
-const char* cmdExample[] = {
-"",
-"To load DAC B input register with 128, type: register=128",
-"To set the LDAC pin high, type: ldacPin=1",
-""
-};
-
-const char cmdNo = (sizeof(cmdList) / sizeof(const char*));
+const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -84,6 +91,62 @@ cmdFunction cmdFunctions[12] = {GetHelp, SetRegister, SetLdacPin, GetLdacPin};
 
 /* Variables holding information about the device */
 unsigned char ldac = 0;
+
+/***************************************************************************//**
+ * @brief Displays error message.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayError(unsigned char funcNo)
+{
+    /* Display error messages */
+    CONSOLE_Print("Invalid parameter!\r\n");
+    CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[funcNo].name, \
+                                    (char*)cmdList[funcNo].description, \
+                                    (char*)cmdList[funcNo].acceptedValue);
+    CONSOLE_Print("Example: %s\r\n", (char*)cmdList[funcNo].example);
+}
+
+/***************************************************************************//**
+ * @brief Internal function for displaying all the command with its description.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayCmdList()
+{
+    unsigned char displayCmd;
+
+    for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
+    {
+        CONSOLE_Print("Invalid parameter!\r\n");
+        CONSOLE_Print("%s - %s\r\n", (char*)cmdList[displayCmd].name, \
+                                     (char*)cmdList[displayCmd].description);
+    }
+}
+
+/***************************************************************************//**
+ * @brief Verify if the given parameter is between his valid limits.
+ *
+ * @param None.
+ *
+ * @return None.
+*******************************************************************************/
+void paramLimit(double* param,
+                unsigned short lowerLimit,
+                unsigned short upperLimit)
+{
+    if(*param < lowerLimit)
+    {
+        *param = lowerLimit;
+    }
+    else
+    {
+        if(*param > upperLimit)
+        {
+            *param = upperLimit;
+        }
+    }
+}
 
 /**************************************************************************//***
  * @brief Displays all available commands.
@@ -97,8 +160,9 @@ void GetHelp(double* param, char paramNo) // "help?" command
     CONSOLE_Print("Available commands:\r\n");
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[displayCmd],
-                                  (char*)cmdDescription[displayCmd]);
+        CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[displayCmd].name,
+                                    (char*)cmdList[displayCmd].description,
+                                    (char*)cmdList[displayCmd].acceptedValue);
     }
 }
 
@@ -116,7 +180,7 @@ char DoDeviceInit(void)
     if(AD5425_Init() == 0)
     {
         CONSOLE_Print("AD5425 OK\r\n");
-        GetHelp(NULL, 0);
+        DisplayCmdList();
         return SUCCESS;
     }
     else
@@ -140,18 +204,7 @@ void SetRegister(double* param, char paramNo) // "loadAndUpdate=" command
     /* Check if the parameters are valid */
     if(paramNo >= 1)
     {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        else
-        {
-            if(param[0] > 255)
-            {
-                param[0] = 255;
-            }
-        }
-
+        paramLimit(&param[0], 0, MAX_VALUE);
         dacValue = (unsigned char)param[0];
         AD5425_SetRegister(dacValue);
         /* Send feedback to user */
@@ -160,9 +213,7 @@ void SetRegister(double* param, char paramNo) // "loadAndUpdate=" command
     else
     {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[1], (char*)cmdDescription[1]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[1]);
+        DisplayError(1);
     }
 }
 
@@ -180,17 +231,7 @@ void SetLdacPin(double* param, char paramNo) // "ldacPin=" command
     /* Check if the parameter is valid */
     if(paramNo >= 1)
     {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        else
-        {
-            if(param[0] > 1)
-            {
-                param[0] = 1;
-            }
-        }
+        paramLimit(&param[0], 0, 1);
 
         status = (unsigned char) param[0];
 
@@ -208,14 +249,12 @@ void SetLdacPin(double* param, char paramNo) // "ldacPin=" command
             }
         }
         /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",(char*)cmdList[2], status);
+        CONSOLE_Print("%s%d\r\n",(char*)cmdList[2].name, status);
      }
      else
      {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[2], (char*)cmdDescription[2]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[2]);
+        DisplayError(2);
      }
 }
 
