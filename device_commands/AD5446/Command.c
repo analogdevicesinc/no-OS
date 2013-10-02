@@ -117,15 +117,15 @@ const struct cmd_info cmdList[] = {
 
 /* Define the output type of each evaluation board */
 const vout_type_t boardOutput[] = {
-        unipolar,       // ID_AD5553
-        unipolar,       // ID_AD5543
+        unipolar_inv,   // ID_AD5553
+        unipolar_inv,   // ID_AD5543
         bipolar,        // ID_AD5542A
         unipolar,       // ID_AD5541A
         unipolar,       // ID_AD5512A
-        unipolar_inv,   // ID_AD5453
-        unipolar,       // ID_AD5452
-        unipolar,       // ID_AD5451
-        unipolar,       // ID_AD5450
+        unipolar_inv,  	// ID_AD5453
+        unipolar,	    // ID_AD5452
+        unipolar,   	// ID_AD5451
+        unipolar,   	// ID_AD5450
         unipolar_inv,   // ID_AD5446
         unipolar_inv    // ID_AD5444
 };
@@ -250,14 +250,14 @@ For AD5446 type 5\r\n");
                 {
                     deviceType = ID_AD5553;
                     max_value = 0x3FFF;
-                    vref = 10;
+                    vref = 5;
                     break;
                 }
                 case 0x31 :
                 {
                     deviceType = ID_AD5543;
                     max_value = 0xFFFF;
-                    vref = 10;
+                    vref = 5;
                     break;
                 }
                 case 0x32 :
@@ -339,11 +339,11 @@ void SetRegister(double* param, char paramNo) /*!< "register=" command */
     {
         if(param[0] < 0)
         {
-            param[0] = 0;
+        	param[0] = 0;
         }
         if(param[0] > max_value)
         {
-            param[0] = max_value;
+        	param[0] = max_value;
         }
         CONSOLE_Print("1.Debug: %f\r\n", param[0]);
         registerValue = (unsigned short)param[0];
@@ -375,9 +375,9 @@ void GetRegister(double* param, char paramNo) /*!< "register?" command */
  * @brief Sets the DAC output voltage.
  *
  * @param param[0] value of the desired voltage. The value can be between:
- *                      - (0 .. Vref), if the output is unipolar
- *                      - (-Vref .. 0) if the output is unipolar inverted
- *                      - (-Vref .. Vref) if the output is bipolar
+ * 						- (0 .. Vref), if the output is unipolar
+ * 						- (-Vref .. 0) if the output is unipolar inverted
+ * 						- (-Vref .. Vref) if the output is bipolar
  *
  * @return None.
 *******************************************************************************/
@@ -403,11 +403,11 @@ void SetVoltage(double* param, char paramNo) /*!< "voltage=" command */
     {
         if(param[0] < min_voltage)
         {
-            param[0] = min_voltage;
+        	param[0] = min_voltage;
         }
         if(param[0] > max_voltage)
         {
-            param[0] = max_voltage;
+        	param[0] = max_voltage;
         }
 
         outVoltage = param[0] / 1000;
