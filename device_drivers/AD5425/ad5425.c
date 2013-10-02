@@ -62,7 +62,7 @@ int AD5425_Init(void)
     char status = -1;
 
     /* Initialize the SPI interface */
-    status = SPI_Init(0, 1000000, 0, 0);
+    status = SPI_Init(0, NULL, 0, 0);
 
     /* Initialize the LDAC GPIO pin */
     AD5425_LDAC_OUT;
@@ -72,11 +72,11 @@ int AD5425_Init(void)
 }
 
 /***************************************************************************//*
- * @brief
+ * @brief Set the shift register of the DAC with the given value
  *
- * @param None
+ * @param The value which will be written to the shift register
  *
- * @return TRUE
+ * @return None
 ******************************************************************************/
 void AD5425_SetRegister(unsigned char data)
 {
