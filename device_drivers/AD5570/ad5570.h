@@ -37,8 +37,6 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
-********************************************************************************
-*   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef _AD5570_H_
 #define _AD5570_H_
@@ -51,7 +49,7 @@
 /* SPI slave device ID */
 #define AD5570_SLAVE_ID         1
 
-/* AD5415 GPIO */
+/* AD5570 GPIO */
 #define AD5570_LDAC_OUT         GPIO0_PIN_OUT
 #define AD5570_LDAC_LOW         GPIO0_LOW
 #define AD5570_LDAC_HIGH        GPIO0_HIGH
