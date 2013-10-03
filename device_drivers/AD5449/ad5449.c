@@ -125,7 +125,7 @@ char AD5449_Init(AD5449_type_t device)
     act_device = device;
 
     /* Initialize SPI communication. */
-    status = SPI_Init(0, 1000000, 0, 0);
+    status = SPI_Init(AD5449_SLAVE_ID, 1000000, 0, 0);
 
     /* Set GPIO pins. */
     AD5449_LDAC_OUT;
