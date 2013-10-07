@@ -1,6 +1,6 @@
 /**************************************************************************//**
-*   @file   AD511x.h
-*   @brief  Header file of AD511x Driver for Microblaze processor.
+*   @file   ad5110.h
+*   @brief  Header file of ad5110 Driver for Microblaze processor.
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 *******************************************************************************
@@ -38,8 +38,8 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 ******************************************************************************/
-#ifndef _AD511x_H_
-#define _AD511x_H_
+#ifndef _ad5110_H_
+#define _ad5110_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -50,57 +50,57 @@
 /******************************************************************************/
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
-/*!< AD511x Device Address */
-#define AD511x_I2C_ADDR			0x2F
-#define AD511x_1_I2C_ADDR		0x2C
+/*!< ad5110 Device Address */
+#define ad5110_I2C_ADDR         0x2F
+#define ad5110_1_I2C_ADDR       0x2C
 
 /******************************************************************************/
 /************************* Input shift register *******************************/
 /******************************************************************************/
 
 /*!< Command position in transmitted bytes */
-#define COMMAND					8
+#define COMMAND                 8
 /*!< Available Commands */
-#define CMD_NOP					0
-#define CMD_WR_RDAC_EEPROM 		1
-#define CMD_WR_RDAC 			2
-#define CMD_SHUT_DOWN			3
-#define CMD_RESET				4
-#define CMD_RD_RDAC				5
-#define CMD_RD_EEPROM			6
+#define CMD_NOP                 0
+#define CMD_WR_RDAC_EEPROM      1
+#define CMD_WR_RDAC             2
+#define CMD_SHUT_DOWN           3
+#define CMD_RESET               4
+#define CMD_RD_RDAC             5
+#define CMD_RD_EEPROM           6
 /*!< Shutdown modes */
-#define SHUT_DOWN_OFF			0
-#define SHUT_DOWN_ON			1
+#define SHUT_DOWN_OFF           0
+#define SHUT_DOWN_ON            1
 /*!< Read modes */
-#define WIPER_POSITION			0
-#define RESISTOR_TOLERANCE 		1
+#define WIPER_POSITION          0
+#define RESISTOR_TOLERANCE      1
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*!< Initializes the communication with the device. */
-char AD511x_Init(unsigned char devAddr);
+char ad5110_Init(unsigned char devAddr);
 
 /*!< Write the content of serial register data to RDAC. */
-void AD511x_WriteRdac(unsigned char rdacValue);
+void ad5110_WriteRdac(unsigned char rdacValue);
 
 /*!< Read the content of RDAC register. */
-unsigned char AD511x_ReadRdac(void);
+unsigned char ad5110_ReadRdac(void);
 
 /*!< Write the content of RDAC register to EEPROM. */
-void AD511x_WriteRdacEeprom(void);
+void ad5110_WriteRdacEeprom(void);
 
 /*!< Read wiper position from EEPROM. */
-unsigned char AD511x_ReadWiper(void);
+unsigned char ad5110_ReadWiper(void);
 
 /*!< Read resistor tolerance from EEPROM. */
-unsigned char AD511x_ReadResTolerance(void);
+unsigned char ad5110_ReadResTolerance(void);
 
 /*!< Software reset; makes a refresh of RDAC register with EEPROM. */
-void AD511x_Reset(void);
+void ad5110_Reset(void);
 
 /*!< Software shutdown. */
-void AD511x_ShutDown(unsigned char value);
+void ad5110_ShutDown(unsigned char value);
 
-#endif	// _AD511x_H_
+#endif  // _ad5110_H_

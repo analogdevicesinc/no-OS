@@ -42,32 +42,32 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "AD511x.h"
+#include "ad5110.h"
 #include "Communication.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-unsigned char ad511xDevAddr = 0;
+unsigned char ad5110DevAddr = 0;
 
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
  *
- * @param devAddr - AD511x device address.
- * 					Example: AD511x_I2C_ADDR - Model AD511X BCPZ Y;
- * 							 AD511x_1_I2C_ADDR - Model AD511X BCPZ Y-1.
+ * @param devAddr - ad5110 device address.
+ *                  Example: ad5110_I2C_ADDR - Model ad5110 BCPZ Y;
+ *                           ad5110_1_I2C_ADDR - Model ad5110 BCPZ Y-1.
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char AD511x_Init(unsigned char devAddr)
+char ad5110_Init(unsigned char devAddr)
 {
-	char status = -1;
+    char status = -1;
 
-	ad511xDevAddr = devAddr;
-	status = I2C_Init(100000);
+    ad5110DevAddr = devAddr;
+    status = I2C_Init(100000);
 
-	return status;
+    return status;
 }
 
 /***************************************************************************//**
@@ -77,16 +77,16 @@ char AD511x_Init(unsigned char devAddr)
  *
  * @return none.
 *******************************************************************************/
-void AD511x_WriteRdac(unsigned char rdacValue)
+void ad5110_WriteRdac(unsigned char rdacValue)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_WR_RDAC;
-	dataBuffer[1] = rdacValue;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_WR_RDAC;
+    dataBuffer[1] = rdacValue;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 }
 
 /***************************************************************************//**
@@ -94,23 +94,23 @@ void AD511x_WriteRdac(unsigned char rdacValue)
  *
  * @return rdacValue - Value read from register.
 *******************************************************************************/
-unsigned char AD511x_ReadRdac(void)
+unsigned char ad5110_ReadRdac(void)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_RD_RDAC;
-	dataBuffer[1] = 0;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_RD_RDAC;
+    dataBuffer[1] = 0;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 
-	I2C_Read(ad511xDevAddr,
-			 dataBuffer,
-			 1,
-			 1);
+    I2C_Read(ad5110DevAddr,
+             dataBuffer,
+             1,
+             1);
 
-	return dataBuffer[0];
+    return dataBuffer[0];
 }
 
 /***************************************************************************//**
@@ -118,16 +118,16 @@ unsigned char AD511x_ReadRdac(void)
  *
  * @return none.
 *******************************************************************************/
-void AD511x_WriteRdacEeprom(void)
+void ad5110_WriteRdacEeprom(void)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_WR_RDAC_EEPROM;
-	dataBuffer[1] = 0;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_WR_RDAC_EEPROM;
+    dataBuffer[1] = 0;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 }
 
 /***************************************************************************//**
@@ -135,23 +135,23 @@ void AD511x_WriteRdacEeprom(void)
  *
  * @return wiperValue - Value read from EEPROM.
 *******************************************************************************/
-unsigned char AD511x_ReadWiper(void)
+unsigned char ad5110_ReadWiper(void)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_RD_EEPROM;
-	dataBuffer[1] = WIPER_POSITION;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_RD_EEPROM;
+    dataBuffer[1] = WIPER_POSITION;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 
-	I2C_Read(ad511xDevAddr,
-			 dataBuffer,
-			 1,
-			 1);
+    I2C_Read(ad5110DevAddr,
+             dataBuffer,
+             1,
+             1);
 
-	return dataBuffer[0];
+    return dataBuffer[0];
 }
 
 /***************************************************************************//**
@@ -159,23 +159,23 @@ unsigned char AD511x_ReadWiper(void)
  *
  * @return resTolerance - Value read from EEPROM.
 *******************************************************************************/
-unsigned char AD511x_ReadResTolerance(void)
+unsigned char ad5110_ReadResTolerance(void)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_RD_EEPROM;
-	dataBuffer[1] = RESISTOR_TOLERANCE;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_RD_EEPROM;
+    dataBuffer[1] = RESISTOR_TOLERANCE;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 
-	I2C_Read(ad511xDevAddr,
-			 dataBuffer,
-			 1,
-			 1);
+    I2C_Read(ad5110DevAddr,
+             dataBuffer,
+             1,
+             1);
 
-	return dataBuffer[0];
+    return dataBuffer[0];
 }
 
 /***************************************************************************//**
@@ -183,35 +183,35 @@ unsigned char AD511x_ReadResTolerance(void)
  *
  * @return none.
 *******************************************************************************/
-void AD511x_Reset(void)
+void ad5110_Reset(void)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_RESET;
-	dataBuffer[1] = 0;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_RESET;
+    dataBuffer[1] = 0;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 }
 
 /***************************************************************************//**
  * @brief Software shutdown.
  *
  * @param value - the value written to shut down register.
- * 				Example: ShutDownOff - the device is on.
- * 						 ShutDownOn  - the device is shut down.
+ *              Example: ShutDownOff - the device is on.
+ *                       ShutDownOn  - the device is shut down.
  *
  * @return none.
 *******************************************************************************/
-void AD511x_ShutDown(unsigned char value)
+void ad5110_ShutDown(unsigned char value)
 {
-	unsigned char dataBuffer[2];
+    unsigned char dataBuffer[2];
 
-	dataBuffer[0] = CMD_SHUT_DOWN;
-	dataBuffer[1] = value;
-	I2C_Write(ad511xDevAddr,
-			  dataBuffer,
-			  2,
-			  1);
+    dataBuffer[0] = CMD_SHUT_DOWN;
+    dataBuffer[1] = value;
+    I2C_Write(ad5110DevAddr,
+              dataBuffer,
+              2,
+              1);
 }
