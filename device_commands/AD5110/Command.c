@@ -44,48 +44,74 @@
 /******************************************************************************/
 #include "Command.h"
 #include "Console.h"
-#include "AD511x.h"
+#include "ad5110.h"
 
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
 
-/*!< List of available commands */
-const char* cmdList[] = {"help?",
-						 "reset!",
-                         "rdac=",
-                         "rdac?",
-                         "rdacToEeprom!",
-                         "wiper?",
-                         "tolerance?",
-						 "power=",
-						 "power?"};
-const char* cmdDescription[] = {
-"  -  Displays all available commands.",
-"  -  Makes a software reset of the device.",
-"  -  Writes to the RDAC register. Accepted values:\r\n\
+const struct cmd_info cmdList[] = {
+    [0] = {
+        .name = "help?",
+        .description = "Displays all available commands.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [1] = {
+		.name = "reset!",
+		.description = "Makes a software reset of the device.",
+		.acceptedValue = "",
+		.example = "",
+    },
+    [2] = {
+		.name = "rdac=",
+		.description = "Writes to the RDAC register..",
+		.acceptedValue = "Accepted values:\r\n\
 \t0 .. 127 - the value written to RDAC.",
-"  -  Displays the last written value in RDAC register.",
-"  -  Writes the content of RDAC register to EEPROM.",
-"  -  Displays the wiper resistance from EEPROM.",
-"  -  Displays the resistance tolerance from EEPROM.",
-"  -  Turns on/off the device. Accepted values:\r\n\
+		.example = "To set the rdac value to 100, type: rdac=100",
+    },
+    [3] = {
+		.name = "rdac?",
+		.description = "Displays the last written value in RDAC register.",
+		.acceptedValue = "",
+		.example = "",
+    },
+    [4] = {
+		.name = "rdacToEeprom!",
+		.description = "Writes the content of RDAC register to EEPROM.",
+		.acceptedValue = "",
+		.example = "",
+    },
+    [5] = {
+		.name = "wiper?",
+		.description = "Displays the wiper resistance from EEPROM.",
+		.acceptedValue = "",
+		.example = "",
+    },
+    [6] = {
+		.name = "tolerance?",
+		.description = "Displays the resistance tolerance from EEPROM.",
+		.acceptedValue = "",
+		.example = "",
+    },
+    [7] = {
+		.name = "power=",
+		.description = "Turns on/off the device.",
+		.acceptedValue = "Accepted values:\r\n\
 \t0 - turns off the device.\r\n\
 \t1 - turns on the device.",
-"  -  Displays the power status of the device."};
+		.example = "To turn off the device, type power=0",
+    },
+    [8] ={
+		.name = "power?",
+		.description = "Displays the power status of the device.",
+		.acceptedValue = "",
+		.example = "",
+    },
+};
 
-const char* cmdExample[] = {
-"",
-"",
-"To set the rdac value to 100, type: rdac=100",
-"",
-"",
-"",
-"",
-"To turn off the device, type power=0",
-""};
 
-const char  cmdNo = (sizeof(cmdList) / sizeof(const char*));
+const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -93,24 +119,56 @@ const char  cmdNo = (sizeof(cmdList) / sizeof(const char*));
 cmdFunction cmdFunctions[9] = {GetHelp, DoReset, SetRdac, GetRdac,
 							   DoRdacToEeprom, GetWiper, GetTolerance, SetPower,
 							   GetPower};
-/*!< Variables holding information about the device */
-unsigned char power = 1; /*!< Power status of the device */
+/* Variables holding information about the device */
+unsigned char power = 1; // Power status of the device
 
 /***************************************************************************//**
  * @brief Displays all available commands.
  *
  * @return None.
 *******************************************************************************/
-void GetHelp(double* param, char paramNo) /*!< "help?" command */
+void GetHelp(double* param, char paramNo) // "help?" command
 {
     unsigned char displayCmd;
 
     CONSOLE_Print("Available commands:\r\n");
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[displayCmd],
-                                  (char*)cmdDescription[displayCmd]);
+        CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[displayCmd].name,
+                                    (char*)cmdList[displayCmd].description,
+                                    (char*)cmdList[displayCmd].acceptedValue);
     }
+}
+
+/***************************************************************************//**
+ * @brief Internal function for displaying all the command with its description.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayCmdList()
+{
+    unsigned char displayCmd;
+
+    for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
+    {
+        CONSOLE_Print("%s - %s\r\n", (char*)cmdList[displayCmd].name, \
+                                     (char*)cmdList[displayCmd].description);
+    }
+}
+
+/***************************************************************************//**
+ * @brief Displays error message.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayError(unsigned char funcNo)
+{
+    /* Display error messages */
+    CONSOLE_Print("Invalid parameter!\r\n");
+    CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[funcNo].name, \
+                                    (char*)cmdList[funcNo].description, \
+                                    (char*)cmdList[funcNo].acceptedValue);
+    CONSOLE_Print("Example: %s\r\n", (char*)cmdList[funcNo].example);
 }
 
 /***************************************************************************//**
@@ -124,17 +182,15 @@ void GetHelp(double* param, char paramNo) /*!< "help?" command */
 *******************************************************************************/
 char DoDeviceInit(void)
 {
-    if(AD511x_Init(AD511x_I2C_ADDR) == 0)
+    if(ad5110_Init(ad5110_I2C_ADDR) == 0)
     {
         CONSOLE_Print("AD5110 OK\r\n");
-        GetHelp(NULL, 0);
-
+        DisplayCmdList();
         return SUCCESS;
     }
     else
     {
         CONSOLE_Print("AD5110 Error\r\n");
-
         return ERROR;
     }
 }
@@ -144,10 +200,10 @@ char DoDeviceInit(void)
  *
  * @return None.
 *******************************************************************************/
-void DoReset(double* param, char paramNo) /*!< "reset!" command */
+void DoReset(double* param, char paramNo) // "reset!" command
 {
-	AD511x_Reset();
-	/*!< Send feedback to user */
+	ad5110_Reset();
+	/* Send feedback to user */
 	CONSOLE_Print("Device was reset.\r\n");
 }
 
@@ -158,11 +214,11 @@ void DoReset(double* param, char paramNo) /*!< "reset!" command */
  *
  * @return None.
 *******************************************************************************/
-void SetRdac(double* param, char paramNo) /*!< "rdac=" command */
+void SetRdac(double* param, char paramNo) // "rdac=" command
 {
     unsigned char rdac;
 
-	/*!< Check if the parameter is valid */
+	/* Check if the parameter is valid */
     if(paramNo >= 1)
     {
         if(param[0] < 0)
@@ -175,17 +231,16 @@ void SetRdac(double* param, char paramNo) /*!< "rdac=" command */
         }
         
         rdac = (unsigned char)param[0];
-        /*!< Write to RDAC register */
-        AD511x_WriteRdac(rdac);
-        /*!< Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",(char*)cmdList[2],rdac);
+        /* Write to RDAC register */
+        ad5110_WriteRdac(rdac);
+        /* Send feedback to user */
+        CONSOLE_Print("%s%d\r\n",(char*)cmdList[2].name,rdac);
     }
      else
     {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[2], (char*)cmdDescription[2]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[2]);
+    	 /* Display error messages */
+    	 DisplayError(2);
+
     }
 }
 
@@ -194,13 +249,13 @@ void SetRdac(double* param, char paramNo) /*!< "rdac=" command */
  *
  * @return None.
 *******************************************************************************/
-void GetRdac(double* param, char paramNo) /*!< "rdac?" command */
+void GetRdac(double* param, char paramNo) // "rdac?" command
 {
 	unsigned char rdac;
 
-	rdac = AD511x_ReadRdac();
-	/*!< Send the requested value to user */
-    CONSOLE_Print("%s%d\r\n",(char*)cmdList[2],rdac);
+	rdac = ad5110_ReadRdac();
+	/* Send the requested value to user */
+    CONSOLE_Print("%s%d\r\n",(char*)cmdList[2].name,rdac);
 }
 
 /***************************************************************************//**
@@ -208,10 +263,10 @@ void GetRdac(double* param, char paramNo) /*!< "rdac?" command */
  *
  * @return None.
 *******************************************************************************/
-void DoRdacToEeprom(double* param, char paramNo) /*!< "rdacToEeprom!" command*/
+void DoRdacToEeprom(double* param, char paramNo) // "rdacToEeprom!" command
 {
-	AD511x_WriteRdacEeprom();
-	/*!< Send feedback to user */
+	ad5110_WriteRdacEeprom();
+	/* Send feedback to user */
 	CONSOLE_Print("RDAC register was written to EEPROM.\r\n");
 }
 
@@ -220,12 +275,12 @@ void DoRdacToEeprom(double* param, char paramNo) /*!< "rdacToEeprom!" command*/
  *
  * @return None.
 *******************************************************************************/
-void GetWiper(double* param, char paramNo) /*!< "wiper?" command*/
+void GetWiper(double* param, char paramNo) // "wiper?" command
 {
 	unsigned char wiper;
 
-	wiper = AD511x_ReadWiper();
-	/*!< Send the requested value to user */
+	wiper = ad5110_ReadWiper();
+	/* Send the requested value to user */
 	CONSOLE_Print("wiper=%d\r\n",wiper);
 }
 
@@ -234,12 +289,12 @@ void GetWiper(double* param, char paramNo) /*!< "wiper?" command*/
  *
  * @return None.
 *******************************************************************************/
-void GetTolerance(double* param, char paramNo) /*!< "tolerance?" command */
+void GetTolerance(double* param, char paramNo) // "tolerance?" command
 {
 	unsigned char tolerance;
 
-	tolerance = AD511x_ReadResTolerance();
-	/*!< Send the requested value to user */
+	tolerance = ad5110_ReadResTolerance();
+	/* Send the requested value to user */
 	CONSOLE_Print("tolerance=%d\r\n",tolerance);
 }
 
@@ -252,9 +307,9 @@ void GetTolerance(double* param, char paramNo) /*!< "tolerance?" command */
  *
  * @return None.
 *******************************************************************************/
-void SetPower(double* param, char paramNo) /*!< "power=" command */
+void SetPower(double* param, char paramNo) // "power=" command
 {
-	/*!< Check if the parameter is valid */
+	/* Check if the parameter is valid */
 	if(paramNo >= 1)
 	{
 		if(param[0] < 0)
@@ -266,17 +321,15 @@ void SetPower(double* param, char paramNo) /*!< "power=" command */
 			param[0] = 1;
 		}
 		power = (unsigned char)param[0];
-		/*!< Turns on/off the device. */
-		AD511x_ShutDown(!power);
-		/*!< Send feedback to user */
-		CONSOLE_Print("%s%d\r\n",(char*)cmdList[7],power);
+		/* Turns on/off the device. */
+		ad5110_ShutDown(!power);
+		/* Send feedback to user */
+		CONSOLE_Print("%s%d\r\n",(char*)cmdList[7].name,power);
 	}
 	else
 	{
-		/*!< Display error messages */
-		CONSOLE_Print("Invalid parameter!\r\n");
-		CONSOLE_Print("%s%s\r\n", (char*)cmdList[7], (char*)cmdDescription[7]);
-		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[7]);
+   	 /* Display error messages */
+   	 DisplayError(7);
 	}
 }
 
@@ -285,8 +338,8 @@ void SetPower(double* param, char paramNo) /*!< "power=" command */
  *
  * @return None.
 *******************************************************************************/
-void GetPower(double* param, char paramNo) /*!< "power?" command */
+void GetPower(double* param, char paramNo) // "power?" command
 {
-	/*!< Send feedback to user */
-	CONSOLE_Print("%s%d\r\n",(char*)cmdList[7],power);
+	/* Send feedback to user */
+	CONSOLE_Print("%s%d\r\n",(char*)cmdList[7].name,power);
 }
