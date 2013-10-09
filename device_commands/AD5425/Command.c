@@ -118,7 +118,6 @@ void DisplayCmdList()
 
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
-        CONSOLE_Print("Invalid parameter!\r\n");
         CONSOLE_Print("%s - %s\r\n", (char*)cmdList[displayCmd].name, \
                                      (char*)cmdList[displayCmd].description);
     }
