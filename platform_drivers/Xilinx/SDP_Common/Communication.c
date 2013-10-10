@@ -55,6 +55,84 @@ static u32 configValue = 0;
 /******************************************************************************/
 
 /***************************************************************************//**
+ * @brief Define preprocessor directives to activate some board specific
+ *        setups, like I2C or SPI ports, or board specific GPIO pins.
+ *        Note that this function is local / protected!
+ *
+ * @param - None
+ *
+ * @return - None
+*******************************************************************************/
+void definePORTS(void)
+{
+
+/*********** Custom setups for Digital-to-Analog Converter Boards *************/
+#if(defined(AD5541A) || defined(AD5542A))
+    /* Activate DAC buffer */
+    GPIO2_PIN_OUT;
+    GPIO2_LOW;
+    /* Deactivate ADC buffer */
+    GPIO3_PIN_OUT;
+    GPIO3_HIGH;
+#endif
+#if(defined(AD5443))
+    /* Select the SDO line for the device */
+    GPIO0_PIN_OUT;
+    GPIO0_HIGH;
+#endif
+#if(defined(AD5570) || defined(AD5453) || defined(AD5446) || defined(AD5443))
+    SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
+#if(defined(AD5629R) || defined(AD5669R) || defined(AD5694R) || defined(AD5696R))
+    I2C_BASEADDR = XPAR_AXI_IIC_1_BASEADDR;
+#endif
+#if(defined(AD5668) || defined(AD5648) || defined(AD5628))
+    /* Activate DAC buffer */
+    GPIO2_PIN_OUT;
+    GPIO2_LOW;
+    /* Deactivate ADC buffer */
+    GPIO3_PIN_OUT;
+    GPIO3_HIGH;
+    /* Deactivate MUX */
+    GPIO4_PIN_OUT;
+    GPIO4_HIGH;
+#endif
+#if(defined(AD5686R) || defined(AD5684R))
+    GPIO0_PIN_OUT;
+    GPIO0_HIGH;
+#endif
+
+/**************** Custom setups for Digital Potentiometers ********************/
+/* Select the AD5162 SPI line (SYNC-4) as output of SYNC lines MUX */
+#if(defined(AD5162))
+    /* Define the level of MUX-AO|CS */
+    GPIO5_PIN_OUT;
+    GPIO5_HIGH;
+    /* Define the level of MUX-A1|DACSEL */
+    GPIO6_PIN_OUT;
+    GPIO6_HIGH;
+    /* Define the level of MUX-A2|U/D */
+    GPIO7_PIN_OUT;
+    GPIO7_LOW;
+#endif
+/* Select the AD8403 SPI line (SYNC-4) as output of SYNC lines MUX */
+#if(defined(AD8403))
+    /* Define the level of MUX-AO|CS */
+    GPIO5_PIN_OUT;
+    GPIO5_LOW;
+    /* Define the level of MUX-A1|DACSEL */
+    GPIO6_PIN_OUT;
+    GPIO6_LOW;
+    /* Define the level of MUX-A2|U/D */
+    GPIO7_PIN_OUT;
+    GPIO7_LOW;
+#endif
+#if(defined(AD5270) || defined(AD5271) || defined(AD5272) || defined(AD5274))
+    SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
+}
+
+/***************************************************************************//**
  * @brief Initializes the selected platform.
  *
  * @return - The result of the initialization.
@@ -77,40 +155,10 @@ char PLATFORM_Init(platformBoard platform)
          xil_printf("Selected platform is not supported\n");
         return -1;
     };
-#if(defined(AD5541A) || defined(AD5542A))
-    /* Activate DAC buffer */
-    GPIO2_PIN_OUT;
-    GPIO2_LOW;
-    /* Deactivate ADC buffer */
-    GPIO3_PIN_OUT;
-    GPIO3_HIGH;
-#endif
-#if(defined(AD5443))
-    /* Select the SDO line for the device */
-    GPIO0_PIN_OUT;
-    GPIO0_HIGH;
-#endif
-#if(defined(AD5570) || defined(AD5453) || defined(AD5446) || defined(AD5443))
-    SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
-#endif
-#if(defined(AD5629R) || defined(AD5669R) || defined(AD5694R) || defined(AD5696R))
-	I2C_BASEADDR = XPAR_AXI_IIC_1_BASEADDR;
-#endif
-#if(defined(AD5668) || defined(AD5648) || defined(AD5628))
-	/* Activate DAC buffer */
-    GPIO2_PIN_OUT;
-    GPIO2_LOW;
-    /* Deactivate ADC buffer */
-    GPIO3_PIN_OUT;
-    GPIO3_HIGH;
-    /* Deactivate MUX */
-    GPIO4_PIN_OUT;
-    GPIO4_HIGH;
-#endif
-#if(defined(AD5686R) || defined(AD5684R))
-    GPIO0_PIN_OUT;
-    GPIO0_HIGH;
-#endif
+
+    /* Define and activate board specific setups */
+    definePORTS();
+
 return 0;
 }
 /***************************************************************************//**
