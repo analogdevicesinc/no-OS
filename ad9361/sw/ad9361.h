@@ -3058,8 +3058,6 @@ struct ad9361_rf_phy {
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
 	struct clk_onecell_data	clk_data;
 	struct ad9361_phy_platform_data *pdata;
-	struct work_struct 	work;
-	struct completion       complete;
 	u8 			prev_ensm_state;
 	u8			curr_ensm_state;
 	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
@@ -3069,7 +3067,6 @@ struct ad9361_rf_phy {
 	bool			auto_cal_en;
 	u64			last_rx_quad_cal_freq;
 	u64			last_tx_quad_cal_freq;
-	//unsigned long		flags;
 	unsigned long		cal_threshold_freq;
 	u32			current_rx_bw_Hz;
 	u32			current_tx_bw_Hz;
@@ -3123,7 +3120,6 @@ int ad9361_reset(struct ad9361_rf_phy *phy);
 int ad9361_setup(struct ad9361_rf_phy *phy);
 int ad9361_spi_write(u32 reg, u32 val);
 int ad9361_spi_read(u32 reg);
-void ad9361_work_func(struct work_struct *work);
 int register_clocks(struct ad9361_rf_phy *phy);
 int ad9361_init_gain_tables(struct ad9361_rf_phy *phy);
 

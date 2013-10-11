@@ -20,12 +20,6 @@
 
 typedef uint8_t	bool;
 
-struct work_struct {
-};
-struct completion {
-	unsigned int done;
-};
-
 struct clk {
 	const char    *name;
 	unsigned long           rate;

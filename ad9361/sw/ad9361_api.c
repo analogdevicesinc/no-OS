@@ -5,11 +5,6 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-static struct clk ad9361_ext_refclk;
-
 /***************************************************************************//**
  * @brief ad9361_init
 *******************************************************************************/
@@ -20,12 +15,12 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	int32_t rev = 0;
 	int32_t i   = 0;
 
-	phy = (struct ad9361_rf_phy *)malloc(sizeof(*phy));
+	phy = malloc(sizeof(*phy));
 	if (!phy) {
 		return ERR_PTR(-ENOMEM);
 	}
 
-	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
+	phy->pdata = malloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
 		return ERR_PTR(-ENOMEM);
 	}
@@ -136,8 +131,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy->rx_eq_2tx = false;
 
-	ad9361_ext_refclk.rate = 40000000;
-	phy->clk_refin = &ad9361_ext_refclk;
+	phy->clk_refin = malloc(sizeof(*phy->clk_refin));
+	phy->clk_refin->rate = 40000000;
 
 	phy->current_table = RXGAIN_TBLS_END;
 	phy->bypass_tx_fir = true;

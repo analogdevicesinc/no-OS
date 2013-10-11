@@ -70,7 +70,7 @@ command cmd_list[] = {
 	{"rx_samp_freq=", "Sets the RX sampling frequency [Hz].", "", set_rx_samp_freq},
 	{"rx_rf_bandwidth?", "Gets current RX RF bandwidth [Hz].", "", get_rx_rf_bandwidth},
 	{"rx_rf_bandwidth=", "Sets the RX RF bandwidth [Hz].", "", set_rx_rf_bandwidth},
-	{"rx1_gc_mode?", "Gets current RX1 GC mode", "", get_rx1_gc_mode},
+	{"rx1_gc_mode?", "Gets current RX1 GC mode.", "", get_rx1_gc_mode},
 	{"rx1_gc_mode=", "Sets the RX1 GC mode.", "", set_rx1_gc_mode},
 	{"rx2_gc_mode?", "Gets current RX2 GC mode.", "", get_rx2_gc_mode},
 	{"rx2_gc_mode=", "Sets the RX2 GC mode.", "", set_rx2_gc_mode},
@@ -191,7 +191,7 @@ void set_tx_lo_freq(double* param, char param_no) // "tx_lo_freq=" command
     	lo_freq_hz *= 1000000;
     	ad9361_set_tx_lo_freq(ad9361_phy, lo_freq_hz);
     	lo_freq_hz /= 1000000;
-    	console_print("rx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
+    	console_print("tx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
     }
 }
 
