@@ -105,35 +105,33 @@ typedef struct
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9361_init (AD9361_InitParam *init_param);
-int32_t ad9361_set_en_state_machine_mode (uint32_t mode);
-int32_t ad9361_get_en_state_machine_mode (uint32_t *mode);
-int32_t ad9361_set_rx_rf_gain (uint8_t ch, int32_t gain_db);
-int32_t ad9361_get_rx_rf_gain (uint8_t ch, int32_t *gain_db);
-int32_t ad9361_set_rx_rf_bandwidth (uint32_t bandwidth_hz);
-int32_t ad9361_get_rx_rf_bandwidth (uint32_t *bandwidth_hz);
-int32_t ad9361_set_rx_sampling_freq (uint32_t sampling_freq_hz);
-int32_t ad9361_get_rx_sampling_freq (uint32_t *sampling_freq_hz);
-int32_t ad9361_set_rx_lo_freq (uint64_t lo_freq_hz);
-int32_t ad9361_get_rx_lo_freq (uint64_t *lo_freq_hz);
-int32_t ad9361_get_rx_rssi (uint8_t ch, struct rf_rssi *rssi);
-int32_t ad9361_set_rx_gain_control_mode (uint8_t ch, uint8_t gc_mode);
-int32_t ad9361_get_rx_gain_control_mode (uint8_t ch, uint8_t *gc_mode);
-int32_t ad9361_set_rx_fir_config (AD9361_RXFIRConfig fir_cfg);
-int32_t ad9361_get_rx_fir_config (AD9361_RXFIRConfig *fir_cfg);
-int32_t ad9361_set_rx_fir_en_dis (uint8_t en_dis);
-int32_t ad9361_get_rx_fir_en_dis (uint8_t *en_dis);
-int32_t ad9361_set_tx_attenuation (uint8_t ch, uint32_t attenuation_mdb);
-int32_t ad9361_get_tx_attenuation (uint8_t ch, uint32_t *attenuation_mdb);
-int32_t ad9361_set_tx_rf_bandwidth (uint32_t  bandwidth_hz);
-int32_t ad9361_get_tx_rf_bandwidth (uint32_t *bandwidth_hz);
-int32_t ad9361_set_tx_sampling_freq (uint32_t sampling_freq_hz);
-int32_t ad9361_get_tx_sampling_freq (uint32_t *sampling_freq_hz);
-int32_t ad9361_set_tx_lo_freq (uint64_t lo_freq_hz);
-int32_t ad9361_get_tx_lo_freq (uint64_t *lo_freq_hz);
-int32_t ad9361_set_tx_fir_config (AD9361_TXFIRConfig fir_cfg);
-int32_t ad9361_get_tx_fir_config (AD9361_TXFIRConfig *fir_cfg);
-int32_t ad9361_set_tx_fir_en_dis (uint8_t en_dis);
-int32_t ad9361_get_tx_fir_en_dis (uint8_t *en_dis);
+struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param);
+int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy, uint32_t mode);
+int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy, uint32_t *mode);
+int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy, uint8_t ch, int32_t gain_db);
+int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy, uint8_t ch, int32_t *gain_db);
+int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t bandwidth_hz);
+int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t *bandwidth_hz);
+int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t sampling_freq_hz);
+int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t *sampling_freq_hz);
+int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
+int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy, uint8_t ch, struct rf_rssi *rssi);
+int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy, uint8_t ch, uint8_t gc_mode);
+int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy, uint8_t ch, uint8_t *gc_mode);
+int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy, AD9361_RXFIRConfig fir_cfg);
+int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
+int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t *attenuation_mdb);
+int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t  bandwidth_hz);
+int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t *bandwidth_hz);
+int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t sampling_freq_hz);
+int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t *sampling_freq_hz);
+int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
+int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy, AD9361_TXFIRConfig fir_cfg);
+int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
 
 #endif

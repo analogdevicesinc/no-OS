@@ -12,7 +12,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct dds_state dds_st;
-extern struct ad9361_rf_phy *phy;
+extern struct ad9361_rf_phy *ad9361_phy;
 
 /***************************************************************************//**
  * @brief dac_read
@@ -68,7 +68,7 @@ void dac_init(uint8_t data_sel)
 
 	dac_write(ADI_REG_RATECNTRL, ADI_RATE(3));
 
-	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
+	dds_st.dac_clk = &ad9361_phy->clks[TX_SAMPL_CLK]->rate;
 
 	dac_write(ADI_REG_CNTRL_1, 0);
 	switch (data_sel) {

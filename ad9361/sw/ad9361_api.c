@@ -8,26 +8,26 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-struct ad9361_rf_phy *phy;
 static struct clk ad9361_ext_refclk;
 
 /***************************************************************************//**
  * @brief ad9361_init
 *******************************************************************************/
-int32_t ad9361_init (AD9361_InitParam *init_param)
+struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 {
+	struct ad9361_rf_phy *phy;
 	int32_t ret = 0;
 	int32_t rev = 0;
 	int32_t i   = 0;
 
 	phy = (struct ad9361_rf_phy *)malloc(sizeof(*phy));
 	if (!phy) {
-		return -ENOMEM;
+		return ERR_PTR(-ENOMEM);
 	}
 
 	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
-		return -ENOMEM;
+		return ERR_PTR(-ENOMEM);
 	}
 
 	/* Mode Setup */
@@ -172,18 +172,19 @@ int32_t ad9361_init (AD9361_InitParam *init_param)
 
 	printf("%s : AD9361 Rev %d successfully initialized\n", __func__, (int)rev);
 
-	return 0;
+	return phy;
 
 out:
 	printf("%s : AD9361 initialization error\n", __func__);
 
-	return ret;
+	return ERR_PTR(ENODEV);
 }
 
 /***************************************************************************//**
  * @brief ad9361_set_en_state_machine_mode
 *******************************************************************************/
-int32_t ad9361_set_en_state_machine_mode (uint32_t mode)
+int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
+										  uint32_t mode)
 {
 	ad9361_ensm_force_state(phy, mode);
 
@@ -193,7 +194,8 @@ int32_t ad9361_set_en_state_machine_mode (uint32_t mode)
 /***************************************************************************//**
  * @brief ad9361_get_en_state_machine_mode
 *******************************************************************************/
-int32_t ad9361_get_en_state_machine_mode (uint32_t *mode)
+int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
+										  uint32_t *mode)
 {
 	*mode = phy->curr_ensm_state;
 
@@ -203,7 +205,8 @@ int32_t ad9361_get_en_state_machine_mode (uint32_t *mode)
 /***************************************************************************//**
  * @brief ad9361_set_rx_rf_gain
 *******************************************************************************/
-int32_t ad9361_set_rx_rf_gain (uint8_t ch, int32_t gain_db)
+int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
+							   uint8_t ch, int32_t gain_db)
 {
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
@@ -217,7 +220,8 @@ int32_t ad9361_set_rx_rf_gain (uint8_t ch, int32_t gain_db)
 /***************************************************************************//**
  * @brief ad9361_set_rx_rf_gain
 *******************************************************************************/
-int32_t ad9361_get_rx_rf_gain (uint8_t ch, int32_t *gain_db)
+int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
+							   uint8_t ch, int32_t *gain_db)
 {
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
@@ -231,7 +235,8 @@ int32_t ad9361_get_rx_rf_gain (uint8_t ch, int32_t *gain_db)
 /***************************************************************************//**
  * @brief ad9361_set_rx_rf_bandwidth
 *******************************************************************************/
-int32_t ad9361_set_rx_rf_bandwidth (uint32_t bandwidth_hz)
+int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
+									uint32_t bandwidth_hz)
 {
 	int32_t ret = 0;
 
@@ -247,7 +252,8 @@ int32_t ad9361_set_rx_rf_bandwidth (uint32_t bandwidth_hz)
 /***************************************************************************//**
  * @brief ad9361_get_rx_rf_bandwidth
 *******************************************************************************/
-int32_t ad9361_get_rx_rf_bandwidth (uint32_t *bandwidth_hz)
+int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
+									uint32_t *bandwidth_hz)
 {
 	*bandwidth_hz = phy->current_rx_bw_Hz;
 
@@ -257,7 +263,8 @@ int32_t ad9361_get_rx_rf_bandwidth (uint32_t *bandwidth_hz)
 /***************************************************************************//**
  * @brief ad9361_set_rx_sampling_freq
 *******************************************************************************/
-int32_t ad9361_set_rx_sampling_freq (uint32_t sampling_freq_hz)
+int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy,
+									 uint32_t sampling_freq_hz)
 {
 	int32_t ret;
 	uint32_t rx[6], tx[6];
@@ -278,9 +285,11 @@ int32_t ad9361_set_rx_sampling_freq (uint32_t sampling_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_get_rx_sampling_freq
 *******************************************************************************/
-int32_t ad9361_get_rx_sampling_freq (uint32_t *sampling_freq_hz)
+int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy,
+									 uint32_t *sampling_freq_hz)
 {
-	*sampling_freq_hz = (uint32_t)clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]);
+	*sampling_freq_hz = (uint32_t)clk_get_rate(phy,
+										phy->ref_clk_scale[RX_SAMPL_CLK]);
 
 	return 0;
 }
@@ -288,7 +297,8 @@ int32_t ad9361_get_rx_sampling_freq (uint32_t *sampling_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_set_rx_lo_freq
 *******************************************************************************/
-int32_t ad9361_set_rx_lo_freq (uint64_t lo_freq_hz)
+int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
+							   uint64_t lo_freq_hz)
 {
 	int32_t ret;
 
@@ -301,9 +311,11 @@ int32_t ad9361_set_rx_lo_freq (uint64_t lo_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_get_rx_lo_freq
 *******************************************************************************/
-int32_t ad9361_get_rx_lo_freq (uint64_t *lo_freq_hz)
+int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
+							   uint64_t *lo_freq_hz)
 {
-	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy, phy->ref_clk_scale[RX_RFPLL]));
+	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
+										phy->ref_clk_scale[RX_RFPLL]));
 
 	return 0;
 }
@@ -311,7 +323,8 @@ int32_t ad9361_get_rx_lo_freq (uint64_t *lo_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_get_rx_rssi
 *******************************************************************************/
-int32_t ad9361_get_rx_rssi (uint8_t ch, struct rf_rssi *rssi)
+int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
+							uint8_t ch, struct rf_rssi *rssi)
 {
 	int32_t ret;
 
@@ -325,7 +338,8 @@ int32_t ad9361_get_rx_rssi (uint8_t ch, struct rf_rssi *rssi)
 /***************************************************************************//**
  * @brief ad9361_set_rx_gain_control_mode
 *******************************************************************************/
-int32_t ad9361_set_rx_gain_control_mode (uint8_t ch, uint8_t gc_mode)
+int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
+										 uint8_t ch, uint8_t gc_mode)
 {
 	struct rf_gain_ctrl gc = {0};
 
@@ -340,7 +354,8 @@ int32_t ad9361_set_rx_gain_control_mode (uint8_t ch, uint8_t gc_mode)
 /***************************************************************************//**
  * @brief ad9361_get_rx_gain_control_mode
 *******************************************************************************/
-int32_t ad9361_get_rx_gain_control_mode (uint8_t ch, uint8_t *gc_mode)
+int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy,
+										 uint8_t ch, uint8_t *gc_mode)
 {
 	*gc_mode = phy->agc_mode[ch];
 
@@ -350,7 +365,8 @@ int32_t ad9361_get_rx_gain_control_mode (uint8_t ch, uint8_t *gc_mode)
 /***************************************************************************//**
  * @brief ad9361_set_rx_fir_config
 *******************************************************************************/
-int32_t ad9361_set_rx_fir_config (AD9361_RXFIRConfig fir_cfg)
+int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
+								  AD9361_RXFIRConfig fir_cfg)
 {
 	int32_t ret;
 
@@ -362,18 +378,10 @@ int32_t ad9361_set_rx_fir_config (AD9361_RXFIRConfig fir_cfg)
 }
 
 /***************************************************************************//**
- * @brief ad9361_get_rx_fir_config
-*******************************************************************************/
-int32_t ad9361_get_rx_fir_config (AD9361_RXFIRConfig *fir_cfg)
-{
-
-	return 0;
-}
-
-/***************************************************************************//**
  * @brief ad9361_set_rx_fir_en_dis
 *******************************************************************************/
-int32_t ad9361_set_rx_fir_en_dis (uint8_t en_dis)
+int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy,
+								  uint8_t en_dis)
 {
 	int32_t ret = 0;
 
@@ -392,7 +400,8 @@ int32_t ad9361_set_rx_fir_en_dis (uint8_t en_dis)
 /***************************************************************************//**
  * @brief ad9361_get_rx_fir_en_dis
 *******************************************************************************/
-int32_t ad9361_get_rx_fir_en_dis (uint8_t *en_dis)
+int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy,
+								  uint8_t *en_dis)
 {
 	*en_dis = !phy->bypass_rx_fir;
 
@@ -402,7 +411,8 @@ int32_t ad9361_get_rx_fir_en_dis (uint8_t *en_dis)
 /***************************************************************************//**
  * @brief ad9361_set_tx_attenuation
 *******************************************************************************/
-int32_t ad9361_set_tx_attenuation (uint8_t ch, uint32_t attenuation_mdb)
+int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
+								   uint8_t ch, uint32_t attenuation_mdb)
 {
 	int32_t ret;
 
@@ -415,7 +425,8 @@ int32_t ad9361_set_tx_attenuation (uint8_t ch, uint32_t attenuation_mdb)
 /***************************************************************************//**
  * @brief ad9361_get_tx_attenuation
 *******************************************************************************/
-int32_t ad9361_get_tx_attenuation (uint8_t ch, uint32_t *attenuation_db)
+int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
+								   uint8_t ch, uint32_t *attenuation_db)
 {
 	uint32_t ret;
 
@@ -430,7 +441,8 @@ int32_t ad9361_get_tx_attenuation (uint8_t ch, uint32_t *attenuation_db)
 /***************************************************************************//**
  * @brief ad9361_get_tx_attenuation
 *******************************************************************************/
-int32_t ad9361_set_tx_rf_bandwidth (uint32_t  bandwidth_hz)
+int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
+									uint32_t  bandwidth_hz)
 {
 	int32_t ret = 0;
 
@@ -446,7 +458,8 @@ int32_t ad9361_set_tx_rf_bandwidth (uint32_t  bandwidth_hz)
 /***************************************************************************//**
  * @brief ad9361_get_tx_attenuation
 *******************************************************************************/
-int32_t ad9361_get_tx_rf_bandwidth (uint32_t *bandwidth_hz)
+int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
+									uint32_t *bandwidth_hz)
 {
 	*bandwidth_hz = phy->current_tx_bw_Hz;
 
@@ -456,7 +469,8 @@ int32_t ad9361_get_tx_rf_bandwidth (uint32_t *bandwidth_hz)
 /***************************************************************************//**
  * @brief ad9361_set_tx_sampling_freq
 *******************************************************************************/
-int32_t ad9361_set_tx_sampling_freq (uint32_t sampling_freq_hz)
+int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy,
+									 uint32_t sampling_freq_hz)
 {
 	int32_t ret;
 	uint32_t rx[6], tx[6];
@@ -477,9 +491,11 @@ int32_t ad9361_set_tx_sampling_freq (uint32_t sampling_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_get_tx_sampling_freq
 *******************************************************************************/
-int32_t ad9361_get_tx_sampling_freq (uint32_t *sampling_freq_hz)
+int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy,
+									 uint32_t *sampling_freq_hz)
 {
-	*sampling_freq_hz = (uint32_t)clk_get_rate(phy, phy->ref_clk_scale[TX_SAMPL_CLK]);
+	*sampling_freq_hz = (uint32_t)clk_get_rate(phy,
+										phy->ref_clk_scale[TX_SAMPL_CLK]);
 
 	return 0;
 }
@@ -487,7 +503,8 @@ int32_t ad9361_get_tx_sampling_freq (uint32_t *sampling_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_set_tx_lo_freq
 *******************************************************************************/
-int32_t ad9361_set_tx_lo_freq (uint64_t lo_freq_hz)
+int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
+							   uint64_t lo_freq_hz)
 {
 	int32_t ret;
 
@@ -500,9 +517,11 @@ int32_t ad9361_set_tx_lo_freq (uint64_t lo_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_get_tx_lo_freq
 *******************************************************************************/
-int32_t ad9361_get_tx_lo_freq (uint64_t *lo_freq_hz)
+int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
+							   uint64_t *lo_freq_hz)
 {
-	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy, phy->ref_clk_scale[TX_RFPLL]));
+	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
+										phy->ref_clk_scale[TX_RFPLL]));
 
 	return 0;
 }
@@ -510,7 +529,8 @@ int32_t ad9361_get_tx_lo_freq (uint64_t *lo_freq_hz)
 /***************************************************************************//**
  * @brief ad9361_set_tx_fir_config
 *******************************************************************************/
-int32_t ad9361_set_tx_fir_config (AD9361_TXFIRConfig fir_cfg)
+int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
+								  AD9361_TXFIRConfig fir_cfg)
 {
 	int32_t ret;
 
@@ -522,17 +542,10 @@ int32_t ad9361_set_tx_fir_config (AD9361_TXFIRConfig fir_cfg)
 }
 
 /***************************************************************************//**
- * @brief ad9361_get_tx_fir_config
-*******************************************************************************/
-int32_t ad9361_get_tx_fir_config (AD9361_TXFIRConfig *fir_cfg)
-{
-	return 0;
-}
-
-/***************************************************************************//**
  * @brief ad9361_set_rx_fir_en_dis
 *******************************************************************************/
-int32_t ad9361_set_tx_fir_en_dis (uint8_t en_dis)
+int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy,
+								  uint8_t en_dis)
 {
 	int32_t ret = 0;
 
@@ -551,7 +564,8 @@ int32_t ad9361_set_tx_fir_en_dis (uint8_t en_dis)
 /***************************************************************************//**
  * @brief ad9361_get_rx_fir_en_dis
 *******************************************************************************/
-int32_t ad9361_get_tx_fir_en_dis (uint8_t *en_dis)
+int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy,
+								  uint8_t *en_dis)
 {
 	*en_dis = !phy->bypass_tx_fir;
 

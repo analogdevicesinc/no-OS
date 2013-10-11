@@ -126,6 +126,7 @@ AD9361_TXFIRConfig tx_fir_config = {
 	 -356, -1182, -307, 558, 271, -4, 219, 107,
 	 -315, -284, 86, 186, 35, -37, -6, -4} // tx_coef[64];
 };
+struct ad9361_rf_phy *ad9361_phy;
 
 /***************************************************************************//**
  * @brief main
@@ -139,10 +140,10 @@ int main(void)
     gpio_direction(54 + 45, 1);
 	spi_init(XPAR_PS7_SPI_0_DEVICE_ID, 1, 0);
 
-    ad9361_init(&default_init_param);
+	ad9361_phy = ad9361_init(&default_init_param);
 
-    ad9361_set_tx_fir_config(tx_fir_config);
-    ad9361_set_rx_fir_config(rx_fir_config);
+    ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
+    ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
     adc_init();
     dac_init(DATA_SEL_DDS);

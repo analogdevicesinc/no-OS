@@ -3922,7 +3922,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 		u32 source, u32 parent_source)
 {
 	struct refclk_scale *clk_priv;
-	struct clk_init_data init;
+	//struct clk_init_data init;
 	struct clk *clk;
 
 	//clk_priv = kmalloc(sizeof(*clk_priv), GFP_KERNEL);
@@ -3935,10 +3935,10 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 	/* struct refclk_scale assignments */
 	clk_priv->source = source;
 	clk_priv->parent_source = parent_source;
-	clk_priv->hw.init = &init;
+	//clk_priv->hw.init = &init;
 	clk_priv->phy = phy;
 
-	init.name = name;
+	//init.name = name;
 #if 0
 	switch (source) {
 	case BBPLL_CLK:
@@ -3952,9 +3952,9 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 		init.ops = &refclk_scale_ops;
 	}
 #endif
-	init.flags = flags;
-	init.parent_names = &parent_name;
-	init.num_parents = 1;
+	//init.flags = flags;
+	//init.parent_names = &parent_name;
+	//init.num_parents = 1;
 
 	phy->ref_clk_scale[source] = clk_priv;
 

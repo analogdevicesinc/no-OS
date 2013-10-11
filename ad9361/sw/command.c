@@ -111,6 +111,7 @@ const char cmd_no = (sizeof(cmd_list) / sizeof(command));
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 extern struct dds_state dds_st;
+extern struct ad9361_rf_phy *ad9361_phy;
 
 /**************************************************************************//***
  * @brief Show the invalid parameter message.
@@ -170,7 +171,7 @@ void get_tx_lo_freq(double* param, char param_no) // "tx_lo_freq?" command
 {
 	uint64_t lo_freq_hz;
 
-	ad9361_get_tx_lo_freq(&lo_freq_hz);
+	ad9361_get_tx_lo_freq(ad9361_phy, &lo_freq_hz);
 	lo_freq_hz /= 1000000;
 	console_print("tx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
 }
@@ -188,7 +189,7 @@ void set_tx_lo_freq(double* param, char param_no) // "tx_lo_freq=" command
     {
     	lo_freq_hz = param[0];
     	lo_freq_hz *= 1000000;
-    	ad9361_set_tx_lo_freq(lo_freq_hz);
+    	ad9361_set_tx_lo_freq(ad9361_phy, lo_freq_hz);
     	lo_freq_hz /= 1000000;
     	console_print("rx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
     }
@@ -203,7 +204,7 @@ void get_tx_samp_freq(double* param, char param_no) // "tx_samp_freq?" command
 {
 	uint32_t sampling_freq_hz;
 
-    ad9361_get_tx_sampling_freq(&sampling_freq_hz);
+    ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
     console_print("tx_samp_freq=%d\n", sampling_freq_hz);
 }
 
@@ -219,8 +220,8 @@ void set_tx_samp_freq(double* param, char param_no) // "tx_samp_freq=" command
     if(param_no >= 1)
     {
         sampling_freq_hz = (uint32_t)param[0];
-        ad9361_set_tx_sampling_freq(sampling_freq_hz);
-        ad9361_get_tx_sampling_freq(&sampling_freq_hz);
+        ad9361_set_tx_sampling_freq(ad9361_phy, sampling_freq_hz);
+        ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
         dds_update();
         console_print("tx_samp_freq=%d\n", sampling_freq_hz);
     }
@@ -237,7 +238,7 @@ void get_tx_rf_bandwidth(double* param, char param_no) // "tx_rf_bandwidth?" com
 {
 	uint32_t bandwidth_hz;
 
-	ad9361_get_tx_rf_bandwidth(&bandwidth_hz);
+	ad9361_get_tx_rf_bandwidth(ad9361_phy, &bandwidth_hz);
 	console_print("tx_rf_bandwidth=%d\n", bandwidth_hz);
 }
 
@@ -253,7 +254,7 @@ void set_tx_rf_bandwidth(double* param, char param_no) // "tx_rf_bandwidth=" com
     if(param_no >= 1)
     {
     	bandwidth_hz = param[0];
-    	ad9361_set_tx_rf_bandwidth(bandwidth_hz);
+    	ad9361_set_tx_rf_bandwidth(ad9361_phy, bandwidth_hz);
     }
     else
     	show_invalid_param_message(1);
@@ -268,7 +269,7 @@ void get_tx1_attenuation(double* param, char param_no) // "tx1_attenuation?" com
 {
 	uint32_t attenuation_mdb;
 
-	ad9361_get_tx_attenuation(0, &attenuation_mdb);
+	ad9361_get_tx_attenuation(ad9361_phy, 0, &attenuation_mdb);
 	console_print("tx1_attenuation=%d\n", attenuation_mdb);
 }
 
@@ -284,7 +285,7 @@ void set_tx1_attenuation(double* param, char param_no) // "tx1_attenuation=" com
     if(param_no >= 1)
     {
     	attenuation_mdb = param[0];
-    	ad9361_set_tx_attenuation(0, attenuation_mdb);
+    	ad9361_set_tx_attenuation(ad9361_phy, 0, attenuation_mdb);
     	console_print("tx1_attenuation=%d\n", attenuation_mdb);
     }
     else
@@ -300,7 +301,7 @@ void get_tx2_attenuation(double* param, char param_no) // "tx1_attenuation?" com
 {
 	uint32_t attenuation_mdb;
 
-	ad9361_get_tx_attenuation(1, &attenuation_mdb);
+	ad9361_get_tx_attenuation(ad9361_phy, 1, &attenuation_mdb);
 	console_print("tx2_attenuation=%d\n", attenuation_mdb);
 }
 
@@ -316,7 +317,7 @@ void set_tx2_attenuation(double* param, char param_no) // "tx1_attenuation=" com
     if(param_no >= 1)
     {
     	attenuation_mdb = param[0];
-    	ad9361_set_tx_attenuation(1, attenuation_mdb);
+    	ad9361_set_tx_attenuation(ad9361_phy, 1, attenuation_mdb);
     	console_print("tx2_attenuation=%d\n", attenuation_mdb);
     }
     else
@@ -332,7 +333,7 @@ void get_tx_fir_en(double* param, char param_no) // "tx_fir_en?" command
 {
 	uint8_t en_dis;
 
-	ad9361_get_tx_fir_en_dis(&en_dis);
+	ad9361_get_tx_fir_en_dis(ad9361_phy, &en_dis);
 	console_print("tx_fir_en=%d\n", en_dis);
 }
 
@@ -348,7 +349,7 @@ void set_tx_fir_en(double* param, char param_no) // "tx_fir_en=" command
     if(param_no >= 1)
     {
     	en_dis = param[0];
-    	ad9361_set_tx_fir_en_dis(en_dis);
+    	ad9361_set_tx_fir_en_dis(ad9361_phy, en_dis);
     	console_print("tx_fir_en=%d\n", en_dis);
     }
     else
@@ -364,7 +365,7 @@ void get_rx_lo_freq(double* param, char param_no) // "rx_lo_freq?" command
 {
 	uint64_t lo_freq_hz;
 
-	ad9361_get_rx_lo_freq(&lo_freq_hz);
+	ad9361_get_rx_lo_freq(ad9361_phy, &lo_freq_hz);
 	lo_freq_hz /= 1000000;
 	console_print("rx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
 }
@@ -382,7 +383,7 @@ void set_rx_lo_freq(double* param, char param_no) // "rx_lo_freq=" command
     {
     	lo_freq_hz = param[0];
     	lo_freq_hz *= 1000000;
-    	ad9361_set_rx_lo_freq(lo_freq_hz);
+    	ad9361_set_rx_lo_freq(ad9361_phy, lo_freq_hz);
     	lo_freq_hz /= 1000000;
 		console_print("rx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
     }
@@ -397,7 +398,7 @@ void get_rx_samp_freq(double* param, char param_no) // "rx_samp_freq?" command
 {
 	uint32_t sampling_freq_hz;
 
-    ad9361_get_rx_sampling_freq(&sampling_freq_hz);
+    ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
     console_print("rx_samp_freq=%d\n", sampling_freq_hz);
 }
 
@@ -413,8 +414,8 @@ void set_rx_samp_freq(double* param, char param_no) // "rx_samp_freq=" command
     if(param_no >= 1)
     {
         sampling_freq_hz = (uint32_t)param[0];
-        ad9361_set_rx_sampling_freq(sampling_freq_hz);
-        ad9361_get_rx_sampling_freq(&sampling_freq_hz);
+        ad9361_set_rx_sampling_freq(ad9361_phy, sampling_freq_hz);
+        ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
         dds_update();
         console_print("rx_samp_freq=%d\n", sampling_freq_hz);
     }
@@ -431,7 +432,7 @@ void get_rx_rf_bandwidth(double* param, char param_no) // "rx_rf_bandwidth?" com
 {
 	uint32_t bandwidth_hz;
 
-	ad9361_get_rx_rf_bandwidth(&bandwidth_hz);
+	ad9361_get_rx_rf_bandwidth(ad9361_phy, &bandwidth_hz);
 	console_print("rx_rf_bandwidth=%d\n", bandwidth_hz);
 }
 
@@ -447,7 +448,7 @@ void set_rx_rf_bandwidth(double* param, char param_no) // "rx_rf_bandwidth=" com
     if(param_no >= 1)
     {
     	bandwidth_hz = param[0];
-    	ad9361_set_rx_rf_bandwidth(bandwidth_hz);
+    	ad9361_set_rx_rf_bandwidth(ad9361_phy, bandwidth_hz);
     	console_print("rx_rf_bandwidth=%d\n", bandwidth_hz);
     }
     else
@@ -463,7 +464,7 @@ void get_rx1_gc_mode(double* param, char param_no) // "rx1_gc_mode?" command
 {
 	uint8_t gc_mode;
 
-	ad9361_get_rx_gain_control_mode(0, &gc_mode);
+	ad9361_get_rx_gain_control_mode(ad9361_phy, 0, &gc_mode);
 	console_print("rx1_gc_mode=%d\n", gc_mode);
 }
 
@@ -479,7 +480,7 @@ void set_rx1_gc_mode(double* param, char param_no) // "rx1_gc_mode=" command
     if(param_no >= 1)
     {
     	gc_mode = param[0];
-    	ad9361_set_rx_gain_control_mode(0, gc_mode);
+    	ad9361_set_rx_gain_control_mode(ad9361_phy, 0, gc_mode);
     	console_print("rx1_gc_mode=%d\n", gc_mode);
     }
     else
@@ -495,7 +496,7 @@ void get_rx2_gc_mode(double* param, char param_no) // "rx2_gc_mode?" command
 {
 	uint8_t gc_mode;
 
-	ad9361_get_rx_gain_control_mode(1, &gc_mode);
+	ad9361_get_rx_gain_control_mode(ad9361_phy, 1, &gc_mode);
 	console_print("rx2_gc_mode=%d\n", gc_mode);
 }
 
@@ -511,7 +512,7 @@ void set_rx2_gc_mode(double* param, char param_no) // "rx2_gc_mode=" command
     if(param_no >= 1)
     {
     	gc_mode = param[0];
-    	ad9361_set_rx_gain_control_mode(1, gc_mode);
+    	ad9361_set_rx_gain_control_mode(ad9361_phy, 1, gc_mode);
     	console_print("rx2_gc_mode=%d\n", gc_mode);
     }
     else
@@ -527,7 +528,7 @@ void get_rx1_rf_gain(double* param, char param_no) // "rx1_rf_gain?" command
 {
 	int32_t gain_db;
 
-	ad9361_get_rx_rf_gain (0, &gain_db);
+	ad9361_get_rx_rf_gain (ad9361_phy, 0, &gain_db);
 	console_print("rx1_rf_gain=%d\n", gain_db);
 }
 
@@ -543,7 +544,7 @@ void set_rx1_rf_gain(double* param, char param_no) // "rx1_rf_gain=" command
     if(param_no >= 1)
     {
     	gain_db = param[0];
-    	ad9361_set_rx_rf_gain (0, gain_db);
+    	ad9361_set_rx_rf_gain (ad9361_phy, 0, gain_db);
     	console_print("rx1_rf_gain=%d\n", gain_db);
     }
     else
@@ -559,7 +560,7 @@ void get_rx2_rf_gain(double* param, char param_no) // "rx2_rf_gain?" command
 {
 	int32_t gain_db;
 
-	ad9361_get_rx_rf_gain (1, &gain_db);
+	ad9361_get_rx_rf_gain (ad9361_phy, 1, &gain_db);
 	console_print("rx2_rf_gain=%d\n", gain_db);
 }
 
@@ -575,7 +576,7 @@ void set_rx2_rf_gain(double* param, char param_no) // "rx2_rf_gain=" command
     if(param_no >= 1)
     {
     	gain_db = param[0];
-    	ad9361_set_rx_rf_gain (1, gain_db);
+    	ad9361_set_rx_rf_gain (ad9361_phy, 1, gain_db);
     	console_print("rx2_rf_gain=%d\n", gain_db);
     }
     else
@@ -591,7 +592,7 @@ void get_rx_fir_en(double* param, char param_no) // "rx_fir_en?" command
 {
 	uint8_t en_dis;
 
-	ad9361_get_rx_fir_en_dis(&en_dis);
+	ad9361_get_rx_fir_en_dis(ad9361_phy, &en_dis);
 	console_print("rx_fir_en=%d\n", en_dis);
 }
 
@@ -607,7 +608,7 @@ void set_rx_fir_en(double* param, char param_no) // "rx_fir_en=" command
     if(param_no >= 1)
     {
     	en_dis = param[0];
-    	ad9361_set_rx_fir_en_dis(en_dis);
+    	ad9361_set_rx_fir_en_dis(ad9361_phy, en_dis);
     	console_print("rx_fir_en=%d\n", en_dis);
     }
     else
