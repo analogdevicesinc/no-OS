@@ -1,10 +1,9 @@
-/***************************************************************************//**
+/**************************************************************************//***
  *   @file   Command.h
  *   @brief  Header file of the commands driver.
- *   @author Istvan Csomortani (istvan.csomortani@analog.com)
- *
-********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ *   @author Lucian Sin (Lucian.Sin@analog.com)
+*******************************************************************************
+* Copyright 2013(c) Analog Devices, Inc..
  *
  * All rights reserved.
  *
@@ -66,43 +65,19 @@ struct cmd_info {
 /* Initializes the device. */
 char DoDeviceInit(void);
 
-/* Set the current device type */
-void DoDeviceLock(void);
-
 /* Displays all available commands. */
 void GetHelp(double* param, char paramNo);
 
-/* Loads and updates the selected DAC with a given value. */
-void SetLoadAndUpdate(double* param, char paramNo);
+/* Executes the step-down of the resistance. */
+void DoIncrement(double* param, char paramNo);
 
-/* Loads selected DAC input register with a given value. */
-void SetLoad(double* param, char paramNo);
+/* Executes the step-down of the resistance. */
+void DoDecrement(double* param, char paramNo);
 
-/* Sets the output value of LDAC pin. */
-void SetLdacPin(double* param, char paramNo);
+/* Executes a shutdown operation on the device. */
+void DoShutdown(double* param, char paramNo);
 
-/* Sets the output value of CLR pin. */
-void SetClrPin(double* param, char paramNo);
-
-/* Reads from the selected DAC register. */
-void GetReadback(double* param, char paramNo);
-
-/* Loads both DAC input registers with a given value. */
-void SetLoadAll(double* param, char paramNo);
-
-/* Updates both DAC outputs. */
-void SetUpdateAll(double* param, char paramNo);
-
-/* Clears both DAC outputs to zero scale. */
-void SetClearToZero(double* param, char paramNo);
-
-/* Clears both DAC outputs to midscale. */
-void SetClearToMid(double* param, char paramNo);
-
-/* Displays the value of LDAC pin. */
-void GetLdacPin(double* param, char paramNo);
-
-/* Displays the value of CLR pin. */
-void GetClrPin(double* param, char paramNo);
+/* Executes a write operation to EEPROM of RDAC value. */
+void DoStore(double* param, char paramNo);
 
 #endif  // __COMMAND_H__

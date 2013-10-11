@@ -1,9 +1,9 @@
 /**************************************************************************//**
  *   @file   Command.c
- *   @brief  Implementation of the commands given by user through UART for AD5415.
- *   @author Istvan Csomortani (istvan.csomortani@analog.com)
- *******************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ *   @brief  Implementation of the commands given by user through UART for AD5111.
+ *   @author Lucian Sin (Lucian.Sin@analog.com)
+*******************************************************************************
+* Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -43,13 +43,13 @@
 /******************************************************************************/
 #include "Command.h"
 #include "Console.h"
-#include "AD5425.h"
+#include "AD5111.h"
 #include "TIME.h"
 
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-#define MAX_VALUE       0xFF
+#define MAX_POS			128
 
 const struct cmd_info cmdList[] = {
     [0] = {
@@ -59,27 +59,31 @@ const struct cmd_info cmdList[] = {
         .example = "",
     },
     [1] = {
-        .name = "register=",
-        .description = "Loads the DAC input register with a given value.",
+        .name = "increment=",
+        .description = "Increases the resistor value with a number of steps.",
         .acceptedValue = "Accepted values:\r\n\
-\tvalue:\r\n \
-\t0 .. 256 - value to be written in register.",
-        .example = "To load DAC B input register with 128, type: register=128",
+\t0 .. 128 - number of steps to increment RDAC value.",
+        .example = "To increment RDAC value by 10 steps, type: increment=10",
     },
     [2] = {
-        .name = "ldacPin=",
-        .description = "Sets the output value of LDAC pin.",
+        .name = "decrement=",
+        .description = "Decreases the resistor value with a number of steps.",
         .acceptedValue = "Accepted values:\r\n\
-\t0 - sets LDAC pin low.(default)\r\n\
-\t1 - sets LDAC pin high.",
-        .example = "To set the LDAC pin high, type: ldacPin=1",
+\t0 .. 128 - number of steps to decrement RDAC value.",
+        .example = "To decrement RDAC value by 25 steps, type: decrement=25",
     },
     [3] = {
-        .name = "ldacPin?",
-        .description = "Displays the value of LDAC pin.",
+	   .name = "store!",
+	   .description = "Device memorizes the current RDAC value in EEPROM.",
+	   .acceptedValue = "",
+	   .example = "",
+	},
+    [4] = {
+        .name = "shutdown!",
+        .description = " Device enters in shutdown mode.",
         .acceptedValue = "",
         .example = "",
-    }
+    },
 };
 
 const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
@@ -87,10 +91,8 @@ const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-cmdFunction cmdFunctions[12] = {GetHelp, SetRegister, SetLdacPin, GetLdacPin};
-
-/* Variables holding information about the device */
-unsigned char ldac = 0;
+cmdFunction cmdFunctions[5] = {GetHelp, DoIncrement, DoDecrement, DoStore,
+							   DoShutdown};
 
 /***************************************************************************//**
  * @brief Displays error message.
@@ -176,98 +178,90 @@ void GetHelp(double* param, char paramNo) // "help?" command
 *******************************************************************************/
 char DoDeviceInit(void)
 {
-    if(AD5425_Init() == 0)
+    if(AD5111_Init() == 0)
     {
-        CONSOLE_Print("AD5425 OK\r\n");
+        CONSOLE_Print("AD5111 OK\r\n");
         DisplayCmdList();
         return SUCCESS;
     }
     else
     {
-        CONSOLE_Print("AD5425 Error\r\n");
+        CONSOLE_Print("AD5111 Error\r\n");
         return ERROR;
     }
 }
 
-/***************************************************************************//**
- * @brief Loads the DAC register with a given value.
- *
- * @param param[0] - value to be written in register.
+/**************************************************************************//***
+ * @brief Executes the step-up of the resistance.
  *
  * @return None.
 *******************************************************************************/
-void SetRegister(double* param, char paramNo) // "loadAndUpdate=" command
+void DoIncrement(double* param, char paramNo) // "increment=" command
 {
-    unsigned char dacValue = 0;
+	unsigned char stepNo  = 0;
+	unsigned char counter = 0;
 
-    /* Check if the parameters are valid */
-    if(paramNo >= 1)
-    {
-        paramLimit(&param[0], 0, MAX_VALUE);
-        dacValue = (unsigned char)param[0];
-        AD5425_SetRegister(dacValue);
-        /* Send feedback to user */
-        CONSOLE_Print("value=%d\r\n", dacValue);
-    }
-    else
-    {
-        /* Display error messages */
-        DisplayError(1);
-    }
+	if(paramNo >= 1)
+	{
+		paramLimit(&param[0], 0, MAX_POS);
+		stepNo = (unsigned char)param[0];
+		for (counter = 0; counter < stepNo; counter++)
+		{
+			incValue();
+		}
+		CONSOLE_Print("Resistor value was increased with %d steps.\r\n", stepNo);
+	}
+	else
+	{
+		/* Display error messages */
+		DisplayError(1);
+	}
 }
 
-/***************************************************************************//**
- * @brief Sets the output value of LDAC pin.
- *
- * @param param[0] - value to be set for LDAC pin.
+/**************************************************************************//***
+ * @brief Executes the step-down of the resistance.
  *
  * @return None.
 *******************************************************************************/
-void SetLdacPin(double* param, char paramNo) // "ldacPin=" command
+void DoDecrement(double* param, char paramNo) // "decrement=" command
 {
-    unsigned char status = 0;
+	unsigned char stepNo  = 0;
+	unsigned char counter = 0;
 
-    /* Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-        paramLimit(&param[0], 0, 1);
-
-        status = (unsigned char) param[0];
-
-        if (status == 0)
-        {
-            AD5425_LDAC_LOW;
-            ldac = 0;
-        }
-        else
-        {
-            if (status == 1)
-            {
-                AD5425_LDAC_HIGH;
-                ldac = 1;
-            }
-        }
-        /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",(char*)cmdList[2].name, status);
-     }
-     else
-     {
-        /* Display error messages */
-        DisplayError(2);
-     }
+	if(paramNo >= 1)
+	{
+		paramLimit(&param[0], 0, MAX_POS);
+		stepNo = (unsigned char)param[0];
+		for (counter = 0; counter < stepNo; counter++)
+		{
+			decValue();
+		}
+		CONSOLE_Print("Resistor value was decreased with %d steps.\r\n", stepNo);
+	}
+	else
+	{
+		/* Display error messages */
+		DisplayError(2);
+	}
 }
-
-/***************************************************************************//**
- * @brief Displays the value of LDAC pin.
- *
- * @param None.
+/**************************************************************************//***
+ * @brief Executes a shutdown operation on the device.
  *
  * @return None.
 *******************************************************************************/
-void GetLdacPin(double* param, char paramNo) // "ldacPin?" command
+void DoShutdown(double* param, char paramNo) // "shutdown!" command
 {
-
-    /* Send requested value to user */
-    CONSOLE_Print("LDAC=%d\r\n",ldac);
+	shutDown();
+	CONSOLE_Print("Device entered in shutdown mode.\r\n");
 }
 
+/**************************************************************************//***
+ * @brief Executes a write operation to EEPROM of RDAC value.
+ *
+ * @return None.
+*******************************************************************************/
+void DoStore(double* param, char paramNo) // "store!" command
+{
+	saveMem();
+	CONSOLE_Print("Device memorized the current RDAC value in EEPROM.\r\n");
+}

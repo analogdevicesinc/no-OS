@@ -1,9 +1,9 @@
-/**************************************************************************//***
- *   @file   Command.h
- *   @brief  Header file of the commands driver.
+/***************************************************************************//**
+ *   @file   AD5755_cfg.h
+ *   @brief  Header file of AD5755 Driver Configuration.
  *   @author Istvan Csomortani (istvan.csomortani@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2012(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,45 +36,24 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-*******************************************************************************/
-#ifndef __COMMAND_H__
-#define __COMMAND_H__
+ ******************************************************************************/
+#ifndef __AD5755_CFG_H__
+#define __AD5755_CFG_H__
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define NULL        ((void *)0)
-#define SUCCESS      0
-#define ERROR       -1
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-typedef void (*cmdFunction)(double* param, char paramNo);
-
-struct cmd_info {
-    char* name;
-    char* description;
-    char* acceptedValue;
-    char* example;
+AD5755_Setup AD5755_st =
+{
+    0,                          //DUT_AD0
+    0,                          //DUT_AD1
+    1,                          //enablePacketErrorCheck
+    0,                          //pocBit
+    1,                          //statReadBit
+    0,                          //shtCcLimBit
+    {0, 0, 0, 0},               //{rsetChA, rsetChB, rsetChC, rsetChD}
+    {0, 0, 0, 0},               //{ovrngBitA, ovrngBitB, ovrngBitC, ovrngBitD}
+    0,                          //dcDcCompBit
+    AD5755_PHASE_ALL_DC_DC,     //dcDcPhaseBit
+    AD5755_FREQ_410_HZ,         //dcDcFreqBit
+    AD5755_MAX_23V              //dcDcMaxVBit
 };
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
 
-/* Initializes the device. */
-char DoDeviceInit(void);
-
-/* Displays all available commands. */
-void GetHelp(double* param, char paramNo);
-
-/* Loads selected DAC input register with a given value. */
-void SetRegister(double* param, char paramNo);
-
-/* Sets the output value of LDAC pin. */
-void SetLdacPin(double* param, char paramNo);
-
-/* Displays the value of LDAC pin. */
-void GetLdacPin(double* param, char paramNo);
-
-#endif  // __COMMAND_H__
+#endif // __AD5755_CFG_H__

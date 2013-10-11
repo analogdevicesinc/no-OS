@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   Command.c
- *   @brief  Implementation of the commands given by user through UART for AD5449.
+ *   @brief  Implementation of the commands given by user through UART for AD5446.
  *   @author Istvan Csomortani (istvan.csomortani@analog.com)
  *
 ********************************************************************************
@@ -44,7 +44,7 @@
 /******************************************************************************/
 #include "Command.h"
 #include "Console.h"
-#include "AD5449.h"
+#include "AD5446.h"
 #include "TIME.h"
 
 /******************************************************************************/
@@ -54,69 +54,38 @@
 const struct cmd_info cmdList[] = {
     [0] = {
         .name = "help?",
-        .description = "Displays all available commands.",
+        .description = "  -  Displays all available commands.",
         .acceptedValue = "",
         .example = "",
     },
     [1] = {
-        .name = "load=",
-        .description = "Loads selected DAC input register with a given value.",
+        .name = "register=",
+        .description = "Writes to the DAC register.",
         .acceptedValue = "Accepted values:\r\n\
-\tchannel:\r\n\
-\t0 - select DAC A input register.\r\n\
-\t1 - select DAC B input register.\r\n\
-\tvalue:\r\n\
-\t0 .. (2^DAC_Resolution)-1 - value to be written in register.",
-        .example = "To load DAC B input register with 500, type: load=1 500",
+\t0 .. 2^DAC_resolution - the value written to the DAC.",
+        .example = "To set the DAC register to 20000, type: register=20000",
     },
     [2] = {
-        .name = "loadAll=",
-        .description = "Loads both DAC input registers.",
-        .acceptedValue = "Accepted values:\r\n\
-\t0 .. (2^DAC_Resolution)-1 - value to be written in register.",
-        .example = "To load both DAC input registers with 3525, \
-type: loadBoth=3525",
+        .name = "register?",
+        .description = "Displays last written value in the DAC register.",
+        .acceptedValue = "",
+        .example = "",
     },
     [3] = {
-        .name = "loadAndUpdate=",
-        .description = "Loads and updates the selected DAC with a given value.",
+        .name = "voltage=",
+        .description = "Sets the DAC output voltage.",
         .acceptedValue = "Accepted values:\r\n\
-\tchannel:\r\n\
-\t0 - select DAC A.\r\n\
-\t1 - select DAC B.\r\n\
-\tvalue:\r\n\
-\t0 .. (2^DAC_Resolution)-1 - value to be written in register.",
-        .example = "To load and update DAC A with 2000, \
-type: loadAndUpdate=0 2000",
+\t-Vref .. +Vref - desired output voltage in milivolts.",
+        .example = "To set the output voltage to 2350.25 [mV], type: voltage = \
+2350.25",
     },
     [4] = {
-        .name = "updateAll!",
-        .description = "Updates both DAC outputs.",
+        .name = "voltage?",
+        .description = "Displays last written voltage value to the DAC.",
         .acceptedValue = "",
         .example = "",
     },
     [5] = {
-        .name = "readback?",
-        .description = "Reads from the selected DAC register.",
-        .acceptedValue = "Accepted values:\r\n\
-\tchannel:\r\n\
-\t0 - read from DAC A.\r\n\
-\t1 - read from DAC B.",
-        .example = "To read from the DAC A register, type: readback?0",
-    },
-    [6] = {
-        .name = "clearToZero!",
-        .description = "Clears both DAC outputs to zero scale.",
-        .acceptedValue = "",
-        .example = "",
-    },
-    [7] = {
-        .name = "clearToMid!",
-        .description = "Clears both DAC outputs to midscale.",
-        .acceptedValue = "",
-        .example = "",
-    },
-    [8] = {
         .name = "ldacPin=",
         .description = "Sets the output value of LDAC pin.",
         .acceptedValue = "Accepted values:\r\n\
@@ -124,13 +93,13 @@ type: loadAndUpdate=0 2000",
 \t1 - sets LDAC pin high.",
         .example = "To set the LDAC pin high, type: ldacPin=1",
     },
-    [9] = {
+    [6] = {
         .name = "ldacPin?",
         .description = "Displays the value of LDAC pin.",
         .acceptedValue = "",
         .example = "",
     },
-    [10] = {
+    [7] = {
         .name = "clrPin=",
         .description = "Sets the output value of CLR pin.",
         .acceptedValue = "Accepted values:\r\n\
@@ -138,7 +107,7 @@ type: loadAndUpdate=0 2000",
 \t1 - sets CLR pin high.(default)",
         .example = "To set the CLR pin low, type: clrPin=0",
     },
-    [11] = {
+    [8] = {
         .name = "clrPin?",
         .description = "Displays the value of CLR pin.",
         .acceptedValue = "",
@@ -146,24 +115,41 @@ type: loadAndUpdate=0 2000",
     }
 };
 
+/* Define the output type of each evaluation board */
+const vout_type_t boardOutput[] = {
+        unipolar_inv,   // ID_AD5553
+        unipolar_inv,   // ID_AD5543
+        bipolar,        // ID_AD5542A
+        unipolar,       // ID_AD5541A
+        unipolar,       // ID_AD5512A
+        unipolar_inv,  	// ID_AD5453
+        unipolar,	    // ID_AD5452
+        unipolar,   	// ID_AD5451
+        unipolar,   	// ID_AD5450
+        unipolar_inv,   // ID_AD5446
+        unipolar_inv    // ID_AD5444
+};
+
 const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-cmdFunction cmdFunctions[12] = {GetHelp, SetLoad, SetLoadAll, SetLoadAndUpdate,
-                                SetUpdateAll, GetReadback, SetClearToZero,
-                                SetClearToMid, SetLdacPin, GetLdacPin,
-                                SetClrPin, GetClrPin};
+cmdFunction cmdFunctions[9] = {GetHelp, SetRegister, GetRegister,
+                               SetVoltage, GetVoltage, SetLdacPin, GetLdacPin,
+                               SetClrPin, GetClrPin};
 
 /* Variables holding information about the device */
-AD5449_type_t deviceType;
+AD5446_type_t deviceType;
 unsigned char ldac = 0;
 unsigned char clr  = 1;
+unsigned short registerValue = 0;
+/* Device specific constants */
 unsigned short max_value = 0;
+float vref = 0;
 
 /***************************************************************************//**
- * @brief Displays error message.
+ * @brief Internal function for displaying error messages.
  *
  * @return None.
 *******************************************************************************/
@@ -188,9 +174,8 @@ void DisplayCmdList()
 
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
-        CONSOLE_Print("Invalid parameter!\r\n");
         CONSOLE_Print("%s - %s\r\n", (char*)cmdList[displayCmd].name, \
-                                     (char*)cmdList[displayCmd].description);
+                                    (char*)cmdList[displayCmd].description);
     }
 }
 
@@ -231,8 +216,8 @@ void GetHelp(double* param, char paramNo) // "help?" command
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
         CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[displayCmd].name,
-                                    (char*)cmdList[displayCmd].description,
-                                    (char*)cmdList[displayCmd].acceptedValue);
+                                        (char*)cmdList[displayCmd].description,
+                                        (char*)cmdList[displayCmd].acceptedValue);
     }
 }
 
@@ -249,59 +234,58 @@ void DoDeviceLock(void)
     while(deviceLocked < 0)
     {
         CONSOLE_Print("Please specify your device.\r\n\
-For AD5415 type 0\r\n\
-For AD5426 type 1\r\n\
-For AD5429 type 2\r\n\
-For AD5432 type 3\r\n\
-For AD5439 type 4\r\n\
-For AD5443 type 5\r\n\
-For AD5449 type 6\r\n");
+For AD5553 type 0\r\n\
+For AD5543 type 1\r\n\
+For AD5542A type 2\r\n\
+For AD5541A type 3\r\n\
+For AD5453 type 4\r\n\
+For AD5446 type 5\r\n");
         CONSOLE_GetCommand(&device);
-        if((device >= 0x30) && (device <= 0x36))
+        if((device >= 0x30) && (device <= 0x35))
         {
             deviceLocked = 1;
             switch(device)
             {
                 case 0x30 :
                 {
-                    deviceType = ID_AD5415;
-                    max_value = 0xFFF;
+                    deviceType = ID_AD5553;
+                    max_value = 0x3FFF;
+                    vref = 5;
                     break;
                 }
                 case 0x31 :
                 {
-                    deviceType = ID_AD5426;
-                    max_value = 0xFF;
+                    deviceType = ID_AD5543;
+                    max_value = 0xFFFF;
+                    vref = 5;
                     break;
                 }
                 case 0x32 :
                 {
-                    deviceType = ID_AD5429;
-                    max_value = 0xFF;
+                    deviceType = ID_AD5542A;
+                    max_value = 0xFFFF;
+                    vref = 2.5;
                     break;
                 }
                 case 0x33 :
                 {
-                    deviceType = ID_AD5432;
-                    max_value = 0x3FF;
+                    deviceType = ID_AD5541A;
+                    max_value = 0xFFFF;
+                    vref = 2.5;
                     break;
                 }
                 case 0x34 :
                 {
-                    deviceType = ID_AD5439;
-                    max_value = 0x3FF;
+                    deviceType = ID_AD5453;
+                    max_value = 0x3FFF;
+                    vref = 10;
                     break;
                 }
                 case 0x35 :
                 {
-                    deviceType = ID_AD5443;
-                    max_value = 0xFFF;
-                    break;
-                }
-                case 0x36 :
-                {
-                    deviceType = ID_AD5449;
-                    max_value = 0xFFF;
+                    deviceType = ID_AD5446;
+                    max_value = 0x3FFF;
+                    vref = 10;
                     break;
                 }
             }
@@ -328,9 +312,10 @@ char DoDeviceInit(void)
 
     DoDeviceLock();
 
-    if(AD5449_Init(deviceType) == 0)
+    if(AD5446_Init(deviceType) == 0)
     {
         CONSOLE_Print("Device OK\r\n");
+        CONSOLE_Print("Slave device ID: %s\r\n", AD5446_SLAVE_ID);
         DisplayCmdList();
         return SUCCESS;
     }
@@ -342,71 +327,152 @@ char DoDeviceInit(void)
 }
 
 /***************************************************************************//**
- * @brief Loads and updates the selected DAC with a given value.
- *
- * @param param[0] - selected DAC.
- *        param[1] - value to be written in register.
+ * @brief Writes to the DAC register.
  *
  * @return None.
 *******************************************************************************/
-void SetLoadAndUpdate(double* param, char paramNo) // "loadAndUpdate=" command
+void SetRegister(double* param, char paramNo) /*!< "register=" command */
 {
 
-    unsigned char  channel  = 0;
-    unsigned short dacValue = 0;
-
-    /* Check if the parameters are valid */
-    if(paramNo >= 2)
+    /*!< Check if the parameter is valid */
+    if(paramNo >= 1)
     {
-        paramLimit(&param[0], 0, 1);
-        paramLimit(&param[1], 0, max_value);
-
-        channel = (unsigned char)param[0];
-        dacValue = (unsigned short)param[1];
-
-        AD5449_LoadUpdateChannel(channel, dacValue);
-        /* Send feedback to user */
-        CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
+        if(param[0] < 0)
+        {
+        	param[0] = 0;
+        }
+        if(param[0] > max_value)
+        {
+        	param[0] = max_value;
+        }
+        CONSOLE_Print("1.Debug: %f\r\n", param[0]);
+        registerValue = (unsigned short)param[0];
+        CONSOLE_Print("2.Debug: %d\r\n", registerValue);
+        /*!< Write to DAC register */
+        AD5446_SetRegister(0, registerValue);
+        /*!< Send the requested value to user */
+        CONSOLE_Print("%s%d\r\n",(char*)cmdList[1].name, registerValue);
     }
     else
     {
-        /* Display error messages */
+        /*!< Display error messages */
+        DisplayError(1);
+    }
+}
+
+/***************************************************************************//**
+ * @brief Displays last written value in the DAC register.
+ *
+ * @return None.
+*******************************************************************************/
+void GetRegister(double* param, char paramNo) /*!< "register?" command */
+{
+    /*!< Send the requested value to user */
+    CONSOLE_Print("%s%d\r\n",(char*)cmdList[1].name, registerValue);
+}
+
+/***************************************************************************//**
+ * @brief Sets the DAC output voltage.
+ *
+ * @param param[0] value of the desired voltage. The value can be between:
+ * 						- (0 .. Vref), if the output is unipolar
+ * 						- (-Vref .. 0) if the output is unipolar inverted
+ * 						- (-Vref .. Vref) if the output is bipolar
+ *
+ * @return None.
+*******************************************************************************/
+void SetVoltage(double* param, char paramNo) /*!< "voltage=" command */
+{
+    double outVoltage = 0;
+    short min_voltage = 0;
+    short max_voltage = (vref * 1000) - 0.001;
+
+    /* Define the lower and upper limits in function of the output polarity */
+    if(boardOutput[deviceType] == bipolar)
+    {
+        min_voltage = (-1) * max_voltage;
+    }
+    if(boardOutput[deviceType] == unipolar_inv)
+    {
+        min_voltage = (-1) * max_voltage;
+        max_voltage = 0;
+    }
+
+    /*!< Check if the parameter is valid */
+    if(paramNo >= 1)
+    {
+        if(param[0] < min_voltage)
+        {
+        	param[0] = min_voltage;
+        }
+        if(param[0] > max_voltage)
+        {
+        	param[0] = max_voltage;
+        }
+
+        outVoltage = param[0] / 1000;
+        outVoltage = AD5446_SetVoltage(outVoltage, vref, boardOutput[deviceType]);
+        /*!< Get the registerValue using value of the outVoltage */
+        switch(boardOutput[deviceType])
+        {
+            case unipolar :
+            {
+                registerValue = (outVoltage * max_value) / vref;
+                break;
+            }
+            case unipolar_inv :
+            {
+                registerValue = (-1) * (outVoltage * max_value) / vref;
+                break;
+            }
+            case bipolar :
+            {
+                registerValue = ((outVoltage + vref) * (max_value/2)) / vref;
+                break;
+            }
+        }
+        /*!< Send feedback to user */
+        CONSOLE_Print("%s%.3f [mV]\r\n",(char*)cmdList[3].name, outVoltage);
+    }
+    else
+    {
+        /*!< Display error messages */
         DisplayError(3);
     }
 }
 
-
 /***************************************************************************//**
- * @brief Loads selected DAC input register with a given value.
- *
- * @param param[0] - selected DAC.
- *        param[1] - value to be written in register.
+ * @brief Displays last written voltage value to the DAC.
  *
  * @return None.
 *******************************************************************************/
-void SetLoad(double* param, char paramNo) // "load=" command
+void GetVoltage(double* param, char paramNo) /*!< "voltage?" command */
 {
-    unsigned char  channel  = 0;
-    unsigned short dacValue = 0;
+    double outVoltage = 0;
 
-    /* Check if the parameters are valid */
-    if(paramNo >= 2)
+    /*!< Get the output voltage using data from registerValue */
+    CONSOLE_Print("Vout type: %d\r\n", boardOutput[deviceType]);
+    switch(boardOutput[deviceType])
     {
-        paramLimit(&param[0], 0, 1);
-        paramLimit(&param[1], 0, max_value);
-
-        channel = (unsigned char)param[0];
-        dacValue = (unsigned short)param[1];
-
-        AD5449_LoadChannel(channel, dacValue);
-        /* Send feedback to user */
-        CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
+        case unipolar :
+        {
+            outVoltage = ((float)registerValue / max_value) * vref;
+            break;
+        }
+        case unipolar_inv :
+        {
+            outVoltage = (-1) * ((float)registerValue / max_value) * vref;
+            break;
+        }
+        case bipolar :
+        {
+            outVoltage = (vref * (float)registerValue / (max_value/2)) - vref;
+            break;
+        }
     }
-    else
-    {
-        /* Display error messages */
-        DisplayError(1);
-    }
+
+    /*!< Send feedback to user */
+    CONSOLE_Print("%s%.3f [mV]\r\n",(char*)cmdList[3].name, outVoltage);
 }
 
 /***************************************************************************//**
@@ -420,34 +486,42 @@ void SetLdacPin(double* param, char paramNo) // "ldacPin=" command
 {
     unsigned char status = 0;
 
-    /* Check if the parameter is valid */
-    if(paramNo >= 1)
+    if((deviceType == ID_AD5542A) || (deviceType == ID_AD5541A))
     {
-        paramLimit(&param[0], 0, 1);
-
-        status = (unsigned char) param[0];
-
-        if (status == 0)
+        /* Check if the parameter is valid */
+        if(paramNo >= 1)
         {
-            AD5449_LDAC_LOW;
-            ldac = 0;
+            paramLimit(&param[0], 0, 1);
+
+            status = (unsigned char) param[0];
+
+            if (status == 0)
+            {
+                AD5446_LDAC_LOW;
+                ldac = 0;
+            }
+            else
+            {
+                if (status == 1)
+                {
+                    AD5446_LDAC_HIGH;
+                    ldac = 1;
+                }
+            }
+            /* Send feedback to user */
+            CONSOLE_Print("%s%d\r\n",(char*)cmdList[5].name, status);
         }
         else
         {
-            if (status == 1)
-            {
-                AD5449_LDAC_HIGH;
-                ldac = 1;
-            }
+            /* Display error messages */
+            DisplayError(5);
         }
-        /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",(char*)cmdList[8].name, status);
-     }
-     else
-     {
-        /* Display error messages */
-        DisplayError(8);
-     }
+    }
+    else
+    {
+        CONSOLE_Print("This function is not supported \
+by the current device!\n\r");
+    }
 }
 
 /***************************************************************************//**
@@ -461,151 +535,43 @@ void SetClrPin(double* param, char paramNo) // "clrPin=" command
 {
     unsigned char status = 0;
 
-    /* Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-        paramLimit(&param[0], 0, 1);
-
-        status = (unsigned char) param[0];
-
-        if (status == 0)
-        {
-            AD5449_CLR_LOW;
-            clr = 0;
-        }
-        else
-        {
-            if (status == 1)
-            {
-                AD5449_CLR_HIGH;
-                clr = 1;
-            }
-        }
-        /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",(char*)cmdList[10].name, status);
-     }
-     else
-     {
-        /* Display error messages */
-        DisplayError(10);
-     }
-}
-
-/***************************************************************************//**
- * @brief Reads from the selected DAC register.
- *
- * @param param[0] - selected DAC.
- *
- * @return None.
-*******************************************************************************/
-void GetReadback(double* param, char paramNo) // "readback?" command
-{
-    unsigned char channel = 0;
-    unsigned short dacValue = 0;
-
-    /* Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-        paramLimit(&param[0], 0, 1);
-        channel = (unsigned char)param[0];
-        dacValue = AD5449_ReadbackChannel(channel);
-        /* Send feedback to user */
-        CONSOLE_Print("register=%d for channel %d\r\n", dacValue, channel);
-    }
-    else
-    {
-        /* Display error messages */
-        DisplayError(5);
-    }
-}
-
-/***************************************************************************//**
- * @brief Loads both DAC input registers with a given value.
- *
- * @param param[0] - value to be written in both registers.
- *
- * @return None.
-*******************************************************************************/
-void SetLoadAll(double* param, char paramNo) // "loadBoth=" command
-{
-    unsigned short dacValue = 0;
-
-    if((deviceType == ID_AD5426) |
-       (deviceType == ID_AD5432) |
-       (deviceType == ID_AD5443) )
-    {
-        CONSOLE_Print("This function is not supported \
-                            by the current device!\n\r");
-    }
-    else
+    if((deviceType == ID_AD5542A))
     {
         /* Check if the parameter is valid */
         if(paramNo >= 1)
         {
-            paramLimit(&param[0], 0, max_value);
-            dacValue = (unsigned short)param[0];
-            AD5449_LoadAll(dacValue);
-            /* Send feedback to user */
-            CONSOLE_Print("value=%d\r\n", dacValue);
-        }
-        else
-        {
-            /* Display error messages */
-            DisplayError(2);
-        }
-    }
-}
+            paramLimit(&param[0], 0, 1);
 
-/***************************************************************************//**
- * @brief Updates both DAC outputs.
- *
- * @param None.
- *
- * @return None.
-*******************************************************************************/
-void SetUpdateAll(double* param, char paramNo) // "updateBoth!" command
-{
-    if((deviceType == ID_AD5426) |
-       (deviceType == ID_AD5432) |
-       (deviceType == ID_AD5443) )
-    {
-        CONSOLE_Print("This function is not supported \
-                            by the current device!\n\r");
+            status = (unsigned char)param[0];
+
+            if (status == 0)
+            {
+                AD5446_CLR_LOW;
+                clr = 0;
+            }
+            else
+            {
+                if (status == 1)
+                {
+                    AD5446_CLR_HIGH;
+                    clr = 1;
+                }
+            }
+
+            /* Send feedback to user */
+            CONSOLE_Print("%s%d\r\n",(char*)cmdList[7].name, status);
+            }
+            else
+            {
+                /* Display error messages */
+                DisplayError(7);
+            }
     }
     else
     {
-        AD5449_UpdateAll();
-        /* Send feedback to user */
-        CONSOLE_Print("Both DAC outputs were updated.\r\n");
+        CONSOLE_Print("This function is not supported \
+by the current device!\n\r");
     }
-}
-
-/***************************************************************************//**
- * @brief Clears both DAC outputs to zero scale.
- *
- * @param None.
- *
- * @return None.
-*******************************************************************************/
-void SetClearToZero(double* param, char paramNo) // "clearToZero!" command
-{
-    AD5449_ClearScaleSetup(AD5449_ZERO_SCALE);
-    /* Send feedback to user */
-    CONSOLE_Print("Both DAC outputs were cleared to zero scale.\r\n");
-}
-
-/***************************************************************************//**
- * @brief Clears both DAC outputs to midscale.
- *
- * @param None.
- *
- * @return None.
-*******************************************************************************/
-void SetClearToMid(double* param, char paramNo) // "clearToMid!" command
-{
-    AD5449_ClearScaleSetup(AD5449_MID_SCALE);
-    /* Send feedback to user */
-    CONSOLE_Print("Both DAC outputs were cleared to midscale.\r\n");
 }
 
 /***************************************************************************//**
@@ -617,8 +583,17 @@ void SetClearToMid(double* param, char paramNo) // "clearToMid!" command
 *******************************************************************************/
 void GetLdacPin(double* param, char paramNo) // "ldacPin?" command
 {
-    /* Send requested value to user */
-    CONSOLE_Print("LDAC=%d\r\n",ldac);
+
+    if((deviceType == ID_AD5542A) || (deviceType == ID_AD5541A))
+    {
+        /* Send requested value to user */
+        CONSOLE_Print("LDAC=%d\r\n",ldac);
+    }
+    else
+    {
+        CONSOLE_Print("This function is not supported \
+by the current device!\n\r");
+    }
 }
 
 /***************************************************************************//**
@@ -630,6 +605,14 @@ void GetLdacPin(double* param, char paramNo) // "ldacPin?" command
 *******************************************************************************/
 void GetClrPin(double* param, char paramNo) // "clrPin?" command
 {
-    /* Send requested value to user */
-    CONSOLE_Print("CLR=%d\r\n",clr);
+    if(deviceType == ID_AD5542A)
+    {
+        /* Send requested value to user */
+        CONSOLE_Print("CLR=%d\r\n",clr);
+    }
+    else
+    {
+        CONSOLE_Print("This function is not supported \
+by the current device!\n\r");
+    }
 }

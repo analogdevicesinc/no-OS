@@ -1,10 +1,10 @@
-/***************************************************************************//**
-*   @file   AD5570.h
-*   @brief  Header file of AD5570 Driver for Microblaze processor.
-*   @author Istvan Csomortani (istvan.csomortani@analog.com)
+/**************************************************************************//**
+*   @file   AD5111.h
+*   @brief  Header file of AD5111 Driver for Microblaze processor.
+*   @author Lucian Sin (Lucian.Sin@analog.com)
 *
-********************************************************************************
-* Copyright 2011(c) Analog Devices, Inc.
+*******************************************************************************
+* Copyright 2013(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -37,36 +37,33 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
-*******************************************************************************/
-#ifndef _AD5570_H_
-#define _AD5570_H_
+******************************************************************************/
+#ifndef _AD5111_H_
+#define _AD5111_H_
 
 /******************************************************************************/
-/*********************************** Include **********************************/
+/***************************** Include Files **********************************/
 /******************************************************************************/
-#include "Communication.h"
+#include "xil_types.h"
+#include "xparameters.h"
 
-/* SPI slave device ID */
-#define AD5570_SLAVE_ID         1
+/***************************************************************************/
+/************************ Functions Declarations ***************************/
+/***************************************************************************/
 
-/* AD5570 GPIO */
-#define AD5570_LDAC_OUT         GPIO0_PIN_OUT
-#define AD5570_LDAC_LOW         GPIO0_LOW
-#define AD5570_LDAC_HIGH        GPIO0_HIGH
+/* Increases the resistor value with one step. */
+void incValue(void);
 
-#define AD5570_CLR_OUT          GPIO1_PIN_OUT
-#define AD5570_CLR_LOW          GPIO1_LOW
-#define AD5570_CLR_HIGH         GPIO1_HIGH
+/* Decreases the resistor value with one step. */
+void decValue(void);
 
-#define AD5570_PD_OUT           GPIO2_PIN_OUT
-#define AD5570_PD_LOW           GPIO2_LOW
-#define AD5570_PD_HIGH          GPIO2_HIGH
+/* Device enters in shutdown mode. */
+void shutDown(void);
 
-/******************************************************************************/
-/************************** Functions Declarations ****************************/
-/******************************************************************************/
+/* Device memorizes the current RDAC value in EEPROM. */
+void saveMem(void);
 
-int AD5570_Init(void);
-void AD5570_SetRegister(unsigned short data);
+/* Initializes the communication with the device. */
+unsigned char AD5111_Init(void);
 
-#endif
+#endif	// _AD5111_H_

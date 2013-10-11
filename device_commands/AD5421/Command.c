@@ -50,56 +50,95 @@
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-/* List of available commands */
-const char* cmdList[] ={"help?",
-                        "reset!",
-                        "current=",
-                        "current?",
-                        "register=",
-                        "register?",
-                        "offset=",
-                        "offset?",
-                        "gain=",
-                        "gain?",
-                        "temp?",
-                        "vloop?",
-						"faultReg?"};
-
-const char* cmdDescription[] = {
-"  -  Displays all available commands.",
-"  -  Resets the AD5421 device.",
-"  -  Sets the output current. Accepted values: \r\n\
+const struct cmd_info cmdList[] = {
+    [0] = {
+        .name = "help?",
+        .description = "Displays all available commands.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [1] = {
+        .name = "reset!",
+        .description = "Resets the AD5421 device.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [2] = {
+        .name = "current=",
+        .description = "Sets the output current.",
+        .acceptedValue = "Accepted values: \r\n\
 \t4 .. 20 - the desired output current in milliamps.",
-"  -  Displays the output current.",
-"  -  Writes to the DAC register. Accepted values: \r\n\
+        .example = "To set the output current to 7.5mA, type: current=7.5",
+    },
+    [3] = {
+        .name = "current?",
+        .description = "Displays the output current.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [4] = {
+        .name = "register=",
+        .description = "Writes to the DAC register.",
+        .acceptedValue = "Accepted values: \r\n\
 \t0 .. 65535 - the value written to the DAC.",
-"  -  Displays the last written value to the DAC register.",
-"  -  Sets the offset. Accepted values: \r\n\
-\t -32768 .. +32767 - digital offset adjustment(LSBs) ",
-"  -  Displays the offset.",
-"  -  Sets the gain. Accepted values: \r\n\
-\t-65535 .. 0 - digital gain adjustment(LSBs) ",
-"  -  Displays the gain.",
-"  -  Displays the die temperature.",
-"  -  Displays the Vloop - COM voltage.",
-"  -  Displays the Fault register."};
+        .example = "To set the DAC register value to 20000, \
+type: register=20000",
+    },
+    [5] = {
+        .name = "register?",
+        .description = "Displays the last written value to the DAC register.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [6] = {
+        .name = "offset=",
+        .description = "Sets the offset.",
+        .acceptedValue = "Accepted values: \r\n\
+\t -32768 .. +32767 - digital offset adjustment(LSBs)",
+        .example = "To set the Offset register value to -10000, \
+type: offset=-10000",
+    },
+    [7] = {
+        .name = "offset?",
+        .description = "Displays the offset.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [8] = {
+        .name = "gain=",
+        .description = "Sets the gain.",
+        .acceptedValue = "Accepted values: \r\n\
+\t-65535 .. 0 - digital gain adjustment(LSBs)",
+        .example = "To set the Gain register value to -30000, \
+type: gain=-30000",
+    },
+    [9] = {
+        .name = "gain?",
+        .description = "Displays the gain.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [10] = {
+        .name = "temp?",
+        .description = "Displays the die temperature.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [11] = {
+        .name = "vloop?",
+        .description = "Displays the Vloop - COM voltage.",
+        .acceptedValue = "",
+        .example = "",
+    },
+    [12] = {
+        .name = "faultReg?",
+        .description = "Displays the Fault register.",
+        .acceptedValue = "",
+        .example = "",
+    }
+};
 
-const char* cmdExample[] = {
-"",
-"",
-"To set the output current to 7.5mA, type: current=7.5",
-"",
-"To set the DAC register value to 20000, type: register=20000",
-"",
-"To set the Offset register value to -10000, type: offset=-10000 ",
-"",
-"To set the Gain register value to -30000, type: gain=-30000",
-"",
-"",
-"",
-""};
-
-const char cmdNo = (sizeof(cmdList) / sizeof(const char*));
+const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -107,11 +146,42 @@ const char cmdNo = (sizeof(cmdList) / sizeof(const char*));
 cmdFunction cmdFunctions[13] = {GetHelp, DoReset, SetCurrent, GetCurrent,
                                SetRegister, GetRegister, SetOffset, GetOffset,
                                SetGain, GetGain, GetTemp, GetVloop, GetFaultReg};
-                               
+
 /* Variables holding information about the device */
 int dacReg    = 0; // Content of DAC register
 int offsetReg = 0; // Content of Offset Adjust register
 int gainReg   = 0; // Content of Gain Adjust register
+
+/***************************************************************************//**
+ * @brief Displays error message.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayError(unsigned char funcNo)
+{
+    /* Display error messages */
+    CONSOLE_Print("Invalid parameter!\r\n");
+    CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[funcNo].name, \
+                                    (char*)cmdList[funcNo].description, \
+                                    (char*)cmdList[funcNo].acceptedValue);
+    CONSOLE_Print("Example: %s\r\n", (char*)cmdList[funcNo].example);
+}
+
+/***************************************************************************//**
+ * @brief Internal function for displaying all the command with its description.
+ *
+ * @return None.
+*******************************************************************************/
+void DisplayCmdList()
+{
+    unsigned char displayCmd;
+
+    for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
+    {
+        CONSOLE_Print("%s - %s\r\n", (char*)cmdList[displayCmd].name, \
+                                     (char*)cmdList[displayCmd].description);
+    }
+}
 
 /***************************************************************************//**
  * @brief Displays all available commands.
@@ -125,8 +195,9 @@ void GetHelp(double* param, char paramNo) // "help?" command
     CONSOLE_Print("Available commands:\r\n");
     for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
     {
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[displayCmd],
-                                  (char*)cmdDescription[displayCmd]);
+        CONSOLE_Print("%s - %s %s\r\n", (char*)cmdList[displayCmd].name,
+                                    (char*)cmdList[displayCmd].description,
+                                    (char*)cmdList[displayCmd].acceptedValue);
     }
 }
 
@@ -147,7 +218,7 @@ char DoDeviceInit(void)
         dacReg    = AD5421_GetDac();
         offsetReg = AD5421_GetOffset();
         gainReg   = AD5421_GetGain();
-        GetHelp(NULL, 0);
+        DisplayCmdList();
         return SUCCESS;
     }
     else
@@ -164,23 +235,23 @@ char DoDeviceInit(void)
 *******************************************************************************/
 void DoReset(double* param, char paramNo) // "reset!" command
 {
-	int spiData  = 0;
+    int spiData  = 0;
 
-	AD5421_Reset();
-	dacReg    = 0;
-	offsetReg = 32768;
-	gainReg   = 65535;
-	/* Setup AD5421 control register. */
-	/* Write to the control register. */
-	spiData = AD5421_CMD(AD5421_CMDWRCTRL);
-	/* Set certain bits. */
-	spiData += (CTRL_AUTO_FAULT_RDBK |
-				CTRL_SEL_ADC_INPUT   |
-				CTRL_ONCHIP_ADC		 |
-				CTRL_SPI_WATCHDOG);
-	/* Send data via SPI. */
-	AD5421_Set(&spiData);
-	TIME_DelayUs(100);
+    AD5421_Reset();
+    dacReg    = 0;
+    offsetReg = 32768;
+    gainReg   = 65535;
+    /* Setup AD5421 control register. */
+    /* Write to the control register. */
+    spiData = AD5421_CMD(AD5421_CMDWRCTRL);
+    /* Set certain bits. */
+    spiData |= (CTRL_AUTO_FAULT_RDBK |
+                CTRL_SEL_ADC_INPUT   |
+                CTRL_ONCHIP_ADC      |
+                CTRL_SPI_WATCHDOG);
+    /* Send data via SPI. */
+    AD5421_Set(&spiData);
+    TIME_DelayUs(100);
     /* Send feedback to user */
     CONSOLE_Print("Device was reset.\r\n");
 }
@@ -209,14 +280,12 @@ void SetRegister(double* param, char paramNo) // "register=" command
         /* Write to DAC register */
         AD5421_SetDac(dacReg);
         /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",cmdList[4],dacReg);
+        CONSOLE_Print("%s%d\r\n",cmdList[4].name, dacReg);
     }
     else
     {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[4], (char*)cmdDescription[4]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[4]);
+        DisplayError(4);
     }
 }
 
@@ -227,9 +296,9 @@ void SetRegister(double* param, char paramNo) // "register=" command
 *******************************************************************************/
 void GetRegister(double* param, char paramNo) // "register?" command
 {
-	dacReg = AD5421_GetDac();
-	/* Send the requested value to user */
-    CONSOLE_Print("%s%d\r\n",cmdList[4],dacReg);
+    dacReg = AD5421_GetDac();
+    /* Send the requested value to user */
+    CONSOLE_Print("%s%d\r\n",cmdList[4].name, dacReg);
 }
 
 /***************************************************************************//**
@@ -258,14 +327,12 @@ void SetOffset(double* param, char paramNo) // "offset=" command
         /* Write to DAC register in order to validate the Offset register value change */
         AD5421_SetDac(dacReg);
         /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",cmdList[6],offsetReg - 32768);
+        CONSOLE_Print("%s%d\r\n", cmdList[6].name, offsetReg - 32768);
     }
     else
     {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[6], (char*)cmdDescription[6]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[6]);
+        DisplayError(6);
     }
 }
 
@@ -276,13 +343,13 @@ void SetOffset(double* param, char paramNo) // "offset=" command
 *******************************************************************************/
 void GetOffset(double* param, char paramNo) // "offset?" command
 {
-	int value = 0;
+    int value = 0;
 
-	offsetReg = AD5421_GetOffset();
-	/* Calculate offset according to the datasheet formula. */
+    offsetReg = AD5421_GetOffset();
+    /* Calculate offset according to the datasheet formula. */
     value = offsetReg - 32768;
-	/* Send the requested value to user */
-    CONSOLE_Print("%s%d [LSBs]\r\n", cmdList[6], value);
+    /* Send the requested value to user */
+    CONSOLE_Print("%s%d [LSBs]\r\n", cmdList[6].name, value);
 }
 
 
@@ -312,14 +379,12 @@ void SetGain(double* param, char paramNo) // "gain=" command
         /* Write to DAC register in order to validate the Gain register value change */
         AD5421_SetDac(dacReg);
         /* Send feedback to user */
-        CONSOLE_Print("%s%d\r\n",cmdList[8],gainReg - 65535);
+        CONSOLE_Print("%s%d\r\n", cmdList[8].name, gainReg - 65535);
     }
     else
     {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[8], (char*)cmdDescription[8]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[8]);
+        DisplayError(8);
     }
 }
 
@@ -330,13 +395,13 @@ void SetGain(double* param, char paramNo) // "gain=" command
 *******************************************************************************/
 void GetGain(double* param, char paramNo) // "gain?" command
 {
-	int value = 0;
+    int value = 0;
 
-	gainReg = AD5421_GetGain();
-	/* Calculate according to the datasheet formula. */
-	value = gainReg - 65535;
-	/* Send the requested value to user */
-    CONSOLE_Print("%s%d [LSBs]\r\n", cmdList[8], value);
+    gainReg = AD5421_GetGain();
+    /* Calculate according to the datasheet formula. */
+    value = gainReg - 65535;
+    /* Send the requested value to user */
+    CONSOLE_Print("%s%d [LSBs]\r\n", cmdList[8].name, value);
 }
 
 /***************************************************************************//**
@@ -346,10 +411,10 @@ void GetGain(double* param, char paramNo) // "gain?" command
 *******************************************************************************/
 void GetTemp(double* param, char paramNo) // "temp?" command
 {
-	int value = 0;
+    int value = 0;
 
-	value = AD5421_GetTemp();
-	/* Send the requested value to user */
+    value = AD5421_GetTemp();
+    /* Send the requested value to user */
     CONSOLE_Print("temperature=%d [C]\r\n", value);
 }
 
@@ -360,10 +425,10 @@ void GetTemp(double* param, char paramNo) // "temp?" command
 *******************************************************************************/
 void GetVloop(double* param, char paramNo) // "vloop?" command
 {
-	float value = 0;
+    float value = 0;
 
-	value = AD5421_GetVloop();
-	/* Send the requested value to user */
+    value = AD5421_GetVloop();
+    /* Send the requested value to user */
     CONSOLE_Print("Vloop - COM = %.3f [V]\r\n", value);
 }
 
@@ -374,10 +439,10 @@ void GetVloop(double* param, char paramNo) // "vloop?" command
 *******************************************************************************/
 void GetFaultReg(double* param, char paramNo) // "faultReg?" command
 {
-	int value = 0;
+    int value = 0;
 
-	value = AD5421_GetFault();
-	/* Send the requested value to user */
+    value = AD5421_GetFault();
+    /* Send the requested value to user */
     CONSOLE_Print("Fault register = 0x%x\r\n", value);
 }
 
@@ -388,22 +453,22 @@ void GetFaultReg(double* param, char paramNo) // "faultReg?" command
 *******************************************************************************/
 void GetCurrent(double* param, char paramNo) // "current?" command
 {
-	float value = 0;
+    float value = 0;
 
-	/* Datasheet formula */
-	value = (16 * ((float)gainReg / 65536) * ((float)dacReg / 65536)) +
-			4 +	(16 * ((float)offsetReg - 32768) / 65536);
-	 /* Establish the current limits in software, in hardware is already done */
-	if (value < 4)
-	{
-		value = 4;
-	}
-	else if (value > 20)
-	{
-		value = 20;
-	}
-	/* Send the requested value to user */
-    CONSOLE_Print("%s%.3f [mA]\r\n", cmdList[2], value);
+    /* Datasheet formula */
+    value = (16 * ((float)gainReg / 65536) * ((float)dacReg / 65536)) +
+            4 + (16 * ((float)offsetReg - 32768) / 65536);
+     /* Establish the current limits in software, in hardware is already done */
+    if (value < 4)
+    {
+        value = 4;
+    }
+    else if (value > 20)
+    {
+        value = 20;
+    }
+    /* Send the requested value to user */
+    CONSOLE_Print("%s%.3f [mA]\r\n", cmdList[2].name, value);
 }
 
 /***************************************************************************//**
@@ -417,7 +482,7 @@ void SetCurrent(double* param, char paramNo) // "current=" command
 {
     float floatValue = 0;
 
-	/* Check if the parameter is valid */
+    /* Check if the parameter is valid */
     if(paramNo >= 1)
     {
         if(param[0] < 4)
@@ -430,15 +495,15 @@ void SetCurrent(double* param, char paramNo) // "current=" command
         }
         /* Datasheet formula */
         floatValue = ((float)param[0] - (4 + (16 * ((float)offsetReg - 32768)) /
-        			  65536)) * 65536 * 65536 / (16 * (float)gainReg);
+                      65536)) * 65536 * 65536 / (16 * (float)gainReg);
         /* Verify the limits of the value to be written in DAC register */
         if (floatValue > 65535)
         {
-        	floatValue = 65535;
+            floatValue = 65535;
         }
         else if (floatValue < 0)
         {
-        	floatValue = 0;
+            floatValue = 0;
         }
 
         dacReg = (int)floatValue;
@@ -446,24 +511,22 @@ void SetCurrent(double* param, char paramNo) // "current=" command
         AD5421_SetDac(dacReg);
         /* Datasheet formula */
         floatValue = (16 * ((float)gainReg / 65536) * ((float)dacReg / 65536))
-        			+ 4 + (16 * ((float)offsetReg - 32768) / 65536);
+                    + 4 + (16 * ((float)offsetReg - 32768) / 65536);
         /* Establish the current limits in software, in hardware is already done */
         if (floatValue < 4)
-		{
-        	floatValue = 4;
-		}
+        {
+            floatValue = 4;
+        }
         else if (floatValue > 20)
         {
-        	floatValue = 20;
+            floatValue = 20;
         }
-		/* Send the requested value to user */
-		CONSOLE_Print("%s%.3f [mA]\r\n", cmdList[2], floatValue);
+        /* Send the requested value to user */
+        CONSOLE_Print("%s%.3f [mA]\r\n", cmdList[2].name, floatValue);
     }
     else
     {
         /* Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[2], (char*)cmdDescription[2]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[2]);
+        DisplayError(2);
     }
 }

@@ -36,7 +36,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-******************************************************************************/
+*******************************************************************************/
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
@@ -48,8 +48,6 @@
 /************************* Variables Definitions ******************************/
 /******************************************************************************/
 extern const struct cmd_info cmdList[];
-extern const char* cmdDescription[];
-extern const char* cmdExample[];
 extern char cmdNo;
 extern cmdFunction cmdFunctions[11];
 

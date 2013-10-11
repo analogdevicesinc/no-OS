@@ -1,10 +1,10 @@
 /**************************************************************************//**
-*   @file   AD5425.c
-*   @brief  Implementation of AD5425 Driver for Microblaze processor.
-*   @author Istvan Csomortani (istvan.csomortani@analog.com)
+*   @file   Command.h
+*   @brief  Header file of the commands driver.
+*   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 *******************************************************************************
-* Copyright 2011(c) Analog Devices, Inc.
+* Copyright 2013(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -37,50 +37,62 @@
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
-*******************************************************************************
-*   SVN Revision: $WCREV$
 ******************************************************************************/
 
-/*****************************************************************************/
-/* Include Files                                                             */
-/*****************************************************************************/
-#include "AD5425.h"
-#include "Communication.h"
+#ifndef __COMMAND_H__
+#define __COMMAND_H__
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define NULL        ((void *)0)
+#define SUCCESS      0
+#define ERROR       -1
 
-/**************************************************************************//**
- * @brief Initialize SPI and Initial Values for AD5425 Board.
- *
- * @param None.
- *
- * @return retValue - Result of the initialization.
- *                    Example: 0 - if initialization was successful;
- *                            -1 - if initialization was unsuccessful.
-******************************************************************************/
-int AD5425_Init(void)
-{
-    char status = -1;
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef void (*cmdFunction)(double* param, char paramNo);
 
-    /* Initialize the SPI interface */
-    status = SPI_Init(0, NULL, 0, 0);
+struct cmd_info {
+    char* name;
+    char* description;
+    char* acceptedValue;
+    char* example;
+};
 
-    /* Initialize the LDAC GPIO pin */
-    AD5425_LDAC_OUT;
-    AD5425_LDAC_LOW;
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-    return status;
-}
+/* Initializes the device. */
+char DoDeviceInit(void);
 
-/***************************************************************************//*
- * @brief Set the shift register of the DAC with the given value
- *
- * @param The value which will be written to the shift register
- *
- * @return None
-******************************************************************************/
-void AD5425_SetRegister(unsigned char data)
-{
-    unsigned char buff = data;
+/* Displays all available commands. */
+void GetHelp(double* param, char paramNo);
 
-    SPI_Write(AD5425_SLAVE_ID, &buff, 1);
-}
+/* Makes a software reset of the device. */
+void DoReset(double* param, char paramNo);
+
+/* Writes to the RDAC register. */
+void SetRdac(double* param, char paramNo);
+
+/* Displays the last written value in RDAC register. */
+void GetRdac(double* param, char paramNo);
+
+/* Stores the RDAC setting to 50-TP. */
+void DoStore(double* param, char paramNo);
+
+/* Displays the contents of the selected 50-TP register. */
+void Get50TPValue(double* param, char paramNo);
+
+/* Displays the address of the last programmed 50-TP register. */
+void Get50TPAddress(double* param, char paramNo);
+
+/* Turns on/off the device. */
+void SetPower(double* param, char paramNo);
+
+/* Displays the power status of the device. */
+void GetPower(double* param, char paramNo);
+
+#endif  // __COMMAND_H__

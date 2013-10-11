@@ -72,37 +72,20 @@ void DoDeviceLock(void);
 /* Displays all available commands. */
 void GetHelp(double* param, char paramNo);
 
-/* Loads and updates the selected DAC with a given value. */
-void SetLoadAndUpdate(double* param, char paramNo);
+/* Set resistor value */
+void SetRdac(double* param, char paramNo);
 
-/* Loads selected DAC input register with a given value. */
-void SetLoad(double* param, char paramNo);
+/* Get resistor value */
+void GetRdac(double* param, char paramNo);
 
-/* Sets the output value of LDAC pin. */
-void SetLdacPin(double* param, char paramNo);
+/* Get WBUF_1 voltage value */
+void GetWBuf1(double* param, char paramNo);
 
-/* Sets the output value of CLR pin. */
-void SetClrPin(double* param, char paramNo);
+/* AD5172/3 specific functions */
+/* Shutdown the RDACs */
+void SetShutdown(double* param, char paramNo);
 
-/* Reads from the selected DAC register. */
-void GetReadback(double* param, char paramNo);
-
-/* Loads both DAC input registers with a given value. */
-void SetLoadAll(double* param, char paramNo);
-
-/* Updates both DAC outputs. */
-void SetUpdateAll(double* param, char paramNo);
-
-/* Clears both DAC outputs to zero scale. */
-void SetClearToZero(double* param, char paramNo);
-
-/* Clears both DAC outputs to midscale. */
-void SetClearToMid(double* param, char paramNo);
-
-/* Displays the value of LDAC pin. */
-void GetLdacPin(double* param, char paramNo);
-
-/* Displays the value of CLR pin. */
-void GetClrPin(double* param, char paramNo);
+/* Notify the user from the state of an RDAC */
+void GetShutdown(double* param, char paramNo);
 
 #endif  // __COMMAND_H__

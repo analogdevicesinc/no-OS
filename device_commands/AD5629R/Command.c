@@ -219,11 +219,11 @@ const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 cmdFunction cmdFunctions[18] = {GetHelp, DoReset, SetPowerMode, GetPowerMode,
-								SetIntRef,GetIntRef, SetLoadN, SetUpdateN,
-								SetLoadNAndUpdateN, SetLoadNAndUpdateAll,
-								SetEnLdacPin, GetEnLdacPin, SetClrCode,
-								GetClrCode, SetLdacPin, GetLdacPin,
-								SetClrPin, GetClrPin};
+                                SetIntRef,GetIntRef, SetLoadN, SetUpdateN,
+                                SetLoadNAndUpdateN, SetLoadNAndUpdateAll,
+                                SetEnLdacPin, GetEnLdacPin, SetClrCode,
+                                GetClrCode, SetLdacPin, GetLdacPin,
+                                SetClrPin, GetClrPin};
 
 /* Variables holding information about the device */
 AD5629R_type   deviceType;
@@ -361,7 +361,7 @@ your device!\r\n");
 *******************************************************************************/
 char DoDeviceInit(void)
 {
-	DoDeviceLock();
+    DoDeviceLock();
 
     if(AD5629R_Init(AD5629R_I2C_ADDR_2, deviceType) == 0)
     {
@@ -386,9 +386,9 @@ char DoDeviceInit(void)
 *******************************************************************************/
 void DoReset(double* param, char paramNo) // "reset!" command
 {
-	AD5629R_Reset();
-	/* Send feedback to user */
-	CONSOLE_Print("Device was reset.\r\n");
+    AD5629R_Reset();
+    /* Send feedback to user */
+    CONSOLE_Print("Device was reset.\r\n");
 }
 
 /***************************************************************************//**
@@ -402,48 +402,48 @@ void DoReset(double* param, char paramNo) // "reset!" command
 void SetPowerMode(double* param, char paramNo) // "powerMode=" command
 {
 
-	unsigned char channel = 0;
-	unsigned char mode    = 0;
+    unsigned char channel = 0;
+    unsigned char mode    = 0;
 
-	/* Check if the parameters are valid */
-	if(paramNo >= 2)
-	{
-		if(param[0] < 0)
-		{
-			param[0] = 0;
-		}
-		else
-		{
-			if(param[0] > 7)
-			{
-				param[0] = 7;
-			}
-		}
+    /* Check if the parameters are valid */
+    if(paramNo >= 2)
+    {
+        if(param[0] < 0)
+        {
+            param[0] = 0;
+        }
+        else
+        {
+            if(param[0] > 7)
+            {
+                param[0] = 7;
+            }
+        }
 
-		if(param[1] < 0)
-		{
-			param[1] = 0;
-		}
-		else
-		{
-			if(param[1] > 3)
-			{
-				param[1] = 3;
-			}
-		}
+        if(param[1] < 0)
+        {
+            param[1] = 0;
+        }
+        else
+        {
+            if(param[1] > 3)
+            {
+                param[1] = 3;
+            }
+        }
 
-		channel = (unsigned char)param[0];
-		mode    = (unsigned char)param[1];
-		AD5629R_SetPowerMode((1 << channel), mode);
-		powerMode[channel] = mode;
-		/* Send feedback to user */
-		CONSOLE_Print("channel=%d; powerMode=%d\r\n",channel, mode);
-	}
-	else
-	{
-		/* Display error messages */
-		DisplayError(2);
-	}
+        channel = (unsigned char)param[0];
+        mode    = (unsigned char)param[1];
+        AD5629R_SetPowerMode((1 << channel), mode);
+        powerMode[channel] = mode;
+        /* Send feedback to user */
+        CONSOLE_Print("channel=%d; powerMode=%d\r\n",channel, mode);
+    }
+    else
+    {
+        /* Display error messages */
+        DisplayError(2);
+    }
 }
 
 /***************************************************************************//**
@@ -455,32 +455,32 @@ void SetPowerMode(double* param, char paramNo) // "powerMode=" command
 *******************************************************************************/
 void GetPowerMode(double* param, char paramNo) // "powerMode?" command
 {
-	unsigned char  channel  = 0;
+    unsigned char  channel  = 0;
 
-	/* Check if the parameters are valid */
-	if(paramNo >= 1)
-	{
-		if(param[0] < 0)
-		{
-			param[0] = 0;
-		}
-		else
-		{
-			if(param[0] > 7)
-			{
-				param[0] = 7;
-			}
-		}
+    /* Check if the parameters are valid */
+    if(paramNo >= 1)
+    {
+        if(param[0] < 0)
+        {
+            param[0] = 0;
+        }
+        else
+        {
+            if(param[0] > 7)
+            {
+                param[0] = 7;
+            }
+        }
 
-		channel = (unsigned char)param[0];
-		/* Send requested value to user */
-		CONSOLE_Print("channel=%d; powerMode=%d\r\n",channel, powerMode[channel]);
-	}
-	else
-	{
-		/* Display error messages */
-		DisplayError(3);
-	}
+        channel = (unsigned char)param[0];
+        /* Send requested value to user */
+        CONSOLE_Print("channel=%d; powerMode=%d\r\n",channel, powerMode[channel]);
+    }
+    else
+    {
+        /* Display error messages */
+        DisplayError(3);
+    }
 }
 
 /***************************************************************************//**
@@ -492,41 +492,41 @@ void GetPowerMode(double* param, char paramNo) // "powerMode?" command
 *******************************************************************************/
 void SetIntRef(double* param, char paramNo) // "intRef=" command
 {
-	unsigned char status = 0;
+    unsigned char status = 0;
 
-	/* Check if the parameter is valid */
-	if(paramNo >= 1)
-	{
-		if(param[0] < 0)
-		{
-			param[0] = 0;
-		}
-		else
-		{
-			if(param[0] > 1)
-			{
-				param[0] = 1;
-			}
-		}
+    /* Check if the parameter is valid */
+    if(paramNo >= 1)
+    {
+        if(param[0] < 0)
+        {
+            param[0] = 0;
+        }
+        else
+        {
+            if(param[0] > 1)
+            {
+                param[0] = 1;
+            }
+        }
 
-		status = (unsigned char)param[0];
-		AD5629R_SetRef(status);
-		ref = status;
-		/* Send feedback to user */
-		if (status == 0)
-		{
-			CONSOLE_Print("The internal reference is disabled.\r\n");
-		}
-		else
-		{
-			CONSOLE_Print("The internal reference is enabled.\r\n");
-		}
-	}
-	else
-	{
-		/* Display error messages */
-		DisplayError(4);
-	}
+        status = (unsigned char)param[0];
+        AD5629R_SetRef(status);
+        ref = status;
+        /* Send feedback to user */
+        if (status == 0)
+        {
+            CONSOLE_Print("The internal reference is disabled.\r\n");
+        }
+        else
+        {
+            CONSOLE_Print("The internal reference is enabled.\r\n");
+        }
+    }
+    else
+    {
+        /* Display error messages */
+        DisplayError(4);
+    }
 }
 
 /***************************************************************************//**
@@ -540,13 +540,13 @@ void GetIntRef(double* param, char paramNo) // "IntRef?" command
 {
     /* Send requested value to user */
     if (ref == 0)
-	{
-		CONSOLE_Print("The internal reference is disabled.\r\n");
-	}
-	else
-	{
-		CONSOLE_Print("The internal reference is enabled.\r\n");
-	}
+    {
+        CONSOLE_Print("The internal reference is disabled.\r\n");
+    }
+    else
+    {
+        CONSOLE_Print("The internal reference is enabled.\r\n");
+    }
 }
 
 /***************************************************************************//**
@@ -574,14 +574,14 @@ void SetLoadN(double* param, char paramNo) // "loadN=" command
         {
             if(param[0] > 7)
             {
-            	if(param[0] < 15)
-            	{
-            		param[0] = 7;
-            	}
-            	else
-            	{
-            		param[0] = 15;
-            	}
+                if(param[0] < 15)
+                {
+                    param[0] = 7;
+                }
+                else
+                {
+                    param[0] = 15;
+                }
             }
         }
 
@@ -603,11 +603,11 @@ void SetLoadN(double* param, char paramNo) // "loadN=" command
         /* Send feedback to user */
         if (channel == 15)
         {
-        	CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
+            CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
         }
         else
         {
-        	CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
+            CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
         }
     }
     else
@@ -637,32 +637,32 @@ void SetUpdateN(double* param, char paramNo) // "updateN=" command
             param[0] = 0;
         }
         else
-		{
-			if(param[0] > 7)
-			{
-				if(param[0] < 15)
-				{
-					param[0] = 7;
-				}
-				else
-				{
-					param[0] = 15;
-				}
-			}
-		}
+        {
+            if(param[0] > 7)
+            {
+                if(param[0] < 15)
+                {
+                    param[0] = 7;
+                }
+                else
+                {
+                    param[0] = 15;
+                }
+            }
+        }
 
         channel = (unsigned char)param[0];
         AD5629R_UpdateDacN(channel);
         /* Send feedback to user */
 
         if (channel == 15)
-		{
-        	CONSOLE_Print("all channels were updated\r\n");
-		}
-		else
-		{
-			CONSOLE_Print("channel %d was updated\r\n",channel);
-		}
+        {
+            CONSOLE_Print("all channels were updated\r\n");
+        }
+        else
+        {
+            CONSOLE_Print("channel %d was updated\r\n",channel);
+        }
     }
     else
     {
@@ -694,18 +694,18 @@ void SetLoadNAndUpdateN(double* param, char paramNo)//"loadNUpdateN=" command
         }
         else
         {
-        	if(param[0] > 7)
-			{
-				if(param[0] < 15)
-				{
-					param[0] = 7;
-				}
-				else
-				{
-					param[0] = 15;
-				}
-			}
-		}
+            if(param[0] > 7)
+            {
+                if(param[0] < 15)
+                {
+                    param[0] = 7;
+                }
+                else
+                {
+                    param[0] = 15;
+                }
+            }
+        }
 
         if(param[1] < 0)
         {
@@ -724,13 +724,13 @@ void SetLoadNAndUpdateN(double* param, char paramNo)//"loadNUpdateN=" command
         AD5629R_WriteRegNUpdateN(channel, dacValue);
         /* Send feedback to user */
         if (channel == 15)
-	    {
-        	CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
-	    }
-	    else
-	    {
-	    	CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
-	    }
+        {
+            CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
+        }
+        else
+        {
+            CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
+        }
     }
     else
     {
@@ -761,19 +761,19 @@ void SetLoadNAndUpdateAll(double* param, char paramNo)//"loadNUpdateAll=" comman
             param[0] = 0;
         }
         else
-		{
-			if(param[0] > 7)
-			{
-				if(param[0] < 15)
-				{
-					param[0] = 7;
-				}
-				else
-				{
-					param[0] = 15;
-				}
-			}
-		}
+        {
+            if(param[0] > 7)
+            {
+                if(param[0] < 15)
+                {
+                    param[0] = 7;
+                }
+                else
+                {
+                    param[0] = 15;
+                }
+            }
+        }
 
         if(param[1] < 0)
         {
@@ -792,13 +792,13 @@ void SetLoadNAndUpdateAll(double* param, char paramNo)//"loadNUpdateAll=" comman
         AD5629R_WriteRegNUpdateAll(channel, dacValue);
         /* Send feedback to user */
         if (channel == 15)
-		{
-        	CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
-		}
-		else
-		{
-			CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
-		}
+        {
+            CONSOLE_Print("channel=all; value=%d\r\n", dacValue);
+        }
+        else
+        {
+            CONSOLE_Print("channel=%d; value=%d\r\n",channel, dacValue);
+        }
     }
     else
     {
@@ -818,51 +818,51 @@ void SetLoadNAndUpdateAll(double* param, char paramNo)//"loadNUpdateAll=" comman
 void SetEnLdacPin(double* param, char paramNo) // "enLdacPin=" command
 {
 
-	unsigned char channel = 0;
-	unsigned char status  = 0;
+    unsigned char channel = 0;
+    unsigned char status  = 0;
 
-	/* Check if the parameters are valid */
-	if(paramNo >= 2)
-	{
-		if(param[0] < 0)
-		{
-			param[0] = 0;
-		}
-		else
-		{
-			if(param[0] > 7)
-			{
-				param[0] = 7;
-			}
-		}
+    /* Check if the parameters are valid */
+    if(paramNo >= 2)
+    {
+        if(param[0] < 0)
+        {
+            param[0] = 0;
+        }
+        else
+        {
+            if(param[0] > 7)
+            {
+                param[0] = 7;
+            }
+        }
 
-		if(param[1] < 0)
-		{
-			param[1] = 0;
-		}
-		else
-		{
-			if(param[1] > 1)
-			{
-				param[1] = 1;
-			}
-		}
-		channel  = (unsigned char)param[0];
-		status   = (unsigned short)param[1];
-		ldacRegVal &= ~(1 << channel);
-		ldacRegVal |=  (status == 0) ? 0 : (1 << channel);
-		AD5629R_LoadLdacReg(ldacRegVal);
+        if(param[1] < 0)
+        {
+            param[1] = 0;
+        }
+        else
+        {
+            if(param[1] > 1)
+            {
+                param[1] = 1;
+            }
+        }
+        channel  = (unsigned char)param[0];
+        status   = (unsigned short)param[1];
+        ldacRegVal &= ~(1 << channel);
+        ldacRegVal |=  (status == 0) ? 0 : (1 << channel);
+        AD5629R_LoadLdacReg(ldacRegVal);
 
-		/* Send feedback to user */
-		if (status == 1)
-		{
-			CONSOLE_Print("For channel %d, LDAC pin is disabled. It sees LDAC pin as 0.\r\n",channel);
-		}
-		else
-		{
-			CONSOLE_Print("For channel %d, LDAC pin is enabled.\r\n",channel);
-		}
-	}
+        /* Send feedback to user */
+        if (status == 1)
+        {
+            CONSOLE_Print("For channel %d, LDAC pin is disabled. It sees LDAC pin as 0.\r\n",channel);
+        }
+        else
+        {
+            CONSOLE_Print("For channel %d, LDAC pin is enabled.\r\n",channel);
+        }
+    }
     else
     {
         /* Display error messages */
@@ -872,7 +872,7 @@ void SetEnLdacPin(double* param, char paramNo) // "enLdacPin=" command
 
 /***************************************************************************//**
  * @brief  Displays the status(enabled or disabled) of the LDAC pin for a
- * 		   selected DAC.
+ *         selected DAC.
  *
  * @param param[0] - selected DAC.
  *
@@ -880,39 +880,39 @@ void SetEnLdacPin(double* param, char paramNo) // "enLdacPin=" command
 *******************************************************************************/
 void GetEnLdacPin(double* param, char paramNo) // "enLdacPin?" command
 {
-	unsigned char  channel  = 0;
+    unsigned char  channel  = 0;
 
-	/* Check if the parameters are valid */
-	if(paramNo >= 1)
-	{
-		if(param[0] < 0)
-		{
-			param[0] = 0;
-		}
-		else
-		{
-			if(param[0] > 7)
-			{
-				param[0] = 7;
-			}
-		}
+    /* Check if the parameters are valid */
+    if(paramNo >= 1)
+    {
+        if(param[0] < 0)
+        {
+            param[0] = 0;
+        }
+        else
+        {
+            if(param[0] > 7)
+            {
+                param[0] = 7;
+            }
+        }
 
-		channel = (unsigned char)param[0];
-		/* Send requested value to user */
-		if (ldacRegVal & (1 << channel))
-		{
-			CONSOLE_Print("For channel %d, LDAC pin is disabled. It sees LDAC pin as 0.\r\n",channel);
-		}
-		else
-		{
-			CONSOLE_Print("For channel %d, LDAC pin is enabled.\r\n",channel);
-		}
-	}
-	else
-	{
-		/* Display error messages */
-		DisplayError(11);
-	}
+        channel = (unsigned char)param[0];
+        /* Send requested value to user */
+        if (ldacRegVal & (1 << channel))
+        {
+            CONSOLE_Print("For channel %d, LDAC pin is disabled. It sees LDAC pin as 0.\r\n",channel);
+        }
+        else
+        {
+            CONSOLE_Print("For channel %d, LDAC pin is enabled.\r\n",channel);
+        }
+    }
+    else
+    {
+        /* Display error messages */
+        DisplayError(11);
+    }
 }
 
 /***************************************************************************//**
@@ -1061,14 +1061,14 @@ void SetClrPin(double* param, char paramNo) // "clrPin=" command
 
         if (status == 0)
         {
-        	AD5629R_CLR_LOW;
+            AD5629R_CLR_LOW;
             clr = 0;
         }
         else
         {
             if (status == 1)
             {
-            	AD5629R_CLR_HIGH;
+                AD5629R_CLR_HIGH;
                 clr = 1;
             }
         }

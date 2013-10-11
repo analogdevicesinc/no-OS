@@ -329,7 +329,8 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                         {
                             for(digitIndex = 0; digitIndex < 16; digitIndex++)
                             {
-                                if(paramString[index] == digits[digitIndex])
+                                if(paramString[index] == digits[digitIndex] ||
+                                  (paramString[index] - 0x20) == digits[digitIndex])
                                 {
                                     *param = *param * 16;
                                     *param = *param + digitIndex;
@@ -339,15 +340,15 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                     }
                     else
                     {
-                    	if(paramString[0] == '-')
-                    	{
-                    		*param = atof((const char*)(&paramString[1]));
-                    		*param *= (-1);
-                    	}
-                    	else
-                    	{
-                    		*param = atof((const char*)paramString);
-                    	}
+                        if(paramString[0] == '-')
+                        {
+                            *param = atof((const char*)(&paramString[1]));
+                            *param *= (-1);
+                        }
+                        else
+                        {
+                            *param = atof((const char*)paramString);
+                        }
                     }
                     param++;
                     *paramNo += 1;
@@ -374,7 +375,8 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                     {
                         for(digitIndex = 0; digitIndex < 16; digitIndex++)
                         {
-                            if(paramString[index] == digits[digitIndex])
+                            if(paramString[index] == digits[digitIndex] ||
+                              (paramString[index] - 0x20) == digits[digitIndex])
                             {
                                 *param *= 16;
                                 *param += digitIndex;
@@ -384,15 +386,15 @@ char CONSOLE_CheckCommands(char*       receivedCmd,
                 }
                 else
                 {
-                	if(paramString[0] == '-')
-                	{
-                		*param = atof((const char*)(&paramString[1]));
-                		*param *= (-1);
-                	}
-                	else
-                	{
-                		*param = atof((const char*)paramString);
-                	}
+                    if(paramString[0] == '-')
+                    {
+                        *param = atof((const char*)(&paramString[1]));
+                        *param *= (-1);
+                    }
+                    else
+                    {
+                        *param = atof((const char*)paramString);
+                    }
                 }
                 *paramNo += 1;
             }
