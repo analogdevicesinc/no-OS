@@ -3058,7 +3058,6 @@ struct ad9361_rf_phy {
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
 	struct clk_onecell_data	clk_data;
 	struct ad9361_phy_platform_data *pdata;
-	struct iio_dev 		*indio_dev;
 	struct work_struct 	work;
 	struct completion       complete;
 	u8 			prev_ensm_state;
@@ -3070,7 +3069,7 @@ struct ad9361_rf_phy {
 	bool			auto_cal_en;
 	u64			last_rx_quad_cal_freq;
 	u64			last_tx_quad_cal_freq;
-	unsigned long		flags;
+	//unsigned long		flags;
 	unsigned long		cal_threshold_freq;
 	u32			current_rx_bw_Hz;
 	u32			current_tx_bw_Hz;
@@ -3092,7 +3091,6 @@ struct ad9361_rf_phy {
 
 struct refclk_scale {
 	struct clk_hw		hw;
-	//struct spi_device	*spi;
 	struct ad9361_rf_phy	*phy;
 	u32			mult;
 	u32			div;

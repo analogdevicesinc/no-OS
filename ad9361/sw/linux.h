@@ -33,7 +33,6 @@ struct clk {
 
 struct clk_hw {
         struct clk *clk;
-//        const struct clk_init_data *init;
 };
 
 struct clk_init_data {

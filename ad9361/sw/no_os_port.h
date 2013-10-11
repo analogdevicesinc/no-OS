@@ -114,11 +114,7 @@ unsigned long clk_get_rate(struct ad9361_rf_phy *phy,
 int clk_set_rate(struct ad9361_rf_phy *phy,
 				 struct refclk_scale *clk_priv,
 				 unsigned long rate);
-void clear_bit(int nr, volatile unsigned long *addr);
-void set_bit(int nr, volatile unsigned long *addr);
 unsigned long int_sqrt(unsigned long x);
 int ilog2(int x);
-void complete_all(struct completion *x);
-bool schedule_work(struct work_struct *work);
 
 #endif

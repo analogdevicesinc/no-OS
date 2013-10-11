@@ -3298,7 +3298,7 @@ int ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	return ad9361_update_rf_bandwidth(phy, phy->current_rx_bw_Hz,
 			phy->current_tx_bw_Hz);
 }
-
+#ifdef LINUX
 void ad9361_work_func(struct work_struct *work)
 {
 	struct ad9361_rf_phy *phy =
@@ -3314,7 +3314,7 @@ void ad9361_work_func(struct work_struct *work)
 	complete_all(&phy->complete);
 	clear_bit(0, &phy->flags);
 }
-
+#endif
 /*
  * AD9361 Clocks
  */
@@ -3901,10 +3901,15 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL))
 		if (abs(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate)) >
 			phy->cal_threshold_freq) {
-
+#ifdef LINUX
 			set_bit(0, &phy->flags);
 			INIT_COMPLETION(phy->complete);
 			schedule_work(&phy->work);
+#else
+			ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
+			if (ret < 0)
+				dev_err("%s: TX QUAD cal failed", __func__);
+#endif
 			phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
 		}
 

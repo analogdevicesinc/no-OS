@@ -319,29 +319,6 @@ int clk_set_rate(struct ad9361_rf_phy *phy,
 }
 
 /***************************************************************************//**
- * @brief clear_bit
-*******************************************************************************/
-void clear_bit(int nr, volatile unsigned long *addr)
-{
-        unsigned long mask = BIT_MASK(nr);
-        unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-
-        *p &= ~mask;
-
-}
-
-/***************************************************************************//**
- * @brief set_bit
-*******************************************************************************/
-void set_bit(int nr, volatile unsigned long *addr)
-{
-        unsigned long mask = BIT_MASK(nr);
-        unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-
-        *p  |= mask;
-}
-
-/***************************************************************************//**
  * @brief int_sqrt
 *******************************************************************************/
 unsigned long int_sqrt(unsigned long x)
@@ -395,22 +372,4 @@ int ilog2(int x)
 	count = count + A;
 
 	return count;
-}
-
-/***************************************************************************//**
- * @brief complete_all
-*******************************************************************************/
-void complete_all(struct completion *x)
-{
-	x->done = 1;
-}
-
-/***************************************************************************//**
- * @brief schedule_work
-*******************************************************************************/
-bool schedule_work(struct work_struct *work)
-{
-	ad9361_work_func(work);
-
-	return 0;
 }
