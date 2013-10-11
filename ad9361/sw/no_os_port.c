@@ -116,8 +116,7 @@ int32_t spi_read(uint8_t *data,
 /***************************************************************************//**
  * @brief spi_write_then_read
 *******************************************************************************/
-int spi_write_then_read(struct spi_device *spi,
-                        const unsigned char *txbuf, unsigned n_tx,
+int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
                         unsigned char *rxbuf, unsigned n_rx)
 {
 	uint8_t buffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

@@ -42,11 +42,11 @@
 #define CLK_IGNORE_UNUSED       		BIT(3)
 #define CLK_GET_RATE_NOCACHE    		BIT(6)
 
-#define dev_err(dev, format, ...)		printf(format, ## __VA_ARGS__)
-#define dev_dbg(dev, format, ...)		printf(format, ## __VA_ARGS__)
-#define dev_info(dev, format, ...)		printf(format, ## __VA_ARGS__)
+#define dev_err(format, ...)		printf(format, ## __VA_ARGS__)
+#define dev_dbg(format, ...)		printf(format, ## __VA_ARGS__)
+#define dev_info(format, ...)		printf(format, ## __VA_ARGS__)
 #define printk(format, ...)				printf(format, ## __VA_ARGS__)
-#define WARN(dev, format, ...)			printf(format, ## __VA_ARGS__)
+#define WARN(format, ...)			printf(format, ## __VA_ARGS__)
 #define msleep_interruptible(msecs)		usleep(msecs*1000)
 #define pr_err							printf
 #define pr_warning						printf
@@ -101,8 +101,7 @@ int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pol);
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number);
-int spi_write_then_read(struct spi_device *spi,
-                        const unsigned char *txbuf, unsigned n_tx,
+int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
                         unsigned char *rxbuf, unsigned n_rx);
 void gpio_init(uint32_t device_id);
 void gpio_direction(uint8_t pin, uint8_t direction);

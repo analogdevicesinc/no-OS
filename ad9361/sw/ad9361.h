@@ -3053,13 +3053,11 @@ enum {
 };
 
 struct ad9361_rf_phy {
-	struct spi_device 	*spi;
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
 	struct clk_onecell_data	clk_data;
 	struct ad9361_phy_platform_data *pdata;
-	struct bin_attribute 	bin;
 	struct iio_dev 		*indio_dev;
 	struct work_struct 	work;
 	struct completion       complete;
@@ -3094,7 +3092,7 @@ struct ad9361_rf_phy {
 
 struct refclk_scale {
 	struct clk_hw		hw;
-	struct spi_device	*spi;
+	//struct spi_device	*spi;
 	struct ad9361_rf_phy	*phy;
 	u32			mult;
 	u32			div;
@@ -3125,9 +3123,8 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 
 int ad9361_reset(struct ad9361_rf_phy *phy);
 int ad9361_setup(struct ad9361_rf_phy *phy);
-int ad9361_spi_write(struct spi_device *spi,
-			 u32 reg, u32 val);
-int ad9361_spi_read(struct spi_device *spi, u32 reg);
+int ad9361_spi_write(u32 reg, u32 val);
+int ad9361_spi_read(u32 reg);
 void ad9361_work_func(struct work_struct *work);
 int register_clocks(struct ad9361_rf_phy *phy);
 int ad9361_init_gain_tables(struct ad9361_rf_phy *phy);

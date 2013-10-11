@@ -20,17 +20,10 @@
 
 typedef uint8_t	bool;
 
-struct bin_attribute {
-};
 struct work_struct {
 };
 struct completion {
 	unsigned int done;
-};
-struct device {
-};
-struct spi_device {
-	struct device dev;
 };
 
 struct clk {
