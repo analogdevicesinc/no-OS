@@ -2657,7 +2657,7 @@ static int ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, unsigned long *
 
 int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long tx_sample_rate,
-				      u32 low_power,
+				      u32 rate_gov,
 				      unsigned long *rx_path_clks,
 				      unsigned long *tx_path_clks)
 {
@@ -2689,7 +2689,7 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 
 	dev_dbg("%s: requested rate %lu TXFIR int %d RXFIR dec %d mode %s\n",
 		__func__, tx_sample_rate, tx_intdec, rx_intdec,
-		low_power ? "Medium PWR" : "Highest OSR");
+		rate_gov ? "Nominal" : "Highest OSR");
 
 	if (tx_sample_rate > (phy->pdata->rx2tx2 ? 61440000UL : 122880000UL))
 		return -EINVAL;
@@ -2697,7 +2697,7 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	clktf = tx_sample_rate * tx_intdec;
 	clkrf = tx_sample_rate * rx_intdec * (phy->rx_eq_2tx ? 2 : 1);
 
-	for (i = low_power; i < 7; i++) {
+	for (i = rate_gov; i < 7; i++) {
 		adc_rate = clkrf * clk_dividers[i][0];
 		dac_rate = clktf * clk_dividers[i][0];
 		if ((adc_rate <= MAX_ADC_CLK) && (adc_rate >= MIN_ADC_CLK)) {
@@ -2716,9 +2716,9 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		}
 	}
 
-	if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6) && low_power < 7) {
+	if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6) && rate_gov < 7) {
 		return ad9361_calculate_rf_clock_chain(phy, tx_sample_rate,
-			++low_power, rx_path_clks, tx_path_clks);
+			++rate_gov, rx_path_clks, tx_path_clks);
 	} else if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6)) {
 		dev_err("%s: Failed to find suitable dividers: %s\n",
 		__func__, (adc_rate < MIN_ADC_CLK) ? "ADC clock below limit" : "BBPLL rate above limit");
