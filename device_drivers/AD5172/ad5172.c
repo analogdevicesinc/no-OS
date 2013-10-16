@@ -136,10 +136,6 @@ void AD5172_Write(unsigned char channel,
     unsigned char dataBuffer[2] = {0,};
     unsigned char i2cSlaveAddr = 0;
 
-    dataBuffer[0] = channel;
-    dataBuffer[1] = data;
-
-    // TBD : we should ignore devices with more than 256 position!
     if(AD5172_CHIP_INFO[this_device].comm_type == SPI)
     {
         if(AD5172_CHIP_INFO[this_device].num_channels == 2)

@@ -2,7 +2,7 @@
 *   @file   ad5172.h
 *   @brief  Header file of AD5172 Driver for Microblaze processor. This driver
 *           supporting the following devices : AD5162, AD5172, AD5173, AD8403,
-*           AD8402, AD8400, ADN2850
+*           AD8402, AD8400
 *   @author Istvan Csomortani (istvan.csomortani@analog.com)
 *
 *******************************************************************************
@@ -70,16 +70,16 @@ typedef enum {
 } AD5172_type_t;
 
 /*****************************************************************************/
-/*  Device specific MACROs                                                                     */
+/*  Device specific MACROs                                                   */
 /*****************************************************************************/
 /* GPIOs */
-#define AD5172_RESET_OUT                GPIO1_PIN_OUT
-#define AD5172_RESET_LOW                GPIO1_LOW
-#define AD5172_RESET_HIGH               GPIO1_HIGH
+#define AD5172_RESET_OUT            GPIO1_PIN_OUT
+#define AD5172_RESET_LOW            GPIO1_LOW
+#define AD5172_RESET_HIGH           GPIO1_HIGH
 
-#define AD5172_SHUTDOWN_OUT             GPIO3_PIN_OUT
-#define AD5172_SHUTDOWN_LOW             GPIO3_LOW
-#define AD5172_SHUTDOWN_HIGH            GPIO3_HIGH
+#define AD5172_SHUTDOWN_OUT         GPIO3_PIN_OUT
+#define AD5172_SHUTDOWN_LOW         GPIO3_LOW
+#define AD5172_SHUTDOWN_HIGH        GPIO3_HIGH
 
 /* I2C addresses */
 #define AD5172_I2C_HARD_ADDR        0xB
