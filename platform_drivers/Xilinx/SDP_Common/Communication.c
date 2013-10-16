@@ -63,9 +63,8 @@ static u32 configValue = 0;
  *
  * @return - None
 *******************************************************************************/
-void definePORTS(void)
+void DefinePorts(void)
 {
-
 /*********** Custom setups for Digital-to-Analog Converter Boards *************/
 #if(defined(AD5541A) || defined(AD5542A))
     /* Activate DAC buffer */
@@ -103,6 +102,18 @@ void definePORTS(void)
 #endif
 
 /**************** Custom setups for Digital Potentiometers ********************/
+/* Select the AD8403 SPI line (SYNC-1) as output of SYNC lines MUX */
+#if(defined(AD8403))
+    /* Define the level of MUX-AO|CS */
+    GPIO5_PIN_OUT;
+    GPIO5_LOW;
+    /* Define the level of MUX-A1|DACSEL */
+    GPIO6_PIN_OUT;
+    GPIO6_LOW;
+    /* Define the level of MUX-A2|U/D */
+    GPIO7_PIN_OUT;
+    GPIO7_LOW;
+#endif
 /* Select the AD5162 SPI line (SYNC-4) as output of SYNC lines MUX */
 #if(defined(AD5162))
     /* Define the level of MUX-AO|CS */
@@ -115,8 +126,8 @@ void definePORTS(void)
     GPIO7_PIN_OUT;
     GPIO7_LOW;
 #endif
-/* Select the AD8403 SPI line (SYNC-4) as output of SYNC lines MUX */
-#if(defined(AD8403))
+/* Select the AD5232 SPI line (SYNC-5) as output of SYNC lines MUX */
+#if(defined(AD5232))
     /* Define the level of MUX-AO|CS */
     GPIO5_PIN_OUT;
     GPIO5_LOW;
@@ -125,8 +136,33 @@ void definePORTS(void)
     GPIO6_LOW;
     /* Define the level of MUX-A2|U/D */
     GPIO7_PIN_OUT;
-    GPIO7_LOW;
+    GPIO7_HIGH;
 #endif
+/* Select the ADN2850 SPI line (SYNC-6) as output of SYNC lines MUX */
+#if(defined(ADN2850))
+    /* Define the level of MUX-AO|CS */
+    GPIO5_PIN_OUT;
+    GPIO5_HIGH;
+    /* Define the level of MUX-A1|DACSEL */
+    GPIO6_PIN_OUT;
+    GPIO6_LOW;
+    /* Define the level of MUX-A2|U/D */
+    GPIO7_PIN_OUT;
+    GPIO7_HIGH;
+#endif
+/* Select the AD5235 SPI line (SYNC-7) as output of SYNC lines MUX */
+#if(defined(AD5235))
+    /* Define the level of MUX-AO|CS */
+    GPIO5_PIN_OUT;
+    GPIO5_LOW;
+    /* Define the level of MUX-A1|DACSEL */
+    GPIO6_PIN_OUT;
+    GPIO6_HIGH;
+    /* Define the level of MUX-A2|U/D */
+    GPIO7_PIN_OUT;
+    GPIO7_HIGH;
+#endif
+
 #if(defined(AD5270) || defined(AD5271) || defined(AD5272) || defined(AD5274))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
@@ -157,7 +193,7 @@ char PLATFORM_Init(platformBoard platform)
     };
 
     /* Define and activate board specific setups */
-    definePORTS();
+    DefinePorts();
 
 return 0;
 }
