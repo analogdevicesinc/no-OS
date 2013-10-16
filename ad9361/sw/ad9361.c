@@ -559,9 +559,10 @@ static int ad9361_spi_readm(u32 reg, u8 *rbuf, u32 num)
 	buf[1] = cmd & 0xFF;
 
 	ret = spi_write_then_read(&buf[0], 2, rbuf, num);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Read Error $d", ret);
 		return ret;
-
+	}
 #ifdef _DEBUG
 	{
 		int i;
@@ -619,8 +620,10 @@ int ad9361_spi_write(u32 reg, u32 val)
 	buf[2] = val;
 
 	ret = spi_write_then_read(buf, 3, NULL, 0);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Write Error $d", ret);
 		return ret;
+	}
 
 #ifdef _DEBUG
 	dev_dbg("%s: reg 0x%X val 0x%X\n", __func__, reg, buf[2]);
@@ -667,8 +670,10 @@ static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 	memcpy(&buf[2], tbuf, num);
 
 	ret = spi_write_then_read(buf, num + 2, NULL, 0);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Write Error $d", ret);
 		return ret;
+	}
 
 #ifdef _DEBUG
 	{
