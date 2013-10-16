@@ -538,6 +538,7 @@ int ad9361_reset(struct ad9361_rf_phy *phy)
 		gpio_set_value(phy->pdata->gpio_resetb, 0);
 		udelay(2);
 		gpio_set_value(phy->pdata->gpio_resetb, 1);
+		udelay(10);
 		return 1;
 	}
 
