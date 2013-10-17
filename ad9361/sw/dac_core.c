@@ -43,6 +43,7 @@
 #include "xparameters.h"
 #include "stdint.h"
 #include "xil_io.h"
+#include "xil_cache.h"
 #include "no_os_port.h"
 #include "dac_core.h"
 
@@ -51,6 +52,16 @@
 /******************************************************************************/
 struct dds_state dds_st;
 extern struct ad9361_rf_phy *ad9361_phy;
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+const uint16_t sine_lut[32] = {
+		0x400, 0x4C7, 0x587, 0x638, 0x6D3, 0x753, 0x7B1, 0x7EB,
+		0x7FF, 0x7EB, 0x7B1, 0x753,	0x6D3, 0x638, 0x587, 0x4C7,
+		0x400, 0x338, 0x278, 0x1C7,	0x12C, 0x0AC, 0x04E, 0x014,
+		0x000, 0x014, 0x04E, 0x0AC,	0x12C, 0x1C7, 0x278, 0x338
+};
 
 /***************************************************************************//**
  * @brief dac_read
@@ -99,7 +110,16 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 *******************************************************************************/
 void dac_init(uint8_t data_sel)
 {
-	uint32_t txcount = 0;
+	uint32_t tx_count;
+	uint32_t index;
+	uint32_t index_i1;
+	uint32_t index_q1;
+	uint32_t index_i2;
+	uint32_t index_q2;
+	uint32_t data_i1;
+	uint32_t data_q1;
+	uint32_t data_i2;
+	uint32_t data_q2;
 
 	dac_write(ADI_REG_RSTN, 0x0);
 	dac_write(ADI_REG_RSTN, ADI_RSTN);
@@ -122,16 +142,42 @@ void dac_init(uint8_t data_sel)
 		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DDS));
 		break;
 	case DATA_SEL_DMA:
-		dac_write(ADI_REG_VDMA_FRMCNT, txcount);
+		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
+		dac_write(ADI_REG_VDMA_FRMCNT, tx_count * 8);
+        for(index = 0; index < (tx_count * 2); index+=2)
+        {
+        	index_i1 = index;
+        	index_q1 = index + (tx_count / 2);
+			if(index_q1 >= (tx_count * 2))
+				index_q1 -= (tx_count * 2);
+			data_i1 = (sine_lut[index_i1 / 2] << 20);
+			data_q1 = (sine_lut[index_q1 / 2] << 4);
+        	Xil_Out32(DDRDAC_BASEADDR + index * 0x04, data_i1 | data_q1);
 
+        	index_i2 += (tx_count / 2);
+        	index_q2 += (tx_count / 2);
+			if(index_i2 >= (tx_count * 2))
+				index_i2 -= (tx_count * 2);
+			if(index_q2 >= (tx_count * 2))
+				index_q2 -= (tx_count * 2);
+			data_i2 = (sine_lut[index_i2 / 2] << 20);
+			data_q2 = (sine_lut[index_q2 / 2] << 4);
+        	Xil_Out32(DDRDAC_BASEADDR + (index + 1) * 0x04, data_i2 | data_q2);
+        }
+        Xil_DCacheFlush();
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x000), 0x0);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x000), 0x3);
+		while((Xil_In32(XPAR_AXI_VDMA_1_BASEADDR + 0x04) & 0x01) == 0x01);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x018), 0x01);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x05c), DDRDAC_BASEADDR);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x058), tx_count * 8);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x054), tx_count * 8);
+		Xil_Out32((XPAR_AXI_VDMA_1_BASEADDR + 0x050), 1);
 		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DMA));
-		dac_write(ADI_REG_VDMA_STATUS, ADI_VDMA_OVF | ADI_VDMA_UNF);
-
 		break;
 	default:
 		break;
 	}
-
 	dac_write(ADI_REG_CNTRL_1, ADI_ENABLE);
 }
 

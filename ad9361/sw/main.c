@@ -185,6 +185,7 @@ int main(void)
 
     adc_init();
     dac_init(DATA_SEL_DDS);
+    //dac_init(DATA_SEL_DMA);
 
     usleep(1000000);
 
