@@ -538,6 +538,7 @@ int ad9361_reset(struct ad9361_rf_phy *phy)
 		gpio_set_value(phy->pdata->gpio_resetb, 0);
 		udelay(2);
 		gpio_set_value(phy->pdata->gpio_resetb, 1);
+		udelay(10);
 		return 1;
 	}
 
@@ -558,9 +559,10 @@ static int ad9361_spi_readm(u32 reg, u8 *rbuf, u32 num)
 	buf[1] = cmd & 0xFF;
 
 	ret = spi_write_then_read(&buf[0], 2, rbuf, num);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Read Error $d", ret);
 		return ret;
-
+	}
 #ifdef _DEBUG
 	{
 		int i;
@@ -618,8 +620,10 @@ int ad9361_spi_write(u32 reg, u32 val)
 	buf[2] = val;
 
 	ret = spi_write_then_read(buf, 3, NULL, 0);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Write Error $d", ret);
 		return ret;
+	}
 
 #ifdef _DEBUG
 	dev_dbg("%s: reg 0x%X val 0x%X\n", __func__, reg, buf[2]);
@@ -666,8 +670,10 @@ static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 	memcpy(&buf[2], tbuf, num);
 
 	ret = spi_write_then_read(buf, num + 2, NULL, 0);
-	if (ret < 0)
+	if (ret < 0) {
+		dev_err("Write Error $d", ret);
 		return ret;
+	}
 
 #ifdef _DEBUG
 	{
@@ -2657,7 +2663,7 @@ static int ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, unsigned long *
 
 int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long tx_sample_rate,
-				      u32 low_power,
+				      u32 rate_gov,
 				      unsigned long *rx_path_clks,
 				      unsigned long *tx_path_clks)
 {
@@ -2689,7 +2695,7 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 
 	dev_dbg("%s: requested rate %lu TXFIR int %d RXFIR dec %d mode %s\n",
 		__func__, tx_sample_rate, tx_intdec, rx_intdec,
-		low_power ? "Medium PWR" : "Highest OSR");
+		rate_gov ? "Nominal" : "Highest OSR");
 
 	if (tx_sample_rate > (phy->pdata->rx2tx2 ? 61440000UL : 122880000UL))
 		return -EINVAL;
@@ -2697,7 +2703,7 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	clktf = tx_sample_rate * tx_intdec;
 	clkrf = tx_sample_rate * rx_intdec * (phy->rx_eq_2tx ? 2 : 1);
 
-	for (i = low_power; i < 7; i++) {
+	for (i = rate_gov; i < 7; i++) {
 		adc_rate = clkrf * clk_dividers[i][0];
 		dac_rate = clktf * clk_dividers[i][0];
 		if ((adc_rate <= MAX_ADC_CLK) && (adc_rate >= MIN_ADC_CLK)) {
@@ -2716,9 +2722,9 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		}
 	}
 
-	if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6) && low_power < 7) {
+	if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6) && rate_gov < 7) {
 		return ad9361_calculate_rf_clock_chain(phy, tx_sample_rate,
-			++low_power, rx_path_clks, tx_path_clks);
+			++rate_gov, rx_path_clks, tx_path_clks);
 	} else if ((index_tx < 0 || index_tx > 6 || index_rx < 0 || index_rx > 6)) {
 		dev_err("%s: Failed to find suitable dividers: %s\n",
 		__func__, (adc_rate < MIN_ADC_CLK) ? "ADC clock below limit" : "BBPLL rate above limit");
