@@ -53,8 +53,10 @@ typedef struct
 	uint8_t		two_rx_two_tx_mode_enable;
 	uint8_t		frequency_division_duplex_mode_enable;
 	uint8_t		split_gain_table_mode_enable;
+	uint8_t		tdd_use_fdd_vco_tables_enable;
+	uint8_t		tdd_use_dual_synth_mode_enable;
 	uint32_t	dcxo_coarse_and_fine_tune[2];
-	uint8_t		ensm_enable_pin_level_mode_enable;
+	uint8_t		ensm_enable_pin_pulse_mode_enable;
 	uint8_t		ensm_enable_txnrx_control_enable;
 	uint32_t	rx_rf_port_input_select;
 	uint32_t	tx_rf_port_output_select;
@@ -64,6 +66,7 @@ typedef struct
 	uint64_t	tx_synthesizer_frequency_hz;
 	uint32_t	rf_rx_bandwidth_hz;
 	uint32_t	rf_tx_bandwidth_hz;
+	uint8_t		update_tx_gain_in_alert_enable;
 	int32_t		tx_attenuation_mdB;
 	/* Gain Control */
 	uint8_t		gc_rx1_mode;

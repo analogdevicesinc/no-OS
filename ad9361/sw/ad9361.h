@@ -2993,9 +2993,11 @@ struct ad9361_phy_platform_data {
 	bool			fdd;
 	bool			split_gt;
 	bool 			use_extclk;
-	bool			ensm_pin_level_mode;
+	bool			ensm_pin_pulse_mode;
 	bool			ensm_pin_ctrl;
 	bool			debug_mode;
+	bool			tdd_use_fdd_tables;
+	bool			tdd_use_dual_synth;
 	u32			dcxo_coarse;
 	u32			dcxo_fine;
 	u32			rf_rx_input_sel;
@@ -3007,6 +3009,7 @@ struct ad9361_phy_platform_data {
 	u32			rf_rx_bandwidth_Hz;
 	u32			rf_tx_bandwidth_Hz;
 	int			tx_atten;
+	bool			update_tx_gain_via_alert;
 	int 			gpio_resetb;
 
 	struct gain_control	gain_ctrl;
@@ -3100,7 +3103,6 @@ struct ad9361_rf_phy {
 	u32			current_rx_bw_Hz;
 	u32			current_tx_bw_Hz;
 	u32			rxbbf_div;
-	u32			ensm_conf1;
 	u32			rate_governor;
 	bool			bypass_rx_fir;
 	bool			bypass_tx_fir;
@@ -3176,7 +3178,7 @@ unsigned long ad9361_to_clk(u64 freq);
 u64 ad9361_from_clk(unsigned long freq);
 int ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi);
 int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
-			       bool tx1, bool tx2);
+             bool tx1, bool tx2, bool immed);
 int ad9361_get_tx_atten(struct ad9361_rf_phy *phy, u32 tx_num);
 int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		struct rf_gain_ctrl *gain_ctrl);

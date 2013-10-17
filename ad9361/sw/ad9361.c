@@ -832,7 +832,7 @@ static int ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 }
 
 int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
-			       bool tx1, bool tx2)
+             bool tx1, bool tx2, bool immed)
 {
 	u8 buf[2];
 	int ret = 0;
@@ -848,14 +848,18 @@ int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
 	buf[0] = atten_mdb >> 8;
 	buf[1] = atten_mdb & 0xFF;
 
+	ad9361_spi_writef(REG_TX2_DIG_ATTEN,
+			IMMEDIATELY_UPDATE_TPC_ATTEN, 0);
+
 	if (tx1)
 		ret = ad9361_spi_writem(REG_TX1_ATTEN_1, buf, 2);
 
 	if (tx2)
 		ret = ad9361_spi_writem(REG_TX2_ATTEN_1, buf, 2);
 
-	ad9361_spi_writef(REG_TX2_DIG_ATTEN,
-			  IMMEDIATELY_UPDATE_TPC_ATTEN, 1);
+	if (immed)
+		ad9361_spi_writef(REG_TX2_DIG_ATTEN,
+				IMMEDIATELY_UPDATE_TPC_ATTEN, 1);
 
 	return ret;
 }
@@ -905,7 +909,7 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 
 	do_div(vco_freq, 1000000UL); /* vco_freq in MHz */
 
-	if (phy->pdata->fdd) {
+	if (phy->pdata->fdd || phy->pdata->tdd_use_fdd_tables) {
 		tab = &SynthLUT_FDD[range][0];
 	} else {
 		tab = &SynthLUT_TDD[range][0];
@@ -1893,11 +1897,6 @@ static int ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 	dev_dbg("%s : rx_freq %llu\n",
 		__func__, rx_freq);
 
-// 	ad9361_spi_write(REG_ENSM_CONFIG_1,
-// 			ENABLE_ENSM_PIN_CTRL |
-// 			FORCE_ALERT_STATE |
-// 			TO_ALERT);
-
 	ad9361_spi_write(REG_WAIT_COUNT, 0x20);
 
 	if(rx_freq <= 4000000000ULL) {
@@ -2531,21 +2530,24 @@ static int ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state)
+static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
+		bool pinctrl)
 {
 	int rc = 0;
 	u32 val;
 
-	if (phy->curr_ensm_state == ensm_state) {
-		dev_dbg("Nothing to do, device is already in %d state\n",
-			ensm_state);
-		goto out;
-	}
+//   if (phy->curr_ensm_state == ensm_state) {
+//     dev_dbg(dev, "Nothing to do, device is already in %d state\n",
+//       ensm_state);
+//     goto out;
+//   }
 
 	dev_dbg("Device is in %x state, moving to %x\n", phy->curr_ensm_state,
 			ensm_state);
 
-	val = phy->ensm_conf1;
+	val = (phy->pdata->ensm_pin_pulse_mode ? 0 : LEVEL_MODE) |
+			(pinctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
+			TO_ALERT;
 
 	switch (ensm_state) {
 	case ENSM_STATE_TX:
@@ -2768,6 +2770,25 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+static int ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
+{
+	struct ad9361_phy_platform_data *pd = phy->pdata;
+	int ret;
+
+	ad9361_spi_write(REG_ENSM_MODE, fdd ? FDD_MODE : 0);
+
+	if (fdd)
+		ret = ad9361_spi_write(REG_ENSM_CONFIG_2,
+				DUAL_SYNTH_MODE |
+				(pinctrl ? FDD_EXTERNAL_CTRL_ENABLE : 0)); /* Dual Synth */
+	else
+		ret = ad9361_spi_write(REG_ENSM_CONFIG_2,
+				(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
+				(pinctrl ? 0 : DUAL_SYNTH_MODE) |
+				(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : 0));
+	return ret;
+}
+
 int ad9361_setup(struct ad9361_rf_phy *phy)
 {
 	unsigned long refin_Hz, ref_freq, bbpll_freq;
@@ -2780,14 +2801,6 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 
 	if (pd->port_ctrl.pp_conf[2] & FDD_RX_RATE_2TX_RATE)
 		phy->rx_eq_2tx = true;
-
-	phy->ensm_conf1 =
-		(pd->ensm_pin_level_mode ? LEVEL_MODE : 0) |
-		(pd->ensm_pin_ctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
-		TO_ALERT;
-
-	ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET); /* RESET */
-	ad9361_spi_write(REG_SPI_CONF, 0x0);
 
 	ad9361_spi_write(REG_CTRL, CTRL_ENABLE);
 	ad9361_spi_write(REG_BANDGAP_CONFIG0, MASTER_BIAS_TRIM(0x0E)); /* Enable Master Bias */
@@ -2993,16 +3006,14 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 
 	ad9361_pp_port_setup(phy, true);
 
-	ad9361_spi_write(REG_ENSM_MODE, pd->fdd ? FDD_MODE : 0x00);
+	ret = ad9361_set_ensm_mode(phy, pd->fdd, pd->ensm_pin_ctrl);
+	if (ret < 0)
+		return ret;
 
-	if (pd->fdd)
-		ad9361_spi_write(REG_ENSM_CONFIG_2,
-			DUAL_SYNTH_MODE |
-			(pd->ensm_pin_ctrl ? FDD_EXTERNAL_CTRL_ENABLE : 0)); /* Dual Synth */
-	 else    /* For now in TDD always use Dual Synth */
-		ad9361_spi_write(REG_ENSM_CONFIG_2, DUAL_SYNTH_MODE);
+	ad9361_spi_writef(REG_TX_ATTEN_OFFSET,
+			MASK_CLR_ATTEN_UPDATE, 0);
 
-	ret = ad9361_set_tx_atten(phy, pd->tx_atten, true, true);
+	ret = ad9361_set_tx_atten(phy, pd->tx_atten, true, true, true);
 	if (ret < 0)
 		return ret;
 
@@ -3011,7 +3022,8 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 
 	phy->curr_ensm_state = ad9361_spi_readf(REG_STATE, ENSM_STATE(~0));
-	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX);
+	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX,
+			pd->ensm_pin_ctrl);
 
 	phy->current_rx_bw_Hz = pd->rf_rx_bandwidth_Hz;
 	phy->current_tx_bw_Hz = pd->rf_tx_bandwidth_Hz;

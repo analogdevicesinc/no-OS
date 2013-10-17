@@ -67,17 +67,20 @@ AD9361_InitParam default_init_param = {
 	1,			// two_rx_two_tx_mode_enable *** adi,2rx-2tx-mode-enable
 	1,			// frequency_division_duplex_mode_enable *** adi,frequency-division-duplex-mode-enable
 	0,			// split_gain_table_mode_enable *** adi,split-gain-table-mode-enable
-	{8, 4096},	// dcxo_coarse_and_fine_tune[2] *** adi,dcxo-coarse-and-fine-tune
-	0,			// ensm_enable_pin_level_mode_enable *** adi,ensm-enable-pin-level-mode-enable
+	0,			// tdd_use_fdd_vco_tables_enable *** adi,tdd-use-fdd-vco-tables-enable
+	0,			// tdd_use_dual_synth_mode_enable *** adi,tdd-use-dual-synth-mode-enable
+	{8, 5920},	// dcxo_coarse_and_fine_tune[2] *** adi,dcxo-coarse-and-fine-tune
+	0,			// ensm_enable_pin_pulse_mode_enable *** adi,ensm-enable-pin-pulse-mode-enable
 	0,			// ensm_enable_txnrx_control_enable *** adi,ensm-enable-txnrx-control-enable
 	0,			// rx_rf_port_input_select *** adi,rx-rf-port-input-select
 	0,			// tx_rf_port_input_select *** adi,tx-rf-port-input-select
 	{983040000, 245760000, 122880000, 61440000, 30720000, 30720000},	// rx_path_clock_frequencies[6]	*** adi,rx-path-clock-frequencies
 	{983040000, 122880000, 122880000, 61440000, 30720000, 30720000},	// tx_path_clock_frequencies[6] *** adi,tx-path-clock-frequencies
 	2400000000UL,	// rx_synthesizer_frequency_hz *** adi,rx-synthesizer-frequency-hz
-	2400000000UL,	// tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
+	2450000000UL,	// tx_synthesizer_frequency_hz *** adi,tx-synthesizer-frequency-hz
 	18000000,	// rf_rx_bandwidth_hz *** adi,rf-rx-bandwidth-hz
 	18000000,	// rf_tx_bandwidth_hz *** adi,rf-tx-bandwidth-hz
+	0,			// update_tx_gain_in_alert_enable *** adi,update-tx-gain-in-alert-enable
 	10000,		// tx_attenuation_mdB *** adi,tx-attenuation-mdB
 	/* Gain Control */
 	2,			// gc_rx1_mode *** adi,gc-rx1-mode
@@ -175,7 +178,7 @@ int main(void)
     Xil_DCacheEnable();
 
 	gpio_init(GPIO_DEVICE_ID);
-    gpio_direction(54 + 45, 1);
+	gpio_direction(54 + 45, 1);
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
 	ad9361_phy = ad9361_init(&default_init_param);

@@ -67,6 +67,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->rx2tx2 = init_param->frequency_division_duplex_mode_enable;
 	phy->pdata->fdd = init_param->two_rx_two_tx_mode_enable;
 	phy->pdata->split_gt = init_param->split_gain_table_mode_enable;
+	phy->pdata->tdd_use_fdd_tables = init_param->tdd_use_fdd_vco_tables_enable;
+	phy->pdata->tdd_use_dual_synth = init_param->tdd_use_dual_synth_mode_enable;
 	phy->pdata->dcxo_coarse = init_param->dcxo_coarse_and_fine_tune[0];
 	phy->pdata->dcxo_fine = init_param->dcxo_coarse_and_fine_tune[1];
 	if((phy->pdata->dcxo_coarse) || (phy->pdata->dcxo_fine)) {
@@ -75,7 +77,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	else {
 		phy->pdata->use_extclk = 1;
 	}
-	phy->pdata->ensm_pin_level_mode = init_param->ensm_enable_pin_level_mode_enable;
+	phy->pdata->ensm_pin_pulse_mode = init_param->ensm_enable_pin_pulse_mode_enable;
 	phy->pdata->ensm_pin_ctrl = init_param->ensm_enable_txnrx_control_enable;
 	phy->pdata->debug_mode = true;
 	phy->pdata->rf_rx_input_sel = init_param->rx_rf_port_input_select;
@@ -91,6 +93,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->rf_rx_bandwidth_Hz = init_param->rf_rx_bandwidth_hz;
 	phy->pdata->rf_tx_bandwidth_Hz = init_param->rf_tx_bandwidth_hz;
 	phy->pdata->tx_atten = init_param->tx_attenuation_mdB;
+	phy->pdata->update_tx_gain_via_alert = init_param->update_tx_gain_in_alert_enable;
 	phy->pdata->gpio_resetb = 54 + 45;
 	/* Gain Control */
 	phy->pdata->gain_ctrl.rx1_mode = init_param->gc_rx1_mode;
@@ -450,7 +453,8 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 	int32_t ret;
 
 	ret = ad9361_set_tx_atten(phy, attenuation_mdb,
-		ch == 0, ch == 1);
+		ch == 0, ch == 1,
+		!phy->pdata->update_tx_gain_via_alert);
 
 	return ret;
 }
