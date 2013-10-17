@@ -40,12 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "xparameters.h"
 #include "stdint.h"
 #include "xil_io.h"
 #include "xil_cache.h"
 #include "xaxidma_hw.h"
 #include "sleep.h"
+#include "parameters.h"
 #include "adc_core.h"
 
 /***************************************************************************//**
@@ -53,7 +53,7 @@
 *******************************************************************************/
 void adc_read(uint32_t regAddr, uint32_t *data)
 {
-    *data = Xil_In32(XPAR_AXI_AD9361_0_BASEADDR + regAddr);
+    *data = Xil_In32(CF_AD9361_RX_BASEADDR + regAddr);
 }
 
 /***************************************************************************//**
@@ -61,15 +61,15 @@ void adc_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void adc_write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(XPAR_AXI_AD9361_0_BASEADDR + regAddr, data);
+	Xil_Out32(CF_AD9361_RX_BASEADDR + regAddr, data);
 }
 
 /***************************************************************************//**
- * @brief adc_write
+ * @brief dma_write
 *******************************************************************************/
 void dma_write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(XPAR_AXI_DMA_1_BASEADDR + XAXIDMA_RX_OFFSET + regAddr, data);
+	Xil_Out32(CF_AD9361_DMA_BASEADDR + XAXIDMA_RX_OFFSET + regAddr, data);
 }
 
 /***************************************************************************//**

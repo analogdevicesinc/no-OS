@@ -93,8 +93,6 @@ enum {
 #define DDS_CHAN_TX2_Q_F1	6
 #define DDS_CHAN_TX2_Q_F2	7
 
-#define DDRDAC_BASEADDR	XPAR_DDR_MEM_BASEADDR + 0xA000000
-
 struct dds_state
 {
 	uint32_t	cached_freq[8];

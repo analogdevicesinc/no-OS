@@ -40,8 +40,8 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
-#include <xil_cache.h>
+#include "xil_cache.h"
+#include "parameters.h"
 #include "ad9361_api.h"
 #include "adc_core.h"
 #include "dac_core.h"
@@ -174,9 +174,9 @@ int main(void)
     Xil_ICacheEnable();
     Xil_DCacheEnable();
 
-	gpio_init(XPAR_PS7_GPIO_0_DEVICE_ID);
+	gpio_init(GPIO_DEVICE_ID);
     gpio_direction(54 + 45, 1);
-	spi_init(XPAR_PS7_SPI_0_DEVICE_ID, 1, 0);
+	spi_init(SPI_DEVICE_ID, 1, 0);
 
 	ad9361_phy = ad9361_init(&default_init_param);
 
@@ -189,7 +189,7 @@ int main(void)
 
     usleep(1000000);
 
-    //adc_capture(16384, 0x800000);
+    //adc_capture(16384, ADC_DDR_BASEADDR);
 
     //while(1);
 
