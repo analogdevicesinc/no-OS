@@ -79,30 +79,30 @@ command cmd_list[] = {
 	{"rx2_rf_gain=", "Sets the RX2 RF gain.", "", set_rx2_rf_gain},
 	{"rx_fir_en?", "Gets current RX FIR state.", "", get_rx_fir_en},
 	{"rx_fir_en=", "Sets the RX FIR state.", "", set_rx_fir_en},
-	{"dds_tx1_f1_freq?", "Gets current DDS TX1 F1 frequency [MHz].", "", get_dds_tx1_f1_freq},
-	{"dds_tx1_f1_freq=", "Sets the DDS TX1 F1 frequency [MHz].", "", set_dds_tx1_f1_freq},
-	{"dds_tx1_f2_freq?", "Gets current DDS TX1 F2 frequency [MHz].", "", get_dds_tx1_f2_freq},
-	{"dds_tx1_f2_freq=", "Sets the DDS TX1 F2 frequency [MHz].", "", set_dds_tx1_f2_freq},
-	{"dds_tx1_f1_phase?", "Gets current DDS TX1 F1 phase [degrees].", "", get_dds_tx1_f1_phase},
-	{"dds_tx1_f1_phase=", "Sets the DDS TX1 F1 phase [degrees].", "", set_dds_tx1_f1_phase},
-	{"dds_tx1_f2_phase?", "Gets current DDS TX1 F2 phase [degrees].", "", get_dds_tx1_f2_phase},
-	{"dds_tx1_f2_phase=", "Sets the DDS TX1 F2 phase [degrees].", "", set_dds_tx1_f2_phase},
-	{"dds_tx1_f1_scale?", "Gets current DDS TX1 F1 scale.", "", get_dds_tx1_f1_scale},
-	{"dds_tx1_f1_scale=", "Sets the DDS TX1 F1 scale.", "", set_dds_tx1_f1_scale},
-	{"dds_tx1_f2_scale?", "Gets current DDS TX1 F2 scale.", "", get_dds_tx1_f2_scale},
-	{"dds_tx1_f2_scale=", "Sets the DDS TX1 F2 scale.", "", set_dds_tx1_f2_scale},
-	{"dds_tx2_f1_freq?", "Gets current DDS TX2 F1 frequency [MHz].", "", get_dds_tx2_f1_freq},
-	{"dds_tx2_f1_freq=", "Sets the DDS TX2 F1 frequency [MHz].", "", set_dds_tx2_f1_freq},
-	{"dds_tx2_f2_freq?", "Gets current DDS TX2 F2 frequency [MHz].", "", get_dds_tx2_f2_freq},
-	{"dds_tx2_f2_freq=", "Sets the DDS TX2 F2 frequency [MHz].", "", set_dds_tx2_f2_freq},
-	{"dds_tx2_f1_phase?", "Gets current DDS TX2 F1 phase [degrees].", "", get_dds_tx2_f1_phase},
-	{"dds_tx2_f1_phase=", "Sets the DDS TX2 F1 phase [degrees].", "", set_dds_tx2_f1_phase},
-	{"dds_tx2_f2_phase?", "Gets current DDS TX2 F2 phase [degrees].", "", get_dds_tx2_f2_phase},
-	{"dds_tx2_f2_phase=", "Sets the DDS TX2 F2 phase [degrees].", "", set_dds_tx2_f2_phase},
-	{"dds_tx2_f1_scale?", "Gets current DDS TX2 F1 scale.", "", get_dds_tx2_f1_scale},
-	{"dds_tx2_f1_scale=", "Sets the DDS TX2 F1 scale.", "", set_dds_tx2_f1_scale},
-	{"dds_tx2_f2_scale?", "Gets current DDS TX2 F2 scale.", "", get_dds_tx2_f2_scale},
-	{"dds_tx2_f2_scale=", "Sets the DDS TX2 F2 scale.", "", set_dds_tx2_f2_scale},
+	{"dds_tx1_tone1_freq?", "Gets current DDS TX1 Tone 1 frequency [Hz].", "", get_dds_tx1_tone1_freq},
+	{"dds_tx1_tone1_freq=", "Sets the DDS TX1 Tone 1 frequency [Hz].", "", set_dds_tx1_tone1_freq},
+	{"dds_tx1_tone2_freq?", "Gets current DDS TX1 Tone 2 frequency [Hz].", "", get_dds_tx1_tone2_freq},
+	{"dds_tx1_tone2_freq=", "Sets the DDS TX1 Tone 2 frequency [Hz].", "", set_dds_tx1_tone2_freq},
+	{"dds_tx1_tone1_phase?", "Gets current DDS TX1 Tone 1 phase [degrees].", "", get_dds_tx1_tone1_phase},
+	{"dds_tx1_tone1_phase=", "Sets the DDS TX1 Tone 1 phase [degrees].", "", set_dds_tx1_tone1_phase},
+	{"dds_tx1_tone2_phase?", "Gets current DDS TX1 Tone 2 phase [degrees].", "", get_dds_tx1_tone2_phase},
+	{"dds_tx1_tone2_phase=", "Sets the DDS TX1 Tone 2 phase [degrees].", "", set_dds_tx1_tone2_phase},
+	{"dds_tx1_tone1_scale?", "Gets current DDS TX1 Tone 1 scale.", "", get_dds_tx1_tone1_scale},
+	{"dds_tx1_tone1_scale=", "Sets the DDS TX1 Tone 1 scale.", "", set_dds_tx1_tone1_scale},
+	{"dds_tx1_tone2_scale?", "Gets current DDS TX1 Tone 2 scale.", "", get_dds_tx1_tone2_scale},
+	{"dds_tx1_tone2_scale=", "Sets the DDS TX1 Tone 2 scale.", "", set_dds_tx1_tone2_scale},
+	{"dds_tx2_tone1_freq?", "Gets current DDS TX2 Tone 1 frequency [Hz].", "", get_dds_tx2_tone1_freq},
+	{"dds_tx2_tone1_freq=", "Sets the DDS TX2 Tone 1 frequency [Hz].", "", set_dds_tx2_tone1_freq},
+	{"dds_tx2_tone2_freq?", "Gets current DDS TX2 Tone 2 frequency [Hz].", "", get_dds_tx2_tone2_freq},
+	{"dds_tx2_tone2_freq=", "Sets the DDS TX2 Tone 2 frequency [Hz].", "", set_dds_tx2_tone2_freq},
+	{"dds_tx2_tone1_phase?", "Gets current DDS TX2 Tone 1 phase [degrees].", "", get_dds_tx2_tone1_phase},
+	{"dds_tx2_tone1_phase=", "Sets the DDS TX2 Tone 1 phase [degrees].", "", set_dds_tx2_tone1_phase},
+	{"dds_tx2_tone2_phase?", "Gets current DDS TX2 Tone 2 phase [degrees].", "", get_dds_tx2_tone2_phase},
+	{"dds_tx2_tone2_phase=", "Sets the DDS TX2 Tone 2 phase [degrees].", "", set_dds_tx2_tone2_phase},
+	{"dds_tx2_tone1_scale?", "Gets current DDS TX2 Tone 1 scale.", "", get_dds_tx2_tone1_scale},
+	{"dds_tx2_tone1_scale=", "Sets the DDS TX2 Tone 1 scale.", "", set_dds_tx2_tone1_scale},
+	{"tx2_tone2_scale?", "Gets current DDS TX2 Tone 2 scale.", "", dds_tx2_tone2_scale},
+	{"dds_tx2_tone2_scale=", "Sets the DDS TX2 Tone 2 scale.", "", set_dds_tx2_tone2_scale},
 };
 const char cmd_no = (sizeof(cmd_list) / sizeof(command));
 
@@ -615,23 +615,23 @@ void set_rx_fir_en(double* param, char param_no) // "rx_fir_en=" command
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F1 frequency [Hz].
+ * @brief Gets current DDS TX1 Tone 1 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f1_freq(double* param, char param_no)	// dds_tx1_f1_freq?
+void get_dds_tx1_tone1_freq(double* param, char param_no)	// dds_tx1_tone1_freq?
 {
 	uint32_t freq = dds_st.cached_freq[DDS_CHAN_TX1_I_F1];
 
-	console_print("dds_tx1_f1_freq=%d\n", freq);
+	console_print("dds_tx1_tone1_freq=%d\n", freq);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F1 frequency [Hz].
+ * @brief Sets the DDS TX1 Tone 1 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f1_freq(double* param, char param_no)	// dds_tx1_f1_freq=
+void set_dds_tx1_tone1_freq(double* param, char param_no)	// dds_tx1_tone1_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
@@ -639,30 +639,30 @@ void set_dds_tx1_f1_freq(double* param, char param_no)	// dds_tx1_f1_freq=
     {
 		dds_set_frequency(DDS_CHAN_TX1_I_F1, freq);
 		dds_set_frequency(DDS_CHAN_TX1_Q_F1, freq);
-		console_print("dds_tx1_f1_freq=%d\n", freq);
+		console_print("dds_tx1_tone1_freq=%d\n", freq);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F2 frequency [Hz].
+ * @brief Gets current DDS TX1 Tone 2 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f2_freq(double* param, char param_no)	// dds_tx1_f2_freq?
+void get_dds_tx1_tone2_freq(double* param, char param_no)	// dds_tx1_tone2_freq?
 {
 	uint32_t freq = dds_st.cached_freq[DDS_CHAN_TX1_I_F2];
 
-	console_print("dds_tx1_f2_freq=%d\n", freq);
+	console_print("dds_tx1_tone2_freq=%d\n", freq);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F2 frequency [Hz].
+ * @brief Sets the DDS TX1 Tone 2 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f2_freq(double* param, char param_no)	// dds_tx1_f2_freq=
+void set_dds_tx1_tone2_freq(double* param, char param_no)	// dds_tx1_tone2_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
@@ -670,98 +670,100 @@ void set_dds_tx1_f2_freq(double* param, char param_no)	// dds_tx1_f2_freq=
     {
 		dds_set_frequency(DDS_CHAN_TX1_I_F2, freq);
 		dds_set_frequency(DDS_CHAN_TX1_Q_F2, freq);
-		console_print("dds_tx1_f2_freq=%d\n", freq);
+		console_print("dds_tx1_tone2_freq=%d\n", freq);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F1 phase [degrees].
+ * @brief Gets current DDS TX1 Tone 1 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f1_phase(double* param, char param_no)	// dds_tx1_f1_phase?
+void get_dds_tx1_tone1_phase(double* param, char param_no)	// dds_tx1_tone1_phase?
 {
 	uint32_t phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F1];
 
 	phase /= 1000;
-	console_print("dds_tx1_f1_phase=%d\n", phase);
+	console_print("dds_tx1_tone1_phase=%d\n", phase);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F1 phase [degrees].
+ * @brief Sets the DDS TX1 Tone 1 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f1_phase(double* param, char param_no)	// dds_tx1_f1_phase=
+void set_dds_tx1_tone1_phase(double* param, char param_no)	// dds_tx1_tone1_phase=
 {
-	uint32_t phase = (uint32_t)param[0];
+	int32_t phase = (uint32_t)param[0];
 
     if(param_no >= 1)
     {
-    	phase *= 1000;
-		dds_set_phase(DDS_CHAN_TX1_I_F1, phase);
-		dds_set_phase(DDS_CHAN_TX1_Q_F1, phase);
-		phase /= 1000;
-		console_print("dds_tx1_f1_phase=%d\n", phase);
+    	dds_set_phase(DDS_CHAN_TX1_I_F1, (uint32_t)(phase * 1000));
+        if ((phase - 90) < 0)
+        	phase += 360;
+        dds_set_phase(DDS_CHAN_TX1_Q_F1, (uint32_t)((phase - 90) * 1000));
+        phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F1] / 1000;
+		console_print("dds_tx1_tone1_phase=%d\n", phase);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F2 phase [degrees].
+ * @brief Gets current DDS TX1 Tone 2 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f2_phase(double* param, char param_no)	// dds_tx1_f2_phase?
+void get_dds_tx1_tone2_phase(double* param, char param_no)	// dds_tx1_tone2_phase?
 {
 	uint32_t phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F2];
 
 	phase /= 1000;
-	console_print("dds_tx1_f2_phase=%d\n", phase);
+	console_print("dds_tx1_tone2_phase=%d\n", phase);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F2 phase [degrees].
+ * @brief Sets the DDS TX1 Tone 2 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f2_phase(double* param, char param_no)	// dds_tx1_f2_phase=
+void set_dds_tx1_tone2_phase(double* param, char param_no)	// dds_tx1_tone2_phase=
 {
-	uint32_t phase = (uint32_t)param[0];
+	int32_t phase = (uint32_t)param[0];
 
     if(param_no >= 1)
     {
-    	phase *= 1000;
-		dds_set_phase(DDS_CHAN_TX1_I_F2, phase);
-		dds_set_phase(DDS_CHAN_TX1_Q_F2, phase);
-		phase /= 1000;
-		console_print("dds_tx1_f2_phase=%d\n", phase);
+    	dds_set_phase(DDS_CHAN_TX1_I_F2, (uint32_t)(phase * 1000));
+        if ((phase - 90) < 0)
+        	phase += 360;
+        dds_set_phase(DDS_CHAN_TX1_Q_F2, (uint32_t)((phase - 90) * 1000));
+        phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F2] / 1000;
+		console_print("dds_tx1_tone2_phase=%d\n", phase);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F1 scale.
+ * @brief Gets current DDS TX1 Tone 1 scale.
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f1_scale(double* param, char param_no)	// dds_tx1_f1_scale?
+void get_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scale?
 {
 	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F1];
 
-	console_print("dds_tx1_f1_scale=%d\n", scale);
+	console_print("dds_tx1_tone1_scale=%d\n", scale);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F1 scale.
+ * @brief Sets the DDS TX1 Tone 1 scale.
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f1_scale(double* param, char param_no)	// dds_tx1_f1_scale=
+void set_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scale=
 {
 	uint32_t scale = (uint32_t)param[0];
 
@@ -769,30 +771,30 @@ void set_dds_tx1_f1_scale(double* param, char param_no)	// dds_tx1_f1_scale=
     {
 		dds_set_scale(DDS_CHAN_TX1_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F1, scale);
-		console_print("dds_tx1_f1_scale=%d\n", scale);
+		console_print("dds_tx1_tone1_scale=%d\n", scale);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX1 F2 scale.
+ * @brief Gets current DDS TX1 Tone 2 scale.
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx1_f2_scale(double* param, char param_no)	// dds_tx1_f2_scale?
+void get_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scale?
 {
 	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F2];
 
-	console_print("dds_tx1_f2_scale=%d\n", scale);
+	console_print("dds_tx1_tone2_scale=%d\n", scale);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX1 F2 scale.
+ * @brief Sets the DDS TX1 Tone 2 scale.
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx1_f2_scale(double* param, char param_no)	// dds_tx1_f2_scale=
+void set_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scale=
 {
 	uint32_t scale = (uint32_t)param[0];
 
@@ -800,30 +802,30 @@ void set_dds_tx1_f2_scale(double* param, char param_no)	// dds_tx1_f2_scale=
     {
 		dds_set_scale(DDS_CHAN_TX1_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F2, scale);
-		console_print("dds_tx1_f2_scale=%d\n", scale);
+		console_print("dds_tx1_tone2_scale=%d\n", scale);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F1 frequency [Hz].
+ * @brief Gets current DDS TX2 Tone 1 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f1_freq(double* param, char param_no)	// dds_tx2_f1_freq?
+void get_dds_tx2_tone1_freq(double* param, char param_no)	// dds_tx2_tone1_freq?
 {
 	uint32_t freq = dds_st.cached_freq[DDS_CHAN_TX2_I_F1];
 
-	console_print("dds_tx2_f1_freq=%d\n", freq);
+	console_print("dds_tx2_tone1_freq=%d\n", freq);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F1 frequency [Hz].
+ * @brief Sets the DDS TX2 Tone 1 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f1_freq(double* param, char param_no)	// dds_tx2_f1_freq=
+void set_dds_tx2_tone1_freq(double* param, char param_no)	// dds_tx2_tone1_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
@@ -831,30 +833,30 @@ void set_dds_tx2_f1_freq(double* param, char param_no)	// dds_tx2_f1_freq=
     {
 		dds_set_frequency(DDS_CHAN_TX2_I_F1, freq);
 		dds_set_frequency(DDS_CHAN_TX2_Q_F1, freq);
-		console_print("dds_tx2_f1_freq=%d\n", freq);
+		console_print("dds_tx2_tone1_freq=%d\n", freq);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F2 frequency [Hz].
+ * @brief Gets current DDS TX2 Tone 2 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f2_freq(double* param, char param_no)	// dds_tx2_f2_freq?
+void get_dds_tx2_tone2_freq(double* param, char param_no)	// dds_tx2_tone2_freq?
 {
 	uint32_t freq = dds_st.cached_freq[DDS_CHAN_TX2_I_F2];
 
-	console_print("dds_tx2_f2_freq=%d\n", freq);
+	console_print("dds_tx2_tone2_freq=%d\n", freq);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F2 frequency [Hz].
+ * @brief Sets the DDS TX2 Tone 2 frequency [Hz].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f2_freq(double* param, char param_no)	// dds_tx2_f2_freq=
+void set_dds_tx2_tone2_freq(double* param, char param_no)	// dds_tx2_tone2_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
@@ -862,52 +864,53 @@ void set_dds_tx2_f2_freq(double* param, char param_no)	// dds_tx2_f2_freq=
     {
 		dds_set_frequency(DDS_CHAN_TX2_I_F2, freq);
 		dds_set_frequency(DDS_CHAN_TX2_Q_F2, freq);
-		console_print("dds_tx2_f2_freq=%d\n", freq);
+		console_print("dds_tx2_tone2_freq=%d\n", freq);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F1 phase [degrees].
+ * @brief Gets current DDS TX2 Tone 1 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f1_phase(double* param, char param_no)	// dds_tx2_f1_phase?
+void get_dds_tx2_tone1_phase(double* param, char param_no)	// dds_tx2_tone1_phase?
 {
 	uint32_t phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F1];
 
 	phase /= 1000;
-	console_print("dds_tx2_f1_phase=%d\n", phase);
+	console_print("dds_tx2_tone1_phase=%d\n", phase);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F1 phase [degrees].
+ * @brief Sets the DDS TX2 Tone 1 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f1_phase(double* param, char param_no)	// dds_tx2_f1_phase=
+void set_dds_tx2_tone1_phase(double* param, char param_no)	// dds_tx2_tone1_phase=
 {
-	uint32_t phase = (uint32_t)param[0];
+	int32_t phase = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
-    	phase *= 1000;
-		dds_set_phase(DDS_CHAN_TX2_I_F1, phase);
-		dds_set_phase(DDS_CHAN_TX2_Q_F1, phase);
-		phase /= 1000;
-		console_print("dds_tx2_f1_phase=%d\n", phase);
-    }
+	if(param_no >= 1)
+	{
+		dds_set_phase(DDS_CHAN_TX2_I_F1, (uint32_t)(phase * 1000));
+		if ((phase - 90) < 0)
+			phase += 360;
+		dds_set_phase(DDS_CHAN_TX2_Q_F1, (uint32_t)((phase - 90) * 1000));
+		phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F1] / 1000;
+		console_print("dds_tx2_tone1_phase=%d\n", phase);
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F2 phase [degrees].
+ * @brief Gets current DDS TX2 Tone 2 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f2_phase(double* param, char param_no)	// dds_tx2_f2_phase?
+void get_dds_tx2_tone2_phase(double* param, char param_no)	// dds_tx2_tone2_phase?
 {
 	uint32_t phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F2];
 
@@ -916,44 +919,45 @@ void get_dds_tx2_f2_phase(double* param, char param_no)	// dds_tx2_f2_phase?
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F2 phase [degrees].
+ * @brief Sets the DDS TX2 Tone 2 phase [degrees].
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f2_phase(double* param, char param_no)	// dds_tx2_f2_phase=
+void set_dds_tx2_tone2_phase(double* param, char param_no)	// dds_tx2_tone2_phase=
 {
-	uint32_t phase = (uint32_t)param[0];
+	int32_t phase = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
-    	phase *= 1000;
-		dds_set_phase(DDS_CHAN_TX2_I_F2, phase);
-		dds_set_phase(DDS_CHAN_TX2_Q_F2, phase);
-		phase /= 1000;
-		console_print("dds_tx2_f2_phase=%d\n", phase);
-    }
+	if(param_no >= 1)
+	{
+		dds_set_phase(DDS_CHAN_TX2_I_F2, (uint32_t)(phase * 1000));
+		if ((phase - 90) < 0)
+			phase += 360;
+		dds_set_phase(DDS_CHAN_TX2_Q_F2, (uint32_t)((phase - 90) * 1000));
+		phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F2] / 1000;
+		console_print("dds_tx2_tone2_phase=%d\n", phase);
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F1 scale.
+ * @brief Gets current DDS TX2 Tone 1 scale.
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f1_scale(double* param, char param_no)	// dds_tx2_f1_scale?
+void get_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scale?
 {
 	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F1];
 
-	console_print("dds_tx2_f1_scale=%d\n", scale);
+	console_print("dds_tx2_tone1_scale=%d\n", scale);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F1 scale.
+ * @brief Sets the DDS TX2 Tone 1 scale.
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f1_scale(double* param, char param_no)	// dds_tx2_f1_scale=
+void set_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scale=
 {
 	uint32_t scale = (uint32_t)param[0];
 
@@ -961,30 +965,30 @@ void set_dds_tx2_f1_scale(double* param, char param_no)	// dds_tx2_f1_scale=
     {
 		dds_set_scale(DDS_CHAN_TX2_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F1, scale);
-		console_print("dds_tx2_f1_scale=%d\n", scale);
+		console_print("dds_tx2_tone1_scale=%d\n", scale);
     }
 	else
     	show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
- * @brief Gets current DDS TX2 F2 scale.
+ * @brief Gets current DDS TX2 Tone 2 scale.
  *
  * @return None.
 *******************************************************************************/
-void get_dds_tx2_f2_scale(double* param, char param_no)	// dds_tx2_f2_scale?
+void dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scale?
 {
 	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F2];
 
-	console_print("dds_tx2_f2_scale=%d\n", scale);
+	console_print("dds_tx2_tone2_scale=%d\n", scale);
 }
 
 /**************************************************************************//***
- * @brief Sets the DDS TX2 F2 scale.
+ * @brief Sets the DDS TX2 Tone 2 scale.
  *
  * @return None.
 *******************************************************************************/
-void set_dds_tx2_f2_scale(double* param, char param_no)	// dds_tx2_f2_scale=
+void set_dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scale=
 {
 	uint32_t scale = (uint32_t)param[0];
 
@@ -992,7 +996,7 @@ void set_dds_tx2_f2_scale(double* param, char param_no)	// dds_tx2_f2_scale=
     {
 		dds_set_scale(DDS_CHAN_TX2_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F2, scale);
-		console_print("dds_tx2_f2_scale=%d\n", scale);
+		console_print("dds_tx2_tone2_scale=%d\n", scale);
     }
 	else
     	show_invalid_param_message(1);
