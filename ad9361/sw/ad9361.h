@@ -38,8 +38,14 @@
 #ifndef IIO_FREQUENCY_AD9361_H_
 #define IIO_FREQUENCY_AD9361_H_
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 #include "linux.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 #define REG_SPI_CONF				 0x000 /* SPI Configuration */
 #define REG_MULTICHIP_SYNC_AND_TX_MON_CTRL	 0x001 /* Multi-Chip Sync and Tx Mon Control */
 #define REG_TX_ENABLE_FILTER_CTRL		 0x002 /* Tx Enable & Filter Control */
@@ -3126,44 +3132,38 @@ struct refclk_scale {
 	enum ad9361_clocks 	parent_source;
 };
 
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate);
 unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate);
 int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate);
-
 long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate);
 unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate);
 int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate);
-
 long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate);
 unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate);
 int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate);
-
 int ad9361_reset(struct ad9361_rf_phy *phy);
 int ad9361_setup(struct ad9361_rf_phy *phy);
 int ad9361_spi_write(u32 reg, u32 val);
 int ad9361_spi_read(u32 reg);
 int register_clocks(struct ad9361_rf_phy *phy);
 int ad9361_init_gain_tables(struct ad9361_rf_phy *phy);
-
-
 void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, u8 ensm_state);
 int ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 		u32 rx_id, struct rf_rx_gain *rx_gain);
 int ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
 		u32 rx_id, struct rf_rx_gain *rx_gain);
-
-
-
-
 int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long tx_sample_rate,
 				      u32 low_power,

@@ -53,12 +53,12 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	int32_t rev = 0;
 	int32_t i   = 0;
 
-	phy = malloc(sizeof(*phy));
+	phy = (struct ad9361_rf_phy *)malloc(sizeof(*phy));
 	if (!phy) {
 		return ERR_PTR(-ENOMEM);
 	}
 
-	phy->pdata = malloc(sizeof(*phy->pdata));
+	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
 		return ERR_PTR(-ENOMEM);
 	}
@@ -172,7 +172,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy->rx_eq_2tx = false;
 
-	phy->clk_refin = malloc(sizeof(*phy->clk_refin));
+	phy->clk_refin = (struct clk *)malloc(sizeof(*phy->clk_refin));
 	phy->clk_refin->rate = 40000000;
 
 	phy->current_table = RXGAIN_TBLS_END;
@@ -211,6 +211,9 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	return phy;
 
 out:
+	free(phy->clk_refin);
+	free(phy->pdata);
+	free(phy);
 	printf("%s : AD9361 initialization error\n", __func__);
 
 	return ERR_PTR(ENODEV);
