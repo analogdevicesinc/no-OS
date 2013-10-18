@@ -2,14 +2,10 @@
 set currentWorkingDirectory [pwd]
 set bitFileName "/system.bit"
 set tclFileName "/ps7_init.tcl"
-set elfFileName "/cf_ad9361_zed_sw.elf"
+set elfFileName "/capture.elf"
 
-set idx [string last "cf_ad9361_zed_capture" $currentWorkingDirectory]
-set currentWorkingDirectory [string replace $currentWorkingDirectory $idx [string length $currentWorkingDirectory] "cf_ad9361_zed_hw_platform"]
 set bitFilePath $currentWorkingDirectory$bitFileName
 set tclFilePath $currentWorkingDirectory$tclFileName
-set idx [string last "cf_ad9361_zed_hw_platform" $currentWorkingDirectory]
-set currentWorkingDirectory [string replace $currentWorkingDirectory $idx [string length $currentWorkingDirectory] "cf_ad9361_zed_sw/Debug"]
 set elfFilePath $currentWorkingDirectory$elfFileName
 
 fpga -debugdevice devicenr 2 -f $bitFilePath
@@ -19,9 +15,14 @@ source $tclFilePath
 ps7_init
 init_user
 dow $elfFilePath
+
+puts "Capturing data..."
+
 run
 after 3000
 stop
+
+puts "Moving data into rx.csv file..."
 
 set startAddress 8388608
 set readData [mrd $startAddress 32768]
@@ -45,6 +46,8 @@ for {set index 1} {$index < 65536} {incr index 4} {
 	puts $fp $line
 }
 close $fp
+
+puts "Done."
 
 disconnect 64
 exit
