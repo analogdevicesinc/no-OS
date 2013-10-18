@@ -3385,7 +3385,6 @@ static inline int ad9361_set_muldiv(struct refclk_scale *priv, u32 mul, u32 div)
 
 static int ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u32 tmp, tmp1;
 
 	switch (clk_priv->source) {
@@ -3495,7 +3494,6 @@ static int ad9361_to_refclk_scaler(struct refclk_scale *clk_priv)
 
 static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u32 tmp;
 	int ret;
 
@@ -3626,7 +3624,6 @@ static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 rate;
 
 	ad9361_get_clk_scaler(clk_priv);
@@ -3638,7 +3635,6 @@ unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	int ret;
 
 	if (rate >= *prate) {
@@ -3660,7 +3656,6 @@ long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long r
 int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	char   message[16][12] = {"BB_REFCLK", "RX_REFCLK", "TX_REFCLK", "BBPLL_CLK", "ADC_CLK",
 		"R2_CLK", "R1_CLK", "CLKRF_CLK", "RX_SAMPL_CLK", "DAC_CLK", "T2_CLK",
 		"T1_CLK", "CLKTF_CLK", "TX_SAMPL_CLK", "RX_RFPLL", "TX_RFPLL"};
@@ -3678,13 +3673,7 @@ int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate
 
 	return ad9361_set_clk_scaler(clk_priv, true);
 }
-#if 0
-struct clk_ops refclk_scale_ops = {
-	.round_rate = ad9361_clk_factor_round_rate,
-	.set_rate = ad9361_clk_factor_set_rate,
-	.recalc_rate = ad9361_clk_factor_recalc_rate,
-};
-#endif
+
 /*
  * BBPLL
  */
@@ -3692,7 +3681,6 @@ struct clk_ops refclk_scale_ops = {
 unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 rate;
 	unsigned long fract, integer;
 	u8 buf[4];
@@ -3739,7 +3727,6 @@ long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 tmp;
 	u32 fract, integer;
 	int icp_val;
@@ -3796,13 +3783,7 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	return ad9361_check_cal_done(clk_priv->phy, REG_CH_1_OVERFLOW,
 				     BBPLL_LOCK, 1);
 }
-#if 0
-struct clk_ops bbpll_clk_ops = {
-	.round_rate = ad9361_bbpll_round_rate,
-	.set_rate = ad9361_bbpll_set_rate,
-	.recalc_rate = ad9361_bbpll_recalc_rate,
-};
-#endif
+
 /*
  * RFPLL
  */
@@ -3851,7 +3832,6 @@ static int ad9361_calc_rfpll_divder(u64 freq,
 unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	unsigned long fract, integer;
 	u8 buf[5];
 	u32 reg, div_mask, vco_div;
@@ -3897,7 +3877,6 @@ long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	struct ad9361_rf_phy *phy = clk_priv->phy;
 	u64 vco;
 	u8 buf[5];
@@ -3970,19 +3949,12 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 
 	return ad9361_check_cal_done(phy, lock_reg, BIT(1), 1);
 }
-#if 0
-struct clk_ops rfpll_clk_ops = {
-	.round_rate = ad9361_rfpll_round_rate,
-	.set_rate = ad9361_rfpll_set_rate,
-	.recalc_rate = ad9361_rfpll_recalc_rate,
-};
-#endif
+
 static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *name,
 		const char *parent_name, unsigned long flags,
 		u32 source, u32 parent_source)
 {
 	struct refclk_scale *clk_priv;
-	//struct clk_init_data init;
 	struct clk *clk;
 
 	//clk_priv = kmalloc(sizeof(*clk_priv), GFP_KERNEL);
@@ -3995,26 +3967,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 	/* struct refclk_scale assignments */
 	clk_priv->source = source;
 	clk_priv->parent_source = parent_source;
-	//clk_priv->hw.init = &init;
 	clk_priv->phy = phy;
-
-	//init.name = name;
-#if 0
-	switch (source) {
-	case BBPLL_CLK:
-		init.ops = &bbpll_clk_ops;
-		break;
-	case RX_RFPLL:
-	case TX_RFPLL:
-		init.ops = &rfpll_clk_ops;
-		break;
-	default:
-		init.ops = &refclk_scale_ops;
-	}
-#endif
-	//init.flags = flags;
-	//init.parent_names = &parent_name;
-	//init.num_parents = 1;
 
 	phy->ref_clk_scale[source] = clk_priv;
 
@@ -4074,12 +4027,6 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 			break;
 	}
 
-//	clk = clk_register(&phy->spi->dev, &clk_priv->hw);
-//	phy->clk_data.clks[source] = clk;
-
-//	if (IS_ERR(clk))
-//		kfree(clk_priv);
-
 	return clk;
 }
 
@@ -4087,9 +4034,6 @@ int register_clocks(struct ad9361_rf_phy *phy)
 {
 	u32 flags = 0;
 
-	//phy->clk_data.clks = devm_kzalloc(&phy->spi->dev,
-	//				 sizeof(*phy->clk_data.clks) *
-	//				 NUM_AD9361_CLKS, GFP_KERNEL);
 	phy->clk_data.clks =malloc(sizeof(*phy->clk_data.clks) *
 					NUM_AD9361_CLKS);
 	if (!phy->clk_data.clks) {
@@ -4184,7 +4128,6 @@ int register_clocks(struct ad9361_rf_phy *phy)
 					"tx_rfpll", "tx_refclk",
 					flags | CLK_IGNORE_UNUSED,
 					TX_RFPLL, TX_REFCLK);
-
 
 	return 0;
 }
