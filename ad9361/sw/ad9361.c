@@ -35,12 +35,19 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#define DEBUG
-//#define _DEBUG
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 #include "ad9361.h"
 #include "linux.h"
 #include "no_os_port.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define DEBUG
+//#define _DEBUG
 
 #define SYNTH_LUT_SIZE	53
 
@@ -832,7 +839,7 @@ static int ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 }
 
 int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
-			       bool tx1, bool tx2)
+             bool tx1, bool tx2, bool immed)
 {
 	u8 buf[2];
 	int ret = 0;
@@ -848,14 +855,18 @@ int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
 	buf[0] = atten_mdb >> 8;
 	buf[1] = atten_mdb & 0xFF;
 
+	ad9361_spi_writef(REG_TX2_DIG_ATTEN,
+			IMMEDIATELY_UPDATE_TPC_ATTEN, 0);
+
 	if (tx1)
 		ret = ad9361_spi_writem(REG_TX1_ATTEN_1, buf, 2);
 
 	if (tx2)
 		ret = ad9361_spi_writem(REG_TX2_ATTEN_1, buf, 2);
 
-	ad9361_spi_writef(REG_TX2_DIG_ATTEN,
-			  IMMEDIATELY_UPDATE_TPC_ATTEN, 1);
+	if (immed)
+		ad9361_spi_writef(REG_TX2_DIG_ATTEN,
+				IMMEDIATELY_UPDATE_TPC_ATTEN, 1);
 
 	return ret;
 }
@@ -905,7 +916,7 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 
 	do_div(vco_freq, 1000000UL); /* vco_freq in MHz */
 
-	if (phy->pdata->fdd) {
+	if (phy->pdata->fdd || phy->pdata->tdd_use_fdd_tables) {
 		tab = &SynthLUT_FDD[range][0];
 	} else {
 		tab = &SynthLUT_TDD[range][0];
@@ -1893,11 +1904,6 @@ static int ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 	dev_dbg("%s : rx_freq %llu\n",
 		__func__, rx_freq);
 
-// 	ad9361_spi_write(REG_ENSM_CONFIG_1,
-// 			ENABLE_ENSM_PIN_CTRL |
-// 			FORCE_ALERT_STATE |
-// 			TO_ALERT);
-
 	ad9361_spi_write(REG_WAIT_COUNT, 0x20);
 
 	if(rx_freq <= 4000000000ULL) {
@@ -2531,21 +2537,24 @@ static int ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state)
+static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
+		bool pinctrl)
 {
 	int rc = 0;
 	u32 val;
 
-	if (phy->curr_ensm_state == ensm_state) {
-		dev_dbg("Nothing to do, device is already in %d state\n",
-			ensm_state);
-		goto out;
-	}
+//   if (phy->curr_ensm_state == ensm_state) {
+//     dev_dbg(dev, "Nothing to do, device is already in %d state\n",
+//       ensm_state);
+//     goto out;
+//   }
 
 	dev_dbg("Device is in %x state, moving to %x\n", phy->curr_ensm_state,
 			ensm_state);
 
-	val = phy->ensm_conf1;
+	val = (phy->pdata->ensm_pin_pulse_mode ? 0 : LEVEL_MODE) |
+			(pinctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
+			TO_ALERT;
 
 	switch (ensm_state) {
 	case ENSM_STATE_TX:
@@ -2768,6 +2777,25 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+static int ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
+{
+	struct ad9361_phy_platform_data *pd = phy->pdata;
+	int ret;
+
+	ad9361_spi_write(REG_ENSM_MODE, fdd ? FDD_MODE : 0);
+
+	if (fdd)
+		ret = ad9361_spi_write(REG_ENSM_CONFIG_2,
+				DUAL_SYNTH_MODE |
+				(pinctrl ? FDD_EXTERNAL_CTRL_ENABLE : 0)); /* Dual Synth */
+	else
+		ret = ad9361_spi_write(REG_ENSM_CONFIG_2,
+				(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
+				(pinctrl ? 0 : DUAL_SYNTH_MODE) |
+				(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : 0));
+	return ret;
+}
+
 int ad9361_setup(struct ad9361_rf_phy *phy)
 {
 	unsigned long refin_Hz, ref_freq, bbpll_freq;
@@ -2780,14 +2808,6 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 
 	if (pd->port_ctrl.pp_conf[2] & FDD_RX_RATE_2TX_RATE)
 		phy->rx_eq_2tx = true;
-
-	phy->ensm_conf1 =
-		(pd->ensm_pin_level_mode ? LEVEL_MODE : 0) |
-		(pd->ensm_pin_ctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
-		TO_ALERT;
-
-	ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET); /* RESET */
-	ad9361_spi_write(REG_SPI_CONF, 0x0);
 
 	ad9361_spi_write(REG_CTRL, CTRL_ENABLE);
 	ad9361_spi_write(REG_BANDGAP_CONFIG0, MASTER_BIAS_TRIM(0x0E)); /* Enable Master Bias */
@@ -2993,16 +3013,14 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 
 	ad9361_pp_port_setup(phy, true);
 
-	ad9361_spi_write(REG_ENSM_MODE, pd->fdd ? FDD_MODE : 0x00);
+	ret = ad9361_set_ensm_mode(phy, pd->fdd, pd->ensm_pin_ctrl);
+	if (ret < 0)
+		return ret;
 
-	if (pd->fdd)
-		ad9361_spi_write(REG_ENSM_CONFIG_2,
-			DUAL_SYNTH_MODE |
-			(pd->ensm_pin_ctrl ? FDD_EXTERNAL_CTRL_ENABLE : 0)); /* Dual Synth */
-	 else    /* For now in TDD always use Dual Synth */
-		ad9361_spi_write(REG_ENSM_CONFIG_2, DUAL_SYNTH_MODE);
+	ad9361_spi_writef(REG_TX_ATTEN_OFFSET,
+			MASK_CLR_ATTEN_UPDATE, 0);
 
-	ret = ad9361_set_tx_atten(phy, pd->tx_atten, true, true);
+	ret = ad9361_set_tx_atten(phy, pd->tx_atten, true, true, true);
 	if (ret < 0)
 		return ret;
 
@@ -3011,7 +3029,8 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 
 	phy->curr_ensm_state = ad9361_spi_readf(REG_STATE, ENSM_STATE(~0));
-	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX);
+	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX,
+			pd->ensm_pin_ctrl);
 
 	phy->current_rx_bw_Hz = pd->rf_rx_bandwidth_Hz;
 	phy->current_tx_bw_Hz = pd->rf_tx_bandwidth_Hz;
@@ -3366,7 +3385,6 @@ static inline int ad9361_set_muldiv(struct refclk_scale *priv, u32 mul, u32 div)
 
 static int ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u32 tmp, tmp1;
 
 	switch (clk_priv->source) {
@@ -3476,7 +3494,6 @@ static int ad9361_to_refclk_scaler(struct refclk_scale *clk_priv)
 
 static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u32 tmp;
 	int ret;
 
@@ -3607,7 +3624,6 @@ static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 rate;
 
 	ad9361_get_clk_scaler(clk_priv);
@@ -3619,7 +3635,6 @@ unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	int ret;
 
 	if (rate >= *prate) {
@@ -3641,7 +3656,6 @@ long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long r
 int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	char   message[16][12] = {"BB_REFCLK", "RX_REFCLK", "TX_REFCLK", "BBPLL_CLK", "ADC_CLK",
 		"R2_CLK", "R1_CLK", "CLKRF_CLK", "RX_SAMPL_CLK", "DAC_CLK", "T2_CLK",
 		"T1_CLK", "CLKTF_CLK", "TX_SAMPL_CLK", "RX_RFPLL", "TX_RFPLL"};
@@ -3659,13 +3673,7 @@ int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate
 
 	return ad9361_set_clk_scaler(clk_priv, true);
 }
-#if 0
-struct clk_ops refclk_scale_ops = {
-	.round_rate = ad9361_clk_factor_round_rate,
-	.set_rate = ad9361_clk_factor_set_rate,
-	.recalc_rate = ad9361_clk_factor_recalc_rate,
-};
-#endif
+
 /*
  * BBPLL
  */
@@ -3673,7 +3681,6 @@ struct clk_ops refclk_scale_ops = {
 unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 rate;
 	unsigned long fract, integer;
 	u8 buf[4];
@@ -3720,7 +3727,6 @@ long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	u64 tmp;
 	u32 fract, integer;
 	int icp_val;
@@ -3777,13 +3783,7 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	return ad9361_check_cal_done(clk_priv->phy, REG_CH_1_OVERFLOW,
 				     BBPLL_LOCK, 1);
 }
-#if 0
-struct clk_ops bbpll_clk_ops = {
-	.round_rate = ad9361_bbpll_round_rate,
-	.set_rate = ad9361_bbpll_set_rate,
-	.recalc_rate = ad9361_bbpll_recalc_rate,
-};
-#endif
+
 /*
  * RFPLL
  */
@@ -3832,7 +3832,6 @@ static int ad9361_calc_rfpll_divder(u64 freq,
 unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	unsigned long fract, integer;
 	u8 buf[5];
 	u32 reg, div_mask, vco_div;
@@ -3878,7 +3877,6 @@ long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
-//	struct refclk_scale *clk_priv = to_clk_priv(hw);
 	struct ad9361_rf_phy *phy = clk_priv->phy;
 	u64 vco;
 	u8 buf[5];
@@ -3951,19 +3949,12 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 
 	return ad9361_check_cal_done(phy, lock_reg, BIT(1), 1);
 }
-#if 0
-struct clk_ops rfpll_clk_ops = {
-	.round_rate = ad9361_rfpll_round_rate,
-	.set_rate = ad9361_rfpll_set_rate,
-	.recalc_rate = ad9361_rfpll_recalc_rate,
-};
-#endif
+
 static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *name,
 		const char *parent_name, unsigned long flags,
 		u32 source, u32 parent_source)
 {
 	struct refclk_scale *clk_priv;
-	//struct clk_init_data init;
 	struct clk *clk;
 
 	//clk_priv = kmalloc(sizeof(*clk_priv), GFP_KERNEL);
@@ -3976,26 +3967,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 	/* struct refclk_scale assignments */
 	clk_priv->source = source;
 	clk_priv->parent_source = parent_source;
-	//clk_priv->hw.init = &init;
 	clk_priv->phy = phy;
-
-	//init.name = name;
-#if 0
-	switch (source) {
-	case BBPLL_CLK:
-		init.ops = &bbpll_clk_ops;
-		break;
-	case RX_RFPLL:
-	case TX_RFPLL:
-		init.ops = &rfpll_clk_ops;
-		break;
-	default:
-		init.ops = &refclk_scale_ops;
-	}
-#endif
-	//init.flags = flags;
-	//init.parent_names = &parent_name;
-	//init.num_parents = 1;
 
 	phy->ref_clk_scale[source] = clk_priv;
 
@@ -4055,12 +4027,6 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 			break;
 	}
 
-//	clk = clk_register(&phy->spi->dev, &clk_priv->hw);
-//	phy->clk_data.clks[source] = clk;
-
-//	if (IS_ERR(clk))
-//		kfree(clk_priv);
-
 	return clk;
 }
 
@@ -4068,9 +4034,6 @@ int register_clocks(struct ad9361_rf_phy *phy)
 {
 	u32 flags = 0;
 
-	//phy->clk_data.clks = devm_kzalloc(&phy->spi->dev,
-	//				 sizeof(*phy->clk_data.clks) *
-	//				 NUM_AD9361_CLKS, GFP_KERNEL);
 	phy->clk_data.clks =malloc(sizeof(*phy->clk_data.clks) *
 					NUM_AD9361_CLKS);
 	if (!phy->clk_data.clks) {
@@ -4165,7 +4128,6 @@ int register_clocks(struct ad9361_rf_phy *phy)
 					"tx_rfpll", "tx_refclk",
 					flags | CLK_IGNORE_UNUSED,
 					TX_RFPLL, TX_REFCLK);
-
 
 	return 0;
 }

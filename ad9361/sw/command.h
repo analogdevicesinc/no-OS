@@ -152,76 +152,76 @@ void get_rx_fir_en(double* param, char param_no);
 /* Sets the RX FIR state. */
 void set_rx_fir_en(double* param, char param_no);
 
-/* Gets current DDS TX1 I frequency. */
-void get_dds_tx1_f1_freq(double* param, char param_no);
+/* Gets current DDS TX1 Tone 1 frequency [Hz]. */
+void get_dds_tx1_tone1_freq(double* param, char param_no);
 
-/* Sets the DDS TX1 I frequency. */
-void set_dds_tx1_f1_freq(double* param, char param_no);
+/* Sets the DDS TX1 Tone 1 frequency [Hz]. */
+void set_dds_tx1_tone1_freq(double* param, char param_no);
 
-/* Gets current DDS TX1 Q frequency. */
-void get_dds_tx1_f2_freq(double* param, char param_no);
+/* Gets current DDS TX1 Tone 2 frequency [Hz]. */
+void get_dds_tx1_tone2_freq(double* param, char param_no);
 
-/* Sets the DDS TX1 Q frequency. */
-void set_dds_tx1_f2_freq(double* param, char param_no);
+/* Sets the DDS TX1 Tone 2 frequency [Hz]. */
+void set_dds_tx1_tone2_freq(double* param, char param_no);
 
-/* Gets current DDS TX1 I phase. */
-void get_dds_tx1_f1_phase(double* param, char param_no);
+/* Gets current DDS TX1 Tone 1 phase [degrees]. */
+void get_dds_tx1_tone1_phase(double* param, char param_no);
 
-/* Sets the DDS TX1 I phase. */
-void set_dds_tx1_f1_phase(double* param, char param_no);
+/* Sets the DDS TX1 Tone 1 phase [degrees]. */
+void set_dds_tx1_tone1_phase(double* param, char param_no);
 
-/* Gets current DDS TX1 Q phase. */
-void get_dds_tx1_f2_phase(double* param, char param_no);
+/* Gets current DDS TX1 Tone 2 phase [degrees]. */
+void get_dds_tx1_tone2_phase(double* param, char param_no);
 
-/* Sets the DDS TX1 Q phase. */
-void set_dds_tx1_f2_phase(double* param, char param_no);
+/* Sets the DDS TX1 Tone 2 phase [degrees]. */
+void set_dds_tx1_tone2_phase(double* param, char param_no);
 
-/* Gets current DDS TX1 I scale. */
-void get_dds_tx1_f1_scale(double* param, char param_no);
+/* Gets current DDS TX1 Tone 1 scale. */
+void get_dds_tx1_tone1_scale(double* param, char param_no);
 
-/* Sets the DDS TX1 I scale. */
-void set_dds_tx1_f1_scale(double* param, char param_no);
+/* Sets the DDS TX1 Tone 1 scale. */
+void set_dds_tx1_tone1_scale(double* param, char param_no);
 
-/* Gets current DDS TX1 Q scale. */
-void get_dds_tx1_f2_scale(double* param, char param_no);
+/* Gets current DDS TX1 Tone 2 scale. */
+void get_dds_tx1_tone2_scale(double* param, char param_no);
 
-/* Sets the DDS TX1 Q scale. */
-void set_dds_tx1_f2_scale(double* param, char param_no);
+/* Sets the DDS TX1 Tone 2 scale. */
+void set_dds_tx1_tone2_scale(double* param, char param_no);
 
-/* Gets current DDS TX2 I frequency. */
-void get_dds_tx2_f1_freq(double* param, char param_no);
+/* Gets current DDS TX2 Tone 1 frequency [Hz]. */
+void get_dds_tx2_tone1_freq(double* param, char param_no);
 
-/* Sets the DDS TX2 I frequency. */
-void set_dds_tx2_f1_freq(double* param, char param_no);
+/* Sets the DDS TX2 Tone 1 frequency [Hz]. */
+void set_dds_tx2_tone1_freq(double* param, char param_no);
 
-/* Gets current DDS TX2 Q frequency. */
-void get_dds_tx2_f2_freq(double* param, char param_no);
+/* Gets current DDS TX2 Tone 2 frequency [Hz]. */
+void get_dds_tx2_tone2_freq(double* param, char param_no);
 
-/* Sets the DDS TX2 Q frequency. */
-void set_dds_tx2_f2_freq(double* param, char param_no);
+/* Sets the DDS TX2 Tone 2 frequency [Hz]. */
+void set_dds_tx2_tone2_freq(double* param, char param_no);
 
-/* Gets current DDS TX2 I phase. */
-void get_dds_tx2_f1_phase(double* param, char param_no);
+/* Gets current DDS TX2 Tone 1 phase [degrees]. */
+void get_dds_tx2_tone1_phase(double* param, char param_no);
 
-/* Sets the DDS TX2 I phase. */
-void set_dds_tx2_f1_phase(double* param, char param_no);
+/* Sets the DDS TX2 Tone 1 phase [degrees]. */
+void set_dds_tx2_tone1_phase(double* param, char param_no);
 
-/* Gets current DDS TX2 Q phase. */
-void get_dds_tx2_f2_phase(double* param, char param_no);
+/* Gets current DDS TX2 Tone 2 phase [degrees]. */
+void get_dds_tx2_tone2_phase(double* param, char param_no);
 
-/* Sets the DDS TX2 Q phase. */
-void set_dds_tx2_f2_phase(double* param, char param_no);
+/* Sets the DDS TX2 Tone 2 phase [degrees]. */
+void set_dds_tx2_tone2_phase(double* param, char param_no);
 
-/* Gets current DDS TX2 I scale. */
-void get_dds_tx2_f1_scale(double* param, char param_no);
+/* Gets current DDS TX2 Tone 1 scale. */
+void get_dds_tx2_tone1_scale(double* param, char param_no);
 
-/* Sets the DDS TX2 I scale. */
-void set_dds_tx2_f1_scale(double* param, char param_no);
+/* Sets the DDS TX2 Tone 1 scale. */
+void set_dds_tx2_tone1_scale(double* param, char param_no);
 
-/* Gets current DDS TX2 Q scale. */
-void get_dds_tx2_f2_scale(double* param, char param_no);
+/* Gets current DDS TX2 Tone 2 scale. */
+void dds_tx2_tone2_scale(double* param, char param_no);
 
-/* Sets the DDS TX2 Q scale. */
-void set_dds_tx2_f2_scale(double* param, char param_no);
+/* Sets the DDS TX2 Tone 2 scale. */
+void set_dds_tx2_tone2_scale(double* param, char param_no);
 
 #endif  // __COMMAND_H__
