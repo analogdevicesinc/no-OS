@@ -51,7 +51,7 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-extern command      cmd_list[];
+extern command	  	cmd_list[];
 extern char			cmd_no;
 extern cmd_function	cmd_functions[11];
 unsigned char		cmd				 =  0;
@@ -174,8 +174,8 @@ struct ad9361_rf_phy *ad9361_phy;
 *******************************************************************************/
 int main(void)
 {
-    Xil_ICacheEnable();
-    Xil_DCacheEnable();
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
 
 	gpio_init(GPIO_DEVICE_ID);
 	gpio_direction(54 + 45, 1);
@@ -183,47 +183,47 @@ int main(void)
 
 	ad9361_phy = ad9361_init(&default_init_param);
 
-    ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
-    ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
+	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
+	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
-    adc_init();
-    dac_init(DATA_SEL_DDS);
-    //dac_init(DATA_SEL_DMA);
+	adc_init();
+	dac_init(DATA_SEL_DDS);
+	//dac_init(DATA_SEL_DMA);
 
-    usleep(1000000);
+	usleep(1000000);
 
-    //adc_capture(16384, ADC_DDR_BASEADDR);
+	//adc_capture(16384, ADC_DDR_BASEADDR);
 
-    //while(1);
+	//while(1);
 
-    get_help(NULL, 0);
+	get_help(NULL, 0);
 
-    while(1)
-    {
-    	console_get_command(received_cmd);
-        invalid_cmd = 0;
-        for(cmd = 0; cmd < cmd_no; cmd++)
-        {
-            param_no = 0;
-            cmd_type = console_check_commands(received_cmd, cmd_list[cmd].name,
-                                              param, &param_no);
-            if(cmd_type == UNKNOWN_CMD)
-            {
-                invalid_cmd++;
-            }
-            else
-            {
-            	cmd_list[cmd].function(param, param_no);
-            }
-        }
-        if(invalid_cmd == cmd_no)
-        {
-        	console_print("Invalid command!\n");
-        }
-    }
+	while(1)
+	{
+		console_get_command(received_cmd);
+		invalid_cmd = 0;
+		for(cmd = 0; cmd < cmd_no; cmd++)
+		{
+			param_no = 0;
+			cmd_type = console_check_commands(received_cmd, cmd_list[cmd].name,
+											  param, &param_no);
+			if(cmd_type == UNKNOWN_CMD)
+			{
+				invalid_cmd++;
+			}
+			else
+			{
+				cmd_list[cmd].function(param, param_no);
+			}
+		}
+		if(invalid_cmd == cmd_no)
+		{
+			console_print("Invalid command!\n");
+		}
+	}
 
-    Xil_DCacheDisable();
-    Xil_ICacheDisable();
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
 
 	return 0;
 }

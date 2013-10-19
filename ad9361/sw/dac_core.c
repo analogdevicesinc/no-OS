@@ -69,7 +69,7 @@ const uint16_t sine_lut[32] = {
 *******************************************************************************/
 void dac_read(uint32_t regAddr, uint32_t *data)
 {
-    *data = Xil_In32(CF_AD9361_TX_BASEADDR + regAddr);
+	*data = Xil_In32(CF_AD9361_TX_BASEADDR + regAddr);
 }
 
 /***************************************************************************//**
@@ -85,7 +85,7 @@ void dac_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void vdma_read(uint32_t regAddr, uint32_t *data)
 {
-    *data = Xil_In32(CF_AD9361_VDMA_BASEADDR + regAddr);
+	*data = Xil_In32(CF_AD9361_VDMA_BASEADDR + regAddr);
 }
 
 /***************************************************************************//**
@@ -162,33 +162,33 @@ void dac_init(uint8_t data_sel)
 	case DATA_SEL_DMA:
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
 		dac_write(ADI_REG_VDMA_FRMCNT, tx_count * 8);
-        for(index = 0; index < (tx_count * 2); index+=2)
-        {
-        	index_i1 = index;
-        	index_q1 = index + (tx_count / 4);
+		for(index = 0; index < (tx_count * 2); index+=2)
+		{
+			index_i1 = index;
+			index_q1 = index + (tx_count / 4);
 			if(index_q1 >= (tx_count * 2))
 				index_q1 -= (tx_count * 2);
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
-        	Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
+			Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
 
-        	index_i2 = index_i1 + (tx_count / 2);
-        	index_q2 = index_q1 + (tx_count / 2);
+			index_i2 = index_i1 + (tx_count / 2);
+			index_q2 = index_q1 + (tx_count / 2);
 			if(index_i2 >= (tx_count * 2))
 				index_i2 -= (tx_count * 2);
 			if(index_q2 >= (tx_count * 2))
 				index_q2 -= (tx_count * 2);
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
-        	Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
-        }
-        Xil_DCacheFlush();
-        vdma_write(XAXIVDMA_CR_OFFSET, 0x0);
-        vdma_write(XAXIVDMA_CR_OFFSET, XAXIVDMA_CR_TAIL_EN_MASK | XAXIVDMA_CR_RUNSTOP_MASK);
-        do {
-        	vdma_read(XAXIVDMA_SR_OFFSET, &status);
-        }
-        while((status & 0x01) == 0x01);
+			Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
+		}
+		Xil_DCacheFlush();
+		vdma_write(XAXIVDMA_CR_OFFSET, 0x0);
+		vdma_write(XAXIVDMA_CR_OFFSET, XAXIVDMA_CR_TAIL_EN_MASK | XAXIVDMA_CR_RUNSTOP_MASK);
+		do {
+			vdma_read(XAXIVDMA_SR_OFFSET, &status);
+		}
+	    while((status & 0x01) == 0x01);
 		vdma_write(XAXIVDMA_FRMSTORE_OFFSET, 0x01);
 		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_START_ADDR_OFFSET, DAC_DDR_BASEADDR);
 		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_STRD_FRMDLY_OFFSET, tx_count * 8);

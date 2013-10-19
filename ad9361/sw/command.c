@@ -131,14 +131,14 @@ void show_invalid_param_message(unsigned char cmd_no)
 *******************************************************************************/
 void get_help(double* param, char param_no) // "help?" command
 {
-    unsigned char display_cmd;
+	unsigned char display_cmd;
 
-    console_print("Available commands:\n");
-    for(display_cmd = 0; display_cmd < cmd_no; display_cmd++)
-    {
-        console_print("%s  - %s\n", (char*)cmd_list[display_cmd].name,
-                                  (char*)cmd_list[display_cmd].description);
-    }
+	console_print("Available commands:\n");
+	for(display_cmd = 0; display_cmd < cmd_no; display_cmd++)
+	{
+		console_print("%s  - %s\n", (char*)cmd_list[display_cmd].name,
+								  (char*)cmd_list[display_cmd].description);
+	}
 }
 
 /**************************************************************************//***
@@ -151,14 +151,14 @@ void get_register(double* param, char param_no) // "register?" command
 	uint16_t reg_addr;
 	uint8_t reg_val;
 
-    if(param_no >= 1)
-    {
-    	reg_addr = param[0];
-    	reg_val = ad9361_spi_read(reg_addr);
-    	console_print("register[0x%x]=0x%x\n", reg_addr, reg_val);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		reg_addr = param[0];
+		reg_val = ad9361_spi_read(reg_addr);
+		console_print("register[0x%x]=0x%x\n", reg_addr, reg_val);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -184,14 +184,14 @@ void set_tx_lo_freq(double* param, char param_no) // "tx_lo_freq=" command
 {
 	uint64_t lo_freq_hz;
 
-    if(param_no >= 1)
-    {
-    	lo_freq_hz = param[0];
-    	lo_freq_hz *= 1000000;
-    	ad9361_set_tx_lo_freq(ad9361_phy, lo_freq_hz);
-    	lo_freq_hz /= 1000000;
-    	console_print("tx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
-    }
+	if(param_no >= 1)
+	{
+		lo_freq_hz = param[0];
+		lo_freq_hz *= 1000000;
+		ad9361_set_tx_lo_freq(ad9361_phy, lo_freq_hz);
+		lo_freq_hz /= 1000000;
+		console_print("tx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
+	}
 }
 
 /**************************************************************************//***
@@ -203,8 +203,8 @@ void get_tx_samp_freq(double* param, char param_no) // "tx_samp_freq?" command
 {
 	uint32_t sampling_freq_hz;
 
-    ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-    console_print("tx_samp_freq=%d\n", sampling_freq_hz);
+	ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
+	console_print("tx_samp_freq=%d\n", sampling_freq_hz);
 }
 
 /**************************************************************************//***
@@ -216,16 +216,16 @@ void set_tx_samp_freq(double* param, char param_no) // "tx_samp_freq=" command
 {
 	uint32_t sampling_freq_hz;
 
-    if(param_no >= 1)
-    {
-        sampling_freq_hz = (uint32_t)param[0];
-        ad9361_set_tx_sampling_freq(ad9361_phy, sampling_freq_hz);
-        ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-        dds_update();
-        console_print("tx_samp_freq=%d\n", sampling_freq_hz);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		sampling_freq_hz = (uint32_t)param[0];
+		ad9361_set_tx_sampling_freq(ad9361_phy, sampling_freq_hz);
+		ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
+		dds_update();
+		console_print("tx_samp_freq=%d\n", sampling_freq_hz);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -250,13 +250,13 @@ void set_tx_rf_bandwidth(double* param, char param_no) // "tx_rf_bandwidth=" com
 {
 	uint32_t bandwidth_hz;
 
-    if(param_no >= 1)
-    {
-    	bandwidth_hz = param[0];
-    	ad9361_set_tx_rf_bandwidth(ad9361_phy, bandwidth_hz);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		bandwidth_hz = param[0];
+		ad9361_set_tx_rf_bandwidth(ad9361_phy, bandwidth_hz);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -281,14 +281,14 @@ void set_tx1_attenuation(double* param, char param_no) // "tx1_attenuation=" com
 {
 	uint32_t attenuation_mdb;
 
-    if(param_no >= 1)
-    {
-    	attenuation_mdb = param[0];
-    	ad9361_set_tx_attenuation(ad9361_phy, 0, attenuation_mdb);
-    	console_print("tx1_attenuation=%d\n", attenuation_mdb);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		attenuation_mdb = param[0];
+		ad9361_set_tx_attenuation(ad9361_phy, 0, attenuation_mdb);
+		console_print("tx1_attenuation=%d\n", attenuation_mdb);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -313,14 +313,14 @@ void set_tx2_attenuation(double* param, char param_no) // "tx1_attenuation=" com
 {
 	uint32_t attenuation_mdb;
 
-    if(param_no >= 1)
-    {
-    	attenuation_mdb = param[0];
-    	ad9361_set_tx_attenuation(ad9361_phy, 1, attenuation_mdb);
-    	console_print("tx2_attenuation=%d\n", attenuation_mdb);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		attenuation_mdb = param[0];
+		ad9361_set_tx_attenuation(ad9361_phy, 1, attenuation_mdb);
+		console_print("tx2_attenuation=%d\n", attenuation_mdb);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -345,14 +345,14 @@ void set_tx_fir_en(double* param, char param_no) // "tx_fir_en=" command
 {
 	uint8_t en_dis;
 
-    if(param_no >= 1)
-    {
-    	en_dis = param[0];
-    	ad9361_set_tx_fir_en_dis(ad9361_phy, en_dis);
-    	console_print("tx_fir_en=%d\n", en_dis);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		en_dis = param[0];
+		ad9361_set_tx_fir_en_dis(ad9361_phy, en_dis);
+		console_print("tx_fir_en=%d\n", en_dis);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -378,14 +378,14 @@ void set_rx_lo_freq(double* param, char param_no) // "rx_lo_freq=" command
 {
 	uint64_t lo_freq_hz;
 
-    if(param_no >= 1)
-    {
-    	lo_freq_hz = param[0];
-    	lo_freq_hz *= 1000000;
-    	ad9361_set_rx_lo_freq(ad9361_phy, lo_freq_hz);
-    	lo_freq_hz /= 1000000;
+	if(param_no >= 1)
+	{
+		lo_freq_hz = param[0];
+		lo_freq_hz *= 1000000;
+		ad9361_set_rx_lo_freq(ad9361_phy, lo_freq_hz);
+		lo_freq_hz /= 1000000;
 		console_print("rx_lo_freq=%d\n", (uint32_t)lo_freq_hz);
-    }
+	}
 }
 
 /**************************************************************************//***
@@ -397,8 +397,8 @@ void get_rx_samp_freq(double* param, char param_no) // "rx_samp_freq?" command
 {
 	uint32_t sampling_freq_hz;
 
-    ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-    console_print("rx_samp_freq=%d\n", sampling_freq_hz);
+	ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
+	console_print("rx_samp_freq=%d\n", sampling_freq_hz);
 }
 
 /**************************************************************************//***
@@ -410,16 +410,16 @@ void set_rx_samp_freq(double* param, char param_no) // "rx_samp_freq=" command
 {
 	uint32_t sampling_freq_hz;
 
-    if(param_no >= 1)
-    {
-        sampling_freq_hz = (uint32_t)param[0];
-        ad9361_set_rx_sampling_freq(ad9361_phy, sampling_freq_hz);
-        ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-        dds_update();
-        console_print("rx_samp_freq=%d\n", sampling_freq_hz);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		sampling_freq_hz = (uint32_t)param[0];
+		ad9361_set_rx_sampling_freq(ad9361_phy, sampling_freq_hz);
+		ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
+		dds_update();
+		console_print("rx_samp_freq=%d\n", sampling_freq_hz);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -444,14 +444,14 @@ void set_rx_rf_bandwidth(double* param, char param_no) // "rx_rf_bandwidth=" com
 {
 	uint32_t bandwidth_hz;
 
-    if(param_no >= 1)
-    {
-    	bandwidth_hz = param[0];
-    	ad9361_set_rx_rf_bandwidth(ad9361_phy, bandwidth_hz);
-    	console_print("rx_rf_bandwidth=%d\n", bandwidth_hz);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		bandwidth_hz = param[0];
+		ad9361_set_rx_rf_bandwidth(ad9361_phy, bandwidth_hz);
+		console_print("rx_rf_bandwidth=%d\n", bandwidth_hz);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -476,14 +476,14 @@ void set_rx1_gc_mode(double* param, char param_no) // "rx1_gc_mode=" command
 {
 	uint8_t gc_mode;
 
-    if(param_no >= 1)
-    {
-    	gc_mode = param[0];
-    	ad9361_set_rx_gain_control_mode(ad9361_phy, 0, gc_mode);
-    	console_print("rx1_gc_mode=%d\n", gc_mode);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		gc_mode = param[0];
+		ad9361_set_rx_gain_control_mode(ad9361_phy, 0, gc_mode);
+		console_print("rx1_gc_mode=%d\n", gc_mode);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -508,14 +508,14 @@ void set_rx2_gc_mode(double* param, char param_no) // "rx2_gc_mode=" command
 {
 	uint8_t gc_mode;
 
-    if(param_no >= 1)
-    {
-    	gc_mode = param[0];
-    	ad9361_set_rx_gain_control_mode(ad9361_phy, 1, gc_mode);
-    	console_print("rx2_gc_mode=%d\n", gc_mode);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		gc_mode = param[0];
+		ad9361_set_rx_gain_control_mode(ad9361_phy, 1, gc_mode);
+		console_print("rx2_gc_mode=%d\n", gc_mode);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -540,14 +540,14 @@ void set_rx1_rf_gain(double* param, char param_no) // "rx1_rf_gain=" command
 {
 	int32_t gain_db;
 
-    if(param_no >= 1)
-    {
-    	gain_db = param[0];
-    	ad9361_set_rx_rf_gain (ad9361_phy, 0, gain_db);
-    	console_print("rx1_rf_gain=%d\n", gain_db);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		gain_db = param[0];
+		ad9361_set_rx_rf_gain (ad9361_phy, 0, gain_db);
+		console_print("rx1_rf_gain=%d\n", gain_db);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -572,14 +572,14 @@ void set_rx2_rf_gain(double* param, char param_no) // "rx2_rf_gain=" command
 {
 	int32_t gain_db;
 
-    if(param_no >= 1)
-    {
-    	gain_db = param[0];
-    	ad9361_set_rx_rf_gain (ad9361_phy, 1, gain_db);
-    	console_print("rx2_rf_gain=%d\n", gain_db);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		gain_db = param[0];
+		ad9361_set_rx_rf_gain (ad9361_phy, 1, gain_db);
+		console_print("rx2_rf_gain=%d\n", gain_db);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -604,14 +604,14 @@ void set_rx_fir_en(double* param, char param_no) // "rx_fir_en=" command
 {
 	uint8_t en_dis;
 
-    if(param_no >= 1)
-    {
-    	en_dis = param[0];
-    	ad9361_set_rx_fir_en_dis(ad9361_phy, en_dis);
-    	console_print("rx_fir_en=%d\n", en_dis);
-    }
-    else
-    	show_invalid_param_message(1);
+	if(param_no >= 1)
+	{
+		en_dis = param[0];
+		ad9361_set_rx_fir_en_dis(ad9361_phy, en_dis);
+		console_print("rx_fir_en=%d\n", en_dis);
+	}
+	else
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -635,14 +635,14 @@ void set_dds_tx1_tone1_freq(double* param, char param_no)	// dds_tx1_tone1_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_frequency(DDS_CHAN_TX1_I_F1, freq);
 		dds_set_frequency(DDS_CHAN_TX1_Q_F1, freq);
 		console_print("dds_tx1_tone1_freq=%d\n", freq);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -666,14 +666,14 @@ void set_dds_tx1_tone2_freq(double* param, char param_no)	// dds_tx1_tone2_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_frequency(DDS_CHAN_TX1_I_F2, freq);
 		dds_set_frequency(DDS_CHAN_TX1_Q_F2, freq);
 		console_print("dds_tx1_tone2_freq=%d\n", freq);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -698,17 +698,17 @@ void set_dds_tx1_tone1_phase(double* param, char param_no)	// dds_tx1_tone1_phas
 {
 	int32_t phase = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
-    	dds_set_phase(DDS_CHAN_TX1_I_F1, (uint32_t)(phase * 1000));
-        if ((phase - 90) < 0)
-        	phase += 360;
-        dds_set_phase(DDS_CHAN_TX1_Q_F1, (uint32_t)((phase - 90) * 1000));
-        phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F1] / 1000;
+	if(param_no >= 1)
+	{
+		dds_set_phase(DDS_CHAN_TX1_I_F1, (uint32_t)(phase * 1000));
+		if ((phase - 90) < 0)
+			phase += 360;
+		dds_set_phase(DDS_CHAN_TX1_Q_F1, (uint32_t)((phase - 90) * 1000));
+		phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F1] / 1000;
 		console_print("dds_tx1_tone1_phase=%d\n", phase);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -733,17 +733,17 @@ void set_dds_tx1_tone2_phase(double* param, char param_no)	// dds_tx1_tone2_phas
 {
 	int32_t phase = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
-    	dds_set_phase(DDS_CHAN_TX1_I_F2, (uint32_t)(phase * 1000));
-        if ((phase - 90) < 0)
-        	phase += 360;
-        dds_set_phase(DDS_CHAN_TX1_Q_F2, (uint32_t)((phase - 90) * 1000));
-        phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F2] / 1000;
+	if(param_no >= 1)
+	{
+		dds_set_phase(DDS_CHAN_TX1_I_F2, (uint32_t)(phase * 1000));
+		if ((phase - 90) < 0)
+			phase += 360;
+		dds_set_phase(DDS_CHAN_TX1_Q_F2, (uint32_t)((phase - 90) * 1000));
+		phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F2] / 1000;
 		console_print("dds_tx1_tone2_phase=%d\n", phase);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -767,14 +767,14 @@ void set_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scal
 {
 	uint32_t scale = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_scale(DDS_CHAN_TX1_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F1, scale);
 		console_print("dds_tx1_tone1_scale=%d\n", scale);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -798,14 +798,14 @@ void set_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scal
 {
 	uint32_t scale = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_scale(DDS_CHAN_TX1_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F2, scale);
 		console_print("dds_tx1_tone2_scale=%d\n", scale);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -829,14 +829,14 @@ void set_dds_tx2_tone1_freq(double* param, char param_no)	// dds_tx2_tone1_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_frequency(DDS_CHAN_TX2_I_F1, freq);
 		dds_set_frequency(DDS_CHAN_TX2_Q_F1, freq);
 		console_print("dds_tx2_tone1_freq=%d\n", freq);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -860,14 +860,14 @@ void set_dds_tx2_tone2_freq(double* param, char param_no)	// dds_tx2_tone2_freq=
 {
 	uint32_t freq = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_frequency(DDS_CHAN_TX2_I_F2, freq);
 		dds_set_frequency(DDS_CHAN_TX2_Q_F2, freq);
 		console_print("dds_tx2_tone2_freq=%d\n", freq);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -961,14 +961,14 @@ void set_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scal
 {
 	uint32_t scale = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_scale(DDS_CHAN_TX2_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F1, scale);
 		console_print("dds_tx2_tone1_scale=%d\n", scale);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }
 
 /**************************************************************************//***
@@ -992,12 +992,12 @@ void set_dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scal
 {
 	uint32_t scale = (uint32_t)param[0];
 
-    if(param_no >= 1)
-    {
+	if(param_no >= 1)
+	{
 		dds_set_scale(DDS_CHAN_TX2_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F2, scale);
 		console_print("dds_tx2_tone2_scale=%d\n", scale);
-    }
+	}
 	else
-    	show_invalid_param_message(1);
+		show_invalid_param_message(1);
 }

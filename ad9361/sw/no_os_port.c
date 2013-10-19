@@ -55,9 +55,9 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 XSpiPs_Config	*spi_config;
-XSpiPs          spi_instance;
-XGpioPs_Config  *gpio_config;
-XGpioPs         gpio_instance;
+XSpiPs			spi_instance;
+XGpioPs_Config	*gpio_config;
+XGpioPs			gpio_instance;
 
 /***************************************************************************//**
  * @brief udelay
@@ -74,9 +74,9 @@ int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pha,
 				 uint8_t  clk_pol)
 {
-	uint32_t base_addr   = 0;
+	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
-	uint8_t  byte        = 0;
+	uint8_t  byte		 = 0;
 
 	spi_config = XSpiPs_LookupConfig(device_id);
 	base_addr = spi_config->BaseAddress;
@@ -91,12 +91,12 @@ int32_t spi_init(uint32_t device_id,
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
 
-    for(byte = 0; byte < 128; byte++)
-    {
-    	XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
-    }
+	for(byte = 0; byte < 128; byte++)
+	{
+		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
+	}
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -105,21 +105,21 @@ int32_t spi_init(uint32_t device_id,
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number)
 {
-	uint32_t base_addr   = 0;
+	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
-    uint32_t status      = 0;
-    uint32_t cnt         = 0;
+	uint32_t status	  	 = 0;
+	uint32_t cnt		 = 0;
 
-    base_addr = spi_config->BaseAddress;
-    control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
+	base_addr = spi_config->BaseAddress;
+	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
 
-    XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
-    				control_val & ~(1 << XSPIPS_CR_SSCTRL_SHIFT));
+	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
+					control_val & ~(1 << XSPIPS_CR_SSCTRL_SHIFT));
 
-    XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
+	XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
 
-    XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
-    XSpiPs_WriteReg(base_addr, XSPIPS_IER_OFFSET, XSPIPS_IXR_TXOW_MASK);
+	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
+	XSpiPs_WriteReg(base_addr, XSPIPS_IER_OFFSET, XSPIPS_IXR_TXOW_MASK);
 
 	while(cnt < bytes_number)
 	{
@@ -155,7 +155,7 @@ int32_t spi_read(uint8_t *data,
  * @brief spi_write_then_read
 *******************************************************************************/
 int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
-                        unsigned char *rxbuf, unsigned n_rx)
+						unsigned char *rxbuf, unsigned n_rx)
 {
 	uint8_t buffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 						  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -361,24 +361,24 @@ int clk_set_rate(struct ad9361_rf_phy *phy,
 *******************************************************************************/
 unsigned long int_sqrt(unsigned long x)
 {
-        unsigned long b, m, y = 0;
+	unsigned long b, m, y = 0;
 
-        if (x <= 1)
-                return x;
+	if (x <= 1)
+			return x;
 
-        m = 1UL << (BITS_PER_LONG - 2);
-        while (m != 0) {
-                b = y + m;
-                y >>= 1;
+	m = 1UL << (BITS_PER_LONG - 2);
+	while (m != 0) {
+			b = y + m;
+			y >>= 1;
 
-                if (x >= b) {
-                        x -= b;
-                        y += m;
-                }
-                m >>= 2;
-        }
+			if (x >= b) {
+					x -= b;
+					y += m;
+			}
+			m >>= 2;
+	}
 
-        return y;
+	return y;
 }
 
 /***************************************************************************//**

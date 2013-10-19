@@ -60,7 +60,7 @@
 *******************************************************************************/
 char uart_init(unsigned long baudRate)
 {
-    return 0;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -96,10 +96,10 @@ void uart_read_char(char * data)
 *******************************************************************************/
 void uart_write_string(const char* string)
 {
-    while(*string)
-    {
-    	uart_write_char(*string++);
-    }
+	while(*string)
+	{
+		uart_write_char(*string++);
+	}
 }
 
 /***************************************************************************//**
@@ -113,34 +113,34 @@ void uart_write_string(const char* string)
 *******************************************************************************/
 char *int_to_str(long number, char base)
 {
-    unsigned long pos_number = 0;
-    char          neg_sign   = 0;
-    const char    digits[17] = "0123456789ABCDEF";
-    static char   buffer[17] = "                ";
-    char*         buffer_ptr = &buffer[16];
+	unsigned long pos_number = 0;
+	char		  neg_sign   = 0;
+	const char	  digits[17] = "0123456789ABCDEF";
+	static char   buffer[17] = "                ";
+	char*		  buffer_ptr = &buffer[16];
 
-    if((number < 0) && (base == 10))
-    {
-        neg_sign = 1;
-        pos_number = -1 * number;
-    }
-    else
-    {
-        pos_number = (unsigned long)number;
-    }
-    do
-    {
-        *buffer_ptr-- = digits[pos_number % base];
-        pos_number /= base;
-    }
-    while(pos_number != 0);
-    if(neg_sign)
-    {
-        *buffer_ptr-- = '-';
-    }
-    *buffer_ptr++;
+	if((number < 0) && (base == 10))
+	{
+		neg_sign = 1;
+		pos_number = -1 * number;
+	}
+	else
+	{
+		pos_number = (unsigned long)number;
+	}
+	do
+	{
+		*buffer_ptr-- = digits[pos_number % base];
+		pos_number /= base;
+	}
+	while(pos_number != 0);
+	if(neg_sign)
+	{
+		*buffer_ptr-- = '-';
+	}
+	*buffer_ptr++;
 
-    return buffer_ptr;
+	return buffer_ptr;
 }
 
 /***************************************************************************//**
@@ -152,115 +152,115 @@ char *int_to_str(long number, char base)
 *******************************************************************************/
 void console_print(char* str, ...)
 {
-    char*         string_ptr;
-    char          first_param  = 0;
-    char          second_param = 0;
-    unsigned long x_mask       = 0;
-    unsigned long d_mask       = 0;
-    char          ch_number    = 0;
-    unsigned long multiplier   = 1;
-    char*         str_arg;
-    long          long_arg;
-    double        double_arg;
-    va_list       argp;
+	char*		  string_ptr;
+	char		  first_param  = 0;
+	char		  second_param = 0;
+	unsigned long x_mask	   = 0;
+	unsigned long d_mask	   = 0;
+	char		  ch_number	   = 0;
+	unsigned long multiplier   = 1;
+	char*		  str_arg;
+	long		  long_arg;
+	double		  double_arg;
+	va_list		  argp;
 
-    va_start(argp, str);
-    for(string_ptr = str; *string_ptr != '\0'; string_ptr++)
-    {
-        if(*string_ptr!='%')
-        {
-            uart_write_char(*string_ptr);
-            continue;
-        }
-        string_ptr++;
-        first_param = 0;
-        while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
-        {
-            first_param *= 10;
-            first_param += (*string_ptr - 0x30);
-            string_ptr++;
-        }
-        if(*string_ptr == '.')
-        {
-            string_ptr++;
-            second_param = 0;
-            while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
-            {
-                second_param *= 10;
-                second_param += (*string_ptr - 0x30);
-                string_ptr++;
-            }
-        }
-        switch(*string_ptr)
-        {
-        case 'c':
-            long_arg = va_arg(argp, long);
-            uart_write_char((char)long_arg);
-            break;
-        case 's':
-            str_arg = va_arg(argp, char*);
-            uart_write_string(str_arg);
-            break;
-        case 'd':
-            long_arg = va_arg(argp, long);
-            uart_write_string(int_to_str(long_arg, 10));
-            break;
-        case 'x':
-            long_arg = va_arg(argp, long);
-            x_mask = 268435456;
-            ch_number = 8;
-            while(x_mask > long_arg)
-            {
-                x_mask /= 16;
-                ch_number--;
-            }
-            while(ch_number < first_param)
-            {
-                uart_write_char('0');
-                ch_number++;
-            }
-            if(long_arg != 0)
-            {
-                uart_write_string(int_to_str(long_arg, 16));
-            }
-            break;
-        case 'f':
-            double_arg = va_arg(argp, double);
-            ch_number = second_param;
-            while(ch_number > 0)
-            {
-                multiplier *= 10;
-                ch_number--;
-            }
-            double_arg *= multiplier;
-            if(double_arg < 0)
-            {
-                double_arg *= -1;
-                uart_write_char('-');
-            }
-            long_arg = (long)double_arg;
-            uart_write_string(int_to_str((long_arg / multiplier), 10));
-            uart_write_char('.');
-            d_mask = 1000000000;
-            ch_number = 10;
-            while(d_mask > (long)(long_arg % multiplier))
-            {
-                d_mask /= 10;
-                ch_number--;
-            }
-            while(ch_number < second_param)
-            {
-                uart_write_char('0');
-                ch_number++;
-            }
-            if((long_arg % multiplier) != 0)
-            {
-                uart_write_string(int_to_str((long_arg % multiplier), 10));
-            }
-            break;
-        }
-    }
-    va_end(argp);
+	va_start(argp, str);
+	for(string_ptr = str; *string_ptr != '\0'; string_ptr++)
+	{
+		if(*string_ptr!='%')
+		{
+			uart_write_char(*string_ptr);
+			continue;
+		}
+		string_ptr++;
+		first_param = 0;
+		while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
+		{
+			first_param *= 10;
+			first_param += (*string_ptr - 0x30);
+			string_ptr++;
+		}
+		if(*string_ptr == '.')
+		{
+			string_ptr++;
+			second_param = 0;
+			while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
+			{
+				second_param *= 10;
+				second_param += (*string_ptr - 0x30);
+				string_ptr++;
+			}
+		}
+		switch(*string_ptr)
+		{
+		case 'c':
+			long_arg = va_arg(argp, long);
+			uart_write_char((char)long_arg);
+			break;
+		case 's':
+			str_arg = va_arg(argp, char*);
+			uart_write_string(str_arg);
+			break;
+		case 'd':
+			long_arg = va_arg(argp, long);
+			uart_write_string(int_to_str(long_arg, 10));
+			break;
+		case 'x':
+			long_arg = va_arg(argp, long);
+			x_mask = 268435456;
+			ch_number = 8;
+			while(x_mask > long_arg)
+			{
+				x_mask /= 16;
+				ch_number--;
+			}
+			while(ch_number < first_param)
+			{
+				uart_write_char('0');
+				ch_number++;
+			}
+			if(long_arg != 0)
+			{
+				uart_write_string(int_to_str(long_arg, 16));
+			}
+			break;
+		case 'f':
+			double_arg = va_arg(argp, double);
+			ch_number = second_param;
+			while(ch_number > 0)
+			{
+				multiplier *= 10;
+				ch_number--;
+			}
+			double_arg *= multiplier;
+			if(double_arg < 0)
+			{
+				double_arg *= -1;
+				uart_write_char('-');
+			}
+			long_arg = (long)double_arg;
+			uart_write_string(int_to_str((long_arg / multiplier), 10));
+			uart_write_char('.');
+			d_mask = 1000000000;
+			ch_number = 10;
+			while(d_mask > (long)(long_arg % multiplier))
+			{
+				d_mask /= 10;
+				ch_number--;
+			}
+			while(ch_number < second_param)
+			{
+				uart_write_char('0');
+				ch_number++;
+			}
+			if((long_arg % multiplier) != 0)
+			{
+				uart_write_string(int_to_str((long_arg % multiplier), 10));
+			}
+			break;
+		}
+	}
+	va_end(argp);
 }
 
 /***************************************************************************//**
@@ -275,7 +275,7 @@ void console_print(char* str, ...)
 *******************************************************************************/
 char console_init(unsigned long baud_rate)
 {
-    return uart_init(baud_rate);
+	return uart_init(baud_rate);
 }
 
 /***************************************************************************//**
@@ -287,14 +287,14 @@ char console_init(unsigned long baud_rate)
 *******************************************************************************/
 void console_get_command(char* command)
 {
-    char            received_char = 0;
-    unsigned char   char_number   = 0;
+	char		  received_char	= 0;
+	unsigned char char_number	= 0;
 
-    while((received_char != '\n') && (received_char != '\r'))
-    {
-        uart_read_char(&received_char);
-        command[char_number++] = received_char;
-    }
+	while((received_char != '\n') && (received_char != '\r'))
+	{
+		uart_read_char(&received_char);
+		command[char_number++] = received_char;
+	}
 }
 
 /***************************************************************************//**
@@ -311,149 +311,149 @@ void console_get_command(char* command)
  *                                READ_CMD    - Read command (?).
  *                                WRITE_CMD   - Write command (=).
 *******************************************************************************/
-int console_check_commands(char*       received_cmd,
-                           const char* expected_cmd,
-                           double*     param,
-                           char*       param_no)
+int console_check_commands(char*	   received_cmd,
+						   const char* expected_cmd,
+						   double*	   param,
+						   char*	   param_no)
 {
-    int             cmd_type         = 1;
-    unsigned char   char_index       = 0;
-    char            param_string[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    unsigned char   param_index      = 0;
-    unsigned char   index            = 0;
-    const    char   digits[17]       = "0123456789ABCDEF";
-    unsigned char   digit_index      = 0;
+	int			  cmd_type		   = 1;
+	unsigned char char_index	   = 0;
+	char		  param_string[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	unsigned char param_index	   = 0;
+	unsigned char index			   = 0;
+	const char	  digits[17]	   = "0123456789ABCDEF";
+	unsigned char digit_index	   = 0;
 
-    while((expected_cmd[char_index] != '!') &&
-          (expected_cmd[char_index] != '?') &&
-          (expected_cmd[char_index] != '=') &&
-          (cmd_type != UNKNOWN_CMD))
-    {
-        if(expected_cmd[char_index] != received_cmd[char_index])
-        {
-            cmd_type = UNKNOWN_CMD;
-        }
-        char_index++;
-    }
-    if(cmd_type != UNKNOWN_CMD)
-    {
-        if(expected_cmd[char_index] == '!')
-        {
-            if(received_cmd[char_index] == '!')
-            {
-                cmd_type = DO_CMD;
-            }
-            else
-            {
-                cmd_type = UNKNOWN_CMD;
-            }
-        }
-        if(expected_cmd[char_index] == '?')
-        {
-            if(received_cmd[char_index] == '?')
-            {
-                cmd_type = READ_CMD;
-            }
-            else
-            {
-                cmd_type = UNKNOWN_CMD;
-            }
-        }
-        if(expected_cmd[char_index] == '=')
-        {
-            if(received_cmd[char_index] == '=')
-            {
-                cmd_type = WRITE_CMD;
-            }
-            else
-            {
-                cmd_type = UNKNOWN_CMD;
-            }
-        }
-        if((cmd_type == WRITE_CMD) || (cmd_type == READ_CMD))
-        {
-            char_index++;
-            while((received_cmd[char_index] != '\n') &&
-                  (received_cmd[char_index] != '\r'))
-            {
-                if((received_cmd[char_index] == 0x20))
-                {
-                    *param = 0;
-                    if((param_string[0] == '0') && (param_string[1] == 'x'))
-                    {
-                        for(index = 2; index < param_index; index++)
-                        {
-                            for(digit_index = 0; digit_index < 16; digit_index++)
-                            {
-                                if(param_string[index] == digits[digit_index])
-                                {
-                                    *param = *param * 16;
-                                    *param = *param + digit_index;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                    	if(param_string[0] == '-')
-                    	{
-                    		*param = atof((const char*)(&param_string[1]));
-                    		*param *= (-1);
-                    	}
-                    	else
-                    	{
-                    		*param = atof((const char*)param_string);
-                    	}
-                    }
-                    param++;
-                    *param_no += 1;
-                    for(param_index = 0; param_index < 10; param_index++)
-                    {
-                        param_string[param_index] = 0;
-                    }
-                    param_index = 0;
-                    char_index++;
-                }
-                else
-                {
-                    param_string[param_index] = received_cmd[char_index];
-                    char_index++;
-                    param_index++;
-                }
-            }
-            if(param_index)
-            {
-                *param = 0;
-                if((param_string[0] == '0') && (param_string[1] == 'x'))
-                {
-                    for(index = 2; index < param_index; index++)
-                    {
-                        for(digit_index = 0; digit_index < 16; digit_index++)
-                        {
-                            if(param_string[index] == digits[digit_index])
-                            {
-                                *param *= 16;
-                                *param += digit_index;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                	if(param_string[0] == '-')
-                	{
-                		*param = atof((const char*)(&param_string[1]));
-                		*param *= (-1);
-                	}
-                	else
-                	{
-                		*param = atof((const char*)param_string);
-                	}
-                }
-                *param_no += 1;
-            }
-        }
-    }
+	while((expected_cmd[char_index] != '!') &&
+		  (expected_cmd[char_index] != '?') &&
+		  (expected_cmd[char_index] != '=') &&
+		  (cmd_type != UNKNOWN_CMD))
+	{
+		if(expected_cmd[char_index] != received_cmd[char_index])
+		{
+			cmd_type = UNKNOWN_CMD;
+		}
+		char_index++;
+	}
+	if(cmd_type != UNKNOWN_CMD)
+	{
+		if(expected_cmd[char_index] == '!')
+		{
+			if(received_cmd[char_index] == '!')
+			{
+				cmd_type = DO_CMD;
+			}
+			else
+			{
+				cmd_type = UNKNOWN_CMD;
+			}
+		}
+		if(expected_cmd[char_index] == '?')
+		{
+			if(received_cmd[char_index] == '?')
+			{
+				cmd_type = READ_CMD;
+			}
+			else
+			{
+				cmd_type = UNKNOWN_CMD;
+			}
+		}
+		if(expected_cmd[char_index] == '=')
+		{
+			if(received_cmd[char_index] == '=')
+			{
+				cmd_type = WRITE_CMD;
+			}
+			else
+			{
+				cmd_type = UNKNOWN_CMD;
+			}
+		}
+		if((cmd_type == WRITE_CMD) || (cmd_type == READ_CMD))
+		{
+			char_index++;
+			while((received_cmd[char_index] != '\n') &&
+				  (received_cmd[char_index] != '\r'))
+			{
+				if((received_cmd[char_index] == 0x20))
+				{
+					*param = 0;
+					if((param_string[0] == '0') && (param_string[1] == 'x'))
+					{
+						for(index = 2; index < param_index; index++)
+						{
+							for(digit_index = 0; digit_index < 16; digit_index++)
+							{
+								if(param_string[index] == digits[digit_index])
+								{
+									*param = *param * 16;
+									*param = *param + digit_index;
+								}
+							}
+						}
+					}
+					else
+					{
+						if(param_string[0] == '-')
+						{
+							*param = atof((const char*)(&param_string[1]));
+							*param *= (-1);
+						}
+						else
+						{
+							*param = atof((const char*)param_string);
+						}
+					}
+					param++;
+					*param_no += 1;
+					for(param_index = 0; param_index < 10; param_index++)
+					{
+						param_string[param_index] = 0;
+					}
+					param_index = 0;
+					char_index++;
+				}
+				else
+				{
+					param_string[param_index] = received_cmd[char_index];
+					char_index++;
+					param_index++;
+				}
+			}
+			if(param_index)
+			{
+				*param = 0;
+				if((param_string[0] == '0') && (param_string[1] == 'x'))
+				{
+					for(index = 2; index < param_index; index++)
+					{
+						for(digit_index = 0; digit_index < 16; digit_index++)
+						{
+							if(param_string[index] == digits[digit_index])
+							{
+								*param *= 16;
+								*param += digit_index;
+							}
+						}
+					}
+				}
+				else
+				{
+					if(param_string[0] == '-')
+					{
+						*param = atof((const char*)(&param_string[1]));
+						*param *= (-1);
+					}
+					else
+					{
+						*param = atof((const char*)param_string);
+					}
+				}
+				*param_no += 1;
+			}
+		}
+	}
 
-    return cmd_type;
+	return cmd_type;
 }
