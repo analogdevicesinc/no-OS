@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   linux.h
- *   @brief  Header file of Linux driver.
+ *   @file   common.h
+ *   @brief  Header file of Common Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.

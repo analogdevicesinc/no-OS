@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   no_os_port.h
- *   @brief  Header file of no-OS Port Driver.
+ *   @file   util.h
+ *   @brief  Header file of Util driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -47,7 +47,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "sleep.h"
-#include "linux.h"
+#include "common.h"
 #include "xil_printf.h"
 #include "ad9361.h"
 

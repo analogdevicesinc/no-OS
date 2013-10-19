@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   no_os_port.c
- *   @brief  Implementation of no-OS Port Driver.
+ *   @file   util.c
+ *   @brief  Implementation of Util Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include "xspips.h"
 #include "xgpiops.h"
-#include "no_os_port.h"
+#include "util.h"
 
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/

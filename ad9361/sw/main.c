@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   main.c
- *   @brief  Implementation of main function.
+ *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.

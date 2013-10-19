@@ -1,6 +1,6 @@
 /**************************************************************************//**
  *   @file   command.c
- *   @brief  Implementation of the AD9361 commands driver.
+ *   @brief  Implementation of AD9361 Command Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
  *******************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
