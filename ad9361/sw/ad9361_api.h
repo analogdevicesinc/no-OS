@@ -128,17 +128,17 @@ typedef struct
 
 typedef struct
 {
-	uint32_t rx;
-	int32_t rx_gain;
-	uint32_t rx_dec;
+	uint32_t rx;			// 1, 2, 3(both)
+	int32_t rx_gain;		// -12, -6, 0, 6
+	uint32_t rx_dec;		// 1, 2, 4
 	int16_t rx_coef[64];
 }AD9361_RXFIRConfig;
 
 typedef struct
 {
-	uint32_t tx;
-	int32_t tx_gain;
-	uint32_t tx_int;
+	uint32_t tx;			// 1, 2, 3(both)
+	int32_t tx_gain;		// -6, 0
+	uint32_t tx_int;		// 1, 2, 4
 	int16_t tx_coef[64];
 }AD9361_TXFIRConfig;
 
