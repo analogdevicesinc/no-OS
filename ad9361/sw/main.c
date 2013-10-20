@@ -187,15 +187,16 @@ int main(void)
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
 	adc_init();
+#ifdef DAC_DMA
+	dac_init(DATA_SEL_DMA);
+#else
 	dac_init(DATA_SEL_DDS);
-	//dac_init(DATA_SEL_DMA);
-
+#endif
 	usleep(1000000);
-
-	//adc_capture(16384, ADC_DDR_BASEADDR);
-
-	//while(1);
-
+#ifdef CAPTURE_SCRIPT
+	adc_capture(16384, ADC_DDR_BASEADDR);
+	while(1);
+#endif
 	get_help(NULL, 0);
 
 	while(1)
