@@ -547,12 +547,12 @@ int ad9361_reset(struct ad9361_rf_phy *phy)
 		mdelay(1);
 		gpio_set_value(phy->pdata->gpio_resetb, 1);
 		mdelay(1);
-		dev_dbg("%s: by GPIO", __func__);
+		dev_dbg("%s: by GPIO\n", __func__);
 		return 0;
 	} else {
 		ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET); /* RESET */
 		ad9361_spi_write(REG_SPI_CONF, 0x0);
-		dev_dbg("%s: by SPI", __func__);
+		dev_dbg("%s: by SPI\n", __func__);
 		return 0;
 	}
 
