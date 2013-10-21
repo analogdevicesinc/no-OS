@@ -184,6 +184,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->quad_track_en = true;
 
 	ad9361_reset(phy);
+	ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
+	ad9361_spi_write(REG_SPI_CONF, 0x0);
 
 	ret = ad9361_spi_read(REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
