@@ -51,7 +51,7 @@
 
 #define SYNTH_LUT_SIZE	53
 
-const struct SynthLUT SynthLUT_FDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
+static const struct SynthLUT SynthLUT_FDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
 {
 	{12605, 10, 0, 4, 0, 15, 8, 8, 12, 3, 14, 15, 11}, /* 40 MHz */
 	{12245, 10, 0, 4, 0, 15, 8, 9, 12, 3, 14, 15, 11},
@@ -385,7 +385,7 @@ struct SynthLUT SynthLUT_TDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
 
 #define SIZE_FULL_TABLE		77
 
-const u8 full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] =
+static const u8 full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] =
 {{  /* 800 MHz */
 	{0x00, 0x00, 0x20}, {0x00, 0x00, 0x00}, {0x00, 0x00, 0x00},
 	{0x00, 0x01, 0x00}, {0x00, 0x02, 0x00}, {0x00, 0x03, 0x00},
@@ -471,7 +471,7 @@ const u8 full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] =
 
 #define SIZE_SPLIT_TABLE		41
 
-const u8 split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] =
+static const u8 split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] =
 {{  /* 800 MHz */
 	{0x00, 0x18, 0x20}, {0x01, 0x18, 0x20}, {0x02, 0x18, 0x20},
 	{0x03, 0x18, 0x20}, {0x04, 0x18, 0x20}, {0x05, 0x18, 0x20},
@@ -522,22 +522,23 @@ const u8 split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] =
 
 /* Mixer GM Sub-table */
 
-const u8 gm_st_gain[16]= {0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60,
+static const u8 gm_st_gain[16]= {0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60,
 			 0x5C, 0x58, 0x54, 0x50, 0x4C, 0x48, 0x30, 0x18, 0x0};
-const u8 gm_st_ctrl[16]= {0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
+static const u8 gm_st_ctrl[16]= {0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
 			 0x2C, 0x2F, 0x31, 0x33, 0x34, 0x35, 0x3A, 0x3D, 0x3E};
 
 
-const s8 lna_table[] = {6, 17, 19, 25};
-const s8 tia_table[] = {-6, 0};
-const s8 mixer_table[] = {0, 5, 11, 16,
+static const s8 lna_table[] = {6, 17, 19, 25};
+static const s8 tia_table[] = {-6, 0};
+static const s8 mixer_table[] = {0, 5, 11, 16,
 			17, 18, 19, 20,
 			21, 22, 23, 24,
 			25, 26,	27, 28};
 
-const char ad9361_ensm_states[][10] = { "sleep", "", "", "", "", "alert", "tx", "tx flush",
-	"rx", "rx_flush", "fdd", "fdd_flush"};
-
+static const char *ad9361_ensm_states[] = {
+		"sleep", "", "", "", "", "alert", "tx", "tx flush",
+		"rx", "rx_flush", "fdd", "fdd_flush"
+};
 
 int ad9361_reset(struct ad9361_rf_phy *phy)
 {
@@ -723,7 +724,7 @@ static int ad9361_run_calibration(struct ad9361_rf_phy *phy, u32 mask)
 	return ad9361_check_cal_done(phy, REG_CALIBRATION_CTRL, mask, 0);
 }
 
-enum rx_gain_table_name ad9361_gt_tableindex(u64 freq)
+static enum rx_gain_table_name ad9361_gt_tableindex(u64 freq)
 {
 	if (freq <= 1300000000ULL)
 		return TBL_200_1300_MHZ;
@@ -890,7 +891,7 @@ int ad9361_get_tx_atten(struct ad9361_rf_phy *phy, u32 tx_num)
 	return code;
 }
 
-u32 ad9361_rfvco_tableindex(unsigned long freq)
+static u32 ad9361_rfvco_tableindex(unsigned long freq)
 {
 	if (freq < 50000000UL)
 		return LUT_FTDD_40;
@@ -1338,7 +1339,7 @@ out:
 
 }
 
-void ad9361_init_gain_info(struct rx_gain_info *rx_gain,
+static void ad9361_init_gain_info(struct rx_gain_info *rx_gain,
 	enum rx_gain_table_type type, int starting_gain,
 	int max_gain, int gain_step, int max_idx, int idx_offset)
 {
@@ -1373,7 +1374,7 @@ int ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
 	return 0;
 }
 
-int ad9361_en_dis_tx(struct ad9361_rf_phy *phy, u32 tx_if, u32 enable)
+static int ad9361_en_dis_tx(struct ad9361_rf_phy *phy, u32 tx_if, u32 enable)
 {
 	if (tx_if == 2 && !phy->pdata->rx2tx2)
 		return -EINVAL;
@@ -1382,7 +1383,7 @@ int ad9361_en_dis_tx(struct ad9361_rf_phy *phy, u32 tx_if, u32 enable)
 			TX_CHANNEL_ENABLE(tx_if), enable);
 }
 
-int ad9361_en_dis_rx(struct ad9361_rf_phy *phy, u32 rx_if, u32 enable)
+static int ad9361_en_dis_rx(struct ad9361_rf_phy *phy, u32 rx_if, u32 enable)
 {
 	if (rx_if == 2 && !phy->pdata->rx2tx2)
 		return -EINVAL;
