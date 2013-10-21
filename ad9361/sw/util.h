@@ -130,6 +130,7 @@ static inline unsigned long __ffs(unsigned long word)
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 void udelay(unsigned long usecs);
+void mdelay(unsigned long msecs);
 int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pha,
 				 uint8_t  clk_pol);

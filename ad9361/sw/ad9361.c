@@ -544,10 +544,16 @@ int ad9361_reset(struct ad9361_rf_phy *phy)
 {
 	if (gpio_is_valid(phy->pdata->gpio_resetb)) {
 		gpio_set_value(phy->pdata->gpio_resetb, 0);
-		udelay(2);
+		mdelay(1);
 		gpio_set_value(phy->pdata->gpio_resetb, 1);
-		udelay(10);
-		return 1;
+		mdelay(1);
+		dev_dbg("%s: by GPIO", __func__);
+		return 0;
+	} else {
+		ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET); /* RESET */
+		ad9361_spi_write(REG_SPI_CONF, 0x0);
+		dev_dbg("%s: by SPI", __func__);
+		return 0;
 	}
 
 	return -ENODEV;
@@ -1122,7 +1128,7 @@ void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, u8 ensm_state)
 		phy->ensm_pin_ctl_en = 0;
 	}
 
-	if (dev_ensm_state & dev_ensm_state)
+	if (dev_ensm_state)
 		val &= ~(TO_ALERT);
 
 	switch (ensm_state) {
