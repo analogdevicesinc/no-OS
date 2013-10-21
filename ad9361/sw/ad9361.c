@@ -1123,9 +1123,9 @@ void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, u8 ensm_state)
 	 */
 	if (val & ENABLE_ENSM_PIN_CTRL) {
 		val &= ~ENABLE_ENSM_PIN_CTRL;
-		phy->ensm_pin_ctl_en = 1;
+		phy->ensm_pin_ctl_en = true;
 	} else {
-		phy->ensm_pin_ctl_en = 0;
+		phy->ensm_pin_ctl_en = false;
 	}
 
 	if (dev_ensm_state)
