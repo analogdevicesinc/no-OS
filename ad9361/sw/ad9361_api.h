@@ -49,81 +49,125 @@
 /******************************************************************************/
 typedef struct
 {
-	/* Mode Setup */
-	uint8_t		two_rx_two_tx_mode_enable;
-	uint8_t		frequency_division_duplex_mode_enable;
-	uint8_t		split_gain_table_mode_enable;
-	uint8_t		tdd_use_fdd_vco_tables_enable;
-	uint8_t		tdd_use_dual_synth_mode_enable;
-	uint32_t	dcxo_coarse_and_fine_tune[2];
-	uint8_t		ensm_enable_pin_pulse_mode_enable;
-	uint8_t		ensm_enable_txnrx_control_enable;
-	uint32_t	rx_rf_port_input_select;
-	uint32_t	tx_rf_port_output_select;
-	uint32_t	rx_path_clock_frequencies[6];
-	uint32_t	tx_path_clock_frequencies[6];
-	uint64_t	rx_synthesizer_frequency_hz;
-	uint64_t	tx_synthesizer_frequency_hz;
-	uint32_t	rf_rx_bandwidth_hz;
-	uint32_t	rf_tx_bandwidth_hz;
-	uint8_t		update_tx_gain_in_alert_enable;
-	int32_t		tx_attenuation_mdB;
+	/* Reference Clock */
+	uint32_t	reference_clk_rate;
+	/* Base Configuration */
+	uint8_t		two_rx_two_tx_mode_enable;	// adi,2rx-2tx-mode-enable
+	uint8_t		frequency_division_duplex_mode_enable;	//adi,frequency-division-duplex-mode-enable
+	uint8_t		tdd_use_dual_synth_mode_enable;	//adi,tdd-use-dual-synth-mode-enable
+	uint8_t		tdd_use_fdd_vco_tables_enable;	//adi,tdd-use-fdd-vco-tables-enable
+	uint8_t		split_gain_table_mode_enable;	//adi,split-gain-table-mode-enable
+	/* ENSM Control */
+	uint8_t		ensm_enable_pin_pulse_mode_enable;	//adi,ensm-enable-pin-pulse-mode-enable
+	uint8_t		ensm_enable_txnrx_control_enable;	//adi,ensm-enable-txnrx-control-enable
+	/* LO Control */
+	uint64_t	rx_synthesizer_frequency_hz;	//adi,rx-synthesizer-frequency-hz
+	uint64_t	tx_synthesizer_frequency_hz;	//adi,tx-synthesizer-frequency-hz
+	/* Rate & BW Control */
+	uint32_t	rx_path_clock_frequencies[6];	//adi,rx-path-clock-frequencies
+	uint32_t	tx_path_clock_frequencies[6];	//adi,tx-path-clock-frequencies
+	uint32_t	rf_rx_bandwidth_hz;	//adi,rf-rx-bandwidth-hz
+	uint32_t	rf_tx_bandwidth_hz;	//adi,rf-tx-bandwidth-hz
+	/* RF Port Control */
+	uint32_t	rx_rf_port_input_select;	//adi,rx-rf-port-input-select
+	uint32_t	tx_rf_port_input_select;	//adi,tx-rf-port-input-select
+	/* TX Attenuation Control */
+	int32_t		tx_attenuation_mdB;	//adi,tx-attenuation-mdB
+	uint8_t		update_tx_gain_in_alert_enable;	//adi,update-tx-gain-in-alert-enable
+	/* Reference Clock Control */
+	uint8_t		xo_disable_use_ext_refclk_enable;	//adi,xo-disable-use-ext-refclk-enable
+	uint32_t	dcxo_coarse_and_fine_tune[2];	//adi,dcxo-coarse-and-fine-tune
 	/* Gain Control */
-	uint8_t		gc_rx1_mode;
-	uint8_t		gc_rx2_mode;
-	uint8_t		gc_adc_ovr_sample_size;
-	uint8_t		gc_adc_small_overload_thresh;
-	uint8_t		gc_adc_large_overload_thresh;
-	uint16_t	gc_lmt_overload_high_thresh;
-	uint16_t	gc_lmt_overload_low_thresh;
-	uint8_t		gc_analog_settling_time;
-	uint16_t	gc_dec_pow_measurement_duration;
-	uint8_t		gc_low_power_thresh;
-	uint8_t		gc_dig_gain_enable;
-	uint8_t		gc_max_dig_gain;
-	/* Manual Gain Control Setup */
-	uint8_t		mgc_rx1_ctrl_inp_enable;
-	uint8_t		mgc_rx2_ctrl_inp_enable;
-	uint8_t		mgc_inc_gain_step;
-	uint8_t		mgc_dec_gain_step;
-	uint8_t		mgc_split_table_ctrl_inp_gain_mode;
-	/* Automatic Gain Control Setup */
-	uint8_t		agc_attack_delay_us;
-	uint8_t		agc_settling_delay;
-	uint8_t		agc_outer_thresh_high;
-	uint8_t		agc_outer_thresh_high_dec_steps;
-	uint8_t		agc_inner_thresh_high;
-	uint8_t		agc_inner_thresh_high_dec_steps;
-	uint8_t		agc_inner_thresh_low;
-	uint8_t		agc_inner_thresh_low_inc_steps;
-	uint8_t		agc_outer_thresh_low;
-	uint8_t		agc_outer_thresh_low_inc_steps;
-	uint8_t		agc_adc_small_overload_exceed_counter;
-	uint8_t		agc_adc_large_overload_exceed_counter;
-	uint8_t		agc_adc_large_overload_inc_steps;
-	uint8_t		agc_adc_lmt_small_overload_prevent_gain_inc_enable;
-	uint8_t		agc_lmt_overload_large_exceed_counter;
-	uint8_t		agc_lmt_overload_small_exceed_counter;
-	uint8_t		agc_lmt_overload_large_inc_steps;
-	uint8_t		agc_dig_saturation_exceed_counter;
-	uint8_t		agc_dig_gain_step_size;
-	uint8_t		agc_sync_for_gain_counter_enable;
-	uint32_t	agc_gain_update_counter;
-	uint8_t		agc_immed_gain_change_if_large_adc_overload_enable;
-	uint8_t		agc_immed_gain_change_if_large_lmt_overload_enable;
-	/* RSSI */
-	uint8_t		rssi_restart_mode;
-	uint8_t		rssi_unit_is_rx_samples_enable;
-	uint32_t	rssi_delay;
-	uint32_t	rssi_wait;
-	uint32_t	rssi_duration;
-	/* Control Outputs */
-	uint8_t		ctrl_outs_index;
-	uint8_t		ctrl_outs_enable_mask;
-	/* AuxADC Temp Sense Control */
-	uint16_t	temp_sense_measurement_interval_ms;
-	int8_t		temp_sense_offset_signed;
-	uint8_t		temp_sense_periodic_measurement_enable;
+	uint8_t		gc_rx1_mode;	//adi,gc-rx1-mode
+	uint8_t		gc_rx2_mode;	//adi,gc-rx2-mode
+	uint8_t		gc_adc_large_overload_thresh;	//adi,gc-adc-large-overload-thresh
+	uint8_t		gc_adc_ovr_sample_size;	//adi,gc-adc-ovr-sample-size
+	uint8_t		gc_adc_small_overload_thresh;	//adi,gc-adc-small-overload-thresh
+	uint8_t		gc_analog_settling_time;	//adi,gc-analog-settling-time
+	uint16_t	gc_dec_pow_measurement_duration;	//adi,gc-dec-pow-measurement-duration
+	uint8_t		gc_dig_gain_enable;	//adi,gc-dig-gain-enable
+	uint16_t	gc_lmt_overload_high_thresh;	//adi,gc-lmt-overload-high-thresh
+	uint16_t	gc_lmt_overload_low_thresh;	//adi,gc-lmt-overload-low-thresh
+	uint8_t		gc_low_power_thresh;	//adi,gc-low-power-thresh
+	uint8_t		gc_max_dig_gain;	//adi,gc-max-dig-gain
+	/* Gain MGC Control */
+	uint8_t		mgc_dec_gain_step;	//adi,mgc-dec-gain-step
+	uint8_t		mgc_inc_gain_step;	//adi,mgc-inc-gain-step
+	uint8_t		mgc_rx1_ctrl_inp_enable;	//adi,mgc-rx1-ctrl-inp-enable
+	uint8_t		mgc_rx2_ctrl_inp_enable;	//adi,mgc-rx2-ctrl-inp-enable
+	uint8_t		mgc_split_table_ctrl_inp_gain_mode;	//adi,mgc-split-table-ctrl-inp-gain-mode
+	/* Gain AGC Control */
+	uint8_t		agc_adc_large_overload_exceed_counter;	//adi,agc-adc-large-overload-exceed-counter
+	uint8_t		agc_adc_large_overload_inc_steps;	//adi,agc-adc-large-overload-inc-steps
+	uint8_t		agc_adc_lmt_small_overload_prevent_gain_inc_enable;	//adi,agc-adc-lmt-small-overload-prevent-gain-inc-enable
+	uint8_t		agc_adc_small_overload_exceed_counter;	//adi,agc-adc-small-overload-exceed-counter
+	uint8_t		agc_attack_delay_us;	//adi,agc-attack-delay-us
+	uint8_t		agc_dig_gain_step_size;	//adi,agc-dig-gain-step-size
+	uint8_t		agc_dig_saturation_exceed_counter;	//adi,agc-dig-saturation-exceed-counter
+	uint32_t	agc_gain_update_counter;	//adi,agc-gain-update-counter
+	uint8_t		agc_immed_gain_change_if_large_adc_overload_enable;	//adi,agc-immed-gain-change-if-large-adc-overload-enable
+	uint8_t		agc_immed_gain_change_if_large_lmt_overload_enable;	//adi,agc-immed-gain-change-if-large-lmt-overload-enable
+	uint8_t		agc_inner_thresh_high;	//adi,agc-inner-thresh-high
+	uint8_t		agc_inner_thresh_high_dec_steps;	//adi,agc-inner-thresh-high-dec-steps
+	uint8_t		agc_inner_thresh_low;	//adi,agc-inner-thresh-low
+	uint8_t		agc_inner_thresh_low_inc_steps;	//adi,agc-inner-thresh-low-inc-steps
+	uint8_t		agc_lmt_overload_large_exceed_counter;	//adi,agc-lmt-overload-large-exceed-counter
+	uint8_t		agc_lmt_overload_large_inc_steps;	//adi,agc-lmt-overload-large-inc-steps
+	uint8_t		agc_lmt_overload_small_exceed_counter;	//adi,agc-lmt-overload-small-exceed-counter
+	uint8_t		agc_outer_thresh_high;	//adi,agc-outer-thresh-high
+	uint8_t		agc_outer_thresh_high_dec_steps;	//adi,agc-outer-thresh-high-dec-steps
+	uint8_t		agc_outer_thresh_low;	//adi,agc-outer-thresh-low
+	uint8_t		agc_outer_thresh_low_inc_steps;	//adi,agc-outer-thresh-low-inc-steps
+	uint8_t		agc_settling_delay;	//adi,agc-settling-delay
+	uint8_t		agc_sync_for_gain_counter_enable;	//adi,agc-sync-for-gain-counter-enable
+	/* RSSI Control */
+	uint32_t	rssi_delay;	//adi,rssi-delay
+	uint32_t	rssi_duration;	//adi,rssi-duration
+	uint8_t		rssi_restart_mode;	//adi,rssi-restart-mode
+	uint8_t		rssi_unit_is_rx_samples_enable;	//adi,rssi-unit-is-rx-samples-enable
+	uint32_t	rssi_wait;	//adi,rssi-wait
+	/* Aux ADC Control */
+	uint32_t	aux_adc_decimation;	//adi,aux-adc-decimation
+	uint32_t	aux_adc_rate;	//adi,aux-adc-rate
+	/* Temperature Sensor Control */
+	uint32_t	temp_sense_decimation;	//adi,temp-sense-decimation
+	uint16_t	temp_sense_measurement_interval_ms;	//adi,temp-sense-measurement-interval-ms
+	int8_t		temp_sense_offset_signed;	//adi,temp-sense-offset-signed
+	uint8_t		temp_sense_periodic_measurement_enable;	//adi,temp-sense-periodic-measurement-enable
+	/* Control Out Setup */
+	uint8_t		ctrl_outs_enable_mask;	//adi,ctrl-outs-enable-mask
+	uint8_t		ctrl_outs_index;	//adi,ctrl-outs-index
+	/* External LNA Control */
+	uint32_t	elna_gain_mdB;	//adi,elna-gain-mdB
+	uint32_t	elna_bypass_loss_mdB;	//adi,elna-bypass-loss-mdB
+	uint8_t		elna_rx1_gpo0_control_enable;	//adi,elna-rx1-gpo0-control-enable
+	uint8_t		elna_rx2_gpo1_control_enable;	//adi,elna-rx2-gpo1-control-enable
+	/* Digital Interface Control */
+	uint8_t		pp_tx_swap_enable;	//adi,pp-tx-swap-enable
+	uint8_t		pp_rx_swap_enable;	//adi,pp-rx-swap-enable
+	uint8_t		tx_channel_swap_enable;	//adi,tx-channel-swap-enable
+	uint8_t		rx_channel_swap_enable;	//adi,rx-channel-swap-enable
+	uint8_t		rx_frame_pulse_mode_enable;	//adi,rx-frame-pulse-mode-enable
+	uint8_t		two_t_two_r_timing_enable;	//adi,2t2r-timing-enable
+	uint8_t		invert_data_bus_enable;	//adi,invert-data-bus-enable
+	uint8_t		invert_data_clk_enable;	//adi,invert-data-clk-enable
+	uint8_t		fdd_alt_word_order_enable;	//adi,fdd-alt-word-order-enable
+	uint8_t		invert_rx_frame_enable;	//adi,invert-rx-frame-enable
+	uint8_t		fdd_rx_rate_2tx_enable;	//adi,fdd-rx-rate-2tx-enable
+	uint8_t		swap_ports_enable;	//adi,swap-ports-enable
+	uint8_t		single_data_rate_enable;	//adi,single-data-rate-enable
+	uint8_t		lvds_mode_enable;	//adi,lvds-mode-enable
+	uint8_t		half_duplex_mode_enable;	//adi,half-duplex-mode-enable
+	uint8_t		single_port_mode_enable;	//adi,single-port-mode-enable
+	uint8_t		full_port_enable;	//adi,full-port-enable
+	uint8_t		full_duplex_swap_bits_enable;	//adi,full-duplex-swap-bits-enable
+	uint32_t	delay_rx_data;	//adi,delay-rx-data
+	uint32_t	rx_data_clock_delay;	//adi,rx-data-clock-delay
+	uint32_t	rx_data_delay;	//adi,rx-data-delay
+	uint32_t	tx_fb_clock_delay;	//adi,tx-fb-clock-delay
+	uint32_t	tx_data_delay;	//adi,tx-data-delay
+	uint32_t	lvds_bias_mV;	//adi,lvds-bias-mV
+	uint8_t		lvds_rx_onchip_termination_enable;	// adi,lvds-rx-onchip-termination-enable
 }AD9361_InitParam;
 
 typedef struct
