@@ -158,7 +158,7 @@ void CONSOLE_Print(char* str, ...)
                 xMask /= 16;
                 chNumber--;
             }
-            while(chNumber < firstParam)
+            while(chNumber <= firstParam)
             {
                 UART_WriteChar('0');
                 chNumber++;
@@ -170,7 +170,7 @@ void CONSOLE_Print(char* str, ...)
             break;
         case 'f':
             doubleArg = va_arg(argp, double);
-            chNumber = secondParam;
+            chNumber = (secondParam > 0) ? secondParam : 3;
             while(chNumber > 0)
             {
                 multiplier *= 10;
@@ -192,7 +192,7 @@ void CONSOLE_Print(char* str, ...)
                 dMask /= 10;
                 chNumber--;
             }
-            while(chNumber < secondParam)
+            while(chNumber <= secondParam)
             {
                 UART_WriteChar('0');
                 chNumber++;
