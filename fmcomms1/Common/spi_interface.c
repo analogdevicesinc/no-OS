@@ -51,7 +51,7 @@
 /* Pointer to functions - used depending on the type of I2C Core used (Hardware or Softcore) */
 uint32_t (*I2C_Write)(uint32_t, uint32_t, uint32_t, uint8_t*);
 uint32_t (*I2C_Read)(uint32_t, uint32_t, uint32_t, uint8_t*);
-uint32_t (*I2C_Init)(uint32_t, uint32_t, uint32_t);
+uint32_t (*I2C_Init)(uint32_t, uint32_t, uint32_t, uint32_t);
 
 /*****************************************************************************/
 /************************ Constants Definitions ******************************/
@@ -252,7 +252,8 @@ int32_t PIC_ReadFwVersion()
 *
 * @return Returns -1 in case of error, 0 for success
 ******************************************************************************/
-int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C)
+int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C,
+				 uint32_t carrierBoard)
 {
 	uint32_t ret;
     uint8_t wrBuf[1] = {0x02};
@@ -274,7 +275,7 @@ int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C)
     	I2C_Init	= &I2C_Init_axi;
     }
 
-    ret = I2C_Init(picI2cAddr, fmcPort, enableCommMux);
+    ret = I2C_Init(picI2cAddr, fmcPort, enableCommMux, carrierBoard);
 
     if(ret)
         return -1;

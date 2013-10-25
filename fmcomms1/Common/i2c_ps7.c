@@ -112,7 +112,8 @@ uint32_t I2C_EnableMux_ps7(uint8_t sel)
 *
 * @return Returns 0 or negative error code.
 ******************************************************************************/
-uint32_t I2C_Init_ps7(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux)
+uint32_t I2C_Init_ps7(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux,
+					  uint32_t carrierBoard)
 {
 	uint32_t ret = 0;
 

@@ -117,7 +117,8 @@
 /*****************************************************************************/
 
 /** Initializes the communication with the Microblaze I2C peripheral */
-uint32_t I2C_Init_ps7(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux);
+uint32_t I2C_Init_ps7(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux,
+					  uint32_t carrierBoard);
 /** Reads data from an I2C slave. */
 uint32_t I2C_Read_ps7(uint32_t i2cAddr, uint32_t regAddr, uint32_t rxSize, uint8_t* rxBuf);
 /** Writes data to an I2C slave. */

@@ -108,7 +108,8 @@ typedef struct _stDevConfig
 /** Reads the PIC firmware version */
 int32_t PIC_ReadFwVersion();
 /** Initializes the communication with the PIC */
-int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C);
+int32_t SPI_Init(uint32_t fmcPort, uint32_t enableCommMux, uint32_t ps7I2C,
+				 uint32_t carrierBoard);
 /** Reads data from the selected device */
 int32_t SPI_Read(uint32_t spiSel, uint32_t regAddr, uint32_t* data); 
 /** Writes data to the selected device */

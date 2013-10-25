@@ -119,7 +119,6 @@ int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit)
     switch(pDefInit->carrierBoard)
     {
     	case XILINX_ZC702:
-            ps7Interface = 1;
         case XILINX_KC705:
         case XILINX_VC707:
             enableCommMux = 1;
@@ -132,7 +131,8 @@ int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit)
             break;
     }
 	XCOMM_boardFmcPort = enableCommMux ? FMC_HPC : pDefInit->fmcPort;
-    ret = SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface);
+    ret = SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface,
+    			   pDefInit->carrierBoard);
 
     return ret;
 }
@@ -162,7 +162,6 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     switch(pDefInit->carrierBoard)
     {
     	case XILINX_ZC702:
-            ps7Interface = 1;
         case XILINX_KC705:
         case XILINX_VC707:
             enableCommMux = 1;
@@ -176,7 +175,8 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     }
 
     XCOMM_boardFmcPort = enableCommMux ? FMC_HPC : pDefInit->fmcPort;
-    if(SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface) < 0)
+    if(SPI_Init(pDefInit->fmcPort, enableCommMux, ps7Interface,
+    			pDefInit->carrierBoard) < 0)
     	return -1;
 
     /* Initialize the AD9548 */
