@@ -43,9 +43,12 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 
-/***************************************************************************//**
- * @brief ad9361_init
-*******************************************************************************/
+/**
+ * Initialize the AD9361 part.
+ * @param init_param The structure that contains the AD9361 initial parameters.
+ * @return A structure that contains the AD9361 current state in case of
+ *         success, negative error code otherwise.
+ */
 struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 {
 	struct ad9361_rf_phy *phy;
@@ -260,9 +263,12 @@ out:
 	return ERR_PTR(ENODEV);
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_en_state_machine_mode
-*******************************************************************************/
+/**
+ * Set the Enable State Machine (ENSM) mode.
+ * @param phy The AD9361 current state structure.
+ * @param mode The ENSM mode (SLEEP, ALERT, FDD, PINCTRL).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t mode)
 {
@@ -271,9 +277,12 @@ int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_en_state_machine_mode
-*******************************************************************************/
+/**
+ * Get the Enable State Machine (ENSM) mode.
+ * @param phy The AD9361 current state structure.
+ * @param mode A variable to store the selected ENSM mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t *mode)
 {
@@ -282,9 +291,13 @@ int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_rf_gain
-*******************************************************************************/
+/**
+ * Set the receive RF gain for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel number (1, 2).
+ * @param gain_db The RF gain (dB).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 							   uint8_t ch, int32_t gain_db)
 {
@@ -297,9 +310,13 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_rf_gain
-*******************************************************************************/
+/**
+ * Get current receive RF gain for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel number (1, 2).
+ * @param gain_db A variable to store the RF gain (dB).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 							   uint8_t ch, int32_t *gain_db)
 {
@@ -312,9 +329,12 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_rf_bandwidth
-*******************************************************************************/
+/**
+ * Set the RX RF bandwidth.
+ * @param phy The AD9361 current state structure.
+ * @param bandwidth_hz The desired bandwidth (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t bandwidth_hz)
 {
@@ -329,9 +349,12 @@ int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_rf_bandwidth
-*******************************************************************************/
+/**
+ * Get the RX RF bandwidth.
+ * @param phy The AD9361 current state structure.
+ * @param bandwidth_hz A variable to store the bandwidth value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t *bandwidth_hz)
 {
@@ -340,9 +363,12 @@ int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_sampling_freq
-*******************************************************************************/
+/**
+ * Set the RX sampling frequency.
+ * @param phy The AD9361 current state structure.
+ * @param sampling_freq_hz The desired frequency (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t sampling_freq_hz)
 {
@@ -362,9 +388,12 @@ int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_sampling_freq
-*******************************************************************************/
+/**
+ * Get current RX sampling frequency.
+ * @param phy The AD9361 current state structure.
+ * @param sampling_freq_hz A variable to store the frequency value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t *sampling_freq_hz)
 {
@@ -374,9 +403,12 @@ int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_lo_freq
-*******************************************************************************/
+/**
+ * Set the RX LO frequency.
+ * @param phy The AD9361 current state structure.
+ * @param lo_freq_hz The desired frequency (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t lo_freq_hz)
 {
@@ -388,9 +420,12 @@ int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_lo_freq
-*******************************************************************************/
+/**
+ * Get current RX LO frequency.
+ * @param phy The AD9361 current state structure.
+ * @param lo_freq_hz A variable to store the frequency value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t *lo_freq_hz)
 {
@@ -400,9 +435,13 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_rssi
-*******************************************************************************/
+/**
+ * Get the RSSI for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel (1, 2).
+ * @param rssi A variable to store the RSSI.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 							uint8_t ch, struct rf_rssi *rssi)
 {
@@ -415,9 +454,14 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_gain_control_mode
-*******************************************************************************/
+/**
+ * Set the gain control mode for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel (1, 2).
+ * @param gc_mode The gain control mode (GAIN_MGC, GAIN_FASTATTACK_AGC,
+ *                GAIN_SLOWATTACK_AGC, GAIN_HYBRID_AGC).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 										 uint8_t ch, uint8_t gc_mode)
 {
@@ -431,9 +475,13 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_gain_control_mode
-*******************************************************************************/
+/**
+ * Get the gain control mode for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel (1, 2).
+ * @param gc_mode A variable to store the gain control mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 										 uint8_t ch, uint8_t *gc_mode)
 {
@@ -442,9 +490,12 @@ int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_fir_config
-*******************************************************************************/
+/**
+ * Set the RX FIR filter configuration.
+ * @param phy The AD9361 current state structure.
+ * @param fir_cfg FIR filter configuration.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 								  AD9361_RXFIRConfig fir_cfg)
 {
@@ -457,9 +508,12 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_fir_en_dis
-*******************************************************************************/
+/**
+ * Enable/disable the RX FIR filter.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t en_dis)
 {
@@ -477,9 +531,12 @@ int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_fir_en_dis
-*******************************************************************************/
+/**
+ * Get the status of the RX FIR filter.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t *en_dis)
 {
@@ -488,9 +545,13 @@ int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_tx_attenuation
-*******************************************************************************/
+/**
+ * Set the transmit attenuation for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel number (1, 2).
+ * @param attenuation_mdb The attenuation (mdB).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t attenuation_mdb)
 {
@@ -503,9 +564,13 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_tx_attenuation
-*******************************************************************************/
+/**
+ * Get current transmit attenuation for the selected channel.
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel number (1, 2).
+ * @param attenuation_mdb A variable to store the attenuation value (mdB).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t *attenuation_db)
 {
@@ -519,9 +584,12 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_tx_attenuation
-*******************************************************************************/
+/**
+ * Set the TX RF bandwidth.
+ * @param phy The AD9361 current state structure.
+ * @param bandwidth_hz The desired bandwidth (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t  bandwidth_hz)
 {
@@ -536,9 +604,12 @@ int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_tx_attenuation
-*******************************************************************************/
+/**
+ * Get the TX RF bandwidth.
+ * @param phy The AD9361 current state structure.
+ * @param bandwidth_hz A variable to store the bandwidth value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t *bandwidth_hz)
 {
@@ -547,9 +618,12 @@ int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_tx_sampling_freq
-*******************************************************************************/
+/**
+ * Set the TX sampling frequency.
+ * @param phy The AD9361 current state structure.
+ * @param sampling_freq_hz The desired frequency (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t sampling_freq_hz)
 {
@@ -569,9 +643,12 @@ int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_tx_sampling_freq
-*******************************************************************************/
+/**
+ * Get current TX sampling frequency.
+ * @param phy The AD9361 current state structure.
+ * @param sampling_freq_hz A variable to store the frequency value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t *sampling_freq_hz)
 {
@@ -581,9 +658,12 @@ int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_tx_lo_freq
-*******************************************************************************/
+/**
+ * Set the TX LO frequency.
+ * @param phy The AD9361 current state structure.
+ * @param lo_freq_hz The desired frequency (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t lo_freq_hz)
 {
@@ -595,9 +675,12 @@ int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_tx_lo_freq
-*******************************************************************************/
+/**
+ * Get current TX LO frequency.
+ * @param phy The AD9361 current state structure.
+ * @param lo_freq_hz A variable to store the frequency value (Hz).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t *lo_freq_hz)
 {
@@ -607,9 +690,12 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_tx_fir_config
-*******************************************************************************/
+/**
+ * Set the TX FIR filter configuration.
+ * @param phy The AD9361 current state structure.
+ * @param fir_cfg FIR filter configuration.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 								  AD9361_TXFIRConfig fir_cfg)
 {
@@ -622,9 +708,12 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_set_rx_fir_en_dis
-*******************************************************************************/
+/**
+ * Enable/disable the TX FIR filter.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t en_dis)
 {
@@ -642,9 +731,12 @@ int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/***************************************************************************//**
- * @brief ad9361_get_rx_fir_en_dis
-*******************************************************************************/
+/**
+ * Get the status of the TX FIR filter.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t *en_dis)
 {
