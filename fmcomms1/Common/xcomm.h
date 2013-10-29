@@ -97,6 +97,7 @@ typedef enum
     XILINX_KC705,
     XILINX_VC707,
     XILINX_ZC702,
+    XILINX_ZC706,
     DIGILENT_ZED,
 }XCOMM_CarrierBoard;
 

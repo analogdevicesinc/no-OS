@@ -160,8 +160,11 @@ uint32_t I2C_Init_axi(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux
     	if(carrierBoard == 3)
     		ret = I2C_EnableMux_axi(0x20);
     	else
-			ret = I2C_EnableMux_axi(fmcPort == 0 ? (uint8_t)I2C_LPC_AXI :
-												   (uint8_t)I2C_HPC_AXI);
+    		if(carrierBoard == 4)
+    			ret = I2C_EnableMux_axi(0x40);
+			else
+				ret = I2C_EnableMux_axi(fmcPort == 0 ? (uint8_t)I2C_LPC_AXI :
+													   (uint8_t)I2C_HPC_AXI);
     }
 
 	return ret;

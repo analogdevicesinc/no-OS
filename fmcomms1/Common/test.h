@@ -86,12 +86,14 @@
 	#define DDRDAC_BASEADDR       DDR_BASEADDR + 0x00010000
 #endif
 
-#define IICSEL_B0LPC_PS7      0x20
-#define IICSEL_B1HPC_PS7      0x20
-#define IICSEL_B0LPC_AXI      0x04
-#define IICSEL_B1HPC_AXI      0x02
-#define IICSEL_B0PIC          0x59
-#define IICSEL_B1PIC          0x58
+#define IICSEL_B0LPC_PS7        0x20
+#define IICSEL_B1HPC_PS7        0x20
+#define IICSEL_B0LPC_PS7_ZC706  0x40
+#define IICSEL_B1HPC_PS7_ZC706  0x40
+#define IICSEL_B0LPC_AXI        0x04
+#define IICSEL_B1HPC_AXI        0x02
+#define IICSEL_B0PIC            0x59
+#define IICSEL_B1PIC            0x58
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/

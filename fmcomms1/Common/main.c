@@ -84,7 +84,15 @@ int main()
     }
     else
     {
-    	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_AXI : IICSEL_B1HPC_AXI);
+        if(defInit.carrierBoard == XILINX_ZC706)
+        {
+        	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_PS7_ZC706 :
+        										   IICSEL_B1HPC_PS7_ZC706);
+        }
+        else
+        {
+        	fmcSel = (defInit.fmcPort == FMC_LPC ? IICSEL_B0LPC_AXI : IICSEL_B1HPC_AXI);
+        }
     }
 
     xil_printf("\n\rInitializing XCOMM I2C...\n\r");
