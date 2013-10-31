@@ -166,6 +166,11 @@ void DefinePorts(void)
 #if(defined(AD5270) || defined(AD5271) || defined(AD5272) || defined(AD5274))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
+/**************** Custom setups for PLL Synthesizers **************************/
+#if(defined(ADF4001) || defined(ADF4002) || defined(ADF4106) || \
+    defined(ADF4153) || defined(ADF4156) || defined(ADF4157))
+    SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
 }
 
 /***************************************************************************//**
