@@ -540,6 +540,11 @@ static const char *ad9361_ensm_states[] = {
 		"rx", "rx_flush", "fdd", "fdd_flush"
 };
 
+/**
+ * AD9361 Device Reset
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_reset(struct ad9361_rf_phy *phy)
 {
 	if (gpio_is_valid(phy->pdata->gpio_resetb)) {
@@ -559,6 +564,13 @@ int ad9361_reset(struct ad9361_rf_phy *phy)
 	return -ENODEV;
 }
 
+/**
+ * SPI multiple bytes register read.
+ * @param reg The register address.
+ * @param rbuf The data buffer.
+ * @param num The number of bytes to read.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_spi_readm(u32 reg, u8 *rbuf, u32 num)
 {
 	u8 buf[2];
@@ -589,6 +601,11 @@ static int ad9361_spi_readm(u32 reg, u8 *rbuf, u32 num)
 	return 0;
 }
 
+/**
+ * SPI register read.
+ * @param reg The register address.
+ * @return The register value or negative error code in case of failure.
+ */
 int ad9361_spi_read(u32 reg)
 {
 	u8 buf;
@@ -601,6 +618,13 @@ int ad9361_spi_read(u32 reg)
 	return buf;
 }
 
+/**
+ * SPI register bits read.
+ * @param reg The register address.
+ * @param mask The bits mask.
+ * @param offset The mask offset.
+ * @return The bits value or negative error code in case of failure.
+ */
 static int __ad9361_spi_readf(u32 reg, u32 mask, u32 offset)
 {
 	u8 buf;
@@ -619,9 +643,22 @@ static int __ad9361_spi_readf(u32 reg, u32 mask, u32 offset)
 	return buf;
 }
 
+/**
+ * SPI register bits read.
+ * @param reg The register address.
+ * @param mask The bits mask.
+ * @return The bits value or negative error code in case of failure.
+ */
 #define ad9361_spi_readf(reg, mask) \
 	__ad9361_spi_readf(reg, mask, __ffs(mask))
 
+
+/**
+ * SPI register write.
+ * @param reg The register address.
+ * @param val The value of the register.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_spi_write(u32 reg, u32 val)
 {
 	u8 buf[3];
@@ -646,6 +683,14 @@ int ad9361_spi_write(u32 reg, u32 val)
 	return 0;
 }
 
+/**
+ * SPI register bits write.
+ * @param reg The register address.
+ * @param mask The bits mask.
+ * @param offset The mask offset.
+ * @param val The bits value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int __ad9361_spi_writef(u32 reg,
 				 u32 mask, u32 offset, u32 val)
 {
@@ -665,9 +710,23 @@ static int __ad9361_spi_writef(u32 reg,
 	return ad9361_spi_write(reg, buf);
 }
 
+/**
+ * SPI register bits write.
+ * @param reg The register address.
+ * @param mask The bits mask.
+ * @param val The bits value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 #define ad9361_spi_writef(reg, mask, val) \
 	__ad9361_spi_writef(reg, mask, __ffs(mask), val)
 
+/**
+ * SPI multiple bytes register write.
+ * @param reg The register address.
+ * @param tbuf The data buffer.
+ * @param num The number of bytes to read.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 {
 	u8 buf[10];
@@ -700,6 +759,14 @@ static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 	return 0;
 }
 
+/**
+ * Check the calibration done bit.
+ * @param phy The AD9361 state structure.
+ * @param reg The register address.
+ * @param mask The bit mask.
+ * @param done_state The done state [0,1].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_check_cal_done(struct ad9361_rf_phy *phy, u32 reg,
 				 u32 mask, bool done_state)
 {
@@ -719,6 +786,14 @@ static int ad9361_check_cal_done(struct ad9361_rf_phy *phy, u32 reg,
 	return -ETIMEDOUT;
 }
 
+/**
+ * Run an AD9361 calibration and check the calibration done bit.
+ * @param phy The AD9361 state structure.
+ * @param mask The calibration bit mask[RX_BB_TUNE_CAL, TX_BB_TUNE_CAL,
+ *             RX_QUAD_CAL, TX_QUAD_CAL, RX_GAIN_STEP_CAL, TXMON_CAL,
+ *             RFDC_CAL, BBDC_CAL].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_run_calibration(struct ad9361_rf_phy *phy, u32 mask)
 {
 	int ret = ad9361_spi_write(REG_CALIBRATION_CTRL, mask);
@@ -730,6 +805,11 @@ static int ad9361_run_calibration(struct ad9361_rf_phy *phy, u32 mask)
 	return ad9361_check_cal_done(phy, REG_CALIBRATION_CTRL, mask, 0);
 }
 
+/**
+ * Choose the right RX gain table index for the selected frequency.
+ * @param freq The frequency value [Hz].
+ * @return The index to the RX gain table.
+ */
 static enum rx_gain_table_name ad9361_gt_tableindex(u64 freq)
 {
 	if (freq <= 1300000000ULL)
@@ -741,18 +821,35 @@ static enum rx_gain_table_name ad9361_gt_tableindex(u64 freq)
 	return TBL_4000_6000_MHZ;
 }
 
-/* PLL operates between 47 .. 6000 MHz which is > 2^32 */
-
+/**
+ * Shift the real frequency value, so it fits type unsigned long
+ * Note: PLL operates between 47 .. 6000 MHz which is > 2^32.
+ * @param freq The frequency value [Hz].
+ * @return The shifted frequency value.
+ */
 unsigned long ad9361_to_clk(u64 freq)
 {
 	return (unsigned long)(freq >> 1);
 }
 
+/**
+ * Shift back the frequency value, so it reflects the real value.
+ * Note: PLL operates between 47 .. 6000 MHz which is > 2^32.
+ * @param freq The frequency value [Hz].
+ * @return The shifted frequency value.
+ */
 u64 ad9361_from_clk(unsigned long freq)
 {
 	return ((u64)freq << 1);
 }
 
+/**
+ * Load the gain table for the selected frequency range and receiver.
+ * @param phy The AD9361 state structure.
+ * @param freq The frequency value [Hz].
+ * @param dest The destination [GT_RX1, GT_RX2].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_load_gt(struct ad9361_rf_phy *phy, u64 freq, u32 dest)
 {
 	const u8 (*tab)[3];
@@ -807,6 +904,13 @@ static int ad9361_load_gt(struct ad9361_rf_phy *phy, u64 freq, u32 dest)
 	return 0;
 }
 
+/**
+ * Setup the external low-noise amplifier (LNA).
+ * @param phy The AD9361 state structure.
+ * @param gain_mdB High gain(non-bypass) value [mdB].
+ * @param bypass_loss_mdB Low gain (bypass) value [mdB].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_setup_ext_lna(struct ad9361_rf_phy *phy, u32 gain_mdB,
 				u32 bypass_loss_mdB)
 {
@@ -817,6 +921,11 @@ static int ad9361_setup_ext_lna(struct ad9361_rf_phy *phy, u32 gain_mdB,
 			EXT_LNA_LOW_GAIN(bypass_loss_mdB / 500));
 }
 
+/**
+ * Load the Gm Sub Table.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 {
 	int i, addr;
@@ -845,6 +954,15 @@ static int ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 	return 0;
 }
 
+/**
+ * Set the attenuation for the selected TX channels.
+ * @param phy The AD9361 state structure.
+ * @param atten_mdb Attenuation value [mdB].
+ * @param tx1 Set true, the attenuation of the TX1 will be affected.
+ * @param tx2 Set true, the attenuation of the TX2 will be affected.
+ * @param immed Set true, an immediate update will take place.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
              bool tx1, bool tx2, bool immed)
 {
@@ -878,6 +996,12 @@ int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
 	return ret;
 }
 
+/**
+ * Get the attenuation for the selected TX channel.
+ * @param phy The AD9361 state structure.
+ * @param tx_num The selected channel [1, 2].
+ * @return The attenuation value [mdB] or negative error code in case of failure.
+ */
 int ad9361_get_tx_atten(struct ad9361_rf_phy *phy, u32 tx_num)
 {
 	u8 buf[2];
@@ -897,6 +1021,11 @@ int ad9361_get_tx_atten(struct ad9361_rf_phy *phy, u32 tx_num)
 	return code;
 }
 
+/**
+ * Choose the right RF VCO table index for the selected frequency.
+ * @param freq The frequency value [Hz].
+ * @return The index from the RF VCO table.
+ */
 static u32 ad9361_rfvco_tableindex(unsigned long freq)
 {
 	if (freq < 50000000UL)
@@ -908,6 +1037,14 @@ static u32 ad9361_rfvco_tableindex(unsigned long freq)
 	return LUT_FTDD_80;
 }
 
+/**
+ * Initialize the RFPLL VCO.
+ * @param phy The AD9361 state structure.
+ * @param tx Set true for TX_RFPLL.
+ * @param vco_freq The VCO frequency [Hz].
+ * @param ref_clk The reference clock frequency [Hz].
+ * @return 0 in case of success
+ */
 static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 				 bool tx, u64 vco_freq,
 				 unsigned long ref_clk)
@@ -975,6 +1112,13 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Get the current gain in Split Gain Table Mode
+ * @param phy The AD9361 state structure.
+ * @param idx_reg Register base address for the selected receiver
+ * @param rx_gain  A rf_rx_gain struct to store the RF gain.
+ * @return 0 in case of success,
+ */
 static int ad9361_get_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
@@ -1011,6 +1155,13 @@ static int ad9361_get_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 	return rc;
 }
 
+/**
+ * Get the current gain in Full Gain Table Mode
+ * @param phy The AD9361 state structure.
+ * @param idx_reg Register base address for the selected receiver
+ * @param rx_gain A rf_rx_gain struct to store the RF gain.
+ * @return 0 in case of success
+ */
 static int ad9361_get_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
@@ -1037,6 +1188,14 @@ static int ad9361_get_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 
 	return rc;
 }
+
+/**
+ * Get current RX gain for the selected channel.
+ * @param phy The AD9361 state structure.
+ * @param rx_id The desired channel number (0, 1).
+ * @param rx_gain A rf_rx_gain struct to store the RF gain.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
 		u32 rx_id, struct rf_rx_gain *rx_gain)
 {
@@ -1097,6 +1256,14 @@ out:
 	return rc;
 }
 
+/**
+ * Force Enable State Machine (ENSM) to the desired state (internally used only).
+ * @param phy The AD9361 state structure.
+ * @param ensm_state The ENSM state [ENSM_STATE_SLEEP_WAIT, ENSM_STATE_ALERT,
+ *                   ENSM_STATE_TX, ENSM_STATE_TX_FLUSH, ENSM_STATE_RX,
+ *                   ENSM_STATE_RX_FLUSH, ENSM_STATE_FDD, ENSM_STATE_FDD_FLUSH].
+ * @return None.
+ */
 void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, u8 ensm_state)
 {
 	u8 dev_ensm_state;
@@ -1161,6 +1328,11 @@ out:
 
 }
 
+/**
+ * Restore the previous Enable State Machine (ENSM) state.
+ * @param phy The AD9361 state structure.
+ * @return None.
+ */
 static void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 {
 	int rc;
@@ -1214,6 +1386,13 @@ out:
 	return;
 }
 
+/**
+ * Set gain in Split Gain Table Mode (used only in Manual Gain Control Mode).
+ * @param phy The AD9361 state structure.
+ * @param idx_reg Register base address for the selected receiver
+ * @param rx_gain The rf_rx_gain struct containing the RF gain.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int set_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
@@ -1253,6 +1432,13 @@ out:
 	return rc;
 }
 
+/**
+ * Set gain in Full Gain Table Mode (used only in Manual Gain Control Mode).
+ * @param phy The AD9361 state structure.
+ * @param idx_reg Register base address for the selected receiver
+ * @param rx_gain The rf_rx_gain struct containing the RF gain.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int set_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
@@ -1288,6 +1474,13 @@ out:
 	return rc;
 }
 
+/**
+ * Set the RX gain for the selected channel.
+ * @param phy The AD9361 state structure.
+ * @param rx_id The desired channel number (0, 1).
+ * @param rx_gain The rf_rx_gain struct containing the RF gain.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 		u32 rx_id, struct rf_rx_gain *rx_gain)
 {
@@ -1342,9 +1535,19 @@ int ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 
 out:
 	return rc;
-
 }
 
+/**
+ * Initialize the rx_gain_info structure.
+ * @param rx_gain The rx_gain_info structure pointer.
+ * @param type Either Full or Split Table
+ * @param starting_gain The starting gain value.
+ * @param max_gain The maximum gain value.
+ * @param gain_step The gain step.
+ * @param max_idx The max table size.
+ * @param idx_offset Offset in the table where linear progression starts
+ * @return None
+ */
 static void ad9361_init_gain_info(struct rx_gain_info *rx_gain,
 	enum rx_gain_table_type type, int starting_gain,
 	int max_gain, int gain_step, int max_idx, int idx_offset)
@@ -1357,6 +1560,11 @@ static void ad9361_init_gain_info(struct rx_gain_info *rx_gain,
 	rx_gain->idx_step_offset = idx_offset;
 }
 
+/**
+ * Initialize the gain table information.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
 {
 	struct rx_gain_info *rx_gain;
@@ -1380,6 +1588,13 @@ int ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
 	return 0;
 }
 
+/**
+ * Enable/disable the desired TX channel.
+ * @param phy The AD9361 state structure.
+ * @param tx_if The desired channel number [1, 2].
+ * @param enable Enable/disable option.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_en_dis_tx(struct ad9361_rf_phy *phy, u32 tx_if, u32 enable)
 {
 	if (tx_if == 2 && !phy->pdata->rx2tx2)
@@ -1389,6 +1604,13 @@ static int ad9361_en_dis_tx(struct ad9361_rf_phy *phy, u32 tx_if, u32 enable)
 			TX_CHANNEL_ENABLE(tx_if), enable);
 }
 
+/**
+ * Enable/disable the desired RX channel.
+ * @param phy The AD9361 state structure.
+ * @param tx_if The desired channel number [1, 2].
+ * @param enable Enable/disable option.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_en_dis_rx(struct ad9361_rf_phy *phy, u32 rx_if, u32 enable)
 {
 	if (rx_if == 2 && !phy->pdata->rx2tx2)
@@ -1398,6 +1620,13 @@ static int ad9361_en_dis_rx(struct ad9361_rf_phy *phy, u32 rx_if, u32 enable)
 			  RX_CHANNEL_ENABLE(rx_if), enable);
 }
 
+/**
+ * Set the gain control mode.
+ * @param phy The AD9361 state structure.
+ * @param rf_gain_ctrl A rf_gain_ctrl struct that contains the the desired
+ *        channel information and the gain control mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		struct rf_gain_ctrl *gain_ctrl)
 {
@@ -1465,6 +1694,12 @@ out:
 	return rc;
 }
 
+/**
+ * Get the RSSI.
+ * @param phy The AD9361 state structure.
+ * @param rssi A rf_rssi struct to store the RSSI.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi)
 {
 	u8 reg_val_buf[6];
@@ -1494,6 +1729,13 @@ int ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi)
 	return rc;
 }
 
+/**
+ * Setup the RX ADC.
+ * @param phy The AD9361 state structure.
+ * @param bbpll_freq The BBPLL frequency [Hz].
+ * @param adc_sampl_freq_Hz The ADC sampling frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_freq,
 			 unsigned long adc_sampl_freq_Hz)
 {
@@ -1641,6 +1883,12 @@ static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_fr
 	return 0;
 }
 
+/**
+ * Perform a RX TIA calibration.
+ * @param phy The AD9361 state structure.
+ * @param bb_bw_Hz The baseband bandwidth [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, unsigned long bb_bw_Hz)
 {
 	unsigned long Cbbf, R2346;
@@ -1692,8 +1940,13 @@ static int ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, unsigned long bb_bw_Hz
 	return 0;
 }
 
-/* BASEBAND RX ANALOG FILTER CALIBRATION */
-
+/**
+ * Perform a baseband RX analog filter calibration.
+ * @param phy The AD9361 state structure.
+ * @param rx_bb_bw The baseband bandwidth [Hz].
+ * @param bbpll_freq The BBPLL frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 					    unsigned long rx_bb_bw,
 					    unsigned long bbpll_freq)
@@ -1741,8 +1994,13 @@ static int ad9361_rx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/* BASEBAND TX ANALOG FILTER CALIBRATION */
-
+/**
+ * Perform a baseband TX analog filter calibration.
+ * @param phy The AD9361 state structure.
+ * @param tx_bb_bw The baseband bandwidth [Hz].
+ * @param bbpll_freq The BBPLL frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_tx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 					    unsigned long tx_bb_bw,
 					    unsigned long bbpll_freq)
@@ -1778,8 +2036,12 @@ static int ad9361_tx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/* BASEBAND TX SECONDARY FILTER */
-
+/**
+ * Perform a baseband TX secondary filter calibration.
+ * @param phy The AD9361 state structure.
+ * @param tx_rf_bw The RF bandwidth [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 					   unsigned long tx_rf_bw)
 {
@@ -1841,8 +2103,13 @@ static int ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/* RF SYNTHESIZER CHARGE PUMP CALIBRATION */
-
+/**
+ * Perform a RF synthesizer charge pump calibration.
+ * @param phy The AD9361 state structure.
+ * @param ref_clk_hz The reference clock rate [Hz].
+ * @param tx The Synthesizer TX = 1, RX = 0.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 					   unsigned long ref_clk_hz, bool tx)
 {
@@ -1891,7 +2158,11 @@ static int ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 	return ret;
 }
 
-/* BASEBAND DC OFFSET CALIBRATION */
+/**
+ * Perform a baseband DC offset calibration.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_bb_dc_offset_calib(struct ad9361_rf_phy *phy)
 {
 	dev_dbg("%s\n", __func__);
@@ -1903,8 +2174,12 @@ static int ad9361_bb_dc_offset_calib(struct ad9361_rf_phy *phy)
 	return ad9361_run_calibration(phy, BBDC_CAL);
 }
 
-/* RF DC OFFSET CALIBRATION */
-
+/**
+ * Perform a RF DC offset calibration.
+ * @param phy The AD9361 state structure.
+ * @param ref_clk_hz The RX LO frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 				     u64 rx_freq)
 {
@@ -1938,8 +2213,13 @@ static int ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 	return ad9361_run_calibration(phy, RFDC_CAL);
 }
 
-/* TX QUADRATURE CALIBRATION */
-
+/**
+ * Perform a TX quadrature calibration.
+ * @param phy The AD9361 state structure.
+ * @param bw The bandwidth [Hz].
+ * @param rx_phase The optional RX phase value overwrite (set to zero).
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 					   unsigned long bw, int rx_phase)
 {
@@ -2048,12 +2328,26 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	return ad9361_run_calibration(phy, TX_QUAD_CAL);
 }
 
+/**
+ * Perform a RX quadrature calibration.
+ * @param phy The AD9361 state structure.
+ * @param bw The bandwidth [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rx_quad_calib(struct ad9361_rf_phy *phy,
 					   unsigned long bw)
 {
 	return -EINVAL; /* TODO */
 }
 
+/**
+ * Setup RX tracking calibrations.
+ * @param phy The AD9361 state structure.
+ * @param bbdc_track Set true, will enable the BBDC tracking.
+ * @param rfdc_track Set true, will enable the RFDC tracking.
+ * @param rxquad_track Set true, will enable the RXQUAD tracking.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 				   bool rfdc_track, bool rxquad_track)
 {
@@ -2086,8 +2380,12 @@ static int ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	return 0;
 }
 
-
-/* REFERENCE CLOCK DELAY UNIT COUNTER REGISTER */
+/**
+ * Setup the reference clock delay unit counter register.
+ * @param phy The AD9361 state structure.
+ * @param ref_clk_hz The reference clock frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_set_ref_clk_cycles(struct ad9361_rf_phy *phy,
 				    unsigned long ref_clk_hz)
 {
@@ -2098,6 +2396,13 @@ static int ad9361_set_ref_clk_cycles(struct ad9361_rf_phy *phy,
 		REFERENCE_CLOCK_CYCLES_PER_US((ref_clk_hz / 1000000UL) - 1));
 }
 
+/**
+ * Setup the DCXO tune.
+ * @param phy The AD9361 state structure.
+ * @param coarse The DCXO tune coarse.
+ * @param fine The DCXO tune fine.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 				    u32 coarse, u32 fine)
 {
@@ -2112,7 +2417,10 @@ static int ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 			DCXO_TUNE_FINE_HIGH(fine));
 }
 
-/* val
+/**
+ * Setup the RF port.
+ * Note:
+ * val
  * 0	(RX1A_N &  RX1A_P) and (RX2A_N & RX2A_P) enabled; balanced
  * 1	(RX1B_N &  RX1B_P) and (RX2B_N & RX2B_P) enabled; balanced
  * 2	(RX1C_N &  RX1C_P) and (RX2C_N & RX2C_P) enabled; balanced
@@ -2123,8 +2431,11 @@ static int ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
  * 6	RX1B_P and RX2B_P enabled; unbalanced
  * 7	RX1C_N and RX2C_N enabled; unbalanced
  * 8	RX1C_P and RX2C_P enabled; unbalanced
+ * @param phy The AD9361 state structure.
+ * @param rx_inputs RX input option identifier
+ * @param txb TX output option identifier
+ * @return 0 in case of success, negative error code otherwise.
  */
-
 static int ad9361_rf_port_setup(struct ad9361_rf_phy *phy,
 				    u32 rx_inputs, u32 txb)
 {
@@ -2147,8 +2458,12 @@ static int ad9361_rf_port_setup(struct ad9361_rf_phy *phy,
 	return ad9361_spi_write(REG_INPUT_SELECT, val);
 }
 
-/*
- * Setup the Parallel Port (Digital Data Interface)
+/**
+ * Setup the Parallel Port (Digital Data Interface).
+ * @param phy The AD9361 state structure.
+ * @param restore_c3 Set true, will restore the Parallel Port Configuration 3
+ *                   register.
+ * @return 0 in case of success, negative error code otherwise.
  */
 static int ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 {
@@ -2178,6 +2493,12 @@ static int ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 	return 0;
 }
 
+/**
+ * Setup the Gain Control Blocks (common function for MGC, AGC modes)
+ * @param phy The AD9361 state structure.
+ * @param ctrl The gain control settings.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_gc_setup(struct ad9361_rf_phy *phy, struct gain_control *ctrl)
 {
 	u32 reg, tmp1, tmp2;
@@ -2360,9 +2681,11 @@ static int ad9361_gc_setup(struct ad9361_rf_phy *phy, struct gain_control *ctrl)
 	return 0;
 }
 
-  //************************************************************
-  // Setup AuxDAC
-  //************************************************************
+/**
+ * Setup the AuxDAC.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_auxdac_setup(struct ad9361_rf_phy *phy)
 {
 	/* FIXME later */
@@ -2383,10 +2706,14 @@ static int ad9361_auxdac_setup(struct ad9361_rf_phy *phy)
 
 	return 0;
 }
-  //************************************************************
-  // Setup AuxADC
-  //************************************************************
 
+/**
+ * Setup the AuxADC.
+ * @param phy The AD9361 state structure.
+ * @param ctrl The AuxADC settings.
+ * @param bbpll_freq The BBPLL frequency [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 			       struct auxadc_control *ctrl,
 			       unsigned long bbpll_freq)
@@ -2418,6 +2745,11 @@ static int ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Get the measured temperature of the device.
+ * @param phy The AD9361 state structure.
+ * @return The measured temperature of the device.
+ */
 static int ad9361_get_temp(struct ad9361_rf_phy *phy)
 {
 	u32 val = ad9361_spi_read(REG_TEMPERATURE);
@@ -2425,10 +2757,12 @@ static int ad9361_get_temp(struct ad9361_rf_phy *phy)
 	return DIV_ROUND_CLOSEST(val * 1000, 1140);
 }
 
-  //************************************************************
-  // Setup Control Outs
-  //************************************************************
-
+/**
+ * Setup the Control Output pins.
+ * @param phy The AD9361 state structure.
+ * @param ctrl The Control Output pins settings.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_ctrl_outs_setup(struct ad9361_rf_phy *phy,
 				  struct ctrl_outs_control *ctrl)
 {
@@ -2437,10 +2771,12 @@ static int ad9361_ctrl_outs_setup(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(REG_CTRL_OUTPUT_POINTER, ctrl->index); // Ctrl Out index
 	return ad9361_spi_write(REG_CTRL_OUTPUT_ENABLE, ctrl->en_mask); // Ctrl Out [7:0] output enable
 }
-  //************************************************************
-  // Setup GPO
-  //************************************************************
 
+/**
+ * Setup the GPO pins.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_gpo_setup(struct ad9361_rf_phy *phy)
 {
 	/* FIXME later */
@@ -2461,6 +2797,13 @@ static int ad9361_gpo_setup(struct ad9361_rf_phy *phy)
 	return 0;
 }
 
+/**
+ * Setup the RSSI.
+ * @param phy The AD9361 state structure.
+ * @param ctrl The RSSI settings.
+ * @param is_update True if update
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 			     struct rssi_control *ctrl,
 			     bool is_update)
@@ -2544,6 +2887,15 @@ static int ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Set the desired Enable State Machine (ENSM) state.
+ * @param phy The AD9361 state structure.
+ * @param ensm_state The ENSM state [ENSM_STATE_SLEEP_WAIT, ENSM_STATE_ALERT,
+ *                   ENSM_STATE_TX, ENSM_STATE_TX_FLUSH, ENSM_STATE_RX,
+ *                   ENSM_STATE_RX_FLUSH, ENSM_STATE_FDD, ENSM_STATE_FDD_FLUSH].
+ * @param pinctrl Set true, will enable the ENSM pin control.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
 		bool pinctrl)
 {
@@ -2612,6 +2964,13 @@ out:
 
 }
 
+/**
+ * Set the RX and TX path rates.
+ * @param phy The AD9361 state structure.
+ * @param rx_path_clks RX path rates buffer.
+ * @param tx_path_clks TX path rates buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long *rx_path_clks,
 				      unsigned long *tx_path_clks)
@@ -2649,6 +3008,13 @@ int ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Get the RX and TX path rates.
+ * @param phy The AD9361 state structure.
+ * @param rx_path_clks RX path rates buffer.
+ * @param tx_path_clks TX path rates buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, unsigned long *rx_path_clks,
 				      unsigned long *tx_path_clks)
 {
@@ -2677,6 +3043,15 @@ static int ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, unsigned long *
 	return 0;
 }
 
+/**
+ * Calculate the RX and TX path rates to obtain the desired sample rate.
+ * @param phy The AD9361 state structure.
+ * @param tx_sample_rate The desired sample rate.
+ * @param rate_gov The rate governor option.
+ * @param rx_path_clks RX path rates buffer.
+ * @param tx_path_clks TX path rates buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long tx_sample_rate,
 				      u32 rate_gov,
@@ -2784,6 +3159,13 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Internal ENSM mode options helper function.
+ * @param phy The AD9361 state structure.
+ * @param fdd
+ * @param pinctrl
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 {
 	struct ad9361_phy_platform_data *pd = phy->pdata;
@@ -2803,6 +3185,11 @@ static int ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctr
 	return ret;
 }
 
+/**
+ * Setup the AD9361 device.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_setup(struct ad9361_rf_phy *phy)
 {
 	unsigned long refin_Hz, ref_freq, bbpll_freq;
@@ -3048,6 +3435,13 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 
 }
 
+/**
+ * Perform the selected calibration
+ * @param phy The AD9361 state structure.
+ * @param cal The selected calibration.
+ * @param arg The argument of the calibration.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_do_calib_run(struct ad9361_rf_phy *phy, u32 cal, int arg)
 {
 	int ret;
@@ -3081,6 +3475,13 @@ static int ad9361_do_calib_run(struct ad9361_rf_phy *phy, u32 cal, int arg)
 	return ret;
 }
 
+/**
+ * Set the RF bandwidth.
+ * @param phy The AD9361 state structure.
+ * @param rf_rx_bw The desired RX bandwidth [Hz].
+ * @param rf_tx_bw The desired TX bandwidth [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 				     u32 rf_rx_bw, u32 rf_tx_bw)
 {
@@ -3141,6 +3542,15 @@ int ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Load the FIR filter coefficients.
+ * @param phy The AD9361 state structure.
+ * @param dest Destination identifier (RX1,2 / TX1,2).
+ * @param gain_dB Gain option.
+ * @param ntaps Number of filter Taps.
+ * @param coef Pointer to filter coefficients.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 				       enum fir_dest dest, int gain_dB,
 				       u32 ntaps, short *coef)
@@ -3193,6 +3603,13 @@ int ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+/**
+ * Parse the FIR filter file/buffer.
+ * @param phy The AD9361 state structure.
+ * @param data Pointer to buffer.
+ * @param size Buffer size.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_parse_fir(struct ad9361_rf_phy *phy,
 				 char *data, u32 size)
 {
@@ -3271,7 +3688,11 @@ static int ad9361_parse_fir(struct ad9361_rf_phy *phy,
 	return size;
 }
 
-
+/**
+ * Validate FIR filter configuration - on pass enable.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 {
 	int ret;
@@ -3360,29 +3781,18 @@ int ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	return ad9361_update_rf_bandwidth(phy, phy->current_rx_bw_Hz,
 			phy->current_tx_bw_Hz);
 }
-#ifdef LINUX
-void ad9361_work_func(struct work_struct *work)
-{
-	struct ad9361_rf_phy *phy =
-		container_of(work, struct ad9361_rf_phy, work);
-	int ret;
 
-	dev_dbg("%s:", __func__);
-
-	ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
-	if (ret < 0)
-		dev_err("%s: TX QUAD cal failed", __func__);
-
-	complete_all(&phy->complete);
-	clear_bit(0, &phy->flags);
-}
-#endif
 /*
  * AD9361 Clocks
  */
 
-#define to_clk_priv(_hw) container_of(_hw, struct refclk_scale, hw)
-
+/**
+ * Set the multiplier and the divider for the selected refclk_scale structure.
+ * @param priv The selected refclk_scale structure.
+ * @param mul The multiplier value.
+ * @param div The divider value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static inline int ad9361_set_muldiv(struct refclk_scale *priv, u32 mul, u32 div)
 {
 	priv->mult = mul;
@@ -3390,6 +3800,11 @@ static inline int ad9361_set_muldiv(struct refclk_scale *priv, u32 mul, u32 div)
 	return 0;
 }
 
+/**
+ * Get the clk scaler for the selected refclk_scale structure.
+ * @param priv The selected refclk_scale structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 {
 	u32 tmp, tmp1;
@@ -3482,6 +3897,12 @@ static int ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 	return 0;
 }
 
+/**
+ * Calculate the REFCLK Scaler for the selected refclk_scale structure.
+ * Note: REFCLK Scaler values - 00: x1; 01: x½; 10: x¼; 11: x2.
+ * @param clk_priv The selected refclk_scale structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_to_refclk_scaler(struct refclk_scale *clk_priv)
 {
 	/* REFCLK Scaler */
@@ -3499,6 +3920,13 @@ static int ad9361_to_refclk_scaler(struct refclk_scale *clk_priv)
 	}
 };
 
+/**
+ * Set clk scaler for the selected refclk_scale structure.
+ * @param clk_priv The selected refclk_scale structure.
+ * @param set Set true, the reference clock frequency will be scaled before
+ *            it enters the BBPLL.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 {
 	u32 tmp;
@@ -3628,6 +4056,12 @@ static int ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 	return 0;
 }
 
+/**
+ * Recalculate the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param parent_rate The parent clock rate.
+ * @return The clock rate.
+ */
 unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
@@ -3639,6 +4073,13 @@ unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 	return (unsigned long)rate;
 }
 
+/**
+ * Calculate the closest possible clock rate that can be set.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return The closest possible clock rate that can be set.
+ */
 long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
@@ -3660,6 +4101,13 @@ long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long r
 	return (*prate / clk_priv->div) * clk_priv->mult;
 }
 
+/**
+ * Set the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
@@ -3684,7 +4132,12 @@ int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate
 /*
  * BBPLL
  */
-
+/**
+ * Recalculate the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param parent_rate The parent clock rate.
+ * @return The clock rate.
+ */
 unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
@@ -3705,6 +4158,13 @@ unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 	return (unsigned long)rate;
 }
 
+/**
+ * Calculate the closest possible clock rate that can be set.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return The closest possible clock rate that can be set.
+ */
 long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
@@ -3731,6 +4191,13 @@ long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	return tmp;
 }
 
+/**
+ * Set the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
@@ -3795,6 +4262,14 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
  * RFPLL
  */
 
+/**
+ * Calculate the RFPLL frequency.
+ * @param parent_rate The parent clock rate.
+ * @param integer The integer value.
+ * @param fract The fractional value.
+ * @param vco_div The VCO divider.
+ * @return The RFPLL frequency.
+ */
 static u64 ad9361_calc_rfpll_freq(u64 parent_rate,
 				   u64 integer,
 				   u64 fract, u32 vco_div)
@@ -3808,6 +4283,16 @@ static u64 ad9361_calc_rfpll_freq(u64 parent_rate,
 	return rate >> (vco_div + 1);
 }
 
+/**
+ * Calculate the RFPLL dividers.
+ * @param freq The RFPLL frequency.
+ * @param parent_rate The parent clock rate.
+ * @param integer The integer value.
+ * @param fract The fractional value.
+ * @param vco_div The VCO divider.
+ * @param vco_freq The VCO frequency.
+ * @return The RFPLL frequency.
+ */
 static int ad9361_calc_rfpll_divder(u64 freq,
 			     u64 parent_rate, u32 *integer,
 			     u32 *fract, int *vco_div, u64 *vco_freq)
@@ -3836,6 +4321,12 @@ static int ad9361_calc_rfpll_divder(u64 freq,
 	return 0;
 }
 
+/**
+ * Recalculate the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param parent_rate The parent clock rate.
+ * @return The clock rate.
+ */
 unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		unsigned long parent_rate)
 {
@@ -3867,6 +4358,13 @@ unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 					      fract, vco_div));
 }
 
+/**
+ * Calculate the closest possible clock rate that can be set.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return The closest possible clock rate that can be set.
+ */
 long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
@@ -3881,6 +4379,13 @@ long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	return ad9361_to_clk(ad9361_calc_rfpll_freq(*prate, integer, fract, vco_div));
 }
 
+/**
+ * Set the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long parent_rate)
 {
@@ -3942,21 +4447,25 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL))
 		if (abs(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate)) >
 			phy->cal_threshold_freq) {
-#ifdef LINUX
-			set_bit(0, &phy->flags);
-			INIT_COMPLETION(phy->complete);
-			schedule_work(&phy->work);
-#else
 			ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
 			if (ret < 0)
 				dev_err("%s: TX QUAD cal failed", __func__);
-#endif
 			phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
 		}
 
 	return ad9361_check_cal_done(phy, lock_reg, BIT(1), 1);
 }
 
+/**
+ * Register and initialize a new clock.
+ * @param phy The AD9361 state structure.
+ * @param name The name of the new clock.
+ * @param parent_name The name of the parent clock.
+ * @param flags The flags.
+ * @param source The source of the new clock.
+ * @param parent_source The source of the parent clock.
+ * @return A struct clk for the new clock or a negative error code.
+ */
 static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *name,
 		const char *parent_name, unsigned long flags,
 		u32 source, u32 parent_source)
@@ -4037,6 +4546,11 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 	return clk;
 }
 
+/**
+ * Register and initialize all the system clocks.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
 int register_clocks(struct ad9361_rf_phy *phy)
 {
 	u32 flags = 0;
