@@ -1,6 +1,6 @@
 /**************************************************************************//**
 *   @file   Commanad.c
-*   @brief  Implementation of the commands given by user through UART for AD5110.
+*   @brief  Implementation of the commands given by user through UART for ADF4157.
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 *******************************************************************************
