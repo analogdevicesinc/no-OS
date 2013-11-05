@@ -2400,6 +2400,23 @@ static int ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 }
 
 /**
+ * Enable/disable the VCO cal.
+ * @param phy The AD9361 state structure.
+ * @param rx Set true for rx.
+ * @param enable Set true to enable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad9361_trx_vco_cal_control(struct ad9361_rf_phy *phy,
+				      bool rx, bool enable)
+{
+	dev_dbg("%s : state %d",
+		__func__, enable);
+
+	return ad9361_spi_writef(rx ? REG_RX_PFD_CONFIG : REG_TX_PFD_CONFIG,
+				 BYPASS_LD_SYNTH, !enable);
+}
+
+/**
  * Setup the reference clock delay unit counter register.
  * @param phy The AD9361 state structure.
  * @param ref_clk_hz The reference clock frequency [Hz].
@@ -3218,6 +3235,9 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 	u32 real_tx_bandwidth = pd->rf_tx_bandwidth_Hz / 2;
 
 	dev_dbg("%s\n", __func__);
+
+	if (pd->fdd)
+		pd->tdd_skip_vco_cal = false;
 
 	if (pd->port_ctrl.pp_conf[2] & FDD_RX_RATE_2TX_RATE)
 		phy->rx_eq_2tx = true;
@@ -4476,7 +4496,18 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 			phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
 		}
 
-	return ad9361_check_cal_done(phy, lock_reg, BIT(1), 1);
+	/* Option to skip VCO cal in TDD mode when moving from TX/RX to Alert */
+	if (phy->pdata->tdd_skip_vco_cal)
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == RX_RFPLL,
+					   true);
+
+	ret = ad9361_check_cal_done(phy, lock_reg, VCO_LOCK, 1);
+
+	if (phy->pdata->tdd_skip_vco_cal)
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == RX_RFPLL,
+					   false);
+
+	return ret;
 }
 
 /**

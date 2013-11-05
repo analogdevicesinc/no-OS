@@ -78,6 +78,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->fdd = init_param->two_rx_two_tx_mode_enable;
 	phy->pdata->rx2tx2 = init_param->frequency_division_duplex_mode_enable;
 	phy->pdata->tdd_use_dual_synth = init_param->tdd_use_dual_synth_mode_enable;
+	phy->pdata->tdd_skip_vco_cal = init_param->tdd_skip_vco_cal_enable;
 	phy->pdata->tdd_use_fdd_tables = init_param->tdd_use_fdd_vco_tables_enable;
 	phy->pdata->split_gt = init_param->split_gain_table_mode_enable;
 
