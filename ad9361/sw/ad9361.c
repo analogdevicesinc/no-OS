@@ -2115,7 +2115,6 @@ static int ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 {
 	u32 offs = tx ? 0x40 : 0;
 	u32 vco_cal_cnt;
-	int ret;
 
 	dev_dbg("%s : ref_clk_hz %lu : is_tx %d\n",
 		__func__, ref_clk_hz, tx);
@@ -2151,11 +2150,8 @@ static int ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 
 	ad9361_spi_write(REG_RX_CP_CONFIG + offs, CP_CAL_ENABLE);
 
-	ret = ad9361_check_cal_done(phy, REG_RX_CAL_STATUS + offs,
-				    CP_CAL_VALID, 1);
-	ad9361_spi_write(REG_RX_CP_CONFIG + offs, 0x0);
-
-	return ret;
+	return ad9361_check_cal_done(phy, REG_RX_CAL_STATUS + offs,
+				CP_CAL_VALID, 1);
 }
 
 /**
@@ -2284,7 +2280,7 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 			break;
 		}
 	} else
-		dev_err("Error in %s line %d clkrf %lu clktf %lu\n",
+		dev_err("Unhandled case in %s line %d clkrf %lu clktf %lu\n",
 			__func__, __LINE__, clkrf, clktf);
 
 	if (rx_phase >= 0)
