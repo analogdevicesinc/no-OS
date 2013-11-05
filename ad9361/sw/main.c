@@ -163,7 +163,7 @@ AD9361_InitParam default_init_param = {
 	0,		//tx_channel_swap_enable *** adi,tx-channel-swap-enable
 	0,		//rx_channel_swap_enable *** adi,rx-channel-swap-enable
 	1,		//rx_frame_pulse_mode_enable *** adi,rx-frame-pulse-mode-enable
-	0,		//two_t_two_r_timing_enable *** adi,2t2r-timing-enable
+	1,		//two_t_two_r_timing_enable *** adi,2t2r-timing-enable
 	0,		//invert_data_bus_enable *** adi,invert-data-bus-enable
 	0,		//invert_data_clk_enable *** adi,invert-data-clk-enable
 	0,		//fdd_alt_word_order_enable *** adi,fdd-alt-word-order-enable
