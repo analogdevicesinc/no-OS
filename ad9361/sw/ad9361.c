@@ -3275,6 +3275,7 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 	}
 
 	ad9361_spi_writef(REG_REF_DIVIDE_CONFIG_1, RX_REF_RESET_BAR, 1);
+	ad9361_spi_writef(REG_REF_DIVIDE_CONFIG_2, TX_REF_RESET_BAR, 1);
 	ad9361_spi_writef(REG_REF_DIVIDE_CONFIG_2,
 			  TX_REF_DOUBLER_FB_DELAY(~0), 3); /* FB DELAY */
 	ad9361_spi_writef(REG_REF_DIVIDE_CONFIG_2,
