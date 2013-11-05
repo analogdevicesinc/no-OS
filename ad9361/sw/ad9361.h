@@ -3040,10 +3040,14 @@ struct ad9361_phy_platform_data {
 struct rf_rx_gain {
 	u32 ant;		/* Antenna number to read gain */
 	s32 gain_db;		/* gain value in dB */
-	u32 lmt_index;	/* LNA-MIXER-TIA gain index */
-	u32 lmt_gain;		/* LNA-MIXER-TIA gain in dB */
-	u32 lpf_gain;		/* Low pass filter gain in dB */
-	u32 digital_gain;	/* Digital gain in dB */
+	u32 fgt_lmt_index;	/* Full Gain Table / LNA-MIXER-TIA gain index */
+	u32 lmt_gain;		/* LNA-MIXER-TIA gain in dB (Split GT mode only)*/
+	u32 lpf_gain;		/* Low pass filter gain in dB / index (Split GT mode only)*/
+	u32 digital_gain;	/* Digital gain in dB / index */
+	/* Debug only */
+	u32 lna_index;		/* LNA Index (Split GT mode only) */
+	u32 tia_index;		/* TIA Index (Split GT mode only) */
+	u32 mixer_index;		/* MIXER Index (Split GT mode only) */
 };
 struct rf_rssi {
 	u32 ant;		/* Antenna number for which RSSI is reported */

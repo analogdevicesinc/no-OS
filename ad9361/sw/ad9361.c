@@ -1140,24 +1140,24 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 static int ad9361_get_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
-	u32 val, tbl_addr, lna_index, tia_index, mixer_index;
+	u32 val, tbl_addr;
 	int rc = 0;
 
-	rx_gain->lmt_index = ad9361_spi_readf(idx_reg,
+	rx_gain->fgt_lmt_index = ad9361_spi_readf(idx_reg,
 					     FULL_TABLE_GAIN_INDEX(~0));
 	tbl_addr = ad9361_spi_read(REG_GAIN_TABLE_ADDRESS);
 
-	ad9361_spi_write(REG_GAIN_TABLE_ADDRESS, rx_gain->lmt_index);
+	ad9361_spi_write(REG_GAIN_TABLE_ADDRESS, rx_gain->fgt_lmt_index);
 
 	val = ad9361_spi_read(REG_GAIN_TABLE_READ_DATA1);
-	lna_index = TO_LNA_GAIN(val);
-	mixer_index = TO_MIXER_GM_GAIN(val);
+	rx_gain->lna_index = TO_LNA_GAIN(val);
+	rx_gain->mixer_index = TO_MIXER_GM_GAIN(val);
 
-	tia_index = ad9361_spi_readf(REG_GAIN_TABLE_READ_DATA2, TIA_GAIN);
+	rx_gain->tia_index = ad9361_spi_readf(REG_GAIN_TABLE_READ_DATA2, TIA_GAIN);
 
-	rx_gain->lmt_gain = lna_table[lna_index] +
-				mixer_table[mixer_index] +
-				tia_table[tia_index];
+	rx_gain->lmt_gain = lna_table[rx_gain->lna_index] +
+			mixer_table[rx_gain->mixer_index] +
+			tia_table[rx_gain->tia_index];
 
 	ad9361_spi_write(REG_GAIN_TABLE_ADDRESS, tbl_addr);
 
@@ -1191,7 +1191,8 @@ static int ad9361_get_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 	tbl = ad9361_gt_tableindex(
 		ad9361_from_clk(clk_get_rate(phy, phy->ref_clk_scale[RX_RFPLL])));
 
-	val = ad9361_spi_readf(idx_reg, FULL_TABLE_GAIN_INDEX(~0));
+	rx_gain->fgt_lmt_index = val = ad9361_spi_readf(idx_reg,
+			FULL_TABLE_GAIN_INDEX(~0));
 
 	gain_info = &phy->rx_gain[tbl];
 	if (val > gain_info->idx_step_offset) {
@@ -1201,6 +1202,10 @@ static int ad9361_get_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 	} else {
 		rx_gain_db = gain_info->starting_gain_db;
 	}
+
+	/* Read Digital Gain */
+	rx_gain->digital_gain = ad9361_spi_readf(idx_reg + 2,
+			DIGITAL_GAIN_RX(~0));
 
 	rx_gain->gain_db = rx_gain_db;
 
@@ -1416,7 +1421,7 @@ static int set_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 {
 	int rc = 0;
 
-	if ((rx_gain->lmt_index > MAX_LMT_INDEX) ||
+	if ((rx_gain->fgt_lmt_index > MAX_LMT_INDEX) ||
 			(rx_gain->lpf_gain > MAX_LPF_GAIN) ||
 			(rx_gain->digital_gain > MAX_DIG_GAIN)) {
 		dev_err("LMT_INDEX missing or greater than max value %d",
@@ -1430,14 +1435,14 @@ static int set_split_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 	}
 	if (rx_gain->gain_db > 0)
 		dev_dbg("Ignoring rx_gain value in split table mode.");
-	if (rx_gain->lmt_index == 0 && rx_gain->lpf_gain == 0 &&
+	if (rx_gain->fgt_lmt_index == 0 && rx_gain->lpf_gain == 0 &&
 			rx_gain->digital_gain == 0) {
 		dev_err("In split table mode, All LMT/LPF/digital gains cannot be 0");
 		rc = -EINVAL;
 		goto out;
 	}
 
-	ad9361_spi_writef(idx_reg, RX_FULL_TBL_IDX_MASK, rx_gain->lmt_index);
+	ad9361_spi_writef(idx_reg, RX_FULL_TBL_IDX_MASK, rx_gain->fgt_lmt_index);
 	ad9361_spi_writef(idx_reg + 1, RX_LPF_IDX_MASK, rx_gain->lpf_gain);
 
 	if (phy->pdata->gain_ctrl.dig_gain_en) {
@@ -1465,7 +1470,7 @@ static int set_full_table_gain(struct ad9361_rf_phy *phy, u32 idx_reg,
 	u32 val;
 	int rc = 0;
 
-	if (rx_gain->lmt_index != ~0 || rx_gain->lpf_gain != ~0 ||
+	if (rx_gain->fgt_lmt_index != ~0 || rx_gain->lpf_gain != ~0 ||
 			rx_gain->digital_gain > 0)
 		dev_dbg("Ignoring lmt/lpf/digital gains in Single Table mode");
 
