@@ -921,6 +921,24 @@ static int ad9361_setup_ext_lna(struct ad9361_rf_phy *phy, u32 gain_mdB,
 			EXT_LNA_LOW_GAIN(bypass_loss_mdB / 500));
 }
 
+
+/**
+ * Set the clock output mode.
+ * @param phy The AD9361 state structure.
+ * @param mode The clock output mode [].
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad9361_clkout_control(struct ad9361_rf_phy *phy,
+				enum ad9361_clkout mode)
+{
+	if (mode == CLKOUT_DISABLE)
+		return ad9361_spi_writef(REG_BBPLL, CLKOUT_ENABLE, 0);
+
+	return ad9361_spi_writef(REG_BBPLL,
+				 CLKOUT_ENABLE | CLKOUT_SELECT(~0),
+				 ((mode - 1) << 1) | 0x1);
+}
+
 /**
  * Load the Gm Sub Table.
  * @param phy The AD9361 state structure.
@@ -3417,6 +3435,10 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 	ret = ad9361_rssi_setup(phy, &pd->rssi_ctrl, false);
 	if (ret < 0)
 		return ret;
+
+	ret = ad9361_clkout_control(phy, pd->ad9361_clkout_mode);
+		if (ret < 0)
+			return ret;
 
 	phy->curr_ensm_state = ad9361_spi_readf(REG_STATE, ENSM_STATE(~0));
 	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX,

@@ -92,6 +92,7 @@ AD9361_InitParam default_init_param = {
 	/* Reference Clock Control */
 	0,		//xo_disable_use_ext_refclk_enable *** adi,xo-disable-use-ext-refclk-enable
 	{8, 5920},	//dcxo_coarse_and_fine_tune[2] *** adi,dcxo-coarse-and-fine-tune
+	0,		//clk_output_mode_select *** adi,clk-output-mode-select
 	/* Gain Control */
 	2,		//gc_rx1_mode *** adi,gc-rx1-mode
 	2,		//gc_rx2_mode *** adi,gc-rx2-mode

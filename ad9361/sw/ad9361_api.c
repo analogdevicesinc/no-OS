@@ -111,6 +111,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->use_extclk = init_param->xo_disable_use_ext_refclk_enable;
 	phy->pdata->dcxo_coarse = init_param->dcxo_coarse_and_fine_tune[0];
 	phy->pdata->dcxo_fine = init_param->dcxo_coarse_and_fine_tune[1];
+	phy->pdata->ad9361_clkout_mode = init_param->clk_output_mode_select;
 
 	/* Gain Control */
 	phy->pdata->gain_ctrl.rx1_mode = init_param->gc_rx1_mode;

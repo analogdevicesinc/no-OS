@@ -77,6 +77,7 @@ typedef struct
 	/* Reference Clock Control */
 	uint8_t		xo_disable_use_ext_refclk_enable;	/* adi,xo-disable-use-ext-refclk-enable */
 	uint32_t	dcxo_coarse_and_fine_tune[2];	/* adi,dcxo-coarse-and-fine-tune */
+	uint32_t	clk_output_mode_select;		/* adi,clk-output-mode-select */
 	/* Gain Control */
 	uint8_t		gc_rx1_mode;	/* adi,gc-rx1-mode */
 	uint8_t		gc_rx2_mode;	/* adi,gc-rx2-mode */

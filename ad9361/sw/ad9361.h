@@ -2994,6 +2994,16 @@ enum ad9361_pdata_tx_freq {
 	NUM_TX_CLOCKS,
 };
 
+enum ad9361_clkout {
+	CLKOUT_DISABLE,
+	BUFFERED_XTALN_DCXO,
+	ADC_CLK_DIV_2,
+	ADC_CLK_DIV_3,
+	ADC_CLK_DIV_4,
+	ADC_CLK_DIV_8,
+	ADC_CLK_DIV_16,
+};
+
 struct ad9361_phy_platform_data {
 	bool			rx2tx2;
 	bool			fdd;
@@ -3017,6 +3027,7 @@ struct ad9361_phy_platform_data {
 	int			tx_atten;
 	bool			update_tx_gain_via_alert;
 	int 			gpio_resetb;
+	enum ad9361_clkout	ad9361_clkout_mode;
 
 	struct gain_control	gain_ctrl;
 	struct rssi_control	rssi_ctrl;
