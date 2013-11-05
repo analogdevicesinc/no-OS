@@ -2348,18 +2348,6 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 }
 
 /**
- * Perform a RX quadrature calibration.
- * @param phy The AD9361 state structure.
- * @param bw The bandwidth [Hz].
- * @return 0 in case of success, negative error code otherwise.
- */
-static int ad9361_rx_quad_calib(struct ad9361_rf_phy *phy,
-					   unsigned long bw)
-{
-	return -EINVAL; /* TODO */
-}
-
-/**
  * Setup RX tracking calibrations.
  * @param phy The AD9361 state structure.
  * @param bbdc_track Set true, will enable the BBDC tracking.
@@ -3498,9 +3486,6 @@ static int ad9361_do_calib_run(struct ad9361_rf_phy *phy, u32 cal, int arg)
 	switch (cal) {
 	case TX_QUAD_CAL:
 		ret = ad9361_tx_quad_calib(phy, phy->current_tx_bw_Hz / 2, arg);
-		break;
-	case RX_QUAD_CAL:
-		ret = ad9361_rx_quad_calib(phy, phy->current_rx_bw_Hz / 2);
 		break;
 	case RFDC_CAL:
 		ret = ad9361_rf_dc_offset_calib(phy,

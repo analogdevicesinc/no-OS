@@ -3118,7 +3118,6 @@ struct ad9361_rf_phy {
 	bool 			ensm_pin_ctl_en;
 
 	bool			auto_cal_en;
-	u64			last_rx_quad_cal_freq;
 	u64			last_tx_quad_cal_freq;
 	unsigned long		cal_threshold_freq;
 	u32			current_rx_bw_Hz;
