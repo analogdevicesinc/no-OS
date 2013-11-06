@@ -4407,15 +4407,11 @@ unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 				unsigned long *prate)
 {
-	u64 vco;
-	u32 fract, integer;
-	int vco_div, ret;
+	if (ad9361_from_clk(rate) > MAX_CARRIER_FREQ_HZ ||
+		ad9361_from_clk(rate) < MIN_CARRIER_FREQ_HZ)
+		return -EINVAL;
 
-	ret = ad9361_calc_rfpll_divder(ad9361_from_clk(rate), *prate, &integer, &fract, &vco_div, &vco);
-	if (ret < 0)
-		return ret;
-
-	return ad9361_to_clk(ad9361_calc_rfpll_freq(*prate, integer, fract, vco_div));
+    return rate;
 }
 
 /**
