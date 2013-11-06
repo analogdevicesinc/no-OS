@@ -71,6 +71,8 @@ AD9361_InitParam default_init_param = {
 	1,		//frequency_division_duplex_mode_enable *** adi,frequency-division-duplex-mode-enable
 	0,		//tdd_use_dual_synth_mode_enable *** adi,tdd-use-dual-synth-mode-enable
 	0,		//tdd_skip_vco_cal_enable *** adi,tdd-skip-vco-cal-enable
+	0,		//external_rx_lo_enable *** adi,external-rx-lo-enable
+	0,		//external_tx_lo_enable *** adi,external-tx-lo-enable
 	0,		//tdd_use_fdd_vco_tables_enable *** adi,tdd-use-fdd-vco-tables-enable
 	0,		//split_gain_table_mode_enable *** adi,split-gain-table-mode-enable
 	/* ENSM Control */

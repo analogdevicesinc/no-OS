@@ -3014,6 +3014,8 @@ struct ad9361_phy_platform_data {
 	bool			tdd_use_fdd_tables;
 	bool			tdd_use_dual_synth;
 	bool			tdd_skip_vco_cal;
+	bool			use_ext_rx_lo;
+	bool			use_ext_tx_lo;
 	u32			dcxo_coarse;
 	u32			dcxo_fine;
 	u32			rf_rx_input_sel;

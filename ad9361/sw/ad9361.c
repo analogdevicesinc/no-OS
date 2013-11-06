@@ -2405,6 +2405,28 @@ static int ad9361_trx_vco_cal_control(struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Enable/disable the ext. LO.
+ * @param phy The AD9361 state structure.
+ * @param rx Set true for rx.
+ * @param enable Set true to enable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
+				      bool rx, bool enable)
+{
+	unsigned val = enable ? ~0 : 0;
+
+	dev_dbg("%s : state %d",
+		__func__, enable);
+	if (rx)
+		return ad9361_spi_write(REG_RX_LO_GEN_POWER_MODE,
+					RX_LO_GEN_POWER_MODE(val));
+	else
+		return ad9361_spi_write(REG_TX_LO_GEN_POWER_MODE,
+					TX_LO_GEN_POWER_MODE(val));
+}
+
+/**
  * Setup the reference clock delay unit counter register.
  * @param phy The AD9361 state structure.
  * @param ref_clk_hz The reference clock frequency [Hz].
@@ -3350,39 +3372,47 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL], ad9361_to_clk(pd->rx_synth_freq));
-	if (ret < 0) {
-		dev_err("Failed to set RX Synth rate (%d)\n",
-			ret);
-		return ret;
+	if (pd->use_ext_rx_lo) {
+		ad9361_trx_ext_lo_control(phy, true, pd->use_ext_rx_lo);
+	} else {
+		ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL], ad9361_to_clk(pd->rx_synth_freq));
+		if (ret < 0) {
+			dev_err("Failed to set RX Synth rate (%d)\n",
+				ret);
+			return ret;
+		}
+
+		ret = clk_prepare_enable(phy->clks[RX_REFCLK]);
+		if (ret < 0) {
+			dev_err("Failed to enable RX Synth ref clock (%d)\n", ret);
+			return ret;
+		}
+
+		ret = clk_prepare_enable(phy->clks[RX_RFPLL]);
+		if (ret < 0)
+			return ret;
 	}
 
- 	ret = clk_prepare_enable(phy->clks[RX_REFCLK]);
-	if (ret < 0) {
-		dev_err("Failed to enable RX Synth ref clock (%d)\n", ret);
-		return ret;
+	if (pd->use_ext_tx_lo) {
+		ad9361_trx_ext_lo_control(phy, false, pd->use_ext_tx_lo);
+	} else {
+		ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL], ad9361_to_clk(pd->tx_synth_freq));
+		if (ret < 0) {
+			dev_err("Failed to set TX Synth rate (%d)\n",
+				ret);
+			return ret;
+		}
+
+		ret = clk_prepare_enable(phy->clks[TX_REFCLK]);
+		if (ret < 0) {
+			dev_err("Failed to enable TX Synth ref clock (%d)\n", ret);
+			return ret;
+		}
+
+		ret = clk_prepare_enable(phy->clks[TX_RFPLL]);
+		if (ret < 0)
+			return ret;
 	}
-
-	ret = clk_prepare_enable(phy->clks[RX_RFPLL]);
-	if (ret < 0)
-		return ret;
-
-	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL], ad9361_to_clk(pd->tx_synth_freq));
-	if (ret < 0) {
-		dev_err("Failed to set TX Synth rate (%d)\n",
-			ret);
-		return ret;
-	}
-
- 	ret = clk_prepare_enable(phy->clks[TX_REFCLK]);
-	if (ret < 0) {
-		dev_err("Failed to enable TX Synth ref clock (%d)\n", ret);
-		return ret;
-	}
-
-	ret = clk_prepare_enable(phy->clks[TX_RFPLL]);
-	if (ret < 0)
-		return ret;
 
 	ret = ad9361_load_mixer_gm_subtable(phy);
 	if (ret < 0)
