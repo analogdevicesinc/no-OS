@@ -2870,7 +2870,6 @@ struct gain_control {
 
 	u16 lmt_overload_high_thresh; /* 16..800 mV, 0x107 */
 	u16 lmt_overload_low_thresh; /* 16..800 mV, 0x108 */
-	u8 analog_settling_time; /* 0..31, Peak overload wait time */
 	u16 dec_pow_measuremnt_duration; /* Samples, 0x15C */
 	u8 low_power_thresh; /* -64..0 dBFS, 0x114 */
 
@@ -2886,8 +2885,7 @@ struct gain_control {
 	u8 mgc_split_table_ctrl_inp_gain_mode; /* 0=AGC determine this, 1=only in LPF, 2=only in LMT */
 
 	/* AGC */
-	u8 agc_attack_delay_us; /* 0..31 us */
-	u8 agc_settling_delay;	/* 0..31, 0x111 */
+	u8 agc_attack_delay_extra_margin_us; /* 0..31 us */
 
 	u8 agc_outer_thresh_high;
 	u8 agc_outer_thresh_high_dec_steps;
@@ -2912,7 +2910,7 @@ struct gain_control {
 	u8 dig_gain_step_size; /* 1..8, 0x100 */
 	bool sync_for_gain_counter_en; /* 0x128:4 !Hybrid */
 
-	u32 gain_update_counter; /* 0..262144, 0x124, 0x125 CLKRF samples*/
+	u32 gain_update_interval_us; /* in us */
 	bool immed_gain_change_if_large_adc_overload; /* 0x123:3 */
 	bool immed_gain_change_if_large_lmt_overload; /* 0x123:7 */
 
@@ -2961,6 +2959,7 @@ struct ctrl_outs_control {
 struct elna_control {
 	u16			gain_mdB;
 	u16			bypass_loss_mdB;
+	u32			settling_delay_ns;
 	bool			elna_1_control_en; /* GPO0 */
 	bool			elna_2_control_en; /* GPO1 */
 };
