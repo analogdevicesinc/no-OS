@@ -3082,9 +3082,9 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 				      unsigned long *rx_path_clks,
 				      unsigned long *tx_path_clks)
 {
-	unsigned long clktf, clkrf, adc_rate = 0, dac_rate = 0, tmp;
+	unsigned long clktf, clkrf, adc_rate = 0, dac_rate = 0;
 	u64 bbpll_rate;
-	int i, index_rx = -1, index_tx = -1;
+	int i, index_rx = -1, index_tx = -1, tmp;
 	u32 div, tx_intdec, rx_intdec;
 	const char clk_dividers[][4] = {
 		{12,3,2,2},
@@ -3123,6 +3123,12 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		dac_rate = clktf * clk_dividers[i][0];
 		if ((adc_rate <= MAX_ADC_CLK) && (adc_rate >= MIN_ADC_CLK)) {
 			tmp = adc_rate / dac_rate;
+
+			if (dac_rate > adc_rate)
+				tmp = (dac_rate / adc_rate) * -1;
+			else
+				tmp = adc_rate / dac_rate;
+
 			if (adc_rate <= MAX_DAC_CLK) {
 				index_rx = i;
 				index_tx = i - ((tmp == 1) ? 0 : tmp);
