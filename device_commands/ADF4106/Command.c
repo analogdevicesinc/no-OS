@@ -61,19 +61,20 @@ const struct cmd_info cmdList[] = {
         .example = "",
     },
     [1] = {
-        .name = "setregister=",
+        .name = "register=",
         .description = "Update the selected latch with the current set ups.",
         .acceptedValue = "Accepted value:\r\n\
 \tlatch:\r\n\
 \t0 - Reference latch\r\n\
 \t1 - N Counter latch\r\n\
 \t2 - Function latch\r\n\
-\t3 - Initialization latch",
-        .example = "To load the new set ups to the Function Latch, \
-type: updatelatch=2",
+\t3 - Initialization latch\r\n\
+\tdesired value of the register",
+        .example = "To load 0xD8082 to the Function Latch, \
+type: register=2 0xD8082",
     },
     [2] = {
-        .name = "getregister=",
+        .name = "register?",
         .description = "Print the specified latch values in a human \
 readable format",
         .acceptedValue = "Accepted value:\r\n\
@@ -82,19 +83,19 @@ readable format",
 \t1 - N Counter latch\r\n\
 \t2 - Function latch\r\n\
 \t3 - Initialization latch",
-        .example = "To print the functional latch, type: printlatch=2",
+        .example = "To print the functional latch, type: register?2",
     },
     [3] = {
-        .name = "setfrequency=",
+        .name = "frequency=",
         .description = "Set the VCO frequency.",
         .acceptedValue = "Accepted value:\r\n\
 \tfrequency:\r\n\
 \t5/500 .. 200/400/6000 Mhz in function of the device type",
         .example = "To set the VCO frequency to 120 Mhz, \
-type setfrequency=120",
+type frequency=120",
     },
     [4] = {
-        .name = "getfrequency?",
+        .name = "frequency?",
         .description = "Print the actual VCO frequency.",
         .acceptedValue = "None",
         .example = "",
@@ -417,72 +418,72 @@ void GetRegister(double* param, char paramNo)
         switch(latch)
         {
             case ADF4106_CTRL_R_COUNTER :
-                CONSOLE_Print("Bellow are the %s content : 0x%.4x\r\n", \
+                CONSOLE_Print("Bellow are the %s content : 0x%4x\r\n", \
                                                 latchName[latch], rLatchBuff);
-                CONSOLE_Print("\t+ Reference Counter Register : %.4x\r\n", \
+                CONSOLE_Print("\t+ Reference Counter Register : %4x\r\n", \
                     (rLatchBuff & ADF4106_R_COUNTER(ADF4106_R_COUNTER_MASK)) \
                         >> ADF4106_R_COUNTER_OFFSET);
-                CONSOLE_Print("\t+ Anti-backlash Width : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Anti-backlash Width : 0x%1x\r\n", \
                             (rLatchBuff & ADF4106_R_ABP(ADF4106_R_ABP_MASK)) \
                             >> ADF4106_R_ABP_OFFSET);
-                CONSOLE_Print("\t+ Test Modes Bits : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Test Modes Bits : 0x%1x\r\n", \
                             (rLatchBuff & ADF4106_R_TMB(ADF4106_R_TMB_MASK)) \
                             >> ADF4106_R_TMB_OFFSET);
-                CONSOLE_Print("\t+ Lock Detect Precision : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Lock Detect Precision : 0x%1x\r\n", \
                             (rLatchBuff & ADF4106_R_LDP(ADF4106_R_LDP_MASK)) \
                             >> ADF4106_R_LDP_OFFSET);
                 break;
             case ADF4106_CTRL_N_COUNTER :
-                CONSOLE_Print("Bellow are the %s content : 0x%.4x\r\n", \
+                CONSOLE_Print("Bellow are the %s content : 0x%4x\r\n", \
                                                 latchName[latch], nLatchBuff);
                 if(deviceType == ID_ADF4106)
                 {
-                    CONSOLE_Print("\t+ 6-bit A Counter : %.4x\r\n", \
+                    CONSOLE_Print("\t+ 6-bit A Counter : %4x\r\n", \
                     (nLatchBuff & ADF4106_N_COUNTER_A(ADF4106_N_COUNTER_A_MASK)) \
                     >> ADF4106_N_COUNTER_A_OFFSET);
                 }
-                CONSOLE_Print("\t+ 13-bit B Counter : %.4x\r\n", \
+                CONSOLE_Print("\t+ 13-bit B Counter : %4x\r\n", \
                     (nLatchBuff & ADF4106_N_COUNTER_B(ADF4106_N_COUNTER_B_MASK)) \
                     >> ADF4106_N_COUNTER_B_OFFSET);
-                CONSOLE_Print("\t+ Charge Pump Gain : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Charge Pump Gain : 0x%1x\r\n", \
                                 (nLatchBuff & ADF4106_N_CP(ADF4106_N_CP_MASK)) \
                                 >> ADF4106_N_CP_OFFSET);
                 break;
             case ADF4106_CTRL_FUNCTION_LATCH :
             case ADF4106_CTRL_INIT_LATCH :
-                CONSOLE_Print("Bellow are the %s content : 0x%.4x\r\n", \
+                CONSOLE_Print("Bellow are the %s content : 0x%4x\r\n", \
                                                 latchName[latch], fiLatchBuff);
-                CONSOLE_Print("\t+ Counter Reset : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Counter Reset : 0x%1x\r\n", \
                                     (fiLatchBuff & ADF4106_CR(ADF4106_CR_MASK)) \
                                     >> ADF4106_CR_OFFSET);
-                CONSOLE_Print("\t+ Power Down 1 : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Power Down 1 : 0x%1x\r\n", \
                                 (fiLatchBuff & ADF4106_PD1(ADF4106_PD1_MASK)) \
                                     >> ADF4106_PD1_OFFSET);
-                CONSOLE_Print("\t+ Muxout Control : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Muxout Control : 0x%1x\r\n", \
                             (fiLatchBuff & ADF4106_MUXOUT(ADF4106_MUXOUT_MASK)) \
                                 >> ADF4106_MUXOUT_OFFSET);
-                CONSOLE_Print("\t+ PD Polarity : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ PD Polarity : 0x%1x\r\n", \
                             (fiLatchBuff & ADF4106_PDPOL(ADF4106_PDPOL_MASK)) \
                                 >> ADF4106_PDPOL_OFFSET);
-                CONSOLE_Print("\t+ CP Three-State : 0x%.1x\r\n",\
+                CONSOLE_Print("\t+ CP Three-State : 0x%1x\r\n",\
                                     (fiLatchBuff & ADF4106_CP(ADF4106_CP_MASK)) \
                                         >> ADF4106_CP_OFFSET);
-                CONSOLE_Print("\t+ FastLock Mode : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ FastLock Mode : 0x%1x\r\n", \
                         (fiLatchBuff & ADF4106_FASTLOCK(ADF4106_FASTLOCK_MASK)) \
                             >> ADF4106_FASTLOCK_OFFSET);
-                CONSOLE_Print("\t+ Timer Counter Control : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Timer Counter Control : 0x%1x\r\n", \
                                 (fiLatchBuff & ADF4106_TCC(ADF4106_TCC_MASK)) \
                                     >> ADF4106_TCC_OFFSET);
-                CONSOLE_Print("\t+ Current Settings 1 : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Current Settings 1 : 0x%1x\r\n", \
                                 (fiLatchBuff & ADF4106_CS1(ADF4106_CS1_MASK)) \
                                     >> ADF4106_CS1_OFFSET);
-                CONSOLE_Print("\t+ Current Settings 2 : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Current Settings 2 : 0x%1x\r\n", \
                                 (fiLatchBuff & ADF4106_CS2(ADF4106_CS2_MASK)) \
                                     >> ADF4106_CS2_OFFSET);
-                CONSOLE_Print("\t+ Power Down 2 : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Power Down 2 : 0x%1x\r\n", \
                                 (fiLatchBuff & ADF4106_PD2(ADF4106_PD2_MASK)) \
                                     >> ADF4106_PD2_OFFSET);
-                CONSOLE_Print("\t+ Prescale Value : 0x%.1x\r\n", \
+                CONSOLE_Print("\t+ Prescale Value : 0x%1x\r\n", \
                                     (fiLatchBuff & ADF4106_PS(ADF4106_PS_MASK)) \
                                         >> ADF4106_PS_OFFSET);
                 break;
@@ -510,7 +511,8 @@ void SetVcoFrequency(double* param, char paramNo)
     if(paramNo >= 1)
     {
         paramLimit(&param[0], vcoMinFrequency, vcoMaxFrequency);
-        vcoFrequency = (unsigned long long)param[0];
+        /* convert the unit to Hz */
+        vcoFrequency = (unsigned long long)param[0] * 1000000;
         vcoFrequency = ADF4106_SetFrequency(vcoFrequency);
         /* Send feedback to user */
         CONSOLE_Print("The VCO frequency was configured to %dMhz\r\n",
