@@ -50,6 +50,16 @@
 #define TIMER_BASEADDR  XPAR_AXI_TIMER_0_BASEADDR
 
 /***************************************************************************//**
+ * @brief Creates a delay of nanoseconds.
+ *
+ * @return None.
+*******************************************************************************/
+void TIME_DelayNs(unsigned short nsUnits)
+{
+    TIMER0_WAIT(TIMER_BASEADDR, nsUnits);
+}
+
+/***************************************************************************//**
  * @brief Creates a delay of microseconds.
  *
  * @return None.

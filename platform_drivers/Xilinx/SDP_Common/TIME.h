@@ -76,7 +76,8 @@
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
 /*****************************************************************************/
-#define CPU_CYCLE_TIME 10 //CPU cycle time in ns, cycle time = 1/CPU_CLOCK_RATE
+/*CPU cycle time in ns, cycle time = 1/CPU_CLOCK_RATE*/
+#define CPU_CYCLE_TIME 10
 
 #define TIMER0_WAIT(timerBaseAddr, ns) \
 	Xil_Out32(timerBaseAddr + TLR0,  (ns < CPU_CYCLE_TIME ? 1 : ns/CPU_CYCLE_TIME)); \
@@ -87,6 +88,9 @@
 /*****************************************************************************/
 /*************************** Functions Prototypes*****************************/
 /*****************************************************************************/
+/*! Creates a delay of nanoseconds. */
+void TIME_DelayNs(unsigned short nsUnits);
+
 /*! Creates a delay of microseconds. */
 void TIME_DelayUs(unsigned short usUnits);
 
