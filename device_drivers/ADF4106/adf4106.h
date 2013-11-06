@@ -92,11 +92,13 @@ typedef enum _ADF4106_init_t
 
 #define ADF4106_R_COUNTER_OFFSET            2
 #define ADF4106_R_COUNTER_MASK              0x3FFF
-#define ADF4106_R_COUNTER(x)                ((x) & ADF4106_R_COUNTER_MASK) << ADF4106_R_COUNTER_OFFSET
+#define ADF4106_R_COUNTER(x)                ((x) & ADF4106_R_COUNTER_MASK) \
+                                            << ADF4106_R_COUNTER_OFFSET
 /* Anti-backlash Pulse Width options */
 #define ADF4106_R_ABP_OFFSET                16
 #define ADF4106_R_ABP_MASK                  0x3
-#define ADF4106_R_ABP(x)                    ((x) & ADF4106_R_ABP_MASK) << ADF4106_R_ABP_OFFSET
+#define ADF4106_R_ABP(x)                    ((x) & ADF4106_R_ABP_MASK) \
+                                            << ADF4106_R_ABP_OFFSET
 #define ADF4106_R_ABP_2_9NS                 0
 #define ADF4106_R_ABP_1_3NS                 1
 #define ADF4106_R_ABP_6_0NS                 2
@@ -104,26 +106,31 @@ typedef enum _ADF4106_init_t
 /* Test Mode Bits */
 #define ADF4106_R_TMB_OFFSET                18
 #define ADF4106_R_TMB_MASK                  0x1
-#define ADF4106_R_TMB(x)                    ((x) & ADF4106_R_TMB_MASK) << ADF4106_R_TMB_OFFSET
+#define ADF4106_R_TMB(x)                    ((x) & ADF4106_R_TMB_MASK) \
+                                            << ADF4106_R_TMB_OFFSET
 #define ADF4106_R_TMB_NORMAL                0
 /* Lock Detect Precision */
 #define ADF4106_R_LDP_OFFSET                20
 #define ADF4106_R_LDP_MASK                  0x1
-#define ADF4106_R_LDP(x)                    ((x) & ADF4106_R_LDP_MASK) <<  ADF4106_R_LDP_OFFSET
+#define ADF4106_R_LDP(x)                    ((x) & ADF4106_R_LDP_MASK) \
+                                            <<  ADF4106_R_LDP_OFFSET
 #define ADF4106_R_LDP_3                     0
 #define ADF4106_R_LDP_5                     1
 
 /* N Counter Latch */
 #define ADF4106_N_COUNTER_A_OFFSET          2
 #define ADF4106_N_COUNTER_A_MASK            0x3F
-#define ADF4106_N_COUNTER_A(x)              ((x) & ADF4106_N_COUNTER_A_MASK) << ADF4106_N_COUNTER_A_OFFSET
+#define ADF4106_N_COUNTER_A(x)              ((x) & ADF4106_N_COUNTER_A_MASK) \
+                                            << ADF4106_N_COUNTER_A_OFFSET
 #define ADF4106_N_COUNTER_B_OFFSET          8
 #define ADF4106_N_COUNTER_B_MASK            0x1FFF
-#define ADF4106_N_COUNTER_B(x)              ((x) & ADF4106_N_COUNTER_B_MASK) << ADF4106_N_COUNTER_B_OFFSET
+#define ADF4106_N_COUNTER_B(x)              ((x) & ADF4106_N_COUNTER_B_MASK) \
+                                            << ADF4106_N_COUNTER_B_OFFSET
 /* Charge Pump Gain Settings */
 #define ADF4106_N_CP_OFFSET                 21
 #define ADF4106_N_CP_MASK                   0x1
-#define ADF4106_N_CP(x)                     ((x) & ADF4106_N_CP_MASK) << ADF4106_N_CP_OFFSET
+#define ADF4106_N_CP(x)                     ((x) & ADF4106_N_CP_MASK) \
+                                            << ADF4106_N_CP_OFFSET
 #define ADF4106_N_CP_GAIN_1                 0
 #define ADF4106_N_CP_GAIN_2                 1
 
@@ -131,31 +138,38 @@ typedef enum _ADF4106_init_t
 /* Counter Reset Bit */
 #define ADF4106_CR_OFFSET                   2
 #define ADF4106_CR_MASK                     0x1
-#define ADF4106_CR(x)                       ((x) & ADF4106_CR_MASK) << ADF4106_CR_OFFSET
+#define ADF4106_CR(x)                       ((x) & ADF4106_CR_MASK) \
+                                            << ADF4106_CR_OFFSET
 /* Power Down Bit 1 */
 #define ADF4106_PD1_OFFSET                  3
 #define ADF4106_PD1_MASK                    0x1
-#define ADF4106_PD1(x)                      ((x) & ADF4106_PD1_MASK) << ADF4106_PD1_OFFSET
+#define ADF4106_PD1(x)                      ((x) & ADF4106_PD1_MASK) \
+                                            << ADF4106_PD1_OFFSET
 /* Muxout Control */
 #define ADF4106_MUXOUT_OFFSET               4
 #define ADF4106_MUXOUT_MASK                 0x7
-#define ADF4106_MUXOUT(x)                   ((x) & ADF4106_MUXOUT_MASK) << ADF4106_MUXOUT_OFFSET
+#define ADF4106_MUXOUT(x)                   ((x) & ADF4106_MUXOUT_MASK) \
+                                            << ADF4106_MUXOUT_OFFSET
 /* Phase Detector Polarity */
 #define ADF4106_PDPOL_OFFSET                7
 #define ADF4106_PDPOL_MASK                  0x1
-#define ADF4106_PDPOL(x)                    ((x) & ADF4106_PDPOL_MASK) << ADF4106_PDPOL_OFFSET
+#define ADF4106_PDPOL(x)                    ((x) & ADF4106_PDPOL_MASK) \
+                                            << ADF4106_PDPOL_OFFSET
 /* Charge Pump Output*/
 #define ADF4106_CP_OFFSET                   8
 #define ADF4106_CP_MASK                     0x1
-#define ADF4106_CP(x)                       ((x) & ADF4106_CP_MASK) << ADF4106_CP_OFFSET
+#define ADF4106_CP(x)                       ((x) & ADF4106_CP_MASK) \
+                                            << ADF4106_CP_OFFSET
 /* Fast-lock Mode */
 #define ADF4106_FASTLOCK_OFFSET             9
 #define ADF4106_FASTLOCK_MASK               0x3
-#define ADF4106_FASTLOCK(x)                 ((x) & ADF4106_FASTLOCK_MASK) << ADF4106_FASTLOCK_OFFSET
+#define ADF4106_FASTLOCK(x)                 ((x) & ADF4106_FASTLOCK_MASK) \
+                                            << ADF4106_FASTLOCK_OFFSET
 /* Timer Counter Control */
 #define ADF4106_TCC_OFFSET                  11
 #define ADF4106_TCC_MASK                    0xF
-#define ADF4106_TCC(x)                      ((x) & ADF4106_TCC_MASK) << ADF4106_TCC_OFFSET
+#define ADF4106_TCC(x)                      ((x) & ADF4106_TCC_MASK) \
+                                            << ADF4106_TCC_OFFSET
 /* Current Setting Position */
 #define ADF4106_CS1_OFFSET                  15
 #define ADF4106_CS1_MASK                    0x7
@@ -167,11 +181,13 @@ typedef enum _ADF4106_init_t
 /* Synchronous or asynchronous power down*/
 #define ADF4106_PD2_OFFSET                  21
 #define ADF4106_PD2_MASK                    0x1
-#define ADF4106_PD2(x)                      ((x) & ADF4106_PD2_MASK) << ADF4106_PD2_OFFSET
+#define ADF4106_PD2(x)                      ((x) & ADF4106_PD2_MASK) \
+                                            << ADF4106_PD2_OFFSET
 /* Prescaler value */
 #define ADF4106_PS_OFFSET                   22
 #define ADF4106_PS_MASK                     0x3
-#define ADF4106_PS(x)                       ((x) & ADF4106_PS_MASK) << ADF4106_PS_OFFSET
+#define ADF4106_PS(x)                       ((x) & ADF4106_PS_MASK) \
+                                            << ADF4106_PS_OFFSET
 
 /* Counter Reset Bit Definition */
 #define ADF4106_CR_NORMAL                 0
@@ -236,7 +252,7 @@ typedef enum _ADF4106_init_t
 /* The default slave ID for SPI interface */
 #define ADF4106_SLAVE_ID                    1
 
-/* Default prescale for ADF4001 and ADF4002 */
+/* Default prescaler for ADF4001 and ADF4002 */
 #define ADF4106_PRESCALE(x)                 (8 << (x))
 
 /*****************************************************************************/
@@ -279,6 +295,9 @@ typedef struct _ADF4106_settings_t {
 
     /* Reference Input Frequency*/
     unsigned long refIn;
+
+    /* PFD max frequency */
+    unsigned long pfdMax;
 
     /* Reference latch */
     unsigned short refCounter : 14;

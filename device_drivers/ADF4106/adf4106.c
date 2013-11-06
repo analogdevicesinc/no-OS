@@ -54,6 +54,9 @@
 #define DATA_OFFSET_LSB8    0
 #define ADDRESS_MASK        3
 
+#define FREQ_2_4_GHZ        2400000000
+#define FREQ_5_2_GHZ        5200000000
+
 /*****************************************************************************/
 /**************************** Private variables ******************************/
 /*****************************************************************************/
@@ -64,7 +67,7 @@ struct adf4106_chip_info {
     unsigned long pfdMinFrequency;
 };
 
-static const struct adf4106_chip_info ADF4106_CHIP_INFO[] = {
+struct adf4106_chip_info ADF4106_CHIP_INFO[] = {
     [ID_ADF4001] = {
         .vcoMaxFrequency = 200000000,           // 200  Mhz
         .pfdMaxFrequency = 55000000,            // 55   Mhz
@@ -80,7 +83,7 @@ static const struct adf4106_chip_info ADF4106_CHIP_INFO[] = {
     [ID_ADF4106] = {
         .vcoMaxFrequency = 6000000000,          // 6    Ghz
         .pfdMaxFrequency = 104000000,           // 104  Mhz
-        .vcoMinFrequency = 5000000,             // 5    Mhz
+        .vcoMinFrequency = 500000000,           // 500  Mhz
         .pfdMinFrequency = 20000000,            // 20   Mhz
     }
 };
@@ -109,7 +112,8 @@ unsigned long iLatch = 0;
  *                        0 - 'INIT_LATCH',
  *                        1 - 'INIT_CEPIN',
  *                        2 - 'INIT_COUNTER_RESET'
- *        ADF4106_st    - the structure with the initial set up values of the *                        registers
+ *        ADF4106_st    - the structure with the initial set up values of the
+ *                        registers
  *
  * @return success
 ******************************************************************************/
@@ -122,8 +126,8 @@ char ADF4106_Init(ADF4106_type_t device,
     /* lock the current device */
     this_device = device;
 
-    /* CPHA = 0; CPOL = 0; */
-    status = SPI_Init(0, 100000, 0, 0);
+    /* CPHA = 1; CPOL = 0; */
+    status = SPI_Init(0, 100000, 0, 1);
 
     /* Bring CE high to put device to power up */
     ADF4106_CE_OUT;
@@ -134,6 +138,12 @@ char ADF4106_Init(ADF4106_type_t device,
 
     /* Set up the reference input frequency */
     refIn = ADF4106_st.refIn;
+
+    /* Import the PFD max limit, from user set up */
+    if(ADF4106_CHIP_INFO[this_device].pfdMaxFrequency > ADF4106_st.pfdMax)
+    {
+    	ADF4106_CHIP_INFO[this_device].pfdMaxFrequency = ADF4106_st.pfdMax;
+    }
 
     switch(initMethod)
     {
@@ -387,9 +397,9 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
     unsigned short     rCounterValue       = 0; // Value for R counter
     unsigned short     a                   = 0; // Value for A counter
     unsigned short     b                   = 0; // Value for B counter
-    unsigned char      devicePrescale      = 0;
+    unsigned char      devicePrescaler     = 0;
+    unsigned char      userPrescaler       = 0; // prescaler defined by user
 
-    frequency *= 1000000; // convert the unit to Hz
     /* Force "frequency" parameter to the [minMHz...maxGHz] interval. */
     if(frequency <= ADF4106_CHIP_INFO[this_device].vcoMaxFrequency)
     {
@@ -411,18 +421,36 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
         /* Get the actual PFD frequency. */
         rCounterValue = ADF4106_TuneRcounter(rCounterValue);
         frequencyPfd = refIn / rCounterValue;
-        /* Define prescale */
-        devicePrescale = (this_device != ID_ADF4106) ? \
+        /* Define the value of the prescaler
+        *  By default the prescaler is constant for ADF4001 and ADF4002
+        *  In case of ADF4106, the minimum admitted prescaler will be selected,
+        *  or the user defined prescaler if it is valid (big enough)
+        *  Valid min prescaler : VCO < 2.4Ghz -> 8/9
+        *                        VCO > 2.4Ghz and VCO < 5.4Ghz -> 16/17
+        *                        VCO > 5.4Ghz -> 32/33
+        */
+        userPrescaler = ADF4106_PRESCALE(fLatch >> ADF4106_PS_OFFSET);
+        devicePrescaler = (this_device != ID_ADF4106) ? \
                                 ADF4106_PRESCALE(ADF4106_PS_8_9) : \
-                                ADF4106_PRESCALE(fLatch >> ADF4106_PS_OFFSET);
+                         (vcoFrequency <= FREQ_2_4_GHZ) ? \
+                                ADF4106_PRESCALE(ADF4106_PS_8_9) : \
+                         ((vcoFrequency > FREQ_2_4_GHZ) & \
+                          (vcoFrequency < FREQ_5_2_GHZ)) ? \
+                                ADF4106_PRESCALE(ADF4106_PS_16_17) : \
+                                ADF4106_PRESCALE(ADF4106_PS_32_33);
+        if(devicePrescaler < userPrescaler)
+        {
+            devicePrescaler = userPrescaler;
+        }
         /* Find the values for Counter A and Counter B using VCO frequency and
-        PFD frequency. */
+        *  PFD frequency.
+        */
         freqRatio = (unsigned short)((float)vcoFrequency / frequencyPfd);
-        b = freqRatio / devicePrescale;
-        a = freqRatio % devicePrescale;
+        b = freqRatio / devicePrescaler;
+        a = freqRatio % devicePrescaler;
     }while(a > b); // B must be greater or equal to A
     /* Find the actual VCO frequency. */
-    calculatedFrequency = (unsigned long long)((b * devicePrescale) + a) * frequencyPfd;
+    calculatedFrequency = (unsigned long long)((b * devicePrescaler) + a) * frequencyPfd;
     /* Load the saved values into the registers using Counter Reset Method. */
     ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH |
                         fLatch |
@@ -446,7 +474,7 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
     {
         ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER |
                             nLatch |
-                            ADF4106_N_COUNTER_B((b * devicePrescale) + a));
+                            ADF4106_N_COUNTER_B((b * devicePrescaler) + a));
     }
 
     fLatch &= ~ADF4106_CR(ADF4106_CR_MASK);
