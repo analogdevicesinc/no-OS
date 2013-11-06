@@ -52,7 +52,7 @@ ADF4153_settings_t ADF4153_st =
     ADF4153_FASTLOCK_DISABLED,          // Fast-Lock
     16,                                 // 12-bit interpolator modulus value
     7,                                  // 4-bit R Counter
-    ADF4153_PRESCALER_8_9,              // Prescale
+    ADF4153_PRESCALER_4_5,              // Prescale
     ADF4153_MUXOUT_LOGICHIGH,           // Muxout
     ADF4153_LOAD_NORMAL,                // Load Control
     ADF4153_CR_DISABLED,                // Counter Reset

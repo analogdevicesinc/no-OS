@@ -77,16 +77,19 @@
 /* 12-bit fractional value */
 #define ADF4153_R0_FRAC_OFFSET              2
 #define ADF4153_R0_FRAC_MASK                0xFFF
-#define ADF4153_R0_FRAC(x)                  ((x) & ADF4153_R0_FRAC_MASK) << ADF4153_R0_FRAC_OFFSET
+#define ADF4153_R0_FRAC(x)                  ((x) & ADF4153_R0_FRAC_MASK) \
+                                              << ADF4153_R0_FRAC_OFFSET
 /* 9-bit integer value */
 #define ADF4153_R0_INT_OFFSET               14
 #define ADF4153_R0_INT_MASK                 0x1FF
-#define ADF4153_R0_INT(x)                   ((x) & ADF4153_R0_INT_MASK) << ADF4153_R0_INT_OFFSET
+#define ADF4153_R0_INT(x)                   ((x) & ADF4153_R0_INT_MASK) \
+                                              << ADF4153_R0_INT_OFFSET
 
 /* Fast-Lock */
 #define ADF4153_R0_FASTLOCK_OFFSET          23
 #define ADF4153_R0_FASTLOCK_MASK            0x1
-#define ADF4153_R0_FASTLOCK(x)              ((x) & ADF4153_R0_FASTLOCK_MASK) << ADF4153_R0_FASTLOCK_OFFSET
+#define ADF4153_R0_FASTLOCK(x)              ((x) & ADF4153_R0_FASTLOCK_MASK) \
+                                              << ADF4153_R0_FASTLOCK_OFFSET
 
 /* R Divider Register */
 

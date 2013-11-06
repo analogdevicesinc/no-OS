@@ -57,6 +57,8 @@
 #define DATA_OFFSET_LSB8    0
 #define ADDRESS_MASK        3
 
+#define FREQ_2_GHZ          2000000000
+
 /*****************************************************************************/
 /**************************** Private variables ******************************/
 /*****************************************************************************/
@@ -89,7 +91,8 @@ unsigned long r3 = 0;               /* the actual value of Noise and Spur Reg*/
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for ADF4106 Board.
  *
- * @param  ADF4106_st    - the structure with the initial set up values of the *                         registers
+ * @param  ADF4106_st    - the structure with the initial set up values of the
+ *                         registers
  *
  * @return success
 ******************************************************************************/
@@ -256,7 +259,7 @@ unsigned long ADF4153_TuneRcounter(unsigned short *rCounter)
     do
     {
         (*rCounter)++;
-        pfdFrequency = refIn * ((1 + refDoubler) / (*rCounter));
+        pfdFrequency = refIn * ((float)(1 + refDoubler) / (*rCounter));
     }
     while(pfdFrequency > ADF4153_PFD_MAX_FRQ);
 
@@ -280,7 +283,8 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
     unsigned long      modValue            = 0;     // MOD value
     unsigned short     rCounter            = 0;     // R Counter
     float              buffer              = 0;
-
+    unsigned char      devicePrescaler     = 0;
+    unsigned char      intMin              = 0;
     /* validate the given frequency parameter */
     if(frequency <= ADF4153_VCO_MAX_FRQ)
     {
@@ -308,12 +312,18 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
             modValue = CEIL(refIn, channelSpacing);
         }while(modValue <= ADF4153_MOD_MAX);
     }
-
-    /* define the PFD frequency and R Counter, using the TuneRCounter() */
-    pfdFrequency = ADF4153_TuneRcounter(&rCounter);
-
-    /* define the INT and FRAC value */
-    intValue = vcoFrequency / pfdFrequency;
+    /* define prescaler */
+    devicePrescaler = (vcoFrequency <= FREQ_2_GHZ) ? ADF4153_PRESCALER_4_5 : \
+                                                     ADF4153_PRESCALER_8_9;
+    intMin = (devicePrescaler == ADF4153_PRESCALER_4_5) ? 31 : 91;
+    /* define the PFD frequency, R counter ant INT value */
+    do
+    {
+        /* define the PFD frequency and R Counter, using the TuneRCounter() */
+        pfdFrequency = ADF4153_TuneRcounter(&rCounter);
+        intValue = vcoFrequency / pfdFrequency;
+    }while(intValue < intMin);
+    /*define FRAC value */
     do
     {
         fracValue++;
@@ -333,11 +343,13 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
 
     /* Load the R divider with the new values */
     r1 &= (~ADF4153_R1_MOD(ADF4153_R1_MOD_MASK) &
-           ~ADF4153_R1_RCOUNTER(ADF4153_R1_RCOUNTER_MASK));
+           ~ADF4153_R1_RCOUNTER(ADF4153_R1_RCOUNTER_MASK) &
+           ~ADF4153_R1_PRESCALE(ADF4153_R1_PRESCALE_MASK));
     ADF4153_UpdateLatch(ADF4153_CTRL_R_DIVIDER |
                         r1 |
                         ADF4153_R1_MOD(modValue) |
-                        ADF4153_R1_RCOUNTER(rCounter));
+                        ADF4153_R1_RCOUNTER(rCounter) |
+                        ADF4153_R1_PRESCALE(devicePrescaler));
 
     /* Load the N divider with the new values */
     r0 &= (~ADF4153_R0_FRAC(ADF4153_R0_FRAC_MASK) &
