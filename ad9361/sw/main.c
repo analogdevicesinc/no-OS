@@ -73,6 +73,11 @@ AD9361_InitParam default_init_param = {
 	0,		//tdd_skip_vco_cal_enable *** adi,tdd-skip-vco-cal-enable
 	0,		//external_rx_lo_enable *** adi,external-rx-lo-enable
 	0,		//external_tx_lo_enable *** adi,external-tx-lo-enable
+	5,		//dc_offset_tracking_update_event_mask *** adi,dc-offset-tracking-update-event-mask
+	6,		//dc_offset_attenuation_high_range *** adi,dc-offset-tracking-update-event-mask
+	5,		//dc_offset_attenuation_low_range *** adi,dc-offset-tracking-update-event-mask
+	0x28,	//dc_offset_count_high_range *** adi,dc-offset-tracking-update-event-mask
+	0x32,	//dc_offset_count_low_range *** adi,dc-offset-tracking-update-event-mask
 	0,		//tdd_use_fdd_vco_tables_enable *** adi,tdd-use-fdd-vco-tables-enable
 	0,		//split_gain_table_mode_enable *** adi,split-gain-table-mode-enable
 	/* ENSM Control */

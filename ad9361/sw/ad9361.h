@@ -3017,6 +3017,11 @@ struct ad9361_phy_platform_data {
 	bool			tdd_skip_vco_cal;
 	bool			use_ext_rx_lo;
 	bool			use_ext_tx_lo;
+	u8				dc_offset_update_events;
+	u8				dc_offset_attenuation_high;
+	u8				dc_offset_attenuation_low;
+	u8				rf_dc_offset_count_high;
+	u8				rf_dc_offset_count_low;
 	u32			dcxo_coarse;
 	u32			dcxo_fine;
 	u32			rf_rx_input_sel;

@@ -81,6 +81,11 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->tdd_skip_vco_cal = init_param->tdd_skip_vco_cal_enable;
 	phy->pdata->use_ext_rx_lo = init_param->external_rx_lo_enable;
 	phy->pdata->use_ext_tx_lo = init_param->external_tx_lo_enable;
+	phy->pdata->dc_offset_update_events = init_param->dc_offset_tracking_update_event_mask;
+	phy->pdata->dc_offset_attenuation_high = init_param->dc_offset_attenuation_high_range;
+	phy->pdata->dc_offset_attenuation_low = init_param->dc_offset_attenuation_low_range;
+	phy->pdata->rf_dc_offset_count_high = init_param->dc_offset_count_high_range;
+	phy->pdata->rf_dc_offset_count_low = init_param->dc_offset_count_low_range;
 	phy->pdata->tdd_use_fdd_tables = init_param->tdd_use_fdd_vco_tables_enable;
 	phy->pdata->split_gt = init_param->split_gain_table_mode_enable;
 

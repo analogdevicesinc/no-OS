@@ -2150,12 +2150,14 @@ static int ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 
 	/* see Table 70 Example Calibration Times for RF VCO Cal */
 	if (phy->pdata->fdd) {
-		vco_cal_cnt = 0x8E;
+		vco_cal_cnt = VCO_CAL_EN | VCO_CAL_COUNT(3) | FB_CLOCK_ADV(2);
 	} else {
-		if (ref_clk_hz >= 50000000UL)
-			vco_cal_cnt = 0x86;
+		if (ref_clk_hz > 40000000UL)
+			vco_cal_cnt = VCO_CAL_EN | VCO_CAL_COUNT(1) |
+				FB_CLOCK_ADV(2);
 		else
-			vco_cal_cnt = 0x82;
+			vco_cal_cnt = VCO_CAL_EN | VCO_CAL_COUNT(0) |
+				FB_CLOCK_ADV(2);
 	}
 
 	ad9361_spi_write(REG_RX_VCO_CAL + offs, vco_cal_cnt);
@@ -2208,17 +2210,20 @@ static int ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(REG_WAIT_COUNT, 0x20);
 
 	if(rx_freq <= 4000000000ULL) {
-		ad9361_spi_write(REG_RF_DC_OFFSET_COUNT, 0x32);
+		ad9361_spi_write(REG_RF_DC_OFFSET_COUNT,
+				 phy->pdata->rf_dc_offset_count_low);
 		ad9361_spi_write(REG_RF_DC_OFFSET_CONFIG_1,
 				 RF_DC_CALIBRATION_COUNT(4) | DAC_FS(2));
 		ad9361_spi_write(REG_RF_DC_OFFSET_ATTEN,
-				 RF_DC_OFFSET_ATTEN(5));
+				 RF_DC_OFFSET_ATTEN(
+				 phy->pdata->dc_offset_attenuation_low));
 	} else {
 		ad9361_spi_write(REG_RF_DC_OFFSET_COUNT, 0x28);
 		ad9361_spi_write(REG_RF_DC_OFFSET_CONFIG_1,
 				 RF_DC_CALIBRATION_COUNT(4) | DAC_FS(3));
 		ad9361_spi_write(REG_RF_DC_OFFSET_ATTEN,
-				 RF_DC_OFFSET_ATTEN(6));
+				 RF_DC_OFFSET_ATTEN(
+				 phy->pdata->dc_offset_attenuation_high));
 	}
 
 	ad9361_spi_write(REG_DC_OFFSET_CONFIG2,
@@ -2368,12 +2373,11 @@ static int ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	ad9361_spi_write(REG_CALIBRATION_CONFIG_3,
 			 PREVENT_POS_LOOP_GAIN | K_EXP_AMPLITUDE(0x15));
 
-	ad9361_spi_writef(REG_DC_OFFSET_CONFIG2,
-			  DC_OFFSET_UPDATE(~0), 0x5); /* Gain change + Rx exit */
-	ad9361_spi_writef(REG_DC_OFFSET_CONFIG2,
-			  ENABLE_BB_DC_OFFSET_TRACKING, bbdc_track);
-	ad9361_spi_writef(REG_DC_OFFSET_CONFIG2,
-			  ENABLE_RF_OFFSET_TRACKING, rfdc_track);
+	ad9361_spi_write(REG_DC_OFFSET_CONFIG2,
+			 USE_WAIT_COUNTER_FOR_RF_DC_INIT_CAL |
+			 DC_OFFSET_UPDATE(phy->pdata->dc_offset_update_events) |
+			(bbdc_track ? ENABLE_BB_DC_OFFSET_TRACKING : 0) |
+			(rfdc_track ? ENABLE_RF_OFFSET_TRACKING : 0));
 
 	if (rxquad_track)
 		qtrack = ENABLE_TRACKING_MODE_CH1 |
