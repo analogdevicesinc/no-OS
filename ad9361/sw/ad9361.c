@@ -2957,6 +2957,16 @@ static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
 	dev_dbg("Device is in %x state, moving to %x\n", phy->curr_ensm_state,
 			ensm_state);
 
+	if (phy->curr_ensm_state == ENSM_STATE_SLEEP) {
+		ad9361_spi_write(REG_CLOCK_ENABLE,
+			DIGITAL_POWER_UP | CLOCK_ENABLE_DFLT | BBPLL_ENABLE |
+			(phy->pdata->use_extclk ? XO_BYPASS : 0)); /* Enable Clocks */
+		udelay(20);
+		ad9361_spi_write(REG_ENSM_CONFIG_1, TO_ALERT | FORCE_ALERT_STATE);
+		ad9361_trx_vco_cal_control(phy, true, true); /* Disable VCO Cal */
+		ad9361_trx_vco_cal_control(phy, false, true);
+	}
+
 	val = (phy->pdata->ensm_pin_pulse_mode ? 0 : LEVEL_MODE) |
 			(pinctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
 			TO_ALERT;
@@ -2987,6 +2997,20 @@ static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
 		break;
 	case ENSM_STATE_SLEEP_WAIT:
 		break;
+	case ENSM_STATE_SLEEP:
+		ad9361_trx_vco_cal_control(phy, true, false); /* Disable VCO Cal */
+		ad9361_trx_vco_cal_control(phy, false, false);
+		ad9361_spi_write(REG_ENSM_CONFIG_1, 0); /* Clear To Alert */
+		ad9361_spi_write(REG_ENSM_CONFIG_1,
+				 phy->pdata->fdd ? FORCE_TX_ON : FORCE_RX_ON);
+		/* Delay Flush Time 384 ADC clock cycles */
+		udelay(384000000UL / clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
+		ad9361_spi_write(REG_ENSM_CONFIG_1, 0); /* Move to Wait*/
+		udelay(1); /* Wait for ENSM settle */
+		ad9361_spi_write(REG_CLOCK_ENABLE, 0); /* Turn off all clocks */
+		phy->curr_ensm_state = ensm_state;
+		return 0;
+
 	default:
 		dev_err("No handling for forcing %d ensm state\n",
 		ensm_state);
