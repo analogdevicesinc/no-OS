@@ -829,7 +829,7 @@ int32_t ad9548_setup(void)
     /* Clock distribution output */
 	distr_settings = (pdata->clock_distr_ext_resistor << 5) |
                      (pdata->clock_distr_high_freq_mode << 4) | 
-                     0xFF;
+                     0xF;
     ret = ad9548_write(AD9548_REG_DISTRIBUTION_SETTINGS, distr_settings);
     if(ret < 0)
         return ret;
