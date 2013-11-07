@@ -2563,7 +2563,8 @@ static int ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 */
 
 	reg = (200 * delay_lna) / 2 + (14000000UL / (clkrf / 500U));
-	reg = DIV_ROUND_UP(reg, 1000UL) + 1; /*FIXME Recovery time */
+	reg = DIV_ROUND_UP(reg, 1000UL) +
+	phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
 	reg = clamp_t(u8, reg, 0U, 31U);
 	ret = ad9361_spi_writef(REG_AGC_ATTACK_DELAY,
 			  AGC_ATTACK_DELAY(~0), reg);
@@ -2572,8 +2573,7 @@ static int ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 * Peak Overload Wait Time (ClkRF cycles)=ceiling((0.1+Delay_LNA) *clkRF+1)
 	 */
 	reg = (delay_lna + 100UL) * (clkrf / 1000UL);
-	reg = DIV_ROUND_UP(reg, 1000000UL) +
-		phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
+	reg = DIV_ROUND_UP(reg, 1000000UL) + 1;
 	reg = clamp_t(u8, reg, 0U, 31U);
 	ret |= ad9361_spi_writef(REG_PEAK_WAIT_TIME,
 			  PEAK_OVERLOAD_WAIT_TIME(~0), reg);
