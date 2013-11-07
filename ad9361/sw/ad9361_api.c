@@ -187,6 +187,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->ctrl_outs_ctrl.index = init_param->ctrl_outs_index;
 
 	/* External LNA Control */
+	phy->pdata->elna_ctrl.settling_delay_ns = init_param->elna_settling_delay_ns;
 	phy->pdata->elna_ctrl.gain_mdB = init_param->elna_gain_mdB;
 	phy->pdata->elna_ctrl.bypass_loss_mdB = init_param->elna_bypass_loss_mdB;
 	phy->pdata->elna_ctrl.elna_1_control_en = init_param->elna_rx1_gpo0_control_enable;

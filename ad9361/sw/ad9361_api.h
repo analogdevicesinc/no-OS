@@ -145,6 +145,7 @@ typedef struct
 	uint8_t		ctrl_outs_enable_mask;	/* adi,ctrl-outs-enable-mask */
 	uint8_t		ctrl_outs_index;	/* adi,ctrl-outs-index */
 	/* External LNA Control */
+	uint32_t	elna_settling_delay_ns;	/* adi,elna-settling-delay-ns */
 	uint32_t	elna_gain_mdB;	/* adi,elna-gain-mdB */
 	uint32_t	elna_bypass_loss_mdB;	/* adi,elna-bypass-loss-mdB */
 	uint8_t		elna_rx1_gpo0_control_enable;	/* adi,elna-rx1-gpo0-control-enable */

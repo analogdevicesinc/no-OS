@@ -160,6 +160,7 @@ AD9361_InitParam default_init_param = {
 	0xFF,	//ctrl_outs_enable_mask *** adi,ctrl-outs-enable-mask
 	0,		//ctrl_outs_index *** adi,ctrl-outs-index
 	/* External LNA Control */
+	0,		//elna_settling_delay_ns *** adi,elna-settling-delay-ns
 	0,		//elna_gain_mdB *** adi,elna-gain-mdB
 	0,		//elna_bypass_loss_mdB *** adi,elna-bypass-loss-mdB
 	0,		//elna_rx1_gpo0_control_enable *** adi,elna-rx1-gpo0-control-enable
