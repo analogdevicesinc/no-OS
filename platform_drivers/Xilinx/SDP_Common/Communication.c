@@ -190,6 +190,7 @@ char PLATFORM_Init(platformBoard platform)
         SPI_BASEADDR  = XPAR_AXI_SPORT_0_BASEADDR;
         I2C_BASEADDR  = XPAR_AXI_IIC_0_BASEADDR;
         GPIO_BASEADDR = XPAR_GPIO_0_BASEADDR;
+        PAR_BASEADDR  = XPAR_AXI_PAR_0_BASEADDR;
         UART_BAUDRATE = 115200;
         break;
      default :

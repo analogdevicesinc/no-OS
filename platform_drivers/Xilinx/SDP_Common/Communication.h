@@ -127,6 +127,11 @@
 //#define ADF4157
 
 /*****************************************************************************/
+/**************** Synchro/Resolver to Digital Converters *********************/
+/*****************************************************************************/
+//#define AD2S1205
+
+/*****************************************************************************/
 /**************************** UART Definitions *******************************/
 /*****************************************************************************/
 #define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
@@ -251,6 +256,11 @@
   currCfgWord = Xil_In32((GPIO_BASEADDR + GPIO_DATA)); \
   Xil_Out32((GPIO_BASEADDR + GPIO_DATA), currCfgWord | cfgWord); \
 }
+#define GPIO_GET_DATA(GPIO_BASE_ADDR) \
+	Xil_In32((GPIO_BASE_ADDR + GPIO_DATA))
+
+#define GPIO_SET_DATA(GPIO_BASE_ADDR, cfgWord) \
+	Xil_Out32((GPIO_BASE_ADDR + GPIO_DATA), cfgWord);
 
 #if(defined(AD5541A) || defined(AD5542A))
 #define GPIO_0_MASK   0x02
@@ -336,6 +346,7 @@ typedef enum
 u32 SPI_BASEADDR;
 u32 I2C_BASEADDR;
 u32 GPIO_BASEADDR;
+u32 PAR_BASEADDR;
 u32 UART_BAUDRATE;
 
 /*****************************************************************************/
