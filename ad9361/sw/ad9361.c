@@ -954,7 +954,7 @@ static int ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 			 START_GM_SUB_TABLE_CLOCK); /* Start Clock */
 
 	for (i = 0, addr = ARRAY_SIZE(gm_st_ctrl); i < ARRAY_SIZE(gm_st_ctrl); i++) {
-		ad9361_spi_write(REG_GAIN_TABLE_ADDRESS, --addr); /* Gain Table Index */
+		ad9361_spi_write(REG_GM_SUB_TABLE_ADDRESS, --addr); /* Gain Table Index */
 		ad9361_spi_write(REG_GM_SUB_TABLE_BIAS_WRITE, 0); /* Bias */
 		ad9361_spi_write(REG_GM_SUB_TABLE_GAIN_WRITE, gm_st_gain[i]); /* Gain */
 		ad9361_spi_write(REG_GM_SUB_TABLE_CTRL_WRITE, gm_st_ctrl[i]); /* Control */
