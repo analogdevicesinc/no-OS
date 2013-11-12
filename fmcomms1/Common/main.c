@@ -210,8 +210,7 @@ int main()
     xil_printf("Actual set Tx frequency: %lld%06lld\n\r", retFreqTx/(uint64_t)1e6, retFreqTx%(uint64_t)1e6);
 
     xil_printf("\n\rSetting up the DDS... \n\r");
-    //dds_setup(fmcSel, 5, 5);
-    dac_dma_setup(fmcSel);
+    dds_setup(fmcSel, 5, 5);
     xil_printf("DDS setup complete.\n\r");
 
     xil_printf("\n\rReading data from air... \n\r");
