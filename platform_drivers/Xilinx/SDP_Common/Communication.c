@@ -171,6 +171,10 @@ void DefinePorts(void)
     defined(ADF4153) || defined(ADF4156) || defined(ADF4157))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
+/**************** Custom setups for Circuits from the Lab *********************/
+#if(defined(CN0150))
+    SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
 }
 
 /***************************************************************************//**
