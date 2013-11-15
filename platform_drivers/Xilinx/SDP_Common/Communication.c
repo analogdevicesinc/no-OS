@@ -172,7 +172,7 @@ void DefinePorts(void)
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
 /**************** Custom setups for Circuits from the Lab *********************/
-#if(defined(CN0150))
+#if(defined(CN0150) || (defined(CN0178)))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
 }
