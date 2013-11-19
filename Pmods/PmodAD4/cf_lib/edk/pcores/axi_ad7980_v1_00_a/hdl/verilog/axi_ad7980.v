@@ -234,12 +234,12 @@ module axi_ad7980 (
   always @(posedge adc_clk)
   begin
       adc_valid <= data_rd_ready_s;
-      adc_data  <= { 16'h0, adc_data_s};
+      adc_data  <= { adc_data_s, 16'h0 };
   end
 
   // processor read interface
 
-  always @(negedge up_rstn or posedge up_clk) begin
+  always @(negedge up_rstn or posedge up_clk) begin 
     if (up_rstn == 0) begin
       up_rdata  <= 'd0;
       up_ack    <= 'd0;
@@ -260,8 +260,7 @@ module axi_ad7980 (
     .adc_sdo (adc_sdo_i),
     .adc_sdi (),
     .adc_sclk_o (adc_sclk_o),
-    .adc_cnv_o (adc_cnv_o),
-    .adc_status_o (adc_status_s)
+    .adc_cnv_o (adc_cnv_o)
     );
 // dma transfer 
   dma_core #(.DATA_WIDTH(32)) i_dma_core (
@@ -291,7 +290,7 @@ module axi_ad7980 (
     .adc_r1_mode (),
     .adc_ddr_edgesel (),
     .adc_pin_mode (),
-    .adc_status (adc_status_s),
+    .adc_status (data_rd_ready_s),
     .adc_clk_ratio (32'd1),
     .delay_clk (1'b0),
     .delay_rst (),
@@ -305,7 +304,7 @@ module axi_ad7980 (
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),
-    .drp_rwn (),
+    .drp_wr (),
     .drp_addr (),
     .drp_wdata (),
     .drp_rdata (16'd0),

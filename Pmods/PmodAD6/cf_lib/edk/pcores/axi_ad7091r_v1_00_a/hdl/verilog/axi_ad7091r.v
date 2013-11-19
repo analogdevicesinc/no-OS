@@ -236,7 +236,7 @@ module axi_ad7091r (
   always @(posedge adc_clk)
   begin
       adc_valid <= data_rd_ready_s;
-      adc_data  <= { 16'h0, adc_data_s };
+      adc_data  <= { adc_data_s, 16'h0 };
   end
 
   // processor read interface
@@ -307,7 +307,7 @@ module axi_ad7091r (
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),
-    .drp_rwn (),
+    .drp_wr (),
     .drp_addr (),
     .drp_wdata (),
     .drp_rdata (16'd0),

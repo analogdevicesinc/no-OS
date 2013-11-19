@@ -315,7 +315,7 @@ module axi_ad7780 (
     .drp_clk (1'd0),
     .drp_rst (),
     .drp_sel (),
-    .drp_rwn (),
+    .drp_wr (),
     .drp_addr (),
     .drp_wdata (),
     .drp_rdata (16'd0),
