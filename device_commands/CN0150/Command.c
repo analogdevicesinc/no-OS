@@ -97,7 +97,8 @@ cmdFunction cmdFunctions[] = {GetHelp, DoCalibration, GetPinCalc, GetError};
 float          slope     = -24;          // nominal value
 float          intercept = 20;           // nominal value
 float          pinCalc   = 0;
-unsigned char  data[2]   = {0x21, 0x00}; // control bytes for ADC
+unsigned char  data[2]   = {0x21, 0x00}; /* control bytes for ADC
+0x21 - the on-chip reference is disabled; mode 2; single channel. */
 
 /***************************************************************************//**
  * @brief Displays all available commands.
