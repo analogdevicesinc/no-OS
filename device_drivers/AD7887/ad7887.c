@@ -69,10 +69,11 @@ char AD7887_Init(void)
 }
 
 /**************************************************************************//**
- * @brief Receives 16 bits from SPI and transmits 0x2100.
- *        0x2100 - the on-chip reference is disabled; mode 2; single channel.
+ * @brief Receives 16 bits from SPI and transmits 2 control bytes.
  *
- * @param data[2] - 2 control bytes(0x21, 0x00).
+ * @param data[2] - 2 control bytes.
+ * 		  			The first byte is the control register on the AD7887.
+ * 		  			The second byte is "don't care".
  *
  * @return rxData - Received data in case of success.
 ******************************************************************************/
