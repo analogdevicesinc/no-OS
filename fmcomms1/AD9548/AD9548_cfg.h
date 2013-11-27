@@ -51,15 +51,7 @@ struct ad9548_reference_spec ad9548_references[] =
 		30000000,   //ref_freq
 		0,          //power_down_en
 		0x00,       //logic_family
-		0,          //manual_profile_en
-		0,          //manual_profile
-	},
-	{ // Ref AA
-		1,          //ref_num
-		30000000,   //ref_freq
-		0,          //power_down_en
-		0x00,       //logic_family
-		0,          //manual_profile_en
+		1,          //manual_profile_en
 		0,          //manual_profile
 	}
 };
@@ -145,7 +137,7 @@ struct ad9548_platform_data ad9548_pdata_lpc =
     ad9548_channels, //channels
 
     /* Reference inputs */
-    2,          //num_references
+    1,          //num_references
     ad9548_references, //references
 
     /* Reference profiles */
@@ -153,6 +145,59 @@ struct ad9548_platform_data ad9548_pdata_lpc =
     0,          //ref_profiles
 
     "ad9548-lpc" //name
+};
+
+static const uint16_t ad9548_profiles[][2] = {
+        {0x0600, 0x00}, /* Profiles are 0x0600-0x07FF */
+        {0x0601, 0x55}, /* Profile 0 */
+        {0x0602, 0xA0}, /* 30MHz input from FPGA, 122.880MHz output clock */
+        {0x0603, 0xFC},
+        {0x0604, 0x01},
+        {0x0605, 0x00},
+        {0x0606, 0x00},
+        {0x0607, 0x00},
+        {0x0608, 0xE8},
+        {0x0609, 0x03},
+        {0x060A, 0x00},
+        {0x060B, 0xE8},
+        {0x060C, 0x03},
+        {0x060D, 0x00},
+        {0x060E, 0x88},
+        {0x060F, 0x13},
+        {0x0610, 0x88},
+        {0x0611, 0x13},
+        {0x0612, 0x0E},
+        {0x0613, 0xB2},
+        {0x0614, 0x08},
+        {0x0615, 0x82},
+        {0x0616, 0x62},
+        {0x0617, 0x42},
+        {0x0618, 0xD8},
+        {0x0619, 0x47},
+        {0x061A, 0x21},
+        {0x061B, 0xCB},
+        {0x061C, 0xC4},
+        {0x061D, 0x05},
+        {0x061E, 0x7F},
+        {0x061F, 0x00},
+        {0x0620, 0x00},
+        {0x0621, 0x00},
+        {0x0622, 0x0B},
+        {0x0623, 0x02},
+        {0x0624, 0x00},
+        {0x0625, 0x00},
+        {0x0626, 0x26},
+        {0x0627, 0xB0},
+        {0x0628, 0x00},
+        {0x0629, 0x10},
+        {0x062A, 0x27},
+        {0x062B, 0x20},
+        {0x062C, 0x44},
+        {0x062D, 0xF4},
+        {0x062E, 0x01},
+        {0x062F, 0x00},
+        {0x0630, 0x20},
+        {0x0631, 0x44},
 };
 
 #endif // __AD9548_CFG_H__

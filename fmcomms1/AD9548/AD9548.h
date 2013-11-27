@@ -801,6 +801,7 @@ struct ad9548_platform_data
     int8_t name[32];
 };
 
+#define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

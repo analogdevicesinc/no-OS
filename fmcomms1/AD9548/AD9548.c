@@ -667,6 +667,7 @@ int32_t ad9548_setup(void)
     ret = ad9548_write(AD9548_REG_SPI_CTRL, 0x10);
     ret = ad9548_write(AD9548_REG_SPI_CTRL, 0x10);
     ret = ad9548_write(AD9548_REG_SPI_CTRL, 0x10);
+    ret = ad9548_write(AD9548_REG_SPI_CTRL, 0x10);
 	if(ret < 0)
         return ret;
 	
@@ -712,6 +713,38 @@ int32_t ad9548_setup(void)
     ret = ad9548_write(AD9548_REG_SYSTEM_CLK_STABILITY_2, ((pdata->sys_clk_stability >> 16) & 0x0F));
     if(ret < 0)
         return ret;
+
+    ret = ad9548_write(AD9548_REG_IO_UPDATE, 0x01);
+    if(ret < 0)
+    	return ret;
+    ad9548_calibrate_sys_clk();
+    ret = ad9548_write(AD9548_REG_IRQ_PIN_OUTPUT_MODE, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_0, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_1, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_2, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_3, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_4, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_5, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_6, 0x00);
+    if(ret < 0)
+    	return ret;
+    ret = ad9548_write(AD9548_REG_IRQ_MASK_7, 0x00);
+    if(ret < 0)
+    	return ret;
 
     /* General configuration */
 	ret = ad9548_write(AD9548_REG_WATCHDOG_TIMER_0, (pdata->watchdog_timer & 0xFF));
@@ -826,6 +859,10 @@ int32_t ad9548_setup(void)
     if(ret < 0)
         return ret;		
     
+    ret = ad9548_write(AD9548_REG_UPDATE_TW, 0x01);
+    if(ret < 0)
+        return ret;
+
     /* Clock distribution output */
 	distr_settings = (pdata->clock_distr_ext_resistor << 5) |
                      (pdata->clock_distr_high_freq_mode << 4) | 
@@ -866,8 +903,8 @@ int32_t ad9548_setup(void)
         if(ret < 0)
             return ret;
 
-        ret = ad9548_write(AD9548_REG_MANUAL_REFERENCE_PROFILE_SEL_0 + pdata->references[i].ref_num/2, 
-                           (pdata->references[i].manual_profile_en << ((pdata->references[i].ref_num % 2)*4 + 3)) | 
+        ret = ad9548_write(AD9548_REG_MANUAL_REFERENCE_PROFILE_SEL_0 + pdata->references[i].ref_num/2,
+                           (pdata->references[i].manual_profile_en << ((pdata->references[i].ref_num % 2)*4 + 3)) |
                            (pdata->references[i].manual_profile << ((pdata->references[i].ref_num % 2)*4)));
         if(ret < 0)
             return ret;
@@ -911,19 +948,30 @@ int32_t ad9548_setup(void)
                            ((pdata->channels[i].channel_divider >> 24) & 0xFF));
         if(ret < 0)
             return ret;
-    }        
-	
+    }
+
+    for (i = 0; i < ARRAY_SIZE(ad9548_profiles); i++)
+    {
+        ret = ad9548_write(ad9548_profiles[i][0], ad9548_profiles[i][1]);
+        if(ret < 0)
+            return ret;
+    }
+
     ret = ad9548_update_io();
     if(ret < 0)
     	return ret;
 
-	ret = ad9548_calibrate_sys_clk();
-	if(ret < 0)
-		return ret;
+    ret = ad9548_write(AD9548_REG_FORCE_VALIDATION_TIMEOUT, 0x01);
+    if(ret < 0)
+    	return ret;
+
+    ret = ad9548_update_io();
+    if(ret < 0)
+    	return ret;
 
 	ret = ad9548_sync_dividers();
 	if(ret < 0)
 		return ret;
-	
+
 	return ret;
 }
