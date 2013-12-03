@@ -46,6 +46,7 @@
 #include "xil_types.h"
 #include "xparameters.h"
 #include "xil_io.h"
+#include "xil_cache.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -281,6 +282,18 @@
 
 #define GPIO_SET_DATA(GPIO_BASE_ADDR, cfgWord) \
 	Xil_Out32((GPIO_BASE_ADDR + GPIO_DATA), cfgWord);
+
+#define GET_REGISTER(AXI_REG_ADDR) \
+  Xil_In32((AXI_REG_ADDR))
+
+#define SET_REGISTER(AXI_REG_ADDR, AXI_REG_DATA) \
+  Xil_Out32((AXI_REG_ADDR), (AXI_REG_DATA))
+
+#define FLUSH_CACHE() \
+{ \
+  microblaze_flush_dcache(); \
+  microblaze_invalidate_dcache(); \
+}
 
 #if(defined(AD5541A) || defined(AD5542A))
 #define GPIO_0_MASK   0x02

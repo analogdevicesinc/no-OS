@@ -42,7 +42,6 @@
 /************************ Include Files ***************************************/
 /******************************************************************************/
 #include "Communication.h"
-#include "xil_io.h"
 #include "TIME.h"
 
 /******************************************************************************/
@@ -192,10 +191,18 @@ char PLATFORM_Init(platformBoard platform)
     switch (platform )
     {
      case XILINX_KC705:
+#ifdef XPAR_AXI_SPORT_0_DEVICE_ID
         SPI_BASEADDR  = XPAR_AXI_SPORT_0_BASEADDR;
+#endif
+#ifdef XPAR_AXI_IIC_0_DEVICE_ID
         I2C_BASEADDR  = XPAR_AXI_IIC_0_BASEADDR;
+#endif
+#ifdef XPAR_AXI_GPIO_0_DEVICE_ID
         GPIO_BASEADDR = XPAR_GPIO_0_BASEADDR;
+#endif
+#ifdef XPAR_AXI_PAR_0_DEVICE_ID
         PAR_BASEADDR  = XPAR_AXI_PAR_0_BASEADDR;
+#endif
         UART_BAUDRATE = 115200;
         break;
      default :
