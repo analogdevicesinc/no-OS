@@ -52,77 +52,33 @@
 /*****************************************************************************/
 /******************* ADC Core Registers Definitions *******************************/
 /*****************************************************************************/
-#define ADC_CORE_VERSION		0x00
-#define ADC_CORE_DMA_CHAN_SEL	0x08
-#define ADC_CORE_DMA_CTRL		0x0C
-#define ADC_CORE_DMA_STAT		0x10
-#define ADC_CORE_ADC_STAT		0x14
-#define ADC_CORE_PN_ERR_CTRL	0x24
-#define ADC_CORE_ADC_CTRL		0x2C
-#define ADC_CORE_IDENT		    0x30
-#define ADC_CORE_CA_OFFS_SCALE	0x40
-#define ADC_CORE_CB_OFFS_SCALE	0x44
-#define ADC_CORE_USRL_DECIM		0x48
-#define ADC_CORE_USRL_DTYPE		0x4C
 
-/* ADC_CORE_DMA_CHAN_SEL */
-#define ADC_CORE_DMA_CHAN_SEL0	(1 << 0)
-#define ADC_CORE_DMA_CHAN_SEL1	(1 << 1)
-#define ADC_CORE_DMA_CHAN_USRL_SEL	(1 << 2)
+/* ADC COMMON */
+#define ADC_REG_RSTN			0x0040
+#define ADC_RSTN				(1 << 0)
+#define ADC_MMCM_RSTN 			(1 << 1)
 
-/* ADC_CORE_DMA_CTRL */
-#define ADC_CORE_DMA_CAP_EN		(1 << 31)
-#define ADC_CORE_DMA_CAP_STREAM	(1 << 30)
-#define ADC_CORE_DMA_CNT(x)		(((x) & 0x3FFFFFFF) << 0)
+/* ADC CHANNEL */
+#define ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
+#define ADC_PN_SEL				(1 << 10)
+#define ADC_IQCOR_ENB			(1 << 9)
+#define ADC_DCFILT_ENB			(1 << 8)
+#define ADC_FORMAT_SIGNEXT		(1 << 6)
+#define ADC_FORMAT_TYPE			(1 << 5)
+#define ADC_FORMAT_ENABLE		(1 << 4)
+#define ADC_PN23_TYPE			(1 << 1)
+#define ADC_ENABLE				(1 << 0)
 
-/* ADC_CORE_DMA_STAT */
-#define ADC_CORE_DMA_STAT_BUSY		(1 << 0) /* W1C */
-#define ADC_CORE_DMA_STAT_OVF		(1 << 1) /* W1C */
-#define ADC_CORE_DMA_STAT_UNF		(1 << 2) /* W1C */
+#define ADC_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
+#define ADC_PN_ERR				(1 << 2)
+#define ADC_PN_OOS				(1 << 1)
+#define ADC_OVER_RANGE			(1 << 0)
 
-/* ADC_CORE_ADC_STAT */
-#define ADC_CORE_ADC_STAT_OVR0	    (1 << 0) /* W1C */
-#define ADC_CORE_ADC_STAT_OVR1	    (1 << 1) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_OOS0	(1 << 2) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_OOS1	(1 << 3) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_ERR0	(1 << 4) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_ERR1	(1 << 5) /* W1C */
-#define ADC_CORE_ADC_STAT_MASK	    0x3F
-
-/* ADC_CORE_ADC_STAT */
-#define ADC_CORE_ADC_STAT_OVR	    (1 << 0) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_OOS	(1 << 1) /* W1C */
-#define ADC_CORE_ADC_STAT_PN_ERR	(1 << 2) /* W1C */
-#define ADC_CORE_ADC_1C_STAT_MASK	0x7
-
-/* ADC_CORE_PN_ERR_CTRL */
-#define ADC_CORE_PN23_1_EN		(1 << 1)
-#define ADC_CORE_PN23_0_EN		(1 << 0)
-#define ADC_CORE_PN9_1_EN	    (0 << 1)
-#define ADC_CORE_PN9_0_EN	    (0 << 0)
-#define ADC_CORE_PN23_EN	    (ADC_CORE_PN23_0_EN | ADC_CORE_PN23_1_EN)
-#define ADC_CORE_PN9_EN			(ADC_CORE_PN9_0_EN | ADC_CORE_PN9_1_EN)
-
-/* ADC_CORE_ADC_CTRL */
-#define ADC_CORE_INPUT_FMT_OFFSET_BIN	(1 << 3)
-#define ADC_CORE_INPUT_FMT_TWOS_COMPL	(0 << 3)
-#define ADC_CORE_SCALE_OFFSET_EN		(1 << 2)
-#define ADC_CORE_SIGNEXTEND		(1 << 1)
-#define ADC_CORE_STATUS_EN		(1 << 0)
-
-/* ADC_CORE_IDENT */
-#define ADC_CORE_IDENT_SLAVE	0x1
-
-/* ADC_CORE_C[A|B]_OFFS_SCALE */
-#define ADC_CORE_OFFSET(x)		(((x) & 0xFFFF) << 16)
-#define ADC_CORE_SCALE(x)			((x) & 0xFFFF)
-
-/* ADC_CORE_USRL_DECIM Custom User Logic Decimation (M/N) */
-#define ADC_CORE_USRL_DECIM_NUM(x)		((x) >> 16)
-#define ADC_CORE_USRL_DECIM_DEN(x)		((x) & 0xFFFF)
-
-/* ADC_CORE_USRL_DTYPE Custom User Logic Data Type */
-#define ADC_CORE_USRL_DTYPE_NORM		(1 << 0)
+#define ADC_REG_CHAN_CNTRL_2(c)	(0x0414 + (c) * 0x40)
+#define ADC_IQCOR_COEFF_1(x)	(((x) & 0xFFFF) << 16)
+#define ADC_TO_IQCOR_COEFF_1(x)	(((x) >> 16) & 0xFFFF)
+#define ADC_IQCOR_COEFF_2(x)	(((x) & 0xFFFF) << 0)
+#define ADC_TO_IQCOR_COEFF_2(x)	(((x) >> 0) & 0xFFFF)
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/

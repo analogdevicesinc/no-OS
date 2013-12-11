@@ -203,7 +203,7 @@ int32_t ad9643_test_mode(int32_t mode, int32_t chan_mask);
 /** Sets the ADC's user test pattern. */
 int32_t ad9643_user_test_pattern(uint8_t* pattern);
 /** Calibrates the DCO clock delay. */
-int32_t ad9643_dco_calibrate_2c();
+int32_t ad9643_dco_calibrate();
 /** Checks if the DCO is locked. */
 int32_t ad9643_is_dco_locked();
 

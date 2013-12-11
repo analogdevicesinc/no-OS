@@ -49,6 +49,9 @@
 
 extern void delay_us(uint32_t us_count);
 
+uint32_t adc_output_mode;
+
+//#define DCO_DEBUG
 /**************************************************************************//**
 * @brief Writes data into a register
 *
@@ -93,6 +96,27 @@ int32_t ad9643_read(uint32_t regAddr)
 }
 
 /***************************************************************************//**
+ * @brief Sets the AD9643 output mode
+ *
+  * @param mode - ADC output mode
+ *
+ * @return Negative error code or 0 in case of success.
+*******************************************************************************/
+static int ad9643_outputmode_set(unsigned mode)
+{
+	int ret;
+
+	ret = ad9643_write(AD9643_REG_OUTPUT_MODE, mode);
+	if (ret < 0)
+		return ret;
+	ret = ad9643_write(AD9643_REG_TEST_MODE, AD9643_TEST_MODE_OFF);
+	if (ret < 0)
+		return ret;
+
+	return ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
+}
+
+/***************************************************************************//**
  * @brief Sets the AD9643 test mode for DCO delay calibration
  *
  * @param chan_mask - Selects the internal ADC the command is applied to.
@@ -100,45 +124,14 @@ int32_t ad9643_read(uint32_t regAddr)
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9643_testmode_set(uint32_t chan_mask, uint32_t mode)
+static int ad9643_testmode_set(unsigned chan, unsigned mode)
 {
-	int32_t ret = 0;
+	ad9643_write(AD9643_REG_CHANNEL_IDX, 1 << chan);
+	ad9643_write(AD9643_REG_TEST_MODE, mode);
+	ad9643_write(AD9643_REG_CHANNEL_IDX, 0x3);
+	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
 
-	switch (mode)
-	{
-	case AD9643_TEST_MODE_PN23_SEQ:
-	case AD9643_TEST_MODE_PN9_SEQ:
-	case AD9643_TEST_MODE_ALTERNATING_CHECKERBOARD:
-        ADC_Core_Write(ADC_CORE_ADC_CTRL,0);
-		ret = ad9643_write(AD9643_REG_OUTPUT_MODE,
-			        	  (AD9643_OUTPUT_MODE_DEF | AD9643_OUTPUT_MODE_TWOS_COMPLEMENT) &
-			        	  ~AD9643_OUTPUT_MODE_TWOS_COMPLEMENT);
-		break;
-	default:
-        ADC_Core_Write(ADC_CORE_ADC_CTRL,ADC_CORE_SIGNEXTEND);
-		ret = ad9643_write(AD9643_REG_OUTPUT_MODE, (AD9643_OUTPUT_MODE_DEF |
-                                           	   	 AD9643_OUTPUT_MODE_TWOS_COMPLEMENT));
-	};
-	if(ret < 0)
-		return ret;
-
-	ret = ad9643_write(AD9643_REG_CHANNEL_IDX, chan_mask);
-	if(ret < 0)
-		return ret;
-
-	ret = ad9643_write(AD9643_REG_TEST_MODE, mode);
-	if(ret < 0)
-		return ret;
-
-	ret = ad9643_write(AD9643_REG_CHANNEL_IDX, AD9643_CHANNEL_IDX_ADC_AB);
-	if(ret < 0)
-		return ret;
-
-	ret = ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
-	if(ret < 0)
-		return ret;
-
-	return ret;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -147,106 +140,160 @@ int32_t ad9643_testmode_set(uint32_t chan_mask, uint32_t mode)
  * @return Negative error code or DCO clock delay code in case of success.
  * 		   If the DCO clock is inverted 0x100 is added to the returned DCO value
 *******************************************************************************/
-int32_t ad9643_dco_calibrate_2c()
+int32_t ad9643_dco_calibrate()
 {
-    int32_t dco, cnt, start, max_start, max_cnt, inv_range = 0;
-    uint32_t stat, tm_mask, err_mask, regVal;
-    uint8_t err_field[66];
+	int ret, dco, cnt, start, max_start, max_cnt;
+	uint32_t stat, inv_range = 0, dco_en = 0, do_inv;
+	unsigned char err_field[66];
+	uint32_t chan_ctrl0, chan_ctrl1;
+	uint32_t reg_val, tmp;
 
-restart:
+	dco_en = AD9643_DCO_OUTPUT_DELAY_EN_DCO_CLK_DELAY;
 
-	ad9643_dco_clock_invert(inv_range);
+	ret = ad9643_outputmode_set(
+			adc_output_mode & ~AD9643_OUTPUT_MODE_TWOS_COMPLEMENT);
+	if (ret < 0)
+		return ret;
 
-	ad9643_testmode_set(0x2, AD9643_TEST_MODE_PN23_SEQ);
-	tm_mask = ADC_CORE_PN23_1_EN | ADC_CORE_PN9_0_EN;
-	err_mask = ADC_CORE_ADC_STAT_PN_ERR0 |
-			   ADC_CORE_ADC_STAT_PN_ERR1 |
-			   ADC_CORE_ADC_STAT_PN_OOS0 |
-			   ADC_CORE_ADC_STAT_PN_OOS1;
+	ADC_Core_Read(ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
+	ADC_Core_Read(ADC_REG_CHAN_CNTRL(1), &chan_ctrl1);
 
-	ad9643_testmode_set(0x1, AD9643_TEST_MODE_PN9_SEQ);
-	ADC_Core_Write(ADC_CORE_PN_ERR_CTRL, tm_mask);
+	do {
+		ad9643_write(AD9643_REG_CLK_PHASE_CTRL, AD9643_CLK_PHASE_CTRL_EVEN_ODD_MODE_EN |
+				(inv_range ? AD9643_CLK_PHASE_CTRL_INVERT_DCO_CLK : 0));
 
-	for(dco = 0; dco <= 32; dco++)
-    {
-    	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,
-                  	 dco > 0 ? ((dco - 1) | 0x80) : 0);
-		ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
-		ad9643_read(AD9643_REG_DCO_OUTPUT_DELAY);	// Necessary on some systems.
-        ADC_Core_Write(ADC_CORE_ADC_STAT, ADC_CORE_ADC_STAT_MASK);
+		ad9643_testmode_set(1, AD9643_TEST_MODE_PN23_SEQ);
+		ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), ADC_ENABLE | ADC_PN23_TYPE);
+		ADC_Core_Write(ADC_REG_CHAN_STATUS(1), ~0);
 
-		delay_us(1000);
-        ADC_Core_Read(ADC_CORE_ADC_STAT, &stat);
-        err_field[dco + (inv_range * 33)] = !!(stat & err_mask);
-	}
+		ad9643_testmode_set(0, AD9643_TEST_MODE_PN9_SEQ);
+		ADC_Core_Write(ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
+		ADC_Core_Write(ADC_REG_CHAN_STATUS(0), ~0);
 
-	for(dco = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
-        dco <= (32 + (inv_range * 33)); dco++)
-    {
-		if (err_field[dco] == 0) 
-        {
-			if (start == -1)
-				start = dco;
-			cnt++;
-		} 
-        else 
-        {
-			if (cnt > max_cnt) 
-            {
-				max_cnt = cnt;
-				max_start = start;
-			}
-			start = -1;
-			cnt = 0;
+		for(dco = 0; dco <= 32; dco++) {
+			ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,
+				dco > 0 ? ((dco - 1) | dco_en) : 0);
+			ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
+			ad9643_read(AD9643_REG_DCO_OUTPUT_DELAY);	// Necessary on some systems.
+
+			ADC_Core_Write(ADC_REG_CHAN_STATUS(0), ~0);
+			ADC_Core_Write(ADC_REG_CHAN_STATUS(1), ~0);
+
+			delay_us(1000);
+
+			ADC_Core_Read(ADC_REG_CHAN_STATUS(0), &stat);
+			ADC_Core_Read(ADC_REG_CHAN_STATUS(1), &tmp);
+			stat |= tmp;
+
+			err_field[dco + (inv_range * 33)] = !!(stat & (ADC_PN_ERR | ADC_PN_OOS));
 		}
-	}
 
-	if (cnt > max_cnt) 
-    {
-		max_cnt = cnt;
-		max_start = start;
-	}
+		for(dco = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
+			dco <= (32 + (inv_range * 33)); dco++) {
+			if (err_field[dco] == 0) {
+				if (start == -1)
+					start = dco;
+				cnt++;
+			} else {
+				if (cnt > max_cnt) {
+					max_cnt = cnt;
+					max_start = start;
+				}
+				start = -1;
+				cnt = 0;
+			}
+		}
 
-    if ((inv_range == 0) && ((max_cnt < 3) || (err_field[32] == 0)))
-    {
-        inv_range = 1;
-        goto restart;
-    }
+		if (cnt > max_cnt) {
+			max_cnt = cnt;
+			max_start = start;
+		}
+
+		if ((inv_range == 0) &&
+			((max_cnt < 3) || (err_field[32] == 0))) {
+			do_inv = 1;
+			inv_range = 1;
+		} else {
+			do_inv = 0;
+		}
+
+	} while (do_inv);
 
 	dco = max_start + (max_cnt / 2);
 
 #ifdef DCO_DEBUG
-    for(cnt = 0; cnt <= (32  + (inv_range * 33)); cnt++)
-        if (cnt == dco)
-            xil_printf("|");
-        else
-        	xil_printf("%c", err_field[cnt] ? '-' : 'o');
+	for(cnt = 0; cnt <= (32  + (inv_range * 33)); cnt++)
+		if (cnt == dco)
+			xil_printf("|");
+		else
+			xil_printf("%c", err_field[cnt] ? '-' : 'o');
 #endif
-
-    if (dco > 32)
-    {
-        dco -= 33;
-        ad9643_dco_clock_invert(1);
-        cnt = 1;
-    }
-    else
-    {
-    	ad9643_dco_clock_invert(0);
-    	cnt = 0;
-    }
+	if (dco > 32) {
+		dco -= 33;
+		ad9643_write(AD9643_REG_CLK_PHASE_CTRL,
+				AD9643_CLK_PHASE_CTRL_EVEN_ODD_MODE_EN | AD9643_CLK_PHASE_CTRL_INVERT_DCO_CLK);
+		cnt = 1;
+	} else {
+		ad9643_write(AD9643_REG_CLK_PHASE_CTRL,
+				AD9643_CLK_PHASE_CTRL_EVEN_ODD_MODE_EN);
+		cnt = 0;
+	}
 
 #ifdef DCO_DEBUG
-    xil_printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
-           dco > 0 ? ((dco - 1) | 0x80) : 0);
+	xil_printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
+	       dco > 0 ? ((dco - 1) | dco_en) : 0);
 #endif
 
-	regVal = dco > 0 ? ((dco - 1) | 0x80) : 0;
+	reg_val = dco > 0 ? ((dco - 1) | dco_en) : 0;
 
-	ad9643_testmode_set(0x3, AD9643_TEST_MODE_OFF);
-	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,regVal);
+	ad9643_testmode_set(0, AD9643_TEST_MODE_OFF);
+	ad9643_testmode_set(1, AD9643_TEST_MODE_OFF);
+	ad9643_write(AD9643_REG_DCO_OUTPUT_DELAY,
+		      dco > 0 ? ((dco - 1) | dco_en) : 0);
 	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
 
-	return dco < 0 ? -1 : (inv_range ? (0x0100 | (regVal & 0x1F)) : (regVal & 0x1F));
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), chan_ctrl1);
+
+	ret = ad9643_outputmode_set(adc_output_mode);
+	if (ret < 0)
+		return ret;
+
+	return dco < 0 ? -1 : (inv_range ? (0x0100 | (reg_val & 0x1F)) : (reg_val & 0x1F));
+}
+
+/***************************************************************************//**
+ * @brief Initializes the AD9643.
+ *
+ * @return Negative error code or 0 in case of success.
+*******************************************************************************/
+int32_t ad9643_setup()
+{
+	int ret, i;
+
+    adc_output_mode = AD9643_OUTPUT_MODE_DEF | AD9643_OUTPUT_MODE_TWOS_COMPLEMENT;
+
+	ad9643_reset();
+	ad9643_write(AD9643_REG_CLK_PHASE_CTRL, AD9643_CLK_PHASE_CTRL_EVEN_ODD_MODE_EN);
+	ad9643_write(AD9643_REG_OUTPUT_MODE, adc_output_mode);
+	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
+
+	ADC_Core_Write(ADC_REG_RSTN, 0);
+	ADC_Core_Write(ADC_REG_RSTN, ADC_RSTN);
+
+	ret = ad9643_dco_calibrate();
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < 2; i++) {
+		ADC_Core_Write(ADC_REG_CHAN_CNTRL_2(i),
+			     (i & 1) ? 0x00004000 : 0x40000000);
+		ADC_Core_Write(ADC_REG_CHAN_CNTRL(i),
+			     ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE |
+			     ADC_IQCOR_ENB | ADC_ENABLE);
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -256,54 +303,43 @@ restart:
 *******************************************************************************/
 int32_t ad9643_is_dco_locked()
 {
+	uint32_t chan_ctrl0, chan_ctrl1;
 	int32_t ret = -1;
-	uint32_t stat;
+	uint32_t stat, tmp;
 
-	ad9643_testmode_set(0x2, AD9643_TEST_MODE_PN23_SEQ);
-	ad9643_testmode_set(0x1, AD9643_TEST_MODE_PN9_SEQ);
-    ADC_Core_Write(ADC_CORE_PN_ERR_CTRL, ADC_CORE_PN23_1_EN | ADC_CORE_PN9_0_EN);
+	ret = ad9643_outputmode_set(
+			adc_output_mode & ~AD9643_OUTPUT_MODE_TWOS_COMPLEMENT);
+	if (ret < 0)
+		return ret;
 
-    ad9643_read(AD9643_REG_DCO_OUTPUT_DELAY);
+	ADC_Core_Read(ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
+	ADC_Core_Read(ADC_REG_CHAN_CNTRL(1), &chan_ctrl1);
 
-    ADC_Core_Write(ADC_CORE_ADC_STAT, ADC_CORE_ADC_STAT_MASK);
+	ad9643_testmode_set(1, AD9643_TEST_MODE_PN23_SEQ);
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), ADC_ENABLE | ADC_PN23_TYPE);
+	ADC_Core_Write(ADC_REG_CHAN_STATUS(1), ~0);
 
-    delay_us(1000);
+	ad9643_testmode_set(0, AD9643_TEST_MODE_PN9_SEQ);
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
+	ADC_Core_Write(ADC_REG_CHAN_STATUS(0), ~0);
 
-	ADC_Core_Read(ADC_CORE_ADC_STAT, &stat);
+	ADC_Core_Write(ADC_REG_CHAN_STATUS(0), ~0);
+	ADC_Core_Write(ADC_REG_CHAN_STATUS(1), ~0);
 
-    if(!( stat & 0x3c))
-    {
-        ret = 0;
-    }
+	delay_us(1000);
 
-	ad9643_testmode_set(0x3, AD9643_TEST_MODE_OFF);
+	ADC_Core_Read(ADC_REG_CHAN_STATUS(0), &stat);
+	ADC_Core_Read(ADC_REG_CHAN_STATUS(1), &tmp);
+	stat |= tmp;
 
-	return ret < 0 ? 0 : 1;
-}
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
+	ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), chan_ctrl1);
 
-/***************************************************************************//**
- * @brief Initializes the AD9643. 
- *
- * @return Negative error code or 0 in case of success.
-*******************************************************************************/
-int32_t ad9643_setup()
-{
-    int32_t ret = 0;
-	
-	ad9643_reset();
-	ad9643_write(AD9643_REG_CLK_PHASE_CTRL, AD9643_CLK_PHASE_CTRL_EVEN_ODD_MODE_EN);
-    ADC_Core_Write(ADC_CORE_ADC_CTRL,ADC_CORE_SIGNEXTEND | ADC_CORE_SCALE_OFFSET_EN);
-    ADC_Core_Write(ADC_CORE_CA_OFFS_SCALE,ADC_CORE_OFFSET(0) | ADC_CORE_SCALE(0x8000));
-    ADC_Core_Write(ADC_CORE_CB_OFFS_SCALE,ADC_CORE_OFFSET(0) | ADC_CORE_SCALE(0x8000));
-	ad9643_write(AD9643_REG_OUTPUT_MODE, AD9643_OUTPUT_MODE_DEF | AD9643_OUTPUT_MODE_TWOS_COMPLEMENT);
-	ad9643_write(AD9643_REG_TEST_MODE, AD9643_TEST_MODE_OFF);
-	ad9643_write(AD9643_REG_TRANSFER, AD9643_TRANSFER_EN);
+	ret = ad9643_outputmode_set(adc_output_mode);
+	if (ret < 0)
+		return ret;
 
-	ret = ad9643_dco_calibrate_2c();
-
-    ADC_Core_Write(ADC_CORE_DMA_CHAN_SEL,0x02);
-
-	return ret < 0 ? -1 : 0;
+	return stat < 1 ? 1 : 0;
 }
 
 /***************************************************************************//**

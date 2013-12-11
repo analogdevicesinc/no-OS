@@ -998,12 +998,7 @@ int32_t XCOMM_CalibrateAdcDco(void)
 {
 	int32_t ret;
 
-	ADC_Core_Write(ADC_CORE_DMA_CHAN_SEL,0x00);
-
-	ad9643_dco_clock_invert(0);
-	ret = ad9643_dco_calibrate_2c();
-
-	ADC_Core_Write(ADC_CORE_DMA_CHAN_SEL,0x02);
+	ret = ad9643_dco_calibrate();
 
 	return ret;
 }
