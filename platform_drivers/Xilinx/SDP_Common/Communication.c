@@ -200,7 +200,7 @@ char PLATFORM_Init(platformBoard platform)
         I2C_BASEADDR  = XPAR_AXI_IIC_0_BASEADDR;
 #endif
 #ifdef XPAR_AXI_GPIO_0_DEVICE_ID
-        GPIO_BASEADDR = XPAR_GPIO_0_BASEADDR;
+        GPIO_BASEADDR = XPAR_AXI_GPIO_0_BASEADDR;
 #endif
 #ifdef XPAR_AXI_PAR_0_DEVICE_ID
         PAR_BASEADDR  = XPAR_AXI_PAR_0_BASEADDR;
@@ -248,16 +248,16 @@ char SPI_Init(unsigned char lsbFirst,
               unsigned char clockEdg)
 {
     /* Configuration Register Settings */
-    configValue |= (lsbFirst    << LSBFirst)         | // MSB First transfer format
-                   (1           << MasterTranInh)    | // Master transactions disabled
-                   (1           << ManualSlaveAssEn) | // Slave select output follows data in slave select register
-                   (1           << RxFifoReset)      | // Receive FIFO normal operation
-                   (0           << TxFifoReset)      | // Transmit FIFO normal operation
-                   (!clockEdg   << CHPA)             | // Data valid on first SCK edge
-                   (clockPol    << CPOL)             | // Active high clock, SCK idles low
-                   (1           << Master)           | // SPI in Master configuration mode
-                   (1           << SPE)              | // SPI enabled
-                   (0           << LOOP);              // Normal operation
+    configValue = (lsbFirst    << LSBFirst)         | // MSB First transfer format
+                  (1           << MasterTranInh)    | // Master transactions disabled
+                  (1           << ManualSlaveAssEn) | // Slave select output follows data in slave select register
+                  (1           << RxFifoReset)      | // Receive FIFO normal operation
+                  (0           << TxFifoReset)      | // Transmit FIFO normal operation
+                  (!clockEdg   << CHPA)             | // Data valid on first SCK edge
+                  (clockPol    << CPOL)             | // Active high clock, SCK idles low
+                  (1           << Master)           | // SPI in Master configuration mode
+                  (1           << SPE)              | // SPI enabled
+                  (0           << LOOP);              // Normal operation
 
     /* Set the slave select register to all ones */
     Xil_Out32(SPI_BASEADDR + SPISSR, 0xFFFFFFFF);
