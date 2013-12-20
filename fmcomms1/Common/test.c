@@ -133,6 +133,50 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 ******************************************************************************/
 void dac_dma_setup(uint32_t sel)
 {
+#ifdef _XPARAMETERS_PS_H_
+	uint32_t baddr;
+	uint32_t index;
+	uint32_t tx_count;
+	uint32_t index_i1;
+	uint32_t index_q1;
+	uint32_t index_i2;
+	uint32_t index_q2;
+	uint32_t i1_data;
+	uint32_t q1_data;
+	uint32_t i2_data;
+	uint32_t q2_data;
+
+	tx_count = sizeof(sine_lut) / sizeof(uint16_t);
+	for(index = 0; index < (tx_count * 2); index += 2)
+	{
+		index_i1 = index;
+		index_q1 = index_i1 + ((tx_count * 2) / 4);
+		if(index_q1 >= (tx_count * 2))
+			index_q1 -= (tx_count * 2);
+		i1_data = ((sine_lut[index_i1 / 2]) & 0xFFFF);
+		q1_data = ((sine_lut[index_q1 / 2]) & 0xFFFF);
+		Xil_Out32((DDRDAC_BASEADDR + (2*index)), ((i1_data << 16) | q1_data));
+		index_i2 = index_i1 + (tx_count / 2);
+		index_q2 = index_q1 + (tx_count / 2);
+		if(index_i2 >= (tx_count * 2))
+			index_i2 -= (tx_count * 2);
+		if(index_q2 >= (tx_count * 2))
+			index_q2 -= (tx_count * 2);
+		i2_data = ((sine_lut[index_i2 / 2]) & 0xFFFF);
+		q2_data = ((sine_lut[index_q2 / 2]) & 0xFFFF);
+		Xil_Out32((DDRDAC_BASEADDR + (2*(index + 1))), ((i2_data << 16) | q2_data));
+	}
+	Xil_DCacheFlush();
+
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9122_1_BASEADDR : DMA9122_0_BASEADDR;
+
+	Xil_Out32(baddr + AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+	Xil_Out32(baddr + AXI_DMAC_REG_SRC_ADDRESS, DDRDAC_BASEADDR);
+	Xil_Out32(baddr + AXI_DMAC_REG_SRC_STRIDE, 0);
+	Xil_Out32(baddr + AXI_DMAC_REG_X_LENGTH, (tx_count * 4) - 1);
+	Xil_Out32(baddr + AXI_DMAC_REG_Y_LENGTH, 0x0);
+	Xil_Out32(baddr + AXI_DMAC_REG_START_TRANSFER, 0x1);
+#else
 	uint32_t dac_baseaddr;
 	uint32_t vdma_baseaddr;
 	uint32_t index;
@@ -198,6 +242,7 @@ void dac_dma_setup(uint32_t sel)
 	{
 		xil_printf("dma_setup: status(%x)\n\r", status);
 	}
+#endif
 }
 
 /**************************************************************************//**
@@ -317,8 +362,50 @@ void dac_test(uint32_t sel)
 *
 * @return None.
 ******************************************************************************/
-void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
+void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address)
 {
+#ifdef _XPARAMETERS_PS_H_
+	uint32_t baddr;
+	uint32_t reg_val;
+	uint32_t transfer_id;
+
+	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
+
+	Xil_Out32(baddr + AXI_DMAC_REG_CTRL, 0x0);
+	Xil_Out32(baddr + AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+
+	Xil_Out32(baddr + AXI_DMAC_REG_IRQ_MASK, 0x0);
+
+	transfer_id = Xil_In32(baddr + AXI_DMAC_REG_TRANSFER_ID);
+	reg_val = Xil_In32(baddr + AXI_DMAC_REG_IRQ_PENDING);
+	Xil_Out32(baddr + AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	Xil_Out32(baddr + AXI_DMAC_REG_DEST_ADDRESS, start_address);
+	Xil_Out32(baddr + AXI_DMAC_REG_DEST_STRIDE, 0x0);
+	Xil_Out32(baddr + AXI_DMAC_REG_X_LENGTH, (size * 8) - 1);
+	Xil_Out32(baddr + AXI_DMAC_REG_Y_LENGTH, 0x0);
+
+	Xil_Out32(baddr + AXI_DMAC_REG_START_TRANSFER, 0x1);
+	/* Wait until the new transfer is queued. */
+	do {
+		reg_val = Xil_In32(baddr + AXI_DMAC_REG_START_TRANSFER);
+	}
+	while(reg_val == 1);
+
+	/* Wait until the current transfer is completed. */
+	do {
+		reg_val = Xil_In32(baddr + AXI_DMAC_REG_IRQ_PENDING);
+	}
+	while(reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT));
+	Xil_Out32(baddr + AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	/* Wait until the transfer with the ID transfer_id is completed. */
+	do {
+		reg_val = Xil_In32(baddr + AXI_DMAC_REG_TRANSFER_DONE);
+	}
+	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+	Xil_DCacheFlush();
+#else
 	uint32_t baddr;
 	uint32_t ba;
 
@@ -374,6 +461,7 @@ void adc_capture(uint32_t sel, uint32_t qwcnt, uint32_t sa)
 #else
 	microblaze_flush_dcache();
 	microblaze_invalidate_dcache();
+#endif
 #endif
 }
 
