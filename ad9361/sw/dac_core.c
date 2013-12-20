@@ -43,7 +43,6 @@
 #include "stdint.h"
 #include "xil_io.h"
 #include "xil_cache.h"
-#include "xaxivdma_hw.h"
 #include "parameters.h"
 #include "util.h"
 #include "dac_core.h"
@@ -81,19 +80,19 @@ void dac_write(uint32_t regAddr, uint32_t data)
 }
 
 /***************************************************************************//**
- * @brief vdma_read
+ * @brief dac_dma_read
 *******************************************************************************/
-void vdma_read(uint32_t regAddr, uint32_t *data)
+void dac_dma_read(uint32_t regAddr, uint32_t *data)
 {
-	*data = Xil_In32(CF_AD9361_VDMA_BASEADDR + regAddr);
+	*data = Xil_In32(CF_AD9361_TX_DMA_BASEADDR + regAddr);
 }
 
 /***************************************************************************//**
- * @brief vdma_write
+ * @brief dac_dma_write
 *******************************************************************************/
-void vdma_write(uint32_t regAddr, uint32_t data)
+void dac_dma_write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(CF_AD9361_VDMA_BASEADDR + regAddr, data);
+	Xil_Out32(CF_AD9361_TX_DMA_BASEADDR + regAddr, data);
 }
 
 /***************************************************************************//**
@@ -127,7 +126,6 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 *******************************************************************************/
 void dac_init(uint8_t data_sel)
 {
-	uint32_t status;
 	uint32_t tx_count;
 	uint32_t index;
 	uint32_t index_i1;
@@ -183,18 +181,12 @@ void dac_init(uint8_t data_sel)
 			Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
 		}
 		Xil_DCacheFlush();
-		vdma_write(XAXIVDMA_CR_OFFSET, 0x0);
-		vdma_write(XAXIVDMA_CR_OFFSET, XAXIVDMA_CR_TAIL_EN_MASK | XAXIVDMA_CR_RUNSTOP_MASK);
-		do {
-			vdma_read(XAXIVDMA_SR_OFFSET, &status);
-		}
-	    while((status & 0x01) == 0x01);
-		vdma_write(XAXIVDMA_FRMSTORE_OFFSET, 0x01);
-		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_START_ADDR_OFFSET, DAC_DDR_BASEADDR);
-		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_STRD_FRMDLY_OFFSET, tx_count * 8);
-		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_HSIZE_OFFSET, tx_count * 8);
-		vdma_write(XAXIVDMA_MM2S_ADDR_OFFSET | XAXIVDMA_VSIZE_OFFSET, 1);
-		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DMA));
+		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
+		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
+		dac_dma_write(AXI_DMAC_REG_X_LENGTH, (tx_count * 8) - 1);
+		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
+		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 		break;
 	default:
 		break;

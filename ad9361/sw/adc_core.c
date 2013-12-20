@@ -43,10 +43,10 @@
 #include "stdint.h"
 #include "xil_io.h"
 #include "xil_cache.h"
-#include "xaxidma_hw.h"
 #include "sleep.h"
 #include "parameters.h"
 #include "adc_core.h"
+#include "stdlib.h"
 
 /***************************************************************************//**
  * @brief adc_read
@@ -65,11 +65,39 @@ void adc_write(uint32_t regAddr, uint32_t data)
 }
 
 /***************************************************************************//**
- * @brief dma_write
+ * @brief axiadc_read
 *******************************************************************************/
-void dma_write(uint32_t regAddr, uint32_t data)
+uint32_t axiadc_read(uint32_t reg)
 {
-	Xil_Out32(CF_AD9361_DMA_BASEADDR + XAXIDMA_RX_OFFSET + regAddr, data);
+	uint32_t val;
+
+	adc_read(reg, &val);
+
+	return val;
+}
+
+/***************************************************************************//**
+ * @brief axiadc_write
+*******************************************************************************/
+void axiadc_write(uint32_t reg, uint32_t val)
+{
+	adc_write(reg, val);
+}
+
+/***************************************************************************//**
+ * @brief adc_dma_read
+*******************************************************************************/
+void adc_dma_read(uint32_t regAddr, uint32_t *data)
+{
+	*data = Xil_In32(CF_AD9361_RX_DMA_BASEADDR + regAddr);
+}
+
+/***************************************************************************//**
+ * @brief adc_dma_write
+*******************************************************************************/
+void adc_dma_write(uint32_t regAddr, uint32_t data)
+{
+	Xil_Out32(CF_AD9361_RX_DMA_BASEADDR + regAddr, data);
 }
 
 /***************************************************************************//**
@@ -80,59 +108,57 @@ void adc_init(void)
 	adc_write(ADI_REG_RSTN, 0);
 	adc_write(ADI_REG_RSTN, ADI_RSTN);
 
-	adc_write(ADI_REG_CHAN_CNTRL(0), ADI_FORMAT_TYPE | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(1), ADI_FORMAT_TYPE | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(2), ADI_FORMAT_TYPE | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(3), ADI_FORMAT_TYPE | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_write(ADI_REG_CHAN_CNTRL(0),
+		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_write(ADI_REG_CHAN_CNTRL(1),
+		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_write(ADI_REG_CHAN_CNTRL(2),
+		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_write(ADI_REG_CHAN_CNTRL(3),
+		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
 }
 
 /***************************************************************************//**
  * @brief adc_capture
 *******************************************************************************/
-void adc_capture(uint32_t size, uint32_t start_address)
+int32_t adc_capture(uint32_t size, uint32_t start_address)
 {
-	uint32_t status;
-	uint32_t ba;
+	uint32_t reg_val;
+	uint32_t transfer_id;
 
-	ba = start_address + (size*16);
-	Xil_Out32((ba + 0x000), (ba + 0x40)); // next descriptor
-	Xil_Out32((ba + 0x004), 0x00); // reserved
-	Xil_Out32((ba + 0x008), start_address); // start address
-	Xil_Out32((ba + 0x00c), 0x00); // reserved
-	Xil_Out32((ba + 0x010), 0x00); // reserved
-	Xil_Out32((ba + 0x014), 0x00); // reserved
-	Xil_Out32((ba + 0x018), (size*16)); // no. of bytes
-	Xil_Out32((ba + 0x01c), 0x00); // status
-	Xil_Out32((ba + 0x040), (ba + 0x00)); // next descriptor
-	Xil_Out32((ba + 0x044), 0x00); // reserved
-	Xil_Out32((ba + 0x048), start_address); // start address
-	Xil_Out32((ba + 0x04c), 0x00); // reserved
-	Xil_Out32((ba + 0x050), 0x00); // reserved
-	Xil_Out32((ba + 0x054), 0x00); // reserved
-	Xil_Out32((ba + 0x058), (size*16)); // no. of bytes
-	Xil_Out32((ba + 0x05c), 0x00); // status
-	Xil_DCacheFlush();
-	dma_write(XAXIDMA_CR_OFFSET, XAXIDMA_CR_RESET_MASK); // Reset DMA engine
-	dma_write(XAXIDMA_CR_OFFSET, 0);
-	dma_write(XAXIDMA_CDESC_OFFSET, ba); // Current descriptor pointer
-	dma_write(XAXIDMA_CR_OFFSET, XAXIDMA_CR_RUNSTOP_MASK); // Start DMA channel
-	dma_write(XAXIDMA_TDESC_OFFSET, (ba+0x40)); // Tail descriptor pointer
+	adc_dma_write(AXI_DMAC_REG_CTRL, 0x0);
+	adc_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
 
-	adc_write(ADI_REG_DMA_CNTRL, 0);
-	adc_write(ADI_REG_STATUS, ~0);
-	adc_write(ADI_REG_DMA_STATUS, ~0);
-	adc_write(ADI_REG_DMA_COUNT, (size*16));
-	adc_write(ADI_REG_DMA_CNTRL, ADI_DMA_START);
-	do
-	{
-		adc_read(ADI_REG_DMA_STATUS, &status);
-		usleep(1000);
+	adc_dma_write(AXI_DMAC_REG_IRQ_MASK, 0x0);
+
+	adc_dma_read(AXI_DMAC_REG_TRANSFER_ID, &transfer_id);
+	adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
+	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, start_address);
+	adc_dma_write(AXI_DMAC_REG_DEST_STRIDE, 0x0);
+	adc_dma_write(AXI_DMAC_REG_X_LENGTH, (size * 8) - 1);
+	adc_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
+
+	adc_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+	/* Wait until the new transfer is queued. */
+	do {
+		adc_dma_read(AXI_DMAC_REG_START_TRANSFER, &reg_val);
 	}
-	while((status & ADI_DMA_UNF) == ADI_DMA_UNF);
-	adc_read(ADI_REG_DMA_STATUS, &status);
-	if((status & ADI_DMA_OVF) == ADI_DMA_OVF)
-	{
-		xil_printf("adc_capture: overflow occurred\n\r");
+	while(reg_val == 1);
+
+	/* Wait until the current transfer is completed. */
+	do {
+		adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 	}
-	Xil_DCacheFlush();
+	while(reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT));
+	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
+
+	/* Wait until the transfer with the ID transfer_id is completed. */
+	do {
+		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
+	}
+	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+
+	return 0;
 }

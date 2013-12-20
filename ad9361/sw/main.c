@@ -231,21 +231,23 @@ int main(void)
 	Xil_DCacheEnable();
 
 	gpio_init(GPIO_DEVICE_ID);
-	gpio_direction(54 + 45, 1);
+	gpio_direction(54 + 46, 1);
 	spi_init(SPI_DEVICE_ID, 1, 0);
+
+	adc_init();
+	dac_init(DATA_SEL_DDS);
 
 	ad9361_phy = ad9361_init(&default_init_param);
 
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
-	adc_init();
 #ifdef DAC_DMA
 	dac_init(DATA_SEL_DMA);
 #else
 	dac_init(DATA_SEL_DDS);
 #endif
-	usleep(1000000);
+
 #ifdef CAPTURE_SCRIPT
 	adc_capture(16384, ADC_DDR_BASEADDR);
 	while(1);

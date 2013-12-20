@@ -42,6 +42,7 @@
 #include "ad9361.h"
 #include "common.h"
 #include "util.h"
+#include "adc_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -586,7 +587,7 @@ static int ad9361_spi_readm(u32 reg, u8 *rbuf, u32 num)
 
 	ret = spi_write_then_read(&buf[0], 2, rbuf, num);
 	if (ret < 0) {
-		dev_err("Read Error $d", ret);
+		dev_err("Read Error %d", ret);
 		return ret;
 	}
 #ifdef _DEBUG
@@ -672,7 +673,7 @@ int ad9361_spi_write(u32 reg, u32 val)
 
 	ret = spi_write_then_read(buf, 3, NULL, 0);
 	if (ret < 0) {
-		dev_err("Write Error $d", ret);
+		dev_err("Write Error %d", ret);
 		return ret;
 	}
 
@@ -744,7 +745,7 @@ static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 
 	ret = spi_write_then_read(buf, num + 2, NULL, 0);
 	if (ret < 0) {
-		dev_err("Write Error $d", ret);
+		dev_err("Write Error %d", ret);
 		return ret;
 	}
 
@@ -757,6 +758,108 @@ static int ad9361_spi_writem(u32 reg, u8 *tbuf, u32 num)
 #endif
 
 	return 0;
+}
+
+static int ad9361_bist_loopback(struct ad9361_rf_phy *phy, bool enable)
+{
+	u32 sp_hd, reg;
+
+	dev_dbg("%s: enable %d", __func__, enable);
+
+	reg = ad9361_spi_read(REG_OBSERVE_CONFIG);
+
+	if (!enable) {
+		reg &= ~(DATA_PORT_SP_HD_LOOP_TEST_OE |
+			DATA_PORT_LOOP_TEST_ENABLE);
+		return ad9361_spi_write(REG_OBSERVE_CONFIG, reg);
+	}
+
+	sp_hd = ad9361_spi_read(REG_PARALLEL_PORT_CONF_3);
+	if ((sp_hd & SINGLE_PORT_MODE) && (sp_hd & HALF_DUPLEX_MODE))
+		reg |= DATA_PORT_SP_HD_LOOP_TEST_OE;
+	else
+		reg &= ~DATA_PORT_SP_HD_LOOP_TEST_OE;
+
+	reg |= DATA_PORT_LOOP_TEST_ENABLE;
+
+	return ad9361_spi_write(REG_OBSERVE_CONFIG, reg);
+}
+
+static int ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode)
+{
+	u32 reg = 0;
+
+	dev_dbg("%s: mode %d\n", __func__, mode);
+
+	switch (mode) {
+	case BIST_DISABLE:
+		reg = 0;
+		break;
+	case BIST_INJ_TX:
+		reg = BIST_CTRL_POINT(0) | BIST_ENABLE;
+		break;
+	case BIST_INJ_RX:
+		reg = BIST_CTRL_POINT(2) | BIST_ENABLE;
+		break;
+	};
+
+	return ad9361_spi_write(REG_BIST_CONFIG, reg);
+}
+
+static ssize_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
+						   char *buf, unsigned buflen)
+{
+	int ret, i, j, chan, len = 0;
+	u8 field[16][16];
+	u8 rx;
+
+	rx = ad9361_spi_read(REG_RX_CLOCK_DATA_DELAY);
+
+	ad9361_bist_prbs(phy, BIST_INJ_RX);
+
+	for (i = 0; i < 16; i++) {
+		for (j = 0; j < 16; j++) {
+			ad9361_spi_write(REG_RX_CLOCK_DATA_DELAY,
+					DATA_CLK_DELAY(j) | RX_DATA_DELAY(i));
+			for (chan = 0; chan < 4; chan++)
+				axiadc_write(ADI_REG_CHAN_STATUS(chan),
+					ADI_PN_ERR | ADI_PN_OOS);
+
+			mdelay(1);
+
+			if (axiadc_read(ADI_REG_STATUS) & ADI_STATUS) {
+				for (chan = 0, ret = 0; chan < 4; chan++)
+					ret |= axiadc_read(ADI_REG_CHAN_STATUS(chan));
+			} else {
+				ret = 1;
+			}
+
+			field[i][j] = ret;
+		}
+	}
+
+	ad9361_spi_write(REG_RX_CLOCK_DATA_DELAY, rx);
+
+	ad9361_bist_prbs(phy, BIST_DISABLE);
+
+	len += snprintf(buf + len, buflen, "CLK: %lu Hz 'o' = PASS\n",
+		       clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
+	len += snprintf(buf + len, buflen, "DC");
+	for (i = 0; i < 16; i++)
+		len += snprintf(buf + len, buflen, "%x:", i);
+	len += snprintf(buf + len, buflen, "\n");
+
+	for (i = 0; i < 16; i++) {
+		len += snprintf(buf + len, buflen, "%x:", i);
+		for (j = 0; j < 16; j++) {
+			len += snprintf(buf + len, buflen, "%c ",
+					(field[i][j] ? '.' : 'o'));
+		}
+		len += snprintf(buf + len, buflen, "\n");
+	}
+	len += snprintf(buf + len, buflen, "\n");
+
+	return len;
 }
 
 /**
@@ -3303,6 +3406,20 @@ int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	return 0;
 }
 
+
+static int ad9361_set_trx_clock_chain_freq(struct ad9361_rf_phy *phy,
+					  unsigned long freq)
+{
+	unsigned long rx[6], tx[6];
+	int ret;
+
+	ret = ad9361_calculate_rf_clock_chain(phy, freq,
+		phy->rate_governor, rx, tx);
+	if (ret < 0)
+		return ret;
+	return ad9361_set_trx_clock_chain(phy, rx, tx);
+}
+
 /**
  * Internal ENSM mode options helper function.
  * @param phy The AD9361 state structure.
@@ -4825,4 +4942,177 @@ int register_clocks(struct ad9361_rf_phy *phy)
 					TX_RFPLL, TX_REFCLK);
 
 	return 0;
+}
+
+static int ad9361_find_opt_delay(u8 *field, u32 *ret_start)
+{
+	int i, cnt = 0, max_cnt = 0, start, max_start = 0;
+
+	for(i = 0, start = -1; i < 16; i++) {
+		if (field[i] == 0) {
+			if (start == -1)
+				start = i;
+			cnt++;
+		} else {
+			if (cnt > max_cnt) {
+				max_cnt = cnt;
+				max_start = start;
+			}
+			start = -1;
+			cnt = 0;
+		}
+	}
+
+	if (cnt > max_cnt) {
+		max_cnt = cnt;
+		max_start = start;
+	}
+
+	*ret_start = max_start;
+
+	return max_cnt;
+}
+
+static int ad9361_dig_tune(struct ad9361_rf_phy *phy, unsigned long max_freq)
+{
+	int ret, i, j, k, chan, t, num_chan;
+	u32 s0, s1, c0, c1, tmp, saved = 0;
+	u8 field[2][16];
+
+	num_chan = 4;	// FIXME
+
+	ad9361_bist_prbs(phy, BIST_INJ_RX);
+
+	for (t = 0; t < 2; t++) {
+		memset(field, 0, 32);
+		for (k = 0; k < 2; k++) {
+			ad9361_set_trx_clock_chain_freq(phy, k ? max_freq : 10000000UL);
+			for (i = 0; i < 2; i++) {
+				for (j = 0; j < 16; j++) {
+					ad9361_spi_write(
+							REG_RX_CLOCK_DATA_DELAY + t,
+							RX_DATA_DELAY(i == 0 ? j : 0) |
+							DATA_CLK_DELAY(i ? j : 0));
+					for (chan = 0; chan < num_chan; chan++)
+						axiadc_write(ADI_REG_CHAN_STATUS(chan),
+							ADI_PN_ERR | ADI_PN_OOS);
+					mdelay(4);
+
+					if ((t == 1) || (axiadc_read(ADI_REG_STATUS) & ADI_STATUS)) {
+						for (chan = 0, ret = 0; chan < num_chan; chan++)
+							ret |= axiadc_read(ADI_REG_CHAN_STATUS(chan));
+					} else {
+						ret = 1;
+					}
+
+					field[i][j] |= ret;
+				}
+			}
+		}
+#ifdef _DEBUG
+		printk("SAMPL CLK: %lu\n", clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
+		printk("  ");
+		for (i = 0; i < 16; i++)
+			printk("%x:", i);
+		printk("\n");
+
+		for (i = 0; i < 2; i++) {
+			printk("%x:", i);
+			for (j = 0; j < 16; j++) {
+				printk("%c ", (field[i][j] ? '#' : 'o'));
+			}
+			printk("\n");
+		}
+		printk("\n");
+#endif
+		c0 = ad9361_find_opt_delay(&field[0][0], &s0);
+		c1 = ad9361_find_opt_delay(&field[1][0], &s1);
+
+		if (!c0 && !c1)
+			dev_err("%s: FAILED!\n", __func__);
+
+		if (c1 > c0)
+			ad9361_spi_write(REG_RX_CLOCK_DATA_DELAY + t,
+					DATA_CLK_DELAY(s1 + c1 / 2) |
+					RX_DATA_DELAY(0));
+		else
+			ad9361_spi_write(REG_RX_CLOCK_DATA_DELAY + t,
+					DATA_CLK_DELAY(0) |
+					RX_DATA_DELAY(s0 + c0 / 2));
+
+		if (t == 0) {
+			/* Now do the loopback and tune the digital out */
+			ad9361_bist_prbs(phy, BIST_DISABLE);
+			ad9361_bist_loopback(phy, 1);
+
+			for (chan = 0; chan < num_chan; chan++) {
+				axiadc_write(ADI_REG_CHAN_CNTRL(chan),
+					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
+					ADI_ENABLE | ADI_IQCOR_ENB | ADI_PN_SEL);
+
+				axiadc_write(0x4414 + (chan) * 0x40, 1);
+			}
+
+			saved = tmp = axiadc_read(0x4048);
+			tmp &= ~0xF;
+			tmp |= 1;
+			axiadc_write(0x4048, tmp);
+		} else {
+			ad9361_bist_loopback(phy, 0);
+
+			axiadc_write(0x4048, saved);
+			for (chan = 0; chan < num_chan; chan++) {
+				axiadc_write(ADI_REG_CHAN_CNTRL(chan),
+					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
+					ADI_ENABLE | ADI_IQCOR_ENB);
+				axiadc_write(0x4414 + (chan) * 0x40, 0);
+			}
+
+			phy->pdata->port_ctrl.rx_clk_data_delay =
+				ad9361_spi_read(REG_RX_CLOCK_DATA_DELAY);
+			phy->pdata->port_ctrl.tx_clk_data_delay =
+				ad9361_spi_read(REG_TX_CLOCK_DATA_DELAY);
+
+			return 0;
+		}
+	}
+
+	return 0;
+}
+
+int ad9361_post_setup(struct ad9361_rf_phy *phy)
+{
+	unsigned rx2tx2 = phy->pdata->rx2tx2;
+	unsigned tmp;
+	int i;
+	int num_channels;
+
+	num_channels = 4;	// FIXME
+	axiadc_write(ADI_REG_CNTRL, rx2tx2 ? 0 : ADI_R1_MODE);
+	tmp = axiadc_read(0x4048);
+
+	if (!rx2tx2) {
+		axiadc_write(0x4048, tmp | BIT(5)); /* R1_MODE */
+		axiadc_write(0x404c, 1); /* RATE */
+	} else {
+		tmp &= ~BIT(5);
+		axiadc_write(0x4048, tmp);
+		axiadc_write(0x404c, 3); /* RATE */
+	}
+
+	for (i = 0; i < num_channels; i++) {
+		axiadc_write(ADI_REG_CHAN_CNTRL_1(i),
+			     ADI_DCFILT_OFFSET(0));
+		axiadc_write(ADI_REG_CHAN_CNTRL_2(i),
+			     (i & 1) ? 0x00004000 : 0x40000000);
+		axiadc_write(ADI_REG_CHAN_CNTRL(i),
+			     ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
+			     ADI_ENABLE | ADI_IQCOR_ENB);
+	}
+
+	ad9361_dig_tune(phy, 61440000);
+
+	return ad9361_set_trx_clock_chain(phy,
+					 phy->pdata->rx_path_clks,
+					 phy->pdata->tx_path_clks);
 }

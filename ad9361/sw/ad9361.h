@@ -3108,6 +3108,12 @@ enum ad9361_clocks {
 	EXT_REF_CLK,
 };
 
+enum ad9361_bist_mode {
+	BIST_DISABLE,
+	BIST_INJ_TX,
+	BIST_INJ_RX,
+};
+
 enum {
 	ID_AD9361,
 };
@@ -3207,6 +3213,7 @@ int ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 				       enum fir_dest dest, int gain_dB,
 				       u32 ntaps, short *coef);
 int ad9361_validate_enable_fir(struct ad9361_rf_phy *phy);
+int ad9361_post_setup(struct ad9361_rf_phy *phy);
 
 #endif
 

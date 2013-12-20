@@ -42,8 +42,15 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+/* ADC COMMON */
 #define ADI_REG_RSTN			0x0040
 #define ADI_RSTN				(1 << 0)
+#define ADI_MMCM_RSTN 			(1 << 1)
+
+#define ADI_REG_CNTRL			0x0044
+#define ADI_R1_MODE				(1 << 2)
+#define ADI_DDR_EDGESEL			(1 << 1)
+#define ADI_PIN_MODE			(1 << 0)
 
 #define ADI_REG_STATUS			0x005C
 #define ADI_MUX_PN_ERR			(1 << 3)
@@ -68,7 +75,9 @@
 #define ADI_DMA_BUSWIDTH(x)		(((x) & 0xFFFFFFFF) << 0)
 #define ADI_TO_DMA_BUSWIDTH(x)	(((x) >> 0) & 0xFFFFFFFF)
 
+/* ADC CHANNEL */
 #define ADI_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
+#define ADI_PN_SEL				(1 << 10)
 #define ADI_IQCOR_ENB			(1 << 9)
 #define ADI_DCFILT_ENB			(1 << 8)
 #define ADI_FORMAT_SIGNEXT		(1 << 6)
@@ -77,10 +86,57 @@
 #define ADI_PN23_TYPE			(1 << 1)
 #define ADI_ENABLE				(1 << 0)
 
+#define ADI_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
+#define ADI_PN_ERR				(1 << 2)
+#define ADI_PN_OOS				(1 << 1)
+#define ADI_OVER_RANGE			(1 << 0)
+
+#define ADI_REG_CHAN_CNTRL_1(c)		(0x0410 + (c) * 0x40)
+#define ADI_DCFILT_OFFSET(x)		(((x) & 0xFFFF) << 16)
+#define ADI_TO_DCFILT_OFFSET(x)		(((x) >> 16) & 0xFFFF)
+#define ADI_DCFILT_COEFF(x)			(((x) & 0xFFFF) << 0)
+#define ADI_TO_DCFILT_COEFF(x)		(((x) >> 0) & 0xFFFF)
+
+#define ADI_REG_CHAN_CNTRL_2(c)		(0x0414 + (c) * 0x40)
+#define ADI_IQCOR_COEFF_1(x)		(((x) & 0xFFFF) << 16)
+#define ADI_TO_IQCOR_COEFF_1(x)		(((x) >> 16) & 0xFFFF)
+#define ADI_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
+#define ADI_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
+
+#define AXI_DMAC_REG_IRQ_MASK			0x80
+#define AXI_DMAC_REG_IRQ_PENDING		0x84
+#define AXI_DMAC_REG_IRQ_SOURCE			0x88
+
+#define AXI_DMAC_REG_CTRL				0x400
+#define AXI_DMAC_REG_TRANSFER_ID		0x404
+#define AXI_DMAC_REG_START_TRANSFER		0x408
+#define AXI_DMAC_REG_FLAGS				0x40c
+#define AXI_DMAC_REG_DEST_ADDRESS		0x410
+#define AXI_DMAC_REG_SRC_ADDRESS		0x414
+#define AXI_DMAC_REG_X_LENGTH			0x418
+#define AXI_DMAC_REG_Y_LENGTH			0x41c
+#define AXI_DMAC_REG_DEST_STRIDE		0x420
+#define AXI_DMAC_REG_SRC_STRIDE			0x424
+#define AXI_DMAC_REG_TRANSFER_DONE		0x428
+#define AXI_DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
+#define AXI_DMAC_REG_STATUS				0x430
+#define AXI_DMAC_REG_CURRENT_DEST_ADDR	0x434
+#define AXI_DMAC_REG_CURRENT_SRC_ADDR	0x438
+#define AXI_DMAC_REG_DBG0				0x43c
+#define AXI_DMAC_REG_DBG1				0x440
+
+#define AXI_DMAC_CTRL_ENABLE			(1 << 0)
+#define AXI_DMAC_CTRL_PAUSE				(1 << 1)
+
+#define AXI_DMAC_IRQ_SOT				(1 << 0)
+#define AXI_DMAC_IRQ_EOT				(1 << 1)
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 void adc_init(void);
-void adc_capture(uint32_t qwcnt, uint32_t sa);
+int32_t adc_capture(uint32_t size, uint32_t start_address);
+void axiadc_write(uint32_t reg, uint32_t val);
+uint32_t axiadc_read(uint32_t reg);
 
 #endif

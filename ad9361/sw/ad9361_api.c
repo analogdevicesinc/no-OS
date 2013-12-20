@@ -221,10 +221,10 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->port_ctrl.lvds_bias_ctrl |= (init_param->lvds_rx_onchip_termination_enable << 5);
 
 	phy->pdata->debug_mode = true;
-	phy->pdata->gpio_resetb = 54 + 45;
+	phy->pdata->gpio_resetb = 54 + 46;			// FIXME
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
-	phy->pdata->port_ctrl.lvds_invert[0] = 0;
-	phy->pdata->port_ctrl.lvds_invert[1] = 0;
+	phy->pdata->port_ctrl.lvds_invert[0] = 0xFF;
+	phy->pdata->port_ctrl.lvds_invert[1] = 0x0F;
 
 	phy->rx_eq_2tx = false;
 
@@ -255,6 +255,10 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	ad9361_init_gain_tables(phy);
 
 	ret = ad9361_setup(phy);
+	if (ret < 0)
+		goto out;
+
+	ret = ad9361_post_setup(phy);
 	if (ret < 0)
 		goto out;
 
