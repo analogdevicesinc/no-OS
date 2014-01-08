@@ -4,7 +4,7 @@
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 *******************************************************************************
-* Copyright 2013(c) Analog Devices, Inc.
+* Copyright 2014(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *

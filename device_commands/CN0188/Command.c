@@ -4,7 +4,7 @@
 *   @author Lucian Sin (Lucian.Sin@analog.com)
 *
 *******************************************************************************
-* Copyright 2013(c) Analog Devices, Inc.
+* Copyright 2014(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -78,6 +78,9 @@ const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 /******************************************************************************/
 cmdFunction cmdFunctions[] = {GetHelp, GetVoltage, GetAdcCode};
 
+/* Variables holding information about the device */
+float gain = 0;
+
 /***************************************************************************//**
  * @brief Displays all available commands.
  *
@@ -128,6 +131,48 @@ void DisplayError(unsigned char funcNo)
 }
 
 /***************************************************************************//**
+ * @brief Sets the current device type.
+ *
+ * @return None.
+*******************************************************************************/
+void DoDeviceLock(void)
+{
+    char device = 0;
+    char deviceLocked = -1;
+
+    while(deviceLocked < 0)
+    {
+        CONSOLE_Print("Please specify your device.\r\n\
+For CN0188 type: 0\r\n\
+For CN0218 type: 1\r\n\
+");
+        CONSOLE_GetCommand(&device);
+        if((device >= 0x30) && (device <= 0x31))
+        {
+            deviceLocked = 1;
+            switch(device)
+            {
+                case 0x30 :
+                {
+                    gain = 49.7;
+                    break;
+                }
+                case 0x31 :
+                {
+                    gain = 5;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            CONSOLE_Print("Please type the number corresponding for \
+your device!\r\n");
+        }
+    }
+}
+
+/***************************************************************************//**
  * @brief Initializes the device.
  *
  * @return - The result of the initialization.
@@ -138,6 +183,8 @@ void DisplayError(unsigned char funcNo)
 *******************************************************************************/
 char DoDeviceInit(void)
 {
+	DoDeviceLock();
+
     if(ad7171_Init() == 0)
     {
         CONSOLE_Print("Device OK\r\n");
@@ -151,7 +198,6 @@ char DoDeviceInit(void)
     }
 }
 
-
 /***************************************************************************//**
  * @brief Displays the input voltage in [mV].
  *
@@ -163,7 +209,7 @@ void GetVoltage(double* param, char paramNo) // "voltage?" command
     unsigned char  pattern = 0;
 
     vin = ad7171_GetVoltage(0x0, &pattern);
-    vin = (vin / 49.7) * 1000;
+    vin = (vin / gain) * 1000;
 
     /* Send feedback to user */
     if (pattern == 0xD)
