@@ -159,7 +159,6 @@ void dac_init(uint8_t data_sel)
 		break;
 	case DATA_SEL_DMA:
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-		dac_write(ADI_REG_VDMA_FRMCNT, tx_count * 8);
 		for(index = 0; index < (tx_count * 2); index+=2)
 		{
 			index_i1 = index;
@@ -187,6 +186,7 @@ void dac_init(uint8_t data_sel)
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, (tx_count * 8) - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DMA));
 		break;
 	default:
 		break;
