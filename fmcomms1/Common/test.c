@@ -409,22 +409,22 @@ void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address)
 	uint32_t baddr;
 	uint32_t ba;
 
-	ba = sa + (qwcnt*8);
+	ba = start_address + (size*8);
 	Xil_Out32((ba + 0x000), (ba + 0x40)); // next descriptor
 	Xil_Out32((ba + 0x004), 0x00); // reserved
-	Xil_Out32((ba + 0x008), sa); // start address
+	Xil_Out32((ba + 0x008), start_address); // start address
 	Xil_Out32((ba + 0x00c), 0x00); // reserved
 	Xil_Out32((ba + 0x010), 0x00); // reserved
 	Xil_Out32((ba + 0x014), 0x00); // reserved
-	Xil_Out32((ba + 0x018), (qwcnt*8)); // no. of bytes
+	Xil_Out32((ba + 0x018), (size*8)); // no. of bytes
 	Xil_Out32((ba + 0x01c), 0x00); // status
 	Xil_Out32((ba + 0x040), (ba + 0x00)); // next descriptor
 	Xil_Out32((ba + 0x044), 0x00); // reserved
-	Xil_Out32((ba + 0x048), sa); // start address
+	Xil_Out32((ba + 0x048), start_address); // start address
 	Xil_Out32((ba + 0x04c), 0x00); // reserved
 	Xil_Out32((ba + 0x050), 0x00); // reserved
 	Xil_Out32((ba + 0x054), 0x00); // reserved
-	Xil_Out32((ba + 0x058), (qwcnt*8)); // no. of bytes
+	Xil_Out32((ba + 0x058), (size*8)); // no. of bytes
 	Xil_Out32((ba + 0x05c), 0x00); // status
 #ifdef _XPARAMETERS_PS_H_
 	Xil_DCacheFlush();
@@ -442,7 +442,7 @@ void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address)
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
 
-	Xil_Out32((baddr + 0x084), (qwcnt*8)); // start capture
+	Xil_Out32((baddr + 0x084), (size*8)); // start capture
 	Xil_Out32((baddr + 0x080), 0x0); // capture disable
 	Xil_Out32((baddr + 0x080), 0x1); // capture disable
 	Xil_Out32((baddr + 0x088), 0xf); // clear status
