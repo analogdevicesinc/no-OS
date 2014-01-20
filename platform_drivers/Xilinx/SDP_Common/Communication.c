@@ -3,7 +3,7 @@
  *   @brief  Implementation of Communication Driver for Xilinx FPGAs.
  *   @author Istvan Csomortani (istvan.csomortani@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2014(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -175,8 +175,19 @@ void DefinePorts(void)
 #if(defined(CN0150) || defined(CN0178) || defined(CN0187) || \
     defined(CN0188) || defined(CN0189) || defined(CN0202) || \
     defined(CN0203) || defined(CN0204) || defined(CN0216) || \
-    defined(CN0218))
+    defined(CN0218) || defined(CN0235))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
+#endif
+#if (defined(CN0235))
+    /* Define the output pins referring to AD8280. */
+    GPIO0_PIN_OUT;  // TEST_IN
+    GPIO0_LOW;
+    GPIO3_PIN_OUT;  // ENBL_IN
+    GPIO3_LOW;
+    /* Define the input pins referring to AD8280. */
+    GPIO1_PIN_IN;   // ALRM_OV
+    GPIO4_PIN_IN;   // ALRM_UV
+
 #endif
 }
 
