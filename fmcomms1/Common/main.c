@@ -67,8 +67,8 @@ int main()
     XCOMM_Version boardVersion;
     XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
     							 XILINX_ML605,	//carrierBoard
-                                 100000000,		//adcSamplingRate
-                                 122880000,		//dacSamplingRate
+    							 245760000,		//adcSamplingRate
+    							 245760000,		//dacSamplingRate
 								 10000,			//rxGain1000
 								 2400000000ull, //rxFrequency
 								 2400000000ull};//txFrequency
@@ -210,7 +210,7 @@ int main()
     xil_printf("Actual set Tx frequency: %lld%06lld\n\r", retFreqTx/(uint64_t)1e6, retFreqTx%(uint64_t)1e6);
 
     xil_printf("\n\rSetting up the DDS... \n\r");
-    dds_setup(fmcSel, 5, 5);
+    dds_setup(fmcSel, 1000000, 1000000);
     xil_printf("DDS setup complete.\n\r");
 
     xil_printf("\n\rReading data from air... \n\r");

@@ -50,6 +50,7 @@
 #include <xil_cache.h>
 #include "timer.h"
 #include "test.h"
+#include "dac_core.h"
 
 /*****************************************************************************/
 /***************************** External Functions ****************************/
@@ -68,6 +69,8 @@ const uint16_t sine_lut[32] = {
 	0x0000, 0x0276, 0x09BE, 0x1592, 0x257D, 0x38E3, 0x4F04, 0x6707
 };
 
+static uint32_t dac_base_addr;
+
 /**************************************************************************//**
 * @brief Delays the program execution with the specified number of ms.
 *
@@ -84,20 +87,87 @@ void delay_ms(uint32_t ms_count)
 #endif
 }
 
-/**************************************************************************//**
-* @brief Computes the DDS increment and offset.
-*
-* @return DDS increment and offset.
-******************************************************************************/
-uint32_t dds_pf(uint32_t phase, uint32_t sin_clk, uint32_t dac_clk)
+/***************************************************************************//**
+* @brief dac_read
+*******************************************************************************/
+void dac_read(uint32_t regAddr, uint32_t *data)
 {
-	uint32_t p_offset;
-	uint32_t p_incr;
+	*data = Xil_In32(dac_base_addr + 0x4000 + regAddr);
+}
 
-	p_offset = (phase*0xffff)/360;
-	p_incr = ((sin_clk*0xffff)/dac_clk) | 0x1;
+/***************************************************************************//**
+* @brief dac_write
+*******************************************************************************/
+void dac_write(uint32_t regAddr, uint32_t data)
+{
+	Xil_Out32(dac_base_addr + 0x4000 + regAddr, data);
+}
 
-	return((p_offset<<16) | p_incr);
+/***************************************************************************//**
+* @brief do_div
+*******************************************************************************/
+#define do_div(n,base) ({								\
+		uint64_t __res;									\
+		__res = ((uint64_t) (n)) % (uint64_t) (base);	\
+		n = ((uint64_t) (n)) / (uint64_t) (base);		\
+		__res;})
+
+/***************************************************************************//**
+* @brief dds_set_frequency
+*******************************************************************************/
+void dds_set_frequency(uint32_t chan, uint32_t freq)
+{
+	uint64_t val64;
+	uint32_t ctrl_reg, reg;
+	uint32_t dac_clk;
+	uint32_t val;
+
+	dac_read(ADI_REG_CLK_FREQ, &val);
+	dac_clk = val;
+	dac_read(ADI_REG_CLK_RATIO, &val);
+	dac_clk *= val * 100000000 / 65536;
+
+	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
+	dac_write(ADI_REG_CNTRL_1, 0);
+	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~ADI_DDS_INCR(~0);
+	val64 = (u64) freq * 0xFFFFULL;
+	do_div(val64, dac_clk);
+	reg |= ADI_DDS_INCR(val64) | 1;
+	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+}
+
+/***************************************************************************//**
+* @brief dds_set_phase
+*******************************************************************************/
+void dds_set_phase(uint32_t chan, uint32_t phase)
+{
+	uint64_t val64;
+	uint32_t ctrl_reg, reg;
+
+	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
+	dac_write(ADI_REG_CNTRL_1, 0);
+	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~ADI_DDS_INIT(~0);
+	val64 = (u64) phase * 0x10000ULL + (360000 / 2);
+	do_div(val64, 360000);
+	reg |= ADI_DDS_INIT(val64);
+	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+}
+
+/***************************************************************************//**
+* @brief dds_set_scale
+*******************************************************************************/
+void dds_set_scale(uint32_t chan, uint32_t scale)
+{
+	uint32_t ctrl_reg;
+
+	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
+	dac_write(ADI_REG_CNTRL_1, 0);
+	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
+	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
 }
 
 /**************************************************************************//**
@@ -107,23 +177,25 @@ uint32_t dds_pf(uint32_t phase, uint32_t sin_clk, uint32_t dac_clk)
 ******************************************************************************/
 void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 {
-	uint32_t baddr;
+	dac_base_addr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ?
+					CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
-	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
-	Xil_Out32((baddr + 0x4400), 0x1); // scale-1
-	Xil_Out32((baddr + 0x4404), dds_pf( 0, f1, 500)); //dds-1
-	Xil_Out32((baddr + 0x4408), 0x1); // scale-2
-	Xil_Out32((baddr + 0x440c), dds_pf( 0, f1, 500)); //dds-1
-	Xil_Out32((baddr + 0x4440), 0x1); // scale-1
-	Xil_Out32((baddr + 0x4444), dds_pf(90, f2, 500)); //dds-1
-	Xil_Out32((baddr + 0x4448), 0x1); // scale-2
-	Xil_Out32((baddr + 0x444c), dds_pf(90, f2, 500)); //dds-2
-	Xil_Out32((baddr + 0x4048), 0x10); // format, sel
-	Xil_Out32((baddr + 0x4044), 0x0); // enable
-	Xil_Out32((baddr + 0x4044), 0x1); // enable
-	Xil_Out32((baddr + 0x4050), 0x0); // enable
-	Xil_Out32((baddr + 0x4050), 0x1); // enable
-	xil_printf("dac_dds: f1(%dMHz), f2(%dMHz).\n\r", f1, f2);
+	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DDS));
+	dac_write(ADI_REG_CNTRL_1, 0x0);
+	dac_write(ADI_REG_CNTRL_1, 0x1);
+
+	dds_set_frequency(0, f1);
+	dds_set_phase(0, 90000);
+	dds_set_scale(0, 4);
+	dds_set_frequency(1, f1);
+	dds_set_phase(1, 90000);
+	dds_set_scale(1, 4);
+	dds_set_frequency(2, f2);
+	dds_set_phase(2, 0);
+	dds_set_scale(2, 4);
+	dds_set_frequency(3, f2);
+	dds_set_phase(3, 0);
+	dds_set_scale(3, 4);
 }
 
 /**************************************************************************//**
