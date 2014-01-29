@@ -79,7 +79,10 @@ const char cmdNo = (sizeof(cmdList) / sizeof(struct cmd_info));
 cmdFunction cmdFunctions[] = {GetHelp, GetVoltage, GetAdcCode};
 
 /* Variables holding information about the device */
-float gain = 0;
+float gain      = 0;
+float vRef      = 0;
+float IdPattern = 0;
+AD7171_type deviceType;
 
 /***************************************************************************//**
  * @brief Displays all available commands.
@@ -145,21 +148,36 @@ void DoDeviceLock(void)
         CONSOLE_Print("Please specify your device.\r\n\
 For CN0188 type: 0\r\n\
 For CN0218 type: 1\r\n\
+For CN0240 type: 2\r\n\
 ");
         CONSOLE_GetCommand(&device);
-        if((device >= 0x30) && (device <= 0x31))
+        if((device >= 0x30) && (device <= 0x32))
         {
             deviceLocked = 1;
             switch(device)
             {
                 case 0x30 :
                 {
-                    gain = 49.7;
+                	deviceType = ID_AD7171;
+                	gain      = 49.7;
+                	vRef      = 2.5;
+                	IdPattern = 8 + 5;
                     break;
                 }
                 case 0x31 :
                 {
-                    gain = 5;
+                	deviceType = ID_AD7171;
+                    gain      = 5;
+                    vRef      = 2.5;
+                    IdPattern = 8 + 5;
+                    break;
+                }
+                case 0x32 :
+                {
+                	deviceType = ID_AD7170;
+                    gain      = 40;
+                    vRef      = 5;
+                    IdPattern = 8 + 5;
                     break;
                 }
             }
@@ -185,7 +203,7 @@ char DoDeviceInit(void)
 {
 	DoDeviceLock();
 
-    if(ad7171_Init() == 0)
+    if(ad7171_Init(deviceType) == 0)
     {
         CONSOLE_Print("Device OK\r\n");
         DisplayCmdList();
@@ -208,11 +226,11 @@ void GetVoltage(double* param, char paramNo) // "voltage?" command
     float          vin     = 0;
     unsigned char  pattern = 0;
 
-    vin = ad7171_GetVoltage(0x0, &pattern);
+    vin = ad7171_GetVoltage(0x0, &pattern, vRef);
     vin = (vin / gain) * 1000;
 
     /* Send feedback to user */
-    if (pattern == 0xD)
+    if (pattern == IdPattern)
     {
         CONSOLE_Print("The serial transfer was correct.\r\n");
         CONSOLE_Print("Voltage=%.3f[mV].\r\n", vin);
@@ -235,7 +253,7 @@ void GetAdcCode(double* param, char paramNo) // "adcCode?" command
 
     adcCode = ad7171_GetAdcCode(0x0, &pattern);
     /* Send feedback to user */
-    if (pattern == 0xD)
+    if (pattern == IdPattern)
     {
         CONSOLE_Print("The serial transfer was correct.\r\n");
         CONSOLE_Print("ADC Code=%d.\r\n", adcCode);
