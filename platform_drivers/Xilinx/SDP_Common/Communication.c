@@ -175,7 +175,7 @@ void DefinePorts(void)
 #if(defined(CN0150) || defined(CN0178) || defined(CN0187) || \
     defined(CN0188) || defined(CN0189) || defined(CN0202) || \
     defined(CN0203) || defined(CN0204) || defined(CN0216) || \
-    defined(CN0218) || defined(CN0235))
+    defined(CN0218) || defined(CN0235) || defined(CN0240))
     SPI_BASEADDR  = XPAR_AXI_SPI_0_BASEADDR;
 #endif
 #if (defined(CN0235))
