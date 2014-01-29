@@ -47,8 +47,28 @@
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-const float          VREF     = 2.5;
-const unsigned short MIDSCALE = 32768;
+const unsigned char MAX_RESOLUTION = 16;
+
+/******************************************************************************/
+/************************** Variables Definitions *****************************/
+/******************************************************************************/
+struct ad7171_chip_info {
+    unsigned char  resolution;
+    unsigned short midscale;
+};
+
+static const struct ad7171_chip_info ad7171_chip_info[] = {
+    [ID_AD7170] = {
+        .resolution = 12,
+        .midscale   = 2048,
+    },
+    [ID_AD7171] = {
+        .resolution = 16,
+        .midscale   = 32768,
+    }
+};
+
+AD7171_type act_device;
 
 /******************************************************************************/
 /*************************** Functions Definitions ****************************/
@@ -63,11 +83,12 @@ const unsigned short MIDSCALE = 32768;
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 ******************************************************************************/
-char ad7171_Init(void)
+char ad7171_Init(AD7171_type device)
 {
 
     char status = -1;
 
+    act_device = device;
     /* Setup SPI Interface */
     status = SPI_Init(0, 1000000, 1, 0);
 
@@ -112,7 +133,9 @@ unsigned long ad7171_Read24Bits(unsigned long ctrl)
  *
  * @return vin - input voltage.
 ******************************************************************************/
-float ad7171_GetVoltage(unsigned long   ctrl, unsigned char*  pattern)
+float ad7171_GetVoltage(unsigned long   ctrl,
+                        unsigned char*  pattern,
+                        float vRef)
 {
     unsigned long  data      = 0;
     unsigned short dataValue = 0;
@@ -120,9 +143,11 @@ float ad7171_GetVoltage(unsigned long   ctrl, unsigned char*  pattern)
 
     data = ad7171_Read24Bits(ctrl);
     /* Extract the ADC code from the 24 bits word. */
-    dataValue = (data & 0xFFFF00) >> 8;
+    dataValue = (data & 0xFFFF00) >> (8 + MAX_RESOLUTION -
+                ad7171_chip_info[act_device].resolution);
     /* Calculate the input voltage corresponding to the current ADC code. */
-    vin = (((float)dataValue / MIDSCALE) - 1) * VREF;
+    vin = (((float)dataValue / ad7171_chip_info[act_device].midscale) - 1) *
+          vRef;
     /* Extract the pattern from the 24 bits word. */
     *pattern = (unsigned char)(data & 0x1F);
 
@@ -146,7 +171,8 @@ unsigned short ad7171_GetAdcCode(unsigned long ctrl, unsigned char* pattern)
 
     data = ad7171_Read24Bits(ctrl);
     /* Extract the ADC code from the 24 bits word. */
-    dataValue = (data & 0xFFFF00) >> 8;
+    dataValue = (data & 0xFFFF00) >> (8 + MAX_RESOLUTION -
+                ad7171_chip_info[act_device].resolution);
     adcCode = dataValue;
     /* Extract the pattern from the 24 bits word. */
     *pattern = (unsigned char)(data & 0x1F);

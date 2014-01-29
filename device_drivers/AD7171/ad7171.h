@@ -53,20 +53,28 @@
 /******************************************************************************/
 #define ad7171_SLAVE_ID     1
 
+/* Supported devices */
+typedef enum {
+    ID_AD7170,
+    ID_AD7171
+} AD7171_type;
+
 /******************************************************************************/
 /*************************** Functions Declarations ***************************/
 /******************************************************************************/
 /* Initializes the communication with the device. */
-char ad7171_Init(void);
+char ad7171_Init(AD7171_type device);
 
 /* Receives 24 bits from SPI and transmits 0x0. */
 unsigned long ad7171_Read24Bits(unsigned long ctrl);
 
 /* Calculates the input voltage and the pattern of the conversion as
 parameter.*/
-float ad7171_GetVoltage(unsigned long   ctrl, unsigned char*  pattern);
+float ad7171_GetVoltage(unsigned long   ctrl,
+                        unsigned char*  pattern,
+                        float vRef);
 
-/*  */
+/*  Returns the ADC code and the pattern of the conversion as parameter. */
 unsigned short ad7171_GetAdcCode(unsigned long ctrl, unsigned char* pattern);
 
 #endif /* _ad7171_H_ */
