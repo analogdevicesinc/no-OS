@@ -230,7 +230,12 @@ void dac_dma_setup(uint32_t sel)
 		data_q = (sine_lut[index_q] << 0);
 		Xil_Out32(DDRDAC_BASEADDR + index * 4, data_i | data_q);
 	}
+#ifdef _XPARAMETERS_PS_H_
 	Xil_DCacheFlush();
+#else
+	microblaze_flush_dcache();
+	microblaze_invalidate_dcache();
+#endif
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9122_1_BASEADDR : DMA9122_0_BASEADDR;
 
@@ -372,7 +377,6 @@ void dac_test(uint32_t sel)
 ******************************************************************************/
 void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address)
 {
-#ifdef _XPARAMETERS_PS_H_
 	uint32_t baddr;
 	uint32_t reg_val;
 	uint32_t transfer_id;
@@ -412,64 +416,11 @@ void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address)
 		reg_val = Xil_In32(baddr + AXI_DMAC_REG_TRANSFER_DONE);
 	}
 	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
-	Xil_DCacheFlush();
-#else
-	uint32_t baddr;
-	uint32_t ba;
-
-	ba = start_address + (size*8);
-	Xil_Out32((ba + 0x000), (ba + 0x40)); // next descriptor
-	Xil_Out32((ba + 0x004), 0x00); // reserved
-	Xil_Out32((ba + 0x008), start_address); // start address
-	Xil_Out32((ba + 0x00c), 0x00); // reserved
-	Xil_Out32((ba + 0x010), 0x00); // reserved
-	Xil_Out32((ba + 0x014), 0x00); // reserved
-	Xil_Out32((ba + 0x018), (size*8)); // no. of bytes
-	Xil_Out32((ba + 0x01c), 0x00); // status
-	Xil_Out32((ba + 0x040), (ba + 0x00)); // next descriptor
-	Xil_Out32((ba + 0x044), 0x00); // reserved
-	Xil_Out32((ba + 0x048), start_address); // start address
-	Xil_Out32((ba + 0x04c), 0x00); // reserved
-	Xil_Out32((ba + 0x050), 0x00); // reserved
-	Xil_Out32((ba + 0x054), 0x00); // reserved
-	Xil_Out32((ba + 0x058), (size*8)); // no. of bytes
-	Xil_Out32((ba + 0x05c), 0x00); // status
 #ifdef _XPARAMETERS_PS_H_
 	Xil_DCacheFlush();
 #else
 	microblaze_flush_dcache();
 	microblaze_invalidate_dcache();
-#endif
-
-	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? DMA9643_1_BASEADDR : DMA9643_0_BASEADDR;
-	Xil_Out32((baddr + 0x030), 4); // reset dma
-	Xil_Out32((baddr + 0x030), 0); // clear dma operations
-	Xil_Out32((baddr + 0x038), ba); // head descr.
-	Xil_Out32((baddr + 0x030), 1); // enable dma operations
-	Xil_Out32((baddr + 0x040), (ba+0x40)); // tail descr.
-
-	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
-
-	Xil_Out32((baddr + 0x084), (size*8)); // start capture
-	Xil_Out32((baddr + 0x080), 0x0); // capture disable
-	Xil_Out32((baddr + 0x080), 0x1); // capture disable
-	Xil_Out32((baddr + 0x088), 0xf); // clear status
-
-	do
-	{
-		delay_ms(1);
-	}
-	while ((Xil_In32(baddr + 0x088) & 0x1) == 1);
-	if (Xil_In32(baddr + 0x088) != 0x00)
-	{
-		xil_printf("adc_capture: overflow occured, data may be corrupted\n\r");
-	}
-#ifdef _XPARAMETERS_PS_H_
-	Xil_DCacheFlush();
-#else
-	microblaze_flush_dcache();
-	microblaze_invalidate_dcache();
-#endif
 #endif
 }
 
