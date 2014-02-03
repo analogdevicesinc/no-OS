@@ -205,38 +205,30 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 ******************************************************************************/
 void dac_dma_setup(uint32_t sel)
 {
-#ifdef _XPARAMETERS_PS_H_
 	uint32_t baddr;
 	uint32_t index;
 	uint32_t tx_count;
-	uint32_t index_i1;
-	uint32_t index_q1;
-	uint32_t index_i2;
-	uint32_t index_q2;
-	uint32_t i1_data;
-	uint32_t q1_data;
-	uint32_t i2_data;
-	uint32_t q2_data;
+	uint32_t index_i;
+	uint32_t index_q;
+	uint32_t data_i;
+	uint32_t data_q;
+	uint32_t dac_clk;
+	uint32_t val;
+	uint32_t sine_freq;
+
+	dac_base_addr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ?
+					CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
 	tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-	for(index = 0; index < (tx_count * 2); index += 2)
+	for(index = 0; index < tx_count; index ++)
 	{
-		index_i1 = index;
-		index_q1 = index_i1 + ((tx_count * 2) / 4);
-		if(index_q1 >= (tx_count * 2))
-			index_q1 -= (tx_count * 2);
-		i1_data = ((sine_lut[index_i1 / 2]) & 0xFFFF);
-		q1_data = ((sine_lut[index_q1 / 2]) & 0xFFFF);
-		Xil_Out32((DDRDAC_BASEADDR + (2*index)), ((i1_data << 16) | q1_data));
-		index_i2 = index_i1 + (tx_count / 2);
-		index_q2 = index_q1 + (tx_count / 2);
-		if(index_i2 >= (tx_count * 2))
-			index_i2 -= (tx_count * 2);
-		if(index_q2 >= (tx_count * 2))
-			index_q2 -= (tx_count * 2);
-		i2_data = ((sine_lut[index_i2 / 2]) & 0xFFFF);
-		q2_data = ((sine_lut[index_q2 / 2]) & 0xFFFF);
-		Xil_Out32((DDRDAC_BASEADDR + (2*(index + 1))), ((i2_data << 16) | q2_data));
+		index_i = index;
+		index_q = index + (tx_count / 4);
+		if(index_q >= tx_count)
+		index_q -= tx_count;
+		data_i = (sine_lut[index_i] << 16);
+		data_q = (sine_lut[index_q] << 0);
+		Xil_Out32(DDRDAC_BASEADDR + index * 4, data_i | data_q);
 	}
 	Xil_DCacheFlush();
 
@@ -248,73 +240,17 @@ void dac_dma_setup(uint32_t sel)
 	Xil_Out32(baddr + AXI_DMAC_REG_X_LENGTH, (tx_count * 4) - 1);
 	Xil_Out32(baddr + AXI_DMAC_REG_Y_LENGTH, 0x0);
 	Xil_Out32(baddr + AXI_DMAC_REG_START_TRANSFER, 0x1);
-#else
-	uint32_t dac_baseaddr;
-	uint32_t vdma_baseaddr;
-	uint32_t index;
-	uint32_t status;
-	uint32_t tx_count;
-	uint32_t index_i1;
-	uint32_t index_q1;
-	uint32_t index_i2;
-	uint32_t index_q2;
-	uint32_t i1_data;
-	uint32_t q1_data;
-	uint32_t i2_data;
-	uint32_t q2_data;
 
-	dac_baseaddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
-	vdma_baseaddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? VDMA9122_1_BASEADDR : VDMA9122_0_BASEADDR;
+	dac_read(ADI_REG_CLK_FREQ, &val);
+	dac_clk = val;
+	dac_read(ADI_REG_CLK_RATIO, &val);
+	dac_clk *= val * 100000000 / 65536;
+	sine_freq = dac_clk / (tx_count * 2);
+	xil_printf("dac_dma: Sine frequency is %d Hz.\n\r", sine_freq);
 
-	tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-	for(index = 0; index < (tx_count * 2); index += 2)
-	{
-		index_i1 = index;
-		index_q1 = index_i1 + ((tx_count * 2) / 4);
-		if(index_q1 >= (tx_count * 2))
-			index_q1 -= (tx_count * 2);
-		i1_data = ((sine_lut[index_i1 / 2]) & 0xFFFF);
-		q1_data = ((sine_lut[index_q1 / 2]) & 0xFFFF);
-		Xil_Out32((DDRDAC_BASEADDR + (2*index)), ((i1_data << 16) | q1_data));
-		index_i2 = index_i1 + (tx_count / 2);
-		index_q2 = index_q1 + (tx_count / 2);
-		if(index_i2 >= (tx_count * 2))
-			index_i2 -= (tx_count * 2);
-		if(index_q2 >= (tx_count * 2))
-			index_q2 -= (tx_count * 2);
-		i2_data = ((sine_lut[index_i2 / 2]) & 0xFFFF);
-		q2_data = ((sine_lut[index_q2 / 2]) & 0xFFFF);
-		Xil_Out32((DDRDAC_BASEADDR + (2*(index + 1))), ((i2_data << 16) | q2_data));
-	}
-
-#ifdef _XPARAMETERS_PS_H_
-	Xil_DCacheFlush();
-#else
-	microblaze_flush_dcache();
-	microblaze_invalidate_dcache();
-#endif
-	xil_printf("dac_dma: buffer-count(%d).\n\r", index);
-	Xil_Out32((dac_baseaddr + 0x4084), tx_count * 4); // vdma frame count
-	Xil_Out32((dac_baseaddr + 0x4048), 0x2); // format, sel
-	Xil_Out32((dac_baseaddr + 0x4044), 0x1); // enable
-	Xil_Out32((vdma_baseaddr + 0x000), 0x4); // reset
-	Xil_Out32((vdma_baseaddr + 0x000), 0x0); // reset
-	Xil_Out32((vdma_baseaddr + 0x000), 0x3); // enable circular mode
-	Xil_Out32((vdma_baseaddr + 0x018), 0x1);
-	Xil_Out32((vdma_baseaddr + 0x05c), DDRDAC_BASEADDR); // start address
-	Xil_Out32((vdma_baseaddr + 0x058), tx_count * 4);
-	Xil_Out32((vdma_baseaddr + 0x054), tx_count * 4);
-	Xil_Out32((vdma_baseaddr + 0x050), 1);
-	delay_ms(10);
-	Xil_Out32((dac_baseaddr + 0x4088), 0x3); // clear status
-	xil_printf("dac_dma: f(60MHz).\n\r");
-	delay_ms(10);
-	status = Xil_In32((dac_baseaddr + 0x4088));
-	if (status != 0x0)
-	{
-		xil_printf("dma_setup: status(%x)\n\r", status);
-	}
-#endif
+	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DMA));
+	dac_write(ADI_REG_CNTRL_1, 0x0);
+	dac_write(ADI_REG_CNTRL_1, 0x1);
 }
 
 /**************************************************************************//**
