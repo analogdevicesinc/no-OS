@@ -67,7 +67,7 @@ static const uint32_t ad9122_reg_defaults[][2] =
 	{AD9122_REG_COMM, 0x00},
 	{AD9122_REG_COMM, AD9122_COMM_RESET},
 	{AD9122_REG_COMM, 0x00},
-	{AD9122_REG_POWER_CTRL, AD9122_POWER_CTRL_PD_AUX_ADC},
+	{AD9122_REG_POWER_CTRL, 0},
 	{AD9122_REG_DATA_FORMAT, AD9122_DATA_FORMAT_BINARY},
 	{AD9122_REG_INTERRUPT_EN_1, 0x00},
 	{AD9122_REG_INTERRUPT_EN_2, 0x00},
@@ -1514,4 +1514,27 @@ int32_t ad9122_set_data_format(uint8_t format)
 	}
 
 	return format;
+}
+
+/***************************************************************************//**
+ * @brief Gets the AD9122 die temperature code.
+ *
+ * @return Returns negative error code in case of error
+ * 		   or the die temperature code.
+*******************************************************************************/
+int32_t ad9122_get_temperature_code(void)
+{
+	int32_t ret;
+	int32_t tmp_code;
+
+	ret = ad9122_read(AD9122_REG_DIE_TEMP_LSB);
+	if (ret < 0)
+		return ret;
+	tmp_code = ret;
+	ret = ad9122_read(AD9122_REG_DIE_TEMP_MSB);
+	if (ret < 0)
+		return ret;
+	tmp_code |= (ret << 8);
+
+	return tmp_code;
 }

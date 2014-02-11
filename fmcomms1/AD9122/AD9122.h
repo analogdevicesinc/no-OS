@@ -396,4 +396,7 @@ int32_t ad9122_get_fifo_status_regs(uint8_t *status1,
 /*  ** Returns negative error code in case of error or the set input data format.*/
 int32_t ad9122_set_data_format(uint8_t format);
 
+/** Gets the AD9122 die temperature code. */
+int32_t ad9122_get_temperature_code(void);
+/*  ** Returns negative error code in case of error or the die temperature code. */
 #endif // __AD9122_H__

@@ -1226,3 +1226,37 @@ int32_t XCOMM_SetDacDataFormat(uint8_t dataFormat)
 {
 	return ad9122_set_data_format(dataFormat);
 }
+
+/***************************************************************************//**
+ * @brief Gets the DAC die temperature code.
+ *
+ * @return Returns negative error code in case of error or the
+ *         die temperature code.
+*******************************************************************************/
+int32_t XCOMM_GetDacTemperatureCode(void)
+{
+	return ad9122_get_temperature_code();
+}
+
+/***************************************************************************//**
+ * @brief Gets the DAC die temperature.
+ *
+ * @param calibTemp: The known temperature in milli degrees Celsius.
+ * @param calibTempCode: The readback code for the known temperature.
+ *
+ * @return Returns negative error code in case of error or the die temperature
+ *         in milli degrees Celsius.
+*******************************************************************************/
+int32_t XCOMM_GetDacTemperature(int32_t calibTemp, int32_t calibTempCode)
+{
+	int32_t tempCode;
+	int32_t temp;
+
+	tempCode = ad9122_get_temperature_code();
+	if(tempCode < 0)
+		return -1;
+
+	temp = ((tempCode - calibTempCode) * 77 + calibTemp * 10 + 10000) / 10;
+
+	return temp;
+}
