@@ -75,7 +75,7 @@ void DAC_Core_Init(uint32_t fmcPort)
 ******************************************************************************/
 void DAC_Core_Read(uint32_t regAddr, uint32_t *data)
 {
-    *data = Xil_In32(dacCoreAxiAddr + regAddr);
+    *data = Xil_In32(dacCoreAxiAddr + 0x4000 + regAddr);
 }
 
 /**************************************************************************//**
@@ -86,5 +86,5 @@ void DAC_Core_Read(uint32_t regAddr, uint32_t *data)
 ******************************************************************************/
 void DAC_Core_Write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(dacCoreAxiAddr + regAddr, data);
+	Xil_Out32(dacCoreAxiAddr + 0x4000 + regAddr, data);
 }
