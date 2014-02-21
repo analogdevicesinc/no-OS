@@ -2140,7 +2140,7 @@ static int ad9361_tx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
 	tx_bb_bw = clamp(tx_bb_bw, 625000UL, 20000000UL);
 
 	/* 1.6 * BBBW * 2PI / ln(2) */
-	target =  132345 * (tx_bb_bw / 10000UL);
+	target =  145036 * (tx_bb_bw / 10000UL);
 	txbbf_div = min_t(unsigned long, 511UL, DIV_ROUND_UP(bbpll_freq, target));
 
 	/* Set TX baseband filter divide value */
