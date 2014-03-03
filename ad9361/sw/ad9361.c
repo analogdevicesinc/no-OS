@@ -4975,7 +4975,7 @@ static int ad9361_find_opt_delay(u8 *field, u32 *ret_start)
 
 static int ad9361_dig_tune(struct ad9361_rf_phy *phy, unsigned long max_freq)
 {
-	int ret, i, j, k, chan, t, num_chan;
+	int ret, i, j, k, chan, t, num_chan, err = 0;
 	u32 s0, s1, c0, c1, tmp, saved = 0;
 	u8 field[2][16];
 
@@ -5028,8 +5028,11 @@ static int ad9361_dig_tune(struct ad9361_rf_phy *phy, unsigned long max_freq)
 		c0 = ad9361_find_opt_delay(&field[0][0], &s0);
 		c1 = ad9361_find_opt_delay(&field[1][0], &s1);
 
-		if (!c0 && !c1)
-			dev_err("%s: FAILED!\n", __func__);
+		if (!c0 && !c1) {
+			dev_err("%s: Tuning %s FAILED!", __func__,
+					t ? "TX" : "RX");
+			err = -EIO;
+		}
 
 		if (c1 > c0)
 			ad9361_spi_write(REG_RX_CLOCK_DATA_DELAY + t,
@@ -5073,11 +5076,11 @@ static int ad9361_dig_tune(struct ad9361_rf_phy *phy, unsigned long max_freq)
 			phy->pdata->port_ctrl.tx_clk_data_delay =
 				ad9361_spi_read(REG_TX_CLOCK_DATA_DELAY);
 
-			return 0;
+			return err;
 		}
 	}
 
-	return 0;
+	return -EINVAL;
 }
 
 int ad9361_post_setup(struct ad9361_rf_phy *phy)
