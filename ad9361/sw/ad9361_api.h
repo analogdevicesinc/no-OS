@@ -136,6 +136,20 @@ typedef struct
 	/* Aux ADC Control */
 	uint32_t	aux_adc_decimation;	/* adi,aux-adc-decimation */
 	uint32_t	aux_adc_rate;	/* adi,aux-adc-rate */
+	/* AuxDAC Control */
+	uint8_t		aux_dac_manual_mode_enable;	/* adi,aux-dac-manual-mode-enable */
+	uint32_t	aux_dac1_default_value_mV;	/* adi,aux-dac1-default-value-mV */
+	uint8_t		aux_dac1_active_in_rx_enable;	/* adi,aux-dac1-active-in-rx-enable */
+	uint8_t		aux_dac1_active_in_tx_enable;	/* adi,aux-dac1-active-in-tx-enable */
+	uint8_t		aux_dac1_active_in_alert_enable;	/* adi,aux-dac1-active-in-alert-enable */
+	uint32_t	aux_dac1_rx_delay_us;	/* adi,aux-dac1-rx-delay-us */
+	uint32_t	aux_dac1_tx_delay_us;	/* adi,aux-dac1-tx-delay-us */
+	uint32_t	aux_dac2_default_value_mV;	/* adi,aux-dac2-default-value-mV */
+	uint8_t		aux_dac2_active_in_rx_enable;	/* adi,aux-dac2-active-in-rx-enable */
+	uint8_t		aux_dac2_active_in_tx_enable;	/* adi,aux-dac2-active-in-tx-enable */
+	uint8_t		aux_dac2_active_in_alert_enable;	/* adi,aux-dac2-active-in-alert-enable */
+	uint32_t	aux_dac2_rx_delay_us;	/* adi,aux-dac2-rx-delay-us */
+	uint32_t	aux_dac2_tx_delay_us;	/* adi,aux-dac2-tx-delay-us */
 	/* Temperature Sensor Control */
 	uint32_t	temp_sense_decimation;	/* adi,temp-sense-decimation */
 	uint16_t	temp_sense_measurement_interval_ms;	/* adi,temp-sense-measurement-interval-ms */

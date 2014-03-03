@@ -176,6 +176,21 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->auxadc_ctrl.auxadc_decimation = init_param->aux_adc_decimation;
 	phy->pdata->auxadc_ctrl.auxadc_clock_rate = init_param->aux_adc_rate;
 
+	/* AuxDAC Control */
+	phy->pdata->auxdac_ctrl.auxdac_manual_mode_en = init_param->aux_dac_manual_mode_enable;
+	phy->pdata->auxdac_ctrl.dac1_default_value = init_param->aux_dac1_default_value_mV;
+	phy->pdata->auxdac_ctrl.dac1_in_rx_en = init_param->aux_dac1_active_in_rx_enable;
+	phy->pdata->auxdac_ctrl.dac1_in_tx_en = init_param->aux_dac1_active_in_tx_enable;
+	phy->pdata->auxdac_ctrl.dac1_in_alert_en = init_param->aux_dac1_active_in_alert_enable;
+	phy->pdata->auxdac_ctrl.dac1_rx_delay_us = init_param->aux_dac1_rx_delay_us;
+	phy->pdata->auxdac_ctrl.dac1_tx_delay_us = init_param->aux_dac1_tx_delay_us;
+	phy->pdata->auxdac_ctrl.dac2_default_value = init_param->aux_dac2_default_value_mV;
+	phy->pdata->auxdac_ctrl.dac2_in_rx_en = init_param->aux_dac2_active_in_rx_enable;
+	phy->pdata->auxdac_ctrl.dac2_in_tx_en = init_param->aux_dac2_active_in_tx_enable;
+	phy->pdata->auxdac_ctrl.dac2_in_alert_en = init_param->aux_dac2_active_in_alert_enable;
+	phy->pdata->auxdac_ctrl.dac2_rx_delay_us = init_param->aux_dac2_rx_delay_us;
+	phy->pdata->auxdac_ctrl.dac2_tx_delay_us = init_param->aux_dac2_tx_delay_us;
+
 	/* Temperature Sensor Control */
 	phy->pdata->auxadc_ctrl.temp_sensor_decimation = init_param->temp_sense_decimation;
 	phy->pdata->auxadc_ctrl.temp_time_inteval_ms = init_param->temp_sense_measurement_interval_ms;

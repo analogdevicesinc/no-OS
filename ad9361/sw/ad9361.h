@@ -777,14 +777,15 @@
 #define COMP_CTRL_1			     (1 << 5) /* Comp Ctrl 1 */
 #define AUXDAC1_STP_FACTOR		     (1 << 4) /* AuxDAC1 Step Factor */
 #define AUXDAC_1_VREF(x)		     (((x) & 0x3) << 2) /* AuxDAC 1 Vref<1:0> */
-#define AUXDAC_2_WORD_LSB(x)		     (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
+#define AUXDAC_1_WORD_LSB(x)		     (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
 
 /*
  *	REG_AUXDAC_2_CONFIG
  */
 #define COMP_CTRL_2			     (1 << 5) /* Comp Ctrl 2 */
 #define AUXDAC2_STP_FACTOR		     (1 << 4) /* AuxDAC2 Step Factor */
-#define AUXDAC_2_VREF(x)		     (((x) & 0xF) << 0) /* AuxDAC 2 Vref<1:0> */
+#define AUXDAC_2_VREF(x) (((x) & 0xF) << 2) /* AuxDAC 2 Vref<1:0> */
+#define AUXDAC_2_WORD_LSB(x) (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
 
 /*
  *	REG_AUXADC_CLOCK_DIVIDER
@@ -2916,6 +2917,26 @@ struct gain_control {
 
 };
 
+struct auxdac_control {
+	u16 dac1_default_value;
+	u16 dac2_default_value;
+
+	bool auxdac_manual_mode_en;
+
+	bool dac1_in_rx_en;
+	bool dac1_in_tx_en;
+	bool dac1_in_alert_en;
+
+	bool dac2_in_rx_en;
+	bool dac2_in_tx_en;
+	bool dac2_in_alert_en;
+
+	u8 dac1_rx_delay_us;
+	u8 dac1_tx_delay_us;
+	u8 dac2_rx_delay_us;
+	u8 dac2_tx_delay_us;
+};
+
 enum rssi_restart_mode {
 	AGC_IN_FAST_ATTACK_MODE_LOCKS_THE_GAIN,
 	EN_AGC_PIN_IS_PULLED_HIGH,
@@ -3042,6 +3063,7 @@ struct ad9361_phy_platform_data {
 	struct ctrl_outs_control	ctrl_outs_ctrl;
 	struct elna_control	elna_ctrl;
 	struct auxadc_control	auxadc_ctrl;
+	struct auxdac_control	auxdac_ctrl;
 };
 
 struct rf_rx_gain {
@@ -3148,6 +3170,8 @@ struct ad9361_rf_phy {
 	bool			rfdc_track_en;
 	bool			bbdc_track_en;
 	bool			quad_track_en;
+	u16 			auxdac1_value;
+	u16 			auxdac2_value;
 };
 
 struct refclk_scale {

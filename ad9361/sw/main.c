@@ -151,6 +151,20 @@ AD9361_InitParam default_init_param = {
 	/* Aux ADC Control */
 	256,	//aux_adc_decimation *** adi,aux-adc-decimation
 	40000000UL,	//aux_adc_rate *** adi,aux-adc-rate
+	/* AuxDAC Control */
+	1,		//aux_dac_manual_mode_enable;	/* adi,aux-dac-manual-mode-enable
+	0,		//aux_dac1_default_value_mV;	/* adi,aux-dac1-default-value-mV
+	0,		//aux_dac1_active_in_rx_enable;	/* adi,aux-dac1-active-in-rx-enable
+	0,		//aux_dac1_active_in_tx_enable;	/* adi,aux-dac1-active-in-tx-enable
+	0,		//aux_dac1_active_in_alert_enable;	/* adi,aux-dac1-active-in-alert-enable
+	0,		//aux_dac1_rx_delay_us;	/* adi,aux-dac1-rx-delay-us
+	0,		//aux_dac1_tx_delay_us;	/* adi,aux-dac1-tx-delay-us
+	0,		//aux_dac2_default_value_mV;	/* adi,aux-dac2-default-value-mV
+	0,		//aux_dac2_active_in_rx_enable;	/* adi,aux-dac2-active-in-rx-enable
+	0,		//aux_dac2_active_in_tx_enable;	/* adi,aux-dac2-active-in-tx-enable
+	0,		//aux_dac2_active_in_alert_enable;	/* adi,aux-dac2-active-in-alert-enable
+	0,		//aux_dac2_rx_delay_us;	/* adi,aux-dac2-rx-delay-us
+	0,		//aux_dac2_tx_delay_us;	/* adi,aux-dac2-tx-delay-us
 	/* Temperature Sensor Control */
 	256,	//temp_sense_decimation *** adi,temp-sense-decimation
 	1000,	//temp_sense_measurement_interval_ms *** adi,temp-sense-measurement-interval-ms
