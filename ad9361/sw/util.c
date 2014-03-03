@@ -40,8 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
 #include "xspips.h"
 #include "xgpiops.h"
+#else
+#include "xspi.h"
+#endif
 #include "util.h"
 
 /******************************************************************************/
@@ -54,10 +58,15 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
 XSpiPs_Config	*spi_config;
 XSpiPs			spi_instance;
 XGpioPs_Config	*gpio_config;
 XGpioPs			gpio_instance;
+#else
+XSpi_Config		*spi_config;
+XSpi			spi_instance;
+#endif
 
 /***************************************************************************//**
  * @brief udelay
@@ -82,8 +91,10 @@ int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pha,
 				 uint8_t  clk_pol)
 {
+
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
+#ifdef _XPARAMETERS_PS_H_
 	uint8_t  byte		 = 0;
 
 	spi_config = XSpiPs_LookupConfig(device_id);
@@ -103,7 +114,20 @@ int32_t spi_init(uint32_t device_id,
 	{
 		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
 	}
-
+#else
+	XSpi_Initialize(&spi_instance, device_id);
+	XSpi_Stop(&spi_instance);
+	spi_config = XSpi_LookupConfig(device_id);
+	base_addr = spi_config->BaseAddress;
+	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
+	control_val = XSP_MASTER_OPTION |
+				  XSP_CLK_PHASE_1_OPTION |
+				  XSP_MANUAL_SSELECT_OPTION;
+	XSpi_SetOptions(&spi_instance, control_val);
+	XSpi_Start(&spi_instance);
+	XSpi_IntrGlobalDisable(&spi_instance);
+	XSpi_SetSlaveSelect(&spi_instance, 1);
+#endif
 	return SUCCESS;
 }
 
@@ -113,10 +137,11 @@ int32_t spi_init(uint32_t device_id,
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number)
 {
+	uint32_t cnt		 = 0;
+#ifdef _XPARAMETERS_PS_H_
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
 	uint32_t status	  	 = 0;
-	uint32_t cnt		 = 0;
 
 	base_addr = spi_config->BaseAddress;
 	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
@@ -155,7 +180,16 @@ int32_t spi_read(uint8_t *data,
 	}
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
+#else
+	uint8_t send_buffer[20];
 
+	for(cnt = 0; cnt < bytes_number; cnt++)
+	{
+		send_buffer[cnt] = data[cnt];
+	}
+
+	XSpi_Transfer(&spi_instance, send_buffer, data, bytes_number);
+#endif
 	return SUCCESS;
 }
 
@@ -188,8 +222,10 @@ int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
 *******************************************************************************/
 void gpio_init(uint32_t device_id)
 {
-	gpio_config = XGpioPs_LookupConfig(XPAR_PS7_GPIO_0_DEVICE_ID);
+#ifdef _XPARAMETERS_PS_H_
+	gpio_config = XGpioPs_LookupConfig(device_id);
 	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
+#endif
 }
 
 /***************************************************************************//**
@@ -197,8 +233,10 @@ void gpio_init(uint32_t device_id)
 *******************************************************************************/
 void gpio_direction(uint8_t pin, uint8_t direction)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&gpio_instance, pin, direction);
 	XGpioPs_SetOutputEnablePin(&gpio_instance, pin, 1);
+#endif
 }
 
 /***************************************************************************//**
@@ -206,7 +244,9 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 *******************************************************************************/
 void gpio_data(uint8_t pin, uint8_t data)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_WritePin(&gpio_instance, pin, data);
+#endif
 }
 
 /***************************************************************************//**
@@ -214,7 +254,11 @@ void gpio_data(uint8_t pin, uint8_t data)
 *******************************************************************************/
 bool gpio_is_valid(int number)
 {
+#ifdef _XPARAMETERS_PS_H_
 	return 1;
+#else
+	return 0;
+#endif
 }
 
 /***************************************************************************//**

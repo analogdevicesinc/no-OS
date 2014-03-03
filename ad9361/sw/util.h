@@ -46,10 +46,19 @@
 #include "limits.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "sleep.h"
 #include "common.h"
 #include "xil_printf.h"
 #include "ad9361.h"
+#ifdef _XPARAMETERS_PS_H_
+#include "sleep.h"
+#else
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	for(delay = 0; delay < usleep * 10; delay++);
+}
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
