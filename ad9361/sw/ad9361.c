@@ -1010,20 +1010,24 @@ static int ad9361_load_gt(struct ad9361_rf_phy *phy, u64 freq, u32 dest)
 /**
  * Setup the external low-noise amplifier (LNA).
  * @param phy The AD9361 state structure.
- * @param gain_mdB High gain(non-bypass) value [mdB].
- * @param bypass_loss_mdB Low gain (bypass) value [mdB].
+ * @param ctrl Pointer to eLNA control structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int ad9361_setup_ext_lna(struct ad9361_rf_phy *phy, u32 gain_mdB,
-				u32 bypass_loss_mdB)
+static int ad9361_setup_ext_lna(struct ad9361_rf_phy *phy,
+				struct elna_control *ctrl)
 {
+	ad9361_spi_writef(REG_EXTERNAL_LNA_CTRL, EXTERNAL_LNA1_CTRL,
+			ctrl->elna_1_control_en);
+
+	ad9361_spi_writef(REG_EXTERNAL_LNA_CTRL, EXTERNAL_LNA2_CTRL,
+			ctrl->elna_2_control_en);
+
 	ad9361_spi_write(REG_EXT_LNA_HIGH_GAIN,
-			EXT_LNA_HIGH_GAIN(gain_mdB / 500));
+			EXT_LNA_HIGH_GAIN(ctrl->gain_mdB / 500));
 
 	return ad9361_spi_write(REG_EXT_LNA_LOW_GAIN,
-			EXT_LNA_LOW_GAIN(bypass_loss_mdB / 500));
+			EXT_LNA_LOW_GAIN(ctrl->bypass_loss_mdB / 500));
 }
-
 
 /**
  * Set the clock output mode.
@@ -3556,8 +3560,7 @@ int ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_setup_ext_lna(phy, pd->elna_ctrl.gain_mdB,
-			pd->elna_ctrl.bypass_loss_mdB);
+	ret = ad9361_setup_ext_lna(phy, &pd->elna_ctrl);
 	if (ret < 0)
 		return ret;
 
