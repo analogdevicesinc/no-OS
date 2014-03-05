@@ -3022,9 +3022,25 @@ static int ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
  */
 static int ad9361_get_temp(struct ad9361_rf_phy *phy)
 {
-	u32 val = ad9361_spi_read(REG_TEMPERATURE);
+	u32 val;
+
+	ad9361_spi_writef(REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 1);
+	val = ad9361_spi_read(REG_TEMPERATURE);
+	ad9361_spi_writef(REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
 
 	return DIV_ROUND_CLOSEST(val * 1000, 1140);
+}
+
+static int ad9361_get_auxadc(struct ad9361_rf_phy *phy)
+{
+	u32 val;
+	u8 buf[2];
+
+	ad9361_spi_writef(REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 1);
+	val = ad9361_spi_readm(REG_AUXADC_LSB, buf, 2);
+	ad9361_spi_writef(REG_AUXADC_CONFIG, AUXADC_POWER_DOWN, 0);
+
+	return (buf[1] << 4) | AUXADC_WORD_LSB(buf[0]);
 }
 
 /**
