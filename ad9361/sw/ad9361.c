@@ -1403,7 +1403,7 @@ int ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
 		val = ad9361_spi_read(REG_FAST_ATTACK_STATE);
 		val = (val >> fast_atk_shift) & FAST_ATK_MASK;
 		if (val != FAST_ATK_GAIN_LOCKED) {
-			dev_err("Failed to read gain, state m/c at %x\n",
+			dev_warn("Failed to read gain, state m/c at %x\n",
 				val);
 			rc = -EAGAIN;
 			goto out;

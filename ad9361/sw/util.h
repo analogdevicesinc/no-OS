@@ -87,6 +87,7 @@ static inline void usleep(unsigned long usleep)
 #define CLK_GET_RATE_NOCACHE	BIT(6)
 
 #define dev_err(format, ...)		printf(format, ## __VA_ARGS__)
+#define dev_warn(format, ...)		printf(format, ## __VA_ARGS__)
 #define dev_dbg(format, ...)		printf(format, ## __VA_ARGS__)
 #define dev_info(format, ...)		printf(format, ## __VA_ARGS__)
 #define printk(format, ...)			printf(format, ## __VA_ARGS__)
