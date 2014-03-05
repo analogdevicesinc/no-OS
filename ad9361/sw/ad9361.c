@@ -3735,8 +3735,8 @@ static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 	if (prepare && !is_prepared) {
 		ad9361_spi_write(
 				REG_RX_FAST_LOCK_SETUP_INIT_DELAY + offs,
-				tx ? phy->pdata->tx_fastlock_delay_ns :
-				phy->pdata->rx_fastlock_delay_ns);
+				(tx ? phy->pdata->tx_fastlock_delay_ns :
+				phy->pdata->rx_fastlock_delay_ns) / 250);
 		ad9361_spi_write(REG_RX_FAST_LOCK_SETUP + offs,
 				RX_FAST_LOCK_PROFILE(profile) |
 				RX_FAST_LOCK_MODE_ENABLE);
@@ -3805,6 +3805,8 @@ static int ad9361_fastlock_recall(struct ad9361_rf_phy *phy, bool tx, u32 profil
 
 	return ad9361_spi_write(REG_RX_FAST_LOCK_SETUP + offs,
 			 RX_FAST_LOCK_PROFILE(profile) |
+			 (phy->pdata->trx_fastlock_pinctrl_en[tx] ?
+			 RX_FAST_LOCK_PROFILE_PIN_SELECT : 0) |
 			 RX_FAST_LOCK_MODE_ENABLE);
 }
 
@@ -3844,8 +3846,7 @@ static void ad9361_clear_state(struct ad9361_rf_phy *phy)
 	phy->rx_fir_dec = 0;
 	phy->rx_fir_ntaps = 0;
 	phy->ensm_pin_ctl_en = false;
-	phy->fastlock.current_profile[0] = 0;
-	phy->fastlock.current_profile[1] = 0;
+	memset(&phy->fastlock, 0, sizeof(phy->fastlock));
 }
 
 /**

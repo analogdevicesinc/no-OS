@@ -81,6 +81,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->tdd_skip_vco_cal = init_param->tdd_skip_vco_cal_enable;
 	phy->pdata->rx_fastlock_delay_ns = init_param->rx_fastlock_delay_ns;
 	phy->pdata->tx_fastlock_delay_ns = init_param->tx_fastlock_delay_ns;
+	phy->pdata->trx_fastlock_pinctrl_en[0] = init_param->rx_fastlock_pincontrol_enable;
+	phy->pdata->trx_fastlock_pinctrl_en[1] = init_param->tx_fastlock_pincontrol_enable;
 	phy->pdata->use_ext_rx_lo = init_param->external_rx_lo_enable;
 	phy->pdata->use_ext_tx_lo = init_param->external_tx_lo_enable;
 	phy->pdata->dc_offset_update_events = init_param->dc_offset_tracking_update_event_mask;

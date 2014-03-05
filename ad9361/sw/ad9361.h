@@ -3112,6 +3112,7 @@ struct ad9361_phy_platform_data {
 	int 			gpio_resetb;
 	u32			rx_fastlock_delay_ns;
 	u32			tx_fastlock_delay_ns;
+	bool			trx_fastlock_pinctrl_en[2];
 	enum ad9361_clkout	ad9361_clkout_mode;
 
 	struct gain_control	gain_ctrl;

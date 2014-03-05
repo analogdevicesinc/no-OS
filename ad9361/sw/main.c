@@ -73,6 +73,8 @@ AD9361_InitParam default_init_param = {
 	0,		//tdd_skip_vco_cal_enable *** adi,tdd-skip-vco-cal-enable
 	0,		//tx_fastlock_delay_ns *** adi,tx-fastlock-delay-ns
 	0,		//rx_fastlock_delay_ns *** adi,rx-fastlock-delay-ns
+	0,		//rx_fastlock_pincontrol_enable *** adi,rx-fastlock-pincontrol-enable
+	0,		//tx_fastlock_pincontrol_enable *** adi,tx-fastlock-pincontrol-enable
 	0,		//external_rx_lo_enable *** adi,external-rx-lo-enable
 	0,		//external_tx_lo_enable *** adi,external-tx-lo-enable
 	5,		//dc_offset_tracking_update_event_mask *** adi,dc-offset-tracking-update-event-mask
