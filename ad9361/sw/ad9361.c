@@ -1250,9 +1250,9 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 			       VCO_VARACTOR_REFERENCE(
 			       tab[i].VCO_Varactor_Reference));
 
-	ad9361_spi_write(REG_RX_VCO_CAL_REF, VCO_CAL_REF_TCF(0));
+	ad9361_spi_write(REG_RX_VCO_CAL_REF + offs, VCO_CAL_REF_TCF(0));
 
-	ad9361_spi_write(REG_RX_VCO_VARACTOR_CTRL_0,
+	ad9361_spi_write(REG_RX_VCO_VARACTOR_CTRL_0 + offs,
 				VCO_VARACTOR_OFFSET(0) |
 				VCO_VARACTOR_REFERENCE_TCF(7));
 
