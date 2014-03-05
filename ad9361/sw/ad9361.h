@@ -3197,6 +3197,19 @@ enum {
 	ID_AD9361,
 };
 
+struct ad9361_fastlock_entry {
+#define FASTLOOK_INIT	1
+	u8 flags;
+	u8 alc_orig;
+	u8 alc_written;
+};
+
+struct ad9361_fastlock {
+	u8 save_profile;
+	u8 current_profile[2];
+	struct ad9361_fastlock_entry entry[2][8];
+};
+
 struct ad9361_rf_phy {
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
@@ -3230,9 +3243,7 @@ struct ad9361_rf_phy {
 	bool			quad_track_en;
 	u16 			auxdac1_value;
 	u16 			auxdac2_value;
-	bool			fastlock_rx_prepared;
-	bool			fastlock_tx_prepared;
-	u32			fastlock_save_profile;
+	struct ad9361_fastlock	fastlock;
 };
 
 struct refclk_scale {

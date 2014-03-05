@@ -3589,12 +3589,50 @@ static int ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctr
 
 /* Fast Lock */
 
+static int ad9361_fastlock_readval(bool tx,
+				u32 profile, u32 word)
+{
+	u32 offs = 0;
+
+	if (tx)
+		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
+
+	ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_ADDR + offs,
+			RX_FAST_LOCK_PROFILE_ADDR(profile) |
+			RX_FAST_LOCK_PROFILE_WORD(word));
+
+	return ad9361_spi_read(REG_RX_FAST_LOCK_PROGRAM_READ + offs);
+}
+
+static int ad9361_fastlock_writeval(bool tx,
+				u32 profile, u32 word, u8 val, bool last)
+{
+	u32 offs = 0;
+	int ret;
+
+	if (tx)
+		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
+
+	ret = ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_ADDR + offs,
+			RX_FAST_LOCK_PROFILE_ADDR(profile) |
+			RX_FAST_LOCK_PROFILE_WORD(word));
+	ret |= ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_DATA + offs, val);
+	ret |= ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_CTRL + offs,
+			RX_FAST_LOCK_PROGRAM_WRITE |
+			RX_FAST_LOCK_PROGRAM_CLOCK_ENABLE);
+
+	if (last) /* Stop Clocks */
+		ret |= ad9361_spi_write(
+			REG_RX_FAST_LOCK_PROGRAM_CTRL + offs, 0);
+
+	return ret;
+}
 
 static int ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
 				u32 profile, u8 *values)
 {
-	unsigned offs = 0;
-	int i;
+	u32 offs = 0;
+	int i, ret = 0;
 
 	dev_dbg("%s: %s Profile %d:",
 		__func__, tx ? "TX" : "RX", profile);
@@ -3602,26 +3640,21 @@ static int ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
 	if (tx)
 		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
 
-	for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++) {
-		ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_ADDR + offs,
-			RX_FAST_LOCK_PROFILE_ADDR(profile) |
-			RX_FAST_LOCK_PROFILE_WORD(i));
-		ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_DATA + offs,
-				 values[i]);
-		ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_CTRL + offs,
-				 RX_FAST_LOCK_PROGRAM_WRITE |
-				 RX_FAST_LOCK_PROGRAM_CLOCK_ENABLE);
+	for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++)
+		ret |= ad9361_fastlock_writeval(tx, profile,
+						i, values[i], i == 0xF);
 
-	}
+	phy->fastlock.entry[tx][profile].flags = FASTLOOK_INIT;
+	phy->fastlock.entry[tx][profile].alc_orig = values[15];
+	phy->fastlock.entry[tx][profile].alc_written = values[15];
 
-	return ad9361_spi_write(
-				 REG_RX_FAST_LOCK_PROGRAM_CTRL + offs, 0);
+	return ret;
 }
 
 static int ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx, u32 profile)
 {
 	u8 val[16];
-	unsigned offs = 0, x, y;
+	u32 offs = 0, x, y;
 
 	dev_dbg("%s: %s Profile %d:",
 		__func__, tx ? "TX" : "RX", profile);
@@ -3663,7 +3696,7 @@ static int ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx, u32 profile
 	x = ad9361_spi_readf(REG_RX_VCO_VARACTOR_CTRL_0 + offs,
 			     VCO_VARACTOR_REFERENCE_TCF(~0));
 	y = ad9361_spi_readf(REG_RFPLL_DIVIDERS,
-		tx ? TX_VCO_DIVIDER(~0) : RX_VCO_DIVIDER(~0));
+		     tx ? TX_VCO_DIVIDER(~0) : RX_VCO_DIVIDER(~0));
 	val[12] = (x << 4) | y;
 
 	x = ad9361_spi_readf(REG_RX_FORCE_VCO_TUNE_1 + offs, VCO_CAL_OFFSET(~0));
@@ -3682,8 +3715,8 @@ static int ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx, u32 profile
 static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 				  u32 profile, bool prepare)
 {
-	unsigned offs, ready_mask;
-	bool *is_prepared;
+	u32 offs, ready_mask;
+	bool is_prepared;
 
 	dev_dbg("%s: %s Profile %d: %s",
 		__func__, tx ? "TX" : "RX", profile,
@@ -3691,15 +3724,15 @@ static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 
 	if (tx) {
 		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
-		is_prepared = &phy->fastlock_tx_prepared;
 		ready_mask = TX_SYNTH_READY_MASK;
 	} else {
 		offs = 0;
-		is_prepared = &phy->fastlock_rx_prepared;
 		ready_mask = RX_SYNTH_READY_MASK;
 	}
 
-	if (prepare && !*is_prepared) {
+	is_prepared = !!phy->fastlock.current_profile[tx];
+
+	if (prepare && !is_prepared) {
 		ad9361_spi_write(
 				REG_RX_FAST_LOCK_SETUP_INIT_DELAY + offs,
 				tx ? phy->pdata->tx_fastlock_delay_ns :
@@ -3711,11 +3744,10 @@ static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 				0);
 
 		ad9361_spi_writef(REG_ENSM_CONFIG_2, ready_mask, 1);
-
 		ad9361_trx_vco_cal_control(phy, tx, false);
 
-		*is_prepared = true;
-	} else if (!prepare && *is_prepared) {
+		phy->fastlock.current_profile[tx] = profile + 1;
+	} else if (!prepare && is_prepared) {
 		ad9361_spi_write(REG_RX_FAST_LOCK_SETUP + offs, 0);
 
 		/* Workaround */
@@ -3727,7 +3759,7 @@ static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 		ad9361_trx_vco_cal_control(phy, tx, true);
 		ad9361_spi_writef(REG_ENSM_CONFIG_2, ready_mask, 0);
 
-		*is_prepared = false;
+		phy->fastlock.current_profile[tx] = 0;
 	}
 
 	return 0;
@@ -3735,7 +3767,8 @@ static int ad9361_fastlock_prepare(struct ad9361_rf_phy *phy, bool tx,
 
 static int ad9361_fastlock_recall(struct ad9361_rf_phy *phy, bool tx, u32 profile)
 {
-	unsigned offs = 0;
+	u32 offs = 0;
+	u8 curr, new, orig, current_profile;
 
 	dev_dbg("%s: %s Profile %d:",
 		__func__, tx ? "TX" : "RX", profile);
@@ -3743,26 +3776,37 @@ static int ad9361_fastlock_recall(struct ad9361_rf_phy *phy, bool tx, u32 profil
 	if (tx)
 		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
 
+	if (phy->fastlock.entry[tx][profile].flags != FASTLOOK_INIT)
+		return -EINVAL;
+
+	/* Workaround: Lock problem with same ALC word */
+
+	current_profile = phy->fastlock.current_profile[tx];
+	new = phy->fastlock.entry[tx][profile].alc_written;
+
+	if (current_profile == 0)
+		curr = ad9361_spi_readf(REG_RX_FORCE_ALC + offs,
+				FORCE_ALC_WORD(~0)) << 1;
+	else
+		curr = phy->fastlock.entry[tx][current_profile - 1].alc_written;
+
+	if ((curr >> 1) == (new >> 1)) {
+		orig = phy->fastlock.entry[tx][profile].alc_orig;
+
+		if ((orig >> 1) == (new >> 1))
+			phy->fastlock.entry[tx][profile].alc_written += 2;
+		else
+			phy->fastlock.entry[tx][profile].alc_written = orig;
+
+		ad9361_fastlock_writeval(tx, profile, 0xF,
+			phy->fastlock.entry[tx][profile].alc_written, true);
+	}
+
 	ad9361_fastlock_prepare(phy, tx, profile, true);
 
 	return ad9361_spi_write(REG_RX_FAST_LOCK_SETUP + offs,
 			 RX_FAST_LOCK_PROFILE(profile) |
 			 RX_FAST_LOCK_MODE_ENABLE);
-}
-
-static int ad9361_fastlock_readval(struct ad9361_rf_phy *phy, bool tx,
-				u32 profile, u32 word)
-{
-	unsigned offs = 0;
-
-	if (tx)
-		offs = REG_TX_FAST_LOCK_SETUP - REG_RX_FAST_LOCK_SETUP;
-
-	ad9361_spi_write(REG_RX_FAST_LOCK_PROGRAM_ADDR + offs,
-		RX_FAST_LOCK_PROFILE_ADDR(profile) |
-		RX_FAST_LOCK_PROFILE_WORD(word));
-
-	return  ad9361_spi_read(REG_RX_FAST_LOCK_PROGRAM_READ + offs);
 }
 
 static int ad9361_fastlock_save(struct ad9361_rf_phy *phy, bool tx,
@@ -3774,10 +3818,9 @@ static int ad9361_fastlock_save(struct ad9361_rf_phy *phy, bool tx,
 		__func__, tx ? "TX" : "RX", profile);
 
 	for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++)
-		values[i] = ad9361_fastlock_readval(phy, tx, profile, i);
+		values[i] = ad9361_fastlock_readval(tx, profile, i);
 
 	return 0;
-
 }
 
 static void ad9361_clear_state(struct ad9361_rf_phy *phy)
@@ -3802,8 +3845,8 @@ static void ad9361_clear_state(struct ad9361_rf_phy *phy)
 	phy->rx_fir_dec = 0;
 	phy->rx_fir_ntaps = 0;
 	phy->ensm_pin_ctl_en = false;
-	phy->fastlock_rx_prepared = false;
-	phy->fastlock_tx_prepared = false;
+	phy->fastlock.current_profile[0] = 0;
+	phy->fastlock.current_profile[1] = 0;
 }
 
 /**
@@ -4976,8 +5019,7 @@ unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 	struct ad9361_rf_phy *phy = clk_priv->phy;
 	unsigned long fract, integer;
 	u8 buf[5];
-	u32 reg, div_mask, vco_div;
-	bool fastlock_en;
+	u32 reg, div_mask, vco_div, profile;
 
 	dev_dbg("%s: Parent Rate %lu Hz",
 		__func__, parent_rate);
@@ -4986,36 +5028,27 @@ unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 	case RX_RFPLL:
 		reg = REG_RX_FRACT_BYTE_2;
 		div_mask = RX_VCO_DIVIDER(~0);
-		fastlock_en = phy->fastlock_rx_prepared;
+		profile = phy->fastlock.current_profile[0];
 		break;
 	case TX_RFPLL:
 		reg = REG_TX_FRACT_BYTE_2;
 		div_mask = TX_VCO_DIVIDER(~0);
-		fastlock_en = phy->fastlock_tx_prepared;
+		profile = phy->fastlock.current_profile[1];
 		break;
 	default:
 		return -EINVAL;
 	}
 
-	if (fastlock_en) {
-		u32 profile;
+	if (profile) {
 		bool tx = clk_priv->source == TX_RFPLL;
+		profile = profile - 1;
 
-		profile = ad9361_spi_read(tx ? REG_TX_FAST_LOCK_SETUP :
-			REG_RX_FAST_LOCK_SETUP);
-
-		if (!(profile & RX_FAST_LOCK_MODE_ENABLE))
-			dev_err("%s: Error on Line %d",
-				__func__, __LINE__);
-
-		profile = profile >> 5;
-
-		buf[0] = ad9361_fastlock_readval(phy, tx, profile, 4);
-		buf[1] = ad9361_fastlock_readval(phy, tx, profile, 3);
-		buf[2] = ad9361_fastlock_readval(phy, tx, profile, 2);
-		buf[3] = ad9361_fastlock_readval(phy, tx, profile, 1);
-		buf[4] = ad9361_fastlock_readval(phy, tx, profile, 0);
-		vco_div = ad9361_fastlock_readval(phy, tx, profile, 12) & 0xF;
+		buf[0] = ad9361_fastlock_readval(tx, profile, 4);
+		buf[1] = ad9361_fastlock_readval(tx, profile, 3);
+		buf[2] = ad9361_fastlock_readval(tx, profile, 2);
+		buf[3] = ad9361_fastlock_readval(tx, profile, 1);
+		buf[4] = ad9361_fastlock_readval(tx, profile, 0);
+		vco_div = ad9361_fastlock_readval(tx, profile, 12) & 0xF;
 
 	} else {
 		ad9361_spi_readm(reg, &buf[0], ARRAY_SIZE(buf));
