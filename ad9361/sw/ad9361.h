@@ -2,7 +2,7 @@
  *   @file   ad9361.h
  *   @brief  Header file of AD9361 Driver.
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2014(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -467,6 +467,8 @@
 #define REG_RX_FRACT_BYTE_0			 0x233 /* RX Fractional Byte 0 */
 #define REG_RX_FRACT_BYTE_1			 0x234 /* RX Fractional Byte 1 */
 #define REG_RX_FRACT_BYTE_2			 0x235 /* RX Fractional Byte 2 */
+#define REG_RX_FORCE_ALC				 0x236 /* RX Force ALC */
+#define REG_RX_FORCE_VCO_TUNE_0			 0x237 /* RX Force VCO Tune 0 */
 #define REG_RX_FORCE_VCO_TUNE_1			 0x238 /* RX Force VCO Tune 1 */
 #define REG_RX_ALC_VARACTOR			 0x239 /* RX ALC/Varactor */
 #define REG_RX_VCO_OUTPUT			 0x23A /* RX VCO Output */
@@ -2396,10 +2398,18 @@
 #define RX_FAST_LOCK_PROFILE(x)		     (((x) & 0x7) << 5) /* Rx Fast Lock Profile<2:0> */
 
 /*
+ *	REG_RX_FAST_LOCK_PROGRAM_ADDR
+ */
+#define RX_FAST_LOCK_PROFILE_ADDR(x)	     (((x) & 0x7) << 4) /* Rx Fast Lock Profile<2:0> */
+#define RX_FAST_LOCK_PROFILE_WORD(x)	     (((x) & 0xF) << 0) /* Configuration Word <3:0> */
+
+/*
  *	REG_RX_FAST_LOCK_PROGRAM_CTRL
  */
 #define RX_FAST_LOCK_PROGRAM_WRITE	     (1 << 1) /* Rx Fast Lock Program Write */
 #define RX_FAST_LOCK_PROGRAM_CLOCK_ENABLE     (1 << 0) /* Rx Fast Lock Program Clock Enable */
+
+#define RX_FAST_LOCK_CONFIG_WORD_NUM	     16
 
 /*
  *	REG_RX_LO_GEN_POWER_MODE
@@ -3100,6 +3110,8 @@ struct ad9361_phy_platform_data {
 	int			tx_atten;
 	bool			update_tx_gain_via_alert;
 	int 			gpio_resetb;
+	u32			rx_fastlock_delay_ns;
+	u32			tx_fastlock_delay_ns;
 	enum ad9361_clkout	ad9361_clkout_mode;
 
 	struct gain_control	gain_ctrl;
@@ -3199,6 +3211,7 @@ struct ad9361_rf_phy {
 
 	bool			auto_cal_en;
 	u64			last_tx_quad_cal_freq;
+	unsigned long		flags;
 	unsigned long		cal_threshold_freq;
 	u32			current_rx_bw_Hz;
 	u32			current_tx_bw_Hz;
@@ -3217,6 +3230,9 @@ struct ad9361_rf_phy {
 	bool			quad_track_en;
 	u16 			auxdac1_value;
 	u16 			auxdac2_value;
+	bool			fastlock_rx_prepared;
+	bool			fastlock_tx_prepared;
+	u32			fastlock_save_profile;
 };
 
 struct refclk_scale {

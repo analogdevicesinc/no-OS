@@ -56,6 +56,8 @@ typedef struct
 	uint8_t		frequency_division_duplex_mode_enable;	/* adi,frequency-division-duplex-mode-enable */
 	uint8_t		tdd_use_dual_synth_mode_enable;	/* adi,tdd-use-dual-synth-mode-enable */
 	uint8_t		tdd_skip_vco_cal_enable;		/* adi,tdd-skip-vco-cal-enable */
+	uint32_t	tx_fastlock_delay_ns;	/* adi,tx-fastlock-delay-ns */
+	uint32_t	rx_fastlock_delay_ns;	/* adi,rx-fastlock-delay-ns */
 	uint8_t		external_rx_lo_enable;	/* adi,external-rx-lo-enable */
 	uint8_t		external_tx_lo_enable;	/* adi,external-tx-lo-enable */
 	uint8_t		dc_offset_tracking_update_event_mask;	/* adi,dc-offset-tracking-update-event-mask */
