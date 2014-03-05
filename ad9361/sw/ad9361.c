@@ -1761,7 +1761,7 @@ int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		struct rf_gain_ctrl *gain_ctrl)
 {
 	int rc = 0;
-	u32 gain_ctl_shift, mode;
+	u32 gain_ctl_shift, mode, dec_pow_meas_dur;
 	u8 val;
 
 	rc = ad9361_spi_readm(REG_AGC_CONFIG_1, &val, 1);
@@ -1771,12 +1771,24 @@ int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		goto out;
 	}
 
+	/*
+	 * if one channel is set to FAST AGC the
+	 * f_agc_dec_pow_measuremnt_duration wins
+	 */
+	if (phy->agc_mode[gain_ctrl->ant == 2 ? 0 : 1] == RF_GAIN_FASTATTACK_AGC)
+		dec_pow_meas_dur =
+			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
+	else
+		dec_pow_meas_dur = phy->pdata->gain_ctrl.dec_pow_measuremnt_duration;
+
 	switch (gain_ctrl->mode) {
 	case RF_GAIN_MGC:
 		mode = RX_GAIN_CTL_MGC;
 		break;
 	case RF_GAIN_FASTATTACK_AGC:
 		mode = RX_GAIN_CTL_AGC_FAST_ATK;
+		dec_pow_meas_dur =
+			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
 		break;
 	case RF_GAIN_SLOWATTACK_AGC:
 		mode = RX_GAIN_CTL_AGC_SLOW_ATK;
@@ -1818,6 +1830,11 @@ int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 				REG_AGC_CONFIG_1);
 		goto out;
 	}
+
+	/* Power Measurement Duration */
+	ad9361_spi_writef(REG_DEC_POWER_MEASURE_DURATION_0,
+			  DEC_POWER_MEASUREMENT_DURATION(~0),
+			  ilog2(dec_pow_meas_dur / 16));
 
 	rc = ad9361_en_dis_rx(phy, gain_ctrl->ant, RX_ENABLE);
 out:
@@ -2832,7 +2849,12 @@ static int ad9361_gc_setup(struct ad9361_rf_phy *phy, struct gain_control *ctrl)
 	ad9361_spi_writef(REG_DEC_POWER_MEASURE_DURATION_0,
 			  ENABLE_DEC_PWR_MEAS, 1); // Power Measurement Duration
 
-	reg = ilog2(ctrl->dec_pow_measuremnt_duration / 16);
+	if (ctrl->rx1_mode == RF_GAIN_FASTATTACK_AGC ||
+		ctrl->rx2_mode == RF_GAIN_FASTATTACK_AGC)
+		reg = ilog2(ctrl->f_agc_dec_pow_measuremnt_duration / 16);
+	else
+		reg = ilog2(ctrl->dec_pow_measuremnt_duration / 16);
+
 	ad9361_spi_writef(REG_DEC_POWER_MEASURE_DURATION_0,
 			  DEC_POWER_MEASUREMENT_DURATION(~0), reg); // Power Measurement Duration
 

@@ -142,6 +142,39 @@ AD9361_InitParam default_init_param = {
 	2,		//agc_outer_thresh_low_inc_steps *** adi,agc-outer-thresh-low-inc-steps
 	1,		//agc_attack_delay_extra_margin_us; *** adi,agc-attack-delay-extra-margin-us
 	0,		//agc_sync_for_gain_counter_enable *** adi,agc-sync-for-gain-counter-enable
+	/* Fast AGC */
+	64,		//fagc_dec_pow_measuremnt_duration ***  adi,fagc-dec-pow-measurement-duration
+	260,	//fagc_state_wait_time_ns ***  adi,fagc-state-wait-time-ns
+		/* Fast AGC - Low Power */
+	0,		//fagc_allow_agc_gain_increase ***  adi,fagc-allow-agc-gain-increase-enable
+	5,		//fagc_lp_thresh_increment_time ***  adi,fagc-lp-thresh-increment-time
+	1,		//fagc_lp_thresh_increment_steps ***  adi,fagc-lp-thresh-increment-steps
+		/* Fast AGC - Lock Level */
+	10,		//fagc_lock_level ***  adi,fagc-lock-level */
+	1,		//fagc_lock_level_lmt_gain_increase_en ***  adi,fagc-lock-level-lmt-gain-increase-enable
+	5,		//fagc_lock_level_gain_increase_upper_limit ***  adi,fagc-lock-level-gain-increase-upper-limit
+		/* Fast AGC - Peak Detectors and Final Settling */
+	1,		//fagc_lpf_final_settling_steps ***  adi,fagc-lpf-final-settling-steps
+	1,		//fagc_lmt_final_settling_steps ***  adi,fagc-lmt-final-settling-steps
+	3,		//fagc_final_overrange_count ***  adi,fagc-final-overrange-count
+		/* Fast AGC - Final Power Test */
+	0,		//fagc_gain_increase_after_gain_lock_en ***  adi,fagc-gain-increase-after-gain-lock-enable
+		/* Fast AGC - Unlocking the Gain */
+		/* 0 = MAX Gain, 1 = Optimized Gain, 2 = Set Gain */
+	0,		//fagc_gain_index_type_after_exit_rx_mode ***  adi,fagc-gain-index-type-after-exit-rx-mode
+	1,		//fagc_use_last_lock_level_for_set_gain_en ***  adi,fagc-use-last-lock-level-for-set-gain-enable
+	1,		//fagc_rst_gla_stronger_sig_thresh_exceeded_en ***  adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable
+	5,		//fagc_optimized_gain_offset ***  adi,fagc-optimized-gain-offset
+	10,		//fagc_rst_gla_stronger_sig_thresh_above_ll ***  adi,fagc-rst-gla-stronger-sig-thresh-above-ll
+	1,		//fagc_rst_gla_engergy_lost_sig_thresh_exceeded_en ***  adi,fagc-rst-gla-engergy-lost-sig-thresh-exceeded-enable
+	1,		//fagc_rst_gla_engergy_lost_goto_optim_gain_en ***  adi,fagc-rst-gla-engergy-lost-goto-optim-gain-enable
+	10,		//fagc_rst_gla_engergy_lost_sig_thresh_below_ll ***  adi,fagc-rst-gla-engergy-lost-sig-thresh-below-ll
+	8,		//fagc_energy_lost_stronger_sig_gain_lock_exit_cnt ***  adi,fagc-energy-lost-stronger-sig-gain-lock-exit-cnt
+	1,		//fagc_rst_gla_large_adc_overload_en ***  adi,fagc-rst-gla-large-adc-overload-enable
+	1,		//fagc_rst_gla_large_lmt_overload_en ***  adi,fagc-rst-gla-large-lmt-overload-enable
+	0,		//fagc_rst_gla_en_agc_pulled_high_en ***  adi,fagc-rst-gla-en-agc-pulled-high-enable
+	0,		//fagc_rst_gla_if_en_agc_pulled_high_mode ***  adi,fagc-rst-gla-if-en-agc-pulled-high-mode
+	64,		//fagc_power_measurement_duration_in_state5 ***  adi,fagc-power-measurement-duration-in-state5
 	/* RSSI Control */
 	1,		//rssi_delay *** adi,rssi-delay
 	1000,	//rssi_duration *** adi,rssi-duration
@@ -152,19 +185,19 @@ AD9361_InitParam default_init_param = {
 	256,	//aux_adc_decimation *** adi,aux-adc-decimation
 	40000000UL,	//aux_adc_rate *** adi,aux-adc-rate
 	/* AuxDAC Control */
-	1,		//aux_dac_manual_mode_enable;	/* adi,aux-dac-manual-mode-enable
-	0,		//aux_dac1_default_value_mV;	/* adi,aux-dac1-default-value-mV
-	0,		//aux_dac1_active_in_rx_enable;	/* adi,aux-dac1-active-in-rx-enable
-	0,		//aux_dac1_active_in_tx_enable;	/* adi,aux-dac1-active-in-tx-enable
-	0,		//aux_dac1_active_in_alert_enable;	/* adi,aux-dac1-active-in-alert-enable
-	0,		//aux_dac1_rx_delay_us;	/* adi,aux-dac1-rx-delay-us
-	0,		//aux_dac1_tx_delay_us;	/* adi,aux-dac1-tx-delay-us
-	0,		//aux_dac2_default_value_mV;	/* adi,aux-dac2-default-value-mV
-	0,		//aux_dac2_active_in_rx_enable;	/* adi,aux-dac2-active-in-rx-enable
-	0,		//aux_dac2_active_in_tx_enable;	/* adi,aux-dac2-active-in-tx-enable
-	0,		//aux_dac2_active_in_alert_enable;	/* adi,aux-dac2-active-in-alert-enable
-	0,		//aux_dac2_rx_delay_us;	/* adi,aux-dac2-rx-delay-us
-	0,		//aux_dac2_tx_delay_us;	/* adi,aux-dac2-tx-delay-us
+	1,		//aux_dac_manual_mode_enable ***  adi,aux-dac-manual-mode-enable
+	0,		//aux_dac1_default_value_mV ***  adi,aux-dac1-default-value-mV
+	0,		//aux_dac1_active_in_rx_enable ***  adi,aux-dac1-active-in-rx-enable
+	0,		//aux_dac1_active_in_tx_enable ***  adi,aux-dac1-active-in-tx-enable
+	0,		//aux_dac1_active_in_alert_enable ***  adi,aux-dac1-active-in-alert-enable
+	0,		//aux_dac1_rx_delay_us ***  adi,aux-dac1-rx-delay-us
+	0,		//aux_dac1_tx_delay_us ***  adi,aux-dac1-tx-delay-us
+	0,		//aux_dac2_default_value_mV ***  adi,aux-dac2-default-value-mV
+	0,		//aux_dac2_active_in_rx_enable ***  adi,aux-dac2-active-in-rx-enable
+	0,		//aux_dac2_active_in_tx_enable ***  adi,aux-dac2-active-in-tx-enable
+	0,		//aux_dac2_active_in_alert_enable ***  adi,aux-dac2-active-in-alert-enable
+	0,		//aux_dac2_rx_delay_us ***  adi,aux-dac2-rx-delay-us
+	0,		//aux_dac2_tx_delay_us ***  adi,aux-dac2-tx-delay-us
 	/* Temperature Sensor Control */
 	256,	//temp_sense_decimation *** adi,temp-sense-decimation
 	1000,	//temp_sense_measurement_interval_ms *** adi,temp-sense-measurement-interval-ms

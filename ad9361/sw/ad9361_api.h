@@ -127,6 +127,38 @@ typedef struct
 	uint8_t		agc_outer_thresh_low_inc_steps;	/* adi,agc-outer-thresh-low-inc-steps */
 	uint32_t	agc_attack_delay_extra_margin_us;	/* adi,agc-attack-delay-extra-margin-us */
 	uint8_t		agc_sync_for_gain_counter_enable;	/* adi,agc-sync-for-gain-counter-enable */
+	/* Fast AGC */
+	uint32_t	fagc_dec_pow_measuremnt_duration;	/* adi,fagc-dec-pow-measurement-duration */
+	uint32_t	fagc_state_wait_time_ns;	/* adi,fagc-state-wait-time-ns */
+		/* Fast AGC - Low Power */
+	uint8_t		fagc_allow_agc_gain_increase;	/* adi,fagc-allow-agc-gain-increase-enable */
+	uint32_t	fagc_lp_thresh_increment_time;	/* adi,fagc-lp-thresh-increment-time */
+	uint32_t	fagc_lp_thresh_increment_steps;	/* adi,fagc-lp-thresh-increment-steps */
+		/* Fast AGC - Lock Level */
+	uint32_t	fagc_lock_level;	/* adi,fagc-lock-level */
+	uint8_t		fagc_lock_level_lmt_gain_increase_en;	/* adi,fagc-lock-level-lmt-gain-increase-enable */
+	uint32_t	fagc_lock_level_gain_increase_upper_limit;	/* adi,fagc-lock-level-gain-increase-upper-limit */
+		/* Fast AGC - Peak Detectors and Final Settling */
+	uint32_t	fagc_lpf_final_settling_steps;	/* adi,fagc-lpf-final-settling-steps */
+	uint32_t	fagc_lmt_final_settling_steps;	/* adi,fagc-lmt-final-settling-steps */
+	uint32_t	fagc_final_overrange_count;	/* adi,fagc-final-overrange-count */
+		/* Fast AGC - Final Power Test */
+	uint8_t		fagc_gain_increase_after_gain_lock_en;	/* adi,fagc-gain-increase-after-gain-lock-enable */
+		/* Fast AGC - Unlocking the Gain */
+	uint32_t	fagc_gain_index_type_after_exit_rx_mode;	/* adi,fagc-gain-index-type-after-exit-rx-mode */
+	uint8_t		fagc_use_last_lock_level_for_set_gain_en;	/* adi,fagc-use-last-lock-level-for-set-gain-enable */
+	uint8_t		fagc_rst_gla_stronger_sig_thresh_exceeded_en;	/* adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable */
+	uint32_t	fagc_optimized_gain_offset;	/* adi,fagc-optimized-gain-offset */
+	uint32_t	fagc_rst_gla_stronger_sig_thresh_above_ll;	/* adi,fagc-rst-gla-stronger-sig-thresh-above-ll */
+	uint8_t		fagc_rst_gla_engergy_lost_sig_thresh_exceeded_en;	/* adi,fagc-rst-gla-engergy-lost-sig-thresh-exceeded-enable */
+	uint8_t		fagc_rst_gla_engergy_lost_goto_optim_gain_en;	/* adi,fagc-rst-gla-engergy-lost-goto-optim-gain-enable */
+	uint32_t	fagc_rst_gla_engergy_lost_sig_thresh_below_ll;	/* adi,fagc-rst-gla-engergy-lost-sig-thresh-below-ll */
+	uint32_t	fagc_energy_lost_stronger_sig_gain_lock_exit_cnt;	/* adi,fagc-energy-lost-stronger-sig-gain-lock-exit-cnt */
+	uint8_t		fagc_rst_gla_large_adc_overload_en;	/* adi,fagc-rst-gla-large-adc-overload-enable */
+	uint8_t		fagc_rst_gla_large_lmt_overload_en;	/* adi,fagc-rst-gla-large-lmt-overload-enable */
+	uint8_t		fagc_rst_gla_en_agc_pulled_high_en;	/* adi,fagc-rst-gla-en-agc-pulled-high-enable */
+	uint32_t	fagc_rst_gla_if_en_agc_pulled_high_mode;	/* adi,fagc-rst-gla-if-en-agc-pulled-high-mode */
+	uint32_t	fagc_power_measurement_duration_in_state5;	/* adi,fagc-power-measurement-duration-in-state5 */
 	/* RSSI Control */
 	uint32_t	rssi_delay;	/* adi,rssi-delay */
 	uint32_t	rssi_duration;	/* adi,rssi-duration */
