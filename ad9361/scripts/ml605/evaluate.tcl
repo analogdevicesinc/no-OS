@@ -6,7 +6,7 @@ set elfFileName "/evaluate.elf"
 set bitFilePath $currentWorkingDirectory$bitFileName
 set elfFilePath $currentWorkingDirectory$elfFileName
 
-#fpga -f $bitFilePath
+fpga -f $bitFilePath -cable type xilinx_platformusb
 connect mb mdm
 rst
 stop
