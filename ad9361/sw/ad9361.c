@@ -2556,12 +2556,12 @@ static int ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int ad9361_trx_vco_cal_control(struct ad9361_rf_phy *phy,
-				      bool rx, bool enable)
+				      bool tx, bool enable)
 {
 	dev_dbg("%s : state %d",
 		__func__, enable);
 
-	return ad9361_spi_writef(rx ? REG_RX_PFD_CONFIG : REG_TX_PFD_CONFIG,
+	return ad9361_spi_writef(tx ? REG_TX_PFD_CONFIG : REG_RX_PFD_CONFIG,
 				 BYPASS_LD_SYNTH, !enable);
 }
 
@@ -3275,8 +3275,8 @@ static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
 			(phy->pdata->use_extclk ? XO_BYPASS : 0)); /* Enable Clocks */
 		udelay(20);
 		ad9361_spi_write(REG_ENSM_CONFIG_1, TO_ALERT | FORCE_ALERT_STATE);
-		ad9361_trx_vco_cal_control(phy, true, true); /* Disable VCO Cal */
-		ad9361_trx_vco_cal_control(phy, false, true);
+		ad9361_trx_vco_cal_control(phy, false, true); /* Enable VCO Cal */
+		ad9361_trx_vco_cal_control(phy, true, true);
 	}
 
 	val = (phy->pdata->ensm_pin_pulse_mode ? 0 : LEVEL_MODE) |
@@ -3310,8 +3310,8 @@ static int ad9361_ensm_set_state(struct ad9361_rf_phy *phy, u8 ensm_state,
 	case ENSM_STATE_SLEEP_WAIT:
 		break;
 	case ENSM_STATE_SLEEP:
-		ad9361_trx_vco_cal_control(phy, true, false); /* Disable VCO Cal */
-		ad9361_trx_vco_cal_control(phy, false, false);
+		ad9361_trx_vco_cal_control(phy, false, false); /* Disable VCO Cal */
+		ad9361_trx_vco_cal_control(phy, true, false);
 		ad9361_spi_write(REG_ENSM_CONFIG_1, 0); /* Clear To Alert */
 		ad9361_spi_write(REG_ENSM_CONFIG_1,
 				 phy->pdata->fdd ? FORCE_TX_ON : FORCE_RX_ON);
@@ -4875,13 +4875,13 @@ int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 
 	/* Option to skip VCO cal in TDD mode when moving from TX/RX to Alert */
 	if (phy->pdata->tdd_skip_vco_cal)
-		ad9361_trx_vco_cal_control(phy, clk_priv->source == RX_RFPLL,
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
 					   true);
 
 	ret = ad9361_check_cal_done(phy, lock_reg, VCO_LOCK, 1);
 
 	if (phy->pdata->tdd_skip_vco_cal)
-		ad9361_trx_vco_cal_control(phy, clk_priv->source == RX_RFPLL,
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
 					   false);
 
 	return ret;
