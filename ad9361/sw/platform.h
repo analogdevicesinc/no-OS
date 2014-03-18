@@ -88,7 +88,8 @@ int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pol);
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number);
-int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
+int spi_write_then_read(struct spi_device *spi,
+		const unsigned char *txbuf, unsigned n_tx,
 		unsigned char *rxbuf, unsigned n_rx);
 void gpio_init(uint32_t device_id);
 void gpio_direction(uint8_t pin, uint8_t direction);
@@ -97,7 +98,7 @@ void gpio_set_value(unsigned gpio, int value);
 void udelay(unsigned long usecs);
 void mdelay(unsigned long msecs);
 unsigned long msleep_interruptible(unsigned int msecs);
-unsigned int axiadc_read(unsigned long reg);
-void axiadc_write(unsigned reg, unsigned val);
+unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg);
+void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val);
 
 #endif

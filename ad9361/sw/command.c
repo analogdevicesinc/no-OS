@@ -154,7 +154,7 @@ void get_register(double* param, char param_no) // "register?" command
 	if(param_no >= 1)
 	{
 		reg_addr = param[0];
-		reg_val = ad9361_spi_read(reg_addr);
+		reg_val = ad9361_spi_read(NULL, reg_addr);
 		console_print("register[0x%x]=0x%x\n", reg_addr, reg_val);
 	}
 	else

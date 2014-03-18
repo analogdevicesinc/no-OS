@@ -186,7 +186,8 @@ int32_t spi_read(uint8_t *data,
 /***************************************************************************//**
  * @brief spi_write_then_read
 *******************************************************************************/
-int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
+int spi_write_then_read(struct spi_device *spi,
+		const unsigned char *txbuf, unsigned n_tx,
 		unsigned char *rxbuf, unsigned n_rx)
 {
 	uint8_t buffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -288,7 +289,7 @@ unsigned long msleep_interruptible(unsigned int msecs)
 /***************************************************************************//**
  * @brief axiadc_read
 *******************************************************************************/
-unsigned int axiadc_read(unsigned long reg)
+unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	uint32_t val;
 
@@ -300,7 +301,7 @@ unsigned int axiadc_read(unsigned long reg)
 /***************************************************************************//**
  * @brief axiadc_write
 *******************************************************************************/
-void axiadc_write(unsigned reg, unsigned val)
+void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
 	adc_write(reg, val);
 }

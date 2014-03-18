@@ -61,6 +61,11 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 		return ERR_PTR(-ENOMEM);
 	}
 
+	phy->spi = (struct spi_device *)malloc(sizeof(*phy->spi));
+	if (!phy->spi) {
+		return ERR_PTR(-ENOMEM);
+	}
+
 	phy->clk_refin = (struct clk *)malloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return ERR_PTR(-ENOMEM);
@@ -68,6 +73,16 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
+		return ERR_PTR(-ENOMEM);
+	}
+
+	phy->adc_conv = (struct axiadc_converter *)malloc(sizeof(*phy->adc_conv));
+	if (!phy->adc_conv) {
+		return ERR_PTR(-ENOMEM);
+	}
+
+	phy->adc_state = (struct axiadc_state *)malloc(sizeof(*phy->adc_state));
+	if (!phy->adc_state) {
 		return ERR_PTR(-ENOMEM);
 	}
 
@@ -279,6 +294,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->port_ctrl.lvds_invert[0] = 0xFF;
 	phy->pdata->port_ctrl.lvds_invert[1] = 0x0F;
 
+	phy->adc_conv->chip_info->num_channels = 4;
+
 	phy->rx_eq_2tx = false;
 
 	phy->current_table = RXGAIN_TBLS_END;
@@ -290,10 +307,10 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->quad_track_en = true;
 
 	ad9361_reset(phy);
-	ad9361_spi_write(REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
-	ad9361_spi_write(REG_SPI_CONF, 0x0);
+	ad9361_spi_write(NULL, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
+	ad9361_spi_write(NULL, REG_SPI_CONF, 0x0);
 
-	ret = ad9361_spi_read(REG_PRODUCT_ID);
+	ret = ad9361_spi_read(NULL, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
 		printf("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
 		ret = -ENODEV;

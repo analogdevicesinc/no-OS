@@ -41,6 +41,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "stdint.h"
 #include "common.h"
 
 /******************************************************************************/
@@ -573,8 +574,8 @@
 #define REG_DAC_TEST_2				 0x3FE /* DAC Test 2 */
 
 /*
- *	REG_SPI_CONF
- */
+*	REG_SPI_CONF
+*/
 #define SOFT_RESET			     (1 << 7) /* Soft Reset */
 #define WIRE3_SPI			     (1 << 6) /* 3-Wire SPI */
 #define LSB_FIRST			     (1 << 5) /* LSB First */
@@ -583,8 +584,8 @@
 #define _SOFT_RESET			     (1 << 0) /* Soft reset */
 
 /*
- *	REG_MULTICHIP_SYNC_AND_TX_MON_CTRL
- */
+*	REG_MULTICHIP_SYNC_AND_TX_MON_CTRL
+*/
 #define TX2_MONITOR_ENABLE		     (1 << 6) /* Tx2 Monitor Enable */
 #define TX1_MONITOR_ENABLE		     (1 << 5) /* Tx1 Monitor Enable */
 #define MCS_RF_ENABLE			     (1 << 3) /* MCS RF Enable */
@@ -593,8 +594,8 @@
 #define MCS_BB_ENABLE			     (1 << 0) /* MCS BB Enable */
 
 /*
- *	REG_TX_ENABLE_FILTER_CTRL
- */
+*	REG_TX_ENABLE_FILTER_CTRL
+*/
 #define THB2_EN				     (1 << 3) /* THB2 Enable */
 #define THB1_EN				     (1 << 2) /* THB1 Enable */
 #define TX_CHANNEL_ENABLE(x)		     (((x) & 0x3) << 6) /* Tx channel Enable<1:0> */
@@ -606,8 +607,8 @@
 #define TX_DISABLE			     0
 
 /*
- *	REG_RX_ENABLE_FILTER_CTRL
- */
+*	REG_RX_ENABLE_FILTER_CTRL
+*/
 #define RHB2_EN				     (1 << 3) /* RHB2 Enable */
 #define RHB1_EN				     (1 << 2) /* RHB1 Enable */
 #define RX_CHANNEL_ENABLE(x)		     (((x) & 0x3) << 6) /* Rx channel Enable<1:0> */
@@ -619,64 +620,64 @@
 #define RX_DISABLE			     0
 
 /*
- *	REG_INPUT_SELECT
- */
+*	REG_INPUT_SELECT
+*/
 #define TX_OUTPUT			     (1 << 6) /* TX Output */
 #define RX_INPUT(x)			     (((x) & 0x3F) << 0) /* RX Input <5:0> */
 
 /*
- *	REG_RFPLL_DIVIDERS
- */
+*	REG_RFPLL_DIVIDERS
+*/
 #define TX_VCO_DIVIDER(x)		     (((x) & 0xF) << 4) /* TX VCO  Divider<3:0> */
 #define RX_VCO_DIVIDER(x)		     (((x) & 0xF) << 0) /* RX VCO  Divider<3:0> */
 
 /*
- *	REG_RX_CLOCK_DATA_DELAY
- */
+*	REG_RX_CLOCK_DATA_DELAY
+*/
 #define DATA_CLK_DELAY(x)		     (((x) & 0xF) << 4) /* DATA_CLK Delay<3:0> */
 #define RX_DATA_DELAY(x)		     (((x) & 0xF) << 0) /* Rx Data Delay <3:0> */
 
 /*
- *	REG_TX_CLOCK_DATA_DELAY
- */
+*	REG_TX_CLOCK_DATA_DELAY
+*/
 #define FB_CLK_DELAY(x)			     (((x) & 0xF) << 4) /* FB_CLK Delay<3:0> */
 #define TX_DATA_DELAY(x)		     (((x) & 0xF) << 0) /* Tx Data Delay <3:0> */
 
 /*
- *	REG_CLOCK_ENABLE
- */
+*	REG_CLOCK_ENABLE
+*/
 #define XO_BYPASS			     (1 << 4) /* XO Bypass */
 #define DIGITAL_POWER_UP			     (1 << 2) /* Digital Power Up */
 #define CLOCK_ENABLE_DFLT		     (1 << 1) /* Set to 1 */
 #define BBPLL_ENABLE			     (1 << 0) /* BBPLL Enable */
 
 /*
- *	REG_BBPLL
- */
+*	REG_BBPLL
+*/
 #define CLKOUT_ENABLE			     (1 << 4) /* CLKOUT Enable */
 #define DAC_CLK_DIV2			     (1 << 3) /* DAC Clk div2 */
 #define CLKOUT_SELECT(x)		     (((x) & 0x7) << 5) /* CLKOUT  Select<2:0> */
 #define BBPLL_DIVIDER(x)		     (((x) & 0x7) << 0) /* BBPLL Divider <2:0> */
 
 /*
- *	REG_START_TEMP_READING
- */
+*	REG_START_TEMP_READING
+*/
 #define START_TEMP_READING		     (1 << 0) /* Start Temp Reading */
 
 /*
- *	REG_TEMP_SENSE2
- */
+*	REG_TEMP_SENSE2
+*/
 #define TEMP_SENSE_PERIODIC_ENABLE	     (1 << 0) /* Temp Sense Periodic Enable */
 #define MEASUREMENT_TIME_INTERVAL(x)	     (((x) & 0x7F) << 1) /* Measurement Time Interval<6:0> */
 
 /*
- *	REG_TEMP_SENSOR_CONFIG
- */
+*	REG_TEMP_SENSOR_CONFIG
+*/
 #define TEMP_SENSOR_DECIMATION(x)	     (((x) & 0x7) << 0) /* Temp Sensor Decimation<2:0> */
 
 /*
- *	REG_PARALLEL_PORT_CONF_1
- */
+*	REG_PARALLEL_PORT_CONF_1
+*/
 #define PP_TX_SWAP_IQ			     (1 << 7) /* PP Tx Swap IQ */
 #define PP_RX_SWAP_IQ			     (1 << 6) /* PP Rx Swap IQ */
 #define TX_CHANNEL_SWAP			     (1 << 5) /* Tx Channel swap */
@@ -687,8 +688,8 @@
 #define INVERT_DATA_CLK			     (1 << 0) /* Invert DATA CLK */
 
 /*
- *	REG_PARALLEL_PORT_CONF_2
- */
+*	REG_PARALLEL_PORT_CONF_2
+*/
 #define FDD_ALT_WORD_ORDER		     (1 << 7) /* FDD Alt Word Order */
 #define INVERT_RX1			     (1 << 6) /* Invert Rx1 */
 #define INVERT_RX2			     (1 << 5) /* Invert Rx2 */
@@ -698,8 +699,8 @@
 #define DELAY_RX_DATA(x)		     (((x) & 0x3) << 0) /* Delay Rx Data<1:0> */
 
 /*
- *	REG_PARALLEL_PORT_CONF_3
- */
+*	REG_PARALLEL_PORT_CONF_3
+*/
 #define FDD_RX_RATE_2TX_RATE		     (1 << 7) /* FDD Rx Rate = 2*Tx Rate */
 #define SWAP_PORTS			     (1 << 6) /* Swap Ports */
 #define SINGLE_DATA_RATE		     (1 << 5) /* Single Data Rate */
@@ -710,13 +711,13 @@
 #define FULL_DUPLEX_SWAP_BITS		     (1 << 0) /* Full Duplex Swap Bits */
 
 /*
- *	REG_ENSM_MODE
- */
+*	REG_ENSM_MODE
+*/
 #define FDD_MODE			     (1 << 0) /* FDD Mode */
 
 /*
- *	REG_ENSM_CONFIG_1
- */
+*	REG_ENSM_CONFIG_1
+*/
 #define ENABLE_RX_DATA_PORT_FOR_CAL	     (1 << 7) /* Enable Rx Data Port for Cal */
 #define FORCE_RX_ON			     (1 << 6) /* Force Rx On */
 #define FORCE_TX_ON			     (1 << 5) /* Force Tx On */
@@ -727,8 +728,8 @@
 #define TO_ALERT				     (1 << 0) /* To Alert */
 
 /*
- *	REG_ENSM_CONFIG_2
- */
+*	REG_ENSM_CONFIG_2
+*/
 #define FDD_EXTERNAL_CTRL_ENABLE	     	     (1 << 7) /* FDD External Control Enable */
 #define POWER_DOWN_RX_SYNTH		     (1 << 6) /* Power Down Rx Synth */
 #define POWER_DOWN_TX_SYNTH		     (1 << 5) /* Power Down Tx Synth */
@@ -739,8 +740,8 @@
 #define TX_SYNTH_READY_MASK		     (1 << 0) /* Tx Synth Ready Mask */
 
 /*
- *	REG_CALIBRATION_CTRL
- */
+*	REG_CALIBRATION_CTRL
+*/
 #define RX_BB_TUNE_CAL			     (1 << 7) /* Rx BB Tune */
 #define TX_BB_TUNE_CAL			     (1 << 6) /* Tx BB Tune */
 #define RX_QUAD_CAL			     (1 << 5) /* Rx Quad Cal */
@@ -752,8 +753,8 @@
 
 
 /*
- *	REG_STATE
- */
+*	REG_STATE
+*/
 #define CALIBRATION_SEQUENCE_STATE(x)	     (((x) & 0xF) << 4) /* Calibration Sequence State<3:0> */
 #define ENSM_STATE(x)			     (((x) & 0xF) << 0) /* ENSM State<3:0> */
 #define ENSM_STATE_SLEEP_WAIT		0x0
@@ -765,69 +766,69 @@
 #define ENSM_STATE_FDD			0xA
 #define ENSM_STATE_FDD_FLUSH		0xB
 #define ENSM_STATE_INVALID		0xFF
-#define ENSM_STATE_SLEEP		0x80
+#define ENSM_STATE_SLEEP			0x80
 
 /*
- *	REG_AUXDAC_2_WORD
- */
+*	REG_AUXDAC_2_WORD
+*/
 #define AUXDAC_2_WORD_MSB(x)		     (((x) & 0x3F) << 2) /* AuxDAC 2 Word<9:2> */
 #define AUXDAC_1_WORD(x)		     (((x) & 0x3) << 0) /* AuxDAC 1 Word <1:0> */
 
 /*
- *	REG_AUXDAC_1_CONFIG
- */
+*	REG_AUXDAC_1_CONFIG
+*/
 #define COMP_CTRL_1			     (1 << 5) /* Comp Ctrl 1 */
 #define AUXDAC1_STP_FACTOR		     (1 << 4) /* AuxDAC1 Step Factor */
 #define AUXDAC_1_VREF(x)		     (((x) & 0x3) << 2) /* AuxDAC 1 Vref<1:0> */
 #define AUXDAC_1_WORD_LSB(x)		     (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
 
 /*
- *	REG_AUXDAC_2_CONFIG
- */
+*	REG_AUXDAC_2_CONFIG
+*/
 #define COMP_CTRL_2			     (1 << 5) /* Comp Ctrl 2 */
 #define AUXDAC2_STP_FACTOR		     (1 << 4) /* AuxDAC2 Step Factor */
-#define AUXDAC_2_VREF(x) (((x) & 0xF) << 2) /* AuxDAC 2 Vref<1:0> */
-#define AUXDAC_2_WORD_LSB(x) (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
+#define AUXDAC_2_VREF(x)		     (((x) & 0xF) << 2) /* AuxDAC 2 Vref<1:0> */
+#define AUXDAC_2_WORD_LSB(x)		     (((x) & 0x3) << 0) /* AuxDAC 2 Word <1:0> */
 
 /*
- *	REG_AUXADC_CLOCK_DIVIDER
- */
+*	REG_AUXADC_CLOCK_DIVIDER
+*/
 #define AUXADC_CLOCK_DIVIDER(x)		     (((x) & 0x3F) << 0) /* AuxADC Clock Divider<5:0> */
 
 /*
- *	REG_AUXADC_CONFIG
- */
+*	REG_AUXADC_CONFIG
+*/
 #define AUXADC_POWER_DOWN		     (1 << 0) /* AuxADC Power Down */
 #define AUX_ADC_DECIMATION(x)		     (((x) & 0x7) << 1) /* Aux ADC Decimation<2:0> */
 
 /*
- *	REG_AUXADC_LSB
- */
+*	REG_AUXADC_LSB
+*/
 #define AUXADC_WORD_LSB(x)		     (((x) & 0xF) << 0) /* AuxADC Word LSB<3:0> */
 
 /*
- *	REG_AUTO_GPO
- */
+*	REG_AUTO_GPO
+*/
 #define GPO_ENABLE_AUTO_RX(x)		     (((x) & 0xF) << 4) /* GPO Enable Auto Rx<3:0> */
 #define GPO_ENABLE_AUTO_TX(x)		     (((x) & 0xF) << 0) /* GPO Enable Auto Tx<3:0> */
 
 /*
- *	REG_AGC_ATTACK_DELAY
- */
+*	REG_AGC_ATTACK_DELAY
+*/
 #define INVERT_BYPASSED_LNA_POLARITY	     (1 << 6) /* Invert Bypassed LNA Polarity */
 #define AGC_ATTACK_DELAY(x)		     (((x) & 0x3F) << 0) /* AGC Attack Delay<5:0> */
 
 /*
- *	REG_AUXDAC_ENABLE_CTRL
- */
+*	REG_AUXDAC_ENABLE_CTRL
+*/
 #define AUXDAC_MANUAL_BAR(x)		     (((x) & 0x3) << 6) /* AuxDac Manual Bar<1:0> */
 #define AUXDAC_AUTO_TX_BAR(x)		     (((x) & 0x3) << 4) /* AuxDAC Auto Tx Bar<1:0> */
 #define AUXDAC_AUTO_RX_BAR(x)		     (((x) & 0x3) << 2) /* AuxDAC Auto Rx Bar<1:0> */
 #define AUXDAC_INIT_BAR(x)		     (((x) & 0x3) << 0) /* AuxDAC Init Bar<1:0> */
 
 /*
- *	REG_EXTERNAL_LNA_CTRL
- */
+*	REG_EXTERNAL_LNA_CTRL
+*/
 #define AUXDAC_MANUAL_SELECT		     (1 << 7) /* AuxDAC Manual Select */
 #define EXTERNAL_LNA2_CTRL		     (1 << 6) /* External LNA2 control */
 #define EXTERNAL_LNA1_CTRL		     (1 << 5) /* External LNA1 control */
@@ -835,14 +836,14 @@
 #define OPEN(x)				     (((x) & 0xF) << 0) /* Open<3:0> */
 
 /*
- *	REG_GPO_FORCE_AND_INIT
- */
+*	REG_GPO_FORCE_AND_INIT
+*/
 #define GPO_MANUAL_CTRL(x)		     (((x) & 0xF) << 4) /* GPO Manual Control<3:0> */
 #define GPO_INIT_STATE(x)		     (((x) & 0xF) << 0) /* GPO Init State<3:0> */
 
 /*
- *	REG_CTRL_OUTPUT_ENABLE
- */
+*	REG_CTRL_OUTPUT_ENABLE
+*/
 #define EN_CTRL7			     (1 << 7) /* En ctrl7 */
 #define EN_CTRL6			     (1 << 6) /* En ctrl6 */
 #define EN_CTRL5			     (1 << 5) /* En ctrl5 */
@@ -853,20 +854,20 @@
 #define EN_CTRL0			     (1 << 0) /* En ctrl0 */
 
 /*
- *	REG_PRODUCT_ID
- */
+*	REG_PRODUCT_ID
+*/
 #define PRODUCT_ID_MASK 		     0xF8
 #define PRODUCT_ID_9361		     0x08
 #define REV_MASK			     0x07
 
 /*
- *	REG_REFERENCE_CLOCK_CYCLES
- */
+*	REG_REFERENCE_CLOCK_CYCLES
+*/
 #define REFERENCE_CLOCK_CYCLES_PER_US(x)     (((x) & 0x7F) << 0) /* Reference Clock Cycles per us<6:0> */
 
 /*
- *	REG_DIGITAL_IO_CTRL
- */
+*	REG_DIGITAL_IO_CTRL
+*/
 #define CLK_OUT_DRIVE			     (1 << 7) /* CLK Out Drive */
 #define DATACLK_DRIVE			     (1 << 6) /* DATACLK drive */
 #define DATA_PORT_DRIVE			     (1 << 2) /* Data Port Drive */
@@ -874,8 +875,8 @@
 #define DATA_PORT_SLEW(x)		     (((x) & 0x3) << 0) /* Data Port Slew<1:0> */
 
 /*
- *	REG_LVDS_BIAS_CTRL
- */
+*	REG_LVDS_BIAS_CTRL
+*/
 #define RX_ON_CHIP_TERM			     (1 << 5) /* Rx On Chip Term */
 #define LVDS_BYPASS_BIAS_R			     (1 << 4) /* Bypass Bias R */
 #define LVDS_TX_LO_VCM			     (1 << 3) /* LVDS Tx LO VCM */
@@ -883,62 +884,62 @@
 #define LVDS_BIAS(x)			     (((x) & 0x7) << 0) /* LVDS Bias <2:0> */
 
 /*
- *	REG_SDM_CTRL_1
- */
+*	REG_SDM_CTRL_1
+*/
 #define INIT_BB_FO_CAL			     (1 << 2) /* Init BB FO CAL */
 #define BBPLL_RESET_BAR			     (1 << 0) /* BBPLL Reset Bar */
 
 /*
- *	REG_CLOCK_CTRL
- */
+*	REG_CLOCK_CTRL
+*/
 #define REF_FREQ_SCALER(x)		     (((x) & 0x3) << 0) /* Ref Frequency Scaler */
 
 /*
- *	REG_CP_CURRENT
- */
+*	REG_CP_CURRENT
+*/
 #define CHARGE_PUMP_CURRENT(x)		     (((x) & 0x3F) << 0) /* Charge Pump Current<5:0> */
 
 /*
- *	REG_CP_BLEED_CURRENT
- */
+*	REG_CP_BLEED_CURRENT
+*/
 #define MCS_REFCLK_SCALE_EN		     (1 << 7) /* MCS refclk Scale En */
 
 /*
- *	REG_LOOP_FILTER_1
- */
+*	REG_LOOP_FILTER_1
+*/
 #define C1_WORD(x)			     (((x) & 0x7) << 5) /* C1 Word<2:0> */
 #define R1_WORD(x)			     (((x) & 0x1F) << 0) /* R1 Word<4:0> */
 
 /*
- *	REG_LOOP_FILTER_2
- */
+*	REG_LOOP_FILTER_2
+*/
 #define R2_WORD				     (1 << 7) /* R2 Word<0> */
 #define C2_WORD(x)			     (((x) & 0x1F) << 2) /* C2 Word<4:0> */
 #define C1_WORD_LSB(x)			     (((x) & 0x3) << 0) /* C1 Word<4:3> */
 
 /*
- *	REG_LOOP_FILTER_3
- */
+*	REG_LOOP_FILTER_3
+*/
 #define BYPASS_C3			     (1 << 7) /* Bypass C3 */
 #define BYPASS_R2			     (1 << 6) /* Bypass R2 */
 #define C3_WORD(x)			     (((x) & 0xF) << 2) /* C3 Word<3:0> */
 #define R2_WORD_LSB(x)			     (((x) & 0x3) << 0) /* R2 Word<2:1> */
 
 /*
- *	REG_VCO_CTRL
- */
+*	REG_VCO_CTRL
+*/
 #define FREQ_CAL_ENABLE			     (1 << 7) /* Freq Cal Enable */
 #define FREQ_CAL_RESET			     (1 << 4) /* Freq Cal Reset */
 #define FREQ_CAL_COUNT_LENGTH(x)	     (((x) & 0x3) << 5) /* Freq Cal Count Length<1:0> */
 
 /*
- *	REG_SDM_CTRL
- */
+*	REG_SDM_CTRL
+*/
 #define CAL_CLOCK_DIV_4			     (1 << 4) /* Cal Clock div 4 */
 
 /*
- *	REG_RX_SYNTH_POWER_DOWN_OVERRIDE
- */
+*	REG_RX_SYNTH_POWER_DOWN_OVERRIDE
+*/
 #define RX_LO_POWER_DOWN		     (1 << 4) /* Rx LO Power Down */
 #define RX_SYNTH_VCO_ALC_POWER_DOWN	     (1 << 3) /* Rx Synth VCO ALC Power Down */
 #define RX_SYNTH_PTAT_POWER_DOWN	     (1 << 2) /* Rx Synth PTAT Power Down */
@@ -946,8 +947,8 @@
 #define RX_SYNTH_VCO_LDO_POWER_DOWN	     (1 << 0) /* Rx Synth VCO LDO Power Down */
 
 /*
- *	REG_TX_SYNTH_POWER_DOWN_OVERRIDE
- */
+*	REG_TX_SYNTH_POWER_DOWN_OVERRIDE
+*/
 #define TX_LO_POWER_DOWN		     (1 << 4) /* Tx LO Power Down */
 #define TX_SYNTH_VCO_ALC_POWER_DOWN	     (1 << 3) /* Tx Synth VCO ALC Power Down */
 #define TX_SYNTH_PTAT_POWER_DOWN	     (1 << 2) /* Tx Synth PTAT Power Down */
@@ -955,48 +956,48 @@
 #define TX_SYNTH_VCO_LDO_POWER_DOWN	     (1 << 0) /* Tx Synth VCO LDO Power Down */
 
 /*
- *	REG_RX_ANALOG_POWER_DOWN_OVERRIDE_1
- */
+*	REG_RX_ANALOG_POWER_DOWN_OVERRIDE_1
+*/
 #define RX_OFFSET_DAC_CGIN_POWER_DOWN(x)     (((x) & 0x3) << 6) /* Rx Offset DAC CGin Power Down<1:0> */
 #define RX_LMT_OVERLOAD_POWER_DOWN(x)	     (((x) & 0x3) << 4) /* Rx LMT Overload Power Down<1:0> */
 #define RX_MIXER_GM_POWER_DOWN(x)	     (((x) & 0x3) << 2) /* Rx Mixer Gm Power Down<1:0> */
 #define RX_CGB_POWER_DOWN(x)		     (((x) & 0x3) << 0) /* Rx CGB Power Down<1:0> */
 
 /*
- *	REG_RX_ANALOG_POWER_DOWN_OVERRIDE_2
- */
+*	REG_RX_ANALOG_POWER_DOWN_OVERRIDE_2
+*/
 #define RX_BBF_POWER_DOWN(x)		     (((x) & 0x3) << 6) /* Rx BBF Power Down<1:0> */
 #define RX_TIA_POWER_DOWN(x)		     (((x) & 0x3) << 4) /* Rx TIA Power Down<1:0> */
 #define RX_MIXER_POWER_DOWN(x)		     (((x) & 0x3) << 2) /* Rx Mixer Power Down<1:0> */
 #define RX_OFFSET_DAC_CGOUT_POWER_DOWN(x)    (((x) & 0x3) << 0) /* Rx Offset DAC CGOut Power Down<1:0> */
 
 /*
- *	REG_TX_ANALOG_POWER_DOWN_OVERRIDE_1
- */
+*	REG_TX_ANALOG_POWER_DOWN_OVERRIDE_1
+*/
 #define TX_SECONDARY_FILTER_POWER_DOWN(x)    (((x) & 0x3) << 6) /* Tx Secondary Filter Power Down<1:0> */
 #define TX_BBF_POWER_DOWN(x)		     (((x) & 0x3) << 4) /* Tx BBF Power Down<1:0> */
 #define TX_DAC_POWER_DOWN(x)		     (((x) & 0x3) << 2) /* Tx DAC Power Down<1:0> */
 #define TX_DAC_BIAS_POWER_DOWN(x)	     (((x) & 0x3) << 0) /* Tx DAC Bias Power Down<1:0> */
 
 /*
- *	REG_ANALOG_POWER_DOWN_OVERRIDE
- */
+*	REG_ANALOG_POWER_DOWN_OVERRIDE
+*/
 #define RX_EXT_VCO_BUFFER_POWER_DOWN	     (1 << 5) /* Rx Ext VCO Buffer Power Down */
 #define TX_EXT_VCO_BUFFER_POWER_DOWN	     (1 << 4) /* Tx Ext VCO Buffer Power Down */
 #define TX_MONITOR_POWER_DOWN(x)	     (((x) & 0x3) << 2) /* Tx Monitor Power Down<1:0> */
 #define TX_UPCONVERTER_POWER_DOWN(x)	     (((x) & 0x3) << 0) /* Tx Upconverter Power Down<1:0> */
 
 /*
- *	REG_MISC_POWER_DOWN_OVERRIDE
- */
+*	REG_MISC_POWER_DOWN_OVERRIDE
+*/
 #define RX_LNA_POWER_DOWN		     (1 << 6) /* Rx LNA Power Down */
 #define DCXO_POWER_DOWN			     (1 << 1) /* DCXO Power Down */
 #define MASTER_BIAS_POWER_DOWN		     (1 << 0) /* Master Bias Power Down */
 #define RX_CALIBRATION_POWER_DOWN(x)	     (((x) & 0x3) << 2) /* Rx Calibration Power Down<1:0> */
 
 /*
- *	REG_CH_1_OVERFLOW
- */
+*	REG_CH_1_OVERFLOW
+*/
 #define BBPLL_LOCK			     (1 << 7) /* BBPLL Lock */
 #define CH_1_INT3			     (1 << 6) /* CH 1 INT3 */
 #define CH1_HB3				     (1 << 5) /* CH1 HB3 */
@@ -1007,8 +1008,8 @@
 #define CH1_RFIR			     (1 << 0) /* CH1 RFIR */
 
 /*
- *	REG_CH_2_OVERFLOW
- */
+*	REG_CH_2_OVERFLOW
+*/
 #define CH2_INT3			     (1 << 6) /* CH2 INT3 */
 #define CH2_HB3				     (1 << 5) /* CH2 HB3 */
 #define CH2_HB2				     (1 << 4) /* CH2 HB2 */
@@ -1018,8 +1019,8 @@
 #define CH2_RFIR			     (1 << 0) /* CH2 RFIR */
 
 /*
- *	REG_TX_FILTER_CONF
- */
+*	REG_TX_FILTER_CONF
+*/
 #define TX_FIR_GAIN_6DB			(1 << 0) /* Filter Gain */
 #define FIR_START_CLK			(1 << 1) /* Start Tx/Rx Clock */
 #define FIR_WRITE			(1 << 2) /* Write Tx/Rx */
@@ -1027,92 +1028,92 @@
 #define FIR_NUM_TAPS(x)			(((x) & 0x7) << 5) /* Number of Taps<2:0> */
 
 /*
- *	REG_TX_MON_LOW_GAIN
- */
+*	REG_TX_MON_LOW_GAIN
+*/
 #define TX_MON_TRACK			     (1 << 5) /* Tx Mon Track */
 #define TX_MON_LOW_GAIN(x)		     (((x) & 0x1F) << 0) /* Tx Mon Low Gain<4:0> */
 
 /*
- *	REG_TX_MON_HIGH_GAIN
- */
+*	REG_TX_MON_HIGH_GAIN
+*/
 #define TX_MON_HIGH_GAIN(x)		     (((x) & 0x1F) << 0) /* Tx Mon High Gain<4:0> */
 
 /*
- *	REG_TX_LEVEL_THRESH
- */
+*	REG_TX_LEVEL_THRESH
+*/
 #define TX_LEVEL_THRESH(x)		     (((x) & 0x3F) << 2) /* Tx Level Threshold<5:0> */
 #define TX_MON_DELAY_COUNTER(x)		     (((x) & 0x3) << 0) /* Tx Mon Delay Counter<9:8> */
 
 /*
- *	REG_TX_RSSI_LSB
- */
+*	REG_TX_RSSI_LSB
+*/
 #define TX_RSSI_2			     (1 << 1) /* Tx RSSI 2<0> */
 #define TX_RSSI_1			     (1 << 0) /* TX RSSI 1<0> */
 
 /*
- *	REG_TPM_MODE_ENABLE
- */
+*	REG_TPM_MODE_ENABLE
+*/
 #define ONE_SHOT_MODE			     (1 << 6) /* One Shot Mode */
 #define TX_MON_DURATION(x)		     (((x) & 0xF) << 0) /* Tx Mon Duration<3:0> */
 
 /*
- *	REG_TX_MON_1_CONFIG
- */
+*	REG_TX_MON_1_CONFIG
+*/
 #define TX_MON_1_LO_CM(x)		     (((x) & 0x3F) << 2) /* Tx Mon 1 LO CM<5:0> */
 #define TX_MON_1_GAIN(x)		     (((x) & 0x3) << 0) /* Tx Mon 1 Gain<1:0> */
 
 /*
- *	REG_TX_MON_2_CONFIG
- */
+*	REG_TX_MON_2_CONFIG
+*/
 #define TX_MON_2_LO_CM(x)		     (((x) & 0x3F) << 2) /* Tx Mon 2 LO CM<5:0> */
 #define TX_MON_2_GAIN(x)		     (((x) & 0x3) << 0) /* Tx Mon 2 Gain<1:0> */
 
 /*
- *	REG_TX1_ATTEN_1
- */
+*	REG_TX1_ATTEN_1
+*/
 #define TX_1_ATTEN			     (1 << 0) /* Tx 1 Atten <8> */
 
 /*
- *	REG_TX2_ATTEN_1
- */
+*	REG_TX2_ATTEN_1
+*/
 #define TX_2_ATTEN			     (1 << 0) /* Tx 2 Atten <8> */
 
 /*
- *	REG_TX_ATTEN_OFFSET
- */
+*	REG_TX_ATTEN_OFFSET
+*/
 #define MASK_CLR_ATTEN_UPDATE		     (1 << 6) /* Mask Clr Atten Update */
 #define TX_ATTEN_OFFSET(x)		     (((x) & 0x3F) << 0) /* Tx Atten Offset<5:0> */
 
 /*
- *	REG_TX1_DIG_ATTEN
- */
+*	REG_TX1_DIG_ATTEN
+*/
 #define SEL_TX1_TX2			     (1 << 6) /* Sel Tx1 & Ttx2 */
 
 /*
- *	REG_TX2_DIG_ATTEN
- */
+*	REG_TX2_DIG_ATTEN
+*/
 #define IMMEDIATELY_UPDATE_TPC_ATTEN	     (1 << 6) /* Immediately Update TPC Atten */
 
 /*
- *	REG_TX1_SYMBOL_ATTEN
- */
+*	REG_TX1_SYMBOL_ATTEN
+*/
 #define TX_1_SYMBOL_ATTEN(x)		     (((x) & 0x7F) << 0) /* Tx 1 Symbol Attenuation<6:0> */
 
 /*
- *	REG_TX2_SYMBOL_ATTEN
- */
+*	REG_TX2_SYMBOL_ATTEN
+*/
 #define TX_2_SYMBOL_ATTEN(x)		     (((x) & 0x7F) << 0) /* Tx 2 Symbol Attenuation<6:0> */
 
 /*
- *	REG_TX_SYMBOL_ATTEN_CONFIG
- */
+*	REG_TX_SYMBOL_ATTEN_CONFIG
+*/
 #define USE_TX1_PIN_SYMBOL_ATTEN	     (1 << 3) /* Use Tx1 Pin & Symbol Atten */
 #define USE_CTRL_IN_FOR_SYMBOL_ATTEN	     (1 << 1) /* Use CTRL IN for symbol Atten */
 #define ENABLE_SYMBOL_ATTEN		     (1 << 0) /* Enable Symbol Atten */
 
 /*
- *	REG_TX_FORCE_BITS
- */
+*	REG_TX_FORCE_BITS
+*/
 #define FORCE_OUT_2_TX2_OFFSET		     (1 << 7) /* Force Out 2 Tx2 Offset */
 #define FORCE_OUT_2_TX1_OFFSET		     (1 << 6) /* Force Out 2 Tx1 Offset */
 #define FORCE_OUT_2_TX2_PHASE_GAIN	     (1 << 5) /* Force Out 2 Tx2 Phase & Gain */
@@ -1123,14 +1124,14 @@
 #define FORCE_OUT_1_TX1_PHASE_GAIN	     (1 << 0) /* Force Out 1 Tx1 Phase & Gain */
 
 /*
- * REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET
- */
+* REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET
+*/
 #define RX_NCO_FREQ(x)			     (((x) & 0x3) << 5) /* Rx NCO Frequency<1:0> */
 #define RX_NCO_PHASE_OFFSET(x)		     (((x) & 0x1F) << 0) /* Rx NCO Phase Offset<4:0> */
 
 /*
- *	REG_QUAD_CAL_CTRL
- */
+*	REG_QUAD_CAL_CTRL
+*/
 #define FREE_RUN_ENABLE			     (1 << 7) /* Free Run Enable */
 #define SETTLE_MAIN_ENABLE		     (1 << 6) /* Settle Main Enable */
 #define DC_OFFSET_ENABLE			     (1 << 5) /* DC Offset Enable */
@@ -1140,16 +1141,16 @@
 #define M_DECIM(x)			     (((x) & 0x3) << 0) /* M<1:0> */
 
 /*
- *	REG_KEXP_1
- */
+*	REG_KEXP_1
+*/
 #define KEXP_TX(x)			     (((x) & 0x3) << 6) /* Kexp Tx<1:0> */
 #define KEXP_TX_COMP(x)			     (((x) & 0x3) << 4) /* Kexp Tx_comp <1:0> */
 #define KEXP_DC_I(x)			     (((x) & 0x3) << 2) /* Kexp DC I <1:0> */
 #define KEXP_DC_Q(x)			     (((x) & 0x3) << 0) /* Kexp DC Q <1:0> */
 
 /*
- *	REG_KEXP_2
- */
+*	REG_KEXP_2
+*/
 #define INVERT_I_DATA			     (1 << 5) /* Invert I data */
 #define INVERT_Q_DATA			     (1 << 4) /* Invert Q data */
 #define TX_NCO_FREQ(x)			     (((x) & 0x3) << 6) /* Tx NCO frequency<1:0> */
@@ -1157,27 +1158,27 @@
 #define KEXP_AMP(x)			     (((x) & 0x3) << 0) /* Kexp Amp <1:0> */
 
 /*
- *	REG_QUAD_CAL_STATUS_TX1
- */
+*	REG_QUAD_CAL_STATUS_TX1
+*/
 #define TX1_LO_CONV			     (1 << 1) /* Tx1 LO Conv */
 #define TX1_SSB_CONV			     (1 << 0) /* Tx1 SSB Conv */
 #define TX1_CONVERGENCE_COUNT(x)	     (((x) & 0x3F) << 2) /* Tx1 Convergence Count<5:0> */
 
 /*
- *	REG_QUAD_CAL_STATUS_TX2
- */
+*	REG_QUAD_CAL_STATUS_TX2
+*/
 #define TX2_LO_CONV			     (1 << 1) /* Tx2 LO Conv */
 #define TX2_SSB_CONV			     (1 << 0) /* Tx2 SSB Conv */
 #define TX2_CONVERGENCE_COUNT(x)	     (((x) & 0x3F) << 2) /* Tx2 Convergence Count<5:0> */
 
 /*
- * REG_TX_QUAD_FULL_LMT_GAIN
- */
+* REG_TX_QUAD_FULL_LMT_GAIN
+*/
 #define RX_FULL_TABLELMT_TABLE_GAIN(x)	     (((x) & 0x7F) << 0) /* RX Full table/LMT table gain<6:0> */
 
 /*
- *	REG_SQUARER_CONFIG
- */
+*	REG_SQUARER_CONFIG
+*/
 #define GM_STAGE_TIME_CON_OVERRIDE	     (1 << 5) /* Gm Stage Time Con Override */
 #define GM_STAGE_MV_HP_POLE		     (1 << 4) /* Gm Stage MV HP Pole */
 #define GM_STAGE_LOWER_CM		     (1 << 3) /* Gm Stage Lower CM */
@@ -1185,160 +1186,160 @@
 #define VBIAS_CTRL(x)			     (((x) & 0x3) << 1) /* Vbias	 Control<1:0> */
 
 /*
- *	REG_THRESH_ACCUM
- */
+*	REG_THRESH_ACCUM
+*/
 #define THRESH_ACCUMULATOR(x)		     (((x) & 0xF) << 0) /* Threshold Accumulator<3:0> */
 
 /*
- *	REG_TX_QUAD_LPF_GAIN
- */
+*	REG_TX_QUAD_LPF_GAIN
+*/
 #define RX_LPF_GAIN(x)			     (((x) & 0x1F) << 0) /* RX LPF gain<4:0> */
 
 /*
- *	REG_TXDAC_VDS_I
- */
+*	REG_TXDAC_VDS_I
+*/
 #define TXDAC_VDS_I(x)			     (((x) & 0x3F) << 0) /* TxDAC Vds I<5:0> */
 
 /*
- *	REG_TXDAC_VDS_Q
- */
+*	REG_TXDAC_VDS_Q
+*/
 #define TXDAC_VDS_Q(x)			     (((x) & 0x3F) << 0) /* TxDAC Vds Q<5:0> */
 
 /*
- *	REG_TXDAC_GN_I
- */
+*	REG_TXDAC_GN_I
+*/
 #define TXDAC_GN_I(x)			     (((x) & 0x3F) << 0) /* txDAC_gn_I<5:0> */
 
 /*
- *	REG_TXDAC_GN_Q
- */
+*	REG_TXDAC_GN_Q
+*/
 #define TXDAC_GN_Q(x)			     (((x) & 0x3F) << 0) /* txDAC_gn_Q<5:0> */
 
 /*
- *	REG_TXBBF_OPAMP_A
- */
+*	REG_TXBBF_OPAMP_A
+*/
 #define OPAMPA_OUTPUT_BIAS(x)		     (((x) & 0x3) << 5) /* OpAmpA Output Bias<1:0> */
 #define OPAMPA_RZ(x)			     (((x) & 0x3) << 3) /* OpAmpA RZ<1:0> */
 #define OPAMP_A_CC(x)			     (((x) & 0x7) << 0) /* OpAmp A CC<2:0> */
 
 /*
- *	REG_TXBBF_OPAMP_B
- */
+*	REG_TXBBF_OPAMP_B
+*/
 #define OPAMPB_OUTPUT_BIAS(x)		     (((x) & 0x3) << 5) /* OpAmpB Output Bias<1:0> */
 #define OPAMPB_RZ(x)			     (((x) & 0x3) << 3) /* OpAmpB RZ<1:0> */
 #define OPAMP_B_CC(x)			     (((x) & 0x7) << 0) /* OpAmp B CC<2:0> */
 
 /*
- *	REG_TX_BBF_R1
- */
+*	REG_TX_BBF_R1
+*/
 #define OVERRIDE_ENABLE			     (1 << 7) /* Override enable */
 #define R1(x)				     (((x) & 0x1F) << 0) /* R1<4:0> */
 
 /*
- *	REG_TX_BBF_R2
- */
+*	REG_TX_BBF_R2
+*/
 #define R2(x)				     (((x) & 0x1F) << 0) /* R2<4:0> */
 
 /*
- *	REG_TX_BBF_R3
- */
+*	REG_TX_BBF_R3
+*/
 #define R3(x)				     (((x) & 0x1F) << 0) /* R3<4:0> */
 
 /*
- *	REG_TX_BBF_R4
- */
+*	REG_TX_BBF_R4
+*/
 #define R4(x)				     (((x) & 0x1F) << 0) /* R4<4:0> */
 
 /*
- *	REG_TX_BBF_RP
- */
+*	REG_TX_BBF_RP
+*/
 #define RP(x)				     (((x) & 0x1F) << 0) /* Rp<4:0> */
 
 /*
- *	REG_TX_BBF_C1
- */
+*	REG_TX_BBF_C1
+*/
 #define C1(x)				     (((x) & 0x3F) << 0) /* C1<5:0> */
 
 /*
- *	REG_TX_BBF_C2
- */
+*	REG_TX_BBF_C2
+*/
 #define C2(x)				     (((x) & 0x3F) << 0) /* C2<5:0> */
 
 /*
- *	REG_TX_BBF_CP
- */
+*	REG_TX_BBF_CP
+*/
 #define CP(x)				     (((x) & 0x3F) << 0) /* Cp<5:0> */
 
 /*
- *	REG_TX_TUNE_CTRL
- */
+*	REG_TX_TUNE_CTRL
+*/
 #define PD_TUNE				     (1 << 2) /* PD Tune */
 #define TUNER_RESAMPLE			     (1 << 1) /* Tuner Resample */
 #define TUNER_RESAMPLE_PHASE		     (1 << 0) /* Tuner Resample Phase */
 #define TUNE_CTRL(x)			     (((x) & 0x3) << 5) /* Tune Control<1:0> */
 
 /*
- *	REG_TX_BBF_R2B
- */
+*	REG_TX_BBF_R2B
+*/
 #define TX_BBF_BYPASS_BIAS_R			     (1 << 7) /* Bypass Bias R */
 #define R2B_OVR				     (1 << 5) /* R2b Ovr */
 #define R2B(x)				     (((x) & 0x1F) << 0) /* R2b<4:0> */
 
 /*
- *	REG_TX_BBF_TUNE
- */
+*	REG_TX_BBF_TUNE
+*/
 #define BBF1_COMP_I			     (1 << 3) /* BBF1 Comp I */
 #define BBF1_COMP_Q			     (1 << 2) /* BBF1 Comp Q */
 #define BBF2_COMP_I			     (1 << 1) /* BBF2 Comp I */
 #define BBF2_COMP_Q			     (1 << 0) /* BBF2 Comp Q */
 
 /*
- *	REG_CONFIG0
- */
+*	REG_CONFIG0
+*/
 #define BIAS(x)				     (((x) & 0x3) << 6) /* Bias<1:0> */
 #define RGM(x)				     (((x) & 0x3) << 4) /* Rgm<1:0> */
 #define CC(x)				     (((x) & 0x3) << 2) /* Cc<1:0> */
 #define AMPBIAS(x)			     (((x) & 0x3) << 0) /* AmpBias<1:0> */
 
 /*
- *	REG_RESISTOR
- */
+*	REG_RESISTOR
+*/
 #define RESISTOR(x)			     (((x) & 0xF) << 0) /* Resistor<3:0> */
 
 /*
- *	REG_CAPACITOR
- */
+*	REG_CAPACITOR
+*/
 #define CAPACITOR(x)			     (((x) & 0x3F) << 0) /* Capacitor<5:0> */
 
 /*
- *	REG_LO_CM
- */
+*	REG_LO_CM
+*/
 #define LO_COMMON_MODE(x)		     (((x) & 0x3) << 5) /* LO Common Mode<1:0> */
 
 /*
- *	REG_TX_BBF_TUNE_MODE
- */
+*	REG_TX_BBF_TUNE_MODE
+*/
 #define EVALTIME				     (1 << 4) /* EvalTime */
 #define TX_BBF_TUNE_DIVIDER		     (1 << 0) /* TX BBF Tune Divider<8> */
 #define TUNE_COMP_MASK(x)		     (((x) & 0x3) << 5) /* Tune Comp Mask<1:0> */
 #define TUNER_MODE(x)			     (((x) & 0x7) << 1) /* Tuner Mode<2:0> */
 
 /*
- *	REG_RX_FILTER_CONFIG
- */
+*	REG_RX_FILTER_CONFIG
+*/
 #define WRITE_RX			     (1 << 2) /* Write Rx */
 #define START_RX_CLOCK			     (1 << 1) /* Start Rx Clock */
 #define NUMBER_OF_TAPS(x)		     (((x) & 0x7) << 5) /* Number of Taps */
 #define SELECT_RX_CH(x)			     (((x) & 0x3) << 3) /* Select Rx Ch<1:0> */
 
 /*
- *	REG_RX_FILTER_GAIN
- */
+*	REG_RX_FILTER_GAIN
+*/
 #define FILTER_GAIN(x)			     (((x) & 0x3) << 0) /* Filter gain<1:0> */
 
 /*
- *	REG_AGC_CONFIG_1
- */
+*	REG_AGC_CONFIG_1
+*/
 #define DEC_PWR_FOR_LOW_PWR		     (1 << 7) /* Dec Pwr for Low Pwr */
 #define DEC_PWR_FOR_LOCK_LEVEL		     (1 << 6) /* Dec Pwr for Lock Level */
 #define DEC_PWR_FOR_GAIN_LOCK_EXIT	     (1 << 5) /* Dec Pwr for Gain Lock Exit */
@@ -1354,8 +1355,8 @@
 #define RX_GAIN_CTL_AGC_SLOW_ATK_HYBD		0x03
 
 /*
- *	REG_AGC_CONFIG_2
- */
+*	REG_AGC_CONFIG_2
+*/
 #define AGC_SOFT_RESET			     (1 << 7) /* Soft Reset */
 #define AGC_GAIN_UNLOCK_CTRL		     (1 << 6) /* Gain Unlock Control */
 #define AGC_USE_FULL_GAIN_TABLE		     (1 << 3) /* Use Full Gain Table */
@@ -1364,100 +1365,100 @@
 #define MAN_GAIN_CTRL_RX1		     (1 << 0) /* Manual Gain Control Rx 1 */
 
 /*
- *	REG_AGC_CONFIG_3
- */
+*	REG_AGC_CONFIG_3
+*/
 #define INCDEC_LMT_GAIN			     (1 << 4) /* Inc/Dec LMT Gain */
 #define USE_AGC_FOR_LMTLPF_GAIN		     (1 << 3) /* Use AGC for LMT/LPF Gain */
 #define MANUAL_INCR_STEP_SIZE(x)		     (((x) & 0x7) << 5) /* Manual (CTRL_IN) Incr Gain Step Size<2:0> */
 #define ADC_OVERRANGE_SAMPLE_SIZE(x)	     (((x) & 0x7) << 0) /* ADC Overrange Sample Size<2:0> */
 
 /*
- * REG_MAX_LMT_FULL_GAIN
- */
+* REG_MAX_LMT_FULL_GAIN
+*/
 #define MAXIMUM_FULL_TABLELMT_TABLE_INDEX(x) (((x) & 0x7F) << 0) /* Maximum Full Table/LMT Table Index<6:0> */
 
 /*
- *	REG_PEAK_WAIT_TIME
- */
+*	REG_PEAK_WAIT_TIME
+*/
 #define MANUAL_CTRL_IN_DECR_GAIN_STP_SIZE(x) (((x) & 0x7) << 5) /* Manual (CTRL_IN) Decr Gain Step Size<2:0> */
 #define PEAK_OVERLOAD_WAIT_TIME(x)	     (((x) & 0x1F) << 0) /* Peak Overload Wait Time<4:0> */
 
 /*
- *	REG_DIGITAL_GAIN
- */
+*	REG_DIGITAL_GAIN
+*/
 #define DIG_GAIN_STP_SIZE(x)		     (((x) & 0x7) << 5) /* Dig Gain Step Size<2:0> */
 #define MAXIMUM_DIGITAL_GAIN(x)		     (((x) & 0x1F) << 0) /* Maximum Digital Gain<4:0> */
 
 /*
- *	REG_AGC_LOCK_LEVEL
- */
+*	REG_AGC_LOCK_LEVEL
+*/
 #define ENABLE_DIG_SAT_OVRG		     (1 << 7) /* Enable Dig Sat Ovrg */
 #define AGC_LOCK_LEVEL_FAST_AGC_INNER_HIGH_THRESH_SLOW(x) (((x) & 0x7F) << 0) /* AGC Lock Level (Fast)/ AGC Inner High Threshold (Slow) <6:0> */
 
 /*
- *	REG_GAIN_STP_CONFIG1
- */
+*	REG_GAIN_STP_CONFIG1
+*/
 #define LMT_DETECTOR_SETTLING_TIME(x)	     (((x) & 0x7) << 5) /* LMT Detector Settling Time<2:0> */
 #define DEC_STP_SIZE_FOR_LARGE_LMT_OVERLOAD(x) (((x) & 0x7) << 2) /* Dec Step Size for: Large LMT Overload/ Full Table Case #3 <2:0> */
 #define ADC_NOISE_CORRECTION_FACTOR(x)	     (((x) & 0x3) << 0) /* ADC Noise Correction Factor<1:0> */
 
 /*
- *	REG_GAIN_STP_CONFIG_2
- */
+*	REG_GAIN_STP_CONFIG_2
+*/
 #define DECREMENT_STP_SIZE_FOR_SMALL_LPF_GAIN_CHANGE(x) (((x) & 0x7) << 4) /* Fast Attack Only. Decrement Step Size for: Small LPF Gain Change / Full Table Case #2 <2:0> */
 #define LARGE_LPF_GAIN_STEP(x) 		     (((x) & 0xF) << 0) /* Decrement Step Size for: Large LPF Gain Change / Full Table Case #1<3:0> */
 
 /*
- *	REG_SMALL_LMT_OVERLOAD_THRESH
- */
+*	REG_SMALL_LMT_OVERLOAD_THRESH
+*/
 #define FORCE_PD_RESET_RX2		     (1 << 7) /* Force PD Reset Rx2 */
 #define FOR_PD_RESET_RX1			     (1 << 6) /* For PD Reset Rx1 */
 #define SMALL_LMT_OVERLOAD_THRESH(x)	     (((x) & 0x3F) << 0) /* Small LMT Overload Threshold<5:0> */
 
 /*
- *	REG_LARGE_LMT_OVERLOAD_THRESH
- */
+*	REG_LARGE_LMT_OVERLOAD_THRESH
+*/
 #define LARGE_LMT_OVERLOAD_THRESH(x)	     (((x) & 0x3F) << 0) /* Large LMT Overload Threshold<5:0> */
 
 /*
- *	REG_RX1_MANUAL_LMT_FULL_GAIN
- */
-#define POWER_MEAS_IN_STATE_5_MSB	     (1 << 7) /* Power Meas in State 5<3> */
+*	REG_RX1_MANUAL_LMT_FULL_GAIN
+*/
+#define POWER_MEAS_IN_STATE_5_MSB	     (1 << 7) /* Power Meas in State 5 <3> */
 #define RX1_MANUAL_FULL_TABLE_LMT_TABLE_GAIN_INDEX(x) (((x) & 0x7F) << 0) /* Rx1 Manual Full table/LMT table Gain Index<6:0> */
 #define RX_FULL_TBL_IDX_MASK		     RX1_MANUAL_FULL_TABLE_LMT_TABLE_GAIN_INDEX(~0)
 
 /*
- *	REG_RX1_MANUAL_LPF_GAIN
- */
+*	REG_RX1_MANUAL_LPF_GAIN
+*/
 #define POWER_MEAS_IN_STATE_5(x)	     	     (((x) & 0x7) << 5) /* Power Meas in State 5<2:0> */
 #define RX1_MANUAL_LPF_GAIN(x)		     (((x) & 0x1F) << 0) /* Rx1 Manual LPF Gain <4:0> */
 #define RX_LPF_IDX_MASK			     RX1_MANUAL_LPF_GAIN(~0)
 
 /*
- *	REG_RX1_MANUAL_DIGITALFORCED_GAIN
- */
+*	REG_RX1_MANUAL_DIGITALFORCED_GAIN
+*/
 #define FORCE_RX1_DIGITAL_GAIN		     (1 << 5) /* Force Rx1 Digital Gain */
 #define RX1_MANUALFORCED_DIGITAL_GAIN(x)     (((x) & 0x1F) << 0) /* Rx1 Manual/Forced Digital Gain<4:0> */
 #define RX_DIGITAL_IDX_MASK		     RX1_MANUALFORCED_DIGITAL_GAIN(~0)
 /*
- *	REG_RX2_MANUAL_LMT_FULL_GAIN
- */
+*	REG_RX2_MANUAL_LMT_FULL_GAIN
+*/
 #define RX2_MANUAL_FULL_TABLE_LMT_TABLE_GAIN_INDEX(x) (((x) & 0x7F) << 0) /* Rx2 Manual Full table/ LMT table Gain Index<6:0> */
 
 /*
- *	REG_RX2_MANUAL_LPF_GAIN
- */
+*	REG_RX2_MANUAL_LPF_GAIN
+*/
 #define RX2_MANUAL_LPF_GAIN(x)		     (((x) & 0x1F) << 0) /* Rx2 Manual LPF Gain<4:0> */
 
 /*
- *	REG_RX2_MANUAL_DIGITALFORCED_GAIN
- */
+*	REG_RX2_MANUAL_DIGITALFORCED_GAIN
+*/
 #define FORCE_RX2_DIGITAL_GAIN		     (1 << 5) /* Force Rx2 Digital Gain */
 #define RX2_MANUALFORCED_DIGITAL_GAIN(x)     (((x) & 0x1F) << 0) /* Rx2 Manual/Forced Digital Gain<4:0> */
 
 /*
- * REG_FAST_CONFIG_1
- */
+* REG_FAST_CONFIG_1
+*/
 #define ENABLE_GAIN_INC_AFTER_GAIN_LOCK	     (1 << 7) /* Enable Gain Inc after Gain Lock */
 #define GOTO_OPT_GAIN_IF_ENERGY_LOST_OR_EN_AGC_HIGH (1 << 6) /* Goto Opt Gain if Energy Lost or EN_AGC High */
 #define GOTO_SET_GAIN_IF_EN_AGC_HIGH	     (1 << 5) /* Goto Set Gain if EN_AGC High */
@@ -1468,161 +1469,161 @@
 #define ENABLE_INCR_GAIN		     (1 << 0) /* Enable Incr Gain */
 
 /*
- * REG_FAST_CONFIG_2_SETTLING_DELAY
- */
+* REG_FAST_CONFIG_2_SETTLING_DELAY
+*/
 #define USE_LAST_LOCK_LEVEL_FOR_SET_GAIN     (1 << 7) /* Use Last Lock Level for Set Gain */
 #define ENABLE_LMT_GAIN_INC_FOR_LOCK_LEVEL   (1 << 6) /* Enable LMT Gain Inc for Lock Level */
 #define GOTO_MAX_GAIN_OR_OPT_GAIN_IF_EN_AGC_HIGH (1 << 5) /* Goto Max Gain or Opt Gain if EN_AGC High */
 #define SETTLING_DELAY(x)		     (((x) & 0x1F) << 0) /* Settling Delay<4:0> */
 
 /*
- * REG_FAST_ENERGY_LOST_THRESH
- */
+* REG_FAST_ENERGY_LOST_THRESH
+*/
 #define POST_LOCK_LEVEL_STP_SIZE_FOR_LPF_TABLE_FULL_TABLE(x) (((x) & 0x3) << 6) /* Post Lock Level Step Size for: LPF Table/ Full Table <1:0> */
 #define ENERGY_LOST_THRESH(x)		     (((x) & 0x3F) << 0) /* Energy lost threshold<5:0> */
 
 /*
- * REG_FAST_STRONGER_SIGNAL_THRESH
- */
+* REG_FAST_STRONGER_SIGNAL_THRESH
+*/
 #define POST_LOCK_LEVEL_STP_FOR_LMT_TABLE(x) (((x) & 0x3) << 6) /* Post Lock Level Step for LMT	 Table <1:0> */
 #define STRONGER_SIGNAL_THRESH(x)	     (((x) & 0x3F) << 0) /* Stronger Signal Threshold<5:0> */
 
 /*
- * REG_FAST_LOW_POWER_THRESH
- */
+* REG_FAST_LOW_POWER_THRESH
+*/
 #define DONT_UNLOCK_GAIN_IF_ADC_OVRG	     (1 << 7) /* Don't unlock gain if ADC Ovrg */
 #define LOW_POWER_THRESH(x)		     (((x) & 0x7F) << 0) /* Low Power Threshold<6:0> */
 
 /*
- * REG_FAST_STRONG_SIGNAL_FREEZE
- */
+* REG_FAST_STRONG_SIGNAL_FREEZE
+*/
 #define DONT_UNLOCK_GAIN_IF_STRONGER_SIGNAL (1 << 7) /* Don't unlock gain if Stronger Signal */
 
 /*
- * REG_FAST_FINAL_OVER_RANGE_AND_OPT_GAIN
- */
+* REG_FAST_FINAL_OVER_RANGE_AND_OPT_GAIN
+*/
 #define FINAL_OVER_RANGE_COUNT(x)	     (((x) & 0x7) << 5) /* Final Over Range Count<2:0> */
 #define OPTIMIZE_GAIN_OFFSET(x)		     (((x) & 0xF) << 0) /* Optimize Gain Offset<3:0> */
 
 /*
- * REG_FAST_ENERGY_DETECT_COUNT
- */
+* REG_FAST_ENERGY_DETECT_COUNT
+*/
 #define INCREMENT_GAIN_STP_LPFLMT(x)	     (((x) & 0x7) << 5) /* Increment Gain Step (LPF/LMT)<2:0> */
 #define ENERGY_DETECT_COUNT(x)		     (((x) & 0x1F) << 0) /* Energy Detect count<4:0> */
 
 /*
- * REG_FAST_AGCLL_UPPER_LIMIT
- */
+* REG_FAST_AGCLL_UPPER_LIMIT
+*/
 #define AGCLL_MAX_INCREASE(x)		     (((x) & 0x3F) << 0) /* AGCLL Max Increase<5:0> */
 
 /*
- * REG_FAST_GAIN_LOCK_EXIT_COUNT
- */
+* REG_FAST_GAIN_LOCK_EXIT_COUNT
+*/
 #define GAIN_LOCK_EXIT_COUNT(x)		     (((x) & 0x3F) << 0) /* Gain Lock Exit Count<5:0> */
 
 /*
- * REG_FAST_INITIAL_LMT_GAIN_LIMIT
- */
+* REG_FAST_INITIAL_LMT_GAIN_LIMIT
+*/
 #define INITIAL_LMT_GAIN_LIMIT(x)	     (((x) & 0x7F) << 0) /* Initial LMT Gain Limit<6:0> */
 
 /*
- *	REG_AGC_INNER_LOW_THRESH
- */
+*	REG_AGC_INNER_LOW_THRESH
+*/
 #define PREVENT_GAIN_INC			     (1 << 7) /* Prevent Gain Inc */
 #define AGC_INNER_LOW_THRESH(x)		     (((x) & 0x7F) << 0) /* AGC Inner Low Threshold<6:0> */
 
 /*
- *	REG_LMT_OVERLOAD_COUNTERS
- */
+*	REG_LMT_OVERLOAD_COUNTERS
+*/
 #define LARGE_LMT_OVERLOAD_EXED_COUNTER(x)   (((x) & 0xF) << 4) /* Large LMT Overload Exceeded Counter<3:0> */
 #define SMALL_LMT_OVERLOAD_EXED_COUNTER(x)   (((x) & 0xF) << 0) /* Small LMT Overload Exceeded Counter<3:0> */
 
 /*
- *	REG_ADC_OVERLOAD_COUNTERS
- */
+*	REG_ADC_OVERLOAD_COUNTERS
+*/
 #define LARGE_ADC_OVERLOAD_EXED_COUNTER(x)   (((x) & 0xF) << 4) /* Large ADC Overload Exceeded Counter<3:0> */
 #define SMALL_ADC_OVERLOAD_EXED_COUNTER(x)   (((x) & 0xF) << 0) /* Small ADC Overload Exceeded Counter<3:0> */
 
 /*
- *	REG_GAIN_STP1
- */
+*	REG_GAIN_STP1
+*/
 #define IMMED_GAIN_CHANGE_IF_LG_LMT_OVERLOAD (1 << 7) /* Immed. Gain Change if Lg LMT Overload */
 #define IMMED_GAIN_CHANGE_IF_LG_ADC_OVERLOAD (1 << 3) /* Immed. Gain Change if Lg ADC Overload */
 #define AGC_INNER_HIGH_THRESH_EXED_STP_SIZE(x) (((x) & 0x7) << 4) /* AGC Inner High Threshold Exceeded Step Size<2:0> */
 #define AGC_INNER_LOW_THRESH_EXED_STP_SIZE(x) (((x) & 0x7) << 0) /* AGC Inner Low Threshold Exceeded Step Size<2:0> */
 
 /*
- *	REG_DIGITAL_SAT_COUNTER
- */
+*	REG_DIGITAL_SAT_COUNTER
+*/
 #define DOUBLE_GAIN_COUNTER		     (1 << 5) /* Double Gain Counter */
 #define ENABLE_SYNC_FOR_GAIN_COUNTER	     (1 << 4) /* Enable Sync for Gain Counter */
 #define DIG_SATURATION_EXED_COUNTER(x)	     (((x) & 0xF) << 0) /* Dig Saturation Exceeded Counter<3:0> */
 
 /*
- *	REG_OUTER_POWER_THRESHS
- */
+*	REG_OUTER_POWER_THRESHS
+*/
 #define AGC_OUTER_HIGH_THRESH(x)	     	     (((x) & 0xF) << 4) /* AGC Outer High Threshold<3:0> */
 #define AGC_OUTER_LOW_THRESH(x)		     (((x) & 0xF) << 0) /* AGC Outer Low Threshold<3:0> */
 
 /*
- *	REG_GAIN_STP_2
- */
+*	REG_GAIN_STP_2
+*/
 #define AGC_OUTER_HIGH_THRESH_EXED_STP_SIZE(x) (((x) & 0xF) << 4) /* AGC outer High Threshold Exceeded Step Size<3:0> */
 #define AGC_OUTER_LOW_THRESH_EXED_STP_SIZE(x) (((x) & 0xF) << 0) /* AGC Outer Low Threshold Exceeded Step Size<3:0> */
 
 /*
- *	REG_EXT_LNA_HIGH_GAIN
- */
+*	REG_EXT_LNA_HIGH_GAIN
+*/
 #define EXT_LNA_HIGH_GAIN(x)		     (((x) & 0x3F) << 0) /* Ext LNA High Gain<5:0> */
 
 /*
- *	REG_EXT_LNA_LOW_GAIN
- */
+*	REG_EXT_LNA_LOW_GAIN
+*/
 #define EXT_LNA_LOW_GAIN(x)		     (((x) & 0x3F) << 0) /* Ext LNA Low Gain<5:0> */
 
 /*
- *	REG_GAIN_TABLE_ADDRESS
- */
+*	REG_GAIN_TABLE_ADDRESS
+*/
 #define GAIN_TABLE_ADDRESS(x)		     (((x) & 0x7F) << 0) /* Gain Table Address<6:0> */
 
 /*
- *	REG_GAIN_TABLE_WRITE_DATA1
- */
+*	REG_GAIN_TABLE_WRITE_DATA1
+*/
 #define EXT_LNA_CTRL			     (1 << 7) /* Ext LNA Ctrl */
 #define LNA_GAIN(x)			     (((x) & 0x3) << 5) /* LNA Gain <1:0> */
 #define MIXER_GM_GAIN(x)			     (((x) & 0x1F) << 0) /* Mixer Gm Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_WRITE_DATA2
- */
+*	REG_GAIN_TABLE_WRITE_DATA2
+*/
 #define TIA_GAIN				     (1 << 5) /* TIA Gain */
 #define LPF_GAIN(x)			     (((x) & 0x1F) << 0) /* LPF Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_WRITE_DATA_3
- */
+*	REG_GAIN_TABLE_WRITE_DATA_3
+*/
 #define RF_DC_CAL			     (1 << 5) /* RF DC Cal */
 #define DIGITAL_GAIN(x)			     (((x) & 0x1F) << 0) /* Digital Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_READ_DATA_1
- */
+*	REG_GAIN_TABLE_READ_DATA_1
+*/
 #define TO_LNA_GAIN(x)			     (((x) >> 5) & 0x3) /* LNA Gain <1:0> */
 #define TO_MIXER_GM_GAIN(x)		     (((x) >> 0) & 0x1F) /* Mixer Gm Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_READ_DATA_2
- */
+*	REG_GAIN_TABLE_READ_DATA_2
+*/
 #define TO_LPF_GAIN(x)			     (((x) >> 0) & 0x1F) /* LPF Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_READ_DATA_3
- */
+*	REG_GAIN_TABLE_READ_DATA_3
+*/
 #define TO_DIGITAL_GAIN(x)		     (((x) >> 0) & 0x1F) /* Digital Gain <4:0> */
 
 /*
- *	REG_GAIN_TABLE_CONFIG
- */
+*	REG_GAIN_TABLE_CONFIG
+*/
 #define WRITE_GAIN_TABLE			     (1 << 2) /* Write Gain Table */
 #define START_GAIN_TABLE_CLOCK		     (1 << 1) /* Start Gain Table Clock */
 #define RECEIVER_SELECT(x)		     (((x) & 0x3) << 3) /* Receiver Select<1:0> */
@@ -1631,54 +1632,54 @@
 
 
 /*
- *	REG_GM_SUB_TABLE_GAIN_WRITE
- */
+*	REG_GM_SUB_TABLE_GAIN_WRITE
+*/
 #define GM_SUB_TABLE_GAIN_WRITE(x)	     (((x) & 0x7F) << 0) /* Gm Sub Table Gain Word Write<6:0> */
 
 /*
- *	REG_GM_SUB_TABLE_BIAS_WRITE
- */
+*	REG_GM_SUB_TABLE_BIAS_WRITE
+*/
 #define GM_SUB_TABLE_BIAS_WRITE(x)	     (((x) & 0x1F) << 0) /* Gm Sub Table Bias Word Write<4:0> */
 
 /*
- *	REG_GM_SUB_TABLE_CTRL_WRITE
- */
+*	REG_GM_SUB_TABLE_CTRL_WRITE
+*/
 #define GM_SUB_TABLE_CTRL_WRITE(x)	     (((x) & 0x3F) << 0) /* Gm Sub Table Control Word Write<5:0> */
 
 /*
- *	REG_GM_SUB_TABLE_GAIN_READ
- */
+*	REG_GM_SUB_TABLE_GAIN_READ
+*/
 #define GM_SUB_TABLE_GAIN_READ(x)	     (((x) & 0x7F) << 0) /* Gm Sub Table Gain Word Read<6:0> */
 
 /*
- *	REG_GM_SUB_TABLE_BIAS_READ
- */
+*	REG_GM_SUB_TABLE_BIAS_READ
+*/
 #define GM_SUB_TABLE_BIAS_READ(x)	     (((x) & 0x1F) << 0) /* Gm Sub Table Bias Word Read<4:0> */
 
 /*
- *	REG_GM_SUB_TABLE_CTRL_READ
- */
+*	REG_GM_SUB_TABLE_CTRL_READ
+*/
 #define GM_SUB_TABLE_CTRL_READ(x)	     (((x) & 0x3F) << 0) /* Gm Sub Table Control Word Read<5:0> */
 
 /*
- *	REG_GM_SUB_TABLE_CONFIG
- */
+*	REG_GM_SUB_TABLE_CONFIG
+*/
 #define WRITE_GM_SUB_TABLE		     (1 << 2) /* Write Gm Sub Table */
 #define START_GM_SUB_TABLE_CLOCK		     (1 << 1) /* Start Gm Sub Table Clock */
 
 /*
- *	REG_GAIN_DIFF_WORDERROR_WRITE
- */
+*	REG_GAIN_DIFF_WORDERROR_WRITE
+*/
 #define CALIB_TABLE_GAIN_DIFFERROR_WORD(x)   (((x) & 0x3F) << 0) /* Calib Table Gain Diff/Error Word<5:0> */
 
 /*
- *	REG_GAIN_ERROR_READ
- */
+*	REG_GAIN_ERROR_READ
+*/
 #define CALIB_TABLE_GAIN_ERROR(x)	     (((x) & 0x1F) << 0) /* Calib Table Gain Error<4:0> */
 
 /*
- *	REG_CONFIG
- */
+*	REG_CONFIG
+*/
 #define READ_SELECT			     (1 << 4) /* Read Select */
 #define WRITE_MIXER_ERROR_TABLE		     (1 << 3) /* Write Mixer Error Table */
 #define WRITE_LNA_ERROR_TABLE		     (1 << 2) /* Write LNA Error Table */
@@ -1687,42 +1688,42 @@
 #define CALIB_TABLE_SELECT(x)		     (((x) & 0x3) << 5) /* Calib Table Select<1:0> */
 
 /*
- *	REG_LNA_GAIN_DIFF_READ_BACK
- */
+*	REG_LNA_GAIN_DIFF_READ_BACK
+*/
 #define LNA_CALIB_TABLE_GAIN_DIFFERENCE_WORD(x) (((x) & 0x3F) << 0) /* LNA Calib Table Gain Difference Word<5:0> */
 
 /*
- *	REG_MAX_MIXER_CALIBRATION_GAIN_INDEX
- */
+*	REG_MAX_MIXER_CALIBRATION_GAIN_INDEX
+*/
 #define MAX_MIXER_CALIBRATION_GAIN_INDEX(x)  (((x) & 0x1F) << 0) /* Max Mixer Calibration Gain Index<4:0> */
 
 /*
- *	REG_SETTLE_TIME
- */
+*	REG_SETTLE_TIME
+*/
 #define ENABLE_DIG_GAIN_CORR		     (1 << 7) /* Enable Dig Gain Corr */
 #define FORCE_TEMP_SENSOR_FOR_CAL	     (1 << 6) /* Force Temp Sensor for Cal */
 #define SETTLE_TIME(x)			     (((x) & 0x3F) << 0) /* Settle Time<5:0> */
 
 /*
- *	REG_MEASURE_DURATION
- */
+*	REG_MEASURE_DURATION
+*/
 #define GAIN_CAL_MEAS_DURATION(x)	     (((x) & 0xF) << 0) /* Gain Cal Meas Duration<3:0> */
 
 /*
- *	REG_MEASURE_DURATION_01
- */
+*	REG_MEASURE_DURATION_01
+*/
 #define MEASUREMENT_DURATION_1(x)	     (((x) & 0xF) << 4) /* Measurement duration 1 <3:0> */
 #define MEASUREMENT_DURATION_0(x)	     (((x) & 0xF) << 0) /* Measurement duration 0 <3:0> */
 
 /*
- *	REG_MEASURE_DURATION_23
- */
+*	REG_MEASURE_DURATION_23
+*/
 #define MEASUREMENT_DURATION_3(x)	     (((x) & 0xF) << 4) /* Measurement duration 3 <3:0> */
 #define MEASUREMENT_DURATION_2(x)	     (((x) & 0xF) << 0) /* Measurement duration 2 <3:0> */
 
 /*
- *	REG_RSSI_CONFIG
- */
+*	REG_RSSI_CONFIG
+*/
 #define START_RSSI_MEAS			     (1 << 5) /* Start RSSI Meas (Mode 4) */
 #define ENABLE_ADC_POWER_MEAS		     (1 << 1) /* Enable ADC Power Meas. */
 #define DEFAULT_RSSI_MEAS_MODE		     (1 << 0) /* Default RSSI Meas Mode */
@@ -1730,14 +1731,14 @@
 #define RSSI_MODE_SELECT(x)		     (((x) & 0x7) << 2) /* RSSI Mode Select<2:0> */
 
 /*
- *	REG_ADC_MEASURE_DURATION_01
- */
+*	REG_ADC_MEASURE_DURATION_01
+*/
 #define ADC_POWER_MEASUREMENT_DURATION_1(x)  (((x) & 0xF) << 4) /* ADC Power Measurement Duration 1<3:0> */
 #define ADC_POWER_MEASUREMENT_DURATION_0(x) (((x) & 0xF) << 0) /* ADC Power Measurement Duration 0 <3:0> */
 
 /*
- *	REG_DEC_POWER_MEASURE_DURATION_0
- */
+*	REG_DEC_POWER_MEASURE_DURATION_0
+*/
 #define USE_HB3_OUT_FOR_ADC_PWR_MEAS	     (1 << 7) /* Use HB3 Out for ADC Pwr Meas */
 #define USE_HB1_OUT_FOR_DEC_PWR_MEAS	     (1 << 6) /* Use HB1 Out for Dec pwr Meas */
 #define ENABLE_DEC_PWR_MEAS		     (1 << 5) /* Enable Dec Pwr Meas */
@@ -1745,19 +1746,19 @@
 #define DEC_POWER_MEASUREMENT_DURATION(x)     (((x) & 0xF) << 0) /* Dec Power Measurement Duration <3:0> */
 
 /*
- *	REG_LNA_GAIN
- */
+*	REG_LNA_GAIN
+*/
 #define DB_GAIN_READBACK_CHANNEL		     (1 << 0) /* dB Gain Read-back Channel */
 #define MAX_LNA_GAIN(x)			     (((x) & 0x7F) << 1) /* Max LNA Gain<6:0> */
 
 /*
- *	REG_RX_QUAD_CAL_LEVEL
- */
+*	REG_RX_QUAD_CAL_LEVEL
+*/
 #define RX_QUAD_CAL_LEVEL(x)		     (((x) & 0xF) << 0) /* Rx Quad Cal Level <3 :0> */
 
 /*
- *	REG_CALIBRATION_CONFIG_1
- */
+*	REG_CALIBRATION_CONFIG_1
+*/
 #define ENABLE_PHASE_CORR		     (1 << 7) /* Enable Phase Corr */
 #define ENABLE_GAIN_CORR			     (1 << 6) /* Enable Gain Corr */
 #define USE_SETTLE_COUNT_FOR_DC_CAL_WAIT      (1 << 5) /* Use Settle Count for DC Cal Wait */
@@ -1768,68 +1769,68 @@
 #define ENABLE_TRACKING_MODE_CH1		     (1 << 0) /* Enable Tracking Mode CH1 */
 
 /*
- *	REG_CALIBRATION_CONFIG_2
- */
+*	REG_CALIBRATION_CONFIG_2
+*/
 #define SOFT_RESET			     (1 << 7) /* Soft Reset */
 #define CALIBRATION_CONFIG2_DFLT		     (0x3 << 5) /* Must be 2'b11 */
 #define K_EXP_PHASE(x)			     (((x) & 0x1F) << 0) /* K exp Phase<4:0> */
 
 /*
- *	REG_CALIBRATION_CONFIG_3
- */
+*	REG_CALIBRATION_CONFIG_3
+*/
 #define PREVENT_POS_LOOP_GAIN		     (1 << 7) /* Prevent Pos Loop Gain */
 #define K_EXP_AMPLITUDE(x)		     (((x) & 0x1F) << 0) /* K exp Amplitude<4:0> */
 
 /*
- *	REG_RX_QUAD_GAIN1
- */
+*	REG_RX_QUAD_GAIN1
+*/
 #define RX_FULL_TABLELMT_TABLE_GAIN(x)	     (((x) & 0x7F) << 0) /* Rx Full table/LMT table gain<6:0> */
 
 /*
- *	REG_RX_QUAD_GAIN2
- */
+*	REG_RX_QUAD_GAIN2
+*/
 #define CORRECTION_WORD_DECIMATION_M(x)	     (((x) & 0x7) << 5) /* Correction Word Decimation M<2:0> */
 #define RX_LPF_GAIN(x)			     (((x) & 0x1F) << 0) /* Rx LPF gain<4:0> */
 
 /*
- *	REG_RX1_INPUT_A_OFFSETS
- */
+*	REG_RX1_INPUT_A_OFFSETS
+*/
 #define RX1_INPUT_A_I_DC_OFFSET_LSB(x)	     (((x) & 0x3F) << 2) /* Rx1 Input A "I" DC Offset<5:0> */
 #define RX1_INPUT_A_Q_DC_OFFSET(x)	     (((x) & 0x3) << 0) /* Rx1 Input A "Q" DC Offset<9:8> */
 
 /*
- *	REG_INPUT_A_OFFSETS_1
- */
+*	REG_INPUT_A_OFFSETS_1
+*/
 #define RX2_INPUT_A_Q_DC_OFFSET_LSB(x)	     (((x) & 0xF) << 4) /* Rx2 Input A "Q" DC Offset<3:0> */
 #define RX1_INPUT_A_I_DC_OFFSET_MSB(x)	     (((x) & 0xF) << 0) /* Rx1 Input A "I" DC Offset<9:6> */
 
 /*
- *	REG_RX2_INPUT_A_OFFSETS
- */
+*	REG_RX2_INPUT_A_OFFSETS
+*/
 #define RX2_INPUT_A_I_DC_OFFSET(x)	     (((x) & 0x3) << 6) /* Rx2 Input A "I" DC Offset<1:0> */
 #define RX2_INPUT_A_Q_DC_OFFSET_MSB(x)	     (((x) & 0x3F) << 0) /* Rx2 Input A "Q" DC Offset<9:4> */
 
 /*
- *	REG_RX1_INPUT_BC_OFFSETS
- */
+*	REG_RX1_INPUT_BC_OFFSETS
+*/
 #define RX1_INPUT_BC_I_DC_OFFSET_LSB(x)	     (((x) & 0x3F) << 2) /* Rx1 Input B&C "I" DC Offset<5:0> */
 #define RX1_INPUT_BC_Q_DC_OFFSET(x)	     (((x) & 0x3) << 0) /* Rx1 Input B&C "Q" DC Offset<9:8> */
 
 /*
- *	REG_INPUT_BC_OFFSETS_1
- */
+*	REG_INPUT_BC_OFFSETS_1
+*/
 #define RX2_INPUT_BC_Q_DC_OFFSET_LSB(x)	     (((x) & 0xF) << 4) /* Rx2 Input B&C "Q" DC Offset<3:0> */
 #define RX1_INPUT_BC_I_DC_OFFSET_MSB(x)	     (((x) & 0xF) << 0) /* Rx1 Input B&C "I" DC Offset<9:6> */
 
 /*
- *	REG_RX2_INPUT_BC_OFFSETS
- */
+*	REG_RX2_INPUT_BC_OFFSETS
+*/
 #define RX2_INPUT_BC_I_DC_OFFSET(x)	     (((x) & 0x3) << 6) /* Rx2 Input B&C "I" DC Offset<1:0> */
 #define RX2_INPUT_BC_Q_DC_OFFSET_MSB(x)	     (((x) & 0x3F) << 0) /* Rx2 Input B&C "Q" DC Offset<9:4> */
 
 /*
- *	REG_FORCE_BITS
- */
+*	REG_FORCE_BITS
+*/
 #define RX2_INPUT_BC_FORCE_OFFSET	     (1 << 7) /* Rx2 Input B&C Force offset */
 #define RX1_INPUT_BC_FORCE_OFFSET	     (1 << 6) /* Rx1 Input B&C Force offset */
 #define RX2_INPUT_BC_FORCE_PHGAIN	     (1 << 5) /* Rx2 Input B&C Force Ph/Gain */
@@ -1840,28 +1841,28 @@
 #define RX1_INPUT_A_FORCE_PHGAIN		     (1 << 0) /* Rx1 Input A Force Ph/Gain */
 
 /*
- *	REG_RF_DC_OFFSET_CONFIG_1
- */
+*	REG_RF_DC_OFFSET_CONFIG_1
+*/
 #define DAC_FS(x)			     (((x) & 0x3) << 4) /* DAC FS<1:0> */
 #define RF_DC_CALIBRATION_COUNT(x)	     (((x) & 0xF) << 0) /* RF DC Calibration Count<3:0> */
 
 /*
- *	REG_RF_DC_OFFSET_ATTEN
- */
+*	REG_RF_DC_OFFSET_ATTEN
+*/
 #define RF_DC_OFFSET_TABLE_UPDATE_COUNT(x)   (((x) & 0x7) << 5) /* RF DC Offset Table Update Count<2:0> */
 #define RF_DC_OFFSET_ATTEN(x)		     (((x) & 0x1F) << 0) /* RF DC Offset Attenuation<4:0> */
 
 /*
- *	REG_INVERT_BITS
- */
+*	REG_INVERT_BITS
+*/
 #define INVERT_RX2_RF_DC_CGIN_WORD	     (1 << 7) /* Invert Rx2 RF DC  CGin Word */
 #define INVERT_RX1_RF_DC_CGIN_WORD	     (1 << 6) /* Invert Rx1 RF DC  CGin Word */
 #define INVERT_RX2_RF_DC_CGOUT_WORD	     (1 << 5) /* Invert Rx2 RF DC  CGout Word */
 #define INVERT_RX1_RF_DC_CGOUT_WORD	     (1 << 4) /* Invert Rx1 RF DC  CGout Word */
 
 /*
- *	REG_DC_OFFSET_CONFIG2
- */
+*	REG_DC_OFFSET_CONFIG2
+*/
 #define USE_WAIT_COUNTER_FOR_RF_DC_INIT_CAL   (1 << 7) /* Use Wait Counter for RF DC Init Cal */
 #define ENABLE_FAST_SETTLE_MODE		     (1 << 6) /* Enable Fast Settle Mode */
 #define ENABLE_BB_DC_OFFSET_TRACKING	     (1 << 5) /* Enable BB DC Offset Tracking */
@@ -1870,93 +1871,93 @@
 #define DC_OFFSET_UPDATE(x)		     (((x) & 0x7) << 0) /* DC Offset Update<2:0> */
 
 /*
- *	REG_RF_CAL_GAIN_INDEX
- */
+*	REG_RF_CAL_GAIN_INDEX
+*/
 #define RF_MINIMUM_CALIBRATION_GAIN_INDEX(x) (((x) & 0x7F) << 0) /* RF Minimum Calibration Gain Index<6:0> */
 
 /*
- *	REG_SOI_THRESH
- */
+*	REG_SOI_THRESH
+*/
 #define RF_SOI_THRESH(x)		     (((x) & 0x7F) << 0) /* RF SOI Threshold<6:0> */
 
 /*
- *	REG_BB_DC_OFFSET_SHIFT
- */
+*	REG_BB_DC_OFFSET_SHIFT
+*/
 #define INCREASE_COUNT_DURATION		     (1 << 7) /* Increase Count Duration */
 #define BB_TRACKING_DECIMATE(x)		     (((x) & 0x3) << 5) /* BB Tracking Decimate<1:0> */
 #define BB_DC_M_SHIFT(x)			     (((x) & 0x1F) << 0) /* BB  DC M Shift<4:0> */
 
 /*
- *	REG_BB_DC_OFFSET_FAST_SETTLE_SHIFT
- */
+*	REG_BB_DC_OFFSET_FAST_SETTLE_SHIFT
+*/
 #define READ_BACK_CH_SEL		     (1 << 7) /* Read Back  CH Sel */
 #define UPDATE_TRACKING_WORD		     (1 << 6) /* Update Tracking Word */
 #define FORCE_RX_NULL			     (1 << 5) /* Force Rx Null */
 #define BB_DC_TRACKING_FAST_SETTLE_M_SHIFT(x) (((x) & 0x1F) << 0) /* BB DC Tracking Fast Settle M Shift<4:0> */
 
 /*
- *	REG_BB_DC_OFFSET_ATTEN
- */
+*	REG_BB_DC_OFFSET_ATTEN
+*/
 #define BB_DC_OFFSET_ATTEN(x)		     (((x) & 0xF) << 0) /* BB DC Offset Atten<3:0> */
 
 /*
- *	REG_RX1_BB_DC_WORD_I_MSB
- */
+*	REG_RX1_BB_DC_WORD_I_MSB
+*/
 #define RX1_BB_DC_OFFSET_CORRECTION_WORD_I(x) (((x) & 0x7F) << 0) /* RX1 BB DC Offset Correction word I<14:8> */
 
 /*
- *	REG_RX1_BB_DC_WORD_Q_MSB
- */
+*	REG_RX1_BB_DC_WORD_Q_MSB
+*/
 #define RX1_BB_DC_OFFSET_CORRECTION_WORD_Q(x) (((x) & 0x7F) << 0) /* RX1 BB DC Offset Correction word Q<14:8> */
 
 /*
- *	REG_RX2_BB_DC_WORD_I_MSB
- */
+*	REG_RX2_BB_DC_WORD_I_MSB
+*/
 #define RX2_BB_DC_OFFSET_CORRECTION_WORD_I(x) (((x) & 0x7F) << 0) /* RX2 BB DC Offset Correction word I<14:8> */
 
 /*
- *	REG_RX2_BB_DC_WORD_Q_MSB
- */
+*	REG_RX2_BB_DC_WORD_Q_MSB
+*/
 #define RX2_BB_DC_OFFSET_CORRECTION_WORD_Q(x) (((x) & 0x7F) << 0) /* RX2 BB DC Offset Correction word Q<14:8> */
 
 /*
- *	REG_BB_TRACK_CORR_WORD_I_MSB
- */
+*	REG_BB_TRACK_CORR_WORD_I_MSB
+*/
 #define RX1RX2_BB_DC_OFFSET_TRACKING_CORRECTION_WORD_I(x) (((x) & 0x7F) << 0) /* RX1/RX2 BB DC Offset Tracking correction word I<14:8> */
 
 /*
- *	REG_BB_TRACK_CORR_WORD_Q_MSB
- */
+*	REG_BB_TRACK_CORR_WORD_Q_MSB
+*/
 #define RX1RX2_BB_DC_OFFSET_TRACKING_CORRECTION_WORD_Q(x) (((x) & 0x7F) << 0) /* RX1/RX2 BB DC Offset Tracking correction word Q<14:8> */
 
 /*
- *	REG_SYMBOL_LSB
- */
+*	REG_SYMBOL_LSB
+*/
 #define RX2_RSSI_SYMBOL			    (1 << 1) /* Rx2 RSSI symbol <0> */
 #define RX1_RSSI_SYMBOL			    (1 << 0) /* Rx1 RSSI symbol <0> */
 
 /*
- *	REG_PREAMBLE_LSB
- */
+*	REG_PREAMBLE_LSB
+*/
 #define RX2_RSSI_PREAMBLE		     (1 << 1) /* Rx2 RSSI preamble <0> */
 #define RX1_RSSI_PREAMBLE		     (1 << 0) /* Rx1 RSSI preamble <0> */
 
 /*
- *	REG_RX1_RSSI_SYMBOL, REG_RX1_RSSI_PREAMBLE,
- * 	REG_RX2_RSSI_SYMBOL, REG_RX2_RSSI_PREAMBLE
- */
+*	REG_RX1_RSSI_SYMBOL, REG_RX1_RSSI_PREAMBLE,
+* 	REG_RX2_RSSI_SYMBOL, REG_RX2_RSSI_PREAMBLE
+*/
 #define RSSI_LSB_SHIFT	1
 #define RSSI_LSB_MASK1	0x01
 #define RSSI_LSB_MASK2	0x02
 
 /*
- *	REG_RX_PATH_GAIN_LSB
- */
+*	REG_RX_PATH_GAIN_LSB
+*/
 #define RX_PATH_GAIN			     (1 << 0) /* Rx Path Gain<0> */
 
 /*
- *	REG_RX_DIFF_LNA_FORCE
- */
+*	REG_RX_DIFF_LNA_FORCE
+*/
 #define FORCE_RX2_LNA_GAIN		     (1 << 7) /* Force Rx2 LNA Gain */
 #define RX2_LNA_BYPASS			     (1 << 6) /* Rx2 LNA Bypass */
 #define FORCE_RX1_LNA_GAIN		     (1 << 3) /* Force Rx1 LNA Gain */
@@ -1965,89 +1966,89 @@
 #define RX1_LNA_GAIN(x)			     (((x) & 0x3) << 0) /* Rx1 LNA Gain<1:0> */
 
 /*
- *	REG_RX_LNA_BIAS_COARSE
- */
+*	REG_RX_LNA_BIAS_COARSE
+*/
 #define RX_LNA_BIAS_COARSE(x)		     (((x) & 0xF) << 0) /* Rx LNA Bias Coarse<3:0> */
 
 /*
- *	REG_RX_LNA_BIAS_FINE_0
- */
+*	REG_RX_LNA_BIAS_FINE_0
+*/
 #define RX_LNA_PCASCODE_BIAS(x)		     (((x) & 0x7) << 5) /* Rx LNA p-Cascode Bias<2:0> */
 #define RX_LNA_BIAS(x)			     (((x) & 0x1F) << 0) /* Rx LNA Bias<4:0> */
 
 /*
- *	REG_RX_LNA_BIAS_FINE_1
- */
+*	REG_RX_LNA_BIAS_FINE_1
+*/
 #define RX_LNA_P_CASCODE_BIAS_FINE(x)	     (((x) & 0x3) << 0) /* Rx LNA p- Cascode Bias Fine<4:3> */
 
 /*
- *	REG_RX_MIX_GM_CONFIG
- */
+*	REG_RX_MIX_GM_CONFIG
+*/
 #define RX_MIX_GM_CM_OUT(x)		     (((x) & 0x7) << 5) /* Rx Mix Gm CM Out<2:0> */
 #define RX_MIX_GM_PLOAD(x)		     (((x) & 0x3) << 0) /* Rx Mix Gm pload <1:0> */
 
 /*
- *	REG_RX1_MIX_GM_FORCE
- */
+*	REG_RX1_MIX_GM_FORCE
+*/
 #define FORCE_RX1_MIX_GM		     (1 << 6) /* Force Rx1 Mix Gm */
 #define RX1_MIX_GM_GAIN(x)		     (((x) & 0x3F) << 0) /* Rx1 Mix Gm Gain<5:0> */
 
 /*
- * REG_RX1_MIX_GM_BIAS_FORCE
- */
+* REG_RX1_MIX_GM_BIAS_FORCE
+*/
 #define RX1_MIX_GM_BIAS(x)		     (((x) & 0x1F) << 0) /* Rx1 Mix Gm Bias<4:0> */
 
 /*
- *	REG_RX2_MIX_GM_FORCE
- */
+*	REG_RX2_MIX_GM_FORCE
+*/
 #define FORCE_RX2_MIX_GM		     (1 << 6) /* Force Rx2 Mix Gm */
 #define RX2_MIX_GM_GAIN(x)		     (((x) & 0x3F) << 0) /* Rx2 Mix Gm Gain<5:0> */
 
 /*
- * REG_RX2_MIX_GM_BIAS_FORCE
- */
+* REG_RX2_MIX_GM_BIAS_FORCE
+*/
 #define RX2_MIX_GM_BIAS(x)		     (((x) & 0x1F) << 0) /* Rx2 Mix Gm Bias<4:0> */
 
 /*
- *	REG_INPUT_A_MSBS
- */
+*	REG_INPUT_A_MSBS
+*/
 #define INPUT_A_RX1_Q(x)		     (((x) & 0x3) << 6) /* Input A RX1 Q<9:8> */
 #define INPUT_A_RX1_I(x)		     (((x) & 0x3) << 4) /* Input A RX1 I<9:8> */
 #define INPUT_A_RX2_I(x)		     (((x) & 0x3) << 2) /* Input A RX2 I<9:8> */
 #define INPUT_A_RX2_Q(x)		     (((x) & 0x3) << 0) /* Input A RX2 Q<9:8> */
 
 /*
- *	REG_INPUTS_BC_MSBS
- */
+*	REG_INPUTS_BC_MSBS
+*/
 #define INPUTS_BC_RX1_Q(x)		     (((x) & 0x3) << 6) /* Inputs B&C RX1 Q<9:8> */
 #define INPUTS_BC_RX1_I(x)		     (((x) & 0x3) << 4) /* Inputs B&C RX1 I<9:8> */
 #define INPUTS_BC_RX2_I(x)		     (((x) & 0x3) << 2) /* Inputs B&C RX2 I<9:8> */
 #define INPUTS_BC_RX2_Q(x)		     (((x) & 0x3) << 0) /* Inputs B&C RX2 Q<9:8> */
 
 /*
- *	REG_FORCE_OS_DAC
- */
+*	REG_FORCE_OS_DAC
+*/
 #define FORCE_CGIN_DAC			     (1 << 2) /* Force CGin DAC */
 
 /*
- *	REG_RX_MIX_LO_CM
- */
+*	REG_RX_MIX_LO_CM
+*/
 #define RX_MIX_LO_CM(x)			     (((x) & 0x3F) << 0) /* Rx Mix LO CM<5:0> */
 
 /*
- *	REG_RX_CGB_SEG_ENABLE
- */
+*	REG_RX_CGB_SEG_ENABLE
+*/
 #define RX_CGB_SEG_ENABLE(x)		     (((x) & 0x3F) << 0) /* Rx CGB Seg Enable<5:0> */
 
 /*
- *	REG_RX_MIX_INPUTBIAS
- */
+*	REG_RX_MIX_INPUTBIAS
+*/
 #define RX_CGB_INPUT_CM_SEL(x)		     (((x) & 0x3) << 4) /* Rx CGB Input CM Sel<1:0> */
 #define RX_CGB_BIAS(x)			     (((x) & 0xF) << 0) /* Rx CGB Bias<3:0> */
 
 /*
- *	REG_RX_TIA_CONFIG
- */
+*	REG_RX_TIA_CONFIG
+*/
 #define TIA2_OVERRIDE_C			     (1 << 3) /* TIA2 Override C */
 #define TIA2_OVERRIDE_R			     (1 << 2) /* TIA2 Override R */
 #define TIA1_OVERRIDE_C			     (1 << 1) /* TIA1 Override C */
@@ -2055,122 +2056,122 @@
 #define TIA_SEL_CC(x)			     (((x) & 0x7) << 5) /* TIA Sel CC<2:0> */
 
 /*
- *	REG_TIA1_C_LSB
- */
+*	REG_TIA1_C_LSB
+*/
 #define TIA1_RF(x)			     (((x) & 0x3) << 6) /* TIA1 RF<1:0> */
 #define TIA1_C_LSB(x)			     (((x) & 0x3F) << 0) /* TIA1	 C LSB<5:0> */
 
 /*
- *	REG_TIA1_C_MSB
- */
+*	REG_TIA1_C_MSB
+*/
 #define TIA1_C_MSB(x)			     (((x) & 0x7F) << 0) /* TIA1 C MSB<6:0> */
 
 /*
- *	REG_TIA2_C_LSB
- */
+*	REG_TIA2_C_LSB
+*/
 #define TIA2_RF(x)			     (((x) & 0x3) << 6) /* TIA2 RF<1:0> */
 #define TIA2_C_LSB(x)			     (((x) & 0x3F) << 0) /* TIA2 C LSB<5:0> */
 
 /*
- *	REG_TIA2_C_MSB
- */
+*	REG_TIA2_C_MSB
+*/
 #define TIA2_C_MSB(x)			     (((x) & 0x7F) << 0) /* TIA2 C MSB<6:0> */
 
 /*
- *	REG_RX1_BBF_R1A
- */
+*	REG_RX1_BBF_R1A
+*/
 #define FORCE_RX1_RESISTORS		     (1 << 7) /* Force Rx1 Resistors */
 #define RX1_BBF_R1A(x)			     (((x) & 0x3F) << 0) /* Rx1 BBF R1A<5:0> */
 
 /*
- *	REG_RX2_BBF_R1A
- */
+*	REG_RX2_BBF_R1A
+*/
 #define FORCE_RX2_RESISTORS		     (1 << 7) /* Force Rx2 Resistors */
 #define RX2_BBF_R1A(x)			     (((x) & 0x3F) << 0) /* Rx2 BBF R1A<5:0> */
 
 /*
- *	REG_RX1_TUNE_CTRL
- */
+*	REG_RX1_TUNE_CTRL
+*/
 #define RX1_TUNE_RESAMPLE_PHASE	   	     (1 << 2) /* Rx1 Tune Resample Phase */
 #define RX1_TUNE_RESAMPLE		     (1 << 1) /* Rx1 Tune Resample */
 #define RX1_PD_TUNE			     (1 << 0) /* Rx1 PD Tune */
 
 /*
- *	REG_RX2_TUNE_CTRL
- */
+*	REG_RX2_TUNE_CTRL
+*/
 #define RX2_TUNE_RESAMPLE_PHASE		     (1 << 2) /* Rx2 Tune Resam ple Phase */
 #define RX2_TUNE_RESAMPLE		     (1 << 1) /* Rx2 Tune Resample */
 #define RX2_PD_TUNE			     (1 << 0) /* Rx2 PD Tune */
 
 /*
- *	REG_RX_BBF_R2346
- */
+*	REG_RX_BBF_R2346
+*/
 #define TUNE_OVERRIDE			     (1 << 7) /* Tune Override */
 #define RX_BBF_R2346(x)			     (((x) & 0x7) << 0) /* Rx BBF R2346<2:0> */
 
 /*
- *	REG_RX_BBF_C1_MSB
- */
+*	REG_RX_BBF_C1_MSB
+*/
 #define RX_BBF_C1_MSB(x)		     (((x) & 0x3F) << 0) /* Rx BBF C1 MSB<5:0> */
 
 /*
- *	REG_RX_BBF_C1_LSB
- */
+*	REG_RX_BBF_C1_LSB
+*/
 #define RX_BBF_C1_LSB(x)		     (((x) & 0x7F) << 0) /* Rx BBF C1 LSB<6:0> */
 
 /*
- *	REG_RX_BBF_C2_MSB
- */
+*	REG_RX_BBF_C2_MSB
+*/
 #define RX_BBF_C2_MSB(x)		     (((x) & 0x3F) << 0) /* Rx BBF C2 MSB<5:0> */
 
 /*
- *	REG_RX_BBF_C2_LSB
- */
+*	REG_RX_BBF_C2_LSB
+*/
 #define RX_BBF_C2_LSB(x)		     (((x) & 0x7F) << 0) /* Rx BBF C2 LSB<6:0> */
 
 /*
- *	REG_RX_BBF_C3_MSB
- */
+*	REG_RX_BBF_C3_MSB
+*/
 #define RX_BBF_C3_MSB(x)		     (((x) & 0x3F) << 0) /* Rx BBF C3 MSB<5:0> */
 
 /*
- *	REG_RX_BBF_C3_LSB
- */
+*	REG_RX_BBF_C3_LSB
+*/
 #define RX_BBF_C3_LSB(x)		     (((x) & 0x7F) << 0) /* Rx BBF C3 LSB<6:0> */
 
 /*
- *	REG_RX_BBF_CC1_CTR
- */
+*	REG_RX_BBF_CC1_CTR
+*/
 #define RX_BBF_CC1_CTR(x)		     (((x) & 0x7F) << 0) /* Rx BBF CC1 Ctr<6:0> */
 
 /*
- *	REG_RX_BBF_POW_RZ_BYTE0
- */
+*	REG_RX_BBF_POW_RZ_BYTE0
+*/
 #define MUST_BE_ZERO			     (1 << 7) /* Must be zero */
 #define RX1_BBF_POW_CTR(x)		     (((x) & 0x3) << 5) /* Rx1 BBF Pow Ctr<1:0> */
 #define RX_BBF_RZ1_CTR(x)		     (((x) & 0x3) << 3) /* Rx BBF Rz1 Ctr<1:0> */
 
 /*
- *	REG_RX_BBF_CC2_CTR
- */
+*	REG_RX_BBF_CC2_CTR
+*/
 #define RX_BBF_CC2_CTR(x)		     (((x) & 0x7F) << 0) /* Rx BBF CC2 Ctr<6:0> */
 
 /*
- *	REG_RX_BBF_POW_RZ_BYTE1
- */
+*	REG_RX_BBF_POW_RZ_BYTE1
+*/
 #define RX_BBF_POW3_CTR(x)		     (((x) & 0x3) << 6) /* Rx BBF Pow3 Ctr<1:0> */
 #define RX_BBF_RZ3_CTR(x)		     (((x) & 0x3) << 4) /* Rx BBF RZ3 Ctr<1:0> */
 #define RX_BBF_POW2_CTR(x)		     (((x) & 0x3) << 2) /* Rx BBF Pow2 Ctr<1:0> */
 #define RX_BBF_RZ2_CTR(x)		     (((x) & 0x3) << 0) /* Rx BBF Rz2 Ctr<1:0> */
 
 /*
- *	REG_RX_BBF_CC3_CTR
- */
+*	REG_RX_BBF_CC3_CTR
+*/
 #define RX_BBF_CC3_CTR(x)		     (((x) & 0x7F) << 0) /* Rx BBF CC3 Ctr<6:0> */
 
 /*
- *	REG_RX_BBF_TUNE
- */
+*	REG_RX_BBF_TUNE
+*/
 #define RXBBF_BYPASS_BIAS_R		     (1 << 7) /* RxBBF Bypass Bias R */
 #define RX_BBF_R5_TUNE			     (1 << 4) /* Rx BBF R5 Tune */
 #define RX1_BBF_TUNE_COMP_I		     (1 << 3) /* Rx1 BBF Tune Comp I */
@@ -2180,106 +2181,106 @@
 #define RX_BBF_TUNE_CTR(x)		     (((x) & 0x3) << 5) /* Rx BBF Tune Ctr<1:0> */
 
 /*
- *	REG_RX1_BBF_MAN_GAIN
- */
+*	REG_RX1_BBF_MAN_GAIN
+*/
 #define RX1_BBF_FORCE_GAIN		     (1 << 5) /* Rx1 BBF Force Gain */
 #define RX1_BBF_BQ_GAIN(x)		     (((x) & 0x3) << 3) /* Rx1 BBF BQ Gain<1:0> */
 #define RX1_BBF_POLE_GAIN(x)		     (((x) & 0x7) << 0) /* Rx1 BBF Pole Gain<2:0> */
 
 /*
- *	REG_RX2_BBF_MAN_GAIN
- */
+*	REG_RX2_BBF_MAN_GAIN
+*/
 #define RX2_BBF_FORCE_GAIN		     (1 << 5) /* Rx2 BBF Force Gain */
 #define RX2_BBF_BQ_GAIN(x)		     (((x) & 0x3) << 3) /* Rx2 BBF BQ Gain<1:0> */
 #define RX2_BBF_POLE_GAIN(x)		     (((x) & 0x7) << 0) /* Rx2 BBF Pole Gain<2:0> */
 
 /*
- *	REG_RX_BBF_TUNE_CONFIG
- */
+*	REG_RX_BBF_TUNE_CONFIG
+*/
 #define RX_TUNE_EVALTIME			     (1 << 4) /* Rx Tune Evaltime */
 #define RX_BBF_TUNE_DIVIDE		     (1 << 0) /* RX BBF Tune Divide<8> */
 #define TUNE_COMP_MASK(x)		     (((x) & 0x3) << 5) /* Tune Comp Mask <1:0> */
 #define RX_TUNE_MODE(x)			     (((x) & 0x7) << 1) /* Rx Tune Mode<2:0> */
 
 /*
- *	REG_POLE_GAIN
- */
+*	REG_POLE_GAIN
+*/
 #define POLE_GAIN_TUNE(x)		     (((x) & 0x3) << 0) /* Pole Gain Tune<1:0> */
 
 /*
- *	REG_RX_BBBW_MHZ
- */
+*	REG_RX_BBBW_MHZ
+*/
 #define RX_TUNE_BBBW_MHZ(x)		     (((x) & 0x1F) << 0) /* Rx Tune BBBW MHz<4::0> */
 
 /*
- *	REG_RX_BBBW_KHZ
- */
+*	REG_RX_BBBW_KHZ
+*/
 #define RX_TUNE_BBBW_KHZ(x)		     (((x) & 0x7F) << 0) /* Rx Tune BBBW kHz<6:0> */
 
 /*
- *	REG_RX_PFD_CONFIG
- */
+*	REG_RX_PFD_CONFIG
+*/
 #define BYPASS_LD_SYNTH			     (1 << 0) /* Bypass Ld Synth */
 
 /*
- *	REG_RX_INTEGER_BYTE_1
- */
+*	REG_RX_INTEGER_BYTE_1
+*/
 #define SYNTH_INTEGER_WORD(x)		     (((x) & 0x7) << 0) /* Synthesizer Integer Word<10:8> */
 
 /*
- *	REG_RX_FRACT_BYTE_2
- */
+*	REG_RX_FRACT_BYTE_2
+*/
 #define SYNTH_FRACT_WORD(x)	     (((x) & 0x7F) << 0) /* Synthesizer Fractional Word <22:16> */
 
 /*
- *	REG_RX_FORCE_VCO_TUNE_1
- */
+*	REG_RX_FORCE_VCO_TUNE_1
+*/
 #define VCO_CAL_OFFSET(x)		     (((x) & 0xF) << 3) /* VCO Cal Offset<3:0> */
 
 /*
- *	REG_RX_ALC_VARACTOR
- */
+*	REG_RX_ALC_VARACTOR
+*/
 #define INIT_ALC_VALUE(x)		     (((x) & 0xF) << 4) /* Init ALC Value<3:0> */
 #define VCO_VARACTOR(x)			     (((x) & 0xF) << 0) /* VCO Varactor<3:0> */
 
 /*
- *	REG_RX_VCO_OUTPUT
- */
+*	REG_RX_VCO_OUTPUT
+*/
 #define PORB_VCO_LOGIC			     (1 << 6) /* PORb VCO Logic */
 #define VCO_OUTPUT_LEVEL(x)		     (((x) & 0xF) << 0) /* VCO Output Level<3:0> */
 
 /*
- *	REG_RX_CP_CURRENT
- */
+*	REG_RX_CP_CURRENT
+*/
 #define CHARGE_PUMP_CURRENT(x)		     (((x) & 0x3F) << 0) /* Charge Pump Current<5:0> */
 
 /*
- *	REG_RX_CP_OFFSET
- */
+*	REG_RX_CP_OFFSET
+*/
 #define SYNTH_RECAL			     (1 << 7) /* Synth Re-Cal */
 
 /*
- *	REG_RX_CP_CONFIG
- */
+*	REG_RX_CP_CONFIG
+*/
 #define HALF_VCO_CAL_CLK		     (1 << 7) /* Half Vco Cal Clk */
 #define F_CPCAL				     (1 << 3) /* F Cpcal */
 #define CP_CAL_ENABLE			     (1 << 2) /* Cp Cal Enable */
 
 /*
- *	REG_RX_LOOP_FILTER_1
- */
+*	REG_RX_LOOP_FILTER_1
+*/
 #define LOOP_FILTER_C2(x)		     (((x) & 0xF) << 4) /* Loop Filter C2<3:0> */
 #define LOOP_FILTER_C1(x)		     (((x) & 0xF) << 0) /* Loop Filter C1<3:0> */
 
 /*
- *	REG_RX_LOOP_FILTER_2
- */
+*	REG_RX_LOOP_FILTER_2
+*/
 #define LOOP_FILTER_R1(x)		     (((x) & 0xF) << 4) /* Loop Filter R1<3:0> */
 #define LOOP_FILTER_C3(x)		     (((x) & 0xF) << 0) /* Loop Filter C3<3:0> */
 
 /*
- *	REG_RX_LOOP_FILTER_3
- */
+*	REG_RX_LOOP_FILTER_3
+*/
 #define LOOP_FILTER_BYPASS_R3		     (1 << 7) /* Loop Filter Bypass R3 */
 #define LOOP_FILTER_BYPASS_R1		     (1 << 6) /* Loop Filter Bypass R1 */
 #define LOOP_FILTER_BYPASS_C2		     (1 << 5) /* Loop Filter Bypass C2 */
@@ -2287,110 +2288,111 @@
 #define LOOP_FILTER_R3(x)		     (((x) & 0xF) << 0) /* Loop Filter R3<3:0> */
 
 /*
- *	REG_RX_DITHERCP_CAL
- */
+*	REG_RX_DITHERCP_CAL
+*/
 #define FORCED_CP_CAL_WORD(x)		     (((x) & 0xF) << 0) /* Forced CP Cal Word<3:0> */
 
 /*
- *	REG_RX_VCO_BIAS_1
- */
+*	REG_RX_VCO_BIAS_1
+*/
 #define VCO_BIAS_TCF(x)			     (((x) & 0x3) << 3) /* VCO Bias Tcf<1:0> */
 #define VCO_BIAS_REF(x)			     (((x) & 0x7) << 0) /* VCO Bias Ref<2:0> */
 
 /*
- *	REG_RX_CAL_STATUS
- */
+*	REG_RX_CAL_STATUS
+*/
 #define CP_CAL_VALID			     (1 << 7) /* CP Cal Valid */
 #define CP_CAL_DONE			     (1 << 5) /* CP Cal Done */
 #define VCO_CAL_BUSY			     (1 << 4) /* VCO Cal Busy */
 #define CP_CAL_WORD(x)			     (((x) & 0xF) << 0) /* CP Cal Word<3:0> */
 
 /*
- *	REG_RX_VCO_CAL_REF
- */
+*	REG_RX_VCO_CAL_REF
+*/
 #define VCO_CAL_REF_TCF(x)		     (((x) & 0x7) << 0) /* VCO Cal Ref Tcf<2:0> */
 
 /*
- *	REG_RX_VCO_PD_OVERRIDES
- */
+*	REG_RX_VCO_PD_OVERRIDES
+*/
 #define POWER_DOWN_VARACTOR_REF		     (1 << 3) /* Power Down Varactor Ref */
 #define PWR_DOWN_VARACT_REF_TCF		     (1 << 2) /* Pwr Down Varact Ref Tcf */
 #define POWER_DOWN_CAL_TCF		     (1 << 1) /* Power Down Cal Tcf */
 #define POWER_DOWN_VCO_BUFFFER		     (1 << 0) /* Power Down VCO Bufffer */
 
 /*
- * REG_RX_CP_OVERRANGE_VCO_LOCK
- */
+* REG_RX_CP_OVERRANGE_VCO_LOCK
+*/
 #define CP_OVRG_HIGH			     (1 << 7) /* CP Ovrg High */
 #define CP_OVRG_LOW			     (1 << 6) /* CP Ovrg Low */
-#define VCO_LOCK				(1 << 1) /* Lock */
+#define VCO_LOCK				     (1 << 1) /* Lock */
+
 /*
- *	REG_RX_VCO_LDO
- */
+*	REG_RX_VCO_LDO
+*/
 #define VCO_LDO_BYPASS			     (1 << 7) /* VCO LDO Bypass */
 #define VCO_LDO_INRUSH(x)		     (((x) & 0x3) << 5) /* VCO LDO Inrush<1:0> */
 #define VCO_LDO_SEL(x)			     (((x) & 0x7) << 2) /* VCO LDO Sel<2:0> */
 #define VCO_LDO_VDROP_SEL(x)		     (((x) & 0x3) << 0) /* VCO LDO Vdrop Sel<1:0> */
 
 /*
- *	REG_RX_VCO_CAL
- */
+*	REG_RX_VCO_CAL
+*/
 #define VCO_CAL_EN			     (1 << 7) /* VCO Cal En */
 #define VCO_CAL_ALC_WAIT(x)		     (((x) & 0x7) << 4) /* VCO Cal ALC Wait <2:0> */
 #define VCO_CAL_COUNT(x)		     (((x) & 0x3) << 2) /* VCO Cal Count <1:0> */
 
 /*
- *	REG_RX_LOCK_DETECT_CONFIG
- */
+*	REG_RX_LOCK_DETECT_CONFIG
+*/
 #define LOCK_DETECT_COUNT(x)		     (((x) & 0x3) << 2) /* Lock Detect Count<1:0> */
 #define LOCK_DETECT_MODE(x)		     (((x) & 0x3) << 0) /* Lock Detect Mode<1:0> */
 
 /*
- *	REG_RX_CP_LEVEL_DETECT
- */
+*	REG_RX_CP_LEVEL_DETECT
+*/
 #define CP_LEVEL_DETECT_POWER_DOWN	     (1 << 6) /* CP Level Detect Power Down */
 #define CP_LEVEL_THRESH_LOW(x)		     (((x) & 0x7) << 3) /* CP Level Threshold Low<2:0> */
 #define CP_LEVEL_THRESH_HIGH(x)		     (((x) & 0x7) << 0) /* CP Level Threshold High<2:0> */
 
 /*
- *	REG_RX_DSM_SETUP_0
- */
+*	REG_RX_DSM_SETUP_0
+*/
 #define DSM_PROG(x)			     (((x) & 0xF) << 0) /* DSM Prog<3:0> */
 
 /*
- *	REG_RX_DSM_SETUP_1
- */
+*	REG_RX_DSM_SETUP_1
+*/
 #define SIF_CLOCK			     (1 << 6) /* SIF clock */
 #define SIF_RESET_BAR			     (1 << 5) /* SIF Reset Bar */
 #define SIF_ADDR(x)			     (((x) & 0x1F) << 0) /* SIF Addr<4:0> */
 
 /*
- *	REG_RX_CORRECTION_WORD0
- */
+*	REG_RX_CORRECTION_WORD0
+*/
 #define UPDATE_FREQ_WORD		     	     (1 << 7) /* Update Freq Word */
 #define READ_EFFECTIVE_TUNING_WORD	     (1 << 5) /* Read Effective Tuning Word */
 #define FREQ_CORRECTION_WORD_MSB(x)	     (((x) & 0x1F) << 0) /* Frequency Correction Word<11:7> */
 
 /*
- *	REG_RX_CORRECTION_WORD1
- */
+*	REG_RX_CORRECTION_WORD1
+*/
 #define UPDATE_FREQ_WORD			     (1 << 7) /* Update Freq Word */
 #define FREQ_CORRECTION_WORD_LSB(x)	     (((x) & 0x7F) << 0) /* Frequency Correction Word<6:0> */
 
 /*
- *	REG_RX_VCO_VARACTOR_CTRL_0
- */
+*	REG_RX_VCO_VARACTOR_CTRL_0
+*/
 #define VCO_VARACTOR_REFERENCE_TCF(x)	     (((x) & 0x7) << 4) /* VCO Varactor Reference Tcf<2:0> */
 #define VCO_VARACTOR_OFFSET(x)		     (((x) & 0xF) << 0) /* VCO Varactor Offset<3:0> */
 
 /*
- *	REG_RX_VCO_VARACTOR_CTRL_1
- */
+*	REG_RX_VCO_VARACTOR_CTRL_1
+*/
 #define VCO_VARACTOR_REFERENCE(x)	     (((x) & 0xF) << 0) /* VCO Varactor Reference<3:0> */
 
 /*
- *	REG_RX_FAST_LOCK_SETUP
- */
+*	REG_RX_FAST_LOCK_SETUP
+*/
 #define RX_FAST_LOCK_LOAD_SYNTH		     (1 << 3) /* Rx Fast Lock Load Synth */
 #define RX_FAST_LOCK_PROFILE_INIT	     (1 << 2) /* Rx Fast Lock Profile Init */
 #define RX_FAST_LOCK_PROFILE_PIN_SELECT	     (1 << 1) /* Rx Fast Lock Profile Pin Select */
@@ -2398,86 +2400,87 @@
 #define RX_FAST_LOCK_PROFILE(x)		     (((x) & 0x7) << 5) /* Rx Fast Lock Profile<2:0> */
 
 /*
- *	REG_RX_FAST_LOCK_PROGRAM_ADDR
- */
+*	REG_RX_FAST_LOCK_PROGRAM_ADDR
+*/
 #define RX_FAST_LOCK_PROFILE_ADDR(x)	     (((x) & 0x7) << 4) /* Rx Fast Lock Profile<2:0> */
 #define RX_FAST_LOCK_PROFILE_WORD(x)	     (((x) & 0xF) << 0) /* Configuration Word <3:0> */
 
+
 /*
- *	REG_RX_FAST_LOCK_PROGRAM_CTRL
- */
+*	REG_RX_FAST_LOCK_PROGRAM_CTRL
+*/
 #define RX_FAST_LOCK_PROGRAM_WRITE	     (1 << 1) /* Rx Fast Lock Program Write */
 #define RX_FAST_LOCK_PROGRAM_CLOCK_ENABLE     (1 << 0) /* Rx Fast Lock Program Clock Enable */
 
 #define RX_FAST_LOCK_CONFIG_WORD_NUM	     16
 
 /*
- *	REG_RX_LO_GEN_POWER_MODE
- */
+*	REG_RX_LO_GEN_POWER_MODE
+*/
 #define RX_LO_GEN_POWER_MODE(x)		     (((x) & 0x3) << 4) /* Power Mode<3:0> */
 
 /*
- *	REG_TX_PFD_CONFIG
- */
+*	REG_TX_PFD_CONFIG
+*/
 #define DIV_TEST_EN			     (1 << 5) /* Div Test En */
 #define PFD_CLK_EDGE			     (1 << 1) /* PFD Clk Edge */
 #define BYPASS_LD_SYNTH			     (1 << 0) /* Bypass Ld Synth */
 #define PFD_WIDTH(x)			     (((x) & 0x3) << 2) /* PFD Width <1:0> */
 
 /*
- *	REG_TX_INTEGER_BYTE_1
- */
+*	REG_TX_INTEGER_BYTE_1
+*/
 #define SDM_BYPASS			     (1 << 7) /* SDM Bypass */
 #define SDM_POWER_DOWN			     (1 << 6) /* SDM Power Down */
 #define SYNTH_INTEGER_WORD(x)		     (((x) & 0x7) << 0) /* Synthesizer Integer Word<10:8> */
 
 /*
- *	REG_TX_FRACT_BYTE_2
- */
+*	REG_TX_FRACT_BYTE_2
+*/
 #define SYNTH_FRACT_WORD(x)	     (((x) & 0x7F) << 0) /* Synthesizer Fractional Word <22:16> */
 
 /*
- *	REG_TX_FORCE_ALC
- */
+*	REG_TX_FORCE_ALC
+*/
 #define FORCE_ALC_ENABLE		     (1 << 7) /* Force ALC Enable */
 #define FORCE_ALC_WORD(x)		     (((x) & 0x7F) << 0) /* Force ALC Word<6:0> */
 
 /*
- *	REG_TX_FORCE_VCO_TUNE_1
- */
+*	REG_TX_FORCE_VCO_TUNE_1
+*/
 #define BYPASS_LOAD_DELAY		     (1 << 7) /* Bypass Load Delay */
 #define FORCE_VCO_TUNE_ENABLE		     (1 << 1) /* Force VCO Tune Enable */
 #define FORCE_VCO_TUNE			     (1 << 0) /* Force VCO Tune */
 #define VCO_CAL_OFFSET(x)		     (((x) & 0xF) << 3) /* VCO Cal Offset<3:0> */
 
 /*
- *	REG_TX_ALCVARACT_OR
- */
+*	REG_TX_ALCVARACT_OR
+*/
 #define INIT_ALC_VALUE(x)		     (((x) & 0xF) << 4) /* Init ALC Value<3:0> */
 #define VCO_VARACTOR(x)			     (((x) & 0xF) << 0) /* VCO Varactor<3:0> */
 
 /*
- *	REG_TX_VCO_OUTPUT
- */
+*	REG_TX_VCO_OUTPUT
+*/
 #define PORB_VCO_LOGIC			     (1 << 6) /* PORb VCO Logic */
 #define VCO_OUTPUT_LEVEL(x)		     (((x) & 0xF) << 0) /* VCO Output Level<3:0> */
 
 /*
- *	REG_TX_CP_CURRENT
- */
+*	REG_TX_CP_CURRENT
+*/
 #define TX_CP_CURRENT_DFLT		     (1 << 7) /* Set to 1 */
 #define VTUNE_FORCE			     (1 << 6) /* Vtune Force */
 #define CHARGE_PUMP_CURRENT(x)		     (((x) & 0x3F) << 0) /* Charge Pump Current<5:0> */
 
 /*
- *	REG_TX_CP_OFFSET
- */
+*	REG_TX_CP_OFFSET
+*/
 #define SYNTH_RECAL			     (1 << 7) /* Synth Re-Cal */
 #define CHARGE_PUMP_OFFSET(x)		     (((x) & 0x3F) << 0) /* Charge Pump Offset<5:0> */
 
 /*
- *	REG_TX_CP_CONFIG
- */
+*	REG_TX_CP_CONFIG
+*/
 #define HALF_VCO_CAL_CLK		     (1 << 7) /* Half Vco Cal Clk */
 #define DITHER_MODE			     (1 << 6) /* Dither Mode */
 #define CP_OFFSET_OFF			     (1 << 4) /* Cp Offset Off */
@@ -2486,20 +2489,20 @@
 #define CP_TEST(x)			     (((x) & 0x3) << 0) /* Cp Test <1:0> */
 
 /*
- *	REG_TX_LOOP_FILTER_1
- */
+*	REG_TX_LOOP_FILTER_1
+*/
 #define LOOP_FILTER_C2(x)		     (((x) & 0xF) << 4) /* Loop Filter C2<3:0> */
 #define LOOP_FILTER_C1(x)		     (((x) & 0xF) << 0) /* Loop Filter C1<3:0> */
 
 /*
- *	REG_TX_LOOP_FILTER_2
- */
+*	REG_TX_LOOP_FILTER_2
+*/
 #define LOOP_FILTER_R1(x)		     (((x) & 0xF) << 4) /* Loop Filter R1<3:0> */
 #define LOOP_FILTER_C3(x)		     (((x) & 0xF) << 0) /* Loop Filter C3<3:0> */
 
 /*
- *	REG_TX_LOOP_FILTER_3
- */
+*	REG_TX_LOOP_FILTER_3
+*/
 #define LOOP_FILTER_BYPASS_R3		     (1 << 7) /* Loop Filter Bypass R3 */
 #define LOOP_FILTER_BYPASS_R1		     (1 << 6) /* Loop Filter Bypass R1 */
 #define LOOP_FILTER_BYPASS_C2		     (1 << 5) /* Loop Filter Bypass C2 */
@@ -2507,21 +2510,21 @@
 #define LOOP_FILTER_R3(x)		     (((x) & 0xF) << 0) /* Loop Filter R3<3:0> */
 
 /*
- *	REG_TX_DITHERCP_CAL
- */
+*	REG_TX_DITHERCP_CAL
+*/
 #define NUMBER_SDM_DITHER_BITS(x)	     (((x) & 0xF) << 4) /* Number SDM Dither Bits<3:0> */
 #define FORCED_CP_CAL_WORD(x)		     (((x) & 0xF) << 0) /* Forced CP Cal Word<3:0> */
 
 /*
- *	REG_TX_VCO_BIAS_1
- */
+*	REG_TX_VCO_BIAS_1
+*/
 #define MUST_BE_ZEROS(x)		     (((x) & 0x3) << 5) /* Must be zeros */
 #define VCO_BIAS_TCF(x)			     (((x) & 0x3) << 3) /* VCO Bias Tcf<1:0> */
 #define VCO_BIAS_REF(x)			     (((x) & 0x7) << 0) /* VCO Bias Ref<2:0> */
 
 /*
- *	REG_TX_VCO_BIAS_2
- */
+*	REG_TX_VCO_BIAS_2
+*/
 #define VCO_BYPASS_BIAS_DAC_R		     (1 << 7) /* VCO Bypass Bias DAC R */
 #define VCO_COMP_BYPASS_BIAS_R		     (1 << 4) /* VCO Comp Bypass Bias R */
 #define BYPASS_PRESCALE_R		     (1 << 3) /* Bypass Prescale R */
@@ -2529,8 +2532,8 @@
 #define PRESCALE_BIAS(x)		     (((x) & 0x3) << 0) /* Prescale Bias <1:0> */
 
 /*
- *	REG_TX_CAL_STATUS
- */
+*	REG_TX_CAL_STATUS
+*/
 #define CP_CAL_VALID			     (1 << 7) /* CP Cal Valid */
 #define COMP_OUT			     (1 << 6) /* Comp Out */
 #define CP_CAL_DONE			     (1 << 5) /* CP Cal Done */
@@ -2538,123 +2541,123 @@
 #define CP_CAL_WORD(x)			     (((x) & 0xF) << 0) /* CP Cal Word<3:0> */
 
 /*
- *	REG_TX_VCO_CAL_REF
- */
+*	REG_TX_VCO_CAL_REF
+*/
 #define VCO_CAL_REF_MONITOR		     (1 << 3) /* VCO Cal Ref Monitor */
 #define VCO_CAL_REF_TCF(x)		     (((x) & 0x7) << 0) /* VCO Cal Ref Tcf<2:0> */
 
 /*
- *	REG_TX_VCO_PD_OVERRIDES
- */
+*	REG_TX_VCO_PD_OVERRIDES
+*/
 #define POWER_DOWN_VARACTOR_REF		     (1 << 3) /* Power Down Varactor Ref */
 #define POWER_DOWN_VARACT_REF_TCF	     (1 << 2) /* Power Down Varact Ref Tcf */
 #define POWER_DOWN_CAL_TCF		     (1 << 1) /* Power Down Cal Tcf */
 #define POWER_DOWN_VCO_BUFFFER		     (1 << 0) /* Power Down VCO Bufffer */
 
 /*
- * REG_TX_CP_OVERRANGE_VCO_LOCK
- */
+* REG_TX_CP_OVERRANGE_VCO_LOCK
+*/
 #define CP_OVRG_HIGH			     (1 << 7) /* CP Ovrg High */
 #define CP_OVRG_LOW			     (1 << 6) /* CP Ovrg Low */
-#define VCO_LOCK				(1 << 1) /* Lock */
+#define VCO_LOCK				     (1 << 1) /* Lock */
 
 /*
- *	REG_TX_VCO_LDO
- */
+*	REG_TX_VCO_LDO
+*/
 #define VCO_LDO_BYPASS			     (1 << 7) /* VCO LDO Bypass */
 #define VCO_LDO_INRUSH(x)		     (((x) & 0x3) << 5) /* VCO LDO Inrush<1:0> */
 #define VCO_LDO_VOUT_SEL(x)		     (((x) & 0x7) << 2) /* VCO LDO Vout Sel<2:0> */
 #define VCO_LDO_VDROP_SEL(x)		     (((x) & 0x3) << 0) /* VCO LDO Vdrop Sel<1:0> */
 
 /*
- *	REG_TX_VCO_CAL
- */
+*	REG_TX_VCO_CAL
+*/
 #define VCO_CAL_EN			     (1 << 7) /* VCO Cal En */
 #define VCO_CAL_ALC_WAIT(x)		     (((x) & 0x7) << 4) /* VCO Cal ALC Wait<2:0) */
 #define VCO_CAL_COUNT(x)			     (((x) & 0x3) << 2) /* VCO Cal Count<1:0> */
 #define FB_CLOCK_ADV(x)			     (((x) & 0x3) << 0) /* FB Clock Adv<1:0> */
 
 /*
- *	REG_TX_LOCK_DETECT_CONFIG
- */
+*	REG_TX_LOCK_DETECT_CONFIG
+*/
 #define LOCK_DETECT_COUNT(x)		     (((x) & 0x3) << 2) /* Lock Detect Count<1:0> */
 #define LOCK_DETECT_MODE(x)		     (((x) & 0x3) << 0) /* Lock Detect Mode<1:0> */
 
 /*
- *	REG_TX_CP_LEVEL_DETECT
- */
+*	REG_TX_CP_LEVEL_DETECT
+*/
 #define CP_LEVEL_DETECT_POWER_DOWN	     (1 << 6) /* CP Level Detect Power Down */
 #define CP_LEVEL_DETECT_THRESH_LOW(x)	     (((x) & 0x7) << 3) /* CP Level Detect Threshold Low<2:0> */
 #define CP_LEVEL_DETECT_THRESH_HIGH(x)	     (((x) & 0x7) << 0) /* CP Level Detect Threshold High<2:0> */
 
 /*
- *	REG_TX_DSM_SETUP_0
- */
+*	REG_TX_DSM_SETUP_0
+*/
 #define DSM_PROG(x)			     (((x) & 0xF) << 0) /* DSM Prog<3:0> */
 
 /*
- *	REG_TX_DSM_SETUP_1
- */
+*	REG_TX_DSM_SETUP_1
+*/
 #define SIF_CLOCK			     (1 << 6) /* SIF clock */
 #define SIF_RESET_BAR			     (1 << 5) /* SIF Reset Bar */
 #define SIF_ADDR(x)			     (((x) & 0x1F) << 0) /* SIF Addr<4:0> */
 
 /*
- *	REG_TX_CORRECTION_WORD0
- */
+*	REG_TX_CORRECTION_WORD0
+*/
 #define UPDATE_FREQ_WORD				(1 << 7) /* Update Freq Word */
 #define READ_EFFECTIVE_TUNING_WORD		(1 << 5) /* Read Effective Tuning Word */
 #define FREQ_CORRECTION_WORD_MSB(x)		(((x) & 0x1F) << 0) /* Frequency Correction Word<11:7> */
 
 /*
- *	REG_TX_CORRECTION_WORD1
- */
+*	REG_TX_CORRECTION_WORD1
+*/
 #define UPDATE_FREQ_WORD				(1 << 7) /* Update Freq Word */
 #define FREQ_CORRECTION_WORD_LSB(x)		(((x) & 0x7F) << 0) /* Frequency Correction Word<6:0> */
 
 /*
- *	REG_TX_VCO_VARACTOR_CTRL_0
- */
+*	REG_TX_VCO_VARACTOR_CTRL_0
+*/
 #define VCO_VARACTOR_REFERENCE_TCF(x)	     (((x) & 0x7) << 4) /* VCO Varactor Reference Tcf<2:0> */
 #define VCO_VARACTOR_OFFSET(x)		     (((x) & 0xF) << 0) /* VCO Varactor Offset<3:0> */
 
 /*
- *	REG_TX_VCO_VARACTOR_CTRL_1
- */
+*	REG_TX_VCO_VARACTOR_CTRL_1
+*/
 #define VCO_VARACTOR_REFERENCE(x)	     (((x) & 0xF) << 0) /* VCO Varactor Reference<3:0> */
 
 /*
- *	REG_DCXO_COARSE_TUNE
- */
+*	REG_DCXO_COARSE_TUNE
+*/
 #define DCXO_TUNE_COARSE(x)		     (((x) & 0x3F) << 0) /* DCXO Tune Coarse<5:0> */
 
 /*
- *	REG_DCXO_FINE_TUNE_LOW
- */
+*	REG_DCXO_FINE_TUNE_LOW
+*/
 #define DCXO_TUNE_FINE_LOW(x)		     (((x) & 0x1F) << 3) /* DCXO Tune Fine<4:0> */
 
 /*
- *	REG_DCXO_FINE_TUNE_HIGH
- */
+*	REG_DCXO_FINE_TUNE_HIGH
+*/
 #define DCXO_TUNE_FINE_HIGH(x)		     ((x) >> 5) /* DCXO Tune Fine<12:5> */
 
 /*
- *	REG_DCXO_CONFIG
- */
+*	REG_DCXO_CONFIG
+*/
 #define MUST_BE_ZERO			     (1 << 7) /* Must be zero */
 #define DCXO_RTAIL(x)			     (((x) & 0x7) << 4) /* DCXO Rtail<2:0> */
 #define DCXO_RD(x)			     (((x) & 0x3) << 2) /* DCXO Rd<1:0> */
 
 /*
- *	REG_DCXO_TEMPCO_ADDR
- */
+*	REG_DCXO_TEMPCO_ADDR
+*/
 #define DCXO_TEMPCO_EN			     (1 << 7) /* DCXO Tempco En */
 #define DCXO_TEMPCO_CLK			     (1 << 6) /* DCXO Tempco Clk */
 #define DCXO_TEMPERATURE_COEF_ADDRESS(x)     (((x) & 0x3F) << 0) /* DCXO Temperature Coefficient Address<5:0> */
 
 /*
- *	REG_TX_FAST_LOCK_SETUP
- */
+*	REG_TX_FAST_LOCK_SETUP
+*/
 #define TX_FAST_LOCK_LOAD_SYNTH		     (1 << 3) /* Tx Fast Lock Load Synth */
 #define TX_FAST_LOCK_PROFILE_INIT	     (1 << 2) /* Tx Fast Lock Profile Init */
 #define TX_FAST_LOCK_PROFILE_PIN_SELECT	     (1 << 1) /* Tx Fast Lock Profile Pin Select */
@@ -2662,42 +2665,42 @@
 #define TX_FAST_LOCK_PROFILE(x)		     (((x) & 0x7) << 5) /* Tx Fast Lock Profile<2:0> */
 
 /*
- *	REG_TX_FAST_LOCK_PROGRAM_CTRL
- */
+*	REG_TX_FAST_LOCK_PROGRAM_CTRL
+*/
 #define TX_FAST_LOCK_PROGRAM_WRITE	     (1 << 1) /* Tx Fast Lock Program Write */
 #define TX_FAST_LOCK_PROGRAM_CLOCK_ENABLE     (1 << 0) /* Tx Fast Lock Program Clock Enable */
 
 /*
- *	REG_TX_LO_GEN_POWER_MODE
- */
+*	REG_TX_LO_GEN_POWER_MODE
+*/
 #define TX_LO_GEN_POWER_MODE(x)		     (((x) & 0xF) << 4) /* Power Mode<3:0> */
 
 /*
- *	REG_BANDGAP_CONFIG0
- */
+*	REG_BANDGAP_CONFIG0
+*/
 #define POWER_DOWN_BANDGAP_REF		     (1 << 7) /* Power Down Bandgap Ref */
 #define MASTER_BIAS_FILTER_BYPASS	     (1 << 6) /* Master Bias Filter Bypass */
 #define MASTER_BIAS_REF_SEL		     (1 << 5) /* Master Bias Ref Sel */
 #define MASTER_BIAS_TRIM(x)		     (((x) & 0x1F) << 0) /* Master Bias Trim<4:0> */
 
 /*
- *	REG_BANDGAP_CONFIG1
- */
+*	REG_BANDGAP_CONFIG1
+*/
 #define VCO_LDO_FILTER_BYPASS		     (1 << 7) /* VCO LDO Filter Bypass */
 #define VCO_LDO_REF_SEL			     (1 << 6) /* VCO LDO Ref Sel */
 #define BANDGAP_REF_RESET		     (1 << 5) /* Bandgap Ref Reset */
 #define BANDGAP_TEMP_TRIM(x)		     (((x) & 0x1F) << 0) /* Bandgap Temp Trim<4:0> */
 
 /*
- *	REG_REF_DIVIDE_CONFIG_1
- */
+*	REG_REF_DIVIDE_CONFIG_1
+*/
 #define REF_DIVIDE_CONFIG_1_DFLT		     (1 << 2) /* Set to 1 */
 #define RX_REF_RESET_BAR		     	     (1 << 1) /* Rx Ref Reset Bar */
 #define RX_REF_DIVIDER_MSB		     (1 << 0) /* Rx Ref Divider<1> */
 
 /*
- *	REG_REF_DIVIDE_CONFIG_2
- */
+*	REG_REF_DIVIDE_CONFIG_2
+*/
 #define RX_REF_DIVIDER_LSB		     (1 << 7) /* Rx Ref Divider< 0> */
 #define TX_REF_RESET_BAR			     (1 << 4) /* Tx Ref Reset Bar */
 #define RX_REF_DOUBLER_FB_DELAY(x)	     (((x) & 0x3) << 5) /* Rx Ref Doubler FB Delay<1:0> */
@@ -2705,23 +2708,23 @@
 #define TX_REF_DOUBLER_FB_DELAY(x)	     (((x) & 0x3) << 0) /* Tx Ref Doubler FB Delay<1:0> */
 
 /*
- *	REG_GAIN_RX1,2
- */
+*	REG_GAIN_RX1,2
+*/
 #define FULL_TABLE_GAIN_INDEX(x)		     (((x) & 0x7F) << 0) /* Full Table Gain Index Rx1/LMT Gain Rx1<6:0> */
 
 /*
- *	REG_LPF_GAIN_RX1,2
- */
+*	REG_LPF_GAIN_RX1,2
+*/
 #define LPF_GAIN_RX(x)			     (((x) & 0x1F) << 0) /* LPF gain Rx1<4:0> */
 
 /*
- *	REG_DIG_GAIN_RX1,2
- */
+*	REG_DIG_GAIN_RX1,2
+*/
 #define DIGITAL_GAIN_RX(x)		     (((x) & 0x1F) << 0) /* Digital gain Rx1<4:0> */
 
 /*
- *	REG_FAST_ATTACK_STATE
- */
+*	REG_FAST_ATTACK_STATE
+*/
 #define FAST_ATTACK_STATE_RX2(x)	     	     (((x) & 0x7) << 4) /* Fast Attack State Rx2<2:0> */
 #define FAST_ATTACK_STATE_RX1(x)	     	     (((x) & 0x7) << 0) /* Fast Attack State Rx1<2:0> */
 #define FAST_ATK_MASK			     0x7
@@ -2735,15 +2738,15 @@
 #define FAST_ATK_GAIN_LOCKED		     5
 
 /*
- *	REG_SLOW_LOOP_STATE
- */
+*	REG_SLOW_LOOP_STATE
+*/
 #define SLOW_LOOP_STATE_RX2(x)		     (((x) & 0x7) << 4) /* Slow Loop State Rx2<2:0> */
 #define SLOW_LOOP_STATE_RX1(x)		     (((x) & 0x7) << 0) /* Slow Loop State Rx1<2:0> */
 
 
 /*
- *	REG_OVRG_SIGS_RX1,2
- */
+*	REG_OVRG_SIGS_RX1,2
+*/
 #define GAIN_LOCK_1			     (1 << 6) /* Gain Lock 1 */
 #define LOW_POWER_1			     (1 << 5) /* Low Power 1 */
 #define LARGE_LMT_OL			     (1 << 4) /* Large LMT OL */
@@ -2752,13 +2755,13 @@
 #define SMALL_ADC_OL			     (1 << 1) /* Small ADC OL */
 #define DIG_SAT				     (1 << 0) /* Dig Sat */
 /*
- *	REG_CTRL
- */
+*	REG_CTRL
+*/
 #define CTRL_ENABLE		     	     (1 << 0) /* Set to 1 */
 
 /*
- *	REG_BIST_CONFIG
- */
+*	REG_BIST_CONFIG
+*/
 #define TONE_PRBS			     (1 << 1) /* Tone/ PRBS */
 #define BIST_ENABLE			     (1 << 0) /* BIST Enable */
 #define TONE_FREQ(x)			     (((x) & 0x3) << 6) /* Tone Frequency<1:0> */
@@ -2766,8 +2769,8 @@
 #define BIST_CTRL_POINT(x)		     (((x) & 0x3) << 2) /* BIST Control Point <1:0> */
 
 /*
- *	REG_OBSERVE_CONFIG
- */
+*	REG_OBSERVE_CONFIG
+*/
 #define DATA_PORT_SP_HD_LOOP_TEST_OE	     (1 << 7) /* Data Port SP, HD Loop Test OE */
 #define RX_MASK				     (1 << 6) /* Rx Mask */
 #define CHANNEL				     (1 << 5) /* Channel */
@@ -2775,8 +2778,8 @@
 #define OBSERVATION_POINT(x)		     (((x) & 0xF) << 1) /* Observation Point<2:0> */
 
 /*
- *	REG_BIST_AND_DATA_PORT_TEST_CONFIG
- */
+*	REG_BIST_AND_DATA_PORT_TEST_CONFIG
+*/
 #define BIST_MASK_CHANNEL_2_Q_DATA	     (1 << 5) /* BIST Mask Channel 2 Q data */
 #define BIST_MASK_CHANNEL_2_I_DATA	     (1 << 4) /* BIST Mask Channel 2 I data */
 #define BIST_MASK_CHANNEL_1_Q_DATA	     (1 << 3) /* BIST Mask Channel 1 Q data */
@@ -2786,14 +2789,14 @@
 #define TEMP_SENSE_VBE_TEST(x)		     (((x) & 0x3) << 6) /* Temp Sense Vbe Test<1:0> */
 
 /*
- *	REG_DAC_TEST_2
- */
+*	REG_DAC_TEST_2
+*/
 #define DAC_TEST_ENABLE			     (1 << 7) /* DAC Test Enable */
 #define DAC_TEST_WORD(x)		     (((x) & 0x7F) << 0) /* DAC test Word <22:16> */
 
 /*
- *	SPI Comm Helpers
- */
+*	SPI Comm Helpers
+*/
 #define AD_READ		(0 << 15)
 #define AD_WRITE		(1 << 15)
 #define AD_CNT(x)	((((x) - 1) & 0x7) << 12)
@@ -2801,8 +2804,8 @@
 
 
 /*
- *	AD9361 Limits
- */
+*	AD9361 Limits
+*/
 
 #define RSSI_MULTIPLIER			100
 #define RSSI_RESOLUTION			((int) (0.25 * RSSI_MULTIPLIER))
@@ -2817,8 +2820,8 @@
 #define MAX_BBPLL_DIV			64
 #define MIN_BBPLL_DIV			2
 
-#define MIN_ADC_CLK			10500000UL /* 10.5MHz */
-#define MAX_ADC_CLK			672000000UL /* 672 MHz */
+#define MIN_ADC_CLK			(MIN_BBPLL_FREQ / MAX_BBPLL_DIV) /* 11.17MHz */
+#define MAX_ADC_CLK			640000000UL /* 640 MHz */
 #define MAX_DAC_CLK			(MAX_ADC_CLK / 2)
 
 #define MAX_MBYTE_SPI			8
@@ -2831,8 +2834,8 @@
 #define MIN_CARRIER_FREQ_HZ		47000000ULL
 
 /*
- *	Driver
- */
+*	Driver
+*/
 
 
 
@@ -2859,8 +2862,8 @@ enum fir_dest {
 };
 
 struct rf_gain_ctrl {
-	u32 ant;
-	u8 mode;
+	uint32_t ant;
+	uint8_t mode;
 };
 
 enum rf_gain_ctrl_mode {
@@ -2882,99 +2885,100 @@ struct gain_control {
 	enum rf_gain_ctrl_mode rx2_mode;
 
 	/* Common */
-	u8 adc_ovr_sample_size; /* 1..8 Sum x samples, AGC_CONFIG_3 */
-	u8 adc_small_overload_thresh; /* 0..255, 0x105 */
-	u8 adc_large_overload_thresh; /* 0..255, 0x104 */
+	uint8_t adc_ovr_sample_size; /* 1..8 Sum x samples, AGC_CONFIG_3 */
+	uint8_t adc_small_overload_thresh; /* 0..255, 0x105 */
+	uint8_t adc_large_overload_thresh; /* 0..255, 0x104 */
 
-	u16 lmt_overload_high_thresh; /* 16..800 mV, 0x107 */
-	u16 lmt_overload_low_thresh; /* 16..800 mV, 0x108 */
-	u16 dec_pow_measuremnt_duration; /* Samples, 0x15C */
-	u8 low_power_thresh; /* -64..0 dBFS, 0x114 */
+	uint16_t lmt_overload_high_thresh; /* 16..800 mV, 0x107 */
+	uint16_t lmt_overload_low_thresh; /* 16..800 mV, 0x108 */
+	uint16_t dec_pow_measuremnt_duration; /* Samples, 0x15C */
+	uint8_t low_power_thresh; /* -64..0 dBFS, 0x114 */
 
 	bool dig_gain_en; /* should be turned off, since ADI GT doesn't use dig gain */
-	u8 max_dig_gain; /* 0..31 */
+	uint8_t max_dig_gain; /* 0..31 */
 
 	/* MGC */
 	bool mgc_rx1_ctrl_inp_en; /* Enables Pin control on RX1 default SPI ctrl */
 	bool mgc_rx2_ctrl_inp_en; /* Enables Pin control on RX2 default SPI ctrl */
 
-	u8 mgc_inc_gain_step; /* 1..8 */
-	u8 mgc_dec_gain_step; /* 1..8 */
-	u8 mgc_split_table_ctrl_inp_gain_mode; /* 0=AGC determine this, 1=only in LPF, 2=only in LMT */
+	uint8_t mgc_inc_gain_step; /* 1..8 */
+	uint8_t mgc_dec_gain_step; /* 1..8 */
+	uint8_t mgc_split_table_ctrl_inp_gain_mode; /* 0=AGC determine this, 1=only in LPF, 2=only in LMT */
 
 	/* AGC */
-	u8 agc_attack_delay_extra_margin_us; /* 0..31 us */
+	uint8_t agc_attack_delay_extra_margin_us; /* 0..31 us */
 
-	u8 agc_outer_thresh_high;
-	u8 agc_outer_thresh_high_dec_steps;
-	u8 agc_inner_thresh_high;
-	u8 agc_inner_thresh_high_dec_steps;
-	u8 agc_inner_thresh_low;
-	u8 agc_inner_thresh_low_inc_steps;
-	u8 agc_outer_thresh_low;
-	u8 agc_outer_thresh_low_inc_steps;
+	uint8_t agc_outer_thresh_high;
+	uint8_t agc_outer_thresh_high_dec_steps;
+	uint8_t agc_inner_thresh_high;
+	uint8_t agc_inner_thresh_high_dec_steps;
+	uint8_t agc_inner_thresh_low;
+	uint8_t agc_inner_thresh_low_inc_steps;
+	uint8_t agc_outer_thresh_low;
+	uint8_t agc_outer_thresh_low_inc_steps;
 
-	u8 adc_small_overload_exceed_counter; /* 0..15, 0x122 */
-	u8 adc_large_overload_exceed_counter; /* 0..15, 0x122 */
-	u8 adc_large_overload_inc_steps; /* 0..15, 0x106 */
+	uint8_t adc_small_overload_exceed_counter; /* 0..15, 0x122 */
+	uint8_t adc_large_overload_exceed_counter; /* 0..15, 0x122 */
+	uint8_t adc_large_overload_inc_steps; /* 0..15, 0x106 */
 
 	bool adc_lmt_small_overload_prevent_gain_inc; /* 0x120 */
 
-	u8 lmt_overload_large_exceed_counter; /* 0..15, 0x121 */
-	u8 lmt_overload_small_exceed_counter; /* 0..15, 0x121 */
-	u8 lmt_overload_large_inc_steps; /* 0..7, 0x121 */
+	uint8_t lmt_overload_large_exceed_counter; /* 0..15, 0x121 */
+	uint8_t lmt_overload_small_exceed_counter; /* 0..15, 0x121 */
+	uint8_t lmt_overload_large_inc_steps; /* 0..7, 0x121 */
 
-	u8 dig_saturation_exceed_counter; /* 0..15, 0x128 */
-	u8 dig_gain_step_size; /* 1..8, 0x100 */
+	uint8_t dig_saturation_exceed_counter; /* 0..15, 0x128 */
+	uint8_t dig_gain_step_size; /* 1..8, 0x100 */
 	bool sync_for_gain_counter_en; /* 0x128:4 !Hybrid */
 
-	u32 gain_update_interval_us; /* in us */
+	uint32_t gain_update_interval_us; /* in us */
 	bool immed_gain_change_if_large_adc_overload; /* 0x123:3 */
 	bool immed_gain_change_if_large_lmt_overload; /* 0x123:7 */
 
 	/*
-	 * Fast AGC
-	 */
-	u32 f_agc_dec_pow_measuremnt_duration;  /* Samples, 0x15C */
-	u32 f_agc_state_wait_time_ns; /* 0x117 0..31 RX samples -> time_ns */
+	* Fast AGC
+	*/
+	uint32_t f_agc_dec_pow_measuremnt_duration;  /* Samples, 0x15C */
+	uint32_t f_agc_state_wait_time_ns; /* 0x117 0..31 RX samples -> time_ns */
 	/* Fast AGC - Low Power */
 	bool f_agc_allow_agc_gain_increase; /* 0x110:1 */
-	u8 f_agc_lp_thresh_increment_time; /* 0x11B RX samples */
-	u8 f_agc_lp_thresh_increment_steps; /* 0x117 1..8 */
+	uint8_t f_agc_lp_thresh_increment_time; /* 0x11B RX samples */
+	uint8_t f_agc_lp_thresh_increment_steps; /* 0x117 1..8 */
 
 	/* Fast AGC - Lock Level */
-	u8 f_agc_lock_level; /* 0x101 0..-127 dBFS */
+	uint8_t f_agc_lock_level; /* 0x101 0..-127 dBFS */
 	bool f_agc_lock_level_lmt_gain_increase_en; /* 0x111:6 */
-	u8 f_agc_lock_level_gain_increase_upper_limit; /* 0x118 0..63 */
+	uint8_t f_agc_lock_level_gain_increase_upper_limit; /* 0x118 0..63 */
 	/* Fast AGC - Peak Detectors and Final Settling */
-	u8 f_agc_lpf_final_settling_steps; /* 0x112:6 0..3 (Post Lock Level Step)*/
-	u8 f_agc_lmt_final_settling_steps; /* 0x113:6 0..3 (Post Lock Level Step)*/
-	u8 f_agc_final_overrange_count; /* 0x116:5 0..7 */
+	uint8_t f_agc_lpf_final_settling_steps; /* 0x112:6 0..3 (Post Lock Level Step)*/
+	uint8_t f_agc_lmt_final_settling_steps; /* 0x113:6 0..3 (Post Lock Level Step)*/
+	uint8_t f_agc_final_overrange_count; /* 0x116:5 0..7 */
 	/* Fast AGC - Final Power Test */
 	bool f_agc_gain_increase_after_gain_lock_en; /* 0x110:7  */
 	/* Fast AGC - Unlocking the Gain */
 	/* 0 = MAX Gain, 1 = Set Gain, 2 = Optimized Gain */
 	enum f_agc_target_gain_index_type f_agc_gain_index_type_after_exit_rx_mode; /* 0x110:[4,2]  */
 	bool f_agc_use_last_lock_level_for_set_gain_en; /* 0x111:7 */
-	u8 f_agc_optimized_gain_offset;	/*0x116 0..15 steps */
+	uint8_t f_agc_optimized_gain_offset;	/*0x116 0..15 steps */
 	bool f_agc_rst_gla_stronger_sig_thresh_exceeded_en; /* 0x110:~6 */
-	u8 f_agc_rst_gla_stronger_sig_thresh_above_ll;	/*0x113 0..63 dbFS */
+	uint8_t f_agc_rst_gla_stronger_sig_thresh_above_ll;	/*0x113 0..63 dbFS */
 	bool f_agc_rst_gla_engergy_lost_sig_thresh_exceeded_en; /* 0x110:6 */
 	bool f_agc_rst_gla_engergy_lost_goto_optim_gain_en; /* 0x110:6 */
-	u8 f_agc_rst_gla_engergy_lost_sig_thresh_below_ll; /* 0x112:6 */
-	u8 f_agc_energy_lost_stronger_sig_gain_lock_exit_cnt; /* 0x119 0..63 RX samples */
+	uint8_t f_agc_rst_gla_engergy_lost_sig_thresh_below_ll; /* 0x112:6 */
+	uint8_t f_agc_energy_lost_stronger_sig_gain_lock_exit_cnt; /* 0x119 0..63 RX samples */
 	bool f_agc_rst_gla_large_adc_overload_en; /*0x110:~1 and 0x114:~7 */
 	bool f_agc_rst_gla_large_lmt_overload_en; /*0x110:~1 */
 	bool f_agc_rst_gla_en_agc_pulled_high_en;
 	/* 0 = Max Gain, 1 = Set Gain, 2 = Optimized Gain, 3 = No Gain Change */
 
 	enum f_agc_target_gain_index_type f_agc_rst_gla_if_en_agc_pulled_high_mode; /* 0x0FB, 0x111 */
-	u8 f_agc_power_measurement_duration_in_state5; /* 0x109, 0x10a RX samples 0..524288*/
+	uint8_t f_agc_power_measurement_duration_in_state5; /* 0x109, 0x10a RX samples 0..524288*/
+
 };
 
 struct auxdac_control {
-	u16 dac1_default_value;
-	u16 dac2_default_value;
+	uint16_t dac1_default_value;
+	uint16_t dac2_default_value;
 
 	bool auxdac_manual_mode_en;
 
@@ -2986,10 +2990,10 @@ struct auxdac_control {
 	bool dac2_in_tx_en;
 	bool dac2_in_alert_en;
 
-	u8 dac1_rx_delay_us;
-	u8 dac1_tx_delay_us;
-	u8 dac2_rx_delay_us;
-	u8 dac2_tx_delay_us;
+	uint8_t dac1_rx_delay_us;
+	uint8_t dac1_tx_delay_us;
+	uint8_t dac2_rx_delay_us;
+	uint8_t dac2_tx_delay_us;
 };
 
 enum rssi_restart_mode {
@@ -3004,49 +3008,49 @@ enum rssi_restart_mode {
 struct rssi_control {
 	enum rssi_restart_mode restart_mode;
 	bool rssi_unit_is_rx_samples;	/* default unit is time */
-	u32 rssi_delay;
-	u32 rssi_wait;
-	u32 rssi_duration;
+	uint32_t rssi_delay;
+	uint32_t rssi_wait;
+	uint32_t rssi_duration;
 };
 
 struct rx_gain_info {
 	enum rx_gain_table_type tbl_type;
-	int starting_gain_db;
-	int max_gain_db;
-	int gain_step_db;
-	int max_idx;
-	int idx_step_offset;
+	int32_t starting_gain_db;
+	int32_t max_gain_db;
+	int32_t gain_step_db;
+	int32_t max_idx;
+	int32_t idx_step_offset;
 };
 
 struct port_control {
-	u8			pp_conf[3];
-	u8			rx_clk_data_delay;
-	u8			tx_clk_data_delay;
-	u8			digital_io_ctrl;
-	u8			lvds_bias_ctrl;
-	u8			lvds_invert[2];
+	uint8_t			pp_conf[3];
+	uint8_t			rx_clk_data_delay;
+	uint8_t			tx_clk_data_delay;
+	uint8_t			digital_io_ctrl;
+	uint8_t			lvds_bias_ctrl;
+	uint8_t			lvds_invert[2];
 };
 
 struct ctrl_outs_control {
-	u8			index;
-	u8			en_mask;
+	uint8_t			index;
+	uint8_t			en_mask;
 };
 
 struct elna_control {
-	u16			gain_mdB;
-	u16			bypass_loss_mdB;
-	u32			settling_delay_ns;
+	uint16_t			gain_mdB;
+	uint16_t			bypass_loss_mdB;
+	uint32_t			settling_delay_ns;
 	bool			elna_1_control_en; /* GPO0 */
 	bool			elna_2_control_en; /* GPO1 */
 };
 
 struct auxadc_control {
-	s8			offset;
-	u32			temp_time_inteval_ms;
-	u32			temp_sensor_decimation;
+	int8_t			offset;
+	uint32_t			temp_time_inteval_ms;
+	uint32_t			temp_sensor_decimation;
 	bool			periodic_temp_measuremnt;
-	u32			auxadc_clock_rate;
-	u32			auxadc_decimation;
+	uint32_t			auxadc_clock_rate;
+	uint32_t			auxadc_decimation;
 };
 
 enum ad9361_pdata_rx_freq {
@@ -3092,27 +3096,28 @@ struct ad9361_phy_platform_data {
 	bool			tdd_skip_vco_cal;
 	bool			use_ext_rx_lo;
 	bool			use_ext_tx_lo;
-	u8				dc_offset_update_events;
-	u8				dc_offset_attenuation_high;
-	u8				dc_offset_attenuation_low;
-	u8				rf_dc_offset_count_high;
-	u8				rf_dc_offset_count_low;
-	u32			dcxo_coarse;
-	u32			dcxo_fine;
-	u32			rf_rx_input_sel;
-	u32			rf_tx_output_sel;
-	unsigned long		rx_path_clks[NUM_RX_CLOCKS];
-	unsigned long		tx_path_clks[NUM_TX_CLOCKS];
-	u64			rx_synth_freq;
-	u64			tx_synth_freq;
-	u32			rf_rx_bandwidth_Hz;
-	u32			rf_tx_bandwidth_Hz;
-	int			tx_atten;
+	uint8_t			dc_offset_update_events;
+	uint8_t			dc_offset_attenuation_high;
+	uint8_t			dc_offset_attenuation_low;
+	uint8_t			rf_dc_offset_count_high;
+	uint8_t			rf_dc_offset_count_low;
+	uint32_t			dcxo_coarse;
+	uint32_t			dcxo_fine;
+	uint32_t			rf_rx_input_sel;
+	uint32_t			rf_tx_output_sel;
+	uint32_t		rx_path_clks[NUM_RX_CLOCKS];
+	uint32_t		tx_path_clks[NUM_TX_CLOCKS];
+	uint64_t			rx_synth_freq;
+	uint64_t			tx_synth_freq;
+	uint32_t			rf_rx_bandwidth_Hz;
+	uint32_t			rf_tx_bandwidth_Hz;
+	int32_t			tx_atten;
 	bool			update_tx_gain_via_alert;
-	int 			gpio_resetb;
-	u32			rx_fastlock_delay_ns;
-	u32			tx_fastlock_delay_ns;
+	int32_t 			gpio_resetb;
+	uint32_t			rx_fastlock_delay_ns;
+	uint32_t			tx_fastlock_delay_ns;
 	bool			trx_fastlock_pinctrl_en[2];
+
 	enum ad9361_clkout	ad9361_clkout_mode;
 
 	struct gain_control	gain_ctrl;
@@ -3122,42 +3127,44 @@ struct ad9361_phy_platform_data {
 	struct elna_control	elna_ctrl;
 	struct auxadc_control	auxadc_ctrl;
 	struct auxdac_control	auxdac_ctrl;
+
 };
 
 struct rf_rx_gain {
-	u32 ant;		/* Antenna number to read gain */
-	s32 gain_db;		/* gain value in dB */
-	u32 fgt_lmt_index;	/* Full Gain Table / LNA-MIXER-TIA gain index */
-	u32 lmt_gain;		/* LNA-MIXER-TIA gain in dB (Split GT mode only)*/
-	u32 lpf_gain;		/* Low pass filter gain in dB / index (Split GT mode only)*/
-	u32 digital_gain;	/* Digital gain in dB / index */
+	uint32_t ant;		/* Antenna number to read gain */
+	int32_t gain_db;		/* gain value in dB */
+	uint32_t fgt_lmt_index;	/* Full Gain Table / LNA-MIXER-TIA gain index */
+	uint32_t lmt_gain;		/* LNA-MIXER-TIA gain in dB (Split GT mode only)*/
+	uint32_t lpf_gain;		/* Low pass filter gain in dB / index (Split GT mode only)*/
+	uint32_t digital_gain;	/* Digital gain in dB / index */
 	/* Debug only */
-	u32 lna_index;		/* LNA Index (Split GT mode only) */
-	u32 tia_index;		/* TIA Index (Split GT mode only) */
-	u32 mixer_index;		/* MIXER Index (Split GT mode only) */
+	uint32_t lna_index;		/* LNA Index (Split GT mode only) */
+	uint32_t tia_index;		/* TIA Index (Split GT mode only) */
+	uint32_t mixer_index;		/* MIXER Index (Split GT mode only) */
+
 };
 struct rf_rssi {
-	u32 ant;		/* Antenna number for which RSSI is reported */
-	u32 symbol;		/* Runtime RSSI */
-	u32 preamble;		/* Initial RSSI */
-	s32 multiplier;	/* Multiplier to convert reported RSSI */
-	u8 duration;		/* Duration to be considered for measuring */
+	uint32_t ant;		/* Antenna number for which RSSI is reported */
+	uint32_t symbol;		/* Runtime RSSI */
+	uint32_t preamble;		/* Initial RSSI */
+	int32_t multiplier;	/* Multiplier to convert reported RSSI */
+	uint8_t duration;		/* Duration to be considered for measuring */
 };
 
 struct SynthLUT {
-	u16 VCO_MHz;
-	u8 VCO_Output_Level;
-	u8 VCO_Varactor;
-	u8 VCO_Bias_Ref;
-	u8 VCO_Bias_Tcf;
-	u8 VCO_Cal_Offset;
-	u8 VCO_Varactor_Reference;
-	u8 Charge_Pump_Current;
-	u8 LF_C2;
-	u8 LF_C1;
-	u8 LF_R1;
-	u8 LF_C3;
-	u8 LF_R3;
+	uint16_t VCO_MHz;
+	uint8_t VCO_Output_Level;
+	uint8_t VCO_Varactor;
+	uint8_t VCO_Bias_Ref;
+	uint8_t VCO_Bias_Tcf;
+	uint8_t VCO_Cal_Offset;
+	uint8_t VCO_Varactor_Reference;
+	uint8_t Charge_Pump_Current;
+	uint8_t LF_C2;
+	uint8_t LF_C1;
+	uint8_t LF_R1;
+	uint8_t LF_C3;
+	uint8_t LF_R3;
 };
 
 enum {
@@ -3166,6 +3173,491 @@ enum {
 	LUT_FTDD_80,
 	LUT_FTDD_ENT,
 };
+
+#define SYNTH_LUT_SIZE	53
+
+static const struct SynthLUT SynthLUT_FDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
+	{
+		{ 12605, 10, 0, 4, 0, 15, 8, 8, 12, 3, 14, 15, 11 }, /* 40 MHz */
+		{ 12245, 10, 0, 4, 0, 15, 8, 9, 12, 3, 14, 15, 11 },
+		{ 11906, 10, 0, 4, 0, 15, 8, 9, 12, 3, 14, 15, 11 },
+		{ 11588, 10, 0, 4, 0, 15, 8, 10, 12, 3, 14, 15, 11 },
+		{ 11288, 10, 0, 4, 0, 15, 8, 11, 12, 3, 14, 15, 11 },
+		{ 11007, 10, 0, 4, 0, 15, 8, 11, 12, 3, 14, 15, 11 },
+		{ 10742, 10, 0, 4, 0, 14, 8, 12, 12, 3, 14, 15, 11 },
+		{ 10492, 10, 0, 5, 1, 14, 9, 13, 12, 3, 14, 15, 11 },
+		{ 10258, 10, 0, 5, 1, 14, 9, 13, 12, 3, 14, 15, 11 },
+		{ 10036, 10, 0, 5, 1, 14, 9, 14, 12, 3, 14, 15, 11 },
+		{ 9827, 10, 0, 5, 1, 14, 9, 15, 12, 3, 14, 15, 11 },
+		{ 9631, 10, 0, 5, 1, 14, 9, 15, 12, 3, 14, 15, 11 },
+		{ 9445, 10, 0, 5, 1, 14, 9, 16, 12, 3, 14, 15, 11 },
+		{ 9269, 10, 0, 5, 1, 14, 9, 17, 12, 3, 14, 15, 11 },
+		{ 9103, 10, 0, 5, 1, 14, 9, 17, 12, 3, 14, 15, 11 },
+		{ 8946, 10, 0, 5, 1, 14, 9, 18, 12, 3, 14, 15, 11 },
+		{ 8797, 10, 1, 6, 1, 15, 11, 13, 12, 3, 14, 15, 11 },
+		{ 8655, 10, 1, 6, 1, 15, 11, 14, 12, 3, 14, 15, 11 },
+		{ 8520, 10, 1, 6, 1, 15, 11, 14, 12, 3, 14, 15, 11 },
+		{ 8392, 10, 1, 6, 1, 15, 11, 15, 12, 3, 14, 15, 11 },
+		{ 8269, 10, 1, 6, 1, 15, 11, 15, 12, 3, 14, 15, 11 },
+		{ 8153, 10, 1, 6, 1, 15, 11, 16, 12, 3, 14, 15, 11 },
+		{ 8041, 10, 1, 6, 1, 15, 11, 16, 12, 3, 14, 15, 11 },
+		{ 7934, 10, 1, 6, 1, 15, 11, 17, 12, 3, 14, 15, 11 },
+		{ 7831, 10, 1, 6, 1, 15, 11, 17, 12, 3, 14, 15, 11 },
+		{ 7733, 10, 1, 6, 1, 15, 11, 17, 12, 3, 14, 15, 11 },
+		{ 7638, 10, 1, 6, 1, 15, 11, 18, 12, 3, 14, 15, 11 },
+		{ 7547, 10, 1, 6, 1, 15, 11, 18, 12, 3, 14, 15, 11 },
+		{ 7459, 10, 1, 6, 1, 15, 11, 19, 12, 3, 14, 15, 11 },
+		{ 7374, 10, 1, 7, 2, 15, 12, 19, 12, 3, 14, 15, 11 },
+		{ 7291, 10, 1, 7, 2, 15, 12, 20, 12, 3, 14, 15, 11 },
+		{ 7212, 10, 1, 7, 2, 15, 12, 20, 12, 3, 14, 15, 11 },
+		{ 7135, 10, 1, 7, 2, 15, 14, 21, 12, 3, 14, 15, 11 },
+		{ 7061, 10, 1, 7, 2, 15, 14, 21, 12, 3, 14, 15, 11 },
+		{ 6988, 10, 1, 7, 2, 15, 14, 22, 12, 3, 14, 15, 11 },
+		{ 6918, 10, 1, 7, 2, 15, 14, 22, 12, 3, 14, 15, 11 },
+		{ 6850, 10, 1, 7, 2, 15, 14, 23, 12, 3, 14, 15, 11 },
+		{ 6784, 10, 1, 7, 2, 15, 14, 23, 12, 3, 14, 15, 11 },
+		{ 6720, 10, 1, 7, 2, 15, 14, 24, 12, 3, 14, 15, 11 },
+		{ 6658, 10, 1, 7, 2, 15, 14, 24, 12, 3, 14, 15, 11 },
+		{ 6597, 10, 1, 7, 2, 15, 14, 25, 12, 3, 14, 15, 11 },
+		{ 6539, 10, 1, 7, 2, 15, 14, 25, 12, 3, 14, 15, 11 },
+		{ 6482, 10, 1, 7, 2, 15, 14, 26, 12, 3, 14, 15, 11 },
+		{ 6427, 10, 1, 7, 2, 15, 14, 26, 12, 3, 14, 15, 11 },
+		{ 6373, 10, 3, 7, 3, 15, 12, 17, 12, 3, 14, 15, 11 },
+		{ 6321, 10, 3, 7, 3, 15, 12, 17, 12, 3, 14, 15, 11 },
+		{ 6270, 10, 3, 7, 3, 15, 12, 17, 12, 3, 14, 15, 11 },
+		{ 6222, 10, 3, 7, 3, 15, 12, 18, 12, 3, 14, 15, 11 },
+		{ 6174, 10, 3, 7, 3, 15, 12, 18, 12, 3, 14, 15, 11 },
+		{ 6128, 10, 3, 7, 3, 15, 12, 18, 12, 3, 14, 15, 11 },
+		{ 6083, 10, 3, 7, 3, 15, 12, 18, 12, 3, 14, 15, 11 },
+		{ 6040, 10, 3, 7, 3, 15, 12, 19, 12, 3, 14, 15, 11 },
+		{ 5997, 10, 3, 7, 3, 15, 12, 19, 12, 3, 14, 15, 11 },
+	}, {
+		{ 12605, 10, 0, 4, 0, 15, 8, 10, 15, 4, 13, 15, 10 },  /* 60 MHz */
+		{ 12245, 10, 0, 4, 0, 15, 8, 11, 15, 4, 13, 15, 10 },
+		{ 11906, 10, 0, 4, 0, 15, 8, 11, 15, 4, 13, 15, 10 },
+		{ 11588, 10, 0, 4, 0, 15, 8, 12, 15, 4, 13, 15, 10 },
+		{ 11288, 10, 0, 4, 0, 15, 8, 13, 15, 4, 13, 15, 10 },
+		{ 11007, 10, 0, 4, 0, 14, 8, 14, 15, 4, 13, 15, 10 },
+		{ 10742, 10, 0, 4, 0, 14, 8, 15, 15, 4, 13, 15, 10 },
+		{ 10492, 10, 0, 5, 1, 14, 9, 15, 15, 4, 13, 15, 10 },
+		{ 10258, 10, 0, 5, 1, 14, 9, 16, 15, 4, 13, 15, 10 },
+		{ 10036, 10, 0, 5, 1, 14, 9, 17, 15, 4, 13, 15, 10 },
+		{ 9827, 10, 0, 5, 1, 14, 9, 18, 15, 4, 13, 15, 10 },
+		{ 9631, 10, 0, 5, 1, 14, 9, 19, 15, 4, 13, 15, 10 },
+		{ 9445, 10, 0, 5, 1, 14, 9, 19, 15, 4, 13, 15, 10 },
+		{ 9269, 10, 0, 5, 1, 14, 9, 20, 15, 4, 13, 15, 10 },
+		{ 9103, 10, 0, 5, 1, 13, 9, 21, 15, 4, 13, 15, 10 },
+		{ 8946, 10, 0, 5, 1, 13, 9, 22, 15, 4, 13, 15, 10 },
+		{ 8797, 10, 1, 6, 1, 15, 11, 16, 15, 4, 13, 15, 10 },
+		{ 8655, 10, 1, 6, 1, 15, 11, 17, 15, 4, 13, 15, 10 },
+		{ 8520, 10, 1, 6, 1, 15, 11, 17, 15, 4, 13, 15, 10 },
+		{ 8392, 10, 1, 6, 1, 15, 11, 18, 15, 4, 13, 15, 10 },
+		{ 8269, 10, 1, 6, 1, 15, 11, 18, 15, 4, 13, 15, 10 },
+		{ 8153, 10, 1, 6, 1, 15, 11, 19, 15, 4, 13, 15, 10 },
+		{ 8041, 10, 1, 6, 1, 15, 11, 19, 15, 4, 13, 15, 10 },
+		{ 7934, 10, 1, 6, 1, 15, 11, 20, 15, 4, 13, 15, 10 },
+		{ 7831, 10, 1, 6, 1, 15, 11, 21, 15, 4, 13, 15, 10 },
+		{ 7733, 10, 1, 6, 1, 15, 11, 21, 15, 4, 13, 15, 10 },
+		{ 7638, 10, 1, 6, 1, 15, 11, 22, 15, 4, 13, 15, 10 },
+		{ 7547, 10, 1, 6, 1, 15, 11, 22, 15, 4, 13, 15, 10 },
+		{ 7459, 10, 1, 6, 1, 15, 11, 23, 15, 4, 13, 15, 10 },
+		{ 7374, 10, 1, 7, 2, 15, 12, 23, 15, 4, 13, 15, 10 },
+		{ 7291, 10, 1, 7, 2, 15, 12, 24, 15, 4, 13, 15, 10 },
+		{ 7212, 10, 1, 7, 2, 15, 12, 25, 15, 4, 13, 15, 10 },
+		{ 7135, 10, 1, 7, 2, 15, 14, 25, 15, 4, 13, 15, 10 },
+		{ 7061, 10, 1, 7, 2, 15, 14, 26, 15, 4, 13, 15, 10 },
+		{ 6988, 10, 1, 7, 2, 15, 14, 26, 15, 4, 13, 15, 10 },
+		{ 6918, 10, 1, 7, 2, 15, 14, 27, 15, 4, 13, 15, 10 },
+		{ 6850, 10, 1, 7, 2, 15, 14, 27, 15, 4, 13, 15, 10 },
+		{ 6784, 10, 1, 7, 2, 15, 14, 28, 15, 4, 13, 15, 10 },
+		{ 6720, 10, 1, 7, 2, 15, 14, 29, 15, 4, 13, 15, 10 },
+		{ 6658, 10, 1, 7, 2, 15, 14, 29, 15, 4, 13, 15, 10 },
+		{ 6597, 10, 1, 7, 2, 15, 14, 30, 15, 4, 13, 15, 10 },
+		{ 6539, 10, 1, 7, 2, 15, 14, 30, 15, 4, 13, 15, 10 },
+		{ 6482, 10, 1, 7, 2, 15, 14, 31, 15, 4, 13, 15, 10 },
+		{ 6427, 10, 1, 7, 2, 15, 14, 32, 15, 4, 13, 15, 10 },
+		{ 6373, 10, 3, 7, 3, 15, 12, 20, 15, 4, 13, 15, 10 },
+		{ 6321, 10, 3, 7, 3, 15, 12, 21, 15, 4, 13, 15, 10 },
+		{ 6270, 10, 3, 7, 3, 15, 12, 21, 15, 4, 13, 15, 10 },
+		{ 6222, 10, 3, 7, 3, 15, 12, 21, 15, 4, 13, 15, 10 },
+		{ 6174, 10, 3, 7, 3, 15, 12, 22, 15, 4, 13, 15, 10 },
+		{ 6128, 10, 3, 7, 3, 15, 12, 22, 15, 4, 13, 15, 10 },
+		{ 6083, 10, 3, 7, 3, 15, 12, 22, 15, 4, 13, 15, 10 },
+		{ 6040, 10, 3, 7, 3, 15, 12, 23, 15, 4, 13, 15, 10 },
+		{ 5997, 10, 3, 7, 3, 15, 12, 23, 15, 4, 13, 15, 10 },
+	}, {
+		{ 12605, 10, 0, 4, 0, 15, 8, 8, 13, 4, 13, 15, 9 },   /* 80 MHz */
+		{ 12245, 10, 0, 4, 0, 15, 8, 9, 13, 4, 13, 15, 9 },
+		{ 11906, 10, 0, 4, 0, 15, 8, 10, 13, 4, 13, 15, 9 },
+		{ 11588, 10, 0, 4, 0, 15, 8, 11, 13, 4, 13, 15, 9 },
+		{ 11288, 10, 0, 4, 0, 15, 8, 11, 13, 4, 13, 15, 9 },
+		{ 11007, 10, 0, 4, 0, 14, 8, 12, 13, 4, 13, 15, 9 },
+		{ 10742, 10, 0, 4, 0, 14, 8, 13, 13, 4, 13, 15, 9 },
+		{ 10492, 10, 0, 5, 1, 14, 9, 13, 13, 4, 13, 15, 9 },
+		{ 10258, 10, 0, 5, 1, 14, 9, 14, 13, 4, 13, 15, 9 },
+		{ 10036, 10, 0, 5, 1, 14, 9, 15, 13, 4, 13, 15, 9 },
+		{ 9827, 10, 0, 5, 1, 14, 9, 15, 13, 4, 13, 15, 9 },
+		{ 9631, 10, 0, 5, 1, 13, 9, 16, 13, 4, 13, 15, 9 },
+		{ 9445, 10, 0, 5, 1, 13, 9, 17, 13, 4, 13, 15, 9 },
+		{ 9269, 10, 0, 5, 1, 13, 9, 18, 13, 4, 13, 15, 9 },
+		{ 9103, 10, 0, 5, 1, 13, 9, 18, 13, 4, 13, 15, 9 },
+		{ 8946, 10, 0, 5, 1, 13, 9, 19, 13, 4, 13, 15, 9 },
+		{ 8797, 10, 1, 6, 1, 15, 11, 14, 13, 4, 13, 15, 9 },
+		{ 8655, 10, 1, 6, 1, 15, 11, 14, 13, 4, 13, 15, 9 },
+		{ 8520, 10, 1, 6, 1, 15, 11, 15, 13, 4, 13, 15, 9 },
+		{ 8392, 10, 1, 6, 1, 15, 11, 15, 13, 4, 13, 15, 9 },
+		{ 8269, 10, 1, 6, 1, 15, 11, 16, 13, 4, 13, 15, 9 },
+		{ 8153, 10, 1, 6, 1, 15, 11, 16, 13, 4, 13, 15, 9 },
+		{ 8041, 10, 1, 6, 1, 15, 11, 17, 13, 4, 13, 15, 9 },
+		{ 7934, 10, 1, 6, 1, 15, 11, 17, 13, 4, 13, 15, 9 },
+		{ 7831, 10, 1, 6, 1, 15, 11, 18, 13, 4, 13, 15, 9 },
+		{ 7733, 10, 1, 6, 1, 15, 11, 18, 13, 4, 13, 15, 9 },
+		{ 7638, 10, 1, 6, 1, 15, 11, 19, 13, 4, 13, 15, 9 },
+		{ 7547, 10, 1, 6, 1, 15, 11, 19, 13, 4, 13, 15, 9 },
+		{ 7459, 10, 1, 6, 1, 15, 11, 20, 13, 4, 13, 15, 9 },
+		{ 7374, 10, 1, 7, 2, 15, 12, 20, 13, 4, 13, 15, 9 },
+		{ 7291, 10, 1, 7, 2, 15, 12, 21, 13, 4, 13, 15, 9 },
+		{ 7212, 10, 1, 7, 2, 15, 12, 21, 13, 4, 13, 15, 9 },
+		{ 7135, 10, 1, 7, 2, 15, 14, 22, 13, 4, 13, 15, 9 },
+		{ 7061, 10, 1, 7, 2, 15, 14, 22, 13, 4, 13, 15, 9 },
+		{ 6988, 10, 1, 7, 2, 15, 14, 23, 13, 4, 13, 15, 9 },
+		{ 6918, 10, 1, 7, 2, 15, 14, 23, 13, 4, 13, 15, 9 },
+		{ 6850, 10, 1, 7, 2, 15, 14, 24, 13, 4, 13, 15, 9 },
+		{ 6784, 10, 1, 7, 2, 15, 14, 24, 13, 4, 13, 15, 9 },
+		{ 6720, 10, 1, 7, 2, 15, 14, 25, 13, 4, 13, 15, 9 },
+		{ 6658, 10, 1, 7, 2, 15, 14, 25, 13, 4, 13, 15, 9 },
+		{ 6597, 10, 1, 7, 2, 15, 14, 26, 13, 4, 13, 15, 9 },
+		{ 6539, 10, 1, 7, 2, 15, 14, 26, 13, 4, 13, 15, 9 },
+		{ 6482, 10, 1, 7, 2, 15, 14, 27, 13, 4, 13, 15, 9 },
+		{ 6427, 10, 1, 7, 2, 15, 14, 27, 13, 4, 13, 15, 9 },
+		{ 6373, 10, 3, 7, 3, 15, 12, 18, 13, 4, 13, 15, 9 },
+		{ 6321, 10, 3, 7, 3, 15, 12, 18, 13, 4, 13, 15, 9 },
+		{ 6270, 10, 3, 7, 3, 15, 12, 18, 13, 4, 13, 15, 9 },
+		{ 6222, 10, 3, 7, 3, 15, 12, 19, 13, 4, 13, 15, 9 },
+		{ 6174, 10, 3, 7, 3, 15, 12, 19, 13, 4, 13, 15, 9 },
+		{ 6128, 10, 3, 7, 3, 15, 12, 19, 13, 4, 13, 15, 9 },
+		{ 6083, 10, 3, 7, 3, 15, 12, 19, 13, 4, 13, 15, 9 },
+		{ 6040, 10, 3, 7, 3, 15, 12, 20, 13, 4, 13, 15, 9 },
+		{ 5997, 10, 3, 7, 3, 15, 12, 20, 13, 4, 13, 15, 9 },
+	} };
+
+static struct SynthLUT SynthLUT_TDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
+	{
+		{ 12605, 13, 0, 4, 0, 14, 0, 10, 12, 3, 14, 15, 11 },   /* 40 MHz */
+		{ 12245, 13, 0, 4, 0, 13, 0, 10, 12, 3, 14, 15, 11 },
+		{ 11906, 13, 0, 4, 0, 12, 0, 11, 12, 3, 14, 15, 11 },
+		{ 11588, 13, 0, 4, 0, 12, 0, 12, 12, 3, 14, 15, 11 },
+		{ 11288, 13, 0, 4, 0, 12, 0, 13, 12, 3, 14, 15, 11 },
+		{ 11007, 13, 0, 4, 0, 11, 0, 13, 12, 3, 14, 15, 11 },
+		{ 10742, 13, 0, 4, 0, 11, 0, 14, 12, 3, 14, 15, 11 },
+		{ 10492, 13, 0, 5, 1, 11, 0, 15, 12, 3, 14, 15, 11 },
+		{ 10258, 13, 0, 5, 1, 10, 0, 16, 12, 3, 14, 15, 11 },
+		{ 10036, 13, 0, 5, 1, 10, 0, 17, 12, 3, 14, 15, 11 },
+		{ 9827, 13, 0, 5, 1, 10, 0, 17, 12, 3, 14, 15, 11 },
+		{ 9631, 13, 0, 5, 1, 10, 0, 18, 12, 3, 14, 15, 11 },
+		{ 9445, 13, 0, 5, 1, 9, 0, 19, 12, 3, 14, 15, 11 },
+		{ 9269, 10, 0, 6, 1, 12, 0, 17, 12, 3, 14, 15, 11 },
+		{ 9103, 10, 0, 6, 1, 12, 0, 17, 12, 3, 14, 15, 11 },
+		{ 8946, 10, 0, 6, 1, 11, 0, 18, 12, 3, 14, 15, 11 },
+		{ 8797, 10, 0, 6, 1, 11, 0, 19, 12, 3, 14, 15, 11 },
+		{ 8655, 10, 0, 6, 1, 11, 0, 19, 12, 3, 14, 15, 11 },
+		{ 8520, 10, 0, 6, 1, 11, 0, 20, 12, 3, 14, 15, 11 },
+		{ 8392, 10, 0, 6, 1, 11, 0, 21, 12, 3, 14, 15, 11 },
+		{ 8269, 10, 0, 6, 1, 11, 0, 21, 12, 3, 14, 15, 11 },
+		{ 8153, 10, 0, 6, 1, 11, 0, 22, 12, 3, 14, 15, 11 },
+		{ 8041, 10, 0, 6, 1, 11, 0, 23, 12, 3, 14, 15, 11 },
+		{ 7934, 10, 0, 6, 1, 11, 0, 23, 12, 3, 14, 15, 11 },
+		{ 7831, 10, 0, 6, 1, 10, 0, 24, 12, 3, 14, 15, 11 },
+		{ 7733, 10, 0, 6, 1, 10, 0, 25, 12, 3, 14, 15, 11 },
+		{ 7638, 10, 0, 6, 1, 10, 0, 25, 12, 3, 14, 15, 11 },
+		{ 7547, 10, 0, 6, 1, 10, 0, 26, 12, 3, 14, 15, 11 },
+		{ 7459, 10, 0, 6, 1, 10, 0, 27, 12, 3, 14, 15, 11 },
+		{ 7374, 10, 0, 7, 2, 10, 0, 27, 12, 3, 14, 15, 11 },
+		{ 7291, 10, 0, 7, 2, 9, 0, 28, 12, 3, 14, 15, 11 },
+		{ 7212, 10, 0, 7, 2, 9, 0, 29, 12, 3, 14, 15, 11 },
+		{ 7135, 10, 0, 7, 2, 9, 0, 29, 12, 3, 14, 15, 11 },
+		{ 7061, 10, 0, 7, 2, 9, 0, 30, 12, 3, 14, 15, 11 },
+		{ 6988, 10, 0, 7, 2, 9, 0, 31, 12, 3, 14, 15, 11 },
+		{ 6918, 10, 0, 7, 2, 9, 0, 31, 12, 3, 14, 15, 11 },
+		{ 6850, 10, 0, 7, 2, 8, 0, 32, 12, 3, 14, 15, 11 },
+		{ 6784, 10, 0, 7, 2, 8, 0, 33, 12, 3, 14, 15, 11 },
+		{ 6720, 10, 0, 7, 2, 8, 0, 33, 12, 3, 14, 15, 11 },
+		{ 6658, 10, 0, 7, 2, 8, 0, 34, 12, 3, 14, 15, 11 },
+		{ 6597, 10, 0, 7, 2, 8, 0, 35, 12, 3, 14, 15, 11 },
+		{ 6539, 10, 0, 7, 2, 8, 0, 35, 12, 3, 14, 15, 11 },
+		{ 6482, 10, 0, 7, 2, 8, 0, 36, 12, 3, 14, 15, 11 },
+		{ 6427, 10, 0, 7, 2, 7, 0, 37, 12, 3, 14, 15, 11 },
+		{ 6373, 10, 0, 7, 3, 7, 0, 37, 12, 3, 14, 15, 11 },
+		{ 6321, 10, 0, 7, 3, 7, 0, 38, 12, 3, 14, 15, 11 },
+		{ 6270, 10, 0, 7, 3, 7, 0, 39, 12, 3, 14, 15, 11 },
+		{ 6222, 10, 0, 7, 3, 7, 0, 39, 12, 3, 14, 15, 11 },
+		{ 6174, 10, 0, 7, 3, 7, 0, 40, 12, 3, 14, 15, 11 },
+		{ 6128, 10, 0, 7, 3, 7, 0, 41, 12, 3, 14, 15, 11 },
+		{ 6083, 10, 0, 7, 3, 7, 0, 41, 12, 3, 14, 15, 11 },
+		{ 6040, 10, 0, 7, 3, 6, 0, 42, 12, 3, 14, 15, 11 },
+		{ 5997, 10, 0, 7, 3, 6, 0, 42, 12, 3, 14, 15, 11 },
+	}, {
+		{ 12605, 13, 0, 4, 0, 14, 0, 12, 15, 4, 13, 15, 10 },   /* 60 MHz */
+		{ 12245, 13, 0, 4, 0, 13, 0, 13, 15, 4, 13, 15, 10 },
+		{ 11906, 13, 0, 4, 0, 13, 0, 14, 15, 4, 13, 15, 10 },
+		{ 11588, 13, 0, 4, 0, 12, 0, 14, 15, 4, 13, 15, 10 },
+		{ 11288, 13, 0, 4, 0, 12, 0, 15, 15, 4, 13, 15, 10 },
+		{ 11007, 13, 0, 4, 0, 12, 0, 16, 15, 4, 13, 15, 10 },
+		{ 10742, 13, 0, 4, 0, 11, 0, 17, 15, 4, 13, 15, 10 },
+		{ 10492, 13, 0, 5, 1, 11, 0, 18, 15, 4, 13, 15, 10 },
+		{ 10258, 13, 0, 5, 1, 11, 0, 19, 15, 4, 13, 15, 10 },
+		{ 10036, 13, 0, 5, 1, 10, 0, 20, 15, 4, 13, 15, 10 },
+		{ 9827, 13, 0, 5, 1, 10, 0, 21, 15, 4, 13, 15, 10 },
+		{ 9631, 13, 0, 5, 1, 10, 0, 22, 15, 4, 13, 15, 10 },
+		{ 9445, 13, 0, 5, 1, 10, 0, 23, 15, 4, 13, 15, 10 },
+		{ 9269, 10, 0, 6, 1, 12, 0, 20, 15, 4, 13, 15, 10 },
+		{ 9103, 10, 0, 6, 1, 12, 0, 21, 15, 4, 13, 15, 10 },
+		{ 8946, 10, 0, 6, 1, 12, 0, 22, 15, 4, 13, 15, 10 },
+		{ 8797, 10, 0, 6, 1, 12, 0, 23, 15, 4, 13, 15, 10 },
+		{ 8655, 10, 0, 6, 1, 12, 0, 23, 15, 4, 13, 15, 10 },
+		{ 8520, 10, 0, 6, 1, 12, 0, 24, 15, 4, 13, 15, 10 },
+		{ 8392, 10, 0, 6, 1, 12, 0, 25, 15, 4, 13, 15, 10 },
+		{ 8269, 10, 0, 6, 1, 12, 0, 26, 15, 4, 13, 15, 10 },
+		{ 8153, 10, 0, 6, 1, 12, 0, 27, 15, 4, 13, 15, 10 },
+		{ 8041, 10, 0, 6, 1, 12, 0, 27, 15, 4, 13, 15, 10 },
+		{ 7934, 10, 0, 6, 1, 11, 0, 28, 15, 4, 13, 15, 10 },
+		{ 7831, 10, 0, 6, 1, 11, 0, 29, 15, 4, 13, 15, 10 },
+		{ 7733, 10, 0, 6, 1, 11, 0, 30, 15, 4, 13, 15, 10 },
+		{ 7638, 10, 0, 6, 1, 11, 0, 31, 15, 4, 13, 15, 10 },
+		{ 7547, 10, 0, 6, 1, 11, 0, 31, 15, 4, 13, 15, 10 },
+		{ 7459, 10, 0, 6, 1, 11, 0, 32, 15, 4, 13, 15, 10 },
+		{ 7374, 10, 0, 7, 2, 11, 0, 33, 15, 4, 13, 15, 10 },
+		{ 7291, 10, 0, 7, 2, 11, 0, 34, 15, 4, 13, 15, 10 },
+		{ 7212, 10, 0, 7, 2, 11, 0, 35, 15, 4, 13, 15, 10 },
+		{ 7135, 10, 0, 7, 2, 10, 0, 35, 15, 4, 13, 15, 10 },
+		{ 7061, 10, 0, 7, 2, 10, 0, 36, 15, 4, 13, 15, 10 },
+		{ 6988, 10, 0, 7, 2, 10, 0, 37, 15, 4, 13, 15, 10 },
+		{ 6918, 10, 0, 7, 2, 10, 0, 38, 15, 4, 13, 15, 10 },
+		{ 6850, 10, 0, 7, 2, 10, 0, 39, 15, 4, 13, 15, 10 },
+		{ 6784, 10, 0, 7, 2, 10, 0, 39, 15, 4, 13, 15, 10 },
+		{ 6720, 10, 0, 7, 2, 10, 0, 40, 15, 4, 13, 15, 10 },
+		{ 6658, 10, 0, 7, 2, 9, 0, 41, 15, 4, 13, 15, 10 },
+		{ 6597, 10, 0, 7, 2, 9, 0, 42, 15, 4, 13, 15, 10 },
+		{ 6539, 10, 0, 7, 2, 9, 0, 43, 15, 4, 13, 15, 10 },
+		{ 6482, 10, 0, 7, 2, 9, 0, 43, 15, 4, 13, 15, 10 },
+		{ 6427, 10, 0, 7, 2, 9, 0, 44, 15, 4, 13, 15, 10 },
+		{ 6373, 10, 0, 7, 3, 9, 0, 45, 15, 4, 13, 15, 10 },
+		{ 6321, 10, 0, 7, 3, 9, 0, 46, 15, 4, 13, 15, 10 },
+		{ 6270, 10, 0, 7, 3, 9, 0, 47, 15, 4, 13, 15, 10 },
+		{ 6222, 10, 0, 7, 3, 9, 0, 47, 15, 4, 13, 15, 10 },
+		{ 6174, 10, 0, 7, 3, 9, 0, 48, 15, 4, 13, 15, 10 },
+		{ 6128, 10, 0, 7, 3, 9, 0, 49, 15, 4, 13, 15, 10 },
+		{ 6083, 10, 0, 7, 3, 9, 0, 50, 15, 4, 13, 15, 10 },
+		{ 6040, 10, 0, 7, 3, 9, 0, 51, 15, 4, 13, 15, 10 },
+		{ 5997, 10, 0, 7, 3, 8, 0, 51, 15, 4, 13, 15, 10 },
+	}, {
+		{ 12605, 13, 0, 4, 0, 14, 0, 10, 13, 4, 13, 15, 9 },   /* 80 MHz */
+		{ 12245, 13, 0, 4, 0, 13, 0, 11, 13, 4, 13, 15, 9 },
+		{ 11906, 13, 0, 4, 0, 12, 0, 12, 13, 4, 13, 15, 9 },
+		{ 11588, 13, 0, 4, 0, 12, 0, 13, 13, 4, 13, 15, 9 },
+		{ 11288, 13, 0, 4, 0, 12, 0, 13, 13, 4, 13, 15, 9 },
+		{ 11007, 13, 0, 4, 0, 11, 0, 14, 13, 4, 13, 15, 9 },
+		{ 10742, 13, 0, 4, 0, 11, 0, 15, 13, 4, 13, 15, 9 },
+		{ 10492, 13, 0, 5, 1, 11, 0, 16, 13, 4, 13, 15, 9 },
+		{ 10258, 13, 0, 5, 1, 10, 0, 17, 13, 4, 13, 15, 9 },
+		{ 10036, 13, 0, 5, 1, 10, 0, 17, 13, 4, 13, 15, 9 },
+		{ 9827, 13, 0, 5, 1, 10, 0, 18, 13, 4, 13, 15, 9 },
+		{ 9631, 13, 0, 5, 1, 10, 0, 19, 13, 4, 13, 15, 9 },
+		{ 9445, 13, 0, 5, 1, 9, 0, 20, 13, 4, 13, 15, 9 },
+		{ 9269, 10, 0, 6, 1, 12, 0, 18, 13, 4, 13, 15, 9 },
+		{ 9103, 10, 0, 6, 1, 12, 0, 18, 13, 4, 13, 15, 9 },
+		{ 8946, 10, 0, 6, 1, 11, 0, 19, 13, 4, 13, 15, 9 },
+		{ 8797, 10, 0, 6, 1, 11, 0, 20, 13, 4, 13, 15, 9 },
+		{ 8655, 10, 0, 6, 1, 11, 0, 20, 13, 4, 13, 15, 9 },
+		{ 8520, 10, 0, 6, 1, 11, 0, 21, 13, 4, 13, 15, 9 },
+		{ 8392, 10, 0, 6, 1, 11, 0, 22, 13, 4, 13, 15, 9 },
+		{ 8269, 10, 0, 6, 1, 11, 0, 22, 13, 4, 13, 15, 9 },
+		{ 8153, 10, 0, 6, 1, 11, 0, 23, 13, 4, 13, 15, 9 },
+		{ 8041, 10, 0, 6, 1, 11, 0, 24, 13, 4, 13, 15, 9 },
+		{ 7934, 10, 0, 6, 1, 11, 0, 25, 13, 4, 13, 15, 9 },
+		{ 7831, 10, 0, 6, 1, 10, 0, 25, 13, 4, 13, 15, 9 },
+		{ 7733, 10, 0, 6, 1, 10, 0, 26, 13, 4, 13, 15, 9 },
+		{ 7638, 10, 0, 6, 1, 10, 0, 27, 13, 4, 13, 15, 9 },
+		{ 7547, 10, 0, 6, 1, 10, 0, 27, 13, 4, 13, 15, 9 },
+		{ 7459, 10, 0, 6, 1, 10, 0, 28, 13, 4, 13, 15, 9 },
+		{ 7374, 10, 0, 7, 2, 10, 0, 29, 13, 4, 13, 15, 9 },
+		{ 7291, 10, 0, 7, 2, 9, 0, 29, 13, 4, 13, 15, 9 },
+		{ 7212, 10, 0, 7, 2, 9, 0, 30, 13, 4, 13, 15, 9 },
+		{ 7135, 10, 0, 7, 2, 9, 0, 31, 13, 4, 13, 15, 9 },
+		{ 7061, 10, 0, 7, 2, 9, 0, 32, 13, 4, 13, 15, 9 },
+		{ 6988, 10, 0, 7, 2, 9, 0, 32, 13, 4, 13, 15, 9 },
+		{ 6918, 10, 0, 7, 2, 9, 0, 33, 13, 4, 13, 15, 9 },
+		{ 6850, 10, 0, 7, 2, 8, 0, 34, 13, 4, 13, 15, 9 },
+		{ 6784, 10, 0, 7, 2, 8, 0, 34, 13, 4, 13, 15, 9 },
+		{ 6720, 10, 0, 7, 2, 8, 0, 35, 13, 4, 13, 15, 9 },
+		{ 6658, 10, 0, 7, 2, 8, 0, 36, 13, 4, 13, 15, 9 },
+		{ 6597, 10, 0, 7, 2, 8, 0, 36, 13, 4, 13, 15, 9 },
+		{ 6539, 10, 0, 7, 2, 8, 0, 37, 13, 4, 13, 15, 9 },
+		{ 6482, 10, 0, 7, 2, 8, 0, 38, 13, 4, 13, 15, 9 },
+		{ 6427, 10, 0, 7, 2, 7, 0, 39, 13, 4, 13, 15, 9 },
+		{ 6373, 10, 0, 7, 3, 7, 0, 39, 13, 4, 13, 15, 9 },
+		{ 6321, 10, 0, 7, 3, 7, 0, 40, 13, 4, 13, 15, 9 },
+		{ 6270, 10, 0, 7, 3, 7, 0, 41, 13, 4, 13, 15, 9 },
+		{ 6222, 10, 0, 7, 3, 7, 0, 41, 13, 4, 13, 15, 9 },
+		{ 6174, 10, 0, 7, 3, 7, 0, 42, 13, 4, 13, 15, 9 },
+		{ 6128, 10, 0, 7, 3, 7, 0, 43, 13, 4, 13, 15, 9 },
+		{ 6083, 10, 0, 7, 3, 7, 0, 44, 13, 4, 13, 15, 9 },
+		{ 6040, 10, 0, 7, 3, 6, 0, 44, 13, 4, 13, 15, 9 },
+		{ 5997, 10, 0, 7, 3, 6, 0, 44, 13, 4, 13, 15, 9 },
+	} };
+
+/* Rx Gain Tables */
+
+#define SIZE_FULL_TABLE		77
+
+static const uint8_t full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] =
+{ {  /* 800 MHz */
+	{ 0x00, 0x00, 0x20 }, { 0x00, 0x00, 0x00 }, { 0x00, 0x00, 0x00 },
+	{ 0x00, 0x01, 0x00 }, { 0x00, 0x02, 0x00 }, { 0x00, 0x03, 0x00 },
+	{ 0x00, 0x04, 0x00 }, { 0x00, 0x05, 0x00 }, { 0x01, 0x03, 0x20 },
+	{ 0x01, 0x04, 0x00 }, { 0x01, 0x05, 0x00 }, { 0x01, 0x06, 0x00 },
+	{ 0x01, 0x07, 0x00 }, { 0x01, 0x08, 0x00 }, { 0x01, 0x09, 0x00 },
+	{ 0x01, 0x0A, 0x00 }, { 0x01, 0x0B, 0x00 }, { 0x01, 0x0C, 0x00 },
+	{ 0x01, 0x0D, 0x00 }, { 0x01, 0x0E, 0x00 }, { 0x02, 0x09, 0x20 },
+	{ 0x02, 0x0A, 0x00 }, { 0x02, 0x0B, 0x00 }, { 0x02, 0x0C, 0x00 },
+	{ 0x02, 0x0D, 0x00 }, { 0x02, 0x0E, 0x00 }, { 0x02, 0x0F, 0x00 },
+	{ 0x02, 0x10, 0x00 }, { 0x02, 0x2B, 0x20 }, { 0x02, 0x2C, 0x00 },
+	{ 0x04, 0x28, 0x20 }, { 0x04, 0x29, 0x00 }, { 0x04, 0x2A, 0x00 },
+	{ 0x04, 0x2B, 0x00 }, { 0x24, 0x20, 0x20 }, { 0x24, 0x21, 0x00 },
+	{ 0x44, 0x20, 0x20 }, { 0x44, 0x21, 0x00 }, { 0x44, 0x22, 0x00 },
+	{ 0x44, 0x23, 0x00 }, { 0x44, 0x24, 0x00 }, { 0x44, 0x25, 0x00 },
+	{ 0x44, 0x26, 0x00 }, { 0x44, 0x27, 0x00 }, { 0x44, 0x28, 0x00 },
+	{ 0x44, 0x29, 0x00 }, { 0x44, 0x2A, 0x00 }, { 0x44, 0x2B, 0x00 },
+	{ 0x44, 0x2C, 0x00 }, { 0x44, 0x2D, 0x00 }, { 0x44, 0x2E, 0x00 },
+	{ 0x44, 0x2F, 0x00 }, { 0x44, 0x30, 0x00 }, { 0x44, 0x31, 0x00 },
+	{ 0x44, 0x32, 0x00 }, { 0x64, 0x2E, 0x20 }, { 0x64, 0x2F, 0x00 },
+	{ 0x64, 0x30, 0x00 }, { 0x64, 0x31, 0x00 }, { 0x64, 0x32, 0x00 },
+	{ 0x64, 0x33, 0x00 }, { 0x64, 0x34, 0x00 }, { 0x64, 0x35, 0x00 },
+	{ 0x64, 0x36, 0x00 }, { 0x64, 0x37, 0x00 }, { 0x64, 0x38, 0x00 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 }
+}, {  /* 2300 MHz */
+	{ 0x00, 0x00, 0x20 }, { 0x00, 0x00, 0x00 }, { 0x00, 0x00, 0x00 },
+	{ 0x00, 0x01, 0x00 }, { 0x00, 0x02, 0x00 }, { 0x00, 0x03, 0x00 },
+	{ 0x00, 0x04, 0x00 }, { 0x00, 0x05, 0x00 }, { 0x01, 0x03, 0x20 },
+	{ 0x01, 0x04, 0x00 }, { 0x01, 0x05, 0x00 }, { 0x01, 0x06, 0x00 },
+	{ 0x01, 0x07, 0x00 }, { 0x01, 0x08, 0x00 }, { 0x01, 0x09, 0x00 },
+	{ 0x01, 0x0A, 0x00 }, { 0x01, 0x0B, 0x00 }, { 0x01, 0x0C, 0x00 },
+	{ 0x01, 0x0D, 0x00 }, { 0x01, 0x0E, 0x00 }, { 0x02, 0x09, 0x20 },
+	{ 0x02, 0x0A, 0x00 }, { 0x02, 0x0B, 0x00 }, { 0x02, 0x0C, 0x00 },
+	{ 0x02, 0x0D, 0x00 }, { 0x02, 0x0E, 0x00 }, { 0x02, 0x0F, 0x00 },
+	{ 0x02, 0x10, 0x00 }, { 0x02, 0x2B, 0x20 }, { 0x02, 0x2C, 0x00 },
+	{ 0x04, 0x27, 0x20 }, { 0x04, 0x28, 0x00 }, { 0x04, 0x29, 0x00 },
+	{ 0x04, 0x2A, 0x00 }, { 0x04, 0x2B, 0x00 }, { 0x24, 0x21, 0x20 },
+	{ 0x24, 0x22, 0x00 }, { 0x44, 0x20, 0x20 }, { 0x44, 0x21, 0x00 },
+	{ 0x44, 0x22, 0x00 }, { 0x44, 0x23, 0x00 }, { 0x44, 0x24, 0x00 },
+	{ 0x44, 0x25, 0x00 }, { 0x44, 0x26, 0x00 }, { 0x44, 0x27, 0x00 },
+	{ 0x44, 0x28, 0x00 }, { 0x44, 0x29, 0x00 }, { 0x44, 0x2A, 0x00 },
+	{ 0x44, 0x2B, 0x00 }, { 0x44, 0x2C, 0x00 }, { 0x44, 0x2D, 0x00 },
+	{ 0x44, 0x2E, 0x00 }, { 0x44, 0x2F, 0x00 }, { 0x44, 0x30, 0x00 },
+	{ 0x44, 0x31, 0x00 }, { 0x64, 0x2E, 0x20 }, { 0x64, 0x2F, 0x00 },
+	{ 0x64, 0x30, 0x00 }, { 0x64, 0x31, 0x00 }, { 0x64, 0x32, 0x00 },
+	{ 0x64, 0x33, 0x00 }, { 0x64, 0x34, 0x00 }, { 0x64, 0x35, 0x00 },
+	{ 0x64, 0x36, 0x00 }, { 0x64, 0x37, 0x00 }, { 0x64, 0x38, 0x00 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 },
+}, {  /* 5500 MHz */
+	{ 0x00, 0x00, 0x20 }, { 0x00, 0x00, 0x00 }, { 0x00, 0x00, 0x00 },
+	{ 0x00, 0x00, 0x00 }, { 0x00, 0x00, 0x00 }, { 0x00, 0x01, 0x00 },
+	{ 0x00, 0x02, 0x00 }, { 0x00, 0x03, 0x00 }, { 0x01, 0x01, 0x20 },
+	{ 0x01, 0x02, 0x00 }, { 0x01, 0x03, 0x00 }, { 0x01, 0x04, 0x20 },
+	{ 0x01, 0x05, 0x00 }, { 0x01, 0x06, 0x00 }, { 0x01, 0x07, 0x00 },
+	{ 0x01, 0x08, 0x00 }, { 0x01, 0x09, 0x00 }, { 0x01, 0x0A, 0x00 },
+	{ 0x01, 0x0B, 0x00 }, { 0x01, 0x0C, 0x00 }, { 0x02, 0x08, 0x20 },
+	{ 0x02, 0x09, 0x00 }, { 0x02, 0x0A, 0x00 }, { 0x02, 0x0B, 0x20 },
+	{ 0x02, 0x0C, 0x00 }, { 0x02, 0x0D, 0x00 }, { 0x02, 0x0E, 0x00 },
+	{ 0x02, 0x0F, 0x00 }, { 0x02, 0x2A, 0x20 }, { 0x02, 0x2B, 0x00 },
+	{ 0x04, 0x27, 0x20 }, { 0x04, 0x28, 0x00 }, { 0x04, 0x29, 0x00 },
+	{ 0x04, 0x2A, 0x00 }, { 0x04, 0x2B, 0x00 }, { 0x04, 0x2C, 0x00 },
+	{ 0x04, 0x2D, 0x00 }, { 0x24, 0x20, 0x20 }, { 0x24, 0x21, 0x00 },
+	{ 0x24, 0x22, 0x00 }, { 0x44, 0x20, 0x20 }, { 0x44, 0x21, 0x00 },
+	{ 0x44, 0x22, 0x00 }, { 0x44, 0x23, 0x00 }, { 0x44, 0x24, 0x00 },
+	{ 0x44, 0x25, 0x00 }, { 0x44, 0x26, 0x00 }, { 0x44, 0x27, 0x00 },
+	{ 0x44, 0x28, 0x00 }, { 0x44, 0x29, 0x00 }, { 0x44, 0x2A, 0x00 },
+	{ 0x44, 0x2B, 0x00 }, { 0x44, 0x2C, 0x00 }, { 0x44, 0x2D, 0x00 },
+	{ 0x44, 0x2E, 0x00 }, { 0x64, 0x2E, 0x20 }, { 0x64, 0x2F, 0x00 },
+	{ 0x64, 0x30, 0x00 }, { 0x64, 0x31, 0x00 }, { 0x64, 0x32, 0x00 },
+	{ 0x64, 0x33, 0x00 }, { 0x64, 0x34, 0x00 }, { 0x64, 0x35, 0x00 },
+	{ 0x64, 0x36, 0x00 }, { 0x64, 0x37, 0x00 }, { 0x64, 0x38, 0x00 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 }
+} };
+
+#define SIZE_SPLIT_TABLE		41
+
+static const uint8_t split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] =
+{ {  /* 800 MHz */
+	{ 0x00, 0x18, 0x20 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x20 }, { 0x01, 0x18, 0x20 }, { 0x02, 0x18, 0x20 },
+	{ 0x04, 0x18, 0x20 }, { 0x04, 0x38, 0x20 }, { 0x05, 0x38, 0x20 },
+	{ 0x06, 0x38, 0x20 }, { 0x07, 0x38, 0x20 }, { 0x08, 0x38, 0x20 },
+	{ 0x09, 0x38, 0x20 }, { 0x0A, 0x38, 0x20 }, { 0x0B, 0x38, 0x20 },
+	{ 0x0C, 0x38, 0x20 }, { 0x0D, 0x38, 0x20 }, { 0x0E, 0x38, 0x20 },
+	{ 0x0F, 0x38, 0x20 }, { 0x24, 0x38, 0x20 }, { 0x25, 0x38, 0x20 },
+	{ 0x44, 0x38, 0x20 }, { 0x45, 0x38, 0x20 }, { 0x46, 0x38, 0x20 },
+	{ 0x47, 0x38, 0x20 }, { 0x48, 0x38, 0x20 }, { 0x64, 0x38, 0x20 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 },
+}, {  /* 2300 MHz */
+	{ 0x00, 0x18, 0x20 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x20 }, { 0x01, 0x18, 0x20 },
+	{ 0x02, 0x18, 0x20 }, { 0x04, 0x18, 0x20 }, { 0x04, 0x38, 0x20 },
+	{ 0x05, 0x38, 0x20 }, { 0x06, 0x38, 0x20 }, { 0x07, 0x38, 0x20 },
+	{ 0x08, 0x38, 0x20 }, { 0x09, 0x38, 0x20 }, { 0x0A, 0x38, 0x20 },
+	{ 0x0B, 0x38, 0x20 }, { 0x0C, 0x38, 0x20 }, { 0x0D, 0x38, 0x20 },
+	{ 0x0E, 0x38, 0x20 }, { 0x0F, 0x38, 0x20 }, { 0x25, 0x38, 0x20 },
+	{ 0x26, 0x38, 0x20 }, { 0x44, 0x38, 0x20 }, { 0x45, 0x38, 0x20 },
+	{ 0x46, 0x38, 0x20 }, { 0x47, 0x38, 0x20 }, { 0x64, 0x38, 0x20 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 },
+}, {  /* 5500 MHz */
+	{ 0x00, 0x18, 0x20 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
+	{ 0x00, 0x18, 0x00 }, { 0x01, 0x18, 0x20 }, { 0x02, 0x18, 0x20 },
+	{ 0x04, 0x18, 0x20 }, { 0x04, 0x38, 0x20 }, { 0x05, 0x38, 0x20 },
+	{ 0x06, 0x38, 0x20 }, { 0x07, 0x38, 0x20 }, { 0x08, 0x38, 0x20 },
+	{ 0x09, 0x38, 0x20 }, { 0x0A, 0x38, 0x20 }, { 0x0B, 0x38, 0x20 },
+	{ 0x0C, 0x38, 0x20 }, { 0x0D, 0x38, 0x20 }, { 0x0E, 0x38, 0x20 },
+	{ 0x0F, 0x38, 0x20 }, { 0x62, 0x38, 0x20 }, { 0x25, 0x38, 0x20 },
+	{ 0x26, 0x38, 0x20 }, { 0x44, 0x38, 0x20 }, { 0x64, 0x38, 0x20 },
+	{ 0x65, 0x38, 0x20 }, { 0x66, 0x38, 0x20 }, { 0x67, 0x38, 0x20 },
+	{ 0x68, 0x38, 0x20 }, { 0x69, 0x38, 0x20 }, { 0x6A, 0x38, 0x20 },
+	{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
+	{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 },
+} };
+
+/* Mixer GM Sub-table */
+
+static const uint8_t gm_st_gain[16] = { 0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60,
+0x5C, 0x58, 0x54, 0x50, 0x4C, 0x48, 0x30, 0x18, 0x0 };
+static const uint8_t gm_st_ctrl[16] = { 0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
+0x2C, 0x2F, 0x31, 0x33, 0x34, 0x35, 0x3A, 0x3D, 0x3E };
+
+
+static const int8_t lna_table[] = { 6, 17, 19, 25 };
+static const int8_t tia_table[] = { -6, 0 };
+static const int8_t mixer_table[] = { 0, 5, 11, 16,
+17, 18, 19, 20,
+21, 22, 23, 24,
+25, 26, 27, 28 };
 
 enum ad9361_clocks {
 	BB_REFCLK,
@@ -3188,6 +3680,98 @@ enum ad9361_clocks {
 	EXT_REF_CLK,
 };
 
+struct ad9361_debugfs_entry {
+	struct ad9361_rf_phy *phy;
+	const char *propname;
+	void *out_value;
+	uint32_t val;
+	uint8_t size;
+	uint8_t cmd;
+};
+
+struct ad9361_fastlock_entry {
+#define FASTLOOK_INIT	1
+	uint8_t flags;
+	uint8_t alc_orig;
+	uint8_t alc_written;
+};
+
+struct ad9361_fastlock {
+	uint8_t save_profile;
+	uint8_t current_profile[2];
+	struct ad9361_fastlock_entry entry[2][8];
+};
+
+struct ad9361_rf_phy {
+	struct spi_device 	*spi;
+	struct clk 		*clk_refin;
+	struct clk 		*clks[NUM_AD9361_CLKS];
+	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
+	struct clk_onecell_data	clk_data;
+	struct ad9361_phy_platform_data *pdata;
+#ifdef NO_NEEDED
+	struct ad9361_debugfs_entry debugfs_entry[132];
+	struct bin_attribute 	bin;
+	struct iio_dev 		*indio_dev;
+	struct work_struct 	work;
+	struct completion       complete;
+	uint32_t 			ad9361_debugfs_entry_index;
+#endif
+	uint8_t 			prev_ensm_state;
+	uint8_t			curr_ensm_state;
+	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
+	enum rx_gain_table_name current_table;
+	bool 			ensm_pin_ctl_en;
+
+	bool			auto_cal_en;
+	uint64_t			last_tx_quad_cal_freq;
+	uint32_t		flags;
+	uint32_t		cal_threshold_freq;
+	uint32_t			current_rx_bw_Hz;
+	uint32_t			current_tx_bw_Hz;
+	uint32_t			rxbbf_div;
+	uint32_t			rate_governor;
+	bool			bypass_rx_fir;
+	bool			bypass_tx_fir;
+	bool			rx_eq_2tx;
+	uint8_t			tx_fir_int;
+	uint8_t			tx_fir_ntaps;
+	uint8_t			rx_fir_dec;
+	uint8_t			rx_fir_ntaps;
+	uint8_t			agc_mode[2];
+	bool			rfdc_track_en;
+	bool			bbdc_track_en;
+	bool			quad_track_en;
+	uint16_t 			auxdac1_value;
+	uint16_t 			auxdac2_value;
+	struct ad9361_fastlock	fastlock;
+	struct axiadc_converter	*adc_conv;
+	struct axiadc_state		*adc_state;
+};
+
+struct refclk_scale {
+#ifdef NO_NEEDED
+	struct clk_hw		hw;
+#endif
+	struct spi_device	*spi;
+	struct ad9361_rf_phy	*phy;
+	uint32_t			mult;
+	uint32_t			div;
+	enum ad9361_clocks 	source;
+	enum ad9361_clocks 	parent_source;
+};
+
+enum debugfs_cmd {
+	DBGFS_NONE,
+	DBGFS_INIT,
+	DBGFS_LOOPBACK,
+	DBGFS_BIST_PRBS,
+	DBGFS_BIST_TONE,
+	DBGFS_BIST_DT_ANALYSIS,
+	DBGFS_RXGAIN_1,
+	DBGFS_RXGAIN_2,
+};
+
 enum ad9361_bist_mode {
 	BIST_DISABLE,
 	BIST_INJ_TX,
@@ -3196,121 +3780,64 @@ enum ad9361_bist_mode {
 
 enum {
 	ID_AD9361,
-};
-
-struct ad9361_fastlock_entry {
-#define FASTLOOK_INIT	1
-	u8 flags;
-	u8 alc_orig;
-	u8 alc_written;
-};
-
-struct ad9361_fastlock {
-	u8 save_profile;
-	u8 current_profile[2];
-	struct ad9361_fastlock_entry entry[2][8];
-};
-
-struct ad9361_rf_phy {
-	struct clk 		*clk_refin;
-	struct clk 		*clks[NUM_AD9361_CLKS];
-	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
-	struct clk_onecell_data	clk_data;
-	struct ad9361_phy_platform_data *pdata;
-	u8 			prev_ensm_state;
-	u8			curr_ensm_state;
-	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
-	enum rx_gain_table_name current_table;
-	bool 			ensm_pin_ctl_en;
-
-	bool			auto_cal_en;
-	u64			last_tx_quad_cal_freq;
-	unsigned long		flags;
-	unsigned long		cal_threshold_freq;
-	u32			current_rx_bw_Hz;
-	u32			current_tx_bw_Hz;
-	u32			rxbbf_div;
-	u32			rate_governor;
-	bool			bypass_rx_fir;
-	bool			bypass_tx_fir;
-	bool			rx_eq_2tx;
-	u8			tx_fir_int;
-	u8			tx_fir_ntaps;
-	u8			rx_fir_dec;
-	u8			rx_fir_ntaps;
-	u8			agc_mode[2];
-	bool			rfdc_track_en;
-	bool			bbdc_track_en;
-	bool			quad_track_en;
-	u16 			auxdac1_value;
-	u16 			auxdac2_value;
-	struct ad9361_fastlock	fastlock;
-};
-
-struct refclk_scale {
-	struct clk_hw		hw;
-	struct ad9361_rf_phy	*phy;
-	u32			mult;
-	u32			div;
-	enum ad9361_clocks 	source;
-	enum ad9361_clocks 	parent_source;
+	ID_AD9364,
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long *prate);
-unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
-		unsigned long parent_rate);
-int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long parent_rate);
-long ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long *prate);
-unsigned long ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
-		unsigned long parent_rate);
-int ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long parent_rate);
-long ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long *prate);
-unsigned long ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
-		unsigned long parent_rate);
-int ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
-				unsigned long parent_rate);
-int ad9361_reset(struct ad9361_rf_phy *phy);
-int ad9361_setup(struct ad9361_rf_phy *phy);
-int ad9361_spi_write(u32 reg, u32 val);
-int ad9361_spi_read(u32 reg);
-int register_clocks(struct ad9361_rf_phy *phy);
-int ad9361_init_gain_tables(struct ad9361_rf_phy *phy);
-void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, u8 ensm_state);
-int ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
-		u32 rx_id, struct rf_rx_gain *rx_gain);
-int ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
-		u32 rx_id, struct rf_rx_gain *rx_gain);
-int ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
-				      unsigned long tx_sample_rate,
-				      u32 low_power,
-				      unsigned long *rx_path_clks,
-				      unsigned long *tx_path_clks);
-int ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
-				      unsigned long *rx_path_clks,
-				      unsigned long *tx_path_clks);
-int ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
-				     u32 rf_rx_bw, u32 rf_tx_bw);
-unsigned long ad9361_to_clk(u64 freq);
-u64 ad9361_from_clk(unsigned long freq);
-int ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi);
-int ad9361_set_tx_atten(struct ad9361_rf_phy *phy, u32 atten_mdb,
-             bool tx1, bool tx2, bool immed);
-int ad9361_get_tx_atten(struct ad9361_rf_phy *phy, u32 tx_num);
-int ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
+int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg);
+int32_t ad9361_spi_write(struct spi_device *spi,
+	uint32_t reg, uint32_t val);
+int32_t ad9361_reset(struct ad9361_rf_phy *phy);
+int32_t register_clocks(struct ad9361_rf_phy *phy);
+int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy);
+int32_t ad9361_setup(struct ad9361_rf_phy *phy);
+int32_t ad9361_post_setup(struct ad9361_rf_phy *phy);
+void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state);
+int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
+	uint32_t rx_id, struct rf_rx_gain *rx_gain);
+int32_t ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
+	uint32_t rx_id, struct rf_rx_gain *rx_gain);
+int32_t ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
+	uint32_t rf_rx_bw, uint32_t rf_tx_bw);
+int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
+	uint32_t tx_sample_rate,
+	uint32_t rate_gov,
+	uint32_t *rx_path_clks,
+	uint32_t *tx_path_clks);
+int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
+	uint32_t *rx_path_clks,
+	uint32_t *tx_path_clks);
+uint32_t ad9361_to_clk(uint64_t freq);
+uint64_t ad9361_from_clk(uint32_t freq);
+int32_t ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi);
+int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		struct rf_gain_ctrl *gain_ctrl);
-int ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
-				       enum fir_dest dest, int gain_dB,
-				       u32 ntaps, short *coef);
-int ad9361_validate_enable_fir(struct ad9361_rf_phy *phy);
-int ad9361_post_setup(struct ad9361_rf_phy *phy);
+int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
+	enum fir_dest dest, int32_t gain_dB,
+	uint32_t ntaps, short *coef);
+int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy);
+int32_t ad9361_set_tx_atten(struct ad9361_rf_phy *phy, uint32_t atten_mdb,
+	bool tx1, bool tx2, bool immed);
+int32_t ad9361_get_tx_atten(struct ad9361_rf_phy *phy, uint32_t tx_num);
+uint32_t ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
+	uint32_t parent_rate);
+int32_t ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t *prate);
+int32_t ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t parent_rate);
+uint32_t ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
+	uint32_t parent_rate);
+int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t *prate);
+int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t parent_rate);
+uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
+	uint32_t parent_rate);
+int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t *prate);
+int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
+	uint32_t parent_rate);
 
 #endif
-

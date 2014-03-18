@@ -66,14 +66,32 @@
 #define CLK_IGNORE_UNUSED						BIT(3)
 #define CLK_GET_RATE_NOCACHE					BIT(6)
 
-#define dev_err(format, ...)		printf(format, ## __VA_ARGS__)
-#define dev_warn(format, ...)		printf(format, ## __VA_ARGS__)
-#define dev_dbg(format, ...)		printf(format, ## __VA_ARGS__)
-#define dev_info(format, ...)		printf(format, ## __VA_ARGS__)
+#define dev_err(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
+#define dev_warn(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
+#define dev_dbg(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
+#define dev_info(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
 #define printk(format, ...)			printf(format, ## __VA_ARGS__)
 #define WARN(format, ...)			printf(format, ## __VA_ARGS__)
 #define pr_err						printf
 #define pr_warning					printf
+
+struct device {
+};
+
+struct spi_device {
+	struct device dev;
+};
+
+struct axiadc_state {
+};
+
+struct axiadc_chip_info {
+	unsigned	num_channels;
+};
+
+struct axiadc_converter {
+	struct axiadc_chip_info	*chip_info;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
