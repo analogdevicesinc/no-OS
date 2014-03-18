@@ -47,6 +47,7 @@
 #include "dac_core.h"
 #include "console.h"
 #include "command.h"
+#include "platform.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/

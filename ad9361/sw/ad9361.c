@@ -42,7 +42,7 @@
 #include "ad9361.h"
 #include "common.h"
 #include "util.h"
-#include "adc_core.h"
+#include "platform.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/

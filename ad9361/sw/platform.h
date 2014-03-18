@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   adc_core.h
- *   @brief  Header file of ADC Core Driver.
+ *   @file   platform.h
+ *   @brief  Header file of Platform driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2014(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,17 +36,12 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef ADC_CORE_API_H_
-#define ADC_CORE_API_H_
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-/* ADC COMMON */
-#define ADI_REG_RSTN			0x0040
-#define ADI_RSTN				(1 << 0)
-#define ADI_MMCM_RSTN 			(1 << 1)
-
 #define ADI_REG_CNTRL			0x0044
 #define ADI_R1_MODE				(1 << 2)
 #define ADI_DDR_EDGESEL			(1 << 1)
@@ -58,24 +53,6 @@
 #define ADI_MUX_OVER_RANGE		(1 << 1)
 #define ADI_STATUS				(1 << 0)
 
-#define ADI_REG_DMA_CNTRL		0x0080
-#define ADI_DMA_STREAM			(1 << 1)
-#define ADI_DMA_START			(1 << 0)
-
-#define ADI_REG_DMA_COUNT		0x0084
-#define ADI_DMA_COUNT(x)		(((x) & 0xFFFFFFFF) << 0)
-#define ADI_TO_DMA_COUNT(x)		(((x) >> 0) & 0xFFFFFFFF)
-
-#define ADI_REG_DMA_STATUS		0x0088
-#define ADI_DMA_OVF				(1 << 2)
-#define ADI_DMA_UNF				(1 << 1)
-#define ADI_DMA_STATUS			(1 << 0)
-
-#define ADI_REG_DMA_BUSWIDTH	0x008C
-#define ADI_DMA_BUSWIDTH(x)		(((x) & 0xFFFFFFFF) << 0)
-#define ADI_TO_DMA_BUSWIDTH(x)	(((x) >> 0) & 0xFFFFFFFF)
-
-/* ADC CHANNEL */
 #define ADI_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
 #define ADI_PN_SEL				(1 << 10)
 #define ADI_IQCOR_ENB			(1 << 9)
@@ -103,40 +80,24 @@
 #define ADI_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
 #define ADI_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
 
-#define AXI_DMAC_REG_IRQ_MASK			0x80
-#define AXI_DMAC_REG_IRQ_PENDING		0x84
-#define AXI_DMAC_REG_IRQ_SOURCE			0x88
-
-#define AXI_DMAC_REG_CTRL				0x400
-#define AXI_DMAC_REG_TRANSFER_ID		0x404
-#define AXI_DMAC_REG_START_TRANSFER		0x408
-#define AXI_DMAC_REG_FLAGS				0x40c
-#define AXI_DMAC_REG_DEST_ADDRESS		0x410
-#define AXI_DMAC_REG_SRC_ADDRESS		0x414
-#define AXI_DMAC_REG_X_LENGTH			0x418
-#define AXI_DMAC_REG_Y_LENGTH			0x41c
-#define AXI_DMAC_REG_DEST_STRIDE		0x420
-#define AXI_DMAC_REG_SRC_STRIDE			0x424
-#define AXI_DMAC_REG_TRANSFER_DONE		0x428
-#define AXI_DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
-#define AXI_DMAC_REG_STATUS				0x430
-#define AXI_DMAC_REG_CURRENT_DEST_ADDR	0x434
-#define AXI_DMAC_REG_CURRENT_SRC_ADDR	0x438
-#define AXI_DMAC_REG_DBG0				0x43c
-#define AXI_DMAC_REG_DBG1				0x440
-
-#define AXI_DMAC_CTRL_ENABLE			(1 << 0)
-#define AXI_DMAC_CTRL_PAUSE				(1 << 1)
-
-#define AXI_DMAC_IRQ_SOT				(1 << 0)
-#define AXI_DMAC_IRQ_EOT				(1 << 1)
-
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void adc_init(void);
-int32_t adc_capture(uint32_t size, uint32_t start_address);
-void adc_read(uint32_t regAddr, uint32_t *data);
-void adc_write(uint32_t regAddr, uint32_t data);
+int32_t spi_init(uint32_t device_id,
+				 uint8_t  clk_pha,
+				 uint8_t  clk_pol);
+int32_t spi_read(uint8_t *data,
+				 uint8_t bytes_number);
+int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
+		unsigned char *rxbuf, unsigned n_rx);
+void gpio_init(uint32_t device_id);
+void gpio_direction(uint8_t pin, uint8_t direction);
+bool gpio_is_valid(int number);
+void gpio_set_value(unsigned gpio, int value);
+void udelay(unsigned long usecs);
+void mdelay(unsigned long msecs);
+unsigned long msleep_interruptible(unsigned int msecs);
+unsigned int axiadc_read(unsigned long reg);
+void axiadc_write(unsigned reg, unsigned val);
 
 #endif

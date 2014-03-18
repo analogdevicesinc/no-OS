@@ -92,7 +92,6 @@ static inline void usleep(unsigned long usleep)
 #define dev_info(format, ...)		printf(format, ## __VA_ARGS__)
 #define printk(format, ...)			printf(format, ## __VA_ARGS__)
 #define WARN(format, ...)			printf(format, ## __VA_ARGS__)
-#define msleep_interruptible(msecs)	usleep(msecs*1000)
 #define pr_err						printf
 #define pr_warning					printf
 
@@ -139,20 +138,6 @@ static inline unsigned long __ffs(unsigned long word)
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void udelay(unsigned long usecs);
-void mdelay(unsigned long msecs);
-int32_t spi_init(uint32_t device_id,
-				 uint8_t  clk_pha,
-				 uint8_t  clk_pol);
-int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number);
-int spi_write_then_read(const unsigned char *txbuf, unsigned n_tx,
-						unsigned char *rxbuf, unsigned n_rx);
-void gpio_init(uint32_t device_id);
-void gpio_direction(uint8_t pin, uint8_t direction);
-void gpio_data(uint8_t pin, uint8_t data);
-bool gpio_is_valid(int number);
-void gpio_set_value(unsigned gpio, int value);
 int clk_prepare_enable(struct clk *clk);
 unsigned long clk_get_rate(struct ad9361_rf_phy *phy,
 						   struct refclk_scale *clk_priv);
