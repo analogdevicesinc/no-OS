@@ -50,6 +50,16 @@
 #endif
 #include "util.h"
 #include "adc_core.h"
+#ifdef _XPARAMETERS_PS_H_
+#include "sleep.h"
+#else
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	for(delay = 0; delay < usleep * 10; delay++);
+}
+#endif
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/

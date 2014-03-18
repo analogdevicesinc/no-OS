@@ -40,7 +40,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "xparameters.h"
 #include "util.h"
 
 /******************************************************************************/
@@ -51,7 +50,7 @@
 /***************************************************************************//**
  * @brief clk_prepare_enable
 *******************************************************************************/
-int clk_prepare_enable(struct clk *clk)
+int32_t clk_prepare_enable(struct clk *clk)
 {
 	return 0;
 }
@@ -59,10 +58,10 @@ int clk_prepare_enable(struct clk *clk)
 /***************************************************************************//**
  * @brief clk_get_rate
 *******************************************************************************/
-unsigned long clk_get_rate(struct ad9361_rf_phy *phy,
-						   struct refclk_scale *clk_priv)
+uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
+					  struct refclk_scale *clk_priv)
 {
-	unsigned long rate;
+	uint32_t rate;
 	u32 source;
 
 	source = clk_priv->source;
@@ -106,13 +105,13 @@ unsigned long clk_get_rate(struct ad9361_rf_phy *phy,
 /***************************************************************************//**
  * @brief clk_set_rate
 *******************************************************************************/
-int clk_set_rate(struct ad9361_rf_phy *phy,
-				 struct refclk_scale *clk_priv,
-				 unsigned long rate)
+int32_t clk_set_rate(struct ad9361_rf_phy *phy,
+					 struct refclk_scale *clk_priv,
+					 uint32_t rate)
 {
 	u32 source;
-	int i;
-	unsigned long round_rate;
+	int32_t i;
+	uint32_t round_rate;
 
 	source = clk_priv->source;
 	if(phy->clks[source]->rate != rate)
@@ -190,23 +189,23 @@ int clk_set_rate(struct ad9361_rf_phy *phy,
 /***************************************************************************//**
  * @brief int_sqrt
 *******************************************************************************/
-unsigned long int_sqrt(unsigned long x)
+uint32_t int_sqrt(uint32_t x)
 {
-	unsigned long b, m, y = 0;
+	uint32_t b, m, y = 0;
 
 	if (x <= 1)
-			return x;
+		return x;
 
 	m = 1UL << (BITS_PER_LONG - 2);
 	while (m != 0) {
-			b = y + m;
-			y >>= 1;
+		b = y + m;
+		y >>= 1;
 
-			if (x >= b) {
-					x -= b;
-					y += m;
-			}
-			m >>= 2;
+		if (x >= b) {
+			x -= b;
+			y += m;
+		}
+		m >>= 2;
 	}
 
 	return y;
@@ -215,30 +214,79 @@ unsigned long int_sqrt(unsigned long x)
 /***************************************************************************//**
  * @brief ilog2
 *******************************************************************************/
-int ilog2(int x)
+int32_t ilog2(int32_t x)
 {
-	int A = !(!(x >> 16));
-	int count = 0;
-	int x_copy = x;
+	int32_t A = !(!(x >> 16));
+	int32_t count = 0;
+	int32_t x_copy = x;
 
-	count = count + (A<<4);
+	count = count + (A << 4);
 
-	x_copy = (((~A + 1) & (x >> 16)) + (~(~A+1) & x));
+	x_copy = (((~A + 1) & (x >> 16)) + (~(~A + 1) & x));
 
 	A = !(!(x_copy >> 8));
-	count = count + (A<<3);
-	x_copy = (((~A + 1) & (x_copy >> 8)) + (~(~A+1) & x_copy));
+	count = count + (A << 3);
+	x_copy = (((~A + 1) & (x_copy >> 8)) + (~(~A + 1) & x_copy));
 
 	A = !(!(x_copy >> 4));
-	count = count + (A<<2);
-	x_copy = (((~A + 1) & (x_copy >> 4)) + (~(~A+1) & x_copy));
+	count = count + (A << 2);
+	x_copy = (((~A + 1) & (x_copy >> 4)) + (~(~A + 1) & x_copy));
 
 	A = !(!(x_copy >> 2));
-	count = count + (A<<1);
-	x_copy = (((~A + 1) & (x_copy >> 2)) + (~(~A+1) & x_copy));
+	count = count + (A << 1);
+	x_copy = (((~A + 1) & (x_copy >> 2)) + (~(~A + 1) & x_copy));
 
 	A = !(!(x_copy >> 1));
 	count = count + A;
 
 	return count;
+}
+
+/***************************************************************************//**
+ * @brief do_div
+*******************************************************************************/
+uint64_t do_div(uint64_t* n, uint64_t base)
+{
+	uint64_t mod = 0;
+
+	mod = *(uint64_t *)n % base;
+	*(uint64_t *)n = *(uint64_t *)n / base;
+
+	return mod;
+}
+
+/***************************************************************************//**
+ * @brief __ffs
+*******************************************************************************/
+uint32_t __ffs(uint32_t word)
+{
+	int32_t num = 0;
+
+	if ((word & 0xffff) == 0) {
+			num += 16;
+			word >>= 16;
+	}
+	if ((word & 0xff) == 0) {
+			num += 8;
+			word >>= 8;
+	}
+	if ((word & 0xf) == 0) {
+			num += 4;
+			word >>= 4;
+	}
+	if ((word & 0x3) == 0) {
+			num += 2;
+			word >>= 2;
+	}
+	if ((word & 0x1) == 0)
+			num += 1;
+	return num;
+}
+
+/***************************************************************************//**
+ * @brief ERR_PTR
+*******************************************************************************/
+void * ERR_PTR(long error)
+{
+	return (void *) error;
 }

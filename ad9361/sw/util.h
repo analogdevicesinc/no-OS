@@ -47,44 +47,24 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "common.h"
-#include "xil_printf.h"
 #include "ad9361.h"
-#ifdef _XPARAMETERS_PS_H_
-#include "sleep.h"
-#else
-static inline void usleep(unsigned long usleep)
-{
-	unsigned long delay = 0;
-
-	for(delay = 0; delay < usleep * 10; delay++);
-}
-#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define SUCCESS							0
-#define ARRAY_SIZE(arr)					(sizeof(arr) / sizeof((arr)[0]))
-#define min(x, y)						((x < y) ? x : y)
-#define max(x, y)						((x > y) ? x : y)
-#define clamp(val, min_val, max_val)	(max(min(val, max_val), min_val))
-#define min_t(type, x, y)				(type)min((type)x, (type)y)
-#define max_t(type, x, y)				(type)max((type)x, (type)y)
-#define clamp_t(type, val, min_val, max_val)	\
-			(type)clamp((type)val, (type)min_val, (type)max_val)
-#define INIT_COMPLETION(x)				((x).done = 0)
-#define DIV_ROUND_UP(x, y)				((x + y - 1) / y)
-#define DIV_ROUND_CLOSEST(x, divisor)(			\
-{												\
-	typeof(x) __x = x;							\
-	typeof(divisor) __d = divisor;				\
-	(((typeof(x))-1) > 0 ||						\
-	 ((typeof(divisor))-1) > 0 || (__x) > 0) ?	\
-			(((__x) + ((__d) / 2)) / (__d)) :	\
-			(((__x) - ((__d) / 2)) / (__d));})
-#define BIT(x)					(1 << (x))
-#define CLK_IGNORE_UNUSED	   	BIT(3)
-#define CLK_GET_RATE_NOCACHE	BIT(6)
+#define SUCCESS									0
+#define ARRAY_SIZE(arr)							(sizeof(arr) / sizeof((arr)[0]))
+#define min(x, y)								(((x) < (y)) ? (x) : (y))
+#define min_t(type, x, y)						(type)min((type)(x), (type)(y))
+#define max(x, y)								(((x) > (y)) ? (x) : (y))
+#define max_t(type, x, y)						(type)max((type)(x), (type)(y))
+#define clamp(val, min_val, max_val)			(max(min((val), (max_val)), (min_val)))
+#define clamp_t(type, val, min_val, max_val)	(type)clamp((type)(val), (type)(min_val), (type)(max_val))
+#define DIV_ROUND_UP(x, y)						(((x) + (y) - 1) / (y))
+#define DIV_ROUND_CLOSEST(x, divisor)			(((x) + (divisor) / 2) / (divisor))
+#define BIT(x)									(1 << (x))
+#define CLK_IGNORE_UNUSED						BIT(3)
+#define CLK_GET_RATE_NOCACHE					BIT(6)
 
 #define dev_err(format, ...)		printf(format, ## __VA_ARGS__)
 #define dev_warn(format, ...)		printf(format, ## __VA_ARGS__)
@@ -95,56 +75,20 @@ static inline void usleep(unsigned long usleep)
 #define pr_err						printf
 #define pr_warning					printf
 
-static inline void * ERR_PTR(long error)
-{
-	return (void *) error;
-}
-
-static inline unsigned long __ffs(unsigned long word)
-{
-	int num = 0;
-
-	if ((word & 0xffff) == 0) {
-			num += 16;
-			word >>= 16;
-	}
-	if ((word & 0xff) == 0) {
-			num += 8;
-			word >>= 8;
-	}
-	if ((word & 0xf) == 0) {
-			num += 4;
-			word >>= 4;
-	}
-	if ((word & 0x3) == 0) {
-			num += 2;
-			word >>= 2;
-	}
-	if ((word & 0x1) == 0)
-			num += 1;
-	return num;
-}
-
-#define container_of(ptr, type, member) ({					\
-	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-	(type *)( (char *)__mptr - offsetof(type,member) );})
-
-#define do_div(n,base) ({								\
-		uint64_t __res;									\
-		__res = ((uint64_t) (n)) % (uint64_t) (base);	\
-		n = ((uint64_t) (n)) / (uint64_t) (base);		\
-		__res;})
-
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int clk_prepare_enable(struct clk *clk);
-unsigned long clk_get_rate(struct ad9361_rf_phy *phy,
-						   struct refclk_scale *clk_priv);
-int clk_set_rate(struct ad9361_rf_phy *phy,
-				 struct refclk_scale *clk_priv,
-				 unsigned long rate);
-unsigned long int_sqrt(unsigned long x);
-int ilog2(int x);
+int32_t clk_prepare_enable(struct clk *clk);
+uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
+					  struct refclk_scale *clk_priv);
+int32_t clk_set_rate(struct ad9361_rf_phy *phy,
+					 struct refclk_scale *clk_priv,
+					 uint32_t rate);
+uint32_t int_sqrt(uint32_t x);
+int32_t ilog2(int32_t x);
+uint64_t do_div(uint64_t* n,
+				uint64_t base);
+uint32_t __ffs(uint32_t word);
+void * ERR_PTR(long error);
 
 #endif
