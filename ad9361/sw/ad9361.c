@@ -1216,7 +1216,7 @@ static int ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 	dev_dbg("%s : vco_freq %llu : ref_clk %lu : range %d\n",
 		__func__, vco_freq, ref_clk, range);
 
-	do_div(vco_freq, 1000000UL); /* vco_freq in MHz */
+	do_div(&vco_freq, 1000000UL); /* vco_freq in MHz */
 
 	if (phy->pdata->fdd || phy->pdata->tdd_use_fdd_tables) {
 		tab = &SynthLUT_FDD[range][0];
@@ -1938,7 +1938,7 @@ static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_fr
 	 */
 
 	tmp = bbpll_freq * 10000ULL;
-	do_div(tmp, 126906UL * phy->rxbbf_div);
+	do_div(&tmp, 126906UL * phy->rxbbf_div);
 	bb_bw_Hz = tmp;
 
 	dev_dbg("%s : BBBW %lu : ADCfreq %lu\n",
@@ -1959,7 +1959,7 @@ static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_fr
 			(160 * c3_msb + 10 * c3_lsb + 140) *
 			(bb_bw_Hz) * (1000 + (10 * (bb_bw_Hz - 18000000) / 1000000)));
 
-		do_div(invrc_tconst_1e6, 1000UL);
+		do_div(&invrc_tconst_1e6, 1000UL);
 
 	} else {
 		invrc_tconst_1e6 = (160975ULL * r2346 *
@@ -1967,7 +1967,7 @@ static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_fr
 			(bb_bw_Hz));
 	}
 
-	do_div(invrc_tconst_1e6, 1000000000UL);
+	do_div(&invrc_tconst_1e6, 1000000000UL);
 
 	if (invrc_tconst_1e6 > ULONG_MAX)
 		dev_err("invrc_tconst_1e6 > ULONG_MAX\n");
@@ -2000,29 +2000,29 @@ static int ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, unsigned long bbpll_fr
 
 	tmp = -50000000 + 8ULL * scale_snr_1e3 * sqrt_inv_rc_tconst_1e3 *
 		min_sqrt_term_1e3;
-	do_div(tmp, 100000000UL);
+	do_div(&tmp, 100000000UL);
 	data[7] = min_t(u64, 124U, tmp);
 
 	tmp = (invrc_tconst_1e6 >> 1) + 20 * inv_scaled_adc_clk_1e3 *
 		data[7] / 80 * 1000ULL;
-	do_div(tmp, invrc_tconst_1e6);
+	do_div(&tmp, invrc_tconst_1e6);
 	data[8] = min_t(u64, 255U, tmp);
 
 	tmp = (-500000 + 77ULL * sqrt_inv_rc_tconst_1e3 * min_sqrt_term_1e3);
-	do_div(tmp, 1000000UL);
+	do_div(&tmp, 1000000UL);
 	data[10] = min_t(u64, 127U, tmp);
 
 	data[9] = min_t(u32, 127U, ((800 * data[10]) / 1000));
 	tmp = ((invrc_tconst_1e6 >> 1) + (20 * inv_scaled_adc_clk_1e3 *
 		data[10] * 1000ULL));
-	do_div(tmp, invrc_tconst_1e6 * 77);
+	do_div(&tmp, invrc_tconst_1e6 * 77);
 	data[11] = min_t(u64, 255U, tmp);
 	data[12] = min_t(u32, 127U, (-500000 + 80 * sqrt_inv_rc_tconst_1e3 *
 		min_sqrt_term_1e3) / 1000000UL);
 
 	tmp = -3*(long)(invrc_tconst_1e6 >> 1) + inv_scaled_adc_clk_1e3 *
 		data[12] * (1000ULL * 20 / 80);
-	do_div(tmp, invrc_tconst_1e6);
+	do_div(&tmp, invrc_tconst_1e6);
 	data[13] = min_t(u64, 255, tmp);
 
 	data[14] = 21 * (inv_scaled_adc_clk_1e3 / 10000);
@@ -2088,7 +2088,7 @@ static int ad9361_rx_tia_calib(struct ad9361_rf_phy *phy, unsigned long bb_bw_Hz
 	R2346 = 18300 * RX_BBF_R2346(reg1E6);
 
 	CTIA_fF = Cbbf * R2346 * 560ULL;
-	do_div(CTIA_fF, 3500000UL);
+	do_div(&CTIA_fF, 3500000UL);
 
 	if (bb_bw_Hz <= 3000000UL)
 		reg1DB = 0xE0;
@@ -2241,7 +2241,7 @@ static int ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 	for (i = 0, res = 1; i < 4; i++) {
 		div = corner * res;
 		cap = (500000000ULL) + (div >> 1);
-		do_div(cap, div);
+		do_div(&cap, div);
 		cap -= 12ULL;
 		if (cap < 64ULL)
 			break;
@@ -4838,7 +4838,7 @@ unsigned long ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 	integer = buf[0];
 
 	rate = ((u64)parent_rate * fract);
-	do_div(rate, BBPLL_MODULUS);
+	do_div(&rate, BBPLL_MODULUS);
 	rate += (u64)parent_rate * integer;
 
 	return (unsigned long)rate;
@@ -4856,6 +4856,7 @@ long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 {
 	u64 tmp;
 	u32 fract, integer;
+	uint64_t temp;
 
 	if (rate > MAX_BBPLL_FREQ)
 		return MAX_BBPLL_FREQ;
@@ -4863,15 +4864,17 @@ long ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	if (rate < MIN_BBPLL_FREQ)
 		return MIN_BBPLL_FREQ;
 
-	tmp = do_div(rate, *prate);
+	temp = rate;
+	tmp = do_div(&temp, *prate);
+	rate = temp;
 	tmp = tmp * BBPLL_MODULUS + (*prate >> 1);
-	do_div(tmp, *prate);
+	do_div(&tmp, *prate);
 
 	integer = rate;
 	fract = tmp;
 
 	tmp = *prate * (u64)fract;
-	do_div(tmp, BBPLL_MODULUS);
+	do_div(&tmp, BBPLL_MODULUS);
 	tmp += *prate * integer;
 
 	return tmp;
@@ -4891,6 +4894,7 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	u32 fract, integer;
 	int icp_val;
 	u8 lf_defaults[3] = {0x35, 0x5B, 0xE8};
+	uint64_t temp;
 	char   message[16][12] = {"BB_REFCLK", "RX_REFCLK", "TX_REFCLK", "BBPLL_CLK", "ADC_CLK",
 		"R2_CLK", "R1_CLK", "CLKRF_CLK", "RX_SAMPL_CLK", "DAC_CLK", "T2_CLK",
 		"T1_CLK", "CLKTF_CLK", "TX_SAMPL_CLK", "RX_RFPLL", "TX_RFPLL"};
@@ -4903,7 +4907,7 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	 * Scale is 150uA @ (1280MHz BBPLL, 40MHz REFCLK)
 	 */
 	tmp = (rate >> 7) * 150ULL;
-	do_div(tmp, (parent_rate >> 7) * 32UL + (tmp >> 1));
+	do_div(&tmp, (parent_rate >> 7) * 32UL + (tmp >> 1));
 
 	/* 25uA/LSB, Offset 25uA */
 	icp_val = DIV_ROUND_CLOSEST((u32)tmp, 25U) - 1;
@@ -4921,9 +4925,11 @@ int ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, unsigned long rate,
 	ad9361_spi_write(REG_SDM_CTRL, 0x10);
 
 	/* Calculate and set BBPLL frequency word */
-	tmp = do_div(rate, parent_rate);
+	temp = rate;
+	tmp = do_div(&temp, parent_rate);
+	rate = temp;
 	tmp = tmp *(u64) BBPLL_MODULUS + (parent_rate >> 1);
-	do_div(tmp, parent_rate);
+	do_div(&tmp, parent_rate);
 
 	integer = rate;
 	fract = tmp;
@@ -4963,7 +4969,7 @@ static u64 ad9361_calc_rfpll_freq(u64 parent_rate,
 	u64 rate;
 
 	rate = parent_rate * fract;
-	do_div(rate, RFPLL_MODULUS);
+	do_div(&rate, RFPLL_MODULUS);
 	rate += parent_rate * integer;
 
 	return rate >> (vco_div + 1);
@@ -4998,9 +5004,9 @@ static int ad9361_calc_rfpll_divder(u64 freq,
 
 	*vco_div = div;
 	*vco_freq = freq;
-	tmp = do_div(freq, parent_rate);
+	tmp = do_div(&freq, parent_rate);
 	tmp = tmp * RFPLL_MODULUS + (parent_rate >> 1);
-	do_div(tmp, parent_rate);
+	do_div(&tmp, parent_rate);
 	*integer = freq;
 	*fract = tmp;
 

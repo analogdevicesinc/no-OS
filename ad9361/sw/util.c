@@ -249,8 +249,8 @@ uint64_t do_div(uint64_t* n, uint64_t base)
 {
 	uint64_t mod = 0;
 
-	mod = *(uint64_t *)n % base;
-	*(uint64_t *)n = *(uint64_t *)n / base;
+	mod = *n % base;
+	*n = *n / base;
 
 	return mod;
 }

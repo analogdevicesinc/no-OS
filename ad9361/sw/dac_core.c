@@ -108,11 +108,11 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 	dds_st.cached_phase[chan] = phase;
 	dds_st.cached_scale[chan] = scale;
 	val64 = (u64) freq * 0xFFFFULL;
-	do_div(val64, *dds_st.dac_clk);
+	do_div(&val64, *dds_st.dac_clk);
 	val = ADI_DDS_INCR(val64) | 1;
 
 	val64 = (u64) phase * 0x10000ULL + (360000 / 2);
-	do_div(val64, 360000);
+	do_div(&val64, 360000);
 	val |= ADI_DDS_INIT(val64);
 
 	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
@@ -208,7 +208,7 @@ void dds_set_frequency(uint32_t chan, uint32_t freq)
 	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~ADI_DDS_INCR(~0);
 	val64 = (u64) freq * 0xFFFFULL;
-	do_div(val64, *dds_st.dac_clk);
+	do_div(&val64, *dds_st.dac_clk);
 	reg |= ADI_DDS_INCR(val64) | 1;
 	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
@@ -228,7 +228,7 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~ADI_DDS_INIT(~0);
 	val64 = (u64) phase * 0x10000ULL + (360000 / 2);
-	do_div(val64, 360000);
+	do_div(&val64, 360000);
 	reg |= ADI_DDS_INIT(val64);
 	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
