@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include "ad9361.h"
 #include "ad9361_api.h"
+#include "util.h"
 
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
@@ -75,32 +76,32 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy = (struct ad9361_rf_phy *)malloc(sizeof(*phy));
 	if (!phy) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	phy->spi = (struct spi_device *)malloc(sizeof(*phy->spi));
 	if (!phy->spi) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	phy->clk_refin = (struct clk *)malloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	phy->adc_conv = (struct axiadc_converter *)malloc(sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	phy->adc_state = (struct axiadc_state *)malloc(sizeof(*phy->adc_state));
 	if (!phy->adc_state) {
-		return ERR_PTR(-ENOMEM);
+		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
 	/* Reference Clock */
@@ -155,11 +156,11 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->use_extclk = init_param->xo_disable_use_ext_refclk_enable;
 	phy->pdata->dcxo_coarse = init_param->dcxo_coarse_and_fine_tune[0];
 	phy->pdata->dcxo_fine = init_param->dcxo_coarse_and_fine_tune[1];
-	phy->pdata->ad9361_clkout_mode = init_param->clk_output_mode_select;
+	phy->pdata->ad9361_clkout_mode = (enum ad9361_clkout)init_param->clk_output_mode_select;
 
 	/* Gain Control */
-	phy->pdata->gain_ctrl.rx1_mode = init_param->gc_rx1_mode;
-	phy->pdata->gain_ctrl.rx2_mode = init_param->gc_rx2_mode;
+	phy->pdata->gain_ctrl.rx1_mode = (enum rf_gain_ctrl_mode)init_param->gc_rx1_mode;
+	phy->pdata->gain_ctrl.rx2_mode = (enum rf_gain_ctrl_mode)init_param->gc_rx2_mode;
 	phy->pdata->gain_ctrl.adc_large_overload_thresh = init_param->gc_adc_large_overload_thresh;
 	phy->pdata->gain_ctrl.adc_ovr_sample_size = init_param->gc_adc_ovr_sample_size;
 	phy->pdata->gain_ctrl.adc_small_overload_thresh = init_param->gc_adc_small_overload_thresh;
@@ -220,7 +221,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 		/* Fast AGC - Final Power Test */
 	phy->pdata->gain_ctrl.f_agc_gain_increase_after_gain_lock_en = init_param->fagc_gain_increase_after_gain_lock_en;
 		/* Fast AGC - Unlocking the Gain */
-	phy->pdata->gain_ctrl.f_agc_gain_index_type_after_exit_rx_mode = init_param->fagc_gain_index_type_after_exit_rx_mode;
+	phy->pdata->gain_ctrl.f_agc_gain_index_type_after_exit_rx_mode = (enum f_agc_target_gain_index_type)init_param->fagc_gain_index_type_after_exit_rx_mode;
 	phy->pdata->gain_ctrl.f_agc_use_last_lock_level_for_set_gain_en = init_param->fagc_use_last_lock_level_for_set_gain_en;
 	phy->pdata->gain_ctrl.f_agc_rst_gla_stronger_sig_thresh_exceeded_en = init_param->fagc_rst_gla_stronger_sig_thresh_exceeded_en;
 	phy->pdata->gain_ctrl.f_agc_optimized_gain_offset = init_param->fagc_optimized_gain_offset;
@@ -232,13 +233,13 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->gain_ctrl.f_agc_rst_gla_large_adc_overload_en = init_param->fagc_rst_gla_large_adc_overload_en;
 	phy->pdata->gain_ctrl.f_agc_rst_gla_large_lmt_overload_en = init_param->fagc_rst_gla_large_lmt_overload_en;
 	phy->pdata->gain_ctrl.f_agc_rst_gla_en_agc_pulled_high_en = init_param->fagc_rst_gla_en_agc_pulled_high_en;
-	phy->pdata->gain_ctrl.f_agc_rst_gla_if_en_agc_pulled_high_mode = init_param->fagc_rst_gla_if_en_agc_pulled_high_mode;
+	phy->pdata->gain_ctrl.f_agc_rst_gla_if_en_agc_pulled_high_mode = (enum f_agc_target_gain_index_type)init_param->fagc_rst_gla_if_en_agc_pulled_high_mode;
 	phy->pdata->gain_ctrl.f_agc_power_measurement_duration_in_state5 = init_param->fagc_power_measurement_duration_in_state5;
 
 	/* RSSI Control */
 	phy->pdata->rssi_ctrl.rssi_delay = init_param->rssi_delay;
 	phy->pdata->rssi_ctrl.rssi_duration = init_param->rssi_duration;
-	phy->pdata->rssi_ctrl.restart_mode = init_param->rssi_restart_mode;
+	phy->pdata->rssi_ctrl.restart_mode = (enum rssi_restart_mode)init_param->rssi_restart_mode;
 	phy->pdata->rssi_ctrl.rssi_unit_is_rx_samples = init_param->rssi_unit_is_rx_samples_enable;
 	phy->pdata->rssi_ctrl.rssi_wait = init_param->rssi_wait;
 
@@ -329,7 +330,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	ret = ad9361_spi_read(NULL, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
-		printf("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
+		printf("%s : Unsupported PRODUCT_ID 0x%X", "ad9361_init", (unsigned int)ret);
 		ret = -ENODEV;
 		goto out;
 	}
@@ -349,17 +350,20 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	if (ret < 0)
 		goto out;
 
-	printf("%s : AD9361 Rev %d successfully initialized\n", __func__, (int)rev);
+	printf("%s : AD9361 Rev %d successfully initialized\n", "ad9361_init", (int)rev);
 
 	return phy;
 
 out:
+	free(phy->spi);
+	free(phy->adc_conv);
+	free(phy->adc_state);
 	free(phy->clk_refin);
 	free(phy->pdata);
 	free(phy);
-	printf("%s : AD9361 initialization error\n", __func__);
+	printf("%s : AD9361 initialization error\n", "ad9361_init");
 
-	return ERR_PTR(ENODEV);
+	return (struct ad9361_rf_phy *)ERR_PTR(ENODEV);
 }
 
 /**
@@ -600,7 +604,7 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	ret = ad9361_load_fir_filter_coef(phy, fir_cfg.rx | FIR_IS_RX,
+	ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)(fir_cfg.rx | FIR_IS_RX),
 			fir_cfg.rx_gain, 64, fir_cfg.rx_coef);
 	phy->rx_fir_dec = fir_cfg.rx_dec;
 
@@ -800,7 +804,7 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	ret = ad9361_load_fir_filter_coef(phy, fir_cfg.tx,
+	ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)fir_cfg.tx,
 			fir_cfg.tx_gain, 64, fir_cfg.tx_coef);
 	phy->tx_fir_int = fir_cfg.tx_int;
 
