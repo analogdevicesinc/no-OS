@@ -62,7 +62,7 @@ uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
 					  struct refclk_scale *clk_priv)
 {
 	uint32_t rate;
-	u32 source;
+	uint32_t source;
 
 	source = clk_priv->source;
 
@@ -109,7 +109,7 @@ int32_t clk_set_rate(struct ad9361_rf_phy *phy,
 					 struct refclk_scale *clk_priv,
 					 uint32_t rate)
 {
-	u32 source;
+	uint32_t source;
 	int32_t i;
 	uint32_t round_rate;
 
