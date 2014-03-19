@@ -43,6 +43,23 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 
+/******************************************************************************/
+/************************ Constants Definitions *******************************/
+/******************************************************************************/
+static struct axiadc_chip_info axiadc_chip_info_tbl[] =
+{
+	{
+		"AD9361",
+		4,
+		61440000UL,
+	},
+	{
+		"AD9364",
+		2,
+		122880000UL,
+	},
+};
+
 /**
  * Initialize the AD9361 part.
  * @param init_param The structure that contains the AD9361 initial parameters.
@@ -294,7 +311,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->port_ctrl.lvds_invert[0] = 0xFF;
 	phy->pdata->port_ctrl.lvds_invert[1] = 0x0F;
 
-	phy->adc_conv->chip_info->num_channels = 4;
+	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
 
 	phy->rx_eq_2tx = false;
 

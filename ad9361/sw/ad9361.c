@@ -3342,7 +3342,7 @@ int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 	uint64_t bbpll_rate;
 	int32_t i, index_rx = -1, index_tx = -1, tmp;
 	uint32_t div, tx_intdec, rx_intdec;
-	const char clk_dividers[][4] = {
+	const int8_t clk_dividers[][4] = {
 		{ 12, 3, 2, 2 },
 		{ 8, 2, 2, 2 },
 		{ 6, 3, 1, 2 },
@@ -3351,7 +3351,6 @@ int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		{ 2, 2, 1, 1 },
 		{ 1, 1, 1, 1 },
 	};
-
 
 	if (phy->bypass_rx_fir)
 		rx_intdec = 1;
@@ -3851,11 +3850,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	ad9361_set_dcxo_tune(phy, pd->dcxo_coarse, pd->dcxo_fine);
 
-#ifdef TODO
-	refin_Hz = clk_get_rate(phy->clk_refin);
-#else
-	refin_Hz = 40000000UL;	// FIXME
-#endif
+	refin_Hz = phy->clk_refin->rate;
 
 	if (refin_Hz < 40000000UL)
 		ref_freq = 2 * refin_Hz;
@@ -4205,7 +4200,7 @@ int32_t ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	enum fir_dest dest, int32_t gain_dB,
-	uint32_t ntaps, short *coef)
+	uint32_t ntaps, int16_t *coef)
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t val, offs = 0, fir_conf = 0;
@@ -4272,8 +4267,8 @@ static int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 	int32_t i = 0, ret, txc, rxc;
 	int32_t tx = -1, tx_gain, tx_int;
 	int32_t rx = -1, rx_gain, rx_dec;
-	short coef_tx[128];
-	short coef_rx[128];
+	int16_t coef_tx[128];
+	int16_t coef_rx[128];
 	char *ptr = data;
 
 	while ((line = strsep(&ptr, "\n"))) {
@@ -4316,13 +4311,13 @@ static int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 		ret = sscanf(line, "%d,%d", &txc, &rxc);
 #endif
 		if (ret == 1) {
-			coef_tx[i] = coef_rx[i] = (short)txc;
+			coef_tx[i] = coef_rx[i] = (int16_t)txc;
 			i++;
 			continue;
 		}
 		else if (ret == 2) {
-			coef_tx[i] = (short)txc;
-			coef_rx[i] = (short)rxc;
+			coef_tx[i] = (int16_t)txc;
+			coef_rx[i] = (int16_t)rxc;
 			i++;
 			continue;
 		}

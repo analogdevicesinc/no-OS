@@ -86,7 +86,9 @@ struct axiadc_state {
 };
 
 struct axiadc_chip_info {
-	unsigned	num_channels;
+	char		*name;
+	int32_t		num_channels;
+	uint32_t	max_rate;
 };
 
 struct axiadc_converter {
