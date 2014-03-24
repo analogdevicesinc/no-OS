@@ -159,18 +159,18 @@ void dac_init(uint8_t data_sel)
 		break;
 	case DATA_SEL_DMA:
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-		for(index = 0; index < (tx_count * 2); index+=2)
+		for(index = 0; index < (tx_count * 2); index += 2)
 		{
 			index_i1 = index;
-			index_q1 = index + (tx_count / 4);
+			index_q1 = index + (tx_count / 2);
 			if(index_q1 >= (tx_count * 2))
 				index_q1 -= (tx_count * 2);
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
 			Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
 
-			index_i2 = index_i1 + (tx_count / 2);
-			index_q2 = index_q1 + (tx_count / 2);
+			index_i2 = index_i1 + (tx_count / 2) * 3;
+			index_q2 = index_q1 + (tx_count / 2) * 3;
 			if(index_i2 >= (tx_count * 2))
 				index_i2 -= (tx_count * 2);
 			if(index_q2 >= (tx_count * 2))
