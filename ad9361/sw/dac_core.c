@@ -169,8 +169,8 @@ void dac_init(uint8_t data_sel)
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
 			Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
 
-			index_i2 = index_i1 + (tx_count / 2) * 3;
-			index_q2 = index_q1 + (tx_count / 2) * 3;
+			index_i2 = index_i1;
+			index_q2 = index_q1;
 			if(index_i2 >= (tx_count * 2))
 				index_i2 -= (tx_count * 2);
 			if(index_q2 >= (tx_count * 2))
