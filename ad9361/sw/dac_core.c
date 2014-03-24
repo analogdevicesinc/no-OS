@@ -180,6 +180,7 @@ void dac_init(uint8_t data_sel)
 			Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
 		}
 		Xil_DCacheFlush();
+		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
 		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
 		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
