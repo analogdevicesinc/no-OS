@@ -43,6 +43,7 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 #include "util.h"
+#include "platform.h"
 
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
@@ -323,6 +324,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->rfdc_track_en = true;
 	phy->bbdc_track_en = true;
 	phy->quad_track_en = true;
+
+	axiadc_init();
 
 	ad9361_reset(phy);
 	ad9361_spi_write(NULL, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);

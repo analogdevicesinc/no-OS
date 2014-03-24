@@ -286,9 +286,6 @@ int main(void)
 	gpio_direction(54 + 46, 1);
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
-	adc_init();
-	dac_init(DATA_SEL_DDS);
-
 	ad9361_phy = ad9361_init(&default_init_param);
 
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);

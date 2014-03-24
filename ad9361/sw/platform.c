@@ -50,6 +50,7 @@
 #endif
 #include "util.h"
 #include "adc_core.h"
+#include "dac_core.h"
 #ifdef _XPARAMETERS_PS_H_
 #include "sleep.h"
 #else
@@ -284,6 +285,15 @@ unsigned long msleep_interruptible(unsigned int msecs)
 	mdelay(msecs);
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief axiadc_init
+*******************************************************************************/
+void axiadc_init(void)
+{
+	adc_init();
+	dac_init(DATA_SEL_DDS);
 }
 
 /***************************************************************************//**
