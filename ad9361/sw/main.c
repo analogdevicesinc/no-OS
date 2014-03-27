@@ -41,19 +41,22 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 //#define CONSOLE_COMMANDS
+#define XILINX_PLATFORM
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "xil_cache.h"
-#include "parameters.h"
 #include "ad9361_api.h"
-#include "adc_core.h"
-#include "dac_core.h"
+#include "parameters.h"
 #include "platform.h"
 #ifdef CONSOLE_COMMANDS
 #include "command.h"
 #include "console.h"
+#endif
+#ifdef XILINX_PLATFORM
+#include "adc_core.h"
+#include "dac_core.h"
+#include "xil_cache.h"
 #endif
 
 /******************************************************************************/
@@ -288,11 +291,13 @@ struct ad9361_rf_phy *ad9361_phy;
 *******************************************************************************/
 int main(void)
 {
+#ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
+#endif
 
 	gpio_init(GPIO_DEVICE_ID);
-	gpio_direction(54 + 46, 1);
+	gpio_direction(GPIO_RESET_PIN_NO, 1);
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
 	ad9361_phy = ad9361_init(&default_init_param);
@@ -300,6 +305,7 @@ int main(void)
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
+#ifdef XILINX_PLATFORM
 #ifdef DAC_DMA
 	dac_init(DATA_SEL_DMA);
 #else
@@ -309,6 +315,7 @@ int main(void)
 #ifdef CAPTURE_SCRIPT
 	adc_capture(16384, ADC_DDR_BASEADDR);
 	while(1);
+#endif
 #endif
 
 #ifdef CONSOLE_COMMANDS
@@ -341,8 +348,10 @@ int main(void)
 	while(1);
 #endif
 
+#ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
+#endif
 
 	return 0;
 }
