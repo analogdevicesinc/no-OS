@@ -38,6 +38,11 @@
 *******************************************************************************/
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+//#define CONSOLE_COMMANDS
+
+/******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "xil_cache.h"
@@ -45,13 +50,16 @@
 #include "ad9361_api.h"
 #include "adc_core.h"
 #include "dac_core.h"
-#include "console.h"
-#include "command.h"
 #include "platform.h"
+#ifdef CONSOLE_COMMANDS
+#include "command.h"
+#include "console.h"
+#endif
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+#ifdef CONSOLE_COMMANDS
 extern command	  	cmd_list[];
 extern char			cmd_no;
 extern cmd_function	cmd_functions[11];
@@ -63,6 +71,7 @@ char				invalid_cmd		 =  0;
 char				received_cmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 										0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 										0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+#endif
 
 AD9361_InitParam default_init_param = {
 	/* Reference Clock */
@@ -301,6 +310,8 @@ int main(void)
 	adc_capture(16384, ADC_DDR_BASEADDR);
 	while(1);
 #endif
+
+#ifdef CONSOLE_COMMANDS
 	get_help(NULL, 0);
 
 	while(1)
@@ -326,6 +337,9 @@ int main(void)
 			console_print("Invalid command!\n");
 		}
 	}
+#else
+	while(1);
+#endif
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
