@@ -1,5 +1,4 @@
 
-CC = arm-xilinx-linux-gnueabi-gcc
 CFLAGS = -Wall -Os
 
 OBJS = ad9361.c ad9361.h ad9361_api.c ad9361_api.h common.h main.c parameters.h platform.c platform.h util.c util.h
