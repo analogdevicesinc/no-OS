@@ -109,8 +109,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->clk_refin->rate = init_param->reference_clk_rate;
 
 	/* Base Configuration */
-	phy->pdata->fdd = init_param->two_rx_two_tx_mode_enable;
-	phy->pdata->rx2tx2 = init_param->frequency_division_duplex_mode_enable;
+	phy->pdata->fdd = init_param->frequency_division_duplex_mode_enable;
+	phy->pdata->rx2tx2 = init_param->two_rx_two_tx_mode_enable;
 	phy->pdata->tdd_use_dual_synth = init_param->tdd_use_dual_synth_mode_enable;
 	phy->pdata->tdd_skip_vco_cal = init_param->tdd_skip_vco_cal_enable;
 	phy->pdata->rx_fastlock_delay_ns = init_param->rx_fastlock_delay_ns;
