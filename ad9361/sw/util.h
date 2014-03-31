@@ -95,11 +95,12 @@ struct axiadc_converter {
 	struct axiadc_chip_info	*chip_info;
 };
 
-#ifdef VISUALSTUDIO
+#ifdef WIN32
 #include "basetsd.h"
 typedef SSIZE_T ssize_t;
 #define strsep(s, ct)				0
 #define snprintf(s, n, format, ...)	0
+#define __func__ __FUNCTION__
 #endif
 
 /******************************************************************************/
