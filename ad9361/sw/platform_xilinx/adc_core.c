@@ -40,12 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdint.h"
-#include "xil_io.h"
-#include "xil_cache.h"
-#include "parameters.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include <xil_cache.h>
+#include <xil_io.h>
 #include "adc_core.h"
-#include "stdlib.h"
+#include "parameters.h"
 
 /***************************************************************************//**
  * @brief adc_read

@@ -54,9 +54,9 @@
 #include "console.h"
 #endif
 #ifdef XILINX_PLATFORM
+#include <xil_cache.h>
 #include "adc_core.h"
 #include "dac_core.h"
-#include "xil_cache.h"
 #endif
 
 /******************************************************************************/

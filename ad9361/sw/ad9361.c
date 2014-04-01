@@ -39,15 +39,15 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdint.h"
+#include <malloc.h>
+#include <limits.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "ad9361.h"
 #include "platform.h"
 #include "util.h"
-#include "string.h"
-#include "limits.h"
-#include "stdlib.h"
-#include "malloc.h"
-#include "stdio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
