@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   util.h
- *   @brief  Header file of Util driver.
+ *   @file   parameters.h
+ *   @brief  Parameters Definitions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -36,87 +36,35 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __NO_OS_PORT_H__
-#define __NO_OS_PORT_H__
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <limits.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "ad9361.h"
-#include "common.h"
+#include <xparameters.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define SUCCESS									0
-#define ARRAY_SIZE(arr)							(sizeof(arr) / sizeof((arr)[0]))
-#define min(x, y)								(((x) < (y)) ? (x) : (y))
-#define min_t(type, x, y)						(type)min((type)(x), (type)(y))
-#define max(x, y)								(((x) > (y)) ? (x) : (y))
-#define max_t(type, x, y)						(type)max((type)(x), (type)(y))
-#define clamp(val, min_val, max_val)			(max(min((val), (max_val)), (min_val)))
-#define clamp_t(type, val, min_val, max_val)	(type)clamp((type)(val), (type)(min_val), (type)(max_val))
-#define DIV_ROUND_UP(x, y)						(((x) + (y) - 1) / (y))
-#define DIV_ROUND_CLOSEST(x, divisor)			(((x) + (divisor) / 2) / (divisor))
-#define BIT(x)									(1 << (x))
-#define CLK_IGNORE_UNUSED						BIT(3)
-#define CLK_GET_RATE_NOCACHE					BIT(6)
+#define CF_AD9361_RX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR
+#define CF_AD9361_TX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR + 0x4000
+#define CF_AD9361_RX_DMA_BASEADDR	XPAR_AXI_DMAC_0_BASEADDR
+#define CF_AD9361_TX_DMA_BASEADDR	XPAR_AXI_DMAC_1_BASEADDR
+#ifdef _XPARAMETERS_PS_H_
+#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
+#define DAC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0xA000000
 
-#define dev_err(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
-#define dev_warn(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
-#define dev_dbg(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
-#define dev_info(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
-#define printk(format, ...)			printf(format, ## __VA_ARGS__)
-#define WARN(format, ...)			printf(format, ## __VA_ARGS__)
-#define pr_err						printf
-#define pr_warning					printf
+#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_RESET_PIN_NO			54 + 46
+#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
+#else
+#define ADC_DDR_BASEADDR			XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0x800000
+#define DAC_DDR_BASEADDR			XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0xA000000
 
-struct device {
-};
-
-struct spi_device {
-	struct device dev;
-};
-
-struct axiadc_state {
-};
-
-struct axiadc_chip_info {
-	char		*name;
-	int32_t		num_channels;
-	uint32_t	max_rate;
-};
-
-struct axiadc_converter {
-	struct axiadc_chip_info	*chip_info;
-};
-
-#ifdef WIN32
-#include "basetsd.h"
-typedef SSIZE_T ssize_t;
-#define strsep(s, ct)				0
-#define snprintf(s, n, format, ...)	0
-#define __func__ __FUNCTION__
+#define GPIO_DEVICE_ID				0
+#define GPIO_RESET_PIN_NO			0
+#define SPI_DEVICE_ID				XPAR_AXI_SPI_0_DEVICE_ID
 #endif
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-int32_t clk_prepare_enable(struct clk *clk);
-uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
-					  struct refclk_scale *clk_priv);
-int32_t clk_set_rate(struct ad9361_rf_phy *phy,
-					 struct refclk_scale *clk_priv,
-					 uint32_t rate);
-uint32_t int_sqrt(uint32_t x);
-int32_t ilog2(int32_t x);
-uint64_t do_div(uint64_t* n,
-				uint64_t base);
-uint32_t __ffs(uint32_t word);
-void * ERR_PTR(long error);
-
-#endif
+#endif // __PARAMETERS_H__

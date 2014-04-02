@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   common.h
- *   @brief  Header file of Common Driver.
+ *   @file   parameters.h
+ *   @brief  Parameters Definitions.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -36,55 +36,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef COMMON_H_
-#define COMMON_H_
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define false	0
-#define true	1
+#define CF_AD9361_RX_BASEADDR		0
+#define CF_AD9361_TX_BASEADDR		0
+#define CF_AD9361_RX_DMA_BASEADDR	0
+#define CF_AD9361_TX_DMA_BASEADDR	0
 
-#define EIO			5	/* I/O error */
-#define EAGAIN		11	/* Try again */
-#define ENOMEM		12	/* Out of memory */
-#define EFAULT		14	/* Bad address */
-#define ENODEV		19	/* No such device */
-#define EINVAL		22	/* Invalid argument */
-#define ETIMEDOUT	110	/* Connection timed out */
+#define ADC_DDR_BASEADDR			0
+#define DAC_DDR_BASEADDR			0
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-#ifndef WIN32
-typedef uint8_t	bool;
-#endif
+#define GPIO_DEVICE_ID				0
+#define GPIO_RESET_PIN_NO			0
+#define SPI_DEVICE_ID				0
 
-struct clk {
-	const char	*name;
-	uint32_t	rate;
-};
-
-struct clk_hw {
-		struct clk *clk;
-};
-
-struct clk_init_data {
-	const char				*name;
-	const struct clk_ops	*ops;
-	const char				**parent_names;
-	uint8_t					num_parents;
-	uint32_t				flags;
-};
-
-struct clk_onecell_data {
-	struct clk		**clks;
-	uint32_t		clk_num;
-};
-
-#endif
+#endif // __PARAMETERS_H__

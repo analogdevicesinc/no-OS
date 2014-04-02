@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   adc_core.c
- *   @brief  Implementation of ADC Core Driver.
+ *   @file   Platform.c
+ *   @brief  Implementation of Platform Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -40,104 +40,131 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <stdlib.h>
-#include <xil_cache.h>
-#include <xil_io.h>
-#include "adc_core.h"
-#include "parameters.h"
+#include "stdint.h"
+#include "util.h"
 
 /***************************************************************************//**
- * @brief adc_read
+ * @brief usleep
 *******************************************************************************/
-void adc_read(uint32_t regAddr, uint32_t *data)
+static inline void usleep(unsigned long usleep)
 {
-	*data = Xil_In32(CF_AD9361_RX_BASEADDR + regAddr);
+
 }
 
 /***************************************************************************//**
- * @brief adc_write
+ * @brief spi_init
 *******************************************************************************/
-void adc_write(uint32_t regAddr, uint32_t data)
+int32_t spi_init(uint32_t device_id,
+				 uint8_t  clk_pha,
+				 uint8_t  clk_pol)
 {
-	Xil_Out32(CF_AD9361_RX_BASEADDR + regAddr, data);
+	return 0;
 }
 
 /***************************************************************************//**
- * @brief adc_dma_read
+ * @brief spi_read
 *******************************************************************************/
-void adc_dma_read(uint32_t regAddr, uint32_t *data)
+int32_t spi_read(uint8_t *data,
+				 uint8_t bytes_number)
 {
-	*data = Xil_In32(CF_AD9361_RX_DMA_BASEADDR + regAddr);
+	return 0;
 }
 
 /***************************************************************************//**
- * @brief adc_dma_write
+ * @brief spi_write_then_read
 *******************************************************************************/
-void adc_dma_write(uint32_t regAddr, uint32_t data)
+int spi_write_then_read(struct spi_device *spi,
+		const unsigned char *txbuf, unsigned n_tx,
+		unsigned char *rxbuf, unsigned n_rx)
 {
-	Xil_Out32(CF_AD9361_RX_DMA_BASEADDR + regAddr, data);
+	return 0;
 }
 
 /***************************************************************************//**
- * @brief adc_init
+ * @brief gpio_init
 *******************************************************************************/
-void adc_init(void)
+void gpio_init(uint32_t device_id)
 {
-	adc_write(ADI_REG_RSTN, 0);
-	adc_write(ADI_REG_RSTN, ADI_RSTN);
 
-	adc_write(ADI_REG_CHAN_CNTRL(0),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(1),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(2),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(3),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
 }
 
 /***************************************************************************//**
- * @brief adc_capture
+ * @brief gpio_direction
 *******************************************************************************/
-int32_t adc_capture(uint32_t size, uint32_t start_address)
+void gpio_direction(uint8_t pin, uint8_t direction)
 {
-	uint32_t reg_val;
-	uint32_t transfer_id;
 
-	adc_dma_write(AXI_DMAC_REG_CTRL, 0x0);
-	adc_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+}
 
-	adc_dma_write(AXI_DMAC_REG_IRQ_MASK, 0x0);
+/***************************************************************************//**
+ * @brief gpio_is_valid
+*******************************************************************************/
+bool gpio_is_valid(int number)
+{
+	return 0;
+}
 
-	adc_dma_read(AXI_DMAC_REG_TRANSFER_ID, &transfer_id);
-	adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
+/***************************************************************************//**
+ * @brief gpio_data
+*******************************************************************************/
+void gpio_data(uint8_t pin, uint8_t data)
+{
 
-	adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, start_address);
-	adc_dma_write(AXI_DMAC_REG_DEST_STRIDE, 0x0);
-	adc_dma_write(AXI_DMAC_REG_X_LENGTH, (size * 8) - 1);
-	adc_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
+}
 
-	adc_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
-	/* Wait until the new transfer is queued. */
-	do {
-		adc_dma_read(AXI_DMAC_REG_START_TRANSFER, &reg_val);
-	}
-	while(reg_val == 1);
+/***************************************************************************//**
+ * @brief gpio_set_value
+*******************************************************************************/
+void gpio_set_value(unsigned gpio, int value)
+{
 
-	/* Wait until the current transfer is completed. */
-	do {
-		adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-	}
-	while(reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT));
-	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
+}
 
-	/* Wait until the transfer with the ID transfer_id is completed. */
-	do {
-		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
-	}
-	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+/***************************************************************************//**
+ * @brief udelay
+*******************************************************************************/
+void udelay(unsigned long usecs)
+{
+
+}
+
+/***************************************************************************//**
+ * @brief mdelay
+*******************************************************************************/
+void mdelay(unsigned long msecs)
+{
+
+}
+
+/***************************************************************************//**
+ * @brief msleep_interruptible
+*******************************************************************************/
+unsigned long msleep_interruptible(unsigned int msecs)
+{
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief axiadc_init
+*******************************************************************************/
+void axiadc_init(void)
+{
+
+}
+
+/***************************************************************************//**
+ * @brief axiadc_read
+*******************************************************************************/
+unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
+{
+
+}
+
+/***************************************************************************//**
+ * @brief axiadc_write
+*******************************************************************************/
+void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
+{
+
 }

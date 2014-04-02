@@ -40,19 +40,19 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdint.h"
-#include "xparameters.h"
+#include <stdint.h>
+#include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
-#include "xspips.h"
-#include "xgpiops.h"
+#include <xgpiops.h>
+#include <xspips.h>
 #else
-#include "xspi.h"
+#include <xspi.h>
 #endif
 #include "util.h"
 #include "adc_core.h"
 #include "dac_core.h"
 #ifdef _XPARAMETERS_PS_H_
-#include "sleep.h"
+#include <sleep.h>
 #else
 static inline void usleep(unsigned long usleep)
 {

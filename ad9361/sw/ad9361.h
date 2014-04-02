@@ -41,7 +41,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "stdint.h"
+#include <stdint.h>
 #include "common.h"
 
 /******************************************************************************/
@@ -3709,14 +3709,6 @@ struct ad9361_rf_phy {
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
 	struct clk_onecell_data	clk_data;
 	struct ad9361_phy_platform_data *pdata;
-#ifdef NO_NEEDED
-	struct ad9361_debugfs_entry debugfs_entry[132];
-	struct bin_attribute 	bin;
-	struct iio_dev 		*indio_dev;
-	struct work_struct 	work;
-	struct completion       complete;
-	uint32_t 			ad9361_debugfs_entry_index;
-#endif
 	uint8_t 			prev_ensm_state;
 	uint8_t			curr_ensm_state;
 	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
@@ -3750,9 +3742,6 @@ struct ad9361_rf_phy {
 };
 
 struct refclk_scale {
-#ifdef NO_NEEDED
-	struct clk_hw		hw;
-#endif
 	struct spi_device	*spi;
 	struct ad9361_rf_phy	*phy;
 	uint32_t			mult;

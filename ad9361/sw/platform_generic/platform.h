@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Parameters Definitions.
+ *   @file   platform.h
+ *   @brief  Header file of Platform driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2013(c) Analog Devices, Inc.
+ * Copyright 2014(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,33 +36,76 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef PLATFORM_H_
+#define PLATFORM_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "xparameters.h"
+#include "stdint.h"
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define CF_AD9361_RX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR
-#define CF_AD9361_TX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR + 0x4000
-#define CF_AD9361_RX_DMA_BASEADDR	XPAR_AXI_DMAC_0_BASEADDR
-#define CF_AD9361_TX_DMA_BASEADDR	XPAR_AXI_DMAC_1_BASEADDR
-#ifdef _XPARAMETERS_PS_H_
-#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
-#define DAC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0xA000000
+#define ADI_REG_CNTRL			0x0044
+#define ADI_R1_MODE				(1 << 2)
+#define ADI_DDR_EDGESEL			(1 << 1)
+#define ADI_PIN_MODE			(1 << 0)
 
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#else
-#define ADC_DDR_BASEADDR			XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0x800000
-#define DAC_DDR_BASEADDR			XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0xA000000
+#define ADI_REG_STATUS			0x005C
+#define ADI_MUX_PN_ERR			(1 << 3)
+#define ADI_MUX_PN_OOS			(1 << 2)
+#define ADI_MUX_OVER_RANGE		(1 << 1)
+#define ADI_STATUS				(1 << 0)
 
-#define GPIO_DEVICE_ID				0
-#define SPI_DEVICE_ID				XPAR_AXI_SPI_0_DEVICE_ID
+#define ADI_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
+#define ADI_PN_SEL				(1 << 10)
+#define ADI_IQCOR_ENB			(1 << 9)
+#define ADI_DCFILT_ENB			(1 << 8)
+#define ADI_FORMAT_SIGNEXT		(1 << 6)
+#define ADI_FORMAT_TYPE			(1 << 5)
+#define ADI_FORMAT_ENABLE		(1 << 4)
+#define ADI_PN23_TYPE			(1 << 1)
+#define ADI_ENABLE				(1 << 0)
+
+#define ADI_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
+#define ADI_PN_ERR				(1 << 2)
+#define ADI_PN_OOS				(1 << 1)
+#define ADI_OVER_RANGE			(1 << 0)
+
+#define ADI_REG_CHAN_CNTRL_1(c)		(0x0410 + (c) * 0x40)
+#define ADI_DCFILT_OFFSET(x)		(((x) & 0xFFFF) << 16)
+#define ADI_TO_DCFILT_OFFSET(x)		(((x) >> 16) & 0xFFFF)
+#define ADI_DCFILT_COEFF(x)			(((x) & 0xFFFF) << 0)
+#define ADI_TO_DCFILT_COEFF(x)		(((x) >> 0) & 0xFFFF)
+
+#define ADI_REG_CHAN_CNTRL_2(c)		(0x0414 + (c) * 0x40)
+#define ADI_IQCOR_COEFF_1(x)		(((x) & 0xFFFF) << 16)
+#define ADI_TO_IQCOR_COEFF_1(x)		(((x) >> 16) & 0xFFFF)
+#define ADI_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
+#define ADI_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+int32_t spi_init(uint32_t device_id,
+				 uint8_t  clk_pha,
+				 uint8_t  clk_pol);
+int32_t spi_read(uint8_t *data,
+				 uint8_t bytes_number);
+int spi_write_then_read(struct spi_device *spi,
+		const unsigned char *txbuf, unsigned n_tx,
+		unsigned char *rxbuf, unsigned n_rx);
+void gpio_init(uint32_t device_id);
+void gpio_direction(uint8_t pin, uint8_t direction);
+bool gpio_is_valid(int number);
+void gpio_set_value(unsigned gpio, int value);
+void udelay(unsigned long usecs);
+void mdelay(unsigned long msecs);
+unsigned long msleep_interruptible(unsigned int msecs);
+void axiadc_init(void);
+unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg);
+void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val);
+
 #endif
-
-#endif // __PARAMETERS_H__

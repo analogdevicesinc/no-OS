@@ -1,0 +1,25 @@
+
+CFLAGS = -Wall -Os
+
+all: ad9361 lib-ad9361
+
+ad9361: ad9361.o ad9361_api.o main.c platform.o util.o
+	$(CC) $+ $(CFLAGS) -o ad9361.elf
+
+ad9361.o: ad9361.c ad9361.h platform.h util.h
+	$(CC) ad9361.c -c $(CFLAGS)
+
+ad9361_api.o: ad9361.h ad9361_api.h platform.h util.h
+	$(CC) ad9361_api.c -c $(CFLAGS)
+
+platform.o: platform.c platform.h util.h
+	$(CC) platform.c -c $(CFLAGS)
+
+util.o: util.c util.h
+	$(CC) util.c -c $(CFLAGS)
+
+lib-ad9361: ad9361.o ad9361_api.o platform.o util.o
+	ar rvs lib-ad9361.a $+
+
+clean:
+	rm -rf ad9361.elf lib-ad9361.a *.o
