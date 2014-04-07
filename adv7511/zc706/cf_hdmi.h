@@ -49,12 +49,28 @@
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
+#ifdef XPAR_AXI_CLKGEN_0_BASEADDR
 #define CF_CLKGEN_BASEADDR  XPAR_AXI_CLKGEN_0_BASEADDR
+#else
+#define CF_CLKGEN_BASEADDR  XPAR_AXI_HDMI_CLKGEN_BASEADDR
+#endif
+#ifdef XPAR_AXI_HDMI_TX_0_BASEADDR
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_0_BASEADDR
+#else
+#define CFV_BASEADDR        XPAR_AXI_HDMI_CORE_BASEADDR
+#endif
+#ifdef XPAR_AXI_SPDIF_TX_0_BASEADDR
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
+#else
+#define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_CORE_BASEADDR
+#endif
 #define DDR_BASEADDR        XPAR_DDR_MEM_BASEADDR
 #define UART_BASEADDR       XPS_UART1_BASEADDR
+#ifdef XPAR_AXI_VDMA_0_BASEADDR
 #define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
+#else
+#define VDMA_BASEADDR       XPAR_AXI_HDMI_DMA_BASEADDR
+#endif
 #define ADMA_DEVICE_ID		XPAR_XDMAPS_1_DEVICE_ID
 #define IIC_BASEADDR        XPS_I2C0_BASEADDR
 #define VIDEO_BASEADDR		DDR_BASEADDR + 0x2000000
