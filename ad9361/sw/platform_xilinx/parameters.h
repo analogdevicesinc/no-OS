@@ -47,10 +47,23 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#ifdef XPAR_AXI_AD9361_0_BASEADDR
 #define CF_AD9361_RX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR
 #define CF_AD9361_TX_BASEADDR		XPAR_AXI_AD9361_0_BASEADDR + 0x4000
+#else
+#define CF_AD9361_RX_BASEADDR		XPAR_AXI_AD9361_BASEADDR
+#define CF_AD9361_TX_BASEADDR		XPAR_AXI_AD9361_BASEADDR + 0x4000
+#endif
+#ifdef XPAR_AXI_DMAC_0_BASEADDR
 #define CF_AD9361_RX_DMA_BASEADDR	XPAR_AXI_DMAC_0_BASEADDR
+#else
+#define CF_AD9361_RX_DMA_BASEADDR	XPAR_AXI_AD9361_ADC_DMA_BASEADDR
+#endif
+#ifdef XPAR_AXI_DMAC_1_BASEADDR
 #define CF_AD9361_TX_DMA_BASEADDR	XPAR_AXI_DMAC_1_BASEADDR
+#else
+#define CF_AD9361_TX_DMA_BASEADDR	XPAR_AXI_AD9361_DAC_DMA_BASEADDR
+#endif
 #ifdef _XPARAMETERS_PS_H_
 #define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
 #define DAC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0xA000000
