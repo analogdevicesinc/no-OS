@@ -753,9 +753,9 @@ void set_dds_tx1_tone2_phase(double* param, char param_no)	// dds_tx1_tone2_phas
 *******************************************************************************/
 void get_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scale?
 {
-	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F1];
+	double scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F1];
 
-	console_print("dds_tx1_tone1_scale=%d\n", scale);
+	console_print("dds_tx1_tone1_scale=%f\n", scale);
 }
 
 /**************************************************************************//***
@@ -765,13 +765,14 @@ void get_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scal
 *******************************************************************************/
 void set_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scale=
 {
-	uint32_t scale = (uint32_t)param[0];
+	double scale = param[0];
 
 	if(param_no >= 1)
 	{
 		dds_set_scale(DDS_CHAN_TX1_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F1, scale);
-		console_print("dds_tx1_tone1_scale=%d\n", scale);
+		scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F1];
+		console_print("dds_tx1_tone1_scale=%f\n", scale);
 	}
 	else
 		show_invalid_param_message(1);
@@ -784,9 +785,9 @@ void set_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scal
 *******************************************************************************/
 void get_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scale?
 {
-	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F2];
+	double scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F2];
 
-	console_print("dds_tx1_tone2_scale=%d\n", scale);
+	console_print("dds_tx1_tone2_scale=%f\n", scale);
 }
 
 /**************************************************************************//***
@@ -796,13 +797,14 @@ void get_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scal
 *******************************************************************************/
 void set_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scale=
 {
-	uint32_t scale = (uint32_t)param[0];
+	double scale = param[0];
 
 	if(param_no >= 1)
 	{
 		dds_set_scale(DDS_CHAN_TX1_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX1_Q_F2, scale);
-		console_print("dds_tx1_tone2_scale=%d\n", scale);
+		scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F2];
+		console_print("dds_tx1_tone2_scale=%f\n", scale);
 	}
 	else
 		show_invalid_param_message(1);
@@ -947,9 +949,9 @@ void set_dds_tx2_tone2_phase(double* param, char param_no)	// dds_tx2_tone2_phas
 *******************************************************************************/
 void get_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scale?
 {
-	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F1];
+	double scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F1];
 
-	console_print("dds_tx2_tone1_scale=%d\n", scale);
+	console_print("dds_tx2_tone1_scale=%f\n", scale);
 }
 
 /**************************************************************************//***
@@ -959,13 +961,14 @@ void get_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scal
 *******************************************************************************/
 void set_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scale=
 {
-	uint32_t scale = (uint32_t)param[0];
+	double scale = param[0];
 
 	if(param_no >= 1)
 	{
 		dds_set_scale(DDS_CHAN_TX2_I_F1, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F1, scale);
-		console_print("dds_tx2_tone1_scale=%d\n", scale);
+		scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F1];
+		console_print("dds_tx2_tone1_scale=%f\n", scale);
 	}
 	else
 		show_invalid_param_message(1);
@@ -978,9 +981,9 @@ void set_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scal
 *******************************************************************************/
 void dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scale?
 {
-	uint32_t scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F2];
+	double scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F2];
 
-	console_print("dds_tx2_tone2_scale=%d\n", scale);
+	console_print("dds_tx2_tone2_scale=%f\n", scale);
 }
 
 /**************************************************************************//***
@@ -990,13 +993,14 @@ void dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scale?
 *******************************************************************************/
 void set_dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scale=
 {
-	uint32_t scale = (uint32_t)param[0];
+	double scale = param[0];
 
 	if(param_no >= 1)
 	{
 		dds_set_scale(DDS_CHAN_TX2_I_F2, scale);
 		dds_set_scale(DDS_CHAN_TX2_Q_F2, scale);
-		console_print("dds_tx2_tone2_scale=%d\n", scale);
+		scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F2];
+		console_print("dds_tx2_tone2_scale=%f\n", scale);
 	}
 	else
 		show_invalid_param_message(1);

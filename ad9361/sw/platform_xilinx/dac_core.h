@@ -42,6 +42,16 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define ADI_REG_VERSION			0x0000
+#define ADI_VERSION(x)			(((x) & 0xffffffff) << 0)
+#define VERSION_IS(x,y,z)		((x) << 16 | (y) << 8 | (z))
+#define ADI_REG_ID				0x0004
+#define ADI_ID(x)				(((x) & 0xffffffff) << 0)
+#define ADI_REG_SCRATCH			0x0008
+#define ADI_SCRATCH(x)			(((x) & 0xffffffff) << 0)
+
+#define PCORE_VERSION_MAJOR(version)	(version >> 16)
+
 #define ADI_REG_RSTN			0x0040
 #define ADI_RSTN				(1 << 0)
 
@@ -75,8 +85,8 @@ enum {
 };
 
 #define ADI_REG_CHAN_CNTRL_1_IIOCHAN(x)	(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
-#define ADI_DDS_SCALE(x)				(((x) & 0xF) << 0)
-#define ADI_TO_DDS_SCALE(x)				(((x) >> 0) & 0xF)
+#define ADI_DDS_SCALE(x)				(((x) & 0xFFFF) << 0)
+#define ADI_TO_DDS_SCALE(x)				(((x) >> 0) & 0xFFFF)
 
 #define ADI_REG_CHAN_CNTRL_2_IIOCHAN(x)	(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define ADI_DDS_INIT(x)					(((x) & 0xFFFF) << 16)
@@ -125,8 +135,9 @@ struct dds_state
 {
 	uint32_t	cached_freq[8];
 	uint32_t	cached_phase[8];
-	uint32_t	cached_scale[8];
+	double		cached_scale[8];
 	uint32_t	*dac_clk;
+	uint32_t	pcore_version;
 };
 
 /******************************************************************************/
@@ -135,7 +146,7 @@ struct dds_state
 void dac_init(uint8_t data_sel);
 void dds_set_frequency(uint32_t chan, uint32_t freq);
 void dds_set_phase(uint32_t chan, uint32_t phase);
-void dds_set_scale(uint32_t chan, uint32_t scale);
+void dds_set_scale(uint32_t chan, double scale);
 void dds_update(void);
 
 #endif

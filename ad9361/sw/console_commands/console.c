@@ -226,6 +226,10 @@ void console_print(char* str, ...)
 			break;
 		case 'f':
 			double_arg = va_arg(argp, double);
+			if(second_param == 0)
+			{
+				second_param = 3;
+			}
 			ch_number = second_param;
 			while(ch_number > 0)
 			{

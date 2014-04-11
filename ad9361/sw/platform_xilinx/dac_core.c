@@ -99,24 +99,14 @@ void dac_dma_write(uint32_t regAddr, uint32_t data)
  * @brief dds_default_setup
 *******************************************************************************/
 static int dds_default_setup(uint32_t chan, uint32_t phase,
-							 uint32_t freq, uint32_t scale)
+							 uint32_t freq, double scale)
 {
-	uint64_t val64;
-	uint32_t val;
-
+	dds_set_phase(chan, phase);
+	dds_set_frequency(chan, freq);
+	dds_set_scale(chan, scale);
 	dds_st.cached_freq[chan] = freq;
 	dds_st.cached_phase[chan] = phase;
 	dds_st.cached_scale[chan] = scale;
-	val64 = (u64) freq * 0xFFFFULL;
-	do_div(&val64, *dds_st.dac_clk);
-	val = ADI_DDS_INCR(val64) | 1;
-
-	val64 = (u64) phase * 0x10000ULL + (360000 / 2);
-	do_div(&val64, 360000);
-	val |= ADI_DDS_INIT(val64);
-
-	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
-	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), val);
 
 	return 0;
 }
@@ -144,17 +134,19 @@ void dac_init(uint8_t data_sel)
 
 	dds_st.dac_clk = &ad9361_phy->clks[TX_SAMPL_CLK]->rate;
 
+	dac_read(ADI_REG_VERSION, &dds_st.pcore_version);
+
 	dac_write(ADI_REG_CNTRL_1, 0);
 	switch (data_sel) {
 	case DATA_SEL_DDS:
-		dds_default_setup(DDS_CHAN_TX1_I_F1, 90000, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX1_I_F2, 90000, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX1_Q_F1, 0, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX1_Q_F2, 0, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX2_I_F1, 90000, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 4);
-		dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 4);
+		dds_default_setup(DDS_CHAN_TX1_I_F1, 90000, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX1_I_F2, 90000, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX1_Q_F1, 0, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX1_Q_F2, 0, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX2_I_F1, 90000, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 0.25);
+		dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 0.25);
 		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DDS));
 		break;
 	case DATA_SEL_DMA:
@@ -238,14 +230,64 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 /***************************************************************************//**
  * @brief dds_set_phase
 *******************************************************************************/
-void dds_set_scale(uint32_t chan, uint32_t scale)
+void dds_set_scale(uint32_t chan, double scale)
 {
 	uint32_t ctrl_reg;
+	uint32_t scale_reg;
+	uint32_t sign_part;
+	uint32_t int_part;
+	uint32_t fract_part;
 
+	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) > 6)
+	{
+		if(scale >= 1.0)
+		{
+			sign_part = 0;
+			int_part = 1;
+			fract_part = 0;
+			dds_st.cached_scale[chan] = 1.0;
+			goto set_scale_reg;
+		}
+		if(scale <= -1.0)
+		{
+			sign_part = 1;
+			int_part = 1;
+			fract_part = 0;
+			dds_st.cached_scale[chan] = -1.0;
+			goto set_scale_reg;
+		}
+		if(scale < 0)
+		{
+			sign_part = 1;
+			int_part = 0;
+			dds_st.cached_scale[chan] = scale;
+			scale *= -1;
+			goto set_scale_reg;
+		}
+		dds_st.cached_scale[chan] = scale;
+		fract_part = (uint32_t)(scale * 0x4000);
+	set_scale_reg:
+		scale_reg = (sign_part << 15) | (int_part << 14) | fract_part;
+	}
+	else
+	{
+		if(scale >= 1.0)
+		{
+			scale_reg = 0;
+			scale = 1.0;
+		}
+		if(scale <= 0.0)
+		{
+			scale_reg = 0;
+			scale = 0.0;
+		}
+		dds_st.cached_scale[chan] = scale;
+		fract_part = (uint32_t)(scale * 1000000);
+		scale_reg = 500000 / fract_part;
+	}
 	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
-	dds_st.cached_scale[chan] = scale;
 	dac_write(ADI_REG_CNTRL_1, 0);
-	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
+	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale_reg));
 	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
 }
 
