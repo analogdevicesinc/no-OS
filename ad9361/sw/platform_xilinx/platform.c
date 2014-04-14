@@ -172,6 +172,7 @@ int32_t spi_read(uint8_t *data,
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
 #else
+#ifdef XPAR_AXI_SPI_0_DEVICE_ID
 	uint8_t send_buffer[20];
 
 	for(cnt = 0; cnt < bytes_number; cnt++)
@@ -180,6 +181,22 @@ int32_t spi_read(uint8_t *data,
 	}
 
 	XSpi_Transfer(&spi_instance, send_buffer, data, bytes_number);
+#else
+	Xil_Out32((spi_instance.BaseAddr + 0x60), 0x1e6);
+	Xil_Out32((spi_instance.BaseAddr + 0x70), 0x000);
+	while(cnt < bytes_number)
+	{
+		Xil_Out32((spi_instance.BaseAddr + 0x68), data[cnt]);
+		Xil_Out32((spi_instance.BaseAddr + 0x60), 0x096);
+		do {usleep(100);}
+		while ((Xil_In32((spi_instance.BaseAddr + 0x64)) & 0x4) == 0x0);
+		Xil_Out32((spi_instance.BaseAddr + 0x60), 0x186);
+		data[cnt] = Xil_In32(spi_instance.BaseAddr + 0x6c);
+		cnt++;
+	}
+	Xil_Out32((spi_instance.BaseAddr + 0x70), 0x001);
+	Xil_Out32((spi_instance.BaseAddr + 0x60), 0x180);
+#endif
 #endif
 	return SUCCESS;
 }
