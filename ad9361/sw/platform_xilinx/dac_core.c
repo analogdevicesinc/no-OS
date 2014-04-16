@@ -264,6 +264,8 @@ void dds_set_scale(uint32_t chan, double scale)
 			scale *= -1;
 			goto set_scale_reg;
 		}
+		sign_part = 0;
+		int_part = 0;
 		dds_st.cached_scale[chan] = scale;
 		fract_part = (uint32_t)(scale * 0x4000);
 	set_scale_reg:
