@@ -59,6 +59,7 @@
 
 /****** Global variables ******/
 struct fmcomms1_calib_data XCOMM_calData[16];
+struct fmcomms1_calib_data_v1 XCOMM_calData_v1[16];
 uint8_t XCOMM_calDataSize;
 XCOMM_FmcPort XCOMM_boardFmcPort;
 
@@ -200,6 +201,10 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     /* Read the calibration data from the EEPROM */
     if(EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort) < 0)
         return -1;
+    if(EEPROM_GetCalData((uint8_t*)XCOMM_calData_v1, &XCOMM_calDataSize, XCOMM_boardFmcPort) < 0)
+        return -1;
+	if(XCOMM_calData[0].version == ADI_VERSION(1))
+		XCOMM_calDataSize = XCOMM_calData_v1[0].num_entries;
     
     return 0;
 }
@@ -689,6 +694,7 @@ XCOMM_RxIQCorrection XCOMM_GetRxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
     if(readMode == XCOMM_ReadMode_FromHW)
     {
         EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort);
+        EEPROM_GetCalData((uint8_t*)XCOMM_calData_v1, &XCOMM_calDataSize, XCOMM_boardFmcPort);
     }
 
     if(!XCOMM_calDataSize)
@@ -697,32 +703,73 @@ XCOMM_RxIQCorrection XCOMM_GetRxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
     }
     else
     {
-        frequency /= 1000000;
-        while(idx < XCOMM_calDataSize)
-        {
-            signeddelta = (int32_t)(frequency - XCOMM_calData[idx].cal_frequency_MHz);
-            delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
-            if(delta < minDelta)
-            {
-                minDelta = delta;
-                calIdx = idx;
-            }
-            idx++;
-        }
-        if ((XCOMM_calData[calIdx].adi_magic0 != ADI_MAGIC_0) ||
-            (XCOMM_calData[calIdx].adi_magic1 != ADI_MAGIC_1) /*||
-            (XCOMM_calData[calIdx].version != ADI_VERSION(VERSION_SUPPORTED)*/)
-        {
-            XCOMM_State.rxIqCorrection.error = -1;
-        }
-        else
-        {
-            XCOMM_State.rxIqCorrection.gainI = XCOMM_calData[calIdx].i_adc_gain_adj;
-            XCOMM_State.rxIqCorrection.offsetI = XCOMM_calData[calIdx].i_adc_offset_adj;
-            XCOMM_State.rxIqCorrection.gainQ = XCOMM_calData[calIdx].q_adc_gain_adj;
-            XCOMM_State.rxIqCorrection.offsetQ = XCOMM_calData[calIdx].q_adc_offset_adj;
-            XCOMM_State.rxIqCorrection.error = 0;
-        }
+    	if(XCOMM_calData[0].version == ADI_VERSION(0))
+    	{
+    		/* Version 0 */
+			frequency /= 1000000;
+			while(idx < XCOMM_calDataSize)
+			{
+				signeddelta = (int32_t)(frequency - XCOMM_calData[idx].cal_frequency_MHz);
+				delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
+				if(delta < minDelta)
+				{
+					minDelta = delta;
+					calIdx = idx;
+				}
+				idx++;
+			}
+			if ((XCOMM_calData[calIdx].adi_magic0 != ADI_MAGIC_0) ||
+				(XCOMM_calData[calIdx].adi_magic1 != ADI_MAGIC_1))
+			{
+				XCOMM_State.rxIqCorrection.error = -1;
+			}
+			else
+			{
+				XCOMM_State.rxIqCorrection.gainI = XCOMM_calData[calIdx].i_adc_gain_adj;
+				XCOMM_State.rxIqCorrection.offsetI = XCOMM_calData[calIdx].i_adc_offset_adj;
+				XCOMM_State.rxIqCorrection.gainQ = XCOMM_calData[calIdx].q_adc_gain_adj;
+				XCOMM_State.rxIqCorrection.offsetQ = XCOMM_calData[calIdx].q_adc_offset_adj;
+				XCOMM_State.rxIqCorrection.error = 0;
+			}
+    	}
+    	else
+    	{
+        	if(XCOMM_calData[0].version == ADI_VERSION(1))
+        	{
+        		/* Version 1 */
+        		XCOMM_calDataSize = XCOMM_calData_v1[0].num_entries;
+    			frequency /= 1000000;
+    			while(idx < XCOMM_calDataSize)
+    			{
+    				signeddelta = (int32_t)(frequency - XCOMM_calData_v1[idx].cal_frequency_MHz);
+    				delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
+    				if(delta < minDelta)
+    				{
+    					minDelta = delta;
+    					calIdx = idx;
+    				}
+    				idx++;
+    			}
+    			if ((XCOMM_calData_v1[calIdx].adi_magic0 != ADI_MAGIC_0) ||
+    				(XCOMM_calData_v1[calIdx].adi_magic1 != ADI_MAGIC_1))
+    			{
+    				XCOMM_State.rxIqCorrection.error = -1;
+    			}
+    			else
+    			{
+    				XCOMM_State.rxIqCorrection.gainI = XCOMM_calData_v1[calIdx].i_adc_gain_adj;
+    				XCOMM_State.rxIqCorrection.offsetI = XCOMM_calData_v1[calIdx].i_adc_offset_adj;
+    				XCOMM_State.rxIqCorrection.gainQ = XCOMM_calData_v1[calIdx].q_adc_gain_adj;
+    				XCOMM_State.rxIqCorrection.offsetQ = XCOMM_calData_v1[calIdx].q_adc_offset_adj;
+    				XCOMM_State.rxIqCorrection.error = 0;
+    			}
+        	}
+        	else
+        	{
+        		/* Unknown version */
+        		XCOMM_State.rxIqCorrection.error = -1;
+        	}
+    	}
     }
     
     return XCOMM_State.rxIqCorrection;
@@ -830,6 +877,7 @@ XCOMM_TxIQCorrection XCOMM_GetTxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
     if(readMode == XCOMM_ReadMode_FromHW)
     {
         EEPROM_GetCalData((uint8_t*)XCOMM_calData, &XCOMM_calDataSize, XCOMM_boardFmcPort);
+        EEPROM_GetCalData((uint8_t*)XCOMM_calData_v1, &XCOMM_calDataSize, XCOMM_boardFmcPort);
     }
 
     if(!XCOMM_calDataSize)
@@ -838,36 +886,81 @@ XCOMM_TxIQCorrection XCOMM_GetTxIqCorrection(uint64_t frequency, XCOMM_ReadMode 
     }
     else
     {
-        frequency /= 1000000;
-        while(idx < XCOMM_calDataSize)
-        {
-            signeddelta = (int32_t)(frequency - XCOMM_calData[idx].cal_frequency_MHz);
-            delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
-            if(delta < minDelta)
-            {
-                minDelta = delta;
-                calIdx = idx;
-            }
-            idx++;
-        }
-        if ((XCOMM_calData[calIdx].adi_magic0 != ADI_MAGIC_0) ||
-            (XCOMM_calData[calIdx].adi_magic1 != ADI_MAGIC_1) /*||
-            (XCOMM_calData[calIdx].adi_magic1 != ADI_VERSION(VERSION_SUPPORTED)*/)
-        {
-            XCOMM_State.txIqCorrection.error = -1;
-        }
-        else
-        {
-            XCOMM_State.txIqCorrection.phaseAdjI = XCOMM_calData[calIdx].i_phase_adj;
-            XCOMM_State.txIqCorrection.offsetI   = XCOMM_calData[calIdx].i_dac_offset;
-            XCOMM_State.txIqCorrection.fsAdjI    = XCOMM_calData[calIdx].i_dac_fs_adj;
-            
-            XCOMM_State.txIqCorrection.phaseAdjQ = XCOMM_calData[calIdx].q_phase_adj;
-            XCOMM_State.txIqCorrection.offsetQ   = XCOMM_calData[calIdx].q_dac_offset;
-            XCOMM_State.txIqCorrection.fsAdjQ    = XCOMM_calData[calIdx].q_dac_fs_adj;
+    	if(XCOMM_calData[0].version == ADI_VERSION(0))
+    	{
+    		/* Version 0 */
+			frequency /= 1000000;
+			while(idx < XCOMM_calDataSize)
+			{
+				signeddelta = (int32_t)(frequency - XCOMM_calData[idx].cal_frequency_MHz);
+				delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
+				if(delta < minDelta)
+				{
+					minDelta = delta;
+					calIdx = idx;
+				}
+				idx++;
+			}
+			if ((XCOMM_calData[calIdx].adi_magic0 != ADI_MAGIC_0) ||
+				(XCOMM_calData[calIdx].adi_magic1 != ADI_MAGIC_1))
+			{
+				XCOMM_State.txIqCorrection.error = -1;
+			}
+			else
+			{
+				XCOMM_State.txIqCorrection.phaseAdjI = XCOMM_calData[calIdx].i_phase_adj;
+				XCOMM_State.txIqCorrection.offsetI   = XCOMM_calData[calIdx].i_dac_offset;
+				XCOMM_State.txIqCorrection.fsAdjI    = XCOMM_calData[calIdx].i_dac_fs_adj;
 
-            XCOMM_State.txIqCorrection.error = 0;
-        }
+				XCOMM_State.txIqCorrection.phaseAdjQ = XCOMM_calData[calIdx].q_phase_adj;
+				XCOMM_State.txIqCorrection.offsetQ   = XCOMM_calData[calIdx].q_dac_offset;
+				XCOMM_State.txIqCorrection.fsAdjQ    = XCOMM_calData[calIdx].q_dac_fs_adj;
+
+				XCOMM_State.txIqCorrection.error = 0;
+			}
+    	}
+    	else
+    	{
+        	if(XCOMM_calData[0].version == ADI_VERSION(1))
+        	{
+        		/* Version 1 */
+        		XCOMM_calDataSize = XCOMM_calData_v1[0].num_entries;
+    			frequency /= 1000000;
+    			while(idx < XCOMM_calDataSize)
+    			{
+    				signeddelta = (int32_t)(frequency - XCOMM_calData_v1[idx].cal_frequency_MHz);
+    				delta = (uint32_t)(signeddelta>0?signeddelta:-signeddelta);
+    				if(delta < minDelta)
+    				{
+    					minDelta = delta;
+    					calIdx = idx;
+    				}
+    				idx++;
+    			}
+    			if ((XCOMM_calData_v1[calIdx].adi_magic0 != ADI_MAGIC_0) ||
+    				(XCOMM_calData_v1[calIdx].adi_magic1 != ADI_MAGIC_1))
+    			{
+    				XCOMM_State.txIqCorrection.error = -1;
+    			}
+    			else
+    			{
+    				XCOMM_State.txIqCorrection.phaseAdjI = XCOMM_calData_v1[calIdx].i_phase_adj;
+    				XCOMM_State.txIqCorrection.offsetI   = XCOMM_calData_v1[calIdx].i_dac_offset;
+    				XCOMM_State.txIqCorrection.fsAdjI    = XCOMM_calData_v1[calIdx].i_dac_fs_adj;
+
+    				XCOMM_State.txIqCorrection.phaseAdjQ = XCOMM_calData_v1[calIdx].q_phase_adj;
+    				XCOMM_State.txIqCorrection.offsetQ   = XCOMM_calData_v1[calIdx].q_dac_offset;
+    				XCOMM_State.txIqCorrection.fsAdjQ    = XCOMM_calData_v1[calIdx].q_dac_fs_adj;
+
+    				XCOMM_State.txIqCorrection.error = 0;
+    			}
+        	}
+        	else
+        	{
+        		/* Unknown version */
+        		XCOMM_State.rxIqCorrection.error = -1;
+        	}
+    	}
     }
     
     return XCOMM_State.txIqCorrection;

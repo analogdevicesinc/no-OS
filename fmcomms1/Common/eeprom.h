@@ -52,7 +52,7 @@
 #define IICSEL_FRU_HPC  0x50
 #define IICSEL_CAL_HPC  0x54
 
-#define CURRENT_VERSION 0
+#define CURRENT_VERSION 1
 #define MAX_SIZE_CAL_EEPROM	254
 #define FAB_SIZE_CAL_EEPROM	256
 #define NEXT_TERMINATION	0
@@ -61,30 +61,60 @@
 #define ADI_MAGIC_1	'D'
 #define ADI_VERSION(v)	('0' + (v))
 
+/* Version 0 */
+
 #pragma pack(push, 1) // exact fit - no padding
 struct fmcomms1_calib_data 
 {
-		int8_t   adi_magic0;
-		int8_t   adi_magic1;
-		int8_t   version;
-		uint8_t  next;
-		uint16_t cal_frequency_MHz;
+	int8_t		adi_magic0;
+	int8_t		adi_magic1;
+	int8_t		version;
+	uint8_t		next;
+	uint16_t	cal_frequency_MHz;
 
-		/* DAC Calibration Data */
-        int16_t  i_phase_adj;     /* 10-bit */
-        int16_t  q_phase_adj;     /* 10-bit */
-        uint16_t i_dac_offset;    /* 16-bit */
-        uint16_t q_dac_offset;    /* 16-bit */
-        uint16_t i_dac_fs_adj;    /* 10-bit */
-        uint16_t q_dac_fs_adj;    /* 10-bit */
-        
-        /* ADC Calibration Data */
-        int16_t  i_adc_offset_adj;  /* 16-bit signed */
-        uint16_t i_adc_gain_adj;    /* 16-bit fract 1.15 */
-        int16_t  q_adc_offset_adj;  /* 16-bit signed */
-        uint16_t q_adc_gain_adj;    /* 16-bit fract 1.15 */
+	/* DAC Calibration Data */
+	int16_t		i_phase_adj;	/* 10-bit */
+	int16_t		q_phase_adj;	/* 10-bit */
+	uint16_t	i_dac_offset;	/* 16-bit */
+	uint16_t	q_dac_offset;	/* 16-bit */
+	uint16_t	i_dac_fs_adj;	/* 10-bit */
+	uint16_t	q_dac_fs_adj;	/* 10-bit */
+
+	/* ADC Calibration Data */
+	int16_t		i_adc_offset_adj;	/* 16-bit signed */
+	uint16_t	i_adc_gain_adj;		/* 16-bit fract 1.15 */
+	int16_t		q_adc_offset_adj;	/* 16-bit signed */
+	uint16_t	q_adc_gain_adj;		/* 16-bit fract 1.15 */
 };
-#pragma pack(pop) //back to whatever the previous packing mode was  
+#pragma pack(pop) //back to whatever the previous packing mode was
+
+/* Version 1 */
+
+#pragma pack(push, 1) // exact fit - no padding
+struct fmcomms1_calib_data_v1 {
+	int8_t		adi_magic0;
+	int8_t		adi_magic1;
+	int8_t		version;
+	uint8_t		num_entries;
+	uint16_t	temp_calibbias;
+	uint16_t	cal_frequency_MHz;
+
+	/* DAC Calibration Data */
+	int16_t		i_phase_adj;	/* 10-bit */
+	int16_t		q_phase_adj;	/* 10-bit */
+	int16_t		i_dac_offset;	/* 16-bit */
+	int16_t		q_dac_offset;	/* 16-bit */
+	uint16_t	i_dac_fs_adj;	/* 10-bit */
+	uint16_t	q_dac_fs_adj;	/* 10-bit */
+
+	/* ADC Calibration Data */
+	int16_t		i_adc_offset_adj;	/* 16-bit signed */
+	uint16_t	i_adc_gain_adj;		/* 16-bit fract 1.1.14 */
+	uint16_t	i_adc_phase_adj;	/* 16-bit fract 1.1.14 */
+	int16_t		q_adc_offset_adj;	/* 16-bit signed */
+	uint16_t	q_adc_gain_adj;		/* 16-bit fract 1.1.14 */
+};
+#pragma pack(pop) //back to whatever the previous packing mode was
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
