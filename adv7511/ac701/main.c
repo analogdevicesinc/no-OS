@@ -160,11 +160,17 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
+#ifdef XPAR_AXI_IIC_0_BASEADDR
 	HAL_PlatformInit(XPAR_AXI_IIC_0_BASEADDR,	/* Perform any required platform init */
 				 XPAR_AXI_TIMER_0_BASEADDR,		/* including hardware reset to HDMI devices */
 				 XPAR_AXI_TIMER_0_INTERRUPT_MASK,
 				 XPAR_AXI_INTC_0_BASEADDR);
-
+#else
+	HAL_PlatformInit(XPAR_AXI_IIC_MAIN_BASEADDR,	/* Perform any required platform init */
+				 XPAR_AXI_TIMER_BASEADDR,		/* including hardware reset to HDMI devices */
+				 XPAR_AXI_TIMER_INTERRUPT_MASK,
+				 XPAR_INTC_0_BASEADDR);
+#endif
 	Xil_ExceptionEnable();
 
 	SetVideoResolution(RESOLUTION_640x480);

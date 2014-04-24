@@ -421,7 +421,7 @@ void CLKGEN_CalcClkParams(unsigned long divider,
 void CLKGEN_Write(unsigned long reg,
 				  unsigned long val)
 {
-	Xil_Out32(XPAR_AXI_CLKGEN_0_BASEADDR + reg, val);
+	Xil_Out32(CF_CLKGEN_BASEADDR + reg, val);
 }
 
 /***************************************************************************//**
@@ -430,7 +430,7 @@ void CLKGEN_Write(unsigned long reg,
 static void CLKGEN_Read(unsigned long reg,
 						unsigned long *val)
 {
-	*val = Xil_In32(XPAR_AXI_CLKGEN_0_BASEADDR + reg);
+	*val = Xil_In32(CF_CLKGEN_BASEADDR + reg);
 }
 
 /***************************************************************************//**
@@ -493,8 +493,8 @@ void CLKGEN_MMCMWrite(unsigned long reg,
 
 	reg_val |= AXI_CLKGEN_V2_DRP_CNTRL_SEL | (reg << 16) | (val & mask);
 
-	Xil_Out32(XPAR_AXI_CLKGEN_0_BASEADDR + AXI_CLKGEN_V2_REG_DRP_CNTRL, 0x00);
-	Xil_Out32(XPAR_AXI_CLKGEN_0_BASEADDR + AXI_CLKGEN_V2_REG_DRP_CNTRL, reg_val);
+	Xil_Out32(CF_CLKGEN_BASEADDR + AXI_CLKGEN_V2_REG_DRP_CNTRL, 0x00);
+	Xil_Out32(CF_CLKGEN_BASEADDR + AXI_CLKGEN_V2_REG_DRP_CNTRL, reg_val);
 }
 
 /***************************************************************************//**
