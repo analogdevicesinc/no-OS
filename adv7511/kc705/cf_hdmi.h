@@ -49,13 +49,41 @@
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
+#ifdef XPAR_AXI_CLKGEN_0_BASEADDR
 #define CF_CLKGEN_BASEADDR  XPAR_AXI_CLKGEN_0_BASEADDR
+#else
+#define CF_CLKGEN_BASEADDR  XPAR_AXI_HDMI_CLKGEN_BASEADDR
+#endif
+#ifdef XPAR_AXI_HDMI_TX_0_BASEADDR
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_0_BASEADDR
+#else
+#define CFV_BASEADDR		XPAR_AXI_HDMI_CORE_BASEADDR
+#endif
+#ifdef XPAR_AXI_SPDIF_TX_0_BASEADDR
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
+#else
+#define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_CORE_BASEADDR
+#endif
+#ifdef XPAR_DDR3_SDRAM_S_AXI_BASEADDR
 #define DDR_BASEADDR        XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+#else
+#define DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR
+#endif
+#ifdef XPAR_RS232_UART_1_BASEADDR
 #define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
+#else
+#define UART_BASEADDR       XPAR_AXI_UART_BASEADDR
+#endif
+#ifdef XPAR_AXI_VDMA_0_BASEADDR
 #define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
+#else
+#define VDMA_BASEADDR       XPAR_AXI_HDMI_DMA_BASEADDR
+#endif
+#ifdef XPAR_AXI_DMA_0_BASEADDR
 #define ADMA_BASEADDR       XPAR_AXI_DMA_0_BASEADDR
+#else
+#define ADMA_BASEADDR       XPAR_AXIDMA_0_BASEADDR
+#endif
 #define IIC_BASEADDR        XPAR_AXI_IIC_0_BASEADDR
 #define VIDEO_BASEADDR		DDR_BASEADDR + 0x2000000
 #define AUDIO_BASEADDR		DDR_BASEADDR + 0x1000000
