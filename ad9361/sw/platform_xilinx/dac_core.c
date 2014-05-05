@@ -51,7 +51,6 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct dds_state dds_st;
-extern struct ad9361_rf_phy *ad9361_phy;
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -114,7 +113,7 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 /***************************************************************************//**
  * @brief dac_init
 *******************************************************************************/
-void dac_init(uint8_t data_sel)
+void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 {
 	uint32_t tx_count;
 	uint32_t index;
@@ -132,7 +131,7 @@ void dac_init(uint8_t data_sel)
 
 	dac_write(ADI_REG_RATECNTRL, ADI_RATE(3));
 
-	dds_st.dac_clk = &ad9361_phy->clks[TX_SAMPL_CLK]->rate;
+	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
 
 	dac_read(ADI_REG_VERSION, &dds_st.pcore_version);
 

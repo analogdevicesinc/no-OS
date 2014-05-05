@@ -307,9 +307,9 @@ int main(void)
 
 #ifdef XILINX_PLATFORM
 #ifdef DAC_DMA
-	dac_init(DATA_SEL_DMA);
+	dac_init(ad9361_phy, DATA_SEL_DMA);
 #else
-	dac_init(DATA_SEL_DDS);
+	dac_init(ad9361_phy, DATA_SEL_DDS);
 #endif
 
 #ifdef CAPTURE_SCRIPT

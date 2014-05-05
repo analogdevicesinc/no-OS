@@ -325,8 +325,6 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->bbdc_track_en = true;
 	phy->quad_track_en = true;
 
-	axiadc_init();
-
 	ad9361_reset(phy);
 	ad9361_spi_write(NULL, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
 	ad9361_spi_write(NULL, REG_SPI_CONF, 0x0);
@@ -342,6 +340,8 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	ret = register_clocks(phy);
 	if (ret < 0)
 		goto out;
+
+	axiadc_init(phy);
 
 	ad9361_init_gain_tables(phy);
 

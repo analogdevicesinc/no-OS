@@ -104,7 +104,7 @@ void gpio_set_value(unsigned gpio, int value);
 void udelay(unsigned long usecs);
 void mdelay(unsigned long msecs);
 unsigned long msleep_interruptible(unsigned int msecs);
-void axiadc_init(void);
+void axiadc_init(struct ad9361_rf_phy *phy);
 unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg);
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val);
 
