@@ -4411,7 +4411,7 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	}
 
 	if (!phy->bypass_tx_fir) {
-		max = ((rx[ADC_FREQ] / 2) / tx[TX_SAMPL_FREQ]) * 16;
+		max = (tx[DAC_FREQ] / tx[TX_SAMPL_FREQ]) * 16;
 		if (phy->tx_fir_ntaps > max) {
 			dev_err(dev,
 				"%s: Invalid: ratio ADC/2 / TX_SAMPL * 16 > TAPS"
@@ -4422,7 +4422,8 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	}
 
 	if (!phy->bypass_rx_fir) {
-		max = ((rx[ADC_FREQ] / 2) / rx[RX_SAMPL_FREQ]) * 16;
+		max = (((rx[ADC_FREQ] / (rx[ADC_FREQ] == rx[R2_FREQ]) ? 1 : 2)) /
+				rx[RX_SAMPL_FREQ]) * 16;
 		if (phy->rx_fir_ntaps > max) {
 			dev_err(dev,
 				"%s: Invalid: ratio ADC/2 / RX_SAMPL * 16 > TAPS (max %d)",
