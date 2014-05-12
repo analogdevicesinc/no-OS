@@ -139,7 +139,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	}
 	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
 
-        Xil_DCacheFlush();
+        Xil_DCacheInvalidateRange(start_address, (size * 8) - 1);
 
 	return 0;
 }
