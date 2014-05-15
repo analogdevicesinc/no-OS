@@ -313,8 +313,13 @@ int main(void)
 #endif
 
 #ifdef CAPTURE_SCRIPT
-	adc_capture(16384, ADC_DDR_BASEADDR);
-	while(1);
+    // NOTE: To prevent unwanted data loss, it's recomanded to invalidate
+    // cache after each adc_capture() call, keeping in mind that the
+    // size of the capture and the start address must be alinged to the size
+    // of the cache line.
+    adc_capture(16384, ADC_DDR_BASEADDR);
+    Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
+    while(1);
 #endif
 #endif
 
