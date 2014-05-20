@@ -49,6 +49,7 @@
 #include "xil_io.h"
 #include "timer.h"
 
+#ifndef XPAR_AXI_IIC_MAIN_BASEADDR
 #ifndef XPAR_AXI_IIC_0_BASEADDR
 	#define XPAR_AXI_IIC_0_BASEADDR 0
 #endif
@@ -57,6 +58,10 @@
     #define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_1_BASEADDR
 #else
     #define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_0_BASEADDR
+#endif
+#else
+	#define AXI_IIC_BASEADDR_0 XPAR_AXI_IIC_MAIN_BASEADDR
+	#define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_MAIN_BASEADDR
 #endif
 
 /*****************************************************************************/
@@ -97,7 +102,11 @@ void delay_us(uint32_t us_count)
 	volatile uint32_t i;
 	for(i = 0; i < us_count*500; i++);
 #else
+#ifdef XPAR_AXI_TIMER_0_BASEADDR
 	TIMER0_WAIT(XPAR_AXI_TIMER_0_BASEADDR, us_count*1000);
+#else
+	TIMER0_WAIT(XPAR_AXI_TIMER_BASEADDR, us_count*1000);
+#endif
 #endif
 }
 /**************************************************************************//**

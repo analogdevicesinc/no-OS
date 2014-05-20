@@ -61,6 +61,8 @@
 #define ADI_REG_SCRATCH		0x0008 /*Version and Scratch Registers */
 #define ADI_SCRATCH(x)		(((x) & 0xffffffff) << 0) /* RW, Scratch register. */
 
+#define PCORE_VERSION_MAJOR(version)	(version >> 16)
+
 /* DAC COMMON */
 #define ADI_REG_RSTN		0x0040
 #define ADI_RSTN			(1 << 0)
@@ -129,8 +131,8 @@ enum {
 
 /* DAC CHANNEL */
 #define ADI_REG_CHAN_CNTRL_1_IIOCHAN(x)	(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
-#define ADI_DDS_SCALE(x)				(((x) & 0xF) << 0)
-#define ADI_TO_DDS_SCALE(x)				(((x) >> 0) & 0xF)
+#define ADI_DDS_SCALE(x)				(((x) & 0xFFFF) << 0)
+#define ADI_TO_DDS_SCALE(x)				(((x) >> 0) & 0xFFFF)
 
 #define ADI_REG_CHAN_CNTRL_2_IIOCHAN(x)	(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define ADI_DDS_INIT(x)					(((x) & 0xFFFF) << 16)

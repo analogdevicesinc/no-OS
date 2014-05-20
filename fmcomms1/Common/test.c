@@ -83,7 +83,11 @@ void delay_ms(uint32_t ms_count)
 	volatile uint32_t i;
 	for(i = 0; i < ms_count*1000; i++);
 #else
+#ifdef XPAR_AXI_TIMER_0_BASEADDR
 	TIMER0_WAIT(XPAR_AXI_TIMER_0_BASEADDR, ms_count*1000000);
+#else
+	TIMER0_WAIT(XPAR_AXI_TIMER_BASEADDR, ms_count*1000000);
+#endif
 #endif
 }
 
@@ -160,13 +164,63 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 /***************************************************************************//**
 * @brief dds_set_scale
 *******************************************************************************/
-void dds_set_scale(uint32_t chan, uint32_t scale)
+void dds_set_scale(uint32_t chan, double scale)
 {
+	uint32_t pcore_version;
 	uint32_t ctrl_reg;
+	uint32_t scale_reg;
+	uint32_t sign_part;
+	uint32_t int_part;
+	uint32_t fract_part;
 
+	dac_read(ADI_REG_VERSION, &pcore_version);
+	if (PCORE_VERSION_MAJOR(pcore_version) > 6)
+	{
+		if(scale >= 1.0)
+		{
+			sign_part = 0;
+			int_part = 1;
+			fract_part = 0;
+			goto set_scale_reg;
+		}
+		if(scale <= -1.0)
+		{
+			sign_part = 1;
+			int_part = 1;
+			fract_part = 0;
+			goto set_scale_reg;
+		}
+		if(scale < 0)
+		{
+			sign_part = 1;
+			int_part = 0;
+			scale *= -1;
+			goto set_scale_reg;
+		}
+		sign_part = 0;
+		int_part = 0;
+		fract_part = (uint32_t)(scale * 0x4000);
+	set_scale_reg:
+		scale_reg = (sign_part << 15) | (int_part << 14) | fract_part;
+	}
+	else
+	{
+		if(scale >= 1.0)
+		{
+			scale_reg = 0;
+			scale = 1.0;
+		}
+		if(scale <= 0.0)
+		{
+			scale_reg = 0;
+			scale = 0.0;
+		}
+		fract_part = (uint32_t)(scale * 1000000);
+		scale_reg = 500000 / fract_part;
+	}
 	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
 	dac_write(ADI_REG_CNTRL_1, 0);
-	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale));
+	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale_reg));
 	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
 }
 
@@ -186,16 +240,16 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 
 	dds_set_frequency(0, f1);
 	dds_set_phase(0, 90000);
-	dds_set_scale(0, 4);
+	dds_set_scale(0, 0.25);
 	dds_set_frequency(1, f1);
 	dds_set_phase(1, 90000);
-	dds_set_scale(1, 4);
+	dds_set_scale(1, 0.25);
 	dds_set_frequency(2, f2);
 	dds_set_phase(2, 0);
-	dds_set_scale(2, 4);
+	dds_set_scale(2, 0.25);
 	dds_set_frequency(3, f2);
 	dds_set_phase(3, 0);
-	dds_set_scale(3, 4);
+	dds_set_scale(3, 0.25);
 }
 
 /**************************************************************************//**
