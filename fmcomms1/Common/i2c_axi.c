@@ -61,7 +61,11 @@
 #endif
 #else
 	#define AXI_IIC_BASEADDR_0 XPAR_AXI_IIC_MAIN_BASEADDR
-	#define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_MAIN_BASEADDR
+	#ifdef XPAR_AXI_IIC_FMC_BASEADDR
+		#define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_FMC_BASEADDR
+	#else
+		#define AXI_IIC_BASEADDR_1 XPAR_AXI_IIC_MAIN_BASEADDR
+	#endif
 #endif
 
 /*****************************************************************************/
