@@ -323,6 +323,7 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy->pdata->debug_mode = true;
 	phy->pdata->gpio_resetb = 54 + 46;			// FIXME
+	phy->pdata->gpio_sync = -1;			// FIXME
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
 	phy->pdata->port_ctrl.lvds_invert[0] = 0xFF;
 	phy->pdata->port_ctrl.lvds_invert[1] = 0x0F;

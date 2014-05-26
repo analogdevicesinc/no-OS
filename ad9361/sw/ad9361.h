@@ -3129,6 +3129,7 @@ struct ad9361_phy_platform_data {
 	int32_t			tx_atten;
 	bool			update_tx_gain_via_alert;
 	int32_t 			gpio_resetb;
+	int32_t 			gpio_sync;
 	uint32_t			rx_fastlock_delay_ns;
 	uint32_t			tx_fastlock_delay_ns;
 	bool			trx_fastlock_pinctrl_en[2];

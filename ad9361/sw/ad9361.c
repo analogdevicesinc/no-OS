@@ -2373,6 +2373,51 @@ static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 			TX1_MONITOR_ENABLE | TX2_MONITOR_ENABLE, en_mask);
 }
 
+static int ad9361_mcs(struct ad9361_rf_phy *phy, unsigned step)
+{
+	unsigned mcs_mask = MCS_BBPLL_ENABLE | MCS_DIGITAL_CLK_ENABLE | MCS_BB_ENABLE;
+
+	dev_dbg(&phy->spi->dev, "%s: MCS step %d", __func__, step);
+
+
+	switch (step) {
+	case 1:
+		ad9361_spi_writef(phy->spi, REG_CP_BLEED_CURRENT,
+			MCS_REFCLK_SCALE_EN, 1);
+		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
+			mcs_mask, MCS_BB_ENABLE | MCS_BBPLL_ENABLE);
+		break;
+	case 2:
+		if(!gpio_is_valid(phy->pdata->gpio_sync))
+			break;
+		/*
+		 * NOTE: This is not a regular GPIO -
+		 * HDL ensures Multi-chip Synchronization SYNC_IN Pulse Timing
+		 * relative to rising and falling edge of REF_CLK
+		 */
+		gpio_set_value(phy->pdata->gpio_sync, 1);
+		gpio_set_value(phy->pdata->gpio_sync, 0);
+		break;
+	case 3:
+		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
+			mcs_mask, MCS_BB_ENABLE | MCS_DIGITAL_CLK_ENABLE);
+		break;
+	case 4:
+		if(!gpio_is_valid(phy->pdata->gpio_sync))
+			break;
+		gpio_set_value(phy->pdata->gpio_sync, 1);
+		gpio_set_value(phy->pdata->gpio_sync, 0);
+		break;
+	case 0:
+	case 5:
+		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
+			mcs_mask, 0);
+		break;
+	}
+
+	return 0;
+}
+
 /**
 * Setup the RF port.
 * Note:
