@@ -307,6 +307,19 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->port_ctrl.lvds_bias_ctrl = (init_param->lvds_bias_mV / 75) & 0x7;
 	phy->pdata->port_ctrl.lvds_bias_ctrl |= (init_param->lvds_rx_onchip_termination_enable << 5);
 
+	/* Tx Monitor Control */
+	phy->pdata->txmon_ctrl.low_high_gain_threshold_mdB = init_param->low_high_gain_threshold_mdB;
+	phy->pdata->txmon_ctrl.low_gain_dB = init_param->low_gain_dB;
+	phy->pdata->txmon_ctrl.high_gain_dB = init_param->high_gain_dB;
+	phy->pdata->txmon_ctrl.tx_mon_track_en = init_param->tx_mon_track_en;
+	phy->pdata->txmon_ctrl.one_shot_mode_en = init_param->one_shot_mode_en;
+	phy->pdata->txmon_ctrl.tx_mon_delay = init_param->tx_mon_delay;
+	phy->pdata->txmon_ctrl.tx_mon_duration = init_param->tx_mon_duration;
+	phy->pdata->txmon_ctrl.tx1_mon_front_end_gain = init_param->tx1_mon_front_end_gain;
+	phy->pdata->txmon_ctrl.tx2_mon_front_end_gain = init_param->tx2_mon_front_end_gain;
+	phy->pdata->txmon_ctrl.tx1_mon_lo_cm = init_param->tx1_mon_lo_cm;
+	phy->pdata->txmon_ctrl.tx2_mon_lo_cm = init_param->tx2_mon_lo_cm;
+
 	phy->pdata->debug_mode = true;
 	phy->pdata->gpio_resetb = 54 + 46;			// FIXME
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;

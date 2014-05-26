@@ -255,6 +255,17 @@ AD9361_InitParam default_init_param = {
 	0,		//tx_data_delay *** adi,tx-data-delay
 	150,	//lvds_bias_mV *** adi,lvds-bias-mV
 	1,		//lvds_rx_onchip_termination_enable *** adi,lvds-rx-onchip-termination-enable
+	37000,	//low_high_gain_threshold_mdB *** adi,txmon-low-high-thresh
+	0,		//low_gain_dB *** adi,txmon-low-gain
+	24,		//high_gain_dB *** adi,txmon-high-gain
+	0,		//tx_mon_track_en *** adi,txmon-dc-tracking-enable
+	0,		//one_shot_mode_en *** adi,txmon-one-shot-mode-enable
+	511,	//tx_mon_delay *** adi,txmon-delay
+	8192,	//tx_mon_duration *** adi,txmon-duration
+	2,		//tx1_mon_front_end_gain *** adi,txmon-1-front-end-gain
+	2,		//tx2_mon_front_end_gain *** adi,txmon-2-front-end-gain
+	48,		//tx1_mon_lo_cm *** adi,txmon-1-lo-cm
+	48		//tx2_mon_lo_cm *** adi,txmon-2-lo-cm
 };
 
 AD9361_RXFIRConfig rx_fir_config = {

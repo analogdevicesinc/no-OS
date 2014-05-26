@@ -2317,6 +2317,63 @@ static int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Setup TXMON.
+ * @param phy The AD9361 state structure.
+ * @param ctrl The TXMON settings.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_txmon_setup(struct ad9361_rf_phy *phy,
+			       struct tx_monitor_control *ctrl)
+{
+	struct spi_device *spi = phy->spi;
+
+	dev_dbg(&phy->spi->dev, "%s", __func__);
+
+	ad9361_spi_write(spi, REG_TPM_MODE_ENABLE,
+			 (ctrl->one_shot_mode_en ? ONE_SHOT_MODE : 0) |
+			 TX_MON_DURATION(ilog2(ctrl->tx_mon_duration / 16)));
+
+	ad9361_spi_write(spi, REG_TX_MON_DELAY, ctrl->tx_mon_delay);
+
+	ad9361_spi_write(spi, REG_TX_MON_1_CONFIG,
+			 TX_MON_1_LO_CM(ctrl->tx1_mon_lo_cm) |
+			 TX_MON_1_GAIN(ctrl->tx1_mon_front_end_gain));
+	ad9361_spi_write(spi, REG_TX_MON_2_CONFIG,
+			 TX_MON_2_LO_CM(ctrl->tx2_mon_lo_cm) |
+			 TX_MON_2_GAIN(ctrl->tx2_mon_front_end_gain));
+
+	ad9361_spi_write(spi, REG_TX_ATTEN_THRESH,
+			 ctrl->low_high_gain_threshold_mdB / 250);
+
+	ad9361_spi_write(spi, REG_TX_MON_HIGH_GAIN,
+			 TX_MON_HIGH_GAIN(ctrl->high_gain_dB));
+
+	ad9361_spi_write(spi, REG_TX_MON_LOW_GAIN,
+			 (ctrl->tx_mon_track_en ? TX_MON_TRACK : 0) |
+			 TX_MON_LOW_GAIN(ctrl->low_gain_dB));
+
+	return 0;
+}
+
+/**
+ * Enable TXMON.
+ * @param phy The AD9361 state structure.
+ * @param en_mask The enable mask.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
+				int32_t en_mask)
+{
+	dev_dbg(&phy->spi->dev, "%s", __func__);
+
+	ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
+			TX_MONITOR_POWER_DOWN(~0), !en_mask);
+
+	return ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
+			TX1_MONITOR_ENABLE | TX2_MONITOR_ENABLE, en_mask);
+}
+
+/**
 * Setup the RF port.
 * Note:
 * val
@@ -2335,13 +2392,20 @@ static int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 * @param txb TX output option identifier
 * @return 0 in case of success, negative error code otherwise.
 */
-static int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy,
-	uint32_t rx_inputs, uint32_t txb)
+static int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
+				    uint32_t rx_inputs, uint32_t txb)
 {
 	uint32_t val;
 
-	if (rx_inputs > 8)
+	if (rx_inputs > 11)
 		return -EINVAL;
+
+	if (!is_out) {
+		if (rx_inputs > 8)
+			return ad9361_txmon_control(phy, rx_inputs & (TX_1 | TX_2));
+		else
+			ad9361_txmon_control(phy, 0);
+	}
 
 	if (rx_inputs < 3)
 		val = 3 << (rx_inputs * 2);
@@ -3899,8 +3963,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ad9361_en_dis_tx(phy, 2, pd->rx2tx2);
 	ad9361_en_dis_rx(phy, 2, pd->rx2tx2);
 
-	ret = ad9361_rf_port_setup(phy, pd->rf_rx_input_sel,
-		pd->rf_tx_output_sel);
+	ret = ad9361_rf_port_setup(phy, true, pd->rf_rx_input_sel,
+				   pd->rf_tx_output_sel);
 	if (ret < 0)
 		return ret;
 
@@ -4068,6 +4132,11 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 
 	ret = ad9361_clkout_control(phy, pd->ad9361_clkout_mode);
+	if (ret < 0)
+		return ret;
+
+
+	ret = ad9361_txmon_setup(phy, &pd->txmon_ctrl);
 	if (ret < 0)
 		return ret;
 
