@@ -1396,7 +1396,7 @@ int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
  */
 static int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable)
 {
-	if (tx_if == 2 && !phy->pdata->rx2tx2)
+	if (tx_if == 2 && !phy->pdata->rx2tx2 && enable)
 		return -EINVAL;
 
 	return ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
@@ -1412,7 +1412,7 @@ static int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint3
  */
 static int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable)
 {
-	if (rx_if == 2 && !phy->pdata->rx2tx2)
+	if (rx_if == 2 && !phy->pdata->rx2tx2 && enable)
 		return -EINVAL;
 
 	return ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
@@ -3896,10 +3896,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ad9361_en_dis_tx(phy, 1, TX_ENABLE);
 	ad9361_en_dis_rx(phy, 1, RX_ENABLE);
 
-	if (pd->rx2tx2) {
-		ad9361_en_dis_tx(phy, 2, TX_ENABLE);
-		ad9361_en_dis_rx(phy, 2, RX_ENABLE);
-	}
+	ad9361_en_dis_tx(phy, 2, pd->rx2tx2);
+	ad9361_en_dis_rx(phy, 2, pd->rx2tx2);
 
 	ret = ad9361_rf_port_setup(phy, pd->rf_rx_input_sel,
 		pd->rf_tx_output_sel);
@@ -4613,7 +4611,8 @@ static int32_t ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 		if (ret < 0)
 			return ret;
 		if (set)
-			return ad9361_spi_writef(spi, REG_CLOCK_CTRL, 0x3, ret);
+			return ad9361_spi_writef(spi, REG_CLOCK_CTRL,
+						REF_FREQ_SCALER(~0), ret);
 		break;
 
 	case RX_REFCLK:

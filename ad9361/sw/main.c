@@ -313,7 +313,7 @@ int main(void)
 #endif
 
 #ifdef CAPTURE_SCRIPT
-    // NOTE: To prevent unwanted data loss, it's recomanded to invalidate
+    // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size
     // of the cache line.
