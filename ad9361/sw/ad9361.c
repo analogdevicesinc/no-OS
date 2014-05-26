@@ -2454,6 +2454,14 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 	ad9361_spi_write(spi, REG_LVDS_INVERT_CTRL1, pd->port_ctrl.lvds_invert[0]);
 	ad9361_spi_write(spi, REG_LVDS_INVERT_CTRL2, pd->port_ctrl.lvds_invert[1]);
 
+	if (pd->rx1rx2_phase_inversion_en ||
+		(pd->port_ctrl.pp_conf[1] & INVERT_RX2)) {
+
+		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
+		ad9361_spi_writef(spi, REG_INVERT_BITS,
+				  INVERT_RX2_RF_DC_CGOUT_WORD, 1);
+	}
+
 	return 0;
 }
 

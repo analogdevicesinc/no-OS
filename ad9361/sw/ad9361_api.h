@@ -226,6 +226,7 @@ typedef struct
 	uint32_t	tx_data_delay;	/* adi,tx-data-delay */
 	uint32_t	lvds_bias_mV;	/* adi,lvds-bias-mV */
 	uint8_t		lvds_rx_onchip_termination_enable;	/* adi,lvds-rx-onchip-termination-enable */
+	uint8_t		rx1rx2_phase_inversion_en;	/* adi,rx1-rx2-phase-inversion-enable */
 	/* Tx Monitor Control */
 	uint32_t low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
 	uint32_t low_gain_dB;	/* adi,txmon-low-gain */
