@@ -300,10 +300,10 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->pdata->port_ctrl.pp_conf[2] |= (init_param->full_port_enable << 1);
 	phy->pdata->port_ctrl.pp_conf[2] |= (init_param->full_duplex_swap_bits_enable << 0);
 	phy->pdata->port_ctrl.pp_conf[1] |= (init_param->delay_rx_data & 0x3);
-	phy->pdata->port_ctrl.rx_clk_data_delay = (init_param->rx_data_clock_delay & 0xF) << 4;
-	phy->pdata->port_ctrl.rx_clk_data_delay |= (init_param->rx_data_delay & 0xF);
-	phy->pdata->port_ctrl.tx_clk_data_delay = (init_param->tx_fb_clock_delay & 0xF) << 4;
-	phy->pdata->port_ctrl.tx_clk_data_delay |= (init_param->tx_data_delay & 0xF);
+	phy->pdata->port_ctrl.rx_clk_data_delay = DATA_CLK_DELAY(init_param->rx_data_clock_delay);
+	phy->pdata->port_ctrl.rx_clk_data_delay |= RX_DATA_DELAY(init_param->rx_data_delay);
+	phy->pdata->port_ctrl.tx_clk_data_delay = FB_CLK_DELAY(init_param->tx_fb_clock_delay);
+	phy->pdata->port_ctrl.tx_clk_data_delay |= TX_DATA_DELAY(init_param->tx_data_delay);
 	phy->pdata->port_ctrl.lvds_bias_ctrl = (init_param->lvds_bias_mV / 75) & 0x7;
 	phy->pdata->port_ctrl.lvds_bias_ctrl |= (init_param->lvds_rx_onchip_termination_enable << 5);
 	phy->pdata->rx1rx2_phase_inversion_en = init_param->rx1rx2_phase_inversion_en;
