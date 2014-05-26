@@ -5629,10 +5629,19 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 				axiadc_write(st, 0x4414 + (chan)* 0x40, 0);
 			}
 
-			phy->pdata->port_ctrl.rx_clk_data_delay =
-				ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
-			phy->pdata->port_ctrl.tx_clk_data_delay =
-				ad9361_spi_read(phy->spi, REG_TX_CLOCK_DATA_DELAY);
+			if (err == -EIO) {
+				ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY,
+						phy->pdata->port_ctrl.rx_clk_data_delay);
+
+				ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY,
+						phy->pdata->port_ctrl.tx_clk_data_delay);
+				err = 0;
+			} else {
+				phy->pdata->port_ctrl.rx_clk_data_delay =
+					ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
+				phy->pdata->port_ctrl.tx_clk_data_delay =
+					ad9361_spi_read(phy->spi, REG_TX_CLOCK_DATA_DELAY);
+			}
 
 			return err;
 		}
