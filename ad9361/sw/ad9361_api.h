@@ -228,17 +228,23 @@ typedef struct
 	uint8_t		lvds_rx_onchip_termination_enable;	/* adi,lvds-rx-onchip-termination-enable */
 	uint8_t		rx1rx2_phase_inversion_en;	/* adi,rx1-rx2-phase-inversion-enable */
 	/* Tx Monitor Control */
-	uint32_t low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
-	uint32_t low_gain_dB;	/* adi,txmon-low-gain */
-	uint32_t high_gain_dB;	/* adi,txmon-high-gain */
-	uint8_t tx_mon_track_en;	/* adi,txmon-dc-tracking-enable */
-	uint8_t one_shot_mode_en;	/* adi,txmon-one-shot-mode-enable */
-	uint32_t tx_mon_delay;	/* adi,txmon-delay */
-	uint32_t tx_mon_duration;	/* adi,txmon-duration */
-	uint32_t tx1_mon_front_end_gain;	/* adi,txmon-1-front-end-gain */
-	uint32_t tx2_mon_front_end_gain;	/* adi,txmon-2-front-end-gain */
-	uint32_t tx1_mon_lo_cm;	/* adi,txmon-1-lo-cm */
-	uint32_t tx2_mon_lo_cm;	/* adi,txmon-2-lo-cm */
+	uint32_t	low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
+	uint32_t	low_gain_dB;	/* adi,txmon-low-gain */
+	uint32_t	high_gain_dB;	/* adi,txmon-high-gain */
+	uint8_t		tx_mon_track_en;	/* adi,txmon-dc-tracking-enable */
+	uint8_t		one_shot_mode_en;	/* adi,txmon-one-shot-mode-enable */
+	uint32_t	tx_mon_delay;	/* adi,txmon-delay */
+	uint32_t	tx_mon_duration;	/* adi,txmon-duration */
+	uint32_t	tx1_mon_front_end_gain;	/* adi,txmon-1-front-end-gain */
+	uint32_t	tx2_mon_front_end_gain;	/* adi,txmon-2-front-end-gain */
+	uint32_t	tx1_mon_lo_cm;	/* adi,txmon-1-lo-cm */
+	uint32_t	tx2_mon_lo_cm;	/* adi,txmon-2-lo-cm */
+	/* GPIO definitions */
+	int32_t		gpio_resetb;	/* reset-gpios */
+	/* MCS Sync */
+	int32_t		gpio_sync;		/* sync-gpios */
+	int32_t		gpio_cal_sw1;	/* cal-sw1-gpios */
+	int32_t		gpio_cal_sw2;	/* cal-sw2-gpios */
 }AD9361_InitParam;
 
 typedef struct

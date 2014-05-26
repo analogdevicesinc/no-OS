@@ -267,7 +267,13 @@ AD9361_InitParam default_init_param = {
 	2,		//tx1_mon_front_end_gain *** adi,txmon-1-front-end-gain
 	2,		//tx2_mon_front_end_gain *** adi,txmon-2-front-end-gain
 	48,		//tx1_mon_lo_cm *** adi,txmon-1-lo-cm
-	48		//tx2_mon_lo_cm *** adi,txmon-2-lo-cm
+	48,		//tx2_mon_lo_cm *** adi,txmon-2-lo-cm
+	/* GPIO definitions */
+	-1,		//gpio_resetb;	/* reset-gpios */
+	/* MCS Sync */
+	-1,		//gpio_sync;		/* sync-gpios */
+	-1,		//gpio_cal_sw1;	/* cal-sw1-gpios */
+	-1		//gpio_cal_sw2;	/* cal-sw2-gpios */
 };
 
 AD9361_RXFIRConfig rx_fir_config = {
@@ -309,8 +315,15 @@ int main(void)
 	Xil_DCacheEnable();
 #endif
 
+	// NOTE: The user has to choose the GPIO numbers according to desired
+	// carrier board.
+	default_init_param.gpio_resetb = GPIO_RESET_PIN;
+	default_init_param.gpio_sync = -1;
+	default_init_param.gpio_cal_sw1 = -1;
+	default_init_param.gpio_cal_sw2 = -1;
 	gpio_init(GPIO_DEVICE_ID);
-	gpio_direction(GPIO_RESET_PIN_NO, 1);
+	gpio_direction(default_init_param.gpio_resetb, 1);
+
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
 	ad9361_phy = ad9361_init(&default_init_param);

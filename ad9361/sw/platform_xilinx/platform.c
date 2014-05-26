@@ -46,6 +46,8 @@
 #include <xgpiops.h>
 #include <xspips.h>
 #else
+#include <xgpio.h>
+#include <xgpio_l.h>
 #include <xspi.h>
 #endif
 #include "util.h"
@@ -73,6 +75,7 @@ XGpioPs			gpio_instance;
 #else
 XSpi_Config		*spi_config;
 XSpi			spi_instance;
+XGpio_Config	*gpio_config;
 #endif
 
 /***************************************************************************//**
@@ -234,6 +237,8 @@ void gpio_init(uint32_t device_id)
 #ifdef _XPARAMETERS_PS_H_
 	gpio_config = XGpioPs_LookupConfig(device_id);
 	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
+#else
+	gpio_config = XGpio_LookupConfig(device_id);
 #endif
 }
 
@@ -245,6 +250,19 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&gpio_instance, pin, direction);
 	XGpioPs_SetOutputEnablePin(&gpio_instance, pin, 1);
+#else
+	uint32_t config = 0;
+
+	config = Xil_In32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET));
+	if(direction)
+	{
+		config &= ~(1 << pin);
+	}
+	else
+	{
+		config |= (1 << pin);
+	}
+	Xil_Out32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET), config);
 #endif
 }
 
@@ -253,11 +271,10 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 *******************************************************************************/
 bool gpio_is_valid(int number)
 {
-#ifdef _XPARAMETERS_PS_H_
-	return 1;
-#else
-	return 0;
-#endif
+	if(number >= 0)
+		return 1;
+	else
+		return 0;
 }
 
 /***************************************************************************//**
@@ -267,6 +284,19 @@ void gpio_data(uint8_t pin, uint8_t data)
 {
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_WritePin(&gpio_instance, pin, data);
+#else
+	uint32_t config = 0;
+
+	config = Xil_In32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET));
+	if(data)
+	{
+		config |= (1 << pin);
+	}
+	else
+	{
+		config &= ~(1 << pin);
+	}
+	Xil_Out32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET), config);
 #endif
 }
 
