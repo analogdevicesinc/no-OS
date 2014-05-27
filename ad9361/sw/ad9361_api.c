@@ -671,6 +671,111 @@ int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Enable/disable the RX RFDC Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t en_dis)
+{
+	int32_t ret = 0;
+
+	if(phy->rfdc_track_en == en_dis)
+		return ret;
+
+	phy->rfdc_track_en = en_dis;
+	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
+		phy->rfdc_track_en, phy->quad_track_en);
+
+	return ret;
+}
+
+/**
+ * Get the status of the RX RFDC Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t *en_dis)
+{
+	*en_dis = phy->rfdc_track_en;
+
+	return 0;
+}
+
+/**
+ * Enable/disable the RX BasebandDC Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t en_dis)
+{
+	int32_t ret = 0;
+
+	if(phy->bbdc_track_en == en_dis)
+		return ret;
+
+	phy->bbdc_track_en = en_dis;
+	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
+		phy->rfdc_track_en, phy->quad_track_en);
+
+	return ret;
+}
+
+/**
+ * Get the status of the RX BasebandDC Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t *en_dis)
+{
+	*en_dis = phy->bbdc_track_en;
+
+	return 0;
+}
+
+/**
+ * Enable/disable the RX Quadrature Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t en_dis)
+{
+	int32_t ret = 0;
+
+	if(phy->quad_track_en == en_dis)
+		return ret;
+
+	phy->quad_track_en = en_dis;
+	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
+		phy->rfdc_track_en, phy->quad_track_en);
+
+	return ret;
+}
+
+/**
+ * Get the status of the RX Quadrature Tracking.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
+										 uint8_t *en_dis)
+{
+	*en_dis = phy->quad_track_en;
+
+	return 0;
+}
+
+/**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (1, 2).
@@ -868,4 +973,41 @@ int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 	*en_dis = !phy->bypass_tx_fir;
 
 	return 0;
+}
+
+/**
+ * Set the RX and TX path rates.
+ * @param phy The AD9361 state structure.
+ * @param rx_path_clks RX path rates buffer.
+ * @param tx_path_clks TX path rates buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy,
+	uint32_t *rx_path_clks,
+	uint32_t *tx_path_clks)
+{
+	int32_t ret;
+
+	ret = ad9361_set_trx_clock_chain(phy, rx_path_clks, tx_path_clks);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_update_rf_bandwidth(phy, phy->current_rx_bw_Hz,
+					phy->current_tx_bw_Hz);
+
+	return ret;
+}
+
+/**
+ * Get the RX and TX path rates.
+ * @param phy The AD9361 state structure.
+ * @param rx_path_clks RX path rates buffer.
+ * @param tx_path_clks TX path rates buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy,
+	uint32_t *rx_path_clks,
+	uint32_t *tx_path_clks)
+{
+	return ad9361_get_trx_clock_chain(phy, rx_path_clks, tx_path_clks);
 }

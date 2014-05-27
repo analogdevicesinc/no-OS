@@ -300,6 +300,18 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy, AD9361_RXFIRConfig 
 int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the RX FIR filter. */
 int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Enable/disable the RX RFDC Tracking. */
+int32_t ad9361_set_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+/* Get the status of the RX RFDC Tracking. */
+int32_t ad9361_get_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Enable/disable the RX BasebandDC Tracking. */
+int32_t ad9361_set_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+/* Get the status of the RX BasebandDC Tracking. */
+int32_t ad9361_get_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Enable/disable the RX Quadrature Tracking. */
+int32_t ad9361_set_rx_quad_track_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+/* Get the status of the RX Quadrature Tracking. */
+int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -322,4 +334,8 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy, AD9361_TXFIRConfig 
 int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the TX FIR filter. */
 int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Set the RX and TX path rates. */
+int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
+/* Get the RX and TX path rates. */
+int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 #endif

@@ -3818,6 +3818,8 @@ int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 	uint32_t *rx_path_clks,
 	uint32_t *tx_path_clks);
+int32_t ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks,
+	uint32_t *tx_path_clks);
 uint32_t ad9361_to_clk(uint64_t freq);
 uint64_t ad9361_from_clk(uint32_t freq);
 int32_t ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi);
@@ -3848,5 +3850,6 @@ int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate);
 int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t parent_rate);
-
+int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
+	bool rfdc_track, bool rxquad_track);
 #endif

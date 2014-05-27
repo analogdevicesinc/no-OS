@@ -2174,7 +2174,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
  * @param rxquad_track Set true, will enable the RXQUAD tracking.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
+int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	bool rfdc_track, bool rxquad_track)
 {
 	struct spi_device *spi = phy->spi;
@@ -3367,7 +3367,7 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
  * @param tx_path_clks TX path rates buffer.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks,
+int32_t ad9361_get_trx_clock_chain(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks,
 	uint32_t *tx_path_clks)
 {
 	int32_t i, j, n;
