@@ -1,8 +1,9 @@
 /***************************************************************************//**
- *   @file   platfrom.c
- *   @brief  Implementation of platfrom Driver.
+ *   @file   Platform.c
+ *   @brief  Implementation of Platform Driver.
+ *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2014(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -39,9 +40,184 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform.h"
-#include "gpio.h"
-#include "spi.h"
+#include <stdint.h>
+#include "util.h"
+#include "parameters.h"
+
+#include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
+
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+int spidev_fd;
+int uio_fd;
+void *uio_addr;
+
+/***************************************************************************//**
+ * @brief spi_init
+*******************************************************************************/
+int32_t spi_init(uint32_t device_id,
+			uint8_t  clk_pha,
+			uint8_t  clk_pol)
+{
+	uint8_t mode = SPI_CPHA;
+	uint8_t bits = 8;
+	uint32_t speed = 10000000;
+	int ret;
+
+	spidev_fd = open(SPIDEV_DEV, O_RDWR);
+	if (spidev_fd < 0) {
+		printf("%s: Can't open device\n\r", __func__);
+		return -1;
+	}
+
+	ret = ioctl(spidev_fd, SPI_IOC_WR_MODE, &mode);
+	if (ret == -1) {
+		printf("%s: Can't set spi mode\n\r", __func__);
+		return ret;
+	}
+
+	ret = ioctl(spidev_fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
+	if (ret == -1) {
+		printf("%s: Can't set bits per word\n\r", __func__);
+		return ret;
+	}
+	
+	ret = ioctl(spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+	if (ret == -1) {
+		printf("%s: Can't set max speed hz\n\r", __func__);
+		return ret;
+	}
+	
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief spi_read
+*******************************************************************************/
+int32_t spi_read(uint8_t *data,
+				 uint8_t bytes_number)
+{
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief spi_write_then_read
+*******************************************************************************/
+int spi_write_then_read(struct spi_device *spi,
+		const unsigned char *txbuf, unsigned n_tx,
+		unsigned char *rxbuf, unsigned n_rx)
+{
+	int ret;
+	struct spi_ioc_transfer tr[2] = {
+		{
+			.tx_buf = (unsigned long)txbuf,
+			.len = n_tx,
+		}, {
+			.rx_buf = (unsigned long)rxbuf,
+			.len = n_rx,
+		},
+	};
+
+	ret = ioctl(spidev_fd, SPI_IOC_MESSAGE(2), &tr);
+	if (ret == 1) {
+		printf("%s: Can't send spi message\n\r", __func__);
+		return -EIO;
+	}
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief gpio_init
+*******************************************************************************/
+void gpio_init(uint32_t device_id)
+{
+	int fd, len;
+	char buf[11];
+
+	fd = open("/sys/class/gpio/export", O_WRONLY);
+	if (fd < 0) {
+		printf("%s: Can't export GPIO\n\r", __func__);
+		return;
+	}
+	
+	len = snprintf(buf, sizeof(buf), "%d", device_id);
+	write(fd, buf, len);
+	close(fd);
+}
+
+/***************************************************************************//**
+ * @brief gpio_direction
+*******************************************************************************/
+void gpio_direction(uint8_t pin, uint8_t direction)
+{
+	int fd, len;
+	char buf[60];
+
+	pin = 0; // FIXME
+	len = snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction", pin);
+
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		printf("%s: Can't set GPIO direction\n\r", __func__);
+		return;
+	}
+
+	if (direction == 1)
+		write(fd, "out", 4);
+	else
+		write(fd, "in", 3);
+
+	close(fd);
+}
+
+/***************************************************************************//**
+ * @brief gpio_is_valid
+*******************************************************************************/
+bool gpio_is_valid(int number)
+{
+	return 1;
+}
+
+/***************************************************************************//**
+ * @brief gpio_data
+*******************************************************************************/
+void gpio_data(uint8_t pin, uint8_t data)
+{
+	int fd, len;
+	char buf[60];
+
+	pin = 0; // FIXME
+	len = snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
+
+	fd = open(buf, O_WRONLY);
+	if (fd < 0) {
+		printf("%s: Can't set GPIO value\n\r", __func__);
+		return;
+	}
+
+	if (data)
+		write(fd, "1", 2);
+	else
+		write(fd, "0", 2);
+
+	close(fd);
+}
+
+/***************************************************************************//**
+ * @brief gpio_set_value
+*******************************************************************************/
+void gpio_set_value(unsigned gpio, int value)
+{
+	gpio_data(gpio, value);
+}
 
 /***************************************************************************//**
  * @brief udelay
@@ -64,57 +240,49 @@ void mdelay(unsigned long msecs)
 *******************************************************************************/
 unsigned long msleep_interruptible(unsigned int msecs)
 {
-	mdelay(msecs);
-
+	usleep(msecs * 1000);
 	return 0;
 }
 
 /***************************************************************************//**
- * @brief spi_init
+ * @brief axiadc_init
 *******************************************************************************/
-int32_t spi_init(char *device)
+void axiadc_init(struct ad9361_rf_phy *phy)
 {
-	return spidev_init(device);
+	uio_fd = open(UIO_DEV, O_RDWR);
+	if(uio_fd < 1)
+	{
+		printf("%s: Can't open device\n\r", __func__);
+		return;
+	}
+	
+	uio_addr = mmap(NULL, 24576, PROT_READ|PROT_WRITE, MAP_SHARED, uio_fd, 0);
+	
+	*((unsigned *) (uio_addr + 0x40)) = 0x0;
+	*((unsigned *) (uio_addr + 0x40)) = 0x1;
+	
+	*((unsigned *) (uio_addr + 0x400)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
+	*((unsigned *) (uio_addr + 0x440)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
+	*((unsigned *) (uio_addr + 0x4C0)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
+	*((unsigned *) (uio_addr + 0x500)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
+	
+	*((unsigned *) (uio_addr + 0x4040)) = 0x0;
+	*((unsigned *) (uio_addr + 0x4040)) = 0x1;
+	*((unsigned *) (uio_addr + 0x4044)) = 0x1;
 }
 
 /***************************************************************************//**
- * @brief spi_write_then_read
+ * @brief axiadc_read
 *******************************************************************************/
-int spi_write_then_read(struct spi_device *spi,
-						const unsigned char *txbuf, unsigned n_tx,
-						unsigned char *rxbuf, unsigned n_rx)
-{
-	return spidev_write_then_read(txbuf, n_tx, rxbuf, n_rx);
+unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
+{	
+	return (*((unsigned *) (uio_addr + reg)));
 }
 
 /***************************************************************************//**
- * @brief gpio_init
+ * @brief axiadc_write
 *******************************************************************************/
-void gpio_init(unsigned gpio)
+void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	gpio_export(gpio);
-}
-
-/***************************************************************************//**
- * @brief gpio_direction
-*******************************************************************************/
-void gpio_direction(unsigned gpio, uint8_t direction)
-{
-	gpio_dir(gpio, direction);
-}
-
-/***************************************************************************//**
- * @brief gpio_set_value
-*******************************************************************************/
-void gpio_set_value(unsigned gpio, int value)
-{
-	gpio_value(gpio, value);
-}
-
-/***************************************************************************//**
- * @brief gpio_is_valid
-*******************************************************************************/
-bool gpio_is_valid(unsigned gpio)
-{
-	return 1;
+	*((unsigned *) (uio_addr + reg)) = val;
 }
