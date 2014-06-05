@@ -170,10 +170,10 @@ uint32_t I2C_Init_axi(uint32_t i2cAddr, uint32_t fmcPort, uint32_t enableCommMux
     //enable the I2C mux
     if(enableCommMux)
     {
-    	if(carrierBoard == 3)
+    	if(carrierBoard == 4)
     		ret = I2C_EnableMux_axi(0x20);
     	else
-    		if(carrierBoard == 4)
+    		if(carrierBoard == 5)
     			ret = I2C_EnableMux_axi(0x40);
 			else
 				ret = I2C_EnableMux_axi(fmcPort == 0 ? (uint8_t)I2C_LPC_AXI :
