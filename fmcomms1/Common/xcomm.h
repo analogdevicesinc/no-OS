@@ -94,6 +94,7 @@ typedef enum
 typedef enum
 {
     XILINX_ML605 = 0,
+    XILINX_AC701,
     XILINX_KC705,
     XILINX_VC707,
     XILINX_ZC702,

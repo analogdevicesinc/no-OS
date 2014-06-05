@@ -121,6 +121,7 @@ int32_t XCOMM_InitI2C(XCOMM_DefaultInit* pDefInit)
     {
     	case XILINX_ZC702:
     	case XILINX_ZC706:
+        case XILINX_AC701:
         case XILINX_KC705:
         case XILINX_VC707:
             enableCommMux = 1;
@@ -165,6 +166,7 @@ int32_t XCOMM_Init(XCOMM_DefaultInit* pDefInit)
     {
     	case XILINX_ZC702:
     	case XILINX_ZC706:
+        case XILINX_AC701:
         case XILINX_KC705:
         case XILINX_VC707:
             enableCommMux = 1;
