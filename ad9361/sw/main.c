@@ -41,7 +41,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 //#define CONSOLE_COMMANDS
-#define XILINX_PLATFORM
+//#define XILINX_PLATFORM
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -55,6 +55,8 @@
 #endif
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
+#endif
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
 #include "adc_core.h"
 #include "dac_core.h"
 #endif
@@ -331,14 +333,15 @@ int main(void)
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
-#ifdef XILINX_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
 #ifdef DAC_DMA
 	dac_init(ad9361_phy, DATA_SEL_DMA);
 #else
 	dac_init(ad9361_phy, DATA_SEL_DDS);
 #endif
+#endif
 
-#ifdef CAPTURE_SCRIPT
+#if defined XILINX_PLATFORM && defined CAPTURE_SCRIPT
     // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size
@@ -346,7 +349,6 @@ int main(void)
     adc_capture(16384, ADC_DDR_BASEADDR);
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
     while(1);
-#endif
 #endif
 
 #ifdef CONSOLE_COMMANDS

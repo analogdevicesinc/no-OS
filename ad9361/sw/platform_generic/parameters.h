@@ -51,7 +51,7 @@
 #define DAC_DDR_BASEADDR			0
 
 #define GPIO_DEVICE_ID				0
-#define GPIO_RESET_PIN_NO			0
+#define GPIO_RESET_PIN				0
 #define SPI_DEVICE_ID				0
 
 #endif // __PARAMETERS_H__
