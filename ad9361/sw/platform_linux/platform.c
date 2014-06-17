@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include "util.h"
+#include "../util.h"
 #include "parameters.h"
 
 #include <fcntl.h>
