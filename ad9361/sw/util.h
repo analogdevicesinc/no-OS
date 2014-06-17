@@ -118,5 +118,6 @@ uint64_t do_div(uint64_t* n,
 				uint64_t base);
 uint32_t __ffs(uint32_t word);
 void * ERR_PTR(long error);
+void *zmalloc(size_t size);
 
 #endif

@@ -290,3 +290,14 @@ void * ERR_PTR(long error)
 {
 	return (void *) error;
 }
+
+/***************************************************************************//**
+ * @brief zmalloc
+*******************************************************************************/
+void *zmalloc(size_t size)
+{
+	void *ptr = malloc(size);
+	if (ptr)
+		memset(ptr, 0, size);
+	return ptr;
+}

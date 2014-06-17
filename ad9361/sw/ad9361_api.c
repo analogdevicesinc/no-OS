@@ -75,32 +75,32 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	int32_t rev = 0;
 	int32_t i   = 0;
 
-	phy = (struct ad9361_rf_phy *)malloc(sizeof(*phy));
+	phy = (struct ad9361_rf_phy *)zmalloc(sizeof(*phy));
 	if (!phy) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
-	phy->spi = (struct spi_device *)malloc(sizeof(*phy->spi));
+	phy->spi = (struct spi_device *)zmalloc(sizeof(*phy->spi));
 	if (!phy->spi) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
-	phy->clk_refin = (struct clk *)malloc(sizeof(*phy->clk_refin));
+	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
-	phy->pdata = (struct ad9361_phy_platform_data *)malloc(sizeof(*phy->pdata));
+	phy->pdata = (struct ad9361_phy_platform_data *)zmalloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
-	phy->adc_conv = (struct axiadc_converter *)malloc(sizeof(*phy->adc_conv));
+	phy->adc_conv = (struct axiadc_converter *)zmalloc(sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
-	phy->adc_state = (struct axiadc_state *)malloc(sizeof(*phy->adc_state));
+	phy->adc_state = (struct axiadc_state *)zmalloc(sizeof(*phy->adc_state));
 	if (!phy->adc_state) {
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
