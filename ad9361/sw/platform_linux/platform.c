@@ -43,6 +43,8 @@
 #include <stdint.h>
 #include "../util.h"
 #include "parameters.h"
+#include "adc_core.h"
+#include "dac_core.h"
 
 #include <fcntl.h>
 #include <errno.h>
@@ -56,8 +58,6 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 int spidev_fd;
-int uio_fd;
-void *uio_addr;
 
 /***************************************************************************//**
  * @brief spi_init
@@ -249,34 +249,20 @@ unsigned long msleep_interruptible(unsigned int msecs)
 *******************************************************************************/
 void axiadc_init(struct ad9361_rf_phy *phy)
 {
-	uio_fd = open(UIO_DEV, O_RDWR);
-	if(uio_fd < 1)
-	{
-		printf("%s: Can't open device\n\r", __func__);
-		return;
-	}
-	
-	uio_addr = mmap(NULL, 24576, PROT_READ|PROT_WRITE, MAP_SHARED, uio_fd, 0);
-	
-	*((unsigned *) (uio_addr + 0x40)) = 0x0;
-	*((unsigned *) (uio_addr + 0x40)) = 0x1;
-	
-	*((unsigned *) (uio_addr + 0x400)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
-	*((unsigned *) (uio_addr + 0x440)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
-	*((unsigned *) (uio_addr + 0x4C0)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
-	*((unsigned *) (uio_addr + 0x500)) = (1 << 9) | (1 << 6) | (1 << 4) | (1 << 0);
-	
-	*((unsigned *) (uio_addr + 0x4040)) = 0x0;
-	*((unsigned *) (uio_addr + 0x4040)) = 0x1;
-	*((unsigned *) (uio_addr + 0x4044)) = 0x1;
+	adc_init();
+	dac_init(phy, DATA_SEL_DDS);
 }
 
 /***************************************************************************//**
  * @brief axiadc_read
 *******************************************************************************/
 unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
-{	
-	return (*((unsigned *) (uio_addr + reg)));
+{
+	unsigned int val;
+
+	adc_read(reg, &val);
+
+	return val;
 }
 
 /***************************************************************************//**
@@ -284,5 +270,6 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	*((unsigned *) (uio_addr + reg)) = val;
+	adc_write(reg, val);
 }
+
