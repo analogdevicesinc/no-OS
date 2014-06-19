@@ -222,6 +222,12 @@ int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
 	rx_buff_virt_addr = (mapping_addr + (RX_BUFF_MEM_ADDR & page_mask));
 
 	FILE *f = fopen(filename, "w");
+	if (f == NULL)
+	{
+		munmap(mapping_addr, mapping_length);
+		close(dev_mem_fd);
+		return -1;
+	}
 
 	for(index = 0; index < size * 2; index += 2)
 	{
@@ -235,7 +241,8 @@ int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
 	}
 
 	fclose(f);
+	munmap(mapping_addr, mapping_length);
+	close(dev_mem_fd);
 
 	return 0;
 }
-
