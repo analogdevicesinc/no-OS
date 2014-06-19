@@ -47,14 +47,19 @@
 #define CF_AD9361_RX_DMA_BASEADDR	0
 #define CF_AD9361_TX_DMA_BASEADDR	0
 
-#define ADC_DDR_BASEADDR			0
-#define DAC_DDR_BASEADDR			0
+#define ADC_DDR_BASEADDR		0
+#define DAC_DDR_BASEADDR		0
 
-#define GPIO_DEVICE_ID				0
-#define GPIO_RESET_PIN				100
-#define SPI_DEVICE_ID				0
+#define GPIO_DEVICE_ID			0
+#define GPIO_RESET_PIN			100
+#define SPI_DEVICE_ID			0
 
-#define UIO_DEV					"/dev/uio0"
-#define SPIDEV_DEV				"/dev/spidev32766.0"
+#define AD9361_UIO_DEV			"/dev/uio0"
+#define RXDMA_UIO_DEV			"/dev/uio1"
+#define TXDMA_UIO_DEV			"/dev/uio2"
+#define SPIDEV_DEV			"/dev/spidev32766.0"
+
+#define TX_BUFF_MEM_ADDR		0x30000000	// FIXME
+#define TX_BUFF_MEM_SIZE		0x1000		// FIXME
 
 #endif // __PARAMETERS_H__

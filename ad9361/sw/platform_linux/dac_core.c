@@ -45,11 +45,18 @@
 #include "dac_core.h"
 #include "parameters.h"
 #include "../util.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct dds_state dds_st;
+int txdma_uio_fd;
+void *txdma_uio_addr;
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -82,7 +89,7 @@ void dac_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void dac_dma_read(uint32_t regAddr, uint32_t *data)
 {
-	//TODO
+	*data = (*((unsigned *) (txdma_uio_addr + regAddr)));
 }
 
 /***************************************************************************//**
@@ -90,7 +97,7 @@ void dac_dma_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void dac_dma_write(uint32_t regAddr, uint32_t data)
 {
-	//TODO
+	*((unsigned *) (txdma_uio_addr + regAddr)) = data;
 }
 
 /***************************************************************************//**
@@ -115,15 +122,20 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 {
 	uint32_t tx_count;
-	uint32_t index;
-	uint32_t index_i1;
-	uint32_t index_q1;
-	uint32_t index_i2;
-	uint32_t index_q2;
-	uint32_t data_i1;
-	uint32_t data_q1;
-	uint32_t data_i2;
-	uint32_t data_q2;
+	uint32_t index, index_i1, index_q1, index_i2, index_q2;
+	uint32_t data_i1, data_q1, data_i2, data_q2;
+	int dev_mem_fd;
+	uint32_t mapping_length, page_mask, page_size;
+	void *mapping_addr, *tx_buff_virt_addr;
+
+	txdma_uio_fd = open(TXDMA_UIO_DEV, O_RDWR);
+	if(txdma_uio_fd < 1)
+	{
+		printf("%s: Can't open txdma_uio device\n\r", __func__);
+		return;
+	}
+	
+	txdma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, txdma_uio_fd, 0);
 
 	dac_write(ADI_REG_RSTN, 0x0);
 	dac_write(ADI_REG_RSTN, ADI_RSTN);
@@ -148,6 +160,30 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DDS));
 		break;
 	case DATA_SEL_DMA:
+		dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
+		if(dev_mem_fd == -1)
+		{
+			printf("%s: Can't open /dev/mem device\n\r", __func__);
+			return;
+		}
+
+		page_size = sysconf(_SC_PAGESIZE);
+		mapping_length = (((TX_BUFF_MEM_SIZE / page_size) + 1) * page_size);
+		page_mask = (page_size - 1);
+		mapping_addr = mmap(NULL,
+				   mapping_length,
+				   PROT_READ | PROT_WRITE,
+				   MAP_SHARED,
+				   dev_mem_fd,
+				   (TX_BUFF_MEM_ADDR & ~page_mask));
+		if(mapping_addr == MAP_FAILED)
+		{
+			printf("%s: mmap error\n\r", __func__);
+			return;
+		}
+
+		tx_buff_virt_addr = (mapping_addr + (TX_BUFF_MEM_ADDR & page_mask));
+
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
 		for(index = 0; index < (tx_count * 2); index += 2)
 		{
@@ -157,8 +193,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 				index_q1 -= (tx_count * 2);
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
-			//TODO
-
+			*((unsigned *) (tx_buff_virt_addr + (index * 4))) = data_i1 | data_q1;
 			index_i2 = index_i1;
 			index_q2 = index_q1;
 			if(index_i2 >= (tx_count * 2))
@@ -167,11 +202,15 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 				index_q2 -= (tx_count * 2);
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
-			//TODO
+			*((unsigned *) (tx_buff_virt_addr + ((index + 1) * 4))) = data_i2 | data_q2;
 		}
+
+		munmap(mapping_addr, mapping_length);
+		close(dev_mem_fd);
+
 		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
-		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
+		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, TX_BUFF_MEM_ADDR);
 		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, (tx_count * 8) - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);

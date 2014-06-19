@@ -54,15 +54,17 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-int uio_fd;
-void *uio_addr;
+int ad9361_uio_fd;
+void *ad9361_uio_addr;
+int rxdma_uio_fd;
+void *rxdma_uio_addr;
 
 /***************************************************************************//**
  * @brief adc_read
 *******************************************************************************/
 void adc_read(uint32_t regAddr, uint32_t *data)
 {
-	*data = (*((unsigned *) (uio_addr + regAddr)));
+	*data = (*((unsigned *) (ad9361_uio_addr + regAddr)));
 }
 
 /***************************************************************************//**
@@ -70,7 +72,7 @@ void adc_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void adc_write(uint32_t regAddr, uint32_t data)
 {
-	*((unsigned *) (uio_addr + regAddr)) = data;
+	*((unsigned *) (ad9361_uio_addr + regAddr)) = data;
 }
 
 /***************************************************************************//**
@@ -78,7 +80,7 @@ void adc_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_dma_read(uint32_t regAddr, uint32_t *data)
 {
-	//TODO
+	*data = (*((unsigned *) (rxdma_uio_addr + regAddr)));
 }
 
 /***************************************************************************//**
@@ -86,7 +88,7 @@ void adc_dma_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void adc_dma_write(uint32_t regAddr, uint32_t data)
 {
-	//TODO
+	*((unsigned *) (rxdma_uio_addr + regAddr)) = data;
 }
 
 /***************************************************************************//**
@@ -94,15 +96,34 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_init(void)
 {
-	uio_fd = open(UIO_DEV, O_RDWR);
-	if(uio_fd < 1)
+	ad9361_uio_fd = open(AD9361_UIO_DEV, O_RDWR);
+	if(ad9361_uio_fd < 1)
 	{
-		printf("%s: Can't open device\n\r", __func__);
+		printf("%s: Can't open ad9361_uio device\n\r", __func__);
 		return;
 	}
 	
-	uio_addr = mmap(NULL, 24576, PROT_READ|PROT_WRITE, MAP_SHARED, uio_fd, 0);
+	ad9361_uio_addr = mmap(NULL,
+			       24576,
+			       PROT_READ|PROT_WRITE,
+			       MAP_SHARED,
+			       ad9361_uio_fd,
+			       0);
 	
+	rxdma_uio_fd = open(RXDMA_UIO_DEV, O_RDWR);
+	if(rxdma_uio_fd < 1)
+	{
+		printf("%s: Can't open rxdma_uio device\n\r", __func__);
+		return;
+	}
+	
+	rxdma_uio_addr = mmap(NULL,
+			      4096,
+			      PROT_READ|PROT_WRITE,
+			      MAP_SHARED,
+			      rxdma_uio_fd,
+			      0);
+
 	adc_write(ADI_REG_RSTN, 0);
 	adc_write(ADI_REG_RSTN, ADI_RSTN);
 
