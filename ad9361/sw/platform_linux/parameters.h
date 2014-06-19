@@ -59,6 +59,8 @@
 #define TXDMA_UIO_DEV			"/dev/uio2"
 #define SPIDEV_DEV			"/dev/spidev32766.0"
 
+#define RX_BUFF_MEM_ADDR		0x20000000	// FIXME
+#define RX_BUFF_MEM_SIZE		0x20000		// FIXME
 #define TX_BUFF_MEM_ADDR		0x30000000	// FIXME
 #define TX_BUFF_MEM_SIZE		0x1000		// FIXME
 

@@ -139,5 +139,7 @@ void adc_init(void);
 int32_t adc_capture(uint32_t size, uint32_t start_address);
 void adc_read(uint32_t regAddr, uint32_t *data);
 void adc_write(uint32_t regAddr, uint32_t data);
+int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
+			  const char * filename);
 
 #endif

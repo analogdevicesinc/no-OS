@@ -50,6 +50,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <stdio.h>
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -181,3 +182,60 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 
 	return 0;
 }
+
+/***************************************************************************//**
+ * @brief adc_save_csv_file
+*******************************************************************************/
+int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
+			  const char * filename)
+{
+	int dev_mem_fd;
+	uint32_t mapping_length, page_mask, page_size;
+	void *mapping_addr, *rx_buff_virt_addr;
+	uint32_t index;
+	uint32_t data, data_i1, data_q1, data_i2, data_q2;
+
+	adc_capture(size, start_address);
+
+	dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
+	if(dev_mem_fd == -1)
+	{
+		printf("%s: Can't open /dev/mem device\n\r", __func__);
+		return -1;
+	}
+
+	page_size = sysconf(_SC_PAGESIZE);
+	mapping_length = (((RX_BUFF_MEM_SIZE / page_size) + 1) * page_size);
+	page_mask = (page_size - 1);
+	mapping_addr = mmap(NULL,
+			   mapping_length,
+			   PROT_READ | PROT_WRITE,
+			   MAP_SHARED,
+			   dev_mem_fd,
+			   (RX_BUFF_MEM_ADDR & ~page_mask));
+	if(mapping_addr == MAP_FAILED)
+	{
+		printf("%s: mmap error\n\r", __func__);
+		return -1;
+	}
+
+	rx_buff_virt_addr = (mapping_addr + (RX_BUFF_MEM_ADDR & page_mask));
+
+	FILE *f = fopen(filename, "w");
+
+	for(index = 0; index < size * 2; index += 2)
+	{
+		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
+		data_q1 = (data & 0xFFFF);
+		data_i1 = (data >> 16) & 0xFFFF;
+		data = *((unsigned *) (rx_buff_virt_addr + ((index + 1) * 4)));
+		data_q2 = (data & 0xFFFF);
+		data_i2 = (data >> 16) & 0xFFFF;
+		fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+	}
+
+	fclose(f);
+
+	return 0;
+}
+
