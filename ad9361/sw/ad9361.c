@@ -2037,9 +2037,15 @@ static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 		USE_WAIT_COUNTER_FOR_RF_DC_INIT_CAL |
 		DC_OFFSET_UPDATE(3));
 
-	ad9361_spi_write(spi, REG_INVERT_BITS,
-		INVERT_RX1_RF_DC_CGOUT_WORD |
-		INVERT_RX2_RF_DC_CGOUT_WORD);
+	if (phy->pdata->rx1rx2_phase_inversion_en ||
+		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
+		ad9361_spi_write(spi, REG_INVERT_BITS,
+				INVERT_RX1_RF_DC_CGOUT_WORD);
+	} else {
+		ad9361_spi_write(spi, REG_INVERT_BITS,
+				INVERT_RX1_RF_DC_CGOUT_WORD |
+				INVERT_RX2_RF_DC_CGOUT_WORD);
+	}
 
 	return ad9361_run_calibration(phy, RFDC_CAL);
 }
@@ -2459,7 +2465,7 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 
 		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
 		ad9361_spi_writef(spi, REG_INVERT_BITS,
-				  INVERT_RX2_RF_DC_CGOUT_WORD, 1);
+				  INVERT_RX2_RF_DC_CGOUT_WORD, 0);
 	}
 
 	return 0;
