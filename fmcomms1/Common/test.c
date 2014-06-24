@@ -62,11 +62,18 @@ extern void xil_printf(const char *ctrl1, ...);
 /*****************************************************************************/
 /************************ Constants Definitions ******************************/
 /*****************************************************************************/
-const uint16_t sine_lut[32] = {
+const uint16_t sine_lut_i[32] = {
 	0x8000, 0x98F8, 0xB0FB, 0xC71C, 0xDA82, 0xEA6D, 0xF641, 0xFD89,
 	0xFFFF, 0xFD89, 0xF641, 0xEA6D, 0xDA82, 0xC71C, 0xB0FB, 0x98F8,
 	0x8000, 0x6707, 0x4F04, 0x38E3, 0x257D, 0x1592, 0x09BE, 0x0276,
 	0x0000, 0x0276, 0x09BE, 0x1592, 0x257D, 0x38E3, 0x4F04, 0x6707
+};
+
+const uint16_t sine_lut_q[32] = {
+	0x0000, 0x0276, 0x09BE, 0x1592, 0x257D, 0x38E3, 0x4F04, 0x6707,
+	0x8000, 0x98F8, 0xB0FB, 0xC71C, 0xDA82, 0xEA6D, 0xF641, 0xFD89,
+	0xFFFF, 0xFD89, 0xF641, 0xEA6D, 0xDA82, 0xC71C, 0xB0FB, 0x98F8,
+	0x8000, 0x6707, 0x4F04, 0x38E3, 0x257D, 0x1592, 0x09BE, 0x0276
 };
 
 static uint32_t dac_base_addr;
@@ -262,8 +269,6 @@ void dac_dma_setup(uint32_t sel)
 	uint32_t baddr;
 	uint32_t index;
 	uint32_t tx_count;
-	uint32_t index_i;
-	uint32_t index_q;
 	uint32_t data_i;
 	uint32_t data_q;
 	uint32_t dac_clk;
@@ -273,15 +278,11 @@ void dac_dma_setup(uint32_t sel)
 	dac_base_addr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ?
 					CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
-	tx_count = sizeof(sine_lut) / sizeof(uint16_t);
+	tx_count = sizeof(sine_lut_i) / sizeof(uint16_t);
 	for(index = 0; index < tx_count; index ++)
 	{
-		index_i = index;
-		index_q = index + (tx_count / 4);
-		if(index_q >= tx_count)
-		index_q -= tx_count;
-		data_i = (sine_lut[index_i] << 16);
-		data_q = (sine_lut[index_q] << 0);
+		data_i = (sine_lut_i[index] << 16);
+		data_q = (sine_lut_q[index] << 0);
 		Xil_Out32(DDRDAC_BASEADDR + index * 4, data_i | data_q);
 	}
 #ifdef _XPARAMETERS_PS_H_
