@@ -3986,8 +3986,12 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	dev_dbg(dev, "%s", __func__);
 
-	if (pd->fdd)
+	if (pd->fdd) {
 		pd->tdd_skip_vco_cal = false;
+	} else { /* TDD Mode */
+		if (pd->tdd_use_dual_synth || pd->tdd_skip_vco_cal)
+			pd->tdd_use_fdd_tables = true;
+	}
 
 	if (pd->port_ctrl.pp_conf[2] & FDD_RX_RATE_2TX_RATE)
 		phy->rx_eq_2tx = true;
