@@ -5621,7 +5621,7 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 		if (!c0 && !c1) {
 			dev_err(&phy->spi->dev, "%s: Tuning %s FAILED!", __func__,
 				t ? "TX" : "RX");
-			err = -EIO;
+			err |= -EIO;
 		}
 
 		if (c1 > c0)
