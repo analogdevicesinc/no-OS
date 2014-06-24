@@ -5540,14 +5540,15 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 	uint32_t s0, s1, c0, c1, tmp, saved = 0;
 	uint8_t field[2][16];
 
-	num_chan = conv->chip_info->num_channels;
+	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
 
 	ad9361_bist_prbs(phy, BIST_INJ_RX);
 
 	for (t = 0; t < 2; t++) {
 		memset(field, 0, 32);
 		for (k = 0; k < 2; k++) {
-			ad9361_set_trx_clock_chain_freq(phy, k ? max_freq : 10000000UL);
+			if (max_freq)
+				ad9361_set_trx_clock_chain_freq(phy, k ? max_freq : 10000000UL);
 			for (i = 0; i < 2; i++) {
 				for (j = 0; j < 16; j++) {
 					ad9361_spi_write(phy->spi,
@@ -5560,8 +5561,9 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 					mdelay(4);
 
 					if ((t == 1) || (axiadc_read(st, ADI_REG_STATUS) & ADI_STATUS)) {
-						for (chan = 0, ret = 0; chan < num_chan; chan++)
+						for (chan = 0, ret = 0; chan < num_chan; chan++) {
 							ret |= axiadc_read(st, ADI_REG_CHAN_STATUS(chan));
+						}
 					}
 					else {
 						ret = 1;
@@ -5665,8 +5667,10 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axiadc_state *st = phy->adc_state;
 	int32_t rx2tx2 = phy->pdata->rx2tx2;
-	int32_t tmp;
+	int32_t tmp, num_chan;
 	int32_t i, ret;
+
+	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
 
 	axiadc_write(st, ADI_REG_CNTRL, rx2tx2 ? 0 : ADI_R1_MODE);
 	tmp = axiadc_read(st, 0x4048);
@@ -5681,7 +5685,7 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 		axiadc_write(st, 0x404c, 3); /* RATE */
 	}
 
-	for (i = 0; i < conv->chip_info->num_channels; i++) {
+	for (i = 0; i < num_chan; i++) {
 		axiadc_write(st, ADI_REG_CHAN_CNTRL_1(i),
 			ADI_DCFILT_OFFSET(0));
 		axiadc_write(st, ADI_REG_CHAN_CNTRL_2(i),
@@ -5691,7 +5695,8 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 			ADI_ENABLE | ADI_IQCOR_ENB);
 	}
 
-	ret = ad9361_dig_tune(phy, 61440000);
+	ret = ad9361_dig_tune(phy, ((conv->chip_info->num_channels > 4) ||
+		axiadc_read(st, 0x0004)) ? 0 : 61440000);
 	if (ret < 0)
 		return ret;
 
