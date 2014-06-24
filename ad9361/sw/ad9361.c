@@ -5275,6 +5275,11 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 	}
 
+	/* Option to skip VCO cal in TDD mode when moving from TX/RX to Alert */
+	if (phy->pdata->tdd_skip_vco_cal)
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
+					   true);
+
 	ad9361_rfpll_vco_init(phy, div_mask == TX_VCO_DIVIDER(~0),
 		vco, parent_rate);
 
@@ -5306,11 +5311,6 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 				"%s: TX QUAD cal failed", __func__);
 			phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
 		}
-
-	/* Option to skip VCO cal in TDD mode when moving from TX/RX to Alert */
-	if (phy->pdata->tdd_skip_vco_cal)
-		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
-		true);
 
 	ret = ad9361_check_cal_done(phy, lock_reg, VCO_LOCK, 1);
 
