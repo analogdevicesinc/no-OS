@@ -3590,8 +3590,8 @@ static int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pi
 	else
 		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2,
 		(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
-		(pinctrl ? 0 : DUAL_SYNTH_MODE) |
-		(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : 0));
+		(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE :
+		(pd->tdd_use_dual_synth ? 0 : TXNRX_SPI_CTRL)));
 	return ret;
 }
 
