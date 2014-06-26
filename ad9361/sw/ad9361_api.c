@@ -397,9 +397,12 @@ out:
 int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t mode)
 {
-	ad9361_ensm_force_state(phy, mode);
+	int32_t ret;
 
-	return 0;
+	ad9361_set_ensm_mode(phy, phy->pdata->fdd, false);
+	ret = ad9361_ensm_set_state(phy, mode, false);
+
+	return ret;
 }
 
 /**
