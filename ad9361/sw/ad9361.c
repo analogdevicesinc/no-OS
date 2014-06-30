@@ -3254,7 +3254,7 @@ static int32_t ad9361_bb_clk_change_handler(struct ad9361_rf_phy *phy)
  * @param pinctrl Set true, will enable the ENSM pin control.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
+int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 	bool pinctrl)
 {
 	struct spi_device *spi = phy->spi;
@@ -3580,7 +3580,7 @@ static int32_t ad9361_set_trx_clock_chain_freq(struct ad9361_rf_phy *phy,
  * @param pinctrl
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
+int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 {
 	struct ad9361_phy_platform_data *pd = phy->pdata;
 	int32_t ret;

@@ -3803,7 +3803,9 @@ int32_t register_clocks(struct ad9361_rf_phy *phy);
 int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy);
 int32_t ad9361_setup(struct ad9361_rf_phy *phy);
 int32_t ad9361_post_setup(struct ad9361_rf_phy *phy);
-void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state);
+int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl);
+int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
+	bool pinctrl);
 int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 	uint32_t rx_id, struct rf_rx_gain *rx_gain);
 int32_t ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
