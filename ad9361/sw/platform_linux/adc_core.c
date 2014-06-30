@@ -184,16 +184,18 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 }
 
 /***************************************************************************//**
- * @brief adc_save_csv_file
+ * @brief adc_save_file
 *******************************************************************************/
-int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
-			  const char * filename)
+int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
+			  const char * filename, uint8_t bin_file)
 {
 	int dev_mem_fd;
 	uint32_t mapping_length, page_mask, page_size;
 	void *mapping_addr, *rx_buff_virt_addr;
 	uint32_t index;
 	uint32_t data, data_i1, data_q1, data_i2, data_q2;
+	FILE *f;
+	uint32_t ch1, ch2;
 
 	adc_capture(size, start_address);
 
@@ -221,8 +223,15 @@ int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
 
 	rx_buff_virt_addr = (mapping_addr + (RX_BUFF_MEM_ADDR & page_mask));
 
-	FILE *f = fopen(filename, "w");
-	if (f == NULL)
+	if(bin_file)
+	{
+		f = fopen(filename, "wb");
+	}
+	else
+	{
+		f = fopen(filename, "w");
+	}
+	if(f == NULL)
 	{
 		munmap(mapping_addr, mapping_length);
 		close(dev_mem_fd);
@@ -237,7 +246,17 @@ int32_t adc_capture_save_csv_file(uint32_t size, uint32_t start_address,
 		data = *((unsigned *) (rx_buff_virt_addr + ((index + 1) * 4)));
 		data_q2 = (data & 0xFFFF);
 		data_i2 = (data >> 16) & 0xFFFF;
-		fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+		if(bin_file)
+		{
+			ch1 = (data_i1 << 16) | data_q1;
+			fwrite(&ch1,1,4,f);
+			ch2 = (data_i2 << 16) | data_q2;
+			fwrite(&ch2,1,4,f);
+		}
+		else
+		{
+			fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+		}
 	}
 
 	fclose(f);
