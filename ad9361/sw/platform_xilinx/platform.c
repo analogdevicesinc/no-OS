@@ -53,6 +53,7 @@
 #include "util.h"
 #include "adc_core.h"
 #include "dac_core.h"
+#include "platform.h"
 #ifdef _XPARAMETERS_PS_H_
 #include <sleep.h>
 #else
@@ -361,4 +362,37 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
 	adc_write(reg, val);
+}
+
+/***************************************************************************//**
+ * @brief axiadc_set_pnsel
+*******************************************************************************/
+int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
+{
+	unsigned reg;
+
+	uint32_t version = axiadc_read(st, 0x4000);
+
+	if (PCORE_VERSION_MAJOR(version) > 7) {
+		reg = axiadc_read(st, ADI_REG_CHAN_CNTRL_3(channel));
+		reg &= ~ADI_ADC_PN_SEL(~0);
+		reg |= ADI_ADC_PN_SEL(sel);
+		axiadc_write(st, ADI_REG_CHAN_CNTRL_3(channel), reg);
+	} else {
+		reg = axiadc_read(st, ADI_REG_CHAN_CNTRL(channel));
+
+		if (sel == ADC_PN_CUSTOM) {
+			reg |= ADI_PN_SEL;
+		} else if (sel == ADC_PN9) {
+			reg &= ~ADI_PN23_TYPE;
+			reg &= ~ADI_PN_SEL;
+		} else {
+			reg |= ADI_PN23_TYPE;
+			reg &= ~ADI_PN_SEL;
+		}
+
+		axiadc_write(st, ADI_REG_CHAN_CNTRL(channel), reg);
+	}
+
+	return 0;
 }

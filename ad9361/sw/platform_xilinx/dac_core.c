@@ -132,6 +132,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	dac_write(ADI_REG_RATECNTRL, ADI_RATE(3));
 
 	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
+	dds_st.num_dds_channels = 8;	// FIXME
 
 	dac_read(ADI_REG_VERSION, &dds_st.pcore_version);
 
@@ -146,7 +147,8 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 0.25);
 		dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 0.25);
 		dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 0.25);
-		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DDS));
+		dac_write(ADI_REG_CNTRL_2, 0);
+		dac_datasel(-1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
@@ -178,7 +180,8 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, (tx_count * 8) - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
-		dac_write(ADI_REG_CNTRL_2, ADI_DATA_SEL(DATA_SEL_DMA));
+		dac_write(ADI_REG_CNTRL_2, 0);
+		dac_datasel(-1, DATA_SEL_DMA);
 		break;
 	default:
 		break;
@@ -305,4 +308,38 @@ void dds_update(void)
 		dds_set_phase(chan, dds_st.cached_phase[chan]);
 		dds_set_scale(chan, dds_st.cached_scale[chan]);
 	}
+}
+
+/***************************************************************************//**
+ * @brief dac_datasel
+*******************************************************************************/
+int dac_datasel(int32_t chan, enum dds_data_select sel)
+{
+	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) > 7) {
+		if (chan < 0) { /* ALL */
+			int i;
+			for (i = 0; i < dds_st.num_dds_channels; i++) {
+				dac_write(ADI_REG_CHAN_CNTRL_7(i), sel);
+			}
+		} else {
+			dac_write(ADI_REG_CHAN_CNTRL_7(chan), sel);
+		}
+	} else {
+		uint32_t reg;
+
+		switch(sel) {
+		case DATA_SEL_DDS:
+		case DATA_SEL_SED:
+		case DATA_SEL_DMA:
+			dac_read(ADI_REG_CNTRL_2, &reg);
+			reg &= ~ADI_DATA_SEL(~0);
+			reg |= ADI_DATA_SEL(sel);
+			dac_write(ADI_REG_CNTRL_2, reg);
+			break;
+		default:
+			return -EINVAL;
+		}
+	}
+
+	return 0;
 }

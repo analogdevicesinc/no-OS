@@ -302,6 +302,12 @@ static int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable)
 	struct axiadc_state *st = phy->adc_state;
 	int32_t reg, chan;
 
+	uint32_t version = axiadc_read(st, 0x4000);
+
+	/* Still there but implemented a bit different */
+	if (PCORE_VERSION_MAJOR(version) > 7)
+		return -ENODEV;
+
 	for (chan = 0; chan < conv->chip_info->num_channels; chan++) {
 		reg = axiadc_read(st, 0x4414 + (chan)* 0x40);
 		/* DAC_LB_ENB If set enables loopback of receive data */
@@ -5574,6 +5580,10 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 	uint32_t s0, s1, c0, c1, tmp, saved = 0;
 	uint8_t field[2][16];
 
+	uint32_t hdl_dac_version = axiadc_read(st, 0x4000);
+
+	axiadc_write(st, 0x4044, 0x1);	// FIXME
+
 	if (!phy->pdata->fdd && (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)) {
 		ad9361_set_ensm_mode(phy, true, false);
 		ad9361_ensm_force_state(phy, ENSM_STATE_FDD);
@@ -5654,25 +5664,37 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 			for (chan = 0; chan < num_chan; chan++) {
 				axiadc_write(st, ADI_REG_CHAN_CNTRL(chan),
 					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
-					ADI_ENABLE | ADI_IQCOR_ENB | ADI_PN_SEL);
+					ADI_ENABLE | ADI_IQCOR_ENB);
+				axiadc_set_pnsel(st, chan, ADC_PN_CUSTOM);
+				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
+					axiadc_write(st, 0x4418 + (chan) * 0x40, 9);
+				else
+					axiadc_write(st, 0x4414 + (chan) * 0x40, 1);
 
-				axiadc_write(st, 0x4414 + (chan)* 0x40, 1);
 			}
+			if (PCORE_VERSION_MAJOR(hdl_dac_version) < 8) {
+				saved = tmp = axiadc_read(st, 0x4048);
+				tmp &= ~0xF;
+				tmp |= 1;
+				axiadc_write(st, 0x4048, tmp);
 
-			saved = tmp = axiadc_read(st, 0x4048);
-			tmp &= ~0xF;
-			tmp |= 1;
-			axiadc_write(st, 0x4048, tmp);
-		}
-		else {
+			}
+		} else {
 			ad9361_bist_loopback(phy, 0);
 
-			axiadc_write(st, 0x4048, saved);
+			if (PCORE_VERSION_MAJOR(hdl_dac_version) < 8)
+				axiadc_write(st, 0x4048, saved);
+
 			for (chan = 0; chan < num_chan; chan++) {
 				axiadc_write(st, ADI_REG_CHAN_CNTRL(chan),
 					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
 					ADI_ENABLE | ADI_IQCOR_ENB);
-				axiadc_write(st, 0x4414 + (chan)* 0x40, 0);
+				axiadc_set_pnsel(st, chan, ADC_PN9);
+				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
+					axiadc_write(st, 0x4418 + (chan) * 0x40, 0);
+				else
+					axiadc_write(st, 0x4414 + (chan) * 0x40, 0);
+
 			}
 
 			if (err == -EIO) {

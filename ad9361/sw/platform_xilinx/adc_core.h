@@ -104,6 +104,12 @@
 #define ADI_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
 #define ADI_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
 
+#define ADI_REG_CHAN_CNTRL_3(c)		(0x0418 + (c) * 0x40) /* v8.0 */
+#define ADI_ADC_PN_SEL(x)			(((x) & 0xF) << 16)
+#define ADI_TO_ADC_PN_SEL(x)		(((x) >> 16) & 0xF)
+#define ADI_ADC_DATA_SEL(x)			(((x) & 0xF) << 0)
+#define ADI_TO_ADC_DATA_SEL(x)		(((x) >> 0) & 0xF)
+
 #define AXI_DMAC_REG_IRQ_MASK			0x80
 #define AXI_DMAC_REG_IRQ_PENDING		0x84
 #define AXI_DMAC_REG_IRQ_SOURCE			0x88
