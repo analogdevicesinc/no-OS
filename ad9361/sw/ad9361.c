@@ -5582,8 +5582,6 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 
 	uint32_t hdl_dac_version = axiadc_read(st, 0x4000);
 
-	axiadc_write(st, 0x4044, 0x1);	// FIXME
-
 	if (!phy->pdata->fdd && (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)) {
 		ad9361_set_ensm_mode(phy, true, false);
 		ad9361_ensm_force_state(phy, ENSM_STATE_FDD);
@@ -5667,7 +5665,10 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 					ADI_ENABLE | ADI_IQCOR_ENB);
 				axiadc_set_pnsel(st, chan, ADC_PN_CUSTOM);
 				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
+				{
 					axiadc_write(st, 0x4418 + (chan) * 0x40, 9);
+					axiadc_write(st, 0x4044, 0x1);
+				}
 				else
 					axiadc_write(st, 0x4414 + (chan) * 0x40, 1);
 
@@ -5691,7 +5692,10 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 					ADI_ENABLE | ADI_IQCOR_ENB);
 				axiadc_set_pnsel(st, chan, ADC_PN9);
 				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
+				{
 					axiadc_write(st, 0x4418 + (chan) * 0x40, 0);
+					axiadc_write(st, 0x4044, 0x1);
+				}
 				else
 					axiadc_write(st, 0x4414 + (chan) * 0x40, 0);
 
