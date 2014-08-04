@@ -154,6 +154,7 @@ struct dds_state
 	uint32_t	pcore_version;
 	uint32_t	num_dds_channels;
 	bool		enable;
+	bool		rx2tx2;
 };
 
 #define ADI_REG_CHAN_CNTRL_7(c)		(0x0418 + (c) * 0x40) /* v8.0 */

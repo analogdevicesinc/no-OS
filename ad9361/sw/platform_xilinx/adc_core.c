@@ -47,6 +47,11 @@
 #include "adc_core.h"
 #include "parameters.h"
 
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+struct adc_state adc_st;
+
 /***************************************************************************//**
  * @brief adc_read
 *******************************************************************************/
@@ -82,7 +87,7 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 /***************************************************************************//**
  * @brief adc_init
 *******************************************************************************/
-void adc_init(void)
+void adc_init(struct ad9361_rf_phy *phy)
 {
 	adc_write(ADI_REG_RSTN, 0);
 	adc_write(ADI_REG_RSTN, ADI_RSTN);
@@ -91,10 +96,14 @@ void adc_init(void)
 		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
 	adc_write(ADI_REG_CHAN_CNTRL(1),
 		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(2),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(3),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_st.rx2tx2 = phy->pdata->rx2tx2;
+	if(adc_st.rx2tx2)
+	{
+		adc_write(ADI_REG_CHAN_CNTRL(2),
+			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+		adc_write(ADI_REG_CHAN_CNTRL(3),
+			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	}
 }
 
 /***************************************************************************//**
@@ -104,6 +113,16 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 {
 	uint32_t reg_val;
 	uint32_t transfer_id;
+	uint32_t length;
+
+	if(adc_st.rx2tx2)
+	{
+		length = (size * 8);
+	}
+	else
+	{
+		length = (size * 4);
+	}
 
 	adc_dma_write(AXI_DMAC_REG_CTRL, 0x0);
 	adc_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
@@ -116,7 +135,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 
 	adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, start_address);
 	adc_dma_write(AXI_DMAC_REG_DEST_STRIDE, 0x0);
-	adc_dma_write(AXI_DMAC_REG_X_LENGTH, (size * 8) - 1);
+	adc_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 	adc_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 
 	adc_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);

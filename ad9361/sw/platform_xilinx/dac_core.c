@@ -151,6 +151,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	uint32_t data_q1;
 	uint32_t data_i2;
 	uint32_t data_q2;
+	uint32_t length;
 
 	dac_write(ADI_REG_RSTN, 0x0);
 	dac_write(ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
@@ -158,7 +159,15 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	dac_write(ADI_REG_RATECNTRL, ADI_RATE(3));
 
 	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
-	dds_st.num_dds_channels = 8;	// FIXME
+	dds_st.rx2tx2 = phy->pdata->rx2tx2;
+	if(dds_st.rx2tx2)
+	{
+		dds_st.num_dds_channels = 8;
+	}
+	else
+	{
+		dds_st.num_dds_channels = 4;
+	}
 
 	dac_read(ADI_REG_VERSION, &dds_st.pcore_version);
 
@@ -169,41 +178,68 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dds_default_setup(DDS_CHAN_TX1_I_F2, 90000, 1000000, 0.25);
 		dds_default_setup(DDS_CHAN_TX1_Q_F1, 0, 1000000, 0.25);
 		dds_default_setup(DDS_CHAN_TX1_Q_F2, 0, 1000000, 0.25);
-		dds_default_setup(DDS_CHAN_TX2_I_F1, 90000, 1000000, 0.25);
-		dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 0.25);
-		dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 0.25);
-		dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 0.25);
+		if(dds_st.rx2tx2)
+		{
+			dds_default_setup(DDS_CHAN_TX2_I_F1, 90000, 1000000, 0.25);
+			dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 0.25);
+			dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 0.25);
+			dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 0.25);
+		}
 		dac_write(ADI_REG_CNTRL_2, 0);
 		dac_datasel(-1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-		for(index = 0; index < (tx_count * 2); index += 2)
+		if(dds_st.rx2tx2)
 		{
-			index_i1 = index;
-			index_q1 = index + (tx_count / 2);
-			if(index_q1 >= (tx_count * 2))
-				index_q1 -= (tx_count * 2);
-			data_i1 = (sine_lut[index_i1 / 2] << 20);
-			data_q1 = (sine_lut[index_q1 / 2] << 4);
-			Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
+			for(index = 0; index < (tx_count * 2); index += 2)
+			{
+				index_i1 = index;
+				index_q1 = index + (tx_count / 2);
+				if(index_q1 >= (tx_count * 2))
+					index_q1 -= (tx_count * 2);
+				data_i1 = (sine_lut[index_i1 / 2] << 20);
+				data_q1 = (sine_lut[index_q1 / 2] << 4);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
 
-			index_i2 = index_i1;
-			index_q2 = index_q1;
-			if(index_i2 >= (tx_count * 2))
-				index_i2 -= (tx_count * 2);
-			if(index_q2 >= (tx_count * 2))
-				index_q2 -= (tx_count * 2);
-			data_i2 = (sine_lut[index_i2 / 2] << 20);
-			data_q2 = (sine_lut[index_q2 / 2] << 4);
-			Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
+				index_i2 = index_i1;
+				index_q2 = index_q1;
+				if(index_i2 >= (tx_count * 2))
+					index_i2 -= (tx_count * 2);
+				if(index_q2 >= (tx_count * 2))
+					index_q2 -= (tx_count * 2);
+				data_i2 = (sine_lut[index_i2 / 2] << 20);
+				data_q2 = (sine_lut[index_q2 / 2] << 4);
+				Xil_Out32(DAC_DDR_BASEADDR + (index + 1) * 4, data_i2 | data_q2);
+			}
+		}
+		else
+		{
+			for(index = 0; index < tx_count; index += 1)
+			{
+				index_i1 = index;
+				index_q1 = index + (tx_count / 4);
+				if(index_q1 >= tx_count)
+					index_q1 -= tx_count;
+				data_i1 = (sine_lut[index_i1] << 20);
+				data_q1 = (sine_lut[index_q1] << 4);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
+			}
 		}
 		Xil_DCacheFlush();
+		if(dds_st.rx2tx2)
+		{
+			length = (tx_count * 8);
+		}
+		else
+		{
+			length = (tx_count * 4);
+		}
 		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
 		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
 		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
-		dac_dma_write(AXI_DMAC_REG_X_LENGTH, (tx_count * 8) - 1);
+		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 		dac_write(ADI_REG_CNTRL_2, 0);
