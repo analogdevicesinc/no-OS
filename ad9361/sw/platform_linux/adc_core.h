@@ -40,6 +40,11 @@
 #define ADC_CORE_API_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "../ad9361.h"
+
+/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 /* ADC COMMON */
@@ -104,6 +109,12 @@
 #define ADI_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
 #define ADI_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
 
+#define ADI_REG_CHAN_CNTRL_3(c)		(0x0418 + (c) * 0x40) /* v8.0 */
+#define ADI_ADC_PN_SEL(x)			(((x) & 0xF) << 16)
+#define ADI_TO_ADC_PN_SEL(x)		(((x) >> 16) & 0xF)
+#define ADI_ADC_DATA_SEL(x)			(((x) & 0xF) << 0)
+#define ADI_TO_ADC_DATA_SEL(x)		(((x) >> 0) & 0xF)
+
 #define AXI_DMAC_REG_IRQ_MASK			0x80
 #define AXI_DMAC_REG_IRQ_PENDING		0x84
 #define AXI_DMAC_REG_IRQ_SOURCE			0x88
@@ -132,10 +143,15 @@
 #define AXI_DMAC_IRQ_SOT				(1 << 0)
 #define AXI_DMAC_IRQ_EOT				(1 << 1)
 
+struct adc_state
+{
+	bool rx2tx2;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void adc_init(void);
+void adc_init(struct ad9361_rf_phy *phy);
 int32_t adc_capture(uint32_t size, uint32_t start_address);
 void adc_read(uint32_t regAddr, uint32_t *data);
 void adc_write(uint32_t regAddr, uint32_t data);
