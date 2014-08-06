@@ -77,6 +77,7 @@ XGpioPs			gpio_instance;
 XSpi_Config		*spi_config;
 XSpi			spi_instance;
 XGpio_Config	*gpio_config;
+XGpio			gpio_instance;
 #endif
 
 /***************************************************************************//**
@@ -240,6 +241,7 @@ void gpio_init(uint32_t device_id)
 	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
 #else
 	gpio_config = XGpio_LookupConfig(device_id);
+	XGpio_CfgInitialize (&gpio_instance, gpio_config, gpio_config->BaseAddress);
 #endif
 }
 
