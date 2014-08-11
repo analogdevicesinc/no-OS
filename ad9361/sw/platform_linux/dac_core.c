@@ -210,6 +210,7 @@ printf("%s: Open txdma_uio device\n\r", __func__);
 		dac_datasel(-1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
+#ifdef DMA_UIO
 		dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
 		if(dev_mem_fd == -1)
 		{
@@ -289,6 +290,7 @@ printf("%s: Open txdma_uio device\n\r", __func__);
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+#endif
 		dac_write(ADI_REG_CNTRL_2, 0);
 		dac_datasel(-1, DATA_SEL_DMA);
 		break;
