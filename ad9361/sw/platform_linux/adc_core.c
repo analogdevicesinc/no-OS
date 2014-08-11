@@ -58,8 +58,10 @@
 struct adc_state adc_st;
 int ad9361_uio_fd;
 void *ad9361_uio_addr;
+#ifdef DMA_UIO
 int rxdma_uio_fd;
 void *rxdma_uio_addr;
+#endif
 
 /***************************************************************************//**
  * @brief adc_read
@@ -82,7 +84,11 @@ void adc_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_dma_read(uint32_t regAddr, uint32_t *data)
 {
+#ifdef DMA_UIO
 	*data = (*((unsigned *) (rxdma_uio_addr + regAddr)));
+#else
+	*data = 0;
+#endif
 }
 
 /***************************************************************************//**
@@ -90,7 +96,9 @@ void adc_dma_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void adc_dma_write(uint32_t regAddr, uint32_t data)
 {
+#ifdef DMA_UIO
 	*((unsigned *) (rxdma_uio_addr + regAddr)) = data;
+#endif
 }
 
 /***************************************************************************//**
@@ -111,7 +119,8 @@ void adc_init(struct ad9361_rf_phy *phy)
 			       MAP_SHARED,
 			       ad9361_uio_fd,
 			       0);
-	
+#ifdef DMA_UIO
+printf("%s: Open rxdma_uio device\n\r", __func__);
 	rxdma_uio_fd = open(RXDMA_UIO_DEV, O_RDWR);
 	if(rxdma_uio_fd < 1)
 	{
@@ -125,7 +134,7 @@ void adc_init(struct ad9361_rf_phy *phy)
 			      MAP_SHARED,
 			      rxdma_uio_fd,
 			      0);
-
+#endif
 	adc_write(ADI_REG_RSTN, 0);
 	adc_write(ADI_REG_RSTN, ADI_RSTN);
 

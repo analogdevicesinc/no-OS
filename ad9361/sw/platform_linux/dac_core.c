@@ -55,8 +55,10 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct dds_state dds_st;
+#ifdef DMA_UIO
 int txdma_uio_fd;
 void *txdma_uio_addr;
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -89,7 +91,11 @@ void dac_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void dac_dma_read(uint32_t regAddr, uint32_t *data)
 {
+#ifdef DMA_UIO
 	*data = (*((unsigned *) (txdma_uio_addr + regAddr)));
+#else
+	*data = 0;
+#endif
 }
 
 /***************************************************************************//**
@@ -97,7 +103,9 @@ void dac_dma_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void dac_dma_write(uint32_t regAddr, uint32_t data)
 {
+#ifdef DMA_UIO
 	*((unsigned *) (txdma_uio_addr + regAddr)) = data;
+#endif
 }
 
 /***************************************************************************//**
@@ -155,6 +163,8 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	uint32_t mapping_length, page_mask, page_size;
 	void *mapping_addr, *tx_buff_virt_addr;
 
+#ifdef DMA_UIO
+printf("%s: Open txdma_uio device\n\r", __func__);
 	txdma_uio_fd = open(TXDMA_UIO_DEV, O_RDWR);
 	if(txdma_uio_fd < 1)
 	{
@@ -163,7 +173,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	}
 	
 	txdma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, txdma_uio_fd, 0);
-
+#endif
 	dac_write(ADI_REG_RSTN, 0x0);
 	dac_write(ADI_REG_RSTN, ADI_RSTN);
 
