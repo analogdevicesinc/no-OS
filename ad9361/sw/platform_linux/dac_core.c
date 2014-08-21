@@ -164,7 +164,6 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	void *mapping_addr, *tx_buff_virt_addr;
 
 #ifdef DMA_UIO
-printf("%s: Open txdma_uio device\n\r", __func__);
 	txdma_uio_fd = open(TXDMA_UIO_DEV, O_RDWR);
 	if(txdma_uio_fd < 1)
 	{
