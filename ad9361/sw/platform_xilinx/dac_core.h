@@ -149,7 +149,7 @@ struct dds_state
 {
 	uint32_t	cached_freq[8];
 	uint32_t	cached_phase[8];
-	double		cached_scale[8];
+	int32_t		cached_scale[8];
 	uint32_t	*dac_clk;
 	uint32_t	pcore_version;
 	uint32_t	num_dds_channels;
@@ -167,7 +167,7 @@ struct dds_state
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel);
 void dds_set_frequency(uint32_t chan, uint32_t freq);
 void dds_set_phase(uint32_t chan, uint32_t phase);
-void dds_set_scale(uint32_t chan, double scale);
+void dds_set_scale(uint32_t chan, int32_t scale_micro_units);
 void dds_update(void);
 int dac_datasel(int32_t chan, enum dds_data_select sel);
 
