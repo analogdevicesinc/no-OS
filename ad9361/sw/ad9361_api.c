@@ -637,6 +637,55 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Get the RX FIR filter configuration.
+ * @param phy The AD9361 current state structure.
+ * @param tx_ch The selected RX channel (1, 2).
+ * @param fir_cfg FIR filter configuration output file.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch, AD9361_RXFIRConfig *fir_cfg)
+{
+	int32_t ret;
+	uint32_t fir_conf;
+	uint8_t index;
+
+	ret = ad9361_spi_read(NULL, REG_RX_FILTER_CONFIG);
+	if(ret < 0)
+		return ret;
+	fir_conf = ret;
+
+	ret = ad9361_spi_read(NULL, REG_RX_FILTER_GAIN);
+	if(ret < 0)
+		return ret;
+	fir_cfg->rx_gain = -6 * (ret & FILTER_GAIN(3)) + 6;
+	fir_cfg->rx = rx_ch;
+
+	fir_conf &= ~FIR_SELECT(3);
+	fir_conf |= FIR_NUM_TAPS(7) | FIR_SELECT(rx_ch) | FIR_START_CLK;
+	ad9361_spi_write(NULL, REG_RX_FILTER_CONFIG, fir_conf);
+
+	for(index = 0; index < 128; index++)
+	{
+		ad9361_spi_write(NULL, REG_RX_FILTER_COEF_ADDR, index);
+		ret = ad9361_spi_read(NULL, REG_RX_FILTER_COEF_READ_DATA_1);
+		if(ret < 0)
+			return ret;
+		fir_cfg->rx_coef[index] = ret;
+		ret = ad9361_spi_read(NULL, REG_RX_FILTER_COEF_READ_DATA_2);
+		if(ret < 0)
+			return ret;
+		fir_cfg->rx_coef[index] |= (ret << 8);
+	}
+
+	fir_conf &= ~FIR_START_CLK;
+	ad9361_spi_write(NULL, REG_RX_FILTER_CONFIG, fir_conf);
+
+	fir_cfg->rx_dec = phy->rx_fir_dec;
+
+	return 0;
+}
+
+/**
  * Enable/disable the RX FIR filter.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
@@ -939,6 +988,51 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 	phy->tx_fir_int = fir_cfg.tx_int;
 
 	return ret;
+}
+
+/**
+ * Get the TX FIR filter configuration.
+ * @param phy The AD9361 current state structure.
+ * @param tx_ch The selected TX channel (1, 2).
+ * @param fir_cfg FIR filter configuration output file.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD9361_TXFIRConfig *fir_cfg)
+{
+	int32_t ret;
+	uint32_t fir_conf;
+	uint8_t index;
+
+	ret = ad9361_spi_read(NULL, REG_TX_FILTER_CONF);
+	if(ret < 0)
+		return ret;
+	fir_conf = ret;
+	fir_cfg->tx_gain = -6 * (fir_conf & TX_FIR_GAIN_6DB);
+	fir_cfg->tx = tx_ch;
+
+	fir_conf &= ~FIR_SELECT(3);
+	fir_conf |= FIR_NUM_TAPS(7) | FIR_SELECT(tx_ch) | FIR_START_CLK;
+	ad9361_spi_write(NULL, REG_TX_FILTER_CONF, fir_conf);
+
+	for(index = 0; index < 128; index++)
+	{
+		ad9361_spi_write(NULL, REG_TX_FILTER_COEF_ADDR, index);
+		ret = ad9361_spi_read(NULL, REG_TX_FILTER_COEF_READ_DATA_1);
+		if(ret < 0)
+			return ret;
+		fir_cfg->tx_coef[index] = ret;
+		ret = ad9361_spi_read(NULL, REG_TX_FILTER_COEF_READ_DATA_2);
+		if(ret < 0)
+			return ret;
+		fir_cfg->tx_coef[index] |= (ret << 8);
+	}
+
+	fir_conf &= ~FIR_START_CLK;
+	ad9361_spi_write(NULL, REG_TX_FILTER_CONF, fir_conf);
+
+	fir_cfg->tx_int = phy->tx_fir_int;
+
+	return 0;
 }
 
 /**
