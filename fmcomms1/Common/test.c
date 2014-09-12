@@ -128,11 +128,13 @@ void dac_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void dds_set_frequency(uint32_t chan, uint32_t freq)
 {
+	uint32_t pcore_version;
 	uint64_t val64;
 	uint32_t ctrl_reg, reg;
 	uint32_t dac_clk;
 	uint32_t val;
 
+	dac_read(ADI_REG_VERSION, &pcore_version);
 	dac_read(ADI_REG_CLK_FREQ, &val);
 	dac_clk = val;
 	dac_read(ADI_REG_CLK_RATIO, &val);
@@ -146,7 +148,14 @@ void dds_set_frequency(uint32_t chan, uint32_t freq)
 	do_div(val64, dac_clk);
 	reg |= ADI_DDS_INCR(val64) | 1;
 	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	if (PCORE_VERSION_MAJOR(pcore_version) > 7)
+	{
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
+	else
+	{
+		dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	}
 }
 
 /***************************************************************************//**
@@ -154,9 +163,11 @@ void dds_set_frequency(uint32_t chan, uint32_t freq)
 *******************************************************************************/
 void dds_set_phase(uint32_t chan, uint32_t phase)
 {
+	uint32_t pcore_version;
 	uint64_t val64;
 	uint32_t ctrl_reg, reg;
 
+	dac_read(ADI_REG_VERSION, &pcore_version);
 	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
 	dac_write(ADI_REG_CNTRL_1, 0);
 	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
@@ -165,7 +176,14 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 	do_div(val64, 360000);
 	reg |= ADI_DDS_INIT(val64);
 	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	if (PCORE_VERSION_MAJOR(pcore_version) > 7)
+	{
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
+	else
+	{
+		dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	}
 }
 
 /***************************************************************************//**
@@ -228,7 +246,14 @@ void dds_set_scale(uint32_t chan, double scale)
 	dac_read(ADI_REG_CNTRL_1, &ctrl_reg);
 	dac_write(ADI_REG_CNTRL_1, 0);
 	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale_reg));
-	dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	if (PCORE_VERSION_MAJOR(pcore_version) > 7)
+	{
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
+	else
+	{
+		dac_write(ADI_REG_CNTRL_1, ctrl_reg);
+	}
 }
 
 /**************************************************************************//**
@@ -238,12 +263,26 @@ void dds_set_scale(uint32_t chan, double scale)
 ******************************************************************************/
 void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 {
+	uint32_t hdl_version;
+
 	dac_base_addr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ?
 					CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
 
-	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DDS));
-	dac_write(ADI_REG_CNTRL_1, 0x0);
-	dac_write(ADI_REG_CNTRL_1, 0x1);
+	dac_read(ADI_REG_VERSION, &hdl_version);
+
+	if (PCORE_VERSION_MAJOR(hdl_version) > 7)
+	{
+		dac_write(ADI_REG_CHAN_CNTRL_7(0), 0);
+		dac_write(ADI_REG_CHAN_CNTRL_7(1), 0);
+		dac_write(ADI_REG_CNTRL_1, 0x0);
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
+	else
+	{
+		dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DDS));
+		dac_write(ADI_REG_CNTRL_1, 0x0);
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
 
 	dds_set_frequency(0, f1);
 	dds_set_phase(0, 90000);
@@ -322,8 +361,11 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 {
 	uint32_t baddr;
 	uint32_t rdata;
+	uint32_t hdl_version;
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
+
+	hdl_version = Xil_In32(baddr + 0x4000);
 
 	ad9122_write(0x68, ((s0>> 0) & 0xff));
 	ad9122_write(0x69, ((s0>> 8) & 0xff));
@@ -337,8 +379,17 @@ void dac_sed(uint32_t sel, uint32_t s0, uint32_t s1)
 	ad9122_write(0x67, 0x80);
 	Xil_Out32((baddr + 0x4410), s0); // pattern
 	Xil_Out32((baddr + 0x4450), s1); // pattern
-	Xil_Out32((baddr + 0x4048), 0x1); // format, sel
-	Xil_Out32((baddr + 0x4044), 0x1); // enable
+	if (PCORE_VERSION_MAJOR(hdl_version) > 7)
+	{
+		Xil_Out32((baddr + 0x4418), 0x1); // sed sel
+		Xil_Out32((baddr + 0x4458), 0x1); // sed sel
+		Xil_Out32((baddr + 0x4044), 0x1); // sync
+	}
+	else
+	{
+		Xil_Out32((baddr + 0x4048), 0x1); // format, sel
+		Xil_Out32((baddr + 0x4044), 0x1); // enable
+	}
 	delay_ms(10);
 	ad9122_write(0x67, 0xa3);
 	ad9122_write(0x07, 0x1c);
