@@ -272,6 +272,14 @@ void dds_set_frequency(uint32_t chan, uint32_t freq)
 }
 
 /***************************************************************************//**
+ * @brief dds_get_frequency
+*******************************************************************************/
+void dds_get_frequency(uint32_t chan, uint32_t *freq)
+{
+	*freq = dds_st.cached_freq[chan];
+}
+
+/***************************************************************************//**
  * @brief dds_set_phase
 *******************************************************************************/
 void dds_set_phase(uint32_t chan, uint32_t phase)
@@ -288,6 +296,14 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 	reg |= ADI_DDS_INIT(val64);
 	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(0);
+}
+
+/***************************************************************************//**
+ * @brief dds_get_phase
+*******************************************************************************/
+void dds_get_phase(uint32_t chan, uint32_t *phase)
+{
+	*phase = dds_st.cached_phase[chan];
 }
 
 /***************************************************************************//**
@@ -356,6 +372,14 @@ void dds_set_scale(uint32_t chan, int32_t scale_micro_units)
 }
 
 /***************************************************************************//**
+ * @brief dds_get_phase
+*******************************************************************************/
+void dds_get_scale(uint32_t chan, int32_t *scale_micro_units)
+{
+	*scale_micro_units = dds_st.cached_scale[chan];
+}
+
+/***************************************************************************//**
  * @brief dds_update
 *******************************************************************************/
 void dds_update(void)
@@ -400,6 +424,15 @@ int dac_datasel(int32_t chan, enum dds_data_select sel)
 			return -EINVAL;
 		}
 	}
+	dds_st.cached_datasel[chan] = sel;
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief dac_get_datasel
+*******************************************************************************/
+void dac_get_datasel(int32_t chan, enum dds_data_select *sel)
+{
+	*sel = dds_st.cached_datasel[chan];
 }

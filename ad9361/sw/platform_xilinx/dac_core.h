@@ -147,14 +147,15 @@ enum dds_data_select {
 
 struct dds_state
 {
-	uint32_t	cached_freq[8];
-	uint32_t	cached_phase[8];
-	int32_t		cached_scale[8];
-	uint32_t	*dac_clk;
-	uint32_t	pcore_version;
-	uint32_t	num_dds_channels;
-	bool		enable;
-	bool		rx2tx2;
+	uint32_t				cached_freq[8];
+	uint32_t				cached_phase[8];
+	int32_t					cached_scale[8];
+	enum dds_data_select	cached_datasel[8];
+	uint32_t				*dac_clk;
+	uint32_t				pcore_version;
+	uint32_t				num_dds_channels;
+	bool					enable;
+	bool					rx2tx2;
 };
 
 #define ADI_REG_CHAN_CNTRL_7(c)		(0x0418 + (c) * 0x40) /* v8.0 */
@@ -166,9 +167,13 @@ struct dds_state
 /******************************************************************************/
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel);
 void dds_set_frequency(uint32_t chan, uint32_t freq);
+void dds_get_frequency(uint32_t chan, uint32_t *freq);
 void dds_set_phase(uint32_t chan, uint32_t phase);
+void dds_get_phase(uint32_t chan, uint32_t *phase);
 void dds_set_scale(uint32_t chan, int32_t scale_micro_units);
+void dds_get_scale(uint32_t chan, int32_t *scale_micro_units);
 void dds_update(void);
 int dac_datasel(int32_t chan, enum dds_data_select sel);
+void dac_get_datasel(int32_t chan, enum dds_data_select *sel);
 
 #endif
