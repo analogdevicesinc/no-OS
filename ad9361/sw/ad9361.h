@@ -3722,6 +3722,12 @@ struct ad9361_fastlock {
 	struct ad9361_fastlock_entry entry[2][8];
 };
 
+enum ad9361_bist_mode {
+	BIST_DISABLE,
+	BIST_INJ_TX,
+	BIST_INJ_RX,
+};
+
 struct ad9361_rf_phy {
 	struct spi_device 	*spi;
 	struct clk 		*clk_refin;
@@ -3759,6 +3765,12 @@ struct ad9361_rf_phy {
 	struct ad9361_fastlock	fastlock;
 	struct axiadc_converter	*adc_conv;
 	struct axiadc_state		*adc_state;
+	int32_t					bist_loopback_mode;
+	enum ad9361_bist_mode	bist_prbs_mode;
+	enum ad9361_bist_mode	bist_tone_mode;
+	uint32_t				bist_tone_freq_Hz;
+	uint32_t				bist_tone_level_dB;
+	uint32_t				bist_tone_mask;
 };
 
 struct refclk_scale {
@@ -3779,12 +3791,6 @@ enum debugfs_cmd {
 	DBGFS_BIST_DT_ANALYSIS,
 	DBGFS_RXGAIN_1,
 	DBGFS_RXGAIN_2,
-};
-
-enum ad9361_bist_mode {
-	BIST_DISABLE,
-	BIST_INJ_TX,
-	BIST_INJ_RX,
 };
 
 enum {
@@ -3855,8 +3861,13 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	bool rfdc_track, bool rxquad_track);
 int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode);
+void ad9361_get_bist_loopback(struct ad9361_rf_phy *phy, int32_t *mode);
 int32_t ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode);
+void ad9361_get_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode *mode);
 int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 						 enum ad9361_bist_mode mode, uint32_t freq_Hz,
 						 uint32_t level_dB, uint32_t mask);
+void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
+						 enum ad9361_bist_mode *mode, uint32_t *freq_Hz,
+						 uint32_t *level_dB, uint32_t *mask);
 #endif

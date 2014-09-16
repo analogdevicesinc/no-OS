@@ -344,6 +344,13 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->bbdc_track_en = true;
 	phy->quad_track_en = true;
 
+	phy->bist_loopback_mode = 0;
+	phy->bist_prbs_mode = BIST_DISABLE;
+	phy->bist_tone_mode = BIST_DISABLE;
+	phy->bist_tone_freq_Hz = 0;
+	phy->bist_tone_level_dB = 0;
+	phy->bist_tone_mask = 0;
+
 	ad9361_reset(phy);
 	ad9361_spi_write(NULL, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
 	ad9361_spi_write(NULL, REG_SPI_CONF, 0x0);

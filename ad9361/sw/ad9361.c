@@ -336,6 +336,7 @@ int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode)
 
 	reg = ad9361_spi_read(phy->spi, REG_OBSERVE_CONFIG);
 
+	phy->bist_loopback_mode = mode;
 
 	switch (mode) {
 	case 0:
@@ -367,6 +368,17 @@ int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode)
 }
 
 /**
+ * Get BIST loopback mode.
+ * @param phy The AD9361 state structure.
+ * @param mode BIST loopback mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+void ad9361_get_bist_loopback(struct ad9361_rf_phy *phy, int32_t *mode)
+{
+	*mode = phy->bist_loopback_mode;
+}
+
+/**
  * BIST mode.
  * @param phy The AD9361 state structure.
  * @param mode Bist mode.
@@ -377,6 +389,8 @@ int32_t ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode)
 	uint32_t reg = 0;
 
 	dev_dbg(&phy->spi->dev, "%s: mode %d", __func__, mode);
+
+	phy->bist_prbs_mode = mode;
 
 	switch (mode) {
 	case BIST_DISABLE:
@@ -391,6 +405,17 @@ int32_t ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode)
 	};
 
 	return ad9361_spi_write(phy->spi, REG_BIST_CONFIG, reg);
+}
+
+/**
+ * Get BIST mode settings.
+ * @param phy The AD9361 state structure.
+ * @param mode Bist mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+void ad9361_get_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode *mode)
+{
+	*mode = phy->bist_prbs_mode;
 }
 
 /**
@@ -410,6 +435,11 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 	uint32_t reg = 0, reg1, reg_mask;
 
 	dev_dbg(&phy->spi->dev, "%s: mode %d", __func__, mode);
+
+	phy->bist_tone_mode = mode;
+	phy->bist_tone_freq_Hz = freq_Hz;
+	phy->bist_tone_level_dB = level_dB;
+	phy->bist_tone_mask = mask;
 
 	switch (mode) {
 	case BIST_DISABLE:
@@ -443,6 +473,25 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(phy->spi, REG_BIST_AND_DATA_PORT_TEST_CONFIG, reg1);
 
 	return ad9361_spi_write(phy->spi, REG_BIST_CONFIG, reg);
+}
+
+/**
+ * Get BIST tone settings.
+ * @param phy The AD9361 state structure.
+ * @param mode Bist tone mode.
+ * @param freq_Hz Bist tone frequency.
+ * @param level_dB Bist tone level.
+ * @param mask Bist reg mask.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
+						 enum ad9361_bist_mode *mode, uint32_t *freq_Hz,
+						 uint32_t *level_dB, uint32_t *mask)
+{
+	*mode = phy->bist_tone_mode;
+	*freq_Hz = phy->bist_tone_freq_Hz;
+	*level_dB = phy->bist_tone_level_dB;
+	*mask = phy->bist_tone_mask;
 }
 
 /**
