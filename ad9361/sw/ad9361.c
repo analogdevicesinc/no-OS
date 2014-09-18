@@ -571,7 +571,7 @@ static ssize_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 	uint32_t mask, bool done_state)
 {
-	uint32_t timeout = 500;
+	uint32_t timeout = 5000; /* RFDC_CAL can take long */
 	uint32_t state;
 
 	do {
@@ -579,7 +579,10 @@ static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
 		if (state == done_state)
 			return 0;
 
-		msleep_interruptible(1);
+		if (reg == REG_CALIBRATION_CTRL)
+			udelay(1200);
+		else
+			udelay(120);
 	} while (timeout--);
 
 	dev_err(&phy->spi->dev, "Calibration TIMEOUT (0x%X, 0x%X)", reg, mask);
