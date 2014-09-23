@@ -253,6 +253,7 @@ typedef struct
 	int32_t rx_gain;		/* -12, -6, 0, 6 */
 	uint32_t rx_dec;		/* 1, 2, 4 */
 	int16_t rx_coef[128];
+	uint8_t rx_coef_size;
 }AD9361_RXFIRConfig;
 
 typedef struct
@@ -261,6 +262,7 @@ typedef struct
 	int32_t tx_gain;		/* -6, 0 */
 	uint32_t tx_int;		/* 1, 2, 4 */
 	int16_t tx_coef[128];
+	uint8_t tx_coef_size;
 }AD9361_TXFIRConfig;
 
 /******************************************************************************/

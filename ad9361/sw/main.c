@@ -297,7 +297,8 @@ AD9361_RXFIRConfig rx_fir_config = {
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0} // rx_coef[128];
+	 0, 0, 0, 0, 0, 0, 0, 0}, // rx_coef[128];
+	 128 // rx_coef_size
 };
 
 AD9361_TXFIRConfig tx_fir_config = {
@@ -319,7 +320,8 @@ AD9361_TXFIRConfig tx_fir_config = {
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0} // tx_coef[128];
+	 0, 0, 0, 0, 0, 0, 0, 0}, // tx_coef[128];
+	 128 // tx_coef_size
 };
 struct ad9361_rf_phy *ad9361_phy;
 
