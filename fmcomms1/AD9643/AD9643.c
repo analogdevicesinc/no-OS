@@ -147,6 +147,10 @@ int32_t ad9643_dco_calibrate()
 	unsigned char err_field[66];
 	uint32_t chan_ctrl0, chan_ctrl1;
 	uint32_t reg_val, tmp;
+	uint32_t version;
+	uint32_t chan_ctrl3;
+
+	ADC_Core_Read(0x0, &version);
 
 	dco_en = AD9643_DCO_OUTPUT_DELAY_EN_DCO_CLK_DELAY;
 
@@ -163,11 +167,27 @@ int32_t ad9643_dco_calibrate()
 				(inv_range ? AD9643_CLK_PHASE_CTRL_INVERT_DCO_CLK : 0));
 
 		ad9643_testmode_set(1, AD9643_TEST_MODE_PN23_SEQ);
-		ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), ADC_ENABLE | ADC_PN23_TYPE);
+		if (PCORE_VERSION_MAJOR(version) > 7) {
+			ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), ADC_ENABLE);
+			ADC_Core_Read(ADI_REG_CHAN_CNTRL_3(1), &chan_ctrl3);
+			chan_ctrl3 &= ~ADI_ADC_PN_SEL(~0);
+			chan_ctrl3 |= ADI_ADC_PN_SEL(ADC_PN23);
+			ADC_Core_Write(ADI_REG_CHAN_CNTRL_3(1), chan_ctrl3);
+		}
+		else {
+			ADC_Core_Write(ADC_REG_CHAN_CNTRL(1), ADC_ENABLE | ADC_PN23_TYPE);
+		}
+
 		ADC_Core_Write(ADC_REG_CHAN_STATUS(1), ~0);
 
 		ad9643_testmode_set(0, AD9643_TEST_MODE_PN9_SEQ);
 		ADC_Core_Write(ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
+		if (PCORE_VERSION_MAJOR(version) > 7) {
+			ADC_Core_Read(ADI_REG_CHAN_CNTRL_3(0), &chan_ctrl3);
+			chan_ctrl3 &= ~ADI_ADC_PN_SEL(~0);
+			chan_ctrl3 |= ADI_ADC_PN_SEL(ADC_PN9);
+			ADC_Core_Write(ADI_REG_CHAN_CNTRL_3(0), chan_ctrl3);
+		}
 		ADC_Core_Write(ADC_REG_CHAN_STATUS(0), ~0);
 
 		for(dco = 0; dco <= 32; dco++) {

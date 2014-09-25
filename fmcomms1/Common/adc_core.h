@@ -80,6 +80,22 @@
 #define ADC_IQCOR_COEFF_2(x)	(((x) & 0xFFFF) << 0)
 #define ADC_TO_IQCOR_COEFF_2(x)	(((x) >> 0) & 0xFFFF)
 
+#define ADI_REG_CHAN_CNTRL_3(c)	(0x0418 + (c) * 0x40) /* v8.0 */
+#define ADI_ADC_PN_SEL(x)		(((x) & 0xF) << 16)
+
+enum adc_pn_sel {
+	ADC_PN9 = 0,
+	ADC_PN23A = 1,
+	ADC_PN7 = 4,
+	ADC_PN15 = 5,
+	ADC_PN23 = 6,
+	ADC_PN31 = 7,
+	ADC_PN_CUSTOM = 9,
+	ADC_PN_END = 10,
+};
+
+#define PCORE_VERSION_MAJOR(version) (version >> 16)
+
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
