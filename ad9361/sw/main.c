@@ -79,6 +79,8 @@ char				received_cmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 #endif
 
 AD9361_InitParam default_init_param = {
+	/* Identification number */
+	0,		//id_no;
 	/* Reference Clock */
 	40000000UL,	//reference_clk_rate
 	/* Base Configuration */
