@@ -49,6 +49,8 @@
 /******************************************************************************/
 typedef struct
 {
+	/* Identification number */
+	uint8_t		id_no;
 	/* Reference Clock */
 	uint32_t	reference_clk_rate;
 	/* Base Configuration */

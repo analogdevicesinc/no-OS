@@ -153,7 +153,7 @@ struct adc_state
 /******************************************************************************/
 void adc_init(struct ad9361_rf_phy *phy);
 int32_t adc_capture(uint32_t size, uint32_t start_address);
-void adc_read(uint32_t regAddr, uint32_t *data);
-void adc_write(uint32_t regAddr, uint32_t data);
+void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data);
+void adc_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data);
 
 #endif

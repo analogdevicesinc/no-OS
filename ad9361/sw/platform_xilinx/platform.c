@@ -129,7 +129,8 @@ int32_t spi_init(uint32_t device_id,
 /***************************************************************************//**
  * @brief spi_read
 *******************************************************************************/
-int32_t spi_read(uint8_t *data,
+int32_t spi_read(struct spi_device *spi,
+				 uint8_t *data,
 				 uint8_t bytes_number)
 {
 	uint32_t cnt		 = 0;
@@ -142,7 +143,7 @@ int32_t spi_read(uint8_t *data,
 	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
-					control_val & ~(1 << XSPIPS_CR_SSCTRL_SHIFT));
+					control_val & ~((spi->id_no == 0 ? 1 : 2) << XSPIPS_CR_SSCTRL_SHIFT));
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
 
@@ -221,7 +222,7 @@ int spi_write_then_read(struct spi_device *spi,
 	{
 		buffer[byte] = (unsigned char)txbuf[byte];
 	}
-	spi_read(buffer, n_tx + n_rx);
+	spi_read(spi, buffer, n_tx + n_rx);
 	for(byte = n_tx; byte < n_tx + n_rx; byte++)
 	{
 		rxbuf[byte - n_tx] = buffer[byte];
@@ -351,7 +352,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	uint32_t val;
 
-	adc_read(reg, &val);
+	adc_read(st->phy, reg, &val);
 
 	return val;
 }
@@ -361,7 +362,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	adc_write(reg, val);
+	adc_write(st->phy, reg, val);
 }
 
 /***************************************************************************//**

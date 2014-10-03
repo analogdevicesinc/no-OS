@@ -105,6 +105,12 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
 	}
 
+	phy->spi->id_no = init_param->id_no;
+	phy->adc_state->phy = phy;
+
+	/* Identification number */
+	phy->id_no = init_param->id_no;
+
 	/* Reference Clock */
 	phy->clk_refin->rate = init_param->reference_clk_rate;
 
@@ -352,10 +358,10 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 	phy->bist_tone_mask = 0;
 
 	ad9361_reset(phy);
-	ad9361_spi_write(NULL, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
-	ad9361_spi_write(NULL, REG_SPI_CONF, 0x0);
+	ad9361_spi_write(phy->spi, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
+	ad9361_spi_write(phy->spi, REG_SPI_CONF, 0x0);
 
-	ret = ad9361_spi_read(NULL, REG_PRODUCT_ID);
+	ret = ad9361_spi_read(phy->spi, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
 		printf("%s : Unsupported PRODUCT_ID 0x%X", "ad9361_init", (unsigned int)ret);
 		ret = -ENODEV;
@@ -656,14 +662,14 @@ int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch, AD936
 	uint32_t fir_conf;
 	uint8_t index;
 
-	ret = ad9361_spi_read(NULL, REG_RX_FILTER_CONFIG);
+	ret = ad9361_spi_read(phy->spi, REG_RX_FILTER_CONFIG);
 	if(ret < 0)
 		return ret;
 	fir_conf = ret;
 
 	fir_cfg->rx_coef_size = (((fir_conf & FIR_NUM_TAPS(7)) >> 5) + 1) * 16;
 
-	ret = ad9361_spi_read(NULL, REG_RX_FILTER_GAIN);
+	ret = ad9361_spi_read(phy->spi, REG_RX_FILTER_GAIN);
 	if(ret < 0)
 		return ret;
 	fir_cfg->rx_gain = -6 * (ret & FILTER_GAIN(3)) + 6;
@@ -671,23 +677,23 @@ int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch, AD936
 
 	fir_conf &= ~FIR_SELECT(3);
 	fir_conf |= FIR_SELECT(rx_ch) | FIR_START_CLK;
-	ad9361_spi_write(NULL, REG_RX_FILTER_CONFIG, fir_conf);
+	ad9361_spi_write(phy->spi, REG_RX_FILTER_CONFIG, fir_conf);
 
 	for(index = 0; index < 128; index++)
 	{
-		ad9361_spi_write(NULL, REG_RX_FILTER_COEF_ADDR, index);
-		ret = ad9361_spi_read(NULL, REG_RX_FILTER_COEF_READ_DATA_1);
+		ad9361_spi_write(phy->spi, REG_RX_FILTER_COEF_ADDR, index);
+		ret = ad9361_spi_read(phy->spi, REG_RX_FILTER_COEF_READ_DATA_1);
 		if(ret < 0)
 			return ret;
 		fir_cfg->rx_coef[index] = ret;
-		ret = ad9361_spi_read(NULL, REG_RX_FILTER_COEF_READ_DATA_2);
+		ret = ad9361_spi_read(phy->spi, REG_RX_FILTER_COEF_READ_DATA_2);
 		if(ret < 0)
 			return ret;
 		fir_cfg->rx_coef[index] |= (ret << 8);
 	}
 
 	fir_conf &= ~FIR_START_CLK;
-	ad9361_spi_write(NULL, REG_RX_FILTER_CONFIG, fir_conf);
+	ad9361_spi_write(phy->spi, REG_RX_FILTER_CONFIG, fir_conf);
 
 	fir_cfg->rx_dec = phy->rx_fir_dec;
 
@@ -1012,7 +1018,7 @@ int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD936
 	uint32_t fir_conf;
 	uint8_t index;
 
-	ret = ad9361_spi_read(NULL, REG_TX_FILTER_CONF);
+	ret = ad9361_spi_read(phy->spi, REG_TX_FILTER_CONF);
 	if(ret < 0)
 		return ret;
 	fir_conf = ret;
@@ -1022,23 +1028,23 @@ int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD936
 
 	fir_conf &= ~FIR_SELECT(3);
 	fir_conf |= FIR_SELECT(tx_ch) | FIR_START_CLK;
-	ad9361_spi_write(NULL, REG_TX_FILTER_CONF, fir_conf);
+	ad9361_spi_write(phy->spi, REG_TX_FILTER_CONF, fir_conf);
 
 	for(index = 0; index < 128; index++)
 	{
-		ad9361_spi_write(NULL, REG_TX_FILTER_COEF_ADDR, index);
-		ret = ad9361_spi_read(NULL, REG_TX_FILTER_COEF_READ_DATA_1);
+		ad9361_spi_write(phy->spi, REG_TX_FILTER_COEF_ADDR, index);
+		ret = ad9361_spi_read(phy->spi, REG_TX_FILTER_COEF_READ_DATA_1);
 		if(ret < 0)
 			return ret;
 		fir_cfg->tx_coef[index] = ret;
-		ret = ad9361_spi_read(NULL, REG_TX_FILTER_COEF_READ_DATA_2);
+		ret = ad9361_spi_read(phy->spi, REG_TX_FILTER_COEF_READ_DATA_2);
 		if(ret < 0)
 			return ret;
 		fir_cfg->tx_coef[index] |= (ret << 8);
 	}
 
 	fir_conf &= ~FIR_START_CLK;
-	ad9361_spi_write(NULL, REG_TX_FILTER_CONF, fir_conf);
+	ad9361_spi_write(phy->spi, REG_TX_FILTER_CONF, fir_conf);
 
 	fir_cfg->tx_int = phy->tx_fir_int;
 

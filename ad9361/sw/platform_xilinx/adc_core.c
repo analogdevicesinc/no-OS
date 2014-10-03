@@ -46,6 +46,7 @@
 #include <xil_io.h>
 #include "adc_core.h"
 #include "parameters.h"
+#include "util.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -55,17 +56,37 @@ struct adc_state adc_st;
 /***************************************************************************//**
  * @brief adc_read
 *******************************************************************************/
-void adc_read(uint32_t regAddr, uint32_t *data)
+void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 {
-	*data = Xil_In32(CF_AD9361_RX_BASEADDR + regAddr);
+	switch (phy->id_no)
+	{
+	case 0:
+		*data = Xil_In32(AD9361_RX_0_BASEADDR + regAddr);
+		break;
+	case 1:
+		*data = Xil_In32(AD9361_RX_1_BASEADDR + regAddr);
+		break;
+	default:
+		break;
+	}
 }
 
 /***************************************************************************//**
  * @brief adc_write
 *******************************************************************************/
-void adc_write(uint32_t regAddr, uint32_t data)
+void adc_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(CF_AD9361_RX_BASEADDR + regAddr, data);
+	switch (phy->id_no)
+	{
+	case 0:
+		Xil_Out32(AD9361_RX_0_BASEADDR + regAddr, data);
+		break;
+	case 1:
+		Xil_Out32(AD9361_RX_1_BASEADDR + regAddr, data);
+		break;
+	default:
+		break;
+	}
 }
 
 /***************************************************************************//**
@@ -89,19 +110,19 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_init(struct ad9361_rf_phy *phy)
 {
-	adc_write(ADI_REG_RSTN, 0);
-	adc_write(ADI_REG_RSTN, ADI_RSTN);
+	adc_write(phy, ADI_REG_RSTN, 0);
+	adc_write(phy, ADI_REG_RSTN, ADI_RSTN);
 
-	adc_write(ADI_REG_CHAN_CNTRL(0),
+	adc_write(phy, ADI_REG_CHAN_CNTRL(0),
 		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(ADI_REG_CHAN_CNTRL(1),
+	adc_write(phy, ADI_REG_CHAN_CNTRL(1),
 		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
 	adc_st.rx2tx2 = phy->pdata->rx2tx2;
 	if(adc_st.rx2tx2)
 	{
-		adc_write(ADI_REG_CHAN_CNTRL(2),
+		adc_write(phy, ADI_REG_CHAN_CNTRL(2),
 			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-		adc_write(ADI_REG_CHAN_CNTRL(3),
+		adc_write(phy, ADI_REG_CHAN_CNTRL(3),
 			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
 	}
 }

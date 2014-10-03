@@ -79,10 +79,12 @@ struct device {
 };
 
 struct spi_device {
-	struct device dev;
+	struct device	dev;
+	uint8_t 		id_no;
 };
 
 struct axiadc_state {
+	struct ad9361_rf_phy	*phy;
 };
 
 struct axiadc_chip_info {

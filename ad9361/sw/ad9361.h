@@ -3729,6 +3729,7 @@ enum ad9361_bist_mode {
 };
 
 struct ad9361_rf_phy {
+	uint8_t 		id_no;
 	struct spi_device 	*spi;
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
