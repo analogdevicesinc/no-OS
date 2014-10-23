@@ -2447,7 +2447,7 @@ static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
 	ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
-			TX_MONITOR_POWER_DOWN(~0), !en_mask);
+			TX_MONITOR_POWER_DOWN(~0), ~en_mask);
 
 	return ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
 			TX1_MONITOR_ENABLE | TX2_MONITOR_ENABLE, en_mask);
