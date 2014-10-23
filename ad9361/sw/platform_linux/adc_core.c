@@ -211,7 +211,8 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
  * @brief adc_save_file
 *******************************************************************************/
 int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
-			  const char * filename, uint8_t bin_file)
+			  const char * filename, uint8_t bin_file,
+			  uint8_t ch_no)
 {
 	int dev_mem_fd;
 	uint32_t mapping_length, page_mask, page_size;
@@ -231,21 +232,21 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	}
 
 	page_size = sysconf(_SC_PAGESIZE);
-	mapping_length = (((RX_BUFF_MEM_SIZE / page_size) + 1) * page_size);
+	mapping_length = ((((size * 8) / page_size) + 1) * page_size);
 	page_mask = (page_size - 1);
 	mapping_addr = mmap(NULL,
 			   mapping_length,
 			   PROT_READ | PROT_WRITE,
 			   MAP_SHARED,
 			   dev_mem_fd,
-			   (RX_BUFF_MEM_ADDR & ~page_mask));
+			   (start_address & ~page_mask));
 	if(mapping_addr == MAP_FAILED)
 	{
 		printf("%s: mmap error\n\r", __func__);
 		return -1;
 	}
 
-	rx_buff_virt_addr = (mapping_addr + (RX_BUFF_MEM_ADDR & page_mask));
+	rx_buff_virt_addr = (mapping_addr + (start_address & page_mask));
 
 	if(bin_file)
 	{
@@ -274,12 +275,22 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 		{
 			ch1 = (data_i1 << 16) | data_q1;
 			fwrite(&ch1,1,4,f);
-			ch2 = (data_i2 << 16) | data_q2;
-			fwrite(&ch2,1,4,f);
+			if(ch_no == 2)
+			{
+				ch2 = (data_i2 << 16) | data_q2;
+				fwrite(&ch2,1,4,f);
+			}
 		}
 		else
 		{
-			fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+			if(ch_no == 2)
+			{
+				fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+			}
+			else
+			{
+				fprintf(f, "%d,%d\n", data_q1, data_i1);
+			}
 		}
 	}
 
