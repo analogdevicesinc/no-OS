@@ -1,6 +1,6 @@
 PLATFORM=platform_linux
 
-CFLAGS=-c -Wall -I$(PLATFORM) -DDMA_UIO #-Iconsole_commands -DCONSOLE_COMMANDS
+CFLAGS=-c -Wall -Werror -I$(PLATFORM) -DDMA_UIO #-Iconsole_commands -DCONSOLE_COMMANDS
 
 LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
 LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))

@@ -110,20 +110,20 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_init(struct ad9361_rf_phy *phy)
 {
-	adc_write(phy, ADI_REG_RSTN, 0);
-	adc_write(phy, ADI_REG_RSTN, ADI_RSTN);
+	adc_write(phy, ADC_REG_RSTN, 0);
+	adc_write(phy, ADC_REG_RSTN, ADC_RSTN);
 
-	adc_write(phy, ADI_REG_CHAN_CNTRL(0),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-	adc_write(phy, ADI_REG_CHAN_CNTRL(1),
-		ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
+		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+	adc_write(phy, ADC_REG_CHAN_CNTRL(1),
+		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_st.rx2tx2 = phy->pdata->rx2tx2;
 	if(adc_st.rx2tx2)
 	{
-		adc_write(phy, ADI_REG_CHAN_CNTRL(2),
-			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
-		adc_write(phy, ADI_REG_CHAN_CNTRL(3),
-			ADI_IQCOR_ENB | ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE | ADI_ENABLE);
+		adc_write(phy, ADC_REG_CHAN_CNTRL(2),
+			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+		adc_write(phy, ADC_REG_CHAN_CNTRL(3),
+			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	}
 }
 

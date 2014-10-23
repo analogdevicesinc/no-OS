@@ -159,11 +159,11 @@ void gpio_init(uint32_t device_id)
 *******************************************************************************/
 void gpio_direction(uint8_t pin, uint8_t direction)
 {
-	int fd, len;
+	int fd;
 	char buf[60];
 
 	pin = 0; // FIXME
-	len = snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction", pin);
+	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction", pin);
 
 	fd = open(buf, O_WRONLY);
 	if (fd < 0) {
@@ -192,11 +192,11 @@ bool gpio_is_valid(int number)
 *******************************************************************************/
 void gpio_data(uint8_t pin, uint8_t data)
 {
-	int fd, len;
+	int fd;
 	char buf[60];
 
 	pin = 0; // FIXME
-	len = snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
+	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
 
 	fd = open(buf, O_WRONLY);
 	if (fd < 0) {

@@ -3361,7 +3361,7 @@ static const struct SynthLUT SynthLUT_FDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
 		{ 5997, 10, 3, 7, 3, 15, 12, 20, 13, 4, 13, 15, 9 },
 	} };
 
-static struct SynthLUT SynthLUT_TDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
+static const struct SynthLUT SynthLUT_TDD[LUT_FTDD_ENT][SYNTH_LUT_SIZE] = {
 	{
 		{ 12605, 13, 0, 4, 0, 14, 0, 10, 12, 3, 14, 15, 11 },   /* 40 MHz */
 		{ 12245, 13, 0, 4, 0, 13, 0, 10, 12, 3, 14, 15, 11 },

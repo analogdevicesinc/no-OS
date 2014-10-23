@@ -47,43 +47,43 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define ADI_REG_VERSION			0x0000
-#define ADI_VERSION(x)			(((x) & 0xffffffff) << 0)
+#define DAC_REG_VERSION			0x0000
+#define DAC_VERSION(x)			(((x) & 0xffffffff) << 0)
 #define VERSION_IS(x,y,z)		((x) << 16 | (y) << 8 | (z))
-#define ADI_REG_ID				0x0004
-#define ADI_ID(x)				(((x) & 0xffffffff) << 0)
-#define ADI_REG_SCRATCH			0x0008
-#define ADI_SCRATCH(x)			(((x) & 0xffffffff) << 0)
+#define DAC_REG_ID				0x0004
+#define DAC_ID(x)				(((x) & 0xffffffff) << 0)
+#define DAC_REG_SCRATCH			0x0008
+#define DAC_SCRATCH(x)			(((x) & 0xffffffff) << 0)
 
 #define PCORE_VERSION_MAJOR(version)	(version >> 16)
 
-#define ADI_REG_RSTN			0x0040
-#define ADI_RSTN				(1 << 0)
-#define ADI_MMCM_RSTN 			(1 << 1)
+#define DAC_REG_RSTN			0x0040
+#define DAC_RSTN				(1 << 0)
+#define DAC_MMCM_RSTN 			(1 << 1)
 
-#define ADI_REG_RATECNTRL		0x004C
-#define ADI_RATE(x)				(((x) & 0xFF) << 0)
-#define ADI_TO_RATE(x)			(((x) >> 0) & 0xFF)
+#define DAC_REG_RATECNTRL		0x004C
+#define DAC_RATE(x)				(((x) & 0xFF) << 0)
+#define DAC_TO_RATE(x)			(((x) >> 0) & 0xFF)
 
-#define ADI_REG_CNTRL_1			0x0044
-#define ADI_ENABLE				(1 << 0) /* v7.0 */
-#define ADI_SYNC				(1 << 0) /* v8.0 */
+#define DAC_REG_CNTRL_1			0x0044
+#define DAC_ENABLE				(1 << 0) /* v7.0 */
+#define DAC_SYNC				(1 << 0) /* v8.0 */
 
-#define ADI_REG_CNTRL_2			0x0048
-#define ADI_PAR_TYPE			(1 << 7)
-#define ADI_PAR_ENB				(1 << 6)
-#define ADI_R1_MODE				(1 << 5)
-#define ADI_DATA_FORMAT			(1 << 4)
-#define ADI_DATA_SEL(x)			(((x) & 0xF) << 0) /* v7.0 */
-#define ADI_TO_DATA_SEL(x)		(((x) >> 0) & 0xF) /* v7.0 */
+#define DAC_REG_CNTRL_2			0x0048
+#define DAC_PAR_TYPE			(1 << 7)
+#define DAC_PAR_ENB				(1 << 6)
+#define DAC_R1_MODE				(1 << 5)
+#define DAC_DATA_FORMAT			(1 << 4)
+#define DAC_DATA_SEL(x)			(((x) & 0xF) << 0) /* v7.0 */
+#define DAC_TO_DATA_SEL(x)		(((x) >> 0) & 0xF) /* v7.0 */
 
-#define ADI_REG_VDMA_FRMCNT		0x0084
-#define ADI_VDMA_FRMCNT(x)		(((x) & 0xFFFFFFFF) << 0)
-#define ADI_TO_VDMA_FRMCNT(x)	(((x) >> 0) & 0xFFFFFFFF)
+#define DAC_REG_VDMA_FRMCNT		0x0084
+#define DAC_VDMA_FRMCNT(x)		(((x) & 0xFFFFFFFF) << 0)
+#define DAC_TO_VDMA_FRMCNT(x)	(((x) >> 0) & 0xFFFFFFFF)
 
-#define ADI_REG_VDMA_STATUS		0x0088
-#define ADI_VDMA_OVF			(1 << 1)
-#define ADI_VDMA_UNF			(1 << 0)
+#define DAC_REG_VDMA_STATUS		0x0088
+#define DAC_VDMA_OVF			(1 << 1)
+#define DAC_VDMA_UNF			(1 << 0)
 
 enum dds_data_select {
 	DATA_SEL_DDS,
@@ -98,15 +98,15 @@ enum dds_data_select {
 	DATA_SEL_PNXX,	/* (Device specific) */
 };
 
-#define ADI_REG_CHAN_CNTRL_1_IIOCHAN(x)	(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
-#define ADI_DDS_SCALE(x)				(((x) & 0xFFFF) << 0)
-#define ADI_TO_DDS_SCALE(x)				(((x) >> 0) & 0xFFFF)
+#define DAC_REG_CHAN_CNTRL_1_IIOCHAN(x)	(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
+#define DAC_DDS_SCALE(x)				(((x) & 0xFFFF) << 0)
+#define DAC_TO_DDS_SCALE(x)				(((x) >> 0) & 0xFFFF)
 
-#define ADI_REG_CHAN_CNTRL_2_IIOCHAN(x)	(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
-#define ADI_DDS_INIT(x)					(((x) & 0xFFFF) << 16)
-#define ADI_TO_DDS_INIT(x)				(((x) >> 16) & 0xFFFF)
-#define ADI_DDS_INCR(x)					(((x) & 0xFFFF) << 0)
-#define ADI_TO_DDS_INCR(x)				(((x) >> 0) & 0xFFFF)
+#define DAC_REG_CHAN_CNTRL_2_IIOCHAN(x)	(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
+#define DAC_DDS_INIT(x)					(((x) & 0xFFFF) << 16)
+#define DAC_TO_DDS_INIT(x)				(((x) >> 16) & 0xFFFF)
+#define DAC_DDS_INCR(x)					(((x) & 0xFFFF) << 0)
+#define DAC_TO_DDS_INCR(x)				(((x) >> 0) & 0xFFFF)
 
 #define DDS_CHAN_TX1_I_F1	0
 #define DDS_CHAN_TX1_I_F2	1
@@ -157,9 +157,9 @@ struct dds_state
 	bool		rx2tx2;
 };
 
-#define ADI_REG_CHAN_CNTRL_7(c)		(0x0418 + (c) * 0x40) /* v8.0 */
-#define ADI_DAC_DDS_SEL(x)		(((x) & 0xF) << 0)
-#define ADI_TO_DAC_DDS_SEL(x)		(((x) >> 0) & 0xF)
+#define DAC_REG_CHAN_CNTRL_7(c)		(0x0418 + (c) * 0x40) /* v8.0 */
+#define DAC_DAC_DDS_SEL(x)		(((x) & 0xF) << 0)
+#define DAC_TO_DAC_DDS_SEL(x)		(((x) >> 0) & 0xF)
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

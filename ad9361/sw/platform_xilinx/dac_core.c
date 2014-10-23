@@ -138,7 +138,7 @@ void dac_stop(struct ad9361_rf_phy *phy)
 {
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8)
 	{
-		dac_write(phy, ADI_REG_CNTRL_1, 0);
+		dac_write(phy, DAC_REG_CNTRL_1, 0);
 	}
 }
 
@@ -149,11 +149,11 @@ void dac_start_sync(struct ad9361_rf_phy *phy, bool force_on)
 {
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8)
 	{
-		dac_write(phy, ADI_REG_CNTRL_1, (dds_st[phy->id_no].enable || force_on) ? ADI_ENABLE : 0);
+		dac_write(phy, DAC_REG_CNTRL_1, (dds_st[phy->id_no].enable || force_on) ? DAC_ENABLE : 0);
 	}
 	else
 	{
-		dac_write(phy, ADI_REG_CNTRL_1, ADI_SYNC);
+		dac_write(phy, DAC_REG_CNTRL_1, DAC_SYNC);
 	}
 }
 
@@ -174,10 +174,10 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	uint32_t data_q2;
 	uint32_t length;
 
-	dac_write(phy, ADI_REG_RSTN, 0x0);
-	dac_write(phy, ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
+	dac_write(phy, DAC_REG_RSTN, 0x0);
+	dac_write(phy, DAC_REG_RSTN, DAC_RSTN | DAC_MMCM_RSTN);
 
-	dac_write(phy, ADI_REG_RATECNTRL, ADI_RATE(3));
+	dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
 
 	dds_st[phy->id_no].dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
 	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
@@ -190,7 +190,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dds_st[phy->id_no].num_dds_channels = 4;
 	}
 
-	dac_read(phy, ADI_REG_VERSION, &dds_st[phy->id_no].pcore_version);
+	dac_read(phy, DAC_REG_VERSION, &dds_st[phy->id_no].pcore_version);
 
 	dac_stop(phy);
 	switch (data_sel) {
@@ -206,7 +206,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 			dds_default_setup(phy, DDS_CHAN_TX2_Q_F1, 0, 1000000, 250000);
 			dds_default_setup(phy, DDS_CHAN_TX2_Q_F2, 0, 1000000, 250000);
 		}
-		dac_write(phy, ADI_REG_CNTRL_2, 0);
+		dac_write(phy, DAC_REG_CNTRL_2, 0);
 		dac_datasel(phy, -1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
@@ -263,7 +263,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
-		dac_write(phy, ADI_REG_CNTRL_2, 0);
+		dac_write(phy, DAC_REG_CNTRL_2, 0);
 		dac_datasel(phy, -1, DATA_SEL_DMA);
 		break;
 	default:
@@ -283,12 +283,12 @@ void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq)
 
 	dds_st[phy->id_no].cached_freq[chan] = freq;
 	dac_stop(phy);
-	dac_read(phy, ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
-	reg &= ~ADI_DDS_INCR(~0);
+	dac_read(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~DAC_DDS_INCR(~0);
 	val64 = (uint64_t) freq * 0xFFFFULL;
 	do_div(&val64, *dds_st[phy->id_no].dac_clk);
-	reg |= ADI_DDS_INCR(val64) | 1;
-	dac_write(phy, ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	reg |= DAC_DDS_INCR(val64) | 1;
+	dac_write(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(phy, 0);
 }
 
@@ -310,12 +310,12 @@ void dds_set_phase(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t phase)
 
 	dds_st[phy->id_no].cached_phase[chan] = phase;
 	dac_stop(phy);
-	dac_read(phy, ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
-	reg &= ~ADI_DDS_INIT(~0);
+	dac_read(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~DAC_DDS_INIT(~0);
 	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
 	do_div(&val64, 360000);
-	reg |= ADI_DDS_INIT(val64);
-	dac_write(phy, ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	reg |= DAC_DDS_INIT(val64);
+	dac_write(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(phy, 0);
 }
 
@@ -388,7 +388,7 @@ void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t scale_micro
 		scale_reg = 500000 / fract_part;
 	}
 	dac_stop(phy);
-	dac_write(phy, ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale_reg));
+	dac_write(phy, DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
 	dac_start_sync(phy, 0);
 }
 
@@ -424,10 +424,10 @@ int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_selec
 		if (chan < 0) { /* ALL */
 			int i;
 			for (i = 0; i < dds_st[phy->id_no].num_dds_channels; i++) {
-				dac_write(phy, ADI_REG_CHAN_CNTRL_7(i), sel);
+				dac_write(phy, DAC_REG_CHAN_CNTRL_7(i), sel);
 			}
 		} else {
-			dac_write(phy, ADI_REG_CHAN_CNTRL_7(chan), sel);
+			dac_write(phy, DAC_REG_CHAN_CNTRL_7(chan), sel);
 		}
 	} else {
 		uint32_t reg;
@@ -436,10 +436,10 @@ int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_selec
 		case DATA_SEL_DDS:
 		case DATA_SEL_SED:
 		case DATA_SEL_DMA:
-			dac_read(phy, ADI_REG_CNTRL_2, &reg);
-			reg &= ~ADI_DATA_SEL(~0);
-			reg |= ADI_DATA_SEL(sel);
-			dac_write(phy, ADI_REG_CNTRL_2, reg);
+			dac_read(phy, DAC_REG_CNTRL_2, &reg);
+			reg &= ~DAC_DATA_SEL(~0);
+			reg |= DAC_DATA_SEL(sel);
+			dac_write(phy, DAC_REG_CNTRL_2, reg);
 			break;
 		default:
 			return -EINVAL;

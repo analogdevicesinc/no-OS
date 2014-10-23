@@ -131,7 +131,7 @@ void dac_stop(void)
 {
 	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) < 8)
 	{
-		dac_write(ADI_REG_CNTRL_1, 0);
+		dac_write(DAC_REG_CNTRL_1, 0);
 	}
 }
 
@@ -142,11 +142,11 @@ void dac_start_sync(bool force_on)
 {
 	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) < 8)
 	{
-		dac_write(ADI_REG_CNTRL_1, (dds_st.enable || force_on) ? ADI_ENABLE : 0);
+		dac_write(DAC_REG_CNTRL_1, (dds_st.enable || force_on) ? DAC_ENABLE : 0);
 	}
 	else
 	{
-		dac_write(ADI_REG_CNTRL_1, ADI_SYNC);
+		dac_write(DAC_REG_CNTRL_1, DAC_SYNC);
 	}
 }
 
@@ -173,10 +173,10 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	
 	txdma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, txdma_uio_fd, 0);
 #endif
-	dac_write(ADI_REG_RSTN, 0x0);
-	dac_write(ADI_REG_RSTN, ADI_RSTN);
+	dac_write(DAC_REG_RSTN, 0x0);
+	dac_write(DAC_REG_RSTN, DAC_RSTN);
 
-	dac_write(ADI_REG_RATECNTRL, ADI_RATE(3));
+	dac_write(DAC_REG_RATECNTRL, DAC_RATE(3));
 
 	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
 	dds_st.rx2tx2 = phy->pdata->rx2tx2;
@@ -189,9 +189,9 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dds_st.num_dds_channels = 4;
 	}
 
-	dac_read(ADI_REG_VERSION, &dds_st.pcore_version);
+	dac_read(DAC_REG_VERSION, &dds_st.pcore_version);
 
-	dac_write(ADI_REG_CNTRL_1, 0);
+	dac_write(DAC_REG_CNTRL_1, 0);
 	switch (data_sel) {
 	case DATA_SEL_DDS:
 		dds_default_setup(DDS_CHAN_TX1_I_F1, 90000, 1000000, 250000);
@@ -205,7 +205,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 			dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 250000);
 			dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 250000);
 		}
-		dac_write(ADI_REG_CNTRL_2, 0);
+		dac_write(DAC_REG_CNTRL_2, 0);
 		dac_datasel(-1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
@@ -290,7 +290,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 #endif
-		dac_write(ADI_REG_CNTRL_2, 0);
+		dac_write(DAC_REG_CNTRL_2, 0);
 		dac_datasel(-1, DATA_SEL_DMA);
 		break;
 	default:
@@ -310,12 +310,12 @@ void dds_set_frequency(uint32_t chan, uint32_t freq)
 
 	dds_st.cached_freq[chan] = freq;
 	dac_stop();
-	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
-	reg &= ~ADI_DDS_INCR(~0);
+	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~DAC_DDS_INCR(~0);
 	val64 = (uint64_t) freq * 0xFFFFULL;
 	do_div(&val64, *dds_st.dac_clk);
-	reg |= ADI_DDS_INCR(val64) | 1;
-	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	reg |= DAC_DDS_INCR(val64) | 1;
+	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(0);
 }
 
@@ -329,12 +329,12 @@ void dds_set_phase(uint32_t chan, uint32_t phase)
 
 	dds_st.cached_phase[chan] = phase;
 	dac_stop();
-	dac_read(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
-	reg &= ~ADI_DDS_INIT(~0);
+	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	reg &= ~DAC_DDS_INIT(~0);
 	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
 	do_div(&val64, 360000);
-	reg |= ADI_DDS_INIT(val64);
-	dac_write(ADI_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	reg |= DAC_DDS_INIT(val64);
+	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(0);
 }
 
@@ -399,7 +399,7 @@ void dds_set_scale(uint32_t chan, int32_t scale_micro_units)
 		scale_reg = 500000 / fract_part;
 	}
 	dac_stop();
-	dac_write(ADI_REG_CHAN_CNTRL_1_IIOCHAN(chan), ADI_DDS_SCALE(scale_reg));
+	dac_write(DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
 	dac_start_sync(0);
 }
 
@@ -427,10 +427,10 @@ int dac_datasel(int32_t chan, enum dds_data_select sel)
 		if (chan < 0) { /* ALL */
 			int i;
 			for (i = 0; i < dds_st.num_dds_channels; i++) {
-				dac_write(ADI_REG_CHAN_CNTRL_7(i), sel);
+				dac_write(DAC_REG_CHAN_CNTRL_7(i), sel);
 			}
 		} else {
-			dac_write(ADI_REG_CHAN_CNTRL_7(chan), sel);
+			dac_write(DAC_REG_CHAN_CNTRL_7(chan), sel);
 		}
 	} else {
 		uint32_t reg;
@@ -439,10 +439,10 @@ int dac_datasel(int32_t chan, enum dds_data_select sel)
 		case DATA_SEL_DDS:
 		case DATA_SEL_SED:
 		case DATA_SEL_DMA:
-			dac_read(ADI_REG_CNTRL_2, &reg);
-			reg &= ~ADI_DATA_SEL(~0);
-			reg |= ADI_DATA_SEL(sel);
-			dac_write(ADI_REG_CNTRL_2, reg);
+			dac_read(DAC_REG_CNTRL_2, &reg);
+			reg &= ~DAC_DATA_SEL(~0);
+			reg |= DAC_DATA_SEL(sel);
+			dac_write(DAC_REG_CNTRL_2, reg);
 			break;
 		default:
 			return -EINVAL;
