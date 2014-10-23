@@ -2329,8 +2329,7 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 		ad9361_spi_write(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
 			enable ? TX_SYNTH_VCO_ALC_POWER_DOWN |
 			TX_SYNTH_PTAT_POWER_DOWN |
-			TX_SYNTH_VCO_POWER_DOWN |
-		TX_SYNTH_VCO_LDO_POWER_DOWN : 0);
+			TX_SYNTH_VCO_POWER_DOWN : 0);
 
 		ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
 			TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
@@ -2348,8 +2347,7 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 		ad9361_spi_write(phy->spi, REG_RX_SYNTH_POWER_DOWN_OVERRIDE,
 			enable ? RX_SYNTH_VCO_ALC_POWER_DOWN |
 			RX_SYNTH_PTAT_POWER_DOWN |
-			RX_SYNTH_VCO_POWER_DOWN |
-		RX_SYNTH_VCO_LDO_POWER_DOWN : 0);
+			RX_SYNTH_VCO_POWER_DOWN : 0);
 
 		ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
 			RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
