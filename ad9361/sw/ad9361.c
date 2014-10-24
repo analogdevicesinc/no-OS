@@ -1476,6 +1476,105 @@ static int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint3
 }
 
 /**
+ * Update the Gain Control.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
+{
+	struct spi_device *spi = phy->spi;
+	uint32_t clkrf;
+	uint32_t reg, delay_lna, settling_delay, dec_pow_meas_dur;
+	int32_t ret;
+
+	clkrf = clk_get_rate(phy, phy->ref_clk_scale[CLKRF_CLK]);
+	delay_lna = phy->pdata->elna_ctrl.settling_delay_ns;
+
+	/*
+	 * AGC Attack Delay (us)=ceiling((((0.2+Delay_LNA)*ClkRF+14))/(2*ClkRF))+1
+	 * ClkRF in MHz, delay in us
+	 */
+
+	reg = (200 * delay_lna) / 2 + (14000000UL / (clkrf / 500U));
+	reg = DIV_ROUND_UP(reg, 1000UL) +
+		phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
+	reg = clamp_t(uint8_t, reg, 0U, 31U);
+	ret = ad9361_spi_writef(spi, REG_AGC_ATTACK_DELAY,
+			  AGC_ATTACK_DELAY(~0), reg);
+
+	/*
+	 * Peak Overload Wait Time (ClkRF cycles)=ceiling((0.1+Delay_LNA) *clkRF+1)
+	 */
+
+	reg = (delay_lna + 100UL) * (clkrf / 1000UL);
+	reg = DIV_ROUND_UP(reg, 1000000UL) + 1;
+	reg = clamp_t(uint8_t, reg, 0U, 31U);
+	ret |= ad9361_spi_writef(spi, REG_PEAK_WAIT_TIME,
+			  PEAK_OVERLOAD_WAIT_TIME(~0), reg);
+
+	/*
+	 * Settling Delay in 0x111.  Applies to all gain control modes:
+	 * 0x111[D4:D0]= ceiling(((0.2+Delay_LNA)*clkRF
+	dodebug = false;+14)/2)
+	 */
+
+	reg = (delay_lna + 200UL) * (clkrf / 2000UL);
+	reg = DIV_ROUND_UP(reg, 1000000UL) + 7;
+	reg = settling_delay = clamp_t(uint8_t, reg, 0U, 31U);
+	ret |= ad9361_spi_writef(spi, REG_FAST_CONFIG_2_SETTLING_DELAY,
+			 SETTLING_DELAY(~0), reg);
+
+	/*
+	 * Gain Update Counter [15:0]= round((((time*ClkRF-0x111[D4:D0]*2)-2))/2)
+	 */
+	reg = phy->pdata->gain_ctrl.gain_update_interval_us * (clkrf / 1000UL) -
+		settling_delay * 2000UL - 2000UL;
+
+	reg = DIV_ROUND_CLOSEST(reg, 2000UL);
+	reg = clamp_t(uint32_t, reg, 0U, 131071UL);
+
+	if (phy->agc_mode[0] == RF_GAIN_FASTATTACK_AGC ||
+		phy->agc_mode[1] == RF_GAIN_FASTATTACK_AGC) {
+		dec_pow_meas_dur =
+			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
+	} else {
+
+		dec_pow_meas_dur = phy->pdata->gain_ctrl.dec_pow_measuremnt_duration;
+
+		if (((reg * 2) / dec_pow_meas_dur) < 2) {
+			dec_pow_meas_dur = reg;
+		}
+	}
+
+	/* Power Measurement Duration */
+	ad9361_spi_writef(spi, REG_DEC_POWER_MEASURE_DURATION_0,
+			  DEC_POWER_MEASUREMENT_DURATION(~0),
+			  ilog2(dec_pow_meas_dur / 16));
+
+
+	ret |= ad9361_spi_writef(spi, REG_DIGITAL_SAT_COUNTER,
+			  DOUBLE_GAIN_COUNTER,  reg > 65535);
+
+	if (reg > 65535)
+		reg /= 2;
+
+	ret |= ad9361_spi_write(spi, REG_GAIN_UPDATE_COUNTER1, reg & 0xFF);
+	ret |= ad9361_spi_write(spi, REG_GAIN_UPDATE_COUNTER2, reg >> 8);
+
+	/*
+	 * Fast AGC State Wait Time - Energy Detect Count
+	 */
+
+	reg = DIV_ROUND_CLOSEST(phy->pdata->gain_ctrl.f_agc_state_wait_time_ns *
+				1000, clkrf / 1000UL);
+	reg = clamp_t(uint32_t, reg, 0U, 31U);
+	ret |= ad9361_spi_writef(spi, REG_FAST_ENERGY_DETECT_COUNT,
+			  ENERGY_DETECT_COUNT(~0),  reg);
+
+	return ret;
+}
+
+/**
  * Set the gain control mode.
  * @param phy The AD9361 state structure.
  * @param rf_gain_ctrl A rf_gain_ctrl struct that contains the the desired
@@ -1487,7 +1586,7 @@ int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 {
 	struct spi_device *spi = phy->spi;
 	int32_t rc = 0;
-	uint32_t gain_ctl_shift, mode, dec_pow_meas_dur;
+	uint32_t gain_ctl_shift, mode;
 	uint8_t val;
 
 	rc = ad9361_spi_readm(spi, REG_AGC_CONFIG_1, &val, 1);
@@ -1497,24 +1596,12 @@ int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		goto out;
 	}
 
-	/*
-	* if one channel is set to FAST AGC the
-	* f_agc_dec_pow_measuremnt_duration wins
-	*/
-	if (phy->agc_mode[gain_ctrl->ant == 2 ? 0 : 1] == RF_GAIN_FASTATTACK_AGC)
-		dec_pow_meas_dur =
-		phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
-	else
-		dec_pow_meas_dur = phy->pdata->gain_ctrl.dec_pow_measuremnt_duration;
-
 	switch (gain_ctrl->mode) {
 	case RF_GAIN_MGC:
 		mode = RX_GAIN_CTL_MGC;
 		break;
 	case RF_GAIN_FASTATTACK_AGC:
 		mode = RX_GAIN_CTL_AGC_FAST_ATK;
-		dec_pow_meas_dur =
-			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
 		break;
 	case RF_GAIN_SLOWATTACK_AGC:
 		mode = RX_GAIN_CTL_AGC_SLOW_ATK;
@@ -1559,13 +1646,8 @@ int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 		goto out;
 	}
 
-	/* Power Measurement Duration */
-	ad9361_spi_writef(spi, REG_DEC_POWER_MEASURE_DURATION_0,
-		DEC_POWER_MEASUREMENT_DURATION(~0),
-		ilog2(dec_pow_meas_dur / 16));
-
-
-	rc = ad9361_en_dis_rx(phy, gain_ctrl->ant, RX_ENABLE);
+	ad9361_en_dis_rx(phy, gain_ctrl->ant, RX_ENABLE);
+	rc = ad9361_gc_update(phy);
 out:
 	return rc;
 }
@@ -2541,84 +2623,6 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 	}
 
 	return 0;
-}
-
-/**
- * Update the Gain Control.
- * @param phy The AD9361 state structure.
- * @return 0 in case of success, negative error code otherwise.
- */
-static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
-{
-	struct spi_device *spi = phy->spi;
-	uint32_t clkrf;
-	uint32_t reg, delay_lna, settling_delay;
-	int32_t ret;
-
-	clkrf = clk_get_rate(phy, phy->ref_clk_scale[CLKRF_CLK]);
-	delay_lna = phy->pdata->elna_ctrl.settling_delay_ns;
-
-	/*
-	* AGC Attack Delay (us)=ceiling((((0.2+Delay_LNA)*ClkRF+14))/(2*ClkRF))+1
-	* ClkRF in MHz, delay in us
-	*/
-
-	reg = (200 * delay_lna) / 2 + (14000000UL / (clkrf / 500U));
-	reg = DIV_ROUND_UP(reg, 1000UL) +
-		phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
-	reg = clamp_t(uint8_t, reg, 0U, 31U);
-	ret = ad9361_spi_writef(spi, REG_AGC_ATTACK_DELAY,
-		AGC_ATTACK_DELAY(~0), reg);
-
-	/*
-	* Peak Overload Wait Time (ClkRF cycles)=ceiling((0.1+Delay_LNA) *clkRF+1)
-	*/
-
-	reg = (delay_lna + 100UL) * (clkrf / 1000UL);
-	reg = DIV_ROUND_UP(reg, 1000000UL) + 1;
-	reg = clamp_t(uint8_t, reg, 0U, 31U);
-	ret |= ad9361_spi_writef(spi, REG_PEAK_WAIT_TIME,
-		PEAK_OVERLOAD_WAIT_TIME(~0), reg);
-
-	/*
-	* Settling Delay in 0x111.  Applies to all gain control modes:
-	* 0x111[D4:D0]= ceiling(((0.2+Delay_LNA)*clkRF+14)/2)
-	*/
-
-	reg = (delay_lna + 200UL) * (clkrf / 2000UL);
-	reg = DIV_ROUND_UP(reg, 1000000UL) + 7;
-	reg = settling_delay = clamp_t(uint8_t, reg, 0U, 31U);
-	ret |= ad9361_spi_writef(spi, REG_FAST_CONFIG_2_SETTLING_DELAY,
-		SETTLING_DELAY(~0), reg);
-
-	/*
-	* Gain Update Counter [15:0]= round((((time*ClkRF-0x111[D4:D0]*2)-2))/2)
-	*/
-	reg = phy->pdata->gain_ctrl.gain_update_interval_us * (clkrf / 1000UL) -
-		settling_delay * 2000UL - 2000UL;
-	reg = DIV_ROUND_CLOSEST(reg, 2000UL);
-	reg = clamp_t(uint32_t, reg, 0U, 131071UL);
-
-	ret |= ad9361_spi_writef(spi, REG_DIGITAL_SAT_COUNTER,
-		DOUBLE_GAIN_COUNTER, reg > 65535);
-
-	if (reg > 65535)
-		reg /= 2;
-
-	ret |= ad9361_spi_write(spi, REG_GAIN_UPDATE_COUNTER1, reg & 0xFF);
-	ret |= ad9361_spi_write(spi, REG_GAIN_UPDATE_COUNTER2, reg >> 8);
-
-	/*
-	* Fast AGC State Wait Time - Energy Detect Count
-	*/
-
-	reg = DIV_ROUND_CLOSEST(phy->pdata->gain_ctrl.f_agc_state_wait_time_ns *
-		1000, clkrf / 1000UL);
-	reg = clamp_t(uint32_t, reg, 0U, 31U);
-	ret |= ad9361_spi_writef(spi, REG_FAST_ENERGY_DETECT_COUNT,
-		ENERGY_DETECT_COUNT(~0), reg);
-
-	return ret;
 }
 
 /**
