@@ -221,7 +221,7 @@ void set_tx_samp_freq(double* param, char param_no) // "tx_samp_freq=" command
 		sampling_freq_hz = (uint32_t)param[0];
 		ad9361_set_tx_sampling_freq(ad9361_phy, sampling_freq_hz);
 		ad9361_get_tx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-		dds_update();
+		dds_update(ad9361_phy);
 		console_print("tx_samp_freq=%d\n", sampling_freq_hz);
 	}
 	else
@@ -415,7 +415,7 @@ void set_rx_samp_freq(double* param, char param_no) // "rx_samp_freq=" command
 		sampling_freq_hz = (uint32_t)param[0];
 		ad9361_set_rx_sampling_freq(ad9361_phy, sampling_freq_hz);
 		ad9361_get_rx_sampling_freq(ad9361_phy, &sampling_freq_hz);
-		dds_update();
+		dds_update(ad9361_phy);
 		console_print("rx_samp_freq=%d\n", sampling_freq_hz);
 	}
 	else
@@ -637,8 +637,8 @@ void set_dds_tx1_tone1_freq(double* param, char param_no)	// dds_tx1_tone1_freq=
 
 	if(param_no >= 1)
 	{
-		dds_set_frequency(DDS_CHAN_TX1_I_F1, freq);
-		dds_set_frequency(DDS_CHAN_TX1_Q_F1, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX1_I_F1, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX1_Q_F1, freq);
 		console_print("dds_tx1_tone1_freq=%d\n", freq);
 	}
 	else
@@ -668,8 +668,8 @@ void set_dds_tx1_tone2_freq(double* param, char param_no)	// dds_tx1_tone2_freq=
 
 	if(param_no >= 1)
 	{
-		dds_set_frequency(DDS_CHAN_TX1_I_F2, freq);
-		dds_set_frequency(DDS_CHAN_TX1_Q_F2, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX1_I_F2, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX1_Q_F2, freq);
 		console_print("dds_tx1_tone2_freq=%d\n", freq);
 	}
 	else
@@ -700,10 +700,10 @@ void set_dds_tx1_tone1_phase(double* param, char param_no)	// dds_tx1_tone1_phas
 
 	if(param_no >= 1)
 	{
-		dds_set_phase(DDS_CHAN_TX1_I_F1, (uint32_t)(phase * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX1_I_F1, (uint32_t)(phase * 1000));
 		if ((phase - 90) < 0)
 			phase += 360;
-		dds_set_phase(DDS_CHAN_TX1_Q_F1, (uint32_t)((phase - 90) * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX1_Q_F1, (uint32_t)((phase - 90) * 1000));
 		phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F1] / 1000;
 		console_print("dds_tx1_tone1_phase=%d\n", phase);
 	}
@@ -735,10 +735,10 @@ void set_dds_tx1_tone2_phase(double* param, char param_no)	// dds_tx1_tone2_phas
 
 	if(param_no >= 1)
 	{
-		dds_set_phase(DDS_CHAN_TX1_I_F2, (uint32_t)(phase * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX1_I_F2, (uint32_t)(phase * 1000));
 		if ((phase - 90) < 0)
 			phase += 360;
-		dds_set_phase(DDS_CHAN_TX1_Q_F2, (uint32_t)((phase - 90) * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX1_Q_F2, (uint32_t)((phase - 90) * 1000));
 		phase = dds_st.cached_phase[DDS_CHAN_TX1_I_F2] / 1000;
 		console_print("dds_tx1_tone2_phase=%d\n", phase);
 	}
@@ -769,8 +769,8 @@ void set_dds_tx1_tone1_scale(double* param, char param_no)	// dds_tx1_tone1_scal
 
 	if(param_no >= 1)
 	{
-		dds_set_scale(DDS_CHAN_TX1_I_F1, scale);
-		dds_set_scale(DDS_CHAN_TX1_Q_F1, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX1_I_F1, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX1_Q_F1, scale);
 		scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F1];
 		console_print("dds_tx1_tone1_scale=%d\n", scale);
 	}
@@ -801,8 +801,8 @@ void set_dds_tx1_tone2_scale(double* param, char param_no)	// dds_tx1_tone2_scal
 
 	if(param_no >= 1)
 	{
-		dds_set_scale(DDS_CHAN_TX1_I_F2, scale);
-		dds_set_scale(DDS_CHAN_TX1_Q_F2, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX1_I_F2, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX1_Q_F2, scale);
 		scale = dds_st.cached_scale[DDS_CHAN_TX1_I_F2];
 		console_print("dds_tx1_tone2_scale=%d\n", scale);
 	}
@@ -833,8 +833,8 @@ void set_dds_tx2_tone1_freq(double* param, char param_no)	// dds_tx2_tone1_freq=
 
 	if(param_no >= 1)
 	{
-		dds_set_frequency(DDS_CHAN_TX2_I_F1, freq);
-		dds_set_frequency(DDS_CHAN_TX2_Q_F1, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX2_I_F1, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX2_Q_F1, freq);
 		console_print("dds_tx2_tone1_freq=%d\n", freq);
 	}
 	else
@@ -864,8 +864,8 @@ void set_dds_tx2_tone2_freq(double* param, char param_no)	// dds_tx2_tone2_freq=
 
 	if(param_no >= 1)
 	{
-		dds_set_frequency(DDS_CHAN_TX2_I_F2, freq);
-		dds_set_frequency(DDS_CHAN_TX2_Q_F2, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX2_I_F2, freq);
+		dds_set_frequency(ad9361_phy, DDS_CHAN_TX2_Q_F2, freq);
 		console_print("dds_tx2_tone2_freq=%d\n", freq);
 	}
 	else
@@ -896,10 +896,10 @@ void set_dds_tx2_tone1_phase(double* param, char param_no)	// dds_tx2_tone1_phas
 
 	if(param_no >= 1)
 	{
-		dds_set_phase(DDS_CHAN_TX2_I_F1, (uint32_t)(phase * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX2_I_F1, (uint32_t)(phase * 1000));
 		if ((phase - 90) < 0)
 			phase += 360;
-		dds_set_phase(DDS_CHAN_TX2_Q_F1, (uint32_t)((phase - 90) * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX2_Q_F1, (uint32_t)((phase - 90) * 1000));
 		phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F1] / 1000;
 		console_print("dds_tx2_tone1_phase=%d\n", phase);
 	}
@@ -931,10 +931,10 @@ void set_dds_tx2_tone2_phase(double* param, char param_no)	// dds_tx2_tone2_phas
 
 	if(param_no >= 1)
 	{
-		dds_set_phase(DDS_CHAN_TX2_I_F2, (uint32_t)(phase * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX2_I_F2, (uint32_t)(phase * 1000));
 		if ((phase - 90) < 0)
 			phase += 360;
-		dds_set_phase(DDS_CHAN_TX2_Q_F2, (uint32_t)((phase - 90) * 1000));
+		dds_set_phase(ad9361_phy, DDS_CHAN_TX2_Q_F2, (uint32_t)((phase - 90) * 1000));
 		phase = dds_st.cached_phase[DDS_CHAN_TX2_I_F2] / 1000;
 		console_print("dds_tx2_tone2_phase=%d\n", phase);
 	}
@@ -965,8 +965,8 @@ void set_dds_tx2_tone1_scale(double* param, char param_no)	// dds_tx2_tone1_scal
 
 	if(param_no >= 1)
 	{
-		dds_set_scale(DDS_CHAN_TX2_I_F1, scale);
-		dds_set_scale(DDS_CHAN_TX2_Q_F1, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX2_I_F1, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX2_Q_F1, scale);
 		scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F1];
 		console_print("dds_tx2_tone1_scale=%d\n", scale);
 	}
@@ -997,8 +997,8 @@ void set_dds_tx2_tone2_scale(double* param, char param_no)	// dds_tx2_tone2_scal
 
 	if(param_no >= 1)
 	{
-		dds_set_scale(DDS_CHAN_TX2_I_F2, scale);
-		dds_set_scale(DDS_CHAN_TX2_Q_F2, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX2_I_F2, scale);
+		dds_set_scale(ad9361_phy, DDS_CHAN_TX2_Q_F2, scale);
 		scale = dds_st.cached_scale[DDS_CHAN_TX2_I_F2];
 		console_print("dds_tx2_tone2_scale=%d\n", scale);
 	}
