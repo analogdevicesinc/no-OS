@@ -313,9 +313,12 @@ void dac_dma_setup(uint32_t sel)
 	uint32_t dac_clk;
 	uint32_t val;
 	uint32_t sine_freq;
+	uint32_t hdl_version;
 
 	dac_base_addr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ?
 					CFAD9122_1_BASEADDR : CFAD9122_0_BASEADDR;
+
+	dac_read(ADI_REG_VERSION, &hdl_version);
 
 	tx_count = sizeof(sine_lut_i) / sizeof(uint16_t);
 	for(index = 0; index < tx_count; index ++)
@@ -347,9 +350,19 @@ void dac_dma_setup(uint32_t sel)
 	sine_freq = dac_clk / (tx_count * 2);
 	xil_printf("dac_dma: Sine frequency is %d Hz.\n\r", sine_freq);
 
-	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DMA));
-	dac_write(ADI_REG_CNTRL_1, 0x0);
-	dac_write(ADI_REG_CNTRL_1, 0x1);
+	if (PCORE_VERSION_MAJOR(hdl_version) > 7)
+	{
+		dac_write(ADI_REG_CHAN_CNTRL_7(0), 2);
+		dac_write(ADI_REG_CHAN_CNTRL_7(1), 2);
+		dac_write(ADI_REG_CNTRL_1, 0x0);
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
+	else
+	{
+		dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT | ADI_DATA_SEL(DATA_SEL_DMA));
+		dac_write(ADI_REG_CNTRL_1, 0x0);
+		dac_write(ADI_REG_CNTRL_1, 0x1);
+	}
 }
 
 /**************************************************************************//**
