@@ -62,8 +62,12 @@ struct ad9517_state
 	uint8_t									prescaler_p;
 	uint8_t									antibacklash_pulse_width;
 }ad9517_st;
+#ifdef OLD_VERSION
 int32_t spiBaseAddress = 0;
 int32_t spiSlaveSelect = 0;
+#else
+static uint8_t ad9517_slave_select;
+#endif
 
 /***************************************************************************//**
  * @brief Initializes the AD9517.
@@ -73,7 +77,11 @@ int32_t spiSlaveSelect = 0;
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
+#ifdef OLD_VERSION
 int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo)
+#else
+int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
+#endif
 {
 	struct ad9517_state *st 		= &ad9517_st;
 	int32_t				ret			= 0;
@@ -85,6 +93,7 @@ int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo)
 	st->lvpecl_channels = &ad9517_lvpecl_channels[0];
 	st->lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
 
+#ifdef OLD_VERSION
 	spiBaseAddress = spiBaseAddr;
 	spiSlaveSelect = ssNo;
 	
@@ -94,6 +103,10 @@ int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo)
 	{
 		return ret;
 	}
+#else
+	ad9517_slave_select = slave_select;
+	spi_init(spi_device_id, 0, 0);
+#endif
 	/* Configure serial port for long instructions and reset the serial interface. */
 	ret = ad9517_write(AD9517_REG_SERIAL_PORT_CONFIG, AD9517_SOFT_RESET | AD9517_LONG_INSTRUCTION);
 	if(ret < 0)
@@ -184,8 +197,13 @@ int32_t ad9517_write(uint32_t regAddr, uint16_t regVal)
 	uint8_t  i           = 0;
     int32_t  ret         = 0;
 	uint16_t regAddress  = 0;
+#ifdef OLD_VERSION
 	char     regValue    = 0;
 	char     txBuffer[3] = {0, 0, 0};
+#else
+	uint8_t regValue	 = 0;
+	uint8_t txBuffer[3]  = {0, 0, 0};
+#endif
 
 	regAddress = AD9517_WRITE + AD9517_ADDR(regAddr);
 	for(i = 0; i < AD9517_TRANSF_LEN(regAddr); i++)
@@ -194,7 +212,11 @@ int32_t ad9517_write(uint32_t regAddr, uint16_t regVal)
 		txBuffer[0] = (regAddress & 0xFF00) >> 8;
 		txBuffer[1] = regAddress & 0x00FF;
 		txBuffer[2] = regValue;
+#ifdef OLD_VERSION
 		ret         = SPI_TransferData(spiBaseAddress, 3, txBuffer, 0, NULL, spiSlaveSelect);
+#else
+		ret = spi_write_and_read(ad9517_slave_select, txBuffer, 3);
+#endif
 		if(ret < 0)
 		{
 			return ret;
@@ -215,11 +237,13 @@ int32_t ad9517_write(uint32_t regAddr, uint16_t regVal)
 int32_t ad9517_read(uint32_t regAddr)
 {
 	uint32_t regAddress  = 0;
+#ifdef OLD_VERSION
 	uint8_t  rxBuffer[3] = {0, 0, 0};
+	int32_t  ret         = 0;
+#endif
 	uint8_t  txBuffer[3] = {0, 0, 0};
 	uint32_t regValue    = 0;
 	uint8_t  i           = 0;
-	int32_t  ret         = 0;
 
 	regAddress = AD9517_READ + AD9517_ADDR(regAddr);
 	for(i = 0; i < AD9517_TRANSF_LEN(regAddr); i++)
@@ -227,14 +251,22 @@ int32_t ad9517_read(uint32_t regAddr)
 		txBuffer[0] = (regAddress & 0xFF00) >> 8;
 		txBuffer[1] = regAddress & 0x00FF;
 		txBuffer[2] = 0;
+#ifdef OLD_VERSION
 		ret         = SPI_TransferData(spiBaseAddress, 3, (char*)txBuffer, 3, (char*)rxBuffer, spiSlaveSelect);
 		if(ret < 0)
 		{
 			return ret;
 		}
+#else
+		spi_write_and_read(ad9517_slave_select, txBuffer, 3);
+#endif
 		regAddress--;
 		regValue <<= 8;
+#ifdef OLD_VERSION
 		regValue |= rxBuffer[2];
+#else
+		regValue |= txBuffer[2];
+#endif
 	}
 
 	return regValue;

@@ -52,7 +52,7 @@
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
-    #define CF_BASEADDR   XPAR_AXI_ADC_1C_0_BASEADDR
+    #define CF_BASEADDR   XPAR_AXI_AD9467_BASEADDR
     #define DDR_BASEADDR  XPAR_DDR_MEM_BASEADDR + 128*1024*1024
     #define DMA_BASEADDR  XPAR_AXI_DMA_0_BASEADDR
     #define UART_BASEADDR XPS_UART1_BASEADDR
@@ -65,33 +65,10 @@
     #define SPI_BASEADDR  XPAR_AXI_SPI_0_BASEADDR
 #endif
 
-/* CF register map. */
-#define CF_REG_VERSION            0x00
-#define CF_REG_CAPTURE_CTRL       0x0C
-#define CF_REG_ADC_STATUS         0x10
-#define CF_REG_DATA_MONITOR       0x14
-#define CF_REG_DATA_MODE          0x18
-#define CF_REG_DELAY_CTRL         0x1C
-#define CF_REG_DELAY_STATUS       0x20
-#define CF_REG_PN_TYPE            0x24
-#define CF_REG_DATA_SELECT        0x28
-
-/* CF_REG_CAPTURE_CTRL bit definition. */
-#define CF_CAPTURE_CTRL_CAPTURE_START(x)    (((x) & 0x1) << 16)
-#define CF_CAPTURE_CTRL_CAPTURE_COUNT(x)    ((((x) - 1) & 0xFFFF) << 0)
-
-/* CF_REG_ADC_STATUS bit definition. */
-#define CF_ADC_STATUS_UNDERFLOW        (1 << 2) // (Write 1 to clear)
-#define CF_ADC_STATUS_OVERFLOW         (1 << 1) // (Write 1 to clear)
-#define CF_ADC_STATUS_BUSY             (1 << 0) // (Read Only)
-
-/* CF_REG_DATA_MONITOR bit definition. */
-#define CF_DATA_MONITOR_PN_ERR         (1 << 2) // (Write 1 to clear)
-#define CF_DATA_MONITOR_PN_SYNC        (1 << 1) // (Write 1 to clear)
-#define CF_DATA_MONITOR_PN_OVER_RNG    (1 << 0) // (Write 1 to clear)
-
-/* CF_REG_DATA_MODE bit definition. */
-#define CF_DATA_MODE_BITS(x)        (((x) & 0x3) << 0)
+/* ADC registers */
+#define CF_REG_DELAY_CTRL			0x60
+#define CF_REG_DELAY_STATUS			0x20
+#define CF_REG_DATA_MONITOR			0x404
 
 /* CF_REG_DELAY_CTRL bit definition. */
 #define CF_DELAY_CTRL_SEL(x)        (((x) & 0x1) << 17)
@@ -100,14 +77,62 @@
 #define CF_DELAY_CTRL_WR_DATA(x)    (((x) & 0x1F) << 0)
 
 /* CF_REG_DELAY_STATUS bit definition. */
-#define CF_DELAY_STATUS_LOCKED      (1 << 8)    // (Read Only)
+#define CF_DELAY_STATUS_LOCKED      (1 << 9)    // (Read Only)
+#define CF_DELAY_STATUS_STATUS      (1 << 8)    // (Read Only)
 #define CF_DELAY_STATUS_RD_DATA     (0x1F << 0) // (Read Only)
 
-/* CF_REG_PN_TYPE bit definition. */
-#define CF_PN_TYPE_BIT(x)           (((x) & 0x1) << 0)
+/* CF_REG_DATA_MONITOR bit definition. */
+#define CF_DATA_MONITOR_PN_ERR         (1 << 2) // (Write 1 to clear)
+#define CF_DATA_MONITOR_PN_SYNC        (1 << 1) // (Write 1 to clear)
+#define CF_DATA_MONITOR_PN_OVER_RNG    (1 << 0) // (Write 1 to clear)
 
-/* CF_REG_DATA_SELECT bit definition. */
-#define CF_DATA_SELECT_BIT(x)       (((x) & 0x1) << 0)
+#define ADC_REG_RSTN			0x040
+#define ADC_MMCM_RSTN			(1 << 1)
+#define ADC_RSTN				(1 << 0)
+
+#define ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
+#define ADC_PN_SEL				(1 << 10)	/* !v8.0 */
+#define ADC_IQCOR_ENB			(1 << 9)
+#define ADC_DCFILT_ENB			(1 << 8)
+#define ADC_FORMAT_SIGNEXT		(1 << 6)
+#define ADC_FORMAT_TYPE			(1 << 5)
+#define ADC_FORMAT_ENABLE		(1 << 4)
+#define ADC_PN23_TYPE			(1 << 1)	/* !v8.0 */
+#define ADC_ENABLE				(1 << 0)
+
+#define ADC_REG_CHAN_CNTRL_3(c)	(0x0418 + (c) * 0x40) /* v8.0 */
+#define ADC_ADC_PN_SEL(x)		(((x) & 0xF) << 16)
+#define ADC_TO_ADC_PN_SEL(x)	(((x) >> 16) & 0xF)
+#define ADC_ADC_DATA_SEL(x)		(((x) & 0xF) << 0)
+#define ADC_TO_ADC_DATA_SEL(x)	(((x) >> 0) & 0xF)
+
+/* DMAC registers */
+#define AXI_DMAC_REG_IRQ_MASK			0x80
+#define AXI_DMAC_REG_IRQ_PENDING		0x84
+#define AXI_DMAC_REG_IRQ_SOURCE			0x88
+#define AXI_DMAC_REG_CTRL				0x400
+#define AXI_DMAC_REG_TRANSFER_ID		0x404
+#define AXI_DMAC_REG_START_TRANSFER		0x408
+#define AXI_DMAC_REG_FLAGS				0x40c
+#define AXI_DMAC_REG_DEST_ADDRESS		0x410
+#define AXI_DMAC_REG_SRC_ADDRESS		0x414
+#define AXI_DMAC_REG_X_LENGTH			0x418
+#define AXI_DMAC_REG_Y_LENGTH			0x41c
+#define AXI_DMAC_REG_DEST_STRIDE		0x420
+#define AXI_DMAC_REG_SRC_STRIDE			0x424
+#define AXI_DMAC_REG_TRANSFER_DONE		0x428
+#define AXI_DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
+#define AXI_DMAC_REG_STATUS				0x430
+#define AXI_DMAC_REG_CURRENT_DEST_ADDR	0x434
+#define AXI_DMAC_REG_CURRENT_SRC_ADDR	0x438
+#define AXI_DMAC_REG_DBG0				0x43c
+#define AXI_DMAC_REG_DBG1				0x440
+
+#define AXI_DMAC_CTRL_ENABLE			(1 << 0)
+#define AXI_DMAC_CTRL_PAUSE				(1 << 1)
+
+#define AXI_DMAC_IRQ_SOT				(1 << 0)
+#define AXI_DMAC_IRQ_EOT				(1 << 1)
 
 /******************************************************************************/
 /************************** Types Declarations ********************************/
@@ -132,6 +157,17 @@ typedef enum _OutputModes
     GRAY_CODE,
 
 }typeOutputModes;
+
+enum adc_pnsel {
+	ADC_PN9 = 0,
+	ADC_PN23A = 1,
+	ADC_PN7 = 4,
+	ADC_PN15 = 5,
+	ADC_PN23 = 6,
+	ADC_PN31 = 7,
+	ADC_PN_CUSTOM = 9,
+	ADC_PN_END = 10,
+};
 
 /*******************************************************************************/
 /************************ Functions Declarations *******************************/

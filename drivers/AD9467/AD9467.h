@@ -135,7 +135,11 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Configures the test mode and the output mode to a default state. */
+#ifdef OLD_VERSION
 int32_t ad9467_setup(int32_t spiBaseAddr, int32_t ssNo);
+#else
+int32_t ad9467_setup(uint32_t spi_device_id, uint8_t slave_select);
+#endif
 /*! Writes data into a register.  */
 int32_t ad9467_write(uint16_t regAddr, uint8_t regVal);
 /*! Reads data from a register. */

@@ -374,7 +374,11 @@ enum out_lvds_current_options
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Initializes the AD9517. */
+#ifdef OLD_VERSION
 int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo);
+#else
+int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select);
+#endif
 /*!  Writes data into a register. */
 int32_t ad9517_write(uint32_t regAddr, uint16_t regVal);
 /*! Reads data from a register. */

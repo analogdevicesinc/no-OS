@@ -44,185 +44,104 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
+#include <xparameters.h>
+#include <xgpiops.h>
+#include <xspips.h>
+#include <sleep.h>
 #include "spi.h"
-#include "xil_io.h"
-
-/*****************************************************************************/
-/************************ Constants Definitions ******************************/
-/*****************************************************************************/
-#define MAX_TX_SIZE	16 /*!< Maximum number of bytes that can be transmitted in one SPI transfer */
 
 /*****************************************************************************/
 /************************ Variables Definitions ******************************/
 /*****************************************************************************/
-typedef struct _stSpiConfig
+XSpiPs_Config	*spi_config;
+XSpiPs			spi_instance;
+
+/***************************************************************************//**
+* @brief mdelay
+*******************************************************************************/
+void mdelay(uint32_t msecs)
 {
-	u32 	axiBaseAddr; /*!< Base address of the SPI Microblaze IP */
-	u32		config;	 	 /*!< Configuration of the SPI Microblaze IP  */
-}stSpiConfig;
-
-static stSpiConfig spiConfig[2] = {{0,0}, {0,0}};
-static char emptyTxBuf[MAX_TX_SIZE];
-
-/**************************************************************************//**
-* @brief Initializes the communication with the Microblaze SPI peripheral.
-*
-* @param axiBaseAddr - Microblaze SPI peripheral AXI base address.
-* @param lsbFirst    - Set to 1 if the data is transmitted LSB first.
-* @param cpha        - Set to 1 if CPHA mode is used.
-* @param cpol        - Set to 1 if CPOL mode is used.
-* @return TRUE
-******************************************************************************/
-u32 SPI_Init(u32 axiBaseAddr, char lsbFirst, char cpha, char cpol)
-{
-    u32 i        = 0;
-	u32 cfgValue = 0;
-
-	//set the empty Tx buffer to 0
-	for(i = 0; i < MAX_TX_SIZE; i++)
-	{
-		emptyTxBuf[i] = 0;
-	}
-
-	// Configuration Register Settings
-	cfgValue |= (lsbFirst 	<< LSBFirst)         | // MSB First transfer format
-				(1 			<< MasterTranInh)    | // Master transactions disabled
-				(1 			<< ManualSlaveAssEn) | // Slave select output follows data in slave select register
-				(1 			<< RxFifoReset)      | // Receive FIFO normal operation
-				(0 			<< TxFifoReset)      | // Transmit FIFO normal operation
-				(cpha 		<< CHPA)             | // Data valid on first SCK edge
-				(cpol 		<< CPOL)             | // Active high clock, SCK idles low
-				(1 			<< Master)           | // SPI in Master configuration mode
-				(1 			<< SPE)              | // SPI enabled
-				(0 			<< LOOP);              // Normal operation
-
-    //initialize the SPI configuration
-    for(i = 0; i < sizeof(spiConfig) / sizeof(stSpiConfig); i++)
-    {
-    	if(spiConfig[i].axiBaseAddr == 0)
-    	{
-    		spiConfig[i].axiBaseAddr = axiBaseAddr;
-    		spiConfig[i].config	 	 = cfgValue;
-    		break;
-    	}
-    }
-
-    //set the slave select register to all ones
-    Xil_Out32(axiBaseAddr + SPISSR, 0xFFFFFFFF);
-
-    // Set corresponding value to the Configuration Register
-    Xil_Out32(axiBaseAddr + SPICR, cfgValue);
-
-    return TRUE;
+	usleep(msecs * 1000);
 }
 
-/**************************************************************************//**
-* @brief Transfers data to and from a SPI slave.
-*
-* @param axiBaseAddr - Microblaze SPI peripheral AXI base address.
-* @param txSize      - Number of bytes to transmit to the SPI slave.
-* @param txBuffer    - Buffer which holds the data to be transmitted to the SPI slave.
-* @param rxSize      - Number of bytes to receive from the SPI slave.
-* @param txBuffer    - Buffer to store the data read to the SPI slave.
-* @param ssNo        - Slave select line on which the slave is connected.
-* @return TRUE.
-******************************************************************************/
-u32 SPI_TransferData(u32 axiBaseAddr, char txSize, char* txBuf, char rxSize, char* rxBuf, char ssNo)
+/***************************************************************************//**
+* @brief spi_init
+*******************************************************************************/
+int32_t spi_init(uint32_t device_id,
+		uint8_t clk_pha,
+		uint8_t clk_pol)
 {
-    u32 i         = 0;
-    u32 cfgValue  = 0;
-    u32 SPIStatus = 0;
-    u32 rxCnt     = 0;
-    u32 txCnt     = 0;
-    u32 timeout   = 0xFFFF;
+	uint8_t  byte		 = 0;
+	uint32_t base_addr	 = 0;
+	uint32_t control_val = 0;
 
-    // Get the configuration of the SPI core
-    for(i = 0; i < sizeof(spiConfig) / sizeof(stSpiConfig); i++)
+	spi_config = XSpiPs_LookupConfig(device_id);
+	base_addr = spi_config->BaseAddress;
+	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
+	control_val = XSPIPS_CR_SSFORCE_MASK |
+			XSPIPS_CR_SSCTRL_MASK |
+			4 << XSPIPS_CR_PRESC_SHIFT |
+			(clk_pha ? XSPIPS_CR_CPHA_MASK : 0) |
+			(clk_pol ? XSPIPS_CR_CPOL_MASK : 0) |
+			XSPIPS_CR_MSTREN_MASK;
+	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
+	for(byte = 0; byte < 128; byte++)
 	{
-		if(spiConfig[i].axiBaseAddr == axiBaseAddr)
-		{
-			cfgValue = spiConfig[i].config;
-			break;
-		}
+		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
 	}
 
-    // Check if the transmit buffer is empty
-    if(txSize == 0)
-    {
-    	txSize = rxSize;
-    	txBuf = emptyTxBuf;
-    }
+	return 0;
+}
 
-    // Write configuration data to master SPI device SPICR
-    Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+/***************************************************************************//**
+* @brief spi_write_and_read
+*******************************************************************************/
+int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
+				 uint8_t bytes_number)
+{
+	uint32_t cnt		 = 0;
+	uint32_t base_addr	 = 0;
+	uint32_t control_val = 0;
+	uint32_t status	  	 = 0;
 
-    // Write to SPISSR to manually assert SSn
-    Xil_Out32(axiBaseAddr + SPISSR, ~(0x00000001 << (ssNo - 1)));
+	ss = (1 << ss);
+	base_addr = spi_config->BaseAddress;
+	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
 
-    // Write initial data to master SPIDTR register
-    Xil_Out32(axiBaseAddr + SPIDTR, txBuf[0]);
+	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
+					control_val & ~(ss << XSPIPS_CR_SSCTRL_SHIFT));
 
-    // Enable the master transactions
-    cfgValue &= ~(1 << MasterTranInh);
-    Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+	XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
 
-    // Send and receive the data
-    while(txCnt < txSize)
-    {
-    	// Poll status for completion
-    	do
-    	{
-    		SPIStatus = Xil_In32(axiBaseAddr + SPISR);
-    	}
-    	while(((SPIStatus & 0x01) == 1) && timeout--);
-    	if(timeout == -1)
-    	{
-        	// Disable the master transactions
-    		cfgValue |= (1 << MasterTranInh);
-    		Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
+	XSpiPs_WriteReg(base_addr, XSPIPS_IER_OFFSET, XSPIPS_IXR_TXOW_MASK);
 
-    		//reset the SPI core
-			Xil_Out32(axiBaseAddr + SRR, 0x0000000A);
+	while(cnt < bytes_number)
+	{
+		XSpiPs_WriteReg(base_addr, XSPIPS_TXD_OFFSET, data[cnt]);
+		cnt++;
+	}
 
-			//set the slave select register to all ones
-			Xil_Out32(axiBaseAddr + SPISSR, 0xFFFFFFFF);
+	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, XSPIPS_ER_ENABLE_MASK);
 
-			// Set corresponding value to the Configuration Register
-			Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+	do
+	{
+		status = XSpiPs_ReadReg(base_addr, XSPIPS_SR_OFFSET);
+	}
+	while((status & XSPIPS_IXR_TXOW_MASK) == 0x0);
 
-			return FALSE;
-    	}
-    	timeout = 0xFFFF;
+	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
 
-    	// Read received data from SPI Core buffer
-    	if(rxCnt < rxSize)
-    	{
-    		rxBuf[rxCnt] = Xil_In32(axiBaseAddr + SPIDRR);
-    		rxCnt++;
-    	}
-		// Send next data
-    	txCnt++;
-    	if(txCnt < txSize)
-    	{
-        	// Disable the master transactions
-    		cfgValue |= (1 << MasterTranInh);
-    		Xil_Out32(axiBaseAddr + SPICR, cfgValue);
+	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
 
-    		// Write data
-    		Xil_Out32(axiBaseAddr + SPIDTR, txBuf[txCnt]);
+	cnt = 0;
+	while(cnt < bytes_number)
+	{
+		data[cnt] = XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
+		cnt++;
+	}
 
-    		/// Enable the master transactions
-			cfgValue &= ~(1 << MasterTranInh);
-			Xil_Out32(axiBaseAddr + SPICR, cfgValue);
-    	}
-    }
+	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
 
-    // Disable the master transactions
-    cfgValue |= (1 << MasterTranInh);
-    Xil_Out32(axiBaseAddr + SPICR, cfgValue);
-
-    // Write all ones to SPISSR
-    Xil_Out32(axiBaseAddr + SPISSR, 0xFFFFFFFF);
-
-    return TRUE;
+	return 0;
 }

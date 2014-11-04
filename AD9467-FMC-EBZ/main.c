@@ -64,10 +64,10 @@ int main(){
     Xil_DCacheEnable();
 
     /* AD9467 Setup. */
-    ad9467_setup(XPAR_AXI_SPI_0_BASEADDR, 1);
+    ad9467_setup(XPAR_PS7_SPI_0_DEVICE_ID, 0);
 
     /* AD9517 Setup. */
-    ad9517_setup(XPAR_AXI_SPI_0_BASEADDR, 2);    // Initialize device.
+    ad9517_setup(XPAR_PS7_SPI_0_DEVICE_ID, 1);    // Initialize device.
     ad9517_power_mode(3, 0);                     // Set channel 3 for normal operation
     ad9517_frequency(3, 250000000);              // Set the channel 3 frequency to 250Mhz
     ad9517_update();                             // Update registers
@@ -82,6 +82,7 @@ int main(){
 
     /* AD9467 test. */
     adc_setup(0);
+
     for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++)        // Data pattern checks
     {
         adc_test(mode, OFFSET_BINARY);       // Data format is offset binary

@@ -49,8 +49,12 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+#ifdef OLD_VERSION
  static int32_t spiBaseAddress;
  static int32_t spiSlaveSelect;
+#else
+static uint8_t ad9467_slave_select;
+#endif
 
 /***************************************************************************//**
  * @brief Configures the test mode and the output mode to a default state.
@@ -60,10 +64,15 @@
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
+#ifdef OLD_VERSION
 int32_t ad9467_setup(int32_t spiBaseAddr, int32_t ssNo)
+#else
+int32_t ad9467_setup(uint32_t spi_device_id, uint8_t slave_select)
+#endif
 {
     int32_t ret = 0;
 
+#ifdef OLD_VERSION
     spiBaseAddress = spiBaseAddr;
     spiSlaveSelect = ssNo;
     /* Initializes the SPI peripheral */
@@ -72,7 +81,10 @@ int32_t ad9467_setup(int32_t spiBaseAddr, int32_t ssNo)
 	{
 		return ret;
 	}
-
+#else
+	ad9467_slave_select = slave_select;
+	spi_init(spi_device_id, 0, 0);
+#endif
 	/* Disable test mode. */
     ret = ad9467_write(AD9467_REG_TEST_IO, 0x00);
     if(ret < 0)
@@ -114,8 +126,12 @@ int32_t ad9467_write(uint16_t regAddr, uint8_t regVal)
 	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
 	write_buffer[2] = regVal;
 
+#ifdef OLD_VERSION
 	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 0, NULL, 
 			spiSlaveSelect);
+#else
+	ret = spi_write_and_read(ad9467_slave_select, write_buffer, 3);
+#endif
 
     return ret;
 }
@@ -129,9 +145,11 @@ int32_t ad9467_write(uint16_t regAddr, uint8_t regVal)
 ******************************************************************************/
 int32_t ad9467_read(uint16_t regAddr)
 {
+#ifdef OLD_VERSION
 	int32_t ret;
-	uint8_t	write_buffer[3];
 	uint8_t	read_buffer[3] = {0, 0, 0};
+#endif
+	uint8_t	write_buffer[3];
 
 	regAddr += AD9467_READ;
 
@@ -139,6 +157,7 @@ int32_t ad9467_read(uint16_t regAddr)
 	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
 	write_buffer[2] = 0;
 
+#ifdef OLD_VERSION
 	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 3, (char*)read_buffer, 
 			spiSlaveSelect);
 	if(ret < 0)
@@ -147,6 +166,11 @@ int32_t ad9467_read(uint16_t regAddr)
 	}
 
 	return (int32_t)read_buffer[2];
+#else
+	spi_write_and_read(ad9467_slave_select, write_buffer, 3);
+
+	return (int32_t)write_buffer[2];
+#endif
 }
 
 /***************************************************************************//**
