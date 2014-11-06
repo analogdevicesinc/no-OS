@@ -286,7 +286,14 @@ void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq)
 	dac_read(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~DAC_DDS_INCR(~0);
 	val64 = (uint64_t) freq * 0xFFFFULL;
-	do_div(&val64, *dds_st[phy->id_no].dac_clk);
+	if(dds_st[phy->id_no].rx2tx2)
+	{
+		do_div(&val64, *dds_st[phy->id_no].dac_clk);
+	}
+	else
+	{
+		do_div(&val64, (*dds_st[phy->id_no].dac_clk / 2));
+	}
 	reg |= DAC_DDS_INCR(val64) | 1;
 	dac_write(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
 	dac_start_sync(phy, 0);
