@@ -397,6 +397,7 @@ int main(void)
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size
     // of the cache line.
+	mdelay(1000);
     adc_capture(16384, ADC_DDR_BASEADDR);
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
     while(1);
