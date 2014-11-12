@@ -42,6 +42,7 @@
 /******************************************************************************/
 //#define CONSOLE_COMMANDS
 //#define XILINX_PLATFORM
+//#define FMCOMMS5
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -326,6 +327,9 @@ AD9361_TXFIRConfig tx_fir_config = {
 	 128 // tx_coef_size
 };
 struct ad9361_rf_phy *ad9361_phy;
+#ifdef FMCOMMS5
+struct ad9361_rf_phy *ad9361_phy_b;
+#endif
 
 /***************************************************************************//**
  * @brief main
@@ -340,9 +344,15 @@ int main(void)
 	// NOTE: The user has to choose the GPIO numbers according to desired
 	// carrier board.
 	default_init_param.gpio_resetb = GPIO_RESET_PIN;
+#ifdef FMCOMMS5
+	default_init_param.gpio_sync = GPIO_SYNC_PIN;
+	default_init_param.gpio_cal_sw1 = GPIO_CAL_SW1_PIN;
+	default_init_param.gpio_cal_sw2 = GPIO_CAL_SW2_PIN;
+#else
 	default_init_param.gpio_sync = -1;
 	default_init_param.gpio_cal_sw1 = -1;
 	default_init_param.gpio_cal_sw2 = -1;
+#endif
 	gpio_init(GPIO_DEVICE_ID);
 	gpio_direction(default_init_param.gpio_resetb, 1);
 
@@ -353,10 +363,31 @@ int main(void)
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
+#ifdef FMCOMMS5
+	default_init_param.id_no = 1;
+	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
+	default_init_param.gpio_sync = -1;
+	default_init_param.gpio_cal_sw1 = -1;
+	default_init_param.gpio_cal_sw2 = -1;
+	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
+	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
+	gpio_direction(default_init_param.gpio_resetb, 1);
+	ad9361_phy_b = ad9361_init(&default_init_param);
+
+	ad9361_set_tx_fir_config(ad9361_phy_b, tx_fir_config);
+	ad9361_set_rx_fir_config(ad9361_phy_b, rx_fir_config);
+#endif
+
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM
 #ifdef DAC_DMA
+#ifdef FMCOMMS5
+	dac_init(ad9361_phy_b, DATA_SEL_DMA);
+#endif
 	dac_init(ad9361_phy, DATA_SEL_DMA);
 #else
+#ifdef FMCOMMS5
+	dac_init(ad9361_phy_b, DATA_SEL_DDS);
+#endif
 	dac_init(ad9361_phy, DATA_SEL_DDS);
 #endif
 #endif
