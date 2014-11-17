@@ -213,7 +213,10 @@ int32_t ad9548_write_raw(int32_t channel,
 			ret = -1;
 			goto out;
 		}
-		tmp = st->pdata->dpll_out_freq / val;
+	    tmp = (st->pdata->dpll_out_freq / val) - 1;
+	    if(tmp < 0) {
+	    	tmp = 0;
+	    }
 		ret = ad9548_write(AD9548_REG_DISTRIBUTION_CHANNEL_DIVIDERS_0 + channel*4, tmp & 0xFF);
         if (ret < 0)
 		    goto out;

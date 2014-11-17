@@ -118,7 +118,7 @@ struct ad9548_platform_data ad9548_pdata_lpc =
     0x0000,     //dpll_phase_slew_limit
     0x7530,     //dpll_history_acc_timer
     0x00,       //dpll_history_mode
-    30000000,   //dpll_out_freq
+    120000000,  //dpll_out_freq
 
     /* Clock distribution synchronization */
     0,          //clock_distr_ext_resistor
