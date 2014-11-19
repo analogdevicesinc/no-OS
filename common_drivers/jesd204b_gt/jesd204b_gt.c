@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include <xil_printf.h>
 #include <xil_io.h>
-#include "platform.h"
+#include "platform_drivers.h"
 #include "jesd204b_gt.h"
 
 /******************************************************************************/
@@ -99,6 +99,9 @@ int32_t jesd204b_gt_clk_enable(uint32_t num)
 	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
 	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
 	mdelay(50);
+
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
 
 	xil_printf("%s CLK is enabled.\n",
 		num == JESD204B_GT_RX ? "JESD204B GT RX" : "JESD204B GT TX");
