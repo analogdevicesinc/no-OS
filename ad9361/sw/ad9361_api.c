@@ -68,7 +68,7 @@ static struct axiadc_chip_info axiadc_chip_info_tbl[] =
  * @return A structure that contains the AD9361 current state in case of
  *         success, negative error code otherwise.
  */
-struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
+int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_param)
 {
 	struct ad9361_rf_phy *phy;
 	int32_t ret = 0;
@@ -77,32 +77,32 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	phy = (struct ad9361_rf_phy *)zmalloc(sizeof(*phy));
 	if (!phy) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->spi = (struct spi_device *)zmalloc(sizeof(*phy->spi));
 	if (!phy->spi) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->pdata = (struct ad9361_phy_platform_data *)zmalloc(sizeof(*phy->pdata));
 	if (!phy->pdata) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->adc_conv = (struct axiadc_converter *)zmalloc(sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->adc_state = (struct axiadc_state *)zmalloc(sizeof(*phy->adc_state));
 	if (!phy->adc_state) {
-		return (struct ad9361_rf_phy *)ERR_PTR(-ENOMEM);
+		return -ENOMEM;
 	}
 
 	phy->spi->id_no = init_param->id_no;
@@ -387,7 +387,9 @@ struct ad9361_rf_phy *ad9361_init (AD9361_InitParam *init_param)
 
 	printf("%s : AD9361 Rev %d successfully initialized\n", "ad9361_init", (int)rev);
 
-	return phy;
+	*ad9361_phy = phy;
+
+	return 0;
 
 out:
 	free(phy->spi);
@@ -398,7 +400,7 @@ out:
 	free(phy);
 	printf("%s : AD9361 initialization error\n", "ad9361_init");
 
-	return (struct ad9361_rf_phy *)ERR_PTR(ENODEV);
+	return -ENODEV;
 }
 
 /**

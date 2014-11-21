@@ -358,7 +358,7 @@ int main(void)
 
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
-	ad9361_phy = ad9361_init(&default_init_param);
+	ad9361_init(&ad9361_phy, &default_init_param);
 
 	ad9361_set_tx_fir_config(ad9361_phy, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
@@ -372,7 +372,7 @@ int main(void)
 	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
 	gpio_direction(default_init_param.gpio_resetb, 1);
-	ad9361_phy_b = ad9361_init(&default_init_param);
+	ad9361_init(&ad9361_phy_b, &default_init_param);
 
 	ad9361_set_tx_fir_config(ad9361_phy_b, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy_b, rx_fir_config);
