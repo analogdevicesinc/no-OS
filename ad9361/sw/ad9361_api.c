@@ -1138,11 +1138,9 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 	switch (no_ch_mode) {
 	case 1:
 		phy->pdata->rx2tx2 = 0;
-		phy->pdata->port_ctrl.pp_conf[0] &= ~(1 << 2);
 		break;
 	case 2:
 		phy->pdata->rx2tx2 = 1;
-		phy->pdata->port_ctrl.pp_conf[0] |= (1 << 2);
 		break;
 	default:
 		return -1;
