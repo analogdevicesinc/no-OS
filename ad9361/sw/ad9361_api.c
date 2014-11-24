@@ -1126,3 +1126,54 @@ int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy,
 {
 	return ad9361_get_trx_clock_chain(phy, rx_path_clks, tx_path_clks);
 }
+
+/**
+ * Set the number of channels mode.
+ * @param phy The AD9361 state structure.
+ * @param ch_mode Number of channels mode: 1 - 1x1; 2 - 2x2.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
+{
+	switch (no_ch_mode) {
+	case 1:
+		phy->pdata->rx2tx2 = 0;
+		phy->pdata->port_ctrl.pp_conf[0] &= ~(1 << 2);
+		break;
+	case 2:
+		phy->pdata->rx2tx2 = 1;
+		phy->pdata->port_ctrl.pp_conf[0] |= (1 << 2);
+		break;
+	default:
+		return -1;
+	}
+
+	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
+	ad9361_reset(phy);
+	ad9361_spi_write(phy->spi, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
+	ad9361_spi_write(phy->spi, REG_SPI_CONF, 0x0);
+
+	phy->clks[TX_REFCLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[TX_REFCLK], phy->clk_refin->rate);
+	phy->clks[TX_REFCLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[TX_REFCLK], phy->clk_refin->rate);
+	phy->clks[RX_REFCLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[RX_REFCLK], phy->clk_refin->rate);
+	phy->clks[BB_REFCLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[BB_REFCLK], phy->clk_refin->rate);
+	phy->clks[BBPLL_CLK]->rate = ad9361_bbpll_recalc_rate(phy->ref_clk_scale[BBPLL_CLK], phy->clks[BB_REFCLK]->rate);
+	phy->clks[ADC_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[ADC_CLK], phy->clks[BBPLL_CLK]->rate);
+	phy->clks[R2_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[R2_CLK], phy->clks[ADC_CLK]->rate);
+	phy->clks[R1_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[R1_CLK], phy->clks[R2_CLK]->rate);
+	phy->clks[CLKRF_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[CLKRF_CLK], phy->clks[R1_CLK]->rate);
+	phy->clks[RX_SAMPL_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[RX_SAMPL_CLK], phy->clks[CLKRF_CLK]->rate);
+	phy->clks[DAC_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[DAC_CLK], phy->clks[ADC_CLK]->rate);
+	phy->clks[T2_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[T2_CLK], phy->clks[DAC_CLK]->rate);
+	phy->clks[T1_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[T1_CLK], phy->clks[T2_CLK]->rate);
+	phy->clks[CLKTF_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[CLKTF_CLK], phy->clks[T1_CLK]->rate);
+	phy->clks[TX_SAMPL_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[TX_SAMPL_CLK], phy->clks[CLKTF_CLK]->rate);
+	phy->clks[RX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[RX_RFPLL], phy->clks[RX_REFCLK]->rate);
+	phy->clks[TX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[TX_RFPLL], phy->clks[TX_REFCLK]->rate);
+
+	axiadc_init(phy);
+	ad9361_setup(phy);
+	ad9361_post_setup(phy);
+
+	return 0;
+}

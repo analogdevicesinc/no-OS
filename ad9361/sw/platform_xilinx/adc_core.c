@@ -125,6 +125,11 @@ void adc_init(struct ad9361_rf_phy *phy)
 		adc_write(phy, ADC_REG_CHAN_CNTRL(3),
 			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	}
+	else
+	{
+		adc_write(phy, ADC_REG_CHAN_CNTRL(2), 0);
+		adc_write(phy, ADC_REG_CHAN_CNTRL(3), 0);
+	}
 }
 
 /***************************************************************************//**
