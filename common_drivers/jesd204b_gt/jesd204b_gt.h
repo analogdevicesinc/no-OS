@@ -53,8 +53,6 @@
 
 #define JESD204B_GT_REG_SCRATCH				0x0008
 
-/* JESD GT */
-
 #define JESD204B_GT_REG_CPLL_PD				0x010
 #define JESD204B_GT_CPLL_PD 				(1 << 0)
 
@@ -221,6 +219,7 @@ typedef struct
 int32_t jesd204b_gt_read(uint32_t reg_addr, uint32_t *reg_data);
 int32_t jesd204b_gt_write(uint32_t reg_addr, uint32_t reg_data);
 int32_t jesd204b_gt_clk_enable(uint32_t num);
+int32_t jesd204b_gt_clk_synchronize(uint32_t num);
 int32_t jesd204b_gt_setup(uint32_t baseaddr, jesd204b_gt_state setup_param);
 
 #endif

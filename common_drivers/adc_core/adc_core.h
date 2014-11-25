@@ -47,9 +47,15 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define ADC_REG_RSTN			0x040
+#define ADC_REG_RSTN			0x0040
 #define ADC_MMCM_RSTN			(1 << 1)
 #define ADC_RSTN				(1 << 0)
+
+#define ADC_REG_STATUS			0x005C
+#define ADC_MUX_PN_ERR			(1 << 3)
+#define ADC_MUX_PN_OOS			(1 << 2)
+#define ADC_MUX_OVER_RANGE		(1 << 1)
+#define ADC_STATUS				(1 << 0)
 
 #define ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
 #define ADC_PN_SEL				(1 << 10)	/* !v8.0 */
@@ -66,6 +72,6 @@
 /******************************************************************************/
 int32_t adc_read(uint32_t reg_addr, uint32_t *reg_data);
 int32_t adc_write(uint32_t reg_addr, uint32_t reg_data);
-int32_t adc_setup(uint32_t baseaddr);
+int32_t adc_setup(uint32_t baseaddr, uint8_t ch_no);
 
 #endif

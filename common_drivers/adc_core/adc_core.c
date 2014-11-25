@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <xil_io.h>
 #include "adc_core.h"
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -71,12 +72,34 @@ int32_t adc_write(uint32_t reg_addr, uint32_t reg_data)
 /***************************************************************************//**
 * @brief adc_setup
 *******************************************************************************/
-int32_t adc_setup(uint32_t baseaddr)
+int32_t adc_setup(uint32_t baseaddr, uint8_t ch_no)
 {
+	uint8_t index;
+	uint32_t status;
+
 	adc_baseaddr = baseaddr;
 
 	adc_write(ADC_REG_RSTN, 0x00);
-	adc_write(ADC_REG_RSTN, 0x01);
+	adc_write(ADC_REG_RSTN, 0x03);
 
-	return 0;
+	mdelay(100);
+
+	for(index = 0; index < ch_no; index++)
+	{
+		adc_write(ADC_REG_CHAN_CNTRL(index), 0x51);
+	}
+
+	adc_read(ADC_REG_STATUS, &status);
+	if(status == 0x0)
+	{
+		xil_printf("ADC Core Status errors.\n\r");
+
+		return -1;
+	}
+	else
+	{
+		xil_printf("ADC Core successfully initialized.\n");
+
+		return 0;
+	}
 }

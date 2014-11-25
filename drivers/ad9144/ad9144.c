@@ -114,10 +114,12 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select)
 	}
 
 	// power-up and dac initialization
-	mdelay(50);
+	mdelay(5);
 
 	ad9144_spi_write(REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);	// reset
 	ad9144_spi_write(REG_SPI_INTFCONFA, 0x00);	// reset
+
+	mdelay(4);
 
 	ad9144_spi_write(0x011, 0x00);	// dacs - power up everything
 	ad9144_spi_write(0x080, 0x00);	// clocks - power up everything
@@ -185,8 +187,10 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select)
 
 	// cross-bar
 
-	ad9144_spi_write(0x308, 0x18);	// lane selects
-	ad9144_spi_write(0x309, 0x11);	// lane selects
+	ad9144_spi_write(REG_XBAR_LN_0_1, SRC_LANE0(0) |
+		SRC_LANE1(3));	// lane selects
+	ad9144_spi_write(REG_XBAR_LN_2_3, SRC_LANE2(1) |
+		SRC_LANE3(2));	// lane selects
 
 	// data link layer
 

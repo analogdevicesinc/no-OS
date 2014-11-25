@@ -328,20 +328,20 @@
 /*
  *      REG_SPI_DEVCONF
  */
-#define DEVSTATUS(x)                         ((x) & 0xF) << 4) /* Device Status */
-#define CUSTOPMODE(x)                        ((x) & 0x3) << 2) /* Customer Operating Mode */
-#define SYSOPMODE(x)                         ((x) & 0x3) << 0) /* System Operating Mode */
+#define DEVSTATUS(x)                         (((x) & 0xF) << 4) /* Device Status */
+#define CUSTOPMODE(x)                        (((x) & 0x3) << 2) /* Customer Operating Mode */
+#define SYSOPMODE(x)                         (((x) & 0x3) << 0) /* System Operating Mode */
 
 /*
  *      REG_SPI_CHIPGRADE
  */
-#define PROD_GRADE(x)                        ((x) & 0xF) << 4) /* Product Grade */
-#define DEV_REVISION(x)                      ((x) & 0xF) << 0) /* Device Revision */
+#define PROD_GRADE(x)                        (((x) & 0xF) << 4) /* Product Grade */
+#define DEV_REVISION(x)                      (((x) & 0xF) << 0) /* Device Revision */
 
 /*
  *      REG_SPI_PAGEINDX
  */
-#define PAGEINDX(x)                          ((x) & 0x3) << 0) /* Page or Index Pointer */
+#define PAGEINDX(x)                          (((x) & 0x3) << 0) /* Page or Index Pointer */
 
 /*
  *      REG_SPI_MS_UPDATE
@@ -379,7 +379,7 @@
 /*
  *      REG_COARSE_GROUP_DLY
  */
-#define COARSE_GROUP_DLY(x)                  ((x) & 0xF) << 0) /* Coarse group delay */
+#define COARSE_GROUP_DLY(x)                  (((x) & 0xF) << 0) /* Coarse group delay */
 
 /*
  *      REG_IRQ_ENABLE0
@@ -485,7 +485,7 @@
  *      REG_SYNC_TESTCTRL
  */
 #define TARRFAPHAZ                           (1 << 0) /* Target Polarity of Rf Divider */
-#define SYNCBYPASS(x)                        ((x) & 0x3) << 6) /* Sync Bypass handshaking */
+#define SYNCBYPASS(x)                        (((x) & 0x3) << 6) /* Sync Bypass handshaking */
 
 /*
  *      REG_SYNC_DACDELAY_H
@@ -495,7 +495,7 @@
 /*
  *      REG_SYNC_ERRWINDOW
  */
-#define ERRWINDOW(x)                         ((x) & 0x7) << 0) /* Sync Error Window */
+#define ERRWINDOW(x)                         (((x) & 0x7) << 0) /* Sync Error Window */
 
 /*
  *      REG_SYNC_LASTERR_H
@@ -511,7 +511,7 @@
 #define SYNCARM                              (1 << 6) /* Sync Arming Strobe */
 #define SYNCCLRSTKY                          (1 << 5) /* Sync Sticky Bit Clear */
 #define SYNCCLRLAST                          (1 << 4) /* Sync Clear LAST_ */
-#define SYNCMODE(x)                          ((x) & 0xF) << 0) /* Sync Mode */
+#define SYNCMODE(x)                          (((x) & 0xF) << 0) /* Sync Mode */
 
 /*
  *      REG_SYNC_STATUS
@@ -542,22 +542,22 @@
 /*
  *      REG_DACGAIN0_1
  */
-#define DACGAIN_IM0(x)                       ((x) & 0x3) << 0) /* I Channel DAC gain <9:8> Dual A */
+#define DACGAIN_IM0(x)                       (((x) & 0x3) << 0) /* I Channel DAC gain <9:8> Dual A */
 
 /*
  *      REG_DACGAIN1_1
  */
-#define DACGAIN_IM1(x)                       ((x) & 0x3) << 0) /* Q Channel DAC gain <9:8> Dual A */
+#define DACGAIN_IM1(x)                       (((x) & 0x3) << 0) /* Q Channel DAC gain <9:8> Dual A */
 
 /*
  *      REG_DACGAIN2_1
  */
-#define DACGAIN_IM2(x)                       ((x) & 0x3) << 0) /* I Channel DAC gain <9:8> Dual B */
+#define DACGAIN_IM2(x)                       (((x) & 0x3) << 0) /* I Channel DAC gain <9:8> Dual B */
 
 /*
  *      REG_DACGAIN3_1
  */
-#define DACGAIN_IM3(x)                       ((x) & 0x3) << 0) /* Q Channel DAC gain <9:8> Dual B */
+#define DACGAIN_IM3(x)                       (((x) & 0x3) << 0) /* Q Channel DAC gain <9:8> Dual B */
 
 /*
  *      REG_PD_DACLDO
@@ -606,24 +606,24 @@
 #define NCOCLRMTCH                           (1 << 5) /* NCO Clear Data Match */
 #define NCOCLRPASS                           (1 << 4) /* NCO Clear PASSed */
 #define NCOCLRFAIL                           (1 << 3) /* NCO Clear FAILed */
-#define NCOCLRMODE(x)                        ((x) & 0x3) << 0) /* NCO Clear Mode */
+#define NCOCLRMODE(x)                        (((x) & 0x3) << 0) /* NCO Clear Mode */
 
 /*
  *      REG_PA_THRES1
  */
-#define PA_THRESH_MSB(x)                     ((x) & 0x1F) << 0) /* Average power threshold for comparison. */
+#define PA_THRESH_MSB(x)                     (((x) & 0x1F) << 0) /* Average power threshold for comparison. */
 
 /*
  *      REG_PA_AVG_TIME
  */
 #define PA_ENABLE                            (1 << 7) /* 1 = Enable average power calculation and error detection */
 #define PA_BUS_SWAP                          (1 << 6) /* Swap channelA or channelB databus for power calculation */
-#define PA_AVG_TIME(x)                       ((x) & 0xF) << 0) /* Set power average time */
+#define PA_AVG_TIME(x)                       (((x) & 0xF) << 0) /* Set power average time */
 
 /*
  *      REG_PA_POWER1
  */
-#define PA_POWER_MSB(x)                      ((x) & 0x1F) << 0) /* average power bus = I^2+Q^2 (I/Q use 6MSB of databus) */
+#define PA_POWER_MSB(x)                      (((x) & 0x1F) << 0) /* average power bus = I^2+Q^2 (I/Q use 6MSB of databus) */
 
 /*
  *      REG_CLKCFG0
@@ -640,7 +640,7 @@
 #define PD_SYSREF                            (1 << 4) /* Powerdown SYSREF buffer */
 #define HYS_ON                               (1 << 3) /* Hysteresis enabled */
 #define SYSREF_RISE                          (1 << 2) /* Use SYSREF rising edge */
-#define HYS_CNTRL1(x)                        ((x) & 0x3) << 0) /* Hysteresis control bits <9:8> */
+#define HYS_CNTRL1(x)                        (((x) & 0x3) << 0) /* Hysteresis control bits <9:8> */
 
 /*
  *      REG_DACPLLCNTRL
@@ -657,14 +657,14 @@
 /*
  *      REG_DACLOOPFILT1
  */
-#define LF_C2_WORD(x)                        ((x) & 0xF) << 4) /* C2 control word */
-#define LF_C1_WORD(x)                        ((x) & 0xF) << 0) /* C1 control word */
+#define LF_C2_WORD(x)                        (((x) & 0xF) << 4) /* C2 control word */
+#define LF_C1_WORD(x)                        (((x) & 0xF) << 0) /* C1 control word */
 
 /*
  *      REG_DACLOOPFILT2
  */
-#define LF_R1_WORD(x)                        ((x) & 0xF) << 4) /* R1 control word */
-#define LF_C3_WORD(x)                        ((x) & 0xF) << 0) /* C3 control word */
+#define LF_R1_WORD(x)                        (((x) & 0xF) << 4) /* R1 control word */
+#define LF_C3_WORD(x)                        (((x) & 0xF) << 0) /* C3 control word */
 
 /*
  *      REG_DACLOOPFILT3
@@ -673,22 +673,22 @@
 #define LF_BYPASS_R1                         (1 << 6) /* Bypass R1 res */
 #define LF_BYPASS_C2                         (1 << 5) /* Bypass C2 cap */
 #define LF_BYPASS_C1                         (1 << 4) /* Bypass C1 cap */
-#define LF_R3_WORD(x)                        ((x) & 0xF) << 0) /* R3 Control Word */
+#define LF_R3_WORD(x)                        (((x) & 0xF) << 0) /* R3 Control Word */
 
 /*
  *      REG_DACCPCNTRL
  */
-#define CP_CURRENT(x)                        ((x) & 0x3F) << 0) /* Charge Pump Current Control */
+#define CP_CURRENT(x)                        (((x) & 0x3F) << 0) /* Charge Pump Current Control */
 
 /*
  *      REG_DACLOGENCNTRL
  */
-#define LO_DIV_MODE(x)                       ((x) & 0x3) << 0) /* Logen_Division */
+#define LO_DIV_MODE(x)                       (((x) & 0x3) << 0) /* Logen_Division */
 
 /*
  *      REG_DACLDOCNTRL1
  */
-#define REF_DIVRATE(x)                       ((x) & 0x7) << 0) /* Reference Clock Division Ratio */
+#define REF_DIVRATE(x)                       (((x) & 0x7) << 0) /* Reference Clock Division Ratio */
 
 /*
  *      REG_CAL_DAC_ERR
@@ -699,7 +699,7 @@
 /*
  *      REG_CAL_MSB_THRES
  */
-#define CAL_MSB_TAC(x)                       ((x) & 0x7) << 0) /* MSB sweep TAC */
+#define CAL_MSB_TAC(x)                       (((x) & 0x7) << 0) /* MSB sweep TAC */
 
 /*
  *      REG_CAL_CTRL_GLOBAL
@@ -710,35 +710,35 @@
 /*
  *      REG_CAL_MSBHILVL
  */
-#define CAL_MSBLVLHI(x)                      ((x) & 0x3F) << 0) /* High level limit for msb sweep average */
+#define CAL_MSBLVLHI(x)                      (((x) & 0x3F) << 0) /* High level limit for msb sweep average */
 
 /*
  *      REG_CAL_MSBLOLVL
  */
-#define CAL_MSBLVLLO(x)                      ((x) & 0x3F) << 0) /* Low level limit for msb sweep average */
+#define CAL_MSBLVLLO(x)                      (((x) & 0x3F) << 0) /* Low level limit for msb sweep average */
 
 /*
  *      REG_CAL_THRESH
  */
-#define CAL_LTAC_THRES(x)                    ((x) & 0x7) << 3) /* Long TAC threshold */
-#define CAL_TAC_THRES(x)                     ((x) & 0x7) << 0) /* TAC threshold */
+#define CAL_LTAC_THRES(x)                    (((x) & 0x7) << 3) /* Long TAC threshold */
+#define CAL_TAC_THRES(x)                     (((x) & 0x7) << 0) /* TAC threshold */
 
 /*
  *      REG_CAL_AVG_CNT
  */
-#define MSB_GLOBAL_SUBAVG(x)                 ((x) & 0x3) << 6) /* Local Averages for MSB in Global Calibration */
-#define GLOBAL_AVG_CNT(x)                    ((x) & 0x7) << 3) /* Global avg Terminal count */
-#define LOCAL_AVRG_CNT(x)                    ((x) & 0x7) << 0) /* Local avg terminal count */
+#define MSB_GLOBAL_SUBAVG(x)                 (((x) & 0x3) << 6) /* Local Averages for MSB in Global Calibration */
+#define GLOBAL_AVG_CNT(x)                    (((x) & 0x7) << 3) /* Global avg Terminal count */
+#define LOCAL_AVRG_CNT(x)                    (((x) & 0x7) << 0) /* Local avg terminal count */
 
 /*
  *      REG_CAL_CLKDIV
  */
-#define CAL_CLKDIV(x)                        ((x) & 0xF) << 0) /* Calibration clock divider */
+#define CAL_CLKDIV(x)                        (((x) & 0xF) << 0) /* Calibration clock divider */
 
 /*
  *      REG_CAL_INDX
  */
-#define CAL_INDX(x)                          ((x) & 0xF) << 0) /* DAC Calibration Index paging bits */
+#define CAL_INDX(x)                          (((x) & 0xF) << 0) /* DAC Calibration Index paging bits */
 
 /*
  *      REG_CAL_CTRL
@@ -754,12 +754,12 @@
 /*
  *      REG_CAL_ADDR
  */
-#define CAL_ADDR(x)                          ((x) & 0x3F) << 0) /* Calibration DAC address */
+#define CAL_ADDR(x)                          (((x) & 0x3F) << 0) /* Calibration DAC address */
 
 /*
  *      REG_CAL_DATA
  */
-#define CAL_DATA(x)                          ((x) & 0x3F) << 0) /* Calibration DAC Coefficient Data */
+#define CAL_DATA(x)                          (((x) & 0x3F) << 0) /* Calibration DAC Coefficient Data */
 
 /*
  *      REG_CAL_UPDATE
@@ -779,12 +779,12 @@
 #define PHASE_ADJ_ENABLE                     (1 << 4) /* 1 = Enable phase compensation */
 #define SEL_SIDEBAND                         (1 << 1) /* 1 = Select upper or lower sideband from modulation result */
 #define I_TO_Q                               (1 << 0) /* 1 = send I datapath into Q DAC */
-#define MODULATION_TYPE(x)                   ((x) & 0x3) << 2) /* selects type of modulation operation */
+#define MODULATION_TYPE(x)                   (((x) & 0x3) << 2) /* selects type of modulation operation */
 
 /*
  *      REG_INTERP_MODE
  */
-#define INTERP_MODE(x)                       ((x) & 0x7) << 0) /* Interpolation Mode */
+#define INTERP_MODE(x)                       (((x) & 0x7) << 0) /* Interpolation Mode */
 
 /*
  *      REG_NCO_FTW_UPDATE
@@ -803,16 +803,16 @@
 #define GP_PA_ON_INVERT                      (1 << 2) /* External Modulator polarity invert */
 #define GP_PA_CTRL                           (1 << 1) /* External PA control */
 #define TXEN_SM_EN                           (1 << 0) /* Enable TXEN state machine */
-#define PA_FALL(x)                           ((x) & 0x3) << 6) /* PA fall control */
-#define PA_RISE(x)                           ((x) & 0x3) << 4) /* PA rises control */
+#define PA_FALL(x)                           (((x) & 0x3) << 6) /* PA fall control */
+#define PA_RISE(x)                           (((x) & 0x3) << 4) /* PA rises control */
 
 /*
  *      REG_TXEN_SM_1
  */
-#define DIG_FALL(x)                          ((x) & 0x3) << 6) /* DIG_FALL */
-#define DIG_RISE(x)                          ((x) & 0x3) << 4) /* DIG_RISE */
-#define DAC_FALL(x)                          ((x) & 0x3) << 2) /* DAC_FALL */
-#define DAC_RISE(x)                          ((x) & 0x3) << 0) /* DAC_RISE */
+#define DIG_FALL(x)                          (((x) & 0x3) << 6) /* DIG_FALL */
+#define DIG_RISE(x)                          (((x) & 0x3) << 4) /* DIG_RISE */
+#define DAC_FALL(x)                          (((x) & 0x3) << 2) /* DAC_FALL */
+#define DAC_RISE(x)                          (((x) & 0x3) << 0) /* DAC_RISE */
 
 /*
  *      REG_DACOUT_ON_DOWN
@@ -831,15 +831,15 @@
  */
 #define ADC_TESTMODE                         (1 << 7) /* ADC_TESTMODE */
 #define AUXADC_ENABLE                        (1 << 0) /* AUXADC_ENABLE */
-#define FS_CURRENT(x)                        ((x) & 0x7) << 4) /* FS_CURRENT */
-#define REF_CURRENT(x)                       ((x) & 0x7) << 1) /* REF_CURRENT */
+#define FS_CURRENT(x)                        (((x) & 0x7) << 4) /* FS_CURRENT */
+#define REF_CURRENT(x)                       (((x) & 0x7) << 1) /* REF_CURRENT */
 
 /*
  *      REG_DIE_TEMP_CTRL1
  */
 #define SELECT_CLKDIG                        (1 << 3) /* SELECT_CLKDIG */
 #define EN_DIV2                              (1 << 2) /* EN_DIV2 */
-#define INCAP_CTRL(x)                        ((x) & 0x3) << 0) /* INCAP_CTRL */
+#define INCAP_CTRL(x)                        (((x) & 0x3) << 0) /* INCAP_CTRL */
 
 /*
  *      REG_DIE_TEMP_UPDATE
@@ -855,32 +855,32 @@
 /*
  *      REG_IPATH_DC_OFFSET_2PART
  */
-#define IPATH_DC_OFFSET_2PART(x)             ((x) & 0x1F) << 0) /* second part of DC Offset value for I path */
+#define IPATH_DC_OFFSET_2PART(x)             (((x) & 0x1F) << 0) /* second part of DC Offset value for I path */
 
 /*
  *      REG_QPATH_DC_OFFSET_2PART
  */
-#define QPATH_DC_OFFSET_2PART(x)             ((x) & 0x1F) << 0) /* second part of DC Offset value for Q path */
+#define QPATH_DC_OFFSET_2PART(x)             (((x) & 0x1F) << 0) /* second part of DC Offset value for Q path */
 
 /*
  *      REG_IDAC_DIG_GAIN1
  */
-#define IDAC_DIG_GAIN1(x)                    ((x) & 0xF) << 0) /* MSB of I DAC digital gain */
+#define IDAC_DIG_GAIN1(x)                    (((x) & 0xF) << 0) /* MSB of I DAC digital gain */
 
 /*
  *      REG_QDAC_DIG_GAIN1
  */
-#define QDAC_DIG_GAIN1(x)                    ((x) & 0xF) << 0) /* MSB of Q DAC digital gain */
+#define QDAC_DIG_GAIN1(x)                    (((x) & 0xF) << 0) /* MSB of Q DAC digital gain */
 
 /*
  *      REG_GAIN_RAMP_UP_STP1
  */
-#define GAIN_RAMP_UP_STP1(x)                 ((x) & 0xF) << 0) /* MSB of digital gain rises */
+#define GAIN_RAMP_UP_STP1(x)                 (((x) & 0xF) << 0) /* MSB of digital gain rises */
 
 /*
  *      REG_GAIN_RAMP_DOWN_STP1
  */
-#define GAIN_RAMP_DOWN_STP1(x)               ((x) & 0xF) << 0) /* MSB of digital gain drops */
+#define GAIN_RAMP_DOWN_STP1(x)               (((x) & 0xF) << 0) /* MSB of digital gain drops */
 
 /*
  *      REG_BLSM_CTRL
@@ -900,7 +900,7 @@
 #define GAIN_SOFT_ON_RB                      (1 << 2) /* gain soft on readback */
 #define SOFT_OFF_EN_RB                       (1 << 1) /* Blanking SM soft Off read back */
 #define SOFT_ON_EN_RB                        (1 << 0) /* Blanking SM soft On read back */
-#define SOFTBLANKRB(x)                       ((x) & 0x3) << 6) /* Blanking State */
+#define SOFTBLANKRB(x)                       (((x) & 0x3) << 6) /* Blanking State */
 
 /*
  *      REG_PRBS
@@ -916,29 +916,29 @@
 /*
  *      REG_DACPLLT5
  */
-#define VCO_VAR(x)                           ((x) & 0xF) << 0) /* Varactor KVO setting */
+#define VCO_VAR(x)                           (((x) & 0xF) << 0) /* Varactor KVO setting */
 
 /*
  *      REG_DACPLLTB
  */
-#define VCO_BIAS_REF(x)                      ((x) & 0x7) << 0) /* VCO Bias control */
+#define VCO_BIAS_REF(x)                      (((x) & 0x7) << 0) /* VCO Bias control */
 
 /*
  *      REG_DACPLLTD
  */
 #define VCO_CAL_REF_MON                      (1 << 3) /* Sent control voltage to outside world */
-#define VCO_CAL_REF_TCF(x)                   ((x) & 0x7) << 0) /* TempCo for cal ref */
+#define VCO_CAL_REF_TCF(x)                   (((x) & 0x7) << 0) /* TempCo for cal ref */
 
 /*
  *      REG_DACPLLT17
  */
-#define VCO_VAR_REF_TCF(x)                   ((x) & 0x7) << 4) /* Varactor Reference TempCo */
-#define VCO_VAR_OFF(x)                       ((x) & 0xF) << 0) /* Varactor Offset */
+#define VCO_VAR_REF_TCF(x)                   (((x) & 0x7) << 4) /* Varactor Reference TempCo */
+#define VCO_VAR_OFF(x)                       (((x) & 0xF) << 0) /* Varactor Offset */
 
 /*
  *      REG_SPISTRENGTH
  */
-#define SPIDRV(x)                            ((x) & 0xF) << 0) /* Slew and drive strength for cmos interface */
+#define SPIDRV(x)                            (((x) & 0xF) << 0) /* Slew and drive strength for cmos interface */
 
 /*
  *      REG_CLK_TEST
@@ -949,9 +949,9 @@
  *      REG_ATEST_VOLTS
  */
 #define ATEST_EN                             (1 << 0) /* Enable Analog Test Mode */
-#define ATEST_TOPVSEL(x)                     ((x) & 0x3) << 5) /* Which source at analog top to use */
-#define ATEST_DACSEL(x)                      ((x) & 0x3) << 3) /* DAC from which to get voltage */
-#define ATEST_VSEL(x)                        ((x) & 0x3) << 1) /* DAC Voltage to Select */
+#define ATEST_TOPVSEL(x)                     (((x) & 0x3) << 5) /* Which source at analog top to use */
+#define ATEST_DACSEL(x)                      (((x) & 0x3) << 3) /* DAC from which to get voltage */
+#define ATEST_VSEL(x)                        (((x) & 0x3) << 1) /* DAC Voltage to Select */
 
 /*
  *      REG_ASPI_CLKSRC
@@ -976,38 +976,38 @@
  *      REG_CDR_OPERATING_MODE_REG_0
  */
 #define SPI_ENHALFRATE                       (1 << 5)
-#define SPI_DIVISION_RATE(x)                 ((x) & 0x3) << 1)
+#define SPI_DIVISION_RATE(x)                 (((x) & 0x3) << 1)
 
 /*
  *      REG_EQ_CONFIG_PHY_0_1
  */
-#define SPI_EQ_CONFIG1(x)                    ((x) & 0xF) << 4)
-#define SPI_EQ_CONFIG0(x)                    ((x) & 0xF) << 0)
+#define SPI_EQ_CONFIG1(x)                    (((x) & 0xF) << 4)
+#define SPI_EQ_CONFIG0(x)                    (((x) & 0xF) << 0)
 
 /*
  *      REG_EQ_CONFIG_PHY_2_3
  */
-#define SPI_EQ_CONFIG3(x)                    ((x) & 0xF) << 4)
-#define SPI_EQ_CONFIG2(x)                    ((x) & 0xF) << 0)
+#define SPI_EQ_CONFIG3(x)                    (((x) & 0xF) << 4)
+#define SPI_EQ_CONFIG2(x)                    (((x) & 0xF) << 0)
 
 /*
  *      REG_EQ_CONFIG_PHY_4_5
  */
-#define SPI_EQ_CONFIG5(x)                    ((x) & 0xF) << 4)
-#define SPI_EQ_CONFIG4(x)                    ((x) & 0xF) << 0)
+#define SPI_EQ_CONFIG5(x)                    (((x) & 0xF) << 4)
+#define SPI_EQ_CONFIG4(x)                    (((x) & 0xF) << 0)
 
 /*
  *      REG_EQ_CONFIG_PHY_6_7
  */
-#define SPI_EQ_CONFIG7(x)                    ((x) & 0xF) << 4)
-#define SPI_EQ_CONFIG6(x)                    ((x) & 0xF) << 0)
+#define SPI_EQ_CONFIG7(x)                    (((x) & 0xF) << 4)
+#define SPI_EQ_CONFIG6(x)                    (((x) & 0xF) << 0)
 
 /*
  *      REG_EQ_BIAS_REG
  */
-#define SPI_EQ_EXTRA_SPI_LSBITS(x)           ((x) & 0x3) << 6)
-#define SPI_EQ_BIASPTAT(x)                   ((x) & 0x7) << 3)
-#define SPI_EQ_BIASPLY(x)                    ((x) & 0x7) << 0)
+#define SPI_EQ_EXTRA_SPI_LSBITS(x)           (((x) & 0x3) << 6)
+#define SPI_EQ_BIASPTAT(x)                   (((x) & 0x7) << 3)
+#define SPI_EQ_BIASPLY(x)                    (((x) & 0x7) << 0)
 
 /*
  *      REG_SYNTH_ENABLE_CNTRL
@@ -1024,7 +1024,7 @@
 /*
  *      REG_REF_CLK_DIVIDER_LDO
  */
-#define SPI_CDR_OVERSAMP(x)                  ((x) & 0x3) << 0)
+#define SPI_CDR_OVERSAMP(x)                  (((x) & 0x3) << 0)
 
 /*
  *      REG_TERM_BLK1_CTRLREG0
@@ -1042,66 +1042,66 @@
 #define CHECKSUM_MODE                        (1 << 6) /* Checksum mode */
 #define LINK_MODE                            (1 << 3) /* Link mode */
 #define SEL_REG_MAP_1                        (1 << 2) /* Link register map selection */
-#define LINK_EN(x)                           ((x) & 0x3) << 0) /* Link enable */
+#define LINK_EN(x)                           (((x) & 0x3) << 0) /* Link enable */
 
 /*
  *      REG_GENERAL_JRX_CTRL_1
  */
-#define SUBCLASSV_LOCAL(x)                   ((x) & 0x7) << 0) /* JESD204B subclass */
+#define SUBCLASSV_LOCAL(x)                   (((x) & 0x7) << 0) /* JESD204B subclass */
 
 /*
  *      REG_DYN_LINK_LATENCY_0
  */
-#define DYN_LINK_LATENCY_0(x)                ((x) & 0x1F) << 0) /* Dynamic link latency: Link 0 */
+#define DYN_LINK_LATENCY_0(x)                (((x) & 0x1F) << 0) /* Dynamic link latency: Link 0 */
 
 /*
  *      REG_DYN_LINK_LATENCY_1
  */
-#define DYN_LINK_LATENCY_1(x)                ((x) & 0x1F) << 0) /* Dynamic link latency: Link 1 */
+#define DYN_LINK_LATENCY_1(x)                (((x) & 0x1F) << 0) /* Dynamic link latency: Link 1 */
 
 /*
  *      REG_LMFC_DELAY_0
  */
-#define LMFC_DELAY_0(x)                      ((x) & 0x1F) << 0) /* LMFC delay: Link 0 */
+#define LMFC_DELAY_0(x)                      (((x) & 0x1F) << 0) /* LMFC delay: Link 0 */
 
 /*
  *      REG_LMFC_DELAY_1
  */
-#define LMFC_DELAY_1(x)                      ((x) & 0x1F) << 0) /* LMFC delay: Link 1 */
+#define LMFC_DELAY_1(x)                      (((x) & 0x1F) << 0) /* LMFC delay: Link 1 */
 
 /*
  *      REG_LMFC_VAR_0
  */
-#define LMFC_VAR_0(x)                        ((x) & 0x1F) << 0) /* Location in RX LMFC where JESD words are read out from buffer */
+#define LMFC_VAR_0(x)                        (((x) & 0x1F) << 0) /* Location in RX LMFC where JESD words are read out from buffer */
 
 /*
  *      REG_LMFC_VAR_1
  */
-#define LMFC_VAR_1(x)                        ((x) & 0x1F) << 0) /* Location in RX LMFC where JESD words are read out from buffer */
+#define LMFC_VAR_1(x)                        (((x) & 0x1F) << 0) /* Location in RX LMFC where JESD words are read out from buffer */
 
 /*
  *      REG_XBAR_LN_0_1
  */
-#define SRC_LANE1(x)                         ((x) & 0x7) << 3) /* Logic Lane 1 source */
-#define SRC_LANE0(x)                         ((x) & 0x7) << 0) /* Logic Lane 0 source */
+#define SRC_LANE1(x)                         (((x) & 0x7) << 3) /* Logic Lane 1 source */
+#define SRC_LANE0(x)                         (((x) & 0x7) << 0) /* Logic Lane 0 source */
 
 /*
  *      REG_XBAR_LN_2_3
  */
-#define SRC_LANE3(x)                         ((x) & 0x7) << 3) /* Logic Lane 3 source */
-#define SRC_LANE2(x)                         ((x) & 0x7) << 0) /* Logic Lane 2 source */
+#define SRC_LANE3(x)                         (((x) & 0x7) << 3) /* Logic Lane 3 source */
+#define SRC_LANE2(x)                         (((x) & 0x7) << 0) /* Logic Lane 2 source */
 
 /*
  *      REG_XBAR_LN_4_5
  */
-#define SRC_LANE5(x)                         ((x) & 0x7) << 3) /* Logic Lane 5 source */
-#define SRC_LANE4(x)                         ((x) & 0x7) << 0) /* Logic Lane 4 source */
+#define SRC_LANE5(x)                         (((x) & 0x7) << 3) /* Logic Lane 5 source */
+#define SRC_LANE4(x)                         (((x) & 0x7) << 0) /* Logic Lane 4 source */
 
 /*
  *      REG_XBAR_LN_6_7
  */
-#define SRC_LANE7(x)                         ((x) & 0x7) << 3) /* Logic Lane 7 source */
-#define SRC_LANE6(x)                         ((x) & 0x7) << 0) /* Logic Lane 6 source */
+#define SRC_LANE7(x)                         (((x) & 0x7) << 3) /* Logic Lane 7 source */
+#define SRC_LANE6(x)                         (((x) & 0x7) << 0) /* Logic Lane 6 source */
 
 /*
  *      REG_FIFO_STATUS_REG_2
@@ -1120,24 +1120,24 @@
 /*
  *      REG_SYNCB_GEN_1
  */
-#define SYNCB_ERR_DUR(x)                     ((x) & 0xF) << 4) /* Duration of SYNCOUT low for the purpose of error reporting */
-#define SYNCB_SYNCREQ_DUR(x)                 ((x) & 0xF) << 0) /* Duration of SYNCOUT low for purpose of synchronization request */
+#define SYNCB_ERR_DUR(x)                     (((x) & 0xF) << 4) /* Duration of SYNCOUT low for the purpose of error reporting */
+#define SYNCB_SYNCREQ_DUR(x)                 (((x) & 0xF) << 0) /* Duration of SYNCOUT low for purpose of synchronization request */
 
 /*
  *      REG_PHY_PRBS_TEST_CTRL
  */
 #define PHY_TEST_START                       (1 << 1) /* PHY PRBS test start */
 #define PHY_TEST_RESET                       (1 << 0) /* PHY PRBS test reset */
-#define PHY_SRC_ERR_CNT(x)                   ((x) & 0x7) << 4) /* PHY error count source */
-#define PHY_PRBS_PAT_SEL(x)                  ((x) & 0x3) << 2) /* PHY PRBS pattern select */
+#define PHY_SRC_ERR_CNT(x)                   (((x) & 0x7) << 4) /* PHY error count source */
+#define PHY_PRBS_PAT_SEL(x)                  (((x) & 0x3) << 2) /* PHY PRBS pattern select */
 
 /*
  *      REG_SHORT_TPL_TEST_0
  */
 #define SHORT_TPL_TEST_RESET                 (1 << 1) /* Short transport layer test reset */
 #define SHORT_TPL_TEST_EN                    (1 << 0) /* Short transport layer test enable */
-#define SHORT_TPL_SP_SEL(x)                  ((x) & 0x3) << 4) /* Short transport layer sample select */
-#define SHORT_TPL_M_SEL(x)                   ((x) & 0x3) << 2) /* Short transport layer test DAC select */
+#define SHORT_TPL_SP_SEL(x)                  (((x) & 0x3) << 4) /* Short transport layer sample select */
+#define SHORT_TPL_M_SEL(x)                   (((x) & 0x3) << 2) /* Short transport layer test DAC select */
 
 /*
  *      REG_SHORT_TPL_TEST_3
@@ -1147,139 +1147,139 @@
 /*
  *      REG_BID_REG
  */
-#define ADJCNT_RD(x)                         ((x) & 0xF) << 4)
-#define BID_RD(x)                            ((x) & 0xF) << 0)
+#define ADJCNT_RD(x)                         (((x) & 0xF) << 4)
+#define BID_RD(x)                            (((x) & 0xF) << 0)
 
 /*
  *      REG_LID0_REG
  */
 #define ADJDIR_RD                            (1 << 6)
 #define PHADJ_RD                             (1 << 5)
-#define LID0_RD(x)                           ((x) & 0x1F) << 0)
+#define LID0_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_SCR_L_REG
  */
 #define SCR_RD                               (1 << 7)
-#define L_RD(x)                              ((x) & 0x1F) << 0)
+#define L_RD(x)                              (((x) & 0x1F) << 0)
 
 /*
  *      REG_K_REG
  */
-#define K_RD(x)                              ((x) & 0x1F) << 0)
+#define K_RD(x)                              (((x) & 0x1F) << 0)
 
 /*
  *      REG_CS_N_REG
  */
-#define CS_RD(x)                             ((x) & 0x3) << 6)
-#define N_RD(x)                              ((x) & 0x1F) << 0)
+#define CS_RD(x)                             (((x) & 0x3) << 6)
+#define N_RD(x)                              (((x) & 0x1F) << 0)
 
 /*
  *      REG_NP_REG
  */
-#define SUBCLASSV_RD(x)                      ((x) & 0x7) << 5)
-#define NP_RD(x)                             ((x) & 0x1F) << 0)
+#define SUBCLASSV_RD(x)                      (((x) & 0x7) << 5)
+#define NP_RD(x)                             (((x) & 0x1F) << 0)
 
 /*
  *      REG_S_REG
  */
-#define JESDV_RD(x)                          ((x) & 0x7) << 5)
-#define S_RD(x)                              ((x) & 0x1F) << 0)
+#define JESDV_RD(x)                          (((x) & 0x7) << 5)
+#define S_RD(x)                              (((x) & 0x1F) << 0)
 
 /*
  *      REG_HD_CF_REG
  */
 #define HD_RD                                (1 << 7)
-#define CF_RD(x)                             ((x) & 0x1F) << 0)
+#define CF_RD(x)                             (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID1_REG
  */
-#define LID1_RD(x)                           ((x) & 0x1F) << 0)
+#define LID1_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID2_REG
  */
-#define LID2_RD(x)                           ((x) & 0x1F) << 0)
+#define LID2_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID3_REG
  */
-#define LID3_RD(x)                           ((x) & 0x1F) << 0)
+#define LID3_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID4_REG
  */
-#define LID4_RD(x)                           ((x) & 0x1F) << 0)
+#define LID4_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID5_REG
  */
-#define LID5_RD(x)                           ((x) & 0x1F) << 0)
+#define LID5_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID6_REG
  */
-#define LID6_RD(x)                           ((x) & 0x1F) << 0)
+#define LID6_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_LID7_REG
  */
-#define LID7_RD(x)                           ((x) & 0x1F) << 0)
+#define LID7_RD(x)                           (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_BID
  */
-#define ADJCNT(x)                            ((x) & 0xF) << 4)
-#define BID(x)                               ((x) & 0xF) << 0)
+#define ADJCNT(x)                            (((x) & 0xF) << 4)
+#define BID(x)                               (((x) & 0xF) << 0)
 
 /*
  *      REG_ILS_LID0
  */
 #define ADJDIR                               (1 << 6)
 #define PHADJ                                (1 << 5)
-#define LID0(x)                              ((x) & 0x1F) << 0)
+#define LID0(x)                              (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_SCR_L
  */
 #define SCR                                  (1 << 7)
-#define L(x)                                 ((x) & 0x1F) << 0)
+#define L(x)                                 (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_K
  */
-#define K(x)                                 ((x) & 0x1F) << 0)
+#define K(x)                                 (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_CS_N
  */
-#define CS(x)                                ((x) & 0x3) << 6)
-#define N(x)                                 ((x) & 0x1F) << 0)
+#define CS(x)                                (((x) & 0x3) << 6)
+#define N(x)                                 (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_NP
  */
-#define SUBCLASSV(x)                         ((x) & 0x7) << 5)
-#define NP(x)                                ((x) & 0x1F) << 0)
+#define SUBCLASSV(x)                         (((x) & 0x7) << 5)
+#define NP(x)                                (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_S
  */
-#define JESDV(x)                             ((x) & 0x7) << 5)
-#define S(x)                                 ((x) & 0x1F) << 0)
+#define JESDV(x)                             (((x) & 0x7) << 5)
+#define S(x)                                 (((x) & 0x1F) << 0)
 
 /*
  *      REG_ILS_HD_CF
  */
 #define HD                                   (1 << 7)
-#define CF(x)                                ((x) & 0x1F) << 0)
+#define CF(x)                                (((x) & 0x1F) << 0)
 
 /*
  *      REG_ERRCNTRMON
  */
-#define LANESEL(x)                           ((x) & 0x7) << 4)
-#define CNTRSEL(x)                           ((x) & 0x3) << 0)
+#define LANESEL(x)                           (((x) & 0x7) << 4)
+#define CNTRSEL(x)                           (((x) & 0x3) << 0)
 
 /*
  *      REG_BADDISPARITY
@@ -1287,7 +1287,7 @@
 #define RST_IRQ_DIS                          (1 << 7)
 #define DIS_ERR_CNTR_DIS                     (1 << 6)
 #define RST_ERR_CNTR_DIS                     (1 << 5)
-#define LANE_ADDR_DIS(x)                     ((x) & 0x7) << 0)
+#define LANE_ADDR_DIS(x)                     (((x) & 0x7) << 0)
 
 /*
  *      REG_NITDISPARITY
@@ -1295,7 +1295,7 @@
 #define RST_IRQ_NIT                          (1 << 7)
 #define DIS_ERR_CNTR_NIT                     (1 << 6)
 #define RST_ERR_CNTR_NIT                     (1 << 5)
-#define LANE_ADDR_NIT(x)                     ((x) & 0x7) << 0)
+#define LANE_ADDR_NIT(x)                     (((x) & 0x7) << 0)
 
 /*
  *      REG_UNEXPECTEDKCHAR
@@ -1303,7 +1303,7 @@
 #define RST_IRQ_K                            (1 << 7)
 #define DIS_ERR_CNTR_K                       (1 << 6)
 #define RST_ERR_CNTR_K                       (1 << 5)
-#define LANE_ADDR_K(x)                       ((x) & 0x7) << 0)
+#define LANE_ADDR_K(x)                       (((x) & 0x7) << 0)
 
 /*
  *      REG_CTRLREG2

@@ -103,8 +103,8 @@ int32_t ad9680_setup(uint32_t spi_device_id, uint8_t slave_select)
 
 	ad9680_spi_write(AD9680_REG_DEVICE_INDEX, 0x03);	// select both channels
 	ad9680_spi_write(AD9680_REG_CHIP_DEC_RATIO, 0x00);	// full sample rate (decimation = 1)
-	ad9680_spi_write(AD9680_REG_ADC_TEST_MODE, 0x04);	// test pattern
-	ad9680_spi_write(AD9680_REG_OUTPUT_MODE, 0x00);	// offset binary
+	ad9680_spi_write(AD9680_REG_ADC_TEST_MODE, 0x00);	// test pattern
+	ad9680_spi_write(AD9680_REG_OUTPUT_MODE, 0x01);	// twos complement
 	ad9680_spi_write(AD9680_REG_JESD204B_QUICK_CONFIG, 0x88);	// m=2, l=4, f= 1
 	ad9680_spi_write(AD9680_REG_JESD204B_CSN_CONFIG, 0x0d);	// 14-bit
 	ad9680_spi_write(AD9680_REG_JESD204B_LANE_SERD_OUT0_ASSIGN, 0x00);	// serdes-0 = lane 0

@@ -47,21 +47,42 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DAC_REG_RSTN			0x040
-#define DAC_MMCM_RSTN			(1 << 1)
-#define DAC_RSTN				(1 << 0)
+#define DAC_REG_VERSION					0x0000
+#define DAC_VERSION(x)					(((x) & 0xffffffff) << 0)
+#define DAC_VERSION_IS(x,y,z)			((x) << 16 | (y) << 8 | (z))
+#define DAC_PCORE_VERSION_MAJOR(x)		((x) >> 16)
 
-#define DAC_REG_CNTRL_1			0x0044
-#define DAC_ENABLE				(1 << 0) /* v7.0 */
-#define DAC_SYNC				(1 << 0) /* v8.0 */
+#define DAC_REG_ID						0x0004
+#define DAC_ID(x)						(((x) & 0xffffffff) << 0)
 
-#define DAC_REG_CLK_FREQ		0x0054
-#define DAC_CLK_FREQ(x)			(((x) & 0xFFFFFFFF) << 0)
-#define DAC_TO_CLK_FREQ(x)		(((x) >> 0) & 0xFFFFFFFF)
+#define DAC_REG_SCRATCH					0x0008
+#define DAC_SCRATCH(x)					(((x) & 0xffffffff) << 0)
 
-#define DAC_REG_CLK_RATIO		0x0058
-#define DAC_CLK_RATIO(x)		(((x) & 0xFFFFFFFF) << 0)
-#define DAC_TO_CLK_RATIO(x)		(((x) >> 0) & 0xFFFFFFFF)
+#define DAC_REG_RSTN					0x040
+#define DAC_MMCM_RSTN					(1 << 1)
+#define DAC_RSTN						(1 << 0)
+
+#define DAC_REG_CNTRL_1					0x0044
+#define DAC_ENABLE						(1 << 0) /* v7.0 */
+#define DAC_SYNC						(1 << 0) /* v8.0 */
+
+#define DAC_REG_RATECNTRL				0x004C
+#define DAC_RATE(x)						(((x) & 0xFF) << 0)
+#define DAC_TO_RATE(x)					(((x) >> 0) & 0xFF)
+
+#define DAC_REG_CLK_FREQ				0x0054
+#define DAC_CLK_FREQ(x)					(((x) & 0xFFFFFFFF) << 0)
+#define DAC_TO_CLK_FREQ(x)				(((x) >> 0) & 0xFFFFFFFF)
+
+#define DAC_REG_CLK_RATIO				0x0058
+#define DAC_CLK_RATIO(x)				(((x) & 0xFFFFFFFF) << 0)
+#define DAC_TO_CLK_RATIO(x)				(((x) >> 0) & 0xFFFFFFFF)
+
+#define DAC_REG_STATUS					0x005C
+#define DAC_MUX_PN_ERR					(1 << 3)
+#define DAC_MUX_PN_OOS					(1 << 2)
+#define DAC_MUX_OVER_RANGE				(1 << 1)
+#define DAC_STATUS						(1 << 0)
 
 #define DAC_REG_CHAN_CNTRL_1_IIOCHAN(x)	(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define DAC_DDS_SCALE(x)				(((x) & 0xFFFF) << 0)
@@ -83,5 +104,8 @@
 int32_t dac_read(uint32_t reg_addr, uint32_t *reg_data);
 int32_t dac_write(uint32_t reg_addr, uint32_t reg_data);
 int32_t dac_setup(uint32_t baseaddr);
+int32_t dds_set_frequency(uint32_t chan, uint32_t freq);
+int32_t dds_set_phase(uint32_t chan, uint32_t phase);
+int32_t dds_set_scale(uint32_t chan, int32_t scale_micro_units);
 
 #endif

@@ -70,88 +70,156 @@ int32_t dac_write(uint32_t reg_addr, uint32_t reg_data)
 }
 
 /***************************************************************************//**
-* @brief dds_set_frequency
+ * @brief dds_set_frequency
 *******************************************************************************/
-void dds_set_frequency(uint32_t chan, uint32_t freq)
+int32_t dds_set_frequency(uint32_t chan, uint32_t freq)
 {
+	uint32_t pcore_version;
+	uint32_t val;
 	uint64_t val64;
 	uint32_t reg;
 	uint64_t dac_clk;
-	uint32_t val;
 
 	dac_read(DAC_REG_CLK_FREQ, &val);
 	dac_clk = val;
 	dac_read(DAC_REG_CLK_RATIO, &val);
 	dac_clk *= val * 1525;
 
-	dac_write(DAC_REG_CNTRL_1, 0);
+	dac_read(DAC_REG_VERSION, &pcore_version);
+
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, 0);
+	}
+
 	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~DAC_DDS_INCR(~0);
-	val64 = (u64) freq * 0xFFFFULL;
+	val64 = (uint64_t) freq * 0xFFFFULL;
 	val64 = val64 / dac_clk;
 	reg |= DAC_DDS_INCR(val64) | 1;
 	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_write(DAC_REG_CNTRL_1, 0x1);
+
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_ENABLE);
+	}
+	else
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_SYNC);
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
-* @brief dds_set_phase
+ * @brief dds_set_phase
 *******************************************************************************/
-void dds_set_phase(uint32_t chan, uint32_t phase)
+int32_t dds_set_phase(uint32_t chan, uint32_t phase)
 {
+	uint32_t pcore_version;
 	uint64_t val64;
 	uint32_t reg;
 
-	dac_write(DAC_REG_CNTRL_1, 0);
+	dac_read(DAC_REG_VERSION, &pcore_version);
+
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, 0);
+	}
 	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~DAC_DDS_INIT(~0);
-	val64 = (u64) phase * 0x10000ULL + (360000 / 2);
+	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
 	val64 = val64 / 360000;
 	reg |= DAC_DDS_INIT(val64);
 	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_write(DAC_REG_CNTRL_1, 0x1);
+
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_ENABLE);
+	}
+	else
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_SYNC);
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
-* @brief dds_set_scale
+ * @brief dds_set_scale
 *******************************************************************************/
-void dds_set_scale(uint32_t chan, double scale)
+int32_t dds_set_scale(uint32_t chan, int32_t scale_micro_units)
 {
+	uint32_t pcore_version;
 	uint32_t scale_reg;
 	uint32_t sign_part;
 	uint32_t int_part;
 	uint32_t fract_part;
 
-	if(scale >= 1.0)
-	{
-		sign_part = 0;
-		int_part = 1;
-		fract_part = 0;
-		goto set_scale_reg;
-	}
-	if(scale <= -1.0)
-	{
-		sign_part = 1;
-		int_part = 1;
-		fract_part = 0;
-		goto set_scale_reg;
-	}
-	if(scale < 0)
-	{
-		sign_part = 1;
-		int_part = 0;
-		scale *= -1;
-		goto set_scale_reg;
-	}
-	sign_part = 0;
-	int_part = 0;
-	fract_part = (uint32_t)(scale * 0x4000);
-set_scale_reg:
-	scale_reg = (sign_part << 15) | (int_part << 14) | fract_part;
+	dac_read(DAC_REG_VERSION, &pcore_version);
 
-	dac_write(DAC_REG_CNTRL_1, 0);
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) > 6)
+	{
+		if(scale_micro_units >= 1000000)
+		{
+			sign_part = 0;
+			int_part = 1;
+			fract_part = 0;
+			goto set_scale_reg;
+		}
+		if(scale_micro_units <= -1000000)
+		{
+			sign_part = 1;
+			int_part = 1;
+			fract_part = 0;
+			goto set_scale_reg;
+		}
+		if(scale_micro_units < 0)
+		{
+			sign_part = 1;
+			int_part = 0;
+			scale_micro_units *= -1;
+		}
+		else
+		{
+			sign_part = 0;
+			int_part = 0;
+		}
+		fract_part = (uint32_t)(((uint64_t)scale_micro_units * 0x4000) / 1000000);
+	set_scale_reg:
+		scale_reg = (sign_part << 15) | (int_part << 14) | fract_part;
+	}
+	else
+	{
+		if(scale_micro_units >= 1000000)
+		{
+			scale_reg = 0;
+			scale_micro_units = 1000000;
+		}
+		if(scale_micro_units <= 0)
+		{
+			scale_reg = 0;
+			scale_micro_units = 0;
+		}
+		fract_part = (uint32_t)(scale_micro_units);
+		scale_reg = 500000 / fract_part;
+	}
+
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, 0);
+	}
 	dac_write(DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
-	dac_write(DAC_REG_CNTRL_1, 0x1);
+	if(DAC_PCORE_VERSION_MAJOR(pcore_version) < 8)
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_ENABLE);
+	}
+	else
+	{
+		dac_write(DAC_REG_CNTRL_1, DAC_SYNC);
+	}
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -159,24 +227,26 @@ set_scale_reg:
 *******************************************************************************/
 int32_t dac_setup(uint32_t baseaddr)
 {
+	uint32_t status;
+
 	dac_baseaddr = baseaddr;
 
 	dac_write(DAC_REG_RSTN, 0x00);
-	dac_write(DAC_REG_RSTN, 0x01);
+	dac_write(DAC_REG_RSTN, 0x03);
 
-	mdelay(1000);
+	mdelay(100);
 
-	dac_write(DAC_REG_CHAN_CNTRL_7(0), 0);
-	dac_write(DAC_REG_CHAN_CNTRL_7(1), 0);
-	dac_write(DAC_REG_CNTRL_1, 0x0);
-	dac_write(DAC_REG_CNTRL_1, 0x1);
+	dac_read(DAC_REG_STATUS, &status);
+	if(status == 0x0)
+	{
+		xil_printf("DAC Core Status errors.\n\r");
 
-	dds_set_frequency(0, 50000000);
-	dds_set_phase(0, 90000);
-	dds_set_scale(0, 0.25);
-	dds_set_frequency(1, 50000000);
-	dds_set_phase(1, 90000);
-	dds_set_scale(1, 0.25);
+		return -1;
+	}
+	else
+	{
+		xil_printf("DAC Core successfully initialized.\n");
 
-	return 0;
+		return 0;
+	}
 }

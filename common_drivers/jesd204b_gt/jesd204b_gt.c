@@ -100,11 +100,29 @@ int32_t jesd204b_gt_clk_enable(uint32_t num)
 	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
 	mdelay(50);
 
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
-
 	xil_printf("%s CLK is enabled.\n",
 		num == JESD204B_GT_RX ? "JESD204B GT RX" : "JESD204B GT TX");
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief jesd204b_gt_clk_enable
+*******************************************************************************/
+int32_t jesd204b_gt_clk_synchronize(uint32_t num)
+{
+	uint32_t offs = (num == JESD204B_GT_TX ?
+			JESD204B_GT_REG_TX_GT_RSTN - JESD204B_GT_REG_RX_GT_RSTN : 0);
+	uint32_t data;
+
+	do
+	{
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
+		mdelay(100);
+		jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS + offs, &data);
+	}
+	while(data != 0x1ffff);
 
 	return 0;
 }
