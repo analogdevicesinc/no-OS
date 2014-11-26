@@ -133,7 +133,7 @@ int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_io_update()
+int32_t ad9523_io_update(void)
 {
     return ad9523_spi_write(AD9523_IO_UPDATE, AD9523_IO_UPDATE_EN);
 }
@@ -205,7 +205,7 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_sync()
+int32_t ad9523_sync(void)
 {
 	int32_t ret, tmp;
 	uint32_t reg_data;

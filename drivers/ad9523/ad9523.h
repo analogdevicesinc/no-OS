@@ -467,84 +467,18 @@ struct ad9523_platform_data
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-/** Initializes the AD9523. */
+/* Reads the value of the selected register. */
+int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data);
+/* Writes a value to the selected register. */
+int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data);
+/* Updates the AD9523 configuration */
+int32_t ad9523_io_update(void);
+/* Sets the clock provider for selected channel. */
+int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out);
+/* Updates the AD9523 configuration. */
+int32_t ad9523_sync(void);
+/* Initializes the AD9523. */
 int32_t ad9523_setup(uint32_t spi_device_id,
 					 uint8_t slave_select,
 					 struct ad9523_platform_data ad9523_pdata);
-
-int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data);
-
-/** Resets the device. */
-int32_t ad9523_reset();
-/** Determines the achievable output frequency for the DAC CLK channel */
-uint32_t ad9523_clk_round_rate_DAC_CLK(uint32_t rate);
-/** Determines the achievable output frequency for the DAC DCO CLK channel */
-uint32_t ad9523_clk_round_rate_DAC_DCO_CLK(uint32_t rate);
-/** Determines the achievable output frequency for the DAC REF CLK channel */
-uint32_t ad9523_clk_round_rate_DAC_REF_CLK(uint32_t rate);
-/** Sets the output frequency for channel 0. */
-int64_t ad9523_out_altvoltage_ZD_OUTPUT_frequency(int64_t Hz);
-/** Sets the phase for channel 0. */
-int64_t ad9523_out_altvoltage_ZD_OUTPUT_phase(int64_t rad);
-/** Powers down / enables channel 0. */
-int64_t ad9523_out_altvoltage_ZD_OUTPUT_raw(int64_t raw_data);
-/** Sets the output frequency for channel 12. */
-int64_t ad9523_out_altvoltage_DAC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 12. */
-int64_t ad9523_out_altvoltage_DAC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 12. */
-int64_t ad9523_out_altvoltage_DAC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 2. */
-int64_t ad9523_out_altvoltage_ADC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 2. */
-int64_t ad9523_out_altvoltage_ADC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 2. */
-int64_t ad9523_out_altvoltage_ADC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 10. */
-int64_t ad9523_out_altvoltage_DAC_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 10. */
-int64_t ad9523_out_altvoltage_DAC_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 10. */
-int64_t ad9523_out_altvoltage_DAC_REF_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 5. */
-int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 5. */
-int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 5. */
-int64_t ad9523_out_altvoltage_TX_LO_REF_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 6. */
-int64_t ad9523_out_altvoltage_DAC_DCO_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 6. */
-int64_t ad9523_out_altvoltage_DAC_DCO_CLK_phase(int64_t rad);
-/** Powers down / enables channel 6. */
-int64_t ad9523_out_altvoltage_DAC_DCO_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 7. */
-int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 7. */
-int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_phase(int64_t rad);
-/** Powers down / enables channel 7. */
-int64_t ad9523_out_altvoltage_ADC_SYNC_CLK_raw(int64_t raw_data);
-/** Sets the output frequency for channel 9. */
-int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_frequency(int64_t Hz);
-/** Sets the phase for channel 9. */
-int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_phase(int64_t rad);
-/** Powers down / enables channel 9. */
-int64_t ad9523_out_altvoltage_RX_LO_REF_CLK_raw(int64_t raw_data);
-/** Returns the state of the PLL2 feedback clock */
-int32_t ad9523_pll2_feedback_clk_present();
-/** Returns the state of the PLL2 reference clock */
-int32_t ad9523_pll2_reference_clk_present();
-/** Returns the state of the PLL1 reference clock A */
-int32_t ad9523_pll1_reference_clk_a_present();
-/** Returns the state of the PLL1 reference clock B */
-int32_t ad9523_pll1_reference_clk_b_present();
-/** Returns the state of the PLL1 reference clock test */
-int32_t ad9523_pll1_reference_clk_test_present();
-/** Returns the state of the VCXO clock */
-int32_t ad9523_vcxo_clk_present();
-/** Stores the current device configuration into on-chip EEPROM. */
-int32_t ad9523_store_eeprom();
-/** Triggers the clock distribution synchronization functionality. */
-int32_t ad9523_sync_dividers();
-
 #endif // __AD9523_H__
