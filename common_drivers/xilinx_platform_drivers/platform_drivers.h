@@ -53,6 +53,5 @@ int32_t spi_init(uint32_t device_id,
 int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 				 uint8_t bytes_number);
 void mdelay(uint32_t msecs);
-void daq2_gpio_ctl(uint32_t base_addr);
 
 #endif

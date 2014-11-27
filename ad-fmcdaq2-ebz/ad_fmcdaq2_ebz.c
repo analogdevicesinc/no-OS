@@ -51,6 +51,18 @@
 #include "jesd204b_gt.h"
 #include "jesd204b_v51.h"
 
+#ifdef _XPARAMETERS_PS_H_
+#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR	XPAR_PS7_GPIO_0_BASEADDR
+#else
+#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR	XPAR_GPIO_0_BASEADDR
+#endif
+#define AD9144_CORE_BASEADDR	XPAR_AXI_AD9144_CORE_BASEADDR
+#define AD9680_CORE_BASEADDR	XPAR_AXI_AD9680_CORE_BASEADDR
+#define AD9144_JESD_BASEADDR	XPAR_AXI_AD9144_JESD_BASEADDR
+#define AD9680_JESD_BASEADDR	XPAR_AXI_AD9680_JESD_BASEADDR
+#define DAQ2_GT_BASEADDR		XPAR_AXI_DAQ2_GT_BASEADDR
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -206,6 +218,7 @@ struct ad9523_platform_data ad9523_pdata_lpc =
 *******************************************************************************/
 void daq2_gpio_ctl(uint32_t base_addr)
 {
+#ifdef _XPARAMETERS_PS_H_
 	Xil_Out32((base_addr + 0x02c4), 0x07e0); // direction (6-ctl, 5-status)
 	Xil_Out32((base_addr + 0x02c8), 0x07e0); // enable
 	Xil_Out32((base_addr + 0x0018), 0x0000); // mask
@@ -214,6 +227,14 @@ void daq2_gpio_ctl(uint32_t base_addr)
 	Xil_Out32((base_addr + 0x0018), 0x07e0); // mask
 	Xil_Out32((base_addr + 0x004c), 0x03e0); // data
 	mdelay(10);
+#else
+	Xil_Out32((base_addr + 0x0c), 0x00); // direction -gpio2 (ctl)
+	Xil_Out32((base_addr + 0x04), 0x1f); // direction -gpio (status)
+	Xil_Out32((base_addr + 0x08), 0x00); // data -gpio2
+	mdelay(10);
+	Xil_Out32((base_addr + 0x08), 0x1f); // data -gpio2
+	mdelay(100);
+#endif
 }
 
 /***************************************************************************//**
@@ -224,21 +245,11 @@ int main(void)
 	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
 
-	daq2_gpio_ctl(XPAR_PS7_GPIO_0_BASEADDR);
+	daq2_gpio_ctl(GPIO_BASEADDR);
 
-	ad9523_setup(XPAR_PS7_SPI_0_DEVICE_ID, 0, ad9523_pdata_lpc);
+	ad9523_setup(SPI_DEVICE_ID, 0, ad9523_pdata_lpc);
 
-	ad9144_setup(XPAR_PS7_SPI_0_DEVICE_ID, 1);
-
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 32;
-	jesd204b_st.bytes_per_frame = 1;
-	jesd204b_st.subclass = 1;
-	jesd204b_setup(XPAR_AXI_AD9144_JESD_BASEADDR, jesd204b_st);
-
-	ad9680_setup(XPAR_PS7_SPI_0_DEVICE_ID, 2);
+	ad9144_setup(SPI_DEVICE_ID, 1);
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;
@@ -246,14 +257,24 @@ int main(void)
 	jesd204b_st.frames_per_multiframe = 32;
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
-	jesd204b_setup(XPAR_AXI_AD9680_JESD_BASEADDR, jesd204b_st);
+	jesd204b_setup(AD9144_JESD_BASEADDR, jesd204b_st);
+
+	ad9680_setup(SPI_DEVICE_ID, 2);
+
+	jesd204b_st.lanesync_enable = 1;
+	jesd204b_st.scramble_enable = 1;
+	jesd204b_st.sysref_always_enable = 0;
+	jesd204b_st.frames_per_multiframe = 32;
+	jesd204b_st.bytes_per_frame = 1;
+	jesd204b_st.subclass = 1;
+	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 
 	jesd204b_gt_st.use_cpll = 0;
 	jesd204b_gt_st.rx_sys_clk_sel = 3;
 	jesd204b_gt_st.rx_out_clk_sel = 4;
 	jesd204b_gt_st.tx_sys_clk_sel = 3;
 	jesd204b_gt_st.tx_out_clk_sel = 4;
-	jesd204b_gt_setup(XPAR_AXI_DAQ2_GT_BASEADDR, jesd204b_gt_st);
+	jesd204b_gt_setup(DAQ2_GT_BASEADDR, jesd204b_gt_st);
 
 	jesd204b_gt_clk_enable(JESD204B_GT_TX);
 	jesd204b_gt_clk_enable(JESD204B_GT_RX);
@@ -261,7 +282,7 @@ int main(void)
 	jesd204b_gt_clk_synchronize(JESD204B_GT_TX);
 	jesd204b_gt_clk_synchronize(JESD204B_GT_RX);
 
-	dac_setup(XPAR_AXI_AD9144_CORE_BASEADDR);
+	dac_setup(AD9144_CORE_BASEADDR);
 
 	dds_set_frequency(0, 5000000);
 	dds_set_phase(0, 0);
@@ -277,7 +298,7 @@ int main(void)
 	dds_set_phase(3, 90000);
 	dds_set_scale(3, 500000);
 
-	adc_setup(XPAR_AXI_AD9680_CORE_BASEADDR, 2);
+	adc_setup(AD9680_CORE_BASEADDR, 2);
 
 	xil_printf("Done.\n\r");
 

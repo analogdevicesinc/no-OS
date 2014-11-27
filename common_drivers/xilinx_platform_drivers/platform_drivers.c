@@ -41,15 +41,30 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#ifdef _XPARAMETERS_PS_H_
 #include <xspips.h>
 #include <sleep.h>
+#else
+#include <xspi.h>
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	for(delay = 0; delay < usleep * 10; delay++);
+}
+#endif
 #include "platform_drivers.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
 XSpiPs_Config	*spi_config;
 XSpiPs			spi_instance;
+#else
+XSpi_Config		*spi_config;
+XSpi			spi_instance;
+#endif
 
 /***************************************************************************//**
 * @brief spi_init
@@ -58,9 +73,10 @@ int32_t spi_init(uint32_t device_id,
 		uint8_t clk_pha,
 		uint8_t clk_pol)
 {
-	uint8_t  byte		 = 0;
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
+#ifdef _XPARAMETERS_PS_H_
+	uint8_t  byte		 = 0;
 
 	spi_config = XSpiPs_LookupConfig(device_id);
 	base_addr = spi_config->BaseAddress;
@@ -76,7 +92,20 @@ int32_t spi_init(uint32_t device_id,
 	{
 		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
 	}
-
+#else
+	XSpi_Initialize(&spi_instance, device_id);
+	XSpi_Stop(&spi_instance);
+	spi_config = XSpi_LookupConfig(device_id);
+	base_addr = spi_config->BaseAddress;
+	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
+	control_val = XSP_MASTER_OPTION |
+				  (clk_pol ? XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+				  (clk_pha ? XSP_CLK_PHASE_1_OPTION : 0) |
+				  XSP_MANUAL_SSELECT_OPTION;
+	XSpi_SetOptions(&spi_instance, control_val);
+	XSpi_Start(&spi_instance);
+	XSpi_IntrGlobalDisable(&spi_instance);
+#endif
 	return 0;
 }
 
@@ -87,6 +116,7 @@ int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 				 uint8_t bytes_number)
 {
 	uint32_t cnt		 = 0;
+#ifdef _XPARAMETERS_PS_H_
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
 	uint32_t status	  	 = 0;
@@ -129,7 +159,18 @@ int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 	}
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
+#else
+	uint8_t send_buffer[20];
 
+	ss = (1 << ss);
+
+	XSpi_SetSlaveSelect(&spi_instance, ss);
+	for(cnt = 0; cnt < bytes_number; cnt++)
+	{
+		send_buffer[cnt] = data[cnt];
+	}
+	XSpi_Transfer(&spi_instance, send_buffer, data, bytes_number);
+#endif
 	return 0;
 }
 
