@@ -177,17 +177,17 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	dac_write(phy, DAC_REG_RSTN, 0x0);
 	dac_write(phy, DAC_REG_RSTN, DAC_RSTN | DAC_MMCM_RSTN);
 
-	dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
-
 	dds_st[phy->id_no].dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
 	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
 	if(dds_st[phy->id_no].rx2tx2)
 	{
 		dds_st[phy->id_no].num_dds_channels = 8;
+		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
 	}
 	else
 	{
 		dds_st[phy->id_no].num_dds_channels = 4;
+		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
 	}
 
 	dac_read(phy, DAC_REG_VERSION, &dds_st[phy->id_no].pcore_version);
