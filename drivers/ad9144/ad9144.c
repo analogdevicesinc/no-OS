@@ -1,6 +1,6 @@
 /***************************************************************************//**
-* @file ad9680.c
-* @brief Implementation of AD9680 Driver.
+* @file ad9144.c
+* @brief Implementation of AD9144 Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
 * Copyright 2014(c) Analog Devices, Inc.
@@ -181,7 +181,7 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select)
 	mdelay(20);
 
 	ad9144_spi_read(0x281, &pll_stat);
-	xil_printf("AD9680 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
+	xil_printf("AD9144 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9144_spi_write(0x268, 0x62);	// equalizer
 
