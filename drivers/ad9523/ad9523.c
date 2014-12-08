@@ -113,7 +113,7 @@ int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data)
 int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data)
 {
 	uint8_t buf[3];
-	int32_t ret;
+	int32_t ret = 0;
 	uint8_t index;
 
 	for(index = 0; index < AD9523_TRANSF_LEN(reg_addr); index++)
