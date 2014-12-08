@@ -48,6 +48,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 uint32_t adc_baseaddr;
+uint32_t adc_dmac_baseaddr;
 
 /***************************************************************************//**
 * @brief adc_read
@@ -70,14 +71,31 @@ int32_t adc_write(uint32_t reg_addr, uint32_t reg_data)
 }
 
 /***************************************************************************//**
+ * @brief adc_dmac_read
+*******************************************************************************/
+void adc_dmac_read(uint32_t reg_addr, uint32_t *reg_data)
+{
+	*reg_data = Xil_In32(adc_dmac_baseaddr + reg_addr);
+}
+
+/***************************************************************************//**
+ * @brief adc_dmac_write
+*******************************************************************************/
+void adc_dmac_write(uint32_t reg_addr, uint32_t reg_data)
+{
+	Xil_Out32(adc_dmac_baseaddr + reg_addr, reg_data);
+}
+
+/***************************************************************************//**
 * @brief adc_setup
 *******************************************************************************/
-int32_t adc_setup(uint32_t baseaddr, uint8_t ch_no)
+int32_t adc_setup(uint32_t adc_addr, uint32_t dma_addr,  uint8_t ch_no)
 {
 	uint8_t index;
 	uint32_t status;
 
-	adc_baseaddr = baseaddr;
+	adc_baseaddr = adc_addr;
+	adc_dmac_baseaddr = dma_addr;
 
 	adc_write(ADC_REG_RSTN, 0x00);
 	adc_write(ADC_REG_RSTN, 0x03);
@@ -102,4 +120,52 @@ int32_t adc_setup(uint32_t baseaddr, uint8_t ch_no)
 
 		return 0;
 	}
+}
+
+/***************************************************************************//**
+ * @brief adc_capture
+*******************************************************************************/
+int32_t adc_capture(uint32_t size, uint32_t start_address)
+{
+	uint32_t reg_val;
+	uint32_t transfer_id;
+	uint32_t length;
+
+	length = (size * 4);
+
+	adc_dmac_write(ADC_DMAC_REG_CTRL, 0x0);
+	adc_dmac_write(ADC_DMAC_REG_CTRL, ADC_DMAC_CTRL_ENABLE);
+
+	adc_dmac_write(ADC_DMAC_REG_IRQ_MASK, 0x0);
+
+	adc_dmac_read(ADC_DMAC_REG_TRANSFER_ID, &transfer_id);
+	adc_dmac_read(ADC_DMAC_REG_IRQ_PENDING, &reg_val);
+	adc_dmac_write(ADC_DMAC_REG_IRQ_PENDING, reg_val);
+
+	adc_dmac_write(ADC_DMAC_REG_DEST_ADDRESS, start_address);
+	adc_dmac_write(ADC_DMAC_REG_DEST_STRIDE, 0x0);
+	adc_dmac_write(ADC_DMAC_REG_X_LENGTH, length - 1);
+	adc_dmac_write(ADC_DMAC_REG_Y_LENGTH, 0x0);
+
+	adc_dmac_write(ADC_DMAC_REG_START_TRANSFER, 0x1);
+	/* Wait until the new transfer is queued. */
+	do {
+		adc_dmac_read(ADC_DMAC_REG_START_TRANSFER, &reg_val);
+	}
+	while(reg_val == 1);
+
+	/* Wait until the current transfer is completed. */
+	do {
+		adc_dmac_read(ADC_DMAC_REG_IRQ_PENDING, &reg_val);
+	}
+	while(reg_val != (ADC_DMAC_IRQ_SOT | ADC_DMAC_IRQ_EOT));
+	adc_dmac_write(ADC_DMAC_REG_IRQ_PENDING, reg_val);
+
+	/* Wait until the transfer with the ID transfer_id is completed. */
+	do {
+		adc_dmac_read(ADC_DMAC_REG_TRANSFER_DONE, &reg_val);
+	}
+	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+
+	return 0;
 }
