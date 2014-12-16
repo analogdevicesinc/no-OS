@@ -181,12 +181,12 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
 	if(dds_st[phy->id_no].rx2tx2)
 	{
-		dds_st[phy->id_no].num_dds_channels = 8;
+		dds_st[phy->id_no].num_buf_channels = 4;
 		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
 	}
 	else
 	{
-		dds_st[phy->id_no].num_dds_channels = 4;
+		dds_st[phy->id_no].num_buf_channels = 2;
 		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
 	}
 
@@ -423,7 +423,7 @@ int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_selec
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) > 7) {
 		if (chan < 0) { /* ALL */
 			int i;
-			for (i = 0; i < dds_st[phy->id_no].num_dds_channels; i++) {
+			for (i = 0; i < dds_st[phy->id_no].num_buf_channels; i++) {
 				dac_write(phy, DAC_REG_CHAN_CNTRL_7(i), sel);
 			}
 		} else {

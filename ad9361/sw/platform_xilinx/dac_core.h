@@ -153,7 +153,7 @@ struct dds_state
 	enum dds_data_select	cached_datasel[8];
 	uint32_t				*dac_clk;
 	uint32_t				pcore_version;
-	uint32_t				num_dds_channels;
+	uint32_t				num_buf_channels;
 	bool					enable;
 	bool					rx2tx2;
 };
