@@ -51,6 +51,12 @@
 
 void xil_printf(const char *ctrl1, ...);
 
+#ifdef _XPARAMETERS_PS_H_
+#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
+#else
+#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
+#endif
+
 /***************************************************************************//**
  * @brief Main function.
  *
@@ -64,10 +70,10 @@ int main(){
     Xil_DCacheEnable();
 
     /* AD9467 Setup. */
-    ad9467_setup(XPAR_PS7_SPI_0_DEVICE_ID, 0);
+    ad9467_setup(SPI_DEVICE_ID, 0);
 
     /* AD9517 Setup. */
-    ad9517_setup(XPAR_PS7_SPI_0_DEVICE_ID, 1);    // Initialize device.
+    ad9517_setup(SPI_DEVICE_ID, 1);    // Initialize device.
     ad9517_power_mode(3, 0);                     // Set channel 3 for normal operation
     ad9517_frequency(3, 250000000);              // Set the channel 3 frequency to 250Mhz
     ad9517_update();                             // Update registers

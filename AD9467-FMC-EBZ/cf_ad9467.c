@@ -69,11 +69,14 @@ void DisplayTestMode(uint32_t mode, uint32_t format);
 void delay_ms(uint32_t ms_count)
 {
     uint32_t count;
-
+#ifdef _XPARAMETERS_PS_H_
     for (count = 0; count < ((ms_count * 100000) + 1); count++)
     {
         asm("nop");
     }
+#else
+	for(count = 0; count < ms_count * 10000; count++);
+#endif
 }
 
 /***************************************************************************//**

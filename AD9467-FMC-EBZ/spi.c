@@ -45,16 +45,28 @@
 /***************************** Include Files *********************************/
 /*****************************************************************************/
 #include <xparameters.h>
+#ifdef _XPARAMETERS_PS_H_
 #include <xgpiops.h>
 #include <xspips.h>
 #include <sleep.h>
+#else
+#include <xspi.h>
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	for(delay = 0; delay < usleep * 10; delay++);
+}
+#endif
 #include "spi.h"
 
 /*****************************************************************************/
 /************************ Variables Definitions ******************************/
 /*****************************************************************************/
+#ifdef _XPARAMETERS_PS_H_
 XSpiPs_Config	*spi_config;
 XSpiPs			spi_instance;
+#endif
 
 /***************************************************************************//**
 * @brief mdelay
@@ -71,6 +83,7 @@ int32_t spi_init(uint32_t device_id,
 		uint8_t clk_pha,
 		uint8_t clk_pol)
 {
+#ifdef _XPARAMETERS_PS_H_
 	uint8_t  byte		 = 0;
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
@@ -89,6 +102,7 @@ int32_t spi_init(uint32_t device_id,
 	{
 		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
 	}
+#endif
 
 	return 0;
 }
@@ -100,6 +114,7 @@ int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 				 uint8_t bytes_number)
 {
 	uint32_t cnt		 = 0;
+#ifdef _XPARAMETERS_PS_H_
 	uint32_t base_addr	 = 0;
 	uint32_t control_val = 0;
 	uint32_t status	  	 = 0;
@@ -142,6 +157,26 @@ int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 	}
 
 	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
+#else
+	uint8_t sel[2] = {0xE, 0xD};
+
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xfff);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), 0x0e6);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), sel[ss]);
+
+	for(cnt = 0; cnt < bytes_number; cnt++)
+	{
+		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x68), (data[cnt] & 0xff));
+		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), 0x086);
+		do {mdelay(1);}
+		while ((Xil_In32((XPAR_SPI_0_BASEADDR + 0x64)) & 0x4) == 0x0);
+		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), 0x086);
+		data[cnt] = (Xil_In32(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff);
+	}
+
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xfff);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), 0x080);
+#endif
 
 	return 0;
 }
