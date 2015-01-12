@@ -42,8 +42,13 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <xil_printf.h>
-#include "platform.h"
+#include "platform_drivers.h"
 #include "ad9625.h"
+
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+uint8_t ad9625_slave_select;
 
 /***************************************************************************//**
 * @brief ad9625_spi_read
@@ -57,7 +62,7 @@ int32_t ad9625_spi_read(uint16_t reg_addr, uint8_t *reg_data)
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(buf, 3);
+	ret = spi_write_and_read(ad9625_slave_select, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -75,7 +80,7 @@ int32_t ad9625_spi_write(uint16_t reg_addr, uint8_t reg_data)
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(buf, 3);
+	ret = spi_write_and_read(ad9625_slave_select, buf, 3);
 
 	return ret;
 }
@@ -83,11 +88,12 @@ int32_t ad9625_spi_write(uint16_t reg_addr, uint8_t reg_data)
 /***************************************************************************//**
 * @brief ad9625_setup
 *******************************************************************************/
-int32_t ad9625_setup(uint32_t spi_device_id)
+int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
 
+	ad9625_slave_select = slave_select;
 	spi_init(spi_device_id, 0, 0);
 
 	ad9625_spi_write(AD9625_REG_CHIP_PORT_CONF, 0x24);

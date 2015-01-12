@@ -66,6 +66,6 @@
 /******************************************************************************/
 int32_t ad9625_spi_read(uint16_t reg_addr, uint8_t *reg_data);
 int32_t ad9625_spi_write(uint16_t reg_addr, uint8_t reg_data);
-int32_t ad9625_setup(uint32_t spi_device_id);
+int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select);
 
 #endif
