@@ -3753,6 +3753,11 @@ struct ad9361_rf_phy {
 	bool			bypass_rx_fir;
 	bool			bypass_tx_fir;
 	bool			rx_eq_2tx;
+	bool			filt_valid;
+	uint32_t		filt_rx_path_clks[NUM_RX_CLOCKS];
+	uint32_t		filt_tx_path_clks[NUM_TX_CLOCKS];
+	uint32_t		filt_rx_bw_Hz;
+	uint32_t		filt_tx_bw_Hz;
 	uint8_t			tx_fir_int;
 	uint8_t			tx_fir_ntaps;
 	uint8_t			rx_fir_dec;
