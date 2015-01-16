@@ -4741,7 +4741,11 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 		}
 
 		if (rtx < 0) {
+#ifdef WIN32
 			ret = sscanf(line, "RTX %lu %lu %lu %lu %lu %lu",
+#else
+			ret = sscanf(line, "RTX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
+#endif
 				     &phy->filt_tx_path_clks[0],
 				     &phy->filt_tx_path_clks[1],
 				     &phy->filt_tx_path_clks[2],
@@ -4757,7 +4761,11 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 		}
 
 		if (rrx < 0) {
+#ifdef WIN32
 			ret = sscanf(line, "RRX %lu %lu %lu %lu %lu %lu",
+#else
+			ret = sscanf(line, "RRX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
+#endif
 				     &phy->filt_rx_path_clks[0],
 				     &phy->filt_rx_path_clks[1],
 				     &phy->filt_rx_path_clks[2],
