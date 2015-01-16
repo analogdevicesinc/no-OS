@@ -4658,7 +4658,7 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 {
 	int32_t ret;
 	uint32_t rx[6], tx[6];
-	uint32_t max, valid;
+	uint32_t max, min, valid;
 
 	dev_dbg(dev, "%s: TX FIR EN=%d/TAPS%d/INT%d, RX FIR EN=%d/TAPS%d/DEC%d",
 		__func__, !phy->bypass_tx_fir, phy->tx_fir_ntaps, phy->tx_fir_int,
@@ -4697,13 +4697,18 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		ret = ad9361_calculate_rf_clock_chain(phy,
 			clk_get_rate(phy, phy->ref_clk_scale[TX_SAMPL_CLK]),
 			phy->rate_governor, rx, tx);
-
 		if (ret < 0) {
+			min = DIV_ROUND_UP(MIN_ADC_CLK,
+					phy->rate_governor ? 8 : 12);
 			dev_err(dev,
-				"%s: Calculating filter rates failed %"PRId32,
-				__func__, ret);
-
-			return ret;
+				"%s: Calculating filter rates failed %"PRId32
+				" using min frequency",__func__, ret);
+			if (clk_get_rate(phy, phy->ref_clk_scale[TX_SAMPL_CLK]) <= min)
+				ret = ad9361_calculate_rf_clock_chain(phy, min,
+					phy->rate_governor, rx, tx);
+			if (ret < 0) {
+				return ret;
+			}
 		}
 		valid = false;
 	} else {
