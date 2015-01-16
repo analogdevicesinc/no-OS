@@ -132,6 +132,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->rf_dc_offset_count_low = init_param->dc_offset_count_low_range;
 	phy->pdata->tdd_use_fdd_tables = init_param->tdd_use_fdd_vco_tables_enable;
 	phy->pdata->split_gt = init_param->split_gain_table_mode_enable;
+	phy->pdata->trx_synth_max_fref = init_param->trx_synthesizer_target_fref_overwrite_hz;
 
 	/* ENSM Control */
 	phy->pdata->ensm_pin_pulse_mode = init_param->ensm_enable_pin_pulse_mode_enable;

@@ -4058,6 +4058,26 @@ void ad9361_clear_state(struct ad9361_rf_phy *phy)
 }
 
 /**
+ * Determine the reference frequency value.
+ * @param refin_Hz Maximum allowed frequency.
+ * @param max Reference in frequency value.
+ * @return Reference frequency value.
+ */
+static uint32_t ad9361_ref_div_sel(uint32_t refin_Hz, uint32_t max)
+{
+	if (refin_Hz <= (max / 2))
+		return 2 * refin_Hz;
+	else if (refin_Hz <= max)
+		return refin_Hz;
+	else if (refin_Hz <= (max * 2))
+		return refin_Hz / 2;
+	else if (refin_Hz <= (max * 4))
+		return refin_Hz / 4;
+	else
+		return 0;
+}
+
+/**
  * Setup the AD9361 device.
  * @param phy The AD9361 state structure.
  * @return 0 in case of success, negative error code otherwise.
@@ -4091,15 +4111,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	refin_Hz = phy->clk_refin->rate;
 
-	if (refin_Hz < 40000000UL)
-		ref_freq = 2 * refin_Hz;
-	else if (refin_Hz < 80000000UL)
-		ref_freq = refin_Hz;
-	else if (refin_Hz < 160000000UL)
-		ref_freq = refin_Hz / 2;
-	else if (refin_Hz < 320000000UL)
-		ref_freq = refin_Hz / 4;
-	else
+	ref_freq = ad9361_ref_div_sel(refin_Hz, MAX_BBPLL_FREF);
+	if (!ref_freq)
 		return -EINVAL;
 
 	ad9361_spi_writef(spi, REG_REF_DIVIDE_CONFIG_1, RX_REF_RESET_BAR, 1);
@@ -4171,6 +4184,17 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ret = ad9361_setup_ext_lna(phy, &pd->elna_ctrl);
 	if (ret < 0)
 		return ret;
+
+	/*
+	 * This allows forcing a lower F_REF window
+	 * (worse phase noise, better fractional spurs)
+	 */
+	pd->trx_synth_max_fref = clamp_t(uint32_t, pd->trx_synth_max_fref,
+					 MIN_SYNTH_FREF, MAX_SYNTH_FREF);
+
+	ref_freq = ad9361_ref_div_sel(refin_Hz, pd->trx_synth_max_fref);
+	if (!ref_freq)
+		return -EINVAL;
 
 	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_REFCLK], ref_freq);
 	if (ret < 0) {
