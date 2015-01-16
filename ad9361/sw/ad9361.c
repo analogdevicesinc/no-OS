@@ -2198,6 +2198,55 @@ static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Update RF bandwidth.
+ * @param phy The AD9361 state structure.
+ * @param rf_rx_bw RF RX bandwidth [Hz].
+ * @param rf_tx_bw RF TX bandwidth [Hz].
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t __ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
+		uint32_t rf_rx_bw, uint32_t rf_tx_bw)
+{
+	uint32_t real_rx_bandwidth = rf_rx_bw / 2;
+	uint32_t real_tx_bandwidth = rf_tx_bw / 2;
+	uint32_t bbpll_freq;
+	int32_t ret;
+
+	dev_dbg(&phy->spi->dev, "%s: %"PRIu32" %"PRIu32,
+		__func__, rf_rx_bw, rf_tx_bw);
+
+	bbpll_freq = clk_get_rate(phy, phy->ref_clk_scale[BBPLL_CLK]);
+
+	ret = ad9361_rx_bb_analog_filter_calib(phy,
+				real_rx_bandwidth,
+				bbpll_freq);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_tx_bb_analog_filter_calib(phy,
+				real_tx_bandwidth,
+				bbpll_freq);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_rx_tia_calib(phy, real_rx_bandwidth);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_tx_bb_second_filter_calib(phy, rf_tx_bw);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_rx_adc_setup(phy,
+				bbpll_freq,
+				clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+/**
  * Perform a TX quadrature calibration.
  * @param phy The AD9361 state structure.
  * @param bw The bandwidth [Hz].
@@ -2205,12 +2254,13 @@ static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
-	uint32_t bw, int32_t rx_phase)
+	uint32_t bw_rx, uint32_t bw_tx,
+	int32_t rx_phase)
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t clktf, clkrf;
-	int32_t txnco_word, rxnco_word, ret;
 	uint8_t __rx_phase = 0, reg_inv_bits;
+	int32_t txnco_word, rxnco_word, txnco_freq, ret;
 	const uint8_t(*tab)[3];
 	uint32_t index_max, i, lpf_tia_mask;
 	/*
@@ -2223,16 +2273,15 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	clkrf = clk_get_rate(phy, phy->ref_clk_scale[CLKRF_CLK]);
 	clktf = clk_get_rate(phy, phy->ref_clk_scale[CLKTF_CLK]);
 
-	dev_dbg(&phy->spi->dev, "%s : bw %"PRIu32" clkrf %"PRIu32" clktf %"PRIu32,
-		__func__, bw, clkrf, clktf);
+	dev_dbg(&phy->spi->dev, "%s : bw_tx %"PRIu32" clkrf %"PRIu32" clktf %"PRIu32,
+		__func__, bw_tx, clkrf, clktf);
 
-	txnco_word = DIV_ROUND_CLOSEST(bw * 8, clktf) - 1;
+	txnco_word = DIV_ROUND_CLOSEST(bw_tx * 8, clktf) - 1;
 	txnco_word = clamp_t(int, txnco_word, 0, 3);
+	rxnco_word = txnco_word;
 
 	dev_dbg(dev, "Tx NCO frequency: %"PRIu32" (BW/4: %"PRIu32") txnco_word %"PRId32,
-		clktf * (txnco_word + 1) / 32, bw / 4, txnco_word);
-
-	rxnco_word = txnco_word;
+			clktf * (txnco_word + 1) / 32, bw_tx / 4, txnco_word);
 
 	if (clkrf == (2 * clktf)) {
 		__rx_phase = 0x0E;
@@ -2278,6 +2327,15 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 
 	if (rx_phase >= 0)
 		__rx_phase = rx_phase;
+
+	txnco_freq = clktf * (txnco_word + 1) / 32;
+
+	if (txnco_freq > (bw_rx / 4) || txnco_freq > (bw_tx / 4)) {
+		/* Make sure the BW during calibration is wide enough */
+		ret = __ad9361_update_rf_bandwidth(phy, txnco_freq * 8, txnco_freq * 8);
+		if (ret < 0)
+			return ret;
+	}
 
 	if (phy->pdata->rx1rx2_phase_inversion_en ||
 		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
@@ -2333,6 +2391,12 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
 		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
 		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
+	}
+
+	if (txnco_freq > (bw_rx / 4) || txnco_freq > (bw_tx / 4)) {
+		__ad9361_update_rf_bandwidth(phy,
+			phy->current_rx_bw_Hz,
+			phy->current_tx_bw_Hz);
 	}
 
 	return ret;
@@ -4301,7 +4365,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_tx_quad_calib(phy, real_tx_bandwidth, -1);
+	ret = ad9361_tx_quad_calib(phy, real_rx_bandwidth, real_tx_bandwidth, -1);
 	if (ret < 0)
 		return ret;
 
@@ -4371,7 +4435,8 @@ static int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int3
 
 	switch (cal) {
 	case TX_QUAD_CAL:
-		ret = ad9361_tx_quad_calib(phy, phy->current_tx_bw_Hz / 2, arg);
+		ret = ad9361_tx_quad_calib(phy, phy->current_rx_bw_Hz / 2,
+					   phy->current_tx_bw_Hz / 2, arg);
 		break;
 	case RFDC_CAL:
 		ret = ad9361_rf_dc_offset_calib(phy,
@@ -4399,51 +4464,24 @@ static int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int3
 int32_t ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 	uint32_t rf_rx_bw, uint32_t rf_tx_bw)
 {
-	uint32_t bbpll_freq;
-	uint32_t real_rx_bandwidth = rf_rx_bw / 2;
-	uint32_t real_tx_bandwidth = rf_tx_bw / 2;
 	int32_t ret;
 
-	bbpll_freq = clk_get_rate(phy, phy->ref_clk_scale[BBPLL_CLK]);
 	ret = ad9361_tracking_control(phy, false, false, false);
 	if (ret < 0)
 		return ret;
 
-
 	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
 
-	ret = ad9361_rx_bb_analog_filter_calib(phy,
-		real_rx_bandwidth,
-		bbpll_freq);
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_tx_bb_analog_filter_calib(phy,
-		real_tx_bandwidth,
-		bbpll_freq);
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_rx_tia_calib(phy, real_rx_bandwidth);
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_tx_bb_second_filter_calib(phy, rf_tx_bw);
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_rx_adc_setup(phy,
-		bbpll_freq,
-		clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_tx_quad_calib(phy, real_tx_bandwidth, -1);
+	ret = __ad9361_update_rf_bandwidth(phy, rf_rx_bw, rf_tx_bw);
 	if (ret < 0)
 		return ret;
 
 	phy->current_rx_bw_Hz = rf_rx_bw;
 	phy->current_tx_bw_Hz = rf_tx_bw;
+
+	ret = ad9361_tx_quad_calib(phy, rf_rx_bw / 2, rf_tx_bw / 2, -1);
+	if (ret < 0)
+		return ret;
 
 	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
 		phy->rfdc_track_en, phy->quad_track_en);
@@ -4751,6 +4789,18 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		valid = true;
 
 	}
+
+#ifdef _DEBUG
+	dev_dbg(&phy->spi->dev, "%s:RX %lu %lu %lu %lu %lu %lu",
+		__func__, rx[BBPLL_FREQ], rx[ADC_FREQ],
+		rx[R2_FREQ], rx[R1_FREQ],
+		rx[CLKRF_FREQ], rx[RX_SAMPL_FREQ]);
+
+	dev_dbg(&phy->spi->dev, "%s:TX %lu %lu %lu %lu %lu %lu",
+		__func__, tx[BBPLL_FREQ], tx[ADC_FREQ],
+		tx[R2_FREQ], tx[R1_FREQ],
+		tx[CLKRF_FREQ], tx[RX_SAMPL_FREQ]);
+#endif
 
 	if (!phy->bypass_tx_fir) {
 		max = (tx[DAC_FREQ] / tx[TX_SAMPL_FREQ]) * 16;
