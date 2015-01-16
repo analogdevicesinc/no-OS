@@ -1092,6 +1092,47 @@ int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Get the TX RSSI for the selected channel (TX_MON should be enabled).
+ * @param phy The AD9361 current state structure.
+ * @param ch The desired channel (0, 1).
+ * @param rssi_db_x_1000 A variable to store the RSSI.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
+							uint8_t ch,
+							uint32_t *rssi_db_x_1000)
+{
+	uint8_t reg_val_buf[3];
+	uint32_t val;
+	int32_t ret;
+
+	ret = ad9361_spi_readm(phy->spi, REG_TX_RSSI_LSB,
+			reg_val_buf, ARRAY_SIZE(reg_val_buf));
+	if (ret < 0) {
+		return ret;
+	}
+
+	switch (ch)
+	{
+	case 0:
+		val = (reg_val_buf[2] << 1) | (reg_val_buf[0] & TX_RSSI_1);
+		break;
+	case 1:
+		val = (reg_val_buf[1] << 1) | ((reg_val_buf[0] & TX_RSSI_2) >> 1);
+		break;
+	default:
+		return -1;
+	}
+
+	val *= RSSI_RESOLUTION;
+
+	*rssi_db_x_1000 = ((val / RSSI_MULTIPLIER) * 1000) +
+			(val % RSSI_MULTIPLIER);
+
+	return 0;
+}
+
+/**
  * Set the RX and TX path rates.
  * @param phy The AD9361 state structure.
  * @param rx_path_clks RX path rates buffer.

@@ -343,6 +343,8 @@ int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD936
 int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the TX FIR filter. */
 int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Get the TX RSSI for the selected channel. */
+int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t *rssi_db_x_1000);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */

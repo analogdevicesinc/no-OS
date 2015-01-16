@@ -68,7 +68,7 @@ const char *ad9361_ensm_states[] = {
  * @param num The number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
+int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
 	uint8_t *rbuf, uint32_t num)
 {
 	uint8_t buf[2];
@@ -2702,13 +2702,28 @@ static int32_t ad9361_txmon_setup(struct ad9361_rf_phy *phy,
 static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 				int32_t en_mask)
 {
-	dev_dbg(&phy->spi->dev, "%s", __func__);
+	dev_dbg(&phy->spi->dev, "%s: mask 0x%"PRIx32, __func__, en_mask);
+
+#if 0
+	if (!phy->pdata->fdd && en_mask) {
+		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_1,
+				ENABLE_RX_DATA_PORT_FOR_CAL, 1);
+		phy->txmon_tdd_en = true;
+	} else {
+		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_1,
+				ENABLE_RX_DATA_PORT_FOR_CAL, 0);
+		phy->txmon_tdd_en = false;
+	}
+#endif
 
 	ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
 			TX_MONITOR_POWER_DOWN(~0), ~en_mask);
 
-	return ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
-			TX1_MONITOR_ENABLE | TX2_MONITOR_ENABLE, en_mask);
+	ad9361_spi_writef(phy->spi, REG_TPM_MODE_ENABLE,
+			TX1_MON_ENABLE, !!(en_mask & TX_1));
+
+	return ad9361_spi_writef(phy->spi, REG_TPM_MODE_ENABLE,
+			TX2_MON_ENABLE, !!(en_mask & TX_2));
 }
 
 /**
@@ -3512,6 +3527,7 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 
 	val = (phy->pdata->ensm_pin_pulse_mode ? 0 : LEVEL_MODE) |
 		(pinctrl ? ENABLE_ENSM_PIN_CTRL : 0) |
+		(phy->txmon_tdd_en ? ENABLE_RX_DATA_PORT_FOR_CAL : 0) |
 		TO_ALERT;
 
 	switch (ensm_state) {
@@ -4222,6 +4238,7 @@ void ad9361_clear_state(struct ad9361_rf_phy *phy)
 	phy->rx_fir_dec = 0;
 	phy->rx_fir_ntaps = 0;
 	phy->ensm_pin_ctl_en = false;
+	phy->txmon_tdd_en = 0;
 	memset(&phy->fastlock, 0, sizeof(phy->fastlock));
 }
 

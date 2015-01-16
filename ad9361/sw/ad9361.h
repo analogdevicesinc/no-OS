@@ -1053,6 +1053,8 @@
 /*
 *	REG_TPM_MODE_ENABLE
 */
+#define TX2_MON_ENABLE		     	 (1 << 7) /* Tx2 Monitor Enable */
+#define TX1_MON_ENABLE		     	 (1 << 5) /* Tx1 Monitor Enable */
 #define ONE_SHOT_MODE			     (1 << 6) /* One Shot Mode */
 #define TX_MON_DURATION(x)		     (((x) & 0xF) << 0) /* Tx Mon Duration<3:0> */
 
@@ -3770,6 +3772,7 @@ struct ad9361_rf_phy {
 	bool			rfdc_track_en;
 	bool			bbdc_track_en;
 	bool			quad_track_en;
+	bool			txmon_tdd_en;
 	uint16_t 			auxdac1_value;
 	uint16_t 			auxdac2_value;
 	struct ad9361_fastlock	fastlock;
@@ -3811,6 +3814,8 @@ enum {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
+	uint8_t *rbuf, uint32_t num);
 int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg);
 int32_t ad9361_spi_write(struct spi_device *spi,
 	uint32_t reg, uint32_t val);
