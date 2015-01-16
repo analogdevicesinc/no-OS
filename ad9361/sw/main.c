@@ -353,7 +353,12 @@ int main(void)
 	default_init_param.gpio_cal_sw1 = -1;
 	default_init_param.gpio_cal_sw2 = -1;
 #endif
+
+#ifdef LINUX_PLATFORM
+	gpio_init(default_init_param.gpio_resetb);
+#else
 	gpio_init(GPIO_DEVICE_ID);
+#endif
 	gpio_direction(default_init_param.gpio_resetb, 1);
 
 	spi_init(SPI_DEVICE_ID, 1, 0);
@@ -429,8 +434,6 @@ int main(void)
 			console_print("Invalid command!\n");
 		}
 	}
-#else
-	while(1);
 #endif
 
 #ifdef XILINX_PLATFORM

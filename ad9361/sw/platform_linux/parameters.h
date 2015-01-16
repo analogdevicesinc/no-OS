@@ -51,7 +51,8 @@
 #define DAC_DDR_BASEADDR		0
 
 #define GPIO_DEVICE_ID			0
-#define GPIO_RESET_PIN			100
+#define GPIO_CHIP_BASE			138
+#define GPIO_RESET_PIN			(GPIO_CHIP_BASE + 100)
 #define SPI_DEVICE_ID			0
 
 #define AD9361_UIO_DEV			"/dev/uio0"

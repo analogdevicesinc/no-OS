@@ -162,7 +162,6 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 	int fd;
 	char buf[60];
 
-	pin = 0; // FIXME
 	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction", pin);
 
 	fd = open(buf, O_WRONLY);
@@ -195,7 +194,6 @@ void gpio_data(uint8_t pin, uint8_t data)
 	int fd;
 	char buf[60];
 
-	pin = 0; // FIXME
 	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
 
 	fd = open(buf, O_WRONLY);
