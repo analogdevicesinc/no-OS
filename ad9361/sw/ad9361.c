@@ -301,23 +301,33 @@ static int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable)
 {
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axiadc_state *st = phy->adc_state;
-	int32_t reg, chan;
+	int32_t reg, addr, chan;
 
 	uint32_t version = axiadc_read(st, 0x4000);
 
 	/* Still there but implemented a bit different */
 	if (PCORE_VERSION_MAJOR(version) > 7)
-		return -ENODEV;
+		addr = 0x4418;
+	else
+		addr = 0x4414;
 
 	for (chan = 0; chan < conv->chip_info->num_channels; chan++) {
-		reg = axiadc_read(st, 0x4414 + (chan)* 0x40);
-		/* DAC_LB_ENB If set enables loopback of receive data */
-		if (enable)
-			reg |= BIT(1);
-		else
-			reg &= ~BIT(1);
+		reg = axiadc_read(st, addr + (chan) * 0x40);
 
-		axiadc_write(st, 0x4414 + (chan)* 0x40, reg);
+		if (PCORE_VERSION_MAJOR(version) > 7) {
+		/* FIXME: May cause problems if DMA is selected */
+			if (enable)
+				reg = 0x8;
+			else
+				reg = 0x0;
+		} else {
+		/* DAC_LB_ENB If set enables loopback of receive data */
+			if (enable)
+				reg |= BIT(1);
+			else
+				reg &= ~BIT(1);
+		}
+		axiadc_write(st, addr + (chan) * 0x40, reg);
 	}
 
 	return 0;
