@@ -267,6 +267,41 @@ static int32_t ad9361_spi_writem(struct spi_device *spi,
 }
 
 /**
+ * Find optimal value.
+ * @param field
+ * @param ret_start
+ * @return The optimal delay in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start)
+{
+	int32_t i, cnt = 0, max_cnt = 0, start, max_start = 0;
+
+	for(i = 0, start = -1; i < size; i++) {
+		if (field[i] == 0) {
+			if (start == -1)
+				start = i;
+			cnt++;
+		} else {
+			if (cnt > max_cnt) {
+				max_cnt = cnt;
+				max_start = start;
+			}
+			start = -1;
+			cnt = 0;
+		}
+	}
+
+	if (cnt > max_cnt) {
+		max_cnt = cnt;
+		max_start = start;
+	}
+
+	*ret_start = max_start;
+
+	return max_cnt;
+}
+
+/**
  * AD9361 Device Reset
  * @param phy The AD9361 state structure.
  * @return 0 in case of success, negative error code otherwise.
@@ -2247,6 +2282,60 @@ static int32_t __ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Loop through all possible phase offsets in case the QUAD CAL doesn't converge.
+ * @param phy The AD9361 state structure.
+ * @param rxnco_word Rx NCO word.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy, uint32_t rxnco_word)
+{
+	int32_t i, ret;
+	uint8_t field[64];
+	uint32_t val, start;
+
+	dev_dbg(&phy->spi->dev, "%s", __func__);
+
+	for (i = 0; i < (ARRAY_SIZE(field) / 2); i++) {
+
+		ad9361_spi_write(phy->spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
+			RX_NCO_FREQ(rxnco_word) | RX_NCO_PHASE_OFFSET(i));
+
+		ret =  ad9361_run_calibration(phy, TX_QUAD_CAL);
+		if (ret < 0)
+			return ret;
+
+		/* Handle 360/0 wrap around */
+		val = ad9361_spi_read(phy->spi, REG_QUAD_CAL_STATUS_TX1);
+		field[i] = field[i + 32] = !((val & TX1_LO_CONV) && (val & TX1_SSB_CONV));
+	}
+
+	ret = ad9361_find_opt(field, ARRAY_SIZE(field), &start);
+
+#ifdef _DEBUG
+	for (i = 0; i < 64; i++) {
+		printk("%c", (field[i] ? '#' : 'o'));
+	}
+#ifdef WIN32
+	printk(" RX_NCO_PHASE_OFFSET(%d) \n", (start + ret / 2) & 0x1F);
+#else
+	printk(" RX_NCO_PHASE_OFFSET(%"PRIu32") \n", (start + ret / 2) & 0x1F);
+#endif
+#endif
+
+	ad9361_spi_write(phy->spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
+		RX_NCO_FREQ(rxnco_word) |
+		RX_NCO_PHASE_OFFSET((start + ret / 2) & 0x1F));
+
+	ad9361_run_calibration(phy, TX_QUAD_CAL);
+	/* REVISIT: sometimes we need to do it twice */
+	ret = ad9361_run_calibration(phy, TX_QUAD_CAL);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+/**
  * Perform a TX quadrature calibration.
  * @param phy The AD9361 state structure.
  * @param bw The bandwidth [Hz].
@@ -2259,8 +2348,8 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t clktf, clkrf;
-	uint8_t __rx_phase = 0, reg_inv_bits;
 	int32_t txnco_word, rxnco_word, txnco_freq, ret;
+	uint8_t __rx_phase = 0, reg_inv_bits, val;
 	const uint8_t(*tab)[3];
 	uint32_t index_max, i, lpf_tia_mask;
 	/*
@@ -2385,7 +2474,22 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_QUAD_SETTLE_COUNT, 0xF0);
 	ad9361_spi_write(spi, REG_TX_QUAD_LPF_GAIN, 0x00);
 
-	ret =  ad9361_run_calibration(phy, TX_QUAD_CAL);
+	ret = ad9361_run_calibration(phy, TX_QUAD_CAL);
+
+	val = ad9361_spi_readf(spi, REG_QUAD_CAL_STATUS_TX1,
+			       TX1_LO_CONV | TX1_SSB_CONV);
+	dev_dbg(dev, "LO leakage: %d Quadrature Calibration: %d : rx_phase %d\n",
+		!!(val & TX1_LO_CONV), !!(val & TX1_SSB_CONV), __rx_phase);
+
+	/* Calibration failed -> loop through all 32 phase offsets */
+	if (val != (TX1_LO_CONV | TX1_SSB_CONV))
+		ret = ad9361_tx_quad_phase_search(phy, rxnco_word);
+
+	if (phy->pdata->rx1rx2_phase_inversion_en ||
+		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
+		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
+		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
+	}
 
 	if (phy->pdata->rx1rx2_phase_inversion_en ||
 		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
@@ -5759,42 +5863,6 @@ int32_t register_clocks(struct ad9361_rf_phy *phy)
 }
 
 /**
- * Find optimal delay.
- * @param field
- * @param ret_start
- * @return The optimal delay in case of success, negative error code otherwise.
- */
-static int32_t ad9361_find_opt_delay(uint8_t *field, uint32_t *ret_start)
-{
-	int32_t i, cnt = 0, max_cnt = 0, start, max_start = 0;
-
-	for (i = 0, start = -1; i < 16; i++) {
-		if (field[i] == 0) {
-			if (start == -1)
-				start = i;
-			cnt++;
-		}
-		else {
-			if (cnt > max_cnt) {
-				max_cnt = cnt;
-				max_start = start;
-			}
-			start = -1;
-			cnt = 0;
-		}
-	}
-
-	if (cnt > max_cnt) {
-		max_cnt = cnt;
-		max_start = start;
-	}
-
-	*ret_start = max_start;
-
-	return max_cnt;
-}
-
-/**
  * Digital tune.
  * @param phy The AD9361 state structure.
  * @param max_freq Maximum frequency.
@@ -5864,8 +5932,8 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 		}
 		printk("\n");
 #endif
-		c0 = ad9361_find_opt_delay(&field[0][0], &s0);
-		c1 = ad9361_find_opt_delay(&field[1][0], &s1);
+		c0 = ad9361_find_opt(&field[0][0], 16, &s0);
+		c1 = ad9361_find_opt(&field[1][0], 16, &s1);
 
 		if (!c0 && !c1) {
 			dev_err(&phy->spi->dev, "%s: Tuning %s FAILED!", __func__,
