@@ -72,6 +72,7 @@ typedef struct
 	uint8_t		tdd_use_fdd_vco_tables_enable;	/* adi,tdd-use-fdd-vco-tables-enable */
 	uint8_t		split_gain_table_mode_enable;	/* adi,split-gain-table-mode-enable */
 	uint32_t	trx_synthesizer_target_fref_overwrite_hz;	/* adi,trx-synthesizer-target-fref-overwrite-hz */
+	uint8_t		qec_tracking_slow_mode_enable;	/* adi,qec-tracking-slow-mode-enable */
 	/* ENSM Control */
 	uint8_t		ensm_enable_pin_pulse_mode_enable;	/* adi,ensm-enable-pin-pulse-mode-enable */
 	uint8_t		ensm_enable_txnrx_control_enable;	/* adi,ensm-enable-txnrx-control-enable */

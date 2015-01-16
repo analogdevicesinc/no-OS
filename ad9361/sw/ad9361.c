@@ -2534,6 +2534,10 @@ int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 		(bbdc_track ? ENABLE_BB_DC_OFFSET_TRACKING : 0) |
 		(rfdc_track ? ENABLE_RF_OFFSET_TRACKING : 0));
 
+	ad9361_spi_writef(spi, REG_RX_QUAD_GAIN2,
+			 CORRECTION_WORD_DECIMATION_M(~0),
+			 phy->pdata->qec_tracking_slow_mode_en ? 4 : 0);
+
 	if (rxquad_track)
 		qtrack = ENABLE_TRACKING_MODE_CH1 |
 		(phy->pdata->rx2tx2 ? ENABLE_TRACKING_MODE_CH2 : 0);
