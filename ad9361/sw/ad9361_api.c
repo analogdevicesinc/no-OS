@@ -439,7 +439,7 @@ int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 /**
  * Set the receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (1, 2).
+ * @param ch The desired channel number (0, 1).
  * @param gain_db The RF gain (dB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -458,7 +458,7 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 /**
  * Get current receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (1, 2).
+ * @param ch The desired channel number (0, 1).
  * @param gain_db A variable to store the RF gain (dB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -583,7 +583,7 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 /**
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (1, 2).
+ * @param ch The desired channel (0, 1).
  * @param rssi A variable to store the RSSI.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -602,7 +602,7 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 /**
  * Set the gain control mode for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (1, 2).
+ * @param ch The desired channel (0, 1).
  * @param gc_mode The gain control mode (GAIN_MGC, GAIN_FASTATTACK_AGC,
  *                GAIN_SLOWATTACK_AGC, GAIN_HYBRID_AGC).
  * @return 0 in case of success, negative error code otherwise.
@@ -623,7 +623,7 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 /**
  * Get the gain control mode for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (1, 2).
+ * @param ch The desired channel (0, 1).
  * @param gc_mode A variable to store the gain control mode.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -849,7 +849,7 @@ int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
 /**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (1, 2).
+ * @param ch The desired channel number (0, 1).
  * @param attenuation_mdb The attenuation (mdB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -868,7 +868,7 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 /**
  * Get current transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (1, 2).
+ * @param ch The desired channel number (0, 1).
  * @param attenuation_mdb A variable to store the attenuation value (mdB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -879,7 +879,7 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 
 	ret = ad9361_get_tx_atten(phy, ch + 1);
 	if(ret < 0)
-		return EINVAL;
+		return ret;
 	*attenuation_db = ret;
 
 	return 0;
@@ -1122,7 +1122,7 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
 		val = (reg_val_buf[1] << 1) | ((reg_val_buf[0] & TX_RSSI_2) >> 1);
 		break;
 	default:
-		return -1;
+		return -EINVAL;
 	}
 
 	val *= RSSI_RESOLUTION;
@@ -1186,7 +1186,7 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 		phy->pdata->rx2tx2 = 1;
 		break;
 	default:
-		return -1;
+		return -EINVAL;
 	}
 
 	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
