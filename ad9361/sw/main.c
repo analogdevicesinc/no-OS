@@ -43,6 +43,7 @@
 //#define CONSOLE_COMMANDS
 //#define XILINX_PLATFORM
 //#define FMCOMMS5
+//#define CAPTURE_SCRIPT
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -407,7 +408,6 @@ int main(void)
 	mdelay(1000);
     adc_capture(16384, ADC_DDR_BASEADDR);
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
-    while(1);
 #endif
 
 #ifdef CONSOLE_COMMANDS
@@ -437,6 +437,8 @@ int main(void)
 		}
 	}
 #endif
+
+	printf("Done.\n");
 
 #ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();

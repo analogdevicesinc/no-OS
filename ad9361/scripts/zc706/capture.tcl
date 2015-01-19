@@ -19,7 +19,7 @@ dow $elfFilePath
 puts "Capturing data..."
 
 run
-after 3000
+after 5000
 stop
 
 puts "Moving data into rx.csv file..."
