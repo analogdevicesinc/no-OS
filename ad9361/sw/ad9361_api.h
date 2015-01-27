@@ -205,6 +205,7 @@ typedef struct
 	uint8_t		elna_rx1_gpo0_control_enable;	/* adi,elna-rx1-gpo0-control-enable */
 	uint8_t		elna_rx2_gpo1_control_enable;	/* adi,elna-rx2-gpo1-control-enable */
 	/* Digital Interface Control */
+	uint32_t	digital_interface_tune_skip_mode;	/* adi,digital-interface-tune-skip-mode */
 	uint8_t		pp_tx_swap_enable;	/* adi,pp-tx-swap-enable */
 	uint8_t		pp_rx_swap_enable;	/* adi,pp-rx-swap-enable */
 	uint8_t		tx_channel_swap_enable;	/* adi,tx-channel-swap-enable */
