@@ -2038,20 +2038,20 @@ static int32_t ad9361_tx_bb_analog_filter_calib(struct ad9361_rf_phy *phy,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
-	uint32_t tx_rf_bw)
+	uint32_t tx_bb_bw)
 {
 	uint64_t cap;
 	uint32_t corner, res, div;
 	uint32_t reg_conf, reg_res;
 	int32_t ret, i;
 
-	dev_dbg(&phy->spi->dev, "%s : tx_rf_bw %"PRIu32,
-		__func__, tx_rf_bw);
+	dev_dbg(&phy->spi->dev, "%s : tx_bb_bw %"PRIu32,
+		__func__, tx_bb_bw);
 
-	tx_rf_bw = clamp(tx_rf_bw, 1060000UL, 40000000UL);
+	tx_bb_bw = clamp(tx_bb_bw, 530000UL, 20000000UL);
 
 	/* BBBW * 5PI */
-	corner = 15708 * (tx_rf_bw / 20000UL);
+	corner = 15708 * (tx_bb_bw / 10000UL);
 
 	for (i = 0, res = 1; i < 4; i++) {
 		div = corner * res;
@@ -2067,9 +2067,9 @@ static int32_t ad9361_tx_bb_second_filter_calib(struct ad9361_rf_phy *phy,
 	if (cap > 63ULL)
 		cap = 63ULL;
 
-	if (tx_rf_bw <= 9000000UL)
+	if (tx_bb_bw <= 4500000UL)
 		reg_conf = 0x59;
-	else if (tx_rf_bw <= 24000000UL)
+	else if (tx_bb_bw <= 12000000UL)
 		reg_conf = 0x56;
 	else
 		reg_conf = 0x57;
@@ -2255,7 +2255,7 @@ static int32_t __ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_tx_bb_second_filter_calib(phy, rf_tx_bw);
+	ret = ad9361_tx_bb_second_filter_calib(phy, real_tx_bandwidth);
 	if (ret < 0)
 		return ret;
 
@@ -4471,7 +4471,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_tx_bb_second_filter_calib(phy, pd->rf_tx_bandwidth_Hz);
+	ret = ad9361_tx_bb_second_filter_calib(phy, real_tx_bandwidth);
 	if (ret < 0)
 		return ret;
 
