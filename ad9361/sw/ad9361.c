@@ -1382,7 +1382,7 @@ int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t val, idx_reg;
-	uint8_t gain_ctl_shift, ensm_state;
+	uint8_t gain_ctl_shift;
 	int32_t rc = 0;
 
 	if (rx_id == 1) {
@@ -1409,23 +1409,10 @@ int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 		goto out;
 	}
 
-	if (phy->pdata->fdd)
-		ensm_state = ENSM_STATE_FDD;
-	else
-		ensm_state = ENSM_STATE_RX;
-
-	/* RX must be enabled while changing Gain */
-	ad9361_ensm_force_state(phy, ensm_state);
-
 	if (phy->pdata->split_gt)
 		rc = set_split_table_gain(phy, idx_reg, rx_gain);
 	else
 		rc = set_full_table_gain(phy, idx_reg, rx_gain);
-
-	/* Restore is done intentionally before checking rc, because
-	* we need to restore PHY to previous state even if write failed
-	*/
-	ad9361_ensm_restore_prev_state(phy);
 
 	if (rc) {
 		dev_err(dev, "Unable to write gain tbl idx reg: %"PRIu32, idx_reg);
