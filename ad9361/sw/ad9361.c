@@ -1108,7 +1108,7 @@ int32_t ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
 	val = ad9361_spi_readf(spi, REG_RX_ENABLE_FILTER_CTRL, rx_enable_mask);
 
 	if (!val) {
-		dev_err(dev, "Rx%"PRIu32" is not enabled", rx_gain->ant);
+		dev_dbg(dev, "Rx%"PRIu32" is not enabled", rx_gain->ant);
 		rc = -EAGAIN;
 		goto out;
 	}
