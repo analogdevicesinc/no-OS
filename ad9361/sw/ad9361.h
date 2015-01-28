@@ -1414,7 +1414,7 @@
 *	REG_SMALL_LMT_OVERLOAD_THRESH
 */
 #define FORCE_PD_RESET_RX2		     (1 << 7) /* Force PD Reset Rx2 */
-#define FOR_PD_RESET_RX1			     (1 << 6) /* For PD Reset Rx1 */
+#define FORCE_PD_RESET_RX1			     (1 << 6) /* Force PD Reset Rx1 */
 #define SMALL_LMT_OVERLOAD_THRESH(x)	     (((x) & 0x3F) << 0) /* Small LMT Overload Threshold<5:0> */
 
 /*
