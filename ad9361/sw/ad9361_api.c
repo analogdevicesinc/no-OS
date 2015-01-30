@@ -876,7 +876,7 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t *attenuation_db)
 {
-	uint32_t ret;
+	int32_t ret;
 
 	ret = ad9361_get_tx_atten(phy, ch + 1);
 	if(ret < 0)

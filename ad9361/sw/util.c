@@ -54,6 +54,10 @@
 *******************************************************************************/
 int32_t clk_prepare_enable(struct clk *clk)
 {
+	if (clk) {
+		// Unused variable - fix compiler warning
+	}
+
 	return 0;
 }
 

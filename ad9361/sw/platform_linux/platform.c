@@ -72,6 +72,16 @@ int32_t spi_init(uint32_t device_id,
 	uint32_t speed = 10000000;
 	int ret;
 
+	if (device_id) {
+		// Unused variable - fix compiler warning
+	}
+	if (clk_pha) {
+		// Unused variable - fix compiler warning
+	}
+	if (clk_pol) {
+		// Unused variable - fix compiler warning
+	}
+
 	spidev_fd = open(SPIDEV_DEV, O_RDWR);
 	if (spidev_fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
@@ -105,6 +115,13 @@ int32_t spi_init(uint32_t device_id,
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number)
 {
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
 	return 0;
 }
 
@@ -116,6 +133,11 @@ int spi_write_then_read(struct spi_device *spi,
 		unsigned char *rxbuf, unsigned n_rx)
 {
 	int ret;
+
+	if (spi) {
+		// Unused variable - fix compiler warning
+	}
+
 	struct spi_ioc_transfer tr[2] = {
 		{
 			.tx_buf = (unsigned long)txbuf,
@@ -183,6 +205,10 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 *******************************************************************************/
 bool gpio_is_valid(int number)
 {
+	if (number) {
+		// Unused variable - fix compiler warning
+	}
+
 	return 1;
 }
 
@@ -259,6 +285,10 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	unsigned int val;
 
+	if (st) {
+		// Unused variable - fix compiler warning
+	}
+
 	adc_read(reg, &val);
 
 	return val;
@@ -269,6 +299,10 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
+	if (st) {
+		// Unused variable - fix compiler warning
+	}
+
 	adc_write(reg, val);
 }
 

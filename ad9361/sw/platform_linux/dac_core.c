@@ -425,7 +425,7 @@ int dac_datasel(int32_t chan, enum dds_data_select sel)
 {
 	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) > 7) {
 		if (chan < 0) { /* ALL */
-			int i;
+			uint32_t i;
 			for (i = 0; i < dds_st.num_dds_channels; i++) {
 				dac_write(DAC_REG_CHAN_CNTRL_7(i), sel);
 			}

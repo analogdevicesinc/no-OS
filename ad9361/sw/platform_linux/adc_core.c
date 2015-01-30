@@ -202,7 +202,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	do {
 		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
 	}
-	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+	while((reg_val & (1 << transfer_id)) != (uint32_t)(1 << transfer_id));
 
 	return 0;
 }

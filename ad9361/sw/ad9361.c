@@ -276,7 +276,7 @@ static int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_star
 {
 	int32_t i, cnt = 0, max_cnt = 0, start, max_start = 0;
 
-	for(i = 0, start = -1; i < size; i++) {
+	for(i = 0, start = -1; i < (int64_t)size; i++) {
 		if (field[i] == 0) {
 			if (start == -1)
 				start = i;
@@ -808,7 +808,7 @@ static int32_t ad9361_load_mixer_gm_subtable(struct ad9361_rf_phy *phy)
 	ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_CONFIG,
 		START_GM_SUB_TABLE_CLOCK); /* Start Clock */
 
-	for (i = 0, addr = ARRAY_SIZE(gm_st_ctrl); i < ARRAY_SIZE(gm_st_ctrl); i++) {
+	for (i = 0, addr = ARRAY_SIZE(gm_st_ctrl); i < (int64_t)ARRAY_SIZE(gm_st_ctrl); i++) {
 		ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_ADDRESS, --addr); /* Gain Table Index */
 		ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_BIAS_WRITE, 0); /* Bias */
 		ad9361_spi_write(phy->spi, REG_GM_SUB_TABLE_GAIN_WRITE, gm_st_gain[i]); /* Gain */
@@ -1041,7 +1041,7 @@ static int32_t ad9361_get_full_table_gain(struct ad9361_rf_phy *phy, uint32_t id
 struct rf_rx_gain *rx_gain)
 {
 	struct spi_device *spi = phy->spi;
-	uint32_t val;
+	int32_t val;
 	enum rx_gain_table_name tbl;
 	struct rx_gain_info *gain_info;
 	int32_t rc = 0, rx_gain_db;
@@ -1342,7 +1342,7 @@ struct rf_rx_gain *rx_gain)
 	uint32_t val;
 	int32_t rc = 0;
 
-	if (rx_gain->fgt_lmt_index != ~0 || rx_gain->lpf_gain != ~0 ||
+	if (rx_gain->fgt_lmt_index != (uint32_t)~0 || (int64_t)rx_gain->lpf_gain != (uint32_t)~0 ||
 		rx_gain->digital_gain > 0)
 		dev_dbg(dev,
 		"Ignoring lmt/lpf/digital gains in Single Table mode");
@@ -2282,7 +2282,7 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy, uint32_t r
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
-	for (i = 0; i < (ARRAY_SIZE(field) / 2); i++) {
+	for (i = 0; i < (int64_t)(ARRAY_SIZE(field) / 2); i++) {
 
 		ad9361_spi_write(phy->spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
 			RX_NCO_FREQ(rxnco_word) | RX_NCO_PHASE_OFFSET(i));
@@ -2406,7 +2406,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 
 	txnco_freq = clktf * (txnco_word + 1) / 32;
 
-	if (txnco_freq > (bw_rx / 4) || txnco_freq > (bw_tx / 4)) {
+	if (txnco_freq > (int64_t)(bw_rx / 4) || txnco_freq > (int64_t)(bw_tx / 4)) {
 		/* Make sure the BW during calibration is wide enough */
 		ret = __ad9361_update_rf_bandwidth(phy, txnco_freq * 8, txnco_freq * 8);
 		if (ret < 0)
@@ -2484,7 +2484,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
 	}
 
-	if (txnco_freq > (bw_rx / 4) || txnco_freq > (bw_tx / 4)) {
+	if (txnco_freq > (int64_t)(bw_rx / 4) || txnco_freq > (int64_t)(bw_tx / 4)) {
 		__ad9361_update_rf_bandwidth(phy,
 			phy->current_rx_bw_Hz,
 			phy->current_tx_bw_Hz);
@@ -3421,7 +3421,7 @@ struct rssi_control *ctrl,
 	do {
 		for (i = 14; rssi_duration > 0 && i >= 0; i--) {
 			val = 1 << i;
-			if (rssi_duration >= val) {
+			if ((int64_t)rssi_duration >= val) {
 				dur_buf[j++] = i;
 				total_dur += val;
 				rssi_duration -= val;
@@ -5382,6 +5382,10 @@ int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t fract, integer;
 	uint64_t temp;
 
+	if (clk_priv) {
+		// Unused variable - fix compiler warning
+	}
+
 	if (rate > MAX_BBPLL_FREQ)
 		return MAX_BBPLL_FREQ;
 
@@ -5601,6 +5605,13 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate)
 {
+	if (clk_priv) {
+		// Unused variable - fix compiler warning
+	}
+	if (prate) {
+		// Unused variable - fix compiler warning
+	}
+
 	if (ad9361_from_clk(rate) > MAX_CARRIER_FREQ_HZ ||
 		ad9361_from_clk(rate) < MIN_CARRIER_FREQ_HZ)
 		return -EINVAL;
@@ -5679,7 +5690,7 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	*/
 	if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL))
 		if (abs((int64_t)(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate))) >
-			phy->cal_threshold_freq) {
+			(int64_t)phy->cal_threshold_freq) {
 			ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
 			if (ret < 0)
 				dev_err(&phy->spi->dev,
@@ -5712,6 +5723,16 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 {
 	struct refclk_scale *clk_priv;
 	struct clk *clk;
+
+	if (name) {
+		// Unused variable - fix compiler warning
+	}
+	if (parent_name) {
+		// Unused variable - fix compiler warning
+	}
+	if (flags) {
+		// Unused variable - fix compiler warning
+	}
 
 	clk_priv = (struct refclk_scale *)malloc(sizeof(*clk_priv));
 	if (!clk_priv) {
