@@ -88,6 +88,7 @@ AD9361_InitParam default_init_param = {
 	/* Base Configuration */
 	1,		//two_rx_two_tx_mode_enable *** adi,2rx-2tx-mode-enable
 	1,		//frequency_division_duplex_mode_enable *** adi,frequency-division-duplex-mode-enable
+	0,		//frequency_division_duplex_independent_mode_enable *** adi,frequency-division-duplex-independent-mode-enable
 	0,		//tdd_use_dual_synth_mode_enable *** adi,tdd-use-dual-synth-mode-enable
 	0,		//tdd_skip_vco_cal_enable *** adi,tdd-skip-vco-cal-enable
 	0,		//tx_fastlock_delay_ns *** adi,tx-fastlock-delay-ns

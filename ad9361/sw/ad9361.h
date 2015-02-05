@@ -3105,6 +3105,7 @@ enum ad9361_clkout {
 struct ad9361_phy_platform_data {
 	bool			rx2tx2;
 	bool			fdd;
+	bool			fdd_independent_mode;
 	bool			split_gt;
 	bool 			use_extclk;
 	bool			ensm_pin_pulse_mode;

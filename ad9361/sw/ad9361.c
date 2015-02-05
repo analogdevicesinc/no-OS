@@ -3857,18 +3857,27 @@ int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 {
 	struct ad9361_phy_platform_data *pd = phy->pdata;
 	int32_t ret;
+	uint32_t val = 0;
 
 	ad9361_spi_write(phy->spi, REG_ENSM_MODE, fdd ? FDD_MODE : 0);
 
+	if (pd->use_ext_rx_lo)
+		val |= POWER_DOWN_RX_SYNTH;
+
+	if (pd->use_ext_tx_lo)
+		val |= POWER_DOWN_TX_SYNTH;
+
 	if (fdd)
 		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2,
-		DUAL_SYNTH_MODE |
-		(pinctrl ? FDD_EXTERNAL_CTRL_ENABLE : 0)); /* Dual Synth */
+				val | DUAL_SYNTH_MODE |
+				(pinctrl ? (pd->fdd_independent_mode ?
+					FDD_EXTERNAL_CTRL_ENABLE : 0) : 0));
 	else
-		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2,
+		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2, val |
 		(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
-		(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE :
-		(pd->tdd_use_dual_synth ? 0 : TXNRX_SPI_CTRL)));
+		(pd->tdd_use_dual_synth ? 0 :
+		(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : TXNRX_SPI_CTRL)));
+
 	return ret;
 }
 

@@ -56,6 +56,7 @@ typedef struct
 	/* Base Configuration */
 	uint8_t		two_rx_two_tx_mode_enable;	/* adi,2rx-2tx-mode-enable */
 	uint8_t		frequency_division_duplex_mode_enable;	/* adi,frequency-division-duplex-mode-enable */
+	uint8_t		frequency_division_duplex_independent_mode_enable;	/* adi,frequency-division-duplex-independent-mode-enable */
 	uint8_t		tdd_use_dual_synth_mode_enable;	/* adi,tdd-use-dual-synth-mode-enable */
 	uint8_t		tdd_skip_vco_cal_enable;		/* adi,tdd-skip-vco-cal-enable */
 	uint32_t	tx_fastlock_delay_ns;	/* adi,tx-fastlock-delay-ns */
