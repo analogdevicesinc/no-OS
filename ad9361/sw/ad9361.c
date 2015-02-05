@@ -2779,9 +2779,6 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
-	if (!pd->fdd && !pd->tdd_use_dual_synth)
-		pd->port_ctrl.pp_conf[2] |= HALF_DUPLEX_MODE;
-
 	if (restore_c3) {
 		return ad9361_spi_write(spi, REG_PARALLEL_PORT_CONF_3,
 			pd->port_ctrl.pp_conf[2]);
