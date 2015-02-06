@@ -4705,7 +4705,7 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	uint32_t ntaps, int16_t *coef)
 {
 	struct spi_device *spi = phy->spi;
-	uint32_t val, offs = 0, fir_conf = 0;
+	uint32_t val, offs = 0, fir_conf = 0, fir_enable = 0;
 
 	dev_dbg(&phy->spi->dev, "%s: TAPS %"PRIu32", gain %"PRId32", dest %d",
 		__func__, ntaps, gain_dB, dest);
@@ -4723,11 +4723,21 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 		ad9361_spi_write(spi, REG_RX_FILTER_GAIN, val & 0x3);
 		offs = REG_RX_FILTER_COEF_ADDR - REG_TX_FILTER_COEF_ADDR;
 		phy->rx_fir_ntaps = ntaps;
+		fir_enable = ad9361_spi_readf(phy->spi,
+			REG_RX_ENABLE_FILTER_CTRL, RX_FIR_ENABLE_DECIMATION(~0));
+		ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
+			RX_FIR_ENABLE_DECIMATION(~0),
+			(phy->rx_fir_dec == 4) ? 3 : phy->rx_fir_dec);
 	}
 	else {
 		if (gain_dB == -6)
 			fir_conf = TX_FIR_GAIN_6DB;
 		phy->tx_fir_ntaps = ntaps;
+		fir_enable = ad9361_spi_readf(phy->spi,
+			REG_TX_ENABLE_FILTER_CTRL, TX_FIR_ENABLE_INTERPOLATION(~0));
+		ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
+			TX_FIR_ENABLE_INTERPOLATION(~0),
+			(phy->tx_fir_int == 4) ? 3 : phy->tx_fir_int);
 	}
 
 	val = ntaps / 16 - 1;
@@ -4751,6 +4761,13 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs, fir_conf);
 	fir_conf &= ~FIR_START_CLK;
 	ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs, fir_conf);
+
+	if (dest & FIR_IS_RX)
+		ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
+			RX_FIR_ENABLE_DECIMATION(~0), fir_enable);
+	else
+		ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
+			TX_FIR_ENABLE_INTERPOLATION(~0), fir_enable);
 
 	return ad9361_verify_fir_filter_coef(phy, dest, ntaps, coef);
 }
@@ -4899,8 +4916,8 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 	case FIR_TX1:
 	case FIR_TX2:
 	case FIR_TX1_TX2:
-		ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)tx, tx_gain, i, coef_tx);
 		phy->tx_fir_int = tx_int;
+		ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)tx, tx_gain, i, coef_tx);
 		break;
 	default:
 		ret = -EINVAL;
@@ -4910,9 +4927,9 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 	case FIR_RX1:
 	case FIR_RX2:
 	case FIR_RX1_RX2:
+		phy->rx_fir_dec = rx_dec;
 		ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)(rx | FIR_IS_RX),
 			rx_gain, i, coef_rx);
-		phy->rx_fir_dec = rx_dec;
 		break;
 	default:
 		ret = -EINVAL;
