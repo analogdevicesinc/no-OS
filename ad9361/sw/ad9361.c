@@ -2112,7 +2112,9 @@ static int32_t ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : ref_clk_hz %"PRIu32" : is_tx %d",
 		__func__, ref_clk_hz, tx);
 
-	ad9361_spi_write(phy->spi, REG_RX_CP_LEVEL_DETECT + offs, 0x17);
+	/* REVIST:
+	 * ad9361_spi_write(phy->spi, REG_RX_CP_LEVEL_DETECT + offs, 0x17);
+	 */
 	ad9361_spi_write(phy->spi, REG_RX_DSM_SETUP_1 + offs, 0x0);
 
 	ad9361_spi_write(phy->spi, REG_RX_LO_GEN_POWER_MODE + offs, 0x00);
@@ -3563,7 +3565,8 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 		udelay(384000000UL / clk_get_rate(phy, phy->ref_clk_scale[ADC_CLK]));
 		ad9361_spi_write(spi, REG_ENSM_CONFIG_1, 0); /* Move to Wait*/
 		udelay(1); /* Wait for ENSM settle */
-		ad9361_spi_write(spi, REG_CLOCK_ENABLE, 0); /* Turn off all clocks */
+		ad9361_spi_write(spi, REG_CLOCK_ENABLE,
+				 (phy->pdata->use_extclk ? XO_BYPASS : 0)); /* Turn off all clocks */
 		phy->curr_ensm_state = ensm_state;
 		return 0;
 
@@ -4648,6 +4651,9 @@ static int32_t ad9361_verify_fir_filter_coef(struct ad9361_rf_phy *phy,
 	uint32_t val, offs = 0, gain = 0, conf, sel, cnt;
 	int32_t ret = 0;
 
+#ifndef DEBUG
+	return 0;
+#endif
 	dev_dbg(&phy->spi->dev, "%s: TAPS %"PRIu32", dest %d",
 		__func__, ntaps, dest);
 
