@@ -4627,6 +4627,71 @@ int32_t ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Verify the FIR filter coefficients.
+ * @param phy The AD9361 state structure.
+ * @param dest Destination identifier (RX1,2 / TX1,2).
+ * @param ntaps Number of filter Taps.
+ * @param coef Pointer to filter coefficients.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_verify_fir_filter_coef(struct ad9361_rf_phy *phy,
+		enum fir_dest dest,
+		uint32_t ntaps, short *coef)
+{
+	struct spi_device *spi = phy->spi;
+	uint32_t val, offs = 0, gain = 0, conf, sel, cnt;
+	int32_t ret = 0;
+
+	dev_dbg(&phy->spi->dev, "%s: TAPS %"PRIu32", dest %d",
+		__func__, ntaps, dest);
+
+	if (dest & FIR_IS_RX) {
+		gain = ad9361_spi_read(spi, REG_RX_FILTER_GAIN);
+		offs = REG_RX_FILTER_COEF_ADDR - REG_TX_FILTER_COEF_ADDR;
+		ad9361_spi_write(spi, REG_RX_FILTER_GAIN, 0);
+	}
+
+	conf = ad9361_spi_read(spi, REG_TX_FILTER_CONF + offs);
+
+	if ((dest & 3) == 3) {
+		sel = 1;
+		cnt = 2;
+	} else {
+		sel = (dest & 3);
+		cnt = 1;
+	}
+
+	for (; cnt > 0; cnt--, sel++) {
+
+		ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs,
+				 FIR_NUM_TAPS(ntaps / 16 - 1) |
+				 FIR_SELECT(sel) | FIR_START_CLK);
+		for (val = 0; val < ntaps; val++) {
+			short tmp;
+			ad9361_spi_write(spi, REG_TX_FILTER_COEF_ADDR + offs, val);
+
+			tmp = (ad9361_spi_read(spi, REG_TX_FILTER_COEF_READ_DATA_1 + offs) & 0xFF) |
+			(ad9361_spi_read(spi, REG_TX_FILTER_COEF_READ_DATA_2 + offs) << 8);
+
+			if (tmp != coef[val]) {
+				dev_err(&phy->spi->dev,"%s%"PRIu32" read verify failed TAP%"PRIu32" %d =! %d \n",
+					(dest & FIR_IS_RX) ? "RX" : "TX", sel,
+					val, tmp, coef[val]);
+				ret = -EIO;
+			}
+		}
+	}
+
+	if (dest & FIR_IS_RX) {
+		ad9361_spi_write(spi, REG_RX_FILTER_GAIN, gain);
+	}
+
+	ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs, conf);
+
+	return ret;
+}
+
+/**
  * Load the FIR filter coefficients.
  * @param phy The AD9361 state structure.
  * @param dest Destination identifier (RX1,2 / TX1,2).
@@ -4687,7 +4752,7 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	fir_conf &= ~FIR_START_CLK;
 	ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs, fir_conf);
 
-	return 0;
+	return ad9361_verify_fir_filter_coef(phy, dest, ntaps, coef);
 }
 
 /**
