@@ -2285,7 +2285,6 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy, uint32_t r
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
 	for (i = 0; i < (int64_t)(ARRAY_SIZE(field) / 2); i++) {
-
 		ad9361_spi_write(phy->spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
 			RX_NCO_FREQ(rxnco_word) | RX_NCO_PHASE_OFFSET(i));
 
@@ -2311,12 +2310,17 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy, uint32_t r
 #endif
 #endif
 
+	ad9361_spi_write(phy->spi, REG_QUAD_CAL_CTRL,
+			 SETTLE_MAIN_ENABLE | DC_OFFSET_ENABLE | QUAD_CAL_SOFT_RESET |
+			 GAIN_ENABLE | PHASE_ENABLE | M_DECIM(3));
+	ad9361_spi_write(phy->spi, REG_QUAD_CAL_CTRL,
+			 SETTLE_MAIN_ENABLE | DC_OFFSET_ENABLE |
+			 GAIN_ENABLE | PHASE_ENABLE | M_DECIM(3));
+
 	ad9361_spi_write(phy->spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
 		RX_NCO_FREQ(rxnco_word) |
 		RX_NCO_PHASE_OFFSET((start + ret / 2) & 0x1F));
 
-	ad9361_run_calibration(phy, TX_QUAD_CAL);
-	/* REVISIT: sometimes we need to do it twice */
 	ret = ad9361_run_calibration(phy, TX_QUAD_CAL);
 	if (ret < 0)
 		return ret;
@@ -2430,7 +2434,9 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_QUAD_CAL_NCO_FREQ_PHASE_OFFSET,
 		RX_NCO_FREQ(rxnco_word) | RX_NCO_PHASE_OFFSET(__rx_phase));
 	ad9361_spi_writef(spi, REG_KEXP_2, TX_NCO_FREQ(~0), txnco_word);
-
+	ad9361_spi_write(spi, REG_QUAD_CAL_CTRL,
+			 SETTLE_MAIN_ENABLE | DC_OFFSET_ENABLE | QUAD_CAL_SOFT_RESET |
+			 GAIN_ENABLE | PHASE_ENABLE | M_DECIM(3));
 	ad9361_spi_write(spi, REG_QUAD_CAL_CTRL,
 		SETTLE_MAIN_ENABLE | DC_OFFSET_ENABLE |
 		GAIN_ENABLE | PHASE_ENABLE | M_DECIM(3));
