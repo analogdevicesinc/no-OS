@@ -5690,8 +5690,8 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		vco_div = ad9361_spi_readf(clk_priv->spi, REG_RFPLL_DIVIDERS, div_mask);
 	}
 
-	fract = (buf[0] << 16) | (buf[1] << 8) | buf[2];
-	integer = buf[3] << 8 | buf[4];
+	fract = (SYNTH_FRACT_WORD(buf[0]) << 16) | (buf[1] << 8) | buf[2];
+	integer = (SYNTH_INTEGER_WORD(buf[3]) << 8) | buf[4];
 
 	return ad9361_to_clk(ad9361_calc_rfpll_freq(parent_rate, integer,
 		fract, vco_div));
@@ -5771,10 +5771,13 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	ad9361_rfpll_vco_init(phy, div_mask == TX_VCO_DIVIDER(~0),
 		vco, parent_rate);
 
-	buf[0] = fract >> 16;
+	buf[0] = SYNTH_FRACT_WORD(fract >> 16);
 	buf[1] = fract >> 8;
 	buf[2] = fract & 0xFF;
 	buf[3] = integer >> 8;
+	buf[3] = SYNTH_INTEGER_WORD(integer >> 8) |
+			(~SYNTH_INTEGER_WORD(~0) &
+			ad9361_spi_read(clk_priv->spi, reg - 3));
 	buf[4] = integer & 0xFF;
 
 	ad9361_spi_writem(clk_priv->spi, reg, buf, 5);
