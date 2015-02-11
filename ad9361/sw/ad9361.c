@@ -2737,12 +2737,15 @@ static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 * 6	RX1B_P and RX2B_P enabled; unbalanced
 * 7	RX1C_N and RX2C_N enabled; unbalanced
 * 8	RX1C_P and RX2C_P enabled; unbalanced
+* 9 TX_MON1
+* 10 TX_MON2
+* 11 TX_MON1 & TX_MON2
 * @param phy The AD9361 state structure.
 * @param rx_inputs RX input option identifier
 * @param txb TX output option identifier
 * @return 0 in case of success, negative error code otherwise.
 */
-static int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
+int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
 				    uint32_t rx_inputs, uint32_t txb)
 {
 	uint32_t val;

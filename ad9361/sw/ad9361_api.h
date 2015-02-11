@@ -322,6 +322,10 @@ int32_t ad9361_get_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_
 int32_t ad9361_set_rx_quad_track_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the RX Quadrature Tracking. */
 int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Set the RX RF input port. */
+int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t mode);
+/* Get the selected RX RF input port. */
+int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t *mode);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -348,6 +352,10 @@ int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
 /* Get the TX RSSI for the selected channel. */
 int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t *rssi_db_x_1000);
+/* Set the TX RF output port. */
+int32_t ad9361_set_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t mode);
+/* Get the selected TX RF output port. */
+int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t *mode);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */

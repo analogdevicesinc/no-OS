@@ -3888,4 +3888,6 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
 						 enum ad9361_bist_mode *mode, uint32_t *freq_Hz,
 						 uint32_t *level_dB, uint32_t *mask);
+int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
+				    uint32_t rx_inputs, uint32_t txb);
 #endif

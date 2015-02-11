@@ -849,6 +849,50 @@ int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Set the RX RF input port.
+ * @param phy The AD9361 current state structure.
+ * @param mode The RF port.
+ * 			   Accepted values:
+ *				0	(RX1A_N &  RX1A_P) and (RX2A_N & RX2A_P) enabled; balanced
+ *				1	(RX1B_N &  RX1B_P) and (RX2B_N & RX2B_P) enabled; balanced
+ *				2	(RX1C_N &  RX1C_P) and (RX2C_N & RX2C_P) enabled; balanced
+ *				3	RX1A_N and RX2A_N enabled; unbalanced
+ *				4	RX1A_P and RX2A_P enabled; unbalanced
+ *				5	RX1B_N and RX2B_N enabled; unbalanced
+ *				6	RX1B_P and RX2B_P enabled; unbalanced
+ *				7	RX1C_N and RX2C_N enabled; unbalanced
+ *				8	RX1C_P and RX2C_P enabled; unbalanced
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy,
+									 uint32_t mode)
+{
+	int32_t ret;
+
+	phy->pdata->rf_rx_input_sel = mode;
+
+	ret = ad9361_rf_port_setup(phy, false,
+						phy->pdata->rf_rx_input_sel,
+						phy->pdata->rf_tx_output_sel);
+
+	return ret;
+}
+
+/**
+ * Get the selected RX RF input port.
+ * @param phy The AD9361 current state structure.
+ * @param mode The RF port.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy,
+									 uint32_t *mode)
+{
+	*mode = phy->pdata->rf_rx_input_sel;
+
+	return 0;
+}
+
+/**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (0, 1).
@@ -1131,6 +1175,43 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
 
 	*rssi_db_x_1000 = ((val / RSSI_MULTIPLIER) * 1000) +
 			(val % RSSI_MULTIPLIER);
+
+	return 0;
+}
+
+/**
+ * Set the TX RF output port.
+ * @param phy The AD9361 current state structure.
+ * @param mode The RF port.
+ * 			   Accepted values:
+ *				0	TXA
+ *				1	TXB
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_tx_rf_port_output (struct ad9361_rf_phy *phy,
+									  uint32_t mode)
+{
+	int32_t ret;
+
+	phy->pdata->rf_tx_output_sel = mode;
+
+	ret = ad9361_rf_port_setup(phy, true,
+						phy->pdata->rf_rx_input_sel,
+						phy->pdata->rf_tx_output_sel);
+
+	return ret;
+}
+
+/**
+ * Get the selected TX RF output port.
+ * @param phy The AD9361 current state structure.
+ * @param mode The RF port.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy,
+									  uint32_t *mode)
+{
+	*mode = phy->pdata->rf_tx_output_sel;
 
 	return 0;
 }
