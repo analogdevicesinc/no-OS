@@ -64,21 +64,47 @@ void *rx_dma_uio_addr;
 uint32_t rx_buff_mem_size;
 uint32_t rx_buff_mem_addr;
 #endif
+#ifdef FMCOMMS5
+int ad9361_b_uio_fd;
+void *ad9361_b_uio_addr;
+#endif
 
 /***************************************************************************//**
  * @brief adc_read
 *******************************************************************************/
-void adc_read(uint32_t regAddr, uint32_t *data)
+void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 {
-	*data = (*((unsigned *) (ad9361_uio_addr + regAddr)));
+	switch (phy->id_no) {
+	case 0:
+		*data = (*((unsigned *) (ad9361_uio_addr + regAddr)));
+		break;
+	case 1:
+#ifdef FMCOMMS5
+		*data = (*((unsigned *) (ad9361_b_uio_addr + regAddr)));
+		break;
+#endif
+	default:
+		break;
+	}
 }
 
 /***************************************************************************//**
  * @brief adc_write
 *******************************************************************************/
-void adc_write(uint32_t regAddr, uint32_t data)
+void adc_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 {
-	*((unsigned *) (ad9361_uio_addr + regAddr)) = data;
+	switch (phy->id_no) {
+	case 0:
+		*((unsigned *) (ad9361_uio_addr + regAddr)) = data;
+		break;
+	case 1:
+#ifdef FMCOMMS5
+		*((unsigned *) (ad9361_b_uio_addr + regAddr)) = data;
+		break;
+#endif
+	default:
+		break;
+	}
 }
 
 /***************************************************************************//**
@@ -143,6 +169,22 @@ void adc_init(struct ad9361_rf_phy *phy)
 			       MAP_SHARED,
 			       ad9361_uio_fd,
 			       0);
+#ifdef FMCOMMS5
+	ad9361_b_uio_fd = open(AD9361_B_UIO_DEV, O_RDWR);
+	if(ad9361_b_uio_fd < 1)
+	{
+		printf("%s: Can't open ad9361_b_uio device\n\r", __func__);
+		return;
+	}
+
+	ad9361_b_uio_addr = mmap(NULL,
+			       24576,
+			       PROT_READ|PROT_WRITE,
+			       MAP_SHARED,
+			       ad9361_b_uio_fd,
+			       0);
+#endif
+
 #ifdef DMA_UIO
 printf("%s: Open rx_dma_uio device\n\r", __func__);
 	rx_dma_uio_fd = open(RX_DMA_UIO_DEV, O_RDWR);
@@ -159,19 +201,19 @@ printf("%s: Open rx_dma_uio device\n\r", __func__);
 			      rx_dma_uio_fd,
 			      0);
 #endif
-	adc_write(ADC_REG_RSTN, 0);
-	adc_write(ADC_REG_RSTN, ADC_RSTN);
+	adc_write(phy, ADC_REG_RSTN, 0);
+	adc_write(phy, ADC_REG_RSTN, ADC_RSTN);
 
-	adc_write(ADC_REG_CHAN_CNTRL(0),
+	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
 		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
-	adc_write(ADC_REG_CHAN_CNTRL(1),
+	adc_write(phy, ADC_REG_CHAN_CNTRL(1),
 		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_st.rx2tx2 = phy->pdata->rx2tx2;
 	if(adc_st.rx2tx2)
 	{
-		adc_write(ADC_REG_CHAN_CNTRL(2),
+		adc_write(phy, ADC_REG_CHAN_CNTRL(2),
 			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
-		adc_write(ADC_REG_CHAN_CNTRL(3),
+		adc_write(phy, ADC_REG_CHAN_CNTRL(3),
 			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	}
 }

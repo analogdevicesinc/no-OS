@@ -376,6 +376,9 @@ int main(void)
 #ifdef FMCOMMS5
 	default_init_param.id_no = 1;
 	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
+#ifdef LINUX_PLATFORM
+	gpio_init(default_init_param.gpio_resetb);
+#endif
 	default_init_param.gpio_sync = -1;
 	default_init_param.gpio_cal_sw1 = -1;
 	default_init_param.gpio_cal_sw2 = -1;

@@ -54,7 +54,7 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-struct dds_state dds_st;
+struct dds_state dds_st[2];
 #ifdef DMA_UIO
 int tx_dma_uio_fd;
 void *tx_dma_uio_addr;
@@ -75,17 +75,17 @@ const uint16_t sine_lut[32] = {
 /***************************************************************************//**
  * @brief dac_read
 *******************************************************************************/
-void dac_read(uint32_t regAddr, uint32_t *data)
+void dac_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 {
-	adc_read(regAddr + 0x4000, data);
+	adc_read(phy, regAddr + 0x4000, data);
 }
 
 /***************************************************************************//**
  * @brief dac_write
 *******************************************************************************/
-void dac_write(uint32_t regAddr, uint32_t data)
+void dac_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 {
-	adc_write(regAddr + 0x4000, data);
+	adc_write(phy, regAddr + 0x4000, data);
 }
 
 /***************************************************************************//**
@@ -113,15 +113,16 @@ void dac_dma_write(uint32_t regAddr, uint32_t data)
 /***************************************************************************//**
  * @brief dds_default_setup
 *******************************************************************************/
-static int dds_default_setup(uint32_t chan, uint32_t phase,
+static int dds_default_setup(struct ad9361_rf_phy *phy,
+							 uint32_t chan, uint32_t phase,
 							 uint32_t freq, int32_t scale)
 {
-	dds_set_phase(chan, phase);
-	dds_set_frequency(chan, freq);
-	dds_set_scale(chan, scale);
-	dds_st.cached_freq[chan] = freq;
-	dds_st.cached_phase[chan] = phase;
-	dds_st.cached_scale[chan] = scale;
+	dds_set_phase(phy, chan, phase);
+	dds_set_frequency(phy, chan, freq);
+	dds_set_scale(phy, chan, scale);
+	dds_st[phy->id_no].cached_freq[chan] = freq;
+	dds_st[phy->id_no].cached_phase[chan] = phase;
+	dds_st[phy->id_no].cached_scale[chan] = scale;
 
 	return 0;
 }
@@ -129,26 +130,26 @@ static int dds_default_setup(uint32_t chan, uint32_t phase,
 /***************************************************************************//**
  * @brief dac_stop
 *******************************************************************************/
-void dac_stop(void)
+void dac_stop(struct ad9361_rf_phy *phy)
 {
-	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) < 8)
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8)
 	{
-		dac_write(DAC_REG_CNTRL_1, 0);
+		dac_write(phy, DAC_REG_CNTRL_1, 0);
 	}
 }
 
 /***************************************************************************//**
  * @brief dac_start_sync
 *******************************************************************************/
-void dac_start_sync(bool force_on)
+void dac_start_sync(struct ad9361_rf_phy *phy, bool force_on)
 {
-	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) < 8)
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8)
 	{
-		dac_write(DAC_REG_CNTRL_1, (dds_st.enable || force_on) ? DAC_ENABLE : 0);
+		dac_write(phy, DAC_REG_CNTRL_1, (dds_st[phy->id_no].enable || force_on) ? DAC_ENABLE : 0);
 	}
 	else
 	{
-		dac_write(DAC_REG_CNTRL_1, DAC_SYNC);
+		dac_write(phy, DAC_REG_CNTRL_1, DAC_SYNC);
 	}
 }
 
@@ -175,40 +176,40 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	
 	tx_dma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, tx_dma_uio_fd, 0);
 #endif
-	dac_write(DAC_REG_RSTN, 0x0);
-	dac_write(DAC_REG_RSTN, DAC_RSTN);
+	dac_write(phy, DAC_REG_RSTN, 0x0);
+	dac_write(phy, DAC_REG_RSTN, DAC_RSTN);
 
-	dac_write(DAC_REG_RATECNTRL, DAC_RATE(3));
+	dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
 
-	dds_st.dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
-	dds_st.rx2tx2 = phy->pdata->rx2tx2;
-	if(dds_st.rx2tx2)
+	dds_st[phy->id_no].dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
+	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
+	if(dds_st[phy->id_no].rx2tx2)
 	{
-		dds_st.num_dds_channels = 8;
+		dds_st[phy->id_no].num_dds_channels = 8;
 	}
 	else
 	{
-		dds_st.num_dds_channels = 4;
+		dds_st[phy->id_no].num_dds_channels = 4;
 	}
 
-	dac_read(DAC_REG_VERSION, &dds_st.pcore_version);
+	dac_read(phy, DAC_REG_VERSION, &dds_st[phy->id_no].pcore_version);
 
-	dac_write(DAC_REG_CNTRL_1, 0);
+	dac_write(phy, DAC_REG_CNTRL_1, 0);
 	switch (data_sel) {
 	case DATA_SEL_DDS:
-		dds_default_setup(DDS_CHAN_TX1_I_F1, 90000, 1000000, 250000);
-		dds_default_setup(DDS_CHAN_TX1_I_F2, 90000, 1000000, 250000);
-		dds_default_setup(DDS_CHAN_TX1_Q_F1, 0, 1000000, 250000);
-		dds_default_setup(DDS_CHAN_TX1_Q_F2, 0, 1000000, 250000);
-		if(dds_st.rx2tx2)
+		dds_default_setup(phy, DDS_CHAN_TX1_I_F1, 90000, 1000000, 250000);
+		dds_default_setup(phy, DDS_CHAN_TX1_I_F2, 90000, 1000000, 250000);
+		dds_default_setup(phy, DDS_CHAN_TX1_Q_F1, 0, 1000000, 250000);
+		dds_default_setup(phy, DDS_CHAN_TX1_Q_F2, 0, 1000000, 250000);
+		if(dds_st[phy->id_no].rx2tx2)
 		{
-			dds_default_setup(DDS_CHAN_TX2_I_F1, 90000, 1000000, 250000);
-			dds_default_setup(DDS_CHAN_TX2_I_F2, 90000, 1000000, 250000);
-			dds_default_setup(DDS_CHAN_TX2_Q_F1, 0, 1000000, 250000);
-			dds_default_setup(DDS_CHAN_TX2_Q_F2, 0, 1000000, 250000);
+			dds_default_setup(phy, DDS_CHAN_TX2_I_F1, 90000, 1000000, 250000);
+			dds_default_setup(phy, DDS_CHAN_TX2_I_F2, 90000, 1000000, 250000);
+			dds_default_setup(phy, DDS_CHAN_TX2_Q_F1, 0, 1000000, 250000);
+			dds_default_setup(phy, DDS_CHAN_TX2_Q_F2, 0, 1000000, 250000);
 		}
-		dac_write(DAC_REG_CNTRL_2, 0);
-		dac_datasel(-1, DATA_SEL_DDS);
+		dac_write(phy, DAC_REG_CNTRL_2, 0);
+		dac_datasel(phy, -1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
 #ifdef DMA_UIO
@@ -240,7 +241,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		tx_buff_virt_addr = (mapping_addr + (tx_buff_mem_addr & page_mask));
 
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-		if(dds_st.rx2tx2)
+		if(dds_st[phy->id_no].rx2tx2)
 		{
 			for(index = 0; index < (tx_count * 2); index += 2)
 			{
@@ -279,7 +280,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		munmap(mapping_addr, mapping_length);
 		close(dev_mem_fd);
 
-		if(dds_st.rx2tx2)
+		if(dds_st[phy->id_no].rx2tx2)
 		{
 			length = (tx_count * 8);
 		}
@@ -295,72 +296,72 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 #endif
-		dac_write(DAC_REG_CNTRL_2, 0);
-		dac_datasel(-1, DATA_SEL_DMA);
+		dac_write(phy, DAC_REG_CNTRL_2, 0);
+		dac_datasel(phy, -1, DATA_SEL_DMA);
 		break;
 	default:
 		break;
 	}
-	dds_st.enable = true;
-	dac_start_sync(0);
+	dds_st[phy->id_no].enable = true;
+	dac_start_sync(phy, 0);
 }
 
 /***************************************************************************//**
  * @brief dds_set_frequency
 *******************************************************************************/
-void dds_set_frequency(uint32_t chan, uint32_t freq)
+void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq)
 {
 	uint64_t val64;
 	uint32_t reg;
 
-	dds_st.cached_freq[chan] = freq;
-	dac_stop();
-	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	dds_st[phy->id_no].cached_freq[chan] = freq;
+	dac_stop(phy);
+	dac_read(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~DAC_DDS_INCR(~0);
 	val64 = (uint64_t) freq * 0xFFFFULL;
-	do_div(&val64, *dds_st.dac_clk);
+	do_div(&val64, *dds_st[phy->id_no].dac_clk);
 	reg |= DAC_DDS_INCR(val64) | 1;
-	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_start_sync(0);
+	dac_write(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	dac_start_sync(phy, 0);
 }
 
 /***************************************************************************//**
  * @brief dds_set_phase
 *******************************************************************************/
-void dds_set_phase(uint32_t chan, uint32_t phase)
+void dds_set_phase(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t phase)
 {
 	uint64_t val64;
 	uint32_t reg;
 
-	dds_st.cached_phase[chan] = phase;
-	dac_stop();
-	dac_read(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
+	dds_st[phy->id_no].cached_phase[chan] = phase;
+	dac_stop(phy);
+	dac_read(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), &reg);
 	reg &= ~DAC_DDS_INIT(~0);
 	val64 = (uint64_t) phase * 0x10000ULL + (360000 / 2);
 	do_div(&val64, 360000);
 	reg |= DAC_DDS_INIT(val64);
-	dac_write(DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
-	dac_start_sync(0);
+	dac_write(phy, DAC_REG_CHAN_CNTRL_2_IIOCHAN(chan), reg);
+	dac_start_sync(phy, 0);
 }
 
 /***************************************************************************//**
  * @brief dds_set_phase
 *******************************************************************************/
-void dds_set_scale(uint32_t chan, int32_t scale_micro_units)
+void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t scale_micro_units)
 {
 	uint32_t scale_reg;
 	uint32_t sign_part;
 	uint32_t int_part;
 	uint32_t fract_part;
 
-	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) > 6)
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) > 6)
 	{
 		if(scale_micro_units >= 1000000)
 		{
 			sign_part = 0;
 			int_part = 1;
 			fract_part = 0;
-			dds_st.cached_scale[chan] = 1000000;
+			dds_st[phy->id_no].cached_scale[chan] = 1000000;
 			goto set_scale_reg;
 		}
 		if(scale_micro_units <= -1000000)
@@ -368,10 +369,10 @@ void dds_set_scale(uint32_t chan, int32_t scale_micro_units)
 			sign_part = 1;
 			int_part = 1;
 			fract_part = 0;
-			dds_st.cached_scale[chan] = -1000000;
+			dds_st[phy->id_no].cached_scale[chan] = -1000000;
 			goto set_scale_reg;
 		}
-		dds_st.cached_scale[chan] = scale_micro_units;
+		dds_st[phy->id_no].cached_scale[chan] = scale_micro_units;
 		if(scale_micro_units < 0)
 		{
 			sign_part = 1;
@@ -399,43 +400,43 @@ void dds_set_scale(uint32_t chan, int32_t scale_micro_units)
 			scale_reg = 0;
 			scale_micro_units = 0;
 		}
-		dds_st.cached_scale[chan] = scale_micro_units;
+		dds_st[phy->id_no].cached_scale[chan] = scale_micro_units;
 		fract_part = (uint32_t)(scale_micro_units);
 		scale_reg = 500000 / fract_part;
 	}
-	dac_stop();
-	dac_write(DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
-	dac_start_sync(0);
+	dac_stop(phy);
+	dac_write(phy, DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
+	dac_start_sync(phy, 0);
 }
 
 /***************************************************************************//**
  * @brief dds_update
 *******************************************************************************/
-void dds_update(void)
+void dds_update(struct ad9361_rf_phy *phy)
 {
 	uint32_t chan;
 
 	for(chan = DDS_CHAN_TX1_I_F1; chan <= DDS_CHAN_TX2_Q_F2; chan++)
 	{
-		dds_set_frequency(chan, dds_st.cached_freq[chan]);
-		dds_set_phase(chan, dds_st.cached_phase[chan]);
-		dds_set_scale(chan, dds_st.cached_scale[chan]);
+		dds_set_frequency(phy, chan, dds_st[phy->id_no].cached_freq[chan]);
+		dds_set_phase(phy, chan, dds_st[phy->id_no].cached_phase[chan]);
+		dds_set_scale(phy, chan, dds_st[phy->id_no].cached_scale[chan]);
 	}
 }
 
 /***************************************************************************//**
  * @brief dac_datasel
 *******************************************************************************/
-int dac_datasel(int32_t chan, enum dds_data_select sel)
+int dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select sel)
 {
-	if (PCORE_VERSION_MAJOR(dds_st.pcore_version) > 7) {
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) > 7) {
 		if (chan < 0) { /* ALL */
 			uint32_t i;
-			for (i = 0; i < dds_st.num_dds_channels; i++) {
-				dac_write(DAC_REG_CHAN_CNTRL_7(i), sel);
+			for (i = 0; i < dds_st[phy->id_no].num_dds_channels; i++) {
+				dac_write(phy, DAC_REG_CHAN_CNTRL_7(i), sel);
 			}
 		} else {
-			dac_write(DAC_REG_CHAN_CNTRL_7(chan), sel);
+			dac_write(phy, DAC_REG_CHAN_CNTRL_7(chan), sel);
 		}
 	} else {
 		uint32_t reg;
@@ -444,10 +445,10 @@ int dac_datasel(int32_t chan, enum dds_data_select sel)
 		case DATA_SEL_DDS:
 		case DATA_SEL_SED:
 		case DATA_SEL_DMA:
-			dac_read(DAC_REG_CNTRL_2, &reg);
+			dac_read(phy, DAC_REG_CNTRL_2, &reg);
 			reg &= ~DAC_DATA_SEL(~0);
 			reg |= DAC_DATA_SEL(sel);
-			dac_write(DAC_REG_CNTRL_2, reg);
+			dac_write(phy, DAC_REG_CNTRL_2, reg);
 			break;
 		default:
 			return -EINVAL;

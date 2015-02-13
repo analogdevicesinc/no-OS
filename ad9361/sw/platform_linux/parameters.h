@@ -53,6 +53,10 @@
 #define GPIO_DEVICE_ID			0
 #define GPIO_CHIP_BASE			138
 #define GPIO_RESET_PIN			(GPIO_CHIP_BASE + 100)
+#define GPIO_RESET_PIN_2		(GPIO_CHIP_BASE + 113)
+#define GPIO_SYNC_PIN			(GPIO_CHIP_BASE + 99)
+#define GPIO_CAL_SW1_PIN		(GPIO_CHIP_BASE + 107)
+#define GPIO_CAL_SW2_PIN		(GPIO_CHIP_BASE + 108)
 #define SPI_DEVICE_ID			0
 
 #define AD9361_UIO_DEV			"/dev/uio0"
@@ -69,5 +73,9 @@
 #define TX_BUFF_MEM_SIZE		"/sys/class/uio/uio2/maps/map1/size"
 #define TX_BUFF_MEM_ADDR		"/sys/class/uio/uio2/maps/map1/addr"
 #define SPIDEV_DEV			"/dev/spidev32766.0"
+#define AD9361_B_UIO_DEV		"/dev/uio3"
+#define AD9361_B_UIO_SIZE		"/sys/class/uio/uio3/maps/map0/size"
+#define AD9361_B_UIO_ADDR		"/sys/class/uio/uio3/maps/map0/addr"
+#define SPIDEV_B_DEV			"/dev/spidev32766.1"
 
 #endif // __PARAMETERS_H__

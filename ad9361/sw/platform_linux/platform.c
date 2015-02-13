@@ -59,6 +59,9 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 int spidev_fd;
+#ifdef FMCOMMS5
+int spidev_b_fd;
+#endif
 
 /***************************************************************************//**
  * @brief spi_init
@@ -105,7 +108,32 @@ int32_t spi_init(uint32_t device_id,
 		printf("%s: Can't set max speed hz\n\r", __func__);
 		return ret;
 	}
+#ifdef FMCOMMS5
+	spidev_b_fd = open(SPIDEV_B_DEV, O_RDWR);
+	if (spidev_b_fd < 0) {
+		printf("%s: Can't open device\n\r", __func__);
+		return -1;
+	}
+
+	ret = ioctl(spidev_b_fd, SPI_IOC_WR_MODE, &mode);
+	if (ret == -1) {
+		printf("%s: Can't set spi mode\n\r", __func__);
+		return ret;
+	}
+
+	ret = ioctl(spidev_b_fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
+	if (ret == -1) {
+		printf("%s: Can't set bits per word\n\r", __func__);
+		return ret;
+	}
 	
+	ret = ioctl(spidev_b_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+	if (ret == -1) {
+		printf("%s: Can't set max speed hz\n\r", __func__);
+		return ret;
+	}
+#endif
+
 	return 0;
 }
 
@@ -148,10 +176,20 @@ int spi_write_then_read(struct spi_device *spi,
 		},
 	};
 
-	ret = ioctl(spidev_fd, SPI_IOC_MESSAGE(2), &tr);
-	if (ret == 1) {
-		printf("%s: Can't send spi message\n\r", __func__);
-		return -EIO;
+	if (spi->id_no == 0) {
+		ret = ioctl(spidev_fd, SPI_IOC_MESSAGE(2), &tr);
+		if (ret == 1) {
+			printf("%s: Can't send spi message\n\r", __func__);
+			return -EIO;
+		}
+	} else {
+#ifdef FMCOMMS5
+		ret = ioctl(spidev_b_fd, SPI_IOC_MESSAGE(2), &tr);
+		if (ret == 1) {
+			printf("%s: Can't send spi message\n\r", __func__);
+			return -EIO;
+		}
+#endif
 	}
 
 	return ret;
@@ -285,11 +323,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	unsigned int val;
 
-	if (st) {
-		// Unused variable - fix compiler warning
-	}
-
-	adc_read(reg, &val);
+	adc_read(st->phy, reg, &val);
 
 	return val;
 }
@@ -299,11 +333,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	if (st) {
-		// Unused variable - fix compiler warning
-	}
-
-	adc_write(reg, val);
+	adc_write(st->phy, reg, val);
 }
 
 /***************************************************************************//**
