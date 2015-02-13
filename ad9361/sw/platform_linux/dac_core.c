@@ -56,8 +56,10 @@
 /******************************************************************************/
 struct dds_state dds_st;
 #ifdef DMA_UIO
-int txdma_uio_fd;
-void *txdma_uio_addr;
+int tx_dma_uio_fd;
+void *tx_dma_uio_addr;
+uint32_t tx_buff_mem_size;
+uint32_t tx_buff_mem_addr;
 #endif
 
 /******************************************************************************/
@@ -92,7 +94,7 @@ void dac_write(uint32_t regAddr, uint32_t data)
 void dac_dma_read(uint32_t regAddr, uint32_t *data)
 {
 #ifdef DMA_UIO
-	*data = (*((unsigned *) (txdma_uio_addr + regAddr)));
+	*data = (*((unsigned *) (tx_dma_uio_addr + regAddr)));
 #else
 	*data = 0;
 #endif
@@ -104,7 +106,7 @@ void dac_dma_read(uint32_t regAddr, uint32_t *data)
 void dac_dma_write(uint32_t regAddr, uint32_t data)
 {
 #ifdef DMA_UIO
-	*((unsigned *) (txdma_uio_addr + regAddr)) = data;
+	*((unsigned *) (tx_dma_uio_addr + regAddr)) = data;
 #endif
 }
 
@@ -155,6 +157,7 @@ void dac_start_sync(bool force_on)
 *******************************************************************************/
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 {
+#ifdef DMA_UIO
 	uint32_t tx_count;
 	uint32_t index, index_i1, index_q1, index_i2, index_q2;
 	uint32_t data_i1, data_q1, data_i2, data_q2;
@@ -163,15 +166,14 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 	uint32_t mapping_length, page_mask, page_size;
 	void *mapping_addr, *tx_buff_virt_addr;
 
-#ifdef DMA_UIO
-	txdma_uio_fd = open(TXDMA_UIO_DEV, O_RDWR);
-	if(txdma_uio_fd < 1)
+	tx_dma_uio_fd = open(TX_DMA_UIO_DEV, O_RDWR);
+	if(tx_dma_uio_fd < 1)
 	{
-		printf("%s: Can't open txdma_uio device\n\r", __func__);
+		printf("%s: Can't open tx_dma_uio device\n\r", __func__);
 		return;
 	}
 	
-	txdma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, txdma_uio_fd, 0);
+	tx_dma_uio_addr = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, tx_dma_uio_fd, 0);
 #endif
 	dac_write(DAC_REG_RSTN, 0x0);
 	dac_write(DAC_REG_RSTN, DAC_RSTN);
@@ -210,6 +212,9 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		break;
 	case DATA_SEL_DMA:
 #ifdef DMA_UIO
+		get_file_info(TX_BUFF_MEM_SIZE, &tx_buff_mem_size);
+		get_file_info(TX_BUFF_MEM_ADDR, &tx_buff_mem_addr);
+
 		dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
 		if(dev_mem_fd == -1)
 		{
@@ -218,21 +223,21 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		}
 
 		page_size = sysconf(_SC_PAGESIZE);
-		mapping_length = (((TX_BUFF_MEM_SIZE / page_size) + 1) * page_size);
+		mapping_length = (((tx_buff_mem_size / page_size) + 1) * page_size);
 		page_mask = (page_size - 1);
 		mapping_addr = mmap(NULL,
 				   mapping_length,
 				   PROT_READ | PROT_WRITE,
 				   MAP_SHARED,
 				   dev_mem_fd,
-				   (TX_BUFF_MEM_ADDR & ~page_mask));
+				   (tx_buff_mem_addr & ~page_mask));
 		if(mapping_addr == MAP_FAILED)
 		{
 			printf("%s: mmap error\n\r", __func__);
 			return;
 		}
 
-		tx_buff_virt_addr = (mapping_addr + (TX_BUFF_MEM_ADDR & page_mask));
+		tx_buff_virt_addr = (mapping_addr + (tx_buff_mem_addr & page_mask));
 
 		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
 		if(dds_st.rx2tx2)
@@ -284,7 +289,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		}
 		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
-		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, TX_BUFF_MEM_ADDR);
+		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, tx_buff_mem_addr);
 		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);

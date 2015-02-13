@@ -59,8 +59,10 @@ struct adc_state adc_st;
 int ad9361_uio_fd;
 void *ad9361_uio_addr;
 #ifdef DMA_UIO
-int rxdma_uio_fd;
-void *rxdma_uio_addr;
+int rx_dma_uio_fd;
+void *rx_dma_uio_addr;
+uint32_t rx_buff_mem_size;
+uint32_t rx_buff_mem_addr;
 #endif
 
 /***************************************************************************//**
@@ -85,7 +87,7 @@ void adc_write(uint32_t regAddr, uint32_t data)
 void adc_dma_read(uint32_t regAddr, uint32_t *data)
 {
 #ifdef DMA_UIO
-	*data = (*((unsigned *) (rxdma_uio_addr + regAddr)));
+	*data = (*((unsigned *) (rx_dma_uio_addr + regAddr)));
 #else
 	*data = 0;
 #endif
@@ -97,8 +99,30 @@ void adc_dma_read(uint32_t regAddr, uint32_t *data)
 void adc_dma_write(uint32_t regAddr, uint32_t data)
 {
 #ifdef DMA_UIO
-	*((unsigned *) (rxdma_uio_addr + regAddr)) = data;
+	*((unsigned *) (rx_dma_uio_addr + regAddr)) = data;
 #endif
+}
+
+/***************************************************************************//**
+ * @brief get_file_info
+*******************************************************************************/
+int32_t get_file_info(const char *filename, uint32_t *info)
+{
+	int32_t ret;
+	FILE* fp;
+
+	fp = fopen(filename,"r");
+	if (!fp) {
+		printf("%s: File %s cannot be opened.", __func__, filename);
+		return -1;
+	}
+	ret = fscanf(fp,"0x%x", info);
+	if (ret < 0) {
+		printf("%s: Cannot read info from file %s.", __func__, filename);
+		return -1;
+	}
+	fclose(fp);
+	return 0;
 }
 
 /***************************************************************************//**
@@ -120,19 +144,19 @@ void adc_init(struct ad9361_rf_phy *phy)
 			       ad9361_uio_fd,
 			       0);
 #ifdef DMA_UIO
-printf("%s: Open rxdma_uio device\n\r", __func__);
-	rxdma_uio_fd = open(RXDMA_UIO_DEV, O_RDWR);
-	if(rxdma_uio_fd < 1)
+printf("%s: Open rx_dma_uio device\n\r", __func__);
+	rx_dma_uio_fd = open(RX_DMA_UIO_DEV, O_RDWR);
+	if(rx_dma_uio_fd < 1)
 	{
-		printf("%s: Can't open rxdma_uio device\n\r", __func__);
+		printf("%s: Can't open rx_dma_uio device\n\r", __func__);
 		return;
 	}
 	
-	rxdma_uio_addr = mmap(NULL,
+	rx_dma_uio_addr = mmap(NULL,
 			      4096,
 			      PROT_READ|PROT_WRITE,
 			      MAP_SHARED,
-			      rxdma_uio_fd,
+			      rx_dma_uio_fd,
 			      0);
 #endif
 	adc_write(ADC_REG_RSTN, 0);
@@ -157,9 +181,14 @@ printf("%s: Open rxdma_uio device\n\r", __func__);
 *******************************************************************************/
 int32_t adc_capture(uint32_t size, uint32_t start_address)
 {
+#ifdef DMA_UIO
 	uint32_t reg_val;
 	uint32_t transfer_id;
 	uint32_t length;
+
+	get_file_info(RX_BUFF_MEM_SIZE, &rx_buff_mem_size);
+	get_file_info(RX_BUFF_MEM_ADDR, &rx_buff_mem_addr);
+	start_address = rx_buff_mem_addr;
 
 	if(adc_st.rx2tx2)
 	{
@@ -168,6 +197,11 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	else
 	{
 		length = (size * 4);
+	}
+
+	if(length > rx_buff_mem_size) {
+		printf("%s: Desired length (%d) is bigger than the buffer size (%d).", __func__, length, rx_buff_mem_size);
+		return -1;
 	}
 
 	adc_dma_write(AXI_DMAC_REG_CTRL, 0x0);
@@ -203,6 +237,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
 	}
 	while((reg_val & (1 << transfer_id)) != (uint32_t)(1 << transfer_id));
+#endif
 
 	return 0;
 }
@@ -214,6 +249,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 			  const char * filename, uint8_t bin_file,
 			  uint8_t ch_no)
 {
+#ifdef DMA_UIO
 	int dev_mem_fd;
 	uint32_t mapping_length, page_mask, page_size;
 	void *mapping_addr, *rx_buff_virt_addr;
@@ -223,6 +259,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	uint32_t ch1, ch2;
 
 	adc_capture(size, start_address);
+	start_address = rx_buff_mem_addr;
 
 	dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
 	if(dev_mem_fd == -1)
@@ -297,6 +334,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	fclose(f);
 	munmap(mapping_addr, mapping_length);
 	close(dev_mem_fd);
+#endif
 
 	return 0;
 }

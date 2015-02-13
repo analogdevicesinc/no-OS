@@ -56,13 +56,18 @@
 #define SPI_DEVICE_ID			0
 
 #define AD9361_UIO_DEV			"/dev/uio0"
-#define RXDMA_UIO_DEV			"/dev/uio1"
-#define TXDMA_UIO_DEV			"/dev/uio2"
+#define AD9361_UIO_SIZE			"/sys/class/uio/uio0/maps/map0/size"
+#define AD9361_UIO_ADDR			"/sys/class/uio/uio0/maps/map0/addr"
+#define RX_DMA_UIO_DEV			"/dev/uio1"
+#define RX_DMA_UIO_SIZE			"/sys/class/uio/uio1/maps/map0/size"
+#define RX_DMA_UIO_ADDR			"/sys/class/uio/uio1/maps/map0/addr"
+#define RX_BUFF_MEM_SIZE		"/sys/class/uio/uio1/maps/map1/size"
+#define RX_BUFF_MEM_ADDR		"/sys/class/uio/uio1/maps/map1/addr"
+#define TX_DMA_UIO_DEV			"/dev/uio2"
+#define TX_DMA_UIO_SIZE			"/sys/class/uio/uio2/maps/map0/size"
+#define TX_DMA_UIO_ADDR			"/sys/class/uio/uio2/maps/map0/addr"
+#define TX_BUFF_MEM_SIZE		"/sys/class/uio/uio2/maps/map1/size"
+#define TX_BUFF_MEM_ADDR		"/sys/class/uio/uio2/maps/map1/addr"
 #define SPIDEV_DEV			"/dev/spidev32766.0"
-
-#define RX_BUFF_MEM_ADDR		0x20000000	// FIXME
-#define RX_BUFF_MEM_SIZE		0x20000		// FIXME
-#define TX_BUFF_MEM_ADDR		0x30000000	// FIXME
-#define TX_BUFF_MEM_SIZE		0x1000		// FIXME
 
 #endif // __PARAMETERS_H__
