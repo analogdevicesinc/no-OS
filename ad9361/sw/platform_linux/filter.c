@@ -155,8 +155,10 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 							  char *tx_mat_fir_filename,
 							  char *rx_mat_fir_filename)
 {
-	uint8_t fir_type;
+#ifdef DEBUG
 	uint8_t index;
+#endif
+	uint8_t fir_type;
 	uint32_t tx_bandwidth;
 	uint32_t rx_bandwidth;
 	uint32_t tx_path_clks[6];
@@ -167,15 +169,15 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 	parse_mat_fir_file(tx_mat_fir_filename, &fir_type, (FIRConfig*)&tx_fir, &tx_bandwidth, tx_path_clks);
 
 	if (!fir_type) {
-		printf("Invalid TX filter configuration was identified.\n");
+		printf("Invalid TX filter configuration.\n");
 		return -1;
 	}
-
-	printf("Channel selection: %d\n", tx_fir.tx);
+#ifdef DEBUG
+	printf("channels_selection: %d\n", tx_fir.tx);
 
 	printf("gain = %d\n", tx_fir.tx_gain);
 
-	printf("dec_int = %d\n", tx_fir.tx_int);
+	printf("int = %d\n", tx_fir.tx_int);
 
 	for (index = 0; index < tx_fir.tx_coef_size; index ++) {
 		if (index == 0)
@@ -200,19 +202,19 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 		else
 			printf(", ");
 	}
-
+#endif
 	parse_mat_fir_file(rx_mat_fir_filename, &fir_type, (FIRConfig *)&rx_fir, &rx_bandwidth, rx_path_clks);
 
 	if (fir_type) {
-		printf("Invalid RX filter configuration was identified.\n");
+		printf("Invalid RX filter configuration.\n");
 		return -1;
 	}
-
-	printf("Channel selection: %d\n", rx_fir.rx);
+#ifdef DEBUG
+	printf("channels_selection: %d\n", rx_fir.rx);
 
 	printf("gain = %d\n", rx_fir.rx_gain);
 
-	printf("dec_int = %d\n", rx_fir.rx_dec);
+	printf("dec = %d\n", rx_fir.rx_dec);
 
 	for (index = 0; index < rx_fir.rx_coef_size; index ++) {
 		if (index == 0)
@@ -237,7 +239,7 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 		else
 			printf(", ");
 	}
-
+#endif
 	ad9361_set_tx_fir_config(phy, tx_fir);
 	ad9361_set_rx_fir_config(phy, rx_fir);
 	ad9361_set_tx_fir_en_dis(phy, 1);
