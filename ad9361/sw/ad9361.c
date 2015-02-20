@@ -706,11 +706,11 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq, uint32_t
 	enum rx_gain_table_name band;
 	uint32_t index_max, i;
 
-	dev_dbg(&phy->spi->dev, "%s: frequency %llu", __func__, freq);
+	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64, __func__, freq);
 
 	band = ad9361_gt_tableindex(freq);
 
-	dev_dbg(&phy->spi->dev, "%s: frequency %llu (band %d)",
+	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64" (band %d)",
 		__func__, freq, band);
 
 	/* check if table is present */
@@ -929,7 +929,7 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 
 	range = ad9361_rfvco_tableindex(ref_clk);
 
-	dev_dbg(&phy->spi->dev, "%s : vco_freq %llu : ref_clk %"PRIu32" : range %"PRIu32,
+	dev_dbg(&phy->spi->dev, "%s : vco_freq %"PRIu64" : ref_clk %"PRIu32" : range %"PRIu32,
 		__func__, vco_freq, ref_clk, range);
 
 	do_div(&vco_freq, 1000000UL); /* vco_freq in MHz */
@@ -1794,7 +1794,7 @@ static int32_t ad9361_rx_adc_setup(struct ad9361_rf_phy *phy, uint32_t bbpll_fre
 	min_sqrt_term_1e3 = min_t(uint32_t, 1000U,
 		int_sqrt(maxsnr * scaled_adc_clk_1e6));
 
-	dev_dbg(&phy->spi->dev, "invrc_tconst_1e6 %llu, sqrt_inv_rc_tconst_1e3 %"PRIu32,
+	dev_dbg(&phy->spi->dev, "invrc_tconst_1e6 %"PRIu64", sqrt_inv_rc_tconst_1e3 %"PRIu32,
 		invrc_tconst_1e6, sqrt_inv_rc_tconst_1e3);
 	dev_dbg(&phy->spi->dev, "scaled_adc_clk_1e6 %"PRIu32", inv_scaled_adc_clk_1e3 %"PRIu32,
 		scaled_adc_clk_1e6, inv_scaled_adc_clk_1e3);
@@ -2180,7 +2180,7 @@ static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 {
 	struct spi_device *spi = phy->spi;
 
-	dev_dbg(&phy->spi->dev, "%s : rx_freq %llu",
+	dev_dbg(&phy->spi->dev, "%s : rx_freq %"PRIu64,
 		__func__, rx_freq);
 
 	ad9361_spi_write(spi, REG_WAIT_COUNT, 0x20);
@@ -5032,12 +5032,12 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	}
 
 #ifdef _DEBUG
-	dev_dbg(&phy->spi->dev, "%s:RX %lu %lu %lu %lu %lu %lu",
+	dev_dbg(&phy->spi->dev, "%s:RX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
 		__func__, rx[BBPLL_FREQ], rx[ADC_FREQ],
 		rx[R2_FREQ], rx[R1_FREQ],
 		rx[CLKRF_FREQ], rx[RX_SAMPL_FREQ]);
 
-	dev_dbg(&phy->spi->dev, "%s:TX %lu %lu %lu %lu %lu %lu",
+	dev_dbg(&phy->spi->dev, "%s:TX %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32" %"PRIu32,
 		__func__, tx[BBPLL_FREQ], tx[ADC_FREQ],
 		tx[R2_FREQ], tx[R1_FREQ],
 		tx[CLKRF_FREQ], tx[RX_SAMPL_FREQ]);
