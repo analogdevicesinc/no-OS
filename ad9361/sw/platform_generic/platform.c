@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include "stdint.h"
 #include "../util.h"
+#include "platform.h"
 
 /***************************************************************************//**
  * @brief usleep
@@ -158,7 +159,7 @@ void axiadc_init(struct ad9361_rf_phy *phy)
 *******************************************************************************/
 unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
-
+	return 0;
 }
 
 /***************************************************************************//**
@@ -168,3 +169,12 @@ void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
 
 }
+
+/***************************************************************************//**
+* @brief axiadc_set_pnsel
+*******************************************************************************/
+int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
+{
+	return 0;
+}
+
