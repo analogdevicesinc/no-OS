@@ -1513,6 +1513,7 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	uint32_t clkrf;
 	uint32_t reg, delay_lna, settling_delay, dec_pow_meas_dur;
 	int32_t ret;
+	uint32_t fir_div;
 
 	clkrf = clk_get_rate(phy, phy->ref_clk_scale[CLKRF_CLK]);
 	delay_lna = phy->pdata->elna_ctrl.settling_delay_ns;
@@ -1565,11 +1566,12 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 		dec_pow_meas_dur =
 			phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration;
 	} else {
-
+		fir_div = DIV_ROUND_CLOSEST(clkrf,
+				clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
 		dec_pow_meas_dur = phy->pdata->gain_ctrl.dec_pow_measuremnt_duration;
 
-		if (((reg * 2) / dec_pow_meas_dur) < 2) {
-			dec_pow_meas_dur = reg;
+		if (((reg * 2 / fir_div) / dec_pow_meas_dur) < 2) {
+			dec_pow_meas_dur = reg / fir_div;
 		}
 	}
 
