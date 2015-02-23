@@ -1301,3 +1301,38 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 
 	return 0;
 }
+
+/**
+ * Do multi chip synchronization.
+ * @param phy_master The AD9361 Master state structure.
+ * @param phy_slave The AD9361 Slave state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *phy_slave)
+{
+	uint32_t ensm_mode;
+	int32_t step;
+	int32_t reg;
+
+	reg = ad9361_spi_read(phy_master->spi, REG_RX_CLOCK_DATA_DELAY);
+	ad9361_spi_write(phy_slave->spi, REG_RX_CLOCK_DATA_DELAY, reg);
+	reg = ad9361_spi_read(phy_master->spi, REG_TX_CLOCK_DATA_DELAY);
+	ad9361_spi_write(phy_slave->spi, REG_TX_CLOCK_DATA_DELAY, reg);
+
+	ad9361_get_en_state_machine_mode(phy_master, &ensm_mode);
+
+	ad9361_set_en_state_machine_mode(phy_master, ENSM_STATE_ALERT);
+	ad9361_set_en_state_machine_mode(phy_slave, ENSM_STATE_ALERT);
+
+	for (step = 1; step <= 5; step++)
+	{
+		ad9361_mcs(phy_slave, step);
+		ad9361_mcs(phy_master, step);
+		mdelay(100);
+	}
+
+	ad9361_set_en_state_machine_mode(phy_master, ensm_mode);
+	ad9361_set_en_state_machine_mode(phy_slave, ensm_mode);
+
+	return 0;
+}

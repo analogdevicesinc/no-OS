@@ -374,6 +374,8 @@ int main(void)
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
 #ifdef FMCOMMS5
+	gpio_init(default_init_param.gpio_sync);
+	gpio_direction(default_init_param.gpio_sync, 1);
 	default_init_param.id_no = 1;
 	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM
@@ -403,6 +405,10 @@ int main(void)
 #endif
 	dac_init(ad9361_phy, DATA_SEL_DDS);
 #endif
+#endif
+
+#ifdef FMCOMMS5
+	ad9361_do_mcs(ad9361_phy, ad9361_phy_b);
 #endif
 
 #if defined XILINX_PLATFORM && defined CAPTURE_SCRIPT
