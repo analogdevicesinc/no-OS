@@ -164,7 +164,7 @@ struct dds_state
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel);
+void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma);
 void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq);
 void dds_set_phase(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t phase);
 void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t scale_micro_units);

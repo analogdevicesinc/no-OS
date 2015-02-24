@@ -52,6 +52,11 @@
 #include <unistd.h>
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+//#define FMCOMMS5
+
+/******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct dds_state dds_st[2];
@@ -156,11 +161,12 @@ void dac_start_sync(struct ad9361_rf_phy *phy, bool force_on)
 /***************************************************************************//**
  * @brief dac_init
 *******************************************************************************/
-void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
+void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 {
 #ifdef DMA_UIO
 	uint32_t tx_count;
 	uint32_t index, index_i1, index_q1, index_i2, index_q2;
+	uint32_t index_mem;
 	uint32_t data_i1, data_q1, data_i2, data_q2;
 	uint32_t length;
 	int dev_mem_fd;
@@ -212,90 +218,104 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel)
 		dac_datasel(phy, -1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
+		if(has_dma)
+		{
 #ifdef DMA_UIO
-		get_file_info(TX_BUFF_MEM_SIZE, &tx_buff_mem_size);
-		get_file_info(TX_BUFF_MEM_ADDR, &tx_buff_mem_addr);
+			get_file_info(TX_BUFF_MEM_SIZE, &tx_buff_mem_size);
+			get_file_info(TX_BUFF_MEM_ADDR, &tx_buff_mem_addr);
 
-		dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
-		if(dev_mem_fd == -1)
-		{
-			printf("%s: Can't open /dev/mem device\n\r", __func__);
-			return;
-		}
-
-		page_size = sysconf(_SC_PAGESIZE);
-		mapping_length = (((tx_buff_mem_size / page_size) + 1) * page_size);
-		page_mask = (page_size - 1);
-		mapping_addr = mmap(NULL,
-				   mapping_length,
-				   PROT_READ | PROT_WRITE,
-				   MAP_SHARED,
-				   dev_mem_fd,
-				   (tx_buff_mem_addr & ~page_mask));
-		if(mapping_addr == MAP_FAILED)
-		{
-			printf("%s: mmap error\n\r", __func__);
-			return;
-		}
-
-		tx_buff_virt_addr = (mapping_addr + (tx_buff_mem_addr & page_mask));
-
-		tx_count = sizeof(sine_lut) / sizeof(uint16_t);
-		if(dds_st[phy->id_no].rx2tx2)
-		{
-			for(index = 0; index < (tx_count * 2); index += 2)
+			dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
+			if(dev_mem_fd == -1)
 			{
-				index_i1 = index;
-				index_q1 = index + (tx_count / 2);
-				if(index_q1 >= (tx_count * 2))
-					index_q1 -= (tx_count * 2);
-				data_i1 = (sine_lut[index_i1 / 2] << 20);
-				data_q1 = (sine_lut[index_q1 / 2] << 4);
-				*((unsigned *) (tx_buff_virt_addr + (index * 4))) = data_i1 | data_q1;
-				index_i2 = index_i1;
-				index_q2 = index_q1;
-				if(index_i2 >= (tx_count * 2))
-					index_i2 -= (tx_count * 2);
-				if(index_q2 >= (tx_count * 2))
-					index_q2 -= (tx_count * 2);
-				data_i2 = (sine_lut[index_i2 / 2] << 20);
-				data_q2 = (sine_lut[index_q2 / 2] << 4);
-				*((unsigned *) (tx_buff_virt_addr + ((index + 1) * 4))) = data_i2 | data_q2;
+				printf("%s: Can't open /dev/mem device\n\r", __func__);
+				return;
 			}
-		}
-		else
-		{
-			for(index = 0; index < tx_count; index += 1)
+
+			page_size = sysconf(_SC_PAGESIZE);
+			mapping_length = (((tx_buff_mem_size / page_size) + 1) * page_size);
+			page_mask = (page_size - 1);
+			mapping_addr = mmap(NULL,
+					   mapping_length,
+					   PROT_READ | PROT_WRITE,
+					   MAP_SHARED,
+					   dev_mem_fd,
+					   (tx_buff_mem_addr & ~page_mask));
+			if(mapping_addr == MAP_FAILED)
 			{
-				index_i1 = index;
-				index_q1 = index + (tx_count / 4);
-				if(index_q1 >= tx_count)
-					index_q1 -= tx_count;
-				data_i1 = (sine_lut[index_i1 / 2] << 20);
-				data_q1 = (sine_lut[index_q1 / 2] << 4);
-				*((unsigned *) (tx_buff_virt_addr + (index * 4))) = data_i1 | data_q1;
+				printf("%s: mmap error\n\r", __func__);
+				return;
 			}
-		}
 
-		munmap(mapping_addr, mapping_length);
-		close(dev_mem_fd);
+			tx_buff_virt_addr = (mapping_addr + (tx_buff_mem_addr & page_mask));
 
-		if(dds_st[phy->id_no].rx2tx2)
-		{
-			length = (tx_count * 8);
-		}
-		else
-		{
-			length = (tx_count * 4);
-		}
-		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
-		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
-		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, tx_buff_mem_addr);
-		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
-		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
-		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
-		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+			tx_count = sizeof(sine_lut) / sizeof(uint16_t);
+			if(dds_st[phy->id_no].rx2tx2)
+			{
+#ifdef FMCOMMS5
+				for(index = 0, index_mem = 0; index < (tx_count * 2); index += 2, index_mem += 4)
+#else
+				for(index = 0, index_mem = 0; index < (tx_count * 2); index += 2, index_mem += 2)
 #endif
+				{
+					index_i1 = index;
+					index_q1 = index + (tx_count / 2);
+					if(index_q1 >= (tx_count * 2))
+						index_q1 -= (tx_count * 2);
+					data_i1 = (sine_lut[index_i1 / 2] << 20);
+					data_q1 = (sine_lut[index_q1 / 2] << 4);
+					*((unsigned *) (tx_buff_virt_addr + (index_mem* 4))) = data_i1 | data_q1;
+					index_i2 = index_i1;
+					index_q2 = index_q1;
+					if(index_i2 >= (tx_count * 2))
+						index_i2 -= (tx_count * 2);
+					if(index_q2 >= (tx_count * 2))
+						index_q2 -= (tx_count * 2);
+					data_i2 = (sine_lut[index_i2 / 2] << 20);
+					data_q2 = (sine_lut[index_q2 / 2] << 4);
+					*((unsigned *) (tx_buff_virt_addr + ((index_mem+ 1) * 4))) = data_i2 | data_q2;
+#ifdef FMCOMMS5
+					*((unsigned *) (tx_buff_virt_addr + ((index_mem+ 2) * 4))) = data_i1 | data_q1;
+					*((unsigned *) (tx_buff_virt_addr + ((index_mem+ 3) * 4))) = data_i2 | data_q2;
+#endif
+				}
+			}
+			else
+			{
+				for(index = 0; index < tx_count; index += 1)
+				{
+					index_i1 = index;
+					index_q1 = index + (tx_count / 4);
+					if(index_q1 >= tx_count)
+						index_q1 -= tx_count;
+					data_i1 = (sine_lut[index_i1 / 2] << 20);
+					data_q1 = (sine_lut[index_q1 / 2] << 4);
+					*((unsigned *) (tx_buff_virt_addr + (index * 4))) = data_i1 | data_q1;
+				}
+			}
+
+			munmap(mapping_addr, mapping_length);
+			close(dev_mem_fd);
+
+			if(dds_st[phy->id_no].rx2tx2)
+			{
+				length = (tx_count * 8);
+			}
+			else
+			{
+				length = (tx_count * 4);
+			}
+#ifdef FMCOMMS5
+			length = (tx_count * 16);
+#endif
+			dac_dma_write(AXI_DMAC_REG_CTRL, 0);
+			dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+			dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, tx_buff_mem_addr);
+			dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
+			dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
+			dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
+			dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+#endif
+		}
 		dac_write(phy, DAC_REG_CNTRL_2, 0);
 		dac_datasel(phy, -1, DATA_SEL_DMA);
 		break;

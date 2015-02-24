@@ -396,14 +396,14 @@ int main(void)
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM
 #ifdef DAC_DMA
 #ifdef FMCOMMS5
-	dac_init(ad9361_phy_b, DATA_SEL_DMA);
+	dac_init(ad9361_phy_b, DATA_SEL_DMA, 0);
 #endif
-	dac_init(ad9361_phy, DATA_SEL_DMA);
+	dac_init(ad9361_phy, DATA_SEL_DMA, 1);
 #else
 #ifdef FMCOMMS5
-	dac_init(ad9361_phy_b, DATA_SEL_DDS);
+	dac_init(ad9361_phy_b, DATA_SEL_DDS, 0);
 #endif
-	dac_init(ad9361_phy, DATA_SEL_DDS);
+	dac_init(ad9361_phy, DATA_SEL_DDS, 1);
 #endif
 #endif
 

@@ -49,6 +49,11 @@
 #include "util.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+//#define FMCOMMS5
+
+/******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct adc_state adc_st;
@@ -149,6 +154,10 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	{
 		length = (size * 4);
 	}
+
+#ifdef FMCOMMS5
+	length = (size * 16);
+#endif
 
 	adc_dma_write(AXI_DMAC_REG_CTRL, 0x0);
 	adc_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);

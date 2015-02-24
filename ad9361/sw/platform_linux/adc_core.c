@@ -241,6 +241,10 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 		length = (size * 4);
 	}
 
+#ifdef FMCOMMS5
+	length = (size * 16);
+#endif
+
 	if(length > rx_buff_mem_size) {
 		printf("%s: Desired length (%d) is bigger than the buffer size (%d).", __func__, length, rx_buff_mem_size);
 		return -1;
@@ -299,6 +303,11 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	uint32_t data, data_i1, data_q1, data_i2, data_q2;
 	FILE *f;
 	uint32_t ch1, ch2;
+	uint32_t length;
+#ifdef FMCOMMS5
+	uint32_t data_i3, data_q3, data_i4, data_q4;
+	uint32_t ch3, ch4;
+#endif
 
 	adc_capture(size, start_address);
 	start_address = rx_buff_mem_addr;
@@ -342,7 +351,77 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 		return -1;
 	}
 
-	for(index = 0; index < size * 2; index += 2)
+	if(adc_st.rx2tx2)
+	{
+		length = (size * 8);
+	}
+	else
+	{
+		length = (size * 4);
+	}
+
+#ifdef FMCOMMS5
+	length = (size * 16);
+#endif
+
+#ifdef FMCOMMS5
+	for(index = 0; index < (length / 2); index += 4)
+	{
+		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
+		data_q1 = (data & 0xFFFF);
+		data_i1 = (data >> 16) & 0xFFFF;
+		data = *((unsigned *) (rx_buff_virt_addr + ((index + 1) * 4)));
+		data_q2 = (data & 0xFFFF);
+		data_i2 = (data >> 16) & 0xFFFF;
+
+		data = *((unsigned *) (rx_buff_virt_addr + ((index + 2) * 4)));
+		data_q3 = (data & 0xFFFF);
+		data_i3 = (data >> 16) & 0xFFFF;
+		data = *((unsigned *) (rx_buff_virt_addr + ((index + 3) * 4)));
+		data_q4 = (data & 0xFFFF);
+		data_i4 = (data >> 16) & 0xFFFF;
+
+		if(bin_file)
+		{
+			ch1 = (data_i1 << 16) | data_q1;
+			fwrite(&ch1,1,4,f);
+			if(ch_no == 2)
+			{
+				ch2 = (data_i2 << 16) | data_q2;
+				fwrite(&ch2,1,4,f);
+			}
+			if(ch_no == 4)
+			{
+				ch2 = (data_i2 << 16) | data_q2;
+				fwrite(&ch2,1,4,f);
+				ch3 = (data_i3 << 16) | data_q3;
+				fwrite(&ch3,1,4,f);
+				ch4 = (data_i4 << 16) | data_q4;
+				fwrite(&ch4,1,4,f);
+			}
+		}
+		else
+		{
+			if(ch_no == 4)
+			{
+				fprintf(f, "%d,%d,%d,%d,%d,%d,%d,%d\n", data_q1, data_i1,
+					data_q2, data_i2, data_q3, data_i3, data_q4, data_i4);
+			}
+			else
+			{
+				if(ch_no == 2)
+				{
+					fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
+				}
+				else
+				{
+					fprintf(f, "%d,%d\n", data_q1, data_i1);
+				}
+			}
+		}
+	}
+#else
+	for(index = 0; index < (length / 2); index += 2)
 	{
 		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
 		data_q1 = (data & 0xFFFF);
@@ -372,6 +451,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 			}
 		}
 	}
+#endif
 
 	fclose(f);
 	munmap(mapping_addr, mapping_length);

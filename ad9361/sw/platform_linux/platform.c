@@ -243,11 +243,10 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 *******************************************************************************/
 bool gpio_is_valid(int number)
 {
-	if (number) {
-		// Unused variable - fix compiler warning
-	}
-
-	return 1;
+	if(number >= 0)
+		return 1;
+	else
+		return 0;
 }
 
 /***************************************************************************//**
@@ -313,7 +312,7 @@ unsigned long msleep_interruptible(unsigned int msecs)
 void axiadc_init(struct ad9361_rf_phy *phy)
 {
 	adc_init(phy);
-	dac_init(phy, DATA_SEL_DDS);
+	dac_init(phy, DATA_SEL_DDS, 0);
 }
 
 /***************************************************************************//**
