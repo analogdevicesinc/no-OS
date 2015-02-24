@@ -218,7 +218,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 		dac_datasel(phy, -1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
-		if(has_dma)
+		if(config_dma)
 		{
 #ifdef DMA_UIO
 			get_file_info(TX_BUFF_MEM_SIZE, &tx_buff_mem_size);
