@@ -273,7 +273,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 				length = (tx_count * 4);
 			}
 #ifdef FMCOMMS5
-			length = (size * 16);
+			length = (tx_count * 16);
 #endif
 			dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 			dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
