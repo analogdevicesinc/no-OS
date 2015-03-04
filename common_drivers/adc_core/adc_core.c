@@ -3,7 +3,7 @@
 * @brief Implementation of ADC Core Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -41,6 +41,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xil_io.h>
+#include <xil_printf.h>
+#ifdef ADC_DMAC_INTERRUPTS
+#include <xscugic.h>
+#endif
 #include "adc_core.h"
 #include "platform_drivers.h"
 
@@ -49,6 +53,19 @@
 /******************************************************************************/
 uint32_t adc_baseaddr;
 uint32_t adc_dmac_baseaddr;
+#ifdef ADC_DMAC_INTERRUPTS
+uint8_t  adc_sot_flag			= 0;
+uint8_t  adc_eot_flag			= 0;
+uint32_t adc_dmac_start_address	= 0;
+#endif
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#ifdef ADC_DMAC_INTERRUPTS
+#define ADC_DMAC_INT_ID			89
+#define ADC_DMAC_TRANSFER_SIZE	32768
+#endif
 
 /***************************************************************************//**
 * @brief adc_read
@@ -122,11 +139,37 @@ int32_t adc_setup(uint32_t adc_addr, uint32_t dma_addr,  uint8_t ch_no)
 	}
 }
 
+#ifdef ADC_DMAC_INTERRUPTS
+/***************************************************************************//**
+ * @brief adc_dmac_isr
+*******************************************************************************/
+void adc_dmac_isr(void *instance)
+{
+	uint32_t reg_val;
+
+	adc_dmac_read(ADC_DMAC_REG_IRQ_PENDING, &reg_val);
+	adc_dmac_write(ADC_DMAC_REG_IRQ_PENDING, reg_val);
+	if(reg_val & ADC_DMAC_IRQ_SOT)
+	{
+		adc_sot_flag = 1;
+		adc_dmac_start_address += ADC_DMAC_TRANSFER_SIZE;
+		adc_dmac_write(ADC_DMAC_REG_DEST_ADDRESS, adc_dmac_start_address);
+		/* The current transfer was started and a new one is queued. */
+		adc_dmac_write(ADC_DMAC_REG_START_TRANSFER, 0x1);
+	}
+	if(reg_val & ADC_DMAC_IRQ_EOT)
+	{
+		adc_eot_flag = 1;
+	}
+}
+#endif
+
 /***************************************************************************//**
  * @brief adc_capture
 *******************************************************************************/
 int32_t adc_capture(uint32_t size, uint32_t start_address)
 {
+
 	uint32_t reg_val;
 	uint32_t transfer_id;
 	uint32_t length;
@@ -142,6 +185,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	adc_dmac_read(ADC_DMAC_REG_IRQ_PENDING, &reg_val);
 	adc_dmac_write(ADC_DMAC_REG_IRQ_PENDING, reg_val);
 
+#ifndef ADC_DMAC_INTERRUPTS
 	adc_dmac_write(ADC_DMAC_REG_DEST_ADDRESS, start_address);
 	adc_dmac_write(ADC_DMAC_REG_DEST_STRIDE, 0x0);
 	adc_dmac_write(ADC_DMAC_REG_X_LENGTH, length - 1);
@@ -166,6 +210,44 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 		adc_dmac_read(ADC_DMAC_REG_TRANSFER_DONE, &reg_val);
 	}
 	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+#else
+	XScuGic_Config	*gic_config;
+	XScuGic			gic;
+	int32_t			status;
+
+	gic_config = XScuGic_LookupConfig(XPAR_PS7_SCUGIC_0_DEVICE_ID);
+	if(gic_config == NULL)
+		xil_printf("Error\n");
+
+	status = XScuGic_CfgInitialize(&gic, gic_config, gic_config->CpuBaseAddress);
+	if(status)
+		xil_printf("Error\n");
+
+	XScuGic_SetPriorityTriggerType(&gic, ADC_DMAC_INT_ID, 0x0, 0x3);
+
+	status = XScuGic_Connect(&gic, ADC_DMAC_INT_ID, (Xil_ExceptionHandler)adc_dmac_isr, NULL);
+	if(status)
+		xil_printf("Error\n");
+
+	XScuGic_Enable(&gic, ADC_DMAC_INT_ID);
+
+	Xil_ExceptionInit();
+
+	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT, (Xil_ExceptionHandler)XScuGic_InterruptHandler, (void *)&gic);
+	Xil_ExceptionEnable();
+
+	adc_dmac_start_address = start_address;
+
+	adc_dmac_write(ADC_DMAC_REG_DEST_ADDRESS, adc_dmac_start_address);
+	adc_dmac_write(ADC_DMAC_REG_DEST_STRIDE, 0x0);
+	adc_dmac_write(ADC_DMAC_REG_X_LENGTH, ADC_DMAC_TRANSFER_SIZE - 1);
+	adc_dmac_write(ADC_DMAC_REG_Y_LENGTH, 0x0);
+
+	adc_dmac_write(ADC_DMAC_REG_START_TRANSFER, 0x1);
+
+	while(adc_dmac_start_address < (start_address + length + ADC_DMAC_TRANSFER_SIZE));
+	adc_dmac_write(ADC_DMAC_REG_CTRL, 0x0);
+#endif
 
 	return 0;
 }
