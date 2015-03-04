@@ -4454,6 +4454,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (pd->use_ext_rx_lo)
 		ad9361_trx_ext_lo_control(phy, false, pd->use_ext_rx_lo);
 
+	/* Skip quad cal here we do it later again */
+	phy->last_tx_quad_cal_freq = pd->tx_synth_freq;
 	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL], ad9361_to_clk(pd->tx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set TX Synth rate (%"PRId32")",
