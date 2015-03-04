@@ -440,14 +440,17 @@ void dds_update(struct ad9361_rf_phy *phy)
 *******************************************************************************/
 int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select sel)
 {
+	int i;
+
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) > 7) {
 		if (chan < 0) { /* ALL */
-			int i;
 			for (i = 0; i < dds_st[phy->id_no].num_buf_channels; i++) {
 				dac_write(phy, DAC_REG_CHAN_CNTRL_7(i), sel);
+				dds_st[phy->id_no].cached_datasel[i] = sel;
 			}
 		} else {
 			dac_write(phy, DAC_REG_CHAN_CNTRL_7(chan), sel);
+			dds_st[phy->id_no].cached_datasel[chan] = sel;
 		}
 	} else {
 		uint32_t reg;
@@ -464,8 +467,10 @@ int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_selec
 		default:
 			return -EINVAL;
 		}
+		for (i = 0; i < dds_st[phy->id_no].num_buf_channels; i++) {
+			dds_st[phy->id_no].cached_datasel[i] = sel;
+		}
 	}
-	dds_st[phy->id_no].cached_datasel[chan] = sel;
 
 	return 0;
 }
