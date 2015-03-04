@@ -3753,6 +3753,7 @@ struct ad9361_rf_phy {
 
 	bool			auto_cal_en;
 	uint64_t			last_tx_quad_cal_freq;
+	uint32_t			last_tx_quad_cal_phase;
 	uint32_t		flags;
 	uint32_t		cal_threshold_freq;
 	uint32_t			current_rx_bw_Hz;
