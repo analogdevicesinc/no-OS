@@ -1362,3 +1362,33 @@ int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy,
 
 	return ret;
 }
+
+/**
+ * Set the OSR rate governor.
+ * @param phy The AD9361 current state structure.
+ * @param rate_gov Option: 0 - highest OSR;
+ * 						   1 - nominal.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t rate_gov)
+{
+	if (rate_gov == 0)
+		phy->rate_governor = 0;
+	else
+		phy->rate_governor = 1;
+
+	return 0;
+}
+
+/**
+ * Get the OSR rate governor.
+ * @param phy The AD9361 current state structure.
+ * @param rate_gov Option buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov)
+{
+	*rate_gov = phy->rate_governor;
+
+	return 0;
+}
