@@ -4548,6 +4548,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
+	phy->current_rx_bw_Hz = pd->rf_rx_bandwidth_Hz;
+	phy->current_tx_bw_Hz = pd->rf_tx_bandwidth_Hz;
 	phy->last_tx_quad_cal_phase = ~0;
 	ret = ad9361_tx_quad_calib(phy, real_rx_bandwidth, real_tx_bandwidth, -1);
 	if (ret < 0)
@@ -4591,8 +4593,6 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ad9361_ensm_set_state(phy, pd->fdd ? ENSM_STATE_FDD : ENSM_STATE_RX,
 		pd->ensm_pin_ctrl);
 
-	phy->current_rx_bw_Hz = pd->rf_rx_bandwidth_Hz;
-	phy->current_tx_bw_Hz = pd->rf_tx_bandwidth_Hz;
 	phy->auto_cal_en = true;
 	phy->cal_threshold_freq = 100000000ULL; /* 100 MHz */
 
