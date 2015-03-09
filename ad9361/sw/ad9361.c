@@ -6087,10 +6087,10 @@ static int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 	if (!phy->pdata->fdd) {
 		ad9361_set_ensm_mode(phy, true, false);
 		ad9361_ensm_force_state(phy, ENSM_STATE_FDD);
+	} else {
+		ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
+		ad9361_ensm_restore_prev_state(phy);
 	}
-
-	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
-	ad9361_ensm_restore_prev_state(phy);
 
 	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
 
