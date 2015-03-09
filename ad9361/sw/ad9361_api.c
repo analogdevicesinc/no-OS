@@ -1336,3 +1336,29 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 
 	return 0;
 }
+
+/**
+ * Enable/disable the TRX FIR filters.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy,
+								  uint8_t en_dis)
+{
+	int32_t ret = 0;
+
+	if ((phy->bypass_rx_fir == phy->bypass_tx_fir) &&
+			(phy->bypass_rx_fir == !en_dis))
+		return ret;
+
+	phy->bypass_rx_fir = !en_dis;
+	phy->bypass_tx_fir = !en_dis;
+	ret = ad9361_validate_enable_fir(phy);
+	if (ret < 0) {
+		phy->bypass_rx_fir = true;
+		phy->bypass_tx_fir = true;
+	}
+
+	return ret;
+}

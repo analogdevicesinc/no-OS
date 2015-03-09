@@ -364,4 +364,6 @@ int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_cl
 int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode);
 /* Do multi chip synchronization. */
 int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *phy_slave);
+/* Enable/disable the TRX FIR filters. */
+int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 #endif
