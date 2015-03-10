@@ -129,7 +129,7 @@ static inline int32_t ad6676_get_splitreg(uint32_t reg, uint32_t *val)
 static int32_t ad6676_set_fadc(uint32_t val)
 {
 	return ad6676_set_splitreg(AD6676_FADC_0,
-			clamp_t(u32, val, MIN_FADC, MAX_FADC) / MHz);
+			clamp_t(uint32_t, val, MIN_FADC, MAX_FADC) / MHz);
 }
 
 /***************************************************************************//**
@@ -373,7 +373,7 @@ int32_t ad6676_shuffle_setup(struct ad6676_shuffler_conf *conf)
 	uint32_t reg_val, val, thresh;
 	int32_t i;
 
-	thresh = clamp_t(u8, conf->shuffle_thresh, 0, 8U);
+	thresh = clamp_t(uint8_t, conf->shuffle_thresh, 0, 8U);
 
 	for (i = 0; i < 4; i++) {
 		if ((i + 1) == conf->shuffle_ctrl)
