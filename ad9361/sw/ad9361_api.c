@@ -213,24 +213,23 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->gain_ctrl.sync_for_gain_counter_en = init_param->agc_sync_for_gain_counter_enable;
 
 	/* Fast AGC */
-
 	phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration = init_param->fagc_dec_pow_measuremnt_duration;
-	phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration = init_param->fagc_state_wait_time_ns;
-		/* Fast AGC - Low Power */
+	phy->pdata->gain_ctrl.f_agc_state_wait_time_ns  = init_param->fagc_state_wait_time_ns;
+	/* Fast AGC - Low Power */
 	phy->pdata->gain_ctrl.f_agc_allow_agc_gain_increase = init_param->fagc_allow_agc_gain_increase;
 	phy->pdata->gain_ctrl.f_agc_lp_thresh_increment_time = init_param->fagc_lp_thresh_increment_time;
 	phy->pdata->gain_ctrl.f_agc_lp_thresh_increment_steps = init_param->fagc_lp_thresh_increment_steps;
-		/* Fast AGC - Lock Level */
+	/* Fast AGC - Lock Level */
 	phy->pdata->gain_ctrl.f_agc_lock_level = init_param->fagc_lock_level;
 	phy->pdata->gain_ctrl.f_agc_lock_level_lmt_gain_increase_en = init_param->fagc_lock_level_lmt_gain_increase_en;
 	phy->pdata->gain_ctrl.f_agc_lock_level_gain_increase_upper_limit = init_param->fagc_lock_level_gain_increase_upper_limit;
-		/* Fast AGC - Peak Detectors and Final Settling */
+	/* Fast AGC - Peak Detectors and Final Settling */
 	phy->pdata->gain_ctrl.f_agc_lpf_final_settling_steps = init_param->fagc_lpf_final_settling_steps;
 	phy->pdata->gain_ctrl.f_agc_lmt_final_settling_steps = init_param->fagc_lmt_final_settling_steps;
 	phy->pdata->gain_ctrl.f_agc_final_overrange_count = init_param->fagc_final_overrange_count;
-		/* Fast AGC - Final Power Test */
+	/* Fast AGC - Final Power Test */
 	phy->pdata->gain_ctrl.f_agc_gain_increase_after_gain_lock_en = init_param->fagc_gain_increase_after_gain_lock_en;
-		/* Fast AGC - Unlocking the Gain */
+	/* Fast AGC - Unlocking the Gain */
 	phy->pdata->gain_ctrl.f_agc_gain_index_type_after_exit_rx_mode = (enum f_agc_target_gain_index_type)init_param->fagc_gain_index_type_after_exit_rx_mode;
 	phy->pdata->gain_ctrl.f_agc_use_last_lock_level_for_set_gain_en = init_param->fagc_use_last_lock_level_for_set_gain_en;
 	phy->pdata->gain_ctrl.f_agc_rst_gla_stronger_sig_thresh_exceeded_en = init_param->fagc_rst_gla_stronger_sig_thresh_exceeded_en;
