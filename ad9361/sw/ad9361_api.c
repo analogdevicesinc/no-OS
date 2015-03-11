@@ -338,8 +338,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->gpio_cal_sw2 = init_param->gpio_cal_sw2;
 
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
-	phy->pdata->port_ctrl.lvds_invert[0] = 0xFF;
-	phy->pdata->port_ctrl.lvds_invert[1] = 0x0F;
+	phy->pdata->port_ctrl.lvds_invert[0] = init_param->lvds_invert1_control;
+	phy->pdata->port_ctrl.lvds_invert[1] = init_param->lvds_invert2_control;
 
 	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
 

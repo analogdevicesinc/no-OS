@@ -233,6 +233,8 @@ typedef struct
 	uint32_t	lvds_bias_mV;	/* adi,lvds-bias-mV */
 	uint8_t		lvds_rx_onchip_termination_enable;	/* adi,lvds-rx-onchip-termination-enable */
 	uint8_t		rx1rx2_phase_inversion_en;	/* adi,rx1-rx2-phase-inversion-enable */
+	uint8_t		lvds_invert1_control;	/* adi,lvds-invert1-control */
+	uint8_t		lvds_invert2_control;	/* adi,lvds-invert2-control */
 	/* Tx Monitor Control */
 	uint32_t	low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
 	uint32_t	low_gain_dB;	/* adi,txmon-low-gain */

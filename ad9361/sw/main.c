@@ -266,6 +266,8 @@ AD9361_InitParam default_init_param = {
 	150,	//lvds_bias_mV *** adi,lvds-bias-mV
 	1,		//lvds_rx_onchip_termination_enable *** adi,lvds-rx-onchip-termination-enable
 	0,		//rx1rx2_phase_inversion_en *** adi,rx1-rx2-phase-inversion-enable
+	0xFF,	//lvds_invert1_control *** adi,lvds-invert1-control
+	0x0F,	//lvds_invert2_control *** adi,lvds-invert2-control
 	/* Tx Monitor Control */
 	37000,	//low_high_gain_threshold_mdB *** adi,txmon-low-high-thresh
 	0,		//low_gain_dB *** adi,txmon-low-gain
