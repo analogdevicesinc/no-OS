@@ -88,7 +88,8 @@ int32_t ad9144_spi_write(uint16_t reg_addr, uint8_t reg_data)
 /***************************************************************************//**
 * @brief ad9144_setup
 *******************************************************************************/
-int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select)
+int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
+						ad9144_init_param init_param)
 {
 	uint8_t chip_id;
 	uint8_t scratchpad;
@@ -187,10 +188,10 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select)
 
 	// cross-bar
 
-	ad9144_spi_write(REG_XBAR_LN_0_1, SRC_LANE0(0) |
-		SRC_LANE1(3));	// lane selects
-	ad9144_spi_write(REG_XBAR_LN_2_3, SRC_LANE2(1) |
-		SRC_LANE3(2));	// lane selects
+	ad9144_spi_write(REG_XBAR_LN_0_1, SRC_LANE0(init_param.jesd_xbar_lane0_sel) |
+		SRC_LANE1(init_param.jesd_xbar_lane1_sel));	// lane selects
+	ad9144_spi_write(REG_XBAR_LN_2_3, SRC_LANE2(init_param.jesd_xbar_lane2_sel) |
+		SRC_LANE3(init_param.jesd_xbar_lane3_sel));	// lane selects
 
 	// data link layer
 

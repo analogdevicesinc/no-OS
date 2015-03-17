@@ -214,6 +214,13 @@ struct ad9523_platform_data ad9523_pdata_lpc =
 	"ad9523-lpc" //name
 };
 
+ad9144_init_param default_ad9144_init_param = {
+	2,	// jesd_xbar_lane0_sel
+	3,	// jesd_xbar_lane1_sel
+	0,	// jesd_xbar_lane2_sel
+	1,	// jesd_xbar_lane3_sel
+};
+
 /***************************************************************************//**
 * @brief daq2_gpio_ctl
 *******************************************************************************/
@@ -250,7 +257,7 @@ int main(void)
 
 	ad9523_setup(SPI_DEVICE_ID, 0, ad9523_pdata_lpc);
 
-	ad9144_setup(SPI_DEVICE_ID, 1);
+	ad9144_setup(SPI_DEVICE_ID, 1, default_ad9144_init_param);
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;

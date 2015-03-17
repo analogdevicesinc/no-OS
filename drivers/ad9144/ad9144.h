@@ -1338,10 +1338,19 @@
 
 #define AD9144_CHIP_ID							0x44
 
+typedef struct
+{
+	uint8_t jesd_xbar_lane0_sel;
+	uint8_t jesd_xbar_lane1_sel;
+	uint8_t jesd_xbar_lane2_sel;
+	uint8_t jesd_xbar_lane3_sel;
+}ad9144_init_param;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select);
+int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
+						ad9144_init_param init_param);
 int32_t ad9144_spi_read(uint16_t reg_addr, uint8_t *reg_data);
 
 #endif
