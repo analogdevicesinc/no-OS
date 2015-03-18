@@ -3108,6 +3108,11 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy, struct gain_control *c
 	ad9361_spi_writef(spi, REG_FAST_STRONGER_SIGNAL_THRESH,
 		STRONGER_SIGNAL_THRESH(~0), reg);
 
+	reg = ctrl->f_agc_rst_gla_engergy_lost_sig_thresh_below_ll;
+	reg = clamp_t(uint32_t, reg, 0U, 63U);
+	ad9361_spi_writef(spi, REG_FAST_ENERGY_LOST_THRESH,
+			  ENERGY_LOST_THRESH(~0),  reg);
+
 	reg = ctrl->f_agc_rst_gla_engergy_lost_goto_optim_gain_en;
 	ad9361_spi_writef(spi, REG_FAST_CONFIG_1,
 		GOTO_OPT_GAIN_IF_ENERGY_LOST_OR_EN_AGC_HIGH, reg);
