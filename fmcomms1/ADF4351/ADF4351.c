@@ -226,9 +226,10 @@ int64_t adf4351_set_freq(struct adf4351_state *st, uint64_t freq,
 		st->r0_int = (uint32_t)tmp;
 	} while (mdiv > st->r0_int);
 
-	band_sel_div = st->fpfd % ADF4351_MAX_BANDSEL_CLK > ADF4351_MAX_BANDSEL_CLK / 2 ?
-					st->fpfd / ADF4351_MAX_BANDSEL_CLK + 1 :
-					st->fpfd / ADF4351_MAX_BANDSEL_CLK;
+	band_sel_div = (((st->fpfd) + (ADF4351_MAX_BANDSEL_CLK) - 1) / (ADF4351_MAX_BANDSEL_CLK));	// DIV_ROUND_UP
+
+	if (st->fpfd == ADF4351_MAX_FREQ_PFD)
+		band_sel_div = 255;
 
 	if (st->r0_fract && st->r1_mod) {
 		div_gcd = gcd(st->r1_mod, st->r0_fract);
