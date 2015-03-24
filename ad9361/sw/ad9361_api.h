@@ -372,4 +372,6 @@ int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 int32_t ad9361_set_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t rate_gov);
 /* Get the OSR rate governor. */
 int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov);
+/* Perform the selected calibration. */
+int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
 #endif

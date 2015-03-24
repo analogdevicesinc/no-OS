@@ -4612,7 +4612,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
  * @param arg The argument of the calibration.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
+int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
 {
 	int32_t ret;
 

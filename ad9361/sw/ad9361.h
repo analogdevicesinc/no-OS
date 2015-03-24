@@ -3892,4 +3892,5 @@ void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
 int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
 				    uint32_t rx_inputs, uint32_t txb);
 int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step);
+int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
 #endif

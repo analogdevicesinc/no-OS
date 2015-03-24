@@ -1391,3 +1391,15 @@ int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov)
 
 	return 0;
 }
+
+/**
+ * Perform the selected calibration.
+ * @param phy The AD9361 state structure.
+ * @param cal The selected calibration (TX_QUAD_CAL, RFDC_CAL).
+ * @param arg For TX_QUAD_CAL - the optional RX phase value overwrite (set to zero).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
+{
+	return ad9361_do_calib_run(phy, cal, arg);
+}
