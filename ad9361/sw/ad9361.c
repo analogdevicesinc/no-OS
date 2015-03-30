@@ -2138,8 +2138,10 @@ static int32_t ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 
 	/* Enable FDD mode during calibrations */
 
-	if (!phy->pdata->fdd)
-		ad9361_spi_write(phy->spi, REG_PARALLEL_PORT_CONF_3, LVDS_MODE);
+	if (!phy->pdata->fdd) {
+		ad9361_spi_writef(phy->spi, REG_PARALLEL_PORT_CONF_3,
+				  HALF_DUPLEX_MODE, 0);
+	}
 
 	ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2, DUAL_SYNTH_MODE);
 	ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_1,
@@ -2822,6 +2824,14 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 		return ad9361_spi_write(spi, REG_PARALLEL_PORT_CONF_3,
 			pd->port_ctrl.pp_conf[2]);
 	}
+
+	/* Sanity check */
+	if (pd->port_ctrl.pp_conf[2] & LVDS_MODE)
+		pd->port_ctrl.pp_conf[2] &=
+		~(HALF_DUPLEX_MODE | SINGLE_DATA_RATE | SINGLE_PORT_MODE);
+
+	if (pd->port_ctrl.pp_conf[2] & FULL_PORT)
+		pd->port_ctrl.pp_conf[2] &= ~(HALF_DUPLEX_MODE | SINGLE_PORT_MODE);
 
 	ad9361_spi_write(spi, REG_PARALLEL_PORT_CONF_1, pd->port_ctrl.pp_conf[0]);
 	ad9361_spi_write(spi, REG_PARALLEL_PORT_CONF_2, pd->port_ctrl.pp_conf[1]);
