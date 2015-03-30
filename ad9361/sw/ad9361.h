@@ -3058,6 +3058,29 @@ struct auxadc_control {
 	uint32_t			auxadc_decimation;
 };
 
+struct gpo_control {
+	bool gpo0_inactive_state_high_en;
+	bool gpo1_inactive_state_high_en;
+	bool gpo2_inactive_state_high_en;
+	bool gpo3_inactive_state_high_en;
+	bool gpo0_slave_rx_en;
+	bool gpo0_slave_tx_en;
+	bool gpo1_slave_rx_en;
+	bool gpo1_slave_tx_en;
+	bool gpo2_slave_rx_en;
+	bool gpo2_slave_tx_en;
+	bool gpo3_slave_rx_en;
+	bool gpo3_slave_tx_en;
+	uint8_t gpo0_rx_delay_us;
+	uint8_t gpo0_tx_delay_us;
+	uint8_t gpo1_rx_delay_us;
+	uint8_t gpo1_tx_delay_us;
+	uint8_t gpo2_rx_delay_us;
+	uint8_t gpo2_tx_delay_us;
+	uint8_t gpo3_rx_delay_us;
+	uint8_t gpo3_tx_delay_us;
+};
+
 struct tx_monitor_control {
 	bool tx_mon_track_en;
 	bool one_shot_mode_en;
@@ -3150,6 +3173,7 @@ struct ad9361_phy_platform_data {
 	struct elna_control	elna_ctrl;
 	struct auxadc_control	auxadc_ctrl;
 	struct auxdac_control	auxdac_ctrl;
+	struct gpo_control	gpo_ctrl;
 	struct tx_monitor_control txmon_ctrl;
 
 	int32_t 			gpio_resetb;

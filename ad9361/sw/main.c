@@ -268,6 +268,27 @@ AD9361_InitParam default_init_param = {
 	0,		//rx1rx2_phase_inversion_en *** adi,rx1-rx2-phase-inversion-enable
 	0xFF,	//lvds_invert1_control *** adi,lvds-invert1-control
 	0x0F,	//lvds_invert2_control *** adi,lvds-invert2-control
+	/* GPO Control */
+	0,		//gpo0_inactive_state_high_enable *** adi,gpo0-inactive-state-high-enable
+	0,		//gpo1_inactive_state_high_enable *** adi,gpo1-inactive-state-high-enable
+	0,		//gpo2_inactive_state_high_enable *** adi,gpo2-inactive-state-high-enable
+	0,		//gpo3_inactive_state_high_enable *** adi,gpo3-inactive-state-high-enable
+	0,		//gpo0_slave_rx_enable *** adi,gpo0-slave-rx-enable
+	0,		//gpo0_slave_tx_enable *** adi,gpo0-slave-tx-enable
+	0,		//gpo1_slave_rx_enable *** adi,gpo1-slave-rx-enable
+	0,		//gpo1_slave_tx_enable *** adi,gpo1-slave-tx-enable
+	0,		//gpo2_slave_rx_enable *** adi,gpo2-slave-rx-enable
+	0,		//gpo2_slave_tx_enable *** adi,gpo2-slave-tx-enable
+	0,		//gpo3_slave_rx_enable *** adi,gpo3-slave-rx-enable
+	0,		//gpo3_slave_tx_enable *** adi,gpo3-slave-tx-enable
+	0,		//gpo0_rx_delay_us *** adi,gpo0-rx-delay-us
+	0,		//gpo0_tx_delay_us *** adi,gpo0-tx-delay-us
+	0,		//gpo1_rx_delay_us *** adi,gpo1-rx-delay-us
+	0,		//gpo1_tx_delay_us *** adi,gpo1-tx-delay-us
+	0,		//gpo2_rx_delay_us *** adi,gpo2-rx-delay-us
+	0,		//gpo2_tx_delay_us *** adi,gpo2-tx-delay-us
+	0,		//gpo3_rx_delay_us *** adi,gpo3-rx-delay-us
+	0,		//gpo3_tx_delay_us *** adi,gpo3-tx-delay-us
 	/* Tx Monitor Control */
 	37000,	//low_high_gain_threshold_mdB *** adi,txmon-low-high-thresh
 	0,		//low_gain_dB *** adi,txmon-low-gain

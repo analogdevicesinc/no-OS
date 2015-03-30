@@ -3401,23 +3401,36 @@ struct ctrl_outs_control *ctrl)
  * @param phy The AD9361 state structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_gpo_setup(struct ad9361_rf_phy *phy)
+static int32_t ad9361_gpo_setup(struct ad9361_rf_phy *phy, struct gpo_control *ctrl)
 {
 	struct spi_device *spi = phy->spi;
-	/* FIXME later */
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
-	ad9361_spi_write(spi, 0x020, 0x00); // GPO Auto Enable Setup in RX and TX
-	ad9361_spi_write(spi, 0x027, 0x03); // GPO Manual and GPO auto value in ALERT
-	ad9361_spi_write(spi, 0x028, 0x00); // GPO_0 RX Delay
-	ad9361_spi_write(spi, 0x029, 0x00); // GPO_1 RX Delay
-	ad9361_spi_write(spi, 0x02a, 0x00); // GPO_2 RX Delay
-	ad9361_spi_write(spi, 0x02b, 0x00); // GPO_3 RX Delay
-	ad9361_spi_write(spi, 0x02c, 0x00); // GPO_0 TX Delay
-	ad9361_spi_write(spi, 0x02d, 0x00); // GPO_1 TX Delay
-	ad9361_spi_write(spi, 0x02e, 0x00); // GPO_2 TX Delay
-	ad9361_spi_write(spi, 0x02f, 0x00); // GPO_3 TX Delay
+	ad9361_spi_write(spi, REG_AUTO_GPO,
+			 GPO_ENABLE_AUTO_RX(ctrl->gpo0_slave_rx_en |
+				(ctrl->gpo1_slave_rx_en << 1) |
+				(ctrl->gpo2_slave_rx_en << 2) |
+				(ctrl->gpo3_slave_rx_en << 3)) |
+			 GPO_ENABLE_AUTO_TX(ctrl->gpo0_slave_tx_en |
+				(ctrl->gpo1_slave_tx_en << 1) |
+				(ctrl->gpo2_slave_tx_en << 2) |
+				(ctrl->gpo3_slave_tx_en << 3)));
+
+	ad9361_spi_write(spi, REG_GPO_FORCE_AND_INIT,
+			 GPO_INIT_STATE(ctrl->gpo0_inactive_state_high_en |
+				(ctrl->gpo1_inactive_state_high_en << 1) |
+				(ctrl->gpo2_inactive_state_high_en << 2) |
+				(ctrl->gpo3_inactive_state_high_en << 3)));
+
+	ad9361_spi_write(spi, REG_GPO0_RX_DELAY, ctrl->gpo0_rx_delay_us);
+	ad9361_spi_write(spi, REG_GPO0_TX_DELAY, ctrl->gpo0_tx_delay_us);
+	ad9361_spi_write(spi, REG_GPO1_RX_DELAY, ctrl->gpo1_rx_delay_us);
+	ad9361_spi_write(spi, REG_GPO1_TX_DELAY, ctrl->gpo1_tx_delay_us);
+	ad9361_spi_write(spi, REG_GPO2_RX_DELAY, ctrl->gpo2_rx_delay_us);
+	ad9361_spi_write(spi, REG_GPO2_TX_DELAY, ctrl->gpo2_tx_delay_us);
+	ad9361_spi_write(spi, REG_GPO3_RX_DELAY, ctrl->gpo3_rx_delay_us);
+	ad9361_spi_write(spi, REG_GPO3_TX_DELAY, ctrl->gpo3_tx_delay_us);
 
 	return 0;
 }
@@ -4433,7 +4446,7 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_gpo_setup(phy);
+	ret = ad9361_gpo_setup(phy, &pd->gpo_ctrl);
 	if (ret < 0)
 		return ret;
 

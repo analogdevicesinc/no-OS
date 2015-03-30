@@ -235,6 +235,27 @@ typedef struct
 	uint8_t		rx1rx2_phase_inversion_en;	/* adi,rx1-rx2-phase-inversion-enable */
 	uint8_t		lvds_invert1_control;	/* adi,lvds-invert1-control */
 	uint8_t		lvds_invert2_control;	/* adi,lvds-invert2-control */
+	/* GPO Control */
+	uint8_t gpo0_inactive_state_high_enable;	/* adi,gpo0-inactive-state-high-enable */
+	uint8_t gpo1_inactive_state_high_enable;	/* adi,gpo1-inactive-state-high-enable */
+	uint8_t gpo2_inactive_state_high_enable;	/* adi,gpo2-inactive-state-high-enable */
+	uint8_t gpo3_inactive_state_high_enable;	/* adi,gpo3-inactive-state-high-enable */
+	uint8_t gpo0_slave_rx_enable;	/* adi,gpo0-slave-rx-enable */
+	uint8_t gpo0_slave_tx_enable;	/* adi,gpo0-slave-tx-enable */
+	uint8_t gpo1_slave_rx_enable;	/* adi,gpo1-slave-rx-enable */
+	uint8_t gpo1_slave_tx_enable;	/* adi,gpo1-slave-tx-enable */
+	uint8_t gpo2_slave_rx_enable;	/* adi,gpo2-slave-rx-enable */
+	uint8_t gpo2_slave_tx_enable;	/* adi,gpo2-slave-tx-enable */
+	uint8_t gpo3_slave_rx_enable;	/* adi,gpo3-slave-rx-enable */
+	uint8_t gpo3_slave_tx_enable;	/* adi,gpo3-slave-tx-enable */
+	uint8_t gpo0_rx_delay_us;	/* adi,gpo0-rx-delay-us */
+	uint8_t gpo0_tx_delay_us;	/* adi,gpo0-tx-delay-us */
+	uint8_t gpo1_rx_delay_us;	/* adi,gpo1-rx-delay-us */
+	uint8_t gpo1_tx_delay_us;	/* adi,gpo1-tx-delay-us */
+	uint8_t gpo2_rx_delay_us;	/* adi,gpo2-rx-delay-us */
+	uint8_t gpo2_tx_delay_us;	/* adi,gpo2-tx-delay-us */
+	uint8_t gpo3_rx_delay_us;	/* adi,gpo3-rx-delay-us */
+	uint8_t gpo3_tx_delay_us;	/* adi,gpo3-tx-delay-us */
 	/* Tx Monitor Control */
 	uint32_t	low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
 	uint32_t	low_gain_dB;	/* adi,txmon-low-gain */
