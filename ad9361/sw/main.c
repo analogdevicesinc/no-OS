@@ -171,22 +171,21 @@ AD9361_InitParam default_init_param = {
 	/* Fast AGC */
 	64,		//fagc_dec_pow_measuremnt_duration ***  adi,fagc-dec-pow-measurement-duration
 	260,	//fagc_state_wait_time_ns ***  adi,fagc-state-wait-time-ns
-		/* Fast AGC - Low Power */
+	/* Fast AGC - Low Power */
 	0,		//fagc_allow_agc_gain_increase ***  adi,fagc-allow-agc-gain-increase-enable
 	5,		//fagc_lp_thresh_increment_time ***  adi,fagc-lp-thresh-increment-time
 	1,		//fagc_lp_thresh_increment_steps ***  adi,fagc-lp-thresh-increment-steps
-		/* Fast AGC - Lock Level */
+	/* Fast AGC - Lock Level */
 	10,		//fagc_lock_level ***  adi,fagc-lock-level */
 	1,		//fagc_lock_level_lmt_gain_increase_en ***  adi,fagc-lock-level-lmt-gain-increase-enable
 	5,		//fagc_lock_level_gain_increase_upper_limit ***  adi,fagc-lock-level-gain-increase-upper-limit
-		/* Fast AGC - Peak Detectors and Final Settling */
+	/* Fast AGC - Peak Detectors and Final Settling */
 	1,		//fagc_lpf_final_settling_steps ***  adi,fagc-lpf-final-settling-steps
 	1,		//fagc_lmt_final_settling_steps ***  adi,fagc-lmt-final-settling-steps
 	3,		//fagc_final_overrange_count ***  adi,fagc-final-overrange-count
-		/* Fast AGC - Final Power Test */
+	/* Fast AGC - Final Power Test */
 	0,		//fagc_gain_increase_after_gain_lock_en ***  adi,fagc-gain-increase-after-gain-lock-enable
-		/* Fast AGC - Unlocking the Gain */
-		/* 0 = MAX Gain, 1 = Optimized Gain, 2 = Set Gain */
+	/* Fast AGC - Unlocking the Gain */
 	0,		//fagc_gain_index_type_after_exit_rx_mode ***  adi,fagc-gain-index-type-after-exit-rx-mode
 	1,		//fagc_use_last_lock_level_for_set_gain_en ***  adi,fagc-use-last-lock-level-for-set-gain-enable
 	1,		//fagc_rst_gla_stronger_sig_thresh_exceeded_en ***  adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable
@@ -302,22 +301,18 @@ AD9361_InitParam default_init_param = {
 	48,		//tx1_mon_lo_cm *** adi,txmon-1-lo-cm
 	48,		//tx2_mon_lo_cm *** adi,txmon-2-lo-cm
 	/* GPIO definitions */
-	-1,		//gpio_resetb;	/* reset-gpios */
+	-1,		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
-	-1,		//gpio_sync;		/* sync-gpios */
-	-1,		//gpio_cal_sw1;	/* cal-sw1-gpios */
-	-1		//gpio_cal_sw2;	/* cal-sw2-gpios */
+	-1,		//gpio_sync *** sync-gpios
+	-1,		//gpio_cal_sw1 *** cal-sw1-gpios
+	-1		//gpio_cal_sw2 *** cal-sw2-gpios
 };
 
-AD9361_RXFIRConfig rx_fir_config = {
+AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	3, // rx;
 	0, // rx_gain;
 	1, // rx_dec;
-	{0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 -4, -6, -37, 35, 186, 86, -284, 315,
+	{-4, -6, -37, 35, 186, 86, -284, -315,
 	 107, 219, -4, 271, 558, -307, -1182, -356,
 	 658, 157, 207, 1648, 790, -2525, -2553, 748,
 	 865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
@@ -325,22 +320,22 @@ AD9361_RXFIRConfig rx_fir_config = {
 	 748, -2553, -2525, 790, 1648, 207, 157, 658,
 	 -356, -1182, -307, 558, 271, -4, 219, 107,
 	 -315, -284, 86, 186, 35, -37, -6, -4,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0}, // rx_coef[128];
-	 128 // rx_coef_size
+	 64 // rx_coef_size
 };
 
-AD9361_TXFIRConfig tx_fir_config = {
+AD9361_TXFIRConfig tx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	3, // tx;
 	-6, // tx_gain;
-	1, // tx_inc;
-	{0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 -4, -6, -37, 35, 186, 86, -284, 315,
+	1, // tx_int;
+	{-4, -6, -37, 35, 186, 86, -284, -315,
 	 107, 219, -4, 271, 558, -307, -1182, -356,
 	 658, 157, 207, 1648, 790, -2525, -2553, 748,
 	 865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
@@ -351,8 +346,12 @@ AD9361_TXFIRConfig tx_fir_config = {
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
+	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0}, // tx_coef[128];
-	 128 // tx_coef_size
+	 64 // tx_coef_size
 };
 struct ad9361_rf_phy *ad9361_phy;
 #ifdef FMCOMMS5
