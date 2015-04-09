@@ -379,6 +379,10 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t *rss
 int32_t ad9361_set_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t mode);
 /* Get the selected TX RF output port. */
 int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t *mode);
+/* Enable/disable the auto calibration. */
+int32_t ad9361_set_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
+/* Get the status of the auto calibration flag. */
+int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */

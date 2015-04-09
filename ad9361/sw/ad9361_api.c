@@ -1240,6 +1240,35 @@ int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Enable/disable the auto calibration.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The option (ENABLE, DISABLE).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis)
+{
+	if (en_dis == 0)
+		phy->auto_cal_en = 0;
+	else
+		phy->auto_cal_en = 1;
+
+	return 0;
+}
+
+/**
+ * Get the status of the auto calibration flag.
+ * @param phy The AD9361 current state structure.
+ * @param en_dis The enable/disable status buffer.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis)
+{
+	*en_dis = phy->auto_cal_en;
+
+	return 0;
+}
+
+/**
  * Set the RX and TX path rates.
  * @param phy The AD9361 state structure.
  * @param rx_path_clks RX path rates buffer.
