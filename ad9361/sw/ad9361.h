@@ -3917,4 +3917,10 @@ int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
 				    uint32_t rx_inputs, uint32_t txb);
 int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step);
 int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
+int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx, uint32_t profile);
+int32_t ad9361_fastlock_recall(struct ad9361_rf_phy *phy, bool tx, uint32_t profile);
+int32_t ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
+	uint32_t profile, uint8_t *values);
+int32_t ad9361_fastlock_save(struct ad9361_rf_phy *phy, bool tx,
+	uint32_t profile, uint8_t *values);
 #endif

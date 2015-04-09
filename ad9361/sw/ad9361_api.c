@@ -916,6 +916,52 @@ int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Store RX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
+{
+	return ad9361_fastlock_store(phy, 0, profile);
+}
+
+/**
+ * Recall RX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
+{
+	return ad9361_fastlock_recall(phy, 0, profile);
+}
+
+/**
+ * Load RX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @param values Fastlock profile program data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
+{
+	return ad9361_fastlock_load(phy, 0, profile, values);
+}
+
+/**
+ * Save RX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @param values Fastlock profile program data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
+{
+	return ad9361_fastlock_save(phy, 0, profile, values);
+}
+
+/**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (0, 1).
@@ -1266,6 +1312,52 @@ int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_di
 	*en_dis = phy->auto_cal_en;
 
 	return 0;
+}
+
+/**
+ * Store TX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_tx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
+{
+	return ad9361_fastlock_store(phy, 1, profile);
+}
+
+/**
+ * Recall TX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
+{
+	return ad9361_fastlock_recall(phy, 1, profile);
+}
+
+/**
+ * Load TX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @param values Fastlock profile program data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
+{
+	return ad9361_fastlock_load(phy, 1, profile, values);
+}
+
+/**
+ * Save TX fastlock profile.
+ * @param phy The AD9361 state structure.
+ * @param profile The profile number (0 - 7).
+ * @param values Fastlock profile program data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
+{
+	return ad9361_fastlock_save(phy, 1, profile, values);
 }
 
 /**

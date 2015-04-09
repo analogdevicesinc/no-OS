@@ -4018,7 +4018,7 @@ static int32_t ad9361_fastlock_writeval(struct spi_device *spi, bool tx,
  * @param values
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
+int32_t ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
 	uint32_t profile, uint8_t *values)
 {
 	int32_t i, ret = 0;

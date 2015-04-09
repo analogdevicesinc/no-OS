@@ -349,6 +349,14 @@ int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_
 int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t mode);
 /* Get the selected RX RF input port. */
 int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy, uint32_t *mode);
+/* Store RX fastlock profile. */
+int32_t ad9361_rx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile);
+/* Recall RX fastlock profile. */
+int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
+/* Load RX fastlock profile. */
+int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
+/* Save RX fastlock profile. */
+int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -383,6 +391,14 @@ int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy, uint32_t *mode)
 int32_t ad9361_set_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis);
 /* Get the status of the auto calibration flag. */
 int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_dis);
+/* Store TX fastlock profile. */
+int32_t ad9361_tx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile);
+/* Recall TX fastlock profile. */
+int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
+/* Load TX fastlock profile. */
+int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
+/* Save TX fastlock profile. */
+int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */
