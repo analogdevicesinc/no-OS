@@ -565,7 +565,7 @@ void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
  * @param buflen The buffer length.
  * @return The size in case of success, negative error code otherwise.
  */
-ssize_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
+int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	char *buf, int32_t buflen)
 {
 	struct axiadc_state *st = phy->adc_state;
