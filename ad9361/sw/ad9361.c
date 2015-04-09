@@ -53,8 +53,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DEBUG
-
 const char *ad9361_ensm_states[] = {
 	"sleep", "", "", "", "", "alert", "tx", "tx flush",
 	"rx", "rx_flush", "fdd", "fdd_flush"
@@ -5909,7 +5907,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 
 	clk_priv = (struct refclk_scale *)malloc(sizeof(*clk_priv));
 	if (!clk_priv) {
-		pr_err("ad9361_clk_register: could not allocate fixed factor clk");
+		dev_err(&phy->spi->dev, "ad9361_clk_register: could not allocate fixed factor clk");
 		return (struct clk *)ERR_PTR(-ENOMEM);
 	}
 
