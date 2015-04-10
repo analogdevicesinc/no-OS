@@ -67,6 +67,8 @@ static struct axiadc_chip_info axiadc_chip_info_tbl[] =
  * @param init_param The structure that contains the AD9361 initial parameters.
  * @return A structure that contains the AD9361 current state in case of
  *         success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_param)
 {
@@ -433,16 +435,62 @@ out:
 /**
  * Set the Enable State Machine (ENSM) mode.
  * @param phy The AD9361 current state structure.
- * @param mode The ENSM mode (SLEEP, ALERT, FDD, PINCTRL).
+ * @param mode The ENSM mode.
+ * 			   Accepted values:
+ * 				ENSM_MODE_TX
+ * 				ENSM_MODE_RX
+ * 				ENSM_MODE_ALERT
+ * 				ENSM_MODE_FDD
+ * 				ENSM_MODE_WAIT
+ * 				ENSM_MODE_SLEEP
+ * 				ENSM_MODE_PINCTRL
+ * 				ENSM_MODE_PINCTRL_FDD_INDEP
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t mode)
 {
 	int32_t ret;
+	uint8_t ensm_state;
+	bool pinctrl = false;
 
-	ad9361_set_ensm_mode(phy, phy->pdata->fdd, false);
-	ret = ad9361_ensm_set_state(phy, mode, false);
+	phy->pdata->fdd_independent_mode = false;
+
+	switch (mode) {
+	case ENSM_MODE_TX:
+		ensm_state = ENSM_STATE_TX;
+		break;
+	case ENSM_MODE_RX:
+		ensm_state = ENSM_STATE_RX;
+		break;
+	case ENSM_MODE_ALERT:
+		ensm_state = ENSM_STATE_ALERT;
+		break;
+	case ENSM_MODE_FDD:
+		ensm_state = ENSM_STATE_FDD;
+		break;
+	case ENSM_MODE_WAIT:
+		ensm_state = ENSM_STATE_SLEEP_WAIT;
+		break;
+	case ENSM_MODE_SLEEP:
+		ensm_state = ENSM_STATE_SLEEP;
+		break;
+	case ENSM_MODE_PINCTRL:
+		ensm_state = ENSM_STATE_SLEEP_WAIT;
+		pinctrl = true;
+		break;
+	case ENSM_MODE_PINCTRL_FDD_INDEP:
+		ensm_state = ENSM_STATE_FDD;
+		phy->pdata->fdd_independent_mode = true;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	ad9361_set_ensm_mode(phy, phy->pdata->fdd, pinctrl);
+	ret = ad9361_ensm_set_state(phy, ensm_state, pinctrl);
 
 	return ret;
 }
@@ -456,7 +504,42 @@ int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t *mode)
 {
-	*mode = phy->curr_ensm_state;
+	uint8_t ensm_state = phy->curr_ensm_state;
+	bool pinctrl = false;
+	int32_t ret;
+
+	ret = ad9361_spi_read(phy->spi, REG_ENSM_CONFIG_1);
+	if ((ret & ENABLE_ENSM_PIN_CTRL) == ENABLE_ENSM_PIN_CTRL)
+		pinctrl = true;
+
+	switch (ensm_state) {
+	case ENSM_STATE_TX:
+		*mode = ENSM_MODE_TX;
+		break;
+	case ENSM_STATE_RX:
+		*mode = ENSM_MODE_RX;
+		break;
+	case ENSM_STATE_ALERT:
+		*mode = ENSM_MODE_ALERT;
+		break;
+	case ENSM_STATE_FDD:
+		if (phy->pdata->fdd_independent_mode)
+			*mode = ENSM_MODE_PINCTRL_FDD_INDEP;
+		else
+			*mode = ENSM_MODE_FDD;
+		break;
+	case ENSM_STATE_SLEEP_WAIT:
+		if (pinctrl)
+			*mode = ENSM_MODE_PINCTRL;
+		else
+			*mode = ENSM_MODE_WAIT;
+		break;
+	case ENSM_STATE_SLEEP:
+		*mode = ENSM_MODE_SLEEP;
+		break;
+	default:
+		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -464,8 +547,13 @@ int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 /**
  * Set the receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (0, 1).
+ * @param ch The desired channel number (RX1, RX2).
+ * 			 Accepted values:
+ * 			  RX1 (0)
+ * 			  RX2 (1)
  * @param gain_db The RF gain (dB).
+ * 				  Example:
+ * 				   10 (10 dB)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
@@ -483,7 +571,10 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 /**
  * Get current receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (0, 1).
+ * @param ch The desired channel number (RX1, RX2).
+ * 			 Accepted values:
+ * 			  RX1 (0)
+ * 			  RX2 (1)
  * @param gain_db A variable to store the RF gain (dB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -503,7 +594,11 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
  * Set the RX RF bandwidth.
  * @param phy The AD9361 current state structure.
  * @param bandwidth_hz The desired bandwidth (Hz).
+ * 					   Example:
+ * 					    18000000 (18 MHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t bandwidth_hz)
@@ -537,7 +632,11 @@ int32_t ad9361_get_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
  * Set the RX sampling frequency.
  * @param phy The AD9361 current state structure.
  * @param sampling_freq_hz The desired frequency (Hz).
+ * 						   Example:
+ * 						    30720000 (30.72 MHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_rx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t sampling_freq_hz)
@@ -577,7 +676,11 @@ int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy,
  * Set the RX LO frequency.
  * @param phy The AD9361 current state structure.
  * @param lo_freq_hz The desired frequency (Hz).
+ * 					 Example:
+ * 					  2400000000 (2.4 GHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t lo_freq_hz)
@@ -608,7 +711,10 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 /**
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (0, 1).
+ * @param ch The desired channel (RX1, RX2).
+ * 			 Accepted values:
+ * 			  RX1 (0)
+ * 			  RX2 (1)
  * @param rssi A variable to store the RSSI.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -627,9 +733,17 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 /**
  * Set the gain control mode for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (0, 1).
- * @param gc_mode The gain control mode (GAIN_MGC, GAIN_FASTATTACK_AGC,
- *                GAIN_SLOWATTACK_AGC, GAIN_HYBRID_AGC).
+ * @param ch The desired channel (RX1, RX2).
+ * 			 Accepted values:
+ * 			  RX1 (0)
+ * 			  RX2 (1)
+ * @param gc_mode The gain control mode (manual, fast_attack, slow_attack,
+ * 				  hybrid).
+ *                Accepted values:
+ *				   RF_GAIN_MGC (manual)
+ *				   RF_GAIN_FASTATTACK_AGC (fast_attack)
+ *				   RF_GAIN_SLOWATTACK_AGC (slow_attack)
+ *				   RF_GAIN_HYBRID_AGC (hybrid)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
@@ -648,7 +762,10 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 /**
  * Get the gain control mode for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (0, 1).
+ * @param ch The desired channel (RX1, RX2).
+ * 			 Accepted values:
+ * 			  RX1 (0)
+ * 			  RX2 (1)
  * @param gc_mode A variable to store the gain control mode.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -665,6 +782,8 @@ int32_t ad9361_get_rx_gain_control_mode (struct ad9361_rf_phy *phy,
  * @param phy The AD9361 current state structure.
  * @param fir_cfg FIR filter configuration.
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 								  AD9361_RXFIRConfig fir_cfg)
@@ -681,7 +800,10 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 /**
  * Get the RX FIR filter configuration.
  * @param phy The AD9361 current state structure.
- * @param tx_ch The selected RX channel (1, 2).
+ * @param tx_ch The selected RX channel (RX1, RX2).
+ * 				Accepted values:
+ * 				 RX1 (0)
+ * 				 RX2 (1)
  * @param fir_cfg FIR filter configuration output file.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -690,6 +812,8 @@ int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch, AD936
 	int32_t ret;
 	uint32_t fir_conf;
 	uint8_t index;
+
+	rx_ch += 1;
 
 	ret = ad9361_spi_read(phy->spi, REG_RX_FILTER_CONFIG);
 	if(ret < 0)
@@ -733,7 +857,12 @@ int32_t ad9361_get_rx_fir_config(struct ad9361_rf_phy *phy, uint8_t rx_ch, AD936
  * Enable/disable the RX FIR filter.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_rx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t en_dis)
@@ -770,6 +899,9 @@ int32_t ad9361_get_rx_fir_en_dis (struct ad9361_rf_phy *phy,
  * Enable/disable the RX RFDC Tracking.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
@@ -805,6 +937,9 @@ int32_t ad9361_get_rx_rfdc_track_en_dis (struct ad9361_rf_phy *phy,
  * Enable/disable the RX BasebandDC Tracking.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
@@ -840,6 +975,9 @@ int32_t ad9361_get_rx_bbdc_track_en_dis (struct ad9361_rf_phy *phy,
  * Enable/disable the RX Quadrature Tracking.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
@@ -876,15 +1014,15 @@ int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
  * @param phy The AD9361 current state structure.
  * @param mode The RF port.
  * 			   Accepted values:
- *				0	(RX1A_N &  RX1A_P) and (RX2A_N & RX2A_P) enabled; balanced
- *				1	(RX1B_N &  RX1B_P) and (RX2B_N & RX2B_P) enabled; balanced
- *				2	(RX1C_N &  RX1C_P) and (RX2C_N & RX2C_P) enabled; balanced
- *				3	RX1A_N and RX2A_N enabled; unbalanced
- *				4	RX1A_P and RX2A_P enabled; unbalanced
- *				5	RX1B_N and RX2B_N enabled; unbalanced
- *				6	RX1B_P and RX2B_P enabled; unbalanced
- *				7	RX1C_N and RX2C_N enabled; unbalanced
- *				8	RX1C_P and RX2C_P enabled; unbalanced
+ *				A_BALANCED (0 - (RX1A_N &  RX1A_P) and (RX2A_N & RX2A_P) enabled; balanced)
+ *				B_BALANCED (1 - (RX1B_N &  RX1B_P) and (RX2B_N & RX2B_P) enabled; balanced)
+ *				C_BALANCED (2 - (RX1C_N &  RX1C_P) and (RX2C_N & RX2C_P) enabled; balanced)
+ *				A_N		   (3 - RX1A_N and RX2A_N enabled; unbalanced)
+ *				A_P		   (4 - RX1A_P and RX2A_P enabled; unbalanced)
+ *				B_N		   (5 - RX1B_N and RX2B_N enabled; unbalanced)
+ *				B_P		   (6 - RX1B_P and RX2B_P enabled; unbalanced)
+ *				C_N		   (7 - RX1C_N and RX2C_N enabled; unbalanced)
+ *				C_P		   (8 - RX1C_P and RX2C_P enabled; unbalanced)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy,
@@ -917,8 +1055,12 @@ int32_t ad9361_get_rx_rf_port_input (struct ad9361_rf_phy *phy,
 
 /**
  * Store RX fastlock profile.
+ * To create a profile tune the synthesizer (ad9361_set_rx_lo_freq()) and then
+ * call this function specifying the target profile number.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
@@ -927,9 +1069,13 @@ int32_t ad9361_rx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
 }
 
 /**
- * Recall RX fastlock profile.
+ * Recall specified RX fastlock profile.
+ * When in fastlock pin select mode (init_param->rx_fastlock_pincontrol_enable),
+ * the function needs to be called before then the pin-control can be used.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
@@ -938,10 +1084,15 @@ int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
 }
 
 /**
- * Load RX fastlock profile.
+ * Load RX fastlock profile. A previously saved profile can be loaded in any
+ * of the 8 available slots.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @param values Fastlock profile program data.
+ * 				 Example:
+ * 				  val0,val1,val2,…,val15
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
@@ -950,9 +1101,12 @@ int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uin
 }
 
 /**
- * Save RX fastlock profile.
+ * Save RX fastlock profile. In order to use more than 8 Profiles, an existing
+ * profile can be read back and stored by the user application.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @param values Fastlock profile program data.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -964,8 +1118,13 @@ int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uin
 /**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (0, 1).
+ * @param ch The desired channel number (TX1, TX2).
+ * 			 Accepted values:
+ * 			  TX1 (0)
+ * 			  TX2 (1)
  * @param attenuation_mdb The attenuation (mdB).
+ * 						  Example:
+ * 						   10000 (10 dB)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
@@ -983,7 +1142,10 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 /**
  * Get current transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel number (0, 1).
+ * @param ch The desired channel number (TX1, TX2).
+ * 			 Accepted values:
+ * 			  TX1 (0)
+ * 			  TX2 (1)
  * @param attenuation_mdb A variable to store the attenuation value (mdB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1004,7 +1166,11 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
  * Set the TX RF bandwidth.
  * @param phy The AD9361 current state structure.
  * @param bandwidth_hz The desired bandwidth (Hz).
+ * 					   Example:
+ * 					    18000000 (18 MHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t  bandwidth_hz)
@@ -1038,7 +1204,11 @@ int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
  * Set the TX sampling frequency.
  * @param phy The AD9361 current state structure.
  * @param sampling_freq_hz The desired frequency (Hz).
+ * 						   Example:
+ * 						    30720000 (30.72 MHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_tx_sampling_freq (struct ad9361_rf_phy *phy,
 									 uint32_t sampling_freq_hz)
@@ -1078,7 +1248,11 @@ int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy,
  * Set the TX LO frequency.
  * @param phy The AD9361 current state structure.
  * @param lo_freq_hz The desired frequency (Hz).
+ * 					 Example:
+ * 					  2400000000 (2.4 GHz)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
 							   uint64_t lo_freq_hz)
@@ -1111,6 +1285,8 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
  * @param phy The AD9361 current state structure.
  * @param fir_cfg FIR filter configuration.
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 								  AD9361_TXFIRConfig fir_cfg)
@@ -1127,7 +1303,10 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 /**
  * Get the TX FIR filter configuration.
  * @param phy The AD9361 current state structure.
- * @param tx_ch The selected TX channel (1, 2).
+ * @param tx_ch The selected TX channel (TX1, TX2).
+ * 				Accepted values:
+ * 				 TX1 (0)
+ * 				 TX2 (1)
  * @param fir_cfg FIR filter configuration output file.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1136,6 +1315,8 @@ int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD936
 	int32_t ret;
 	uint32_t fir_conf;
 	uint8_t index;
+
+	tx_ch += 1;
 
 	ret = ad9361_spi_read(phy->spi, REG_TX_FILTER_CONF);
 	if(ret < 0)
@@ -1174,7 +1355,12 @@ int32_t ad9361_get_tx_fir_config(struct ad9361_rf_phy *phy, uint8_t tx_ch, AD936
  * Enable/disable the TX FIR filter.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t en_dis)
@@ -1210,7 +1396,10 @@ int32_t ad9361_get_tx_fir_en_dis (struct ad9361_rf_phy *phy,
 /**
  * Get the TX RSSI for the selected channel (TX_MON should be enabled).
  * @param phy The AD9361 current state structure.
- * @param ch The desired channel (0, 1).
+ * @param ch The desired channel (TX1, TX2).
+ * 			 Accepted values:
+ * 			  TX1 (0)
+ * 			  TX2 (1)
  * @param rssi_db_x_1000 A variable to store the RSSI.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1228,8 +1417,7 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
 		return ret;
 	}
 
-	switch (ch)
-	{
+	switch (ch) {
 	case 0:
 		val = (reg_val_buf[2] << 1) | (reg_val_buf[0] & TX_RSSI_1);
 		break;
@@ -1253,8 +1441,8 @@ int32_t ad9361_get_tx_rssi (struct ad9361_rf_phy *phy,
  * @param phy The AD9361 current state structure.
  * @param mode The RF port.
  * 			   Accepted values:
- *				0	TXA
- *				1	TXB
+ *				TXA	(0)
+ *				TXB	(1)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_tx_rf_port_output (struct ad9361_rf_phy *phy,
@@ -1289,6 +1477,9 @@ int32_t ad9361_get_tx_rf_port_output (struct ad9361_rf_phy *phy,
  * Enable/disable the auto calibration.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t en_dis)
@@ -1316,8 +1507,12 @@ int32_t ad9361_get_tx_auto_cal_en_dis (struct ad9361_rf_phy *phy, uint8_t *en_di
 
 /**
  * Store TX fastlock profile.
+ * To create a profile tune the synthesizer (ad9361_set_tx_lo_freq()) and then
+ * call this function specifying the target profile number.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_tx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
@@ -1326,9 +1521,13 @@ int32_t ad9361_tx_fastlock_store(struct ad9361_rf_phy *phy, uint32_t profile)
 }
 
 /**
- * Recall TX fastlock profile.
+ * Recall specified TX fastlock profile.
+ * When in fastlock pin select mode (init_param->tx_fastlock_pincontrol_enable),
+ * the function needs to be called before then the pin-control can be used.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
@@ -1337,10 +1536,15 @@ int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
 }
 
 /**
- * Load TX fastlock profile.
+ * Load TX fastlock profile. A previously saved profile can be loaded in any
+ * of the 8 available slots.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @param values Fastlock profile program data.
+ * 				 Example:
+ * 				  val0,val1,val2,…,val15
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
@@ -1349,9 +1553,12 @@ int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uin
 }
 
 /**
- * Save TX fastlock profile.
+ * Save TX fastlock profile. In order to use more than 8 Profiles, an existing
+ * profile can be read back and stored by the user application.
  * @param phy The AD9361 state structure.
  * @param profile The profile number (0 - 7).
+ * 				  Accepted values:
+ * 				   0 - 7
  * @param values Fastlock profile program data.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1366,6 +1573,8 @@ int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uin
  * @param rx_path_clks RX path rates buffer.
  * @param tx_path_clks TX path rates buffer.
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy,
 	uint32_t *rx_path_clks,
@@ -1400,7 +1609,10 @@ int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy,
 /**
  * Set the number of channels mode.
  * @param phy The AD9361 state structure.
- * @param ch_mode Number of channels mode: 1 - 1x1; 2 - 2x2.
+ * @param ch_mode Number of channels mode (MODE_1x1, MODE_2x2).
+ * 				  Accepted values:
+ * 				   MODE_1x1 (1)
+ * 				   MODE_2x2 (2)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
@@ -1451,6 +1663,8 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
  * @param phy_master The AD9361 Master state structure.
  * @param phy_slave The AD9361 Slave state structure.
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *phy_slave)
 {
@@ -1485,7 +1699,12 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
  * Enable/disable the TRX FIR filters.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
+ * 				 Accepted values:
+ * 				  ENABLE (1)
+ * 				  DISABLE (0)
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy,
 								  uint8_t en_dis)
@@ -1510,8 +1729,10 @@ int32_t ad9361_set_trx_fir_en_dis (struct ad9361_rf_phy *phy,
 /**
  * Set the OSR rate governor.
  * @param phy The AD9361 current state structure.
- * @param rate_gov Option: 0 - highest OSR;
- * 						   1 - nominal.
+ * @param rate_gov OSR rate governor (highest, nominal).
+ * 				   Accepted values:
+ * 					HIGHEST_OSR (0 - highest OSR)
+ * 					NOMINAL_OSR (1 - nominal)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t rate_gov)
@@ -1541,8 +1762,13 @@ int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov)
  * Perform the selected calibration.
  * @param phy The AD9361 state structure.
  * @param cal The selected calibration (TX_QUAD_CAL, RFDC_CAL).
+ * 			  Accepted values:
+ * 			   TX_QUAD_CAL
+ * 			   RFDC_CAL
  * @param arg For TX_QUAD_CAL - the optional RX phase value overwrite (set to zero).
  * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
  */
 int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
 {

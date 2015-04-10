@@ -294,6 +294,45 @@ typedef struct
 	uint8_t tx_coef_size;
 }AD9361_TXFIRConfig;
 
+enum ad9361_ensm_mode {
+	ENSM_MODE_TX,
+	ENSM_MODE_RX,
+	ENSM_MODE_ALERT,
+	ENSM_MODE_FDD,
+	ENSM_MODE_WAIT,
+	ENSM_MODE_SLEEP,
+	ENSM_MODE_PINCTRL,
+	ENSM_MODE_PINCTRL_FDD_INDEP,
+};
+
+#define ENABLE		1
+#define DISABLE		0
+
+#define RX1			0
+#define RX2			1
+
+#define TX1			0
+#define TX2			1
+
+#define A_BALANCED	0
+#define B_BALANCED	1
+#define C_BALANCED	2
+#define A_N			3
+#define A_P			4
+#define B_N			5
+#define B_P			6
+#define C_N			7
+#define C_P			8
+
+#define TXA			0
+#define TXB			1
+
+#define MODE_1x1	1
+#define MODE_2x2	2
+
+#define HIGHEST_OSR	0
+#define NOMINAL_OSR	1
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
