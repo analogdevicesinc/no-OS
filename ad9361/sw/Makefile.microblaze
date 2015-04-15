@@ -9,8 +9,8 @@ CC := $(CROSS_COMPILE)-gcc
 AR := $(CROSS_COMPILE)-ar
 
 
-LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,-lad9361,--end-group -Wl,-defsym -Wl,_HEAP_SIZE=0x100000
-CFLAGS= -Wall -I$(PLATFORM) -mlittle-endian -mxl-soft-mul -mcpu=v9.2 -O2 -mxl-soft-mul -DXILINX_PLATFORM -DCONSOLE_COMMANDS
+LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,-lad9361,--gc-sections,--end-group -Wl,-defsym -Wl,_HEAP_SIZE=0x100000
+CFLAGS= -Wall -I$(PLATFORM) -mlittle-endian -mxl-soft-mul -mcpu=v9.2 -mxl-soft-mul -Os -ffunction-sections -fdata-sections -DXILINX_PLATFORM -DCONSOLE_COMMANDS
 
 LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
 LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))

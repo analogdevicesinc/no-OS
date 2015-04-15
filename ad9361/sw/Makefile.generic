@@ -1,6 +1,6 @@
 PLATFORM=platform_generic
 
-CFLAGS=-c -Wall -I$(PLATFORM) -Iconsole_commands #-DCONSOLE_COMMANDS
+CFLAGS=-c -Wall -I$(PLATFORM) -Os -ffunction-sections -fdata-sections -Iconsole_commands #-DCONSOLE_COMMANDS
 
 LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
 LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))
@@ -13,7 +13,7 @@ EXEC=ad9361_generic
 all: $(SOURCES) $(EXEC)
 
 $(EXEC): libad9361.a $(MAIN_SOURCES)
-	$(CC) $(LDFLAGS) $(MAIN_SOURCES) -o $@ -I$(PLATFORM) -lad9361 -L.
+	$(CC) $(LDFLAGS) $(MAIN_SOURCES) -o $@ -I$(PLATFORM) -lad9361 -L. -Wl,--gc-sections
 
 libad9361.a: $(LIB_SOURCES)
 	$(AR) rvs libad9361.a $+

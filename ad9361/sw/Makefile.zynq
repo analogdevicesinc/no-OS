@@ -8,8 +8,8 @@ CROSS_COMPILE=arm-xilinx-eabi
 CC := $(CROSS_COMPILE)-gcc
 AR := $(CROSS_COMPILE)-ar
 
-LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,-lad9361,--end-group
-CFLAGS= -Wall -I$(PLATFORM) -DXILINX_PLATFORM -DCONSOLE_COMMANDS
+LN_FLAGS := -Wl,--start-group,-lxil,-lgcc,-lc,-lad9361,--gc-sections,--end-group
+CFLAGS= -Wall -I$(PLATFORM) -Os -ffunction-sections -fdata-sections -DXILINX_PLATFORM -DCONSOLE_COMMANDS
 
 LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
 LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))

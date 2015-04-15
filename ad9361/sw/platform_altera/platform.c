@@ -277,6 +277,14 @@ void axiadc_init(struct ad9361_rf_phy *phy)
 }
 
 /***************************************************************************//**
+ * @brief axiadc_post_setup
+*******************************************************************************/
+int axiadc_post_setup(struct ad9361_rf_phy *phy)
+{
+	return ad9361_post_setup(phy);
+}
+
+/***************************************************************************//**
  * @brief axiadc_read
 *******************************************************************************/
 unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)

@@ -48,6 +48,8 @@
 #include <stdlib.h>
 #include "ad9361.h"
 #include "common.h"
+#include "config.h"
+
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -66,13 +68,10 @@
 #define CLK_IGNORE_UNUSED						BIT(3)
 #define CLK_GET_RATE_NOCACHE					BIT(6)
 
-#define VERBOSE
-#define DEBUG
-
-#if defined(VERBOSE)
+#if defined(HAVE_VERBOSE_MESSAGES)
 #define dev_err(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
 #define dev_warn(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
-#if defined(DEBUG)
+#if defined(HAVE_DEBUG_MESSAGES)
 #define dev_dbg(dev, format, ...)		printf(format, ## __VA_ARGS__);printf("\n")
 #else
 #define dev_dbg(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })

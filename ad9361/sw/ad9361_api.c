@@ -410,7 +410,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	if (ret < 0)
 		goto out;
 
-	ret = ad9361_post_setup(phy);
+	/* platform specific wrapper to call ad9361_post_setup() */
+	ret = axiadc_post_setup(phy);
 	if (ret < 0)
 		goto out;
 
