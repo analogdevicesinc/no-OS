@@ -387,8 +387,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->bist_tone_mask = 0;
 
 	ad9361_reset(phy);
-	ad9361_spi_write(phy->spi, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
-	ad9361_spi_write(phy->spi, REG_SPI_CONF, 0x0);
 
 	ret = ad9361_spi_read(phy->spi, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
