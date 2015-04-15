@@ -2980,7 +2980,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 
 	ret = __ad9361_tx_quad_calib(phy, __rx_phase, rxnco_word, decim, &val);
 
-	dev_dbg(dev, "LO leakage: %d Quadrature Calibration: %d : rx_phase %d\n",
+	dev_dbg(dev, "LO leakage: %d Quadrature Calibration: %d : rx_phase %d",
 		!!(val & TX1_LO_CONV), !!(val & TX1_SSB_CONV), __rx_phase);
 
 	/* Calibration failed -> try last phase offset */
@@ -5242,7 +5242,7 @@ static int32_t ad9361_verify_fir_filter_coef(struct ad9361_rf_phy *phy,
 			(ad9361_spi_read(spi, REG_TX_FILTER_COEF_READ_DATA_2 + offs) << 8);
 
 			if (tmp != coef[val]) {
-				dev_err(&phy->spi->dev,"%s%"PRIu32" read verify failed TAP%"PRIu32" %d =! %d \n",
+				dev_err(&phy->spi->dev,"%s%"PRIu32" read verify failed TAP%"PRIu32" %d =! %d",
 					(dest & FIR_IS_RX) ? "RX" : "TX", sel,
 					val, tmp, coef[val]);
 				ret = -EIO;
