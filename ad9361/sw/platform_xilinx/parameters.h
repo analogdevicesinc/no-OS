@@ -89,6 +89,12 @@
 #define GPIO_SYNC_PIN				99
 #define GPIO_CAL_SW1_PIN			107
 #define GPIO_CAL_SW2_PIN			108
+#define GPIO_ENABLE_PIN				101
+#define GPIO_TXNRX_PIN        		102
+#define GPIO_CTL0_PIN				94
+#define GPIO_CTL1_PIN				95
+#define GPIO_CTL2_PIN				96
+#define GPIO_CTL3_PIN				97
 
 #define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
 #else
