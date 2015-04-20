@@ -323,6 +323,9 @@ enum ad9361_ensm_mode {
 #define B_P			6
 #define C_N			7
 #define C_P			8
+#define TX_MON1		9
+#define TX_MON2		10
+#define TX_MON1_2	11
 
 #define TXA			0
 #define TXB			1

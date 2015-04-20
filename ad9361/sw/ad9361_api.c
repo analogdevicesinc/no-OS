@@ -1022,6 +1022,9 @@ int32_t ad9361_get_rx_quad_track_en_dis (struct ad9361_rf_phy *phy,
  *				B_P		   (6 - RX1B_P and RX2B_P enabled; unbalanced)
  *				C_N		   (7 - RX1C_N and RX2C_N enabled; unbalanced)
  *				C_P		   (8 - RX1C_P and RX2C_P enabled; unbalanced)
+ *				TX_MON1	   (9 - TX_MONITOR1)
+ *				TX_MON2	   (10 - TX_MONITOR2)
+ *				TX_MON1_2  (11 - TX_MONITOR1 & TX_MONITOR2)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_set_rx_rf_port_input (struct ad9361_rf_phy *phy,
