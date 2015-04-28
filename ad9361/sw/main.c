@@ -396,7 +396,9 @@ int main(void)
 	ad9361_set_rx_fir_config(ad9361_phy, rx_fir_config);
 
 #ifdef FMCOMMS5
+#ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_sync);
+#endif
 	gpio_direction(default_init_param.gpio_sync, 1);
 	default_init_param.id_no = 1;
 	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
