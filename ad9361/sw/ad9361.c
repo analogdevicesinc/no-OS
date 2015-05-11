@@ -6093,7 +6093,7 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	* Scale is 150uA @ (1280MHz BBPLL, 40MHz REFCLK)
 	*/
 	tmp = (rate >> 7) * 150ULL;
-	do_div(&tmp, (parent_rate >> 7) * 32UL + (tmp >> 1));
+	do_div(&tmp, (parent_rate >> 7) * 32UL);
 
 	/* 25uA/LSB, Offset 25uA */
 	icp_val = DIV_ROUND_CLOSEST((uint32_t)tmp, 25U) - 1;
