@@ -217,7 +217,7 @@ void gpio_init(uint32_t device_id)
 /***************************************************************************//**
  * @brief gpio_direction
 *******************************************************************************/
-void gpio_direction(uint8_t pin, uint8_t direction)
+void gpio_direction(uint16_t pin, uint8_t direction)
 {
 	int fd;
 	char buf[60];
@@ -252,7 +252,7 @@ bool gpio_is_valid(int number)
 /***************************************************************************//**
  * @brief gpio_data
 *******************************************************************************/
-void gpio_data(uint8_t pin, uint8_t data)
+void gpio_data(uint16_t pin, uint8_t data)
 {
 	int fd;
 	char buf[60];

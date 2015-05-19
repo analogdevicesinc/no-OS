@@ -126,7 +126,7 @@ int spi_write_then_read(struct spi_device *spi,
 		const unsigned char *txbuf, unsigned n_tx,
 		unsigned char *rxbuf, unsigned n_rx);
 void gpio_init(uint32_t device_id);
-void gpio_direction(uint8_t pin, uint8_t direction);
+void gpio_direction(uint16_t pin, uint8_t direction);
 bool gpio_is_valid(int number);
 void gpio_set_value(unsigned gpio, int value);
 void udelay(unsigned long usecs);
