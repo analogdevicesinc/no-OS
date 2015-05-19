@@ -160,7 +160,7 @@ int spi_write_then_read(struct spi_device *spi,
 		const unsigned char *txbuf, unsigned n_tx,
 		unsigned char *rxbuf, unsigned n_rx)
 {
-	int ret;
+	int ret = 0;
 
 	if (spi) {
 		// Unused variable - fix compiler warning
@@ -202,6 +202,7 @@ void gpio_init(uint32_t device_id)
 {
 	int fd, len;
 	char buf[11];
+	int ret;
 
 	fd = open("/sys/class/gpio/export", O_WRONLY);
 	if (fd < 0) {
@@ -210,7 +211,11 @@ void gpio_init(uint32_t device_id)
 	}
 	
 	len = snprintf(buf, sizeof(buf), "%d", device_id);
-	write(fd, buf, len);
+	ret = write(fd, buf, len);
+	if (ret == -1) {
+		// Unused variable - fix compiler warning
+	}
+
 	close(fd);
 }
 
@@ -221,6 +226,7 @@ void gpio_direction(uint16_t pin, uint8_t direction)
 {
 	int fd;
 	char buf[60];
+	int ret;
 
 	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/direction", pin);
 
@@ -231,9 +237,12 @@ void gpio_direction(uint16_t pin, uint8_t direction)
 	}
 
 	if (direction == 1)
-		write(fd, "out", 4);
+		ret = write(fd, "out", 4);
 	else
-		write(fd, "in", 3);
+		ret = write(fd, "in", 3);
+	if (ret == -1) {
+		// Unused variable - fix compiler warning
+	}
 
 	close(fd);
 }
@@ -256,6 +265,7 @@ void gpio_data(uint16_t pin, uint8_t data)
 {
 	int fd;
 	char buf[60];
+	int ret;
 
 	snprintf(buf, sizeof(buf), "/sys/class/gpio/gpio%d/value", pin);
 
@@ -266,9 +276,12 @@ void gpio_data(uint16_t pin, uint8_t data)
 	}
 
 	if (data)
-		write(fd, "1", 2);
+		ret = write(fd, "1", 2);
 	else
-		write(fd, "0", 2);
+		ret = write(fd, "0", 2);
+	if (ret == -1) {
+		// Unused variable - fix compiler warning
+	}
 
 	close(fd);
 }

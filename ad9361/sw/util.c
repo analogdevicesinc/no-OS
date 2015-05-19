@@ -67,7 +67,7 @@ int32_t clk_prepare_enable(struct clk *clk)
 uint32_t clk_get_rate(struct ad9361_rf_phy *phy,
 					  struct refclk_scale *clk_priv)
 {
-	uint32_t rate;
+	uint32_t rate = 0;
 	uint32_t source;
 
 	source = clk_priv->source;

@@ -2857,7 +2857,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	struct spi_device *spi = phy->spi;
 	uint32_t clktf, clkrf;
 	int32_t txnco_word, rxnco_word, txnco_freq, ret;
-	uint8_t __rx_phase = 0, reg_inv_bits, val, decim;
+	uint8_t __rx_phase = 0, reg_inv_bits = 0, val, decim;
 	const uint8_t(*tab)[3];
 	uint32_t index_max, i, lpf_tia_mask;
 
@@ -6290,10 +6290,10 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t parent_rate)
 {
 	struct ad9361_rf_phy *phy = clk_priv->phy;
-	uint64_t vco;
+	uint64_t vco = 0;
 	uint8_t buf[5];
-	uint32_t reg, div_mask, lock_reg, fract, integer;
-	int32_t vco_div, ret;
+	uint32_t reg, div_mask, lock_reg, fract = 0, integer = 0;
+	int32_t vco_div = 0, ret;
 
 	dev_dbg(&clk_priv->spi->dev, "%s: Rate %"PRIu32" Hz Parent Rate %"PRIu32" Hz",
 		__func__, rate, parent_rate);

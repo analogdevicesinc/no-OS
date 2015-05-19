@@ -186,7 +186,6 @@ void adc_init(struct ad9361_rf_phy *phy)
 #endif
 
 #ifdef DMA_UIO
-printf("%s: Open rx_dma_uio device\n\r", __func__);
 	rx_dma_uio_fd = open(RX_DMA_UIO_DEV, O_RDWR);
 	if(rx_dma_uio_fd < 1)
 	{
