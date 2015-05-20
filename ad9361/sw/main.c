@@ -43,6 +43,7 @@
 //#define CONSOLE_COMMANDS
 //#define XILINX_PLATFORM
 //#define FMCOMMS5
+//#define PICOZED_SDR
 //#define CAPTURE_SCRIPT
 
 /******************************************************************************/
@@ -389,6 +390,10 @@ int main(void)
 	gpio_direction(default_init_param.gpio_resetb, 1);
 
 	spi_init(SPI_DEVICE_ID, 1, 0);
+
+#if defined FMCOMMS5 || defined PICOZED_SDR
+	default_init_param.xo_disable_use_ext_refclk_enable = 1;
+#endif
 
 	ad9361_init(&ad9361_phy, &default_init_param);
 
