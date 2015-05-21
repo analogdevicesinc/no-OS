@@ -789,9 +789,9 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
+	phy->rx_fir_dec = fir_cfg.rx_dec;
 	ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)(fir_cfg.rx | FIR_IS_RX),
 			fir_cfg.rx_gain, fir_cfg.rx_coef_size, fir_cfg.rx_coef);
-	phy->rx_fir_dec = fir_cfg.rx_dec;
 
 	return ret;
 }
@@ -1295,9 +1295,9 @@ int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
+	phy->tx_fir_int = fir_cfg.tx_int;
 	ret = ad9361_load_fir_filter_coef(phy, (enum fir_dest)fir_cfg.tx,
 			fir_cfg.tx_gain, fir_cfg.tx_coef_size, fir_cfg.tx_coef);
-	phy->tx_fir_int = fir_cfg.tx_int;
 
 	return ret;
 }
