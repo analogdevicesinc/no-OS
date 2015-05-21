@@ -532,12 +532,13 @@ static const uint8_t gm_st_gain[16] = { 0x78, 0x74, 0x70, 0x6C, 0x68, 0x64, 0x60
 static const uint8_t gm_st_ctrl[16] = { 0x0, 0xD, 0x15, 0x1B, 0x21, 0x25, 0x29,
 0x2C, 0x2F, 0x31, 0x33, 0x34, 0x35, 0x3A, 0x3D, 0x3E };
 
-static const int8_t lna_table[] = { 6, 17, 19, 25 };
+static const int8_t lna_table[RXGAIN_TBLS_END][4] = {
+	{5, 17, 19, 24}, {3, 14, 17, 21}, {-4, 10, 13, 14}};
 static const int8_t tia_table[] = { -6, 0 };
-static const int8_t mixer_table[] = { 0, 5, 11, 16,
-	17, 18, 19, 20,
-	21, 22, 23, 24,
-	25, 26, 27, 28 };
+static const int8_t mixer_table[RXGAIN_TBLS_END][16] = {
+	{0, 3, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25},
+	{0, 3, 9, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
+	{0, 3, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24}};
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1501,8 +1502,8 @@ struct rf_rx_gain *rx_gain)
 
 	rx_gain->tia_index = ad9361_spi_readf(spi, REG_GAIN_TABLE_READ_DATA2, TIA_GAIN);
 
-	rx_gain->lmt_gain = lna_table[rx_gain->lna_index] +
-		mixer_table[rx_gain->mixer_index] +
+	rx_gain->lmt_gain = lna_table[phy->current_table][rx_gain->lna_index] +
+		mixer_table[phy->current_table][rx_gain->mixer_index] +
 		tia_table[rx_gain->tia_index];
 
 	ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, tbl_addr);
