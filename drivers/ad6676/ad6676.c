@@ -163,7 +163,7 @@ static int32_t ad6676_set_fif(uint32_t val)
 static uint32_t ad6676_get_fif(void)
 {
 	struct ad6676_platform_data *pdata = phy->pdata;
-	uint64_t mix1, mix2;
+	uint64_t mix1 = 0, mix2 = 0;
 
 	ad6676_spi_read(AD6676_MIX1_TUNING, (uint8_t *)&mix1);
 	ad6676_spi_read(AD6676_MIX2_TUNING, (uint8_t *)&mix2);
