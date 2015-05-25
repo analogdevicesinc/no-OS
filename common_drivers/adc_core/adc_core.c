@@ -251,3 +251,18 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 
 	return 0;
 }
+
+/***************************************************************************//**
+ * @brief adc_set_pnsel
+*******************************************************************************/
+int32_t adc_set_pnsel(uint8_t channel, enum adc_pn_sel sel)
+{
+	uint32_t reg;
+
+	adc_read(ADC_REG_CHAN_CNTRL_3(channel), &reg);
+	reg &= ~ADC_ADC_PN_SEL(~0);
+	reg |= ADC_ADC_PN_SEL(sel);
+	adc_write(ADC_REG_CHAN_CNTRL_3(channel), reg);
+
+	return 0;
+}
