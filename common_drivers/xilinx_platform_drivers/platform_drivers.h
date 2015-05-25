@@ -54,6 +54,9 @@
 #define clamp(val, min_val, max_val) (max(min((val), (max_val)), (min_val)))
 #define clamp_t(type, val, min_val, max_val) (type)clamp((type)(val), (type)(min_val), (type)(max_val))
 
+#define GPIO_OUTPUT	1
+#define GPIO_INPUT	0
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -62,6 +65,9 @@ int32_t spi_init(uint32_t device_id,
 		uint8_t clk_pol);
 int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
 				 uint8_t bytes_number);
+void gpio_init(uint32_t device_id);
+void gpio_direction(uint8_t pin, uint8_t direction);
+void gpio_data(uint8_t pin, uint8_t data);
 void mdelay(uint32_t msecs);
 uint64_t do_div(uint64_t* n, uint64_t base);
 #endif
