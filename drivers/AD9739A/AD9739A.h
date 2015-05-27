@@ -224,8 +224,14 @@ struct ad9739a_platform_data
 	uint8_t common_mode_voltage_dacclk_p;
 	uint8_t common_mode_voltage_dacclk_n;
 	float   full_scale_current;
-	int8_t  name[16];
 };
+
+typedef struct
+{
+	uint8_t common_mode_voltage_dacclk_p;
+	uint8_t common_mode_voltage_dacclk_n;
+	float   full_scale_current;
+}ad9739a_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -247,6 +253,11 @@ float ad9739a_DAC_fs_current(float fs_val);
 /*! Delay for a number of fdata clock cycles. */
 int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
+#if 0
 int32_t ad9739a_setup(int32_t spiBaseAddr, int32_t ssNo);
+#else
+int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
+		ad9739a_init_param init_param);
+#endif
 
 #endif /* __AD9739A_H__ */

@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   ADF4350.h
+ *   @file   adf4350.h
  *   @brief  Header file of ADF4350 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2012-2015(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __ADF4350_H__
 #define __ADF4350_H__
@@ -46,6 +44,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 
 /* Channels */
 #define ADF4350_RX_CHANNEL	0
@@ -89,6 +91,9 @@
 #define ADF4350_REG3_12BIT_CLKDIV(x)			((x) << 3)
 #define ADF4350_REG3_12BIT_CLKDIV_MODE(x)		((x) << 16)
 #define ADF4350_REG3_12BIT_CSR_EN				(1 << 18)
+#define ADF4351_REG3_CHARGE_CANCELLATION_EN		(1 << 21)
+#define ADF4351_REG3_ANTI_BACKLASH_3ns_EN		(1 << 22)
+#define ADF4351_REG3_BAND_SEL_CLOCK_MODE_HIGH	(1 << 23)
 
 /* REG4 Bit Definitions */
 #define ADF4350_REG4_OUTPUT_PWR(x)				((x) << 3)
@@ -139,11 +144,45 @@ struct adf4350_platform_data
 	int32_t	    gpio_lock_detect;
 };
 
+typedef struct
+{
+	uint32_t	clkin;
+	uint32_t	channel_spacing;
+	uint32_t	power_up_frequency;
+	uint32_t	reference_div_factor;
+	uint8_t		reference_doubler_enable;
+	uint8_t		reference_div2_enable;
+
+	/* r2_user_settings */
+	uint8_t		phase_detector_polarity_positive_enable;
+	uint8_t		lock_detect_precision_6ns_enable;
+	uint8_t		lock_detect_function_integer_n_enable;
+	uint32_t	charge_pump_current;
+	uint32_t	muxout_select;
+	uint8_t		low_spur_mode_enable;
+
+	/* r3_user_settings */
+	uint8_t		cycle_slip_reduction_enable;
+	uint8_t		charge_cancellation_enable;
+	uint8_t		anti_backlash_3ns_enable;
+	uint8_t		band_select_clock_mode_high_enable;
+	uint32_t	clk_divider_12bit;
+	uint32_t	clk_divider_mode;
+
+	/* r4_user_settings */
+	uint8_t		aux_output_enable;
+	uint8_t		aux_output_fundamental_enable;
+	uint8_t		mute_till_lock_enable;
+	uint32_t	output_power;
+	uint32_t	aux_output_power;
+}adf4350_init_param;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Initializes the ADF4350. */
-int32_t adf4350_setup(int32_t spiBaseAddr, int32_t ssNo);
+int32_t adf4350_setup(uint32_t spi_device_id, uint8_t slave_select,
+		adf4350_init_param init_param);
 /*! Writes 4 bytes of data to ADF4350. */
 int32_t adf4350_write(uint32_t data);
 /*! Stores PLL 0 frequency in Hz. */

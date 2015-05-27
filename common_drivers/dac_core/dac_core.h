@@ -66,6 +66,14 @@
 #define DAC_ENABLE						(1 << 0) /* v7.0 */
 #define DAC_SYNC						(1 << 0) /* v8.0 */
 
+#define ADI_REG_CNTRL_2					0x0048
+#define ADI_PAR_TYPE					(1 << 7)
+#define ADI_PAR_ENB						(1 << 6)
+#define ADI_R1_MODE						(1 << 5)
+#define ADI_DATA_FORMAT					(1 << 4)
+#define ADI_DATA_SEL(x)					(((x) & 0xF) << 0) /* v7.0 */
+#define ADI_TO_DATA_SEL(x)				(((x) >> 0) & 0xF) /* v7.0 */
+
 #define DAC_REG_RATECNTRL				0x004C
 #define DAC_RATE(x)						(((x) & 0xFF) << 0)
 #define DAC_TO_RATE(x)					(((x) >> 0) & 0xFF)

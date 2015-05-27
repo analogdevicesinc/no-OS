@@ -3,7 +3,7 @@
  *   @brief  Implementation of AD9739A Driver.
  *   @author Bancisor Mihai
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2012-2015(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,33 +36,29 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "spi.h"
-#include "AD9739A.h"
-#include "AD9739A_cfg.h"
+#include <malloc.h>
+#include <stdio.h>
+#include "platform_drivers.h"
+#include "ad9739a.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 #define FDATA 2500	// for 2.5 GSPS
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-static int32_t spiBaseAddress;
-static int32_t spiSlaveSelect;
-
+uint8_t ad9739a_slave_select;
 struct ad9739a_state
 {
     struct ad9739a_platform_data *pdata;
-
-}ad9739a_st = 
-{
-    &ad9739a_pdata_lpc
-};
+}ad9739a_st;
 
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
@@ -79,8 +75,7 @@ int32_t ad9739a_write(unsigned char registerAddress, unsigned char registerValue
     data[0] = AD9739A_WRITE | (0x7F & registerAddress);
     data[1] = registerValue;
     
-    return SPI_TransferData(spiBaseAddress, 2, (char*)data, 0, NULL,
-    		                spiSlaveSelect);
+    return spi_write_and_read(ad9739a_slave_select, data, 2);
 }
 
 /***************************************************************************//**
@@ -93,14 +88,13 @@ int32_t ad9739a_write(unsigned char registerAddress, unsigned char registerValue
 int32_t ad9739a_read(unsigned char registerAddress)
 {
 	uint8_t txData[2] = {0, 0};
-	uint8_t rxData[2] = {0, 0};
 	int32_t ret;
 
     txData[0] = AD9739A_READ | (0x7F & registerAddress);
-    ret = SPI_TransferData(spiBaseAddress, 2, (char*)txData, 2, (char*)rxData,
-    		               spiSlaveSelect);
 
-    return (ret < 0 ? ret : (int32_t)rxData[1]);
+    ret = spi_write_and_read(ad9739a_slave_select, txData, 2);
+
+    return (ret < 0 ? ret : (int32_t)txData[1]);
 }
 
 /***************************************************************************//**
@@ -271,7 +265,8 @@ int32_t delay_fdata_cycles(uint32_t cycles)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_setup(int32_t spiBaseAddr, int32_t ssNo)
+int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
+		ad9739a_init_param init_param)
 {
     struct  ad9739a_state *st = &ad9739a_st;
     int32_t ret = 0;
@@ -279,8 +274,18 @@ int32_t ad9739a_setup(int32_t spiBaseAddr, int32_t ssNo)
     uint8_t dll_loop_lock_counter = 0;
     uint8_t dll_loop_locked = 0;
 
-    spiBaseAddress = spiBaseAddr;
-    spiSlaveSelect = ssNo;
+	ad9739a_slave_select = slave_select;
+	spi_init(spi_device_id, 0, 0);
+
+	st->pdata = (struct ad9739a_platform_data *)malloc(sizeof(*st->pdata));
+	if (!st->pdata)
+		return -1;
+
+	st->pdata->common_mode_voltage_dacclk_p =
+			init_param.common_mode_voltage_dacclk_p;
+	st->pdata->common_mode_voltage_dacclk_n =
+			init_param.common_mode_voltage_dacclk_n;
+	st->pdata->full_scale_current = init_param.full_scale_current;
 
 	/* Set 4-wire SPI, MSB first. */
     ret = ad9739a_write(AD9739A_REG_MODE, 0x00);
@@ -407,6 +412,8 @@ int32_t ad9739a_setup(int32_t spiBaseAddr, int32_t ssNo)
     {
         return (int32_t)fret;
     }
-    
+
+	printf("AD9739A successfully initialized.\n");
+
     return 0;
 }
