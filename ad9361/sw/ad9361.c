@@ -4742,14 +4742,15 @@ int32_t ad9361_fastlock_save(struct ad9361_rf_phy *phy, bool tx,
  */
 int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 {
-	int32_t mcs_mask = MCS_BBPLL_ENABLE | MCS_DIGITAL_CLK_ENABLE | MCS_BB_ENABLE;
+	int32_t mcs_mask = MCS_RF_ENABLE | MCS_BBPLL_ENABLE |
+			MCS_DIGITAL_CLK_ENABLE | MCS_BB_ENABLE;
 
 	dev_dbg(&phy->spi->dev, "%s: MCS step %"PRId32, __func__, step);
 
 	switch (step) {
 	case 1:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
-			mcs_mask, MCS_BB_ENABLE | MCS_BBPLL_ENABLE);
+			mcs_mask, MCS_BB_ENABLE | MCS_BBPLL_ENABLE | MCS_RF_ENABLE);
 		ad9361_spi_writef(phy->spi, REG_CP_BLEED_CURRENT,
 			MCS_REFCLK_SCALE_EN, 1);
 		break;
@@ -4766,7 +4767,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 		break;
 	case 3:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
-			mcs_mask, MCS_BB_ENABLE | MCS_DIGITAL_CLK_ENABLE);
+			mcs_mask, MCS_BB_ENABLE | MCS_DIGITAL_CLK_ENABLE | MCS_RF_ENABLE);
 		break;
 	case 4:
 		if(!gpio_is_valid(phy->pdata->gpio_sync))
@@ -4777,7 +4778,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 	case 0:
 	case 5:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
-			mcs_mask, 0);
+			mcs_mask, MCS_RF_ENABLE);
 		break;
 	}
 
