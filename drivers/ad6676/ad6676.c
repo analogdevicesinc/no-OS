@@ -525,7 +525,9 @@ static int32_t ad6676_outputmode_set(uint32_t mode)
 }
 
 /***************************************************************************//**
+* @brief ad6676_set_if_frequency
 *******************************************************************************/
+int32_t ad6676_set_if_frequency(uint32_t if_freq_hz)
 {
 	phy->pdata->base.f_if_hz = if_freq_hz;
 	ad6676_update(phy->pdata);
@@ -536,6 +538,7 @@ static int32_t ad6676_outputmode_set(uint32_t mode)
 /***************************************************************************//**
 * @brief ad6676_get_if_freq
 *******************************************************************************/
+int32_t ad6676_get_if_frequency(uint32_t *if_freq_hz)
 {
 	*if_freq_hz = phy->pdata->base.f_if_hz;
 
@@ -543,7 +546,9 @@ static int32_t ad6676_outputmode_set(uint32_t mode)
 }
 
 /***************************************************************************//**
+* @brief ad6676_set_if_bandwidth
 *******************************************************************************/
+int32_t ad6676_set_if_bandwidth(uint32_t if_bw_hz)
 {
 	phy->pdata->base.bw_hz = if_bw_hz;
 	ad6676_update(phy->pdata);
@@ -552,7 +557,9 @@ static int32_t ad6676_outputmode_set(uint32_t mode)
 }
 
 /***************************************************************************//**
+* @brief ad6676_get_if_bandwidth
 *******************************************************************************/
+int32_t ad6676_get_if_bandwidth(uint32_t *if_bw_hz)
 {
 	*if_bw_hz = phy->pdata->base.bw_hz;
 

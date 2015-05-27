@@ -372,6 +372,10 @@ int32_t ad6676_spi_read(uint16_t reg_addr, uint8_t *reg_data);
 int32_t ad6676_spi_write(uint16_t reg_addr, uint8_t reg_data);
 int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
 		ad6676_init_param *init_param);
+int32_t ad6676_set_if_frequency(uint32_t if_freq_hz);
+int32_t ad6676_get_if_frequency(uint32_t *if_freq_hz);
+int32_t ad6676_set_if_bandwidth(uint32_t if_bw_hz);
+int32_t ad6676_get_if_bandwidth(uint32_t *if_bw_hz);
 int32_t ad6676_set_scale(uint8_t scale);
 int32_t ad6676_get_scale(uint8_t *scale);
 int32_t ad6676_set_attenuation(uint8_t attenuation);
