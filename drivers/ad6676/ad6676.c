@@ -525,6 +525,87 @@ static int32_t ad6676_outputmode_set(uint32_t mode)
 }
 
 /***************************************************************************//**
+*******************************************************************************/
+{
+	phy->pdata->base.f_if_hz = if_freq_hz;
+	ad6676_update(phy->pdata);
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_get_if_freq
+*******************************************************************************/
+{
+	*if_freq_hz = phy->pdata->base.f_if_hz;
+
+	return 0;
+}
+
+/***************************************************************************//**
+*******************************************************************************/
+{
+	phy->pdata->base.bw_hz = if_bw_hz;
+	ad6676_update(phy->pdata);
+
+	return 0;
+}
+
+/***************************************************************************//**
+*******************************************************************************/
+{
+	*if_bw_hz = phy->pdata->base.bw_hz;
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_set_scale
+*******************************************************************************/
+int32_t ad6676_set_scale(uint8_t scale)
+{
+	scale = clamp(scale, 0, 64);
+	phy->pdata->base.scale = scale;
+	ad6676_update(phy->pdata);
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_get_scale
+*******************************************************************************/
+int32_t ad6676_get_scale(uint8_t *scale)
+{
+	*scale = phy->pdata->base.scale;
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_set_attenuation
+*******************************************************************************/
+int32_t ad6676_set_attenuation(uint8_t attenuation)
+{
+	phy->pdata->base.attenuation = clamp(attenuation, 0, 27);
+	ad6676_spi_write(AD6676_ATTEN_VALUE_PIN0,
+			phy->pdata->base.attenuation);
+	ad6676_spi_write(AD6676_ATTEN_VALUE_PIN1,
+			phy->pdata->base.attenuation);
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_get_attenuation
+*******************************************************************************/
+int32_t ad6676_get_attenuation(uint8_t *attenuation)
+{
+	*attenuation = phy->pdata->base.attenuation;
+
+	return 0;
+}
+
+/***************************************************************************//**
 * @brief ad6676_setup
 *******************************************************************************/
 int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
@@ -575,6 +656,8 @@ int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
 	/* Shuffler Configuration */
 	phy->pdata->shuffler.shuffle_ctrl = init_param->shuffler_control;
 	phy->pdata->shuffler.shuffle_thresh = init_param->shuffler_thresh;
+
+	phy->pdata->base.attenuation = 12;
 
 	ad6676_spi_read(AD6676_CHIP_ID0, &reg_id);
 	if (reg_id != CHIPID0_AD6676) {
