@@ -95,8 +95,8 @@ ATV_ERR ADIAPI_TransmitterInit(void)
     TransmitterParm.InPixelFormat 		= SDR_444_SEP_SYNC;
     TransmitterParm.InPixelStyle 		= 2;
     TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
-    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_YUV_444;
-    TransmitterParm.InColorSpace 		= TX_CS_RGB;
+    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_RGB_444;
+    TransmitterParm.InColorSpace 		= TX_CS_YUV_601;
     TransmitterParm.OutColorSpace 		= TX_CS_RGB;
     TransmitterParm.AudInterface		= TX_SPDIF;
     TransmitterParm.DebugControl		= 1;
