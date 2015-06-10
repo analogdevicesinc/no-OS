@@ -150,11 +150,13 @@ void get_register(double* param, char param_no) // "register?" command
 {
 	uint16_t reg_addr;
 	uint8_t reg_val;
+	struct spi_device spi;
 
 	if(param_no >= 1)
 	{
+		spi.id_no = 0;
 		reg_addr = param[0];
-		reg_val = ad9361_spi_read(NULL, reg_addr);
+		reg_val = ad9361_spi_read(&spi, reg_addr);
 		console_print("register[0x%x]=0x%x\n", reg_addr, reg_val);
 	}
 	else
