@@ -45,6 +45,7 @@
 #include "platform.h"
 #include "util.h"
 
+#ifndef AXI_ADC_NOT_PRESENT
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
@@ -61,6 +62,7 @@ static struct axiadc_chip_info axiadc_chip_info_tbl[] =
 		122880000UL,
 	},
 };
+#endif
 
 /**
  * Initialize the AD9361 part.
@@ -96,7 +98,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	if (!phy->pdata) {
 		return -ENOMEM;
 	}
-
+#ifndef AXI_ADC_NOT_PRESENT
 	phy->adc_conv = (struct axiadc_converter *)zmalloc(sizeof(*phy->adc_conv));
 	if (!phy->adc_conv) {
 		return -ENOMEM;
@@ -106,9 +108,10 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	if (!phy->adc_state) {
 		return -ENOMEM;
 	}
+	phy->adc_state->phy = phy;
+#endif
 
 	phy->spi->id_no = init_param->id_no;
-	phy->adc_state->phy = phy;
 
 	/* Identification number */
 	phy->id_no = init_param->id_no;
@@ -367,7 +370,9 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->port_ctrl.lvds_invert[0] = init_param->lvds_invert1_control;
 	phy->pdata->port_ctrl.lvds_invert[1] = init_param->lvds_invert2_control;
 
+#ifndef AXI_ADC_NOT_PRESENT
 	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
+#endif
 
 	phy->rx_eq_2tx = false;
 
@@ -400,7 +405,9 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	if (ret < 0)
 		goto out;
 
+#ifndef AXI_ADC_NOT_PRESENT
 	axiadc_init(phy);
+#endif
 
 	ad9361_init_gain_tables(phy);
 
@@ -408,10 +415,12 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	if (ret < 0)
 		goto out;
 
+#ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
 	ret = axiadc_post_setup(phy);
 	if (ret < 0)
 		goto out;
+#endif
 
 	printf("%s : AD9361 Rev %d successfully initialized\n", "ad9361_init", (int)rev);
 
@@ -421,8 +430,10 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 
 out:
 	free(phy->spi);
+#ifndef AXI_ADC_NOT_PRESENT
 	free(phy->adc_conv);
 	free(phy->adc_state);
+#endif
 	free(phy->clk_refin);
 	free(phy->pdata);
 	free(phy);
@@ -1630,7 +1641,9 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 		return -EINVAL;
 	}
 
+#ifndef AXI_ADC_NOT_PRESENT
 	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
+#endif
 	ad9361_reset(phy);
 	ad9361_spi_write(phy->spi, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
 	ad9361_spi_write(phy->spi, REG_SPI_CONF, 0x0);
@@ -1653,9 +1666,14 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 	phy->clks[RX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[RX_RFPLL], phy->clks[RX_REFCLK]->rate);
 	phy->clks[TX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[TX_RFPLL], phy->clks[TX_REFCLK]->rate);
 
+#ifndef AXI_ADC_NOT_PRESENT
 	axiadc_init(phy);
+#endif
 	ad9361_setup(phy);
-	ad9361_post_setup(phy);
+#ifndef AXI_ADC_NOT_PRESENT
+	/* platform specific wrapper to call ad9361_post_setup() */
+	axiadc_post_setup(phy);
+#endif
 
 	return 0;
 }
