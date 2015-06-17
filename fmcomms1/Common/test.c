@@ -559,8 +559,11 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 	uint32_t adc_clk_int;
 	uint32_t adc_clk_frac;
 	float adc_clk;
+	uint32_t pcore_version;
 
 	baddr = ((sel == IICSEL_B1HPC_AXI)||(sel == IICSEL_B1HPC_PS7)) ? CFAD9643_1_BASEADDR : CFAD9643_0_BASEADDR;
+
+	pcore_version = Xil_In32(baddr + 0x0000);
 
 	Xil_Out32((baddr + 0x040), 0x3);
 	delay_ms(10);
@@ -568,10 +571,19 @@ void adc_test(uint32_t sel, uint32_t mode, uint32_t format)
 	{
 		xil_printf("adc_test: status NOT set!!\n\r");
 	}
-	if ((Xil_In32(baddr + 0x064) & 0x200) == 0x0)
-	{
-		xil_printf("adc_test: delay NOT locked!!\n\r");
+
+	if (PCORE_VERSION_MAJOR(pcore_version) > 8) {
+		if ((Xil_In32(baddr + 0x800) & 0x200) == 0x1)
+		{
+			xil_printf("adc_test: delay NOT locked!!\n\r");
+		}
+	} else {
+		if ((Xil_In32(baddr + 0x064) & 0x200) == 0x0)
+		{
+			xil_printf("adc_test: delay NOT locked!!\n\r");
+		}
 	}
+
 	rdata = Xil_In32(baddr + 0x054);
 	adc_clk = (float) rdata;
 	rdata = Xil_In32(baddr + 0x058);
