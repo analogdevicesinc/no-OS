@@ -67,7 +67,7 @@ int main()
     XCOMM_Version boardVersion;
     XCOMM_DefaultInit defInit = {FMC_LPC,		//fmcPort
     							 XILINX_ML605,	//carrierBoard
-    							 122880000,		//adcSamplingRate
+    							 61440000,		//adcSamplingRate
     							 122880000,		//dacSamplingRate
 								 10000,			//rxGain1000
 								 2400000000ull, //rxFrequency
@@ -209,9 +209,15 @@ int main()
     retFreqTx = XCOMM_SetTxFrequency(defInit.txFrequency);
     xil_printf("Actual set Tx frequency: %lld%06lld\n\r", retFreqTx/(uint64_t)1e6, retFreqTx%(uint64_t)1e6);
 
+#ifndef DAC_DMA
     xil_printf("\n\rSetting up the DDS... \n\r");
     dds_setup(fmcSel, 1000000, 1000000);
     xil_printf("DDS setup complete.\n\r");
+#else
+    xil_printf("\n\rSetting up the DAC DMA... \n\r");
+    dac_dma_setup(fmcSel);
+    xil_printf("DAC DMA setup complete.\n\r");
+#endif
 
     xil_printf("\n\rReading data from air... \n\r");
     XCOMM_SetAdcTestMode(XCOMM_AdcTestMode_Off, XCOMM_AdcChannel_All);
