@@ -3270,6 +3270,13 @@ struct ad9361_fastlock {
 	struct ad9361_fastlock_entry entry[2][8];
 };
 
+enum dig_tune_flags {
+	BE_VERBOSE = 1,
+	BE_MOREVERBOSE = 2,
+	DO_IDELAY = 4,
+	DO_ODELAY = 8,
+};
+
 enum ad9361_bist_mode {
 	BIST_DISABLE,
 	BIST_INJ_TX,

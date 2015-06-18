@@ -89,6 +89,118 @@ int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable)
 }
 
 /**
+ * Set IO delay.
+ * @param st The AXI ADC state structure.
+ * @param lane Lane number.
+ * @param val Value.
+ * @param tx The Synthesizer TX = 1, RX = 0.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_iodelay_set(struct axiadc_state *st, unsigned lane,
+			      unsigned val, bool tx)
+{
+	if (tx) {
+		if (PCORE_VERSION_MAJOR(st->pcore_version) > 8)
+			axiadc_write(st, 0x4000 + ADI_REG_DELAY(lane), val);
+		else
+			return -ENODEV;
+	} else {
+		axiadc_idelay_set(st, lane, val);
+	}
+
+	return 0;
+}
+
+/**
+ * Set midscale IO delay.
+ * @param phy The AD9361 state structure.
+ * @param tx The Synthesizer TX = 1, RX = 0.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_midscale_iodelay(struct ad9361_rf_phy *phy, bool tx)
+{
+	struct axiadc_state *st = phy->adc_state;
+	int32_t ret = 0, i;
+
+	for (i = 0; i < 7; i++)
+		ret |= ad9361_iodelay_set(st, i, 15, tx);
+
+	return 0;
+}
+
+/**
+ * Digital tune IO delay.
+ * @param phy The AD9361 state structure.
+ * @param tx The Synthesizer TX = 1, RX = 0.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
+{
+	struct axiadc_converter *conv = phy->adc_conv;
+	struct axiadc_state *st = phy->adc_state;
+	int32_t ret, i, j, chan, num_chan;
+	uint32_t s0, c0;
+	uint8_t field[32];
+
+	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
+
+	for (i = 0; i < 7; i++) {
+		for (j = 0; j < 32; j++) {
+			ad9361_iodelay_set(st, i, j, tx);
+			mdelay(1);
+
+			for (chan = 0; chan < num_chan; chan++)
+				axiadc_write(st, ADI_REG_CHAN_STATUS(chan),
+					ADI_PN_ERR | ADI_PN_OOS);
+			mdelay(10);
+
+			for (chan = 0, ret = 0; chan < num_chan; chan++)
+				ret |= axiadc_read(st, ADI_REG_CHAN_STATUS(chan));
+
+			field[j] = ret;
+		}
+
+		c0 = ad9361_find_opt(&field[0], 32, &s0);
+		ad9361_iodelay_set(st, i, s0 + c0 / 2, tx);
+
+		dev_dbg(&phy->spi->dev,
+			 "%s Lane %"PRId32", window cnt %"PRIu32" , start %"PRIu32", IODELAY set to %"PRIu32"\n",
+			 tx ? "TX" :"RX",  i , c0, s0, s0 + c0 / 2);
+	}
+
+	return 0;
+}
+
+/**
+ * Digital tune verbose print.
+ * @param phy The AD9361 state structure.
+ * @param field Field.
+ * @param tx The Synthesizer TX = 1, RX = 0.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static void ad9361_dig_tune_verbose_print(struct ad9361_rf_phy *phy,
+					  uint8_t field[][16], bool tx)
+{
+	int32_t i, j;
+
+	printk("SAMPL CLK: %"PRIu32" tuning: %s\n",
+			clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]), tx ? "TX" : "RX");
+	printk("  ");
+	for (i = 0; i < 16; i++)
+		printk("%"PRIx32":", i);
+	printk("\n");
+
+	for (i = 0; i < 2; i++) {
+		printk("%"PRIx32":", i);
+		for (j = 0; j < 16; j++) {
+			printk("%c ", (field[i][j] ? '#' : 'o'));
+		}
+		printk("\n");
+	}
+	printk("\n");
+}
+
+/**
  * Digital interface timing analysis.
  * @param phy The AD9361 state structure.
  * @param buf The buffer.
@@ -157,17 +269,21 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
  * Digital tune.
  * @param phy The AD9361 state structure.
  * @param max_freq Maximum frequency.
+ * @param flags Flags: BE_VERBOSE, BE_MOREVERBOSE, DO_IDELAY, DO_ODELAY.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
+int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
+						enum dig_tune_flags flags)
 {
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axiadc_state *st = phy->adc_state;
 	int32_t ret, i, j, k, chan, t, num_chan, err = 0;
 	uint32_t s0, s1, c0, c1, tmp, saved = 0;
 	uint8_t field[2][16];
+	uint32_t rates[3] = {25000000U, 40000000U, 61440000U};
+	uint32_t hdl_dac_version;
 
-	uint32_t hdl_dac_version = axiadc_read(st, 0x4000);
+	hdl_dac_version = axiadc_read(st, 0x4000);
 
 	if (phy->pdata->dig_interface_tune_skipmode == 2) {
 	/* skip completely and use defaults */
@@ -180,6 +296,12 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 		return 0;
 	}
 
+	if (flags & DO_IDELAY)
+		ad9361_midscale_iodelay(phy, 0);
+
+	if (flags & DO_ODELAY)
+		ad9361_midscale_iodelay(phy, 1);
+
 	if (!phy->pdata->fdd) {
 		ad9361_set_ensm_mode(phy, true, false);
 		ad9361_ensm_force_state(phy, ENSM_STATE_FDD);
@@ -188,15 +310,16 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 		ad9361_ensm_restore_prev_state(phy);
 	}
 
-	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
+	num_chan = (conv->chip_info->num_channels > 4) ? 4 :
+		conv->chip_info->num_channels;
 
 	ad9361_bist_prbs(phy, BIST_INJ_RX);
 
 	for (t = 0; t < 2; t++) {
 		memset(field, 0, 32);
-		for (k = 0; k < 2; k++) {
+		for (k = 0; k < (max_freq ? ARRAY_SIZE(rates) : 1); k++) {
 			if (max_freq)
-				ad9361_set_trx_clock_chain_freq(phy, k ? max_freq : 10000000UL);
+				ad9361_set_trx_clock_chain_freq(phy, rates[k]);
 			for (i = 0; i < 2; i++) {
 				for (j = 0; j < 16; j++) {
 					ad9361_spi_write(phy->spi,
@@ -220,30 +343,21 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 					field[i][j] |= ret;
 				}
 			}
-		}
-#ifdef _DEBUG
-		printk("SAMPL CLK: %"PRIu32"\n", clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
-		printk("  ");
-		for (i = 0; i < 16; i++)
-			printk("%"PRIx32":", i);
-		printk("\n");
-
-		for (i = 0; i < 2; i++) {
-			printk("%"PRIx32":", i);
-			for (j = 0; j < 16; j++) {
-				printk("%c ", (field[i][j] ? '#' : 'o'));
+			if ((flags & BE_MOREVERBOSE) && max_freq) {
+				ad9361_dig_tune_verbose_print(phy, field, t);
 			}
-			printk("\n");
 		}
-		printk("\n");
-#endif
+
 		c0 = ad9361_find_opt(&field[0][0], 16, &s0);
 		c1 = ad9361_find_opt(&field[1][0], 16, &s1);
 
 		if (!c0 && !c1) {
+			ad9361_dig_tune_verbose_print(phy, field, t);
 			dev_err(&phy->spi->dev, "%s: Tuning %s FAILED!", __func__,
 				t ? "TX" : "RX");
 			err |= -EIO;
+		} else if (flags & BE_VERBOSE) {
+			ad9361_dig_tune_verbose_print(phy, field, t);
 		}
 
 		if (c1 > c0)
@@ -256,6 +370,9 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 			RX_DATA_DELAY(s0 + c0 / 2));
 
 		if (t == 0) {
+			if (flags & DO_IDELAY)
+				ad9361_dig_tune_iodelay(phy, 0);
+
 			/* Now do the loopback and tune the digital out */
 			ad9361_bist_prbs(phy, BIST_DISABLE);
 
@@ -274,6 +391,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 			}
 
 			ad9361_bist_loopback(phy, 1);
+			axiadc_write(st, 0x4000 + ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
 
 			for (chan = 0; chan < num_chan; chan++) {
 				axiadc_write(st, ADI_REG_CHAN_CNTRL(chan),
@@ -297,6 +415,9 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 
 			}
 		} else {
+			if (flags & DO_ODELAY)
+				ad9361_dig_tune_iodelay(phy, 1);
+
 			ad9361_bist_loopback(phy, 0);
 
 			if (PCORE_VERSION_MAJOR(hdl_dac_version) < 8)
@@ -323,7 +444,8 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq)
 
 				ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY,
 						phy->pdata->port_ctrl.tx_clk_data_delay);
-				err = 0;
+				if (!max_freq)
+					err = 0;
 			} else {
 				phy->pdata->port_ctrl.rx_clk_data_delay =
 					ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
@@ -353,7 +475,7 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axiadc_state *st = phy->adc_state;
 	int32_t rx2tx2 = phy->pdata->rx2tx2;
-	int32_t tmp, num_chan;
+	int32_t tmp, num_chan, flags;
 	int32_t i, ret;
 
 	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
@@ -381,10 +503,19 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 			ADI_ENABLE | ADI_IQCOR_ENB);
 	}
 
+	flags = 0x0;
+
 	ret = ad9361_dig_tune(phy, ((conv->chip_info->num_channels > 4) ||
-		axiadc_read(st, 0x0004)) ? 0 : 61440000);
+		axiadc_read(st, 0x0004)) ? 0 : 61440000, flags);
 	if (ret < 0)
 		return ret;
+
+	if (flags & (DO_IDELAY | DO_ODELAY)) {
+		ret = ad9361_dig_tune(phy, (axiadc_read(st, ADI_REG_ID)) ?
+			0 : 61440000, flags & BE_VERBOSE);
+		if (ret < 0)
+			return ret;
+	}
 
 	ret = ad9361_set_trx_clock_chain(phy,
 					 phy->pdata->rx_path_clks,

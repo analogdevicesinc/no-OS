@@ -109,6 +109,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 		return -ENOMEM;
 	}
 	phy->adc_state->phy = phy;
+	phy->adc_state->pcore_version = axiadc_read(phy->adc_state, ADI_REG_VERSION);
 #endif
 
 	phy->spi->id_no = init_param->id_no;
