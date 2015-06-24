@@ -4642,6 +4642,12 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 
 	switch (step) {
 	case 1:
+		/* REVIST:
+		* POWER_DOWN_TRX_SYNTH and MCS_RF_ENABLE somehow conflict
+		*/
+		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
+				POWER_DOWN_TX_SYNTH | POWER_DOWN_RX_SYNTH, 0);
+
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
 			mcs_mask, MCS_BB_ENABLE | MCS_BBPLL_ENABLE | MCS_RF_ENABLE);
 		ad9361_spi_writef(phy->spi, REG_CP_BLEED_CURRENT,
@@ -4668,7 +4674,6 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 		gpio_set_value(phy->pdata->gpio_sync, 1);
 		gpio_set_value(phy->pdata->gpio_sync, 0);
 		break;
-	case 0:
 	case 5:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
 			mcs_mask, MCS_RF_ENABLE);
