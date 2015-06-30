@@ -223,6 +223,17 @@ ad9144_init_param default_ad9144_init_param = {
 
 /***************************************************************************//**
 * @brief daq2_gpio_ctl
+	ch2 gpios:
+		trig		11
+		adc_pd		10
+		dac_txen	9
+		dac_reset	8
+		clkd_sync	6
+		adc_fdb		4
+		adc_fda		3
+		dac_irq		2
+		clkd_status_1	1
+		clkd_status_0	0
 *******************************************************************************/
 void daq2_gpio_ctl(uint32_t base_addr)
 {
@@ -236,12 +247,9 @@ void daq2_gpio_ctl(uint32_t base_addr)
 	Xil_Out32((base_addr + 0x004c), 0x03e0); // data
 	mdelay(10);
 #else
-	Xil_Out32((base_addr + 0x0c), 0x00); // direction -gpio2 (ctl)
-	Xil_Out32((base_addr + 0x04), 0x1f); // direction -gpio (status)
-	Xil_Out32((base_addr + 0x08), 0x00); // data -gpio2
-	mdelay(10);
-	Xil_Out32((base_addr + 0x08), 0x1f); // data -gpio2
-	mdelay(100);
+	Xil_Out32((base_addr + 0x000c), 0x081f); // direction
+	Xil_Out32((base_addr + 0x0008), 0x0340); // data
+	mdelay(250);
 #endif
 }
 
