@@ -53,7 +53,7 @@ static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
 
-	for(delay = 0; delay < usleep * 10; delay++);
+	for(delay = 0; delay < usleep; delay++);
 }
 #endif
 #include "platform_drivers.h"
