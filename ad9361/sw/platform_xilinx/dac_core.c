@@ -122,7 +122,7 @@ void dac_dma_write(uint32_t regAddr, uint32_t data)
 /***************************************************************************//**
  * @brief dds_default_setup
 *******************************************************************************/
-static int dds_default_setup(struct ad9361_rf_phy *phy,
+int32_t dds_default_setup(struct ad9361_rf_phy *phy,
 							 uint32_t chan, uint32_t phase,
 							 uint32_t freq, int32_t scale)
 {
@@ -440,7 +440,7 @@ void dds_update(struct ad9361_rf_phy *phy)
 *******************************************************************************/
 int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select sel)
 {
-	int i;
+	int32_t i;
 
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) > 7) {
 		if (chan < 0) { /* ALL */
