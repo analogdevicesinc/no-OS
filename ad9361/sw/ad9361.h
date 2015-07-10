@@ -3147,6 +3147,7 @@ struct ad9361_phy_platform_data {
 	uint8_t			rf_dc_offset_count_high;
 	uint8_t			rf_dc_offset_count_low;
 	uint8_t			dig_interface_tune_skipmode;
+	uint8_t			dig_interface_tune_fir_disable;
 	uint32_t			dcxo_coarse;
 	uint32_t			dcxo_fine;
 	uint32_t			rf_rx_input_sel;
@@ -3279,6 +3280,8 @@ enum dig_tune_flags {
 	BE_MOREVERBOSE = 2,
 	DO_IDELAY = 4,
 	DO_ODELAY = 8,
+	SKIP_STORE_RESULT = 16,
+	RESTORE_DEFAULT = 32,
 };
 
 enum ad9361_bist_mode {
@@ -3467,4 +3470,6 @@ int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start);
 int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable);
 int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	char *buf, int32_t buflen);
+int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
+						enum dig_tune_flags flags);
 #endif

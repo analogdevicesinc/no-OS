@@ -285,7 +285,8 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 	hdl_dac_version = axiadc_read(st, 0x4000);
 
-	if (phy->pdata->dig_interface_tune_skipmode == 2) {
+	if ((phy->pdata->dig_interface_tune_skipmode == 2) ||
+			(flags & RESTORE_DEFAULT)) {
 	/* skip completely and use defaults */
 		ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY,
 				phy->pdata->port_ctrl.rx_clk_data_delay);
@@ -378,9 +379,9 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 			if (phy->pdata->dig_interface_tune_skipmode == 1) {
 			/* skip TX */
-
-				phy->pdata->port_ctrl.rx_clk_data_delay =
-					ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
+				if (!(flags & SKIP_STORE_RESULT))
+					phy->pdata->port_ctrl.rx_clk_data_delay =
+							ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
 
 				if (!phy->pdata->fdd) {
 					ad9361_set_ensm_mode(phy, phy->pdata->fdd,
@@ -446,7 +447,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 						phy->pdata->port_ctrl.tx_clk_data_delay);
 				if (!max_freq)
 					err = 0;
-			} else {
+			} else if (!(flags & SKIP_STORE_RESULT)) {
 				phy->pdata->port_ctrl.rx_clk_data_delay =
 					ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
 				phy->pdata->port_ctrl.tx_clk_data_delay =

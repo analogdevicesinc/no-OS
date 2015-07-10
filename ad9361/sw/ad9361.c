@@ -4134,6 +4134,33 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 			return ret;
 		}
 	}
+
+	/*
+	 * Workaround for clock framework since clocks don't change we
+	 * manually need to enable the filter
+	 */
+
+	if (phy->rx_fir_dec == 1 || phy->bypass_rx_fir) {
+		ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
+			RX_FIR_ENABLE_DECIMATION(~0), !phy->bypass_rx_fir);
+	}
+
+	if (phy->tx_fir_int == 1 || phy->bypass_tx_fir) {
+		ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
+			TX_FIR_ENABLE_INTERPOLATION(~0), !phy->bypass_tx_fir);
+	}
+
+	/* The FIR filter once enabled causes the interface timing to change.
+	 * It's typically not a problem if the timing margin is big enough.
+	 * However at 61.44 MSPS it causes problems on some systems.
+	 * So we always run the digital tune in case the filter is enabled.
+	 * If it is disabled we restore the values from the initial calibration.
+	 */
+
+	if (!phy->pdata->dig_interface_tune_fir_disable &&
+		!(phy->bypass_tx_fir && phy->bypass_rx_fir))
+		ret = ad9361_dig_tune(phy, 0, SKIP_STORE_RESULT);
+
 	return ad9361_bb_clk_change_handler(phy);
 }
 
@@ -5551,20 +5578,10 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	/*
-	* Workaround for clock framework since clocks don't change we
-	* manually need to enable the filter
-	*/
-
-	if (phy->rx_fir_dec == 1 || phy->bypass_rx_fir) {
-		ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
-			RX_FIR_ENABLE_DECIMATION(~0), !phy->bypass_rx_fir);
-	}
-
-	if (phy->tx_fir_int == 1 || phy->bypass_tx_fir) {
-		ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
-			TX_FIR_ENABLE_INTERPOLATION(~0), !phy->bypass_tx_fir);
-	}
+	/* See also: ad9361_set_trx_clock_chain() */
+	if (!phy->pdata->dig_interface_tune_fir_disable &&
+		phy->bypass_tx_fir && phy->bypass_rx_fir)
+		ad9361_dig_tune(phy, 0, RESTORE_DEFAULT);
 
 	return ad9361_update_rf_bandwidth(phy,
 		valid ? phy->filt_rx_bw_Hz : phy->current_rx_bw_Hz,

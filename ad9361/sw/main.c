@@ -240,6 +240,7 @@ AD9361_InitParam default_init_param = {
 	0,		//elna_rx2_gpo1_control_enable *** adi,elna-rx2-gpo1-control-enable
 	/* Digital Interface Control */
 	0,		//digital_interface_tune_skip_mode *** adi,digital-interface-tune-skip-mode
+	0,		//digital_interface_tune_fir_disable *** adi,digital-interface-tune-fir-disable
 	1,		//pp_tx_swap_enable *** adi,pp-tx-swap-enable
 	1,		//pp_rx_swap_enable *** adi,pp-rx-swap-enable
 	0,		//tx_channel_swap_enable *** adi,tx-channel-swap-enable
