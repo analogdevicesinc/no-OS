@@ -274,6 +274,10 @@ typedef struct
 	int32_t		gpio_sync;		/* sync-gpios */
 	int32_t		gpio_cal_sw1;	/* cal-sw1-gpios */
 	int32_t		gpio_cal_sw2;	/* cal-sw2-gpios */
+	/* External LO clocks */
+	uint32_t (*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
+	int32_t (*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv, uint32_t rate);
+	int32_t (*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv, uint32_t rate);
 }AD9361_InitParam;
 
 typedef struct

@@ -402,6 +402,10 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	}
 	rev = ret & REV_MASK;
 
+	phy->ad9361_rfpll_ext_recalc_rate = init_param->ad9361_rfpll_ext_recalc_rate;
+	phy->ad9361_rfpll_ext_round_rate = init_param->ad9361_rfpll_ext_round_rate;
+	phy->ad9361_rfpll_ext_set_rate = init_param->ad9361_rfpll_ext_set_rate;
+
 	ret = register_clocks(phy);
 	if (ret < 0)
 		goto out;
@@ -1664,8 +1668,12 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 	phy->clks[T1_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[T1_CLK], phy->clks[T2_CLK]->rate);
 	phy->clks[CLKTF_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[CLKTF_CLK], phy->clks[T1_CLK]->rate);
 	phy->clks[TX_SAMPL_CLK]->rate = ad9361_clk_factor_recalc_rate(phy->ref_clk_scale[TX_SAMPL_CLK], phy->clks[CLKTF_CLK]->rate);
-	phy->clks[RX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[RX_RFPLL], phy->clks[RX_REFCLK]->rate);
-	phy->clks[TX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[TX_RFPLL], phy->clks[TX_REFCLK]->rate);
+	phy->clks[RX_RFPLL_INT]->rate = ad9361_rfpll_int_recalc_rate(phy->ref_clk_scale[RX_RFPLL_INT], phy->clks[RX_REFCLK]->rate);
+	phy->clks[TX_RFPLL_INT]->rate = ad9361_rfpll_int_recalc_rate(phy->ref_clk_scale[TX_RFPLL_INT], phy->clks[TX_REFCLK]->rate);
+	phy->clks[RX_RFPLL_DUMMY]->rate = ad9361_rfpll_dummy_recalc_rate(phy->ref_clk_scale[RX_RFPLL_DUMMY]);
+	phy->clks[TX_RFPLL_DUMMY]->rate = ad9361_rfpll_dummy_recalc_rate(phy->ref_clk_scale[TX_RFPLL_DUMMY]);
+	phy->clks[RX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[RX_RFPLL]);
+	phy->clks[TX_RFPLL]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[TX_RFPLL]);
 
 #ifndef AXI_ADC_NOT_PRESENT
 	axiadc_init(phy);

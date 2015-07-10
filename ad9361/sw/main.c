@@ -306,7 +306,11 @@ AD9361_InitParam default_init_param = {
 	/* MCS Sync */
 	-1,		//gpio_sync *** sync-gpios
 	-1,		//gpio_cal_sw1 *** cal-sw1-gpios
-	-1		//gpio_cal_sw2 *** cal-sw2-gpios
+	-1,		//gpio_cal_sw2 *** cal-sw2-gpios
+	/* External LO clocks */
+	NULL,	//(*ad9361_rfpll_ext_recalc_rate)()
+	NULL,	//(*ad9361_rfpll_ext_round_rate)()
+	NULL	//(*ad9361_rfpll_ext_set_rate)()
 };
 
 AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs

@@ -2494,9 +2494,9 @@ static int32_t ad9361_txrx_synth_cp_calib(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : ref_clk_hz %"PRIu32" : is_tx %d",
 		__func__, ref_clk_hz, tx);
 
-	/* REVIST:
-	 * ad9361_spi_write(phy->spi, REG_RX_CP_LEVEL_DETECT + offs, 0x17);
-	 */
+	/* REVIST: */
+	ad9361_spi_write(phy->spi, REG_RX_CP_LEVEL_DETECT + offs, 0x17);
+
 	ad9361_spi_write(phy->spi, REG_RX_DSM_SETUP_1 + offs, 0x0);
 
 	ad9361_spi_write(phy->spi, REG_RX_LO_GEN_POWER_MODE + offs, 0x00);
@@ -2988,46 +2988,51 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 	bool tx, bool enable)
 {
 	int32_t val = enable ? ~0 : 0;
+	int32_t ret;
 
-	dev_dbg(&phy->spi->dev, "%s : state %d",
-		__func__, enable);
+	dev_dbg(&phy->spi->dev, "%s : %s state %d",
+		__func__, tx ? "TX" : "RX", enable);
 
 	if (tx) {
-		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-			POWER_DOWN_TX_SYNTH, enable);
+		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
+				POWER_DOWN_TX_SYNTH, enable);
 
-		ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
-			TX_VCO_DIVIDER(~0), 0x7);
+		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
+				TX_VCO_DIVIDER(~0), enable ? 7 :
+				phy->cached_tx_rfpll_div);
 
-		ad9361_spi_write(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
-			enable ? TX_SYNTH_VCO_ALC_POWER_DOWN |
-			TX_SYNTH_PTAT_POWER_DOWN |
-			TX_SYNTH_VCO_POWER_DOWN : 0);
+		ret |= ad9361_spi_write(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
+				enable ? TX_SYNTH_VCO_ALC_POWER_DOWN |
+				TX_SYNTH_PTAT_POWER_DOWN |
+				TX_SYNTH_VCO_POWER_DOWN : 0);
 
-		ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
-			TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
+		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
+				TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
 
-		return ad9361_spi_write(phy->spi, REG_TX_LO_GEN_POWER_MODE,
-			TX_LO_GEN_POWER_MODE(val));
+		ret |= ad9361_spi_write(phy->spi, REG_TX_LO_GEN_POWER_MODE,
+				TX_LO_GEN_POWER_MODE(val));
 	}
 	else {
-		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-			POWER_DOWN_RX_SYNTH, enable);
+		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
+				POWER_DOWN_RX_SYNTH, enable);
 
-		ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
-			RX_VCO_DIVIDER(~0), 0x7);
+		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
+				RX_VCO_DIVIDER(~0), enable ? 7 :
+				phy->cached_rx_rfpll_div);
 
-		ad9361_spi_write(phy->spi, REG_RX_SYNTH_POWER_DOWN_OVERRIDE,
-			enable ? RX_SYNTH_VCO_ALC_POWER_DOWN |
-			RX_SYNTH_PTAT_POWER_DOWN |
-			RX_SYNTH_VCO_POWER_DOWN : 0);
+		ret |= ad9361_spi_write(phy->spi, REG_RX_SYNTH_POWER_DOWN_OVERRIDE,
+				enable ? RX_SYNTH_VCO_ALC_POWER_DOWN |
+				RX_SYNTH_PTAT_POWER_DOWN |
+				RX_SYNTH_VCO_POWER_DOWN : 0);
 
-		ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
-			RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
+		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
+				RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
 
-		return ad9361_spi_write(phy->spi, REG_RX_LO_GEN_POWER_MODE,
-			RX_LO_GEN_POWER_MODE(val));
+		ret |= ad9361_spi_write(phy->spi, REG_RX_LO_GEN_POWER_MODE,
+				RX_LO_GEN_POWER_MODE(val));
 	}
+
+	return ret;
 }
 
 /**
@@ -4055,7 +4060,7 @@ out:
 static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 		uint32_t *rx_path_clks)
 {
-	int i;
+	int32_t i;
 	uint32_t data_clk;
 
 	data_clk = (phy->pdata->rx2tx2 ? 4 : 2) * rx_path_clks[RX_SAMPL_FREQ];
@@ -4318,11 +4323,8 @@ int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 
 	ad9361_spi_write(phy->spi, REG_ENSM_MODE, fdd ? FDD_MODE : 0);
 
-	if (pd->use_ext_rx_lo)
-		val |= POWER_DOWN_RX_SYNTH;
-
-	if (pd->use_ext_tx_lo)
-		val |= POWER_DOWN_TX_SYNTH;
+	val = ad9361_spi_read(phy->spi, REG_ENSM_CONFIG_2);
+	val &= POWER_DOWN_RX_SYNTH | POWER_DOWN_TX_SYNTH;
 
 	if (fdd)
 		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2,
@@ -4896,10 +4898,6 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	/* REVISIT : add EXT LO clock */
-	if (pd->use_ext_rx_lo)
-		ad9361_trx_ext_lo_control(phy, false, pd->use_ext_rx_lo);
-
 	/* Skip quad cal here we do it later again */
 	phy->last_tx_quad_cal_freq = pd->tx_synth_freq;
 	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL], ad9361_to_clk(pd->tx_synth_freq));
@@ -4918,10 +4916,6 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ret = clk_prepare_enable(phy->clks[TX_RFPLL]);
 	if (ret < 0)
 		return ret;
-
-	/* REVISIT : add EXT LO clock */
-	if (pd->use_ext_tx_lo)
-		ad9361_trx_ext_lo_control(phy, true, pd->use_ext_tx_lo);
 
 	ret = ad9361_load_mixer_gm_subtable(phy);
 	if (ret < 0)
@@ -5028,6 +5022,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 int32_t ad9361_do_calib_run(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
 {
 	int32_t ret;
+
+	dev_dbg(&phy->spi->dev, "%s: CAL %"PRIu32" ARG %"PRId32, __func__, cal, arg);
 
 	ret = ad9361_tracking_control(phy, false, false, false);
 	if (ret < 0)
@@ -6048,7 +6044,7 @@ int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
  * @param vco_div The VCO divider.
  * @return The RFPLL frequency.
  */
-static uint64_t ad9361_calc_rfpll_freq(uint64_t parent_rate,
+static uint64_t ad9361_calc_rfpll_int_freq(uint64_t parent_rate,
 	uint64_t integer,
 	uint64_t fract, uint32_t vco_div)
 {
@@ -6071,7 +6067,7 @@ static uint64_t ad9361_calc_rfpll_freq(uint64_t parent_rate,
  * @param vco_freq The VCO frequency.
  * @return The RFPLL frequency.
  */
-static int32_t ad9361_calc_rfpll_divder(uint64_t freq,
+static int32_t ad9361_calc_rfpll_int_divder(uint64_t freq,
 	uint64_t parent_rate, uint32_t *integer,
 	uint32_t *fract, int32_t *vco_div, uint64_t *vco_freq)
 {
@@ -6105,7 +6101,7 @@ static int32_t ad9361_calc_rfpll_divder(uint64_t freq,
  * @param parent_rate The parent clock rate.
  * @return The clock rate.
  */
-uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
+uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 	uint32_t parent_rate)
 {
 	struct ad9361_rf_phy *phy = clk_priv->phy;
@@ -6117,12 +6113,12 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 		__func__, parent_rate);
 
 	switch (clk_priv->source) {
-	case RX_RFPLL:
+	case RX_RFPLL_INT:
 		reg = REG_RX_FRACT_BYTE_2;
 		div_mask = RX_VCO_DIVIDER(~0);
 		profile = phy->fastlock.current_profile[0];
 		break;
-	case TX_RFPLL:
+	case TX_RFPLL_INT:
 		reg = REG_TX_FRACT_BYTE_2;
 		div_mask = TX_VCO_DIVIDER(~0);
 		profile = phy->fastlock.current_profile[1];
@@ -6132,7 +6128,7 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 	}
 
 	if (profile) {
-		bool tx = clk_priv->source == TX_RFPLL;
+		bool tx = clk_priv->source == TX_RFPLL_INT;
 		profile = profile - 1;
 
 		buf[0] = ad9361_fastlock_readval(phy->spi, tx, profile, 4);
@@ -6151,7 +6147,7 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
 	fract = (SYNTH_FRACT_WORD(buf[0]) << 16) | (buf[1] << 8) | buf[2];
 	integer = (SYNTH_INTEGER_WORD(buf[3]) << 8) | buf[4];
 
-	return ad9361_to_clk(ad9361_calc_rfpll_freq(parent_rate, integer,
+	return ad9361_to_clk(ad9361_calc_rfpll_int_freq(parent_rate, integer,
 		fract, vco_div));
 }
 
@@ -6162,12 +6158,11 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
  * @param parent_rate The parent clock rate.
  * @return The closest possible clock rate that can be set.
  */
-int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
+int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate)
 {
-	if (clk_priv) {
-		// Unused variable - fix compiler warning
-	}
+	dev_dbg(&clk_priv->spi->dev, "%s: Rate %lu Hz", __func__, rate);
+
 	if (prate) {
 		// Unused variable - fix compiler warning
 	}
@@ -6186,7 +6181,7 @@ int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
  * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
+int32_t ad9361_rfpll_int_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t parent_rate)
 {
 	struct ad9361_rf_phy *phy = clk_priv->phy;
@@ -6198,23 +6193,25 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	dev_dbg(&clk_priv->spi->dev, "%s: Rate %"PRIu32" Hz Parent Rate %"PRIu32" Hz",
 		__func__, rate, parent_rate);
 
-	ad9361_fastlock_prepare(phy, clk_priv->source == TX_RFPLL, 0, false);
+	ad9361_fastlock_prepare(phy, clk_priv->source == TX_RFPLL_INT, 0, false);
 
-	ret = ad9361_calc_rfpll_divder(ad9361_from_clk(rate), parent_rate,
+	ret = ad9361_calc_rfpll_int_divder(ad9361_from_clk(rate), parent_rate,
 		&integer, &fract, &vco_div, &vco);
 	if (ret < 0)
 		return ret;
 
 	switch (clk_priv->source) {
-	case RX_RFPLL:
+	case RX_RFPLL_INT:
 		reg = REG_RX_FRACT_BYTE_2;
 		lock_reg = REG_RX_CP_OVERRANGE_VCO_LOCK;
 		div_mask = RX_VCO_DIVIDER(~0);
+		phy->cached_rx_rfpll_div = vco_div;
 		break;
-	case TX_RFPLL:
+	case TX_RFPLL_INT:
 		reg = REG_TX_FRACT_BYTE_2;
 		lock_reg = REG_TX_CP_OVERRANGE_VCO_LOCK;
 		div_mask = TX_VCO_DIVIDER(~0);
+		phy->cached_tx_rfpll_div = vco_div;
 		break;
 	default:
 		return -EINVAL;
@@ -6223,7 +6220,7 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 	/* Option to skip VCO cal in TDD mode when moving from TX/RX to Alert */
 	if (phy->pdata->tdd_skip_vco_cal)
-		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL_INT,
 					   true);
 
 	ad9361_rfpll_vco_init(phy, div_mask == TX_VCO_DIVIDER(~0),
@@ -6241,33 +6238,184 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	ad9361_spi_writem(clk_priv->spi, reg, buf, 5);
 	ad9361_spi_writef(clk_priv->spi, REG_RFPLL_DIVIDERS, div_mask, vco_div);
 
-	/* Load Gain Table */
-	if (clk_priv->source == RX_RFPLL) {
-		ret = ad9361_load_gt(phy, ad9361_from_clk(rate), GT_RX1 + GT_RX2);
-		if (ret < 0)
-			return ret;
-	}
-
-	/* For RX LO we typically have the tracking option enabled
-	* so for now do nothing here.
-	*/
-	if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL))
-		if (abs((int64_t)(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate))) >
-			(int64_t)phy->cal_threshold_freq) {
-			ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
-			if (ret < 0)
-				dev_err(&phy->spi->dev,
-				"%s: TX QUAD cal failed", __func__);
-			phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
-		}
-
 	ret = ad9361_check_cal_done(phy, lock_reg, VCO_LOCK, 1);
 
 	if (phy->pdata->tdd_skip_vco_cal)
-		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL,
+		ad9361_trx_vco_cal_control(phy, clk_priv->source == TX_RFPLL_INT,
 		false);
 
 	return ret;
+}
+
+/**
+ * Recalculate the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param parent_rate The parent clock rate.
+ * @return The clock rate.
+ */
+uint32_t ad9361_rfpll_dummy_recalc_rate(struct refclk_scale *clk_priv)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+
+	return 	phy->clks[clk_priv->source]->rate;
+}
+
+/**
+ * Set the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rfpll_dummy_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+
+	phy->clks[clk_priv->source]->rate = rate;
+
+	return 0;
+}
+
+/**
+ * Recalculate the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param parent_rate The parent clock rate.
+ * @return The clock rate.
+ */
+uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+	uint32_t rate;
+
+	switch (clk_priv->source) {
+	case RX_RFPLL:
+		if (phy->pdata->use_ext_rx_lo) {
+			if (phy->ad9361_rfpll_ext_recalc_rate)
+				rate = phy->ad9361_rfpll_ext_recalc_rate(clk_priv);
+			else
+				rate = ad9361_rfpll_dummy_recalc_rate(phy->ref_clk_scale[RX_RFPLL_DUMMY]);
+		} else {
+			rate = ad9361_rfpll_int_recalc_rate(phy->ref_clk_scale[RX_RFPLL_INT],
+					phy->clks[RX_REFCLK]->rate);
+		}
+		break;
+	case TX_RFPLL:
+		if (phy->pdata->use_ext_tx_lo) {
+			if (phy->ad9361_rfpll_ext_recalc_rate)
+				rate = phy->ad9361_rfpll_ext_recalc_rate(clk_priv);
+			else
+				rate = ad9361_rfpll_dummy_recalc_rate(phy->ref_clk_scale[TX_RFPLL_DUMMY]);
+		} else {
+			rate = ad9361_rfpll_int_recalc_rate(phy->ref_clk_scale[TX_RFPLL_INT],
+					phy->clks[TX_REFCLK]->rate);
+		}
+		break;
+	default:
+		rate = 0;
+		break;
+	}
+
+	return rate;
+}
+
+/**
+ * Calculate the closest possible clock rate that can be set.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return The closest possible clock rate that can be set.
+ */
+int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+	int32_t round_rate;
+
+	switch (clk_priv->source) {
+	case RX_RFPLL:
+		if (phy->pdata->use_ext_rx_lo) {
+			if (phy->ad9361_rfpll_ext_round_rate)
+				round_rate = phy->ad9361_rfpll_ext_round_rate(clk_priv, rate);
+			else
+				round_rate = rate;
+		} else {
+			round_rate = ad9361_rfpll_int_round_rate(phy->ref_clk_scale[RX_RFPLL_INT], rate,
+							&phy->clks[phy->ref_clk_scale[RX_RFPLL_INT]->parent_source]->rate);
+		}
+	case TX_RFPLL:
+		if (phy->pdata->use_ext_tx_lo) {
+			if (phy->ad9361_rfpll_ext_round_rate)
+				round_rate = phy->ad9361_rfpll_ext_round_rate(clk_priv, rate);
+			else
+				round_rate = rate;
+		} else {
+			round_rate = ad9361_rfpll_int_round_rate(phy->ref_clk_scale[TX_RFPLL_INT], rate,
+							&phy->clks[phy->ref_clk_scale[TX_RFPLL_INT]->parent_source]->rate);
+		}
+		break;
+	default:
+		round_rate = 0;
+		break;
+	}
+
+	return round_rate;
+}
+
+/**
+ * Set the clock rate.
+ * @param refclk_scale The refclk_scale structure.
+ * @param rate The clock rate.
+ * @param parent_rate The parent clock rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+	int32_t ret;
+
+	switch (clk_priv->source) {
+	case RX_RFPLL:
+		if (phy->pdata->use_ext_rx_lo) {
+			if (phy->ad9361_rfpll_ext_set_rate)
+				phy->ad9361_rfpll_ext_set_rate(clk_priv, rate);
+			else
+				ad9361_rfpll_dummy_set_rate(phy->ref_clk_scale[RX_RFPLL_DUMMY], rate);
+		} else {
+			ad9361_rfpll_int_set_rate(phy->ref_clk_scale[RX_RFPLL_INT], rate,
+					phy->clks[phy->ref_clk_scale[RX_RFPLL_INT]->parent_source]->rate);
+		}
+		/* Load Gain Table */
+		ret = ad9361_load_gt(phy, ad9361_from_clk(rate), GT_RX1 + GT_RX2);
+		if (ret < 0)
+			return ret;
+		break;
+	case TX_RFPLL:
+		if (phy->pdata->use_ext_tx_lo) {
+			if (phy->ad9361_rfpll_ext_set_rate)
+				phy->ad9361_rfpll_ext_set_rate(clk_priv, rate);
+			else
+				ad9361_rfpll_dummy_set_rate(phy->ref_clk_scale[TX_RFPLL_DUMMY], rate);
+		} else {
+			ad9361_rfpll_int_set_rate(phy->ref_clk_scale[TX_RFPLL_INT], rate,
+					phy->clks[phy->ref_clk_scale[TX_RFPLL_INT]->parent_source]->rate);
+		}
+		/* For RX LO we typically have the tracking option enabled
+		* so for now do nothing here.
+		*/
+		if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL_INT))
+			if (abs((int64_t)(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate))) >
+				(int64_t)phy->cal_threshold_freq) {
+				ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
+				if (ret < 0)
+					dev_err(&phy->spi->dev,
+					"%s: TX QUAD cal failed", __func__);
+				phy->last_tx_quad_cal_freq = ad9361_from_clk(rate);
+			}
+		break;
+	default:
+		break;
+	}
+
+	return 0;
 }
 
 /**
@@ -6360,12 +6508,23 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy, const char *na
 	case TX_SAMPL_CLK:
 		clk->rate = ad9361_clk_factor_recalc_rate(clk_priv, phy->clks[CLKTF_CLK]->rate);
 		break;
+	case RX_RFPLL_INT:
+		clk->rate = ad9361_rfpll_int_recalc_rate(clk_priv, phy->clks[RX_REFCLK]->rate);
+		break;
+	case TX_RFPLL_INT:
+		clk->rate = ad9361_rfpll_int_recalc_rate(clk_priv, phy->clks[TX_REFCLK]->rate);
+		break;
+	case RX_RFPLL_DUMMY:
+		clk->rate = phy->pdata->rx_synth_freq;
+		break;
+	case TX_RFPLL_DUMMY:
+		clk->rate = phy->pdata->tx_synth_freq;
+		break;
 	case RX_RFPLL:
-		clk->rate = ad9361_rfpll_recalc_rate(clk_priv, phy->clks[RX_REFCLK]->rate);
+		clk->rate = ad9361_rfpll_recalc_rate(clk_priv);
 		break;
 	case TX_RFPLL:
-		clk->rate = ad9361_rfpll_recalc_rate(clk_priv, phy->clks[TX_REFCLK]->rate);
-		break;
+		clk->rate = ad9361_rfpll_recalc_rate(clk_priv);
 	}
 
 	return clk;
@@ -6462,15 +6621,35 @@ int32_t register_clocks(struct ad9361_rf_phy *phy)
 		flags | CLK_IGNORE_UNUSED,
 		TX_SAMPL_CLK, CLKTF_CLK);
 
-	phy->clks[RX_RFPLL] = ad9361_clk_register(phy,
+	phy->clks[RX_RFPLL_INT] = ad9361_clk_register(phy,
 		"rx_rfpll", "rx_refclk",
 		flags | CLK_IGNORE_UNUSED,
-		RX_RFPLL, RX_REFCLK);
+		RX_RFPLL_INT, RX_REFCLK);
 
-	phy->clks[TX_RFPLL] = ad9361_clk_register(phy,
+	phy->clks[TX_RFPLL_INT] = ad9361_clk_register(phy,
 		"tx_rfpll", "tx_refclk",
 		flags | CLK_IGNORE_UNUSED,
-		TX_RFPLL, TX_REFCLK);
+		TX_RFPLL_INT, TX_REFCLK);
+
+	phy->clks[RX_RFPLL_DUMMY] = ad9361_clk_register(phy,
+		"rx_rfpll_dummy", NULL,
+		flags | CLK_IGNORE_UNUSED,
+		RX_RFPLL_DUMMY, 0);
+
+	phy->clks[TX_RFPLL_DUMMY] = ad9361_clk_register(phy,
+		"tx_rfpll_dummy", NULL,
+		flags | CLK_IGNORE_UNUSED,
+		TX_RFPLL_DUMMY, 0);
+
+	phy->clks[RX_RFPLL] = ad9361_clk_register(phy,
+		"rx_rfpll", NULL,
+		flags | CLK_IGNORE_UNUSED,
+		RX_RFPLL, 0);
+
+	phy->clks[TX_RFPLL] = ad9361_clk_register(phy,
+		"tx_rfpll", NULL,
+		flags | CLK_IGNORE_UNUSED,
+		TX_RFPLL, 0);
 
 	return 0;
 }

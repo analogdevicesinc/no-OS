@@ -3242,6 +3242,10 @@ enum ad9361_clocks {
 	T1_CLK,
 	CLKTF_CLK,
 	TX_SAMPL_CLK,
+	RX_RFPLL_INT,
+	TX_RFPLL_INT,
+	RX_RFPLL_DUMMY,
+	TX_RFPLL_DUMMY,
 	RX_RFPLL,
 	TX_RFPLL,
 	NUM_AD9361_CLKS,
@@ -3290,9 +3294,14 @@ struct ad9361_rf_phy {
 	struct clk 		*clks[NUM_AD9361_CLKS];
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
 	struct clk_onecell_data	clk_data;
+	uint32_t (*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
+	int32_t (*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv, uint32_t rate);
+	int32_t (*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv, uint32_t rate);
 	struct ad9361_phy_platform_data *pdata;
 	uint8_t 			prev_ensm_state;
 	uint8_t			curr_ensm_state;
+	uint8_t			cached_rx_rfpll_div;
+	uint8_t			cached_tx_rfpll_div;
 	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
 	enum rx_gain_table_name current_table;
 	bool 			ensm_pin_ctl_en;
@@ -3417,12 +3426,17 @@ int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate);
 int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t parent_rate);
-uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv,
+uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 	uint32_t parent_rate);
-int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
+int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate);
-int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
+int32_t ad9361_rfpll_int_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t parent_rate);
+uint32_t ad9361_rfpll_dummy_recalc_rate(struct refclk_scale *clk_priv);
+int32_t ad9361_rfpll_dummy_set_rate(struct refclk_scale *clk_priv, uint32_t rate);
+uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv);
+int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate);
+int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate);
 int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	bool rfdc_track, bool rxquad_track);
 int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode);
