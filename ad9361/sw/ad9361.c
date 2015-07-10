@@ -2990,12 +2990,19 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 	int32_t val = enable ? ~0 : 0;
 	int32_t ret;
 
+	/* REVIST:
+	 * POWER_DOWN_TRX_SYNTH and MCS_RF_ENABLE somehow conflict
+	 */
+
+	bool mcs_rf_enable = ad9361_spi_readf(phy->spi,
+		REG_MULTICHIP_SYNC_AND_TX_MON_CTRL, MCS_RF_ENABLE);
+
 	dev_dbg(&phy->spi->dev, "%s : %s state %d",
 		__func__, tx ? "TX" : "RX", enable);
 
 	if (tx) {
 		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-				POWER_DOWN_TX_SYNTH, enable);
+				POWER_DOWN_TX_SYNTH, mcs_rf_enable ? 0 : enable);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
 				TX_VCO_DIVIDER(~0), enable ? 7 :
@@ -3014,7 +3021,7 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 	}
 	else {
 		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-				POWER_DOWN_RX_SYNTH, enable);
+				POWER_DOWN_RX_SYNTH, mcs_rf_enable ? 0 : enable);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
 				RX_VCO_DIVIDER(~0), enable ? 7 :
