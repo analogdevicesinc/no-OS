@@ -5216,6 +5216,8 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 		return -EINVAL;
 	}
 
+	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
+
 	if (dest & FIR_IS_RX) {
 		val = 3 - (gain_dB + 12) / 6;
 		ad9361_spi_write(spi, REG_RX_FILTER_GAIN, val & 0x3);
@@ -5266,6 +5268,8 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	else
 		ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
 			TX_FIR_ENABLE_INTERPOLATION(~0), fir_enable);
+
+	ad9361_ensm_restore_prev_state(phy);
 
 	return ad9361_verify_fir_filter_coef(phy, dest, ntaps, coef);
 }
