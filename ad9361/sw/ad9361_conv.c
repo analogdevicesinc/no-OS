@@ -216,6 +216,8 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	uint8_t field[16][16];
 	uint8_t rx;
 
+	dev_dbg(&phy->spi->dev, "%s:\n", __func__);
+
 	rx = ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
 
 	ad9361_bist_prbs(phy, BIST_INJ_RX);
@@ -283,6 +285,9 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	uint8_t field[2][16];
 	uint32_t rates[3] = {25000000U, 40000000U, 61440000U};
 	uint32_t hdl_dac_version;
+
+	dev_dbg(&phy->spi->dev, "%s: freq %lu flags 0x%X\n", __func__,
+			max_freq, flags);
 
 	hdl_dac_version = axiadc_read(st, 0x4000);
 
