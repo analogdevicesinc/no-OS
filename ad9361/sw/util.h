@@ -105,6 +105,7 @@ struct axiadc_chip_info {
 
 struct axiadc_converter {
 	struct axiadc_chip_info	*chip_info;
+	uint32_t				scratch_reg[16];
 };
 
 #ifdef WIN32
