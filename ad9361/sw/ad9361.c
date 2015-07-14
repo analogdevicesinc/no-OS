@@ -4974,6 +4974,12 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
+	ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL],
+		pd->use_ext_rx_lo);
+
+	ad9361_clk_mux_set_parent(phy->ref_clk_scale[TX_RFPLL],
+		pd->use_ext_tx_lo);
+
 	ret = ad9361_load_mixer_gm_subtable(phy);
 	if (ret < 0)
 		return ret;
@@ -6467,6 +6473,30 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 	}
 
 	return 0;
+}
+
+/**
+ * Set clock mux parent.
+ * @param refclk_scale The refclk_scale structure.
+ * @param index Index - Enable (1), disable (0) ext lo.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index)
+{
+	struct ad9361_rf_phy *phy = clk_priv->phy;
+	int32_t ret;
+
+	dev_dbg(&clk_priv->spi->dev, "%s: index %d", __func__, index);
+
+	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
+
+	ret = ad9361_trx_ext_lo_control(phy, clk_priv->source == TX_RFPLL, index == 1);
+	if (ret >= 0)
+		clk_priv->mult = index;
+
+	ad9361_ensm_restore_prev_state(phy);
+
+	return ret;
 }
 
 /**

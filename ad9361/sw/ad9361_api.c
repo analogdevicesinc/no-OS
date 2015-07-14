@@ -725,6 +725,22 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 }
 
 /**
+ * Switch between internal and external LO.
+ * @param phy The AD9361 state structure.
+ * @param int_ext The selected lo (INT_LO, EXT_LO).
+ * 			  Accepted values:
+ * 			   INT_LO
+ * 			   EXT_LO
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
+{
+	phy->pdata->use_ext_rx_lo = int_ext;
+
+	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL], int_ext);
+}
+
+/**
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel (RX1, RX2).
@@ -1297,6 +1313,22 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 										phy->ref_clk_scale[TX_RFPLL]));
 
 	return 0;
+}
+
+/**
+ * Switch between internal and external LO.
+ * @param phy The AD9361 state structure.
+ * @param int_ext The selected lo (INT_LO, EXT_LO).
+ * 			  Accepted values:
+ * 			   INT_LO
+ * 			   EXT_LO
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
+{
+	phy->pdata->use_ext_tx_lo = int_ext;
+
+	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[TX_RFPLL], int_ext);
 }
 
 /**

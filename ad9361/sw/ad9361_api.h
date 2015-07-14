@@ -341,6 +341,9 @@ enum ad9361_ensm_mode {
 #define HIGHEST_OSR	0
 #define NOMINAL_OSR	1
 
+#define INT_LO		0
+#define EXT_LO		1
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -366,6 +369,8 @@ int32_t ad9361_get_rx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t *sampli
 int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
 /* Get current RX LO frequency. */
 int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+/* Switch between internal and external LO. */
+int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext);
 /* Get the RSSI for the selected channel. */
 int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy, uint8_t ch, struct rf_rssi *rssi);
 /* Set the gain control mode for the selected channel. */
@@ -420,6 +425,8 @@ int32_t ad9361_get_tx_sampling_freq (struct ad9361_rf_phy *phy, uint32_t *sampli
 int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t lo_freq_hz);
 /* Get current TX LO frequency. */
 int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy, uint64_t *lo_freq_hz);
+/* Switch between internal and external LO. */
+int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext);
 /* Set the TX FIR filter configuration. */
 int32_t ad9361_set_tx_fir_config (struct ad9361_rf_phy *phy, AD9361_TXFIRConfig fir_cfg);
 /* Get the TX FIR filter configuration. */

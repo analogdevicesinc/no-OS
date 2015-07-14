@@ -3440,6 +3440,7 @@ int32_t ad9361_rfpll_dummy_set_rate(struct refclk_scale *clk_priv, uint32_t rate
 uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv);
 int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate);
 int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate);
+int32_t ad9361_clk_mux_set_parent(struct refclk_scale *clk_priv, uint8_t index);
 int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 	bool rfdc_track, bool rxquad_track);
 int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode);
