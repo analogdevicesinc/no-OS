@@ -1127,7 +1127,7 @@ int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
  * 				   0 - 7
  * @param values Fastlock profile program data.
  * 				 Example:
- * 				  val0,val1,val2,…,val15
+ * 				  val0,val1,val2,Â…,val15
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
@@ -1595,7 +1595,7 @@ int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile)
  * 				   0 - 7
  * @param values Fastlock profile program data.
  * 				 Example:
- * 				  val0,val1,val2,…,val15
+ * 				  val0,val1,val2,Â…,val15
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
@@ -1744,7 +1744,7 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 	ad9361_set_en_state_machine_mode(phy_master, ENSM_STATE_ALERT);
 	ad9361_set_en_state_machine_mode(phy_slave, ENSM_STATE_ALERT);
 
-	for (step = 1; step <= 5; step++)
+	for (step = 0; step <= 5; step++)
 	{
 		ad9361_mcs(phy_slave, step);
 		ad9361_mcs(phy_master, step);
