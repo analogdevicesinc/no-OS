@@ -47,6 +47,35 @@
 #include <stdint.h>
 #include "AD7176_regs.h"
 
+typedef enum crc_mode crc_mode;
+typedef enum ad7176_devices ad7176_devices;
+
+struct ad7176_device {
+	ad7176_devices id;
+	int slave_select_id;
+	st_reg *regs;
+	crc_mode useCRC;
+};
+
+enum ad7176_devices {
+	AD7124_4 = 1,
+	AD7124_8,
+	AD7172_2,
+	AD7172_4,
+	AD7173_8,
+	AD7175_2,
+	AD7175_8,
+	AD7176_2,
+	AD7176_DEVICES_COUNT
+};
+
+enum crc_mode
+{
+	disable,
+	use_CRC,
+	use_XOR,
+};
+
 /*****************************************************************************/
 /******************* AD7176 Constants ****************************************/
 /*****************************************************************************/
@@ -56,19 +85,19 @@
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 /*! Reads the value of the specified register. */
-int32_t AD7176_ReadRegister(st_reg* pReg);
+int32_t AD7176_ReadRegister(struct ad7176_device *device, st_reg* pReg);
 
 /*! Writes the value of the specified register. */
-int32_t AD7176_WriteRegister(st_reg reg);
+int32_t AD7176_WriteRegister(struct ad7176_device *device, st_reg reg);
 
 /*! Resets the device. */
-int32_t AD7176_Reset(void);
+int32_t AD7176_Reset(struct ad7176_device *device);
 
 /*! Waits until a new conversion result is available. */
-int32_t AD7176_WaitForReady(uint32_t timeout);
+int32_t AD7176_WaitForReady(struct ad7176_device *device, uint32_t timeout);
 
 /*! Reads the conversion result from the device. */
-int32_t AD7176_ReadData(int32_t* pData);
+int32_t AD7176_ReadData(struct ad7176_device *device, int32_t* pData);
 
 /*! Computes the CRC checksum for a data buffer. */
 uint8_t AD7176_ComputeCRC8(uint8_t* pBuf, uint8_t bufSize);
@@ -77,9 +106,10 @@ uint8_t AD7176_ComputeCRC8(uint8_t* pBuf, uint8_t bufSize);
 uint8_t AD7176_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize);
 
 /*! Updates the CRC settings. */
-void AD7176_UpdateCRCSetting(void);
+int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device);
 
 /*! Initializes the AD7176. */
-int32_t AD7176_Setup(void);
+int32_t AD7176_Setup(struct ad7176_device *device, enum ad7176_devices dev_type,
+					 int slave_select, st_reg *regs);
 
 #endif // __AD7176_H__

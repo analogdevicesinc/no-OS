@@ -38,39 +38,26 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#define AD7176_INIT
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "Communication.h"
 #include "AD7176.h"
 
-/******************************************************************************/
-/************************ Local variables and types ***************************/
-/******************************************************************************/
-enum CRC_MODE
-{
-	disable,
-	use_CRC,
-	use_XOR,
-};
-
-struct AD7176_state
-{
-	enum CRC_MODE useCRC;
-}AD7176_st;
+/* Error codes */
+#define INVALID_VAL -1
 
 /***************************************************************************//**
 * @brief Reads the value of the specified register.
 *
+* @param device - The handler of the instance of the driver.
 * @param pReg - Pointer to the register structure holding info about the
 *               register to be read. The read value is stored inside the
 *               register structure.
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_ReadRegister(st_reg* pReg)
+int32_t AD7176_ReadRegister(struct ad7176_device *device, st_reg* pReg)
 {
 	int32_t ret       = 0;
 	uint8_t buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -78,19 +65,22 @@ int32_t AD7176_ReadRegister(st_reg* pReg)
 	uint8_t check8    = 0;
 	uint8_t msgBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
+	if(!device || !pReg)
+		return INVALID_VAL;
+
 	/* Build the Command word */
 	buffer[0] = COMM_REG_WEN | COMM_REG_RD | pReg->addr;
 
 	/* Read data from the device */
-	ret = SPI_Read(AD7176_SLAVE_ID,
+	ret = SPI_Read(device->slave_select_id,
 			buffer,
-			((AD7176_st.useCRC != disable) ? pReg->size + 1
+			((device->useCRC != disable) ? pReg->size + 1
 							: pReg->size) + 1);
 	if(ret < 0)
 		return ret;
 
 	/* Check the CRC */
-	if(AD7176_st.useCRC == use_CRC)
+	if(device->useCRC == use_CRC)
 	{
 		msgBuf[0] = COMM_REG_WEN | COMM_REG_RD | pReg->addr;
 		for(i = 1; i < pReg->size + 2; ++i)
@@ -99,7 +89,7 @@ int32_t AD7176_ReadRegister(st_reg* pReg)
 		}
 		check8 = AD7176_ComputeCRC8(msgBuf, pReg->size + 2);
 	}
-	if(AD7176_st.useCRC == use_XOR)
+	if(device->useCRC == use_XOR)
 	{
 		msgBuf[0] = COMM_REG_WEN | COMM_REG_RD | pReg->addr;
 		for(i = 1; i < pReg->size + 2; ++i)
@@ -129,17 +119,21 @@ int32_t AD7176_ReadRegister(st_reg* pReg)
 /***************************************************************************//**
 * @brief Writes the value of the specified register.
 *
+* @param device - The handler of the instance of the driver.
 * @param reg - Register structure holding info about the register to be written
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_WriteRegister(st_reg reg)
+int32_t AD7176_WriteRegister(struct ad7176_device *device, st_reg reg)
 {
 	int32_t ret      = 0;
 	int32_t regValue = 0;
 	uint8_t wrBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint8_t i        = 0;
 	uint8_t crc8     = 0;
+
+	if(!device)
+		return INVALID_VAL;
 
 	/* Build the Command word */
 	wrBuf[0] = COMM_REG_WEN | COMM_REG_WR | reg.addr;
@@ -153,16 +147,16 @@ int32_t AD7176_WriteRegister(st_reg reg)
 	}
 
 	/* Compute the CRC */
-	if(AD7176_st.useCRC != disable)
+	if(device->useCRC != disable)
 	{
 		crc8 = AD7176_ComputeCRC8(wrBuf, reg.size + 1);
 		wrBuf[reg.size + 1] = crc8;
 	}
 
 	/* Write data to the device */
-	ret = SPI_Write(AD7176_SLAVE_ID,
+	ret = SPI_Write(device->slave_select_id,
 			wrBuf,
-			(AD7176_st.useCRC != disable) ? reg.size + 2
+			(device->useCRC != disable) ? reg.size + 2
 							: reg.size + 1);
 
 	return ret;
@@ -171,14 +165,19 @@ int32_t AD7176_WriteRegister(st_reg reg)
 /***************************************************************************//**
 * @brief Resets the device.
 *
+* @param device - The handler of the instance of the driver.
+*
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_Reset(void)
+int32_t AD7176_Reset(struct ad7176_device *device)
 {
 	int32_t ret = 0;
 	uint8_t wrBuf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-	ret = SPI_Write(AD7176_SLAVE_ID, wrBuf, 8);
+	if(!device)
+		return INVALID_VAL;
+
+	ret = SPI_Write(device->slave_select_id, wrBuf, 8);
 
 	return ret;
 }
@@ -186,25 +185,32 @@ int32_t AD7176_Reset(void)
 /***************************************************************************//**
 * @brief Waits until a new conversion result is available.
 *
+* @param device - The handler of the instance of the driver.
 * @param timeout - Count representing the number of polls to be done until the
 *                  function returns if no new data is available.
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_WaitForReady(uint32_t timeout)
+int32_t AD7176_WaitForReady(struct ad7176_device *device, uint32_t timeout)
 {
+	st_reg *regs;
 	int32_t ret;
 	int8_t ready = 0;
+
+	if(!device)
+		return INVALID_VAL;
+
+	regs = device->regs;
 
 	while(!ready && --timeout)
 	{
 		/* Read the value of the Status Register */
-		ret = AD7176_ReadRegister(&AD7176_regs[Status_Register]);
+		ret = AD7176_ReadRegister(device, &regs[Status_Register]);
 		if(ret < 0)
 			return ret;
 
 		/* Check the RDY bit in the Status Register */
-		ready = (AD7176_regs[Status_Register].value & STATUS_REG_RDY) != 0;
+		ready = (regs[Status_Register].value & STATUS_REG_RDY) != 0;
 	}
 
 	return timeout ? 0 : -1;
@@ -213,19 +219,26 @@ int32_t AD7176_WaitForReady(uint32_t timeout)
 /***************************************************************************//**
 * @brief Reads the conversion result from the device.
 *
+* @param device - The handler of the instance of the driver.
 * @param pData - Pointer to store the read data.
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_ReadData(int32_t* pData)
+int32_t AD7176_ReadData(struct ad7176_device *device, int32_t* pData)
 {
+	st_reg *regs;
 	int32_t ret;
 
+	if(!device)
+		return INVALID_VAL;
+
+	regs = device->regs;
+
 	/* Read the value of the Status Register */
-	ret = AD7176_ReadRegister(&AD7176_regs[Data_Register]);
+	ret = AD7176_ReadRegister(device, &regs[Data_Register]);
 
 	/* Get the read result */
-	*pData = AD7176_regs[Data_Register].value;
+	*pData = regs[Data_Register].value;
 
 	return ret;
 }
@@ -287,58 +300,91 @@ uint8_t AD7176_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize)
 /***************************************************************************//**
 * @brief Updates the CRC settings.
 *
-* @return None.
+* @param device - The handler of the instance of the driver.
+*
+* @return Returns 0 for success or negative error code.
 *******************************************************************************/
-void AD7176_UpdateCRCSetting(void)
+int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device)
 {
+	st_reg *regs;
+
+	if(!device)
+		return INVALID_VAL;
+
+	regs = device->regs;
+
 	/* Get CRC State. */
-	if(INTF_MODE_REG_CRC_STAT(AD7176_regs[Interface_Mode_Register].value))
+	if(INTF_MODE_REG_CRC_STAT(regs[Interface_Mode_Register].value))
 	{
-		AD7176_st.useCRC = use_CRC;
+		device->useCRC = use_CRC;
 	}
-	else if(INTF_MODE_REG_XOR_STAT(AD7176_regs[Interface_Mode_Register].value))
+	else if(INTF_MODE_REG_XOR_STAT(regs[Interface_Mode_Register].value))
 	{
-		AD7176_st.useCRC = use_XOR;
+		device->useCRC = use_XOR;
 	}
 	else
 	{
-		AD7176_st.useCRC = disable;
+		device->useCRC = disable;
 	}
+
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief Initializes the AD7176.
 *
+* @param device - The handler of the instance of the driver.
+* @param dev_type - The type of the device that the driver should be instantiated
+*                   with.
+* @param slave_select - The Slave Chip Select Id to be passed to the SPI calls.
+* @param regs - The list of registers of the device (initialized or not) to be
+*               added to the instance of the driver.
+*
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_Setup(void)
+int32_t AD7176_Setup(struct ad7176_device *device, enum ad7176_devices dev_type,
+					 int slave_select, st_reg *regs)
 {
 	int32_t ret;
 	enum AD7176_registers regNr;
 
+	if(!device || !regs)
+		return INVALID_VAL;
+
+	if (dev_type < AD7124_4 || dev_type >= AD7176_DEVICES_COUNT)
+		return INVALID_VAL;
+
+	device->id = dev_type;
+	device->regs = regs;
+	device->slave_select_id = slave_select;
+
 	/* Initialize the SPI communication. */
-	SPI_Init(0, 1000000, 1, 0);
+	ret = SPI_Init(0, 1000000, 1, 0);
+	if (ret < 0)
+		return ret;
 
 	/*  Reset the device interface.*/
-	AD7176_Reset();
+	ret = AD7176_Reset(device);
+	if (ret < 0)
+		return ret;
 
 	/* Initialize ADC mode register. */
-	ret = AD7176_WriteRegister(AD7176_regs[ADC_Mode_Register]);
+	ret = AD7176_WriteRegister(device, regs[ADC_Mode_Register]);
 	if(ret < 0)
 		return ret;
 
 	/* Initialize Interface mode register. */
-	ret = AD7176_WriteRegister(AD7176_regs[Interface_Mode_Register]);
+	ret = AD7176_WriteRegister(device, regs[Interface_Mode_Register]);
 	if(ret < 0)
 		return ret;
 
 	/* Get CRC State */
-	AD7176_UpdateCRCSetting();
+	AD7176_UpdateCRCSetting(device);
 
 	/* Initialize registers Data_Register through Filter_Config_4. */
 	for(regNr = Data_Register; (regNr < Offset_1) && !(ret < 0); regNr++)
 	{
-		ret = AD7176_WriteRegister(AD7176_regs[regNr]);
+		ret = AD7176_WriteRegister(device, regs[regNr]);
 	}
 
 	return ret;

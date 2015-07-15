@@ -50,7 +50,7 @@ typedef struct _st_reg
 }st_reg;
 
 /*! AD7176 registers list*/
-enum AD7176_registers
+enum ad7176_registers
 {
 	Status_Register = 0x00,
 	ADC_Mode_Register,
@@ -85,7 +85,7 @@ enum AD7176_registers
 
 #ifdef AD7176_INIT
 /*! Array holding the info for the AD7176 registers - address, initial value, size */
-st_reg AD7176_regs[] =
+st_reg ad7176_regs[] =
 {
 	{0x00, 0x00,   1}, //Status_Register
 	{0x01, 0x0000, 2}, //ADC_Mode_Register
@@ -117,7 +117,7 @@ st_reg AD7176_regs[] =
 	{0xFF, 0, 1} //Communications_Register
 };
 #else
-extern st_reg AD7176_regs[AD7176_REG_NO];
+extern st_reg ad7176_regs[AD7176_REG_NO];
 #endif
 
 #define AD7176_SLAVE_ID    1
