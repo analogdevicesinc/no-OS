@@ -346,7 +346,7 @@ int32_t AD7176_Setup(struct ad7176_device *device, enum ad7176_devices dev_type,
 					 int slave_select, st_reg *regs)
 {
 	int32_t ret;
-	enum AD7176_registers regNr;
+	enum ad7176_registers regNr;
 
 	if(!device || !regs)
 		return INVALID_VAL;

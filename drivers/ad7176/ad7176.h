@@ -47,16 +47,6 @@
 #include <stdint.h>
 #include "AD7176_regs.h"
 
-typedef enum crc_mode crc_mode;
-typedef enum ad7176_devices ad7176_devices;
-
-struct ad7176_device {
-	ad7176_devices id;
-	int slave_select_id;
-	st_reg *regs;
-	crc_mode useCRC;
-};
-
 enum ad7176_devices {
 	AD7124_4 = 1,
 	AD7124_8,
@@ -74,6 +64,16 @@ enum crc_mode
 	disable,
 	use_CRC,
 	use_XOR,
+};
+
+typedef enum crc_mode crc_mode;
+typedef enum ad7176_devices ad7176_devices;
+
+struct ad7176_device {
+	ad7176_devices id;
+	int slave_select_id;
+	st_reg *regs;
+	crc_mode useCRC;
 };
 
 /*****************************************************************************/
