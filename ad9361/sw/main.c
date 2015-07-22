@@ -238,6 +238,7 @@ AD9361_InitParam default_init_param = {
 	0,		//elna_bypass_loss_mdB *** adi,elna-bypass-loss-mdB
 	0,		//elna_rx1_gpo0_control_enable *** adi,elna-rx1-gpo0-control-enable
 	0,		//elna_rx2_gpo1_control_enable *** adi,elna-rx2-gpo1-control-enable
+	0,		//elna_gaintable_all_index_enable *** adi,elna-gaintable-all-index-enable
 	/* Digital Interface Control */
 	0,		//digital_interface_tune_skip_mode *** adi,digital-interface-tune-skip-mode
 	0,		//digital_interface_tune_fir_disable *** adi,digital-interface-tune-fir-disable

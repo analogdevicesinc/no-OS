@@ -205,6 +205,7 @@ typedef struct
 	uint32_t	elna_bypass_loss_mdB;	/* adi,elna-bypass-loss-mdB */
 	uint8_t		elna_rx1_gpo0_control_enable;	/* adi,elna-rx1-gpo0-control-enable */
 	uint8_t		elna_rx2_gpo1_control_enable;	/* adi,elna-rx2-gpo1-control-enable */
+	uint8_t		elna_gaintable_all_index_enable;	/* adi,elna-gaintable-all-index-enable */
 	/* Digital Interface Control */
 	uint8_t		digital_interface_tune_skip_mode;	/* adi,digital-interface-tune-skip-mode */
 	uint8_t		digital_interface_tune_fir_disable;	/* adi,digital-interface-tune-fir-disable */

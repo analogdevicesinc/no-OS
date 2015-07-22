@@ -1089,7 +1089,7 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq, uint32_t
 	struct spi_device *spi = phy->spi;
 	const uint8_t(*tab)[3];
 	enum rx_gain_table_name band;
-	uint32_t index_max, i;
+	uint32_t index_max, i, lna;
 
 	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64, __func__, freq);
 
@@ -1114,12 +1114,15 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq, uint32_t
 		index_max = SIZE_FULL_TABLE;
 	}
 
+	lna = phy->pdata->elna_ctrl.elna_in_gaintable_all_index_en ?
+			EXT_LNA_CTRL : 0;
+
 	ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG, START_GAIN_TABLE_CLOCK |
 		RECEIVER_SELECT(dest)); /* Start Gain Table Clock */
 
 	for (i = 0; i < index_max; i++) {
 		ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, i); /* Gain Table Index */
-		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA1, tab[i][0]); /* Ext LNA, Int LNA, & Mixer Gain Word */
+		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA1, tab[i][0] | lna); /* Ext LNA, Int LNA, & Mixer Gain Word */
 		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA2, tab[i][1]); /* TIA & LPF Word */
 		ad9361_spi_write(spi, REG_GAIN_TABLE_WRITE_DATA3, tab[i][2]); /* DC Cal bit & Dig Gain Word */
 		ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG,

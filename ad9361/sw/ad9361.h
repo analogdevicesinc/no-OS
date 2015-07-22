@@ -3047,6 +3047,7 @@ struct elna_control {
 	uint32_t			settling_delay_ns;
 	bool			elna_1_control_en; /* GPO0 */
 	bool			elna_2_control_en; /* GPO1 */
+	bool			elna_in_gaintable_all_index_en;
 };
 
 struct auxadc_control {

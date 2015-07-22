@@ -293,6 +293,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->elna_ctrl.bypass_loss_mdB = init_param->elna_bypass_loss_mdB;
 	phy->pdata->elna_ctrl.elna_1_control_en = init_param->elna_rx1_gpo0_control_enable;
 	phy->pdata->elna_ctrl.elna_2_control_en = init_param->elna_rx2_gpo1_control_enable;
+	phy->pdata->elna_ctrl.elna_in_gaintable_all_index_en = init_param->elna_gaintable_all_index_enable;
 
 	/* Digital Interface Control */
 	phy->pdata->dig_interface_tune_skipmode = (init_param->digital_interface_tune_skip_mode);
