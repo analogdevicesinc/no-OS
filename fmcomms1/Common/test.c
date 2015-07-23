@@ -4,7 +4,7 @@
 *   @author acozma (andrei.cozma@analog.com)
 *
 *******************************************************************************
-* Copyright 2011(c) Analog Devices, Inc.
+* Copyright 2011-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -63,17 +63,17 @@ extern void xil_printf(const char *ctrl1, ...);
 /************************ Constants Definitions ******************************/
 /*****************************************************************************/
 const uint16_t sine_lut_q[32] = {
-	0x8000, 0x98F8, 0xB0FB, 0xC71C, 0xDA82, 0xEA6D, 0xF641, 0xFD89,
-	0xFFFF, 0xFD89, 0xF641, 0xEA6D, 0xDA82, 0xC71C, 0xB0FB, 0x98F8,
-	0x8000, 0x6707, 0x4F04, 0x38E3, 0x257D, 0x1592, 0x09BE, 0x0276,
-	0x0000, 0x0276, 0x09BE, 0x1592, 0x257D, 0x38E3, 0x4F04, 0x6707
+	32768, 34366, 35902, 37318, 38560, 39578, 40335, 40802,
+	40959, 40802, 40335, 39578, 38560, 37318, 35902, 34366,
+	32768, 31169, 29633, 28217, 26975, 25957, 25200, 24733,
+	24576, 24733, 25200, 25957, 26975, 28217, 29633, 31169,
 };
 
 const uint16_t sine_lut_i[32] = {
-	0x0000, 0x0276, 0x09BE, 0x1592, 0x257D, 0x38E3, 0x4F04, 0x6707,
-	0x8000, 0x98F8, 0xB0FB, 0xC71C, 0xDA82, 0xEA6D, 0xF641, 0xFD89,
-	0xFFFF, 0xFD89, 0xF641, 0xEA6D, 0xDA82, 0xC71C, 0xB0FB, 0x98F8,
-	0x8000, 0x6707, 0x4F04, 0x38E3, 0x257D, 0x1592, 0x09BE, 0x0276
+	24576, 24733, 25200, 25957, 26975, 28217, 29633, 31169,
+	32768, 34366, 35902, 37318, 38560, 39578, 40335, 40802,
+	40959, 40802, 40335, 39578, 38560, 37318, 35902, 34366,
+	32768, 31169, 29633, 28217, 26975, 25957, 25200, 24733,
 };
 
 static uint32_t dac_base_addr;
@@ -286,16 +286,16 @@ void dds_setup(uint32_t sel, uint32_t f1, uint32_t f2)
 
 	dds_set_frequency(0, f1);
 	dds_set_phase(0, 90000);
-	dds_set_scale(0, 0.25);
+	dds_set_scale(0, 0.125);
 	dds_set_frequency(1, f1);
 	dds_set_phase(1, 90000);
-	dds_set_scale(1, 0.25);
+	dds_set_scale(1, 0.125);
 	dds_set_frequency(2, f2);
 	dds_set_phase(2, 0);
-	dds_set_scale(2, 0.25);
+	dds_set_scale(2, 0.125);
 	dds_set_frequency(3, f2);
 	dds_set_phase(3, 0);
-	dds_set_scale(3, 0.25);
+	dds_set_scale(3, 0.125);
 }
 
 /**************************************************************************//**

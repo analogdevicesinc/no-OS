@@ -4,7 +4,7 @@
 *   @author acozma (andrei.cozma@analog.com)
 *
 *******************************************************************************
-* Copyright 2011(c) Analog Devices, Inc.
+* Copyright 2011-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -212,5 +212,6 @@ void dac_test(uint32_t sel);
 void adc_capture(uint32_t sel, uint32_t size, uint32_t start_address);
 /** Verifies the communication with the ADC */
 void adc_test(uint32_t sel, uint32_t mode, uint32_t format);
-
+/** Delays the program execution with the specified number of ms **/
+void delay_ms(uint32_t ms_count);
 #endif /*__TEST_H__*/
