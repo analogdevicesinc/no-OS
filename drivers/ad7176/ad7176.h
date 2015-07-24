@@ -1,10 +1,11 @@
 /**************************************************************************//**
-*   @file   AD7176.h
-*   @brief  AD7176 header file.
-*   @author acozma (andrei.cozma@analog.com)
-*
+*   @file    AD7176.h
+*   @brief   AD7176 header file.
+*   @devices AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2
+*   @author  acozma (andrei.cozma@analog.com)
+*            dnechita (dan.nechita@analog.com)
 *******************************************************************************
-* Copyright 2011(c) Analog Devices, Inc.
+* Copyright 2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -47,48 +48,41 @@
 #include <stdint.h>
 #include "AD7176_regs.h"
 
-enum ad7176_devices {
-	AD7124_4 = 1,
-	AD7124_8,
-	AD7172_2,
-	AD7172_4,
-	AD7173_8,
-	AD7175_2,
-	AD7175_8,
-	AD7176_2,
-	AD7176_DEVICES_COUNT
-};
+typedef enum ad7176_crc_mode ad7176_crc_mode;
 
-enum crc_mode
+enum ad7176_crc_mode
 {
-	disable,
-	use_CRC,
-	use_XOR,
+	AD7124_DISABLE,
+	AD7124_USE_CRC,
+	AD7124_USE_XOR,
 };
 
-typedef enum crc_mode crc_mode;
-typedef enum ad7176_devices ad7176_devices;
-
+/*
+ * The structure describes the device and is used with the ad7176 driver.
+ * @slave_select_id: The ID of the Slave Select to be passed to the SPI calls.
+ * @regs: A reference to the register list of the device that the user must
+ *       provide when calling the Setup() function.
+ * @userCRC: Error check type to use on SPI transfers.
+ */
 struct ad7176_device {
-	ad7176_devices id;
 	int slave_select_id;
-	st_reg *regs;
-	crc_mode useCRC;
+	ad7176_st_reg *regs;
+	ad7176_crc_mode useCRC;
 };
 
 /*****************************************************************************/
 /******************* AD7176 Constants ****************************************/
 /*****************************************************************************/
-#define CRC8_POLYNOMIAL_REPRESENTATION 0x07 // x8 + x3 + x + 1
+#define AD7176_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 /*! Reads the value of the specified register. */
-int32_t AD7176_ReadRegister(struct ad7176_device *device, st_reg* pReg);
+int32_t AD7176_ReadRegister(struct ad7176_device *device, ad7176_st_reg* pReg);
 
 /*! Writes the value of the specified register. */
-int32_t AD7176_WriteRegister(struct ad7176_device *device, st_reg reg);
+int32_t AD7176_WriteRegister(struct ad7176_device *device, ad7176_st_reg reg);
 
 /*! Resets the device. */
 int32_t AD7176_Reset(struct ad7176_device *device);
@@ -109,7 +103,7 @@ uint8_t AD7176_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize);
 int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device);
 
 /*! Initializes the AD7176. */
-int32_t AD7176_Setup(struct ad7176_device *device, enum ad7176_devices dev_type,
-					 int slave_select, st_reg *regs);
+int32_t AD7176_Setup(struct ad7176_device *device, int slave_select,
+			ad7176_st_reg *regs);
 
-#endif // __AD7176_H__
+#endif /* __AD7176_H__ */
