@@ -44,6 +44,11 @@
 #include "Communication.h"
 #include "AD7124.h"
 
+/* Error codes */
+#define INVALID_VAL -1 /* Invalid argument */
+#define COMM_ERR    -2 /* Communication error on receive */
+#define TIMEOUT     -3 /* A timeout has occured */
+
 /***************************************************************************//**
 * @brief Reads the value of the specified register without checking if the
 *        device is ready to accept user requests.
@@ -55,7 +60,7 @@
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_NoCheckReadRegister(struct ad7124_device *device, st_reg* pReg)
+int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
 {
 	int32_t ret       = 0;
 	uint8_t buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -116,7 +121,7 @@ int32_t AD7124_NoCheckReadRegister(struct ad7124_device *device, st_reg* pReg)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_NoCheckWriteRegister(struct ad7124_device *device, st_reg reg)
+int32_t AD7124_NoCheckWriteRegister(ad7124_device *device, ad7124_st_reg reg)
 {
 	int32_t ret      = 0;
 	int32_t regValue = 0;
@@ -167,7 +172,7 @@ int32_t AD7124_NoCheckWriteRegister(struct ad7124_device *device, st_reg reg)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_ReadRegister(struct ad7124_device *device, st_reg* pReg)
+int32_t AD7124_ReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
 {
 	int32_t ret;
 	
@@ -192,7 +197,7 @@ int32_t AD7124_ReadRegister(struct ad7124_device *device, st_reg* pReg)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WriteRegister(struct ad7124_device *device, st_reg pReg)
+int32_t AD7124_WriteRegister(ad7124_device *device, ad7124_st_reg pReg)
 {
 	int32_t ret;
 	
@@ -214,7 +219,7 @@ int32_t AD7124_WriteRegister(struct ad7124_device *device, st_reg pReg)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_Reset(struct ad7124_device *device)
+int32_t AD7124_Reset(ad7124_device *device)
 {
 	int32_t ret = 0;
 	uint8_t wrBuf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -236,9 +241,9 @@ int32_t AD7124_Reset(struct ad7124_device *device)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WaitForSpiReady(struct ad7124_device *device, uint32_t timeout)
+int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout)
 {
-	st_reg *regs;
+	ad7124_st_reg *regs;
 	int32_t ret;
 	int8_t ready = 0;
 
@@ -271,9 +276,9 @@ int32_t AD7124_WaitForSpiReady(struct ad7124_device *device, uint32_t timeout)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WaitForConvReady(struct ad7124_device *device, uint32_t timeout)
+int32_t AD7124_WaitForConvReady(ad7124_device *device, uint32_t timeout)
 {
-	st_reg *regs;
+	ad7124_st_reg *regs;
 	int32_t ret;
 	int8_t ready = 0;
 
@@ -305,9 +310,9 @@ int32_t AD7124_WaitForConvReady(struct ad7124_device *device, uint32_t timeout)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_ReadData(struct ad7124_device *device, int32_t* pData)
+int32_t AD7124_ReadData(ad7124_device *device, int32_t* pData)
 {
-	st_reg *regs;
+	ad7124_st_reg *regs;
 	int32_t ret;
 
 	if(!device)
@@ -364,9 +369,9 @@ uint8_t AD7124_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 *
 * @return None.
 *******************************************************************************/
-void AD7124_UpdateCRCSetting(struct ad7124_device *device)
+void AD7124_UpdateCRCSetting(ad7124_device *device)
 {
-	st_reg *regs;
+	ad7124_st_reg *regs;
 
 	if(!device)
 		return;
@@ -391,9 +396,9 @@ void AD7124_UpdateCRCSetting(struct ad7124_device *device)
 *
 * @return None.
 *******************************************************************************/
-void AD7124_UpdateDevSpiSettings(struct ad7124_device *device)
+void AD7124_UpdateDevSpiSettings(ad7124_device *device)
 {
-	st_reg *regs;
+	ad7124_st_reg *regs;
 
 	if(!device)
 		return;
@@ -420,8 +425,8 @@ void AD7124_UpdateDevSpiSettings(struct ad7124_device *device)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_Setup(struct ad7124_device *device, int slave_select,
-			st_reg *regs)
+int32_t AD7124_Setup(ad7124_device *device, int slave_select,
+			ad7124_st_reg *regs)
 {
 	int32_t ret;
 	enum ad7124_registers regNr;
@@ -450,7 +455,7 @@ int32_t AD7124_Setup(struct ad7124_device *device, int slave_select,
 	for(regNr = AD7124_Status; (regNr < AD7124_Offset_0) && !(ret < 0);
 		regNr++)
 	{
-		if (regs[regNr].rw == RW)
+		if (regs[regNr].rw == AD7124_RW)
 		{
 			ret = AD7124_WriteRegister(device, regs[regNr]);
 			if (ret < 0)

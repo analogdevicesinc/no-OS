@@ -47,6 +47,8 @@
 #include <stdint.h>
 #include "AD7124_regs.h"
 
+typedef struct ad7124_device ad7124_device;
+
 /*
  * The structure describes the device and is used with the ad7124 driver.
  * @slave_select_id: The ID of the Slave Select to be passed to the SPI calls.
@@ -61,7 +63,7 @@
  */
 struct ad7124_device {
 	int slave_select_id;
-	st_reg *regs;
+	ad7124_st_reg *regs;
 	int useCRC;
 	int check_ready;
 	int spi_rdy_poll_cnt;
@@ -70,55 +72,48 @@ struct ad7124_device {
 /******************************************************************************/
 /******************* AD7124 Constants *****************************************/
 /******************************************************************************/
-#define AD7124_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x3 + x + 1 */
+#define AD7124_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
 #define AD7124_DISABLE_CRC 0
 #define AD7124_USE_CRC 1
-
-/******************************************************************************/
-/****************** AD7124 Error Definitions **********************************/
-/******************************************************************************/
-#define INVALID_VAL -1 /* Invalid argument */
-#define COMM_ERR    -2 /* Communication error on receive */
-#define TIMEOUT     -3 /* A timeout has occured */
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Reads the value of the specified register. */
-int32_t AD7124_ReadRegister(struct ad7124_device *device, st_reg* pReg);
+int32_t AD7124_ReadRegister(ad7124_device *device, ad7124_st_reg* pReg);
 
 /*! Writes the value of the specified register. */
-int32_t AD7124_WriteRegister(struct ad7124_device *device, st_reg reg);
+int32_t AD7124_WriteRegister(ad7124_device *device, ad7124_st_reg reg);
 
 /*! Reads the value of the specified register without a device state check. */
-int32_t AD7124_NoCheckReadRegister(struct ad7124_device *device, st_reg* pReg);
+int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg);
 
 /*! Writes the value of the specified register without a device state check. */
-int32_t AD7124_NoCheckWriteRegister(struct ad7124_device *device, st_reg reg);
+int32_t AD7124_NoCheckWriteRegister(ad7124_device *device, ad7124_st_reg reg);
 
 /*! Resets the device. */
-int32_t AD7124_Reset(struct ad7124_device *device);
+int32_t AD7124_Reset(ad7124_device *device);
 
 /*! Waits until the device can accept read and write user actions. */
-int32_t AD7124_WaitForSpiReady(struct ad7124_device *device, uint32_t timeout);
+int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout);
 
 /*! Waits until a new conversion result is available. */
-int32_t AD7124_WaitForConvReady(struct ad7124_device *device, uint32_t timeout);
+int32_t AD7124_WaitForConvReady(ad7124_device *device, uint32_t timeout);
 
 /*! Reads the conversion result from the device. */
-int32_t AD7124_ReadData(struct ad7124_device *device, int32_t* pData);
+int32_t AD7124_ReadData(ad7124_device *device, int32_t* pData);
 
 /*! Computes the CRC checksum for a data buffer. */
 uint8_t AD7124_ComputeCRC8(uint8_t* pBuf, uint8_t bufSize);
 
 /*! Updates the CRC settings. */
-void AD7124_UpdateCRCSetting(struct ad7124_device *device);
+void AD7124_UpdateCRCSetting(ad7124_device *device);
 
 /*! Updates the device SPI interface settings. */
-void AD7124_UpdateDevSpiSettings(struct ad7124_device *device);
+void AD7124_UpdateDevSpiSettings(ad7124_device *device);
 
 /*! Initializes the AD7124. */
-int32_t AD7124_Setup(struct ad7124_device *device, int slave_select,
-		     	st_reg *regs);
+int32_t AD7124_Setup(ad7124_device *device, int slave_select,
+			ad7124_st_reg *regs);
 
 #endif /* __AD7124_H__ */
