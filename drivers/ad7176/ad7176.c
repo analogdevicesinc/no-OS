@@ -79,13 +79,13 @@ int32_t AD7176_ReadRegister(struct ad7176_device *device, ad7176_st_reg* pReg)
 	/* Read data from the device */
 	ret = SPI_Read(device->slave_select_id,
 			buffer,
-			((device->useCRC != AD7124_DISABLE) ? pReg->size + 1
+			((device->useCRC != AD7176_DISABLE) ? pReg->size + 1
 							: pReg->size) + 1);
 	if(ret < 0)
 		return ret;
 
 	/* Check the CRC */
-	if(device->useCRC == AD7124_USE_CRC)
+	if(device->useCRC == AD7176_USE_CRC)
 	{
 		msgBuf[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_RD |
 			AD7176_COMM_REG_RA(pReg->addr);
@@ -95,7 +95,7 @@ int32_t AD7176_ReadRegister(struct ad7176_device *device, ad7176_st_reg* pReg)
 		}
 		check8 = AD7176_ComputeCRC8(msgBuf, pReg->size + 2);
 	}
-	if(device->useCRC == AD7124_USE_XOR)
+	if(device->useCRC == AD7176_USE_XOR)
 	{
 		msgBuf[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_RD |
 				AD7176_COMM_REG_RA(pReg->addr);
@@ -155,7 +155,7 @@ int32_t AD7176_WriteRegister(struct ad7176_device *device, ad7176_st_reg reg)
 	}
 
 	/* Compute the CRC */
-	if(device->useCRC != AD7124_DISABLE)
+	if(device->useCRC != AD7176_DISABLE)
 	{
 		crc8 = AD7176_ComputeCRC8(wrBuf, reg.size + 1);
 		wrBuf[reg.size + 1] = crc8;
@@ -164,7 +164,7 @@ int32_t AD7176_WriteRegister(struct ad7176_device *device, ad7176_st_reg reg)
 	/* Write data to the device */
 	ret = SPI_Write(device->slave_select_id,
 			wrBuf,
-			(device->useCRC != AD7124_DISABLE) ? reg.size + 2
+			(device->useCRC != AD7176_DISABLE) ? reg.size + 2
 							: reg.size + 1);
 
 	return ret;
@@ -325,15 +325,15 @@ int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device)
 	/* Get CRC State. */
 	if(AD7176_IFMODE_REG_CRC_STAT(regs[AD7176_Interface_Mode].value))
 	{
-		device->useCRC = AD7124_USE_CRC;
+		device->useCRC = AD7176_USE_CRC;
 	}
 	else if(AD7176_IFMODE_REG_XOR_STAT(regs[AD7176_Interface_Mode].value))
 	{
-		device->useCRC = AD7124_USE_XOR;
+		device->useCRC = AD7176_USE_XOR;
 	}
 	else
 	{
-		device->useCRC = AD7124_DISABLE;
+		device->useCRC = AD7176_DISABLE;
 	}
 
 	return 0;

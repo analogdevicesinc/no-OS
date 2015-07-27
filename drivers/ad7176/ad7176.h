@@ -52,9 +52,9 @@ typedef enum ad7176_crc_mode ad7176_crc_mode;
 
 enum ad7176_crc_mode
 {
-	AD7124_DISABLE,
-	AD7124_USE_CRC,
-	AD7124_USE_XOR,
+	AD7176_DISABLE,
+	AD7176_USE_CRC,
+	AD7176_USE_XOR,
 };
 
 /*
