@@ -58,7 +58,9 @@ int main(void)
 	if (ret)
 		goto err2;
 
-	/* This is an example of subscribing to a source change event */
+	/*
+	 * This is an example of subscribing to a source change event
+	 */
 
 	/* Subscribe to V4L2_EVENT_SOURCE_CHANGE event */
 	ret = v4l2_cfg_subscribe_event(adv7611_subdev_fd, V4L2_EVENT_SOURCE_CHANGE, 0);
@@ -83,7 +85,9 @@ int main(void)
 		}
 	}
 
-	/* This is an example of subscribing to a control event */
+	/*
+	 * This is an example of subscribing to a control event
+	 */
 
 	/* Querry and print the ADV7511_SUBDEV's controls */
 	ret = v4l2_cfg_query_ctrls(adv7511_subdev_fd, ctrls, &ctrls_no);
@@ -111,6 +115,53 @@ int main(void)
 		}
 	}
 
+	/*
+	 * This is an example of setting controls' values
+	 */
+
+	/* Querry and print the ADV7611_SUBDEV's controls */
+	ret = v4l2_cfg_query_ctrls(adv7611_subdev_fd, ctrls, &ctrls_no);
+	if (ret)
+		goto err2;
+	printf("Controls found:\n");
+	for (index = 0; index < ctrls_no; index++) {
+		printf("\t%s (ID: 0x%x)\n", ctrls[index].name, ctrls[index].id);
+	}
+
+	/* Disable free running mode */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 0);
+	if (ret)
+		goto err2;
+
+	/* Enable Automatic free running mode */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 2);
+	if (ret)
+		goto err2;
+
+	/* Force free running mode */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 1);
+	if (ret)
+		goto err2;
+
+	/* Specify your own color for free running mode instead of using the default blue color */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 3].id, 1);
+	if (ret)
+		goto err2;
+
+	/* Custom free running color can be set in GRB 24-bit format */
+	/* Green */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0xFF0000);
+	if (ret)
+		goto err2;
+	/* Red */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0x00FF00);
+	if (ret)
+		goto err2;
+	/* Blue */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0x0000FF);
+	if (ret)
+		goto err2;
+
 	close(adv7611_subdev_fd);
 	close(adv7511_subdev_fd);
 
@@ -122,4 +173,3 @@ err1:
 	close(adv7611_subdev_fd);
 	return -1;
 }
-

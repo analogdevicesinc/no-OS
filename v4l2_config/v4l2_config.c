@@ -147,31 +147,43 @@ int v4l2_cfg_dequeue_event(int dev_fd,
 	return ioctl(dev_fd, VIDIOC_DQEVENT, dqevent);
 }
 
-#if 0
 /***************************************************************************//**
-* @brief v4l2_poll_for_ctrl_event
+* @brief v4l2_cfg_get_control_value
 *******************************************************************************/
-int v4l2_poll_for_source_change_event(const char *dev_path,
-									  unsigned int event_id)
+int v4l2_cfg_get_control_value(int dev_fd,
+							   int ctrl_id,
+							   int *value)
 {
-	struct v4l2_event_subscription sub;
-	struct v4l2_event_new dqevent;
+	struct v4l2_control ctrl;
 	int ret;
 
-	memset(&sub, 0, sizeof(sub));
-	sub.type = V4L2_EVENT_SOURCE_CHANGE;
+	ctrl.id = ctrl_id;
 
-	ret = ioctl(dev_fd, VIDIOC_SUBSCRIBE_EVENT, &sub);
+	ret = ioctl(dev_fd, VIDIOC_G_CTRL, &ctrl);
 	if (ret == -1)
 		return -1;
 
-	while (1) {
-		if (!ioctl(dev_fd, VIDIOC_DQEVENT, &dqevent)) {
-			printf("source_change: pad/input=%d changes: %x\n", dqevent.id, dqevent.u.src_change.changes);
-		}
-	}
+	*value = ctrl.value;
 
 	return 0;
 }
-#endif
 
+/***************************************************************************//**
+* @brief v4l2_cfg_set_control_value
+*******************************************************************************/
+int v4l2_cfg_set_control_value(int dev_fd,
+							   int ctrl_id,
+							   int value)
+{
+	struct v4l2_control ctrl;
+	int ret;
+
+	ctrl.id = ctrl_id;
+	ctrl.value = value;
+
+	ret = ioctl(dev_fd, VIDIOC_S_CTRL, &ctrl);
+	if (ret == -1)
+		return -1;
+
+	return 0;
+}

@@ -56,4 +56,10 @@ int v4l2_cfg_unsubscribe_event(int dev_fd,
 							 unsigned int event_id);
 int v4l2_cfg_dequeue_event(int dev_fd,
 						   struct v4l2_event_new *dqevent);
+int v4l2_cfg_get_control_value(int dev_fd,
+							   int ctrl_id,
+							   int *value);
+int v4l2_cfg_set_control_value(int dev_fd,
+							   int ctrl_id,
+							   int value);
 #endif
