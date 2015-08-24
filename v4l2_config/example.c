@@ -129,36 +129,44 @@ int main(void)
 	}
 
 	/* Disable free running mode */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 0);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+									V4L2_CFG_CID_ADV7611_FREE_RUN_MODE, 0);
 	if (ret)
 		goto err2;
 
 	/* Enable Automatic free running mode */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 2);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+									V4L2_CFG_CID_ADV7611_FREE_RUN_MODE, 2);
 	if (ret)
 		goto err2;
 
 	/* Force free running mode */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 1].id, 1);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+									V4L2_CFG_CID_ADV7611_FREE_RUN_MODE, 1);
 	if (ret)
 		goto err2;
 
-	/* Specify your own color for free running mode instead of using the default blue color */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 3].id, 1);
+	/* Specify your own color for free running mode instead of using the
+	   default blue color */
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+							V4L2_CFG_CID_ADV7611_FREE_RUN_COLOR_MANUAL, 1);
 	if (ret)
 		goto err2;
 
 	/* Custom free running color can be set in GRB 24-bit format */
 	/* Green */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0xFF0000);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+							V4L2_CFG_CID_ADV7611_FREE_RUN_COLOR, 0xFF0000);
 	if (ret)
 		goto err2;
 	/* Red */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0x00FF00);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+							V4L2_CFG_CID_ADV7611_FREE_RUN_COLOR, 0x00FF00);
 	if (ret)
 		goto err2;
 	/* Blue */
-	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd, ctrls[ctrls_no - 2].id, 0x0000FF);
+	ret = v4l2_cfg_set_control_value(adv7611_subdev_fd,
+							V4L2_CFG_CID_ADV7611_FREE_RUN_COLOR, 0x0000FF);
 	if (ret)
 		goto err2;
 
