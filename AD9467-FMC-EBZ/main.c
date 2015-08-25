@@ -109,10 +109,9 @@ int main(){
 
     xil_printf("Start capturing data...\n\r");
 
-    while(1)
-    {
-        adc_capture(1024, DDR_BASEADDR);
-    }
+    adc_capture(16384, DDR_BASEADDR);
+
+    xil_printf("Done.\n\r");
 
     Xil_DCacheDisable();
     Xil_ICacheDisable();

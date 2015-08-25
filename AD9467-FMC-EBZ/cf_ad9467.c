@@ -164,22 +164,36 @@ uint32_t adc_delay_1(uint32_t no_of_lanes, uint32_t delay)
 {
     uint32_t i;
     uint32_t rdata;
+    uint32_t pcore_version;
 
-	for (i = 0; i < no_of_lanes; i++) {
-		Xil_Out32((CF_BASEADDR + 0x060), 0x0); // delay write
-		Xil_Out32((CF_BASEADDR + 0x060), (0x20000 | (i<<8) | delay)); // delay write
-		while (Xil_In32((CF_BASEADDR + 0x064) & 0x100) == 0x100) {}
-	}
-
-	for (i = 0; i < no_of_lanes; i++) {
-		Xil_Out32((CF_BASEADDR + 0x060), 0x0); // delay write
-		Xil_Out32((CF_BASEADDR + 0x060), (0x30000 | (i<<8) | delay)); // delay write
-		while (Xil_In32((CF_BASEADDR + 0x064) & 0x100) == 0x100) {}
-		rdata = Xil_In32(CF_BASEADDR + 0x064) & 0xff;
-		if (rdata != delay) {
-			xil_printf("adc_delay_1: sel(%2d), data(%04x)\n\r", i, rdata);
+    pcore_version = Xil_In32(CF_BASEADDR + 0x0);
+    pcore_version >>= 16;
+    xil_printf("pcore_version: %d\n\r", pcore_version);
+    if (pcore_version < 9) {
+		for (i = 0; i < no_of_lanes; i++) {
+			Xil_Out32((CF_BASEADDR + 0x060), 0x0); // delay write
+			Xil_Out32((CF_BASEADDR + 0x060), (0x20000 | (i<<8) | delay)); // delay write
+			while (Xil_In32((CF_BASEADDR + 0x064) & 0x100) == 0x100) {}
 		}
-	}
+
+		for (i = 0; i < no_of_lanes; i++) {
+			Xil_Out32((CF_BASEADDR + 0x060), 0x0); // delay write
+			Xil_Out32((CF_BASEADDR + 0x060), (0x30000 | (i<<8) | delay)); // delay write
+			while (Xil_In32((CF_BASEADDR + 0x064) & 0x100) == 0x100) {}
+			rdata = Xil_In32(CF_BASEADDR + 0x064) & 0xff;
+			if (rdata != delay) {
+				xil_printf("adc_delay_1: sel(%2d), data(%04x)\n\r", i, rdata);
+			}
+		}
+    } else {
+		for (i = 0; i < no_of_lanes; i++) {
+			Xil_Out32((CF_BASEADDR + ((0x200 + i)*4)), delay);
+			rdata = Xil_In32(CF_BASEADDR + ((0x200 + i)*4));
+			if (rdata != delay) {
+				xil_printf("adc_delay_1: sel(%2d), rcv(%04x), exp(%04x)\n\r", i, rdata, delay);
+			}
+		}
+    }
 
     return(0);
 }
