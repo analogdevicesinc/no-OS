@@ -52,11 +52,13 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR	XPAR_PS7_GPIO_0_BASEADDR
+#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR			XPAR_PS7_GPIO_0_BASEADDR
+#define ADC_DDR_BASEADDR		XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0x800000
 #else
-#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR	XPAR_GPIO_0_BASEADDR
+#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR			XPAR_GPIO_0_BASEADDR
+#define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 #define AD6676_CORE_BASEADDR	XPAR_AXI_AD6676_CORE_BASEADDR
 #define AD6676_DMA_BASEADDR		XPAR_AXI_AD6676_DMA_BASEADDR
@@ -93,6 +95,17 @@ ad6676_init_param default_init_param = {
 
 /***************************************************************************//**
 * @brief ad6676_ebz_gpio_ctl
+*			gpios:
+*				adc_oen		9	- 0
+*				adc_sela	8	- 0
+*				adc_selb	7	- 1
+*				adc_s0		6	- 0
+*				adc_s1		5	- 1
+*				adc_resetb	4	- 1
+*				adc_agc1	3	- by default input - 0
+*				adc_agc2	2	- by default input - 0
+*				adc_agc3	1	- by default output
+*				adc_agc4	0	- by default output
 *******************************************************************************/
 void ad6676_ebz_gpio_ctl(uint32_t base_addr)
 {
@@ -106,12 +119,8 @@ void ad6676_ebz_gpio_ctl(uint32_t base_addr)
 	Xil_Out32((base_addr + 0x0018), 0x03ff); // mask
 	Xil_Out32((base_addr + 0x004c), 0x00b0); // data
 #else
-	Xil_Out32((base_addr + 0x04), 0x00); // direction -gpio
-	Xil_Out32((base_addr + 0x00), 0x00); // data -gpio
-	mdelay(10);
-
-	Xil_Out32((base_addr + 0x04), 0x00); // direction -gpio
-	Xil_Out32((base_addr + 0x08), 0x10); // data -gpio2
+	Xil_Out32((base_addr + 0x000c), 0x0003); // direction
+	Xil_Out32((base_addr + 0x0008), 0x00b0); // data
 #endif
 }
 
@@ -148,6 +157,10 @@ int main(void)
 
 	/* Enable Ramp Test Mode */
 	ad6676_spi_write(AD6676_TEST_GEN, TESTGENMODE_RAMP);
+
+	xil_printf("Start capturing data...\n\r");
+	adc_capture(16384, ADC_DDR_BASEADDR);
+	xil_printf("Done.\n\r");
 
 	return 0;
 }
