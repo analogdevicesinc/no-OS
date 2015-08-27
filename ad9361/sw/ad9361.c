@@ -6221,7 +6221,7 @@ uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate)
 {
-	dev_dbg(&clk_priv->spi->dev, "%s: Rate %lu Hz", __func__, rate);
+	dev_dbg(&clk_priv->spi->dev, "%s: Rate %u Hz", __func__, rate);
 
 	if (prate) {
 		// Unused variable - fix compiler warning

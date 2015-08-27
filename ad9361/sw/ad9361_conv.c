@@ -286,7 +286,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	uint32_t rates[3] = {25000000U, 40000000U, 61440000U};
 	uint32_t hdl_dac_version;
 
-	dev_dbg(&phy->spi->dev, "%s: freq %lu flags 0x%X\n", __func__,
+	dev_dbg(&phy->spi->dev, "%s: freq %u flags 0x%X\n", __func__,
 			max_freq, flags);
 
 	hdl_dac_version = axiadc_read(st, 0x4000);
@@ -324,7 +324,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 	for (t = 0; t < 2; t++) {
 		memset(field, 0, 32);
-		for (k = 0; k < (max_freq ? ARRAY_SIZE(rates) : 1); k++) {
+		for (k = 0; (uint32_t)k < (max_freq ? ARRAY_SIZE(rates) : 1); k++) {
 			if (max_freq)
 				ad9361_set_trx_clock_chain_freq(phy, rates[k]);
 			for (i = 0; i < 2; i++) {
