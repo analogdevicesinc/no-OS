@@ -1742,8 +1742,8 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 
 	ad9361_get_en_state_machine_mode(phy_master, &ensm_mode);
 
-	ad9361_set_en_state_machine_mode(phy_master, ENSM_STATE_ALERT);
-	ad9361_set_en_state_machine_mode(phy_slave, ENSM_STATE_ALERT);
+	ad9361_set_en_state_machine_mode(phy_master, ENSM_MODE_ALERT);
+	ad9361_set_en_state_machine_mode(phy_slave, ENSM_MODE_ALERT);
 
 	for (step = 0; step <= 5; step++)
 	{
