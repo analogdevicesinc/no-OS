@@ -179,22 +179,27 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 	uint32_t data_i2;
 	uint32_t data_q2;
 	uint32_t length;
+	uint32_t reg_ctrl_2;
 
 	dac_write(phy, DAC_REG_RSTN, 0x0);
 	dac_write(phy, DAC_REG_RSTN, DAC_RSTN | DAC_MMCM_RSTN);
 
 	dds_st[phy->id_no].dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
 	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
+	dac_read(phy, DAC_REG_CNTRL_2, &reg_ctrl_2);
 	if(dds_st[phy->id_no].rx2tx2)
 	{
 		dds_st[phy->id_no].num_buf_channels = 4;
 		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
+		reg_ctrl_2 &= ~DAC_R1_MODE;
 	}
 	else
 	{
 		dds_st[phy->id_no].num_buf_channels = 2;
 		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
+		reg_ctrl_2 |= DAC_R1_MODE;
 	}
+	dac_write(phy, DAC_REG_CNTRL_2, reg_ctrl_2);
 
 	dac_read(phy, DAC_REG_VERSION, &dds_st[phy->id_no].pcore_version);
 
@@ -212,7 +217,6 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 			dds_default_setup(phy, DDS_CHAN_TX2_Q_F1, 0, 1000000, 250000);
 			dds_default_setup(phy, DDS_CHAN_TX2_Q_F2, 0, 1000000, 250000);
 		}
-		dac_write(phy, DAC_REG_CNTRL_2, 0);
 		dac_datasel(phy, -1, DATA_SEL_DDS);
 		break;
 	case DATA_SEL_DMA:
@@ -283,7 +287,6 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 			dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
 			dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 		}
-		dac_write(phy, DAC_REG_CNTRL_2, 0);
 		dac_datasel(phy, -1, DATA_SEL_DMA);
 		break;
 	default:
