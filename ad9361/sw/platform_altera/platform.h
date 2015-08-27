@@ -138,7 +138,7 @@ int axiadc_post_setup(struct ad9361_rf_phy *phy);
 unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg);
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val);
 int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel);
+void axiadc_idelay_set(struct axiadc_state *st, unsigned lane, unsigned val);
 int32_t altera_bridge_init(ALT_BRIDGE_t bridge);
 int32_t altera_bridge_uninit(ALT_BRIDGE_t bridge);
-
 #endif

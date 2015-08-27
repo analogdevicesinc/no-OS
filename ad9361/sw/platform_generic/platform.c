@@ -186,3 +186,11 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
 	return 0;
 }
 
+/***************************************************************************//**
+ * @brief axiadc_idelay_set
+*******************************************************************************/
+void axiadc_idelay_set(struct axiadc_state *st,
+				unsigned lane, unsigned val)
+{
+
+}

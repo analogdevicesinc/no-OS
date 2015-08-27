@@ -137,21 +137,7 @@ int32_t spi_init(uint32_t device_id,
 	return 0;
 }
 
-/***************************************************************************//**
- * @brief spi_read
-*******************************************************************************/
-int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number)
-{
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
 
-	return 0;
-}
 
 /***************************************************************************//**
  * @brief spi_write_then_read
@@ -389,3 +375,19 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
 	return 0;
 }
 
+/***************************************************************************//**
+ * @brief axiadc_idelay_set
+*******************************************************************************/
+void axiadc_idelay_set(struct axiadc_state *st,
+				unsigned lane, unsigned val)
+{
+	if (PCORE_VERSION_MAJOR(st->pcore_version) > 8) {
+		axiadc_write(st, ADI_REG_DELAY(lane), val);
+	} else {
+		axiadc_write(st, ADI_REG_DELAY_CNTRL, 0);
+		axiadc_write(st, ADI_REG_DELAY_CNTRL,
+				ADI_DELAY_ADDRESS(lane)
+				| ADI_DELAY_WDATA(val)
+				| ADI_DELAY_SEL);
+	}
+}
