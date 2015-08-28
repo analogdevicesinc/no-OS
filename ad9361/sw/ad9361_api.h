@@ -238,26 +238,26 @@ typedef struct
 	uint8_t		lvds_invert1_control;	/* adi,lvds-invert1-control */
 	uint8_t		lvds_invert2_control;	/* adi,lvds-invert2-control */
 	/* GPO Control */
-	uint8_t gpo0_inactive_state_high_enable;	/* adi,gpo0-inactive-state-high-enable */
-	uint8_t gpo1_inactive_state_high_enable;	/* adi,gpo1-inactive-state-high-enable */
-	uint8_t gpo2_inactive_state_high_enable;	/* adi,gpo2-inactive-state-high-enable */
-	uint8_t gpo3_inactive_state_high_enable;	/* adi,gpo3-inactive-state-high-enable */
-	uint8_t gpo0_slave_rx_enable;	/* adi,gpo0-slave-rx-enable */
-	uint8_t gpo0_slave_tx_enable;	/* adi,gpo0-slave-tx-enable */
-	uint8_t gpo1_slave_rx_enable;	/* adi,gpo1-slave-rx-enable */
-	uint8_t gpo1_slave_tx_enable;	/* adi,gpo1-slave-tx-enable */
-	uint8_t gpo2_slave_rx_enable;	/* adi,gpo2-slave-rx-enable */
-	uint8_t gpo2_slave_tx_enable;	/* adi,gpo2-slave-tx-enable */
-	uint8_t gpo3_slave_rx_enable;	/* adi,gpo3-slave-rx-enable */
-	uint8_t gpo3_slave_tx_enable;	/* adi,gpo3-slave-tx-enable */
-	uint8_t gpo0_rx_delay_us;	/* adi,gpo0-rx-delay-us */
-	uint8_t gpo0_tx_delay_us;	/* adi,gpo0-tx-delay-us */
-	uint8_t gpo1_rx_delay_us;	/* adi,gpo1-rx-delay-us */
-	uint8_t gpo1_tx_delay_us;	/* adi,gpo1-tx-delay-us */
-	uint8_t gpo2_rx_delay_us;	/* adi,gpo2-rx-delay-us */
-	uint8_t gpo2_tx_delay_us;	/* adi,gpo2-tx-delay-us */
-	uint8_t gpo3_rx_delay_us;	/* adi,gpo3-rx-delay-us */
-	uint8_t gpo3_tx_delay_us;	/* adi,gpo3-tx-delay-us */
+	uint8_t		gpo0_inactive_state_high_enable;	/* adi,gpo0-inactive-state-high-enable */
+	uint8_t		gpo1_inactive_state_high_enable;	/* adi,gpo1-inactive-state-high-enable */
+	uint8_t		gpo2_inactive_state_high_enable;	/* adi,gpo2-inactive-state-high-enable */
+	uint8_t		gpo3_inactive_state_high_enable;	/* adi,gpo3-inactive-state-high-enable */
+	uint8_t		gpo0_slave_rx_enable;	/* adi,gpo0-slave-rx-enable */
+	uint8_t		gpo0_slave_tx_enable;	/* adi,gpo0-slave-tx-enable */
+	uint8_t		gpo1_slave_rx_enable;	/* adi,gpo1-slave-rx-enable */
+	uint8_t		gpo1_slave_tx_enable;	/* adi,gpo1-slave-tx-enable */
+	uint8_t		gpo2_slave_rx_enable;	/* adi,gpo2-slave-rx-enable */
+	uint8_t		gpo2_slave_tx_enable;	/* adi,gpo2-slave-tx-enable */
+	uint8_t		gpo3_slave_rx_enable;	/* adi,gpo3-slave-rx-enable */
+	uint8_t		gpo3_slave_tx_enable;	/* adi,gpo3-slave-tx-enable */
+	uint8_t		gpo0_rx_delay_us;	/* adi,gpo0-rx-delay-us */
+	uint8_t		gpo0_tx_delay_us;	/* adi,gpo0-tx-delay-us */
+	uint8_t		gpo1_rx_delay_us;	/* adi,gpo1-rx-delay-us */
+	uint8_t		gpo1_tx_delay_us;	/* adi,gpo1-tx-delay-us */
+	uint8_t		gpo2_rx_delay_us;	/* adi,gpo2-rx-delay-us */
+	uint8_t		gpo2_tx_delay_us;	/* adi,gpo2-tx-delay-us */
+	uint8_t		gpo3_rx_delay_us;	/* adi,gpo3-rx-delay-us */
+	uint8_t		gpo3_tx_delay_us;	/* adi,gpo3-tx-delay-us */
 	/* Tx Monitor Control */
 	uint32_t	low_high_gain_threshold_mdB;	/* adi,txmon-low-high-thresh */
 	uint32_t	low_gain_dB;	/* adi,txmon-low-gain */
@@ -277,27 +277,31 @@ typedef struct
 	int32_t		gpio_cal_sw1;	/* cal-sw1-gpios */
 	int32_t		gpio_cal_sw2;	/* cal-sw2-gpios */
 	/* External LO clocks */
-	uint32_t (*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
-	int32_t (*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv, uint32_t rate);
-	int32_t (*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv, uint32_t rate);
+	uint32_t	(*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
+	int32_t		(*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv, uint32_t rate);
+	int32_t		(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv, uint32_t rate);
 }AD9361_InitParam;
 
 typedef struct
 {
-	uint32_t rx;			/* 1, 2, 3(both) */
-	int32_t rx_gain;		/* -12, -6, 0, 6 */
-	uint32_t rx_dec;		/* 1, 2, 4 */
-	int16_t rx_coef[128];
-	uint8_t rx_coef_size;
+	uint32_t	rx;				/* 1, 2, 3(both) */
+	int32_t		rx_gain;		/* -12, -6, 0, 6 */
+	uint32_t	rx_dec;			/* 1, 2, 4 */
+	int16_t		rx_coef[128];
+	uint8_t		rx_coef_size;
+	uint32_t	rx_path_clks[6];
+	uint32_t	rx_bandwidth;
 }AD9361_RXFIRConfig;
 
 typedef struct
 {
-	uint32_t tx;			/* 1, 2, 3(both) */
-	int32_t tx_gain;		/* -6, 0 */
-	uint32_t tx_int;		/* 1, 2, 4 */
-	int16_t tx_coef[128];
-	uint8_t tx_coef_size;
+	uint32_t	tx;				/* 1, 2, 3(both) */
+	int32_t		tx_gain;		/* -6, 0 */
+	uint32_t	tx_int;			/* 1, 2, 4 */
+	int16_t		tx_coef[128];
+	uint8_t		tx_coef_size;
+	uint32_t	tx_path_clks[6];
+	uint32_t	tx_bandwidth;
 }AD9361_TXFIRConfig;
 
 enum ad9361_ensm_mode {
@@ -415,7 +419,7 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32
 /* Get current transmit attenuation for the selected channel. */
 int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t *attenuation_mdb);
 /* Set the TX RF bandwidth. */
-int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t  bandwidth_hz);
+int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t bandwidth_hz);
 /* Get the TX RF bandwidth. */
 int32_t ad9361_get_tx_rf_bandwidth (struct ad9361_rf_phy *phy, uint32_t *bandwidth_hz);
 /* Set the TX sampling frequency. */
@@ -470,4 +474,8 @@ int32_t ad9361_set_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t rate_gov);
 int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov);
 /* Perform the selected calibration. */
 int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
+/* Load and enable TRX FIR filters configurations. */
+int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
+								   AD9361_RXFIRConfig rx_fir_cfg,
+								   AD9361_TXFIRConfig tx_fir_cfg);
 #endif

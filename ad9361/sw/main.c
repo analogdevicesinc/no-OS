@@ -316,9 +316,9 @@ AD9361_InitParam default_init_param = {
 };
 
 AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
-	3, // rx;
-	0, // rx_gain;
-	1, // rx_dec;
+	3, // rx
+	0, // rx_gain
+	1, // rx_dec
 	{-4, -6, -37, 35, 186, 86, -284, -315,
 	 107, 219, -4, 271, 558, -307, -1182, -356,
 	 658, 157, 207, 1648, 790, -2525, -2553, 748,
@@ -334,14 +334,16 @@ AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0}, // rx_coef[128];
-	 64 // rx_coef_size
+	 0, 0, 0, 0, 0, 0, 0, 0}, // rx_coef[128]
+	 64, // rx_coef_size
+	 {0, 0, 0, 0, 0, 0}, //rx_path_clks[6]
+	 0 // rx_bandwidth
 };
 
 AD9361_TXFIRConfig tx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
-	3, // tx;
-	-6, // tx_gain;
-	1, // tx_int;
+	3, // tx
+	-6, // tx_gain
+	1, // tx_int
 	{-4, -6, -37, 35, 186, 86, -284, -315,
 	 107, 219, -4, 271, 558, -307, -1182, -356,
 	 658, 157, 207, 1648, 790, -2525, -2553, 748,
@@ -357,8 +359,10 @@ AD9361_TXFIRConfig tx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
 	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0}, // tx_coef[128];
-	 64 // tx_coef_size
+	 0, 0, 0, 0, 0, 0, 0, 0}, // tx_coef[128]
+	 64, // tx_coef_size
+	 {0, 0, 0, 0, 0, 0}, // tx_path_clks[6]
+	 0 // tx_bandwidth
 };
 struct ad9361_rf_phy *ad9361_phy;
 #ifdef FMCOMMS5

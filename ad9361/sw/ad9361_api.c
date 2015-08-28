@@ -220,7 +220,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 
 	/* Fast AGC */
 	phy->pdata->gain_ctrl.f_agc_dec_pow_measuremnt_duration = init_param->fagc_dec_pow_measuremnt_duration;
-	phy->pdata->gain_ctrl.f_agc_state_wait_time_ns  = init_param->fagc_state_wait_time_ns;
+	phy->pdata->gain_ctrl.f_agc_state_wait_time_ns = init_param->fagc_state_wait_time_ns;
 	/* Fast AGC - Low Power */
 	phy->pdata->gain_ctrl.f_agc_allow_agc_gain_increase = init_param->fagc_allow_agc_gain_increase;
 	phy->pdata->gain_ctrl.f_agc_lp_thresh_increment_time = init_param->fagc_lp_thresh_increment_time;
@@ -705,7 +705,7 @@ int32_t ad9361_set_rx_lo_freq (struct ad9361_rf_phy *phy,
 	int32_t ret;
 
 	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL],
-			   ad9361_to_clk(lo_freq_hz));
+				ad9361_to_clk(lo_freq_hz));
 
 	return ret;
 }
@@ -1296,7 +1296,7 @@ int32_t ad9361_set_tx_lo_freq (struct ad9361_rf_phy *phy,
 	int32_t ret;
 
 	ret = clk_set_rate(phy, phy->ref_clk_scale[TX_RFPLL],
-			   ad9361_to_clk(lo_freq_hz));
+				ad9361_to_clk(lo_freq_hz));
 
 	return ret;
 }
@@ -1836,4 +1836,33 @@ int32_t ad9361_get_trx_rate_gov (struct ad9361_rf_phy *phy, uint32_t *rate_gov)
 int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg)
 {
 	return ad9361_do_calib_run(phy, cal, arg);
+}
+
+/**
+ * Load and enable TRX FIR filters configurations.
+ * @param phy The AD9361 current state structure.
+ * @param rx_fir_cfg RX FIR filter configuration.
+ * @param tx_fir_cfg TX FIR filter configuration.
+ * @return 0 in case of success, negative error code otherwise.
+ *
+ * Note: This function will/may affect the data path.
+ */
+int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
+								   AD9361_RXFIRConfig rx_fir_cfg,
+								   AD9361_TXFIRConfig tx_fir_cfg)
+{
+	ad9361_set_tx_fir_config(phy, tx_fir_cfg);
+	ad9361_set_rx_fir_config(phy, rx_fir_cfg);
+
+	ad9361_set_trx_fir_en_dis(phy, 1);
+
+	if (tx_fir_cfg.tx_bandwidth && rx_fir_cfg.rx_bandwidth) {
+		ad9361_set_tx_rf_bandwidth(phy, tx_fir_cfg.tx_bandwidth);
+		ad9361_set_rx_rf_bandwidth(phy, rx_fir_cfg.rx_bandwidth);
+	}
+
+	if (rx_fir_cfg.rx_path_clks[RX_SAMPL_FREQ] && tx_fir_cfg.tx_path_clks[TX_SAMPL_FREQ])
+		ad9361_set_trx_path_clks(phy, rx_fir_cfg.rx_path_clks, tx_fir_cfg.tx_path_clks);
+
+	return 0;
 }
