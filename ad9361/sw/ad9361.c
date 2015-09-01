@@ -6227,6 +6227,10 @@ int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv, uint32_t rate
 		// Unused variable - fix compiler warning
 	}
 
+	if (clk_priv) {
+		// Unused variable - fix compiler warning
+	}
+
 	if (ad9361_from_clk(rate) > MAX_CARRIER_FREQ_HZ ||
 		ad9361_from_clk(rate) < MIN_CARRIER_FREQ_HZ)
 		return -EINVAL;
