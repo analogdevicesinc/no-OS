@@ -790,6 +790,24 @@ int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start)
 }
 
 /**
+ * Select the channel mapping in 1rx1tx mode.
+ * @param phy The AD9361 state structure.
+ * @param map Map
+ * @param channel Channel
+ * @return The channel number.
+ */
+int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, int32_t map, int32_t channel)
+{
+	if (phy->pdata->rx2tx2)
+		return channel;
+
+	if (map == 2)
+		return channel + 1;
+
+	return channel;
+}
+
+/**
  * AD9361 Device Reset
  * @param phy The AD9361 state structure.
  * @return 0 in case of success, negative error code otherwise.
@@ -1864,9 +1882,9 @@ int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
  * @param enable Enable/disable option.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable)
+int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable)
 {
-	if (tx_if == 2 && !phy->pdata->rx2tx2 && enable)
+	if ((tx_if & enable) > 1 && AD9364_DEVICE && enable)
 		return -EINVAL;
 
 	return ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
@@ -1880,9 +1898,9 @@ static int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint3
  * @param enable Enable/disable option.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable)
+int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable)
 {
-	if (rx_if == 2 && !phy->pdata->rx2tx2 && enable)
+	if ((rx_if & enable) > 1 && AD9364_DEVICE && enable)
 		return -EINVAL;
 
 	return ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
@@ -2687,7 +2705,9 @@ static int32_t __ad9361_tx_quad_calib(struct ad9361_rf_phy *phy, uint32_t phase,
 		return ret;
 
 	if (res)
-		*res = ad9361_spi_read(phy->spi, REG_QUAD_CAL_STATUS_TX1) &
+		*res = ad9361_spi_read(phy->spi,
+				(phy->pdata->rx1tx1_mode_use_tx_num == 2) ?
+				REG_QUAD_CAL_STATUS_TX2 : REG_QUAD_CAL_STATUS_TX1) &
 				(TX1_LO_CONV | TX1_SSB_CONV);
 
 	return 0;
@@ -2950,9 +2970,13 @@ int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 			 CORRECTION_WORD_DECIMATION_M(~0),
 			 phy->pdata->qec_tracking_slow_mode_en ? 4 : 0);
 
-	if (rxquad_track)
-		qtrack = ENABLE_TRACKING_MODE_CH1 |
-		(phy->pdata->rx2tx2 ? ENABLE_TRACKING_MODE_CH2 : 0);
+	if (rxquad_track) {
+		if (phy->pdata->rx2tx2)
+			qtrack = ENABLE_TRACKING_MODE_CH1 | ENABLE_TRACKING_MODE_CH2;
+		else
+			qtrack = (phy->pdata->rx1tx1_mode_use_rx_num == 1) ?
+				ENABLE_TRACKING_MODE_CH1 : ENABLE_TRACKING_MODE_CH2;
+	}
 
 	ad9361_spi_write(spi, REG_CALIBRATION_CONFIG_1,
 		ENABLE_PHASE_CORR | ENABLE_GAIN_CORR |
@@ -4870,11 +4894,18 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 	}
 
-	ad9361_en_dis_tx(phy, 1, TX_ENABLE);
-	ad9361_en_dis_rx(phy, 1, RX_ENABLE);
+	if (!pd->rx2tx2) {
+		pd->rx1tx1_mode_use_tx_num =
+			clamp_t(uint32_t, pd->rx1tx1_mode_use_tx_num, TX_1, TX_2);
+		pd->rx1tx1_mode_use_rx_num =
+			clamp_t(uint32_t, pd->rx1tx1_mode_use_rx_num, RX_1, RX_2);
 
-	ad9361_en_dis_tx(phy, 2, pd->rx2tx2);
-	ad9361_en_dis_rx(phy, 2, pd->rx2tx2);
+		ad9361_en_dis_tx(phy, TX_1 | TX_2, pd->rx1tx1_mode_use_tx_num);
+		ad9361_en_dis_rx(phy, TX_1 | TX_2, pd->rx1tx1_mode_use_rx_num);
+	} else {
+		ad9361_en_dis_tx(phy, TX_1 | TX_2, TX_1 | TX_2);
+		ad9361_en_dis_rx(phy, RX_1 | RX_2, RX_1 | RX_2);
+	}
 
 	ret = ad9361_rf_port_setup(phy, true, pd->rf_rx_input_sel,
 				   pd->rf_tx_output_sel);
@@ -5050,9 +5081,19 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ad9361_spi_writef(phy->spi, REG_TX_ATTEN_OFFSET,
 		MASK_CLR_ATTEN_UPDATE, 0);
 
-	ret = ad9361_set_tx_atten(phy, pd->tx_atten, true, true, true);
+	ret = ad9361_set_tx_atten(phy, pd->tx_atten,
+			pd->rx2tx2 ? true : pd->rx1tx1_mode_use_tx_num == 1,
+			pd->rx2tx2 ? true : pd->rx1tx1_mode_use_tx_num == 2, true);
 	if (ret < 0)
 		return ret;
+
+	if (!pd->rx2tx2) {
+		ret = ad9361_set_tx_atten(phy, 89750,
+				pd->rx1tx1_mode_use_tx_num == 2,
+				pd->rx1tx1_mode_use_tx_num == 1, true);
+		if (ret < 0)
+			return ret;
+	}
 
 	ret = ad9361_rssi_setup(phy, &pd->rssi_ctrl, false);
 	if (ret < 0)
@@ -6221,7 +6262,7 @@ uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 	uint32_t *prate)
 {
-	dev_dbg(&clk_priv->spi->dev, "%s: Rate %u Hz", __func__, rate);
+	dev_dbg(&clk_priv->spi->dev, "%s: Rate %"PRIu32" Hz", __func__, rate);
 
 	if (prate) {
 		// Unused variable - fix compiler warning

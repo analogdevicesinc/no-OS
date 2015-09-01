@@ -286,7 +286,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	uint32_t rates[3] = {25000000U, 40000000U, 61440000U};
 	uint32_t hdl_dac_version;
 
-	dev_dbg(&phy->spi->dev, "%s: freq %u flags 0x%X\n", __func__,
+	dev_dbg(&phy->spi->dev, "%s: freq %"PRIu32" flags 0x%X\n", __func__,
 			max_freq, flags);
 
 	hdl_dac_version = axiadc_read(st, 0x4000);
@@ -400,6 +400,11 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 				return 0;
 			}
 
+			/* Loopback works only TX1->RX1 or RX2->RX2 */
+			if (num_chan == 2 && phy->pdata->rx1tx1_mode_use_rx_num !=
+					phy->pdata->rx1tx1_mode_use_tx_num)
+					ad9361_en_dis_tx(phy, TX_1 | TX_2, phy->pdata->rx1tx1_mode_use_rx_num);
+
 			ad9361_bist_loopback(phy, 1);
 			axiadc_write(st, 0x4000 + ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
 
@@ -429,6 +434,10 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 				ad9361_dig_tune_iodelay(phy, 1);
 
 			ad9361_bist_loopback(phy, 0);
+
+			if (num_chan == 2 && phy->pdata->rx1tx1_mode_use_rx_num !=
+					phy->pdata->rx1tx1_mode_use_tx_num)
+					ad9361_en_dis_tx(phy, TX_1 | TX_2, phy->pdata->rx1tx1_mode_use_tx_num);
 
 			if (PCORE_VERSION_MAJOR(hdl_dac_version) < 8)
 				axiadc_write(st, 0x4048, saved);

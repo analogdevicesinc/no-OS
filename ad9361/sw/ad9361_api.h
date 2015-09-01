@@ -55,6 +55,8 @@ typedef struct
 	uint32_t	reference_clk_rate;
 	/* Base Configuration */
 	uint8_t		two_rx_two_tx_mode_enable;	/* adi,2rx-2tx-mode-enable */
+	uint8_t		one_rx_one_tx_mode_use_rx_num;	/* adi,1rx-1tx-mode-use-rx-num */
+	uint8_t		one_rx_one_tx_mode_use_tx_num;	/* adi,1rx-1tx-mode-use-tx-num */
 	uint8_t		frequency_division_duplex_mode_enable;	/* adi,frequency-division-duplex-mode-enable */
 	uint8_t		frequency_division_duplex_independent_mode_enable;	/* adi,frequency-division-duplex-independent-mode-enable */
 	uint8_t		tdd_use_dual_synth_mode_enable;	/* adi,tdd-use-dual-synth-mode-enable */

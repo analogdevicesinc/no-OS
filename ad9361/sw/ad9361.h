@@ -3153,6 +3153,8 @@ struct ad9361_phy_platform_data {
 	uint32_t			dcxo_fine;
 	uint32_t			rf_rx_input_sel;
 	uint32_t			rf_tx_output_sel;
+	uint32_t		rx1tx1_mode_use_rx_num;
+	uint32_t		rx1tx1_mode_use_tx_num;
 	uint32_t		rx_path_clks[NUM_RX_CLOCKS];
 	uint32_t		tx_path_clks[NUM_TX_CLOCKS];
 	uint32_t		trx_synth_max_fref;
@@ -3474,4 +3476,7 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	char *buf, int32_t buflen);
 int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 						enum dig_tune_flags flags);
+int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable);
+int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable);
+int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, int32_t map, int32_t channel);
 #endif

@@ -44,6 +44,7 @@
 #include "ad9361_api.h"
 #include "platform.h"
 #include "util.h"
+#include "config.h"
 
 #ifndef AXI_ADC_NOT_PRESENT
 /******************************************************************************/
@@ -123,6 +124,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->fdd = init_param->frequency_division_duplex_mode_enable;
 	phy->pdata->fdd_independent_mode = init_param->frequency_division_duplex_independent_mode_enable;
 	phy->pdata->rx2tx2 = init_param->two_rx_two_tx_mode_enable;
+	phy->pdata->rx1tx1_mode_use_rx_num = init_param->one_rx_one_tx_mode_use_rx_num;
+	phy->pdata->rx1tx1_mode_use_tx_num = init_param->one_rx_one_tx_mode_use_tx_num;
 	phy->pdata->tdd_use_dual_synth = init_param->tdd_use_dual_synth_mode_enable;
 	phy->pdata->tdd_skip_vco_cal = init_param->tdd_skip_vco_cal_enable;
 	phy->pdata->rx_fastlock_delay_ns = init_param->rx_fastlock_delay_ns;
@@ -403,6 +406,12 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	}
 	rev = ret & REV_MASK;
 
+	if (AD9364_DEVICE) {
+		phy->pdata->rx2tx2 = false;
+		phy->pdata->rx1tx1_mode_use_rx_num = 1;
+		phy->pdata->rx1tx1_mode_use_tx_num = 1;
+	}
+
 	phy->ad9361_rfpll_ext_recalc_rate = init_param->ad9361_rfpll_ext_recalc_rate;
 	phy->ad9361_rfpll_ext_round_rate = init_param->ad9361_rfpll_ext_round_rate;
 	phy->ad9361_rfpll_ext_set_rate = init_param->ad9361_rfpll_ext_set_rate;
@@ -580,7 +589,10 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 	int32_t ret = 0;
 
 	rx_gain.gain_db = gain_db;
-	ret = ad9361_set_rx_gain(phy, ch + 1, &rx_gain);
+	ret = ad9361_set_rx_gain(phy,
+					ad9361_1rx1tx_channel_map(phy,
+					phy->pdata->rx1tx1_mode_use_rx_num,
+					ch + 1), &rx_gain);
 
 	return ret;
 }
@@ -601,7 +613,9 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
 
-	ret = ad9361_get_rx_gain(phy, ch + 1, &rx_gain);
+	ret = ad9361_get_rx_gain(phy, ad9361_1rx1tx_channel_map(phy,
+			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1), &rx_gain);
+
 	*gain_db = rx_gain.gain_db;
 
 	return ret;
@@ -756,7 +770,8 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	rssi->ant = ch + 1;
+	rssi->ant = ad9361_1rx1tx_channel_map(phy,
+			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1);
 	rssi->duration = 1;
 	ret = ad9361_read_rssi(phy, rssi);
 
@@ -784,7 +799,8 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 {
 	struct rf_gain_ctrl gc = {0};
 
-	gc.ant = ch + 1;
+	gc.ant = ad9361_1rx1tx_channel_map(phy,
+			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1);
 	gc.mode = phy->agc_mode[ch] = gc_mode;
 
 	ad9361_set_gain_ctrl_mode(phy, &gc);
@@ -1167,10 +1183,14 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t attenuation_mdb)
 {
 	int32_t ret;
+	int32_t channel;
 
+	channel = ad9361_1rx1tx_channel_map(phy,
+			phy->pdata->rx1tx1_mode_use_tx_num,
+			ch);
 	ret = ad9361_set_tx_atten(phy, attenuation_mdb,
-		ch == 0, ch == 1,
-		!phy->pdata->update_tx_gain_via_alert);
+			channel == 0, channel == 1,
+			!phy->pdata->update_tx_gain_via_alert);
 
 	return ret;
 }
@@ -1190,7 +1210,11 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	ret = ad9361_get_tx_atten(phy, ch + 1);
+	ret = ad9361_get_tx_atten(phy,
+			ad9361_1rx1tx_channel_map(phy,
+			phy->pdata->rx1tx1_mode_use_tx_num,
+			ch + 1));
+
 	if(ret < 0)
 		return ret;
 	*attenuation_db = ret;
