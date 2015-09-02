@@ -88,6 +88,8 @@ AD9361_InitParam default_init_param = {
 	40000000UL,	//reference_clk_rate
 	/* Base Configuration */
 	1,		//two_rx_two_tx_mode_enable *** adi,2rx-2tx-mode-enable
+	1,		//one_rx_one_tx_mode_use_rx_num *** adi,1rx-1tx-mode-use-rx-num
+	1,		//one_rx_one_tx_mode_use_tx_num *** adi,1rx-1tx-mode-use-tx-num
 	1,		//frequency_division_duplex_mode_enable *** adi,frequency-division-duplex-mode-enable
 	0,		//frequency_division_duplex_independent_mode_enable *** adi,frequency-division-duplex-independent-mode-enable
 	0,		//tdd_use_dual_synth_mode_enable *** adi,tdd-use-dual-synth-mode-enable
