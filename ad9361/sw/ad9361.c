@@ -796,10 +796,17 @@ int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start)
  * @param channel Channel
  * @return The channel number.
  */
-int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, int32_t map, int32_t channel)
+int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, bool tx, int32_t channel)
 {
+	uint32_t map;
+
 	if (phy->pdata->rx2tx2)
 		return channel;
+
+	if (tx)
+		map = phy->pdata->rx1tx1_mode_use_tx_num;
+	else
+		map = phy->pdata->rx1tx1_mode_use_rx_num;
 
 	if (map == 2)
 		return channel + 1;
@@ -837,6 +844,56 @@ int32_t ad9361_reset(struct ad9361_rf_phy *phy)
 }
 
 /**
+ * Enable/disable the desired TX channel.
+ * @param phy The AD9361 state structure.
+ * @param tx_if The desired channel number [1, 2].
+ * @param enable Enable/disable option.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable)
+{
+	if ((tx_if & enable) > 1 && AD9364_DEVICE && enable)
+		return -EINVAL;
+
+	return ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
+		TX_CHANNEL_ENABLE(tx_if), enable);
+}
+
+/**
+ * Enable/disable the desired RX channel.
+ * @param phy The AD9361 state structure.
+ * @param tx_if The desired channel number [1, 2].
+ * @param enable Enable/disable option.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable)
+{
+	if ((rx_if & enable) > 1 && AD9364_DEVICE && enable)
+		return -EINVAL;
+
+	return ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
+		RX_CHANNEL_ENABLE(rx_if), enable);
+}
+
+/**
+ * Loopback works only TX1->RX1 or RX2->RX2.
+ * @param phy The AD9361 state structure.
+ * @param enable Enable.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+static int32_t ad9361_int_loopback_fix_ch_cross(struct ad9361_rf_phy *phy, bool enable)
+{
+	/* Loopback works only TX1->RX1 or RX2->RX2 */
+	if (!phy->pdata->rx2tx2 && phy->pdata->rx1tx1_mode_use_rx_num !=
+			phy->pdata->rx1tx1_mode_use_tx_num)
+		return ad9361_en_dis_tx(phy, TX_1 | TX_2,
+				enable ? phy->pdata->rx1tx1_mode_use_rx_num :
+				phy->pdata->rx1tx1_mode_use_tx_num);
+
+	return 0;
+}
+
+/**
  * BIST loopback mode.
  * @param phy The AD9361 state structure.
  * @param mode BIST loopback mode.
@@ -855,12 +912,14 @@ int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode)
 	switch (mode) {
 	case 0:
 		ad9361_hdl_loopback(phy, false);
+		ad9361_int_loopback_fix_ch_cross(phy, false);
 		reg &= ~(DATA_PORT_SP_HD_LOOP_TEST_OE |
 			DATA_PORT_LOOP_TEST_ENABLE);
 		return ad9361_spi_write(phy->spi, REG_OBSERVE_CONFIG, reg);
 	case 1:
 		/* loopback (AD9361 internal) TX->RX */
 		ad9361_hdl_loopback(phy, false);
+		ad9361_int_loopback_fix_ch_cross(phy, true);
 		sp_hd = ad9361_spi_read(phy->spi, REG_PARALLEL_PORT_CONF_3);
 		if ((sp_hd & SINGLE_PORT_MODE) && (sp_hd & HALF_DUPLEX_MODE))
 			reg |= DATA_PORT_SP_HD_LOOP_TEST_OE;
@@ -873,6 +932,7 @@ int32_t ad9361_bist_loopback(struct ad9361_rf_phy *phy, int32_t mode)
 	case 2:
 		/* loopback (FPGA internal) RX->TX */
 		ad9361_hdl_loopback(phy, true);
+		ad9361_int_loopback_fix_ch_cross(phy, false);
 		reg &= ~(DATA_PORT_SP_HD_LOOP_TEST_OE |
 			DATA_PORT_LOOP_TEST_ENABLE);
 		return ad9361_spi_write(phy->spi, REG_OBSERVE_CONFIG, reg);
@@ -1873,38 +1933,6 @@ int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
 		SIZE_FULL_TABLE, 4);
 
 	return 0;
-}
-
-/**
- * Enable/disable the desired TX channel.
- * @param phy The AD9361 state structure.
- * @param tx_if The desired channel number [1, 2].
- * @param enable Enable/disable option.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t enable)
-{
-	if ((tx_if & enable) > 1 && AD9364_DEVICE && enable)
-		return -EINVAL;
-
-	return ad9361_spi_writef(phy->spi, REG_TX_ENABLE_FILTER_CTRL,
-		TX_CHANNEL_ENABLE(tx_if), enable);
-}
-
-/**
- * Enable/disable the desired RX channel.
- * @param phy The AD9361 state structure.
- * @param tx_if The desired channel number [1, 2].
- * @param enable Enable/disable option.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable)
-{
-	if ((rx_if & enable) > 1 && AD9364_DEVICE && enable)
-		return -EINVAL;
-
-	return ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
-		RX_CHANNEL_ENABLE(rx_if), enable);
 }
 
 /**

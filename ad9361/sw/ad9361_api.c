@@ -574,9 +574,11 @@ int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
  * Set the receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (RX1, RX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  RX1 (0)
  * 			  RX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  RX1 (0)
  * @param gain_db The RF gain (dB).
  * 				  Example:
  * 				   10 (10 dB)
@@ -588,10 +590,14 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
 
+	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
+		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
 	rx_gain.gain_db = gain_db;
 	ret = ad9361_set_rx_gain(phy,
-					ad9361_1rx1tx_channel_map(phy,
-					phy->pdata->rx1tx1_mode_use_rx_num,
+					ad9361_1rx1tx_channel_map(phy, false,
 					ch + 1), &rx_gain);
 
 	return ret;
@@ -601,9 +607,11 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
  * Get current receive RF gain for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (RX1, RX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  RX1 (0)
  * 			  RX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  RX1 (0)
  * @param gain_db A variable to store the RF gain (dB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -613,8 +621,13 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
 
+	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
+		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
 	ret = ad9361_get_rx_gain(phy, ad9361_1rx1tx_channel_map(phy,
-			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1), &rx_gain);
+			false, ch + 1), &rx_gain);
 
 	*gain_db = rx_gain.gain_db;
 
@@ -759,9 +772,11 @@ int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel (RX1, RX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  RX1 (0)
  * 			  RX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  RX1 (0)
  * @param rssi A variable to store the RSSI.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -770,8 +785,12 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	rssi->ant = ad9361_1rx1tx_channel_map(phy,
-			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1);
+	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
+		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
+	rssi->ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	rssi->duration = 1;
 	ret = ad9361_read_rssi(phy, rssi);
 
@@ -782,9 +801,11 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
  * Set the gain control mode for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel (RX1, RX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  RX1 (0)
  * 			  RX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  RX1 (0)
  * @param gc_mode The gain control mode (manual, fast_attack, slow_attack,
  * 				  hybrid).
  *                Accepted values:
@@ -799,8 +820,12 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 {
 	struct rf_gain_ctrl gc = {0};
 
-	gc.ant = ad9361_1rx1tx_channel_map(phy,
-			phy->pdata->rx1tx1_mode_use_rx_num, ch + 1);
+	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
+		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
+	gc.ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	gc.mode = phy->agc_mode[ch] = gc_mode;
 
 	ad9361_set_gain_ctrl_mode(phy, &gc);
@@ -1171,9 +1196,11 @@ int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uin
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (TX1, TX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  TX1 (0)
  * 			  TX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  TX1 (0)
  * @param attenuation_mdb The attenuation (mdB).
  * 						  Example:
  * 						   10000 (10 dB)
@@ -1185,9 +1212,12 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 	int32_t ret;
 	int32_t channel;
 
-	channel = ad9361_1rx1tx_channel_map(phy,
-			phy->pdata->rx1tx1_mode_use_tx_num,
-			ch);
+	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
+		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
+	channel = ad9361_1rx1tx_channel_map(phy, true, ch);
 	ret = ad9361_set_tx_atten(phy, attenuation_mdb,
 			channel == 0, channel == 1,
 			!phy->pdata->update_tx_gain_via_alert);
@@ -1199,9 +1229,11 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
  * Get current transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (TX1, TX2).
- * 			 Accepted values:
+ * 			 Accepted values in 2x2 mode:
  * 			  TX1 (0)
  * 			  TX2 (1)
+ * 			 Accepted values in 1x1 mode:
+ * 			  TX1 (0)
  * @param attenuation_mdb A variable to store the attenuation value (mdB).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -1210,9 +1242,13 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
+	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
+		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
+		return -1;
+	}
+
 	ret = ad9361_get_tx_atten(phy,
-			ad9361_1rx1tx_channel_map(phy,
-			phy->pdata->rx1tx1_mode_use_tx_num,
+			ad9361_1rx1tx_channel_map(phy, true,
 			ch + 1));
 
 	if(ret < 0)
