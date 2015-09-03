@@ -283,6 +283,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	int32_t ret, i, j, k, chan, t, num_chan, err = 0;
 	uint32_t s0, s1, c0, c1, tmp, saved = 0;
 	uint8_t field[2][16];
+	uint32_t saved_dsel[4], saved_chan_ctrl6[4], saved_chan_ctrl0[4];
 	uint32_t rates[3] = {25000000U, 40000000U, 61440000U};
 	uint32_t hdl_dac_version;
 
@@ -404,12 +405,15 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 			axiadc_write(st, 0x4000 + ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
 
 			for (chan = 0; chan < num_chan; chan++) {
+				saved_chan_ctrl0[chan] = axiadc_read(st, ADI_REG_CHAN_CNTRL(chan));
 				axiadc_write(st, ADI_REG_CHAN_CNTRL(chan),
 					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
 					ADI_ENABLE | ADI_IQCOR_ENB);
 				axiadc_set_pnsel(st, chan, ADC_PN_CUSTOM);
+				saved_chan_ctrl6[chan] = axiadc_read(st, 0x4414 + (chan) * 0x40);
 				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
 				{
+					saved_dsel[chan] = axiadc_read(st, 0x4418 + (chan) * 0x40);
 					axiadc_write(st, 0x4418 + (chan) * 0x40, 9);
 					axiadc_write(st, 0x4044, 0x1);
 				}
@@ -435,16 +439,15 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 			for (chan = 0; chan < num_chan; chan++) {
 				axiadc_write(st, ADI_REG_CHAN_CNTRL(chan),
-					ADI_FORMAT_SIGNEXT | ADI_FORMAT_ENABLE |
-					ADI_ENABLE | ADI_IQCOR_ENB);
+					saved_chan_ctrl0[chan]);
 				axiadc_set_pnsel(st, chan, ADC_PN9);
 				if (PCORE_VERSION_MAJOR(hdl_dac_version) > 7)
 				{
-					axiadc_write(st, 0x4418 + (chan) * 0x40, 0);
+					axiadc_write(st, 0x4418 + (chan) * 0x40, saved_dsel[chan]);
 					axiadc_write(st, 0x4044, 0x1);
 				}
-				else
-					axiadc_write(st, 0x4414 + (chan) * 0x40, 0);
+
+				axiadc_write(st, 0x4414 + (chan) * 0x40, saved_chan_ctrl6[chan]);
 
 			}
 
