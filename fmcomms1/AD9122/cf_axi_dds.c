@@ -326,6 +326,9 @@ static void cf_axi_dds_set_sed_pattern(unsigned chan,
 									   unsigned pat2)
 {
 	uint32_t ctrl;
+	uint32_t hdl_version;
+
+	DAC_Core_Read(ADI_REG_VERSION, &hdl_version);
 
 	DAC_Core_Write(ADI_REG_CHAN_CNTRL_5(chan),
 			ADI_TO_DDS_PATT_1(pat1) | ADI_DDS_PATT_2(pat2));
@@ -333,8 +336,14 @@ static void cf_axi_dds_set_sed_pattern(unsigned chan,
 	DAC_Core_Write(ADI_REG_CNTRL_1, 0);
 
 	DAC_Core_Read(ADI_REG_CNTRL_2, &ctrl);
-	ctrl &= ~ADI_DATA_SEL(~0);
-	DAC_Core_Write(ADI_REG_CNTRL_2, ctrl | ADI_DATA_SEL(DATA_SEL_SED) | ADI_DATA_FORMAT);
+	if (PCORE_VERSION_MAJOR(hdl_version) > 7) {
+		DAC_Core_Write(ADI_REG_CHAN_CNTRL_7(0), ADI_DATA_SEL(DATA_SEL_SED));
+		DAC_Core_Write(ADI_REG_CHAN_CNTRL_7(1), ADI_DATA_SEL(DATA_SEL_SED));
+	} else {
+		ctrl &= ~ADI_DATA_SEL(~0);
+		ctrl |= ADI_DATA_SEL(DATA_SEL_SED);
+	}
+	DAC_Core_Write(ADI_REG_CNTRL_2, ctrl | ADI_DATA_FORMAT);
 
 	DAC_Core_Write(ADI_REG_CNTRL_1, ADI_ENABLE);
 }
