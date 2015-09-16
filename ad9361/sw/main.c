@@ -93,10 +93,10 @@ AD9361_InitParam default_init_param = {
 	0,		//external_rx_lo_enable *** adi,external-rx-lo-enable
 	0,		//external_tx_lo_enable *** adi,external-tx-lo-enable
 	5,		//dc_offset_tracking_update_event_mask *** adi,dc-offset-tracking-update-event-mask
-	6,		//dc_offset_attenuation_high_range *** adi,dc-offset-tracking-update-event-mask
-	5,		//dc_offset_attenuation_low_range *** adi,dc-offset-tracking-update-event-mask
-	0x28,	//dc_offset_count_high_range *** adi,dc-offset-tracking-update-event-mask
-	0x32,	//dc_offset_count_low_range *** adi,dc-offset-tracking-update-event-mask
+	6,		//dc_offset_attenuation_high_range *** adi,dc-offset-attenuation-high-range
+	5,		//dc_offset_attenuation_low_range *** adi,dc-offset-attenuation-low-range
+	0x28,	//dc_offset_count_high_range *** adi,dc-offset-count-high-range
+	0x32,	//dc_offset_count_low_range *** adi,dc-offset-count-low-range
 	0,		//tdd_use_fdd_vco_tables_enable *** adi,tdd-use-fdd-vco-tables-enable
 	0,		//split_gain_table_mode_enable *** adi,split-gain-table-mode-enable
 	MAX_SYNTH_FREF,	//trx_synthesizer_target_fref_overwrite_hz *** adi,trx-synthesizer-target-fref-overwrite-hz
@@ -121,7 +121,7 @@ AD9361_InitParam default_init_param = {
 	/* Reference Clock Control */
 	0,		//xo_disable_use_ext_refclk_enable *** adi,xo-disable-use-ext-refclk-enable
 	{8, 5920},	//dcxo_coarse_and_fine_tune[2] *** adi,dcxo-coarse-and-fine-tune
-	0,		//clk_output_mode_select *** adi,clk-output-mode-select
+	CLKOUT_DISABLE,	//clk_output_mode_select *** adi,clk-output-mode-select
 	/* Gain Control */
 	2,		//gc_rx1_mode *** adi,gc-rx1-mode
 	2,		//gc_rx2_mode *** adi,gc-rx2-mode
@@ -171,7 +171,7 @@ AD9361_InitParam default_init_param = {
 	5,		//fagc_lp_thresh_increment_time ***  adi,fagc-lp-thresh-increment-time
 	1,		//fagc_lp_thresh_increment_steps ***  adi,fagc-lp-thresh-increment-steps
 	/* Fast AGC - Lock Level */
-	10,		//fagc_lock_level ***  adi,fagc-lock-level */
+	10,		//fagc_lock_level ***  adi,fagc-lock-level
 	1,		//fagc_lock_level_lmt_gain_increase_en ***  adi,fagc-lock-level-lmt-gain-increase-enable
 	5,		//fagc_lock_level_gain_increase_upper_limit ***  adi,fagc-lock-level-gain-increase-upper-limit
 	/* Fast AGC - Peak Detectors and Final Settling */
