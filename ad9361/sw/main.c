@@ -426,6 +426,7 @@ int main(void)
 	ad9361_set_rx_fir_config(ad9361_phy_b, rx_fir_config);
 #endif
 
+#ifndef AXI_ADC_NOT_PRESENT
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM
 #ifdef DAC_DMA
 #ifdef FMCOMMS5
@@ -439,11 +440,13 @@ int main(void)
 	dac_init(ad9361_phy, DATA_SEL_DDS, 1);
 #endif
 #endif
+#endif
 
 #ifdef FMCOMMS5
 	ad9361_do_mcs(ad9361_phy, ad9361_phy_b);
 #endif
 
+#ifndef AXI_ADC_NOT_PRESENT
 #if defined XILINX_PLATFORM && defined CAPTURE_SCRIPT
     // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
@@ -452,6 +455,7 @@ int main(void)
 	mdelay(1000);
     adc_capture(16384, ADC_DDR_BASEADDR);
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
+#endif
 #endif
 
 #ifdef CONSOLE_COMMANDS

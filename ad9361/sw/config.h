@@ -58,5 +58,6 @@
 //#define FMCOMMS5
 //#define PICOZED_SDR
 //#define CAPTURE_SCRIPT
+//#define AXI_ADC_NOT_PRESENT
 
 #endif
