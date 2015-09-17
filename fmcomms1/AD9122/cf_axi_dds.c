@@ -330,6 +330,9 @@ static void cf_axi_dds_set_sed_pattern(unsigned chan,
 
 	DAC_Core_Read(ADI_REG_VERSION, &hdl_version);
 
+	DAC_Core_Write(ADI_REG_RSTN, 0x0);
+	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
+
 	DAC_Core_Write(ADI_REG_CHAN_CNTRL_5(chan),
 			ADI_TO_DDS_PATT_1(pat1) | ADI_DDS_PATT_2(pat2));
 

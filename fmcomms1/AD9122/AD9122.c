@@ -131,13 +131,13 @@ static struct ad9122_sed dac_sed_pattern[5] = {
 	{
 		0x5555,
 		0xAAAA,
-		0xAAAA,
-		0x5555
+		0x5555,
+		0xAAAA
 	},
 	{
 		0,
-		0,
 		0xFFFF,
+		0,
 		0xFFFF
 	},
 	{
