@@ -330,9 +330,6 @@ static void cf_axi_dds_set_sed_pattern(unsigned chan,
 
 	DAC_Core_Read(ADI_REG_VERSION, &hdl_version);
 
-	DAC_Core_Write(ADI_REG_RSTN, 0x0);
-	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
-
 	DAC_Core_Write(ADI_REG_CHAN_CNTRL_5(chan),
 			ADI_TO_DDS_PATT_1(pat1) | ADI_DDS_PATT_2(pat2));
 
@@ -362,11 +359,29 @@ int32_t  cf_axi_dds_of_probe()
 	struct cf_axi_dds_state *st = &dds_state;
 #endif
 	struct cf_axi_converter *conv = &dds_conv;
+	uint32_t hdl_version;
+	uint32_t drp_status;
+	int32_t timeout = 100;
 
 	conv->pcore_sync = cf_axi_dds_sync_frame;
 	conv->pcore_set_sed_pattern = cf_axi_dds_set_sed_pattern;
 
+	DAC_Core_Read(ADI_REG_VERSION, &hdl_version);
+
 	DAC_Core_Write(ADI_REG_RSTN, 0x0);
+	if (PCORE_VERSION_MAJOR(hdl_version) > 7) {
+		DAC_Core_Write(ADI_REG_RSTN, ADI_MMCM_RSTN);
+		do {
+			DAC_Core_Read(ADI_REG_DRP_STATUS, &drp_status);
+			if (drp_status & ADI_DRP_LOCKED)
+				break;
+			mdelay(1);
+		} while(timeout--);
+		if(timeout == -1) {
+			xil_printf("Error: DRP UNLOCKED\n");
+			return -1;
+		}
+	}
 	DAC_Core_Write(ADI_REG_RSTN, ADI_RSTN | ADI_MMCM_RSTN);
 	DAC_Core_Write(ADI_REG_RATECNTRL, ADI_RATE(1));
 	DAC_Core_Write(ADI_REG_CNTRL_1, 0);
