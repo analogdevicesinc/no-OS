@@ -161,7 +161,7 @@
 
 /* AD9739A_REG_LVDS_REC_STAT9 definitions, address 0x21 */
 #define AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON		(1 << 3)
-#define AD9739A_LVDS_REC_STAT9_RCVR_FE_ON       (1 << 2)
+#define AD9739A_LVDS_REC_STAT9_RCVR_FE_ON	   (1 << 2)
 #define AD9739A_LVDS_REC_STAT9_RCVR_LST			(1 << 1)
 #define AD9739A_LVDS_REC_STAT9_RCVR_LCK			(1 << 0)
 
@@ -239,7 +239,7 @@ typedef struct
 
 /*! Writes a value to the selected register. */
 int32_t ad9739a_write(unsigned char registerAddress, 
-                     unsigned char registerValue);
+					  unsigned char registerValue);
 /*! Reads the value of the selected register. */
 int32_t ad9739a_read(unsigned char registerAddress);
 /*! Resets the device. */
@@ -253,11 +253,7 @@ float ad9739a_DAC_fs_current(float fs_val);
 /*! Delay for a number of fdata clock cycles. */
 int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
-#if 0
-int32_t ad9739a_setup(int32_t spiBaseAddr, int32_t ssNo);
-#else
 int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 		ad9739a_init_param init_param);
-#endif
 
 #endif /* __AD9739A_H__ */
