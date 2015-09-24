@@ -99,9 +99,10 @@ int main(void)
 {
 	adf4350_setup(SPI_DEVICE_ID, 0, default_adf4350_init_param);
 
+	dac_setup(XPAR_AXI_AD9739A_BASEADDR);
+
 	ad9739a_setup(SPI_DEVICE_ID, 1, default_ad9739a_init_param);
 
-	dac_setup(XPAR_AXI_AD9739A_BASEADDR);
 	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT);
 
 	dds_set_frequency(0, 300000000);
