@@ -640,7 +640,7 @@ static int32_t __ad9361_spi_readf(struct spi_device *spi, uint32_t reg,
  * @return The bits value or negative error code in case of failure.
  */
 #define ad9361_spi_readf(spi, reg, mask) \
-	__ad9361_spi_readf(spi, reg, mask, __ffs(mask))
+	__ad9361_spi_readf(spi, reg, mask, find_first_bit(mask))
 
 /**
  * SPI register write.
@@ -711,7 +711,7 @@ static int32_t __ad9361_spi_writef(struct spi_device *spi, uint32_t reg,
  * @return 0 in case of success, negative error code otherwise.
  */
 #define ad9361_spi_writef(spi, reg, mask, val) \
-	__ad9361_spi_writef(spi, reg, mask, __ffs(mask), val)
+	__ad9361_spi_writef(spi, reg, mask, find_first_bit(mask), val)
 
 /**
  * SPI multiple bytes register write.

@@ -129,7 +129,7 @@ uint32_t int_sqrt(uint32_t x);
 int32_t ilog2(int32_t x);
 uint64_t do_div(uint64_t* n,
 				uint64_t base);
-uint32_t __ffs(uint32_t word);
+uint32_t find_first_bit(uint32_t word);
 void * ERR_PTR(long error);
 void *zmalloc(size_t size);
 

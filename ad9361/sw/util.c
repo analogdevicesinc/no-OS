@@ -286,9 +286,9 @@ uint64_t do_div(uint64_t* n, uint64_t base)
 }
 
 /***************************************************************************//**
- * @brief __ffs
+ * @brief find_first_bit
 *******************************************************************************/
-uint32_t __ffs(uint32_t word)
+uint32_t find_first_bit(uint32_t word)
 {
 	int32_t num = 0;
 
