@@ -52,11 +52,13 @@
 #include "jesd204b_v51.h"
 
 #ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR	XPAR_PS7_GPIO_0_BASEADDR
+#define SPI_DEVICE_ID		XPAR_PS7_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR		XPAR_PS7_GPIO_0_BASEADDR
+#define ADC_DDR_BASEADDR	XPAR_DDR_MEM_BASEADDR + 0x800000
 #else
-#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR	XPAR_GPIO_0_BASEADDR
+#define SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
+#define GPIO_BASEADDR		XPAR_GPIO_0_BASEADDR
+#define ADC_DDR_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 #define AD9144_CORE_BASEADDR	XPAR_AXI_AD9144_CORE_BASEADDR
 #define AD9680_CORE_BASEADDR	XPAR_AXI_AD9680_CORE_BASEADDR
@@ -260,6 +262,9 @@ int main(void)
 {
 	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
+	uint32_t jesd204b_gt_version;
+	uint32_t lane;
+	uint32_t num_of_config_regs;
 
 	daq2_gpio_ctl(GPIO_BASEADDR);
 
@@ -285,6 +290,7 @@ int main(void)
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 
+	jesd204b_gt_st.num_of_lanes = 4;
 	jesd204b_gt_st.use_cpll = 0;
 	jesd204b_gt_st.rx_sys_clk_sel = 3;
 	jesd204b_gt_st.rx_out_clk_sel = 4;
@@ -292,11 +298,19 @@ int main(void)
 	jesd204b_gt_st.tx_out_clk_sel = 4;
 	jesd204b_gt_setup(DAQ2_GT_BASEADDR, jesd204b_gt_st);
 
-	jesd204b_gt_clk_enable(JESD204B_GT_TX);
-	jesd204b_gt_clk_enable(JESD204B_GT_RX);
+	jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
+	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
+		num_of_config_regs = 1;
+	else
+		num_of_config_regs = jesd204b_gt_st.num_of_lanes;
 
-	jesd204b_gt_clk_synchronize(JESD204B_GT_TX);
-	jesd204b_gt_clk_synchronize(JESD204B_GT_RX);
+	for (lane = 0; lane < num_of_config_regs; lane++) {
+		jesd204b_gt_clk_enable(JESD204B_GT_TX, lane);
+		jesd204b_gt_clk_enable(JESD204B_GT_RX, lane);
+	}
+
+	jesd204b_gt_clk_synchronize(JESD204B_GT_TX, 0);
+	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
 
 	dac_setup(AD9144_CORE_BASEADDR);
 
@@ -316,7 +330,11 @@ int main(void)
 
 	adc_setup(AD9680_CORE_BASEADDR, AD9680_DMA_BASEADDR, 2);
 
-	xil_printf("Done.\n\r");
+	xil_printf("Initialization done.\n\r");
+
+	adc_capture(16384, ADC_DDR_BASEADDR);
+
+	xil_printf("Capture done.\n\r");
 
 	return 0;
 }

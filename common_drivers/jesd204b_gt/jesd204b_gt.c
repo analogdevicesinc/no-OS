@@ -49,6 +49,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 uint32_t jesd204b_gt_baseaddr;
+uint8_t  num_of_config_regs;
 
 /***************************************************************************//**
 * @brief jesd204b_gt_read
@@ -73,31 +74,31 @@ int32_t jesd204b_gt_write(uint32_t reg_addr, uint32_t reg_data)
 /***************************************************************************//**
 * @brief jesd204b_gt_clk_enable
 *******************************************************************************/
-int32_t jesd204b_gt_clk_enable(uint32_t num)
+int32_t jesd204b_gt_clk_enable(uint32_t num, uint32_t lane)
 {
 	uint32_t offs = (num == JESD204B_GT_TX ?
-			JESD204B_GT_REG_TX_GT_RSTN - JESD204B_GT_REG_RX_GT_RSTN : 0);
+			JESD204B_GT_REG_TX_GT_RSTN(lane) - JESD204B_GT_REG_RX_GT_RSTN(lane) : 0);
 	uint32_t data;
 
-	jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN + offs, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN + offs, 0);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN(lane) + offs, 0);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN(lane) + offs, 0);
 	mdelay(10);
 
-	jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS + offs, &data);
+	jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS(lane) + offs, &data);
 	if(JESD204B_GT_TO_RX_PLL_LOCKED(data) != 0xFF)
 	{
 		xil_printf("%s PLL is unlocked.\n",
 			num == JESD204B_GT_RX ? "JESD204B GT RX" : "JESD204B GT TX");
 	}
 
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYNC_CTL + offs, JESD204B_GT_RX_SYNC);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN + offs, JESD204B_GT_RX_GT_RSTN);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN + offs, JESD204B_GT_RX_RSTN);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane) + offs, 0);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYNC_CTL(lane) + offs, JESD204B_GT_RX_SYNC);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN(lane) + offs, JESD204B_GT_RX_GT_RSTN);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN(lane) + offs, JESD204B_GT_RX_RSTN);
 	mdelay(40);
 
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane) + offs, JESD204B_GT_RX_SYSREF);
+	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane) + offs, 0);
 	mdelay(50);
 
 	xil_printf("%s CLK is enabled.\n",
@@ -109,20 +110,24 @@ int32_t jesd204b_gt_clk_enable(uint32_t num)
 /***************************************************************************//**
 * @brief jesd204b_gt_clk_enable
 *******************************************************************************/
-int32_t jesd204b_gt_clk_synchronize(uint32_t num)
+int32_t jesd204b_gt_clk_synchronize(uint32_t num, uint32_t lane)
 {
 	uint32_t offs = (num == JESD204B_GT_TX ?
-			JESD204B_GT_REG_TX_GT_RSTN - JESD204B_GT_REG_RX_GT_RSTN : 0);
+			JESD204B_GT_REG_TX_GT_RSTN(lane) - JESD204B_GT_REG_RX_GT_RSTN(lane) : 0);
 	uint32_t data;
+	int8_t   timeout = 100;
 
 	do
 	{
-		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, JESD204B_GT_RX_SYSREF);
-		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL + offs, 0);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane) + offs, JESD204B_GT_RX_SYSREF);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane) + offs, 0);
 		mdelay(100);
-		jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS + offs, &data);
+		jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS(lane) + offs, &data);
 	}
-	while(data != 0x1ffff);
+	while((data != 0x1ffff) && (timeout--));
+
+	if (timeout == -1)
+		xil_printf("Synchronization timeout. JESD204B_GT_REG_RX_STATUS = 0x%x\n", data);
 
 	return 0;
 }
@@ -133,47 +138,61 @@ int32_t jesd204b_gt_clk_synchronize(uint32_t num)
 int32_t jesd204b_gt_setup(uint32_t baseaddr, jesd204b_gt_state setup_param)
 {
 	uint32_t data;
+	uint32_t jesd204b_gt_version;
+	uint32_t lane;
 
 	jesd204b_gt_baseaddr = baseaddr;
-	jesd204b_gt_write(JESD204B_GT_REG_CPLL_PD,
-			setup_param.use_cpll ? 0 : JESD204B_GT_CPLL_PD);
 
-	if (setup_param.rx_sys_clk_sel || setup_param.rx_out_clk_sel)
-		jesd204b_gt_write(JESD204B_GT_REG_RX_CLK_SEL,
-				JESD204B_GT_RX_SYS_CLK_SEL(setup_param.rx_sys_clk_sel) |
-				JESD204B_GT_RX_OUT_CLK_SEL(setup_param.rx_out_clk_sel));
+	jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
+	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
+		num_of_config_regs = 1;
+	else
+		num_of_config_regs = setup_param.num_of_lanes;
 
-	if (setup_param.tx_sys_clk_sel || setup_param.tx_out_clk_sel)
-		jesd204b_gt_write(JESD204B_GT_REG_TX_CLK_SEL,
-				JESD204B_GT_TX_SYS_CLK_SEL(setup_param.tx_sys_clk_sel) |
-				JESD204B_GT_TX_OUT_CLK_SEL(setup_param.tx_out_clk_sel));
+	for (lane = 0; lane < num_of_config_regs; lane++) {
+		jesd204b_gt_write(JESD204B_GT_REG_CPLL_PD(lane),
+				setup_param.use_cpll ? 0 : JESD204B_GT_CPLL_PD);
 
-	jesd204b_gt_write(JESD204B_GT_REG_RSTN_1, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_TX_GT_RSTN, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_TX_RSTN, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RSTN_1,
-			JESD204B_GT_DRP_RSTN | JESD204B_GT_PLL_RSTN);
+		if (setup_param.rx_sys_clk_sel || setup_param.rx_out_clk_sel)
+			jesd204b_gt_write(JESD204B_GT_REG_RX_CLK_SEL(lane),
+					JESD204B_GT_RX_SYS_CLK_SEL(setup_param.rx_sys_clk_sel) |
+					JESD204B_GT_RX_OUT_CLK_SEL(setup_param.rx_out_clk_sel));
+
+		if (setup_param.tx_sys_clk_sel || setup_param.tx_out_clk_sel)
+			jesd204b_gt_write(JESD204B_GT_REG_TX_CLK_SEL(lane),
+					JESD204B_GT_TX_SYS_CLK_SEL(setup_param.tx_sys_clk_sel) |
+					JESD204B_GT_TX_OUT_CLK_SEL(setup_param.tx_out_clk_sel));
+
+		jesd204b_gt_write(JESD204B_GT_REG_RSTN_1(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_TX_GT_RSTN(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_TX_RSTN(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_RSTN_1(lane),
+				JESD204B_GT_DRP_RSTN | JESD204B_GT_PLL_RSTN);
+	}
 
 	mdelay(50);
 
-	if (setup_param.rx_sys_clk_sel || setup_param.rx_out_clk_sel) {
-		jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS, &data);
-		xil_printf("JESD204B GT RX PLL is %s.\n",
-			JESD204B_GT_TO_RX_PLL_LOCKED(data) == 0xFF ? "locked" : "unlocked");
-	}
+	for (lane = 0; lane < num_of_config_regs; lane++) {
+		if (setup_param.rx_sys_clk_sel || setup_param.rx_out_clk_sel) {
+			jesd204b_gt_read(JESD204B_GT_REG_RX_STATUS(lane), &data);
+			xil_printf("JESD204B GT RX %d PLL is %s.\n", lane,
+				JESD204B_GT_TO_RX_PLL_LOCKED(data) == 0xFF ? "locked" : "unlocked");
+		}
 
-	if (setup_param.tx_sys_clk_sel || setup_param.tx_out_clk_sel) {
-		jesd204b_gt_read(JESD204B_GT_REG_TX_STATUS, &data);
-		xil_printf("JESD204B GT TX PLL is %s.\n",
-			JESD204B_GT_TO_TX_PLL_LOCKED(data) == 0xFF ? "locked" : "unlocked");
-	}
+		if (setup_param.tx_sys_clk_sel || setup_param.tx_out_clk_sel) {
+			jesd204b_gt_read(JESD204B_GT_REG_TX_STATUS(lane), &data);
+			xil_printf("JESD204B GT TX %d PLL is %s.\n", lane,
+				JESD204B_GT_TO_TX_PLL_LOCKED(data) == 0xFF ? "locked" : "unlocked");
+		}
 
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_RX_SYNC_CTL, JESD204B_GT_RX_SYNC);
-	jesd204b_gt_write(JESD204B_GT_REG_TX_SYSREF_CTL, 0);
-	jesd204b_gt_write(JESD204B_GT_REG_TX_SYNC_CTL, JESD204B_GT_TX_SYNC);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYSREF_CTL(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_SYNC_CTL(lane), JESD204B_GT_RX_SYNC);
+		jesd204b_gt_write(JESD204B_GT_REG_TX_SYSREF_CTL(lane), 0);
+		jesd204b_gt_write(JESD204B_GT_REG_TX_SYNC_CTL(lane), JESD204B_GT_TX_SYNC);
+		jesd204b_gt_write(JESD204B_GT_REG_RX_USER_READY(lane), JESD204B_GT_RX_USER_READY);
+	}
 
 	xil_printf("JESD204B GT successfully initialized.\n");
 
