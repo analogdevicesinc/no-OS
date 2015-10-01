@@ -266,6 +266,8 @@ int main(void)
 	uint32_t lane;
 	uint32_t num_of_config_regs;
 
+	xil_printf("DAQ2: 'dev' branch.\n\r");
+
 	daq2_gpio_ctl(GPIO_BASEADDR);
 
 	ad9523_setup(SPI_DEVICE_ID, 0, ad9523_pdata_lpc);
