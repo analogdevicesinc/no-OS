@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <xil_printf.h>
 #include "xparameters.h"
 #include "ad9517.h"
 #include "ad9250.h"
@@ -51,9 +52,11 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
+#define SPI_DEVICE_ID		XPAR_PS7_SPI_0_DEVICE_ID
+#define ADC_DDR_BASEADDR	XPAR_DDR_MEM_BASEADDR + 0x800000
 #else
-#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
+#define SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
+#define ADC_DDR_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 
 /***************************************************************************//**
@@ -63,11 +66,15 @@ int main(void)
 {
 	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
+	uint32_t jesd204b_gt_version;
+	uint32_t config_reg;
+	uint32_t num_of_config_regs;
 
 	ad9517_setup(SPI_DEVICE_ID, 0);
 	ad9250_setup(SPI_DEVICE_ID, 0, 0);
 	ad9250_setup(SPI_DEVICE_ID, 0, 1);
 
+	jesd204b_gt_st.num_of_lanes = 4;
 	jesd204b_gt_st.use_cpll = 1;
 	jesd204b_gt_st.rx_sys_clk_sel = 0;
 	jesd204b_gt_st.rx_out_clk_sel = 2;
@@ -83,11 +90,22 @@ int main(void)
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(XPAR_AXI_AD9250_JESD_BASEADDR, jesd204b_st);
 
-	jesd204b_gt_clk_enable(JESD204B_GT_RX);
+	jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
+	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
+		num_of_config_regs = 1;
+	else
+		num_of_config_regs = jesd204b_gt_st.num_of_lanes;
+
+	for (config_reg = 0; config_reg < num_of_config_regs; config_reg++)
+		jesd204b_gt_clk_enable(JESD204B_GT_RX, config_reg);
+
+	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
 
 	adc_setup(XPAR_AXI_AD9250_0_CORE_BASEADDR, XPAR_AXI_AD9250_0_DMA_BASEADDR, 2);
 
 	adc_setup(XPAR_AXI_AD9250_1_CORE_BASEADDR, XPAR_AXI_AD9250_1_DMA_BASEADDR, 2);
+
+	xil_printf("Done.\n");
 
 	return 0;
 }
