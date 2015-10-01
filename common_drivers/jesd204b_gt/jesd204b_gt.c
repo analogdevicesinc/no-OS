@@ -126,8 +126,12 @@ int32_t jesd204b_gt_clk_synchronize(uint32_t num, uint32_t lane)
 	}
 	while((data != 0x1ffff) && (timeout--));
 
-	if (timeout == -1)
-		xil_printf("Synchronization timeout. JESD204B_GT_REG_RX_STATUS = 0x%x\n", data);
+	if (timeout == -1) {
+		xil_printf("Synchronization timeout. %s = 0x%x\n",
+		num == JESD204B_GT_TX ? "JESD204B_GT_REG_TX_STATUS" : "JESD204B_GT_REG_RX_STATUS",
+					data);
+		return -1;
+	}
 
 	return 0;
 }
