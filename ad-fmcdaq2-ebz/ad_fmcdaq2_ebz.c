@@ -223,6 +223,34 @@ ad9144_init_param default_ad9144_init_param = {
 	1,	// jesd_xbar_lane3_sel
 };
 
+jesd204b_gt_link ad9144_gt_link = {
+  JESD204B_GT_TX,
+  0,
+  3,
+  JESD204B_GT_QPLL,
+  JESD204B_GT_DFE,
+  500,
+  10000,
+  JESD204B_GT_SYSREF_EXT,
+  3,
+  4,
+  0
+};
+
+jesd204b_gt_link ad9680_gt_link = {
+  JESD204B_GT_RX,
+  0,
+  3,
+  JESD204B_GT_QPLL,
+  JESD204B_GT_DFE,
+  500,
+  10000,
+  JESD204B_GT_SYSREF_EXT,
+  3,
+  4,
+  0
+};
+
 /***************************************************************************//**
 * @brief daq2_gpio_ctl
 	ch2 gpios:
@@ -260,59 +288,27 @@ void daq2_gpio_ctl(uint32_t base_addr)
 *******************************************************************************/
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
-	uint32_t jesd204b_gt_version;
-	uint32_t lane;
-	uint32_t num_of_config_regs;
 
-	xil_printf("DAQ2: 'dev' branch.\n\r");
+	jesd204b_st.lanesync_enable = 1;
+	jesd204b_st.scramble_enable = 1;
+	jesd204b_st.sysref_always_enable = 0;
+	jesd204b_st.frames_per_multiframe = 32;
+	jesd204b_st.bytes_per_frame = 1;
+	jesd204b_st.subclass = 1;
 
 	daq2_gpio_ctl(GPIO_BASEADDR);
 
 	ad9523_setup(SPI_DEVICE_ID, 0, ad9523_pdata_lpc);
+  jesd204b_gt_initialize(DAQ2_GT_BASEADDR, 4);
 
 	ad9144_setup(SPI_DEVICE_ID, 1, default_ad9144_init_param);
-
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 32;
-	jesd204b_st.bytes_per_frame = 1;
-	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9144_JESD_BASEADDR, jesd204b_st);
+  jesd204b_gt_setup(ad9144_gt_link);
 
 	ad9680_setup(SPI_DEVICE_ID, 2);
-
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 32;
-	jesd204b_st.bytes_per_frame = 1;
-	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
-
-	jesd204b_gt_st.num_of_lanes = 4;
-	jesd204b_gt_st.use_cpll = 0;
-	jesd204b_gt_st.rx_sys_clk_sel = 3;
-	jesd204b_gt_st.rx_out_clk_sel = 4;
-	jesd204b_gt_st.tx_sys_clk_sel = 3;
-	jesd204b_gt_st.tx_out_clk_sel = 4;
-	jesd204b_gt_setup(DAQ2_GT_BASEADDR, jesd204b_gt_st);
-
-	jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
-	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
-		num_of_config_regs = 1;
-	else
-		num_of_config_regs = jesd204b_gt_st.num_of_lanes;
-
-	for (lane = 0; lane < num_of_config_regs; lane++) {
-		jesd204b_gt_clk_enable(JESD204B_GT_TX, lane);
-		jesd204b_gt_clk_enable(JESD204B_GT_RX, lane);
-	}
-
-	jesd204b_gt_clk_synchronize(JESD204B_GT_TX, 0);
-	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
+	jesd204b_gt_setup(ad9680_gt_link);
 
 	dac_setup(AD9144_CORE_BASEADDR);
 
@@ -331,12 +327,8 @@ int main(void)
 	dds_set_scale(3, 500000);
 
 	adc_setup(AD9680_CORE_BASEADDR, AD9680_DMA_BASEADDR, 2);
-
-	xil_printf("Initialization done.\n\r");
-
 	adc_capture(16384, ADC_DDR_BASEADDR);
 
-	xil_printf("Capture done.\n\r");
-
+	xil_printf("done.\n\r");
 	return 0;
 }
