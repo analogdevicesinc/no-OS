@@ -1,0 +1,12 @@
+**AD-FMCDAQ3-EBZ** Bare Metal Quick Start Guide: [https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/software/baremetal] (https://wiki.analog.com/resources/eval/user-guides/ad-fmcdaq3-ebz/software/baremetal)
+
+The following drivers are required for building the **AD-FMCDAQ3-EBZ** no-OS project:
+ - AD-FMCDAQ3-EBZ Main Driver	-	[./] (./)
+ - Xilinx Platform Drivers		-	[../common_drivers/xilinx_platform_drivers] (../common_drivers/xilinx_platform_drivers)
+ - AD9152 Driver				-	[../drivers/ad9152] (../drivers/ad9152)
+ - AD9528 Driver				-	[../drivers/ad9528] (../drivers/ad9528)
+ - AD9680 Driver				-	[../drivers/ad9680] (../drivers/ad9680)
+ - ADC Core Driver				-	[../common_drivers/adc_core] (../common_drivers/adc_core)
+ - DAC Core Driver				-	[../common_drivers/dac_core] (../common_drivers/dac_core)
+ - JESD204B GT Driver			-	[../common_drivers/jesd204b_gt] (../common_drivers/jesd204b_gt)
+ - JESD204B V51 Driver			-	[../common_drivers/jesd204b_v51] (../common_drivers/jesd204b_v51)
