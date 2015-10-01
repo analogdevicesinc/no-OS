@@ -245,7 +245,7 @@ int32_t dac_setup(uint32_t baseaddr)
 	}
 	else
 	{
-		xil_printf("DAC Core successfully initialized.\n");
+		xil_printf("DAC Core successfully initialized.\n\r");
 
 		return 0;
 	}

@@ -283,7 +283,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 		return ret;
 
 	if (reg_data != 0xAD95) {
-		xil_printf("SPI Read Verify failed (0x%X).\n", reg_data);
+		xil_printf("SPI Read Verify failed (0x%X).\n\r", reg_data);
 		return -1;
 	}
 
@@ -478,7 +478,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	if (ret < 0)
 		return ret;
 
-	xil_printf("AD9523 successfully initialized.\n");
+	xil_printf("AD9523 successfully initialized.\n\r");
 
 	return 0;
 }

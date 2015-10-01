@@ -90,7 +90,7 @@ int32_t jesd204b_setup(uint32_t baseaddr, jesd204b_state setup_param)
 			JESD204B_FRAMES_PER_MFRAME(setup_param.frames_per_multiframe));
 	jesd204b_write(JESD204B_REG_SUBCLASS, setup_param.subclass);
 
-	xil_printf("JESD204B successfully initialized.\n");
+	xil_printf("JESD204B successfully initialized.\n\r");
 
 	return 0;
 }

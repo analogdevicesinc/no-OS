@@ -133,7 +133,7 @@ int32_t adc_setup(uint32_t adc_addr, uint32_t dma_addr,  uint8_t ch_no)
 	}
 	else
 	{
-		xil_printf("ADC Core successfully initialized.\n");
+		xil_printf("ADC Core successfully initialized.\n\r");
 
 		return 0;
 	}
