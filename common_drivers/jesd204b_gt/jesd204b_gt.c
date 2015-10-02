@@ -95,9 +95,11 @@ int32_t jesd204b_gt_setup(jesd204b_gt_link link_param)
     jesd204b_gt_write(JESD204B_GT_REG_LPM_QPLL(lane),
       JESD204B_GT_LPM_DFE(link_param.lpm_or_dfe) |
       JESD204B_GT_QPLL_CPLL(link_param.qpll_or_cpll));
+    jesd204b_gt_write(JESD204B_GT_REG_RSTN(lane), JESD204B_GT_DRP_RSTN);
 
    // if(link_param.tx_or_rx == JESD204B_GT_TX)
    // {
+      jesd204b_gt_write(JESD204B_GT_REG_TX_PLL_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_TX_GT_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_TX_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_TX_USER_READY(lane), 0);
@@ -106,9 +108,11 @@ int32_t jesd204b_gt_setup(jesd204b_gt_link link_param)
       jesd204b_gt_write(JESD204B_GT_REG_TX_CLK_SEL(lane),
           JESD204B_GT_TX_SYS_CLK_SEL(link_param.sys_clk_sel) |
           JESD204B_GT_TX_OUT_CLK_SEL(link_param.out_clk_sel));
+      jesd204b_gt_write(JESD204B_GT_REG_TX_PLL_RSTN(lane), JESD204B_GT_TX_PLL_RSTN);
   //}
   //else
   //{
+      jesd204b_gt_write(JESD204B_GT_REG_RX_PLL_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_RX_GT_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_RX_RSTN(lane), 0);
       jesd204b_gt_write(JESD204B_GT_REG_RX_USER_READY(lane), 0);
@@ -117,10 +121,9 @@ int32_t jesd204b_gt_setup(jesd204b_gt_link link_param)
       jesd204b_gt_write(JESD204B_GT_REG_RX_CLK_SEL(lane),
           JESD204B_GT_RX_SYS_CLK_SEL(link_param.sys_clk_sel) |
           JESD204B_GT_RX_OUT_CLK_SEL(link_param.out_clk_sel));
+      jesd204b_gt_write(JESD204B_GT_REG_RX_PLL_RSTN(lane), JESD204B_GT_RX_PLL_RSTN);
    // }
 
-    jesd204b_gt_write(JESD204B_GT_REG_RSTN(lane),
-        JESD204B_GT_DRP_RSTN | JESD204B_GT_PLL_RSTN);
   }
   }
   jesd204b_gt_common_done = 1;

@@ -61,7 +61,6 @@
                                           
 #define JESD204B_GT_REG_RSTN(c)           (0x014 + (c) * 0x400)
 #define JESD204B_GT_DRP_RSTN              (1 << 1)
-#define JESD204B_GT_PLL_RSTN              (1 << 0)
                                           
 #define JESD204B_GT_REG_RX_GT_RSTN(c)     (0x020 + (c) * 0x400)
 #define JESD204B_GT_RX_GT_RSTN            (1 << 0)
@@ -93,6 +92,9 @@
 #define JESD204B_GT_REG_RX_USER_READY(c)  (0x038 + (c) * 0x400)
 #define JESD204B_GT_RX_USER_READY         (1 << 0)
 
+#define JESD204B_GT_REG_RX_PLL_RSTN(c)    (0x03c + (c) * 0x400)
+#define JESD204B_GT_RX_PLL_RSTN           (1 << 0)
+                                          
 #define JESD204B_GT_REG_TX_GT_RSTN(c)     (0x060 + (c) * 0x400)
 #define JESD204B_GT_TX_GT_RSTN            (1 << 0)
 
@@ -123,6 +125,9 @@
 #define JESD204B_GT_REG_TX_USER_READY(c)  (0x078 + (c) * 0x400)
 #define JESD204B_GT_TX_USER_READY         (1 << 0)
 
+#define JESD204B_GT_REG_TX_PLL_RSTN(c)    (0x07c + (c) * 0x400)
+#define JESD204B_GT_TX_PLL_RSTN           (1 << 0)
+                                          
 #define JESD204B_GT_REG_RX_LANESEL(c)     (0x008C + (c) * 0x400)
 #define JESD204B_GT_RX_LANESEL(x)         (((x) & 0xFF) << 0)
 #define JESD204B_GT_TO_RX_LANESEL(x)      (((x) >> 0) & 0xFF)
