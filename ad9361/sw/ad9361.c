@@ -540,6 +540,13 @@ static const int8_t mixer_table[RXGAIN_TBLS_END][16] = {
 	{0, 3, 9, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26},
 	{0, 3, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24}};
 
+static const uint32_t gain_step_calib_reg_val[4][5] = {
+	{0xC0, 0x2E, 0x10, 0x06, 0x00},	// LO Frequency Range: 600 to 1300 MHz
+	{0xC0, 0x2C, 0x10, 0x06, 0x00},	// LO Frequency Range: 1300 to 3300 MHz
+	{0xB8, 0x2C, 0x10, 0x06, 0x00},	// LO Frequency Range: 2700 to 4100 MHz
+	{0xA0, 0x24, 0x10, 0x06, 0x00},	// LO Frequency Range: 4000 to 6000 MHz
+};
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -6807,6 +6814,107 @@ int32_t register_clocks(struct ad9361_rf_phy *phy)
 		"tx_rfpll", NULL,
 		flags | CLK_IGNORE_UNUSED,
 		TX_RFPLL, 0);
+
+	return 0;
+}
+
+/**
+ * Perform an RSSI gain step calibration.
+ * Note: Before running the function, provide a single tone within the channel
+ *    bandwidth and monitor the received data. Adjust the tone amplitude until
+ *    the received data is within a few dB of full scale but not overloading.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy)
+{
+	uint32_t lna_error[4];
+	uint32_t mixer_error[15];
+	uint64_t lo_freq_hz;
+	uint8_t  lo_index;
+	uint8_t  i;
+
+	lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
+										phy->ref_clk_scale[RX_RFPLL]));
+	if (lo_freq_hz < 1300000000ULL)
+		lo_index = 0;
+	else
+		if (lo_freq_hz < 3300000000ULL)
+			lo_index = 1;
+		else
+			if (lo_freq_hz < 4100000000ULL)
+				lo_index = 2;
+			else
+				lo_index = 3;
+
+	/* Put the AD9361 into the Alert state. */
+	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
+
+	/* Program the directly-addressable register values. */
+	ad9361_spi_write(phy->spi, REG_MAX_MIXER_CALIBRATION_GAIN_INDEX,
+			MAX_MIXER_CALIBRATION_GAIN_INDEX(0x0F));
+	ad9361_spi_write(phy->spi, REG_MEASURE_DURATION,
+			GAIN_CAL_MEAS_DURATION(0x0E));
+	ad9361_spi_write(phy->spi, REG_SETTLE_TIME,
+			SETTLE_TIME(0x3F));
+	ad9361_spi_write(phy->spi, REG_RSSI_CONFIG,
+			RSSI_MODE_SELECT(0x3) | DEFAULT_RSSI_MEAS_MODE);
+	ad9361_spi_write(phy->spi, REG_MEASURE_DURATION_01,
+			MEASUREMENT_DURATION_0(0x0E));
+	ad9361_spi_write(phy->spi, REG_LNA_GAIN,
+			gain_step_calib_reg_val[lo_index][0]);
+
+	/* Program the LNA gain step words into the internal table. */
+	ad9361_spi_write(phy->spi, REG_CONFIG,
+			CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+	for(i = 0; i < 4; i++) {
+		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE,
+				gain_step_calib_reg_val[lo_index][i+1]);
+		ad9361_spi_write(phy->spi, REG_CONFIG,
+				CALIB_TABLE_SELECT(0x3) | WRITE_LNA_GAIN_DIFF | START_CALIB_TABLE_CLOCK);
+		udelay(3);	//Wait for data to fully write to internal table
+	}
+
+	ad9361_spi_write(phy->spi, REG_CONFIG, START_CALIB_TABLE_CLOCK);
+	ad9361_spi_write(phy->spi, REG_CONFIG, 0x00);
+
+	/* Run and wait until the calibration completes. */
+	ad9361_run_calibration(phy, RX_GAIN_STEP_CAL);
+
+	/* Read the LNA and Mixer error terms into nonvolatile memory. */
+	ad9361_spi_write(phy->spi, REG_CONFIG, CALIB_TABLE_SELECT(0x1) | READ_SELECT);
+	for(i = 0; i < 4; i++) {
+		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
+		lna_error[i] = ad9361_spi_read(phy->spi, REG_GAIN_ERROR_READ);
+	}
+	ad9361_spi_write(phy->spi, REG_CONFIG, CALIB_TABLE_SELECT(0x1));
+	for(i = 0; i < 15; i++) {
+		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
+		mixer_error[i] = ad9361_spi_read(phy->spi, REG_GAIN_ERROR_READ);
+	}
+	ad9361_spi_write(phy->spi, REG_CONFIG, 0x00);
+
+	/* Programming gain step errors into the AD9361 in the field */
+	ad9361_spi_write(phy->spi,
+			REG_CONFIG, CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+	for(i = 0; i < 4; i++) {
+		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE, lna_error[i]);
+		ad9361_spi_write(phy->spi, REG_CONFIG,
+				CALIB_TABLE_SELECT(0x3) | WRITE_LNA_ERROR_TABLE | START_CALIB_TABLE_CLOCK);
+	}
+	ad9361_spi_write(phy->spi, REG_CONFIG,
+			CALIB_TABLE_SELECT(0x3) | START_CALIB_TABLE_CLOCK);
+	for(i = 0; i < 15; i++) {
+		ad9361_spi_write(phy->spi, REG_WORD_ADDRESS, i);
+		ad9361_spi_write(phy->spi, REG_GAIN_DIFF_WORDERROR_WRITE, mixer_error[i]);
+		ad9361_spi_write(phy->spi, REG_CONFIG,
+				CALIB_TABLE_SELECT(0x3) | WRITE_MIXER_ERROR_TABLE | START_CALIB_TABLE_CLOCK);
+	}
+	ad9361_spi_write(phy->spi, REG_CONFIG, 0x00);
+
+	ad9361_ensm_restore_prev_state(phy);
 
 	return 0;
 }
