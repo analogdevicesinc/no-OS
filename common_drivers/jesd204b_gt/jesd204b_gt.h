@@ -54,80 +54,51 @@
 
 #define JESD204B_GT_REG_ID                0x0004
 #define JESD204B_GT_REG_SCRATCH           0x0008
-                                          
-#define JESD204B_GT_REG_LPM_QPLL(c)       (0x010 + (c) * 0x400)
-#define JESD204B_GT_LPM_DFE(x)            (x << 1)
-#define JESD204B_GT_QPLL_CPLL(x)          (x << 0)
-                                          
-#define JESD204B_GT_REG_RSTN(c)           (0x014 + (c) * 0x400)
+#define JESD204B_GT_REG_DRP_RSTN(c)       (0x014 + (c) * 0x400)
 #define JESD204B_GT_DRP_RSTN              (1 << 1)
+#define JESD204B_GT_REG_RX_OFFSET         0x0000
+#define JESD204B_GT_REG_TX_OFFSET         0x0040
                                           
-#define JESD204B_GT_REG_RX_GT_RSTN(c)     (0x020 + (c) * 0x400)
-#define JESD204B_GT_RX_GT_RSTN            (1 << 0)
+#define JESD204B_GT_REG_LPM_CPLL_PD(c)    (0x010 + (c) * 0x400)
+#define JESD204B_GT_LPM_DFE(x)            (x << 1)
+#define JESD204B_GT_CPLL_PD               (1 << 0)
                                           
-#define JESD204B_GT_REG_RX_RSTN(c)        (0x024 + (c) * 0x400)
-#define JESD204B_GT_RX_RSTN               (1 << 0)
-
-#define JESD204B_GT_REG_RX_CLK_SEL(c)     (0x028 + (c) * 0x400)
-#define JESD204B_GT_RX_SYS_CLK_SEL(x)     (((x) & 0x3) << 4)
-#define JESD204B_GT_TO_RX_SYS_CLK_SEL(x)  (((x) >> 4) & 0x3)
-#define JESD204B_GT_RX_OUT_CLK_SEL(x)     (((x) & 0x7) << 0)
-#define JESD204B_GT_TO_RX_OUT_CLK_SEL(x)  (((x) >> 0) & 0x7)
-
-#define JESD204B_GT_REG_RX_SYSREF_CTL(c)  (0x02C + (c) * 0x400)
-#define JESD204B_GT_RX_SYSREF_EXTERNAL    (1 << 1)
-#define JESD204B_GT_RX_SYSREF_ON          (1 << 0)
-#define JESD204B_GT_RX_SYSREF_OFF         (0 << 0)
-
-#define JESD204B_GT_REG_RX_SYNC_CTL(c)    (0x030 + (c) * 0x400)
-#define JESD204B_GT_RX_SYNC               (1 << 0)
-
-#define JESD204B_GT_REG_RX_STATUS(c)      (0x034 + (c) * 0x400)
-#define JESD204B_GT_RX_STATUS             (1 << 16)
-#define JESD204B_GT_RX_RST_DONE(x)        (((x) & 0xFF) << 8)
-#define JESD204B_GT_TO_RX_RST_DONE(x)     (((x) >> 8) & 0xFF)
-#define JESD204B_GT_RX_PLL_LOCKED(x)      (((x) & 0xFF) << 0)
-#define JESD204B_GT_TO_RX_PLL_LOCKED(x)   (((x) >> 0) & 0xFF)
-
-#define JESD204B_GT_REG_RX_USER_READY(c)  (0x038 + (c) * 0x400)
-#define JESD204B_GT_RX_USER_READY         (1 << 0)
-
-#define JESD204B_GT_REG_RX_PLL_RSTN(c)    (0x03c + (c) * 0x400)
-#define JESD204B_GT_RX_PLL_RSTN           (1 << 0)
+#define JESD204B_GT_REG_GT_RSTN(c)        (0x020 + (c) * 0x400)
+#define JESD204B_GT_GT_RSTN               (1 << 0)
                                           
-#define JESD204B_GT_REG_TX_GT_RSTN(c)     (0x060 + (c) * 0x400)
-#define JESD204B_GT_TX_GT_RSTN            (1 << 0)
+#define JESD204B_GT_REG_RSTN(c)           (0x024 + (c) * 0x400)
+#define JESD204B_GT_RSTN                  (1 << 0)
 
-#define JESD204B_GT_REG_TX_RSTN(c)        (0x064 + (c) * 0x400)
-#define JESD204B_GT_TX_RSTN               (1 << 0)
+#define JESD204B_GT_REG_CLK_SEL(c)        (0x028 + (c) * 0x400)
+#define JESD204B_GT_SYS_CLK_SEL(x)        (((x) & 0x3) << 4)
+#define JESD204B_GT_TO_SYS_CLK_SEL(x)     (((x) >> 4) & 0x3)
+#define JESD204B_GT_OUT_CLK_SEL(x)        (((x) & 0x7) << 0)
+#define JESD204B_GT_TO_OUT_CLK_SEL(x)     (((x) >> 0) & 0x7)
 
-#define JESD204B_GT_REG_TX_CLK_SEL(c)     (0x068 + (c) * 0x400)
-#define JESD204B_GT_TX_SYS_CLK_SEL(x)     (((x) & 0x3) << 4)
-#define JESD204B_GT_TO_TX_SYS_CLK_SEL(x)  (((x) >> 4) & 0x3)
-#define JESD204B_GT_TX_OUT_CLK_SEL(x)     (((x) & 0x7) << 0)
-#define JESD204B_GT_TO_TX_OUT_CLK_SEL(x)  (((x) >> 0) & 0x7)
+#define JESD204B_GT_REG_SYSREF_CTL(c)     (0x02C + (c) * 0x400)
+#define JESD204B_GT_SYSREF_EXTERNAL       (1 << 1)
+#define JESD204B_GT_SYSREF_ON             (1 << 0)
+#define JESD204B_GT_SYSREF_OFF            (0 << 0)
 
-#define JESD204B_GT_REG_TX_SYSREF_CTL(c)  (0x006C + (c) * 0x400)
-#define JESD204B_GT_TX_SYSREF_EXTERNAL    (1 << 1)
-#define JESD204B_GT_TX_SYSREF_ON          (1 << 0)
-#define JESD204B_GT_TX_SYSREF_OFF         (1 << 0)
+#define JESD204B_GT_REG_SYNC_CTL(c)       (0x030 + (c) * 0x400)
+#define JESD204B_GT_SYNC                  (1 << 0)
 
-#define JESD204B_GT_REG_TX_SYNC_CTL(c)    (0x0070 + (c) * 0x400)
-#define JESD204B_GT_TX_SYNC               (1 << 0)
+#define JESD204B_GT_REG_STATUS(c)         (0x034 + (c) * 0x400)
+#define JESD204B_GT_STATUS                (1 << 16)
+#define JESD204B_GT_STATUS_PLL_LOCKED     0x000ff
+#define JESD204B_GT_STATUS_RST_DONE       0x0ffff
+#define JESD204B_GT_STATUS_SYNC           0x1ffff
+#define JESD204B_GT_RST_DONE(x)           (((x) & 0xFF) << 8)
+#define JESD204B_GT_TO_RST_DONE(x)        (((x) >> 8) & 0xFF)
+#define JESD204B_GT_PLL_LOCKED(x)         (((x) & 0xFF) << 0)
+#define JESD204B_GT_TO_PLL_LOCKED(x)      (((x) >> 0) & 0xFF)
 
-#define JESD204B_GT_REG_TX_STATUS(c)      (0x074 + (c) * 0x400)
-#define JESD204B_GT_TX_STATUS             (1 << 16)
-#define JESD204B_GT_TX_RST_DONE(x)        (((x) & 0xFF) << 8)
-#define JESD204B_GT_TO_TX_RST_DONE(x)     (((x) >> 8) & 0xFF)
-#define JESD204B_GT_TX_PLL_LOCKED(x)      (((x) & 0xFF) << 0)
-#define JESD204B_GT_TO_TX_PLL_LOCKED(x)   (((x) >> 0) & 0xFF)
+#define JESD204B_GT_REG_USER_READY(c)     (0x038 + (c) * 0x400)
+#define JESD204B_GT_USER_READY            (1 << 0)
 
-#define JESD204B_GT_REG_TX_USER_READY(c)  (0x078 + (c) * 0x400)
-#define JESD204B_GT_TX_USER_READY         (1 << 0)
+#define JESD204B_GT_REG_PLL_RSTN(c)       (0x03c + (c) * 0x400)
+#define JESD204B_GT_PLL_RSTN              (1 << 0)
 
-#define JESD204B_GT_REG_TX_PLL_RSTN(c)    (0x07c + (c) * 0x400)
-#define JESD204B_GT_TX_PLL_RSTN           (1 << 0)
-                                          
 #define JESD204B_GT_REG_RX_LANESEL(c)     (0x008C + (c) * 0x400)
 #define JESD204B_GT_RX_LANESEL(x)         (((x) & 0xFF) << 0)
 #define JESD204B_GT_TO_RX_LANESEL(x)      (((x) >> 0) & 0xFF)
@@ -249,6 +220,10 @@ typedef struct
 /******************************************************************************/
 int32_t jesd204b_gt_read(uint32_t reg_addr, uint32_t *reg_data);
 int32_t jesd204b_gt_write(uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd204b_gt_txrx_read(uint8_t tx_or_rx, uint32_t reg_addr, uint32_t *reg_data);
+int32_t jesd204b_gt_txrx_write(uint8_t tx_or_rx, uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd204b_gt_txrx_status(uint8_t tx_or_rx, uint8_t first_lane,
+  uint8_t last_lane, uint32_t status);
 int32_t jesd204b_gt_initialize(uint32_t baseaddr, uint32_t num_of_lanes);
 int32_t jesd204b_gt_setup(jesd204b_gt_link link_param);
 
