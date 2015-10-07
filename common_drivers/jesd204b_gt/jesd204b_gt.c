@@ -117,8 +117,11 @@ int32_t jesd204b_gt_txrx_status(uint8_t tx_or_rx, uint8_t first_lane,
       if((data & status) != status)
       {
         lane_status_all = 0;
-        xil_printf("JESD204B-GT-%s[%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n\r",
-          ((tx_or_rx == JESD204B_GT_TX) ? "TX" : "RX"), lane, data, status);
+        if(lane_timeout <= 0)
+        {
+          xil_printf("JESD204B-GT-%s[%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n\r",
+            ((tx_or_rx == JESD204B_GT_TX) ? "TX" : "RX"), lane, data, status);
+        }
       }
     }
     if(lane_timeout <= 0) break;
