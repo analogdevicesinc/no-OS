@@ -48,29 +48,10 @@
 #include "jesd204b_gt.h"
 #include "jesd204b_v51.h"
 
-#ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
-#else
-#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
-#endif
-#define AD9625_CORE_BASEADDR	XPAR_AXI_AD9625_CORE_BASEADDR
-#define AD9625_DMA_BASEADDR		XPAR_AXI_AD9625_DMA_BASEADDR
-#define AD9625_JESD_BASEADDR	XPAR_AXI_AD9625_JESD_BASEADDR
-#define AD9625_GT_GT_BASEADDR	XPAR_AXI_AD9625_GT_BASEADDR
-
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
+	jesd204b_gt_link jesd204b_gt_link;
 	jesd204b_state jesd204b_st;
-
-	ad9625_setup(SPI_DEVICE_ID, 0);
-
-	jesd204b_gt_st.use_cpll = 1;
-	jesd204b_gt_st.rx_sys_clk_sel = 0;
-	jesd204b_gt_st.rx_out_clk_sel = 2;
-	jesd204b_gt_st.tx_sys_clk_sel = 0;
-	jesd204b_gt_st.tx_out_clk_sel = 2;
-	jesd204b_gt_setup(AD9625_GT_GT_BASEADDR, jesd204b_gt_st);
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;
@@ -78,15 +59,34 @@ int main(void)
 	jesd204b_st.frames_per_multiframe = 32;
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
-	jesd204b_setup(AD9625_JESD_BASEADDR, jesd204b_st);
+  jesd204b_gt_link.tx_or_rx = JESD204B_GT_RX;
+  jesd204b_gt_link.first_lane = 0;
+  jesd204b_gt_link.last_lane = 7;
+  jesd204b_gt_link.qpll_or_cpll = JESD204B_GT_CPLL;
+  jesd204b_gt_link.lpm_or_dfe = JESD204B_GT_DFE;
+  jesd204b_gt_link.ref_clk = 625;
+  jesd204b_gt_link.lane_rate = 6250;
+  jesd204b_gt_link.sysref_int_or_ext = JESD204B_GT_SYSREF_INT;
+  jesd204b_gt_link.sys_clk_sel = 0;
+  jesd204b_gt_link.out_clk_sel  = 2;
+  jesd204b_gt_link.gth_or_gtx = 0;
 
-	jesd204b_gt_clk_enable(JESD204B_GT_RX);
+  jesd204b_gt_initialize(XPAR_AXI_FMCADC5_0_GT_BASEADDR, 8);
+	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 0);
+	jesd204b_setup(XPAR_AXI_AD9625_0_JESD_BASEADDR, jesd204b_st);
+	jesd204b_gt_setup(jesd204b_gt_link);
+
+  jesd204b_gt_initialize(XPAR_AXI_FMCADC5_1_GT_BASEADDR, 8);
+	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 1);
+	jesd204b_setup(XPAR_AXI_AD9625_1_JESD_BASEADDR, jesd204b_st);
+	jesd204b_gt_setup(jesd204b_gt_link);
 
 	ad9625_spi_write(AD9625_REG_TEST_CNTRL, 0x0F);
 	ad9625_spi_write(AD9625_REG_OUTPUT_MODE, 0x00);
 	ad9625_spi_write(AD9625_REG_TRANSFER, 0x01);
 
-	adc_setup(AD9625_CORE_BASEADDR, AD9625_DMA_BASEADDR, 1);
+	adc_setup(XPAR_AXI_AD9625_0_CORE_BASEADDR, XPAR_AXI_AD9625_DMA_BASEADDR, 1);
+	adc_setup(XPAR_AXI_AD9625_1_CORE_BASEADDR, XPAR_AXI_AD9625_DMA_BASEADDR, 1);
 
 	xil_printf("Done.\n\r");
 
