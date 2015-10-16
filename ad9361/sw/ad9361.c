@@ -4134,13 +4134,18 @@ static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 
 	data_clk = (phy->pdata->rx2tx2 ? 4 : 2) * rx_path_clks[RX_SAMPL_FREQ];
 
-	for (i = ADC_FREQ; i < RX_SAMPL_CLK; i++) {
-		if (abs(rx_path_clks[i] - data_clk) < 4)
+	for (i = 1; i <= 3; i++) {
+		if (abs(rx_path_clks[ADC_FREQ] / i - data_clk) < 4)
+			return 0;
+	}
+
+	for (i = 1; i <= 4; i++) {
+		if (abs((rx_path_clks[R2_FREQ] >> i) - data_clk) < 4)
 			return 0;
 	}
 
 	dev_err(&phy->spi->dev, "%s: Failed - at least one of the clock rates"
-		"must be equal to the DATA_CLK (lvds) rate", __func__);
+		" must be equal to the DATA_CLK (lvds) rate", __func__);
 
 	return -EINVAL;
 }
