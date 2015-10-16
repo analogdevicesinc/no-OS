@@ -4019,12 +4019,6 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 	uint32_t val;
 	uint32_t tmp;
 
-	// 	if (phy->curr_ensm_state == ensm_state) {
-	// 		dev_dbg(dev, "Nothing to do, device is already in %d state",
-	// 			ensm_state);
-	// 		goto out;
-	// 	}
-
 	dev_dbg(dev, "Device is in %x state, moving to %x", phy->curr_ensm_state,
 		ensm_state);
 
@@ -4096,6 +4090,11 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 			phy->pdata->fdd ? "FDD" : "TDD");
 		goto out;
 	}
+
+	if (!phy->pdata->fdd && !pinctrl && !phy->pdata->tdd_use_dual_synth &&
+			(ensm_state == ENSM_STATE_TX || ensm_state == ENSM_STATE_RX))
+		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
+				TXNRX_SPI_CTRL, ensm_state == ENSM_STATE_TX);
 
 	rc = ad9361_spi_write(spi, REG_ENSM_CONFIG_1, val);
 	if (rc)
@@ -4433,9 +4432,9 @@ int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 				(pd->fdd_independent_mode ? FDD_EXTERNAL_CTRL_ENABLE : 0));
 	else
 		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2, val |
-		(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
-		(pd->tdd_use_dual_synth ? 0 :
-		(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : TXNRX_SPI_CTRL)));
+				(pd->tdd_use_dual_synth ? DUAL_SYNTH_MODE : 0) |
+				(pd->tdd_use_dual_synth ? 0 :
+				(pinctrl ? SYNTH_ENABLE_PIN_CTRL_MODE : 0)));
 
 	return ret;
 }
