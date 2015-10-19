@@ -127,13 +127,13 @@ int32_t adc_setup(uint32_t adc_addr, uint32_t dma_addr,  uint8_t ch_no)
 	adc_read(ADC_REG_STATUS, &status);
 	if(status == 0x0)
 	{
-		xil_printf("ADC Core Status errors.\n\r");
+		xil_printf("ADC Core Status errors.\n");
 
 		return -1;
 	}
 	else
 	{
-		xil_printf("ADC Core successfully initialized.\n\r");
+		xil_printf("ADC Core successfully initialized.\n");
 
 		return 0;
 	}

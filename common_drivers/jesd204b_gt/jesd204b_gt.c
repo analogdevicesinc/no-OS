@@ -119,7 +119,7 @@ int32_t jesd204b_gt_txrx_status(uint8_t tx_or_rx, uint8_t first_lane,
         lane_status_all = 0;
         if(lane_timeout <= 0)
         {
-          xil_printf("JESD204B-GT-%s[%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n\r",
+          xil_printf("JESD204B-GT-%s[%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n",
             ((tx_or_rx == JESD204B_GT_TX) ? "TX" : "RX"), lane, data, status);
         }
       }
@@ -140,7 +140,7 @@ int32_t jesd204b_gt_setup(jesd204b_gt_link link_param)
 
   if(jesd204b_gt_init_done != 1)
   {
-    xil_printf("JESD204B GT run initialize before setup.\n\r");
+    xil_printf("JESD204B GT run initialize before setup.\n");
     return(-1);
   }
 
@@ -243,7 +243,7 @@ int32_t jesd204b_gt_initialize(uint32_t baseaddr, uint32_t num_of_lanes)
   jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
   if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
   {
-    xil_printf("JESD204B GT Version %d is NOT supported.\n\r", jesd204b_gt_version);
+    xil_printf("JESD204B GT Version %d is NOT supported.\n", jesd204b_gt_version);
     return(-1);
   }
 
