@@ -45,6 +45,11 @@
 #include "platform_drivers.h"
 #include "ad9625.h"
 
+/******************************************************************************/
+/************************ Variables Definitions *******************************/
+/******************************************************************************/
+uint8_t spi_is_initialized = 0;
+
 /***************************************************************************//**
 * @brief ad9625_spi_read
 *******************************************************************************/
@@ -92,7 +97,10 @@ int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select)
 	uint8_t chip_id;
 	uint8_t pll_stat;
 
-	spi_init(spi_device_id, 0, 0);
+	if (!spi_is_initialized) {
+		spi_init(spi_device_id, 0, 0);
+		spi_is_initialized = 1;
+	}
 
 	ad9625_spi_write(slave_select, AD9625_REG_CHIP_PORT_CONF, 0x24);
 	ad9625_spi_write(slave_select, AD9625_REG_TRANSFER, 0x01);
