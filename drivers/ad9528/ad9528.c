@@ -247,7 +247,7 @@ int32_t ad9528_setup(uint32_t spi_device_id,
 		return ret;
 
 	if ((reg_data & 0xFFFFFF) != AD9528_SPI_MAGIC) {
-		xil_printf("AD9523 SPI Read Verify failed (0x%X).\n", reg_data);
+		xil_printf("AD9528 SPI Read Verify failed (0x%X).\n", reg_data);
 		return -1;
 	}
 
