@@ -71,13 +71,29 @@ int main(void)
 	jesd204b_gt_link.out_clk_sel = 2;
 	jesd204b_gt_link.gth_or_gtx = 0;
 
-	jesd204b_gt_initialize(XPAR_AXI_FMCADC5_0_GT_BASEADDR, 8);
+  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
+  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x0c), 0x1f00); // direction -gpio
+  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
+  if((Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x08) & 0x1000) != 0x1000)
+  {
+	  xil_printf("GPIO Power Good NOT set!.\n\r");
+    return(-1);
+  }
+
+  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
+  mdelay(1);
+
+  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0044); // data -gpio
+  mdelay(100);
+
 	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 0);
+	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 1);
+
+	jesd204b_gt_initialize(XPAR_AXI_FMCADC5_0_GT_BASEADDR, 8);
 	jesd204b_setup(XPAR_AXI_AD9625_0_JESD_BASEADDR, jesd204b_st);
 	jesd204b_gt_setup(jesd204b_gt_link);
 
 	jesd204b_gt_initialize(XPAR_AXI_FMCADC5_1_GT_BASEADDR, 8);
-	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 1);
 	jesd204b_setup(XPAR_AXI_AD9625_1_JESD_BASEADDR, jesd204b_st);
 	jesd204b_gt_setup(jesd204b_gt_link);
 

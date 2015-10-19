@@ -126,7 +126,11 @@ int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select)
 	}
 
 	ad9625_spi_read(slave_select, AD9625_REG_PLL_STATUS, &pll_stat);
-	xil_printf("AD9625 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
+	if((pll_stat & 0x80) != 0x80)
+	{
+		xil_printf("Error: AD9625 PLL is NOT locked (0x%x).\n", chip_id);
+		return -1;
+	}
 
 	xil_printf("AD9625 successfully initialized.\n");
 
