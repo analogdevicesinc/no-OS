@@ -45,15 +45,12 @@
 #include "platform_drivers.h"
 #include "ad9625.h"
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-uint8_t ad9625_slave_select;
-
 /***************************************************************************//**
 * @brief ad9625_spi_read
 *******************************************************************************/
-int32_t ad9625_spi_read(uint16_t reg_addr, uint8_t *reg_data)
+int32_t ad9625_spi_read(uint8_t slave_select,
+						uint16_t reg_addr,
+						uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -62,7 +59,7 @@ int32_t ad9625_spi_read(uint16_t reg_addr, uint8_t *reg_data)
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(ad9625_slave_select, buf, 3);
+	ret = spi_write_and_read(slave_select, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -71,7 +68,9 @@ int32_t ad9625_spi_read(uint16_t reg_addr, uint8_t *reg_data)
 /***************************************************************************//**
 * @brief ad9625_spi_write
 *******************************************************************************/
-int32_t ad9625_spi_write(uint16_t reg_addr, uint8_t reg_data)
+int32_t ad9625_spi_write(uint8_t slave_select,
+						 uint16_t reg_addr,
+						 uint8_t reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -80,7 +79,7 @@ int32_t ad9625_spi_write(uint16_t reg_addr, uint8_t reg_data)
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(ad9625_slave_select, buf, 3);
+	ret = spi_write_and_read(slave_select, buf, 3);
 
 	return ret;
 }
@@ -93,33 +92,32 @@ int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select)
 	uint8_t chip_id;
 	uint8_t pll_stat;
 
-	ad9625_slave_select = slave_select;
 	spi_init(spi_device_id, 0, 0);
 
-	ad9625_spi_write(AD9625_REG_CHIP_PORT_CONF, 0x24);
-	ad9625_spi_write(AD9625_REG_TRANSFER, 0x01);
+	ad9625_spi_write(slave_select, AD9625_REG_CHIP_PORT_CONF, 0x24);
+	ad9625_spi_write(slave_select, AD9625_REG_TRANSFER, 0x01);
 	mdelay(10);
 
-	ad9625_spi_write(AD9625_REG_POWER_MODE, 0x00);
-	ad9625_spi_write(AD9625_REG_TRANSFER, 0x01);
-	ad9625_spi_write(AD9625_REG_JESD204B_LINK_CNTRL_1, 0x15);
-	ad9625_spi_write(AD9625_REG_JESD204B_LANE_POWER_MODE, 0x00);
-	ad9625_spi_write(AD9625_REG_DIVCLK_OUT_CNTRL, 0x11);
-	ad9625_spi_write(AD9625_REG_TEST_CNTRL, 0x00);
-	ad9625_spi_write(AD9625_REG_OUTPUT_MODE, 0x00);
-	ad9625_spi_write(AD9625_REG_OUTPUT_ADJUST, 0x10);
-	ad9625_spi_write(AD9625_REG_JESD204B_LINK_CNTRL_1, 0x14);
-	ad9625_spi_write(AD9625_REG_TRANSFER, 0x01);
+	ad9625_spi_write(slave_select, AD9625_REG_POWER_MODE, 0x00);
+	ad9625_spi_write(slave_select, AD9625_REG_TRANSFER, 0x01);
+	ad9625_spi_write(slave_select, AD9625_REG_JESD204B_LINK_CNTRL_1, 0x15);
+	ad9625_spi_write(slave_select, AD9625_REG_JESD204B_LANE_POWER_MODE, 0x00);
+	ad9625_spi_write(slave_select, AD9625_REG_DIVCLK_OUT_CNTRL, 0x11);
+	ad9625_spi_write(slave_select, AD9625_REG_TEST_CNTRL, 0x00);
+	ad9625_spi_write(slave_select, AD9625_REG_OUTPUT_MODE, 0x00);
+	ad9625_spi_write(slave_select, AD9625_REG_OUTPUT_ADJUST, 0x10);
+	ad9625_spi_write(slave_select, AD9625_REG_JESD204B_LINK_CNTRL_1, 0x14);
+	ad9625_spi_write(slave_select, AD9625_REG_TRANSFER, 0x01);
 	mdelay(10);
 
-	ad9625_spi_read(AD9625_REG_CHIP_ID, &chip_id);
+	ad9625_spi_read(slave_select, AD9625_REG_CHIP_ID, &chip_id);
 	if(chip_id != AD9625_CHIP_ID)
 	{
 		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
-	ad9625_spi_read(AD9625_REG_PLL_STATUS, &pll_stat);
+	ad9625_spi_read(slave_select, AD9625_REG_PLL_STATUS, &pll_stat);
 	xil_printf("AD9625 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
 
 	xil_printf("AD9625 successfully initialized.\n");

@@ -82,9 +82,9 @@ int main(void)
 
 	jesd204b_gt_clk_enable(JESD204B_GT_RX);
 
-	ad9625_spi_write(AD9625_REG_TEST_CNTRL, 0x0F);
-	ad9625_spi_write(AD9625_REG_OUTPUT_MODE, 0x00);
-	ad9625_spi_write(AD9625_REG_TRANSFER, 0x01);
+	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
+	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
+	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x01);
 
 	adc_setup(AD9625_CORE_BASEADDR, AD9625_DMA_BASEADDR, 1);
 
