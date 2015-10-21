@@ -218,6 +218,8 @@ void adc4_gpio_ctl(uint32_t device_id)
 	mdelay(10);
 }
 
+extern uint8_t spi_decoded_cs;
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
@@ -228,9 +230,11 @@ int main(void)
 
 	adc4_gpio_ctl(GPIO_DEVICE_ID);
 
+	spi_decoded_cs = 1;
+
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
-	ad9680_setup(SPI_DEVICE_ID, 2);
+	ad9680_setup(SPI_DEVICE_ID, 1);
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;
