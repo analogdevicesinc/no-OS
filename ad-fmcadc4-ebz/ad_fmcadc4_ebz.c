@@ -59,6 +59,7 @@
 #define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 #define AD9680_CORE_0_BASEADDR	XPAR_AXI_AD9680_CORE_0_BASEADDR
+#define AD9680_CORE_1_BASEADDR	XPAR_AXI_AD9680_CORE_1_BASEADDR
 #define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
 #define AD9680_JESD_BASEADDR	XPAR_AXI_AD9680_JESD_BASEADDR
 #define FMCADC4_GT_BASEADDR		XPAR_AXI_FMCADC4_GT_BASEADDR
@@ -227,6 +228,8 @@ int main(void)
 {
 	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
+	adc_core ad9680_0;
+	adc_core ad9680_1;
 
 	adc4_gpio_ctl(GPIO_DEVICE_ID);
 
@@ -235,6 +238,8 @@ int main(void)
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
 	ad9680_setup(SPI_DEVICE_ID, 1);
+
+	ad9680_setup(SPI_DEVICE_ID, 2);
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;
@@ -256,11 +261,17 @@ int main(void)
 
 	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
 
-	adc_setup(AD9680_CORE_0_BASEADDR, AD9680_DMA_BASEADDR, 2);
+	ad9680_0.adc_baseaddr = AD9680_CORE_0_BASEADDR;
+	ad9680_0.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	adc_setup(ad9680_0, 2);
+
+	ad9680_1.adc_baseaddr = AD9680_CORE_0_BASEADDR;
+	ad9680_1.dmac_baseaddr = 0;
+	adc_setup(ad9680_1, 2);
 
 	xil_printf("Initialization done.\n\r");
 
-	adc_capture(16384, ADC_DDR_BASEADDR);
+	adc_capture(ad9680_0, 16384, ADC_DDR_BASEADDR);
 
 	xil_printf("Capture done.\n\r");
 
