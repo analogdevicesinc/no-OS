@@ -97,7 +97,7 @@ int32_t spi_init(uint32_t device_id,
 
 	XSpiPs_SetOptions(&spi_instance, spi_options);
 
-	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_256);
+	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
 #else
 	XSpi_Initialize(&spi_instance, device_id);
 	XSpi_Stop(&spi_instance);
