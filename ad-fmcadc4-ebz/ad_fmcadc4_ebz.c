@@ -233,7 +233,6 @@ int main(void)
 	spi_decoded_cs = 1;
 
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
-	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
 	ad9680_setup(SPI_DEVICE_ID, 1);
 
