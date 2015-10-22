@@ -3,7 +3,7 @@
 * @brief Header file of Platform Drivers.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -36,8 +36,8 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef PLATFORM_H_
-#define PLATFORM_H_
+#ifndef PLATFORM_DRIVERS_H_
+#define PLATFORM_DRIVERS_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/

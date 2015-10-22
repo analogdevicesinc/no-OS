@@ -3,7 +3,7 @@
 * @brief Implementation of Platform Drivers.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -49,12 +49,7 @@
 #include <xspi.h>
 #include <xgpio.h>
 #include <xgpio_l.h>
-static inline void usleep(unsigned long usleep)
-{
-	unsigned long delay = 0;
-
-	for(delay = 0; delay < usleep; delay++);
-}
+#include <microblaze_sleep.h>
 #endif
 #include "platform_drivers.h"
 
@@ -66,12 +61,12 @@ XSpiPs_Config	*spi_config;
 XSpiPs			spi_instance;
 XGpioPs_Config	*gpio_config;
 XGpioPs			gpio_instance;
+uint8_t			spi_decoded_cs = 0;
 #else
 XSpi_Config		*spi_config;
 XSpi			spi_instance;
 XGpio_Config	*gpio_config;
 #endif
-uint8_t			spi_decoded_cs = 0;
 
 /***************************************************************************//**
 * @brief spi_init
@@ -207,7 +202,11 @@ void gpio_data(uint8_t pin, uint8_t data)
 *******************************************************************************/
 void mdelay(uint32_t msecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
+#else
+	MB_Sleep(msecs);
+#endif
 }
 
 /***************************************************************************//**
