@@ -51,18 +51,29 @@
 #include <xgpiops.h>
 #include <xspips.h>
 
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 #define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_OFFSET				54 + 32
+#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 #define AD9680_CORE_0_BASEADDR	XPAR_AXI_AD9680_CORE_0_BASEADDR
 #define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
 #define AD9680_JESD_BASEADDR	XPAR_AXI_AD9680_JESD_BASEADDR
 #define FMCADC4_GT_BASEADDR		XPAR_AXI_FMCADC4_GT_BASEADDR
-#define AD9528_RSTN_GPIO		86
-#define AD9528_STATUS0_GPIO		87
+#define GPIO_AD9528_RSTN		GPIO_OFFSET + 0
+#define GPIO_AD9528_STATUS		GPIO_OFFSET + 1
+#define GPIO_AD9680_1_FDA		GPIO_OFFSET + 2
+#define GPIO_AD9680_1_FDB		GPIO_OFFSET + 3
+#define GPIO_AD9680_2_FDA		GPIO_OFFSET + 4
+#define GPIO_AD9680_2_FDB		GPIO_OFFSET + 5
+
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+extern uint8_t spi_decoded_cs;
+
 struct ad9528_channel_spec ad9528_channels[] =
 {
 	{
@@ -134,91 +145,80 @@ struct ad9528_channel_spec ad9528_channels[] =
 
 struct ad9528_platform_data ad9528_pdata_lpc =
 {
-		80000000,	// vcxo_freq
-		1,			// spi3wire
+	80000000,	// vcxo_freq
+	1,			// spi3wire
 
-		/* REFA / REFB input configuration */
-		0,	// refa_en
-		0,	// refb_en
+	/* REFA / REFB input configuration */
+	0,	// refa_en
+	0,	// refb_en
 
-		/* Differential/ Single-Ended Input Configuration */
-		1,	// refa_diff_rcv_en
-		0,	// refb_diff_rcv_en
-		0,	// osc_in_diff_en
+	/* Differential/ Single-Ended Input Configuration */
+	1,	// refa_diff_rcv_en
+	0,	// refb_diff_rcv_en
+	0,	// osc_in_diff_en
 
-		/*
-		 * Valid if differential input disabled
-		 * if false defaults to pos input
-		 */
-		0,	// refa_cmos_neg_inp_en
-		0,	// refb_cmos_neg_inp_en
-		1,	// osc_in_cmos_neg_inp_en
+	/*
+	 * Valid if differential input disabled
+	 * if false defaults to pos input
+	 */
+	0,	// refa_cmos_neg_inp_en
+	0,	// refb_cmos_neg_inp_en
+	1,	// osc_in_cmos_neg_inp_en
 
-		/* PLL1 Setting */
-		1,		// refa_r_div
-		1,		// refb_r_div
-		8,		// pll1_feedback_div
-		1,		// pll1_feedback_src_vcxo
-		10000,	// pll1_charge_pump_current_nA
-		0,		// pll1_bypass_en
+	/* PLL1 Setting */
+	1,		// refa_r_div
+	1,		// refb_r_div
+	8,		// pll1_feedback_div
+	1,		// pll1_feedback_src_vcxo
+	10000,	// pll1_charge_pump_current_nA
+	0,		// pll1_bypass_en
 
-		/* Reference */
-		REF_MODE_STAY_ON_REFB,	// ref_mode
-		SYSREF_SRC_INTERNAL,	// sysref_src
-		20,						// sysref_k_div
+	/* Reference */
+	REF_MODE_STAY_ON_REFB,	// ref_mode
+	SYSREF_SRC_INTERNAL,	// sysref_src
+	20,						// sysref_k_div
 
-		/* PLL2 Setting */
-		805000,	// pll2_charge_pump_current_nA
-		0,	// pll2_ndiv_a_cnt
-		25,	// pll2_ndiv_b_cnt
-		0,	// pll2_freq_doubler_en
-		2,	// pll2_r1_div
-		25,	// pll2_n2_div
-		4,	// pll2_vco_diff_m1 /* 3..5 */
+	/* PLL2 Setting */
+	805000,	// pll2_charge_pump_current_nA
+	0,	// pll2_ndiv_a_cnt
+	25,	// pll2_ndiv_b_cnt
+	0,	// pll2_freq_doubler_en
+	2,	// pll2_r1_div
+	25,	// pll2_n2_div
+	4,	// pll2_vco_diff_m1 /* 3..5 */
 
-		/* Loop Filter PLL2 */
-		RPOLE2_900_OHM,	// rpole2
-		RZERO_3250_OHM,	// rzero
-		CPOLE1_16_PF,	// cpole1
-		0,				// rzero_bypass_en;
+	/* Loop Filter PLL2 */
+	RPOLE2_900_OHM,	// rpole2
+	RZERO_3250_OHM,	// rzero
+	CPOLE1_16_PF,	// cpole1
+	0,				// rzero_bypass_en;
 
-		/* Output Channel Configuration */
-		ARRAY_SIZE(ad9528_channels),	// num_channels
-		ad9528_channels,				// *channels
+	/* Output Channel Configuration */
+	ARRAY_SIZE(ad9528_channels),	// num_channels
+	ad9528_channels,				// *channels
 };
 
 /***************************************************************************//**
 * @brief adc4_gpio_ctl
-	ch2 gpios:
-		ad9680_2_fdb	6
-		ad9680_2_fda	5
-		ad9680_1_fdb	4
-		ad9680_1_fda	3
-		ad9528_status	1
-		ad9528_rstn		0
 *******************************************************************************/
 void adc4_gpio_ctl(uint32_t device_id)
 {
-	XGpioPs_Config	*gpio_config;
-	XGpioPs			gpio_instance;
+	gpio_init(device_id);
 
-	gpio_config = XGpioPs_LookupConfig(device_id);
-	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
+	gpio_direction(GPIO_AD9528_RSTN, GPIO_OUTPUT);
+	gpio_direction(GPIO_AD9528_STATUS, GPIO_OUTPUT);
+	gpio_direction(GPIO_AD9680_1_FDA, GPIO_INPUT);
+	gpio_direction(GPIO_AD9680_1_FDB, GPIO_INPUT);
+	gpio_direction(GPIO_AD9680_2_FDA, GPIO_INPUT);
+	gpio_direction(GPIO_AD9680_2_FDB, GPIO_INPUT);
 
-	XGpioPs_SetDirectionPin(&gpio_instance, AD9528_RSTN_GPIO, 1);
-	XGpioPs_SetOutputEnablePin(&gpio_instance, AD9528_RSTN_GPIO, 1);
-	XGpioPs_SetDirectionPin(&gpio_instance, AD9528_STATUS0_GPIO, 1);
-	XGpioPs_SetOutputEnablePin(&gpio_instance, AD9528_STATUS0_GPIO, 1);
-
-	XGpioPs_WritePin(&gpio_instance, AD9528_STATUS0_GPIO, 0);
-	XGpioPs_WritePin(&gpio_instance, AD9528_RSTN_GPIO, 0);
+	gpio_set_value(GPIO_AD9528_STATUS, 0);
+	gpio_set_value(GPIO_AD9528_RSTN, 0);
 	mdelay(10);
 
-	XGpioPs_WritePin(&gpio_instance, AD9528_RSTN_GPIO, 1);
+	gpio_set_value(GPIO_AD9528_RSTN, 1);
 	mdelay(10);
 }
-
-extern uint8_t spi_decoded_cs;
 
 /***************************************************************************//**
 * @brief main
@@ -232,6 +232,7 @@ int main(void)
 
 	spi_decoded_cs = 1;
 
+	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
 	ad9680_setup(SPI_DEVICE_ID, 1);
