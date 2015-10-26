@@ -280,6 +280,14 @@ int main(void)
 	ad9680_1.dmac_baseaddr = 0;
 	adc_setup(ad9680_1, 2);
 
+	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
+
+  adc_pn_mon(ad9680_0, 2, 1);
+  adc_pn_mon(ad9680_1, 2, 1);
+
 	xil_printf("Initialization done.\n\r");
 
 	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);

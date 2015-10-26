@@ -114,14 +114,14 @@ int32_t ad9680_setup(uint32_t spi_device_id, uint8_t slave_select)
 	ad9680_spi_read(slave_select, AD9680_REG_CHIP_ID_LOW, &chip_id);
 	if(chip_id != AD9680_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
+		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
 	ad9680_spi_read(slave_select, AD9680_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
-	xil_printf("AD9680 PLL is %s.\n\r", pll_stat & 0x80 ? "locked" : "unlocked");
+	xil_printf("AD9680 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
 
-	xil_printf("AD9680 successfully initialized.\n\r");
+	xil_printf("AD9680 successfully initialized.\n");
 
 	return 0;
 }

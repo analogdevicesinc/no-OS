@@ -59,6 +59,9 @@
 #define ADC_DDR_EDGESEL			(1 << 1)
 #define ADC_PIN_MODE			(1 << 0)
 
+#define ADC_REG_CLOCK_COUNT			0x0054
+#define ADC_REG_CLOCK_RATIO			0x0058
+
 #define ADC_REG_STATUS			0x005C
 #define ADC_MUX_PN_ERR			(1 << 3)
 #define ADC_MUX_PN_OOS			(1 << 2)
