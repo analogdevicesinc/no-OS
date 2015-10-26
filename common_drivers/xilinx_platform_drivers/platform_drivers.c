@@ -93,6 +93,13 @@ int32_t spi_init(uint32_t device_id,
 	XSpiPs_SetOptions(&spi_instance, spi_options);
 
 	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
+
+	/* FIXME: Temporary 15.2 Fix */
+	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
+
+	XSpiPs_SetOptions(&spi_instance, spi_options);
+
+	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
 #else
 	XSpi_Initialize(&spi_instance, device_id);
 
