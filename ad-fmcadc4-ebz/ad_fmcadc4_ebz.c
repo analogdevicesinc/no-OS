@@ -235,6 +235,13 @@ int main(void)
 
 	spi_decoded_cs = 1;
 
+#ifdef MODE_1_24G
+	ad9528_pdata_lpc.pll2_ndiv_a_cnt = 1;
+	ad9528_pdata_lpc.pll2_ndiv_b_cnt = 23;
+	ad9528_pdata_lpc.pll2_n2_div = 31;
+	ad9528_pdata_lpc.pll2_vco_diff_m1 = 3;
+#endif
+
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
 	jesd204b_gt_initialize(FMCADC4_GT_BASEADDR, 8);
