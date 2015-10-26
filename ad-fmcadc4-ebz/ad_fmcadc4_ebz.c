@@ -226,7 +226,7 @@ void adc4_gpio_ctl(uint32_t device_id)
 *******************************************************************************/
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
+	jesd204b_gt_link ad9680_gt_link;
 	jesd204b_state jesd204b_st;
 	adc_core ad9680_0;
 	adc_core ad9680_1;
@@ -236,6 +236,8 @@ int main(void)
 	spi_decoded_cs = 1;
 
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
+
+	jesd204b_gt_initialize(FMCADC4_GT_BASEADDR, 8);
 
 	ad9680_setup(SPI_DEVICE_ID, 1);
 
@@ -249,29 +251,37 @@ int main(void)
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 
-	jesd204b_gt_st.num_of_lanes = 4;
-	jesd204b_gt_st.use_cpll = 0;
-	jesd204b_gt_st.rx_sys_clk_sel = 3;
-	jesd204b_gt_st.rx_out_clk_sel = 4;
-	jesd204b_gt_st.tx_sys_clk_sel = 3;
-	jesd204b_gt_st.tx_out_clk_sel = 4;
-	jesd204b_gt_setup(FMCADC4_GT_BASEADDR, jesd204b_gt_st);
+	ad9680_gt_link.tx_or_rx = JESD204B_GT_RX;
+	ad9680_gt_link.first_lane = 0;
+	ad9680_gt_link.last_lane = 7;
+	ad9680_gt_link.qpll_or_cpll = JESD204B_GT_QPLL;
+	ad9680_gt_link.lpm_or_dfe = JESD204B_GT_DFE;
+	ad9680_gt_link.ref_clk = 500;
+	ad9680_gt_link.lane_rate = 10000;
+	ad9680_gt_link.sysref_int_or_ext = JESD204B_GT_SYSREF_EXT;
+	ad9680_gt_link.sys_clk_sel = 3;
+	ad9680_gt_link.out_clk_sel = 4;
+	ad9680_gt_link.gth_or_gtx = 0;
 
-	jesd204b_gt_clk_enable(JESD204B_GT_RX, 0);
-
-	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
+	jesd204b_gt_setup(ad9680_gt_link);
 
 	ad9680_0.adc_baseaddr = AD9680_CORE_0_BASEADDR;
 	ad9680_0.dmac_baseaddr = AD9680_DMA_BASEADDR;
 	adc_setup(ad9680_0, 2);
 
-	ad9680_1.adc_baseaddr = AD9680_CORE_0_BASEADDR;
+	ad9680_1.adc_baseaddr = AD9680_CORE_1_BASEADDR;
 	ad9680_1.dmac_baseaddr = 0;
 	adc_setup(ad9680_1, 2);
 
 	xil_printf("Initialization done.\n\r");
 
-	adc_capture(ad9680_0, 16384, ADC_DDR_BASEADDR);
+	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x0F);
+
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
+
+	adc_capture(ad9680_0, 32768, ADC_DDR_BASEADDR);
 
 	xil_printf("Capture done.\n\r");
 
