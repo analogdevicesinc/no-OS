@@ -294,12 +294,7 @@ int32_t adc_pn_mon(adc_core core,
 		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_ENABLE);
 		adc_set_pnsel(core, index, sel);
 	}
-	mdelay(100);
-
-	for (index = 0; index < no_of_channels; index++) {
-		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
-	}
-	mdelay(100);
+	mdelay(1);
 
 	for (index = 0; index < no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
