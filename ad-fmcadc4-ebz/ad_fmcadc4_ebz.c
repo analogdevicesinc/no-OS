@@ -282,19 +282,23 @@ int main(void)
 
 	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
 	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(1, AD9680_REG_OUTPUT_MODE, 0);
 	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
 	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0);
 
-  adc_pn_mon(ad9680_0, 2, 1);
-  adc_pn_mon(ad9680_1, 2, 1);
+	adc_pn_mon(ad9680_0, 2, 1);
+	adc_pn_mon(ad9680_1, 2, 1);
 
 	xil_printf("Initialization done.\n\r");
 
 	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
 	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x0F);
+	ad9680_spi_write(1, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
 	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
+	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	adc_capture(ad9680_0, 32768, ADC_DDR_BASEADDR);
 
