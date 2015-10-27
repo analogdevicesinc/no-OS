@@ -112,11 +112,11 @@ void adc_dmac_write(adc_core core,
 /***************************************************************************//**
 * @brief adc_setup
 *******************************************************************************/
-int32_t adc_setup(adc_core core, uint8_t ch_no)
+int32_t adc_setup(adc_core core, uint8_t no_of_channels)
 {
 	uint8_t	 index;
 	uint32_t reg_data;
-  uint32_t adc_clock;
+	uint32_t adc_clock;
 
 	adc_read(core, ADC_REG_ID, &reg_data);
 	if (reg_data)
@@ -124,13 +124,14 @@ int32_t adc_setup(adc_core core, uint8_t ch_no)
 	else
 		core.master = 0;
 
-	adc_write(core, ADC_REG_RSTN, 0x00);
-	adc_write(core, ADC_REG_RSTN, 0x03);
-	for(index = 0; index < ch_no; index++) {
+	adc_write(core, ADC_REG_RSTN, 0);
+	adc_write(core, ADC_REG_RSTN, ADC_MMCM_RSTN | ADC_RSTN);
+
+	for(index = 0; index < no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_CNTRL(index), 0x51);
 	}
 
-	mdelay(1);
+	mdelay(100);
 
 	adc_read(core, ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
@@ -138,44 +139,14 @@ int32_t adc_setup(adc_core core, uint8_t ch_no)
 		return -1;
 	}
 
-  adc_read(core, ADC_REG_CLOCK_COUNT, &adc_clock);
-  adc_read(core, ADC_REG_CLOCK_RATIO, &reg_data);
+	adc_read(core, ADC_REG_CLK_FREQ, &adc_clock);
+	adc_read(core, ADC_REG_CLK_RATIO, &reg_data);
+	adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
+	adc_clock = adc_clock >> 16;
 
-  adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
-  adc_clock = adc_clock >> 16;
-
-	xil_printf("ADC Core Initialized (%dMHz).\n", adc_clock);
+	xil_printf("ADC Core Initialized (%d MHz).\n", adc_clock);
 
 	return 0;
-}
-
-int32_t adc_pn_mon(adc_core core, uint8_t no_of_channels, uint32_t pn23_pn9_n) {
-
-  uint32_t n;
-  uint32_t reg_data;
-  int32_t pn_errors;
-
-  for (n = 0; n < no_of_channels; n++) {
-    adc_write(core, ADC_REG_CHAN_CNTRL(n), 0x1);
-    adc_write(core, ADC_REG_CHAN_CNTRL_3(n), ADC_ADC_PN_SEL(pn23_pn9_n));
-  }
-  mdelay(1);
-
-  for (n = 0; n < no_of_channels; n++) {
-    adc_write(core, ADC_REG_CHAN_STATUS(n), 0xff);
-  }
-  mdelay(100);
-
-  pn_errors = 0;
-  for (n = 0; n < no_of_channels; n++) {
-    adc_read(core, ADC_REG_CHAN_STATUS(n), &reg_data);
-    if (reg_data != 0) {
-      pn_errors = -1;
-      xil_printf("ADC PN Status: %d, %d, 0x%02x!\n", n, pn23_pn9_n, reg_data);
-    }
-  }
-
-  return(pn_errors);
 }
 
 #ifdef ADC_DMAC_INTERRUPTS
@@ -306,4 +277,42 @@ int32_t adc_set_pnsel(adc_core core,
 	adc_write(core, ADC_REG_CHAN_CNTRL_3(channel), reg);
 
 	return 0;
+}
+
+/***************************************************************************//**
+ * @brief adc_pn_mon
+*******************************************************************************/
+int32_t adc_pn_mon(adc_core core,
+				   uint8_t no_of_channels,
+				   enum adc_pn_sel sel)
+{
+	uint8_t	index;
+	uint32_t reg_data;
+	int32_t pn_errors = 0;
+
+	for (index = 0; index < no_of_channels; index++) {
+		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_ENABLE);
+		adc_set_pnsel(core, index, sel);
+	}
+	mdelay(100);
+
+	for (index = 0; index < no_of_channels; index++) {
+		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
+	}
+	mdelay(100);
+
+	for (index = 0; index < no_of_channels; index++) {
+		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
+	}
+	mdelay(100);
+
+	for (index = 0; index < no_of_channels; index++) {
+		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
+		if (reg_data != 0) {
+			pn_errors = -1;
+			xil_printf("ADC PN Status: %d, %d, 0x%02x!\n", index, sel, reg_data);
+		}
+	}
+
+	return pn_errors;
 }
