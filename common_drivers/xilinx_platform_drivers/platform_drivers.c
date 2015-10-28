@@ -234,6 +234,30 @@ int32_t gpio_set_value(uint8_t pin, uint8_t data)
 }
 
 /***************************************************************************//**
+ * @brief gpio_get_value
+*******************************************************************************/
+int32_t gpio_get_value(uint8_t pin, uint8_t *data)
+{
+#ifdef _XPARAMETERS_PS_H_
+	*data = XGpioPs_ReadPin(&gpio_instance, pin);
+#else
+	uint32_t channel = 1;
+	uint32_t config	 = 0;
+
+	/* We assume that pin 32 is the first pin from channel 2 */
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
+	}
+
+	config = XGpio_DiscreteRead(&gpio_instance, channel);
+	*data = (config & (1 << pin)) ? 1 : 0;
+#endif
+
+	return 0;
+}
+
+/***************************************************************************//**
 * @brief mdelay
 *******************************************************************************/
 void mdelay(uint32_t msecs)

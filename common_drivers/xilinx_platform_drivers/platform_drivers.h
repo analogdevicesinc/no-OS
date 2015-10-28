@@ -72,6 +72,7 @@ int32_t spi_write_and_read(uint8_t ss,
 int32_t gpio_init(uint32_t device_id);
 int32_t gpio_direction(uint8_t pin, uint8_t direction);
 int32_t gpio_set_value(uint8_t pin, uint8_t data);
+int32_t gpio_get_value(uint8_t pin, uint8_t *data);
 void mdelay(uint32_t msecs);
 uint64_t do_div(uint64_t* n, uint64_t base);
 #endif
