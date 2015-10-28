@@ -124,6 +124,7 @@ int main(void)
 	jesd204b_st.frames_per_multiframe = 32;
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
+
 	jesd204b_gt_link.tx_or_rx = JESD204B_GT_RX;
 	jesd204b_gt_link.first_lane = 0;
 	jesd204b_gt_link.last_lane = 7;
@@ -152,11 +153,11 @@ int main(void)
 
 	ad9625_0.adc_baseaddr = AD9625_CORE_0_BASEADDR;
 	ad9625_0.dmac_baseaddr = AD9625_DMA_BASEADDR;
-	adc_setup(ad9625_0, 2);
+	adc_setup(ad9625_0, 1);
 
 	ad9625_1.adc_baseaddr = AD9625_CORE_1_BASEADDR;
 	ad9625_1.dmac_baseaddr = 0;
-	adc_setup(ad9625_1, 2);
+	adc_setup(ad9625_1, 1);
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x5);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x0);
@@ -166,8 +167,8 @@ int main(void)
 	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x0);
 	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x1);
 
-	adc_pn_mon(ad9625_0, 2, ADC_PN23A);
-	adc_pn_mon(ad9625_1, 2, ADC_PN23A);
+	adc_pn_mon(ad9625_0, 1, ADC_PN23A);
+	adc_pn_mon(ad9625_1, 1, ADC_PN23A);
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
