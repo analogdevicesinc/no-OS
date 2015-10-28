@@ -93,13 +93,13 @@ int32_t adc5_gpio_ctl(uint32_t device_id)
 	gpio_set_value(GPIO_PWDN_0, 0);
 	gpio_set_value(GPIO_RST_1, 0);
 	gpio_set_value(GPIO_PWDN_1, 0);
+	mdelay(10);
 
 	gpio_get_value(GPIO_PWR_GOOD, &pwr_good);
 	if (!pwr_good) {
 		xil_printf("Error: GPIO Power Good NOT set.\n\r");
 		return -1;
 	}
-	mdelay(1);
 
 	gpio_set_value(GPIO_RST_0, 1);
 	gpio_set_value(GPIO_RST_1, 1);
@@ -157,6 +157,17 @@ int main(void)
 	ad9625_1.adc_baseaddr = AD9625_CORE_1_BASEADDR;
 	ad9625_1.dmac_baseaddr = 0;
 	adc_setup(ad9625_1, 2);
+
+	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x5);
+	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x0);
+	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x1);
+
+	ad9625_spi_write(1, AD9625_REG_TEST_CNTRL, 0x5);
+	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x0);
+	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x1);
+
+	adc_pn_mon(ad9625_0, 2, ADC_PN23A);
+	adc_pn_mon(ad9625_1, 2, ADC_PN23A);
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
