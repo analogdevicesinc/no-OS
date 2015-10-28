@@ -48,10 +48,75 @@
 #include "jesd204b_gt.h"
 #include "jesd204b_v51.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define AD9625_CORE_0_BASEADDR		XPAR_AXI_AD9625_0_CORE_BASEADDR
+#define AD9625_CORE_1_BASEADDR		XPAR_AXI_AD9625_1_CORE_BASEADDR
+#define AD9625_DMA_BASEADDR			XPAR_AXI_AD9625_DMA_BASEADDR
+#define AD9625_JESD_0_BASEADDR		XPAR_AXI_AD9625_0_JESD_BASEADDR
+#define AD9625_JESD_1_BASEADDR		XPAR_AXI_AD9625_1_JESD_BASEADDR
+#define FMCADC5_GT_0_BASEADDR		XPAR_AXI_FMCADC5_0_GT_BASEADDR
+#define FMCADC5_GT_1_BASEADDR		XPAR_AXI_FMCADC5_1_GT_BASEADDR
+#define GPIO_DEVICE_ID				XPAR_AXI_GPIO_DEVICE_ID
+#define GPIO_OFFSET					32
+#define GPIO_RST_0					GPIO_OFFSET + 2
+#define GPIO_PWDN_0					GPIO_OFFSET + 3
+#define GPIO_RST_1					GPIO_OFFSET + 6
+#define GPIO_PWDN_1					GPIO_OFFSET + 7
+#define GPIO_IRQ_0					GPIO_OFFSET + 8
+#define GPIO_FD_0					GPIO_OFFSET + 9
+#define GPIO_IRQ_1					GPIO_OFFSET + 10
+#define GPIO_FD_1					GPIO_OFFSET + 11
+#define GPIO_PWR_GOOD				GPIO_OFFSET + 12
+#define ADC_DDR_BASEADDR			XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
+
+/***************************************************************************//**
+* @brief adc5_gpio_ctl
+*******************************************************************************/
+int32_t adc5_gpio_ctl(uint32_t device_id)
+{
+	uint8_t pwr_good;
+
+	gpio_init(device_id);
+
+	gpio_direction(GPIO_RST_0, GPIO_OUTPUT);
+	gpio_direction(GPIO_PWDN_0, GPIO_OUTPUT);
+	gpio_direction(GPIO_RST_1, GPIO_OUTPUT);
+	gpio_direction(GPIO_PWDN_1, GPIO_OUTPUT);
+	gpio_direction(GPIO_IRQ_0, GPIO_INPUT);
+	gpio_direction(GPIO_FD_0, GPIO_INPUT);
+	gpio_direction(GPIO_IRQ_1, GPIO_INPUT);
+	gpio_direction(GPIO_FD_1, GPIO_INPUT);
+	gpio_direction(GPIO_PWR_GOOD, GPIO_INPUT);
+	gpio_set_value(GPIO_RST_0, 0);
+	gpio_set_value(GPIO_PWDN_0, 0);
+	gpio_set_value(GPIO_RST_1, 0);
+	gpio_set_value(GPIO_PWDN_1, 0);
+
+	gpio_get_value(GPIO_PWR_GOOD, &pwr_good);
+	if (!pwr_good) {
+		xil_printf("Error: GPIO Power Good NOT set.\n\r");
+		return -1;
+	}
+	mdelay(1);
+
+	gpio_set_value(GPIO_RST_0, 1);
+	gpio_set_value(GPIO_RST_1, 1);
+	mdelay(100);
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief main
+*******************************************************************************/
 int main(void)
 {
 	jesd204b_gt_link jesd204b_gt_link;
 	jesd204b_state jesd204b_st;
+	adc_core ad9625_0;
+	adc_core ad9625_1;
 
 	jesd204b_st.lanesync_enable = 1;
 	jesd204b_st.scramble_enable = 1;
@@ -71,20 +136,8 @@ int main(void)
 	jesd204b_gt_link.out_clk_sel = 2;
 	jesd204b_gt_link.gth_or_gtx = 0;
 
-  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
-  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x0c), 0x1f00); // direction -gpio
-  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
-  if((Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x08) & 0x1000) != 0x1000)
-  {
-	  xil_printf("GPIO Power Good NOT set!.\n\r");
-    return(-1);
-  }
-
-  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0000); // data -gpio
-  mdelay(1);
-
-  Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x08), 0x0044); // data -gpio
-  mdelay(100);
+	if (adc5_gpio_ctl(GPIO_DEVICE_ID))
+		return -1;
 
 	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 0);
 	ad9625_setup(XPAR_SPI_0_DEVICE_ID, 1);
@@ -97,14 +150,27 @@ int main(void)
 	jesd204b_setup(XPAR_AXI_AD9625_1_JESD_BASEADDR, jesd204b_st);
 	jesd204b_gt_setup(jesd204b_gt_link);
 
+	ad9625_0.adc_baseaddr = AD9625_CORE_0_BASEADDR;
+	ad9625_0.dmac_baseaddr = AD9625_DMA_BASEADDR;
+	adc_setup(ad9625_0, 2);
+
+	ad9625_1.adc_baseaddr = AD9625_CORE_1_BASEADDR;
+	ad9625_1.dmac_baseaddr = 0;
+	adc_setup(ad9625_1, 2);
+
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
 	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x01);
 
-	adc_setup(XPAR_AXI_AD9625_0_CORE_BASEADDR, XPAR_AXI_AD9625_DMA_BASEADDR, 1);
-	adc_setup(XPAR_AXI_AD9625_1_CORE_BASEADDR, XPAR_AXI_AD9625_DMA_BASEADDR, 1);
+	ad9625_spi_write(1, AD9625_REG_TEST_CNTRL, 0x0F);
+	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x00);
+	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x01);
 
-	xil_printf("Done.\n\r");
+	xil_printf("Initialization done.\n\r");
+
+	adc_capture(ad9625_0, 32768, ADC_DDR_BASEADDR);
+
+	xil_printf("Capture done.\n\r");
 
 	return 0;
 }
