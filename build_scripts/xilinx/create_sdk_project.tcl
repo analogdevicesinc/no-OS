@@ -10,51 +10,62 @@ set index 1
 	}
 
 # setting the parsed arguments
-if { [catch {set proj_dir $parameter(1)} fid] } {
+if { [catch {set project_location_arg $parameter(1)} fid] } {
 	puts "The tcl script was called with less parameters than required"
 	exit 1
 }
-if { [catch {set system_hdf_location $parameter(2)} fid] } {
+if { [catch {set system_hdf_location_arg $parameter(2)} fid] } {
 	puts "The tcl script was called with less parameters than required"
 	exit 1
+}
+
+# check if the hdf exists
+if {[file exists $system_hdf_location_arg]} {
+	set system_hdf_location [file join [pwd] $system_hdf_location_arg]
+	puts "hdf file used: $system_hdf_location"
+} else {
+	puts "No such hdf file: $system_hdf_location_arg"
+	exit
 }
 
 # define, create, set, project directories
-puts "The build directory is: $proj_dir"
-if {[file exists $proj_dir]} {
-	puts "$proj_dir already exists"
-} else { 
-	file mkdir $proj_dir
-	puts "$proj_dir was created"
+puts "The build directory is: $project_location_arg"
+if {[file exists $project_location_arg]} {
+	puts "$project_location_arg already exists"
+	set project_location [file join [pwd] $project_location_arg]
+	puts $project_location
+} else {
+	file mkdir $project_location_arg
+	set project_location [file join [pwd] $project_location_arg]
+	puts "$project_location was created"
 }
-  
-set input "input_files"
-file mkdir $proj_dir/$input/sources
-set project_destination $proj_dir/$input/sources
-set workspace "workspace"
+
 set source_directory [pwd]
+set input "input_files"
+file mkdir $project_location/$input/sources
+set project_destination $project_location/$input/sources
 
 # acknowledge the board processor
-cd $proj_dir/$input
-file copy -force -- $system_hdf_location $proj_dir/$input
+cd $project_location/$input
+file copy -force -- $system_hdf_location $project_location/$input
 hsi open_hw_design system_top.hdf
 set cpu_name [lindex [hsi get_cells -filter {IP_TYPE==PROCESSOR}] 0] 
 puts "FPGA CPU: $cpu_name"
  
 # create project
-cd $proj_dir
-sdk set_workspace $proj_dir/$workspace
+cd $project_location
+sdk set_workspace $project_location/workspace
 sdk create_hw_project -name hw -hwspec $system_hdf_location
 sdk create_bsp_project -name bsp -hwproject hw -proc $cpu_name -os standalone 
 sdk create_app_project -name sw -hwproject hw -proc $cpu_name -bsp bsp -os standalone -lang C -app {Empty Application} 
 
 # import sources
 source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl; 
-file copy -force -- $proj_dir/$workspace/sw/src/lscript.ld $project_destination
+file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
 sdk import_sources -name sw -path $project_destination
 sdk build_project -type all
 
 # delete the copy of source files
-file delete -force -- $proj_dir/$input
+file delete -force -- $project_location/$input
 puts "Done."
 exit
