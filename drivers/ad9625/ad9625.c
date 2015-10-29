@@ -102,7 +102,7 @@ int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select)
 		spi_is_initialized = 1;
 	}
 
-	ad9625_spi_write(slave_select, AD9625_REG_CHIP_PORT_CONF, 0x24);
+	ad9625_spi_write(slave_select, AD9625_REG_CHIP_PORT_CONF, 0x18);
 	ad9625_spi_write(slave_select, AD9625_REG_TRANSFER, 0x01);
 	mdelay(10);
 

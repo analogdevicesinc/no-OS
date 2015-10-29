@@ -108,6 +108,71 @@ int32_t adc5_gpio_ctl(uint32_t device_id)
 	return 0;
 }
 
+// ##############################################################################
+// ##############################################################################
+
+int32_t gtlink_control(uint32_t data) {
+
+  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_RSTN(0)), data);
+  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(0)), data);
+  Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_RSTN(0)), data);
+  Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(0)), data);
+  return(0);
+}
+
+int32_t gtlink_sysref(uint32_t data, uint32_t status) {
+
+  uint32_t n;
+  uint32_t rdata;
+  int32_t rstatus;
+
+  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYSREF_CTL(0)), 0x0);
+  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYSREF_CTL(0)), data);
+  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYSREF_CTL(0)), 0x0);
+
+  // check the status again-
+
+  rstatus = 0;
+
+  for (n = 0; n < 8; n++) {
+    rdata = Xil_In32(XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_STATUS(n));
+    if (rdata != status) {
+      rstatus = -1;
+      xil_printf("JESD204B-GT[%d,%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n", 0, n, rdata, status);
+    }
+    rdata = Xil_In32(XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_STATUS(n));
+    if (rdata != status) {
+      rstatus = -1;
+      xil_printf("JESD204B-GT[%d,%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n", 1, n, rdata, status);
+    }
+  }
+
+  return(rstatus);
+}
+
+int32_t ad9625_sysref_status(void) {
+
+  uint32_t n;
+  uint8_t rdata8;
+  int32_t rstatus;
+
+  rstatus = 0;
+
+  for (n = 0; n < 2; n++) {
+    ad9625_spi_read(n, 0x100, &rdata8);
+    if ((rdata8 & 0x0c) != 0) {
+      rstatus = -1;
+      xil_printf("AD9625[%d]: %04x, %02x\n", n, 0x100, rdata8);
+    }
+  }
+
+  return(rstatus);
+}
+
+// ##############################################################################
+// ##############################################################################
+
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
@@ -153,11 +218,57 @@ int main(void)
 
 	ad9625_0.adc_baseaddr = AD9625_CORE_0_BASEADDR;
 	ad9625_0.dmac_baseaddr = AD9625_DMA_BASEADDR;
-	adc_setup(ad9625_0, 1);
 
 	ad9625_1.adc_baseaddr = AD9625_CORE_1_BASEADDR;
 	ad9625_1.dmac_baseaddr = 0;
+
+  // setup above works independently, here we need to start again- so that
+  // both cores receive sysref at the same time.
+  // reset the data path from master
+
+  // reset the data path, but make sure we didn't break anything
+
+  gtlink_control(0);
+  if (gtlink_sysref(0, 0xffff) != 0) {
+    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+    return(-1);
+  }
+
+  // sysref, both cores now gets sysref at the same time
+
+  gtlink_control(1);
+  if (gtlink_sysref(1, 0x1ffff) != 0) {
+    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+    return(-1);
+  }
+
+  // reconfigure the devices so that sysref is used for synchronization
+
+	ad9625_spi_write(0, 0x08a, 0x22); // disable lmfc/fclk reset (default is 0x20)
+	ad9625_spi_write(0, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(0, 0x03a, 0x0a); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(0, 0x0ff, 0x01); // Register update
+
+	ad9625_spi_write(1, 0x08a, 0x22); // disable lmfc/fclk reset (default is 0x20)
+	ad9625_spi_write(1, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(1, 0x03a, 0x0a); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(1, 0x0ff, 0x01); // Register update
+
+  // data path must be active now, bring cores out of reset
+
+	adc_setup(ad9625_0, 1);
 	adc_setup(ad9625_1, 1);
+
+  // send the alignment sysref to both- (this is the sync function)
+
+  if (gtlink_sysref(1, 0x1ffff) != 0) {
+    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+    return(-1);
+  }
+
+  ad9625_sysref_status();
+
+  // check prbs on both channels-
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x5);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x0);
@@ -167,22 +278,27 @@ int main(void)
 	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x0);
 	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x1);
 
-	adc_pn_mon(ad9625_0, 1, ADC_PN23A);
-	adc_pn_mon(ad9625_1, 1, ADC_PN23A);
+	if (adc_pn_mon(ad9625_0, 1, ADC_PN23A) != 0) return(-1);
+	if (adc_pn_mon(ad9625_1, 1, ADC_PN23A) != 0) return(-1);
 
-	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
-	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
-	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x01);
+  // no prbs errors, now sync the 2 devices
 
-	ad9625_spi_write(1, AD9625_REG_TEST_CNTRL, 0x0F);
-	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x00);
-	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x01);
+	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0);
+	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x1);
+	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x1);
+  adc_write(ad9625_0, ADC_REG_CHAN_CNTRL(0), 0x51);
 
-	xil_printf("Initialization done.\n\r");
+	ad9625_spi_write(1, AD9625_REG_TEST_CNTRL, 0x0);
+	ad9625_spi_write(1, AD9625_REG_OUTPUT_MODE, 0x1);
+	ad9625_spi_write(1, AD9625_REG_TRANSFER, 0x1);
+  adc_write(ad9625_1, ADC_REG_CHAN_CNTRL(0), 0x51);
+
+
+	xil_printf("Initialization done.\n");
 
 	adc_capture(ad9625_0, 32768, ADC_DDR_BASEADDR);
 
-	xil_printf("Capture done.\n\r");
+	xil_printf("Capture done.\n");
 
 	return 0;
 }
