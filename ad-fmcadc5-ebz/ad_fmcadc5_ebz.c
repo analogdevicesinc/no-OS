@@ -226,6 +226,15 @@ int main(void)
   // both cores receive sysref at the same time.
   // reset the data path from master
 
+  // reconfigure the devices so that sysref is used for synchronization
+
+	ad9625_spi_write(0, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(0, 0x03a, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(0, 0x0ff, 0x01); // Register update
+	ad9625_spi_write(1, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(1, 0x03a, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(1, 0x0ff, 0x01); // Register update
+
   // reset the data path, but make sure we didn't break anything
 
   gtlink_control(0);
@@ -242,31 +251,12 @@ int main(void)
     return(-1);
   }
 
-  // reconfigure the devices so that sysref is used for synchronization
-
-	ad9625_spi_write(0, 0x08a, 0x22); // disable lmfc/fclk reset (default is 0x20)
-	ad9625_spi_write(0, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
-	ad9625_spi_write(0, 0x03a, 0x0a); // Sysref enabled (default is 0x00)
-	ad9625_spi_write(0, 0x0ff, 0x01); // Register update
-
-	ad9625_spi_write(1, 0x08a, 0x22); // disable lmfc/fclk reset (default is 0x20)
-	ad9625_spi_write(1, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
-	ad9625_spi_write(1, 0x03a, 0x0a); // Sysref enabled (default is 0x00)
-	ad9625_spi_write(1, 0x0ff, 0x01); // Register update
+  ad9625_sysref_status();
 
   // data path must be active now, bring cores out of reset
 
 	adc_setup(ad9625_0, 1);
 	adc_setup(ad9625_1, 1);
-
-  // send the alignment sysref to both- (this is the sync function)
-
-  if (gtlink_sysref(1, 0x1ffff) != 0) {
-    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
-    return(-1);
-  }
-
-  ad9625_sysref_status();
 
   // check prbs on both channels-
 
