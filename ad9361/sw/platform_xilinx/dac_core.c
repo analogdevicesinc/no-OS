@@ -485,3 +485,176 @@ void dac_get_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_sele
 {
 	*sel = dds_st[phy->id_no].cached_datasel[chan];
 }
+
+/***************************************************************************//**
+ * @brief dds_to_signed_mag_fmt
+*******************************************************************************/
+uint32_t dds_to_signed_mag_fmt(int32_t val, int32_t val2)
+{
+	uint32_t i;
+	uint64_t val64;
+
+	/* format is 1.1.14 (sign, integer and fractional bits) */
+
+	switch (val) {
+	case 1:
+		i = 0x4000;
+		break;
+	case -1:
+		i = 0xC000;
+		break;
+	case 0:
+		i = 0;
+		if (val2 < 0) {
+				i = 0x8000;
+				val2 *= -1;
+		}
+		break;
+	default:
+		/* Invalid Value */
+		i = 0;
+	}
+
+	val64 = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
+	do_div(&val64, 1000000UL);
+
+	return i | val64;
+}
+
+/***************************************************************************//**
+ * @brief dds_from_signed_mag_fmt
+*******************************************************************************/
+void dds_from_signed_mag_fmt(uint32_t val,
+							 int32_t *r_val,
+							 int32_t *r_val2)
+{
+	uint64_t val64;
+	int32_t sign;
+
+	if (val & 0x8000)
+		sign = -1;
+	else
+		sign = 1;
+
+	if (val & 0x4000)
+		*r_val = 1 * sign;
+	else
+		*r_val = 0;
+
+	val &= ~0xC000;
+
+	val64 = val * 1000000ULL + (0x4000 / 2);
+	do_div(&val64, 0x4000);
+
+	if (*r_val == 0)
+		*r_val2 = val64 * sign;
+	else
+		*r_val2 = val64;
+}
+
+/***************************************************************************//**
+ * @brief dds_set_calib_scale_phase
+*******************************************************************************/
+int32_t dds_set_calib_scale_phase(struct ad9361_rf_phy *phy,
+								  uint32_t phase,
+								  uint32_t chan,
+								  int32_t val,
+								  int32_t val2)
+{
+	uint32_t reg;
+	uint32_t i;
+
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8) {
+		return -1;
+	}
+
+	i = dds_to_signed_mag_fmt(val, val2);
+
+	dac_read(phy, DAC_REG_CHAN_CNTRL_8(chan), &reg);
+
+	if (!((chan + phase) % 2)) {
+		reg &= ~DAC_IQCOR_COEFF_1(~0);
+		reg |= DAC_IQCOR_COEFF_1(i);
+	} else {
+		reg &= ~DAC_IQCOR_COEFF_2(~0);
+		reg |= DAC_IQCOR_COEFF_2(i);
+	}
+	dac_write(phy, DAC_REG_CHAN_CNTRL_8(chan), reg);
+	dac_write(phy, DAC_REG_CHAN_CNTRL_6(chan), DAC_IQCOR_ENB);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief dds_get_calib_scale_phase
+*******************************************************************************/
+int32_t dds_get_calib_scale_phase(struct ad9361_rf_phy *phy,
+								  uint32_t phase,
+								  uint32_t chan,
+								  int32_t *val,
+								  int32_t *val2)
+{
+	uint32_t reg;
+
+	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8) {
+		return -1;
+	}
+
+	dac_read(phy, DAC_REG_CHAN_CNTRL_8(chan), &reg);
+
+	/* format is 1.1.14 (sign, integer and fractional bits) */
+
+	if (!((phase + chan) % 2)) {
+		reg = DAC_TO_IQCOR_COEFF_1(reg);
+	} else {
+		reg = DAC_TO_IQCOR_COEFF_2(reg);
+	}
+
+	dds_from_signed_mag_fmt(reg, val, val2);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief dds_set_calib_scale
+*******************************************************************************/
+int32_t dds_set_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2)
+{
+	return dds_set_calib_scale_phase(phy, 0, chan, val, val2);
+}
+
+/***************************************************************************//**
+ * @brief dds_get_calib_scale
+*******************************************************************************/
+int32_t dds_get_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2)
+{
+	return dds_get_calib_scale_phase(phy, 0, chan, val, val2);
+}
+
+/***************************************************************************//**
+ * @brief dds_set_calib_phase
+*******************************************************************************/
+int32_t dds_set_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2)
+{
+	return dds_set_calib_scale_phase(phy, 1, chan, val, val2);
+}
+
+/***************************************************************************//**
+ * @brief dds_get_calib_phase
+*******************************************************************************/
+int32_t dds_get_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2)
+{
+	return dds_get_calib_scale_phase(phy, 1, chan, val, val2);
+}

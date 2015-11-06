@@ -155,5 +155,20 @@ void adc_init(struct ad9361_rf_phy *phy);
 int32_t adc_capture(uint32_t size, uint32_t start_address);
 void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data);
 void adc_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data);
-
+int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
+int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t adc_get_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
 #endif

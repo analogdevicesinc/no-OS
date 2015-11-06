@@ -158,9 +158,18 @@ struct dds_state
 	bool					rx2tx2;
 };
 
+#define DAC_REG_CHAN_CNTRL_6(c)		(0x0414 + (c) * 0x40)
+#define DAC_IQCOR_ENB				(1 << 2) /* v8.0 */
+
 #define DAC_REG_CHAN_CNTRL_7(c)		(0x0418 + (c) * 0x40) /* v8.0 */
-#define DAC_DAC_DDS_SEL(x)		(((x) & 0xF) << 0)
+#define DAC_DAC_DDS_SEL(x)			(((x) & 0xF) << 0)
 #define DAC_TO_DAC_DDS_SEL(x)		(((x) >> 0) & 0xF)
+
+#define DAC_REG_CHAN_CNTRL_8(c)		(0x041C + (c) * 0x40) /* v8.0 */
+#define DAC_IQCOR_COEFF_1(x)		(((x) & 0xFFFF) << 16)
+#define DAC_TO_IQCOR_COEFF_1(x)		(((x) >> 16) & 0xFFFF)
+#define DAC_IQCOR_COEFF_2(x)		(((x) & 0xFFFF) << 0)
+#define DAC_TO_IQCOR_COEFF_2(x)		(((x) >> 0) & 0xFFFF)
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -175,5 +184,20 @@ void dds_get_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t *scale_micr
 void dds_update(struct ad9361_rf_phy *phy);
 int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select sel);
 void dac_get_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select *sel);
-
+int32_t dds_set_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t dds_get_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
+int32_t dds_set_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t dds_get_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
 #endif

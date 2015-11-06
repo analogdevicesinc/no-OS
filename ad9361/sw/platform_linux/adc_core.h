@@ -159,5 +159,20 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 			  const char * filename, uint8_t bin_file,
 			  uint8_t ch_no);
 int32_t get_file_info(const char *filename, uint32_t *info);
-
+int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
+int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t val,
+							int32_t val2);
+int32_t adc_get_calib_phase(struct ad9361_rf_phy *phy,
+							uint32_t chan,
+							int32_t *val,
+							int32_t *val2);
 #endif
