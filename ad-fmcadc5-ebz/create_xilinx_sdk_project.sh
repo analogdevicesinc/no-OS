@@ -1,5 +1,5 @@
-build_destination=$1
-hdf_destination=$2
+hdf_destination=$1
+build_destination=$2
 
 missing_arguments()
 {
@@ -16,6 +16,10 @@ missing_arguments()
 
 got_arguments()
 {
+	if [ "$build_destination" = "" ]
+	then
+	build_destination="./"
+	fi
 	echo "$build_destination"
 	echo "$hdf_destination"
 }
@@ -27,6 +31,6 @@ else
     got_arguments
 fi
 
-xsct -s  ../build_scripts/xilinx/create_sdk_project.tcl "$build_destination" "$hdf_destination"
+xsct -s  ../build_scripts/xilinx/create_sdk_project.tcl "$hdf_destination" "$build_destination"
 
 echo "Done!"
