@@ -169,6 +169,95 @@ int32_t ad9625_sysref_status(void) {
   return(rstatus);
 }
 
+int32_t ad9625_sysref_simple(void) {
+
+  // reset the data path, but make sure we didn't break anything
+
+  gtlink_control(0);
+  if (gtlink_sysref(0, 0xffff) != 0) {
+    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+    return(-1);
+  }
+
+  // sysref, both cores now gets sysref at the same time
+
+  gtlink_control(1);
+  if (gtlink_sysref(1, 0x1ffff) != 0) {
+    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+    return(-1);
+  }
+
+  ad9625_sysref_status();
+
+  return(0);
+}
+
+int32_t ad9625_sysref_sw_calibrate(void) {
+
+  uint32_t n;
+  uint32_t rgpio;
+  uint8_t rdata8;
+  uint32_t rdata;
+  uint32_t rstatus;
+
+  rgpio = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8) & 0x00ffffff;
+
+  ad9625_spi_write(0, 0x13c, 0x40);
+	ad9625_spi_write(0, 0x0ff, 0x01);
+
+  rstatus = 0;
+
+  for (n = 0; n < 32; n++) {
+
+    gtlink_control(0);
+    if (gtlink_sysref(0, 0xffff) != 0) {
+      xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+      return(-1);
+    }
+
+    ad9625_spi_write(0, 0x03a, 0x42);
+	  ad9625_spi_write(0, 0x0ff, 0x01);
+    ad9625_spi_write(0, 0x03a, 0x02);
+	  ad9625_spi_write(0, 0x0ff, 0x01);
+
+    Xil_Out32((XPAR_GPIO_0_BASEADDR + 0x8), (rgpio | (n<<24)));
+    rdata = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8);
+    if ((rdata & 0xff000000) != ((n<<24) | 0x20000000)) {
+      xil_printf("[%05d]: SYSREF Delay Control Failed(%d, 0x%08x), Exiting!!\n", __LINE__, n, rdata);
+      return(-1);
+    }
+
+    ad9625_spi_read(0, 0x100, &rdata8);
+    if ((rdata8 & 0x04) != 0x00) {
+      xil_printf("[%05d]: SYSREF Clear Status Failed(%d, 0x%04x), Exiting!!\n", __LINE__, n, rdata8);
+      return(-1);
+    }
+    
+    gtlink_control(1);
+    if (gtlink_sysref(1, 0x1ffff) != 0) {
+      xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
+      return(-1);
+    }
+
+    ad9625_spi_read(0, 0x100, &rdata8);
+    if ((rdata8 & 0x04) == 0x04) {
+      ad9625_spi_read(1, 0x100, &rdata8);
+      if ((rdata8 & 0x04) == 0x00) {
+        rstatus = 1;
+        xil_printf("SYSREF Calibration Successful[%d]\n", n);
+        break;
+      }
+    }
+  }
+
+  if (rstatus == 0) {
+    xil_printf("SYSREF Calibration Failed!!\n");
+  }
+
+  return(0);
+}
+
+
 // ##############################################################################
 // ##############################################################################
 
@@ -235,23 +324,8 @@ int main(void)
 	ad9625_spi_write(1, 0x03a, 0x02); // Sysref enabled (default is 0x00)
 	ad9625_spi_write(1, 0x0ff, 0x01); // Register update
 
-  // reset the data path, but make sure we didn't break anything
-
-  gtlink_control(0);
-  if (gtlink_sysref(0, 0xffff) != 0) {
-    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
-    return(-1);
-  }
-
-  // sysref, both cores now gets sysref at the same time
-
-  gtlink_control(1);
-  if (gtlink_sysref(1, 0x1ffff) != 0) {
-    xil_printf("[%05d]: Interleaving Synchronization Failed, Exiting!!\n", __LINE__);
-    return(-1);
-  }
-
-  ad9625_sysref_status();
+  // ad9625_sysref_simple();
+  ad9625_sysref_sw_calibrate();
 
   // data path must be active now, bring cores out of reset
 
