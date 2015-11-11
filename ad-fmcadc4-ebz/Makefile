@@ -15,7 +15,7 @@ all:$(elf_file)
 
 $(elf_file): $(libxil) $(src)
 	@echo 'creating project'
-	xsct -s ../build_scripts/xilinx/create_sdk_project.tcl ./$(hdf_file) $(project)
+	xsct -s ../build_scripts/xilinx/create_sdk_project.tcl $(hdf_file) $(project)
 
 $(libxil): $(hdf_file)
 	rm -rf $(project)
