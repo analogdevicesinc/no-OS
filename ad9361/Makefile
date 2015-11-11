@@ -7,7 +7,9 @@ hdf_file:= system_top.hdf
 elf_file := $(project)/workspace/sw/Debug/sw.elf
 libxil := $(project)/workspace/bsp/sys_mb/lib/libxil.a
 
-src := $(foreach dir,$(files),$(wildcard $(dir)/*))
+src := $(foreach dir,$(files),$(wildcard $(dir)*.c))
+src += $(foreach dir,$(files),$(wildcard $(dir)*.h))
+
 
 all:$(elf_file)
 
