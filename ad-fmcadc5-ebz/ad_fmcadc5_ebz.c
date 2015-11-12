@@ -111,12 +111,65 @@ int32_t adc5_gpio_ctl(uint32_t device_id)
 // ##############################################################################
 // ##############################################################################
 
+int32_t jesd204b_gt_setup_modified(jesd204b_gt_link link_param) {
+
+  int32_t lane;
+
+  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_PLL_RSTN(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_GT_RSTN(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_RSTN(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_USER_READY(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYNC_CTL(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYSREF_CTL(lane), 0);
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_LPM_CPLL_PD(lane),
+      JESD204B_GT_LPM_DFE(link_param.lpm_or_dfe));
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_CLK_SEL(lane),
+      JESD204B_GT_SYS_CLK_SEL(link_param.sys_clk_sel) |
+      JESD204B_GT_OUT_CLK_SEL(link_param.out_clk_sel));
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_PLL_RSTN(lane),
+      JESD204B_GT_PLL_RSTN);
+  }
+
+  // check pll status
+
+  if(jesd204b_gt_txrx_status(link_param.tx_or_rx, link_param.first_lane,
+    link_param.last_lane, JESD204B_GT_STATUS_PLL_LOCKED) != 0)
+    return(-1);
+
+  // bring phy out of reset
+
+  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_GT_RSTN(lane),
+      JESD204B_GT_RSTN);
+  }
+  mdelay(1);
+
+  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_USER_READY(lane),
+      JESD204B_GT_USER_READY);
+  }
+
+  // check reset-done & pll status
+
+  if(jesd204b_gt_txrx_status(link_param.tx_or_rx, link_param.first_lane,
+    link_param.last_lane, JESD204B_GT_STATUS_RST_DONE) != 0)
+    return(-1);
+
+  return(0);
+}
+
 int32_t gtlink_control(uint32_t data) {
 
-  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_RSTN(0)), data);
-  Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(0)), data);
-  Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_RSTN(0)), data);
-  Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(0)), data);
+  int32_t n;
+
+  for (n = 7; n >= 0; n--) {
+    Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_RSTN(n)), data);
+    Xil_Out32((XPAR_AXI_FMCADC5_0_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(n)), data);
+    Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_RSTN(n)), data);
+    Xil_Out32((XPAR_AXI_FMCADC5_1_GT_BASEADDR + JESD204B_GT_REG_SYNC_CTL(n)), data);
+  }
   return(0);
 }
 
@@ -196,13 +249,15 @@ int32_t ad9625_sysref_sw_calibrate(void) {
 
   uint32_t n;
   uint32_t rgpio;
-  uint8_t rdata8;
   uint32_t rdata;
   uint32_t rstatus;
+  uint8_t rdata8_0;
+  uint8_t rdata8_1;
 
   rgpio = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8) & 0x00ffffff;
+  Xil_Out32((XPAR_GPIO_0_BASEADDR + 0x8), (rgpio | (31<<24)));
 
-  ad9625_spi_write(0, 0x13c, 0x40);
+  ad9625_spi_write(0, 0x13c, 0x60);
 	ad9625_spi_write(0, 0x0ff, 0x01);
 
   rstatus = 0;
@@ -220,6 +275,11 @@ int32_t ad9625_sysref_sw_calibrate(void) {
     ad9625_spi_write(0, 0x03a, 0x02);
 	  ad9625_spi_write(0, 0x0ff, 0x01);
 
+    ad9625_spi_write(1, 0x03a, 0x42);
+	  ad9625_spi_write(1, 0x0ff, 0x01);
+    ad9625_spi_write(1, 0x03a, 0x02);
+	  ad9625_spi_write(1, 0x0ff, 0x01);
+
     Xil_Out32((XPAR_GPIO_0_BASEADDR + 0x8), (rgpio | (n<<24)));
     rdata = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8);
     if ((rdata & 0xff000000) != ((n<<24) | 0x20000000)) {
@@ -227,9 +287,10 @@ int32_t ad9625_sysref_sw_calibrate(void) {
       return(-1);
     }
 
-    ad9625_spi_read(0, 0x100, &rdata8);
-    if ((rdata8 & 0x04) != 0x00) {
-      xil_printf("[%05d]: SYSREF Clear Status Failed(%d, 0x%04x), Exiting!!\n", __LINE__, n, rdata8);
+    ad9625_spi_read(0, 0x100, &rdata8_0);
+    ad9625_spi_read(1, 0x100, &rdata8_1);
+    if (((rdata8_0 & 0x04) != 0x00) || ((rdata8_1 & 0x04) != 0x00)) {
+      xil_printf("[%05d]: SYSREF Clear Status Failed(%d, 0x%02x, 0x%02x), Exiting!!\n", __LINE__, n, rdata8_0, rdata8_1);
       return(-1);
     }
     
@@ -239,18 +300,22 @@ int32_t ad9625_sysref_sw_calibrate(void) {
       return(-1);
     }
 
-    ad9625_spi_read(0, 0x100, &rdata8);
-    if ((rdata8 & 0x04) == 0x04) {
-      ad9625_spi_read(1, 0x100, &rdata8);
-      if ((rdata8 & 0x04) == 0x00) {
-        rstatus = 1;
-        xil_printf("SYSREF Calibration Successful[%d]\n", n);
-        break;
-      }
+    ad9625_spi_read(0, 0x100, &rdata8_0);
+    ad9625_spi_read(1, 0x100, &rdata8_1);
+
+    if ((rstatus == 1) && ((rdata8_0 & 0x04) == 0x04) && ((rdata8_1 & 0x04) == 0x00)) {
+      rstatus = 2;
+      xil_printf("SYSREF Calibration Successful[%d]\n", n);
+      break;
+    }
+
+    rstatus = 0;
+    if (((rdata8_0 & 0x04) == 0x00) && ((rdata8_1 & 0x04) == 0x00)) {
+      rstatus = 1;
     }
   }
 
-  if (rstatus == 0) {
+  if (rstatus != 2) {
     xil_printf("SYSREF Calibration Failed!!\n");
   }
 
@@ -299,11 +364,11 @@ int main(void)
 
 	jesd204b_gt_initialize(XPAR_AXI_FMCADC5_0_GT_BASEADDR, 8);
 	jesd204b_setup(XPAR_AXI_AD9625_0_JESD_BASEADDR, jesd204b_st);
-	jesd204b_gt_setup(jesd204b_gt_link);
+	jesd204b_gt_setup_modified(jesd204b_gt_link);
 
 	jesd204b_gt_initialize(XPAR_AXI_FMCADC5_1_GT_BASEADDR, 8);
 	jesd204b_setup(XPAR_AXI_AD9625_1_JESD_BASEADDR, jesd204b_st);
-	jesd204b_gt_setup(jesd204b_gt_link);
+	jesd204b_gt_setup_modified(jesd204b_gt_link);
 
 	ad9625_0.adc_baseaddr = AD9625_CORE_0_BASEADDR;
 	ad9625_0.dmac_baseaddr = AD9625_DMA_BASEADDR;
@@ -325,6 +390,7 @@ int main(void)
 	ad9625_spi_write(1, 0x0ff, 0x01); // Register update
 
   // ad9625_sysref_simple();
+
   ad9625_sysref_sw_calibrate();
 
   // data path must be active now, bring cores out of reset
