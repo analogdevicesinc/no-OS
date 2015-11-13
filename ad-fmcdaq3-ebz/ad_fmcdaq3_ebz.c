@@ -67,6 +67,17 @@
 struct ad9528_channel_spec ad9528_channels[] =
 {
 	{
+		13,					// channel_num
+		0,					// sync_ignore_en
+		0,					// output_dis
+		DRIVER_MODE_LVDS,	// driver_mode
+		SOURCE_VCO,			// signal_source
+		0,					// divider_phase
+		1,					// channel_divider
+		"ADC_CLK",			// extended_name
+	},
+
+	{
 		2,					// channel_num
 		0,					// sync_ignore_en
 		0,					// output_dis
@@ -141,17 +152,6 @@ struct ad9528_channel_spec ad9528_channels[] =
 		0,					// divider_phase
 		2,					// channel_divider
 		"DAC_CLK_FMC",		// extended_name
-	},
-
-	{
-		13,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"ADC_CLK",			// extended_name
 	},
 };
 
@@ -242,47 +242,19 @@ void daq3_gpio_ctl(uint32_t base_addr)
 	mdelay(10);
 }
 
-jesd204b_gt_link ad9152_gt_link = {
-	JESD204B_GT_TX,
-	0,
-	3,
-	JESD204B_GT_QPLL,
-	JESD204B_GT_DFE,
-	500,
-	10000,
-	JESD204B_GT_SYSREF_EXT,
-	3,
-	4,
-	0
-};
-
-jesd204b_gt_link ad9680_gt_link = {
-	JESD204B_GT_RX,
-	0,
-	3,
-	JESD204B_GT_QPLL,
-	JESD204B_GT_DFE,
-	500,
-	10000,
-	JESD204B_GT_SYSREF_EXT,
-	3,
-	4,
-	0
-};
-
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
+	jesd204b_gt_link ad9680_gt_link;
+	jesd204b_gt_link ad9152_gt_link;
 	jesd204b_state jesd204b_st;
-	adc_core ad9680;
+	adc_core ad9680_core;
 
 	daq3_gpio_ctl(GPIO_BASEADDR);
 
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
-
-	jesd204b_gt_initialize(DAQ3_GT_BASEADDR, 4);
 
 	ad9152_setup(SPI_DEVICE_ID, 1, default_ad9152_init_param);
 
@@ -293,7 +265,6 @@ int main(void)
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9152_JESD_BASEADDR, jesd204b_st);
-	jesd204b_gt_setup(ad9152_gt_link);
 
 	ad9680_setup(SPI_DEVICE_ID, 2);
 
@@ -304,6 +275,25 @@ int main(void)
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
+
+	ad9680_gt_link.tx_or_rx = JESD204B_GT_RX;
+	ad9680_gt_link.first_lane = 0;
+	ad9680_gt_link.last_lane = 3;
+	ad9680_gt_link.qpll_or_cpll = JESD204B_GT_QPLL;
+	ad9680_gt_link.lpm_or_dfe = JESD204B_GT_DFE;
+	ad9680_gt_link.ref_clk = 500;
+	ad9680_gt_link.lane_rate = 1000;
+	ad9680_gt_link.sysref_int_or_ext = JESD204B_GT_SYSREF_EXT;
+	ad9680_gt_link.sys_clk_sel = 3;
+	ad9680_gt_link.out_clk_sel = 4;
+	ad9680_gt_link.gth_or_gtx = 0;
+
+  memcpy(&ad9152_gt_link, &ad9680_gt_link, sizeof(ad9152_gt_link));
+
+  ad9152_gt_link.tx_or_rx = JESD204B_GT_TX;
+
+	jesd204b_gt_initialize(DAQ3_GT_BASEADDR, 4);
+	jesd204b_gt_setup(ad9152_gt_link);
 	jesd204b_gt_setup(ad9680_gt_link);
 
 	dac_setup(AD9152_CORE_BASEADDR);
@@ -322,18 +312,57 @@ int main(void)
 	dds_set_phase(3, 90000);
 	dds_set_scale(3, 500000);
 
-	ad9680.adc_baseaddr = AD9680_CORE_BASEADDR;
-	ad9680.dmac_baseaddr = AD9680_DMA_BASEADDR;
-	adc_setup(ad9680, 2);
+	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
+	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	adc_setup(ad9680_core, 2);
 
-	xil_printf("Initialization done.\n\r");
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0);
 
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x03);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
+	adc_pn_mon(ad9680_core, 2, 1);
 
-	adc_capture(ad9680, 32768, ADC_DDR_BASEADDR);
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0f);
+	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
+  adc_write(ad9680_core, ADC_REG_CHAN_CNTRL(0), 0x51);
+  adc_write(ad9680_core, ADC_REG_CHAN_CNTRL(1), 0x51);
 
-	xil_printf("Capture done.\n\r");
+	xil_printf("Initialization done.\n");
+
+	adc_capture(ad9680_core, 16384, ADC_DDR_BASEADDR);
+
+  uint32_t n;
+  uint32_t ecnt;
+  uint32_t rdata;
+  uint32_t edata;
+
+  ecnt = 0;
+  for (n = 0; n < 16384; n++) {
+    rdata = Xil_In32(ADC_DDR_BASEADDR + (n*4)) & 0x3fff3fff;
+    if (n == 0) edata = rdata;
+    if (rdata != edata) {
+	    xil_printf("Capture Error[%d]: rcv(%08x) exp(%08x).\n", n, rdata, edata);
+      if (ecnt == 10) break;
+      ecnt++;
+    }
+    if ((edata & 0x3fff) == 0x3fff) {
+      edata = edata & 0xffff0000;
+    } else {
+      edata = edata + 0x00000001;
+    }
+    if ((edata & 0x3fff0000) == 0x3fff0000) {
+      edata = edata & 0x0000ffff;
+    } else {
+      edata = edata + 0x00010000;
+    }
+  }
+
+	xil_printf("Capture done.\n");
+
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x00);
+	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	return 0;
 }
