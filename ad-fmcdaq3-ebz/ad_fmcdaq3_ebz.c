@@ -67,17 +67,6 @@
 struct ad9528_channel_spec ad9528_channels[] =
 {
 	{
-		1,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"ADC_CLK",			// extended_name
-	},
-
-	{
 		2,					// channel_num
 		0,					// sync_ignore_en
 		0,					// output_dis
@@ -153,6 +142,17 @@ struct ad9528_channel_spec ad9528_channels[] =
 		2,					// channel_divider
 		"DAC_CLK_FMC",		// extended_name
 	},
+
+	{
+		13,					// channel_num
+		0,					// sync_ignore_en
+		0,					// output_dis
+		DRIVER_MODE_LVDS,	// driver_mode
+		SOURCE_VCO,			// signal_source
+		0,					// divider_phase
+		1,					// channel_divider
+		"ADC_CLK",			// extended_name
+	},
 };
 
 struct ad9528_platform_data ad9528_pdata_lpc =
@@ -215,7 +215,7 @@ ad9152_init_param default_ad9152_init_param = {
 	1,	// jesd_xbar_lane1_sel
 	2,	// jesd_xbar_lane2_sel
 	3,	// jesd_xbar_lane3_sel
-	1,	// lanes2_3_swap_data
+	0,	// lanes2_3_swap_data
 };
 
 /***************************************************************************//**
@@ -242,20 +242,47 @@ void daq3_gpio_ctl(uint32_t base_addr)
 	mdelay(10);
 }
 
+jesd204b_gt_link ad9152_gt_link = {
+	JESD204B_GT_TX,
+	0,
+	3,
+	JESD204B_GT_QPLL,
+	JESD204B_GT_DFE,
+	500,
+	10000,
+	JESD204B_GT_SYSREF_EXT,
+	3,
+	4,
+	0
+};
+
+jesd204b_gt_link ad9680_gt_link = {
+	JESD204B_GT_RX,
+	0,
+	3,
+	JESD204B_GT_QPLL,
+	JESD204B_GT_DFE,
+	500,
+	10000,
+	JESD204B_GT_SYSREF_EXT,
+	3,
+	4,
+	0
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
 	jesd204b_state jesd204b_st;
-	uint32_t jesd204b_gt_version;
-	uint32_t lane;
-	uint32_t num_of_config_regs;
+	adc_core ad9680;
 
 	daq3_gpio_ctl(GPIO_BASEADDR);
 
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
+
+	jesd204b_gt_initialize(DAQ3_GT_BASEADDR, 4);
 
 	ad9152_setup(SPI_DEVICE_ID, 1, default_ad9152_init_param);
 
@@ -266,6 +293,7 @@ int main(void)
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9152_JESD_BASEADDR, jesd204b_st);
+	jesd204b_gt_setup(ad9152_gt_link);
 
 	ad9680_setup(SPI_DEVICE_ID, 2);
 
@@ -276,28 +304,7 @@ int main(void)
 	jesd204b_st.bytes_per_frame = 1;
 	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
-
-	jesd204b_gt_st.num_of_lanes = 4;
-	jesd204b_gt_st.use_cpll = 0;
-	jesd204b_gt_st.rx_sys_clk_sel = 3;
-	jesd204b_gt_st.rx_out_clk_sel = 4;
-	jesd204b_gt_st.tx_sys_clk_sel = 3;
-	jesd204b_gt_st.tx_out_clk_sel = 4;
-	jesd204b_gt_setup(DAQ3_GT_BASEADDR, jesd204b_gt_st);
-
-	jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
-	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
-		num_of_config_regs = 1;
-	else
-		num_of_config_regs = jesd204b_gt_st.num_of_lanes;
-
-	for (lane = 0; lane < num_of_config_regs; lane++) {
-		jesd204b_gt_clk_enable(JESD204B_GT_TX, lane);
-		jesd204b_gt_clk_enable(JESD204B_GT_RX, lane);
-	}
-
-	jesd204b_gt_clk_synchronize(JESD204B_GT_TX, 0);
-	jesd204b_gt_clk_synchronize(JESD204B_GT_RX, 0);
+	jesd204b_gt_setup(ad9680_gt_link);
 
 	dac_setup(AD9152_CORE_BASEADDR);
 
@@ -315,11 +322,16 @@ int main(void)
 	dds_set_phase(3, 90000);
 	dds_set_scale(3, 500000);
 
-	adc_setup(AD9680_CORE_BASEADDR, AD9680_DMA_BASEADDR, 2);
+	ad9680.adc_baseaddr = AD9680_CORE_BASEADDR;
+	ad9680.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	adc_setup(ad9680, 2);
 
 	xil_printf("Initialization done.\n\r");
 
-	adc_capture(16384, ADC_DDR_BASEADDR);
+	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x03);
+	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
+
+	adc_capture(ad9680, 32768, ADC_DDR_BASEADDR);
 
 	xil_printf("Capture done.\n\r");
 
