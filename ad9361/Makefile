@@ -5,7 +5,11 @@ files := $(subst ],,$(subst [,,$(strip $(foreach dir,$(VARIABLE),$(if $(findstri
 project := sdk_project
 hdf_file:= system_top.hdf
 elf_file := $(project)/workspace/sw/Debug/sw.elf
-libxil := $(project)/workspace/bsp/sys_mb/lib/libxil.a
+fpga_processor :=sys_mb
+fpga_processor +=ps7_cortexa9_0
+fpga_processor +=ps7_cortexa9_1
+libxil:=$(foreach name,$(fpga_processor),$(if $(wildcard $(project)/workspace/bsp/$(name)/lib/libxil.a),$(project)/workspace/bsp/$(name)/lib/libxil.a))
+
 
 src := $(foreach dir,$(files),$(wildcard $(dir)*.c))
 src += $(foreach dir,$(files),$(wildcard $(dir)*.h))
