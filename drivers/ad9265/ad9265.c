@@ -122,7 +122,10 @@ int32_t ad9265_testmode_set(uint8_t chan, uint8_t mode)
 /***************************************************************************//**
 * @brief ad9265_calibrate
 *******************************************************************************/
-int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
+int32_t ad9265_calibrate(uint8_t dco,
+						 uint8_t dco_en,
+						 uint8_t nb_lanes,
+						 adc_core core)
 {
 	int32_t ret, val, cnt, start, max_start, max_cnt;
 	uint32_t stat, inv_range = 0, do_inv, lane,
@@ -134,23 +137,23 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 	if (ret < 0)
 		return ret;
 
-	adc_read(ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
+	adc_read(core, ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
 
 	do {
 		if (!dco) {
-			adc_read(ADC_REG_CNTRL, &reg_cntrl);
+			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
 
 			if (inv_range)
 				reg_cntrl |= ADC_DDR_EDGESEL;
 			else
 				reg_cntrl &= ~ADC_DDR_EDGESEL;
-			adc_write(ADC_REG_CNTRL, reg_cntrl);
+			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
 		}
 
 		ad9265_testmode_set(0, TESTMODE_PN9_SEQ);
-		adc_write(ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
-		adc_set_pnsel(0, ADC_PN9);
-		adc_write(ADC_REG_CHAN_STATUS(0), ~0);
+		adc_write(core, ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
+		adc_set_pnsel(core, 0, ADC_PN9);
+		adc_write(core, ADC_REG_CHAN_STATUS(0), ~0);
 
 		for (val = 0; val <= max_val; val++) {
 			if (dco) {
@@ -160,20 +163,20 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 						TRANSFER_SYNC);
 			} else {
 				for (lane = 0; lane < nb_lanes; lane++) {
-					adc_write(ADC_REG_DELAY_CNTRL, 0);
+					adc_write(core, ADC_REG_DELAY_CNTRL, 0);
 
-					adc_write(ADC_REG_DELAY_CNTRL,
+					adc_write(core, ADC_REG_DELAY_CNTRL,
 							ADC_DELAY_ADDRESS(lane)
 							| ADC_DELAY_WDATA(val)
 							| ADC_DELAY_SEL);
 				}
 			}
 
-			adc_write(ADC_REG_CHAN_STATUS(0), ~0);
+			adc_write(core, ADC_REG_CHAN_STATUS(0), ~0);
 
 			mdelay(1);
 
-			adc_read(ADC_REG_CHAN_STATUS(0), &stat);
+			adc_read(core, ADC_REG_CHAN_STATUS(0), &stat);
 
 			err_field[val + (inv_range * (max_val + 1))] =
 			    ! !(stat & (ADC_PN_ERR | ADC_PN_OOS));
@@ -224,9 +227,9 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 	if (val > max_val) {
 		val -= max_val + 1;
 		if (!dco) {
-			adc_read(ADC_REG_CNTRL, &reg_cntrl);
+			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
 			reg_cntrl |= ADC_DDR_EDGESEL;
-			adc_write(ADC_REG_CNTRL, reg_cntrl);
+			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
 		}
 		cnt = 1;
 	} else {
@@ -234,9 +237,9 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 			ad9265_spi_write(AD9265_REG_OUTPUT_PHASE,
 				 OUTPUT_EVEN_ODD_MODE_EN);
 		} else {
-			adc_read(ADC_REG_CNTRL, &reg_cntrl);
+			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
 			reg_cntrl &= ~ADC_DDR_EDGESEL;
-			adc_write(ADC_REG_CNTRL, reg_cntrl);
+			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
 		}
 		cnt = 0;
 	}
@@ -257,16 +260,16 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 		ad9265_spi_write(AD9265_REG_TRANSFER, TRANSFER_SYNC);
 	} else {
 		for (lane = 0; lane < nb_lanes; lane++) {
-			adc_write(ADC_REG_DELAY_CNTRL, 0);
+			adc_write(core, ADC_REG_DELAY_CNTRL, 0);
 
-			adc_write(ADC_REG_DELAY_CNTRL,
+			adc_write(core, ADC_REG_DELAY_CNTRL,
 					ADC_DELAY_ADDRESS(lane)
 					| ADC_DELAY_WDATA(val)
 					| ADC_DELAY_SEL);
 		}
 	}
 
-	adc_write(ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
+	adc_write(core, ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
 
 	ret = ad9265_outputmode_set(ad9265_output_mode);
 	if (ret < 0)
@@ -278,7 +281,9 @@ int32_t ad9265_calibrate(uint8_t dco, uint8_t dco_en, uint8_t nb_lanes)
 /***************************************************************************//**
 * @brief ad9265_setup
 *******************************************************************************/
-int32_t ad9265_setup(uint32_t spi_device_id, uint8_t slave_select)
+int32_t ad9265_setup(uint32_t spi_device_id,
+					 uint8_t slave_select,
+					 adc_core core)
 {
 	uint8_t chip_id;
 
@@ -295,7 +300,7 @@ int32_t ad9265_setup(uint32_t spi_device_id, uint8_t slave_select)
 	ad9265_output_mode = AD9265_DEF_OUTPUT_MODE | OUTPUT_MODE_TWOS_COMPLEMENT;
 	ad9265_outputmode_set(ad9265_output_mode);
 
-	ad9265_calibrate(1, 0, 0);
+	ad9265_calibrate(1, 0, 0, core);
 
 	xil_printf("AD9265 successfully initialized.\n");
 

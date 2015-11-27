@@ -40,10 +40,11 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <xil_cache.h>
 #include <xil_printf.h>
 #include "xparameters.h"
-#include "ad9434.h"
 #include "adc_core.h"
+#include "ad9434.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -58,15 +59,26 @@
 *******************************************************************************/
 int main(void)
 {
-	adc_setup(AD9434_CORE_BASEADDR, AD9434_DMA_BASEADDR, 1);
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
 
-	ad9434_setup(SPI_DEVICE_ID, 0);
+	adc_core ad9434_core;
+
+	ad9434_core.adc_baseaddr = AD9434_CORE_BASEADDR;
+	ad9434_core.dmac_baseaddr = AD9434_DMA_BASEADDR;
+	ad9434_core.no_of_channels = 1;
+	adc_setup(ad9434_core);
+
+	ad9434_setup(SPI_DEVICE_ID, 0, ad9434_core);
 
 	ad9434_testmode_set(0, TESTMODE_ONE_ZERO_TOGGLE);
 
-	adc_capture(16384, ADC_DDR_BASEADDR);
+	adc_capture(ad9434_core, 32768, ADC_DDR_BASEADDR);
 
 	xil_printf("Done\n");
+
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
 
 	return 0;
 }

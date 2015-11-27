@@ -221,15 +221,37 @@ void adc4_gpio_ctl(uint32_t device_id)
 	mdelay(10);
 }
 
+jesd204b_state jesd204b_st = {
+	1,	// lanesync_enable
+	1,	// scramble_enable
+	0,	// sysref_always_enable
+	32,	// frames_per_multiframe
+	1,	// bytes_per_frame
+	1,	// subclass
+};
+
+jesd204b_gt_link gt_link = {
+	FMCADC4_GT_BASEADDR,	// gt_core_addr
+	JESD204B_GT_RX,			// tx_or_rx
+	0,						// first_lane
+	7,						// last_lane
+	JESD204B_GT_QPLL,		// qpll_or_cpll
+	JESD204B_GT_DFE,		// lpm_or_dfe
+	500,					// ref_clk
+	1000,					// lane_rate
+	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
+	3,						// sys_clk_sel
+	4,						// out_clk_sel
+	0,						// gth_or_gtx
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	jesd204b_gt_link ad9680_gt_link;
-	jesd204b_state jesd204b_st;
-	adc_core ad9680_0;
-	adc_core ad9680_1;
+	adc_core ad9680_0_core;
+	adc_core ad9680_1_core;
 
 	adc4_gpio_ctl(GPIO_DEVICE_ID);
 
@@ -244,41 +266,28 @@ int main(void)
 
 	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
 
-	jesd204b_gt_initialize(FMCADC4_GT_BASEADDR, 8);
+	jesd204b_gt_initialize(gt_link);
 
 	ad9680_setup(SPI_DEVICE_ID, 1);
 
 	ad9680_setup(SPI_DEVICE_ID, 2);
 
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 32;
-	jesd204b_st.bytes_per_frame = 1;
-	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 
-	ad9680_gt_link.tx_or_rx = JESD204B_GT_RX;
-	ad9680_gt_link.first_lane = 0;
-	ad9680_gt_link.last_lane = 7;
-	ad9680_gt_link.qpll_or_cpll = JESD204B_GT_QPLL;
-	ad9680_gt_link.lpm_or_dfe = JESD204B_GT_DFE;
-	ad9680_gt_link.ref_clk = 500;
-	ad9680_gt_link.lane_rate = 10000;
-	ad9680_gt_link.sysref_int_or_ext = JESD204B_GT_SYSREF_EXT;
-	ad9680_gt_link.sys_clk_sel = 3;
-	ad9680_gt_link.out_clk_sel = 4;
-	ad9680_gt_link.gth_or_gtx = 0;
+	jesd204b_gt_setup(gt_link);
+	jesd204b_gt_en_sync_sysref(gt_link);
 
-	jesd204b_gt_setup(ad9680_gt_link);
+	ad9680_0_core.adc_baseaddr = AD9680_CORE_0_BASEADDR;
+	ad9680_0_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	ad9680_0_core.no_of_channels = 2;
+	ad9680_0_core.resolution = 14;
+	adc_setup(ad9680_0_core);
 
-	ad9680_0.adc_baseaddr = AD9680_CORE_0_BASEADDR;
-	ad9680_0.dmac_baseaddr = AD9680_DMA_BASEADDR;
-	adc_setup(ad9680_0, 2);
-
-	ad9680_1.adc_baseaddr = AD9680_CORE_1_BASEADDR;
-	ad9680_1.dmac_baseaddr = 0;
-	adc_setup(ad9680_1, 2);
+	ad9680_1_core.adc_baseaddr = AD9680_CORE_1_BASEADDR;
+	ad9680_1_core.dmac_baseaddr = 0;
+	ad9680_1_core.no_of_channels = 2;
+	ad9680_1_core.resolution = 14;
+	adc_setup(ad9680_1_core);
 
 	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
 	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x05);
@@ -287,8 +296,8 @@ int main(void)
 	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
 	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0);
 
-	adc_pn_mon(ad9680_0, 2, 1);
-	adc_pn_mon(ad9680_1, 2, 1);
+	adc_pn_mon(ad9680_0_core, ADC_PN23A);
+	adc_pn_mon(ad9680_1_core, ADC_PN23A);
 
 	xil_printf("Initialization done.\n\r");
 
@@ -300,9 +309,9 @@ int main(void)
 	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
 	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
 
-	adc_capture(ad9680_0, 32768, ADC_DDR_BASEADDR);
+	adc_capture(ad9680_0_core, 32768, ADC_DDR_BASEADDR);
 
-	xil_printf("Capture done.\n\r");
+	xil_printf("Ramp capture done.\n");
 
 	return 0;
 }

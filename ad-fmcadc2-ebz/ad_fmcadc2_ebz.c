@@ -49,44 +49,66 @@
 #include "jesd204b_v51.h"
 
 #ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
+#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+#define ADC_DDR_BASEADDR		XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0x800000
 #else
-#define SPI_DEVICE_ID	XPAR_SPI_0_DEVICE_ID
+#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
+#define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 #define AD9625_CORE_BASEADDR	XPAR_AXI_AD9625_CORE_BASEADDR
 #define AD9625_DMA_BASEADDR		XPAR_AXI_AD9625_DMA_BASEADDR
 #define AD9625_JESD_BASEADDR	XPAR_AXI_AD9625_JESD_BASEADDR
-#define AD9625_GT_GT_BASEADDR	XPAR_AXI_AD9625_GT_BASEADDR
+#define AD9625_GT_BASEADDR		XPAR_AXI_AD9625_GT_BASEADDR
+
+jesd204b_state jesd204b_st = {
+	1,	// lanesync_enable
+	1,	// scramble_enable
+	0,	// sysref_always_enable
+	32,	// frames_per_multiframe
+	1,	// bytes_per_frame
+	1,	// subclass
+};
+
+jesd204b_gt_link gt_link = {
+	AD9625_GT_BASEADDR,		// gt_core_addr
+	JESD204B_GT_RX,			// tx_or_rx
+	0,						// first_lane
+	7,						// last_lane
+	JESD204B_GT_CPLL,		// qpll_or_cpll
+	JESD204B_GT_DFE,		// lpm_or_dfe
+	500,					// ref_clk
+	1000,					// lane_rate
+	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
+	0,						// sys_clk_sel
+	2,						// out_clk_sel
+	0,						// gth_or_gtx
+};
 
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
-	jesd204b_state jesd204b_st;
+	adc_core ad9625_core;
 
 	ad9625_setup(SPI_DEVICE_ID, 0);
 
-	jesd204b_gt_st.use_cpll = 1;
-	jesd204b_gt_st.rx_sys_clk_sel = 0;
-	jesd204b_gt_st.rx_out_clk_sel = 2;
-	jesd204b_gt_st.tx_sys_clk_sel = 0;
-	jesd204b_gt_st.tx_out_clk_sel = 2;
-	jesd204b_gt_setup(AD9625_GT_GT_BASEADDR, jesd204b_gt_st);
-
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 32;
-	jesd204b_st.bytes_per_frame = 1;
-	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD9625_JESD_BASEADDR, jesd204b_st);
 
-	jesd204b_gt_clk_enable(JESD204B_GT_RX);
+	jesd204b_gt_setup(gt_link);
+	jesd204b_gt_en_sync_sysref(gt_link);
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
 	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
 	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x01);
 
-	adc_setup(AD9625_CORE_BASEADDR, AD9625_DMA_BASEADDR, 1);
+	ad9625_core.adc_baseaddr = AD9625_CORE_BASEADDR;
+	ad9625_core.dmac_baseaddr = AD9625_DMA_BASEADDR;
+	ad9625_core.no_of_channels = 1;
+	ad9625_core.resolution = 12;
+
+	adc_setup(ad9625_core);
+
+	xil_printf("Start capturing data...\n\r");
+
+	adc_capture(ad9625_core, 16384, ADC_DDR_BASEADDR);
 
 	xil_printf("Done.\n\r");
 
