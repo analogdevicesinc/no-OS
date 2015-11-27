@@ -299,6 +299,7 @@ void daq2_gpio_ctl(uint32_t gpio_device_id)
 int main(void)
 {
 	jesd204b_state jesd204b_st;
+	adc_core ad9680_core;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -339,8 +340,11 @@ int main(void)
 	dds_set_phase(3, 90000);
 	dds_set_scale(3, 500000);
 
-	adc_setup(AD9680_CORE_BASEADDR, AD9680_DMA_BASEADDR, 2);
-	adc_capture(16384, ADC_DDR_BASEADDR);
+	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
+	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	adc_setup(ad9680_core, 2);
+
+	adc_capture(ad9680_core, 16384, ADC_DDR_BASEADDR);
 
 	xil_printf("done.\n\r");
 
