@@ -112,7 +112,7 @@ void adc_dmac_write(adc_core core,
 /***************************************************************************//**
 * @brief adc_setup
 *******************************************************************************/
-int32_t adc_setup(adc_core core, uint8_t no_of_channels)
+int32_t adc_setup(adc_core core)
 {
 	uint8_t	 index;
 	uint32_t reg_data;
@@ -127,7 +127,7 @@ int32_t adc_setup(adc_core core, uint8_t no_of_channels)
 	adc_write(core, ADC_REG_RSTN, 0);
 	adc_write(core, ADC_REG_RSTN, ADC_MMCM_RSTN | ADC_RSTN);
 
-	for(index = 0; index < no_of_channels; index++) {
+	for(index = 0; index < core.no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_CNTRL(index), 0x51);
 	}
 
@@ -177,14 +177,16 @@ void adc_dmac_isr(void *instance)
 /***************************************************************************//**
  * @brief adc_capture
 *******************************************************************************/
-int32_t adc_capture(adc_core core, uint32_t size, uint32_t start_address)
+int32_t adc_capture(adc_core core,
+					uint32_t no_of_samples,
+					uint32_t start_address)
 {
 
 	uint32_t reg_val;
 	uint32_t transfer_id;
 	uint32_t length;
 
-	length = (size * 4);
+	length = (no_of_samples * core.no_of_channels * ((core.resolution + 7) / 8));
 
 	adc_dmac_write(core, ADC_DMAC_REG_CTRL, 0x0);
 	adc_dmac_write(core, ADC_DMAC_REG_CTRL, ADC_DMAC_CTRL_ENABLE);
@@ -283,25 +285,24 @@ int32_t adc_set_pnsel(adc_core core,
  * @brief adc_pn_mon
 *******************************************************************************/
 int32_t adc_pn_mon(adc_core core,
-				   uint8_t no_of_channels,
 				   enum adc_pn_sel sel)
 {
 	uint8_t	index;
 	uint32_t reg_data;
 	int32_t pn_errors = 0;
 
-	for (index = 0; index < no_of_channels; index++) {
+	for (index = 0; index < core.no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_ENABLE);
 		adc_set_pnsel(core, index, sel);
 	}
 	mdelay(1);
 
-	for (index = 0; index < no_of_channels; index++) {
+	for (index = 0; index < core.no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
 	}
 	mdelay(100);
 
-	for (index = 0; index < no_of_channels; index++) {
+	for (index = 0; index < core.no_of_channels; index++) {
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
@@ -310,4 +311,44 @@ int32_t adc_pn_mon(adc_core core,
 	}
 
 	return pn_errors;
+}
+
+/***************************************************************************//**
+ * @brief adc_ramp_test
+*******************************************************************************/
+int32_t adc_ramp_test(adc_core core,
+					  uint32_t no_of_samples,
+					  uint32_t start_address)
+{
+	uint8_t err_cnt = 0;
+	uint32_t exp_data;
+	uint32_t rcv_data;
+	uint32_t index;
+
+	// FIXME
+	for (index = 0; index < no_of_samples; index++) {
+		rcv_data = Xil_In32(start_address + (index*4)) & 0x3fff3fff;
+		if (index == 0)
+			exp_data = rcv_data;
+		if (rcv_data != exp_data) {
+			xil_printf("Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+					index, rcv_data, exp_data);
+			if (exp_data == 10)
+				break;
+			exp_data++;
+		}
+		if ((exp_data & 0x3fff) == 0x3fff)
+			exp_data = exp_data & 0xffff0000;
+		else
+			exp_data = exp_data + 0x00000001;
+		if ((exp_data & 0x3fff0000) == 0x3fff0000)
+			exp_data = exp_data & 0x0000ffff;
+		else
+			exp_data = exp_data + 0x00010000;
+	}
+
+	if (err_cnt)
+		return -1;
+	else
+		return 0;
 }

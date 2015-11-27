@@ -3,7 +3,7 @@
 * @brief Implementation of JESD204B GT Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -45,90 +45,92 @@
 #include "platform_drivers.h"
 #include "jesd204b_gt.h"
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-uint32_t jesd204b_gt_baseaddr;
-uint32_t jesd204b_gt_init_done = 0;
-
 /***************************************************************************//**
 * @brief jesd204b_gt_read
 *******************************************************************************/
-int32_t jesd204b_gt_read(uint32_t reg_addr, uint32_t *reg_data)
+int32_t jesd204b_gt_read(jesd204b_gt_link link_param,
+						 uint32_t reg_addr,
+						 uint32_t *reg_data)
 {
-  *reg_data = Xil_In32((jesd204b_gt_baseaddr + reg_addr));
+	*reg_data = Xil_In32((link_param.gt_core_addr + reg_addr));
 
-  return 0;
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief jesd204b_gt_write
 *******************************************************************************/
-int32_t jesd204b_gt_write(uint32_t reg_addr, uint32_t reg_data)
+int32_t jesd204b_gt_write(jesd204b_gt_link link_param,
+						  uint32_t reg_addr,
+						  uint32_t reg_data)
 {
-  Xil_Out32((jesd204b_gt_baseaddr + reg_addr), reg_data);
+	Xil_Out32((link_param.gt_core_addr + reg_addr), reg_data);
 
-  return 0;
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief jesd204b_gt_txrx_read
 *******************************************************************************/
-int32_t jesd204b_gt_txrx_read(uint8_t tx_or_rx, uint32_t reg_addr, uint32_t *reg_data)
+int32_t jesd204b_gt_txrx_read(jesd204b_gt_link link_param,
+							  uint32_t reg_addr,
+							  uint32_t *reg_data)
 {
-  *reg_data = Xil_In32((jesd204b_gt_baseaddr + reg_addr + ((tx_or_rx == JESD204B_GT_TX) ?
-    JESD204B_GT_REG_TX_OFFSET : JESD204B_GT_REG_RX_OFFSET)));
+	jesd204b_gt_read(link_param, reg_addr + ((link_param.tx_or_rx == JESD204B_GT_TX) ?
+		    JESD204B_GT_REG_TX_OFFSET : JESD204B_GT_REG_RX_OFFSET), reg_data);
 
-  return 0;
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief jesd204b_gt_txrx_write
 *******************************************************************************/
-int32_t jesd204b_gt_txrx_write(uint8_t tx_or_rx, uint32_t reg_addr, uint32_t reg_data)
+int32_t jesd204b_gt_txrx_write(jesd204b_gt_link link_param,
+							   uint32_t reg_addr,
+							   uint32_t reg_data)
 {
-  Xil_Out32((jesd204b_gt_baseaddr + reg_addr + ((tx_or_rx == JESD204B_GT_TX) ?
-    JESD204B_GT_REG_TX_OFFSET : JESD204B_GT_REG_RX_OFFSET)), reg_data);
-
-  return 0;
+	jesd204b_gt_write(link_param, reg_addr + ((link_param.tx_or_rx == JESD204B_GT_TX) ?
+		    JESD204B_GT_REG_TX_OFFSET : JESD204B_GT_REG_RX_OFFSET), reg_data);
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief jesd204b_gt_txrx_status_check
 *******************************************************************************/
-int32_t jesd204b_gt_txrx_status(uint8_t tx_or_rx, uint8_t first_lane,
-  uint8_t last_lane, uint32_t status)
+int32_t jesd204b_gt_txrx_status(jesd204b_gt_link link_param,
+								uint8_t first_lane,
+								uint8_t last_lane,
+								uint32_t status)
 {
-  int32_t lane;
-  int32_t lane_timeout;
-  uint32_t data;
-  uint32_t lane_status_all;
+	int32_t lane;
+	int32_t lane_timeout = 10;
+	uint32_t data;
+	uint32_t lane_status_all = 0;
 
-  lane_status_all = 0;
-  lane_timeout = 10;
-  while(lane_status_all == 0)
-  {
-    mdelay(1);
-    lane_status_all = 1;
-    lane_timeout = lane_timeout - 1;
-    for (lane = last_lane; lane >= first_lane; lane--)
-    {
-      jesd204b_gt_txrx_read(tx_or_rx, JESD204B_GT_REG_STATUS(lane), &data);
-      if((data & status) != status)
-      {
-        lane_status_all = 0;
-        if(lane_timeout <= 0)
-        {
-          xil_printf("JESD204B-GT-%s[%d]: Invalid status, received(0x%05x), expected(0x%05x)!\n",
-            ((tx_or_rx == JESD204B_GT_TX) ? "TX" : "RX"), lane, data, status);
-        }
-      }
-    }
-    if(lane_timeout <= 0) break;
-  }
+	while (lane_status_all == 0) {
+		mdelay(1);
+		lane_status_all = 1;
+		lane_timeout = lane_timeout - 1;
+		for (lane = last_lane; lane >= first_lane; lane--) {
+			jesd204b_gt_txrx_read(link_param,
+					JESD204B_GT_REG_STATUS(lane), &data);
+			if ((data & status) != status) {
+				lane_status_all = 0;
+				if(lane_timeout <= 0)
+					xil_printf("JESD204B-GT-%s[%d]: Invalid status,"
+							" received(0x%05x), expected(0x%05x)!\n",
+							((link_param.tx_or_rx == JESD204B_GT_TX) ? "TX" : "RX"),
+							lane, data, status);
+			}
+		}
+		if (lane_timeout <= 0)
+			break;
+	}
 
-  if(lane_status_all == 0) return(-1);
-  return(0);
+	if (lane_status_all == 0)
+		return -1;
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -136,127 +138,130 @@ int32_t jesd204b_gt_txrx_status(uint8_t tx_or_rx, uint8_t first_lane,
 *******************************************************************************/
 int32_t jesd204b_gt_setup(jesd204b_gt_link link_param)
 {
-  int32_t lane;
+	int32_t lane;
 
-  if(jesd204b_gt_init_done != 1)
-  {
-    xil_printf("JESD204B GT run initialize before setup.\n");
-    return(-1);
-  }
+	// need to check here if rx/tx are doing conflicting cpll/qpll usage
 
-  // need to check here if rx/tx are doing conflicting cpll/qpll usage.
+	for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_PLL_RSTN(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_GT_RSTN(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_RSTN(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_USER_READY(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_SYNC_CTL(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_SYSREF_CTL(lane), 0);
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_LPM_CPLL_PD(lane),
+						JESD204B_GT_LPM_DFE(link_param.lpm_or_dfe));
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_CLK_SEL(lane),
+						JESD204B_GT_SYS_CLK_SEL(link_param.sys_clk_sel) |
+						JESD204B_GT_OUT_CLK_SEL(link_param.out_clk_sel));
+		jesd204b_gt_txrx_write(link_param,
+						JESD204B_GT_REG_PLL_RSTN(lane),
+						JESD204B_GT_PLL_RSTN);
+	}
 
-  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--)
-  {
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_PLL_RSTN(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_GT_RSTN(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_RSTN(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_USER_READY(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYNC_CTL(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYSREF_CTL(lane), 0);
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_LPM_CPLL_PD(lane),
-      JESD204B_GT_LPM_DFE(link_param.lpm_or_dfe));
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_CLK_SEL(lane),
-      JESD204B_GT_SYS_CLK_SEL(link_param.sys_clk_sel) |
-      JESD204B_GT_OUT_CLK_SEL(link_param.out_clk_sel));
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_PLL_RSTN(lane),
-      JESD204B_GT_PLL_RSTN);
-  }
+	// reconfigure gt
 
-  // reconfigure gt -
+	// check pll status
 
-  // check pll status
+	if (jesd204b_gt_txrx_status(link_param, link_param.first_lane,
+			link_param.last_lane, JESD204B_GT_STATUS_PLL_LOCKED) != 0)
+	return -1;
 
-  if(jesd204b_gt_txrx_status(link_param.tx_or_rx, link_param.first_lane,
-    link_param.last_lane, JESD204B_GT_STATUS_PLL_LOCKED) != 0)
-    return(-1);
+	// bring phy out of reset
 
-  // bring phy out of reset
+	for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+		jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_GT_RSTN(lane), JESD204B_GT_RSTN);
+	}
+	mdelay(1);
 
-  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--)
-  {
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_GT_RSTN(lane),
-      JESD204B_GT_RSTN);
-  }
-  mdelay(1);
+	for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+		jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_USER_READY(lane), JESD204B_GT_USER_READY);
+	}
 
-  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--)
-  {
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_USER_READY(lane),
-      JESD204B_GT_USER_READY);
-  }
+	// check reset-done & pll status
 
-  // check reset-done & pll status
+	if (jesd204b_gt_txrx_status(link_param, link_param.first_lane,
+			link_param.last_lane, JESD204B_GT_STATUS_RST_DONE) != 0)
+		return -1;
 
-  if(jesd204b_gt_txrx_status(link_param.tx_or_rx, link_param.first_lane,
-    link_param.last_lane, JESD204B_GT_STATUS_RST_DONE) != 0)
-    return(-1);
+	return 0;
+}
 
-  // bring data-path out of reset
+/***************************************************************************//**
+* @brief jesd204b_gt_en_sync_sysref
+*******************************************************************************/
+int32_t jesd204b_gt_en_sync_sysref(jesd204b_gt_link link_param)
+{
+	int32_t lane;
 
-  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--)
-  {
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_RSTN(lane),
-      JESD204B_GT_RSTN);
-  }
-  mdelay(1);
+	// bring data-path out of reset
 
-  // enable sync & sysref
+	for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+		jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_RSTN(lane), JESD204B_GT_RSTN);
+	}
+	mdelay(1);
 
-  for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--)
-  {
-    jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYNC_CTL(lane),
-      JESD204B_GT_SYNC);
-    if(link_param.sysref_int_or_ext == JESD204B_GT_SYSREF_INT)
-    {
-      jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYSREF_CTL(lane),
-        JESD204B_GT_SYSREF_ON);
-      jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYSREF_CTL(lane),
-        JESD204B_GT_SYSREF_OFF);
-    }
-    else
-    {
-      jesd204b_gt_txrx_write(link_param.tx_or_rx, JESD204B_GT_REG_SYSREF_CTL(lane),
-        JESD204B_GT_SYSREF_EXTERNAL);
-    }
-  }
+	// enable sync & sysref
 
-  // check status
+	for (lane = link_param.last_lane; lane >= link_param.first_lane; lane--) {
+		jesd204b_gt_txrx_write(link_param,
+				JESD204B_GT_REG_SYNC_CTL(lane), JESD204B_GT_SYNC);
+		if(link_param.sysref_int_or_ext == JESD204B_GT_SYSREF_INT) {
+			jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_SYSREF_CTL(lane), JESD204B_GT_SYSREF_ON);
+			jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_SYSREF_CTL(lane), JESD204B_GT_SYSREF_OFF);
+		} else {
+			jesd204b_gt_txrx_write(link_param,
+					JESD204B_GT_REG_SYSREF_CTL(lane),
+					JESD204B_GT_SYSREF_EXTERNAL);
+		}
+	}
 
-  if(jesd204b_gt_txrx_status(link_param.tx_or_rx, link_param.first_lane,
-    link_param.last_lane, JESD204B_GT_STATUS_SYNC) != 0)
-    return(-1);
+	// check status
 
-  return(0);
+	if (jesd204b_gt_txrx_status(link_param, link_param.first_lane,
+			link_param.last_lane, JESD204B_GT_STATUS_SYNC) != 0)
+		return -1;
+
+	return 0;
 }
 
 /***************************************************************************//**
 * @brief jesd204b_gt_initialize
 *******************************************************************************/
-int32_t jesd204b_gt_initialize(uint32_t baseaddr, uint32_t num_of_lanes)
+int32_t jesd204b_gt_initialize(jesd204b_gt_link link_param)
 {
-  uint32_t jesd204b_gt_version;
-  int32_t lane;
+	uint32_t jesd204b_gt_version;
+	uint32_t num_of_lanes;
+	int32_t lane;
 
-  jesd204b_gt_baseaddr = baseaddr;
-  jesd204b_gt_init_done = 0;
-  jesd204b_gt_read(JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
-  if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7)
-  {
-    xil_printf("JESD204B GT Version %d is NOT supported.\n", jesd204b_gt_version);
-    return(-1);
-  }
+	jesd204b_gt_read(link_param, JESD204B_GT_REG_VERSION, &jesd204b_gt_version);
+	if(JESD204B_GT_VERSION_MAJOR(jesd204b_gt_version) < 7) {
+		xil_printf("JESD204B GT Version %d is NOT supported.\n",
+				jesd204b_gt_version);
+		return -1;
+	}
 
-  // drp-reset only
+	num_of_lanes = (link_param.last_lane - link_param.first_lane) + 1;
 
-  for (lane = 0; lane < num_of_lanes; lane++)
-  {
-    jesd204b_gt_write(JESD204B_GT_REG_DRP_RSTN(lane), 0);
-    jesd204b_gt_write(JESD204B_GT_REG_DRP_RSTN(lane), JESD204B_GT_DRP_RSTN);
-  }
+	// drp-reset only
 
-  jesd204b_gt_init_done = 1;
-  return(0);
+	for (lane = 0; lane < num_of_lanes; lane++) {
+		jesd204b_gt_write(link_param, JESD204B_GT_REG_DRP_RSTN(lane), 0);
+		jesd204b_gt_write(link_param, JESD204B_GT_REG_DRP_RSTN(lane), JESD204B_GT_DRP_RSTN);
+	}
+
+	return 0;
 }
-
-
