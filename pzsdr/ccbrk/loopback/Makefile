@@ -1,4 +1,7 @@
-# Symlink or copy over the related system_top.hdf to build
+# The related system_top.hdf file must be symlinked or copied over to build.
+#
+# Also, this requires at least vivado-2015.2 since it uses xsct to run the SDK
+# from the command line.
 
 SOURCES := loopback.c
 EXEC = loopback
