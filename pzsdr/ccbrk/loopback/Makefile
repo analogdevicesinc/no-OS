@@ -24,7 +24,7 @@ $(EXEC): system_top.hdf
 	@echo 'sdk build_project -name $(EXEC)' >> sdk/sdk.tcl
 	@echo 'exit' >> sdk/sdk.tcl
 	@xsct -n -q -s sdk/sdk.tcl
-	@rm -rf .Xil
+	@rm -rf .Xil *.log
 
 clean:
 	@rm -rf sdk
