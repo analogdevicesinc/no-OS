@@ -469,7 +469,7 @@ static int32_t ad6676_init(void)
 	if (ret < 0)
 		return ret;
 
-	if (!&phy->pdata->base.use_extclk)
+	if (!phy->pdata->base.use_extclk)
 		ad6676_set_clk_synth(phy->ref_clk, phy->pdata->base.f_adc_hz);
 	else
 		ad6676_set_extclk_cntl(phy->pdata->base.f_adc_hz);
