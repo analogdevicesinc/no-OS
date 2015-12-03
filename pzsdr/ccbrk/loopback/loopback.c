@@ -85,5 +85,8 @@ int main()
 			ret = XST_FAILURE;
 	}
 
+	Xil_DCacheEnable();
+	Xil_ICacheEnable();
+
 	return ret;
 }
