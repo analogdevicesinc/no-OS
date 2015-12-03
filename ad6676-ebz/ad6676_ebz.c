@@ -53,17 +53,29 @@
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
 #define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR			XPAR_PS7_GPIO_0_BASEADDR
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_OFFSET				54 + 32
 #define ADC_DDR_BASEADDR		XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0x800000
 #else
 #define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
-#define GPIO_BASEADDR			XPAR_GPIO_0_BASEADDR
+#define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
+#define GPIO_OFFSET				32
 #define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 #define AD6676_CORE_BASEADDR	XPAR_AXI_AD6676_CORE_BASEADDR
 #define AD6676_DMA_BASEADDR		XPAR_AXI_AD6676_DMA_BASEADDR
 #define AD6676_JESD_BASEADDR	XPAR_AXI_AD6676_JESD_BASEADDR
 #define AD6676_GT_BASEADDR		XPAR_AXI_AD6676_GT_BASEADDR
+#define GPIO_ADC_OEN			GPIO_OFFSET + 9
+#define GPIO_ADC_SELA			GPIO_OFFSET + 8
+#define GPIO_ADC_SELB			GPIO_OFFSET + 7
+#define GPIO_ADC_S0				GPIO_OFFSET + 6
+#define GPIO_ADC_S1				GPIO_OFFSET + 5
+#define GPIO_ADC_RESETB			GPIO_OFFSET + 4
+#define GPIO_ADC_AGC1			GPIO_OFFSET + 3
+#define GPIO_ADC_AGC2			GPIO_OFFSET + 2
+#define GPIO_ADC_AGC3			GPIO_OFFSET + 1
+#define GPIO_ADC_AGC4			GPIO_OFFSET + 0
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -91,38 +103,17 @@ ad6676_init_param default_init_param = {
 	16,				// jesd_f_frames_per_multiframe
 	1,				// shuffler_control
 	5,				// shuffler_thresh
+	GPIO_ADC_OEN,	// gpio_adc_oen
+	GPIO_ADC_SELA,	// gpio_adc_sela
+	GPIO_ADC_SELB,	// gpio_adc_selb
+	GPIO_ADC_S0,	// gpio_adc_s0
+	GPIO_ADC_S1,	// gpio_adc_s1
+	GPIO_ADC_RESETB,	// gpio_adc_resetb
+	GPIO_ADC_AGC1,	// gpio_adc_agc1
+	GPIO_ADC_AGC2,	// gpio_adc_agc2
+	GPIO_ADC_AGC3,	// gpio_adc_agc3
+	GPIO_ADC_AGC4,	// gpio_adc_agc4
 };
-
-/***************************************************************************//**
-* @brief ad6676_ebz_gpio_ctl
-*			gpios:
-*				adc_oen		9	- 0
-*				adc_sela	8	- 0
-*				adc_selb	7	- 1
-*				adc_s0		6	- 0
-*				adc_s1		5	- 1
-*				adc_resetb	4	- 1
-*				adc_agc1	3	- by default input - 0
-*				adc_agc2	2	- by default input - 0
-*				adc_agc3	1	- by default output
-*				adc_agc4	0	- by default output
-*******************************************************************************/
-void ad6676_ebz_gpio_ctl(uint32_t base_addr)
-{
-#ifdef _XPARAMETERS_PS_H_
-	Xil_Out32((base_addr + 0x02c4), 0x03ff); // direction (6-ctl, 5-status)
-	Xil_Out32((base_addr + 0x02c8), 0x03ff); // enable
-	Xil_Out32((base_addr + 0x0018), 0x0000); // mask
-	Xil_Out32((base_addr + 0x004c), 0x0000); // data
-	mdelay(10);
-
-	Xil_Out32((base_addr + 0x0018), 0x03ff); // mask
-	Xil_Out32((base_addr + 0x004c), 0x00b0); // data
-#else
-	Xil_Out32((base_addr + 0x000c), 0x0003); // direction
-	Xil_Out32((base_addr + 0x0008), 0x00b0); // data
-#endif
-}
 
 jesd204b_state jesd204b_st = {
 	1,	// lanesync_enable
@@ -155,10 +146,12 @@ int main(void)
 {
 	adc_core ad6676_core;
 
-	ad6676_ebz_gpio_ctl(GPIO_BASEADDR);
-
 	jesd204b_gt_initialize(gt_link);
-	ad6676_setup(SPI_DEVICE_ID, 0, &default_init_param);
+
+	ad6676_setup(SPI_DEVICE_ID,
+				 GPIO_DEVICE_ID,
+				 0,
+				 &default_init_param);
 
 	jesd204b_setup(AD6676_JESD_BASEADDR, jesd204b_st);
 

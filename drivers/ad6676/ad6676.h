@@ -323,10 +323,24 @@ struct ad6676_shuffler_conf {
 	uint8_t shuffle_thresh;
 };
 
+struct ad6676_gpio {
+	int32_t		adc_oen;
+	int32_t		adc_sela;
+	int32_t		adc_selb;
+	int32_t		adc_s0;
+	int32_t		adc_s1;
+	int32_t		adc_resetb;
+	int32_t		adc_agc1;
+	int32_t		adc_agc2;
+	int32_t		adc_agc3;
+	int32_t		adc_agc4;
+};
+
 struct ad6676_platform_data {
 	struct ad6676_base_conf base;
 	struct ad6676_jesd_conf jesd;
 	struct ad6676_shuffler_conf shuffler;
+	struct ad6676_gpio gpio;
 	uint8_t spi3wire;
 };
 
@@ -363,6 +377,17 @@ typedef struct
 	/* Shuffler Configuration */
 	uint8_t		shuffler_control;
 	uint8_t		shuffler_thresh;
+	/* GPIOs */
+	int32_t		gpio_adc_oen;
+	int32_t		gpio_adc_sela;
+	int32_t		gpio_adc_selb;
+	int32_t		gpio_adc_s0;
+	int32_t		gpio_adc_s1;
+	int32_t		gpio_adc_resetb;
+	int32_t		gpio_adc_agc1;
+	int32_t		gpio_adc_agc2;
+	int32_t		gpio_adc_agc3;
+	int32_t		gpio_adc_agc4;
 }ad6676_init_param;
 
 /******************************************************************************/
@@ -370,8 +395,10 @@ typedef struct
 /******************************************************************************/
 int32_t ad6676_spi_read(uint16_t reg_addr, uint8_t *reg_data);
 int32_t ad6676_spi_write(uint16_t reg_addr, uint8_t reg_data);
-int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
-		ad6676_init_param *init_param);
+int32_t ad6676_setup(uint32_t spi_device_id,
+					 uint32_t gpio_device_id,
+					 uint8_t slave_select,
+					 ad6676_init_param *init_param);
 int32_t ad6676_set_if_frequency(uint32_t if_freq_hz);
 int32_t ad6676_get_if_frequency(uint32_t *if_freq_hz);
 int32_t ad6676_set_if_bandwidth(uint32_t if_bw_hz);
