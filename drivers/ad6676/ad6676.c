@@ -392,17 +392,18 @@ int32_t ad6676_shuffle_setup(struct ad6676_shuffler_conf *conf)
 *******************************************************************************/
 static int32_t ad6676_calibrate(uint32_t cal)
 {
-	int32_t tout_i = 2, tout_o = 2;
+	int32_t tout_i, tout_o = 2;
 	uint32_t done;
 
 	do {
 		ad6676_spi_write(AD6676_CAL_CMD, cal);
+		tout_i = 2;
 
 		do {
 			mdelay(250);
 			ad6676_spi_read(AD6676_CAL_DONE, (uint8_t *)&done);
 			done &= CAL_DONE;
-		} while (!done && tout_i--);
+		} while (tout_i-- && !done);
 
 		if (!done) {
 			xil_printf("AD6676 CAL timeout (0x%X)\n", cal);
