@@ -16,9 +16,7 @@ $(EXEC): system_top.hdf
 	@echo 'sdk create_app_project -name $(EXEC) -hwproject hw -proc ps7_cortexa9_0 -os standalone -lang C -app "Empty Application" -bsp bsp' >> sdk/sdk.tcl
 	@echo 'exit' >> sdk/sdk.tcl
 	@xsct -n -q -s sdk/sdk.tcl
-	# apply fixes to make the elfs run in u-boot properly
-	@patch -p0 < ../../u-boot-elf-xil-crt0.S.patch
-	@sed -i 's/^ENTRY(_vector_table)/ENTRY(_start)/' "sdk/$(EXEC)/src/lscript.ld"
+	@patch -p0 < ../../u-boot-elf-2015.2.patch
 	@cp -R $(SOURCES) "sdk/$(EXEC)/src/"
 	@echo 'sdk set_workspace sdk' > sdk/sdk.tcl
 	@echo 'sdk build_project -name $(EXEC)' >> sdk/sdk.tcl
