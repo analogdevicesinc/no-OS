@@ -344,6 +344,28 @@ static int32_t ad6676_set_clk_synth(uint32_t refin_Hz, uint32_t freq)
 /***************************************************************************//**
 * @brief ad6676_jesd_setup
 *******************************************************************************/
+static int32_t ad6676_set_extclk_cntl(uint32_t freq)
+{
+	int ret;
+
+	xil_printf("%s: frequency %u\n", __func__, freq);
+
+	ret = ad6676_spi_write(AD6676_CLKSYN_LOGEN, 0x5);
+	if (ret < 0)
+		return ret;
+
+	/* Enable EXT CLK and ADC clock */
+	ret = ad6676_spi_write(AD6676_CLKSYN_ENABLE, /* 2A0 */
+		EN_EXT_CK | EN_ADC_CK);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+/***************************************************************************//**
+* @brief ad6676_jesd_setup
+*******************************************************************************/
 static int32_t ad6676_jesd_setup(struct ad6676_jesd_conf *conf)
 {
 	int32_t ret;
@@ -447,7 +469,10 @@ static int32_t ad6676_init(void)
 	if (ret < 0)
 		return ret;
 
-	ad6676_set_clk_synth(phy->ref_clk, phy->pdata->base.f_adc_hz);
+	if (!phy->pdata->base.use_extclk)
+		ad6676_set_clk_synth(phy->ref_clk, phy->pdata->base.f_adc_hz);
+	else
+		ad6676_set_extclk_cntl(phy->pdata->base.f_adc_hz);
 
 	ad6676_jesd_setup(&phy->pdata->jesd);
 
@@ -614,13 +639,71 @@ int32_t ad6676_get_attenuation(uint8_t *attenuation)
 }
 
 /***************************************************************************//**
+* @brief ad6676_gpio_config
+*******************************************************************************/
+int32_t ad6676_gpio_config(void)
+{
+	gpio_direction(phy->pdata->gpio.adc_oen, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_sela, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_selb, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_s0, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_s1, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_resetb, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_agc1, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_agc2, GPIO_OUTPUT);
+	gpio_direction(phy->pdata->gpio.adc_agc3, GPIO_INPUT);
+	gpio_direction(phy->pdata->gpio.adc_agc4, GPIO_INPUT);
+
+	gpio_set_value(phy->pdata->gpio.adc_oen, GPIO_LOW);
+
+	switch (phy->pdata->base.decimation) {
+	case 12:
+		gpio_set_value(phy->pdata->gpio.adc_s0, GPIO_HIGH);
+		gpio_set_value(phy->pdata->gpio.adc_s1, GPIO_HIGH);
+		break;
+	case 16:
+		gpio_set_value(phy->pdata->gpio.adc_s0, GPIO_LOW);
+		gpio_set_value(phy->pdata->gpio.adc_s1, GPIO_HIGH);
+		break;
+	case 24:
+		gpio_set_value(phy->pdata->gpio.adc_s0, GPIO_LOW);
+		gpio_set_value(phy->pdata->gpio.adc_s1, GPIO_HIGH);
+		break;
+	case 32:
+		gpio_set_value(phy->pdata->gpio.adc_s0, GPIO_LOW);
+		gpio_set_value(phy->pdata->gpio.adc_s1, GPIO_LOW);
+		break;
+	default:
+		return -1;
+	}
+
+	if (phy->pdata->base.use_extclk) {
+		gpio_set_value(phy->pdata->gpio.adc_sela, GPIO_HIGH);
+		gpio_set_value(phy->pdata->gpio.adc_selb, GPIO_LOW);
+	} else {
+		gpio_set_value(phy->pdata->gpio.adc_sela, GPIO_LOW);
+		gpio_set_value(phy->pdata->gpio.adc_selb, GPIO_HIGH);
+	}
+
+	gpio_set_value(phy->pdata->gpio.adc_resetb, GPIO_HIGH);
+	gpio_set_value(phy->pdata->gpio.adc_agc1, GPIO_LOW);
+	gpio_set_value(phy->pdata->gpio.adc_agc2, GPIO_LOW);
+
+	return 0;
+}
+
+/***************************************************************************//**
 * @brief ad6676_setup
 *******************************************************************************/
-int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
-				ad6676_init_param *init_param)
+int32_t ad6676_setup(uint32_t spi_device_id,
+					 uint32_t gpio_device_id,
+					 uint8_t slave_select,
+					 ad6676_init_param *init_param)
 {
 	uint8_t reg_id;
 	uint8_t status;
+
+	gpio_init(gpio_device_id);
 
 	ad6676_slave_select = slave_select;
 	spi_init(spi_device_id, 0, 0);
@@ -665,7 +748,21 @@ int32_t ad6676_setup(uint32_t spi_device_id, uint8_t slave_select,
 	phy->pdata->shuffler.shuffle_ctrl = init_param->shuffler_control;
 	phy->pdata->shuffler.shuffle_thresh = init_param->shuffler_thresh;
 
+	/* GPIO */
+	phy->pdata->gpio.adc_oen = init_param->gpio_adc_oen;
+	phy->pdata->gpio.adc_sela = init_param->gpio_adc_sela;
+	phy->pdata->gpio.adc_selb = init_param->gpio_adc_selb;
+	phy->pdata->gpio.adc_s0 = init_param->gpio_adc_s0;
+	phy->pdata->gpio.adc_s1 = init_param->gpio_adc_s1;
+	phy->pdata->gpio.adc_resetb = init_param->gpio_adc_resetb;
+	phy->pdata->gpio.adc_agc1 = init_param->gpio_adc_agc1;
+	phy->pdata->gpio.adc_agc2 = init_param->gpio_adc_agc2;
+	phy->pdata->gpio.adc_agc3 = init_param->gpio_adc_agc3;
+	phy->pdata->gpio.adc_agc4 = init_param->gpio_adc_agc4;
+
 	phy->pdata->base.attenuation = 12;
+
+	ad6676_gpio_config();
 
 	ad6676_spi_read(AD6676_CHIP_ID0, &reg_id);
 	if (reg_id != CHIPID0_AD6676) {
