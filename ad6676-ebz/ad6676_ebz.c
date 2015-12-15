@@ -160,7 +160,7 @@ int main(void)
 
 	ad6676_core.adc_baseaddr = AD6676_CORE_BASEADDR;
 	ad6676_core.dmac_baseaddr = AD6676_DMA_BASEADDR;
-	ad6676_core.no_of_channels = 1;
+	ad6676_core.no_of_channels = 2;
 	ad6676_core.resolution = 16;
 
 	adc_setup(ad6676_core);
