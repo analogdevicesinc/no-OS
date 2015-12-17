@@ -140,6 +140,8 @@ u32 gt_init(u32 n)
 
 u32 fmc_init(void)
 {
+	u32 ret = XST_SUCCESS;
+
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x101 * 0x4)), 0x00000000);
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x111 * 0x4)), 0x00000000);
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x200 * 0x4)), 0x1);
@@ -152,10 +154,12 @@ u32 fmc_init(void)
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x270 * 0x4)), 0x1);
 	delay_ms(1);
 
-	gt_init(0);
+	if (gt_init(0) != XST_SUCCESS)
+		ret = XST_FAILURE;
 
-	fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x202 * 0x4)), FMC_CLK0);
-	fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x212 * 0x4)), FMC_CLK1);
+	if ((fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x202 * 0x4)), FMC_CLK0) != XST_SUCCESS) ||
+			(fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x212 * 0x4)), FMC_CLK1) != XST_SUCCESS));
+		ret = XST_FAILURE;
 	/* fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x222 * 0x4)), 250);
 	 * fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x232 * 0x4)), 125);
 	 * fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x242 * 0x4)), 125);
@@ -164,7 +168,7 @@ u32 fmc_init(void)
 	 * fmc_verify_clk(Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x272 * 0x4)), 0);
 	 */
 
-	return XST_SUCCESS;
+	return ret;
 }
 
 void gpio_write(u32 value) {
@@ -314,7 +318,8 @@ int main()
 	}
 
 	/* Initialize GT for SFP */
-	gt_init(1);
+	if (gt_init(1) != XST_SUCCESS)
+		ret = XST_FAILURE;
 
 	/* SFP pins aren't looped back normally */
 	/* walking 1 on SFP */
