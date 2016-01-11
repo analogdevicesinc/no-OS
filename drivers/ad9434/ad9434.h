@@ -93,5 +93,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9434_testmode_set(uint8_t chan, uint8_t mode);
-int32_t ad9434_setup(uint32_t spi_device_id, uint8_t slave_select);
+int32_t ad9434_setup(uint32_t spi_device_id,
+					 uint8_t slave_select,
+					 adc_core core);
 #endif

@@ -3,7 +3,7 @@
 * @brief Header file of ADC Core Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -47,6 +47,9 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define ADC_REG_ID				0x0004
+#define ADC_ID(x)				(((x) & 0xffffffff) << 0)
+
 #define ADC_REG_RSTN			0x0040
 #define ADC_MMCM_RSTN			(1 << 1)
 #define ADC_RSTN				(1 << 0)
@@ -55,6 +58,14 @@
 #define ADC_R1_MODE				(1 << 2)
 #define ADC_DDR_EDGESEL			(1 << 1)
 #define ADC_PIN_MODE			(1 << 0)
+
+#define ADC_REG_CLK_FREQ		0x0054
+#define ADC_CLK_FREQ(x)			(((x) & 0xFFFFFFFF) << 0)
+#define ADC_TO_CLK_FREQ(x)		(((x) >> 0) & 0xFFFFFFFF)
+
+#define ADC_REG_CLK_RATIO		0x0058
+#define ADC_CLK_RATIO(x)		(((x) & 0xFFFFFFFF) << 0)
+#define ADC_TO_CLK_RATIO(x)		(((x) >> 0) & 0xFFFFFFFF)
 
 #define ADC_REG_STATUS			0x005C
 #define ADC_MUX_PN_ERR			(1 << 3)
@@ -130,12 +141,33 @@ enum adc_pn_sel {
 	ADC_PN_END = 10,
 };
 
+typedef struct {
+	uint32_t adc_baseaddr;
+	uint32_t dmac_baseaddr;
+	uint8_t	 master;
+	uint8_t	 no_of_channels;
+	uint8_t	 resolution;
+} adc_core;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t adc_read(uint32_t reg_addr, uint32_t *reg_data);
-int32_t adc_write(uint32_t reg_addr, uint32_t reg_data);
-int32_t adc_setup(uint32_t adc_addr, uint32_t dma_addr,  uint8_t ch_no);
-int32_t adc_capture(uint32_t size, uint32_t start_address);
-int32_t adc_set_pnsel(uint8_t channel, enum adc_pn_sel sel);
+int32_t adc_read(adc_core core,
+				 uint32_t reg_addr,
+				 uint32_t *reg_data);
+int32_t adc_write(adc_core core,
+				  uint32_t reg_addr,
+				  uint32_t reg_data);
+int32_t adc_setup(adc_core core);
+int32_t adc_capture(adc_core core,
+					uint32_t size,
+					uint32_t start_address);
+int32_t adc_set_pnsel(adc_core core,
+					  uint8_t channel,
+					  enum adc_pn_sel sel);
+int32_t adc_pn_mon(adc_core core,
+				   enum adc_pn_sel sel);
+int32_t adc_ramp_test(adc_core core,
+					  uint32_t no_of_samples,
+					  uint32_t start_address);
 #endif

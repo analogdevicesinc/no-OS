@@ -102,7 +102,7 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
 	ad9144_spi_read(REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		xil_printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
 		return -1;
 	}
 
@@ -110,7 +110,7 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
 	ad9144_spi_read(REG_SPI_SCRATCHPAD, &scratchpad);
 	if(scratchpad != 0xAD)
 	{
-		xil_printf("Error: scratchpad (0x%x).\n", scratchpad);
+		xil_printf("Error: scratchpad (0x%x).\n\r", scratchpad);
 		return -1;
 	}
 
@@ -182,7 +182,7 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
 	mdelay(20);
 
 	ad9144_spi_read(0x281, &pll_stat);
-	xil_printf("AD9144 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
+	xil_printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9144_spi_write(0x268, 0x62);	// equalizer
 
@@ -216,15 +216,15 @@ int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
 
 	ad9144_spi_write(0x0e8, 0x01);	// read dac-0
 	ad9144_spi_read(0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-0 calibration %s.\n", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	xil_printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(0x0e8, 0x02);	// read dac-1
 	ad9144_spi_read(0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-1 calibration %s.\n", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	xil_printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(0x0e7, 0x30);	// turn off cal clock
 
-	xil_printf("AD9144 successfully initialized.\n");
+	xil_printf("AD9144 successfully initialized.\n\r");
 
 	return 0;
 }

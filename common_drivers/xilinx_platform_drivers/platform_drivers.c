@@ -3,7 +3,7 @@
 * @brief Implementation of Platform Drivers.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2015(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -49,12 +49,7 @@
 #include <xspi.h>
 #include <xgpio.h>
 #include <xgpio_l.h>
-static inline void usleep(unsigned long usleep)
-{
-	unsigned long delay = 0;
-
-	for(delay = 0; delay < usleep; delay++);
-}
+#include <microblaze_sleep.h>
 #endif
 #include "platform_drivers.h"
 
@@ -66,179 +61,200 @@ XSpiPs_Config	*spi_config;
 XSpiPs			spi_instance;
 XGpioPs_Config	*gpio_config;
 XGpioPs			gpio_instance;
+uint8_t			spi_decoded_cs = 0;
 #else
 XSpi_Config		*spi_config;
 XSpi			spi_instance;
 XGpio_Config	*gpio_config;
+XGpio			gpio_instance;
 #endif
 
 /***************************************************************************//**
 * @brief spi_init
 *******************************************************************************/
 int32_t spi_init(uint32_t device_id,
-		uint8_t clk_pha,
-		uint8_t clk_pol)
+				 uint8_t clk_pha,
+				 uint8_t clk_pol)
 {
 	uint32_t base_addr	 = 0;
-	uint32_t control_val = 0;
-#ifdef _XPARAMETERS_PS_H_
-	uint8_t  byte		 = 0;
+	uint32_t spi_options = 0;
 
+#ifdef _XPARAMETERS_PS_H_
 	spi_config = XSpiPs_LookupConfig(device_id);
+
 	base_addr = spi_config->BaseAddress;
 	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
-	control_val = XSPIPS_CR_SSFORCE_MASK |
-			XSPIPS_CR_SSCTRL_MASK |
-			4 << XSPIPS_CR_PRESC_SHIFT |
-			(clk_pha ? XSPIPS_CR_CPHA_MASK : 0) |
-			(clk_pol ? XSPIPS_CR_CPOL_MASK : 0) |
-			XSPIPS_CR_MSTREN_MASK;
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
-	for(byte = 0; byte < 128; byte++)
-	{
-		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
-	}
+
+	spi_options = XSPIPS_MASTER_OPTION |
+			(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+			(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
+			(spi_decoded_cs ? XSPIPS_DECODE_SSELECT_OPTION : 0) |
+			XSPIPS_FORCE_SSELECT_OPTION;
+	XSpiPs_SetOptions(&spi_instance, spi_options);
+
+	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
+
+	/* FIXME: Temporary 15.2 Fix */
+	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
+
+	XSpiPs_SetOptions(&spi_instance, spi_options);
+
+	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
 #else
 	XSpi_Initialize(&spi_instance, device_id);
+
 	XSpi_Stop(&spi_instance);
+
 	spi_config = XSpi_LookupConfig(device_id);
+
 	base_addr = spi_config->BaseAddress;
 	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
-	control_val = XSP_MASTER_OPTION |
+
+	spi_options = XSP_MASTER_OPTION |
 				  (clk_pol ? XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 				  (clk_pha ? XSP_CLK_PHASE_1_OPTION : 0) |
 				  XSP_MANUAL_SSELECT_OPTION;
-	XSpi_SetOptions(&spi_instance, control_val);
+	XSpi_SetOptions(&spi_instance, spi_options);
+
 	XSpi_Start(&spi_instance);
+
 	XSpi_IntrGlobalDisable(&spi_instance);
 #endif
+
 	return 0;
 }
 
 /***************************************************************************//**
 * @brief spi_write_and_read
 *******************************************************************************/
-int32_t spi_write_and_read(uint8_t ss, uint8_t *data,
-				 uint8_t bytes_number)
+int32_t spi_write_and_read(uint8_t ss,
+						   uint8_t *data,
+						   uint8_t bytes_number)
 {
-	uint32_t cnt		 = 0;
 #ifdef _XPARAMETERS_PS_H_
-	uint32_t base_addr	 = 0;
-	uint32_t control_val = 0;
-	uint32_t status	  	 = 0;
+	XSpiPs_SetSlaveSelect(&spi_instance, ss);
 
-	ss = (1 << ss);
-	base_addr = spi_config->BaseAddress;
-	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
-					control_val & ~(ss << XSPIPS_CR_SSCTRL_SHIFT));
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
-	XSpiPs_WriteReg(base_addr, XSPIPS_IER_OFFSET, XSPIPS_IXR_TXOW_MASK);
-
-	while(cnt < bytes_number)
-	{
-		XSpiPs_WriteReg(base_addr, XSPIPS_TXD_OFFSET, data[cnt]);
-		cnt++;
-	}
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, XSPIPS_ER_ENABLE_MASK);
-
-	do
-	{
-		status = XSpiPs_ReadReg(base_addr, XSPIPS_SR_OFFSET);
-	}
-	while((status & XSPIPS_IXR_TXOW_MASK) == 0x0);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
-
-	cnt = 0;
-	while(cnt < bytes_number)
-	{
-		data[cnt] = XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
-		cnt++;
-	}
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
+	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
 #else
-	uint8_t send_buffer[20];
+	uint8_t	 send_buffer[20];
+	uint32_t cnt = 0;
 
 	ss = (1 << ss);
-
 	XSpi_SetSlaveSelect(&spi_instance, ss);
+
 	for(cnt = 0; cnt < bytes_number; cnt++)
 	{
 		send_buffer[cnt] = data[cnt];
 	}
 	XSpi_Transfer(&spi_instance, send_buffer, data, bytes_number);
 #endif
+
 	return 0;
 }
 
 /***************************************************************************//**
  * @brief gpio_init
 *******************************************************************************/
-void gpio_init(uint32_t device_id)
+int32_t gpio_init(uint32_t device_id)
 {
+	uint32_t base_addr = 0;
+
 #ifdef _XPARAMETERS_PS_H_
 	gpio_config = XGpioPs_LookupConfig(device_id);
-	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
+
+	base_addr = gpio_config->BaseAddr;
+	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, base_addr);
 #else
 	gpio_config = XGpio_LookupConfig(device_id);
-#endif
-}
 
+	base_addr = gpio_config->BaseAddress;
+	XGpio_CfgInitialize(&gpio_instance, gpio_config, base_addr);
+#endif
+
+	return 0;
+}
 
 /***************************************************************************//**
  * @brief gpio_direction
 *******************************************************************************/
-void gpio_direction(uint8_t pin, uint8_t direction)
+int32_t gpio_direction(uint8_t pin, uint8_t direction)
 {
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&gpio_instance, pin, direction);
 	XGpioPs_SetOutputEnablePin(&gpio_instance, pin, 1);
 #else
-	uint32_t config = 0;
+	uint32_t channel = 1;
+	uint32_t config	 = 0;
 
-	config = Xil_In32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET));
-	if(direction)
-	{
-		config &= ~(1 << pin);
+	/* We assume that pin 32 is the first pin from channel 2 */
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
 	}
-	else
-	{
+
+	config = XGpio_GetDataDirection(&gpio_instance, channel);
+	if (direction) {
+		config &= ~(1 << pin);
+	} else {
 		config |= (1 << pin);
 	}
-	Xil_Out32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET), config);
+	XGpio_SetDataDirection(&gpio_instance, channel, config);
 #endif
+
+	return 0;
 }
 
 /***************************************************************************//**
- * @brief gpio_data
+ * @brief gpio_set_value
 *******************************************************************************/
-void gpio_data(uint8_t pin, uint8_t data)
+int32_t gpio_set_value(uint8_t pin, uint8_t data)
 {
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_WritePin(&gpio_instance, pin, data);
 #else
-	uint32_t config = 0;
+	uint32_t channel = 1;
+	uint32_t config	 = 0;
 
-	config = Xil_In32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET));
-	if(data)
-	{
-		config |= (1 << pin);
+	/* We assume that pin 32 is the first pin from channel 2 */
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
 	}
-	else
-	{
+
+	config = XGpio_DiscreteRead(&gpio_instance, channel);
+	if(data) {
+		config |= (1 << pin);
+	} else {
 		config &= ~(1 << pin);
 	}
-	Xil_Out32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET), config);
+	XGpio_DiscreteWrite(&gpio_instance, channel, config);
 #endif
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief gpio_get_value
+*******************************************************************************/
+int32_t gpio_get_value(uint8_t pin, uint8_t *data)
+{
+#ifdef _XPARAMETERS_PS_H_
+	*data = XGpioPs_ReadPin(&gpio_instance, pin);
+#else
+	uint32_t channel = 1;
+	uint32_t config	 = 0;
+
+	/* We assume that pin 32 is the first pin from channel 2 */
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
+	}
+
+	config = XGpio_DiscreteRead(&gpio_instance, channel);
+	*data = (config & (1 << pin)) ? 1 : 0;
+#endif
+
+	return 0;
 }
 
 /***************************************************************************//**
@@ -254,7 +270,11 @@ void gpio_set_value(uint8_t pin, uint8_t data)
 *******************************************************************************/
 void mdelay(uint32_t msecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
+#else
+	MB_Sleep(msecs);
+#endif
 }
 
 /***************************************************************************//**
@@ -263,6 +283,7 @@ void mdelay(uint32_t msecs)
 uint64_t do_div(uint64_t* n, uint64_t base)
 {
 	uint64_t mod = 0;
+
 	mod = *n % base;
 	*n = *n / base;
 

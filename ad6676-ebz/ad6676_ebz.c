@@ -65,7 +65,7 @@
 #define AD6676_CORE_BASEADDR	XPAR_AXI_AD6676_CORE_BASEADDR
 #define AD6676_DMA_BASEADDR		XPAR_AXI_AD6676_DMA_BASEADDR
 #define AD6676_JESD_BASEADDR	XPAR_AXI_AD6676_JESD_BASEADDR
-#define AD6676_GT_GT_BASEADDR	XPAR_AXI_AD6676_GT_BASEADDR
+#define AD6676_GT_BASEADDR		XPAR_AXI_AD6676_GT_BASEADDR
 #define GPIO_ADC_OEN			GPIO_OFFSET + 9
 #define GPIO_ADC_SELA			GPIO_OFFSET + 8
 #define GPIO_ADC_SELB			GPIO_OFFSET + 7
@@ -115,43 +115,63 @@ ad6676_init_param default_init_param = {
 	GPIO_ADC_AGC4,	// gpio_adc_agc4
 };
 
+jesd204b_state jesd204b_st = {
+	1,	// lanesync_enable
+	1,	// scramble_enable
+	0,	// sysref_always_enable
+	16,	// frames_per_multiframe
+	2,	// bytes_per_frame
+	1,	// subclass
+};
+
+jesd204b_gt_link gt_link = {
+	AD6676_GT_BASEADDR,		// gt_core_addr
+	JESD204B_GT_RX,			// tx_or_rx
+	0,						// first_lane
+	1,						// last_lane
+	JESD204B_GT_CPLL,		// qpll_or_cpll
+	JESD204B_GT_DFE,		// lpm_or_dfe
+	500,					// ref_clk
+	1000,					// lane_rate
+	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
+	0,						// sys_clk_sel
+	4,						// out_clk_sel
+	0,						// gth_or_gtx
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	jesd204b_gt_state jesd204b_gt_st;
-	jesd204b_state jesd204b_st;
+	adc_core ad6676_core;
+
+	jesd204b_gt_initialize(gt_link);
 
 	ad6676_setup(SPI_DEVICE_ID,
 				 GPIO_DEVICE_ID,
 				 0,
 				 &default_init_param);
 
-	jesd204b_gt_st.use_cpll = 1;
-	jesd204b_gt_st.rx_sys_clk_sel = 0;
-	jesd204b_gt_st.rx_out_clk_sel = 4;
-	jesd204b_gt_st.tx_sys_clk_sel = 0;
-	jesd204b_gt_st.tx_out_clk_sel = 4;
-	jesd204b_gt_setup(AD6676_GT_GT_BASEADDR, jesd204b_gt_st);
-
-	jesd204b_st.lanesync_enable = 1;
-	jesd204b_st.scramble_enable = 1;
-	jesd204b_st.sysref_always_enable = 0;
-	jesd204b_st.frames_per_multiframe = 16;
-	jesd204b_st.bytes_per_frame = 2;
-	jesd204b_st.subclass = 1;
 	jesd204b_setup(AD6676_JESD_BASEADDR, jesd204b_st);
 
-	jesd204b_gt_clk_enable(JESD204B_GT_RX, 0);
+	jesd204b_gt_setup(gt_link);
+	jesd204b_gt_en_sync_sysref(gt_link);
 
-	adc_setup(AD6676_CORE_BASEADDR, AD6676_DMA_BASEADDR,  2);
+	ad6676_core.adc_baseaddr = AD6676_CORE_BASEADDR;
+	ad6676_core.dmac_baseaddr = AD6676_DMA_BASEADDR;
+	ad6676_core.no_of_channels = 2;
+	ad6676_core.resolution = 16;
+
+	adc_setup(ad6676_core);
 
 	/* Enable Ramp Test Mode */
 	ad6676_spi_write(AD6676_TEST_GEN, TESTGENMODE_RAMP);
 
 	xil_printf("Start capturing data...\n\r");
-	adc_capture(16384, ADC_DDR_BASEADDR);
+
+	adc_capture(ad6676_core, 16384, ADC_DDR_BASEADDR);
+
 	xil_printf("Done.\n\r");
 
 	return 0;
