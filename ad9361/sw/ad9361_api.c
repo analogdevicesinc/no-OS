@@ -1912,25 +1912,37 @@ int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
 								   AD9361_RXFIRConfig rx_fir_cfg,
 								   AD9361_TXFIRConfig tx_fir_cfg)
 {
+	int32_t rtx = -1, rrx = -1;
+
 	phy->filt_rx_bw_Hz = 0;
 	phy->filt_tx_bw_Hz = 0;
-
 	phy->filt_valid = false;
 
-	if (rx_fir_cfg.rx_path_clks[RX_SAMPL_FREQ] && tx_fir_cfg.tx_path_clks[TX_SAMPL_FREQ]) {
-		memcpy(phy->filt_rx_path_clks, rx_fir_cfg.rx_path_clks, sizeof(phy->filt_rx_path_clks));
-		memcpy(phy->filt_tx_path_clks, tx_fir_cfg.tx_path_clks, sizeof(phy->filt_tx_path_clks));
+	if (tx_fir_cfg.tx_path_clks[TX_SAMPL_FREQ]) {
+		memcpy(phy->filt_tx_path_clks, tx_fir_cfg.tx_path_clks,
+				sizeof(phy->filt_tx_path_clks));
+		rtx = 0;
 	}
 
-	if (rx_fir_cfg.rx_bandwidth && tx_fir_cfg.tx_bandwidth) {
-		phy->filt_rx_bw_Hz = rx_fir_cfg.rx_bandwidth;
+	if (rx_fir_cfg.rx_path_clks[RX_SAMPL_FREQ]) {
+		memcpy(phy->filt_rx_path_clks, rx_fir_cfg.rx_path_clks,
+				sizeof(phy->filt_rx_path_clks));
+		rrx = 0;
+	}
+
+	if (tx_fir_cfg.tx_bandwidth) {
 		phy->filt_tx_bw_Hz = tx_fir_cfg.tx_bandwidth;
+	}
+
+	if (rx_fir_cfg.rx_bandwidth) {
+		phy->filt_rx_bw_Hz = rx_fir_cfg.rx_bandwidth;
 	}
 
 	ad9361_set_tx_fir_config(phy, tx_fir_cfg);
 	ad9361_set_rx_fir_config(phy, rx_fir_cfg);
 
-	phy->filt_valid = true;
+	if (!(rrx | rtx))
+		phy->filt_valid = true;
 
 	ad9361_set_trx_fir_en_dis(phy, 1);
 
