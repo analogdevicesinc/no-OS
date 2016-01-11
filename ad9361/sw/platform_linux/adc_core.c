@@ -352,19 +352,19 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 
 	if(adc_st.rx2tx2)
 	{
-		length = (size * 8);
+		length = (size * 2);
 	}
 	else
 	{
-		length = (size * 4);
+		length = (size * 1);
 	}
 
 #ifdef FMCOMMS5
-	length = (size * 16);
+	length = (size * 4);
 #endif
 
 #ifdef FMCOMMS5
-	for(index = 0; index < (length / 2); index += 4)
+	for(index = 0; index < length; index += 4)
 	{
 		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
 		data_q1 = (data & 0xFFFF);
@@ -420,7 +420,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 		}
 	}
 #else
-	for(index = 0; index < (length / 2); index += 2)
+	for(index = 0; index < length; index += 2)
 	{
 		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
 		data_q1 = (data & 0xFFFF);

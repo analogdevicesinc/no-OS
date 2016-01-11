@@ -133,5 +133,7 @@ int main(void)
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 
+	xil_printf("Done.\n");
+
 	return 0;
 }

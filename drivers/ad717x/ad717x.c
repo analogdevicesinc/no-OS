@@ -1,7 +1,8 @@
 /***************************************************************************//**
-*   @file    AD7176.c
-*   @brief   AD7176 implementation file.
+*   @file    AD717X.c
+*   @brief   AD717X implementation file.
 *   @devices AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2
+*            AD7177-2
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
 *
@@ -44,7 +45,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "Communication.h"
-#include "AD7176.h"
+#include "AD717x.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
@@ -52,58 +53,90 @@
 #define TIMEOUT     -3 /* A timeout has occured */
 
 /***************************************************************************//**
+* @brief  Searches through the list of registers of the driver instance and
+*         retrieves a pointer to the register that matches the given address.
+* @param device - The handler of the instance of the driver.
+* @param reg_address - The address to be used to find the register.
+*
+* @return A pointer to the register if found or 0.
+*******************************************************************************/
+ad717x_st_reg *AD717X_GetReg(struct ad717x_device *device, uint8_t reg_address)
+{
+	uint8_t i;
+	ad717x_st_reg *reg = 0;
+
+	if (!device || !device->regs)
+		return 0;
+
+	for (i = 0; i < device->num_regs; i++)
+	{
+		if (device->regs[i].addr == reg_address)
+		{
+			reg = &device->regs[i];
+			break;
+		}
+	}
+
+	return reg;
+}
+
+/***************************************************************************//**
 * @brief Reads the value of the specified register.
 *
 * @param device - The handler of the instance of the driver.
-* @param pReg - Pointer to the register structure holding info about the
-*               register to be read. The read value is stored inside the
-*               register structure.
+* @addr - The address of the register to be read. The value will be stored
+*         inside the register structure that holds info about this register.
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_ReadRegister(struct ad7176_device *device, ad7176_st_reg* pReg)
+int32_t AD717X_ReadRegister(struct ad717x_device *device, uint8_t addr)
 {
 	int32_t ret       = 0;
 	uint8_t buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint8_t i         = 0;
 	uint8_t check8    = 0;
 	uint8_t msgBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	ad717x_st_reg *pReg;
 
-	if(!device || !pReg)
+	if(!device)
 		return INVALID_VAL;
+	
+	pReg = AD717X_GetReg(device, addr);
+	if (!pReg)
+	  	return INVALID_VAL;
 
 	/* Build the Command word */
-	buffer[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_RD |
-			AD7176_COMM_REG_RA(pReg->addr);
+	buffer[0] = AD717X_COMM_REG_WEN | AD717X_COMM_REG_RD |
+			AD717X_COMM_REG_RA(pReg->addr);
 
 	/* Read data from the device */
 	ret = SPI_Read(device->slave_select_id,
 			buffer,
-			((device->useCRC != AD7176_DISABLE) ? pReg->size + 1
+			((device->useCRC != AD717X_DISABLE) ? pReg->size + 1
 							: pReg->size) + 1);
 	if(ret < 0)
 		return ret;
 
 	/* Check the CRC */
-	if(device->useCRC == AD7176_USE_CRC)
+	if(device->useCRC == AD717X_USE_CRC)
 	{
-		msgBuf[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_RD |
-			AD7176_COMM_REG_RA(pReg->addr);
+		msgBuf[0] = AD717X_COMM_REG_WEN | AD717X_COMM_REG_RD |
+			AD717X_COMM_REG_RA(pReg->addr);
 		for(i = 1; i < pReg->size + 2; ++i)
 		{
 			msgBuf[i] = buffer[i];
 		}
-		check8 = AD7176_ComputeCRC8(msgBuf, pReg->size + 2);
+		check8 = AD717X_ComputeCRC8(msgBuf, pReg->size + 2);
 	}
-	if(device->useCRC == AD7176_USE_XOR)
+	if(device->useCRC == AD717X_USE_XOR)
 	{
-		msgBuf[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_RD |
-				AD7176_COMM_REG_RA(pReg->addr);
+		msgBuf[0] = AD717X_COMM_REG_WEN | AD717X_COMM_REG_RD |
+				AD717X_COMM_REG_RA(pReg->addr);
 		for(i = 1; i < pReg->size + 2; ++i)
 		{
 			msgBuf[i] = buffer[i];
 		}
-		check8 = AD7176_ComputeXOR8(msgBuf, pReg->size + 2);
+		check8 = AD717X_ComputeXOR8(msgBuf, pReg->size + 2);
 	}
 
 	if(check8 != 0)
@@ -128,44 +161,52 @@ int32_t AD7176_ReadRegister(struct ad7176_device *device, ad7176_st_reg* pReg)
 *
 * @param device - The handler of the instance of the driver.
 * @param reg - Register structure holding info about the register to be written
+* @param addr - The address of the register to be written with the value stored
+*               inside the register structure that holds info about this
+*               register.
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_WriteRegister(struct ad7176_device *device, ad7176_st_reg reg)
+int32_t AD717X_WriteRegister(struct ad717x_device *device, uint8_t addr)
 {
 	int32_t ret      = 0;
 	int32_t regValue = 0;
 	uint8_t wrBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint8_t i        = 0;
 	uint8_t crc8     = 0;
+	ad717x_st_reg *preg;
 
 	if(!device)
 		return INVALID_VAL;
+	
+	preg = AD717X_GetReg(device, addr);
+	if (!preg)
+	  	return INVALID_VAL;
 
 	/* Build the Command word */
-	wrBuf[0] = AD7176_COMM_REG_WEN | AD7176_COMM_REG_WR |
-			AD7176_COMM_REG_RA(reg.addr);
+	wrBuf[0] = AD717X_COMM_REG_WEN | AD717X_COMM_REG_WR |
+			AD717X_COMM_REG_RA(preg->addr);
 
 	/* Fill the write buffer */
-	regValue = reg.value;
-	for(i = 0; i < reg.size; i++)
+	regValue = preg->value;
+	for(i = 0; i < preg->size; i++)
 	{
-		wrBuf[reg.size - i] = regValue & 0xFF;
+		wrBuf[preg->size - i] = regValue & 0xFF;
 		regValue >>= 8;
 	}
 
 	/* Compute the CRC */
-	if(device->useCRC != AD7176_DISABLE)
+	if(device->useCRC != AD717X_DISABLE)
 	{
-		crc8 = AD7176_ComputeCRC8(wrBuf, reg.size + 1);
-		wrBuf[reg.size + 1] = crc8;
+		crc8 = AD717X_ComputeCRC8(wrBuf, preg->size + 1);
+		wrBuf[preg->size + 1] = crc8;
 	}
 
 	/* Write data to the device */
 	ret = SPI_Write(device->slave_select_id,
 			wrBuf,
-			(device->useCRC != AD7176_DISABLE) ? reg.size + 2
-							: reg.size + 1);
+			(device->useCRC != AD717X_DISABLE) ? preg->size + 2
+							: preg->size + 1);
 
 	return ret;
 }
@@ -177,7 +218,7 @@ int32_t AD7176_WriteRegister(struct ad7176_device *device, ad7176_st_reg reg)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_Reset(struct ad7176_device *device)
+int32_t AD717X_Reset(struct ad717x_device *device)
 {
 	int32_t ret = 0;
 	uint8_t wrBuf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -199,27 +240,28 @@ int32_t AD7176_Reset(struct ad7176_device *device)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_WaitForReady(struct ad7176_device *device, uint32_t timeout)
+int32_t AD717X_WaitForReady(struct ad717x_device *device, uint32_t timeout)
 {
-	ad7176_st_reg *regs;
+	ad717x_st_reg *statusReg;
 	int32_t ret;
 	int8_t ready = 0;
 
-	if(!device)
+	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	statusReg = AD717X_GetReg(device, AD717X_STATUS_REG);
+	if (!statusReg)
+	  	return INVALID_VAL;
 
 	while(!ready && --timeout)
 	{
 		/* Read the value of the Status Register */
-		ret = AD7176_ReadRegister(device, &regs[AD7176_Status]);
+		ret = AD717X_ReadRegister(device, AD717X_STATUS_REG);
 		if(ret < 0)
 			return ret;
 
 		/* Check the RDY bit in the Status Register */
-		ready = (regs[AD7176_Status].value &
-				AD7176_STATUS_REG_RDY) != 0;
+		ready = (statusReg->value & AD717X_STATUS_REG_RDY) != 0;
 	}
 
 	return timeout ? 0 : TIMEOUT;
@@ -233,21 +275,23 @@ int32_t AD7176_WaitForReady(struct ad7176_device *device, uint32_t timeout)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_ReadData(struct ad7176_device *device, int32_t* pData)
+int32_t AD717X_ReadData(struct ad717x_device *device, int32_t* pData)
 {
-	ad7176_st_reg *regs;
+	ad717x_st_reg *dataReg;
 	int32_t ret;
 
-	if(!device)
+	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	dataReg = AD717X_GetReg(device, AD717X_DATA_REG);
+	if (!dataReg)
+		return INVALID_VAL;
 
 	/* Read the value of the Status Register */
-	ret = AD7176_ReadRegister(device, &regs[AD7176_Data]);
+	ret = AD717X_ReadRegister(device, AD717X_DATA_REG);
 
 	/* Get the read result */
-	*pData = regs[AD7176_Data].value;
+	*pData = dataReg->value;
 
 	return ret;
 }
@@ -260,7 +304,7 @@ int32_t AD7176_ReadData(struct ad7176_device *device, int32_t* pData)
 *
 * @return Returns the computed CRC checksum.
 *******************************************************************************/
-uint8_t AD7176_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
+uint8_t AD717X_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 {
 	uint8_t i   = 0;
 	uint8_t crc = 0;
@@ -272,7 +316,7 @@ uint8_t AD7176_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 			if(((crc & 0x80) != 0) != ((*pBuf & i) != 0)) /* MSB of CRC register XOR input Bit from Data */
 			{
 				crc <<= 1;
-				crc ^= AD7176_CRC8_POLYNOMIAL_REPRESENTATION;
+				crc ^= AD717X_CRC8_POLYNOMIAL_REPRESENTATION;
 			}
 			else
 			{
@@ -293,7 +337,7 @@ uint8_t AD7176_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 *
 * @return Returns the computed XOR checksum.
 *******************************************************************************/
-uint8_t AD7176_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize)
+uint8_t AD717X_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize)
 {
 	uint8_t xor = 0;
 
@@ -313,34 +357,36 @@ uint8_t AD7176_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device)
+int32_t AD717X_UpdateCRCSetting(struct ad717x_device *device)
 {
-	ad7176_st_reg *regs;
+	ad717x_st_reg *interfaceReg;
 
-	if(!device)
+	if(!device || !device->regs)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	interfaceReg = AD717X_GetReg(device, AD717X_IFMODE_REG);
+	if (!interfaceReg)
+		return INVALID_VAL;
 
 	/* Get CRC State. */
-	if(AD7176_IFMODE_REG_CRC_STAT(regs[AD7176_Interface_Mode].value))
+	if(AD717X_IFMODE_REG_CRC_STAT(interfaceReg->value))
 	{
-		device->useCRC = AD7176_USE_CRC;
+		device->useCRC = AD717X_USE_CRC;
 	}
-	else if(AD7176_IFMODE_REG_XOR_STAT(regs[AD7176_Interface_Mode].value))
+	else if(AD717X_IFMODE_REG_XOR_STAT(interfaceReg->value))
 	{
-		device->useCRC = AD7176_USE_XOR;
+		device->useCRC = AD717X_USE_XOR;
 	}
 	else
 	{
-		device->useCRC = AD7176_DISABLE;
+		device->useCRC = AD717X_DISABLE;
 	}
 
 	return 0;
 }
 
 /***************************************************************************//**
-* @brief Initializes the AD7176.
+* @brief Initializes the AD717X.
 *
 * @param device - The handler of the instance of the driver.
 * @param dev_type - The type of the device that the driver should be
@@ -351,17 +397,18 @@ int32_t AD7176_UpdateCRCSetting(struct ad7176_device *device)
 *
 * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7176_Setup(struct ad7176_device *device, int slave_select,
-			ad7176_st_reg *regs)
+int32_t AD717X_Setup(struct ad717x_device *device, uint8_t slave_select,
+			ad717x_st_reg *regs, uint8_t num_regs)
 {
 	int32_t ret;
-	enum ad7176_registers regNr;
+	ad717x_st_reg *preg;
 
 	if(!device || !regs)
 		return INVALID_VAL;
 
 	device->regs = regs;
 	device->slave_select_id = slave_select;
+	device->num_regs = num_regs;
 
 	/* Initialize the SPI communication. */
 	ret = SPI_Init(0, 1000000, 1, 0);
@@ -369,35 +416,42 @@ int32_t AD7176_Setup(struct ad7176_device *device, int slave_select,
 		return ret;
 
 	/*  Reset the device interface.*/
-	ret = AD7176_Reset(device);
+	ret = AD717X_Reset(device);
 	if (ret < 0)
 		return ret;
 
 	/* Initialize ADC mode register. */
-	ret = AD7176_WriteRegister(device, regs[AD7176_ADC_Mode]);
+	ret = AD717X_WriteRegister(device, AD717X_ADCMODE_REG);
 	if(ret < 0)
 		return ret;
 
 	/* Initialize Interface mode register. */
-	ret = AD7176_WriteRegister(device, regs[AD7176_Interface_Mode]);
+	ret = AD717X_WriteRegister(device, AD717X_IFMODE_REG);
 	if(ret < 0)
 		return ret;
 
 	/* Get CRC State */
-	ret = AD7176_UpdateCRCSetting(device);
+	ret = AD717X_UpdateCRCSetting(device);
 	if(ret < 0)
 		return ret;
 
-	/* Initialize registers AD7176_ADC_Mode through AD7176_Offset_0. */
-	for(regNr = AD7176_GPIOCon; (regNr < AD7176_Offset_0) && !(ret < 0);
-		regNr++)
+	/* Initialize registers AD717X_GPIOCON_REG through AD717X_OFFSET0_REG */
+	preg = AD717X_GetReg(device, AD717X_GPIOCON_REG);
+	if (!preg)
+	  	return INVALID_VAL;
+	
+	while (preg && preg->addr != AD717X_OFFSET0_REG)
 	{
-		if (regNr == AD7176_ID)
+		if (preg->addr == AD717X_ID_REG)
+		{
+			preg ++;
 			continue;
-
-		ret = AD7176_WriteRegister(device, regs[regNr]);
+		}
+		
+		ret = AD717X_WriteRegister(device, preg->addr);
 		if (ret < 0)
 			break;
+		preg ++;
 	}
 
 	return ret;
