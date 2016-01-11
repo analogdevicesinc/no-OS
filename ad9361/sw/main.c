@@ -373,6 +373,13 @@ int main(void)
 	Xil_DCacheEnable();
 #endif
 
+#ifdef ALTERA_PLATFORM
+	if (altera_bridge_init()) {
+		printf("Altera Bridge Init Error!\n");
+		return -1;
+	}
+#endif
+
 	// NOTE: The user has to choose the GPIO numbers according to desired
 	// carrier board.
 	default_init_param.gpio_resetb = GPIO_RESET_PIN;
@@ -491,6 +498,13 @@ int main(void)
 #ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
+#endif
+
+#ifdef ALTERA_PLATFORM
+	if (altera_bridge_uninit()) {
+		printf("Altera Bridge Uninit Error!\n");
+		return -1;
+	}
 #endif
 
 	return 0;

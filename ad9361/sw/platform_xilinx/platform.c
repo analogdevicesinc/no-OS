@@ -88,37 +88,32 @@ int32_t spi_init(uint32_t device_id,
 {
 
 	uint32_t base_addr	 = 0;
-	uint32_t control_val = 0;
+	uint32_t spi_options = 0;
 #ifdef _XPARAMETERS_PS_H_
-	uint8_t  byte		 = 0;
 
 	spi_config = XSpiPs_LookupConfig(device_id);
 	base_addr = spi_config->BaseAddress;
+
 	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
 
-	control_val = XSPIPS_CR_SSFORCE_MASK |
-				  XSPIPS_CR_SSCTRL_MASK |
-				  4 << XSPIPS_CR_PRESC_SHIFT |
-				  (clk_pha ? XSPIPS_CR_CPHA_MASK : 0) |
-				  (clk_pol ? XSPIPS_CR_CPOL_MASK : 0) |
-				  XSPIPS_CR_MSTREN_MASK;
+	spi_options = XSPIPS_MASTER_OPTION |
+			(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+			(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
+			XSPIPS_FORCE_SSELECT_OPTION;
 
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
+	XSpiPs_SetOptions(&spi_instance, spi_options);
 
-	for(byte = 0; byte < 128; byte++)
-	{
-		XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
-	}
+	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_256);
 #else
 	XSpi_Initialize(&spi_instance, device_id);
 	XSpi_Stop(&spi_instance);
 	spi_config = XSpi_LookupConfig(device_id);
 	base_addr = spi_config->BaseAddress;
 	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
-	control_val = XSP_MASTER_OPTION |
+	spi_options = XSP_MASTER_OPTION |
 				  XSP_CLK_PHASE_1_OPTION |
 				  XSP_MANUAL_SSELECT_OPTION;
-	XSpi_SetOptions(&spi_instance, control_val);
+	XSpi_SetOptions(&spi_instance, spi_options);
 	XSpi_Start(&spi_instance);
 	XSpi_IntrGlobalDisable(&spi_instance);
 	XSpi_SetSlaveSelect(&spi_instance, 1);
@@ -133,50 +128,12 @@ int32_t spi_read(struct spi_device *spi,
 				 uint8_t *data,
 				 uint8_t bytes_number)
 {
-	uint32_t cnt		 = 0;
 #ifdef _XPARAMETERS_PS_H_
-	uint32_t base_addr	 = 0;
-	uint32_t control_val = 0;
-	uint32_t status	  	 = 0;
+	XSpiPs_SetSlaveSelect(&spi_instance, (spi->id_no == 0 ? 0 : 1));
 
-	base_addr = spi_config->BaseAddress;
-	control_val = XSpiPs_ReadReg(base_addr, XSPIPS_CR_OFFSET);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET,
-					control_val & ~((spi->id_no == 0 ? 1 : 2) << XSPIPS_CR_SSCTRL_SHIFT));
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_TXWR_OFFSET, 0x01);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
-	XSpiPs_WriteReg(base_addr, XSPIPS_IER_OFFSET, XSPIPS_IXR_TXOW_MASK);
-
-	while(cnt < bytes_number)
-	{
-		XSpiPs_WriteReg(base_addr, XSPIPS_TXD_OFFSET, data[cnt]);
-		cnt++;
-	}
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, XSPIPS_ER_ENABLE_MASK);
-
-	do
-	{
-		status = XSpiPs_ReadReg(base_addr, XSPIPS_SR_OFFSET);
-	}
-	while((status & XSPIPS_IXR_TXOW_MASK) == 0x0);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_SR_OFFSET, XSPIPS_IXR_TXOW_MASK);
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_CR_OFFSET, control_val);
-
-	cnt = 0;
-	while(cnt < bytes_number)
-	{
-		data[cnt] = XSpiPs_ReadReg(base_addr, XSPIPS_RXD_OFFSET);
-		cnt++;
-	}
-
-	XSpiPs_WriteReg(base_addr, XSPIPS_ER_OFFSET, 0x0);
+	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
 #else
+	uint32_t cnt = 0;
 #ifdef XPAR_AXI_SPI_0_DEVICE_ID
 	uint8_t send_buffer[20];
 

@@ -55,6 +55,7 @@
 
 //#define CONSOLE_COMMANDS
 //#define XILINX_PLATFORM
+//#define ALTERA_PLATFORM
 //#define FMCOMMS5
 //#define PICOZED_SDR
 //#define CAPTURE_SCRIPT

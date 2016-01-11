@@ -44,16 +44,29 @@
 #include "util.h"
 #include "adc_core.h"
 #include "dac_core.h"
+#include "parameters.h"
 #include "platform.h"
 #include "socal/socal.h"
 #include "alt_spi.h"
 #include "alt_address_space.h"
+#include "alt_bridge_manager.h"
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-ALT_SPI_DEV_t *spim0_dev;
-ALT_SPI_CONFIG_t *spim0_cfg;
+/* Altera Avalon SPI Registers Definition */
+
+#define ALT_AVL_SPI_RXDATA_REG				0x0000
+#define ALT_AVL_SPI_TXDATA_REG				0x0004
+#define ALT_AVL_SPI_STATUS_REG				0x0008
+#define ALT_AVL_SPI_CONTROL_REG				0x000C
+#define ALT_AVL_SPI_CONTROL_SSO_MSK			(1 << 10)
+#define ALT_AVL_SPI_SLAVE_SEL_REG   		0x0014
+#define ALT_AVL_SPI_STATUS_TMT_MSK			(1 << 5)
+#define ALT_AVL_SPI_STATUS_TRDY_MSK			(1 << 6)
+#define ALT_AVL_SPI_STATUS_RRDY_MSK			(1 << 7)
+
+/* Altera Avalon GPIO Registers Definition */
+
+#define ALT_AVL_PIO_DATA_REG				0x0000
+#define ALT_AVL_PIO_DIRECTION_REG			0x0004
 
 /***************************************************************************//**
  * @brief usleep
@@ -68,11 +81,11 @@ static inline void usleep(unsigned long usleep)
 /***************************************************************************//**
  * @brief altera_bridge_init
 *******************************************************************************/
-int32_t altera_bridge_init(ALT_BRIDGE_t bridge)
+int32_t altera_bridge_init(void)
 {
 	int32_t status = 0;
 
-	status = alt_bridge_init(bridge, NULL, NULL);
+	status = alt_bridge_init(ALT_BRIDGE_LWH2F, NULL, NULL);
 
 	if (status == 0)
 	{
@@ -88,67 +101,33 @@ int32_t altera_bridge_init(ALT_BRIDGE_t bridge)
 /***************************************************************************//**
  * @brief altera_bridge_uninit
 *******************************************************************************/
-int32_t altera_bridge_uninit(ALT_BRIDGE_t bridge)
+int32_t altera_bridge_uninit(void)
 {
 	int32_t status = 0;
 
-    status = alt_bridge_uninit(bridge, NULL, NULL);
+    status = alt_bridge_uninit(ALT_BRIDGE_LWH2F, NULL, NULL);
 
     return status;
 }
 
 /***************************************************************************//**
- * @brief altera_spi_init
+ * @brief alt_avl_spi_read
 *******************************************************************************/
-int32_t altera_spi_init(uint32_t spi_base_address)
+uint32_t alt_avl_spi_read(uint32_t reg_addr)
 {
-	int32_t status = 0;
+	uint32_t reg_data;
 
-	spim0_dev = (ALT_SPI_DEV_t *)malloc(sizeof(*spim0_dev));
-	spim0_cfg = (ALT_SPI_CONFIG_t *)malloc(sizeof(*spim0_cfg));
+	reg_data = alt_read_word(SPI_BASEADDR + reg_addr);
 
-    status = alt_spi_init(ALT_SPI_SPIM0, spim0_dev);
-    if(status != ALT_E_SUCCESS)
-    	printf("Error\n\r");
-
-    status = alt_spi_config_get(spim0_dev, spim0_cfg);
-    if(status != ALT_E_SUCCESS)
-    	printf("Error\n\r");
-    spim0_cfg->clk_phase = ALT_SPI_SCPH_TOGGLE_START;
-    spim0_cfg->loopback_mode = false;
-
-    status = alt_spi_config_set(spim0_dev, spim0_cfg);
-    if(status != ALT_E_SUCCESS)
-    	printf("Error\n\r");
-
-    status = alt_spi_speed_set(spim0_dev, 5000000);
-    if(status != ALT_E_SUCCESS)
-    	printf("Error\n\r");
-
-    status = alt_spi_enable(spim0_dev);
-    if(status != ALT_E_SUCCESS)
-    	printf("Error\n\r");
-
-    return status;
+	return reg_data;
 }
 
 /***************************************************************************//**
- * @brief altera_spi_read
+ * @brief alt_avl_spi_write
 *******************************************************************************/
-int32_t altera_spi_read(uint8_t *data,
-						uint8_t bytes_number)
+void alt_avl_spi_write(uint32_t reg_addr, uint32_t reg_data)
 {
-    uint16_t tx_buf[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    uint16_t rx_buf[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    uint16_t index;
-
-    for(index = 0; index < bytes_number; index++)
-    	tx_buf[index] = data[index];
-	alt_spi_master_tx_rx_transfer(spim0_dev, 1, bytes_number, tx_buf, rx_buf);
-    for(index = 0; index < bytes_number; index++)
-    	data[index] = rx_buf[index];
-
-	return 0;
+	alt_write_word(SPI_BASEADDR + reg_addr, reg_data);
 }
 
 /***************************************************************************//**
@@ -158,11 +137,7 @@ int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pha,
 				 uint8_t  clk_pol)
 {
-	int32_t status;
-
-	status = altera_spi_init(device_id);
-
-	return status;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -171,7 +146,35 @@ int32_t spi_init(uint32_t device_id,
 int32_t spi_read(uint8_t *data,
 				 uint8_t bytes_number)
 {
-	altera_spi_read(data, bytes_number);
+	uint32_t cnt = 0;
+
+	/* Enable Slave Select mask. */
+	alt_avl_spi_write(ALT_AVL_SPI_SLAVE_SEL_REG, 1);
+	/* Set the SSO bit (force chip select). */
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, ALT_AVL_SPI_CONTROL_SSO_MSK);
+	/* Discard any stale data, in case previous communication was interrupted. */
+	alt_avl_spi_read(ALT_AVL_SPI_RXDATA_REG);
+
+	while(cnt < bytes_number)
+	{
+		/* Wait until txdata register is empty. */
+		while((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) &
+					ALT_AVL_SPI_STATUS_TRDY_MSK) == 0);
+		/* Write data to txdata register. */
+		alt_avl_spi_write(ALT_AVL_SPI_TXDATA_REG, data[cnt]);
+		/* Wait until rxdata register is full. */
+		while ((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG)
+					& ALT_AVL_SPI_STATUS_RRDY_MSK) == 0);
+		/* Read data from rxdata register. */
+		data[cnt] = alt_avl_spi_read(ALT_AVL_SPI_RXDATA_REG);
+		cnt++;
+	}
+
+	/* Wait until the interface has finished transmitting. */
+	while((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) &
+				ALT_AVL_SPI_STATUS_TMT_MSK) == 0);
+	/* Clear the SSO bit (release chip select). */
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, 0);
 
 	return 0;
 }
@@ -202,6 +205,26 @@ int spi_write_then_read(struct spi_device *spi,
 }
 
 /***************************************************************************//**
+ * @brief alt_avl_gpio_read
+*******************************************************************************/
+uint32_t alt_avl_gpio_read(uint32_t reg_addr)
+{
+	uint32_t reg_data;
+
+	reg_data = alt_read_word(GPIO_BASEADDR + reg_addr);
+
+	return reg_data;
+}
+
+/***************************************************************************//**
+ * @brief alt_avl_gpio_write
+*******************************************************************************/
+void alt_avl_gpio_write(uint32_t reg_addr, uint32_t reg_data)
+{
+	alt_write_word(GPIO_BASEADDR + reg_addr, reg_data);
+}
+
+/***************************************************************************//**
  * @brief gpio_init
 *******************************************************************************/
 void gpio_init(uint32_t device_id)
@@ -214,7 +237,14 @@ void gpio_init(uint32_t device_id)
 *******************************************************************************/
 void gpio_direction(uint8_t pin, uint8_t direction)
 {
+	uint32_t reg_val;
 
+	reg_val = alt_avl_gpio_read(ALT_AVL_PIO_DIRECTION_REG);
+	if (direction)
+		reg_val |= (1 << pin);
+	else
+		reg_val &= ~(1 << pin);
+	alt_avl_gpio_write(ALT_AVL_PIO_DIRECTION_REG, reg_val);
 }
 
 /***************************************************************************//**
@@ -222,7 +252,10 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 *******************************************************************************/
 bool gpio_is_valid(int number)
 {
-	return 0;
+	if(number >= 0)
+		return 1;
+	else
+		return 0;
 }
 
 /***************************************************************************//**
@@ -238,7 +271,14 @@ void gpio_data(uint8_t pin, uint8_t data)
 *******************************************************************************/
 void gpio_set_value(unsigned gpio, int value)
 {
-	gpio_data(gpio, value);
+	uint32_t reg_val;
+
+	reg_val = alt_avl_gpio_read(ALT_AVL_PIO_DATA_REG);
+	if (value)
+		reg_val |= (1 << gpio);
+	else
+		reg_val &= ~(1 << gpio);
+	alt_avl_gpio_write(ALT_AVL_PIO_DATA_REG, reg_val);
 }
 
 /***************************************************************************//**

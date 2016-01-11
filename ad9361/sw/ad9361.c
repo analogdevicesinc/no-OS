@@ -742,8 +742,13 @@ static int32_t ad9361_spi_writem(struct spi_device *spi,
 	buf[0] = cmd >> 8;
 	buf[1] = cmd & 0xFF;
 
+#ifndef ALTERA_PLATFORM
 	memcpy(&buf[2], tbuf, num);
-
+#else
+	int32_t i;
+	for (i = 0; i < num; i++)
+		buf[2 + i] =  tbuf[i];
+#endif
 	ret = spi_write_then_read(spi, buf, num + 2, NULL, 0);
 	if (ret < 0) {
 		dev_err(&spi->dev, "Write Error %"PRId32, ret);
@@ -5623,8 +5628,19 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		}
 		valid = false;
 	} else {
+#ifndef ALTERA_PLATFORM
 		memcpy(rx, phy->filt_rx_path_clks, sizeof(rx));
 		memcpy(tx, phy->filt_tx_path_clks, sizeof(tx));
+#else
+		int32_t i;
+		uint32_t num;
+		num = sizeof(rx);
+		for (i = 0; i < num; i++)
+			rx[i] = phy->filt_rx_path_clks[i];
+		num = sizeof(tx);
+		for (i = 0; i < num; i++)
+			tx[i] = phy->filt_tx_path_clks[i];
+#endif
 		valid = true;
 
 	}

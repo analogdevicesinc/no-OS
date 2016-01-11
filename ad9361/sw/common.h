@@ -47,9 +47,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define false	0
-#define true	1
-
 #define EIO			5	/* I/O error */
 #define EAGAIN		11	/* Try again */
 #define ENOMEM		12	/* Out of memory */
@@ -61,8 +58,10 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-#ifndef WIN32
-typedef uint8_t	bool;
+#if defined (__STDC__) && (__STDC_VERSION__ >= 199901L)
+#include <stdbool.h>
+#else
+typedef enum { false, true } bool;
 #endif
 
 struct clk {
