@@ -79,6 +79,21 @@ sdk create_app_project -name sw -hwproject hw -proc $cpu_name -bsp bsp -os stand
 # import sources
 source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl; 
 file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
+
+if { $cpu_name == "sys_mb" } {
+set fp1 [open $project_destination/lscript.ld r+]
+set file_data [read $fp1]
+		if { [regsub -all {_HEAP_SIZE : 0x400;} $file_data {_HEAP_SIZE : 0x10000;} file_data] } {
+			puts "successfully  increase the heap size to 0x10000"
+		} else { puts "faild to increase the heap size"
+			exit -1
+		}
+chan truncate $fp1 0 ;#delete the content
+seek $fp1 0 start
+puts $fp1 $file_data
+close $fp1
+}
+
 sdk import_sources -name sw -path $project_destination
 sdk build_project -type all
 
