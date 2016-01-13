@@ -112,6 +112,7 @@ int main(void)
 	dds_set_frequency(1, 300000000);
 	dds_set_phase(1, 0);
 	dds_set_scale(1, 250000);
+	printf("Done.\n");
 
 	return 0;
 }
