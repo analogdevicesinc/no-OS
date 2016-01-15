@@ -42,7 +42,20 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "xparameters.h"
 #include <stdint.h>
+#ifdef XPAR_GPIO_0_DEVICE_ID
+#include <xgpio.h>
+#endif
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+#include <xgpiops.h>
+#endif
+#ifdef XPAR_SPI_0_DEVICE_ID
+#include <xspi.h>
+#endif
+#ifdef XPAR_PS7_SPI_0_DEVICE_ID
+#include <xspips.h>
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -55,24 +68,76 @@
 #define clamp_t(type, val, min_val, max_val) (type)clamp((type)(val), \
 											 (type)(min_val), (type)(max_val))
 
-#define GPIO_OUTPUT	1
-#define GPIO_INPUT	0
+#define GPIO_OUT	1
+#define GPIO_IN		0
 #define GPIO_HIGH	1
 #define GPIO_LOW	0
+
+typedef enum {
+	AXI_GPIO,
+	PS7_GPIO,
+} gpio_type;
+
+typedef struct {
+	gpio_type		type;
+	uint32_t		device_id;
+#ifdef XPAR_GPIO_0_DEVICE_ID
+	XGpio_Config	*axi_config;
+	XGpio			axi_instance;
+#endif
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+	XGpioPs_Config	*ps7_config;
+	XGpioPs			ps7_instance;
+#endif
+} gpio_device;
+
+#define SPI_CPHA	0x01
+#define SPI_CPOL	0x02
+
+typedef enum {
+	SPI_MODE_0 = (0 | 0),
+	SPI_MODE_1 = (0 | SPI_CPHA),
+	SPI_MODE_2 = (SPI_CPOL | 0),
+	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA),
+} spi_mode;
+
+typedef enum {
+	AXI_SPI,
+	PS7_SPI,
+} spi_type;
+
+typedef struct {
+	uint8_t			chip_select;
+	spi_mode		mode;
+	spi_type		type;
+	uint32_t		device_id;
+#ifdef XPAR_SPI_0_DEVICE_ID
+	XSpi_Config		*axi_config;
+	XSpi			axi_instance;
+#endif
+#ifdef XPAR_PS7_SPI_0_DEVICE_ID
+	XSpiPs_Config	*ps7_config;
+	XSpiPs			ps7_instance;
+#endif
+} spi_device;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t spi_init(uint32_t device_id,
-				 uint8_t clk_pha,
-				 uint8_t clk_pol);
-int32_t spi_write_and_read(uint8_t ss,
+int32_t spi_init(spi_device *dev);
+int32_t spi_write_and_read(spi_device *dev,
 						   uint8_t *data,
 						   uint8_t bytes_number);
-int32_t gpio_init(uint32_t device_id);
-int32_t gpio_direction(uint8_t pin, uint8_t direction);
-int32_t gpio_set_value(uint8_t pin, uint8_t data);
-int32_t gpio_get_value(uint8_t pin, uint8_t *data);
+int32_t gpio_init(gpio_device *dev);
+int32_t gpio_set_direction(gpio_device *dev,
+						   uint8_t pin,
+						   uint8_t direction);
+int32_t gpio_set_value(gpio_device *dev,
+					   uint8_t pin,
+					   uint8_t data);
+int32_t gpio_get_value(gpio_device *dev,
+					   uint8_t pin,
+					   uint8_t *data);
 void mdelay(uint32_t msecs);
 uint64_t do_div(uint64_t* n, uint64_t base);
 #endif
