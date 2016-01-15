@@ -78,6 +78,13 @@
 /* AD7768_REG_CH_STANDBY */
 #define AD7768_CH_STANDBY(x)				(1 << (x))
 
+/* AD7768_REG_CH_MODE_x */
+#define AD7768_CH_MODE_FILTER_TYPE			(1 << 3)
+#define AD7768_CH_MODE_DEC_RATE(x)			(((x) & 0x7) << 0)
+
+/* AD7768_REG_CH_MODE_SEL */
+#define AD7768_CH_MODE(x)					(1 << (x))
+
 /* AD7768_REG_PWR_MODE */
 #define AD7768_PWR_MODE_SLEEP_MODE			(1 << 7)
 #define AD7768_PWR_MODE_POWER_MODE(x)		(((x) & 0x3) << 5)
@@ -153,6 +160,27 @@ typedef enum {
 	AD7768_STANDBY,
 } ad7768_ch_state;
 
+typedef enum {
+	AD7768_MODE_A,
+	AD7768_MODE_B,
+} ad7768_ch_mode;
+
+typedef enum {
+	AD7768_FILTER_WIDEBAND,
+	AD7768_FILTER_SINC,
+} ad7768_filt_type;
+
+typedef enum {
+	AD7768_DEC_X32,
+	AD7768_DEC_X64,
+	AD7768_DEC_X128,
+	AD7768_DEC_X256,
+	AD7768_DEC_X512,
+	AD7768_DEC_X1024,
+	AD7768_DEC_X1024_2ND,
+	AD7768_DEC_X1024_3RD,
+} ad7768_dec_rate;
+
 typedef struct {
 	spi_device			spi_dev;
 	gpio_device			gpio_dev;
@@ -171,6 +199,9 @@ typedef struct {
 	ad7768_conv_op		conv_op;
 	ad7768_crc_sel		crc_sel;
 	ad7768_ch_state		ch_state[8];
+	ad7768_ch_mode		ch_mode[8];
+	ad7768_filt_type	filt_type[2];
+	ad7768_dec_rate		dec_rate[2];
 } ad7768_dev;
 
 typedef struct
@@ -264,6 +295,24 @@ int32_t ad7768_set_ch_state(ad7768_dev *dev,
 int32_t ad7768_get_ch_state(ad7768_dev *dev,
 							ad7768_ch ch,
 							ad7768_ch_state *state);
+/* Set the mode configuration. */
+int32_t ad7768_set_mode_config(ad7768_dev *dev,
+							   ad7768_ch_mode mode,
+							   ad7768_filt_type filt_type,
+							   ad7768_dec_rate dec_rate);
+/* Get the mode configuration. */
+int32_t ad7768_get_mode_config(ad7768_dev *dev,
+							   ad7768_ch_mode mode,
+							   ad7768_filt_type *filt_type,
+							   ad7768_dec_rate *dec_rate);
+/* Set the channel mode. */
+int32_t ad7768_set_ch_mode(ad7768_dev *dev,
+						   ad7768_ch ch,
+						   ad7768_ch_mode mode);
+/* Get the channel mode. */
+int32_t ad7768_get_ch_mode(ad7768_dev *dev,
+						   ad7768_ch ch,
+						   ad7768_ch_mode *mode);
 /* Initialize the device. */
 int32_t ad7768_setup(ad7768_dev **device,
 					 ad7768_init_param init_param);
