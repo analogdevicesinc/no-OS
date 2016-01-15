@@ -444,7 +444,7 @@ int32_t ad7768_set_crc_sel(ad7768_dev *dev,
 /**
  * Get the CRC selection.
  * @param dev - The device structure.
- * @param crc_sel -
+ * @param crc_sel - The CRC selection.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7768_get_crc_sel(ad7768_dev *dev,
@@ -458,6 +458,15 @@ int32_t ad7768_get_crc_sel(ad7768_dev *dev,
 /**
  * Set the channel state.
  * @param dev - The device structure.
+ * @param ch - The channel number.
+ * 			   Accepted values: AD7768_CH0
+ * 			   					AD7768_CH1
+ * 			   					AD7768_CH2
+ * 			   					AD7768_CH3
+ * 			   					AD7768_CH4
+ * 			   					AD7768_CH5
+ * 			   					AD7768_CH6
+ * 			   					AD7768_CH7
  * @param state - The channel state.
  * 				  Accepted values: AD7768_ENABLED
  * 								   AD7768_STANDBY
@@ -479,7 +488,16 @@ int32_t ad7768_set_ch_state(ad7768_dev *dev,
 /**
  * Get the channel state.
  * @param dev - The device structure.
- * @param crc_sel - The channel state.
+ * @param ch - The channel number.
+ * 			   Accepted values: AD7768_CH0
+ * 			   					AD7768_CH1
+ * 			   					AD7768_CH2
+ * 			   					AD7768_CH3
+ * 			   					AD7768_CH4
+ * 			   					AD7768_CH5
+ * 			   					AD7768_CH6
+ * 			   					AD7768_CH7
+ * @param state - The channel state.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7768_get_ch_state(ad7768_dev *dev,
@@ -487,6 +505,117 @@ int32_t ad7768_get_ch_state(ad7768_dev *dev,
 							ad7768_ch_state *state)
 {
 	*state = dev->ch_state[ch];
+
+	return 0;
+}
+
+/**
+ * Set the mode configuration.
+ * @param dev - The device structure.
+ * @param mode - The channel mode.
+ * 				 Accepted values: AD7768_MODE_A
+ * 								  AD7768_MODE_B
+ * @param filt_type - The filter type.
+ * 					  Accepted values: AD7768_FILTER_WIDEBAND
+ * 					  				   AD7768_FILTER_SINC,
+ * @param dec_rate - The decimation rate.
+ * 					 Accepted values: AD7768_DEC_X32
+ * 					 				  AD7768_DEC_X64
+ * 					 				  AD7768_DEC_X128
+ * 					 				  AD7768_DEC_X256
+ * 					 				  AD7768_DEC_X512
+ * 					 				  AD7768_DEC_X1024
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_set_mode_config(ad7768_dev *dev,
+							   ad7768_ch_mode mode,
+							   ad7768_filt_type filt_type,
+							   ad7768_dec_rate dec_rate)
+{
+	uint8_t reg_val;
+
+	reg_val = ((filt_type == AD7768_FILTER_SINC) ? AD7768_CH_MODE_FILTER_TYPE : 0) |
+			AD7768_CH_MODE_DEC_RATE(dec_rate);
+	if (mode == AD7768_MODE_A) {
+		ad7768_spi_write(dev, AD7768_REG_CH_MODE_A, reg_val);
+	} else {
+		ad7768_spi_write(dev, AD7768_REG_CH_MODE_B, reg_val);
+	}
+	dev->filt_type[mode] = filt_type;
+	dev->dec_rate[mode] = dec_rate;
+
+	return 0;
+}
+
+/**
+ * Get the mode configuration.
+ * @param dev - The device structure.
+ * @param mode - The channel mode.
+ * @param filt_type - The filter type.
+ * @param dec_rate - The decimation rate.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_get_mode_config(ad7768_dev *dev,
+							   ad7768_ch_mode mode,
+							   ad7768_filt_type *filt_type,
+							   ad7768_dec_rate *dec_rate)
+{
+	*filt_type = dev->filt_type[mode];
+	*dec_rate = dev->dec_rate[mode];
+
+	return 0;
+}
+
+/**
+ * Set the channel mode.
+ * @param dev - The device structure.
+ * @param ch - The channel number.
+ * 			   Accepted values: AD7768_CH0
+ * 			   					AD7768_CH1
+ * 			   					AD7768_CH2
+ * 			   					AD7768_CH3
+ * 			   					AD7768_CH4
+ * 			   					AD7768_CH5
+ * 			   					AD7768_CH6
+ * 			   					AD7768_CH7
+ * @param mode - The channel mode.
+ * 				 Accepted values: AD7768_MODE_A
+ * 								  AD7768_MODE_B
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_set_ch_mode(ad7768_dev *dev,
+						   ad7768_ch ch,
+						   ad7768_ch_mode mode)
+{
+	ad7768_spi_write_mask(dev,
+						  AD7768_REG_CH_MODE_SEL,
+						  AD7768_CH_MODE(ch),
+						  mode ? AD7768_CH_MODE(ch) : 0);
+	dev->ch_mode[ch] = mode;
+
+	return 0;
+}
+
+/**
+ * Get the channel mode.
+ * @param dev - The device structure.
+ * @param ch - The channel number.
+ * 			   Accepted values: AD7768_CH0
+ * 			   					AD7768_CH1
+ * 			   					AD7768_CH2
+ * 			   					AD7768_CH3
+ * 			   					AD7768_CH4
+ * 			   					AD7768_CH5
+ * 			   					AD7768_CH6
+ * 			   					AD7768_CH7
+ * @param mode - The channel mode.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7768_get_ch_mode(ad7768_dev *dev,
+						   ad7768_ch ch,
+						   ad7768_ch_mode *mode)
+{
+	*mode = dev->ch_mode[ch];
 
 	return 0;
 }
