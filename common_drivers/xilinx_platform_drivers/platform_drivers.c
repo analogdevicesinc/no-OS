@@ -42,13 +42,8 @@
 /******************************************************************************/
 #include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
-#include <xspips.h>
-#include <xgpiops.h>
 #include <sleep.h>
 #else
-#include <xspi.h>
-#include <xgpio.h>
-#include <xgpio_l.h>
 #include <microblaze_sleep.h>
 #endif
 #include "platform_drivers.h"
@@ -56,70 +51,65 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-#ifdef _XPARAMETERS_PS_H_
-XSpiPs_Config	*spi_config;
-XSpiPs			spi_instance;
-XGpioPs_Config	*gpio_config;
-XGpioPs			gpio_instance;
-uint8_t			spi_decoded_cs = 0;
-#else
-XSpi_Config		*spi_config;
-XSpi			spi_instance;
-XGpio_Config	*gpio_config;
-XGpio			gpio_instance;
+#ifdef XPAR_PS7_SPI_0_DEVICE_ID
+uint8_t	spi_decoded_cs = 0;
 #endif
 
 /***************************************************************************//**
 * @brief spi_init
 *******************************************************************************/
-int32_t spi_init(uint32_t device_id,
-				 uint8_t clk_pha,
-				 uint8_t clk_pol)
+int32_t spi_init(spi_device *dev)
 {
-	uint32_t base_addr	 = 0;
+	uint8_t	 clk_pha;
+	uint8_t	 clk_pol;
 	uint32_t spi_options = 0;
 
-#ifdef _XPARAMETERS_PS_H_
-	spi_config = XSpiPs_LookupConfig(device_id);
+	clk_pha = (dev->mode & SPI_CPHA) >> 0;
+	clk_pol = (dev->mode & SPI_CPOL) >> 1;
 
-	base_addr = spi_config->BaseAddress;
-	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
+	if (dev->type == AXI_SPI) {
+#ifdef XPAR_SPI_0_DEVICE_ID
+		XSpi_Initialize(&dev->axi_instance,
+						dev->device_id);
 
-	spi_options = XSPIPS_MASTER_OPTION |
-			(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
-			(spi_decoded_cs ? XSPIPS_DECODE_SSELECT_OPTION : 0) |
-			XSPIPS_FORCE_SSELECT_OPTION;
-	XSpiPs_SetOptions(&spi_instance, spi_options);
+		XSpi_Stop(&dev->axi_instance);
 
-	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
+		dev->axi_config = XSpi_LookupConfig(dev->device_id);
 
-	/* FIXME: Temporary 15.2 Fix */
-	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
+		XSpi_CfgInitialize(&dev->axi_instance,
+						   dev->axi_config,
+						   dev->axi_config->BaseAddress);
 
-	XSpiPs_SetOptions(&spi_instance, spi_options);
+		spi_options = XSP_MASTER_OPTION |
+					  (clk_pol ? XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+					  (clk_pha ? XSP_CLK_PHASE_1_OPTION : 0) |
+					  XSP_MANUAL_SSELECT_OPTION;
+		XSpi_SetOptions(&dev->axi_instance, spi_options);
 
-	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_32);
-#else
-	XSpi_Initialize(&spi_instance, device_id);
+		XSpi_Start(&dev->axi_instance);
 
-	XSpi_Stop(&spi_instance);
-
-	spi_config = XSpi_LookupConfig(device_id);
-
-	base_addr = spi_config->BaseAddress;
-	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
-
-	spi_options = XSP_MASTER_OPTION |
-				  (clk_pol ? XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-				  (clk_pha ? XSP_CLK_PHASE_1_OPTION : 0) |
-				  XSP_MANUAL_SSELECT_OPTION;
-	XSpi_SetOptions(&spi_instance, spi_options);
-
-	XSpi_Start(&spi_instance);
-
-	XSpi_IntrGlobalDisable(&spi_instance);
+		XSpi_IntrGlobalDisable(&dev->axi_instance);
 #endif
+	} else {
+#ifdef XPAR_PS7_SPI_0_DEVICE_ID
+		dev->ps7_config = XSpiPs_LookupConfig(dev->device_id);
+
+		XSpiPs_CfgInitialize(&dev->ps7_instance,
+							 dev->ps7_config,
+							 dev->ps7_config->BaseAddress);
+
+		spi_options = XSPIPS_MASTER_OPTION |
+				(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+				(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
+				(spi_decoded_cs ? XSPIPS_DECODE_SSELECT_OPTION : 0) |
+				XSPIPS_FORCE_SSELECT_OPTION;
+		XSpiPs_SetOptions(&dev->ps7_instance,
+						  spi_options);
+
+		XSpiPs_SetClkPrescaler(&dev->ps7_instance,
+							   XSPIPS_CLK_PRESCALE_32);
+#endif
+	}
 
 	return 0;
 }
@@ -127,27 +117,34 @@ int32_t spi_init(uint32_t device_id,
 /***************************************************************************//**
 * @brief spi_write_and_read
 *******************************************************************************/
-int32_t spi_write_and_read(uint8_t ss,
+int32_t spi_write_and_read(spi_device *dev,
 						   uint8_t *data,
 						   uint8_t bytes_number)
 {
-#ifdef _XPARAMETERS_PS_H_
-	XSpiPs_SetSlaveSelect(&spi_instance, ss);
+	if (dev->type == AXI_SPI) {
+#ifdef XPAR_SPI_0_DEVICE_ID
+		uint8_t	 ss = (1 << dev->chip_select);
+		uint8_t	 send_buffer[20];
+		uint32_t cnt = 0;
 
-	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
-#else
-	uint8_t	 send_buffer[20];
-	uint32_t cnt = 0;
+		XSpi_SetSlaveSelect(&dev->axi_instance, ss);
 
-	ss = (1 << ss);
-	XSpi_SetSlaveSelect(&spi_instance, ss);
-
-	for(cnt = 0; cnt < bytes_number; cnt++)
-	{
-		send_buffer[cnt] = data[cnt];
-	}
-	XSpi_Transfer(&spi_instance, send_buffer, data, bytes_number);
+		for(cnt = 0; cnt < bytes_number; cnt++)
+		{
+			send_buffer[cnt] = data[cnt];
+		}
+		XSpi_Transfer(&dev->axi_instance,
+					  send_buffer,
+					  data,
+					  bytes_number);
 #endif
+	} else {
+#ifdef XPAR_PS7_SPI_0_DEVICE_ID
+		XSpiPs_SetSlaveSelect(&dev->ps7_instance, dev->chip_select);
+
+		XSpiPs_PolledTransfer(&dev->ps7_instance, data, data, bytes_number);
+#endif
+	}
 
 	return 0;
 }
@@ -155,8 +152,26 @@ int32_t spi_write_and_read(uint8_t ss,
 /***************************************************************************//**
  * @brief gpio_init
 *******************************************************************************/
-int32_t gpio_init(uint32_t device_id)
+int32_t gpio_init(gpio_device *dev)
 {
+	if (dev->type == AXI_GPIO) {
+#ifdef XPAR_GPIO_0_DEVICE_ID
+		dev->axi_config = XGpio_LookupConfig(dev->device_id);
+		XGpio_CfgInitialize(&dev->axi_instance,
+							dev->axi_config,
+							dev->axi_config->BaseAddress);
+#endif
+	} else {
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+		dev->ps7_config = XGpioPs_LookupConfig(dev->device_id);
+		XGpioPs_CfgInitialize(&dev->ps7_instance,
+							  dev->ps7_config,
+							  dev->ps7_config->BaseAddr);
+#endif
+	}
+
+	return 0;
+#if 0
 	uint32_t base_addr = 0;
 
 #ifdef _XPARAMETERS_PS_H_
@@ -172,13 +187,52 @@ int32_t gpio_init(uint32_t device_id)
 #endif
 
 	return 0;
+#endif
 }
 
 /***************************************************************************//**
  * @brief gpio_direction
 *******************************************************************************/
-int32_t gpio_direction(uint8_t pin, uint8_t direction)
+int32_t gpio_set_direction(gpio_device *dev,
+						   uint8_t pin,
+						   uint8_t direction)
 {
+	if (dev->type == AXI_GPIO) {
+#ifdef XPAR_GPIO_0_DEVICE_ID
+		uint32_t channel = 1;
+		uint32_t config	 = 0;
+
+		/* We assume that pin 32 is the first pin from channel 2 */
+		if (pin >= 32) {
+			channel = 2;
+			pin -= 32;
+		}
+
+		config = XGpio_GetDataDirection(&dev->axi_instance,
+										channel);
+		if (direction) {
+			config &= ~(1 << pin);
+		} else {
+			config |= (1 << pin);
+		}
+		XGpio_SetDataDirection(&dev->axi_instance,
+							   channel,
+							   config);
+#endif
+	} else {
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+		XGpioPs_SetDirectionPin(&dev->ps7_instance,
+								pin,
+								direction);
+		XGpioPs_SetOutputEnablePin(&dev->ps7_instance,
+								   pin,
+								   1);
+#endif
+	}
+
+	return 0;
+#if 0
+
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&gpio_instance, pin, direction);
 	XGpioPs_SetOutputEnablePin(&gpio_instance, pin, 1);
@@ -202,13 +256,48 @@ int32_t gpio_direction(uint8_t pin, uint8_t direction)
 #endif
 
 	return 0;
+#endif
 }
 
 /***************************************************************************//**
  * @brief gpio_set_value
 *******************************************************************************/
-int32_t gpio_set_value(uint8_t pin, uint8_t data)
+int32_t gpio_set_value(gpio_device *dev,
+					   uint8_t pin,
+					   uint8_t data)
 {
+	if (dev->type == AXI_GPIO) {
+#ifdef XPAR_GPIO_0_DEVICE_ID
+		uint32_t channel = 1;
+		uint32_t config	 = 0;
+
+		/* We assume that pin 32 is the first pin from channel 2 */
+		if (pin >= 32) {
+			channel = 2;
+			pin -= 32;
+		}
+
+		config = XGpio_DiscreteRead(&dev->axi_instance,
+									channel);
+		if(data) {
+			config |= (1 << pin);
+		} else {
+			config &= ~(1 << pin);
+		}
+		XGpio_DiscreteWrite(&dev->axi_instance,
+							channel,
+							config);
+#endif
+	} else {
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+		XGpioPs_WritePin(&dev->ps7_instance,
+						 pin,
+						 data);
+#endif
+	}
+
+	return 0;
+#if 0
 #ifdef _XPARAMETERS_PS_H_
 	XGpioPs_WritePin(&gpio_instance, pin, data);
 #else
@@ -231,13 +320,39 @@ int32_t gpio_set_value(uint8_t pin, uint8_t data)
 #endif
 
 	return 0;
+#endif
 }
 
 /***************************************************************************//**
  * @brief gpio_get_value
 *******************************************************************************/
-int32_t gpio_get_value(uint8_t pin, uint8_t *data)
+int32_t gpio_get_value(gpio_device *dev,
+					   uint8_t pin,
+					   uint8_t *data)
 {
+	if (dev->type == AXI_GPIO) {
+#ifdef XPAR_GPIO_0_DEVICE_ID
+		uint32_t channel = 1;
+		uint32_t config	 = 0;
+
+		/* We assume that pin 32 is the first pin from channel 2 */
+		if (pin >= 32) {
+			channel = 2;
+			pin -= 32;
+		}
+
+		config = XGpio_DiscreteRead(&dev->axi_instance,
+									channel);
+		*data = (config & (1 << pin)) ? 1 : 0;
+#endif
+	} else {
+#ifdef XPAR_PS7_GPIO_0_DEVICE_ID
+		*data = XGpioPs_ReadPin(&dev->ps7_instance, pin);
+#endif
+	}
+
+	return 0;
+#if 0
 #ifdef _XPARAMETERS_PS_H_
 	*data = XGpioPs_ReadPin(&gpio_instance, pin);
 #else
@@ -255,6 +370,7 @@ int32_t gpio_get_value(uint8_t pin, uint8_t *data)
 #endif
 
 	return 0;
+#endif
 }
 
 /***************************************************************************//**
