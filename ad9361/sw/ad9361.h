@@ -3135,7 +3135,6 @@ struct ad9361_phy_platform_data {
 	bool			ensm_pin_pulse_mode;
 	bool			ensm_pin_ctrl;
 	bool			debug_mode;
-	bool			tdd_use_fdd_tables;
 	bool			tdd_use_dual_synth;
 	bool			tdd_skip_vco_cal;
 	bool			use_ext_rx_lo;
@@ -3315,6 +3314,10 @@ struct ad9361_rf_phy {
 	bool			auto_cal_en;
 	uint64_t			last_tx_quad_cal_freq;
 	uint32_t			last_tx_quad_cal_phase;
+	uint64_t		current_tx_lo_freq;
+	uint64_t		current_rx_lo_freq;
+	bool			current_tx_use_tdd_table;
+	bool			current_rx_use_tdd_table;
 	uint32_t		flags;
 	uint32_t		cal_threshold_freq;
 	uint32_t			current_rx_bw_Hz;

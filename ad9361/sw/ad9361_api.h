@@ -72,7 +72,6 @@ typedef struct
 	uint8_t		dc_offset_attenuation_low_range;	/* adi,dc-offset-attenuation-low-range */
 	uint8_t		dc_offset_count_high_range;			/* adi,dc-offset-count-high-range */
 	uint8_t		dc_offset_count_low_range;			/* adi,dc-offset-count-low-range */
-	uint8_t		tdd_use_fdd_vco_tables_enable;	/* adi,tdd-use-fdd-vco-tables-enable */
 	uint8_t		split_gain_table_mode_enable;	/* adi,split-gain-table-mode-enable */
 	uint32_t	trx_synthesizer_target_fref_overwrite_hz;	/* adi,trx-synthesizer-target-fref-overwrite-hz */
 	uint8_t		qec_tracking_slow_mode_enable;	/* adi,qec-tracking-slow-mode-enable */

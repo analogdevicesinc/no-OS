@@ -140,7 +140,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->dc_offset_attenuation_low = init_param->dc_offset_attenuation_low_range;
 	phy->pdata->rf_dc_offset_count_high = init_param->dc_offset_count_high_range;
 	phy->pdata->rf_dc_offset_count_low = init_param->dc_offset_count_low_range;
-	phy->pdata->tdd_use_fdd_tables = init_param->tdd_use_fdd_vco_tables_enable;
 	phy->pdata->split_gt = init_param->split_gain_table_mode_enable;
 	phy->pdata->trx_synth_max_fref = init_param->trx_synthesizer_target_fref_overwrite_hz;
 	phy->pdata->qec_tracking_slow_mode_en = init_param->qec_tracking_slow_mode_enable;
