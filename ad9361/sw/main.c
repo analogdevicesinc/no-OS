@@ -386,6 +386,7 @@ int main(void)
 	default_init_param.gpio_sync = GPIO_SYNC_PIN;
 	default_init_param.gpio_cal_sw1 = GPIO_CAL_SW1_PIN;
 	default_init_param.gpio_cal_sw2 = GPIO_CAL_SW2_PIN;
+	default_init_param.rx1rx2_phase_inversion_en = 1;
 #else
 	default_init_param.gpio_sync = -1;
 	default_init_param.gpio_cal_sw1 = -1;
