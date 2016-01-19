@@ -4891,6 +4891,8 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	int32_t ret;
 	uint32_t real_rx_bandwidth = pd->rf_rx_bandwidth_Hz / 2;
 	uint32_t real_tx_bandwidth = pd->rf_tx_bandwidth_Hz / 2;
+	bool tmp_use_ext_rx_lo = pd->use_ext_rx_lo;
+	bool tmp_use_ext_tx_lo = pd->use_ext_tx_lo;
 
 	dev_dbg(dev, "%s", __func__);
 
@@ -5027,6 +5029,9 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
+	phy->pdata->use_ext_rx_lo = 0;
+	phy->pdata->use_ext_tx_lo = 0;
+
 	ret = clk_set_rate(phy, phy->ref_clk_scale[RX_RFPLL], ad9361_to_clk(pd->rx_synth_freq));
 	if (ret < 0) {
 		dev_err(dev, "Failed to set RX Synth rate (%"PRId32")",
@@ -5062,6 +5067,9 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	ret = clk_prepare_enable(phy->clks[TX_RFPLL]);
 	if (ret < 0)
 		return ret;
+
+	phy->pdata->use_ext_rx_lo = tmp_use_ext_rx_lo;
+	phy->pdata->use_ext_tx_lo = tmp_use_ext_tx_lo;
 
 	ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL],
 		pd->use_ext_rx_lo);
