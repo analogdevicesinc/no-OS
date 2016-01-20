@@ -121,11 +121,11 @@ int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
 	ad9517_spi_write(0x0232, 0x01);
 	ad9517_spi_write(0x0018, 0x06);
 	ad9517_spi_write(0x0232, 0x01);
-	mdelay(1);
+	mdelay(50);
 
 	ad9517_spi_write(0x0018, 0x07);
 	ad9517_spi_write(0x0232, 0x01);
-	mdelay(1);
+	mdelay(50);
 
 	ad9517_spi_read(0x001f, &stat);
 	xil_printf("AD9517 PLL %s.\n", stat & 0x01 ? "ok" : "errors");
