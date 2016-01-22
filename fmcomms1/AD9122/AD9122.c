@@ -46,6 +46,7 @@
 #include "spi_interface.h"
 #include "dac_core.h"
 #include "cf_axi_dds.h"
+#include "mmcm.h"
 #include "AD9122.h"
 
 struct cf_axi_converter dds_conv;
@@ -536,6 +537,7 @@ static int32_t ad9122_set_data_clk(struct cf_axi_converter *conv, uint32_t freq)
 	if(ret < 0)
 		return (int32_t)ret;
 	conv->clk[CLK_DATA] = (uint32_t)ret;
+	mmcm_set_rate(conv->clk[CLK_DATA], conv->clk[CLK_DATA]);
 
 	ret = pfnSetRefClk(r_ref_freq);
 	if(ret < 0)
@@ -988,7 +990,7 @@ int32_t ad9122_setup(void* pfnSetDataClock,
 					AD9122_DATAPATH_CTRL_BYPASS_INV_SINC;
 	ad9122_write(AD9122_REG_DATAPATH_CTRL, datapath_ctrl);
 
-	rate = 491520000;
+	rate = 245760000;
 	ret = ad9122_set_interpol(conv, conv->interp_factor,
 			  	  	  	  	  conv->fcenter_shift, rate);
 

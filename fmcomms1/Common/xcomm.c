@@ -55,6 +55,7 @@
 #include "spi_interface.h"
 #include "adc_core.h"
 #include "dac_core.h"
+#include "mmcm.h"
 #include "xcomm.h"
 
 /****** Global variables ******/
@@ -267,6 +268,9 @@ int32_t XCOMM_InitRx(XCOMM_DefaultInit* pDefInit)
 ******************************************************************************/
 int32_t XCOMM_InitTx(XCOMM_DefaultInit* pDefInit)
 {
+	/* Initialize MMCM */
+	mmcm_init(pDefInit->fmcPort);
+
 	/* Power up all the Tx clocks */
 	if(ad9523_out_altvoltage_DAC_CLK_raw(1) < 0)
 		return -1;

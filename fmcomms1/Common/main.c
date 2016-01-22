@@ -171,6 +171,7 @@ int main()
 		i++;
 	}
 	xil_printf("\n\r");
+	XCOMM_SetDacInterpolationFreq(valArray[i - 1]);
 
 	xil_printf("\n\rDAC available center shift frequencies [Hz]: ");
 	XCOMM_GetDacAvailableCenterShiftFreq(valArray);
