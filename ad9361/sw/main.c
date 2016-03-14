@@ -402,8 +402,12 @@ int main(void)
 
 	spi_init(SPI_DEVICE_ID, 1, 0);
 
-#if defined FMCOMMS5 || defined PICOZED_SDR
+#if defined FMCOMMS5 || defined PICOZED_SDR || defined PICOZED_SDR_CMOS
 	default_init_param.xo_disable_use_ext_refclk_enable = 1;
+#endif
+
+#ifdef PICOZED_SDR_CMOS
+	default_init_param.lvds_mode_enable = 0;
 #endif
 
 	ad9361_init(&ad9361_phy, &default_init_param);
