@@ -90,9 +90,6 @@ int32_t ad7779_spi_read(ad7779_dev *dev,
 	buf[1] = 0x00;
 	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
 
-	buf[0] = 0x80 | (reg_addr & 0x7F);
-	buf[1] = 0x00;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
 	*reg_data = buf[1];
 
 	return ret;
@@ -112,7 +109,7 @@ int32_t ad7779_spi_write(ad7779_dev *dev,
 	uint8_t buf[2];
 	int32_t ret;
 
-	buf[0] = (reg_addr & 0x7F);
+	buf[0] = 0x00 | (reg_addr & 0x7F);
 	buf[1] = reg_data;
 	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
 
