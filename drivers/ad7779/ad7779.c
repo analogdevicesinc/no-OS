@@ -797,6 +797,43 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 }
 
 /**
+ * Set the state (enable, disable) of the SINC5 filter.
+ * @param dev - The device structure.
+ * @param state - The SINC5 filter state.
+ * 				  Accepted values: AD7779_ENABLE
+ * 								   AD7779_DISABLE
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
+									  ad7779_state state)
+{
+	int32_t ret;
+
+	ret = ad7779_spi_write_mask(dev,
+								AD7779_REG_GENERAL_USER_CONFIG_2,
+								AD7771_FILTER_MODE,
+								(state == AD7779_ENABLE) ?
+										AD7771_FILTER_MODE : 0);
+	dev->sinc5_state = state;
+
+	return ret;
+}
+
+/**
+ * Get the state (enable, disable) of the SINC5 filter.
+ * @param dev - The device structure.
+ * @param state - The SINC5 filter state.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
+									  ad7779_state *state)
+{
+	*state = dev->sinc5_state;
+
+	return SUCCESS;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
