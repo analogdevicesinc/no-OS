@@ -108,6 +108,17 @@
 #define AD7779_DOUT_HEADER_FORMAT			(1 << 5)
 #define AD7779_DCLK_CLK_DIV(x)				(((x) & 0x3) << 1)
 
+/* AD7779_REG_BUFFER_CONFIG_1 */
+#define AD7779_REF_BUF_POS_EN				(1 << 4)
+#define AD7779_REF_BUF_NEG_EN				(1 << 3)
+
+/* AD7779_REG_BUFFER_CONFIG_2 */
+#define AD7779_REFBUFP_PREQ					(1 << 7)
+#define AD7779_REFBUFN_PREQ					(1 << 6)
+#define AD7779_PDB_ALDO1_OVRDRV				(1 << 2)
+#define AD7779_PDB_ALDO2_OVRDRV				(1 << 1)
+#define AD7779_PDB_DLDO_OVRDRV				(1 << 0)
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -160,64 +171,77 @@ typedef enum {
 	AD7779_INT_REF,
 } ad7779_ref_type;
 
+typedef enum {
+	AD7779_REFX_P,
+	AD7779_REFX_N,
+} ad7779_refx_pin;
+
+typedef enum {
+	AD7779_REF_BUF_ENABLED,
+	AD7779_REF_BUF_PRECHARGED,
+	AD7779_REF_BUF_DISABLED,
+} ad7779_ref_buf_op_mode;
+
 typedef struct {
 	/* SPI */
-	spi_device			spi_dev;
+	spi_device				spi_dev;
 	/* GPIO */
-	gpio_device			gpio_dev;
-	int8_t				gpio_mode0;
-	int8_t				gpio_mode1;
-	int8_t				gpio_mode2;
-	int8_t				gpio_mode3;
-	int8_t				gpio_dclk0;
-	int8_t				gpio_dclk1;
-	int8_t				gpio_dclk2;
-	int8_t				gpio_sync_in;
+	gpio_device				gpio_dev;
+	int8_t					gpio_mode0;
+	int8_t					gpio_mode1;
+	int8_t					gpio_mode2;
+	int8_t					gpio_mode3;
+	int8_t					gpio_dclk0;
+	int8_t					gpio_dclk1;
+	int8_t					gpio_dclk2;
+	int8_t					gpio_sync_in;
 	/* Device Settings */
-	ad7779_ctrl_mode	ctrl_mode;
-	ad7779_state		state[8];
-	ad7779_gain			gain[8];
-	uint16_t			dec_rate_int;
-	uint16_t			dec_rate_dec;
- 	ad7779_ref_type		ref_type;
-	ad7779_pwr_mode		pwr_mode;
-	ad7768_dclk_div		dclk_div;
-	uint8_t				sync_offset[8];
-	uint32_t			offset_corr[8];
-	uint32_t			gain_corr[8];
-	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
+	ad7779_ctrl_mode		ctrl_mode;
+	ad7779_state			state[8];
+	ad7779_gain				gain[8];
+	uint16_t				dec_rate_int;
+	uint16_t				dec_rate_dec;
+	ad7779_ref_type			ref_type;
+	ad7779_pwr_mode			pwr_mode;
+	ad7768_dclk_div			dclk_div;
+	uint8_t					sync_offset[8];
+	uint32_t				offset_corr[8];
+	uint32_t				gain_corr[8];
+	ad7779_ref_buf_op_mode	ref_buf_op_mode[2];
+	ad7779_state			sinc5_state;	// Can be enabled only for AD7771
 } ad7779_dev;
 
 typedef struct {
 	/* SPI */
-	uint8_t				spi_chip_select;
-	spi_mode			spi_mode;
-	spi_type			spi_type;
-	uint32_t			spi_device_id;
+	uint8_t					spi_chip_select;
+	spi_mode				spi_mode;
+	spi_type				spi_type;
+	uint32_t				spi_device_id;
 	/* GPIO */
-	gpio_type			gpio_type;
-	uint32_t			gpio_device_id;
-	int8_t				gpio_mode0;
-	int8_t				gpio_mode1;
-	int8_t				gpio_mode2;
-	int8_t				gpio_mode3;
-	int8_t				gpio_dclk0;
-	int8_t				gpio_dclk1;
-	int8_t				gpio_dclk2;
-	int8_t				gpio_sync_in;
+	gpio_type				gpio_type;
+	uint32_t				gpio_device_id;
+	int8_t					gpio_mode0;
+	int8_t					gpio_mode1;
+	int8_t					gpio_mode2;
+	int8_t					gpio_mode3;
+	int8_t					gpio_dclk0;
+	int8_t					gpio_dclk1;
+	int8_t					gpio_dclk2;
+	int8_t					gpio_sync_in;
 	/* Device Settings */
-	ad7779_ctrl_mode	ctrl_mode;
-	ad7779_state		state[8];
-	ad7779_gain			gain[8];
-	uint16_t			dec_rate_int;
-	uint16_t			dec_rate_dec;
- 	ad7779_ref_type		ref_type;
-	ad7779_pwr_mode		pwr_mode;
-	ad7768_dclk_div		dclk_div;
-	uint8_t				sync_offset[8];
-	uint32_t			offset_corr[8];
-	uint32_t			gain_corr[8];
-	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
+	ad7779_ctrl_mode		ctrl_mode;
+	ad7779_state			state[8];
+	ad7779_gain				gain[8];
+	uint16_t				dec_rate_int;
+	uint16_t				dec_rate_dec;
+	ad7779_ref_type			ref_type;
+	ad7779_pwr_mode			pwr_mode;
+	ad7768_dclk_div			dclk_div;
+	uint8_t					sync_offset[8];
+	uint32_t				offset_corr[8];
+	uint32_t				gain_corr[8];
+	ad7779_ref_buf_op_mode	ref_buf_op_mode[2];
+	ad7779_state			sinc5_state;	// Can be enabled only for AD7771
 } ad7779_init_param;
 
 /******************************************************************************/
