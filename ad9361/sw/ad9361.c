@@ -4327,7 +4327,7 @@ int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		__func__, tx_sample_rate, tx_intdec, rx_intdec,
 		rate_gov ? "Nominal" : "Highest OSR");
 
-	if (tx_sample_rate > (phy->pdata->rx2tx2 ? 61440000UL : 122880000UL))
+	if (tx_sample_rate > 61440000UL)
 		return -EINVAL;
 
 	clktf = tx_sample_rate * tx_intdec;
