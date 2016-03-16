@@ -94,7 +94,14 @@
 #define AD7779_PDB_REFOUT_BUF				(1 << 4)
 #define AD7779_PDB_SAR						(1 << 3)
 #define AD7779_PDB_RC_OSC					(1 << 2)
-#define AD7779_SOFT_RESET					(((x) & 0x3) << 0)
+#define AD7779_SOFT_RESET(x)				(((x) & 0x3) << 0)
+
+/* AD7779_REG_GENERAL_USER_CONFIG_2 */
+#define AD7771_FILTER_MODE					(1 << 6)
+#define AD7779_SAR_DIAG_MODE_EN				(1 << 5)
+#define AD7779_SDO_DRIVE_STR(x)				(((x) & 0x3) << 3)
+#define AD7779_DOUT_DRIVE_STR(x)			(((x) & 0x3) << 1)
+#define AD7779_SPI_SYNC						(1 << 0)
 
 /* AD7779_REG_DOUT_FORMAT */
 #define AD7779_DOUT_FORMAT(x)				(((x) & 0x3) << 6)
@@ -178,6 +185,7 @@ typedef struct {
 	uint8_t				sync_offset[8];
 	uint32_t			offset_corr[8];
 	uint32_t			gain_corr[8];
+	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
 } ad7779_dev;
 
 typedef struct {
@@ -209,6 +217,7 @@ typedef struct {
 	uint8_t				sync_offset[8];
 	uint32_t			offset_corr[8];
 	uint32_t			gain_corr[8];
+	ad7779_state		sinc5_state;	// Can be enabled only for AD7771
 } ad7779_init_param;
 
 /******************************************************************************/
