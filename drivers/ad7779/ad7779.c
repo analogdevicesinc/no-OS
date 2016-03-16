@@ -797,6 +797,109 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 }
 
 /**
+ * Set the reference buffer operation mode of the selected pin.
+ * @param dev - The device structure.
+ * @param refx_pin - The selected pin.
+ * 					 Accepted values: AD7779_REFX_P
+ * 									  AD7779_REFX_N
+ * @param mode - The reference buffer operation mode.
+ * 				 Accepted values: AD7779_REF_BUF_ENABLED
+ * 								  AD7779_REF_BUF_PRECHARGED
+ * 								  AD7779_REF_BUF_DISABLED
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
+								   ad7779_refx_pin refx_pin,
+								   ad7779_ref_buf_op_mode mode)
+{
+	int32_t ret;
+	uint8_t config_1;
+	uint8_t config_2;
+
+	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
+		printf("%s: This feature is not available in PIN control mode.\n",
+			   __func__);
+		return FAILURE;
+	}
+
+	if (refx_pin == AD7779_REFX_P) {
+		switch (mode) {
+		case AD7779_REF_BUF_ENABLED:
+			config_1 = AD7779_REF_BUF_POS_EN;
+			config_2 = 0;
+			break;
+		case AD7779_REF_BUF_PRECHARGED:
+			config_1 = AD7779_REF_BUF_POS_EN;
+			config_2 = AD7779_REFBUFP_PREQ;
+			break;
+		default:
+			config_1 = 0;
+			config_2 = 0;
+		}
+		ret = ad7779_spi_write_mask(dev,
+									AD7779_REG_BUFFER_CONFIG_1,
+									AD7779_REF_BUF_POS_EN,
+									config_1);
+		ret |= ad7779_spi_write_mask(dev,
+									 AD7779_REG_BUFFER_CONFIG_2,
+									 AD7779_REFBUFP_PREQ,
+									 config_2);
+	} else {
+		switch (mode) {
+		case AD7779_REF_BUF_ENABLED:
+			config_1 = AD7779_REF_BUF_NEG_EN;
+			config_2 = 0;
+			break;
+		case AD7779_REF_BUF_PRECHARGED:
+			config_1 = AD7779_REF_BUF_NEG_EN;
+			config_2 = AD7779_REFBUFN_PREQ;
+			break;
+		default:
+			config_1 = 0;
+			config_2 = 0;
+		}
+		ret = ad7779_spi_write_mask(dev,
+									AD7779_REG_BUFFER_CONFIG_1,
+									AD7779_REF_BUF_NEG_EN,
+									config_1);
+		ret |= ad7779_spi_write_mask(dev,
+									 AD7779_REG_BUFFER_CONFIG_2,
+									 AD7779_REFBUFN_PREQ,
+									 config_2);
+	}
+	dev->ref_buf_op_mode[refx_pin] = mode;
+
+	return ret;
+}
+
+/**
+ * Get the reference buffer operation mode of the selected pin.
+ * @param dev - The device structure.
+ * @param refx_pin - The selected pin.
+ * 					 Accepted values: AD7779_REFX_P
+ * 									  AD7779_REFX_N
+ * @param mode - The reference buffer operation mode.
+ * 				 Accepted values: AD7779_REF_BUF_ENABLED
+ * 								  AD7779_REF_BUF_PRECHARGED
+ * 								  AD7779_REF_BUF_DISABLED
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
+								   ad7779_refx_pin refx_pin,
+								   ad7779_ref_buf_op_mode *mode)
+{
+	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
+		printf("%s: This feature is not available in PIN control mode.\n",
+			   __func__);
+		return FAILURE;
+	}
+
+	*mode = dev->ref_buf_op_mode[refx_pin];
+
+	return SUCCESS;
+}
+
+/**
  * Set the state (enable, disable) of the SINC5 filter.
  * @param dev - The device structure.
  * @param state - The SINC5 filter state.
@@ -808,6 +911,12 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 									  ad7779_state state)
 {
 	int32_t ret;
+
+	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
+		printf("%s: This feature is not available in PIN control mode.\n",
+			   __func__);
+		return FAILURE;
+	}
 
 	ret = ad7779_spi_write_mask(dev,
 								AD7779_REG_GENERAL_USER_CONFIG_2,
@@ -828,6 +937,12 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
 									  ad7779_state *state)
 {
+	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
+		printf("%s: This feature is not available in PIN control mode.\n",
+			   __func__);
+		return FAILURE;
+	}
+
 	*state = dev->sinc5_state;
 
 	return SUCCESS;
