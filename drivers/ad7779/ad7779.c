@@ -70,11 +70,6 @@ const uint8_t pin_mode_options[16][4] = {
 };
 
 /******************************************************************************/
-/*************************** Variables Definitions ****************************/
-/******************************************************************************/
-uint8_t cached_reg_val[AD7779_REG_SRC_UPDATE + 1];
-
-/******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
 /**
@@ -117,7 +112,7 @@ int32_t ad7779_spi_write(ad7779_dev *dev,
 	buf[0] = 0x00 | (reg_addr & 0x7F);
 	buf[1] = reg_data;
 	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
-	cached_reg_val[reg_addr] = reg_data;
+	dev->cached_reg_val[reg_addr] = reg_data;
 
 	return ret;
 }
@@ -160,7 +155,7 @@ int32_t ad7779_spi_write_mask(ad7779_dev *dev,
 	uint8_t reg_data;
 	int32_t ret;
 
-	reg_data = cached_reg_val[reg_addr];
+	reg_data = dev->cached_reg_val[reg_addr];
 	reg_data &= ~mask;
 	reg_data |= data;
 	ret = ad7779_spi_write(dev, reg_addr, reg_data);
@@ -1003,7 +998,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
 		for (i = AD7779_REG_CH_CONFIG(0); i <= AD7779_REG_SRC_UPDATE; i++)
-			ret |= ad7779_spi_read(dev, i, &cached_reg_val[i]);
+			ret |= ad7779_spi_read(dev, i, &dev->cached_reg_val[i]);
 
 	for (i = AD7779_CH0; i <= AD7779_CH7; i++) {
 		dev->state[i] = init_param.state[i];
