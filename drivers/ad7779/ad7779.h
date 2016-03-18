@@ -209,6 +209,7 @@ typedef struct {
 	uint32_t				gain_corr[8];
 	ad7779_ref_buf_op_mode	ref_buf_op_mode[2];
 	ad7779_state			sinc5_state;	// Can be enabled only for AD7771
+	uint8_t					cached_reg_val[AD7779_REG_SRC_UPDATE + 1];
 } ad7779_dev;
 
 typedef struct {
