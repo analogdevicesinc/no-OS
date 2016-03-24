@@ -119,6 +119,16 @@
 #define AD7779_PDB_ALDO2_OVRDRV				(1 << 1)
 #define AD7779_PDB_DLDO_OVRDRV				(1 << 0)
 
+/* AD7779_REG_GEN_ERR_REG_1_EN */
+#define AD7779_MEMMAP_CRC_TEST_EN			(1 << 5)
+#define AD7779_ROM_CRC_TEST_EN				(1 << 4)
+#define AD7779_SPI_CLK_COUNT_TEST_EN		(1 << 3)
+#define AD7779_SPI_INVALID_READ_TEST_EN		(1 << 2)
+#define AD7779_SPI_INVALID_WRITE_TEST_EN	(1 << 1)
+#define AD7779_SPI_CRC_TEST_EN				(1 << 0)
+
+#define AD7779_CRC8_POLY					0x07
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -197,6 +207,7 @@ typedef struct {
 	int8_t					gpio_sync_in;
 	/* Device Settings */
 	ad7779_ctrl_mode		ctrl_mode;
+	ad7779_state			spi_crc_en;
 	ad7779_state			state[8];
 	ad7779_gain				gain[8];
 	uint16_t				dec_rate_int;
@@ -231,6 +242,7 @@ typedef struct {
 	int8_t					gpio_sync_in;
 	/* Device Settings */
 	ad7779_ctrl_mode		ctrl_mode;
+	ad7779_state			spi_crc_en;
 	ad7779_state			state[8];
 	ad7779_gain				gain[8];
 	uint16_t				dec_rate_int;
@@ -248,24 +260,27 @@ typedef struct {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/* Compute CRC8 checksum. */
+uint8_t ad7779_compute_crc8(uint8_t *data,
+							uint8_t data_size);
 /* SPI read from device. */
-int32_t ad7779_spi_read(ad7779_dev *dev,
-						uint8_t reg_addr,
-						uint8_t *reg_data);
+int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
+								uint8_t reg_addr,
+								uint8_t *reg_data);
 /* SPI write to device. */
-int32_t ad7779_spi_write(ad7779_dev *dev,
-						 uint8_t reg_addr,
-						 uint8_t reg_data);
+int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
+								 uint8_t reg_addr,
+								 uint8_t reg_data);
 /* SPI read from device using a mask. */
-int32_t ad7779_spi_read_mask(ad7779_dev *dev,
-							 uint8_t reg_addr,
-							 uint8_t mask,
-							 uint8_t *data);
+int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
+									 uint8_t reg_addr,
+									 uint8_t mask,
+									 uint8_t *data);
 /* SPI write to device using a mask. */
-int32_t ad7779_spi_write_mask(ad7779_dev *dev,
-							  uint8_t reg_addr,
-							  uint8_t mask,
-							  uint8_t data);
+int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
+									  uint8_t reg_addr,
+									  uint8_t mask,
+									  uint8_t data);
 /* Set the state (enable, disable) of the channel. */
 int32_t ad7779_set_state(ad7779_dev *dev,
 						 ad7779_ch ch,
@@ -335,6 +350,20 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 int32_t ad7779_get_gain_corr(ad7779_dev *dev,
 							 ad7779_ch ch,
 							 uint32_t *gain);
+/* Set the reference buffer operation mode of the selected pin. */
+int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
+								   ad7779_refx_pin refx_pin,
+								   ad7779_ref_buf_op_mode mode);
+/* Get the reference buffer operation mode of the selected pin. */
+int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
+								   ad7779_refx_pin refx_pin,
+								   ad7779_ref_buf_op_mode *mode);
+/* Set the state (enable, disable) of the SINC5 filter. */
+int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
+									  ad7779_state state);
+/* Get the state (enable, disable) of the SINC5 filter. */
+int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
+									  ad7779_state *state);
 /* Initialize the device. */
 int32_t ad7779_setup(ad7779_dev **device,
 					 ad7779_init_param init_param);

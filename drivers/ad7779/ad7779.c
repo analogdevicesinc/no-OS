@@ -73,38 +73,78 @@ const uint8_t pin_mode_options[16][4] = {
 /************************** Functions Implementation **************************/
 /******************************************************************************/
 /**
- * SPI read from device.
+ * Compute CRC8 checksum.
+ * @param data - The data buffer.
+ * @param data_size - The size of the data buffer.
+ * @return CRC8 checksum.
+ */
+uint8_t ad7779_compute_crc8(uint8_t *data,
+							uint8_t data_size)
+{
+	uint8_t i;
+	uint8_t crc = 0;
+
+	while (data_size) {
+		for (i = 0x80; i != 0; i >>= 1) {
+			if (((crc & 0x80) != 0) != ((*data & i) != 0)) {
+				crc <<= 1;
+				crc ^= AD7779_CRC8_POLY;
+			} else
+				crc <<= 1;
+		}
+		data++;
+		data_size--;
+	}
+
+	return crc;
+}
+
+/**
+ * SPI internal register read from device.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad7779_spi_read(ad7779_dev *dev,
-						uint8_t reg_addr,
-						uint8_t *reg_data)
+int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
+								uint8_t reg_addr,
+								uint8_t *reg_data)
 {
-	uint8_t buf[2];
+	uint8_t buf[3];
+	uint8_t buf_size = 2;
+	uint8_t crc;
 	int32_t ret;
 
 	buf[0] = 0x80 | (reg_addr & 0x7F);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	buf[2] = 0x00;
+	if (dev->spi_crc_en == AD7779_ENABLE)
+		buf_size = 3;
+	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
 
 	*reg_data = buf[1];
+	if (dev->spi_crc_en == AD7779_ENABLE) {
+		buf[0] = 0x80 | (reg_addr & 0x7F);
+		crc = ad7779_compute_crc8(&buf[0], 2);
+		if (crc != buf[2]) {
+			printf("%s: CRC Error.\n", __func__);
+			ret = FAILURE;
+		}
+	}
 
 	return ret;
 }
 
 /**
- * SPI write to device.
+ * SPI internal register write to device.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad7779_spi_write(ad7779_dev *dev,
-						 uint8_t reg_addr,
-						 uint8_t reg_data)
+int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
+								 uint8_t reg_addr,
+								 uint8_t reg_data)
 {
 	uint8_t buf[2];
 	int32_t ret;
@@ -118,39 +158,39 @@ int32_t ad7779_spi_write(ad7779_dev *dev,
 }
 
 /**
- * SPI read from device using a mask.
+ * SPI internal register read from device using a mask.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad7779_spi_read_mask(ad7779_dev *dev,
-							 uint8_t reg_addr,
-							 uint8_t mask,
-							 uint8_t *data)
+int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
+									 uint8_t reg_addr,
+									 uint8_t mask,
+									 uint8_t *data)
 {
 	uint8_t reg_data;
 	int32_t ret;
 
-	ret = ad7779_spi_read(dev, reg_addr, &reg_data);
+	ret = ad7779_spi_int_reg_read(dev, reg_addr, &reg_data);
 	*data = (reg_data & mask);
 
 	return ret;
 }
 
 /**
- * SPI write to device using a mask.
+ * SPI internal register write to device using a mask.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad7779_spi_write_mask(ad7779_dev *dev,
-							  uint8_t reg_addr,
-							  uint8_t mask,
-							  uint8_t data)
+int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
+									  uint8_t reg_addr,
+									  uint8_t mask,
+									  uint8_t data)
 {
 	uint8_t reg_data;
 	int32_t ret;
@@ -158,7 +198,7 @@ int32_t ad7779_spi_write_mask(ad7779_dev *dev,
 	reg_data = dev->cached_reg_val[reg_addr];
 	reg_data &= ~mask;
 	reg_data |= data;
-	ret = ad7779_spi_write(dev, reg_addr, reg_data);
+	ret = ad7779_spi_int_reg_write(dev, reg_addr, reg_data);
 
 	return ret;
 }
@@ -264,10 +304,10 @@ int32_t ad7779_set_state(ad7779_dev *dev,
 {
 	int32_t ret;
 
-	ret = ad7779_spi_write_mask(dev,
-								AD7779_REG_CH_DISABLE,
-								AD7779_CH_DISABLE(0x1),
-								AD7779_CH_DISABLE(state));
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_CH_DISABLE,
+										AD7779_CH_DISABLE(0x1),
+										AD7779_CH_DISABLE(state));
 	dev->state[ch] = state;
 
 	return ret;
@@ -337,10 +377,10 @@ int32_t ad7779_set_gain(ad7779_dev *dev,
 		ret = ad7779_do_update_mode_pins(dev);
 	} else {
 		dev->gain[ch] = gain;
-		ret = ad7779_spi_write_mask(dev,
-									AD7779_REG_CH_CONFIG(ch),
-									AD7779_CH_GAIN(0x3),
-									AD7779_CH_GAIN(gain));
+		ret = ad7779_spi_int_reg_write_mask(dev,
+											AD7779_REG_CH_CONFIG(ch),
+											AD7779_CH_GAIN(0x3),
+											AD7779_CH_GAIN(gain));
 	}
 
 	return ret;
@@ -406,21 +446,21 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 	} else {
 		msb = (int_val & 0x0F00) >> 8;
 		lsb = (int_val & 0x00FF) >> 0;
-		ret = ad7779_spi_write(dev,
-							   AD7779_REG_SRC_N_MSB,
-							   msb);
-		ret |= ad7779_spi_write(dev,
-								AD7779_REG_SRC_N_LSB,
-								lsb);
+		ret = ad7779_spi_int_reg_write(dev,
+									   AD7779_REG_SRC_N_MSB,
+									   msb);
+		ret |= ad7779_spi_int_reg_write(dev,
+										AD7779_REG_SRC_N_LSB,
+										lsb);
 		dec_val = (dec_val * 65536) / 1000;
 		msb = (dec_val & 0xFF00) >> 8;
 		lsb = (dec_val & 0x00FF) >> 0;
-		ret |= ad7779_spi_write(dev,
-								AD7779_REG_SRC_IF_MSB,
-								msb);
-		ret |= ad7779_spi_write(dev,
-								AD7779_REG_SRC_IF_LSB,
-								lsb);
+		ret |= ad7779_spi_int_reg_write(dev,
+										AD7779_REG_SRC_IF_MSB,
+										msb);
+		ret |= ad7779_spi_int_reg_write(dev,
+										AD7779_REG_SRC_IF_LSB,
+										lsb);
 		dev->dec_rate_int = int_val;
 		dev->dec_rate_int = dec_val;
 	}
@@ -458,10 +498,10 @@ int32_t ad7779_set_power_mode(ad7779_dev *dev,
 {
 	int32_t ret;
 
-	ret = ad7779_spi_write_mask(dev,
-								AD7779_REG_GENERAL_USER_CONFIG_1,
-								AD7779_MOD_POWERMODE,
-								pwr_mode ? AD7779_MOD_POWERMODE : 0);
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_GENERAL_USER_CONFIG_1,
+										AD7779_MOD_POWERMODE,
+										pwr_mode ? AD7779_MOD_POWERMODE : 0);
 	dev->pwr_mode = pwr_mode;
 
 	return ret;
@@ -494,10 +534,10 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
 {
 	int32_t ret;
 
-	ret = ad7779_spi_write_mask(dev,
-								AD7779_REG_GENERAL_USER_CONFIG_1,
-								AD7779_PDB_REFOUT_BUF,
-								ref_type ? AD7779_PDB_REFOUT_BUF : 0);
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_GENERAL_USER_CONFIG_1,
+										AD7779_PDB_REFOUT_BUF,
+										ref_type ? AD7779_PDB_REFOUT_BUF : 0);
 	dev->ref_type = ref_type;
 
 	return ret;
@@ -547,10 +587,10 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 						dev->gpio_dclk2,
 						((div & 0x04) >> 2));
 	} else {
-		ret = ad7779_spi_write_mask(dev,
-									AD7779_REG_CH_DISABLE,
-									AD7779_DCLK_CLK_DIV(0x3),
-									AD7779_DCLK_CLK_DIV(div));
+		ret = ad7779_spi_int_reg_write_mask(dev,
+											AD7779_REG_CH_DISABLE,
+											AD7779_DCLK_CLK_DIV(0x3),
+											AD7779_DCLK_CLK_DIV(div));
 	}
 	dev->dclk_div = div;
 
@@ -598,9 +638,9 @@ int32_t ad7779_set_sync_offset(ad7779_dev *dev,
 		return FAILURE;
 	}
 
-	ret = ad7779_spi_write(dev,
-						   AD7779_REG_CH_SYNC_OFFSET(ch),
-						   sync_offset);
+	ret = ad7779_spi_int_reg_write(dev,
+								   AD7779_REG_CH_SYNC_OFFSET(ch),
+								   sync_offset);
 	dev->sync_offset[ch] = sync_offset;
 
 	return ret;
@@ -669,15 +709,15 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 	upper_byte = (offset & 0xFF0000) >> 16;
 	mid_byte = (offset & 0x00FF00) >> 8;
 	lower_byte = (offset & 0x0000FF) >> 0;
-	ret = ad7779_spi_write(dev,
-						   AD7779_REG_CH_OFFSET_UPPER_BYTE(ch),
-						   upper_byte);
-	ret |= ad7779_spi_write(dev,
-						   AD7779_REG_CH_OFFSET_MID_BYTE(ch),
-						   mid_byte);
-	ret |= ad7779_spi_write(dev,
-						   AD7779_REG_CH_OFFSET_LOWER_BYTE(ch),
-						   lower_byte);
+	ret = ad7779_spi_int_reg_write(dev,
+								   AD7779_REG_CH_OFFSET_UPPER_BYTE(ch),
+								   upper_byte);
+	ret |= ad7779_spi_int_reg_write(dev,
+									AD7779_REG_CH_OFFSET_MID_BYTE(ch),
+									mid_byte);
+	ret |= ad7779_spi_int_reg_write(dev,
+									AD7779_REG_CH_OFFSET_LOWER_BYTE(ch),
+									lower_byte);
 	dev->offset_corr[ch] = offset;
 
 	return ret;
@@ -747,15 +787,15 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 	upper_byte = (gain & 0xff0000) >> 16;
 	mid_byte = (gain & 0x00ff00) >> 8;
 	lower_byte = (gain & 0x0000ff) >> 0;
-	ret = ad7779_spi_write(dev,
-						   AD7779_REG_CH_GAIN_UPPER_BYTE(ch),
-						   upper_byte);
-	ret |= ad7779_spi_write(dev,
-						   AD7779_REG_CH_GAIN_MID_BYTE(ch),
-						   mid_byte);
-	ret |= ad7779_spi_write(dev,
-						   AD7779_REG_CH_GAIN_LOWER_BYTE(ch),
-						   lower_byte);
+	ret = ad7779_spi_int_reg_write(dev,
+								   AD7779_REG_CH_GAIN_UPPER_BYTE(ch),
+								   upper_byte);
+	ret |= ad7779_spi_int_reg_write(dev,
+									AD7779_REG_CH_GAIN_MID_BYTE(ch),
+									mid_byte);
+	ret |= ad7779_spi_int_reg_write(dev,
+									AD7779_REG_CH_GAIN_LOWER_BYTE(ch),
+									lower_byte);
 	dev->gain_corr[ch] = gain;
 
 	return ret;
@@ -831,14 +871,14 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 			config_1 = 0;
 			config_2 = 0;
 		}
-		ret = ad7779_spi_write_mask(dev,
-									AD7779_REG_BUFFER_CONFIG_1,
-									AD7779_REF_BUF_POS_EN,
-									config_1);
-		ret |= ad7779_spi_write_mask(dev,
-									 AD7779_REG_BUFFER_CONFIG_2,
-									 AD7779_REFBUFP_PREQ,
-									 config_2);
+		ret = ad7779_spi_int_reg_write_mask(dev,
+											AD7779_REG_BUFFER_CONFIG_1,
+											AD7779_REF_BUF_POS_EN,
+											config_1);
+		ret |= ad7779_spi_int_reg_write_mask(dev,
+											 AD7779_REG_BUFFER_CONFIG_2,
+											 AD7779_REFBUFP_PREQ,
+											 config_2);
 	} else {
 		switch (mode) {
 		case AD7779_REF_BUF_ENABLED:
@@ -853,14 +893,14 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 			config_1 = 0;
 			config_2 = 0;
 		}
-		ret = ad7779_spi_write_mask(dev,
-									AD7779_REG_BUFFER_CONFIG_1,
-									AD7779_REF_BUF_NEG_EN,
-									config_1);
-		ret |= ad7779_spi_write_mask(dev,
-									 AD7779_REG_BUFFER_CONFIG_2,
-									 AD7779_REFBUFN_PREQ,
-									 config_2);
+		ret = ad7779_spi_int_reg_write_mask(dev,
+											AD7779_REG_BUFFER_CONFIG_1,
+											AD7779_REF_BUF_NEG_EN,
+											config_1);
+		ret |= ad7779_spi_int_reg_write_mask(dev,
+											 AD7779_REG_BUFFER_CONFIG_2,
+											 AD7779_REFBUFN_PREQ,
+											 config_2);
 	}
 	dev->ref_buf_op_mode[refx_pin] = mode;
 
@@ -913,11 +953,11 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 		return FAILURE;
 	}
 
-	ret = ad7779_spi_write_mask(dev,
-								AD7779_REG_GENERAL_USER_CONFIG_2,
-								AD7771_FILTER_MODE,
-								(state == AD7779_ENABLE) ?
-										AD7771_FILTER_MODE : 0);
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_GENERAL_USER_CONFIG_2,
+										AD7771_FILTER_MODE,
+										(state == AD7779_ENABLE) ?
+												AD7771_FILTER_MODE : 0);
 	dev->sinc5_state = state;
 
 	return ret;
@@ -995,10 +1035,23 @@ int32_t ad7779_setup(ad7779_dev **device,
 
 	/* Device Settings */
 	dev->ctrl_mode = init_param.ctrl_mode;
+	dev->spi_crc_en = AD7779_DISABLE;
+
+	if ((dev->ctrl_mode == AD7779_SPI_CTRL) &&
+				(init_param.spi_crc_en == AD7779_ENABLE)) {
+		ret |= ad7779_spi_int_reg_read(dev,
+							AD7779_REG_GEN_ERR_REG_1_EN,
+							&dev->cached_reg_val[AD7779_REG_GEN_ERR_REG_1_EN]);
+		ret |= ad7779_spi_int_reg_write_mask(dev,
+							AD7779_REG_GEN_ERR_REG_1_EN,
+							AD7779_SPI_CRC_TEST_EN,
+							AD7779_SPI_CRC_TEST_EN);
+		dev->spi_crc_en = AD7779_ENABLE;
+	}
 
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
 		for (i = AD7779_REG_CH_CONFIG(0); i <= AD7779_REG_SRC_UPDATE; i++)
-			ret |= ad7779_spi_read(dev, i, &dev->cached_reg_val[i]);
+			ret |= ad7779_spi_int_reg_read(dev, i, &dev->cached_reg_val[i]);
 
 	for (i = AD7779_CH0; i <= AD7779_CH7; i++) {
 		dev->state[i] = init_param.state[i];
