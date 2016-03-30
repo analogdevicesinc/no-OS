@@ -96,7 +96,7 @@ int main(void)
 	jesd204b_gt_en_sync_sysref(gt_link);
 
 	ad9625_spi_write(0, AD9625_REG_TEST_CNTRL, 0x0F);
-	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x00);
+	ad9625_spi_write(0, AD9625_REG_OUTPUT_MODE, 0x01);
 	ad9625_spi_write(0, AD9625_REG_TRANSFER, 0x01);
 
 	ad9625_core.adc_baseaddr = AD9625_CORE_BASEADDR;
