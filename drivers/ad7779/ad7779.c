@@ -146,12 +146,17 @@ int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
 								 uint8_t reg_addr,
 								 uint8_t reg_data)
 {
-	uint8_t buf[2];
+	uint8_t buf[3];
+	uint8_t buf_size = 2;
 	int32_t ret;
 
 	buf[0] = 0x00 | (reg_addr & 0x7F);
 	buf[1] = reg_data;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	if (dev->spi_crc_en == AD7779_ENABLE) {
+		buf[2] = ad7779_compute_crc8(&buf[0], 2);
+		buf_size = 3;
+	}
+	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
 	dev->cached_reg_val[reg_addr] = reg_data;
 
 	return ret;
