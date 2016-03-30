@@ -209,6 +209,123 @@ int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
 }
 
 /**
+ * SPI SAR conversion code read.
+ * @param dev - The device structure.
+ * @param mux_next_conv - The SAR mux input configuration for the next
+ *						  conversion.
+ * 						  Accepted values: AD7779_AUXAINP_AUXAINN
+ *										   AD7779_DVBE_AVSSX
+ *										   AD7779_REF1P_REF1N
+ *										   AD7779_REF2P_REF2N
+ *										   AD7779_REF_OUT_AVSSX
+ *										   AD7779_VCM_AVSSX
+ *										   AD7779_AREG1CAP_AVSSX_ATT
+ *										   AD7779_AREG2CAP_AVSSX_ATT
+ *										   AD7779_DREGCAP_DGND_ATT
+ *										   AD7779_AVDD1A_AVSSX_ATT
+ *										   AD7779_AVDD1B_AVSSX_ATT
+ *										   AD7779_AVDD2A_AVSSX_ATT
+ *										   AD7779_AVDD2B_AVSSX_ATT
+ *										   AD7779_IOVDD_DGND_ATT
+ *										   AD7779_AVDD4_AVSSX
+ *										   AD7779_DGND_AVSS1A_ATT
+ *										   AD7779_DGND_AVSS1B_ATT
+ *										   AD7779_DGND_AVSSX_ATT
+ *										   AD7779_AVDD4_AVSSX_ATT
+ *										   AD7779_REF1P_AVSSX
+ *										   AD7779_REF2P_AVSSX
+ *										   AD7779_AVSSX_AVDD4_ATT
+ * @param sar_code - SAR conversion code.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
+								 ad7779_sar_mux mux_next_conv,
+								 uint16_t *sar_code)
+{
+	uint8_t buf[3];
+	uint8_t buf_size = 2;
+	uint8_t crc;
+	int32_t ret;
+
+	buf[0] = 0x00 | (AD7779_REG_GLOBAL_MUX_CONFIG & 0x7F);
+	buf[1] = AD7779_GLOBAL_MUX_CTRL(mux_next_conv);
+	if (dev->spi_crc_en == AD7779_ENABLE) {
+		buf[2] = ad7779_compute_crc8(&buf[0], 2);
+		buf_size = 3;
+	}
+	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
+	dev->cached_reg_val[AD7779_REG_GLOBAL_MUX_CONFIG] =
+									AD7779_GLOBAL_MUX_CTRL(mux_next_conv);
+	buf[0] = buf[0] & 0x0F;
+	*sar_code = (buf[0] << 8) | buf[1];
+	if (dev->spi_crc_en == AD7779_ENABLE) {
+		crc = ad7779_compute_crc8(&buf[0], 2);
+		if (crc != buf[2]) {
+			printf("%s: CRC Error.\n", __func__);
+			ret = FAILURE;
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * Set SPI operation mode.
+ * @param dev - The device structure.
+ * @param mode - The SPI operation mode.
+ *				 Accepted values: AD7779_INT_REG
+ *								  AD7779_SD_CONV
+ *								  AD7779_SAR_CONV
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
+							   ad7779_spi_op_mode mode)
+{
+	int32_t ret;
+	uint8_t cfg_2;
+	uint8_t cfg_3;
+
+	switch (mode) {
+	case AD7779_SD_CONV:
+		cfg_2 = 0;
+		cfg_3 = AD7779_SPI_SLAVE_MODE_EN;
+		break;
+	case AD7779_SAR_CONV:
+		cfg_2 = AD7779_SAR_DIAG_MODE_EN;
+		cfg_3 = 0;
+		break;
+	default:	// AD7779_INT_REG
+		cfg_2 = 0;
+		cfg_3 = 0;
+	}
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_GENERAL_USER_CONFIG_2,
+										AD7779_SAR_DIAG_MODE_EN,
+										cfg_2);
+	ret |= ad7779_spi_int_reg_write_mask(dev,
+										 AD7779_REG_GENERAL_USER_CONFIG_3,
+										 AD7779_SPI_SLAVE_MODE_EN,
+										 cfg_3);
+	dev->spi_op_mode = mode;
+
+	return ret;
+}
+
+/**
+ * Get SPI operation mode.
+ * @param dev - The device structure.
+ * @param mode - The SPI operation mode.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_get_spi_op_mode(ad7779_dev *dev,
+							   ad7779_spi_op_mode *mode)
+{
+	*mode = dev->spi_op_mode;
+
+	return SUCCESS;
+}
+
+/**
  * Update the state of the MODEx pins according to the settings specified in
  * the device structure.
  * @param dev - The device structure.
@@ -940,6 +1057,126 @@ int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
 }
 
 /**
+ * Set the SAR ADC configuration.
+ * @param dev - The device structure.
+ * @param state - The SAR ADC state.
+ * 				  Accepted values: AD7779_ENABLE
+ * 								   AD7779_DISABLE
+ * @param mux - The SAR mux input configuration.
+ * 				Accepted values: AD7779_AUXAINP_AUXAINN
+ *								 AD7779_DVBE_AVSSX
+ *								 AD7779_REF1P_REF1N
+ *								 AD7779_REF2P_REF2N
+ *								 AD7779_REF_OUT_AVSSX
+ *								 AD7779_VCM_AVSSX
+ *								 AD7779_AREG1CAP_AVSSX_ATT
+ *								 AD7779_AREG2CAP_AVSSX_ATT
+ *								 AD7779_DREGCAP_DGND_ATT
+ *								 AD7779_AVDD1A_AVSSX_ATT
+ *								 AD7779_AVDD1B_AVSSX_ATT
+ *								 AD7779_AVDD2A_AVSSX_ATT
+ *								 AD7779_AVDD2B_AVSSX_ATT
+ *								 AD7779_IOVDD_DGND_ATT
+ *								 AD7779_AVDD4_AVSSX
+ *								 AD7779_DGND_AVSS1A_ATT
+ *								 AD7779_DGND_AVSS1B_ATT
+ *								 AD7779_DGND_AVSSX_ATT
+ *								 AD7779_AVDD4_AVSSX_ATT
+ *								 AD7779_REF1P_AVSSX
+ *								 AD7779_REF2P_AVSSX
+ *								 AD7779_AVSSX_AVDD4_ATT
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
+						   ad7779_state state,
+						   ad7779_sar_mux mux)
+{
+	int32_t ret;
+
+	ret = ad7779_spi_int_reg_write_mask(dev,
+										AD7779_REG_GENERAL_USER_CONFIG_1,
+										AD7779_PDB_SAR,
+										(state == AD7779_ENABLE) ?
+												AD7779_PDB_SAR : 0);
+	ret |= ad7779_spi_int_reg_write(dev,
+									AD7779_REG_GLOBAL_MUX_CONFIG,
+									AD7779_GLOBAL_MUX_CTRL(mux));
+	dev->sar_state = state;
+	dev->sar_mux = mux;
+
+	return ret;
+}
+
+/**
+ * Get the SAR ADC configuration.
+ * @param dev - The device structure.
+ * @param state - The SAR ADC state.
+ * @param mux - The SAR mux input configuration.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
+						   ad7779_state *state,
+						   ad7779_sar_mux *mux)
+{
+	*state = dev->sar_state;
+	*mux = dev->sar_mux;
+
+	return SUCCESS;
+}
+
+/**
+ * Do a single SAR conversion.
+ * @param dev - The device structure.
+ * @param mux - The SAR mux input configuration.
+ * 				Accepted values: AD7779_AUXAINP_AUXAINN
+ *								 AD7779_DVBE_AVSSX
+ *								 AD7779_REF1P_REF1N
+ *								 AD7779_REF2P_REF2N
+ *								 AD7779_REF_OUT_AVSSX
+ *								 AD7779_VCM_AVSSX
+ *								 AD7779_AREG1CAP_AVSSX_ATT
+ *								 AD7779_AREG2CAP_AVSSX_ATT
+ *								 AD7779_DREGCAP_DGND_ATT
+ *								 AD7779_AVDD1A_AVSSX_ATT
+ *								 AD7779_AVDD1B_AVSSX_ATT
+ *								 AD7779_AVDD2A_AVSSX_ATT
+ *								 AD7779_AVDD2B_AVSSX_ATT
+ *								 AD7779_IOVDD_DGND_ATT
+ *								 AD7779_AVDD4_AVSSX
+ *								 AD7779_DGND_AVSS1A_ATT
+ *								 AD7779_DGND_AVSS1B_ATT
+ *								 AD7779_DGND_AVSSX_ATT
+ *								 AD7779_AVDD4_AVSSX_ATT
+ *								 AD7779_REF1P_AVSSX
+ *								 AD7779_REF2P_AVSSX
+ *								 AD7779_AVSSX_AVDD4_ATT
+ * @param sar_code - SAR conversion code.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
+								  ad7779_sar_mux mux,
+								  uint16_t *sar_code)
+{
+	ad7779_spi_op_mode restore_spi_op_mode;
+	ad7779_state restore_sar_state;
+	int32_t ret;
+
+	restore_spi_op_mode = dev->spi_op_mode;
+	restore_sar_state = dev->sar_state;
+	ret = ad7779_set_sar_cfg(dev, AD7779_ENABLE, mux);
+	ret |= ad7779_set_spi_op_mode(dev, AD7779_SAR_CONV);
+	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_convst_sar, GPIO_LOW);
+	mdelay(10);	// Acquisition Time = min 500 ns
+	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_convst_sar, GPIO_HIGH);
+	mdelay(10);	// Conversion Time = max 3.4 us
+	ad7779_spi_sar_read_code(dev, mux, sar_code);
+	ret |= ad7779_set_sar_cfg(dev, restore_sar_state, mux);
+	ret |= ad7779_set_spi_op_mode(dev, restore_spi_op_mode);
+
+	return ret;
+}
+
+/**
  * Set the state (enable, disable) of the SINC5 filter.
  * @param dev - The device structure.
  * @param state - The SINC5 filter state.
@@ -1028,6 +1265,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 	dev->gpio_dclk1 = init_param.gpio_dclk1;
 	dev->gpio_dclk2 = init_param.gpio_dclk2;
 	dev->gpio_sync_in = init_param.gpio_sync_in;
+	dev->gpio_convst_sar = init_param.gpio_convst_sar;
 
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_reset, GPIO_OUT);
 	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_LOW);
@@ -1043,10 +1281,15 @@ int32_t ad7779_setup(ad7779_dev **device,
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_dclk2, GPIO_OUT);
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_sync_in, GPIO_OUT);
 	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_sync_in, GPIO_HIGH);
+	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_convst_sar, GPIO_OUT);
+	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_convst_sar, GPIO_HIGH);
 
 	/* Device Settings */
 	dev->ctrl_mode = init_param.ctrl_mode;
 	dev->spi_crc_en = AD7779_DISABLE;
+	dev->spi_op_mode = AD7779_INT_REG;
+	dev->sar_state = AD7779_DISABLE;
+	dev->sar_mux = AD7779_AUXAINP_AUXAINN;
 
 	if ((dev->ctrl_mode == AD7779_SPI_CTRL) &&
 				(init_param.spi_crc_en == AD7779_ENABLE)) {
@@ -1113,9 +1356,9 @@ int32_t ad7779_setup(ad7779_dev **device,
 	*device = dev;
 
 	if (!ret)
-		printf("AD7768 successfully initialized\n");
+		printf("AD7779 successfully initialized\n");
 	else
-		printf("AD7768 initialization error (%d)\n", ret);
+		printf("AD7779 initialization error (%d)\n", ret);
 
 	return ret;
 }
