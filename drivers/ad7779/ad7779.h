@@ -426,6 +426,8 @@ int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
 int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 								  ad7779_sar_mux mux,
 								  uint16_t *sar_code);
+/* Do a SPI software reset. */
+int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev);
 /* Set the state (enable, disable) of the SINC5 filter. */
 int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 									  ad7779_state state);
