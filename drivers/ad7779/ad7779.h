@@ -103,10 +103,18 @@
 #define AD7779_DOUT_DRIVE_STR(x)			(((x) & 0x3) << 1)
 #define AD7779_SPI_SYNC						(1 << 0)
 
+/* AD7779_REG_GENERAL_USER_CONFIG_3 */
+#define AD7779_CONVST_DEGLITCH_DIS(x)		(((x) & 0x3) << 6)
+#define AD7779_SPI_SLAVE_MODE_EN			(1 << 4)
+#define AD7779_CLK_QUAL_DIS					(1 << 0)
+
 /* AD7779_REG_DOUT_FORMAT */
 #define AD7779_DOUT_FORMAT(x)				(((x) & 0x3) << 6)
 #define AD7779_DOUT_HEADER_FORMAT			(1 << 5)
 #define AD7779_DCLK_CLK_DIV(x)				(((x) & 0x3) << 1)
+
+/* AD7779_REG_GLOBAL_MUX_CONFIG */
+#define AD7779_GLOBAL_MUX_CTRL(x)			(((x) & 0x1F) << 3)
 
 /* AD7779_REG_BUFFER_CONFIG_1 */
 #define AD7779_REF_BUF_POS_EN				(1 << 4)
@@ -136,6 +144,12 @@ typedef enum {
 	AD7779_PIN_CTRL,
 	AD7779_SPI_CTRL,
 } ad7779_ctrl_mode;
+
+typedef enum {
+	AD7779_INT_REG,
+	AD7779_SD_CONV,
+	AD7779_SAR_CONV,
+} ad7779_spi_op_mode;
 
 typedef enum {
 	AD7779_CH0,
@@ -192,6 +206,31 @@ typedef enum {
 	AD7779_REF_BUF_DISABLED,
 } ad7779_ref_buf_op_mode;
 
+typedef enum {
+	AD7779_AUXAINP_AUXAINN,
+	AD7779_DVBE_AVSSX,
+	AD7779_REF1P_REF1N,
+	AD7779_REF2P_REF2N,
+	AD7779_REF_OUT_AVSSX,
+	AD7779_VCM_AVSSX,
+	AD7779_AREG1CAP_AVSSX_ATT,
+	AD7779_AREG2CAP_AVSSX_ATT,
+	AD7779_DREGCAP_DGND_ATT,
+	AD7779_AVDD1A_AVSSX_ATT,
+	AD7779_AVDD1B_AVSSX_ATT,
+	AD7779_AVDD2A_AVSSX_ATT,
+	AD7779_AVDD2B_AVSSX_ATT,
+	AD7779_IOVDD_DGND_ATT,
+	AD7779_AVDD4_AVSSX,
+	AD7779_DGND_AVSS1A_ATT,
+	AD7779_DGND_AVSS1B_ATT,
+	AD7779_DGND_AVSSX_ATT,
+	AD7779_AVDD4_AVSSX_ATT,
+	AD7779_REF1P_AVSSX,
+	AD7779_REF2P_AVSSX,
+	AD7779_AVSSX_AVDD4_ATT,
+} ad7779_sar_mux;
+
 typedef struct {
 	/* SPI */
 	spi_device				spi_dev;
@@ -206,9 +245,11 @@ typedef struct {
 	int8_t					gpio_dclk1;
 	int8_t					gpio_dclk2;
 	int8_t					gpio_sync_in;
+	int8_t					gpio_convst_sar;
 	/* Device Settings */
 	ad7779_ctrl_mode		ctrl_mode;
 	ad7779_state			spi_crc_en;
+	ad7779_spi_op_mode		spi_op_mode;
 	ad7779_state			state[8];
 	ad7779_gain				gain[8];
 	uint16_t				dec_rate_int;
@@ -220,6 +261,8 @@ typedef struct {
 	uint32_t				offset_corr[8];
 	uint32_t				gain_corr[8];
 	ad7779_ref_buf_op_mode	ref_buf_op_mode[2];
+	ad7779_state			sar_state;
+	ad7779_sar_mux			sar_mux;
 	ad7779_state			sinc5_state;	// Can be enabled only for AD7771
 	uint8_t					cached_reg_val[AD7779_REG_SRC_UPDATE + 1];
 } ad7779_dev;
@@ -242,6 +285,7 @@ typedef struct {
 	int8_t					gpio_dclk1;
 	int8_t					gpio_dclk2;
 	int8_t					gpio_sync_in;
+	int8_t					gpio_convst_sar;
 	/* Device Settings */
 	ad7779_ctrl_mode		ctrl_mode;
 	ad7779_state			spi_crc_en;
@@ -283,6 +327,16 @@ int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
 									  uint8_t reg_addr,
 									  uint8_t mask,
 									  uint8_t data);
+/* SPI SAR conversion code read. */
+int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
+								 ad7779_sar_mux mux_next_conv,
+								 uint16_t *sar_code);
+/* Set SPI operation mode. */
+int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
+							   ad7779_spi_op_mode mode);
+/* Get SPI operation mode. */
+int32_t ad7779_get_spi_op_mode(ad7779_dev *dev,
+							   ad7779_spi_op_mode *mode);
 /* Set the state (enable, disable) of the channel. */
 int32_t ad7779_set_state(ad7779_dev *dev,
 						 ad7779_ch ch,
@@ -360,6 +414,18 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
 								   ad7779_refx_pin refx_pin,
 								   ad7779_ref_buf_op_mode *mode);
+/* Set the SAR ADC configuration. */
+int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
+						   ad7779_state state,
+						   ad7779_sar_mux mux);
+/* Get the SAR ADC configuration. */
+int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
+						   ad7779_state *state,
+						   ad7779_sar_mux *mux);
+/* Do a single SAR conversion. */
+int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
+								  ad7779_sar_mux mux,
+								  uint16_t *sar_code);
 /* Set the state (enable, disable) of the SINC5 filter. */
 int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 									  ad7779_state state);
