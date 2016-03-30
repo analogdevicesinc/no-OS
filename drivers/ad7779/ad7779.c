@@ -1177,6 +1177,23 @@ int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
 }
 
 /**
+ * Do a SPI software reset.
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev)
+{
+	uint8_t buf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+	int32_t ret;
+
+	/* Keeping the SDI pin high during 64 consecutives clocks generates a
+	   software reset */
+	ret = spi_write_and_read(&dev->spi_dev, buf, 8);
+
+	return ret;
+}
+
+/**
  * Set the state (enable, disable) of the SINC5 filter.
  * @param dev - The device structure.
  * @param state - The SINC5 filter state.
