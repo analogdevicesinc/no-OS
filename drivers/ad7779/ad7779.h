@@ -197,6 +197,7 @@ typedef struct {
 	spi_device				spi_dev;
 	/* GPIO */
 	gpio_device				gpio_dev;
+	int8_t					gpio_reset;
 	int8_t					gpio_mode0;
 	int8_t					gpio_mode1;
 	int8_t					gpio_mode2;
@@ -232,6 +233,7 @@ typedef struct {
 	/* GPIO */
 	gpio_type				gpio_type;
 	uint32_t				gpio_device_id;
+	int8_t					gpio_reset;
 	int8_t					gpio_mode0;
 	int8_t					gpio_mode1;
 	int8_t					gpio_mode2;

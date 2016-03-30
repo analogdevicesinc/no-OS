@@ -1019,6 +1019,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 	ret |= gpio_init(&dev->gpio_dev);
 
 	/* GPIO */
+	dev->gpio_reset = init_param.gpio_reset;
 	dev->gpio_mode0 = init_param.gpio_mode0;
 	dev->gpio_mode1 = init_param.gpio_mode1;
 	dev->gpio_mode2 = init_param.gpio_mode2;
@@ -1028,6 +1029,11 @@ int32_t ad7779_setup(ad7779_dev **device,
 	dev->gpio_dclk2 = init_param.gpio_dclk2;
 	dev->gpio_sync_in = init_param.gpio_sync_in;
 
+	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_reset, GPIO_OUT);
+	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_LOW);
+	mdelay(10);	// RESET Hold Time = min 2 × MCLK
+	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_HIGH);
+	mdelay(10);	// RESET Rising Edge to First DRDY = min 225 us
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_mode0, GPIO_OUT);
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_mode1, GPIO_OUT);
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_mode2, GPIO_OUT);
