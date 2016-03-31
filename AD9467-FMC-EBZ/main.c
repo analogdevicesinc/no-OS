@@ -98,7 +98,7 @@ int main(){
     /* AD9467 Setup for data acquisition */
     ad9467_output_invert(0);    // Output invert Off
     ad9467_transfer();          // Synchronously update registers
-    ad9467_output_format(0);    // Offset binary
+    ad9467_output_format(1);    // Twos complement
     ad9467_transfer();          // Synchronously update registers
     ad9467_reset_PN9(0);        // Clear PN9 bit
     ad9467_transfer();          // Synchronously update registers
