@@ -47,6 +47,78 @@
 #include "ad7616.h"
 
 /**
+ * Read from device.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_read(ad7616_dev *dev,
+					uint8_t reg_addr,
+					uint16_t *reg_data)
+{
+	if (dev->interface == AD7616_SERIAL)
+		return ad7616_spi_read(dev, reg_addr, reg_data);
+	else
+		return ad7616_par_read(dev, reg_addr, reg_data);
+}
+
+/**
+ * Write to device.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_write(ad7616_dev *dev,
+					 uint8_t reg_addr,
+					 uint16_t reg_data)
+{
+	if (dev->interface == AD7616_SERIAL)
+		return ad7616_spi_write(dev, reg_addr, reg_data);
+	else
+		return ad7616_par_write(dev, reg_addr, reg_data);
+}
+
+/**
+ * Read from device using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_read_mask(ad7616_dev *dev,
+						 uint8_t reg_addr,
+						 uint16_t mask,
+						 uint16_t *data)
+{
+	if (dev->interface == AD7616_SERIAL)
+		return ad7616_spi_read_mask(dev, reg_addr, mask, data);
+	else
+		return ad7616_par_read_mask(dev, reg_addr, mask, data);
+}
+
+/**
+ * SPI write to device using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_write_mask(ad7616_dev *dev,
+						  uint8_t reg_addr,
+						  uint16_t mask,
+						  uint16_t data)
+{
+	if (dev->interface == AD7616_SERIAL)
+		return ad7616_spi_write_mask(dev, reg_addr, mask, data);
+	else
+		return ad7616_par_write_mask(dev, reg_addr, mask, data);
+}
+
+/**
  * SPI read from device.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
@@ -140,6 +212,66 @@ int32_t ad7616_spi_write_mask(ad7616_dev *dev,
 }
 
 /**
+ * PAR read from device.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_par_read(ad7616_dev *dev,
+						uint8_t reg_addr,
+						uint16_t *reg_data)
+{
+	return 0;
+}
+
+/**
+ * PAR write to device.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_par_write(ad7616_dev *dev,
+						 uint8_t reg_addr,
+						 uint16_t reg_data)
+{
+	return 0;
+}
+
+/**
+ * PAR read from device using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_par_read_mask(ad7616_dev *dev,
+							 uint8_t reg_addr,
+							 uint16_t mask,
+							 uint16_t *data)
+{
+	return 0;
+}
+
+/**
+ * PAR write to device using a mask.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param mask - The mask.
+ * @param data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_par_write_mask(ad7616_dev *dev,
+							  uint8_t reg_addr,
+							  uint16_t mask,
+							  uint16_t data)
+{
+	return 0;
+}
+
+/**
  * Perform a full reset of the device.
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
@@ -218,7 +350,7 @@ int32_t ad7616_set_range(ad7616_dev *dev,
 				data = AD7616_INPUT_RANGE(ch - AD7616_VB4, range);
 			}
 		}
-		ret = ad7616_spi_write_mask(dev, reg_addr, mask, data);
+		ret = ad7616_write_mask(dev, reg_addr, mask, data);
 	} else {
 		for (i = 0; i <= AD7616_VA7; i++) {
 			dev->va[i] = range;
@@ -276,7 +408,7 @@ int32_t ad7616_set_oversampling_ratio(ad7616_dev *dev,
 	int32_t ret = 0;
 
 	if (dev->mode == AD7616_SW) {
-		ret = ad7616_spi_write_mask(dev, AD7616_REG_CONFIG,
+		ret = ad7616_write_mask(dev, AD7616_REG_CONFIG,
 				AD7616_OS(0x7), AD7616_OS(osr));
 	} else {
 		ret = gpio_set_value(&dev->gpio_dev,
