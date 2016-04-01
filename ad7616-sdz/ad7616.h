@@ -81,6 +81,11 @@ typedef enum {
 } ad7616_mode;
 
 typedef enum {
+	AD7616_SERIAL,
+	AD7616_PARALLEL,
+} ad7616_interface;
+
+typedef enum {
 	AD7616_VA0,
 	AD7616_VA1,
 	AD7616_VA2,
@@ -118,47 +123,67 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_device		spi_dev;
+	spi_device			spi_dev;
 	/* GPIO */
-	gpio_device		gpio_dev;
-	int8_t			gpio_hw_rngsel0;
-	int8_t			gpio_hw_rngsel1;
-	int8_t			gpio_reset;
-	int8_t			gpio_os0;
-	int8_t			gpio_os1;
-	int8_t			gpio_os2;
+	gpio_device			gpio_dev;
+	int8_t				gpio_hw_rngsel0;
+	int8_t				gpio_hw_rngsel1;
+	int8_t				gpio_reset;
+	int8_t				gpio_os0;
+	int8_t				gpio_os1;
+	int8_t				gpio_os2;
 	/* Device Settings */
-	ad7616_mode		mode;
-	ad7616_range	va[8];
-	ad7616_range	vb[8];
-	ad7616_osr		osr;
+	ad7616_interface	interface;
+	ad7616_mode			mode;
+	ad7616_range		va[8];
+	ad7616_range		vb[8];
+	ad7616_osr			osr;
 } ad7616_dev;
 
 typedef struct {
 	/* SPI */
-	uint8_t			spi_chip_select;
-	spi_mode		spi_mode;
-	spi_type		spi_type;
-	uint32_t		spi_device_id;
+	uint8_t				spi_chip_select;
+	spi_mode			spi_mode;
+	spi_type			spi_type;
+	uint32_t			spi_device_id;
 	/* GPIO */
-	gpio_type		gpio_type;
-	uint32_t		gpio_device_id;
-	int8_t			gpio_hw_rngsel0;
-	int8_t			gpio_hw_rngsel1;
-	int8_t			gpio_reset;
-	int8_t			gpio_os0;
-	int8_t			gpio_os1;
-	int8_t			gpio_os2;
+	gpio_type			gpio_type;
+	uint32_t			gpio_device_id;
+	int8_t				gpio_hw_rngsel0;
+	int8_t				gpio_hw_rngsel1;
+	int8_t				gpio_reset;
+	int8_t				gpio_os0;
+	int8_t				gpio_os1;
+	int8_t				gpio_os2;
 	/* Device Settings */
-	ad7616_mode		mode;
-	ad7616_range	va[8];
-	ad7616_range	vb[8];
-	ad7616_osr		osr;
+	ad7616_interface	interface;
+	ad7616_mode			mode;
+	ad7616_range		va[8];
+	ad7616_range		vb[8];
+	ad7616_osr			osr;
 } ad7616_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/* SPI read from device. */
+int32_t ad7616_read(ad7616_dev *dev,
+					uint8_t reg_addr,
+					uint16_t *reg_data);
+/* SPI write to device. */
+int32_t ad7616_write(ad7616_dev *dev,
+					 uint8_t reg_addr,
+					 uint16_t reg_data);
+/* SPI read from device using a mask. */
+int32_t ad7616_read_mask(ad7616_dev *dev,
+						 uint8_t reg_addr,
+						 uint16_t mask,
+						 uint16_t *data);
+/* SPI write to device using a mask. */
+int32_t ad7616_write_mask(ad7616_dev *dev,
+						  uint8_t reg_addr,
+						  uint16_t mask,
+						  uint16_t data);
 /* SPI read from device. */
 int32_t ad7616_spi_read(ad7616_dev *dev,
 						uint8_t reg_addr,
@@ -174,6 +199,24 @@ int32_t ad7616_spi_read_mask(ad7616_dev *dev,
 							 uint16_t *data);
 /* SPI write to device using a mask. */
 int32_t ad7616_spi_write_mask(ad7616_dev *dev,
+							  uint8_t reg_addr,
+							  uint16_t mask,
+							  uint16_t data);
+/* PAR read from device. */
+int32_t ad7616_par_read(ad7616_dev *dev,
+						uint8_t reg_addr,
+						uint16_t *reg_data);
+/* PAR write to device. */
+int32_t ad7616_par_write(ad7616_dev *dev,
+						 uint8_t reg_addr,
+						 uint16_t reg_data);
+/* PAR read from device using a mask. */
+int32_t ad7616_par_read_mask(ad7616_dev *dev,
+							 uint8_t reg_addr,
+							 uint16_t mask,
+							 uint16_t *data);
+/* PAR write to device using a mask. */
+int32_t ad7616_par_write_mask(ad7616_dev *dev,
 							  uint8_t reg_addr,
 							  uint16_t mask,
 							  uint16_t data);
