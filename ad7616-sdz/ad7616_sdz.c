@@ -91,6 +91,7 @@ ad7616_init_param default_init_param = {
 		-1,						// gpio_os1
 		-1,						// gpio_os2
 		/* Device Settings */
+		AD7616_SERIAL,			// interface;
 		AD7616_SW,				// mode
 		{AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
 		 AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V},	// va[8]
