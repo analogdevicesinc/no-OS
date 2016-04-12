@@ -3,7 +3,7 @@
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2014-2015(c) Analog Devices, Inc.
+ * Copyright 2014-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -232,11 +232,43 @@ struct ad9523_platform_data ad9523_pdata_lpc =
 	"ad9523-lpc" //name
 };
 
+ad9523_init_param default_ad9523_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 ad9144_init_param default_ad9144_init_param = {
+	/* SPI */
+	1,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
+	/* Device Settings */
 	2,	// jesd_xbar_lane0_sel
 	3,	// jesd_xbar_lane1_sel
 	0,	// jesd_xbar_lane2_sel
 	1,	// jesd_xbar_lane3_sel
+};
+
+ad9680_init_param default_ad9680_init_param = {
+	2,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
 };
 
 jesd204b_state jesd204b_st = {
@@ -281,25 +313,34 @@ jesd204b_gt_link ad9680_gt_link = {
 /***************************************************************************//**
 * @brief daq2_gpio_ctl
 *******************************************************************************/
-void daq2_gpio_ctl(uint32_t gpio_device_id)
+void daq2_gpio_ctl(void)
 {
-	gpio_init(gpio_device_id);
+	gpio_device dev;
 
-	gpio_direction(GPIO_CLKD_STATUS_0, GPIO_INPUT);
-	gpio_direction(GPIO_CLKD_STATUS_1, GPIO_INPUT);
-	gpio_direction(GPIO_DAC_IRQ, GPIO_INPUT);
-	gpio_direction(GPIO_ADC_FDA, GPIO_INPUT);
-	gpio_direction(GPIO_ADC_FDB, GPIO_INPUT);
-	gpio_direction(GPIO_CLKD_SYNC, GPIO_OUTPUT);
-	gpio_direction(GPIO_DAC_RESET, GPIO_OUTPUT);
-	gpio_direction(GPIO_DAC_TXEN, GPIO_OUTPUT);
-	gpio_direction(GPIO_ADC_PD, GPIO_OUTPUT);
-	gpio_direction(GPIO_TRIG, GPIO_INPUT);
+#ifdef _XPARAMETERS_PS_H_
+	dev.type = PS7_GPIO;
+#else
+	dev.type = AXI_GPIO;
+#endif
+	dev.device_id = GPIO_DEVICE_ID;
 
-	gpio_set_value(GPIO_CLKD_SYNC, GPIO_HIGH);
-	gpio_set_value(GPIO_DAC_RESET, GPIO_HIGH);
-	gpio_set_value(GPIO_DAC_TXEN, GPIO_HIGH);
-	gpio_set_value(GPIO_ADC_PD, GPIO_LOW);
+	gpio_init(&dev);
+
+	gpio_set_direction(&dev, GPIO_CLKD_STATUS_0, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_CLKD_STATUS_1, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_DAC_IRQ, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_ADC_FDA, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_ADC_FDB, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_CLKD_SYNC, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_DAC_RESET, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_DAC_TXEN, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_ADC_PD, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_TRIG, GPIO_IN);
+
+	gpio_set_value(&dev, GPIO_CLKD_SYNC, GPIO_HIGH);
+	gpio_set_value(&dev, GPIO_DAC_RESET, GPIO_HIGH);
+	gpio_set_value(&dev, GPIO_DAC_TXEN, GPIO_HIGH);
+	gpio_set_value(&dev, GPIO_ADC_PD, GPIO_LOW);
 
 	mdelay(250);
 }
@@ -309,22 +350,26 @@ void daq2_gpio_ctl(uint32_t gpio_device_id)
 *******************************************************************************/
 int main(void)
 {
-	adc_core ad9680_core;
+	adc_core	ad9680_core;
+	ad9523_dev	*ad9523_device;
+	ad9144_dev	*ad9144_device;
+	ad9680_dev	*ad9680_device;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	daq2_gpio_ctl(GPIO_DEVICE_ID);
+	daq2_gpio_ctl();
 
-	ad9523_setup(SPI_DEVICE_ID, 0, ad9523_pdata_lpc);
+	ad9523_setup(&ad9523_device, default_ad9523_init_param, ad9523_pdata_lpc);
+
 	jesd204b_gt_initialize(ad9144_gt_link);
 
-	ad9144_setup(SPI_DEVICE_ID, 1, default_ad9144_init_param);
+	ad9144_setup(&ad9144_device, default_ad9144_init_param);
 	jesd204b_setup(AD9144_JESD_BASEADDR, jesd204b_st);
 	jesd204b_gt_setup(ad9144_gt_link);
 	jesd204b_gt_en_sync_sysref(ad9144_gt_link);
 
-	ad9680_setup(SPI_DEVICE_ID, 2);
+	ad9680_setup(&ad9680_device, default_ad9680_init_param);
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 	jesd204b_gt_setup(ad9680_gt_link);
 	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
@@ -353,25 +398,25 @@ int main(void)
 
 	xil_printf("Initialization done.\n");
 
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
-	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x0);
+	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x0);
 
 	adc_pn_mon(ad9680_core, 1);
 
 	xil_printf("PRBS test done.\n");
 
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0f);
-	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
+	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x0f);
+	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
 
 	xil_printf("Ramp capture done.\n");
 
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x00);
-	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
+	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x00);
+	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
 

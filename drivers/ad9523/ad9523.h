@@ -3,7 +3,7 @@
  *   @brief  Header file of AD9523 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2012-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef _AD9523_H_
 #define _AD9523_H_
@@ -271,6 +269,8 @@
 #define AD9523_NUM_CHAN								14
 #define AD9523_NUM_CHAN_ALT_CLK_SRC					10
 
+#define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
+
 /******************************************************************************/
 /************************ Types Definitions ***********************************/
 /******************************************************************************/
@@ -462,23 +462,38 @@ struct ad9523_platform_data
     char name[16];
 };
 
-#define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
+typedef struct {
+	spi_device	spi_dev;
+} ad9523_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9523_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Reads the value of the selected register. */
-int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data);
+int32_t ad9523_spi_read(ad9523_dev *dev,
+						uint32_t reg_addr,
+						uint32_t *reg_data);
 /* Writes a value to the selected register. */
-int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data);
+int32_t ad9523_spi_write(ad9523_dev *dev,
+						 uint32_t reg_addr,
+						 uint32_t reg_data);
 /* Updates the AD9523 configuration */
-int32_t ad9523_io_update(void);
+int32_t ad9523_io_update(ad9523_dev *dev);
 /* Sets the clock provider for selected channel. */
-int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out);
+int32_t ad9523_vco_out_map(ad9523_dev *dev,
+						   uint32_t ch,
+						   uint32_t out);
 /* Updates the AD9523 configuration. */
-int32_t ad9523_sync(void);
+int32_t ad9523_sync(ad9523_dev *dev);
 /* Initializes the AD9523. */
-int32_t ad9523_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
+int32_t ad9523_setup(ad9523_dev **device,
+					 ad9523_init_param init_param,
 					 struct ad9523_platform_data ad9523_pdata);
 #endif // __AD9523_H__

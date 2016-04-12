@@ -3,7 +3,7 @@
  *   @brief  Implementation of AD9523 Driver.
  *   @author ACozma(andrei.cozma@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2012-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,14 +36,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <math.h>
+#include <stdlib.h>
 #include "platform_drivers.h"
 #include "ad9523.h"
 #include <xil_printf.h>
@@ -51,9 +50,7 @@
 /******************************************************************************/
 /************************ Local variables and types ***************************/
 /******************************************************************************/
-uint8_t ad9523_slave_select;
-
-struct ad9523_state 
+struct ad9523_state
 {
     struct ad9523_platform_data *pdata;
     uint32_t vcxo_freq;
@@ -81,7 +78,9 @@ enum
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
-int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data)
+int32_t ad9523_spi_read(ad9523_dev *dev,
+						uint32_t reg_addr,
+						uint32_t *reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret = 0;
@@ -93,7 +92,7 @@ int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data)
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
-		ret |= spi_write_and_read(ad9523_slave_select, buf, 3);
+		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
 		reg_addr--;
 		*reg_data <<= 8;
 		*reg_data |= buf[2];
@@ -110,7 +109,9 @@ int32_t ad9523_spi_read(uint32_t reg_addr, uint32_t *reg_data)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data)
+int32_t ad9523_spi_write(ad9523_dev *dev,
+						 uint32_t reg_addr,
+						 uint32_t reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret = 0;
@@ -121,7 +122,7 @@ int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data)
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9523_TRANSF_LEN(reg_addr) - index - 1) * 8)) & 0xFF;
-		ret |= spi_write_and_read(ad9523_slave_select, buf, 3);
+		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
 		reg_addr--;
 	}
 
@@ -133,9 +134,9 @@ int32_t ad9523_spi_write(uint32_t reg_addr, uint32_t reg_data)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_io_update(void)
+int32_t ad9523_io_update(ad9523_dev *dev)
 {
-    return ad9523_spi_write(AD9523_IO_UPDATE, AD9523_IO_UPDATE_EN);
+    return ad9523_spi_write(dev, AD9523_IO_UPDATE, AD9523_IO_UPDATE_EN);
 }
 
 /***************************************************************************//**
@@ -146,7 +147,9 @@ int32_t ad9523_io_update(void)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
+int32_t ad9523_vco_out_map(ad9523_dev *dev,
+						   uint32_t ch,
+						   uint32_t out)
 {
 	struct ad9523_state *st = &ad9523_st;
 	int32_t ret;
@@ -155,7 +158,7 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
 
 	switch (ch) {
 	case 0 ... 3:
-		ret = ad9523_spi_read(AD9523_PLL1_OUTPUT_CHANNEL_CTRL, &reg_data);
+		ret = ad9523_spi_read(dev, AD9523_PLL1_OUTPUT_CHANNEL_CTRL, &reg_data);
 		if (ret < 0)
 			break;
 		mask = AD9523_PLL1_OUTP_CH_CTRL_VCXO_SRC_SEL_CH0 << ch;
@@ -165,11 +168,11 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
 		} else {
 			reg_data &= ~mask;
 		}
-		ret = ad9523_spi_write(
+		ret = ad9523_spi_write(dev,
 				   AD9523_PLL1_OUTPUT_CHANNEL_CTRL, reg_data);
 		break;
 	case 4 ... 6:
-		ret = ad9523_spi_read(AD9523_PLL1_OUTPUT_CTRL, &reg_data);
+		ret = ad9523_spi_read(dev, AD9523_PLL1_OUTPUT_CTRL, &reg_data);
 		if (ret < 0)
 			break;
 		mask = AD9523_PLL1_OUTP_CTRL_VCO_DIV_SEL_CH4_M2 << (ch - 4);
@@ -177,10 +180,10 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
 			reg_data |= mask;
 		else
 			reg_data &= ~mask;
-		ret = ad9523_spi_write(AD9523_PLL1_OUTPUT_CTRL, reg_data);
+		ret = ad9523_spi_write(dev, AD9523_PLL1_OUTPUT_CTRL, reg_data);
 		break;
 	case 7 ... 9:
-		ret = ad9523_spi_read(AD9523_PLL1_OUTPUT_CHANNEL_CTRL, &reg_data);
+		ret = ad9523_spi_read(dev, AD9523_PLL1_OUTPUT_CHANNEL_CTRL, &reg_data);
 		if (ret < 0)
 			break;
 		mask = AD9523_PLL1_OUTP_CH_CTRL_VCO_DIV_SEL_CH7_M2 << (ch - 7);
@@ -188,7 +191,7 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
 			reg_data |= mask;
 		else
 			reg_data &= ~mask;
-		ret = ad9523_spi_write(
+		ret = ad9523_spi_write(dev,
 				   AD9523_PLL1_OUTPUT_CHANNEL_CTRL, reg_data);
 		break;
 	default:
@@ -205,30 +208,30 @@ int32_t ad9523_vco_out_map(uint32_t ch, uint32_t out)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_sync(void)
+int32_t ad9523_sync(ad9523_dev *dev)
 {
 	int32_t ret, tmp;
 	uint32_t reg_data;
 
-	ret = ad9523_spi_read(AD9523_STATUS_SIGNALS, &reg_data);
+	ret = ad9523_spi_read(dev, AD9523_STATUS_SIGNALS, &reg_data);
 	if (ret < 0)
 		return ret;
 
 	tmp = reg_data;
 	tmp |= AD9523_STATUS_SIGNALS_SYNC_MAN_CTRL;
 
-	ret = ad9523_spi_write(AD9523_STATUS_SIGNALS, tmp);
+	ret = ad9523_spi_write(dev, AD9523_STATUS_SIGNALS, tmp);
 	if (ret < 0)
 		return ret;
 
-	ad9523_io_update();
+	ad9523_io_update(dev);
 	tmp &= ~AD9523_STATUS_SIGNALS_SYNC_MAN_CTRL;
 
-	ret = ad9523_spi_write(AD9523_STATUS_SIGNALS, tmp);
+	ret = ad9523_spi_write(dev, AD9523_STATUS_SIGNALS, tmp);
 	if (ret < 0)
 		return ret;
 
-	return ad9523_io_update();
+	return ad9523_io_update(dev);
 
 }
 
@@ -237,10 +240,12 @@ int32_t ad9523_sync(void)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
+int32_t ad9523_setup(ad9523_dev **device,
+					 ad9523_init_param init_param,
 					 struct ad9523_platform_data ad9523_pdata)
+
 {
+	ad9523_dev *dev;
 	struct ad9523_state *st = &ad9523_st;
     struct ad9523_platform_data *pdata = &ad9523_pdata;
 	struct ad9523_channel_spec *chan;
@@ -249,11 +254,19 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	uint32_t reg_data;
 	uint32_t version_id;
 
-	ad9523_slave_select = slave_select;
-	spi_init(spi_device_id, 1, 1);
+	dev = (ad9523_dev *)malloc(sizeof(*dev));
+	if (!dev) {
+		return -1;
+	}
+
+	dev->spi_dev.chip_select = init_param.spi_chip_select;
+	dev->spi_dev.mode = init_param.spi_mode;
+	dev->spi_dev.device_id = init_param.spi_device_id;
+	dev->spi_dev.type = init_param.spi_type;
+	ret = spi_init(&dev->spi_dev);
 
 	mdelay(1);
-	ret = ad9523_spi_write(AD9523_SERIAL_PORT_CONFIG,
+	ret = ad9523_spi_write(dev, AD9523_SERIAL_PORT_CONFIG,
 			   AD9523_SER_CONF_SOFT_RESET |
 			  (pdata->spi3wire ? 0 :
 			  AD9523_SER_CONF_SDO_ACTIVE));
@@ -261,24 +274,24 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 		return ret;
 	mdelay(1);
 
-	ret = ad9523_spi_write(AD9523_READBACK_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_READBACK_CTRL,
 			  AD9523_READBACK_CTRL_READ_BUFFERED);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_io_update();
+	ret = ad9523_io_update(dev);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_read(AD9523_EEPROM_CUSTOMER_VERSION_ID, &version_id);
+	ret = ad9523_spi_read(dev, AD9523_EEPROM_CUSTOMER_VERSION_ID, &version_id);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_EEPROM_CUSTOMER_VERSION_ID, 0xAD95);
+	ret = ad9523_spi_write(dev, AD9523_EEPROM_CUSTOMER_VERSION_ID, 0xAD95);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_read(AD9523_EEPROM_CUSTOMER_VERSION_ID, &reg_data);
+	ret = ad9523_spi_read(dev, AD9523_EEPROM_CUSTOMER_VERSION_ID, &reg_data);
 	if (ret < 0)
 		return ret;
 
@@ -287,29 +300,29 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 		return -1;
 	}
 
-	ret = ad9523_spi_write(AD9523_EEPROM_CUSTOMER_VERSION_ID, version_id);
+	ret = ad9523_spi_write(dev, AD9523_EEPROM_CUSTOMER_VERSION_ID, version_id);
 	if (ret < 0)
 		return ret;
 
 	/*
 	 * PLL1 Setup
 	 */
-	ret = ad9523_spi_write(AD9523_PLL1_REF_A_DIVIDER,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_REF_A_DIVIDER,
 		pdata->refa_r_div);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_REF_B_DIVIDER,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_REF_B_DIVIDER,
 		pdata->refb_r_div);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_FEEDBACK_DIVIDER,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_FEEDBACK_DIVIDER,
 		pdata->pll1_feedback_div);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_CHARGE_PUMP_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_CHARGE_PUMP_CTRL,
 		AD_IFE(pll1_bypass_en, AD9523_PLL1_CHARGE_PUMP_TRISTATE,
 		AD9523_PLL1_CHARGE_PUMP_CURRENT_nA(pdata->
 			pll1_charge_pump_current_nA) |
@@ -318,7 +331,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_INPUT_RECEIVERS_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_INPUT_RECEIVERS_CTRL,
 		AD_IFE(pll1_bypass_en, AD9523_PLL1_REFA_REFB_PWR_CTRL_EN |
 		AD_IF(osc_in_diff_en, AD9523_PLL1_OSC_IN_DIFF_EN) |
 		AD_IF(osc_in_cmos_neg_inp_en, AD9523_PLL1_OSC_IN_CMOS_NEG_INP_EN),
@@ -332,7 +345,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_REF_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_REF_CTRL,
 		AD_IFE(pll1_bypass_en, AD9523_PLL1_BYPASS_FEEDBACK_DIV_EN |
 		AD9523_PLL1_ZERO_DELAY_MODE_INT,
 		AD_IF(zd_in_diff_en, AD9523_PLL1_ZD_IN_DIFF_EN) |
@@ -346,13 +359,13 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_MISC_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_MISC_CTRL,
 		AD9523_PLL1_REFB_INDEP_DIV_CTRL_EN |
 		AD9523_PLL1_REF_MODE(pdata->ref_mode));
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL1_LOOP_FILTER_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL1_LOOP_FILTER_CTRL,
 		AD9523_PLL1_LOOP_FILTER_RZERO(pdata->pll1_loop_filter_rzero));
 	if (ret < 0)
 		return ret;
@@ -361,19 +374,19 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	 * PLL2 Setup
 	 */
 
-	ret = ad9523_spi_write(AD9523_PLL2_CHARGE_PUMP,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_CHARGE_PUMP,
 		AD9523_PLL2_CHARGE_PUMP_CURRENT_nA(pdata->
 			pll2_charge_pump_current_nA));
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL2_FEEDBACK_DIVIDER_AB,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_FEEDBACK_DIVIDER_AB,
 		AD9523_PLL2_FB_NDIV_A_CNT(pdata->pll2_ndiv_a_cnt) |
 		AD9523_PLL2_FB_NDIV_B_CNT(pdata->pll2_ndiv_b_cnt));
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL2_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_CTRL,
 		AD9523_PLL2_CHARGE_PUMP_MODE_NORMAL |
 		AD9523_PLL2_BACKLASH_CTRL_EN |
 		AD_IF(pll2_freq_doubler_en, AD9523_PLL2_FREQ_DOUBLER_EN));
@@ -384,12 +397,12 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 			/ pdata->pll2_r2_div) * AD9523_PLL2_FB_NDIV(pdata->
 			pll2_ndiv_a_cnt, pdata->pll2_ndiv_b_cnt);
 
-	ret = ad9523_spi_write(AD9523_PLL2_VCO_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_VCO_CTRL,
 		AD9523_PLL2_VCO_CALIBRATE);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL2_VCO_DIVIDER,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_VCO_DIVIDER,
 		AD9523_PLL2_VCO_DIV_M1(pdata->pll2_vco_diff_m1) |
 		AD9523_PLL2_VCO_DIV_M2(pdata->pll2_vco_diff_m2) |
 		AD_IFE(pll2_vco_diff_m1, 0,
@@ -409,12 +422,12 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 
 	st->vco_out_freq[AD9523_VCXO] = pdata->vcxo_freq;
 
-	ret = ad9523_spi_write(AD9523_PLL2_R2_DIVIDER,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_R2_DIVIDER,
 		AD9523_PLL2_R2_DIVIDER_VAL(pdata->pll2_r2_div));
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_PLL2_LOOP_FILTER_CTRL,
+	ret = ad9523_spi_write(dev, AD9523_PLL2_LOOP_FILTER_CTRL,
 		AD9523_PLL2_LOOP_FILTER_CPOLE1(pdata->cpole1) |
 		AD9523_PLL2_LOOP_FILTER_RZERO(pdata->rzero) |
 		AD9523_PLL2_LOOP_FILTER_RPOLE2(pdata->rpole2) |
@@ -427,7 +440,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 		chan = &pdata->channels[i];
 		if (chan->channel_num < AD9523_NUM_CHAN) {
 			active_mask |= (1 << chan->channel_num);
-			ret = ad9523_spi_write(
+			ret = ad9523_spi_write(dev,
 				AD9523_CHANNEL_CLOCK_DIST(chan->channel_num),
 				AD9523_CLK_DIST_DRIVER_MODE(chan->driver_mode) |
 				AD9523_CLK_DIST_DIV(chan->channel_divider) |
@@ -443,7 +456,7 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 			if (ret < 0)
 				return ret;
 
-			ret = ad9523_vco_out_map(chan->channel_num,
+			ret = ad9523_vco_out_map(dev, chan->channel_num,
 					   chan->use_alt_clock_src);
 			if (ret < 0)
 				return ret;
@@ -454,27 +467,27 @@ int32_t ad9523_setup(uint32_t spi_device_id,
 	{
 		if(!(active_mask & (1 << i)))
 		{
-			ad9523_spi_write(
+			ad9523_spi_write(dev,
 					 AD9523_CHANNEL_CLOCK_DIST(i),
 					 AD9523_CLK_DIST_DRIVER_MODE(TRISTATE) |
 					 AD9523_CLK_DIST_PWR_DOWN_EN);
 		}
 	}
 
-	ret = ad9523_spi_write(AD9523_POWER_DOWN_CTRL, 0);
+	ret = ad9523_spi_write(dev, AD9523_POWER_DOWN_CTRL, 0);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_spi_write(AD9523_STATUS_SIGNALS,
+	ret = ad9523_spi_write(dev, AD9523_STATUS_SIGNALS,
 			   AD9523_STATUS_MONITOR_01_PLL12_LOCKED);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_io_update();
+	ret = ad9523_io_update(dev);
 	if (ret < 0)
 		return ret;
 
-	ret = ad9523_sync();
+	ret = ad9523_sync(dev);
 	if (ret < 0)
 		return ret;
 

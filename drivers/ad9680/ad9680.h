@@ -3,7 +3,7 @@
 * @brief Header file of AD9680 Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2016(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -66,14 +66,29 @@
 #define AD9680_CHIP_ID								0x0C5
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	spi_device	spi_dev;
+} ad9680_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9680_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9680_spi_read(uint8_t slave_select,
+int32_t ad9680_spi_read(ad9680_dev *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data);
-int32_t ad9680_spi_write(uint8_t slave_select,
+int32_t ad9680_spi_write(ad9680_dev *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data);
-int32_t ad9680_setup(uint32_t spi_device_id, uint8_t slave_select);
+int32_t ad9680_setup(ad9680_dev **device,
+					 ad9680_init_param init_param);
 
 #endif
