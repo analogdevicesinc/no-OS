@@ -41,8 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <xil_printf.h>
 #include "platform_drivers.h"
 #include "ad9144.h"
 
@@ -119,7 +119,7 @@ int32_t ad9144_setup(ad9144_dev **device,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
+		printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
 		return -1;
 	}
 
@@ -127,7 +127,7 @@ int32_t ad9144_setup(ad9144_dev **device,
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
 	if(scratchpad != 0xAD)
 	{
-		xil_printf("Error: scratchpad (0x%x).\n\r", scratchpad);
+		printf("Error: scratchpad (0x%x).\n\r", scratchpad);
 		return -1;
 	}
 
@@ -199,7 +199,7 @@ int32_t ad9144_setup(ad9144_dev **device,
 	mdelay(20);
 
 	ad9144_spi_read(dev, 0x281, &pll_stat);
-	xil_printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
+	printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9144_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -233,15 +233,15 @@ int32_t ad9144_setup(ad9144_dev **device,
 
 	ad9144_spi_write(dev, 0x0e8, 0x01);	// read dac-0
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(dev, 0x0e8, 0x02);	// read dac-1
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
-	xil_printf("AD9144 successfully initialized.\n\r");
+	printf("AD9144 successfully initialized.\n\r");
 
 	return ret;
 }
