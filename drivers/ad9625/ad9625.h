@@ -62,14 +62,29 @@
 #define AD9625_CHIP_ID							0x041
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	spi_device	spi_dev;
+} ad9625_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9625_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9625_spi_read(uint8_t slave_select,
+int32_t ad9625_spi_read(ad9625_dev *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data);
-int32_t ad9625_spi_write(uint8_t slave_select,
+int32_t ad9625_spi_write(ad9625_dev *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data);
-int32_t ad9625_setup(uint32_t spi_device_id, uint8_t slave_select);
+int32_t ad9625_setup(ad9625_dev **device,
+					 ad9625_init_param init_param);
 
 #endif

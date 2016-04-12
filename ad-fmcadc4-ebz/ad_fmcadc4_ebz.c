@@ -199,25 +199,56 @@ struct ad9528_platform_data ad9528_pdata_lpc =
 	ad9528_channels,				// *channels
 };
 
+ad9528_init_param default_ad9528_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
+ad9680_init_param default_ad9680_init_param = {
+	1,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 /***************************************************************************//**
 * @brief adc4_gpio_ctl
 *******************************************************************************/
-void adc4_gpio_ctl(uint32_t device_id)
+void adc4_gpio_ctl(void)
 {
-	gpio_init(device_id);
+	gpio_device dev;
 
-	gpio_direction(GPIO_AD9528_RSTN, GPIO_OUTPUT);
-	gpio_direction(GPIO_AD9528_STATUS, GPIO_OUTPUT);
-	gpio_direction(GPIO_AD9680_1_FDA, GPIO_INPUT);
-	gpio_direction(GPIO_AD9680_1_FDB, GPIO_INPUT);
-	gpio_direction(GPIO_AD9680_2_FDA, GPIO_INPUT);
-	gpio_direction(GPIO_AD9680_2_FDB, GPIO_INPUT);
+#ifdef _XPARAMETERS_PS_H_
+	dev.type = PS7_GPIO;
+#else
+	dev.type = AXI_GPIO;
+#endif
+	dev.device_id = GPIO_DEVICE_ID;
 
-	gpio_set_value(GPIO_AD9528_STATUS, 0);
-	gpio_set_value(GPIO_AD9528_RSTN, 0);
+	gpio_init(&dev);
+
+	gpio_set_direction(&dev, GPIO_AD9528_RSTN, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_AD9528_STATUS, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_AD9680_1_FDA, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_AD9680_1_FDB, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_AD9680_2_FDA, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_AD9680_2_FDB, GPIO_IN);
+
+	gpio_set_value(&dev, GPIO_AD9528_STATUS, 0);
+	gpio_set_value(&dev, GPIO_AD9528_RSTN, 0);
 	mdelay(10);
 
-	gpio_set_value(GPIO_AD9528_RSTN, 1);
+	gpio_set_value(&dev, GPIO_AD9528_RSTN, 1);
 	mdelay(10);
 }
 
@@ -252,8 +283,11 @@ int main(void)
 {
 	adc_core ad9680_0_core;
 	adc_core ad9680_1_core;
+	ad9528_dev	*ad9528_device;
+	ad9680_dev	*ad9680_0_device;
+	ad9680_dev	*ad9680_1_device;
 
-	adc4_gpio_ctl(GPIO_DEVICE_ID);
+	adc4_gpio_ctl();
 
 	spi_decoded_cs = 1;
 
@@ -264,13 +298,15 @@ int main(void)
 	ad9528_pdata_lpc.pll2_vco_diff_m1 = 3;
 #endif
 
-	ad9528_setup(SPI_DEVICE_ID, 0, ad9528_pdata_lpc);
+	ad9528_setup(&ad9528_device, default_ad9528_init_param, ad9528_pdata_lpc);
 
 	jesd204b_gt_initialize(gt_link);
 
-	ad9680_setup(SPI_DEVICE_ID, 1);
+	default_ad9680_init_param.spi_chip_select = 1;
+	ad9680_setup(&ad9680_0_device, default_ad9680_init_param);
 
-	ad9680_setup(SPI_DEVICE_ID, 2);
+	default_ad9680_init_param.spi_chip_select = 2;
+	ad9680_setup(&ad9680_1_device, default_ad9680_init_param);
 
 	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
 
@@ -289,25 +325,25 @@ int main(void)
 	ad9680_1_core.resolution = 14;
 	adc_setup(ad9680_1_core);
 
-	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x05);
-	ad9680_spi_write(1, AD9680_REG_OUTPUT_MODE, 0);
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x05);
-	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_OUTPUT_MODE, 0);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_ADC_TEST_MODE, 0x05);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_OUTPUT_MODE, 0);
 
 	adc_pn_mon(ad9680_0_core, ADC_PN23A);
 	adc_pn_mon(ad9680_1_core, ADC_PN23A);
 
 	xil_printf("Initialization done.\n\r");
 
-	ad9680_spi_write(1, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(1, AD9680_REG_ADC_TEST_MODE, 0x0F);
-	ad9680_spi_write(1, AD9680_REG_OUTPUT_MODE, 0x1);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_ADC_TEST_MODE, 0x0F);
+	ad9680_spi_write(ad9680_0_device, AD9680_REG_OUTPUT_MODE, 0x1);
 
-	ad9680_spi_write(2, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(2, AD9680_REG_ADC_TEST_MODE, 0x0F);
-	ad9680_spi_write(2, AD9680_REG_OUTPUT_MODE, 0x1);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_DEVICE_INDEX, 0x3);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_ADC_TEST_MODE, 0x0F);
+	ad9680_spi_write(ad9680_1_device, AD9680_REG_OUTPUT_MODE, 0x1);
 
 	adc_capture(ad9680_0_core, 32768, ADC_DDR_BASEADDR);
 

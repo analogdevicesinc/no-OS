@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#include <xil_cache.h>
 #include <xil_io.h>
 #include "platform_drivers.h"
 #include "ad9625.h"
@@ -84,11 +85,26 @@ jesd204b_gt_link gt_link = {
 	0,						// gth_or_gtx
 };
 
+ad9625_init_param default_ad9625_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 int main(void)
 {
-	adc_core ad9625_core;
+	adc_core	ad9625_core;
+	ad9625_dev	*ad9625_device;
 
-	ad9625_setup(SPI_DEVICE_ID, 0);
+	Xil_ICacheEnable();
+	Xil_DCacheEnable();
+
+	ad9625_setup(&ad9625_device, default_ad9625_init_param);
 
 	jesd204b_setup(AD9625_JESD_BASEADDR, jesd204b_st);
 
@@ -111,6 +127,9 @@ int main(void)
 	adc_capture(ad9625_core, 16384, ADC_DDR_BASEADDR);
 
 	xil_printf("Done.\n\r");
+
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
 
 	return 0;
 }
