@@ -83,7 +83,7 @@ file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_desti
 if { $cpu_name == "sys_mb" } {
 set fp1 [open $project_destination/lscript.ld r+]
 set file_data [read $fp1]
-		if { [regsub -all {_HEAP_SIZE : 0x400;} $file_data {_HEAP_SIZE : 0x10000;} file_data] } {
+		if { [regsub -all {_HEAP_SIZE : 0x800;} $file_data {_HEAP_SIZE : 0x10000;} file_data] } {
 			puts "successfully  increase the heap size to 0x10000"
 		} else { puts "faild to increase the heap size"
 			exit -1
