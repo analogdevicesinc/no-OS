@@ -41,8 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <xil_printf.h>
 #include "platform_drivers.h"
 #include "ad9152.h"
 
@@ -118,7 +118,7 @@ int32_t ad9152_setup(ad9152_dev **device,
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9152_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
@@ -179,7 +179,7 @@ int32_t ad9152_setup(ad9152_dev **device,
 	mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
-	xil_printf("AD9152 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
+	printf("AD9152 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9152_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -206,7 +206,7 @@ int32_t ad9152_setup(ad9152_dev **device,
 	 * Fix for an early DAQ3 design bug (swapped SERDIN+ / SERDIN- pins) */
 	ad9152_spi_write(dev, 0x334, init_param.lanes2_3_swap_data ? 0x0c : 0x00);
 
-	xil_printf("AD9152 successfully initialized.\n");
+	printf("AD9152 successfully initialized.\n");
 
 	return ret;
 }
