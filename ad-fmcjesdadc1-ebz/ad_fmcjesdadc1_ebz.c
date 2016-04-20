@@ -43,6 +43,7 @@
 #include <xil_cache.h>
 #include <xil_io.h>
 #include "xparameters.h"
+#include "platform_drivers.h"
 #include "ad9517.h"
 #include "ad9250.h"
 #include "jesd204b_gt.h"
@@ -86,20 +87,50 @@ jesd204b_gt_link ad9680_gt_link = {
 	0,						// gth_or_gtx
 };
 
+ad9517_init_param default_ad9517_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
+};
+
+ad9250_init_param default_ad9250_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
+	0,				// id_no
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
+	ad9250_dev	*ad9250_0_device;
+	ad9250_dev	*ad9250_1_device;
+	ad9517_dev	*ad9517_device;
+	adc_core	ad9250_0_core;
+	adc_core	ad9250_1_core;
+
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	adc_core ad9250_0_core;
-	adc_core ad9250_1_core;
+	ad9517_setup(&ad9517_device, default_ad9517_init_param);
 
-	ad9517_setup(SPI_DEVICE_ID, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 1);
+	default_ad9250_init_param.id_no = 0;
+	ad9250_setup(&ad9250_0_device, default_ad9250_init_param);
+
+	default_ad9250_init_param.id_no = 1;
+	ad9250_setup(&ad9250_1_device, default_ad9250_init_param);
 
 	jesd204b_gt_setup(ad9680_gt_link);
 	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
@@ -119,11 +150,11 @@ int main(void)
 	adc_setup(ad9250_0_core);
 	adc_setup(ad9250_1_core);
 
-    ad9250_spi_write(0, 0x0d, 0x0f);
-    ad9250_spi_write(0, 0xff, 0x01);
+    ad9250_spi_write(ad9250_0_device, 0x0d, 0x0f);
+    ad9250_spi_write(ad9250_0_device, 0xff, 0x01);
 
-    ad9250_spi_write(1, 0x0d, 0x0f);
-    ad9250_spi_write(1, 0xff, 0x01);
+    ad9250_spi_write(ad9250_1_device, 0x0d, 0x0f);
+    ad9250_spi_write(ad9250_1_device, 0xff, 0x01);
 
 	adc_capture(ad9250_0_core, 32768, ADC_DDR_BASEADDR);
 	adc_capture(ad9250_1_core, 32768, ADC_DDR_BASEADDR + 0x20000);

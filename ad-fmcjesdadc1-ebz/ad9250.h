@@ -45,10 +45,31 @@
 #include <stdint.h>
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	spi_device	spi_dev;
+	uint8_t		id_no;
+} ad9250_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+	uint8_t		id_no;
+} ad9250_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9250_spi_read(uint8_t ad9250_id, uint16_t reg_addr, uint8_t *reg_data);
-int32_t ad9250_spi_write(uint8_t ad9250_id, uint16_t reg_addr, uint8_t reg_data);
-int32_t ad9250_setup(uint32_t spi_device_id, uint8_t slave_select, uint8_t ad9250_id);
+int32_t ad9250_spi_read(ad9250_dev *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
+int32_t ad9250_spi_write(ad9250_dev *dev,
+						 uint16_t reg_addr,
+						 uint8_t reg_data);
+int32_t ad9250_setup(ad9250_dev **device,
+					 ad9250_init_param init_param);
 
 #endif
