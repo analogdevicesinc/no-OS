@@ -90,10 +90,27 @@
 #define AD9434_DEF_OUTPUT_MODE		0x00
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	spi_device	spi_dev;
+	uint8_t		output_mode;
+} ad9434_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9434_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9434_testmode_set(uint8_t chan, uint8_t mode);
-int32_t ad9434_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
+int32_t ad9434_testmode_set(ad9434_dev *dev,
+							uint8_t chan,
+							uint8_t mode);
+int32_t ad9434_setup(ad9434_dev **device,
+		 	 	 	 ad9434_init_param init_param,
 					 adc_core core);
 #endif

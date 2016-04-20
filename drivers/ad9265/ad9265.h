@@ -90,10 +90,27 @@
 #define AD9265_DEF_OUTPUT_MODE		0x40
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	spi_device	spi_dev;
+	uint8_t		output_mode;
+} ad9265_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9265_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9265_testmode_set(uint8_t chan, uint8_t mode);
-int32_t ad9265_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
+int32_t ad9265_testmode_set(ad9265_dev *dev,
+							uint8_t chan,
+							uint8_t mode);
+int32_t ad9265_setup(ad9265_dev **device,
+		 	 	 	 ad9265_init_param init_param,
 					 adc_core core);
 #endif
