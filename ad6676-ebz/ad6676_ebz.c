@@ -81,6 +81,33 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 ad6676_init_param default_init_param = {
+	/* GPIO */
+#ifdef _XPARAMETERS_PS_H_
+	PS7_GPIO,		// gpio_type;
+#else
+	AXI_GPIO,		// gpio_type
+#endif
+	GPIO_DEVICE_ID,	// gpio_device_id
+	GPIO_ADC_OEN,	// gpio_adc_oen
+	GPIO_ADC_SELA,	// gpio_adc_sela
+	GPIO_ADC_SELB,	// gpio_adc_selb
+	GPIO_ADC_S0,	// gpio_adc_s0
+	GPIO_ADC_S1,	// gpio_adc_s1
+	GPIO_ADC_RESETB,	// gpio_adc_resetb
+	GPIO_ADC_AGC1,	// gpio_adc_agc1
+	GPIO_ADC_AGC2,	// gpio_adc_agc2
+	GPIO_ADC_AGC3,	// gpio_adc_agc3
+	GPIO_ADC_AGC4,	// gpio_adc_agc4
+	/* SPI */
+	0, 				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
+	/* Device Settings */
 	200000000UL,	// reference_clk_rate
 	0,				// spi_3_wire
 	3200000000UL,	// adc_frequency_hz
@@ -103,16 +130,6 @@ ad6676_init_param default_init_param = {
 	16,				// jesd_f_frames_per_multiframe
 	1,				// shuffler_control
 	5,				// shuffler_thresh
-	GPIO_ADC_OEN,	// gpio_adc_oen
-	GPIO_ADC_SELA,	// gpio_adc_sela
-	GPIO_ADC_SELB,	// gpio_adc_selb
-	GPIO_ADC_S0,	// gpio_adc_s0
-	GPIO_ADC_S1,	// gpio_adc_s1
-	GPIO_ADC_RESETB,	// gpio_adc_resetb
-	GPIO_ADC_AGC1,	// gpio_adc_agc1
-	GPIO_ADC_AGC2,	// gpio_adc_agc2
-	GPIO_ADC_AGC3,	// gpio_adc_agc3
-	GPIO_ADC_AGC4,	// gpio_adc_agc4
 };
 
 jesd204b_state jesd204b_st = {
@@ -144,14 +161,13 @@ jesd204b_gt_link gt_link = {
 *******************************************************************************/
 int main(void)
 {
-	adc_core ad6676_core;
+	adc_core	ad6676_core;
+	ad6676_dev	*ad6676_device;
 
 	jesd204b_gt_initialize(gt_link);
 
-	ad6676_setup(SPI_DEVICE_ID,
-				 GPIO_DEVICE_ID,
-				 0,
-				 &default_init_param);
+	ad6676_setup(&ad6676_device,
+				 default_init_param);
 
 	jesd204b_setup(AD6676_JESD_BASEADDR, jesd204b_st);
 
@@ -166,7 +182,7 @@ int main(void)
 	adc_setup(ad6676_core);
 
 	/* Enable Ramp Test Mode */
-	ad6676_spi_write(AD6676_TEST_GEN, TESTGENMODE_RAMP);
+	ad6676_spi_write(ad6676_device, AD6676_TEST_GEN, TESTGENMODE_RAMP);
 
 	xil_printf("Start capturing data...\n\r");
 

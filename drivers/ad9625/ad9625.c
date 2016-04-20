@@ -145,6 +145,8 @@ int32_t ad9625_setup(ad9625_dev **device,
 		return -1;
 	}
 
+	*device = dev;
+
 	xil_printf("AD9625 successfully initialized.\n");
 
 	return ret;

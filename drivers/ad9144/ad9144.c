@@ -241,6 +241,8 @@ int32_t ad9144_setup(ad9144_dev **device,
 
 	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
+	*device = dev;
+
 	printf("AD9144 successfully initialized.\n\r");
 
 	return ret;

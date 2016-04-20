@@ -134,6 +134,8 @@ int32_t ad9680_setup(ad9680_dev **device,
 	ad9680_spi_read(dev, AD9680_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
 	xil_printf("AD9680 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
 
+	*device = dev;
+
 	xil_printf("AD9680 successfully initialized.\n");
 
 	return ret;

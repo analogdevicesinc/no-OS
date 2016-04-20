@@ -491,6 +491,8 @@ int32_t ad9523_setup(ad9523_dev **device,
 	if (ret < 0)
 		return ret;
 
+	*device = dev;
+
 	xil_printf("AD9523 successfully initialized.\n\r");
 
 	return 0;

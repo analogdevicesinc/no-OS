@@ -459,6 +459,8 @@ int32_t ad9528_setup(ad9528_dev **device,
 	if (ret < 0)
 		return ret;
 
+	*device = dev;
+
 	xil_printf("AD9528 successfully initialized.\n");
 
 	return 0;

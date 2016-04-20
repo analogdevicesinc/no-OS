@@ -206,6 +206,8 @@ int32_t ad9152_setup(ad9152_dev **device,
 	 * Fix for an early DAQ3 design bug (swapped SERDIN+ / SERDIN- pins) */
 	ad9152_spi_write(dev, 0x334, init_param.lanes2_3_swap_data ? 0x0c : 0x00);
 
+	*device = dev;
+
 	printf("AD9152 successfully initialized.\n");
 
 	return ret;
