@@ -31,6 +31,6 @@ else
     got_arguments
 fi
 
-xsct -s  ../build_scripts/xilinx/create_sdk_project.tcl "$hdf_destination" "$build_destination"
+xsct ../build_scripts/xilinx/create_sdk_project.tcl "$hdf_destination" "$build_destination"
 
 echo "Done!"

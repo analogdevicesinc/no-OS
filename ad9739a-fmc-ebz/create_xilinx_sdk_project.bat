@@ -19,6 +19,6 @@ echo "example => C:/my_workspaces Note: use "/" instead of "\""
 set /p build_destination=
 :end
 
-%XMD_DIR%\xsct -s ..\build_scripts\xilinx\create_sdk_project.tcl %hdf_destination% %build_destination%
+%XMD_DIR%\xsct ..\build_scripts\xilinx\create_sdk_project.tcl %hdf_destination% %build_destination%
 
 echo Done
