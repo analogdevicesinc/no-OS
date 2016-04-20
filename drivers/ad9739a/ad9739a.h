@@ -228,32 +228,48 @@ struct ad9739a_platform_data
 
 typedef struct
 {
-	uint8_t common_mode_voltage_dacclk_p;
-	uint8_t common_mode_voltage_dacclk_n;
-	float   full_scale_current;
+	/* SPI */
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+	/* Device settings */
+	uint8_t		common_mode_voltage_dacclk_p;
+	uint8_t		common_mode_voltage_dacclk_n;
+	float		full_scale_current;
 }ad9739a_init_param;
+
+typedef struct {
+	spi_device	spi_dev;
+	struct ad9739a_platform_data *pdata;
+} ad9739a_dev;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Writes a value to the selected register. */
-int32_t ad9739a_write(unsigned char registerAddress, 
-					  unsigned char registerValue);
+int32_t ad9739a_write(ad9739a_dev *dev,
+					  uint8_t registerAddress,
+					  uint8_t registerValue);
 /*! Reads the value of the selected register. */
-int32_t ad9739a_read(unsigned char registerAddress);
+int32_t ad9739a_read(ad9739a_dev *dev,
+					 uint8_t registerAddress);
 /*! Resets the device. */
-int32_t ad9739a_reset(void);
+int32_t ad9739a_reset(ad9739a_dev *dev);
 /*! Powers down LVDS interface and TxDAC. */
-int32_t ad9739a_power_down(unsigned char pwrConfig);
+int32_t ad9739a_power_down(ad9739a_dev *dev,
+						   uint8_t pwrConfig);
 /*! Sets the normal baseband mode or mix-mode. */
-int32_t ad9739a_operation_mode(unsigned char mode);
+int32_t ad9739a_operation_mode(ad9739a_dev *dev,
+							   uint8_t mode);
 /*! Sets the full-scale output current for the DAC.  */
-float ad9739a_DAC_fs_current(float fs_val);
+float ad9739a_DAC_fs_current(ad9739a_dev *dev,
+							 float fs_val);
 /*! Delay for a number of fdata clock cycles. */
 int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
-int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
-		ad9739a_init_param init_param);
+int32_t ad9739a_setup(ad9739a_dev **device,
+					  ad9739a_init_param init_param);
 
 #endif /* __AD9739A_H__ */

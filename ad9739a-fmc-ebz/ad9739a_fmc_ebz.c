@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#include <stdio.h>
 #include "platform_drivers.h"
 #include "dac_core.h"
 #include "ad9739a.h"
@@ -55,6 +56,13 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 adf4350_init_param default_adf4350_init_param = {
+	/* SPI */
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+	PS7_SPI,		// spi_type
+	SPI_DEVICE_ID,	// spi_device_id
+
+	/* Device settings */
 	25000000,		// clkin;
 	10000,			// channel_spacing;
 	2500000000ul,	// power_up_frequency;
@@ -87,6 +95,12 @@ adf4350_init_param default_adf4350_init_param = {
 };
 
 ad9739a_init_param default_ad9739a_init_param = {
+	/* SPI */
+	1,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+	PS7_SPI,		// spi_type
+	SPI_DEVICE_ID,	// spi_device_id
+	/* Device settings */
 	0xF,	// common_mode_voltage_dacclk_p
 	0xF,	// common_mode_voltage_dacclk_n
 	20.0,	// full_scale_current
@@ -97,11 +111,14 @@ ad9739a_init_param default_ad9739a_init_param = {
 *******************************************************************************/
 int main(void)
 {
-	adf4350_setup(SPI_DEVICE_ID, 0, default_adf4350_init_param);
+	adf4350_dev	*adf4350_device;
+	ad9739a_dev	*ad9739a_device;
+
+	adf4350_setup(&adf4350_device, default_adf4350_init_param);
 
 	dac_setup(XPAR_AXI_AD9739A_BASEADDR);
 
-	ad9739a_setup(SPI_DEVICE_ID, 1, default_ad9739a_init_param);
+	ad9739a_setup(&ad9739a_device, default_ad9739a_init_param);
 
 	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT);
 
@@ -112,6 +129,7 @@ int main(void)
 	dds_set_frequency(1, 300000000);
 	dds_set_phase(1, 0);
 	dds_set_scale(1, 250000);
+
 	printf("Done.\n");
 
 	return 0;
