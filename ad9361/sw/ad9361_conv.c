@@ -328,7 +328,9 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 		memset(field, 0, 32);
 		for (k = 0; (uint32_t)k < (max_freq ? ARRAY_SIZE(rates) : 1); k++) {
 			if (max_freq)
-				ad9361_set_trx_clock_chain_freq(phy, rates[k]);
+				ad9361_set_trx_clock_chain_freq(phy,
+					((phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) || !phy->pdata->rx2tx2) ?
+					rates[k] : rates[k] / 2);
 			for (i = 0; i < 2; i++) {
 				for (j = 0; j < 16; j++) {
 					ad9361_spi_write(phy->spi,
@@ -502,12 +504,14 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 
 	if (!rx2tx2) {
 		axiadc_write(st, 0x4048, tmp | BIT(5)); /* R1_MODE */
-		axiadc_write(st, 0x404c, 1); /* RATE */
+		axiadc_write(st, 0x404c,
+			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 1 : 0); /* RATE */
 	}
 	else {
 		tmp &= ~BIT(5);
 		axiadc_write(st, 0x4048, tmp);
-		axiadc_write(st, 0x404c, 3); /* RATE */
+		axiadc_write(st, 0x404c,
+			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 3 : 1); /* RATE */
 	}
 
 #ifdef ALTERA_PLATFORM
