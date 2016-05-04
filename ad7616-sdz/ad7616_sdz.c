@@ -47,8 +47,10 @@
 #include <xil_cache.h>
 #include <xparameters.h>
 #include "platform_drivers.h"
-#include "ad7616.h"
 #include "ad7616_core.h"
+#include "ad7616.h"
+
+//#define PARALLEL_INTERFACE
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -91,7 +93,11 @@ ad7616_init_param default_init_param = {
 		-1,						// gpio_os1
 		-1,						// gpio_os2
 		/* Device Settings */
-		AD7616_SERIAL,			// interface;
+#ifdef PARALLEL_INTERFACE
+		AD7616_PARALLEL,		// interface
+#else
+		AD7616_SERIAL,			// interface
+#endif
 		AD7616_SW,				// mode
 		{AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
 		 AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V},	// va[8]
@@ -121,15 +127,18 @@ int main(void)
 	core.resolution = 16;
 	ad7616_core_setup(core);
 
-	ad7616_setup(&dev, default_init_param);
+	ad7616_setup(&dev, &core, default_init_param);
 	ad7616_reset(dev);
 
 	for (reg_addr = 2; reg_addr <= 0x07; reg_addr++) {
-		ad7616_spi_read(dev, reg_addr, &reg_data);
+		ad7616_read(dev, reg_addr, &reg_data);
 		printf("0x%x = 0x%x\n", reg_addr, reg_data);
 	}
 
-	ad7616_capture_serial(core, 16384, ADC_DDR_BASEADDR);
+	if (dev->interface == AD7616_PARALLEL)
+		ad7616_capture_parallel(core, 16384, ADC_DDR_BASEADDR);
+	else
+		ad7616_capture_serial(core, 16384, ADC_DDR_BASEADDR);
 
 	printf("Bye\n");
 
