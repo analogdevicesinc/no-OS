@@ -50,8 +50,6 @@
 #include "ad7616_core.h"
 #include "ad7616.h"
 
-//#define PARALLEL_INTERFACE
-
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -93,11 +91,6 @@ ad7616_init_param default_init_param = {
 		-1,						// gpio_os1
 		-1,						// gpio_os2
 		/* Device Settings */
-#ifdef PARALLEL_INTERFACE
-		AD7616_PARALLEL,		// interface
-#else
-		AD7616_SERIAL,			// interface
-#endif
 		AD7616_SW,				// mode
 		{AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
 		 AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V},	// va[8]

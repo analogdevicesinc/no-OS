@@ -157,7 +157,6 @@ typedef struct {
 	int8_t				gpio_os1;
 	int8_t				gpio_os2;
 	/* Device Settings */
-	ad7616_interface	interface;
 	ad7616_mode			mode;
 	ad7616_range		va[8];
 	ad7616_range		vb[8];

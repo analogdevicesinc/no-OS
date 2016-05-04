@@ -389,6 +389,7 @@ int32_t ad7616_setup(ad7616_dev **device,
 {
 	ad7616_dev *dev;
 	uint8_t i;
+	uint32_t if_type;
 	int32_t ret = 0;
 
 	dev = (ad7616_dev *)malloc(sizeof(*dev));
@@ -397,6 +398,11 @@ int32_t ad7616_setup(ad7616_dev **device,
 	}
 
 	dev->core = core;
+	ad7616_core_read(*dev->core, AD7616_REG_UP_IF_TYPE, &if_type);
+	if (if_type)
+		dev->interface = AD7616_PARALLEL;
+	else
+		dev->interface = AD7616_SERIAL;
 
 	dev->spi_dev.chip_select = init_param.spi_chip_select;
 	dev->spi_dev.mode = init_param.spi_mode;
