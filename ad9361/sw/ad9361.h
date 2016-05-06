@@ -3352,6 +3352,7 @@ struct ad9361_rf_phy {
 	uint32_t				bist_tone_freq_Hz;
 	uint32_t				bist_tone_level_dB;
 	uint32_t				bist_tone_mask;
+	bool			bbpll_initialized;
 };
 
 struct refclk_scale {

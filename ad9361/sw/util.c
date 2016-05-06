@@ -165,6 +165,7 @@ int32_t clk_set_rate(struct ad9361_rf_phy *phy,
 					phy->clks[clk_priv->parent_source]->rate);
 				phy->clks[source]->rate = ad9361_bbpll_recalc_rate(clk_priv,
 											phy->clks[clk_priv->parent_source]->rate);
+				phy->bbpll_initialized = true;
 				break;
 			case ADC_CLK:
 			case R2_CLK:
@@ -210,6 +211,16 @@ int32_t clk_set_rate(struct ad9361_rf_phy *phy,
 		for(i = RX_RFPLL; i < NUM_AD9361_CLKS; i++)
 		{
 			phy->clks[i]->rate = ad9361_rfpll_recalc_rate(phy->ref_clk_scale[i]);
+		}
+	} else {
+		if ((source == BBPLL_CLK) && !phy->bbpll_initialized) {
+			round_rate = ad9361_bbpll_round_rate(clk_priv, rate,
+							&phy->clks[clk_priv->parent_source]->rate);
+			ad9361_bbpll_set_rate(clk_priv, round_rate,
+				phy->clks[clk_priv->parent_source]->rate);
+			phy->clks[source]->rate = ad9361_bbpll_recalc_rate(clk_priv,
+										phy->clks[clk_priv->parent_source]->rate);
+			phy->bbpll_initialized = true;
 		}
 	}
 
