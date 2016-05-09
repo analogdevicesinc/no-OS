@@ -731,7 +731,7 @@ int32_t ad6676_setup(ad6676_dev **device,
 		return -1;
 	}
 
-	dev->gpio_dev.device_id = init_param.gpio_type;
+	dev->gpio_dev.device_id = init_param.gpio_device_id;
 	dev->gpio_dev.type = init_param.gpio_type;
 	ret = gpio_init(&dev->gpio_dev);
 
