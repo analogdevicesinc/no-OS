@@ -502,6 +502,123 @@ int main(void)
 
 	printf("Done.\n");
 
+#ifdef TDD_SWITCH_STATE_EXAMPLE
+	uint32_t ensm_mode;
+	if (!ad9361_phy->pdata->fdd) {
+		if (ad9361_phy->pdata->ensm_pin_ctrl) {
+			gpio_direction(GPIO_ENABLE_PIN, 1);
+			gpio_direction(GPIO_TXNRX_PIN, 1);
+			gpio_set_value(GPIO_ENABLE_PIN, 0);
+			gpio_set_value(GPIO_TXNRX_PIN, 0);
+			udelay(10);
+			ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+			printf("TXNRX control - Alert: %s\n",
+					ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+			mdelay(1000);
+
+			if (ad9361_phy->pdata->ensm_pin_pulse_mode) {
+				while(1) {
+					gpio_set_value(GPIO_TXNRX_PIN, 0);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX Pulse control - RX: %s\n",
+							ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX Pulse control - Alert: %s\n",
+							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_TXNRX_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX Pulse control - TX: %s\n",
+							ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX Pulse control - Alert: %s\n",
+							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					mdelay(1000);
+				}
+			} else {
+				while(1) {
+					gpio_set_value(GPIO_TXNRX_PIN, 0);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX control - RX: %s\n",
+							ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					udelay(10);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX control - Alert: %s\n",
+							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_TXNRX_PIN, 1);
+					udelay(10);
+					gpio_set_value(GPIO_ENABLE_PIN, 1);
+					udelay(10);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX control - TX: %s\n",
+							ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+					mdelay(1000);
+
+					gpio_set_value(GPIO_ENABLE_PIN, 0);
+					udelay(10);
+					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+					printf("TXNRX control - Alert: %s\n",
+							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					mdelay(1000);
+				}
+			}
+		} else {
+			while(1) {
+				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_RX);
+				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+				printf("SPI control - RX: %s\n",
+						ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+				mdelay(1000);
+
+				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
+				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+				printf("SPI control - Alert: %s\n",
+						ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+				mdelay(1000);
+
+				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_TX);
+				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+				printf("SPI control - TX: %s\n",
+						ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+				mdelay(1000);
+
+				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
+				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
+				printf("SPI control - Alert: %s\n",
+						ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+				mdelay(1000);
+			}
+		}
+	}
+#endif
+
 #ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
