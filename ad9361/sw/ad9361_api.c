@@ -530,10 +530,12 @@ int32_t ad9361_set_en_state_machine_mode (struct ad9361_rf_phy *phy,
 int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 										  uint32_t *mode)
 {
-	uint8_t ensm_state = phy->curr_ensm_state;
+	uint8_t ensm_state;
 	bool pinctrl = false;
 	int32_t ret;
 
+	ensm_state = ad9361_spi_read(phy->spi, REG_STATE);
+	ensm_state &= ENSM_STATE(~0);
 	ret = ad9361_spi_read(phy->spi, REG_ENSM_CONFIG_1);
 	if ((ret & ENABLE_ENSM_PIN_CTRL) == ENABLE_ENSM_PIN_CTRL)
 		pinctrl = true;
