@@ -296,7 +296,7 @@ int32_t AD7124_WaitForConvReady(ad7124_device *device, uint32_t timeout)
 
 		/* Check the RDY bit in the Status Register */
 		ready = (regs[AD7124_Status].value &
-			 	AD7124_STATUS_REG_RDY) != 0;
+				AD7124_STATUS_REG_RDY) == 0;
 	}
 
 	return timeout ? 0 : TIMEOUT;
