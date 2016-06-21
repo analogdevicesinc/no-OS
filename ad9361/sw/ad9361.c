@@ -3141,7 +3141,7 @@ static int32_t ad9361_set_ref_clk_cycles(struct ad9361_rf_phy *phy,
  * @param fine The DCXO tune fine.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
+int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 	uint32_t coarse, uint32_t fine)
 {
 	dev_dbg(&phy->spi->dev, "%s : coarse %"PRIu32" fine %"PRIu32,

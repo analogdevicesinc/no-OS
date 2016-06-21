@@ -1949,3 +1949,33 @@ int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
 
 	return 0;
 }
+
+/**
+ * Do DCXO coarse tuning.
+ * @param phy The AD9361 current state structure.
+ * @param coarse The DCXO coarse tuning value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_do_dcxo_tune_coarse(struct ad9361_rf_phy *phy,
+								   uint32_t coarse)
+{
+	phy->pdata->dcxo_coarse = coarse;
+
+	return ad9361_set_dcxo_tune(phy, phy->pdata->dcxo_coarse,
+			phy->pdata->dcxo_fine);
+}
+
+/**
+ * Do DCXO fine tuning.
+ * @param phy The AD9361 current state structure.
+ * @param fine The DCXO fine tuning value.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
+								   uint32_t fine)
+{
+	phy->pdata->dcxo_fine = fine;
+
+	return ad9361_set_dcxo_tune(phy, phy->pdata->dcxo_coarse,
+			phy->pdata->dcxo_fine);
+}

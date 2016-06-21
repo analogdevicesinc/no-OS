@@ -3484,4 +3484,6 @@ int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if, uint32_t ena
 int32_t ad9361_en_dis_rx(struct ad9361_rf_phy *phy, uint32_t rx_if, uint32_t enable);
 int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, bool tx, int32_t channel);
 int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy);
+int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
+		uint32_t coarse, uint32_t fine);
 #endif
