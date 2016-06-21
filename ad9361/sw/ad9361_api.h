@@ -479,4 +479,10 @@ int32_t ad9361_do_calib(struct ad9361_rf_phy *phy, uint32_t cal, int32_t arg);
 int32_t ad9361_trx_load_enable_fir(struct ad9361_rf_phy *phy,
 								   AD9361_RXFIRConfig rx_fir_cfg,
 								   AD9361_TXFIRConfig tx_fir_cfg);
+/* Do DCXO coarse tuning. */
+int32_t ad9361_do_dcxo_tune_coarse(struct ad9361_rf_phy *phy,
+								   uint32_t coarse);
+/* Do DCXO fine tuning. */
+int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
+								   uint32_t fine);
 #endif
