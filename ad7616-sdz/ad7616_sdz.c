@@ -121,7 +121,6 @@ int main(void)
 	ad7616_core_setup(core);
 
 	ad7616_setup(&dev, &core, default_init_param);
-	ad7616_reset(dev);
 
 	for (reg_addr = 2; reg_addr <= 0x07; reg_addr++) {
 		ad7616_read(dev, reg_addr, &reg_data);
