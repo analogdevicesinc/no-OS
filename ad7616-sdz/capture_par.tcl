@@ -18,9 +18,19 @@ for {set index 1} {$index < 32768} {incr index 2} {
 
 	set sample0 [expr {($byte1 << 8) | $byte0}]
 	set sample1 [expr {($byte3 << 8) | $byte2}]
-	
-	set line $sample0,$sample1
-	
+
+        # samples are in two's complement
+        if { $sample0 > 0x7FFF } {
+          set sample0 [expr [expr ~$sample0] & 0x7FFF]
+          set sample0 [expr {int ([expr $sample0 + 1] * -1) }]
+        }
+        if { $sample1 > 0x7FFF } {
+          set sample1 [expr [expr ~$sample1] & 0x7FFF]
+          set sample1 [expr {int ([expr $sample1 + 1] * -1) }]
+        }
+
+        set line $sample0,$sample1
+
 	puts $fp $line
 }
 close $fp
