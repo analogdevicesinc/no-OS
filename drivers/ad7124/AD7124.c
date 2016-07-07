@@ -320,7 +320,7 @@ int32_t AD7124_ReadData(ad7124_device *device, int32_t* pData)
 
 	regs = device->regs;
 
-	/* Read the value of the Status Register */
+	/* Read the value of the Data Register */
 	ret = AD7124_ReadRegister(device, &regs[AD7124_Data]);
 
 	/* Get the read result */
