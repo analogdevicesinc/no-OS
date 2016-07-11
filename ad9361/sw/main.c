@@ -408,6 +408,11 @@ int main(void)
 
 #ifdef PICOZED_SDR_CMOS
 	default_init_param.lvds_mode_enable = 0;
+	default_init_param.lvds_rx_onchip_termination_enable = 0;
+	default_init_param.full_port_enable = 1;
+	default_init_param.digital_interface_tune_fir_disable = 1;
+	default_init_param.tx_fb_clock_delay = 0;
+	default_init_param.tx_data_delay = 9;
 #endif
 
 	ad9361_init(&ad9361_phy, &default_init_param);
