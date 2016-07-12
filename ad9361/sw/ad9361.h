@@ -3350,6 +3350,8 @@ struct ad9361_rf_phy {
 	bool			txmon_tdd_en;
 	uint16_t 			auxdac1_value;
 	uint16_t 			auxdac2_value;
+	uint32_t 			tx1_atten_cached;
+	uint32_t 			tx2_atten_cached;
 	struct ad9361_fastlock	fastlock;
 	struct axiadc_converter	*adc_conv;
 	struct axiadc_state		*adc_state;
@@ -3493,4 +3495,5 @@ int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, bool tx, int32_t ch
 int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy);
 int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 		uint32_t coarse, uint32_t fine);
+int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
 #endif
