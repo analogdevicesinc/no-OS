@@ -1373,6 +1373,35 @@ int32_t ad9361_get_tx_atten(struct ad9361_rf_phy *phy, uint32_t tx_num)
 }
 
 /**
+ * Mute TX.
+ * @param phy The AD9361 state structure.
+ * @param state The state - 0 mute; 1 - unmute.
+ * @return 0 in case of success
+ */
+int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state)
+{
+	int32_t ret;
+
+	if (state) {
+		phy->tx1_atten_cached = ad9361_get_tx_atten(phy, 1);
+		phy->tx2_atten_cached = ad9361_get_tx_atten(phy, 2);
+
+		return ad9361_set_tx_atten(phy, 89750, true, true, true);
+	} else {
+		if (phy->tx1_atten_cached == phy->tx2_atten_cached)
+			return ad9361_set_tx_atten(phy, phy->tx1_atten_cached,
+						   true, true, true);
+
+		ret = ad9361_set_tx_atten(phy, phy->tx1_atten_cached,
+						   true, false, true);
+		ret |= ad9361_set_tx_atten(phy, phy->tx2_atten_cached,
+						   false, true, true);
+
+		return ret;
+	}
+}
+
+/**
  * Choose the right RF VCO table index for the selected frequency.
  * @param freq The frequency value [Hz].
  * @return The index from the RF VCO table.
