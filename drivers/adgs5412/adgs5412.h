@@ -124,6 +124,16 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 							   uint8_t reg_addr,
 							   uint8_t reg_data);
+/* SPI register read from device using a mask. */
+int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
+								   uint8_t reg_addr,
+								   uint8_t mask,
+								   uint8_t *data);
+/* SPI internal register write to device using a mask. */
+int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
+									uint8_t reg_addr,
+									uint8_t mask,
+									uint8_t data);
 /* Do a software reset. */
 int32_t adgs5412_do_soft_reset(adgs5412_dev *dev);
 /* Clear the Error Flags Register. */
