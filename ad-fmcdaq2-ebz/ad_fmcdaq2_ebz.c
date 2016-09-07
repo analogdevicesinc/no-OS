@@ -60,6 +60,7 @@
 #define GPIO_OFFSET				54 + 32
 #define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
+#define DAC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0xA000000
 #else
 #define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
 #define GPIO_OFFSET				32
@@ -67,6 +68,7 @@
 #define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
 #define AD9144_CORE_BASEADDR	XPAR_AXI_AD9144_CORE_BASEADDR
+#define AD9144_DMA_BASEADDR		XPAR_AXI_AD9144_DMA_BASEADDR
 #define AD9680_CORE_BASEADDR	XPAR_AXI_AD9680_CORE_BASEADDR
 #define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
 #define AD9144_JESD_BASEADDR	XPAR_AXI_AD9144_JESD_BASEADDR
@@ -345,12 +347,15 @@ void daq2_gpio_ctl(void)
 	mdelay(250);
 }
 
+//#define DMA_EXAMPLE
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
 	adc_core	ad9680_core;
+	dac_core	ad9144_core;
 	ad9523_dev	*ad9523_device;
 	ad9144_dev	*ad9144_device;
 	ad9680_dev	*ad9680_device;
@@ -374,21 +379,30 @@ int main(void)
 	jesd204b_gt_setup(ad9680_gt_link);
 	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
 
-	dac_setup(AD9144_CORE_BASEADDR);
+	ad9144_core.dac_baseaddr = AD9144_CORE_BASEADDR;
+	ad9144_core.dmac_baseaddr = AD9144_DMA_BASEADDR;
+	ad9144_core.no_of_channels = 2;
+	ad9144_core.resolution = 16;
+	ad9144_core.fifo_present = 1;
+	dac_setup(ad9144_core);
 
-	dds_set_frequency(0, 5000000);
-	dds_set_phase(0, 0);
-	dds_set_scale(0, 500000);
-	dds_set_frequency(1, 5000000);
-	dds_set_phase(1, 0);
-	dds_set_scale(1, 500000);
+#ifdef DMA_EXAMPLE
+	dac_dma_setup(ad9144_core, DAC_DDR_BASEADDR);
+#else
+	dds_set_frequency(ad9144_core, 0, 5000000);
+	dds_set_phase(ad9144_core, 0, 0);
+	dds_set_scale(ad9144_core, 0, 500000);
+	dds_set_frequency(ad9144_core, 1, 5000000);
+	dds_set_phase(ad9144_core, 1, 0);
+	dds_set_scale(ad9144_core, 1, 500000);
 
-	dds_set_frequency(2, 5000000);
-	dds_set_phase(2, 90000);
-	dds_set_scale(2, 500000);
-	dds_set_frequency(3, 5000000);
-	dds_set_phase(3, 90000);
-	dds_set_scale(3, 500000);
+	dds_set_frequency(ad9144_core, 2, 5000000);
+	dds_set_phase(ad9144_core, 2, 90000);
+	dds_set_scale(ad9144_core, 2, 500000);
+	dds_set_frequency(ad9144_core, 3, 5000000);
+	dds_set_phase(ad9144_core, 3, 90000);
+	dds_set_scale(ad9144_core, 3, 500000);
+#endif
 
 	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
 	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
