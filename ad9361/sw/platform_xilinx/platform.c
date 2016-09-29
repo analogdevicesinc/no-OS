@@ -211,8 +211,15 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 	XGpioPs_SetOutputEnablePin(&gpio_instance, pin, 1);
 #else
 	uint32_t config = 0;
+	uint32_t tri_reg_addr;
 
-	config = Xil_In32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET));
+	if (pin >= 32) {
+		tri_reg_addr = XGPIO_TRI2_OFFSET;
+		pin -= 32;
+	} else
+		tri_reg_addr = XGPIO_TRI_OFFSET;
+
+	config = Xil_In32((gpio_config->BaseAddress + tri_reg_addr));
 	if(direction)
 	{
 		config &= ~(1 << pin);
@@ -221,7 +228,7 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 	{
 		config |= (1 << pin);
 	}
-	Xil_Out32((gpio_config->BaseAddress + XGPIO_TRI_OFFSET), config);
+	Xil_Out32((gpio_config->BaseAddress + tri_reg_addr), config);
 #endif
 }
 
@@ -245,8 +252,15 @@ void gpio_data(uint8_t pin, uint8_t data)
 	XGpioPs_WritePin(&gpio_instance, pin, data);
 #else
 	uint32_t config = 0;
+	uint32_t data_reg_addr;
 
-	config = Xil_In32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET));
+	if (pin >= 32) {
+		data_reg_addr = XGPIO_DATA2_OFFSET;
+		pin -= 32;
+	} else
+		data_reg_addr = XGPIO_DATA_OFFSET;
+
+	config = Xil_In32((gpio_config->BaseAddress + data_reg_addr));
 	if(data)
 	{
 		config |= (1 << pin);
@@ -255,7 +269,7 @@ void gpio_data(uint8_t pin, uint8_t data)
 	{
 		config &= ~(1 << pin);
 	}
-	Xil_Out32((gpio_config->BaseAddress + XGPIO_DATA_OFFSET), config);
+	Xil_Out32((gpio_config->BaseAddress + data_reg_addr), config);
 #endif
 }
 
