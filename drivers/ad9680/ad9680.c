@@ -107,6 +107,8 @@ int32_t ad9680_setup(ad9680_dev **device,
 	dev->spi_dev.type = init_param.spi_type;
 	ret = spi_init(&dev->spi_dev);
 
+	dev->lane_rate_khz = init_param.lane_rate_khz;
+
 	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_A, 0x81);	// RESET
 	mdelay(5);
 	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_B, 0x01);	// RESET
@@ -122,6 +124,10 @@ int32_t ad9680_setup(ad9680_dev **device,
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN, 0x11);	// serdes-1 = lane 1
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN, 0x22);	// serdes-2 = lane 2
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN, 0x33);	// serdes-3 = lane 3
+	if (dev->lane_rate_khz < 6250000)
+		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x10);	// low line rate mode must be enabled
+	else
+		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x00);	// low line rate mode must be disabled
 	mdelay(20);
 
 	ad9680_spi_read(dev, AD9680_REG_CHIP_ID_LOW, &chip_id);

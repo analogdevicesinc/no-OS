@@ -55,13 +55,14 @@
 #define AD9680_REG_CHIP_DEC_RATIO					0x201
 #define AD9680_REG_ADC_TEST_MODE					0x550
 #define AD9680_REG_OUTPUT_MODE						0x561
+#define AD9680_REG_JESD204B_LANE_RATE_CTRL			0x56e
+#define AD9680_REG_JESD204B_PLL_LOCK_STATUS			0x56f
 #define AD9680_REG_JESD204B_QUICK_CONFIG			0x570
 #define AD9680_REG_JESD204B_CSN_CONFIG				0x58f
-#define AD9680_REG_JESD204B_LANE_SERD_OUT0_ASSIGN	0x5B2
+#define AD9680_REG_JESD204B_LANE_SERD_OUT0_ASSIGN	0x5b2
 #define AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN	0x5b3
 #define AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN	0x5b5
 #define AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN	0x5b6
-#define AD9680_REG_JESD204B_PLL_LOCK_STATUS			0x56F
 
 #define AD9680_CHIP_ID								0x0C5
 
@@ -70,6 +71,7 @@
 /******************************************************************************/
 typedef struct {
 	spi_device	spi_dev;
+	uint32_t	lane_rate_khz;
 } ad9680_dev;
 
 typedef struct {
@@ -77,6 +79,7 @@ typedef struct {
 	spi_mode	spi_mode;
 	spi_type	spi_type;
 	uint32_t	spi_device_id;
+	uint32_t	lane_rate_khz;
 } ad9680_init_param;
 
 /******************************************************************************/
