@@ -49,8 +49,7 @@
 #include "ad9680.h"
 #include "adc_core.h"
 #include "dac_core.h"
-#include "jesd204b_gt.h"
-#include "jesd204b_v51.h"
+#include "adxcvr_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -73,7 +72,8 @@
 #define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
 #define AD9144_JESD_BASEADDR	XPAR_AXI_AD9144_JESD_BASEADDR
 #define AD9680_JESD_BASEADDR	XPAR_AXI_AD9680_JESD_BASEADDR
-#define DAQ2_GT_BASEADDR		XPAR_AXI_DAQ2_GT_BASEADDR
+#define AD9144_ADXCVR_BASEADDR	XPAR_AXI_AD9144_XCVR_BASEADDR
+#define AD9680_ADXCVR_BASEADDR	XPAR_AXI_AD9680_XCVR_BASEADDR
 #define GPIO_CLKD_STATUS_0		GPIO_OFFSET + 0
 #define GPIO_CLKD_STATUS_1		GPIO_OFFSET + 1
 #define GPIO_DAC_IRQ			GPIO_OFFSET + 2
@@ -136,7 +136,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		LVPECL_8mA, //driver_mode
 		1,  //divider_phase
 		128,  //channel_divider
-		"FMC_ADC_SYSREF", //extended_name
+		"CLKD_ADC_SYSREF", //extended_name
 	},
 	{
 		7,  //channel_num
@@ -148,7 +148,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		LVPECL_8mA, //driver_mode
 		1,  //divider_phase
 		128,  //channel_divider
-		"FMC_DAC_SYSREF", //extended_name
+		"CLKD_DAC_SYSREF", //extended_name
 	},
 	{
 		8,  //channel_num
@@ -172,7 +172,7 @@ struct ad9523_channel_spec ad9523_channels[] =
 		LVPECL_8mA, //driver_mode
 		1,  //divider_phase
 		2,  //channel_divider
-		"FMC_DAC_REF_CLK", //extended_name
+		"DAC_CLK_FMC", //extended_name
 	},
 	{
 		13,  //channel_num
@@ -234,6 +234,17 @@ struct ad9523_platform_data ad9523_pdata_lpc =
 	"ad9523-lpc" //name
 };
 
+enum ad9523_channels{
+	DAC_CLK,
+	ADC_CLK_FMC,
+	ADC_SYSREF,
+	CLKD_ADC_SYSREF,
+	CLKD_DAC_SYSREF,
+	DAC_SYSREF,
+	DAC_CLK_FMC,
+	ADC_CLK,
+};
+
 ad9523_init_param default_ad9523_init_param = {
 	0,				// spi_chip_select
 	SPI_MODE_3,		// spi_mode
@@ -242,7 +253,7 @@ ad9523_init_param default_ad9523_init_param = {
 #else
 	AXI_SPI,		// spi_type
 #endif
-	SPI_DEVICE_ID,	// spi_device_id;
+	SPI_DEVICE_ID,	// spi_device_id
 };
 
 ad9144_init_param default_ad9144_init_param = {
@@ -256,10 +267,11 @@ ad9144_init_param default_ad9144_init_param = {
 #endif
 	SPI_DEVICE_ID,	// spi_device_id
 	/* Device Settings */
-	2,	// jesd_xbar_lane0_sel
-	3,	// jesd_xbar_lane1_sel
-	0,	// jesd_xbar_lane2_sel
-	1,	// jesd_xbar_lane3_sel
+	2,				// jesd_xbar_lane0_sel
+	3,				// jesd_xbar_lane1_sel
+	0,				// jesd_xbar_lane2_sel
+	1,				// jesd_xbar_lane3_sel
+	10000000		// lane_rate_khz
 };
 
 ad9680_init_param default_ad9680_init_param = {
@@ -270,46 +282,8 @@ ad9680_init_param default_ad9680_init_param = {
 #else
 	AXI_SPI,		// spi_type
 #endif
-	SPI_DEVICE_ID,	// spi_device_id;
-};
-
-jesd204b_state jesd204b_st = {
-	1,	// lanesync_enable
-	1,	// scramble_enable
-	0,	// sysref_always_enable
-	32,	// frames_per_multiframe
-	1,	// bytes_per_frame
-	1,	// subclass
-};
-
-jesd204b_gt_link ad9144_gt_link = {
-	DAQ2_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_TX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_QPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_EXT,	// sysref_int_or_ext
-	3,						// sys_clk_sel
-	4,						// out_clk_sel
-	0,						// gth_or_gtx
-};
-
-jesd204b_gt_link ad9680_gt_link = {
-	DAQ2_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_RX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_QPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_EXT,	// sysref_int_or_ext
-	3,						// sys_clk_sel
-	4,						// out_clk_sel
-	0,						// gth_or_gtx
+	SPI_DEVICE_ID,	// spi_device_id
+	10000000		// lane_rate_khz
 };
 
 /***************************************************************************//**
@@ -354,36 +328,166 @@ void daq2_gpio_ctl(void)
 *******************************************************************************/
 int main(void)
 {
-	adc_core	ad9680_core;
-	dac_core	ad9144_core;
-	ad9523_dev	*ad9523_device;
-	ad9144_dev	*ad9144_device;
-	ad9680_dev	*ad9680_device;
+	int8_t			mode;
+	ad9523_dev		*ad9523_device;
+	ad9144_dev		*ad9144_device;
+	dac_core		ad9144_core;
+	jesd204_core	ad9144_jesd204;
+	adxcvr_core		ad9144_xcvr;
+	ad9680_dev		*ad9680_device;
+	adc_core		ad9680_core;
+	jesd204_core	ad9680_jesd204;
+	adxcvr_core		ad9680_xcvr;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-
-	daq2_gpio_ctl();
-
-	ad9523_setup(&ad9523_device, default_ad9523_init_param, ad9523_pdata_lpc);
-
-	jesd204b_gt_initialize(ad9144_gt_link);
-
-	ad9144_setup(&ad9144_device, default_ad9144_init_param);
-	jesd204b_setup(AD9144_JESD_BASEADDR, jesd204b_st);
-	jesd204b_gt_setup(ad9144_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9144_gt_link);
-
-	ad9680_setup(&ad9680_device, default_ad9680_init_param);
-	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
-	jesd204b_gt_setup(ad9680_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
 
 	ad9144_core.dac_baseaddr = AD9144_CORE_BASEADDR;
 	ad9144_core.dmac_baseaddr = AD9144_DMA_BASEADDR;
 	ad9144_core.no_of_channels = 2;
 	ad9144_core.resolution = 16;
 	ad9144_core.fifo_present = 1;
+
+	ad9144_jesd204.base_addr = AD9144_JESD_BASEADDR;
+	ad9144_jesd204.rx_tx_n = 0;
+	ad9144_jesd204.octets_per_frame = 1;
+	ad9144_jesd204.frames_per_multiframe = 32;
+	ad9144_jesd204.subclass_mode = 1;
+
+	ad9144_xcvr.base_addr = XPAR_AXI_AD9144_XCVR_BASEADDR;
+	ad9144_xcvr.tx_enable = 1;
+	ad9144_xcvr.gth_enable = 0;
+	ad9144_xcvr.lpm_enable = 1;
+	ad9144_xcvr.out_clk_sel = 4;
+
+	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
+	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+	ad9680_core.no_of_channels = 2;
+	ad9680_core.resolution = 14;
+
+	ad9680_jesd204.base_addr = AD9680_JESD_BASEADDR;
+	ad9680_jesd204.rx_tx_n = 1;
+	ad9680_jesd204.octets_per_frame = 1;
+	ad9680_jesd204.frames_per_multiframe = 32;
+	ad9680_jesd204.subclass_mode = 1;
+
+	ad9680_xcvr.base_addr = XPAR_AXI_AD9680_XCVR_BASEADDR;
+	ad9680_xcvr.tx_enable = 0;
+	ad9680_xcvr.gth_enable = 0;
+	ad9680_xcvr.lpm_enable = 1;
+	ad9680_xcvr.out_clk_sel = 4;
+
+	xil_printf ("Available sampling rates:\n");
+	xil_printf ("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+	xil_printf ("\t2 - ADC 500 MSPS; DAC 1000 MSPS\n");
+	xil_printf ("\t3 - ADC 500 MSPS; DAC 500 MSPS\n");
+	xil_printf ("\t4 - ADC 750 MSPS; DAC 750 MSPS\n");
+	xil_printf ("\t5 - ADC 375 MSPS; DAC 750 MSPS\n");
+	xil_printf ("\t6 - ADC 375 MSPS; DAC 375 MSPS\n");
+
+	mode = inbyte();
+
+	switch (mode) {
+	case '1':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 3;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[DAC_CLK].channel_divider = 1;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[ADC_CLK].channel_divider = 1;
+		ad9144_xcvr.sys_clk_sel = 3;
+		ad9144_xcvr.lane_rate_khz = 10000000;
+		ad9144_xcvr.ref_rate_khz = 500000;
+		ad9680_xcvr.sys_clk_sel = 3;
+		ad9680_xcvr.lane_rate_khz = 10000000;
+		ad9680_xcvr.ref_rate_khz = 500000;
+		break;
+	case '2':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 3;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[DAC_CLK].channel_divider = 1;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[ADC_CLK].channel_divider = 2;
+		ad9144_xcvr.sys_clk_sel = 3;
+		ad9144_xcvr.lane_rate_khz = 10000000;
+		ad9144_xcvr.ref_rate_khz = 500000;
+		ad9680_xcvr.sys_clk_sel = 0;
+		ad9680_xcvr.lane_rate_khz = 5000000;
+		ad9680_xcvr.ref_rate_khz = 250000;
+		break;
+	case '3':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 3;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[DAC_CLK].channel_divider = 2;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[ADC_CLK].channel_divider = 2;
+		ad9144_xcvr.sys_clk_sel = 0;
+		ad9144_xcvr.lane_rate_khz = 5000000;
+		ad9144_xcvr.ref_rate_khz = 250000;
+		ad9680_xcvr.sys_clk_sel = 0;
+		ad9680_xcvr.lane_rate_khz = 5000000;
+		ad9680_xcvr.ref_rate_khz = 250000;
+		break;
+	case '4':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[DAC_CLK].channel_divider = 1;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[ADC_CLK].channel_divider = 1;
+		ad9144_xcvr.sys_clk_sel = 3;
+		ad9144_xcvr.lane_rate_khz = 7500000;
+		ad9144_xcvr.ref_rate_khz = 375000;
+		ad9680_xcvr.sys_clk_sel = 3;
+		ad9680_xcvr.lane_rate_khz = 7500000;
+		ad9680_xcvr.ref_rate_khz = 375000;
+		break;
+	case '5':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 2;
+		ad9523_channels[DAC_CLK].channel_divider = 1;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[ADC_CLK].channel_divider = 2;
+		ad9144_xcvr.sys_clk_sel = 3;
+		ad9144_xcvr.lane_rate_khz = 7500000;
+		ad9144_xcvr.ref_rate_khz = 375000;
+		ad9680_xcvr.sys_clk_sel = 0;
+		ad9680_xcvr.lane_rate_khz = 3750000;
+		ad9680_xcvr.ref_rate_khz = 187500;
+		break;
+	case '6':
+		ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
+		ad9523_channels[DAC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[DAC_CLK].channel_divider = 2;
+		ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
+		ad9523_channels[ADC_CLK].channel_divider = 2;
+		ad9144_xcvr.sys_clk_sel = 0;
+		ad9144_xcvr.lane_rate_khz = 3750000;
+		ad9144_xcvr.ref_rate_khz = 187500;
+		ad9680_xcvr.sys_clk_sel = 0;
+		ad9680_xcvr.lane_rate_khz = 3750000;
+		ad9680_xcvr.ref_rate_khz = 187500;
+		break;
+	default:
+		xil_printf ("Unknown selection.\n");
+		return -1;
+	}
+
+	default_ad9144_init_param.lane_rate_khz = ad9144_xcvr.lane_rate_khz;
+	default_ad9680_init_param.lane_rate_khz = ad9680_xcvr.lane_rate_khz;
+
+	daq2_gpio_ctl();
+
+	ad9523_setup(&ad9523_device, default_ad9523_init_param, ad9523_pdata_lpc);
+
+	ad9144_setup(&ad9144_device, default_ad9144_init_param);
+	jesd204_init(ad9144_jesd204);
+	adxcvr_init(ad9144_xcvr);
+	jesd204_read_status(ad9144_jesd204);
+
+	ad9680_setup(&ad9680_device, default_ad9680_init_param);
+	jesd204_init(ad9680_jesd204);
+	adxcvr_init(ad9680_xcvr);
+	jesd204_read_status(ad9680_jesd204);
+
 	dac_setup(ad9144_core);
 
 #ifdef DMA_EXAMPLE
@@ -404,10 +508,6 @@ int main(void)
 	dds_set_scale(ad9144_core, 3, 500000);
 #endif
 
-	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
-	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
-	ad9680_core.no_of_channels = 2;
-	ad9680_core.resolution = 14;
 	adc_setup(ad9680_core);
 
 	xil_printf("Initialization done.\n");
