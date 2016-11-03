@@ -110,6 +110,8 @@ int32_t ad9144_setup(ad9144_dev **device,
 	dev->spi_dev.type = init_param.spi_type;
 	ret = spi_init(&dev->spi_dev);
 
+	dev->lane_rate_khz = init_param.lane_rate_khz;
+
 	/* Device Settings */
 	dev->jesd_xbar_lane0_sel = init_param.jesd_xbar_lane0_sel;
 	dev->jesd_xbar_lane1_sel = init_param.jesd_xbar_lane1_sel;
@@ -190,10 +192,22 @@ int32_t ad9144_setup(ad9144_dev **device,
 	ad9144_spi_write(dev, 0x2a7, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x2ae, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x314, 0x01);	// pclk == qbd master clock
-	ad9144_spi_write(dev, 0x230, 0x28);	// cdr mode - halfrate, no division
+	if (dev->lane_rate_khz < 2880000)
+		ad9144_spi_write(dev, 0x230, 0x2A);		// CDR_OVERSAMP
+	else
+		if (dev->lane_rate_khz > 5520000)
+			ad9144_spi_write(dev, 0x230, 0x28);	// ENHALFRATE
+		else
+			ad9144_spi_write(dev, 0x230, 0x08);
 	ad9144_spi_write(dev, 0x206, 0x00);	// cdr reset
 	ad9144_spi_write(dev, 0x206, 0x01);	// cdr reset
-	ad9144_spi_write(dev, 0x289, 0x04);	// data-rate == 10Gbps
+	if (dev->lane_rate_khz < 2880000)
+		ad9144_spi_write(dev, 0x289, 0x06);		// data-rate < 2.88 Gbps
+	else
+		if (dev->lane_rate_khz > 5520000)
+			ad9144_spi_write(dev, 0x289, 0x04);	// data-rate > 5.52 Gbps
+		else
+			ad9144_spi_write(dev, 0x289, 0x05);
 	ad9144_spi_write(dev, 0x280, 0x01);	// enable serdes pll
 	ad9144_spi_write(dev, 0x280, 0x05);	// enable serdes calibration
 	mdelay(20);

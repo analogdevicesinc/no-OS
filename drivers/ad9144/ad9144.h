@@ -1345,10 +1345,11 @@ typedef struct {
 	/* SPI */
 	spi_device	spi_dev;
 	/* Device Settings */
-	uint8_t jesd_xbar_lane0_sel;
-	uint8_t jesd_xbar_lane1_sel;
-	uint8_t jesd_xbar_lane2_sel;
-	uint8_t jesd_xbar_lane3_sel;
+	uint8_t		jesd_xbar_lane0_sel;
+	uint8_t		jesd_xbar_lane1_sel;
+	uint8_t		jesd_xbar_lane2_sel;
+	uint8_t		jesd_xbar_lane3_sel;
+	uint32_t	lane_rate_khz;
 } ad9144_dev;
 
 typedef struct {
@@ -1358,10 +1359,11 @@ typedef struct {
 	spi_type	spi_type;
 	uint32_t	spi_device_id;
 	/* Device Settings */
-	uint8_t jesd_xbar_lane0_sel;
-	uint8_t jesd_xbar_lane1_sel;
-	uint8_t jesd_xbar_lane2_sel;
-	uint8_t jesd_xbar_lane3_sel;
+	uint8_t		jesd_xbar_lane0_sel;
+	uint8_t		jesd_xbar_lane1_sel;
+	uint8_t		jesd_xbar_lane2_sel;
+	uint8_t		jesd_xbar_lane3_sel;
+	uint32_t	lane_rate_khz;
 } ad9144_init_param;
 
 /******************************************************************************/
