@@ -74,8 +74,10 @@ char				received_cmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 #endif
 
 AD9361_InitParam default_init_param = {
+	/* Device selection */
+	ID_AD9361,	// dev_sel
 	/* Identification number */
-	0,		//id_no;
+	0,		//id_no
 	/* Reference Clock */
 	40000000UL,	//reference_clk_rate
 	/* Base Configuration */
@@ -401,6 +403,13 @@ int main(void)
 	gpio_direction(default_init_param.gpio_resetb, 1);
 
 	spi_init(SPI_DEVICE_ID, 1, 0);
+
+	if (AD9364_DEVICE)
+		default_init_param.dev_sel = ID_AD9364;
+	if (AD9363A_DEVICE)
+		default_init_param.dev_sel = ID_AD9363A;
+	if (AD9363B_DEVICE)
+		default_init_param.dev_sel = ID_AD9363A;
 
 #if defined FMCOMMS5 || defined PICOZED_SDR || defined PICOZED_SDR_CMOS
 	default_init_param.xo_disable_use_ext_refclk_enable = 1;

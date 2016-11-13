@@ -767,6 +767,50 @@ static int32_t ad9361_spi_writem(struct spi_device *spi,
 }
 
 /**
+ * Validate RF BW frequency.
+ * @param phy The AD9361 state structure.
+ * @param bw The RF BW frequency.
+ * @return The validated RF BW frequency.
+ */
+uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw)
+{
+	switch (phy->dev_sel) {
+	case ID_AD9363A:
+	case ID_AD9363B:
+		return clamp_t(uint32_t, bw, 0, 20000000UL);
+	default:
+		return clamp_t(uint32_t, bw, 0, 56000000UL);
+	}
+}
+
+/**
+ * Validate RF PLL frequency.
+ * @param phy The AD9361 state structure.
+ * @param freq The RF PLL frequency.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_validate_rfpll(struct ad9361_rf_phy *phy, uint64_t freq)
+{
+	switch (phy->dev_sel) {
+		case ID_AD9363A:
+			if (freq > AD9363A_MAX_CARRIER_FREQ_HZ ||
+				freq < AD9363A_MIN_CARRIER_FREQ_HZ)
+				return -EINVAL;
+			break;
+		case ID_AD9363B:
+			if (freq > AD9363B_MAX_CARRIER_FREQ_HZ ||
+				freq < AD9363B_MIN_CARRIER_FREQ_HZ)
+				return -EINVAL;
+			break;
+		default:
+			if (freq > MAX_CARRIER_FREQ_HZ || freq < MIN_CARRIER_FREQ_HZ)
+				return -EINVAL;
+	}
+
+	return 0;
+}
+
+/**
  * Find optimal value.
  * @param field
  * @param ret_start
@@ -4928,12 +4972,17 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	struct spi_device *spi = phy->spi;
 	struct ad9361_phy_platform_data *pd = phy->pdata;
 	int32_t ret;
-	uint32_t real_rx_bandwidth = pd->rf_rx_bandwidth_Hz / 2;
-	uint32_t real_tx_bandwidth = pd->rf_tx_bandwidth_Hz / 2;
+	uint32_t real_rx_bandwidth, real_tx_bandwidth;
 	bool tmp_use_ext_rx_lo = pd->use_ext_rx_lo;
 	bool tmp_use_ext_tx_lo = pd->use_ext_tx_lo;
 
 	dev_dbg(dev, "%s", __func__);
+
+	pd->rf_rx_bandwidth_Hz = ad9361_validate_rf_bw(phy, pd->rf_rx_bandwidth_Hz);
+	pd->rf_tx_bandwidth_Hz = ad9361_validate_rf_bw(phy, pd->rf_tx_bandwidth_Hz);
+
+	real_rx_bandwidth = pd->rf_rx_bandwidth_Hz / 2;
+	real_tx_bandwidth = pd->rf_tx_bandwidth_Hz / 2;
 
 	if (pd->fdd) {
 		pd->tdd_skip_vco_cal = false;
@@ -6281,15 +6330,16 @@ static uint64_t ad9361_calc_rfpll_int_freq(uint64_t parent_rate,
  * @param vco_freq The VCO frequency.
  * @return The RFPLL frequency.
  */
-static int32_t ad9361_calc_rfpll_int_divder(uint64_t freq,
-	uint64_t parent_rate, uint32_t *integer,
-	uint32_t *fract, int32_t *vco_div, uint64_t *vco_freq)
+static int32_t ad9361_calc_rfpll_int_divder(struct ad9361_rf_phy *phy,
+		uint64_t freq, uint64_t parent_rate, uint32_t *integer,
+		uint32_t *fract, int32_t *vco_div, uint64_t *vco_freq)
 {
 	uint64_t tmp;
-	int32_t div;
+	int32_t div, ret;
 
-	if (freq > MAX_CARRIER_FREQ_HZ || freq < MIN_CARRIER_FREQ_HZ)
-		return -EINVAL;
+	ret = ad9361_validate_rfpll(phy, freq);
+	if (ret)
+		return ret;
 
 	div = -1;
 
@@ -6414,7 +6464,7 @@ int32_t ad9361_rfpll_int_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 	ad9361_fastlock_prepare(phy, clk_priv->source == TX_RFPLL_INT, 0, false);
 
-	ret = ad9361_calc_rfpll_int_divder(ad9361_from_clk(rate), parent_rate,
+	ret = ad9361_calc_rfpll_int_divder(phy, ad9361_from_clk(rate), parent_rate,
 		&integer, &fract, &vco_div, &vco);
 	if (ret < 0)
 		return ret;
@@ -6493,7 +6543,7 @@ int32_t ad9361_rfpll_int_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 			}
 
 			if (phy->current_tx_lo_freq != phy->current_rx_lo_freq) {
-				ad9361_calc_rfpll_int_divder(ad9361_from_clk(_rate),
+				ad9361_calc_rfpll_int_divder(phy, ad9361_from_clk(_rate),
 					parent_rate, &integer, &fract, &vco_div, &vco);
 
 				ad9361_fastlock_prepare(phy, clk_priv->source == RX_RFPLL_INT, 0, false);
