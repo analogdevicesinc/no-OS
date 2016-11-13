@@ -113,9 +113,11 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->adc_state->phy = phy;
 #endif
 
-	phy->spi->id_no = init_param->id_no;
+	/* Device selection */
+	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
+	phy->spi->id_no = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */
@@ -171,7 +173,14 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->update_tx_gain_via_alert = init_param->update_tx_gain_in_alert_enable;
 
 	/* Reference Clock Control */
-	phy->pdata->use_extclk = init_param->xo_disable_use_ext_refclk_enable;
+	switch (phy->dev_sel) {
+		case ID_AD9363A:
+		case ID_AD9363B:
+			phy->pdata->use_extclk = true;
+			break;
+		default:
+			phy->pdata->use_extclk = init_param->xo_disable_use_ext_refclk_enable;
+	}
 	phy->pdata->dcxo_coarse = init_param->dcxo_coarse_and_fine_tune[0];
 	phy->pdata->dcxo_fine = init_param->dcxo_coarse_and_fine_tune[1];
 	phy->pdata->ad9361_clkout_mode = (enum ad9361_clkout)init_param->clk_output_mode_select;
@@ -400,7 +409,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 
 	ret = ad9361_spi_read(phy->spi, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
-		printf("%s : Unsupported PRODUCT_ID 0x%X", "ad9361_init", (unsigned int)ret);
+		printf("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
 		ret = -ENODEV;
 		goto out;
 	}
@@ -438,7 +447,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 		goto out;
 #endif
 
-	printf("%s : AD9361 Rev %d successfully initialized\n", "ad9361_init", (int)rev);
+	printf("%s : AD936x Rev %d successfully initialized\n", __func__, (int)rev);
 
 	*ad9361_phy = phy;
 
@@ -453,7 +462,7 @@ out:
 	free(phy->clk_refin);
 	free(phy->pdata);
 	free(phy);
-	printf("%s : AD9361 initialization error\n", "ad9361_init");
+	printf("%s : AD936x initialization error\n", __func__);
 
 	return -ENODEV;
 }
@@ -650,6 +659,8 @@ int32_t ad9361_set_rx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t bandwidth_hz)
 {
 	int32_t ret = 0;
+
+	bandwidth_hz = ad9361_validate_rf_bw(phy, bandwidth_hz);
 
 	if (phy->current_rx_bw_Hz != bandwidth_hz)
 		ret = ad9361_update_rf_bandwidth(phy, bandwidth_hz,
@@ -1274,6 +1285,8 @@ int32_t ad9361_set_tx_rf_bandwidth (struct ad9361_rf_phy *phy,
 									uint32_t  bandwidth_hz)
 {
 	int32_t ret = 0;
+
+	bandwidth_hz = ad9361_validate_rf_bw(phy, bandwidth_hz);
 
 	if (phy->current_tx_bw_Hz != bandwidth_hz)
 		ret = ad9361_update_rf_bandwidth(phy,

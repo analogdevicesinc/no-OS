@@ -49,6 +49,8 @@
 /******************************************************************************/
 typedef struct
 {
+	/* Device selection */
+	enum dev_id	dev_sel;
 	/* Identification number */
 	uint8_t		id_no;
 	/* Reference Clock */
