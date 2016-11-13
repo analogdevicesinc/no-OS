@@ -2845,11 +2845,15 @@
 #define MAX_CARRIER_FREQ_HZ		6000000000ULL
 #define MIN_CARRIER_FREQ_HZ		70000000ULL
 
+#define AD9363A_MAX_CARRIER_FREQ_HZ	3800000000ULL
+#define AD9363A_MIN_CARRIER_FREQ_HZ	325000000ULL
+
+#define AD9363B_MAX_CARRIER_FREQ_HZ	2700000000ULL
+#define AD9363B_MIN_CARRIER_FREQ_HZ	750000000ULL
+
 /*
 *	Driver
 */
-
-
 
 enum rx_gain_table_type {
 	RXGAIN_FULL_TBL,
@@ -3299,7 +3303,15 @@ enum ad9361_bist_mode {
 	BIST_INJ_RX,
 };
 
+enum dev_id {
+	ID_AD9361,
+	ID_AD9364,
+	ID_AD9363A,
+	ID_AD9363B
+};
+
 struct ad9361_rf_phy {
+	enum dev_id		dev_sel;
 	uint8_t 		id_no;
 	struct spi_device 	*spi;
 	struct clk 		*clk_refin;
@@ -3382,11 +3394,6 @@ enum debugfs_cmd {
 	DBGFS_BIST_DT_ANALYSIS,
 	DBGFS_RXGAIN_1,
 	DBGFS_RXGAIN_2,
-};
-
-enum {
-	ID_AD9361,
-	ID_AD9364,
 };
 
 /******************************************************************************/
@@ -3496,4 +3503,5 @@ int32_t ad9361_rssi_gain_step_calib(struct ad9361_rf_phy *phy);
 int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 		uint32_t coarse, uint32_t fine);
 int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
+uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw);
 #endif
