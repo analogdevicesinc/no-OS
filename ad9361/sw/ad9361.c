@@ -1133,7 +1133,7 @@ void ad9361_get_bist_tone(struct ad9361_rf_phy *phy,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_check_cal_done(struct ad9361_rf_phy *phy, uint32_t reg,
-	uint32_t mask, bool done_state)
+	uint32_t mask, uint32_t done_state)
 {
 	uint32_t timeout = 5000; /* RFDC_CAL can take long */
 	uint32_t state;
@@ -4173,9 +4173,19 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 	}
 
 	if (rc) {
-		dev_err(dev, "Invalid ENSM state transition in %s mode",
-			phy->pdata->fdd ? "FDD" : "TDD");
-		goto out;
+		if ((phy->curr_ensm_state != ENSM_STATE_ALERT) && (val & (FORCE_RX_ON | FORCE_TX_ON))) {
+			uint32_t val2 = val;
+
+			val2 &= ~(FORCE_TX_ON | FORCE_RX_ON);
+			val2 |= TO_ALERT | FORCE_ALERT_STATE;
+			ad9361_spi_write(spi, REG_ENSM_CONFIG_1, val2);
+
+			ad9361_check_cal_done(phy, REG_STATE, ENSM_STATE(~0), ENSM_STATE_ALERT);
+		} else {
+			dev_err(dev, "Invalid ENSM state transition in %s mode",
+				phy->pdata->fdd ? "FDD" : "TDD");
+			goto out;
+		}
 	}
 
 	if (!phy->pdata->fdd && !pinctrl && !phy->pdata->tdd_use_dual_synth &&
