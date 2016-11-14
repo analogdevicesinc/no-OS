@@ -776,7 +776,6 @@ uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw)
 {
 	switch (phy->dev_sel) {
 	case ID_AD9363A:
-	case ID_AD9363B:
 		return clamp_t(uint32_t, bw, 0, 20000000UL);
 	default:
 		return clamp_t(uint32_t, bw, 0, 56000000UL);
@@ -795,11 +794,6 @@ int32_t ad9361_validate_rfpll(struct ad9361_rf_phy *phy, uint64_t freq)
 		case ID_AD9363A:
 			if (freq > AD9363A_MAX_CARRIER_FREQ_HZ ||
 				freq < AD9363A_MIN_CARRIER_FREQ_HZ)
-				return -EINVAL;
-			break;
-		case ID_AD9363B:
-			if (freq > AD9363B_MAX_CARRIER_FREQ_HZ ||
-				freq < AD9363B_MIN_CARRIER_FREQ_HZ)
 				return -EINVAL;
 			break;
 		default:

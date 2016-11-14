@@ -133,8 +133,13 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->tx_fastlock_delay_ns = init_param->tx_fastlock_delay_ns;
 	phy->pdata->trx_fastlock_pinctrl_en[0] = init_param->rx_fastlock_pincontrol_enable;
 	phy->pdata->trx_fastlock_pinctrl_en[1] = init_param->tx_fastlock_pincontrol_enable;
-	phy->pdata->use_ext_rx_lo = init_param->external_rx_lo_enable;
-	phy->pdata->use_ext_tx_lo = init_param->external_tx_lo_enable;
+	if (phy->dev_sel == ID_AD9363A) {
+		phy->pdata->use_ext_rx_lo = false;
+		phy->pdata->use_ext_tx_lo = false;
+	} else {
+		phy->pdata->use_ext_rx_lo = init_param->external_rx_lo_enable;
+		phy->pdata->use_ext_tx_lo = init_param->external_tx_lo_enable;
+	}
 	phy->pdata->dc_offset_update_events = init_param->dc_offset_tracking_update_event_mask;
 	phy->pdata->dc_offset_attenuation_high = init_param->dc_offset_attenuation_high_range;
 	phy->pdata->dc_offset_attenuation_low = init_param->dc_offset_attenuation_low_range;
@@ -173,7 +178,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	/* Reference Clock Control */
 	switch (phy->dev_sel) {
 		case ID_AD9363A:
-		case ID_AD9363B:
 			phy->pdata->use_extclk = true;
 			break;
 		default:
@@ -774,6 +778,11 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
+	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
+		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
+		return -1;
+	}
+
 	phy->pdata->use_ext_rx_lo = int_ext;
 
 	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL], int_ext);
@@ -1400,6 +1409,11 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
+	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
+		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
+		return -1;
+	}
+
 	phy->pdata->use_ext_tx_lo = int_ext;
 
 	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[TX_RFPLL], int_ext);
@@ -1807,6 +1821,12 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 	uint32_t ensm_mode;
 	int32_t step;
 	int32_t reg;
+
+	if ((phy_master->dev_sel == ID_AD9363A) ||
+			(phy_slave->dev_sel == ID_AD9363A)) {
+		printf("%s : MCS is not supported by AD9363!\n", __func__);
+		return -1;
+	}
 
 	reg = ad9361_spi_read(phy_master->spi, REG_RX_CLOCK_DATA_DELAY);
 	ad9361_spi_write(phy_slave->spi, REG_RX_CLOCK_DATA_DELAY, reg);
