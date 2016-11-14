@@ -54,14 +54,12 @@
 static struct axiadc_chip_info axiadc_chip_info_tbl[] =
 {
 	{
-		"AD9361",
-		4,
-		61440000UL,
+		"4_CH_DEV",
+		4
 	},
 	{
-		"AD9364",
-		2,
-		122880000UL,
+		"2_CH_DEV",
+		2
 	},
 };
 #endif
