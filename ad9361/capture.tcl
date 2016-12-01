@@ -35,7 +35,7 @@ connect arm hw
 puts "Storing data into .csv files..."
 
 capture rx 0
-capture tx-mon 16384
+capture tx-mon [expr 16384 * 8]
 
 puts "Done."
 

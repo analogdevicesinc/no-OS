@@ -456,9 +456,10 @@ int main(void)
 #endif
 
 
-#ifdef TDD_SWITCH_STATE_EXAMPLE
 	uint32_t ensm_mode;
 	int cnt = 10;
+
+#define NUM_SAMPLES 16384
 
 	ad9361_set_rx_rf_port_input(ad9361_phy, TX_MON1_2);
 
@@ -478,23 +479,23 @@ int main(void)
 
 		mdelay(1000);
 		/* Let's RX */
-		adc_capture(16384, ADC_DDR_BASEADDR);
-
+		adc_capture(NUM_SAMPLES, ADC_DDR_BASEADDR);
+		mdelay(10);
 		gpio_set_value(GPIO_TXNRX_PIN, 1); /* TX On */
 		ad9361_set_trx_lo_powerdown(ad9361_phy, LO_OFF, LO_ON);
 
 		mdelay(1000);
 		/* Let's RX  and Get TX-MON*/
 
-		adc_capture(16384, ADC_DDR_BASEADDR + 16384);
+		adc_capture(NUM_SAMPLES, ADC_DDR_BASEADDR + (8 * NUM_SAMPLES));
+		mdelay(10);
 	}
 
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 2 * 16384);
+	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 2 * 8 * NUM_SAMPLES);
 
 	printf("Done.\n");
 	while (1);
 
-#endif
 
 #ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();
