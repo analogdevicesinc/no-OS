@@ -16,13 +16,16 @@ $(EXEC): system_top.hdf
 	@echo 'sdk setws sdk' > sdk/sdk.tcl
 	@echo 'sdk createhw -name hw -hwspec system_top.hdf' >> sdk/sdk.tcl
 	@echo 'sdk createbsp -name bsp -hwproject hw -proc ps7_cortexa9_0 -os standalone' >> sdk/sdk.tcl
-	@echo 'sdk createapp -name $(EXEC) -hwproject hw -proc ps7_cortexa9_0 -os standalone -lang C -app "Empty Application" -bsp bsp' >> sdk/sdk.tcl
-	@echo 'exit' >> sdk/sdk.tcl
-	@xsct -no-ini -quiet sdk/sdk.tcl
-	@cd sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v*/src && patch -p6 < "${WORKDIR}"/../../u-boot-elf-2015.2.patch
-	@cp -R $(SOURCES) "sdk/$(EXEC)/src/"
-	@echo 'sdk setws sdk' > sdk/sdk.tcl
-	@echo 'sdk projects -build' >> sdk/sdk.tcl
+	@echo "sdk createapp -name $(EXEC) -hwproject hw -proc ps7_cortexa9_0 -os standalone -lang C -app {Empty Application} -bsp bsp" >> sdk/sdk.tcl
+
+# apply ELF bsp patch
+	@echo "cd [glob sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v*/src]" >> sdk/sdk.tcl
+	@echo "exec >@stdout 2>@stderr patch -p6 < \"${WORKDIR}/../../u-boot-elf-2015.2.patch\"" >> sdk/sdk.tcl
+	@echo "cd \"${WORKDIR}\"" >> sdk/sdk.tcl
+
+# build project
+	@echo "exec cp -R $(SOURCES) sdk/$(EXEC)/src/" >> sdk/sdk.tcl
+	@echo "sdk projects -build" >> sdk/sdk.tcl
 	@echo 'exit' >> sdk/sdk.tcl
 	@xsct -no-ini -quiet sdk/sdk.tcl
 	@rm -rf .Xil *.log
