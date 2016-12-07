@@ -16,6 +16,7 @@ $(EXEC): system_top.hdf
 	@echo 'sdk setws sdk' > sdk/sdk.tcl
 	@echo 'sdk createhw -name hw -hwspec system_top.hdf' >> sdk/sdk.tcl
 	@echo 'sdk createbsp -name bsp -hwproject hw -proc ps7_cortexa9_0 -os standalone' >> sdk/sdk.tcl
+	@echo "sdk createapp -name fsbl -hwproject hw -proc ps7_cortexa9_0 -app {Zynq FSBL}" >> sdk/sdk.tcl
 	@echo "sdk createapp -name $(EXEC) -hwproject hw -proc ps7_cortexa9_0 -os standalone -lang C -app {Empty Application} -bsp bsp" >> sdk/sdk.tcl
 
 # apply ELF bsp patch
