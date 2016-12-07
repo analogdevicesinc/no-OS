@@ -38,7 +38,7 @@ int gpio_read(u32 pin, u32 expected) {
 
 	if (pin < 24) {
 		rdata = Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x122 * 0x4));
-		if ((rdata & 0xffffff) != ((expected & 0xffffff) | 0x2)) {
+		if ((rdata & 0xffffff) != (expected & 0xffffff)) {
 			xil_printf("Loopback error on pin %d: "
 				"wrote 0x%08x, read 0x%08x\r\n", (pin + 64),
 				expected, rdata);
