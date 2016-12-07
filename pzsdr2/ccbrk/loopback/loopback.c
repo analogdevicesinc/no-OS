@@ -58,6 +58,36 @@ void gpio_wait()
 	}
 }
 
+int lb_gt(u32 base_addr, u32 no_of_instances)
+{
+	int ret = XST_SUCCESS;
+	u32 m;
+	u32 rdata;
+
+	m = (0x1 << no_of_instances) -1;
+
+	Xil_Out32((base_addr + (0x4 * 0x4)), 0x0);
+	rdata = Xil_In32(base_addr + (0x5 * 0x4));
+	if (rdata != m) {
+		xil_printf("GT loopback error: received 0x%08x, expected 0x%08x\r\n", rdata, m);
+		ret = XST_FAILURE;
+	}
+
+	Xil_Out32((base_addr + (0x4 * 0x4)), 0x1);
+	usleep(1);
+
+	Xil_Out32((base_addr + (0x5 * 0x4)), m);
+	usleep(10);
+
+	rdata = Xil_In32(base_addr + (0x5 * 0x4));
+	if (rdata != 0) {
+		xil_printf("GT loopback error: received 0x%08x, expected 0x%08x\r\n", rdata, 0);
+		ret = XST_FAILURE;
+	}
+
+	return ret;
+}
+
 int main()
 {
 	int ret = XST_SUCCESS;
@@ -84,6 +114,8 @@ int main()
 		if (gpio_read(n, wdata) != XST_SUCCESS)
 			ret = XST_FAILURE;
 	}
+
+	ret = lb_gt(XPAR_AXI_PZ_XCVRLB_BASEADDR, 4);
 
 	return ret;
 }
