@@ -12,6 +12,30 @@
 
 #include <stdio.h>
 
+void delay_clk_count(u32 clk_count) {
+	u32 data_1;
+	u32 data_0;
+
+	Xil_Out32(0xf8f00208, 0x0);
+	Xil_Out32(0xf8f00200, 0x0);
+	Xil_Out32(0xf8f00204, 0x0);
+	Xil_Out32(0xf8f00208, 0x1);
+
+	while (1) {
+		data_1 = Xil_In32(0xf8f00204);
+		data_0 = Xil_In32(0xf8f00200);
+		if (data_1 == Xil_In32(0xf8f00204)) {
+			if (data_0 >= (clk_count*4)) {
+				break;
+			}
+		}
+	}
+}
+
+void delay_ms(u32 ms_count) {
+	delay_clk_count(ms_count*100000);
+}
+
 void gpio_write(u32 value) {
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x101 * 0x4)), value);
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x111 * 0x4)), value);
@@ -74,10 +98,10 @@ int lb_gt(u32 base_addr, u32 no_of_instances)
 	}
 
 	Xil_Out32((base_addr + (0x4 * 0x4)), 0x1);
-	usleep(1);
+	delay_ms(1);
 
 	Xil_Out32((base_addr + (0x5 * 0x4)), m);
-	usleep(10);
+	delay_ms(10);
 
 	rdata = Xil_In32(base_addr + (0x5 * 0x4));
 	if (rdata != 0) {
