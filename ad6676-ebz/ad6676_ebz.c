@@ -45,8 +45,7 @@
 #include "platform_drivers.h"
 #include "ad6676.h"
 #include "adc_core.h"
-#include "jesd204b_gt.h"
-#include "jesd204b_v51.h"
+#include "adxcvr_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -65,7 +64,7 @@
 #define AD6676_CORE_BASEADDR	XPAR_AXI_AD6676_CORE_BASEADDR
 #define AD6676_DMA_BASEADDR		XPAR_AXI_AD6676_DMA_BASEADDR
 #define AD6676_JESD_BASEADDR	XPAR_AXI_AD6676_JESD_BASEADDR
-#define AD6676_GT_BASEADDR		XPAR_AXI_AD6676_GT_BASEADDR
+#define AD6676_ADXCVR_BASEADDR  XPAR_AXI_AD6676_XCVR_BASEADDR
 #define GPIO_ADC_OEN			GPIO_OFFSET + 9
 #define GPIO_ADC_SELA			GPIO_OFFSET + 8
 #define GPIO_ADC_SELB			GPIO_OFFSET + 7
@@ -76,6 +75,8 @@
 #define GPIO_ADC_AGC2			GPIO_OFFSET + 2
 #define GPIO_ADC_AGC3			GPIO_OFFSET + 1
 #define GPIO_ADC_AGC4			GPIO_OFFSET + 0
+
+#define GPIO_JESD204_SYSREF             GPIO_OFFSET + 16
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -132,61 +133,60 @@ ad6676_init_param default_init_param = {
 	5,				// shuffler_thresh
 };
 
-jesd204b_state jesd204b_st = {
-	1,	// lanesync_enable
-	1,	// scramble_enable
-	0,	// sysref_always_enable
-	16,	// frames_per_multiframe
-	2,	// bytes_per_frame
-	1,	// subclass
-};
-
-jesd204b_gt_link gt_link = {
-	AD6676_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_RX,			// tx_or_rx
-	0,						// first_lane
-	1,						// last_lane
-	JESD204B_GT_CPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
-	0,						// sys_clk_sel
-	4,						// out_clk_sel
-	0,						// gth_or_gtx
-};
-
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	adc_core	ad6676_core;
-	ad6676_dev	*ad6676_device;
+	adc_core		ad6676_core;
+	ad6676_dev		*ad6676_device;
+	jesd204_core	        ad6676_jesd204;
+	adxcvr_core		ad6676_xcvr;
 
-	jesd204b_gt_initialize(gt_link);
+	ad6676_jesd204.base_addr = AD6676_JESD_BASEADDR;
+	ad6676_jesd204.rx_tx_n = 1;
+	ad6676_jesd204.octets_per_frame = 1;
+	ad6676_jesd204.frames_per_multiframe = 32;
+	ad6676_jesd204.subclass_mode = 1;
+       ad6676_jesd204.sys_ref = INTERN;
+       ad6676_jesd204.gpio_device.device_id = default_init_param.gpio_device_id;
+       ad6676_jesd204.gpio_device.type = default_init_param.gpio_type;
+       ad6676_jesd204.gpio_sysref = GPIO_JESD204_SYSREF;
 
+	ad6676_xcvr.base_addr = AD6676_ADXCVR_BASEADDR;
+	ad6676_xcvr.tx_enable = 0;
+	ad6676_xcvr.gth_enable = 0;
+	ad6676_xcvr.lpm_enable = 0;
+	ad6676_xcvr.out_clk_sel = 4;
+	ad6676_xcvr.sys_clk_sel = 0;
+
+	ad6676_xcvr.lane_rate_khz = 4000000;
+	ad6676_xcvr.ref_rate_khz = 200000;
+
+       // set up the device
 	ad6676_setup(&ad6676_device,
 				 default_init_param);
-
-	jesd204b_setup(AD6676_JESD_BASEADDR, jesd204b_st);
-
-	jesd204b_gt_setup(gt_link);
-	jesd204b_gt_en_sync_sysref(gt_link);
 
 	ad6676_core.adc_baseaddr = AD6676_CORE_BASEADDR;
 	ad6676_core.dmac_baseaddr = AD6676_DMA_BASEADDR;
 	ad6676_core.no_of_channels = 2;
 	ad6676_core.resolution = 16;
 
+       // set up the JESD link and bring up the core
+	jesd204_init(ad6676_jesd204);
+       adxcvr_init(ad6676_xcvr);
+       jesd204_gen_sysref(ad6676_jesd204);
 	adc_setup(ad6676_core);
+
+       // check JESD link status
+       jesd204_read_status(ad6676_jesd204);
 
 	/* Enable Ramp Test Mode */
 	ad6676_spi_write(ad6676_device, AD6676_TEST_GEN, TESTGENMODE_RAMP);
 
 	xil_printf("Start capturing data...\n\r");
 
-	adc_capture(ad6676_core, 16384, ADC_DDR_BASEADDR);
+	adc_capture(ad6676_core, 16384 * 2, ADC_DDR_BASEADDR);
 
 	xil_printf("Done.\n\r");
 
