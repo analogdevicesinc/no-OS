@@ -836,6 +836,7 @@ int32_t adxcvr_set_lpm_dfe_mode(adxcvr_core core,
 *******************************************************************************/
 int32_t jesd204_init(jesd204_core core)
 {
+
 	jesd204b_write(core, JESD204_REG_TRX_RESET,
 			JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
 	jesd204b_write(core, JESD204_REG_TRX_ILA_SUPPORT,
@@ -851,11 +852,33 @@ int32_t jesd204_init(jesd204_core core)
 	jesd204b_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
 			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
 
-	xil_printf("JESD204 successfully initialized.\n");
-
-	return 0;
+	xil_printf("JESD204 initialization done.\n");
+    return 0;
 }
 
+/***************************************************************************//**
+* @brief jesd204 generate SYSREF if necessar
+*******************************************************************************/
+int32_t jesd204_gen_sysref(jesd204_core core)
+{
+    int32_t ret;
+
+    if ((core.sys_ref == INTERN) && (core.subclass_mode >= 1)) {
+
+        ret = gpio_init(&(core.gpio_device));
+        if (ret < 0) {
+            xil_printf("JESD204 GPIO SYSREF configuration failed!\n\r");
+            return -1;
+        }
+
+        // generate SYS_REF
+
+        gpio_set_direction(&(core.gpio_device), core.gpio_sysref, 1);
+        gpio_set_value(&(core.gpio_device), core.gpio_sysref, 1);
+        mdelay(10);
+    }
+    return 0;
+}
 /***************************************************************************//**
 * @brief jesd204_read_status
 *******************************************************************************/
@@ -874,8 +897,23 @@ int32_t jesd204_read_status(jesd204_core core)
 	} while ((timeout--) && (status == JESD204_TRX_RESET));
 
 	if (status == JESD204_TRX_RESET) {
-		xil_printf("jesd_status: jesd reset not complete!\n");
+		xil_printf("jesd_status: jesd reset not completed!\n");
 		return -1;
+	}
+
+	if (core.subclass_mode >= 1) {
+	  timeout = 100;
+	  do {
+		mdelay(1);
+		jesd204b_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
+		status &= JESD204_TRX_SYSREF_CAPTURED;
+		xil_printf("SYNC STATUS: 0x%x\n\r", status);
+	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
+
+	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
+		xil_printf("jesd_status: missing SYS_REF!\n");
+		return -1;
+	  }
 	}
 
 	timeout = 100;
@@ -886,7 +924,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
 
 	if (status != JESD204_TRX_SYNC_ACHIEVED) {
-		xil_printf("jesd_status: out-of-sync!\n");
+		xil_printf("jesd_status: Link SYNC not achieved!\n");
 		return -1;
 	}
 
@@ -950,7 +988,7 @@ int32_t adxcvr_init(adxcvr_core core)
 	if (!core.tx_enable)
 		adxcvr_set_lpm_dfe_mode(core, core.lpm_enable);
 
-	adxcvr_clk_set_rate(core, core.lane_rate_khz, core.ref_rate_khz);
+	//adxcvr_clk_set_rate(core, core.lane_rate_khz, core.ref_rate_khz);
 
 	adxcvr_write(core, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 
