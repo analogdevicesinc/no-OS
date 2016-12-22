@@ -49,19 +49,19 @@ typedef enum {
 } refclk_ppm;
 
 typedef enum {
-        EXTERN,
-        INTERN
+	EXTERN,
+	INTERN
 } sys_ref_type;
 
 typedef struct {
-	uint32_t        base_addr;
-	uint8_t	        rx_tx_n;
-	uint8_t	        octets_per_frame;
-	uint8_t	        frames_per_multiframe;
-	uint8_t	        subclass_mode;
-        sys_ref_type    sys_ref;
-        gpio_device     gpio_device;
-        uint32_t        gpio_sysref;
+	uint32_t		base_addr;
+	uint8_t			rx_tx_n;
+	uint8_t			octets_per_frame;
+	uint8_t			frames_per_multiframe;
+	uint8_t			subclass_mode;
+	sys_ref_type	sysref_type;
+	gpio_device		gpio_device;
+	uint32_t		gpio_sysref;
 } jesd204_core;
 
 typedef struct {

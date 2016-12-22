@@ -863,11 +863,11 @@ int32_t jesd204_gen_sysref(jesd204_core core)
 {
     int32_t ret;
 
-    if ((core.sys_ref == INTERN) && (core.subclass_mode >= 1)) {
+    if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
 
         ret = gpio_init(&(core.gpio_device));
         if (ret < 0) {
-            xil_printf("JESD204 GPIO SYSREF configuration failed!\n\r");
+            xil_printf("JESD204 GPIO SYSREF configuration failed!\n");
             return -1;
         }
 
@@ -876,6 +876,7 @@ int32_t jesd204_gen_sysref(jesd204_core core)
         gpio_set_direction(&(core.gpio_device), core.gpio_sysref, 1);
         gpio_set_value(&(core.gpio_device), core.gpio_sysref, 1);
         mdelay(10);
+        gpio_set_value(&(core.gpio_device), core.gpio_sysref, 0);
     }
     return 0;
 }
@@ -907,13 +908,13 @@ int32_t jesd204_read_status(jesd204_core core)
 		mdelay(1);
 		jesd204b_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
 		status &= JESD204_TRX_SYSREF_CAPTURED;
-		xil_printf("SYNC STATUS: 0x%x\n\r", status);
 	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
 
 	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
 		xil_printf("jesd_status: missing SYS_REF!\n");
 		return -1;
-	  }
+	  } else
+		xil_printf("SYNC STATUS: 0x%x\n", status);
 	}
 
 	timeout = 100;
