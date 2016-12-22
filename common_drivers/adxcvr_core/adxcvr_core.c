@@ -989,7 +989,8 @@ int32_t adxcvr_init(adxcvr_core core)
 	if (!core.tx_enable)
 		adxcvr_set_lpm_dfe_mode(core, core.lpm_enable);
 
-	//adxcvr_clk_set_rate(core, core.lane_rate_khz, core.ref_rate_khz);
+	if (core.init_set_rate_enable)
+		adxcvr_clk_set_rate(core, core.lane_rate_khz, core.ref_rate_khz);
 
 	adxcvr_write(core, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 

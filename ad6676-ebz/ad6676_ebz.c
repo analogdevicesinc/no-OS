@@ -140,7 +140,7 @@ int main(void)
 {
 	adc_core		ad6676_core;
 	ad6676_dev		*ad6676_device;
-	jesd204_core	        ad6676_jesd204;
+	jesd204_core	ad6676_jesd204;
 	adxcvr_core		ad6676_xcvr;
 
 	ad6676_jesd204.base_addr = AD6676_JESD_BASEADDR;
@@ -148,10 +148,10 @@ int main(void)
 	ad6676_jesd204.octets_per_frame = 1;
 	ad6676_jesd204.frames_per_multiframe = 32;
 	ad6676_jesd204.subclass_mode = 1;
-       ad6676_jesd204.sys_ref = INTERN;
-       ad6676_jesd204.gpio_device.device_id = default_init_param.gpio_device_id;
-       ad6676_jesd204.gpio_device.type = default_init_param.gpio_type;
-       ad6676_jesd204.gpio_sysref = GPIO_JESD204_SYSREF;
+	ad6676_jesd204.sysref_type = INTERN;
+	ad6676_jesd204.gpio_device.device_id = default_init_param.gpio_device_id;
+	ad6676_jesd204.gpio_device.type = default_init_param.gpio_type;
+	ad6676_jesd204.gpio_sysref = GPIO_JESD204_SYSREF;
 
 	ad6676_xcvr.base_addr = AD6676_ADXCVR_BASEADDR;
 	ad6676_xcvr.tx_enable = 0;
@@ -159,27 +159,26 @@ int main(void)
 	ad6676_xcvr.lpm_enable = 0;
 	ad6676_xcvr.out_clk_sel = 4;
 	ad6676_xcvr.sys_clk_sel = 0;
-
+	ad6676_xcvr.init_set_rate_enable = 0;
 	ad6676_xcvr.lane_rate_khz = 4000000;
 	ad6676_xcvr.ref_rate_khz = 200000;
 
-       // set up the device
-	ad6676_setup(&ad6676_device,
-				 default_init_param);
+	// set up the device
+	ad6676_setup(&ad6676_device, default_init_param);
 
 	ad6676_core.adc_baseaddr = AD6676_CORE_BASEADDR;
 	ad6676_core.dmac_baseaddr = AD6676_DMA_BASEADDR;
 	ad6676_core.no_of_channels = 2;
 	ad6676_core.resolution = 16;
 
-       // set up the JESD link and bring up the core
+	// set up the JESD link and bring up the core
 	jesd204_init(ad6676_jesd204);
-       adxcvr_init(ad6676_xcvr);
-       jesd204_gen_sysref(ad6676_jesd204);
+	adxcvr_init(ad6676_xcvr);
+	jesd204_gen_sysref(ad6676_jesd204);
 	adc_setup(ad6676_core);
 
-       // check JESD link status
-       jesd204_read_status(ad6676_jesd204);
+	// check JESD link status
+	jesd204_read_status(ad6676_jesd204);
 
 	/* Enable Ramp Test Mode */
 	ad6676_spi_write(ad6676_device, AD6676_TEST_GEN, TESTGENMODE_RAMP);

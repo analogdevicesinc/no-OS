@@ -359,6 +359,7 @@ int main(void)
 	ad9144_xcvr.gth_enable = 0;
 	ad9144_xcvr.lpm_enable = 1;
 	ad9144_xcvr.out_clk_sel = 4;
+	ad9144_xcvr.init_set_rate_enable = 1;
 
 	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
 	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
@@ -376,6 +377,7 @@ int main(void)
 	ad9680_xcvr.gth_enable = 0;
 	ad9680_xcvr.lpm_enable = 1;
 	ad9680_xcvr.out_clk_sel = 4;
+	ad9680_xcvr.init_set_rate_enable = 1;
 
 	xil_printf ("Available sampling rates:\n");
 	xil_printf ("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");

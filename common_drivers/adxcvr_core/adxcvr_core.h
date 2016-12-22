@@ -65,17 +65,18 @@ typedef struct {
 } jesd204_core;
 
 typedef struct {
-	uint32_t	base_addr;
-	uint8_t		tx_enable;
-	refclk_ppm	ppm;
-	uint16_t	encoding;
-	uint8_t		gth_enable;
-	uint8_t		lpm_enable;
-	uint8_t		cpll_enable;
-	uint32_t	sys_clk_sel;
-	uint32_t	out_clk_sel;
-	uint32_t	lane_rate_khz;
-	uint32_t	ref_rate_khz;
+	uint32_t		base_addr;
+	uint8_t			tx_enable;
+	refclk_ppm		ppm;
+	uint16_t		encoding;
+	uint8_t			gth_enable;
+	uint8_t			lpm_enable;
+	uint8_t			cpll_enable;
+	uint32_t		sys_clk_sel;
+	uint32_t		out_clk_sel;
+	uint32_t		lane_rate_khz;
+	uint32_t		ref_rate_khz;
+	uint8_t			init_set_rate_enable;
 } adxcvr_core;
 
 /******************************************************************************/
