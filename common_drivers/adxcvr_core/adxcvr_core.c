@@ -876,7 +876,6 @@ int32_t jesd204_gen_sysref(jesd204_core core)
         gpio_set_direction(&(core.gpio_device), core.gpio_sysref, 1);
         gpio_set_value(&(core.gpio_device), core.gpio_sysref, 1);
         mdelay(10);
-        gpio_set_value(&(core.gpio_device), core.gpio_sysref, 0);
     }
     return 0;
 }
