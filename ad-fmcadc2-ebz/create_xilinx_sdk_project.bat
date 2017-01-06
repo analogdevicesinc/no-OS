@@ -1,6 +1,6 @@
 @echo off
 
-set XMD_DIR=C:\Xilinx\SDK\2015.4\bin
+set XMD_DIR=C:\Xilinx\SDK\2016.2\bin
 
 if "%~1"=="" goto user
 set hdf_destination="%~1"
