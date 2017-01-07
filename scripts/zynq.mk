@@ -5,14 +5,14 @@ ifeq ($(HDF-FILE),)
 endif
 
 ifeq ($(OS), Windows_NT)
-	SDK_CMD := xsct.bat 
+  XSCT_CMD := xsct.bat 
 else
-	SDK_CMD := xsct 
+  XSCT_CMD := xsct 
 endif
 
-SDK_LOG := xsct.log
-SDK_SCRIPT := $(M_SDK_DIR)/scripts/xsct.tcl
-XMD_SCRIPT := $(M_SDK_DIR)/scripts/xsdb.tcl
+XSCT_LOG := xsct.log
+XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
+XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
 
 CC_CMD_PREFIX = arm-none-eabi
 CC_CMD = $(CC_CMD_PREFIX)-gcc
@@ -21,8 +21,8 @@ CC_FLAGS += -DXILINX
 CC_FLAGS += -DZYNQ_PS7
 CC_FLAGS += -Ibsp/ps7_cortexa9_0/include
 CC_FLAGS += -Isw/src
-CC_FLAGS += -I$(M_SDK_DIR)/common
-CC_FLAGS += -I$(M_SDK_DIR)/drivers
+CC_FLAGS += -I$(NOOS-DIR)/common
+CC_FLAGS += -I$(NOOS-DIR)/drivers
 CC_FLAGS += $(addprefix -I, $(M_INC_DIRS))
 CC_FLAGS += -O2
 CC_FLAGS += -fmessage-length=0
@@ -46,12 +46,12 @@ ELF_FILE := sw.elf
 
 HDR_FILES := $(P_HDR_FILE)
 HDR_FILES += $(M_HDR_FILES)
-HDR_FILES += $(wildcard $(M_SDK_DIR)/common/*.h)
+HDR_FILES += $(wildcard $(NOOS-DIR)/common/*.h)
 HDR_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
 
 SRC_FILES := $(P_SRC_FILE)
 SRC_FILES += $(M_SRC_FILES)
-SRC_FILES += $(wildcard $(M_SDK_DIR)/common/*.c)
+SRC_FILES += $(wildcard $(NOOS-DIR)/common/*.c)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
 all: $(ELF_FILE)
@@ -61,9 +61,9 @@ $(ELF_FILE): $(LINKER_LIBRARY) $(HDR_FILES) $(SRC_FILES) $(LINKER_SCRIPT)
 	$(CC_CMD) $(CC_FLAGS) -o $@ $(SRC_FILES) $(LINKER_FLAGS)
 
 
-$(LINKER_LIBRARY): $(SDK_SCRIPT) $(HDF-FILE)
-	$(SDK_CMD) $(SDK_SCRIPT) $(HDF-FILE) > $(SDK_LOG) 2>&1
+$(LINKER_LIBRARY): $(XSCT_SCRIPT) $(HDF-FILE)
+	$(XSCT_CMD) $(XSCT_SCRIPT) $(HDF-FILE) > $(XSCT_LOG) 2>&1
 
 run: $(ELF_FILE)
-	xsdb $(XMD_SCRIPT) PS7
+	xsdb $(XSDB_SCRIPT) PS7
 
