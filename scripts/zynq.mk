@@ -21,8 +21,6 @@ CC_FLAGS += -DXILINX
 CC_FLAGS += -DZYNQ_PS7
 CC_FLAGS += -Ibsp/ps7_cortexa9_0/include
 CC_FLAGS += -Isw/src
-CC_FLAGS += -I$(NOOS-DIR)/common
-CC_FLAGS += -I$(NOOS-DIR)/drivers
 CC_FLAGS += $(addprefix -I, $(M_INC_DIRS))
 CC_FLAGS += -O2
 CC_FLAGS += -fmessage-length=0

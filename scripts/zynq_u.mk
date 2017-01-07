@@ -1,4 +1,4 @@
-# 7series zynq
+# 8series zynq
 
 ifeq ($(HDF-FILE),)
   HDF-FILE := $(M_HDF_FILE)
@@ -14,28 +14,22 @@ XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
 
-CC_CMD_PREFIX = arm-none-eabi
+CC_CMD_PREFIX = aarch64-none-elf
 CC_CMD = $(CC_CMD_PREFIX)-gcc
 CC_FLAGS := -Wall
 CC_FLAGS += -DXILINX
-CC_FLAGS += -DZYNQ_PS7
-CC_FLAGS += -Ibsp/ps7_cortexa9_0/include
+CC_FLAGS += -DZYNQ_PSU
+CC_FLAGS += -Ibsp/psu_cortexa53_0/include
 CC_FLAGS += -Isw/src
-CC_FLAGS += -I$(NOOS-DIR)/common
-CC_FLAGS += -I$(NOOS-DIR)/drivers
 CC_FLAGS += $(addprefix -I, $(M_INC_DIRS))
 CC_FLAGS += -O2
 CC_FLAGS += -fmessage-length=0
-CC_FLAGS += -mcpu=cortex-a9
-CC_FLAGS += -mfpu=vfpv3
-CC_FLAGS += -mfloat-abi=hard 
-CC_FLAGS += -Wl,-build-id=none -specs=sw/src/Xilinx.spec
 
 P_HDR_FILE := sw/src/platform.h
 P_SRC_FILE := sw/src/platform.c
 
 LINKER_SCRIPT := sw/src/lscript.ld
-LINKER_LIBRARY := bsp/ps7_cortexa9_0/lib/libxil.a
+LINKER_LIBRARY := bsp/psu_cortexa53_0/lib/libxil.a
 LINKER_LIBRARY_PATH := $(dir $(LINKER_LIBRARY))
 LINKER_FLAGS := -L$(LINKER_LIBRARY_PATH)
 LINKER_FLAGS += -Wl,-T
