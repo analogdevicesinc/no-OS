@@ -18,6 +18,7 @@ CC_CMD_PREFIX = aarch64-none-elf
 CC_CMD = $(CC_CMD_PREFIX)-gcc
 CC_FLAGS := -Wall
 CC_FLAGS += -DXILINX
+CC_FLAGS += -DZYNQ
 CC_FLAGS += -DZYNQ_PSU
 CC_FLAGS += -Ibsp/psu_cortexa53_0/include
 CC_FLAGS += -Isw/src

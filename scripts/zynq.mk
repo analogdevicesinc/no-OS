@@ -18,6 +18,7 @@ CC_CMD_PREFIX = arm-none-eabi
 CC_CMD = $(CC_CMD_PREFIX)-gcc
 CC_FLAGS := -Wall
 CC_FLAGS += -DXILINX
+CC_FLAGS += -DZYNQ
 CC_FLAGS += -DZYNQ_PS7
 CC_FLAGS += -Ibsp/ps7_cortexa9_0/include
 CC_FLAGS += -Isw/src
@@ -63,5 +64,5 @@ $(LINKER_LIBRARY): $(XSCT_SCRIPT) $(HDF-FILE)
 	$(XSCT_CMD) $(XSCT_SCRIPT) $(HDF-FILE) > $(XSCT_LOG) 2>&1
 
 run: $(ELF_FILE)
-	xsdb $(XSDB_SCRIPT) PS7
+	xsdb $(XSDB_SCRIPT) ZYNQ_PS7
 
