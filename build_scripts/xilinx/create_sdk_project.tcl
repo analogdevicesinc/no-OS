@@ -54,27 +54,15 @@ puts "FPGA CPU: $cpu_name"
 
 # create project
 cd $project_location
-sdk setws $project_location/workspace
 if {[file exists ./workspace/hw]} {
-	puts "hardware platform \"hw\" already exists"
-} else {
-	sdk createhw -name hw -hwspec $system_hdf_location
-	sdk createbsp -name bsp -hwproject hw -proc $cpu_name -os standalone
+  puts "Delete old workspace"
+	file delete -force -- $project_location/workspace
 }
-if {[file exists ./workspace/sw]} {
-	puts "The software platform already exists, rebuilding sorces"
-	source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl;
-	file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
-	sdk import_sources -name sw -path $project_destination
-	sdk clean_project -type app -name sw
+sdk setws $project_location/workspace
 
-	# delete the copy of source files
-	file delete -force -- $project_location/$input
-	puts "Done."
-	exit
-} else {
+sdk createhw -name hw -hwspec $system_hdf_location
+sdk createbsp -name bsp -hwproject hw -proc $cpu_name -os standalone
 sdk createapp -name sw -hwproject hw -proc $cpu_name -bsp bsp -os standalone -lang C -app {Empty Application}
-}
 
 # import sources
 source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl;
@@ -94,7 +82,6 @@ puts $fp1 $file_data
 close $fp1
 }
 
-sdk import_sources -name sw -path $project_destination
 sdk build_project -type all
 
 # delete the copy of source files
