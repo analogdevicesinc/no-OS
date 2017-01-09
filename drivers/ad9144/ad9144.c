@@ -40,16 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad9144.h"
 
 /***************************************************************************//**
 * @brief ad9144_spi_read
 *******************************************************************************/
-int32_t ad9144_spi_read(ad9144_dev *dev,
+int32_t ad9144_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data)
 {
@@ -60,7 +56,7 @@ int32_t ad9144_spi_read(ad9144_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -69,7 +65,7 @@ int32_t ad9144_spi_read(ad9144_dev *dev,
 /***************************************************************************//**
 * @brief ad9144_spi_write
 *******************************************************************************/
-int32_t ad9144_spi_write(ad9144_dev *dev,
+int32_t ad9144_spi_write(spi_device *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data)
 {
@@ -80,7 +76,7 @@ int32_t ad9144_spi_write(ad9144_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 
 	return ret;
 }
@@ -88,40 +84,19 @@ int32_t ad9144_spi_write(ad9144_dev *dev,
 /***************************************************************************//**
 * @brief ad9144_setup
 *******************************************************************************/
-int32_t ad9144_setup(ad9144_dev **device,
+int32_t ad9144_setup(spi_device *dev,
 					 ad9144_init_param init_param)
 {
-	ad9144_dev *dev;
 	uint8_t chip_id;
 	uint8_t scratchpad;
 	uint8_t pll_stat;
 	uint8_t cal_stat;
 	int32_t ret;
 
-	dev = (ad9144_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	/* SPI */
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
-
-	dev->lane_rate_khz = init_param.lane_rate_khz;
-
-	/* Device Settings */
-	dev->jesd_xbar_lane0_sel = init_param.jesd_xbar_lane0_sel;
-	dev->jesd_xbar_lane1_sel = init_param.jesd_xbar_lane1_sel;
-	dev->jesd_xbar_lane2_sel = init_param.jesd_xbar_lane2_sel;
-	dev->jesd_xbar_lane3_sel = init_param.jesd_xbar_lane3_sel;
-
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
+		xil_printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
 		return -1;
 	}
 
@@ -129,7 +104,7 @@ int32_t ad9144_setup(ad9144_dev **device,
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
 	if(scratchpad != 0xAD)
 	{
-		printf("Error: scratchpad (0x%x).\n\r", scratchpad);
+		xil_printf("Error: scratchpad (0x%x).\n\r", scratchpad);
 		return -1;
 	}
 
@@ -192,19 +167,19 @@ int32_t ad9144_setup(ad9144_dev **device,
 	ad9144_spi_write(dev, 0x2a7, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x2ae, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x314, 0x01);	// pclk == qbd master clock
-	if (dev->lane_rate_khz < 2880000)
+	if (init_param.lane_rate_khz < 2880000)
 		ad9144_spi_write(dev, 0x230, 0x2A);		// CDR_OVERSAMP
 	else
-		if (dev->lane_rate_khz > 5520000)
+		if (init_param.lane_rate_khz > 5520000)
 			ad9144_spi_write(dev, 0x230, 0x28);	// ENHALFRATE
 		else
 			ad9144_spi_write(dev, 0x230, 0x08);
 	ad9144_spi_write(dev, 0x206, 0x00);	// cdr reset
 	ad9144_spi_write(dev, 0x206, 0x01);	// cdr reset
-	if (dev->lane_rate_khz < 2880000)
+	if (init_param.lane_rate_khz < 2880000)
 		ad9144_spi_write(dev, 0x289, 0x06);		// data-rate < 2.88 Gbps
 	else
-		if (dev->lane_rate_khz > 5520000)
+		if (init_param.lane_rate_khz > 5520000)
 			ad9144_spi_write(dev, 0x289, 0x04);	// data-rate > 5.52 Gbps
 		else
 			ad9144_spi_write(dev, 0x289, 0x05);
@@ -213,16 +188,16 @@ int32_t ad9144_setup(ad9144_dev **device,
 	mdelay(20);
 
 	ad9144_spi_read(dev, 0x281, &pll_stat);
-	printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
+	xil_printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9144_spi_write(dev, 0x268, 0x62);	// equalizer
 
 	// cross-bar
 
-	ad9144_spi_write(dev, REG_XBAR_LN_0_1, SRC_LANE0(dev->jesd_xbar_lane0_sel) |
-		SRC_LANE1(dev->jesd_xbar_lane1_sel));	// lane selects
-	ad9144_spi_write(dev, REG_XBAR_LN_2_3, SRC_LANE2(dev->jesd_xbar_lane2_sel) |
-		SRC_LANE3(dev->jesd_xbar_lane3_sel));	// lane selects
+	ad9144_spi_write(dev, REG_XBAR_LN_0_1, SRC_LANE0(init_param.jesd_xbar_lane0_sel) |
+		SRC_LANE1(init_param.jesd_xbar_lane1_sel));	// lane selects
+	ad9144_spi_write(dev, REG_XBAR_LN_2_3, SRC_LANE2(init_param.jesd_xbar_lane2_sel) |
+		SRC_LANE3(init_param.jesd_xbar_lane3_sel));	// lane selects
 
 	// data link layer
 
@@ -247,17 +222,15 @@ int32_t ad9144_setup(ad9144_dev **device,
 
 	ad9144_spi_write(dev, 0x0e8, 0x01);	// read dac-0
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	xil_printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(dev, 0x0e8, 0x02);	// read dac-1
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	xil_printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
 
 	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
-	*device = dev;
-
-	printf("AD9144 successfully initialized.\n\r");
+	xil_printf("AD9144 successfully initialized.\n\r");
 
 	return ret;
 }

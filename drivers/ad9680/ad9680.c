@@ -40,16 +40,13 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <stdlib.h>
-#include <xil_printf.h>
-#include "platform_drivers.h"
+
 #include "ad9680.h"
 
 /***************************************************************************//**
 * @brief ad9680_spi_read
 *******************************************************************************/
-int32_t ad9680_spi_read(ad9680_dev *dev,
+int32_t ad9680_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data)
 {
@@ -60,7 +57,7 @@ int32_t ad9680_spi_read(ad9680_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -69,7 +66,7 @@ int32_t ad9680_spi_read(ad9680_dev *dev,
 /***************************************************************************//**
 * @brief ad9680_spi_write
 *******************************************************************************/
-int32_t ad9680_spi_write(ad9680_dev *dev,
+int32_t ad9680_spi_write(spi_device *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data)
 {
@@ -80,7 +77,7 @@ int32_t ad9680_spi_write(ad9680_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 
 	return ret;
 }
@@ -88,26 +85,12 @@ int32_t ad9680_spi_write(ad9680_dev *dev,
 /***************************************************************************//**
 * @brief ad9680_setup
 *******************************************************************************/
-int32_t ad9680_setup(ad9680_dev **device,
+int32_t ad9680_setup(spi_device *dev,
 					 ad9680_init_param init_param)
 {
-	ad9680_dev *dev;
 	uint8_t chip_id;
 	uint8_t pll_stat;
 	int32_t ret;
-
-	dev = (ad9680_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
-
-	dev->lane_rate_khz = init_param.lane_rate_khz;
 
 	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_A, 0x81);	// RESET
 	mdelay(5);
@@ -124,7 +107,7 @@ int32_t ad9680_setup(ad9680_dev **device,
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN, 0x11);	// serdes-1 = lane 1
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN, 0x22);	// serdes-2 = lane 2
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN, 0x33);	// serdes-3 = lane 3
-	if (dev->lane_rate_khz < 6250000)
+	if (init_param.lane_rate_khz < 6250000)
 		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x10);	// low line rate mode must be enabled
 	else
 		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x00);	// low line rate mode must be disabled
@@ -139,8 +122,6 @@ int32_t ad9680_setup(ad9680_dev **device,
 
 	ad9680_spi_read(dev, AD9680_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
 	xil_printf("AD9680 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
-
-	*device = dev;
 
 	xil_printf("AD9680 successfully initialized.\n");
 

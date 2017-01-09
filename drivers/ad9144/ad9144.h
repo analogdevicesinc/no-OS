@@ -42,7 +42,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
+#include <altxil_base.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1341,23 +1341,8 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
-	/* SPI */
-	spi_device	spi_dev;
-	/* Device Settings */
-	uint8_t		jesd_xbar_lane0_sel;
-	uint8_t		jesd_xbar_lane1_sel;
-	uint8_t		jesd_xbar_lane2_sel;
-	uint8_t		jesd_xbar_lane3_sel;
-	uint32_t	lane_rate_khz;
-} ad9144_dev;
 
 typedef struct {
-	/* SPI */
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
 	/* Device Settings */
 	uint8_t		jesd_xbar_lane0_sel;
 	uint8_t		jesd_xbar_lane1_sel;
@@ -1369,9 +1354,9 @@ typedef struct {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9144_setup(ad9144_dev **device,
+int32_t ad9144_setup(spi_device *dev,
 					 ad9144_init_param init_param);
-int32_t ad9144_spi_read(ad9144_dev *dev,
+int32_t ad9144_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data);
 

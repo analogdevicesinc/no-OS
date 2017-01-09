@@ -41,11 +41,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <math.h>
-#include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad9523.h"
-#include <xil_printf.h>
 
 /******************************************************************************/
 /************************ Local variables and types ***************************/
@@ -78,7 +74,7 @@ enum
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
-int32_t ad9523_spi_read(ad9523_dev *dev,
+int32_t ad9523_spi_read(spi_device *dev,
 						uint32_t reg_addr,
 						uint32_t *reg_data)
 {
@@ -92,7 +88,7 @@ int32_t ad9523_spi_read(ad9523_dev *dev,
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
-		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
+		ret |= ad_spi_xfer(dev, buf, 3);
 		reg_addr--;
 		*reg_data <<= 8;
 		*reg_data |= buf[2];
@@ -109,7 +105,7 @@ int32_t ad9523_spi_read(ad9523_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_spi_write(ad9523_dev *dev,
+int32_t ad9523_spi_write(spi_device *dev,
 						 uint32_t reg_addr,
 						 uint32_t reg_data)
 {
@@ -122,7 +118,7 @@ int32_t ad9523_spi_write(ad9523_dev *dev,
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9523_TRANSF_LEN(reg_addr) - index - 1) * 8)) & 0xFF;
-		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
+		ret |= ad_spi_xfer(dev, buf, 3);
 		reg_addr--;
 	}
 
@@ -134,7 +130,7 @@ int32_t ad9523_spi_write(ad9523_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_io_update(ad9523_dev *dev)
+int32_t ad9523_io_update(spi_device *dev)
 {
     return ad9523_spi_write(dev, AD9523_IO_UPDATE, AD9523_IO_UPDATE_EN);
 }
@@ -147,7 +143,7 @@ int32_t ad9523_io_update(ad9523_dev *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_vco_out_map(ad9523_dev *dev,
+int32_t ad9523_vco_out_map(spi_device *dev,
 						   uint32_t ch,
 						   uint32_t out)
 {
@@ -208,7 +204,7 @@ int32_t ad9523_vco_out_map(ad9523_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_sync(ad9523_dev *dev)
+int32_t ad9523_sync(spi_device *dev)
 {
 	int32_t ret, tmp;
 	uint32_t reg_data;
@@ -240,12 +236,10 @@ int32_t ad9523_sync(ad9523_dev *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9523_setup(ad9523_dev **device,
-					 ad9523_init_param init_param,
+int32_t ad9523_setup(spi_device *dev,
 					 struct ad9523_platform_data ad9523_pdata)
 
 {
-	ad9523_dev *dev;
 	struct ad9523_state *st = &ad9523_st;
     struct ad9523_platform_data *pdata = &ad9523_pdata;
 	struct ad9523_channel_spec *chan;
@@ -254,16 +248,6 @@ int32_t ad9523_setup(ad9523_dev **device,
 	uint32_t reg_data;
 	uint32_t version_id;
 
-	dev = (ad9523_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
 
 	mdelay(1);
 	ret = ad9523_spi_write(dev, AD9523_SERIAL_PORT_CONFIG,
@@ -490,8 +474,6 @@ int32_t ad9523_setup(ad9523_dev **device,
 	ret = ad9523_sync(dev);
 	if (ret < 0)
 		return ret;
-
-	*device = dev;
 
 	xil_printf("AD9523 successfully initialized.\n\r");
 

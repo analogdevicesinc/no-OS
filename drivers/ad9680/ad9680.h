@@ -42,7 +42,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
+#include <altxil_base.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -69,29 +69,21 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
-	spi_device	spi_dev;
-	uint32_t	lane_rate_khz;
-} ad9680_dev;
 
 typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
 	uint32_t	lane_rate_khz;
 } ad9680_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9680_spi_read(ad9680_dev *dev,
+int32_t ad9680_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data);
-int32_t ad9680_spi_write(ad9680_dev *dev,
+int32_t ad9680_spi_write(spi_device *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data);
-int32_t ad9680_setup(ad9680_dev **device,
+int32_t ad9680_setup(spi_device *dev,
 					 ad9680_init_param init_param);
 
 #endif

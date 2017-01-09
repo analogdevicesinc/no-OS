@@ -43,7 +43,7 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include <stdint.h>
+#include <altxil_base.h>
 
 /******************************************************************************/
 /****************************** AD9523 ****************************************/
@@ -462,38 +462,26 @@ struct ad9523_platform_data
     char name[16];
 };
 
-typedef struct {
-	spi_device	spi_dev;
-} ad9523_dev;
-
-typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
-} ad9523_init_param;
-
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Reads the value of the selected register. */
-int32_t ad9523_spi_read(ad9523_dev *dev,
+int32_t ad9523_spi_read(spi_device *dev,
 						uint32_t reg_addr,
 						uint32_t *reg_data);
 /* Writes a value to the selected register. */
-int32_t ad9523_spi_write(ad9523_dev *dev,
+int32_t ad9523_spi_write(spi_device *dev,
 						 uint32_t reg_addr,
 						 uint32_t reg_data);
 /* Updates the AD9523 configuration */
-int32_t ad9523_io_update(ad9523_dev *dev);
+int32_t ad9523_io_update(spi_device *dev);
 /* Sets the clock provider for selected channel. */
-int32_t ad9523_vco_out_map(ad9523_dev *dev,
+int32_t ad9523_vco_out_map(spi_device *dev,
 						   uint32_t ch,
 						   uint32_t out);
 /* Updates the AD9523 configuration. */
-int32_t ad9523_sync(ad9523_dev *dev);
+int32_t ad9523_sync(spi_device *dev);
 /* Initializes the AD9523. */
-int32_t ad9523_setup(ad9523_dev **device,
-					 ad9523_init_param init_param,
+int32_t ad9523_setup(spi_device *dev,
 					 struct ad9523_platform_data ad9523_pdata);
 #endif // __AD9523_H__
