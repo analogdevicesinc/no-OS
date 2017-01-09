@@ -1,6 +1,6 @@
 @echo off
 
-set XMD_DIR=C:\Xilinx\SDK\2015.2\bin
+set XMD_DIR=C:\Xilinx\SDK\2016.2\bin
 
 if "%~1"=="" goto user
 set hdf_destination="%~1"
@@ -19,6 +19,6 @@ echo "example => C:/my_workspaces Note: use "/" instead of "\""
 set /p build_destination=
 :end
 
-%XMD_DIR%\xsct -s ..\build_scripts\xilinx\create_sdk_project.tcl %hdf_destination% %build_destination%
+%XMD_DIR%\xsct ..\build_scripts\xilinx\create_sdk_project.tcl %hdf_destination% %build_destination%
 
 echo Done

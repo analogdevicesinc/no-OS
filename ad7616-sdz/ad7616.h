@@ -138,6 +138,7 @@ typedef struct {
 	ad7616_range		va[8];
 	ad7616_range		vb[8];
 	ad7616_osr			osr;
+	adc_core			*core;
 } ad7616_dev;
 
 typedef struct {
@@ -156,7 +157,6 @@ typedef struct {
 	int8_t				gpio_os1;
 	int8_t				gpio_os2;
 	/* Device Settings */
-	ad7616_interface	interface;
 	ad7616_mode			mode;
 	ad7616_range		va[8];
 	ad7616_range		vb[8];
@@ -192,16 +192,6 @@ int32_t ad7616_spi_read(ad7616_dev *dev,
 int32_t ad7616_spi_write(ad7616_dev *dev,
 						 uint8_t reg_addr,
 						 uint16_t reg_data);
-/* SPI read from device using a mask. */
-int32_t ad7616_spi_read_mask(ad7616_dev *dev,
-							 uint8_t reg_addr,
-							 uint16_t mask,
-							 uint16_t *data);
-/* SPI write to device using a mask. */
-int32_t ad7616_spi_write_mask(ad7616_dev *dev,
-							  uint8_t reg_addr,
-							  uint16_t mask,
-							  uint16_t data);
 /* PAR read from device. */
 int32_t ad7616_par_read(ad7616_dev *dev,
 						uint8_t reg_addr,
@@ -210,16 +200,6 @@ int32_t ad7616_par_read(ad7616_dev *dev,
 int32_t ad7616_par_write(ad7616_dev *dev,
 						 uint8_t reg_addr,
 						 uint16_t reg_data);
-/* PAR read from device using a mask. */
-int32_t ad7616_par_read_mask(ad7616_dev *dev,
-							 uint8_t reg_addr,
-							 uint16_t mask,
-							 uint16_t *data);
-/* PAR write to device using a mask. */
-int32_t ad7616_par_write_mask(ad7616_dev *dev,
-							  uint8_t reg_addr,
-							  uint16_t mask,
-							  uint16_t data);
 /* Perform a full reset of the device. */
 int32_t ad7616_reset(ad7616_dev *dev);
 /* Set the analog input range for the selected analog input channel. */
@@ -234,5 +214,6 @@ int32_t ad7616_set_oversampling_ratio(ad7616_dev *dev,
 									  ad7616_osr osr);
 /* Initialize the device. */
 int32_t ad7616_setup(ad7616_dev **device,
+					 adc_core *core,
 					 ad7616_init_param init_param);
 #endif

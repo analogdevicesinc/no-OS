@@ -3,7 +3,7 @@
 * @brief Header file of AD9144 Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2016(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -1338,19 +1338,41 @@
 
 #define AD9144_CHIP_ID							0x44
 
-typedef struct
-{
-	uint8_t jesd_xbar_lane0_sel;
-	uint8_t jesd_xbar_lane1_sel;
-	uint8_t jesd_xbar_lane2_sel;
-	uint8_t jesd_xbar_lane3_sel;
-}ad9144_init_param;
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	/* SPI */
+	spi_device	spi_dev;
+	/* Device Settings */
+	uint8_t		jesd_xbar_lane0_sel;
+	uint8_t		jesd_xbar_lane1_sel;
+	uint8_t		jesd_xbar_lane2_sel;
+	uint8_t		jesd_xbar_lane3_sel;
+	uint32_t	lane_rate_khz;
+} ad9144_dev;
+
+typedef struct {
+	/* SPI */
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+	/* Device Settings */
+	uint8_t		jesd_xbar_lane0_sel;
+	uint8_t		jesd_xbar_lane1_sel;
+	uint8_t		jesd_xbar_lane2_sel;
+	uint8_t		jesd_xbar_lane3_sel;
+	uint32_t	lane_rate_khz;
+} ad9144_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9144_setup(uint32_t spi_device_id, uint8_t slave_select,
-						ad9144_init_param init_param);
-int32_t ad9144_spi_read(uint16_t reg_addr, uint8_t *reg_data);
+int32_t ad9144_setup(ad9144_dev **device,
+					 ad9144_init_param init_param);
+int32_t ad9144_spi_read(ad9144_dev *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
 
 #endif

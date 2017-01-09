@@ -44,6 +44,7 @@
 #include <xil_printf.h>
 #include "xparameters.h"
 #include "adc_core.h"
+#include "platform_drivers.h"
 #include "ad9434.h"
 
 /******************************************************************************/
@@ -54,24 +55,32 @@
 #define AD9434_DMA_BASEADDR		XPAR_AXI_AD9434_DMA_BASEADDR
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 
+ad9434_init_param default_ad9434_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+	PS7_SPI,		// spi_type
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
+	ad9434_dev	*ad9434_device;
+	adc_core	ad9434_core;
+
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-
-	adc_core ad9434_core;
 
 	ad9434_core.adc_baseaddr = AD9434_CORE_BASEADDR;
 	ad9434_core.dmac_baseaddr = AD9434_DMA_BASEADDR;
 	ad9434_core.no_of_channels = 1;
 	adc_setup(ad9434_core);
 
-	ad9434_setup(SPI_DEVICE_ID, 0, ad9434_core);
+	ad9434_setup(&ad9434_device, default_ad9434_init_param, ad9434_core);
 
-	ad9434_testmode_set(0, TESTMODE_ONE_ZERO_TOGGLE);
+	ad9434_testmode_set(ad9434_device, 0, TESTMODE_ONE_ZERO_TOGGLE);
 
 	adc_capture(ad9434_core, 32768, ADC_DDR_BASEADDR);
 

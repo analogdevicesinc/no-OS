@@ -3,7 +3,7 @@
 * @brief Header file of AD9152 Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2015(c) Analog Devices, Inc.
+* Copyright 2015-2016(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -1338,8 +1338,28 @@
 
 #define AD9152_CHIP_ID							0x52
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	/* SPI */
+	spi_device	spi_dev;
+	/* Device Settings */
+	uint8_t jesd_xbar_lane0_sel;
+	uint8_t jesd_xbar_lane1_sel;
+	uint8_t jesd_xbar_lane2_sel;
+	uint8_t jesd_xbar_lane3_sel;
+	uint8_t lanes2_3_swap_data;
+} ad9152_dev;
+
 typedef struct
 {
+	/* SPI */
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+	/* Device Settings */
 	uint8_t jesd_xbar_lane0_sel;
 	uint8_t jesd_xbar_lane1_sel;
 	uint8_t jesd_xbar_lane2_sel;
@@ -1350,7 +1370,7 @@ typedef struct
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9152_setup(uint32_t spi_device_id, uint8_t slave_select,
-						ad9152_init_param init_param);
+int32_t ad9152_setup(ad9152_dev **device,
+					 ad9152_init_param init_param);
 
 #endif

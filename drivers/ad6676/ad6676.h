@@ -352,6 +352,25 @@ struct ad6676_phy {
 
 typedef struct
 {
+	/* GPIO */
+	gpio_type	gpio_type;
+	uint32_t	gpio_device_id;
+	int32_t		gpio_adc_oen;
+	int32_t		gpio_adc_sela;
+	int32_t		gpio_adc_selb;
+	int32_t		gpio_adc_s0;
+	int32_t		gpio_adc_s1;
+	int32_t		gpio_adc_resetb;
+	int32_t		gpio_adc_agc1;
+	int32_t		gpio_adc_agc2;
+	int32_t		gpio_adc_agc3;
+	int32_t		gpio_adc_agc4;
+	/* SPI */
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+	/* Device Settings */
 	uint32_t	reference_clk_rate;
 	uint8_t		spi_3wire_enable;
 	/* Base Configuration */
@@ -377,34 +396,39 @@ typedef struct
 	/* Shuffler Configuration */
 	uint8_t		shuffler_control;
 	uint8_t		shuffler_thresh;
-	/* GPIOs */
-	int32_t		gpio_adc_oen;
-	int32_t		gpio_adc_sela;
-	int32_t		gpio_adc_selb;
-	int32_t		gpio_adc_s0;
-	int32_t		gpio_adc_s1;
-	int32_t		gpio_adc_resetb;
-	int32_t		gpio_adc_agc1;
-	int32_t		gpio_adc_agc2;
-	int32_t		gpio_adc_agc3;
-	int32_t		gpio_adc_agc4;
 }ad6676_init_param;
+
+typedef struct {
+	spi_device			spi_dev;
+	gpio_device			gpio_dev;
+	struct ad6676_phy	*phy;
+} ad6676_dev;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad6676_spi_read(uint16_t reg_addr, uint8_t *reg_data);
-int32_t ad6676_spi_write(uint16_t reg_addr, uint8_t reg_data);
-int32_t ad6676_setup(uint32_t spi_device_id,
-					 uint32_t gpio_device_id,
-					 uint8_t slave_select,
-					 ad6676_init_param *init_param);
-int32_t ad6676_set_if_frequency(uint32_t if_freq_hz);
-int32_t ad6676_get_if_frequency(uint32_t *if_freq_hz);
-int32_t ad6676_set_if_bandwidth(uint32_t if_bw_hz);
-int32_t ad6676_get_if_bandwidth(uint32_t *if_bw_hz);
-int32_t ad6676_set_scale(uint8_t scale);
-int32_t ad6676_get_scale(uint8_t *scale);
-int32_t ad6676_set_attenuation(uint8_t attenuation);
-int32_t ad6676_get_attenuation(uint8_t *attenuation);
+int32_t ad6676_spi_read(ad6676_dev *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
+int32_t ad6676_spi_write(ad6676_dev *dev,
+						 uint16_t reg_addr,
+						 uint8_t reg_data);
+int32_t ad6676_setup(ad6676_dev **device,
+					 ad6676_init_param init_param);
+int32_t ad6676_set_if_frequency(ad6676_dev *dev,
+								uint32_t if_freq_hz);
+int32_t ad6676_get_if_frequency(ad6676_dev *dev,
+								uint32_t *if_freq_hz);
+int32_t ad6676_set_if_bandwidth(ad6676_dev *dev,
+								uint32_t if_bw_hz);
+int32_t ad6676_get_if_bandwidth(ad6676_dev *dev,
+								uint32_t *if_bw_hz);
+int32_t ad6676_set_scale(ad6676_dev *dev,
+						 uint8_t scale);
+int32_t ad6676_get_scale(ad6676_dev *dev,
+						 uint8_t *scale);
+int32_t ad6676_set_attenuation(ad6676_dev *dev,
+							   uint8_t attenuation);
+int32_t ad6676_get_attenuation(ad6676_dev *dev,
+							   uint8_t *attenuation);
 #endif

@@ -3,7 +3,7 @@
 * @brief Header file of DAC Core Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
-* Copyright 2014(c) Analog Devices, Inc.
+* Copyright 2014-2016(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -66,13 +66,13 @@
 #define DAC_ENABLE						(1 << 0) /* v7.0 */
 #define DAC_SYNC						(1 << 0) /* v8.0 */
 
-#define ADI_REG_CNTRL_2					0x0048
-#define ADI_PAR_TYPE					(1 << 7)
-#define ADI_PAR_ENB						(1 << 6)
-#define ADI_R1_MODE						(1 << 5)
-#define ADI_DATA_FORMAT					(1 << 4)
-#define ADI_DATA_SEL(x)					(((x) & 0xF) << 0) /* v7.0 */
-#define ADI_TO_DATA_SEL(x)				(((x) >> 0) & 0xF) /* v7.0 */
+#define DAC_REG_CNTRL_2					0x0048
+#define DAC_PAR_TYPE					(1 << 7)
+#define DAC_PAR_ENB						(1 << 6)
+#define DAC_R1_MODE						(1 << 5)
+#define DAC_DATA_FORMAT					(1 << 4)
+#define DAC_DATA_SEL(x)					(((x) & 0xF) << 0) /* v7.0 */
+#define DAC_TO_DATA_SEL(x)				(((x) >> 0) & 0xF) /* v7.0 */
 
 #define DAC_REG_RATECNTRL				0x004C
 #define DAC_RATE(x)						(((x) & 0xFF) << 0)
@@ -106,14 +106,88 @@
 #define DAC_DAC_DDS_SEL(x)				(((x) & 0xF) << 0)
 #define DAC_TO_DAC_DDS_SEL(x)			(((x) >> 0) & 0xF)
 
+#define DAC_DMAC_REG_IRQ_MASK			0x80
+#define DAC_DMAC_REG_IRQ_PENDING		0x84
+#define DAC_DMAC_REG_IRQ_SOURCE			0x88
+#define DAC_DMAC_REG_CTRL				0x400
+#define DAC_DMAC_REG_TRANSFER_ID		0x404
+#define DAC_DMAC_REG_START_TRANSFER		0x408
+#define DAC_DMAC_REG_FLAGS				0x40c
+#define DAC_DMAC_REG_DEST_ADDRESS		0x410
+#define DAC_DMAC_REG_SRC_ADDRESS		0x414
+#define DAC_DMAC_REG_X_LENGTH			0x418
+#define DAC_DMAC_REG_Y_LENGTH			0x41c
+#define DAC_DMAC_REG_DEST_STRIDE		0x420
+#define DAC_DMAC_REG_SRC_STRIDE			0x424
+#define DAC_DMAC_REG_TRANSFER_DONE		0x428
+#define DAC_DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
+#define DAC_DMAC_REG_STATUS				0x430
+#define DAC_DMAC_REG_CURRENT_DEST_ADDR	0x434
+#define DAC_DMAC_REG_CURRENT_SRC_ADDR	0x438
+#define DAC_DMAC_REG_DBG0				0x43c
+#define DAC_DMAC_REG_DBG1				0x440
+
+#define DAC_DMAC_ENABLE					(1 << 0)
+#define DAC_DMAC_PAUSE					(1 << 1)
+
+#define DAC_DMAC_IRQ_SOT				(1 << 0)
+#define DAC_DMAC_IRQ_EOT				(1 << 1)
+
+#define DAC_DMAC_FLAGS_CYCLIC			(1 << 0)
+#define DAC_DMAC_FLAGS_TLAST			(1 << 1)
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	uint32_t dac_baseaddr;
+	uint32_t dmac_baseaddr;
+	uint8_t	 no_of_channels;
+	uint8_t	 resolution;
+	uint8_t	 fifo_present;
+} dac_core;
+
+typedef enum {
+	DAC_SRC_DDS,
+	DAC_SRC_SED,
+	DAC_SRC_DMA,
+	DAC_SRC_ZERO,	// Output 0
+	DAC_SRC_PN7,
+	DAC_SRC_PN15,
+	DAC_SRC_PN23,
+	DAC_SRC_PN31,
+	DAC_SRC_LB,		// Loopback data (ADC)
+	DAC_SRC_PNXX,	// Device specific
+} dac_data_src;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t dac_read(uint32_t reg_addr, uint32_t *reg_data);
-int32_t dac_write(uint32_t reg_addr, uint32_t reg_data);
-int32_t dac_setup(uint32_t baseaddr);
-int32_t dds_set_frequency(uint32_t chan, uint32_t freq);
-int32_t dds_set_phase(uint32_t chan, uint32_t phase);
-int32_t dds_set_scale(uint32_t chan, int32_t scale_micro_units);
-
+int32_t dac_read(dac_core core,
+				 uint32_t reg_addr,
+				 uint32_t *reg_data);
+int32_t dac_write(dac_core core,
+				  uint32_t reg_addr,
+				  uint32_t reg_data);
+int32_t dac_dmac_read(dac_core core,
+					  uint32_t reg_addr,
+					  uint32_t *reg_data);
+int32_t dac_dmac_write(dac_core core,
+					   uint32_t reg_addr,
+					   uint32_t reg_data);
+int32_t dac_setup(dac_core core);
+int32_t dds_set_frequency(dac_core core,
+						  uint32_t chan,
+						  uint32_t freq);
+int32_t dds_set_phase(dac_core core,
+					  uint32_t chan,
+					  uint32_t phase);
+int32_t dds_set_scale(dac_core core,
+					  uint32_t chan,
+					  int32_t scale_micro_units);
+int32_t dac_data_src_sel(dac_core core,
+						 int32_t chan,
+						 dac_data_src src);
+int32_t dac_dma_setup(dac_core core,
+					  uint32_t start_address);
 #endif

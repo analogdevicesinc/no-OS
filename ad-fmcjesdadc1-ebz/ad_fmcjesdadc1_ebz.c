@@ -43,10 +43,10 @@
 #include <xil_cache.h>
 #include <xil_io.h>
 #include "xparameters.h"
+#include "platform_drivers.h"
 #include "ad9517.h"
 #include "ad9250.h"
-#include "jesd204b_gt.h"
-#include "jesd204b_v51.h"
+#include "adxcvr_core.h"
 #include "adc_core.h"
 
 /******************************************************************************/
@@ -54,36 +54,41 @@
 /******************************************************************************/
 #ifdef _XPARAMETERS_PS_H_
 #define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_TYPE				PS7_GPIO
+#define GPIO_SYSREF				54 + 32
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 #else
 #define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
+#define GPIO_DEVICE_ID			0	// FIXME
+#define GPIO_TYPE				AXI_GPIO
+#define GPIO_SYSREF				0	// FIXME
 #define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
 #endif
-#define AD9250_GT_BASEADDR		XPAR_AXI_AD9250_GT_BASEADDR
+#define AD9250_ADXCVR_BASEADDR	XPAR_AXI_AD9250_XCVR_BASEADDR
 #define AD9250_JESD_BASEADDR	XPAR_AXI_AD9250_JESD_BASEADDR
 
-jesd204b_state jesd204b_st = {
-	1,	// lanesync_enable
-	1,	// scramble_enable
-	0,	// sysref_always_enable
-	32,	// frames_per_multiframe
-	1,	// bytes_per_frame
-	1,	// subclass
+ad9517_init_param default_ad9517_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
 };
 
-jesd204b_gt_link ad9680_gt_link = {
-	AD9250_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_RX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_CPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
-	0,						// sys_clk_sel
-	2,						// out_clk_sel
-	0,						// gth_or_gtx
+ad9250_init_param default_ad9250_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id
+	0,				// id_no
 };
 
 /***************************************************************************//**
@@ -91,20 +96,48 @@ jesd204b_gt_link ad9680_gt_link = {
 *******************************************************************************/
 int main(void)
 {
+	ad9250_dev	*ad9250_0_device;
+	ad9250_dev	*ad9250_1_device;
+	ad9517_dev	*ad9517_device;
+	adc_core	ad9250_0_core;
+	adc_core	ad9250_1_core;
+	jesd204_core	ad9250_jesd204;
+	adxcvr_core		ad9250_xcvr;
+
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	adc_core ad9250_0_core;
-	adc_core ad9250_1_core;
+	ad9517_setup(&ad9517_device, default_ad9517_init_param);
 
-	ad9517_setup(SPI_DEVICE_ID, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 1);
+	default_ad9250_init_param.id_no = 0;
+	ad9250_setup(&ad9250_0_device, default_ad9250_init_param);
 
-	jesd204b_gt_setup(ad9680_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
+	default_ad9250_init_param.id_no = 1;
+	ad9250_setup(&ad9250_1_device, default_ad9250_init_param);
 
-	jesd204b_setup(AD9250_JESD_BASEADDR, jesd204b_st);
+	ad9250_jesd204.base_addr = AD9250_JESD_BASEADDR;
+	ad9250_jesd204.rx_tx_n = 1;
+	ad9250_jesd204.octets_per_frame = 1;
+	ad9250_jesd204.frames_per_multiframe = 32;
+	ad9250_jesd204.subclass_mode = 1;
+	ad9250_jesd204.sysref_type = INTERN;
+	ad9250_jesd204.gpio_device.device_id = GPIO_DEVICE_ID;
+	ad9250_jesd204.gpio_device.type = PS7_GPIO;
+	ad9250_jesd204.gpio_sysref = GPIO_SYSREF;
+
+	ad9250_xcvr.base_addr = AD9250_ADXCVR_BASEADDR;
+	ad9250_xcvr.tx_enable = 0;
+	ad9250_xcvr.gth_enable = 0;
+	ad9250_xcvr.lpm_enable = 0;
+	ad9250_xcvr.out_clk_sel = 2;
+	ad9250_xcvr.init_set_rate_enable = 0;
+
+	jesd204_init(ad9250_jesd204);
+	adxcvr_init(ad9250_xcvr);
+
+	jesd204_gen_sysref(ad9250_jesd204);
+
+	jesd204_read_status(ad9250_jesd204);
 
 	ad9250_0_core.adc_baseaddr = XPAR_AXI_AD9250_0_CORE_BASEADDR;
 	ad9250_0_core.dmac_baseaddr = XPAR_AXI_AD9250_0_DMA_BASEADDR;
@@ -119,11 +152,11 @@ int main(void)
 	adc_setup(ad9250_0_core);
 	adc_setup(ad9250_1_core);
 
-    ad9250_spi_write(0, 0x0d, 0x0f);
-    ad9250_spi_write(0, 0xff, 0x01);
+    ad9250_spi_write(ad9250_0_device, 0x0d, 0x0f);
+    ad9250_spi_write(ad9250_0_device, 0xff, 0x01);
 
-    ad9250_spi_write(1, 0x0d, 0x0f);
-    ad9250_spi_write(1, 0xff, 0x01);
+    ad9250_spi_write(ad9250_1_device, 0x0d, 0x0f);
+    ad9250_spi_write(ad9250_1_device, 0xff, 0x01);
 
 	adc_capture(ad9250_0_core, 32768, ADC_DDR_BASEADDR);
 	adc_capture(ad9250_1_core, 32768, ADC_DDR_BASEADDR + 0x20000);

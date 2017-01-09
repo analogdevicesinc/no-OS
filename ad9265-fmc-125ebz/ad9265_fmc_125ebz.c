@@ -44,6 +44,7 @@
 #include <xil_printf.h>
 #include "xparameters.h"
 #include "adc_core.h"
+#include "platform_drivers.h"
 #include "ad9265.h"
 
 /******************************************************************************/
@@ -54,24 +55,32 @@
 #define AD9265_DMA_BASEADDR		XPAR_AXI_AD9265_DMA_BASEADDR
 #define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 
+ad9265_init_param default_ad9265_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_0,		// spi_mode
+	PS7_SPI,		// spi_type
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
+	ad9265_dev	*ad9265_device;
+	adc_core	ad9625_core;
+
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-
-	adc_core ad9625_core;
 
 	ad9625_core.adc_baseaddr = AD9265_CORE_BASEADDR;
 	ad9625_core.dmac_baseaddr = AD9265_DMA_BASEADDR;
 	ad9625_core.no_of_channels = 1;
 	adc_setup(ad9625_core);
 
-	ad9265_setup(SPI_DEVICE_ID, 0, ad9625_core);
+	ad9265_setup(&ad9265_device, default_ad9265_init_param, ad9625_core);
 
-	ad9265_testmode_set(0, TESTMODE_ONE_ZERO_TOGGLE);
+	ad9265_testmode_set(ad9265_device, 0, TESTMODE_ONE_ZERO_TOGGLE);
 
 	adc_capture(ad9625_core, 32768, ADC_DDR_BASEADDR);
 

@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <xparameters.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <xil_io.h>
 #include "ad7616_core.h"
 #include "platform_drivers.h"
@@ -100,14 +101,21 @@ int32_t ad7616_dma_write(adc_core core,
 *******************************************************************************/
 int32_t ad7616_core_setup(adc_core core)
 {
+	uint32_t type;
+
+	ad7616_core_write(core, AD7616_REG_UP_CTRL, 0x00);
+	mdelay(10);
 	ad7616_core_write(core, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
-	ad7616_core_write(core, AD7616_REG_UP_BURST_LENGTH, 1);
 	ad7616_core_write(core, AD7616_REG_UP_CONV_RATE, 100);
 	ad7616_core_write(core, AD7616_REG_UP_CTRL,
 								AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
 	mdelay(10);
 	ad7616_core_write(core, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
 	mdelay(10);
+
+	ad7616_core_read(core, AD7616_REG_UP_IF_TYPE, &type);
+	printf("AD7616 IP Core (%s interface) successfully initialized\n",
+			type ? "parallel" : "serial");
 
 	return 0;
 }
@@ -127,12 +135,13 @@ int32_t ad7616_capture_serial(adc_core core,
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x0);
 	mdelay(10);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_RESET(0), 0x1);
-	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_SDO_MEM(0), 0x44);
+	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_SDO_MEM(0), 0x00);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x2103);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x2000);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x11fe);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x0201);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x3000);
+	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), 0x11ff);
 	spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x1);
 
 	ad7616_core_write(core, AD7616_REG_UP_CTRL,

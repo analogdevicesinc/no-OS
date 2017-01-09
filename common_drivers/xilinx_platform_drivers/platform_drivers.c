@@ -108,6 +108,22 @@ int32_t spi_init(spi_device *dev)
 
 		XSpiPs_SetClkPrescaler(&dev->ps7_instance,
 							   XSPIPS_CLK_PRESCALE_32);
+
+		/* FIXME: Temporary 2015.4 Fix */
+		XSpiPs_CfgInitialize(&dev->ps7_instance,
+							 dev->ps7_config,
+							 dev->ps7_config->BaseAddress);
+
+		spi_options = XSPIPS_MASTER_OPTION |
+				(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+				(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
+				(spi_decoded_cs ? XSPIPS_DECODE_SSELECT_OPTION : 0) |
+				XSPIPS_FORCE_SSELECT_OPTION;
+		XSpiPs_SetOptions(&dev->ps7_instance,
+						  spi_options);
+
+		XSpiPs_SetClkPrescaler(&dev->ps7_instance,
+							   XSPIPS_CLK_PRESCALE_32);
 #endif
 	}
 

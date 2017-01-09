@@ -114,38 +114,57 @@ jesd204b_gt_link gt_1_link = {
 	0,						// gth_or_gtx
 };
 
+ad9625_init_param default_ad9625_init_param = {
+	0,				// spi_chip_select
+	SPI_MODE_3,		// spi_mode
+#ifdef _XPARAMETERS_PS_H_
+	PS7_SPI,		// spi_type
+#else
+	AXI_SPI,		// spi_type
+#endif
+	SPI_DEVICE_ID,	// spi_device_id;
+};
+
 /***************************************************************************//**
 * @brief adc5_gpio_ctl
 *******************************************************************************/
-int32_t adc5_gpio_ctl(uint32_t device_id)
+int32_t adc5_gpio_ctl(void)
 {
-	uint8_t pwr_good;
+	gpio_device	dev;
+	uint8_t		pwr_good;
 
-	gpio_init(device_id);
+#ifdef _XPARAMETERS_PS_H_
+	dev.type = PS7_GPIO;
+#else
+	dev.type = AXI_GPIO;
+#endif
+	dev.device_id = GPIO_DEVICE_ID;
 
-	gpio_direction(GPIO_RST_0, GPIO_OUTPUT);
-	gpio_direction(GPIO_PWDN_0, GPIO_OUTPUT);
-	gpio_direction(GPIO_RST_1, GPIO_OUTPUT);
-	gpio_direction(GPIO_PWDN_1, GPIO_OUTPUT);
-	gpio_direction(GPIO_IRQ_0, GPIO_INPUT);
-	gpio_direction(GPIO_FD_0, GPIO_INPUT);
-	gpio_direction(GPIO_IRQ_1, GPIO_INPUT);
-	gpio_direction(GPIO_FD_1, GPIO_INPUT);
-	gpio_direction(GPIO_PWR_GOOD, GPIO_INPUT);
-	gpio_set_value(GPIO_RST_0, 0);
-	gpio_set_value(GPIO_PWDN_0, 0);
-	gpio_set_value(GPIO_RST_1, 0);
-	gpio_set_value(GPIO_PWDN_1, 0);
+	gpio_init(&dev);
+
+	gpio_set_direction(&dev, GPIO_RST_0, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_PWDN_0, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_RST_1, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_PWDN_1, GPIO_OUT);
+	gpio_set_direction(&dev, GPIO_IRQ_0, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_FD_0, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_IRQ_1, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_FD_1, GPIO_IN);
+	gpio_set_direction(&dev, GPIO_PWR_GOOD, GPIO_IN);
+	gpio_set_value(&dev, GPIO_RST_0, 0);
+	gpio_set_value(&dev, GPIO_PWDN_0, 0);
+	gpio_set_value(&dev, GPIO_RST_1, 0);
+	gpio_set_value(&dev, GPIO_PWDN_1, 0);
 	mdelay(10);
 
-	gpio_get_value(GPIO_PWR_GOOD, &pwr_good);
+	gpio_get_value(&dev, GPIO_PWR_GOOD, &pwr_good);
 	if (!pwr_good) {
 		xil_printf("Error: GPIO Power Good NOT set.\n\r");
 		return -1;
 	}
 
-	gpio_set_value(GPIO_RST_0, 1);
-	gpio_set_value(GPIO_RST_1, 1);
+	gpio_set_value(&dev, GPIO_RST_0, 1);
+	gpio_set_value(&dev, GPIO_RST_1, 1);
 	mdelay(100);
 
 	return 0;
@@ -204,7 +223,7 @@ int32_t adc5_gtlink_sysref(uint32_t data,
 /***************************************************************************//**
 * @brief adc5_sysref_sw_calibrate
 *******************************************************************************/
-int32_t adc5_sysref_sw_calibrate(void)
+int32_t adc5_sysref_sw_calibrate(ad9625_dev *dev_0, ad9625_dev *dev_1)
 {
 	uint32_t n;
 	uint32_t rgpio;
@@ -215,18 +234,18 @@ int32_t adc5_sysref_sw_calibrate(void)
 
 	// reconfigure the devices so that sysref is used for synchronization
 
-	ad9625_spi_write(SPI_AD9625_0_SS, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
-	ad9625_spi_write(SPI_AD9625_0_SS, 0x03a, 0x02); // Sysref enabled (default is 0x00)
-	ad9625_spi_write(SPI_AD9625_0_SS, 0x0ff, 0x01); // Register update
-	ad9625_spi_write(SPI_AD9625_1_SS, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
-	ad9625_spi_write(SPI_AD9625_1_SS, 0x03a, 0x02); // Sysref enabled (default is 0x00)
-	ad9625_spi_write(SPI_AD9625_1_SS, 0x0ff, 0x01); // Register update
+	ad9625_spi_write(dev_0, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(dev_0, 0x03a, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(dev_0, 0x0ff, 0x01); // Register update
+	ad9625_spi_write(dev_1, 0x072, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(dev_1, 0x03a, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(dev_1, 0x0ff, 0x01); // Register update
 
 	rgpio = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8) & 0x00ffffff;
 	Xil_Out32((XPAR_GPIO_0_BASEADDR + 0x8), (rgpio | (31<<24)));
 
-	ad9625_spi_write(SPI_AD9625_0_SS, 0x13c, 0x60);
-	ad9625_spi_write(SPI_AD9625_0_SS, 0x0ff, 0x01);
+	ad9625_spi_write(dev_0, 0x13c, 0x60);
+	ad9625_spi_write(dev_0, 0x0ff, 0x01);
 
 	for (n = 0; n < 32; n++) {
 		adc5_gtlink_control(0);
@@ -236,15 +255,15 @@ int32_t adc5_sysref_sw_calibrate(void)
 			return -1;
 		}
 
-		ad9625_spi_write(SPI_AD9625_0_SS, 0x03a, 0x42);
-		ad9625_spi_write(SPI_AD9625_0_SS, 0x0ff, 0x01);
-		ad9625_spi_write(SPI_AD9625_0_SS, 0x03a, 0x02);
-		ad9625_spi_write(SPI_AD9625_0_SS, 0x0ff, 0x01);
+		ad9625_spi_write(dev_0, 0x03a, 0x42);
+		ad9625_spi_write(dev_0, 0x0ff, 0x01);
+		ad9625_spi_write(dev_0, 0x03a, 0x02);
+		ad9625_spi_write(dev_0, 0x0ff, 0x01);
 
-		ad9625_spi_write(SPI_AD9625_1_SS, 0x03a, 0x42);
-		ad9625_spi_write(SPI_AD9625_1_SS, 0x0ff, 0x01);
-		ad9625_spi_write(SPI_AD9625_1_SS, 0x03a, 0x02);
-		ad9625_spi_write(SPI_AD9625_1_SS, 0x0ff, 0x01);
+		ad9625_spi_write(dev_1, 0x03a, 0x42);
+		ad9625_spi_write(dev_1, 0x0ff, 0x01);
+		ad9625_spi_write(dev_1, 0x03a, 0x02);
+		ad9625_spi_write(dev_1, 0x0ff, 0x01);
 
 		Xil_Out32((XPAR_GPIO_0_BASEADDR + 0x8), (rgpio | (n<<24)));
 		rdata = Xil_In32(XPAR_GPIO_0_BASEADDR + 0x8);
@@ -253,8 +272,8 @@ int32_t adc5_sysref_sw_calibrate(void)
 		return(-1);
 		}
 
-		ad9625_spi_read(SPI_AD9625_0_SS, 0x100, &rdata8_0);
-		ad9625_spi_read(SPI_AD9625_1_SS, 0x100, &rdata8_1);
+		ad9625_spi_read(dev_0, 0x100, &rdata8_0);
+		ad9625_spi_read(dev_1, 0x100, &rdata8_1);
 		if (((rdata8_0 & 0x04) != 0x00) || ((rdata8_1 & 0x04) != 0x00)) {
 		xil_printf("[%05d]: SYSREF Clear Status Failed(%d, 0x%02x, 0x%02x), Exiting!!\n", __LINE__, n, rdata8_0, rdata8_1);
 		return(-1);
@@ -266,8 +285,8 @@ int32_t adc5_sysref_sw_calibrate(void)
 		return(-1);
 		}
 
-		ad9625_spi_read(SPI_AD9625_0_SS, 0x100, &rdata8_0);
-		ad9625_spi_read(SPI_AD9625_1_SS, 0x100, &rdata8_1);
+		ad9625_spi_read(dev_0, 0x100, &rdata8_0);
+		ad9625_spi_read(dev_1, 0x100, &rdata8_1);
 
 		if ((rstatus == 1) && ((rdata8_0 & 0x04) == 0x04) && ((rdata8_1 & 0x04) == 0x00)) {
 		rstatus = 2;
@@ -294,14 +313,19 @@ int32_t adc5_sysref_sw_calibrate(void)
 *******************************************************************************/
 int main(void)
 {
-	adc_core ad9625_0_core;
-	adc_core ad9625_1_core;
+	ad9625_dev	*ad9625_0_device;
+	ad9625_dev	*ad9625_1_device;
+	adc_core 	ad9625_0_core;
+	adc_core 	ad9625_1_core;
 
-	if (adc5_gpio_ctl(GPIO_DEVICE_ID))
+	if (adc5_gpio_ctl())
 		return -1;
 
-	ad9625_setup(SPI_DEVICE_ID, SPI_AD9625_0_SS);
-	ad9625_setup(SPI_DEVICE_ID, SPI_AD9625_1_SS);
+	default_ad9625_init_param.spi_chip_select = SPI_AD9625_0_SS;
+	ad9625_setup(&ad9625_0_device, default_ad9625_init_param);
+
+	default_ad9625_init_param.spi_chip_select = SPI_AD9625_1_SS;
+	ad9625_setup(&ad9625_1_device, default_ad9625_init_param);
 
 	jesd204b_gt_initialize(gt_0_link);
 	jesd204b_setup(XPAR_AXI_AD9625_0_JESD_BASEADDR, jesd204b_st);
@@ -325,7 +349,7 @@ int main(void)
 	// both cores receive sysref at the same time.
 	// reset the data path from master
 
-	adc5_sysref_sw_calibrate();
+	adc5_sysref_sw_calibrate(ad9625_0_device, ad9625_1_device);
 
 	// data path must be active now, bring cores out of reset
 
@@ -334,13 +358,13 @@ int main(void)
 
 	// check prbs on both channels-
 
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_TEST_CNTRL, 0x5);
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_OUTPUT_MODE, 0x0);
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_TRANSFER, 0x1);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_TEST_CNTRL, 0x5);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_OUTPUT_MODE, 0x0);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_TRANSFER, 0x1);
 
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_TEST_CNTRL, 0x5);
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_OUTPUT_MODE, 0x0);
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_TRANSFER, 0x1);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_TEST_CNTRL, 0x5);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_OUTPUT_MODE, 0x0);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_TRANSFER, 0x1);
 
 	if (adc_pn_mon(ad9625_0_core, ADC_PN23A) != 0)
 		return -1;
@@ -349,14 +373,14 @@ int main(void)
 
 	// no prbs errors, now sync the 2 devices
 
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_TEST_CNTRL, 0x0);
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_OUTPUT_MODE, 0x1);
-	ad9625_spi_write(SPI_AD9625_0_SS, AD9625_REG_TRANSFER, 0x1);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_TEST_CNTRL, 0x0);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_OUTPUT_MODE, 0x1);
+	ad9625_spi_write(ad9625_0_device, AD9625_REG_TRANSFER, 0x1);
 	adc_write(ad9625_0_core, ADC_REG_CHAN_CNTRL(0), 0x51);
 
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_TEST_CNTRL, 0x0);
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_OUTPUT_MODE, 0x1);
-	ad9625_spi_write(SPI_AD9625_1_SS, AD9625_REG_TRANSFER, 0x1);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_TEST_CNTRL, 0x0);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_OUTPUT_MODE, 0x1);
+	ad9625_spi_write(ad9625_1_device, AD9625_REG_TRANSFER, 0x1);
 	adc_write(ad9625_1_core, ADC_REG_CHAN_CNTRL(0), 0x51);
 
 	xil_printf("Initialization done.\n");

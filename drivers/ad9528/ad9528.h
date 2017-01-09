@@ -3,7 +3,7 @@
  *   @brief  Header file of AD9528 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2015-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -411,13 +411,24 @@ struct ad9528_platform_data
 	struct ad9528_channel_spec	*channels;
 };
 
+typedef struct {
+	spi_device	spi_dev;
+} ad9528_dev;
+
+typedef struct {
+	uint8_t		spi_chip_select;
+	spi_mode	spi_mode;
+	spi_type	spi_type;
+	uint32_t	spi_device_id;
+} ad9528_init_param;
+
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9528_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
+int32_t ad9528_setup(ad9528_dev **device,
+					 ad9528_init_param init_param,
 					 struct ad9528_platform_data ad9528_pdata);
 
 #endif // __AD9528_H__

@@ -3507,5 +3507,4 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 		uint32_t coarse, uint32_t fine);
 int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
 uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw);
-int32_t ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy, enum synth_pd_ctrl rx, enum synth_pd_ctrl tx);
 #endif

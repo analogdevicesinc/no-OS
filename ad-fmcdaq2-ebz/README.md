@@ -8,5 +8,4 @@ The following drivers are required for building the **AD-FMCDAQ2-EBZ** no-OS pro
  - AD9680 Driver				-	[../drivers/ad9680] (../drivers/ad9680)
  - ADC Core Driver				-	[../common_drivers/adc_core] (../common_drivers/adc_core)
  - DAC Core Driver				-	[../common_drivers/dac_core] (../common_drivers/dac_core)
- - JESD204B GT Driver			-	[../common_drivers/jesd204b_gt] (../common_drivers/jesd204b_gt)
- - JESD204B V51 Driver			-	[../common_drivers/jesd204b_v51] (../common_drivers/jesd204b_v51)
+ - ADXCVR Core Driver			-	[../common_drivers/adxcvr_core] (../common_drivers/adxcvr_core)
