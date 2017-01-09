@@ -40,9 +40,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <xil_io.h>
-#include "platform_drivers.h"
 #include "adxcvr_core.h"
 
 /******************************************************************************/
@@ -590,6 +587,8 @@ int32_t adxcvr_gth_rxcdr_settings(adxcvr_core core,
 {
 	uint16_t cfg0, cfg1, cfg2, cfg3, cfg4 = 0;
 
+  cfg2 = 0;
+
 	if (core.tx_enable)
 		return 0; /* Do Nothing */
 
@@ -861,20 +860,11 @@ int32_t jesd204_init(jesd204_core core)
 *******************************************************************************/
 int32_t jesd204_gen_sysref(jesd204_core core)
 {
-    int32_t ret;
-
     if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
-
-        ret = gpio_init(&(core.gpio_device));
-        if (ret < 0) {
-            xil_printf("JESD204 GPIO SYSREF configuration failed!\n");
-            return -1;
-        }
 
         // generate SYS_REF
 
-        gpio_set_direction(&(core.gpio_device), core.gpio_sysref, 1);
-        gpio_set_value(&(core.gpio_device), core.gpio_sysref, 1);
+        ad_gpio_set(core.gpio_sysref, 1);
         mdelay(10);
     }
     return 0;

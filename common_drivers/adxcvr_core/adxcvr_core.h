@@ -39,6 +39,8 @@
 #ifndef ADXCVR_CORE_H_
 #define ADXCVR_CORE_H_
 
+#include <altxil_base.h>
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -60,7 +62,6 @@ typedef struct {
 	uint8_t			frames_per_multiframe;
 	uint8_t			subclass_mode;
 	sys_ref_type	sysref_type;
-	gpio_device		gpio_device;
 	uint32_t		gpio_sysref;
 } jesd204_core;
 
