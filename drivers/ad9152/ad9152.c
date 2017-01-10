@@ -40,16 +40,12 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad9152.h"
 
 /***************************************************************************//**
 * @brief ad9152_spi_read
 *******************************************************************************/
-int32_t ad9152_spi_read(ad9152_dev *dev,
+int32_t ad9152_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data)
 {
@@ -60,7 +56,7 @@ int32_t ad9152_spi_read(ad9152_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -69,7 +65,7 @@ int32_t ad9152_spi_read(ad9152_dev *dev,
 /***************************************************************************//**
 * @brief ad9152_spi_write
 *******************************************************************************/
-int32_t ad9152_spi_write(ad9152_dev *dev,
+int32_t ad9152_spi_write(spi_device *dev,
 						 uint16_t reg_addr,
 						 uint8_t reg_data)
 {
@@ -80,7 +76,7 @@ int32_t ad9152_spi_write(ad9152_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 
 	return ret;
 }
@@ -88,37 +84,17 @@ int32_t ad9152_spi_write(ad9152_dev *dev,
 /***************************************************************************//**
 * @brief ad9152_setup
 *******************************************************************************/
-int32_t ad9152_setup(ad9152_dev **device,
+int32_t ad9152_setup(spi_device *dev,
 					 ad9152_init_param init_param)
 {
-	ad9152_dev *dev;
 	uint8_t chip_id;
 	uint8_t pll_stat;
 	int32_t ret;
 
-	dev = (ad9152_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	/* SPI */
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
-
-	/* Device Settings */
-	dev->jesd_xbar_lane0_sel = init_param.jesd_xbar_lane0_sel;
-	dev->jesd_xbar_lane1_sel = init_param.jesd_xbar_lane1_sel;
-	dev->jesd_xbar_lane2_sel = init_param.jesd_xbar_lane2_sel;
-	dev->jesd_xbar_lane3_sel = init_param.jesd_xbar_lane3_sel;
-	dev->lanes2_3_swap_data = init_param.lanes2_3_swap_data;
-
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9152_CHIP_ID)
 	{
-		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
@@ -179,7 +155,7 @@ int32_t ad9152_setup(ad9152_dev **device,
 	mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
-	printf("AD9152 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
+	xil_printf("AD9152 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
 
 	ad9152_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -206,9 +182,7 @@ int32_t ad9152_setup(ad9152_dev **device,
 	 * Fix for an early DAQ3 design bug (swapped SERDIN+ / SERDIN- pins) */
 	ad9152_spi_write(dev, 0x334, init_param.lanes2_3_swap_data ? 0x0c : 0x00);
 
-	*device = dev;
-
-	printf("AD9152 successfully initialized.\n");
+	xil_printf("AD9152 successfully initialized.\n");
 
 	return ret;
 }

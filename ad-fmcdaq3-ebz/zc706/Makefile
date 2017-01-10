@@ -27,11 +27,11 @@ endif
 
 ## To change HDF file, use make HDF-FILE=<my-hdf-file>
 
-M_HDF_FILE := $(HDL-DIR)/projects/daq2/zc706/daq2_zc706.sdk/system_top.hdf
+M_HDF_FILE := $(HDL-DIR)/projects/daq3/zc706/daq3_zc706.sdk/system_top.hdf
 
 ## To build, use make
 ## To run on hardware, use make run
 
-include $(NOOS-DIR)/ad-fmcdaq2-ebz/ad_fmcdaq2_ebz.mk
+include $(NOOS-DIR)/ad-fmcdaq3-ebz/ad_fmcdaq3_ebz.mk
 include $(NOOS-DIR)/scripts/zynq.mk
 

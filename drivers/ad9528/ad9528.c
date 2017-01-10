@@ -41,11 +41,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdlib.h>
-#include <math.h>
-#include "platform_drivers.h"
 #include "ad9528.h"
-#include <xil_printf.h>
 
 /******************************************************************************/
 /************************ Local variables and types ***************************/
@@ -85,7 +81,7 @@ struct ad9528_state
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_spi_read(ad9528_dev *dev,
+int32_t ad9528_spi_read(spi_device *dev,
 						uint32_t reg_addr,
 						uint32_t *reg_data)
 {
@@ -99,7 +95,7 @@ int32_t ad9528_spi_read(ad9528_dev *dev,
 		buf[0] = 0x80 | (reg_addr >> 8);
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = 0x00;
-		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
+		ret |= ad_spi_xfer(dev, buf, 3);
 		reg_addr--;
 		*reg_data <<= 8;
 		*reg_data |= buf[2];
@@ -116,7 +112,7 @@ int32_t ad9528_spi_read(ad9528_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_spi_write(ad9528_dev *dev,
+int32_t ad9528_spi_write(spi_device *dev,
 						 uint32_t reg_addr,
 						 uint32_t reg_data)
 {
@@ -129,7 +125,7 @@ int32_t ad9528_spi_write(ad9528_dev *dev,
 		buf[0] = reg_addr >> 8;
 		buf[1] = reg_addr & 0xFF;
 		buf[2] = (reg_data >> ((AD9528_TRANSF_LEN(reg_addr) - index - 1) * 8)) & 0xFF;
-		ret |= spi_write_and_read(&dev->spi_dev, buf, 3);
+		ret |= ad_spi_xfer(dev, buf, 3);
 		reg_addr--;
 	}
 
@@ -145,7 +141,7 @@ int32_t ad9528_spi_write(ad9528_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_poll(ad9528_dev *dev,
+int32_t ad9528_poll(spi_device *dev,
 					uint32_t reg_addr,
 					uint32_t mask,
 					uint32_t data)
@@ -171,7 +167,7 @@ int32_t ad9528_poll(ad9528_dev *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_io_update(ad9528_dev *dev)
+int32_t ad9528_io_update(spi_device *dev)
 {
     return ad9528_spi_write(dev, AD9528_IO_UPDATE, AD9528_IO_UPDATE_EN);
 }
@@ -181,7 +177,7 @@ int32_t ad9528_io_update(ad9528_dev *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_sync(ad9528_dev *dev)
+int32_t ad9528_sync(spi_device *dev)
 {
 	int32_t ret;
 
@@ -213,11 +209,9 @@ int32_t ad9528_sync(ad9528_dev *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_setup(ad9528_dev **device,
-					 ad9528_init_param init_param,
+int32_t ad9528_setup(spi_device *dev,
 					 struct ad9528_platform_data ad9528_pdata)
 {
-	ad9528_dev *dev;
 	struct ad9528_state *st = &ad9528_st;
     struct ad9528_platform_data *pdata = &ad9528_pdata;
 	struct ad9528_channel_spec *chan;
@@ -228,18 +222,6 @@ int32_t ad9528_setup(ad9528_dev **device,
 	uint32_t sysref_ctrl;
 	uint32_t reg_data;
 	int32_t ret, i;
-
-	dev = (ad9528_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
-	mdelay(1);
 
 	ret = ad9528_spi_write(dev, AD9528_SERIAL_PORT_CONFIG,
 			AD9528_SER_CONF_SOFT_RESET |
@@ -458,8 +440,6 @@ int32_t ad9528_setup(ad9528_dev **device,
 	ret = ad9528_sync(dev);
 	if (ret < 0)
 		return ret;
-
-	*device = dev;
 
 	xil_printf("AD9528 successfully initialized.\n");
 

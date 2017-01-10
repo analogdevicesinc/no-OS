@@ -40,378 +40,343 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xil_cache.h>
-#include <xil_io.h>
-#include <xparameters.h>
-#include "platform_drivers.h"
+
+#include "altxil_base.h"
 #include "ad9152.h"
 #include "ad9528.h"
 #include "ad9680.h"
 #include "adc_core.h"
 #include "dac_core.h"
-#include "jesd204b_gt.h"
-#include "jesd204b_v51.h"
+#include "adxcvr_core.h"
 
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET				54 + 32
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
-#define AD9152_CORE_BASEADDR	XPAR_AXI_AD9152_CORE_BASEADDR
-#define AD9152_JESD_BASEADDR	XPAR_AXI_AD9152_JESD_BASEADDR
-#define AD9680_CORE_BASEADDR	XPAR_AXI_AD9680_CORE_BASEADDR
-#define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
-#define AD9680_JESD_BASEADDR	XPAR_AXI_AD9680_JESD_BASEADDR
-#define DAQ3_GT_BASEADDR		XPAR_AXI_DAQ3_GT_BASEADDR
-#define GPIO_CLKD_STATUS_0		GPIO_OFFSET + 0
-#define GPIO_CLKD_STATUS_1		GPIO_OFFSET + 1
-#define GPIO_DAC_IRQ			GPIO_OFFSET + 2
-#define GPIO_ADC_FDA			GPIO_OFFSET + 3
-#define GPIO_ADC_FDB			GPIO_OFFSET + 4
-#define GPIO_DAC_TXEN			GPIO_OFFSET + 5
-#define GPIO_ADC_PD				GPIO_OFFSET + 6
-#define GPIO_TRIG				GPIO_OFFSET + 7
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#ifdef XILINX
+#define AD9152_ADXCVR_BASEADDR  XPAR_AXI_AD9152_XCVR_BASEADDR
+#define AD9680_ADXCVR_BASEADDR  XPAR_AXI_AD9680_XCVR_BASEADDR
+#define AD9152_CORE_BASEADDR    XPAR_AXI_AD9152_CORE_BASEADDR
+#define AD9680_CORE_BASEADDR    XPAR_AXI_AD9680_CORE_BASEADDR
+#define AD9152_JESD_BASEADDR    XPAR_AXI_AD9152_JESD_BASEADDR
+#define AD9680_JESD_BASEADDR    XPAR_AXI_AD9680_JESD_BASEADDR
+#define AD9152_DMA_BASEADDR     XPAR_AXI_AD9152_DMA_BASEADDR
+#define AD9680_DMA_BASEADDR     XPAR_AXI_AD9680_DMA_BASEADDR
+#endif
+
+#ifdef ZYNQ_PS7
+#define ADC_DDR_BASEADDR        XPAR_DDR_MEM_BASEADDR + 0x0800000
+#define DAC_DDR_BASEADDR        XPAR_DDR_MEM_BASEADDR + 0xA000000
+#endif
+
+#define GPIO_CLKD_STATUS_0      32
+#define GPIO_CLKD_STATUS_1      33
+#define GPIO_DAC_IRQ            34
+#define GPIO_ADC_FDA            35
+#define GPIO_ADC_FDB            36
+#define GPIO_DAC_TXEN           37
+#define GPIO_ADC_PD             38
+#define GPIO_TRIG               39
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct ad9528_channel_spec ad9528_channels[] =
 {
-	{
-		2,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"DAC_CLK",			// extended_name
-	},
+  {
+    2,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_VCO,      // signal_source
+    0,          // divider_phase
+    1,          // channel_divider
+    "DAC_CLK",      // extended_name
+  },
 
-	{
-		4,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		2,					// channel_divider
-		"ADC_CLK_FMC",		// extended_name
-	},
+  {
+    4,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_VCO,      // signal_source
+    0,          // divider_phase
+    2,          // channel_divider
+    "ADC_CLK_FMC",    // extended_name
+  },
 
-	{
-		5,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_SYSREF_VCO,	// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"ADC_SYSREF",		// extended_name
-	},
+  {
+    5,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_SYSREF_VCO,  // signal_source
+    0,          // divider_phase
+    1,          // channel_divider
+    "ADC_SYSREF",    // extended_name
+  },
 
-	{
-		6,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_SYSREF_VCO,	// signal_source
-		0,					// divider_phase
-		2,					// channel_divider
-		"CLKD_ADC_SYSREF",	// extended_name
-	},
+  {
+    6,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_SYSREF_VCO,  // signal_source
+    0,          // divider_phase
+    2,          // channel_divider
+    "CLKD_ADC_SYSREF",  // extended_name
+  },
 
-	{
-		7,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_SYSREF_VCO,	// signal_source
-		0,					// divider_phase
-		2,					// channel_divider
-		"CLKD_DAC_SYSREF",	// extended_name
-	},
+  {
+    7,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_SYSREF_VCO,  // signal_source
+    0,          // divider_phase
+    2,          // channel_divider
+    "CLKD_DAC_SYSREF",  // extended_name
+  },
 
-	{
-		8,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_SYSREF_VCO,	// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"DAC_SYSREF",		// extended_name
-	},
+  {
+    8,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_SYSREF_VCO,  // signal_source
+    0,          // divider_phase
+    1,          // channel_divider
+    "DAC_SYSREF",    // extended_name
+  },
 
-	{
-		9,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		2,					// channel_divider
-		"DAC_CLK_FMC",		// extended_name
-	},
+  {
+    9,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_VCO,      // signal_source
+    0,          // divider_phase
+    2,          // channel_divider
+    "DAC_CLK_FMC",    // extended_name
+  },
 
-	{
-		13,					// channel_num
-		0,					// sync_ignore_en
-		0,					// output_dis
-		DRIVER_MODE_LVDS,	// driver_mode
-		SOURCE_VCO,			// signal_source
-		0,					// divider_phase
-		1,					// channel_divider
-		"ADC_CLK",			// extended_name
-	},
+  {
+    13,          // channel_num
+    0,          // sync_ignore_en
+    0,          // output_dis
+    DRIVER_MODE_LVDS,  // driver_mode
+    SOURCE_VCO,      // signal_source
+    0,          // divider_phase
+    1,          // channel_divider
+    "ADC_CLK",      // extended_name
+  },
 };
 
 struct ad9528_platform_data ad9528_pdata_lpc =
 {
-	125000000,	// vcxo_freq
-	1,			// spi3wire
+  125000000,  // vcxo_freq
+  1,      // spi3wire
 
-	/* REFA / REFB input configuration */
-	0,	// refa_en
-	0,	// refb_en
+  /* REFA / REFB input configuration */
+  0,  // refa_en
+  0,  // refb_en
 
-	/* Differential/ Single-Ended Input Configuration */
-	0,	// refa_diff_rcv_en
-	0,	// refb_diff_rcv_en
-	1,	// osc_in_diff_en
+  /* Differential/ Single-Ended Input Configuration */
+  0,  // refa_diff_rcv_en
+  0,  // refb_diff_rcv_en
+  1,  // osc_in_diff_en
 
-	/*
-	 * Valid if differential input disabled
-	 * if false defaults to pos input
-	 */
-	0,	// refa_cmos_neg_inp_en
-	0,	// refb_cmos_neg_inp_en
-	0,	// osc_in_cmos_neg_inp_en
+  /*
+   * Valid if differential input disabled
+   * if false defaults to pos input
+   */
+  0,  // refa_cmos_neg_inp_en
+  0,  // refb_cmos_neg_inp_en
+  0,  // osc_in_cmos_neg_inp_en
 
-	/* PLL1 Setting */
-	1,	// refa_r_div
-	1,	// refb_r_div
-	1,	// pll1_feedback_div
-	1,	// pll1_feedback_src_vcxo
-	1,	// pll1_charge_pump_current_nA
-	1,	// pll1_bypass_en
+  /* PLL1 Setting */
+  1,  // refa_r_div
+  1,  // refb_r_div
+  1,  // pll1_feedback_div
+  1,  // pll1_feedback_src_vcxo
+  1,  // pll1_charge_pump_current_nA
+  1,  // pll1_bypass_en
 
-	/* Reference */
-	1,	// ref_mode
-	SYSREF_SRC_INTERNAL,	// sysref_src
-	8,	// sysref_k_div
+  /* Reference */
+  1,  // ref_mode
+  SYSREF_SRC_INTERNAL,  // sysref_src
+  8,  // sysref_k_div
 
-	/* PLL2 Setting */
-	805000,	// pll2_charge_pump_current_nA
-	0,	// pll2_ndiv_a_cnt
-	8,	// pll2_ndiv_b_cnt
-	0,	// pll2_freq_doubler_en
-	1,	// pll2_r1_div
-	8,	// pll2_n2_div
-	4,	// pll2_vco_diff_m1 /* 3..5 */
+  /* PLL2 Setting */
+  805000,  // pll2_charge_pump_current_nA
+  0,  // pll2_ndiv_a_cnt
+  8,  // pll2_ndiv_b_cnt
+  0,  // pll2_freq_doubler_en
+  1,  // pll2_r1_div
+  8,  // pll2_n2_div
+  4,  // pll2_vco_diff_m1 /* 3..5 */
 
-	/* Loop Filter PLL2 */
-	RPOLE2_900_OHM,	// rpole2
-	RZERO_3250_OHM,	// rzero
-	CPOLE1_16_PF,	// cpole1
-	0,	// rzero_bypass_en;
+  /* Loop Filter PLL2 */
+  RPOLE2_900_OHM,  // rpole2
+  RZERO_3250_OHM,  // rzero
+  CPOLE1_16_PF,  // cpole1
+  0,  // rzero_bypass_en;
 
-	/* Output Channel Configuration */
-	ARRAY_SIZE(ad9528_channels),	// num_channels
-	ad9528_channels,	// *channels
-};
-
-ad9528_init_param default_ad9528_init_param = {
-	0,				// spi_chip_select
-	SPI_MODE_3,		// spi_mode
-#ifdef _XPARAMETERS_PS_H_
-	PS7_SPI,		// spi_type
-#else
-	AXI_SPI,		// spi_type
-#endif
-	SPI_DEVICE_ID,	// spi_device_id;
+  /* Output Channel Configuration */
+  ARRAY_SIZE(ad9528_channels),  // num_channels
+  ad9528_channels,  // *channels
 };
 
 ad9152_init_param default_ad9152_init_param = {
-	/* SPI */
-	1,				// spi_chip_select
-	SPI_MODE_3,		// spi_mode
-#ifdef _XPARAMETERS_PS_H_
-	PS7_SPI,		// spi_type
-#else
-	AXI_SPI,		// spi_type
-#endif
-	SPI_DEVICE_ID,	// spi_device_id
-	/* Device Settings */
-	0,	// jesd_xbar_lane0_sel
-	1,	// jesd_xbar_lane1_sel
-	2,	// jesd_xbar_lane2_sel
-	3,	// jesd_xbar_lane3_sel
-	0,	// lanes2_3_swap_data
+  0,
+  1,
+  2,
+  3,
+  0,
+  10000000    // lane_rate_khz
 };
 
 ad9680_init_param default_ad9680_init_param = {
-	2,				// spi_chip_select
-	SPI_MODE_3,		// spi_mode
-#ifdef _XPARAMETERS_PS_H_
-	PS7_SPI,		// spi_type
-#else
-	AXI_SPI,		// spi_type
-#endif
-	SPI_DEVICE_ID,	// spi_device_id;
+  10000000    // lane_rate_khz
 };
 
 
-jesd204b_state jesd204b_st = {
-	1,	// lanesync_enable
-	1,	// scramble_enable
-	0,	// sysref_always_enable
-	32,	// frames_per_multiframe
-	1,	// bytes_per_frame
-	1,	// subclass
-};
-
-jesd204b_gt_link ad9152_gt_link = {
-	DAQ3_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_TX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_QPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_EXT,	// sysref_int_or_ext
-	3,						// sys_clk_sel
-	4,						// out_clk_sel
-	0,						// gth_or_gtx
-};
-
-jesd204b_gt_link ad9680_gt_link = {
-	DAQ3_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_RX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_QPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_EXT,	// sysref_int_or_ext
-	3,						// sys_clk_sel
-	4,						// out_clk_sel
-	0,						// gth_or_gtx
-};
-
-/***************************************************************************//**
-* @brief daq3_gpio_ctl
-*******************************************************************************/
-void daq3_gpio_ctl(void)
-{
-	gpio_device dev;
-
-#ifdef _XPARAMETERS_PS_H_
-	dev.type = PS7_GPIO;
-#else
-	dev.type = AXI_GPIO;
-#endif
-	dev.device_id = GPIO_DEVICE_ID;
-
-	gpio_init(&dev);
-
-	gpio_set_direction(&dev, GPIO_CLKD_STATUS_0, GPIO_IN);
-	gpio_set_direction(&dev, GPIO_CLKD_STATUS_1, GPIO_IN);
-	gpio_set_direction(&dev, GPIO_DAC_IRQ, GPIO_IN);
-	gpio_set_direction(&dev, GPIO_ADC_FDA, GPIO_IN);
-	gpio_set_direction(&dev, GPIO_ADC_FDB, GPIO_IN);
-	gpio_set_direction(&dev, GPIO_DAC_TXEN, GPIO_OUT);
-	gpio_set_direction(&dev, GPIO_ADC_PD, GPIO_OUT);
-	gpio_set_direction(&dev, GPIO_TRIG, GPIO_IN);
-
-	gpio_set_value(&dev, GPIO_DAC_TXEN, GPIO_HIGH);
-	gpio_set_value(&dev, GPIO_ADC_PD, GPIO_LOW);
-}
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	adc_core	ad9680_core;
-	ad9528_dev	*ad9528_device;
-	ad9152_dev	*ad9152_device;
-	ad9680_dev	*ad9680_device;
+  spi_device    ad9528_spi_device;
+  spi_device    ad9152_spi_device;
+  spi_device    ad9680_spi_device;
 
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+  dac_core      ad9152_core;
+  jesd204_core  ad9152_jesd204;
+  adxcvr_core   ad9152_xcvr;
 
-	daq3_gpio_ctl();
+  adc_core      ad9680_core;
+  jesd204_core  ad9680_jesd204;
+  adxcvr_core   ad9680_xcvr;
 
-	ad9528_setup(&ad9528_device, default_ad9528_init_param, ad9528_pdata_lpc);
+  ad_spi_init(&ad9528_spi_device);
+  ad_spi_init(&ad9152_spi_device);
+  ad_spi_init(&ad9680_spi_device);
 
-	ad9152_setup(&ad9152_device, default_ad9152_init_param);
+  ad9528_spi_device.chip_select = 0x6;
+  ad9152_spi_device.chip_select = 0x5;
+  ad9680_spi_device.chip_select = 0x3;
 
-	jesd204b_setup(AD9152_JESD_BASEADDR, jesd204b_st);
+  ad9152_core.dac_baseaddr = AD9152_CORE_BASEADDR;
+  ad9152_core.dmac_baseaddr = AD9152_DMA_BASEADDR;
+  ad9152_core.no_of_channels = 2;
+  ad9152_core.resolution = 16;
+  ad9152_core.fifo_present = 1;
 
-	ad9680_setup(&ad9680_device, default_ad9680_init_param);
+  ad9152_jesd204.base_addr = AD9152_JESD_BASEADDR;
+  ad9152_jesd204.rx_tx_n = 0;
+  ad9152_jesd204.octets_per_frame = 1;
+  ad9152_jesd204.frames_per_multiframe = 32;
+  ad9152_jesd204.subclass_mode = 1;
 
-	jesd204b_setup(AD9680_JESD_BASEADDR, jesd204b_st);
+  ad9152_xcvr.base_addr = XPAR_AXI_AD9152_XCVR_BASEADDR;
+  ad9152_xcvr.tx_enable = 1;
+  ad9152_xcvr.gth_enable = 0;
+  ad9152_xcvr.lpm_enable = 1;
+  ad9152_xcvr.out_clk_sel = 4;
+  ad9152_xcvr.init_set_rate_enable = 1;
 
-	jesd204b_gt_initialize(ad9152_gt_link);
-	jesd204b_gt_setup(ad9152_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9152_gt_link);
-	jesd204b_gt_setup(ad9680_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
+  ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
+  ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+  ad9680_core.no_of_channels = 2;
+  ad9680_core.resolution = 14;
 
-	dac_setup(AD9152_CORE_BASEADDR);
+  ad9680_jesd204.base_addr = AD9680_JESD_BASEADDR;
+  ad9680_jesd204.rx_tx_n = 1;
+  ad9680_jesd204.octets_per_frame = 1;
+  ad9680_jesd204.frames_per_multiframe = 32;
+  ad9680_jesd204.subclass_mode = 1;
 
-	dds_set_frequency(0, 5000000);
-	dds_set_phase(0, 0);
-	dds_set_scale(0, 500000);
-	dds_set_frequency(1, 5000000);
-	dds_set_phase(1, 0);
-	dds_set_scale(1, 500000);
+  ad9680_xcvr.base_addr = XPAR_AXI_AD9680_XCVR_BASEADDR;
+  ad9680_xcvr.tx_enable = 0;
+  ad9680_xcvr.gth_enable = 0;
+  ad9680_xcvr.lpm_enable = 1;
+  ad9680_xcvr.out_clk_sel = 4;
+  ad9680_xcvr.init_set_rate_enable = 1;
 
-	dds_set_frequency(2, 5000000);
-	dds_set_phase(2, 90000);
-	dds_set_scale(2, 500000);
-	dds_set_frequency(3, 5000000);
-	dds_set_phase(3, 90000);
-	dds_set_scale(3, 500000);
 
-	ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
-	ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
-	ad9680_core.no_of_channels = 2;
-	ad9680_core.resolution = 14;
-	adc_setup(ad9680_core);
 
-	xil_printf("Initialization done.\n");
+  Xil_ICacheEnable();
+  Xil_DCacheEnable();
 
-	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x05);
-	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x0);
+  ad_gpio_set(GPIO_DAC_TXEN, 0x1);
+  ad_gpio_set(GPIO_ADC_PD, 0x0);
 
-	adc_pn_mon(ad9680_core, 1);
+  ad9528_setup(&ad9528_spi_device, ad9528_pdata_lpc);
 
-	xil_printf("PRBS test done.\n");
+  ad9152_setup(&ad9152_spi_device, default_ad9152_init_param);
+  jesd204_init(ad9152_jesd204);
+  adxcvr_init(ad9152_xcvr);
+  jesd204_read_status(ad9152_jesd204);
 
-	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x0f);
-	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x1);
+  ad9680_setup(&ad9680_spi_device, default_ad9680_init_param);
+  jesd204_init(ad9680_jesd204);
+  adxcvr_init(ad9680_xcvr);
+  jesd204_read_status(ad9680_jesd204);
 
-	adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
+  dac_setup(ad9152_core);
 
-	xil_printf("Ramp capture done.\n");
+  dds_set_frequency(ad9152_core, 0, 5000000);
+  dds_set_phase(ad9152_core, 0, 0);
+  dds_set_scale(ad9152_core, 0, 500000);
+  dds_set_frequency(ad9152_core, 1, 5000000);
+  dds_set_phase(ad9152_core, 1, 0);
+  dds_set_scale(ad9152_core, 1, 500000);
 
-	adc_ramp_test(ad9680_core, 32768, ADC_DDR_BASEADDR);
+  dds_set_frequency(ad9152_core, 2, 5000000);
+  dds_set_phase(ad9152_core, 2, 90000);
+  dds_set_scale(ad9152_core, 2, 500000);
+  dds_set_frequency(ad9152_core, 3, 5000000);
+  dds_set_phase(ad9152_core, 3, 90000);
+  dds_set_scale(ad9152_core, 3, 500000);
 
-	ad9680_spi_write(ad9680_device, AD9680_REG_DEVICE_INDEX, 0x3);
-	ad9680_spi_write(ad9680_device, AD9680_REG_ADC_TEST_MODE, 0x00);
-	ad9680_spi_write(ad9680_device, AD9680_REG_OUTPUT_MODE, 0x1);
+  ad9680_core.adc_baseaddr = AD9680_CORE_BASEADDR;
+  ad9680_core.dmac_baseaddr = AD9680_DMA_BASEADDR;
+  ad9680_core.no_of_channels = 2;
+  ad9680_core.resolution = 14;
 
-	adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
+  adc_setup(ad9680_core);
 
-	xil_printf("Test mode off capture done.\n");
+  xil_printf("Initialization done.\n");
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_DEVICE_INDEX, 0x3);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_ADC_TEST_MODE, 0x05);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_OUTPUT_MODE, 0x0);
 
-	return 0;
+  adc_pn_mon(ad9680_core, 1);
+
+  xil_printf("PRBS test done.\n");
+
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_DEVICE_INDEX, 0x3);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_ADC_TEST_MODE, 0x0f);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_OUTPUT_MODE, 0x1);
+
+  adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
+
+  xil_printf("Ramp capture done.\n");
+
+  adc_ramp_test(ad9680_core, 32768, ADC_DDR_BASEADDR);
+
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_DEVICE_INDEX, 0x3);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_ADC_TEST_MODE, 0x00);
+  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_OUTPUT_MODE, 0x1);
+
+  adc_capture(ad9680_core, 32768, ADC_DDR_BASEADDR);
+
+  xil_printf("Test mode off capture done.\n");
+
+  Xil_DCacheDisable();
+  Xil_ICacheDisable();
+
+  return 0;
 }

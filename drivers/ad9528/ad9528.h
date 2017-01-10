@@ -43,7 +43,7 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include <stdint.h>
+#include <altxil_base.h>
 
 /******************************************************************************/
 /****************************** AD9528 ****************************************/
@@ -411,24 +411,12 @@ struct ad9528_platform_data
 	struct ad9528_channel_spec	*channels;
 };
 
-typedef struct {
-	spi_device	spi_dev;
-} ad9528_dev;
-
-typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
-} ad9528_init_param;
-
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9528_setup(ad9528_dev **device,
-					 ad9528_init_param init_param,
+int32_t ad9528_setup(spi_device *dev,
 					 struct ad9528_platform_data ad9528_pdata);
 
 #endif // __AD9528_H__
