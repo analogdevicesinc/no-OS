@@ -54,37 +54,36 @@ puts "FPGA CPU: $cpu_name"
  
 # create project
 cd $project_location
-sdk set_workspace $project_location/workspace
-if {[file exists ./workspace/hw]} {
-	puts "hardware platform \"hw\" already exists"
-} else {
-	sdk create_hw_project -name hw -hwspec $system_hdf_location
-	sdk create_bsp_project -name bsp -hwproject hw -proc $cpu_name -os standalone
-}
-if {[file exists ./workspace/sw]} {
-	puts "The software platform already exists, rebuilding sorces"
-	source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl;
-	file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
-	sdk import_sources -name sw -path $project_destination
-	sdk clean_project -type app -name sw
 
-	# delete the copy of source files
-	file delete -force -- $project_location/$input
-	puts "Done."
-	exit
-} else {
-sdk create_app_project -name sw -hwproject hw -proc $cpu_name -bsp bsp -os standalone -lang C -app {Empty Application}
+if {[file exists ./workspace]} {
+    if {[file exists ./workspace/.metadata]} {
+      puts "Delete old project"
+      file delete -force -- ./workspace/.metadata
+    }
+    if {[file exists ./workspace/hw]} {
+      file delete -force -- ./workspace/hw
+    }
+    if {[file exists ./workspace/bsp]} {
+      file delete -force -- ./workspace/bsp
+    }
+    if {[file exists ./workspace/sw]} {
+      file delete -force -- ./workspace/sw
+    }
 }
+
+sdk set_workspace $project_location/workspace
+sdk create_hw_project -name hw -hwspec $system_hdf_location
+sdk create_bsp_project -name bsp -hwproject hw -proc $cpu_name -os standalone
+sdk create_app_project -name sw -hwproject hw -proc $cpu_name -bsp bsp -os standalone -lang C -app {Empty Application}
 
 # import sources
 source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl; 
-file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
 
 if { $cpu_name == "sys_mb" } {
-set fp1 [open $project_destination/lscript.ld r+]
+set fp1 [open $project_location/workspace/sw/src/lscript.ld r+]
 set file_data [read $fp1]
-		if { [regsub -all {_HEAP_SIZE : 0x800;} $file_data {_HEAP_SIZE : 0x10000;} file_data] } {
-			puts "successfully  increase the heap size to 0x10000"
+		if { [regsub -all {_HEAP_SIZE : 0x800;} $file_data {_HEAP_SIZE : 0x100000;} file_data] } {
+			puts "successfully  increase the heap size to 0x100000"
 		} else { puts "faild to increase the heap size"
 			exit -1
 		}
