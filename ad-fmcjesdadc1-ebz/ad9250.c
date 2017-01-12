@@ -121,7 +121,7 @@ int32_t ad9250_setup(ad9250_dev **device,
 	ad9250_spi_write(dev, 0x67, ((dev->id_no*2)+1));
 	ad9250_spi_write(dev, 0x6e, 0x81);
 	ad9250_spi_write(dev, 0x70, 0x1f);
-	ad9250_spi_write(dev, 0x3a, 0x1f);
+	ad9250_spi_write(dev, 0x3a, 0x13);
 	ad9250_spi_write(dev, 0x5f, (0x16 | 0x0));
 	ad9250_spi_write(dev, 0x14, 0x00);
 	ad9250_spi_write(dev, 0x0d, 0x00);
