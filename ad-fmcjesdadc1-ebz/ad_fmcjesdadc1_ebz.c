@@ -102,7 +102,7 @@ int main(void)
 	adc_core	ad9250_0_core;
 	adc_core	ad9250_1_core;
 	jesd204_core	ad9250_jesd204;
-	adxcvr_core		ad9250_xcvr;
+	adxcvr_core	ad9250_xcvr;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -152,11 +152,11 @@ int main(void)
 	adc_setup(ad9250_0_core);
 	adc_setup(ad9250_1_core);
 
-    ad9250_spi_write(ad9250_0_device, 0x0d, 0x0f);
-    ad9250_spi_write(ad9250_0_device, 0xff, 0x01);
+	ad9250_spi_write(ad9250_0_device, 0x0d, 0x0f);
+	ad9250_spi_write(ad9250_0_device, 0xff, 0x01);
 
-    ad9250_spi_write(ad9250_1_device, 0x0d, 0x0f);
-    ad9250_spi_write(ad9250_1_device, 0xff, 0x01);
+	ad9250_spi_write(ad9250_1_device, 0x0d, 0x0f);
+	ad9250_spi_write(ad9250_1_device, 0xff, 0x01);
 
 	adc_capture(ad9250_0_core, 32768, ADC_DDR_BASEADDR);
 	adc_capture(ad9250_1_core, 32768, ADC_DDR_BASEADDR + 0x20000);

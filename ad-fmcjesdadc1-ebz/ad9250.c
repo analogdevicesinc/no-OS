@@ -115,18 +115,18 @@ int32_t ad9250_setup(ad9250_dev **device,
 	printf("AD9250 CHIP ID %s (0x%x).\n",
 			(chip_id == 0xB9) ? "ok" : "errors", chip_id);
 
-    ad9250_spi_write(dev, 0x5f, (0x16 | 0x1));
-    ad9250_spi_write(dev, 0x5e, 0x22);
-    ad9250_spi_write(dev, 0x66, ((dev->id_no*2)+0));
-    ad9250_spi_write(dev, 0x67, ((dev->id_no*2)+1));
-    ad9250_spi_write(dev, 0x6e, 0x81);
-    ad9250_spi_write(dev, 0x70, 0x1f);
-    ad9250_spi_write(dev, 0x3a, 0x1f);
-    ad9250_spi_write(dev, 0x5f, (0x16 | 0x0));
-    ad9250_spi_write(dev, 0x14, 0x00);
-    ad9250_spi_write(dev, 0x0d, 0x00);
-    ad9250_spi_write(dev, 0xff, 0x01);
-    mdelay(10);
+	ad9250_spi_write(dev, 0x5f, (0x16 | 0x1));
+	ad9250_spi_write(dev, 0x5e, 0x22);
+	ad9250_spi_write(dev, 0x66, ((dev->id_no*2)+0));
+	ad9250_spi_write(dev, 0x67, ((dev->id_no*2)+1));
+	ad9250_spi_write(dev, 0x6e, 0x81);
+	ad9250_spi_write(dev, 0x70, 0x1f);
+	ad9250_spi_write(dev, 0x3a, 0x1f);
+	ad9250_spi_write(dev, 0x5f, (0x16 | 0x0));
+	ad9250_spi_write(dev, 0x14, 0x00);
+	ad9250_spi_write(dev, 0x0d, 0x00);
+	ad9250_spi_write(dev, 0xff, 0x01);
+	mdelay(10);
 	ad9250_spi_read(dev, 0x0a, &stat);
 	printf("AD9250 PLL/link %s (0x%x).\n",
 			(stat == 0x81) ? "ok" : "errors", stat);
