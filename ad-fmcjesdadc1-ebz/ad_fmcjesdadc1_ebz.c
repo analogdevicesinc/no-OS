@@ -130,6 +130,7 @@ int main(void)
 	ad9250_xcvr.gth_enable = 0;
 	ad9250_xcvr.lpm_enable = 0;
 	ad9250_xcvr.out_clk_sel = 2;
+	ad9250_xcvr.sys_clk_sel = 0;
 	ad9250_xcvr.init_set_rate_enable = 0;
 
 	jesd204_init(ad9250_jesd204);
