@@ -6,8 +6,10 @@ endif
 
 ifeq ($(OS), Windows_NT)
   XSCT_CMD := xsct.bat 
+  XSDB_CMD := xsdb.bat
 else
   XSCT_CMD := xsct 
+  XSDB_CMD := xsdb 
 endif
 
 XSCT_LOG := xsct.log
@@ -64,5 +66,5 @@ $(LINKER_LIBRARY): $(XSCT_SCRIPT) $(HDF-FILE)
 	$(XSCT_CMD) $(XSCT_SCRIPT) $(HDF-FILE) > $(XSCT_LOG) 2>&1
 
 run: $(ELF_FILE)
-	xsdb $(XSDB_SCRIPT) ZYNQ_PS7
+	$(XSDB_CMD) $(XSDB_SCRIPT) ZYNQ_PS7
 
