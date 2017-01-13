@@ -169,7 +169,7 @@ int main()
 
   if ((pll_status & 0x01) == 0)
   {
-    xil_printf("ERROR: AD9371 PLL is NOT locked!\n");
+    ad_printf("ERROR: AD9371 PLL is NOT locked!\n");
     return(-1);
   }
 
@@ -181,7 +181,7 @@ int main()
 
   if ((mcs_status & 0x0b) != 0x0b)
   {
-    xil_printf("ERROR: AD9371 MCS failed!\n");
+    ad_printf("ERROR: AD9371 MCS failed!\n");
     return(-1);
   }
 
@@ -195,7 +195,7 @@ int main()
 
   if ((pll_status & 0x0f) != 0x0f)
   {
-    xil_printf("ERROR: AD9371 PLLs are NOT locked!\n");
+    ad_printf("ERROR: AD9371 PLLs are NOT locked!\n");
     return(-1);
   }
 
@@ -227,7 +227,7 @@ int main()
 
   if ((cal_flag != 0) || (cal_code != 0))
   {
-    xil_printf("ERROR: AD9371 calibrations failed!\n");
+    ad_printf("ERROR: AD9371 calibrations failed!\n");
     return(-1);
   }
 
@@ -248,7 +248,7 @@ int main()
   MYKONOS_setObsRxPathSource(&mykDevice, OBS_RXOFF);
   MYKONOS_setObsRxPathSource(&mykDevice, OBS_SNIFFER);
 
-  xil_printf("done.\n");
+  ad_printf("done.\n");
   return(0);
 }
 

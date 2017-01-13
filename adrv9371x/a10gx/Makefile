@@ -6,5 +6,5 @@ M_SOPCINFO_FILE := $(HDL-DIR)/projects/adrv9371x/a10gx/system_bd.sopcinfo
 M_SOF_FILE := adrv9371x_a10gx.sof
 
 include $(NOOS-DIR)/adrv9371x/adrv9371x.mk
-include $(NOOS-DIR)/scripts/nios.mk
+include $(NOOS-DIR)/scripts/nios_ii.mk
 

@@ -205,10 +205,10 @@ commonErr_t CMB_closeLog(void)
 commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex, uint32_t errorCode, const char *comment)
 {
   if (level == ADIHAL_LOG_ERROR)
-    xil_printf("AD9371-ERROR[%d]: %s\n", errorCode, comment);
+    ad_printf("AD9371-ERROR[%d]: %s\n", errorCode, comment);
 
   if (level == ADIHAL_LOG_WARNING)
-    xil_printf("AD9371-WARNING[%d]: %s\n", errorCode, comment);
+    ad_printf("AD9371-WARNING[%d]: %s\n", errorCode, comment);
 
   return(COMMONERR_OK);
 }

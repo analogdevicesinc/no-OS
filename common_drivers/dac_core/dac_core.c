@@ -90,7 +90,7 @@ int32_t dac_read(dac_core core,
 				 uint32_t reg_addr,
 				 uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.dac_baseaddr + 0x4000 + reg_addr));
+	*reg_data = ad_reg_read((core.dac_baseaddr + 0x4000 + reg_addr));
 
 	return 0;
 }
@@ -102,7 +102,7 @@ int32_t dac_write(dac_core core,
 				  uint32_t reg_addr,
 				  uint32_t reg_data)
 {
-	Xil_Out32((core.dac_baseaddr + 0x4000 + reg_addr), reg_data);
+	ad_reg_write((core.dac_baseaddr + 0x4000 + reg_addr), reg_data);
 
 	return 0;
 }
@@ -114,7 +114,7 @@ int32_t dac_dmac_read(dac_core core,
 					  uint32_t reg_addr,
 					  uint32_t *reg_data)
 {
-	*reg_data = Xil_In32(core.dmac_baseaddr + reg_addr);
+	*reg_data = ad_reg_read(core.dmac_baseaddr + reg_addr);
 
 	return 0;
 }
@@ -126,7 +126,7 @@ int32_t dac_dmac_write(dac_core core,
 					   uint32_t reg_addr,
 					   uint32_t reg_data)
 {
-	Xil_Out32(core.dmac_baseaddr + reg_addr, reg_data);
+	ad_reg_write(core.dmac_baseaddr + reg_addr, reg_data);
 
 	return 0;
 }
@@ -302,6 +302,17 @@ int32_t dac_data_src_sel(dac_core core,
 	return 0;
 }
 
+void ad_reg_write_16(uint32_t addr, uint32_t data)
+{
+  uint32_t m_data;
+  m_data = ad_reg_read(addr & ~0x3);
+  if ((addr & 0x3) == 0)
+    m_data = (m_data & ~0xffff) | data;
+  else
+    m_data = (m_data & 0xffff) | (data<<16);
+  ad_reg_write((addr & ~0x3), m_data);
+}
+
 /***************************************************************************//**
 * @brief dac_dma_setup
 *******************************************************************************/
@@ -316,27 +327,27 @@ int32_t dac_dma_setup(dac_core core, uint32_t start_address)
 	for (index = 0; index < no_of_samples; index ++) {
 		switch (core.no_of_channels) {
 		case 1:
-			Xil_Out16(start_address + index_mem * 2, sine_lut_1[index]);
+			ad_reg_write_16(start_address + index_mem * 2, sine_lut_1[index]);
 			index_mem += 1;
 			break;
 		case 2:
-			Xil_Out16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
-			Xil_Out16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
+			ad_reg_write_16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
+			ad_reg_write_16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
 			index_mem += 2;
 			break;
 		case 4:
-			Xil_Out16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
-			Xil_Out16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
-			Xil_Out16(start_address + (index_mem + 2) * 2, sine_lut_1[index]);
-			Xil_Out16(start_address + (index_mem + 3) * 2, sine_lut_2[index]);
+			ad_reg_write_16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
+			ad_reg_write_16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
+			ad_reg_write_16(start_address + (index_mem + 2) * 2, sine_lut_1[index]);
+			ad_reg_write_16(start_address + (index_mem + 3) * 2, sine_lut_2[index]);
 			index_mem += 4;
 			break;
 		default:
-			xil_printf("Unsupported mode.\n\r");
+			ad_printf("Unsupported mode.\n\r");
 			return -1;
 		}
 	}
-	Xil_DCacheFlush();
+	ad_dcache_flush();
 
 	dac_dmac_write(core, DAC_DMAC_REG_CTRL, 0);
 	dac_dmac_write(core, DAC_DMAC_REG_CTRL, DAC_DMAC_ENABLE);
@@ -368,11 +379,11 @@ int32_t dac_setup(dac_core core)
 
 	dac_read(core, DAC_REG_STATUS, &status);
 	if (status == 0x0) {
-		xil_printf("DAC Core Status errors.\n\r");
+		ad_printf("DAC Core Status errors.\n\r");
 
 		return -1;
 	} else {
-		xil_printf("DAC Core successfully initialized.\n\r");
+		ad_printf("DAC Core successfully initialized.\n\r");
 
 		return 0;
 	}

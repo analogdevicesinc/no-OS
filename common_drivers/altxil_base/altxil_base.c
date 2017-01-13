@@ -114,6 +114,23 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 
 #endif
 
+#ifdef NIOS_II
+
+  uint32_t i;
+
+  IOWR_32DIRECT(SYS_SPI_BASE, 0x0c, 0x400);
+  IOWR_32DIRECT(SYS_SPI_BASE, 0x14, ~(dev->chip_select));
+  for (i = 0; i < no_of_bytes; i++) {
+    while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x40) == 0x00) {}
+  	IOWR_32DIRECT(SYS_SPI_BASE, 0x04, *(data + i));
+    while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x80) == 0x00) {}
+  	*(data + i) = IORD_32DIRECT(SYS_SPI_BASE, 0x00);
+	}
+  IOWR_32DIRECT(SYS_SPI_BASE, 0x14, 0x000);
+  IOWR_32DIRECT(SYS_SPI_BASE, 0x0c, 0x000);
+
+#endif
+
 	return(0);
 }
 
@@ -161,6 +178,14 @@ int32_t ad_gpio_set(uint8_t pin, uint8_t data)
 
 #endif
 
+#ifdef NIOS_II
+
+  pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
+  IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (data << ppos)));
+  pstatus = 0;
+
+#endif
+
 	return(pstatus);
 }
 
@@ -174,7 +199,9 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
   int32_t pstatus;
   uint32_t ppos;
   uint32_t pdata;
+#ifdef ZYNQ
   uint32_t pmask;
+#endif
 
   if (pin < 32) {
     return(-1);
@@ -182,7 +209,9 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
 
   pstatus = -1;
   ppos = pin - 32;
+#ifdef ZYNQ
   pmask = 0x1 << ppos;
+#endif
 
 #ifdef ZYNQ_PS7
 
@@ -199,6 +228,14 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
   pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
   Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata & ~pmask));
   pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
+  *data = (pdata >> ppos) & 0x1;
+  pstatus = 0;
+
+#endif
+
+#ifdef NIOS_II
+
+  pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
   *data = (pdata >> ppos) & 0x1;
   pstatus = 0;
 

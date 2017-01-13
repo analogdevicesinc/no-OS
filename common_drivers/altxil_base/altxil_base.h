@@ -64,12 +64,31 @@ void Xil_DCacheFlush();
 #ifdef MICROBLAZE
 #endif
 
+#ifdef ALTERA
+#include <io.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <system.h>
+#include <alt_stdio.h>
+#include <alt_cache.h>
+#include <alt_types.h>
+#endif
+
 #ifdef NIOS_II
 #endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+#ifdef ALTERA
+#define int8_t alt_8
+#define int32_t alt_32
+#define uint8_t alt_u8
+#define uint16_t alt_u16
+#define uint32_t alt_u32
+#define uint64_t alt_u64
+#endif
 
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 #define min_t(type, x, y) (type)min((type)(x), (type)(y))
@@ -81,6 +100,31 @@ void Xil_DCacheFlush();
 
 #define mdelay(msecs) usleep(1000*msecs)
 #define udelay(usecs) usleep(usecs)
+
+#ifdef ALTERA
+#define ad_printf alt_printf
+#endif
+
+#ifdef NIOS_II
+#define ad_reg_write(x,y) IOWR_32DIRECT(x,0,y)
+#define ad_reg_read(x) IORD_32DIRECT(x,0)
+#endif
+
+#ifdef XILINX
+#define ad_printf xil_printf
+#define ad_reg_write(x,y) Xil_Out32(x,y)
+#define ad_reg_read(x) Xil_In32(x)
+#endif
+
+#ifdef ALTERA
+#define ad_icache_flush alt_icache_flush_all
+#define ad_dcache_flush alt_icache_flush_all
+#endif
+
+#ifdef XILINX
+#define ad_icache_flush Xil_ICacheFlush
+#define ad_dcache_flush Xil_DCacheFlush
+#endif
 
 /******************************************************************************/
 /********************** SPI structure and functions ***************************/

@@ -69,7 +69,7 @@ int32_t adc_read(adc_core core,
 				 uint32_t reg_addr,
 				 uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.adc_baseaddr + reg_addr));
+	*reg_data = ad_reg_read((core.adc_baseaddr + reg_addr));
 
 	return 0;
 }
@@ -81,7 +81,7 @@ int32_t adc_write(adc_core core,
 				  uint32_t reg_addr,
 				  uint32_t reg_data)
 {
-	Xil_Out32((core.adc_baseaddr + reg_addr), reg_data);
+	ad_reg_write((core.adc_baseaddr + reg_addr), reg_data);
 
 	return 0;
 }
@@ -93,7 +93,7 @@ void adc_dmac_read(adc_core core,
 				   uint32_t reg_addr,
 				   uint32_t *reg_data)
 {
-	*reg_data = Xil_In32(core.dmac_baseaddr + reg_addr);
+	*reg_data = ad_reg_read(core.dmac_baseaddr + reg_addr);
 }
 
 /***************************************************************************//**
@@ -103,7 +103,7 @@ void adc_dmac_write(adc_core core,
 					uint32_t reg_addr,
 					uint32_t reg_data)
 {
-	Xil_Out32(core.dmac_baseaddr + reg_addr, reg_data);
+	ad_reg_write(core.dmac_baseaddr + reg_addr, reg_data);
 }
 
 /***************************************************************************//**
@@ -132,7 +132,7 @@ int32_t adc_setup(adc_core core)
 
 	adc_read(core, ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
-		xil_printf("ADC Core Status errors.\n");
+		ad_printf("ADC Core Status errors.\n");
 		return -1;
 	}
 
@@ -141,7 +141,7 @@ int32_t adc_setup(adc_core core)
 	adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
 	adc_clock = adc_clock >> 16;
 
-	xil_printf("ADC Core Initialized (%d MHz).\n", adc_clock);
+	ad_printf("ADC Core Initialized (%d MHz).\n", adc_clock);
 
 	return 0;
 }
@@ -226,17 +226,17 @@ int32_t adc_capture(adc_core core,
 
 	gic_config = XScuGic_LookupConfig(XPAR_PS7_SCUGIC_0_DEVICE_ID);
 	if(gic_config == NULL)
-		xil_printf("Error\n");
+		ad_printf("Error\n");
 
 	status = XScuGic_CfgInitialize(&gic, gic_config, gic_config->CpuBaseAddress);
 	if(status)
-		xil_printf("Error\n");
+		ad_printf("Error\n");
 
 	XScuGic_SetPriorityTriggerType(&gic, ADC_DMAC_INT_ID, 0x0, 0x3);
 
 	status = XScuGic_Connect(&gic, ADC_DMAC_INT_ID, (Xil_ExceptionHandler)adc_dmac_isr, NULL);
 	if(status)
-		xil_printf("Error\n");
+		ad_printf("Error\n");
 
 	XScuGic_Enable(&gic, ADC_DMAC_INT_ID);
 
@@ -303,7 +303,7 @@ int32_t adc_pn_mon(adc_core core,
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
-			xil_printf("ADC PN Status: %d, %d, 0x%02x!\n", index, sel, reg_data);
+			ad_printf("ADC PN Status: %d, %d, 0x%02x!\n", index, sel, reg_data);
 		}
 	}
 
@@ -324,11 +324,11 @@ int32_t adc_ramp_test(adc_core core,
 
 	// FIXME
 	for (index = 0; index < no_of_samples; index++) {
-		rcv_data = Xil_In32(start_address + (index*4)) & 0x3fff3fff;
+		rcv_data = ad_reg_read(start_address + (index*4)) & 0x3fff3fff;
 		if (index == 0)
 			exp_data = rcv_data;
 		if (rcv_data != exp_data) {
-			xil_printf("Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+			ad_printf("Capture Error[%d]: rcv(%08x) exp(%08x).\n",
 					index, rcv_data, exp_data);
 			if (exp_data == 10)
 				break;

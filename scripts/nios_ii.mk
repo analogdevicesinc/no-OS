@@ -1,69 +1,82 @@
-# 7series zynq
+# nios-ii
 
-ifeq ($(HDF-FILE),)
-  HDF-FILE := $(M_HDF_FILE)
+ifeq ($(SOPCINFO-FILE),)
+  SOPCINFO-FILE := $(M_SOPCINFO_FILE)
 endif
 
-ifeq ($(OS), Windows_NT)
-  XSCT_CMD := xsct.bat 
-else
-  XSCT_CMD := xsct 
+PRJ_DIR := $(dir $(SOPCINFO-FILE))
+M_SOF_FILE := $(PRJ_DIR)/$(M_SOF_FILE)
+ifeq ($(SOF-FILE),)
+  SOF-FILE := $(M_SOF_FILE)
 endif
 
-XSCT_LOG := xsct.log
-XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
-XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
-
-CC_CMD_PREFIX = arm-none-eabi
-CC_CMD = $(CC_CMD_PREFIX)-gcc
-CC_FLAGS := -Wall
-CC_FLAGS += -DXILINX
-CC_FLAGS += -DZYNQ_PS7
-CC_FLAGS += -Ibsp/ps7_cortexa9_0/include
-CC_FLAGS += -Isw/src
-CC_FLAGS += -I$(NOOS-DIR)/common
-CC_FLAGS += -I$(NOOS-DIR)/drivers
-CC_FLAGS += $(addprefix -I, $(M_INC_DIRS))
-CC_FLAGS += -O2
-CC_FLAGS += -fmessage-length=0
-CC_FLAGS += -mcpu=cortex-a9
-CC_FLAGS += -mfpu=vfpv3
-CC_FLAGS += -mfloat-abi=hard 
-CC_FLAGS += -Wl,-build-id=none -specs=sw/src/Xilinx.spec
-
-P_HDR_FILE := sw/src/platform.h
-P_SRC_FILE := sw/src/platform.c
-
-LINKER_SCRIPT := sw/src/lscript.ld
-LINKER_LIBRARY := bsp/ps7_cortexa9_0/lib/libxil.a
-LINKER_LIBRARY_PATH := $(dir $(LINKER_LIBRARY))
-LINKER_FLAGS := -L$(LINKER_LIBRARY_PATH)
-LINKER_FLAGS += -Wl,-T
-LINKER_FLAGS += -Wl,$(LINKER_SCRIPT)
-LINKER_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
-
+APP_LOG := nios_ii_app.log
+BSP_LOG := nios_ii_bsp.log
 ELF_FILE := sw.elf
+CPU_NAME := sys_cpu
 
-HDR_FILES := $(P_HDR_FILE)
-HDR_FILES += $(M_HDR_FILES)
-HDR_FILES += $(wildcard $(NOOS-DIR)/common/*.h)
+HDR_FILES := $(M_HDR_FILES)
 HDR_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
 
-SRC_FILES := $(P_SRC_FILE)
-SRC_FILES += $(M_SRC_FILES)
-SRC_FILES += $(wildcard $(NOOS-DIR)/common/*.c)
+SRC_FILES := $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
-all: $(ELF_FILE)
+BSP_CMD := nios2-bsp hal bsp
+BSP_CMD += $(SOPCINFO-FILE)
+BSP_CMD += --cpu-name $(CPU_NAME)
+
+APP_CMD := nios2-app-generate-makefile
+APP_CMD += --bsp-dir bsp
+APP_CMD += --app-dir sw
+APP_CMD += $(addprefix --inc-dir , $(M_INC_DIRS))
+APP_CMD += --inc-dir bsp/HAL/inc/sys
+APP_CMD += --elf-name $(ELF_FILE)
+APP_CMD += --set OBJDUMP_INCLUDE_SOURCE 1
+APP_CMD += --set APP_CFLAGS_DEFINED_SYMBOLS -DALTERA -DNIOS_II
+APP_CMD += --src-files $(SRC_FILES)
+
+.PHONY: all
+all: sw/$(ELF_FILE)
+
+sw/$(ELF_FILE): bsp/system.h sw/Makefile hw/system_top.sof $(SRC_FILES) $(HDR_FILES)
+	make -C sw
 
 
-$(ELF_FILE): $(LINKER_LIBRARY) $(HDR_FILES) $(SRC_FILES) $(LINKER_SCRIPT) 
-	$(CC_CMD) $(CC_FLAGS) -o $@ $(SRC_FILES) $(LINKER_FLAGS)
+sw/Makefile: $(SOPCINFO-FILE)
+	rm -fr sw
+	$(APP_CMD) > $(APP_LOG) 2>&1
+	mv $(APP_LOG) sw/
 
 
-$(LINKER_LIBRARY): $(XSCT_SCRIPT) $(HDF-FILE)
-	$(XSCT_CMD) $(XSCT_SCRIPT) $(HDF-FILE) > $(XSCT_LOG) 2>&1
+bsp/system.h: $(SOPCINFO-FILE)
+	rm -fr bsp
+	$(BSP_CMD) > $(BSP_LOG) 2>&1
+	mv $(BSP_LOG) bsp/
 
-run: $(ELF_FILE)
-	xsdb $(XSDB_SCRIPT) PS7
+
+hw/system_top.sof: $(SOF-FILE) $(SOPCINFO-FILE)
+	rm -fr hw
+	mkdir hw
+	cp $(SOF-FILE) hw/system_top.sof
+	cp $(SOPCINFO-FILE) hw/
+
+
+.PHONY: clean
+clean:
+	rm -fr bsp
+	rm -fr sw
+
+
+.PHONY: clean-all
+clean-all:
+	rm -fr bsp
+	rm -fr sw
+	rm -fr hw
+
+
+.PHONY: run
+run: sw/$(ELF_FILE)
+	nios2-configure-sof hw/system_top.sof
+	nios2-download -g sw/sw.elf
+	nios2-terminal
 

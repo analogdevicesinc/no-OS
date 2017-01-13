@@ -254,13 +254,13 @@ int32_t ad9528_sync(spi_device *dev)
   if (ad9528_poll(dev, AD9528_READBACK, AD9528_VCXO_OK, AD9528_VCXO_OK) < 0)
   {
     ret = -1;
-    xil_printf("AD9528 VCXO missing!\n");
+    ad_printf("AD9528 VCXO missing!\n");
   }
 
   if (ad9528_poll(dev, AD9528_READBACK, AD9528_PLL2_LOCKED, AD9528_PLL2_LOCKED) < 0)
   {
     ret = -1;
-    xil_printf("AD9528 PLL2 NOT locked!\n");
+    ad_printf("AD9528 PLL2 NOT locked!\n");
   }
 
   return ret;
@@ -304,7 +304,7 @@ int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata)
     return ret;
 
   if ((reg_data & 0xFFFFFF) != AD9528_SPI_MAGIC) {
-    xil_printf("AD9528 SPI Read Verify failed (0x%X).\n", reg_data);
+    ad_printf("AD9528 SPI Read Verify failed (0x%X).\n", reg_data);
     return -1;
   }
 

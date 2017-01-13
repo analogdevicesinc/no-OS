@@ -291,7 +291,7 @@ int32_t jesd204b_read(jesd204_core core,
 					  uint32_t reg_addr,
 					  uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.base_addr + reg_addr));
+	*reg_data = ad_reg_read((core.base_addr + reg_addr));
 
 	return 0;
 }
@@ -303,7 +303,7 @@ int32_t jesd204b_write(jesd204_core core,
 					   uint32_t reg_addr,
 					   uint32_t reg_data)
 {
-	Xil_Out32((core.base_addr + reg_addr), reg_data);
+	ad_reg_write((core.base_addr + reg_addr), reg_data);
 
 	return 0;
 }
@@ -315,7 +315,7 @@ int32_t adxcvr_read(adxcvr_core core,
 					uint32_t reg_addr,
 					uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.base_addr + reg_addr));
+	*reg_data = ad_reg_read((core.base_addr + reg_addr));
 
 	return 0;
 }
@@ -327,7 +327,7 @@ int32_t adxcvr_write(adxcvr_core core,
 					 uint32_t reg_addr,
 					 uint32_t reg_data)
 {
-	Xil_Out32((core.base_addr + reg_addr), reg_data);
+	ad_reg_write((core.base_addr + reg_addr), reg_data);
 
 	return 0;
 }
@@ -368,14 +368,14 @@ int32_t adxcvr_drp_read(adxcvr_core core,
 			continue;
 		}
 #ifdef DEBUG
-		xil_printf("%s: reg 0x%X val 0x%X\n",
+		ad_printf("%s: reg 0x%X val 0x%X\n",
 				__func__, reg_addr, val & 0xFFFF);
 #endif
 		*reg_data = ch_sel ? ADXCVR_CH_RDATA(val) : ADXCVR_CM_RDATA(val);
 		return 0;
 	} while (timeout--);
 
-	xil_printf("%s: Timeout!\n", __func__);
+	ad_printf("%s: Timeout!\n", __func__);
 
 	return -1;
 }
@@ -415,14 +415,14 @@ int32_t adxcvr_drp_write(adxcvr_core core,
 		if (!(val & (ch_sel ? ADXCVR_CH_BUSY : ADXCVR_CM_BUSY))) {
 			adxcvr_drp_read(core, reg_addr, &val_reg);
 			if (val != val_reg)
-				xil_printf("%s: MISMATCH reg 0x%X val 0x%X != read 0x%X\n",
+				ad_printf("%s: MISMATCH reg 0x%X val 0x%X != read 0x%X\n",
 						__func__, reg_addr, val, val_reg);
 			return 0;
 		}
 		mdelay(1);
 	} while (timeout--);
 
-	xil_printf("%s: Timeout!\n", __func__);
+	ad_printf("%s: Timeout!\n", __func__);
 
 	return -1;
 }
@@ -494,7 +494,7 @@ int32_t adxcvr_calc_cpll_settings(adxcvr_core core,
 							*fbdiv = N2[n2][1];
 						}
 #ifdef DEBUG
-						xil_printf("%s: M %d, D %d, N1 %d, N2 %d\n",
+						ad_printf("%s: M %d, D %d, N1 %d, N2 %d\n",
 							__func__, M[m][0], D[d][0],
 							N1[n1][0], N2[n2][0]);
 #endif
@@ -505,7 +505,7 @@ int32_t adxcvr_calc_cpll_settings(adxcvr_core core,
 		}
 	}
 
-	xil_printf("%s: Failed to find matching dividers for %lu kHz rate\n",
+	ad_printf("%s: Failed to find matching dividers for %lu kHz rate\n",
 		__func__, laneRate_kHz);
 
 	return -1;
@@ -561,7 +561,7 @@ int32_t adxcvr_calc_qpll_settings(adxcvr_core core,
 					if (lowband)
 						*lowband = _lowBand;
 #ifdef DEBUG
-					xil_printf("%s: M %d, D %d, N %d, ratio %d, lowband %d\n",
+					ad_printf("%s: M %d, D %d, N %d, ratio %d, lowband %d\n",
 						__func__, M[m][0], D[d][0],
 						N[n][0], (N[n][0] == 66) ? 0 : 1,
 						_lowBand);
@@ -573,7 +573,7 @@ int32_t adxcvr_calc_qpll_settings(adxcvr_core core,
 		}
 	}
 
-	xil_printf("%s: Failed to find matching dividers for %lu kHz rate\n",
+	ad_printf("%s: Failed to find matching dividers for %lu kHz rate\n",
 		__func__, laneRate_kHz);
 
 	return -1;
@@ -627,7 +627,7 @@ int32_t adxcvr_gth_rxcdr_settings(adxcvr_core core,
 			return -1;
 		}
 	} else {
-		xil_printf("%s: GTH PRBS CDR not implemented\n", __func__);
+		ad_printf("%s: GTH PRBS CDR not implemented\n", __func__);
 	}
 
 	adxcvr_drp_write(core, RXCDR_CFG0_ADDR, cfg0);
@@ -645,7 +645,7 @@ int32_t adxcvr_gth_rxcdr_settings(adxcvr_core core,
 int32_t adxcvr_rxcdr_settings(adxcvr_core core,
 							  uint32_t rxout_div)
 {
-	u16 cfg0, cfg1, cfg2, cfg3, cfg4;
+	uint16_t cfg0, cfg1, cfg2, cfg3, cfg4;
 
 	if (core.tx_enable)
 		return 0; /* Do Nothing */
@@ -753,7 +753,7 @@ int32_t adxcvr_clk_set_rate(adxcvr_core core,
 	int32_t ret, pll_done = 0;
 
 #ifdef DEBUG
-	xil_printf("%s: Rate %lu Hz Parent Rate %lu Hz\n",
+	ad_printf("%s: Rate %lu Hz Parent Rate %lu Hz\n",
 		__func__, rate, parent_rate);
 #endif
 
@@ -851,7 +851,7 @@ int32_t jesd204_init(jesd204_core core)
 	jesd204b_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
 			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
 
-	xil_printf("JESD204 initialization done.\n");
+	ad_printf("JESD204 initialization done.\n");
     return 0;
 }
 
@@ -887,7 +887,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	} while ((timeout--) && (status == JESD204_TRX_RESET));
 
 	if (status == JESD204_TRX_RESET) {
-		xil_printf("jesd_status: jesd reset not completed!\n");
+		ad_printf("jesd_status: jesd reset not completed!\n");
 		return -1;
 	}
 
@@ -900,10 +900,10 @@ int32_t jesd204_read_status(jesd204_core core)
 	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
 
 	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
-		xil_printf("jesd_status: missing SYS_REF!\n");
+		ad_printf("jesd_status: missing SYS_REF!\n");
 		return -1;
 	  } else
-		xil_printf("SYNC STATUS: 0x%x\n", status);
+		ad_printf("SYNC STATUS: 0x%x\n", status);
 	}
 
 	timeout = 100;
@@ -914,7 +914,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
 
 	if (status != JESD204_TRX_SYNC_ACHIEVED) {
-		xil_printf("jesd_status: Link SYNC not achieved!\n");
+		ad_printf("jesd_status: Link SYNC not achieved!\n");
 		return -1;
 	}
 
@@ -924,31 +924,31 @@ int32_t jesd204_read_status(jesd204_core core)
 	jesd204b_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
 	for (link = 0; link < 8; link++) {
 		if (status & JESD204_RX_LINK_K_CH_ERR(link)) {
-			xil_printf("Link %d: K_CH_ERR\n", link);
+			ad_printf("Link %d: K_CH_ERR\n", link);
 			ret = -1;
 		}
 		if (status & JESD204_RX_LINK_DISP_ERR(link)) {
-			xil_printf("Link %d: DISP_ERR\n", link);
+			ad_printf("Link %d: DISP_ERR\n", link);
 			ret = -1;
 		}
 		if (status & JESD204_RX_LINK_NOT_IN_TBL_ERR(link)) {
-			xil_printf("Link %d: NOT_IN_TBL_ERR\n", link);
+			ad_printf("Link %d: NOT_IN_TBL_ERR\n", link);
 			ret = -1;
 		}
 	}
 
 	if (status & JESD204_RX_LINK_LANE_ALIGN_ERR_ALARM) {
-		xil_printf("jesd_status: frame alignment error!\n");
+		ad_printf("jesd_status: frame alignment error!\n");
 		ret = -1;
 	}
 
 	if (status & JESD204_RX_LINK_SYSREF_LMFC_ALARM) {
-		xil_printf("jesd_status: sysref alignment error!\n");
+		ad_printf("jesd_status: sysref alignment error!\n");
 		ret = -1;
 	}
 
 	if (status & JESD204_RX_LINK_BUFF_OVF_ALARM) {
-		xil_printf("jesd_status: receive buffer overflow error!\n");
+		ad_printf("jesd_status: receive buffer overflow error!\n");
 		ret = -1;
 	}
 
@@ -990,11 +990,11 @@ int32_t adxcvr_init(adxcvr_core core)
 	} while ((timeout--) && (status == 0));
 
 	if (status) {
-		xil_printf("XCVR successfully initialized.\n");
+		ad_printf("XCVR successfully initialized.\n");
 
 		return 0;
 	} else {
-		xil_printf("XCVR initialization error.\n");
+		ad_printf("XCVR initialization error.\n");
 
 		return -1;
 	}
