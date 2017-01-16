@@ -14,7 +14,9 @@
 M_INC_DIRS := $(NOOS-DIR)/common_drivers/altxil_base
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_core
+M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adxcvr_core
+M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_buffer
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9144
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9523
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
@@ -22,5 +24,4 @@ M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
 M_HDR_FILES :=
 
 M_SRC_FILES := $(NOOS-DIR)/ad-fmcdaq2-ebz/ad_fmcdaq2_ebz.c
-
 
