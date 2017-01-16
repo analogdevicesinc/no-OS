@@ -1,6 +1,6 @@
 /***************************************************************************//**
-* @file adxcvr.h
-* @brief Header file of ADXCVR Driver.
+* @file xcvr.c
+* @brief Implementation of xcvr Driver.
 * @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
 * Copyright 2016(c) Analog Devices, Inc.
@@ -36,56 +36,67 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef ADXCVR_CORE_H_
-#define ADXCVR_CORE_H_
-
-#include <altxil_base.h>
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
+/***************************** Include Files **********************************/
 /******************************************************************************/
-typedef enum {
-	PM_200,
-	PM_700,
-	PM_1250,
-} refclk_ppm;
+#include "xcvr_core.h"
 
-typedef enum {
-	EXTERN,
-	INTERN
-} sys_ref_type;
+/***************************************************************************//**
+* @brief xcvr_read
+*******************************************************************************/
+int32_t xcvr_read(xcvr_core core,
+					uint32_t reg_addr,
+					uint32_t *reg_data)
+{
+	*reg_data = ad_reg_read((core.base_addr + reg_addr));
 
-typedef struct {
-	uint32_t		base_addr;
-	uint8_t			rx_tx_n;
-	uint8_t			octets_per_frame;
-	uint8_t			frames_per_multiframe;
-	uint8_t			subclass_mode;
-	sys_ref_type	sysref_type;
-	uint32_t		gpio_sysref;
-} jesd204_core;
+	return 0;
+}
 
-typedef struct {
-	uint32_t		base_addr;
-	uint8_t			tx_enable;
-	refclk_ppm		ppm;
-	uint16_t		encoding;
-	uint8_t			gth_enable;
-	uint8_t			lpm_enable;
-	uint8_t			cpll_enable;
-	uint32_t		sys_clk_sel;
-	uint32_t		out_clk_sel;
-	uint32_t		lane_rate_khz;
-	uint32_t		ref_rate_khz;
-	uint8_t			init_set_rate_enable;
-} adxcvr_core;
+/***************************************************************************//**
+* @brief xcvr_write
+*******************************************************************************/
+int32_t xcvr_write(xcvr_core core,
+					 uint32_t reg_addr,
+					 uint32_t reg_data)
+{
+	ad_reg_write((core.base_addr + reg_addr), reg_data);
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-int32_t jesd204_init(jesd204_core core);
-int32_t adxcvr_init(adxcvr_core core);
-int32_t jesd204_gen_sysref(jesd204_core core);
-int32_t jesd204_read_status(jesd204_core core);
+	return 0;
+}
 
-#endif
+/*******************************************************************************
+* @brief xcvr_init
+*******************************************************************************/
+
+int32_t xcvr_init(xcvr_core core)
+{
+	uint32_t status;
+	uint32_t timeout;
+
+	xcvr_write(core, XCVR_REG_RESETN, 0);
+
+	xcvr_write(core, XCVR_REG_CONTROL,
+				 ((core.lpm_enable ? XCVR_LPM_DFE_N : 0) |
+				  XCVR_SYSCLK_SEL(core.sys_clk_sel) |
+				  XCVR_OUTCLK_SEL(core.out_clk_sel)));
+
+	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
+
+	timeout = 100;
+	do {
+		mdelay(1);
+		xcvr_read(core,XCVR_REG_STATUS, &status);
+	} while ((timeout--) && (status == 0));
+
+	if (status) {
+		ad_printf("XCVR successfully initialized.\n");
+
+		return 0;
+	} else {
+		ad_printf("XCVR initialization error.\n");
+
+		return -1;
+	}
+}

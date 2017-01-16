@@ -49,7 +49,8 @@
 #include "dac_core.h"
 #include "dmac_core.h"
 #include "dac_buffer.h"
-#include "adxcvr_core.h"
+#include "xcvr_core.h"
+#include "jesd_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -298,11 +299,11 @@ int main(void)
 
 	dac_core	ad9144_core;
 	jesd204_core	ad9144_jesd204;
-	adxcvr_core	ad9144_xcvr;
+	xcvr_core	ad9144_xcvr;
 	dmac_core	ad9144_dma;
 	adc_core	ad9680_core;
 	jesd204_core	ad9680_jesd204;
-	adxcvr_core	ad9680_xcvr;
+	xcvr_core	ad9680_xcvr;
 	dmac_core	ad9680_dma;
 	dmac_xfer 	ad9680_xfer;
 
@@ -332,7 +333,6 @@ int main(void)
 	ad9144_xcvr.gth_enable = 0;
 	ad9144_xcvr.lpm_enable = 1;
 	ad9144_xcvr.out_clk_sel = 4;
-	ad9144_xcvr.init_set_rate_enable = 1;
 
 	ad9144_dma.baseaddr = AD9144_DMA_BASEADDR;
 	ad9144_dma.type = DMAC_DOWNSTREAM;
@@ -353,7 +353,6 @@ int main(void)
 	ad9680_xcvr.gth_enable = 0;
 	ad9680_xcvr.lpm_enable = 1;
 	ad9680_xcvr.out_clk_sel = 4;
-	ad9680_xcvr.init_set_rate_enable = 1;
 
 	ad9680_dma.baseaddr = AD9144_DMA_BASEADDR;
 	ad9680_dma.type = DMAC_UPSTREAM;
@@ -462,12 +461,12 @@ int main(void)
 
 	ad9144_setup(&ad9144_spi_device, default_ad9144_init_param);
 	jesd204_init(ad9144_jesd204);
-	adxcvr_init(ad9144_xcvr);
+	xcvr_init(ad9144_xcvr);
 	jesd204_read_status(ad9144_jesd204);
 
 	ad9680_setup(&ad9680_spi_device, default_ad9680_init_param);
 	jesd204_init(ad9680_jesd204);
-	adxcvr_init(ad9680_xcvr);
+	xcvr_init(ad9680_xcvr);
 	jesd204_read_status(ad9680_jesd204);
 
 	dac_setup(ad9144_core);
