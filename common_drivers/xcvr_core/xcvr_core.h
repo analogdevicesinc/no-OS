@@ -36,9 +36,10 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "altxil_base.h"
 #ifndef XCVR_CORE_H_
 #define XCVR_CORE_H_
+
+#include "altxil_base.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -50,15 +51,18 @@ typedef enum {
 } refclk_ppm;
 
 typedef struct {
-	uint32_t		base_addr;
+	uint32_t		base_address;
 	uint32_t		mmcm_lpll_base_address;
 	uint32_t		mmcm_present;
 	uint32_t		reconfig_bypass;
-	uint32_t		jesd_base_address;
-	uint8_t 		tx_enable;
-	uint8_t 		rx_enable;
-	uint32_t		no_of_links;
-	uint32_t		*link_base_address;
+	uint8_t 		rx_tx_n;
+	uint32_t		no_of_lanes;
+	uint32_t		*lane_base_addresses;
+	uint32_t		lane_rate_kbps;
+	uint32_t		ref_clock_khz;
+
+  // below parameters are auto computed and is for temporary internal use only-
+
 	refclk_ppm		ppm;
 	uint16_t		encoding;
 	uint8_t			gth_enable;
@@ -66,9 +70,6 @@ typedef struct {
 	uint8_t			cpll_enable;
 	uint32_t		sys_clk_sel;
 	uint32_t		out_clk_sel;
-	uint32_t		lane_rate_khz;
-	uint32_t		ref_rate_khz;
-	uint8_t			sysref_type;
 } xcvr_core;
 
 /******************************************************************************/
@@ -131,9 +132,12 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t xcvr_init(xcvr_core core);
-int32_t xcvr_reconfig(xcvr_core core);
-int32_t xcvr_status(xcvr_core core);
 int32_t xcvr_read(xcvr_core core, uint32_t reg_addr, uint32_t *reg_data);
 int32_t xcvr_write(xcvr_core core, uint32_t reg_addr, uint32_t reg_data);
+
+int32_t xcvr_setup(xcvr_core core);
+int32_t xcvr_status(xcvr_core core);
+
+int32_t xcvr_reconfig(xcvr_core core);
+
 #endif
