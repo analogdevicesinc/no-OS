@@ -99,20 +99,25 @@ typedef enum {
 } sys_ref_type;
 
 typedef struct {
-	uint32_t		base_addr;
+	uint32_t		base_address;
 	uint8_t			rx_tx_n;
+  uint8_t     scramble_enable;
 	uint8_t			octets_per_frame;
 	uint8_t			frames_per_multiframe;
 	uint8_t			subclass_mode;
 	sys_ref_type		sysref_type;
-	uint32_t		gpio_sysref;
-} jesd204_core;
+	uint32_t		sysref_gpio_pin;
+} jesd_core;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t jesd204_config(jesd204_core core);
-int32_t jesd204_gen_sysref(jesd204_core core);
-int32_t jesd204_read_status(jesd204_core core);
+
+int32_t jesd_read(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd_write(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
+
+int32_t jesd_setup(jesd_core core);
+int32_t jesd_status(jesd_core core);
+int32_t jesd_sysref_control(jesd_core core, uint32_t enable);
 
 #endif
