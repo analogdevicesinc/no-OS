@@ -167,19 +167,19 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, 0x2a7, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x2ae, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, 0x314, 0x01);	// pclk == qbd master clock
-	if (init_param.lane_rate_khz < 2880000)
+	if (init_param.lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, 0x230, 0x2A);		// CDR_OVERSAMP
 	else
-		if (init_param.lane_rate_khz > 5520000)
+		if (init_param.lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, 0x230, 0x28);	// ENHALFRATE
 		else
 			ad9144_spi_write(dev, 0x230, 0x08);
 	ad9144_spi_write(dev, 0x206, 0x00);	// cdr reset
 	ad9144_spi_write(dev, 0x206, 0x01);	// cdr reset
-	if (init_param.lane_rate_khz < 2880000)
+	if (init_param.lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, 0x289, 0x06);		// data-rate < 2.88 Gbps
 	else
-		if (init_param.lane_rate_khz > 5520000)
+		if (init_param.lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, 0x289, 0x04);	// data-rate > 5.52 Gbps
 		else
 			ad9144_spi_write(dev, 0x289, 0x05);

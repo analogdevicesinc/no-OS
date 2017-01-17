@@ -107,7 +107,7 @@ int32_t ad9680_setup(spi_device *dev,
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN, 0x11);	// serdes-1 = lane 1
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN, 0x22);	// serdes-2 = lane 2
 	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN, 0x33);	// serdes-3 = lane 3
-	if (init_param.lane_rate_khz < 6250000)
+	if (init_param.lane_rate_kbps < 6250000)
 		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x10);	// low line rate mode must be enabled
 	else
 		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x00);	// low line rate mode must be disabled
