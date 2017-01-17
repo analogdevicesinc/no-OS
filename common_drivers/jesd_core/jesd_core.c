@@ -43,49 +43,49 @@
 #include "jesd_core.h"
 
 /***************************************************************************//**
-* @brief jesd204b_read
+* @brief jesd_read
 *******************************************************************************/
-int32_t jesd204b_read(jesd204_core core,
+int32_t jesd_read(jesd_core core,
 					  uint32_t reg_addr,
 					  uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.base_addr + reg_addr));
+	*reg_data = ad_reg_read((core.base_address + reg_addr));
 
 	return 0;
 }
 
 /***************************************************************************//**
-* @brief jesd204b_write
+* @brief jesd_write
 *******************************************************************************/
-int32_t jesd204b_write(jesd204_core core,
+int32_t jesd_write(jesd_core core,
 					   uint32_t reg_addr,
 					   uint32_t reg_data)
 {
-	ad_reg_write((core.base_addr + reg_addr), reg_data);
+	ad_reg_write((core.base_address + reg_addr), reg_data);
 
 	return 0;
 }
 
 
 /***************************************************************************//**
-* @brief jesd204_init
+* @brief jesd_init
 *******************************************************************************/
-int32_t jesd204_init(jesd204_core core)
+int32_t jesd_setup(jesd_core core)
 {
 
-	jesd204b_write(core, JESD204_REG_TRX_RESET,
+	jesd_write(core, JESD204_REG_TRX_RESET,
 			JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
-	jesd204b_write(core, JESD204_REG_TRX_ILA_SUPPORT,
+	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT,
 			JESD204_TRX_ILA_EN);
-	jesd204b_write(core, JESD204_REG_TRX_SCRAMBLING,
+	jesd_write(core, JESD204_REG_TRX_SCRAMBLING,
 			JESD204_TRX_SCR_EN);
-	jesd204b_write(core, JESD204_REG_TRX_SYSREF_HANDLING,
+	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING,
 			0);
-	jesd204b_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
+	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
 			JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
-	jesd204b_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
+	jesd_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
 			JESD204_TRX_FRAMES_PER_MULTIFRAME(core.frames_per_multiframe));
-	jesd204b_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
+	jesd_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
 			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
 
 	ad_printf("JESD204 initialization done.\n");
@@ -93,23 +93,23 @@ int32_t jesd204_init(jesd204_core core)
 }
 
 /***************************************************************************//**
-* @brief jesd204 generate SYSREF if necessar
+* @brief jesd generate SYSREF if necessar
 *******************************************************************************/
-int32_t jesd204_gen_sysref(jesd204_core core)
+int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 {
     if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
 
         // generate SYS_REF
 
-        ad_gpio_set(core.gpio_sysref, 1);
+        ad_gpio_set(core.sysref_gpio_pin, enable);
         mdelay(10);
     }
     return 0;
 }
 /***************************************************************************//**
-* @brief jesd204_read_status
+* @brief jesd_read_status
 *******************************************************************************/
-int32_t jesd204_read_status(jesd204_core core)
+int32_t jesd_status(jesd_core core)
 {
 	uint32_t status;
 	uint32_t timeout;
@@ -119,7 +119,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	timeout = 100;
 	do {
 		mdelay(1);
-		jesd204b_read(core, JESD204_REG_TRX_RESET, &status);
+		jesd_read(core, JESD204_REG_TRX_RESET, &status);
 		status &= JESD204_TRX_RESET;
 	} while ((timeout--) && (status == JESD204_TRX_RESET));
 
@@ -132,7 +132,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	  timeout = 100;
 	  do {
 		mdelay(1);
-		jesd204b_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
+		jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
 		status &= JESD204_TRX_SYSREF_CAPTURED;
 	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
 
@@ -146,7 +146,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	timeout = 100;
 	do {
 		mdelay(1);
-		jesd204b_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
+		jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
 		status &= JESD204_TRX_SYNC_ACHIEVED;
 	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
 
@@ -158,7 +158,7 @@ int32_t jesd204_read_status(jesd204_core core)
 	if (core.rx_tx_n == 0)
 		return 0;
 
-	jesd204b_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
+	jesd_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
 	for (link = 0; link < 8; link++) {
 		if (status & JESD204_RX_LINK_K_CH_ERR(link)) {
 			ad_printf("Link %d: K_CH_ERR\n", link);

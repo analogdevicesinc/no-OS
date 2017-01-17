@@ -298,11 +298,11 @@ int main(void)
 	spi_device	ad9680_spi_device;
 
 	dac_core	ad9144_core;
-	jesd204_core	ad9144_jesd204;
+	jesd_core	ad9144_jesd204;
 	xcvr_core	ad9144_xcvr;
 	dmac_core	ad9144_dma;
 	adc_core	ad9680_core;
-	jesd204_core	ad9680_jesd204;
+	jesd_core	ad9680_jesd204;
 	xcvr_core	ad9680_xcvr;
 	dmac_core	ad9680_dma;
 	dmac_xfer 	ad9680_xfer;
@@ -322,14 +322,14 @@ int main(void)
 	ad9144_core.resolution = 16;
 	ad9144_core.fifo_present = 1;
 
-	ad9144_jesd204.base_addr = AD9144_JESD_BASEADDR;
+	ad9144_jesd204.base_address = AD9144_JESD_BASEADDR;
 	ad9144_jesd204.rx_tx_n = 0;
 	ad9144_jesd204.octets_per_frame = 1;
 	ad9144_jesd204.frames_per_multiframe = 32;
 	ad9144_jesd204.subclass_mode = 1;
 
-	ad9144_xcvr.base_addr = XPAR_AXI_AD9144_XCVR_BASEADDR;
-	ad9144_xcvr.tx_enable = 1;
+	ad9144_xcvr.base_address = XPAR_AXI_AD9144_XCVR_BASEADDR;
+	ad9144_xcvr.rx_tx_n = 0;
 	ad9144_xcvr.gth_enable = 0;
 	ad9144_xcvr.lpm_enable = 1;
 	ad9144_xcvr.out_clk_sel = 4;
@@ -342,14 +342,14 @@ int main(void)
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
 
-	ad9680_jesd204.base_addr = AD9680_JESD_BASEADDR;
+	ad9680_jesd204.base_address = AD9680_JESD_BASEADDR;
 	ad9680_jesd204.rx_tx_n = 1;
 	ad9680_jesd204.octets_per_frame = 1;
 	ad9680_jesd204.frames_per_multiframe = 32;
 	ad9680_jesd204.subclass_mode = 1;
 
-	ad9680_xcvr.base_addr = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_xcvr.tx_enable = 0;
+	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
+	ad9680_xcvr.rx_tx_n = 1;
 	ad9680_xcvr.gth_enable = 0;
 	ad9680_xcvr.lpm_enable = 1;
 	ad9680_xcvr.out_clk_sel = 4;
@@ -376,11 +376,11 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 2;
 			ad9523_channels[ADC_CLK].channel_divider = 1;
 			ad9144_xcvr.sys_clk_sel = 3;
-			ad9144_xcvr.lane_rate_khz = 10000000;
-			ad9144_xcvr.ref_rate_khz = 500000;
+			ad9144_xcvr.lane_rate_kbps = 10000000;
+			ad9144_xcvr.ref_clock_khz = 500000;
 			ad9680_xcvr.sys_clk_sel = 3;
-			ad9680_xcvr.lane_rate_khz = 10000000;
-			ad9680_xcvr.ref_rate_khz = 500000;
+			ad9680_xcvr.lane_rate_kbps = 10000000;
+			ad9680_xcvr.ref_clock_khz = 500000;
 			break;
 		case '2':
 			ad9523_pdata_lpc.pll2_vco_diff_m1 = 3;
@@ -389,11 +389,11 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
 			ad9523_channels[ADC_CLK].channel_divider = 2;
 			ad9144_xcvr.sys_clk_sel = 3;
-			ad9144_xcvr.lane_rate_khz = 10000000;
-			ad9144_xcvr.ref_rate_khz = 500000;
+			ad9144_xcvr.lane_rate_kbps = 10000000;
+			ad9144_xcvr.ref_clock_khz = 500000;
 			ad9680_xcvr.sys_clk_sel = 0;
-			ad9680_xcvr.lane_rate_khz = 5000000;
-			ad9680_xcvr.ref_rate_khz = 250000;
+			ad9680_xcvr.lane_rate_kbps = 5000000;
+			ad9680_xcvr.ref_clock_khz = 250000;
 			break;
 		case '3':
 			ad9523_pdata_lpc.pll2_vco_diff_m1 = 3;
@@ -402,11 +402,11 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
 			ad9523_channels[ADC_CLK].channel_divider = 2;
 			ad9144_xcvr.sys_clk_sel = 0;
-			ad9144_xcvr.lane_rate_khz = 5000000;
-			ad9144_xcvr.ref_rate_khz = 250000;
+			ad9144_xcvr.lane_rate_kbps = 5000000;
+			ad9144_xcvr.ref_clock_khz = 250000;
 			ad9680_xcvr.sys_clk_sel = 0;
-			ad9680_xcvr.lane_rate_khz = 5000000;
-			ad9680_xcvr.ref_rate_khz = 250000;
+			ad9680_xcvr.lane_rate_kbps = 5000000;
+			ad9680_xcvr.ref_clock_khz = 250000;
 			break;
 		case '4':
 			ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
@@ -415,11 +415,11 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 2;
 			ad9523_channels[ADC_CLK].channel_divider = 1;
 			ad9144_xcvr.sys_clk_sel = 3;
-			ad9144_xcvr.lane_rate_khz = 7500000;
-			ad9144_xcvr.ref_rate_khz = 375000;
+			ad9144_xcvr.lane_rate_kbps = 7500000;
+			ad9144_xcvr.ref_clock_khz = 375000;
 			ad9680_xcvr.sys_clk_sel = 3;
-			ad9680_xcvr.lane_rate_khz = 7500000;
-			ad9680_xcvr.ref_rate_khz = 375000;
+			ad9680_xcvr.lane_rate_kbps = 7500000;
+			ad9680_xcvr.ref_clock_khz = 375000;
 			break;
 		case '5':
 			ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
@@ -428,11 +428,11 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
 			ad9523_channels[ADC_CLK].channel_divider = 2;
 			ad9144_xcvr.sys_clk_sel = 3;
-			ad9144_xcvr.lane_rate_khz = 7500000;
-			ad9144_xcvr.ref_rate_khz = 375000;
+			ad9144_xcvr.lane_rate_kbps = 7500000;
+			ad9144_xcvr.ref_clock_khz = 375000;
 			ad9680_xcvr.sys_clk_sel = 0;
-			ad9680_xcvr.lane_rate_khz = 3750000;
-			ad9680_xcvr.ref_rate_khz = 187500;
+			ad9680_xcvr.lane_rate_kbps = 3750000;
+			ad9680_xcvr.ref_clock_khz = 187500;
 			break;
 		case '6':
 			ad9523_pdata_lpc.pll2_vco_diff_m1 = 4;
@@ -441,33 +441,33 @@ int main(void)
 			ad9523_channels[ADC_CLK_FMC].channel_divider = 4;
 			ad9523_channels[ADC_CLK].channel_divider = 2;
 			ad9144_xcvr.sys_clk_sel = 0;
-			ad9144_xcvr.lane_rate_khz = 3750000;
-			ad9144_xcvr.ref_rate_khz = 187500;
+			ad9144_xcvr.lane_rate_kbps = 3750000;
+			ad9144_xcvr.ref_clock_khz = 187500;
 			ad9680_xcvr.sys_clk_sel = 0;
-			ad9680_xcvr.lane_rate_khz = 3750000;
-			ad9680_xcvr.ref_rate_khz = 187500;
+			ad9680_xcvr.lane_rate_kbps = 3750000;
+			ad9680_xcvr.ref_clock_khz = 187500;
 			break;
 		default:
 			ad_printf ("Unknown selection.\n");
 			return -1;
 	}
 
-	default_ad9144_init_param.lane_rate_khz = ad9144_xcvr.lane_rate_khz;
-	default_ad9680_init_param.lane_rate_khz = ad9680_xcvr.lane_rate_khz;
+	default_ad9144_init_param.lane_rate_kbps = ad9144_xcvr.lane_rate_kbps;
+	default_ad9680_init_param.lane_rate_kbps = ad9680_xcvr.lane_rate_kbps;
 
 	daq2_gpio_ctl();
 
 	ad9523_setup(&ad9523_spi_device, ad9523_pdata_lpc);
 
 	ad9144_setup(&ad9144_spi_device, default_ad9144_init_param);
-	jesd204_init(ad9144_jesd204);
+	jesd_setup(ad9144_jesd204);
 	xcvr_init(ad9144_xcvr);
-	jesd204_read_status(ad9144_jesd204);
+	jesd_status(ad9144_jesd204);
 
 	ad9680_setup(&ad9680_spi_device, default_ad9680_init_param);
-	jesd204_init(ad9680_jesd204);
+	jesd_setup(ad9680_jesd204);
 	xcvr_init(ad9680_xcvr);
-	jesd204_read_status(ad9680_jesd204);
+	jesd_status(ad9680_jesd204);
 
 	dac_setup(ad9144_core);
 

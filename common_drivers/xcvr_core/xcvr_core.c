@@ -49,7 +49,7 @@ int32_t xcvr_read(xcvr_core core,
 					uint32_t reg_addr,
 					uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.base_addr + reg_addr));
+	*reg_data = ad_reg_read((core.base_address + reg_addr));
 
 	return 0;
 }
@@ -61,7 +61,7 @@ int32_t xcvr_write(xcvr_core core,
 					 uint32_t reg_addr,
 					 uint32_t reg_data)
 {
-	ad_reg_write((core.base_addr + reg_addr), reg_data);
+	ad_reg_write((core.base_address + reg_addr), reg_data);
 
 	return 0;
 }

@@ -330,7 +330,7 @@ int32_t xcvr_gth_rxcdr_settings(xcvr_core core, uint32_t rxout_div)
 
   cfg2 = 0;
 
-	if (core.tx_enable)
+	if (!core.rx_tx_n)
 		return 0; /* Do Nothing */
 
 	switch (core.ppm) {
@@ -388,7 +388,7 @@ int32_t xcvr_rxcdr_settings(xcvr_core core,
 {
 	u16 cfg0, cfg1, cfg2, cfg3, cfg4;
 
-	if (core.tx_enable)
+	if (!core.rx_tx_n)
 		return 0; /* Do Nothing */
 
 	if (core.gth_enable)
@@ -430,7 +430,7 @@ int32_t xcvr_rxcdr_settings(xcvr_core core,
 			return -1;
 		}
 	} else {
-		if (core.lane_rate_khz > 6600000 && rxout_div == 1)
+		if (core.lane_rate_kbps > 6600000 && rxout_div == 1)
 			cfg4 = 0x0B;
 		else
 			cfg4 = 0x03;
@@ -438,7 +438,7 @@ int32_t xcvr_rxcdr_settings(xcvr_core core,
 		switch (rxout_div) {
 		case 0: /* 1 */
 			if (core.lpm_enable) {
-				if (core.lane_rate_khz  > 6600000) {
+				if (core.lane_rate_kbps  > 6600000) {
 					if (core.ppm == PM_1250)
 						cfg1 = 0x1020;
 					else
@@ -447,7 +447,7 @@ int32_t xcvr_rxcdr_settings(xcvr_core core,
 					cfg1 = 0x1020;
 				}
 			} else { /* DFE */
-				if (core.lane_rate_khz  > 6600000) {
+				if (core.lane_rate_kbps  > 6600000) {
 					if (core.ppm == PM_1250)
 						cfg1 = 0x1020;
 					else
@@ -536,7 +536,7 @@ int32_t xcvr_clk_set_rate(xcvr_core core,
 	}
 
 	ret = xcvr_drp_writef(core, RXOUT_DIV_ADDR,
-			core.tx_enable ? TXOUT_DIV_MASK : RXOUT_DIV_MASK, out_div);
+			core.rx_tx_n ? RXOUT_DIV_MASK : TXOUT_DIV_MASK, out_div);
 
 	xcvr_rxcdr_settings(core, out_div);
 

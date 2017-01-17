@@ -113,7 +113,7 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t jesd_read(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd_read(jesd_core core, uint32_t reg_addr, uint32_t *reg_data);
 int32_t jesd_write(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
 
 int32_t jesd_setup(jesd_core core);
