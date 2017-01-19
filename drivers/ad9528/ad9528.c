@@ -271,6 +271,63 @@ int32_t ad9528_sync(spi_device *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
+int32_t ad9528_init(ad9528_platform_data *pdata)
+{
+  uint32_t i;
+
+  // init assumes vcxo configuration, all channels lvds & vco source
+
+  pdata->spi3wire = 0;
+  pdata->ref_mode = 0;
+  pdata->refa_en = 0;
+  pdata->refa_diff_rcv_en = 0;
+  pdata->refa_cmos_neg_inp_en = 0;
+  pdata->refa_r_div = 1;
+  pdata->refb_en = 0;
+  pdata->refb_diff_rcv_en = 0;
+  pdata->refb_cmos_neg_inp_en = 0;
+  pdata->refb_r_div = 1;
+  pdata->vcxo_freq = 0;
+  pdata->osc_in_diff_en = 1;
+  pdata->osc_in_cmos_neg_inp_en = 0;
+  pdata->pll1_feedback_div = 1;
+  pdata->pll1_feedback_src_vcxo = 1;
+  pdata->pll1_charge_pump_current_nA = 5000;
+  pdata->pll1_bypass_en = 0;
+  pdata->pll2_charge_pump_current_nA = 805000;
+  pdata->pll2_freq_doubler_en = 0;
+  pdata->pll2_r1_div = 1;
+  pdata->pll2_vco_diff_m1 = 1;
+  pdata->pll2_ndiv_a_cnt = 1;
+  pdata->pll2_ndiv_b_cnt = 1;
+  pdata->pll2_n2_div = 1;
+  pdata->sysref_src = SYSREF_SRC_INTERNAL;
+  pdata->sysref_k_div = 512;
+  pdata->rpole2 = RPOLE2_900_OHM;
+  pdata->rzero= RZERO_1850_OHM;
+  pdata->cpole1 = CPOLE1_16_PF;
+  pdata->rzero_bypass_en = 0;
+
+  for (i = 0; i < pdata->num_channels; i++)
+  {
+    (&pdata->channels[i])->channel_num = 0;
+    (&pdata->channels[i])->sync_ignore_en = 0;
+    (&pdata->channels[i])->output_dis = 0;
+    (&pdata->channels[i])->driver_mode = DRIVER_MODE_LVDS;
+    (&pdata->channels[i])->signal_source = SOURCE_VCO;
+    (&pdata->channels[i])->divider_phase = 0;
+    (&pdata->channels[i])->channel_divider = 1;
+  }
+
+  return(0);
+}
+
+
+/***************************************************************************//**
+ * @brief Initializes the AD9528.
+ *
+ * @return Returns 0 in case of success or negative error code.
+*******************************************************************************/
 int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata)
 {
   struct ad9528_state *st = &ad9528_st;

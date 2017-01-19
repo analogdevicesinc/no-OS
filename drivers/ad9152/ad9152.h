@@ -1350,7 +1350,7 @@ typedef struct
 	uint8_t jesd_xbar_lane2_sel;
 	uint8_t jesd_xbar_lane3_sel;
 	uint8_t lanes2_3_swap_data;
-  uint32_t lane_rate_khz;
+  uint32_t lane_rate_kbps;
 }ad9152_init_param;
 
 /******************************************************************************/

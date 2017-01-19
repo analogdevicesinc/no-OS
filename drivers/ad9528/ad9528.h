@@ -418,6 +418,7 @@ typedef struct
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+int32_t ad9528_init(ad9528_platform_data *pdata);
 int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata);
 int32_t ad9528_spi_read(spi_device *dev, uint32_t reg_addr, uint32_t *reg_data);
 int32_t ad9528_spi_write(spi_device *dev, uint32_t reg_addr, uint32_t reg_data);
