@@ -46,57 +46,58 @@
 * @brief xcvr_read
 *******************************************************************************/
 int32_t xcvr_read(xcvr_core core,
-					uint32_t reg_addr,
-					uint32_t *reg_data)
+          uint32_t reg_addr,
+          uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.base_address + reg_addr));
+  *reg_data = ad_reg_read((core.base_address + reg_addr));
 
-	return 0;
+  return 0;
 }
 
 /***************************************************************************//**
 * @brief xcvr_write
 *******************************************************************************/
 int32_t xcvr_write(xcvr_core core,
-					 uint32_t reg_addr,
-					 uint32_t reg_data)
+           uint32_t reg_addr,
+           uint32_t reg_data)
 {
-	ad_reg_write((core.base_address + reg_addr), reg_data);
+  ad_reg_write((core.base_address + reg_addr), reg_data);
 
-	return 0;
+  return 0;
 }
 
 /*******************************************************************************
 * @brief xcvr_init
 *******************************************************************************/
 
-int32_t xcvr_init(xcvr_core core)
+int32_t xcvr_setup(xcvr_core core)
 {
-	uint32_t status;
-	uint32_t timeout;
+  uint32_t status;
+  int32_t timeout;
 
-	xcvr_write(core, XCVR_REG_RESETN, 0);
+  xcvr_write(core, XCVR_REG_RESETN, 0);
+  if (core.reconfig_bypass == 0)
+  {
+    ad_printf("ERROR: XCVR reconfiguration is NOT supported yet!\n");
+    return(-1);
+  }
 
-	xcvr_write(core, XCVR_REG_CONTROL,
-				 ((core.lpm_enable ? XCVR_LPM_DFE_N : 0) |
-				  XCVR_SYSCLK_SEL(core.sys_clk_sel) |
-				  XCVR_OUTCLK_SEL(core.out_clk_sel)));
+  xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
+  timeout = 100;
+  while (timeout > 0)
+  {
+    mdelay(1);
+    xcvr_read(core, XCVR_REG_STATUS, &status);
+    if (status == 1)
+      break;
+  }
 
-	timeout = 100;
-	do {
-		mdelay(1);
-		xcvr_read(core,XCVR_REG_STATUS, &status);
-	} while ((timeout--) && (status == 0));
+  if (status == 0)
+  {
+    ad_printf("ERROR: XCVR initialization failed!\n");
+    return(-1);
+  }
 
-	if (status) {
-		ad_printf("XCVR successfully initialized.\n");
-
-		return 0;
-	} else {
-		ad_printf("XCVR initialization error.\n");
-
-		return -1;
-	}
+  return(0);
 }

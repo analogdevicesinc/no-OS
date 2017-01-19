@@ -540,7 +540,7 @@ int32_t xcvr_clk_set_rate(xcvr_core core,
 
 	xcvr_rxcdr_settings(core, out_div);
 
-	xcvr_read(core, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
 
 	return ret;
 }

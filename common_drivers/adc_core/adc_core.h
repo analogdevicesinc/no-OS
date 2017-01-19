@@ -115,7 +115,7 @@ enum adc_pn_sel {
 };
 
 typedef struct {
-	uint32_t adc_baseaddr;
+	uint32_t base_address;
 	uint8_t	 master;
 	uint8_t	 no_of_channels;
 	uint8_t	 resolution;

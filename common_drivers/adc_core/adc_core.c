@@ -49,7 +49,7 @@ int32_t adc_read(adc_core core,
 		uint32_t reg_addr,
 		uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.adc_baseaddr + reg_addr));
+	*reg_data = ad_reg_read((core.base_address + reg_addr));
 
 	return 0;
 }
@@ -61,7 +61,7 @@ int32_t adc_write(adc_core core,
 		uint32_t reg_addr,
 		uint32_t reg_data)
 {
-	ad_reg_write((core.adc_baseaddr + reg_addr), reg_data);
+	ad_reg_write((core.base_address + reg_addr), reg_data);
 
 	return 0;
 }
@@ -101,7 +101,7 @@ int32_t adc_setup(adc_core core)
 	adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
 	adc_clock = adc_clock >> 16;
 
-	ad_printf("ADC Core Initialized (%d MHz).\n", adc_clock);
+	ad_printf("adc core initialized (%d MHz).\n", adc_clock);
 
 	return 0;
 }
@@ -148,7 +148,7 @@ int32_t adc_pn_mon(adc_core core,
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
-			ad_printf("ADC PN Status: %d, %d, 0x%02x!\n", index, sel, reg_data);
+			ad_printf("ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02x!\n", index, sel, reg_data);
 		}
 	}
 

@@ -78,7 +78,7 @@ int32_t jesd_setup(jesd_core core)
 	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT,
 			JESD204_TRX_ILA_EN);
 	jesd_write(core, JESD204_REG_TRX_SCRAMBLING,
-			JESD204_TRX_SCR_EN);
+			core.scramble_enable);
 	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING,
 			0);
 	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
@@ -88,7 +88,6 @@ int32_t jesd_setup(jesd_core core)
 	jesd_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
 			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
 
-	ad_printf("JESD204 initialization done.\n");
     return 0;
 }
 
@@ -139,8 +138,7 @@ int32_t jesd_status(jesd_core core)
 	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
 		ad_printf("jesd_status: missing SYS_REF!\n");
 		return -1;
-	  } else
-		ad_printf("SYNC STATUS: 0x%x\n", status);
+	  }
 	}
 
 	timeout = 100;

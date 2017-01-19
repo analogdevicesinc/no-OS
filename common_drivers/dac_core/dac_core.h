@@ -110,7 +110,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 typedef struct {
-	uint32_t dac_baseaddr;
+	uint32_t base_address;
 	uint8_t	 no_of_channels;
 	uint8_t	 resolution;
 	uint8_t	 fifo_present;

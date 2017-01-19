@@ -49,7 +49,7 @@ int32_t dac_read(dac_core core,
 		uint32_t reg_addr,
 		uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.dac_baseaddr + 0x4000 + reg_addr));
+	*reg_data = ad_reg_read((core.base_address + 0x4000 + reg_addr));
 
 	return 0;
 }
@@ -61,7 +61,7 @@ int32_t dac_write(dac_core core,
 		uint32_t reg_addr,
 		uint32_t reg_data)
 {
-	ad_reg_write((core.dac_baseaddr + 0x4000 + reg_addr), reg_data);
+	ad_reg_write((core.base_address + 0x4000 + reg_addr), reg_data);
 
 	return 0;
 }
