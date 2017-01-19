@@ -91,10 +91,12 @@ int32_t ad9152_setup(spi_device *dev,
 	uint8_t pll_stat;
 	int32_t ret;
 
+  ret = 0;
+
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9152_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		ad_printf("AD9152: Invalid CHIP ID (0x%x)!\n", chip_id);
 		return -1;
 	}
 
@@ -155,7 +157,11 @@ int32_t ad9152_setup(spi_device *dev,
 	mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
-	xil_printf("AD9152 PLL/link %s.\n", pll_stat & 0x01 ? "ok" : "errors");
+  if (pll_stat == 0)
+  {
+	  ad_printf("AD9152: PLL is NOT locked!.\n");
+    ret = -1;
+  }
 
 	ad9152_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -181,8 +187,6 @@ int32_t ad9152_setup(spi_device *dev,
 	/* TODO: remove me
 	 * Fix for an early DAQ3 design bug (swapped SERDIN+ / SERDIN- pins) */
 	ad9152_spi_write(dev, 0x334, init_param.lanes2_3_swap_data ? 0x0c : 0x00);
-
-	xil_printf("AD9152 successfully initialized.\n");
 
 	return ret;
 }

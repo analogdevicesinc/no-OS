@@ -92,38 +92,36 @@ int32_t ad9680_setup(spi_device *dev,
 	uint8_t pll_stat;
 	int32_t ret;
 
-	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_A, 0x81);	// RESET
-	mdelay(5);
-	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_B, 0x01);	// RESET
-	mdelay(1);
-
-	ad9680_spi_write(dev, AD9680_REG_DEVICE_INDEX, 0x03);	// select both channels
-	ad9680_spi_write(dev, AD9680_REG_CHIP_DEC_RATIO, 0x00);	// full sample rate (decimation = 1)
-	ad9680_spi_write(dev, AD9680_REG_ADC_TEST_MODE, 0x00);	// test pattern
-	ad9680_spi_write(dev, AD9680_REG_OUTPUT_MODE, 0x01);	// twos complement
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_QUICK_CONFIG, 0x88);	// m=2, l=4, f= 1
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_CSN_CONFIG, 0x0d);	// 14-bit
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT0_ASSIGN, 0x00);	// serdes-0 = lane 0
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN, 0x11);	// serdes-1 = lane 1
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN, 0x22);	// serdes-2 = lane 2
-	ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN, 0x33);	// serdes-3 = lane 3
-	if (init_param.lane_rate_kbps < 6250000)
-		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x10);	// low line rate mode must be enabled
-	else
-		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x00);	// low line rate mode must be disabled
-	mdelay(20);
+  ret = 0;
 
 	ad9680_spi_read(dev, AD9680_REG_CHIP_ID_LOW, &chip_id);
 	if(chip_id != AD9680_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		ad_printf("AD9680: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
-	ad9680_spi_read(dev, AD9680_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
-	xil_printf("AD9680 PLL is %s.\n", pll_stat & 0x80 ? "locked" : "unlocked");
+	ad9680_spi_write(dev, AD9680_REG_INTERFACE_CONF_A, 0x81);	// RESET
+	mdelay(250);
 
-	xil_printf("AD9680 successfully initialized.\n");
+	ad9680_spi_write(dev, AD9680_REG_LINK_CONTROL, 0x15);	// disable link, ilas enable
+	ad9680_spi_write(dev, AD9680_REG_JESD204B_MF_CTRL, 0x1f);	// mf-frame-count
+	ad9680_spi_write(dev, AD9680_REG_JESD204B_CSN_CONFIG, 0x2d);	// 14-bit
+	ad9680_spi_write(dev, AD9680_REG_JESD204B_SUBCLASS_CONFIG, 0x2f);	// subclass-1, N'=16
+	ad9680_spi_write(dev, AD9680_REG_JESD204B_QUICK_CONFIG, 0x88);	// m=2, l=4, f= 1
+	if (init_param.lane_rate_kbps < 6250000)
+		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x10);	// low line rate mode must be enabled
+	else
+		ad9680_spi_write(dev, AD9680_REG_JESD204B_LANE_RATE_CTRL, 0x00);	// low line rate mode must be disabled
+	ad9680_spi_write(dev, AD9680_REG_LINK_CONTROL, 0x14);	// link enable
+	mdelay(250);
+
+	ad9680_spi_read(dev, AD9680_REG_JESD204B_PLL_LOCK_STATUS, &pll_stat);
+  if ((pll_stat & 0x80) != 0x80)
+  {
+	  ad_printf("AD9680: PLL is NOT locked!\n");
+    ret = -1;
+  }
 
 	return ret;
 }
