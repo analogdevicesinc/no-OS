@@ -68,6 +68,12 @@
 #define AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN		0x5b6
 
 #define AD9680_CHIP_ID						0x0C5
+#define AD9680_TEST_OFF           0x000
+#define AD9680_TEST_PN9           0x006
+#define AD9680_TEST_PN23          0x005
+#define AD9680_TEST_RAMP          0x00f
+#define AD9680_FORMAT_2S_COMPLEMENT   0x001
+#define AD9680_FORMAT_OFFSET_BINARY   0x000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -80,13 +86,10 @@ typedef struct {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9680_spi_read(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t *reg_data);
-int32_t ad9680_spi_write(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t reg_data);
-int32_t ad9680_setup(spi_device *dev,
-		ad9680_init_param init_param);
+
+int32_t ad9680_spi_read(spi_device *dev, uint16_t reg_addr, uint8_t *reg_data);
+int32_t ad9680_spi_write(spi_device *dev, uint16_t reg_addr, uint8_t reg_data);
+int32_t ad9680_setup(spi_device *dev, ad9680_init_param init_param);
+int32_t ad9680_test(spi_device *dev, uint32_t test_mode);
 
 #endif

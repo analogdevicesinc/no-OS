@@ -242,21 +242,61 @@ int32_t dac_data_src_sel(dac_core core,
  *******************************************************************************/
 int32_t dac_setup(dac_core core)
 {
-	uint32_t status;
+  uint32_t reg_data;
+	uint32_t dac_clock;
 
 	dac_write(core, DAC_REG_RSTN, 0x00);
 	dac_write(core, DAC_REG_RSTN, 0x03);
-
 	mdelay(100);
 
-	dac_read(core, DAC_REG_STATUS, &status);
-	if (status == 0x0) {
-		ad_printf("DAC Core Status errors.\n\r");
-
+	dac_read(core, DAC_REG_STATUS, &reg_data);
+	if (reg_data == 0x0) {
+		ad_printf("DAC Core Status errors.\n");
 		return -1;
-	} else {
-		ad_printf("DAC Core successfully initialized.\n\r");
-
-		return 0;
 	}
+
+	dac_read(core, DAC_REG_CLK_FREQ, &dac_clock);
+	dac_read(core, DAC_REG_CLK_RATIO, &reg_data);
+	dac_clock = (dac_clock * reg_data * 100) + 0x7fff;
+	dac_clock = dac_clock >> 16;
+
+	ad_printf("dac core initialized (%d MHz).\n", dac_clock);
+
+  dac_data_setup(core);
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief dac_setup
+ *******************************************************************************/
+int32_t dac_data_setup(dac_core core)
+{
+  dac_channel *chan;
+  uint32_t i;
+
+  for (i = 0; i < core.no_of_channels; i++) {
+    chan = &core.channels[i];
+    if (chan->dds_dual_tone == 0)
+    {
+      dds_set_frequency(core, ((i*2)+0), chan->dds_frequency_0);
+      dds_set_phase(core, ((i*2)+0), chan->dds_phase_0);
+      dds_set_scale(core, ((i*2)+0), (chan->dds_scale_0)/2);
+      dds_set_frequency(core, ((i*2)+1), chan->dds_frequency_0);
+      dds_set_phase(core, ((i*2)+1), chan->dds_phase_0);
+      dds_set_scale(core, ((i*2)+1), (chan->dds_scale_0)/2);
+    }
+    else
+    {
+      dds_set_frequency(core, ((i*2)+0), chan->dds_frequency_0);
+      dds_set_phase(core, ((i*2)+0), chan->dds_phase_0);
+      dds_set_scale(core, ((i*2)+0), chan->dds_scale_0);
+      dds_set_frequency(core, ((i*2)+1), chan->dds_frequency_1);
+      dds_set_phase(core, ((i*2)+1), chan->dds_phase_1);
+      dds_set_scale(core, ((i*2)+1), chan->dds_scale_1);
+    }
+		dac_write(core, DAC_REG_CHAN_CNTRL_5(i), chan->pat_data);
+    dac_data_src_sel(core, i, chan->sel);
+  }
+
+  return(0);
 }

@@ -102,6 +102,8 @@
 #define DAC_DDS_INCR(x)				(((x) & 0xFFFF) << 0)
 #define DAC_TO_DDS_INCR(x)			(((x) >> 0) & 0xFFFF)
 
+#define DAC_REG_CHAN_CNTRL_5(c)			(0x0410 + (c) * 0x40) /* v8.0 */
+
 #define DAC_REG_CHAN_CNTRL_7(c)			(0x0418 + (c) * 0x40) /* v8.0 */
 #define DAC_DAC_DDS_SEL(x)			(((x) & 0xF) << 0)
 #define DAC_TO_DAC_DDS_SEL(x)			(((x) >> 0) & 0xF)
@@ -109,13 +111,6 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
-	uint32_t base_address;
-	uint8_t	 no_of_channels;
-	uint8_t	 resolution;
-	uint8_t	 fifo_present;
-} dac_core;
-
 typedef enum {
 	DAC_SRC_DDS,
 	DAC_SRC_SED,
@@ -129,27 +124,39 @@ typedef enum {
 	DAC_SRC_PNXX,	// Device specific
 } dac_data_src;
 
+typedef struct {
+  uint32_t dds_frequency_0;
+	uint32_t dds_phase_0;
+	int32_t dds_scale_0;
+  uint32_t dds_frequency_1;
+	uint32_t dds_phase_1;
+	int32_t dds_scale_1;
+  uint32_t  dds_dual_tone;
+  uint32_t  pat_data;
+  dac_data_src sel; 
+} dac_channel;
+
+typedef struct {
+	uint32_t base_address;
+	uint8_t	 resolution;
+	uint8_t	 fifo_present;
+	uint8_t	 no_of_channels;
+  dac_channel *channels;
+} dac_core;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t dac_read(dac_core core,
-		uint32_t reg_addr,
-		uint32_t *reg_data);
-int32_t dac_write(dac_core core,
-		uint32_t reg_addr,
-		uint32_t reg_data);
+
+int32_t dac_read(dac_core core, uint32_t reg_addr, uint32_t *reg_data);
+int32_t dac_write(dac_core core, uint32_t reg_addr, uint32_t reg_data);
 
 int32_t dac_setup(dac_core core);
-int32_t dds_set_frequency(dac_core core,
-		uint32_t chan,
-		uint32_t freq);
-int32_t dds_set_phase(dac_core core,
-		uint32_t chan,
-		uint32_t phase);
-int32_t dds_set_scale(dac_core core,
-		uint32_t chan,
-		int32_t scale_micro_units);
-int32_t dac_data_src_sel(dac_core core,
-		int32_t chan,
-		dac_data_src src);
+int32_t dac_data_setup(dac_core core);
+
+int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq);
+int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase);
+int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units);
+int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src);
+
 #endif

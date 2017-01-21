@@ -85,6 +85,20 @@ int32_t ad9680_spi_write(spi_device *dev,
 /***************************************************************************//**
 * @brief ad9680_setup
 *******************************************************************************/
+int32_t ad9680_test(spi_device *dev,
+		uint32_t test_mode)
+{
+  ad9680_spi_write(dev, AD9680_REG_ADC_TEST_MODE, test_mode);
+  if (test_mode == AD9680_TEST_OFF)
+    ad9680_spi_write(dev, AD9680_REG_OUTPUT_MODE, AD9680_FORMAT_2S_COMPLEMENT);
+  else
+    ad9680_spi_write(dev, AD9680_REG_OUTPUT_MODE, AD9680_FORMAT_OFFSET_BINARY);
+  return(0);
+}
+
+/***************************************************************************//**
+* @brief ad9680_setup
+*******************************************************************************/
 int32_t ad9680_setup(spi_device *dev,
 					 ad9680_init_param init_param)
 {

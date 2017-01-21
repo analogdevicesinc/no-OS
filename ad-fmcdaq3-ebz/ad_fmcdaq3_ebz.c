@@ -77,6 +77,7 @@ int main(void)
   ad9680_init_param ad9680_param;
   xcvr_core ad9152_xcvr;
   jesd_core ad9152_jesd;
+  dac_channel ad9152_channels[2];
   dac_core ad9152_core;
   xcvr_core ad9680_xcvr;
   jesd_core ad9680_jesd;
@@ -150,13 +151,26 @@ int main(void)
   ad9152_xcvr.lane_rate_kbps = 10*1000*1000;
 
   ad9152_jesd.rx_tx_n = 0;
+  ad9152_jesd.scramble_enable = 1;
   ad9152_jesd.octets_per_frame = 1;
   ad9152_jesd.frames_per_multiframe = 32;
   ad9152_jesd.subclass_mode = 1;
 
+  ad9152_channels[0].dds_dual_tone = 0;
+  ad9152_channels[0].dds_frequency_0 = 33*1000*1000;
+  ad9152_channels[0].dds_phase_0 = 0;
+  ad9152_channels[0].dds_scale_0 = 500000;
+  ad9152_channels[0].sel = DAC_SRC_DDS;
+  ad9152_channels[1].dds_dual_tone = 0;
+  ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
+  ad9152_channels[1].dds_phase_0 = 0;
+  ad9152_channels[1].dds_scale_0 = 5000000;
+  ad9152_channels[1].sel = DAC_SRC_DDS;
+
   ad9152_core.no_of_channels = 2;
   ad9152_core.resolution = 16;
   ad9152_core.fifo_present = 1;
+  ad9152_core.channels = &ad9152_channels[0];
 
   // adc settings
 
@@ -169,6 +183,7 @@ int main(void)
   ad9680_xcvr.lane_rate_kbps = 10*1000*1000;
 
   ad9680_jesd.rx_tx_n = 1;
+  ad9680_jesd.scramble_enable = 1;
   ad9680_jesd.octets_per_frame = 1;
   ad9680_jesd.frames_per_multiframe = 32;
   ad9680_jesd.subclass_mode = 1;
@@ -206,32 +221,13 @@ int main(void)
   jesd_status(ad9680_jesd);
   adc_setup(ad9680_core);
 
-  dds_set_frequency(ad9152_core, 0, 5000000);
-  dds_set_phase(ad9152_core, 0, 0);
-  dds_set_scale(ad9152_core, 0, 500000);
-  dds_set_frequency(ad9152_core, 1, 5000000);
-  dds_set_phase(ad9152_core, 1, 0);
-  dds_set_scale(ad9152_core, 1, 500000);
+  ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
+  adc_pn_mon(ad9680_core, ADC_PN9);
 
-  dds_set_frequency(ad9152_core, 2, 5000000);
-  dds_set_phase(ad9152_core, 2, 90000);
-  dds_set_scale(ad9152_core, 2, 500000);
-  dds_set_frequency(ad9152_core, 3, 5000000);
-  dds_set_phase(ad9152_core, 3, 90000);
-  dds_set_scale(ad9152_core, 3, 500000);
+  ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
+  adc_pn_mon(ad9680_core, ADC_PN23A);
 
-  jesd_status(ad9680_jesd);
-  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_ADC_TEST_MODE, 0x06);
-  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_OUTPUT_MODE, 0x0);
-  adc_pn_mon(ad9680_core, 0);
-
-
-  jesd_status(ad9680_jesd);
-  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_ADC_TEST_MODE, 0x05);
-  ad9680_spi_write(&ad9680_spi_device, AD9680_REG_OUTPUT_MODE, 0x0);
-  adc_pn_mon(ad9680_core, 1);
-
+  ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
   ad_printf("daq3: done\n");
-
-  return 0;
+  return(0);
 }
