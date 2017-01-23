@@ -214,6 +214,7 @@ int main(void)
   xcvr_setup(ad9152_xcvr);
   jesd_status(ad9152_jesd);
   dac_setup(ad9152_core);
+  ad9152_status(&ad9152_spi_device);
 
   ad9680_setup(&ad9680_spi_device, ad9680_param);
   jesd_setup(ad9680_jesd);
@@ -223,10 +224,14 @@ int main(void)
 
   ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
   adc_pn_mon(ad9680_core, ADC_PN9);
-
   ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
   adc_pn_mon(ad9680_core, ADC_PN23A);
 
+  // default data
+
+  ad9152_channels[0].sel = DAC_SRC_DDS;
+  ad9152_channels[1].sel = DAC_SRC_DDS;
+  dac_data_setup(ad9152_core);
   ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
   ad_printf("daq3: done\n");
   return(0);

@@ -1337,6 +1337,8 @@
 #define AD9152_MAX_DAC_RATE 		2000000000UL
 
 #define AD9152_CHIP_ID							0x52
+#define AD9152_TEST_PN15            0x01
+#define AD9152_TEST_PN7             0x00
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -1345,18 +1347,15 @@
 typedef struct
 {
 	/* Device Settings */
-	uint8_t jesd_xbar_lane0_sel;
-	uint8_t jesd_xbar_lane1_sel;
-	uint8_t jesd_xbar_lane2_sel;
-	uint8_t jesd_xbar_lane3_sel;
-	uint8_t lanes2_3_swap_data;
   uint32_t lane_rate_kbps;
 }ad9152_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9152_setup(spi_device *dev,
-					 ad9152_init_param init_param);
+
+int32_t ad9152_setup(spi_device *dev, ad9152_init_param init_param);
+int32_t ad9152_datapath_prbs(spi_device *dev, uint32_t prbs_type);
+int32_t ad9152_status(spi_device *dev);
 
 #endif

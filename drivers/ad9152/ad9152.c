@@ -165,12 +165,6 @@ int32_t ad9152_setup(spi_device *dev,
 
 	ad9152_spi_write(dev, 0x268, 0x62);	// equalizer
 
-	// cross-bar
-
-	ad9152_spi_write(dev, REG_XBAR_LN_0_1, SRC_LANE0(init_param.jesd_xbar_lane0_sel) |
-		SRC_LANE1(init_param.jesd_xbar_lane1_sel));	// lane selects
-	ad9152_spi_write(dev, REG_XBAR_LN_2_3, SRC_LANE2(init_param.jesd_xbar_lane2_sel) |
-		SRC_LANE3(init_param.jesd_xbar_lane3_sel));	// lane selects
 
 	// data link layer
 
@@ -184,9 +178,90 @@ int32_t ad9152_setup(spi_device *dev,
 
 	ad9152_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
-	/* TODO: remove me
-	 * Fix for an early DAQ3 design bug (swapped SERDIN+ / SERDIN- pins) */
-	ad9152_spi_write(dev, 0x334, init_param.lanes2_3_swap_data ? 0x0c : 0x00);
-
 	return ret;
 }
+
+/***************************************************************************//**
+* @brief ad9152_setup
+*******************************************************************************/
+int32_t ad9152_datapath_prbs(spi_device *dev, uint32_t prbs_type)
+{
+
+  uint8_t status;
+  int32_t ret;
+
+  status = 0;
+  ret = 0;
+
+  ad9152_spi_write(dev, 0x008, 0x01); // dac-sel
+	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x03));
+  mdelay(1);
+
+	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x01));
+  mdelay(100);
+
+  ad9152_spi_read(dev, REG_PRBS, &status);
+  if ((status & 0xc0) != 0xc0)
+  {
+	  ad_printf("AD9152: PRBS OUT OF SYNC (%x)!.\n", status);
+    ret = -1;
+  }
+  ad9152_spi_read(dev, REG_PRBS_ERROR_I, &status);
+  if (status != 0x00)
+  {
+	  ad_printf("AD9152: PRBS I channel ERRORS (%x)!.\n", status);
+    ret = -1;
+  }
+  ad9152_spi_read(dev, REG_PRBS_ERROR_Q, &status);
+  if (status != 0x00)
+  {
+	  ad_printf("AD9152: PRBS Q channel ERRORS (%x)!.\n", status);
+    ret = -1;
+  }
+
+  return(ret);
+}
+
+/***************************************************************************//**
+* @brief ad9152_setup
+*******************************************************************************/
+int32_t ad9152_status(spi_device *dev)
+{
+
+  uint8_t status;
+  int32_t ret;
+
+  status = 0;
+  ret = 0;
+
+  // check for jesd status on all lanes
+  // failures on top are 100% guaranteed to make subsequent status checks fail
+
+  ad9152_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
+  if (status != 0x0f)
+  {
+	  ad_printf("AD9152: CGS NOT received (%x)!.\n", status);
+    ret = -1;
+  }
+  ad9152_spi_read(dev, REG_INITLANESYNCFLG, &status);
+  if (status != 0x0f)
+  {
+	  ad_printf("AD9152: ILAS NOT received (%x)!.\n", status);
+    ret = -1;
+  }
+  ad9152_spi_read(dev, REG_FRAMESYNCFLG, &status);
+  if (status != 0x0f)
+  {
+	  ad_printf("AD9152: framer OUT OF SYNC (%x)!.\n", status);
+    ret = -1;
+  }
+  ad9152_spi_read(dev, REG_GOODCHKSUMFLG, &status);
+  if (status != 0x0f)
+  {
+	  ad_printf("AD9152: check-sum MISMATCH (%x)!.\n", status);
+    ret = -1;
+  }
+
+  return(ret);
+}
+
