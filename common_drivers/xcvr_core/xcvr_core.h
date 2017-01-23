@@ -39,7 +39,7 @@
 #ifndef XCVR_CORE_H_
 #define XCVR_CORE_H_
 
-#include "altxil_base.h"
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

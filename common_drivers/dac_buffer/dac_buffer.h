@@ -40,7 +40,6 @@
 #ifndef DAC_BUFFER_H_
 #define DAC_BUFFER_H_
 
-#include "altxil_base.h"
 #include "dac_core.h"
 
 /******************************************************************************/

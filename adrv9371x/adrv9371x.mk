@@ -11,7 +11,7 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
-M_INC_DIRS := $(NOOS-DIR)/common_drivers/altxil_base
+M_INC_DIRS := $(NOOS-DIR)/common_drivers/fpga_platform_dirvers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core

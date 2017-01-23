@@ -39,7 +39,7 @@
 #ifndef JESD_CORE_H_
 #define JESD_CORE_H_
 
-#include "altxil_base.h"
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /************************ JESD204 Core Definitions ****************************/

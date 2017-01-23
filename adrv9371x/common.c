@@ -36,7 +36,7 @@
 // ***************************************************************************
 
 #include "common.h"
-#include "altxil_base.h"
+#include "platform_drivers.h"
 
 /* we need to fill in the functions of common */
 

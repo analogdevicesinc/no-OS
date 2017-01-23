@@ -43,7 +43,7 @@
 
 #include "xcvr_xilinx_specific.h"
 #include "xcvr_core.h"
-#include "altxil_base.h"
+#include "platform_drivers.h"
 
 #define ARRAY_SIZE(ar)					(sizeof(ar)/sizeof(ar[0]))
 
