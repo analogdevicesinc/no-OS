@@ -62,11 +62,10 @@
 #define DAC_MMCM_RSTN				(1 << 1)
 #define DAC_RSTN				(1 << 0)
 
-#define DAC_REG_CNTRL_1				0x0044
-#define DAC_ENABLE				(1 << 0) /* v7.0 */
+#define DAC_REG_SYNC_CONTROL			0x0044
 #define DAC_SYNC				(1 << 0) /* v8.0 */
 
-#define DAC_REG_CNTRL_2				0x0048
+#define DAC_REG_DATA_CONTROL			0x0048
 #define DAC_PAR_TYPE				(1 << 7)
 #define DAC_PAR_ENB				(1 << 6)
 #define DAC_R1_MODE				(1 << 5)
@@ -77,6 +76,9 @@
 #define DAC_REG_RATECNTRL			0x004C
 #define DAC_RATE(x)				(((x) & 0xFF) << 0)
 #define DAC_TO_RATE(x)				(((x) >> 0) & 0xFF)
+
+#define DAC_REG_FRAME_CONTROL			0x0050
+#define DAC_FRAME				(1 << 0) /* v8.0 */
 
 #define DAC_REG_CLK_FREQ			0x0054
 #define DAC_CLK_FREQ(x)				(((x) & 0xFFFFFFFF) << 0)
@@ -92,21 +94,21 @@
 #define DAC_MUX_OVER_RANGE			(1 << 1)
 #define DAC_STATUS				(1 << 0)
 
-#define DAC_REG_CHAN_CNTRL_1_IIOCHAN(x)		(0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
+#define DAC_REG_DDS_SCALE(x)		        (0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define DAC_DDS_SCALE(x)			(((x) & 0xFFFF) << 0)
 #define DAC_TO_DDS_SCALE(x)			(((x) >> 0) & 0xFFFF)
 
-#define DAC_REG_CHAN_CNTRL_2_IIOCHAN(x)		(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
+#define DAC_REG_DDS_INIT_INCR(x)		(0x0404 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define DAC_DDS_INIT(x)				(((x) & 0xFFFF) << 16)
 #define DAC_TO_DDS_INIT(x)			(((x) >> 16) & 0xFFFF)
 #define DAC_DDS_INCR(x)				(((x) & 0xFFFF) << 0)
 #define DAC_TO_DDS_INCR(x)			(((x) >> 0) & 0xFFFF)
 
-#define DAC_REG_CHAN_CNTRL_5(c)			(0x0410 + (c) * 0x40) /* v8.0 */
+#define DAC_REG_DATA_PATTERN(c)			(0x0410 + (c) * 0x40) /* v8.0 */
 
-#define DAC_REG_CHAN_CNTRL_7(c)			(0x0418 + (c) * 0x40) /* v8.0 */
-#define DAC_DAC_DDS_SEL(x)			(((x) & 0xF) << 0)
-#define DAC_TO_DAC_DDS_SEL(x)			(((x) >> 0) & 0xF)
+#define DAC_REG_DATA_SELECT(c)			(0x0418 + (c) * 0x40) /* v8.0 */
+#define DAC_DATA_SELECT(x)			(((x) & 0xF) << 0)
+#define DAC_TO_DATA_SELECT(x)			(((x) >> 0) & 0xF)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -125,23 +127,22 @@ typedef enum {
 } dac_data_src;
 
 typedef struct {
-  uint32_t dds_frequency_0;
-	uint32_t dds_phase_0;
-	int32_t dds_scale_0;
-  uint32_t dds_frequency_1;
-	uint32_t dds_phase_1;
-	int32_t dds_scale_1;
-  uint32_t  dds_dual_tone;
-  uint32_t  pat_data;
-  dac_data_src sel; 
+        uint32_t dds_frequency_0;       // in hz (1000*1000 for MHz)
+	uint32_t dds_phase_0;           // in milli(?) angles (90*1000 for 90 degrees = pi/2)
+	int32_t dds_scale_0;            // in micro units (1.0*1000*1000 is 1.0)
+        uint32_t dds_frequency_1;       // in hz (1000*1000 for MHz)
+	uint32_t dds_phase_1;           // in milli(?) angles (90*1000 for 90 degrees = pi/2)
+	int32_t dds_scale_1;            // in micro units (1.0*1000*1000 is 1.0)
+        uint32_t dds_dual_tone;         // if using single tone for this channel, set to 0x0
+        uint32_t pat_data;              // if using SED/debug that sort of thing
+        dac_data_src sel;               // set to one of the enumerated type above.
 } dac_channel;
 
 typedef struct {
 	uint32_t base_address;
 	uint8_t	 resolution;
-	uint8_t	 fifo_present;
 	uint8_t	 no_of_channels;
-  dac_channel *channels;
+        dac_channel *channels;
 } dac_core;
 
 /******************************************************************************/

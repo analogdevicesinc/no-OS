@@ -193,11 +193,8 @@ int32_t ad9152_datapath_prbs(spi_device *dev, uint32_t prbs_type)
   status = 0;
   ret = 0;
 
-  ad9152_spi_write(dev, 0x008, 0x01); // dac-sel
-	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x03));
-  mdelay(1);
-
-	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x01));
+	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x3));
+	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x1));
   mdelay(100);
 
   ad9152_spi_read(dev, REG_PRBS, &status);

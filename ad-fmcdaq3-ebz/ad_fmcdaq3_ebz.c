@@ -164,12 +164,11 @@ int main(void)
   ad9152_channels[1].dds_dual_tone = 0;
   ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
   ad9152_channels[1].dds_phase_0 = 0;
-  ad9152_channels[1].dds_scale_0 = 5000000;
+  ad9152_channels[1].dds_scale_0 = 500000;
   ad9152_channels[1].sel = DAC_SRC_DDS;
 
   ad9152_core.no_of_channels = 2;
   ad9152_core.resolution = 16;
-  ad9152_core.fifo_present = 1;
   ad9152_core.channels = &ad9152_channels[0];
 
   // adc settings
@@ -215,13 +214,22 @@ int main(void)
   jesd_status(ad9152_jesd);
   dac_setup(ad9152_core);
   ad9152_status(&ad9152_spi_device);
+  ad9152_channels[0].sel = DAC_SRC_PN23;
+  ad9152_channels[1].sel = DAC_SRC_PN23;
+  dac_data_setup(ad9152_core);
+  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN15);
+  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN7);
+  ad9152_channels[0].sel = DAC_SRC_PN7;
+  ad9152_channels[1].sel = DAC_SRC_PN7;
+  dac_data_setup(ad9152_core);
+  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN15);
+  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN7);
 
   ad9680_setup(&ad9680_spi_device, ad9680_param);
   jesd_setup(ad9680_jesd);
   xcvr_setup(ad9680_xcvr);
   jesd_status(ad9680_jesd);
   adc_setup(ad9680_core);
-
   ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
   adc_pn_mon(ad9680_core, ADC_PN9);
   ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
@@ -229,9 +237,9 @@ int main(void)
 
   // default data
 
-  ad9152_channels[0].sel = DAC_SRC_DDS;
-  ad9152_channels[1].sel = DAC_SRC_DDS;
-  dac_data_setup(ad9152_core);
+  //ad9152_channels[0].sel = DAC_SRC_DDS;
+  //ad9152_channels[1].sel = DAC_SRC_DDS;
+  //dac_data_setup(ad9152_core);
   ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
   ad_printf("daq3: done\n");
   return(0);
