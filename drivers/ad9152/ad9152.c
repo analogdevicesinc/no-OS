@@ -1,41 +1,41 @@
 /***************************************************************************//**
-* @file ad9152.c
-* @brief Implementation of AD9152 Driver.
-* @author DBogdan (dragos.bogdan@analog.com)
-********************************************************************************
-* Copyright 2015-2016(c) Analog Devices, Inc.
-*
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met:
-* - Redistributions of source code must retain the above copyright
-* notice, this list of conditions and the following disclaimer.
-* - Redistributions in binary form must reproduce the above copyright
-* notice, this list of conditions and the following disclaimer in
-* the documentation and/or other materials provided with the
-* distribution.
-* - Neither the name of Analog Devices, Inc. nor the names of its
-* contributors may be used to endorse or promote products derived
-* from this software without specific prior written permission.
-* - The use of this software may or may not infringe the patent rights
-* of one or more patent holders. This license does not release you
-* from the requirement that you obtain separate licenses from these
-* patent holders to use this software.
-* - Use of the software either in source or binary form, must be run
-* on or directly connected to an Analog Devices Inc. component.
-*
-* THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
-* IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
-* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-* IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
-* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-* LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ * @file ad9152.c
+ * @brief Implementation of AD9152 Driver.
+ * @author DBogdan (dragos.bogdan@analog.com)
+ ********************************************************************************
+ * Copyright 2015-2016(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * - Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in
+ * the documentation and/or other materials provided with the
+ * distribution.
+ * - Neither the name of Analog Devices, Inc. nor the names of its
+ * contributors may be used to endorse or promote products derived
+ * from this software without specific prior written permission.
+ * - The use of this software may or may not infringe the patent rights
+ * of one or more patent holders. This license does not release you
+ * from the requirement that you obtain separate licenses from these
+ * patent holders to use this software.
+ * - Use of the software either in source or binary form, must be run
+ * on or directly connected to an Analog Devices Inc. component.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -43,11 +43,11 @@
 #include "ad9152.h"
 
 /***************************************************************************//**
-* @brief ad9152_spi_read
-*******************************************************************************/
+ * @brief ad9152_spi_read
+ *******************************************************************************/
 int32_t ad9152_spi_read(spi_device *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data)
+		uint16_t reg_addr,
+		uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -63,11 +63,11 @@ int32_t ad9152_spi_read(spi_device *dev,
 }
 
 /***************************************************************************//**
-* @brief ad9152_spi_write
-*******************************************************************************/
+ * @brief ad9152_spi_write
+ *******************************************************************************/
 int32_t ad9152_spi_write(spi_device *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+		uint16_t reg_addr,
+		uint8_t reg_data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -82,16 +82,16 @@ int32_t ad9152_spi_write(spi_device *dev,
 }
 
 /***************************************************************************//**
-* @brief ad9152_setup
-*******************************************************************************/
+ * @brief ad9152_setup
+ *******************************************************************************/
 int32_t ad9152_setup(spi_device *dev,
-					 ad9152_init_param init_param)
+		ad9152_init_param init_param)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
 	int32_t ret;
 
-  ret = 0;
+	ret = 0;
 
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9152_CHIP_ID)
@@ -157,11 +157,11 @@ int32_t ad9152_setup(spi_device *dev,
 	mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
-  if (pll_stat == 0)
-  {
-	  ad_printf("AD9152: PLL is NOT locked!.\n");
-    ret = -1;
-  }
+	if (pll_stat == 0)
+	{
+		ad_printf("AD9152: PLL is NOT locked!.\n");
+		ret = -1;
+	}
 
 	ad9152_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -182,83 +182,119 @@ int32_t ad9152_setup(spi_device *dev,
 }
 
 /***************************************************************************//**
-* @brief ad9152_setup
-*******************************************************************************/
-int32_t ad9152_datapath_prbs(spi_device *dev, uint32_t prbs_type)
+ * @brief ad9152_setup
+ *******************************************************************************/
+
+int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
 {
+	uint32_t dac;
+	uint32_t sample;
+	uint8_t status;
 
-  uint8_t status;
-  int32_t ret;
+	status = 0;
 
-  status = 0;
-  ret = 0;
+	for (dac = 0; dac < 2; dac++) {
+		for (sample = 0; sample < 4; sample++) {
+			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x00));
+			ad9152_spi_write(dev, 0x32e, (init_param.stpl_samples[dac][sample]>>8));
+			ad9152_spi_write(dev, 0x32d, (init_param.stpl_samples[dac][sample]>>0));
+			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x03));
+			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			mdelay(1);
 
-	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x3));
-	ad9152_spi_write(dev, REG_PRBS, ((prbs_type << 2) | 0x1));
-  mdelay(100);
-
-  ad9152_spi_read(dev, REG_PRBS, &status);
-  if ((status & 0xc0) != 0xc0)
-  {
-	  ad_printf("AD9152: PRBS OUT OF SYNC (%x)!.\n", status);
-    ret = -1;
-  }
-  ad9152_spi_read(dev, REG_PRBS_ERROR_I, &status);
-  if (status != 0x00)
-  {
-	  ad_printf("AD9152: PRBS I channel ERRORS (%x)!.\n", status);
-    ret = -1;
-  }
-  ad9152_spi_read(dev, REG_PRBS_ERROR_Q, &status);
-  if (status != 0x00)
-  {
-	  ad_printf("AD9152: PRBS Q channel ERRORS (%x)!.\n", status);
-    ret = -1;
-  }
-
-  return(ret);
+			ad9152_spi_read(dev, 0x32f, &status);
+			if ((status & 0x1) == 0x1)
+				ad_printf("AD9152: short-pattern-test mismatch (%x, %d, %d, %x)!.\n",
+					dac, sample, init_param.stpl_samples[dac][sample], status);
+		}
+	}
+	return(0);
 }
 
 /***************************************************************************//**
-* @brief ad9152_setup
-*******************************************************************************/
+ * @brief ad9152_setup
+ *******************************************************************************/
+
+int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
+{
+
+	uint8_t status;
+	int32_t ret;
+
+	status = 0;
+	ret = 0;
+
+	if (init_param.interpolation == 1)
+		return(ret);
+
+	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
+	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
+	mdelay(100);
+
+	ad9152_spi_read(dev, REG_PRBS, &status);
+	if ((status & 0xc0) != 0xc0)
+	{
+		ad_printf("AD9152: PRBS OUT OF SYNC (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9152_spi_read(dev, REG_PRBS_ERROR_I, &status);
+	if (status != 0x00)
+	{
+		ad_printf("AD9152: PRBS I channel ERRORS (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9152_spi_read(dev, REG_PRBS_ERROR_Q, &status);
+	if (status != 0x00)
+	{
+		ad_printf("AD9152: PRBS Q channel ERRORS (%x)!.\n", status);
+		ret = -1;
+	}
+
+	return(ret);
+}
+
+/***************************************************************************//**
+ * @brief ad9152_setup
+ *******************************************************************************/
+
 int32_t ad9152_status(spi_device *dev)
 {
 
-  uint8_t status;
-  int32_t ret;
+	uint8_t status;
+	int32_t ret;
 
-  status = 0;
-  ret = 0;
+	status = 0;
+	ret = 0;
 
-  // check for jesd status on all lanes
-  // failures on top are 100% guaranteed to make subsequent status checks fail
+	// check for jesd status on all lanes
+	// failures on top are 100% guaranteed to make subsequent status checks fail
 
-  ad9152_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
-  if (status != 0x0f)
-  {
-	  ad_printf("AD9152: CGS NOT received (%x)!.\n", status);
-    ret = -1;
-  }
-  ad9152_spi_read(dev, REG_INITLANESYNCFLG, &status);
-  if (status != 0x0f)
-  {
-	  ad_printf("AD9152: ILAS NOT received (%x)!.\n", status);
-    ret = -1;
-  }
-  ad9152_spi_read(dev, REG_FRAMESYNCFLG, &status);
-  if (status != 0x0f)
-  {
-	  ad_printf("AD9152: framer OUT OF SYNC (%x)!.\n", status);
-    ret = -1;
-  }
-  ad9152_spi_read(dev, REG_GOODCHKSUMFLG, &status);
-  if (status != 0x0f)
-  {
-	  ad_printf("AD9152: check-sum MISMATCH (%x)!.\n", status);
-    ret = -1;
-  }
+	ad9152_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("AD9152: CGS NOT received (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9152_spi_read(dev, REG_INITLANESYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("AD9152: ILAS NOT received (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9152_spi_read(dev, REG_FRAMESYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("AD9152: framer OUT OF SYNC (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9152_spi_read(dev, REG_GOODCHKSUMFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("AD9152: check-sum MISMATCH (%x)!.\n", status);
+		ret = -1;
+	}
 
-  return(ret);
+	return(ret);
 }
 

@@ -2,7 +2,7 @@
  *   @file   ad_fmcdaq3_ebz.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
-********************************************************************************
+ ********************************************************************************
  * Copyright 2015(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -35,7 +35,7 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+ *******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -64,183 +64,205 @@
 #define GPIO_TRIG               39
 
 /***************************************************************************//**
-* @brief main
-*******************************************************************************/
+ * @brief main
+ *******************************************************************************/
 int main(void)
 {
-  spi_device ad9528_spi_device;
-  spi_device ad9152_spi_device;
-  spi_device ad9680_spi_device;
-  ad9528_channel_spec ad9528_channels[8];
-  ad9528_platform_data ad9528_param;
-  ad9152_init_param ad9152_param;
-  ad9680_init_param ad9680_param;
-  xcvr_core ad9152_xcvr;
-  jesd_core ad9152_jesd;
-  dac_channel ad9152_channels[2];
-  dac_core ad9152_core;
-  xcvr_core ad9680_xcvr;
-  jesd_core ad9680_jesd;
-  adc_core ad9680_core;
+	spi_device ad9528_spi_device;
+	spi_device ad9152_spi_device;
+	spi_device ad9680_spi_device;
+	ad9528_channel_spec ad9528_channels[8];
+	ad9528_platform_data ad9528_param;
+	ad9152_init_param ad9152_param;
+	ad9680_init_param ad9680_param;
+	xcvr_core ad9152_xcvr;
+	jesd_core ad9152_jesd;
+	dac_channel ad9152_channels[2];
+	dac_core ad9152_core;
+	xcvr_core ad9680_xcvr;
+	jesd_core ad9680_jesd;
+	adc_core ad9680_core;
 
-  ad_spi_init(&ad9528_spi_device);
-  ad_spi_init(&ad9152_spi_device);
-  ad_spi_init(&ad9680_spi_device);
+	ad_spi_init(&ad9528_spi_device);
+	ad_spi_init(&ad9152_spi_device);
+	ad_spi_init(&ad9680_spi_device);
 
-  ad9528_spi_device.chip_select = 0x6;
-  ad9152_spi_device.chip_select = 0x5;
-  ad9680_spi_device.chip_select = 0x3;
+	ad9528_spi_device.chip_select = 0x6;
+	ad9152_spi_device.chip_select = 0x5;
+	ad9680_spi_device.chip_select = 0x3;
 
-  // ad9528 defaults
+	// ad9528 defaults
 
-  ad9528_param.num_channels = 8;
-  ad9528_param.channels = &ad9528_channels[0];
-  ad9528_init(&ad9528_param);
+	ad9528_param.num_channels = 8;
+	ad9528_param.channels = &ad9528_channels[0];
+	ad9528_init(&ad9528_param);
 
-  // dac-device-clock (1.25G) & sysref (2.44M)
+	// dac-device-clock (1.25G) & sysref (2.44M)
 
-  ad9528_channels[0].channel_num = 2;
-  ad9528_channels[0].channel_divider = 1;
-  ad9528_channels[1].channel_num = 8;
-  ad9528_channels[1].channel_divider = 512;
+	ad9528_channels[0].channel_num = 2;
+	ad9528_channels[0].channel_divider = 1;
+	ad9528_channels[1].channel_num = 8;
+	ad9528_channels[1].channel_divider = 512;
 
-  // dac-fpga-clock (625M) & sysref (2.44M)
+	// dac-fpga-clock (625M) & sysref (2.44M)
 
-  ad9528_channels[2].channel_num = 9;
-  ad9528_channels[2].channel_divider = 2;
-  ad9528_channels[3].channel_num = 7;
-  ad9528_channels[3].channel_divider = 512;
+	ad9528_channels[2].channel_num = 9;
+	ad9528_channels[2].channel_divider = 2;
+	ad9528_channels[3].channel_num = 7;
+	ad9528_channels[3].channel_divider = 512;
 
-  // adc-device-clock (1.2G) & sysref (2.44M)
+	// adc-device-clock (1.2G) & sysref (2.44M)
 
-  ad9528_channels[4].channel_num = 13;
-  ad9528_channels[4].channel_divider = 1;
-  ad9528_channels[5].channel_num = 5;
-  ad9528_channels[5].channel_divider = 512;
+	ad9528_channels[4].channel_num = 13;
+	ad9528_channels[4].channel_divider = 1;
+	ad9528_channels[5].channel_num = 5;
+	ad9528_channels[5].channel_divider = 512;
 
-  // adc-fpga-clock (625M) & sysref (2.44M)
+	// adc-fpga-clock (625M) & sysref (2.44M)
 
-  ad9528_channels[6].channel_num = 4;
-  ad9528_channels[6].channel_divider = 2;
-  ad9528_channels[7].channel_num = 6;
-  ad9528_channels[7].channel_divider = 512;
+	ad9528_channels[6].channel_num = 4;
+	ad9528_channels[6].channel_divider = 2;
+	ad9528_channels[7].channel_num = 6;
+	ad9528_channels[7].channel_divider = 512;
 
-  // pllx settings
+	// pllx settings
 
-  ad9528_param.spi3wire = 1;
-  ad9528_param.vcxo_freq = 125000000;
-  ad9528_param.osc_in_diff_en = 1;
-  ad9528_param.pll2_charge_pump_current_nA = 805000;
-  ad9528_param.pll2_vco_diff_m1 = 3;
-  ad9528_param.pll2_ndiv_a_cnt = 2;
-  ad9528_param.pll2_ndiv_b_cnt = 7;
-  ad9528_param.pll2_n2_div = 10;
-  ad9528_param.sysref_k_div = 512;
-  ad9528_param.rpole2 = RPOLE2_900_OHM;
-  ad9528_param.rzero= RZERO_3250_OHM;
-  ad9528_param.cpole1 = CPOLE1_16_PF;
+	ad9528_param.spi3wire = 1;
+	ad9528_param.vcxo_freq = 125000000;
+	ad9528_param.osc_in_diff_en = 1;
+	ad9528_param.pll2_charge_pump_current_nA = 805000;
+	ad9528_param.pll2_vco_diff_m1 = 3;
+	ad9528_param.pll2_ndiv_a_cnt = 2;
+	ad9528_param.pll2_ndiv_b_cnt = 7;
+	ad9528_param.pll2_n2_div = 10;
+	ad9528_param.sysref_k_div = 512;
+	ad9528_param.rpole2 = RPOLE2_900_OHM;
+	ad9528_param.rzero= RZERO_3250_OHM;
+	ad9528_param.cpole1 = CPOLE1_16_PF;
 
-  // dac settings
+	// dac settings
 
-  ad9152_param.lane_rate_kbps = 10000000;
+	ad9152_xcvr.mmcm_present = 0;
+	ad9152_xcvr.reconfig_bypass = 1;
+	ad9152_xcvr.rx_tx_n = 0;
+	ad9152_xcvr.no_of_lanes = 4;
+	ad9152_xcvr.lane_rate_kbps = 10*1000*1000;
 
-  ad9152_xcvr.mmcm_present = 0;
-  ad9152_xcvr.reconfig_bypass = 1;
-  ad9152_xcvr.rx_tx_n = 0;
-  ad9152_xcvr.no_of_lanes = 4;
-  ad9152_xcvr.lane_rate_kbps = 10*1000*1000;
+	ad9152_jesd.rx_tx_n = 0;
+	ad9152_jesd.scramble_enable = 1;
+	ad9152_jesd.octets_per_frame = 1;
+	ad9152_jesd.frames_per_multiframe = 32;
+	ad9152_jesd.subclass_mode = 1;
 
-  ad9152_jesd.rx_tx_n = 0;
-  ad9152_jesd.scramble_enable = 1;
-  ad9152_jesd.octets_per_frame = 1;
-  ad9152_jesd.frames_per_multiframe = 32;
-  ad9152_jesd.subclass_mode = 1;
+	ad9152_channels[0].dds_dual_tone = 0;
+	ad9152_channels[0].dds_frequency_0 = 33*1000*1000;
+	ad9152_channels[0].dds_phase_0 = 0;
+	ad9152_channels[0].dds_scale_0 = 500000;
+	ad9152_channels[0].sel = DAC_SRC_DDS;
+	ad9152_channels[1].dds_dual_tone = 0;
+	ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
+	ad9152_channels[1].dds_phase_0 = 0;
+	ad9152_channels[1].dds_scale_0 = 500000;
+	ad9152_channels[0].pat_data = 0xb1b0a1a0;
+	ad9152_channels[1].pat_data = 0xd1d0c1c0;
+	ad9152_channels[1].sel = DAC_SRC_DDS;
 
-  ad9152_channels[0].dds_dual_tone = 0;
-  ad9152_channels[0].dds_frequency_0 = 33*1000*1000;
-  ad9152_channels[0].dds_phase_0 = 0;
-  ad9152_channels[0].dds_scale_0 = 500000;
-  ad9152_channels[0].sel = DAC_SRC_DDS;
-  ad9152_channels[1].dds_dual_tone = 0;
-  ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
-  ad9152_channels[1].dds_phase_0 = 0;
-  ad9152_channels[1].dds_scale_0 = 500000;
-  ad9152_channels[1].sel = DAC_SRC_DDS;
+	ad9152_core.no_of_channels = 2;
+	ad9152_core.resolution = 16;
+	ad9152_core.channels = &ad9152_channels[0];
 
-  ad9152_core.no_of_channels = 2;
-  ad9152_core.resolution = 16;
-  ad9152_core.channels = &ad9152_channels[0];
+	ad9152_param.stpl_samples[0][0] = (ad9152_channels[0].pat_data>> 0) & 0xffff;
+	ad9152_param.stpl_samples[0][1] = (ad9152_channels[0].pat_data>>16) & 0xffff;
+	ad9152_param.stpl_samples[0][2] = (ad9152_channels[0].pat_data>> 0) & 0xffff;
+	ad9152_param.stpl_samples[0][3] = (ad9152_channels[0].pat_data>>16) & 0xffff;
+	ad9152_param.stpl_samples[1][0] = (ad9152_channels[1].pat_data>> 0) & 0xffff;
+	ad9152_param.stpl_samples[1][1] = (ad9152_channels[1].pat_data>>16) & 0xffff;
+	ad9152_param.stpl_samples[1][2] = (ad9152_channels[1].pat_data>> 0) & 0xffff;
+	ad9152_param.stpl_samples[1][3] = (ad9152_channels[1].pat_data>>16) & 0xffff;
+	ad9152_param.interpolation = 1;
+	ad9152_param.lane_rate_kbps = 10000000;
 
-  // adc settings
+	// adc settings
 
-  ad9680_param.lane_rate_kbps = 10000000;
+	ad9680_param.lane_rate_kbps = 10000000;
 
-  ad9680_xcvr.mmcm_present = 0;
-  ad9680_xcvr.reconfig_bypass = 1;
-  ad9680_xcvr.rx_tx_n = 1;
-  ad9680_xcvr.no_of_lanes = 4;
-  ad9680_xcvr.lane_rate_kbps = 10*1000*1000;
+	ad9680_xcvr.mmcm_present = 0;
+	ad9680_xcvr.reconfig_bypass = 1;
+	ad9680_xcvr.rx_tx_n = 1;
+	ad9680_xcvr.no_of_lanes = 4;
+	ad9680_xcvr.lane_rate_kbps = 10*1000*1000;
 
-  ad9680_jesd.rx_tx_n = 1;
-  ad9680_jesd.scramble_enable = 1;
-  ad9680_jesd.octets_per_frame = 1;
-  ad9680_jesd.frames_per_multiframe = 32;
-  ad9680_jesd.subclass_mode = 1;
+	ad9680_jesd.rx_tx_n = 1;
+	ad9680_jesd.scramble_enable = 1;
+	ad9680_jesd.octets_per_frame = 1;
+	ad9680_jesd.frames_per_multiframe = 32;
+	ad9680_jesd.subclass_mode = 1;
 
-  ad9680_core.no_of_channels = 2;
-  ad9680_core.resolution = 14;
+	ad9680_core.no_of_channels = 2;
+	ad9680_core.resolution = 14;
 
-  // base addresses
+	// base addresses
 
 #ifdef XILINX
-  ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
-  ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
-  ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
-  ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-  ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
-  ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
+	ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
+	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
+	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
+	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
+	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
+	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 #endif
 
-  // functions (do not modify below)
+	// functions (do not modify below)
 
-  ad_gpio_set(GPIO_DAC_TXEN, 0x1);
-  ad_gpio_set(GPIO_ADC_PD, 0x0);
+	ad_gpio_set(GPIO_DAC_TXEN, 0x1);
+	ad_gpio_set(GPIO_ADC_PD, 0x0);
 
-  ad9528_setup(&ad9528_spi_device, &ad9528_param);
+	ad9528_setup(&ad9528_spi_device, &ad9528_param);
 
-  ad9152_setup(&ad9152_spi_device, ad9152_param);
-  jesd_setup(ad9152_jesd);
-  xcvr_setup(ad9152_xcvr);
-  jesd_status(ad9152_jesd);
-  dac_setup(ad9152_core);
-  ad9152_status(&ad9152_spi_device);
-  ad9152_channels[0].sel = DAC_SRC_PN23;
-  ad9152_channels[1].sel = DAC_SRC_PN23;
-  dac_data_setup(ad9152_core);
-  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN15);
-  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN7);
-  ad9152_channels[0].sel = DAC_SRC_PN7;
-  ad9152_channels[1].sel = DAC_SRC_PN7;
-  dac_data_setup(ad9152_core);
-  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN15);
-  ad9152_datapath_prbs(&ad9152_spi_device, AD9152_TEST_PN7);
+	ad9152_setup(&ad9152_spi_device, ad9152_param);
+	jesd_setup(ad9152_jesd);
+	xcvr_setup(ad9152_xcvr);
+	jesd_status(ad9152_jesd);
+	dac_setup(ad9152_core);
+	ad9152_status(&ad9152_spi_device);
 
-  ad9680_setup(&ad9680_spi_device, ad9680_param);
-  jesd_setup(ad9680_jesd);
-  xcvr_setup(ad9680_xcvr);
-  jesd_status(ad9680_jesd);
-  adc_setup(ad9680_core);
-  ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
-  adc_pn_mon(ad9680_core, ADC_PN9);
-  ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
-  adc_pn_mon(ad9680_core, ADC_PN23A);
+	// ad9152-x1 do not support data path prbs (use short-tpl)
 
-  // default data
+	ad9152_channels[0].sel = DAC_SRC_SED;
+	ad9152_channels[1].sel = DAC_SRC_SED;
+	dac_data_setup(ad9152_core);
+	ad9152_short_pattern_test(&ad9152_spi_device, ad9152_param);
 
-  //ad9152_channels[0].sel = DAC_SRC_DDS;
-  //ad9152_channels[1].sel = DAC_SRC_DDS;
-  //dac_data_setup(ad9152_core);
-  ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
-  ad_printf("daq3: done\n");
-  return(0);
+	// ad9152-xN (n > 1) supports data path prbs
+
+	ad9152_channels[0].sel = DAC_SRC_PN23;
+	ad9152_channels[1].sel = DAC_SRC_PN23;
+	dac_data_setup(ad9152_core);
+	ad9152_param.prbs_type = AD9152_TEST_PN7;
+	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
+
+	ad9152_channels[0].sel = DAC_SRC_PN31;
+	ad9152_channels[1].sel = DAC_SRC_PN31;
+	dac_data_setup(ad9152_core);
+	ad9152_param.prbs_type = AD9152_TEST_PN15;
+	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
+
+	ad9680_setup(&ad9680_spi_device, ad9680_param);
+	jesd_setup(ad9680_jesd);
+	xcvr_setup(ad9680_xcvr);
+	jesd_status(ad9680_jesd);
+	adc_setup(ad9680_core);
+	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
+	adc_pn_mon(ad9680_core, ADC_PN9);
+	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
+	adc_pn_mon(ad9680_core, ADC_PN23A);
+
+	// default data
+
+	ad9152_channels[0].sel = DAC_SRC_DDS;
+	ad9152_channels[1].sel = DAC_SRC_DDS;
+	dac_data_setup(ad9152_core);
+	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
+	ad_printf("daq3: done\n");
+	return(0);
 }
