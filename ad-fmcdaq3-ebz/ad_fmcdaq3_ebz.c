@@ -205,11 +205,22 @@ int main(void)
 
 #ifdef XILINX
 	ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
-	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
 	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
 	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
+	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
+	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
+#endif
+#ifdef ALTERA
+	ad9152_xcvr.base_address = AXI_AD9152_XCVR_BASE;
+	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
+	ad9680_xcvr.base_address = AXI_AD9680_XCVR_BASE;
+	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
+	ad9152_jesd.base_address = AVL_AD9152_XCVR_IP_RECONFIG_BASE;
+	ad9680_jesd.base_address = AVL_AD9680_XCVR_IP_RECONFIG_BASE;
+	ad9152_xcvr.mmcm_lpll_base_address = AVL_AD9152_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9152_xcvr.tx_lane_pll_base_address = AVL_AD9152_XCVR_LANE_PLL_RECONFIG_BASE;
 #endif
 
 	// functions (do not modify below)
