@@ -44,8 +44,9 @@
 /******************************************************************************/
 
 #ifdef XILINX
-#include "xparameters.h"
+#include <xparameters.h>
 #include <xil_printf.h>
+#include "platform.h"
 #endif
 
 #if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
@@ -124,6 +125,11 @@ void Xil_DCacheFlush();
 #ifdef XILINX
 #define ad_icache_flush Xil_ICacheFlush
 #define ad_dcache_flush Xil_DCacheFlush
+#endif
+
+#ifdef XILINX
+#define ad_platform_init init_platform
+#define ad_platform_close cleanup_platform
 #endif
 
 /******************************************************************************/

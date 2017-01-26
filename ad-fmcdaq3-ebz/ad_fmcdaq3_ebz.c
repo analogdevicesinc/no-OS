@@ -214,6 +214,7 @@ int main(void)
 
 	// functions (do not modify below)
 
+	ad_platform_init();
 	ad_gpio_set(GPIO_DAC_TXEN, 0x1);
 	ad_gpio_set(GPIO_ADC_PD, 0x0);
 
@@ -264,5 +265,6 @@ int main(void)
 	dac_data_setup(ad9152_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
 	ad_printf("daq3: done\n");
+	ad_platform_close();
 	return(0);
 }
