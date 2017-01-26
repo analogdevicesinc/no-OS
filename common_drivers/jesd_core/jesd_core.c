@@ -72,6 +72,9 @@ int32_t jesd_write(jesd_core core,
 *******************************************************************************/
 int32_t jesd_setup(jesd_core core)
 {
+#ifdef ALTERA
+	return(0);
+#endif
 
 	jesd_write(core, JESD204_REG_TRX_RESET,
 			JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
@@ -115,6 +118,9 @@ int32_t jesd_status(jesd_core core)
 	uint8_t link;
 	int32_t ret;
 
+#ifdef ALTERA
+	return(0);
+#endif
 	timeout = 100;
 	do {
 		mdelay(1);
