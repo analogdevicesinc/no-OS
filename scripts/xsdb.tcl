@@ -41,7 +41,7 @@ if {$m_type == "ZYNQ_PS7"} {
 if {$m_type == "MICROBLAZE"} {
 }
 
-dow sw.elf
+dow sw/Release/sw.elf
 con
 disconnect
 exit
