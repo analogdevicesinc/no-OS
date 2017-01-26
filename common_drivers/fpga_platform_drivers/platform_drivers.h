@@ -132,6 +132,11 @@ void Xil_DCacheFlush();
 #define ad_platform_close cleanup_platform
 #endif
 
+#ifdef ALTERA
+void ad_platform_init(void);
+void ad_platform_close(void);
+#endif
+
 /******************************************************************************/
 /********************** SPI structure and functions ***************************/
 /******************************************************************************/

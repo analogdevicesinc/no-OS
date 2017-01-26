@@ -271,3 +271,17 @@ void ad_reg_write_16(uint32_t addr, uint32_t data)
 		m_data = (m_data & 0xffff) | (data<<16);
 	ad_reg_write((addr & ~0x3), m_data);
 }
+
+#ifdef ALTERA
+void ad_platform_init(void)
+{
+	return;
+}
+
+void ad_platform_close(void)
+{
+	alt_printf("%c", 0x04);
+	return;
+}
+#endif
+
