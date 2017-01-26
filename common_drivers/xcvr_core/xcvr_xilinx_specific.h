@@ -36,6 +36,7 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifdef XILINX
 #ifndef XIL_SPECIFIC_H_
 #define XIL_SPECIFIC_H_
 
@@ -155,4 +156,5 @@
 
 int32_t adxcvr_set_lpm_dfe_mode(xcvr_core core, uint32_t lpm);
 
+#endif
 #endif
