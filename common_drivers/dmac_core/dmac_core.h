@@ -42,7 +42,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "altxil_base.h"
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -88,7 +88,7 @@ typedef struct {
 } dmac_xfer;
 
 typedef struct {
-	uint32_t	baseaddr;
+	uint32_t	base_address;
 	uint8_t		type;
 	uint32_t	irq_id;
 	dmac_xfer	transfer;
