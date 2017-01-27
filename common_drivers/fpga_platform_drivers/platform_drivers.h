@@ -43,28 +43,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef XILINX
-#include <xparameters.h>
-#include <xil_printf.h>
-#include "platform.h"
-#endif
-
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
-#include <sleep.h>
-#include <xspips.h>
-#endif
-
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
-void Xil_ICacheEnable();
-void Xil_ICacheDisable();
-void Xil_DCacheEnable();
-void Xil_DCacheDisable();
-void Xil_DCacheFlush();
-#endif
-
-#ifdef MICROBLAZE
-#endif
-
 #ifdef ALTERA
 #include <io.h>
 #include <unistd.h>
@@ -78,9 +56,26 @@ void Xil_DCacheFlush();
 #ifdef NIOS_II
 #endif
 
+#ifdef XILINX
+#include <xparameters.h>
+#include <xil_printf.h>
+#include "platform.h"
+#endif
+
+#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#include <sleep.h>
+#include <xspips.h>
+#endif
+
+#ifdef MICROBLAZE
+#include <xil_io.h>
+#endif
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+// data types using stdint-
 
 #ifdef ALTERA
 #define int8_t alt_8
@@ -91,31 +86,38 @@ void Xil_DCacheFlush();
 #define uint64_t alt_u64
 #endif
 
-#define min(x, y) (((x) < (y)) ? (x) : (y))
-#define min_t(type, x, y) (type)min((type)(x), (type)(y))
-#define max(x, y) (((x) > (y)) ? (x) : (y))
-#define max_t(type, x, y) (type)max((type)(x), (type)(y))
-#define clamp(val, min_val, max_val) (max(min((val), (max_val)), (min_val)))
-#define clamp_t(type, val, min_val, max_val) (type)clamp((type)(val), \
-		(type)(min_val), (type)(max_val))
+// sleep functions
 
 #define mdelay(msecs) usleep(1000*msecs)
 #define udelay(usecs) usleep(usecs)
+
+#ifdef MICROBLAZE
+void usleep(uint32_t us_count);
+#endif
+
+// print functions
 
 #ifdef ALTERA
 #define ad_printf alt_printf
 #endif
 
-#ifdef NIOS_II
+#ifdef XILINX
+#define ad_printf xil_printf
+#endif
+
+// io read/write
+
+#ifdef ALTERA
 #define ad_reg_write(x,y) IOWR_32DIRECT(x,0,y)
 #define ad_reg_read(x) IORD_32DIRECT(x,0)
 #endif
 
 #ifdef XILINX
-#define ad_printf xil_printf
 #define ad_reg_write(x,y) Xil_Out32(x,y)
 #define ad_reg_read(x) Xil_In32(x)
 #endif
+
+// cache functions
 
 #ifdef ALTERA
 #define ad_icache_flush alt_icache_flush_all
@@ -127,6 +129,16 @@ void Xil_DCacheFlush();
 #define ad_dcache_flush Xil_DCacheFlush
 #endif
 
+#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+void Xil_ICacheEnable();
+void Xil_ICacheDisable();
+void Xil_DCacheEnable();
+void Xil_DCacheDisable();
+void Xil_DCacheFlush();
+#endif
+
+// platform functions
+
 #ifdef XILINX
 #define ad_platform_init init_platform
 #define ad_platform_close cleanup_platform
@@ -137,9 +149,20 @@ void ad_platform_init(void);
 void ad_platform_close(void);
 #endif
 
+// common macros
+
+#define min(x, y) (((x) < (y)) ? (x) : (y))
+#define min_t(type, x, y) (type)min((type)(x), (type)(y))
+#define max(x, y) (((x) > (y)) ? (x) : (y))
+#define max_t(type, x, y) (type)max((type)(x), (type)(y))
+#define clamp(val, min_val, max_val) (max(min((val), (max_val)), (min_val)))
+#define clamp_t(type, val, min_val, max_val) (type)clamp((type)(val), \
+		(type)(min_val), (type)(max_val))
+
 /******************************************************************************/
 /********************** SPI structure and functions ***************************/
 /******************************************************************************/
+
 // you may override the default spi structure-- the drivers simply turn around
 // the spi structure back to spi function calls.
 
@@ -151,18 +174,21 @@ typedef struct {
 	uint32_t    cpol;
 } spi_device;
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
 int32_t ad_spi_init(spi_device *dev);
 int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes);
+
+/******************************************************************************/
+/********************* GPIO structure and functions ***************************/
+/******************************************************************************/
 
 int32_t ad_gpio_set(uint8_t pin, uint8_t data);
 int32_t ad_gpio_get(uint8_t pin, uint8_t *data);
 
-uint64_t do_div(uint64_t* n, uint64_t base);
+/******************************************************************************/
+/********************* MISC structure and functions ***************************/
+/******************************************************************************/
 
+uint64_t do_div(uint64_t* n, uint64_t base);
 void ad_reg_write_16(uint32_t addr, uint32_t data);
 
 #endif

@@ -131,6 +131,22 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 
 #endif
 
+#ifdef MICROBLAZE
+
+	uint32_t i;
+
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), dev->chip_select);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x086 | (dev->cpol<<3) | (dev->cpha<<4)));
+	for (i = 0; i < no_of_bytes; i++) {
+		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x68), *(data + i));
+		while ((Xil_In32(XPAR_SPI_0_BASEADDR + 0x64) & 0x1) == 0x1) {}
+		*(data + i) = Xil_In32(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff;
+	}
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xff);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (dev->cpol<<3) | (dev->cpha<<4)));
+
+#endif
+
 	return(0);
 }
 
@@ -182,6 +198,16 @@ int32_t ad_gpio_set(uint8_t pin, uint8_t data)
 
 	pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
 	IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (data << ppos)));
+	pstatus = 0;
+
+#endif
+
+#ifdef MICROBLAZE
+
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
+	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (data << ppos)));
 	pstatus = 0;
 
 #endif
@@ -241,6 +267,14 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
 
 #endif
 
+#ifdef MICROBLAZE
+
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+	*data = (pdata >> ppos) & 0x1;
+	pstatus = 0;
+
+#endif
+
 	return(pstatus);
 }
 
@@ -285,3 +319,17 @@ void ad_platform_close(void)
 }
 #endif
 
+#ifdef MICROBLAZE
+void usleep(uint32_t us_count)
+{
+	uint32_t count;
+
+	ad_reg_write((XPAR_AXI_TIMER_BASEADDR + 0x4), 0x00);
+	for (count = 0; count < us_count; count++) {
+		ad_reg_write((XPAR_AXI_TIMER_BASEADDR + 0x0), 0x20);
+		ad_reg_write((XPAR_AXI_TIMER_BASEADDR + 0x0), 0x80);
+		while (ad_reg_read(XPAR_AXI_TIMER_BASEADDR + 0x8) < 100) {}
+	}
+	ad_reg_write((XPAR_AXI_TIMER_BASEADDR + 0x0), 0x20);
+}
+#endif
