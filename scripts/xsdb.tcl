@@ -13,6 +13,7 @@ if {$m_type == "ZYNQ_PS7"} {
 }
 
 if {$m_type == "MICROBLAZE"} {
+  targets -set -filter {name =~ "xc*"}
 }
 
 fpga -file hw/system_top.bit
@@ -39,6 +40,8 @@ if {$m_type == "ZYNQ_PS7"} {
 }
 
 if {$m_type == "MICROBLAZE"} {
+  after 1000
+  targets -set -filter {name =~ "*MicroBlaze*"}
 }
 
 dow sw/Release/sw.elf
