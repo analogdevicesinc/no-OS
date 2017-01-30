@@ -48,7 +48,7 @@
 /******************************************************************************/
 struct ad9523_state
 {
-    struct ad9523_platform_data *pdata;
+    ad9523_platform_data *pdata;
     uint32_t vcxo_freq;
     uint32_t vco_freq;
     uint32_t vco_out_freq[3];
@@ -232,17 +232,87 @@ int32_t ad9523_sync(spi_device *dev)
 }
 
 /***************************************************************************//**
- * @brief Initializes the AD9523.
+ * @brief Initialize the AD9523 data structure with the default register values.
+ *
+ * @return Always return 0.
+*******************************************************************************/
+int32_t ad9523_init(ad9523_platform_data *pdata) {
+
+	uint32_t i = 0;
+
+	pdata->vcxo_freq = 0;
+	pdata->spi3wire = 0;
+
+	/* Differential/ Single-Ended Input Configuration */
+	pdata->refa_diff_rcv_en = 0;
+	pdata->refb_diff_rcv_en = 0;
+	pdata->zd_in_diff_en = 0;
+	pdata->osc_in_diff_en = 0;
+
+	/*
+	 * Valid if differential input disabled
+	 * if not true defaults to pos input
+	 */
+	pdata->refa_cmos_neg_inp_en = 0;
+	pdata->refb_cmos_neg_inp_en = 0;
+	pdata->zd_in_cmos_neg_inp_en = 0;
+	pdata->osc_in_cmos_neg_inp_en = 0;
+
+	/* PLL1 Setting */
+	pdata->refa_r_div = 0;
+	pdata->refb_r_div = 0;
+	pdata->pll1_feedback_div = 0;
+	pdata->pll1_charge_pump_current_nA = 0;
+	pdata->zero_delay_mode_internal_en = 0;
+	pdata->osc_in_feedback_en = 0;
+	pdata->pll1_bypass_en = 0;
+	pdata->pll1_loop_filter_rzero = 0;
+
+	/* Reference */
+	pdata->ref_mode = 0;
+
+	/* PLL2 Setting */
+	pdata->pll2_charge_pump_current_nA = 0;
+	pdata->pll2_ndiv_a_cnt = 0;
+	pdata->pll2_ndiv_b_cnt = 4;
+	pdata->pll2_freq_doubler_en = 0;
+	pdata->pll2_r2_div = 0;
+	pdata->pll2_vco_diff_m1 = 0; /* 3..5 */
+	pdata->pll2_vco_diff_m2 = 0; /* 3..5 */
+
+	/* Loop Filter PLL2 */
+	pdata->rpole2 = 0;
+	pdata->rzero = 0;
+	pdata->cpole1 = 0;
+	pdata->rzero_bypass_en = 0;
+
+	/* Output Channel Configuration */
+	for (i=0; i < pdata->num_channels; i++) {
+		(&pdata->channels[i])->channel_num = 0;
+		(&pdata->channels[i])->divider_output_invert_en = 0;
+		(&pdata->channels[i])->sync_ignore_en = 0;
+		(&pdata->channels[i])->low_power_mode_en = 0;
+		(&pdata->channels[i])->use_alt_clock_src = 0;
+		(&pdata->channels[i])->output_dis = 1;
+		(&pdata->channels[i])->driver_mode = LVDS_7mA;
+		(&pdata->channels[i])->divider_phase = 0;
+		(&pdata->channels[i])->channel_divider = 0;
+	}
+	return 0;
+}
+
+
+/***************************************************************************//**
+ * @brief Setup the AD9523 device.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
 int32_t ad9523_setup(spi_device *dev,
-					 struct ad9523_platform_data ad9523_pdata)
+			ad9523_platform_data *pdata)
 
 {
 	struct ad9523_state *st = &ad9523_st;
-    struct ad9523_platform_data *pdata = &ad9523_pdata;
-	struct ad9523_channel_spec *chan;
+	ad9523_channel_spec *chan;
 	uint32_t active_mask = 0;
 	int32_t ret, i;
 	uint32_t reg_data;

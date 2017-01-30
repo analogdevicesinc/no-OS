@@ -318,7 +318,7 @@ enum ref_sel_mode
  * @extended_name: Optional descriptive channel name.
  */
 
-struct ad9523_channel_spec
+typedef struct
 {
 	unsigned channel_num;
 	unsigned char divider_output_invert_en;
@@ -330,7 +330,7 @@ struct ad9523_channel_spec
 	unsigned char divider_phase;
 	unsigned short channel_divider;
 	char extended_name[16];
-};
+} ad9523_channel_spec;
 
 enum pll1_rzero_resistor {
 	RZERO_883_OHM,
@@ -407,7 +407,7 @@ enum cpole1_capacitor {
  * @name: Optional alternative iio device name.
  */
 
-struct ad9523_platform_data
+typedef struct
 {
 	unsigned long vcxo_freq;
 	unsigned char spi3wire;
@@ -457,10 +457,10 @@ struct ad9523_platform_data
 
 	/* Output Channel Configuration */
 	int num_channels;
-	struct ad9523_channel_spec *channels;
+	ad9523_channel_spec *channels;
 
 	char name[16];
-};
+} ad9523_platform_data;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -481,7 +481,9 @@ int32_t ad9523_vco_out_map(spi_device *dev,
 		uint32_t out);
 /* Updates the AD9523 configuration. */
 int32_t ad9523_sync(spi_device *dev);
-/* Initializes the AD9523. */
+/* Initialize the AD9523 data structure*/
+int32_t ad9523_init(ad9523_platform_data *pdata);
+/* Configure the AD9523. */
 int32_t ad9523_setup(spi_device *dev,
-		struct ad9523_platform_data ad9523_pdata);
+		ad9523_platform_data *pdata);
 #endif // __AD9523_H__
