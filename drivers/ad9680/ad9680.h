@@ -59,28 +59,28 @@
 #define AD9680_REG_JESD204B_LANE_RATE_CTRL			0x56e
 #define AD9680_REG_JESD204B_PLL_LOCK_STATUS			0x56f
 #define AD9680_REG_JESD204B_QUICK_CONFIG			0x570
-#define AD9680_REG_JESD204B_MF_CTRL			      0x58d
+#define AD9680_REG_JESD204B_MF_CTRL				0x58d
 #define AD9680_REG_JESD204B_CSN_CONFIG				0x58f
-#define AD9680_REG_JESD204B_SUBCLASS_CONFIG		0x590
+#define AD9680_REG_JESD204B_SUBCLASS_CONFIG			0x590
 #define AD9680_REG_JESD204B_LANE_SERD_OUT0_ASSIGN		0x5b2
 #define AD9680_REG_JESD204B_LANE_SERD_OUT1_ASSIGN		0x5b3
 #define AD9680_REG_JESD204B_LANE_SERD_OUT2_ASSIGN		0x5b5
 #define AD9680_REG_JESD204B_LANE_SERD_OUT3_ASSIGN		0x5b6
 
 #define AD9680_CHIP_ID						0x0C5
-#define AD9680_TEST_OFF           0x000
-#define AD9680_TEST_PN9           0x006
-#define AD9680_TEST_PN23          0x005
-#define AD9680_TEST_RAMP          0x00f
-#define AD9680_FORMAT_2S_COMPLEMENT   0x001
-#define AD9680_FORMAT_OFFSET_BINARY   0x000
+#define AD9680_TEST_OFF						0x000
+#define AD9680_TEST_PN9						0x006
+#define AD9680_TEST_PN23					0x005
+#define AD9680_TEST_RAMP					0x00f
+#define AD9680_FORMAT_2S_COMPLEMENT				0x001
+#define AD9680_FORMAT_OFFSET_BINARY				0x000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 typedef struct {
-	uint32_t	lane_rate_kbps;
+	uint32_t      lane_rate_kbps;
 } ad9680_init_param;
 
 /******************************************************************************/
