@@ -96,7 +96,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
+		xil_printf("AD9144 Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
 		return -1;
 	}
 
@@ -234,3 +234,106 @@ int32_t ad9144_setup(spi_device *dev,
 
 	return ret;
 }
+
+/***************************************************************************//**
+ * @brief ad9144_status - return the status of the JESD interface
+ *******************************************************************************/
+int32_t ad9144_status(spi_device *dev) {
+
+	uint8_t status = 0;
+	int32_t ret = 0;
+
+	// check for jesd status on all lanes
+	// failures on top are 100% guaranteed to make subsequent status checks fail
+
+	ad9144_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("ad9144: CGS NOT received (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9144_spi_read(dev, REG_INITLANESYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("ad9144: ILAS NOT received (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9144_spi_read(dev, REG_FRAMESYNCFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("ad9144: framer OUT OF SYNC (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9144_spi_read(dev, REG_GOODCHKSUMFLG, &status);
+	if (status != 0x0f)
+	{
+		ad_printf("ad9144: check-sum MISMATCH (%x)!.\n", status);
+		ret = -1;
+	}
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief ad9144_short_pattern_test
+ *******************************************************************************/
+int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param) {
+
+	uint32_t dac = 0;
+	uint32_t sample = 0;
+	uint8_t status = 0;
+
+	for (dac = 0; dac < init_param.active_converters; dac++) {
+		for (sample = 0; sample < 4; sample++) {
+			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x00));
+			ad9144_spi_write(dev, 0x32e, (init_param.stpl_samples[dac][sample]>>8));
+			ad9144_spi_write(dev, 0x32d, (init_param.stpl_samples[dac][sample]>>0));
+			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x03));
+			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			mdelay(1);
+
+			ad9144_spi_read(dev, 0x32f, &status);
+			if ((status & 0x1) == 0x1)
+				ad_printf("ad9144: short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+					dac, sample, init_param.stpl_samples[dac][sample], status);
+		}
+	}
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief ad9144_datapath_prbs_test
+ *******************************************************************************/
+int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param) {
+
+	uint8_t status = 0;
+	int32_t ret = 0;
+
+
+	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
+	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
+	mdelay(500);
+
+	ad9144_spi_read(dev, REG_PRBS, &status);
+	if ((status & 0xc0) != 0xc0)
+	{
+		ad_printf("ad9144: PRBS OUT OF SYNC (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9144_spi_read(dev, REG_PRBS_ERROR_I, &status);
+	if (status != 0x00)
+	{
+		ad_printf("ad9144: PRBS I channel ERRORS (%x)!.\n", status);
+		ret = -1;
+	}
+	ad9144_spi_read(dev, REG_PRBS_ERROR_Q, &status);
+	if (status != 0x00)
+	{
+		ad_printf("ad9144: PRBS Q channel ERRORS (%x)!.\n", status);
+		ret = -1;
+	}
+
+	return ret;
+}
+
