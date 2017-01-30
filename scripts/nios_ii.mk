@@ -33,6 +33,7 @@ APP_CMD += --inc-dir bsp/HAL/inc/sys
 APP_CMD += --elf-name $(ELF_FILE)
 APP_CMD += --set OBJDUMP_INCLUDE_SOURCE 1
 APP_CMD += --set APP_CFLAGS_DEFINED_SYMBOLS -DALTERA -DNIOS_II
+APP_CMD += --set APP_CFLAGS_USER_FLAGS -Wno-format
 APP_CMD += --src-files $(SRC_FILES)
 
 .PHONY: all

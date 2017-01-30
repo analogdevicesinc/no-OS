@@ -98,7 +98,7 @@ void usleep(uint32_t us_count);
 // print functions
 
 #ifdef ALTERA
-#define ad_printf alt_printf
+#define ad_printf printf
 #endif
 
 #ifdef XILINX
