@@ -11,10 +11,18 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
-M_INC_DIRS := $(NOOS-DIR)/common_drivers/fpga_platform_drivers
+# PLATFORM ?= undef 
+# 
+# ifeq "$(PLATFORM)" "xilinx"
+# else ifeq "$(PLATFORM)" "altera"
+# else
+# $(error "Platform is undefined!")
+# endif
+
+M_INC_DIRS += $(NOOS-DIR)/common_drivers/platform_drivers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_core
-M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac
+M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/jesd_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_buffer
