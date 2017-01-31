@@ -333,3 +333,22 @@ void usleep(uint32_t us_count)
 	ad_reg_write((XPAR_AXI_TIMER_BASEADDR + 0x0), 0x20);
 }
 #endif
+
+/***************************************************************************//**
+ * @brief ad_uart_read
+ *******************************************************************************/
+
+#ifdef ZYNQ_PS7
+uint8_t ad_uart_read()
+{
+	u32 RecievedByte;
+	int32_t timeout = 100000000;
+	/* Wait until there is data */
+	while (!XUartPs_IsReceiveData(STDIN_BASEADDRESS)&&timeout>0) {
+		timeout--;
+	}
+	RecievedByte = XUartPs_ReadReg(STDIN_BASEADDRESS, XUARTPS_FIFO_OFFSET);
+	/* Return the byte received */
+	return (uint8_t)RecievedByte;
+}
+#endif
