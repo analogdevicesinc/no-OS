@@ -96,7 +96,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		xil_printf("AD9144 Error: Invalid CHIP ID (0x%x).\n\r", chip_id);
+		ad_printf("AD9144: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
@@ -104,17 +104,15 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
 	if(scratchpad != 0xAD)
 	{
-		xil_printf("Error: scratchpad (0x%x).\n\r", scratchpad);
+		ad_printf("AD9144: scratchpad read-write failed (0x%x)!\n", scratchpad);
 		return -1;
 	}
 
 	// power-up and dac initialization
-	mdelay(5);
 
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);	// reset
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, 0x00);	// reset
-
-	mdelay(4);
+	mdelay(1);
 
 	ad9144_spi_write(dev, 0x011, 0x00);	// dacs - power up everything
 	ad9144_spi_write(dev, 0x080, 0x00);	// clocks - power up everything
@@ -188,16 +186,10 @@ int32_t ad9144_setup(spi_device *dev,
 	mdelay(20);
 
 	ad9144_spi_read(dev, 0x281, &pll_stat);
-	xil_printf("AD9144 PLL/link %s.\n\r", pll_stat & 0x01 ? "ok" : "errors");
+	if ((pll_stat & 0x01) != 0x01)
+		ad_printf("AD9144: PLL NOT locked!.\n");
 
 	ad9144_spi_write(dev, 0x268, 0x62);	// equalizer
-
-	// cross-bar
-
-	ad9144_spi_write(dev, REG_XBAR_LN_0_1, SRC_LANE0(init_param.jesd_xbar_lane0_sel) |
-			SRC_LANE1(init_param.jesd_xbar_lane1_sel));	// lane selects
-	ad9144_spi_write(dev, REG_XBAR_LN_2_3, SRC_LANE2(init_param.jesd_xbar_lane2_sel) |
-			SRC_LANE3(init_param.jesd_xbar_lane3_sel));	// lane selects
 
 	// data link layer
 
@@ -222,15 +214,15 @@ int32_t ad9144_setup(spi_device *dev,
 
 	ad9144_spi_write(dev, 0x0e8, 0x01);	// read dac-0
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-0 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	if ((cal_stat & 0xc0) != 0x80)
+		ad_printf("AD9144: dac-0 calibration failed!\n");
 
 	ad9144_spi_write(dev, 0x0e8, 0x02);	// read dac-1
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
-	xil_printf("AD9144 dac-1 calibration %s.\n\r", (cal_stat & 0xc0) == 0x80 ? "ok" : "failed");
+	if ((cal_stat & 0xc0) != 0x80)
+		ad_printf("AD9144: dac-1 calibration failed!\n");
 
 	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
-
-	xil_printf("AD9144 successfully initialized.\n\r");
 
 	return ret;
 }
@@ -315,6 +307,7 @@ int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param)
 	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
 	mdelay(500);
 
+  	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);
 	ad9144_spi_read(dev, REG_PRBS, &status);
 	if ((status & 0xc0) != 0xc0)
 	{
