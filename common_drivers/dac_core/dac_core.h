@@ -143,7 +143,6 @@ typedef struct {
 	uint8_t	 resolution;
 	uint8_t	 no_of_channels;
 	dac_channel *channels;
-	uint8_t fifo_present;
 } dac_core;
 
 /******************************************************************************/
