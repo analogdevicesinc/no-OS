@@ -104,8 +104,8 @@
 
 /* AD9523_SERIAL_PORT_CONFIG */
 
-#define AD9523_SER_CONF_SDO_ACTIVE				(1 << 7)
-#define AD9523_SER_CONF_SOFT_RESET				(1 << 5)
+#define AD9523_SER_CONF_SDO_ACTIVE				((1 << 7) | (1 << 0))
+#define AD9523_SER_CONF_SOFT_RESET				((1 << 5) | (1 << 2))
 
 /* AD9523_READBACK_CTRL */
 #define AD9523_READBACK_CTRL_READ_BUFFERED			(1 << 0)

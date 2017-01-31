@@ -259,14 +259,14 @@ int32_t ad9523_init(ad9523_platform_data *pdata) {
 	pdata->osc_in_cmos_neg_inp_en = 0;
 
 	/* PLL1 Setting */
-	pdata->refa_r_div = 0;
-	pdata->refb_r_div = 0;
-	pdata->pll1_feedback_div = 0;
+	pdata->refa_r_div = 1;
+	pdata->refb_r_div = 1;
+	pdata->pll1_feedback_div = 1;
 	pdata->pll1_charge_pump_current_nA = 0;
 	pdata->zero_delay_mode_internal_en = 0;
 	pdata->osc_in_feedback_en = 0;
-	pdata->pll1_bypass_en = 0;
-	pdata->pll1_loop_filter_rzero = 0;
+	pdata->pll1_bypass_en = 1;
+	pdata->pll1_loop_filter_rzero = 1;
 
 	/* Reference */
 	pdata->ref_mode = 0;
@@ -293,8 +293,8 @@ int32_t ad9523_init(ad9523_platform_data *pdata) {
 		(&pdata->channels[i])->sync_ignore_en = 0;
 		(&pdata->channels[i])->low_power_mode_en = 0;
 		(&pdata->channels[i])->use_alt_clock_src = 0;
-		(&pdata->channels[i])->output_dis = 1;
-		(&pdata->channels[i])->driver_mode = LVDS_7mA;
+		(&pdata->channels[i])->output_dis = 0;
+		(&pdata->channels[i])->driver_mode = LVPECL_8mA;
 		(&pdata->channels[i])->divider_phase = 0;
 		(&pdata->channels[i])->channel_divider = 0;
 	}
@@ -318,8 +318,6 @@ int32_t ad9523_setup(spi_device *dev,
 	uint32_t reg_data;
 	uint32_t version_id;
 
-
-	mdelay(1);
 	ret = ad9523_spi_write(dev, AD9523_SERIAL_PORT_CONFIG,
 			   AD9523_SER_CONF_SOFT_RESET |
 			  (pdata->spi3wire ? 0 :
@@ -350,7 +348,7 @@ int32_t ad9523_setup(spi_device *dev,
 		return ret;
 
 	if (reg_data != 0xAD95) {
-		xil_printf("SPI Read Verify failed (0x%X).\n\r", reg_data);
+		ad_printf("AD9523: SPI write-verify failed (0x%X)!\n\r", reg_data);
 		return -1;
 	}
 
@@ -545,7 +543,25 @@ int32_t ad9523_setup(spi_device *dev,
 	if (ret < 0)
 		return ret;
 
-	xil_printf("AD9523 successfully initialized.\n\r");
+	ad9523_spi_read(dev, AD9523_READBACK_0, &reg_data);
 
-	return 0;
+	// vcxo must always be okay-
+	
+	if ((reg_data & AD9523_READBACK_0_STAT_VCXO) != AD9523_READBACK_0_STAT_VCXO)
+	{
+		ad_printf("AD9523: VCXO status errors (%x)!\n", reg_data);
+		ret = -1;
+	}
+
+	// pll1 is invalid if ref-a/b are disabled (add later)
+	
+	// pll2 must always be locked
+
+	if ((reg_data & AD9523_READBACK_0_STAT_PLL2_LD) != AD9523_READBACK_0_STAT_PLL2_LD)
+	{
+		ad_printf("AD9523: PLL2 NOT locked (%x)!\n", reg_data);
+		ret = -1;
+	}
+
+	return(ret);
 }
