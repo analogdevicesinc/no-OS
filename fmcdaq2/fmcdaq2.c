@@ -363,6 +363,8 @@ int main(void)
 	// setup GPIOs
 
 	ad_platform_init();
+	ad_gpio_set(GPIO_DAC_RESET, 0);
+	mdelay(1);
 
 	ad_gpio_set(GPIO_CLKD_SYNC, 1);
 	ad_gpio_set(GPIO_DAC_RESET, 1);
