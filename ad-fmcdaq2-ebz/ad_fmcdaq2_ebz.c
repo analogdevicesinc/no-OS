@@ -188,12 +188,12 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_DDS;
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 
+	ad9144_param.lane_rate_kbps = 10000000;
+	ad9144_param.active_converters = 2;
+
 	ad9144_core.no_of_channels = ad9144_param.active_converters;
 	ad9144_core.resolution = 16;
 	ad9144_core.channels = &ad9144_channels[0];
-
-	ad9144_param.lane_rate_kbps = 10000000;
-	ad9144_param.active_converters = 2;
 
 	ad9144_param.stpl_samples[0][0] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
 	ad9144_param.stpl_samples[0][1] = (ad9144_channels[0].pat_data>>16) & 0xffff;
@@ -271,24 +271,22 @@ int main(void)
 	ad9144_status(&ad9144_spi_device);
 
 	// transport layer testing
-
+	
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(ad9144_core);
 	ad9144_short_pattern_test(&ad9144_spi_device, ad9144_param);
-
+	
 	// PN7 data path test
-
+	
 	ad9144_channels[0].sel = DAC_SRC_PN23;
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
 	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
-	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
-
+	
 	// PN15 data path test
-
+	
 	ad9144_channels[0].sel = DAC_SRC_PN31;
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(ad9144_core);
