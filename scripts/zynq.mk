@@ -40,7 +40,7 @@ all: $(ELF_FILE)
 
 $(ELF_FILE): $(HDR_FILES) $(SRC_FILES)
 	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) > $(XSCT_LOG) 2>&1
-	$(XSCT_CMD) $(XSCT_SCRIPT) build >> $(XSCT_LOG) 2>&1
+	$(XSCT_CMD) $(XSCT_SCRIPT) build
 
 
 $(P_HDR_FILES): hw/system_top.bit
