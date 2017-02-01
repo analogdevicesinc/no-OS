@@ -288,7 +288,7 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 			ad9144_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
 				ad_printf("ad9144: short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
-					dac, sample, init_param.stpl_samples[dac][sample], status);
+						dac, sample, init_param.stpl_samples[dac][sample], status);
 		}
 	}
 	return 0;
@@ -307,7 +307,7 @@ int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param)
 	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
 	mdelay(500);
 
-  	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);
+	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);
 	ad9144_spi_read(dev, REG_PRBS, &status);
 	if ((status & 0xc0) != 0xc0)
 	{
