@@ -68,15 +68,127 @@
 #define GPIO_CLKD_STATUS_0	32
 
 enum ad9523_channels {
-       DAC_DEVICE_CLK,
-       DAC_DEVICE_SYSREF,
-       DAC_FPGA_CLK,
-       DAC_FPGA_SYSREF,
-       ADC_DEVICE_CLK,
-       ADC_DEVICE_SYSREF,
-       ADC_FPGA_CLK,
-       ADC_FPGA_SYSREF,
+	DAC_DEVICE_CLK,
+	DAC_DEVICE_SYSREF,
+	DAC_FPGA_CLK,
+	DAC_FPGA_SYSREF,
+	ADC_DEVICE_CLK,
+	ADC_DEVICE_SYSREF,
+	ADC_FPGA_CLK,
+	ADC_FPGA_SYSREF,
 };
+
+/***************************************************************************//**
+ * @brief main
+ *******************************************************************************/
+int fmcdaq2_reconfig(xcvr_core *p_ad9144_xcvr, xcvr_core *p_ad9680_xcvr,
+	ad9523_platform_data *p_ad9523_param)
+{
+
+#ifdef	ALTERA
+	return(0);
+#endif
+
+#ifdef	XILINX
+
+	uint8_t mode;
+
+	ad_printf ("Available sampling rates:\n");
+	ad_printf ("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+	ad_printf ("\t2 - ADC  500 MSPS; DAC 1000 MSPS\n");
+	ad_printf ("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
+	ad_printf ("\t4 - ADC  750 MSPS; DAC  750 MSPS\n");
+	ad_printf ("\t5 - ADC  375 MSPS; DAC  750 MSPS\n");
+	ad_printf ("\t6 - ADC  375 MSPS; DAC  375 MSPS\n");
+
+	mode = inbyte();
+
+	switch (mode) {
+		case '1':
+			p_ad9523_param->pll2_vco_diff_m1 = 3;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 1;
+			p_ad9144_xcvr->sys_clk_sel = 3;
+			p_ad9144_xcvr->lane_rate_kbps = 10000000;
+			p_ad9144_xcvr->ref_clock_khz = 500000;
+			p_ad9680_xcvr->sys_clk_sel = 3;
+			p_ad9680_xcvr->lane_rate_kbps = 10000000;
+			p_ad9680_xcvr->ref_clock_khz = 500000;
+			break;
+		case '2':
+			p_ad9523_param->pll2_vco_diff_m1 = 3;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
+			p_ad9144_xcvr->sys_clk_sel = 3;
+			p_ad9144_xcvr->lane_rate_kbps = 10000000;
+			p_ad9144_xcvr->ref_clock_khz = 500000;
+			p_ad9680_xcvr->sys_clk_sel = 0;
+			p_ad9680_xcvr->lane_rate_kbps = 5000000;
+			p_ad9680_xcvr->ref_clock_khz = 250000;
+			break;
+		case '3':
+			p_ad9523_param->pll2_vco_diff_m1 = 3;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
+			p_ad9144_xcvr->sys_clk_sel = 0;
+			p_ad9144_xcvr->lane_rate_kbps = 5000000;
+			p_ad9144_xcvr->ref_clock_khz = 250000;
+			p_ad9680_xcvr->sys_clk_sel = 0;
+			p_ad9680_xcvr->lane_rate_kbps = 5000000;
+			p_ad9680_xcvr->ref_clock_khz = 250000;
+			break;
+		case '4':
+			p_ad9523_param->pll2_vco_diff_m1 = 4;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 1;
+			p_ad9144_xcvr->sys_clk_sel = 3;
+			p_ad9144_xcvr->lane_rate_kbps = 7500000;
+			p_ad9144_xcvr->ref_clock_khz = 375000;
+			p_ad9680_xcvr->sys_clk_sel = 3;
+			p_ad9680_xcvr->lane_rate_kbps = 7500000;
+			p_ad9680_xcvr->ref_clock_khz = 375000;
+			break;
+		case '5':
+			p_ad9523_param->pll2_vco_diff_m1 = 4;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
+			p_ad9144_xcvr->sys_clk_sel = 3;
+			p_ad9144_xcvr->lane_rate_kbps = 7500000;
+			p_ad9144_xcvr->ref_clock_khz = 375000;
+			p_ad9680_xcvr->sys_clk_sel = 0;
+			p_ad9680_xcvr->lane_rate_kbps = 3750000;
+			p_ad9680_xcvr->ref_clock_khz = 187500;
+			break;
+		case '6':
+			p_ad9523_param->pll2_vco_diff_m1 = 4;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
+			p_ad9144_xcvr->sys_clk_sel = 0;
+			p_ad9144_xcvr->lane_rate_kbps = 3750000;
+			p_ad9144_xcvr->ref_clock_khz = 187500;
+			p_ad9680_xcvr->sys_clk_sel = 0;
+			p_ad9680_xcvr->lane_rate_kbps = 3750000;
+			p_ad9680_xcvr->ref_clock_khz = 187500;
+			break;
+		default:
+			ad_printf("Unknown selection.\n");
+			return -1;
+	}
+	return(0);
+#endif
+}
 
 /***************************************************************************//**
  * @brief main
@@ -121,7 +233,7 @@ int main(void)
 	ad9523_init(&ad9523_param);
 
 	// dac device-clk-sysref, fpga-clk-sysref
-	
+
 	ad9523_channels[DAC_DEVICE_CLK].channel_num = 1;
 	ad9523_channels[DAC_DEVICE_CLK].channel_divider = 1;
 	ad9523_channels[DAC_DEVICE_SYSREF].channel_num = 7;
@@ -132,7 +244,7 @@ int main(void)
 	ad9523_channels[DAC_FPGA_SYSREF].channel_divider = 128;
 
 	// adc device-clk-sysref, fpga-clk-sysref
-	
+
 	ad9523_channels[ADC_DEVICE_CLK].channel_num = 13;
 	ad9523_channels[ADC_DEVICE_CLK].channel_divider = 1;
 	ad9523_channels[ADC_DEVICE_SYSREF].channel_num = 6;
@@ -271,22 +383,22 @@ int main(void)
 	ad9144_status(&ad9144_spi_device);
 
 	// transport layer testing
-	
+
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(ad9144_core);
 	ad9144_short_pattern_test(&ad9144_spi_device, ad9144_param);
-	
+
 	// PN7 data path test
-	
+
 	ad9144_channels[0].sel = DAC_SRC_PN23;
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
 	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
-	
+
 	// PN15 data path test
-	
+
 	ad9144_channels[0].sel = DAC_SRC_PN31;
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(ad9144_core);
