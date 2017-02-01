@@ -81,7 +81,7 @@ int32_t ad_spi_init(spi_device *dev)
 int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 {
 
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#ifdef ZYNQ
 
 	uint32_t initss;
 
@@ -225,7 +225,7 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
 	int32_t pstatus;
 	uint32_t ppos;
 	uint32_t pdata;
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#ifdef ZYNQ
 	uint32_t pmask;
 #endif
 
@@ -235,7 +235,7 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
 
 	pstatus = -1;
 	ppos = pin - 32;
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#ifdef ZYNQ
 	pmask = 0x1 << ppos;
 #endif
 

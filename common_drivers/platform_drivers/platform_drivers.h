@@ -62,7 +62,7 @@
 #include "platform.h"
 #endif
 
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#ifdef ZYNQ
 #include <sleep.h>
 #include <xspips.h>
 #include <xuartps.h>
@@ -70,6 +70,7 @@
 
 #ifdef MICROBLAZE
 #include <xil_io.h>
+#include <xil_cache.h>
 #endif
 
 /******************************************************************************/
@@ -130,7 +131,7 @@ void usleep(uint32_t us_count);
 #define ad_dcache_flush Xil_DCacheFlush
 #endif
 
-#if defined(ZYNQ_PS7) || defined(ZYNQ_PSU)
+#ifdef ZYNQ
 void Xil_ICacheEnable();
 void Xil_ICacheDisable();
 void Xil_DCacheEnable();
