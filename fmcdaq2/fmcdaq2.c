@@ -82,7 +82,7 @@ enum ad9523_channels {
  * @brief main
  *******************************************************************************/
 int fmcdaq2_reconfig(xcvr_core *p_ad9144_xcvr, xcvr_core *p_ad9680_xcvr,
-	ad9523_platform_data *p_ad9523_param)
+		ad9523_platform_data *p_ad9523_param)
 {
 
 #ifdef	ALTERA
@@ -211,6 +211,8 @@ int main(void)
 	adc_core		ad9680_core;
 	jesd_core		ad9680_jesd;
 	xcvr_core		ad9680_xcvr;
+	dmac_core               ad9680_dma;
+	dmac_xfer               rx_xfer;
 
 	//*************************************************************
 	// SPI interface configuration
@@ -347,7 +349,17 @@ int main(void)
 	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
+	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
 #endif
+
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+
+#ifdef MICROBLAZE
+	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
+
 #ifdef ALTERA
 	ad9144_xcvr.base_address = AXI_AD9144_XCVR_BASE;
 	ad9144_core.base_address = AXI_AD9144_CORE_BASE;
@@ -358,7 +370,16 @@ int main(void)
 	ad9144_xcvr.mmcm_lpll_base_address = AVL_AD9144_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9144_xcvr.tx_lane_pll_base_address = AVL_AD9144_XCVR_LANE_PLL_RECONFIG_BASE;
+	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
+	rx_xfer.start_address =  0x800000;
 #endif
+
+	// setup the receive DMA
+
+	ad9680_dma.type = DMAC_RX;
+	ad9680_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.size = 32768;
 
 	// setup GPIOs
 
@@ -425,7 +446,12 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 	dac_data_setup(ad9144_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
-	ad_printf("daq2: done\n");
+	ad_printf("daq2: setup and configuration is done\n");
+
+	// external loopback - capture data with DMA
+	if(!dmac_start_transaction(ad9680_dma)){
+		ad_printf("daq2: RX capture done.\n");
+	};
 
 	ad_platform_close();
 	return(0);
