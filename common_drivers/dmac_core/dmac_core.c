@@ -72,7 +72,7 @@ int32_t dmac_write(dmac_core core,
  * @brief dmac_start_transaction
  *******************************************************************************/
 
-int32_t dmac_start_transaction(dmac_core dma, dmac_xfer *transaction)
+int32_t dmac_start_transaction(dmac_core dma)
 {
 
 	uint32_t reg_val = 0;
@@ -83,21 +83,24 @@ int32_t dmac_start_transaction(dmac_core dma, dmac_xfer *transaction)
 
 	dmac_write(dma, DMAC_REG_IRQ_MASK, 0x0);
 
-	dmac_read(dma, DMAC_REG_TRANSFER_ID, &(transaction->id));
-
+        if(dma.transfer) {
+	        dmac_read(dma, DMAC_REG_TRANSFER_ID, dma.transfer->id);
+        } else {
+                ad_printf("%s : Undefined DMA transfer.\n", __func__);
+                return -1;
+        }
 	dmac_read(dma, DMAC_REG_IRQ_PENDING, &reg_val);
-	ad_printf("DMAC IRQ_PENDING: 0x%x\r\n", reg_val);
 
 	dmac_write(dma, DMAC_REG_IRQ_PENDING, reg_val);
 
-	if(dma.type == DMAC_UPSTREAM) {
-		dmac_write(dma, DMAC_REG_DEST_ADDRESS, transaction->startaddr);
+	if(dma.type == DMAC_RX) {
+		dmac_write(dma, DMAC_REG_DEST_ADDRESS, dma.transfer->start_address);
 		dmac_write(dma, DMAC_REG_DEST_STRIDE, 0x0);
-	} else {    /* DOWNSTREAM */
-		dmac_write(dma, DMAC_REG_SRC_ADDRESS, transaction->startaddr);
+	} else {    /* DMAC_TX */
+		dmac_write(dma, DMAC_REG_SRC_ADDRESS, dma.transfer->start_address);
 		dmac_write(dma, DMAC_REG_SRC_STRIDE, 0x0);
 	}
-	dmac_write(dma, DMAC_REG_X_LENGTH, transaction->size - 1);
+	dmac_write(dma, DMAC_REG_X_LENGTH, dma.transfer->size - 1);
 	dmac_write(dma, DMAC_REG_Y_LENGTH, 0x0);
 
 	dmac_write(dma, DMAC_REG_START_TRANSFER, 0x1);
@@ -123,7 +126,7 @@ int32_t dmac_start_transaction(dmac_core dma, dmac_xfer *transaction)
 		}
 		mdelay(1);
 	}
-	while((reg_val & (1 << transaction->id)) != (1 << transaction->id));
+	while((reg_val & (1 << dma.transfer->id)) != (1 << dma.transfer->id));
 
 	return 0;
 }
