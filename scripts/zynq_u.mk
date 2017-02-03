@@ -58,3 +58,7 @@ hw/system_top.bit: $(HDF-FILE)
 run: $(ELF_FILE)
 	$(XSDB_CMD) $(XSDB_SCRIPT) ZYNQ_PSU
 
+.PHONY: clean
+clean: 
+	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
+
