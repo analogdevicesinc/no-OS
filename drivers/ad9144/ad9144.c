@@ -96,7 +96,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID)
 	{
-		ad_printf("AD9144: Invalid CHIP ID (0x%x).\n", chip_id);
+		ad_printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
@@ -104,7 +104,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
 	if(scratchpad != 0xAD)
 	{
-		ad_printf("AD9144: scratchpad read-write failed (0x%x)!\n", scratchpad);
+		ad_printf("%s : scratchpad read-write failed (0x%x)!\n", __func__, scratchpad);
 		return -1;
 	}
 
@@ -187,7 +187,7 @@ int32_t ad9144_setup(spi_device *dev,
 
 	ad9144_spi_read(dev, 0x281, &pll_stat);
 	if ((pll_stat & 0x01) != 0x01)
-		ad_printf("AD9144: PLL NOT locked!.\n");
+		ad_printf("%s : PLL NOT locked!.\n", __func__);
 
 	ad9144_spi_write(dev, 0x268, 0x62);	// equalizer
 
@@ -215,12 +215,12 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, 0x0e8, 0x01);	// read dac-0
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
 	if ((cal_stat & 0xc0) != 0x80)
-		ad_printf("AD9144: dac-0 calibration failed!\n");
+		ad_printf("%s : dac-0 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, 0x0e8, 0x02);	// read dac-1
 	ad9144_spi_read(dev, 0x0e9, &cal_stat);
 	if ((cal_stat & 0xc0) != 0x80)
-		ad_printf("AD9144: dac-1 calibration failed!\n");
+		ad_printf("%s : dac-1 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
@@ -241,25 +241,25 @@ int32_t ad9144_status(spi_device *dev) {
 	ad9144_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
 	if (status != 0x0f)
 	{
-		ad_printf("ad9144: CGS NOT received (%x)!.\n", status);
+		ad_printf("%s : CGS NOT received (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_INITLANESYNCFLG, &status);
 	if (status != 0x0f)
 	{
-		ad_printf("ad9144: ILAS NOT received (%x)!.\n", status);
+		ad_printf("%s : ILAS NOT received (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_FRAMESYNCFLG, &status);
 	if (status != 0x0f)
 	{
-		ad_printf("ad9144: framer OUT OF SYNC (%x)!.\n", status);
+		ad_printf("%s : framer OUT OF SYNC (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_GOODCHKSUMFLG, &status);
 	if (status != 0x0f)
 	{
-		ad_printf("ad9144: check-sum MISMATCH (%x)!.\n", status);
+		ad_printf("%s : check-sum MISMATCH (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 
@@ -287,8 +287,8 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 
 			ad9144_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
-				ad_printf("ad9144: short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
-						dac, sample, init_param.stpl_samples[dac][sample], status);
+				ad_printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+					__func__, dac, sample, init_param.stpl_samples[dac][sample], status);
 		}
 	}
 	return 0;
@@ -311,19 +311,19 @@ int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param)
 	ad9144_spi_read(dev, REG_PRBS, &status);
 	if ((status & 0xc0) != 0xc0)
 	{
-		ad_printf("ad9144: PRBS OUT OF SYNC (%x)!.\n", status);
+		ad_printf("%s : PRBS OUT OF SYNC (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_PRBS_ERROR_I, &status);
 	if (status != 0x00)
 	{
-		ad_printf("ad9144: PRBS I channel ERRORS (%x)!.\n", status);
+		ad_printf("%s : PRBS I channel ERRORS (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_PRBS_ERROR_Q, &status);
 	if (status != 0x00)
 	{
-		ad_printf("ad9144: PRBS Q channel ERRORS (%x)!.\n", status);
+		ad_printf("%s : PRBS Q channel ERRORS (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 
