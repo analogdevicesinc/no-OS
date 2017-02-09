@@ -135,9 +135,15 @@ typedef struct {
 int32_t xcvr_read(xcvr_core core, uint32_t reg_addr, uint32_t *reg_data);
 int32_t xcvr_write(xcvr_core core, uint32_t reg_addr, uint32_t reg_data);
 
-int32_t xcvr_setup(xcvr_core core);
-int32_t xcvr_status(xcvr_core core);
+#ifdef XILINX
 
-int32_t xcvr_reconfig(xcvr_core core);
+	int32_t xcvr_drp_read(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
+	int32_t xcvr_drp_write(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
+
+	int32_t xcvr_reconfig(xcvr_core core, uint32_t lane_rate, uint32_t ref_clk);
+#endif
+
+int32_t xcvr_setup(xcvr_core *core);
+int32_t xcvr_status(xcvr_core core);
 
 #endif

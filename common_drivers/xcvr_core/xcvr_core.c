@@ -66,6 +66,69 @@ int32_t xcvr_write(xcvr_core core,
 	return 0;
 }
 
+#ifdef XILINX
+
+/***************************************************************************//**
+ * @brief xcvr_drp_read Dynamic reconfiguration port read access for Xilinx devices
+ *******************************************************************************/
+int32_t xcvr_drp_read(xcvr_core core, uint8_t drp_sel,
+				uint32_t drp_addr,
+				uint32_t *drp_data)
+{
+	uint32_t timeout = 20;
+	uint32_t val = 0;
+
+	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
+
+	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
+				 XCVR_CM_ADDR(drp_addr));
+
+	do {
+		xcvr_read(core, drp_sel ? XCVR_REG_CH_STATUS : XCVR_REG_CM_STATUS, &val);
+		if (val & (drp_sel ? XCVR_CH_BUSY : XCVR_CM_BUSY)) {
+			mdelay(1);
+			continue;
+		}
+
+		*drp_data = drp_sel ? XCVR_CH_RDATA(val) : XCVR_CM_RDATA(val);
+		return 0;
+	} while (timeout--);
+
+	xil_printf("%s: Timeout!\n", __func__);
+	return -1;
+}
+
+/***************************************************************************//**
+ * @brief xcvr_drp_write Dynamic reconfiguration port write access for Xilinx devices
+ *******************************************************************************/
+int32_t xcvr_drp_write(xcvr_core core, uint8_t drp_sel,
+				uint32_t drp_addr,
+				uint32_t drp_data)
+{
+	uint32_t timeout = 20;
+	uint32_t val = 0;
+
+	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
+
+	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
+				 XCVR_CM_ADDR(drp_addr) | XCVR_CM_WDATA(drp_data));
+
+	do {
+		xcvr_read(core, drp_sel ? XCVR_REG_CH_STATUS : XCVR_REG_CM_STATUS, &val);
+		if (val & (drp_sel ? XCVR_CH_BUSY : XCVR_CM_BUSY)) {
+			mdelay(1);
+			continue;
+		}
+
+		return 0;
+	} while (timeout--);
+
+	xil_printf("%s: Timeout!\n", __func__);
+	return -1;
+}
+
+#endif
+
 /*******************************************************************************
  * @brief xcvr_init
  *******************************************************************************/
