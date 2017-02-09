@@ -15,6 +15,7 @@ endif
 XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
@@ -61,3 +62,8 @@ run: $(ELF_FILE)
 .PHONY: clean
 clean: 
 	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
+
+
+.PHONY: capture
+capture: $(ELF_FILE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7
