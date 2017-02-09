@@ -195,9 +195,35 @@ int32_t xcvr_setup(xcvr_core core)
 
 	if (status == 0)
 	{
-		ad_printf("ERROR: XCVR initialization failed!\n");
+		ad_printf("%s ERROR: XCVR initialization failed!\n", __func__);
 		return(-1);
 	}
 
 	return(0);
 }
+
+/*******************************************************************************
+ * @brief xcvr_getconfig
+ *******************************************************************************/
+int32_t xcvr_getconfig(xcvr_core *core)
+{
+	uint32_t regbuf;
+
+	xcvr_read(*core, XCVR_REG_PARAMS, &regbuf);
+	core->no_of_lanes = (regbuf & XCVR_NUM_OF_LANES_MASK) >> XCVR_NUM_OF_LANES_OFFSET;
+	core->rx_tx_n = ((regbuf & XCVR_TX_OR_RXN_MASK) >> XCVR_TX_OR_RXN_OFFSET) ? 0 : 1;
+
+#ifdef XILINX
+	core->gt_type = (regbuf & XCVR_GT_TYPE_MASK) >> XCVR_GT_TYPE_OFFSET;
+	core->qpll_enable = (regbuf & XCVR_QPLL_ENABLE_MASK) >> XCVR_QPLL_ENABLE_OFFSET;
+
+	xcvr_read(*core, XCVR_REG_CONTROL, &regbuf);
+	core->lpm_enable = (regbuf & (0x1 << 12)) >> 12;
+	core->out_div = (regbuf & (0x7 << 8)) >> 8;
+	core->sys_clk_sel = (regbuf & (0x3 << 4)) >> 4;
+	core->out_clk_sel = regbuf & 0x7;
+#endif
+
+return 0;
+}
+

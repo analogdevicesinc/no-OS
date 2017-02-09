@@ -56,8 +56,6 @@ typedef struct {
 	uint32_t		mmcm_lpll_base_address;
 	uint32_t		mmcm_present;
 	uint32_t		reconfig_bypass;
-	uint8_t 		rx_tx_n;
-	uint32_t		no_of_lanes;
 	uint32_t		*lane_base_addresses;
 	uint32_t		lane_rate_kbps;
 	uint32_t		ref_clock_khz;
@@ -66,11 +64,15 @@ typedef struct {
 
 	refclk_ppm		ppm;
 	uint16_t		encoding;
-	uint8_t			gth_enable;
+	uint8_t			gt_type;
+	uint32_t		no_of_lanes;
+	uint8_t 		rx_tx_n;
+	uint8_t			qpll_enable;
 	uint8_t			lpm_enable;
-	uint8_t			cpll_enable;
 	uint32_t		sys_clk_sel;
 	uint32_t		out_clk_sel;
+	uint32_t		out_div;
+
 } xcvr_core;
 
 /******************************************************************************/
@@ -103,6 +105,16 @@ typedef struct {
 #define XCVR_SYSCLK_SEL(x)			(((x) & 0x3) << 4)
 #define XCVR_OUTCLK_SEL(x)			(((x) & 0x7) << 0)
 
+#define XCVR_REG_PARAMS				0x0024
+#define XCVR_QPLL_ENABLE_MASK			0x01
+#define XCVR_GT_TYPE_MASK			0x0f
+#define XCVR_TX_OR_RXN_MASK			0x01
+#define XCVR_NUM_OF_LANES_MASK			0xff
+#define XCVR_QPLL_ENABLE_OFFSET			20
+#define XCVR_GT_TYPE_OFFSET			16
+#define XCVR_TX_OR_RXN_OFFSET			 8
+#define XCVR_NUM_OF_LANES_OFFSET		 0
+
 #define XCVR_REG_CM_SEL				0x0040
 
 #define XCVR_REG_CM_CONTROL			0x0044
@@ -128,6 +140,11 @@ typedef struct {
 #define XCVR_BROADCAST				0xff
 #define ENC_8B10B				810
 
+// GT types
+
+#define XILINX_GTH	0
+#define XILINX_GTX	1
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -145,5 +162,6 @@ int32_t xcvr_write(xcvr_core core, uint32_t reg_addr, uint32_t reg_data);
 
 int32_t xcvr_setup(xcvr_core *core);
 int32_t xcvr_status(xcvr_core core);
+int32_t xcvr_getconfig(xcvr_core *core);
 
 #endif
