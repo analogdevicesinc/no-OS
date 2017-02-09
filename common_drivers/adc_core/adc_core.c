@@ -92,7 +92,7 @@ int32_t adc_setup(adc_core core)
 
 	adc_read(core, ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
-		ad_printf("ADC Core Status errors.\n");
+		ad_printf("%s adc core Status errors.\n", __func__);
 		return -1;
 	}
 
@@ -101,7 +101,7 @@ int32_t adc_setup(adc_core core)
 	adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
 	adc_clock = adc_clock >> 16;
 
-	ad_printf("adc core initialized (%d MHz).\n", adc_clock);
+	ad_printf("%s adc core initialized (%d MHz).\n", __func__, adc_clock);
 
 	return 0;
 }
@@ -148,7 +148,7 @@ int32_t adc_pn_mon(adc_core core,
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
-			ad_printf("ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02x!\n", index, sel, reg_data);
+			ad_printf("%s ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02x!\n", __func__, index, sel, reg_data);
 		}
 	}
 
@@ -173,8 +173,8 @@ int32_t adc_ramp_test(adc_core core,
 		if (index == 0)
 			exp_data = rcv_data;
 		if (rcv_data != exp_data) {
-			ad_printf("Capture Error[%d]: rcv(%08x) exp(%08x).\n",
-					index, rcv_data, exp_data);
+			ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+					__func__, index, rcv_data, exp_data);
 			if (exp_data == 10)
 				break;
 			exp_data++;

@@ -129,7 +129,7 @@ int32_t jesd_status(jesd_core core)
 	} while ((timeout--) && (status == JESD204_TRX_RESET));
 
 	if (status == JESD204_TRX_RESET) {
-		ad_printf("jesd_status: jesd reset not completed!\n");
+		ad_printf("%s jesd_status: jesd reset not completed!\n", __func__);
 		return -1;
 	}
 
@@ -142,7 +142,7 @@ int32_t jesd_status(jesd_core core)
 	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
 
 	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
-		ad_printf("jesd_status: missing SYS_REF!\n");
+		ad_printf("%s jesd_status: missing SYS_REF!\n", __func__);
 		return -1;
 	  }
 	}
@@ -155,7 +155,7 @@ int32_t jesd_status(jesd_core core)
 	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
 
 	if (status != JESD204_TRX_SYNC_ACHIEVED) {
-		ad_printf("jesd_status: Link SYNC not achieved!\n");
+		ad_printf("%s jesd_status: Link SYNC not achieved!\n", __func__);
 		return -1;
 	}
 
@@ -165,31 +165,31 @@ int32_t jesd_status(jesd_core core)
 	jesd_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
 	for (link = 0; link < 8; link++) {
 		if (status & JESD204_RX_LINK_K_CH_ERR(link)) {
-			ad_printf("Link %d: K_CH_ERR\n", link);
+			ad_printf("%s Link %d: K_CH_ERR\n", __func__, link);
 			ret = -1;
 		}
 		if (status & JESD204_RX_LINK_DISP_ERR(link)) {
-			ad_printf("Link %d: DISP_ERR\n", link);
+			ad_printf("%s Link %d: DISP_ERR\n", __func__, link);
 			ret = -1;
 		}
 		if (status & JESD204_RX_LINK_NOT_IN_TBL_ERR(link)) {
-			ad_printf("Link %d: NOT_IN_TBL_ERR\n", link);
+			ad_printf("%s Link %d: NOT_IN_TBL_ERR\n", __func__, link);
 			ret = -1;
 		}
 	}
 
 	if (status & JESD204_RX_LINK_LANE_ALIGN_ERR_ALARM) {
-		ad_printf("jesd_status: frame alignment error!\n");
+		ad_printf("%s jesd_status: frame alignment error!\n", __func__);
 		ret = -1;
 	}
 
 	if (status & JESD204_RX_LINK_SYSREF_LMFC_ALARM) {
-		ad_printf("jesd_status: sysref alignment error!\n");
+		ad_printf("%s jesd_status: sysref alignment error!\n", __func__);
 		ret = -1;
 	}
 
 	if (status & JESD204_RX_LINK_BUFF_OVF_ALARM) {
-		ad_printf("jesd_status: receive buffer overflow error!\n");
+		ad_printf("%s jesd_status: receive buffer overflow error!\n", __func__);
 		ret = -1;
 	}
 

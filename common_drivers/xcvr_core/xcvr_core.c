@@ -89,7 +89,7 @@ int32_t xcvr_setup(xcvr_core core)
 		}
 		if ((status & 0x04) != 0x00)
 		{
-			ad_printf("ERROR: xcvr calibration failed!\n");
+			ad_printf("%s ERROR: xcvr calibration failed!\n", __func__);
 			return(-1);
 		}
 		status = ad_reg_read(core.tx_lane_pll_base_address + 0x400);
@@ -105,7 +105,7 @@ int32_t xcvr_setup(xcvr_core core)
 		}
 		if ((status & 0x03) != 0x01)
 		{
-			ad_printf("ERROR: xcvr calibration failed!\n");
+			ad_printf("%s ERROR: xcvr calibration failed!\n", __func__);
 			return(-1);
 		}
 	}

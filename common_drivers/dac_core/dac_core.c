@@ -138,7 +138,7 @@ int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
 
 	if (DAC_PCORE_VERSION_MAJOR(pcore_version) < 6)
 	{
-		ad_printf("ERROR: Sorry, binary scale is NOT supported!\n");
+		ad_printf("%s ERROR: Sorry, binary scale is NOT supported!\n", __func__);
 		return(-1);
 	}
 
@@ -205,7 +205,7 @@ int32_t dac_setup(dac_core core)
 
 	dac_read(core, DAC_REG_STATUS, &reg_data);
 	if (reg_data == 0x0) {
-		ad_printf("DAC Core Status errors.\n");
+		ad_printf("%s DAC Core Status errors.\n", __func__);
 		return -1;
 	}
 
@@ -214,7 +214,7 @@ int32_t dac_setup(dac_core core)
 	dac_clock = (dac_clock * reg_data * 100) + 0x7fff;
 	dac_clock = dac_clock >> 16;
 
-	ad_printf("dac core initialized (%d MHz).\n", dac_clock);
+	ad_printf("%s dac core initialized (%d MHz).\n", __func__, dac_clock);
 
 	dac_data_setup(core);
 	return 0;
