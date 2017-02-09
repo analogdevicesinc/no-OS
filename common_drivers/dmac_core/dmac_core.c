@@ -84,7 +84,7 @@ int32_t dmac_start_transaction(dmac_core dma)
 	dmac_write(dma, DMAC_REG_IRQ_MASK, 0x0);
 
         if(dma.transfer) {
-	        dmac_read(dma, DMAC_REG_TRANSFER_ID, dma.transfer->id);
+	        dmac_read(dma, DMAC_REG_TRANSFER_ID, &(dma.transfer->id));
         } else {
                 ad_printf("%s : Undefined DMA transfer.\n", __func__);
                 return -1;
