@@ -177,8 +177,9 @@ int32_t xcvr_setup(xcvr_core core)
 	xcvr_write(core, XCVR_REG_RESETN, 0);
 	if (core.reconfig_bypass == 0)
 	{
-		ad_printf("ERROR: XCVR reconfiguration is NOT supported yet!\n");
-		return(-1);
+		xcvr_write(core, XCVR_REG_CONTROL, (core.lpm_enable ? XCVR_LPM_DFE_N : 0) |
+							XCVR_SYSCLK_SEL(core.sys_clk_sel) |
+							XCVR_OUTCLK_SEL(core.out_clk_sel));
 	}
 
 	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
