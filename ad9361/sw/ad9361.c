@@ -4046,7 +4046,7 @@ struct rssi_control *ctrl,
 	int32_t val, ret, i, j = 0;
 	uint32_t rssi_delay;
 	uint32_t rssi_wait;
-	uint32_t rssi_duration;
+	int32_t rssi_duration;
 	uint32_t rate;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
@@ -4089,10 +4089,14 @@ struct rssi_control *ctrl,
 
 	} while (j < 4 && rssi_duration > 0);
 
-	for (i = 0, total_weight = 0; i < 4; i++)
-		total_weight += weight[i] =
-		DIV_ROUND_CLOSEST(RSSI_MAX_WEIGHT *
-		(1 << dur_buf[i]), total_dur);
+	for (i = 0, total_weight = 0; i < 4; i++) {
+		if (i < j)
+			total_weight += weight[i] =
+				DIV_ROUND_CLOSEST(RSSI_MAX_WEIGHT *
+					(1 << dur_buf[i]), total_dur);
+		else
+			total_weight += weight[i] = 0;
+	}
 
 	/* total of all weights must be 0xFF */
 	val = total_weight - 0xFF;
@@ -4112,6 +4116,9 @@ struct rssi_control *ctrl,
 	temp = RSSI_MODE_SELECT(ctrl->restart_mode);
 	if (ctrl->restart_mode == SPI_WRITE_TO_REGISTER)
 		temp |= START_RSSI_MEAS;
+
+	if (rssi_duration == 0 && j == 1) /* Power of two */
+		temp |= DEFAULT_RSSI_MEAS_MODE;
 
 	ret = ad9361_spi_write(spi, REG_RSSI_CONFIG, temp); // RSSI Mode Select
 
