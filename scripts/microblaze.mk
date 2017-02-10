@@ -15,6 +15,7 @@ endif
 XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += MICROBLAZE
@@ -32,6 +33,9 @@ HDR_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
 SRC_FILES := $(P_SRC_FILES)
 SRC_FILES += $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
+
+CAPTURE_BADDR := 80800000
+CAPTURE_SIZE := 32768
 
 .PHONY: all
 all: $(ELF_FILE)
@@ -60,4 +64,8 @@ run: $(ELF_FILE)
 .PHONY: clean
 clean: 
 	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
+
+.PHONY: capture
+capture: $(ELF_FILE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) MICROBLAZE $(CAPTURE_BADDR) $(CAPTURE_SIZE)
 

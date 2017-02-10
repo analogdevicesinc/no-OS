@@ -35,6 +35,9 @@ SRC_FILES := $(P_SRC_FILES)
 SRC_FILES += $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
+CAPTURE_BADDR := 800000
+CAPTURE_SIZE := 32768
+
 .PHONY: all
 all: $(ELF_FILE)
 
@@ -66,4 +69,5 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7
+	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE)
+
