@@ -87,10 +87,9 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 {
 
 #ifdef	ALTERA
-	return(0);
 #endif
 
-#ifdef	XILINX
+#ifdef	ZYNQ_PS7
 
 	uint8_t mode = 0;
 
@@ -207,8 +206,8 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			ad_printf("Unknown selection.\n");
 			return -1;
 	}
-	return(0);
 #endif
+	return(0);
 }
 
 /***************************************************************************//**
@@ -404,9 +403,9 @@ int main(void)
 	rx_xfer.size = 32768;
 
 	// change the default JESD configurations, if required
-
+#ifdef ZYNQ_PS7
 	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, &ad9523_param);
-
+#endif
 	//********************************************************************************
 	// bring up the system
 	//********************************************************************************
