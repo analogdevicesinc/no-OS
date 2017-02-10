@@ -6,15 +6,15 @@ set m_type [lindex $argv 0]
 connect
 
 if {$m_type == "ZYNQ_PSU"} {
-  targets -set -filter {name =~ "PSU"}
+  targets -set -filter {name =~ "ARM*#0*"}
 }
 
 if {$m_type == "ZYNQ_PS7"} {
-  targets -set -filter {name =~ "xc7z*"}
+  targets -set -filter {name =~ "ARM*#0*"}
 }
 
 if {$m_type == "MICROBLAZE"} {
-  targets -set -filter {name =~ "xc*"}
+  targets -set -filter {name =~ "*MicroBlaze*"}
 }
 
 puts "Moving data into .csv files..."
@@ -47,5 +47,6 @@ close $fp2
 
 puts "Done."
 
-disconnect 64
+disconnect
+
 exit
