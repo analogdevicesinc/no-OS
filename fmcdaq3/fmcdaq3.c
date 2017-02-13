@@ -49,6 +49,7 @@
 #include "dac_core.h"
 #include "xcvr_core.h"
 #include "jesd_core.h"
+#include "dmac_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -82,6 +83,8 @@ int main(void)
 	xcvr_core ad9680_xcvr;
 	jesd_core ad9680_jesd;
 	adc_core ad9680_core;
+	dmac_core ad9680_dma;
+	dmac_xfer rx_xfer;
 
 	ad_spi_init(&ad9528_spi_device);
 	ad_spi_init(&ad9152_spi_device);
@@ -144,9 +147,7 @@ int main(void)
 
 	ad9152_xcvr.mmcm_present = 0;
 	ad9152_xcvr.reconfig_bypass = 1;
-	ad9152_xcvr.rx_tx_n = 0;
-	ad9152_xcvr.no_of_lanes = 4;
-	ad9152_xcvr.lane_rate_kbps = 10*1000*1000;
+	ad9152_xcvr.lane_rate_kbps = 12500000;
 
 	ad9152_jesd.rx_tx_n = 0;
 	ad9152_jesd.scramble_enable = 1;
@@ -180,17 +181,15 @@ int main(void)
 	ad9152_param.stpl_samples[1][2] = (ad9152_channels[1].pat_data>> 0) & 0xffff;
 	ad9152_param.stpl_samples[1][3] = (ad9152_channels[1].pat_data>>16) & 0xffff;
 	ad9152_param.interpolation = 1;
-	ad9152_param.lane_rate_kbps = 10000000;
+	ad9152_param.lane_rate_kbps = 12500000;
 
 	// adc settings
 
-	ad9680_param.lane_rate_kbps = 10000000;
+	ad9680_param.lane_rate_kbps = 12500000;
 
 	ad9680_xcvr.mmcm_present = 0;
 	ad9680_xcvr.reconfig_bypass = 1;
-	ad9680_xcvr.rx_tx_n = 1;
-	ad9680_xcvr.no_of_lanes = 4;
-	ad9680_xcvr.lane_rate_kbps = 10*1000*1000;
+	ad9680_xcvr.lane_rate_kbps = 12500000;
 
 	ad9680_jesd.rx_tx_n = 1;
 	ad9680_jesd.scramble_enable = 1;
@@ -201,6 +200,20 @@ int main(void)
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
 
+        // receiver DMA configuration
+
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+
+#ifdef MICROBLAZE
+	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
+	ad9680_dma.type = DMAC_RX;
+	ad9680_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.size = 32768;
+
 	// base addresses
 
 #ifdef XILINX
@@ -210,6 +223,7 @@ int main(void)
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
+	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
 #endif
 #ifdef ALTERA
 	ad9152_xcvr.base_address = AXI_AD9152_XCVR_BASE;
@@ -221,6 +235,7 @@ int main(void)
 	ad9152_xcvr.mmcm_lpll_base_address = AVL_AD9152_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9152_xcvr.tx_lane_pll_base_address = AVL_AD9152_XCVR_LANE_PLL_RECONFIG_BASE;
+	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
 #endif
 
 	// functions (do not modify below)
@@ -275,7 +290,15 @@ int main(void)
 	ad9152_channels[1].sel = DAC_SRC_DDS;
 	dac_data_setup(ad9152_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
-	ad_printf("daq3: done\n");
+	ad_printf("daq3: setup and configuration is done\n");
+
+        // capture data with DMA
+
+	if(!dmac_start_transaction(ad9680_dma)){
+		ad_printf("daq3: RX capture done.\n");
+        };
+
 	ad_platform_close();
+
 	return(0);
 }
