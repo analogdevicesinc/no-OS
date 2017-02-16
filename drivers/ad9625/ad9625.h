@@ -61,30 +61,37 @@
 
 #define AD9625_CHIP_ID						0x041
 
+#define AD9625_TEST_OFF						0x000
+#define AD9625_TEST_MID_SCALE					0x001
+#define AD9625_TEST_POS_FSCALE					0x002
+#define AD9625_TEST_NEG_FSCALE					0x003
+#define AD9625_TEST_CHECKBOARD					0x004
+#define AD9625_TEST_PNLONG					0x005
+#define AD9625_TEST_ONE2ZERO					0x007
+#define AD9625_TEST_PATTERN					0x008
+#define AD9625_TEST_RAMP					0x00F
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
-	spi_device	spi_dev;
-} ad9625_dev;
 
 typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
+	/* Device Settings */
+	uint32_t	lane_rate_kbps;
+	uint32_t	test_samples[4];
 } ad9625_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9625_spi_read(ad9625_dev *dev,
+int32_t ad9625_spi_read(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data);
-int32_t ad9625_spi_write(ad9625_dev *dev,
+int32_t ad9625_spi_write(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data);
-int32_t ad9625_setup(ad9625_dev **device,
-		ad9625_init_param init_param);
+int32_t ad9625_setup(spi_device *dev);
+
+int32_t ad9625_test(spi_device *dev, uint32_t test_mode);
 
 #endif

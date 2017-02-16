@@ -54,7 +54,7 @@ uint8_t spi_is_initialized = 0;
 /***************************************************************************//**
  * @brief ad9625_spi_read
  *******************************************************************************/
-int32_t ad9625_spi_read(ad9625_dev *dev,
+int32_t ad9625_spi_read(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data)
 {
@@ -65,7 +65,7 @@ int32_t ad9625_spi_read(ad9625_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -74,7 +74,7 @@ int32_t ad9625_spi_read(ad9625_dev *dev,
 /***************************************************************************//**
  * @brief ad9625_spi_write
  *******************************************************************************/
-int32_t ad9625_spi_write(ad9625_dev *dev,
+int32_t ad9625_spi_write(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data)
 {
@@ -85,7 +85,7 @@ int32_t ad9625_spi_write(ad9625_dev *dev,
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = ad_spi_xfer(dev, buf, 3);
 
 	return ret;
 }
@@ -93,27 +93,11 @@ int32_t ad9625_spi_write(ad9625_dev *dev,
 /***************************************************************************//**
  * @brief ad9625_setup
  *******************************************************************************/
-int32_t ad9625_setup(ad9625_dev **device,
-		ad9625_init_param init_param)
+int32_t ad9625_setup(spi_device *dev)
 {
-	ad9625_dev *dev;
 	uint8_t chip_id;
 	uint8_t pll_stat;
 	int32_t ret;
-
-	if (!spi_is_initialized) {
-		dev = (ad9625_dev *)malloc(sizeof(*dev));
-		if (!dev) {
-			return -1;
-		}
-
-		dev->spi_dev.chip_select = init_param.spi_chip_select;
-		dev->spi_dev.mode = init_param.spi_mode;
-		dev->spi_dev.device_id = init_param.spi_device_id;
-		dev->spi_dev.type = init_param.spi_type;
-		ret = spi_init(&dev->spi_dev);
-		spi_is_initialized = 1;
-	}
 
 	ad9625_spi_write(dev, AD9625_REG_CHIP_PORT_CONF, 0x18);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
@@ -134,20 +118,28 @@ int32_t ad9625_setup(ad9625_dev **device,
 	ad9625_spi_read(dev, AD9625_REG_CHIP_ID, &chip_id);
 	if(chip_id != AD9625_CHIP_ID)
 	{
-		xil_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		ad_printf("%s Error: Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
 	ad9625_spi_read(dev, AD9625_REG_PLL_STATUS, &pll_stat);
 	if((pll_stat & 0x80) != 0x80)
 	{
-		xil_printf("Error: AD9625 PLL is NOT locked (0x%x).\n", chip_id);
+		ad_printf("%s Error: AD9625 PLL is NOT locked (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
-	*device = dev;
-
-	xil_printf("AD9625 successfully initialized.\n");
-
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief ad9625_setup
+ *******************************************************************************/
+int32_t ad9625_test(spi_device *dev, uint32_t test_mode)
+{
+
+        ad9625_spi_write(dev, AD9625_REG_TEST_CNTRL, test_mode);
+        ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);
+
+	return 0;
 }
