@@ -22,5 +22,5 @@ M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
 
 M_HDR_FILES :=
 
-M_SRC_FILES := $(NOOS-DIR)/ad-fmcadc4-ebz/ad_fmcadc4_ebz.c
+M_SRC_FILES := $(NOOS-DIR)/fmcadc4/fmcadc4.c
 
