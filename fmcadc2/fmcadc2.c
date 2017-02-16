@@ -40,97 +40,108 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
-#include <xil_cache.h>
-#include <xil_io.h>
 #include "platform_drivers.h"
 #include "ad9625.h"
 #include "adc_core.h"
-#include "adxcvr_core.h"
+#include "xcvr_core.h"
+#include "jesd_core.h"
+#include "dmac_core.h"
 
-#ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_TYPE			PS7_GPIO
-#define GPIO_JESD204_SYSREF		54 + 34
-#define ADC_DDR_BASEADDR		XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0x800000
-#else
-#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
-#define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
-#endif
-#define AD9625_CORE_BASEADDR		XPAR_AXI_AD9625_CORE_BASEADDR
-#define AD9625_DMA_BASEADDR		XPAR_AXI_AD9625_DMA_BASEADDR
-#define AD9625_JESD_BASEADDR		XPAR_AXI_AD9625_JESD_BASEADDR
-#define AD9625_ADXCVR_BASEADDR		XPAR_AXI_AD9625_XCVR_BASEADDR
-
-ad9625_init_param default_ad9625_init_param = {
-	0,				// spi_chip_select
-	SPI_MODE_3,		// spi_mode
-#ifdef _XPARAMETERS_PS_H_
-	PS7_SPI,		// spi_type
-#else
-	AXI_SPI,		// spi_type
-#endif
-	SPI_DEVICE_ID,	// spi_device_id;
-};
+#define GPIO_JESD204_SYSREF		34
 
 int main(void)
 {
-	adc_core	ad9625_core;
-	ad9625_dev	*ad9625_device;
-	jesd204_core	ad9625_jesd204;
-	adxcvr_core	ad9625_xcvr;
+	spi_device		ad9625_spi_device;
+	adc_core		ad9625_core;
+	ad9625_init_param	ad9625_param;
+	jesd_core		ad9625_jesd;
+	xcvr_core		ad9625_xcvr;
+	dmac_core               ad9625_dma;
+	dmac_xfer               rx_xfer;
 
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	// base addresses
 
-	ad9625_setup(&ad9625_device, default_ad9625_init_param);
+	ad9625_xcvr.base_address = XPAR_AXI_AD9625_XCVR_BASEADDR;
+	ad9625_jesd.base_address = XPAR_AXI_AD9625_JESD_BASEADDR;
+	ad9625_core.base_address = XPAR_AXI_AD9625_CORE_BASEADDR;
+	ad9625_dma.base_address = XPAR_AXI_AD9625_DMA_BASEADDR;
 
-	ad9625_jesd204.base_addr = AD9625_JESD_BASEADDR;
-	ad9625_jesd204.rx_tx_n = 1;
-	ad9625_jesd204.octets_per_frame = 1;
-	ad9625_jesd204.frames_per_multiframe = 32;
-	ad9625_jesd204.subclass_mode = 1;
-	ad9625_jesd204.sys_ref = INTERN;
-	ad9625_jesd204.gpio_device.device_id = GPIO_DEVICE_ID;
-	ad9625_jesd204.gpio_device.type = GPIO_TYPE;
-	ad9625_jesd204.gpio_sysref = GPIO_JESD204_SYSREF;
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
 
-	ad9625_xcvr.base_addr = AD9625_ADXCVR_BASEADDR;
-	ad9625_xcvr.tx_enable = 0;
-	ad9625_xcvr.gth_enable = 0;
-	ad9625_xcvr.lpm_enable = 1;
-	ad9625_xcvr.out_clk_sel = 2;
-	ad9625_xcvr.sys_clk_sel = 0;
+#ifdef MICROBLAZE
+	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
 
-	ad9625_xcvr.lane_rate_khz = 6250000;
-	ad9625_xcvr.ref_rate_khz = 625000;
+	// SPI configuration
 
-	ad9625_spi_write(ad9625_device, AD9625_REG_TEST_CNTRL, 0x0F);
-	ad9625_spi_write(ad9625_device, AD9625_REG_OUTPUT_MODE, 0x01);
-	ad9625_spi_write(ad9625_device, AD9625_REG_TRANSFER, 0x01);
+	ad_spi_init(&ad9625_spi_device);
+	ad9625_spi_device.chip_select = 0x6;
 
-	ad9625_core.adc_baseaddr = AD9625_CORE_BASEADDR;
-	ad9625_core.dmac_baseaddr = AD9625_DMA_BASEADDR;
+	// ADC and receive path configuration
+
+	ad9625_param.lane_rate_kbps = 6250000;
+	ad9625_param.test_samples[0] = 0x5A5;
+	ad9625_param.test_samples[1] = 0x1E1;
+	ad9625_param.test_samples[2] = 0x777;
+	ad9625_param.test_samples[3] = 0x444;
+
+	xcvr_getconfig(&ad9625_xcvr);
+	ad9625_xcvr.mmcm_present = 0;
+	ad9625_xcvr.reconfig_bypass = 1;
+	ad9625_xcvr.lane_rate_kbps = ad9625_param.lane_rate_kbps;
+	ad9625_xcvr.ref_clock_khz = 625000;
+
+	ad9625_jesd.scramble_enable = 1;
+	ad9625_jesd.octets_per_frame = 1;
+	ad9625_jesd.frames_per_multiframe = 32;
+	ad9625_jesd.subclass_mode = 1;
+	ad9625_jesd.sysref_type = INTERN;
+	ad9625_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
+
 	ad9625_core.no_of_channels = 1;
 	ad9625_core.resolution = 12;
 
-	jesd204_init(ad9625_jesd204);
-	adxcvr_init(ad9625_xcvr);
-	jesd204_gen_sysref(ad9625_jesd204);
+	ad9625_dma.type = DMAC_RX;
+	ad9625_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.size = 32768;
+
+	ad_platform_init();
+
+	// set up the device
+	ad9625_setup(&ad9625_spi_device);
+	// set up the JESD core
+	jesd_setup(ad9625_jesd);
+	// set up the XCVRs
+	xcvr_setup(ad9625_xcvr);
+	// generate SYSREF
+	jesd_sysref_control(ad9625_jesd, 1);
+	// JESD core status
+	jesd_status(ad9625_jesd);
+
+	// interface core setup
 	adc_setup(ad9625_core);
 
-	// check JESD link status
-	jesd204_read_status(ad9625_jesd204);
+	// PRBS test
+	ad9625_test(&ad9625_spi_device, AD9625_TEST_PNLONG);
+	adc_pn_mon(ad9625_core, ADC_PN23);
 
-	xil_printf("Start capturing data...\n\r");
+	// set up ramp output
+	ad9625_test(&ad9625_spi_device, AD9625_TEST_RAMP);
+	// test the captured data
+	if(!dmac_start_transaction(ad9625_dma)) {
+		adc_ramp_test(ad9625_core, 1024, rx_xfer.start_address);
+	};
 
-	adc_capture(ad9625_core, 16384, ADC_DDR_BASEADDR);
+	// capture data with DMA
+	ad9625_test(&ad9625_spi_device, AD9625_TEST_OFF);
+	if(!dmac_start_transaction(ad9625_dma)) {
+		ad_printf("%s RX capture done!\n", __func__);
+	};
 
-	xil_printf("Done.\n\r");
+	ad_platform_close();
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
-
-	return 0;
+	return(0);
 }
