@@ -352,3 +352,18 @@ uint8_t ad_uart_read()
 	return (uint8_t)RecievedByte;
 }
 #endif
+
+/***************************************************************************//**
+ * @brief ad_pow2 Create a mask for a given number of bit
+ *******************************************************************************/
+uint32_t ad_pow2(uint32_t number) {
+
+	uint32_t index;
+	uint32_t mask = 1;
+
+	for (index=1; index < number; index++) {
+		mask = (mask << 1) ^ 1;
+	}
+
+	return mask;
+}

@@ -193,5 +193,6 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data);
 uint64_t do_div(uint64_t* n, uint64_t base);
 void ad_reg_write_16(uint32_t addr, uint32_t data);
 uint8_t ad_uart_read();
+uint32_t ad_pow2(uint32_t number);
 
 #endif

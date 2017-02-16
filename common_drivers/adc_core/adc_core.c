@@ -125,6 +125,7 @@ int32_t adc_set_pnsel(adc_core core,
 
 /***************************************************************************//**
  * @brief adc_pn_mon
+ *	  Note: The device must be in PRBS test mode, when calling this function
  *******************************************************************************/
 int32_t adc_pn_mon(adc_core core,
 		enum adc_pn_sel sel)
@@ -157,36 +158,58 @@ int32_t adc_pn_mon(adc_core core,
 
 /***************************************************************************//**
  * @brief adc_ramp_test
+ *	  This functions supports channel number multiple of 2 (e.g 1/2/4/6/8...)
  *******************************************************************************/
 int32_t adc_ramp_test(adc_core core,
 		uint32_t no_of_samples,
 		uint32_t start_address)
 {
-	uint8_t err_cnt = 0;
-	uint32_t exp_data;
-	uint32_t rcv_data;
+	uint8_t	 err_cnt = 0;
+	uint16_t exp_data[32];
+	uint16_t rcv_data[32];
 	uint32_t index;
+	uint32_t mask = ad_pow2(core.resolution);
+	uint32_t current_address = start_address;
+	uint32_t last_address = start_address + (core.no_of_channels*no_of_samples)/2;
 
-	// FIXME
-	for (index = 0; index < no_of_samples; index++) {
-		rcv_data = ad_reg_read(start_address + (index*4)) & 0x3fff3fff;
-		if (index == 0)
-			exp_data = rcv_data;
-		if (rcv_data != exp_data) {
-			ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
-					__func__, index, rcv_data, exp_data);
-			if (exp_data == 10)
-				break;
-			exp_data++;
+	while (current_address < last_address) {
+
+		// read data back from memory, one samples from each channel, min a word
+		for (index=0; index<core.no_of_channels; index+=2) {
+			rcv_data[index] = ad_reg_read(current_address + index) & mask;
+			rcv_data[index+1] = (ad_reg_read(current_address + index) >> 16) & mask;
 		}
-		if ((exp_data & 0x3fff) == 0x3fff)
-			exp_data = exp_data & 0xffff0000;
-		else
-			exp_data = exp_data + 0x00000001;
-		if ((exp_data & 0x3fff0000) == 0x3fff0000)
-			exp_data = exp_data & 0x0000ffff;
-		else
-			exp_data = exp_data + 0x00010000;
+
+		// generate expected data
+		for (index=0; index<core.no_of_channels; index+=2) {
+			if (current_address == start_address) {
+				exp_data[index] = rcv_data[index];
+				exp_data[index+1] = rcv_data[index+1];
+			} else {
+				if(core.no_of_channels < 2) {
+					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 2;
+					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 2;
+				} else {
+					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 1;
+					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 1;
+				}
+			}
+		}
+
+		// compare received and expected
+		for (index=0; index<core.no_of_channels; index+=2) {
+			if (rcv_data[index] != exp_data[index])	{
+				ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+						__func__, index, rcv_data, exp_data);
+				if (err_cnt == 50)
+					break;
+				err_cnt++;
+			}
+		}
+
+		// increment address pointer
+		current_address = (core.no_of_channels == 1) ?	(current_address+4) :
+								(current_address+(core.no_of_channels*2));
 	}
 
 	if (err_cnt)
