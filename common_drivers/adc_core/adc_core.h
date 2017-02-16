@@ -137,6 +137,7 @@ int32_t adc_set_pnsel(adc_core core,
 int32_t adc_pn_mon(adc_core core,
 		enum adc_pn_sel sel);
 int32_t adc_ramp_test(adc_core core,
+		uint8_t no_of_cores,
 		uint32_t no_of_samples,
 		uint32_t start_address);
 #endif

@@ -161,32 +161,34 @@ int32_t adc_pn_mon(adc_core core,
  *	  This functions supports channel number multiple of 2 (e.g 1/2/4/6/8...)
  *******************************************************************************/
 int32_t adc_ramp_test(adc_core core,
+		uint8_t no_of_cores,
 		uint32_t no_of_samples,
 		uint32_t start_address)
 {
 	uint8_t	 err_cnt = 0;
 	uint16_t exp_data[32];
 	uint16_t rcv_data[32];
-	uint32_t index;
+	uint8_t index;
 	uint32_t mask = ad_pow2(core.resolution);
+	uint8_t no_of_channels = core.no_of_channels*no_of_cores;
 	uint32_t current_address = start_address;
-	uint32_t last_address = start_address + (core.no_of_channels*no_of_samples)/2;
+	uint32_t last_address = start_address + (no_of_channels*no_of_samples)/2;
 
 	while (current_address < last_address) {
 
 		// read data back from memory, one samples from each channel, min a word
-		for (index=0; index<core.no_of_channels; index+=2) {
+		for (index=0; index<no_of_channels; index+=2) {
 			rcv_data[index] = ad_reg_read(current_address + index) & mask;
 			rcv_data[index+1] = (ad_reg_read(current_address + index) >> 16) & mask;
 		}
 
 		// generate expected data
-		for (index=0; index<core.no_of_channels; index+=2) {
+		for (index=0; index<no_of_channels; index+=2) {
 			if (current_address == start_address) {
 				exp_data[index] = rcv_data[index];
 				exp_data[index+1] = rcv_data[index+1];
 			} else {
-				if(core.no_of_channels < 2) {
+				if(no_of_channels < 2) {
 					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 2;
 					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 2;
 				} else {
@@ -197,7 +199,7 @@ int32_t adc_ramp_test(adc_core core,
 		}
 
 		// compare received and expected
-		for (index=0; index<core.no_of_channels; index+=2) {
+		for (index=0; index<no_of_channels; index+=2) {
 			if (rcv_data[index] != exp_data[index])	{
 				ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
 						__func__, index, rcv_data, exp_data);
@@ -208,8 +210,8 @@ int32_t adc_ramp_test(adc_core core,
 		}
 
 		// increment address pointer
-		current_address = (core.no_of_channels == 1) ?	(current_address+4) :
-								(current_address+(core.no_of_channels*2));
+		current_address = (no_of_channels == 1) ?	(current_address+4) :
+								(current_address+(no_of_channels*2));
 	}
 
 	if (err_cnt)
