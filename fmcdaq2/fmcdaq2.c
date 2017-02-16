@@ -374,7 +374,7 @@ int main(void)
 	ad9144_param.stpl_samples[1][3] = (ad9144_channels[1].pat_data>>16) & 0xffff;
 
 	//********************************************************************************
-	// ADC (AD9680) and the transmit path ( AXI_ADXCVR,
+	// ADC (AD9680) and the receive path ( AXI_ADXCVR,
 	//	JESD204, AXI_AD9680, TX DMAC) configuration
 	//********************************************************************************
 
