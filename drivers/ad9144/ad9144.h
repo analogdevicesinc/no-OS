@@ -1362,6 +1362,9 @@ int32_t ad9144_setup(spi_device *dev,
 int32_t ad9144_spi_read(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data);
+int32_t ad9144_spi_write(spi_device *dev,
+		uint16_t reg_addr,
+		uint8_t reg_data);
 int32_t ad9144_short_pattern_test(spi_device *dev,
 		ad9144_init_param init_param);
 int32_t ad9144_status(spi_device *dev);
