@@ -54,10 +54,14 @@
 #define AD9625_REG_TEST_CNTRL					0x00D
 #define AD9625_REG_OUTPUT_MODE					0x014
 #define AD9625_REG_OUTPUT_ADJUST				0x015
+#define AD9625_REG_SYSREF_CONTROL				0x03A
 #define AD9625_REG_JESD204B_LINK_CNTRL_1			0x05F
+#define AD9625_REG_JESD204B_CONFIGURATION			0x072
 #define AD9625_REG_JESD204B_LANE_POWER_MODE			0x080
 #define AD9625_REG_TRANSFER					0x0FF
+#define AD9625_REG_IRQ_STATUS					0x100
 #define AD9625_REG_DIVCLK_OUT_CNTRL				0x120
+#define AD9625_REG_SYSREF_SETUP_TIME_GUARDBAND			0x13C
 
 #define AD9625_CHIP_ID						0x041
 
@@ -91,7 +95,6 @@ int32_t ad9625_spi_write(spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data);
 int32_t ad9625_setup(spi_device *dev);
-
 int32_t ad9625_test(spi_device *dev, uint32_t test_mode);
 
 #endif
