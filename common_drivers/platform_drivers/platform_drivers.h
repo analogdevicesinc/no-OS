@@ -185,6 +185,8 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes);
 
 int32_t ad_gpio_set(uint8_t pin, uint8_t data);
 int32_t ad_gpio_get(uint8_t pin, uint8_t *data);
+int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data);
+int32_t ad_gpio_get_range(uint8_t start_pin, uint8_t num_pins, uint32_t *data);
 
 /******************************************************************************/
 /********************* MISC structure and functions ***************************/

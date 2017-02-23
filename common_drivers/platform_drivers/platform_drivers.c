@@ -279,6 +279,130 @@ int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
 }
 
 /***************************************************************************//**
+ * @brief ad_gpio_set_range
+ *******************************************************************************/
+
+int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
+{
+
+	int32_t pstatus;
+	uint32_t ppos;
+	uint32_t pdata;
+	uint32_t pmask;
+
+	if (start_pin < 32) {
+		return(-1);
+	}
+
+	pstatus = -1;
+	ppos = start_pin - 32;
+	pmask = ((1 << num_pins) - 1) << ppos;
+
+#ifdef ZYNQ_PS7
+
+	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
+	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata | pmask));
+	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
+	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
+	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
+	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (data << ppos)));
+	pstatus = 0;
+
+#endif
+
+#ifdef ZYNQ_PSU
+
+	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
+	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata | pmask));
+	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0308);
+	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0308), (pdata | pmask));
+	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
+	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050), ((pdata & ~pmask) | (data << ppos)));
+	pstatus = 0;
+
+#endif
+
+#ifdef NIOS_II
+
+	pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
+	IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (data << ppos)));
+	pstatus = 0;
+
+#endif
+
+#ifdef MICROBLAZE
+
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
+	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (data << ppos)));
+	pstatus = 0;
+
+#endif
+
+	return(pstatus);
+}
+
+/***************************************************************************//**
+ * @brief ad_gpio_get_range
+ *******************************************************************************/
+
+int32_t ad_gpio_get_range(uint8_t start_pin, uint8_t num_pins, uint32_t *data)
+{
+
+	int32_t pstatus;
+	uint32_t ppos;
+	uint32_t pdata;
+	uint32_t pmask;
+
+	if (start_pin < 32) {
+		return(-1);
+	}
+
+	pstatus = -1;
+	ppos = start_pin - 32;
+	pmask = ((1 << num_pins) - 1) << ppos;
+
+#ifdef ZYNQ_PS7
+
+	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
+	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata & ~pmask));
+	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
+	*data = (pdata & pmask) >> ppos;
+	pstatus = 0;
+
+#endif
+
+#ifdef ZYNQ_PSU
+
+	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
+	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata & ~pmask));
+	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
+	*data = (pdata & pmask) >> ppos;
+	pstatus = 0;
+
+#endif
+
+#ifdef NIOS_II
+
+	pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
+	*data = (pdata & pmask) >> ppos;
+	pstatus = 0;
+
+#endif
+
+#ifdef MICROBLAZE
+
+	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+	*data = (pdata & pmask) >> ppos;
+	pstatus = 0;
+
+#endif
+
+	return(pstatus);
+}
+
+/***************************************************************************//**
  * @brief do_div
  *******************************************************************************/
 uint64_t do_div(uint64_t* n, uint64_t base)
