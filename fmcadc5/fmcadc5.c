@@ -50,7 +50,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define GPIO_JESD204_SYSREF	32
+#define GPIO_JESD204_SYSREF		32
 #define GPIO_RST_0			34
 #define GPIO_PWDN_0			35
 #define GPIO_RST_1			38
@@ -59,13 +59,21 @@
 #define GPIO_FD_0			41
 #define GPIO_IRQ_1			42
 #define GPIO_FD_1			43
-#define GPIO_PWR_GOOD		44
-#define GPIO_VDITHER		45
+#define GPIO_PWR_GOOD			44
+#define GPIO_VDITHER			45
 #define GPIO_TRIG			46
+#define GPIO_SYSREF_DELAY		56
+
+#define SYSREF_DELAY_BITS		5
 
 int main(void)
 {
-	uint8_t	pwr_good;
+	uint8_t pwr_good = 0;
+	uint32_t n = 0;
+	uint32_t rdata = 0;
+	uint32_t rstatus = 0;
+	uint8_t rdata8_0 = 0;
+	uint8_t rdata8_1 = 0;
 
 	spi_device			ad9625_0_spi_device;
 	spi_device			ad9625_1_spi_device;
@@ -73,14 +81,14 @@ int main(void)
 	spi_device			dac_sync_1_spi_device;
 	adc_core			ad9625_0_core;
 	adc_core			ad9625_1_core;
-	ad9625_init_param	ad9625_0_param;
-	ad9625_init_param	ad9625_1_param;
+	ad9625_init_param		ad9625_0_param;
+	ad9625_init_param		ad9625_1_param;
 	jesd_core			ad9625_0_jesd;
 	jesd_core			ad9625_1_jesd;
 	xcvr_core			ad9625_0_xcvr;
 	xcvr_core			ad9625_1_xcvr;
-	dmac_core           ad9625_dma;
-	dmac_xfer           rx_xfer;
+	dmac_core			ad9625_dma;
+	dmac_xfer			rx_xfer;
 
 	// base addresses
 	ad9625_0_xcvr.base_address = XPAR_AXI_AD9625_0_XCVR_BASEADDR;
@@ -101,10 +109,10 @@ int main(void)
 	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
 #endif
 
-	ad_gpio_set(GPIO_RST_0, 0);
-	ad_gpio_set(GPIO_PWDN_0, 0);
-	ad_gpio_set(GPIO_RST_1, 0);
-	ad_gpio_set(GPIO_PWDN_1, 0);
+	ad_gpio_set(GPIO_RST_0, 0); // reset active low
+	ad_gpio_set(GPIO_PWDN_0, 0); // power down active high
+	ad_gpio_set(GPIO_RST_1, 0); // reset active low
+	ad_gpio_set(GPIO_PWDN_1, 0); // power down active high
 
 	ad_gpio_get(GPIO_PWR_GOOD, &pwr_good);
 	if (!pwr_good) {
@@ -193,6 +201,69 @@ int main(void)
 	jesd_status(ad9625_0_jesd);
 	jesd_status(ad9625_1_jesd);
 
+	// Synchronize the two AD9625s
+	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_JESD204B_CONFIGURATION, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_SYSREF_CONTROL, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_TRANSFER, 0x01); // Register update
+	ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_JESD204B_CONFIGURATION, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
+	ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_SYSREF_CONTROL, 0x02); // Sysref enabled (default is 0x00)
+	ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_TRANSFER, 0x01); // Register update
+
+	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_SYSREF_SETUP_TIME_GUARDBAND, 0x60);
+	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_TRANSFER, 0x01);
+
+	ad_gpio_set_range(GPIO_SYSREF_DELAY, SYSREF_DELAY_BITS, 0x1f);
+
+	for (n = 0; n < 32; n++) {
+
+		jesd_sysref_control(ad9625_0_jesd, 0);
+		xcvr_reset(ad9625_0_xcvr);
+		xcvr_reset(ad9625_1_xcvr);
+
+		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_SYSREF_CONTROL, 0x42);
+		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_TRANSFER, 0x01);
+		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_SYSREF_CONTROL, 0x02);
+		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_TRANSFER, 0x01);
+
+		ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_SYSREF_CONTROL, 0x42);
+		ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_TRANSFER, 0x01);
+		ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_SYSREF_CONTROL, 0x02);
+		ad9625_spi_write(&ad9625_1_spi_device, AD9625_REG_TRANSFER, 0x01);
+
+		ad_gpio_set_range(GPIO_SYSREF_DELAY, SYSREF_DELAY_BITS, n);
+		ad_gpio_get_range(GPIO_SYSREF_DELAY, SYSREF_DELAY_BITS, &rdata);
+		if (rdata  != n ) {
+				xil_printf("[%05d]: SYSREF Delay Control Failed(%d, %d), Exiting!!\n", __LINE__, n, rdata);
+				return (-1) ;
+		}
+
+		ad9625_spi_read(&ad9625_0_spi_device, AD9625_REG_IRQ_STATUS, &rdata8_0);
+		ad9625_spi_read(&ad9625_1_spi_device, AD9625_REG_IRQ_STATUS, &rdata8_1);
+
+		if (((rdata8_0 & 0x04) != 0x00) || ((rdata8_1 & 0x04) != 0x00)) {
+				xil_printf("[%05d]: SYSREF Clear Status Failed(%d, 0x%02x, 0x%02x), Exiting!!\n", __LINE__, n, rdata8_0, rdata8_1);
+		}
+
+		jesd_sysref_control(ad9625_0_jesd, 1);
+
+		ad9625_spi_read(&ad9625_0_spi_device, AD9625_REG_IRQ_STATUS, &rdata8_0);
+		ad9625_spi_read(&ad9625_1_spi_device, AD9625_REG_IRQ_STATUS, &rdata8_1);
+
+		if ((rstatus == 1) && ((rdata8_0 & 0x04) == 0x04) && ((rdata8_1 & 0x04) == 0x00)) {
+				rstatus = 2;
+				xil_printf("SYSREF Calibration Successful[%d]\n", n);
+				break;
+		}
+
+		rstatus = 0;
+		if (((rdata8_0 & 0x04) == 0x00) && ((rdata8_1 & 0x04) == 0x00)) {
+				rstatus = 1;
+		}
+	}
+
+	if (rstatus != 2) {
+		xil_printf("SYSREF Calibration Failed!!\n");
+	}
 	// interface core setup
 	adc_setup(ad9625_0_core);
 	adc_setup(ad9625_1_core);
@@ -209,11 +280,15 @@ int main(void)
 
 	// test the captured data
 	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_0_core,2, 1024, rx_xfer.start_address);
+		adc_ramp_test(ad9625_0_core, 2, 1024, rx_xfer.start_address);
 	};
 	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_1_core,2, 1024, rx_xfer.start_address);
+		adc_ramp_test(ad9625_1_core, 2, 1024, rx_xfer.start_address);
 	};
+
+	// set up normal output
+	ad9625_test(&ad9625_0_spi_device, AD9625_TEST_OFF);
+	ad9625_test(&ad9625_1_spi_device, AD9625_TEST_OFF);
 
 	// capture data with DMA
 	if(!dmac_start_transaction(ad9625_dma)) {
@@ -224,3 +299,4 @@ int main(void)
 
 	return(0);
 }
+
