@@ -130,9 +130,8 @@ int32_t xcvr_drp_write(xcvr_core core, uint8_t drp_sel,
 #endif
 
 /*******************************************************************************
- * @brief xcvr_init
+ * @brief xcvr_setup
  *******************************************************************************/
-
 int32_t xcvr_setup(xcvr_core core)
 {
 	uint32_t status;
@@ -228,3 +227,33 @@ int32_t xcvr_getconfig(xcvr_core *core)
 return 0;
 }
 
+/*******************************************************************************
+ * @brief xcvr_reset
+ *******************************************************************************/
+int32_t xcvr_reset(xcvr_core core)
+{
+	uint32_t status;
+	int32_t timeout;
+
+	xcvr_write(core, XCVR_REG_RESETN, 0);
+
+	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
+
+	timeout = 100;
+	while (timeout > 0)
+	{
+		mdelay(1);
+		timeout = timeout - 1;
+		xcvr_read(core, XCVR_REG_STATUS, &status);
+		if (status == 1)
+			break;
+	}
+
+	if (status == 0)
+	{
+		ad_printf("%s ERROR: XCVR initialization failed!\n", __func__);
+		return(-1);
+	}
+
+	return(0);
+}
