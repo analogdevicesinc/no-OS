@@ -84,7 +84,7 @@
 typedef struct {
 	uint32_t	id;
 	uint32_t	start_address;
-	uint32_t	size;
+	uint32_t	no_of_samples;
 } dmac_xfer;
 
 typedef struct {

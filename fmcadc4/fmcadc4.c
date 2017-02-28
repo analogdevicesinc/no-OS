@@ -219,7 +219,7 @@ int main(void)
 	ad9680_dma.type 	= DMAC_RX;
 	ad9680_dma.transfer 	= &rx_xfer;
 	rx_xfer.id = 0;
-	rx_xfer.size = 32768;
+	rx_xfer.no_of_samples = 32768;
 
 	// base addresses
 
@@ -268,7 +268,7 @@ int main(void)
 	ad9680_test(&ad9680_1_spi_device, AD9680_TEST_RAMP);
 
 	if(!dmac_start_transaction(ad9680_dma)){
-		adc_ramp_test(ad9680_0_core, 2, 32768, rx_xfer.start_address);
+		adc_ramp_test(ad9680_0_core, 2, rx_xfer.no_of_samples/(2*ad9680_0_core.no_of_channels), rx_xfer.start_address);
         };
 
 	ad9680_test(&ad9680_1_spi_device, AD9680_TEST_OFF);

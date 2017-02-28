@@ -400,7 +400,7 @@ int main(void)
 	ad9680_dma.type = DMAC_RX;
 	ad9680_dma.transfer = &rx_xfer;
 	rx_xfer.id = 0;
-	rx_xfer.size = 32768;
+	rx_xfer.no_of_samples = 32768;
 
 	// change the default JESD configurations, if required
 #ifdef ZYNQ_PS7

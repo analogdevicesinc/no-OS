@@ -100,7 +100,7 @@ int32_t dmac_start_transaction(dmac_core dma)
 		dmac_write(dma, DMAC_REG_SRC_ADDRESS, dma.transfer->start_address);
 		dmac_write(dma, DMAC_REG_SRC_STRIDE, 0x0);
 	}
-	dmac_write(dma, DMAC_REG_X_LENGTH, (4 * dma.transfer->size) - 1);
+	dmac_write(dma, DMAC_REG_X_LENGTH, (2 * dma.transfer->no_of_samples) - 1);
 	dmac_write(dma, DMAC_REG_Y_LENGTH, 0x0);
 
 	dmac_write(dma, DMAC_REG_START_TRANSFER, 0x1);

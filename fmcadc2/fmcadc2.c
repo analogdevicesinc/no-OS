@@ -106,7 +106,7 @@ int main(void)
 	ad9625_dma.type = DMAC_RX;
 	ad9625_dma.transfer = &rx_xfer;
 	rx_xfer.id = 0;
-	rx_xfer.size = 32768;
+	rx_xfer.no_of_samples = 32768;
 
 	ad_platform_init();
 
@@ -132,7 +132,7 @@ int main(void)
 	ad9625_test(&ad9625_spi_device, AD9625_TEST_RAMP);
 	// test the captured data
 	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_core, 1, 1024, rx_xfer.start_address);
+		adc_ramp_test(ad9625_core, 1, rx_xfer.no_of_samples/ad9625_core.no_of_channels, rx_xfer.start_address);
 	};
 
 	// capture data with DMA

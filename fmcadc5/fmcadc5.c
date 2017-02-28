@@ -177,7 +177,7 @@ int main(void)
 	ad9625_dma.type = DMAC_RX;
 	ad9625_dma.transfer = &rx_xfer;
 	rx_xfer.id = 0;
-	rx_xfer.size = 32768;
+	rx_xfer.no_of_samples = 32768;
 
 	ad_platform_init();
 
