@@ -172,7 +172,8 @@ int32_t adc_ramp_test(adc_core core,
 	uint32_t mask = ad_pow2(core.resolution);
 	uint8_t no_of_channels = core.no_of_channels*no_of_cores;
 	uint32_t current_address = start_address;
-	uint32_t last_address = start_address + (no_of_channels*no_of_samples)/2;
+	uint32_t last_address = start_address + (no_of_channels*no_of_samples)*2;
+	uint32_t sample_count = 0;
 
 	while (current_address < last_address) {
 
@@ -189,8 +190,8 @@ int32_t adc_ramp_test(adc_core core,
 				exp_data[index+1] = rcv_data[index+1];
 			} else {
 				if(no_of_channels < 2) {
-					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 2;
-					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 2;
+					exp_data[index] = (exp_data[index] == mask) ? 0 : (exp_data[index] + 2) & mask;
+					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : (exp_data[index+1] + 2) & mask;
 				} else {
 					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 1;
 					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 1;
@@ -200,18 +201,20 @@ int32_t adc_ramp_test(adc_core core,
 
 		// compare received and expected
 		for (index=0; index<no_of_channels; index+=2) {
-			if (rcv_data[index] != exp_data[index])	{
+			if ((rcv_data[index] != exp_data[index]) || (rcv_data[index+1] != exp_data[index+1])) {
 				ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
-						__func__, index, rcv_data, exp_data);
-				if (err_cnt == 50)
-					break;
+						__func__, sample_count+index, rcv_data[index], exp_data[index]);
+				ad_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+						__func__, sample_count+index+1, rcv_data[index+1], exp_data[index+1]);
 				err_cnt++;
+				if (err_cnt == 50) break;
 			}
 		}
+		sample_count+=index;
 
 		// increment address pointer
-		current_address = (no_of_channels == 1) ?	(current_address+4) :
-								(current_address+(no_of_channels*2));
+		current_address = (no_of_channels == 1) ? (current_address+4) :
+							(current_address+(no_of_channels*2));
 	}
 
 	if (err_cnt)
