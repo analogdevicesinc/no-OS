@@ -46,8 +46,8 @@
 * @brief jesd_read
 *******************************************************************************/
 int32_t jesd_read(jesd_core core,
-					  uint32_t reg_addr,
-					  uint32_t *reg_data)
+					uint32_t reg_addr,
+					uint32_t *reg_data)
 {
 	*reg_data = ad_reg_read((core.base_address + reg_addr));
 
@@ -58,8 +58,8 @@ int32_t jesd_read(jesd_core core,
 * @brief jesd_write
 *******************************************************************************/
 int32_t jesd_write(jesd_core core,
-					   uint32_t reg_addr,
-					   uint32_t reg_data)
+					uint32_t reg_addr,
+					uint32_t reg_data)
 {
 	ad_reg_write((core.base_address + reg_addr), reg_data);
 
@@ -99,14 +99,14 @@ int32_t jesd_setup(jesd_core core)
 *******************************************************************************/
 int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 {
-    if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
+	if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
 
-        // generate SYS_REF
+		// generate SYS_REF
 
-        ad_gpio_set(core.sysref_gpio_pin, enable);
-        mdelay(10);
-    }
-    return 0;
+		ad_gpio_set(core.sysref_gpio_pin, enable);
+		mdelay(10);
+	}
+	return 0;
 }
 /***************************************************************************//**
 * @brief jesd_read_status
@@ -134,12 +134,12 @@ int32_t jesd_status(jesd_core core)
 	}
 
 	if (core.subclass_mode >= 1) {
-	  timeout = 100;
-	  do {
-		mdelay(1);
-		jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
-		status &= JESD204_TRX_SYSREF_CAPTURED;
-	  } while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
+		timeout = 100;
+		do {
+			mdelay(1);
+			jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
+			status &= JESD204_TRX_SYSREF_CAPTURED;
+		} while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
 
 	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
 		ad_printf("%s jesd_status: missing SYS_REF!\n", __func__);
