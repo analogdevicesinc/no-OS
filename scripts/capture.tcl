@@ -24,24 +24,18 @@ puts "Moving data into .csv files..."
 after 1000
 
 set start_addr [expr 0x$start_addr]
+set num_of_word [expr 2 * $num_of_sample]
+set readData [mrd -force $start_addr $num_of_word]
 
-set readData [mrd -force $start_addr [expr 4 * $num_of_sample]]
+set fp [ open capture.csv w ]
+for {set index 1} {$index < $num_of_word} {incr index 4} {
 
-set fp1 [ open channel_0.csv w ]
-set fp2 [ open channel_1.csv w ]
-for {set index 1} {$index < 65536} {incr index 2} {
 	set data [lindex $readData $index]
-	set intData [expr 0x$data]
 
-	set sampleI1 [expr {$intData & 0xFFFF}]
-	set sampleQ1 [expr {($intData >> 16) & 0xFFFF}]
-
-	puts $fp1 $sampleI1
-	puts $fp2 $sampleQ1
+	puts $fp $data
 
 }
-close $fp1
-close $fp2
+close $fp
 
 puts "Done."
 
