@@ -40,98 +40,74 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
-#include <xil_io.h>
 #include "platform_drivers.h"
 #include "ad6676.h"
 #include "adc_core.h"
-#include "adxcvr_core.h"
+#include "xcvr_core.h"
+#include "jesd_core.h"
+#include "dmac_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET				54 + 32
-#define ADC_DDR_BASEADDR		XPAR_PS7_DDR_0_S_AXI_BASEADDR + 0x800000
-#else
-#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
-#define GPIO_DEVICE_ID			XPAR_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET				32
-#define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
-#endif
-#define AD6676_CORE_BASEADDR	XPAR_AXI_AD6676_CORE_BASEADDR
-#define AD6676_DMA_BASEADDR		XPAR_AXI_AD6676_DMA_BASEADDR
-#define AD6676_JESD_BASEADDR	XPAR_AXI_AD6676_JESD_BASEADDR
-#define AD6676_ADXCVR_BASEADDR  XPAR_AXI_AD6676_XCVR_BASEADDR
-#define GPIO_ADC_OEN			GPIO_OFFSET + 9
-#define GPIO_ADC_SELA			GPIO_OFFSET + 8
-#define GPIO_ADC_SELB			GPIO_OFFSET + 7
-#define GPIO_ADC_S0				GPIO_OFFSET + 6
-#define GPIO_ADC_S1				GPIO_OFFSET + 5
-#define GPIO_ADC_RESETB			GPIO_OFFSET + 4
-#define GPIO_ADC_AGC1			GPIO_OFFSET + 3
-#define GPIO_ADC_AGC2			GPIO_OFFSET + 2
-#define GPIO_ADC_AGC3			GPIO_OFFSET + 1
-#define GPIO_ADC_AGC4			GPIO_OFFSET + 0
 
-#define GPIO_JESD204_SYSREF             GPIO_OFFSET + 16
+#define GPIO_ADC_OEN			41
+#define GPIO_ADC_SELA			40
+#define GPIO_ADC_SELB			39
+#define GPIO_ADC_S0			38
+#define GPIO_ADC_S1			37
+#define GPIO_ADC_RESETB		36
+#define GPIO_ADC_AGC1			35
+#define GPIO_ADC_AGC2			34
+#define GPIO_ADC_AGC3			33
+#define GPIO_ADC_AGC4			32
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-ad6676_init_param default_init_param = {
-	/* GPIO */
-#ifdef _XPARAMETERS_PS_H_
-	PS7_GPIO,		// gpio_type;
-#else
-	AXI_GPIO,		// gpio_type
-#endif
-	GPIO_DEVICE_ID,	// gpio_device_id
-	GPIO_ADC_OEN,	// gpio_adc_oen
-	GPIO_ADC_SELA,	// gpio_adc_sela
-	GPIO_ADC_SELB,	// gpio_adc_selb
-	GPIO_ADC_S0,	// gpio_adc_s0
-	GPIO_ADC_S1,	// gpio_adc_s1
-	GPIO_ADC_RESETB,	// gpio_adc_resetb
-	GPIO_ADC_AGC1,	// gpio_adc_agc1
-	GPIO_ADC_AGC2,	// gpio_adc_agc2
-	GPIO_ADC_AGC3,	// gpio_adc_agc3
-	GPIO_ADC_AGC4,	// gpio_adc_agc4
-	/* SPI */
-	0, 				// spi_chip_select
-	SPI_MODE_0,		// spi_mode
-#ifdef _XPARAMETERS_PS_H_
-	PS7_SPI,		// spi_type
-#else
-	AXI_SPI,		// spi_type
-#endif
-	SPI_DEVICE_ID,	// spi_device_id
-	/* Device Settings */
-	200000000UL,	// reference_clk_rate
-	0,				// spi_3_wire
-	3200000000UL,	// adc_frequency_hz
-	250000000UL,	// intermediate_frequency_hz
-	MIN_FIF,		// intermediate_frequency_min_hz
-	MAX_FIF,		// intermediate_frequency_max_hz
-	75000000UL,		// bandwidth_hz
-	5,				// bandwidth_margin_low_mhz
-	5,				// bandwidth_margin_high_mhz
-	0,				// bandwidth_margin_if_mhz
-	16,				// decimation
-	19,				// external_inductance_l_nh
-	64,				// idac1_fullscale_adjust
-	0,				// use_external_clk_enable
-	1,				// adc_frequency_fixed_enable
-	1,				// jesd_scrambling_enable
-	1,				// jesd_use_lvds_syncb_enable
-	0,				// jesd_powerdown_sysref_enable
-	2,				// jesd_l_lanes
-	16,				// jesd_f_frames_per_multiframe
-	1,				// shuffler_control
-	5,				// shuffler_thresh
-};
+#define GPIO_JESD204_SYSREF		48
+
+/***************************************************************************//**
+* @brief ad6676_gpio_config
+*******************************************************************************/
+
+int32_t ad6676_gpio_config(ad6676_init_param init_param)
+{
+
+	ad_gpio_set(GPIO_ADC_OEN, 0);
+
+	switch (init_param.decimation) {
+	case 12:
+		ad_gpio_set(GPIO_ADC_S0, 1);
+		ad_gpio_set(GPIO_ADC_S1, 1);
+		break;
+	case 16:
+		ad_gpio_set(GPIO_ADC_S0, 0);
+		ad_gpio_set(GPIO_ADC_S1, 1);
+		break;
+	case 24:
+		ad_gpio_set(GPIO_ADC_S0, 0);
+		ad_gpio_set(GPIO_ADC_S1, 1);
+		break;
+	case 32:
+		ad_gpio_set(GPIO_ADC_S0, 0);
+		ad_gpio_set(GPIO_ADC_S1, 0);
+		break;
+	default:
+		return -1;
+	}
+
+	if (init_param.use_extclk) {
+		ad_gpio_set(GPIO_ADC_SELA, 1);
+		ad_gpio_set(GPIO_ADC_SELB, 0);
+	} else {
+		ad_gpio_set(GPIO_ADC_SELA, 0);
+		ad_gpio_set(GPIO_ADC_SELB, 1);
+	}
+
+	ad_gpio_set(GPIO_ADC_RESETB, 1);
+	ad_gpio_set(GPIO_ADC_AGC1, 0);
+	ad_gpio_set(GPIO_ADC_AGC2, 0);
+
+	return 0;
+}
 
 /***************************************************************************//**
 * @brief main
@@ -139,55 +115,126 @@ ad6676_init_param default_init_param = {
 int main(void)
 {
 	adc_core		ad6676_core;
-	ad6676_dev		*ad6676_device;
-	jesd204_core	ad6676_jesd204;
-	adxcvr_core		ad6676_xcvr;
+	ad6676_init_param 	ad6676_param;
+	jesd_core		ad6676_jesd;
+	xcvr_core		ad6676_xcvr;
+	spi_device		ad6676_spi_device;
+	dmac_core		ad6676_dma;
+	dmac_xfer		rx_xfer;
 
-	ad6676_jesd204.base_addr = AD6676_JESD_BASEADDR;
-	ad6676_jesd204.rx_tx_n = 1;
-	ad6676_jesd204.octets_per_frame = 1;
-	ad6676_jesd204.frames_per_multiframe = 32;
-	ad6676_jesd204.subclass_mode = 1;
-	ad6676_jesd204.sysref_type = INTERN;
-	ad6676_jesd204.gpio_device.device_id = default_init_param.gpio_device_id;
-	ad6676_jesd204.gpio_device.type = default_init_param.gpio_type;
-	ad6676_jesd204.gpio_sysref = GPIO_JESD204_SYSREF;
+	// base addresses
 
-	ad6676_xcvr.base_addr = AD6676_ADXCVR_BASEADDR;
-	ad6676_xcvr.tx_enable = 0;
-	ad6676_xcvr.gth_enable = 0;
+	ad_spi_init(&ad6676_spi_device);
+	ad6676_spi_device.chip_select = 0x0;
+
+	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
+	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
+	ad6676_param.f_if_hz = 250000000UL; // intermediate frequency Hz
+	ad6676_param.bw_hz = 75000000UL; // bandwidth Hz;
+	ad6676_param.bw_margin_low_mhz = 5;
+	ad6676_param.bw_margin_high_mhz = 5;
+	ad6676_param.bw_margin_if_mhz = 0;
+	ad6676_param.decimation = 16;
+	ad6676_param.ext_l = 19; // external inductance l_nh
+	ad6676_param.attenuation = 5;
+	ad6676_param.scale = 64;
+	ad6676_param.use_extclk = 0;
+	ad6676_param.spi3wire = 0;
+	// shuffle
+	ad6676_param.shuffle_ctrl = 1;
+	ad6676_param.shuffle_thresh = 5;
+	// dev jesd
+	ad6676_param.scrambling_en = 1; // jesd scrambling enable
+	ad6676_param.lvds_syncb = 1; // jesd use lvds syncb enable
+	ad6676_param.sysref_pd = 0; // jesd powerdown sysref enable
+	ad6676_param.n_lanes = 2;
+	ad6676_param.frames_per_multiframe = 16;
+
+	// jesd_core settings
+
+	ad6676_jesd.rx_tx_n = 1;
+	ad6676_jesd.scramble_enable = 1;
+	ad6676_jesd.octets_per_frame = 1;
+	ad6676_jesd.frames_per_multiframe = 16;
+	ad6676_jesd.subclass_mode = 1;
+	ad6676_jesd.sysref_type = INTERN;
+	ad6676_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
+
+	// xcvr settings
+
+	ad6676_xcvr.mmcm_present = 0;
 	ad6676_xcvr.lpm_enable = 0;
 	ad6676_xcvr.out_clk_sel = 4;
 	ad6676_xcvr.sys_clk_sel = 0;
-	ad6676_xcvr.init_set_rate_enable = 0;
-	ad6676_xcvr.lane_rate_khz = 4000000;
-	ad6676_xcvr.ref_rate_khz = 200000;
+	ad6676_xcvr.reconfig_bypass = 1;
+	ad6676_xcvr.lane_rate_kbps = 4000000;
+	ad6676_xcvr.ref_clock_khz = 200000;
 
-	// set up the device
-	ad6676_setup(&ad6676_device, default_init_param);
+	// adc settings
 
-	ad6676_core.adc_baseaddr = AD6676_CORE_BASEADDR;
-	ad6676_core.dmac_baseaddr = AD6676_DMA_BASEADDR;
 	ad6676_core.no_of_channels = 2;
 	ad6676_core.resolution = 16;
 
-	// set up the JESD link and bring up the core
-	jesd204_init(ad6676_jesd204);
-	adxcvr_init(ad6676_xcvr);
-	jesd204_gen_sysref(ad6676_jesd204);
+        // receiver DMA configuration
+
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+	ad6676_dma.type = DMAC_RX;
+	ad6676_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.size = 32768;
+#ifdef XILINX
+	ad6676_xcvr.base_address = XPAR_AXI_AD6676_XCVR_BASEADDR;
+	ad6676_jesd.base_address = XPAR_AXI_AD6676_JESD_BASEADDR;
+	ad6676_dma.base_address = XPAR_AXI_AD6676_DMA_BASEADDR;
+	ad6676_core.base_address = XPAR_AXI_AD6676_CORE_BASEADDR;
+#endif
+	xcvr_getconfig(&ad6676_xcvr);
+
+	ad_platform_init();
+
+	// set up clock
+	ad6676_gpio_config(ad6676_param);
+
+	// set up the device
+	ad6676_setup(&ad6676_spi_device, &ad6676_param);
+
+	// set up the JESD core
+	jesd_setup(ad6676_jesd);
+
+	// set up the XCVRs
+	xcvr_setup(ad6676_xcvr);
+
+	// generate SYSREF
+	jesd_sysref_control(ad6676_jesd, 1);
+
+	// JESD core status
+	jesd_status(ad6676_jesd);
+
+	// interface core setup
 	adc_setup(ad6676_core);
 
-	// check JESD link status
-	jesd204_read_status(ad6676_jesd204);
+	// PRBS test
+	ad6676_test(&ad6676_spi_device, TESTGENMODE_PN9_SEQ);
+	adc_pn_mon(ad6676_core, ADC_PN9);
+	ad6676_test(&ad6676_spi_device, TESTGENMODE_PN23_SEQ);
+	adc_pn_mon(ad6676_core, ADC_PN23A);
 
-	/* Enable Ramp Test Mode */
-	ad6676_spi_write(ad6676_device, AD6676_TEST_GEN, TESTGENMODE_RAMP);
+	// set up ramp output
+	ad6676_test(&ad6676_spi_device, TESTGENMODE_RAMP);
+	// test the captured data
+	if(!dmac_start_transaction(ad6676_dma)) {
+		adc_ramp_test(ad6676_core, 1, 32768, rx_xfer.start_address);
+	};
 
-	xil_printf("Start capturing data...\n\r");
+	// capture data with DMA
+	ad6676_test(&ad6676_spi_device, TESTGENMODE_OFF);
+	if(!dmac_start_transaction(ad6676_dma)) {
+		ad_printf("RX capture done!\n");
+	};
 
-	adc_capture(ad6676_core, 16384 * 2, ADC_DDR_BASEADDR);
-
-	xil_printf("Done.\n\r");
+	ad_platform_close();
 
 	return 0;
 }
