@@ -112,7 +112,7 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	printf("Hello\n");
+	printf("AD7616 Reference Design.\n");
 
 	core.adc_baseaddr = AD7616_CORE_BASEADDR;
 	core.dmac_baseaddr = AD7616_DMA_BASEADDR;
@@ -122,17 +122,12 @@ int main(void)
 
 	ad7616_setup(&dev, &core, default_init_param);
 
-	for (reg_addr = 2; reg_addr <= 0x07; reg_addr++) {
-		ad7616_read(dev, reg_addr, &reg_data);
-		printf("0x%x = 0x%x\n", reg_addr, reg_data);
-	}
-
 	if (dev->interface == AD7616_PARALLEL)
 		ad7616_capture_parallel(core, 16384, ADC_DDR_BASEADDR);
 	else
 		ad7616_capture_serial(core, 16384, ADC_DDR_BASEADDR);
 
-	printf("Bye\n");
+	printf("Capture done. Please run the capture.bat script.\n");
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
