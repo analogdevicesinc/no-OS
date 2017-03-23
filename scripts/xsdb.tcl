@@ -13,7 +13,7 @@ if {$m_type == "ZYNQ_PS7"} {
 }
 
 if {$m_type == "MICROBLAZE"} {
-  targets -set -filter {name =~ "xc*"}
+  targets -set -filter {name =~ "xc7*" || name =~ "xck*" }
 }
 
 fpga -file hw/system_top.bit
