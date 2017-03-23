@@ -45,18 +45,50 @@
 #include <stdint.h>
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define AD9250_REG_CHIP_PORT_CONF				0x00
+#define AD9250_REG_CHIP_ID					0x01
+#define AD9250_REG_POWER_MODE					0x08
+#define AD9250_REG_PLL_STATUS					0x0A
+#define AD9250_REG_TEST_CNTRL					0x0D
+#define AD9250_REG_OUTPUT_MODE					0x14
+#define AD9250_REG_OUTPUT_ADJUST				0x15
+#define AD9250_REG_SYSREF_CONTROL				0x3A
+#define AD9250_REG_JESD204B_QUICK_CONFIG			0x5E
+#define AD9250_REG_JESD204B_LINK_CNTRL_1			0x5F
+#define AD9250_REG_204B_LID_CONFIG_0				0x66
+#define AD9250_REG_204B_LID_CONFIG_1				0x67
+#define AD9250_REG_204B_PARAM_SCRAMBLE_LANES			0x6E
+#define AD9250_REG_204B_PARAM_K					0x70
+#define AD9250_REG_JESD204B_CONFIGURATION			0x72
+#define AD9250_REG_JESD204B_LANE_POWER_MODE			0x80
+#define AD9250_REG_TRANSFER					0xFF
+
+#define AD9250_CHIP_ID						0xB9
+
+#define AD9250_TEST_OFF						0x00
+#define AD9250_TEST_MID_SCALE					0x01
+#define AD9250_TEST_POS_FSCALE					0x02
+#define AD9250_TEST_NEG_FSCALE					0x03
+#define AD9250_TEST_CHECKBOARD					0x04
+#define AD9250_TEST_PNLONG					0x05
+#define AD9250_TEST_ONE2ZERO					0x07
+#define AD9250_TEST_PATTERN					0x08
+#define AD9250_TEST_RAMP					0x0F
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
-	spi_device	spi_dev;
-	uint8_t		id_no;
-} ad9250_dev;
 
 typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
+       spi_device      spi_dev;
+       uint8_t         id_no;
+} ad9250_dev;
+
+
+typedef struct {
+	uint32_t	lane_rate_kbps;
 	uint8_t		id_no;
 } ad9250_init_param;
 
@@ -64,12 +96,13 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9250_spi_read(ad9250_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data);
+			uint16_t reg_addr,
+			uint8_t *reg_data);
 int32_t ad9250_spi_write(ad9250_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data);
-int32_t ad9250_setup(ad9250_dev **device,
-					 ad9250_init_param init_param);
+			uint16_t reg_addr,
+			uint8_t reg_data);
+int32_t ad9250_setup(ad9250_dev *dev);
+int32_t ad9250_test(ad9250_dev *dev, 
+			uint32_t test_mode);
 
 #endif

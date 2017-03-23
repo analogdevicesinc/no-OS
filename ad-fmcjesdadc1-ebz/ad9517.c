@@ -54,7 +54,7 @@ uint8_t ad9517_slave_select;
 /***************************************************************************//**
 * @brief ad9517_spi_read
 *******************************************************************************/
-int32_t ad9517_spi_read(ad9517_dev *dev,
+int32_t ad9517_spi_read(spi_device *dev,
 						uint16_t reg_addr,
 						uint8_t *reg_data)
 {
@@ -66,7 +66,7 @@ int32_t ad9517_spi_read(ad9517_dev *dev,
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 4);
+	ret = ad_spi_xfer(dev, buf, 4);
 	*reg_data = buf[3];
 
 	return ret;
@@ -75,9 +75,9 @@ int32_t ad9517_spi_read(ad9517_dev *dev,
 /***************************************************************************//**
 * @brief ad9517_spi_write
 *******************************************************************************/
-int32_t ad9517_spi_write(ad9517_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+int32_t ad9517_spi_write(spi_device *dev,
+						uint16_t reg_addr,
+						uint8_t reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -87,7 +87,7 @@ int32_t ad9517_spi_write(ad9517_dev *dev,
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 4);
+	ret = ad_spi_xfer(dev, buf, 4);
 
 	return ret;
 }
@@ -95,23 +95,10 @@ int32_t ad9517_spi_write(ad9517_dev *dev,
 /***************************************************************************//**
 * @brief ad9517_setup
 *******************************************************************************/
-int32_t ad9517_setup(ad9517_dev **device,
-					 ad9517_init_param init_param)
+int32_t ad9517_setup(spi_device *dev)
 {
-	ad9517_dev *dev;
 	uint8_t stat;
 	int32_t ret;
-
-	dev = (ad9517_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
-
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
 
 	ad9517_spi_write(dev, 0x0010, 0x7c);
 	ad9517_spi_write(dev, 0x0014, 0x05);
@@ -145,8 +132,6 @@ int32_t ad9517_setup(ad9517_dev **device,
 
 	ad9517_spi_read(dev, 0x001f, &stat);
 	printf("AD9517 PLL %s.\n", stat & 0x01 ? "ok" : "errors");
-
-	*device = dev;
 
 	return ret;
 }

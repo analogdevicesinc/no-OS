@@ -45,23 +45,8 @@
 #include <stdint.h>
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-typedef struct {
-	spi_device	spi_dev;
-} ad9517_dev;
-
-typedef struct {
-	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
-	uint32_t	spi_device_id;
-} ad9517_init_param;
-
-/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9517_setup(ad9517_dev **device,
-					 ad9517_init_param init_param);
+int32_t ad9517_setup(spi_device *dev);
 
 #endif

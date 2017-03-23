@@ -50,8 +50,8 @@
 * @brief ad9250_spi_read
 *******************************************************************************/
 int32_t ad9250_spi_read(ad9250_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data)
+							uint16_t reg_addr,
+							uint8_t *reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -61,7 +61,7 @@ int32_t ad9250_spi_read(ad9250_dev *dev,
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = 0x00;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 4);
+	ret = ad_spi_xfer(&dev->spi_dev, buf, 4);
 	*reg_data = buf[3];
 
 	return ret;
@@ -71,8 +71,8 @@ int32_t ad9250_spi_read(ad9250_dev *dev,
 * @brief ad9250_spi_write
 *******************************************************************************/
 int32_t ad9250_spi_write(ad9250_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+							uint16_t reg_addr,
+							uint8_t reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -82,7 +82,7 @@ int32_t ad9250_spi_write(ad9250_dev *dev,
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = reg_data;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 4);
+	ret = ad_spi_xfer(&dev->spi_dev, buf, 4);
 
 	return ret;
 }
@@ -90,48 +90,44 @@ int32_t ad9250_spi_write(ad9250_dev *dev,
 /***************************************************************************//**
 * @brief ad9250_setup
 *******************************************************************************/
-int32_t ad9250_setup(ad9250_dev **device,
-					 ad9250_init_param init_param)
+int32_t ad9250_setup(ad9250_dev *dev)
 {
-	ad9250_dev *dev;
 	uint8_t chip_id;
 	uint8_t stat;
 	int32_t ret;
 
-	dev = (ad9250_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
-	}
 
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
-	ret = spi_init(&dev->spi_dev);
-
-	dev->id_no = init_param.id_no;
-
-	ad9250_spi_read(dev, 0x01, &chip_id);
+	ad9250_spi_read(dev, AD9250_REG_CHIP_ID, &chip_id);
 	printf("AD9250 CHIP ID %s (0x%x).\n",
-			(chip_id == 0xB9) ? "ok" : "errors", chip_id);
+			(chip_id == AD9250_CHIP_ID) ? "ok" : "errors", chip_id);
 
-	ad9250_spi_write(dev, 0x5f, (0x16 | 0x1));
-	ad9250_spi_write(dev, 0x5e, 0x22);
-	ad9250_spi_write(dev, 0x66, ((dev->id_no*2)+0));
-	ad9250_spi_write(dev, 0x67, ((dev->id_no*2)+1));
-	ad9250_spi_write(dev, 0x6e, 0x81);
-	ad9250_spi_write(dev, 0x70, 0x1f);
-	ad9250_spi_write(dev, 0x3a, 0x13);
-	ad9250_spi_write(dev, 0x5f, (0x16 | 0x0));
-	ad9250_spi_write(dev, 0x14, 0x00);
-	ad9250_spi_write(dev, 0x0d, 0x00);
-	ad9250_spi_write(dev, 0xff, 0x01);
+	ad9250_spi_write(dev, AD9250_REG_JESD204B_LINK_CNTRL_1, (0x16 | 0x1));
+	ad9250_spi_write(dev, AD9250_REG_JESD204B_QUICK_CONFIG, 0x22);
+	ad9250_spi_write(dev, AD9250_REG_204B_LID_CONFIG_0, ((dev->id_no*2)+0));
+	ad9250_spi_write(dev, AD9250_REG_204B_LID_CONFIG_1, ((dev->id_no*2)+1));
+	ad9250_spi_write(dev, AD9250_REG_204B_PARAM_SCRAMBLE_LANES, 0x81);
+	ad9250_spi_write(dev, AD9250_REG_204B_PARAM_K, 0x1f);
+	ad9250_spi_write(dev, AD9250_REG_SYSREF_CONTROL, 0x13);
+	ad9250_spi_write(dev, AD9250_REG_JESD204B_LINK_CNTRL_1, (0x16 | 0x0));
+	ad9250_spi_write(dev, AD9250_REG_OUTPUT_MODE, 0x00);
+	ad9250_spi_write(dev, AD9250_REG_TEST_CNTRL, AD9250_TEST_OFF);
+	ad9250_spi_write(dev, AD9250_REG_TRANSFER, 0x01);
 	mdelay(10);
-	ad9250_spi_read(dev, 0x0a, &stat);
+	ad9250_spi_read(dev, AD9250_REG_PLL_STATUS, &stat);
 	printf("AD9250 PLL/link %s (0x%x).\n",
 			(stat == 0x81) ? "ok" : "errors", stat);
 
-	*device = dev;
-
 	return ret;
+}
+
+/*******************************************************************************
+ * @brief ad9250_test
+ *******************************************************************************/
+int32_t ad9250_test(ad9250_dev *dev,
+						uint32_t test_mode)
+{
+        ad9250_spi_write(dev, AD9250_REG_TEST_CNTRL, test_mode);
+        ad9250_spi_write(dev, AD9250_REG_TRANSFER, 0x01);
+
+	return 0;
 }
