@@ -69,12 +69,6 @@ unsigned char SPI_Init(unsigned char lsbFirst,
                        unsigned char clockPol,
                        unsigned char clockEdg);
 
-/*! Initializes the SPI communication peripheral. */
-unsigned char SPI_Init(unsigned char lsbFirst,
-                       unsigned long clockFreq,
-                       unsigned char clockPol,
-                       unsigned char clockEdg);
-
 /*! Reads data from SPI. */
 unsigned char SPI_Read(unsigned char slaveDeviceId,
                        unsigned char* data,
