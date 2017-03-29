@@ -1,6 +1,5 @@
 Run generated ELFs using a more normal OS-style exec startup/teardown
-procedure. Apply this to the generated BSP code before building your
-stand-alone app.
+procedure.
 
 This allows running generated executables to properly support running in
 U-Boot. Without this, executables will run but never return execution control

@@ -788,35 +788,6 @@ int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL], int_ext);
 }
 
-
-/**
- * Power Down RX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd The power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd)
-{
-	return ad9361_synth_lo_powerdown(phy, (enum synth_pd_ctrl) pd, LO_DONTCARE);
-}
-
-/**
- * Get RX LO/Synthesizers power down state.
- * @param phy The AD9361 state structure.
- * @param pd A variable to store the pd state.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_get_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd)
-{
-	*pd = !!(phy->cached_synth_pd[1] & RX_LO_POWER_DOWN);
-
-	return 0;
-}
-
 /**
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
@@ -1449,34 +1420,6 @@ int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 }
 
 /**
- * Power Down TX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd The power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd)
-{
-	return ad9361_synth_lo_powerdown(phy, LO_DONTCARE, (enum synth_pd_ctrl) pd);
-}
-
-/**
- * Get TX LO/Synthesizers power down state.
- * @param phy The AD9361 state structure.
- * @param pd A variable to store the pd state.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_get_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd)
-{
-	*pd = !!(phy->cached_synth_pd[0] & TX_LO_POWER_DOWN);
-
-	return 0;
-}
-
-/**
  * Set the TX FIR filter configuration.
  * @param phy The AD9361 current state structure.
  * @param fir_cfg FIR filter configuration.
@@ -1906,26 +1849,6 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 	ad9361_set_en_state_machine_mode(phy_slave, ensm_mode);
 
 	return 0;
-}
-
-/**
- * Power Down RX/TX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd_rx The RX LO power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @param pd_tx The TX LO power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_trx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd_rx,  uint8_t pd_tx)
-{
-	return ad9361_synth_lo_powerdown(phy, (enum synth_pd_ctrl) pd_rx,
-					 (enum synth_pd_ctrl) pd_tx);
 }
 
 /**

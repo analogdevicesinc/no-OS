@@ -1,5 +1,5 @@
 /*
- * Perform a loopback test for the pzsdr1 on the breakout board using the test fixture.
+ * Perform a loopback test on the pzsdr breakout board using the test fixture.
  */
 
 #include "sleep.h"
@@ -14,6 +14,8 @@
 
 void gpio_write(u32 value) {
 	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x101 * 0x4)), value);
+	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x111 * 0x4)), value);
+	Xil_Out32((XPAR_AXI_GPREG_BASEADDR + (0x121 * 0x4)), value);
 }
 
 int gpio_read(u32 pin, u32 expected) {
@@ -25,6 +27,23 @@ int gpio_read(u32 pin, u32 expected) {
 		xil_printf("Loopback error on pin %d: "
 			"wrote 0x%08x, read 0x%08x\r\n", pin, expected, rdata);
 		ret = XST_FAILURE;
+	}
+
+	rdata = Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x112 * 0x4));
+	if (rdata != expected) {
+		xil_printf("Loopback error on pin %d: "
+			"wrote 0x%08x, read 0x%08x\r\n", (pin + 32), expected, rdata);
+		ret = XST_FAILURE;
+	}
+
+	if (pin < 24) {
+		rdata = Xil_In32(XPAR_AXI_GPREG_BASEADDR + (0x122 * 0x4));
+		if ((rdata & 0xffffff) != ((expected & 0xffffff) | 0x2)) {
+			xil_printf("Loopback error on pin %d: "
+				"wrote 0x%08x, read 0x%08x\r\n", (pin + 64),
+				expected, rdata);
+			ret = XST_FAILURE;
+		}
 	}
 
 	return ret;
@@ -48,7 +67,7 @@ int main()
 	Xil_ICacheDisable();
 
 	/* walking 1 */
-	for(n = 0; n < 28; n++) {
+	for(n = 0; n < 32; n++) {
 		wdata = 1 << n;
 		gpio_write(wdata);
 		gpio_wait();
@@ -57,7 +76,7 @@ int main()
 	}
 
 	/* walking 0 */
-	for(n = 0; n < 28; n++) {
+	for(n = 0; n < 32; n++) {
 		wdata = 1 << n;
 		wdata = ~wdata;
 		gpio_write(wdata);

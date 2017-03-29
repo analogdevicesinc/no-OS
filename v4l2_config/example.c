@@ -70,7 +70,6 @@ int main(void)
 	printf("Poll for \"SRC_CH_RESOLUTION\" event...\n");
 	while (1) {
 		if (!v4l2_cfg_dequeue_event(adv7611_subdev_fd, &event)) {
-			printf("V4L2_EVENT_SOURCE_CHANGE event detected\n");
 			/* Get the detected timings from ADV7611 */
 			while (v4l2_cfg_query_dv_timings(adv7611_subdev_fd, &dv_timings) != 0);
 

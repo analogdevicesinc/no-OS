@@ -417,10 +417,6 @@ int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save RX fastlock profile. */
 int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
-/* Set power down TX LO/Synthesizers */
-int32_t ad9361_set_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd);
-/* Get power down TX LO/Synthesizers */
-int32_t ad9361_get_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -465,16 +461,10 @@ int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save TX fastlock profile. */
 int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
-/* Set power down TX LO/Synthesizers */
-int32_t ad9361_set_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd);
-/* Get power down TX LO/Synthesizers */
-int32_t ad9361_get_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */
 int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
-/* Power Down RX/TX LO/Synthesizers */
-int32_t ad9361_set_trx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd_rx, uint8_t pd_tx);
 /* Set the number of channels mode. */
 int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode);
 /* Do multi chip synchronization. */
