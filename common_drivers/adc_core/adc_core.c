@@ -85,7 +85,9 @@ int32_t adc_setup(adc_core core)
 	adc_write(core, ADC_REG_RSTN, ADC_MMCM_RSTN | ADC_RSTN);
 
 	for(index = 0; index < core.no_of_channels; index++) {
-		adc_write(core, ADC_REG_CHAN_CNTRL(index), 0x51);
+		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_FORMAT_SIGNEXT |
+							   ADC_FORMAT_ENABLE |
+							   ADC_ENABLE);
 	}
 
 	mdelay(100);
@@ -135,7 +137,9 @@ int32_t adc_pn_mon(adc_core core,
 	int32_t pn_errors = 0;
 
 	for (index = 0; index < core.no_of_channels; index++) {
-		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_ENABLE);
+ 		adc_read(core, ADC_REG_CHAN_CNTRL(index), &reg_data);
+ 		reg_data |= ADC_ENABLE;
+ 		adc_write(core, ADC_REG_CHAN_CNTRL(index), reg_data);
 		adc_set_pnsel(core, index, sel);
 	}
 	mdelay(1);
