@@ -67,6 +67,8 @@
 #define GPIO_CLKD_STATUS_1	33
 #define GPIO_CLKD_STATUS_0	32
 
+#define DMA_BUFFER		 1
+
 enum ad9523_channels {
 	DAC_DEVICE_CLK,
 	DAC_DEVICE_SYSREF,
@@ -227,12 +229,14 @@ int main(void)
 	dac_core		ad9144_core;
 	dac_channel		ad9144_channels[2];
 	jesd_core		ad9144_jesd;
+	dmac_core		ad9144_dma;
 	xcvr_core		ad9144_xcvr;
 	adc_core		ad9680_core;
 	jesd_core		ad9680_jesd;
 	xcvr_core		ad9680_xcvr;
 	dmac_core               ad9680_dma;
 	dmac_xfer               rx_xfer;
+	dmac_xfer               tx_xfer;
 
 	//********************************************************************************
 	// setup the base addresses
@@ -242,6 +246,7 @@ int main(void)
 	ad9144_xcvr.base_address = XPAR_AXI_AD9144_XCVR_BASEADDR;
 	ad9144_core.base_address = XPAR_AXI_AD9144_CORE_BASEADDR;
 	ad9144_jesd.base_address = XPAR_AXI_AD9144_JESD_BASEADDR;
+	ad9144_dma.base_address = XPAR_AXI_AD9144_DMA_BASEADDR;
 	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
@@ -250,10 +255,12 @@ int main(void)
 
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+	tx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x900000;
 #endif
 
 #ifdef MICROBLAZE
 	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+	tx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
 #endif
 
 #ifdef ALTERA
@@ -267,7 +274,9 @@ int main(void)
 	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9144_xcvr.tx_lane_pll_base_address = AVL_AD9144_XCVR_LANE_PLL_RECONFIG_BASE;
 	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
+	ad9144_dma.base_address = AXI_AD9144_DMA_BASE;
 	rx_xfer.start_address =  0x800000;
+	tx_xfer.start_address =  0x900000;
 #endif
 
 	//********************************************************************************
@@ -402,6 +411,14 @@ int main(void)
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 32768;
 
+	ad9144_dma.type = DMAC_TX;
+	ad9144_dma.transfer = &tx_xfer;
+	ad9144_dma.flags = DMAC_FLAGS_TLAST;
+	tx_xfer.id = 0;
+	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
+
+	ad_printf("DBG: Number of samples: %d\n", tx_xfer.no_of_samples);
+
 	// change the default JESD configurations, if required
 #ifdef ZYNQ_PS7
 	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, &ad9523_param);
@@ -488,17 +505,26 @@ int main(void)
 
 	// default data
 
+#if DMA_BUFFER
+	ad9144_channels[0].sel = DAC_SRC_DMA;
+	ad9144_channels[1].sel = DAC_SRC_DMA;
+	dac_data_setup(ad9144_core);
+
+	if(!dmac_start_transaction(ad9144_dma)){
+		ad_printf("daq2: transmit data from memory\n");
+	};
+#else
 	ad9144_channels[0].sel = DAC_SRC_DDS;
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 	dac_data_setup(ad9144_core);
-	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
 
 	ad_printf("daq2: setup and configuration is done\n");
-
+#endif
 	//********************************************************************************
 	// external loopback - capture data with DMA
 	//********************************************************************************
 
+	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
 	if(!dmac_start_transaction(ad9680_dma)){
 		ad_printf("daq2: RX capture done.\n");
 	};
