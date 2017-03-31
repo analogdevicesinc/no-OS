@@ -417,8 +417,6 @@ int main(void)
 	tx_xfer.id = 0;
 	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
 
-	ad_printf("DBG: Number of samples: %d\n", tx_xfer.no_of_samples);
-
 	// change the default JESD configurations, if required
 #ifdef ZYNQ_PS7
 	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, &ad9523_param);
