@@ -75,23 +75,19 @@ int32_t jesd_setup(jesd_core core)
 #ifdef ALTERA
 	return(0);
 #endif
-
-	jesd_write(core, JESD204_REG_TRX_RESET,
-			JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
-	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT,
-			JESD204_TRX_ILA_EN);
-	jesd_write(core, JESD204_REG_TRX_SCRAMBLING,
-			core.scramble_enable);
-	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING,
-			0);
+#ifdef XILINX
+	jesd_write(core, JESD204_REG_TRX_RESET, JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
+	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT, JESD204_TRX_ILA_EN);
+	jesd_write(core, JESD204_REG_TRX_SCRAMBLING, core.scramble_enable);
+	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING, 0);
 	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
-			JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
+		JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
 	jesd_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
 			JESD204_TRX_FRAMES_PER_MULTIFRAME(core.frames_per_multiframe));
 	jesd_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
 			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
-
-    return 0;
+    return(0);
+#endif
 }
 
 /***************************************************************************//**
@@ -114,13 +110,35 @@ int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 int32_t jesd_status(jesd_core core)
 {
 	uint32_t status;
-	uint32_t timeout;
-	uint8_t link;
+	int32_t timeout;
 	int32_t ret;
+#ifdef XILINX
+	uint8_t link;
+#endif
 
 #ifdef ALTERA
-	return(0);
+	timeout = 100;
+	ret = -1;
+	while (timeout > 0) {
+		jesd_read(core, JESD204_REG_STATUS, &status);
+		if ((core.rx_tx_n == 0) && ((status & 0x7) == 0x5)) {
+			ret = 0;
+			break;
+		}
+		if ((core.rx_tx_n == 1) && ((status & 0x1) == 0x1)) {
+			ret = 0;
+			break;
+		}
+		timeout = timeout - 1;
+		mdelay(1);
+	}
+
+	if (ret == 0) return(0);
+
+	ad_printf("jesd_status: SYNC errors (%02x)!\n", status);
+	return(-1);
 #endif
+#ifdef XILINX
 	timeout = 100;
 	do {
 		mdelay(1);
@@ -193,5 +211,6 @@ int32_t jesd_status(jesd_core core)
 		ret = -1;
 	}
 
-	return ret;
+	return(ret);
+#endif
 }

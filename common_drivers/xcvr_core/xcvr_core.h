@@ -108,7 +108,7 @@ typedef struct {
 #define XCVR_REG_PARAMS				0x0024
 #define XCVR_QPLL_ENABLE_MASK			0x01
 #define XCVR_GT_TYPE_MASK			0x0f
-#define XCVR_TX_OR_RXN_MASK			0x01
+#define XCVR_TX_OR_RXN_MASK			0x100
 #define XCVR_NUM_OF_LANES_MASK			0xff
 #define XCVR_QPLL_ENABLE_OFFSET			20
 #define XCVR_GT_TYPE_OFFSET			16
