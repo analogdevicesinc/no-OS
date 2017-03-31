@@ -79,6 +79,9 @@
 #define	DMAC_RX 			0
 #define DMAC_TX 			1
 
+#define DMAC_FLAGS_CYCLIC		(1 << 0)
+#define DMAC_FLAGS_TLAST		(1 << 1)
+
 #define TIMEOUT				10000
 
 typedef struct {
@@ -90,6 +93,7 @@ typedef struct {
 typedef struct {
 	uint32_t	base_address;
 	uint8_t		type;
+	uint8_t		flags;
 	uint32_t	irq_id;
 	dmac_xfer       *transfer;
 } dmac_core;

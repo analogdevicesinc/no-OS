@@ -99,6 +99,9 @@ int32_t dmac_start_transaction(dmac_core dma)
 	} else {    /* DMAC_TX */
 		dmac_write(dma, DMAC_REG_SRC_ADDRESS, dma.transfer->start_address);
 		dmac_write(dma, DMAC_REG_SRC_STRIDE, 0x0);
+		dmac_read(dma, DMAC_REG_FLAGS, &reg_val);
+		reg_val = (reg_val & dma.flags);
+		dmac_write(dma, DMAC_REG_FLAGS, reg_val);
 	}
 	dmac_write(dma, DMAC_REG_X_LENGTH, (2 * dma.transfer->no_of_samples) - 1);
 	dmac_write(dma, DMAC_REG_Y_LENGTH, 0x0);
