@@ -82,8 +82,8 @@ puts $fp1 $file_data
 close $fp1
 }
 
-+sdk importsources -name sw -path $project_destination/
-+sdk projects -build -type all
+sdk importsources -name sw -path $project_destination/
+sdk projects -build -type all
 
 # delete the copy of source files
 file delete -force -- $project_location/$input
