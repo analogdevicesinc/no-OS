@@ -69,7 +69,7 @@ source $source_directory/../build_scripts/xilinx/parse_readme_copy_sources.tcl;
 file copy -force -- $project_location/workspace/sw/src/lscript.ld $project_destination
 
 if { $cpu_name == "sys_mb" } {
-set fp1 [open $project_destination/lscript.ld r+]
+set fp1 [open $project_location/workspace/sw/src/lscript.ld r+]
 set file_data [read $fp1]
 		if { [regsub -all {_HEAP_SIZE : 0x800;} $file_data {_HEAP_SIZE : 0x10000;} file_data] } {
 			puts "successfully  increase the heap size to 0x10000"
@@ -82,7 +82,8 @@ puts $fp1 $file_data
 close $fp1
 }
 
-sdk build_project -type all
++sdk importsources -name sw -path $project_destination/
++sdk projects -build -type all
 
 # delete the copy of source files
 file delete -force -- $project_location/$input
