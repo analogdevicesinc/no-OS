@@ -194,8 +194,8 @@ int32_t adc_ramp_test(adc_core core,
 				exp_data[index+1] = rcv_data[index+1];
 			} else {
 				if(no_of_channels < 2) {
-					exp_data[index] = (exp_data[index] == mask) ? 0 : (exp_data[index] + 2) & mask;
-					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : (exp_data[index+1] + 2) & mask;
+					exp_data[index] = ((exp_data[index]+2) > mask) ? 0 : (exp_data[index] + 2);
+					exp_data[index+1] = ((exp_data[index+1]+2) > mask) ? 1 : (exp_data[index+1] + 2);
 				} else {
 					exp_data[index] = (exp_data[index] == mask) ? 0 : exp_data[index] + 1;
 					exp_data[index+1] = (exp_data[index+1] == mask) ? 0 : exp_data[index+1] + 1;
