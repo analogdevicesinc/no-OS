@@ -51,7 +51,7 @@
 #include "dac_buffer.h"
 #include "xcvr_core.h"
 #include "jesd_core.h"
-
+#include "daq2_test.h"
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -463,7 +463,7 @@ int main(void)
 
 	// interface core set up
 	adc_setup(ad9680_core);
-	dac_setup(ad9144_core);
+	dac_setup(&ad9144_core);
 
 	ad9144_status(&ad9144_spi_device);
 
@@ -473,14 +473,14 @@ int main(void)
 
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
-	dac_data_setup(ad9144_core);
+	dac_data_setup(&ad9144_core);
 	ad9144_short_pattern_test(&ad9144_spi_device, ad9144_param);
 
 	// PN7 data path test
 
 	ad9144_channels[0].sel = DAC_SRC_PN23;
 	ad9144_channels[1].sel = DAC_SRC_PN23;
-	dac_data_setup(ad9144_core);
+	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
 	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
 
@@ -488,7 +488,7 @@ int main(void)
 
 	ad9144_channels[0].sel = DAC_SRC_PN31;
 	ad9144_channels[1].sel = DAC_SRC_PN31;
-	dac_data_setup(ad9144_core);
+	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
 	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
 
@@ -506,7 +506,7 @@ int main(void)
 #if DMA_BUFFER
 	ad9144_channels[0].sel = DAC_SRC_DMA;
 	ad9144_channels[1].sel = DAC_SRC_DMA;
-	dac_data_setup(ad9144_core);
+	dac_data_setup(&ad9144_core);
 
 	if(!dmac_start_transaction(ad9144_dma)){
 		ad_printf("daq2: transmit data from memory\n");
@@ -514,7 +514,7 @@ int main(void)
 #else
 	ad9144_channels[0].sel = DAC_SRC_DDS;
 	ad9144_channels[1].sel = DAC_SRC_DDS;
-	dac_data_setup(ad9144_core);
+	dac_data_setup(&ad9144_core);
 
 	ad_printf("daq2: setup and configuration is done\n");
 #endif

@@ -45,11 +45,11 @@
 /***************************************************************************//**
  * @brief dac_read
  *******************************************************************************/
-int32_t dac_read(dac_core core,
+int32_t dac_read(dac_core *core,
 		uint32_t reg_addr,
 		uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.base_address + 0x4000 + reg_addr));
+	*reg_data = ad_reg_read((core->base_address + 0x4000 + reg_addr));
 
 	return 0;
 }
@@ -57,11 +57,11 @@ int32_t dac_read(dac_core core,
 /***************************************************************************//**
  * @brief dac_write
  *******************************************************************************/
-int32_t dac_write(dac_core core,
+int32_t dac_write(dac_core *core,
 		uint32_t reg_addr,
 		uint32_t reg_data)
 {
-	ad_reg_write((core.base_address + 0x4000 + reg_addr), reg_data);
+	ad_reg_write((core->base_address + 0x4000 + reg_addr), reg_data);
 
 	return 0;
 }
@@ -72,7 +72,7 @@ int32_t dac_write(dac_core core,
 
 // freq is in Hz (i.e. set to 1*1000*1000 for 1 MHz)
 
-int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq)
+int32_t dds_set_frequency(dac_core *core, uint32_t chan, uint32_t freq)
 {
 	uint32_t val;
 	uint64_t val64;
@@ -101,7 +101,7 @@ int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq)
 
 // phase is in milli(?) angles scaled to 1000 (i.e. 90*1000 is 90 degrees (pi/2))
 
-int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase)
+int32_t dds_set_phase(dac_core *core, uint32_t chan, uint32_t phase)
 {
 	uint64_t val64;
 	uint32_t reg;
@@ -126,7 +126,7 @@ int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase)
 // do not get fancy, above 1.0 (or below -1.0) will mess the dds tones.
 // dds always runs 16bits-- so unless your data path handles it- stay within -1 to +1.
 
-int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
+int32_t dds_set_scale(dac_core *core, uint32_t chan, int32_t scale_micro_units)
 {
 	uint32_t pcore_version;
 	uint32_t scale_reg;
@@ -161,7 +161,7 @@ int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
  * @brief dac_data_src_sel
  *******************************************************************************/
 
-int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
+int32_t dac_data_src_sel(dac_core *core, int32_t chan, dac_data_src src)
 {
 	uint32_t pcore_version;
 	uint32_t reg;
@@ -181,7 +181,7 @@ int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
 
 	// per channel source select
 
-	for (i = 0; i < (core.no_of_channels * 2); i++)
+	for (i = 0; i < (core->no_of_channels * 2); i++)
 	{
 		if ((chan < 0) || (chan == i))
 			dac_write(core, DAC_REG_DATA_SELECT(i), src);
@@ -194,7 +194,7 @@ int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
 /***************************************************************************//**
  * @brief dac_setup
  *******************************************************************************/
-int32_t dac_setup(dac_core core)
+int32_t dac_setup(dac_core *core)
 {
 	uint32_t reg_data;
 	uint32_t dac_clock;
@@ -224,13 +224,13 @@ int32_t dac_setup(dac_core core)
  * @brief dac_setup
  *******************************************************************************/
 
-int32_t dac_data_setup(dac_core core)
+int32_t dac_data_setup(dac_core *core)
 {
 	dac_channel *chan;
 	uint32_t i;
 
-	for (i = 0; i < core.no_of_channels; i++) {
-		chan = &core.channels[i];
+	for (i = 0; i < core->no_of_channels; i++) {
+		chan = &core->channels[i];
 		if (chan->sel == DAC_SRC_DDS)
 		{
 			dds_set_frequency(core, ((i*2)+0), chan->dds_frequency_0);
