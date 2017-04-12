@@ -250,27 +250,27 @@ int main(void)
 	jesd_setup(ad9152_jesd);
 	xcvr_setup(ad9152_xcvr);
 	jesd_status(ad9152_jesd);
-	dac_setup(ad9152_core);
+	dac_setup(&ad9152_core);
 	ad9152_status(&ad9152_spi_device);
 
 	// ad9152-x1 do not support data path prbs (use short-tpl)
 
 	ad9152_channels[0].sel = DAC_SRC_SED;
 	ad9152_channels[1].sel = DAC_SRC_SED;
-	dac_data_setup(ad9152_core);
+	dac_data_setup(&ad9152_core);
 	ad9152_short_pattern_test(&ad9152_spi_device, ad9152_param);
 
 	// ad9152-xN (n > 1) supports data path prbs
 
 	ad9152_channels[0].sel = DAC_SRC_PN23;
 	ad9152_channels[1].sel = DAC_SRC_PN23;
-	dac_data_setup(ad9152_core);
+	dac_data_setup(&ad9152_core);
 	ad9152_param.prbs_type = AD9152_TEST_PN7;
 	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
 
 	ad9152_channels[0].sel = DAC_SRC_PN31;
 	ad9152_channels[1].sel = DAC_SRC_PN31;
-	dac_data_setup(ad9152_core);
+	dac_data_setup(&ad9152_core);
 	ad9152_param.prbs_type = AD9152_TEST_PN15;
 	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
 
@@ -288,7 +288,7 @@ int main(void)
 
 	ad9152_channels[0].sel = DAC_SRC_DDS;
 	ad9152_channels[1].sel = DAC_SRC_DDS;
-	dac_data_setup(ad9152_core);
+	dac_data_setup(&ad9152_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
 	ad_printf("daq3: setup and configuration is done\n");
 
