@@ -2010,3 +2010,17 @@ int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 	return ad9361_set_dcxo_tune(phy, phy->pdata->dcxo_coarse,
 			phy->pdata->dcxo_fine);
 }
+
+/**
+ * Get the temperature.
+ * @param phy The AD9361 current state structure.
+ * @param temp The temperature (degrees C * 1000).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
+							   int32_t *temp)
+{
+	*temp = ad9361_get_temp(phy);
+
+	return 0;
+}

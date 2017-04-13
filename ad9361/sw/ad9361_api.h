@@ -487,4 +487,7 @@ int32_t ad9361_do_dcxo_tune_coarse(struct ad9361_rf_phy *phy,
 /* Do DCXO fine tuning. */
 int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 								   uint32_t fine);
+/* Get the temperature. */
+int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
+							   int32_t *temp);
 #endif
