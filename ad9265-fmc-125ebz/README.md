@@ -1,7 +1,5 @@
-**AD9265-FMC-125EBZ**
+**AD9265-FMC-125EBZ** For more info see: [https://wiki.analog.com/start?do=search&id=ad9265] (https://wiki.analog.com/start?do=search&id=ad9265)
 
-The following drivers are required for building the **AD9265-FMC-125EBZ** no-OS project:
- - AD9265-FMC-125EBZ Main Driver	-	[./] (./)
- - Xilinx Platform Drivers		-	[../common_drivers/xilinx_platform_drivers] (../common_drivers/xilinx_platform_drivers)
- - AD9265 Driver				-	[../drivers/ad9265] (../drivers/ad9265)
- - ADC Core Driver				-	[../common_drivers/adc_core] (../common_drivers/adc_core)
+Building Bare Metal software:
+- Go to one of the supported carrier boards (e.g. zc706) and use make [https://en.wikipedia.org/wiki/Makefile] (https://en.wikipedia.org/wiki/Makefile)
+- Or open ./ad9265-fmc-125ebz.mk and build the project manually (see platform_drivers.h and include your platform)
