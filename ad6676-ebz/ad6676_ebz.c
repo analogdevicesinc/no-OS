@@ -122,6 +122,8 @@ int main(void)
 	dmac_core		ad6676_dma;
 	dmac_xfer		rx_xfer;
 
+	uint32_t		store_samples;
+
 	// base addresses
 
 	ad_spi_init(&ad6676_spi_device);
@@ -183,7 +185,7 @@ int main(void)
 	ad6676_dma.type = DMAC_RX;
 	ad6676_dma.transfer = &rx_xfer;
 	rx_xfer.id = 0;
-	rx_xfer.size = 32768;
+	rx_xfer.no_of_samples = 32768;
 #ifdef XILINX
 	ad6676_xcvr.base_address = XPAR_AXI_AD6676_XCVR_BASEADDR;
 	ad6676_jesd.base_address = XPAR_AXI_AD6676_JESD_BASEADDR;
@@ -225,7 +227,8 @@ int main(void)
 	ad6676_test(&ad6676_spi_device, TESTGENMODE_RAMP);
 	// test the captured data
 	if(!dmac_start_transaction(ad6676_dma)) {
-		adc_ramp_test(ad6676_core, 1, 32768, rx_xfer.start_address);
+		store_samples = rx_xfer.no_of_samples/ad6676_core.no_of_channels;
+		adc_ramp_test(ad6676_core, 1, store_samples, rx_xfer.start_address);
 	};
 
 	// capture data with DMA
