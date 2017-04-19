@@ -210,11 +210,11 @@ int32_t ad9265_calibrate(spi_device *dev,
 #ifdef DCO_DEBUG
 	for (cnt = 0; cnt <= (max_val + (inv_range * (max_val + 1))); cnt++) {
 		if (cnt == val)
-			printf("|");
+			ad_printf("|");
 		else
-			printf("%c", err_field[cnt] ? '-' : 'o');
+			ad_printf("%c", err_field[cnt] ? '-' : 'o');
 		if (cnt == max_val)
-			printf("\n");
+			ad_printf("\n");
 	}
 #endif
 	if (val > max_val) {
@@ -239,10 +239,10 @@ int32_t ad9265_calibrate(spi_device *dev,
 
 #ifdef DCO_DEBUG
 	if (init_param->dco)
-		printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
+		ad_printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
 				val > 0 ? (uint16_t)((val - 1) | init_param->dco_en) : 0);
 	else
-		printf(" %s IDELAY 0x%x\n", cnt ? "INVERT" : "", (uint16_t)val);
+		ad_printf(" %s IDELAY 0x%x\n", cnt ? "INVERT" : "", (uint16_t)val);
 #endif
 
 	ad9265_testmode_set(dev, TESTMODE_OFF);
@@ -283,7 +283,7 @@ int32_t ad9265_setup(spi_device *dev,
 	ad9265_spi_read(dev, AD9265_REG_CHIP_ID, &chip_id);
 	if(chip_id != AD9265_CHIP_ID)
 	{
-		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		ad_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
@@ -295,7 +295,7 @@ int32_t ad9265_setup(spi_device *dev,
 	init_param->nb_lanes = 6;
 	ad9265_calibrate(dev, init_param, core);
 
-	printf("AD9265 successfully initialized.\n");
+	ad_printf("AD9265 successfully initialized.\n");
 
 	return ret;
 }
