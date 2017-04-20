@@ -1028,6 +1028,8 @@ int32_t ad9361_bist_prbs(struct ad9361_rf_phy *phy, enum ad9361_bist_mode mode)
 		break;
 	};
 
+	phy->bist_config = reg;
+
 	return ad9361_spi_write(phy->spi, REG_BIST_CONFIG, reg);
 }
 
@@ -1095,6 +1097,8 @@ int32_t ad9361_bist_tone(struct ad9361_rf_phy *phy,
 
 	reg1 = ((mask << 2) & reg_mask);
 	ad9361_spi_write(phy->spi, REG_BIST_AND_DATA_PORT_TEST_CONFIG, reg1);
+
+	phy->bist_config = reg;
 
 	return ad9361_spi_write(phy->spi, REG_BIST_CONFIG, reg);
 }

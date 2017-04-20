@@ -3364,6 +3364,7 @@ struct ad9361_rf_phy {
 	struct axiadc_converter	*adc_conv;
 	struct axiadc_state		*adc_state;
 	int32_t					bist_loopback_mode;
+	int32_t					bist_config;
 	enum ad9361_bist_mode	bist_prbs_mode;
 	enum ad9361_bist_mode	bist_tone_mode;
 	uint32_t				bist_tone_freq_Hz;
