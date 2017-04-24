@@ -148,9 +148,9 @@ typedef struct
 {
 	/* SPI */
 	uint8_t		spi_chip_select;
-	spi_mode	spi_mode;
-	spi_type	spi_type;
 	uint32_t	spi_device_id;
+	uint32_t	spi_cpha;
+	uint32_t	spi_cpol;
 
 	/* Device settings */
 	uint32_t	clkin;
@@ -207,7 +207,7 @@ typedef struct {
 int32_t adf4350_setup(adf4350_dev **device,
 					  adf4350_init_param init_param);
 /*! Writes 4 bytes of data to ADF4350. */
-int32_t adf4350_write(adf4350_dev *dev,
+int32_t adf4350_write(spi_device *dev,
 					  uint32_t data);
 /*! Stores PLL 0 frequency in Hz. */
 int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
