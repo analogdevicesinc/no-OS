@@ -333,6 +333,8 @@ int32_t ad6676_spi_write(spi_device *dev,
 							uint8_t reg_data);
 int32_t ad6676_setup(spi_device *dev,
 							ad6676_init_param *init_param);
+int32_t ad6676_update(spi_device *dev,
+							ad6676_init_param *init_param);
 int32_t ad6676_set_attenuation(spi_device *dev,
 							ad6676_init_param *init_param);
 int32_t ad6676_set_fif(spi_device *dev,
