@@ -43,6 +43,36 @@
 #include "platform_drivers.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define CLKGEN_REG_RESETN		0x40
+#define CLKGEN_MMCM_RESETN		(1 << 1)
+#define CLKGEN_RESETN			(1 << 0)
+
+#define CLKGEN_REG_STATUS		0x5c
+#define CLKGEN_STATUS			(1 << 0)
+
+#define XCVR_REG_RESETN			0x0010
+#define XCVR_RESETN				(1 << 0)
+
+#define XCVR_REG_STATUS			0x0014
+#define XCVR_STATUS				(1 << 0)
+
+#define JESD_REG_TRX_VERSION				0x00
+#define JESD_REG_TRX_RESET					0x04
+#define JESD_REG_TRX_ILA_SUPPORT			0x08
+#define JESD_REG_TRX_SCRAMBLING				0x0c
+#define JESD_REG_TRX_SYSREF_HANDLING		0x10
+#define JESD_REG_TX_ILA_MULTIFRAMES			0x14
+#define JESD_REG_TRX_TEST_MODES				0x18
+#define JESD_REG_RX_LINK_ERROR_STATUS		0x1c
+#define JESD_REG_TRX_OCTETS_PER_FRAME		0x20
+#define JESD_REG_TRX_FRAMES_PER_MULTIFRAME	0x24
+#define JESD_REG_TRX_LANES_IN_USE			0x28
+#define JESD_REG_TRX_SUBCLASS_MODE			0x2c
+#define JESD_REG_TRX_SYNC_STATUS			0x38
+
+/******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 spi_device spi_dev = {
@@ -146,25 +176,67 @@ int32_t gpio_get(uint8_t pin, uint8_t *data)
 }
 
 /***************************************************************************//**
+ * @brief clkgen_write
+ *******************************************************************************/
+int32_t clkgen_write(clkgen_device dev,
+					 uint32_t reg_addr,
+					 uint32_t reg_val)
+{
+	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief clkgen_read
+ *******************************************************************************/
+int32_t clkgen_read(clkgen_device dev,
+					uint32_t reg_addr,
+					uint32_t *reg_val)
+{
+	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+
+	return 0;
+}
+
+
+
+
+/***************************************************************************//**
  * @brief clkgen_setup
  *******************************************************************************/
 int32_t clkgen_setup(void)
 {
-	int32_t status = 0;
+	clkgen_device	rx_clkgen;
+	clkgen_device	tx_clkgen;
+	clkgen_device	rx_os_clkgen;
+	uint32_t		reg_val;
+	int32_t			status = 0;
 
-	Xil_Out32((XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR + 0x40), 0x03);
-	Xil_Out32((XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR + 0x40), 0x03);
-	Xil_Out32((XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR + 0x40), 0x03);
+	rx_clkgen.base_addr = XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR;
+	tx_clkgen.base_addr = XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR;
+	rx_os_clkgen.base_addr = XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR;
+
+	clkgen_write(rx_clkgen, CLKGEN_REG_RESETN,
+			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
+	clkgen_write(tx_clkgen, CLKGEN_REG_RESETN,
+			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
+	clkgen_write(rx_os_clkgen, CLKGEN_REG_RESETN,
+			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
 	mdelay(1);
-	if ((Xil_In32(XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR + 0x5c) & 0x1) == 0x0) {
+
+	clkgen_read(rx_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("RX MMCM-PLL NOT locked");
 		status--;
 	}
-	if ((Xil_In32(XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR + 0x5c) & 0x1) == 0x0) {
+	clkgen_read(tx_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("TX MMCM-PLL NOT locked");
 		status--;
 	}
-	if ((Xil_In32(XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR + 0x5c) & 0x1) == 0x0) {
+	clkgen_read(rx_os_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("RX OS MMCM-PLL NOT locked");
 		status--;
 	}
@@ -173,27 +245,62 @@ int32_t clkgen_setup(void)
 }
 
 /***************************************************************************//**
+ * @brief xcvr_write
+ *******************************************************************************/
+int32_t xcvr_write(xcvr_device dev,
+				   uint32_t reg_addr,
+				   uint32_t reg_val)
+{
+	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief xcvr_read
+ *******************************************************************************/
+int32_t xcvr_read(xcvr_device dev,
+				  uint32_t reg_addr,
+				  uint32_t *reg_val)
+{
+	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief xcvr_setup
  *******************************************************************************/
 int32_t xcvr_setup(void)
 {
-	int32_t ret = 0;
-	int32_t status;
-	int32_t timeout;
+	xcvr_device	rx_xcvr;
+	xcvr_device	tx_xcvr;
+	xcvr_device	rx_os_xcvr;
+	uint32_t	status;
+	int32_t		timeout;
+	int32_t		ret = 0;
 
-	Xil_Out32(XPAR_AXI_AD9371_RX_XCVR_BASEADDR + 0x10, 0);
-	Xil_Out32(XPAR_AXI_AD9371_RX_XCVR_BASEADDR + 0x10, 1);
-	Xil_Out32(XPAR_AXI_AD9371_TX_XCVR_BASEADDR + 0x10, 0);
-	Xil_Out32(XPAR_AXI_AD9371_TX_XCVR_BASEADDR + 0x10, 1);
-	Xil_Out32(XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR + 0x10, 0);
-	Xil_Out32(XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR + 0x10, 1);
+	rx_xcvr.base_addr = XPAR_AXI_AD9371_RX_XCVR_BASEADDR;
+	tx_xcvr.base_addr = XPAR_AXI_AD9371_TX_XCVR_BASEADDR;
+	rx_os_xcvr.base_addr = XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR;
+
+	xcvr_write(rx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+
+	xcvr_write(tx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+
+	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+
 	mdelay(1);
+
 	timeout = 100;
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = Xil_In32(XPAR_AXI_AD9371_RX_XCVR_BASEADDR + 0x14);
-		if (status == 1)
+		xcvr_read(rx_xcvr, XCVR_REG_STATUS, &status);
+		if (status == XCVR_STATUS)
 			break;
 	}
 	if (status == 0) {
@@ -201,12 +308,13 @@ int32_t xcvr_setup(void)
 		ret--;
 	} else
 		printf("RX_XCVR initialization OK\n");
+
 	timeout = 100;
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = Xil_In32(XPAR_AXI_AD9371_TX_XCVR_BASEADDR + 0x14);
-		if (status == 1)
+		xcvr_read(tx_xcvr, XCVR_REG_STATUS, &status);
+		if (status == XCVR_STATUS)
 			break;
 	}
 	if (status == 0) {
@@ -214,12 +322,13 @@ int32_t xcvr_setup(void)
 		ret--;
 	} else
 		printf("TX_XCVR initialization OK\n");
+
 	timeout = 100;
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = Xil_In32(XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR + 0x14);
-		if (status == 1)
+		xcvr_read(rx_os_xcvr, XCVR_REG_STATUS, &status);
+		if (status == XCVR_STATUS)
 			break;
 	}
 	if (status == 0) {
@@ -232,34 +341,68 @@ int32_t xcvr_setup(void)
 }
 
 /***************************************************************************//**
+ * @brief jesd_write
+ *******************************************************************************/
+int32_t jesd_write(jesd_device dev,
+				   uint32_t reg_addr,
+				   uint32_t reg_val)
+{
+	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief jesd_read
+ *******************************************************************************/
+int32_t jesd_read(jesd_device dev,
+				  uint32_t reg_addr,
+				  uint32_t *reg_val)
+{
+	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief jesd_setup
  *******************************************************************************/
 int32_t jesd_setup(void)
 {
-	Xil_Out32((RX_JESD_BASEADDR + 0x04), 0x01);
-	Xil_Out32((RX_JESD_BASEADDR + 0x08), 0x01);
-	Xil_Out32((RX_JESD_BASEADDR + 0x0c), 0x01);
-	Xil_Out32((RX_JESD_BASEADDR + 0x10), 0x00);
-	Xil_Out32((RX_JESD_BASEADDR + 0x14), 0x1f);
-	Xil_Out32((RX_JESD_BASEADDR + 0x20), 0x03);
-	Xil_Out32((RX_JESD_BASEADDR + 0x24), 0x1f);
-	Xil_Out32((RX_JESD_BASEADDR + 0x2c), 0x01);
-	Xil_Out32((TX_JESD_BASEADDR + 0x04), 0x01);
-	Xil_Out32((TX_JESD_BASEADDR + 0x08), 0x01);
-	Xil_Out32((TX_JESD_BASEADDR + 0x0c), 0x01);
-	Xil_Out32((TX_JESD_BASEADDR + 0x10), 0x00);
-	Xil_Out32((TX_JESD_BASEADDR + 0x14), 0x1f);
-	Xil_Out32((TX_JESD_BASEADDR + 0x20), 0x01);
-	Xil_Out32((TX_JESD_BASEADDR + 0x24), 0x1f);
-	Xil_Out32((TX_JESD_BASEADDR + 0x2c), 0x01);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x04), 0x01);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x08), 0x01);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x0c), 0x01);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x10), 0x00);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x14), 0x1f);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x20), 0x01);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x24), 0x1f);
-	Xil_Out32((RX_OS_JESD_BASEADDR + 0x2c), 0x01);
+	jesd_device	rx_jesd;
+	jesd_device	tx_jesd;
+	jesd_device	rx_os_jesd;
+
+	rx_jesd.base_addr = RX_JESD_BASEADDR;
+	tx_jesd.base_addr = TX_JESD_BASEADDR;
+	rx_os_jesd.base_addr = RX_OS_JESD_BASEADDR;
+
+	jesd_write(rx_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(rx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(rx_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(rx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(rx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x03);
+	jesd_write(rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(rx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+
+	jesd_write(tx_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(tx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(tx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+
+	jesd_write(rx_os_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
 	return 0;
 }

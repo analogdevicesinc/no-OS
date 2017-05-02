@@ -116,6 +116,18 @@ typedef struct {
 	XGpioPs			ps7_instance;
 } gpio_device;
 
+typedef struct {
+	uint32_t base_addr;
+} clkgen_device;
+
+typedef struct {
+	uint32_t base_addr;
+} jesd_device;
+
+typedef struct {
+	uint32_t base_addr;
+} xcvr_device;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
