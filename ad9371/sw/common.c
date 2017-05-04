@@ -36,19 +36,25 @@ commonErr_t CMB_setGPIO(uint32_t GPIO)
 
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 {
-	if (spiChipSelectIndex == AD9371_CHIP_SELECT) {
-		gpio_set(AD9371_RESET_B, 0x1);
-		gpio_set(AD9371_RESET_B, 0x0);
-		CMB_wait_ms(1);
-		gpio_set(AD9371_RESET_B, 0x1);
-		CMB_wait_ms(1);
-	} else {
-		gpio_set(AD9528_RESET_B, 0x1);
-		gpio_set(AD9528_RESET_B, 0x0);
-		CMB_wait_ms(1);
-		gpio_set(AD9528_RESET_B, 0x1);
-		CMB_wait_ms(1);
+	uint32_t resetGPIO = 0;
+
+	switch (spiChipSelectIndex) {
+	case AD9371_CHIP_SELECT:
+		resetGPIO = AD9371_RESET_B;
+		break;
+	case AD9528_CHIP_SELECT:
+		resetGPIO = AD9528_RESET_B;
+		break;
+	default:
+		return(COMMONERR_FAILED);
 	}
+
+	gpio_set_value(resetGPIO, 0x1);
+	CMB_wait_ms(1);
+	gpio_set_value(resetGPIO, 0x0);
+	CMB_wait_ms(1);
+	gpio_set_value(resetGPIO, 0x1);
+	CMB_wait_ms(1);
 
     return(COMMONERR_OK);
 }

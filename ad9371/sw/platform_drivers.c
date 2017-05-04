@@ -84,6 +84,23 @@ spi_device spi_dev = {
 	0				// id_no
 };
 
+XGpioPs_Config	*gpio_config;
+XGpioPs			gpio_instance;
+
+/***************************************************************************//**
+ * @brief platform_init
+*******************************************************************************/
+int32_t platform_init(void)
+{
+	gpio_init(GPIO_DEVICE_ID);
+
+	gpio_direction_output(AD9371_RESET_B, 1);
+	gpio_direction_output(AD9528_RESET_B, 1);
+	gpio_direction_output(AD9528_SYSREF_REQ, 0);
+
+	return 0;
+}
+
 /***************************************************************************//**
  * @brief spi_write_and_read
 *******************************************************************************/
@@ -122,57 +139,36 @@ int32_t spi_write_and_read(spi_device *dev,
 }
 
 /***************************************************************************//**
- * @brief gpio_data
+ * @brief gpio_init
  *******************************************************************************/
-int32_t gpio_set(uint8_t pin, uint8_t data)
+int32_t gpio_init(uint16_t device_id)
 {
-	int32_t pstatus;
-	uint32_t ppos;
-	uint32_t pdata;
-	uint32_t pmask;
+	gpio_config = XGpioPs_LookupConfig(device_id);
+	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
 
-	if (pin < 32)
-		return -1;
-
-	pstatus = -1;
-	ppos = pin - 32;
-	pmask = 0x1 << ppos;
-
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (data << ppos)));
-	pstatus = 0;
-
-	return pstatus;
+	return 0;
 }
 
 /***************************************************************************//**
- * @brief gpio_get
+ * @brief gpio_direction_output
  *******************************************************************************/
-int32_t gpio_get(uint8_t pin, uint8_t *data)
+int32_t gpio_direction_output(uint8_t gpio, uint8_t value)
 {
-	int32_t pstatus;
-	uint32_t ppos;
-	uint32_t pdata;
-	uint32_t pmask;
+	XGpioPs_SetDirectionPin(&gpio_instance, gpio, 1);
+	XGpioPs_SetOutputEnablePin(&gpio_instance, gpio, 1);
+	XGpioPs_WritePin(&gpio_instance, gpio, value);
 
-	if (pin < 32)
-		return -1;
+	return 0;
+}
 
-	pstatus = -1;
-	ppos = pin - 32;
-	pmask = 0x1 << ppos;
+/***************************************************************************//**
+ * @brief gpio_set_value
+ *******************************************************************************/
+int32_t gpio_set_value(uint8_t gpio, uint8_t value)
+{
+	XGpioPs_WritePin(&gpio_instance, gpio, value);
 
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata & ~pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-	*data = (pdata >> ppos) & 0x1;
-	pstatus = 0;
-
-	return pstatus;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -198,9 +194,6 @@ int32_t clkgen_read(clkgen_device dev,
 
 	return 0;
 }
-
-
-
 
 /***************************************************************************//**
  * @brief clkgen_setup
@@ -403,6 +396,25 @@ int32_t jesd_setup(void)
 	jesd_write(rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief jesd_setup
+ *******************************************************************************/
+int32_t sysref_req(sysref_req_mode mode)
+{
+	if (mode == SYSREF_CONT_ON)
+		gpio_set_value(AD9528_SYSREF_REQ, 1);
+	else if (mode == SYSREF_CONT_OFF)
+		gpio_set_value(AD9528_SYSREF_REQ, 0);
+	else if (mode == SYSREF_PULSE) {
+		gpio_set_value(AD9528_SYSREF_REQ, 1);
+		mdelay(1);
+		gpio_set_value(AD9528_SYSREF_REQ, 0);
+	} else
+		return -1;
 
 	return 0;
 }

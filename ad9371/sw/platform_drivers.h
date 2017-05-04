@@ -48,40 +48,43 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD9528_RESET_B      59
-#define AD9528_SYSREF_REQ   58
-#define AD9371_TX1_ENABLE   57
-#define AD9371_TX2_ENABLE   56
-#define AD9371_RX1_ENABLE   55
-#define AD9371_RX2_ENABLE   54
-#define AD9371_TEST         53
-#define AD9371_RESET_B      52
-#define AD9371_GPINT        51
-#define AD9371_GPIO_00      50
-#define AD9371_GPIO_01      49
-#define AD9371_GPIO_02      48
-#define AD9371_GPIO_03      47
-#define AD9371_GPIO_04      46
-#define AD9371_GPIO_05      45
-#define AD9371_GPIO_06      44
-#define AD9371_GPIO_07      43
-#define AD9371_GPIO_15      42
-#define AD9371_GPIO_08      41
-#define AD9371_GPIO_09      40
-#define AD9371_GPIO_10      39
-#define AD9371_GPIO_11      38
-#define AD9371_GPIO_12      37
-#define AD9371_GPIO_14      36
-#define AD9371_GPIO_13      35
-#define AD9371_GPIO_17      34
-#define AD9371_GPIO_16      33
-#define AD9371_GPIO_18      32
+#define GPIO_OFFSET			54
+#define AD9528_RESET_B      GPIO_OFFSET + 59
+#define AD9528_SYSREF_REQ   GPIO_OFFSET + 58
+#define AD9371_TX1_ENABLE   GPIO_OFFSET + 57
+#define AD9371_TX2_ENABLE   GPIO_OFFSET + 56
+#define AD9371_RX1_ENABLE   GPIO_OFFSET + 55
+#define AD9371_RX2_ENABLE   GPIO_OFFSET + 54
+#define AD9371_TEST         GPIO_OFFSET + 53
+#define AD9371_RESET_B      GPIO_OFFSET + 52
+#define AD9371_GPINT        GPIO_OFFSET + 51
+#define AD9371_GPIO_00      GPIO_OFFSET + 50
+#define AD9371_GPIO_01      GPIO_OFFSET + 49
+#define AD9371_GPIO_02      GPIO_OFFSET + 48
+#define AD9371_GPIO_03      GPIO_OFFSET + 47
+#define AD9371_GPIO_04      GPIO_OFFSET + 46
+#define AD9371_GPIO_05      GPIO_OFFSET + 45
+#define AD9371_GPIO_06      GPIO_OFFSET + 44
+#define AD9371_GPIO_07      GPIO_OFFSET + 43
+#define AD9371_GPIO_15      GPIO_OFFSET + 42
+#define AD9371_GPIO_08      GPIO_OFFSET + 41
+#define AD9371_GPIO_09      GPIO_OFFSET + 40
+#define AD9371_GPIO_10      GPIO_OFFSET + 39
+#define AD9371_GPIO_11      GPIO_OFFSET + 38
+#define AD9371_GPIO_12      GPIO_OFFSET + 37
+#define AD9371_GPIO_14      GPIO_OFFSET + 36
+#define AD9371_GPIO_13      GPIO_OFFSET + 35
+#define AD9371_GPIO_17      GPIO_OFFSET + 34
+#define AD9371_GPIO_16      GPIO_OFFSET + 33
+#define AD9371_GPIO_18      GPIO_OFFSET + 32
 
 #define AD9528_CHIP_SELECT	0
 #define AD9371_CHIP_SELECT	1
 
 #define SPI_BASEADDR		XPAR_PS7_SPI_0_BASEADDR
 #define SPI_DEVICE_ID		XPAR_PS7_SPI_0_DEVICE_ID
+
+#define GPIO_DEVICE_ID		XPAR_PS7_GPIO_0_DEVICE_ID
 
 #define RX_CLKGEN_BASEADDR		XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR
 #define TX_CLKGEN_BASEADDR		XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR
@@ -128,18 +131,27 @@ typedef struct {
 	uint32_t base_addr;
 } xcvr_device;
 
+typedef enum {
+	SYSREF_CONT_ON,
+	SYSREF_CONT_OFF,
+	SYSREF_PULSE,
+} sysref_req_mode;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t platform_init(void);
 int32_t spi_write_and_read(spi_device *dev,
 						   uint8_t *data,
 						   uint8_t bytes_number);
-int32_t gpio_set(uint8_t pin,
-				 uint8_t data);
-int32_t gpio_get(uint8_t pin,
-				 uint8_t *data);
+int32_t gpio_init(uint16_t device_id);
+int32_t gpio_direction_output(uint8_t gpio,
+							  uint8_t value);
+int32_t gpio_set_value(uint8_t gpio,
+					   uint8_t value);
 int32_t clkgen_setup(void);
 int32_t xcvr_setup(void);
 int32_t jesd_setup(void);
+int32_t sysref_req(sysref_req_mode mode);
 
 #endif
