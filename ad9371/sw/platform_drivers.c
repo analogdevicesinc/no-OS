@@ -58,6 +58,12 @@
 #define XCVR_REG_STATUS			0x0014
 #define XCVR_STATUS				(1 << 0)
 
+#define XCVR_REG_CONTROL		0x0020
+#define XCVR_LPM_DFE_N			(1 << 12)
+#define XCVR_RATE(x)			(((x) & 0x7) << 8)
+#define XCVR_SYSCLK_SEL(x)		(((x) & 0x3) << 4)
+#define XCVR_OUTCLK_SEL(x)		(((x) & 0x7) << 0)
+
 #define JESD_REG_TRX_VERSION				0x00
 #define JESD_REG_TRX_RESET					0x04
 #define JESD_REG_TRX_ILA_SUPPORT			0x08
@@ -278,12 +284,15 @@ int32_t xcvr_setup(void)
 	rx_os_xcvr.base_addr = XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR;
 
 	xcvr_write(rx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
 	xcvr_write(rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	xcvr_write(tx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
 	xcvr_write(tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
 	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	mdelay(1);
@@ -329,7 +338,7 @@ int32_t xcvr_setup(void)
 		ret--;
 	} else
 		printf("RX_OS_XCVR initialization OK\n");
-
+ret = 0;
 	return ret;
 }
 
@@ -396,25 +405,6 @@ int32_t jesd_setup(void)
 	jesd_write(rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief jesd_setup
- *******************************************************************************/
-int32_t sysref_req(sysref_req_mode mode)
-{
-	if (mode == SYSREF_CONT_ON)
-		gpio_set_value(AD9528_SYSREF_REQ, 1);
-	else if (mode == SYSREF_CONT_OFF)
-		gpio_set_value(AD9528_SYSREF_REQ, 0);
-	else if (mode == SYSREF_PULSE) {
-		gpio_set_value(AD9528_SYSREF_REQ, 1);
-		mdelay(1);
-		gpio_set_value(AD9528_SYSREF_REQ, 0);
-	} else
-		return -1;
 
 	return 0;
 }

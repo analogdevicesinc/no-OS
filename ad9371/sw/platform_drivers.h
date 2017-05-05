@@ -131,12 +131,6 @@ typedef struct {
 	uint32_t base_addr;
 } xcvr_device;
 
-typedef enum {
-	SYSREF_CONT_ON,
-	SYSREF_CONT_OFF,
-	SYSREF_PULSE,
-} sysref_req_mode;
-
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -152,6 +146,5 @@ int32_t gpio_set_value(uint8_t gpio,
 int32_t clkgen_setup(void);
 int32_t xcvr_setup(void);
 int32_t jesd_setup(void);
-int32_t sysref_req(sysref_req_mode mode);
 
 #endif

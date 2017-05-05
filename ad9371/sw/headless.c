@@ -105,6 +105,20 @@ int main(void)
 		return ad9528Error;
 	}
 
+	/* Initialize CLKGENs */
+	status = clkgen_setup();
+	if (status != 0) {
+		printf("clkgen_setup() failed\n");
+		return -1;
+	}
+
+	/* Initialize JESDs */
+	status = jesd_setup();
+	if (status != 0) {
+		printf("jesd_setup() failed\n");
+		return -1;
+	}
+
 	/*************************************************************************/
 	/*****                Mykonos Initialization Sequence                *****/
 	/*************************************************************************/
@@ -400,24 +414,10 @@ int main(void)
 
 	/*** < Info: Mykonos is actively transmitting CGS from the ObsRxFramer> ***/
 
-	/* Initialize CLKGENs */
-	status = clkgen_setup();
-	if (status != 0) {
-		printf("clkgen_setup() failed\n");
-		return -1;
-	}
-
 	/* Initialize ADXCVRs */
 	status = xcvr_setup();
 	if (status != 0) {
 		printf("xcvr_setup() failed\n");
-		return -1;
-	}
-
-	/* Initialize JESDs */
-	status = jesd_setup();
-	if (status != 0) {
-		printf("jesd_setup() failed\n");
 		return -1;
 	}
 
@@ -435,13 +435,15 @@ int main(void)
         errorString = getMykonosErrorMessage(mykError);
         goto error;
 	} else
-		printf("RxFramerStatus = 0x%x\n", framerStatus);
+		if (framerStatus != 0x3E)
+			printf("RxFramerStatus = 0x%x\n", framerStatus);
 
 	if ((mykError = MYKONOS_readOrxFramerStatus(&mykDevice, &obsFramerStatus)) != MYKONOS_ERR_OK) {
         errorString = getMykonosErrorMessage(mykError);
         goto error;
 	} else
-		printf("OrxFramerStatus = 0x%x\n", obsFramerStatus);
+		if (obsFramerStatus != 0x3E)
+			printf("OrxFramerStatus = 0x%x\n", obsFramerStatus);
 
 	/*************************************************************************/
 	/*****               Check Mykonos Deframer Status                   *****/
@@ -451,7 +453,8 @@ int main(void)
         errorString = getMykonosErrorMessage(mykError);
         goto error;
 	} else
-		printf("DeframerStatus = 0x%x\n", deframerStatus);
+		if (deframerStatus != 0x68)
+			printf("DeframerStatus = 0x%x\n", deframerStatus);
 
 	/*************************************************************************/
 	/*****           Mykonos enable tracking calibrations                *****/
