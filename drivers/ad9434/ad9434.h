@@ -91,21 +91,17 @@
 #define AD9434_DEF_OUTPUT_MODE		0x00
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-typedef struct {
-	uint8_t		output_mode;
-	uint8_t		dco;			// data clock output
-	uint8_t		dco_en;			// dco enable
-	uint8_t		nb_lanes;		// number of lanes
-} ad9434_init_param;
-
-/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+int32_t ad9434_spi_read(spi_device *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
+int32_t ad9434_spi_write(spi_device *dev,
+						 uint16_t reg_addr,
+						 uint8_t reg_data);
 int32_t ad9434_testmode_set(spi_device *dev,
-							uint8_t mode);
-int32_t ad9434_setup(spi_device *dev,
-					ad9434_init_param *init_param,
-					adc_core core);
+						uint8_t mode);
+int32_t ad9434_setup(spi_device *dev);
+int32_t ad9434_outputmode_set(spi_device *dev,
+						uint8_t mode);
 #endif
