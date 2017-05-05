@@ -130,6 +130,12 @@ int32_t adc_read(adc_core core,
 int32_t adc_write(adc_core core,
 		uint32_t reg_addr,
 		uint32_t reg_data);
+uint32_t adc_delay_calibrate(adc_core core,
+		uint32_t no_of_lanes,
+		enum adc_pn_sel sel);
+uint32_t adc_set_delay(adc_core core,
+		uint32_t no_of_lanes,
+		uint32_t delay);
 int32_t adc_setup(adc_core core);
 int32_t adc_set_pnsel(adc_core core,
 		uint8_t channel,

@@ -51,7 +51,14 @@ int32_t adc_read(adc_core core,
 {
 	*reg_data = ad_reg_read((core.base_address + reg_addr));
 
-	return 0;
+	if (*reg_data == 0xDEADDEAD) {
+		#ifdef DEBUG
+			ad_printf("adc_read failed for register: %x", reg_addr);
+		#endif
+		return -1;
+	} else {
+		return 0;
+	}
 }
 
 /***************************************************************************//**
@@ -62,6 +69,11 @@ int32_t adc_write(adc_core core,
 		uint32_t reg_data)
 {
 	ad_reg_write((core.base_address + reg_addr), reg_data);
+
+		#ifdef DEBUG
+			uint32_t reg_data_r;
+			return adc_read(core, reg_addr, &reg_data_r);
+		#endif
 
 	return 0;
 }
@@ -109,7 +121,130 @@ int32_t adc_setup(adc_core core)
 }
 
 /***************************************************************************//**
+ * @brief ADC set delay.
+ *
+ * @param delay - Value of the delay.
+ *	Note:
+ *		The device must be in PRBS test mode, when calling this function
+ *		and the output mode must be two's complement
+
+ * @return 0.
+*******************************************************************************/
+uint32_t adc_set_delay(adc_core core, uint32_t no_of_lanes, uint32_t delay)
+{
+    uint32_t i;
+    uint32_t rdata;
+    uint32_t pcore_version;
+
+    adc_read(core, 0x0, &pcore_version);
+    pcore_version >>= 16;
+    if (pcore_version < 9) {
+			    ad_printf(" pcore_version is : %d\n\r", pcore_version);
+			    ad_printf(" DRIVER DOES NOT SUPPORT PCORE VERSIONS OLDER THAN 10 !");
+			    return -1;
+    } else {
+		for (i = 0; i < no_of_lanes; i++) {
+			adc_write(core ,((0x200 + i)*4), delay);
+			adc_read(core ,((0x200 + i)*4), &rdata);
+			if (rdata != delay) {
+				ad_printf("adc_delay_1: sel(%2d), rcv(%04x), exp(%04x)\n\r", i, rdata, delay);
+			}
+		}
+    }
+
+    return 0;
+}
+
+/***************************************************************************//**
+ * @brief ADC delay.
+ *
+*******************************************************************************/
+uint32_t adc_delay_calibrate(adc_core core,
+			uint32_t no_of_lanes,
+			enum adc_pn_sel sel)
+{
+	uint8_t err_field[32] = {0};
+	uint16_t valid_range[5] = {0};
+	uint16_t invalid_range[5] = {0};
+	uint16_t delay = 0;
+	uint16_t start_valid_delay = 32;
+	uint16_t start_invalid_delay = 32;
+	uint8_t interval = 0;
+	uint8_t max_interval = 0;
+	uint8_t max_valid_range = 0;
+	uint8_t cnt_valid[5] = {0};
+	uint8_t cnt_invalid = 0;
+	uint8_t val = 0;
+	uint8_t max_val = 32;
+
+	for (delay = 0; delay < 32; delay++) {
+		adc_set_delay(core, no_of_lanes, delay);
+		mdelay(20);
+		if (adc_pn_mon(core, sel) == 0) {
+			err_field[delay] = 0;
+			start_valid_delay = start_valid_delay == 32 ? delay : start_valid_delay;
+		} else {
+			err_field[delay] = 1;
+		}
+	}
+	if (start_valid_delay > 31) {
+		ad_printf("%s FAILED.\n", __func__);
+		adc_set_delay(core, no_of_lanes, 0);
+		return(1);
+	}
+
+	start_valid_delay = 32;
+	start_invalid_delay = 32;
+	for (val = 0; val < max_val; val++) {
+		if (err_field[val] == 0) {
+			if (start_valid_delay == 32) {
+				start_valid_delay = val;
+			}
+			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+				start_valid_delay = 32;
+				start_invalid_delay = 32;
+			}
+			cnt_valid[interval]++;
+		} else {
+			if (start_invalid_delay == 32) {
+				start_invalid_delay = val;
+			}
+			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+				valid_range[interval] = start_valid_delay;
+				invalid_range[interval] = start_invalid_delay;
+				start_valid_delay = 32;
+				start_invalid_delay = 32;
+				interval++;
+			}
+			cnt_invalid++;
+		}
+	}
+
+	for (val = 0; val < 5; val++) {
+		if (cnt_valid[val] > max_valid_range) {
+			max_valid_range = cnt_valid[val];
+			max_interval = val;
+		}
+	}
+
+	delay = (valid_range[max_interval] + invalid_range[max_interval] -1)/2;
+
+	ad_printf("adc_delay: setting zero error delay (%d)\n\r", delay);
+	adc_set_delay(core, no_of_lanes, delay);
+
+#ifdef DEBUG
+	ad_printf("Error field (0=success, 1=fail):\n");
+	for (delay = 0; delay < 32; delay++) {
+		ad_printf("%d",err_field[delay]);
+	}
+#endif
+
+    return(0);
+}
+
+/***************************************************************************//**
  * @brief adc_set_pnsel
+ *	  Note: The device must be in PRBS test mode, when calling this function
  *******************************************************************************/
 int32_t adc_set_pnsel(adc_core core,
 		uint8_t channel,
@@ -153,7 +288,6 @@ int32_t adc_pn_mon(adc_core core,
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
-			ad_printf("%s ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02x!\n", __func__, index, sel, reg_data);
 		}
 	}
 
