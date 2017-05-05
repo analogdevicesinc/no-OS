@@ -51,7 +51,14 @@ int32_t dac_read(dac_core *core,
 {
 	*reg_data = ad_reg_read((core->base_address + 0x4000 + reg_addr));
 
-	return 0;
+	if (*reg_data == 0xDEADDEAD) {
+		#ifdef DEBUG
+			ad_printf("dac_read faild for register: %x", reg_addr);
+		#endif
+		return -1;
+	} else {
+		return 0;
+	}
 }
 
 /***************************************************************************//**
@@ -62,6 +69,11 @@ int32_t dac_write(dac_core *core,
 		uint32_t reg_data)
 {
 	ad_reg_write((core->base_address + 0x4000 + reg_addr), reg_data);
+
+		#ifdef DEBUG
+			uint32_t reg_data_r;
+			return adc_read(core, reg_addr, &reg_data_r);
+		#endif
 
 	return 0;
 }
