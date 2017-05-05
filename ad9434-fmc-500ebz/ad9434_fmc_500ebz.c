@@ -54,12 +54,14 @@ int main(void)
 	adc_core		ad9434_core;
 	dmac_core		ad9434_dma;
 	dmac_xfer		rx_xfer;
-	ad9434_init_param	init_param;
-
+	uint8_t			nr_of_lanes = 12;
+	uint8_t			over_range_signal = 1;
 	ad_platform_init();
 
 	ad9434_core.base_address = XPAR_AXI_AD9434_BASEADDR;
 	ad9434_core.no_of_channels = 1;
+	ad9434_core.resolution = 12;
+
 	ad9434_dma.base_address = XPAR_AXI_AD9434_DMA_BASEADDR;
 
 	ad_spi_init(&ad9434_device);
@@ -72,17 +74,18 @@ int main(void)
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 32768;
 
+	ad9434_setup(&ad9434_device);
+
 	adc_setup(ad9434_core);
 
-	ad9434_setup(&ad9434_device, &init_param, ad9434_core);
+	ad9434_testmode_set(&ad9434_device, TESTMODE_PN9_SEQ);
+	adc_delay_calibrate(ad9434_core, nr_of_lanes + over_range_signal, ADC_PN9);
 
-	ad9434_testmode_set(&ad9434_device, TESTMODE_ONE_ZERO_TOGGLE);
-
-	if(!dmac_start_transaction(ad9434_dma)){
-		ad_printf("ad9434: RX test capture done.\n");
+	ad9434_testmode_set(&ad9434_device, TESTMODE_OFF);
+	ad9434_outputmode_set(&ad9434_device, OUTPUT_MODE_TWOS_COMPLEMENT);
+	if(!dmac_start_transaction(ad9434_dma)) {
+		ad_printf("Capture done!\n");
 	};
-
-	xil_printf("Done\n");
 
 	ad_platform_close();
 	return 0;
