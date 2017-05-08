@@ -250,9 +250,9 @@ int32_t dac_data_setup(dac_core *core)
 			dds_set_scale(core, ((i*2)+0), chan->dds_scale_0);
 			if (chan->dds_dual_tone == 0)
 			{
-				dds_set_frequency(core, ((i*2)+1), 0);
-				dds_set_phase(core, ((i*2)+1), 0);
-				dds_set_scale(core, ((i*2)+1), 0);
+				dds_set_frequency(core, ((i*2)+1), chan->dds_frequency_0);
+				dds_set_phase(core, ((i*2)+1), chan->dds_phase_0);
+				dds_set_scale(core, ((i*2)+1), chan->dds_scale_0);
 			}
 			else
 			{
