@@ -146,5 +146,6 @@ int32_t gpio_set_value(uint8_t gpio,
 int32_t clkgen_setup(void);
 int32_t xcvr_setup(void);
 int32_t jesd_setup(void);
+uint32_t ad_pow2(uint32_t number);
 
 #endif

@@ -47,12 +47,76 @@
 #include "mykonos_m3.h"
 #include "mykonos_gpio.h"
 #include "platform_drivers.h"
+#include "adc_core.h"
+#include "dac_core.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 extern ad9528Device_t	clockAD9528_;
 extern mykonosDevice_t	mykDevice;
+
+adc_core  ad9371_rx_core_init = {
+		XPAR_AXI_AD9371_CORE_BASEADDR, 		// base_address
+		1, 									// master
+		4, 									// no_of_channels
+		16,									// resolution
+		XPAR_DDR_MEM_BASEADDR + 0x800000	// adc_ddr_baseaddr
+};
+
+dac_channel ad9371_tx_channels[4] = {
+		{
+		     3*1000*1000, 	// dds_frequency_tone0
+			 90000, 		// dds_phase_tone0
+			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
+			 0,				// dds_frequency_tone1
+			 0,				// dds_phase_tone1
+			 0,				// dds_scale_tone1
+			 1,				// dds_dual_tone
+			 0,				// pat_data
+			 DAC_SRC_DDS	// sel
+		},
+		{
+		     3*1000*1000, 	// dds_frequency_tone0
+			 0, 			// dds_phase_tone0
+			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
+			 0,				// dds_frequency_tone1
+			 0,				// dds_phase_tone1
+			 0,				// dds_scale_tone1
+			 1,				// dds_dual_tone
+			 0,				// pat_data
+			 DAC_SRC_DDS	// sel
+		},
+		{
+		     3*1000*1000, 	// dds_frequency_tone0
+			 90000, 		// dds_phase_tone0
+			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
+			 0,				// dds_frequency_tone1
+			 0,				// dds_phase_tone1
+			 0,				// dds_scale_tone1
+			 1,				// dds_dual_tone
+			 0,				// pat_data
+			 DAC_SRC_DDS	// sel
+		},
+		{
+		     3*1000*1000, 	// dds_frequency_tone0
+			 0, 			// dds_phase_tone0
+			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
+			 0,				// dds_frequency_tone1
+			 0,				// dds_phase_tone1
+			 0,				// dds_scale_tone1
+			 1,				// dds_dual_tone
+			 0,				// pat_data
+			 DAC_SRC_DDS	// sel
+		},
+};
+
+dac_core  ad9371_tx_core_init = {
+		XPAR_AXI_AD9371_CORE_BASEADDR, 			// base_address
+		16, 									// resolution
+		4, 										// no_of_channels
+		ad9371_tx_channels						// *channels
+};
 
 /***************************************************************************//**
  * @brief main
@@ -484,6 +548,22 @@ int main(void)
         errorString = getMykonosErrorMessage(mykError);
         goto error;
 	}
+
+	status = dac_setup(ad9371_tx_core_init);
+	if (status != 0) {
+		printf("dac_setup() failed\n");
+		return -1;
+	}
+
+	status = adc_setup(ad9371_rx_core_init);
+	if (status != 0) {
+		printf("adc_setup() failed\n");
+		return -1;
+	}
+
+	mdelay(1000);
+
+	adc_capture(ad9371_rx_core_init, 16384);
 
 	printf("Done\n");
 
