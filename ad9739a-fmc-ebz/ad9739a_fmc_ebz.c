@@ -50,7 +50,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define DDS_FREQ_HZ(x)		(x)/4
+#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -58,7 +58,7 @@
 adf4350_init_param default_adf4350_init_param = {
 	/* SPI */
 	0,			// spi_chip_select
-	0,			// spi_device_id
+	SPI_DEVICE_ID,		// spi_device_id
 	0,			// spi_cpha
 	0,			// spi_cpol
 
@@ -94,6 +94,7 @@ adf4350_init_param default_adf4350_init_param = {
 	0,			// aux_output_power;
 };
 
+
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
@@ -124,13 +125,15 @@ int main(void)
 	dac_write(&ad9739a_core, DAC_REG_DATA_CONTROL, DAC_DATA_FORMAT);
 
 	ad9739a_channel[0].dds_dual_tone = 0;
-	ad9739a_channel[0].dds_frequency_0 = DDS_FREQ_HZ(33*1000*1000); // 33 Mhz
-	ad9739a_channel[0].dds_frequency_1 = DDS_FREQ_HZ(33*1000*1000); // 33 Mhz
+	ad9739a_channel[1].dds_dual_tone = 0;
+	ad9739a_channel[0].dds_frequency_0 = 33*1000*1000;
+	ad9739a_channel[1].dds_frequency_0 = 33*1000*1000;
 	ad9739a_channel[0].dds_scale_0 = 250000;
-	ad9739a_channel[0].dds_scale_1 = 250000;
+	ad9739a_channel[1].dds_scale_0 = 250000;
 	ad9739a_channel[0].dds_phase_0 = 0;
-	ad9739a_channel[0].dds_phase_1 = 0;
+	ad9739a_channel[1].dds_phase_0 = 0;
 	ad9739a_channel[0].sel = DAC_SRC_DDS;
+	ad9739a_channel[1].sel = DAC_SRC_DDS;
 
 	dac_setup(&ad9739a_core);
 
