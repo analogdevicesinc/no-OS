@@ -125,15 +125,10 @@ int main(void)
 	dac_write(&ad9739a_core, DAC_REG_DATA_CONTROL, DAC_DATA_FORMAT);
 
 	ad9739a_channel[0].dds_dual_tone = 0;
-	ad9739a_channel[1].dds_dual_tone = 0;
 	ad9739a_channel[0].dds_frequency_0 = 33*1000*1000;
-	ad9739a_channel[1].dds_frequency_0 = 33*1000*1000;
 	ad9739a_channel[0].dds_scale_0 = 250000;
-	ad9739a_channel[1].dds_scale_0 = 250000;
 	ad9739a_channel[0].dds_phase_0 = 0;
-	ad9739a_channel[1].dds_phase_0 = 0;
 	ad9739a_channel[0].sel = DAC_SRC_DDS;
-	ad9739a_channel[1].sel = DAC_SRC_DDS;
 
 	dac_setup(&ad9739a_core);
 
