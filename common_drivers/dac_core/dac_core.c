@@ -92,9 +92,9 @@ int32_t dds_set_frequency(dac_core *core, uint32_t chan, uint32_t freq)
 	uint64_t dac_clk;
 
 	dac_read(core, DAC_REG_CLK_FREQ, &val);
-	dac_clk = val;
+	dac_clk = val * ((100*1000*1000)/65535);
 	dac_read(core, DAC_REG_CLK_RATIO, &val);
-	dac_clk *= val * 1525;
+	dac_clk *= val;
 
 	dac_write(core, DAC_REG_SYNC_CONTROL, 0);
 	dac_read(core, DAC_REG_DDS_INIT_INCR(chan), &reg);
