@@ -43,6 +43,12 @@
 
 #include "platform_drivers.h"
 
+/******************************************************************************/
+/*************************** Global variables *********************************/
+/******************************************************************************/
+XSpiPs  m_spi;
+XSpiPs_Config  *m_spi_config;
+
 /***************************************************************************//**
  * @brief ad_spi_init
  *******************************************************************************/
@@ -71,6 +77,15 @@ int32_t ad_spi_init(spi_device *dev)
 	dev->cpha = 0;
 	dev->cpol = 0;
 
+	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
+
+	if (m_spi_config == NULL) {
+		return(-1);
+	}
+
+	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
+		return(-1);
+	}
 	return(0);
 }
 
@@ -84,19 +99,6 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 #ifdef ZYNQ
 
 	uint32_t initss;
-
-	XSpiPs  m_spi;
-	XSpiPs_Config  *m_spi_config;
-
-	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
-
-	if (m_spi_config == NULL) {
-		return(-1);
-	}
-
-	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
-		return(-1);
-	}
 
 	initss = XSpiPs_ReadReg(dev->base_address, XSPIPS_CR_OFFSET);
 	initss = initss & (uint32_t)(~XSPIPS_CR_SSCTRL_MASK);
