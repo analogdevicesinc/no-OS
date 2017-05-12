@@ -142,21 +142,20 @@ typedef struct
 	/* Fast AGC */
 	uint32_t	fagc_dec_pow_measuremnt_duration;	/* adi,fagc-dec-pow-measurement-duration */
 	uint32_t	fagc_state_wait_time_ns;	/* adi,fagc-state-wait-time-ns */
-		/* Fast AGC - Low Power */
+	/* Fast AGC - Low Power */
 	uint8_t		fagc_allow_agc_gain_increase;	/* adi,fagc-allow-agc-gain-increase-enable */
 	uint32_t	fagc_lp_thresh_increment_time;	/* adi,fagc-lp-thresh-increment-time */
 	uint32_t	fagc_lp_thresh_increment_steps;	/* adi,fagc-lp-thresh-increment-steps */
-		/* Fast AGC - Lock Level */
-	uint32_t	fagc_lock_level;	/* adi,fagc-lock-level */
+	/* Fast AGC - Lock Level (Lock Level is set via slow AGC inner high threshold) */
 	uint8_t		fagc_lock_level_lmt_gain_increase_en;	/* adi,fagc-lock-level-lmt-gain-increase-enable */
 	uint32_t	fagc_lock_level_gain_increase_upper_limit;	/* adi,fagc-lock-level-gain-increase-upper-limit */
-		/* Fast AGC - Peak Detectors and Final Settling */
+	/* Fast AGC - Peak Detectors and Final Settling */
 	uint32_t	fagc_lpf_final_settling_steps;	/* adi,fagc-lpf-final-settling-steps */
 	uint32_t	fagc_lmt_final_settling_steps;	/* adi,fagc-lmt-final-settling-steps */
 	uint32_t	fagc_final_overrange_count;	/* adi,fagc-final-overrange-count */
-		/* Fast AGC - Final Power Test */
+	/* Fast AGC - Final Power Test */
 	uint8_t		fagc_gain_increase_after_gain_lock_en;	/* adi,fagc-gain-increase-after-gain-lock-enable */
-		/* Fast AGC - Unlocking the Gain */
+	/* Fast AGC - Unlocking the Gain */
 	uint32_t	fagc_gain_index_type_after_exit_rx_mode;	/* adi,fagc-gain-index-type-after-exit-rx-mode */
 	uint8_t		fagc_use_last_lock_level_for_set_gain_en;	/* adi,fagc-use-last-lock-level-for-set-gain-enable */
 	uint8_t		fagc_rst_gla_stronger_sig_thresh_exceeded_en;	/* adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable */

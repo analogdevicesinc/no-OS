@@ -2959,7 +2959,7 @@ struct gain_control {
 	uint8_t f_agc_lp_thresh_increment_steps; /* 0x117 1..8 */
 
 	/* Fast AGC - Lock Level */
-	uint8_t f_agc_lock_level; /* 0x101 0..-127 dBFS */
+	uint8_t f_agc_lock_level; /* NOT USED: 0x101 0..-127 dBFS same as agc_inner_thresh_high */
 	bool f_agc_lock_level_lmt_gain_increase_en; /* 0x111:6 */
 	uint8_t f_agc_lock_level_gain_increase_upper_limit; /* 0x118 0..63 */
 	/* Fast AGC - Peak Detectors and Final Settling */
