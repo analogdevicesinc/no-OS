@@ -46,8 +46,10 @@
 /******************************************************************************/
 /*************************** Global variables *********************************/
 /******************************************************************************/
+#ifdef ZYNQ
 XSpiPs  m_spi;
 XSpiPs_Config  *m_spi_config;
+#endif
 
 /***************************************************************************//**
  * @brief ad_spi_init
@@ -77,6 +79,7 @@ int32_t ad_spi_init(spi_device *dev)
 	dev->cpha = 0;
 	dev->cpol = 0;
 
+	#ifdef ZYNQ
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
 
 	if (m_spi_config == NULL) {
@@ -86,6 +89,8 @@ int32_t ad_spi_init(spi_device *dev)
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
 		return(-1);
 	}
+	#endif
+
 	return(0);
 }
 
