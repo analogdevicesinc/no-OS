@@ -110,6 +110,34 @@
 #define DAC_DATA_SELECT(x)			(((x) & 0xF) << 0)
 #define DAC_TO_DATA_SELECT(x)			(((x) >> 0) & 0xF)
 
+#define AXI_DMAC_REG_IRQ_MASK			0x80
+#define AXI_DMAC_REG_IRQ_PENDING		0x84
+#define AXI_DMAC_REG_IRQ_SOURCE			0x88
+
+#define AXI_DMAC_REG_CTRL				0x400
+#define AXI_DMAC_REG_TRANSFER_ID		0x404
+#define AXI_DMAC_REG_START_TRANSFER		0x408
+#define AXI_DMAC_REG_FLAGS				0x40c
+#define AXI_DMAC_REG_DEST_ADDRESS		0x410
+#define AXI_DMAC_REG_SRC_ADDRESS		0x414
+#define AXI_DMAC_REG_X_LENGTH			0x418
+#define AXI_DMAC_REG_Y_LENGTH			0x41c
+#define AXI_DMAC_REG_DEST_STRIDE		0x420
+#define AXI_DMAC_REG_SRC_STRIDE			0x424
+#define AXI_DMAC_REG_TRANSFER_DONE		0x428
+#define AXI_DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
+#define AXI_DMAC_REG_STATUS				0x430
+#define AXI_DMAC_REG_CURRENT_DEST_ADDR	0x434
+#define AXI_DMAC_REG_CURRENT_SRC_ADDR	0x438
+#define AXI_DMAC_REG_DBG0				0x43c
+#define AXI_DMAC_REG_DBG1				0x440
+
+#define AXI_DMAC_CTRL_ENABLE			(1 << 0)
+#define AXI_DMAC_CTRL_PAUSE				(1 << 1)
+
+#define AXI_DMAC_IRQ_SOT				(1 << 0)
+#define AXI_DMAC_IRQ_EOT				(1 << 1)
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -143,6 +171,7 @@ typedef struct {
 	uint8_t	 resolution;
 	uint8_t	 no_of_channels;
 	dac_channel *channels;
+	uint32_t dac_ddr_baseaddr;
 } dac_core;
 
 /******************************************************************************/
@@ -159,5 +188,7 @@ int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq);
 int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase);
 int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units);
 int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src);
-
+void dac_write_custom_data(dac_core core,
+					  	   const uint32_t *custom_data_iq,
+						   uint32_t custom_tx_count);
 #endif

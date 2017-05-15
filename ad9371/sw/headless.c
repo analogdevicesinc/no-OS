@@ -55,6 +55,7 @@
 /******************************************************************************/
 extern ad9528Device_t	clockAD9528_;
 extern mykonosDevice_t	mykDevice;
+extern const uint32_t sine_lut_iq[1024];
 
 adc_core  ad9371_rx_core_init = {
 		XPAR_AXI_AD9371_CORE_BASEADDR, 		// base_address
@@ -74,7 +75,7 @@ dac_channel ad9371_tx_channels[4] = {
 			 0,				// dds_scale_tone1
 			 1,				// dds_dual_tone
 			 0,				// pat_data
-			 DAC_SRC_DDS	// sel
+			 DAC_SRC_DMA	// sel
 		},
 		{
 		     3*1000*1000, 	// dds_frequency_tone0
@@ -85,7 +86,7 @@ dac_channel ad9371_tx_channels[4] = {
 			 0,				// dds_scale_tone1
 			 1,				// dds_dual_tone
 			 0,				// pat_data
-			 DAC_SRC_DDS	// sel
+			 DAC_SRC_DMA	// sel
 		},
 		{
 		     3*1000*1000, 	// dds_frequency_tone0
@@ -96,7 +97,7 @@ dac_channel ad9371_tx_channels[4] = {
 			 0,				// dds_scale_tone1
 			 1,				// dds_dual_tone
 			 0,				// pat_data
-			 DAC_SRC_DDS	// sel
+			 DAC_SRC_DMA	// sel
 		},
 		{
 		     3*1000*1000, 	// dds_frequency_tone0
@@ -107,7 +108,7 @@ dac_channel ad9371_tx_channels[4] = {
 			 0,				// dds_scale_tone1
 			 1,				// dds_dual_tone
 			 0,				// pat_data
-			 DAC_SRC_DDS	// sel
+			 DAC_SRC_DMA	// sel
 		},
 };
 
@@ -115,7 +116,8 @@ dac_core  ad9371_tx_core_init = {
 		XPAR_AXI_AD9371_CORE_BASEADDR, 			// base_address
 		16, 									// resolution
 		4, 										// no_of_channels
-		ad9371_tx_channels						// *channels
+		ad9371_tx_channels,						// *channels
+		XPAR_DDR_MEM_BASEADDR + 0xA000000		// dac_ddr_baseaddr
 };
 
 /***************************************************************************//**
@@ -560,6 +562,8 @@ int main(void)
 		printf("adc_setup() failed\n");
 		return -1;
 	}
+
+	dac_write_custom_data(ad9371_tx_core_init, sine_lut_iq, sizeof(sine_lut_iq) / sizeof(uint32_t));
 
 	mdelay(1000);
 
