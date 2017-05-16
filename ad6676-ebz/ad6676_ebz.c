@@ -182,6 +182,9 @@ int main(void)
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
 #endif
+#ifdef MICROBLAZE
+	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
 	ad6676_dma.type = DMAC_RX;
 	ad6676_dma.transfer = &rx_xfer;
 	rx_xfer.id = 0;
