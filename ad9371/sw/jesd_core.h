@@ -47,10 +47,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define RX_CLKGEN_BASEADDR		XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR
-#define TX_CLKGEN_BASEADDR		XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR
-#define RX_OS_CLKGEN_BASEADDR	XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR
-
 #define RX_XCVR_BASEADDR		XPAR_AXI_AD9371_RX_XCVR_BASEADDR
 #define TX_XCVR_BASEADDR		XPAR_AXI_AD9371_TX_XCVR_BASEADDR
 #define RX_OS_XCVR_BASEADDR		XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR
@@ -60,9 +56,19 @@
 #define RX_OS_JESD_BASEADDR		XPAR_AXI_AD9371_RX_OS_JESD_BASEADDR
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	uint32_t base_addr;
+} jesd_device;
+
+typedef struct {
+	uint32_t base_addr;
+} xcvr_device;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t clkgen_setup(void);
 int32_t xcvr_setup(void);
 int32_t jesd_setup(void);
 

@@ -50,6 +50,7 @@
 #include "adc_core.h"
 #include "dac_core.h"
 #include "jesd_core.h"
+#include "clkgen_core.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -170,7 +171,7 @@ int main(void)
 	}
 
 	/* Initialize CLKGENs */
-	status = clkgen_setup();
+	status = clkgen_setup(&mykDevice);
 	if (status != 0) {
 		printf("clkgen_setup() failed\n");
 		return -1;

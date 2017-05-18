@@ -46,13 +46,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define CLKGEN_REG_RESETN		0x40
-#define CLKGEN_MMCM_RESETN		(1 << 1)
-#define CLKGEN_RESETN			(1 << 0)
-
-#define CLKGEN_REG_STATUS		0x5c
-#define CLKGEN_STATUS			(1 << 0)
-
 #define XCVR_REG_RESETN			0x0010
 #define XCVR_RESETN				(1 << 0)
 
@@ -78,72 +71,6 @@
 #define JESD_REG_TRX_LANES_IN_USE			0x28
 #define JESD_REG_TRX_SUBCLASS_MODE			0x2c
 #define JESD_REG_TRX_SYNC_STATUS			0x38
-
-/***************************************************************************//**
- * @brief clkgen_write
- *******************************************************************************/
-int32_t clkgen_write(clkgen_device dev,
-					 uint32_t reg_addr,
-					 uint32_t reg_val)
-{
-	Xil_Out32((dev.base_addr + reg_addr), reg_val);
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief clkgen_read
- *******************************************************************************/
-int32_t clkgen_read(clkgen_device dev,
-					uint32_t reg_addr,
-					uint32_t *reg_val)
-{
-	*reg_val = Xil_In32(dev.base_addr + reg_addr);
-
-	return 0;
-}
-
-/***************************************************************************//**
- * @brief clkgen_setup
- *******************************************************************************/
-int32_t clkgen_setup(void)
-{
-	clkgen_device	rx_clkgen;
-	clkgen_device	tx_clkgen;
-	clkgen_device	rx_os_clkgen;
-	uint32_t		reg_val;
-	int32_t			status = 0;
-
-	rx_clkgen.base_addr = XPAR_AXI_AD9371_RX_CLKGEN_BASEADDR;
-	tx_clkgen.base_addr = XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR;
-	rx_os_clkgen.base_addr = XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR;
-
-	clkgen_write(rx_clkgen, CLKGEN_REG_RESETN,
-			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
-	clkgen_write(tx_clkgen, CLKGEN_REG_RESETN,
-			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
-	clkgen_write(rx_os_clkgen, CLKGEN_REG_RESETN,
-			CLKGEN_MMCM_RESETN | CLKGEN_RESETN);
-	mdelay(1);
-
-	clkgen_read(rx_clkgen, CLKGEN_REG_STATUS, &reg_val);
-	if ((reg_val & CLKGEN_STATUS) == 0x0) {
-		printf("RX MMCM-PLL NOT locked");
-		status--;
-	}
-	clkgen_read(tx_clkgen, CLKGEN_REG_STATUS, &reg_val);
-	if ((reg_val & CLKGEN_STATUS) == 0x0) {
-		printf("TX MMCM-PLL NOT locked");
-		status--;
-	}
-	clkgen_read(rx_os_clkgen, CLKGEN_REG_STATUS, &reg_val);
-	if ((reg_val & CLKGEN_STATUS) == 0x0) {
-		printf("RX OS MMCM-PLL NOT locked");
-		status--;
-	}
-
-	return status;
-}
 
 /***************************************************************************//**
  * @brief xcvr_write
