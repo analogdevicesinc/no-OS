@@ -67,49 +67,46 @@ adc_core  ad9371_rx_core_init = {
 
 dac_channel ad9371_tx_channels[4] = {
 		{
-		     3*1000*1000, 	// dds_frequency_tone0
-			 90000, 		// dds_phase_tone0
-			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
-			 0,				// dds_frequency_tone1
-			 0,				// dds_phase_tone1
-			 0,				// dds_scale_tone1
-			 1,				// dds_dual_tone
-			 0,				// pat_data
-			 DAC_SRC_DMA	// sel
-		},
-		{
-		     3*1000*1000, 	// dds_frequency_tone0
-			 0, 			// dds_phase_tone0
-			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
-			 0,				// dds_frequency_tone1
-			 0,				// dds_phase_tone1
-			 0,				// dds_scale_tone1
-			 1,				// dds_dual_tone
-			 0,				// pat_data
-			 DAC_SRC_DMA	// sel
-		},
-		{
-		     3*1000*1000, 	// dds_frequency_tone0
-			 90000, 		// dds_phase_tone0
-			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
-			 0,				// dds_frequency_tone1
-			 0,				// dds_phase_tone1
-			 0,				// dds_scale_tone1
-			 1,				// dds_dual_tone
-			 0,				// pat_data
-			 DAC_SRC_DMA	// sel
-		},
-		{
-		     3*1000*1000, 	// dds_frequency_tone0
-			 0, 			// dds_phase_tone0
-			 50*1000, 		// dds_scale_tone0	1.0*1000*1000
-			 0,				// dds_frequency_tone1
-			 0,				// dds_phase_tone1
-			 0,				// dds_scale_tone1
-			 1,				// dds_dual_tone
-			 0,				// pat_data
-			 DAC_SRC_DMA	// sel
-		},
+			3*1000*1000,	// dds_frequency_tone0
+			90000,			// dds_phase_tone0
+			50*1000,		// dds_scale_tone0	1.0*1000*1000
+			0,				// dds_frequency_tone1
+			0,				// dds_phase_tone1
+			0,				// dds_scale_tone1
+			1,				// dds_dual_tone
+			0,				// pat_data
+			DAC_SRC_DMA		// sel
+		}, {
+			3*1000*1000,	// dds_frequency_tone0
+			0,				// dds_phase_tone0
+			50*1000,		// dds_scale_tone0	1.0*1000*1000
+			0,				// dds_frequency_tone1
+			0,				// dds_phase_tone1
+			0,				// dds_scale_tone1
+			1,				// dds_dual_tone
+			0,				// pat_data
+			DAC_SRC_DMA		// sel
+		}, {
+			3*1000*1000,	// dds_frequency_tone0
+			90000,			// dds_phase_tone0
+			50*1000,		// dds_scale_tone0	1.0*1000*1000
+			0,				// dds_frequency_tone1
+			0,				// dds_phase_tone1
+			0,				// dds_scale_tone1
+			1,				// dds_dual_tone
+			0,				// pat_data
+			DAC_SRC_DMA		// sel
+		}, {
+			3*1000*1000,	// dds_frequency_tone0
+			0,				// dds_phase_tone0
+			50*1000,		// dds_scale_tone0	1.0*1000*1000
+			0,				// dds_frequency_tone1
+			0,				// dds_phase_tone1
+			0,				// dds_scale_tone1
+			1,				// dds_dual_tone
+			0,				// pat_data
+			DAC_SRC_DMA		// sel
+		}
 };
 
 dac_core  ad9371_tx_core_init = {
@@ -195,10 +192,9 @@ int main(void)
 		goto error;
 	}
 
-	if ((mykError = MYKONOS_initialize(&mykDevice)) != MYKONOS_ERR_OK)
-	{
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+	if ((mykError = MYKONOS_initialize(&mykDevice)) != MYKONOS_ERR_OK) {
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*************************************************************************/
@@ -206,18 +202,18 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_checkPllsLockStatus(&mykDevice, &pllLockStatus)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
-    }
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
+	}
 
 	/*************************************************************************/
 	/*****                Mykonos Perform MultiChip Sync                 *****/
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_enableMultichipSync(&mykDevice, 1, &mcsStatus)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
-    }
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
+	}
 
 	/* Minimum 3 SYSREF pulses from Clock Device has to be produced for MulticChip Sync */
 	AD9528_requestSysref(&clockAD9528_, 1);
@@ -234,9 +230,9 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_enableMultichipSync(&mykDevice, 0, &mcsStatus)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
-    }
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
+	}
 
 	if ((mcsStatus & 0x0B) == 0x0B)
 		printf("MCS successful\n");
@@ -250,9 +246,9 @@ int main(void)
 	if (pllLockStatus & 0x01) {
 		printf("CLKPLL locked\n");
 		if ((mykError = MYKONOS_initArm(&mykDevice)) != MYKONOS_ERR_OK) {
-		    errorString = getMykonosErrorMessage(mykError);
-		    goto error;
-        }
+			errorString = getMykonosErrorMessage(mykError);
+			goto error;
+		}
 
 		if ((mykError = MYKONOS_loadArmFromBinary(&mykDevice, &firmware_Mykonos_M3_bin[0], firmware_Mykonos_M3_bin_len)) != MYKONOS_ERR_OK) {
 			errorString = getMykonosErrorMessage(mykError);
@@ -272,27 +268,27 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_setRfPllFrequency(&mykDevice, RX_PLL, mykDevice.rx->rxPllLoFrequency_Hz)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
+		errorString = getMykonosErrorMessage(mykError);
 		goto error;
-    }
+	}
 
 	if ((mykError = MYKONOS_setRfPllFrequency(&mykDevice, TX_PLL, mykDevice.tx->txPllLoFrequency_Hz)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
+		errorString = getMykonosErrorMessage(mykError);
 		goto error;
-    }
+	}
 
 	if ((mykError = MYKONOS_setRfPllFrequency(&mykDevice, SNIFFER_PLL, mykDevice.obsRx->snifferPllLoFrequency_Hz)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
+		errorString = getMykonosErrorMessage(mykError);
 		goto error;
-    }
+	}
 
 	/* Wait 200ms for PLLs to lock */
 	mdelay(200);
 
 	if ((mykError = MYKONOS_checkPllsLockStatus(&mykDevice, &pllLockStatus)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
+		errorString = getMykonosErrorMessage(mykError);
 		goto error;
-    }
+	}
 
 	if ((pllLockStatus & 0x0F) == 0x0F)
 		printf("PLLs locked\n");
@@ -306,66 +302,67 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykGpioErr = MYKONOS_setRx1GainCtrlPin(&mykDevice, 0, 0, 0, 0, 0)) != MYKONOS_ERR_GPIO_OK) {
-	    errorString = getGpioMykonosErrorMessage(mykGpioErr);
-	    goto error;
-    }
+		errorString = getGpioMykonosErrorMessage(mykGpioErr);
+		goto error;
+	}
 
 	if ((mykGpioErr = MYKONOS_setRx2GainCtrlPin(&mykDevice, 0, 0, 0, 0, 0)) != MYKONOS_ERR_GPIO_OK) {
-	    errorString = getGpioMykonosErrorMessage(mykGpioErr);
-	    goto error;
-    }
+		errorString = getGpioMykonosErrorMessage(mykGpioErr);
+		goto error;
+	}
 
 	if ((mykGpioErr = MYKONOS_setTx1AttenCtrlPin(&mykDevice, 0, 0, 0, 0, 0)) != MYKONOS_ERR_GPIO_OK) {
-	    errorString = getGpioMykonosErrorMessage(mykGpioErr);
-	    goto error;
-    }
+		errorString = getGpioMykonosErrorMessage(mykGpioErr);
+		goto error;
+	}
 
 	if ((mykGpioErr = MYKONOS_setTx2AttenCtrlPin(&mykDevice, 0, 0, 0, 0)) != MYKONOS_ERR_GPIO_OK) {
-	    errorString = getGpioMykonosErrorMessage(mykGpioErr);
-	    goto error;
-    }
+		errorString = getGpioMykonosErrorMessage(mykGpioErr);
+		goto error;
+	}
 
 	if ((mykGpioErr = MYKONOS_setupGpio(&mykDevice)) != MYKONOS_ERR_GPIO_OK) {
-	    errorString = getGpioMykonosErrorMessage(mykGpioErr);
-	    goto error;
-    }
+		errorString = getGpioMykonosErrorMessage(mykGpioErr);
+		goto error;
+	}
 
 	/*************************************************************************/
 	/*****                Mykonos Set manual gains values                *****/
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_setRx1ManualGain(&mykDevice, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setRx2ManualGain(&mykDevice, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setObsRxManualGain(&mykDevice, OBS_RX1_TXLO, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setObsRxManualGain(&mykDevice, OBS_RX2_TXLO, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setObsRxManualGain(&mykDevice, OBS_SNIFFER_A, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setObsRxManualGain(&mykDevice, OBS_SNIFFER_B, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
+
 	if ((mykError = MYKONOS_setObsRxManualGain(&mykDevice, OBS_SNIFFER_C, 255)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*************************************************************************/
@@ -373,13 +370,13 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_setTx1Attenuation(&mykDevice, 0)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_setTx2Attenuation(&mykDevice, 0)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*************************************************************************/
@@ -439,33 +436,32 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_enableSysrefToRxFramer(&mykDevice, 1)) != MYKONOS_ERR_OK) {
-	    errorString = getMykonosErrorMessage(mykError);
-	    goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 	/*** < Info: Mykonos is waiting for sysref in order to start
 	 * transmitting CGS from the RxFramer> ***/
 
 	if ((mykError = MYKONOS_enableSysrefToObsRxFramer(&mykDevice, 1)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 	/*** < Info: Mykonos is waiting for sysref in order to start
 	 * transmitting CGS from the ObsRxFramer> ***/
 
 	if ((mykError = MYKONOS_enableSysrefToDeframer(&mykDevice, 0)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	if ((mykError = MYKONOS_resetDeframer(&mykDevice)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
-	if ((mykError = MYKONOS_enableSysrefToDeframer(&mykDevice, 1)) != MYKONOS_ERR_OK)
-	{
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+	if ((mykError = MYKONOS_enableSysrefToDeframer(&mykDevice, 1)) != MYKONOS_ERR_OK) {
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*************************************************************************/
@@ -498,15 +494,15 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_readRxFramerStatus(&mykDevice, &framerStatus)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	} else
 		if (framerStatus != 0x3E)
 			printf("RxFramerStatus = 0x%x\n", framerStatus);
 
 	if ((mykError = MYKONOS_readOrxFramerStatus(&mykDevice, &obsFramerStatus)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	} else
 		if (obsFramerStatus != 0x3E)
 			printf("OrxFramerStatus = 0x%x\n", obsFramerStatus);
@@ -516,8 +512,8 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_readDeframerStatus(&mykDevice, &deframerStatus)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	} else
 		if (deframerStatus != 0x68)
 			printf("DeframerStatus = 0x%x\n", deframerStatus);
@@ -527,8 +523,8 @@ int main(void)
 	/*************************************************************************/
 
 	if ((mykError = MYKONOS_enableTrackingCals(&mykDevice, trackingCalMask)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*** < Info: Allow Rx1/2 QEC tracking and Tx1/2 QEC tracking to run when in the radioOn state
@@ -537,18 +533,18 @@ int main(void)
 	/*** < Info: Function to turn radio on, Enables transmitters and receivers
 	 * that were setup during MYKONOS_initialize() > ***/
 	if ((mykError = MYKONOS_radioOn(&mykDevice)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	/*** < Info: Allow TxQEC to run when User: is not actively using ORx receive path > ***/
 	if ((mykError = MYKONOS_setObsRxPathSource(&mykDevice, OBS_RXOFF)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
-    }
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
+	}
 	if ((mykError = MYKONOS_setObsRxPathSource(&mykDevice, OBS_INTERNALCALS)) != MYKONOS_ERR_OK) {
-        errorString = getMykonosErrorMessage(mykError);
-        goto error;
+		errorString = getMykonosErrorMessage(mykError);
+		goto error;
 	}
 
 	status = dac_setup(ad9371_tx_core_init);

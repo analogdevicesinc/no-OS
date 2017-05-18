@@ -33,29 +33,29 @@ extern "C" {
 /* proposed to increase number of error return values to make unique for each return */
 typedef enum
 {
-    ADIERR_OK=0,
-    ADIERR_INV_PARM,
-    ADIERR_FAILED
+	ADIERR_OK=0,
+	ADIERR_INV_PARM,
+	ADIERR_FAILED
 } ADI_ERR;
 
 /*!< \brief COMMON layer error reporting enumerated types */
 typedef enum
 {
-    COMMONERR_OK=0,
-    COMMONERR_FAILED
+	COMMONERR_OK=0,
+	COMMONERR_FAILED
 } commonErr_t;
 
 /* bit 0 is MESSAGE, bit 1 is WARNING, bit 2 is ERROR */
 typedef enum
 {
-    ADIHAL_LOG_NONE    = 0x0,
-    ADIHAL_LOG_MESSAGE = 0x1,
-    ADIHAL_LOG_WARNING = 0x2,
-    ADIHAL_LOG_ERROR   = 0x4,
-	ADIHAL_LOG_SPI     = 0x8,
+	ADIHAL_LOG_NONE	= 0x0,
+	ADIHAL_LOG_MESSAGE = 0x1,
+	ADIHAL_LOG_WARNING = 0x2,
+	ADIHAL_LOG_ERROR   = 0x4,
+	ADIHAL_LOG_SPI	 = 0x8,
 	ADIHAL_LOG_AXI_REG = 0x10,
 	ADIHAL_LOG_AXI_MEM = 0x20,
-	ADIHAL_LOG_ALL     = 0x3F
+	ADIHAL_LOG_ALL	 = 0x3F
 } ADI_LOGLEVEL;
 
 /**
@@ -63,17 +63,16 @@ typedef enum
  */
 typedef struct
 {
-	uint8_t chipSelectIndex;        ///< valid 1~8
-	uint8_t writeBitPolarity;       ///< the level of the write bit of a SPI write instruction word, value is inverted for SPI read operation
-	uint8_t longInstructionWord;    ///< 1 = 16bit instruction word, 0 = 8bit instruction word
-	uint8_t MSBFirst;               ///< 1 = MSBFirst, 0 = LSBFirst
-	uint8_t CPHA;                   ///< clock phase, sets which clock edge the data updates (valid 0 or 1)
-	uint8_t CPOL;                   ///< clock polarity 0 = clock starts low, 1 = clock starts high
-    uint8_t enSpiStreaming;         ///< Not implemented. SW feature to improve SPI throughput.
-    uint8_t autoIncAddrUp;          ///< Not implemented. For SPI Streaming, set address increment direction. 1= next addr = addr+1, 0:addr = addr-1
-    uint8_t fourWireMode;           ///< 1: Use 4-wire SPI, 0: 3-wire SPI (SDIO pin is bidirectional). NOTE: ADI's FPGA platform always uses 4-wire mode.
-    uint32_t spiClkFreq_Hz;         ///< SPI Clk frequency in Hz (default 25000000), platform will use next lowest frequency that it's baud rate generator can create */
-
+	uint8_t chipSelectIndex;		///< valid 1~8
+	uint8_t writeBitPolarity;		///< the level of the write bit of a SPI write instruction word, value is inverted for SPI read operation
+	uint8_t longInstructionWord;	///< 1 = 16bit instruction word, 0 = 8bit instruction word
+	uint8_t MSBFirst;				///< 1 = MSBFirst, 0 = LSBFirst
+	uint8_t CPHA;					///< clock phase, sets which clock edge the data updates (valid 0 or 1)
+	uint8_t CPOL;					///< clock polarity 0 = clock starts low, 1 = clock starts high
+	uint8_t enSpiStreaming;			///< Not implemented. SW feature to improve SPI throughput.
+	uint8_t autoIncAddrUp;			///< Not implemented. For SPI Streaming, set address increment direction. 1= next addr = addr+1, 0:addr = addr-1
+	uint8_t fourWireMode;			///< 1: Use 4-wire SPI, 0: 3-wire SPI (SDIO pin is bidirectional). NOTE: ADI's FPGA platform always uses 4-wire mode.
+	uint32_t spiClkFreq_Hz;			///< SPI Clk frequency in Hz (default 25000000), platform will use next lowest frequency that it's baud rate generator can create */
 } spiSettings_t;
 
 /* global variable so application layer can set the log level */

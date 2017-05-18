@@ -26,12 +26,12 @@ extern spi_device spi_dev;
 
 commonErr_t CMB_closeHardware(void)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_setGPIO(uint32_t GPIO)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
@@ -56,17 +56,17 @@ commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 	gpio_set_value(resetGPIO, 0x1);
 	CMB_wait_ms(1);
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_setSPIOptions(spiSettings_t *spiSettings)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_setSPIChannel(uint16_t chipSelectIndex )
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr, uint8_t data)
@@ -89,8 +89,8 @@ commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr, uint8_
 	uint32_t index;
 
 	for (index = 0; index < count; index++)
-	  if (CMB_SPIWriteByte(spiSettings, *(addr + index), *(data + index)) != COMMONERR_OK)
-	    return(COMMONERR_FAILED);
+		if (CMB_SPIWriteByte(spiSettings, *(addr + index), *(data + index)) != COMMONERR_OK)
+			return(COMMONERR_FAILED);
 
 	return(COMMONERR_OK);
 }
@@ -116,12 +116,12 @@ commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr, uint8_t
 	uint8_t data;
 
 	if (CMB_SPIReadByte(spiSettings, addr, &data) != COMMONERR_OK)
-	  return(COMMONERR_FAILED);
+		return(COMMONERR_FAILED);
 
 	data = (data & ~mask) | ((field_val << start_bit) & mask);
 
 	if (CMB_SPIWriteByte(spiSettings, addr, data) != COMMONERR_OK)
-	  return(COMMONERR_FAILED);
+		return(COMMONERR_FAILED);
 
 	return(COMMONERR_OK);
 }
@@ -132,7 +132,7 @@ commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr, uint8_t 
 	uint8_t data;
 
 	if (CMB_SPIReadByte(spiSettings, addr, &data) != COMMONERR_OK)
-	  return(COMMONERR_FAILED);
+		return(COMMONERR_FAILED);
 
 	data = (data & mask) >> start_bit;
 	*field_val = data;
@@ -142,72 +142,72 @@ commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr, uint8_t 
 
 commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex, uint32_t errorCode, const char *comment){
 
-    if((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR))
-    {
-    	printf("ERROR: %d: %s", (int)errorCode, comment);
-    }
-    else if((CMB_LOGLEVEL & ADIHAL_LOG_WARNING) && (level == ADIHAL_LOG_WARNING))
-    {
-    	printf("WARNING: %d: %s",(int)errorCode, comment);
-    }
-    else if((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE) && (level == ADIHAL_LOG_MESSAGE))
-    {
-    	printf("MESSAGE: %d: %s",(int)errorCode, comment);
-    }
-    else if(CMB_LOGLEVEL == ADIHAL_LOG_NONE )
-    {
-    	//printf("MESSAGE: %d: %s",(int)errorCode, comment);
-    }
-    else
-    {
-    	printf("Undefined Log Level: 0x%X", level);
-    }
+	if((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR))
+	{
+		printf("ERROR: %d: %s", (int)errorCode, comment);
+	}
+	else if((CMB_LOGLEVEL & ADIHAL_LOG_WARNING) && (level == ADIHAL_LOG_WARNING))
+	{
+		printf("WARNING: %d: %s",(int)errorCode, comment);
+	}
+	else if((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE) && (level == ADIHAL_LOG_MESSAGE))
+	{
+		printf("MESSAGE: %d: %s",(int)errorCode, comment);
+	}
+	else if(CMB_LOGLEVEL == ADIHAL_LOG_NONE )
+	{
+		//printf("MESSAGE: %d: %s",(int)errorCode, comment);
+	}
+	else
+	{
+		printf("Undefined Log Level: 0x%X", level);
+	}
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 /* if filename null, a default path will be used in logging.c */
 commonErr_t CMB_openLog(const char *filename)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_closeLog(void)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_flushLog(void)
 {
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_wait_ms(uint32_t time_ms)
 {
 	mdelay(time_ms);
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_wait_us(uint32_t time_us)
 {
 	udelay(time_us);
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_setTimeout_ms(uint32_t timeOut_ms)
 {
 	_desired_time_to_elapse_us = timeOut_ms * 1000;
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_setTimeout_us(uint32_t timeOut_us)
 {
 	_desired_time_to_elapse_us = timeOut_us;
 
-    return(COMMONERR_OK);
+	return(COMMONERR_OK);
 }
 
 commonErr_t CMB_hasTimeoutExpired()
