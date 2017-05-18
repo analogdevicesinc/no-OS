@@ -89,6 +89,8 @@
 #define mdelay(msecs)		usleep(1000*msecs)
 #define udelay(usecs)		usleep(usecs)
 
+#define ARRAY_SIZE(ar)		(sizeof(ar)/sizeof(ar[0]))
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -120,5 +122,6 @@ int32_t gpio_direction_output(uint8_t gpio,
 int32_t gpio_set_value(uint8_t gpio,
 					   uint8_t value);
 uint32_t ad_pow2(uint32_t number);
+uint32_t find_first_bit(uint32_t word);
 
 #endif

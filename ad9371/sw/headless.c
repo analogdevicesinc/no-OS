@@ -479,7 +479,7 @@ int main(void)
 	/*** < Info: Mykonos is actively transmitting CGS from the ObsRxFramer> ***/
 
 	/* Initialize ADXCVRs */
-	status = xcvr_setup();
+	status = xcvr_setup(&mykDevice);
 	if (status != 0) {
 		printf("xcvr_setup() failed\n");
 		return -1;
@@ -489,7 +489,7 @@ int main(void)
 	AD9528_requestSysref(&clockAD9528_, 1);
 	mdelay(1);
 	AD9528_requestSysref(&clockAD9528_, 1);
-	mdelay(1);
+	mdelay(5);
 
 	/*************************************************************************/
 	/*****               Check Mykonos Framer Status                     *****/

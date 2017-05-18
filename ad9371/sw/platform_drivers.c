@@ -155,3 +155,31 @@ uint32_t ad_pow2(uint32_t number) {
 
 	return mask;
 }
+
+/***************************************************************************//**
+ * @brief find_first_bit
+*******************************************************************************/
+uint32_t find_first_bit(uint32_t word)
+{
+	int32_t num = 0;
+
+	if ((word & 0xffff) == 0) {
+			num += 16;
+			word >>= 16;
+	}
+	if ((word & 0xff) == 0) {
+			num += 8;
+			word >>= 8;
+	}
+	if ((word & 0xf) == 0) {
+			num += 4;
+			word >>= 4;
+	}
+	if ((word & 0x3) == 0) {
+			num += 2;
+			word >>= 2;
+	}
+	if ((word & 0x1) == 0)
+			num += 1;
+	return num;
+}

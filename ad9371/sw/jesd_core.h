@@ -59,17 +59,31 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 typedef struct {
-	uint32_t base_addr;
+	uint32_t	base_addr;
 } jesd_device;
 
+typedef enum {
+	PM_200,
+	PM_700,
+	PM_1250,
+} refclk_ppm;
+
 typedef struct {
-	uint32_t base_addr;
+	uint32_t	base_addr;
+	uint8_t		tx_enable;
+	refclk_ppm	ppm;
+	uint16_t	encoding;
+	uint8_t		gth_enable;
+	uint8_t		lpm_enable;
+	uint8_t		cpll_enable;
+	uint32_t	lane_rate_khz;
+	uint32_t	ref_rate_khz;
 } xcvr_device;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t xcvr_setup(void);
+int32_t xcvr_setup(mykonosDevice_t *myk_dev);
 int32_t jesd_setup(void);
 
 #endif
