@@ -49,6 +49,7 @@
 #include "platform_drivers.h"
 #include "adc_core.h"
 #include "dac_core.h"
+#include "jesd_core.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
