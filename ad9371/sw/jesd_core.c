@@ -721,7 +721,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 
 	rx_xcvr.base_addr = XPAR_AXI_AD9371_RX_XCVR_BASEADDR;
 	rx_xcvr.ref_rate_khz = myk_dev->clocks->deviceClock_kHz;
-	rx_xcvr.lane_rate_khz = myk_dev->clocks->deviceClock_kHz * 40;
+	rx_xcvr.lane_rate_khz = myk_dev->rx->rxProfile->iqRate_kHz * 40;
 	rx_xcvr.cpll_enable = 1;
 	rx_xcvr.tx_enable = 0;
 	rx_xcvr.gth_enable = 0;
