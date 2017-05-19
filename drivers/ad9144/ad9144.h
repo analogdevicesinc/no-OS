@@ -132,6 +132,7 @@
 #define REG_CAL_ADDR				0x0EA /* Calibration DAC Address */
 #define REG_CAL_DATA				0x0EB /* Calibration DAC Data */
 #define REG_CAL_UPDATE				0x0EC /* Calibration DAC Write Update */
+#define REG_CAL_INIT				0x0ED /* Calibration init */
 #define REG_DATA_FORMAT				0x110 /* Data format */
 #define REG_DATAPATH_CTRL			0x111 /* Datapath Control */
 #define REG_INTERP_MODE				0x112 /* Interpolation Mode */
@@ -196,7 +197,9 @@
 #define REG_MASTER_PD				0x200 /* Master power down for Receiver PHYx */
 #define REG_PHY_PD				0x201 /* Power down for individual Receiver PHYx */
 #define REG_GENERIC_PD				0x203 /* Miscellaneous power down controls */
+#define REG_CDR_RESET				0x206 /* CDR Reset control */
 #define REG_CDR_OPERATING_MODE_REG_0		0x230 /* Clock and data recovery operating modes */
+#define REG_CONFIG_REG3				0x232 /* SERDES interface configuration */
 #define REG_EQ_CONFIG_PHY_0_1			0x250 /* Equalizer configuration for PHY 0 and PHY 1 */
 #define REG_EQ_CONFIG_PHY_2_3			0x251 /* Equalizer configuration for PHY 2 and PHY 3 */
 #define REG_EQ_CONFIG_PHY_4_5			0x252 /* Equalizer configuration for PHY 4 and PHY 5 */
@@ -205,10 +208,17 @@
 #define REG_SYNTH_ENABLE_CNTRL			0x280 /* Rx PLL enable controls */
 #define REG_PLL_STATUS				0x281 /* Rx PLL status readbacks */
 #define REG_REF_CLK_DIVIDER_LDO			0x289 /* Rx PLL LDO control */
+#define REG_SERDES_PLL_CP3			0x29c /* Serdes PLL charge pump */
+#define REG_SERDES_PLL_VAR3			0x29f /* Serdes PLL VCO varactor */
+#define REG_DEV_CONFIG_8			0x2A4 /* To control the clock configuration */
 #define REG_TERM_BLK1_CTRLREG0			0x2A7 /* Termination controls for PHYs 0, 1, 6, and 7 */
 #define REG_TERM_BLK1_CTRLREG1			0x2A8 /* Termination controls for PHYs 0, 1, 6, and 7 */
+#define REG_DEV_CONFIG_9			0x2AA /* SERDES interface termination settings */
+#define REG_DEV_CONFIG_10			0x2AB /* SERDES interface termination settings */
 #define REG_TERM_BLK2_CTRLREG0			0x2AE /* Termination controls for PHYs 2, 3, 4, and 5 */
 #define REG_TERM_BLK2_CTRLREG1			0x2AF /* Termination controls for PHYs 2, 3, 4, and 5 */
+#define REG_DEV_CONFIG_11			0x2B1 /* SERDES interface termination settings */
+#define REG_DEV_CONFIG_12			0x2B2 /* SERDES interface termination settings */
 #define REG_GENERAL_JRX_CTRL_0			0x300 /* General JRX Control Register 0 */
 #define REG_GENERAL_JRX_CTRL_1			0x301 /* General JRX Control Register 1 */
 #define REG_DYN_LINK_LATENCY_0			0x302 /* Register 1 description */
@@ -227,6 +237,7 @@
 #define REG_SYNCB_GEN_0				0x311 /* Register 16 description */
 #define REG_SYNCB_GEN_1				0x312 /* Register 17 description */
 #define REG_SYNCB_GEN_3				0x313 /* Register 18 description */
+#define REG_SERDES_SPI_REG			0x314 /* SERDES SPI configuration */
 #define REG_PHY_PRBS_TEST_EN			0x315 /* PHY PRBS TEST ENABLE FOR INDIVIDUAL LANES */
 #define REG_PHY_PRBS_TEST_CTRL			0x316 /* Reg 20 Description */
 #define REG_PHY_PRBS_TEST_THRESH_LOBITS		0x317 /* Reg 21 Description */
@@ -240,6 +251,7 @@
 #define REG_SHORT_TPL_TEST_1			0x32D /* Reg 47 Description */
 #define REG_SHORT_TPL_TEST_2			0x32E /* Reg 48 Description */
 #define REG_SHORT_TPL_TEST_3			0x32F /* Reg 49 Description */
+#define REG_DEVICE_CONFIG_REG_13		0x333 /* SERDES interface configuration  */
 #define REG_JESD_BIT_INVERSE_CTRL		0x334 /* Reg 42 Description */
 #define REG_DID_REG				0x400 /* Reg 0 Description */
 #define REG_BID_REG				0x401 /* Reg 1 Description */
@@ -281,6 +293,7 @@
 #define REG_ILS_BID				0x451 /* Reg 81 Description */
 #define REG_ILS_LID0				0x452 /* Reg 82 Description */
 #define REG_ILS_SCR_L				0x453 /* Reg 83 Description */
+#define REG_ILS_F				0x454 /* Reg 84 Description */
 #define REG_ILS_K				0x455 /* Reg 85 Description */
 #define REG_ILS_M				0x456 /* Reg 86 Description */
 #define REG_ILS_CS_N				0x457 /* Reg 87 Description */

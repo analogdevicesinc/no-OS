@@ -114,115 +114,115 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, 0x00);	// reset
 	mdelay(1);
 
-	ad9144_spi_write(dev, 0x011, 0x00);	// dacs - power up everything
-	ad9144_spi_write(dev, 0x080, 0x00);	// clocks - power up everything
-	ad9144_spi_write(dev, 0x081, 0x00);	// sysref - power up/falling edge
+	ad9144_spi_write(dev, REG_PWRCNTRL0, 0x00);	// dacs - power up everything
+	ad9144_spi_write(dev, REG_CLKCFG0, 0x00);	// clocks - power up everything
+	ad9144_spi_write(dev, REG_SYSREF_ACTRL0, 0x00);	// sysref - power up/falling edge
 
 	// required device configurations
 
-	ad9144_spi_write(dev, 0x12d, 0x8b);	// data-path
-	ad9144_spi_write(dev, 0x146, 0x01);	// data-path
-	ad9144_spi_write(dev, 0x2a4, 0xff);	// clock
-	ad9144_spi_write(dev, 0x1c4, 0x73);	// dac-pll
-	ad9144_spi_write(dev, 0x291, 0x49);	// serde-pll
-	ad9144_spi_write(dev, 0x29c, 0x24);	// serde-pll
-	ad9144_spi_write(dev, 0x29f, 0x73);	// serde-pll
-	ad9144_spi_write(dev, 0x232, 0xff);	// jesd
-	ad9144_spi_write(dev, 0x333, 0x01);	// jesd
+	ad9144_spi_write(dev, REG_DATA_PATH_FLUSH_COUNT0, 0x8b);	// data-path
+	ad9144_spi_write(dev, REG_BLSM_CTRL, 0x01);			// data-path
+	ad9144_spi_write(dev, REG_DEV_CONFIG_8, 0xff);			// clock
+	ad9144_spi_write(dev, REG_DACPLLT17, 0x73);			// dac-pll
+	//ad9144_spi_write(dev, 0x291, 0x49);	// serde-pll
+	ad9144_spi_write(dev, REG_SERDES_PLL_CP3, 0x24);		// serde-pll
+	ad9144_spi_write(dev, REG_SERDES_PLL_VAR3, 0x73);		// serde-pll
+	ad9144_spi_write(dev, REG_CONFIG_REG3, 0xff);			// jesd
+	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);	// jesd
 
 	// digital data path
 
-	ad9144_spi_write(dev, 0x112, 0x00);	// interpolation (bypass)
-	ad9144_spi_write(dev, 0x110, 0x00);	// 2's complement
+	ad9144_spi_write(dev, REG_INTERP_MODE, 0x00);	// interpolation (bypass)
+	ad9144_spi_write(dev, REG_DATA_FORMAT, 0x00);	// 2's complement
 
 	// transport layer
 
-	ad9144_spi_write(dev, 0x200, 0x00);	// phy - power up
-	ad9144_spi_write(dev, 0x201, 0x00);	// phy - power up
-	ad9144_spi_write(dev, 0x300, 0x01);	// single link - link 0
-	ad9144_spi_write(dev, 0x450, 0x00);	// device id (0x400)
-	ad9144_spi_write(dev, 0x451, 0x00);	// bank id (0x401)
-	ad9144_spi_write(dev, 0x452, 0x04);	// lane-id (0x402)
-	ad9144_spi_write(dev, 0x453, 0x83);	// descrambling, 4 lanes
-	ad9144_spi_write(dev, 0x454, 0x00);	// octects per frame per lane (1)
-	ad9144_spi_write(dev, 0x455, 0x1f);	// mult-frame - framecount (32)
-	ad9144_spi_write(dev, 0x456, 0x01);	// no-of-converters (2)
-	ad9144_spi_write(dev, 0x457, 0x0f);	// no CS bits, 16bit dac
-	ad9144_spi_write(dev, 0x458, 0x2f);	// subclass 1, 16bits per sample
-	ad9144_spi_write(dev, 0x459, 0x20);	// jesd204b, 1 samples per converter per device
-	ad9144_spi_write(dev, 0x45a, 0x80);	// HD mode, no CS bits
-	ad9144_spi_write(dev, 0x45d, 0x49);	// check-sum of 0x450 to 0x45c
-	ad9144_spi_write(dev, 0x46c, 0x0f);	// enable deskew for all lanes
-	ad9144_spi_write(dev, 0x476, 0x01);	// frame - bytecount (1)
-	ad9144_spi_write(dev, 0x47d, 0x0f);	// enable all lanes
+	ad9144_spi_write(dev, REG_MASTER_PD, 0x00);	// phy - power up
+	ad9144_spi_write(dev, REG_PHY_PD, 0x00);	// phy - power up
+	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x01);	// single link - link 0
+	ad9144_spi_write(dev, REG_ILS_DID, 0x00);	// device id (0x400)
+	ad9144_spi_write(dev, REG_ILS_BID, 0x00);	// bank id (0x401)
+	ad9144_spi_write(dev, REG_ILS_LID0, 0x04);	// lane-id (0x402)
+	ad9144_spi_write(dev, REG_ILS_SCR_L, 0x83);	// descrambling, 4 lanes
+	ad9144_spi_write(dev, REG_ILS_F, 0x00);		// octects per frame per lane (1)
+	ad9144_spi_write(dev, REG_ILS_K, 0x1f);		// mult-frame - framecount (32)
+	ad9144_spi_write(dev, REG_ILS_M, 0x01);		// no-of-converters (2)
+	ad9144_spi_write(dev, REG_ILS_CS_N, 0x0f);	// no CS bits, 16bit dac
+	ad9144_spi_write(dev, REG_ILS_NP, 0x2f);	// subclass 1, 16bits per sample
+	ad9144_spi_write(dev, REG_ILS_S, 0x20);		// jesd204b, 1 samples per converter per device
+	ad9144_spi_write(dev, REG_ILS_HD_CF, 0x80);	// HD mode, no CS bits
+	ad9144_spi_write(dev, REG_ILS_CHECKSUM, 0x49);	// check-sum of REG_ILS_DID to 0x45c
+	ad9144_spi_write(dev, REG_LANEDESKEW, 0x0f);	// enable deskew for all lanes
+	ad9144_spi_write(dev, REG_CTRLREG1, 0x01);	// frame - bytecount (1)
+	ad9144_spi_write(dev, REG_LANEENABLE, 0x0f);	// enable all lanes
 
 	// physical layer
 
-	ad9144_spi_write(dev, 0x2aa, 0xb7);	// jesd termination
-	ad9144_spi_write(dev, 0x2ab, 0x87);	// jesd termination
-	ad9144_spi_write(dev, 0x2b1, 0xb7);	// jesd termination
-	ad9144_spi_write(dev, 0x2b2, 0x87);	// jesd termination
-	ad9144_spi_write(dev, 0x2a7, 0x01);	// input termination calibration
-	ad9144_spi_write(dev, 0x2ae, 0x01);	// input termination calibration
-	ad9144_spi_write(dev, 0x314, 0x01);	// pclk == qbd master clock
+	ad9144_spi_write(dev, REG_DEV_CONFIG_9, 0xb7);		// jesd termination
+	ad9144_spi_write(dev, REG_DEV_CONFIG_10, 0x87);		// jesd termination
+	ad9144_spi_write(dev, REG_DEV_CONFIG_11, 0xb7);		// jesd termination
+	ad9144_spi_write(dev, REG_DEV_CONFIG_12, 0x87);		// jesd termination
+	ad9144_spi_write(dev, REG_TERM_BLK1_CTRLREG0, 0x01);	// input termination calibration
+	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
+	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
 	if (init_param.lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, 0x230, 0x2A);		// CDR_OVERSAMP
+		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x2A);		// CDR_OVERSAMP
 	else
 		if (init_param.lane_rate_kbps > 5520000)
-			ad9144_spi_write(dev, 0x230, 0x28);	// ENHALFRATE
+			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x28);	// ENHALFRATE
 		else
-			ad9144_spi_write(dev, 0x230, 0x08);
-	ad9144_spi_write(dev, 0x206, 0x00);	// cdr reset
-	ad9144_spi_write(dev, 0x206, 0x01);	// cdr reset
+			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x08);
+	ad9144_spi_write(dev, REG_CDR_RESET, 0x00);	// cdr reset
+	ad9144_spi_write(dev, REG_CDR_RESET, 0x01);	// cdr reset
 	if (init_param.lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, 0x289, 0x06);		// data-rate < 2.88 Gbps
+		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x06);		// data-rate < 2.88 Gbps
 	else
 		if (init_param.lane_rate_kbps > 5520000)
-			ad9144_spi_write(dev, 0x289, 0x04);	// data-rate > 5.52 Gbps
+			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x04);	// data-rate > 5.52 Gbps
 		else
-			ad9144_spi_write(dev, 0x289, 0x05);
-	ad9144_spi_write(dev, 0x280, 0x01);	// enable serdes pll
-	ad9144_spi_write(dev, 0x280, 0x05);	// enable serdes calibration
+			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x05);
+	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
+	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x05);	// enable serdes calibration
 	mdelay(20);
 
-	ad9144_spi_read(dev, 0x281, &pll_stat);
+	ad9144_spi_read(dev, REG_PLL_STATUS, &pll_stat);
 	if ((pll_stat & 0x01) != 0x01)
 		ad_printf("%s : PLL NOT locked!.\n", __func__);
 
-	ad9144_spi_write(dev, 0x268, 0x62);	// equalizer
+	ad9144_spi_write(dev, REG_EQ_BIAS_REG, 0x62);	// equalizer
 
 	// data link layer
 
-	ad9144_spi_write(dev, 0x301, 0x01);	// subclass-1
-	ad9144_spi_write(dev, 0x304, 0x00);	// lmfc delay
-	ad9144_spi_write(dev, 0x305, 0x00);	// lmfc delay
-	ad9144_spi_write(dev, 0x306, 0x0a);	// receive buffer delay
-	ad9144_spi_write(dev, 0x307, 0x0a);	// receive buffer delay
-	ad9144_spi_write(dev, 0x03a, 0x01);	// sync-oneshot mode
-	ad9144_spi_write(dev, 0x03a, 0x81);	// sync-enable
-	ad9144_spi_write(dev, 0x03a, 0xc1);	// sysref-armed
-	ad9144_spi_write(dev, 0x300, 0x01);	// enable link
+	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_1, 0x01);	// subclass-1
+	ad9144_spi_write(dev, REG_LMFC_DELAY_0, 0x00);	// lmfc delay
+	ad9144_spi_write(dev, REG_LMFC_DELAY_1, 0x00);	// lmfc delay
+	ad9144_spi_write(dev, REG_LMFC_VAR_0, 0x0a);	// receive buffer delay
+	ad9144_spi_write(dev, REG_LMFC_VAR_1, 0x0a);	// receive buffer delay
+	ad9144_spi_write(dev, REG_SYNC_CTRL, 0x01);	// sync-oneshot mode
+	ad9144_spi_write(dev, REG_SYNC_CTRL, 0x81);	// sync-enable
+	ad9144_spi_write(dev, REG_SYNC_CTRL, 0xc1);	// sysref-armed
+	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x01);	// enable link
 
 	// dac calibration
 
-	ad9144_spi_write(dev, 0x0e7, 0x38);	// set calibration clock to 1m
-	ad9144_spi_write(dev, 0x0ed, 0xa6);	// use isb reference of 38 to set cal
-	ad9144_spi_write(dev, 0x0e8, 0x03);	// cal 2 dacs at once
-	ad9144_spi_write(dev, 0x0e9, 0x01);	// single cal enable
-	ad9144_spi_write(dev, 0x0e9, 0x03);	// single cal start
+	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x38);	// set calibration clock to 1m
+	ad9144_spi_write(dev, REG_CAL_INIT, 0xa6);	// use isb reference of 38 to set cal
+	ad9144_spi_write(dev, REG_CAL_INDX, 0x03);	// cal 2 dacs at once
+	ad9144_spi_write(dev, REG_CAL_CTRL, 0x01);	// single cal enable
+	ad9144_spi_write(dev, REG_CAL_CTRL, 0x03);	// single cal start
 	mdelay(10);
 
-	ad9144_spi_write(dev, 0x0e8, 0x01);	// read dac-0
-	ad9144_spi_read(dev, 0x0e9, &cal_stat);
+	ad9144_spi_write(dev, REG_CAL_INDX, 0x01);	// read dac-0
+	ad9144_spi_read(dev, REG_CAL_CTRL, &cal_stat);
 	if ((cal_stat & 0xc0) != 0x80)
 		ad_printf("%s : dac-0 calibration failed!\n", __func__);
 
-	ad9144_spi_write(dev, 0x0e8, 0x02);	// read dac-1
-	ad9144_spi_read(dev, 0x0e9, &cal_stat);
+	ad9144_spi_write(dev, REG_CAL_INDX, 0x02);	// read dac-1
+	ad9144_spi_read(dev, REG_CAL_CTRL, &cal_stat);
 	if ((cal_stat & 0xc0) != 0x80)
 		ad_printf("%s : dac-1 calibration failed!\n", __func__);
 
-	ad9144_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
+	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x30);	// turn off cal clock
 
 	return ret;
 }
@@ -277,15 +277,15 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 
 	for (dac = 0; dac < init_param.active_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
-			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x00));
-			ad9144_spi_write(dev, 0x32e, (init_param.stpl_samples[dac][sample]>>8));
-			ad9144_spi_write(dev, 0x32d, (init_param.stpl_samples[dac][sample]>>0));
-			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
-			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x03));
-			ad9144_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x00));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2, (init_param.stpl_samples[dac][sample]>>8));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1, (init_param.stpl_samples[dac][sample]>>0));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x03));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
 			mdelay(1);
 
-			ad9144_spi_read(dev, 0x32f, &status);
+			ad9144_spi_read(dev, REG_SHORT_TPL_TEST_3, &status);
 			if ((status & 0x1) == 0x1)
 				ad_printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
 					__func__, dac, sample, init_param.stpl_samples[dac][sample], status);
