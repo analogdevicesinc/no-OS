@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <inttypes.h>
 #include <stdio.h>
 #include "mykonos.h"
 #include "jesd_core.h"
@@ -268,7 +269,7 @@ int32_t xcvr_drp_read(xcvr_device dev,
 		return 0;
 	} while (timeout--);
 
-	xil_printf("%s: Timeout!\n", __func__);
+	printf("%s: Timeout!\n", __func__);
 
 	return -1;
 }
@@ -306,7 +307,7 @@ int32_t xcvr_drp_write(xcvr_device dev,
 		if (!(val & (ch_sel ? XCVR_CH_BUSY : XCVR_CM_BUSY))) {
 			xcvr_drp_read(dev, reg_addr, &val_reg);
 			if (val != val_reg)
-				printf("%s: MISMATCH reg 0x%X val 0x%X != read 0x%X\n",
+				printf("%s: MISMATCH reg 0x%"PRIX32" val 0x%"PRIX32" != read 0x%"PRIX32"\n",
 						__func__, reg_addr, val, val_reg);
 			return 0;
 		}
@@ -509,7 +510,7 @@ int32_t xcvr_gth_rxcdr_settings(xcvr_device dev,
 			return -1;
 		}
 	} else {
-		xil_printf("%s: GTH PRBS CDR not implemented\n", __func__);
+		printf("%s: GTH PRBS CDR not implemented\n", __func__);
 	}
 
 	xcvr_drp_write(dev, RXCDR_CFG0_ADDR, cfg0);

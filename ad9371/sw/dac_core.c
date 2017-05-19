@@ -40,8 +40,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "dac_core.h"
+#include <inttypes.h>
+#include <stdio.h>
 #include <xil_cache.h>
+#include "dac_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -370,7 +372,7 @@ int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
 
 	if (DAC_PCORE_VERSION_MAJOR(pcore_version) < 6)
 	{
-		xil_printf("%s ERROR: Sorry, binary scale is NOT supported!\n", __func__);
+		printf("%s ERROR: Sorry, binary scale is NOT supported!\n", __func__);
 		return(-1);
 	}
 
@@ -437,7 +439,7 @@ int32_t dac_setup(dac_core core)
 
 	dac_read(core, DAC_REG_STATUS, &reg_data);
 	if (reg_data == 0x0) {
-		xil_printf("%s DAC Core Status errors.\n", __func__);
+		printf("%s DAC Core Status errors.\n", __func__);
 		return -1;
 	}
 
@@ -448,7 +450,7 @@ int32_t dac_setup(dac_core core)
 
 	dac_write(core, DAC_REG_RATECNTRL, DAC_RATE(3));
 
-	xil_printf("%s dac core initialized (%d MHz).\n", __func__, dac_clock);
+	printf("%s dac core initialized (%"PRIu32" MHz).\n", __func__, dac_clock);
 
 	dac_data_setup(core);
 

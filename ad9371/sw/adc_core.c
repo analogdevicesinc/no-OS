@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <inttypes.h>
 #include <stdio.h>
 #include "adc_core.h"
 
@@ -120,7 +121,7 @@ int32_t adc_setup(adc_core core)
 	adc_clock = (adc_clock * reg_data * 100) + 0x7fff;
 	adc_clock = adc_clock >> 16;
 
-	xil_printf("%s adc core initialized (%d MHz).\n", __func__, adc_clock);
+	printf("%s adc core initialized (%"PRIu32" MHz).\n", __func__, adc_clock);
 
 	return 0;
 }
@@ -170,7 +171,7 @@ int32_t adc_pn_mon(adc_core core,
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
-			xil_printf("%s ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02x!\n", __func__, index, sel, reg_data);
+			printf("%s ERROR: adc pn OUT OF SYNC: %d, %d, 0x%02"PRIx32"!\n", __func__, index, sel, reg_data);
 		}
 	}
 
@@ -223,9 +224,9 @@ int32_t adc_ramp_test(adc_core core,
 		// compare received and expected
 		for (index=0; index<no_of_channels; index+=2) {
 			if ((rcv_data[index] != exp_data[index]) || (rcv_data[index+1] != exp_data[index+1])) {
-				xil_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+				printf("%s Capture Error[%"PRIu32"]: rcv(%08x) exp(%08x).\n",
 						__func__, sample_count+index, rcv_data[index], exp_data[index]);
-				xil_printf("%s Capture Error[%d]: rcv(%08x) exp(%08x).\n",
+				printf("%s Capture Error[%"PRIu32"]: rcv(%08x) exp(%08x).\n",
 						__func__, sample_count+index+1, rcv_data[index+1], exp_data[index+1]);
 				err_cnt++;
 				if (err_cnt == 50) break;
