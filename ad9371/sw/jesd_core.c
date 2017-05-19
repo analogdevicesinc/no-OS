@@ -196,7 +196,10 @@
 #define ENC_8B10B					810
 
 #define JESD_REG_TRX_VERSION				0x00
+
 #define JESD_REG_TRX_RESET					0x04
+#define JESD_TRX_RESET						(1 << 0)
+
 #define JESD_REG_TRX_ILA_SUPPORT			0x08
 #define JESD_REG_TRX_SCRAMBLING				0x0c
 #define JESD_REG_TRX_SYSREF_HANDLING		0x10
@@ -840,7 +843,7 @@ int32_t jesd_read(jesd_device dev,
 /***************************************************************************//**
  * @brief jesd_setup
  *******************************************************************************/
-int32_t jesd_setup(void)
+int32_t jesd_setup(mykonosDevice_t *myk_dev)
 {
 	jesd_device	rx_jesd;
 	jesd_device	tx_jesd;
@@ -850,31 +853,40 @@ int32_t jesd_setup(void)
 	tx_jesd.base_addr = TX_JESD_BASEADDR;
 	rx_os_jesd.base_addr = RX_OS_JESD_BASEADDR;
 
-	jesd_write(rx_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(rx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
 	jesd_write(rx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(rx_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(rx_jesd, JESD_REG_TRX_SCRAMBLING,
+							myk_dev->rx->framer->scramble ? 0x01 : 0x00);
 	jesd_write(rx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+							myk_dev->rx->framer->K - 1);
 	jesd_write(rx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x03);
-	jesd_write(rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+							myk_dev->rx->framer->K - 1);
 	jesd_write(rx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
-	jesd_write(tx_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
 	jesd_write(tx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(tx_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(tx_jesd, JESD_REG_TRX_SCRAMBLING,
+							myk_dev->tx->deframer->scramble ? 0x01 : 0x00);
 	jesd_write(tx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+							myk_dev->tx->deframer->K - 1);
 	jesd_write(tx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+							myk_dev->tx->deframer->K - 1);
 	jesd_write(tx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
-	jesd_write(rx_os_jesd, JESD_REG_TRX_RESET, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_SCRAMBLING, 0x01);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_SCRAMBLING,
+							myk_dev->obsRx->framer->scramble ? 0x01 : 0x00);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES, 0x1f);
+	jesd_write(rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+							myk_dev->obsRx->framer->K - 1);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME, 0x1f);
+	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+							myk_dev->obsRx->framer->K - 1);
 	jesd_write(rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
 	return 0;

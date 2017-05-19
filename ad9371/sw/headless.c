@@ -178,7 +178,7 @@ int main(void)
 	}
 
 	/* Initialize JESDs */
-	status = jesd_setup();
+	status = jesd_setup(&mykDevice);
 	if (status != 0) {
 		printf("jesd_setup() failed\n");
 		return -1;

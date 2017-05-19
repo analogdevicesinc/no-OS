@@ -84,6 +84,6 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t xcvr_setup(mykonosDevice_t *myk_dev);
-int32_t jesd_setup(void);
+int32_t jesd_setup(mykonosDevice_t *myk_dev);
 
 #endif
