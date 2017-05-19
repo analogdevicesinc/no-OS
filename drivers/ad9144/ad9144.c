@@ -82,6 +82,29 @@ int32_t ad9144_spi_write(spi_device *dev,
 }
 
 /***************************************************************************//**
+ * @brief ad9144_spi_check_status
+ *******************************************************************************/
+int32_t ad9144_spi_check_status(spi_device *dev,
+		uint16_t reg_addr,
+		uint8_t reg_mask,
+		uint8_t exp_reg_data)
+{
+	uint16_t timeout = 0;
+	uint8_t status = 0;
+	do {
+		ad9144_spi_read(dev, reg_addr, &status);
+		if ((status & reg_mask) == exp_reg_data) {
+			return 0;
+		} else {
+			timeout++;
+			mdelay(1);
+		}
+	} while(timeout < 100);
+
+	return -1;
+}
+
+/***************************************************************************//**
  * @brief ad9144_setup
  *******************************************************************************/
 int32_t ad9144_setup(spi_device *dev,
@@ -89,8 +112,6 @@ int32_t ad9144_setup(spi_device *dev,
 {
 	uint8_t chip_id;
 	uint8_t scratchpad;
-	uint8_t pll_stat;
-	uint8_t cal_stat;
 	int32_t ret;
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
@@ -185,8 +206,8 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x05);	// enable serdes calibration
 	mdelay(20);
 
-	ad9144_spi_read(dev, REG_PLL_STATUS, &pll_stat);
-	if ((pll_stat & 0x01) != 0x01)
+	ret = ad9144_spi_check_status(dev, REG_PLL_STATUS, 0x01, 0x01);
+	if (ret == -1)
 		ad_printf("%s : PLL NOT locked!.\n", __func__);
 
 	ad9144_spi_write(dev, REG_EQ_BIAS_REG, 0x62);	// equalizer
@@ -213,13 +234,15 @@ int32_t ad9144_setup(spi_device *dev,
 	mdelay(10);
 
 	ad9144_spi_write(dev, REG_CAL_INDX, 0x01);	// read dac-0
-	ad9144_spi_read(dev, REG_CAL_CTRL, &cal_stat);
-	if ((cal_stat & 0xc0) != 0x80)
+
+	ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
+	if (ret == -1)
 		ad_printf("%s : dac-0 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, REG_CAL_INDX, 0x02);	// read dac-1
-	ad9144_spi_read(dev, REG_CAL_CTRL, &cal_stat);
-	if ((cal_stat & 0xc0) != 0x80)
+
+	ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
+	if (ret == -1)
 		ad_printf("%s : dac-1 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x30);	// turn off cal clock
@@ -274,6 +297,7 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 	uint32_t dac = 0;
 	uint32_t sample = 0;
 	uint8_t status = 0;
+	int32_t ret = 0;
 
 	for (dac = 0; dac < init_param.active_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
@@ -283,10 +307,9 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x03));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
-			mdelay(1);
 
-			ad9144_spi_read(dev, REG_SHORT_TPL_TEST_3, &status);
-			if ((status & 0x1) == 0x1)
+			ret = ad9144_spi_check_status(dev, REG_SHORT_TPL_TEST_3, 0x01, 0x00);
+			if (ret == -1)
 				ad_printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
 					__func__, dac, sample, init_param.stpl_samples[dac][sample], status);
 		}
