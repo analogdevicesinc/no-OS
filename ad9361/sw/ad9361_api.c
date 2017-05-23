@@ -603,11 +603,6 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
 
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
-
 	rx_gain.gain_db = gain_db;
 	ret = ad9361_set_rx_gain(phy,
 					ad9361_1rx1tx_channel_map(phy, false,
@@ -633,11 +628,6 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 {
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	ret = ad9361_get_rx_gain(phy, ad9361_1rx1tx_channel_map(phy,
 			false, ch + 1), &rx_gain);
@@ -805,11 +795,6 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 {
 	int32_t ret;
 
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
-
 	rssi->ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	rssi->duration = 1;
 	ret = ad9361_read_rssi(phy, rssi);
@@ -839,11 +824,6 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 										 uint8_t ch, uint8_t gc_mode)
 {
 	struct rf_gain_ctrl gc = {0};
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	gc.ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	gc.mode = phy->agc_mode[ch] = gc_mode;
@@ -1232,11 +1212,6 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 	int32_t ret;
 	int32_t channel;
 
-	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
-		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
-
 	channel = ad9361_1rx1tx_channel_map(phy, true, ch);
 	ret = ad9361_set_tx_atten(phy, attenuation_mdb,
 			channel == 0, channel == 1,
@@ -1261,11 +1236,6 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t *attenuation_db)
 {
 	int32_t ret;
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
-		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	ret = ad9361_get_tx_atten(phy,
 			ad9361_1rx1tx_channel_map(phy, true,
