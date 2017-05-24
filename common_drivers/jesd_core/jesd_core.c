@@ -79,7 +79,9 @@ int32_t jesd_setup(jesd_core core)
 	jesd_write(core, JESD204_REG_TRX_RESET, JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
 	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT, JESD204_TRX_ILA_EN);
 	jesd_write(core, JESD204_REG_TRX_SCRAMBLING, core.scramble_enable);
-	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING, 0);
+	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING, JESD204_TRX_SYSREF_ALWAYSON |
+							  JESD204_TRX_SYSREF_DELAY(0) |
+							  JESD204_TRX_SYSREF_ONRESYNC);
 	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
 		JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
 	jesd_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
