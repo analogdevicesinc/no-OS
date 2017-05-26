@@ -165,10 +165,8 @@ int main(void)
 
 	/* Initialize the AD9528 by writing all SPI registers */
 	ad9528Error = AD9528_initialize(&clockAD9528_);
-	if (ad9528Error != ADIERR_OK) {
-		printf("AD9528_initialize() failed\n");
-		return ad9528Error;
-	}
+	if (ad9528Error != ADIERR_OK)
+		printf("WARNING: AD9528_initialize() issues. Possible cause: REF_CLK not connected.\n");
 
 	/* Initialize CLKGENs */
 	status = clkgen_setup(&mykDevice);
