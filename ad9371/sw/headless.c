@@ -51,6 +51,7 @@
 #include "dac_core.h"
 #include "jesd_core.h"
 #include "clkgen_core.h"
+#include "parameters.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -60,11 +61,11 @@ extern mykonosDevice_t	mykDevice;
 extern const uint32_t sine_lut_iq[1024];
 
 adc_core  ad9371_rx_core_init = {
-		XPAR_AXI_AD9371_CORE_BASEADDR, 		// base_address
-		1, 									// master
-		4, 									// no_of_channels
-		16,									// resolution
-		XPAR_DDR_MEM_BASEADDR + 0x800000	// adc_ddr_baseaddr
+		AXI_AD9371_CORE_BASEADDR,  		// base_address
+		1, 								// master
+		4, 								// no_of_channels
+		16,								// resolution
+		ADC_DDR_BASEADDR				// adc_ddr_baseaddr
 };
 
 dac_channel ad9371_tx_channels[4] = {
@@ -112,11 +113,11 @@ dac_channel ad9371_tx_channels[4] = {
 };
 
 dac_core  ad9371_tx_core_init = {
-		XPAR_AXI_AD9371_CORE_BASEADDR, 			// base_address
-		16, 									// resolution
-		4, 										// no_of_channels
-		ad9371_tx_channels,						// *channels
-		XPAR_DDR_MEM_BASEADDR + 0xA000000		// dac_ddr_baseaddr
+		AXI_AD9371_CORE_BASEADDR, 		// base_address
+		16, 							// resolution
+		4, 								// no_of_channels
+		ad9371_tx_channels,				// *channels
+		DAC_DDR_BASEADDR				// dac_ddr_baseaddr
 };
 
 /***************************************************************************//**
