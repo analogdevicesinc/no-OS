@@ -520,6 +520,7 @@ void dac_write_custom_data(dac_core core,
 
 	dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 	dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+	dac_dma_write(AXI_DMAC_REG_FLAGS, AXI_DMAC_FLAG_CYCLIC | AXI_DMAC_FLAG_LAST);
 	dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, core.dac_ddr_baseaddr);
 	dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 	dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
