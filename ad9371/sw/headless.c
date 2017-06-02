@@ -134,16 +134,19 @@ int main(void)
 	uint8_t				arm_minor;
 	uint8_t				arm_release;
 	mykonosGpioErr_t	mykGpioErr;
-	uint32_t			initCalMask = TX_BB_FILTER | ADC_TUNER |
-						  TIA_3DB_CORNER | DC_OFFSET | TX_ATTENUATION_DELAY |
-						  RX_GAIN_DELAY | FLASH_CAL | RX_LO_DELAY | RX_QEC_INIT;
+	uint32_t			initCalMask = TX_BB_FILTER | ADC_TUNER | TIA_3DB_CORNER | DC_OFFSET |
+									  TX_ATTENUATION_DELAY | RX_GAIN_DELAY | FLASH_CAL |
+									  PATH_DELAY | TX_LO_LEAKAGE_INTERNAL | TX_QEC_INIT |
+									  LOOPBACK_RX_LO_DELAY | LOOPBACK_RX_RX_QEC_INIT |
+									  RX_LO_DELAY | RX_QEC_INIT ;
 	uint8_t				errorFlag = 0;
 	uint8_t				errorCode = 0;
 	uint32_t			initCalsCompleted;
 	uint8_t				framerStatus;
 	uint8_t				obsFramerStatus;
 	uint8_t				deframerStatus;
-	uint32_t			trackingCalMask = TRACK_ORX1_QEC | TRACK_ORX2_QEC;
+	uint32_t			trackingCalMask = TRACK_ORX1_QEC | TRACK_ORX2_QEC | TRACK_RX1_QEC |
+										  TRACK_RX2_QEC | TRACK_TX1_QEC | TRACK_TX2_QEC;
 	uint32_t			status;
 
 	/* Allocating memory for the errorString */
