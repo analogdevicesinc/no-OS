@@ -126,6 +126,7 @@ dac_core  ad9371_tx_core_init = {
 int main(void)
 {
 	ADI_ERR				ad9528Error;
+	ad9528Device_t 		*clockAD9528_device = &clockAD9528_;
 	mykonosErr_t		mykError;
 	const char			*errorString;
 	uint8_t				pllLockStatus;
@@ -161,14 +162,22 @@ int main(void)
 	/**************************************************************************/
 
 	/* Perform a hard reset on the AD9528 DUT */
-	ad9528Error = AD9528_resetDevice(&clockAD9528_);
+	ad9528Error = AD9528_resetDevice(clockAD9528_device);
 	if (ad9528Error != ADIERR_OK) {
 		printf("AD9528_resetDevice() failed\n");
 		return ad9528Error;
 	}
 
+	ad9528Error = AD9528_initDeviceDataStruct(clockAD9528_device, clockAD9528_device->pll1Settings->vcxo_Frequency_Hz,
+											  clockAD9528_device->pll1Settings->refA_Frequency_Hz,
+											  clockAD9528_device->outputSettings->outFrequency_Hz[1]);
+	if (ad9528Error != ADIERR_OK) {
+		printf("AD9528_initDeviceDataStruct() failed\n");
+		return ad9528Error;
+	}
+
 	/* Initialize the AD9528 by writing all SPI registers */
-	ad9528Error = AD9528_initialize(&clockAD9528_);
+	ad9528Error = AD9528_initialize(clockAD9528_device);
 	if (ad9528Error != ADIERR_OK)
 		printf("WARNING: AD9528_initialize() issues. Possible cause: REF_CLK not connected.\n");
 
@@ -220,13 +229,13 @@ int main(void)
 	}
 
 	/* Minimum 3 SYSREF pulses from Clock Device has to be produced for MulticChip Sync */
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
 
 	/*************************************************************************/
@@ -473,7 +482,7 @@ int main(void)
 	/*************************************************************************/
 
 	/* Request a SYSREF from the AD9528 */
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
 
 	/*** < Info: Mykonos is actively transmitting CGS from the RxFramer> ***/
@@ -488,9 +497,9 @@ int main(void)
 	}
 
 	/* Request two SYSREFs from the AD9528 */
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(1);
-	AD9528_requestSysref(&clockAD9528_, 1);
+	AD9528_requestSysref(clockAD9528_device, 1);
 	mdelay(5);
 
 	/*************************************************************************/
