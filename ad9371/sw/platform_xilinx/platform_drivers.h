@@ -79,7 +79,7 @@
 #define AD9371_GPIO_16      GPIO_OFFSET + 33
 #define AD9371_GPIO_18      GPIO_OFFSET + 32
 
-#define AD9528_CHIP_SELECT	0
+#define AD9528_CHIP_SELECT	2
 #define AD9371_CHIP_SELECT	1
 
 #define mdelay(msecs)		usleep(1000*msecs)

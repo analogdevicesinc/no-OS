@@ -132,7 +132,7 @@
 #define AD9528_SYSREF_REQ   49
 #define AD9528_RESET_B      48
 
-#define AD9528_CHIP_SELECT	0
+#define AD9528_CHIP_SELECT	2
 #define AD9371_CHIP_SELECT	1
 
 enum adc_data_sel {
