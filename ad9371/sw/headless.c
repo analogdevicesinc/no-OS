@@ -117,7 +117,9 @@ dac_core  ad9371_tx_core_init = {
 		16, 							// resolution
 		4, 								// no_of_channels
 		ad9371_tx_channels,				// *channels
-		DAC_DDR_BASEADDR				// dac_ddr_baseaddr
+		DAC_DDR_BASEADDR,				// dac_ddr_baseaddr
+		DMA_PLDDR_FIFO,					// dma_type
+		DAC_GPIO_PLDDR_BYPASS, 			// plddr_bypass_gpio
 };
 
 /***************************************************************************//**

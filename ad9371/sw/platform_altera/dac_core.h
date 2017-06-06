@@ -138,6 +138,9 @@
 #define AXI_DMAC_IRQ_SOT				(1 << 0)
 #define AXI_DMAC_IRQ_EOT				(1 << 1)
 
+#define AXI_DMAC_FLAG_CYCLIC			(1 << 0)
+#define AXI_DMAC_FLAG_LAST				(1 << 1)
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -153,6 +156,12 @@ typedef enum {
 	DAC_SRC_LB,	// Loopback data (ADC)
 	DAC_SRC_PNXX,	// Device specific
 } dac_data_src;
+
+typedef enum {
+	DMA_STREAM,
+	DMA_CYCLIC,
+	DMA_PLDDR_FIFO,
+} dac_dma_type;
 
 typedef struct {
 	uint32_t dds_frequency_tone0;       // in hz (1000*1000 for MHz)
@@ -172,6 +181,9 @@ typedef struct {
 	uint8_t	 no_of_channels;
 	dac_channel *channels;
 	uint32_t dac_ddr_baseaddr;
+	dac_dma_type dma_type;
+	uint8_t plddr_bypass_gpio;
+
 } dac_core;
 
 /******************************************************************************/

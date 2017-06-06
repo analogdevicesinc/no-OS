@@ -433,6 +433,14 @@ int32_t dac_setup(dac_core core)
 	uint32_t reg_data;
 	uint32_t dac_clock;
 
+	if (core.plddr_bypass_gpio) {
+		/*
+		 * The default HDL design features a optional high bandwidth DDR FIFO,
+		 * it can be bypassed using this fabric internal GPIO
+		 */
+		gpio_direction_output(core.plddr_bypass_gpio, !(core.dma_type == DMA_PLDDR_FIFO));
+	}
+
 	dac_write(core, DAC_REG_RSTN, 0x00);
 	dac_write(core, DAC_REG_RSTN, 0x03);
 	mdelay(100);
@@ -503,6 +511,7 @@ void dac_write_custom_data(dac_core core,
 	uint32_t index;
 	uint32_t index_mem = 0;
 	uint32_t length;
+	uint32_t dmac_flags;
 	uint8_t chan;
 	uint8_t num_tx_channels = core.no_of_channels / 2;
 
@@ -518,9 +527,22 @@ void dac_write_custom_data(dac_core core,
 
 	length = index_mem * 4;
 
+	switch (core.dma_type)
+	{
+	case DMA_STREAM:
+		dmac_flags = 0;
+		break;
+	case DMA_CYCLIC:
+		dmac_flags = AXI_DMAC_FLAG_CYCLIC;
+		break;
+	case DMA_PLDDR_FIFO:
+		dmac_flags = AXI_DMAC_FLAG_LAST;
+		break;
+	}
+
 	dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 	dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
-	dac_dma_write(AXI_DMAC_REG_FLAGS, AXI_DMAC_FLAG_CYCLIC | AXI_DMAC_FLAG_LAST);
+	dac_dma_write(AXI_DMAC_REG_FLAGS, dmac_flags);
 	dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, core.dac_ddr_baseaddr);
 	dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 	dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);

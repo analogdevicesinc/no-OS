@@ -157,6 +157,12 @@ typedef enum {
 	DAC_SRC_PNXX,	// Device specific
 } dac_data_src;
 
+typedef enum {
+	DMA_STREAM,
+	DMA_CYCLIC,
+	DMA_PLDDR_FIFO,
+} dac_dma_type;
+
 typedef struct {
 	uint32_t dds_frequency_tone0;       // in hz (1000*1000 for MHz)
 	uint32_t dds_phase_tone0;           // in milli(?) angles (90*1000 for 90 degrees = pi/2)
@@ -175,6 +181,9 @@ typedef struct {
 	uint8_t	 no_of_channels;
 	dac_channel *channels;
 	uint32_t dac_ddr_baseaddr;
+	dac_dma_type dma_type;
+	uint8_t plddr_bypass_gpio;
+
 } dac_core;
 
 /******************************************************************************/
