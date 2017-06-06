@@ -113,11 +113,11 @@ static const uint32_t clkgen_lock_table[] =
 /***************************************************************************//**
  * @brief clkgen_write
  *******************************************************************************/
-int32_t clkgen_write(clkgen_device dev,
+int32_t clkgen_write(clkgen_device *dev,
 					 uint32_t reg_addr,
 					 uint32_t reg_val)
 {
-	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+	Xil_Out32((dev->base_addr + reg_addr), reg_val);
 
 	return 0;
 }
@@ -125,11 +125,11 @@ int32_t clkgen_write(clkgen_device dev,
 /***************************************************************************//**
  * @brief clkgen_read
  *******************************************************************************/
-int32_t clkgen_read(clkgen_device dev,
+int32_t clkgen_read(clkgen_device *dev,
 					uint32_t reg_addr,
 					uint32_t *reg_val)
 {
-	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+	*reg_val = Xil_In32(dev->base_addr + reg_addr);
 
 	return 0;
 }
@@ -137,7 +137,7 @@ int32_t clkgen_read(clkgen_device dev,
 /***************************************************************************//**
  * @brief clkgen_mmcm_read
 *******************************************************************************/
-static void clkgen_mmcm_read(clkgen_device dev,
+static void clkgen_mmcm_read(clkgen_device *dev,
 							 uint32_t reg,
 							 uint32_t *val)
 {
@@ -169,7 +169,7 @@ static void clkgen_mmcm_read(clkgen_device dev,
 /***************************************************************************//**
  * @brief clkgen_mmcm_write
 *******************************************************************************/
-void clkgen_mmcm_write(clkgen_device dev,
+void clkgen_mmcm_write(clkgen_device *dev,
 					   uint32_t reg,
 					   uint32_t val,
 					   uint32_t mask)
@@ -301,7 +301,7 @@ void clkgen_calc_clk_params(uint32_t divider,
 /***************************************************************************//**
  * @brief clkgen_mmcm_enable
 *******************************************************************************/
-static void clkgen_mmcm_enable(clkgen_device dev,
+static void clkgen_mmcm_enable(clkgen_device *dev,
 							   char enable)
 {
 	uint32_t val = CLKGEN_RESETN;
@@ -315,7 +315,7 @@ static void clkgen_mmcm_enable(clkgen_device dev,
 /***************************************************************************//**
  * @brief clkgen_set_rate
 *******************************************************************************/
-int32_t clkgen_set_rate(clkgen_device dev,
+int32_t clkgen_set_rate(clkgen_device *dev,
 						uint32_t rate,
 						uint32_t parent_rate)
 {
@@ -372,7 +372,7 @@ int32_t clkgen_set_rate(clkgen_device dev,
 /***************************************************************************//**
  * @brief clkgen_get_rate
 *******************************************************************************/
-uint32_t clkgen_get_rate(clkgen_device dev,
+uint32_t clkgen_get_rate(clkgen_device *dev,
 						 uint32_t parent_rate)
 {
 	uint32_t d, m, dout;
@@ -413,29 +413,29 @@ int32_t clkgen_setup(mykonosDevice_t *myk_dev)
 	tx_clkgen.base_addr = XPAR_AXI_AD9371_TX_CLKGEN_BASEADDR;
 	rx_os_clkgen.base_addr = XPAR_AXI_AD9371_RX_OS_CLKGEN_BASEADDR;
 
-	clkgen_set_rate(rx_clkgen,
+	clkgen_set_rate(&rx_clkgen,
 					myk_dev->rx->rxProfile->iqRate_kHz * 1000,
 					myk_dev->clocks->deviceClock_kHz * 1000);
-	clkgen_set_rate(tx_clkgen,
+	clkgen_set_rate(&tx_clkgen,
 					myk_dev->tx->txProfile->iqRate_kHz * 500,
 					myk_dev->clocks->deviceClock_kHz * 1000);
-	clkgen_set_rate(rx_os_clkgen,
+	clkgen_set_rate(&rx_os_clkgen,
 					myk_dev->obsRx->orxProfile->iqRate_kHz * 500,
 					myk_dev->clocks->deviceClock_kHz * 1000);
 
 	mdelay(1);
 
-	clkgen_read(rx_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	clkgen_read(&rx_clkgen, CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("RX MMCM-PLL NOT locked");
 		status--;
 	}
-	clkgen_read(tx_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	clkgen_read(&tx_clkgen, CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("TX MMCM-PLL NOT locked");
 		status--;
 	}
-	clkgen_read(rx_os_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	clkgen_read(&rx_os_clkgen, CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("RX OS MMCM-PLL NOT locked");
 		status--;

@@ -262,11 +262,11 @@ const uint32_t sine_lut_iq[1024] = {
 /***************************************************************************//**
  * @brief dac_read
  *******************************************************************************/
-int32_t dac_read(dac_core core,
-		uint32_t reg_addr,
-		uint32_t *reg_data)
+int32_t dac_read(dac_core *core,
+				 uint32_t reg_addr,
+				 uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.base_address + 0x4000 + reg_addr));
+	*reg_data = Xil_In32((core->base_address + 0x4000 + reg_addr));
 
 	return 0;
 }
@@ -274,11 +274,11 @@ int32_t dac_read(dac_core core,
 /***************************************************************************//**
  * @brief dac_write
  *******************************************************************************/
-int32_t dac_write(dac_core core,
-		uint32_t reg_addr,
-		uint32_t reg_data)
+int32_t dac_write(dac_core *core,
+				  uint32_t reg_addr,
+				  uint32_t reg_data)
 {
-	Xil_Out32((core.base_address + 0x4000 + reg_addr), reg_data);
+	Xil_Out32((core->base_address + 0x4000 + reg_addr), reg_data);
 
 	return 0;
 }
@@ -286,7 +286,8 @@ int32_t dac_write(dac_core core,
 /***************************************************************************//**
  * @brief dac_dma_read
 *******************************************************************************/
-void dac_dma_read(uint32_t regAddr, uint32_t *data)
+void dac_dma_read(uint32_t regAddr,
+				  uint32_t *data)
 {
 	*data = Xil_In32(XPAR_AXI_AD9371_TX_DMA_BASEADDR + regAddr);
 }
@@ -294,7 +295,8 @@ void dac_dma_read(uint32_t regAddr, uint32_t *data)
 /***************************************************************************//**
  * @brief dac_dma_write
 *******************************************************************************/
-void dac_dma_write(uint32_t regAddr, uint32_t data)
+void dac_dma_write(uint32_t regAddr,
+				   uint32_t data)
 {
 	Xil_Out32(XPAR_AXI_AD9371_TX_DMA_BASEADDR + regAddr, data);
 }
@@ -306,7 +308,9 @@ void dac_dma_write(uint32_t regAddr, uint32_t data)
 
 // freq is in Hz (i.e. set to 1*1000*1000 for 1 MHz)
 
-int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq)
+int32_t dds_set_frequency(dac_core *core,
+						  uint32_t chan,
+						  uint32_t freq)
 {
 	uint32_t val;
 	uint64_t val64;
@@ -335,7 +339,9 @@ int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq)
 
 // phase is in milli(?) angles scaled to 1000 (i.e. 90*1000 is 90 degrees (pi/2))
 
-int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase)
+int32_t dds_set_phase(dac_core *core,
+					  uint32_t chan,
+					  uint32_t phase)
 {
 	uint64_t val64;
 	uint32_t reg;
@@ -360,7 +366,9 @@ int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase)
 // do not get fancy, above 1.0 (or below -1.0) will mess the dds tones.
 // dds always runs 16bits-- so unless your data path handles it- stay within -1 to +1.
 
-int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
+int32_t dds_set_scale(dac_core *core,
+					  uint32_t chan,
+					  int32_t scale_micro_units)
 {
 	uint32_t pcore_version;
 	uint32_t scale_reg;
@@ -395,7 +403,9 @@ int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units)
  * @brief dac_data_src_sel
  *******************************************************************************/
 
-int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
+int32_t dac_data_src_sel(dac_core *core,
+						 int32_t chan,
+						 dac_data_src src)
 {
 	uint32_t pcore_version;
 	uint32_t reg;
@@ -415,7 +425,7 @@ int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
 
 	// per channel source select
 
-	for (i = 0; i < (core.no_of_channels * 2); i++)
+	for (i = 0; i < (core->no_of_channels * 2); i++)
 	{
 		if ((chan < 0) || (chan == i))
 			dac_write(core, DAC_REG_DATA_SELECT(i), src);
@@ -428,17 +438,17 @@ int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src)
 /***************************************************************************//**
  * @brief dac_setup
  *******************************************************************************/
-int32_t dac_setup(dac_core core)
+int32_t dac_setup(dac_core *core)
 {
 	uint32_t reg_data;
 	uint32_t dac_clock;
 
-	if (core.plddr_bypass_gpio) {
+	if (core->plddr_bypass_gpio) {
 		/*
 		 * The default HDL design features a optional high bandwidth DDR FIFO,
 		 * it can be bypassed using this fabric internal GPIO
 		 */
-		gpio_direction_output(core.plddr_bypass_gpio, !(core.dma_type == DMA_PLDDR_FIFO));
+		gpio_direction_output(core->plddr_bypass_gpio, !(core->dma_type == DMA_PLDDR_FIFO));
 	}
 
 	dac_write(core, DAC_REG_RSTN, 0x00);
@@ -469,13 +479,13 @@ int32_t dac_setup(dac_core core)
  * @brief dac_setup
  *******************************************************************************/
 
-int32_t dac_data_setup(dac_core core)
+int32_t dac_data_setup(dac_core *core)
 {
 	dac_channel *chan;
 	uint32_t i;
 
-	for (i = 0; i < core.no_of_channels; i++) {
-		chan = &core.channels[i];
+	for (i = 0; i < core->no_of_channels; i++) {
+		chan = &core->channels[i];
 		if (chan->sel == DAC_SRC_DDS)
 		{
 			dds_set_frequency(core, ((i*2)+0), chan->dds_frequency_tone0);
@@ -504,8 +514,8 @@ int32_t dac_data_setup(dac_core core)
 /***************************************************************************//**
  * @brief dac_write_custom_data
 *******************************************************************************/
-void dac_write_custom_data(dac_core core,
-					  	   const uint32_t *custom_data_iq,
+void dac_write_custom_data(dac_core *core,
+						   const uint32_t *custom_data_iq,
 						   uint32_t custom_tx_count)
 {
 	uint32_t index;
@@ -513,21 +523,21 @@ void dac_write_custom_data(dac_core core,
 	uint32_t length;
 	uint32_t dmac_flags;
 	uint8_t chan;
-	uint8_t num_tx_channels = core.no_of_channels / 2;
+	uint8_t num_tx_channels = core->no_of_channels / 2;
 
 	for(index = 0; index < custom_tx_count; index++)
 	{
 		for (chan = 0; chan < num_tx_channels; chan++) // send the same data on all the channels
 		{
-			Xil_Out32(core.dac_ddr_baseaddr + index_mem * sizeof(uint32_t), custom_data_iq[index]);
+			Xil_Out32(core->dac_ddr_baseaddr + index_mem * sizeof(uint32_t), custom_data_iq[index]);
 			index_mem++;
 		}
 	}
-	Xil_DCacheFlushRange(core.dac_ddr_baseaddr, index_mem * sizeof(uint32_t));
+	Xil_DCacheFlushRange(core->dac_ddr_baseaddr, index_mem * sizeof(uint32_t));
 
 	length = index_mem * 4;
 
-	switch (core.dma_type)
+	switch (core->dma_type)
 	{
 	case DMA_STREAM:
 		dmac_flags = 0;
@@ -543,7 +553,7 @@ void dac_write_custom_data(dac_core core,
 	dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 	dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
 	dac_dma_write(AXI_DMAC_REG_FLAGS, dmac_flags);
-	dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, core.dac_ddr_baseaddr);
+	dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, core->dac_ddr_baseaddr);
 	dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 	dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 	dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);

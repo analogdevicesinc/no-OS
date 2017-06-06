@@ -215,11 +215,11 @@
 /***************************************************************************//**
  * @brief xcvr_write
  *******************************************************************************/
-int32_t xcvr_write(xcvr_device dev,
+int32_t xcvr_write(xcvr_device *dev,
 				   uint32_t reg_addr,
 				   uint32_t reg_val)
 {
-	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+	Xil_Out32((dev->base_addr + reg_addr), reg_val);
 
 	return 0;
 }
@@ -227,11 +227,11 @@ int32_t xcvr_write(xcvr_device dev,
 /***************************************************************************//**
  * @brief xcvr_read
  *******************************************************************************/
-int32_t xcvr_read(xcvr_device dev,
+int32_t xcvr_read(xcvr_device *dev,
 				  uint32_t reg_addr,
 				  uint32_t *reg_val)
 {
-	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+	*reg_val = Xil_In32(dev->base_addr + reg_addr);
 
 	return 0;
 }
@@ -239,7 +239,7 @@ int32_t xcvr_read(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_drp_read
 *******************************************************************************/
-int32_t xcvr_drp_read(xcvr_device dev,
+int32_t xcvr_drp_read(xcvr_device *dev,
 					  uint32_t reg_addr,
 					  uint32_t *reg_data)
 {
@@ -280,7 +280,7 @@ int32_t xcvr_drp_read(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_drp_write
 *******************************************************************************/
-int32_t xcvr_drp_write(xcvr_device dev,
+int32_t xcvr_drp_write(xcvr_device *dev,
 					   uint32_t reg_addr,
 					   uint32_t reg_data)
 {
@@ -325,7 +325,7 @@ int32_t xcvr_drp_write(xcvr_device dev,
 /***************************************************************************//**
 * @brief __xcvr_drp_writef
 *******************************************************************************/
-int32_t __xcvr_drp_writef(xcvr_device dev,
+int32_t __xcvr_drp_writef(xcvr_device *dev,
 						  uint32_t reg,
 						  uint32_t mask,
 						  uint32_t offset,
@@ -359,7 +359,7 @@ int32_t __xcvr_drp_writef(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_calc_cpll_settings
 *******************************************************************************/
-int32_t xcvr_calc_cpll_settings(xcvr_device dev,
+int32_t xcvr_calc_cpll_settings(xcvr_device *dev,
 								uint32_t refclk_kHz,
 								uint32_t laneRate_kHz,
 								uint32_t *refclk_div, uint32_t *out_div,
@@ -408,7 +408,7 @@ int32_t xcvr_calc_cpll_settings(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_calc_qpll_settings
 *******************************************************************************/
-int32_t xcvr_calc_qpll_settings(xcvr_device dev,
+int32_t xcvr_calc_qpll_settings(xcvr_device *dev,
 								uint32_t refclk_kHz,
 								uint32_t laneRate_kHz,
 								uint32_t *refclk_div, uint32_t *out_div,
@@ -471,15 +471,15 @@ int32_t xcvr_calc_qpll_settings(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_gth_rxcdr_settings
 *******************************************************************************/
-int32_t xcvr_gth_rxcdr_settings(xcvr_device dev,
+int32_t xcvr_gth_rxcdr_settings(xcvr_device *dev,
 								uint32_t rxout_div)
 {
 	uint16_t cfg0, cfg1, cfg2, cfg3, cfg4 = 0;
 
-	if (dev.tx_enable)
+	if (dev->tx_enable)
 		return 0; /* Do Nothing */
 
-	switch (dev.ppm) {
+	switch (dev->ppm) {
 	case PM_200:
 		cfg0 = 0x0018;
 		break;
@@ -491,7 +491,7 @@ int32_t xcvr_gth_rxcdr_settings(xcvr_device dev,
 		return -1;
 	}
 
-	if (dev.encoding == ENC_8B10B) {
+	if (dev->encoding == ENC_8B10B) {
 		cfg1 = 0xC208;
 		cfg3 = 0x07FE;
 		cfg3 = 0x0020;
@@ -528,21 +528,21 @@ int32_t xcvr_gth_rxcdr_settings(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_rxcdr_settings
 *******************************************************************************/
-int32_t xcvr_rxcdr_settings(xcvr_device dev,
+int32_t xcvr_rxcdr_settings(xcvr_device *dev,
 							uint32_t rxout_div)
 {
 	u16 cfg0, cfg1, cfg2, cfg3, cfg4;
 
-	if (dev.tx_enable)
+	if (dev->tx_enable)
 		return 0; /* Do Nothing */
 
-	if (dev.gth_enable)
+	if (dev->gth_enable)
 		return xcvr_gth_rxcdr_settings(dev, rxout_div);
 
 	cfg2 = 0x23FF;
 	cfg0 = 0x0020;
 
-	switch (dev.ppm) {
+	switch (dev->ppm) {
 	case PM_200:
 		cfg3 = 0x0000;
 		break;
@@ -554,7 +554,7 @@ int32_t xcvr_rxcdr_settings(xcvr_device dev,
 		return -1;
 	}
 
-	if (dev.encoding == ENC_8B10B) {
+	if (dev->encoding == ENC_8B10B) {
 		cfg4 = 0x03;
 
 		switch (rxout_div) {
@@ -574,16 +574,16 @@ int32_t xcvr_rxcdr_settings(xcvr_device dev,
 			return -1;
 		}
 	} else {
-		if (dev.lane_rate_khz > 6600000 && rxout_div == 1)
+		if (dev->lane_rate_khz > 6600000 && rxout_div == 1)
 			cfg4 = 0x0B;
 		else
 			cfg4 = 0x03;
 
 		switch (rxout_div) {
 		case 0: /* 1 */
-			if (dev.lpm_enable) {
-				if (dev.lane_rate_khz  > 6600000) {
-					if (dev.ppm == PM_1250)
+			if (dev->lpm_enable) {
+				if (dev->lane_rate_khz  > 6600000) {
+					if (dev->ppm == PM_1250)
 						cfg1 = 0x1020;
 					else
 						cfg1 = 0x1040;
@@ -591,13 +591,13 @@ int32_t xcvr_rxcdr_settings(xcvr_device dev,
 					cfg1 = 0x1020;
 				}
 			} else { /* DFE */
-				if (dev.lane_rate_khz  > 6600000) {
-					if (dev.ppm == PM_1250)
+				if (dev->lane_rate_khz  > 6600000) {
+					if (dev->ppm == PM_1250)
 						cfg1 = 0x1020;
 					else
 						cfg1 = 0x1040;
 				} else {
-					if (dev.ppm == PM_1250)
+					if (dev->ppm == PM_1250)
 						cfg1 = 0x1020;
 					else
 						cfg1 = 0x2040;
@@ -630,14 +630,14 @@ int32_t xcvr_rxcdr_settings(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_clk_set_rate
 *******************************************************************************/
-int32_t xcvr_clk_set_rate(xcvr_device dev,
+int32_t xcvr_clk_set_rate(xcvr_device *dev,
 						  uint32_t rate,
 						  uint32_t parent_rate)
 {
 	uint32_t refclk_div, out_div, fbdiv_45, fbdiv, fbdiv_ratio, lowband;
 	int32_t ret, pll_done = 0;
 
-	if (dev.cpll_enable)
+	if (dev->cpll_enable)
 		ret = xcvr_calc_cpll_settings(dev, parent_rate, rate,
 							&refclk_div, &out_div,
 							&fbdiv_45, &fbdiv);
@@ -651,7 +651,7 @@ int32_t xcvr_clk_set_rate(xcvr_device dev,
 
 	xcvr_write(dev, XCVR_REG_RESETN, 0);
 
-	if (dev.cpll_enable) {
+	if (dev->cpll_enable) {
 		xcvr_drp_writef(dev, CPLL_REFCLK_DIV_M_ADDR,
 						CPLL_REFCLK_DIV_M_MASK |
 						CPLL_FB_DIV_45_N1_MASK |
@@ -675,7 +675,7 @@ int32_t xcvr_clk_set_rate(xcvr_device dev,
 	}
 
 	ret = xcvr_drp_writef(dev, RXOUT_DIV_ADDR,
-			dev.tx_enable ? TXOUT_DIV_MASK : RXOUT_DIV_MASK, out_div);
+			dev->tx_enable ? TXOUT_DIV_MASK : RXOUT_DIV_MASK, out_div);
 
 	xcvr_rxcdr_settings(dev, out_div);
 
@@ -687,10 +687,10 @@ int32_t xcvr_clk_set_rate(xcvr_device dev,
 /***************************************************************************//**
 * @brief xcvr_set_lpm_dfe_mode
 *******************************************************************************/
-int32_t xcvr_set_lpm_dfe_mode(xcvr_device dev,
+int32_t xcvr_set_lpm_dfe_mode(xcvr_device *dev,
 							  uint32_t lpm)
 {
-	if (dev.gth_enable) {
+	if (dev->gth_enable) {
 		if (lpm) {
 			xcvr_drp_write(dev, 0x036, 0x0032);
 			xcvr_drp_write(dev, 0x039, 0x1000);
@@ -752,39 +752,39 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	rx_os_xcvr.ppm = PM_200;
 	rx_os_xcvr.lpm_enable = 1;
 
-	xcvr_write(rx_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
-	xcvr_set_lpm_dfe_mode(rx_xcvr, rx_xcvr.lpm_enable);
-	xcvr_clk_set_rate(rx_xcvr, 245760 * 20, rx_xcvr.ref_rate_khz);
-	xcvr_write(rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
+	xcvr_set_lpm_dfe_mode(&rx_xcvr, rx_xcvr.lpm_enable);
+	xcvr_clk_set_rate(&rx_xcvr, 245760 * 20, rx_xcvr.ref_rate_khz);
+	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(tx_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
-	xcvr_clk_set_rate(tx_xcvr, 245760 * 20, tx_xcvr.ref_rate_khz);
-	xcvr_write(tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
+	xcvr_clk_set_rate(&tx_xcvr, 245760 * 20, tx_xcvr.ref_rate_khz);
+	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
-	xcvr_set_lpm_dfe_mode(rx_os_xcvr, rx_os_xcvr.lpm_enable);
-	xcvr_clk_set_rate(rx_os_xcvr, 245760 * 20, rx_os_xcvr.ref_rate_khz);
-	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
+	xcvr_set_lpm_dfe_mode(&rx_os_xcvr, rx_os_xcvr.lpm_enable);
+	xcvr_clk_set_rate(&rx_os_xcvr, 245760 * 20, rx_os_xcvr.ref_rate_khz);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(rx_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
-	xcvr_set_lpm_dfe_mode(rx_xcvr, rx_xcvr.lpm_enable);
-	xcvr_clk_set_rate(rx_xcvr, rx_xcvr.lane_rate_khz, rx_xcvr.ref_rate_khz);
-	xcvr_write(rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
+	xcvr_set_lpm_dfe_mode(&rx_xcvr, rx_xcvr.lpm_enable);
+	xcvr_clk_set_rate(&rx_xcvr, rx_xcvr.lane_rate_khz, rx_xcvr.ref_rate_khz);
+	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(tx_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
-	xcvr_clk_set_rate(tx_xcvr, tx_xcvr.lane_rate_khz, tx_xcvr.ref_rate_khz);
-	xcvr_write(tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
+	xcvr_clk_set_rate(&tx_xcvr, tx_xcvr.lane_rate_khz, tx_xcvr.ref_rate_khz);
+	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
-	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, 0);
-	xcvr_write(rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
-	xcvr_set_lpm_dfe_mode(rx_os_xcvr, rx_os_xcvr.lpm_enable);
-	xcvr_clk_set_rate(rx_os_xcvr, rx_os_xcvr.lane_rate_khz, rx_os_xcvr.ref_rate_khz);
-	xcvr_write(rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, 0);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
+	xcvr_set_lpm_dfe_mode(&rx_os_xcvr, rx_os_xcvr.lpm_enable);
+	xcvr_clk_set_rate(&rx_os_xcvr, rx_os_xcvr.lane_rate_khz, rx_os_xcvr.ref_rate_khz);
+	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	mdelay(1);
 
@@ -792,7 +792,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		xcvr_read(rx_xcvr, XCVR_REG_STATUS, &status);
+		xcvr_read(&rx_xcvr, XCVR_REG_STATUS, &status);
 		if (status == XCVR_STATUS)
 			break;
 	}
@@ -806,7 +806,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		xcvr_read(tx_xcvr, XCVR_REG_STATUS, &status);
+		xcvr_read(&tx_xcvr, XCVR_REG_STATUS, &status);
 		if (status == XCVR_STATUS)
 			break;
 	}
@@ -820,7 +820,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		xcvr_read(rx_os_xcvr, XCVR_REG_STATUS, &status);
+		xcvr_read(&rx_os_xcvr, XCVR_REG_STATUS, &status);
 		if (status == XCVR_STATUS)
 			break;
 	}
@@ -836,11 +836,11 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 /***************************************************************************//**
  * @brief jesd_write
  *******************************************************************************/
-int32_t jesd_write(jesd_device dev,
+int32_t jesd_write(jesd_device *dev,
 				   uint32_t reg_addr,
 				   uint32_t reg_val)
 {
-	Xil_Out32((dev.base_addr + reg_addr), reg_val);
+	Xil_Out32((dev->base_addr + reg_addr), reg_val);
 
 	return 0;
 }
@@ -848,11 +848,11 @@ int32_t jesd_write(jesd_device dev,
 /***************************************************************************//**
  * @brief jesd_read
  *******************************************************************************/
-int32_t jesd_read(jesd_device dev,
+int32_t jesd_read(jesd_device *dev,
 				  uint32_t reg_addr,
 				  uint32_t *reg_val)
 {
-	*reg_val = Xil_In32(dev.base_addr + reg_addr);
+	*reg_val = Xil_In32(dev->base_addr + reg_addr);
 
 	return 0;
 }
@@ -870,41 +870,41 @@ int32_t jesd_setup(mykonosDevice_t *myk_dev)
 	tx_jesd.base_addr = TX_JESD_BASEADDR;
 	rx_os_jesd.base_addr = RX_OS_JESD_BASEADDR;
 
-	jesd_write(rx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(rx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(rx_jesd, JESD_REG_TRX_SCRAMBLING,
+	jesd_write(&rx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
+	jesd_write(&rx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(&rx_jesd, JESD_REG_TRX_SCRAMBLING,
 							myk_dev->rx->framer->scramble ? 0x01 : 0x00);
-	jesd_write(rx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+	jesd_write(&rx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(&rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
 							myk_dev->rx->framer->K - 1);
-	jesd_write(rx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x03);
-	jesd_write(rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+	jesd_write(&rx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x03);
+	jesd_write(&rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
 							myk_dev->rx->framer->K - 1);
-	jesd_write(rx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	jesd_write(&rx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
-	jesd_write(tx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(tx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(tx_jesd, JESD_REG_TRX_SCRAMBLING,
+	jesd_write(&tx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
+	jesd_write(&tx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(&tx_jesd, JESD_REG_TRX_SCRAMBLING,
 							myk_dev->tx->deframer->scramble ? 0x01 : 0x00);
-	jesd_write(tx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+	jesd_write(&tx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(&tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
 							myk_dev->tx->deframer->K - 1);
-	jesd_write(tx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+	jesd_write(&tx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
+	jesd_write(&tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
 							myk_dev->tx->deframer->K - 1);
-	jesd_write(tx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	jesd_write(&tx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
-	jesd_write(rx_os_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_SCRAMBLING,
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_SCRAMBLING,
 							myk_dev->obsRx->framer->scramble ? 0x01 : 0x00);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
+	jesd_write(&rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
 							myk_dev->obsRx->framer->K - 1);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
 							myk_dev->obsRx->framer->K - 1);
-	jesd_write(rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	jesd_write(&rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
 
 	return 0;
 }

@@ -562,23 +562,25 @@ int main(void)
 		goto error;
 	}
 
-	status = dac_setup(ad9371_tx_core_init);
+	status = dac_setup(&ad9371_tx_core_init);
 	if (status != 0) {
 		printf("dac_setup() failed\n");
 		return -1;
 	}
 
-	status = adc_setup(ad9371_rx_core_init);
+	status = adc_setup(&ad9371_rx_core_init);
 	if (status != 0) {
 		printf("adc_setup() failed\n");
 		return -1;
 	}
 
-	dac_write_custom_data(ad9371_tx_core_init, sine_lut_iq, sizeof(sine_lut_iq) / sizeof(uint32_t));
+	dac_write_custom_data(&ad9371_tx_core_init,
+						  sine_lut_iq,
+						  sizeof(sine_lut_iq) / sizeof(uint32_t));
 
 	mdelay(1000);
 
-	adc_capture(ad9371_rx_core_init, 16384);
+	adc_capture(&ad9371_rx_core_init, 16384);
 
 	printf("Done\n");
 

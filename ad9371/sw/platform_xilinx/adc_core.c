@@ -47,11 +47,11 @@
 /***************************************************************************//**
  * @brief adc_read
  *******************************************************************************/
-int32_t adc_read(adc_core core,
-		uint32_t reg_addr,
-		uint32_t *reg_data)
+int32_t adc_read(adc_core *core,
+				 uint32_t reg_addr,
+				 uint32_t *reg_data)
 {
-	*reg_data = Xil_In32((core.base_address + reg_addr));
+	*reg_data = Xil_In32((core->base_address + reg_addr));
 
 	return 0;
 }
@@ -59,11 +59,11 @@ int32_t adc_read(adc_core core,
 /***************************************************************************//**
  * @brief adc_write
  *******************************************************************************/
-int32_t adc_write(adc_core core,
-		uint32_t reg_addr,
-		uint32_t reg_data)
+int32_t adc_write(adc_core *core,
+				  uint32_t reg_addr,
+				  uint32_t reg_data)
 {
-	Xil_Out32((core.base_address + reg_addr), reg_data);
+	Xil_Out32((core->base_address + reg_addr), reg_data);
 
 	return 0;
 }
@@ -71,7 +71,8 @@ int32_t adc_write(adc_core core,
 /***************************************************************************//**
  * @brief adc_dma_read
 *******************************************************************************/
-void adc_dma_read(uint32_t regAddr, uint32_t *data)
+void adc_dma_read(uint32_t regAddr,
+				  uint32_t *data)
 {
 	*data = Xil_In32(XPAR_AXI_AD9371_RX_DMA_BASEADDR + regAddr);
 }
@@ -79,7 +80,8 @@ void adc_dma_read(uint32_t regAddr, uint32_t *data)
 /***************************************************************************//**
  * @brief adc_dma_write
 *******************************************************************************/
-void adc_dma_write(uint32_t regAddr, uint32_t data)
+void adc_dma_write(uint32_t regAddr,
+				   uint32_t data)
 {
 	Xil_Out32(XPAR_AXI_AD9371_RX_DMA_BASEADDR + regAddr, data);
 }
@@ -87,7 +89,7 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 /***************************************************************************//**
  * @brief adc_setup
  *******************************************************************************/
-int32_t adc_setup(adc_core core)
+int32_t adc_setup(adc_core *core)
 {
 	uint8_t	 index;
 	uint32_t reg_data;
@@ -95,14 +97,14 @@ int32_t adc_setup(adc_core core)
 
 	adc_read(core, ADC_REG_ID, &reg_data);
 	if (reg_data)
-		core.master = 1;
+		core->master = 1;
 	else
-		core.master = 0;
+		core->master = 0;
 
 	adc_write(core, ADC_REG_RSTN, 0);
 	adc_write(core, ADC_REG_RSTN, ADC_MMCM_RSTN | ADC_RSTN);
 
-	for(index = 0; index < core.no_of_channels; index++) {
+	for(index = 0; index < core->no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_CNTRL(index), ADC_FORMAT_SIGNEXT |
 							   ADC_FORMAT_ENABLE |
 							   ADC_ENABLE);
@@ -129,9 +131,9 @@ int32_t adc_setup(adc_core core)
 /***************************************************************************//**
  * @brief adc_set_pnsel
  *******************************************************************************/
-int32_t adc_set_pnsel(adc_core core,
-		uint8_t channel,
-		enum adc_pn_sel sel)
+int32_t adc_set_pnsel(adc_core *core,
+					  uint8_t channel,
+					  enum adc_pn_sel sel)
 {
 	uint32_t reg;
 
@@ -147,14 +149,14 @@ int32_t adc_set_pnsel(adc_core core,
  * @brief adc_pn_mon
  *	  Note: The device must be in PRBS test mode, when calling this function
  *******************************************************************************/
-int32_t adc_pn_mon(adc_core core,
-		enum adc_pn_sel sel)
+int32_t adc_pn_mon(adc_core *core,
+				   enum adc_pn_sel sel)
 {
 	uint8_t	index;
 	uint32_t reg_data;
 	int32_t pn_errors = 0;
 
-	for (index = 0; index < core.no_of_channels; index++) {
+	for (index = 0; index < core->no_of_channels; index++) {
  		adc_read(core, ADC_REG_CHAN_CNTRL(index), &reg_data);
  		reg_data |= ADC_ENABLE;
  		adc_write(core, ADC_REG_CHAN_CNTRL(index), reg_data);
@@ -162,12 +164,12 @@ int32_t adc_pn_mon(adc_core core,
 	}
 	mdelay(1);
 
-	for (index = 0; index < core.no_of_channels; index++) {
+	for (index = 0; index < core->no_of_channels; index++) {
 		adc_write(core, ADC_REG_CHAN_STATUS(index), 0xff);
 	}
 	mdelay(100);
 
-	for (index = 0; index < core.no_of_channels; index++) {
+	for (index = 0; index < core->no_of_channels; index++) {
 		adc_read(core, ADC_REG_CHAN_STATUS(index), &reg_data);
 		if (reg_data != 0) {
 			pn_errors = -1;
@@ -182,17 +184,17 @@ int32_t adc_pn_mon(adc_core core,
  * @brief adc_ramp_test
  *	  This functions supports channel number multiple of 2 (e.g 1/2/4/6/8...)
  *******************************************************************************/
-int32_t adc_ramp_test(adc_core core,
-		uint8_t no_of_cores,
-		uint32_t no_of_samples,
-		uint32_t start_address)
+int32_t adc_ramp_test(adc_core *core,
+					  uint8_t no_of_cores,
+					  uint32_t no_of_samples,
+					  uint32_t start_address)
 {
 	uint8_t	 err_cnt = 0;
 	uint16_t exp_data[32];
 	uint16_t rcv_data[32];
 	uint8_t index;
-	uint32_t mask = ad_pow2(core.resolution);
-	uint8_t no_of_channels = core.no_of_channels*no_of_cores;
+	uint32_t mask = ad_pow2(core->resolution);
+	uint8_t no_of_channels = core->no_of_channels*no_of_cores;
 	uint32_t current_address = start_address;
 	uint32_t last_address = start_address + (no_of_channels*no_of_samples)*2;
 	uint32_t sample_count = 0;
@@ -248,12 +250,13 @@ int32_t adc_ramp_test(adc_core core,
 /***************************************************************************//**
  * @brief adc_capture
 *******************************************************************************/
-int32_t adc_capture(adc_core core, uint32_t size)
+int32_t adc_capture(adc_core *core,
+					uint32_t size)
 {
 	uint32_t reg_val;
 	uint32_t transfer_id;
 	uint32_t length;
-	uint8_t no_of_tx_chn = core.no_of_channels / 2;
+	uint8_t no_of_tx_chn = core->no_of_channels / 2;
 
 	length = (size * no_of_tx_chn * sizeof(uint32_t));
 
@@ -266,7 +269,7 @@ int32_t adc_capture(adc_core core, uint32_t size)
 	adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
 
-	adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, core.start_address);
+	adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, core->start_address);
 	adc_dma_write(AXI_DMAC_REG_DEST_STRIDE, 0x0);
 	adc_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
 	adc_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
