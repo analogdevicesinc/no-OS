@@ -41,51 +41,51 @@
 /******************************************************************************/
 #include "jesd_core.h"
 
-void xcvr_write(xcvr_device dev,
+void xcvr_write(xcvr_device *dev,
 				uint32_t reg,
 				uint32_t val)
 {
-	IOWR_32DIRECT(dev.xcvr_base_addr, reg, val);
+	IOWR_32DIRECT(dev->xcvr_base_addr, reg, val);
 }
 
-uint32_t xcvr_read(xcvr_device dev,
+uint32_t xcvr_read(xcvr_device *dev,
 				   uint32_t reg_addr)
 {
-	return IORD_32DIRECT(dev.xcvr_base_addr, reg_addr);
+	return IORD_32DIRECT(dev->xcvr_base_addr, reg_addr);
 }
 
-void atx_pll_write(xcvr_device dev,
+void atx_pll_write(xcvr_device *dev,
 				   uint32_t reg,
 				   uint32_t val)
 {
-	IOWR_32DIRECT(dev.atx_pll_base_addr, reg, val);
+	IOWR_32DIRECT(dev->atx_pll_base_addr, reg, val);
 }
 
-uint32_t atx_pll_read(xcvr_device dev,
+uint32_t atx_pll_read(xcvr_device *dev,
 				      uint32_t reg_addr)
 {
-	return IORD_32DIRECT(dev.atx_pll_base_addr, reg_addr);
+	return IORD_32DIRECT(dev->atx_pll_base_addr, reg_addr);
 }
 
-void adxcfg_write(xcvr_device dev,
+void adxcfg_write(xcvr_device *dev,
 				  uint8_t lane,
 				  uint32_t reg,
 				  uint32_t val)
 {
-	IOWR_32DIRECT(dev.adxcfg_base_addr[lane], reg, val);
+	IOWR_32DIRECT(dev->adxcfg_base_addr[lane], reg, val);
 }
 
-uint32_t adxcfg_read(xcvr_device dev,
+uint32_t adxcfg_read(xcvr_device *dev,
 				 	 uint8_t lane,
 				 	 uint32_t reg_addr)
 {
-	return IORD_32DIRECT(dev.adxcfg_base_addr[lane], reg_addr);
+	return IORD_32DIRECT(dev->adxcfg_base_addr[lane], reg_addr);
 }
 
 
-uint8_t atx_pll_calib(xcvr_device dev)
+uint8_t atx_pll_calib(xcvr_device *dev)
 {
-	uint8_t link = dev.link_num;
+	uint8_t link = dev->link_num;
 	uint32_t addr;
 	uint8_t mask;
 	uint8_t val;
@@ -129,9 +129,9 @@ uint8_t atx_pll_calib(xcvr_device dev)
 	}
 }
 
-uint8_t xcvr_calib_tx(xcvr_device dev)
+uint8_t xcvr_calib_tx(xcvr_device *dev)
 {
-	uint8_t link = dev.link_num;
+	uint8_t link = dev->link_num;
 	uint8_t lane;
 	uint32_t addr;
 	uint8_t mask;
@@ -140,7 +140,7 @@ uint8_t xcvr_calib_tx(xcvr_device dev)
 	uint32_t read_val;
 	uint8_t err = 0;
 
-	for (lane = 0; lane < dev.lanes_per_link; lane++) {
+	for (lane = 0; lane < dev->lanes_per_link; lane++) {
 		/* Get AVMM InterfaceeSICE through arbitration register */
 		addr = XCVR_REG_ARBITRATION(link);
 		mask = XCVR_ARBITRATION_MASK;
@@ -187,9 +187,9 @@ uint8_t xcvr_calib_tx(xcvr_device dev)
 	return err;
 }
 
-uint8_t xcvr_calib_rx(xcvr_device dev)
+uint8_t xcvr_calib_rx(xcvr_device *dev)
 {
-	uint8_t link = dev.link_num;
+	uint8_t link = dev->link_num;
 	uint8_t lane;
 	uint32_t addr;
 	uint8_t mask;
@@ -198,7 +198,7 @@ uint8_t xcvr_calib_rx(xcvr_device dev)
 	uint32_t read_val;
 	uint8_t err = 0;
 
-	for (lane = 0; lane < dev.lanes_per_link; lane++) {
+	for (lane = 0; lane < dev->lanes_per_link; lane++) {
 		/* Get AVMM Interface from PreSICE through arbitration register */
 		addr = XCVR_REG_ARBITRATION(link);
 		mask = XCVR_ARBITRATION_MASK;
@@ -283,23 +283,23 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	tx_xcvr.adxcfg_base_addr[3] = AVL_ADXCFG_3_RCFG_S0_BASE;
 
 
-	xcvr_write(tx_xcvr, ADXCVR_REG_RESETN, 0);
-	if (atx_pll_calib(tx_xcvr))
+	xcvr_write(&tx_xcvr, ADXCVR_REG_RESETN, 0);
+	if (atx_pll_calib(&tx_xcvr))
 		printf("ATX PLL NOT ready\n");
-	if (xcvr_calib_tx(tx_xcvr))
+	if (xcvr_calib_tx(&tx_xcvr))
 		printf("TX calib error\n");
-	xcvr_write(tx_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
+	xcvr_write(&tx_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 
-	xcvr_write(rx_xcvr, ADXCVR_REG_RESETN, 0);
-	if (xcvr_calib_rx(rx_xcvr)) {
+	xcvr_write(&rx_xcvr, ADXCVR_REG_RESETN, 0);
+	if (xcvr_calib_rx(&rx_xcvr)) {
 		printf("RX calib error\n");
 	}
-	xcvr_write(rx_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
+	xcvr_write(&rx_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 
-	xcvr_write(rx_os_xcvr, ADXCVR_REG_RESETN, 0);
-	if (xcvr_calib_rx(rx_os_xcvr))
+	xcvr_write(&rx_os_xcvr, ADXCVR_REG_RESETN, 0);
+	if (xcvr_calib_rx(&rx_os_xcvr))
 		printf("RX obs calib error\n");
-	xcvr_write(rx_os_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
+	xcvr_write(&rx_os_xcvr, ADXCVR_REG_RESETN, ADXCVR_RESETN);
 
 	mdelay(1);
 
@@ -307,7 +307,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = xcvr_read(rx_xcvr, ADXCVR_REG_STATUS);
+		status = xcvr_read(&rx_xcvr, ADXCVR_REG_STATUS);
 		if (status == ADXCVR_STATUS)
 			break;
 	}
@@ -321,7 +321,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = xcvr_read(tx_xcvr, ADXCVR_REG_STATUS);
+		status = xcvr_read(&tx_xcvr, ADXCVR_REG_STATUS);
 		if (status == ADXCVR_STATUS)
 			break;
 	}
@@ -335,7 +335,7 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	while (timeout > 0) {
 		mdelay(1);
 		timeout--;
-		status = xcvr_read(rx_os_xcvr, ADXCVR_REG_STATUS);
+		status = xcvr_read(&rx_os_xcvr, ADXCVR_REG_STATUS);
 		if (status == ADXCVR_STATUS)
 			break;
 	}

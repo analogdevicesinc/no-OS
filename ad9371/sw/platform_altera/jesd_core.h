@@ -102,8 +102,8 @@
 #define XCVR_RATE_SWITCH_FLAG_MASK		0x80
 #define XCVR_RATE_SWITCH_FLAG_NO_RATE_SWITCH	0x80
 
-uint8_t atx_pll_calib(xcvr_device dev);
-uint8_t xcvr_calib_tx(xcvr_device dev);
+uint8_t atx_pll_calib(xcvr_device *dev);
+ uint8_t xcvr_calib_tx(xcvr_device *dev);
 int32_t xcvr_setup(mykonosDevice_t *myk_dev);
 int32_t jesd_setup(mykonosDevice_t *myk_dev);
 

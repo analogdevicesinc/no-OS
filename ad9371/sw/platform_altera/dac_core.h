@@ -190,17 +190,29 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t dac_read(dac_core core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t dac_write(dac_core core, uint32_t reg_addr, uint32_t reg_data);
+int32_t dac_read(dac_core *core,
+				 uint32_t reg_addr,
+				 uint32_t *reg_data);
+int32_t dac_write(dac_core *core,
+				  uint32_t reg_addr,
+				  uint32_t reg_data);
 
-int32_t dac_setup(dac_core core);
-int32_t dac_data_setup(dac_core core);
+int32_t dac_setup(dac_core *core);
+int32_t dac_data_setup(dac_core *core);
 
-int32_t dds_set_frequency(dac_core core, uint32_t chan, uint32_t freq);
-int32_t dds_set_phase(dac_core core, uint32_t chan, uint32_t phase);
-int32_t dds_set_scale(dac_core core, uint32_t chan, int32_t scale_micro_units);
-int32_t dac_data_src_sel(dac_core core, int32_t chan, dac_data_src src);
-void dac_write_custom_data(dac_core core,
-					  	   const uint32_t *custom_data_iq,
+int32_t dds_set_frequency(dac_core *core,
+						  uint32_t chan,
+						  uint32_t freq);
+int32_t dds_set_phase(dac_core *core,
+					  uint32_t chan,
+					  uint32_t phase);
+int32_t dds_set_scale(dac_core *core,
+					  uint32_t chan,
+					  int32_t scale_micro_units);
+int32_t dac_data_src_sel(dac_core *core,
+						 int32_t chan,
+						 dac_data_src src);
+void dac_write_custom_data(dac_core *core,
+						   const uint32_t *custom_data_iq,
 						   uint32_t custom_tx_count);
 #endif
