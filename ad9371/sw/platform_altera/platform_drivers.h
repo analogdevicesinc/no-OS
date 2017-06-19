@@ -122,15 +122,16 @@
 /* PCORE Version > 8.00 */
 #define ADI_REG_DELAY(l)			(0x0800 + (l) * 0x4)
 
-#define AD9371_GPINT       	56
-#define AD9371_TX1_ENABLE  	55
-#define AD9371_TX2_ENABLE  	54
-#define AD9371_RX1_ENABLE   53
-#define AD9371_RX2_ENABLE   52
-#define AD9371_TEST         51
-#define AD9371_RESET_B      50
-#define AD9528_SYSREF_REQ   49
-#define AD9528_RESET_B      48
+#define DAC_GPIO_PLDDR_BYPASS 	60
+#define AD9528_RESET_B      	59
+#define AD9528_SYSREF_REQ   	58
+#define AD9371_TX1_ENABLE  		57
+#define AD9371_TX2_ENABLE  		56
+#define AD9371_RX1_ENABLE   	55
+#define AD9371_RX2_ENABLE   	54
+#define AD9371_TEST         	53
+#define AD9371_RESET_B      	52
+#define AD9371_GPINT       		51
 
 #define AD9528_CHIP_SELECT	2
 #define AD9371_CHIP_SELECT	1
