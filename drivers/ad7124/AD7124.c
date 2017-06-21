@@ -229,6 +229,9 @@ int32_t AD7124_Reset(ad7124_device *device)
 
 	ret = SPI_Write(device->slave_select_id, wrBuf, 8);
 
+	/* Wait for the reset to complete */
+	ret = AD7124_WaitToPowerOn(device, device->spi_rdy_poll_cnt);
+
 	return ret;
 }
 
@@ -265,6 +268,40 @@ int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout)
 	}
 
 	return timeout ? 0 : TIMEOUT;
+}
+
+/***************************************************************************//**
+* @brief Waits until the device finishes the power-on reset operation.
+*
+* @param device - The handler of the instance of the driver.
+* @param timeout - Count representing the number of polls to be done until the
+*                  function returns.
+*
+* @return Returns 0 for success or negative error code.
+*******************************************************************************/
+int32_t AD7124_WaitToPowerOn(ad7124_device *device, uint32_t timeout)
+{
+	ad7124_st_reg *regs;
+	int32_t ret;
+	int8_t powered_on = 0;
+
+	if(!device)
+		return INVALID_VAL;
+
+	regs = device->regs;
+
+	while(!powered_on && timeout--)
+	{
+		ret = AD7124_ReadRegister(device, &regs[AD7124_Status]);
+		if(ret < 0)
+			return ret;
+
+		/* Check the POR_FLAG bit in the Status Register */
+		powered_on = (regs[AD7124_Status].value &
+				AD7124_STATUS_REG_POR_FLAG) == 0;
+	}
+
+	return (timeout || powered_on) ? 0 : TIMEOUT;
 }
 
 /***************************************************************************//**

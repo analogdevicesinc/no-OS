@@ -382,6 +382,9 @@ int32_t AD7124_Reset(ad7124_device *device);
 /*! Waits until the device can accept read and write user actions. */
 int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout);
 
+/*! Waits until the device finishes the power-on reset operation. */
+int32_t AD7124_WaitToPowerOn(ad7124_device *device, uint32_t timeout);
+
 /*! Waits until a new conversion result is available. */
 int32_t AD7124_WaitForConvReady(ad7124_device *device, uint32_t timeout);
 
