@@ -208,6 +208,7 @@
 #define REG_SYNTH_ENABLE_CNTRL			0x280 /* Rx PLL enable controls */
 #define REG_PLL_STATUS				0x281 /* Rx PLL status readbacks */
 #define REG_REF_CLK_DIVIDER_LDO			0x289 /* Rx PLL LDO control */
+#define REG_SERDES_PLL_CTRL			0x291 /* Serdes PLL control */
 #define REG_SERDES_PLL_CP3			0x29c /* Serdes PLL charge pump */
 #define REG_SERDES_PLL_VAR3			0x29f /* Serdes PLL VCO varactor */
 #define REG_DEV_CONFIG_8			0x2A4 /* To control the clock configuration */

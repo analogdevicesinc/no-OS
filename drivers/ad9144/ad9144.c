@@ -145,11 +145,11 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_BLSM_CTRL, 0x01);			// data-path
 	ad9144_spi_write(dev, REG_DEV_CONFIG_8, 0xff);			// clock
 	ad9144_spi_write(dev, REG_DACPLLT17, 0x73);			// dac-pll
-	//ad9144_spi_write(dev, 0x291, 0x49);	// serde-pll
+	ad9144_spi_write(dev, REG_SERDES_PLL_CTRL, 0x49);		// serdes-pll
 	ad9144_spi_write(dev, REG_SERDES_PLL_CP3, 0x24);		// serde-pll
 	ad9144_spi_write(dev, REG_SERDES_PLL_VAR3, 0x73);		// serde-pll
 	ad9144_spi_write(dev, REG_CONFIG_REG3, 0xff);			// jesd
-	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);	// jesd
+	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);		// jesd
 
 	// digital data path
 
