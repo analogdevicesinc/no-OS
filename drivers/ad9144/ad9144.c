@@ -187,7 +187,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
 	if (init_param.lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x2A);		// CDR_OVERSAMP
+		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x0A);		// CDR_OVERSAMP
 	else
 		if (init_param.lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x28);	// ENHALFRATE
