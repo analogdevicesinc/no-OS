@@ -562,7 +562,7 @@ int main(void)
 		goto error;
 	}
 
-	status = dac_setup(&ad9371_tx_core_init);
+	status = dac_setup(&mykDevice, &ad9371_tx_core_init);
 	if (status != 0) {
 		printf("dac_setup() failed\n");
 		return -1;

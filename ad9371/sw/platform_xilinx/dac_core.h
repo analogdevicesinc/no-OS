@@ -183,7 +183,7 @@ typedef struct {
 	uint32_t dac_ddr_baseaddr;
 	dac_dma_type dma_type;
 	uint8_t plddr_bypass_gpio;
-
+	uint64_t clock;
 } dac_core;
 
 /******************************************************************************/
@@ -196,7 +196,8 @@ int32_t dac_read(dac_core *core,
 int32_t dac_write(dac_core *core,
 				  uint32_t reg_addr,
 				  uint32_t reg_data);
-int32_t dac_setup(dac_core *core);
+int32_t dac_setup(mykonosDevice_t *myk_dev,
+				  dac_core *core);
 int32_t dac_data_setup(dac_core *core);
 int32_t dds_set_frequency(dac_core *core,
 						  uint32_t chan,

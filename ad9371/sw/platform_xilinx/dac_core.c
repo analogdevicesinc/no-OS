@@ -43,6 +43,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <xil_cache.h>
+#include "mykonos.h"
 #include "dac_core.h"
 
 /******************************************************************************/
@@ -312,20 +313,13 @@ int32_t dds_set_frequency(dac_core *core,
 						  uint32_t chan,
 						  uint32_t freq)
 {
-	uint32_t val;
 	uint64_t val64;
 	uint32_t reg;
-	uint64_t dac_clk;
-
-	dac_read(core, DAC_REG_CLK_FREQ, &val);
-	dac_clk = val;
-	dac_read(core, DAC_REG_CLK_RATIO, &val);
-	dac_clk *= val * 1525;
 
 	dac_write(core, DAC_REG_SYNC_CONTROL, 0);
 	dac_read(core, DAC_REG_DDS_INIT_INCR(chan), &reg);
 	val64 = (uint64_t) freq * 0xFFFFULL;
-	val64 = val64 / dac_clk;
+	val64 = val64 / core->clock;
 	reg = (reg & ~DAC_DDS_INCR(~0)) | DAC_DDS_INCR(val64) | 1;
 	dac_write(core, DAC_REG_DDS_INIT_INCR(chan), reg);
 	dac_write(core, DAC_REG_SYNC_CONTROL, DAC_SYNC);
@@ -438,10 +432,10 @@ int32_t dac_data_src_sel(dac_core *core,
 /***************************************************************************//**
  * @brief dac_setup
  *******************************************************************************/
-int32_t dac_setup(dac_core *core)
+int32_t dac_setup(mykonosDevice_t *myk_dev,
+				  dac_core *core)
 {
 	uint32_t reg_data;
-	uint32_t dac_clock;
 
 	if (core->plddr_bypass_gpio) {
 		/*
@@ -461,14 +455,12 @@ int32_t dac_setup(dac_core *core)
 		return -1;
 	}
 
-	dac_read(core, DAC_REG_CLK_FREQ, &dac_clock);
-	dac_read(core, DAC_REG_CLK_RATIO, &reg_data);
-	dac_clock = (dac_clock * reg_data * 100) + 0x7fff;
-	dac_clock = dac_clock >> 16;
+	core->clock = myk_dev->tx->txProfile->iqRate_kHz * 1000;
 
 	dac_write(core, DAC_REG_RATECNTRL, DAC_RATE(3));
 
-	printf("%s dac core initialized (%"PRIu32" MHz).\n", __func__, dac_clock);
+	printf("%s dac core initialized (%"PRIu64" MHz).\n",
+			__func__, core->clock / 1000000);
 
 	dac_data_setup(core);
 
