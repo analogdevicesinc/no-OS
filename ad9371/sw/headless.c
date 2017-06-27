@@ -275,7 +275,7 @@ int main(void)
 	}
 
 	/* Read back the version of the ARM binary loaded into the Mykonos ARM memory */
-	if ((mykError = MYKONOS_getArmVersion(&mykDevice, &arm_major, &arm_minor, &arm_release)) == MYKONOS_ERR_OK)
+	if ((mykError = MYKONOS_getArmVersion(&mykDevice, &arm_major, &arm_minor, &arm_release, NULL)) == MYKONOS_ERR_OK)
 		printf("AD9371 ARM version %d.%d.%d\n", arm_major, arm_minor, arm_release);
 
 	/*************************************************************************/
