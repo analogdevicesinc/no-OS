@@ -446,13 +446,11 @@ int32_t ad77681_set_crc_sel(ad77681_dev *dev,
 }
 
 /**
- * Activates CRC on all SPI transactions and
- * Selects CRC method as XOR or 8-bit polynomial
+ * Enables Status bits output
  * @param dev - The device structure.
- * @param crc_sel - The CRC type.
- * 					Accepted values: AD77681_CRC
- *									 AD77681_XOR
- *									 AD77681_NO_CRC
+ * @param status_bit - enable or disable status bit
+ * 					Accepted values: true
+ *									 false
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_status_bit(ad77681_dev *dev,
