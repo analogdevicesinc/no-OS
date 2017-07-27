@@ -48,11 +48,21 @@
 #define ADGS5412_REG_BURST_EN		0x05
 #define ADGS5412_REG_SOFT_RESETB	0x0B
 
-/* ADGS5412_REG_SW_DATA */
+/* ADGS5412_REG_SW_DATA for ADGS5412 */
 #define ADGS5412_SW4_EN				(1 << 3)
 #define ADGS5412_SW3_EN				(1 << 2)
 #define ADGS5412_SW2_EN				(1 << 1)
 #define ADGS5412_SW1_EN				(1 << 0)
+
+/* ADGS5412_REG_SW_DATA for ADGS5414 */
+#define ADGS5414_SW7_EN				(1 << 7)
+#define ADGS5414_SW6_EN				(1 << 6)
+#define ADGS5414_SW5_EN				(1 << 5)
+#define ADGS5414_SW4_EN				(1 << 4)
+#define ADGS5414_SW3_EN				(1 << 3)
+#define ADGS5414_SW2_EN				(1 << 2)
+#define ADGS5414_SW1_EN				(1 << 1)
+#define ADGS5414_SW0_EN				(1 << 0)
 
 /* ADGS5412_REG_ERR_CONFIG */
 #define ADGS5412_RW_ERR_EN			(1 << 2)
