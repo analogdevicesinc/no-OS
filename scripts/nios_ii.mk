@@ -15,11 +15,11 @@ BSP_LOG := nios_ii_bsp.log
 ELF_FILE := sw.elf
 CPU_NAME := sys_cpu
 
-HDR_FILES := $(M_HDR_FILES)
-HDR_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
+HDR_FILES := $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
+HDR_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.h))
 
 SRC_FILES := $(M_SRC_FILES)
-SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
+SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
 
 BSP_CMD := nios2-bsp hal bsp
 BSP_CMD += $(SOPCINFO-FILE)
@@ -29,6 +29,7 @@ APP_CMD := nios2-app-generate-makefile
 APP_CMD += --bsp-dir bsp
 APP_CMD += --app-dir sw
 APP_CMD += $(addprefix --inc-dir , $(M_INC_DIRS))
+APP_CMD += $(addprefix --inc-dir , $(M_SRC_DIRS))
 APP_CMD += --inc-dir bsp/HAL/inc/sys
 APP_CMD += --elf-name $(ELF_FILE)
 APP_CMD += --set OBJDUMP_INCLUDE_SOURCE 1

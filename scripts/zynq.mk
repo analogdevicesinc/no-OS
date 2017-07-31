@@ -28,12 +28,12 @@ P_SRC_FILES := xilsw/src/platform.c
 ELF_FILE := sw/Release/sw.elf
 
 HDR_FILES := $(P_HDR_FILES)
-HDR_FILES += $(M_HDR_FILES)
 HDR_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.h))
+HDR_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.h))
 
 SRC_FILES := $(P_SRC_FILES)
 SRC_FILES += $(M_SRC_FILES)
-SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
+SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
 
 CAPTURE_BADDR := 800000
 CAPTURE_SIZE := 32768
