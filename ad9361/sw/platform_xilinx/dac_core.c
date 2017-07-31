@@ -191,7 +191,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 	uint32_t data_i2;
 	uint32_t data_q2;
 	uint32_t length;
-	uint32_t reg_ctrl_2;
+	uint32_t reg_ctrl_2 = 0;
 
 	dac_write(phy, DAC_REG_RSTN, 0x0);
 	dac_write(phy, DAC_REG_RSTN, DAC_RSTN | DAC_MMCM_RSTN);
@@ -320,7 +320,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq)
 {
 	uint64_t val64;
-	uint32_t reg;
+	uint32_t reg = 0;
 
 	dds_st[phy->id_no].cached_freq[chan] = freq;
 	dac_stop(phy);
@@ -347,7 +347,7 @@ void dds_get_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t *freq)
 void dds_set_phase(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t phase)
 {
 	uint64_t val64;
-	uint32_t reg;
+	uint32_t reg = 0;
 
 	dds_st[phy->id_no].cached_phase[chan] = phase;
 	dac_stop(phy);
@@ -474,7 +474,7 @@ int32_t dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_selec
 			dds_st[phy->id_no].cached_datasel[chan] = sel;
 		}
 	} else {
-		uint32_t reg;
+		uint32_t reg = 0;
 
 		switch(sel) {
 		case DATA_SEL_DDS:
@@ -579,7 +579,7 @@ int32_t dds_set_calib_scale_phase(struct ad9361_rf_phy *phy,
 								  int32_t val,
 								  int32_t val2)
 {
-	uint32_t reg;
+	uint32_t reg = 0;
 	uint32_t i;
 
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8) {
@@ -612,7 +612,7 @@ int32_t dds_get_calib_scale_phase(struct ad9361_rf_phy *phy,
 								  int32_t *val,
 								  int32_t *val2)
 {
-	uint32_t reg;
+	uint32_t reg = 0;
 
 	if (PCORE_VERSION_MAJOR(dds_st[phy->id_no].pcore_version) < 8) {
 		return -1;

@@ -207,7 +207,7 @@ int32_t adc_set_calib_scale_phase(struct ad9361_rf_phy *phy,
 {
 	uint32_t fract;
 	uint64_t llval;
-	uint32_t tmp;
+	uint32_t tmp = 0;
 
 	switch (val) {
 	case 1:
@@ -255,7 +255,7 @@ int32_t adc_get_calib_scale_phase(struct ad9361_rf_phy *phy,
 								  int32_t *val,
 								  int32_t *val2)
 {
-	uint32_t tmp;
+	uint32_t tmp = 0;
 	int32_t sign;
 	uint64_t llval;
 
