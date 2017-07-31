@@ -385,10 +385,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->port_ctrl.lvds_invert[0] = init_param->lvds_invert1_control;
 	phy->pdata->port_ctrl.lvds_invert[1] = init_param->lvds_invert2_control;
 
-#ifndef AXI_ADC_NOT_PRESENT
-	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
-#endif
-
 	phy->rx_eq_2tx = false;
 
 	phy->current_table = RXGAIN_TBLS_END;
@@ -422,6 +418,10 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 		phy->pdata->rx1tx1_mode_use_rx_num = 1;
 		phy->pdata->rx1tx1_mode_use_tx_num = 1;
 	}
+
+#ifndef AXI_ADC_NOT_PRESENT
+	phy->adc_conv->chip_info = &axiadc_chip_info_tbl[phy->pdata->rx2tx2 ? ID_AD9361 : ID_AD9364];
+#endif
 
 	phy->ad9361_rfpll_ext_recalc_rate = init_param->ad9361_rfpll_ext_recalc_rate;
 	phy->ad9361_rfpll_ext_round_rate = init_param->ad9361_rfpll_ext_round_rate;
