@@ -2,7 +2,7 @@
 
 include ../../scripts/noos.mk
 
-M_HDF_FILE := $(HDL-DIR)/projects/adrv9364z7020/ccbob_lvds/adrv9364z7020_ccbob_lvds.sdk/system_top.hdf
+M_HDF_FILE := $(HDL-DIR)/projects/adrv9364z7020/ccbob_cmos/adrv9364z7020_ccbob_cmos.sdk/system_top.hdf
 
 M_SRC_DIRS := $(NOOS-DIR)/ad9361/sw
 M_SRC_DIRS += $(NOOS-DIR)/ad9361/sw/platform_xilinx
@@ -16,6 +16,8 @@ M_DEFINES += AD9364_DEVICE=1
 M_DEFINES += AD9363A_DEVICE=0
 M_DEFINES += XILINX_PLATFORM
 M_DEFINES += PICOZED_SDR
+M_DEFINES += PICOZED_SDR_CMOS
+M_DEFINES += PICOZED_SDR_CMOS_SWAP_PORTS
 
 include $(NOOS-DIR)/scripts/zynq.mk
 
