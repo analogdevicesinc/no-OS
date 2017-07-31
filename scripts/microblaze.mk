@@ -19,6 +19,7 @@ XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += MICROBLAZE
+COMPILER_DEFINES += $(M_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h

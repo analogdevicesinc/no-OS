@@ -20,6 +20,7 @@ XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
 COMPILER_DEFINES += ZYNQ_PS7
+COMPILER_DEFINES += $(M_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h

@@ -19,6 +19,7 @@ XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
 COMPILER_DEFINES += ZYNQ_PSU
+COMPILER_DEFINES += $(M_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h
