@@ -72,24 +72,10 @@ int32_t jesd_write(jesd_core core,
 *******************************************************************************/
 int32_t jesd_setup(jesd_core core)
 {
-#ifdef ALTERA
+	jesd_write(core, 0x210, (((core.octets_per_frame-1) << 16) |
+		((core.frames_per_multiframe*core.octets_per_frame)-1)));
+	jesd_write(core, 0x0c0, 0);
 	return(0);
-#endif
-#ifdef XILINX
-	jesd_write(core, JESD204_REG_TRX_RESET, JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
-	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT, JESD204_TRX_ILA_EN);
-	jesd_write(core, JESD204_REG_TRX_SCRAMBLING, core.scramble_enable);
-	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING, JESD204_TRX_SYSREF_ALWAYSON |
-							  JESD204_TRX_SYSREF_DELAY(0) |
-							  JESD204_TRX_SYSREF_ONRESYNC);
-	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
-		JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
-	jesd_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
-			JESD204_TRX_FRAMES_PER_MULTIFRAME(core.frames_per_multiframe));
-	jesd_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
-			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
-    return(0);
-#endif
 }
 
 /***************************************************************************//**
@@ -114,105 +100,22 @@ int32_t jesd_status(jesd_core core)
 	uint32_t status;
 	int32_t timeout;
 	int32_t ret;
-#ifdef XILINX
-	uint8_t link;
-#endif
 
-#ifdef ALTERA
+	ret = 0;
 	timeout = 100;
-	ret = -1;
 	while (timeout > 0) {
-		jesd_read(core, JESD204_REG_STATUS, &status);
-		if ((core.rx_tx_n == 0) && ((status & 0x7) == 0x5)) {
-			ret = 0;
-			break;
-		}
-		if ((core.rx_tx_n == 1) && ((status & 0x1) == 0x1)) {
-			ret = 0;
-			break;
-		}
+		mdelay(1);
+		jesd_read(core, 0x280, &status);
+		if ((status & 0x13) == 0x13) break;
 		timeout = timeout - 1;
-		mdelay(1);
 	}
-
-	if (ret == 0) return(0);
-
-	ad_printf("jesd_status: SYNC errors (%02x)!\n", status);
-	return(-1);
-#endif
-#ifdef XILINX
-	timeout = 100;
-	do {
-		mdelay(1);
-		jesd_read(core, JESD204_REG_TRX_RESET, &status);
-		status &= JESD204_TRX_RESET;
-	} while ((timeout--) && (status == JESD204_TRX_RESET));
-
-	if (status == JESD204_TRX_RESET) {
-		ad_printf("%s jesd_status: jesd reset not completed!\n", __func__);
-		return -1;
-	}
-
-	if (core.subclass_mode >= 1) {
-		timeout = 100;
-		do {
-			mdelay(1);
-			jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
-			status &= JESD204_TRX_SYSREF_CAPTURED;
-		} while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
-
-	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
-		ad_printf("%s jesd_status: missing SYS_REF!\n", __func__);
-		return -1;
-	  }
-	}
-
-	timeout = 100;
-	do {
-		mdelay(1);
-		jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
-		status &= JESD204_TRX_SYNC_ACHIEVED;
-	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
-
-	if (status != JESD204_TRX_SYNC_ACHIEVED) {
-		ad_printf("%s jesd_status: Link SYNC not achieved!\n", __func__);
-		return -1;
-	}
-
-	if (core.rx_tx_n == 0)
-		return 0;
-
-	jesd_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
-	for (link = 0; link < 8; link++) {
-		if (status & JESD204_RX_LINK_K_CH_ERR(link)) {
-			ad_printf("%s Link %d: K_CH_ERR\n", __func__, link);
-			ret = -1;
-		}
-		if (status & JESD204_RX_LINK_DISP_ERR(link)) {
-			ad_printf("%s Link %d: DISP_ERR\n", __func__, link);
-			ret = -1;
-		}
-		if (status & JESD204_RX_LINK_NOT_IN_TBL_ERR(link)) {
-			ad_printf("%s Link %d: NOT_IN_TBL_ERR\n", __func__, link);
-			ret = -1;
-		}
-	}
-
-	if (status & JESD204_RX_LINK_LANE_ALIGN_ERR_ALARM) {
-		ad_printf("%s jesd_status: frame alignment error!\n", __func__);
+	if ((status & 0x10) != 0x10) {
+		ad_printf("%s jesd_status: out of sync (%x)!\n", __func__, status);
 		ret = -1;
 	}
-
-	if (status & JESD204_RX_LINK_SYSREF_LMFC_ALARM) {
-		ad_printf("%s jesd_status: sysref alignment error!\n", __func__);
+	if ((status & 0x03) != 0x03) {
+		ad_printf("%s jesd_status: not in data phase (%x)!\n", __func__, status);
 		ret = -1;
 	}
-
-	if (status & JESD204_RX_LINK_BUFF_OVF_ALARM) {
-		ad_printf("%s jesd_status: receive buffer overflow error!\n", __func__);
-		ret = -1;
-	}
-
 	return(ret);
-#endif
 }
