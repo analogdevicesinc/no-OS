@@ -280,9 +280,13 @@ int main(void)
 	jesd_status(ad9680_jesd);
 	adc_setup(ad9680_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
-	adc_pn_mon(ad9680_core, ADC_PN9);
+	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
+		ad_printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
+	};
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
-	adc_pn_mon(ad9680_core, ADC_PN23A);
+	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
+		ad_printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
+	};
 
 	// default data
 

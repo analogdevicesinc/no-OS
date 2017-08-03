@@ -755,18 +755,18 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, 0);
 	xcvr_write(&rx_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
 	xcvr_set_lpm_dfe_mode(&rx_xcvr, rx_xcvr.lpm_enable);
-	xcvr_clk_set_rate(&rx_xcvr, 245760 * 20, rx_xcvr.ref_rate_khz);
+	xcvr_clk_set_rate(&rx_xcvr, rx_xcvr.ref_rate_khz * 40, rx_xcvr.ref_rate_khz);
 	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, 0);
 	xcvr_write(&tx_xcvr, XCVR_REG_CONTROL, XCVR_SYSCLK_SEL(3) | XCVR_OUTCLK_SEL(3));
-	xcvr_clk_set_rate(&tx_xcvr, 245760 * 20, tx_xcvr.ref_rate_khz);
+	xcvr_clk_set_rate(&tx_xcvr, tx_xcvr.ref_rate_khz * 40, tx_xcvr.ref_rate_khz);
 	xcvr_write(&tx_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, 0);
 	xcvr_write(&rx_os_xcvr, XCVR_REG_CONTROL, XCVR_LPM_DFE_N | XCVR_OUTCLK_SEL(3));
 	xcvr_set_lpm_dfe_mode(&rx_os_xcvr, rx_os_xcvr.lpm_enable);
-	xcvr_clk_set_rate(&rx_os_xcvr, 245760 * 20, rx_os_xcvr.ref_rate_khz);
+	xcvr_clk_set_rate(&rx_os_xcvr, rx_os_xcvr.ref_rate_khz * 40, rx_os_xcvr.ref_rate_khz);
 	xcvr_write(&rx_os_xcvr, XCVR_REG_RESETN, XCVR_RESETN);
 
 	xcvr_write(&rx_xcvr, XCVR_REG_RESETN, 0);

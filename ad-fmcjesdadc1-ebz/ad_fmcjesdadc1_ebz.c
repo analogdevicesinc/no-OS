@@ -160,9 +160,13 @@ int main(void)
 
 	// PRBS test
 	ad9250_test(&ad9250_0_device, AD9250_TEST_PNLONG);
-	adc_pn_mon(ad9250_0_core, ADC_PN23);
+	if(adc_pn_mon(ad9250_0_core, ADC_PN23) == -1) {
+		ad_printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
+	};
 	ad9250_test(&ad9250_1_device, AD9250_TEST_PNLONG);
-	adc_pn_mon(ad9250_1_core, ADC_PN23);
+	if(adc_pn_mon(ad9250_1_core, ADC_PN23) == -1) {
+		ad_printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
+	};
 
 	// set up ramp output
 	ad9250_test(&ad9250_0_device, AD9250_TEST_RAMP);

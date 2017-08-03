@@ -145,11 +145,11 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_BLSM_CTRL, 0x01);			// data-path
 	ad9144_spi_write(dev, REG_DEV_CONFIG_8, 0xff);			// clock
 	ad9144_spi_write(dev, REG_DACPLLT17, 0x73);			// dac-pll
-	//ad9144_spi_write(dev, 0x291, 0x49);	// serde-pll
+	ad9144_spi_write(dev, REG_SERDES_PLL_CTRL, 0x49);		// serdes-pll
 	ad9144_spi_write(dev, REG_SERDES_PLL_CP3, 0x24);		// serde-pll
 	ad9144_spi_write(dev, REG_SERDES_PLL_VAR3, 0x73);		// serde-pll
 	ad9144_spi_write(dev, REG_CONFIG_REG3, 0xff);			// jesd
-	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);	// jesd
+	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);		// jesd
 
 	// digital data path
 
@@ -187,7 +187,7 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
 	if (init_param.lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x2A);		// CDR_OVERSAMP
+		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x0A);		// CDR_OVERSAMP
 	else
 		if (init_param.lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x28);	// ENHALFRATE

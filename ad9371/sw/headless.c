@@ -275,7 +275,7 @@ int main(void)
 	}
 
 	/* Read back the version of the ARM binary loaded into the Mykonos ARM memory */
-	if ((mykError = MYKONOS_getArmVersion(&mykDevice, &arm_major, &arm_minor, &arm_release)) == MYKONOS_ERR_OK)
+	if ((mykError = MYKONOS_getArmVersion(&mykDevice, &arm_major, &arm_minor, &arm_release, NULL)) == MYKONOS_ERR_OK)
 		printf("AD9371 ARM version %d.%d.%d\n", arm_major, arm_minor, arm_release);
 
 	/*************************************************************************/
@@ -562,7 +562,7 @@ int main(void)
 		goto error;
 	}
 
-	status = dac_setup(&ad9371_tx_core_init);
+	status = dac_setup(&mykDevice, &ad9371_tx_core_init);
 	if (status != 0) {
 		printf("dac_setup() failed\n");
 		return -1;

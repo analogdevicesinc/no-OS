@@ -252,15 +252,23 @@ int main(void)
 
 	adc_setup(ad9680_0_core);
 	ad9680_test(&ad9680_0_spi_device, AD9680_TEST_PN9);
-	adc_pn_mon(ad9680_0_core, ADC_PN9);
+	if(adc_pn_mon(ad9680_0_core, ADC_PN9) == -1) {
+		ad_printf("%s ad9680_0 - PN9 sequence mismatch!\n", __func__);
+	};
 	ad9680_test(&ad9680_0_spi_device, AD9680_TEST_PN23);
-	adc_pn_mon(ad9680_0_core, ADC_PN23A);
+	if(adc_pn_mon(ad9680_0_core, ADC_PN23A) == -1) {
+		ad_printf("%s ad9680_0 - PN23A sequence mismatch!\n", __func__);
+	};
 
 	adc_setup(ad9680_1_core);
 	ad9680_test(&ad9680_1_spi_device, AD9680_TEST_PN9);
-	adc_pn_mon(ad9680_1_core, ADC_PN9);
+	if(adc_pn_mon(ad9680_1_core, ADC_PN9) == -1) {
+		ad_printf("%s ad9680_1 - PN9 sequence mismatch!\n", __func__);
+	};
 	ad9680_test(&ad9680_1_spi_device, AD9680_TEST_PN23);
-	adc_pn_mon(ad9680_1_core, ADC_PN23A);
+	if(adc_pn_mon(ad9680_1_core, ADC_PN23A) == -1) {
+		ad_printf("%s ad9680_1 - PN23A sequence mismatch!\n", __func__);
+	};
 
 	// ramp data
 
