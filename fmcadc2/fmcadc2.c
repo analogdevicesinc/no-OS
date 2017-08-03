@@ -126,7 +126,9 @@ int main(void)
 
 	// PRBS test
 	ad9625_test(&ad9625_spi_device, AD9625_TEST_PNLONG);
-	adc_pn_mon(ad9625_core, ADC_PN23);
+	if(adc_pn_mon(ad9625_core, ADC_PN23) == -1) {
+		ad_printf("%s PN23 sequence mismatch at ad9625!\n", __func__);
+	};
 
 	// set up ramp output
 	ad9625_test(&ad9625_spi_device, AD9625_TEST_RAMP);
