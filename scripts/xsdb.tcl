@@ -16,6 +16,9 @@ if {$m_type == "MICROBLAZE"} {
   targets -set -filter {name =~ "xc7*" || name =~ "xck*" }
 }
 
+rst -srst
+after 1000
+
 fpga -file hw/system_top.bit
 
 if {$m_type == "ZYNQ_PSU"} {

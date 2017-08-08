@@ -60,6 +60,16 @@ typedef struct {
 	uint32_t		lane_rate_kbps;
 	uint32_t		ref_clock_khz;
 
+	uint32_t		es_lane;
+	uint32_t		es_start_address;
+	uint32_t		es_prescale;
+	int32_t			es_voffset_min;
+	int32_t			es_voffset_max;
+	int32_t			es_voffset_step;
+	int32_t			es_hoffset_min;
+	int32_t			es_hoffset_max;
+	int32_t			es_hoffset_step;
+
 	// below parameters are auto computed and is for temporary internal use only-
 
 	refclk_ppm		ppm;
@@ -116,29 +126,30 @@ typedef struct {
 #define XCVR_NUM_OF_LANES_OFFSET		 0
 
 #define XCVR_REG_CM_SEL				0x0040
-
 #define XCVR_REG_CM_CONTROL			0x0044
-#define XCVR_CM_WR				(1 << 28)
-#define XCVR_CM_ADDR(x)				(((x) & 0xFFF) << 16)
-#define XCVR_CM_WDATA(x)			(((x) & 0xFFFF) << 0)
-
 #define XCVR_REG_CM_STATUS			0x0048
-#define XCVR_CM_BUSY				(1 << 16)
-#define XCVR_CM_RDATA(x)			(((x) & 0xFFFF) << 0)
-
 #define XCVR_REG_CH_SEL				0x0060
-
 #define XCVR_REG_CH_CONTROL			0x0064
-#define XCVR_CH_WR				(1 << 28)
-#define XCVR_CH_ADDR(x)				(((x) & 0xFFF) << 16)
-#define XCVR_CH_WDATA(x)			(((x) & 0xFFFF) << 0)
-
 #define XCVR_REG_CH_STATUS			0x0068
-#define XCVR_CH_BUSY				(1 << 16)
-#define XCVR_CH_RDATA(x)			(((x) & 0xFFFF) << 0)
 
-#define XCVR_BROADCAST				0xff
-#define ENC_8B10B				810
+#define XCVR_DRP_CHANNEL			0
+#define XCVR_DRP_COMMON				1
+#define XCVR_DRP_WR				(1 << 28)
+#define XCVR_DRP_ADDR(x)			(((x) & 0xFFF) << 16)
+#define XCVR_DRP_WDATA(x)			(((x) & 0xFFFF) << 0)
+#define XCVR_DRP_BUSY(x)			((x >> 16) & 0x1)
+#define XCVR_DRP_RDATA(x)			(((x) & 0xFFFF) << 0)
+#define XCVR_DRP_BROADCAST			0xff
+
+#define XCVR_REG_ES_LANE_SELECT			(0x020*4)
+#define XCVR_REG_ES_REQUEST			(0x028*4)
+#define XCVR_REG_ES_PRESCALE			(0x029*4)
+#define XCVR_REG_ES_VOFFSET			(0x02a*4)
+#define XCVR_REG_ES_HOFFSET			(0x02b*4)
+#define XCVR_REG_ES_HOFFSET_STEP		(0x02c*4)
+#define XCVR_REG_ES_START_ADDRESS		(0x02d*4)
+#define XCVR_REG_ES_STATUS			(0x02e*4)
+#define XCVR_ES_STATUS(x)			((x) & 0x1)
 
 // GT types
 
@@ -151,18 +162,14 @@ typedef struct {
 
 int32_t xcvr_read(xcvr_core core, uint32_t reg_addr, uint32_t *reg_data);
 int32_t xcvr_write(xcvr_core core, uint32_t reg_addr, uint32_t reg_data);
-
-#ifdef XILINX
-
-	int32_t xcvr_drp_read(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
-	int32_t xcvr_drp_write(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
-
-	int32_t xcvr_reconfig(xcvr_core core, uint32_t lane_rate, uint32_t ref_clk);
-#endif
+int32_t xcvr_drp_read(xcvr_core core, uint8_t cm_ch_n, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
+int32_t xcvr_drp_write(xcvr_core core, uint8_t cm_ch_n, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
+int32_t xcvr_reconfig(xcvr_core core, uint32_t lane_rate, uint32_t ref_clk);
 
 int32_t xcvr_setup(xcvr_core core);
 int32_t xcvr_status(xcvr_core core);
 int32_t xcvr_getconfig(xcvr_core *core);
 int32_t xcvr_reset(xcvr_core core);
+int32_t xcvr_eyescan(xcvr_core core);
 
 #endif

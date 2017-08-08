@@ -487,6 +487,23 @@ int main(void)
 		ad_printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
+#ifdef ZYNQ_PS7
+
+	// eye-scan
+
+	ad9680_xcvr.es_lane = 2;
+	ad9680_xcvr.es_start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+	ad9680_xcvr.es_prescale = 0;
+	ad9680_xcvr.es_voffset_min = -127;
+	ad9680_xcvr.es_voffset_max = 127;
+	ad9680_xcvr.es_voffset_step = 1;
+	ad9680_xcvr.es_hoffset_min = -512;
+	ad9680_xcvr.es_hoffset_max = 512;
+	ad9680_xcvr.es_hoffset_step = 1;
+
+	xcvr_eyescan(ad9680_xcvr);
+#endif
+
 	// default data
 
 #if DMA_BUFFER
