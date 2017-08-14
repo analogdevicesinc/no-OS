@@ -143,17 +143,16 @@ int32_t adf4351_tune_r_cnt(struct adf4351_state *st, uint16_t r_cnt)
 *******************************************************************************/
 uint32_t gcd(uint32_t x, uint32_t y)
 {
-	int32_t tmp;
+	uint32_t tmp;
 
-	tmp = y > x ? x : y;
-
-
-	while((x % tmp) || (y % tmp))
+	while (y != 0)
 	{
-		tmp--;
+		tmp = x % y;
+		x = y;
+		y = tmp;
 	}
 
-	return tmp;
+	return x;
 }
 
 /***************************************************************************//**
