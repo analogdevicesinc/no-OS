@@ -21,6 +21,7 @@ COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
 COMPILER_DEFINES += ZYNQ_PS7
 COMPILER_DEFINES += $(M_DEFINES)
+COMPILER_DEFINES += $(subst $(comma),$(space),$(DEFINE))
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h
@@ -38,6 +39,10 @@ SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
 
 CAPTURE_BADDR := 800000
 CAPTURE_SIZE := 32768
+
+ifeq ($(REBUILD),1)
+  $(shell rm -fr .metadata .Xil hw bsp xilsw sw xsct.log)
+endif
 
 .PHONY: all
 all: $(ELF_FILE)

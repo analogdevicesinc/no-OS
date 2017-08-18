@@ -3,6 +3,7 @@
 ##    <some-directory>/hdl
 ##    <some-directory>/no-OS
 
+comma := ,
 empty :=
 space := $(empty) $(empty)
 
@@ -32,4 +33,19 @@ ifeq ($(HDL-DIR),)
   HDL-DIR := $(M_ROOT_DIR)/hdl
 endif
 
+## defines (& re-defines) from command line
+## simple diff and decide if we need to rebuild
+
+$(shell touch mkdefines.log)
+
+REBUILD := 0
+PREV_DEFINE := $(shell cat mkdefines.log)
+ifeq ($(DEFINE),)
+  DEFINE := $(PREV_DEFINE)
+endif
+ifneq ($(PREV_DEFINE),$(DEFINE))
+  REBUILD := 1
+endif
+
+$(shell echo $(DEFINE) > mkdefines.log)
 
