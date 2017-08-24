@@ -2,7 +2,7 @@
 
 include ../../scripts/noos.mk
 
-M_HDF_FILE := $(HDL-DIR)/projects/adrv9361z7035/ccbob_lvds/adrv9361z7035_ccbob_lvds.sdk/system_top.hdf
+M_HDF_FILE := $(HDL-DIR)/projects/adrv9361z7035/ccfmc_lvds/adrv9361z7035_ccfmc_lvds.sdk/system_top.hdf
 
 M_SRC_DIRS := $(NOOS-DIR)/ad9361/sw
 M_SRC_DIRS += $(NOOS-DIR)/ad9361/sw/platform_xilinx

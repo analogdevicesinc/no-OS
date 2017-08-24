@@ -10,8 +10,9 @@ if {$m_mode == "init"} {
   set cpu_name [lindex [hsi get_cells -filter {IP_TYPE==PROCESSOR}] 0]
 
   sdk createhw -name hw -hwspec $hdf_file
-  sdk createapp -name xilsw -hwproject hw -proc $cpu_name -bsp bsp -app {Hello World}
-  sdk createapp -name sw -hwproject hw -proc $cpu_name -bsp bsp -app {Empty Application}
+  sdk createapp -name fsbl -hwproject hw -proc $cpu_name -app {Zynq FSBL}
+  sdk createapp -name xilsw -hwproject hw -proc $cpu_name -bsp fsbl_bsp -app {Hello World}
+  sdk createapp -name sw -hwproject hw -proc $cpu_name -bsp fsbl_bsp -app {Empty Application}
   exit
 }
 
@@ -38,11 +39,15 @@ if {$m_mode == "defines"} {
 
 if {$m_mode == "make-bsp-xilsw"} {
 
-  sdk projects -build -type bsp -name bsp
+  sdk configapp -app fsbl build-config release
+  sdk configapp -app xilsw build-config release
+  sdk projects -build -type bsp -name fsbl_bsp
+  sdk projects -build -type app -name fsbl
   sdk projects -build -type app -name xilsw
   exit
 }
 
+sdk configapp -app sw build-config release
 sdk projects -build -type app -name sw
 exit
 

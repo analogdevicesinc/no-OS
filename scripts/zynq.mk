@@ -41,7 +41,7 @@ CAPTURE_BADDR := 800000
 CAPTURE_SIZE := 32768
 
 ifeq ($(REBUILD),1)
-  $(shell rm -fr .metadata .Xil hw bsp xilsw sw xsct.log)
+  $(shell rm -fr .metadata .Xil hw fsbl_bsp fsbl xilsw sw xsct.log)
 endif
 
 .PHONY: all
@@ -58,7 +58,7 @@ $(P_SRC_FILES): hw/system_top.bit
 
 
 hw/system_top.bit: $(HDF-FILE)
-	rm -fr .metadata .Xil hw bsp xilsw sw xsct.log
+	rm -fr .metadata .Xil hw fsbl_bsp fsbl xilsw sw xsct.log
 	$(XSCT_CMD) $(XSCT_SCRIPT) init $(HDF-FILE) > $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) defines $(COMPILER_DEFINES) >> $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) make-bsp-xilsw >> $(XSCT_LOG) 2>&1
@@ -70,10 +70,19 @@ run: $(ELF_FILE)
 
 .PHONY: clean
 clean: 
-	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
+	rm -rf hw fsbl_bsp fsbl sw .metadata .Xil xilsw xsct.log SDK.log
 
 
 .PHONY: capture
 capture: $(ELF_FILE)
 	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE)
+
+BOOT.bin: hw/system_top.bit fsbl/Release/fsbl.elf $(ELF_FILE)
+	echo "image:" > zynq.bif
+	echo "{" >> zynq.bif
+	echo "\t[bootloader]fsbl/Release/fsbl.elf" >> zynq.bif
+	echo "\thw/system_top.bit" >> zynq.bif
+	echo "\tsw/Release/sw.elf" >> zynq.bif
+	echo "}" >> zynq.bif
+	bootgen -image zynq.bif -arch zynq -o BOOT.bin
 
