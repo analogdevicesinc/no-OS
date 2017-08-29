@@ -139,8 +139,9 @@ enum adc_data_sel {
 int32_t spi_init(uint32_t device_id,
 				 uint8_t  clk_pha,
 				 uint8_t  clk_pol);
-int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number);
+int32_t spi_read(struct spi_device *spi,
+				uint8_t *data,
+				uint8_t bytes_number);
 int spi_write_then_read(struct spi_device *spi,
 		const unsigned char *txbuf, unsigned n_tx,
 		unsigned char *rxbuf, unsigned n_rx);
@@ -159,4 +160,7 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel);
 void axiadc_idelay_set(struct axiadc_state *st, unsigned lane, unsigned val);
 int32_t altera_bridge_init(void);
 int32_t altera_bridge_uninit(void);
+#ifdef __GNUC__ // skip for armcc
+char *strsep(char **i_string, const char *i_char);
+#endif
 #endif

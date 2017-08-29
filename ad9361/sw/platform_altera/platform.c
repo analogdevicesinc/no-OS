@@ -46,7 +46,8 @@
 #include "dac_core.h"
 #include "parameters.h"
 #include "platform.h"
-#include "socal/socal.h"
+#include "socal.h"
+#include "alt_printf.h"
 #include "alt_spi.h"
 #include "alt_address_space.h"
 #include "alt_bridge_manager.h"
@@ -143,8 +144,9 @@ int32_t spi_init(uint32_t device_id,
 /***************************************************************************//**
  * @brief spi_read
 *******************************************************************************/
-int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number)
+int32_t spi_read(struct spi_device *spi,
+				uint8_t *data,
+				uint8_t bytes_number)
 {
 	uint32_t cnt = 0;
 
@@ -195,7 +197,7 @@ int spi_write_then_read(struct spi_device *spi,
 	{
 		buffer[byte] = (unsigned char)txbuf[byte];
 	}
-	spi_read(buffer, n_tx + n_rx);
+	spi_read(spi, buffer, n_tx + n_rx);
 	for(byte = n_tx; byte < n_tx + n_rx; byte++)
 	{
 		rxbuf[byte - n_tx] = buffer[byte];
@@ -312,8 +314,8 @@ unsigned long msleep_interruptible(unsigned int msecs)
 *******************************************************************************/
 void axiadc_init(struct ad9361_rf_phy *phy)
 {
-	adc_init();
-	dac_init(phy, DATA_SEL_DDS);
+	adc_init(phy);
+	dac_init(phy, DATA_SEL_DDS, 0);
 }
 
 /***************************************************************************//**
@@ -331,7 +333,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	uint32_t val;
 
-	adc_read(reg, &val);
+	adc_read(st->phy, reg, &val);
 
 	return val;
 }
@@ -341,7 +343,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	adc_write(reg, val);
+	adc_write(st->phy, reg, val);
 }
 
 /***************************************************************************//**
@@ -393,3 +395,14 @@ void axiadc_idelay_set(struct axiadc_state *st,
 				| ADI_DELAY_SEL);
 	}
 }
+
+/***************************************************************************//**
+ * @brief string separate (skip for armcc)
+*******************************************************************************/
+
+#ifdef __GNUC__
+char *strsep(char **i_string, const char *i_char) {
+
+	return(NULL);
+}
+#endif
