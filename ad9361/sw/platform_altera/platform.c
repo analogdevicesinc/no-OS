@@ -403,6 +403,27 @@ void axiadc_idelay_set(struct axiadc_state *st,
 #ifdef __GNUC__
 char *strsep(char **i_string, const char *i_char) {
 
-	return(NULL);
+	int s_char;
+	char *r_string;
+	char *m_string;
+
+	if (*i_string == NULL) return (NULL);
+
+	r_string = *i_string;
+	m_string = *i_string;
+	while (1) {
+		s_char = *m_string;
+		*i_string = m_string + 1;
+		if (s_char == *i_char) {
+			*m_string = 0;
+			break;
+		}
+		if (s_char == 0) {
+			*i_string = NULL;
+			break;
+		}
+		*m_string = *m_string + 1;
+	}
+	return(r_string);
 }
 #endif
