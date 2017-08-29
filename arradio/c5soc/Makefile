@@ -5,6 +5,7 @@ include ../../scripts/noos.mk
 M_SOPCINFO_FILE := $(HDL-DIR)/projects/arradio/c5soc/system_bd.sopcinfo
 M_SOPCINFO_DIR := $(HDL-DIR)/projects/arradio/c5soc/hps_isw_handoff/system_bd_sys_hps
 M_SOF_FILE := $(HDL-DIR)/projects/arradio/c5soc/arradio_c5soc.sof
+M_SRC_FILES := $(NOOS-DIR)/arradio/c5soc/alt_retarget_gnu.c
 
 M_SRC_DIRS := $(NOOS-DIR)/ad9361/sw
 M_SRC_DIRS += $(NOOS-DIR)/ad9361/sw/platform_altera
