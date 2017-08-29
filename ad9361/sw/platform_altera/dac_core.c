@@ -41,11 +41,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include <xil_cache.h>
-#include <xil_io.h>
 #include "dac_core.h"
 #include "parameters.h"
 #include "util.h"
+#include "socal.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -87,10 +86,10 @@ void dac_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 	switch (phy->id_no)
 	{
 	case 0:
-		*data = Xil_In32(AD9361_TX_0_BASEADDR + regAddr);
+		*data = alt_read_word(AD9361_TX_0_BASEADDR + regAddr);
 		break;
 	case 1:
-		*data = Xil_In32(AD9361_TX_1_BASEADDR + regAddr);
+		*data = alt_read_word(AD9361_TX_1_BASEADDR + regAddr);
 		break;
 	default:
 		break;
@@ -105,10 +104,10 @@ void dac_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 	switch (phy->id_no)
 	{
 	case 0:
-		Xil_Out32(AD9361_TX_0_BASEADDR + regAddr, data);
+		alt_write_word(AD9361_TX_0_BASEADDR + regAddr, data);
 		break;
 	case 1:
-		Xil_Out32(AD9361_TX_1_BASEADDR + regAddr, data);
+		alt_write_word(AD9361_TX_1_BASEADDR + regAddr, data);
 		break;
 	default:
 		break;
@@ -120,7 +119,7 @@ void dac_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void dac_dma_read(uint32_t regAddr, uint32_t *data)
 {
-	*data = Xil_In32(CF_AD9361_TX_DMA_BASEADDR + regAddr);
+	*data = alt_read_word(CF_AD9361_TX_DMA_BASEADDR + regAddr);
 }
 
 /***************************************************************************//**
@@ -128,7 +127,7 @@ void dac_dma_read(uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void dac_dma_write(uint32_t regAddr, uint32_t data)
 {
-	Xil_Out32(CF_AD9361_TX_DMA_BASEADDR + regAddr, data);
+	alt_write_word(CF_AD9361_TX_DMA_BASEADDR + regAddr, data);
 }
 
 /***************************************************************************//**
@@ -255,7 +254,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 						index_q1 -= (tx_count * 2);
 					data_i1 = (sine_lut[index_i1 / 2] << 20);
 					data_q1 = (sine_lut[index_q1 / 2] << 4);
-					Xil_Out32(DAC_DDR_BASEADDR + index_mem * 4, data_i1 | data_q1);
+					alt_write_word(DAC_DDR_BASEADDR + index_mem * 4, data_i1 | data_q1);
 
 					index_i2 = index_i1;
 					index_q2 = index_q1;
@@ -265,10 +264,10 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 						index_q2 -= (tx_count * 2);
 					data_i2 = (sine_lut[index_i2 / 2] << 20);
 					data_q2 = (sine_lut[index_q2 / 2] << 4);
-					Xil_Out32(DAC_DDR_BASEADDR + (index_mem + 1) * 4, data_i2 | data_q2);
+					alt_write_word(DAC_DDR_BASEADDR + (index_mem + 1) * 4, data_i2 | data_q2);
 #ifdef FMCOMMS5
-					Xil_Out32(DAC_DDR_BASEADDR + (index_mem + 2) * 4, data_i1 | data_q1);
-					Xil_Out32(DAC_DDR_BASEADDR + (index_mem + 3) * 4, data_i2 | data_q2);
+					alt_write_word(DAC_DDR_BASEADDR + (index_mem + 2) * 4, data_i1 | data_q1);
+					alt_write_word(DAC_DDR_BASEADDR + (index_mem + 3) * 4, data_i2 | data_q2);
 #endif
 				}
 			}
@@ -282,10 +281,9 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 						index_q1 -= tx_count;
 					data_i1 = (sine_lut[index_i1] << 20);
 					data_q1 = (sine_lut[index_q1] << 4);
-					Xil_Out32(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
+					alt_write_word(DAC_DDR_BASEADDR + index * 4, data_i1 | data_q1);
 				}
 			}
-			Xil_DCacheFlush();
 			if(dds_st[phy->id_no].rx2tx2)
 			{
 				length = (tx_count * 8);
