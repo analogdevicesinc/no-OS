@@ -24,6 +24,7 @@ M_DEFINES += ALTERA_PLATFORM
 SYS_UBOOT_IMAGE := bsp/arradio_c5soc_uboot.bin
 SYS_FPGA_IMAGE := hw/arradio_c5soc.rbf
 SYS_APP_IMAGE := sw/arradio_c5soc.bin
+SYS_APP_SCRIPT := u-boot.scr
 
 SRC_FILES := $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
@@ -33,12 +34,20 @@ HPS_FLAGS += $(addprefix -I, $(M_SRC_DIRS))
 
 
 .PHONY: all
-all: $(SYS_UBOOT_IMAGE) $(SYS_FPGA_IMAGE) $(SYS_APP_IMAGE)
+all: $(SYS_UBOOT_IMAGE) $(SYS_FPGA_IMAGE) $(SYS_APP_IMAGE) $(SYS_APP_SCRIPT)
+ifneq ($(sd-dir),)
+	rm -fr $(sd-dir)/arradio_c5soc.bin
+	rm -fr $(sd-dir)/arradio_c5soc.rbf
+	rm -fr $(sd-dir)/u-boot.scr
+	cp $(SYS_FPGA_IMAGE) $(sd-dir)/
+	cp $(SYS_APP_IMAGE) $(sd-dir)/
+	cp $(SYS_APP_SCRIPT) $(sd-dir)/
+endif
 
 
 .PHONY: clean
 clean:
-	rm -fr sw hw bsp
+	rm -fr sw hw bsp mkdefines.log
 
 
 $(SYS_UBOOT_IMAGE): $(M_SOPCINFO_DIR) $(M_SOPCINFO_FILE)
@@ -70,5 +79,12 @@ $(SYS_APP_IMAGE): $(SRC_FILES)
 		-Isw -Ibsp/generated $(HPS_FLAGS) $(SRC_FILES)
 	arm-altera-eabi-objcopy -O binary sw/arradio_c5soc.axf $(SYS_APP_IMAGE)
 
+
+$(SYS_APP_SCRIPT): $(SYS_APP_IMAGE) $(SYS_UBOOT_IMAGE) $(SYS_FPGA_IMAGE)
+	$(file >u-boot.scr.txt,fatload mmc 0:1 $$fpgadata arradio_c5soc.rbf)
+	$(file >>u-boot.scr.txt,fpga load 0 $$fpgadata $$filesize)
+	$(file >>u-boot.scr.txt,fatload mmc 0:1 0x100000 arradio_c5soc.bin)
+	$(file >>u-boot.scr.txt,go 0x100000)
+	mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "U-Boot Script" -d u-boot.scr.txt $(SYS_APP_SCRIPT)
 
 
