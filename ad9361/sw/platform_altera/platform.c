@@ -72,12 +72,28 @@
 /***************************************************************************//**
  * @brief usleep
 *******************************************************************************/
+#ifdef __GNUC__
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x8), 0x6);
+	alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x0), 0xffffffff);
+	for (delay = 0; delay < usleep; delay++) {
+		alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x8), 0x6);
+		alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x8), 0x7);
+		while (alt_read_word(SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x4) > 0xffffff9b);
+	}
+	alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x8), 0x6);
+}
+#else
 static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
 
 	for(delay = 0; delay < usleep * 10; delay++);
 }
+#endif
 
 /***************************************************************************//**
  * @brief altera_bridge_init
