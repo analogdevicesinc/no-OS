@@ -72,7 +72,14 @@
 /***************************************************************************//**
  * @brief usleep
 *******************************************************************************/
-#ifdef __GNUC__
+#ifdef ALTERA_PLATFORM
+static inline void usleep(unsigned long usleep)
+{
+	unsigned long delay = 0;
+
+	for(delay = 0; delay < usleep * 10; delay++);
+}
+#else
 static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
@@ -86,18 +93,12 @@ static inline void usleep(unsigned long usleep)
 	}
 	alt_write_word((SYS_HPS_BRIDGES_SYS_HPS_TIMER0_BASE + 0x8), 0x6);
 }
-#else
-static inline void usleep(unsigned long usleep)
-{
-	unsigned long delay = 0;
-
-	for(delay = 0; delay < usleep * 10; delay++);
-}
 #endif
 
 /***************************************************************************//**
  * @brief altera_bridge_init
 *******************************************************************************/
+#ifdef ALTERA_PLATFORM
 int32_t altera_bridge_init(void)
 {
 	int32_t status = 0;
@@ -114,10 +115,12 @@ int32_t altera_bridge_init(void)
 
 	return status;
 }
+#endif
 
 /***************************************************************************//**
  * @brief altera_bridge_uninit
 *******************************************************************************/
+#ifdef ALTERA_PLATFORM
 int32_t altera_bridge_uninit(void)
 {
 	int32_t status = 0;
@@ -126,6 +129,7 @@ int32_t altera_bridge_uninit(void)
 
     return status;
 }
+#endif
 
 /***************************************************************************//**
  * @brief alt_avl_spi_read
@@ -416,7 +420,7 @@ void axiadc_idelay_set(struct axiadc_state *st,
  * @brief string separate (skip for armcc)
 *******************************************************************************/
 
-#ifdef __GNUC__
+#ifndef ALTERA_PLATFORM
 char *strsep(char **i_string, const char *i_char) {
 
 	int s_char;
