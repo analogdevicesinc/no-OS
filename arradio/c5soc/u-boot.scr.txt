@@ -1,0 +1,5 @@
+fatload mmc 0:1 $fpgadata arradio_c5soc.rbf
+fpga load 0 $fpgadata $filesize
+run bridge_enable_handoff
+fatload mmc 0:1 0x100000 arradio_c5soc.bin
+go 0x100000

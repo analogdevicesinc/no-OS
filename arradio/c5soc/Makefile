@@ -77,12 +77,7 @@ $(SYS_APP_IMAGE): $(SRC_FILES)
 	arm-altera-eabi-objcopy -O binary sw/arradio_c5soc.axf $(SYS_APP_IMAGE)
 
 
-$(SYS_APP_SCRIPT): $(SYS_UBOOT_IMAGE) $(SYS_FPGA_IMAGE)
-	$(file >u-boot.scr.txt,fatload mmc 0:1 $$fpgadata arradio_c5soc.rbf)
-	$(file >>u-boot.scr.txt,fpga load 0 $$fpgadata $$filesize)
-	$(file >>u-boot.scr.txt,run bridge_enable_handoff)
-	$(file >>u-boot.scr.txt,fatload mmc 0:1 0x100000 arradio_c5soc.bin)
-	$(file >>u-boot.scr.txt,go 0x100000)
+$(SYS_APP_SCRIPT): u-boot.scr.txt
 	mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "U-Boot Script" -d u-boot.scr.txt $(SYS_APP_SCRIPT)
 
 
