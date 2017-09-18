@@ -163,9 +163,11 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg);
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val);
 int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel);
 void axiadc_idelay_set(struct axiadc_state *st, unsigned lane, unsigned val);
+#ifndef ARRADIO
 int32_t altera_bridge_init(void);
 int32_t altera_bridge_uninit(void);
-#ifdef __GNUC__ // skip for armcc
+#endif
+#ifdef ARRADIO
 char *strsep(char **i_string, const char *i_char);
 #endif
 #endif

@@ -74,14 +74,16 @@
 /***************************************************************************//**
  * @brief usleep
 *******************************************************************************/
-#ifdef ALTERA_PLATFORM
+#ifndef ARRADIO
 static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
 
 	for(delay = 0; delay < usleep * 10; delay++);
 }
-#else
+#endif
+
+#ifdef ARRADIO
 static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
@@ -100,7 +102,7 @@ static inline void usleep(unsigned long usleep)
 /***************************************************************************//**
  * @brief altera_bridge_init
 *******************************************************************************/
-#ifdef ALTERA_PLATFORM
+#ifndef ARRADIO
 int32_t altera_bridge_init(void)
 {
 	int32_t status = 0;
@@ -122,7 +124,7 @@ int32_t altera_bridge_init(void)
 /***************************************************************************//**
  * @brief altera_bridge_uninit
 *******************************************************************************/
-#ifdef ALTERA_PLATFORM
+#ifndef ARRADIO
 int32_t altera_bridge_uninit(void)
 {
 	int32_t status = 0;
@@ -422,7 +424,7 @@ void axiadc_idelay_set(struct axiadc_state *st,
  * @brief string separate (skip for armcc)
 *******************************************************************************/
 
-#ifndef ALTERA_PLATFORM
+#ifdef ARRADIO
 char *strsep(char **i_string, const char *i_char) {
 
 	int s_char;
