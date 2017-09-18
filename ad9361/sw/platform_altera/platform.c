@@ -47,7 +47,7 @@
 #include "parameters.h"
 #include "platform.h"
 #include "socal.h"
-#ifndef ARRADIO
+#ifdef ALTERA_PLATFORM
 #include "alt_printf.h"
 #include "alt_spi.h"
 #include "alt_address_space.h"
@@ -74,7 +74,7 @@
 /***************************************************************************//**
  * @brief usleep
 *******************************************************************************/
-#ifndef ARRADIO
+#ifdef ALTERA_PLATFORM
 static inline void usleep(unsigned long usleep)
 {
 	unsigned long delay = 0;
@@ -102,7 +102,7 @@ static inline void usleep(unsigned long usleep)
 /***************************************************************************//**
  * @brief altera_bridge_init
 *******************************************************************************/
-#ifndef ARRADIO
+#ifdef ALTERA_PLATFORM
 int32_t altera_bridge_init(void)
 {
 	int32_t status = 0;
@@ -124,7 +124,7 @@ int32_t altera_bridge_init(void)
 /***************************************************************************//**
  * @brief altera_bridge_uninit
 *******************************************************************************/
-#ifndef ARRADIO
+#ifdef ALTERA_PLATFORM
 int32_t altera_bridge_uninit(void)
 {
 	int32_t status = 0;
@@ -168,6 +168,27 @@ int32_t spi_init(uint32_t device_id,
 /***************************************************************************//**
  * @brief spi_read
 *******************************************************************************/
+#ifdef ARRADIO
+int32_t spi_read(struct spi_device *spi, uint8_t *data, uint8_t bytes_number) {
+
+	uint32_t cnt = 0;
+
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, ALT_AVL_SPI_CONTROL_SSO_MSK);
+	alt_avl_spi_write(ALT_AVL_SPI_SLAVE_SEL_REG, 1);
+	while ((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) & 0xd8) != 0x40);
+	for (cnt = 0; cnt < bytes_number; cnt++) {
+		alt_avl_spi_write(ALT_AVL_SPI_TXDATA_REG, *(data + cnt));
+		while ((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) & 0xd8) != 0xc0);
+		*(data + cnt) = alt_avl_spi_read(ALT_AVL_SPI_RXDATA_REG);
+		while ((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) & 0xd8) != 0x40);
+	}
+	alt_avl_spi_write(ALT_AVL_SPI_SLAVE_SEL_REG, 0);
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, 0);
+	return(0);
+}
+#endif
+
+#ifdef ALTERA_PLATFORM
 int32_t spi_read(struct spi_device *spi,
 				uint8_t *data,
 				uint8_t bytes_number)
@@ -204,6 +225,7 @@ int32_t spi_read(struct spi_device *spi,
 
 	return 0;
 }
+#endif
 
 /***************************************************************************//**
  * @brief spi_write_then_read
@@ -255,7 +277,12 @@ void alt_avl_gpio_write(uint32_t reg_addr, uint32_t reg_data)
 *******************************************************************************/
 void gpio_init(uint32_t device_id)
 {
-
+#ifdef ARRADIO
+	alt_avl_gpio_write(ALT_AVL_PIO_DATA_REG, 0);
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, ALT_AVL_SPI_CONTROL_SSO_MSK);
+	alt_avl_spi_write(ALT_AVL_SPI_SLAVE_SEL_REG, 0);
+	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, 0);
+#endif
 }
 
 /***************************************************************************//**
