@@ -115,8 +115,23 @@ void adc_dma_write(uint32_t regAddr, uint32_t data)
 *******************************************************************************/
 void adc_init(struct ad9361_rf_phy *phy)
 {
+	uint32_t data;
+
+	data = 0x20000;
 	adc_write(phy, ADC_REG_RSTN, 0);
-	adc_write(phy, ADC_REG_RSTN, ADC_RSTN);
+	adc_write(phy, ADC_REG_TIMER, data);
+	adc_write(phy, ADC_REG_RSTN, (ADC_RSTN | ADC_MMCM_RSTN));
+	while (data != 0) {
+		adc_read(phy, ADC_REG_TIMER, &data);
+	}
+	adc_read(phy, ADC_REG_DRP_STATUS, &data);
+       	if (!(data & ADC_DRP_STATUS)) {
+		printf("%s: AXI ADC NOT locked!\n", __func__);
+	}
+
+	adc_read(phy, ADC_REG_CLK_FREQ, &data);
+	data = (data * 50) >> 16;
+	printf("%s interface clock is (%d MHz).\n", __func__, (unsigned int) data);
 
 	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
 		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
