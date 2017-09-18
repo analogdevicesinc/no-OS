@@ -14,8 +14,13 @@ M_DEFINES := CONFIG_H_
 M_DEFINES += HAVE_VERBOSE_MESSAGES
 M_DEFINES += HAVE_SPLIT_GAIN_TABLE=1
 M_DEFINES += HAVE_TDD_SYNTH_TABLE=1
-M_DEFINES += AD9361_DEVICE=1
-M_DEFINES += AD9364_DEVICE=0
+ifeq ($(DEFINE),1R1T)
+	M_DEFINES += AD9361_DEVICE=0
+	M_DEFINES += AD9364_DEVICE=1
+else
+	M_DEFINES += AD9361_DEVICE=1
+	M_DEFINES += AD9364_DEVICE=0
+endif
 M_DEFINES += AD9363A_DEVICE=0
 M_DEFINES += ARRADIO
 
@@ -26,9 +31,15 @@ SYS_APP_SCRIPT := u-boot.scr
 
 SRC_FILES := $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
+HDR_FILES := $(M_HDR_FILES)
+HDR_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.h))
 HPS_FLAGS := $(addprefix -D, $(M_DEFINES))
 HPS_FLAGS += $(addprefix -I, $(M_INC_DIRS))
 HPS_FLAGS += $(addprefix -I, $(M_SRC_DIRS))
+
+ifeq ($(REBUILD),1)
+  $(shell rm -fr $(SYS_APP_IMAGE))
+endif
 
 
 .PHONY: all
@@ -67,7 +78,7 @@ $(SYS_FPGA_IMAGE): $(M_SOF_FILE)
 	quartus_cpf -c -o bitstream_compression=off $(M_SOF_FILE) $(SYS_FPGA_IMAGE)
 
 
-$(SYS_APP_IMAGE): $(SRC_FILES)
+$(SYS_APP_IMAGE): $(SRC_FILES) $(HDR_FILES)
 	arm-altera-eabi-gcc -g -O0 -mcpu=cortex-a9 -mfloat-abi=softfp -mfpu=neon \
 		-Wall -Werror -std=c99 -o sw/arradio_c5soc.axf -DHPS -Dsoc_cv_av \
 		-T$(SOCEDS_DEST_ROOT)/host_tools/mentor/gnu/arm/baremetal/arm-altera-eabi/lib/cycloneV-dk-ram.ld \
