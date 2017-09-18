@@ -130,7 +130,7 @@ void adc_init(struct ad9361_rf_phy *phy)
 
 	adc_read(phy, ADC_REG_CLK_FREQ, &data);
 	data = (data * 50) >> 16;
-	printf("%s interface clock is (%d MHz).\n", __func__, (unsigned int) data);
+	printf("%s: interface clock is (%d MHz).\n", __func__, (unsigned int) data);
 
 	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
 		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
