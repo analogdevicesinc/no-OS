@@ -47,10 +47,12 @@
 #include "parameters.h"
 #include "platform.h"
 #include "socal.h"
+#ifndef ARRADIO
 #include "alt_printf.h"
 #include "alt_spi.h"
 #include "alt_address_space.h"
 #include "alt_bridge_manager.h"
+#endif
 
 /* Altera Avalon SPI Registers Definition */
 

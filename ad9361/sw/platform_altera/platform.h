@@ -60,12 +60,17 @@
 #define ADI_R1_MODE				(1 << 2)
 #define ADI_DDR_EDGESEL			(1 << 1)
 #define ADI_PIN_MODE			(1 << 0)
+#define ADI_REG_CLK_FREQ		0x0054
 
 #define ADI_REG_STATUS			0x005C
 #define ADI_MUX_PN_ERR			(1 << 3)
 #define ADI_MUX_PN_OOS			(1 << 2)
 #define ADI_MUX_OVER_RANGE		(1 << 1)
 #define ADI_STATUS				(1 << 0)
+
+#define ADI_REG_DRP_STATUS		0x0074
+#define ADI_DRP_STATUS			(1 << 17)
+#define ADI_REG_TIMER			0x0100
 
 #define ADI_REG_DELAY_CNTRL		0x0060	/* <= v8.0 */
 #define ADI_DELAY_SEL			(1 << 17)

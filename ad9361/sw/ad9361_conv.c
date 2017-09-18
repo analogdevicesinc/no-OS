@@ -520,14 +520,24 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 
 	if (!rx2tx2) {
 		axiadc_write(st, 0x4048, tmp | BIT(5)); /* R1_MODE */
+#ifdef ARRADIO
+		axiadc_write(st, 0x404c,
+			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 0 : 0); /* RATE */
+#else
 		axiadc_write(st, 0x404c,
 			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 1 : 0); /* RATE */
+#endif
 	}
 	else {
 		tmp &= ~BIT(5);
 		axiadc_write(st, 0x4048, tmp);
+#ifdef ARRADIO
+		axiadc_write(st, 0x404c,
+			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 1 : 0); /* RATE */
+#else
 		axiadc_write(st, 0x404c,
 			     (phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) ? 3 : 1); /* RATE */
+#endif
 	}
 
 #ifdef ALTERA_PLATFORM
