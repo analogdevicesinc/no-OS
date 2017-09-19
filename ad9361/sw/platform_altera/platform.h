@@ -80,6 +80,8 @@
 #define ADI_DELAY_WDATA(x)		(((x) & 0x1F) << 0)
 #define ADI_TO_DELAY_WDATA(x)	(((x) >> 0) & 0x1F)
 
+#define ADI_REG_ADC_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
+#define ADI_REG_DAC_CHAN_CNTRL(c)	(0x4418 + (c) * 0x40)
 #define ADI_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
 #define ADI_PN_SEL				(1 << 10) /* !v8.0 */
 #define ADI_IQCOR_ENB			(1 << 9)
@@ -89,6 +91,9 @@
 #define ADI_FORMAT_ENABLE		(1 << 4)
 #define ADI_PN23_TYPE			(1 << 1) /* !v8.0 */
 #define ADI_ENABLE				(1 << 0)
+
+#define ADI_ADC_PN_DATA(x)		((x) | (1 << 10))
+#define ADI_DAC_PN_DATA(x)		(((x) & 0) | 0x9)
 
 #define ADI_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
 #define ADI_PN_ERR				(1 << 2)

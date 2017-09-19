@@ -90,6 +90,8 @@ int32_t ad9361_hdl_loopback(struct ad9361_rf_phy *phy, bool enable)
 	return 0;
 }
 
+#ifndef AXI_ADC_NOT_LEGACY_DIGITAL_TUNE
+
 /**
  * Set IO delay.
  * @param st The AXI ADC state structure.
@@ -499,6 +501,206 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 	return -EINVAL;
 }
+
+#endif
+
+#ifdef AXI_ADC_NOT_LEGACY_DIGITAL_TUNE
+
+int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
+	char *buf, int32_t buflen) {
+
+	printf("%s: NOT implemented yet!\n", __func__);
+	return(-1);
+}
+
+int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
+	enum dig_tune_flags flags) {
+
+	struct axiadc_converter *conv = phy->adc_conv;
+	struct axiadc_state *st = phy->adc_state;
+	uint32_t rx_clks[6];
+	uint32_t tx_clks[6];
+	uint32_t adc_data[4];
+	uint32_t dac_data[4];
+	uint32_t data;
+	uint8_t loopback;
+	int32_t status;
+	uint8_t	bist;
+	int32_t clock_cntrl;
+	int32_t mode;
+	int32_t delay;
+	int32_t derror;
+	int32_t dfirst;
+	int32_t dlast;
+	int32_t dstart;
+	int32_t dend;
+	int32_t dmode;
+	int32_t n;
+
+	status = 0;
+	dev_dbg(&phy->spi->dev, "%s: freq %"PRIu32" flags 0x%X\n", __func__, max_freq, flags);
+
+	/* if skipping, set to predefined delay */
+
+	if ((phy->pdata->dig_interface_tune_skipmode == 2) || (flags & RESTORE_DEFAULT)) {
+		ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY, phy->pdata->port_ctrl.rx_clk_data_delay);
+		ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY, phy->pdata->port_ctrl.tx_clk_data_delay);
+		return(status);
+	}
+
+	/* in order to exit to the same state as we entered */
+
+	loopback = phy->bist_loopback_mode;
+	bist = phy->bist_config;
+	clock_cntrl = ad9361_spi_read(phy->spi, REG_LVDS_INVERT_CTRL2) & 0x5f;
+
+	/* bad idea- tuning must be done for every data-path clock change */
+
+	if (max_freq > 0) {
+		ad9361_get_trx_clock_chain(phy, rx_clks, tx_clks);
+	}
+
+	for (n = 0; n < conv->chip_info->num_channels; n++) {
+		adc_data[n] = axiadc_read(st, ADI_REG_ADC_CHAN_CNTRL(n));
+		dac_data[n] = axiadc_read(st, ADI_REG_DAC_CHAN_CNTRL(n));
+	}
+
+	/* set clocks first */
+
+	if (max_freq > 0) {
+		ad9361_set_trx_clock_chain_freq(phy, 61440000U);
+	}
+
+	axiadc_write(st, ADI_REG_RSTN, 0);
+	axiadc_write(st, ADI_REG_TIMER, 0x20000);
+	axiadc_write(st, ADI_REG_RSTN, (ADI_RSTN | ADI_MMCM_RSTN));
+	while (axiadc_read(st, ADI_REG_TIMER));
+
+	if (!(axiadc_read(st, ADI_REG_DRP_STATUS) & ADI_DRP_STATUS)) {
+		printf("%s: adc core is NOT locked!", __func__);
+		status = status | EIO;
+	}
+
+	data = (axiadc_read(st, ADI_REG_CLK_FREQ) * 50) >> 16;
+	printf("%s: interface clock is (%d MHz).\n", __func__, (unsigned int) data);
+
+	/* mode == 0, receive (default clock) */
+	/* mode == 1, transmit (default clock) */
+	/* mode == 2, transmit (inverted clock) */
+
+	for (mode = 0; mode < 3; mode++) {
+
+		/* clock selects */
+
+		if (mode == 0) ad9361_spi_write(phy->spi, REG_LVDS_INVERT_CTRL2, (clock_cntrl | 0x00));
+		if (mode == 1) ad9361_spi_write(phy->spi, REG_LVDS_INVERT_CTRL2, (clock_cntrl | 0x00));
+		if (mode == 2) ad9361_spi_write(phy->spi, REG_LVDS_INVERT_CTRL2, (clock_cntrl | 0x80));
+
+		/* mode 0 receive only */
+
+		if (mode == 0) {
+			ad9361_bist_loopback(phy, 0);
+			ad9361_bist_prbs(phy, BIST_INJ_RX);
+		}
+
+		/* mode 1 & 2 transmit-receive loopback */
+
+		if (mode == 1) {
+			ad9361_bist_loopback(phy, 1);
+			ad9361_bist_prbs(phy, BIST_DISABLE);
+			for (n = 0; n < conv->chip_info->num_channels; n++) {
+				axiadc_write(st, ADI_REG_ADC_CHAN_CNTRL(n), ADI_ADC_PN_DATA(adc_data[n]));
+				axiadc_write(st, ADI_REG_DAC_CHAN_CNTRL(n), ADI_DAC_PN_DATA(dac_data[n]));
+			}
+		}
+
+		if ((mode == 0) || (mode == 1)) {
+			dstart = 0;
+			dend = -1;
+			dmode = -1;
+		}
+		
+		dfirst = -1;
+		dlast = 0;
+
+		for (delay = 0; delay < 16; delay++) {
+
+			/* wouldn't clock delay better? but have to bring down the pll */
+			 
+			if (mode == 0) {
+				ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY, RX_DATA_DELAY(delay));
+			}
+
+			if ((mode == 1) || (mode == 2)) {
+				ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY, FB_CLK_DELAY(delay));
+			}
+
+			axiadc_write(st, ADI_REG_TIMER, 0x100);
+			while (axiadc_read(st, ADI_REG_TIMER));
+
+			for (n = 0; n < conv->chip_info->num_channels; n++) {
+				axiadc_write(st, ADI_REG_CHAN_STATUS(n), (ADI_PN_ERR | ADI_PN_OOS));
+			}
+
+			axiadc_write(st, ADI_REG_TIMER, 0x1000);
+			while (axiadc_read(st, ADI_REG_TIMER));
+			derror = 0x10;
+
+			if (axiadc_read(st, ADI_REG_STATUS) & ADI_STATUS) {
+				derror = 0x00;
+				for (n = 0; n < conv->chip_info->num_channels; n++) {
+					if (axiadc_read(st, ADI_REG_CHAN_STATUS(n))) {
+						derror = derror | (1 << n);
+					}
+				}
+			}
+
+			if (derror == 0) dlast = delay;
+			if ((derror == 0) && (dfirst < 0)) dfirst = delay;
+			if ((delay == 15) || ((derror != 0) && (dfirst >= 0))) {
+				if ((dend - dstart) < (dlast - dfirst)) {
+					dstart = dfirst;
+					dend = dlast;
+					dmode = mode;
+				}
+				dfirst = -1;
+				dlast = 0;
+			}
+			printf("-%02x", (unsigned int) derror);
+		}
+		printf("\n");
+		
+		if (mode == 0) {
+			delay = (dstart + dend)/2;
+			ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY, RX_DATA_DELAY(delay));
+			printf("%d --- %d --- %d --- %d\n", (unsigned int) clock_cntrl, (unsigned int) delay, (unsigned int) dstart,  (unsigned int) dend);
+		}
+		if (mode == 2) {
+			delay = (dstart + dend)/2;
+			clock_cntrl = (dmode == 2) ? (clock_cntrl | 0x80) : clock_cntrl;
+			ad9361_spi_write(phy->spi, REG_TX_CLOCK_DATA_DELAY, FB_CLK_DELAY(delay));
+			ad9361_spi_write(phy->spi, REG_LVDS_INVERT_CTRL2, clock_cntrl);
+			printf("%d --- %d --- %d --- %d\n", (unsigned int) clock_cntrl, (unsigned int) delay, (unsigned int) dstart,  (unsigned int) dend);
+		}
+	}
+
+	/* restore ad9361 settings */
+
+	ad9361_bist_loopback(phy, loopback);
+	ad9361_spi_write(phy->spi, REG_BIST_CONFIG, bist);
+
+	if (max_freq > 0) {
+		ad9361_set_trx_clock_chain(phy, rx_clks, tx_clks);
+	}
+
+	for (n = 0; n < conv->chip_info->num_channels; n++) {
+		axiadc_write(st, ADI_REG_ADC_CHAN_CNTRL(n), adc_data[n]);
+		axiadc_write(st, ADI_REG_DAC_CHAN_CNTRL(n), dac_data[n]);
+	}
+	return(status);
+}
+
+#endif
 
 /**
 * Setup the AD9361 device.
