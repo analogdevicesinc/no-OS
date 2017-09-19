@@ -174,17 +174,16 @@ long adf4156_tune_r_cnt(adf4156_state *st, long r_cnt)
 *******************************************************************************/
 unsigned long gcd(unsigned long x, unsigned long y)
 {
-        long tmp;
+	unsigned long tmp;
 
-        tmp = y > x ? x : y;
+	while (y != 0)
+	{
+		tmp = x % y;
+		x = y;
+		y = tmp;
+	}
 
-
-        while((x % tmp) || (y % tmp))
-        {
-                tmp--;
-        }
-
-        return tmp;
+	return x;
 }
 
 /***************************************************************************//**
