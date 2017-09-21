@@ -51,7 +51,7 @@
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #include "adc_core.h"
 #include "dac_core.h"
 #endif
@@ -452,7 +452,7 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DAC_DMA
 #ifdef FMCOMMS5
 	dac_init(ad9361_phy_b, DATA_SEL_DMA, 0);
@@ -472,14 +472,16 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if defined XILINX_PLATFORM && defined CAPTURE_SCRIPT
+#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && defined CAPTURE_SCRIPT
     // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size
     // of the cache line.
 	mdelay(1000);
-    adc_capture(16384, ADC_DDR_BASEADDR);
+	adc_capture(16384, ADC_DDR_BASEADDR);
+#ifdef XILINX_PLATFORM
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
+#endif
 #endif
 #endif
 
