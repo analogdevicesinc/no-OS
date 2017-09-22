@@ -51,7 +51,7 @@
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ARRADIO
 #include "adc_core.h"
 #include "dac_core.h"
 #endif
@@ -454,7 +454,7 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM
+#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ARRADIO
 #ifdef DAC_DMA
 #ifdef FMCOMMS5
 	dac_init(ad9361_phy_b, DATA_SEL_DMA, 0);
@@ -483,6 +483,24 @@ int main(void)
     adc_capture(16384, ADC_DDR_BASEADDR);
     Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
 #endif
+#endif
+
+#ifdef ARRADIO
+
+	int i;
+	int samples = 128;
+	adc_capture(samples, ADC_DDR_BASEADDR);
+	short* data = (short*) ADC_DDR_BASEADDR;
+
+	if (AD9364_DEVICE) {
+		for (i = 0; i < samples * 2; i+=2) {
+			printf ("%d,%d\n",data[i],data[i+1]);
+		}
+	} else {
+		for (i = 0; i < samples * 4; i+=4) {
+			printf ("%d,%d,%d,%d\n",data[i],data[i+1],data[i+2],data[i+3]);
+		}
+	}
 #endif
 
 #ifdef CONSOLE_COMMANDS
