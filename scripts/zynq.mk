@@ -12,14 +12,15 @@ else
   XSDB_CMD := xsdb 
 endif
 
+CPU := ZYNQ_PS7
 XSCT_LOG := xsct.log
-XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
-XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
-XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
+XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl $(CPU)
+XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl $(CPU)
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl $(CPU)
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
-COMPILER_DEFINES += ZYNQ_PS7
+COMPILER_DEFINES += $(CPU)
 COMPILER_DEFINES += $(M_DEFINES)
 COMPILER_DEFINES += $(subst $(comma),$(space),$(DEFINE))
 
@@ -66,7 +67,7 @@ hw/system_top.bit: $(HDF-FILE)
 
 .PHONY: run
 run: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_SCRIPT) ZYNQ_PS7
+	$(XSDB_CMD) $(XSDB_SCRIPT)
 
 .PHONY: clean
 clean: 
@@ -75,7 +76,7 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) $(CAPTURE_BADDR) $(CAPTURE_SIZE)
 
 BOOT.bin: hw/system_top.bit fsbl/Release/fsbl.elf $(ELF_FILE)
 	echo "image:" > zynq.bif

@@ -12,14 +12,16 @@ else
   XSDB_CMD := xsdb 
 endif
 
+CPU := MICROBLAZE
 XSCT_LOG := xsct.log
-XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
-XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
-XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
+XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl $(CPU)
+XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl $(CPU)
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl $(CPU)
 
 COMPILER_DEFINES := XILINX
-COMPILER_DEFINES += MICROBLAZE
+COMPILER_DEFINES += $(CPU)
 COMPILER_DEFINES += $(M_DEFINES)
+COMPILER_DEFINES += $(subst $(comma),$(space),$(DEFINE))
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h
@@ -38,12 +40,16 @@ SRC_FILES += $(foreach i_dir, $(M_SRC_DIRS), $(wildcard $(i_dir)/*.c))
 CAPTURE_BADDR := 80800000
 CAPTURE_SIZE := 32768
 
+ifeq ($(REBUILD),1)
+  $(shell rm -fr .metadata .Xil hw bsp xilsw sw xsct.log)
+endif
+
 .PHONY: all
 all: $(ELF_FILE)
 
 
 $(ELF_FILE): $(HDR_FILES) $(SRC_FILES)
-	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) > $(XSCT_LOG) 2>&1
+	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) >> $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) build
 
 
@@ -60,13 +66,14 @@ hw/system_top.bit: $(HDF-FILE)
 
 .PHONY: run
 run: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_SCRIPT) MICROBLAZE
+	$(XSDB_CMD) $(XSDB_SCRIPT)
 
 .PHONY: clean
 clean: 
 	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
 
+
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) MICROBLAZE $(CAPTURE_BADDR) $(CAPTURE_SIZE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) $(CAPTURE_BADDR) $(CAPTURE_SIZE)
 
