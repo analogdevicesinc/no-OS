@@ -222,11 +222,11 @@ int main(void)
 	//********************************************************************************
 
 #ifdef XILINX
-	ad9144_xcvr.base_address = XPAR_AXI_AD9144_XCVR_BASEADDR;
+	ad9144_xcvr.base_address = XPAR_AXI_DAQ2_XCVR_BASEADDR;
 	ad9144_core.base_address = XPAR_AXI_AD9144_CORE_BASEADDR;
 	ad9144_jesd.base_address = XPAR_AXI_AD9144_JESD_TX_AXI_BASEADDR;
 	ad9144_dma.base_address = XPAR_AXI_AD9144_DMA_BASEADDR;
-	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
+	ad9680_xcvr.base_address = XPAR_AXI_DAQ2_XCVR_BASEADDR;
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
 	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
