@@ -51,6 +51,7 @@
 #include "dac_buffer.h"
 #include "xcvr_core.h"
 #include "jesd_core.h"
+#include <stdio.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -196,9 +197,9 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
  *******************************************************************************/
 int main(void)
 {
-	spi_device		ad9523_spi_device;
-	spi_device		ad9144_spi_device;
-	spi_device		ad9680_spi_device;
+	struct spi_device		ad9523_spi_device;
+	struct spi_device		ad9144_spi_device;
+	struct spi_device		ad9680_spi_device;
 
 	ad9523_channel_spec	ad9523_channels[8];
 	ad9523_platform_data	ad9523_param;
@@ -426,21 +427,20 @@ int main(void)
 	ad9680_setup(&ad9680_spi_device, ad9680_param);
 	ad9144_setup(&ad9144_spi_device, ad9144_param);
 
-	// set up the JESD core
-	jesd_setup(ad9680_jesd);
 	jesd_setup(ad9144_jesd);
+	mdelay(1);
 
 	// set up the XCVRs
-	if (ad9144_xcvr.sys_clk_sel == 3) {	// DAC_XCVR controls the QPLL reset
 		xcvr_setup(ad9144_xcvr);
-		xcvr_setup(ad9680_xcvr);
-	} else {				// ADC_XCVR controls the CPLL reset
-		xcvr_setup(ad9680_xcvr);
-		xcvr_setup(ad9144_xcvr);
-	}
+
+	// set up the JESD core
+	jesd_setup(ad9680_jesd);
+	mdelay(10);
 
 	// JESD core status
+	printf("jesd-status tx\n");
 	jesd_status(ad9144_jesd);
+	printf("jesd-status rx\n");
 	jesd_status(ad9680_jesd);
 
 	// interface core set up
@@ -478,16 +478,18 @@ int main(void)
 	// receive path testing
 	//********************************************************************************
 
+		ad_printf("%s ad9680 - running PN9\n", __func__);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
 	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
 		ad_printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
+		ad_printf("%s ad9680 - running PN23\n", __func__);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
 	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
 		ad_printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
-#ifdef ZYNQ_PS7
+#ifdef XCVR_EYE_SCAN
 
 	// eye-scan
 
