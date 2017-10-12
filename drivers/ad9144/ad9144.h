@@ -1356,7 +1356,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad9144_init_param {
 	/* Device Settings */
 	uint8_t		jesd_xbar_lane0_sel;
 	uint8_t		jesd_xbar_lane1_sel;
@@ -1366,13 +1366,13 @@ typedef struct {
 	uint32_t	stpl_samples[4][4];
 	uint32_t	lane_rate_kbps;
 	uint32_t	prbs_type;
-} ad9144_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9144_setup(struct spi_device *dev,
-		ad9144_init_param init_param);
+		struct ad9144_init_param *init_param);
 int32_t ad9144_spi_read(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data);
@@ -1380,8 +1380,8 @@ int32_t ad9144_spi_write(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data);
 int32_t ad9144_short_pattern_test(struct spi_device *dev,
-		ad9144_init_param init_param);
+		struct ad9144_init_param *init_param);
 int32_t ad9144_status(struct spi_device *dev);
 int32_t ad9144_datapath_prbs_test(struct spi_device *dev,
-	       ad9144_init_param init_param);
+	       struct ad9144_init_param *init_param);
 #endif

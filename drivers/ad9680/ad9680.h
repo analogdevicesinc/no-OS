@@ -79,9 +79,9 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad9680_init_param {
 	uint32_t      lane_rate_kbps;
-} ad9680_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -89,7 +89,7 @@ typedef struct {
 
 int32_t ad9680_spi_read(struct spi_device *dev, uint16_t reg_addr, uint8_t *reg_data);
 int32_t ad9680_spi_write(struct spi_device *dev, uint16_t reg_addr, uint8_t reg_data);
-int32_t ad9680_setup(struct spi_device *dev, ad9680_init_param init_param);
+int32_t ad9680_setup(struct spi_device *dev, struct ad9680_init_param *init_param);
 int32_t ad9680_test(struct spi_device *dev, uint32_t test_mode);
 
 #endif

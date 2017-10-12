@@ -108,7 +108,7 @@ int32_t ad9144_spi_check_status(struct spi_device *dev,
  * @brief ad9144_setup
  *******************************************************************************/
 int32_t ad9144_setup(struct spi_device *dev,
-		ad9144_init_param init_param)
+		struct ad9144_init_param *init_param)
 {
 	uint8_t chip_id;
 	uint8_t scratchpad;
@@ -186,19 +186,19 @@ int32_t ad9144_setup(struct spi_device *dev,
 	ad9144_spi_write(dev, REG_TERM_BLK1_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
-	if (init_param.lane_rate_kbps < 2880000)
+	if (init_param->lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x0A);		// CDR_OVERSAMP
 	else
-		if (init_param.lane_rate_kbps > 5520000)
+		if (init_param->lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x28);	// ENHALFRATE
 		else
 			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x08);
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x00);	// cdr reset
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x01);	// cdr reset
-	if (init_param.lane_rate_kbps < 2880000)
+	if (init_param->lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x06);		// data-rate < 2.88 Gbps
 	else
-		if (init_param.lane_rate_kbps > 5520000)
+		if (init_param->lane_rate_kbps > 5520000)
 			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x04);	// data-rate > 5.52 Gbps
 		else
 			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x05);
@@ -292,18 +292,18 @@ int32_t ad9144_status(struct spi_device *dev) {
 /***************************************************************************//**
  * @brief ad9144_short_pattern_test
  *******************************************************************************/
-int32_t ad9144_short_pattern_test(struct spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_short_pattern_test(struct spi_device *dev, struct ad9144_init_param *init_param) {
 
 	uint32_t dac = 0;
 	uint32_t sample = 0;
 	uint8_t status = 0;
 	int32_t ret = 0;
 
-	for (dac = 0; dac < init_param.active_converters; dac++) {
+	for (dac = 0; dac < init_param->active_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x00));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2, (init_param.stpl_samples[dac][sample]>>8));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1, (init_param.stpl_samples[dac][sample]>>0));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2, (init_param->stpl_samples[dac][sample]>>8));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1, (init_param->stpl_samples[dac][sample]>>0));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x03));
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
@@ -311,7 +311,7 @@ int32_t ad9144_short_pattern_test(struct spi_device *dev, ad9144_init_param init
 			ret = ad9144_spi_check_status(dev, REG_SHORT_TPL_TEST_3, 0x01, 0x00);
 			if (ret == -1)
 				ad_printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
-					__func__, dac, sample, init_param.stpl_samples[dac][sample], status);
+					__func__, dac, sample, init_param->stpl_samples[dac][sample], status);
 		}
 	}
 	return 0;
@@ -320,14 +320,14 @@ int32_t ad9144_short_pattern_test(struct spi_device *dev, ad9144_init_param init
 /***************************************************************************//**
  * @brief ad9144_datapath_prbs_test
  *******************************************************************************/
-int32_t ad9144_datapath_prbs_test(struct spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_datapath_prbs_test(struct spi_device *dev, struct ad9144_init_param *init_param) {
 
 	uint8_t status = 0;
 	int32_t ret = 0;
 
 
-	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
-	ad9144_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
+	ad9144_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x03));
+	ad9144_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x01));
 	mdelay(500);
 
 	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);

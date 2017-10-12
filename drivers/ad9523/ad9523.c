@@ -48,7 +48,7 @@
 /******************************************************************************/
 struct ad9523_state
 {
-	ad9523_platform_data *pdata;
+	struct ad9523_platform_data *pdata;
 	uint32_t vcxo_freq;
 	uint32_t vco_freq;
 	uint32_t vco_out_freq[3];
@@ -244,7 +244,7 @@ int32_t ad9523_calibrate(struct spi_device *dev)
 // status 
 // calibration requires all registers to be written (not in hold registers) first.
 
-int32_t ad9523_status(struct spi_device *dev, ad9523_platform_data *pdata)
+int32_t ad9523_status(struct spi_device *dev, struct ad9523_platform_data *pdata)
 {
 	int32_t ret;
 	uint32_t reg_data;
@@ -329,7 +329,7 @@ int32_t ad9523_sync(struct spi_device *dev)
  *
  * @return Always return 0.
  *******************************************************************************/
-int32_t ad9523_init(ad9523_platform_data *pdata) {
+int32_t ad9523_init(struct ad9523_platform_data *pdata) {
 
 	uint32_t i = 0;
 
@@ -401,11 +401,11 @@ int32_t ad9523_init(ad9523_platform_data *pdata) {
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 int32_t ad9523_setup(struct spi_device *dev,
-		ad9523_platform_data *pdata)
+		struct ad9523_platform_data *pdata)
 
 {
 	struct ad9523_state *st = &ad9523_st;
-	ad9523_channel_spec *chan;
+	struct ad9523_channel_spec *chan;
 	uint32_t active_mask = 0;
 	int32_t ret, i;
 	uint32_t reg_data;
