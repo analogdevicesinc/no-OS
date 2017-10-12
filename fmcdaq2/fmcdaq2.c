@@ -84,9 +84,9 @@ enum ad9523_channels {
 /***************************************************************************//**
  * @brief main
  *******************************************************************************/
-int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
-		     ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
-		     ad9523_platform_data *p_ad9523_param)
+int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
+		     struct ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
+		     struct ad9523_platform_data *p_ad9523_param)
 {
 
 #ifdef	ALTERA
@@ -201,10 +201,10 @@ int main(void)
 	struct spi_device		ad9144_spi_device;
 	struct spi_device		ad9680_spi_device;
 
-	ad9523_channel_spec	ad9523_channels[8];
-	ad9523_platform_data	ad9523_param;
-	ad9144_init_param	ad9144_param;
-	ad9680_init_param	ad9680_param;
+	struct ad9523_channel_spec	ad9523_channels[8];
+	struct ad9523_platform_data	ad9523_param;
+	struct ad9144_init_param	ad9144_param;
+	struct ad9680_init_param	ad9680_param;
 
 	dac_core		ad9144_core;
 	dac_channel		ad9144_channels[2];
@@ -424,8 +424,8 @@ int main(void)
 	ad9523_setup(&ad9523_spi_device, &ad9523_param);
 
 	// set up the devices
-	ad9680_setup(&ad9680_spi_device, ad9680_param);
-	ad9144_setup(&ad9144_spi_device, ad9144_param);
+	ad9680_setup(&ad9680_spi_device, &ad9680_param);
+	ad9144_setup(&ad9144_spi_device, &ad9144_param);
 
 	jesd_setup(ad9144_jesd);
 	mdelay(1);
@@ -456,7 +456,7 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(&ad9144_core);
-	ad9144_short_pattern_test(&ad9144_spi_device, ad9144_param);
+	ad9144_short_pattern_test(&ad9144_spi_device, &ad9144_param);
 
 	// PN7 data path test
 
@@ -464,7 +464,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
+	ad9144_datapath_prbs_test(&ad9144_spi_device, &ad9144_param);
 
 	// PN15 data path test
 
@@ -472,7 +472,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
+	ad9144_datapath_prbs_test(&ad9144_spi_device, &ad9144_param);
 
 	//********************************************************************************
 	// receive path testing
