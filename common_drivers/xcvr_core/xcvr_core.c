@@ -125,8 +125,6 @@ int32_t xcvr_drp_write(xcvr_core core, uint8_t cm_ch_n, uint8_t drp_sel,
  *******************************************************************************/
 int32_t xcvr_setup(xcvr_core core)
 {
-	uint32_t status;
-	int32_t timeout;
 
 #ifdef ALTERA
 	if (core.rx_tx_n == 0)
@@ -164,32 +162,13 @@ int32_t xcvr_setup(xcvr_core core)
 	}
 #endif
 
-	xcvr_write(core, XCVR_REG_RESETN, 0);
-	if (core.reconfig_bypass == 0)
-	{
-		xcvr_write(core, XCVR_REG_CONTROL, (core.lpm_enable ? XCVR_LPM_DFE_N : 0) |
-							XCVR_SYSCLK_SEL(core.sys_clk_sel) |
-							XCVR_OUTCLK_SEL(core.out_clk_sel));
-	}
-
-	xcvr_write(core, XCVR_REG_RESETN, XCVR_RESETN);
-
-	timeout = 100;
-	while (timeout > 0)
-	{
-		mdelay(1);
-		timeout = timeout - 1;
-		xcvr_read(core, XCVR_REG_STATUS, &status);
-		if (status == 1)
-			break;
-	}
-
-	if (status == 0)
-	{
-		ad_printf("%s ERROR: XCVR initialization failed!\n", __func__);
-		return(-1);
-	}
-
+  	xcvr_write(core, 0x420, 0x1);
+  	xcvr_write(core, 0x424, 0x1);
+	mdelay(1);
+	xcvr_write(core, 0x420, 0x0);
+	xcvr_write(core, 0x424, 0x0);
+	mdelay(10);
+	mdelay(10);
 	return(0);
 }
 
@@ -198,22 +177,6 @@ int32_t xcvr_setup(xcvr_core core)
  *******************************************************************************/
 int32_t xcvr_getconfig(xcvr_core *core)
 {
-	uint32_t regbuf;
-
-	xcvr_read(*core, XCVR_REG_PARAMS, &regbuf);
-	core->no_of_lanes = (regbuf & XCVR_NUM_OF_LANES_MASK) >> XCVR_NUM_OF_LANES_OFFSET;
-	core->rx_tx_n = ((regbuf & XCVR_TX_OR_RXN_MASK) >> XCVR_TX_OR_RXN_OFFSET) ? 0 : 1;
-
-#ifdef XILINX
-	core->gt_type = (regbuf & XCVR_GT_TYPE_MASK) >> XCVR_GT_TYPE_OFFSET;
-	core->qpll_enable = (regbuf & XCVR_QPLL_ENABLE_MASK) >> XCVR_QPLL_ENABLE_OFFSET;
-
-	xcvr_read(*core, XCVR_REG_CONTROL, &regbuf);
-	core->lpm_enable = (regbuf & (0x1 << 12)) >> 12;
-	core->out_div = (regbuf & (0x7 << 8)) >> 8;
-	core->sys_clk_sel = (regbuf & (0x3 << 4)) >> 4;
-	core->out_clk_sel = regbuf & 0x7;
-#endif
 
 return 0;
 }
