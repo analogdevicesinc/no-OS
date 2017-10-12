@@ -87,9 +87,9 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9680_spi_read(spi_device *dev, uint16_t reg_addr, uint8_t *reg_data);
-int32_t ad9680_spi_write(spi_device *dev, uint16_t reg_addr, uint8_t reg_data);
-int32_t ad9680_setup(spi_device *dev, ad9680_init_param init_param);
-int32_t ad9680_test(spi_device *dev, uint32_t test_mode);
+int32_t ad9680_spi_read(struct spi_device *dev, uint16_t reg_addr, uint8_t *reg_data);
+int32_t ad9680_spi_write(struct spi_device *dev, uint16_t reg_addr, uint8_t reg_data);
+int32_t ad9680_setup(struct spi_device *dev, ad9680_init_param init_param);
+int32_t ad9680_test(struct spi_device *dev, uint32_t test_mode);
 
 #endif

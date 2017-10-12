@@ -45,7 +45,7 @@
 /***************************************************************************//**
  * @brief ad9144_spi_read
  *******************************************************************************/
-int32_t ad9144_spi_read(spi_device *dev,
+int32_t ad9144_spi_read(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data)
 {
@@ -65,7 +65,7 @@ int32_t ad9144_spi_read(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_spi_write
  *******************************************************************************/
-int32_t ad9144_spi_write(spi_device *dev,
+int32_t ad9144_spi_write(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data)
 {
@@ -84,7 +84,7 @@ int32_t ad9144_spi_write(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_spi_check_status
  *******************************************************************************/
-int32_t ad9144_spi_check_status(spi_device *dev,
+int32_t ad9144_spi_check_status(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_mask,
 		uint8_t exp_reg_data)
@@ -107,7 +107,7 @@ int32_t ad9144_spi_check_status(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_setup
  *******************************************************************************/
-int32_t ad9144_setup(spi_device *dev,
+int32_t ad9144_setup(struct spi_device *dev,
 		ad9144_init_param init_param)
 {
 	uint8_t chip_id;
@@ -253,7 +253,7 @@ int32_t ad9144_setup(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_status - return the status of the JESD interface
  *******************************************************************************/
-int32_t ad9144_status(spi_device *dev) {
+int32_t ad9144_status(struct spi_device *dev) {
 
 	uint8_t status = 0;
 	int32_t ret = 0;
@@ -292,7 +292,7 @@ int32_t ad9144_status(spi_device *dev) {
 /***************************************************************************//**
  * @brief ad9144_short_pattern_test
  *******************************************************************************/
-int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_short_pattern_test(struct spi_device *dev, ad9144_init_param init_param) {
 
 	uint32_t dac = 0;
 	uint32_t sample = 0;
@@ -320,7 +320,7 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 /***************************************************************************//**
  * @brief ad9144_datapath_prbs_test
  *******************************************************************************/
-int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_datapath_prbs_test(struct spi_device *dev, ad9144_init_param init_param) {
 
 	uint8_t status = 0;
 	int32_t ret = 0;

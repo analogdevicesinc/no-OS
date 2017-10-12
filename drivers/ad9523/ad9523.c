@@ -74,7 +74,7 @@ enum
  *
  * @return registerValue - The register's value or negative error code.
  *******************************************************************************/
-int32_t ad9523_spi_read(spi_device *dev,
+int32_t ad9523_spi_read(struct spi_device *dev,
 		uint32_t reg_addr,
 		uint32_t *reg_data)
 {
@@ -105,7 +105,7 @@ int32_t ad9523_spi_read(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
-int32_t ad9523_spi_write(spi_device *dev,
+int32_t ad9523_spi_write(struct spi_device *dev,
 		uint32_t reg_addr,
 		uint32_t reg_data)
 {
@@ -130,7 +130,7 @@ int32_t ad9523_spi_write(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
-int32_t ad9523_io_update(spi_device *dev)
+int32_t ad9523_io_update(struct spi_device *dev)
 {
 	return ad9523_spi_write(dev, AD9523_IO_UPDATE, AD9523_IO_UPDATE_EN);
 }
@@ -143,7 +143,7 @@ int32_t ad9523_io_update(spi_device *dev)
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
-int32_t ad9523_vco_out_map(spi_device *dev,
+int32_t ad9523_vco_out_map(struct spi_device *dev,
 		uint32_t ch,
 		uint32_t out)
 {
@@ -208,7 +208,7 @@ int32_t ad9523_vco_out_map(spi_device *dev,
 // vco calibration on default setup may not work (as it is a buffered write)
 // calibration requires all registers to be written (not in hold registers) first.
 
-int32_t ad9523_calibrate(spi_device *dev)
+int32_t ad9523_calibrate(struct spi_device *dev)
 {
 	uint32_t reg_data;
 	uint32_t timeout;
@@ -244,7 +244,7 @@ int32_t ad9523_calibrate(spi_device *dev)
 // status 
 // calibration requires all registers to be written (not in hold registers) first.
 
-int32_t ad9523_status(spi_device *dev, ad9523_platform_data *pdata)
+int32_t ad9523_status(struct spi_device *dev, ad9523_platform_data *pdata)
 {
 	int32_t ret;
 	uint32_t reg_data;
@@ -297,7 +297,7 @@ int32_t ad9523_status(spi_device *dev, ad9523_platform_data *pdata)
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
-int32_t ad9523_sync(spi_device *dev)
+int32_t ad9523_sync(struct spi_device *dev)
 {
 	int32_t ret, tmp;
 	uint32_t reg_data;
@@ -400,7 +400,7 @@ int32_t ad9523_init(ad9523_platform_data *pdata) {
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
-int32_t ad9523_setup(spi_device *dev,
+int32_t ad9523_setup(struct spi_device *dev,
 		ad9523_platform_data *pdata)
 
 {

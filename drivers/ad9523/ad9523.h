@@ -466,24 +466,24 @@ typedef struct
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Reads the value of the selected register. */
-int32_t ad9523_spi_read(spi_device *dev,
+int32_t ad9523_spi_read(struct spi_device *dev,
 		uint32_t reg_addr,
 		uint32_t *reg_data);
 /* Writes a value to the selected register. */
-int32_t ad9523_spi_write(spi_device *dev,
+int32_t ad9523_spi_write(struct spi_device *dev,
 		uint32_t reg_addr,
 		uint32_t reg_data);
 /* Updates the AD9523 configuration */
-int32_t ad9523_io_update(spi_device *dev);
+int32_t ad9523_io_update(struct spi_device *dev);
 /* Sets the clock provider for selected channel. */
-int32_t ad9523_vco_out_map(spi_device *dev,
+int32_t ad9523_vco_out_map(struct spi_device *dev,
 		uint32_t ch,
 		uint32_t out);
 /* Updates the AD9523 configuration. */
-int32_t ad9523_sync(spi_device *dev);
+int32_t ad9523_sync(struct spi_device *dev);
 /* Initialize the AD9523 data structure*/
 int32_t ad9523_init(ad9523_platform_data *pdata);
 /* Configure the AD9523. */
-int32_t ad9523_setup(spi_device *dev,
+int32_t ad9523_setup(struct spi_device *dev,
 		ad9523_platform_data *pdata);
 #endif // __AD9523_H__
