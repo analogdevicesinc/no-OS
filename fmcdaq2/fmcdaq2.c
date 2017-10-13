@@ -84,8 +84,8 @@ enum ad9523_channels {
 /***************************************************************************//**
  * @brief main
  *******************************************************************************/
-int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
-		     struct ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
+int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, struct xcvr_core *p_ad9144_xcvr,
+		     struct ad9680_init_param *p_ad9680_param, struct xcvr_core *p_ad9680_xcvr,
 		     struct ad9523_platform_data *p_ad9523_param)
 {
 
@@ -205,15 +205,16 @@ int main(void)
 	struct ad9523_platform_data	ad9523_param;
 	struct ad9144_init_param	ad9144_param;
 	struct ad9680_init_param	ad9680_param;
+	struct xcvr_core_instance	daq2_xcvr;
 
 	dac_core		ad9144_core;
 	dac_channel		ad9144_channels[2];
 	jesd_core		ad9144_jesd;
 	dmac_core		ad9144_dma;
-	xcvr_core		ad9144_xcvr;
+	struct xcvr_core		ad9144_xcvr;
 	adc_core		ad9680_core;
 	jesd_core		ad9680_jesd;
-	xcvr_core		ad9680_xcvr;
+	struct xcvr_core		ad9680_xcvr;
 	dmac_core               ad9680_dma;
 	dmac_xfer               rx_xfer;
 	dmac_xfer               tx_xfer;
@@ -223,11 +224,10 @@ int main(void)
 	//********************************************************************************
 
 #ifdef XILINX
-	ad9144_xcvr.base_address = XPAR_AXI_DAQ2_XCVR_BASEADDR;
+	daq2_xcvr.base_address = XPAR_AXI_DAQ2_XCVR_BASEADDR;
 	ad9144_core.base_address = XPAR_AXI_AD9144_CORE_BASEADDR;
 	ad9144_jesd.base_address = XPAR_AXI_AD9144_JESD_TX_AXI_BASEADDR;
 	ad9144_dma.base_address = XPAR_AXI_AD9144_DMA_BASEADDR;
-	ad9680_xcvr.base_address = XPAR_AXI_DAQ2_XCVR_BASEADDR;
 	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
 	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
@@ -322,10 +322,12 @@ int main(void)
 	//	JESD204, AXI_AD9144, TX DMAC) configuration
 	//********************************************************************************
 
-	xcvr_getconfig(&ad9144_xcvr);
-	ad9144_xcvr.mmcm_present = 0;
-	ad9144_xcvr.reconfig_bypass = 1;
-	ad9144_xcvr.lane_rate_kbps = 10000000;
+	ad9144_xcvr.mmcm_or_linkpll_present = 0;
+	ad9144_xcvr.mmcm_or_linkpll_base_address = 0;
+	ad9144_xcvr.tx_lane_pll_base_address = 0;
+	ad9144_xcvr.tx_or_rx_n = 1;
+	ad9144_xcvr.number_of_instances = 1;
+	ad9144_xcvr.instances = &daq2_xcvr;
 
 	ad9144_jesd.rx_tx_n = 0;
 	ad9144_jesd.scramble_enable = 1;
@@ -369,10 +371,12 @@ int main(void)
 
 	ad9680_param.lane_rate_kbps = 10000000;
 
-	xcvr_getconfig(&ad9680_xcvr);
-	ad9680_xcvr.mmcm_present = 0;
-	ad9680_xcvr.reconfig_bypass = 1;
-	ad9680_xcvr.lane_rate_kbps = ad9680_param.lane_rate_kbps;
+	ad9680_xcvr.mmcm_or_linkpll_present = 0;
+	ad9680_xcvr.mmcm_or_linkpll_base_address = 0;
+	ad9680_xcvr.tx_lane_pll_base_address = 0;
+	ad9680_xcvr.tx_or_rx_n = 0;
+	ad9680_xcvr.number_of_instances = 1;
+	ad9680_xcvr.instances = &daq2_xcvr;
 
 	ad9680_jesd.scramble_enable = 1;
 	ad9680_jesd.octets_per_frame = 1;
@@ -431,7 +435,10 @@ int main(void)
 	mdelay(1);
 
 	// set up the XCVRs
-		xcvr_setup(ad9144_xcvr);
+		xcvr_setup(&ad9144_xcvr);
+		xcvr_setup(&ad9680_xcvr);
+		xcvr_status(&ad9144_xcvr);
+		xcvr_status(&ad9680_xcvr);
 
 	// set up the JESD core
 	jesd_setup(ad9680_jesd);
