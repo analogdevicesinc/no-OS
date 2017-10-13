@@ -33,44 +33,13 @@
 // ***************************************************************************
 // ***************************************************************************
 
-#ifndef XCVR_CORE_H
-#define XCVR_CORE_H
+#ifdef ALTERA
+#ifndef XCVR_CORE_ALTERA_H
+#define XCVR_CORE_ALTERA_H
 
-#include "platform_drivers.h"
-#include "xcvr_core_xilinx.h"
-#include "xcvr_core_altera.h"
+#include "xcvr_core.h"
 
-/* physical link is allowed to be part of multiple instances */
-
-struct xcvr_core_instance {
-
-	uint32_t base_address;
-	uint32_t number_of_lanes;
-};
-
-struct xcvr_core {
-
-	struct xcvr_core_instance *instances;
-	uint32_t mmcm_or_linkpll_present;
-	uint32_t mmcm_or_linkpll_base_address;
-	uint32_t tx_lane_pll_base_address;
-	uint32_t tx_or_rx_n;
-	uint32_t number_of_instances;
-};
-
-int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t xcvr_write(struct xcvr_core *core, uint32_t reg_addr, uint32_t reg_data);
-
-int32_t xcvr_drp_read(struct xcvr_core *core, uint8_t cm_ch_n, uint8_t drp_sel,
-	uint32_t drp_addr, uint32_t *drp_data);
-int32_t xcvr_drp_write(struct xcvr_core *core, uint8_t cm_ch_n, uint8_t drp_sel,
-	uint32_t drp_addr, uint32_t drp_data);
-
-int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_clk);
-
-int32_t xcvr_setup(struct xcvr_core *core);
-int32_t xcvr_status(struct xcvr_core *core);
-
+#endif
 #endif
 
 // ***************************************************************************

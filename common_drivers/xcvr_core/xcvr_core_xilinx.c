@@ -33,43 +33,123 @@
 // ***************************************************************************
 // ***************************************************************************
 
-#ifndef XCVR_CORE_H
-#define XCVR_CORE_H
-
-#include "platform_drivers.h"
+#ifdef XILINX
 #include "xcvr_core_xilinx.h"
-#include "xcvr_core_altera.h"
 
-/* physical link is allowed to be part of multiple instances */
+/* all are broad-cast reads and writes */
 
-struct xcvr_core_instance {
+int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data) {
 
-	uint32_t base_address;
-	uint32_t number_of_lanes;
-};
+	int32_t i;
+	uint32_t data;
+	struct xcvr_core_instance *xcvr_inst;
 
-struct xcvr_core {
+	*reg_data = -1;
+	data = -1;
 
-	struct xcvr_core_instance *instances;
-	uint32_t mmcm_or_linkpll_present;
-	uint32_t mmcm_or_linkpll_base_address;
-	uint32_t tx_lane_pll_base_address;
-	uint32_t tx_or_rx_n;
-	uint32_t number_of_instances;
-};
+	for (i = 0; i < core->number_of_instances; i++) {
+		xcvr_inst = &core->instances[i];
+		if (i == 0) {
+			data = ad_reg_read(xcvr_inst->base_address + reg_addr);
+		}
+		if (ad_reg_read(xcvr_inst->base_address + reg_addr) != data) {
+			return(-1);
+		}
+	}
 
-int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t xcvr_write(struct xcvr_core *core, uint32_t reg_addr, uint32_t reg_data);
+	*reg_data = data;
+	return(0);
+}
+
+int32_t xcvr_write(struct xcvr_core *core, uint32_t reg_addr, uint32_t reg_data) {
+
+	int32_t i;
+	struct xcvr_core_instance *xcvr_inst;
+
+	for (i = 0; i < core->number_of_instances; i++) {
+		xcvr_inst = &core->instances[i];
+		ad_reg_write((xcvr_inst->base_address + reg_addr), reg_data);
+	}
+	return(0);
+}
 
 int32_t xcvr_drp_read(struct xcvr_core *core, uint8_t cm_ch_n, uint8_t drp_sel,
-	uint32_t drp_addr, uint32_t *drp_data);
+	uint32_t drp_addr, uint32_t *drp_data) {
+
+	return(0);
+}
+
 int32_t xcvr_drp_write(struct xcvr_core *core, uint8_t cm_ch_n, uint8_t drp_sel,
-	uint32_t drp_addr, uint32_t drp_data);
+	uint32_t drp_addr, uint32_t drp_data) {
 
-int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_clk);
+	return(0);
+}
 
-int32_t xcvr_setup(struct xcvr_core *core);
-int32_t xcvr_status(struct xcvr_core *core);
+int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_clk) {
+
+	return(0);
+}
+
+// ***************************************************************************
+// ***************************************************************************
+
+int32_t xcvr_setup(struct xcvr_core *core) {
+
+	if (core->tx_or_rx_n == 1) {
+
+	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);
+	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
+		return(0);
+	}
+
+	if (core->tx_or_rx_n == 0) {
+
+	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x1);
+	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
+		return(0);
+	}
+
+	return(0);
+}
+
+int32_t xcvr_status(struct xcvr_core *core) {
+
+	int32_t timeout = 20;
+	uint32_t data;
+	uint32_t mask;
+
+	data = -1;
+	mask = -1;
+
+	if (core->tx_or_rx_n == 1) {
+		xcvr_read(core, XCVR_TXPLL_TYPE_ADDR, &data);
+		mask = XCVR_TXRESET_STATUS_MASK;
+	}
+	if (core->tx_or_rx_n == 0) {
+		xcvr_read(core, XCVR_RXPLL_TYPE_ADDR, &data);
+		mask = XCVR_RXRESET_STATUS_MASK;
+	}
+
+	if (data == XCVR_CPLL) {
+		mask = mask | XCVR_CPLL_STATUS_MASK;
+	}
+	if (data == XCVR_QPLL) {
+		mask = mask | XCVR_QPLL_STATUS_MASK;
+	}
+	if (data == XCVR_QPLL1) {
+		mask = mask | XCVR_QPLL1_STATUS_MASK;
+	}
+
+	while (timeout > 0) {
+		xcvr_read(core, XCVR_STATUS_ADDR, &data);
+		if ((data & mask) == 0) return(0);
+		timeout = timeout - 1;
+		mdelay(1);
+	}
+
+	ad_printf("%s: invalid status, data(%x), mask(%x)!\n", __func__, data, mask);
+	return(0);
+}
 
 #endif
 
