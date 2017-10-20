@@ -778,7 +778,7 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
-	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
+	if ((phy->dev_sel == ID_AD9363A) && (int_ext == EXT_LO)) {
 		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
 		return -1;
 	}
@@ -1424,7 +1424,7 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
 										phy->ref_clk_scale[TX_RFPLL]));
 
-	return 0;
+	return 0ad9361_set_tx_lo_int_ext;
 }
 
 /**
@@ -1438,7 +1438,7 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
  */
 int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
-	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
+	if ((phy->dev_sel == ID_AD9363A) && (int_ext == EXT_LO)) {
 		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
 		return -1;
 	}
