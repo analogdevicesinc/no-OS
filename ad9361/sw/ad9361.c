@@ -5842,9 +5842,9 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 		max = (tx[DAC_FREQ] / tx[TX_SAMPL_FREQ]) * 16;
 		if (phy->tx_fir_ntaps > max) {
 			dev_err(dev,
-				"%s: Invalid: ratio ADC/2 / TX_SAMPL * 16 > TAPS"
+				"%s: Invalid: ratio DAC / TX_SAMPL * 16 > TAPS"
 				"(max %"PRIu32", adc %"PRIu32", tx %"PRIu32")",
-				__func__, max, rx[ADC_FREQ], tx[TX_SAMPL_FREQ]);
+				__func__, max, tx[DAC_FREQ], tx[TX_SAMPL_FREQ]);
 			return -EINVAL;
 		}
 	}
