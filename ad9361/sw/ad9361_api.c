@@ -1424,7 +1424,7 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 	*lo_freq_hz = ad9361_from_clk(clk_get_rate(phy,
 										phy->ref_clk_scale[TX_RFPLL]));
 
-	return 0ad9361_set_tx_lo_int_ext;
+	return 0;
 }
 
 /**
