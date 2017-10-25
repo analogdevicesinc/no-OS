@@ -56,7 +56,7 @@
  * @return CRC8 checksum.
  */
 uint8_t adgs5412_compute_crc8(uint8_t *data,
-							  uint8_t data_size)
+			      uint8_t data_size)
 {
 	uint8_t i;
 	uint8_t crc = 0;
@@ -84,8 +84,8 @@ uint8_t adgs5412_compute_crc8(uint8_t *data,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
-							  uint8_t reg_addr,
-							  uint8_t *reg_data)
+			      uint8_t reg_addr,
+			      uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	uint8_t buf_size = 2;
@@ -94,7 +94,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -129,8 +129,8 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
-							   uint8_t reg_addr,
-							   uint8_t reg_data)
+			       uint8_t reg_addr,
+			       uint8_t reg_data)
 {
 	uint8_t buf[3];
 	uint8_t buf_size = 2;
@@ -138,7 +138,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -166,16 +166,16 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
-								   uint8_t reg_addr,
-								   uint8_t mask,
-								   uint8_t *data)
+				   uint8_t reg_addr,
+				   uint8_t mask,
+				   uint8_t *data)
 {
 	uint8_t reg_data;
 	int32_t ret;
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -194,16 +194,16 @@ int32_t adgs5412_spi_reg_read_mask(adgs5412_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_spi_reg_write_mask(adgs5412_dev *dev,
-									uint8_t reg_addr,
-									uint8_t mask,
-									uint8_t data)
+				    uint8_t reg_addr,
+				    uint8_t mask,
+				    uint8_t data)
 {
 	uint8_t reg_data;
 	int32_t ret;
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -226,16 +226,16 @@ int32_t adgs5412_do_soft_reset(adgs5412_dev *dev)
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
 	ret = adgs5412_spi_reg_write(dev,
-								 ADGS5412_REG_SOFT_RESETB,
-								 ADGS5412_RESET_1);
+				     ADGS5412_REG_SOFT_RESETB,
+				     ADGS5412_RESET_1);
 	ret |= adgs5412_spi_reg_write(dev,
-								  ADGS5412_REG_SOFT_RESETB,
-								  ADGS5412_RESET_2);
+				      ADGS5412_REG_SOFT_RESETB,
+				      ADGS5412_RESET_2);
 
 	return ret;
 }
@@ -253,7 +253,7 @@ int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -280,7 +280,7 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
 
 	if (dev->daisy_chain_en == ADGS5412_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -299,14 +299,14 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
-									   uint8_t *cmds,
-									   uint8_t cmds_size)
+				       uint8_t *cmds,
+				       uint8_t cmds_size)
 {
 	int32_t ret;
 
 	if (dev->daisy_chain_en == ADGS5412_DISABLE) {
 		printf("%s: This feature is available in Daisy-Chain mode only.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -319,11 +319,11 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
- * 					   parameters.
+ * 		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t adgs5412_setup(adgs5412_dev **device,
-					   adgs5412_init_param init_param)
+		       adgs5412_init_param init_param)
 {
 	adgs5412_dev *dev;
 	int32_t ret;
@@ -334,10 +334,11 @@ int32_t adgs5412_setup(adgs5412_dev **device,
 	}
 
 	/* SPI */
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
 	dev->spi_dev.type = init_param.spi_type;
+	dev->spi_dev.id = init_param.spi_id;
+	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+	dev->spi_dev.mode = init_param.spi_mode;
+	dev->spi_dev.chip_select = init_param.spi_chip_select;
 	ret = spi_init(&dev->spi_dev);
 
 	/* Device Settings */
@@ -347,18 +348,18 @@ int32_t adgs5412_setup(adgs5412_dev **device,
 
 	if (init_param.crc_en == ADGS5412_ENABLE) {
 		adgs5412_spi_reg_write_mask(dev,
-									ADGS5412_REG_ERR_CONFIG,
-									ADGS5412_CRC_ERR_EN,
-									ADGS5412_CRC_ERR_EN);
+					    ADGS5412_REG_ERR_CONFIG,
+					    ADGS5412_CRC_ERR_EN,
+					    ADGS5412_CRC_ERR_EN);
 		dev->crc_en = ADGS5412_ENABLE;
 	}
 
 	dev->burst_mode_en = init_param.burst_mode_en;
 	if (dev->burst_mode_en == ADGS5412_ENABLE)
 		adgs5412_spi_reg_write_mask(dev,
-									ADGS5412_REG_BURST_EN,
-									ADGS5412_BURST_MODE_EN,
-									ADGS5412_BURST_MODE_EN);
+					    ADGS5412_REG_BURST_EN,
+					    ADGS5412_BURST_MODE_EN,
+					    ADGS5412_BURST_MODE_EN);
 
 	if (init_param.daisy_chain_en == ADGS5412_ENABLE) {
 		adgs5412_enter_daisy_chain(dev);
