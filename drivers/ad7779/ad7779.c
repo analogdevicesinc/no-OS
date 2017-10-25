@@ -337,12 +337,15 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 	uint8_t option_index;
 	uint8_t mode;
 
-	if (!(dev->gain[AD7779_CH0] == dev->gain[AD7779_CH1] ==
-		  dev->gain[AD7779_CH2] == dev->gain[AD7779_CH3] == AD7779_GAIN_1))
+	if (!(dev->gain[AD7779_CH0] == dev->gain[AD7779_CH1] &&
+	      dev->gain[AD7779_CH1] == dev->gain[AD7779_CH2] &&
+	      dev->gain[AD7779_CH2] == dev->gain[AD7779_CH3] &&
+	      dev->gain[AD7779_CH3] == AD7779_GAIN_1))
 		goto error;
 
-	if (!(dev->gain[AD7779_CH4] == dev->gain[AD7779_CH5] ==
-		  dev->gain[AD7779_CH6] == dev->gain[AD7779_CH6]))
+	if (!(dev->gain[AD7779_CH4] == dev->gain[AD7779_CH5] &&
+	      dev->gain[AD7779_CH5] == dev->gain[AD7779_CH6] &&
+	      dev->gain[AD7779_CH6] == dev->gain[AD7779_CH7]))
 		goto error;
 
 	switch (dev->dec_rate_int) {
