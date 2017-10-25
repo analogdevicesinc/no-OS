@@ -261,7 +261,7 @@ int32_t AD717X_WaitForReady(struct ad717x_device *device, uint32_t timeout)
 			return ret;
 
 		/* Check the RDY bit in the Status Register */
-		ready = (statusReg->value & AD717X_STATUS_REG_RDY) != 0;
+		ready = (statusReg->value & AD717X_STATUS_REG_RDY) == 0;
 	}
 
 	return timeout ? 0 : TIMEOUT;

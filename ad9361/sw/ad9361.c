@@ -6736,7 +6736,7 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 		/* For RX LO we typically have the tracking option enabled
 		* so for now do nothing here.
 		*/
-		if (phy->auto_cal_en && (clk_priv->source == TX_RFPLL_INT))
+		if (phy->auto_cal_en && !phy->pdata->use_ext_tx_lo)
 			if (abs((int64_t)(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate))) >
 				(int64_t)phy->cal_threshold_freq) {
 				ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
