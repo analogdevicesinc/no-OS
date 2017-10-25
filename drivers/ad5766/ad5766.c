@@ -57,8 +57,8 @@
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_spi_cmd_write(ad5766_dev *dev,
-							 uint8_t cmd,
-							 uint16_t data)
+			     uint8_t cmd,
+			     uint16_t data)
 {
 	uint8_t buf[3];
 	int32_t ret;
@@ -80,15 +80,15 @@ int32_t ad5766_spi_cmd_write(ad5766_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
-								ad5766_dac dac,
-								uint32_t *data)
+				ad5766_dac dac,
+				uint32_t *data)
 {
 	uint8_t buf[3] = {0, 0, 0};
 	int32_t ret;
 
 	if (dev->daisy_chain_en == AD5766_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
-			__func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -105,86 +105,85 @@ int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
  * Set software LDAC for the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_LDAC(x) | AD5766_LDAC(y) | ...
+ *		    Accepted values: AD5766_LDAC(x) | AD5766_LDAC(y) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_sw_ldac(ad5766_dev *dev,
-						   uint16_t setting)
+			   uint16_t setting)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_SW_LDAC,
-								setting);
+				    setting);
 }
 
 /**
  * Set clear code and span settings.
  * @param dev - The device structure.
- *				Accepted values: 
  * @param clr - The clear code setting.
- *				Accepted values: AD5766_ZERO
- *								 AD5766_MID
- *								 AD5766_FULL
+ *		Accepted values: AD5766_ZERO
+ *				 AD5766_MID
+ *				 AD5766_FULL
  * @param span - The span setting.
- *				 Accepted values: AD5766_M_20V_TO_0V
- *								  AD5766_M_16V_TO_0V
- *								  AD5766_M_10V_TO_0V
- *								  AD5766_M_12V_TO_P_14V
- *								  AD5766_M_16V_TO_P_10V
- *								  AD5766_M_5V_TO_P_6V
- *								  AD5766_M_10V_TO_P_10V
+ *		 Accepted values: AD5766_M_20V_TO_0V
+ *				  AD5766_M_16V_TO_0V
+ *				  AD5766_M_10V_TO_0V
+ *				  AD5766_M_12V_TO_P_14V
+ *				  AD5766_M_16V_TO_P_10V
+ *				  AD5766_M_5V_TO_P_6V
+ *				  AD5766_M_10V_TO_P_10V
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_clr_span(ad5766_dev *dev,
-							ad5766_clr clr,
-							ad5766_span span)
+			    ad5766_clr clr,
+			    ad5766_span span)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_SPAN_REG,
-								AD5766_CFG_CLR(clr) | AD5766_SPAN(span));
+				    AD5766_CFG_CLR(clr) | AD5766_SPAN(span));
 }
 
 /**
  * Power down the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
+ *		    Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_pwr_dac(ad5766_dev *dev,
-						   uint16_t setting)
+			   uint16_t setting)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_WR_PWR_DAC,
-								setting);
+				    setting);
 }
 
 /**
  * Power down the dither block for the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
+ *		    Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_pwr_dither(ad5766_dev *dev,
-							  uint16_t setting)
+			      uint16_t setting)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_WR_PWR_DITHER,
-								setting);
+				    setting);
 }
 
 /**
  * Enable the dither signal for the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_N0(x) | AD5766_N1(y) | ...
+ *		    Accepted values: AD5766_N0(x) | AD5766_N1(y) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dither_signal(ad5766_dev *dev,
-								 uint32_t setting)
+				 uint32_t setting)
 {
 	int32_t ret;
 
 	ret = ad5766_spi_cmd_write(dev, AD5766_CMD_DITHER_SIG_1,
-							   (setting & 0xFFFF) >> 0);
+				   (setting & 0xFFFF) >> 0);
 	ret |= ad5766_spi_cmd_write(dev, AD5766_CMD_DITHER_SIG_2,
-								(setting & 0xFFFF0000) >> 16);
+				    (setting & 0xFFFF0000) >> 16);
 
 	return ret;
 }
@@ -193,33 +192,33 @@ int32_t ad5766_set_dither_signal(ad5766_dev *dev,
  * Invert the dither signal for the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_INV_D(x) | AD5766_INV_D(y) | ...
+ *		    Accepted values: AD5766_INV_D(x) | AD5766_INV_D(y) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_inv_dither(ad5766_dev *dev,
-							  uint16_t setting)
+			      uint16_t setting)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_INV_DITHER,
-						 setting);
+				    setting);
 }
 
 /**
  * Enable the dither scaling for the selected channels.
  * @param dev - The device structure.
  * @param setting - The setting.
- *					Accepted values: AD5766_75(x) | AD5766_50(y) |
- *									 AD5766_25(z) | ...
+ *		    Accepted values: AD5766_75(x) | AD5766_50(y) |
+ *				     AD5766_25(z) | ...
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dither_scale(ad5766_dev *dev,
-								uint32_t setting)
+				uint32_t setting)
 {
 	int32_t ret;
 
 	ret = ad5766_spi_cmd_write(dev, AD5766_CMD_DITHER_SCALE_1,
-							   (setting & 0xFFFF) >> 0);
+				   (setting & 0xFFFF) >> 0);
 	ret |= ad5766_spi_cmd_write(dev, AD5766_CMD_DITHER_SCALE_2,
-								(setting & 0xFFFF0000) >> 16);
+				    (setting & 0xFFFF0000) >> 16);
 
 	return ret;
 }
@@ -232,7 +231,7 @@ int32_t ad5766_set_dither_scale(ad5766_dev *dev,
 int32_t ad5766_do_soft_reset(ad5766_dev *dev)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_SW_FULL_RESET,
-								AD5766_RESET);
+				    AD5766_RESET);
 }
 
 /**
@@ -243,11 +242,11 @@ int32_t ad5766_do_soft_reset(ad5766_dev *dev)
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_in_reg(ad5766_dev *dev,
-						  ad5766_dac dac,
-						  uint16_t data)
+			  ad5766_dac dac,
+			  uint16_t data)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_WR_IN_REG(dac),
-								data);
+				    data);
 }
 
 /**
@@ -258,11 +257,11 @@ int32_t ad5766_set_in_reg(ad5766_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dac_reg(ad5766_dev *dev,
-							  ad5766_dac dac,
-							  uint16_t data)
+			   ad5766_dac dac,
+			   uint16_t data)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_WR_DAC_REG(dac),
-								data);
+				    data);
 }
 
 /**
@@ -272,22 +271,21 @@ int32_t ad5766_set_dac_reg(ad5766_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dac_reg_all(ad5766_dev *dev,
-							   ad5766_dac dac,
-							   uint16_t data)
+			       uint16_t data)
 {
 	return ad5766_spi_cmd_write(dev, AD5766_CMD_WR_DAC_REG_ALL,
-								data);
+				    data);
 }
 
 /**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
- * 					   parameters.
+ *		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_setup(ad5766_dev **device,
-					 ad5766_init_param init_param)
+		     ad5766_init_param init_param)
 {
 	ad5766_dev *dev;
 	int32_t ret;
@@ -298,14 +296,15 @@ int32_t ad5766_setup(ad5766_dev **device,
 	}
 
 	/* SPI */
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
 	dev->spi_dev.type = init_param.spi_type;
+	dev->spi_dev.id = init_param.spi_id;
+	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+	dev->spi_dev.mode = init_param.spi_mode;
+	dev->spi_dev.chip_select = init_param.spi_chip_select;
 	ret = spi_init(&dev->spi_dev);
 
 	/* GPIO */
-	dev->gpio_dev.device_id = init_param.gpio_device_id;
+	dev->gpio_dev.id = init_param.gpio_id;
 	dev->gpio_dev.type = init_param.gpio_type;
 	ret |= gpio_init(&dev->gpio_dev);
 
@@ -319,7 +318,7 @@ int32_t ad5766_setup(ad5766_dev **device,
 	/* Device Settings */
 	dev->daisy_chain_en = init_param.daisy_chain_en;
 	ret |= ad5766_spi_cmd_write(dev, AD5766_CMD_SDO_CNTRL,
-								dev->daisy_chain_en ? AD5766_SDO_EN : 0);
+				    dev->daisy_chain_en ? AD5766_SDO_EN : 0);
 
 	ret |= ad5766_set_clr_span(dev, init_param.clr, init_param.span);
 	ret |= ad5766_set_pwr_dac(dev, init_param.pwr_dac_setting);
