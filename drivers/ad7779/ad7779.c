@@ -50,7 +50,7 @@
 /*************************** Constants Definitions ****************************/
 /******************************************************************************/
 const uint8_t pin_mode_options[16][4] = {
-/*	GAIN_1	GAIN_2	GAIN_4	GAIN_8 */
+	/*GAIN_1, GAIN_2, GAIN_4, GAIN_8 */
 	{0x03,	0xFF,	0x07,	0xFF},	// DEC_RATE_128, HIGH_RES, EXT_REF
 	{0x0A,	0xFF,	0xFF,	0xFF},	// DEC_RATE_128, HIGH_RES, INT_REF
 	{0x0D,	0xFF,	0xFF,	0xFF},	// DEC_RATE_128, LOW_PWR, EXT_REF
@@ -66,7 +66,7 @@ const uint8_t pin_mode_options[16][4] = {
 	{0x00,	0xFF,	0xFF,	0xFF},	// DEC_RATE_1024, HIGH_RES, EXT_REF
 	{0xFF,	0xFF,	0xFF,	0xFF},	// DEC_RATE_1024, HIGH_RES, INT_REF
 	{0xFF,	0xFF,	0xFF,	0xFF},	// DEC_RATE_1024, LOW_PWR, EXT_REF
-	{0xFF,	0xFF,	0xFF,	0xFF},	// DEC_RATE_1024, LOW_PWR, INT_REF	
+	{0xFF,	0xFF,	0xFF,	0xFF},	// DEC_RATE_1024, LOW_PWR, INT_REF
 };
 
 /******************************************************************************/
@@ -79,7 +79,7 @@ const uint8_t pin_mode_options[16][4] = {
  * @return CRC8 checksum.
  */
 uint8_t ad7779_compute_crc8(uint8_t *data,
-							uint8_t data_size)
+			    uint8_t data_size)
 {
 	uint8_t i;
 	uint8_t crc = 0;
@@ -107,8 +107,8 @@ uint8_t ad7779_compute_crc8(uint8_t *data,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
-								uint8_t reg_addr,
-								uint8_t *reg_data)
+				uint8_t reg_addr,
+				uint8_t *reg_data)
 {
 	uint8_t buf[3];
 	uint8_t buf_size = 2;
@@ -143,8 +143,8 @@ int32_t ad7779_spi_int_reg_read(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
-								 uint8_t reg_addr,
-								 uint8_t reg_data)
+				 uint8_t reg_addr,
+				 uint8_t reg_data)
 {
 	uint8_t buf[3];
 	uint8_t buf_size = 2;
@@ -171,9 +171,9 @@ int32_t ad7779_spi_int_reg_write(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
-									 uint8_t reg_addr,
-									 uint8_t mask,
-									 uint8_t *data)
+				     uint8_t reg_addr,
+				     uint8_t mask,
+				     uint8_t *data)
 {
 	uint8_t reg_data;
 	int32_t ret;
@@ -193,9 +193,9 @@ int32_t ad7779_spi_int_reg_read_mask(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
-									  uint8_t reg_addr,
-									  uint8_t mask,
-									  uint8_t data)
+				      uint8_t reg_addr,
+				      uint8_t mask,
+				      uint8_t data)
 {
 	uint8_t reg_data;
 	int32_t ret;
@@ -212,35 +212,35 @@ int32_t ad7779_spi_int_reg_write_mask(ad7779_dev *dev,
  * SPI SAR conversion code read.
  * @param dev - The device structure.
  * @param mux_next_conv - The SAR mux input configuration for the next
- *						  conversion.
- * 						  Accepted values: AD7779_AUXAINP_AUXAINN
- *										   AD7779_DVBE_AVSSX
- *										   AD7779_REF1P_REF1N
- *										   AD7779_REF2P_REF2N
- *										   AD7779_REF_OUT_AVSSX
- *										   AD7779_VCM_AVSSX
- *										   AD7779_AREG1CAP_AVSSX_ATT
- *										   AD7779_AREG2CAP_AVSSX_ATT
- *										   AD7779_DREGCAP_DGND_ATT
- *										   AD7779_AVDD1A_AVSSX_ATT
- *										   AD7779_AVDD1B_AVSSX_ATT
- *										   AD7779_AVDD2A_AVSSX_ATT
- *										   AD7779_AVDD2B_AVSSX_ATT
- *										   AD7779_IOVDD_DGND_ATT
- *										   AD7779_AVDD4_AVSSX
- *										   AD7779_DGND_AVSS1A_ATT
- *										   AD7779_DGND_AVSS1B_ATT
- *										   AD7779_DGND_AVSSX_ATT
- *										   AD7779_AVDD4_AVSSX_ATT
- *										   AD7779_REF1P_AVSSX
- *										   AD7779_REF2P_AVSSX
- *										   AD7779_AVSSX_AVDD4_ATT
+ *			  conversion.
+ *			  Accepted values: AD7779_AUXAINP_AUXAINN
+ *					   AD7779_DVBE_AVSSX
+ *					   AD7779_REF1P_REF1N
+ *					   AD7779_REF2P_REF2N
+ *					   AD7779_REF_OUT_AVSSX
+ *					   AD7779_VCM_AVSSX
+ *					   AD7779_AREG1CAP_AVSSX_ATT
+ *					   AD7779_AREG2CAP_AVSSX_ATT
+ *					   AD7779_DREGCAP_DGND_ATT
+ *					   AD7779_AVDD1A_AVSSX_ATT
+ *					   AD7779_AVDD1B_AVSSX_ATT
+ *					   AD7779_AVDD2A_AVSSX_ATT
+ *					   AD7779_AVDD2B_AVSSX_ATT
+ *					   AD7779_IOVDD_DGND_ATT
+ *					   AD7779_AVDD4_AVSSX
+ *					   AD7779_DGND_AVSS1A_ATT
+ *					   AD7779_DGND_AVSS1B_ATT
+ *					   AD7779_DGND_AVSSX_ATT
+ *					   AD7779_AVDD4_AVSSX_ATT
+ *					   AD7779_REF1P_AVSSX
+ *					   AD7779_REF2P_AVSSX
+ *					   AD7779_AVSSX_AVDD4_ATT
  * @param sar_code - SAR conversion code.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
-								 ad7779_sar_mux mux_next_conv,
-								 uint16_t *sar_code)
+				 ad7779_sar_mux mux_next_conv,
+				 uint16_t *sar_code)
 {
 	uint8_t buf[3];
 	uint8_t buf_size = 2;
@@ -255,7 +255,7 @@ int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
 	}
 	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
 	dev->cached_reg_val[AD7779_REG_GLOBAL_MUX_CONFIG] =
-									AD7779_GLOBAL_MUX_CTRL(mux_next_conv);
+		AD7779_GLOBAL_MUX_CTRL(mux_next_conv);
 	buf[0] = buf[0] & 0x0F;
 	*sar_code = (buf[0] << 8) | buf[1];
 	if (dev->spi_crc_en == AD7779_ENABLE) {
@@ -273,13 +273,13 @@ int32_t ad7779_spi_sar_read_code(ad7779_dev *dev,
  * Set SPI operation mode.
  * @param dev - The device structure.
  * @param mode - The SPI operation mode.
- *				 Accepted values: AD7779_INT_REG
- *								  AD7779_SD_CONV
- *								  AD7779_SAR_CONV
+ *		 Accepted values: AD7779_INT_REG
+ *				  AD7779_SD_CONV
+ *				  AD7779_SAR_CONV
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
-							   ad7779_spi_op_mode mode)
+			       ad7779_spi_op_mode mode)
 {
 	int32_t ret;
 	uint8_t cfg_2;
@@ -299,13 +299,13 @@ int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
 		cfg_3 = 0;
 	}
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_GENERAL_USER_CONFIG_2,
-										AD7779_SAR_DIAG_MODE_EN,
-										cfg_2);
+					    AD7779_REG_GENERAL_USER_CONFIG_2,
+					    AD7779_SAR_DIAG_MODE_EN,
+					    cfg_2);
 	ret |= ad7779_spi_int_reg_write_mask(dev,
-										 AD7779_REG_GENERAL_USER_CONFIG_3,
-										 AD7779_SPI_SLAVE_MODE_EN,
-										 cfg_3);
+					     AD7779_REG_GENERAL_USER_CONFIG_3,
+					     AD7779_SPI_SLAVE_MODE_EN,
+					     cfg_3);
 	dev->spi_op_mode = mode;
 
 	return ret;
@@ -318,7 +318,7 @@ int32_t ad7779_set_spi_op_mode(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_spi_op_mode(ad7779_dev *dev,
-							   ad7779_spi_op_mode *mode)
+			       ad7779_spi_op_mode *mode)
 {
 	*mode = dev->spi_op_mode;
 
@@ -370,27 +370,26 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 			mode = pin_mode_options[option_index + 0][dev->gain[AD7779_CH4]];
 		else
 			mode = pin_mode_options[option_index + 1][dev->gain[AD7779_CH4]];
+	else if (dev->ref_type == AD7779_EXT_REF)
+		mode = pin_mode_options[option_index + 2][dev->gain[AD7779_CH4]];
 	else
-		if (dev->ref_type == AD7779_EXT_REF)
-			mode = pin_mode_options[option_index + 2][dev->gain[AD7779_CH4]];
-		else
-			mode = pin_mode_options[option_index + 3][dev->gain[AD7779_CH4]];
+		mode = pin_mode_options[option_index + 3][dev->gain[AD7779_CH4]];
 
 	if (mode == 0xFF)
-	  goto error;
+		goto error;
 
 	ret = gpio_set_value(&dev->gpio_dev,
-					dev->gpio_mode0,
-					((mode & 0x01) >> 0));
+			     dev->gpio_mode0,
+			     ((mode & 0x01) >> 0));
 	ret |= gpio_set_value(&dev->gpio_dev,
-					dev->gpio_mode1,
-					((mode & 0x02) >> 1));
+			      dev->gpio_mode1,
+			      ((mode & 0x02) >> 1));
 	ret |= gpio_set_value(&dev->gpio_dev,
-					dev->gpio_mode2,
-					((mode & 0x04) >> 2));
+			      dev->gpio_mode2,
+			      ((mode & 0x04) >> 2));
 	ret |= gpio_set_value(&dev->gpio_dev,
-					dev->gpio_mode3,
-					((mode & 0x08) >> 3));
+			      dev->gpio_mode3,
+			      ((mode & 0x08) >> 3));
 
 	/* All the pins that define the AD7779 configuration mode are re-evaluated
 	 * every time SYNC_IN pin is pulsed. */
@@ -402,7 +401,7 @@ int32_t ad7779_do_update_mode_pins(ad7779_dev *dev)
 
 error:
 	printf("%s: This setting can't be set in PIN control mode.\n",
-		   __func__);
+	       __func__);
 	return FAILURE;
 }
 
@@ -410,29 +409,29 @@ error:
  * Set the state (enable, disable) of the channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param state - The channel state.
- * 				  Accepted values: AD7779_ENABLE
- * 								   AD7779_DISABLE
+ *		  Accepted values: AD7779_ENABLE
+ *				   AD7779_DISABLE
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_state(ad7779_dev *dev,
-						 ad7779_ch ch,
-						 ad7779_state state)
+			 ad7779_ch ch,
+			 ad7779_state state)
 {
 	int32_t ret;
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_CH_DISABLE,
-										AD7779_CH_DISABLE(0x1),
-										AD7779_CH_DISABLE(state));
+					    AD7779_REG_CH_DISABLE,
+					    AD7779_CH_DISABLE(0x1),
+					    AD7779_CH_DISABLE(state));
 	dev->state[ch] = state;
 
 	return ret;
@@ -442,20 +441,20 @@ int32_t ad7779_set_state(ad7779_dev *dev,
  * Get the state (enable, disable) of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param state - The channel state.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_state(ad7779_dev *dev,
-						 ad7779_ch ch,
-						 ad7779_state *state)
+			 ad7779_ch ch,
+			 ad7779_state *state)
 {
 	*state = dev->state[ch];
 
@@ -466,24 +465,24 @@ int32_t ad7779_get_state(ad7779_dev *dev,
  * Set the gain of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param gain - The gain value.
- * 				 Accepted values: AD7779_GAIN_1
- * 								  AD7779_GAIN_2
- * 								  AD7779_GAIN_4
- * 								  AD7779_GAIN_8
+ *		 Accepted values: AD7779_GAIN_1
+ *				  AD7779_GAIN_2
+ *				  AD7779_GAIN_4
+ *				  AD7779_GAIN_8
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_gain(ad7779_dev *dev,
-						ad7779_ch ch,
-						ad7779_gain gain)
+			ad7779_ch ch,
+			ad7779_gain gain)
 {
 	int32_t ret;
 
@@ -503,9 +502,9 @@ int32_t ad7779_set_gain(ad7779_dev *dev,
 	} else {
 		dev->gain[ch] = gain;
 		ret = ad7779_spi_int_reg_write_mask(dev,
-											AD7779_REG_CH_CONFIG(ch),
-											AD7779_CH_GAIN(0x3),
-											AD7779_CH_GAIN(gain));
+						    AD7779_REG_CH_CONFIG(ch),
+						    AD7779_CH_GAIN(0x3),
+						    AD7779_CH_GAIN(gain));
 	}
 
 	return ret;
@@ -515,20 +514,20 @@ int32_t ad7779_set_gain(ad7779_dev *dev,
  * Get the gain of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param gain - The gain value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_gain(ad7779_dev *dev,
-						ad7779_ch ch,
-						ad7779_gain *gain)
+			ad7779_ch ch,
+			ad7779_gain *gain)
 {
 	*gain = dev->gain[ch];
 
@@ -543,8 +542,8 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dec_rate(ad7779_dev *dev,
-							uint16_t int_val,
-							uint16_t dec_val)
+			    uint16_t int_val,
+			    uint16_t dec_val)
 {
 	int32_t ret;
 	uint8_t msb;
@@ -562,7 +561,7 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 			break;
 		default:
 			printf("%s: This setting can't be set in PIN control mode.\n",
-				   __func__);
+			       __func__);
 			return FAILURE;
 		}
 		dev->dec_rate_int = int_val;
@@ -572,20 +571,20 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 		msb = (int_val & 0x0F00) >> 8;
 		lsb = (int_val & 0x00FF) >> 0;
 		ret = ad7779_spi_int_reg_write(dev,
-									   AD7779_REG_SRC_N_MSB,
-									   msb);
+					       AD7779_REG_SRC_N_MSB,
+					       msb);
 		ret |= ad7779_spi_int_reg_write(dev,
-										AD7779_REG_SRC_N_LSB,
-										lsb);
+						AD7779_REG_SRC_N_LSB,
+						lsb);
 		dec_val = (dec_val * 65536) / 1000;
 		msb = (dec_val & 0xFF00) >> 8;
 		lsb = (dec_val & 0x00FF) >> 0;
 		ret |= ad7779_spi_int_reg_write(dev,
-										AD7779_REG_SRC_IF_MSB,
-										msb);
+						AD7779_REG_SRC_IF_MSB,
+						msb);
 		ret |= ad7779_spi_int_reg_write(dev,
-										AD7779_REG_SRC_IF_LSB,
-										lsb);
+						AD7779_REG_SRC_IF_LSB,
+						lsb);
 		dev->dec_rate_int = int_val;
 		dev->dec_rate_int = dec_val;
 	}
@@ -601,8 +600,8 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dec_rate(ad7779_dev *dev,
-							uint16_t *int_val,
-							uint16_t *dec_val)
+			    uint16_t *int_val,
+			    uint16_t *dec_val)
 {
 	*int_val = dev->dec_rate_int;
 	*dec_val = dev->dec_rate_int;
@@ -614,19 +613,19 @@ int32_t ad7779_get_dec_rate(ad7779_dev *dev,
  * Set the power mode.
  * @param dev - The device structure.
  * @param pwr_mode - The power mode.
- * 					 Accepted values: AD7779_HIGH_RES
- *									  AD7779_LOW_PWR
+ *		     Accepted values: AD7779_HIGH_RES
+ *				      AD7779_LOW_PWR
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_power_mode(ad7779_dev *dev,
-							  ad7779_pwr_mode pwr_mode)
+			      ad7779_pwr_mode pwr_mode)
 {
 	int32_t ret;
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_GENERAL_USER_CONFIG_1,
-										AD7779_MOD_POWERMODE,
-										pwr_mode ? AD7779_MOD_POWERMODE : 0);
+					    AD7779_REG_GENERAL_USER_CONFIG_1,
+					    AD7779_MOD_POWERMODE,
+					    pwr_mode ? AD7779_MOD_POWERMODE : 0);
 	dev->pwr_mode = pwr_mode;
 
 	return ret;
@@ -639,7 +638,7 @@ int32_t ad7779_set_power_mode(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_power_mode(ad7779_dev *dev,
-							  ad7779_pwr_mode *pwr_mode)
+			      ad7779_pwr_mode *pwr_mode)
 {
 	*pwr_mode = dev->pwr_mode;
 
@@ -650,19 +649,19 @@ int32_t ad7779_get_power_mode(ad7779_dev *dev,
  * Set the reference type.
  * @param dev - The device structure.
  * @param pwr_mode - The reference type.
- * 					 Accepted values: AD7779_EXT_REF
- *									  AD7779_INT_REF
+ *		     Accepted values: AD7779_EXT_REF
+ *				      AD7779_INT_REF
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_reference_type(ad7779_dev *dev,
-								  ad7779_ref_type ref_type)
+				  ad7779_ref_type ref_type)
 {
 	int32_t ret;
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_GENERAL_USER_CONFIG_1,
-										AD7779_PDB_REFOUT_BUF,
-										ref_type ? AD7779_PDB_REFOUT_BUF : 0);
+					    AD7779_REG_GENERAL_USER_CONFIG_1,
+					    AD7779_PDB_REFOUT_BUF,
+					    ref_type ? AD7779_PDB_REFOUT_BUF : 0);
 	dev->ref_type = ref_type;
 
 	return ret;
@@ -675,7 +674,7 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_reference_type(ad7779_dev *dev,
-								  ad7779_ref_type *ref_type)
+				  ad7779_ref_type *ref_type)
 {
 	*ref_type = dev->ref_type;
 
@@ -686,36 +685,36 @@ int32_t ad7779_get_reference_type(ad7779_dev *dev,
  * Set the DCLK divider.
  * @param dev - The device structure.
  * @param div - The DCLK divider.
- *				Accepted values: AD7779_DCLK_DIV_1
- *								 AD7779_DCLK_DIV_2
- *								 AD7779_DCLK_DIV_4
- *								 AD7779_DCLK_DIV_8
- *								 AD7779_DCLK_DIV_16
- *								 AD7779_DCLK_DIV_32
- *								 AD7779_DCLK_DIV_64
- *								 AD7779_DCLK_DIV_128
+ *		Accepted values: AD7779_DCLK_DIV_1
+ *				 AD7779_DCLK_DIV_2
+ *				 AD7779_DCLK_DIV_4
+ *				 AD7779_DCLK_DIV_8
+ *				 AD7779_DCLK_DIV_16
+ *				 AD7779_DCLK_DIV_32
+ *				 AD7779_DCLK_DIV_64
+ *				 AD7779_DCLK_DIV_128
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dclk_div(ad7779_dev *dev,
-							ad7768_dclk_div div)
+			    ad7768_dclk_div div)
 {
 	int32_t ret;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		ret = gpio_set_value(&dev->gpio_dev,
-						dev->gpio_dclk0,
-						((div & 0x01) >> 0));
+				     dev->gpio_dclk0,
+				     ((div & 0x01) >> 0));
 		ret |= gpio_set_value(&dev->gpio_dev,
-						dev->gpio_dclk1,
-						((div & 0x02) >> 1));
+				      dev->gpio_dclk1,
+				      ((div & 0x02) >> 1));
 		ret |= gpio_set_value(&dev->gpio_dev,
-						dev->gpio_dclk2,
-						((div & 0x04) >> 2));
+				      dev->gpio_dclk2,
+				      ((div & 0x04) >> 2));
 	} else {
 		ret = ad7779_spi_int_reg_write_mask(dev,
-											AD7779_REG_CH_DISABLE,
-											AD7779_DCLK_CLK_DIV(0x3),
-											AD7779_DCLK_CLK_DIV(div));
+						    AD7779_REG_CH_DISABLE,
+						    AD7779_DCLK_CLK_DIV(0x3),
+						    AD7779_DCLK_CLK_DIV(div));
 	}
 	dev->dclk_div = div;
 
@@ -729,7 +728,7 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dclk_div(ad7779_dev *dev,
-							ad7768_dclk_div *div)
+			    ad7768_dclk_div *div)
 {
 	*div = dev->dclk_div;
 
@@ -740,32 +739,32 @@ int32_t ad7779_get_dclk_div(ad7779_dev *dev,
  * Set the synchronization offset of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param sync_offset - The synchronization offset value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_sync_offset(ad7779_dev *dev,
-							   ad7779_ch ch,
-							   uint8_t sync_offset)
+			       ad7779_ch ch,
+			       uint8_t sync_offset)
 {
 	int32_t ret;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
 	ret = ad7779_spi_int_reg_write(dev,
-								   AD7779_REG_CH_SYNC_OFFSET(ch),
-								   sync_offset);
+				       AD7779_REG_CH_SYNC_OFFSET(ch),
+				       sync_offset);
 	dev->sync_offset[ch] = sync_offset;
 
 	return ret;
@@ -775,24 +774,24 @@ int32_t ad7779_set_sync_offset(ad7779_dev *dev,
  * Get the synchronization offset of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param sync_offset - The synchronization offset value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_sync_offset(ad7779_dev *dev,
-							   ad7779_ch ch,
-							   uint8_t *sync_offset)
+			       ad7779_ch ch,
+			       uint8_t *sync_offset)
 {
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -805,20 +804,20 @@ int32_t ad7779_get_sync_offset(ad7779_dev *dev,
  * Set the offset correction of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param offset - The offset value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_offset_corr(ad7779_dev *dev,
-							   ad7779_ch ch,
-							   uint32_t offset)
+			       ad7779_ch ch,
+			       uint32_t offset)
 {
 	int32_t ret;
 	uint8_t upper_byte;
@@ -827,7 +826,7 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -835,14 +834,14 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
 	mid_byte = (offset & 0x00FF00) >> 8;
 	lower_byte = (offset & 0x0000FF) >> 0;
 	ret = ad7779_spi_int_reg_write(dev,
-								   AD7779_REG_CH_OFFSET_UPPER_BYTE(ch),
-								   upper_byte);
+				       AD7779_REG_CH_OFFSET_UPPER_BYTE(ch),
+				       upper_byte);
 	ret |= ad7779_spi_int_reg_write(dev,
-									AD7779_REG_CH_OFFSET_MID_BYTE(ch),
-									mid_byte);
+					AD7779_REG_CH_OFFSET_MID_BYTE(ch),
+					mid_byte);
 	ret |= ad7779_spi_int_reg_write(dev,
-									AD7779_REG_CH_OFFSET_LOWER_BYTE(ch),
-									lower_byte);
+					AD7779_REG_CH_OFFSET_LOWER_BYTE(ch),
+					lower_byte);
 	dev->offset_corr[ch] = offset;
 
 	return ret;
@@ -852,24 +851,24 @@ int32_t ad7779_set_offset_corr(ad7779_dev *dev,
  * Get the offset correction of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param offset - The offset value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_offset_corr(ad7779_dev *dev,
-							   ad7779_ch ch,
-							   uint32_t *offset)
+			       ad7779_ch ch,
+			       uint32_t *offset)
 {
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -882,20 +881,20 @@ int32_t ad7779_get_offset_corr(ad7779_dev *dev,
  * Set the gain correction of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param gain - The gain value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_gain_corr(ad7779_dev *dev,
-							 ad7779_ch ch,
-							 uint32_t gain)
+			     ad7779_ch ch,
+			     uint32_t gain)
 {
 	int32_t ret;
 	uint8_t upper_byte;
@@ -904,7 +903,7 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -913,14 +912,14 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
 	mid_byte = (gain & 0x00ff00) >> 8;
 	lower_byte = (gain & 0x0000ff) >> 0;
 	ret = ad7779_spi_int_reg_write(dev,
-								   AD7779_REG_CH_GAIN_UPPER_BYTE(ch),
-								   upper_byte);
+				       AD7779_REG_CH_GAIN_UPPER_BYTE(ch),
+				       upper_byte);
 	ret |= ad7779_spi_int_reg_write(dev,
-									AD7779_REG_CH_GAIN_MID_BYTE(ch),
-									mid_byte);
+					AD7779_REG_CH_GAIN_MID_BYTE(ch),
+					mid_byte);
 	ret |= ad7779_spi_int_reg_write(dev,
-									AD7779_REG_CH_GAIN_LOWER_BYTE(ch),
-									lower_byte);
+					AD7779_REG_CH_GAIN_LOWER_BYTE(ch),
+					lower_byte);
 	dev->gain_corr[ch] = gain;
 
 	return ret;
@@ -930,24 +929,24 @@ int32_t ad7779_set_gain_corr(ad7779_dev *dev,
  * Get the gain correction of the selected channel.
  * @param dev - The device structure.
  * @param ch - The channel number.
- * 			   Accepted values: AD7779_CH0
- * 			   					AD7779_CH1
- * 			   					AD7779_CH2
- * 			   					AD7779_CH3
- * 			   					AD7779_CH4
- * 			   					AD7779_CH5
- * 			   					AD7779_CH6
- * 			   					AD7779_CH7
+ *	       Accepted values: AD7779_CH0
+ *				AD7779_CH1
+ *				AD7779_CH2
+ *				AD7779_CH3
+ *				AD7779_CH4
+ *				AD7779_CH5
+ *				AD7779_CH6
+ *				AD7779_CH7
  * @param gain - The gain value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_gain_corr(ad7779_dev *dev,
-							 ad7779_ch ch,
-							 uint32_t *gain)
+			     ad7779_ch ch,
+			     uint32_t *gain)
 {
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -960,17 +959,17 @@ int32_t ad7779_get_gain_corr(ad7779_dev *dev,
  * Set the reference buffer operation mode of the selected pin.
  * @param dev - The device structure.
  * @param refx_pin - The selected pin.
- * 					 Accepted values: AD7779_REFX_P
- * 									  AD7779_REFX_N
+ *		     Accepted values: AD7779_REFX_P
+ *				      AD7779_REFX_N
  * @param mode - The reference buffer operation mode.
- * 				 Accepted values: AD7779_REF_BUF_ENABLED
- * 								  AD7779_REF_BUF_PRECHARGED
- * 								  AD7779_REF_BUF_DISABLED
+ *		 Accepted values: AD7779_REF_BUF_ENABLED
+ *				  AD7779_REF_BUF_PRECHARGED
+ *				  AD7779_REF_BUF_DISABLED
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
-								   ad7779_refx_pin refx_pin,
-								   ad7779_ref_buf_op_mode mode)
+				   ad7779_refx_pin refx_pin,
+				   ad7779_ref_buf_op_mode mode)
 {
 	int32_t ret;
 	uint8_t config_1;
@@ -978,7 +977,7 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -997,13 +996,13 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 			config_2 = 0;
 		}
 		ret = ad7779_spi_int_reg_write_mask(dev,
-											AD7779_REG_BUFFER_CONFIG_1,
-											AD7779_REF_BUF_POS_EN,
-											config_1);
+						    AD7779_REG_BUFFER_CONFIG_1,
+						    AD7779_REF_BUF_POS_EN,
+						    config_1);
 		ret |= ad7779_spi_int_reg_write_mask(dev,
-											 AD7779_REG_BUFFER_CONFIG_2,
-											 AD7779_REFBUFP_PREQ,
-											 config_2);
+						     AD7779_REG_BUFFER_CONFIG_2,
+						     AD7779_REFBUFP_PREQ,
+						     config_2);
 	} else {
 		switch (mode) {
 		case AD7779_REF_BUF_ENABLED:
@@ -1019,13 +1018,13 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
 			config_2 = 0;
 		}
 		ret = ad7779_spi_int_reg_write_mask(dev,
-											AD7779_REG_BUFFER_CONFIG_1,
-											AD7779_REF_BUF_NEG_EN,
-											config_1);
+						    AD7779_REG_BUFFER_CONFIG_1,
+						    AD7779_REF_BUF_NEG_EN,
+						    config_1);
 		ret |= ad7779_spi_int_reg_write_mask(dev,
-											 AD7779_REG_BUFFER_CONFIG_2,
-											 AD7779_REFBUFN_PREQ,
-											 config_2);
+						     AD7779_REG_BUFFER_CONFIG_2,
+						     AD7779_REFBUFN_PREQ,
+						     config_2);
 	}
 	dev->ref_buf_op_mode[refx_pin] = mode;
 
@@ -1036,21 +1035,21 @@ int32_t ad7779_set_ref_buf_op_mode(ad7779_dev *dev,
  * Get the reference buffer operation mode of the selected pin.
  * @param dev - The device structure.
  * @param refx_pin - The selected pin.
- * 					 Accepted values: AD7779_REFX_P
- * 									  AD7779_REFX_N
+ *		     Accepted values: AD7779_REFX_P
+ *				      AD7779_REFX_N
  * @param mode - The reference buffer operation mode.
- * 				 Accepted values: AD7779_REF_BUF_ENABLED
- * 								  AD7779_REF_BUF_PRECHARGED
- * 								  AD7779_REF_BUF_DISABLED
+ *		 Accepted values: AD7779_REF_BUF_ENABLED
+ *				  AD7779_REF_BUF_PRECHARGED
+ *				  AD7779_REF_BUF_DISABLED
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
-								   ad7779_refx_pin refx_pin,
-								   ad7779_ref_buf_op_mode *mode)
+				   ad7779_refx_pin refx_pin,
+				   ad7779_ref_buf_op_mode *mode)
 {
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -1063,47 +1062,47 @@ int32_t ad7779_get_ref_buf_op_mode(ad7779_dev *dev,
  * Set the SAR ADC configuration.
  * @param dev - The device structure.
  * @param state - The SAR ADC state.
- * 				  Accepted values: AD7779_ENABLE
- * 								   AD7779_DISABLE
+ *		  Accepted values: AD7779_ENABLE
+ *				   AD7779_DISABLE
  * @param mux - The SAR mux input configuration.
- * 				Accepted values: AD7779_AUXAINP_AUXAINN
- *								 AD7779_DVBE_AVSSX
- *								 AD7779_REF1P_REF1N
- *								 AD7779_REF2P_REF2N
- *								 AD7779_REF_OUT_AVSSX
- *								 AD7779_VCM_AVSSX
- *								 AD7779_AREG1CAP_AVSSX_ATT
- *								 AD7779_AREG2CAP_AVSSX_ATT
- *								 AD7779_DREGCAP_DGND_ATT
- *								 AD7779_AVDD1A_AVSSX_ATT
- *								 AD7779_AVDD1B_AVSSX_ATT
- *								 AD7779_AVDD2A_AVSSX_ATT
- *								 AD7779_AVDD2B_AVSSX_ATT
- *								 AD7779_IOVDD_DGND_ATT
- *								 AD7779_AVDD4_AVSSX
- *								 AD7779_DGND_AVSS1A_ATT
- *								 AD7779_DGND_AVSS1B_ATT
- *								 AD7779_DGND_AVSSX_ATT
- *								 AD7779_AVDD4_AVSSX_ATT
- *								 AD7779_REF1P_AVSSX
- *								 AD7779_REF2P_AVSSX
- *								 AD7779_AVSSX_AVDD4_ATT
+ *		Accepted values: AD7779_AUXAINP_AUXAINN
+ *				 AD7779_DVBE_AVSSX
+ *				 AD7779_REF1P_REF1N
+ *				 AD7779_REF2P_REF2N
+ *				 AD7779_REF_OUT_AVSSX
+ *				 AD7779_VCM_AVSSX
+ *				 AD7779_AREG1CAP_AVSSX_ATT
+ *				 AD7779_AREG2CAP_AVSSX_ATT
+ *				 AD7779_DREGCAP_DGND_ATT
+ *				 AD7779_AVDD1A_AVSSX_ATT
+ *				 AD7779_AVDD1B_AVSSX_ATT
+ *				 AD7779_AVDD2A_AVSSX_ATT
+ *				 AD7779_AVDD2B_AVSSX_ATT
+ *				 AD7779_IOVDD_DGND_ATT
+ *				 AD7779_AVDD4_AVSSX
+ *				 AD7779_DGND_AVSS1A_ATT
+ *				 AD7779_DGND_AVSS1B_ATT
+ *				 AD7779_DGND_AVSSX_ATT
+ *				 AD7779_AVDD4_AVSSX_ATT
+ *				 AD7779_REF1P_AVSSX
+ *				 AD7779_REF2P_AVSSX
+ *				 AD7779_AVSSX_AVDD4_ATT
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
-						   ad7779_state state,
-						   ad7779_sar_mux mux)
+			   ad7779_state state,
+			   ad7779_sar_mux mux)
 {
 	int32_t ret;
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_GENERAL_USER_CONFIG_1,
-										AD7779_PDB_SAR,
-										(state == AD7779_ENABLE) ?
-												AD7779_PDB_SAR : 0);
+					    AD7779_REG_GENERAL_USER_CONFIG_1,
+					    AD7779_PDB_SAR,
+					    (state == AD7779_ENABLE) ?
+					    AD7779_PDB_SAR : 0);
 	ret |= ad7779_spi_int_reg_write(dev,
-									AD7779_REG_GLOBAL_MUX_CONFIG,
-									AD7779_GLOBAL_MUX_CTRL(mux));
+					AD7779_REG_GLOBAL_MUX_CONFIG,
+					AD7779_GLOBAL_MUX_CTRL(mux));
 	dev->sar_state = state;
 	dev->sar_mux = mux;
 
@@ -1118,8 +1117,8 @@ int32_t ad7779_set_sar_cfg(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
-						   ad7779_state *state,
-						   ad7779_sar_mux *mux)
+			   ad7779_state *state,
+			   ad7779_sar_mux *mux)
 {
 	*state = dev->sar_state;
 	*mux = dev->sar_mux;
@@ -1131,34 +1130,34 @@ int32_t ad7779_get_sar_cfg(ad7779_dev *dev,
  * Do a single SAR conversion.
  * @param dev - The device structure.
  * @param mux - The SAR mux input configuration.
- * 				Accepted values: AD7779_AUXAINP_AUXAINN
- *								 AD7779_DVBE_AVSSX
- *								 AD7779_REF1P_REF1N
- *								 AD7779_REF2P_REF2N
- *								 AD7779_REF_OUT_AVSSX
- *								 AD7779_VCM_AVSSX
- *								 AD7779_AREG1CAP_AVSSX_ATT
- *								 AD7779_AREG2CAP_AVSSX_ATT
- *								 AD7779_DREGCAP_DGND_ATT
- *								 AD7779_AVDD1A_AVSSX_ATT
- *								 AD7779_AVDD1B_AVSSX_ATT
- *								 AD7779_AVDD2A_AVSSX_ATT
- *								 AD7779_AVDD2B_AVSSX_ATT
- *								 AD7779_IOVDD_DGND_ATT
- *								 AD7779_AVDD4_AVSSX
- *								 AD7779_DGND_AVSS1A_ATT
- *								 AD7779_DGND_AVSS1B_ATT
- *								 AD7779_DGND_AVSSX_ATT
- *								 AD7779_AVDD4_AVSSX_ATT
- *								 AD7779_REF1P_AVSSX
- *								 AD7779_REF2P_AVSSX
- *								 AD7779_AVSSX_AVDD4_ATT
+ *		Accepted values: AD7779_AUXAINP_AUXAINN
+ *				 AD7779_DVBE_AVSSX
+ *				 AD7779_REF1P_REF1N
+ *				 AD7779_REF2P_REF2N
+ *				 AD7779_REF_OUT_AVSSX
+ *				 AD7779_VCM_AVSSX
+ *				 AD7779_AREG1CAP_AVSSX_ATT
+ *				 AD7779_AREG2CAP_AVSSX_ATT
+ *				 AD7779_DREGCAP_DGND_ATT
+ *				 AD7779_AVDD1A_AVSSX_ATT
+ *				 AD7779_AVDD1B_AVSSX_ATT
+ *				 AD7779_AVDD2A_AVSSX_ATT
+ *				 AD7779_AVDD2B_AVSSX_ATT
+ *				 AD7779_IOVDD_DGND_ATT
+ *				 AD7779_AVDD4_AVSSX
+ *				 AD7779_DGND_AVSS1A_ATT
+ *				 AD7779_DGND_AVSS1B_ATT
+ *				 AD7779_DGND_AVSSX_ATT
+ *				 AD7779_AVDD4_AVSSX_ATT
+ *				 AD7779_REF1P_AVSSX
+ *				 AD7779_REF2P_AVSSX
+ *				 AD7779_AVSSX_AVDD4_ATT
  * @param sar_code - SAR conversion code.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_do_single_sar_conv(ad7779_dev *dev,
-								  ad7779_sar_mux mux,
-								  uint16_t *sar_code)
+				  ad7779_sar_mux mux,
+				  uint16_t *sar_code)
 {
 	ad7779_spi_op_mode restore_spi_op_mode;
 	ad7779_state restore_sar_state;
@@ -1200,26 +1199,26 @@ int32_t ad7779_do_spi_soft_reset(ad7779_dev *dev)
  * Set the state (enable, disable) of the SINC5 filter.
  * @param dev - The device structure.
  * @param state - The SINC5 filter state.
- * 				  Accepted values: AD7779_ENABLE
- * 								   AD7779_DISABLE
+ *		  Accepted values: AD7779_ENABLE
+ *				   AD7779_DISABLE
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
-									  ad7779_state state)
+				      ad7779_state state)
 {
 	int32_t ret;
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
-										AD7779_REG_GENERAL_USER_CONFIG_2,
-										AD7771_FILTER_MODE,
-										(state == AD7779_ENABLE) ?
-												AD7771_FILTER_MODE : 0);
+					    AD7779_REG_GENERAL_USER_CONFIG_2,
+					    AD7771_FILTER_MODE,
+					    (state == AD7779_ENABLE) ?
+					    AD7771_FILTER_MODE : 0);
 	dev->sinc5_state = state;
 
 	return ret;
@@ -1232,11 +1231,11 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
-									  ad7779_state *state)
+				      ad7779_state *state)
 {
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		printf("%s: This feature is not available in PIN control mode.\n",
-			   __func__);
+		       __func__);
 		return FAILURE;
 	}
 
@@ -1249,11 +1248,11 @@ int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
- * 					   parameters.
+ *		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_setup(ad7779_dev **device,
-					 ad7779_init_param init_param)
+		     ad7779_init_param init_param)
 {
 	ad7779_dev *dev;
 	uint8_t i;
@@ -1265,17 +1264,18 @@ int32_t ad7779_setup(ad7779_dev **device,
 	}
 
 	/* SPI */
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
 	dev->spi_dev.type = init_param.spi_type;
+	dev->spi_dev.id = init_param.spi_id;
+	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+	dev->spi_dev.mode = init_param.spi_mode;
+	dev->spi_dev.chip_select = init_param.spi_chip_select;
 	ret = spi_init(&dev->spi_dev);
 
-	dev->gpio_dev.device_id = init_param.gpio_device_id;
+	/* GPIO */
+	dev->gpio_dev.id = init_param.gpio_id;
 	dev->gpio_dev.type = init_param.gpio_type;
 	ret |= gpio_init(&dev->gpio_dev);
 
-	/* GPIO */
 	dev->gpio_reset = init_param.gpio_reset;
 	dev->gpio_mode0 = init_param.gpio_mode0;
 	dev->gpio_mode1 = init_param.gpio_mode1;
@@ -1289,7 +1289,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_reset, GPIO_OUT);
 	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_LOW);
-	mdelay(10);	// RESET Hold Time = min 2 × MCLK
+	mdelay(10);	// RESET Hold Time = min 2 x MCLK
 	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_HIGH);
 	mdelay(10);	// RESET Rising Edge to First DRDY = min 225 us
 	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_mode0, GPIO_OUT);
@@ -1312,14 +1312,14 @@ int32_t ad7779_setup(ad7779_dev **device,
 	dev->sar_mux = AD7779_AUXAINP_AUXAINN;
 
 	if ((dev->ctrl_mode == AD7779_SPI_CTRL) &&
-				(init_param.spi_crc_en == AD7779_ENABLE)) {
+	    (init_param.spi_crc_en == AD7779_ENABLE)) {
 		ret |= ad7779_spi_int_reg_read(dev,
-							AD7779_REG_GEN_ERR_REG_1_EN,
-							&dev->cached_reg_val[AD7779_REG_GEN_ERR_REG_1_EN]);
+					       AD7779_REG_GEN_ERR_REG_1_EN,
+					       &dev->cached_reg_val[AD7779_REG_GEN_ERR_REG_1_EN]);
 		ret |= ad7779_spi_int_reg_write_mask(dev,
-							AD7779_REG_GEN_ERR_REG_1_EN,
-							AD7779_SPI_CRC_TEST_EN,
-							AD7779_SPI_CRC_TEST_EN);
+						     AD7779_REG_GEN_ERR_REG_1_EN,
+						     AD7779_SPI_CRC_TEST_EN,
+						     AD7779_SPI_CRC_TEST_EN);
 		dev->spi_crc_en = AD7779_ENABLE;
 	}
 
@@ -1332,7 +1332,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 		if (dev->ctrl_mode == AD7779_SPI_CTRL)
 			ret |= ad7779_set_state(dev, (ad7779_ch)i, dev->state[i]);
 	}
- 
+
 	for (i = AD7779_CH0; i <= AD7779_CH7; i++) {
 		dev->gain[i] = init_param.gain[i];
 		if (dev->ctrl_mode == AD7779_SPI_CTRL)
@@ -1344,7 +1344,7 @@ int32_t ad7779_setup(ad7779_dev **device,
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
 		ret |= ad7779_set_dec_rate(dev, dev->dec_rate_int, dev->dec_rate_dec);
 
- 	dev->ref_type = init_param.ref_type;
+	dev->ref_type = init_param.ref_type;
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
 		ret |= ad7779_set_reference_type(dev, dev->ref_type);
 
@@ -1365,11 +1365,11 @@ int32_t ad7779_setup(ad7779_dev **device,
 		dev->gain_corr[i] = init_param.gain_corr[i];
 		if (dev->ctrl_mode == AD7779_SPI_CTRL) {
 			ret |= ad7779_set_sync_offset(dev, (ad7779_ch)i,
-								dev->sync_offset[i]);
+						      dev->sync_offset[i]);
 			ret |= ad7779_set_offset_corr(dev, (ad7779_ch)i,
-								dev->offset_corr[i]);
+						      dev->offset_corr[i]);
 			ret |= ad7779_set_gain_corr(dev, (ad7779_ch)i,
-								dev->gain_corr[i]);
+						    dev->gain_corr[i]);
 		}
 	}
 
