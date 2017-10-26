@@ -50,9 +50,6 @@
 #define ADXL345_SPI_COMM       0
 #define ADXL345_I2C_COMM       1
 
-/* SPI slave device ID */
-#define ADXL345_SLAVE_ID       1
-
 /* I2C address of the device */
 #define ADXL345_ADDRESS			0x1D
 
@@ -173,37 +170,77 @@
 #define ADXL345_ID              0xE5
 
 /* ADXL345 Full Resolution Scale Factor */
-#define ADXL345_SCALE_FACTOR    0.0039 
+#define ADXL345_SCALE_FACTOR    0.0039
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* I2C */
+	i2c_device	i2c_dev;
+	/* SPI */
+	spi_device	spi_dev;
+	/* Device Settings */
+	char		communicationType;
+	char		selectedRange;
+	char		fullResolutionSet;
+} adxl345_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_type	i2c_type;
+	uint32_t	i2c_id;
+	uint32_t	i2c_max_speed_hz;
+	uint8_t	i2c_slave_address;
+	/* SPI */
+	spi_type	spi_type;
+	uint32_t	spi_id;
+	uint32_t	spi_max_speed_hz;
+	spi_mode	spi_mode;
+	uint8_t		spi_chip_select;
+	/* Device Settings */
+	char		communicationType;
+	char		selectedRange;
+	char		fullResolutionSet;
+} adxl345_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Reads the value of a register. */
-unsigned char ADXL345_GetRegisterValue(unsigned char registerAddress);
+unsigned char ADXL345_GetRegisterValue(adxl345_dev *dev,
+				       unsigned char registerAddress);
 
 /*! Writes data into a register. */
-void ADXL345_SetRegisterValue(unsigned char registerAddress,
+void ADXL345_SetRegisterValue(adxl345_dev *dev,
+			      unsigned char registerAddress,
 			      unsigned char registerValue);
 
 /*! Init. the comm. peripheral and checks if the ADXL345 part is present. */
-char ADXL345_Init(char commProtocol);
+char ADXL345_Init(adxl345_dev **device,
+		  adxl345_init_param init_param);
 
 /*! Places the device into standby/measure mode. */
-void ADXL345_SetPowerMode(unsigned char pwrMode);
+void ADXL345_SetPowerMode(adxl345_dev *dev,
+			  unsigned char pwrMode);
 
 /*! Reads the raw output data of each axis. */
-void ADXL345_GetXyz(short* x,
+void ADXL345_GetXyz(adxl345_dev *dev,
+		    short* x,
 		    short* y,
 		    short* z);
 
 /*! Reads the raw output data of each axis and converts it to g. */
-void ADXL345_GetGxyz(float* x,
+void ADXL345_GetGxyz(adxl345_dev *dev,
+		     float* x,
 		     float* y,
 		     float* z);
 
 /*! Enables/disables the tap detection. */
-void ADXL345_SetTapDetection(unsigned char tapType,
+void ADXL345_SetTapDetection(adxl345_dev *dev,
+			     unsigned char tapType,
                              unsigned char tapAxes,
                              unsigned char tapDur,
                              unsigned char tapLatent,
@@ -212,14 +249,16 @@ void ADXL345_SetTapDetection(unsigned char tapType,
                              unsigned char tapInt);
 
 /*! Enables/disables the activity detection. */
-void ADXL345_SetActivityDetection(unsigned char actOnOff,
+void ADXL345_SetActivityDetection(adxl345_dev *dev,
+				  unsigned char actOnOff,
 				  unsigned char actAxes,
 				  unsigned char actAcDc,
 				  unsigned char actThresh,
 				  unsigned char actInt);
 
 /*! Enables/disables the inactivity detection. */
-void ADXL345_SetInactivityDetection(unsigned char inactOnOff,
+void ADXL345_SetInactivityDetection(adxl345_dev *dev,
+				    unsigned char inactOnOff,
 				    unsigned char inactAxes,
 				    unsigned char inactAcDc,
 				    unsigned char inactThresh,
@@ -227,17 +266,21 @@ void ADXL345_SetInactivityDetection(unsigned char inactOnOff,
 				    unsigned char inactInt);
 
 /*! Enables/disables the free-fall detection. */
-void ADXL345_SetFreeFallDetection(unsigned char ffOnOff,
+void ADXL345_SetFreeFallDetection(adxl345_dev *dev,
+				  unsigned char ffOnOff,
 				  unsigned char ffThresh,
 				  unsigned char ffTime,
 				  unsigned char ffInt);
 
 /*! Sets an offset value for each axis (Offset Calibration). */
-void ADXL345_SetOffset(unsigned char xOffset,
+void ADXL345_SetOffset(adxl345_dev *dev,
+		       unsigned char xOffset,
 		       unsigned char yOffset,
 		       unsigned char zOffset);
 
 /*! Selects the measurement range. */
-void ADXL345_SetRangeResolution(unsigned char gRange, unsigned char fullRes);
+void ADXL345_SetRangeResolution(adxl345_dev *dev,
+				unsigned char gRange,
+				unsigned char fullRes);
 
 #endif	/* __ADXL345_H__ */
