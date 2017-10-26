@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ADT7420.h
+ *   @file   adt7420.h
  *   @brief  Header file of ADT7420 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __ADT7420_H__
 #define __ADT7420_H__
@@ -47,73 +45,73 @@
 /******************************************************************************/
 
 /* ADT7420 address */
-#define ADT7420_A0_PIN(x)       (((x) & 0x1) << 0) // I2C Serial Bus Address Selection Pin
-#define ADT7420_A1_PIN(x)       (((x) & 0x1) << 1) // I2C Serial Bus Address Selection Pin
-#define ADT7420_ADDRESS(x,y)    (0x48 + ADT7420_A1_PIN(x) + ADT7420_A0_PIN(y))
+#define ADT7420_A0_PIN(x)	(((x) & 0x1) << 0) // I2C Serial Bus Address Selection Pin
+#define ADT7420_A1_PIN(x)	(((x) & 0x1) << 1) // I2C Serial Bus Address Selection Pin
+#define ADT7420_ADDRESS(x,y)	(0x48 + ADT7420_A1_PIN(x) + ADT7420_A0_PIN(y))
 
 /* ADT7420 registers */
-#define ADT7420_REG_TEMP_MSB    0x00 // Temperature value MSB
-#define ADT7420_REG_TEMP_LSB    0x01 // Temperature value LSB
-#define ADT7420_REG_STATUS      0x02 // Status
-#define ADT7420_REG_CONFIG      0x03 // Configuration
-#define ADT7420_REG_T_HIGH_MSB  0x04 // Temperature HIGH setpoint MSB
-#define ADT7420_REG_T_HIGH_LSB  0x05 // Temperature HIGH setpoint LSB
-#define ADT7420_REG_T_LOW_MSB   0x06 // Temperature LOW setpoint MSB
-#define ADT7420_REG_T_LOW_LSB   0x07 // Temperature LOW setpoint LSB
-#define ADT7420_REG_T_CRIT_MSB  0x08 // Temperature CRIT setpoint MSB
-#define ADT7420_REG_T_CRIT_LSB  0x09 // Temperature CRIT setpoint LSB
-#define ADT7420_REG_HIST        0x0A // Temperature HYST setpoint
-#define ADT7420_REG_ID          0x0B // ID
-#define ADT7420_REG_RESET       0x2F // Software reset
+#define ADT7420_REG_TEMP_MSB		0x00 // Temperature value MSB
+#define ADT7420_REG_TEMP_LSB		0x01 // Temperature value LSB
+#define ADT7420_REG_STATUS		0x02 // Status
+#define ADT7420_REG_CONFIG		0x03 // Configuration
+#define ADT7420_REG_T_HIGH_MSB		0x04 // Temperature HIGH setpoint MSB
+#define ADT7420_REG_T_HIGH_LSB		0x05 // Temperature HIGH setpoint LSB
+#define ADT7420_REG_T_LOW_MSB		0x06 // Temperature LOW setpoint MSB
+#define ADT7420_REG_T_LOW_LSB		0x07 // Temperature LOW setpoint LSB
+#define ADT7420_REG_T_CRIT_MSB		0x08 // Temperature CRIT setpoint MSB
+#define ADT7420_REG_T_CRIT_LSB		0x09 // Temperature CRIT setpoint LSB
+#define ADT7420_REG_HIST		0x0A // Temperature HYST setpoint
+#define ADT7420_REG_ID			0x0B // ID
+#define ADT7420_REG_RESET		0x2F // Software reset
 
 /* ADT7420_REG_STATUS definition */
-#define ADT7420_STATUS_T_LOW            (1 << 4)
-#define ADT7420_STATUS_T_HIGH           (1 << 5)
-#define ADT7420_STATUS_T_CRIT           (1 << 6)
-#define ADT7420_STATUS_RDY              (1 << 7)
+#define ADT7420_STATUS_T_LOW		(1 << 4)
+#define ADT7420_STATUS_T_HIGH		(1 << 5)
+#define ADT7420_STATUS_T_CRIT		(1 << 6)
+#define ADT7420_STATUS_RDY		(1 << 7)
 
 /* ADT7420_REG_CONFIG definition */
-#define ADT7420_CONFIG_FAULT_QUEUE(x)   (x & 0x3)
-#define ADT7420_CONFIG_CT_POL           (1 << 2)
-#define ADT7420_CONFIG_INT_POL          (1 << 3)
-#define ADT7420_CONFIG_INT_CT_MODE      (1 << 4)
-#define ADT7420_CONFIG_OP_MODE(x)       ((x & 0x3) << 5)
-#define ADT7420_CONFIG_RESOLUTION       (1 << 7)
+#define ADT7420_CONFIG_FAULT_QUEUE(x)	(x & 0x3)
+#define ADT7420_CONFIG_CT_POL		(1 << 2)
+#define ADT7420_CONFIG_INT_POL		(1 << 3)
+#define ADT7420_CONFIG_INT_CT_MODE	(1 << 4)
+#define ADT7420_CONFIG_OP_MODE(x)	((x & 0x3) << 5)
+#define ADT7420_CONFIG_RESOLUTION	(1 << 7)
 
 /* ADT7420_CONFIG_FAULT_QUEUE(x) options */
-#define ADT7420_FAULT_QUEUE_1_FAULT     0
-#define ADT7420_FAULT_QUEUE_2_FAULTS    1
-#define ADT7420_FAULT_QUEUE_3_FAULTS    2
-#define ADT7420_FAULT_QUEUE_4_FAULTS    3
+#define ADT7420_FAULT_QUEUE_1_FAULT	0
+#define ADT7420_FAULT_QUEUE_2_FAULTS	1
+#define ADT7420_FAULT_QUEUE_3_FAULTS	2
+#define ADT7420_FAULT_QUEUE_4_FAULTS	3
 
 /* ADT7420_CONFIG_OP_MODE(x) options */
-#define ADT7420_OP_MODE_CONT_CONV       0
-#define ADT7420_OP_MODE_ONE_SHOT        1
-#define ADT7420_OP_MODE_1_SPS           2
-#define ADT7420_OP_MODE_SHUTDOWN        3
+#define ADT7420_OP_MODE_CONT_CONV	0
+#define ADT7420_OP_MODE_ONE_SHOT	1
+#define ADT7420_OP_MODE_1_SPS		2
+#define ADT7420_OP_MODE_SHUTDOWN	3
 
 /* ADT7420 default ID */
-#define ADT7420_DEFAULT_ID  0xCB
+#define ADT7420_DEFAULT_ID		0xCB
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 typedef struct {
-    /* I2C */
-    i2c_device	i2c_dev;
-    /* Device Settings */
-    unsigned char resolutionSetting;
+	/* I2C */
+	i2c_device	i2c_dev;
+	/* Device Settings */
+	uint8_t		resolution_setting;
 } adt7420_dev;
 
 typedef struct {
-    /* I2C */
-    i2c_type	i2c_type;
-    uint32_t	i2c_id;
-    uint32_t	i2c_max_speed_hz;
-    uint8_t	i2c_slave_address;
-    /* Device Settings */
-    unsigned char resolutionSetting;
+	/* I2C */
+	i2c_type	i2c_type;
+	uint32_t	i2c_id;
+	uint32_t	i2c_max_speed_hz;
+	uint8_t		i2c_slave_address;
+	/* Device Settings */
+	uint8_t		resolution_setting;
 } adt7420_init_param;
 
 /******************************************************************************/
@@ -121,28 +119,30 @@ typedef struct {
 /******************************************************************************/
 
 /*! Reads the value of a register. */
-unsigned char ADT7420_GetRegisterValue(adt7420_dev *dev,
-                                       unsigned char registerAddress);
+uint8_t adt7420_get_register_value(adt7420_dev *dev,
+				   uint8_t register_address);
 
 /*! Sets the value of a register. */
-void ADT7420_SetRegisterValue(adt7420_dev *dev,
-                              unsigned char registerAddress,
-                              unsigned char registerValue);
+void adt7420_set_register_value(adt7420_dev *dev,
+				uint8_t register_address,
+				uint8_t register_value);
 
 /*! Initializes the comm. peripheral and checks if the device is present. */
-char ADT7420_Init(adt7420_dev **device,
-		  adt7420_init_param init_param);
+int32_t adt7420_init(adt7420_dev **device,
+		     adt7420_init_param init_param);
 
 /*! Resets the ADT7420. */
-void ADT7420_Reset(adt7420_dev *dev);
+void adt7420_reset(adt7420_dev *dev);
 
 /*! Sets the operational mode for ADT7420. */
-void ADT7420_SetOperationMode(adt7420_dev *dev, unsigned char mode);
+void adt7420_set_operation_mode(adt7420_dev *dev,
+				uint8_t mode);
 
 /*! Sets the resolution for ADT7420. */
-void ADT7420_SetResolution(adt7420_dev *dev, unsigned char resolution);
+void adt7420_set_resolution(adt7420_dev *dev,
+			    uint8_t resolution);
 
 /*! Reads the temperature data and converts it to Celsius degrees. */
-float ADT7420_GetTemperature(adt7420_dev *dev);
+float adt7420_get_temperature(adt7420_dev *dev);
 
 #endif	/* __ADT7420_H__ */

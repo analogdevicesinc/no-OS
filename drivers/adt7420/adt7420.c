@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ADT7420.c
+ *   @file   adt7420.c
  *   @brief  Implementation of ADT7420 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -51,47 +49,47 @@
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
- * @param registerAddress - Address of the register.
+ * @param register_address - Address of the register.
  *
- * @return registerValue  - Value of the register.
+ * @return register_value  - Value of the register.
 *******************************************************************************/
-unsigned char ADT7420_GetRegisterValue(adt7420_dev *dev,
-                                       unsigned char registerAddress)
+uint8_t adt7420_get_register_value(adt7420_dev *dev,
+				   uint8_t register_address)
 {
-    unsigned char registerValue = 0;
+	uint8_t register_value = 0;
 
-    i2c_write(&dev->i2c_dev,
-              &registerAddress,
-              1,
-              0);
-    i2c_read(&dev->i2c_dev,
-             &registerValue,
-             1,
-             1);
+	i2c_write(&dev->i2c_dev,
+		  &register_address,
+		  1,
+		  0);
+	i2c_read(&dev->i2c_dev,
+		 &register_value,
+		 1,
+		 1);
 
-	return registerValue;
+	return register_value;
 }
 
 /***************************************************************************//**
  * @brief Sets the value of a register.
  *
- * @param registerAddress - Address of the register.
- * @param registerValue   - Value of the register.
+ * @param register_address - Address of the register.
+ * @param register_value   - Value of the register.
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetRegisterValue(adt7420_dev *dev,
-                              unsigned char registerAddress,
-                              unsigned char registerValue)
+void adt7420_set_register_value(adt7420_dev *dev,
+				uint8_t register_address,
+				uint8_t register_value)
 {
-    unsigned char dataBuffer[2] = {0, 0};
+	uint8_t data_buffer[2] = {0, 0};
 
-    dataBuffer[0] = registerAddress;
-    dataBuffer[1] = registerValue;
-    i2c_write(&dev->i2c_dev,
-              dataBuffer,
-              2,
-              1);
+	data_buffer[0] = register_address;
+	data_buffer[1] = register_value;
+	i2c_write(&dev->i2c_dev,
+		  data_buffer,
+		  2,
+		  1);
 }
 
 /***************************************************************************//**
@@ -104,37 +102,34 @@ void ADT7420_SetRegisterValue(adt7420_dev *dev,
  *                            0 - I2C peripheral was initialized and the
  *                                device is present.
 *******************************************************************************/
-char ADT7420_Init(adt7420_dev **device,
-		  adt7420_init_param init_param)
+int32_t adt7420_init(adt7420_dev **device,
+		     adt7420_init_param init_param)
 {
-    adt7420_dev *dev;
-    unsigned char status;
-    unsigned char test   = 0;
+	adt7420_dev *dev;
+	int32_t status;
+	uint8_t test   = 0;
 
-    dev = (adt7420_dev *)malloc(sizeof(*dev));
-    if (!dev) {
-        return -1;
-    }
+	dev = (adt7420_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-    /* I2C */
-    dev->i2c_dev.type = init_param.i2c_type;
-    dev->i2c_dev.id = init_param.i2c_id;
-    dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
-    dev->i2c_dev.slave_address = init_param.i2c_slave_address;
-    status = i2c_init(&dev->i2c_dev);
+	/* I2C */
+	dev->i2c_dev.type = init_param.i2c_type;
+	dev->i2c_dev.id = init_param.i2c_id;
+	dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
+	dev->i2c_dev.slave_address = init_param.i2c_slave_address;
+	status = i2c_init(&dev->i2c_dev);
 
-    /* Device Settings */
-    dev->resolutionSetting = init_param.resolutionSetting;
+	/* Device Settings */
+	dev->resolution_setting = init_param.resolution_setting;
 
-    test   = ADT7420_GetRegisterValue(dev, ADT7420_REG_ID);
-    if(test != ADT7420_DEFAULT_ID)
-    {
-        status = -1;
-    }
+	test   = adt7420_get_register_value(dev, ADT7420_REG_ID);
+	if(test != ADT7420_DEFAULT_ID)
+		status = -1;
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
@@ -144,15 +139,15 @@ char ADT7420_Init(adt7420_dev **device,
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_Reset(adt7420_dev *dev)
+void adt7420_reset(adt7420_dev *dev)
 {
-    unsigned char registerAddress = ADT7420_REG_RESET;
+	uint8_t register_address = ADT7420_REG_RESET;
 
-    i2c_write(&dev->i2c_dev,
-              &registerAddress,
-              1,
-              1);
-    dev->resolutionSetting = 0;
+	i2c_write(&dev->i2c_dev,
+		  &register_address,
+		  1,
+		  1);
+	dev->resolution_setting = 0;
 }
 
 /***************************************************************************//**
@@ -166,14 +161,15 @@ void ADT7420_Reset(adt7420_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetOperationMode(adt7420_dev *dev, unsigned char mode)
+void adt7420_set_operation_mode(adt7420_dev *dev,
+				uint8_t mode)
 {
-    unsigned char registerValue = 0;
+	uint8_t register_value = 0;
 
-    registerValue  = ADT7420_GetRegisterValue(dev, ADT7420_REG_CONFIG);
-    registerValue &= ~ADT7420_CONFIG_OP_MODE(ADT7420_OP_MODE_SHUTDOWN);
-    registerValue |= ADT7420_CONFIG_OP_MODE(mode);
-    ADT7420_SetRegisterValue(dev, ADT7420_REG_CONFIG, registerValue);
+	register_value  = adt7420_get_register_value(dev, ADT7420_REG_CONFIG);
+	register_value &= ~ADT7420_CONFIG_OP_MODE(ADT7420_OP_MODE_SHUTDOWN);
+	register_value |= ADT7420_CONFIG_OP_MODE(mode);
+	adt7420_set_register_value(dev, ADT7420_REG_CONFIG, register_value);
 }
 
 /***************************************************************************//**
@@ -185,15 +181,16 @@ void ADT7420_SetOperationMode(adt7420_dev *dev, unsigned char mode)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetResolution(adt7420_dev *dev, unsigned char resolution)
+void adt7420_set_resolution(adt7420_dev *dev,
+			    uint8_t resolution)
 {
-    unsigned char registerValue = 0;
+	uint8_t register_value = 0;
 
-    registerValue  = ADT7420_GetRegisterValue(dev, ADT7420_REG_CONFIG);
-    registerValue &= ~ADT7420_CONFIG_RESOLUTION;
-    registerValue |= (resolution * ADT7420_CONFIG_RESOLUTION);
-    ADT7420_SetRegisterValue(dev, ADT7420_REG_CONFIG, registerValue);
-    dev->resolutionSetting = resolution;
+	register_value  = adt7420_get_register_value(dev, ADT7420_REG_CONFIG);
+	register_value &= ~ADT7420_CONFIG_RESOLUTION;
+	register_value |= (resolution * ADT7420_CONFIG_RESOLUTION);
+	adt7420_set_register_value(dev, ADT7420_REG_CONFIG, register_value);
+	dev->resolution_setting = resolution;
 }
 
 /***************************************************************************//**
@@ -201,43 +198,32 @@ void ADT7420_SetResolution(adt7420_dev *dev, unsigned char resolution)
  *
  * @return temperature - Temperature in degrees Celsius.
 *******************************************************************************/
-float ADT7420_GetTemperature(adt7420_dev *dev)
+float adt7420_get_temperature(adt7420_dev *dev)
 {
-    unsigned char  msbTemp = 0;
-    unsigned char  lsbTemp = 0;
-    unsigned short temp    = 0;
-    float          tempC   = 0;
+	uint8_t  msb_temp = 0;
+	uint8_t  lsb_temp = 0;
+	uint16_t temp     = 0;
+	float    temp_c   = 0;
 
-    msbTemp = ADT7420_GetRegisterValue(dev, ADT7420_REG_TEMP_MSB);
-    lsbTemp = ADT7420_GetRegisterValue(dev, ADT7420_REG_TEMP_LSB);
-    temp    = ((unsigned short)msbTemp << 8) + lsbTemp;
-    if(dev->resolutionSetting)
-    {
-        if(temp & 0x8000)
-        {
-            /*! Negative temperature */
-            tempC = (float)((signed long)temp - 65536) / 128;
-        }
-        else
-        {
-            /*! Positive temperature */
-            tempC = (float)temp / 128;
-        }
-    }
-    else
-    {
-        temp >>= 3;
-        if(temp & 0x1000)
-        {
-            /*! Negative temperature */
-            tempC = (float)((signed long)temp - 8192) / 16;
-        }
-        else
-        {
-            /*! Positive temperature */
-            tempC = (float)temp / 16;
-        }
-    }
+	msb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_MSB);
+	lsb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_LSB);
+	temp    = ((uint16_t)msb_temp << 8) + lsb_temp;
+	if(dev->resolution_setting) {
+		if(temp & 0x8000)
+			/*! Negative temperature */
+			temp_c = (float)((int32_t)temp - 65536) / 128;
+		else
+			/*! Positive temperature */
+			temp_c = (float)temp / 128;
+	} else {
+		temp >>= 3;
+		if(temp & 0x1000)
+			/*! Negative temperature */
+			temp_c = (float)((int32_t)temp - 8192) / 16;
+		else
+			/*! Positive temperature */
+			temp_c = (float)temp / 16;
+	}
 
-    return tempC;
+	return temp_c;
 }
