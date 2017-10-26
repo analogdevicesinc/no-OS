@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __ADXL362_H__
@@ -48,9 +46,9 @@
 /******************************************************************************/
 
 /* ADXL362 communication commands */
-#define ADXL362_WRITE_REG           0x0A
-#define ADXL362_READ_REG            0x0B
-#define ADXL362_WRITE_FIFO          0x0D
+#define ADXL362_WRITE_REG               0x0A
+#define ADXL362_READ_REG                0x0B
+#define ADXL362_WRITE_FIFO              0x0D
 
 /* Registers */
 #define ADXL362_REG_DEVID_AD            0x00
@@ -89,14 +87,14 @@
 #define ADXL362_REG_SELF_TEST           0x2E
 
 /* ADXL362_REG_STATUS definitions */
-#define ADXL362_STATUS_ERR_USER_REGS        (1 << 7)
-#define ADXL362_STATUS_AWAKE                (1 << 6)
-#define ADXL362_STATUS_INACT                (1 << 5)
-#define ADXL362_STATUS_ACT                  (1 << 4)
-#define ADXL362_STATUS_FIFO_OVERRUN         (1 << 3)
-#define ADXL362_STATUS_FIFO_WATERMARK       (1 << 2)
-#define ADXL362_STATUS_FIFO_RDY             (1 << 1)
-#define ADXL362_STATUS_DATA_RDY             (1 << 0)
+#define ADXL362_STATUS_ERR_USER_REGS    (1 << 7)
+#define ADXL362_STATUS_AWAKE            (1 << 6)
+#define ADXL362_STATUS_INACT            (1 << 5)
+#define ADXL362_STATUS_ACT              (1 << 4)
+#define ADXL362_STATUS_FIFO_OVERRUN     (1 << 3)
+#define ADXL362_STATUS_FIFO_WATERMARK   (1 << 2)
+#define ADXL362_STATUS_FIFO_RDY         (1 << 1)
+#define ADXL362_STATUS_DATA_RDY         (1 << 0)
 
 /* ADXL362_REG_ACT_INACT_CTL definitions */
 #define ADXL362_ACT_INACT_CTL_LINKLOOP(x)   (((x) & 0x3) << 4)
@@ -106,47 +104,47 @@
 #define ADXL362_ACT_INACT_CTL_ACT_EN        (1 << 0)
 
 /* ADXL362_ACT_INACT_CTL_LINKLOOP(x) options */
-#define ADXL362_MODE_DEFAULT        0
-#define ADXL362_MODE_LINK           1
-#define ADXL362_MODE_LOOP           3
+#define ADXL362_MODE_DEFAULT            0
+#define ADXL362_MODE_LINK               1
+#define ADXL362_MODE_LOOP               3
 
 /* ADXL362_REG_FIFO_CTL */
-#define ADXL362_FIFO_CTL_AH                 (1 << 3)
-#define ADXL362_FIFO_CTL_FIFO_TEMP          (1 << 2)
-#define ADXL362_FIFO_CTL_FIFO_MODE(x)       (((x) & 0x3) << 0)
+#define ADXL362_FIFO_CTL_AH             (1 << 3)
+#define ADXL362_FIFO_CTL_FIFO_TEMP      (1 << 2)
+#define ADXL362_FIFO_CTL_FIFO_MODE(x)   (((x) & 0x3) << 0)
 
 /* ADXL362_FIFO_CTL_FIFO_MODE(x) options */
-#define ADXL362_FIFO_DISABLE              0
-#define ADXL362_FIFO_OLDEST_SAVED         1
-#define ADXL362_FIFO_STREAM               2
-#define ADXL362_FIFO_TRIGGERED            3
+#define ADXL362_FIFO_DISABLE            0
+#define ADXL362_FIFO_OLDEST_SAVED       1
+#define ADXL362_FIFO_STREAM             2
+#define ADXL362_FIFO_TRIGGERED          3
 
 /* ADXL362_REG_INTMAP1 */
-#define ADXL362_INTMAP1_INT_LOW             (1 << 7)
-#define ADXL362_INTMAP1_AWAKE               (1 << 6)
-#define ADXL362_INTMAP1_INACT               (1 << 5)
-#define ADXL362_INTMAP1_ACT                 (1 << 4)
-#define ADXL362_INTMAP1_FIFO_OVERRUN        (1 << 3)
-#define ADXL362_INTMAP1_FIFO_WATERMARK      (1 << 2)
-#define ADXL362_INTMAP1_FIFO_READY          (1 << 1)
-#define ADXL362_INTMAP1_DATA_READY          (1 << 0)
+#define ADXL362_INTMAP1_INT_LOW         (1 << 7)
+#define ADXL362_INTMAP1_AWAKE           (1 << 6)
+#define ADXL362_INTMAP1_INACT           (1 << 5)
+#define ADXL362_INTMAP1_ACT             (1 << 4)
+#define ADXL362_INTMAP1_FIFO_OVERRUN    (1 << 3)
+#define ADXL362_INTMAP1_FIFO_WATERMARK  (1 << 2)
+#define ADXL362_INTMAP1_FIFO_READY      (1 << 1)
+#define ADXL362_INTMAP1_DATA_READY      (1 << 0)
 
 /* ADXL362_REG_INTMAP2 definitions */
-#define ADXL362_INTMAP2_INT_LOW             (1 << 7)
-#define ADXL362_INTMAP2_AWAKE               (1 << 6)
-#define ADXL362_INTMAP2_INACT               (1 << 5)
-#define ADXL362_INTMAP2_ACT                 (1 << 4)
-#define ADXL362_INTMAP2_FIFO_OVERRUN        (1 << 3)
-#define ADXL362_INTMAP2_FIFO_WATERMARK      (1 << 2)
-#define ADXL362_INTMAP2_FIFO_READY          (1 << 1)
-#define ADXL362_INTMAP2_DATA_READY          (1 << 0)
+#define ADXL362_INTMAP2_INT_LOW         (1 << 7)
+#define ADXL362_INTMAP2_AWAKE           (1 << 6)
+#define ADXL362_INTMAP2_INACT           (1 << 5)
+#define ADXL362_INTMAP2_ACT             (1 << 4)
+#define ADXL362_INTMAP2_FIFO_OVERRUN    (1 << 3)
+#define ADXL362_INTMAP2_FIFO_WATERMARK  (1 << 2)
+#define ADXL362_INTMAP2_FIFO_READY      (1 << 1)
+#define ADXL362_INTMAP2_DATA_READY      (1 << 0)
 
 /* ADXL362_REG_FILTER_CTL definitions */
-#define ADXL362_FILTER_CTL_RANGE(x)         (((x) & 0x3) << 6)
-#define ADXL362_FILTER_CTL_RES              (1 << 5)
-#define ADXL362_FILTER_CTL_HALF_BW          (1 << 4)
-#define ADXL362_FILTER_CTL_EXT_SAMPLE       (1 << 3)
-#define ADXL362_FILTER_CTL_ODR(x)           (((x) & 0x7) << 0)
+#define ADXL362_FILTER_CTL_RANGE(x)     (((x) & 0x3) << 6)
+#define ADXL362_FILTER_CTL_RES          (1 << 5)
+#define ADXL362_FILTER_CTL_HALF_BW      (1 << 4)
+#define ADXL362_FILTER_CTL_EXT_SAMPLE   (1 << 3)
+#define ADXL362_FILTER_CTL_ODR(x)       (((x) & 0x7) << 0)
 
 /* ADXL362_FILTER_CTL_RANGE(x) options */
 #define ADXL362_RANGE_2G                0 /* +/-2 g */
@@ -162,17 +160,17 @@
 #define ADXL362_ODR_400_HZ              5 /* 400 Hz */
 
 /* ADXL362_REG_POWER_CTL definitions */
-#define ADXL362_POWER_CTL_RES               (1 << 7)
-#define ADXL362_POWER_CTL_EXT_CLK           (1 << 6)
-#define ADXL362_POWER_CTL_LOW_NOISE(x)      (((x) & 0x3) << 4)
-#define ADXL362_POWER_CTL_WAKEUP            (1 << 3)
-#define ADXL362_POWER_CTL_AUTOSLEEP         (1 << 2)
-#define ADXL362_POWER_CTL_MEASURE(x)        (((x) & 0x3) << 0)
+#define ADXL362_POWER_CTL_RES           (1 << 7)
+#define ADXL362_POWER_CTL_EXT_CLK       (1 << 6)
+#define ADXL362_POWER_CTL_LOW_NOISE(x)  (((x) & 0x3) << 4)
+#define ADXL362_POWER_CTL_WAKEUP        (1 << 3)
+#define ADXL362_POWER_CTL_AUTOSLEEP     (1 << 2)
+#define ADXL362_POWER_CTL_MEASURE(x)    (((x) & 0x3) << 0)
 
 /* ADXL362_POWER_CTL_LOW_NOISE(x) options */
-#define ADXL362_NOISE_MODE_NORMAL           0
-#define ADXL362_NOISE_MODE_LOW              1
-#define ADXL362_NOISE_MODE_ULTRALOW         2
+#define ADXL362_NOISE_MODE_NORMAL       0
+#define ADXL362_NOISE_MODE_LOW          1
+#define ADXL362_NOISE_MODE_ULTRALOW     2
 
 /* ADXL362_POWER_CTL_MEASURE(x) options */
 #define ADXL362_MEASURE_STANDBY         0
@@ -196,7 +194,7 @@ typedef struct {
 	/* SPI */
 	spi_device	spi_dev;
 	/* Device Settings */
-	char		selectedRange;
+	uint8_t		selected_range;
 } adxl362_dev;
 
 typedef struct {
@@ -213,61 +211,72 @@ typedef struct {
 /******************************************************************************/
 
 /*! Initializes the device. */
-char ADXL362_Init(adxl362_dev **device,
-		  adxl362_init_param init_param);
+int32_t adxl362_init(adxl362_dev **device,
+		     adxl362_init_param init_param);
 
 /*! Writes data into a register. */
-void ADXL362_SetRegisterValue(adxl362_dev *dev,
-			      unsigned short registerValue,
-                              unsigned char  registerAddress,
-                              unsigned char  bytesNumber);
+void adxl362_set_register_value(adxl362_dev *dev,
+				uint16_t register_value,
+				uint8_t  register_address,
+				uint8_t  bytes_number);
 
 /*! Performs a burst read of a specified number of registers. */
-void ADXL362_GetRegisterValue(adxl362_dev *dev,
-			      unsigned char *pReadData,
-                              unsigned char  registerAddress,
-                              unsigned char  bytesNumber);
+void adxl362_get_register_value(adxl362_dev *dev,
+				uint8_t *read_data,
+				uint8_t  register_address,
+				uint8_t  bytes_number);
 
 /*! Reads multiple bytes from the device's FIFO buffer. */
-void ADXL362_GetFifoValue(adxl362_dev *dev, unsigned char *pBuffer, unsigned short bytesNumber);
+void adxl362_get_fifo_value(adxl362_dev *dev,
+			    uint8_t *buffer,
+			    uint16_t bytes_number);
 
 /*! Resets the device via SPI communication bus. */
-void ADXL362_SoftwareReset(adxl362_dev *dev);
+void adxl362_software_reset(adxl362_dev *dev);
 
 /*! Places the device into standby/measure mode. */
-void ADXL362_SetPowerMode(adxl362_dev *dev, unsigned char pwrMode);
+void adxl362_set_power_mode(adxl362_dev *dev,
+			    uint8_t pwr_mode);
 
 /*! Selects the measurement range. */
-void ADXL362_SetRange(adxl362_dev *dev, unsigned char gRange);
+void adxl362_set_range(adxl362_dev *dev,
+		       uint8_t gRange);
 
 /*! Selects the Output Data Rate of the device. */
-void ADXL362_SetOutputRate(adxl362_dev *dev, unsigned char outRate);
+void adxl362_set_output_rate(adxl362_dev *dev,
+			     uint8_t outRate);
 
 /*! Reads the 3-axis raw data from the accelerometer. */
-void ADXL362_GetXyz(adxl362_dev *dev, short *x, short *y, short *z);
+void adxl362_get_xyz(adxl362_dev *dev,
+		     int16_t *x,
+		     int16_t *y,
+		     int16_t *z);
 
 /*! Reads the 3-axis raw data from the accelerometer and converts it to g. */
-void ADXL362_GetGxyz(adxl362_dev *dev, float* x, float* y, float* z);
+void adxl362_get_g_xyz(adxl362_dev *dev,
+		       float* x,
+		       float* y,
+		       float* z);
 
 /*! Reads the temperature of the device. */
-float ADXL362_ReadTemperature(adxl362_dev *dev);
+float adxl362_read_temperature(adxl362_dev *dev);
 
 /*! Configures the FIFO feature. */
-void ADXL362_FifoSetup(adxl362_dev *dev,
-		       unsigned char  mode,
-                       unsigned short waterMarkLvl,
-                       unsigned char  enTempRead);
+void adxl362_fifo_setup(adxl362_dev *dev,
+			uint8_t  mode,
+			uint16_t waterMarkLvl,
+			uint8_t  enTempRead);
 
 /*! Configures activity detection. */
-void ADXL362_SetupActivityDetection(adxl362_dev *dev,
-				    unsigned char  refOrAbs,
-                                    unsigned short threshold,
-                                    unsigned char  time);
+void adxl362_setup_activity_detection(adxl362_dev *dev,
+				      uint8_t  refOrAbs,
+				      uint16_t threshold,
+				      uint8_t  time);
 
 /*! Configures inactivity detection. */
-void ADXL362_SetupInactivityDetection(adxl362_dev *dev,
-				      unsigned char  refOrAbs,
-                                      unsigned short threshold,
-                                      unsigned short time);
+void adxl362_setup_inactivity_detection(adxl362_dev *dev,
+					uint8_t  refOrAbs,
+					uint16_t threshold,
+					uint16_t time);
 
 #endif /* __ADXL362_H__ */

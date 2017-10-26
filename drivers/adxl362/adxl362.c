@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ADXL362.c
+ *   @file   adxl362.c
  *   @brief  Implementation of ADXL362 Driver.
  *   @author DNechita(Dan.Nechita@analog.com)
 ********************************************************************************
@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -59,17 +57,16 @@
  * @return  0 - the initialization was successful and the device is present;
  *         -1 - an error occurred.
 *******************************************************************************/
-char ADXL362_Init(adxl362_dev **device,
-		  adxl362_init_param init_param)
+int32_t adxl362_init(adxl362_dev **device,
+		     adxl362_init_param init_param)
 {
 	adxl362_dev *dev;
-    unsigned char regValue = 0;
-    char          status   = -1;
+	uint8_t reg_value = 0;
+	int32_t status    = -1;
 
 	dev = (adxl362_dev *)malloc(sizeof(*dev));
-	if (!dev) {
+	if (!dev)
 		return -1;
-	}
 
 	/* SPI */
 	dev->spi_dev.type = init_param.spi_type;
@@ -79,96 +76,93 @@ char ADXL362_Init(adxl362_dev **device,
 	dev->spi_dev.chip_select = init_param.spi_chip_select;
 	status = spi_init(&dev->spi_dev);
 
-    ADXL362_GetRegisterValue(dev, &regValue, ADXL362_REG_PARTID, 1);
-    if((regValue != ADXL362_PART_ID))
-    {
-        status = -1;
-    }
-    dev->selectedRange = 2; // Measurement Range: +/- 2g (reset default).
+	adxl362_get_register_value(dev, &reg_value, ADXL362_REG_PARTID, 1);
+	if((reg_value != ADXL362_PART_ID))
+		status = -1;
+
+	dev->selected_range = 2; // Measurement Range: +/- 2g (reset default).
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
- * @param registerValue   - Data value to write.
- * @param registerAddress - Address of the register.
- * @param bytesNumber     - Number of bytes. Accepted values: 0 - 1.
+ * @param register_value   - Data value to write.
+ * @param register_address - Address of the register.
+ * @param bytes_number     - Number of bytes. Accepted values: 0 - 1.
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetRegisterValue(adxl362_dev *dev,
-			      unsigned short registerValue,
-                              unsigned char  registerAddress,
-                              unsigned char  bytesNumber)
+void adxl362_set_register_value(adxl362_dev *dev,
+				uint16_t register_value,
+				uint8_t register_address,
+				uint8_t bytes_number)
 {
-    unsigned char buffer[4] = {0, 0, 0, 0};
+	uint8_t buffer[4] = {0, 0, 0, 0};
 
-    buffer[0] = ADXL362_WRITE_REG;
-    buffer[1] = registerAddress;
-    buffer[2] = (registerValue & 0x00FF);
-    buffer[3] = (registerValue >> 8);
-    spi_write_and_read(&dev->spi_dev, buffer, bytesNumber + 2);
+	buffer[0] = ADXL362_WRITE_REG;
+	buffer[1] = register_address;
+	buffer[2] = (register_value & 0x00FF);
+	buffer[3] = (register_value >> 8);
+	spi_write_and_read(&dev->spi_dev,
+			   buffer,
+			   bytes_number + 2);
 }
 
 /***************************************************************************//**
  * @brief Performs a burst read of a specified number of registers.
  *
- * @param pReadData       - The read values are stored in this buffer.
- * @param registerAddress - The start address of the burst read.
- * @param bytesNumber     - Number of bytes to read.
+ * @param read_data        - The read values are stored in this buffer.
+ * @param register_address - The start address of the burst read.
+ * @param bytes_number     - Number of bytes to read.
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_GetRegisterValue(adxl362_dev *dev,
-			      unsigned char* pReadData,
-                              unsigned char  registerAddress,
-                              unsigned char  bytesNumber)
+void adxl362_get_register_value(adxl362_dev *dev,
+				uint8_t* read_data,
+				uint8_t  register_address,
+				uint8_t  bytes_number)
 {
-    unsigned char buffer[32];
-    unsigned char index = 0;
+	uint8_t buffer[32];
+	uint8_t index = 0;
 
-    buffer[0] = ADXL362_READ_REG;
-    buffer[1] = registerAddress;
-    for(index = 0; index < bytesNumber; index++)
-    {
-        buffer[index + 2] = pReadData[index];
-    }
-    spi_write_and_read(&dev->spi_dev, buffer, bytesNumber + 2);
-    for(index = 0; index < bytesNumber; index++)
-    {
-        pReadData[index] = buffer[index + 2];
-    }
+	buffer[0] = ADXL362_READ_REG;
+	buffer[1] = register_address;
+	for(index = 0; index < bytes_number; index++)
+		buffer[index + 2] = read_data[index];
+	spi_write_and_read(&dev->spi_dev,
+			   buffer,
+			   bytes_number + 2);
+	for(index = 0; index < bytes_number; index++)
+		read_data[index] = buffer[index + 2];
 }
 
 /***************************************************************************//**
  * @brief Reads multiple bytes from the device's FIFO buffer.
  *
- * @param pBuffer     - Stores the read bytes.
- * @param bytesNumber - Number of bytes to read.
+ * @param buffer       - Stores the read bytes.
+ * @param bytes_number - Number of bytes to read.
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_GetFifoValue(adxl362_dev *dev,
-			  unsigned char* pBuffer,
-			  unsigned short bytesNumber)
+void adxl362_get_fifo_value(adxl362_dev *dev,
+			    uint8_t  *buffer,
+			    uint16_t bytes_number)
 {
-    unsigned char  buffer[512];
-    unsigned short index = 0;
+	uint8_t  spi_buffer[512];
+	uint16_t index = 0;
 
-    buffer[0] = ADXL362_WRITE_FIFO;
-    for(index = 0; index < bytesNumber; index++)
-    {
-        buffer[index + 1] = pBuffer[index];
-    }
-    spi_write_and_read(&dev->spi_dev, buffer, bytesNumber + 1);
-    for(index = 0; index < bytesNumber; index++)
-    {
-        pBuffer[index] = buffer[index + 1];
-    }
+	spi_buffer[0] = ADXL362_WRITE_FIFO;
+	for(index = 0; index < bytes_number; index++)
+		spi_buffer[index + 1] = buffer[index];
+	spi_write_and_read(&dev->spi_dev,
+			   spi_buffer,
+			   bytes_number + 1);
+	for(index = 0; index < bytes_number; index++)
+		buffer[index] = spi_buffer[index + 1];
 }
 
 /***************************************************************************//**
@@ -176,76 +170,100 @@ void ADXL362_GetFifoValue(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SoftwareReset(adxl362_dev *dev)
+void adxl362_software_reset(adxl362_dev *dev)
 {
-    ADXL362_SetRegisterValue(dev, ADXL362_RESET_KEY, ADXL362_REG_SOFT_RESET, 1);
+	adxl362_set_register_value(dev,
+				   ADXL362_RESET_KEY,
+				   ADXL362_REG_SOFT_RESET,
+				   1);
 }
 
 /***************************************************************************//**
  * @brief Places the device into standby/measure mode.
  *
- * @param pwrMode - Power mode.
- *                  Example: 0 - standby mode.
- *                  1 - measure mode.
+ * @param pwr_mode - Power mode.
+ *                   Example: 0 - standby mode.
+ *                            1 - measure mode.
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetPowerMode(adxl362_dev *dev, unsigned char pwrMode)
+void adxl362_set_power_mode(adxl362_dev *dev,
+			    uint8_t pwr_mode)
 {
-    unsigned char oldPowerCtl = 0;
-    unsigned char newPowerCtl = 0;
+	uint8_t old_power_ctl = 0;
+	uint8_t new_power_ctl = 0;
 
-    ADXL362_GetRegisterValue(dev, &oldPowerCtl, ADXL362_REG_POWER_CTL, 1);
-    newPowerCtl = oldPowerCtl & ~ADXL362_POWER_CTL_MEASURE(0x3);
-    newPowerCtl = newPowerCtl |
-                  (pwrMode * ADXL362_POWER_CTL_MEASURE(ADXL362_MEASURE_ON));
-    ADXL362_SetRegisterValue(dev, newPowerCtl, ADXL362_REG_POWER_CTL, 1);
+	adxl362_get_register_value(dev,
+				   &old_power_ctl,
+				   ADXL362_REG_POWER_CTL,
+				   1);
+	new_power_ctl = old_power_ctl & ~ADXL362_POWER_CTL_MEASURE(0x3);
+	new_power_ctl = new_power_ctl |
+			(pwr_mode * ADXL362_POWER_CTL_MEASURE(ADXL362_MEASURE_ON));
+	adxl362_set_register_value(dev,
+				   new_power_ctl,
+				   ADXL362_REG_POWER_CTL,
+				   1);
 }
 
 /***************************************************************************//**
  * @brief Selects the measurement range.
  *
- * @param gRange - Range option.
+ * @param g_range - Range option.
  *                  Example: ADXL362_RANGE_2G  -  +-2 g
  *                           ADXL362_RANGE_4G  -  +-4 g
  *                           ADXL362_RANGE_8G  -  +-8 g
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetRange(adxl362_dev *dev, unsigned char gRange)
+void adxl362_set_range(adxl362_dev *dev,
+		       uint8_t g_range)
 {
-    unsigned char oldFilterCtl = 0;
-    unsigned char newFilterCtl = 0;
+	uint8_t old_filter_ctl = 0;
+	uint8_t new_filter_ctl = 0;
 
-    ADXL362_GetRegisterValue(dev, &oldFilterCtl, ADXL362_REG_FILTER_CTL, 1);
-    newFilterCtl = oldFilterCtl & ~ADXL362_FILTER_CTL_RANGE(0x3);
-    newFilterCtl = newFilterCtl | ADXL362_FILTER_CTL_RANGE(gRange);
-    ADXL362_SetRegisterValue(dev, newFilterCtl, ADXL362_REG_FILTER_CTL, 1);
-    dev->selectedRange = (1 << gRange) * 2;
+	adxl362_get_register_value(dev,
+				   &old_filter_ctl,
+				   ADXL362_REG_FILTER_CTL,
+				   1);
+	new_filter_ctl = old_filter_ctl & ~ADXL362_FILTER_CTL_RANGE(0x3);
+	new_filter_ctl = new_filter_ctl | ADXL362_FILTER_CTL_RANGE(g_range);
+	adxl362_set_register_value(dev,
+				   new_filter_ctl,
+				   ADXL362_REG_FILTER_CTL,
+				   1);
+	dev->selected_range = (1 << g_range) * 2;
 }
 
 /***************************************************************************//**
  * @brief Selects the Output Data Rate of the device.
  *
- * @param outRate - Output Data Rate option.
- *                  Example: ADXL362_ODR_12_5_HZ  -  12.5Hz
- *                           ADXL362_ODR_25_HZ    -  25Hz
- *                           ADXL362_ODR_50_HZ    -  50Hz
- *                           ADXL362_ODR_100_HZ   -  100Hz
- *                           ADXL362_ODR_200_HZ   -  200Hz
- *                           ADXL362_ODR_400_HZ   -  400Hz
+ * @param out_rate - Output Data Rate option.
+ *                   Example: ADXL362_ODR_12_5_HZ  -  12.5Hz
+ *                            ADXL362_ODR_25_HZ    -  25Hz
+ *                            ADXL362_ODR_50_HZ    -  50Hz
+ *                            ADXL362_ODR_100_HZ   -  100Hz
+ *                            ADXL362_ODR_200_HZ   -  200Hz
+ *                            ADXL362_ODR_400_HZ   -  400Hz
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetOutputRate(adxl362_dev *dev, unsigned char outRate)
+void adxl362_set_output_rate(adxl362_dev *dev,
+			     uint8_t out_rate)
 {
-    unsigned char oldFilterCtl = 0;
-    unsigned char newFilterCtl = 0;
+	uint8_t old_filter_ctl = 0;
+	uint8_t new_filter_ctl = 0;
 
-    ADXL362_GetRegisterValue(dev, &oldFilterCtl, ADXL362_REG_FILTER_CTL, 1);
-    newFilterCtl = oldFilterCtl & ~ADXL362_FILTER_CTL_ODR(0x7);
-    newFilterCtl = newFilterCtl | ADXL362_FILTER_CTL_ODR(outRate);
-    ADXL362_SetRegisterValue(dev, newFilterCtl, ADXL362_REG_FILTER_CTL, 1);
+	adxl362_get_register_value(dev,
+				   &old_filter_ctl,
+				   ADXL362_REG_FILTER_CTL,
+				   1);
+	new_filter_ctl = old_filter_ctl & ~ADXL362_FILTER_CTL_ODR(0x7);
+	new_filter_ctl = new_filter_ctl | ADXL362_FILTER_CTL_ODR(out_rate);
+	adxl362_set_register_value(dev,
+				   new_filter_ctl,
+				   ADXL362_REG_FILTER_CTL,
+				   1);
 }
 
 /***************************************************************************//**
@@ -257,14 +275,20 @@ void ADXL362_SetOutputRate(adxl362_dev *dev, unsigned char outRate)
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_GetXyz(adxl362_dev *dev, short* x, short* y, short* z)
+void adxl362_get_xyz(adxl362_dev *dev,
+		     int16_t* x,
+		     int16_t* y,
+		     int16_t* z)
 {
-    unsigned char xyzValues[6] = {0, 0, 0, 0, 0, 0};
+	uint8_t xyz_values[6] = {0, 0, 0, 0, 0, 0};
 
-    ADXL362_GetRegisterValue(dev, xyzValues, ADXL362_REG_XDATA_L, 6);
-    *x = ((short)xyzValues[1] << 8) + xyzValues[0];
-    *y = ((short)xyzValues[3] << 8) + xyzValues[2];
-    *z = ((short)xyzValues[5] << 8) + xyzValues[4];
+	adxl362_get_register_value(dev,
+				   xyz_values,
+				   ADXL362_REG_XDATA_L,
+				   6);
+	*x = ((int16_t)xyz_values[1] << 8) + xyz_values[0];
+	*y = ((int16_t)xyz_values[3] << 8) + xyz_values[2];
+	*z = ((int16_t)xyz_values[5] << 8) + xyz_values[4];
 }
 
 /***************************************************************************//**
@@ -276,35 +300,44 @@ void ADXL362_GetXyz(adxl362_dev *dev, short* x, short* y, short* z)
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_GetGxyz(adxl362_dev *dev, float* x, float* y, float* z)
+void adxl362_get_g_xyz(adxl362_dev *dev,
+		       float* x,
+		       float* y,
+		       float* z)
 {
-    unsigned char xyzValues[6] = {0, 0, 0, 0, 0, 0};
+	uint8_t xyz_values[6] = {0, 0, 0, 0, 0, 0};
 
-    ADXL362_GetRegisterValue(dev, xyzValues, ADXL362_REG_XDATA_L, 6);
-    *x = ((short)xyzValues[1] << 8) + xyzValues[0];
-    *x /= (1000 / (dev->selectedRange / 2));
-    *y = ((short)xyzValues[3] << 8) + xyzValues[2];
-    *y /= (1000 / (dev->selectedRange / 2));
-    *z = ((short)xyzValues[5] << 8) + xyzValues[4];
-    *z /= (1000 / (dev->selectedRange / 2));
+	adxl362_get_register_value(dev,
+				   xyz_values,
+				   ADXL362_REG_XDATA_L,
+				   6);
+	*x = ((int16_t)xyz_values[1] << 8) + xyz_values[0];
+	*x /= (1000 / (dev->selected_range / 2));
+	*y = ((int16_t)xyz_values[3] << 8) + xyz_values[2];
+	*y /= (1000 / (dev->selected_range / 2));
+	*z = ((int16_t)xyz_values[5] << 8) + xyz_values[4];
+	*z /= (1000 / (dev->selected_range / 2));
 }
 
 /***************************************************************************//**
  * @brief Reads the temperature of the device.
  *
- * @return tempCelsius - The value of the temperature(degrees Celsius).
+ * @return temp_celsius - The value of the temperature(degree s Celsius).
 *******************************************************************************/
-float ADXL362_ReadTemperature(adxl362_dev *dev)
+float adxl362_read_temperature(adxl362_dev *dev)
 {
-    unsigned char rawTempData[2] = {0, 0};
-    short         signedTemp     = 0;
-    float         tempCelsius    = 0;
+	uint8_t raw_temp_data[2] = {0, 0};
+	int16_t signed_temp      = 0;
+	float   temp_celsius     = 0;
 
-    ADXL362_GetRegisterValue(dev, rawTempData, ADXL362_REG_TEMP_L, 2);
-    signedTemp = (short)(rawTempData[1] << 8) + rawTempData[0];
-    tempCelsius = (float)signedTemp * 0.065;
+	adxl362_get_register_value(dev,
+				   raw_temp_data,
+				   ADXL362_REG_TEMP_L,
+				   2);
+	signed_temp = (int16_t)(raw_temp_data[1] << 8) + raw_temp_data[0];
+	temp_celsius = (float)signed_temp * 0.065;
 
-    return tempCelsius;
+	return temp_celsius;
 }
 
 /***************************************************************************//**
@@ -315,32 +348,38 @@ float ADXL362_ReadTemperature(adxl362_dev *dev)
  *                                ADXL362_FIFO_OLDEST_SAVED -  Oldest saved mode.
  *                                ADXL362_FIFO_STREAM       -  Stream mode.
  *                                ADXL362_FIFO_TRIGGERED    -  Triggered mode.
- * @param waterMarkLvl - Specifies the number of samples to store in the FIFO.
- * @param enTempRead   - Store Temperature Data to FIFO.
- *                       Example: 1 - temperature data is stored in the FIFO
- *                                    together with x-, y- and x-axis data.
- *                                0 - temperature data is skipped.
+ * @param water_mark_lvl - Specifies the number of samples to store in the FIFO.
+ * @param en_temp_read   - Store Temperature Data to FIFO.
+ *                         Example: 1 - temperature data is stored in the FIFO
+ *                                      together with x-, y- and x-axis data.
+ *                                  0 - temperature data is skipped.
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_FifoSetup(adxl362_dev *dev,
-		       unsigned char  mode,
-                       unsigned short waterMarkLvl,
-                       unsigned char  enTempRead)
+void adxl362_fifo_setup(adxl362_dev *dev,
+			uint8_t  mode,
+			uint16_t water_mark_lvl,
+			uint8_t  en_temp_read)
 {
-    unsigned char writeVal = 0;
+	uint8_t write_val = 0;
 
-    writeVal = ADXL362_FIFO_CTL_FIFO_MODE(mode) |
-               (enTempRead * ADXL362_FIFO_CTL_FIFO_TEMP) |
-               ADXL362_FIFO_CTL_AH;
-    ADXL362_SetRegisterValue(dev, writeVal, ADXL362_REG_FIFO_CTL, 1);
-    ADXL362_SetRegisterValue(dev, waterMarkLvl, ADXL362_REG_FIFO_SAMPLES, 2);
+	write_val = ADXL362_FIFO_CTL_FIFO_MODE(mode) |
+		    (en_temp_read * ADXL362_FIFO_CTL_FIFO_TEMP) |
+		    ADXL362_FIFO_CTL_AH;
+	adxl362_set_register_value(dev,
+				   write_val,
+				   ADXL362_REG_FIFO_CTL,
+				   1);
+	adxl362_set_register_value(dev,
+				   water_mark_lvl,
+				   ADXL362_REG_FIFO_SAMPLES,
+				   2);
 }
 
 /***************************************************************************//**
  * @brief Configures activity detection.
  *
- * @param refOrAbs  - Referenced/Absolute Activity Select.
+ * @param ref_or_abs  - Referenced/Absolute Activity Select.
  *                    Example: 0 - absolute mode.
  *                             1 - referenced mode.
  * @param threshold - 11-bit unsigned value that the adxl362 samples are
@@ -351,32 +390,44 @@ void ADXL362_FifoSetup(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetupActivityDetection(adxl362_dev *dev,
-				    unsigned char  refOrAbs,
-                                    unsigned short threshold,
-                                    unsigned char  time)
+void adxl362_setup_activity_detection(adxl362_dev *dev,
+				      uint8_t  ref_or_abs,
+				      uint16_t threshold,
+				      uint8_t  time)
 {
-    unsigned char oldActInactReg = 0;
-    unsigned char newActInactReg = 0;
+	uint8_t old_act_inact_reg = 0;
+	uint8_t new_act_inact_reg = 0;
 
-    /* Configure motion threshold and activity timer. */
-    ADXL362_SetRegisterValue(dev, (threshold & 0x7FF), ADXL362_REG_THRESH_ACT_L, 2);
-    ADXL362_SetRegisterValue(dev, time, ADXL362_REG_TIME_ACT, 1);
-    /* Enable activity interrupt and select a referenced or absolute
-       configuration. */
-    ADXL362_GetRegisterValue(dev, &oldActInactReg, ADXL362_REG_ACT_INACT_CTL, 1);
-    newActInactReg = oldActInactReg & ~ADXL362_ACT_INACT_CTL_ACT_REF;
-    newActInactReg |= ADXL362_ACT_INACT_CTL_ACT_EN |
-                     (refOrAbs * ADXL362_ACT_INACT_CTL_ACT_REF);
-    ADXL362_SetRegisterValue(dev, newActInactReg, ADXL362_REG_ACT_INACT_CTL, 1);
+	/* Configure motion threshold and activity timer. */
+	adxl362_set_register_value(dev,
+				   (threshold & 0x7FF),
+				   ADXL362_REG_THRESH_ACT_L,
+				   2);
+	adxl362_set_register_value(dev,
+				   time,
+				   ADXL362_REG_TIME_ACT,
+				   1);
+	/* Enable activity interrupt and select a referenced or absolute
+	   configuration. */
+	adxl362_get_register_value(dev,
+				   &old_act_inact_reg,
+				   ADXL362_REG_ACT_INACT_CTL,
+				   1);
+	new_act_inact_reg = old_act_inact_reg & ~ADXL362_ACT_INACT_CTL_ACT_REF;
+	new_act_inact_reg |= ADXL362_ACT_INACT_CTL_ACT_EN |
+			     (ref_or_abs * ADXL362_ACT_INACT_CTL_ACT_REF);
+	adxl362_set_register_value(dev,
+				   new_act_inact_reg,
+				   ADXL362_REG_ACT_INACT_CTL,
+				   1);
 }
 
 /***************************************************************************//**
  * @brief Configures inactivity detection.
  *
- * @param refOrAbs  - Referenced/Absolute Inactivity Select.
- *                    Example: 0 - absolute mode.
- *                             1 - referenced mode.
+ * @param ref_or_abs  - Referenced/Absolute Inactivity Select.
+ *                      Example: 0 - absolute mode.
+ *                               1 - referenced mode.
  * @param threshold - 11-bit unsigned value that the adxl362 samples are
  *                    compared to.
  * @param time      - 16-bit value written to the inactivity timer register. The
@@ -385,24 +436,30 @@ void ADXL362_SetupActivityDetection(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADXL362_SetupInactivityDetection(adxl362_dev *dev,
-				      unsigned char  refOrAbs,
-                                      unsigned short threshold,
-                                      unsigned short time)
+void adxl362_setup_inactivity_detection(adxl362_dev *dev,
+					uint8_t  ref_or_abs,
+					uint16_t threshold,
+					uint16_t time)
 {
-    unsigned char oldActInactReg = 0;
-    unsigned char newActInactReg = 0;
+	uint8_t old_act_inact_reg = 0;
+	uint8_t new_act_inact_reg = 0;
 
-    /* Configure motion threshold and inactivity timer. */
-    ADXL362_SetRegisterValue(dev, (threshold & 0x7FF),
-                              ADXL362_REG_THRESH_INACT_L,
-                              2);
-    ADXL362_SetRegisterValue(dev, time, ADXL362_REG_TIME_INACT_L, 2);
-    /* Enable inactivity interrupt and select a referenced or absolute
-       configuration. */
-    ADXL362_GetRegisterValue(dev, &oldActInactReg, ADXL362_REG_ACT_INACT_CTL, 1);
-    newActInactReg = oldActInactReg & ~ADXL362_ACT_INACT_CTL_INACT_REF;
-    newActInactReg |= ADXL362_ACT_INACT_CTL_INACT_EN |
-                     (refOrAbs * ADXL362_ACT_INACT_CTL_INACT_REF);
-    ADXL362_SetRegisterValue(dev, newActInactReg, ADXL362_REG_ACT_INACT_CTL, 1);
+	/* Configure motion threshold and inactivity timer. */
+	adxl362_set_register_value(dev, (threshold & 0x7FF),
+				   ADXL362_REG_THRESH_INACT_L,
+				   2);
+	adxl362_set_register_value(dev, time, ADXL362_REG_TIME_INACT_L, 2);
+	/* Enable inactivity interrupt and select a referenced or absolute
+	   configuration. */
+	adxl362_get_register_value(dev,
+				   &old_act_inact_reg,
+				   ADXL362_REG_ACT_INACT_CTL,
+				   1);
+	new_act_inact_reg = old_act_inact_reg & ~ADXL362_ACT_INACT_CTL_INACT_REF;
+	new_act_inact_reg |= ADXL362_ACT_INACT_CTL_INACT_EN |
+			     (ref_or_abs * ADXL362_ACT_INACT_CTL_INACT_REF);
+	adxl362_set_register_value(dev,
+				   new_act_inact_reg,
+				   ADXL362_REG_ACT_INACT_CTL,
+				   1);
 }
