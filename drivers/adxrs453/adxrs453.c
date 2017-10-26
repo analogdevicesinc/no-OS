@@ -49,6 +49,10 @@
 /***************************************************************************//**
  * @brief Initializes the ADXRS453 and checks if the device is present.
  *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful (ID starts
  *                                with 0x52).
@@ -88,9 +92,10 @@ char ADXRS453_Init(adxrs453_dev **device,
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
  *
- * @return registerValue - Value of the register.
+ * @return registerValue  - Value of the register.
 *******************************************************************************/
 unsigned short ADXRS453_GetRegisterValue(adxrs453_dev *dev,
 					 unsigned char registerAddress)
@@ -131,8 +136,9 @@ unsigned short ADXRS453_GetRegisterValue(adxrs453_dev *dev,
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
- * @param registerValue - Data value to write.
+ * @param registerValue   - Data value to write.
  *
  * @return None.
 *******************************************************************************/
@@ -169,7 +175,7 @@ void ADXRS453_SetRegisterValue(adxrs453_dev *dev,
 /***************************************************************************//**
  * @brief Reads the sensor data.
  *
- * @param None.
+ * @param dev - The device structure.
  *
  * @return registerValue - The sensor data.
 *******************************************************************************/
@@ -211,7 +217,7 @@ unsigned long ADXRS453_GetSensorData(adxrs453_dev *dev)
 /***************************************************************************//**
  * @brief Reads the rate data and converts it to degrees/second.
  *
- * @param None.
+ * @param dev - The device structure.
  *
  * @return rate - The rate value in degrees/second.
 *******************************************************************************/
@@ -239,7 +245,7 @@ float ADXRS453_GetRate(adxrs453_dev *dev)
 /***************************************************************************//**
  * @brief Reads the temperature sensor data and converts it to degrees Celsius.
  *
- * @param None.
+ * @param dev - The device structure.
  *
  * @return temperature - The temperature value in degrees Celsius.
 *******************************************************************************/
