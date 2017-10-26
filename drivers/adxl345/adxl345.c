@@ -43,15 +43,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "adxl345.h"		// ADXL345 definitions.
-#include "Communication.h"	// Communication definitions.
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-char communicationType = 0;
-char selectedRange     = 0;
-char fullResolutionSet = 0;
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "adxl345.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -64,25 +59,26 @@ char fullResolutionSet = 0;
  *
  * @return registerValue  - Value of the register.
 *******************************************************************************/
-unsigned char ADXL345_GetRegisterValue(unsigned char registerAddress)
+unsigned char ADXL345_GetRegisterValue(adxl345_dev *dev,
+				       unsigned char registerAddress)
 {
     unsigned char dataBuffer[2] = {0, 0};
     unsigned char registerValue = 0;
-    
-    if(communicationType == ADXL345_SPI_COMM)
+
+    if(dev->communicationType == ADXL345_SPI_COMM)
     {
         dataBuffer[0] = ADXL345_SPI_READ | registerAddress;
         dataBuffer[1] = 0;
-        SPI_Read(ADXL345_SLAVE_ID, dataBuffer, 2);
+        spi_write_and_read(&dev->spi_dev, dataBuffer, 2);
         registerValue = dataBuffer[1];
     }
     else
     {
-        I2C_Write(ADXL345_ADDRESS,  // Address of the slave device.
+        i2c_write(&dev->i2c_dev,  // Address of the slave device.
                   &registerAddress, // Transmission data.
                   1,                // Number of bytes to write.
                   0);               // Stop condition control.
-        I2C_Read(ADXL345_ADDRESS,   // Address of the slave device.
+        i2c_read(&dev->i2c_dev,   // Address of the slave device.
                  &registerValue,    // Received data.
                  1,                 // Number of bytes to read.
                  1);                // Stop condition control.
@@ -99,22 +95,23 @@ unsigned char ADXL345_GetRegisterValue(unsigned char registerAddress)
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetRegisterValue(unsigned char registerAddress,
+void ADXL345_SetRegisterValue(adxl345_dev *dev,
+			      unsigned char registerAddress,
                               unsigned char registerValue)
 {
     unsigned char dataBuffer[2] = {0, 0};
 
-    if(communicationType == ADXL345_SPI_COMM)
+    if(dev->communicationType == ADXL345_SPI_COMM)
     {
         dataBuffer[0] = ADXL345_SPI_WRITE | registerAddress;
         dataBuffer[1] = registerValue;
-        SPI_Write(ADXL345_SLAVE_ID, dataBuffer, 2);
+        spi_write_and_read(&dev->spi_dev, dataBuffer, 2);
     }
     else
     {
 	dataBuffer[0] = registerAddress;
 	dataBuffer[1] = registerValue;
-	I2C_Write(ADXL345_ADDRESS, dataBuffer, 2, 1);
+	i2c_write(&dev->i2c_dev, dataBuffer, 2, 1);
     }
 }
 
@@ -123,37 +120,53 @@ void ADXL345_SetRegisterValue(unsigned char registerAddress,
  *		  part is present.
  *
  * @param commProtocol - SPI or I2C protocol.
- *                       Example: ADXL345_SPI_COMM 
- *                                ADXL345_I2C_COMM 
+ *                       Example: ADXL345_SPI_COMM
+ *                                ADXL345_I2C_COMM
  *
  * @return status      - Result of the initialization procedure.
  *                       Example: -1 - I2C/SPI peripheral was not initialized or
  *                                     ADXL345 part is not present.
- *                                 0 - I2C/SPI peripheral is initialized and 
+ *                                 0 - I2C/SPI peripheral is initialized and
  *                                     ADXL345 part is present.
 *******************************************************************************/
-char ADXL345_Init(char commProtocol)
+char ADXL345_Init(adxl345_dev **device,
+		  adxl345_init_param init_param)
 {
+	adxl345_dev *dev;
     unsigned char status = 0;
 
-    communicationType = commProtocol;
-    if(commProtocol == ADXL345_SPI_COMM)
+	dev = (adxl345_dev *)malloc(sizeof(*dev));
+	if (!dev) {
+		return -1;
+	}
+
+	dev->communicationType = init_param.communicationType;
+
+    if(dev->communicationType == ADXL345_SPI_COMM)
     {
-        status = SPI_Init(0,        // Transfer format.
-                          1000000,  // SPI clock frequency.
-                          1,        // SPI clock polarity.
-                          0);       // SPI clock edge.
+	    dev->spi_dev.type = init_param.spi_type;
+	    dev->spi_dev.id = init_param.spi_id;
+	    dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+	    dev->spi_dev.mode = init_param.spi_mode;
+	    dev->spi_dev.chip_select = init_param.spi_chip_select;
+	    status = spi_init(&dev->spi_dev);
     }
     else
     {
-        status = I2C_Init(100000);  // I2C clock frequency.
+	    dev->i2c_dev.type = init_param.i2c_type;
+	    dev->i2c_dev.id = init_param.i2c_id;
+	    dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
+	    dev->i2c_dev.slave_address = init_param.i2c_slave_address;
+	    status = i2c_init(&dev->i2c_dev);
     }
-    if(ADXL345_GetRegisterValue(ADXL345_DEVID) != ADXL345_ID)
+    if(ADXL345_GetRegisterValue(dev, ADXL345_DEVID) != ADXL345_ID)
     {
         status = -1;
     }
-    selectedRange = 2; // Measurement Range: +/- 2g (reset default).
-    fullResolutionSet = 0;
+    dev->selectedRange = 2; // Measurement Range: +/- 2g (reset default).
+    dev->fullResolutionSet = 0;
+
+	*device = dev;
 
     return status;
 }
@@ -167,15 +180,16 @@ char ADXL345_Init(char commProtocol)
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetPowerMode(unsigned char pwrMode)
+void ADXL345_SetPowerMode(adxl345_dev *dev,
+			  unsigned char pwrMode)
 {
     unsigned char oldPowerCtl = 0;
     unsigned char newPowerCtl = 0;
-    
-    oldPowerCtl = ADXL345_GetRegisterValue(ADXL345_POWER_CTL);
+
+    oldPowerCtl = ADXL345_GetRegisterValue(dev, ADXL345_POWER_CTL);
     newPowerCtl = oldPowerCtl & ~ADXL345_PCTL_MEASURE;
     newPowerCtl = newPowerCtl | (pwrMode * ADXL345_PCTL_MEASURE);
-    ADXL345_SetRegisterValue(ADXL345_POWER_CTL, newPowerCtl);
+    ADXL345_SetRegisterValue(dev, ADXL345_POWER_CTL, newPowerCtl);
 }
 
 /***************************************************************************//**
@@ -187,19 +201,20 @@ void ADXL345_SetPowerMode(unsigned char pwrMode)
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_GetXyz(short* x,
+void ADXL345_GetXyz(adxl345_dev *dev,
+		    short* x,
 		    short* y,
 		    short* z)
 {
     unsigned char firstRegAddress = ADXL345_DATAX0;
     unsigned char readBuffer[7]   = {0, 0, 0, 0, 0, 0, 0};
-    
-    if(communicationType == ADXL345_SPI_COMM)
+
+    if(dev->communicationType == ADXL345_SPI_COMM)
     {
         readBuffer[0] = ADXL345_SPI_READ |
                         ADXL345_SPI_MB |
                         firstRegAddress;
-        SPI_Read(ADXL345_SLAVE_ID, readBuffer, 7);
+        spi_write_and_read(&dev->spi_dev, readBuffer, 7);
         /* x = ((ADXL345_DATAX1) << 8) + ADXL345_DATAX0 */
         *x = ((short)readBuffer[2] << 8) + readBuffer[1];
         /* y = ((ADXL345_DATAY1) << 8) + ADXL345_DATAY0 */
@@ -209,16 +224,16 @@ void ADXL345_GetXyz(short* x,
     }
     else
     {
-        I2C_Write(ADXL345_ADDRESS,  // Adress of the slave device.
+        i2c_write(&dev->i2c_dev,  // Adress of the slave device.
                   &firstRegAddress, // Transmission data.
                   1,                // Number of bytes to write.
                   0);               // Stop condition control.
-        I2C_Read(ADXL345_ADDRESS,   // Adress of the slave device.
+        i2c_read(&dev->i2c_dev,   // Adress of the slave device.
                  readBuffer,        // Received data.
                  6,                 // Number of bytes to read.
                  1);                // Stop condition control.
         /* x = ((ADXL345_DATAX1) << 8) + ADXL345_DATAX0 */
-        *x = ((short)readBuffer[1] << 8) + readBuffer[0];       
+        *x = ((short)readBuffer[1] << 8) + readBuffer[0];
         /* y = ((ADXL345_DATAY1) << 8) + ADXL345_DATAY0 */
         *y = ((short)readBuffer[3] << 8) + readBuffer[2];
         /* z = ((ADXL345_DATAZ1) << 8) + ADXL345_DATAZ0 */
@@ -235,31 +250,32 @@ void ADXL345_GetXyz(short* x,
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_GetGxyz(float* x,
+void ADXL345_GetGxyz(adxl345_dev *dev,
+		     float* x,
 		     float* y,
 		     float* z)
 {
     short xData = 0;  // X-axis's output data.
     short yData = 0;  // Y-axis's output data.
     short zData = 0;  // Z-axis's output data.
- 
-    ADXL345_GetXyz(&xData, &yData, &zData);
-    *x = (float)(fullResolutionSet ? (xData * ADXL345_SCALE_FACTOR) :
-            (xData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
-    *y = (float)(fullResolutionSet ? (yData * ADXL345_SCALE_FACTOR) :
-            (yData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
-    *z = (float)(fullResolutionSet ? (zData * ADXL345_SCALE_FACTOR) :
-            (zData * ADXL345_SCALE_FACTOR * (selectedRange >> 1)));
+
+    ADXL345_GetXyz(dev, &xData, &yData, &zData);
+    *x = (float)(dev->fullResolutionSet ? (xData * ADXL345_SCALE_FACTOR) :
+            (xData * ADXL345_SCALE_FACTOR * (dev->selectedRange >> 1)));
+    *y = (float)(dev->fullResolutionSet ? (yData * ADXL345_SCALE_FACTOR) :
+            (yData * ADXL345_SCALE_FACTOR * (dev->selectedRange >> 1)));
+    *z = (float)(dev->fullResolutionSet ? (zData * ADXL345_SCALE_FACTOR) :
+            (zData * ADXL345_SCALE_FACTOR * (dev->selectedRange >> 1)));
 }
 
 /***************************************************************************//**
  * @brief Enables/disables the tap detection.
  *
  * @param tapType   - Tap type (none, single, double).
- *			Example: 0x0 - disables tap detection.	
- *				ADXL345_SINGLE_TAP - enables single tap 
+ *			Example: 0x0 - disables tap detection.
+ *				ADXL345_SINGLE_TAP - enables single tap
  *                                                   detection.
- *				ADXL345_DOUBLE_TAP - enables double tap 
+ *				ADXL345_DOUBLE_TAP - enables double tap
  *                                                   detection.
  * @param tapAxes   - Axes which participate in tap detection.
  *			Example: 0x0 - disables axes participation.
@@ -272,14 +288,15 @@ void ADXL345_GetGxyz(float* x,
  * @param tapThresh - Tap threshold. The scale factor is 62.5 mg/LSB.
  * @param tapInt    - Interrupts pin.
  *			Example: 0x0 - interrupts on INT1 pin.
- *				ADXL345_SINGLE_TAP - single tap interrupts on 
+ *				ADXL345_SINGLE_TAP - single tap interrupts on
  *						     INT2 pin.
  *				ADXL345_DOUBLE_TAP - double tap interrupts on
  *						     INT2 pin.
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetTapDetection(unsigned char tapType,
+void ADXL345_SetTapDetection(adxl345_dev *dev,
+			     unsigned char tapType,
                              unsigned char tapAxes,
                              unsigned char tapDur,
                              unsigned char tapLatent,
@@ -293,25 +310,25 @@ void ADXL345_SetTapDetection(unsigned char tapType,
     unsigned char newIntMap    = 0;
     unsigned char oldIntEnable = 0;
     unsigned char newIntEnable = 0;
-    
-    oldTapAxes = ADXL345_GetRegisterValue(ADXL345_TAP_AXES);
+
+    oldTapAxes = ADXL345_GetRegisterValue(dev, ADXL345_TAP_AXES);
     newTapAxes = oldTapAxes & ~(ADXL345_TAP_X_EN |
                                 ADXL345_TAP_Y_EN |
                                 ADXL345_TAP_Z_EN);
     newTapAxes = newTapAxes | tapAxes;
-    ADXL345_SetRegisterValue(ADXL345_TAP_AXES, newTapAxes);
-    ADXL345_SetRegisterValue(ADXL345_DUR, tapDur);
-    ADXL345_SetRegisterValue(ADXL345_LATENT, tapLatent);
-    ADXL345_SetRegisterValue(ADXL345_WINDOW, tapWindow);
-    ADXL345_SetRegisterValue(ADXL345_THRESH_TAP, tapThresh);
-    oldIntMap = ADXL345_GetRegisterValue(ADXL345_INT_MAP);
+    ADXL345_SetRegisterValue(dev, ADXL345_TAP_AXES, newTapAxes);
+    ADXL345_SetRegisterValue(dev, ADXL345_DUR, tapDur);
+    ADXL345_SetRegisterValue(dev, ADXL345_LATENT, tapLatent);
+    ADXL345_SetRegisterValue(dev, ADXL345_WINDOW, tapWindow);
+    ADXL345_SetRegisterValue(dev, ADXL345_THRESH_TAP, tapThresh);
+    oldIntMap = ADXL345_GetRegisterValue(dev, ADXL345_INT_MAP);
     newIntMap = oldIntMap & ~(ADXL345_SINGLE_TAP | ADXL345_DOUBLE_TAP);
     newIntMap = newIntMap | tapInt;
-    ADXL345_SetRegisterValue(ADXL345_INT_MAP, newIntMap);
-    oldIntEnable = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_MAP, newIntMap);
+    oldIntEnable = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newIntEnable = oldIntEnable & ~(ADXL345_SINGLE_TAP | ADXL345_DOUBLE_TAP);
     newIntEnable = newIntEnable | tapType;
-    ADXL345_SetRegisterValue(ADXL345_INT_ENABLE, newIntEnable);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_ENABLE, newIntEnable);
 }
 
 /***************************************************************************//**
@@ -328,15 +345,16 @@ void ADXL345_SetTapDetection(unsigned char tapType,
  * @param actAcDc   - Selects dc-coupled or ac-coupled operation.
  *			Example: 0x0 - dc-coupled operation.
  *				ADXL345_ACT_ACDC - ac-coupled operation.
- * @param actThresh - Threshold value for detecting activity. The scale factor 
+ * @param actThresh - Threshold value for detecting activity. The scale factor
                       is 62.5 mg/LSB.
  * @patam actInt    - Interrupts pin.
  *			Example: 0x0 - activity interrupts on INT1 pin.
- *				ADXL345_ACTIVITY - activity interrupts on INT2 
+ *				ADXL345_ACTIVITY - activity interrupts on INT2
  *                                                 pin.
  * @return None.
 *******************************************************************************/
-void ADXL345_SetActivityDetection(unsigned char actOnOff,
+void ADXL345_SetActivityDetection(adxl345_dev *dev,
+				  unsigned char actOnOff,
                                   unsigned char actAxes,
                                   unsigned char actAcDc,
                                   unsigned char actThresh,
@@ -348,23 +366,23 @@ void ADXL345_SetActivityDetection(unsigned char actOnOff,
     unsigned char newIntMap      = 0;
     unsigned char oldIntEnable   = 0;
     unsigned char newIntEnable   = 0;
-    
-    oldActInactCtl = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+
+    oldActInactCtl = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newActInactCtl = oldActInactCtl & ~(ADXL345_ACT_ACDC |
                                         ADXL345_ACT_X_EN |
                                         ADXL345_ACT_Y_EN |
                                         ADXL345_ACT_Z_EN);
     newActInactCtl = newActInactCtl | (actAcDc | actAxes);
-    ADXL345_SetRegisterValue(ADXL345_ACT_INACT_CTL, newActInactCtl);
-    ADXL345_SetRegisterValue(ADXL345_THRESH_ACT, actThresh);
-    oldIntMap = ADXL345_GetRegisterValue(ADXL345_INT_MAP);
+    ADXL345_SetRegisterValue(dev, ADXL345_ACT_INACT_CTL, newActInactCtl);
+    ADXL345_SetRegisterValue(dev, ADXL345_THRESH_ACT, actThresh);
+    oldIntMap = ADXL345_GetRegisterValue(dev, ADXL345_INT_MAP);
     newIntMap = oldIntMap & ~(ADXL345_ACTIVITY);
     newIntMap = newIntMap | actInt;
-    ADXL345_SetRegisterValue(ADXL345_INT_MAP, newIntMap);
-    oldIntEnable = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_MAP, newIntMap);
+    oldIntEnable = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newIntEnable = oldIntEnable & ~(ADXL345_ACTIVITY);
     newIntEnable = newIntEnable | (ADXL345_ACTIVITY * actOnOff);
-    ADXL345_SetRegisterValue(ADXL345_INT_ENABLE, newIntEnable);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_ENABLE, newIntEnable);
 }
 
 /***************************************************************************//**
@@ -381,7 +399,7 @@ void ADXL345_SetActivityDetection(unsigned char actOnOff,
  * @param inactAcDc   - Selects dc-coupled or ac-coupled operation.
  *			  Example: 0x0 - dc-coupled operation.
  *				ADXL345_INACT_ACDC - ac-coupled operation.
- * @param inactThresh - Threshold value for detecting inactivity. The scale 
+ * @param inactThresh - Threshold value for detecting inactivity. The scale
                         factor is 62.5 mg/LSB.
  * @param inactTime   - Inactivity time. The scale factor is 1 sec/LSB.
  * @patam inactInt    - Interrupts pin.
@@ -391,7 +409,8 @@ void ADXL345_SetActivityDetection(unsigned char actOnOff,
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetInactivityDetection(unsigned char inactOnOff,
+void ADXL345_SetInactivityDetection(adxl345_dev *dev,
+				    unsigned char inactOnOff,
                                     unsigned char inactAxes,
                                     unsigned char inactAcDc,
                                     unsigned char inactThresh,
@@ -404,24 +423,24 @@ void ADXL345_SetInactivityDetection(unsigned char inactOnOff,
     unsigned char newIntMap      = 0;
     unsigned char oldIntEnable   = 0;
     unsigned char newIntEnable   = 0;
-    
-    oldActInactCtl = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+
+    oldActInactCtl = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newActInactCtl = oldActInactCtl & ~(ADXL345_INACT_ACDC |
                                         ADXL345_INACT_X_EN |
                                         ADXL345_INACT_Y_EN |
                                         ADXL345_INACT_Z_EN);
     newActInactCtl = newActInactCtl | (inactAcDc | inactAxes);
-    ADXL345_SetRegisterValue(ADXL345_ACT_INACT_CTL, newActInactCtl);
-    ADXL345_SetRegisterValue(ADXL345_THRESH_INACT, inactThresh);
-    ADXL345_SetRegisterValue(ADXL345_TIME_INACT, inactTime);
-    oldIntMap = ADXL345_GetRegisterValue(ADXL345_INT_MAP);
+    ADXL345_SetRegisterValue(dev, ADXL345_ACT_INACT_CTL, newActInactCtl);
+    ADXL345_SetRegisterValue(dev, ADXL345_THRESH_INACT, inactThresh);
+    ADXL345_SetRegisterValue(dev, ADXL345_TIME_INACT, inactTime);
+    oldIntMap = ADXL345_GetRegisterValue(dev, ADXL345_INT_MAP);
     newIntMap = oldIntMap & ~(ADXL345_INACTIVITY);
     newIntMap = newIntMap | inactInt;
-    ADXL345_SetRegisterValue(ADXL345_INT_MAP, newIntMap);
-    oldIntEnable = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_MAP, newIntMap);
+    oldIntEnable = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newIntEnable = oldIntEnable & ~(ADXL345_INACTIVITY);
     newIntEnable = newIntEnable | (ADXL345_INACTIVITY * inactOnOff);
-    ADXL345_SetRegisterValue(ADXL345_INT_ENABLE, newIntEnable);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_ENABLE, newIntEnable);
 }
 
 /***************************************************************************//**
@@ -430,17 +449,18 @@ void ADXL345_SetInactivityDetection(unsigned char inactOnOff,
  * @param ffOnOff  - Enables/disables the free-fall detection.
  *			Example: 0x0 - disables the free-fall detection.
  *				 0x1 - enables the free-fall detection.
- * @param ffThresh - Threshold value for free-fall detection. The scale factor 
+ * @param ffThresh - Threshold value for free-fall detection. The scale factor
                      is 62.5 mg/LSB.
- * @param ffTime   - Time value for free-fall detection. The scale factor is 
+ * @param ffTime   - Time value for free-fall detection. The scale factor is
                      5 ms/LSB.
  * @param ffInt    - Interrupts pin.
  *		        Example: 0x0 - free-fall interrupts on INT1 pin.
- *			         ADXL345_FREE_FALL - free-fall interrupts on 
- *                                                   INT2 pin.   
+ *			         ADXL345_FREE_FALL - free-fall interrupts on
+ *                                                   INT2 pin.
  * @return None.
 *******************************************************************************/
-void ADXL345_SetFreeFallDetection(unsigned char ffOnOff,
+void ADXL345_SetFreeFallDetection(adxl345_dev *dev,
+				  unsigned char ffOnOff,
                                   unsigned char ffThresh,
                                   unsigned char ffTime,
                                   unsigned char ffInt)
@@ -449,17 +469,17 @@ void ADXL345_SetFreeFallDetection(unsigned char ffOnOff,
     unsigned char newIntMap    = 0;
     unsigned char oldIntEnable = 0;
     unsigned char newIntEnable = 0;
-    
-    ADXL345_SetRegisterValue(ADXL345_THRESH_FF, ffThresh);
-    ADXL345_SetRegisterValue(ADXL345_TIME_FF, ffTime);
-    oldIntMap = ADXL345_GetRegisterValue(ADXL345_INT_MAP);
+
+    ADXL345_SetRegisterValue(dev, ADXL345_THRESH_FF, ffThresh);
+    ADXL345_SetRegisterValue(dev, ADXL345_TIME_FF, ffTime);
+    oldIntMap = ADXL345_GetRegisterValue(dev, ADXL345_INT_MAP);
     newIntMap = oldIntMap & ~(ADXL345_FREE_FALL);
     newIntMap = newIntMap | ffInt;
-    ADXL345_SetRegisterValue(ADXL345_INT_MAP, newIntMap);
-    oldIntEnable = ADXL345_GetRegisterValue(ADXL345_INT_ENABLE);
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_MAP, newIntMap);
+    oldIntEnable = ADXL345_GetRegisterValue(dev, ADXL345_INT_ENABLE);
     newIntEnable = oldIntEnable & ~ADXL345_FREE_FALL;
     newIntEnable = newIntEnable | (ADXL345_FREE_FALL * ffOnOff);
-    ADXL345_SetRegisterValue(ADXL345_INT_ENABLE, newIntEnable);	
+    ADXL345_SetRegisterValue(dev, ADXL345_INT_ENABLE, newIntEnable);
 }
 
 /***************************************************************************//**
@@ -471,13 +491,14 @@ void ADXL345_SetFreeFallDetection(unsigned char ffOnOff,
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetOffset(unsigned char xOffset,
+void ADXL345_SetOffset(adxl345_dev *dev,
+		       unsigned char xOffset,
                        unsigned char yOffset,
                        unsigned char zOffset)
 {
-    ADXL345_SetRegisterValue(ADXL345_OFSX, xOffset);
-    ADXL345_SetRegisterValue(ADXL345_OFSY, yOffset);
-    ADXL345_SetRegisterValue(ADXL345_OFSZ, yOffset);
+    ADXL345_SetRegisterValue(dev, ADXL345_OFSX, xOffset);
+    ADXL345_SetRegisterValue(dev, ADXL345_OFSY, yOffset);
+    ADXL345_SetRegisterValue(dev, ADXL345_OFSZ, zOffset);
 }
 
 /***************************************************************************//**
@@ -494,15 +515,17 @@ void ADXL345_SetOffset(unsigned char xOffset,
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_SetRangeResolution(unsigned char gRange, unsigned char fullRes)
+void ADXL345_SetRangeResolution(adxl345_dev *dev,
+				unsigned char gRange,
+				unsigned char fullRes)
 {
     unsigned char oldDataFormat = 0;
     unsigned char newDataFormat = 0;
-    
-    oldDataFormat = ADXL345_GetRegisterValue(ADXL345_DATA_FORMAT);
+
+    oldDataFormat = ADXL345_GetRegisterValue(dev, ADXL345_DATA_FORMAT);
     newDataFormat = oldDataFormat & ~(ADXL345_RANGE(0x3) | ADXL345_FULL_RES);
     newDataFormat =  newDataFormat | ADXL345_RANGE(gRange) | fullRes;
-    ADXL345_SetRegisterValue(ADXL345_DATA_FORMAT, newDataFormat);
-    selectedRange = (1 << (gRange + 1));
-    fullResolutionSet = fullRes ? 1 : 0;
+    ADXL345_SetRegisterValue(dev, ADXL345_DATA_FORMAT, newDataFormat);
+    dev->selectedRange = (1 << (gRange + 1));
+    dev->fullResolutionSet = fullRes ? 1 : 0;
 }
