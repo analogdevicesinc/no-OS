@@ -49,6 +49,7 @@
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
+ * @param dev              - The device structure.
  * @param register_address - Address of the register.
  *
  * @return register_value  - Value of the register.
@@ -73,6 +74,7 @@ uint8_t adt7420_get_register_value(adt7420_dev *dev,
 /***************************************************************************//**
  * @brief Sets the value of a register.
  *
+ * @param dev              - The device structure.
  * @param register_address - Address of the register.
  * @param register_value   - Value of the register.
  *
@@ -95,6 +97,10 @@ void adt7420_set_register_value(adt7420_dev *dev,
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and checks if the device is
  *        present.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return status - The result of the initialization procedure.
  *                  Example: -1 - I2C peripheral was not initialized or the
@@ -137,6 +143,8 @@ int32_t adt7420_init(adt7420_dev **device,
  *        The ADT7420 does not respond to I2C bus commands while the default
  *        values upload (approximately 200 us).
  *
+ * @param dev - The device structure.
+ *
  * @return None.
 *******************************************************************************/
 void adt7420_reset(adt7420_dev *dev)
@@ -153,6 +161,7 @@ void adt7420_reset(adt7420_dev *dev)
 /***************************************************************************//**
  * @brief Sets the operational mode for ADT7420.
  *
+ * @param dev  - The device structure.
  * @param mode - Operation mode.
  *               Example: ADT7420_OP_MODE_CONT_CONV - continuous conversion;
  *                        ADT7420_OP_MODE_ONE_SHOT  - one shot;
@@ -175,6 +184,7 @@ void adt7420_set_operation_mode(adt7420_dev *dev,
 /***************************************************************************//**
  * @brief Sets the resolution for ADT7420.
  *
+ * @param dev        - The device structure.
  * @param resolution - Resolution.
  *                     Example: 0 - 13-bit resolution;
  *                              1 - 16-bit resolution.
@@ -195,6 +205,8 @@ void adt7420_set_resolution(adt7420_dev *dev,
 
 /***************************************************************************//**
  * @brief Reads the temperature data and converts it to Celsius degrees.
+ *
+ * @param dev - The device structure.
  *
  * @return temperature - Temperature in degrees Celsius.
 *******************************************************************************/
