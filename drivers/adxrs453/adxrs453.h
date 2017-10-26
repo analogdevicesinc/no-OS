@@ -44,8 +44,6 @@
 /************************** ADXRS453 Definitions ******************************/
 /******************************************************************************/
 
-#define ADXRS453_SLAVE_ID       1
-
 #define ADXRS453_READ           (1 << 7)
 #define ADXRS453_WRITE          (1 << 6)
 #define ADXRS453_SENSOR_DATA    (1 << 5)
@@ -61,26 +59,47 @@
 #define ADXRS453_REG_SN_LOW     0x10
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_device	spi_dev;
+} adxrs453_dev;
+
+typedef struct {
+	/* SPI */
+	spi_type	spi_type;
+	uint32_t	spi_id;
+	uint32_t	spi_max_speed_hz;
+	spi_mode	spi_mode;
+	uint8_t		spi_chip_select;
+} adxrs453_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the ADXRS453 and checks if the device is present. */
-char ADXRS453_Init(void);
+char ADXRS453_Init(adxrs453_dev **device,
+		   adxrs453_init_param init_param);
 
 /*! Reads the value of a register. */
-unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress);
+unsigned short ADXRS453_GetRegisterValue(adxrs453_dev *dev,
+					 unsigned char registerAddress);
 
 /*! Writes data into a register. */
-void ADXRS453_SetRegisterValue(unsigned char registerAddress,
+void ADXRS453_SetRegisterValue(adxrs453_dev *dev,
+			       unsigned char registerAddress,
                                unsigned short registerValue);
 
 /*! Reads the sensor data. */
-unsigned long ADXRS453_GetSensorData(void);
+unsigned long ADXRS453_GetSensorData(adxrs453_dev *dev);
 
 /*! Reads the rate data and converts it to degrees/second. */
-float ADXRS453_GetRate(void);
+float ADXRS453_GetRate(adxrs453_dev *dev);
 
 /*! Reads the temperature sensor data and converts it to degrees Celsius. */
-float ADXRS453_GetTemperature(void);
+float ADXRS453_GetTemperature(adxrs453_dev *dev);
 
 #endif // __ADXRS453_H__

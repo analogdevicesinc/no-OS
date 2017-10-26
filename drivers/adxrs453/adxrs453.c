@@ -41,8 +41,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "adxrs453.h"       // ADXRS453 definitions
-#include "Communication.h"  // Communication definitions
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "adxrs453.h"
 
 /***************************************************************************//**
  * @brief Initializes the ADXRS453 and checks if the device is present.
@@ -52,24 +54,34 @@
  *                                with 0x52).
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char ADXRS453_Init(void)
+char ADXRS453_Init(adxrs453_dev **device,
+		   adxrs453_init_param init_param)
 {
+	adxrs453_dev *dev;
     char           status     = 0;
     unsigned short adxrs453Id = 0;
-    
-    /* Initialize the SPI communication peripheral at 8 MHz. */ 
-    SPI_Init(0,        // Transfer format. 
-             8000000,  // SPI clock frequency. 
-             0,        // SPI clock polarity. 
-             1);       // SPI clock edge.
-    
-    /* Read the value of the ADXRS453 ID register. */ 
-    adxrs453Id = ADXRS453_GetRegisterValue(ADXRS453_REG_PID);
+
+	dev = (adxrs453_dev *)malloc(sizeof(*dev));
+	if (!dev) {
+		return -1;
+	}
+
+	    dev->spi_dev.type = init_param.spi_type;
+	    dev->spi_dev.id = init_param.spi_id;
+	    dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+	    dev->spi_dev.mode = init_param.spi_mode;
+	    dev->spi_dev.chip_select = init_param.spi_chip_select;
+	    status = spi_init(&dev->spi_dev);
+
+    /* Read the value of the ADXRS453 ID register. */
+    adxrs453Id = ADXRS453_GetRegisterValue(dev, ADXRS453_REG_PID);
     if((adxrs453Id >> 8) != 0x52)
     {
         status = -1;
     }
-    
+
+	*device = dev;
+
     return status;
 }
 
@@ -80,7 +92,8 @@ char ADXRS453_Init(void)
  *
  * @return registerValue - Value of the register.
 *******************************************************************************/
-unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress)
+unsigned short ADXRS453_GetRegisterValue(adxrs453_dev *dev,
+					 unsigned char registerAddress)
 {
     unsigned char  dataBuffer[4] = {0, 0, 0, 0};
     unsigned long  command       = 0;
@@ -102,8 +115,12 @@ unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress)
     {
         dataBuffer[3] |= 1;
     }
-    SPI_Write(ADXRS453_SLAVE_ID, dataBuffer, 4);
-    SPI_Read(ADXRS453_SLAVE_ID, dataBuffer, 4);
+    dataBuffer[4] = dataBuffer[0];
+    dataBuffer[5] = dataBuffer[1];
+    dataBuffer[6] = dataBuffer[2];
+    dataBuffer[7] = dataBuffer[3];
+    spi_write_and_read(&dev->spi_dev, dataBuffer, 4);
+    spi_write_and_read(&dev->spi_dev, &dataBuffer[4], 4);
     registerValue = ((unsigned short)dataBuffer[1] << 11) |
                     ((unsigned short)dataBuffer[2] << 3) |
                     (dataBuffer[3] >> 5);
@@ -119,20 +136,21 @@ unsigned short ADXRS453_GetRegisterValue(unsigned char registerAddress)
  *
  * @return None.
 *******************************************************************************/
-void ADXRS453_SetRegisterValue(unsigned char registerAddress,
+void ADXRS453_SetRegisterValue(adxrs453_dev *dev,
+			       unsigned char registerAddress,
                                unsigned short registerValue)
 {
     unsigned char dataBuffer[4] = {0, 0, 0, 0};
     unsigned long command       = 0;
     unsigned char bitNo         = 0;
     unsigned char sum           = 0;
-    
+
     dataBuffer[0] = ADXRS453_WRITE | (registerAddress >> 7);
     dataBuffer[1] = (registerAddress << 1) |
                     (registerValue >> 15);
     dataBuffer[2] = (registerValue >> 7);
     dataBuffer[3] = (registerValue << 1);
-    
+
     command = ((unsigned long)dataBuffer[0] << 24) |
               ((unsigned long)dataBuffer[1] << 16) |
               ((unsigned short)dataBuffer[2] << 8) |
@@ -145,7 +163,7 @@ void ADXRS453_SetRegisterValue(unsigned char registerAddress,
     {
         dataBuffer[3] |= 1;
     }
-    SPI_Write(ADXRS453_SLAVE_ID, dataBuffer, 4);
+    spi_write_and_read(&dev->spi_dev, dataBuffer, 4);
 }
 
 /***************************************************************************//**
@@ -155,14 +173,14 @@ void ADXRS453_SetRegisterValue(unsigned char registerAddress,
  *
  * @return registerValue - The sensor data.
 *******************************************************************************/
-unsigned long ADXRS453_GetSensorData(void)
+unsigned long ADXRS453_GetSensorData(adxrs453_dev *dev)
 {
-    unsigned char dataBuffer[4] = {0, 0, 0, 0};
+    unsigned char dataBuffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     unsigned long command       = 0;
     unsigned char bitNo         = 0;
     unsigned char sum           = 0;
     unsigned long registerValue = 0;
-    
+
     dataBuffer[0] = ADXRS453_SENSOR_DATA;
     command = ((unsigned long)dataBuffer[0] << 24) |
               ((unsigned long)dataBuffer[1] << 16) |
@@ -176,13 +194,17 @@ unsigned long ADXRS453_GetSensorData(void)
     {
         dataBuffer[3] |= 1;
     }
-    SPI_Write(ADXRS453_SLAVE_ID, dataBuffer, 4);
-    SPI_Read(ADXRS453_SLAVE_ID, dataBuffer, 4);
+    dataBuffer[4] = dataBuffer[0];
+    dataBuffer[5] = dataBuffer[1];
+    dataBuffer[6] = dataBuffer[2];
+    dataBuffer[7] = dataBuffer[3];
+    spi_write_and_read(&dev->spi_dev, dataBuffer, 4);
+    spi_write_and_read(&dev->spi_dev, &dataBuffer[4], 4);
     registerValue = ((unsigned long)dataBuffer[0] << 24) |
                     ((unsigned long)dataBuffer[1] << 16) |
                     ((unsigned short)dataBuffer[2] << 8) |
                     dataBuffer[3];
-    
+
     return registerValue;
 }
 
@@ -193,13 +215,13 @@ unsigned long ADXRS453_GetSensorData(void)
  *
  * @return rate - The rate value in degrees/second.
 *******************************************************************************/
-float ADXRS453_GetRate(void)
+float ADXRS453_GetRate(adxrs453_dev *dev)
 {
     unsigned short registerValue = 0;
     float          rate          = 0.0;
-    
-    registerValue = ADXRS453_GetRegisterValue(ADXRS453_REG_RATE);
-   
+
+    registerValue = ADXRS453_GetRegisterValue(dev, ADXRS453_REG_RATE);
+
     /*!< If data received is in positive degree range */
     if(registerValue < 0x8000)
     {
@@ -210,7 +232,7 @@ float ADXRS453_GetRate(void)
     {
         rate = (-1) * ((float)(0xFFFF - registerValue + 1) / 80.0);
     }
-    
+
     return rate;
 }
 
@@ -221,14 +243,14 @@ float ADXRS453_GetRate(void)
  *
  * @return temperature - The temperature value in degrees Celsius.
 *******************************************************************************/
-float ADXRS453_GetTemperature(void)
+float ADXRS453_GetTemperature(adxrs453_dev *dev)
 {
     unsigned long registerValue = 0;
     float          temperature   = 0;
-    
-    registerValue = ADXRS453_GetRegisterValue(ADXRS453_REG_TEM);
+
+    registerValue = ADXRS453_GetRegisterValue(dev, ADXRS453_REG_TEM);
     registerValue = (registerValue >> 6) - 0x31F;
     temperature = (float) registerValue / 5;
-    
+
     return temperature;
 }
