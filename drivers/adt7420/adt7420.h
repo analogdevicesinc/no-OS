@@ -43,18 +43,13 @@
 #define __ADT7420_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /************************** ADT7420 Definitions *******************************/
 /******************************************************************************/
 
 /* ADT7420 address */
-#define ADT7420_A0_PIN          1 // I2C Serial Bus Address Selection Pin
-#define ADT7420_A1_PIN          1 // I2C Serial Bus Address Selection Pin
-#define ADT7420_ADDRESS         (0x48 + (ADT7420_A1_PIN << 1) + ADT7420_A0_PIN)
+#define ADT7420_A0_PIN(x)       (((x) & 0x1) << 0) // I2C Serial Bus Address Selection Pin
+#define ADT7420_A1_PIN(x)       (((x) & 0x1) << 1) // I2C Serial Bus Address Selection Pin
+#define ADT7420_ADDRESS(x,y)    (0x48 + ADT7420_A1_PIN(x) + ADT7420_A0_PIN(y))
 
 /* ADT7420 registers */
 #define ADT7420_REG_TEMP_MSB    0x00 // Temperature value MSB
@@ -101,29 +96,53 @@
 #define ADT7420_DEFAULT_ID  0xCB
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+    /* I2C */
+    i2c_device	i2c_dev;
+    /* Device Settings */
+    unsigned char resolutionSetting;
+} adt7420_dev;
+
+typedef struct {
+    /* I2C */
+    i2c_type	i2c_type;
+    uint32_t	i2c_id;
+    uint32_t	i2c_max_speed_hz;
+    uint8_t	i2c_slave_address;
+    /* Device Settings */
+    unsigned char resolutionSetting;
+} adt7420_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Reads the value of a register. */
-unsigned char ADT7420_GetRegisterValue(unsigned char registerAddress);
+unsigned char ADT7420_GetRegisterValue(adt7420_dev *dev,
+                                       unsigned char registerAddress);
 
 /*! Sets the value of a register. */
-void ADT7420_SetRegisterValue(unsigned char registerAddress,
+void ADT7420_SetRegisterValue(adt7420_dev *dev,
+                              unsigned char registerAddress,
                               unsigned char registerValue);
 
 /*! Initializes the comm. peripheral and checks if the device is present. */
-char ADT7420_Init(void);
+char ADT7420_Init(adt7420_dev **device,
+		  adt7420_init_param init_param);
 
 /*! Resets the ADT7420. */
-void ADT7420_Reset(void);
+void ADT7420_Reset(adt7420_dev *dev);
 
 /*! Sets the operational mode for ADT7420. */
-void ADT7420_SetOperationMode(unsigned char mode);
+void ADT7420_SetOperationMode(adt7420_dev *dev, unsigned char mode);
 
 /*! Sets the resolution for ADT7420. */
-void ADT7420_SetResolution(unsigned char resolution);
+void ADT7420_SetResolution(adt7420_dev *dev, unsigned char resolution);
 
 /*! Reads the temperature data and converts it to Celsius degrees. */
-float ADT7420_GetTemperature(void);
+float ADT7420_GetTemperature(adt7420_dev *dev);
 
 #endif	/* __ADT7420_H__ */
