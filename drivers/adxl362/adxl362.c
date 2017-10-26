@@ -54,6 +54,10 @@
  * @brief Initializes communication with the device and checks if the part is
  *        present by reading the device id.
  *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
  * @return  0 - the initialization was successful and the device is present;
  *         -1 - an error occurred.
 *******************************************************************************/
@@ -90,6 +94,7 @@ int32_t adxl362_init(adxl362_dev **device,
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
+ * @param dev              - The device structure.
  * @param register_value   - Data value to write.
  * @param register_address - Address of the register.
  * @param bytes_number     - Number of bytes. Accepted values: 0 - 1.
@@ -115,6 +120,7 @@ void adxl362_set_register_value(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Performs a burst read of a specified number of registers.
  *
+ * @param dev              - The device structure.
  * @param read_data        - The read values are stored in this buffer.
  * @param register_address - The start address of the burst read.
  * @param bytes_number     - Number of bytes to read.
@@ -143,6 +149,7 @@ void adxl362_get_register_value(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Reads multiple bytes from the device's FIFO buffer.
  *
+ * @param dev          - The device structure.
  * @param buffer       - Stores the read bytes.
  * @param bytes_number - Number of bytes to read.
  *
@@ -168,6 +175,8 @@ void adxl362_get_fifo_value(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Resets the device via SPI communication bus.
  *
+ * @param dev - The device structure.
+ *
  * @return None.
 *******************************************************************************/
 void adxl362_software_reset(adxl362_dev *dev)
@@ -181,6 +190,7 @@ void adxl362_software_reset(adxl362_dev *dev)
 /***************************************************************************//**
  * @brief Places the device into standby/measure mode.
  *
+ * @param dev      - The device structure.
  * @param pwr_mode - Power mode.
  *                   Example: 0 - standby mode.
  *                            1 - measure mode.
@@ -209,6 +219,7 @@ void adxl362_set_power_mode(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Selects the measurement range.
  *
+ * @param dev - The device structure.
  * @param g_range - Range option.
  *                  Example: ADXL362_RANGE_2G  -  +-2 g
  *                           ADXL362_RANGE_4G  -  +-4 g
@@ -238,6 +249,7 @@ void adxl362_set_range(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Selects the Output Data Rate of the device.
  *
+ * @param dev      - The device structure.
  * @param out_rate - Output Data Rate option.
  *                   Example: ADXL362_ODR_12_5_HZ  -  12.5Hz
  *                            ADXL362_ODR_25_HZ    -  25Hz
@@ -269,9 +281,10 @@ void adxl362_set_output_rate(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Reads the 3-axis raw data from the accelerometer.
  *
- * @param x - Stores the X-axis data(as two's complement).
- * @param y - Stores the Y-axis data(as two's complement).
- * @param z - Stores the Z-axis data(as two's complement).
+ * @param dev - The device structure.
+ * @param x   - Stores the X-axis data(as two's complement).
+ * @param y   - Stores the Y-axis data(as two's complement).
+ * @param z   - Stores the Z-axis data(as two's complement).
  *
  * @return None.
 *******************************************************************************/
@@ -294,9 +307,10 @@ void adxl362_get_xyz(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Reads the 3-axis raw data from the accelerometer and converts it to g.
  *
- * @param x - Stores the X-axis data.
- * @param y - Stores the Y-axis data.
- * @param z - Stores the Z-axis data.
+ * @param dev - The device structure.
+ * @param x   - Stores the X-axis data.
+ * @param y   - Stores the Y-axis data.
+ * @param z   - Stores the Z-axis data.
  *
  * @return None.
 *******************************************************************************/
@@ -322,6 +336,8 @@ void adxl362_get_g_xyz(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Reads the temperature of the device.
  *
+ * @param dev - The device structure.
+ *
  * @return temp_celsius - The value of the temperature(degree s Celsius).
 *******************************************************************************/
 float adxl362_read_temperature(adxl362_dev *dev)
@@ -343,6 +359,7 @@ float adxl362_read_temperature(adxl362_dev *dev)
 /***************************************************************************//**
  * @brief Configures the FIFO feature.
  *
+ * @param dev          - The device structure.
  * @param mode         - Mode selection.
  *                       Example: ADXL362_FIFO_DISABLE      -  FIFO is disabled.
  *                                ADXL362_FIFO_OLDEST_SAVED -  Oldest saved mode.
@@ -379,6 +396,7 @@ void adxl362_fifo_setup(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Configures activity detection.
  *
+ * @param dev         - The device structure.
  * @param ref_or_abs  - Referenced/Absolute Activity Select.
  *                    Example: 0 - absolute mode.
  *                             1 - referenced mode.
@@ -425,6 +443,7 @@ void adxl362_setup_activity_detection(adxl362_dev *dev,
 /***************************************************************************//**
  * @brief Configures inactivity detection.
  *
+ * @param dev         - The device structure.
  * @param ref_or_abs  - Referenced/Absolute Inactivity Select.
  *                      Example: 0 - absolute mode.
  *                               1 - referenced mode.
