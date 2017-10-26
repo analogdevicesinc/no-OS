@@ -43,12 +43,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "adt7420.h"
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-unsigned char resolutionSetting = 0;    // Current resolution setting
 
 /***************************************************************************//**
  * @brief Reads the value of a register.
@@ -57,15 +55,16 @@ unsigned char resolutionSetting = 0;    // Current resolution setting
  *
  * @return registerValue  - Value of the register.
 *******************************************************************************/
-unsigned char ADT7420_GetRegisterValue(unsigned char registerAddress)
+unsigned char ADT7420_GetRegisterValue(adt7420_dev *dev,
+                                       unsigned char registerAddress)
 {
     unsigned char registerValue = 0;
 
-    I2C_Write(ADT7420_ADDRESS,
+    i2c_write(&dev->i2c_dev,
               &registerAddress,
               1,
               0);
-    I2C_Read(ADT7420_ADDRESS,
+    i2c_read(&dev->i2c_dev,
              &registerValue,
              1,
              1);
@@ -81,14 +80,15 @@ unsigned char ADT7420_GetRegisterValue(unsigned char registerAddress)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetRegisterValue(unsigned char registerAddress,
+void ADT7420_SetRegisterValue(adt7420_dev *dev,
+                              unsigned char registerAddress,
                               unsigned char registerValue)
 {
     unsigned char dataBuffer[2] = {0, 0};
-    
+
     dataBuffer[0] = registerAddress;
     dataBuffer[1] = registerValue;
-    I2C_Write(ADT7420_ADDRESS,
+    i2c_write(&dev->i2c_dev,
               dataBuffer,
               2,
               1);
@@ -104,18 +104,36 @@ void ADT7420_SetRegisterValue(unsigned char registerAddress,
  *                            0 - I2C peripheral was initialized and the
  *                                device is present.
 *******************************************************************************/
-char ADT7420_Init(void)
+char ADT7420_Init(adt7420_dev **device,
+		  adt7420_init_param init_param)
 {
-    unsigned char status = -1;
+    adt7420_dev *dev;
+    unsigned char status;
     unsigned char test   = 0;
-    
-    status = I2C_Init(100000);
-    test   = ADT7420_GetRegisterValue(ADT7420_REG_ID);
+
+    dev = (adt7420_dev *)malloc(sizeof(*dev));
+    if (!dev) {
+        return -1;
+    }
+
+    /* I2C */
+    dev->i2c_dev.type = init_param.i2c_type;
+    dev->i2c_dev.id = init_param.i2c_id;
+    dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
+    dev->i2c_dev.slave_address = init_param.i2c_slave_address;
+    status = i2c_init(&dev->i2c_dev);
+
+    /* Device Settings */
+    dev->resolutionSetting = init_param.resolutionSetting;
+
+    test   = ADT7420_GetRegisterValue(dev, ADT7420_REG_ID);
     if(test != ADT7420_DEFAULT_ID)
     {
         status = -1;
     }
-    
+
+	*device = dev;
+
     return status;
 }
 
@@ -126,15 +144,15 @@ char ADT7420_Init(void)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_Reset(void)
+void ADT7420_Reset(adt7420_dev *dev)
 {
     unsigned char registerAddress = ADT7420_REG_RESET;
-    
-    I2C_Write(ADT7420_ADDRESS,
+
+    i2c_write(&dev->i2c_dev,
               &registerAddress,
               1,
               1);
-    resolutionSetting = 0;
+    dev->resolutionSetting = 0;
 }
 
 /***************************************************************************//**
@@ -148,14 +166,14 @@ void ADT7420_Reset(void)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetOperationMode(unsigned char mode)
+void ADT7420_SetOperationMode(adt7420_dev *dev, unsigned char mode)
 {
     unsigned char registerValue = 0;
 
-    registerValue  = ADT7420_GetRegisterValue(ADT7420_REG_CONFIG);
+    registerValue  = ADT7420_GetRegisterValue(dev, ADT7420_REG_CONFIG);
     registerValue &= ~ADT7420_CONFIG_OP_MODE(ADT7420_OP_MODE_SHUTDOWN);
     registerValue |= ADT7420_CONFIG_OP_MODE(mode);
-    ADT7420_SetRegisterValue(ADT7420_REG_CONFIG, registerValue);
+    ADT7420_SetRegisterValue(dev, ADT7420_REG_CONFIG, registerValue);
 }
 
 /***************************************************************************//**
@@ -167,15 +185,15 @@ void ADT7420_SetOperationMode(unsigned char mode)
  *
  * @return None.
 *******************************************************************************/
-void ADT7420_SetResolution(unsigned char resolution)
+void ADT7420_SetResolution(adt7420_dev *dev, unsigned char resolution)
 {
     unsigned char registerValue = 0;
 
-    registerValue  = ADT7420_GetRegisterValue(ADT7420_REG_CONFIG);
+    registerValue  = ADT7420_GetRegisterValue(dev, ADT7420_REG_CONFIG);
     registerValue &= ~ADT7420_CONFIG_RESOLUTION;
     registerValue |= (resolution * ADT7420_CONFIG_RESOLUTION);
-    ADT7420_SetRegisterValue(ADT7420_REG_CONFIG, registerValue);
-    resolutionSetting = resolution;
+    ADT7420_SetRegisterValue(dev, ADT7420_REG_CONFIG, registerValue);
+    dev->resolutionSetting = resolution;
 }
 
 /***************************************************************************//**
@@ -183,17 +201,17 @@ void ADT7420_SetResolution(unsigned char resolution)
  *
  * @return temperature - Temperature in degrees Celsius.
 *******************************************************************************/
-float ADT7420_GetTemperature(void)
+float ADT7420_GetTemperature(adt7420_dev *dev)
 {
     unsigned char  msbTemp = 0;
     unsigned char  lsbTemp = 0;
     unsigned short temp    = 0;
     float          tempC   = 0;
 
-    msbTemp = ADT7420_GetRegisterValue(ADT7420_REG_TEMP_MSB);
-    lsbTemp = ADT7420_GetRegisterValue(ADT7420_REG_TEMP_LSB);
+    msbTemp = ADT7420_GetRegisterValue(dev, ADT7420_REG_TEMP_MSB);
+    lsbTemp = ADT7420_GetRegisterValue(dev, ADT7420_REG_TEMP_LSB);
     temp    = ((unsigned short)msbTemp << 8) + lsbTemp;
-    if(resolutionSetting)
+    if(dev->resolutionSetting)
     {
         if(temp & 0x8000)
         {
