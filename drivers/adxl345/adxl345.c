@@ -53,6 +53,7 @@
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
+ * @param dev              - The device structure.
  * @param register_address - Address of the register.
  *
  * @return register_value  - Value of the register.
@@ -87,6 +88,7 @@ uint8_t adxl345_get_register_value(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
+ * @param dev              - The device structure.
  * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
  *
@@ -119,7 +121,6 @@ void adxl345_set_register_value(adxl345_dev *dev,
  *        part is present.
  *
  * @param device     - The device structure.
- *
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
@@ -169,6 +170,7 @@ int32_t adxl345_init(adxl345_dev **device,
 /***************************************************************************//**
  * @brief Places the device into standby/measure mode.
  *
+ * @param dev      - The device structure.
  * @param pwr_mode - Power mode.
  *                   Example: 0x0 - standby mode.
  *                            0x1 - measure mode.
@@ -193,9 +195,10 @@ void adxl345_set_power_mode(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Reads the raw output data of each axis.
  *
- * @param x - X-axis's output data.
- * @param y - Y-axis's output data.
- * @param z - Z-axis's output data.
+ * @param dev - The device structure.
+ * @param x   - X-axis's output data.
+ * @param y   - Y-axis's output data.
+ * @param z   - Z-axis's output data.
  *
  * @return None.
 *******************************************************************************/
@@ -241,9 +244,10 @@ void adxl345_get_xyz(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Reads the raw output data of each axis and converts it to g.
  *
- * @param x - X-axis's output data.
- * @param y - Y-axis's output data.
- * @param z - Z-axis's output data.
+ * @param dev - The device structure.
+ * @param x   - X-axis's output data.
+ * @param y   - Y-axis's output data.
+ * @param z   - Z-axis's output data.
  *
  * @return None.
 *******************************************************************************/
@@ -268,6 +272,7 @@ void adxl345_get_g_xyz(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Enables/disables the tap detection.
  *
+ * @param dev        - The device structure.
  * @param tap_type   - Tap type (none, single, double).
  *                     Example: 0x0 - disables tap detection.
  *				ADXL345_SINGLE_TAP - enables single tap
@@ -350,6 +355,7 @@ void adxl345_set_tap_detection(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Enables/disables the activity detection.
  *
+ * @param dev       - The device structure.
  * @param actOnOff  - Enables/disables the activity detection.
  *                    Example: 0x0 - disables the activity detection.
  *                             0x1 - enables the activity detection.
@@ -416,6 +422,7 @@ void adxl345_set_activity_detection(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Enables/disables the inactivity detection.
  *
+ * @param dev          - The device structure.
  * @param inact_on_off - Enables/disables the inactivity detection.
  *                       Example: 0x0 - disables the inactivity detection.
  *                                0x1 - enables the inactivity detection.
@@ -487,6 +494,7 @@ void adxl345_set_inactivity_detection(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Enables/disables the free-fall detection.
  *
+ * @param dev       - The device structure.
  * @param ff_on_off - Enables/disables the free-fall detection.
  *                    Example: 0x0 - disables the free-fall detection.
  *                             0x1 - enables the free-fall detection.
@@ -537,6 +545,7 @@ void adxl345_set_free_fall_detection(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Sets an offset value for each axis (Offset Calibration).
  *
+ * @param dev      - The device structure.
  * @param x_offset - X-axis's offset.
  * @param y_offset - Y-axis's offset.
  * @param z_offset - Z-axis's offset.
@@ -562,6 +571,7 @@ void adxl345_set_offset(adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Selects the measurement range.
  *
+ * @param dev      - The device structure.
  * @param g_range  - Range option.
  *                   Example: ADXL345_RANGE_PM_2G  - +-2 g
  *                            ADXL345_RANGE_PM_4G  - +-4 g
