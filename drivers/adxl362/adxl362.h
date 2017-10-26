@@ -44,15 +44,8 @@
 #define __ADXL362_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /********************************* ADXL362 ************************************/
 /******************************************************************************/
-
-#define ADXL362_SLAVE_ID    1
 
 /* ADXL362 communication commands */
 #define ADXL362_WRITE_REG           0x0A
@@ -197,58 +190,83 @@
 #define ADXL362_RESET_KEY               0x52
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	/* SPI */
+	spi_device	spi_dev;
+	/* Device Settings */
+	char		selectedRange;
+} adxl362_dev;
+
+typedef struct {
+	/* SPI */
+	spi_type	spi_type;
+	uint32_t	spi_id;
+	uint32_t	spi_max_speed_hz;
+	spi_mode	spi_mode;
+	uint8_t		spi_chip_select;
+} adxl362_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the device. */
-char ADXL362_Init(void);
+char ADXL362_Init(adxl362_dev **device,
+		  adxl362_init_param init_param);
 
 /*! Writes data into a register. */
-void ADXL362_SetRegisterValue(unsigned short registerValue,
+void ADXL362_SetRegisterValue(adxl362_dev *dev,
+			      unsigned short registerValue,
                               unsigned char  registerAddress,
                               unsigned char  bytesNumber);
 
 /*! Performs a burst read of a specified number of registers. */
-void ADXL362_GetRegisterValue(unsigned char *pReadData,
+void ADXL362_GetRegisterValue(adxl362_dev *dev,
+			      unsigned char *pReadData,
                               unsigned char  registerAddress,
                               unsigned char  bytesNumber);
 
 /*! Reads multiple bytes from the device's FIFO buffer. */
-void ADXL362_GetFifoValue(unsigned char *pBuffer, unsigned short bytesNumber);
+void ADXL362_GetFifoValue(adxl362_dev *dev, unsigned char *pBuffer, unsigned short bytesNumber);
 
 /*! Resets the device via SPI communication bus. */
-void ADXL362_SoftwareReset(void);
+void ADXL362_SoftwareReset(adxl362_dev *dev);
 
 /*! Places the device into standby/measure mode. */
-void ADXL362_SetPowerMode(unsigned char pwrMode);
+void ADXL362_SetPowerMode(adxl362_dev *dev, unsigned char pwrMode);
 
 /*! Selects the measurement range. */
-void ADXL362_SetRange(unsigned char gRange);
+void ADXL362_SetRange(adxl362_dev *dev, unsigned char gRange);
 
 /*! Selects the Output Data Rate of the device. */
-void ADXL362_SetOutputRate(unsigned char outRate);
+void ADXL362_SetOutputRate(adxl362_dev *dev, unsigned char outRate);
 
 /*! Reads the 3-axis raw data from the accelerometer. */
-void ADXL362_GetXyz(short *x, short *y, short *z);
+void ADXL362_GetXyz(adxl362_dev *dev, short *x, short *y, short *z);
 
 /*! Reads the 3-axis raw data from the accelerometer and converts it to g. */
-void ADXL362_GetGxyz(float* x, float* y, float* z);
+void ADXL362_GetGxyz(adxl362_dev *dev, float* x, float* y, float* z);
 
 /*! Reads the temperature of the device. */
-float ADXL362_ReadTemperature(void);
+float ADXL362_ReadTemperature(adxl362_dev *dev);
 
 /*! Configures the FIFO feature. */
-void ADXL362_FifoSetup(unsigned char  mode,
+void ADXL362_FifoSetup(adxl362_dev *dev,
+		       unsigned char  mode,
                        unsigned short waterMarkLvl,
                        unsigned char  enTempRead);
 
 /*! Configures activity detection. */
-void ADXL362_SetupActivityDetection(unsigned char  refOrAbs,
+void ADXL362_SetupActivityDetection(adxl362_dev *dev,
+				    unsigned char  refOrAbs,
                                     unsigned short threshold,
                                     unsigned char  time);
 
 /*! Configures inactivity detection. */
-void ADXL362_SetupInactivityDetection(unsigned char  refOrAbs,
+void ADXL362_SetupInactivityDetection(adxl362_dev *dev,
+				      unsigned char  refOrAbs,
                                       unsigned short threshold,
                                       unsigned short time);
 
