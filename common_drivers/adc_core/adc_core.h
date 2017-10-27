@@ -82,6 +82,8 @@
 #define ADC_DELAY_WDATA(x)		(((x) & 0x1F) << 0)
 #define ADC_TO_DELAY_WDATA(x)		(((x) >> 0) & 0x1F)
 
+#define ADC_REG_TIMER			0x0100
+
 #define ADC_REG_CHAN_CNTRL(c)		(0x0400 + (c) * 0x40)
 #define ADC_PN_SEL			(1 << 10)
 #define ADC_IQCOR_ENB			(1 << 9)
@@ -114,35 +116,37 @@ enum adc_pn_sel {
 	ADC_PN_END = 10,
 };
 
-typedef struct {
+struct adc_core {
 	uint32_t base_address;
 	uint8_t	 master;
 	uint8_t	 no_of_channels;
 	uint8_t	 resolution;
-} adc_core;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t adc_read(adc_core core,
+int32_t adc_read(struct adc_core *core,
 		uint32_t reg_addr,
 		uint32_t *reg_data);
-int32_t adc_write(adc_core core,
+int32_t adc_write(struct adc_core *core,
 		uint32_t reg_addr,
 		uint32_t reg_data);
-uint32_t adc_delay_calibrate(adc_core core,
+uint32_t adc_delay_calibrate(struct adc_core *core,
 		uint32_t no_of_lanes,
 		enum adc_pn_sel sel);
-uint32_t adc_set_delay(adc_core core,
+uint32_t adc_set_delay(struct adc_core *core,
 		uint32_t no_of_lanes,
 		uint32_t delay);
-int32_t adc_setup(adc_core core);
-int32_t adc_set_pnsel(adc_core core,
+int32_t adc_setup(struct adc_core *core);
+int32_t adc_set_pnsel(struct adc_core *core,
 		uint8_t channel,
 		enum adc_pn_sel sel);
-int32_t adc_pn_mon(adc_core core,
+int32_t adc_pn_mon(struct adc_core *core,
 		enum adc_pn_sel sel);
-int32_t adc_ramp_test(adc_core core,
+int32_t adc_pn_mon_int(struct adc_core *core,
+		enum adc_pn_sel sel);
+int32_t adc_ramp_test(struct adc_core *core,
 		uint8_t no_of_cores,
 		uint32_t no_of_samples,
 		uint32_t start_address);

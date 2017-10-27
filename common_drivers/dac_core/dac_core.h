@@ -94,6 +94,8 @@
 #define DAC_MUX_OVER_RANGE			(1 << 1)
 #define DAC_STATUS				(1 << 0)
 
+#define DAC_REG_TIMER				0x0100
+
 #define DAC_REG_DDS_SCALE(x)		        (0x0400 + ((x) >> 1) * 0x40 + ((x) & 1) * 0x8)
 #define DAC_DDS_SCALE(x)			(((x) & 0xFFFF) << 0)
 #define DAC_TO_DDS_SCALE(x)			(((x) >> 0) & 0xFFFF)

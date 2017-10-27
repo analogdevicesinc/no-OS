@@ -219,8 +219,13 @@ int32_t dac_setup(struct dac_core *core)
 	uint32_t dac_clock;
 
 	dac_write(core, DAC_REG_RSTN, 0x00);
+	dac_write(core, DAC_REG_TIMER, 0x20000);
 	dac_write(core, DAC_REG_RSTN, 0x03);
-	mdelay(1);
+
+	reg_data = 1;
+	while (reg_data > 0) {
+		dac_read(core, DAC_REG_TIMER, &reg_data);
+	}
 
 	dac_read(core, DAC_REG_STATUS, &reg_data);
 	if (reg_data == 0x0) {

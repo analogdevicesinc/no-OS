@@ -211,9 +211,9 @@ int main(void)
 	struct jesd_core		ad9680_jesd;
 	struct dac_channel		ad9144_channels[2];
 	struct dac_core			ad9144_core;
+	struct adc_core			ad9680_core;
 
 	dmac_core		ad9144_dma;
-	adc_core		ad9680_core;
 	dmac_core               ad9680_dma;
 	dmac_xfer               rx_xfer;
 	dmac_xfer               tx_xfer;
@@ -416,13 +416,11 @@ int main(void)
 	mdelay(10);
 
 	// JESD core status
-	printf("jesd-status tx\n");
 	jesd_status(&ad9144_jesd);
-	printf("jesd-status rx\n");
 	jesd_status(&ad9680_jesd);
 
 	// interface core set up
-	adc_setup(ad9680_core);
+	adc_setup(&ad9680_core);
 	dac_setup(&ad9144_core);
 
 	ad9144_status(&ad9144_spi_device);
@@ -458,16 +456,11 @@ int main(void)
 	// AD9680 interface validation tests
 	//********************************************************************************
 
-		ad_printf("%s ad9680 - running PN9\n", __func__);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
-	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
-		ad_printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
-	};
-		ad_printf("%s ad9680 - running PN23\n", __func__);
+	adc_pn_mon(&ad9680_core, ADC_PN9);
+
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
-	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
-		ad_printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
-	};
+	adc_pn_mon(&ad9680_core, ADC_PN23A);
 
 #ifdef XCVR_EYE_SCAN
 
