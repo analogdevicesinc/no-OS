@@ -23,6 +23,10 @@ if {$m_type == "ZYNQ_PSU"} {
   source hw/psu_init.tcl
   psu_init
   psu_post_config
+  psu_ps_pl_isolation_removal
+  psu_ps_pl_reset_config
+  mwr 0xffff0000 0x14000000                                                                                         
+  mwr 0xFD1A0104 0x380E                                                                                             
 }
 
 if {$m_type == "ZYNQ_PS7"} {
@@ -33,6 +37,7 @@ if {$m_type == "ZYNQ_PS7"} {
 }
 
 if {$m_type == "ZYNQ_PSU"} {
+  targets -set -filter {name =~ "*Cortex-A53 #0*"}
 }
 
 if {$m_type == "ZYNQ_PS7"} {
