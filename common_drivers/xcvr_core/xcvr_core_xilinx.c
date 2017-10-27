@@ -98,7 +98,7 @@ int32_t xcvr_setup(struct xcvr_core *core) {
 	if (core->tx_or_rx_n == 1) {
 
 	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);
-	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
+	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x0);
 		return(0);
 	}
 
@@ -147,7 +147,11 @@ int32_t xcvr_status(struct xcvr_core *core) {
 		mdelay(1);
 	}
 
-	ad_printf("%s: invalid status, data(%x), mask(%x)!\n", __func__, data, mask);
+	if (core->tx_or_rx_n == 0) {
+		ad_printf("rx_%s: invalid status, data(%x), mask(%x)!\n", __func__, data, mask);
+	} else {
+		ad_printf("tx_%s: invalid status, data(%x), mask(%x)!\n", __func__, data, mask);
+	}
 	return(0);
 }
 
