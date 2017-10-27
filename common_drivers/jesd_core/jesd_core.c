@@ -40,82 +40,69 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+
 #include "jesd_core.h"
 
-/***************************************************************************//**
-* @brief jesd_read
-*******************************************************************************/
-int32_t jesd_read(jesd_core core,
-					uint32_t reg_addr,
-					uint32_t *reg_data)
-{
-	*reg_data = ad_reg_read((core.base_address + reg_addr));
+/* basic read/write functions */
 
-	return 0;
-}
+int32_t jesd_read(struct jesd_core *core, uint32_t reg_addr, uint32_t *reg_data) {
 
-/***************************************************************************//**
-* @brief jesd_write
-*******************************************************************************/
-int32_t jesd_write(jesd_core core,
-					uint32_t reg_addr,
-					uint32_t reg_data)
-{
-	ad_reg_write((core.base_address + reg_addr), reg_data);
-
-	return 0;
-}
-
-
-/***************************************************************************//**
-* @brief jesd_init
-*******************************************************************************/
-int32_t jesd_setup(jesd_core core)
-{
-	jesd_write(core, 0x210, (((core.octets_per_frame-1) << 16) |
-		((core.frames_per_multiframe*core.octets_per_frame)-1)));
-	jesd_write(core, 0x0c0, 0);
+	*reg_data = ad_reg_read((core->base_address + reg_addr));
 	return(0);
 }
 
-/***************************************************************************//**
-* @brief jesd generate SYSREF if necessar
-*******************************************************************************/
-int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
-{
-	if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
+int32_t jesd_write(struct jesd_core *core, uint32_t reg_addr, uint32_t reg_data) {
 
-		// generate SYS_REF
-
-		ad_gpio_set(core.sysref_gpio_pin, enable);
-		mdelay(10);
-	}
-	return 0;
+	ad_reg_write((core->base_address + reg_addr), reg_data);
+	return(0);
 }
-/***************************************************************************//**
-* @brief jesd_read_status
-*******************************************************************************/
-int32_t jesd_status(jesd_core core)
-{
-	uint32_t status;
-	int32_t timeout;
-	int32_t ret;
 
-	ret = 0;
+/* jesd setup (may be called independent of xcvrs) */
+
+int32_t jesd_setup(struct jesd_core *core) {
+
+	jesd_write(core, JESD204_REG_LINK_DISABLE, JESD204_LINK_DISABLE);
+	jesd_write(core, JESD204_REG_LINK_CONFIG_0, (((core->octets_per_frame-1) << 16) |
+		((core->frames_per_multiframe*core->octets_per_frame)-1)));
+	jesd_write(core, JESD204_REG_LINK_DISABLE, JESD204_LINK_ENABLE);
+	return(0);
+}
+
+/* jesd status (read after xcvrs are up & running) */
+/* it is not much useful to call this function now, the status is not persistent */
+
+int32_t jesd_status(struct jesd_core *core) {
+
+	uint32_t data;
+	int32_t timeout;
+
 	timeout = 100;
 	while (timeout > 0) {
-		mdelay(1);
-		jesd_read(core, 0x280, &status);
-		if ((status & 0x13) == 0x13) break;
+		jesd_read(core, JESD204_REG_LINK_STATUS, &data);
+		if (((data & JESD204_RX_LINK_MASK) == JESD204_RX_LINK_ACTIVE) &&
+			(core->tx_or_rx_n == 0)) return(0);
+		if (((data & JESD204_TX_LINK_MASK) == JESD204_TX_LINK_ACTIVE) &&
+			(core->tx_or_rx_n == 1)) return(0);
 		timeout = timeout - 1;
+		mdelay(1);
 	}
-	if ((status & 0x10) != 0x10) {
-		ad_printf("%s jesd_status: out of sync (%x)!\n", __func__, status);
-		ret = -1;
+	if (core->tx_or_rx_n == 0) {
+		ad_printf("rx_%s: invalid status, data(%x)!\n", __func__, data);
+	} else {
+		ad_printf("tx_%s: invalid status, data(%x)!\n", __func__, data);
 	}
-	if ((status & 0x03) != 0x03) {
-		ad_printf("%s jesd_status: not in data phase (%x)!\n", __func__, status);
-		ret = -1;
-	}
-	return(ret);
+	return(-1);
 }
+
+/* jesd sysref control, fpga sourcing sysref */
+/* as much as possible do NOT use this method */
+/* not guaranteed to have a valid sysref timing if using this method */
+
+int32_t jesd_sysref_control(struct jesd_core *core) {
+
+	ad_gpio_set(core->sysref_gpio_pin, 1);
+	mdelay(1);
+	ad_gpio_set(core->sysref_gpio_pin, 0);
+	return(0);
+}
+

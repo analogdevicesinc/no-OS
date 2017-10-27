@@ -41,90 +41,35 @@
 
 #include "platform_drivers.h"
 
-/******************************************************************************/
-/************************ JESD204 Core Definitions ****************************/
-/******************************************************************************/
-#define JESD204_REG_TRX_VERSION				0x00
-#define JESD204_REG_TRX_RESET				0x04
-#define JESD204_REG_TRX_ILA_SUPPORT			0x08
-#define JESD204_REG_TRX_SCRAMBLING			0x0c
-#define JESD204_REG_TRX_SYSREF_HANDLING			0x10
-#define JESD204_REG_TX_ILA_MULTIFRAMES			0x14
-#define JESD204_REG_TRX_TEST_MODES			0x18
-#define JESD204_REG_RX_LINK_ERROR_STATUS		0x1c
-#define JESD204_REG_TRX_OCTETS_PER_FRAME		0x20
-#define JESD204_REG_TRX_FRAMES_PER_MULTIFRAME		0x24
-#define JESD204_REG_TRX_LANES_IN_USE			0x28
-#define JESD204_REG_TRX_SUBCLASS_MODE			0x2c
-#define JESD204_REG_TRX_SYNC_STATUS			0x38
-
-#define JESD204_REG_STATUS				0x80
-
-/* JESD204_REG_TRX_RESET */
-#define JESD204_TRX_GT_WDT_DIS				(1 << 16)
-#define JESD204_TRX_RESET				(1 << 0)
-
-/* JESD204_REG_TRX_ILA_SUPPORT */
-#define JESD204_TRX_ILA_EN				(1 << 0)
-
-/* JESD204_REG_TRX_SCRAMBLING */
-#define JESD204_TRX_SCR_EN				(1 << 0)
-
-/* JESD204_REg_TRX_SYSREF_HANDLING */
-#define JESD204_TRX_SYSREF_ALWAYSON			(1 << 0)
-#define JESD204_TRX_SYSREF_DELAY(x)			(((x) & 0xf) << 8)
-#define JESD204_TRX_SYSREF_ONRESYNC			(1 << 16)
-
-/* JESD204_REG_RX_LINK_ERROR_STATUS */
-#define JESD204_RX_LINK_LANE_ALIGN_ERR_ALARM		(1 << 31)
-#define JESD204_RX_LINK_SYSREF_LMFC_ALARM		(1 << 30)
-#define JESD204_RX_LINK_BUFF_OVF_ALARM			(1 << 29)
-#define JESD204_RX_LINK_K_CH_ERR(l)			((1 << 2) << (3 * (l)))
-#define JESD204_RX_LINK_DISP_ERR(l)			((1 << 1) << (3 * (l)))
-#define JESD204_RX_LINK_NOT_IN_TBL_ERR(l)		((1 << 0) << (3 * (l)))
-
-/* JESD204_REG_TRX_OCTETS_PER_FRAME */
-#define JESD204_TRX_OCTETS_PER_FRAME(x)			(((x) - 1) & 0xff)
-
-/* JESD204_REG_TRX_FRAMES_PER_MULTIFRAME */
-#define JESD204_TRX_FRAMES_PER_MULTIFRAME(x)		(((x) - 1) & 0x1f)
-
-/* JESD204_REG_TRX_SUBCLASS_MODE */
-#define JESD204_TRX_SUBCLASS_MODE(x)			((x) & 0x3)
-
-/* JESD204_REG_TRX_SYNC_STATUS */
-#define JESD204_TRX_SYSREF_CAPTURED			(1 << 16)
-#define JESD204_TRX_SYNC_ACHIEVED			(1 << 0)
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
+#define JESD204_REG_LINK_CONFIG_0			0x210
+#define JESD204_REG_LINK_DISABLE			0x0c0
+#define JESD204_REG_LINK_STATUS				0x280
+#define JESD204_LINK_DISABLE				0x1
+#define JESD204_LINK_ENABLE				0x0
+#define JESD204_TX_LINK_MASK				0x13
+#define JESD204_TX_LINK_ACTIVE				0x13
+#define JESD204_RX_LINK_MASK				0x3
+#define JESD204_RX_LINK_ACTIVE				0x3
 
 typedef enum {
 	EXTERN,
 	INTERN
-} sys_ref_type;
+} m_sysref_type;
 
-typedef struct {
-  uint32_t		base_address;
-  uint8_t		rx_tx_n;
-  uint8_t		scramble_enable;
-  uint8_t		octets_per_frame;
-  uint8_t		frames_per_multiframe;
-  uint8_t		subclass_mode;
-  sys_ref_type		sysref_type;
-  uint32_t		sysref_gpio_pin;
-} jesd_core;
+struct jesd_core {
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
+	uint32_t base_address;
+	uint8_t	tx_or_rx_n;
+	uint8_t	octets_per_frame;
+	uint8_t	frames_per_multiframe;
+	uint32_t sysref_gpio_pin;
+	m_sysref_type sysref_type;
+};
 
-int32_t jesd_read(jesd_core core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t jesd_write(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
-
-int32_t jesd_setup(jesd_core core);
-int32_t jesd_status(jesd_core core);
-int32_t jesd_sysref_control(jesd_core core, uint32_t enable);
+int32_t jesd_read(struct jesd_core *core, uint32_t reg_addr, uint32_t *reg_data);
+int32_t jesd_write(struct jesd_core *core, uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd_setup(struct jesd_core *core);
+int32_t jesd_status(struct jesd_core *core);
+int32_t jesd_sysref_control(struct jesd_core *core);
 
 #endif

@@ -200,21 +200,20 @@ int main(void)
 	struct spi_device		ad9523_spi_device;
 	struct spi_device		ad9144_spi_device;
 	struct spi_device		ad9680_spi_device;
-
 	struct ad9523_channel_spec	ad9523_channels[8];
 	struct ad9523_platform_data	ad9523_param;
 	struct ad9144_init_param	ad9144_param;
 	struct ad9680_init_param	ad9680_param;
 	struct xcvr_core_instance	daq2_xcvr;
+	struct xcvr_core		ad9144_xcvr;
+	struct xcvr_core		ad9680_xcvr;
+	struct jesd_core		ad9144_jesd;
+	struct jesd_core		ad9680_jesd;
 
 	dac_core		ad9144_core;
 	dac_channel		ad9144_channels[2];
-	jesd_core		ad9144_jesd;
 	dmac_core		ad9144_dma;
-	struct xcvr_core		ad9144_xcvr;
 	adc_core		ad9680_core;
-	jesd_core		ad9680_jesd;
-	struct xcvr_core		ad9680_xcvr;
 	dmac_core               ad9680_dma;
 	dmac_xfer               rx_xfer;
 	dmac_xfer               tx_xfer;
@@ -329,11 +328,9 @@ int main(void)
 	ad9144_xcvr.number_of_instances = 1;
 	ad9144_xcvr.instances = &daq2_xcvr;
 
-	ad9144_jesd.rx_tx_n = 0;
-	ad9144_jesd.scramble_enable = 1;
+	ad9144_jesd.tx_or_rx_n = 1;
 	ad9144_jesd.octets_per_frame = 1;
 	ad9144_jesd.frames_per_multiframe = 32;
-	ad9144_jesd.subclass_mode = 1;
 
 	ad9144_channels[0].dds_dual_tone = 0;
 	ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
@@ -378,10 +375,9 @@ int main(void)
 	ad9680_xcvr.number_of_instances = 1;
 	ad9680_xcvr.instances = &daq2_xcvr;
 
-	ad9680_jesd.scramble_enable = 1;
+	ad9680_jesd.tx_or_rx_n = 0;
 	ad9680_jesd.octets_per_frame = 1;
 	ad9680_jesd.frames_per_multiframe = 32;
-	ad9680_jesd.subclass_mode = 1;
 
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
@@ -431,7 +427,7 @@ int main(void)
 	ad9680_setup(&ad9680_spi_device, &ad9680_param);
 	ad9144_setup(&ad9144_spi_device, &ad9144_param);
 
-	jesd_setup(ad9144_jesd);
+	jesd_setup(&ad9144_jesd);
 	mdelay(1);
 
 	// set up the XCVRs
@@ -441,14 +437,14 @@ int main(void)
 		xcvr_status(&ad9680_xcvr);
 
 	// set up the JESD core
-	jesd_setup(ad9680_jesd);
+	jesd_setup(&ad9680_jesd);
 	mdelay(10);
 
 	// JESD core status
 	printf("jesd-status tx\n");
-	jesd_status(ad9144_jesd);
+	jesd_status(&ad9144_jesd);
 	printf("jesd-status rx\n");
-	jesd_status(ad9680_jesd);
+	jesd_status(&ad9680_jesd);
 
 	// interface core set up
 	adc_setup(ad9680_core);
