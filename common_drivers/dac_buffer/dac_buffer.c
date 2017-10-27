@@ -280,7 +280,7 @@ const uint16_t sine_lut_2[1024] = {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-uint32_t dac_buffer_load(dac_core core, uint32_t start_address) {
+uint32_t dac_buffer_load(struct dac_core core, uint32_t start_address) {
 
 	uint32_t no_of_samples;
 	uint32_t index;

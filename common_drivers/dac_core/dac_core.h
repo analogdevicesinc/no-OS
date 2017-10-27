@@ -126,7 +126,7 @@ typedef enum {
 	DAC_SRC_PNXX,	// Device specific
 } dac_data_src;
 
-typedef struct {
+struct dac_channel {
 	uint32_t dds_frequency_0;       // in hz (1000*1000 for MHz)
 	uint32_t dds_phase_0;           // in milli(?) angles (90*1000 for 90 degrees = pi/2)
 	int32_t dds_scale_0;            // in micro units (1.0*1000*1000 is 1.0)
@@ -136,28 +136,31 @@ typedef struct {
 	uint32_t dds_dual_tone;         // if using single tone for this channel, set to 0x0
 	uint32_t pat_data;              // if using SED/debug that sort of thing
 	dac_data_src sel;               // set to one of the enumerated type above.
-} dac_channel;
+};
 
-typedef struct {
+struct dac_core {
 	uint32_t base_address;
-	uint8_t	 resolution;
-	uint8_t	 no_of_channels;
-	dac_channel *channels;
-} dac_core;
+	uint8_t resolution;
+	uint8_t no_of_channels;
+	struct dac_channel *channels;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t dac_read(dac_core *core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t dac_write(dac_core *core, uint32_t reg_addr, uint32_t reg_data);
+int32_t dac_read(struct dac_core *core, uint32_t reg_addr, uint32_t *reg_data);
+int32_t dac_write(struct dac_core *core, uint32_t reg_addr, uint32_t reg_data);
 
-int32_t dac_setup(dac_core *core);
-int32_t dac_data_setup(dac_core *core);
+int32_t dac_setup(struct dac_core *core);
+int32_t dac_channel_init(struct dac_core *core);
+int32_t dac_channel_setup(struct dac_core *core);
 
-int32_t dds_set_frequency(dac_core *core, uint32_t chan, uint32_t freq);
-int32_t dds_set_phase(dac_core *core, uint32_t chan, uint32_t phase);
-int32_t dds_set_scale(dac_core *core, uint32_t chan, int32_t scale_micro_units);
-int32_t dac_data_src_sel(dac_core *core, int32_t chan, dac_data_src src);
+/* channel based (-1 for all), do not use for multi tones dds control */
+
+int32_t dac_set_frequency(struct dac_core *core, int32_t chan, uint32_t freq);
+int32_t dac_set_phase(struct dac_core *core, int32_t chan, uint32_t phase);
+int32_t dac_set_scale(struct dac_core *core, int32_t chan, int32_t scale_micro_units);
+int32_t dac_set_source(struct dac_core *core, int32_t chan, dac_data_src src);
 
 #endif

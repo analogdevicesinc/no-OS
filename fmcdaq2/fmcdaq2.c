@@ -209,9 +209,9 @@ int main(void)
 	struct xcvr_core		ad9680_xcvr;
 	struct jesd_core		ad9144_jesd;
 	struct jesd_core		ad9680_jesd;
+	struct dac_channel		ad9144_channels[2];
+	struct dac_core			ad9144_core;
 
-	dac_core		ad9144_core;
-	dac_channel		ad9144_channels[2];
 	dmac_core		ad9144_dma;
 	adc_core		ad9680_core;
 	dmac_core               ad9680_dma;
@@ -317,9 +317,11 @@ int main(void)
 	ad9523_param.cpole1 = 2;
 
 	//********************************************************************************
-	// DAC (AD9144) and the transmit path (AXI_ADXCVR,
-	//	JESD204, AXI_AD9144, TX DMAC) configuration
+	// DAC (AD9144) and the transmit path (JESD-PHY, JESD-IP, AXI_AD9144, TX DMAC)
 	//********************************************************************************
+
+	ad9144_param.lane_rate_kbps = 10000000;
+	ad9144_param.active_converters = 2;
 
 	ad9144_xcvr.mmcm_or_linkpll_present = 0;
 	ad9144_xcvr.mmcm_or_linkpll_base_address = 0;
@@ -332,38 +334,12 @@ int main(void)
 	ad9144_jesd.octets_per_frame = 1;
 	ad9144_jesd.frames_per_multiframe = 32;
 
-	ad9144_channels[0].dds_dual_tone = 0;
-	ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
-	ad9144_channels[0].dds_phase_0 = 0;
-	ad9144_channels[0].dds_scale_0 = 500000;
-	ad9144_channels[0].pat_data = 0xb1b0a1a0;
-	ad9144_channels[1].dds_dual_tone = 0;
-	ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
-	ad9144_channels[1].dds_phase_0 = 0;
-	ad9144_channels[1].dds_scale_0 = 500000;
-	ad9144_channels[1].pat_data = 0xd1d0c1c0;
-	ad9144_channels[0].sel = DAC_SRC_DDS;
-	ad9144_channels[1].sel = DAC_SRC_DDS;
-
-	ad9144_param.lane_rate_kbps = 10000000;
-	ad9144_param.active_converters = 2;
-
 	ad9144_core.no_of_channels = ad9144_param.active_converters;
-	ad9144_core.resolution = 16;
 	ad9144_core.channels = &ad9144_channels[0];
-
-	ad9144_param.stpl_samples[0][0] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[0][1] = (ad9144_channels[0].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[0][2] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[0][3] = (ad9144_channels[0].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[1][0] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[1][1] = (ad9144_channels[1].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[1][2] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[1][3] = (ad9144_channels[1].pat_data>>16) & 0xffff;
+	dac_channel_init(&ad9144_core);
 
 	//********************************************************************************
-	// ADC (AD9680) and the receive path ( AXI_ADXCVR,
-	//	JESD204, AXI_AD9680, TX DMAC) configuration
+	// ADC (AD9680) and the receive path (JESD-PHY, JESD-IP, AXI_AD9680, RX DMAC)
 	//********************************************************************************
 
 	ad9680_param.lane_rate_kbps = 10000000;
@@ -412,18 +388,17 @@ int main(void)
 	ad_gpio_set(GPIO_DAC_RESET, 0);
 	ad_gpio_set(GPIO_DAC_TXEN, 0);
 	ad_gpio_set(GPIO_ADC_PD, 1);
-	mdelay(5);
+	mdelay(1);
 
 	ad_gpio_set(GPIO_CLKD_SYNC, 1);
 	ad_gpio_set(GPIO_DAC_RESET, 1);
 	ad_gpio_set(GPIO_DAC_TXEN, 1);
 	ad_gpio_set(GPIO_ADC_PD, 0);
+	mdelay(1);
 
-	// setup clocks
+	// setup spi device(s)
 
 	ad9523_setup(&ad9523_spi_device, &ad9523_param);
-
-	// set up the devices
 	ad9680_setup(&ad9680_spi_device, &ad9680_param);
 	ad9144_setup(&ad9144_spi_device, &ad9144_param);
 
@@ -453,32 +428,34 @@ int main(void)
 	ad9144_status(&ad9144_spi_device);
 
 	//********************************************************************************
-	// transport path testing
+	// AD9144 interface validation tests (no need to run all this, PRBS is good)
 	//********************************************************************************
 
-	ad9144_channels[0].sel = DAC_SRC_SED;
-	ad9144_channels[1].sel = DAC_SRC_SED;
-	dac_data_setup(&ad9144_core);
+	ad9144_param.stpl_samples[0][0] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
+	ad9144_param.stpl_samples[0][1] = (ad9144_channels[0].pat_data>>16) & 0xffff;
+	ad9144_param.stpl_samples[0][2] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
+	ad9144_param.stpl_samples[0][3] = (ad9144_channels[0].pat_data>>16) & 0xffff;
+	ad9144_param.stpl_samples[1][0] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
+	ad9144_param.stpl_samples[1][1] = (ad9144_channels[1].pat_data>>16) & 0xffff;
+	ad9144_param.stpl_samples[1][2] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
+	ad9144_param.stpl_samples[1][3] = (ad9144_channels[1].pat_data>>16) & 0xffff;
+	dac_set_source(&ad9144_core, -1, DAC_SRC_SED);
 	ad9144_short_pattern_test(&ad9144_spi_device, &ad9144_param);
 
 	// PN7 data path test
 
-	ad9144_channels[0].sel = DAC_SRC_PN23;
-	ad9144_channels[1].sel = DAC_SRC_PN23;
-	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
+	dac_set_source(&ad9144_core, -1, DAC_SRC_PN23);
 	ad9144_datapath_prbs_test(&ad9144_spi_device, &ad9144_param);
 
 	// PN15 data path test
 
-	ad9144_channels[0].sel = DAC_SRC_PN31;
-	ad9144_channels[1].sel = DAC_SRC_PN31;
-	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
+	dac_set_source(&ad9144_core, -1, DAC_SRC_PN31);
 	ad9144_datapath_prbs_test(&ad9144_spi_device, &ad9144_param);
 
 	//********************************************************************************
-	// receive path testing
+	// AD9680 interface validation tests
 	//********************************************************************************
 
 		ad_printf("%s ad9680 - running PN9\n", __func__);
@@ -512,18 +489,12 @@ int main(void)
 	// default data
 
 #if DMA_BUFFER
-	ad9144_channels[0].sel = DAC_SRC_DMA;
-	ad9144_channels[1].sel = DAC_SRC_DMA;
-	dac_data_setup(&ad9144_core);
-
+	dac_set_source(&ad9144_core, -1, DAC_SRC_DMA);
 	if(!dmac_start_transaction(ad9144_dma)){
 		ad_printf("daq2: transmit data from memory\n");
 	};
 #else
-	ad9144_channels[0].sel = DAC_SRC_DDS;
-	ad9144_channels[1].sel = DAC_SRC_DDS;
-	dac_data_setup(&ad9144_core);
-
+	dac_set_source(&ad9144_core, -1, DAC_SRC_DDS);
 	ad_printf("daq2: setup and configuration is done\n");
 #endif
 	//********************************************************************************
