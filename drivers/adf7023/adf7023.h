@@ -367,44 +367,86 @@ struct ADF7023_BBRAM
 #define ADF7023_RX_BASE_ADR 0x10
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_device	spi_dev;
+	/* GPIO */
+	gpio_device	gpio_dev;
+	int8_t		gpio_cs;
+	int8_t		gpio_miso;
+	/* Device Settings */
+	struct ADF7023_BBRAM ADF7023_BBRAMCurrent;
+} adf7023_dev;
+
+typedef struct {
+	/* SPI */
+	spi_type	spi_type;
+	uint32_t	spi_id;
+	uint32_t	spi_max_speed_hz;
+	spi_mode	spi_mode;
+	uint8_t		spi_chip_select;
+	/* GPIO */
+	gpio_type	gpio_type;
+	uint32_t	gpio_id;
+	int8_t		gpio_cs;
+	int8_t		gpio_miso;
+} adf7023_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initializes the ADF7023. */
-char ADF7023_Init(void);
+int32_t ADF7023_Init(adf7023_dev **device,
+		     adf7023_init_param init_param);
 
 /* Reads the status word of the ADF7023. */
-void ADF7023_GetStatus(unsigned char* status);
+void ADF7023_GetStatus(adf7023_dev *dev,
+		       unsigned char* status);
 
 /* Initiates a command. */
-void ADF7023_SetCommand(unsigned char command);
+void ADF7023_SetCommand(adf7023_dev *dev,
+			unsigned char command);
 
 /* Sets a FW state and waits until the device enters in that state. */
-void ADF7023_SetFwState(unsigned char fwState);
+void ADF7023_SetFwState(adf7023_dev *dev,
+			unsigned char fwState);
 
 /* Reads data from the RAM. */
-void ADF7023_GetRAM(unsigned long address,
+void ADF7023_GetRAM(adf7023_dev *dev,
+		    unsigned long address,
                     unsigned long length,
                     unsigned char* data);
 
 /* Writes data to RAM. */
-void ADF7023_SetRAM(unsigned long address,
+void ADF7023_SetRAM(adf7023_dev *dev,
+		    unsigned long address,
                     unsigned long length,
                     unsigned char* data);
 
 /* Receives one packet. */
-void ADF7023_ReceivePacket(unsigned char* packet, unsigned char* length);
+void ADF7023_ReceivePacket(adf7023_dev *dev,
+			   unsigned char* packet,
+			   unsigned char* length);
 
 /* Transmits one packet. */
-void ADF7023_TransmitPacket(unsigned char* packet, unsigned char length);
+void ADF7023_TransmitPacket(adf7023_dev *dev,
+			    unsigned char* packet,
+			    unsigned char length);
 
 /* Sets the channel frequency. */
-void ADF7023_SetChannelFrequency(unsigned long chFreq);
+void ADF7023_SetChannelFrequency(adf7023_dev *dev,
+				 unsigned long chFreq);
 
 /* Sets the data rate. */
-void ADF7023_SetDataRate(unsigned long dataRate);
+void ADF7023_SetDataRate(adf7023_dev *dev,
+			 unsigned long dataRate);
 
 /* Sets the frequency deviation. */
-void ADF7023_SetFrequencyDeviation(unsigned long freqDev);
+void ADF7023_SetFrequencyDeviation(adf7023_dev *dev,
+				   unsigned long freqDev);
 
 #endif // __ADF7023_H__
