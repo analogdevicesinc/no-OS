@@ -58,12 +58,12 @@
  *                                with 0x52).
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char adxrs453_init(adxrs453_dev **device,
-		   adxrs453_init_param init_param)
+int32_t adxrs453_init(adxrs453_dev **device,
+		      adxrs453_init_param init_param)
 {
 	adxrs453_dev *dev;
-	char           status      = 0;
-	unsigned short adxrs453_id = 0;
+	int32_t      status      = 0;
+	uint16_t     adxrs453_id = 0;
 
 	dev = (adxrs453_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -90,39 +90,39 @@ char adxrs453_init(adxrs453_dev **device,
  * @brief Reads the value of a register.
  *
  * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
+ * @param register_address - Address of the register.
  *
  * @return register_value  - Value of the register.
 *******************************************************************************/
-unsigned short adxrs453_get_register_value(adxrs453_dev *dev,
-		unsigned char registerAddress)
+uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
+				     uint8_t register_address)
 {
-	unsigned char  data_buffer[4] = {0, 0, 0, 0};
-	unsigned long  command        = 0;
-	unsigned char  bit_no         = 0;
-	unsigned char  sum            = 0;
-	unsigned short register_value = 0;
+	uint8_t  data_buffer[4] = {0, 0, 0, 0};
+	uint32_t command        = 0;
+	uint8_t  bit_no         = 0;
+	uint8_t  sum            = 0;
+	uint16_t register_value = 0;
 
-	data_buffer[0] = ADXRS453_READ | (registerAddress >> 7);
-	data_buffer[1] = (registerAddress << 1);
-	command = ((unsigned long)data_buffer[0] << 24) |
-		  ((unsigned long)data_buffer[1] << 16) |
-		  ((unsigned short)data_buffer[2] << 8) |
+	data_buffer[0] = ADXRS453_READ | (register_address >> 7);
+	data_buffer[1] = (register_address << 1);
+	command = ((uint32_t)data_buffer[0] << 24) |
+		  ((uint32_t)data_buffer[1] << 16) |
+		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
-	for(bit_no = 31; bit_no > 0; bit_no--) {
+	for(bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
-	}
-	if(!(sum % 2)) {
+
+	if(!(sum % 2))
 		data_buffer[3] |= 1;
-	}
+
 	data_buffer[4] = data_buffer[0];
 	data_buffer[5] = data_buffer[1];
 	data_buffer[6] = data_buffer[2];
 	data_buffer[7] = data_buffer[3];
 	spi_write_and_read(&dev->spi_dev, data_buffer, 4);
 	spi_write_and_read(&dev->spi_dev, &data_buffer[4], 4);
-	register_value = ((unsigned short)data_buffer[1] << 11) |
-			 ((unsigned short)data_buffer[2] << 3) |
+	register_value = ((uint16_t)data_buffer[1] << 11) |
+			 ((uint16_t)data_buffer[2] << 3) |
 			 (data_buffer[3] >> 5);
 
 	return register_value;
@@ -132,29 +132,29 @@ unsigned short adxrs453_get_register_value(adxrs453_dev *dev,
  * @brief Writes data into a register.
  *
  * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
+ * @param register_address - Address of the register.
  * @param register_value   - Data value to write.
  *
  * @return None.
 *******************************************************************************/
 void adxrs453_set_register_value(adxrs453_dev *dev,
-				 unsigned char registerAddress,
-				 unsigned short register_value)
+				 uint8_t register_address,
+				 uint16_t register_value)
 {
-	unsigned char data_buffer[4] = {0, 0, 0, 0};
-	unsigned long command        = 0;
-	unsigned char bit_no         = 0;
-	unsigned char sum            = 0;
+	uint8_t  data_buffer[4] = {0, 0, 0, 0};
+	uint32_t command        = 0;
+	uint8_t  bit_no         = 0;
+	uint8_t  sum            = 0;
 
-	data_buffer[0] = ADXRS453_WRITE | (registerAddress >> 7);
-	data_buffer[1] = (registerAddress << 1) |
+	data_buffer[0] = ADXRS453_WRITE | (register_address >> 7);
+	data_buffer[1] = (register_address << 1) |
 			 (register_value >> 15);
 	data_buffer[2] = (register_value >> 7);
 	data_buffer[3] = (register_value << 1);
 
-	command = ((unsigned long)data_buffer[0] << 24) |
-		  ((unsigned long)data_buffer[1] << 16) |
-		  ((unsigned short)data_buffer[2] << 8) |
+	command = ((uint32_t)data_buffer[0] << 24) |
+		  ((uint32_t)data_buffer[1] << 16) |
+		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
 	for(bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
@@ -172,18 +172,18 @@ void adxrs453_set_register_value(adxrs453_dev *dev,
  *
  * @return register_value - The sensor data.
 *******************************************************************************/
-unsigned long adxrs453_get_sensor_data(adxrs453_dev *dev)
+uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev)
 {
-	unsigned char data_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	unsigned long command        = 0;
-	unsigned char bit_no         = 0;
-	unsigned char sum            = 0;
-	unsigned long register_value = 0;
+	uint8_t  data_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	uint32_t command        = 0;
+	uint8_t  bit_no         = 0;
+	uint8_t  sum            = 0;
+	uint32_t register_value = 0;
 
 	data_buffer[0] = ADXRS453_SENSOR_DATA;
-	command = ((unsigned long)data_buffer[0] << 24) |
-		  ((unsigned long)data_buffer[1] << 16) |
-		  ((unsigned short)data_buffer[2] << 8) |
+	command = ((uint32_t)data_buffer[0] << 24) |
+		  ((uint32_t)data_buffer[1] << 16) |
+		  ((uint16_t)data_buffer[2] << 8) |
 		  data_buffer[3];
 	for(bit_no = 31; bit_no > 0; bit_no--)
 		sum += ((command >> bit_no) & 0x1);
@@ -197,9 +197,9 @@ unsigned long adxrs453_get_sensor_data(adxrs453_dev *dev)
 	data_buffer[7] = data_buffer[3];
 	spi_write_and_read(&dev->spi_dev, data_buffer, 4);
 	spi_write_and_read(&dev->spi_dev, &data_buffer[4], 4);
-	register_value = ((unsigned long)data_buffer[0] << 24) |
-			 ((unsigned long)data_buffer[1] << 16) |
-			 ((unsigned short)data_buffer[2] << 8) |
+	register_value = ((uint32_t)data_buffer[0] << 24) |
+			 ((uint32_t)data_buffer[1] << 16) |
+			 ((uint16_t)data_buffer[2] << 8) |
 			 data_buffer[3];
 
 	return register_value;
@@ -214,8 +214,8 @@ unsigned long adxrs453_get_sensor_data(adxrs453_dev *dev)
 *******************************************************************************/
 float adxrs453_get_rate(adxrs453_dev *dev)
 {
-	unsigned short register_value = 0;
-	float          rate           = 0.0;
+	uint16_t register_value = 0;
+	float    rate           = 0.0;
 
 	register_value = adxrs453_get_register_value(dev, ADXRS453_REG_RATE);
 
@@ -238,8 +238,8 @@ float adxrs453_get_rate(adxrs453_dev *dev)
 *******************************************************************************/
 float adxrs453_get_temperature(adxrs453_dev *dev)
 {
-	unsigned long register_value = 0;
-	float         temperature    = 0;
+	uint32_t register_value = 0;
+	float    temperature    = 0;
 
 	register_value = adxrs453_get_register_value(dev, ADXRS453_REG_TEM);
 	register_value = (register_value >> 6) - 0x31F;
