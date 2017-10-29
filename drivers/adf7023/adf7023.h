@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __ADF7023_H__
 #define __ADF7023_H__
@@ -295,72 +293,71 @@
 #define MCR_REG_GPIO_CONFIGURE                    0x3FA
 #define MCR_REG_TEST_DAC_GAIN                     0x3FD
 
-struct ADF7023_BBRAM
-{
-    unsigned char interruptMask0;               // 0x100
-    unsigned char interruptMask1;               // 0x101
-    unsigned char numberOfWakeups0;             // 0x102
-    unsigned char numberOfWakeups1;             // 0x103
-    unsigned char numberOfWakeupsIrqThreshold0; // 0x104
-    unsigned char numberOfWakeupsIrqThreshold1; // 0x105
-    unsigned char rxDwellTime;                  // 0x106
-    unsigned char parmtimeDivider;              // 0x107
-    unsigned char swmRssiThresh;                // 0x108
-    unsigned char channelFreq0;                 // 0x109
-    unsigned char channelFreq1;                 // 0x10A
-    unsigned char channelFreq2;                 // 0x10B
-    unsigned char radioCfg0;                    // 0x10C
-    unsigned char radioCfg1;                    // 0x10D
-    unsigned char radioCfg2;                    // 0x10E
-    unsigned char radioCfg3;                    // 0x10F
-    unsigned char radioCfg4;                    // 0x110
-    unsigned char radioCfg5;                    // 0x111
-    unsigned char radioCfg6;                    // 0x112
-    unsigned char radioCfg7;                    // 0x113
-    unsigned char radioCfg8;                    // 0x114
-    unsigned char radioCfg9;                    // 0x115
-    unsigned char radioCfg10;                   // 0x116
-    unsigned char radioCfg11;                   // 0x117
-    unsigned char imageRejectCalPhase;          // 0x118
-    unsigned char imageRejectCalAmplitude;      // 0x119
-    unsigned char modeControl;                  // 0x11A
-    unsigned char preambleMatch;                // 0x11B
-    unsigned char symbolMode;                   // 0x11C
-    unsigned char preambleLen;                  // 0x11D
-    unsigned char crcPoly0;                     // 0x11E
-    unsigned char crcPoly1;                     // 0x11F
-    unsigned char syncControl;                  // 0x120
-    unsigned char syncByte0;                    // 0x121
-    unsigned char syncByte1;                    // 0x122
-    unsigned char syncByte2;                    // 0x123
-    unsigned char txBaseAdr;                    // 0x124
-    unsigned char rxBaseAdr;                    // 0x125
-    unsigned char packetLengthControl;          // 0x126
-    unsigned char packetLengthMax;              // 0x127
-    unsigned char staticRegFix;                 // 0x128
-    unsigned char addressMatchOffset;           // 0x129
-    unsigned char addressLength;                // 0x12A
-    unsigned char addressFiltering0;            // 0x12B
-    unsigned char addressFiltering1;            // 0x12C
-    unsigned char addressFiltering2;            // 0x12D
-    unsigned char addressFiltering3;            // 0x12E
-    unsigned char addressFiltering4;            // 0x12F
-    unsigned char addressFiltering5;            // 0x130
-    unsigned char addressFiltering6;            // 0x131
-    unsigned char addressFiltering7;            // 0x132
-    unsigned char addressFiltering8;            // 0x133
-    unsigned char addressFiltering9;            // 0x134
-    unsigned char addressFiltering10;           // 0x135
-    unsigned char addressFiltering11;           // 0x136
-    unsigned char addressFiltering12;           // 0x137
-    unsigned char rssiWaitTime;                 // 0x138
-    unsigned char testmodes;                    // 0x139
-    unsigned char transitionClockDiv;           // 0x13A
-    unsigned char reserved0;                    // 0x13B
-    unsigned char reserved1;                    // 0x13C
-    unsigned char reserved2;                    // 0x13D
-    unsigned char rxSynthLockTime;              // 0x13E
-    unsigned char txSynthLockTime;              // 0x13F
+struct adf7023_bbram {
+	uint8_t interrupt_mask0;                  // 0x100
+	uint8_t interrupt_mask1;                  // 0x101
+	uint8_t number_of_wakeups0;               // 0x102
+	uint8_t number_of_wakeups1;               // 0x103
+	uint8_t number_of_wakeups_irq_threshold0; // 0x104
+	uint8_t number_of_wakeups_irq_threshold1; // 0x105
+	uint8_t rx_dwell_time;                    // 0x106
+	uint8_t parmtime_divider;                 // 0x107
+	uint8_t swm_rssi_thresh;                  // 0x108
+	uint8_t channel_freq0;                    // 0x109
+	uint8_t channel_freq1;                    // 0x10A
+	uint8_t channel_freq2;                    // 0x10B
+	uint8_t radio_cfg0;                       // 0x10C
+	uint8_t radio_cfg1;                       // 0x10D
+	uint8_t radio_cfg2;                       // 0x10E
+	uint8_t radio_cfg3;                       // 0x10F
+	uint8_t radio_cfg4;                       // 0x110
+	uint8_t radio_cfg5;                       // 0x111
+	uint8_t radio_cfg6;                       // 0x112
+	uint8_t radio_cfg7;                       // 0x113
+	uint8_t radio_cfg8;                       // 0x114
+	uint8_t radio_cfg9;                       // 0x115
+	uint8_t radio_cfg10;                      // 0x116
+	uint8_t radio_cfg11;                      // 0x117
+	uint8_t image_reject_cal_phase;           // 0x118
+	uint8_t image_reject_cal_amplitude;       // 0x119
+	uint8_t mode_control;                     // 0x11A
+	uint8_t preamble_match;                   // 0x11B
+	uint8_t symbol_mode;                      // 0x11C
+	uint8_t preamble_len;                     // 0x11D
+	uint8_t crc_poly0;                        // 0x11E
+	uint8_t crc_poly1;                        // 0x11F
+	uint8_t syncControl;                      // 0x120
+	uint8_t sync_byte0;                       // 0x121
+	uint8_t sync_byte1;                       // 0x122
+	uint8_t sync_byte2;                       // 0x123
+	uint8_t tx_base_adr;                      // 0x124
+	uint8_t rx_base_adr;                      // 0x125
+	uint8_t packet_length_control;            // 0x126
+	uint8_t packet_length_max;                // 0x127
+	uint8_t static_reg_fix;                   // 0x128
+	uint8_t address_match_offset;             // 0x129
+	uint8_t address_length;                   // 0x12A
+	uint8_t address_filtering0;               // 0x12B
+	uint8_t address_filtering1;               // 0x12C
+	uint8_t address_filtering2;               // 0x12D
+	uint8_t address_filtering3;               // 0x12E
+	uint8_t address_filtering4;               // 0x12F
+	uint8_t address_filtering5;               // 0x130
+	uint8_t address_filtering6;               // 0x131
+	uint8_t address_filtering7;               // 0x132
+	uint8_t address_filtering8;               // 0x133
+	uint8_t address_filtering9;               // 0x134
+	uint8_t address_filtering10;              // 0x135
+	uint8_t address_filtering11;              // 0x136
+	uint8_t address_filtering12;              // 0x137
+	uint8_t rssi_wait_time;                   // 0x138
+	uint8_t testmodes;                        // 0x139
+	uint8_t transition_clock_div;             // 0x13A
+	uint8_t reserved0;                        // 0x13B
+	uint8_t reserved1;                        // 0x13C
+	uint8_t reserved2;                        // 0x13D
+	uint8_t rx_synth_lock_time;               // 0x13E
+	uint8_t tx_synth_lock_time;               // 0x13F
 };
 
 #define ADF7023_TX_BASE_ADR 0x10
@@ -372,13 +369,13 @@ struct ADF7023_BBRAM
 
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_device		spi_dev;
 	/* GPIO */
-	gpio_device	gpio_dev;
-	int8_t		gpio_cs;
-	int8_t		gpio_miso;
+	gpio_device		gpio_dev;
+	int8_t			gpio_cs;
+	int8_t			gpio_miso;
 	/* Device Settings */
-	struct ADF7023_BBRAM ADF7023_BBRAMCurrent;
+	struct adf7023_bbram	adf7023_bbram_current;
 } adf7023_dev;
 
 typedef struct {
@@ -400,53 +397,53 @@ typedef struct {
 /******************************************************************************/
 
 /* Initializes the ADF7023. */
-int32_t ADF7023_Init(adf7023_dev **device,
+int32_t adf7023_init(adf7023_dev **device,
 		     adf7023_init_param init_param);
 
 /* Reads the status word of the ADF7023. */
-void ADF7023_GetStatus(adf7023_dev *dev,
-		       unsigned char* status);
+void adf7023_get_status(adf7023_dev *dev,
+			uint8_t* status);
 
 /* Initiates a command. */
-void ADF7023_SetCommand(adf7023_dev *dev,
-			unsigned char command);
+void adf7023_set_command(adf7023_dev *dev,
+			 uint8_t command);
 
 /* Sets a FW state and waits until the device enters in that state. */
-void ADF7023_SetFwState(adf7023_dev *dev,
-			unsigned char fwState);
+void adf7023_set_fw_state(adf7023_dev *dev,
+			  uint8_t fw_state);
 
 /* Reads data from the RAM. */
-void ADF7023_GetRAM(adf7023_dev *dev,
-		    unsigned long address,
-                    unsigned long length,
-                    unsigned char* data);
+void adf7023_get_ram(adf7023_dev *dev,
+		     uint32_t address,
+		     uint32_t length,
+		     uint8_t* data);
 
 /* Writes data to RAM. */
-void ADF7023_SetRAM(adf7023_dev *dev,
-		    unsigned long address,
-                    unsigned long length,
-                    unsigned char* data);
+void adf7023_set_ram(adf7023_dev *dev,
+		     uint32_t address,
+		     uint32_t length,
+		     uint8_t* data);
 
 /* Receives one packet. */
-void ADF7023_ReceivePacket(adf7023_dev *dev,
-			   unsigned char* packet,
-			   unsigned char* length);
+void adf7023_receive_packet(adf7023_dev *dev,
+			    uint8_t* packet,
+			    uint8_t* length);
 
 /* Transmits one packet. */
-void ADF7023_TransmitPacket(adf7023_dev *dev,
-			    unsigned char* packet,
-			    unsigned char length);
+void adf7023_transmit_packet(adf7023_dev *dev,
+			     uint8_t* packet,
+			     uint8_t length);
 
 /* Sets the channel frequency. */
-void ADF7023_SetChannelFrequency(adf7023_dev *dev,
-				 unsigned long chFreq);
+void adf7023_set_channel_frequency(adf7023_dev *dev,
+				   uint32_t ch_freq);
 
 /* Sets the data rate. */
-void ADF7023_SetDataRate(adf7023_dev *dev,
-			 unsigned long dataRate);
+void adf7023_set_data_rate(adf7023_dev *dev,
+			   uint32_t data_rate);
 
 /* Sets the frequency deviation. */
-void ADF7023_SetFrequencyDeviation(adf7023_dev *dev,
-				   unsigned long freqDev);
+void adf7023_set_frequency_deviation(adf7023_dev *dev,
+				     uint32_t freq_dev);
 
 #endif // __ADF7023_H__

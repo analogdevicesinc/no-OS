@@ -36,8 +36,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -52,8 +50,12 @@
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/
 /******************************************************************************/
-#define ADF7023_CS_ASSERT   gpio_set_value(&dev->gpio_dev, dev->gpio_cs, GPIO_LOW)
-#define ADF7023_CS_DEASSERT gpio_set_value(&dev->gpio_dev, dev->gpio_cs, GPIO_HIGH)
+#define ADF7023_CS_ASSERT   gpio_set_value(&dev->gpio_dev, \
+			    dev->gpio_cs,                  \
+			    GPIO_LOW)
+#define ADF7023_CS_DEASSERT gpio_set_value(&dev->gpio_dev, \
+			    dev->gpio_cs,                  \
+			    GPIO_HIGH)
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -64,25 +66,23 @@
  * @brief Transfers one byte of data.
  *
  * @param dev - The device structure.
- * @param writeByte - Write data.
- * @param readByte - Read data.
+ * @param write_byte - Write data.
+ * @param read_byte - Read data.
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_WriteReadByte(adf7023_dev *dev,
-			   unsigned char writeByte,
-                           unsigned char* readByte)
+void adf7023_write_read_byte(adf7023_dev *dev,
+			     uint8_t write_byte,
+			     uint8_t* read_byte)
 {
-    unsigned char data = 0;
+	uint8_t data = 0;
 
-    data = writeByte;
+	data = write_byte;
 	spi_write_and_read(&dev->spi_dev,
 			   &data,
 			   1);
-    if(readByte)
-    {
-        *readByte = data;
-    }
+	if (read_byte)
+		*read_byte = data;
 }
 
 /***************************************************************************//**
@@ -96,13 +96,13 @@ void ADF7023_WriteReadByte(adf7023_dev *dev,
  *               Example: 0 - if initialization was successful;
  *                        -1 - if initialization was unsuccessful.
 *******************************************************************************/
-int32_t ADF7023_Init(adf7023_dev **device,
+int32_t adf7023_init(adf7023_dev **device,
 		     adf7023_init_param init_param)
 {
 	adf7023_dev *dev;
-    unsigned char  miso    = 0;
-    unsigned short timeout = 0;
-    unsigned char  status  = 0;
+	uint8_t  miso    = 0;
+	uint16_t timeout = 0;
+	uint8_t  status  = 0;
 	int32_t ret = 0;
 
 	dev = (adf7023_dev *)malloc(sizeof(*dev));
@@ -125,7 +125,7 @@ int32_t ADF7023_Init(adf7023_dev **device,
 	dev->gpio_cs = init_param.gpio_cs;
 	dev->gpio_miso = init_param.gpio_miso;
 
-    dev->ADF7023_BBRAMCurrent = ADF7023_BBRAMDefault;
+	dev->adf7023_bbram_current = adf7023_bbram_default;
 
 	if (dev->gpio_cs >= 0) {
 		ret |= gpio_set_direction(&dev->gpio_dev,
@@ -136,27 +136,24 @@ int32_t ADF7023_Init(adf7023_dev **device,
 				      GPIO_HIGH);
 	}
 
-    ADF7023_CS_ASSERT;
+	ADF7023_CS_ASSERT;
 
-    while ((miso == 0) && (timeout < 1000))
-    {
-	gpio_get_value(&dev->gpio_dev, dev->gpio_miso, &miso);
-        timeout++;
-    }
-    if(timeout == 1000)
-    {
-        ret = -1;
-    }
-    while(!(status & STATUS_CMD_READY))
-    {
-        ADF7023_GetStatus(dev, &status);
-    }
-    ADF7023_SetRAM(dev, 0x100, 64, (unsigned char*)&dev->ADF7023_BBRAMCurrent);
-    ADF7023_SetCommand(dev, CMD_CONFIG_DEV);
+	while ((miso == 0) && (timeout < 1000)) {
+		gpio_get_value(&dev->gpio_dev, dev->gpio_miso, &miso);
+		timeout++;
+	}
+	if (timeout == 1000)
+		ret = -1;
+
+	while(!(status & STATUS_CMD_READY))
+		adf7023_get_status(dev, &status);
+
+	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
+	adf7023_set_command(dev, CMD_CONFIG_DEV);
 
 	*device = dev;
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -167,13 +164,13 @@ int32_t ADF7023_Init(adf7023_dev **device,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_GetStatus(adf7023_dev *dev,
-		       unsigned char* status)
+void adf7023_get_status(adf7023_dev *dev,
+			uint8_t* status)
 {
-    ADF7023_CS_ASSERT;
-    ADF7023_WriteReadByte(dev, SPI_NOP, 0);
-    ADF7023_WriteReadByte(dev, SPI_NOP, status);
-    ADF7023_CS_DEASSERT;
+	ADF7023_CS_ASSERT;
+	adf7023_write_read_byte(dev, SPI_NOP, 0);
+	adf7023_write_read_byte(dev, SPI_NOP, status);
+	ADF7023_CS_DEASSERT;
 }
 
 /***************************************************************************//**
@@ -184,48 +181,46 @@ void ADF7023_GetStatus(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetCommand(adf7023_dev *dev,
-			unsigned char command)
+void adf7023_set_command(adf7023_dev *dev,
+			 uint8_t command)
 {
-    ADF7023_CS_ASSERT;
-    ADF7023_WriteReadByte(dev, command, 0);
-    ADF7023_CS_DEASSERT;
+	ADF7023_CS_ASSERT;
+	adf7023_write_read_byte(dev, command, 0);
+	ADF7023_CS_DEASSERT;
 }
 
 /***************************************************************************//**
  * @brief Sets a FW state and waits until the device enters in that state.
  *
  * @param dev - The device structure.
- * @param fwState - FW state.
+ * @param fw_state - FW state.
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetFwState(adf7023_dev *dev,
-			unsigned char fwState)
+void adf7023_set_fw_state(adf7023_dev *dev,
+			  uint8_t fw_state)
 {
-    unsigned char status = 0;
+	uint8_t status = 0;
 
-    switch(fwState)
-    {
-        case FW_STATE_PHY_OFF:
-            ADF7023_SetCommand(dev, CMD_PHY_OFF);
-            break;
-        case FW_STATE_PHY_ON:
-            ADF7023_SetCommand(dev, CMD_PHY_ON);
-            break;
-        case FW_STATE_PHY_RX:
-            ADF7023_SetCommand(dev, CMD_PHY_RX);
-            break;
-        case FW_STATE_PHY_TX:
-            ADF7023_SetCommand(dev, CMD_PHY_TX);
-            break;
-        default:
-            ADF7023_SetCommand(dev, CMD_PHY_SLEEP);
-    }
-    while((status & STATUS_FW_STATE) != fwState)
-    {
-        ADF7023_GetStatus(dev, &status);
-    }
+	switch(fw_state) {
+	case FW_STATE_PHY_OFF:
+		adf7023_set_command(dev, CMD_PHY_OFF);
+		break;
+	case FW_STATE_PHY_ON:
+		adf7023_set_command(dev, CMD_PHY_ON);
+		break;
+	case FW_STATE_PHY_RX:
+		adf7023_set_command(dev, CMD_PHY_RX);
+		break;
+	case FW_STATE_PHY_TX:
+		adf7023_set_command(dev, CMD_PHY_TX);
+		break;
+	default:
+		adf7023_set_command(dev, CMD_PHY_SLEEP);
+	}
+	while((status & STATUS_FW_STATE) != fw_state) {
+		adf7023_get_status(dev, &status);
+	}
 }
 
 /***************************************************************************//**
@@ -238,20 +233,19 @@ void ADF7023_SetFwState(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_GetRAM(adf7023_dev *dev,
-		    unsigned long address,
-                    unsigned long length,
-                    unsigned char* data)
+void adf7023_get_ram(adf7023_dev *dev,
+		     uint32_t address,
+		     uint32_t length,
+		     uint8_t* data)
 {
-    ADF7023_CS_ASSERT;
-    ADF7023_WriteReadByte(dev, SPI_MEM_RD | ((address & 0x700) >> 8), 0);
-    ADF7023_WriteReadByte(dev, address & 0xFF, 0);
-    ADF7023_WriteReadByte(dev, SPI_NOP, 0);
-    while(length--)
-    {
-        ADF7023_WriteReadByte(dev, SPI_NOP, data++);
-    }
-    ADF7023_CS_DEASSERT;
+	ADF7023_CS_ASSERT;
+	adf7023_write_read_byte(dev, SPI_MEM_RD | ((address & 0x700) >> 8), 0);
+	adf7023_write_read_byte(dev, address & 0xFF, 0);
+	adf7023_write_read_byte(dev, SPI_NOP, 0);
+	while(length--) {
+		adf7023_write_read_byte(dev, SPI_NOP, data++);
+	}
+	ADF7023_CS_DEASSERT;
 }
 
 /***************************************************************************//**
@@ -264,19 +258,18 @@ void ADF7023_GetRAM(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetRAM(adf7023_dev *dev,
-		    unsigned long address,
-                    unsigned long length,
-                    unsigned char* data)
+void adf7023_set_ram(adf7023_dev *dev,
+		     uint32_t address,
+		     uint32_t length,
+		     uint8_t* data)
 {
-    ADF7023_CS_ASSERT;
-    ADF7023_WriteReadByte(dev, SPI_MEM_WR | ((address & 0x700) >> 8), 0);
-    ADF7023_WriteReadByte(dev, address & 0xFF, 0);
-    while(length--)
-    {
-        ADF7023_WriteReadByte(dev, *(data++), 0);
-    }
-    ADF7023_CS_DEASSERT;
+	ADF7023_CS_ASSERT;
+	adf7023_write_read_byte(dev, SPI_MEM_WR | ((address & 0x700) >> 8), 0);
+	adf7023_write_read_byte(dev, address & 0xFF, 0);
+	while(length--) {
+		adf7023_write_read_byte(dev, *(data++), 0);
+	}
+	ADF7023_CS_DEASSERT;
 }
 
 /***************************************************************************//**
@@ -288,25 +281,24 @@ void ADF7023_SetRAM(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_ReceivePacket(adf7023_dev *dev,
-			   unsigned char* packet,
-			   unsigned char* length)
+void adf7023_receive_packet(adf7023_dev *dev,
+			    uint8_t* packet,
+			    uint8_t* length)
 {
-    unsigned char interruptReg = 0;
+	uint8_t interruptReg = 0;
 
-    ADF7023_SetFwState(dev, FW_STATE_PHY_ON);
-    ADF7023_SetFwState(dev, FW_STATE_PHY_RX);
-    while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT))
-    {
-        ADF7023_GetRAM(dev, MCR_REG_INTERRUPT_SOURCE_0,
-                       0x1,
-                       &interruptReg);
-    }
-    ADF7023_SetRAM(dev, MCR_REG_INTERRUPT_SOURCE_0,
-                   0x1,
-                   &interruptReg);
-    ADF7023_GetRAM(dev, 0x10, 1, length);
-    ADF7023_GetRAM(dev, 0x12, *length - 2, packet);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_RX);
+	while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT)) {
+		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
+				0x1,
+				&interruptReg);
+	}
+	adf7023_set_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
+			0x1,
+			&interruptReg);
+	adf7023_get_ram(dev, 0x10, 1, length);
+	adf7023_get_ram(dev, 0x12, *length - 2, packet);
 }
 
 /***************************************************************************//**
@@ -318,25 +310,24 @@ void ADF7023_ReceivePacket(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_TransmitPacket(adf7023_dev *dev,
-			    unsigned char* packet,
-			    unsigned char length)
+void adf7023_transmit_packet(adf7023_dev *dev,
+			     uint8_t* packet,
+			     uint8_t length)
 {
-    unsigned char interruptReg = 0;
-    unsigned char header[2]    = {0, 0};
+	uint8_t interruptReg = 0;
+	uint8_t header[2]    = {0, 0};
 
-    header[0] = 2 + length;
-    header[1] = dev->ADF7023_BBRAMCurrent.addressMatchOffset;
-    ADF7023_SetRAM(dev, 0x10, 2, header);
-    ADF7023_SetRAM(dev, 0x12, length, packet);
-    ADF7023_SetFwState(dev, FW_STATE_PHY_ON);
-    ADF7023_SetFwState(dev, FW_STATE_PHY_TX);
-    while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF))
-    {
-        ADF7023_GetRAM(dev, MCR_REG_INTERRUPT_SOURCE_0,
-                       0x1,
-                       &interruptReg);
-    }
+	header[0] = 2 + length;
+	header[1] = dev->adf7023_bbram_current.address_match_offset;
+	adf7023_set_ram(dev, 0x10, 2, header);
+	adf7023_set_ram(dev, 0x12, length, packet);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_TX);
+	while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF)) {
+		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
+				0x1,
+				&interruptReg);
+	}
 }
 
 /***************************************************************************//**
@@ -347,57 +338,57 @@ void ADF7023_TransmitPacket(adf7023_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetChannelFrequency(adf7023_dev *dev,
-				 unsigned long chFreq)
+void adf7023_set_channel_frequency(adf7023_dev *dev,
+				   uint32_t chFreq)
 {
-    chFreq = (unsigned long)(((float)chFreq / 26000000) * 65535);
-    dev->ADF7023_BBRAMCurrent.channelFreq0 = (chFreq & 0x0000FF) >> 0;
-    dev->ADF7023_BBRAMCurrent.channelFreq1 = (chFreq & 0x00FF00) >> 8;
-    dev->ADF7023_BBRAMCurrent.channelFreq2 = (chFreq & 0xFF0000) >> 16;
-    ADF7023_SetRAM(dev, 0x100, 64, (unsigned char*)&dev->ADF7023_BBRAMCurrent);
+	chFreq = (uint32_t)(((float)chFreq / 26000000) * 65535);
+	dev->adf7023_bbram_current.channel_freq0 = (chFreq & 0x0000FF) >> 0;
+	dev->adf7023_bbram_current.channel_freq1 = (chFreq & 0x00FF00) >> 8;
+	dev->adf7023_bbram_current.channel_freq2 = (chFreq & 0xFF0000) >> 16;
+	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
 }
 
 /***************************************************************************//**
  * @brief Sets the data rate.
  *
  * @param dev - The device structure.
- * @param dataRate - Data rate.
+ * @param data_rate - Data rate.
  *
  * @return None.
 *******************************************************************************/
 void ADF7023_SetDataRate(adf7023_dev *dev,
-			 unsigned long dataRate)
+			 uint32_t data_rate)
 {
-    dataRate = (unsigned long)(dataRate / 100);
-    dev->ADF7023_BBRAMCurrent.radioCfg0 =
-        BBRAM_RADIO_CFG_0_DATA_RATE_7_0((dataRate & 0x00FF) >> 0);
-    dev->ADF7023_BBRAMCurrent.radioCfg1 &= ~BBRAM_RADIO_CFG_1_DATA_RATE_11_8(0xF);
-    dev->ADF7023_BBRAMCurrent.radioCfg1 |=
-        BBRAM_RADIO_CFG_1_DATA_RATE_11_8((dataRate & 0x0F00) >> 8);
-    ADF7023_SetRAM(dev, 0x100, 64, (unsigned char*)&dev->ADF7023_BBRAMCurrent);
-    ADF7023_SetFwState(dev, FW_STATE_PHY_OFF);
-    ADF7023_SetCommand(dev, CMD_CONFIG_DEV);
+	data_rate = (uint32_t)(data_rate / 100);
+	dev->adf7023_bbram_current.radio_cfg0 =
+		BBRAM_RADIO_CFG_0_DATA_RATE_7_0((data_rate & 0x00FF) >> 0);
+	dev->adf7023_bbram_current.radio_cfg1 &= ~BBRAM_RADIO_CFG_1_DATA_RATE_11_8(0xF);
+	dev->adf7023_bbram_current.radio_cfg1 |=
+		BBRAM_RADIO_CFG_1_DATA_RATE_11_8((data_rate & 0x0F00) >> 8);
+	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_OFF);
+	adf7023_set_command(dev, CMD_CONFIG_DEV);
 }
 
 /***************************************************************************//**
  * @brief Sets the frequency deviation.
  *
  * @param dev - The device structure.
- * @param freqDev - Frequency deviation.
+ * @param freq_dev - Frequency deviation.
  *
  * @return None.
 *******************************************************************************/
 void ADF7023_SetFrequencyDeviation(adf7023_dev *dev,
-				   unsigned long freqDev)
+				   uint32_t freq_dev)
 {
-    freqDev = (unsigned long)(freqDev / 100);
-    dev->ADF7023_BBRAMCurrent.radioCfg1 &=
-        ~BBRAM_RADIO_CFG_1_FREQ_DEVIATION_11_8(0xF);
-    dev->ADF7023_BBRAMCurrent.radioCfg1 |=
-        BBRAM_RADIO_CFG_1_FREQ_DEVIATION_11_8((freqDev & 0x0F00) >> 8);
-    dev->ADF7023_BBRAMCurrent.radioCfg2 =
-        BBRAM_RADIO_CFG_2_FREQ_DEVIATION_7_0((freqDev & 0x00FF) >> 0);
-    ADF7023_SetRAM(dev, 0x100, 64, (unsigned char*)&dev->ADF7023_BBRAMCurrent);
-    ADF7023_SetFwState(dev, FW_STATE_PHY_OFF);
-    ADF7023_SetCommand(dev, CMD_CONFIG_DEV);
+	freq_dev = (uint32_t)(freq_dev / 100);
+	dev->adf7023_bbram_current.radio_cfg1 &=
+		~BBRAM_RADIO_CFG_1_FREQ_DEVIATION_11_8(0xF);
+	dev->adf7023_bbram_current.radio_cfg1 |=
+		BBRAM_RADIO_CFG_1_FREQ_DEVIATION_11_8((freq_dev & 0x0F00) >> 8);
+	dev->adf7023_bbram_current.radio_cfg2 =
+		BBRAM_RADIO_CFG_2_FREQ_DEVIATION_7_0((freq_dev & 0x00FF) >> 0);
+	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
+	adf7023_set_fw_state(dev, FW_STATE_PHY_OFF);
+	adf7023_set_command(dev, CMD_CONFIG_DEV);
 }
