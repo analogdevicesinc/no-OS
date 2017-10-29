@@ -81,20 +81,20 @@ typedef struct {
 /******************************************************************************/
 
 /*! Initializes the ADXRS453 and checks if the device is present. */
-char adxrs453_init(adxrs453_dev **device,
-		   adxrs453_init_param init_param);
+int32_t adxrs453_init(adxrs453_dev **device,
+		      adxrs453_init_param init_param);
 
 /*! Reads the value of a register. */
-unsigned short adxrs453_get_register_value(adxrs453_dev *dev,
-		unsigned char registerAddress);
+uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
+				     uint8_t register_address);
 
 /*! Writes data into a register. */
 void adxrs453_set_register_value(adxrs453_dev *dev,
-				 unsigned char registerAddress,
-				 unsigned short registerValue);
+				 uint8_t register_address,
+				 uint16_t register_value);
 
 /*! Reads the sensor data. */
-unsigned long adxrs453_get_sensor_data(adxrs453_dev *dev);
+uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev);
 
 /*! Reads the rate data and converts it to degrees/second. */
 float adxrs453_get_rate(adxrs453_dev *dev);
