@@ -98,12 +98,12 @@ uint32_t altera_a10_acquire_arbitration(xcvr_pll *mypll)
 		case atx_type:
 			arb_status = XCVR_REG_CAPAB_PLL_STAT;
 			break;
-		case cdr_type: // PMA
-		case cmu_type:
+		case cmu_cdr_type: // PMA
+		case cmu_tx_type:
 			arb_status = XCVR_REG_CAPAB_PMA;
 			break;
 		default:
-			ad_printf("%s: Pll type not defined!\n", __func__);
+			printf("%s: Pll type not defined!\n", __func__);
 			return -1;
 		}
 
@@ -112,14 +112,12 @@ uint32_t altera_a10_acquire_arbitration(xcvr_pll *mypll)
 	do {
 		a10_pll_read(mypll, arb_status, &status);
 		if ((status & BIT(2)) == 0) {
-			AD_DEBUG_PRINT(("%s: arbitration acquired %d us\n",
-				__func__, timeout * 10));
 			return 0;
 		}
 		mdelay(1);
 	} while (timeout++ < 100);
 
-	ad_printf("%s: Failed to acquire arbitration\n", __func__);
+	printf("%s: Failed to acquire arbitration\n", __func__);
 
 	return -1;
 }
@@ -131,7 +129,6 @@ void altera_a10_release_arbitration(xcvr_pll *mypll,
 	uint8_t run_calibration)
 {
 	a10_pll_write(mypll, XCVR_REG_ARBITRATION, (run_calibration ? 0x1 : 0x3));
-	AD_DEBUG_PRINT(("%s: arbitration released\n", __func__));
 }
 
 /*******************************************************************************
@@ -156,35 +153,37 @@ uint8_t pll_calibration_check(xcvr_pll *my_pll)
 			mask = XCVR_CAPAB_PLL_CAL_BSY_MASK;
 			msg = "ATX PLL calibration";
 			break;
-		case cdr_type: // PMA RX
+		case cmu_cdr_type: // PMA RX
 			arb_status = XCVR_REG_CAPAB_PMA;
 			mask = XCVR_CAPAB_RX_CAL_BUSY_MASK;
-			msg = "CDR PLL calibration";
+			msg = "CMU/CDR PLL calibration";
 			break;
-		case cmu_type: // PMA TX
+		case cmu_tx_type: // PMA TX
 			arb_status = XCVR_REG_CAPAB_PMA;
 			mask = XCVR_CAPAB_TX_CAL_BUSY_MASK;
-			msg = "CMU PLL calibration";
+			msg = "CMU/TX PLL calibration";
 			break;
 		default:
-			ad_printf("%s: %x Pll type not defined!\n", __func__,
+			printf("%s: %x Pll type not defined!\n", __func__,
 				my_pll->type);
 			return -1;
 		}
 	/* Wait max 100ms for cal_busy to de-assert */
 	do {
-		udelay(200);
+		udelay(100);
 
 		/* Read PLL calibration status from capability register */
 		a10_pll_read(my_pll, arb_status, &val);
 		if ((val & mask) == 0x00) {
-			AD_DEBUG_PRINT(("%s OK (ID: %d, addr 0x%x)\n", msg,
-				my_pll->id, my_pll->base_address));
+#ifdef DEBUG
+			printf("%s OK (%d us, ID: %d, addr 0x%x)\n", msg,
+				timeout * 100, my_pll->id, my_pll->base_address);
+#endif
 			return 0;
 		}
-	} while (timeout++ < 500);
+	} while (timeout++ < 1000);
 
-	ad_printf("%s FAILED (ID: %d, addr 0x%x)\n", msg,
+	printf("%s FAILED (ID: %d, addr 0x%x)\n", msg,
 		my_pll->id, my_pll->base_address);
 
 	return 1;
@@ -199,13 +198,13 @@ uint32_t pll_is_enabled(xcvr_pll *mypll)
 		case fpll_type:
 		case atx_type:
 			break;
-		case cdr_type: // PMA RX
-		case cmu_type: // PMA TX
-			ad_printf("%s: PMA has no powerdown option!\n",
+		case cmu_cdr_type: // PMA RX
+		case cmu_tx_type: // PMA TX
+			printf("%s: PMA has no powerdown option!\n",
 				__func__);
 			return 0;
 		default:
-			ad_printf("%s: Pll type not defined!\n", __func__);
+			printf("%s: Pll type not defined!\n", __func__);
 			return -1;
 		}
 	uint32_t ret;
@@ -222,13 +221,13 @@ uint32_t pll_enable(xcvr_pll *mypll)
 		case fpll_type:
 		case atx_type:
 			break;
-		case cdr_type: // PMA RX
-		case cmu_type: // PMA TX
-			ad_printf("%s: PMA has no powerdown option!\n",
+		case cmu_cdr_type: // PMA RX
+		case cmu_tx_type: // PMA TX
+			printf("%s: PMA has no powerdown option!\n",
 				__func__);
 			return 0;
 		default:
-			ad_printf("%s: Pll type not defined!\n", __func__);
+			printf("%s: Pll type not defined!\n", __func__);
 			return -1;
 		}
 		a10_pll_write(mypll, 0x2e0, 0x2);
@@ -244,12 +243,12 @@ uint32_t pll_disable(xcvr_pll *mypll)
 		case fpll_type:
 		case atx_type:
 			break;
-		case cdr_type: // PMA RX
-		case cmu_type: // PMA TX
-			ad_printf("%s: PMA has no powerdown option!\n", __func__);
+		case cmu_cdr_type: // PMA RX
+		case cmu_tx_type: // PMA TX
+			printf("%s: PMA has no powerdown option!\n", __func__);
 			return 0;
 		default:
-			ad_printf("%s: Pll type not defined!\n", __func__);
+			printf("%s: Pll type not defined!\n", __func__);
 			return -1;
 		}
 		a10_pll_write(mypll, 0x2e0, 0x3);

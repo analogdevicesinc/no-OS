@@ -133,20 +133,20 @@ uint32_t atx_lookup_lf_resistance(uint32_t m)
 /*******************************************************************************
 * @brief atx_calc_params
 *******************************************************************************/
-void atx_calc_params(uint64_t fref_khz,
-	uint64_t fout_khz, uint32_t *best_n, uint32_t *best_m,
-	uint32_t *best_l, uint64_t *best_fvco)
+void atx_calc_params(uint32_t fref_khz,
+	uint32_t fout_khz, uint32_t *best_n, uint32_t *best_m,
+	uint32_t *best_l, uint32_t *best_fvco)
 {
-	uint64_t m, m_min, m_max;
-	uint64_t n, l;
-	uint64_t f, fvco, best_f;
-	uint64_t pfd;
+	uint32_t m, m_min, m_max;
+	uint32_t n, l;
+	uint32_t f, fvco, best_f;
+	uint32_t pfd;
 
 	*best_n = *best_m = *best_l = *best_fvco = 0;
 	best_f = ULONG_MAX;
 
-	m_min = max_t(uint64_t, DIV_ROUND_UP(A10_ATX_PLL_VCO_MIN / 2, fref_khz), 8);
-	m_max = min_t(uint64_t, (A10_ATX_PLL_VCO_MAX / 2 * 8 / fref_khz), 127);
+	m_min = max_t(uint32_t, DIV_ROUND_UP(A10_ATX_PLL_VCO_MIN / 2, fref_khz), 8);
+	m_max = min_t(uint32_t, (A10_ATX_PLL_VCO_MAX / 2 * 8 / fref_khz), 127);
 
 	for (n = 1; n <= 8; n *= 2) {
 		pfd = fref_khz / n;
@@ -178,42 +178,48 @@ void atx_calc_params(uint64_t fref_khz,
 /*******************************************************************************
 * @brief atx_pll_round_rate
 *******************************************************************************/
-uint64_t atx_pll_round_rate(uint64_t fout_khz, uint32_t fref_khz)
+uint32_t atx_pll_round_rate(uint32_t l_rate_kbps, uint32_t fref_khz)
 {
-	uint32_t n, m, l;
-	uint64_t fvco;
-	uint64_t tmp;
+	uint32_t n, m, l, fout_khz;
+	uint32_t fvco;
+	uint32_t tmp;
+
+	fout_khz = l_rate_kbps / 2;
 
 	atx_calc_params(fref_khz, fout_khz, &n, &m, &l, &fvco);
 
 	if (n == 0 || m == 0 || l == 0)
 		return -1;
 
-	tmp = (uint64_t)fref_khz * m *2;
+	tmp = (uint32_t)fref_khz * m * 4;
 	tmp = DIV_ROUND_CLOSEST_ull(tmp, l * n);
 
-	return min_t(uint64_t, tmp, LONG_MAX);
+	return min_t(uint32_t, tmp, LONG_MAX);
 }
 
 /*******************************************************************************
 * @brief atx_pll_set_rate
 *******************************************************************************/
 uint32_t atx_pll_set_rate(xcvr_core *core,
-	uint64_t fout_khz, uint32_t fref_khz)
+	uint32_t l_rate_kbps, uint32_t fref_khz)
 {
-	uint32_t n, m, l;
-	uint64_t fvco;
+	uint32_t n, m, l, fout_khz;
+	uint32_t fvco;
 	uint32_t lfr, cpc, band, tank;
+
+	fout_khz = l_rate_kbps / 2;
 
 	atx_calc_params(fref_khz, fout_khz, &n, &m, &l, &fvco);
 
-	AD_DEBUG_PRINT(("\nATX PLL:\n"));
-	AD_DEBUG_PRINT(("fref_khz: %d\n", fref_khz));
-	AD_DEBUG_PRINT(("fout_khz: %d\n", fout_khz));
-	AD_DEBUG_PRINT(("n: %d\n", n));
-	AD_DEBUG_PRINT(("m: %d\n", m));
-	AD_DEBUG_PRINT(("l: %d\n", l));
-	AD_DEBUG_PRINT(("fvco: %d\n", fvco));
+#ifdef DEBUG
+	printf("\nATX PLL:\n");
+	printf("\tfref_khz: %d\n", fref_khz);
+	printf("\tlane rate: %d\n", l_rate_kbps);
+	printf("\tn: %d\n", n);
+	printf("\tm: %d\n", m);
+	printf("\tl: %d\n", l);
+	printf("\tfvco: %d\n", fvco);
+#endif
 
 	if (n == 0 || m == 0 || l == 0)
 		return -1;
@@ -281,11 +287,11 @@ uint32_t atx_pll_set_rate(xcvr_core *core,
 /*******************************************************************************
 * @brief atx_pll_recalc_rate
 *******************************************************************************/
-uint64_t atx_pll_recalc_rate(xcvr_core *core,
+uint32_t atx_pll_recalc_rate(xcvr_core *core,
 	uint32_t fref_khz)
 {
 	uint32_t m, n, l;
-	uint64_t tmp;
+	uint32_t tmp;
 	uint32_t div0, div1;
 
 	altera_a10_acquire_arbitration(&(core->dev.atx_pll));
@@ -299,13 +305,13 @@ uint64_t atx_pll_recalc_rate(xcvr_core *core,
 	n = 1 << ((div0 >> 2) & 0x3);
 	l = 1 << (div1 & 0x7);
 
-	tmp = (uint64_t)fref_khz * m;
-	tmp = DIV_ROUND_CLOSEST_ull(tmp, l * n / 4);
+	tmp = (uint32_t)fref_khz * m;
+	tmp = DIV_ROUND_CLOSEST_ull(tmp, l*n/2);
 
 	if (tmp != 0 && core->dev.atx_pll.initial_recalc)
 		atx_pll_set_rate(core, tmp, fref_khz);
 
-	return min_t(uint64_t, tmp, ULONG_MAX);
+	return min_t(uint32_t, tmp * 2, ULONG_MAX);
 }
 
 #endif

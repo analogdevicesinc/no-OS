@@ -267,20 +267,17 @@ uint32_t altera_a10_cdr_lookup_cp_current_pfd(uint32_t fvco,
 /*******************************************************************************
 * @brief altera_a10_cdr_calc_params
 *******************************************************************************/
-void altera_a10_cdr_calc_params(uint64_t fref_khz,
-	uint64_t fout_khz, uint32_t *best_n, uint32_t *best_m,
+void altera_a10_cdr_calc_params(uint32_t fref_khz,
+	uint32_t fout_khz, uint32_t *best_n, uint32_t *best_m,
 	uint32_t *best_lpfd, uint32_t *best_lpd,
-	uint64_t *best_fvco)
+	uint32_t *best_fvco)
 {
-	uint64_t m, m_min, m_max;
-	uint64_t n, lpd, lpfd, lpfd_min;
-	uint64_t fvco, target_fvco;
-	uint64_t pfd;
+	uint32_t m, m_min, m_max;
+	uint32_t n, lpd, lpfd, lpfd_min;
+	uint32_t fvco, target_fvco;
+	uint32_t pfd;
 
 	*best_n = *best_m = *best_lpfd = *best_lpd = *best_fvco = 0;
-
-
-	fout_khz /= 2;
 
 	for (lpd = 1; lpd < 16; lpd *= 2) {
 		if (fout_khz >= A10_CDR_PLL_VCO_MIN / lpd)
@@ -294,8 +291,8 @@ void altera_a10_cdr_calc_params(uint64_t fref_khz,
 	else
 		lpfd_min = 1;
 
-	m_min = max_t(uint64_t, DIV_ROUND_UP(A10_CDR_PLL_VCO_MIN / 2, fref_khz), 8);
-	m_max = min_t(uint64_t, A10_CDR_PLL_VCO_MAX * 8 / lpfd_min / fref_khz, 127);
+	m_min = max_t(uint32_t, DIV_ROUND_UP(A10_CDR_PLL_VCO_MIN / 2, fref_khz), 8);
+	m_max = min_t(uint32_t, A10_CDR_PLL_VCO_MAX * 8 / lpfd_min / fref_khz, 127);
 
 	for (n = 1; n <= 8; n *= 2) {
 		pfd = fref_khz / n;
@@ -325,31 +322,33 @@ void altera_a10_cdr_calc_params(uint64_t fref_khz,
 /*******************************************************************************
 * @brief altera_a10_cdr_pll_round_rate
 *******************************************************************************/
-uint64_t altera_a10_cdr_pll_round_rate(uint64_t fout_khz, uint32_t fref_khz)
+uint32_t altera_a10_cdr_pll_round_rate(uint32_t l_rate_kbps, uint32_t fref_khz)
 {
-	uint32_t n, m, lpfd, lpd;
-	uint64_t fvco;
-	uint64_t tmp;
+	uint32_t n, m, lpfd, lpd, fout_khz;
+	uint32_t fvco;
+	uint32_t tmp;
+
+	fout_khz = l_rate_kbps / 2;
 
 	altera_a10_cdr_calc_params(fref_khz, fout_khz, &n, &m, &lpfd, &lpd, &fvco);
 
 	if (n == 0 || m == 0 || lpfd == 0 || lpd == 0)
 		return -1;
 
-	tmp = (uint64_t)fref_khz * m * lpfd * 2;
+	tmp = (uint32_t)fref_khz * m * lpfd * 2;
 	tmp = DIV_ROUND_CLOSEST_ull(tmp, n * lpd);
 
-	return min_t(uint64_t, tmp, LONG_MAX);
+	return min_t(uint32_t, tmp, LONG_MAX);
 }
 
 /*******************************************************************************
 * @brief altera_a10_cdr_pll_set_rate
 *******************************************************************************/
 int32_t altera_a10_cdr_pll_set_rate(xcvr_core *core,
-	uint64_t fout_khz, uint32_t fref_khz)
+	uint32_t l_rate_kbps, uint32_t fref_khz)
 {
-	uint32_t n, m, lpfd, lpd;
-	uint64_t fvco;
+	uint32_t n, m, lpfd, lpd, fout_khz;
+	uint32_t fvco;
 	uint32_t i;
 	uint32_t vco_speed, vco_speed_fix;
 	uint32_t cp_current_pd, lfr_pd;
@@ -357,16 +356,20 @@ int32_t altera_a10_cdr_pll_set_rate(xcvr_core *core,
 	uint32_t clkdiv_low;
 	uint32_t fast_lock;
 
+	fout_khz = l_rate_kbps/2;
+
 	altera_a10_cdr_calc_params(fref_khz, fout_khz, &n, &m, &lpfd, &lpd, &fvco);
 
-	AD_DEBUG_PRINT(("\nCDR PLL:\n"));
-	AD_DEBUG_PRINT(("fref_khz: %d\n", fref_khz));
-	AD_DEBUG_PRINT(("fout_khz: %d\n", fout_khz));
-	AD_DEBUG_PRINT(("n: %d\n", n));
-	AD_DEBUG_PRINT(("m: %d\n", m));
-	AD_DEBUG_PRINT(("lpfd: %d\n", lpfd));
-	AD_DEBUG_PRINT(("lpd: %d\n", lpd));
-	AD_DEBUG_PRINT(("fvco: %d\n", fvco));
+#ifdef DEBUG
+	printf("\nCDR PLL:\n");
+	printf("\tfref_khz: %d\n", fref_khz);
+	printf("\tlane rate: %d\n", l_rate_kbps);
+	printf("\tn: %d\n", n);
+	printf("\tm: %d\n", m);
+	printf("\tlpfd: %d\n", lpfd);
+	printf("\tlpd: %d\n", lpd);
+	printf("\tfvco: %d\n", fvco);
+#endif
 
 	if (n == 0 || m == 0 || lpfd == 0 || lpd == 0)
 		return -1;

@@ -202,14 +202,14 @@ uint32_t fpll_round_rate(uint32_t fout_khz, uint32_t fref_khz)
 {
 	uint32_t n, m, c0;
 	uint32_t fvco;
-	uint64_t tmp;
+	uint32_t tmp;
 
 	fpll_calc_params(fref_khz, fout_khz, &n, &m, &c0, &fvco);
 
 	if (n == 0 || m == 0 || c0 == 0)
 		return -1;
 
-	tmp = (uint64_t)fref_khz * m;
+	tmp = (uint32_t)fref_khz * m;
 	tmp = DIV_ROUND_CLOSEST_ull(tmp, c0 * n * 2);
 
 	// fout frequency
@@ -229,13 +229,15 @@ int32_t fpll_set_rate(xcvr_pll *fpll, uint32_t fout_khz,
 
 	fpll_calc_params(fref_khz, fout_khz, &n, &m, &c0, &fvco);
 
-	AD_DEBUG_PRINT(("\nFPLL PLL:\n"));
-	AD_DEBUG_PRINT(("fref_khz: %d\n", fref_khz));
-	AD_DEBUG_PRINT(("fout_khz: %d\n", fout_khz));
-	AD_DEBUG_PRINT(("n: %d\n", n));
-	AD_DEBUG_PRINT(("m: %d\n", m));
-	AD_DEBUG_PRINT(("c0: %d\n", c0));
-	AD_DEBUG_PRINT(("fvco: %d\n", fvco));
+#ifdef DEBUG
+	printf("\nFPLL PLL:\n");
+	printf("\tfref_khz: %d\n", fref_khz);
+	printf("\tfout_khz: %d\n", fout_khz);
+	printf("\tn: %d\n", n);
+	printf("\tm: %d\n", m);
+	printf("\tc0: %d\n", c0);
+	printf("\tfvco: %d\n", fvco);
+#endif
 
 	if (n == 0 || m == 0 || c0 == 0)
 		return -1;
@@ -281,7 +283,7 @@ uint32_t fpll_recalc_rate(xcvr_pll *fpll,
 	uint32_t fref_khz)
 {
 	uint32_t m, n, c0;
-	uint64_t tmp;
+	uint32_t tmp;
 	uint32_t div0, div1;
 
 	altera_a10_acquire_arbitration(fpll);
@@ -316,7 +318,7 @@ uint32_t fpll_recalc_rate(xcvr_pll *fpll,
 	if (tmp != 0 && fpll->initial_recalc)
 		fpll_set_rate(fpll, tmp, fref_khz);
 
-	return min_t(uint64_t, tmp, ULONG_MAX);
+	return min_t(uint32_t, tmp, ULONG_MAX);
 }
 
 #endif

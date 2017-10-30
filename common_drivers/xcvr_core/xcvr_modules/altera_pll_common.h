@@ -54,8 +54,8 @@
 typedef enum {
 	atx_type,
 	fpll_type,
-	cdr_type,
-	cmu_type,
+	cmu_cdr_type,
+	cmu_tx_type,
 } pll_type;
 
 typedef struct {

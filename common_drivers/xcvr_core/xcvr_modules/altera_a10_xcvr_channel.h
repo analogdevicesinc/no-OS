@@ -63,10 +63,10 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-uint64_t altera_a10_cdr_pll_round_rate(uint64_t fout_khz, uint32_t fref_khz);
+uint32_t altera_a10_cdr_pll_round_rate(uint32_t fout_khz, uint32_t fref_khz);
 
 int32_t altera_a10_cdr_pll_set_rate(xcvr_core *core,
-	uint64_t fout_khz, uint32_t fref_khz);
+	uint32_t fout_khz, uint32_t fref_khz);
 
 int32_t altera_a10_calib_tx_pll(xcvr_core *core);
 

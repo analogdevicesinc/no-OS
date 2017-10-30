@@ -63,16 +63,16 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-void atx_calc_params(uint64_t fref_khz,
-	uint64_t fout_khz, uint32_t *best_n, uint32_t *best_m,
-	uint32_t *best_l, uint64_t *best_fvco);
+void atx_calc_params(uint32_t fref_khz,
+	uint32_t fout_khz, uint32_t *best_n, uint32_t *best_m,
+	uint32_t *best_l, uint32_t *best_fvco);
 
-uint64_t atx_pll_round_rate(uint64_t fout_khz, uint32_t fref_khz);
+uint32_t atx_pll_round_rate(uint32_t fout_khz, uint32_t fref_khz);
 
 uint32_t atx_pll_set_rate(xcvr_core *core,
-	uint64_t fout_khz, uint32_t fref_khz);
+	uint32_t fout_khz, uint32_t fref_khz);
 
-uint64_t atx_pll_recalc_rate(xcvr_core *core,
+uint32_t atx_pll_recalc_rate(xcvr_core *core,
 	uint32_t fref_khz);
 
 #endif
