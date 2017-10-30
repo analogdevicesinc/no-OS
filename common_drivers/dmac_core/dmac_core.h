@@ -84,31 +84,31 @@
 
 #define TIMEOUT				10000
 
-typedef struct {
+struct dmac_xfer {
 	uint32_t	id;
 	uint32_t	start_address;
 	uint32_t	no_of_samples;
-} dmac_xfer;
+};
 
-typedef struct {
+struct dmac_core {
 	uint32_t	base_address;
 	uint8_t		type;
 	uint8_t		flags;
 	uint32_t	irq_id;
-	dmac_xfer       *transfer;
-} dmac_core;
+	struct dmac_xfer       *transfer;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t dmac_read(dmac_core core,
+int32_t dmac_read(struct dmac_core *core,
 		uint32_t reg_addr,
 		uint32_t *reg_data);
-int32_t dmac_write(dmac_core core,
+int32_t dmac_write(struct dmac_core *core,
 		uint32_t reg_addr,
 		uint32_t reg_data);
 
-int32_t dmac_start_transaction(dmac_core core);
+int32_t dmac_start_transaction(struct dmac_core *core);
 
 #endif
