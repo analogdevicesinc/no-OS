@@ -68,8 +68,6 @@
 #define GPIO_CLKD_STATUS_1	33
 #define GPIO_CLKD_STATUS_0	32
 
-#define DMA_BUFFER		 1
-
 enum ad9523_channels {
 	DAC_DEVICE_CLK,
 	DAC_DEVICE_SYSREF,
@@ -118,31 +116,18 @@ int main(void) {
 	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
 	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
 #endif
-
-#ifdef ZYNQ
-	ad9680_dma_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-	ad9144_dma_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x900000;
-#endif
-
-#ifdef MICROBLAZE
-	ad9680_dma_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-	ad9144_dma_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
-#endif
-
 #ifdef ALTERA
 	ad9144_xcvr.base_address = AXI_AD9144_XCVR_BASE;
-	ad9144_core.base_address = AXI_AD9144_CORE_BASE;
 	ad9680_xcvr.base_address = AXI_AD9680_XCVR_BASE;
-	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
-	ad9144_jesd.base_address = AVL_AD9144_XCVR_IP_RECONFIG_BASE;
-	ad9680_jesd.base_address = AVL_AD9680_XCVR_IP_RECONFIG_BASE;
 	ad9144_xcvr.mmcm_lpll_base_address = AVL_AD9144_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
 	ad9144_xcvr.tx_lane_pll_base_address = AVL_AD9144_XCVR_LANE_PLL_RECONFIG_BASE;
-	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
+	ad9144_core.base_address = AXI_AD9144_CORE_BASE;
+	ad9144_jesd.base_address = AVL_AD9144_XCVR_IP_RECONFIG_BASE;
 	ad9144_dma.base_address = AXI_AD9144_DMA_BASE;
-	ad9680_dma_xfer.start_address =  0x800000;
-	ad9144_dma_xfer.start_address =  0x900000;
+	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
+	ad9680_jesd.base_address = AVL_AD9680_XCVR_IP_RECONFIG_BASE;
+	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
 #endif
 
 	//********************************************************************************
@@ -225,6 +210,10 @@ int main(void) {
 	ad9144_core.channels = &ad9144_channels[0];
 	dac_channel_init(&ad9144_core);
 
+	ad9144_dma.transfer = &ad9144_dma_xfer;
+	ad9144_dma.flags = DMAC_FLAGS_TLAST;
+	dmac_init(&ad9144_dma, DMAC_TX);
+
 	//********************************************************************************
 	// ADC (AD9680) and the receive path (JESD-PHY, JESD-IP, AXI_AD9680, RX DMAC)
 	//********************************************************************************
@@ -245,20 +234,12 @@ int main(void) {
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
 
-	//********************************************************************************
-	// configure the receiver DMA
-	//********************************************************************************
-
-	ad9680_dma.type = DMAC_RX;
 	ad9680_dma.transfer = &ad9680_dma_xfer;
-	ad9680_dma_xfer.id = 0;
-	ad9680_dma_xfer.no_of_samples = 32768;
+	dmac_init(&ad9680_dma, DMAC_RX);
 
-	ad9144_dma.type = DMAC_TX;
-	ad9144_dma.transfer = &ad9144_dma_xfer;
-	ad9144_dma.flags = DMAC_FLAGS_TLAST;
-	ad9144_dma_xfer.id = 0;
-	ad9144_dma_xfer.no_of_samples = dac_buffer_load(ad9144_core, ad9144_dma_xfer.start_address);
+	//********************************************************************************
+	// Execution Phase (do NOT modify below)
+	//********************************************************************************
 
 	// simple sampling rate controls
 
@@ -346,6 +327,12 @@ int main(void) {
 	dac_set_source(&ad9144_core, -1, DAC_SRC_PN31);
 	ad9144_datapath_prbs_test(&ad9144_spi_device, &ad9144_param);
 
+	// AD9144 (dma source)
+
+	dac_set_source(&ad9144_core, -1, DAC_SRC_DMA);
+	dac_buffer_load(&ad9144_core, &ad9144_dma_xfer);
+	dmac_start_transaction(&ad9144_dma);
+
 	// AD9680 (PN9 data path test)
 
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
@@ -356,43 +343,17 @@ int main(void) {
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
 	adc_pn_mon(&ad9680_core, ADC_PN23A);
 
-#ifdef XCVR_EYE_SCAN
+	// AD9680 (dma caputure)
+
+	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
+	dmac_start_transaction(&ad9680_dma);
 
 	// eye-scan
 
-	ad9680_xcvr.es_lane = 2;
-	ad9680_xcvr.es_start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-	ad9680_xcvr.es_prescale = 0;
-	ad9680_xcvr.es_voffset_min = -127;
-	ad9680_xcvr.es_voffset_max = 127;
-	ad9680_xcvr.es_voffset_step = 1;
-	ad9680_xcvr.es_hoffset_min = -512;
-	ad9680_xcvr.es_hoffset_max = 512;
-	ad9680_xcvr.es_hoffset_step = 1;
+	xcvr_eyescan_init(&ad9680_xcvr);
+	xcvr_eyescan(&ad9680_xcvr);
 
-	xcvr_eyescan(ad9680_xcvr);
-#endif
-
-	// default data
-
-#if DMA_BUFFER
-	dac_set_source(&ad9144_core, -1, DAC_SRC_DMA);
-	if(!dmac_start_transaction(&ad9144_dma)){
-		ad_printf("daq2: transmit data from memory\n");
-	};
-#else
-	dac_set_source(&ad9144_core, -1, DAC_SRC_DDS);
-	ad_printf("daq2: setup and configuration is done\n");
-#endif
-	//********************************************************************************
-	// external loopback - capture data with DMA
-	//********************************************************************************
-
-	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
-	if(!dmac_start_transaction(&ad9680_dma)){
-		ad_printf("daq2: RX capture done.\n");
-	};
-
+	ad_printf("done.\n");
 	ad_platform_close();
 	return(0);
 }

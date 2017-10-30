@@ -42,6 +42,33 @@
 /******************************************************************************/
 #include "dmac_core.h"
 
+/* you may override dma address in any of the following way */
+/* 1. least intrusive- use make arguments */
+/* 	make DEFINE=DMAC_MEM_RX_OFFSET=<NEW_VALUE> ; change receive offset */
+/* 	make DEFINE=DMAC_MEM_TX_OFFSET=<NEW_VALUE> ; change transmit offset */
+/* 	make DEFINE=DMAC_MEM_BASE=<NEW_VALUE> ; change base for both rx & tx */
+/* 2. intrusive- change stuff in this file */
+/* 3. override the settings in your main */
+
+#ifndef DMAC_MEM_RX_OFFSET
+#define DMAC_MEM_RX_OFFSET 0x800000
+#endif
+#ifndef DMAC_MEM_TX_OFFSET
+#define DMAC_MEM_TX_OFFSET 0x900000
+#endif
+
+#ifndef DMAC_MEM_BASE
+#ifdef ZYNQ
+#define DMAC_MEM_BASE XPAR_DDR_MEM_BASEADDR
+#endif
+#ifdef MICROBLAZE
+#define DMAC_MEM_BASE XPAR_AXI_DDR_CNTRL_BASEADDR 
+#endif
+#ifdef ALTERA
+#define DMAC_MEM_BASE 0x0 
+#endif
+#endif
+
 /***************************************************************************//**
  * @brief dmac_read
  *******************************************************************************/
@@ -133,3 +160,21 @@ int32_t dmac_start_transaction(struct dmac_core *core)
 	return 0;
 }
 
+int32_t dmac_init(struct dmac_core *core, uint8_t type)
+{
+	struct dmac_xfer *xfer;
+
+	xfer = core->transfer;
+        if(xfer == NULL) {
+                ad_printf("%s : Undefined DMA transfer.\n", __func__);
+                return -1;
+        }
+
+	xfer->id = 0;
+	xfer->no_of_samples = 32768;
+	xfer->start_address = DMAC_MEM_BASE + ((type == DMAC_RX) ?
+		DMAC_MEM_RX_OFFSET : DMAC_MEM_TX_OFFSET);
+
+	core->type = type;
+	return 0;
+}

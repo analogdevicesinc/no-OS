@@ -41,12 +41,13 @@
 #define DAC_BUFFER_H_
 
 #include "dac_core.h"
+#include "dmac_core.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-uint32_t dac_buffer_load(struct dac_core core, uint32_t start_address);
+uint32_t dac_buffer_load(struct dac_core *m_dac_core, struct dmac_xfer *m_dma_xfer);
 
 #endif
 

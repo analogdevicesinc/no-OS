@@ -56,6 +56,15 @@ struct xcvr_core {
 	uint32_t tx_lane_pll_base_address;
 	uint32_t tx_or_rx_n;
 	uint32_t number_of_instances;
+	uint32_t es_lane;
+	uint32_t es_start_address;
+	uint32_t es_prescale;
+	uint32_t es_voffset_min;
+	uint32_t es_voffset_max;
+	uint32_t es_voffset_step;
+	uint32_t es_hoffset_min;
+	uint32_t es_hoffset_max;
+	uint32_t es_hoffset_step;
 };
 
 int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data);
@@ -70,6 +79,9 @@ int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_c
 
 int32_t xcvr_setup(struct xcvr_core *core);
 int32_t xcvr_status(struct xcvr_core *core);
+
+int32_t xcvr_eyescan_init(struct xcvr_core *core);
+int32_t xcvr_eyescan(struct xcvr_core *core);
 
 #endif
 

@@ -155,6 +155,28 @@ int32_t xcvr_status(struct xcvr_core *core) {
 	return(0);
 }
 
+// ***************************************************************************
+// ***************************************************************************
+
+int32_t xcvr_eyescan_init(struct xcvr_core *core) {
+
+	core->es_lane = 2;
+	core->es_start_address = 0x0;
+	core->es_prescale = 0;
+	core->es_voffset_min = -127;
+	core->es_voffset_max = 127;
+	core->es_voffset_step = 1;
+	core->es_hoffset_min = -512;
+	core->es_hoffset_max = 512;
+	core->es_hoffset_step = 1;
+	return(0);
+}
+
+int32_t xcvr_eyescan(struct xcvr_core *core) {
+
+	return(0);
+}
+
 #endif
 
 // ***************************************************************************

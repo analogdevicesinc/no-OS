@@ -109,6 +109,7 @@ int32_t dmac_write(struct dmac_core *core,
 		uint32_t reg_addr,
 		uint32_t reg_data);
 
+int32_t dmac_init(struct dmac_core *core, uint8_t type);
 int32_t dmac_start_transaction(struct dmac_core *core);
 
 #endif

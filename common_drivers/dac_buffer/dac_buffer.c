@@ -280,7 +280,7 @@ const uint16_t sine_lut_2[1024] = {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-uint32_t dac_buffer_load(struct dac_core core, uint32_t start_address) {
+uint32_t dac_buffer_load(struct dac_core *m_dac_core, struct dmac_xfer *m_dma_xfer) {
 
 	uint32_t no_of_samples;
 	uint32_t index;
@@ -289,21 +289,21 @@ uint32_t dac_buffer_load(struct dac_core core, uint32_t start_address) {
 	no_of_samples = sizeof(sine_lut_1) / sizeof(typeof(sine_lut_1[0]));
 
 	for (index = 0; index < no_of_samples; index ++) {
-		switch (core.no_of_channels) {
+		switch (m_dac_core->no_of_channels) {
 			case 1:
-				ad_reg_write_16(start_address + index_mem * 2, sine_lut_1[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + index_mem * 2, sine_lut_1[index]);
 				index_mem += 1;
 				break;
 			case 2:
-				ad_reg_write_16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
-				ad_reg_write_16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 0) * 2, sine_lut_1[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 1) * 2, sine_lut_2[index]);
 				index_mem += 2;
 				break;
 			case 4:
-				ad_reg_write_16(start_address + (index_mem + 0) * 2, sine_lut_1[index]);
-				ad_reg_write_16(start_address + (index_mem + 1) * 2, sine_lut_2[index]);
-				ad_reg_write_16(start_address + (index_mem + 2) * 2, sine_lut_1[index]);
-				ad_reg_write_16(start_address + (index_mem + 3) * 2, sine_lut_2[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 0) * 2, sine_lut_1[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 1) * 2, sine_lut_2[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 2) * 2, sine_lut_1[index]);
+				ad_reg_write_16(m_dma_xfer->start_address + (index_mem + 3) * 2, sine_lut_2[index]);
 				index_mem += 4;
 				break;
 			default:
@@ -314,6 +314,7 @@ uint32_t dac_buffer_load(struct dac_core core, uint32_t start_address) {
 
 	ad_dcache_flush();
 
-	return (core.no_of_channels * no_of_samples);
+	m_dma_xfer->no_of_samples = m_dac_core->no_of_channels * no_of_samples;
+	return (m_dac_core->no_of_channels * no_of_samples);
 }
 
