@@ -85,10 +85,10 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 		uint32_t lane_rate_khz, xcvr_qpll *qpll_config);
 
 int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
-	uint32_t drp_sel, xcvr_qpll *qpll_config);
+		xcvr_qpll *qpll_config);
 
 int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
-	uint32_t drp_sel, xcvr_qpll *qpll_config);
+		xcvr_qpll *qpll_config);
 
 uint32_t xilinx_xcvr_qpll_calc_lane_rate(uint32_t ref_clk_khz,
 		xcvr_qpll *qpll_config);

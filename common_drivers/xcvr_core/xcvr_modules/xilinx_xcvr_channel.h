@@ -118,39 +118,36 @@ int32_t xilinx_xcvr_calc_cpll_config(uint32_t ref_clk_khz,
 		uint32_t lane_rate_khz,	xcvr_cpll *cpll_config);
 
 int32_t xilinx_xcvr_cpll_read_config(xcvr_core *core,
-		uint32_t drp_sel, xcvr_cpll *cpll_config);
+		xcvr_cpll *cpll_config);
 
-int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core, uint32_t drp_sel,
+int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core,
 		xcvr_cpll *cpll_config);
 
 uint32_t xilinx_xcvr_cpll_calc_lane_rate(uint32_t ref_clk_khz,
 		xcvr_cpll *cpll_config);
 
 int32_t xilinx_xcvr_gth3_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t out_div);
+		uint32_t out_div);
 
 int32_t xilinx_xcvr_gtx2_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t lane_rate, uint32_t out_div,
-	uint8_t lpm_enable);
+		uint32_t lane_rate, uint32_t out_div,
+		uint8_t lpm_enable);
 
 int32_t xilinx_xcvr_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t lane_rate, uint32_t out_div,
-	uint8_t lpm_enable);
+		uint32_t lane_rate, uint32_t out_div,
+		uint8_t lpm_enable);
 
-int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core,
-	uint32_t drp_sel, uint8_t lpm_dfe_n);
+int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core, uint8_t lpm_dfe_n);
 
-int32_t xilinx_xcvr_read_out_div(xcvr_core *core, uint32_t drp_sel,
-	uint32_t *rx_out_div, uint32_t *tx_out_div);
+int32_t xilinx_xcvr_read_out_div(xcvr_core *core,
+		uint32_t *rx_out_div, uint32_t *tx_out_div);
 
-int32_t xilinx_xcvr_write_out_div(xcvr_core *core, uint32_t drp_sel,
-	int32_t rx_out_div, int32_t tx_out_div);
+int32_t xilinx_xcvr_write_out_div(xcvr_core *core,
+		int32_t rx_out_div, int32_t tx_out_div);
 
-int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,
-	uint32_t drp_sel, uint32_t div);
+int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,	uint32_t div);
 
-int32_t xilinx_xcvr_write_tx_clk25_div(xcvr_core *core,
-	uint32_t drp_sel, uint32_t div);
+int32_t xilinx_xcvr_write_tx_clk25_div(xcvr_core *core,	uint32_t div);
 
 #endif
 #endif

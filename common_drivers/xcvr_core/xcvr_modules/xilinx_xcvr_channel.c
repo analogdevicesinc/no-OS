@@ -71,13 +71,15 @@ int32_t xilinx_xcvr_calc_cpll_config(uint32_t ref_clk_khz,
 						cpll_config->refclk_div_M = m;
 						cpll_config->fb_div_N1 = n1;
 						cpll_config->fb_div_N2 = n2;
-						cpll_config->out_div = n2;
+						cpll_config->out_div = d;
 
-						AD_DEBUG_PRINT(("CPLL config:\n"));
-						AD_DEBUG_PRINT(("refclk_div_M %lu\n", __func__, m));
-						AD_DEBUG_PRINT(("fb_div_N1 %lu\n", __func__, n1));
-						AD_DEBUG_PRINT(("fb_div_N2 %lu\n", n2, __func__));
-						AD_DEBUG_PRINT(("out_div %lu\n", d, __func__));
+#ifdef DEBUG
+						printf("CPLL config:\n");
+						printf("\trefclk_div_M = %lu\n", m);
+						printf("\tfb_div_N1 = %lu\n", n1);
+						printf("\tfb_div_N2 = %lu\n", n2);
+						printf("\tout_div = %lu\n", d);
+#endif
 
 						return 0;
 					}
@@ -86,7 +88,7 @@ int32_t xilinx_xcvr_calc_cpll_config(uint32_t ref_clk_khz,
 		}
 	}
 
-	ad_printf("%s: Faild to find config for lane_rate_khz=%d, ref_clock_khz=%d\n",
+	printf("%s: Faild to find config for lane_rate_khz=%lu, ref_clock_khz=%lu\n",
 		__func__, lane_rate_khz, ref_clk_khz);
 	return -1;
 }
@@ -95,12 +97,12 @@ int32_t xilinx_xcvr_calc_cpll_config(uint32_t ref_clk_khz,
 * @brief xilinx_xcvr_cpll_read_config
 *******************************************************************************/
 int32_t xilinx_xcvr_cpll_read_config(xcvr_core *core,
-		uint32_t drp_sel, xcvr_cpll *cpll_config)
+		xcvr_cpll *cpll_config)
 {
 	uint32_t val;
 	int32_t ret;
 
-	ret = xcvr_drp_read(core, XCVR_DRP_CHANNEL, drp_sel, CPLL_REFCLK_DIV_M_ADDR, &val);
+	ret = xcvr_drp_read(core, XCVR_REG_CH_SEL, CPLL_REFCLK_DIV_M_ADDR, &val);
 	if (ret < 0)
 		return ret;
 
@@ -138,8 +140,7 @@ int32_t xilinx_xcvr_cpll_read_config(xcvr_core *core,
 /*******************************************************************************
 * @brief xilinx_xcvr_cpll_write_config
 *******************************************************************************/
-int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core, uint32_t drp_sel,
-		xcvr_cpll *cpll_config)
+int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core, xcvr_cpll *cpll_config)
 {
 	uint32_t val = 0;
 
@@ -182,7 +183,7 @@ int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core, uint32_t drp_sel,
 		return -1;
 	}
 
-	return xcvr_drp_update(core, XCVR_DRP_CHANNEL, drp_sel, CPLL_REFCLK_DIV_M_ADDR,
+	return xcvr_drp_update(core, XCVR_REG_CH_SEL, CPLL_REFCLK_DIV_M_ADDR,
 		CPLL_REFCLK_DIV_M_MASK | CPLL_FB_DIV_45_N1_MASK | CPLL_FBDIV_N2_MASK,
 		val);
 }
@@ -204,7 +205,7 @@ uint32_t xilinx_xcvr_cpll_calc_lane_rate(uint32_t ref_clk_khz,
 * @brief xilinx_xcvr_gth3_configure_cdr
 *******************************************************************************/
 int32_t xilinx_xcvr_gth3_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t out_div)
+	uint32_t out_div)
 {
 	uint32_t cfg0, cfg1, cfg2, cfg3;
 
@@ -244,14 +245,14 @@ int32_t xilinx_xcvr_gth3_configure_cdr(xcvr_core *core,
 		}
 
 	} else {
-		ad_printf("%s: GTH PRBS CDR not implemented\n", __func__);
+		printf("%s: GTH PRBS CDR not implemented\n", __func__);
 		return 0;
 	}
 
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG0_ADDR, cfg0);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG1_ADDR, cfg1);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG2_ADDR, cfg2);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG3_ADDR, cfg3);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG0_ADDR, cfg0);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG1_ADDR, cfg1);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG2_ADDR, cfg2);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG3_ADDR, cfg3);
 
 	return 0;
 }
@@ -260,7 +261,7 @@ int32_t xilinx_xcvr_gth3_configure_cdr(xcvr_core *core,
 * @brief xilinx_xcvr_gtx2_configure_cdr
 *******************************************************************************/
 int32_t xilinx_xcvr_gtx2_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t lane_rate, uint32_t out_div,
+	uint32_t lane_rate, uint32_t out_div,
 	uint8_t lpm_enable)
 {
 	uint32_t cfg0, cfg1, cfg2, cfg3, cfg4;
@@ -347,11 +348,11 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(xcvr_core *core,
 		}
 	}
 
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG0_ADDR, cfg0);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG1_ADDR, cfg1);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG2_ADDR, cfg2);
-	xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG3_ADDR, cfg3);
-	xcvr_drp_update(core, XCVR_DRP_CHANNEL, drp_sel, RXCDR_CFG4_ADDR, RXCDR_CFG4_MASK, cfg4);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG0_ADDR, cfg0);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG1_ADDR, cfg1);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG2_ADDR, cfg2);
+	xcvr_drp_write(core, XCVR_REG_CH_SEL, RXCDR_CFG3_ADDR, cfg3);
+	xcvr_drp_update(core, XCVR_REG_CH_SEL, RXCDR_CFG4_ADDR, RXCDR_CFG4_MASK, cfg4);
 
 	return 0;
 }
@@ -360,15 +361,15 @@ int32_t xilinx_xcvr_gtx2_configure_cdr(xcvr_core *core,
 * @brief xilinx_xcvr_configure_cdr
 *******************************************************************************/
 int32_t xilinx_xcvr_configure_cdr(xcvr_core *core,
-	uint32_t drp_sel, uint32_t lane_rate, uint32_t out_div,
+	uint32_t lane_rate, uint32_t out_div,
 	uint8_t lpm_enable)
 {
 	switch (core->dev.gt_type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
-		return xilinx_xcvr_gtx2_configure_cdr(core, drp_sel, lane_rate,
+		return xilinx_xcvr_gtx2_configure_cdr(core, lane_rate,
 			out_div, lpm_enable);
 	case XILINX_XCVR_TYPE_US_GTH3:
-		return xilinx_xcvr_gth3_configure_cdr(core, drp_sel, out_div);
+		return xilinx_xcvr_gth3_configure_cdr(core, out_div);
 	default:
 		return -1;
 	}
@@ -378,25 +379,25 @@ int32_t xilinx_xcvr_configure_cdr(xcvr_core *core,
 * @brief xilinx_xcvr_configure_lpm_dfe_mode
 *******************************************************************************/
 int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core,
-	uint32_t drp_sel, uint8_t lpm_dfe_n)
+	uint8_t lpm_dfe_n)
 {
 	switch (core->dev.gt_type) {
 	case XILINX_XCVR_TYPE_US_GTH3:
 		if (lpm_dfe_n) {
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x036, 0x0032);
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x039, 0x1000);
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x062, 0x1980);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x036, 0x0032);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x039, 0x1000);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x062, 0x1980);
 		} else {
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x036, 0x0002);
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x039, 0x0000);
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x062, 0x0000);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x036, 0x0002);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x039, 0x0000);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x062, 0x0000);
 		}
 		break;
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		if (lpm_dfe_n)
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x029, 0x0104);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x029, 0x0104);
 		else
-			xcvr_drp_write(core, XCVR_DRP_CHANNEL, drp_sel, 0x029, 0x0954);
+			xcvr_drp_write(core, XCVR_REG_CH_SEL, 0x029, 0x0954);
 		break;
 	}
 
@@ -406,13 +407,13 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core,
 /*******************************************************************************
 * @brief xilinx_xcvr_read_out_div
 *******************************************************************************/
-int32_t xilinx_xcvr_read_out_div(xcvr_core *core, uint32_t drp_sel,
+int32_t xilinx_xcvr_read_out_div(xcvr_core *core,
 	uint32_t *rx_out_div, uint32_t *tx_out_div)
 {
 	uint32_t val;
 	int32_t ret;
 
-	ret = xcvr_drp_read(core, XCVR_DRP_CHANNEL, drp_sel, OUT_DIV_ADDR, &val);
+	ret = xcvr_drp_read(core, XCVR_REG_CH_SEL, OUT_DIV_ADDR, &val);
 	if (ret < 0)
 		return ret;
 
@@ -446,7 +447,7 @@ uint32_t xilinx_xcvr_out_div_to_val(uint32_t out_div)
 /*******************************************************************************
 * @brief xilinx_xcvr_write_out_div
 *******************************************************************************/
-int32_t xilinx_xcvr_write_out_div(xcvr_core *core, uint32_t drp_sel,
+int32_t xilinx_xcvr_write_out_div(xcvr_core *core,
 	int32_t rx_out_div, int32_t tx_out_div)
 {
 	uint32_t val = 0;
@@ -461,14 +462,14 @@ int32_t xilinx_xcvr_write_out_div(xcvr_core *core, uint32_t drp_sel,
 		mask |= 0x7 << OUT_DIV_RX_OFFSET;
 	}
 
-	return xcvr_drp_update(core, XCVR_DRP_CHANNEL, drp_sel, OUT_DIV_ADDR, mask, val);
+	return xcvr_drp_update(core, XCVR_REG_CH_SEL, OUT_DIV_ADDR, mask, val);
 }
 
 /*******************************************************************************
 * @brief xilinx_xcvr_write_rx_clk25_div
 *******************************************************************************/
 int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,
-	uint32_t drp_sel, uint32_t div)
+	uint32_t div)
 {
 	if (div == 0 || div > 32)
 		return -1;
@@ -476,7 +477,7 @@ int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,
 	div--;
 	div <<= RX_CLK25_DIV_OFFSET;
 
-	return xcvr_drp_update(core, XCVR_DRP_CHANNEL, drp_sel, RX_CLK25_DIV,
+	return xcvr_drp_update(core, XCVR_REG_CH_SEL, RX_CLK25_DIV,
 		RX_CLK25_DIV_MASK, div);
 }
 
@@ -484,14 +485,14 @@ int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,
 * @brief xilinx_xcvr_write_tx_clk25_div
 *******************************************************************************/
 int32_t xilinx_xcvr_write_tx_clk25_div(xcvr_core *core,
-	uint32_t drp_sel, uint32_t div)
+	uint32_t div)
 {
 	if (div == 0 || div > 32)
 		return -1;
 
 	div--;
 
-	return xcvr_drp_update(core, XCVR_DRP_CHANNEL, drp_sel, TX_CLK25_DIV,
+	return xcvr_drp_update(core, XCVR_REG_CH_SEL, TX_CLK25_DIV,
 		TX_CLK25_DIV_MASK, div);
 }
 

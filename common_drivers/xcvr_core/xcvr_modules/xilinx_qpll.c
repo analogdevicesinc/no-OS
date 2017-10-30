@@ -59,7 +59,7 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 	qpll_config->fb_div = 0;
 	qpll_config->band = 0;
 
-	const u8 N[] = {16, 20, 32, 40, 64, 66, 80, 100};
+	const uint8_t N[] = {16, 20, 32, 40, 64, 66, 80, 100};
 
 	for (m = 1; m <= 4; m++) {
 		for (d = 1; d <= 16; d <<= 1) {
@@ -84,11 +84,13 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 					qpll_config->band = band;
 					qpll_config->out_div = d;
 
-					AD_DEBUG_PRINT(("QPLL config:\n"));
-					AD_DEBUG_PRINT(("refclk_div_M %lu\n", m));
-					AD_DEBUG_PRINT(("fb_div %lu\n", N[n]));
-					AD_DEBUG_PRINT(("band %lu\n", band));
-					AD_DEBUG_PRINT(("out_div %lu\n", d));
+#ifdef DEBUG
+					printf("QPLL config:\n");
+					printf("\trefclk_div_M = %lu\n", m);
+					printf("\tfb_div = %d\n", N[n]);
+					printf("\tband = %lu\n", band);
+					printf("\tout_div = %lu\n", d);
+#endif
 
 					return 0;
 				}
@@ -96,7 +98,7 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 		}
 	}
 
-	ad_printf("%s: Faild to find config for lane_rate_khz=%d, ref_clock_khz=%d\n",
+	printf("%s: Faild to find config for lane_rate_khz=%lu, ref_clock_khz=%lu\n",
 		__func__, lane_rate_khz, refclk_khz);
 
 	return -1;
@@ -106,12 +108,12 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 * @brief xilinx_xcvr_qpll_read_config
 *******************************************************************************/
 int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
-	uint32_t drp_sel, xcvr_qpll *qpll_config)
+	xcvr_qpll *qpll_config)
 {
 	uint32_t val;
 	int32_t ret;
 
-	ret = xcvr_drp_read(core, XCVR_DRP_COMMON, drp_sel, QPLL_CFG1_ADDR, &val);
+	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_CFG1_ADDR, &val);
 	if (ret < 0)
 		return ret;
 
@@ -130,7 +132,7 @@ int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
 		break;
 	}
 
-	ret = xcvr_drp_read(core, XCVR_DRP_COMMON, drp_sel, QPLL_FBDIV_N_ADDR, &val);
+	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_FBDIV_N_ADDR, &val);
 	if (ret < 0)
 		return ret;
 
@@ -161,7 +163,7 @@ int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
 		break;
 	}
 
-	ret = xcvr_drp_read(core, XCVR_DRP_COMMON, drp_sel, QPLL_CFG0_ADDR, &val);
+	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_CFG0_ADDR, &val);
 	if (ret < 0)
 		return 0;
 
@@ -177,7 +179,7 @@ int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
 * @brief xilinx_xcvr_qpll_write_config
 *******************************************************************************/
 int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
-	uint32_t drp_sel, xcvr_qpll *qpll_config)
+	xcvr_qpll *qpll_config)
 {
 	uint32_t cfg0, cfg1, fbdiv, fbdiv_ratio;
 	int32_t ret;
@@ -196,8 +198,8 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 		cfg1 = QPLL_REFCLK_DIV_M(2);
 		break;
 	default:
-		AD_DEBUG_PRINT(("Invalid refclk divider: %d\n",
-			qpll_config->refclk_div_M));
+		printf("Invalid refclk divider: %lu\n",
+			qpll_config->refclk_div_M);
 		return -1;
 	}
 
@@ -230,8 +232,8 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 		fbdiv = 368;
 		break;
 	default:
-		AD_DEBUG_PRINT(("Invalid feedback divider: %d\n",
-			qpll_config->fb_div));
+		printf("Invalid feedback divider: %lu\n",
+			qpll_config->fb_div);
 		return -1;
 	}
 
@@ -240,22 +242,22 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 	else
 		cfg0 = QPLL_CFG0_LOWBAND_MASK;
 
-	ret = xcvr_drp_update(core, XCVR_DRP_COMMON, drp_sel, QPLL_CFG0_ADDR,
+	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_CFG0_ADDR,
 		QPLL_CFG0_LOWBAND_MASK, cfg0);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_DRP_COMMON, drp_sel, QPLL_CFG1_ADDR,
+	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_CFG1_ADDR,
 		QPLL_REFCLK_DIV_M_MASK, cfg1);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_DRP_COMMON, drp_sel, QPLL_FBDIV_N_ADDR,
+	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_FBDIV_N_ADDR,
 		QPLL_FBDIV_N_MASK, fbdiv);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_DRP_COMMON, drp_sel, QPLL_FBDIV_RATIO_ADDR,
+	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_FBDIV_RATIO_ADDR,
 		QPLL_FBDIV_RATIO_MASK, fbdiv_ratio);
 	if (ret < 0)
 		return ret;
