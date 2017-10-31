@@ -72,6 +72,7 @@ int main(void)
 	dmac_xfer		rx_xfer_0;
 	dmac_xfer		rx_xfer_1;
 
+#ifdef XILINX
 	ad9250_xcvr.base_address = XPAR_AXI_AD9250_XCVR_BASEADDR;
 	ad9250_jesd204.base_address = XPAR_AXI_AD9250_JESD_RX_AXI_BASEADDR;
 	ad9250_0_core.base_address = XPAR_AXI_AD9250_0_CORE_BASEADDR;
@@ -79,6 +80,7 @@ int main(void)
 
 	ad9250_0_dma.base_address = XPAR_AXI_AD9250_0_DMA_BASEADDR;
 	ad9250_1_dma.base_address = XPAR_AXI_AD9250_1_DMA_BASEADDR;
+#endif
 
 #ifdef ZYNQ
 	rx_xfer_0.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
@@ -88,6 +90,22 @@ int main(void)
 #ifdef MICROBLAZE
 	rx_xfer_0.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
 	rx_xfer_1.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
+#endif
+
+#ifdef ALTERA
+	ad9250_xcvr.base_address = AXI_AD9250_XCVR_BASE;
+	ad9250_xcvr.dev.link_pll.base_address = AVL_AD9250_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9250_0_core.base_address = AXI_AD9250_CORE_0_BASE;
+	ad9250_0_core.base_address = AXI_AD9250_CORE_1_BASE;
+	ad9250_jesd204.base_address = AVL_AD9250_XCVR_IP_RECONFIG_BASE;
+
+	ad9250_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
+	ad9250_xcvr.dev.channel_pll[0].base_address = AVL_AD9250_XCVR_PHY_RECONFIG_0_BASE;
+
+	ad9250_0_dma.base_address = AXI_AD9250_DMA_0_BASE;
+	ad9250_1_dma.base_address = AXI_AD9250_DMA_1_BASE;
+	rx_xfer_0.start_address =  0x800000;
+	rx_xfer_1.start_address =  0x900000;
 #endif
 
 	// SPI configuration
@@ -105,7 +123,7 @@ int main(void)
 	ad9250_1_param.lane_rate_kbps = 4915200;
 
 	xcvr_getconfig(&ad9250_xcvr);
-	ad9250_xcvr.reconfig_bypass = 1;
+	ad9250_xcvr.reconfig_bypass = 0;
 	ad9250_xcvr.lane_rate_kbps = ad9250_0_param.lane_rate_kbps;
 	ad9250_xcvr.ref_clock_khz = 245760;
 
