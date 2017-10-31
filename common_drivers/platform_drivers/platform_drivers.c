@@ -481,15 +481,11 @@ uint8_t ad_uart_read()
 	RecievedByte = XUartPs_ReadReg(STDIN_BASEADDRESS, XUARTPS_FIFO_OFFSET);
 	/* Return the byte received */
 	return (uint8_t)RecievedByte;
-#endif
+#else
+	uint8_t RecievedByte = 0;
 
-#ifdef ALTERA
-	uint8_t RecievedByte;
-	int32_t timeout = 100000000;
-		while (!RecievedByte&&timeout>0) {
-			RecievedByte = getc(stdin);
-		timeout--;
-	}
+	RecievedByte = getc(stdin);
+
 	return RecievedByte;
 #endif
 }
