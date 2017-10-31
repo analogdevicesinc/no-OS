@@ -96,10 +96,6 @@ void ad_platform_close(void);
 #define udelay(usecs) usleep(usecs)
 #define mdelay(msecs) usleep(1000*msecs)
 
-#ifdef MICROBLAZE
-void usleep(uint32_t us_count);
-#endif
-
 #endif
 
 // ***************************************************************************

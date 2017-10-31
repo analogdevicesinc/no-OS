@@ -95,6 +95,24 @@ int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_c
 
 int32_t xcvr_setup(struct xcvr_core *core) {
 
+	uint32_t rx_data;
+	uint32_t tx_data;
+
+	rx_data = 0;
+	tx_data = 0;
+
+	xcvr_read(core, XCVR_RXPLL_TYPE_ADDR, &rx_data);
+	xcvr_read(core, XCVR_TXPLL_TYPE_ADDR, &tx_data);
+
+	if (rx_data == tx_data) {
+
+	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);
+	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x1);
+	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x0);
+	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
+		return(0);
+	}
+
 	if (core->tx_or_rx_n == 1) {
 
 	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);

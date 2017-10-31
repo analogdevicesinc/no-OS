@@ -203,7 +203,7 @@ int32_t ad_spi_xfer(struct spi_device *dev, uint8_t *data, uint8_t no_of_bytes) 
 		*(data + i) = ad_reg_read(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff;
 	}
 	ad_reg_write((XPAR_SPI_0_BASEADDR + 0x70), 0xff);
-	ad_reg_write((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (dev->cpol<<3) | (dev->cpha<<4)))
+	ad_reg_write((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (dev->cpol<<3) | (dev->cpha<<4)));
 
 	return(0);
 }

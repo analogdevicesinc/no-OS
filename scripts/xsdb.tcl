@@ -6,18 +6,19 @@ connect
 
 if {$m_type == "ZYNQ_PSU"} {
   targets -set -filter {name =~ "PSU"}
+  rst -srst
+  after 1000
 }
 
 if {$m_type == "ZYNQ_PS7"} {
   targets -set -filter {name =~ "xc7z*"}
+  rst -srst
+  after 1000
 }
 
 if {$m_type == "MICROBLAZE"} {
   targets -set -filter {name =~ "xc7*" || name =~ "xck*" }
 }
-
-rst -srst
-after 1000
 
 fpga -file hw/system_top.bit
 
@@ -49,7 +50,7 @@ if {$m_type == "ZYNQ_PS7"} {
 
 if {$m_type == "MICROBLAZE"} {
   after 1000
-  targets -set -filter {name =~ "*MicroBlaze*"}
+  targets -set -filter {name =~ "*MicroBlaze #0"}
 }
 
 dow sw/Release/sw.elf
