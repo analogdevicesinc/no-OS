@@ -42,6 +42,28 @@
 /******************************************************************************/
 #include "jesd_core.h"
 
+/*******************************************************************************/
+const char *axi_jesd204_rx_link_status_label[4] = {
+	"RESET",	// 0
+	"WAIT FOR PHY",	// 1
+	"CGS",		// 2
+	"DATA"		// 3
+};
+
+const char *axi_jesd204_tx_link_status_label[] = {
+	"WAIT",
+	"CGS",
+	"ILAS",
+	"DATA"
+};
+
+const char *axi_jesd204_rx_lane_status_label[4] = {
+	"INIT",		// 0
+	"CHECK",	// 1
+	"DATA",		// 2
+	"UNKNOWN"	// 3
+};
+
 /***************************************************************************//**
 * @brief jesd_read
 *******************************************************************************/
@@ -72,24 +94,11 @@ int32_t jesd_write(jesd_core core,
 *******************************************************************************/
 int32_t jesd_setup(jesd_core core)
 {
-#ifdef ALTERA
+	jesd_write(core, 0x210, (((core.octets_per_frame-1) << 16) |
+		((core.frames_per_multiframe*core.octets_per_frame)-1)));
+	jesd_write(core, 0x0c0, 0);
+	mdelay(100);
 	return(0);
-#endif
-#ifdef XILINX
-	jesd_write(core, JESD204_REG_TRX_RESET, JESD204_TRX_GT_WDT_DIS | JESD204_TRX_RESET);
-	jesd_write(core, JESD204_REG_TRX_ILA_SUPPORT, JESD204_TRX_ILA_EN);
-	jesd_write(core, JESD204_REG_TRX_SCRAMBLING, core.scramble_enable);
-	jesd_write(core, JESD204_REG_TRX_SYSREF_HANDLING, JESD204_TRX_SYSREF_ALWAYSON |
-							  JESD204_TRX_SYSREF_DELAY(0) |
-							  JESD204_TRX_SYSREF_ONRESYNC);
-	jesd_write(core, JESD204_REG_TRX_OCTETS_PER_FRAME,
-		JESD204_TRX_OCTETS_PER_FRAME(core.octets_per_frame));
-	jesd_write(core, JESD204_REG_TRX_FRAMES_PER_MULTIFRAME,
-			JESD204_TRX_FRAMES_PER_MULTIFRAME(core.frames_per_multiframe));
-	jesd_write(core, JESD204_REG_TRX_SUBCLASS_MODE,
-			JESD204_TRX_SUBCLASS_MODE(core.subclass_mode));
-    return(0);
-#endif
 }
 
 /***************************************************************************//**
@@ -106,113 +115,201 @@ int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 	}
 	return 0;
 }
+
 /***************************************************************************//**
-* @brief jesd_read_status
+* @brief jesd_read_status generic
 *******************************************************************************/
 int32_t jesd_status(jesd_core core)
 {
 	uint32_t status;
 	int32_t timeout;
 	int32_t ret;
-#ifdef XILINX
-	uint8_t link;
-#endif
 
-#ifdef ALTERA
+	ret = 0;
 	timeout = 100;
-	ret = -1;
 	while (timeout > 0) {
-		jesd_read(core, JESD204_REG_STATUS, &status);
-		if ((core.rx_tx_n == 0) && ((status & 0x7) == 0x5)) {
-			ret = 0;
-			break;
-		}
-		if ((core.rx_tx_n == 1) && ((status & 0x1) == 0x1)) {
-			ret = 0;
-			break;
-		}
+		mdelay(1);
+		jesd_read(core, 0x280, &status);
+		if ((status & 0x13) == 0x13) break;
 		timeout = timeout - 1;
-		mdelay(1);
 	}
-
-	if (ret == 0) return(0);
-
-	ad_printf("jesd_status: SYNC errors (%02x)!\n", status);
-	return(-1);
-#endif
-#ifdef XILINX
-	timeout = 100;
-	do {
-		mdelay(1);
-		jesd_read(core, JESD204_REG_TRX_RESET, &status);
-		status &= JESD204_TRX_RESET;
-	} while ((timeout--) && (status == JESD204_TRX_RESET));
-
-	if (status == JESD204_TRX_RESET) {
-		ad_printf("%s jesd_status: jesd reset not completed!\n", __func__);
-		return -1;
-	}
-
-	if (core.subclass_mode >= 1) {
-		timeout = 100;
-		do {
-			mdelay(1);
-			jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
-			status &= JESD204_TRX_SYSREF_CAPTURED;
-		} while ((timeout--) && (status != JESD204_TRX_SYSREF_CAPTURED));
-
-	  if (status != JESD204_TRX_SYSREF_CAPTURED) {
-		ad_printf("%s jesd_status: missing SYS_REF!\n", __func__);
-		return -1;
-	  }
-	}
-
-	timeout = 100;
-	do {
-		mdelay(1);
-		jesd_read(core, JESD204_REG_TRX_SYNC_STATUS, &status);
-		status &= JESD204_TRX_SYNC_ACHIEVED;
-	} while ((timeout--) && (status != JESD204_TRX_SYNC_ACHIEVED));
-
-	if (status != JESD204_TRX_SYNC_ACHIEVED) {
-		ad_printf("%s jesd_status: Link SYNC not achieved!\n", __func__);
-		return -1;
-	}
-
-	if (core.rx_tx_n == 0)
-		return 0;
-
-	jesd_read(core, JESD204_REG_RX_LINK_ERROR_STATUS, &status);
-	for (link = 0; link < 8; link++) {
-		if (status & JESD204_RX_LINK_K_CH_ERR(link)) {
-			ad_printf("%s Link %d: K_CH_ERR\n", __func__, link);
-			ret = -1;
-		}
-		if (status & JESD204_RX_LINK_DISP_ERR(link)) {
-			ad_printf("%s Link %d: DISP_ERR\n", __func__, link);
-			ret = -1;
-		}
-		if (status & JESD204_RX_LINK_NOT_IN_TBL_ERR(link)) {
-			ad_printf("%s Link %d: NOT_IN_TBL_ERR\n", __func__, link);
-			ret = -1;
-		}
-	}
-
-	if (status & JESD204_RX_LINK_LANE_ALIGN_ERR_ALARM) {
-		ad_printf("%s jesd_status: frame alignment error!\n", __func__);
+	if ((status & 0x10) != 0x10) {
+		ad_printf("%s jesd_status: out of sync (%x)!\n", __func__, status);
 		ret = -1;
 	}
-
-	if (status & JESD204_RX_LINK_SYSREF_LMFC_ALARM) {
-		ad_printf("%s jesd_status: sysref alignment error!\n", __func__);
+	if ((status & 0x03) != 0x03) {
+		ad_printf("%s jesd_status: not in data phase (%x)!\n", __func__, status);
 		ret = -1;
 	}
-
-	if (status & JESD204_RX_LINK_BUFF_OVF_ALARM) {
-		ad_printf("%s jesd_status: receive buffer overflow error!\n", __func__);
-		ret = -1;
-	}
+	ad_printf("%s jesd_status: %x\n", __func__, status);
 
 	return(ret);
-#endif
 }
+
+/***************************************************************************//**
+* @brief axi_jesd204_rx_status_read
+*******************************************************************************/
+int32_t axi_jesd204_rx_status_read(jesd_core jesd)
+{
+	uint32_t sysref_status;
+	uint32_t link_disabled;
+	uint32_t link_status;
+	uint32_t clock_ratio;
+	int32_t ret = 0;
+
+	ret |= jesd_read(jesd, JESD204_REG_LINK_STATE, &link_disabled);
+	ret |= jesd_read(jesd, JESD204_REG_LINK_STATUS, &link_status);
+	ret |= jesd_read(jesd, JESD204_REG_SYSREF_STATUS, &sysref_status);
+	ret |= jesd_read(jesd, JESD204_REG_LINK_CLK_RATIO, &clock_ratio);
+
+	ad_printf("Rx link is %s\n",
+		(link_disabled & 0x1) ? "disabled" : "enabled");
+
+	if (clock_ratio == 0) {
+		ad_printf("Measured Link Clock: off\n");
+	} else {
+		ad_printf("Measured Link Clock: %d MHz\n",
+			(clock_ratio * 100 + 0x7fff) >> 16);
+	}
+
+	if (!link_disabled) {
+		ad_printf("Link status: %s\n",
+			axi_jesd204_rx_link_status_label[link_status & 0x3]);
+		ad_printf("SYSREF captured: %s\n",
+			(sysref_status & 1) ? "Yes" : "No");
+		if (sysref_status & 2) {
+			ad_printf("SYSREF alignment ERROR\n",
+				(sysref_status & 2) ? "Yes" : "No");
+		}
+
+	} else {
+		ad_printf("External reset is %s\n",
+			(link_disabled & 0x2) ? "asserted" : "deasserted");
+	}
+
+	return ret;
+}
+
+/***************************************************************************//**
+* @brief axi_jesd204_tx_status_read
+*******************************************************************************/
+int32_t axi_jesd204_tx_status_read(jesd_core jesd)
+{
+	uint32_t sysref_status;
+	uint32_t link_disabled;
+	uint32_t link_status;
+	uint32_t clock_ratio;
+	int32_t ret = 0;
+
+	ret |= jesd_read(jesd, JESD204_REG_LINK_STATE, &link_disabled);
+	ret |= jesd_read(jesd, JESD204_REG_LINK_STATUS, &link_status);
+	ret |= jesd_read(jesd, JESD204_REG_SYSREF_STATUS, &sysref_status);
+	ret |= jesd_read(jesd, JESD204_REG_LINK_CLK_RATIO, &clock_ratio);
+
+	ad_printf("Tx link is %s\n",
+		(link_disabled & 0x1) ? "disabled" : "enabled");
+
+	if (clock_ratio == 0) {
+		ad_printf("Measured Link Clock: off\n");
+	} else {
+		ad_printf("Measured Link Clock: %d MHz\n",
+			(clock_ratio * 100 + 0x7fff) >> 16);;
+	}
+
+	if (!link_disabled) {
+		ad_printf("Link status: %s\n",
+			axi_jesd204_tx_link_status_label[link_status & 0x3]);
+		ad_printf("SYSREF captured: %s\n",
+			(sysref_status & 1) ? "Yes" : "No");
+		if (sysref_status & 2) {
+			ad_printf("SYSREF alignment ERROR\n",
+				(sysref_status & 2) ? "Yes" : "No");
+		}
+	} else {
+		ad_printf("External reset is %s\n",
+			(link_disabled & 0x2) ? "asserted" : "deasserted");
+	}
+
+	return ret;
+}
+
+/***************************************************************************//**
+* @brief axi_jesd204_rx_laneinfo_read
+*******************************************************************************/
+/* FIXME: This violates every single sysfs ABI recommendation */
+int32_t axi_jesd204_rx_laneinfo_read(jesd_core jesd, uint32_t lane)
+{
+	uint32_t lane_status;
+	uint32_t lane_latency;
+	uint32_t octets_per_multiframe;
+	uint32_t val[4];
+	int32_t ret = 0;
+
+	ret |= jesd_read(jesd, JESD204_RX_REG_LANE_STATUS(lane), &lane_status);
+
+	ad_printf("CGS state: %s\n",
+		axi_jesd204_rx_lane_status_label[lane_status & 0x3]);
+
+	ad_printf("Initial Frame Synchronization: %s\n",
+				(lane_status & BIT(4)) ? "Yes" : "No");
+
+	if (!(lane_status & BIT(4)))
+		return ret;
+
+	ret |= jesd_read(jesd, JESD204_REG_LINK_CONF0, &octets_per_multiframe);
+	octets_per_multiframe &= 0xffff;
+	octets_per_multiframe += 1;
+
+	ret |= jesd_read(jesd, JESD204_RX_REG_LANE_LATENCY(lane), &lane_latency);
+	ad_printf("Lane Latency: %d Multi-frames and %d Octets\n",
+			lane_latency / octets_per_multiframe,
+			lane_latency % octets_per_multiframe);
+
+	ad_printf("Initial Lane Alignment Sequence: %s\n",
+				(lane_status & BIT(5)) ? "Yes" : "No");
+
+	if (!(lane_status & BIT(5)))
+		return ret;
+
+	ret |= jesd_read(jesd, JESD204_RX_REG_ILAS(lane, 0), &val[0]);
+	ret |= jesd_read(jesd, JESD204_RX_REG_ILAS(lane, 1), &val[1]);
+	ret |= jesd_read(jesd, JESD204_RX_REG_ILAS(lane, 2), &val[2]);
+	ret |= jesd_read(jesd, JESD204_RX_REG_ILAS(lane, 3), &val[3]);
+
+	ad_printf("DID: %d, BID: %d, LID: %d, L: %d, SCR: %d, F: %d\n",
+		(val[0] >> 16) & 0xff,
+		(val[0] >> 24) & 0xf,
+		(val[1] >> 0) & 0x1f,
+		(val[1] >> 8) & 0x1f,
+		(val[1] >> 15) & 0x1,
+		(val[1] >> 16) & 0xff
+	);
+
+	ad_printf("K: %d, M: %d, N: %d, CS: %d, N': %d, S: %d, HD: %d\n",
+		(val[1] >> 24) & 0x1f,
+		(val[2] >> 0) & 0xff,
+		(val[2] >> 8) & 0x1f,
+		(val[2] >> 14) & 0x3,
+		(val[2] >> 16) & 0x1f,
+		(val[2] >> 24) & 0x1f,
+		(val[3] >> 7) & 0x1
+	);
+
+	ad_printf("FCHK: 0x%X, CF: %d\n",
+		(val[3] >> 24) & 0xff,
+		(val[3] >> 0) & 0x1f
+	);
+
+	ad_printf("ADJCNT: %d, PHADJ: %d, ADJDIR: %d, JESDV: %d, SUBCLASS: %d\n",
+		(val[0] >> 28) & 0xff,
+		(val[1] >> 5) & 0x1,
+		(val[1] >> 6) & 0x1,
+		(val[2] >> 29) & 0x7,
+		(val[2] >> 21) & 0x7
+	);
+
+	return ret;
+}
+
+/*******************************************************************************/
+/*******************************************************************************/

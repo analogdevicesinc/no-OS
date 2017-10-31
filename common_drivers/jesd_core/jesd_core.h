@@ -58,8 +58,6 @@
 #define JESD204_REG_TRX_SUBCLASS_MODE			0x2c
 #define JESD204_REG_TRX_SYNC_STATUS			0x38
 
-#define JESD204_REG_STATUS				0x80
-
 /* JESD204_REG_TRX_RESET */
 #define JESD204_TRX_GT_WDT_DIS				(1 << 16)
 #define JESD204_TRX_RESET				(1 << 0)
@@ -96,6 +94,42 @@
 #define JESD204_TRX_SYSREF_CAPTURED			(1 << 16)
 #define JESD204_TRX_SYNC_ACHIEVED			(1 << 0)
 
+// ADI JESD
+
+#define JESD204_REG_VERSION				0x00
+#define JESD204_REG_ID					0x04
+#define JESD204_REG_SCRATCH				0x08
+#define JESD204_REG_MAGIC				0x0c
+
+#define JESD204_REG_SYNTH_NUM_LANES			0x10
+#define JESD204_REG_SYNTH_DATA_PATH_WIDTH		0x14
+
+#define JESD204_REG_IRQ_ENABLE				0x80
+#define JESD204_REG_IRQ_PENDING				0x84
+#define JESD204_REG_IRQ_SOURCE				0x88
+
+#define JESD204_REG_LINK_DISABLE			0xc0
+#define JESD204_REG_LINK_STATE				0xc4
+#define JESD204_REG_LINK_CLK_RATIO			0xc8
+
+#define JESD204_REG_SYSREF_CONF				0x100
+#define JESD204_REG_SYSREF_LMFC_OFFSET			0x104
+#define JESD204_REG_SYSREF_STATUS			0x108
+
+#define JESD204_REG_LANES_ENABLE			0x200
+#define JESD204_REG_LINK_CONF0				0x210
+#define JESD204_REG_LINK_CONF1				0x214
+#define JESD204_REG_LINK_CONF2				0x240
+#define JESD204_REG_LINK_STATUS				0x280
+
+#define JESD204_RX_REG_SYNTH_ELASTIC_BUFFER_SIZE	0x40
+
+#define JESD204_RX_REG_LANE_STATUS(x)		(((x) * 32) + 0x300)
+#define JESD204_RX_REG_LANE_LATENCY(x)		(((x) * 32) + 0x304)
+#define JESD204_RX_REG_ILAS(x, y)		(((x) * 32 + (y) * 4) + 0x310)
+
+#define JESD204_RX_MAGIC (('2' << 24) | ('0' << 16) | ('4' << 8) | ('R'))
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -109,8 +143,13 @@ typedef struct {
   uint32_t		base_address;
   uint8_t		rx_tx_n;
   uint8_t		scramble_enable;
+  uint8_t		lanes_per_device;
   uint8_t		octets_per_frame;
   uint8_t		frames_per_multiframe;
+  uint8_t		converters_per_device;
+  uint8_t		resolution;
+  uint8_t		bits_per_sample;
+  uint8_t		high_density;
   uint8_t		subclass_mode;
   sys_ref_type		sysref_type;
   uint32_t		sysref_gpio_pin;
@@ -125,6 +164,9 @@ int32_t jesd_write(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
 
 int32_t jesd_setup(jesd_core core);
 int32_t jesd_status(jesd_core core);
+int32_t axi_jesd204_rx_status_read(jesd_core jesd);
+int32_t axi_jesd204_tx_status_read(jesd_core jesd);
+int32_t axi_jesd204_rx_laneinfo_read(jesd_core jesd, uint32_t lane);
 int32_t jesd_sysref_control(jesd_core core, uint32_t enable);
 
 #endif
