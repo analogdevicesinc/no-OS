@@ -42,6 +42,8 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "config.h"
+#include <stdio.h>
 
 #ifdef ALTERA
 #include <io.h>
@@ -153,13 +155,27 @@ void ad_platform_close(void);
 
 // common macros
 
-#define min(x, y) (((x) < (y)) ? (x) : (y))
-#define min_t(type, x, y) (type)min((type)(x), (type)(y))
-#define max(x, y) (((x) > (y)) ? (x) : (y))
-#define max_t(type, x, y) (type)max((type)(x), (type)(y))
-#define clamp(val, min_val, max_val) (max(min((val), (max_val)), (min_val)))
-#define clamp_t(type, val, min_val, max_val) (type)clamp((type)(val), \
-		(type)(min_val), (type)(max_val))
+#define min(x, y) 			(((x) < (y)) ? (x) : (y))
+#define min_t(type, x, y) 		(type)min((type)(x), (type)(y))
+#define max(x, y) 			(((x) > (y)) ? (x) : (y))
+#define max_t(type, x, y) 		(type)max((type)(x), (type)(y))
+#define clamp(val, min_val, max_val) 	(max(min((val), (max_val)), (min_val)))
+#define clamp_t(type, val, min_val, max_val)\
+		(type)clamp((type)(val), (type)(min_val), (type)(max_val))
+#define DIV_ROUND_UP(n,d) 		(((n) + (d) - 1) / (d))
+#define DIV_ROUND_CLOSEST(x, y)		(uint32_t)(((double)(x) / (y)) + 0.5)
+#define DIV_ROUND_CLOSEST_ull(x, y)	(uint64_t)(((double)(x) / (y)) + 0.5)
+#define ARRAY_SIZE(ar)			(sizeof(ar)/sizeof(ar[0]))
+#define BIT(nr)				(1 << (nr))
+#define ROUND_UP(x,y)			(((x)+(y)-1)/(y))
+#define ROUND_CLOSEST(x,y)		(((x)+(y))/(y) + 0.5)
+
+#ifdef ALTERA
+#define LONG_MAX			(~0L)
+#define ULONG_MAX			(~0UL)
+#define FALSE				0
+#define TRUE				1
+#endif
 
 /******************************************************************************/
 /********************** SPI structure and functions ***************************/

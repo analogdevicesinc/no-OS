@@ -468,10 +468,10 @@ void usleep(uint32_t us_count)
 /***************************************************************************//**
  * @brief ad_uart_read
  *******************************************************************************/
-
-#ifdef ZYNQ_PS7
 uint8_t ad_uart_read()
 {
+#ifdef ZYNQ_PS7
+
 	u32 RecievedByte;
 	int32_t timeout = 100000000;
 	/* Wait until there is data */
@@ -481,8 +481,18 @@ uint8_t ad_uart_read()
 	RecievedByte = XUartPs_ReadReg(STDIN_BASEADDRESS, XUARTPS_FIFO_OFFSET);
 	/* Return the byte received */
 	return (uint8_t)RecievedByte;
-}
 #endif
+
+#ifdef ALTERA
+	uint8_t RecievedByte;
+	int32_t timeout = 100000000;
+		while (!RecievedByte&&timeout>0) {
+			RecievedByte = getc(stdin);
+		timeout--;
+	}
+	return RecievedByte;
+#endif
+}
 
 /***************************************************************************//**
  * @brief ad_pow2 Create a mask for a given number of bit
