@@ -22,8 +22,9 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_buffer
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9144
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9523
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
+M_INC_DIRS += $(NOOS-DIR)/fmcdaq2
 
-M_HDR_FILES := $(NOOS-DIR)/fmcdaq2/config.h
+M_HDR_FILES :=
 
-M_SRC_FILES := $(NOOS-DIR)/fmcdaq2/fmcdaq2.c
+M_SRC_FILES :=
 
