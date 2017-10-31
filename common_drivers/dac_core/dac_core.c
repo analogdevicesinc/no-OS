@@ -72,7 +72,7 @@ int32_t dac_write(dac_core *core,
 
 		#ifdef DEBUG
 			uint32_t reg_data_r;
-			return adc_read(core, reg_addr, &reg_data_r);
+			return dac_read(core, reg_addr, &reg_data_r);
 		#endif
 
 	return 0;
