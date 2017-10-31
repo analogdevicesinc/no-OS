@@ -41,38 +41,57 @@
 
 #include "platform_drivers.h"
 
+#ifdef ALTERA
+#include "altera_pll_common.h"
+#endif
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+#ifdef ALTERA
+typedef enum {
+	PM_100,
+	PM_300,
+	PM_500,
+	PM_1000,
+} clk_ppm;
+
+typedef struct {
+	xcvr_pll		link_pll;
+	xcvr_pll		atx_pll;
+	xcvr_pll		channel_pll[8];	// max 8
+} fpga_dev;
+#endif
+
+#ifdef XILINX
 typedef enum {
 	PM_200,
 	PM_700,
 	PM_1250,
-} refclk_ppm;
+} clk_ppm;
 
 typedef struct {
-	uint32_t		base_address;
-	uint32_t		tx_lane_pll_base_address;
-	uint32_t		mmcm_lpll_base_address;
-	uint32_t		mmcm_present;
-	uint32_t		reconfig_bypass;
-	uint32_t		*lane_base_addresses;
-	uint32_t		lane_rate_kbps;
-	uint32_t		ref_clock_khz;
-
-	// below parameters are auto computed and is for temporary internal use only-
-
-	refclk_ppm		ppm;
-	uint16_t		encoding;
 	uint8_t			gt_type;
-	uint32_t		no_of_lanes;
-	uint8_t 		rx_tx_n;
 	uint8_t			qpll_enable;
 	uint8_t			lpm_enable;
 	uint32_t		sys_clk_sel;
 	uint32_t		out_clk_sel;
 	uint32_t		out_div;
+} fpga_dev;
+#endif
 
+typedef struct {
+	uint32_t		base_address;
+	uint8_t			initial_recalc;
+	uint8_t			reconfig_bypass;
+	uint32_t		ref_clock_khz;
+	uint32_t		link_clk_khz;
+	uint32_t		lane_rate_kbps;
+	uint32_t		lanes_per_link;
+	uint16_t		encoding;
+	uint8_t 		rx_tx_n;
+	clk_ppm			refclk_ppm;
+	fpga_dev		dev;
 } xcvr_core;
 
 /******************************************************************************/
@@ -140,6 +159,12 @@ typedef struct {
 #define XCVR_BROADCAST				0xff
 #define ENC_8B10B				810
 
+#ifdef ALTERA
+#define XCVR_REG_STATUS2			0x0018
+#define XCVR_STATUS2_XCVR(x)			BIT(x)
+#define XCVR_REG_SYNTH_CONF			0x0024
+# endif
+
 // GT types
 
 #define XILINX_GTH	0
@@ -149,20 +174,21 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t xcvr_read(xcvr_core core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t xcvr_write(xcvr_core core, uint32_t reg_addr, uint32_t reg_data);
+int32_t xcvr_read(xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data);
+int32_t xcvr_write(xcvr_core *core, uint32_t reg_addr, uint32_t reg_data);
 
 #ifdef XILINX
 
-	int32_t xcvr_drp_read(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
-	int32_t xcvr_drp_write(xcvr_core core, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
+	int32_t xcvr_drp_read(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
+	int32_t xcvr_drp_write(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
+	int32_t xcvr_drp_update(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t mask, uint32_t val);
 
-	int32_t xcvr_reconfig(xcvr_core core, uint32_t lane_rate, uint32_t ref_clk);
 #endif
 
-int32_t xcvr_setup(xcvr_core core);
-int32_t xcvr_status(xcvr_core core);
+int32_t xcvr_setup(xcvr_core *core);
+int32_t xcvr_status(xcvr_core *core);
 int32_t xcvr_getconfig(xcvr_core *core);
-int32_t xcvr_reset(xcvr_core core);
+int32_t xcvr_reset(xcvr_core *core);
+void xcvr_filalize_lane_rate_change(xcvr_core *core);
 
 #endif
