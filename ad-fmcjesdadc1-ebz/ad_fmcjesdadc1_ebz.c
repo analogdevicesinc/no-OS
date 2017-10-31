@@ -73,7 +73,7 @@ int main(void)
 	dmac_xfer		rx_xfer_1;
 
 	ad9250_xcvr.base_address = XPAR_AXI_AD9250_XCVR_BASEADDR;
-	ad9250_jesd204.base_address = XPAR_AXI_AD9250_JESD_BASEADDR;
+	ad9250_jesd204.base_address = XPAR_AXI_AD9250_JESD_RX_AXI_BASEADDR;
 	ad9250_0_core.base_address = XPAR_AXI_AD9250_0_CORE_BASEADDR;
 	ad9250_1_core.base_address = XPAR_AXI_AD9250_1_CORE_BASEADDR;
 
@@ -105,7 +105,6 @@ int main(void)
 	ad9250_1_param.lane_rate_kbps = 4915200;
 
 	xcvr_getconfig(&ad9250_xcvr);
-	ad9250_xcvr.mmcm_present = 0;
 	ad9250_xcvr.reconfig_bypass = 1;
 	ad9250_xcvr.lane_rate_kbps = ad9250_0_param.lane_rate_kbps;
 	ad9250_xcvr.ref_clock_khz = 245760;
@@ -146,13 +145,13 @@ int main(void)
 	jesd_setup(ad9250_jesd204);
 
 	// set up the XCVR core
-	xcvr_setup(ad9250_xcvr);
+	xcvr_setup(&ad9250_xcvr);
 
 	// generate SYSREF
 	jesd_sysref_control(ad9250_jesd204,1);
 
 	// JESD core status
-	jesd_status(ad9250_jesd204);
+	axi_jesd204_rx_status_read(ad9250_jesd204);
 
 	// set up interface core
 	adc_setup(ad9250_0_core);
