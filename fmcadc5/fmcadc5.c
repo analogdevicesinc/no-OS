@@ -143,13 +143,11 @@ int main(void)
 	ad9625_1_param.test_samples[3] = 0x444;
 
 	xcvr_getconfig(&ad9625_0_xcvr);
-	ad9625_0_xcvr.mmcm_present = 0;
 	ad9625_0_xcvr.reconfig_bypass = 1;
 	ad9625_0_xcvr.lane_rate_kbps = ad9625_0_param.lane_rate_kbps;
 	ad9625_0_xcvr.ref_clock_khz = 625000;
 
 	xcvr_getconfig(&ad9625_1_xcvr);
-	ad9625_1_xcvr.mmcm_present = 0;
 	ad9625_1_xcvr.reconfig_bypass = 1;
 	ad9625_1_xcvr.lane_rate_kbps = ad9625_1_param.lane_rate_kbps;
 	ad9625_1_xcvr.ref_clock_khz = 625000;
@@ -190,16 +188,16 @@ int main(void)
 	jesd_setup(ad9625_1_jesd);
 
 	// set up the XCVRs
-	xcvr_setup(ad9625_0_xcvr);
-	xcvr_setup(ad9625_1_xcvr);
+	xcvr_setup(&ad9625_0_xcvr);
+	xcvr_setup(&ad9625_1_xcvr);
 
 	// generate SYSREF
 	jesd_sysref_control(ad9625_0_jesd, 1);
 	jesd_sysref_control(ad9625_1_jesd, 1);
 
 	// JESD core status
-	jesd_status(ad9625_0_jesd);
-	jesd_status(ad9625_1_jesd);
+	axi_jesd204_rx_status_read(ad9625_0_jesd);
+	axi_jesd204_rx_status_read(ad9625_1_jesd);
 
 	// Synchronize the two AD9625s
 	ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_JESD204B_CONFIGURATION, 0x8b); // CS - overrange + sysref time-stamp. (default is 0x0b)
@@ -217,8 +215,8 @@ int main(void)
 	for (n = 0; n < 32; n++) {
 
 		jesd_sysref_control(ad9625_0_jesd, 0);
-		xcvr_reset(ad9625_0_xcvr);
-		xcvr_reset(ad9625_1_xcvr);
+		xcvr_reset(&ad9625_0_xcvr);
+		xcvr_reset(&ad9625_1_xcvr);
 
 		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_SYSREF_CONTROL, 0x42);
 		ad9625_spi_write(&ad9625_0_spi_device, AD9625_REG_TRANSFER, 0x01);
