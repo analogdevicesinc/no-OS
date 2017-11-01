@@ -65,8 +65,6 @@
 #define AD9680_CORE_0_BASEADDR		XPAR_AXI_AD9680_CORE_0_BASEADDR
 #define AD9680_CORE_1_BASEADDR		XPAR_AXI_AD9680_CORE_1_BASEADDR
 #define AD9680_DMA_BASEADDR		XPAR_AXI_AD9680_DMA_BASEADDR
-#define AD9680_JESD_BASEADDR		XPAR_AXI_AD9680_JESD_BASEADDR
-#define FMCADC4_GT_BASEADDR		XPAR_AXI_FMCADC4_GT_BASEADDR
 
 /***************************************************************************//**
 * @brief main
@@ -190,8 +188,8 @@ int main(void)
 
 	ad9680_0_param.lane_rate_kbps = 10000000;
 
-	ad9680_xcvr.mmcm_present = 0;
-	ad9680_xcvr.reconfig_bypass = 1;
+	ad9680_xcvr.reconfig_bypass = 0;
+	ad9680_xcvr.ref_clock_khz = 500000;
 	ad9680_xcvr.lane_rate_kbps = ad9680_0_param.lane_rate_kbps;
 
 	ad9680_jesd.rx_tx_n = 1;
@@ -225,7 +223,7 @@ int main(void)
 
 #ifdef XILINX
 	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
+	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
 	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
 	ad9680_0_core.base_address = XPAR_AXI_AD9680_CORE_0_BASEADDR;
 	ad9680_1_core.base_address = XPAR_AXI_AD9680_CORE_1_BASEADDR;
@@ -247,8 +245,8 @@ int main(void)
 	ad9680_setup(&ad9680_0_spi_device, ad9680_0_param);
 	ad9680_setup(&ad9680_1_spi_device, ad9680_1_param);
 	jesd_setup(ad9680_jesd);
-	xcvr_setup(ad9680_xcvr);
-	jesd_status(ad9680_jesd);
+	xcvr_setup(&ad9680_xcvr);
+	axi_jesd204_rx_status_read(ad9680_jesd);
 
 	adc_setup(ad9680_0_core);
 	ad9680_test(&ad9680_0_spi_device, AD9680_TEST_PN9);
