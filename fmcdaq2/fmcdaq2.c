@@ -57,6 +57,8 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define GPIO_XCVR_TX_RESET	45
+#define GPIO_XCVR_RX_RESET	44
 #define GPIO_TRIG		43
 #define GPIO_ADC_PD		42
 #define GPIO_DAC_TXEN		41
@@ -92,7 +94,7 @@ int main(void) {
 	struct ad9523_platform_data	ad9523_param;
 	struct ad9144_init_param	ad9144_param;
 	struct ad9680_init_param	ad9680_param;
-	struct xcvr_core_instance	daq2_xcvr;
+	struct xcvr_core_phy		daq2_xcvr;
 	struct xcvr_core		ad9144_xcvr;
 	struct xcvr_core		ad9680_xcvr;
 	struct jesd_core		ad9144_jesd;
@@ -195,12 +197,11 @@ int main(void) {
 	ad9144_param.lane_rate_kbps = 10000000;
 	ad9144_param.active_converters = 2;
 
-	ad9144_xcvr.mmcm_or_linkpll_present = 0;
-	ad9144_xcvr.mmcm_or_linkpll_base_address = 0;
-	ad9144_xcvr.tx_lane_pll_base_address = 0;
+	ad9144_xcvr.gpio_reset = GPIO_XCVR_TX_RESET;
+	ad9144_xcvr.link_pll_present = 0;
 	ad9144_xcvr.tx_or_rx_n = 1;
-	ad9144_xcvr.number_of_instances = 1;
-	ad9144_xcvr.instances = &daq2_xcvr;
+	ad9144_xcvr.no_of_phys = 1;
+	ad9144_xcvr.phys = &daq2_xcvr;
 
 	ad9144_jesd.tx_or_rx_n = 1;
 	ad9144_jesd.octets_per_frame = 1;
@@ -220,12 +221,11 @@ int main(void) {
 
 	ad9680_param.lane_rate_kbps = 10000000;
 
-	ad9680_xcvr.mmcm_or_linkpll_present = 0;
-	ad9680_xcvr.mmcm_or_linkpll_base_address = 0;
-	ad9680_xcvr.tx_lane_pll_base_address = 0;
+	ad9680_xcvr.gpio_reset = GPIO_XCVR_RX_RESET;
+	ad9680_xcvr.link_pll_present = 0;
 	ad9680_xcvr.tx_or_rx_n = 0;
-	ad9680_xcvr.number_of_instances = 1;
-	ad9680_xcvr.instances = &daq2_xcvr;
+	ad9680_xcvr.no_of_phys = 1;
+	ad9680_xcvr.phys = &daq2_xcvr;
 
 	ad9680_jesd.tx_or_rx_n = 0;
 	ad9680_jesd.octets_per_frame = 1;
@@ -266,6 +266,8 @@ int main(void) {
 	// setup GPIOs
 
 	ad_platform_init();
+	ad_gpio_set(GPIO_XCVR_TX_RESET, 1);
+	ad_gpio_set(GPIO_XCVR_RX_RESET, 1);
 	ad_gpio_set(GPIO_CLKD_SYNC, 0);
 	ad_gpio_set(GPIO_DAC_RESET, 0);
 	ad_gpio_set(GPIO_DAC_TXEN, 0);

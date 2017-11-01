@@ -41,21 +41,25 @@
 #include "xcvr_core_altera.h"
 
 /* physical link is allowed to be part of multiple instances */
+/* phy is always fully consumed (split occurs when full) */
+/* worst case -> no_of_lanes == no_of_phys */
 
-struct xcvr_core_instance {
+struct xcvr_core_phy {
 
 	uint32_t base_address;
-	uint32_t number_of_lanes;
+	uint32_t no_of_lanes;
 };
 
 struct xcvr_core {
 
-	struct xcvr_core_instance *instances;
-	uint32_t mmcm_or_linkpll_present;
-	uint32_t mmcm_or_linkpll_base_address;
-	uint32_t tx_lane_pll_base_address;
+	struct xcvr_core_phy *phys;
+	uint32_t no_of_phys;
 	uint32_t tx_or_rx_n;
-	uint32_t number_of_instances;
+	uint32_t gpio_reset;
+	uint32_t link_pll_present;
+	uint32_t link_pll_base_address;
+	uint32_t lane_pll_base_address;
+	uint32_t es_base_address;
 	uint32_t es_lane;
 	uint32_t es_start_address;
 	uint32_t es_prescale;

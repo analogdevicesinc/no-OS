@@ -42,17 +42,17 @@ int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data)
 
 	int32_t i;
 	uint32_t data;
-	struct xcvr_core_instance *xcvr_inst;
+	struct xcvr_core_phy *phy;
 
 	*reg_data = -1;
 	data = -1;
 
-	for (i = 0; i < core->number_of_instances; i++) {
-		xcvr_inst = &core->instances[i];
+	for (i = 0; i < core->no_of_phys; i++) {
+		phy = &core->phys[i];
 		if (i == 0) {
-			data = ad_reg_read(xcvr_inst->base_address + reg_addr);
+			data = ad_reg_read(phy->base_address + reg_addr);
 		}
-		if (ad_reg_read(xcvr_inst->base_address + reg_addr) != data) {
+		if (ad_reg_read(phy->base_address + reg_addr) != data) {
 			return(-1);
 		}
 	}
@@ -64,11 +64,11 @@ int32_t xcvr_read(struct xcvr_core *core, uint32_t reg_addr, uint32_t *reg_data)
 int32_t xcvr_write(struct xcvr_core *core, uint32_t reg_addr, uint32_t reg_data) {
 
 	int32_t i;
-	struct xcvr_core_instance *xcvr_inst;
+	struct xcvr_core_phy *phy;
 
-	for (i = 0; i < core->number_of_instances; i++) {
-		xcvr_inst = &core->instances[i];
-		ad_reg_write((xcvr_inst->base_address + reg_addr), reg_data);
+	for (i = 0; i < core->no_of_phys; i++) {
+		phy = &core->phys[i];
+		ad_reg_write((phy->base_address + reg_addr), reg_data);
 	}
 	return(0);
 }
@@ -95,33 +95,16 @@ int32_t xcvr_reconfig(struct xcvr_core *core, uint32_t lane_rate, uint32_t ref_c
 
 int32_t xcvr_setup(struct xcvr_core *core) {
 
-	uint32_t rx_data;
-	uint32_t tx_data;
-
-	rx_data = 0;
-	tx_data = 0;
-
-	xcvr_read(core, XCVR_RXPLL_TYPE_ADDR, &rx_data);
-	xcvr_read(core, XCVR_TXPLL_TYPE_ADDR, &tx_data);
-
-	if (rx_data == tx_data) {
-
-	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);
-	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x1);
-	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x0);
-	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
-		return(0);
-	}
+	ad_gpio_set(core->gpio_reset, 0x1);
+	ad_gpio_set(core->gpio_reset, 0x0);
 
 	if (core->tx_or_rx_n == 1) {
-
 	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x1);
 	  	xcvr_write(core, XCVR_TX_RESET_ADDR, 0x0);
 		return(0);
 	}
 
 	if (core->tx_or_rx_n == 0) {
-
 	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x1);
 	  	xcvr_write(core, XCVR_RX_RESET_ADDR, 0x0);
 		return(0);
