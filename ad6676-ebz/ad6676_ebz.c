@@ -56,7 +56,7 @@
 #define GPIO_ADC_SELB			39
 #define GPIO_ADC_S0			38
 #define GPIO_ADC_S1			37
-#define GPIO_ADC_RESETB		36
+#define GPIO_ADC_RESETB			36
 #define GPIO_ADC_AGC1			35
 #define GPIO_ADC_AGC2			34
 #define GPIO_ADC_AGC3			33
@@ -164,11 +164,10 @@ int main(void)
 
 	// xcvr settings
 
-	ad6676_xcvr.mmcm_present = 0;
-	ad6676_xcvr.lpm_enable = 0;
-	ad6676_xcvr.out_clk_sel = 4;
-	ad6676_xcvr.sys_clk_sel = 0;
-	ad6676_xcvr.reconfig_bypass = 1;
+	ad6676_xcvr.dev.lpm_enable = 0;
+	ad6676_xcvr.dev.out_clk_sel = 4;
+	ad6676_xcvr.dev.sys_clk_sel = 0;
+	ad6676_xcvr.reconfig_bypass = 0;
 	ad6676_xcvr.lane_rate_kbps = 4000000;
 	ad6676_xcvr.ref_clock_khz = 200000;
 
@@ -191,7 +190,7 @@ int main(void)
 	rx_xfer.no_of_samples = 32768;
 #ifdef XILINX
 	ad6676_xcvr.base_address = XPAR_AXI_AD6676_XCVR_BASEADDR;
-	ad6676_jesd.base_address = XPAR_AXI_AD6676_JESD_BASEADDR;
+	ad6676_jesd.base_address = XPAR_AXI_AD6676_JESD_RX_AXI_BASEADDR;
 	ad6676_dma.base_address = XPAR_AXI_AD6676_DMA_BASEADDR;
 	ad6676_core.base_address = XPAR_AXI_AD6676_CORE_BASEADDR;
 #endif
@@ -209,13 +208,13 @@ int main(void)
 	jesd_setup(ad6676_jesd);
 
 	// set up the XCVRs
-	xcvr_setup(ad6676_xcvr);
+	xcvr_setup(&ad6676_xcvr);
 
 	// generate SYSREF
 	jesd_sysref_control(ad6676_jesd, 1);
 
 	// JESD core status
-	jesd_status(ad6676_jesd);
+	axi_jesd204_rx_status_read(ad6676_jesd);
 
 	// interface core setup
 	adc_setup(ad6676_core);
