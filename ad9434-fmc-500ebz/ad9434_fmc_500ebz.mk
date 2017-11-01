@@ -14,7 +14,6 @@
 M_INC_DIRS := $(NOOS-DIR)/common_drivers/platform_drivers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
-M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9434
 
 M_HDR_FILES :=
