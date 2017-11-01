@@ -62,7 +62,7 @@ int main(void)
 	// base addresses
 
 	ad9625_xcvr.base_address = XPAR_AXI_AD9625_XCVR_BASEADDR;
-	ad9625_jesd.base_address = XPAR_AXI_AD9625_JESD_BASEADDR;
+	ad9625_jesd.base_address = XPAR_AXI_AD9625_JESD_RX_AXI_BASEADDR;
 	ad9625_core.base_address = XPAR_AXI_AD9625_CORE_BASEADDR;
 	ad9625_dma.base_address = XPAR_AXI_AD9625_DMA_BASEADDR;
 
@@ -88,8 +88,7 @@ int main(void)
 	ad9625_param.test_samples[3] = 0x444;
 
 	xcvr_getconfig(&ad9625_xcvr);
-	ad9625_xcvr.mmcm_present = 0;
-	ad9625_xcvr.reconfig_bypass = 1;
+	ad9625_xcvr.reconfig_bypass = 0;
 	ad9625_xcvr.lane_rate_kbps = ad9625_param.lane_rate_kbps;
 	ad9625_xcvr.ref_clock_khz = 625000;
 
@@ -115,11 +114,11 @@ int main(void)
 	// set up the JESD core
 	jesd_setup(ad9625_jesd);
 	// set up the XCVRs
-	xcvr_setup(ad9625_xcvr);
+	xcvr_setup(&ad9625_xcvr);
 	// generate SYSREF
 	jesd_sysref_control(ad9625_jesd, 1);
 	// JESD core status
-	jesd_status(ad9625_jesd);
+	axi_jesd204_rx_status_read(ad9625_jesd);
 
 	// interface core setup
 	adc_setup(ad9625_core);
