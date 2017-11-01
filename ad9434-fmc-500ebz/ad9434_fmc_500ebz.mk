@@ -16,7 +16,7 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9434
 
-M_HDR_FILES :=
+M_HDR_FILES := $(NOOS-DIR)/ad9434-fmc-500ebz/config.h
 
-M_SRC_FILES :=$(NOOS-DIR)/ad9434-fmc-500ebz/ad9434_fmc_500ebz.c
+M_SRC_FILES := $(NOOS-DIR)/ad9434-fmc-500ebz/ad9434_fmc_500ebz.c
 
