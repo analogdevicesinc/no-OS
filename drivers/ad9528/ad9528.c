@@ -82,7 +82,7 @@ struct ad9528_state
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
 
-int32_t ad9528_spi_read(spi_device *dev,
+int32_t ad9528_spi_read(struct spi_device *dev,
             uint32_t reg_addr,
             uint32_t *reg_data)
 {
@@ -108,7 +108,7 @@ int32_t ad9528_spi_read(spi_device *dev,
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
 
-int32_t ad9528_spi_write(spi_device *dev,
+int32_t ad9528_spi_write(struct spi_device *dev,
              uint32_t reg_addr,
              uint32_t reg_data)
 {
@@ -133,7 +133,7 @@ int32_t ad9528_spi_write(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_spi_read_n(spi_device *dev,
+int32_t ad9528_spi_read_n(struct spi_device *dev,
             uint32_t reg_addr,
             uint32_t *reg_data)
 {
@@ -166,7 +166,7 @@ int32_t ad9528_spi_read_n(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_spi_write_n(spi_device *dev,
+int32_t ad9528_spi_write_n(struct spi_device *dev,
              uint32_t reg_addr,
              uint32_t reg_data)
 {
@@ -195,7 +195,7 @@ int32_t ad9528_spi_write_n(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_poll(spi_device *dev,
+int32_t ad9528_poll(struct spi_device *dev,
           uint32_t reg_addr,
           uint32_t mask,
           uint32_t data)
@@ -221,7 +221,7 @@ int32_t ad9528_poll(spi_device *dev,
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_io_update(spi_device *dev)
+int32_t ad9528_io_update(struct spi_device *dev)
 {
     return ad9528_spi_write_n(dev, AD9528_IO_UPDATE, AD9528_IO_UPDATE_EN);
 }
@@ -231,7 +231,7 @@ int32_t ad9528_io_update(spi_device *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_sync(spi_device *dev)
+int32_t ad9528_sync(struct spi_device *dev)
 {
   int32_t ret;
 
@@ -271,7 +271,7 @@ int32_t ad9528_sync(spi_device *dev)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_init(ad9528_platform_data *pdata)
+int32_t ad9528_init(struct ad9528_platform_data *pdata)
 {
   uint32_t i;
 
@@ -328,10 +328,10 @@ int32_t ad9528_init(ad9528_platform_data *pdata)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata)
+int32_t ad9528_setup(struct spi_device *dev, struct ad9528_platform_data *pdata)
 {
   struct ad9528_state *st = &ad9528_st;
-  ad9528_channel_spec *chan;
+  struct ad9528_channel_spec *chan;
   uint32_t active_mask = 0;
   uint32_t ignoresync_mask = 0;
   uint32_t vco_freq;

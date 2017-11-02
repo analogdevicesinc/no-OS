@@ -3,7 +3,7 @@
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
  ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2014-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -47,14 +47,18 @@
 #include "ad9680.h"
 #include "adc_core.h"
 #include "dac_core.h"
+#include "dmac_core.h"
+#include "dac_buffer.h"
 #include "xcvr_core.h"
 #include "jesd_core.h"
-#include "dmac_core.h"
+#include <stdio.h>
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+#define GPIO_XCVR_TX_RESET	41
+#define GPIO_XCVR_RX_RESET	40
 #define GPIO_CLKD_STATUS_0      32
 #define GPIO_CLKD_STATUS_1      33
 #define GPIO_DAC_IRQ            34
@@ -64,27 +68,60 @@
 #define GPIO_ADC_PD             38
 #define GPIO_TRIG               39
 
-/***************************************************************************//**
- * @brief main
- *******************************************************************************/
-int main(void)
-{
-	spi_device ad9528_spi_device;
-	spi_device ad9152_spi_device;
-	spi_device ad9680_spi_device;
-	ad9528_channel_spec ad9528_channels[8];
-	ad9528_platform_data ad9528_param;
-	ad9152_init_param ad9152_param;
-	ad9680_init_param ad9680_param;
-	xcvr_core ad9152_xcvr;
-	jesd_core ad9152_jesd;
-	dac_channel ad9152_channels[2];
-	dac_core ad9152_core;
-	xcvr_core ad9680_xcvr;
-	jesd_core ad9680_jesd;
-	adc_core ad9680_core;
-	dmac_core ad9680_dma;
-	dmac_xfer rx_xfer;
+/******************************************************************************/
+/********************** Main **************************************************/
+/******************************************************************************/
+
+int main(void) {
+
+	struct spi_device		ad9528_spi_device;
+	struct spi_device		ad9152_spi_device;
+	struct spi_device		ad9680_spi_device;
+	struct ad9528_channel_spec	ad9528_channels[8];
+	struct ad9528_platform_data	ad9528_param;
+	struct ad9152_init_param	ad9152_param;
+	struct ad9680_init_param	ad9680_param;
+	struct xcvr_core_phy		daq3_xcvr;
+	struct xcvr_core		ad9152_xcvr;
+	struct xcvr_core		ad9680_xcvr;
+	struct jesd_core		ad9152_jesd;
+	struct jesd_core		ad9680_jesd;
+	struct dac_channel		ad9152_channels[2];
+	struct dac_core			ad9152_core;
+	struct adc_core			ad9680_core;
+	struct dmac_xfer		ad9680_dma_xfer;
+	struct dmac_xfer		ad9152_dma_xfer;
+	struct dmac_core		ad9152_dma;
+	struct dmac_core		ad9680_dma;
+
+	// base addresses
+
+#ifdef XILINX
+	daq3_xcvr.base_address = XPAR_AXI_DAQ3_XCVR_BASEADDR;
+	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
+	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_TX_AXI_BASEADDR;
+	ad9152_dma.base_address = XPAR_AXI_AD9152_DMA_BASEADDR;
+	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
+	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
+	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
+#endif
+#ifdef ALTERA
+	ad9152_xcvr.base_address = AXI_AD9152_XCVR_BASE;
+	ad9680_xcvr.base_address = AXI_AD9680_XCVR_BASE;
+	ad9152_xcvr.mmcm_lpll_base_address = AVL_AD9152_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9152_xcvr.tx_lane_pll_base_address = AVL_AD9152_XCVR_LANE_PLL_RECONFIG_BASE;
+	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
+	ad9152_jesd.base_address = AVL_AD9152_XCVR_IP_RECONFIG_BASE;
+	ad9152_dma.base_address = AXI_AD9152_DMA_BASE;
+	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
+	ad9680_jesd.base_address = AVL_AD9680_XCVR_IP_RECONFIG_BASE;
+	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
+#endif
+
+	//********************************************************************************
+	// SPI interface configuration
+	//********************************************************************************
 
 	ad_spi_init(&ad9528_spi_device);
 	ad_spi_init(&ad9152_spi_device);
@@ -94,7 +131,9 @@ int main(void)
 	ad9152_spi_device.chip_select = 0x5;
 	ad9680_spi_device.chip_select = 0x3;
 
-	// ad9528 defaults
+	//********************************************************************************
+	// clock distribution device (AD9528) configuration
+	//********************************************************************************
 
 	ad9528_param.num_channels = 8;
 	ad9528_param.channels = &ad9528_channels[0];
@@ -143,34 +182,90 @@ int main(void)
 	ad9528_param.rzero= RZERO_3250_OHM;
 	ad9528_param.cpole1 = CPOLE1_16_PF;
 
-	// dac settings
+	//********************************************************************************
+	// DAC (AD9152) and the transmit path (JESD-PHY, JESD-IP, AXI_AD9152, TX DMAC)
+	//********************************************************************************
 
-	ad9152_xcvr.mmcm_present = 0;
-	ad9152_xcvr.reconfig_bypass = 1;
-	ad9152_xcvr.lane_rate_kbps = 12500000;
+	ad9152_param.lane_rate_kbps = 12500000;
+	ad9152_param.interpolation = 1;
 
-	ad9152_jesd.rx_tx_n = 0;
-	ad9152_jesd.scramble_enable = 1;
+	ad9152_xcvr.gpio_reset = GPIO_XCVR_TX_RESET;
+	ad9152_xcvr.link_pll_present = 0;
+	ad9152_xcvr.tx_or_rx_n = 1;
+	ad9152_xcvr.no_of_phys = 1;
+	ad9152_xcvr.phys = &daq3_xcvr;
+
+	ad9152_jesd.tx_or_rx_n = 1;
 	ad9152_jesd.octets_per_frame = 1;
 	ad9152_jesd.frames_per_multiframe = 32;
-	ad9152_jesd.subclass_mode = 1;
-
-	ad9152_channels[0].dds_dual_tone = 0;
-	ad9152_channels[0].dds_frequency_0 = 33*1000*1000;
-	ad9152_channels[0].dds_phase_0 = 0;
-	ad9152_channels[0].dds_scale_0 = 500000;
-	ad9152_channels[0].sel = DAC_SRC_DDS;
-	ad9152_channels[1].dds_dual_tone = 0;
-	ad9152_channels[1].dds_frequency_0 = 11*1000*1000;
-	ad9152_channels[1].dds_phase_0 = 0;
-	ad9152_channels[1].dds_scale_0 = 500000;
-	ad9152_channels[0].pat_data = 0xb1b0a1a0;
-	ad9152_channels[1].pat_data = 0xd1d0c1c0;
-	ad9152_channels[1].sel = DAC_SRC_DDS;
 
 	ad9152_core.no_of_channels = 2;
-	ad9152_core.resolution = 16;
 	ad9152_core.channels = &ad9152_channels[0];
+	dac_channel_init(&ad9152_core);
+
+	ad9152_dma.transfer = &ad9152_dma_xfer;
+	ad9152_dma.flags = DMAC_FLAGS_TLAST;
+	dmac_init(&ad9152_dma, DMAC_TX);
+
+	//********************************************************************************
+	// ADC (AD9680) and the receive path (JESD-PHY, JESD-IP, AXI_AD9680, RX DMAC)
+	//********************************************************************************
+
+	ad9680_param.lane_rate_kbps = 12500000;
+
+	ad9680_xcvr.gpio_reset = GPIO_XCVR_RX_RESET;
+	ad9680_xcvr.link_pll_present = 0;
+	ad9680_xcvr.tx_or_rx_n = 0;
+	ad9680_xcvr.no_of_phys = 1;
+	ad9680_xcvr.phys = &daq3_xcvr;
+
+	ad9680_jesd.tx_or_rx_n = 0;
+	ad9680_jesd.octets_per_frame = 1;
+	ad9680_jesd.frames_per_multiframe = 32;
+
+	ad9680_core.no_of_channels = 2;
+	ad9680_core.resolution = 14;
+
+	ad9680_dma.transfer = &ad9680_dma_xfer;
+	dmac_init(&ad9680_dma, DMAC_RX);
+
+	//********************************************************************************
+	// Execution Phase (do NOT modify below)
+	//********************************************************************************
+
+	// setup GPIOs
+
+	ad_platform_init();
+	ad_gpio_set(GPIO_XCVR_TX_RESET, 1);
+	ad_gpio_set(GPIO_XCVR_RX_RESET, 1);
+	ad_gpio_set(GPIO_DAC_TXEN, 0x1);
+	ad_gpio_set(GPIO_ADC_PD, 0x0);
+
+	// setup spi device(s)
+
+	ad9528_setup(&ad9528_spi_device, &ad9528_param);
+	ad9680_setup(&ad9680_spi_device, &ad9680_param);
+	ad9152_setup(&ad9152_spi_device, &ad9152_param);
+
+	// setup fpga peripherals
+
+	jesd_setup(&ad9152_jesd);
+	jesd_setup(&ad9680_jesd);
+	xcvr_setup(&ad9152_xcvr);
+	xcvr_setup(&ad9680_xcvr);
+	mdelay(10);
+
+	xcvr_status(&ad9152_xcvr);
+	xcvr_status(&ad9680_xcvr);
+	jesd_status(&ad9152_jesd);
+	jesd_status(&ad9680_jesd);
+
+	adc_setup(&ad9680_core);
+	dac_setup(&ad9152_core);
+
+	ad9152_status(&ad9152_spi_device);
+
+	// AD9152 (short pattern test)
 
 	ad9152_param.stpl_samples[0][0] = (ad9152_channels[0].pat_data>> 0) & 0xffff;
 	ad9152_param.stpl_samples[0][1] = (ad9152_channels[0].pat_data>>16) & 0xffff;
@@ -180,129 +275,36 @@ int main(void)
 	ad9152_param.stpl_samples[1][1] = (ad9152_channels[1].pat_data>>16) & 0xffff;
 	ad9152_param.stpl_samples[1][2] = (ad9152_channels[1].pat_data>> 0) & 0xffff;
 	ad9152_param.stpl_samples[1][3] = (ad9152_channels[1].pat_data>>16) & 0xffff;
-	ad9152_param.interpolation = 1;
-	ad9152_param.lane_rate_kbps = 12500000;
+	dac_set_source(&ad9152_core, -1, DAC_SRC_SED);
+	ad9152_short_pattern_test(&ad9152_spi_device, &ad9152_param);
 
-	// adc settings
+	// AD9152 (dma source)
 
-	ad9680_param.lane_rate_kbps = 12500000;
+	dac_set_source(&ad9152_core, -1, DAC_SRC_DMA);
+	dac_buffer_load(&ad9152_core, &ad9152_dma_xfer);
+	dmac_start_transaction(&ad9152_dma);
 
-	ad9680_xcvr.mmcm_present = 0;
-	ad9680_xcvr.reconfig_bypass = 1;
-	ad9680_xcvr.lane_rate_kbps = 12500000;
+	// AD9680 (PN9 data path test)
 
-	ad9680_jesd.rx_tx_n = 1;
-	ad9680_jesd.scramble_enable = 1;
-	ad9680_jesd.octets_per_frame = 1;
-	ad9680_jesd.frames_per_multiframe = 32;
-	ad9680_jesd.subclass_mode = 1;
-
-	ad9680_core.no_of_channels = 2;
-	ad9680_core.resolution = 14;
-
-        // receiver DMA configuration
-
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
-	ad9680_dma.type = DMAC_RX;
-	ad9680_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-
-	// base addresses
-
-#ifdef XILINX
-	ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
-	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
-	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
-	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_BASEADDR;
-	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_BASEADDR;
-	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
-#endif
-#ifdef ALTERA
-	ad9152_xcvr.base_address = AXI_AD9152_XCVR_BASE;
-	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
-	ad9680_xcvr.base_address = AXI_AD9680_XCVR_BASE;
-	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
-	ad9152_jesd.base_address = AVL_AD9152_XCVR_IP_RECONFIG_BASE;
-	ad9680_jesd.base_address = AVL_AD9680_XCVR_IP_RECONFIG_BASE;
-	ad9152_xcvr.mmcm_lpll_base_address = AVL_AD9152_XCVR_CORE_PLL_RECONFIG_BASE;
-	ad9680_xcvr.mmcm_lpll_base_address = AVL_AD9680_XCVR_CORE_PLL_RECONFIG_BASE;
-	ad9152_xcvr.tx_lane_pll_base_address = AVL_AD9152_XCVR_LANE_PLL_RECONFIG_BASE;
-	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
-#endif
-
-	// functions (do not modify below)
-
-	ad_platform_init();
-	ad_gpio_set(GPIO_DAC_TXEN, 0x1);
-	ad_gpio_set(GPIO_ADC_PD, 0x0);
-
-	ad9528_setup(&ad9528_spi_device, &ad9528_param);
-
-	ad9152_setup(&ad9152_spi_device, ad9152_param);
-	jesd_setup(ad9152_jesd);
-	xcvr_setup(ad9152_xcvr);
-	jesd_status(ad9152_jesd);
-	dac_setup(&ad9152_core);
-	ad9152_status(&ad9152_spi_device);
-
-	// ad9152-x1 do not support data path prbs (use short-tpl)
-
-	ad9152_channels[0].sel = DAC_SRC_SED;
-	ad9152_channels[1].sel = DAC_SRC_SED;
-	dac_data_setup(&ad9152_core);
-	ad9152_short_pattern_test(&ad9152_spi_device, ad9152_param);
-
-	// ad9152-xN (n > 1) supports data path prbs
-
-	ad9152_channels[0].sel = DAC_SRC_PN23;
-	ad9152_channels[1].sel = DAC_SRC_PN23;
-	dac_data_setup(&ad9152_core);
-	ad9152_param.prbs_type = AD9152_TEST_PN7;
-	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
-
-	ad9152_channels[0].sel = DAC_SRC_PN31;
-	ad9152_channels[1].sel = DAC_SRC_PN31;
-	dac_data_setup(&ad9152_core);
-	ad9152_param.prbs_type = AD9152_TEST_PN15;
-	ad9152_datapath_prbs_test(&ad9152_spi_device, ad9152_param);
-
-	ad9680_setup(&ad9680_spi_device, ad9680_param);
-	jesd_setup(ad9680_jesd);
-	xcvr_setup(ad9680_xcvr);
-	jesd_status(ad9680_jesd);
-	adc_setup(ad9680_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
-	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
-		ad_printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
-	};
+	adc_pn_mon(&ad9680_core, ADC_PN9);
+
+	// AD9680 (PN23 data path test)
+
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
-	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
-		ad_printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
-	};
+	adc_pn_mon(&ad9680_core, ADC_PN23A);
 
-	// default data
+	// AD9680 (dma caputure)
 
-	ad9152_channels[0].sel = DAC_SRC_DDS;
-	ad9152_channels[1].sel = DAC_SRC_DDS;
-	dac_data_setup(&ad9152_core);
 	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
-	ad_printf("daq3: setup and configuration is done\n");
+	dmac_start_transaction(&ad9680_dma);
 
-        // capture data with DMA
+	// eye-scan
 
-	if(!dmac_start_transaction(ad9680_dma)){
-		ad_printf("daq3: RX capture done.\n");
-        };
+	xcvr_eyescan_init(&ad9680_xcvr);
+	xcvr_eyescan(&ad9680_xcvr);
 
+	ad_printf("done.\n");
 	ad_platform_close();
-
 	return(0);
 }

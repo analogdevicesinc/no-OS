@@ -1342,22 +1342,22 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct
+struct ad9152_init_param
 {
 	/* Device Settings */
 	uint32_t stpl_samples[2][4];
 	uint32_t interpolation;
 	uint32_t prbs_type;
 	uint32_t lane_rate_kbps;
-} ad9152_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9152_setup(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_status(spi_device *dev);
+int32_t ad9152_setup(struct spi_device *dev, struct ad9152_init_param *init_param);
+int32_t ad9152_datapath_prbs_test(struct spi_device *dev, struct ad9152_init_param *init_param);
+int32_t ad9152_short_pattern_test(struct spi_device *dev, struct ad9152_init_param *init_param);
+int32_t ad9152_status(struct spi_device *dev);
 
 #endif

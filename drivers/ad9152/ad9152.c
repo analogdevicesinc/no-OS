@@ -45,7 +45,7 @@
 /***************************************************************************//**
  * @brief ad9152_spi_read
  *******************************************************************************/
-int32_t ad9152_spi_read(spi_device *dev,
+int32_t ad9152_spi_read(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data)
 {
@@ -65,7 +65,7 @@ int32_t ad9152_spi_read(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9152_spi_write
  *******************************************************************************/
-int32_t ad9152_spi_write(spi_device *dev,
+int32_t ad9152_spi_write(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data)
 {
@@ -84,8 +84,8 @@ int32_t ad9152_spi_write(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9152_setup
  *******************************************************************************/
-int32_t ad9152_setup(spi_device *dev,
-		ad9152_init_param init_param)
+int32_t ad9152_setup(struct spi_device *dev,
+		struct ad9152_init_param *init_param)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
@@ -185,7 +185,7 @@ int32_t ad9152_setup(spi_device *dev,
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
+int32_t ad9152_short_pattern_test(struct spi_device *dev, struct ad9152_init_param *init_param)
 {
 	uint32_t dac;
 	uint32_t sample;
@@ -196,8 +196,8 @@ int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
 	for (dac = 0; dac < 2; dac++) {
 		for (sample = 0; sample < 4; sample++) {
 			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x00));
-			ad9152_spi_write(dev, 0x32e, (init_param.stpl_samples[dac][sample]>>8));
-			ad9152_spi_write(dev, 0x32d, (init_param.stpl_samples[dac][sample]>>0));
+			ad9152_spi_write(dev, 0x32e, (init_param->stpl_samples[dac][sample]>>8));
+			ad9152_spi_write(dev, 0x32d, (init_param->stpl_samples[dac][sample]>>0));
 			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
 			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x03));
 			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
@@ -206,7 +206,7 @@ int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
 			ad9152_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
 				ad_printf("AD9152: short-pattern-test mismatch (%x, %d, %d, %x)!.\n",
-					dac, sample, init_param.stpl_samples[dac][sample], status);
+					dac, sample, init_param->stpl_samples[dac][sample], status);
 		}
 	}
 	return(0);
@@ -216,7 +216,7 @@ int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
+int32_t ad9152_datapath_prbs_test(struct spi_device *dev, struct ad9152_init_param *init_param)
 {
 
 	uint8_t status;
@@ -225,11 +225,11 @@ int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
 	status = 0;
 	ret = 0;
 
-	if (init_param.interpolation == 1)
+	if (init_param->interpolation == 1)
 		return(ret);
 
-	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x03));
-	ad9152_spi_write(dev, REG_PRBS, ((init_param.prbs_type << 2) | 0x01));
+	ad9152_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x03));
+	ad9152_spi_write(dev, REG_PRBS, ((init_param->prbs_type << 2) | 0x01));
 	mdelay(100);
 
 	ad9152_spi_read(dev, REG_PRBS, &status);
@@ -258,7 +258,7 @@ int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_status(spi_device *dev)
+int32_t ad9152_status(struct spi_device *dev)
 {
 
 	uint8_t status;
