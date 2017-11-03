@@ -54,7 +54,7 @@ uint8_t spi_is_initialized = 0;
 /***************************************************************************//**
  * @brief ad9625_spi_read
  *******************************************************************************/
-int32_t ad9625_spi_read(spi_device *dev,
+int32_t ad9625_spi_read(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data)
 {
@@ -74,7 +74,7 @@ int32_t ad9625_spi_read(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9625_spi_write
  *******************************************************************************/
-int32_t ad9625_spi_write(spi_device *dev,
+int32_t ad9625_spi_write(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data)
 {
@@ -93,7 +93,7 @@ int32_t ad9625_spi_write(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9625_setup
  *******************************************************************************/
-int32_t ad9625_setup(spi_device *dev)
+int32_t ad9625_setup(struct spi_device *dev)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
@@ -135,7 +135,7 @@ int32_t ad9625_setup(spi_device *dev)
 /***************************************************************************//**
  * @brief ad9625_setup
  *******************************************************************************/
-int32_t ad9625_test(spi_device *dev, uint32_t test_mode)
+int32_t ad9625_test(struct spi_device *dev, uint32_t test_mode)
 {
 
         ad9625_spi_write(dev, AD9625_REG_TEST_CNTRL, test_mode);

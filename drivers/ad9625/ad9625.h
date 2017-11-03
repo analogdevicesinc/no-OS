@@ -79,22 +79,22 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad9625_init_param {
 	/* Device Settings */
 	uint32_t	lane_rate_kbps;
 	uint32_t	test_samples[4];
-} ad9625_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9625_spi_read(spi_device *dev,
+int32_t ad9625_spi_read(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t *reg_data);
-int32_t ad9625_spi_write(spi_device *dev,
+int32_t ad9625_spi_write(struct spi_device *dev,
 		uint16_t reg_addr,
 		uint8_t reg_data);
-int32_t ad9625_setup(spi_device *dev);
-int32_t ad9625_test(spi_device *dev, uint32_t test_mode);
+int32_t ad9625_setup(struct spi_device *dev);
+int32_t ad9625_test(struct spi_device *dev, uint32_t test_mode);
 
 #endif

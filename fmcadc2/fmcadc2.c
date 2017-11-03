@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+
 #include "platform_drivers.h"
 #include "ad9625.h"
 #include "adc_core.h"
@@ -47,103 +48,74 @@
 #include "jesd_core.h"
 #include "dmac_core.h"
 
-#define GPIO_JESD204_SYSREF		34
+#define GPIO_XCVR_RESET	38
+#define GPIO_JESD204_SYSREF 34
 
-int main(void)
-{
-	spi_device		ad9625_spi_device;
-	adc_core		ad9625_core;
-	ad9625_init_param	ad9625_param;
-	jesd_core		ad9625_jesd;
-	xcvr_core		ad9625_xcvr;
-	dmac_core               ad9625_dma;
-	dmac_xfer               rx_xfer;
+int main(void) {
+
+	struct spi_device	ad9625_spi_device;
+	struct xcvr_core_phy	ad9625_xcvr_phy;
+	struct xcvr_core	ad9625_xcvr;
+	struct jesd_core	ad9625_jesd;
+	struct adc_core		ad9625_core;
+	struct dmac_xfer	ad9625_dma_xfer;
+	struct dmac_core	ad9625_dma;
 
 	// base addresses
 
-	ad9625_xcvr.base_address = XPAR_AXI_AD9625_XCVR_BASEADDR;
-	ad9625_jesd.base_address = XPAR_AXI_AD9625_JESD_BASEADDR;
+	ad9625_xcvr_phy.base_address = XPAR_AXI_AD9625_XCVR_BASEADDR;
 	ad9625_core.base_address = XPAR_AXI_AD9625_CORE_BASEADDR;
+	ad9625_jesd.base_address = XPAR_AXI_AD9625_JESD_RX_AXI_BASEADDR;
 	ad9625_dma.base_address = XPAR_AXI_AD9625_DMA_BASEADDR;
 
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
-
-	// SPI configuration
+	// spi configuration
 
 	ad_spi_init(&ad9625_spi_device);
 	ad9625_spi_device.chip_select = 0x6;
 
-	// ADC and receive path configuration
+	// phy, jesd-ip, core & dma
 
-	ad9625_param.lane_rate_kbps = 6250000;
-	ad9625_param.test_samples[0] = 0x5A5;
-	ad9625_param.test_samples[1] = 0x1E1;
-	ad9625_param.test_samples[2] = 0x777;
-	ad9625_param.test_samples[3] = 0x444;
+	ad9625_xcvr.gpio_reset = GPIO_XCVR_RESET;
+	ad9625_xcvr.link_pll_present = 0;
+	ad9625_xcvr.tx_or_rx_n = 0;
+	ad9625_xcvr.no_of_phys = 1;
+	ad9625_xcvr.phys = &ad9625_xcvr_phy;
 
-	xcvr_getconfig(&ad9625_xcvr);
-	ad9625_xcvr.mmcm_present = 0;
-	ad9625_xcvr.reconfig_bypass = 1;
-	ad9625_xcvr.lane_rate_kbps = ad9625_param.lane_rate_kbps;
-	ad9625_xcvr.ref_clock_khz = 625000;
-
-	ad9625_jesd.scramble_enable = 1;
+	ad9625_jesd.tx_or_rx_n = 0;
 	ad9625_jesd.octets_per_frame = 1;
 	ad9625_jesd.frames_per_multiframe = 32;
-	ad9625_jesd.subclass_mode = 1;
 	ad9625_jesd.sysref_type = INTERN;
 	ad9625_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
 
 	ad9625_core.no_of_channels = 1;
 	ad9625_core.resolution = 12;
 
-	ad9625_dma.type = DMAC_RX;
-	ad9625_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
+	ad9625_dma.transfer = &ad9625_dma_xfer;
+	dmac_init(&ad9625_dma, DMAC_RX);
+
+	// main
 
 	ad_platform_init();
+	ad_gpio_set(GPIO_XCVR_RESET, 1);
 
-	// set up the device
 	ad9625_setup(&ad9625_spi_device);
-	// set up the JESD core
-	jesd_setup(ad9625_jesd);
-	// set up the XCVRs
-	xcvr_setup(ad9625_xcvr);
-	// generate SYSREF
-	jesd_sysref_control(ad9625_jesd, 1);
-	// JESD core status
-	jesd_status(ad9625_jesd);
+	jesd_setup(&ad9625_jesd);
+	xcvr_setup(&ad9625_xcvr);
+	jesd_sysref_control(&ad9625_jesd);
+	xcvr_status(&ad9625_xcvr);
+	jesd_status(&ad9625_jesd);
+	adc_setup(&ad9625_core);
 
-	// interface core setup
-	adc_setup(ad9625_core);
+	// data-path
 
-	// PRBS test
 	ad9625_test(&ad9625_spi_device, AD9625_TEST_PNLONG);
-	if(adc_pn_mon(ad9625_core, ADC_PN23) == -1) {
-		ad_printf("%s PN23 sequence mismatch at ad9625!\n", __func__);
-	};
+	adc_pn_mon(&ad9625_core, ADC_PN23);
 
-	// set up ramp output
-	ad9625_test(&ad9625_spi_device, AD9625_TEST_RAMP);
-	// test the captured data
-	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_core, 1, rx_xfer.no_of_samples/ad9625_core.no_of_channels, rx_xfer.start_address);
-	};
+	// dma
 
-	// capture data with DMA
 	ad9625_test(&ad9625_spi_device, AD9625_TEST_OFF);
-	if(!dmac_start_transaction(ad9625_dma)) {
-		ad_printf("%s RX capture done!\n", __func__);
-	};
-
+	dmac_start_transaction(&ad9625_dma);
+	ad_printf("done.\n");
 	ad_platform_close();
-
 	return(0);
 }
