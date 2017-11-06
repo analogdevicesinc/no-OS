@@ -92,7 +92,7 @@ static const ad5686_chip_info chip_info[] = {
  *                            0 - I2C peripheral was initialized and the
  *                                device is present.
 *******************************************************************************/
-int32_t AD5686_Init(ad5686_dev **device,
+int32_t ad5686_init(ad5686_dev **device,
 		    ad5686_init_param init_param)
 {
 	ad5686_dev *dev;
@@ -154,205 +154,231 @@ int32_t AD5686_Init(ad5686_dev **device,
 /**************************************************************************//**
  * @brief Write to input shift register.
  *
- * @param   command  - command control bits.
- *          data     - data to be written in input register.
+ * @param dev     - The device structure.
+ * @param command - Command control bits.
+ * @param data    - Data to be written in input register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-unsigned short AD5686_SetShiftReg(ad5686_dev *dev,
-				  unsigned char command,
-                                  unsigned char address,
-                                  unsigned short data)
+uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
+			      uint8_t command,
+			      uint8_t address,
+			      uint16_t data)
 {
-    unsigned char dataBuff[PKT_LENGTH] = {0, 0, 0};
-    unsigned short readBackData = 0;
+	uint8_t data_buff[PKT_LENGTH] = {0, 0, 0};
+	uint16_t read_back_data = 0;
 
-    dataBuff[0] = ((command & CMD_MASK) << CMD_OFFSET) | \
-                  (address & ADDR_MASK);
-    dataBuff[1] = (data & MSB_MASK) >> MSB_OFFSET;
-    dataBuff[2] = (data & LSB_MASK);
+	data_buff[0] = ((command & CMD_MASK) << CMD_OFFSET) | \
+		       (address & ADDR_MASK);
+	data_buff[1] = (data & MSB_MASK) >> MSB_OFFSET;
+	data_buff[2] = (data & LSB_MASK);
 
-    if(chip_info[dev->act_device].communication == SPI)
-    {
-        spi_write_and_read(&dev->spi_dev, dataBuff, PKT_LENGTH);
-        readBackData = (dataBuff[1] << MSB_OFFSET) | dataBuff[2];
-    }
-    else
-    {
-        i2c_write(&dev->i2c_dev, dataBuff, PKT_LENGTH, 1);
-    }
-return readBackData;
+	if(chip_info[dev->act_device].communication == SPI) {
+		spi_write_and_read(&dev->spi_dev, data_buff, PKT_LENGTH);
+		read_back_data = (data_buff[1] << MSB_OFFSET) | data_buff[2];
+	} else
+		i2c_write(&dev->i2c_dev, data_buff, PKT_LENGTH, 1);
+
+	return read_back_data;
 }
 
 /**************************************************************************//**
  * @brief Write to Input Register n (dependent on LDAC)
  *
- * @param   address  - the chosen channel to write to.
- *                      Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                                channel A and C
- *          data - desired value to be written in register.
+ * @param dev      - The device structure.
+ * @param address  - The chosen channel to write to.
+ *                    Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
+ *                              channel A and C
+ * @param data - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5686_WriteRegister(ad5686_dev *dev, unsigned char address, unsigned short data)
+void ad5686_write_register(ad5686_dev *dev,
+			   uint8_t address,
+			   uint16_t data)
 {
-    unsigned char dataOffset = MAX_RESOLUTION - \
-                                chip_info[dev->act_device].resolution;
+	uint8_t data_offset = MAX_RESOLUTION - \
+			      chip_info[dev->act_device].resolution;
 
-    AD5686_SetShiftReg(dev, AD5686_CTRL_WRITE, address, data << dataOffset);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_WRITE, address,
+			     data << data_offset);
 }
 
 /**************************************************************************//**
  * @brief Update DAC Register n with contents of Input Register n
  *
- * @param   address  - the chosen channel to write to.
- *                     Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                                channel A and C
+ * @param dev     - The device structure.
+ * @param address - The chosen channel to write to.
+ *                  Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
+ *                            channel A and C
  *
  * @return None.
 ******************************************************************************/
-void AD5686_UpdateRegister(ad5686_dev *dev, unsigned char address)
+void ad5686_update_register(ad5686_dev *dev,
+			    uint8_t address)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_UPDATE, address, 0);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_UPDATE, address, 0);
 }
 
 /**************************************************************************//**
  * @brief Write to and update DAC channel n
  *
- * @param   address  - the chosen channel to write to.
- *                      Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                                channel A and C
- *          data - desired value to be written in register.
+ * @param dev     - The device structure.
+ * @param address - The chosen channel to write to.
+ *                  Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
+ *                            channel A and C
+ * @param data    - Desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5686_WriteUpdateRegister(ad5686_dev *dev, unsigned char address, unsigned short data)
+void ad5686_write_update_register(ad5686_dev *dev,
+				  uint8_t address,
+				  uint16_t data)
 {
-    unsigned dataOffset = MAX_RESOLUTION - \
-                                chip_info[dev->act_device].resolution;
+	uint8_t data_offset = MAX_RESOLUTION - \
+			      chip_info[dev->act_device].resolution;
 
-    AD5686_SetShiftReg(dev, AD5686_CTRL_WRITEUPDATE, address, data << dataOffset);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_WRITEUPDATE, address,
+			     data << data_offset);
 }
 
 /**************************************************************************//**
  * @brief Read back Input Register n
  *
- * @param   address  - the channel which will be read back. Note: only one
- *                     channel should be selected, if there will be selected
- *                     more than one channel, the channel A will be read back
- *                     by default
- *                     Example: 'AD5686_CH_C' will read back the channel C
+ * @param dev     - The device structure.
+ * @param address - The channel which will be read back. Note: only one
+ *                  channel should be selected, if there will be selected
+ *                  more than one channel, the channel A will be read back
+ *                  by default
+ *                  Example: 'AD5686_CH_C' will read back the channel C
  *
  * @return None.
 ******************************************************************************/
-unsigned short AD5686_ReadBackRegister(ad5686_dev *dev, unsigned char address)
+uint16_t ad5686_read_back_register(ad5686_dev *dev,
+				   uint8_t address)
 {
 
-    unsigned short readBackData = 0;
-    unsigned short offset = MAX_RESOLUTION - \
-            chip_info[dev->act_device].resolution;
+	uint16_t read_back_data = 0;
+	uint16_t offset = MAX_RESOLUTION - \
+			  chip_info[dev->act_device].resolution;
 
-    if(chip_info[dev->act_device].communication == SPI)
-    {
-        AD5686_SetShiftReg(dev, AD5686_CTRL_RB_REG, address, 0);
-        readBackData = AD5686_SetShiftReg(dev, AD5686_CTRL_NOP, 0, 0);
-        readBackData >>= offset;
-    }
+	if(chip_info[dev->act_device].communication == SPI) {
+		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, address, 0);
+		read_back_data = ad5686_set_shift_reg(dev, AD5686_CTRL_NOP, 0, 0);
+		read_back_data >>= offset;
+	}
 
-return readBackData;
+	return read_back_data;
 }
 
 /**************************************************************************//**
  * @brief Write to and update DAC channel n
  *
- * @param   address  - the chosen channel to write to.
- *                     Example : 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                                channel A and C
- *          mode     - Power-down operation modes.
-                       Accepted values:
-                        'AD5686_PWRM_NORMAL' - Normal Mode
- *                      'AD5686_PWRM_1K' - Power-down mode 1kOhm to GND
- *                      'AD5686_PWRM_100K' - Power-down mode 100kOhm to GND
- *                      'AD5686_PWRM_THREESTATE' - Three-State
+ * @param dev     - The device structure.
+ * @param address - The chosen channel to write to.
+ *                  Example : 'AD5686_CH_A | AD5686_CH_C' will write to \
+ *                             channel A and C
+ * @param mode    - Power-down operation modes.
+ *                  Accepted values:
+ *                  'AD5686_PWRM_NORMAL' - Normal Mode
+ *                  'AD5686_PWRM_1K' - Power-down mode 1kOhm to GND
+ *                  'AD5686_PWRM_100K' - Power-down mode 100kOhm to GND
+ *                  'AD5686_PWRM_THREESTATE' - Three-State
  *
  * @return None.
 ******************************************************************************/
-void AD5686_PowerMode(ad5686_dev *dev, unsigned char address, unsigned char mode)
+void ad5686_power_mode(ad5686_dev *dev,
+		       uint8_t address,
+		       uint8_t mode)
 {
-    unsigned short data = 0;
+	uint16_t data = 0;
 
-    data |= (address & AD5686_CH_A) ? (mode << AD5686_PWRM_CHA_OFFSET) : 0x0;
-    data |= (address & AD5686_CH_B) ? (mode << AD5686_PWRM_CHB_OFFSET) : 0x0;
-    data |= (address & AD5686_CH_C) ? (mode << AD5686_PWRM_CHC_OFFSET) : 0x0;
-    data |= (address & AD5686_CH_D) ? (mode << AD5686_PWRM_CHD_OFFSET) : 0x0;
+	data |= (address & AD5686_CH_A) ?
+		(mode << AD5686_PWRM_CHA_OFFSET) : 0x0;
+	data |= (address & AD5686_CH_B) ?
+		(mode << AD5686_PWRM_CHB_OFFSET) : 0x0;
+	data |= (address & AD5686_CH_C) ?
+		(mode << AD5686_PWRM_CHC_OFFSET) : 0x0;
+	data |= (address & AD5686_CH_D) ?
+		(mode << AD5686_PWRM_CHD_OFFSET) : 0x0;
 
-    AD5686_SetShiftReg(dev, AD5686_CTRL_PWR, address, data);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_PWR, address, data);
 }
 
 /**************************************************************************//**
  * @brief Set hardware LDAC mask register
  *
- * @param   ldacMask  - in case of which channel ignore transitions on the LDAC *                      pin
- *                      Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                                channel A and C
+ * @param dev       - The device structure.
+ * @param ldac_mask - In case of which channel ignore transitions on the LDAC
+ *                    pin.
+ *                    Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
+ *                              channel A and C
  *
  * @return None.
 ******************************************************************************/
-void AD5686_LdacMask(ad5686_dev *dev, unsigned char ldacMask)
+void ad5686_ldac_mask(ad5686_dev *dev,
+		      uint8_t ldac_mask)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_LDAC_MASK, 0, ldacMask);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_LDAC_MASK, 0, ldac_mask);
 }
 
 /**************************************************************************//**
  * @brief Software reset (power-on reset)
  *
- * @param  None.
+ * @param dev - The device structure.
  *
  * @return None.
 ******************************************************************************/
-void AD5686_SoftwareReset(ad5686_dev *dev)
+void ad5686_software_reset(ad5686_dev *dev)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_SWRESET, 0, 0);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_SWRESET, 0, 0);
 }
 
 
 /**************************************************************************//**
  * @brief Write to Internal reference setup register
- * @param  value - the internal reference register value
- *                  Example : 'AD5686_INTREF_EN' - enable internal reference
+ *
+ * @param dev   - The device structure.
+ * @param value - The internal reference register value
+ *                Example : 'AD5686_INTREF_EN' - enable internal reference
  *                            'AD5686_INTREF_DIS' - disable internal reference
  *
  * @return None.
 ******************************************************************************/
-void AD5686_InternalReference(ad5686_dev *dev, unsigned char value)
+void ad5686_internal_reference(ad5686_dev *dev,
+			       uint8_t value)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_IREF_REG, 0, value);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_IREF_REG, 0, value);
 }
 
 /**************************************************************************//**
  * @brief Set up DCEN register (daisy-chain enable)
  *
- * @param  value - Enable or disable daisy-chain mode
-                   Example : 'AD5686_DC_EN' - daisy-chain enable
- *                           'AD5686_DC_DIS' - daisy-chain disable
+ * @param dev   - The device structure.
+ * @param value - Enable or disable daisy-chain mode
+ *                Example : 'AD5686_DC_EN' - daisy-chain enable
+ *                          'AD5686_DC_DIS' - daisy-chain disable
  *
  * @return None.
 ******************************************************************************/
-void AD5686_DaisyChainEn(ad5686_dev *dev, unsigned char value)
+void ad5686_daisy_chain_en(ad5686_dev *dev,
+			   uint8_t value)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_DCEN, 0, value);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_DCEN, 0, value);
 }
 
 /**************************************************************************//**
  * @brief Set up readback register (readback enable)
  *
- * @param  value - Enable or disable daisy-chain mode
-                   Example : 'AD5686_RB_EN' - daisy-chain enable
- *                           'AD5686_RB_DIS' - daisy-chain disable
+ * @param dev   - The device structure.
+ * @param value - Enable or disable daisy-chain mode
+ *                Example : 'AD5686_RB_EN' - daisy-chain enable
+ *                          'AD5686_RB_DIS' - daisy-chain disable
  *
  * @return None.
 ******************************************************************************/
-void AD5686_ReadBackEn(ad5686_dev *dev, unsigned char value)
+void ad5686_read_back_en(ad5686_dev *dev,
+			 uint8_t value)
 {
-    AD5686_SetShiftReg(dev, AD5686_CTRL_RB_REG, 0, value);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, 0, value);
 }
