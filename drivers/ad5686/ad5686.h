@@ -42,21 +42,6 @@
 *
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/* Supported devices */
-typedef enum {
-    ID_AD5684R,
-    ID_AD5685R,
-    ID_AD5686R,
-    ID_AD5694R,
-    ID_AD5695R,
-    ID_AD5696R,
-} AD5686_type_t;
-
 /* Control Bits */
 #define AD5686_CTRL_NOP          0
 #define AD5686_CTRL_WRITE        1
@@ -90,14 +75,6 @@ typedef enum {
 #define AD5686_PWRM_CHC_OFFSET   4
 #define AD5686_PWRM_CHD_OFFSET   6
 
-/* AD5449 GPIO */
-#define AD5686_LDAC_OUT          GPIO0_PIN_OUT
-#define AD5686_LDAC_LOW          GPIO0_LOW
-#define AD5686_LDAC_HIGH         GPIO0_HIGH
-#define AD5686_RESET_OUT         GPIO1_PIN_OUT
-#define AD5686_RESET_LOW         GPIO1_LOW
-#define AD5686_RESET_HIGH        GPIO1_HIGH
-
 /* Enable/disable defines */
 #define AD5686_INTREF_EN        1
 #define AD5686_INTREF_DIS       0
@@ -106,51 +83,120 @@ typedef enum {
 #define AD5686_RB_EN            1
 #define AD5686_RB_DIS           0
 
-/* Define I2C hardwired address */
-#define AD5686_I2C_ADDR          0x0E
+#define MAX_RESOLUTION  16     // Maximum resolution of the supported devices
 
-/* SPI slave device ID */
-#define AD5686_SLAVE_ID          1
+#define CMD_MASK        0xFF   // Mask for Command bits
+#define ADDR_MASK       0xFF   // Mask for Address bits
+#define CMD_OFFSET      4      // Offset for Command
+#define MSB_MASK        0xFF00 // Most significant byte of the data word
+#define MSB_OFFSET      8
+#define LSB_MASK        0x00FF // Least significant byte of the data word
+#define LSB_OFFSET      0
+#define PKT_LENGTH      3      // SPI packet length in byte
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/* Supported devices */
+typedef enum {
+	ID_AD5684R,
+	ID_AD5685R,
+	ID_AD5686R,
+	ID_AD5694R,
+	ID_AD5695R,
+	ID_AD5696R,
+} ad5686_type;
+
+typedef enum {
+	SPI,
+	I2C,
+} comm_type;
+
+typedef struct {
+	uint8_t		resolution;
+	comm_type		communication;
+} ad5686_chip_info;
+
+typedef struct {
+	/* I2C */
+	i2c_device	i2c_dev;
+	/* SPI */
+	spi_device	spi_dev;
+	/* GPIO */
+	gpio_device	gpio_dev;
+	int8_t		gpio_reset;
+	int8_t		gpio_ldac;
+	/* Device Settings */
+	ad5686_type	act_device;
+} ad5686_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_type	i2c_type;
+	uint32_t	i2c_id;
+	uint32_t	i2c_max_speed_hz;
+	uint8_t	i2c_slave_address;
+	/* SPI */
+	spi_type	spi_type;
+	uint32_t	spi_id;
+	uint32_t	spi_max_speed_hz;
+	spi_mode	spi_mode;
+	uint8_t		spi_chip_select;
+	/* GPIO */
+	gpio_type	gpio_type;
+	uint32_t	gpio_id;
+	int8_t		gpio_reset;
+	int8_t		gpio_ldac;
+	/* Device Settings */
+	ad5686_type	act_device;
+} ad5686_init_param;
+
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize SPI and Initial Values for AD5449 Board. */
-char AD5686_Init(AD5686_type_t device);
+int32_t AD5686_Init(ad5686_dev **device,
+		    ad5686_init_param init_param);
 /* Write to input register */
-unsigned short AD5686_SetShiftReg(unsigned char command,
+unsigned short AD5686_SetShiftReg(ad5686_dev *dev,
+				  unsigned char command,
                         unsigned char address,
                         unsigned short data);
 
 /* Write to Input Register n (dependent on LDAC) */
-void AD5686_WriteRegister(unsigned char address,
+void AD5686_WriteRegister(ad5686_dev *dev,
+			  unsigned char address,
                           unsigned short data);
 
 /* Update DAC Register n with contents of Input Register n */
-void AD5686_UpdateRegister(unsigned char address);
+void AD5686_UpdateRegister(ad5686_dev *dev, unsigned char address);
 
 /* Write to and update DAC channel n */
-void AD5686_WriteUpdateRegister(unsigned char address,
+void AD5686_WriteUpdateRegister(ad5686_dev *dev,
+				unsigned char address,
                                 unsigned short data);
 
 /* Read back Input Register n */
-unsigned short AD5686_ReadBackRegister(unsigned char address);
+unsigned short AD5686_ReadBackRegister(ad5686_dev *dev, unsigned char address);
 
 /* Power down / power up DAC */
-void AD5686_PowerMode(unsigned char address,
+void AD5686_PowerMode(ad5686_dev *dev,
+		      unsigned char address,
                      unsigned char mode);
 
 /* Set up LDAC mask register */
-void AD5686_LdacMask(unsigned char ldacMask);
+void AD5686_LdacMask(ad5686_dev *dev, unsigned char ldacMask);
 
 /* Software reset (power-on reset) */
-void AD5686_SoftwareReset();
+void AD5686_SoftwareReset(ad5686_dev *dev);
 
 /* Write to Internal reference setup register */
-void AD5686_InternalReference(unsigned char value);
+void AD5686_InternalReference(ad5686_dev *dev, unsigned char value);
 
 /* Set up DCEN register (daisy-chain enable) */
-void AD5686_DaisyChainEn(unsigned char value);
+void AD5686_DaisyChainEn(ad5686_dev *dev, unsigned char value);
 
 /* Set up readback register (readback enable) */
-void AD5686_ReadBackEn(unsigned char value);
+void AD5686_ReadBackEn(ad5686_dev *dev, unsigned char value);

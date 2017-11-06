@@ -43,96 +43,112 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ad5686.h"
-#include "Communication.h"
-
-#define MAX_RESOLUTION  16     /* Maximum resolution of the supported devices */
-
-#define CMD_MASK        0xFF   /* Mask for Command bits */
-#define ADDR_MASK       0xFF   /* Mask for Address bits */
-#define CMD_OFFSET      4      /* Offset for Command */
-#define MSB_MASK        0xFF00 /* Most significant byte of the data word */
-#define MSB_OFFSET      8
-#define LSB_MASK        0x00FF /* Least significant byte of the data word */
-#define LSB_OFFSET      0
-#define PKT_LENGTH      3      /* SPI packet length in byte */
 
 /*****************************************************************************/
-/***************************** Variable definition ***************************/
+/***************************** Constant definition ***************************/
 /*****************************************************************************/
-typedef enum
-{
-    spi,
-    i2c
-} comm_type_t;
-
-struct ad5686_chip_info {
-    unsigned char resolution;
-    comm_type_t communication;
+static const ad5686_chip_info chip_info[] = {
+	[ID_AD5684R] = {
+		.resolution = 12,
+		.communication = SPI,
+	},
+	[ID_AD5685R] = {
+		.resolution = 14,
+		.communication = SPI,
+	},
+	[ID_AD5686R] = {
+		.resolution = 16,
+		.communication = SPI,
+	},
+	[ID_AD5694R] = {
+		.resolution = 12,
+		.communication = I2C,
+	},
+	[ID_AD5695R] = {
+		.resolution = 14,
+		.communication = I2C,
+	},
+	[ID_AD5696R] = {
+		.resolution = 16,
+		.communication = I2C,
+	}
 };
 
-static const struct ad5686_chip_info ad5686_chip_info[] = {
-    [ID_AD5684R] = {
-        .resolution = 12,
-        .communication = spi,
-    },
-    [ID_AD5685R] = {
-        .resolution = 14,
-        .communication = spi,
-    },
-    [ID_AD5686R] = {
-        .resolution = 16,
-        .communication = spi,
-    },
-    [ID_AD5694R] = {
-        .resolution = 12,
-        .communication = i2c,
-    },
-    [ID_AD5695R] = {
-        .resolution = 14,
-        .communication = i2c,
-    },
-    [ID_AD5696R] = {
-        .resolution = 16,
-        .communication = i2c,
-    }
-};
-
-AD5686_type_t act_device;
-
-/**************************************************************************//**
- * @brief Initialize SPI and Initial Values for AD5686 Board.
+/***************************************************************************//**
+ * @brief Initializes the communication peripheral and the initial Values for
+ *        AD5686 Board.
  *
- * @param device    - Type of the desired device.
- *                    Example: ID_AD5415, ID_AD5426, ID_AD5429, ID_AD5432,
- *                             ID_AD5439, ID_AD5443, ID_AD5686,
- * @return retValue - Result of the initialization.
- *                    Example: 0 - if initialization was successful;
- *                            -1 - if initialization was unsuccessful.
-******************************************************************************/
-char AD5686_Init(AD5686_type_t device)
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return status - The result of the initialization procedure.
+ *                  Example: -1 - I2C peripheral was not initialized or the
+ *                                device is not present.
+ *                            0 - I2C peripheral was initialized and the
+ *                                device is present.
+*******************************************************************************/
+int32_t AD5686_Init(ad5686_dev **device,
+		    ad5686_init_param init_param)
 {
-    char status = -1;
+	ad5686_dev *dev;
+	int32_t     ret;
 
-    act_device = device;
+	dev = (ad5686_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-    /* Initialize SPI communication. */
-    if(ad5686_chip_info[act_device].communication == spi)
-    {
-        status = SPI_Init(0, 1000000, 0, 0);
-    }
-    else
-    {
-        status = I2C_Init(100000);
-    }
+	dev->act_device = init_param.act_device;
 
-    /* Set GPIO pins. */
-    AD5686_LDAC_OUT;
-    AD5686_LDAC_LOW;
-    AD5686_RESET_OUT;
-    AD5686_RESET_HIGH;
+	if (chip_info[dev->act_device].communication == SPI) {
+		dev->spi_dev.type = init_param.spi_type;
+		dev->spi_dev.id = init_param.spi_id;
+		dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
+		dev->spi_dev.mode = init_param.spi_mode;
+		dev->spi_dev.chip_select = init_param.spi_chip_select;
+		ret = spi_init(&dev->spi_dev);
+	} else {
+		dev->i2c_dev.type = init_param.i2c_type;
+		dev->i2c_dev.id = init_param.i2c_id;
+		dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
+		dev->i2c_dev.slave_address = init_param.i2c_slave_address;
+		ret = i2c_init(&dev->i2c_dev);
+	}
 
-return status;
+
+	/* GPIO */
+	dev->gpio_dev.id = init_param.gpio_id;
+	dev->gpio_dev.type = init_param.gpio_type;
+	ret |= gpio_init(&dev->gpio_dev);
+
+	dev->gpio_reset = init_param.gpio_reset;
+	dev->gpio_ldac = init_param.gpio_ldac;
+
+	if (dev->gpio_ldac >= 0) {
+		ret |= gpio_set_direction(&dev->gpio_dev,
+					  dev->gpio_ldac,
+					  GPIO_OUT);
+		ret |= gpio_set_value(&dev->gpio_dev,
+				      dev->gpio_ldac,
+				      GPIO_LOW);
+	}
+
+	if (dev->gpio_reset >= 0) {
+		ret |= gpio_set_direction(&dev->gpio_dev,
+					  dev->gpio_reset,
+					  GPIO_OUT);
+		ret |= gpio_set_value(&dev->gpio_dev,
+				      dev->gpio_reset,
+				      GPIO_HIGH);
+	}
+
+	*device = dev;
+
+	return ret;
 }
 
 /**************************************************************************//**
@@ -143,7 +159,8 @@ return status;
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-unsigned short AD5686_SetShiftReg(unsigned char command,
+unsigned short AD5686_SetShiftReg(ad5686_dev *dev,
+				  unsigned char command,
                                   unsigned char address,
                                   unsigned short data)
 {
@@ -155,14 +172,14 @@ unsigned short AD5686_SetShiftReg(unsigned char command,
     dataBuff[1] = (data & MSB_MASK) >> MSB_OFFSET;
     dataBuff[2] = (data & LSB_MASK);
 
-    if(ad5686_chip_info[act_device].communication == spi)
+    if(chip_info[dev->act_device].communication == SPI)
     {
-        SPI_Write((unsigned char)AD5686_SLAVE_ID, dataBuff, PKT_LENGTH);
+        spi_write_and_read(&dev->spi_dev, dataBuff, PKT_LENGTH);
         readBackData = (dataBuff[1] << MSB_OFFSET) | dataBuff[2];
     }
     else
     {
-        I2C_Write(AD5686_I2C_ADDR, dataBuff, PKT_LENGTH, 1);
+        i2c_write(&dev->i2c_dev, dataBuff, PKT_LENGTH, 1);
     }
 return readBackData;
 }
@@ -177,12 +194,12 @@ return readBackData;
  *
  * @return None.
 ******************************************************************************/
-void AD5686_WriteRegister(unsigned char address, unsigned short data)
+void AD5686_WriteRegister(ad5686_dev *dev, unsigned char address, unsigned short data)
 {
     unsigned char dataOffset = MAX_RESOLUTION - \
-                                ad5686_chip_info[act_device].resolution;
+                                chip_info[dev->act_device].resolution;
 
-    AD5686_SetShiftReg(AD5686_CTRL_WRITE, address, data << dataOffset);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_WRITE, address, data << dataOffset);
 }
 
 /**************************************************************************//**
@@ -194,9 +211,9 @@ void AD5686_WriteRegister(unsigned char address, unsigned short data)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_UpdateRegister(unsigned char address)
+void AD5686_UpdateRegister(ad5686_dev *dev, unsigned char address)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_UPDATE, address, 0);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_UPDATE, address, 0);
 }
 
 /**************************************************************************//**
@@ -209,12 +226,12 @@ void AD5686_UpdateRegister(unsigned char address)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_WriteUpdateRegister(unsigned char address, unsigned short data)
+void AD5686_WriteUpdateRegister(ad5686_dev *dev, unsigned char address, unsigned short data)
 {
     unsigned dataOffset = MAX_RESOLUTION - \
-                                ad5686_chip_info[act_device].resolution;
+                                chip_info[dev->act_device].resolution;
 
-    AD5686_SetShiftReg(AD5686_CTRL_WRITEUPDATE, address, data << dataOffset);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_WRITEUPDATE, address, data << dataOffset);
 }
 
 /**************************************************************************//**
@@ -228,17 +245,17 @@ void AD5686_WriteUpdateRegister(unsigned char address, unsigned short data)
  *
  * @return None.
 ******************************************************************************/
-unsigned short AD5686_ReadBackRegister(unsigned char address)
+unsigned short AD5686_ReadBackRegister(ad5686_dev *dev, unsigned char address)
 {
 
     unsigned short readBackData = 0;
     unsigned short offset = MAX_RESOLUTION - \
-            ad5686_chip_info[act_device].resolution;
+            chip_info[dev->act_device].resolution;
 
-    if(ad5686_chip_info[act_device].communication == spi)
+    if(chip_info[dev->act_device].communication == SPI)
     {
-        AD5686_SetShiftReg(AD5686_CTRL_RB_REG, address, 0);
-        readBackData = AD5686_SetShiftReg(AD5686_CTRL_NOP, 0, 0);
+        AD5686_SetShiftReg(dev, AD5686_CTRL_RB_REG, address, 0);
+        readBackData = AD5686_SetShiftReg(dev, AD5686_CTRL_NOP, 0, 0);
         readBackData >>= offset;
     }
 
@@ -260,7 +277,7 @@ return readBackData;
  *
  * @return None.
 ******************************************************************************/
-void AD5686_PowerMode(unsigned char address, unsigned char mode)
+void AD5686_PowerMode(ad5686_dev *dev, unsigned char address, unsigned char mode)
 {
     unsigned short data = 0;
 
@@ -269,7 +286,7 @@ void AD5686_PowerMode(unsigned char address, unsigned char mode)
     data |= (address & AD5686_CH_C) ? (mode << AD5686_PWRM_CHC_OFFSET) : 0x0;
     data |= (address & AD5686_CH_D) ? (mode << AD5686_PWRM_CHD_OFFSET) : 0x0;
 
-    AD5686_SetShiftReg(AD5686_CTRL_PWR, address, data);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_PWR, address, data);
 }
 
 /**************************************************************************//**
@@ -281,9 +298,9 @@ void AD5686_PowerMode(unsigned char address, unsigned char mode)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_LdacMask(unsigned char ldacMask)
+void AD5686_LdacMask(ad5686_dev *dev, unsigned char ldacMask)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_LDAC_MASK, 0, ldacMask);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_LDAC_MASK, 0, ldacMask);
 }
 
 /**************************************************************************//**
@@ -293,9 +310,9 @@ void AD5686_LdacMask(unsigned char ldacMask)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_SoftwareReset()
+void AD5686_SoftwareReset(ad5686_dev *dev)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_SWRESET, 0, 0);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_SWRESET, 0, 0);
 }
 
 
@@ -307,9 +324,9 @@ void AD5686_SoftwareReset()
  *
  * @return None.
 ******************************************************************************/
-void AD5686_InternalReference(unsigned char value)
+void AD5686_InternalReference(ad5686_dev *dev, unsigned char value)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_IREF_REG, 0, value);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_IREF_REG, 0, value);
 }
 
 /**************************************************************************//**
@@ -321,9 +338,9 @@ void AD5686_InternalReference(unsigned char value)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_DaisyChainEn(unsigned char value)
+void AD5686_DaisyChainEn(ad5686_dev *dev, unsigned char value)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_DCEN, 0, value);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_DCEN, 0, value);
 }
 
 /**************************************************************************//**
@@ -335,7 +352,7 @@ void AD5686_DaisyChainEn(unsigned char value)
  *
  * @return None.
 ******************************************************************************/
-void AD5686_ReadBackEn(unsigned char value)
+void AD5686_ReadBackEn(ad5686_dev *dev, unsigned char value)
 {
-    AD5686_SetShiftReg(AD5686_CTRL_RB_REG, 0, value);
+    AD5686_SetShiftReg(dev, AD5686_CTRL_RB_REG, 0, value);
 }
