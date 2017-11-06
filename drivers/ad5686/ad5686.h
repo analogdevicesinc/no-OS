@@ -115,7 +115,7 @@ typedef enum {
 
 typedef struct {
 	uint8_t		resolution;
-	comm_type		communication;
+	comm_type	communication;
 } ad5686_chip_info;
 
 typedef struct {
@@ -152,51 +152,57 @@ typedef struct {
 	ad5686_type	act_device;
 } ad5686_init_param;
 
-
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize SPI and Initial Values for AD5449 Board. */
-int32_t AD5686_Init(ad5686_dev **device,
+int32_t ad5686_init(ad5686_dev **device,
 		    ad5686_init_param init_param);
+
 /* Write to input register */
-unsigned short AD5686_SetShiftReg(ad5686_dev *dev,
-				  unsigned char command,
-                        unsigned char address,
-                        unsigned short data);
+uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
+			      uint8_t command,
+			      uint8_t address,
+			      uint16_t data);
 
 /* Write to Input Register n (dependent on LDAC) */
-void AD5686_WriteRegister(ad5686_dev *dev,
-			  unsigned char address,
-                          unsigned short data);
+void ad5686_write_register(ad5686_dev *dev,
+			   uint8_t address,
+			   uint16_t data);
 
 /* Update DAC Register n with contents of Input Register n */
-void AD5686_UpdateRegister(ad5686_dev *dev, unsigned char address);
+void ad5686_update_register(ad5686_dev *dev,
+			    uint8_t address);
 
 /* Write to and update DAC channel n */
-void AD5686_WriteUpdateRegister(ad5686_dev *dev,
-				unsigned char address,
-                                unsigned short data);
+void ad5686_write_update_register(ad5686_dev *dev,
+				  uint8_t address,
+				  uint16_t data);
 
 /* Read back Input Register n */
-unsigned short AD5686_ReadBackRegister(ad5686_dev *dev, unsigned char address);
+uint16_t ad5686_read_back_register(ad5686_dev *dev,
+				   uint8_t address);
 
 /* Power down / power up DAC */
-void AD5686_PowerMode(ad5686_dev *dev,
-		      unsigned char address,
-                     unsigned char mode);
+void ad5686_power_mode(ad5686_dev *dev,
+		       uint8_t address,
+		       uint8_t mode);
 
 /* Set up LDAC mask register */
-void AD5686_LdacMask(ad5686_dev *dev, unsigned char ldacMask);
+void ad5686_ldac_mask(ad5686_dev *dev,
+		      uint8_t ldac_mask);
 
 /* Software reset (power-on reset) */
-void AD5686_SoftwareReset(ad5686_dev *dev);
+void ad5686_software_reset(ad5686_dev *dev);
 
 /* Write to Internal reference setup register */
-void AD5686_InternalReference(ad5686_dev *dev, unsigned char value);
+void ad5686_internal_reference(ad5686_dev *dev,
+			       uint8_t value);
 
 /* Set up DCEN register (daisy-chain enable) */
-void AD5686_DaisyChainEn(ad5686_dev *dev, unsigned char value);
+void ad5686_daisy_chain_en(ad5686_dev *dev,
+			   uint8_t value);
 
 /* Set up readback register (readback enable) */
-void AD5686_ReadBackEn(ad5686_dev *dev, unsigned char value);
+void ad5686_read_back_en(ad5686_dev *dev,
+			 uint8_t value);
