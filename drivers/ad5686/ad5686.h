@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   AD5686.h
+*   @file   ad5686.h
 *   @brief  Header file of AD5686 Driver. This driver supporting the following
 *              devices: AD5684R, AD5685R, AD5686R, AD5694R, AD5695R, AD5696R,
 *
