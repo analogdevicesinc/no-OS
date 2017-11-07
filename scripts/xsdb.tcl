@@ -41,7 +41,7 @@ if {$m_type == "ZYNQ_PS7"} {
 
 if {$m_type == "MICROBLAZE"} {
   after 1000
-  targets -set -filter {name =~ "*MicroBlaze*"}
+  targets -set -filter {name =~ "*MicroBlaze #*"}
 }
 
 dow sw/Release/sw.elf
