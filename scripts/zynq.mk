@@ -20,6 +20,7 @@ XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
 COMPILER_DEFINES += ZYNQ_PS7
+COMPILER_DEFINES += $(M_COMPILER_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h
@@ -35,6 +36,9 @@ SRC_FILES := $(P_SRC_FILES)
 SRC_FILES += $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
+LIB_FILES := $(M_LIB_FILES)
+LIB_NAME := $(M_LIB_NAME)
+
 CAPTURE_BADDR := 800000
 CAPTURE_SIZE := 32768
 
@@ -42,8 +46,9 @@ CAPTURE_SIZE := 32768
 all: $(ELF_FILE)
 
 
-$(ELF_FILE): $(HDR_FILES) $(SRC_FILES)
-	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) >> $(XSCT_LOG) 2>&1
+$(ELF_FILE): $(HDR_FILES) $(SRC_FILES) $(LIB_FILES)
+	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) $(LIB_FILES) >> $(XSCT_LOG) 2>&1
+	$(XSCT_CMD) $(XSCT_SCRIPT) library $(LIB_NAME) >> $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) build
 
 

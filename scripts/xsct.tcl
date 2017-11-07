@@ -22,6 +22,13 @@ if {$m_mode == "sources"} {
   }
   exit
 }
+if {$m_mode == "library"} {
+
+  for {set i 1} {$i < $argc} {incr i} {
+    setlib -lib [lindex $argv $i]
+  }
+  exit
+}
 
 if {$m_mode == "defines"} {
 
