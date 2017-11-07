@@ -59,7 +59,6 @@ typedef enum {
 } pll_type;
 
 typedef struct {
-	uint16_t		id;
 	pll_type		type;
 	uint32_t		base_address;
 	uint8_t			initial_recalc;

@@ -176,15 +176,15 @@ uint8_t pll_calibration_check(xcvr_pll *my_pll)
 		a10_pll_read(my_pll, arb_status, &val);
 		if ((val & mask) == 0x00) {
 #ifdef DEBUG
-			printf("%s OK (%d us, ID: %d, addr 0x%x)\n", msg,
-				timeout * 100, my_pll->id, my_pll->base_address);
+			printf("%s OK (%d us, addr 0x%x)\n", msg,
+				timeout * 100, my_pll->base_address);
 #endif
 			return 0;
 		}
 	} while (timeout++ < 1000);
 
-	printf("%s FAILED (ID: %d, addr 0x%x)\n", msg,
-		my_pll->id, my_pll->base_address);
+	printf("%s FAILED (addr 0x%x)\n", msg,
+		my_pll->base_address);
 
 	return 1;
 }

@@ -371,6 +371,7 @@ int32_t xilinx_xcvr_configure_cdr(xcvr_core *core,
 	case XILINX_XCVR_TYPE_US_GTH3:
 		return xilinx_xcvr_gth3_configure_cdr(core, out_div);
 	default:
+		printf("%s ERROR: xcvr type not defined\n",__func__);
 		return -1;
 	}
 }
