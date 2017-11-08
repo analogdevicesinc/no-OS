@@ -45,7 +45,7 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include <stdint.h>
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /****************************** AD9517 ****************************************/
@@ -302,32 +302,6 @@
 #define AD9517_MAX_PFD_FREQ			100000000
 #define AD9517_MAX_PRESCLAER_OUT_FREQ		300000000
 
-/* Platform specific information */
-struct ad9517_platform_data 
-{
-	/* PLL Reference */
-	int32_t ref_1_freq;	// Frequency of the Reference 1.
-	int32_t ref_2_freq;	// Frequency of the Reference 2.
-	uint8_t diff_ref_en;	// Selects the differential PLL reference mode.
-	uint8_t ref_1_power_on;	// Power on REF1.
-	uint8_t ref_2_power_on;	// Power on REF2.
-	uint8_t ref_sel_pin_en;	// Set method of PLL reference selection.
-	uint8_t ref_sel_pin;	// State of the REF_SEL pin.
-	uint8_t ref_2_en;	// Select Reference 2.
-	
-	/* External Clock  */
-	int64_t ext_clk_freq;	// Frequency of the external clock.
-
-	/* VCO  */
-	int64_t int_vco_freq;	// Frequency of the internal VCO.
-	
-	/* External Clock or VCO selection */
-	int32_t vco_clk_sel;
-	
-	uint8_t power_down_vco_clk;
-	uint8_t name[16];
-};
-
 /* LVPECL output channel configuration. */
 struct ad9517_lvpecl_channel_spec 
 {
@@ -370,28 +344,53 @@ enum out_lvds_current_options
 	LVDS_7mA,
 };
 
+/* Platform specific information */
+struct ad9517_platform_data 
+{
+	/* PLL Reference */
+	int32_t ref_1_freq;	// Frequency of the Reference 1.
+	int32_t ref_2_freq;	// Frequency of the Reference 2.
+	uint8_t diff_ref_en;	// Selects the differential PLL reference mode.
+	uint8_t ref_1_power_on;	// Power on REF1.
+	uint8_t ref_2_power_on;	// Power on REF2.
+	uint8_t ref_sel_pin_en;	// Set method of PLL reference selection.
+	uint8_t ref_sel_pin;	// State of the REF_SEL pin.
+	uint8_t ref_2_en;	// Select Reference 2.
+	
+	/* External Clock  */
+	int64_t ext_clk_freq;	// Frequency of the external clock.
+
+	/* VCO  */
+	int64_t int_vco_freq;	// Frequency of the internal VCO.
+	
+	/* External Clock or VCO selection */
+	int32_t vco_clk_sel;
+	
+	uint8_t power_down_vco_clk;
+	uint8_t name[16];
+
+	struct ad9517_lvpecl_channel_spec lvpecl_channels[4];
+	struct ad9517_lvds_cmos_channel_spec lvds_cmos_channels[4];
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Initializes the AD9517. */
-#ifdef OLD_VERSION
-int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo);
-#else
-int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select);
-#endif
+int32_t ad9517_setup(struct spi_device *dev, struct ad9517_platform_data *pdata);
 /*!  Writes data into a register. */
-int32_t ad9517_write(uint32_t regAddr, uint16_t regVal);
+int32_t ad9517_write(struct spi_device *dev, uint32_t regAddr, uint16_t regVal);
 /*! Reads data from a register. */
-int32_t ad9517_read(uint32_t regAddr);
+int32_t ad9517_read(struct spi_device *dev, uint32_t regAddr);
 /*! Transfers the contents of the buffer registers into the active registers. */
-int32_t ad9517_update(void);
+int32_t ad9517_update(struct spi_device *dev, void);
 /*! Sets the VCO frequency. */
-int64_t ad9517_vco_frequency(int64_t frequency);
+int64_t ad9517_vco_frequency(struct spi_device *dev, int64_t frequency);
 /*! Sets the frequency on the specified channel. */
-int64_t ad9517_frequency(int32_t channel, int64_t frequency);
+int64_t ad9517_frequency(struct spi_device *dev, int32_t channel, int64_t frequency);
 /*! Sets the phase on the specified channel. */
-int32_t ad9517_phase(int32_t channel, int32_t phase);
+int32_t ad9517_phase(struct spi_device *dev, int32_t channel, int32_t phase);
 /*! Sets the power mode of the specified channel. */
-int32_t ad9517_power_mode(int32_t channel, int32_t mode);
+int32_t ad9517_power_mode(struct spi_device *dev, int32_t channel, int32_t mode);
 
 #endif // __AD9517_H__
