@@ -45,7 +45,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /*********************************** AD9250 ***********************************/
@@ -246,59 +246,6 @@
 /*****************************************************************************/
 
 /**
- * struct ad9250_platform_data - Platform specific information.
- *
- * @extrnPDWNmode: External PDWN mode.
- *		   0 = PDWN is full power down
- *		   1 = PDWN puts device in standby
- * @enClkDCS: Clock duty cycle stabilizer enable.
- *	      0 = disable
- *	      1 = enable
- * @clkSelection: Clock selection.
- *		  0 = Nyquist clock
- *		  2 = RF clock divide by 4
- *		  3 = clock off
- * @clkDivRatio: Clock divider ratio relative to the encode clock.
- *		 0x00 = divide by 1
- *		 0x01 = divide by 2
- *		 ...
- *		 0x07 = divide by 8
- * @clkDivPhase: Clock divide phase relative to the encode clock.
- *		 0x0 = 0 input clock cycles delayed
- *		 0x1 = 1 input clock cycles delayed
- *		 ...
- *		 0x7 = 7 input clock cycles delayed
- * @adcVref: Main reference full-scale VREF adjustment.
- *	     0x0f = internal 2.087 V p-p
- *	     ...
- *	     0x01 = internal 1.772 V p-p
- *	     0x00 = internal 1.75 V p-p [default]
- *	     0x1F = internal 1.727 V p-p
- *	     ...
- *	     0x10 = internal 1.383 V p-p
- * @pllLowEncode: PLL low encode.
- *		  0 = for lane speeds > 2 Gbps
- *		  1 = for lane speeds < 2 Gbps
- * @name: Device name.
- */
-struct ad9250_platform_data
-{
-	/* Power configuration */
-	int8_t extrnPDWNmode;
-	/* Global clock */
-	int8_t enClkDCS;
-	int8_t clkSelection;
-	int8_t clkDivRatio;
-	int8_t clkDivPhase;
-	/* ADC Vref */
-	int8_t adcVref;
-	/* PLL */
-	int8_t pllLowEncode;
-	/* Device name */
-	int8_t	name[16];
-};
-
-/**
  * struct ad9250_jesd204b_cfg - JESD204B interface configuration.
  *
  * @jtxInStandBy: JTX in standby.
@@ -433,62 +380,120 @@ struct ad9250_fast_detect_cfg
 	int16_t dfDwellTime;
 };
 
+/**
+ * struct ad9250_platform_data - Platform specific information.
+ *
+ * @extrnPDWNmode: External PDWN mode.
+ *		   0 = PDWN is full power down
+ *		   1 = PDWN puts device in standby
+ * @enClkDCS: Clock duty cycle stabilizer enable.
+ *	      0 = disable
+ *	      1 = enable
+ * @clkSelection: Clock selection.
+ *		  0 = Nyquist clock
+ *		  2 = RF clock divide by 4
+ *		  3 = clock off
+ * @clkDivRatio: Clock divider ratio relative to the encode clock.
+ *		 0x00 = divide by 1
+ *		 0x01 = divide by 2
+ *		 ...
+ *		 0x07 = divide by 8
+ * @clkDivPhase: Clock divide phase relative to the encode clock.
+ *		 0x0 = 0 input clock cycles delayed
+ *		 0x1 = 1 input clock cycles delayed
+ *		 ...
+ *		 0x7 = 7 input clock cycles delayed
+ * @adcVref: Main reference full-scale VREF adjustment.
+ *	     0x0f = internal 2.087 V p-p
+ *	     ...
+ *	     0x01 = internal 1.772 V p-p
+ *	     0x00 = internal 1.75 V p-p [default]
+ *	     0x1F = internal 1.727 V p-p
+ *	     ...
+ *	     0x10 = internal 1.383 V p-p
+ * @pllLowEncode: PLL low encode.
+ *		  0 = for lane speeds > 2 Gbps
+ *		  1 = for lane speeds < 2 Gbps
+ * @name: Device name.
+ */
+struct ad9250_platform_data
+{
+	/* Power configuration */
+	int8_t extrnPDWNmode;
+	/* Global clock */
+	int8_t enClkDCS;
+	int8_t clkSelection;
+	int8_t clkDivRatio;
+	int8_t clkDivPhase;
+	/* ADC Vref */
+	int8_t adcVref;
+	/* PLL */
+	int8_t pllLowEncode;
+	/* Device name */
+	int8_t	name[16];
+	/* keep it a single structure (too many irrelevant stuff) */
+	struct ad9250_jesd204b_cfg jesd204b_cfg;
+	struct ad9250_fast_detect_cfg fast_detect_cfg;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+/*! Initialize to defaults. */
+int32_t ad9250_init(struct ad9250_platform_data *pdata);
 /*! Configures the device. */
-int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo);
+int32_t ad9250_setup(struct spi_device *dev, struct ad9250_platform_data *pdata);
 /*! Reads the value of the selected register. */
-int32_t ad9250_read(int32_t registerAddress);
+int32_t ad9250_read(struct spi_device *dev, int32_t registerAddress);
 /*! Writes a value to the selected register. */
-int32_t ad9250_write(int32_t registerAddress, int32_t registerValue);
+int32_t ad9250_write(struct spi_device *dev, int32_t registerAddress, int32_t registerValue);
 /*! Initiates a transfer and waits for the operation to end. */
-int32_t ad9250_transfer(void);
+int32_t ad9250_transfer(struct spi_device *dev);
 /*! Resets all registers to their default values. */
-int32_t ad9250_soft_reset(void);
+int32_t ad9250_soft_reset(struct spi_device *dev);
 /*! Configures the power mode of the chip. */
-int32_t ad9250_chip_pwr_mode(int32_t mode);
+int32_t ad9250_chip_pwr_mode(struct spi_device *dev, int32_t mode);
 /*! Selects a channel as the current channel for further configurations. */
-int32_t ad9250_select_channel_for_config(int32_t channel);
+int32_t ad9250_select_channel_for_config(struct spi_device *dev, int32_t channel);
 /*! Sets the ADC's test mode. */
-int32_t ad9250_test_mode(int32_t mode);
+int32_t ad9250_test_mode(struct spi_device *dev, int32_t mode);
 /*! Sets the offset adjustment. */
-int32_t ad9250_offset_adj(int32_t adj);
+int32_t ad9250_offset_adj(struct spi_device *dev, int32_t adj);
 /*! Disables (1) or enables (0) the data output. */
-int32_t ad9250_output_disable(int32_t en);
+int32_t ad9250_output_disable(struct spi_device *dev, int32_t en);
 /*! Activates the inverted (1) or normal (0) output mode. */
-int32_t ad9250_output_invert(int32_t invert);
+int32_t ad9250_output_invert(struct spi_device *dev, int32_t invert);
 /*! Specifies the output format. */
-int32_t ad9250_output_format(int32_t format);
+int32_t ad9250_output_format(struct spi_device *dev, int32_t format);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad9250_reset_PN29(int32_t rst);
+int32_t ad9250_reset_PN29(struct spi_device *dev, int32_t rst);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad9250_reset_PN23(int32_t rst);
+int32_t ad9250_reset_PN23(struct spi_device *dev, int32_t rst);
 /*! Configures a User Test Pattern. */
-int32_t ad9250_set_user_pattern(int32_t patternNo, int32_t user_pattern);
+int32_t ad9250_set_user_pattern(struct spi_device *dev, int32_t patternNo, int32_t user_pattern);
 /*! Enables the Build-In-Self-Test. */
-int32_t ad9250_bist_enable(int32_t enable);
+int32_t ad9250_bist_enable(struct spi_device *dev, int32_t enable);
 /*! Resets the Build-In-Self-Test. */
-int32_t ad9250_bist_reset(int32_t reset);
+int32_t ad9250_bist_reset(struct spi_device *dev, int32_t reset);
 /*! Configures the JESD204B interface. */
-int32_t ad9250_jesd204b_setup(void);
+int32_t ad9250_jesd204b_setup(struct spi_device *dev);
 /*! Configures the power mode of the JESD204B data transmit block. */
-int32_t ad9250_jesd204b_pwr_mode(int32_t mode);
+int32_t ad9250_jesd204b_pwr_mode(struct spi_device *dev, int32_t mode);
 /*! Selects the point in the processing path of a lane, where the test data will
   be inserted. */
-int32_t ad9250_jesd204b_select_test_injection_point(int32_t injPoint);
+int32_t ad9250_jesd204b_select_test_injection_point(struct spi_device *dev, int32_t injPoint);
 /*! Selects a JESD204B test mode. */
-int32_t ad9250_jesd204b_test_mode(int32_t testMode);
+int32_t ad9250_jesd204b_test_mode(struct spi_device *dev, int32_t testMode);
 /*! Inverts the logic of JESD204B bits. */
-int32_t ad9250_jesd204b_invert_logic(int32_t invert);
+int32_t ad9250_jesd204b_invert_logic(struct spi_device *dev, int32_t invert);
 /*! Configures the Fast-Detect module. */
-int32_t ad9250_fast_detect_setup(void);
+int32_t ad9250_fast_detect_setup(struct spi_device *dev);
 /*! Enables DC correction for use in the output data signal path. */
-int32_t ad9250_dcc_enable(int32_t enable);
+int32_t ad9250_dcc_enable(struct spi_device *dev, int32_t enable);
 /*! Selects the bandwidth value for the DC correction circuit. */
-int32_t ad9250_dcc_bandwidth(int32_t bw);
+int32_t ad9250_dcc_bandwidth(struct spi_device *dev, int32_t bw);
 /*! Freezes DC correction value. */
-int32_t ad9250_dcc_freeze(int32_t freeze);
+int32_t ad9250_dcc_freeze(struct spi_device *dev, int32_t freeze);
 
 #endif /* __AD9250_H__ */
