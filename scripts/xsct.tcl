@@ -34,11 +34,19 @@ if {$m_mode == "defines"} {
 
   sdk configapp -app sw build-config debug
   for {set i 1} {$i < $argc} {incr i} {
-    sdk configapp -app sw define-compiler-symbols [lindex $argv $i]
+    set compiler_define [lindex $argv $i]
+    if { [regexp [ 0-9] $compiler_define ] } {
+	regsub -all { } $compiler_define {=} compiler_define
+    }
+    sdk configapp -app sw define-compiler-symbols $compiler_define
   }
   sdk configapp -app sw build-config release
   for {set i 1} {$i < $argc} {incr i} {
-    sdk configapp -app sw define-compiler-symbols [lindex $argv $i]
+    set compiler_define [lindex $argv $i]
+    if { [regexp [ 0-9] $compiler_define ] } {
+	regsub -all { } $compiler_define {=} compiler_define
+    }
+    sdk configapp -app sw define-compiler-symbols $compiler_define
   }
   exit
 }
