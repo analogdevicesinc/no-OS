@@ -12,6 +12,22 @@ else
   XSDB_CMD := xsdb 
 endif
 
+ifeq ($(CAPTURE_BADDR),)
+  CAPTURE_BADDR := 0x800000
+endif
+
+ifeq ($(CAPTURE_SIZE),)
+  CAPTURE_SIZE := 32768
+endif
+
+ifeq ($(NR_CH),)
+  NR_CH := 1
+endif
+
+ifeq ($(BITS_PER_SAMPLE),)
+  BITS_PER_SAMPLE := 16
+endif
+
 XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
@@ -38,9 +54,6 @@ SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
 LIB_FILES := $(M_LIB_FILES)
 LIB_NAME := $(M_LIB_NAME)
-
-CAPTURE_BADDR := 800000
-CAPTURE_SIZE := 32768
 
 .PHONY: all
 all: $(ELF_FILE)
@@ -74,5 +87,4 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE)
-
+	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_CH) $(BITS_PER_SAMPLE)
