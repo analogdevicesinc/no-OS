@@ -10,6 +10,22 @@ ifeq ($(SOF-FILE),)
   SOF-FILE := $(M_SOF_FILE)
 endif
 
+ifeq ($(CAPTURE_BADDR),)
+  CAPTURE_BADDR := 0x800000
+endif
+
+ifeq ($(CAPTURE_SIZE),)
+  CAPTURE_SIZE := 32768
+endif
+
+ifeq ($(NR_CH),)
+  NR_CH := 1
+endif
+
+ifeq ($(BITS_PER_SAMPLE),)
+  BITS_PER_SAMPLE := 16
+endif
+
 APP_LOG := nios_ii_app.log
 BSP_LOG := nios_ii_bsp.log
 ELF_FILE := sw.elf
@@ -35,6 +51,8 @@ APP_CMD += --set OBJDUMP_INCLUDE_SOURCE 1
 APP_CMD += --set APP_CFLAGS_DEFINED_SYMBOLS -DALTERA -DNIOS_II
 APP_CMD += --set APP_CFLAGS_USER_FLAGS -Wno-format
 APP_CMD += --src-files $(SRC_FILES)
+
+CAPTURE_SCRIPT := $(NOOS-DIR)/scripts/nios2_capture.tcl
 
 .PHONY: all
 all: sw/$(ELF_FILE)
@@ -78,6 +96,9 @@ clean-all:
 .PHONY: run
 run: sw/$(ELF_FILE)
 	nios2-configure-sof hw/system_top.sof
-	nios2-download -g sw/sw.elf
-	nios2-terminal
+	nios2-download -r sw/sw.elf
+	nios2-terminal -o 40
 
+.PHONY: capture
+capture: sw/$(ELF_FILE)
+	system-console --script=$(CAPTURE_SCRIPT) $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_CH) $(BITS_PER_SAMPLE)
