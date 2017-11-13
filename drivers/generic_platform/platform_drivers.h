@@ -69,7 +69,14 @@ typedef struct {
 	uint32_t	id;
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
-} i2c_device;
+} i2c_init_param;
+
+typedef struct {
+	i2c_type	type;
+	uint32_t	id;
+	uint32_t	max_speed_hz;
+	uint8_t		slave_address;
+} i2c_desc;
 
 typedef enum {
 	GENERIC_SPI
@@ -88,7 +95,15 @@ typedef struct {
 	uint32_t	max_speed_hz;
 	spi_mode	mode;
 	uint8_t		chip_select;
-} spi_device;
+} spi_init_param;
+
+typedef struct {
+	spi_type	type;
+	uint32_t	id;
+	uint32_t	max_speed_hz;
+	spi_mode	mode;
+	uint8_t		chip_select;
+} spi_desc;
 
 typedef enum {
 	GENERIC_GPIO
@@ -97,56 +112,68 @@ typedef enum {
 typedef struct {
 	gpio_type	type;
 	uint32_t	id;
-} gpio_device;
+	uint8_t		number;
+} gpio_desc;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
-int32_t i2c_init(i2c_device *dev);
+int32_t i2c_init(i2c_desc **desc,
+		 i2c_init_param param);
+
+/* Free the resources allocated by i2c_init(). */
+int32_t i2c_remove(i2c_desc *desc);
 
 /* Write data to a slave device. */
-int32_t i2c_write(i2c_device *dev,
+int32_t i2c_write(i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit);
 
 /* Read data from a slave device. */
-int32_t i2c_read(i2c_device *dev,
+int32_t i2c_read(i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit);
 
 /* Initialize the SPI communication peripheral. */
-int32_t spi_init(spi_device *dev);
+int32_t spi_init(spi_desc **desc,
+		 spi_init_param param);
+
+/* Free the resources allocated by spi_init() */
+int32_t spi_remove(spi_desc *desc);
 
 /* Write and read data to/from SPI. */
-int32_t spi_write_and_read(spi_device *dev,
+int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number);
 
-/* Initialize the GPIO controller. */
-int32_t gpio_init(gpio_device *dev);
+/* Obtain the GPIO decriptor. */
+int32_t gpio_get(gpio_desc **desc,
+		 uint8_t gpio_number);
 
-/* Set the direction of the specified GPIO. */
-int32_t gpio_set_direction(gpio_device *dev,
-			  uint8_t gpio_num,
-			  uint8_t direction);
+/* Free the resources allocated by gpio_get() */
+int32_t gpio_remove(gpio_desc *desc);
+
+/* Enable the input direction of the specified GPIO. */
+int32_t gpio_direction_input(gpio_desc *desc);
+
+/* Enable the output direction of the specified GPIO. */
+int32_t gpio_direction_output(gpio_desc *desc,
+			      uint8_t value);
 
 /* Get the direction of the specified GPIO. */
-int32_t gpio_get_direction(gpio_device *dev,
-			  uint8_t gpio_num,
-			  uint8_t *direction);
+int32_t gpio_get_direction(gpio_desc *desc,
+			   uint8_t *direction);
 
 /* Set the value of the specified GPIO. */
-int32_t gpio_set_value(gpio_device *dev,
-		       uint8_t gpio_num,
+int32_t gpio_set_value(gpio_desc *desc,
 		       uint8_t value);
 
 /* Get the value of the specified GPIO. */
-int32_t gpio_get_value(gpio_device *dev,
-		       uint8_t gpio_num,
+int32_t gpio_get_value(gpio_desc *desc,
 		       uint8_t *value);
 
 /* Generate miliseconds delay. */
