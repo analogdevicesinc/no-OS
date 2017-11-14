@@ -176,9 +176,9 @@
 
 typedef struct {
 	/* I2C */
-	i2c_device	i2c_dev;
+	i2c_desc	*i2c_desc;
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* Device Settings */
 	char		communication_type;
 	char		selected_range;
@@ -187,16 +187,9 @@ typedef struct {
 
 typedef struct {
 	/* I2C */
-	i2c_type	i2c_type;
-	uint32_t	i2c_id;
-	uint32_t	i2c_max_speed_hz;
-	uint8_t	i2c_slave_address;
+	i2c_init_param	i2c_init;
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* Device Settings */
 	char		communication_type;
 	char		selected_range;
@@ -219,6 +212,9 @@ void adxl345_set_register_value(adxl345_dev *dev,
 /*! Init. the comm. peripheral and checks if the ADXL345 part is present. */
 int32_t adxl345_init(adxl345_dev **device,
 		     adxl345_init_param init_param);
+
+/*! Free the resources allocated by adxl345_init(). */
+int32_t adxl345_remove(adxl345_dev *dev);
 
 /*! Places the device into standby/measure mode. */
 void adxl345_set_power_mode(adxl345_dev *dev,

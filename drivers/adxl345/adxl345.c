@@ -67,16 +67,16 @@ uint8_t adxl345_get_register_value(adxl345_dev *dev,
 	if (dev->communication_type == ADXL345_SPI_COMM) {
 		data_buffer[0] = ADXL345_SPI_READ | register_address;
 		data_buffer[1] = 0;
-		spi_write_and_read(&dev->spi_dev,
+		spi_write_and_read(dev->spi_desc,
 				   data_buffer,
 				   2);
 		register_value = data_buffer[1];
 	} else {
-		i2c_write(&dev->i2c_dev,
+		i2c_write(dev->i2c_desc,
 			  &register_address, // Transmission data.
 			  1,                 // Number of bytes to write.
 			  0);                // Stop condition control.
-		i2c_read(&dev->i2c_dev,
+		i2c_read(dev->i2c_desc,
 			 &register_value,    // Received data.
 			 1,                  // Number of bytes to read.
 			 1);                 // Stop condition control.
@@ -103,13 +103,13 @@ void adxl345_set_register_value(adxl345_dev *dev,
 	if (dev->communication_type == ADXL345_SPI_COMM) {
 		data_buffer[0] = ADXL345_SPI_WRITE | register_address;
 		data_buffer[1] = register_value;
-		spi_write_and_read(&dev->spi_dev,
+		spi_write_and_read(dev->spi_desc,
 				   data_buffer,
 				   2);
 	} else {
 		data_buffer[0] = register_address;
 		data_buffer[1] = register_value;
-		i2c_write(&dev->i2c_dev,
+		i2c_write(dev->i2c_desc,
 			  data_buffer,        // Received data.
 			  2,                  // Number of bytes to read.
 			  1);                 // Stop condition control.
@@ -142,20 +142,11 @@ int32_t adxl345_init(adxl345_dev **device,
 
 	dev->communication_type = init_param.communication_type;
 
-	if (dev->communication_type == ADXL345_SPI_COMM) {
-		dev->spi_dev.type = init_param.spi_type;
-		dev->spi_dev.id = init_param.spi_id;
-		dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-		dev->spi_dev.mode = init_param.spi_mode;
-		dev->spi_dev.chip_select = init_param.spi_chip_select;
-		status = spi_init(&dev->spi_dev);
-	} else {
-		dev->i2c_dev.type = init_param.i2c_type;
-		dev->i2c_dev.id = init_param.i2c_id;
-		dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
-		dev->i2c_dev.slave_address = init_param.i2c_slave_address;
-		status = i2c_init(&dev->i2c_dev);
-	}
+	if (dev->communication_type == ADXL345_SPI_COMM)
+		status = spi_init(&dev->spi_desc, init_param.spi_init);
+	else
+		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+
 	if (adxl345_get_register_value(dev, ADXL345_DEVID) != ADXL345_ID)
 		status = -1;
 
@@ -165,6 +156,27 @@ int32_t adxl345_init(adxl345_dev **device,
 	*device = dev;
 
 	return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adxl345_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t adxl345_remove(adxl345_dev *dev)
+{
+	int32_t ret;
+
+	if (dev->communication_type == ADXL345_SPI_COMM)
+		ret = spi_remove(dev->spi_desc);
+	else
+		ret = i2c_remove(dev->i2c_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -214,7 +226,7 @@ void adxl345_get_xyz(adxl345_dev *dev,
 		read_buffer[0] = ADXL345_SPI_READ |
 				 ADXL345_SPI_MB |
 				 first_reg_address;
-		spi_write_and_read(&dev->spi_dev,
+		spi_write_and_read(dev->spi_desc,
 				   read_buffer,
 				   7);
 		/* x = ((ADXL345_DATAX1) << 8) + ADXL345_DATAX0 */
@@ -224,11 +236,11 @@ void adxl345_get_xyz(adxl345_dev *dev,
 		/* z = ((ADXL345_DATAZ1) << 8) + ADXL345_DATAZ0 */
 		*z = ((int16_t)read_buffer[6] << 8) + read_buffer[5];
 	} else {
-		i2c_write(&dev->i2c_dev,
+		i2c_write(dev->i2c_desc,
 			  &first_reg_address, // Transmission data.
 			  1,                  // Number of bytes to write.
 			  0);                 // Stop condition control.
-		i2c_read(&dev->i2c_dev,
+		i2c_read(dev->i2c_desc,
 			 read_buffer,         // Received data.
 			 6,                   // Number of bytes to read.
 			 1);                  // Stop condition control.
