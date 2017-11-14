@@ -369,25 +369,18 @@ struct adf7023_bbram {
 
 typedef struct {
 	/* SPI */
-	spi_device		spi_dev;
+	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_device		gpio_dev;
-	int8_t			gpio_cs;
-	int8_t			gpio_miso;
+	gpio_desc		*gpio_cs;
+	gpio_desc		*gpio_miso;
 	/* Device Settings */
 	struct adf7023_bbram	adf7023_bbram_current;
 } adf7023_dev;
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* GPIO */
-	gpio_type	gpio_type;
-	uint32_t	gpio_id;
 	int8_t		gpio_cs;
 	int8_t		gpio_miso;
 } adf7023_init_param;
@@ -399,6 +392,9 @@ typedef struct {
 /* Initializes the ADF7023. */
 int32_t adf7023_init(adf7023_dev **device,
 		     adf7023_init_param init_param);
+
+/* Free the resources allocated by adf7023_init(). */
+int32_t adf7023_remove(adf7023_dev *dev);
 
 /* Reads the status word of the ADF7023. */
 void adf7023_get_status(adf7023_dev *dev,

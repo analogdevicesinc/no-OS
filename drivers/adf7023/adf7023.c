@@ -50,11 +50,9 @@
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/
 /******************************************************************************/
-#define ADF7023_CS_ASSERT   gpio_set_value(&dev->gpio_dev, \
-			    dev->gpio_cs,                  \
+#define ADF7023_CS_ASSERT   gpio_set_value(dev->gpio_cs,  \
 			    GPIO_LOW)
-#define ADF7023_CS_DEASSERT gpio_set_value(&dev->gpio_dev, \
-			    dev->gpio_cs,                  \
+#define ADF7023_CS_DEASSERT gpio_set_value(dev->gpio_cs,  \
 			    GPIO_HIGH)
 
 /******************************************************************************/
@@ -78,7 +76,7 @@ void adf7023_write_read_byte(adf7023_dev *dev,
 	uint8_t data = 0;
 
 	data = write_byte;
-	spi_write_and_read(&dev->spi_dev,
+	spi_write_and_read(dev->spi_desc,
 			   &data,
 			   1);
 	if (read_byte)
@@ -110,36 +108,22 @@ int32_t adf7023_init(adf7023_dev **device,
 		return -1;
 
 	/* SPI */
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	ret = spi_init(&dev->spi_dev);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* GPIO */
-	dev->gpio_dev.id = init_param.gpio_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
-
-	dev->gpio_cs = init_param.gpio_cs;
-	dev->gpio_miso = init_param.gpio_miso;
+	ret |= gpio_get(&dev->gpio_cs, init_param.gpio_cs);
+	ret |= gpio_get(&dev->gpio_miso, init_param.gpio_miso);
 
 	dev->adf7023_bbram_current = adf7023_bbram_default;
 
-	if (dev->gpio_cs >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_cs,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_cs,
-				      GPIO_HIGH);
-	}
+	if (dev->gpio_cs)
+		ret |= gpio_direction_output(dev->gpio_cs,
+					     GPIO_HIGH);
 
 	ADF7023_CS_ASSERT;
 
 	while ((miso == 0) && (timeout < 1000)) {
-		gpio_get_value(&dev->gpio_dev, dev->gpio_miso, &miso);
+		gpio_get_value(dev->gpio_miso, &miso);
 		timeout++;
 	}
 	if (timeout == 1000)
@@ -152,6 +136,25 @@ int32_t adf7023_init(adf7023_dev **device,
 	adf7023_set_command(dev, CMD_CONFIG_DEV);
 
 	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adf7023_init().
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t adf7023_remove(adf7023_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_cs);
+	ret |= gpio_remove(dev->gpio_miso);
+
+	free(dev);
 
 	return ret;
 }
