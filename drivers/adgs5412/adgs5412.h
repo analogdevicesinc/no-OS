@@ -101,7 +101,7 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* Device Settings */
 	adgs5412_state	crc_en;
 	adgs5412_state	burst_mode_en;
@@ -110,11 +110,7 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* Device Settings */
 	adgs5412_state	crc_en;
 	adgs5412_state	burst_mode_en;
@@ -156,6 +152,8 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
 				       uint8_t *cmds,
 				       uint8_t cmds_size);
 /* Initialize the device. */
-int32_t adgs5412_setup(adgs5412_dev **device,
-		       adgs5412_init_param init_param);
+int32_t adgs5412_init(adgs5412_dev **device,
+		      adgs5412_init_param init_param);
+/* Free the resources allocated by adgs5412_init(). */
+int32_t adgs5412_remove(adgs5412_dev *dev);
 #endif // ADGS5412_H_
