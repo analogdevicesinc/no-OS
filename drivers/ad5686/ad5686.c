@@ -86,11 +86,11 @@ static const ad5686_chip_info chip_info[] = {
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
- * @return status - The result of the initialization procedure.
- *                  Example: -1 - I2C peripheral was not initialized or the
- *                                device is not present.
- *                            0 - I2C peripheral was initialized and the
- *                                device is present.
+ * @return ret - The result of the initialization procedure.
+ *               Example: -1 - I2C peripheral was not initialized or the
+ *                             device is not present.
+ *                         0 - I2C peripheral was initialized and the
+ *                             device is present.
 *******************************************************************************/
 int32_t ad5686_init(ad5686_dev **device,
 		    ad5686_init_param init_param)
@@ -104,49 +104,50 @@ int32_t ad5686_init(ad5686_dev **device,
 
 	dev->act_device = init_param.act_device;
 
-	if (chip_info[dev->act_device].communication == SPI) {
-		dev->spi_dev.type = init_param.spi_type;
-		dev->spi_dev.id = init_param.spi_id;
-		dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-		dev->spi_dev.mode = init_param.spi_mode;
-		dev->spi_dev.chip_select = init_param.spi_chip_select;
-		ret = spi_init(&dev->spi_dev);
-	} else {
-		dev->i2c_dev.type = init_param.i2c_type;
-		dev->i2c_dev.id = init_param.i2c_id;
-		dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
-		dev->i2c_dev.slave_address = init_param.i2c_slave_address;
-		ret = i2c_init(&dev->i2c_dev);
-	}
+	if (chip_info[dev->act_device].communication == SPI)
+		ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	else
+		ret = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 
 
 	/* GPIO */
-	dev->gpio_dev.id = init_param.gpio_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
+	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	ret |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 
-	dev->gpio_reset = init_param.gpio_reset;
-	dev->gpio_ldac = init_param.gpio_ldac;
+	if (dev->gpio_ldac)
+		ret |= gpio_direction_output(dev->gpio_ldac, GPIO_LOW);
 
-	if (dev->gpio_ldac >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_ldac,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_ldac,
-				      GPIO_LOW);
-	}
-
-	if (dev->gpio_reset >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_reset,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_reset,
-				      GPIO_HIGH);
-	}
+	if (dev->gpio_reset)
+		ret |= gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
 
 	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad5686_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t ad5686_remove(ad5686_dev *dev)
+{
+	int32_t ret;
+
+	if (chip_info[dev->act_device].communication == SPI)
+		ret = spi_remove(dev->spi_desc);
+	else
+		ret = i2c_remove(dev->i2c_desc);
+
+	if (dev->gpio_ldac)
+		ret |= gpio_remove(dev->gpio_ldac);
+
+	if (dev->gpio_reset)
+		ret |= gpio_remove(dev->gpio_reset);
+
+	free(dev);
 
 	return ret;
 }
@@ -174,10 +175,10 @@ uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
 	data_buff[2] = (data & LSB_MASK);
 
 	if(chip_info[dev->act_device].communication == SPI) {
-		spi_write_and_read(&dev->spi_dev, data_buff, PKT_LENGTH);
+		spi_write_and_read(dev->spi_desc, data_buff, PKT_LENGTH);
 		read_back_data = (data_buff[1] << MSB_OFFSET) | data_buff[2];
 	} else
-		i2c_write(&dev->i2c_dev, data_buff, PKT_LENGTH, 1);
+		i2c_write(dev->i2c_desc, data_buff, PKT_LENGTH, 1);
 
 	return read_back_data;
 }

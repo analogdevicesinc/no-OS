@@ -120,32 +120,22 @@ typedef struct {
 
 typedef struct {
 	/* I2C */
-	i2c_device	i2c_dev;
+	i2c_desc	*i2c_desc;
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_device	gpio_dev;
-	int8_t		gpio_reset;
-	int8_t		gpio_ldac;
+	gpio_desc	*gpio_reset;
+	gpio_desc	*gpio_ldac;
 	/* Device Settings */
 	ad5686_type	act_device;
 } ad5686_dev;
 
 typedef struct {
 	/* I2C */
-	i2c_type	i2c_type;
-	uint32_t	i2c_id;
-	uint32_t	i2c_max_speed_hz;
-	uint8_t	i2c_slave_address;
+	i2c_init_param	i2c_init;
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* GPIO */
-	gpio_type	gpio_type;
-	uint32_t	gpio_id;
 	int8_t		gpio_reset;
 	int8_t		gpio_ldac;
 	/* Device Settings */
@@ -158,6 +148,9 @@ typedef struct {
 /* Initialize SPI and Initial Values for AD5449 Board. */
 int32_t ad5686_init(ad5686_dev **device,
 		    ad5686_init_param init_param);
+
+/* Free the resources allocated by ad5686_init(). */
+int32_t ad5686_remove(ad5686_dev *dev);
 
 /* Write to input register */
 uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
