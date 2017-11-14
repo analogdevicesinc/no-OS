@@ -69,12 +69,7 @@ int32_t adxrs453_init(adxrs453_dev **device,
 	if (!dev)
 		return -1;
 
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	status = spi_init(&dev->spi_dev);
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* Read the value of the ADXRS453 ID register. */
 	adxrs453_id = adxrs453_get_register_value(dev, ADXRS453_REG_PID);
@@ -84,6 +79,24 @@ int32_t adxrs453_init(adxrs453_dev **device,
 	*device = dev;
 
 	return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adxrs453_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t adxrs453_remove(adxrs453_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -119,8 +132,8 @@ uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
 	data_buffer[5] = data_buffer[1];
 	data_buffer[6] = data_buffer[2];
 	data_buffer[7] = data_buffer[3];
-	spi_write_and_read(&dev->spi_dev, data_buffer, 4);
-	spi_write_and_read(&dev->spi_dev, &data_buffer[4], 4);
+	spi_write_and_read(dev->spi_desc, data_buffer, 4);
+	spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
 	register_value = ((uint16_t)data_buffer[1] << 11) |
 			 ((uint16_t)data_buffer[2] << 3) |
 			 (data_buffer[3] >> 5);
@@ -162,7 +175,7 @@ void adxrs453_set_register_value(adxrs453_dev *dev,
 	if(!(sum % 2))
 		data_buffer[3] |= 1;
 
-	spi_write_and_read(&dev->spi_dev, data_buffer, 4);
+	spi_write_and_read(dev->spi_desc, data_buffer, 4);
 }
 
 /***************************************************************************//**
@@ -195,8 +208,8 @@ uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev)
 	data_buffer[5] = data_buffer[1];
 	data_buffer[6] = data_buffer[2];
 	data_buffer[7] = data_buffer[3];
-	spi_write_and_read(&dev->spi_dev, data_buffer, 4);
-	spi_write_and_read(&dev->spi_dev, &data_buffer[4], 4);
+	spi_write_and_read(dev->spi_desc, data_buffer, 4);
+	spi_write_and_read(dev->spi_desc, &data_buffer[4], 4);
 	register_value = ((uint32_t)data_buffer[0] << 24) |
 			 ((uint32_t)data_buffer[1] << 16) |
 			 ((uint16_t)data_buffer[2] << 8) |

@@ -64,16 +64,12 @@
 
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 } adxrs453_dev;
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 } adxrs453_init_param;
 
 /******************************************************************************/
@@ -83,6 +79,9 @@ typedef struct {
 /*! Initializes the ADXRS453 and checks if the device is present. */
 int32_t adxrs453_init(adxrs453_dev **device,
 		      adxrs453_init_param init_param);
+
+/*! Free the resources allocated by adxrs453_init(). */
+int32_t adxrs453_remove(adxrs453_dev *dev);
 
 /*! Reads the value of a register. */
 uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
