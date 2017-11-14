@@ -73,12 +73,7 @@ int32_t adxl362_init(adxl362_dev **device,
 		return -1;
 
 	/* SPI */
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	status = spi_init(&dev->spi_dev);
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	adxl362_get_register_value(dev, &reg_value, ADXL362_REG_PARTID, 1);
 	if((reg_value != ADXL362_PART_ID))
@@ -89,6 +84,24 @@ int32_t adxl362_init(adxl362_dev **device,
 	*device = dev;
 
 	return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adxl362_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t adxl362_remove(adxl362_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -112,7 +125,7 @@ void adxl362_set_register_value(adxl362_dev *dev,
 	buffer[1] = register_address;
 	buffer[2] = (register_value & 0x00FF);
 	buffer[3] = (register_value >> 8);
-	spi_write_and_read(&dev->spi_dev,
+	spi_write_and_read(dev->spi_desc,
 			   buffer,
 			   bytes_number + 2);
 }
@@ -139,7 +152,7 @@ void adxl362_get_register_value(adxl362_dev *dev,
 	buffer[1] = register_address;
 	for(index = 0; index < bytes_number; index++)
 		buffer[index + 2] = read_data[index];
-	spi_write_and_read(&dev->spi_dev,
+	spi_write_and_read(dev->spi_desc,
 			   buffer,
 			   bytes_number + 2);
 	for(index = 0; index < bytes_number; index++)
@@ -165,7 +178,7 @@ void adxl362_get_fifo_value(adxl362_dev *dev,
 	spi_buffer[0] = ADXL362_WRITE_FIFO;
 	for(index = 0; index < bytes_number; index++)
 		spi_buffer[index + 1] = buffer[index];
-	spi_write_and_read(&dev->spi_dev,
+	spi_write_and_read(dev->spi_desc,
 			   spi_buffer,
 			   bytes_number + 1);
 	for(index = 0; index < bytes_number; index++)
