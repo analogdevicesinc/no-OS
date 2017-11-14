@@ -118,14 +118,13 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_device	gpio_dev;
-	int8_t		gpio_reset;
+	gpio_desc	*gpio_reset;
 	uint8_t		gpio_reset_value;
-	int8_t		gpio_clr;
+	gpio_desc	*gpio_clr;
 	uint8_t		gpio_clr_value;
-	int8_t		gpio_ldac;
+	gpio_desc	*gpio_ldac;
 	uint8_t		gpio_ldac_value;
 	/* Device Settings */
 	ad5761r_type	type;
@@ -141,14 +140,8 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* GPIO */
-	gpio_type	gpio_type;
-	uint32_t	gpio_id;
 	int8_t		gpio_reset;
 	uint8_t		gpio_reset_value;
 	int8_t		gpio_clr;
@@ -173,6 +166,8 @@ typedef struct {
 /* Initialize the device. */
 int32_t ad5761r_init(ad5761r_dev **device,
 		     ad5761r_init_param init_param);
+/* Free the resources allocated by ad5761r_init(). */
+int32_t ad5761r_remove(ad5761r_dev *dev);
 /* SPI write to device. */
 int32_t ad5761r_write(ad5761r_dev *dev,
 		      uint8_t reg_addr_cmd,
