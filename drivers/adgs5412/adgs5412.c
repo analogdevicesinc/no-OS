@@ -103,7 +103,7 @@ int32_t adgs5412_spi_reg_read(adgs5412_dev *dev,
 	buf[2] = 0x00;
 	if (dev->crc_en == ADGS5412_ENABLE)
 		buf_size = 3;
-	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
+	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 		ret = FAILURE;
@@ -148,7 +148,7 @@ int32_t adgs5412_spi_reg_write(adgs5412_dev *dev,
 		buf[2] = adgs5412_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
+	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
 	if (buf[0] != ADGS5412_ALIGNMENT) {
 		printf("%s: Alignment Error: 0x%x.\n", __func__, buf[0]);
 		ret = FAILURE;
@@ -263,7 +263,7 @@ int32_t adgs5412_clear_err_flags(adgs5412_dev *dev)
 		buf[2] = adgs5412_compute_crc8(&buf[0], 2);
 		buf_size = 3;
 	}
-	ret = spi_write_and_read(&dev->spi_dev, buf, buf_size);
+	ret = spi_write_and_read(dev->spi_desc, buf, buf_size);
 
 	return ret;
 }
@@ -286,7 +286,7 @@ int32_t adgs5412_enter_daisy_chain(adgs5412_dev *dev)
 
 	buf[0] = ADGS5412_DAISY_CHAIN_1;
 	buf[1] = ADGS5412_DAISY_CHAIN_2;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -310,7 +310,7 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
 		return FAILURE;
 	}
 
-	ret = spi_write_and_read(&dev->spi_dev, cmds, cmds_size);
+	ret = spi_write_and_read(dev->spi_desc, cmds, cmds_size);
 
 	return ret;
 }
@@ -322,24 +322,18 @@ int32_t adgs5412_send_daisy_chain_cmds(adgs5412_dev *dev,
  * 		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t adgs5412_setup(adgs5412_dev **device,
-		       adgs5412_init_param init_param)
+int32_t adgs5412_init(adgs5412_dev **device,
+		      adgs5412_init_param init_param)
 {
 	adgs5412_dev *dev;
 	int32_t ret;
 
 	dev = (adgs5412_dev *)malloc(sizeof(*dev));
-	if (!dev) {
+	if (!dev)
 		return -1;
-	}
 
 	/* SPI */
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	ret = spi_init(&dev->spi_dev);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* Device Settings */
 	dev->crc_en = ADGS5412_DISABLE;
@@ -372,6 +366,22 @@ int32_t adgs5412_setup(adgs5412_dev **device,
 		printf("ADGS5412 successfully initialized\n");
 	else
 		printf("ADGS5412 initialization error (%d)\n", ret);
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adgs5412_init().
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t adgs5412_remove(adgs5412_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
 
 	return ret;
 }
