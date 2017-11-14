@@ -132,24 +132,17 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_device	gpio_dev;
-	int8_t		gpio_reset;
+	gpio_desc	*gpio_reset;
 	/* Device Settings */
 	ad5766_state	daisy_chain_en;
 } ad5766_dev;
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 	/* GPIO */
-	gpio_type	gpio_type;
-	uint32_t	gpio_id;
 	int8_t		gpio_reset;
 	/* Device Settings */
 	ad5766_state	daisy_chain_en;
@@ -209,6 +202,9 @@ int32_t ad5766_set_dac_reg(ad5766_dev *dev,
 int32_t ad5766_set_dac_reg_all(ad5766_dev *dev,
 			       uint16_t data);
 /* Initialize the device. */
-int32_t ad5766_setup(ad5766_dev **device,
-		     ad5766_init_param init_param);
+int32_t ad5766_init(ad5766_dev **device,
+		    ad5766_init_param init_param);
+
+/* Free the resources allocated by ad5766_init(). */
+int32_t ad5766_remove(ad5766_dev *dev);
 #endif // AD5766_H_

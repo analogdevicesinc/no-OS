@@ -67,7 +67,7 @@ int32_t ad5766_spi_cmd_write(ad5766_dev *dev,
 	buf[1] = (data & 0xFF00) >> 8;
 	buf[2] = (data & 0x00FF) >> 0;
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
@@ -94,7 +94,7 @@ int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
 
 	ad5766_spi_cmd_write(dev, AD5766_CMD_READBACK_REG(dac), 0x0000);
 
-	ret = spi_write_and_read(&dev->spi_dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
 
 	*data = (buf[0] << 16) | ((buf[1] << 8)) | (buf[2] << 0);
 
@@ -284,8 +284,8 @@ int32_t ad5766_set_dac_reg_all(ad5766_dev *dev,
  *		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad5766_setup(ad5766_dev **device,
-		     ad5766_init_param init_param)
+int32_t ad5766_init(ad5766_dev **device,
+		    ad5766_init_param init_param)
 {
 	ad5766_dev *dev;
 	int32_t ret;
@@ -296,23 +296,13 @@ int32_t ad5766_setup(ad5766_dev **device,
 	}
 
 	/* SPI */
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	ret = spi_init(&dev->spi_dev);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* GPIO */
-	dev->gpio_dev.id = init_param.gpio_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
-
-	dev->gpio_reset = init_param.gpio_reset;
-	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_reset, GPIO_OUT);
-	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_LOW);
+	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	ret |= gpio_direction_output(dev->gpio_reset, GPIO_LOW);
 	mdelay(10);
-	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_HIGH);
+	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
 	mdelay(10);
 
 	/* Device Settings */
@@ -333,6 +323,24 @@ int32_t ad5766_setup(ad5766_dev **device,
 		printf("AD5766 successfully initialized\n");
 	else
 		printf("AD5766 initialization error (%d)\n", ret);
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad5766_init().
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad5766_remove(ad5766_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_reset);
+
+	free(dev);
 
 	return ret;
 }
