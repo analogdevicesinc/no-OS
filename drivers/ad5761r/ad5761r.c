@@ -79,7 +79,7 @@ int32_t ad5761r_write(ad5761r_dev *dev,
 	data[0] = reg_addr_cmd;
 	data[1] = (reg_data & 0xFF00) >> 8;
 	data[2] = (reg_data & 0x00FF) >> 0;
-	ret = spi_write_and_read(&dev->spi_dev, data, 3);
+	ret = spi_write_and_read(dev->spi_desc, data, 3);
 
 	return ret;
 }
@@ -112,7 +112,7 @@ int32_t ad5761r_read(ad5761r_dev *dev,
 	data[0] = reg_addr_cmd;
 	data[1] = 0;
 	data[2] = 0;
-	ret = spi_write_and_read(&dev->spi_dev, data, 3);
+	ret = spi_write_and_read(dev->spi_desc, data, 3);
 	*reg_data = (data[1] << 8) | data[2];
 
 	return ret;
@@ -486,10 +486,9 @@ int32_t ad5761r_get_brownout_condition(ad5761r_dev *dev,
 int32_t ad5761r_set_reset_pin(ad5761r_dev *dev,
 			      uint8_t value)
 {
-	if (dev->gpio_reset >= 0) {
+	if (dev->gpio_reset) {
 		dev->gpio_reset_value = value;
-		return gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_reset,
+		return gpio_set_value(dev->gpio_reset,
 				      dev->gpio_reset_value);
 	} else
 		return -1;
@@ -504,7 +503,7 @@ int32_t ad5761r_set_reset_pin(ad5761r_dev *dev,
 int32_t ad5761r_get_reset_pin(ad5761r_dev *dev,
 			      uint8_t *value)
 {
-	if (dev->gpio_reset >= 0) {
+	if (dev->gpio_reset) {
 		*value = dev->gpio_reset_value;
 		return 0;
 	} else
@@ -522,10 +521,9 @@ int32_t ad5761r_get_reset_pin(ad5761r_dev *dev,
 int32_t ad5761r_set_clr_pin(ad5761r_dev *dev,
 			    uint8_t value)
 {
-	if (dev->gpio_clr >= 0) {
+	if (dev->gpio_clr) {
 		dev->gpio_clr_value = value;
-		return gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_clr,
+		return gpio_set_value(dev->gpio_clr,
 				      dev->gpio_clr_value);
 	} else
 		return -1;
@@ -540,7 +538,7 @@ int32_t ad5761r_set_clr_pin(ad5761r_dev *dev,
 int32_t ad5761r_get_clr_pin(ad5761r_dev *dev,
 			    uint8_t *value)
 {
-	if (dev->gpio_clr >= 0) {
+	if (dev->gpio_clr) {
 		*value = dev->gpio_clr_value;
 		return 0;
 	} else
@@ -558,10 +556,9 @@ int32_t ad5761r_get_clr_pin(ad5761r_dev *dev,
 int32_t ad5761r_set_ldac_pin(ad5761r_dev *dev,
 			     uint8_t value)
 {
-	if (dev->gpio_ldac >= 0) {
+	if (dev->gpio_ldac) {
 		dev->gpio_ldac_value = value;
-		return gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_ldac,
+		return gpio_set_value(dev->gpio_ldac,
 				      dev->gpio_ldac_value);
 	} else
 		return -1;
@@ -576,7 +573,7 @@ int32_t ad5761r_set_ldac_pin(ad5761r_dev *dev,
 int32_t ad5761r_get_ldac_pin(ad5761r_dev *dev,
 			     uint8_t *value)
 {
-	if (dev->gpio_ldac >= 0) {
+	if (dev->gpio_ldac) {
 		*value = dev->gpio_ldac_value;
 		return 0;
 	} else
@@ -670,51 +667,26 @@ int32_t ad5761r_init(ad5761r_dev **device,
 	}
 
 	/* SPI */
-	dev->spi_dev.type = init_param.spi_type;
-	dev->spi_dev.id = init_param.spi_id;
-	dev->spi_dev.max_speed_hz = init_param.spi_max_speed_hz;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	ret = spi_init(&dev->spi_dev);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* GPIO */
-	dev->gpio_dev.id = init_param.gpio_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
-
-	dev->gpio_reset = init_param.gpio_reset;
+	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
 	dev->gpio_reset_value = init_param.gpio_reset_value;
-	dev->gpio_clr = init_param.gpio_clr;
+	ret |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
 	dev->gpio_clr_value = init_param.gpio_clr_value;
-	dev->gpio_ldac = init_param.gpio_ldac;
+	ret |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 	dev->gpio_ldac_value = init_param.gpio_ldac_value;
 
-	if (dev->gpio_reset >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_reset,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_reset,
-				      dev->gpio_reset_value);
-	}
+	if (dev->gpio_reset)
+		ret |= gpio_direction_output(dev->gpio_reset,
+					     dev->gpio_reset_value);
 
-	if (dev->gpio_clr >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_clr,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_clr,
-				      dev->gpio_clr_value);
-	}
-
-	if (dev->gpio_ldac >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-					  dev->gpio_ldac,
-					  GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-				      dev->gpio_ldac,
-				      dev->gpio_ldac_value);
-	}
+	if (dev->gpio_clr)
+		ret |= gpio_direction_output(dev->gpio_clr,
+					     dev->gpio_clr_value);
+	if (dev->gpio_ldac)
+		ret |= gpio_direction_output(dev->gpio_ldac,
+					     dev->gpio_ldac_value);
 
 	/* Device Settings */
 	dev->type = init_param.type;
@@ -731,6 +703,31 @@ int32_t ad5761r_init(ad5761r_dev **device,
 	ret |= ad5761r_set_daisy_chain_en_dis(dev, dev->daisy_chain_en);
 
 	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad5761r_init().
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad5761r_remove(ad5761r_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	if (dev->gpio_reset)
+		ret |= gpio_remove(dev->gpio_reset);
+
+	if (dev->gpio_clr)
+		ret |= gpio_remove(dev->gpio_clr);
+
+	if (dev->gpio_ldac)
+		ret |= gpio_remove(dev->gpio_ldac);
+
+	free(dev);
 
 	return ret;
 }
