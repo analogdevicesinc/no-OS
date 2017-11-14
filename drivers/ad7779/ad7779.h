@@ -43,18 +43,18 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD7779_REG_CH_CONFIG(ch)		(0x00 + (ch))		// Channel Configuration
-#define AD7779_REG_CH_DISABLE			0x08				// Disable clocks to ADC channel
+#define AD7779_REG_CH_DISABLE			0x08			// Disable clocks to ADC channel
 #define AD7779_REG_CH_SYNC_OFFSET(ch)		(0x09 + (ch))		// Channel SYNC Offset
-#define AD7779_REG_GENERAL_USER_CONFIG_1	0x11				// General User Config 1
-#define AD7779_REG_GENERAL_USER_CONFIG_2	0x12				// General User Config 2
-#define AD7779_REG_GENERAL_USER_CONFIG_3	0x13				// General User Config 3
-#define AD7779_REG_DOUT_FORMAT			0x14				// Data out format
-#define AD7779_REG_ADC_MUX_CONFIG		0x15				// Main ADC meter and reference Mux control
-#define AD7779_REG_GLOBAL_MUX_CONFIG		0x16				// Global diagnostics mux
-#define AD7779_REG_GPIO_CONFIG			0x17				// GPIO config
-#define AD7779_REG_GPIO_DATA			0x18				// GPIO Data
-#define AD7779_REG_BUFFER_CONFIG_1		0x19				// Buffer Config 1
-#define AD7779_REG_BUFFER_CONFIG_2		0x1A				// Buffer Config 2
+#define AD7779_REG_GENERAL_USER_CONFIG_1	0x11			// General User Config 1
+#define AD7779_REG_GENERAL_USER_CONFIG_2	0x12			// General User Config 2
+#define AD7779_REG_GENERAL_USER_CONFIG_3	0x13			// General User Config 3
+#define AD7779_REG_DOUT_FORMAT			0x14			// Data out format
+#define AD7779_REG_ADC_MUX_CONFIG		0x15			// Main ADC meter and reference Mux control
+#define AD7779_REG_GLOBAL_MUX_CONFIG		0x16			// Global diagnostics mux
+#define AD7779_REG_GPIO_CONFIG			0x17			// GPIO config
+#define AD7779_REG_GPIO_DATA			0x18			// GPIO Data
+#define AD7779_REG_BUFFER_CONFIG_1		0x19			// Buffer Config 1
+#define AD7779_REG_BUFFER_CONFIG_2		0x1A			// Buffer Config 2
 #define AD7779_REG_CH_OFFSET_UPPER_BYTE(ch)	(0x1C + (ch) * 6)	// Channel offset upper byte
 #define AD7779_REG_CH_OFFSET_MID_BYTE(ch)	(0x1D + (ch) * 6)	// Channel offset middle byte
 #define AD7779_REG_CH_OFFSET_LOWER_BYTE(ch)	(0x1E + (ch) * 6)	// Channel offset lower byte
@@ -62,23 +62,23 @@
 #define AD7779_REG_CH_GAIN_MID_BYTE(ch)		(0x20 + (ch) * 6)	// Channel gain middle byte
 #define AD7779_REG_CH_GAIN_LOWER_BYTE(ch)	(0x21 + (ch) * 6)	// Channel gain lower byte
 #define AD7779_REG_CH_ERR_REG(ch)		(0x4C + (ch))		// Channel Status Register
-#define AD7779_REG_CH0_1_SAT_ERR		0x54				// Channel 0/1 DSP errors
-#define AD7779_REG_CH2_3_SAT_ERR		0x55				// Channel 2/3 DSP errors
-#define AD7779_REG_CH4_5_SAT_ERR		0x56				// Channel 4/5 DSP errors
-#define AD7779_REG_CH6_7_SAT_ERR		0x57				// Channel 6/7 DSP errors
-#define AD7779_REG_CHX_ERR_REG_EN		0x58				// Channel 0-7 Error Reg Enable
-#define AD7779_REG_GEN_ERR_REG_1		0x59				// General Errors Register 1
-#define AD7779_REG_GEN_ERR_REG_1_EN		0x5A				// General Errors Register 1 Enable
-#define AD7779_REG_GEN_ERR_REG_2		0x5B				// General Errors Register 2
-#define AD7779_REG_GEN_ERR_REG_2_EN		0x5C				// General Errors Register 2 Enable
-#define AD7779_REG_STATUS_REG_1			0x5D				// Error Status Register 1
-#define AD7779_REG_STATUS_REG_2			0x5E				// Error Status Register 2
-#define AD7779_REG_STATUS_REG_3			0x5F				// Error Status Register 3
-#define AD7779_REG_SRC_N_MSB			0x60				// Decimation Rate (N) MSB
-#define AD7779_REG_SRC_N_LSB			0x61				// Decimation Rate (N) LSB
-#define AD7779_REG_SRC_IF_MSB			0x62				// Decimation Rate (IF) MSB
-#define AD7779_REG_SRC_IF_LSB			0x63				// Decimation Rate (IF) LSB
-#define AD7779_REG_SRC_UPDATE			0x64				// SRC load source and load update
+#define AD7779_REG_CH0_1_SAT_ERR		0x54			// Channel 0/1 DSP errors
+#define AD7779_REG_CH2_3_SAT_ERR		0x55			// Channel 2/3 DSP errors
+#define AD7779_REG_CH4_5_SAT_ERR		0x56			// Channel 4/5 DSP errors
+#define AD7779_REG_CH6_7_SAT_ERR		0x57			// Channel 6/7 DSP errors
+#define AD7779_REG_CHX_ERR_REG_EN		0x58			// Channel 0-7 Error Reg Enable
+#define AD7779_REG_GEN_ERR_REG_1		0x59			// General Errors Register 1
+#define AD7779_REG_GEN_ERR_REG_1_EN		0x5A			// General Errors Register 1 Enable
+#define AD7779_REG_GEN_ERR_REG_2		0x5B			// General Errors Register 2
+#define AD7779_REG_GEN_ERR_REG_2_EN		0x5C			// General Errors Register 2 Enable
+#define AD7779_REG_STATUS_REG_1			0x5D			// Error Status Register 1
+#define AD7779_REG_STATUS_REG_2			0x5E			// Error Status Register 2
+#define AD7779_REG_STATUS_REG_3			0x5F			// Error Status Register 3
+#define AD7779_REG_SRC_N_MSB			0x60			// Decimation Rate (N) MSB
+#define AD7779_REG_SRC_N_LSB			0x61			// Decimation Rate (N) LSB
+#define AD7779_REG_SRC_IF_MSB			0x62			// Decimation Rate (IF) MSB
+#define AD7779_REG_SRC_IF_LSB			0x63			// Decimation Rate (IF) LSB
+#define AD7779_REG_SRC_UPDATE			0x64			// SRC load source and load update
 
 /* AD7779_REG_CHx_CONFIG */
 #define AD7779_CH_GAIN(x)			(((x) & 0x3) << 6)
@@ -233,19 +233,18 @@ typedef enum {
 
 typedef struct {
 	/* SPI */
-	spi_device		spi_dev;
+	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_device		gpio_dev;
-	int8_t			gpio_reset;
-	int8_t			gpio_mode0;
-	int8_t			gpio_mode1;
-	int8_t			gpio_mode2;
-	int8_t			gpio_mode3;
-	int8_t			gpio_dclk0;
-	int8_t			gpio_dclk1;
-	int8_t			gpio_dclk2;
-	int8_t			gpio_sync_in;
-	int8_t			gpio_convst_sar;
+	gpio_desc		*gpio_reset;
+	gpio_desc		*gpio_mode0;
+	gpio_desc		*gpio_mode1;
+	gpio_desc		*gpio_mode2;
+	gpio_desc		*gpio_mode3;
+	gpio_desc		*gpio_dclk0;
+	gpio_desc		*gpio_dclk1;
+	gpio_desc		*gpio_dclk2;
+	gpio_desc		*gpio_sync_in;
+	gpio_desc		*gpio_convst_sar;
 	/* Device Settings */
 	ad7779_ctrl_mode	ctrl_mode;
 	ad7779_state		spi_crc_en;
@@ -269,14 +268,8 @@ typedef struct {
 
 typedef struct {
 	/* SPI */
-	spi_type		spi_type;
-	uint32_t		spi_id;
-	uint32_t		spi_max_speed_hz;
-	spi_mode		spi_mode;
-	uint8_t			spi_chip_select;
+	spi_init_param		spi_init;
 	/* GPIO */
-	gpio_type		gpio_type;
-	uint32_t		gpio_id;
 	int8_t			gpio_reset;
 	int8_t			gpio_mode0;
 	int8_t			gpio_mode1;
@@ -436,6 +429,10 @@ int32_t ad7771_set_sinc5_filter_state(ad7779_dev *dev,
 int32_t ad7771_get_sinc5_filter_state(ad7779_dev *dev,
 				      ad7779_state *state);
 /* Initialize the device. */
-int32_t ad7779_setup(ad7779_dev **device,
-		     ad7779_init_param init_param);
+int32_t ad7779_init(ad7779_dev **device,
+		    ad7779_init_param init_param);
+
+/* Free the resources allocated by ad7779_init(). */
+int32_t ad7779_remove(ad7779_dev *dev);
+
 #endif // AD7779_H_
