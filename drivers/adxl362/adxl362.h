@@ -192,18 +192,14 @@
 /******************************************************************************/
 typedef struct {
 	/* SPI */
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	/* Device Settings */
 	uint8_t		selected_range;
 } adxl362_dev;
 
 typedef struct {
 	/* SPI */
-	spi_type	spi_type;
-	uint32_t	spi_id;
-	uint32_t	spi_max_speed_hz;
-	spi_mode	spi_mode;
-	uint8_t		spi_chip_select;
+	spi_init_param	spi_init;
 } adxl362_init_param;
 
 /******************************************************************************/
@@ -213,6 +209,9 @@ typedef struct {
 /*! Initializes the device. */
 int32_t adxl362_init(adxl362_dev **device,
 		     adxl362_init_param init_param);
+
+/*! Free the resources allocated by adxl362_init(). */
+int32_t adxl362_remove(adxl362_dev *dev);
 
 /*! Writes data into a register. */
 void adxl362_set_register_value(adxl362_dev *dev,
