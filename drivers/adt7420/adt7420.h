@@ -99,17 +99,14 @@
 
 typedef struct {
 	/* I2C */
-	i2c_device	i2c_dev;
+	i2c_desc	*i2c_desc;
 	/* Device Settings */
 	uint8_t		resolution_setting;
 } adt7420_dev;
 
 typedef struct {
 	/* I2C */
-	i2c_type	i2c_type;
-	uint32_t	i2c_id;
-	uint32_t	i2c_max_speed_hz;
-	uint8_t		i2c_slave_address;
+	i2c_init_param	i2c_init;
 	/* Device Settings */
 	uint8_t		resolution_setting;
 } adt7420_init_param;
@@ -130,6 +127,9 @@ void adt7420_set_register_value(adt7420_dev *dev,
 /*! Initializes the comm. peripheral and checks if the device is present. */
 int32_t adt7420_init(adt7420_dev **device,
 		     adt7420_init_param init_param);
+
+/* Free the resources allocated by adt7420_init(). */
+int32_t adt7420_remove(adt7420_dev *dev);
 
 /*! Resets the ADT7420. */
 void adt7420_reset(adt7420_dev *dev);

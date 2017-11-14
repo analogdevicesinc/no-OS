@@ -59,11 +59,11 @@ uint8_t adt7420_get_register_value(adt7420_dev *dev,
 {
 	uint8_t register_value = 0;
 
-	i2c_write(&dev->i2c_dev,
+	i2c_write(dev->i2c_desc,
 		  &register_address,
 		  1,
 		  0);
-	i2c_read(&dev->i2c_dev,
+	i2c_read(dev->i2c_desc,
 		 &register_value,
 		 1,
 		 1);
@@ -88,7 +88,7 @@ void adt7420_set_register_value(adt7420_dev *dev,
 
 	data_buffer[0] = register_address;
 	data_buffer[1] = register_value;
-	i2c_write(&dev->i2c_dev,
+	i2c_write(dev->i2c_desc,
 		  data_buffer,
 		  2,
 		  1);
@@ -120,11 +120,7 @@ int32_t adt7420_init(adt7420_dev **device,
 		return -1;
 
 	/* I2C */
-	dev->i2c_dev.type = init_param.i2c_type;
-	dev->i2c_dev.id = init_param.i2c_id;
-	dev->i2c_dev.max_speed_hz = init_param.i2c_max_speed_hz;
-	dev->i2c_dev.slave_address = init_param.i2c_slave_address;
-	status = i2c_init(&dev->i2c_dev);
+	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 
 	/* Device Settings */
 	dev->resolution_setting = init_param.resolution_setting;
@@ -136,6 +132,24 @@ int32_t adt7420_init(adt7420_dev **device,
 	*device = dev;
 
 	return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by adt7420_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t adt7420_remove(adt7420_dev *dev)
+{
+	int32_t ret;
+
+	ret = i2c_remove(dev->i2c_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -151,7 +165,7 @@ void adt7420_reset(adt7420_dev *dev)
 {
 	uint8_t register_address = ADT7420_REG_RESET;
 
-	i2c_write(&dev->i2c_dev,
+	i2c_write(dev->i2c_desc,
 		  &register_address,
 		  1,
 		  1);
