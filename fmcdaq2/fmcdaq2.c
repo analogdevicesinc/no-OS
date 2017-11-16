@@ -121,9 +121,11 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_xcvr->ref_clock_khz = 375000;
 #ifdef ZYNQ_PS7
 			p_ad9144_xcvr->dev.lpm_enable = 0;
+			p_ad9144_xcvr->dev.qpll_enable = 1;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
 
 			p_ad9680_xcvr->dev.lpm_enable = 1;
+			p_ad9680_xcvr->dev.qpll_enable = 1;
 			p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
 			break;
@@ -148,9 +150,11 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_xcvr->ref_clock_khz = 250000;
 #ifdef ZYNQ_PS7
 			p_ad9144_xcvr->dev.lpm_enable = 1;
+			p_ad9144_xcvr->dev.qpll_enable = 0;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
 
 			p_ad9680_xcvr->dev.lpm_enable = 1;
+			p_ad9680_xcvr->dev.qpll_enable = 0;
 			p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
 			break;
@@ -175,9 +179,11 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_xcvr->ref_clock_khz = 250000;
 #ifdef ZYNQ_PS7
 			p_ad9144_xcvr->dev.lpm_enable = 0;
+			p_ad9144_xcvr->dev.qpll_enable = 1;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
 
 			p_ad9680_xcvr->dev.lpm_enable = 1;
+			p_ad9680_xcvr->dev.qpll_enable = 0;
 			p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
 			break;
@@ -445,7 +451,7 @@ int main(void)
 #endif
 #ifdef XILINX
 	// set up the XCVRs
-	if (ad9144_xcvr.dev.sys_clk_sel == 3) {	// DAC_XCVR controls the QPLL reset
+	if (ad9144_xcvr.dev.qpll_enable) {	// DAC_XCVR controls the QPLL reset
 		xcvr_setup(&ad9144_xcvr);
 		xcvr_setup(&ad9680_xcvr);
 	} else {				// ADC_XCVR controls the CPLL reset
