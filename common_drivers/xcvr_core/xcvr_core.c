@@ -123,7 +123,8 @@ int32_t xcvr_drp_write(xcvr_core *core, uint8_t drp_sel,
 	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
 
 	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
-				 XCVR_CM_ADDR(drp_addr) | XCVR_CM_WDATA(drp_data));
+			drp_sel ? (XCVR_CH_WR | XCVR_CH_ADDR(drp_addr) | XCVR_CH_WDATA(drp_data)) :
+			(XCVR_CM_WR | XCVR_CM_ADDR(drp_addr) | XCVR_CM_WDATA(drp_data)));
 
 	do {
 		xcvr_read(core, drp_sel ? XCVR_REG_CH_STATUS : XCVR_REG_CM_STATUS, &val);
