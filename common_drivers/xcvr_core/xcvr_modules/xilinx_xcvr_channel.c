@@ -406,30 +406,9 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core,
 }
 
 /*******************************************************************************
-* @brief xilinx_xcvr_read_out_div
+* @brief *xilinx_xcvr_out_div_to_val
 *******************************************************************************/
-int32_t xilinx_xcvr_read_out_div(xcvr_core *core,
-	uint32_t *rx_out_div, uint32_t *tx_out_div)
-{
-	uint32_t val;
-	int32_t ret;
-
-	ret = xcvr_drp_read(core, XCVR_REG_CH_SEL, OUT_DIV_ADDR, &val);
-	if (ret < 0)
-		return ret;
-
-	if (rx_out_div)
-		*rx_out_div = 1 << ((val >> OUT_DIV_RX_OFFSET) & 7);
-	if (tx_out_div)
-		*tx_out_div = 1 << ((val >> OUT_DIV_TX_OFFSET) & 7);
-
-	return 0;
-}
-
-/*******************************************************************************
-* @brief xilinx_xcvr_out_div_to_val
-*******************************************************************************/
-uint32_t xilinx_xcvr_out_div_to_val(uint32_t out_div)
+uint32_t write_xilinx_xcvr_out_div_to_val(uint32_t out_div)
 {
 	switch (out_div) {
 	case 1:
@@ -445,6 +424,45 @@ uint32_t xilinx_xcvr_out_div_to_val(uint32_t out_div)
 	}
 }
 
+uint32_t read_xilinx_xcvr_out_div_to_val(uint32_t out_div)
+{
+	switch (out_div) {
+	case 0:
+		return 1;
+	case 1:
+		return 2;
+	case 2:
+		return 4;
+	case 3:
+		return 8;
+	case 4:
+		return 16;
+	default:
+		return -1;
+	}
+}
+
+/*******************************************************************************
+* @brief xilinx_xcvr_read_out_div
+*******************************************************************************/
+int32_t xilinx_xcvr_read_out_div(xcvr_core *core,
+	uint32_t *rx_out_div, uint32_t *tx_out_div)
+{
+	uint32_t val;
+	int32_t ret;
+
+	ret = xcvr_drp_read(core, XCVR_REG_CH_SEL, OUT_DIV_ADDR, &val);
+	if (ret < 0)
+		return ret;
+
+	if (rx_out_div)
+		*rx_out_div = read_xilinx_xcvr_out_div_to_val((val >> OUT_DIV_RX_OFFSET) & 7);
+	if (tx_out_div)
+		*tx_out_div = read_xilinx_xcvr_out_div_to_val((val >> OUT_DIV_TX_OFFSET) & 7);
+
+	return 0;
+}
+
 /*******************************************************************************
 * @brief xilinx_xcvr_write_out_div
 *******************************************************************************/
@@ -455,11 +473,11 @@ int32_t xilinx_xcvr_write_out_div(xcvr_core *core,
 	uint32_t mask = 0;
 
 	if (tx_out_div >= 0) {
-		val |= xilinx_xcvr_out_div_to_val(tx_out_div) << OUT_DIV_TX_OFFSET;
+		val |= write_xilinx_xcvr_out_div_to_val(tx_out_div) << OUT_DIV_TX_OFFSET;
 		mask |= 0x7 << OUT_DIV_TX_OFFSET;
 	}
 	if (rx_out_div >= 0) {
-		val |= xilinx_xcvr_out_div_to_val(rx_out_div) << OUT_DIV_RX_OFFSET;
+		val |= write_xilinx_xcvr_out_div_to_val(rx_out_div) << OUT_DIV_RX_OFFSET;
 		mask |= 0x7 << OUT_DIV_RX_OFFSET;
 	}
 
