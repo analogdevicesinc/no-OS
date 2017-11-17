@@ -11,6 +11,9 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
+## CAPTURE SCRIPT
+NR_OF_CHAN := 2
+
 M_INC_DIRS := $(NOOS-DIR)/common_drivers/platform_drivers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dac_core
@@ -27,4 +30,3 @@ M_INC_DIRS += $(NOOS-DIR)/fmcdaq2
 M_HDR_FILES :=
 
 M_SRC_FILES :=
-

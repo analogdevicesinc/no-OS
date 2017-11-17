@@ -11,6 +11,10 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
+## CAPTURE SCRIPT
+##		1 channel of I/Q data (I-Q separate files)
+NR_OF_CHAN := 2
+
 M_INC_DIRS := $(NOOS-DIR)/common_drivers/platform_drivers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core

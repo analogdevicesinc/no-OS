@@ -20,8 +20,8 @@ ifeq ($(CAPTURE_SIZE),)
   CAPTURE_SIZE := 32768
 endif
 
-ifeq ($(NR_CH),)
-  NR_CH := 1
+ifeq ($(NR_OF_CHAN),)
+  NR_OF_CHAN := 1
 endif
 
 ifeq ($(BITS_PER_SAMPLE),)
@@ -31,7 +31,7 @@ endif
 XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
-XSDB_CAPTURE := $(NOOS-DIR)/scripts/capture.tcl
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/xilinx_capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += MICROBLAZE
@@ -85,5 +85,5 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) MICROBLAZE $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_CH) $(BITS_PER_SAMPLE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) MICROBLAZE $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)
 

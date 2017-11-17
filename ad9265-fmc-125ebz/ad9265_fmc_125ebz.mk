@@ -16,7 +16,7 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9265
 
-M_HDR_FILES :=
+M_HDR_FILES := $(NOOS-DIR)/ad9265-fmc-125ebz/config.h
 
 M_SRC_FILES := $(NOOS-DIR)/ad9265-fmc-125ebz/ad9265_fmc_125ebz.c
 

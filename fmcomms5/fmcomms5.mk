@@ -11,6 +11,10 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
+## CAPTURE SCRIPT
+##		4 channels of I/Q data (I-Q separate files)
+NR_OF_CHAN := 8
+
 M_INC_DIRS := $(NOOS-DIR)/ad9361/sw/platform_xilinx
 M_INC_DIRS += $(NOOS-DIR)/ad9361/sw
 
