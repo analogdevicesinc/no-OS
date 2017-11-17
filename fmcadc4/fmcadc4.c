@@ -188,10 +188,6 @@ int main(void)
 
 	ad9680_0_param.lane_rate_kbps = 10000000;
 
-	ad9680_xcvr.reconfig_bypass = 0;
-	ad9680_xcvr.ref_clock_khz = 500000;
-	ad9680_xcvr.lane_rate_kbps = ad9680_0_param.lane_rate_kbps;
-
 	ad9680_jesd.rx_tx_n = 1;
 	ad9680_jesd.scramble_enable = 1;
 	ad9680_jesd.octets_per_frame = 1;
@@ -232,6 +228,12 @@ int main(void)
 	// functions (do not modify below)
 
 	ad_platform_init();
+
+	xcvr_getconfig(&ad9680_xcvr);
+	ad9680_xcvr.reconfig_bypass = 0;
+	ad9680_xcvr.ref_clock_khz = 500000;
+	ad9680_xcvr.lane_rate_kbps = ad9680_0_param.lane_rate_kbps;
+	ad9680_xcvr.dev.qpll_enable = 1;
 
 	ad_gpio_set(GPIO_AD9528_STATUS, 0x0);
 	ad_gpio_set(GPIO_AD9528_RSTN, 0x0);
@@ -277,6 +279,7 @@ int main(void)
 		adc_ramp_test(ad9680_0_core, 2, rx_xfer.no_of_samples/(2*ad9680_0_core.no_of_channels), rx_xfer.start_address);
         };
 
+	ad9680_test(&ad9680_0_spi_device, AD9680_TEST_OFF);
 	ad9680_test(&ad9680_1_spi_device, AD9680_TEST_OFF);
 	if(!dmac_start_transaction(ad9680_dma)){
 		ad_printf("RX capture done.\n");
