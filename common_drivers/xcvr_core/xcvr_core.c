@@ -206,24 +206,21 @@ int32_t xcvr_setup(xcvr_core *core)
 	xcvr_cpll cpll_config;
 	xcvr_qpll qpll_config;
 
-	const uint32_t qpll_max_lane_rate = 12500000;
-	const uint32_t cpll_max_lane_rate =  6250000;
-	const uint32_t cpll_min_lane_rate =  1250000;
-
 	xcvr_write(core, XCVR_REG_RESETN, 0);  // enter reset state
 
 	if (core->reconfig_bypass == 0)
 	{
 		if (core->lane_rate_kbps > 12500000){
-			printf("ERROR: Max qpll lane_rate: %lu", 12500000);
+			printf("ERROR: Max qpll lane_rate: %d", 12500000);
 			return -1;
 		}
 		if (core->lane_rate_kbps < 1250000){
-			printf("ERROR: Min cpll lane_rate: %lu", 1250000);
+			printf("ERROR: Min cpll lane_rate: %d", 1250000);
 			return -1;
 		}
 
 		if (core->dev.qpll_enable) {
+			printf("\nQPLL ENABLE\n");
 			ret |= xilinx_xcvr_calc_qpll_config(core->ref_clock_khz,
 					core->lane_rate_kbps, &qpll_config);
 			out_div = qpll_config.out_div;
@@ -234,6 +231,7 @@ int32_t xcvr_setup(xcvr_core *core)
 			xilinx_xcvr_qpll_write_config(core, &qpll_config);
 			local_sys_clk_sel = 0x3;
 		} else {
+			printf("\nCPLL ENABLE\n");
 			ret |= xilinx_xcvr_calc_cpll_config(core->ref_clock_khz,
 					core->lane_rate_kbps, &cpll_config);
 			out_div = cpll_config.out_div;
