@@ -67,7 +67,7 @@
 #define GPIO_CLKD_STATUS_1	33
 #define GPIO_CLKD_STATUS_0	32
 
-#define DMA_BUFFER		 1
+#define DMA_BUFFER		 0
 
 enum ad9523_channels {
 	DAC_DEVICE_CLK,
@@ -94,15 +94,15 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 	printf ("\t1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
 	printf ("\t2 - ADC  500 MSPS; DAC 1000 MSPS\n");
 	printf ("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
-	printf ("\t4 - ADC  750 MSPS; DAC  750 MSPS\n");
+	printf ("\t4 - ADC  600 MSPS; DAC  600 MSPS\n");
 	printf ("choose an option [default 1]:\n");
 
 	mode = ad_uart_read();
 
 	switch (mode) {
 		case '4':
-			printf ("4 - ADC  750 MSPS; DAC  750 MSPS\n");
-			p_ad9523_param->pll2_vco_diff_m1 = 4;
+			printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
+			p_ad9523_param->pll2_vco_diff_m1 = 5;
 			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
 			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
 			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->channel_divider = 128;
@@ -112,20 +112,20 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->channel_divider = 128;
 			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->channel_divider = 128;
 			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 7500000;
-			p_ad9144_xcvr->lane_rate_kbps = 7500000;
-			p_ad9144_xcvr->ref_clock_khz = 375000;
+			p_ad9144_param->lane_rate_kbps = 6000000;
+			p_ad9144_xcvr->lane_rate_kbps = 6000000;
+			p_ad9144_xcvr->ref_clock_khz = 300000;
 			p_ad9680_xcvr->reconfig_bypass = 0;
-			p_ad9680_param->lane_rate_kbps = 7500000;
-			p_ad9680_xcvr->lane_rate_kbps = 7500000;
-			p_ad9680_xcvr->ref_clock_khz = 375000;
+			p_ad9680_param->lane_rate_kbps = 6000000;
+			p_ad9680_xcvr->lane_rate_kbps = 6000000;
+			p_ad9680_xcvr->ref_clock_khz = 300000;
 #ifdef ZYNQ_PS7
 			p_ad9144_xcvr->dev.lpm_enable = 0;
-			p_ad9144_xcvr->dev.qpll_enable = 1;
+			p_ad9144_xcvr->dev.qpll_enable = 0;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
 
 			p_ad9680_xcvr->dev.lpm_enable = 1;
-			p_ad9680_xcvr->dev.qpll_enable = 1;
+			p_ad9680_xcvr->dev.qpll_enable = 0;
 			p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
 			break;
@@ -339,6 +339,7 @@ int main(void)
 
 	xcvr_getconfig(&ad9144_xcvr);
 	ad9144_xcvr.reconfig_bypass = 1;
+	ad9144_xcvr.dev.qpll_enable = 1;
 	ad9144_xcvr.lane_rate_kbps = 10000000;
 
 	ad9144_jesd.rx_tx_n = 0;
@@ -385,6 +386,7 @@ int main(void)
 
 	xcvr_getconfig(&ad9680_xcvr);
 	ad9680_xcvr.reconfig_bypass = 1;
+	ad9680_xcvr.dev.qpll_enable = 1;
 	ad9680_xcvr.rx_tx_n = 1;
 	ad9680_xcvr.lane_rate_kbps = ad9680_param.lane_rate_kbps;
 
