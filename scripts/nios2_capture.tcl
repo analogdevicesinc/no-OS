@@ -96,6 +96,13 @@ for {set index 1} {$index < $num_sample_per_32bit_mm} {incr index 1} {
 				} else {
 					set ch_x_index 1
 				}
+				if { [expr $n + 2] < $num_of_channels} {
+					set index [expr $index + 1]
+					set data [lindex $readData $index]
+					set data [expr $data]
+					set sample1 [expr {$data & 0xFFFF}]
+					set sample2 [expr {($data >> 16) & 0xFFFF}]
+				}
 			}
 		}
 	} elseif { $storage_bits <= 32 } { # 32 bit channel
@@ -110,6 +117,12 @@ for {set index 1} {$index < $num_sample_per_32bit_mm} {incr index 1} {
 					set ch_x_index 1
 				}
 				puts $f($ch_x_index) $sample
+				if { [expr $n + 1] < $num_of_channels} {
+					set index [expr $index + 1]
+					set data [lindex $readData $index]
+					set data [expr $data]
+					set sample [expr {$data & 0xFFFFFF}]
+				}
 			}
 		}
 	} else {

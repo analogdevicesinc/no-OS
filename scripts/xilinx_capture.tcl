@@ -108,6 +108,13 @@ for {set index 1} {$index < $num_of_samples} {incr index 2} {
 				} else {
 					set ch_x_index 1
 				}
+				if { [expr $n + 2] < $num_of_channels} {
+					set index [expr $index + 2]
+					set data [lindex $readData $index]
+					set data [expr 0x$data]
+					set sample1 [expr {$data & 0xFFFF}]
+					set sample2 [expr {($data >> 16) & 0xFFFF}]
+				}
 			}
 		}
 	} elseif { $storage_bits <= 32 } {
@@ -122,6 +129,12 @@ for {set index 1} {$index < $num_of_samples} {incr index 2} {
 					set ch_x_index 1
 				}
 				puts $f($ch_x_index) $sample
+				if { [expr $n + 1] < $num_of_channels} {
+					set index [expr $index + 2]
+					set data [lindex $readData $index]
+					set data [expr 0x$data]
+					set sample [expr {$data & 0xFFFFFF}]
+				}
 			}
 	} else {
 		puts "ERROR: Unsupported number of bits/sample"
