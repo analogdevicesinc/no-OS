@@ -3043,12 +3043,6 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
 	}
 
-	if (phy->pdata->rx1rx2_phase_inversion_en ||
-		(phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
-		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
-		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
-	}
-
 	if (txnco_freq > (int64_t)(bw_rx / 4) || txnco_freq > (int64_t)(bw_tx / 4)) {
 		__ad9361_update_rf_bandwidth(phy,
 			phy->current_rx_bw_Hz,
