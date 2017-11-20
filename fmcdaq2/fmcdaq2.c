@@ -119,7 +119,7 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_param->lane_rate_kbps = 6000000;
 			p_ad9680_xcvr->lane_rate_kbps = 6000000;
 			p_ad9680_xcvr->ref_clock_khz = 300000;
-#ifdef ZYNQ_PS7
+#ifdef XILINX
 			p_ad9144_xcvr->dev.lpm_enable = 0;
 			p_ad9144_xcvr->dev.qpll_enable = 0;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
@@ -148,7 +148,7 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_param->lane_rate_kbps = 5000000;
 			p_ad9680_xcvr->lane_rate_kbps = 5000000;
 			p_ad9680_xcvr->ref_clock_khz = 250000;
-#ifdef ZYNQ_PS7
+#ifdef XILINX
 			p_ad9144_xcvr->dev.lpm_enable = 1;
 			p_ad9144_xcvr->dev.qpll_enable = 0;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
@@ -177,7 +177,7 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
 			p_ad9680_param->lane_rate_kbps = 5000000;
 			p_ad9680_xcvr->lane_rate_kbps = 5000000;
 			p_ad9680_xcvr->ref_clock_khz = 250000;
-#ifdef ZYNQ_PS7
+#ifdef XILINX
 			p_ad9144_xcvr->dev.lpm_enable = 0;
 			p_ad9144_xcvr->dev.qpll_enable = 1;
 			p_ad9144_xcvr->dev.out_clk_sel = 4;
