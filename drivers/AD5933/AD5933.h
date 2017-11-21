@@ -43,11 +43,6 @@
 #define __AD5933_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /************************** AD5933 Definitions ********************************/
 /******************************************************************************/
 
@@ -64,7 +59,7 @@
 #define AD5933_REG_IMAG_DATA        0x96    // Imaginary data
 
 /* AD5933_REG_CONTROL_HB Bits */
-#define AD5933_CONTROL_FUNCTION(x)  ((x) << 4)     
+#define AD5933_CONTROL_FUNCTION(x)  ((x) << 4)
 #define AD5933_CONTROL_RANGE(x)     ((x) << 1)
 #define AD5933_CONTROL_PGA_GAIN(x)  ((x) << 0)
 
@@ -111,47 +106,84 @@
 #define AD5933_MAX_INC_NUM          511             // Maximum increment number
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+	/* Device Settings */
+	unsigned long currentSysClk;
+	unsigned char currentClockSource;
+	unsigned char currentGain;
+	unsigned char currentRange;
+} ad5933_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+	/* Device Settings */
+	unsigned long currentSysClk;
+	unsigned char currentClockSource;
+	unsigned char currentGain;
+	unsigned char currentRange;
+} ad5933_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication peripheral. */
-char AD5933_Init(void);
+int32_t AD5933_Init(ad5933_dev **device,
+		    ad5933_init_param init_param);
+
+/*! Free the resources allocated by ad5686_init(). */
+int32_t ad5933_remove(ad5933_dev *dev);
 
 /*! Writes data into a register. */
-void AD5933_SetRegisterValue(unsigned char registerAddress,
+void AD5933_SetRegisterValue(ad5933_dev *dev,
+			     unsigned char registerAddress,
                              unsigned long registerValue,
                              unsigned char bytesNumber);
 
 /*! Reads the value of a register. */
-unsigned long AD5933_GetRegisterValue(unsigned char registerAddress,
+unsigned long AD5933_GetRegisterValue(ad5933_dev *dev,
+				      unsigned char registerAddress,
                                       unsigned char bytesNumber);
 
 /*! Resets the device. */
-void AD5933_Reset(void);
+void AD5933_Reset(ad5933_dev *dev);
 
 /*! Selects the source of the system clock. */
-void AD5933_SetSystemClk(char clkSource, unsigned long extClkFreq);
+void AD5933_SetSystemClk(ad5933_dev *dev,
+			 char clkSource,
+			 unsigned long extClkFreq);
 
 /*! Selects the range and gain of the device. */
-void AD5933_SetRangeAndGain(char range, char gain);
+void AD5933_SetRangeAndGain(ad5933_dev *dev,
+			    char range,
+			    char gain);
 
 /*! Reads the temp. from the part and returns the data in degrees Celsius. */
-float AD5933_GetTemperature(void);
+float AD5933_GetTemperature(ad5933_dev *dev);
 
 /*! Configures the sweep parameters. */
-void AD5933_ConfigSweep(unsigned long  startFreq,
+void AD5933_ConfigSweep(ad5933_dev *dev,
+			unsigned long  startFreq,
                         unsigned long  incFreq,
                         unsigned short incNum);
 
 /*! Starts the sweep operation. */
-void AD5933_StartSweep(void);
+void AD5933_StartSweep(ad5933_dev *dev);
 
 /*! Reads the real and the imaginary data and calculates the Gain Factor. */
-double AD5933_CalculateGainFactor(unsigned long calibrationImpedance,
+double AD5933_CalculateGainFactor(ad5933_dev *dev,
+				  unsigned long calibrationImpedance,
                                   unsigned char freqFunction);
 
 /*! Reads the real and the imaginary data and calculates the Impedance. */
-double AD5933_CalculateImpedance(double gainFactor,
+double AD5933_CalculateImpedance(ad5933_dev *dev,
+				 double gainFactor,
                                  unsigned char freqFunction);
 
 #endif /* __AD5933_H__ */
