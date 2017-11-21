@@ -93,14 +93,14 @@ int main(void)
 #endif
 
 #ifdef ALTERA
-	ad9250_xcvr.base_address = AXI_AD9250_XCVR_BASE;
-	ad9250_xcvr.dev.link_pll.base_address = AVL_AD9250_XCVR_CORE_PLL_RECONFIG_BASE;
+	ad9250_xcvr.base_address = AD9250_JESD204_LINK_MANAGEMENT_BASE;
+	ad9250_xcvr.dev.link_pll.base_address = AD9250_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9250_0_core.base_address = AXI_AD9250_CORE_0_BASE;
 	ad9250_0_core.base_address = AXI_AD9250_CORE_1_BASE;
-	ad9250_jesd204.base_address = AVL_AD9250_XCVR_IP_RECONFIG_BASE;
+	ad9250_jesd204.base_address = AD9250_JESD204_LINK_RECONFIG_BASE;
 
 	ad9250_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
-	ad9250_xcvr.dev.channel_pll[0].base_address = AVL_AD9250_XCVR_PHY_RECONFIG_0_BASE;
+	ad9250_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_BASE;
 
 	ad9250_0_dma.base_address = AXI_AD9250_DMA_0_BASE;
 	ad9250_1_dma.base_address = AXI_AD9250_DMA_1_BASE;
@@ -123,6 +123,7 @@ int main(void)
 	ad9250_1_param.lane_rate_kbps = 4915200;
 
 	xcvr_getconfig(&ad9250_xcvr);
+
 	ad9250_xcvr.reconfig_bypass = 0;
 	ad9250_xcvr.lane_rate_kbps = ad9250_0_param.lane_rate_kbps;
 	ad9250_xcvr.ref_clock_khz = 245760;
@@ -202,6 +203,7 @@ int main(void)
 	ad9250_test(&ad9250_1_device, AD9250_TEST_OFF);
 
 	// capture data with DMA
+
 	if(!dmac_start_transaction(ad9250_0_dma)) {
 		ad_printf("%s RX capture done!\n", __func__);
 	};
