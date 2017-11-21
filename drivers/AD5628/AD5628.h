@@ -44,11 +44,6 @@
 #define __AD5628_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /******************************** AD5628 **************************************/
 /******************************************************************************/
 
@@ -101,19 +96,40 @@
 #define AD5628_CODE_NOP           3
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc	*spi_desc;
+} ad5628_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+} ad5628_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Resets the device and performs several initializations. */
-char AD5628_Init(void);
+int32_t AD5628_Init(ad5628_dev **device,
+		 ad5628_init_param init_param);
+
+/*! Free the resources allocated by AD5628_Init(). */
+int32_t ad5628_remove(ad5628_dev *dev);
 
 /*! Sets the device in a specific power mode. */
-void AD5628_PowerMode(unsigned char pwrMode, unsigned char channel);
+void AD5628_PowerMode(ad5628_dev *dev,
+		      unsigned char pwrMode,
+		      unsigned char channel);
 
 /*! Resets the device. */
-void AD5628_Reset(void);
+void AD5628_Reset(ad5628_dev *dev);
 
 /*! Writes a 32-bit data-word to the Input Register of the device. */
-void AD5628_SetInputRegister(unsigned long registerValue);
+void AD5628_SetInputRegister(ad5628_dev *dev,
+			     unsigned long registerValue);
 
 #endif /* __AD5628_H__ */
