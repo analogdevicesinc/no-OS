@@ -17,7 +17,7 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9739a
 M_INC_DIRS += $(NOOS-DIR)/drivers/adf4350
 
-M_HDR_FILES :=
+M_HDR_FILES := $(NOOS-DIR)/ad9739a-fmc-ebz/config.h
 
 M_SRC_FILES := $(NOOS-DIR)/ad9739a-fmc-ebz/ad9739a_fmc_ebz.c
 
