@@ -43,35 +43,76 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "AD5628.h"    // AD5628 definitions.
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "AD5628.h"
 
 /***************************************************************************//**
- * @brief Resets the device and performs several initializations.
+ * @brief Initializes the communication peripheral and the initial Values for
+ *        AD5628 Board and resets the device.
  *
- * @return Result of the initialization procedure.
- *			Example: -1- SPI peripheral was not initialized.
- *				  0- SPI peripheral is initialized.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return ret - The result of the initialization procedure.
+ *               Example: -1 - SPI peripheral was not initialized or the
+ *                             device is not present.
+ *                         0 - SPI peripheral was initialized and the
+ *                             device is present.
 *******************************************************************************/
-char AD5628_Init(void)
+int32_t AD5628_Init(ad5628_dev **device,
+		 ad5628_init_param init_param)
 {
-    char status = -1;
-    
+	ad5628_dev *dev;
+    int32_t status;
+
+	dev = (ad5628_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
     /* Initializes communication. */
-    status = SPI_Init(0, 1000000, 1, 1);
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
     /* Behaves as a power-on reset. */
-    AD5628_Reset();
+    AD5628_Reset(dev);
     /* Turns on the on-board reference. */
-    AD5628_SetInputRegister(AD5628_CMD(AD5628_CMD_SET_INT_REF)|
+    AD5628_SetInputRegister(dev,
+			    AD5628_CMD(AD5628_CMD_SET_INT_REF)|
                             AD5628_INT_REF_ON);
     /* Clear code is set to 0x0000. */
-    AD5628_SetInputRegister(AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE)|
+    AD5628_SetInputRegister(dev,
+			    AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE)|
                             AD5628_CODE_0X0000);
+	*device = dev;
 
-    return status; 
+    return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD5628_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t AD5628_remove(ad5628_dev *dev)
+{
+	int32_t status;
+
+	status = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return status;
 }
 
 /***************************************************************************//**
  * @brief Sets the device in a specific power mode.
+ *
+ *
+ * @param dev - The device structure.
  *
  * @param pwrMode - power mode of the device.
  *                  Example: AD5628_PWRDN_NONE
@@ -87,7 +128,9 @@ char AD5628_Init(void)
  *
  * @return none.
 *******************************************************************************/
-void AD5628_PowerMode(unsigned char pwrMode, unsigned char channel)
+void AD5628_PowerMode(ad5628_dev *dev,
+		      unsigned char pwrMode,
+		      unsigned char channel)
 {
     unsigned char selectedChannel = 0;
 
@@ -100,7 +143,8 @@ void AD5628_PowerMode(unsigned char pwrMode, unsigned char channel)
         selectedChannel = (1 << channel);
     }
     /* Selects a power mode for the selected channel. */
-    AD5628_SetInputRegister(AD5628_CMD(AD5628_CMD_POWERDOWN) |
+    AD5628_SetInputRegister(dev,
+			    AD5628_CMD(AD5628_CMD_POWERDOWN) |
                             AD5628_POWER_MODE(pwrMode) |
                             selectedChannel);
 }
@@ -108,27 +152,32 @@ void AD5628_PowerMode(unsigned char pwrMode, unsigned char channel)
 /***************************************************************************//**
  * @brief Resets the device.
  *
+ * @param dev - The device structure.
+ *
  * @return none.
 *******************************************************************************/
-void AD5628_Reset(void)
+void AD5628_Reset(ad5628_dev *dev)
 {
-     AD5628_SetInputRegister(AD5628_CMD(AD5628_CMD_RESET));
+     AD5628_SetInputRegister(dev, AD5628_CMD(AD5628_CMD_RESET));
 }
 
 /***************************************************************************//**
  * @brief Writes a 32-bit data-word to the Input Register of the device.
  *
+ * @param dev - The device structure.
+ *
  * @param registerValue - Value of the register.
  *
  * @return none.
 *******************************************************************************/
-void AD5628_SetInputRegister(unsigned long registerValue)
+void AD5628_SetInputRegister(ad5628_dev *dev,
+			     unsigned long registerValue)
 {
     unsigned char registerWord[4] = {0, 0, 0, 0};
-    
+
     registerWord[0] = (unsigned char)((registerValue & 0xFF000000) >> 24);
     registerWord[1] = (unsigned char)((registerValue & 0x00FF0000) >> 16);
     registerWord[2] = (unsigned char)((registerValue & 0x0000FF00) >> 8);
     registerWord[3] = (unsigned char)((registerValue & 0x000000FF) >> 0);
-    SPI_Write(AD5628_SLAVE_ID, registerWord, 4);
+	spi_write_and_read(dev->spi_desc, registerWord, 4);
 }
