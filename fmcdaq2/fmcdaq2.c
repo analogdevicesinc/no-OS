@@ -339,7 +339,9 @@ int main(void)
 
 	xcvr_getconfig(&ad9144_xcvr);
 	ad9144_xcvr.reconfig_bypass = 1;
+#ifdef XILINX
 	ad9144_xcvr.dev.qpll_enable = 1;
+#endif
 	ad9144_xcvr.lane_rate_kbps = 10000000;
 
 	ad9144_jesd.rx_tx_n = 0;
@@ -386,7 +388,9 @@ int main(void)
 
 	xcvr_getconfig(&ad9680_xcvr);
 	ad9680_xcvr.reconfig_bypass = 1;
+#ifdef XILINX
 	ad9680_xcvr.dev.qpll_enable = 1;
+#endif
 	ad9680_xcvr.rx_tx_n = 1;
 	ad9680_xcvr.lane_rate_kbps = ad9680_param.lane_rate_kbps;
 
