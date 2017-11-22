@@ -44,11 +44,6 @@
 #define __AD7193_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /******************************** AD7193 **************************************/
 /******************************************************************************/
 
@@ -56,39 +51,42 @@
 #define AD7193_SLAVE_ID         1
 
 /* AD74XX Chip Select Pin declaration */
-#define AD7193_CS_LOW           SPI_CS_LOW
-#define AD7193_CS_HIGH          SPI_CS_HIGH
+#define AD7193_CS_LOW           gpio_set_value(dev->gpio_cs,  \
+			        GPIO_LOW)
+#define AD7193_CS_HIGH          gpio_set_value(dev->gpio_cs,  \
+			        GPIO_HIGH)
 
 /* AD7193 GPIO */
-#define AD7193_RDY_STATE       SPI_MISO
+#define AD7193_RDY_STATE(value) gpio_get_value(dev->gpio_miso,  \
+                                &value)
 
 /* AD7193 Register Map */
-#define AD7193_REG_COMM         0 // Communications Register (WO, 8-bit) 
-#define AD7193_REG_STAT         0 // Status Register         (RO, 8-bit) 
-#define AD7193_REG_MODE         1 // Mode Register           (RW, 24-bit 
+#define AD7193_REG_COMM         0 // Communications Register (WO, 8-bit)
+#define AD7193_REG_STAT         0 // Status Register         (RO, 8-bit)
+#define AD7193_REG_MODE         1 // Mode Register           (RW, 24-bit
 #define AD7193_REG_CONF         2 // Configuration Register  (RW, 24-bit)
-#define AD7193_REG_DATA         3 // Data Register           (RO, 24/32-bit) 
-#define AD7193_REG_ID           4 // ID Register             (RO, 8-bit) 
-#define AD7193_REG_GPOCON       5 // GPOCON Register         (RW, 8-bit) 
-#define AD7193_REG_OFFSET       6 // Offset Register         (RW, 24-bit 
+#define AD7193_REG_DATA         3 // Data Register           (RO, 24/32-bit)
+#define AD7193_REG_ID           4 // ID Register             (RO, 8-bit)
+#define AD7193_REG_GPOCON       5 // GPOCON Register         (RW, 8-bit)
+#define AD7193_REG_OFFSET       6 // Offset Register         (RW, 24-bit
 #define AD7193_REG_FULLSCALE    7 // Full-Scale Register     (RW, 24-bit)
 
 /* Communications Register Bit Designations (AD7193_REG_COMM) */
-#define AD7193_COMM_WEN         (1 << 7)           // Write Enable. 
+#define AD7193_COMM_WEN         (1 << 7)           // Write Enable.
 #define AD7193_COMM_WRITE       (0 << 6)           // Write Operation.
-#define AD7193_COMM_READ        (1 << 6)           // Read Operation. 
-#define AD7193_COMM_ADDR(x)     (((x) & 0x7) << 3) // Register Address. 
+#define AD7193_COMM_READ        (1 << 6)           // Read Operation.
+#define AD7193_COMM_ADDR(x)     (((x) & 0x7) << 3) // Register Address.
 #define AD7193_COMM_CREAD       (1 << 2)           // Continuous Read of Data Register.
 
 /* Status Register Bit Designations (AD7193_REG_STAT) */
 #define AD7193_STAT_RDY         (1 << 7) // Ready.
 #define AD7193_STAT_ERR         (1 << 6) // ADC error bit.
-#define AD7193_STAT_NOREF       (1 << 5) // Error no external reference. 
-#define AD7193_STAT_PARITY      (1 << 4) // Parity check of the data register. 
-#define AD7193_STAT_CH3         (1 << 3) // Channel 3. 
-#define AD7193_STAT_CH2         (1 << 2) // Channel 2. 
-#define AD7193_STAT_CH1         (1 << 1) // Channel 1. 
-#define AD7193_STAT_CH0         (1 << 0) // Channel 0. 
+#define AD7193_STAT_NOREF       (1 << 5) // Error no external reference.
+#define AD7193_STAT_PARITY      (1 << 4) // Parity check of the data register.
+#define AD7193_STAT_CH3         (1 << 3) // Channel 3.
+#define AD7193_STAT_CH2         (1 << 2) // Channel 2.
+#define AD7193_STAT_CH1         (1 << 1) // Channel 1.
+#define AD7193_STAT_CH0         (1 << 0) // Channel 0.
 
 /* Mode Register Bit Designations (AD7193_REG_MODE) */
 #define AD7193_MODE_SEL(x)      (((unsigned long)(x) & 0x7) << 21) // Operation Mode Select.
@@ -115,8 +113,8 @@
 /* Mode Register: AD7193_MODE_CLKSRC(x) options */
 #define AD7193_CLK_EXT_MCLK1_2          0 // External crystal. The external crystal
                                           // is connected from MCLK1 to MCLK2.
-#define AD7193_CLK_EXT_MCLK2            1 // External Clock applied to MCLK2 
-#define AD7193_CLK_INT                  2 // Internal 4.92 MHz clock. 
+#define AD7193_CLK_EXT_MCLK2            1 // External Clock applied to MCLK2
+#define AD7193_CLK_INT                  2 // Internal 4.92 MHz clock.
                                           // Pin MCLK2 is tristated.
 #define AD7193_CLK_INT_CO               3 // Internal 4.92 MHz clock. The internal
                                           // clock is available on MCLK2.
@@ -149,7 +147,7 @@
 #define AD7193_CH_6      6 // AIN5(+) - AIN6(-);       AIN7 - AINCOM
 #define AD7193_CH_7      7 // AIN7(+) - AIN8(-);       AIN8 - AINCOM
 #define AD7193_CH_TEMP   8 //           Temperature sensor
-#define AD7193_CH_SHORT  9 // AIN2(+) - AIN2(-);       AINCOM(+) - AINCOM(-) 
+#define AD7193_CH_SHORT  9 // AIN2(+) - AIN2(-);       AINCOM(+) - AINCOM(-)
 
 /* Configuration Register: AD7193_CONF_GAIN(x) options */
 //                              ADC Input Range (5 V Reference)
@@ -174,51 +172,92 @@
 #define AD7193_GPOCON_P0DAT     (1 << 0) // P0 state
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc	*spi_desc;
+	/* GPIO */
+	gpio_desc *gpio_cs;
+	gpio_desc *gpio_miso;
+	/* Device Settings */
+	unsigned char currentPolarity;
+	unsigned char currentGain;
+} ad7193_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t gpio_cs;
+	int8_t gpio_miso;
+	/* Device Settings */
+	unsigned char currentPolarity;
+	unsigned char currentGain;
+} ad7193_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Checks if the AD7139 part is present. */
-char AD7193_Init(void);
+char AD7193_Init(ad7193_dev **device,
+		    ad7193_init_param init_param);
+
+/*! Free the resources allocated by AD7193_Init(). */
+int32_t AD5628_remove(ad7193_dev *dev);
 
 /*! Writes data into a register. */
-void AD7193_SetRegisterValue(unsigned char registerAddress,
+void AD7193_SetRegisterValue(ad7193_dev *dev,
+			     unsigned char registerAddress,
                              unsigned long registerValue,
                              unsigned char bytesNumber,
-                             unsigned char modifyCS);
+			     unsigned char modifyCS);
 
 /*! Reads the value of a register. */
-unsigned long AD7193_GetRegisterValue(unsigned char registerAddress,
+unsigned long AD7193_GetRegisterValue(ad7193_dev *dev,
+				      unsigned char registerAddress,
                                       unsigned char bytesNumber,
-                                      unsigned char modifyCS);
+				      unsigned char modifyCS);
 
 /*! Resets the device. */
-void AD7193_Reset(void);
+void AD7193_Reset(ad7193_dev *dev);
 
 /*! Set device to idle or power-down. */
-void AD7193_SetPower(unsigned char pwrMode);
+void AD7193_SetPower(ad7193_dev *dev,
+		     unsigned char pwrMode);
 
 /*! Waits for RDY pin to go low. */
-void AD7193_WaitRdyGoLow(void);
+void AD7193_WaitRdyGoLow(ad7193_dev *dev);
 
 /*! Selects the channel to be enabled. */
-void AD7193_ChannelSelect(unsigned short channel);
+void AD7193_ChannelSelect(ad7193_dev *dev,
+			  unsigned short channel);
 
 /*! Performs the given calibration to the specified channel. */
-void AD7193_Calibrate(unsigned char mode, unsigned char channel);
+void AD7193_Calibrate(ad7193_dev *dev,
+		      unsigned char mode,
+		      unsigned char channel);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
-void AD7193_RangeSetup(unsigned char polarity, unsigned char range);
+void AD7193_RangeSetup(ad7193_dev *dev,
+		       unsigned char polarity,
+		       unsigned char range);
 
 /*! Returns the result of a single conversion. */
-unsigned long AD7193_SingleConversion(void);
+unsigned long AD7193_SingleConversion(ad7193_dev *dev);
 
 /*! Returns the average of several conversion results. */
-unsigned long AD7193_ContinuousReadAvg(unsigned char sampleNumber);
+unsigned long AD7193_ContinuousReadAvg(ad7193_dev *dev,
+				       unsigned char sampleNumber);
 
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
-float AD7193_TemperatureRead(void);
+float AD7193_TemperatureRead(ad7193_dev *dev);
 
 /*! Converts 24-bit raw data to volts. */
-float AD7193_ConvertToVolts(unsigned long rawData, float vRef);
+float AD7193_ConvertToVolts(ad7193_dev *dev,
+			    unsigned long rawData,
+			    float vRef);
 
 #endif /* __AD7193_H__ */
