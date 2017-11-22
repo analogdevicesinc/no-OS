@@ -145,60 +145,96 @@
 #define AD7156_CHANNEL2                 2
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+} ad7156_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+} ad7156_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*!< Performs a burst read of a specified number of registers. */
-void AD7156_GetRegisterValue(unsigned char* pReadData,
+void AD7156_GetRegisterValue(ad7156_dev *dev,
+			     unsigned char* pReadData,
                              unsigned char registerAddress,
                              unsigned char bytesNumber);
 
 /*!< Writes data into one or two registers.. */
-void AD7156_SetRegisterValue(unsigned short registerValue,
+void AD7156_SetRegisterValue(ad7156_dev *dev,
+			     unsigned short registerValue,
                              unsigned char  registerAddress,
                              unsigned char  bytesNumber);
 /*!< Initializes the communication peripheral and checks if the device is
     present. */
-char AD7156_Init(void);
+char AD7156_Init(ad7156_dev **device,
+		 ad7156_init_param init_param);
+
+/*! Free the resources allocated by ad7156_init(). */
+int32_t AD7156_remove(ad7156_dev *dev);
 
 /*!< Resets the device. */
-void AD7156_Reset(void);
+void AD7156_Reset(ad7156_dev *dev);
 
 /*!< Sets the converter mode of operation. */
-void AD7156_SetPowerMode(unsigned char pwrMode);
+void AD7156_SetPowerMode(ad7156_dev *dev,
+			 unsigned char pwrMode);
 
 /*!< Enables or disables conversion on the selected channel. */
-void AD7156_ChannelState(unsigned char channel, unsigned char enableConv);
+void AD7156_ChannelState(ad7156_dev *dev,
+			 unsigned char channel,
+			 unsigned char enableConv);
 
 /*!< Sets the input range of the specified channel. */
-void AD7156_SetRange(unsigned channel, unsigned char range);
+void AD7156_SetRange(ad7156_dev *dev,
+		     unsigned channel,
+		     unsigned char range);
 
 /*!< Reads the range bits from the device and returns the range in pF. */
-float AD7156_GetRange(unsigned channel);
+float AD7156_GetRange(ad7156_dev *dev,
+		      unsigned channel);
 
 /*!< Selects the threshold mode of operation. */
-void AD7156_SetThresholdMode(unsigned char thrMode, unsigned char thrFixed);
+void AD7156_SetThresholdMode(ad7156_dev *dev,
+			     unsigned char thrMode,
+			     unsigned char thrFixed);
 
 /*!< Writes to the threshold register when threshold fixed mode is enabled. */
-void AD7156_SetThreshold(unsigned char channel, float pFthr);
+void AD7156_SetThreshold(ad7156_dev *dev,
+			 unsigned char channel,
+			 float pFthr);
 
 /*!< Writes a value(pF) to the sensitivity register. This functions
     should be used when adaptive threshold mode is selected. */
-void AD7156_SetSensitivity(unsigned char channel, float pFsensitivity);
+void AD7156_SetSensitivity(ad7156_dev *dev,
+			   unsigned char channel,
+			   float pFsensitivity);
 
 /*!< Reads a 12-bit sample from the selected channel */
-unsigned short AD7156_ReadChannelData(unsigned char channel);
+unsigned short AD7156_ReadChannelData(ad7156_dev *dev,
+				      unsigned char channel);
 
 /*!< Waits for a finished CDC conversion and reads a 12-bit sample from
     the selected channel. */
-unsigned short AD7156_WaitReadChannelData(unsigned char channel);
+unsigned short AD7156_WaitReadChannelData(ad7156_dev *dev,
+					  unsigned char channel);
 
 /*!< Reads a sample the selected channel and converts the data to
    picofarads(pF). */
-float AD7156_ReadChannelCapacitance(unsigned char channel);
+float AD7156_ReadChannelCapacitance(ad7156_dev *dev,
+				    unsigned char channel);
 
 /*!< Waits for a finished CDC conversion the selected channel, reads a
     sample and converts the data to picofarads(pF). */
-float AD7156_WaitReadChannelCapacitance(unsigned char channel);
+float AD7156_WaitReadChannelCapacitance(ad7156_dev *dev,
+					unsigned char channel);
 
 #endif	/* __AD7156_H__ */
