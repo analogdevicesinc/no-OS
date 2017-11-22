@@ -44,30 +44,41 @@
 #define __AD7091R_H__
 
 /******************************************************************************/
-/********************************* AD7091R ************************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/* SPI slave device ID */
-#define AD7091R_SLAVE_ID    1
+typedef struct {
+	/* SPI */
+	spi_desc	*spi_desc;
+} ad7091r_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+} ad7091r_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the SPI communication peripheral. */
-char AD7091R_Init(void);
+char AD7091R_Init(ad7091r_dev **device,
+		  ad7091r_init_param init_param);
+
+/*! Free the resources allocated by ad7091r_init(). */
+int32_t ad5686_remove(ad7091r_dev *dev);
 
 /*! Initiate a software reset of the device. */
-void AD7091R_SoftwareReset(void);
+void AD7091R_SoftwareReset(ad7091r_dev *dev);
 
 /*! Initiates one conversion and reads back the result. */
-unsigned short AD7091R_ReadSample(void);
+unsigned short AD7091R_ReadSample(ad7091r_dev *dev);
 
 /*! Puts the device in power-down mode. */
-void AD7091R_PowerDown(void);
+void AD7091R_PowerDown(ad7091r_dev *dev);
 
 /*! Powers up the device. */
-void AD7091R_PowerUp(void);
+void AD7091R_PowerUp(ad7091r_dev *dev);
 
 /*! Converts a 12-bit raw sample to volts. */
 float AD7091R_ConvertToVolts(short rawSample, float vRef);
