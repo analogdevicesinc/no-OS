@@ -151,11 +151,17 @@
 typedef struct {
 	/* I2C */
 	i2c_desc	*i2c_desc;
+	/* Device Settings */
+	float ad7156Channel1Range;
+	float ad7156Channel2Range;
 } ad7156_dev;
 
 typedef struct {
 	/* I2C */
 	i2c_init_param	i2c_init;
+	/* Device Settings */
+	float ad7156Channel1Range;
+	float ad7156Channel2Range;
 } ad7156_init_param;
 
 /******************************************************************************/
