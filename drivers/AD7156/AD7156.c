@@ -47,12 +47,6 @@
 #include "AD7156.h"
 
 /******************************************************************************/
-/************************ Variables Declarations ******************************/
-/******************************************************************************/
-float ad7156Channel1Range = 2;
-float ad7156Channel2Range = 2;
-
-/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -122,6 +116,9 @@ char AD7156_Init(ad7156_dev **device,
 	dev = (ad7156_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
+
+	dev->ad7156Channel1Range = init_param.ad7156Channel1Range;
+	dev->ad7156Channel2Range = init_param.ad7156Channel2Range;
 
     status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
     AD7156_GetRegisterValue(dev,
@@ -273,12 +270,12 @@ void AD7156_SetRange(ad7156_dev *dev,
     /* Update global variables that hold range information. */
     if(channel == 1)
     {
-        ad7156Channel1Range = AD7156_GetRange(dev,
+        dev->ad7156Channel1Range = AD7156_GetRange(dev,
 					      channel);
     }
     else
     {
-        ad7156Channel2Range = AD7156_GetRange(dev,
+        dev->ad7156Channel2Range = AD7156_GetRange(dev,
 					      channel);
     }
 }
@@ -324,11 +321,11 @@ float AD7156_GetRange(ad7156_dev *dev,
     /* Update global variables that hold range information. */
     if(channel == 1)
     {
-        ad7156Channel1Range = range;
+        dev->ad7156Channel1Range = range;
     }
     else
     {
-        ad7156Channel2Range = range;
+        dev->ad7156Channel2Range = range;
     }
 
     return range;
@@ -431,7 +428,7 @@ void AD7156_SetSensitivity(ad7156_dev *dev,
 
     sensitivityRegAddr = (channel == 1) ? AD7156_REG_CH1_SENS_THRSH_H :
                                           AD7156_REG_CH2_SENS_THRSH_H;
-    range = (channel == 1) ? ad7156Channel1Range : ad7156Channel2Range;
+    range = (channel == 1) ? dev->ad7156Channel1Range : dev->ad7156Channel2Range;
     rawSensitivity = (unsigned short)(pFsensitivity * 0xA00 / range);
     rawSensitivity = (rawSensitivity << 4) & 0x0FF0;
     AD7156_SetRegisterValue(dev,
@@ -535,7 +532,7 @@ float AD7156_ReadChannelCapacitance(ad7156_dev *dev,
     float chRange = 0;
     float pFdata = 0;
 
-    chRange = (channel == 1) ? ad7156Channel1Range : ad7156Channel2Range;
+    chRange = (channel == 1) ? dev->ad7156Channel1Range : dev->ad7156Channel2Range;
     rawCh = AD7156_ReadChannelData(dev,
 				   channel);
     if(rawCh < 0x3000)
@@ -568,7 +565,7 @@ float AD7156_WaitReadChannelCapacitance(ad7156_dev *dev,
     float chRange = 0;
     float pFdata = 0;
 
-    chRange = (channel == 1) ? ad7156Channel1Range : ad7156Channel2Range;
+    chRange = (channel == 1) ? dev->ad7156Channel1Range : dev->ad7156Channel2Range;
     rawCh = AD7156_WaitReadChannelData(dev,
 				       channel);
     if(rawCh < 0x3000)
