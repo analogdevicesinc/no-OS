@@ -131,6 +131,10 @@ int32_t dmac_start_transaction(dmac_core dma)
 	}
 	while((reg_val & (1 << dma.transfer->id)) != (1 << dma.transfer->id));
 
+#ifdef XILINX
+	Xil_DCacheInvalidateRange(dma.transfer->start_address, (2 * dma.transfer->no_of_samples));
+#endif
+
 	return 0;
 }
 
