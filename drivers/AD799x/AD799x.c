@@ -43,13 +43,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "AD799x.h"    // AD799x definitions.
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-static char bitsNumber      = 0;
-static char i2cSlaveAddress = 0;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -58,70 +55,98 @@ static char i2cSlaveAddress = 0;
 /***************************************************************************//**
  * @brief Initializes I2C.
  *
- * @param partNumber    - The name of the device 
- *
- * @param deviceVersion - Version of the device.
- *                        Example:  0 - refers to AD799x-0;
- *                                  1 - refers to AD799x-1.
+ * @param device - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return status       - Initialization status.
  *                        Example: -1 - Initialization failed;
  *                                  0 - Initialization succeeded.
 *******************************************************************************/
-char AD799x_Init(char partNumber, char deviceVersion)
+char AD799x_Init(ad799x_dev **device,
+		 ad799x_init_param init_param)
 {
+	ad799x_dev *dev;
     char status = -1;
-    
+
+	dev = (ad799x_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
     /* Initialize I2C peripheral. */
-    status = I2C_Init(100000);
-    /* Determine which slave address to use. */
-    i2cSlaveAddress = (deviceVersion) ? AD799X_1_ADDRESS : AD799X_0_ADDRESS;
+	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+
     /* Determine the number of bits available for a conversion. */
-    switch(partNumber)
+    switch(init_param.partNumber)
     {
         case AD7991:
-            bitsNumber = 12;
+            dev->bitsNumber = 12;
             break;
         case AD7995:
-            bitsNumber = 10;
+            dev->bitsNumber = 10;
             break;
         case AD7999:
-            bitsNumber = 8;
-            break;            
+            dev->bitsNumber = 8;
+            break;
     }
-    
+
+	*device = dev;
+
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD799x_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t adf799x_remove(ad799x_dev *dev)
+{
+	int32_t ret;
+
+	ret = i2c_remove(dev->i2c_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Writes data into the Configuration Register.
  *
+ * @param dev           - The device structure.
  * @param registerValue - Data value to write.
  *
  * @return None.
 *******************************************************************************/
-void AD799x_SetConfigurationReg(unsigned char registerValue)
-{    
-    I2C_Write(i2cSlaveAddress, &registerValue, 1, 1);        
+void AD799x_SetConfigurationReg(ad799x_dev *dev,
+				unsigned char registerValue)
+{
+	i2c_write(dev->i2c_desc, &registerValue, 1, 1);
 }
 
 /***************************************************************************//**
  * @brief Reads the High byte and the Low byte of the conversion.
  *
- * @param convValue - It is used to store the conversion value. 
+ * @param dev       - The device structure.
+ * @param convValue - It is used to store the conversion value.
  * @param channel   - Stores the channel number for the current conversion.
  *
  * @return none.
 *******************************************************************************/
-void AD799x_GetConversionResult(short* convValue, char* channel)
+void AD799x_GetConversionResult(ad799x_dev *dev,
+				short* convValue,
+				char* channel)
 {
     unsigned char rxData[2] = {0, 0};
     short         convWord  = 0;
 
-    I2C_Read(i2cSlaveAddress, rxData, 2, 1);
+	i2c_read(dev->i2c_desc, rxData, 2, 1);
     convWord = (rxData[0] << 8) + rxData[1];
     *channel = (convWord & 0x3000) >> 12;
-    *convValue = (convWord & 0x0FFF) >> (12 - bitsNumber);
+    *convValue = (convWord & 0x0FFF) >> (12 - dev->bitsNumber);
 }
 
 /***************************************************************************//**
@@ -132,11 +157,13 @@ void AD799x_GetConversionResult(short* convValue, char* channel)
  *
  * @return voltage  - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD799x_ConvertToVolts(short rawSample, float vRef)
+float AD799x_ConvertToVolts(ad799x_dev *dev,
+			    short rawSample,
+			    float vRef)
 {
     float voltage = 0;
-    
-    voltage = vRef * (float)rawSample / (1 << bitsNumber);
-    
+
+    voltage = vRef * (float)rawSample / (1 << dev->bitsNumber);
+
     return voltage;
 }

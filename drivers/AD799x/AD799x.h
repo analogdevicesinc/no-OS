@@ -44,21 +44,8 @@
 #define __AD799X_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /******************************** AD799x **************************************/
 /******************************************************************************/
-
-/* Supported devices */
-#define AD7991          0
-#define AD7995          1
-#define AD7999          2
-
-#define AD799X_0_ADDRESS          0x28 // I2C address of AD799x-0 .
-#define AD799X_1_ADDRESS          0x29 // I2C address of AD799x-1 .
 
 /* Configuration Register definition. */
 #define AD799X_CHANNEL(ch)        ((1 << ch) << 4)
@@ -68,19 +55,53 @@
 #define AD799X_SAMPLE_DELAY	  (1 << 0)
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/* Supported devices */
+typedef enum {
+	ID_AD7991,
+	ID_AD7995,
+	ID_AD7999
+} ad799x_type;
+
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+	/* Device Settings */
+	uint8_t         bitsNumber;
+} ad799x_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+	/* Device Settings */
+	ad799x_type	partNumber;
+} ad799x_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes I2C. */
-char AD799x_Init(char partNumber, char deviceVersion);
+char AD799x_Init(ad799x_dev **device,
+		 ad799x_init_param init_param);
+
+/*! Free the resources allocated by AD799x_Init(). */
+int32_t adf799x_remove(ad799x_dev *dev);
 
 /*! Writes data into the Configuration Register. */
-void AD799x_SetConfigurationReg(unsigned char registerValue);
+void AD799x_SetConfigurationReg(ad799x_dev *dev,
+				unsigned char registerValue);
 
 /*! Reads the High byte and the Low byte of the conversion. */
-void AD799x_GetConversionResult(short* convValue, char* channel);
+void AD799x_GetConversionResult(ad799x_dev *dev,
+				short* convValue,
+				char* channel);
 
 /*! Converts a raw sample to volts.*/
-float AD799x_ConvertToVolts(short rawSample, float vRef);
+float AD799x_ConvertToVolts(ad799x_dev *dev,
+			    short rawSample,
+			    float vRef);
 
 #endif /* __AD799X_H__ */
