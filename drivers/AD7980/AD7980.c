@@ -43,8 +43,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "AD7980.h"           // AD7980 definitions.
-#include "Communication.h"    // Communication definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -53,40 +55,85 @@
 /***************************************************************************//**
  * @brief Initializes the communication peripheral.
  *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
  * @return status - Initialization status.
  *                  Example: -1 - Initialization failed;
  *                            0 - Initialization succeeded.
 *******************************************************************************/
-char AD7980_Init(void)
+char AD7980_Init(adf7980_dev **device,
+		 adf7980_init_param init_param)
 {
-    unsigned char status = 0;
-    
-    status = SPI_Init(0, 1000000, 1, 1);
-    
+	adf7980_dev *dev;
+	unsigned char status;
+
+	dev = (adf7980_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* SPI */
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	/* GPIO */
+	status |= gpio_get(&dev->gpio_cs, init_param.gpio_cs);
+
+	if (dev->gpio_cs)
+		status |= gpio_direction_output(dev->gpio_cs,
+						GPIO_HIGH);
+
+	*device = dev;
+
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD7980_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t adf7980_remove(adf7980_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_cs);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Initiates conversion and reads data.
  *
+ * @param dev           - The device structure.
+ *
  * @return receivedData - Data read from the ADC.
 *******************************************************************************/
-unsigned short AD7980_Conversion(void)
+unsigned short AD7980_Conversion(adf7980_dev *dev)
 {
 	unsigned short receivedData = 0;
 	unsigned char  txData[1] = {0};
 	unsigned char  rxData[2] = {0, 0};
-	
+
     txData[0] = 0x7F;
-	SPI_Write(0, txData, 1);
+	spi_write_and_read(dev->spi_desc,
+			   txData,
+			   1);
 	AD7980_CS_LOW;
     rxData[0] = 0xFF;
     rxData[1] = 0xFF;
-	SPI_Read(0, rxData, 2);
+	spi_write_and_read(dev->spi_desc,
+			   rxData,
+			   2);
 	AD7980_CS_HIGH;
 	receivedData = (rxData[0] << 8) + rxData[1];
-	
-	return(receivedData);	
+
+	return(receivedData);
 }
 
 /***************************************************************************//**
@@ -100,8 +147,8 @@ unsigned short AD7980_Conversion(void)
 float AD7980_ConvertToVolts(unsigned short rawSample, float vRef)
 {
     float voltage = 0;
-    
+
     voltage = vRef * (float)rawSample / (1ul << 16);
-    
+
     return voltage;
 }
