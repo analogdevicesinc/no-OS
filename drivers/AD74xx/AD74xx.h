@@ -44,51 +44,77 @@
 #define __AD74XX_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /******************************** AD74XX **************************************/
 /******************************************************************************/
 
-/* Supported devices. */
-#define AD7466          12
-#define AD7467          10
-#define AD7468          8
-#define AD7475          12
-#define AD7476          12
-#define AD7476A         12
-#define AD7477          10
-#define AD7477A         10
-#define AD7478          8
-#define AD7478A         8
-#define AD7495          12
-
-/* SPI slave device ID */
-#define AD74XX_SLAVE_ID         1
-
 /* AD74XX Chip Select Pin declaration */
-#define AD74XX_CS_LOW           SPI_CS_LOW
-#define AD74XX_CS_HIGH          SPI_CS_HIGH
+#define AD74XX_CS_LOW           gpio_set_value(dev->gpio_cs,  \
+			        GPIO_LOW)
+#define AD74XX_CS_HIGH          gpio_set_value(dev->gpio_cs,  \
+			        GPIO_HIGH)
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/* Supported devices */
+typedef enum {
+	ID_AD7466  = 12,
+	ID_AD7467  = 10,
+	ID_AD7468  = 8,
+	ID_AD7475  = 12,
+	ID_AD7476  = 12,
+	ID_AD7476A = 12,
+	ID_AD7477  = 10,
+	ID_AD7477A = 10,
+	ID_AD7478  = 8,
+	ID_AD7478A = 8,
+	ID_AD7495  = 12
+} ad74xx_type;
+
+typedef struct {
+	/* SPI */
+	spi_desc	*spi_desc;
+	/* GPIO */
+	gpio_desc	*gpio_cs;
+	/* Device Settings */
+	char		deviceBitsNumber;
+	ad74xx_type	partNumber;
+} ad74xx_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	uint8_t		gpio_cs;
+	/* Device Settings */
+	char		deviceBitsNumber;
+	ad74xx_type	partNumber;
+} ad74xx_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes device. */
-char AD74xx_Init(char partNumber);
+char AD74xx_Init(ad74xx_dev **device,
+		 ad74xx_init_param init_param);
+
+/*! Free the resources allocated by AD74xx_Init(). */
+int32_t AD74xx_remove(ad74xx_dev *dev);
 
 /*! Powers down the device. */
-void AD74xx_PowerDown(void);
+void AD74xx_PowerDown(ad74xx_dev *dev);
 
 /*! Powers up the device by performing a dummy read. */
-void AD74xx_PowerUp(void);
+void AD74xx_PowerUp(ad74xx_dev *dev);
 
 /*! Reads the conversion value. */
-unsigned short AD74xx_GetRegisterValue(void);
+unsigned short AD74xx_GetRegisterValue(ad74xx_dev *dev);
 
 /*! Converts a raw sample to volts. */
-float AD74xx_ConvertToVolts(unsigned short rawValue, float vRef);
+float AD74xx_ConvertToVolts(ad74xx_dev *dev,
+			    unsigned short rawValue,
+			    float vRef);
 
 #endif /* __AD74XX_H__ */
