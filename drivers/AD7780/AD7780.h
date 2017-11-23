@@ -43,31 +43,36 @@
 #define __AD7780_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /************************** AD7780 Definitions ********************************/
 /******************************************************************************/
 
 /* DOUT/RDY pin */
-#define AD7780_RDY_STATE        SPI_MISO
+#define AD7780_RDY_STATE(value) gpio_get_value(dev->gpio_miso,          \
+		                &value)
 
 /* PDRST pin */
-#define AD7780_PDRST_PIN_OUT    SPI_CS_PIN_OUT
-#define AD7780_PDRST_HIGH       SPI_CS_HIGH
-#define AD7780_PDRST_LOW        SPI_CS_LOW
+#define AD7780_PDRST_PIN_OUT    gpio_direction_output(dev->gpio_pdrst,     \
+					              GPIO_HIGH);
+#define AD7780_PDRST_HIGH       gpio_set_value(dev->gpio_pdrst,            \
+			        GPIO_HIGH)
+#define AD7780_PDRST_LOW        gpio_set_value(dev->gpio_pdrst,            \
+			        GPIO_LOW)
 
 /* FILTER pin */
-#define AD7780_FILTER_PIN_OUT   GPIO1_PIN_OUT
-#define AD7780_FILTER_HIGH      GPIO1_HIGH
-#define AD7780_FILTER_LOW       GPIO1_LOW
+#define AD7780_FILTER_PIN_OUT   gpio_direction_output(dev->gpio_filter, \
+					              GPIO_HIGH);
+#define AD7780_FILTER_HIGH      gpio_set_value(dev->gpio_filter,        \
+			        GPIO_HIGH)
+#define AD7780_FILTER_LOW       gpio_set_value(dev->gpio_filter,        \
+			        GPIO_LOW)
 
 /* GAIN pin */
-#define AD7780_GAIN_PIN_OUT     GPIO2_PIN_OUT
-#define AD7780_GAIN_HIGH        GPIO2_HIGH
-#define AD7780_GAIN_LOW         GPIO2_LOW
+#define AD7780_GAIN_PIN_OUT     gpio_direction_output(dev->gpio_gain,   \
+					              GPIO_HIGH);
+#define AD7780_GAIN_HIGH        gpio_set_value(dev->gpio_gain,          \
+			        GPIO_HIGH)
+#define AD7780_GAIN_LOW         gpio_set_value(dev->gpio_gain,          \
+			        GPIO_LOW)
 
 /* Status bits */
 #define AD7780_STAT_RDY         (1 << 7) // Ready bit.
@@ -82,20 +87,51 @@
 #define AD7780_ID_NUMBER        0x08
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_pdrst;
+	gpio_desc		*gpio_miso;
+	gpio_desc		*gpio_filter;
+	gpio_desc		*gpio_gain;
+} adf7780_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_cs;
+	int8_t		gpio_miso;
+	int8_t		gpio_filter;
+	int8_t		gpio_gain;
+} adf7780_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication peripheral and checks if the device is
 present. */
-char AD7780_Init(void);
+char AD7780_Init(adf7780_dev **device,
+		 adf7780_init_param init_param);
+
+/*! Free the resources allocated by AD7780_Init(). */
+int32_t adf7780_remove(adf7780_dev *dev);
 
 /*! Waits for DOUT/RDY pin to go low. */
-char AD7780_WaitRdyGoLow(void);
+char AD7780_WaitRdyGoLow(adf7780_dev *dev);
 
 /*! Reads a 24-bit sample from the ADC. */
-long AD7780_ReadSample(unsigned char* pStatus);
+long AD7780_ReadSample(adf7780_dev *dev,
+		       unsigned char* pStatus);
 
 /*! Converts the 24-bit raw value to volts. */
-float AD7780_ConvertToVoltage(unsigned long rawSample, float vRef, unsigned char gain);
+float AD7780_ConvertToVoltage(unsigned long rawSample,
+			      float vRef,
+			      unsigned char gain);
 
 #endif /* __AD7780_H__ */
