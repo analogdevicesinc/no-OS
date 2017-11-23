@@ -43,8 +43,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ADP5589.h"			// ADP5589 definitions.
-#include "Communication.h"		// Communication definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -53,38 +55,42 @@
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
  * @param registerValue   - Data value to write.
  *
  * @return None.
 *******************************************************************************/
-void ADP5589_SetRegisterValue(unsigned char registerAddress,
+void ADP5589_SetRegisterValue(adp5589_dev *dev,
+			      unsigned char registerAddress,
                               unsigned char registerValue)
 {
     static unsigned char writeData[2] = {0, 0};
 
     writeData[0] = registerAddress;
     writeData[1] = registerValue;
-    I2C_Write(ADP5589_ADDRESS, writeData, 2, 1);
+	i2c_write(dev->i2c_desc, writeData, 2, 1);
 }
 
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
  *
  * @return registerValue  - Value of the register.
 *******************************************************************************/
-unsigned char ADP5589_GetRegisterValue(unsigned char registerAddress)
+unsigned char ADP5589_GetRegisterValue(adp5589_dev *dev,
+				       unsigned char registerAddress)
 {
     static unsigned char readData[2]   = {0, 0};
     static unsigned char registerValue = 0;
-    
+
     readData[0] = registerAddress;
-    I2C_Write(ADP5589_ADDRESS, readData, 1, 0);
-    I2C_Read(ADP5589_ADDRESS, readData, 1, 1);
+	i2c_write(dev->i2c_desc, readData, 1, 0);
+	i2c_read(dev->i2c_desc, readData, 1, 1);
     registerValue = readData[0];
-    
+
     return registerValue;
 }
 
@@ -92,128 +98,200 @@ unsigned char ADP5589_GetRegisterValue(unsigned char registerAddress)
  * @brief Initializes the communication peripheral and checks if the ADP5589
  *		  part is present.
  *
+ * @param device - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
  * @return status - Result of the initialization procedure.
  *                  Example: -1 - I2C peripheral was not initialized or
  *                                ADP5589 part is not present.
  *                            0 - I2C peripheral is initialized and ADP5589
  *                                part is present.
 *******************************************************************************/
-char ADP5589_Init(void)
+char ADP5589_Init(adp5589_dev **device,
+		  adp5589_init_param init_param)
 {
-    static unsigned char status = 0;
-    
-    status = I2C_Init(100000);
-    if((ADP5589_GetRegisterValue(ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) != 
+	adp5589_dev *dev;
+    static unsigned char status;
+
+	dev = (adp5589_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+    if((ADP5589_GetRegisterValue(dev,ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) !=
     ADP5589_ID)
     {
         status = -1;
     }
     /* Enable internal oscillator and set clock frequency to 500 kHz. */
-    ADP5589_SetRegisterValue(ADP5589_ADR_GENERAL_CFG_B, 
-                             ADP5589_GENERAL_CFG_B_OSC_EN| 
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_GENERAL_CFG_B,
+                             ADP5589_GENERAL_CFG_B_OSC_EN|
                              ADP5589_GENERAL_CFG_B_CORE_FREQ(3));
-                                                     
+
+	*device = dev;
+
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ADP5589_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t adp5589_remove(adp5589_dev *dev)
+{
+	int32_t ret;
+
+	ret = i2c_remove(dev->i2c_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Initializes the PWM generator in continuous mode.
  *
+ * @param dev - The device structure.
+ *
  * @return None.
 *******************************************************************************/
-void ADP5589_InitPwm(void)
+void ADP5589_InitPwm(adp5589_dev *dev)
 {
-    ADP5589_SetRegisterValue(ADP5589_ADR_PWM_CFG, 
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PWM_CFG,
 	         	     ADP5589_PWM_CFG_PWM_EN);
-    ADP5589_SetRegisterValue(ADP5589_ADR_PIN_CONFIG_D, 
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PIN_CONFIG_D,
 	                     ADP5589_PIN_CONFIG_D_R3_EXTEND(2));
 }
 
 /***************************************************************************//**
  * @brief Initializes keyboard decoder.
+ *
+ * @param dev       - The device structure.
  * @param pmodPort  - J1 or J2 connector of PmodIOXP
  *			Example: PMOD_IOXP_J1 - J1 connector.
  *			         PMOD_IOXP_J2 - J2 connector.
+ *
  * @return None.
 *******************************************************************************/
-void ADP5589_InitKey(unsigned char pmodPort)
+void ADP5589_InitKey(adp5589_dev *dev,
+		     unsigned char pmodPort)
 {
     if(!pmodPort)
     {
         /* Config row 0,1,2,3 */
-        ADP5589_SetRegisterValue(ADP5589_ADR_PIN_CONFIG_A,0x0F);
+        ADP5589_SetRegisterValue(dev,
+				 ADP5589_ADR_PIN_CONFIG_A,
+				 0x0F);
         /* Config column 0,1,2,3 */
-        ADP5589_SetRegisterValue(ADP5589_ADR_PIN_CONFIG_B,0x0F);
+        ADP5589_SetRegisterValue(dev,
+				 ADP5589_ADR_PIN_CONFIG_B,
+				 0x0F);
     }
     else
     {
         /* Config row 4,5,6,7 */
-        ADP5589_SetRegisterValue(ADP5589_ADR_PIN_CONFIG_A,0xF0);
+        ADP5589_SetRegisterValue(dev,
+				 ADP5589_ADR_PIN_CONFIG_A,
+				 0xF0);
         /* Config column 4,5,6,7 */
-        ADP5589_SetRegisterValue(ADP5589_ADR_PIN_CONFIG_B,0xF0);		
+        ADP5589_SetRegisterValue(dev,
+				 ADP5589_ADR_PIN_CONFIG_B,
+				 0xF0);
     }
 }
 
 /***************************************************************************//**
  * @brief Sets the PWM On and Off times.
  *
+ * @param dev        - The device structure.
  * @param pwmOffTime - The amount of time in uS for which the PWM pulse is LOW.
  * @param pwmONTime  - The amount of time in uS for which the PWM pulse is HIGH.
  *
  * @return None.
 *******************************************************************************/
-void ADP5589_SetPwm(unsigned short pwmOffTime, unsigned short pwmOnTime)
+void ADP5589_SetPwm(adp5589_dev *dev,
+		    unsigned short pwmOffTime,
+		    unsigned short pwmOnTime)
 {
     unsigned char data = 0;
-	
+
     data = (unsigned char)(pwmOffTime >> 8);
-    ADP5589_SetRegisterValue(ADP5589_ADR_PWM_OFFT_HIGH, data);
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PWM_OFFT_HIGH,
+			     data);
     data = (unsigned char)(pwmOffTime & 0xFF);
-    ADP5589_SetRegisterValue(ADP5589_ADR_PWM_OFFT_LOW, data);
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PWM_OFFT_LOW,
+			     data);
     data = (unsigned char)(pwmOnTime & 0xFF);
-    ADP5589_SetRegisterValue(ADP5589_ADR_PWM_ONT_LOW, data);
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PWM_ONT_LOW,
+			     data);
     data = (unsigned char)(pwmOnTime >> 8);
-    ADP5589_SetRegisterValue(ADP5589_ADR_PWM_ONT_HIGH, data);
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_PWM_ONT_HIGH,
+			     data);
 }
 /***************************************************************************//**
  * @brief Sets the direction of the pins.
  *
+ * @param dev  - The device structure.
+ * @param dev  - The device structure.
  * @param reg  - The address of the direction register to be written.
  * @param val  - The data to be written to the direction register.
  *
  * @return None.
 *******************************************************************************/
-void ADP5589_GpioDirection(unsigned char reg, unsigned char val)
+void ADP5589_GpioDirection(adp5589_dev *dev,
+			   unsigned char reg,
+			   unsigned char val)
 {
-    ADP5589_SetRegisterValue(reg, val);
+    ADP5589_SetRegisterValue(dev,
+			     reg,
+			     val);
 }
 /***************************************************************************//**
  * @brief Reads the state of the pins.
  *
+ * @param dev  - The device structure.
  * @param reg  - The address of the status register to be read.
  *
  * @return val - The value of the register.
 *******************************************************************************/
-unsigned char ADP5589_GetPinState(unsigned char reg)
+unsigned char ADP5589_GetPinState(adp5589_dev *dev,
+				  unsigned char reg)
 {
     unsigned char val = 0;
-	
-    val = ADP5589_GetRegisterValue(reg);
-	
+
+    val = ADP5589_GetRegisterValue(dev,
+				   reg);
+
     return val;
 }
 
 /***************************************************************************//**
  * @brief Sets the state of the pins.
  *
+ * @param dev    - The device structure.
  * @param reg    - The address of the status register to be read.
  * @param state  - The value to be written to the pins.
  *
  * @return none
 *******************************************************************************/
-void ADP5589_SetPinState(unsigned char reg, unsigned char state)
+void ADP5589_SetPinState(adp5589_dev *dev,
+			 unsigned char reg,
+			 unsigned char state)
 {
-    ADP5589_SetRegisterValue(reg,state);
+    ADP5589_SetRegisterValue(dev,
+			     reg,
+			     state);
 }
 
 /***************************************************************************//**
@@ -234,7 +312,7 @@ unsigned char ADP5589_KeyDecode(unsigned char reg,
                                 unsigned char pmodPort)
 {
     unsigned char key = 0;
-	
+
     reg -= 0x30 * pmodPort;
     if(eventType == ADP5589_EVENT_KEY_PRESSED)
     {
@@ -301,26 +379,32 @@ unsigned char ADP5589_KeyDecode(unsigned char reg,
 /***************************************************************************//**
  * @brief Locks the ADP5589 and requests Password for unlock.
  *
+ * @param dev       - The device structure.
  * @param pmodPort  - J1 or J2 connector of PmodIOXP
  *			Example: PMOD_IOXP_J1 - J1 connector.
  *				 PMOD_IOXP_J2 - J2 connector.
  *
  * @return key      - Actual Key on the Pmod-KYPD.
 *******************************************************************************/
-void ADP5589_KeyLock(unsigned char firstEvent,
+void ADP5589_KeyLock(adp5589_dev *dev,
+		     unsigned char firstEvent,
                      unsigned char secondEvent,
                      unsigned char pmodPort)
 {
     unsigned char data = 0;
-    
-    ADP5589_SetRegisterValue(ADP5589_ADR_UNLOCK1,
+
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_UNLOCK1,
             ADP5589_UNLOCK1_UNLOCK1_STATE | (firstEvent + 0x30 * pmodPort));
-    ADP5589_SetRegisterValue(ADP5589_ADR_UNLOCK2,
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_UNLOCK2,
             ADP5589_UNLOCK2_UNLOCK2_STATE | (secondEvent + 0x30 * pmodPort));
-    ADP5589_SetRegisterValue(ADP5589_ADR_LOCK_CFG, ADP5589_LOCK_CFG_LOCK_EN);
+    ADP5589_SetRegisterValue(dev,
+			     ADP5589_ADR_LOCK_CFG, ADP5589_LOCK_CFG_LOCK_EN);
     do
     {
-        data = ADP5589_GetRegisterValue(ADP5589_ADR_STATUS);
+        data = ADP5589_GetRegisterValue(dev,
+					ADP5589_ADR_STATUS);
     }
     while((data & ADP5589_STATUS_LOCK_STAT) != 0);
 }
