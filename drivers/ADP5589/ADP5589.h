@@ -52,9 +52,9 @@
 #define ADP5589_ID		0x10	// Manufacturer ID
 
 /* Register address definitions */
-#define ADP5589_ADR_ID               	0x00	
+#define ADP5589_ADR_ID               	0x00
 #define ADP5589_ADR_INT_STATUS       	0x01
-#define ADP5589_ADR_STATUS           	0x02                            
+#define ADP5589_ADR_STATUS           	0x02
 #define ADP5589_ADR_FIFO1            	0x03
 #define ADP5589_ADR_FIFO2            	0x04
 #define ADP5589_ADR_FIFO3            	0x05
@@ -129,8 +129,8 @@
 #define ADP5589_ADR_PIN_CONFIG_B       	0x4A
 #define ADP5589_ADR_PIN_CONFIG_C       	0x4B
 #define ADP5589_ADR_PIN_CONFIG_D       	0x4C
-#define ADP5589_ADR_GENERAL_CFG_B      	0x4D     
-#define ADP5589_ADR_INT_EN            	0x4E 
+#define ADP5589_ADR_GENERAL_CFG_B      	0x4D
+#define ADP5589_ADR_INT_EN            	0x4E
 
 
 /* Register Bit Mask Definitions. */
@@ -222,13 +222,13 @@
 /* UNLOCK2 Register bits 0x34. */
 #define ADP5589_UNLOCK2_UNLOCK2_STATE	  	(1 << 7)
 #define ADP5589_UNLOCK2_UNLOCK2_UNLOCK2(x) 	(((x) & 0x7F) << 0)
-/* EXT_LOCK_EVENT Register bits 0x35. */ 
+/* EXT_LOCK_EVENT Register bits 0x35. */
 #define ADP5589_EXT_LOCK_EXT_LOCK_STATE		(1 << 7)
 #define ADP5589_EXT_LOCK_EXT_LOCK_EVENT(x) 	(((x) & 0x7F) << 0)
 /* UNLOCK_TIMERS Register bits 0x36. */
 #define ADP5589_UNLOCK_TIMERS_INT_MASK_TIMER(x)	(((x) & 0xF8) << 3)
 #define ADP5589_UNLOCK_TIMERS_UNLOCK_TIMER(x)  	(((x) & 0x07) << 0)
-/* UNLOCK_TIMER bits. */ 
+/* UNLOCK_TIMER bits. */
 #define ADP5589_UNLOCK_TIMER_DIS	        0
 #define ADP5589_UNLOCK_TIMER_1SEC	        1
 #define ADP5589_UNLOCK_TIMER_2SEC	        2
@@ -243,7 +243,7 @@
 #define ADP5589_INT_MASTER_TIMER_2SEC	        2
 #define ADP5589_INT_MASTER_TIMER_30SEC	        (0X1E)
 #define ADP5589_INT_MASTER_TIMER_31SEC	        (0X1F)
-/* LOCK_CFG Register bits 0x37. */ 
+/* LOCK_CFG Register bits 0x37. */
 #define ADP5589_LOCK_CFG_LOCK_EN		(1 << 0)
 /* RESET_CFG Register bits 0x3D. */
 #define ADP5589_RESET_CFG_RESET_PULSE_WIDTH(x)	(((x) & 0x03) << 0)
@@ -251,7 +251,7 @@
 #define ADP5589_RESET_CFG_RST_PASSTHRU_EN	(1 << 5)
 #define ADP5589_RESET_CFG_RESET1_POL		(1 << 6)
 #define ADP5589_RESET_CFG_RESET2_POL		(1 << 7)
-/* RESET_TRIGGER_TIME bits. */ 
+/* RESET_TRIGGER_TIME bits. */
 #define ADP5589_RESET_CFG_RESET_TRIGGER_TIME_IMMED	0
 #define ADP5589_RESET_CFG_RESET_TRIGGER_TIME_1D0SEC	1
 #define ADP5589_RESET_CFG_RESET_TRIGGER_TIME_1D5SEC	2
@@ -265,11 +265,11 @@
 #define ADP5589_RESET_CFG_RESET_PULSE_WIDTH_1MS		1
 #define ADP5589_RESET_CFG_RESET_PULSE_WIDTH_2MS		2
 #define ADP5589_RESET_CFG_RESET_PULSE_WIDTH_10MS	3
-/* PWM_CFG Register bits 0x42. */ 
+/* PWM_CFG Register bits 0x42. */
 #define ADP5589_PWM_CFG_PWM_EN				(1 << 0)
 #define ADP5589_PWM_CFG_PWM_MODE			(1 << 1)
 #define ADP5589_PWM_CFG_PWM_IN_AND			(1 << 2)
-/* CLOCK_DIV_CFG Register bits 0x43. */ 
+/* CLOCK_DIV_CFG Register bits 0x43. */
 #define ADP5589_CLOCK_DIV_CFG_CLK_INV			(1 << 6)
 #define ADP5589_CLOCK_DIV_CFG_CLK_DIV(x)		(((x) & 0x1F) << 1)
 #define ADP5589_CLOCK_DIV_CFG_CLK_DIV_EN		(1 << 0)
@@ -279,7 +279,7 @@
 #define ADP5589_CLOCK_DIV_CFG_CLK_DIV_DIV3		(0X02)
 #define ADP5589_CLOCK_DIV_CFG_CLK_DIV_DIV4		(0X03)
 #define ADP5589_CLOCK_DIV_CFG_CLK_DIV_DIV32		(0X1F)
-/* LOGIC_1_CFG Register bits 0x44. */ 
+/* LOGIC_1_CFG Register bits 0x44. */
 #define ADP5589_LOGIC_1_CFG_LOGIC1_SEL(x)		(((x) & 0x07) << 0)
 #define ADP5589_LOGIC_1_LA1_INV				(1 << 3)
 #define ADP5589_LOGIC_1_LB1_INV				(1 << 4)
@@ -294,26 +294,26 @@
 #define ADP5589_LOGIC_CFG_LOGIC_SEL_IN_LA		(0x05)
 #define ADP5589_LOGIC_CFG_LOGIC_SEL_IN_LB		(0x06)
 #define ADP5589_LOGIC_CFG_LOGIC_SEL_IN_LC		(0x07)
-/* LOGIC_2_CFG Register bits 0x45. */ 
+/* LOGIC_2_CFG Register bits 0x45. */
 #define ADP5589_LOGIC_2_CFG_LOGIC2_SEL(x)		(((x) & 0x07) << 0)
 #define ADP5589_LOGIC_2_LA2_INV				(1 << 3)
 #define ADP5589_LOGIC_2_LB2_INV				(1 << 4)
 #define ADP5589_LOGIC_2_LC2_INV				(1 << 5)
 #define ADP5589_LOGIC_2_LY2_INV				(1 << 6)
 #define ADP5589_LOGIC_2_LY1_CASCADE			(1 << 7)
-/* LOGIC_FF_CFG Register bits 0x46. */ 
+/* LOGIC_FF_CFG Register bits 0x46. */
 #define ADP5589_LOGIC_FF_CFG_FF1_CLR			(1 << 0)
 #define ADP5589_LOGIC_FF_CFG_FF1_SET			(1 << 1)
 #define ADP5589_LOGIC_FF_CFG_FF2_CLR			(1 << 2)
 #define ADP5589_LOGIC_FF_CFG_FF2_SET			(1 << 3)
-/* LOGIC_INT_EVENT_EN Register bits 0x47. */ 
+/* LOGIC_INT_EVENT_EN Register bits 0x47. */
 #define ADP5589_LOGIC_INT_EVENT_EN_LOGIC1_INT_LEVEL	(1 << 0)
 #define ADP5589_LOGIC_INT_EVENT_EN_LOGIC1_EVENT_EN	(1 << 1)
 #define ADP5589_LOGIC_INT_EVENT_EN_LY1_DBNC_DIS		(1 << 2)
 #define ADP5589_LOGIC_INT_EVENT_EN_LOGIC2_INT_LEVEL	(1 << 3)
 #define ADP5589_LOGIC_INT_EVENT_EN_LOGIC2_EVENT_EN	(1 << 4)
 #define ADP5589_LOGIC_INT_EVENT_EN_LY2_DBNC_DIS		(1 << 5)
-/* POLL_TIME_CFG Register bits 0x48. */ 
+/* POLL_TIME_CFG Register bits 0x48. */
 #define ADP5589_POLL_TIME_CFG_KEY_POLL_TIME(x)		(((x) & 0x03) << 0)
 /* KEY_POLL_TIME bits. */
 #define ADP5589_POLL_TIME_CFG_KEY_POLL_TIME_10MS	(0x00)
@@ -325,37 +325,66 @@
 #define ADP5589_EVENT_KEY_PRESSED                       1
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+} adp5589_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+} adp5589_init_param;
+
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Writes data into a register. */
-void ADP5589_SetRegisterValue(unsigned char registerAddress,
+void ADP5589_SetRegisterValue(adp5589_dev *dev,
+			      unsigned char registerAddress,
                               unsigned char registerValue);
 
 /*! Reads the value of a register. */
-unsigned char ADP5589_GetRegisterValue(unsigned char registerAddress);
+unsigned char ADP5589_GetRegisterValue(adp5589_dev *dev,
+				       unsigned char registerAddress);
 
-/* Initializes the communication peripheral and checks if the ADP5589 
+/*! Initializes the communication peripheral and checks if the ADP5589
 	part is present. */
-char ADP5589_Init(void);
+char ADP5589_Init(adp5589_dev **device,
+		  adp5589_init_param init_param);
+
+/*! Free the resources allocated by ADP5589_Init(). */
+int32_t adp5589_remove(adp5589_dev *dev);
 
 /*! Initializes the PWM generator in continuous mode. */
-void ADP5589_InitPwm(void);
+void ADP5589_InitPwm(adp5589_dev *dev);
 
-/* Sets the PWM On and Off times. */
-void ADP5589_SetPwm(unsigned short pwmOffTime, unsigned short pwmOnTime);
+/*! Sets the PWM On and Off times. */
+void ADP5589_SetPwm(adp5589_dev *dev,
+		    unsigned short pwmOffTime,
+		    unsigned short pwmOnTime);
 
 /*! Sets the direction of the pins. */
-void ADP5589_GpioDirection(unsigned char reg, unsigned char val);
+void ADP5589_GpioDirection(adp5589_dev *dev,
+			   unsigned char reg,
+			   unsigned char val);
 
 /*! Reads the state of the pins. */
-unsigned char ADP5589_GetPinState(unsigned char reg);
+unsigned char ADP5589_GetPinState(adp5589_dev *dev,
+				  unsigned char reg);
 
 /*! Sets the state of the pins.*/
-void ADP5589_SetPinState(unsigned char reg, unsigned char state);
+void ADP5589_SetPinState(adp5589_dev *dev,
+			 unsigned char reg,
+			 unsigned char state);
 
 /*! Initializes keyboard decoder. */
-void ADP5589_InitKey(unsigned char pmodPort);
+void ADP5589_InitKey(adp5589_dev *dev,
+		     unsigned char pmodPort);
 
 /*! Decodes the key on the Pmod-KYPD. */
 unsigned char ADP5589_KeyDecode(unsigned char reg,
@@ -363,7 +392,8 @@ unsigned char ADP5589_KeyDecode(unsigned char reg,
                                 unsigned char pmodPort);
 
 /*! Locks the ADP5589 and requests Password for unlock. */
-void ADP5589_KeyLock(unsigned char firstEvent,
+void ADP5589_KeyLock(adp5589_dev *dev,
+		     unsigned char firstEvent,
                      unsigned char secondEvent,
                      unsigned char pmodPort);
 
