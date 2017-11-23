@@ -77,7 +77,7 @@ char AD7780_Init(adf7780_dev **device,
 	if (!dev)
 		return -1;
 
-	initStatus = gpio_get(&dev->gpio_cs, init_param.gpio_cs);
+	initStatus = gpio_get(&dev->gpio_pdrst, init_param.gpio_pdrst);
 	initStatus = gpio_get(&dev->gpio_miso, init_param.gpio_miso);
 	initStatus = gpio_get(&dev->gpio_filter, init_param.gpio_filter);
 	initStatus = gpio_get(&dev->gpio_gain, init_param.gpio_gain);
@@ -130,7 +130,7 @@ int32_t adf7780_remove(adf7780_dev *dev)
 
 	ret = spi_remove(dev->spi_desc);
 
-	ret |= gpio_remove(dev->gpio_cs);
+	ret |= gpio_remove(dev->gpio_pdrst);
 	ret |= gpio_remove(dev->gpio_miso);
 	ret |= gpio_remove(dev->gpio_filter);
 	ret |= gpio_remove(dev->gpio_gain);
