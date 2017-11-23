@@ -100,37 +100,37 @@ int main(void)
 	ad9528_param.channels = &ad9528_channels[0];
 	ad9528_init(&ad9528_param);
 
-	// dac-device-clock (1.2G)
+	// dac-device-clock (1.233G)
 	ad9528_channels[0].channel_num = 2;
 	ad9528_channels[0].channel_divider = 1;
 
-	//adc sysref
+	//adc sysref (4.9M)
 	ad9528_channels[1].channel_num = 8;
-	ad9528_channels[1].channel_divider = 1;
+	ad9528_channels[1].channel_divider = 256;
 
-	// adc-fpga-clock (600M)
+	// adc-fpga-clock (616.5M)
 	ad9528_channels[2].channel_num = 9;
 	ad9528_channels[2].channel_divider = 2;
 
-	// adc sysref clkd
+	// adc dev sysref (4.9M)
 	ad9528_channels[3].channel_num = 7;
-	ad9528_channels[3].channel_divider = 2;
+	ad9528_channels[3].channel_divider = 256;
 
-	// adc-device-clock (1.2G)
+	// adc-device-clock (1.233G)
 	ad9528_channels[4].channel_num = 13;
 	ad9528_channels[4].channel_divider = 1;
 
-	// dac sysref
+	// dac sysref (4.9M)
 	ad9528_channels[5].channel_num = 5;
-	ad9528_channels[5].channel_divider = 1;
+	ad9528_channels[5].channel_divider = 256;
 
-	// dac-fpga-fmc (600M)
+	// dac-fpga-fmc (616.5M)
 	ad9528_channels[6].channel_num = 4;
 	ad9528_channels[6].channel_divider = 2;
 
-	// dac sysref clkd
+	// dac dev sysref (4.9M)
 	ad9528_channels[7].channel_num = 6;
-	ad9528_channels[7].channel_divider = 2;
+	ad9528_channels[7].channel_divider = 256;
 
 	// pllx settings
 
@@ -139,20 +139,21 @@ int main(void)
 	ad9528_param.osc_in_diff_en = 1;
 	ad9528_param.pll2_charge_pump_current_nA = 35000;
 	ad9528_param.pll2_vco_diff_m1 = 3;
-	ad9528_param.pll2_ndiv_a_cnt = 2;
-	ad9528_param.pll2_ndiv_b_cnt = 7;
-	ad9528_param.pll2_n2_div = 12;
+	ad9528_param.pll2_r1_div = 3;
+	ad9528_param.pll2_ndiv_a_cnt = 3;
+	ad9528_param.pll2_ndiv_b_cnt = 27;
+	ad9528_param.pll2_n2_div = 37;
 	ad9528_param.sysref_k_div = 128;
 	ad9528_param.rpole2 = RPOLE2_900_OHM;
-	ad9528_param.rzero= RZERO_3250_OHM;
+	ad9528_param.rzero= RZERO_1850_OHM;
 	ad9528_param.cpole1 = CPOLE1_16_PF;
 
 	// dac settings
 
 	xcvr_getconfig(&ad9152_xcvr);
 	ad9152_xcvr.reconfig_bypass = 0;
-	ad9152_xcvr.ref_clock_khz = 600000;
-	ad9152_xcvr.lane_rate_kbps = 12000000;
+	ad9152_xcvr.ref_clock_khz = 616500;
+	ad9152_xcvr.lane_rate_kbps = 12330000;
 #ifdef XILINX
 	ad9152_xcvr.dev.qpll_enable = 1;
 #endif
@@ -189,16 +190,16 @@ int main(void)
 	ad9152_param.stpl_samples[1][2] = (ad9152_channels[1].pat_data>> 0) & 0xffff;
 	ad9152_param.stpl_samples[1][3] = (ad9152_channels[1].pat_data>>16) & 0xffff;
 	ad9152_param.interpolation = 1;
-	ad9152_param.lane_rate_kbps = 12000000;
+	ad9152_param.lane_rate_kbps = 12330000;
 
 	// adc settings
 
-	ad9680_param.lane_rate_kbps = 12000000;
+	ad9680_param.lane_rate_kbps = 12330000;
 
-	// xcvr_getconfig(&ad9680_xcvr);
+	xcvr_getconfig(&ad9680_xcvr);
 	ad9680_xcvr.reconfig_bypass = 0;
-	ad9680_xcvr.ref_clock_khz = 600000;
-	ad9680_xcvr.lane_rate_kbps = 12000000;
+	ad9680_xcvr.ref_clock_khz = 616500;
+	ad9680_xcvr.lane_rate_kbps = 12330000;
 #ifdef XILINX
 	ad9680_xcvr.dev.qpll_enable = 1;
 #endif
