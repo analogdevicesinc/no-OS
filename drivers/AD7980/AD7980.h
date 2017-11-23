@@ -46,18 +46,42 @@
 /******************************** AD7980 **************************************/
 /******************************************************************************/
 /* AD74XX Chip Select Pin declaration */
-#define AD7980_CS_LOW           SPI_CS_LOW
-#define AD7980_CS_HIGH          SPI_CS_HIGH
+#define AD7980_CS_LOW           gpio_set_value(dev->gpio_cs,  \
+			        GPIO_LOW)
+#define AD7980_CS_HIGH          gpio_set_value(dev->gpio_cs,  \
+			        GPIO_HIGH)
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_cs;
+} adf7980_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_cs;
+} adf7980_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication peripheral. */
-char AD7980_Init(void);
+char AD7980_Init(adf7980_dev **device,
+		 adf7980_init_param init_param);
+
+/*! Free the resources allocated by AD7980_Init(). */
+int32_t adf7980_remove(adf7980_dev *dev);
 
 /*! Initiates conversion and reads data. */
-unsigned short AD7980_Conversion(void);
+unsigned short AD7980_Conversion(adf7980_dev *dev);
 
 /*! Converts a 16-bit raw sample to volts. */
 float AD7980_ConvertToVolts(unsigned short rawSample, float vRef);
