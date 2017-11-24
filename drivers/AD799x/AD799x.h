@@ -88,7 +88,7 @@ char AD799x_Init(ad799x_dev **device,
 		 ad799x_init_param init_param);
 
 /*! Free the resources allocated by AD799x_Init(). */
-int32_t adf799x_remove(ad799x_dev *dev);
+int32_t ad799x_remove(ad799x_dev *dev);
 
 /*! Writes data into the Configuration Register. */
 void AD799x_SetConfigurationReg(ad799x_dev *dev,

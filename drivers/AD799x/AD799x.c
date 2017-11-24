@@ -102,7 +102,7 @@ char AD799x_Init(ad799x_dev **device,
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t adf799x_remove(ad799x_dev *dev)
+int32_t ad799x_remove(ad799x_dev *dev)
 {
 	int32_t ret;
 
