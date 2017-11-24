@@ -206,7 +206,7 @@ char AD7193_Init(ad7193_dev **device,
 		    ad7193_init_param init_param);
 
 /*! Free the resources allocated by AD7193_Init(). */
-int32_t AD5628_remove(ad7193_dev *dev);
+int32_t AD7193_remove(ad7193_dev *dev);
 
 /*! Writes data into a register. */
 void AD7193_SetRegisterValue(ad7193_dev *dev,

@@ -114,7 +114,7 @@ char AD7193_Init(ad7193_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD5628_remove(ad7193_dev *dev)
+int32_t AD7193_remove(ad7193_dev *dev)
 {
 	int32_t status;
 
