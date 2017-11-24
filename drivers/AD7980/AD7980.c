@@ -63,13 +63,13 @@
  *                  Example: -1 - Initialization failed;
  *                            0 - Initialization succeeded.
 *******************************************************************************/
-char AD7980_Init(adf7980_dev **device,
-		 adf7980_init_param init_param)
+char AD7980_Init(ad7980_dev **device,
+		 ad7980_init_param init_param)
 {
-	adf7980_dev *dev;
+	ad7980_dev *dev;
 	unsigned char status;
 
-	dev = (adf7980_dev *)malloc(sizeof(*dev));
+	dev = (ad7980_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -94,7 +94,7 @@ char AD7980_Init(adf7980_dev **device,
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t adf7980_remove(adf7980_dev *dev)
+int32_t ad7980_remove(ad7980_dev *dev)
 {
 	int32_t ret;
 
@@ -114,7 +114,7 @@ int32_t adf7980_remove(adf7980_dev *dev)
  *
  * @return receivedData - Data read from the ADC.
 *******************************************************************************/
-unsigned short AD7980_Conversion(adf7980_dev *dev)
+unsigned short AD7980_Conversion(ad7980_dev *dev)
 {
 	unsigned short receivedData = 0;
 	unsigned char  txData[1] = {0};
