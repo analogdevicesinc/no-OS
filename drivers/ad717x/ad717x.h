@@ -43,42 +43,47 @@
 #ifndef __AD717X_H__
 #define __AD717X_H__
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include <stdint.h>
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
-typedef enum ad717x_crc_mode ad717x_crc_mode;
-
-enum ad717x_crc_mode
-{
+typedef enum {
 	AD717X_DISABLE,
 	AD717X_USE_CRC,
 	AD717X_USE_XOR,
-};
+} ad717x_crc_mode;
 
 /*! AD717X register info */
-typedef struct _ad717x_st_reg
-{
+typedef struct {
 	int32_t addr;
 	int32_t value;
 	int32_t size;
-}ad717x_st_reg;
+} ad717x_st_reg;
 
 /*
  * The structure describes the device and is used with the ad717x driver.
  * @slave_select_id: The ID of the Slave Select to be passed to the SPI calls.
  * @regs: A reference to the register list of the device that the user must
  *       provide when calling the Setup() function.
- * @num_regs: The length of the register list. 
+ * @num_regs: The length of the register list.
  * @userCRC: Error check type to use on SPI transfers.
  */
-struct ad717x_device {
-	uint8_t slave_select_id;
-	ad717x_st_reg *regs;
-	uint8_t num_regs;
-	ad717x_crc_mode useCRC;
-};
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* Device Settings */
+	ad717x_st_reg		*regs;
+	uint8_t			num_regs;
+	ad717x_crc_mode		useCRC;
+} ad717x_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param		spi_init;
+	/* Device Settings */
+	ad717x_st_reg		*regs;
+	uint8_t			num_regs;
+} ad717x_init_param;
 
 /*****************************************************************************/
 /***************** AD717X Register Definitions *******************************/
@@ -240,34 +245,44 @@ struct ad717x_device {
 /*****************************************************************************/
 
 /*! Retrieves a pointer to the register that matches the given address */
-ad717x_st_reg *AD717X_GetReg(struct ad717x_device *device, uint8_t reg_address);
+ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,
+			     uint8_t reg_address);
 
 /*! Reads the value of the specified register. */
-int32_t AD717X_ReadRegister(struct ad717x_device *device, uint8_t addr);
+int32_t AD717X_ReadRegister(ad717x_dev *device,
+			    uint8_t addr);
 
 /*! Writes the value of the specified register. */
-int32_t AD717X_WriteRegister(struct ad717x_device *device, uint8_t);
+int32_t AD717X_WriteRegister(ad717x_dev *device,
+			     uint8_t);
 
 /*! Resets the device. */
-int32_t AD717X_Reset(struct ad717x_device *device);
+int32_t AD717X_Reset(ad717x_dev *device);
 
 /*! Waits until a new conversion result is available. */
-int32_t AD717X_WaitForReady(struct ad717x_device *device, uint32_t timeout);
+int32_t AD717X_WaitForReady(ad717x_dev *device,
+			    uint32_t timeout);
 
 /*! Reads the conversion result from the device. */
-int32_t AD717X_ReadData(struct ad717x_device *device, int32_t* pData);
+int32_t AD717X_ReadData(ad717x_dev *device,
+			int32_t* pData);
 
 /*! Computes the CRC checksum for a data buffer. */
-uint8_t AD717X_ComputeCRC8(uint8_t* pBuf, uint8_t bufSize);
+uint8_t AD717X_ComputeCRC8(uint8_t* pBuf,
+			   uint8_t bufSize);
 
 /*! Computes the XOR checksum for a data buffer. */
-uint8_t AD717X_ComputeXOR8(uint8_t * pBuf, uint8_t bufSize);
+uint8_t AD717X_ComputeXOR8(uint8_t * pBuf,
+			   uint8_t bufSize);
 
 /*! Updates the CRC settings. */
-int32_t AD717X_UpdateCRCSetting(struct ad717x_device *device);
+int32_t AD717X_UpdateCRCSetting(ad717x_dev *device);
 
 /*! Initializes the AD717X. */
-int32_t AD717X_Setup(struct ad717x_device *device, uint8_t slave_select,
-			ad717x_st_reg *regs, uint8_t num_regs);
+int32_t AD717X_Init(ad717x_dev **device,
+		    ad717x_init_param init_param);
+
+/*! Free the resources allocated by AD717X_Init(). */
+int32_t AD717X_remove(ad717x_dev *dev);
 
 #endif /* __AD717X_H__ */
