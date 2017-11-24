@@ -66,14 +66,14 @@
  *                         0 - SPI peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-char AD7780_Init(adf7780_dev **device,
-		 adf7780_init_param init_param)
+char AD7780_Init(ad7780_dev **device,
+		 ad7780_init_param init_param)
 {
-	adf7780_dev *dev;
+	ad7780_dev *dev;
     unsigned char ad7780Status;
     char          initStatus;
 
-	dev = (adf7780_dev *)malloc(sizeof(*dev));
+	dev = (ad7780_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -124,7 +124,7 @@ char AD7780_Init(adf7780_dev **device,
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t adf7780_remove(adf7780_dev *dev)
+int32_t ad7780_remove(ad7780_dev *dev)
 {
 	int32_t ret;
 
@@ -149,7 +149,7 @@ int32_t adf7780_remove(adf7780_dev *dev)
  *         Example: -1 - DOUT/RDY pin is high.
  *                   0 - DOUT/RDY pin is low.
 *******************************************************************************/
-char AD7780_WaitRdyGoLow(adf7780_dev *dev)
+char AD7780_WaitRdyGoLow(ad7780_dev *dev)
 {
     unsigned long timeout = 0xFFFFF;
 	uint8_t wait = 1;
@@ -177,7 +177,7 @@ char AD7780_WaitRdyGoLow(adf7780_dev *dev)
  *
  * @return convSample - The 24-bit sample.
 *******************************************************************************/
-long AD7780_ReadSample(adf7780_dev *dev,
+long AD7780_ReadSample(ad7780_dev *dev,
 		       unsigned char* pStatus)
 {
     unsigned char rxBuff[4]  = {0, 0, 0, 0};

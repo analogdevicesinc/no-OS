@@ -98,7 +98,7 @@ typedef struct {
 	gpio_desc		*gpio_miso;
 	gpio_desc		*gpio_filter;
 	gpio_desc		*gpio_gain;
-} adf7780_dev;
+} ad7780_dev;
 
 typedef struct {
 	/* SPI */
@@ -108,7 +108,7 @@ typedef struct {
 	int8_t		gpio_miso;
 	int8_t		gpio_filter;
 	int8_t		gpio_gain;
-} adf7780_init_param;
+} ad7780_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -116,17 +116,17 @@ typedef struct {
 
 /*! Initializes the communication peripheral and checks if the device is
 present. */
-char AD7780_Init(adf7780_dev **device,
-		 adf7780_init_param init_param);
+char AD7780_Init(ad7780_dev **device,
+		 ad7780_init_param init_param);
 
 /*! Free the resources allocated by AD7780_Init(). */
-int32_t adf7780_remove(adf7780_dev *dev);
+int32_t ad7780_remove(ad7780_dev *dev);
 
 /*! Waits for DOUT/RDY pin to go low. */
-char AD7780_WaitRdyGoLow(adf7780_dev *dev);
+char AD7780_WaitRdyGoLow(ad7780_dev *dev);
 
 /*! Reads a 24-bit sample from the ADC. */
-long AD7780_ReadSample(adf7780_dev *dev,
+long AD7780_ReadSample(ad7780_dev *dev,
 		       unsigned char* pStatus);
 
 /*! Converts the 24-bit raw value to volts. */
