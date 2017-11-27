@@ -42,20 +42,8 @@
 #define _AD9833_H_
 
 /******************************************************************************/
-/******************************* Include Files ********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /********************* Macros and Constants Definitions ***********************/
 /******************************************************************************/
-/* Supported devices */
-typedef enum {
-    ID_AD9833,
-    ID_AD9834,
-    ID_AD9837,
-    ID_AD9838,
-} AD9833_type;
 
 #define AD9833_CTRLB28          (1 << 13)
 #define AD9833_CTRLHLB          (1 << 12)
@@ -71,21 +59,33 @@ typedef enum {
 #define AD9833_CTRLMODE         (1 << 1)
 
 /* GPIOs */
-#define AD9834_PSEL_OUT         GPIO0_PIN_OUT
-#define AD9834_PSEL_LOW         GPIO0_LOW
-#define AD9834_PSEL_HIGH        GPIO0_HIGH
+#define AD9834_PSEL_OUT         gpio_direction_output(dev->gpio_psel,  \
+			        GPIO_HIGH)
+#define AD9834_PSEL_LOW         gpio_set_value(dev->gpio_psel,         \
+			        GPIO_LOW)
+#define AD9834_PSEL_HIGH        gpio_set_value(dev->gpio_psel,         \
+			        GPIO_HIGH)
 
-#define AD9834_FSEL_OUT         GPIO1_PIN_OUT
-#define AD9834_FSEL_LOW         GPIO1_LOW
-#define AD9834_FSEL_HIGH        GPIO1_HIGH
+#define AD9834_FSEL_OUT         gpio_direction_output(dev->gpio_fsel,  \
+			        GPIO_HIGH)
+#define AD9834_FSEL_LOW         gpio_set_value(dev->gpio_fsel,         \
+			        GPIO_LOW)
+#define AD9834_FSEL_HIGH        gpio_set_value(dev->gpio_fsel,         \
+			        GPIO_HIGH)
 
-#define AD9834_RESET_OUT        GPIO2_PIN_OUT
-#define AD9834_RESET_LOW        GPIO2_LOW
-#define AD9834_RESET_HIGH       GPIO2_HIGH
+#define AD9834_RESET_OUT        gpio_direction_output(dev->gpio_reset, \
+			        GPIO_HIGH)
+#define AD9834_RESET_LOW        gpio_set_value(dev->gpio_reset,        \
+			        GPIO_LOW)
+#define AD9834_RESET_HIGH       pio_set_value(dev->gpio_reset,         \
+			        GPIO_HIGH)
 
-#define AD9834_SLEEP_OUT        GPIO3_PIN_OUT
-#define AD9834_SLEEP_LOW        GPIO3_LOW
-#define AD9834_SLEEP_HIGH       GPIO3_HIGH
+#define AD9834_SLEEP_OUT        gpio_direction_output(dev->gpio_sleep, \
+			        GPIO_HIGH)
+#define AD9834_SLEEP_LOW        gpio_set_value(dev->gpio_sleep,        \
+			        GPIO_LOW)
+#define AD9834_SLEEP_HIGH       gpio_set_value(dev->gpio_sleep,         \
+			        GPIO_HIGH)
 
 
 #define BIT_F0ADDRESS           0x4000      // Frequency Register 0 address.
@@ -93,31 +93,87 @@ typedef enum {
 #define BIT_P0ADDRESS           0xC000      // Phase Register 0 address.
 #define BIT_P1ADDRESS           0xE000      // Phase Register 1 address.
 
-#define AD9833_SLAVE_ID         1
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/* Supported devices */
+typedef enum {
+    ID_AD9833,
+    ID_AD9834,
+    ID_AD9837,
+    ID_AD9838,
+} AD9833_type;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_psel;
+	gpio_desc		*gpio_fsel;
+	gpio_desc		*gpio_reset;
+	gpio_desc		*gpio_sleep;
+	/* Device Settings */
+	AD9833_type		act_device;
+	unsigned char		prog_method;
+	unsigned short		ctrlRegValue;
+	unsigned short		testOpbiten;
+} AD9833_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param		spi_init;
+	/* GPIO */
+	int8_t			gpio_psel;
+	int8_t			gpio_fsel;
+	int8_t			gpio_reset;
+	int8_t			gpio_sleep;
+	/* Device Settings */
+	AD9833_type		act_device;
+} AD9833_init_param;
+
+typedef struct {
+    unsigned long mclk;
+    float freq_const;
+} ad9833_chip_info;
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
 /* Initialize the SPI communication with the device. */
-char AD9833_Init(AD9833_type device);
+char AD9833_Init(AD9833_dev **device,
+		 AD9833_init_param init_param);
+/* Free the resources allocated by adf7023_init(). */
+int32_t AD9833_remove(AD9833_dev *dev);
 /* Transmits 16 bits on SPI. */
-void AD9833_TxSpi(short value);
+void AD9833_TxSpi(AD9833_dev *dev,
+		  short value);
 /* Selects the type of output. */
-char AD9833_OutMode(unsigned char vOutMode);
+char AD9833_OutMode(AD9833_dev *dev,
+		    unsigned char vOutMode);
 /* Loads a frequency value in a register. */
-void AD9833_SetFreq(unsigned char registerNumber, unsigned long frequencyValue);
+void AD9833_SetFreq(AD9833_dev *dev,
+		    unsigned char registerNumber,
+		    unsigned long frequencyValue);
 /* Loads a phase value in a register. */
-void AD9833_SetPhase(unsigned char registerNumber, float phaseValue);
+void AD9833_SetPhase(AD9833_dev *dev,
+		     unsigned char registerNumber,
+		     float phaseValue);
 /* Select the frequency register to be used. */
-void AD9833_SelectFreqReg(unsigned char freqReg);
+void AD9833_SelectFreqReg(AD9833_dev *dev,
+			  unsigned char freqReg);
 /* Select the phase register to be used. */
-void AD9833_SelectPhaseReg(unsigned char phaseReg);
+void AD9833_SelectPhaseReg(AD9833_dev *dev,
+			   unsigned char phaseReg);
 /* Enable / Disable the sleep function. */
-void AD9833_SleepMode(unsigned char sleepMode);
+void AD9833_SleepMode(AD9833_dev *dev,
+		      unsigned char sleepMode);
 
-void AD9834_SelectProgMethod(unsigned char value);
+void AD9834_SelectProgMethod(AD9833_dev *dev,
+			     unsigned char value);
 
-void AD9834_LogicOutput(unsigned char opbiten,
+void AD9834_LogicOutput(AD9833_dev *dev,
+			unsigned char opbiten,
                         unsigned char signpib,
                         unsigned char div2);
 
