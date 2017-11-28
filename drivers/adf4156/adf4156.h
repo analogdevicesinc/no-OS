@@ -42,11 +42,6 @@
 #define _ADF4156_H_
 
 /******************************************************************************/
-/******************************* Include Files ********************************/
-/******************************************************************************/
-#include "Communication.h"
-
-/******************************************************************************/
 /********************* Macros and Constants Definitions ***********************/
 /******************************************************************************/
 /* FRAC/INT Register R0 */
@@ -123,25 +118,40 @@
 #define ADF4156_R4_CTRL             0x04
 
 /* GPIO */
-#define ADF4156_LE_OUT              GPIO0_PIN_OUT
-#define ADF4156_LE_LOW              GPIO0_LOW
-#define ADF4156_LE_HIGH             GPIO0_HIGH
+#define ADF4156_LE_OUT              gpio_direction_output(dev->gpio_le,  \
+			            GPIO_HIGH);
+#define ADF4156_LE_LOW              gpio_set_value(dev->gpio_le,         \
+			            GPIO_LOW)
+#define ADF4156_LE_HIGH             gpio_set_value(dev->gpio_le,         \
+			            GPIO_HIGH)
 
-#define ADF4156_MUX_OUT             GPIO1_PIN_OUT
-#define ADF4156_MUX_LOW             GPIO1_LOW
-#define ADF4156_MUX_HIGH            GPIO1_HIGH
+#define ADF4156_MUX_OUT             gpio_direction_output(dev->gpio_mux, \
+			            GPIO_HIGH);
+#define ADF4156_MUX_LOW             gpio_set_value(dev->gpio_mux,        \
+			            GPIO_LOW)
+#define ADF4156_MUX_HIGH            gpio_set_value(dev->gpio_mux,        \
+			            GPIO_HIGH)
 
-#define ADF4156_CE_OUT              GPIO2_PIN_OUT
-#define ADF4156_CE_LOW              GPIO2_LOW
-#define ADF4156_CE_HIGH             GPIO2_HIGH
+#define ADF4156_CE_OUT              gpio_direction_output(dev->gpio_ce,  \
+			            GPIO_HIGH);
+#define ADF4156_CE_LOW              gpio_set_value(dev->gpio_ce,         \
+			            GPIO_LOW)
+#define ADF4156_CE_HIGH             gpio_set_value(dev->gpio_ce,         \
+			            GPIO_HIGH)
 
-#define ADF4156_LE2_OUT             GPIO6_PIN_OUT
-#define ADF4156_LE2_LOW             GPIO6_LOW
-#define ADF4156_LE2_HIGH            GPIO6_HIGH
+#define ADF4156_LE2_OUT             gpio_direction_output(dev->gpio_le2, \
+			            GPIO_HIGH);
+#define ADF4156_LE2_LOW             gpio_set_value(dev->gpio_le2,        \
+			            GPIO_LOW)
+#define ADF4156_LE2_HIGH            gpio_set_value(dev->gpio_le2,        \
+			            GPIO_HIGH)
 
-#define ADF4156_CE2_OUT             GPIO7_PIN_OUT
-#define ADF4156_CE2_LOW             GPIO7_LOW
-#define ADF4156_CE2_HIGH            GPIO7_HIGH
+#define ADF4156_CE2_OUT             gpio_direction_output(dev->gpio_ce2, \
+			            GPIO_HIGH);
+#define ADF4156_CE2_LOW             gpio_set_value(dev->gpio_ce2,        \
+			            GPIO_LOW)
+#define ADF4156_CE2_HIGH            gpio_set_value(dev->gpio_ce2,        \
+			            GPIO_HIGH)
 
 /* Specifications */
 #define ADF4156_MAX_OUT_FREQ        6200          /* MHz */
@@ -161,8 +171,6 @@
 #define ADF4156_REG3                3
 #define ADF4156_REG4                4
 
-#define ADF4156_SLAVE_ID            1
-
 /******************************************************************************/
 /**************************** Types Declarations ******************************/
 /******************************************************************************/
@@ -172,8 +180,7 @@
     ID_ADF4157,
 } ADF4156_type;
 */
-typedef struct
-{
+typedef struct {
         unsigned long       clkin;
         unsigned long       channel_spacing;
         unsigned char       ref_doubler_en;
@@ -182,10 +189,9 @@ typedef struct
         unsigned long       r2_user_settings;
         unsigned long       r3_user_settings;
         unsigned long       r4_user_settings;
-}adf4156_platform_data;
+} adf4156_platform_data;
 
-typedef struct
-{
+typedef struct {
         adf4156_platform_data   *pdata;
         unsigned long       fpfd;           /* Phase Frequency Detector */
         unsigned short      r_cnt;          /* R-counter */
@@ -193,25 +199,50 @@ typedef struct
         unsigned long       r0_int;         /* Integer value */
         unsigned long       r2_mod;         /* Modulus value */
         unsigned long       reg_val[5];     /* Actual register value */
-}adf4156_state;
+} adf4156_state;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_le;
+	gpio_desc		*gpio_ce;
+	/* Device Settings */
+	adf4156_state adf4156_st;
+} adf4156_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_le;
+	int8_t		gpio_ce;
+} adf4156_init_param;
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
 /* Initialize the SPI communication with the device. */
-char ADF4156_Init(void);
+char ADF4156_Init(adf4156_dev **device,
+		  adf4156_init_param init_param);
+
+/* Free the resources allocated by ADF4156_Init(). */
+int32_t ADF4156_remove(adf4156_dev *dev);
 
 /* Transmits 32 bits on SPI. */
-char ADF4156_Set(unsigned long value);
+char ADF4156_Set(adf4156_dev *dev,
+		 unsigned long value);
 
 /* Increases the R counter value until the PFD frequency is smaller than
 ADF4351_MAX_FREQ_PFD. */
-long adf4156_tune_r_cnt(adf4156_state *st, long r_cnt);
+long adf4156_tune_r_cnt(adf4156_dev *dev,
+			long r_cnt);
 
 /* Computes the greatest common divider of two numbers. */
 unsigned long gcd(unsigned long x, unsigned long y);
 
 /* Sets the ADF4156 output frequency. */
-double adf4156_set_freq(adf4156_state *st, double freq);
+double adf4156_set_freq(adf4156_dev *dev,
+			double freq);
 
 #endif /* _ADF4156_H_ */

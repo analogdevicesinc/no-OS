@@ -41,29 +41,38 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "ADF4156.h"
-#include "ADF4156_cfg.h"
-#include "Console.h"
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-adf4156_state adf4156_st;
-
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "adf4156.h"
+#include "adf4156_cfg.h"
 
 /***************************************************************************//**
  * @brief Initialize the SPI communication with the device.
  *
- * @param None.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char ADF4156_Init(void)
+char ADF4156_Init(adf4156_dev **device,
+		  adf4156_init_param init_param)
 {
-    unsigned long   cfgValue = 0;
-    char            status   = -1;
+	adf4156_dev *dev;
+    unsigned long   cfgValue;
+    char            status;
+
+	dev = (adf4156_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* Setup GPIO pads */
+	status = gpio_get(&dev->gpio_le, init_param.gpio_le);
+	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
 
     /* Setup Control GPIO Pins */
     ADF4156_LE_OUT;
@@ -74,19 +83,21 @@ char ADF4156_Init(void)
     //ADF4156_CE2_OUT;
 
     /* Setup SPI Interface */
-    status = SPI_Init(0, 1000000, 0, 1);
+	status |= spi_init(&dev->spi_desc, init_param.spi_init);
 
     /* R4 */
     cfgValue = adf4156_pdata_lpc.r4_user_settings |
                ADF4156_R4_CTRL;
-    ADF4156_Set(cfgValue);
-    adf4156_st.reg_val[ADF4156_REG4] = cfgValue;
+    ADF4156_Set(dev,
+		cfgValue);
+    dev->adf4156_st.reg_val[ADF4156_REG4] = cfgValue;
 
     /* R3 */
     cfgValue = adf4156_pdata_lpc.r3_user_settings |
                ADF4156_R3_CTRL;
-    ADF4156_Set(cfgValue);
-    adf4156_st.reg_val[ADF4156_REG3] = cfgValue;
+    ADF4156_Set(dev,
+		cfgValue);
+    dev->adf4156_st.reg_val[ADF4156_REG3] = cfgValue;
 
     /* R2 */
     cfgValue = adf4156_pdata_lpc.r2_user_settings |
@@ -96,34 +107,62 @@ char ADF4156_Init(void)
                ADF4156_R_CNT(1)                   |
                ADF4156_MOD_WORD(0)                |
                ADF4156_R2_CTRL;
-    ADF4156_Set(cfgValue);
-    adf4156_st.reg_val[ADF4156_REG2] = cfgValue;
+    ADF4156_Set(dev,
+		cfgValue);
+    dev->adf4156_st.reg_val[ADF4156_REG2] = cfgValue;
 
     /* R1 */
     cfgValue = ADF4156_PHASE_VAL(1)     |
                ADF4156_R1_CTRL;
-    ADF4156_Set(cfgValue);
-    adf4156_st.reg_val[ADF4156_REG1] = cfgValue;
+    ADF4156_Set(dev,
+		cfgValue);
+    dev->adf4156_st.reg_val[ADF4156_REG1] = cfgValue;
 
     /* R0 */
     cfgValue = adf4156_pdata_lpc.r0_user_settings |
                ADF4156_INT_VAL(1)                 |
                ADF4156_FRAC_VAL(1)                |
                ADF4156_R0_CTRL;
-    ADF4156_Set(cfgValue);
-    adf4156_st.reg_val[ADF4156_REG0] = cfgValue;
+    ADF4156_Set(dev,
+		cfgValue);
+    dev->adf4156_st.reg_val[ADF4156_REG0] = cfgValue;
+
+	*device = dev;
 
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ADF4156_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ADF4156_remove(adf4156_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_le);
+	ret |= gpio_remove(dev->gpio_ce);
+
+	free(dev);
+
+	return ret;
 }
 
 /**************************************************************************//**
  * @brief Transmits 32 bits on SPI.
  *
+ * @param dev   - The device structure.
  * @param value - Data which will be transmitted.
  *
  * @return none.
 ******************************************************************************/
-char ADF4156_Set(unsigned long value)
+char ADF4156_Set(adf4156_dev *dev,
+		 unsigned long value)
 {
     char          validation  = 0;
     char          status      = 0;
@@ -135,7 +174,9 @@ char ADF4156_Set(unsigned long value)
     txBuffer[3] = (unsigned char)((value & 0x000000FF) >> 0);
 
     ADF4156_LE_LOW;
-    validation = SPI_Write(ADF4156_SLAVE_ID, txBuffer, 4);
+	validation = spi_write_and_read(dev->spi_desc,
+					txBuffer,
+					4);
     if (validation != 4)
     {
         status = -1;
@@ -149,20 +190,22 @@ char ADF4156_Set(unsigned long value)
  * @brief Increases the R counter value until the PFD frequency is
  *        smaller than ADF4351_MAX_FREQ_PFD.
  *
- * @param st    - The selected structure.
+ * @param dev   - The device structure.
  * @param r_cnt - Initial r_cnt value.
  *
  * @return Final r_cnt value.
 *******************************************************************************/
-long adf4156_tune_r_cnt(adf4156_state *st, long r_cnt)
+long adf4156_tune_r_cnt(adf4156_dev *dev,
+			long r_cnt)
 {
-    adf4156_platform_data *pdata = st->pdata;
+    adf4156_platform_data *pdata = dev->adf4156_st.pdata;
 
     do {
             r_cnt++;
-            st->fpfd = (pdata->clkin * (pdata->ref_doubler_en ? 2 : 1)) /
-                       (r_cnt * (pdata->ref_div2_en ? 2 : 1));
-    } while (st->fpfd > ADF4156_MAX_FREQ_PFD);
+            dev->adf4156_st.fpfd = (pdata->clkin * \
+				   (pdata->ref_doubler_en ? 2 : 1)) /
+		                   (r_cnt * (pdata->ref_div2_en ? 2 : 1));
+    } while (dev->adf4156_st.fpfd > ADF4156_MAX_FREQ_PFD);
 
     return r_cnt;
 }
@@ -189,12 +232,13 @@ unsigned long gcd(unsigned long x, unsigned long y)
 /***************************************************************************//**
  * @brief Sets the ADF4156 output frequency.
  *
- * @param st      - The selected structure.
+ * @param dev     - The device structure.
  * @param freq    - The desired frequency value.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
 *******************************************************************************/
-double adf4156_set_freq(adf4156_state *st,double freq)
+double adf4156_set_freq(adf4156_dev *dev,
+			double freq)
 {
         unsigned long long  tmp;
         unsigned long       div_gcd, prescaler, chspc;
@@ -216,72 +260,78 @@ double adf4156_set_freq(adf4156_state *st,double freq)
         }
 
         freq *= 1000000;
-        chspc = st->pdata->channel_spacing;
+        chspc = dev->adf4156_st.pdata->channel_spacing;
 
-        if ((st->pdata->clkin > ADF4156_MAX_FREQ_REFIN) ||
-            (st->pdata->clkin < ADF4156_MIN_FREQ_REFIN))
+        if ((dev->adf4156_st.pdata->clkin > ADF4156_MAX_FREQ_REFIN) ||
+            (dev->adf4156_st.pdata->clkin < ADF4156_MIN_FREQ_REFIN))
         {
             return -1;
         }
 
         do{
                 do{
-                        r_cnt = adf4156_tune_r_cnt(st, r_cnt);
-                        st->r2_mod = st->fpfd / chspc;
+                        r_cnt = adf4156_tune_r_cnt(dev, r_cnt);
+                        dev->adf4156_st.r2_mod = \
+				dev->adf4156_st.fpfd / chspc;
                         if (r_cnt > ADF4156_MAX_R_CNT)
                         {
-                            CONSOLE_Print("Error! R-counter has a too high \
+                            printf("Error! R-counter has a too high \
 value for the selected spacing. Try with a higher spacing value.\r\n");
                             return -1;
                         }
-                   }while ((st->r2_mod > ADF4156_MAX_MODULUS) && r_cnt);
-             st->r_cnt = r_cnt;
-             tmp = freq * (unsigned long long)st->r2_mod + (st->fpfd >> 1);
-             tmp = (unsigned long long)(tmp / st->fpfd);
-             st->r0_fract = tmp % st->r2_mod;
-             tmp = tmp / st->r2_mod;
-             st->r0_int = (unsigned long)tmp;
-        }while (mdiv > st->r0_int);
+                   }while ((dev->adf4156_st.r2_mod > ADF4156_MAX_MODULUS) && r_cnt);
+             dev->adf4156_st.r_cnt = r_cnt;
+             tmp = freq * (unsigned long long)dev->adf4156_st.r2_mod + (dev->adf4156_st.fpfd >> 1);
+             tmp = (unsigned long long)(tmp / dev->adf4156_st.fpfd);
+             dev->adf4156_st.r0_fract = tmp % dev->adf4156_st.r2_mod;
+             tmp = tmp / dev->adf4156_st.r2_mod;
+             dev->adf4156_st.r0_int = (unsigned long)tmp;
+        }while (mdiv > dev->adf4156_st.r0_int);
 
-        if (st->r0_fract && st->r2_mod)
+        if (dev->adf4156_st.r0_fract && dev->adf4156_st.r2_mod)
         {
-            div_gcd = gcd(st->r2_mod, st->r0_fract);
-            st->r2_mod /= div_gcd;
-            st->r0_fract /= div_gcd;
+            div_gcd = gcd(dev->adf4156_st.r2_mod, dev->adf4156_st.r0_fract);
+            dev->adf4156_st.r2_mod /= div_gcd;
+            dev->adf4156_st.r0_fract /= div_gcd;
         }else
         {
-            st->r0_fract = 0;
-            st->r2_mod = 1;
+            dev->adf4156_st.r0_fract = 0;
+            dev->adf4156_st.r2_mod = 1;
         }
 
         /* register R3 */
-        st->reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
-        st->reg_val[ADF4156_REG3] |= (ADF4156_CNT_RST(1));
+        dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
+        dev->adf4156_st.reg_val[ADF4156_REG3] |= (ADF4156_CNT_RST(1));
 
-        ADF4156_Set(st->reg_val[ADF4156_REG3]);
+        ADF4156_Set(dev,
+		    dev->adf4156_st.reg_val[ADF4156_REG3]);
 
         /* register R2 */
-        st->reg_val[ADF4156_REG2] &= ~(ADF4156_MOD_WORD(-1) |
+        dev->adf4156_st.reg_val[ADF4156_REG2] &= ~(ADF4156_MOD_WORD(-1) |
                                        ADF4156_R_CNT(-1)    |
                                        ADF4156_PRESCALER(-1));
-        st->reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(st->r2_mod) |
-                                      ADF4156_R_CNT(st->r_cnt)     |
+        dev->adf4156_st.reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(dev->adf4156_st.r2_mod) |
+                                      ADF4156_R_CNT(dev->adf4156_st.r_cnt)     |
                                       prescaler);
-        ADF4156_Set(st->reg_val[ADF4156_REG2]);
+        ADF4156_Set(dev,
+		    dev->adf4156_st.reg_val[ADF4156_REG2]);
 
         /* register R0 */
-        st->reg_val[ADF4156_REG0] &= ~(ADF4156_INT_VAL(-1) |
+        dev->adf4156_st.reg_val[ADF4156_REG0] &= ~(ADF4156_INT_VAL(-1) |
                                        ADF4156_FRAC_VAL(-1));
-        st->reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(st->r0_int) |
-                                      ADF4156_FRAC_VAL(st->r0_fract));
-        ADF4156_Set(st->reg_val[ADF4156_REG0]);
+        dev->adf4156_st.reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(dev->adf4156_st.r0_int) |
+                                      ADF4156_FRAC_VAL(dev->adf4156_st.r0_fract));
+        ADF4156_Set(dev,
+		    dev->adf4156_st.reg_val[ADF4156_REG0]);
 
         /* register R3 */
-        st->reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
-        ADF4156_Set(st->reg_val[ADF4156_REG3]);
+        dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
+        ADF4156_Set(dev,
+		    dev->adf4156_st.reg_val[ADF4156_REG3]);
 
-        result = st->r0_int * (float)(st->fpfd / 1000000);
-        result = result + ((float)st->r0_fract / st->r2_mod) * (st->fpfd / 1000000);
+        result = dev->adf4156_st.r0_int * (float)(dev->adf4156_st.fpfd / 1000000);
+        result = result + ((float)dev->adf4156_st.r0_fract / dev->adf4156_st.r2_mod) *\
+		(dev->adf4156_st.fpfd / 1000000);
 
         return result;
 }
