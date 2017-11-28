@@ -42,9 +42,10 @@
 /*****************************************************************************/
 /****************************** Include Files ********************************/
 /*****************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "adf4153.h"
-#include "Communication.h"
-#include "TIME.h"
 
 /* For round up division */
 #define CEIL(a, b) (((a) / (b)) + (((a) % (b)) > 0 ? 1 : 0))
@@ -60,48 +61,49 @@
 #define FREQ_2_GHZ          2000000000
 
 /*****************************************************************************/
-/**************************** Private variables ******************************/
-/*****************************************************************************/
-
-/* RF input frequency limits */
-long ADF4153_RFIN_MIN_FRQ = 10000000;           // 10 Mhz
-long ADF4153_RFIN_MAX_FRQ = 250000000;          // 250 Mhz
-/* Maximum PFD frequency */
-long ADF4153_PFD_MAX_FRQ = 32000000;            // 32 Mhz
-/* VCO out frequency limits */
-long ADF4153_VCO_MIN_FRQ = 500000000;           // 500 Mhz
-long long ADF4153_VCO_MAX_FRQ = 4000000000;     // 4 Ghz
-/* maximum interpolator modulus value */
-short ADF4153_MOD_MAX    = 4095;                // the MOD is stored in 12 bits
-
-/* Reference input frequency */
-unsigned long refIn = 0;
-unsigned long channelSpacing = 0;
-
-/* Internal buffers for each latch */
-unsigned long r0 = 0;               /* the actual value of N Divider Register */
-unsigned long r1 = 0;               /* the actual value of R Divider Register */
-unsigned long r2 = 0;               /* the actual value of Control Register */
-unsigned long r3 = 0;               /* the actual value of Noise and Spur Reg*/
-
-/*****************************************************************************/
 /*************************** Functions definitions ***************************/
 /*****************************************************************************/
 
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for ADF4106 Board.
  *
- * @param  ADF4106_st    - the structure with the initial set up values of the
- *                         registers
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return success
 ******************************************************************************/
-char ADF4153_Init(ADF4153_settings_t ADF4153_st)
+char ADF4153_Init(ADF4153_dev **device,
+		  ADF4153_init_param init_param)
 {
-    char status = -1;
+	ADF4153_dev *dev;
+    char status;
+
+	dev = (ADF4153_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	dev->ADF4153_st = init_param.ADF4153_st;
+
+	dev->ADF4153_RFIN_MIN_FRQ = 10000000;   // 10 Mhz
+	dev->ADF4153_RFIN_MAX_FRQ = 250000000;  // 250 Mhz
+	dev->ADF4153_PFD_MAX_FRQ  = 32000000;   // 32 Mhz
+	dev->ADF4153_VCO_MIN_FRQ  = 500000000;  // 500 Mhz
+	dev->ADF4153_VCO_MAX_FRQ  = 4000000000; // 4 Ghz
+	dev->ADF4153_MOD_MAX      = 4095;       // the MOD is stored in 12 bits
+	dev->r0 = 0;
+	dev->r1 = 0;
+	dev->r2 = 0;
+	dev->r3 = 0;
 
     /* CPHA = 1; CPOL = 0; */
-    status = SPI_Init(0, 100000, 0, 1);
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
+	/* GPIO */
+	status |= gpio_get(&dev->gpio_le, init_param.gpio_le);
+	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
+	status |= gpio_get(&dev->gpio_le2, init_param.gpio_le2);
+	status |= gpio_get(&dev->gpio_ce2, init_param.gpio_ce2);
 
     /* Bring CE high to put device to power up */
     ADF4153_CE_OUT;
@@ -110,71 +112,102 @@ char ADF4153_Init(ADF4153_settings_t ADF4153_st)
     ADF4153_LE_OUT;
     ADF4153_LE_LOW;
 
-    /* Set up the reference input frequency */
-    refIn = ADF4153_st.refIn;
-    channelSpacing = ADF4153_st.channelSpacing;
-
     /* Write all zeros to the noise and spur register */
-    ADF4153_UpdateLatch(ADF4153_CTRL_NOISE_SPUR |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_NOISE_SPUR |
                         0x0);
     /* selects the lowest noise mode by default */
-    ADF4153_UpdateLatch(ADF4153_CTRL_NOISE_SPUR |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_NOISE_SPUR |
                         0x3C7);
     /* Set up the control register and enable the counter reset */
-    ADF4153_UpdateLatch(ADF4153_CTRL_CONTROL |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_CONTROL |
                         ADF4153_R2_COUNTER_RST(ADF4153_CR_ENABLED) |
-                        ADF4153_R2_CP_3STATE(ADF4153_st.cpThreeState) |
-                        ADF4153_R2_POWER_DOWN(ADF4153_st.powerDown) |
-                        ADF4153_R2_LDP(ADF4153_st.ldp) |
-                        ADF4153_R2_PD_POL(ADF4153_st.pdPolarity) |
-                        ADF4153_R2_CP_CURRENT(ADF4153_st.cpCurrent) |
-                        ADF4153_R2_REF_DOUBLER(ADF4153_st.refDoubler) |
-                        ADF4153_R2_RESYNC(ADF4153_st.resync)
+                        ADF4153_R2_CP_3STATE(dev->ADF4153_st.cpThreeState) |
+                        ADF4153_R2_POWER_DOWN(dev->ADF4153_st.powerDown) |
+                        ADF4153_R2_LDP(dev->ADF4153_st.ldp) |
+                        ADF4153_R2_PD_POL(dev->ADF4153_st.pdPolarity) |
+                        ADF4153_R2_CP_CURRENT(dev->ADF4153_st.cpCurrent) |
+                        ADF4153_R2_REF_DOUBLER(dev->ADF4153_st.refDoubler) |
+                        ADF4153_R2_RESYNC(dev->ADF4153_st.resync)
                         );
     /* If resync feature is enabled */
-    if(ADF4153_st.resync != 0x0)
+    if(init_param.ADF4153_st.resync != 0x0)
     {
         /* Load the R divider register */
-        ADF4153_UpdateLatch(ADF4153_CTRL_R_DIVIDER |
+        ADF4153_UpdateLatch(dev,
+			    ADF4153_CTRL_R_DIVIDER |
                             ADF4153_R1_MOD(10) |    //Resync Delay
-                            ADF4153_R1_RCOUNTER(ADF4153_st.rCounter) |
-                            ADF4153_R1_PRESCALE(ADF4153_st.prescaler) |
-                            ADF4153_R1_MUXOUT(ADF4153_st.muxout) |
+                            ADF4153_R1_RCOUNTER(dev->ADF4153_st.rCounter) |
+                            ADF4153_R1_PRESCALE(dev->ADF4153_st.prescaler) |
+                            ADF4153_R1_MUXOUT(dev->ADF4153_st.muxout) |
                             ADF4153_R1_LOAD(ADF4153_LOAD_RESYNC)
                             );
     }
     /* Load the R divider register */
-    ADF4153_UpdateLatch(ADF4153_CTRL_R_DIVIDER |
-                        ADF4153_R1_MOD(ADF4153_st.modValue) |
-                        ADF4153_R1_RCOUNTER(ADF4153_st.rCounter) |
-                        ADF4153_R1_PRESCALE(ADF4153_st.prescaler) |
-                        ADF4153_R1_MUXOUT(ADF4153_st.muxout) |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_R_DIVIDER |
+                        ADF4153_R1_MOD(dev->ADF4153_st.modValue) |
+                        ADF4153_R1_RCOUNTER(dev->ADF4153_st.rCounter) |
+                        ADF4153_R1_PRESCALE(dev->ADF4153_st.prescaler) |
+                        ADF4153_R1_MUXOUT(dev->ADF4153_st.muxout) |
                         ADF4153_R1_LOAD(ADF4153_LOAD_NORMAL)
                         );
     /* Load the N divider register */
-    ADF4153_UpdateLatch(ADF4153_CTRL_N_DIVIDER |
-                        ADF4153_R0_FRAC(ADF4153_st.fracValue) |
-                        ADF4153_R0_INT(ADF4153_st.intValue) |
-                        ADF4153_R0_FASTLOCK(ADF4153_st.fastlock)
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_N_DIVIDER |
+                        ADF4153_R0_FRAC(dev->ADF4153_st.fracValue) |
+                        ADF4153_R0_INT(dev->ADF4153_st.intValue) |
+                        ADF4153_R0_FASTLOCK(dev->ADF4153_st.fastlock)
                         );
 
     /* Disable the counter reset in the Control Register */
-    r2 &= ~ADF4153_R2_COUNTER_RST(ADF4153_R2_COUNTER_RST_MASK);
-    ADF4153_UpdateLatch(ADF4153_CTRL_CONTROL |
-                        r2 |
+    dev->r2 &= ~ADF4153_R2_COUNTER_RST(ADF4153_R2_COUNTER_RST_MASK);
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_CONTROL |
+                        dev->r2 |
                         ADF4153_R2_COUNTER_RST(ADF4153_CR_DISABLED)
                         );
+
+	*device = dev;
+
 return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ADF4153_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ADF4153_remove(ADF4153_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_le);
+	ret |= gpio_remove(dev->gpio_ce);
+	ret |= gpio_remove(dev->gpio_le2);
+	ret |= gpio_remove(dev->gpio_ce2);
+
+	free(dev);
+
+	return ret;
 }
 
 /**************************************************************************//**
  * @brief Update one of the latch via the SPI interface
  *
+ * @param dev         - The device structure.
  * @param   latchData - the data which will be written to the latch
  *
  * @return
 ******************************************************************************/
-void ADF4153_UpdateLatch(unsigned long latchData)
+void ADF4153_UpdateLatch(ADF4153_dev *dev,
+			 unsigned long latchData)
 {
     unsigned char dataBuffer[3] = {0,};
     unsigned char latchType = latchData & 0x3;
@@ -183,16 +216,16 @@ void ADF4153_UpdateLatch(unsigned long latchData)
     switch(latchType)
     {
         case ADF4153_CTRL_N_DIVIDER :
-            r0 = latchData;
+            dev->r0 = latchData;
             break;
         case ADF4153_CTRL_R_DIVIDER :
-            r1 = latchData;
+            dev->r1 = latchData;
             break;
         case ADF4153_CTRL_CONTROL :
-            r2 = latchData;
+            dev->r2 = latchData;
             break;
         case ADF4153_CTRL_NOISE_SPUR :
-            r3 = latchData;
+            dev->r3 = latchData;
             break;
     }
 
@@ -200,9 +233,9 @@ void ADF4153_UpdateLatch(unsigned long latchData)
     dataBuffer[1] = (latchData & DATA_MASK_MID8) >> DATA_OFFSET_MID8;
     dataBuffer[2] = (latchData & DATA_MASK_LSB8) >> DATA_OFFSET_LSB8;
 
-    SPI_Write(ADF4153_SLAVE_ID,
-              dataBuffer,
-              3);
+	spi_write_and_read(dev->spi_desc,
+			   dataBuffer,
+			   3);
 
     /* Generate a load pulse */
     ADF4153_LE_HIGH;
@@ -212,6 +245,7 @@ void ADF4153_UpdateLatch(unsigned long latchData)
 /***************************************************************************//**
  * @brief Return the value of a desired latch
  *
+ * @param dev        - The device structure.
  * @param   param[0] - the type of the latch:
  *                      0 - 'ADF4153_CTRL_N_DIVIDER'
  *                      1 - 'ADF4153_CTRL_R_DIVIDER'
@@ -220,21 +254,22 @@ void ADF4153_UpdateLatch(unsigned long latchData)
  *
  * @return latchValue - the value of the desired latch
 *******************************************************************************/
-unsigned long ADF4153_ReadLatch(unsigned char latchType)
+unsigned long ADF4153_ReadLatch(ADF4153_dev *dev,
+				unsigned char latchType)
 {
     switch(latchType)
     {
         case ADF4153_CTRL_N_DIVIDER :
-            return r0;
+            return dev->r0;
 
         case ADF4153_CTRL_R_DIVIDER :
-            return r1;
+            return dev->r1;
 
         case ADF4153_CTRL_CONTROL :
-            return r2;
+            return dev->r2;
 
         case ADF4153_CTRL_NOISE_SPUR :
-            return r3;
+            return dev->r3;
 
         default :
             return -1;
@@ -245,23 +280,26 @@ unsigned long ADF4153_ReadLatch(unsigned char latchType)
  * @brief Increases the R counter value until the ADF4106_PDF_MAX_FREQ is
  *        greater than PFD frequency.
  *
+ * @param dev      - The device structure.
  * @param rCounter - pointer of the R counter variable.
  *
  * @return pfdFrequency - The value of the PFD frequency.
 *******************************************************************************/
-unsigned long ADF4153_TuneRcounter(unsigned short *rCounter)
+unsigned long ADF4153_TuneRcounter(ADF4153_dev *dev,
+				   unsigned short *rCounter)
 {
     unsigned long pfdFrequency = 0;              // PFD frequency
     unsigned char refDoubler = 0;                // Reference Doubler
 
-    refDoubler = (r2 & ADF4153_R2_REF_DOUBLER(ADF4153_R2_RESYNC_MASK)) >> \
+    refDoubler = (dev->r2 & ADF4153_R2_REF_DOUBLER(ADF4153_R2_RESYNC_MASK)) >> \
                   ADF4153_R2_REF_DOUBLER_OFFSET; // the actual reference doubler
     do
     {
         (*rCounter)++;
-        pfdFrequency = refIn * ((float)(1 + refDoubler) / (*rCounter));
+        pfdFrequency = dev->ADF4153_st.refIn * \
+		       ((float)(1 + refDoubler) / (*rCounter));
     }
-    while(pfdFrequency > ADF4153_PFD_MAX_FRQ);
+    while(pfdFrequency > dev->ADF4153_PFD_MAX_FRQ);
 
 return pfdFrequency;
 }
@@ -269,11 +307,13 @@ return pfdFrequency;
 /***************************************************************************//**
  * @brief Sets the output frequency.
  *
+ * @param dev       - The device structure.
  * @param frequency - The desired frequency value.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
 *******************************************************************************/
-unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
+unsigned long long ADF4153_SetFrequency(ADF4153_dev *dev,
+					unsigned long long frequency)
 {
     unsigned long long vcoFrequency        = 0;     // VCO frequency
     unsigned long      pfdFrequency        = 0;     // PFD frequency
@@ -286,31 +326,33 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
     unsigned char      devicePrescaler     = 0;
     unsigned char      intMin              = 0;
     /* validate the given frequency parameter */
-    if(frequency <= ADF4153_VCO_MAX_FRQ)
+    if(frequency <= dev->ADF4153_VCO_MAX_FRQ)
     {
-        if(frequency >= ADF4153_VCO_MIN_FRQ)
+        if(frequency >= dev->ADF4153_VCO_MIN_FRQ)
         {
             vcoFrequency = frequency;
         }
         else
         {
-            vcoFrequency = ADF4153_VCO_MIN_FRQ;
+            vcoFrequency = dev->ADF4153_VCO_MIN_FRQ;
         }
     }
     else
     {
-        vcoFrequency = ADF4153_VCO_MAX_FRQ;
+        vcoFrequency = dev->ADF4153_VCO_MAX_FRQ;
     }
 
     /* define the value of MOD */
-    modValue = CEIL(refIn, channelSpacing);
+    modValue = CEIL(dev->ADF4153_st.refIn,
+		    dev->ADF4153_st.channelSpacing);
     /* if the modValue is too high, increase the channel spacing */
-    if(modValue > ADF4153_MOD_MAX)
+    if(modValue > dev->ADF4153_MOD_MAX)
     {
         do{
-            channelSpacing++;
-            modValue = CEIL(refIn, channelSpacing);
-        }while(modValue <= ADF4153_MOD_MAX);
+            dev->ADF4153_st.channelSpacing++;
+            modValue = CEIL(dev->ADF4153_st.refIn,
+			    dev->ADF4153_st.channelSpacing);
+        }while(modValue <= dev->ADF4153_MOD_MAX);
     }
     /* define prescaler */
     devicePrescaler = (vcoFrequency <= FREQ_2_GHZ) ? ADF4153_PRESCALER_4_5 : \
@@ -320,7 +362,8 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
     do
     {
         /* define the PFD frequency and R Counter, using the TuneRCounter() */
-        pfdFrequency = ADF4153_TuneRcounter(&rCounter);
+        pfdFrequency = ADF4153_TuneRcounter(dev,
+					    &rCounter);
         intValue = vcoFrequency / pfdFrequency;
     }while(intValue < intMin);
     /*define FRAC value */
@@ -337,31 +380,35 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
     calculatedFrequency = (unsigned long long)(buffer * pfdFrequency);
 
     /* Enable the Counter Reset */
-    ADF4153_UpdateLatch(ADF4153_CTRL_CONTROL |
-                        r2 |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_CONTROL |
+                        dev->r2 |
                         ADF4153_R2_COUNTER_RST(ADF4153_CR_ENABLED));
 
     /* Load the R divider with the new values */
-    r1 &= (~ADF4153_R1_MOD(ADF4153_R1_MOD_MASK) &
+    dev->r1 &= (~ADF4153_R1_MOD(ADF4153_R1_MOD_MASK) &
            ~ADF4153_R1_RCOUNTER(ADF4153_R1_RCOUNTER_MASK) &
            ~ADF4153_R1_PRESCALE(ADF4153_R1_PRESCALE_MASK));
-    ADF4153_UpdateLatch(ADF4153_CTRL_R_DIVIDER |
-                        r1 |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_R_DIVIDER |
+                        dev->r1 |
                         ADF4153_R1_MOD(modValue) |
                         ADF4153_R1_RCOUNTER(rCounter) |
                         ADF4153_R1_PRESCALE(devicePrescaler));
 
     /* Load the N divider with the new values */
-    r0 &= (~ADF4153_R0_FRAC(ADF4153_R0_FRAC_MASK) &
+    dev->r0 &= (~ADF4153_R0_FRAC(ADF4153_R0_FRAC_MASK) &
            ~ADF4153_R0_INT(ADF4153_R0_INT_MASK));
-    ADF4153_UpdateLatch(ADF4153_CTRL_N_DIVIDER |
-                        r0 |
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_N_DIVIDER |
+                        dev->r0 |
                         ADF4153_R0_FRAC(fracValue) |
                         ADF4153_R0_INT(intValue));
     /* Disable the Counter Reset */
-    r2 &= ~ADF4153_R2_COUNTER_RST(ADF4153_R2_COUNTER_RST_MASK);
-    ADF4153_UpdateLatch(ADF4153_CTRL_CONTROL |
-                        r2 |
+    dev->r2 &= ~ADF4153_R2_COUNTER_RST(ADF4153_R2_COUNTER_RST_MASK);
+    ADF4153_UpdateLatch(dev,
+			ADF4153_CTRL_CONTROL |
+                        dev->r2 |
                         ADF4153_R2_COUNTER_RST(ADF4153_CR_DISABLED));
 
     return calculatedFrequency;
@@ -370,11 +417,11 @@ unsigned long long ADF4153_SetFrequency(unsigned long long frequency)
 /***************************************************************************//**
  * @brief Return the value of the channel spacing
  *
- * @param frequency - The desired frequency value.
+ * @param dev - The device structure.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
 *******************************************************************************/
-unsigned long ADF4153_GetChannelSpacing( void )
+unsigned long ADF4153_GetChannelSpacing(ADF4153_dev *dev)
 {
-    return channelSpacing;
+    return dev->ADF4153_st.channelSpacing;
 }

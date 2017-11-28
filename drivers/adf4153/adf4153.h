@@ -42,27 +42,37 @@
 #ifndef __ADF4153_H__
 #define __ADF4153_H__
 
-#include "Communication.h"
-
 /*****************************************************************************/
 /*  Device specific MACROs                                                   */
 /*****************************************************************************/
 /* GPIOs */
-#define ADF4153_LE_OUT                      GPIO0_PIN_OUT
-#define ADF4153_LE_LOW                      GPIO0_LOW
-#define ADF4153_LE_HIGH                     GPIO0_HIGH
+#define ADF4153_LE_OUT                      gpio_direction_output(dev->gpio_le,  \
+			                    GPIO_HIGH)
+#define ADF4153_LE_LOW                      gpio_set_value(dev->gpio_le,         \
+			                    GPIO_LOW)
+#define ADF4153_LE_HIGH                     gpio_set_value(dev->gpio_le,         \
+			                    GPIO_HIGH)
 
-#define ADF4153_CE_OUT                      GPIO2_PIN_OUT
-#define ADF4153_CE_LOW                      GPIO2_LOW
-#define ADF4153_CE_HIGH                     GPIO2_HIGH
+#define ADF4153_CE_OUT                      gpio_direction_output(dev->gpio_ce,  \
+			                    GPIO_HIGH)
+#define ADF4153_CE_LOW                      gpio_set_value(dev->gpio_ce,         \
+			                    GPIO_LOW)
+#define ADF4153_CE_HIGH                     gpio_set_value(dev->gpio_ce,         \
+			                    GPIO_HIGH)
 
-#define ADF4153_LE2_OUT                     GPIO6_PIN_OUT
-#define ADF4153_LE2_LOW                     GPIO6_LOW
-#define ADF4153_LE2_HIGH                    GPIO6_HIGH
+#define ADF4153_LE2_OUT                     gpio_direction_output(dev->gpio_le2, \
+			                    GPIO_HIGH)
+#define ADF4153_LE2_LOW                     gpio_set_value(dev->gpio_le2,        \
+			                    GPIO_LOW)
+#define ADF4153_LE2_HIGH                    gpio_set_value(dev->gpio_le2,        \
+			                    GPIO_HIGH)
 
-#define ADF4153_CE2_OUT                     GPIO7_PIN_OUT
-#define ADF4153_CE2_LOW                     GPIO7_LOW
-#define ADF4153_CE2_HIGH                    GPIO7_HIGH
+#define ADF4153_CE2_OUT                     gpio_direction_output(dev->gpio_ce2, \
+			                    GPIO_HIGH)
+#define ADF4153_CE2_LOW                     gpio_set_value(dev->gpio_ce2,        \
+			                    GPIO_LOW)
+#define ADF4153_CE2_HIGH                    gpio_set_value(dev->gpio_ce2,        \
+			                    GPIO_HIGH)
 
 /* Control Bits */
 #define ADF4153_CTRL_MASK                   0x3
@@ -229,9 +239,6 @@
 #define ADF4153_LOW_NOISE_SPUR              0b11100
 #define ADF4153_LOWEST_NOISE                0b11111
 
-/* The default slave ID for SPI interface */
-#define ADF4153_SLAVE_ID                    1
-
 /*****************************************************************************/
 /************************** Types Declarations *******************************/
 /*****************************************************************************/
@@ -280,7 +287,7 @@
 *                 spurious performance or for improved phase noise performance
 */
 
-typedef struct _ADF4153_settings_t {
+typedef struct {
 
     /* Reference Input Frequency*/
     unsigned long refIn;
@@ -314,22 +321,69 @@ typedef struct _ADF4153_settings_t {
 
 } ADF4153_settings_t;
 
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_le;
+	gpio_desc		*gpio_ce;
+	gpio_desc		*gpio_le2;
+	gpio_desc		*gpio_ce2;
+	/* Device Settings */
+	ADF4153_settings_t ADF4153_st;
+	/* RF input frequency limits */
+	unsigned long ADF4153_RFIN_MIN_FRQ;
+	unsigned long ADF4153_RFIN_MAX_FRQ;
+	/* Maximum PFD frequency */
+	unsigned long ADF4153_PFD_MAX_FRQ;
+	/* VCO out frequency limits */
+	unsigned long ADF4153_VCO_MIN_FRQ;
+	unsigned long long ADF4153_VCO_MAX_FRQ;
+	/* maximum interpolator modulus value */
+	unsigned short ADF4153_MOD_MAX;
+
+	/* Internal buffers for each latch */
+	unsigned long r0;               /* the actual value of N Divider Register */
+	unsigned long r1;               /* the actual value of R Divider Register */
+	unsigned long r2;               /* the actual value of Control Register */
+	unsigned long r3;               /* the actual value of Noise and Spur Reg*/
+} ADF4153_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_le;
+	int8_t		gpio_ce;
+	int8_t		gpio_le2;
+	int8_t		gpio_ce2;
+	/* Device Settings */
+	ADF4153_settings_t ADF4153_st;
+} ADF4153_init_param;
+
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char ADF4153_Init(ADF4153_settings_t ADF4153_st);
+char ADF4153_Init(ADF4153_dev **device,
+		  ADF4153_init_param init_param);
+
+/* Free the resources allocated by ADF4153_Init(). */
+int32_t ADF4153_remove(ADF4153_dev *dev);
 
 /* Update register function */
-void ADF4153_UpdateLatch(unsigned long latchData);
+void ADF4153_UpdateLatch(ADF4153_dev *dev,
+			 unsigned long latchData);
 
 /* Return the value of a desired latch */
-unsigned long ADF4153_ReadLatch(unsigned char latchType);
+unsigned long ADF4153_ReadLatch(ADF4153_dev *dev,
+				unsigned char latchType);
 
 /* Set the frequency to a desired value */
-unsigned long long ADF4153_SetFrequency(unsigned long long frequency);
+unsigned long long ADF4153_SetFrequency(ADF4153_dev *dev,
+					unsigned long long frequency);
 
 /* Return the value of the channel spacing */
-unsigned long ADF4153_GetChannelSpacing( void );
+unsigned long ADF4153_GetChannelSpacing(ADF4153_dev *dev);
 
 #endif // __ADF4153_H__
