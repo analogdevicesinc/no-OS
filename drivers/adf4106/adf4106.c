@@ -42,9 +42,10 @@
 /*****************************************************************************/
 /****************************** Include Files ********************************/
 /*****************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "adf4106.h"
-#include "Communication.h"
-#include "TIME.h"
 
 #define DATA_MASK_MSB8      0xFF0000
 #define DATA_OFFSET_MSB8    16
@@ -57,17 +58,11 @@
 #define FREQ_2_4_GHZ        2400000000
 #define FREQ_5_2_GHZ        5200000000
 
-/*****************************************************************************/
-/**************************** Private variables ******************************/
-/*****************************************************************************/
-struct adf4106_chip_info {
-    unsigned long long vcoMaxFrequency;
-    unsigned long pfdMaxFrequency;
-    unsigned long vcoMinFrequency;
-    unsigned long pfdMinFrequency;
-};
+/******************************************************************************/
+/************************** Constants Definitions *****************************/
+/******************************************************************************/
 
-struct adf4106_chip_info ADF4106_CHIP_INFO[] = {
+const adf4106_chip_info CHIP_INFO[] = {
     [ID_ADF4001] = {
         .vcoMaxFrequency = 200000000,           // 200  Mhz
         .pfdMaxFrequency = 55000000,            // 55   Mhz
@@ -88,18 +83,6 @@ struct adf4106_chip_info ADF4106_CHIP_INFO[] = {
     }
 };
 
-/* Actual device type */
-ADF4106_type_t this_device;
-
-/* Reference input frequency */
-unsigned long refIn = 0;
-
-/* Internal buffers for each latch */
-unsigned long rLatch = 0;
-unsigned long nLatch = 0;
-unsigned long fLatch = 0;
-unsigned long iLatch = 0;
-
 /*****************************************************************************/
 /*************************** Functions definitions ***************************/
 /*****************************************************************************/
@@ -107,27 +90,41 @@ unsigned long iLatch = 0;
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for ADF4106 Board.
  *
- * @param device        - The current device type.
- *        initMethod    - Initialization method
- *                        0 - 'INIT_LATCH',
- *                        1 - 'INIT_CEPIN',
- *                        2 - 'INIT_COUNTER_RESET'
- *        ADF4106_st    - the structure with the initial set up values of the
- *                        registers
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return success
 ******************************************************************************/
-char ADF4106_Init(ADF4106_type_t device,
-                  ADF4106_init_t initMethod,
-                  ADF4106_settings_t ADF4106_st)
+char ADF4106_Init(ADF4106_dev **device,
+		  ADF4106_init_param init_param)
 {
+	ADF4106_dev *dev;
     char status = -1;
 
+	dev = (ADF4106_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
     /* lock the current device */
-    this_device = device;
+	dev->chip_info = CHIP_INFO[init_param.this_device];
+
+	dev->ADF4106_st = init_param.ADF4106_st;
+	dev->this_device = init_param.this_device;
+
+	dev->rLatch = 0;
+	dev->nLatch = 0;
+	dev->fLatch = 0;
+	dev->iLatch = 0;
 
     /* CPHA = 1; CPOL = 0; */
-    status = SPI_Init(0, 100000, 0, 1);
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
+	/* GPIO */
+	status |= gpio_get(&dev->gpio_le, init_param.gpio_le);
+	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
+	status |= gpio_get(&dev->gpio_le2, init_param.gpio_le2);
+	status |= gpio_get(&dev->gpio_ce2, init_param.gpio_ce2);
 
     /* Bring CE high to put device to power up */
     ADF4106_CE_OUT;
@@ -136,39 +133,63 @@ char ADF4106_Init(ADF4106_type_t device,
     ADF4106_LE_OUT;
     ADF4106_LE_LOW;
 
-    /* Set up the reference input frequency */
-    refIn = ADF4106_st.refIn;
-
     /* Import the PFD max limit, from user set up */
-    if(ADF4106_CHIP_INFO[this_device].pfdMaxFrequency > ADF4106_st.pfdMax)
+    if(dev->chip_info.pfdMaxFrequency > dev->ADF4106_st.pfdMax)
     {
-    	ADF4106_CHIP_INFO[this_device].pfdMaxFrequency = ADF4106_st.pfdMax;
+    	dev->chip_info.pfdMaxFrequency = dev->ADF4106_st.pfdMax;
     }
 
-    switch(initMethod)
+    switch(init_param.initMethod)
     {
         case INIT_LATCH :
-            ADF4106_InitLatchMethod(ADF4106_st);
+            ADF4106_InitLatchMethod(dev);
             break;
         case INIT_CEPIN :
-            ADF4106_InitCEPinMethod(ADF4106_st);
+            ADF4106_InitCEPinMethod(dev);
             break;
         case INIT_COUNTER_RESET :
-            ADF4106_InitCounteResetMethod(ADF4106_st);
+            ADF4106_InitCounteResetMethod(dev);
             break;
     }
 
+	*device = dev;
+
 return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ADF4106_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ADF4106_remove(ADF4106_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_le);
+	ret |= gpio_remove(dev->gpio_ce);
+	ret |= gpio_remove(dev->gpio_le2);
+	ret |= gpio_remove(dev->gpio_ce2);
+
+	free(dev);
+
+	return ret;
 }
 
 /**************************************************************************//**
  * @brief Update one of the latch via the SPI interface
  *
+ * @param dev         - The device structure.
  * @param   latchData - the data which will be written to the latch
  *
  * @return
 ******************************************************************************/
-void ADF4106_UpdateLatch(unsigned long latchData)
+void ADF4106_UpdateLatch(ADF4106_dev *dev,
+			 unsigned long latchData)
 {
     unsigned char dataBuffer[3] = {0,};
     unsigned char latchType = latchData & 0x3;
@@ -177,17 +198,17 @@ void ADF4106_UpdateLatch(unsigned long latchData)
     switch(latchType)
     {
         case ADF4106_CTRL_R_COUNTER :
-            rLatch = latchData;
+            dev->rLatch = latchData;
             break;
         case ADF4106_CTRL_N_COUNTER :
-            nLatch = latchData;
+            dev->nLatch = latchData;
             break;
         case ADF4106_CTRL_FUNCTION_LATCH :
-            fLatch = latchData;
+            dev->fLatch = latchData;
             break;
         case ADF4106_CTRL_INIT_LATCH :
-            iLatch = latchData;
-            fLatch = ADF4106_CTRL_FUNCTION_LATCH |
+            dev->iLatch = latchData;
+            dev->fLatch = ADF4106_CTRL_FUNCTION_LATCH |
                     (latchData & ~ADF4106_CTRL_MASK);
             break;
     }
@@ -196,9 +217,9 @@ void ADF4106_UpdateLatch(unsigned long latchData)
     dataBuffer[1] = (latchData & DATA_MASK_MID8) >> DATA_OFFSET_MID8;
     dataBuffer[2] = (latchData & DATA_MASK_LSB8) >> DATA_OFFSET_LSB8;
 
-    SPI_Write(ADF4106_SLAVE_ID,
-              dataBuffer,
-              3);
+	spi_write_and_read(dev->spi_desc,
+			   dataBuffer,
+			   3);
 
     /* Generate a load pulse */
     ADF4106_LE_HIGH;
@@ -208,128 +229,139 @@ void ADF4106_UpdateLatch(unsigned long latchData)
 /**************************************************************************//**
  * @brief Initialization latch method
  *
- * @param None
+ * @param dev - The device structure.
  *
  * @return
 ******************************************************************************/
-void ADF4106_InitLatchMethod(ADF4106_settings_t ADF4106_st)
+void ADF4106_InitLatchMethod(ADF4106_dev *dev)
 {
     /* Program initialization latch (COUNTER RESET bit is zero) */
-    ADF4106_UpdateLatch(ADF4106_CTRL_INIT_LATCH | \
-                        ADF4106_CR(ADF4106_st.counterReset) | \
-                        ADF4106_PD1(ADF4106_st.powerDown1) | \
-                        ADF4106_MUXOUT(ADF4106_st.muxoutControl) | \
-                        ADF4106_PDPOL(ADF4106_st.phaseDetectorPol) | \
-                        ADF4106_CP(ADF4106_st.cpType) | \
-                        ADF4106_FASTLOCK(ADF4106_st.fastLockMode) | \
-                        ADF4106_TCC(ADF4106_st.timerCounterControl) |\
-                        ADF4106_CS1(ADF4106_st.currentSetting1) | \
-                        ADF4106_CS2(ADF4106_st.currentSetting2) | \
-                        ADF4106_PD2(ADF4106_st.powerDown2));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_INIT_LATCH | \
+                        ADF4106_CR(dev->ADF4106_st.counterReset) | \
+                        ADF4106_PD1(dev->ADF4106_st.powerDown1) | \
+                        ADF4106_MUXOUT(dev->ADF4106_st.muxoutControl) | \
+                        ADF4106_PDPOL(dev->ADF4106_st.phaseDetectorPol) | \
+                        ADF4106_CP(dev->ADF4106_st.cpType) | \
+                        ADF4106_FASTLOCK(dev->ADF4106_st.fastLockMode) | \
+                        ADF4106_TCC(dev->ADF4106_st.timerCounterControl) |\
+                        ADF4106_CS1(dev->ADF4106_st.currentSetting1) | \
+                        ADF4106_CS2(dev->ADF4106_st.currentSetting2) | \
+                        ADF4106_PD2(dev->ADF4106_st.powerDown2));
 
     /* Do an R load */
-    ADF4106_UpdateLatch(ADF4106_CTRL_R_COUNTER | \
-                        ADF4106_R_COUNTER(ADF4106_st.refCounter) | \
-                        ADF4106_R_ABP(ADF4106_st.antiBacklashWidth)| \
-                        ADF4106_R_TMB(ADF4106_st.testModeBits) | \
-                        ADF4106_R_LDP(ADF4106_st.lockDetectPrecision));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_R_COUNTER | \
+                        ADF4106_R_COUNTER(dev->ADF4106_st.refCounter) | \
+                        ADF4106_R_ABP(dev->ADF4106_st.antiBacklashWidth)| \
+                        ADF4106_R_TMB(dev->ADF4106_st.testModeBits) | \
+                        ADF4106_R_LDP(dev->ADF4106_st.lockDetectPrecision));
 
     /* Do an N load */
-    ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER | \
-                        ADF4106_N_COUNTER_B(ADF4106_st.bNCounter) | \
-                        ADF4106_N_CP(ADF4106_st.cpGain));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_N_COUNTER | \
+                        ADF4106_N_COUNTER_B(dev->ADF4106_st.bNCounter) | \
+                        ADF4106_N_CP(dev->ADF4106_st.cpGain));
 
     /* Update the local variable for Function Latch */
-    fLatch = ADF4106_CTRL_FUNCTION_LATCH | (iLatch & 0xFFFFFFFC);
+    dev->fLatch = ADF4106_CTRL_FUNCTION_LATCH | (dev->iLatch & 0xFFFFFFFC);
 }
 
 /**************************************************************************//**
  * @brief CE Pin method
  *
- * @param None
+ * @param dev - The device structure.
  *
  * @return
 ******************************************************************************/
-void ADF4106_InitCEPinMethod(ADF4106_settings_t ADF4106_st)
+void ADF4106_InitCEPinMethod(ADF4106_dev *dev)
 {
     /* Bring CE low to put the device into power down. */
     ADF4106_CE_LOW;
     /* Program the function latch */
-    ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH | \
-                        ADF4106_CR(ADF4106_st.counterReset) | \
-                        ADF4106_PD1(ADF4106_st.powerDown1) | \
-                        ADF4106_MUXOUT(ADF4106_st.muxoutControl) | \
-                        ADF4106_PDPOL(ADF4106_st.phaseDetectorPol) | \
-                        ADF4106_CP(ADF4106_st.cpType) | \
-                        ADF4106_FASTLOCK(ADF4106_st.fastLockMode) | \
-                        ADF4106_TCC(ADF4106_st.timerCounterControl) |\
-                        ADF4106_CS1(ADF4106_st.currentSetting1) | \
-                        ADF4106_CS2(ADF4106_st.currentSetting2) | \
-                        ADF4106_PD2(ADF4106_st.powerDown2));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_FUNCTION_LATCH | \
+                        ADF4106_CR(dev->ADF4106_st.counterReset) | \
+                        ADF4106_PD1(dev->ADF4106_st.powerDown1) | \
+                        ADF4106_MUXOUT(dev->ADF4106_st.muxoutControl) | \
+                        ADF4106_PDPOL(dev->ADF4106_st.phaseDetectorPol) | \
+                        ADF4106_CP(dev->ADF4106_st.cpType) | \
+                        ADF4106_FASTLOCK(dev->ADF4106_st.fastLockMode) | \
+                        ADF4106_TCC(dev->ADF4106_st.timerCounterControl) |\
+                        ADF4106_CS1(dev->ADF4106_st.currentSetting1) | \
+                        ADF4106_CS2(dev->ADF4106_st.currentSetting2) | \
+                        ADF4106_PD2(dev->ADF4106_st.powerDown2));
     /* Program the R counter latch */
-    ADF4106_UpdateLatch(ADF4106_CTRL_R_COUNTER | \
-                        ADF4106_R_COUNTER(ADF4106_st.refCounter) | \
-                        ADF4106_R_ABP(ADF4106_st.antiBacklashWidth)| \
-                        ADF4106_R_TMB(ADF4106_st.testModeBits) | \
-                        ADF4106_R_LDP(ADF4106_st.lockDetectPrecision));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_R_COUNTER | \
+                        ADF4106_R_COUNTER(dev->ADF4106_st.refCounter) | \
+                        ADF4106_R_ABP(dev->ADF4106_st.antiBacklashWidth)| \
+                        ADF4106_R_TMB(dev->ADF4106_st.testModeBits) | \
+                        ADF4106_R_LDP(dev->ADF4106_st.lockDetectPrecision));
     /* Program the N counter latch */
-    ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER | \
-                         ADF4106_N_COUNTER_B(ADF4106_st.bNCounter) | \
-                         ADF4106_N_CP(ADF4106_st.cpGain));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_N_COUNTER | \
+			ADF4106_N_COUNTER_B(dev->ADF4106_st.bNCounter) | \
+			ADF4106_N_CP(dev->ADF4106_st.cpGain));
     /* Bring CE high to take the device out of power-down */
     ADF4106_CE_HIGH;
     /* Wait for the input buffer bias to reach steady state */
-    TIME_DelayUs(1);
+    mdelay(1);
 }
 
 /**************************************************************************//**
  * @brief Counter reset method
  *
- * @param None
+ * @param dev - The device structure.
  *
  * @return
 ******************************************************************************/
-void ADF4106_InitCounteResetMethod(ADF4106_settings_t ADF4106_st)
+void ADF4106_InitCounteResetMethod(ADF4106_dev *dev)
 {
     /* Program the function latch, enable the counter reset */
-    ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH | \
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_FUNCTION_LATCH | \
                         ADF4106_CR_RESET | \
-                        ADF4106_PD1(ADF4106_st.powerDown1) | \
-                        ADF4106_MUXOUT(ADF4106_st.muxoutControl) | \
-                        ADF4106_PDPOL(ADF4106_st.phaseDetectorPol) | \
-                        ADF4106_CP(ADF4106_st.cpType) | \
-                        ADF4106_FASTLOCK(ADF4106_st.fastLockMode) | \
-                        ADF4106_TCC(ADF4106_st.timerCounterControl) |\
-                        ADF4106_CS1(ADF4106_st.currentSetting1) | \
-                        ADF4106_CS2(ADF4106_st.currentSetting2) | \
-                        ADF4106_PD2(ADF4106_st.powerDown2));
+                        ADF4106_PD1(dev->ADF4106_st.powerDown1) | \
+                        ADF4106_MUXOUT(dev->ADF4106_st.muxoutControl) | \
+                        ADF4106_PDPOL(dev->ADF4106_st.phaseDetectorPol) | \
+                        ADF4106_CP(dev->ADF4106_st.cpType) | \
+                        ADF4106_FASTLOCK(dev->ADF4106_st.fastLockMode) | \
+                        ADF4106_TCC(dev->ADF4106_st.timerCounterControl) |\
+                        ADF4106_CS1(dev->ADF4106_st.currentSetting1) | \
+                        ADF4106_CS2(dev->ADF4106_st.currentSetting2) | \
+                        ADF4106_PD2(dev->ADF4106_st.powerDown2));
     /* Program the R counter latch */
-    ADF4106_UpdateLatch(ADF4106_CTRL_R_COUNTER | \
-                        ADF4106_R_COUNTER(ADF4106_st.refCounter) | \
-                        ADF4106_R_ABP(ADF4106_st.antiBacklashWidth)| \
-                        ADF4106_R_TMB(ADF4106_st.testModeBits) | \
-                        ADF4106_R_LDP(ADF4106_st.lockDetectPrecision));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_R_COUNTER | \
+                        ADF4106_R_COUNTER(dev->ADF4106_st.refCounter) | \
+                        ADF4106_R_ABP(dev->ADF4106_st.antiBacklashWidth)| \
+                        ADF4106_R_TMB(dev->ADF4106_st.testModeBits) | \
+                        ADF4106_R_LDP(dev->ADF4106_st.lockDetectPrecision));
     /* Program the N counter latch */
-    ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER | \
-                         ADF4106_N_COUNTER_B(ADF4106_st.bNCounter) | \
-                         ADF4106_N_CP(ADF4106_st.cpGain));
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_N_COUNTER | \
+			ADF4106_N_COUNTER_B(dev->ADF4106_st.bNCounter) | \
+			ADF4106_N_CP(dev->ADF4106_st.cpGain));
     /* Do a Function Load, this time disable the counter reset */
-    ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH | \
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_FUNCTION_LATCH | \
                         ADF4106_CR_NORMAL | \
-                        ADF4106_PD1(ADF4106_st.powerDown1) | \
-                        ADF4106_MUXOUT(ADF4106_st.muxoutControl) | \
-                        ADF4106_PDPOL(ADF4106_st.phaseDetectorPol) | \
-                        ADF4106_CP(ADF4106_st.cpType) | \
-                        ADF4106_FASTLOCK(ADF4106_st.fastLockMode) | \
-                        ADF4106_TCC(ADF4106_st.timerCounterControl) |\
-                        ADF4106_CS1(ADF4106_st.currentSetting1) | \
-                        ADF4106_CS2(ADF4106_st.currentSetting2) | \
-                        ADF4106_PD2(ADF4106_st.powerDown2));
+                        ADF4106_PD1(dev->ADF4106_st.powerDown1) | \
+                        ADF4106_MUXOUT(dev->ADF4106_st.muxoutControl) | \
+                        ADF4106_PDPOL(dev->ADF4106_st.phaseDetectorPol) | \
+                        ADF4106_CP(dev->ADF4106_st.cpType) | \
+                        ADF4106_FASTLOCK(dev->ADF4106_st.fastLockMode) | \
+                        ADF4106_TCC(dev->ADF4106_st.timerCounterControl) |\
+                        ADF4106_CS1(dev->ADF4106_st.currentSetting1) | \
+                        ADF4106_CS2(dev->ADF4106_st.currentSetting2) | \
+                        ADF4106_PD2(dev->ADF4106_st.powerDown2));
 }
 
 /***************************************************************************//**
  * @brief Return the value of a desired latch
  *
+ * @param dev        - The device structure.
  * @param   param[0] - the type of the latch:
  *                      0 - 'ADF4106_CTRL_R_COUNTER'
  *                      1 - 'ADF4106_CTRL_N_COUNTER'
@@ -338,21 +370,22 @@ void ADF4106_InitCounteResetMethod(ADF4106_settings_t ADF4106_st)
  *
  * @return latchValue - the value of the desired latch
 *******************************************************************************/
-unsigned long ADF4106_ReadLatch(unsigned char latchType)
+unsigned long ADF4106_ReadLatch(ADF4106_dev *dev,
+				unsigned char latchType)
 {
     switch(latchType)
     {
         case ADF4106_CTRL_R_COUNTER :
-            return rLatch;
+            return dev->rLatch;
 
         case ADF4106_CTRL_N_COUNTER :
-            return nLatch;
+            return dev->nLatch;
 
         case ADF4106_CTRL_FUNCTION_LATCH :
-            return fLatch;
+            return dev->fLatch;
 
         case ADF4106_CTRL_INIT_LATCH :
-            return iLatch;
+            return dev->iLatch;
 
         default :
             return -1;
@@ -363,20 +396,22 @@ unsigned long ADF4106_ReadLatch(unsigned char latchType)
  * @brief Increases the R counter value until the ADF4106_PDF_MAX_FREQ is
  *        greater than PFD frequency.
  *
+ * @param dev      - The device structure.
  * @param rCounter - R counter value.
  *
  * @return rCounter - modified R counter value.
 *******************************************************************************/
-unsigned short ADF4106_TuneRcounter(unsigned short rCounter)
+unsigned short ADF4106_TuneRcounter(ADF4106_dev *dev,
+				    unsigned short rCounter)
 {
     unsigned long frequencyPfd = 0; // PFD frequency
 
     do
     {
         rCounter++;
-        frequencyPfd = refIn / rCounter;
+        frequencyPfd = dev->ADF4106_st.refIn / rCounter;
     }
-    while(frequencyPfd > ADF4106_CHIP_INFO[this_device].pfdMaxFrequency);
+    while(frequencyPfd > dev->chip_info.pfdMaxFrequency);
 
     return rCounter;
 }
@@ -384,11 +419,13 @@ unsigned short ADF4106_TuneRcounter(unsigned short rCounter)
 /***************************************************************************//**
  * @brief Sets the output frequency.
  *
+ * @param dev       - The device structure.
  * @param frequency - The desired frequency value.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
 *******************************************************************************/
-unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
+unsigned long long ADF4106_SetFrequency(ADF4106_dev *dev,
+					unsigned long long frequency)
 {
     unsigned long long vcoFrequency        = 0; // VCO frequency
     unsigned long      frequencyPfd        = 0; // PFD frequency
@@ -401,26 +438,27 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
     unsigned char      userPrescaler       = 0; // prescaler defined by user
 
     /* Force "frequency" parameter to the [minMHz...maxGHz] interval. */
-    if(frequency <= ADF4106_CHIP_INFO[this_device].vcoMaxFrequency)
+    if(frequency <= dev->chip_info.vcoMaxFrequency)
     {
-        if(frequency >= ADF4106_CHIP_INFO[this_device].vcoMinFrequency)
+        if(frequency >= dev->chip_info.vcoMinFrequency)
         {
             vcoFrequency = frequency;
         }
         else
         {
-            vcoFrequency = ADF4106_CHIP_INFO[this_device].vcoMinFrequency;
+            vcoFrequency = dev->chip_info.vcoMinFrequency;
         }
     }
     else
     {
-        vcoFrequency = ADF4106_CHIP_INFO[this_device].vcoMaxFrequency;
+        vcoFrequency = dev->chip_info.vcoMaxFrequency;
     }
     do
     {
         /* Get the actual PFD frequency. */
-        rCounterValue = ADF4106_TuneRcounter(rCounterValue);
-        frequencyPfd = refIn / rCounterValue;
+        rCounterValue = ADF4106_TuneRcounter(dev,
+					     rCounterValue);
+        frequencyPfd = dev->ADF4106_st.refIn / rCounterValue;
         /* Define the value of the prescaler
         *  By default the prescaler is constant for ADF4001 and ADF4002
         *  In case of ADF4106, the minimum admitted prescaler will be selected,
@@ -429,8 +467,8 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
         *                        VCO > 2.4Ghz and VCO < 5.4Ghz -> 16/17
         *                        VCO > 5.4Ghz -> 32/33
         */
-        userPrescaler = ADF4106_PRESCALE(fLatch >> ADF4106_PS_OFFSET);
-        devicePrescaler = (this_device != ID_ADF4106) ? \
+        userPrescaler = ADF4106_PRESCALE(dev->fLatch >> ADF4106_PS_OFFSET);
+        devicePrescaler = (dev->this_device != ID_ADF4106) ? \
                                 ADF4106_PRESCALE(ADF4106_PS_8_9) : \
                          (vcoFrequency <= FREQ_2_4_GHZ) ? \
                                 ADF4106_PRESCALE(ADF4106_PS_8_9) : \
@@ -452,34 +490,39 @@ unsigned long long ADF4106_SetFrequency(unsigned long long frequency)
     /* Find the actual VCO frequency. */
     calculatedFrequency = (unsigned long long)((b * devicePrescaler) + a) * frequencyPfd;
     /* Load the saved values into the registers using Counter Reset Method. */
-    ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH |
-                        fLatch |
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_FUNCTION_LATCH |
+                        dev->fLatch |
                         ADF4106_CR(ADF4106_CR_RESET));
 
-    rLatch &= ~ADF4106_R_COUNTER(ADF4106_R_COUNTER_MASK);
-    ADF4106_UpdateLatch(ADF4106_CTRL_R_COUNTER |
-                        rLatch |
+    dev->rLatch &= ~ADF4106_R_COUNTER(ADF4106_R_COUNTER_MASK);
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_R_COUNTER |
+                        dev->rLatch |
                         ADF4106_R_COUNTER(rCounterValue));
 
-    nLatch &= ~(ADF4106_N_COUNTER_A(ADF4106_N_COUNTER_A_MASK) |
+    dev->nLatch &= ~(ADF4106_N_COUNTER_A(ADF4106_N_COUNTER_A_MASK) |
     			ADF4106_N_COUNTER_B(ADF4106_N_COUNTER_B_MASK));
-    if(this_device == ID_ADF4106)
+    if(dev->this_device == ID_ADF4106)
     {
-        ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER |
-                            nLatch |
+        ADF4106_UpdateLatch(dev,
+			    ADF4106_CTRL_N_COUNTER |
+                            dev->nLatch |
                             ADF4106_N_COUNTER_A(a) |
                             ADF4106_N_COUNTER_B(b));
     }
     else
     {
-        ADF4106_UpdateLatch(ADF4106_CTRL_N_COUNTER |
-                            nLatch |
+        ADF4106_UpdateLatch(dev,
+			    ADF4106_CTRL_N_COUNTER |
+                            dev->nLatch |
                             ADF4106_N_COUNTER_B((b * devicePrescaler) + a));
     }
 
-    fLatch &= ~ADF4106_CR(ADF4106_CR_MASK);
-    ADF4106_UpdateLatch(ADF4106_CTRL_FUNCTION_LATCH |
-                        fLatch |
+    dev->fLatch &= ~ADF4106_CR(ADF4106_CR_MASK);
+    ADF4106_UpdateLatch(dev,
+			ADF4106_CTRL_FUNCTION_LATCH |
+                        dev->fLatch |
                         ADF4106_CR(ADF4106_CR_NORMAL));
 
     return calculatedFrequency;

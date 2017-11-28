@@ -42,43 +42,37 @@
 #ifndef __ADF4106_H__
 #define __ADF4106_H__
 
-#include "Communication.h"
-
-/* Supported devices */
-typedef enum _ADF4106_type_t
-{
-    ID_ADF4001,
-    ID_ADF4002,
-    ID_ADF4106
-} ADF4106_type_t;
-
-/* Initialization methods */
-typedef enum _ADF4106_init_t
-{
-    INIT_LATCH,
-    INIT_CEPIN,
-    INIT_COUNTER_RESET
-} ADF4106_init_t;
-
 /*****************************************************************************/
 /*  Device specific MACROs                                                   */
 /*****************************************************************************/
 /* GPIOs */
-#define ADF4106_LE_OUT                      GPIO0_PIN_OUT
-#define ADF4106_LE_LOW                      GPIO0_LOW
-#define ADF4106_LE_HIGH                     GPIO0_HIGH
+#define ADF4106_LE_OUT                      gpio_direction_output(dev->gpio_le,  \
+			                    GPIO_HIGH)
+#define ADF4106_LE_LOW                      gpio_set_value(dev->gpio_le,         \
+			                    GPIO_LOW)
+#define ADF4106_LE_HIGH                     gpio_set_value(dev->gpio_le,         \
+			                    GPIO_HIGH)
 
-#define ADF4106_CE_OUT                      GPIO2_PIN_OUT
-#define ADF4106_CE_LOW                      GPIO2_LOW
-#define ADF4106_CE_HIGH                     GPIO2_HIGH
+#define ADF4106_CE_OUT                      gpio_direction_output(dev->gpio_ce,  \
+			                    GPIO_HIGH)
+#define ADF4106_CE_LOW                      gpio_set_value(dev->gpio_ce,         \
+			                    GPIO_LOW)
+#define ADF4106_CE_HIGH                     gpio_set_value(dev->gpio_ce,         \
+			                    GPIO_HIGH)
 
-#define ADF4106_LE2_OUT                     GPIO6_PIN_OUT
-#define ADF4106_LE2_LOW                     GPIO6_LOW
-#define ADF4106_LE2_HIGH                    GPIO6_HIGH
+#define ADF4106_LE2_OUT                     gpio_direction_output(dev->gpio_le2, \
+			                    GPIO_HIGH)
+#define ADF4106_LE2_LOW                     gpio_set_value(dev->gpio_le2,        \
+			                    GPIO_LOW)
+#define ADF4106_LE2_HIGH                    gpio_set_value(dev->gpio_le2,        \
+			                    GPIO_HIGH)
 
-#define ADF4106_CE2_OUT                     GPIO7_PIN_OUT
-#define ADF4106_CE2_LOW                     GPIO7_LOW
-#define ADF4106_CE2_HIGH                    GPIO7_HIGH
+#define ADF4106_CE2_OUT                     gpio_direction_output(dev->gpio_ce2, \
+			                    GPIO_HIGH)
+#define ADF4106_CE2_LOW                     gpio_set_value(dev->gpio_ce2,        \
+			                    GPIO_LOW)
+#define ADF4106_CE2_HIGH                    gpio_set_value(dev->gpio_ce2,        \
+			                    GPIO_HIGH)
 
 /* Control Bits */
 #define ADF4106_CTRL_MASK                   0x3
@@ -249,9 +243,6 @@ typedef enum _ADF4106_init_t
 #define ADF4106_PS_32_33                  2
 #define ADF4106_PS_64_65                  3
 
-/* The default slave ID for SPI interface */
-#define ADF4106_SLAVE_ID                    1
-
 /* Default prescaler for ADF4001 and ADF4002 */
 #define ADF4106_PRESCALE(x)                 (8 << (x))
 
@@ -291,7 +282,7 @@ typedef enum _ADF4106_init_t
 *   @powerDown2 - define the type of the power down: asynchronous or
 */
 
-typedef struct _ADF4106_settings_t {
+typedef struct {
 
     /* Reference Input Frequency*/
     unsigned long refIn;
@@ -325,26 +316,85 @@ typedef struct _ADF4106_settings_t {
 
 } ADF4106_settings_t;
 
+/* Supported devices */
+typedef enum {
+    ID_ADF4001,
+    ID_ADF4002,
+    ID_ADF4106
+} ADF4106_type_t;
+
+/* Initialization methods */
+typedef enum {
+    INIT_LATCH,
+    INIT_CEPIN,
+    INIT_COUNTER_RESET
+} ADF4106_init_t;
+
+typedef struct {
+    unsigned long long vcoMaxFrequency;
+    unsigned long pfdMaxFrequency;
+    unsigned long vcoMinFrequency;
+    unsigned long pfdMinFrequency;
+} adf4106_chip_info;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_le;
+	gpio_desc		*gpio_ce;
+	gpio_desc		*gpio_le2;
+	gpio_desc		*gpio_ce2;
+	/* Device Settings */
+	adf4106_chip_info chip_info;
+	ADF4106_settings_t ADF4106_st;
+	ADF4106_type_t this_device;
+	/* Internal buffers for each latch */
+	unsigned long rLatch;
+	unsigned long nLatch;
+	unsigned long fLatch;
+	unsigned long iLatch;
+} ADF4106_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_le;
+	int8_t		gpio_ce;
+	int8_t		gpio_le2;
+	int8_t		gpio_ce2;
+	/* Device Settings */
+	ADF4106_type_t this_device;
+	ADF4106_init_t initMethod;
+	ADF4106_settings_t ADF4106_st;
+} ADF4106_init_param;
+
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char ADF4106_Init(ADF4106_type_t device,
-                  ADF4106_init_t initMethod,
-                  ADF4106_settings_t ADF4106_st);
+char ADF4106_Init(ADF4106_dev **device,
+		  ADF4106_init_param init_param);
+
+/* Free the resources allocated by ADF4106_Init(). */
+int32_t ADF4106_remove(ADF4106_dev *dev);
 
 /* Update register function */
-void ADF4106_UpdateLatch(unsigned long latchData);
+void ADF4106_UpdateLatch(ADF4106_dev *dev,
+			 unsigned long latchData);
 
 /* Return the value of a desired latch */
-unsigned long ADF4106_ReadLatch(unsigned char latchType);
+unsigned long ADF4106_ReadLatch(ADF4106_dev *dev,
+				unsigned char latchType);
 
 /* PLL initialization functions */
-void ADF4106_InitLatchMethod(ADF4106_settings_t ADF4106_st);
-void ADF4106_InitCEPinMethod(ADF4106_settings_t ADF4106_st);
-void ADF4106_InitCounteResetMethod(ADF4106_settings_t ADF4106_st);
+void ADF4106_InitLatchMethod(ADF4106_dev *dev);
+void ADF4106_InitCEPinMethod(ADF4106_dev *dev);
+void ADF4106_InitCounteResetMethod(ADF4106_dev *dev);
 
 /* Set the frequency to a desired value */
-unsigned long long ADF4106_SetFrequency(unsigned long long frequency);
+unsigned long long ADF4106_SetFrequency(ADF4106_dev *dev,
+					unsigned long long frequency);
 
 #endif // __ADF4106_H__
