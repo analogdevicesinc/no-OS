@@ -42,73 +42,101 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ad5110.h"
-#include "Communication.h"
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-unsigned char ad5110DevAddr = 0;
 
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
  *
- * @param devAddr - ad5110 device address.
- *                  Example: ad5110_I2C_ADDR - Model ad5110 BCPZ Y;
- *                           ad5110_1_I2C_ADDR - Model ad5110 BCPZ Y-1.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char ad5110_Init(unsigned char devAddr)
+char ad5110_Init(ad5110_dev **device,
+		 ad5110_init_param init_param)
 {
-    char status = -1;
+	ad5110_dev *dev;
+    char status;
 
-    ad5110DevAddr = devAddr;
-    status = I2C_Init(100000);
+	dev = (ad5110_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	dev->ad5110DevAddr = init_param.ad5110DevAddr;
+	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+
+	*device = dev;
 
     return status;
 }
 
 /***************************************************************************//**
+ * @brief Free the resources allocated by ad5110_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t ad5110_remove(ad5110_dev *dev)
+{
+	int32_t ret;
+
+	ret = i2c_remove(dev->i2c_desc);
+
+	free(dev);
+
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Write the content of serial register data to RDAC.
  *
+ * @param dev       - The device structure.
  * @param rdacValue - Value of the serial register.
  *
  * @return none.
 *******************************************************************************/
-void ad5110_WriteRdac(unsigned char rdacValue)
+void ad5110_WriteRdac(ad5110_dev *dev,
+		      unsigned char rdacValue)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_WR_RDAC;
     dataBuffer[1] = rdacValue;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 }
 
 /***************************************************************************//**
  * @brief Read the content of RDAC register.
  *
+ * @param dev - The device structure.
+ *
  * @return rdacValue - Value read from register.
 *******************************************************************************/
-unsigned char ad5110_ReadRdac(void)
+unsigned char ad5110_ReadRdac(ad5110_dev *dev)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_RD_RDAC;
     dataBuffer[1] = 0;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 
-    I2C_Read(ad5110DevAddr,
-             dataBuffer,
-             1,
-             1);
+	i2c_read(dev->i2c_desc,
+		 dataBuffer,
+		 1,
+		 1);
 
     return dataBuffer[0];
 }
@@ -116,40 +144,44 @@ unsigned char ad5110_ReadRdac(void)
 /***************************************************************************//**
  * @brief Write the content of RDAC register to EEPROM.
  *
+ * @param dev - The device structure.
+ *
  * @return none.
 *******************************************************************************/
-void ad5110_WriteRdacEeprom(void)
+void ad5110_WriteRdacEeprom(ad5110_dev *dev)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_WR_RDAC_EEPROM;
     dataBuffer[1] = 0;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 }
 
 /***************************************************************************//**
  * @brief Read wiper position from EEPROM.
  *
+ * @param dev - The device structure.
+ *
  * @return wiperValue - Value read from EEPROM.
 *******************************************************************************/
-unsigned char ad5110_ReadWiper(void)
+unsigned char ad5110_ReadWiper(ad5110_dev *dev)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_RD_EEPROM;
     dataBuffer[1] = WIPER_POSITION;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 
-    I2C_Read(ad5110DevAddr,
-             dataBuffer,
-             1,
-             1);
+	i2c_read(dev->i2c_desc,
+		 dataBuffer,
+		 1,
+		 1);
 
     return dataBuffer[0];
 }
@@ -157,23 +189,25 @@ unsigned char ad5110_ReadWiper(void)
 /***************************************************************************//**
  * @brief Read resistor tolerance from EEPROM.
  *
+ * @param dev - The device structure.
+ *
  * @return resTolerance - Value read from EEPROM.
 *******************************************************************************/
-unsigned char ad5110_ReadResTolerance(void)
+unsigned char ad5110_ReadResTolerance(ad5110_dev *dev)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_RD_EEPROM;
     dataBuffer[1] = RESISTOR_TOLERANCE;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 
-    I2C_Read(ad5110DevAddr,
-             dataBuffer,
-             1,
-             1);
+	i2c_read(dev->i2c_desc,
+		 dataBuffer,
+		 1,
+		 1);
 
     return dataBuffer[0];
 }
@@ -181,37 +215,41 @@ unsigned char ad5110_ReadResTolerance(void)
 /***************************************************************************//**
  * @brief Software reset; makes a refresh of RDAC register with EEPROM.
  *
+ * @param dev - The device structure.
+ *
  * @return none.
 *******************************************************************************/
-void ad5110_Reset(void)
+void ad5110_Reset(ad5110_dev *dev)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_RESET;
     dataBuffer[1] = 0;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 }
 
 /***************************************************************************//**
  * @brief Software shutdown.
  *
+ * @param dev   - The device structure.
  * @param value - the value written to shut down register.
  *              Example: ShutDownOff - the device is on.
  *                       ShutDownOn  - the device is shut down.
  *
  * @return none.
 *******************************************************************************/
-void ad5110_ShutDown(unsigned char value)
+void ad5110_ShutDown(ad5110_dev *dev,
+		     unsigned char value)
 {
     unsigned char dataBuffer[2];
 
     dataBuffer[0] = CMD_SHUT_DOWN;
     dataBuffer[1] = value;
-    I2C_Write(ad5110DevAddr,
-              dataBuffer,
-              2,
-              1);
+	i2c_write(dev->i2c_desc,
+		  dataBuffer,
+		  2,
+		  1);
 }
