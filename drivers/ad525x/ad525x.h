@@ -43,50 +43,33 @@
 #ifndef __AD525X_H__
 #define __AD525X_H__
 
-#include "Communication.h"
-
-/* Custom boolean type */
-typedef enum _Bool_t
-{
-    false,
-    true
-} Bool_t;
-
-/* Communication types */
-typedef enum _CommType_t
-{
-    SPI,
-    I2C
-} CommType_t;
-
-/* Supported devices */
-typedef enum _AD525X_type_t
-{
-    ID_AD5232,
-    ID_AD5235,
-    ID_ADN2850,
-    ID_AD5252,
-    ID_AD5251,
-    ID_AD5254,
-    ID_AD5253,
-} AD525X_type_t;
-
 /*****************************************************************************/
 /*  Device specific MACROs                                                   */
 /*****************************************************************************/
 /* GPIOs */
-#define AD525X_RESET_OUT                    GPIO1_PIN_OUT
-#define AD525X_RESET_LOW                    GPIO1_LOW
-#define AD525X_RESET_HIGH                   GPIO1_HIGH
-#define AD525X_SHUTDOWN_OUT                 GPIO3_PIN_OUT
-#define AD525X_SHUTDOWN_LOW                 GPIO3_LOW
-#define AD525X_SHUTDOWN_HIGH                GPIO3_HIGH
-#define AD525X_READY_IN                     GPIO0_PIN_IN
-#define AD525X_READY_LOW                    GPIO0_LOW
-#define AD525X_READY_HIGH                   GPIO0_HIGH
-#define AD525X_WP_BF_OUT                    GPIO2_PIN_OUT
-#define AD525X_WP_BF_LOW                    GPIO2_LOW
-#define AD525X_WP_BF_HIGH                   GPIO2_HIGH
+#define AD525X_RESET_OUT                    gpio_direction_output(dev->gpio_reset,    \
+			                    GPIO_HIGH)
+#define AD525X_RESET_LOW                    gpio_set_value(dev->gpio_reset,           \
+			                    GPIO_LOW)
+#define AD525X_RESET_HIGH                   gpio_set_value(dev->gpio_reset,           \
+			                    GPIO_HIGH)
+#define AD525X_SHUTDOWN_OUT                 gpio_direction_output(dev->gpio_shutdown, \
+			                    GPIO_HIGH)
+#define AD525X_SHUTDOWN_LOW                 gpio_set_value(dev->gpio_shutdown,        \
+			                    GPIO_LOW)
+#define AD525X_SHUTDOWN_HIGH                gpio_set_value(dev->gpio_shutdown,        \
+			                    GPIO_HIGH)
+#define AD525X_READY_IN                     gpio_direction_input(dev->gpio_ready)
+#define AD525X_READY_LOW                    gpio_set_value(dev->gpio_ready,           \
+			                    GPIO_LOW)
+#define AD525X_READY_HIGH                   gpio_set_value(dev->gpio_ready,           \
+			                    GPIO_HIGH)
+#define AD525X_WP_BF_OUT                    gpio_direction_output(dev->gpio_wpbf,     \
+			                    GPIO_HIGH)
+#define AD525X_WP_BF_LOW                    gpio_set_value(dev->gpio_wpbf,            \
+			                    GPIO_LOW)
+#define AD525X_WP_BF_HIGH                   gpio_set_value(dev->gpio_wpbf,            \
+			                    GPIO_HIGH)
 
 /* Data word masks */
 #define AD525X_MEM_ADDR_MASK                0xF
@@ -146,35 +129,97 @@ typedef enum _AD525X_type_t
 #define AD525X_RDAC3_SIGN_TOL               0x1E
 #define AD525X_RDAC4_DECIMAL_TOL            0x1F
 
-/* The default slave ID for SPI interface */
-#define AD525X_SLAVE_ID                     1
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/* Custom boolean type */
+typedef enum {
+    false,
+    true
+} Bool_t;
+
+/* Supported devices */
+typedef enum {
+    ID_AD5232,
+    ID_AD5235,
+    ID_ADN2850,
+    ID_AD5252,
+    ID_AD5251,
+    ID_AD5254,
+    ID_AD5253,
+} AD525X_type_t;
+
+/* Communication types */
+typedef enum {
+    SPI,
+    I2C
+} CommType_t;
+
+typedef struct {
+    unsigned char num_channels;
+    CommType_t comm_type;
+    unsigned short num_position;
+} ad525x_chip_info;
+
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+	/* SPI */
+	spi_desc	*spi_desc;
+	/* GPIO */
+	gpio_desc	*gpio_reset;
+	gpio_desc	*gpio_shutdown;
+	gpio_desc	*gpio_ready;
+	gpio_desc	*gpio_wpbf;
+	/* Device Settings */
+	AD525X_type_t	this_device;
+} ad525x_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_reset;
+	int8_t		gpio_shutdown;
+	int8_t		gpio_ready;
+	int8_t		gpio_wpbf;
+	/* Device Settings */
+	AD525X_type_t	this_device;
+} ad525x_init_param;
 
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char AD525X_Init(AD525X_type_t device);
+char AD525X_Init(ad525x_dev **device,
+		 ad525x_init_param init_param);
+
+/* Free the resources allocated by AD525X_Init(). */
+int32_t ad525x_remove(ad525x_dev *dev);
 
 /* Read data from the EEMEM */
-unsigned short AD525X_ReadMem(unsigned char slaveId,
+unsigned short AD525X_ReadMem(ad525x_dev *dev,
                               unsigned char address);
 
 /* Write data to EEMEM */
-void AD525X_WriteMem(unsigned char slaveId,
+void AD525X_WriteMem(ad525x_dev *dev,
                      unsigned char address,
                      unsigned short data);
 
 /* Read the value of the RDAC register */
-unsigned short AD525X_ReadRdac(unsigned char slaveId,
+unsigned short AD525X_ReadRdac(ad525x_dev *dev,
                                unsigned char address);
 
 /* Write the value of the RDAC register */
-void AD525X_WriteRdac(unsigned char slaveId,
+void AD525X_WriteRdac(ad525x_dev *dev,
                       unsigned char address,
                       unsigned short data);
 
 /* Write quick commands to the device */
-void AD525X_WriteCommand(unsigned char slaveId,
+void AD525X_WriteCommand(ad525x_dev *dev,
                          unsigned char command,
                          unsigned char address);
 

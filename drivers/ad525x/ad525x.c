@@ -42,23 +42,19 @@
 /*****************************************************************************/
 /****************************** Include Files ********************************/
 /*****************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ad525x.h"
-#include "Communication.h"
-#include "TIME.h"
 
 #define MSB_BYTE_MASK       0xFF00
 #define LSB_BYTE_MASK       0x00FF
 #define ONEBYTE_OFFSET      0x8
-/*****************************************************************************/
-/**************************** Private variables ******************************/
-/*****************************************************************************/
-struct ad525x_chip_info {
-    unsigned char num_channels;
-    CommType_t comm_type;
-    unsigned short num_position;
-};
 
-static const struct ad525x_chip_info AD525X_CHIP_INFO[] = {
+/*****************************************************************************/
+/***************************** Constant definition ***************************/
+/*****************************************************************************/
+static const ad525x_chip_info CHIP_INFO[] = {
     [ID_AD5232] = {
         .num_channels = 2,
         .comm_type = SPI,
@@ -96,9 +92,6 @@ static const struct ad525x_chip_info AD525X_CHIP_INFO[] = {
     }
 };
 
-/* Actual device type */
-AD525X_type_t this_device;
-
 /*****************************************************************************/
 /*************************** Functions definitions ***************************/
 /*****************************************************************************/
@@ -106,25 +99,38 @@ AD525X_type_t this_device;
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for AD5172 Board.
  *
- * @param The current device type.
+ * @param + device     - The device structure.
+ *        + init_param - The structure that contains the device initial
+ * 		         parameters.
  *
  * @return success
 ******************************************************************************/
-char AD525X_Init(AD525X_type_t device)
+char AD525X_Init(ad525x_dev **device,
+		 ad525x_init_param init_param)
 {
-    char status = -1;
+	ad525x_dev *dev;
+    char status;
 
-    this_device = device;
+	dev = (ad525x_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    dev->this_device = init_param.this_device;
+
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* CPHA = 0; CPOL = 0; */
-        status = SPI_Init(0, 100000, 0, 0);
+	    status = spi_init(&dev->spi_desc, init_param.spi_init);
     }
     else
     {
-        status = I2C_Init(100000);
+	    status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
     }
+
+	status |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	status |= gpio_get(&dev->gpio_shutdown, init_param.gpio_shutdown);
+	status |= gpio_get(&dev->gpio_ready, init_param.gpio_ready);
+	status |= gpio_get(&dev->gpio_wpbf, init_param.gpio_wpbf);
 
     /* Deactivate Hardware Reset */
     AD525X_RESET_OUT;
@@ -138,70 +144,101 @@ char AD525X_Init(AD525X_type_t device)
     /* Setup the RDY input */
     AD525X_READY_IN;
 
+	*device = dev;
+
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD525X_Init().
+ *
+ * @param + dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t ad525x_remove(ad525x_dev *dev)
+{
+	int32_t ret;
+
+	if (CHIP_INFO[dev->this_device].comm_type == SPI)
+		ret = spi_remove(dev->spi_desc);
+	else
+		ret = i2c_remove(dev->i2c_desc);
+
+	if (dev->gpio_shutdown)
+		ret |= gpio_remove(dev->gpio_shutdown);
+
+	if (dev->gpio_reset)
+		ret |= gpio_remove(dev->gpio_reset);
+
+	if (dev->gpio_ready)
+		ret |= gpio_remove(dev->gpio_ready);
+
+	if (dev->gpio_wpbf)
+		ret |= gpio_remove(dev->gpio_wpbf);
+
+	free(dev);
+
+	return ret;
 }
 
 /**************************************************************************//**
  * @brief Read data from the EEMEM
  *
- * @param + slaveId - slave device ID in case of SPI interface, and
- *                    programmable device address in case of the I2C
+ * @param + dev     - The device structure.
  *        + address - desired address of the EEMEM memory
  *
  *
  * @return success
 ******************************************************************************/
-unsigned short AD525X_ReadMem(unsigned char slaveId,
+unsigned short AD525X_ReadMem(ad525x_dev *dev,
                               unsigned char address)
 {
     unsigned char dataBuffer[3] = {0,};
-    unsigned char i2cSlaveAddr = 0;
     unsigned short data = 0;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* Sending the command, reading the result on the next frame */
         dataBuffer[0] |= AD525X_CMD_SPI_MEM2SREG << AD525X_CMD_SPI_OFFSET;
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK;
         /* 3 byte data word */
-        if((this_device == ID_AD5235) || (this_device == ID_ADN2850))
+        if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850))
         {
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      3);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
             dataBuffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
-            SPI_Read(slaveId,
-                            dataBuffer,
-                            3);
+
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
             data = (dataBuffer[1] << ONEBYTE_OFFSET) | dataBuffer[2];
             return data;
         }
         else /* 2 byte data word */
         {
-            SPI_Read(slaveId,
-                     dataBuffer,
-                     2);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
             return (unsigned short)dataBuffer[1];
         }
     }
     else /* Communication interface is I2C */
     {
-        /* Setup I2C address */
-        i2cSlaveAddr |= (AD525X_I2C_HARD_ADDR | \
-                        (slaveId & AD525X_I2C_PIN_ADDR_MASK));
         dataBuffer[0] &= ~AD525X_I2C_CMD_OR_REG;             // reset CMD/REG_n
         dataBuffer[0] |= AD525X_I2C_EE_OR_RDAC;              // set EE/RDAC_n
         dataBuffer[0] |= address & AD525X_I2C_MEM_ADDR_MASK; // set address
         /* Dummy write to select the desired register */
-        I2C_Write(i2cSlaveAddr,
-                  dataBuffer,
-                  1,
-                  1);
+	    i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      1,
+		      1);
         dataBuffer[0] &= AD525X_CMD_NOP;
-        I2C_Read(i2cSlaveAddr,
-                 dataBuffer,
-                 1,
-                 1);
+	    i2c_read(dev->i2c_desc,
+		 dataBuffer,
+		 1,
+		 1);
         data = (unsigned short)dataBuffer[0];
         return data;
     }
@@ -210,127 +247,117 @@ unsigned short AD525X_ReadMem(unsigned char slaveId,
 /*****SPI_*********************************************************************//**
  * @brief Write data to EEMEM.
  *
- * @param + slaveId - slave device ID in case of SPI interface, and
- *                    programmable device address in case of the I2C
+ * @param + dev     - The device structure.
  *        + address - desired address of the EEMEM memory
- *        + data - the data which will be written to the memory
+ *        + data    - the data which will be written to the memory
  *
  * @return success
 ******************************************************************************/
-void AD525X_WriteMem(unsigned char slaveId,
+void AD525X_WriteMem(ad525x_dev *dev,
                      unsigned char address,
                      unsigned short data)
 {
     unsigned char dataBuffer[3] = {0,};
-    unsigned char i2cSlaveAddr = 0;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* Sending the command, reading the result on the next frame */
         dataBuffer[0] |= AD525X_CMD_SPI_SREG2MEM << AD525X_CMD_SPI_OFFSET;
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK;
-        if((this_device == ID_AD5235) || (this_device == ID_ADN2850)) /* 3 byte data word */
+        if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) /* 3 byte data word */
         {
             dataBuffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
             dataBuffer[2] = data & LSB_BYTE_MASK;
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      3);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
         }
         else /* 2 byte data word */
         {
             dataBuffer[1] = data & LSB_BYTE_MASK;
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      2);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
         }
     }
     else /* Communication interface is I2C */
     {
-        /* Setup I2C address */
-        i2cSlaveAddr |= (AD525X_I2C_HARD_ADDR | \
-                        (slaveId & AD525X_I2C_PIN_ADDR_MASK));
         dataBuffer[0] &= ~AD525X_I2C_CMD_OR_REG;         // reset CMD/REG_n
         dataBuffer[0] |= AD525X_I2C_EE_OR_RDAC;          // set EE/RDAC_n
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
 
         dataBuffer[1] = (data & LSB_BYTE_MASK);
-        I2C_Write(i2cSlaveAddr,
-                  dataBuffer,
-                  2,
-                  1);
+	    i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      2,
+		      1);
     }
 }
 
 /**************************************************************************//**
  * @brief Read data from the RDAC register
  *
- * @param + slaveId - slave device ID in case of SPI interface, and
- *                    programmable device address in case of the I2C
+ * @param + dev     - The device structure.
  *        + address - desired address of the RDAC registers
  *
  *
  * @return success
 ******************************************************************************/
-unsigned short AD525X_ReadRdac(unsigned char slaveId,
+unsigned short AD525X_ReadRdac(ad525x_dev *dev,
                                unsigned char address)
 {
     unsigned char dataBuffer[3] = {0,};
-    unsigned char i2cSlaveAddr = 0;
     unsigned short data = 0;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* Sending the command, reading the result on the next frame */
         dataBuffer[0] |= AD525X_CMD_SPI_RDAC2SREG << AD525X_CMD_SPI_OFFSET;
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK;
         /* 3 byte data word */
-        if((this_device == ID_AD5235) || (this_device == ID_ADN2850))
+        if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850))
         {
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      3);
-            TIME_DelayUs(50);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
+            mdelay(50);
             dataBuffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
-            SPI_Read(slaveId,
-                            dataBuffer,
-                            3);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
             data = (dataBuffer[1] << ONEBYTE_OFFSET) | dataBuffer[2];
             return (data & AD525X_DATA10_MASK);
         }
         else /* 2 byte data word */
         {
-            SPI_Read(slaveId,
-                     dataBuffer,
-                     2);
-            TIME_DelayUs(50);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
+            mdelay(50);
             /* Sending a dummy frame to read the result */
             dataBuffer[0] &= AD525X_CMD_NOP << AD525X_CMD_SPI_OFFSET;
-            SPI_Read(slaveId,
-                     dataBuffer,
-                     2);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
             data = (unsigned short)dataBuffer[1];
             return data;
         }
     }
     else /* Communication interface is I2C */
     {
-        /* Setup I2C address */
-        i2cSlaveAddr |= (AD525X_I2C_HARD_ADDR | \
-                        (slaveId & AD525X_I2C_PIN_ADDR_MASK));
         dataBuffer[0] &= ~AD525X_I2C_CMD_OR_REG;         // reset CMD/REG_n
         dataBuffer[0] &= ~AD525X_I2C_EE_OR_RDAC;         // reset EE/RDAC_n
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
         /* Dummy write to select the desired register */
-        I2C_Write(i2cSlaveAddr,
-                  dataBuffer,
-                  1,
-                  1);
+	    i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      1,
+		      1);
         dataBuffer[0] &= AD525X_CMD_NOP;
-        I2C_Read(i2cSlaveAddr,
-                 dataBuffer,
-                 1,
-                 1);
+	    i2c_read(dev->i2c_desc,
+		 dataBuffer,
+		 1,
+		 1);
         data = (unsigned short)dataBuffer[0];
         return data;
     }
@@ -339,77 +366,70 @@ unsigned short AD525X_ReadRdac(unsigned char slaveId,
 /**************************************************************************//**
  * @brief Write data to RDAC register.
  *
- * @param + slaveId - slave device ID in case of SPI interface, and
- *                    programmable device address in case of the I2C
+ * @param + dev     - The device structure.
  *        + address - desired address of the RDAC register
- *        + data - the data which will be written to the RDAC register
+ *        + data    - the data which will be written to the RDAC register
  *
  * @return success
 ******************************************************************************/
-void AD525X_WriteRdac(unsigned char slaveId,
+void AD525X_WriteRdac(ad525x_dev *dev,
                       unsigned char address,
                       unsigned short data)
 {
     unsigned char dataBuffer[3] = {0,};
-    unsigned char i2cSlaveAddr = 0;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* Sending the command, reading the result on the next frame */
         dataBuffer[0] |= AD525X_CMD_SPI_SREG2RDAC << AD525X_CMD_SPI_OFFSET;
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK;
-        if((this_device == ID_AD5235) || (this_device == ID_ADN2850)) /* 3 byte data word */
+        if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) /* 3 byte data word */
         {
             dataBuffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
             dataBuffer[2] = data & LSB_BYTE_MASK;
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      3);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
         }
         else /* 2 byte data word */
         {
             dataBuffer[1] = data & LSB_BYTE_MASK;
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      2);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
         }
     }
     else /* Communication interface is I2C */
     {
-        /* Setup I2C address */
-        i2cSlaveAddr |= (AD525X_I2C_HARD_ADDR | \
-                        (slaveId & AD525X_I2C_PIN_ADDR_MASK));
         dataBuffer[0] &= ~AD525X_I2C_CMD_OR_REG;         // reset CMD/REG_n
         dataBuffer[0] &= ~AD525X_I2C_EE_OR_RDAC;         // reset EE/RDAC_n
         dataBuffer[0] |= address & AD525X_MEM_ADDR_MASK; // set address
 
         dataBuffer[1] = (data & LSB_BYTE_MASK);
-        I2C_Write(i2cSlaveAddr,
-                  dataBuffer,
-                  2,
-                  1);
+	    i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      2,
+		      1);
     }
-    TIME_DelayMs(25);
+    mdelay(25);
 }
 
 /**************************************************************************//**
  * @brief Write quick commands to the device.
  *
- * @param + slaveId - slave device ID in case of SPI interface, and
- *                    programmable device address in case of the I2C
+ * @param + dev     - The device structure.
  *        + command - desired command, the functionality of a command it may
  *                    vary at diffrent devices
  *
  * @return success
 ******************************************************************************/
-void AD525X_WriteCommand(unsigned char slaveId,
+void AD525X_WriteCommand(ad525x_dev *dev,
                          unsigned char command,
                          unsigned char address)
 {
     unsigned char dataBuffer[3] = {0,};
-    unsigned char i2cSlaveAddr = 0;
 
-    if(AD525X_CHIP_INFO[this_device].comm_type == SPI)
+    if(CHIP_INFO[dev->this_device].comm_type == SPI)
     {
         /* Sending the command, reading the result on the next frame */
         command &= AD525X_CMD_MASK;
@@ -433,55 +453,50 @@ void AD525X_WriteCommand(unsigned char slaveId,
             dataBuffer[0] |= (address & AD525X_RDAC_ADDR_MASK_1BIT);
         }
 
-        if((this_device == ID_AD5235) || (this_device == ID_ADN2850)) /* 3 byte data word */
+        if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) /* 3 byte data word */
         {
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      3);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
             if(command == AD525X_CMD_MEM2RDAC)
             {
                 dataBuffer[0] &= AD525X_CMD_NOP;
-                SPI_Write(slaveId,
-                          dataBuffer,
-                          3);
+		    spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   3);
             }
         }
         else /* 2 byte data word */
         {
-            SPI_Write(slaveId,
-                      dataBuffer,
-                      2);
+		spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
             if(command == AD525X_CMD_MEM2RDAC)
             {
-                dataBuffer[0] &= AD525X_CMD_NOP;
-                SPI_Write(slaveId,
-                          dataBuffer,
-                          2);
+		    spi_write_and_read(dev->spi_desc,
+				   dataBuffer,
+				   2);
             }
         }
     }
     else /* Communication interface is I2C */
     {
-        /* Setup I2C address */
-        i2cSlaveAddr |= (AD525X_I2C_HARD_ADDR | \
-                        (slaveId & AD525X_I2C_PIN_ADDR_MASK));
-
         dataBuffer[0] |= AD525X_I2C_CMD_OR_REG;                // set CMD/REG_n
         dataBuffer[0] |= (command & AD525X_CMD_MASK) << AD525X_CMD_I2C_OFFSET;
         dataBuffer[0] |= address & AD525X_RDAC_ADDR_MASK_3BIT; // set address
 
-        I2C_Write(i2cSlaveAddr,
-                  dataBuffer,
-                  2,
-                  1);
+	    i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      2,
+		      1);
         if(command == AD525X_CMD_MEM2RDAC)
         {
             dataBuffer[0] &= AD525X_CMD_NOP;
-            I2C_Write(i2cSlaveAddr,
-                      dataBuffer,
-                      1,
-                      1);
+		i2c_write(dev->i2c_desc,
+		      dataBuffer,
+		      1,
+		      1);
         }
     }
-    TIME_DelayMs(25);
+    mdelay(25);
 }
