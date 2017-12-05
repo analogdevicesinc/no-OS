@@ -42,19 +42,6 @@
 #define _ad5110_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "xil_types.h"
-#include "xparameters.h"
-
-/******************************************************************************/
-/******************* Macros and Constants Definitions *************************/
-/******************************************************************************/
-/*!< ad5110 Device Address */
-#define ad5110_I2C_ADDR         0x2F
-#define ad5110_1_I2C_ADDR       0x2C
-
-/******************************************************************************/
 /************************* Input shift register *******************************/
 /******************************************************************************/
 
@@ -76,31 +63,54 @@
 #define RESISTOR_TOLERANCE      1
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	/* I2C */
+	i2c_desc	*i2c_desc;
+	/* Device Settings */
+	unsigned char ad5110DevAddr;
+} ad5110_dev;
+
+typedef struct {
+	/* I2C */
+	i2c_init_param	i2c_init;
+	/* Device Settings */
+	unsigned char ad5110DevAddr;
+} ad5110_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*!< Initializes the communication with the device. */
-char ad5110_Init(unsigned char devAddr);
+char ad5110_Init(ad5110_dev **device,
+		 ad5110_init_param init_param);
+
+/*!< Free the resources allocated by ad5110_Init(). */
+int32_t ad5110_remove(ad5110_dev *dev);
 
 /*!< Write the content of serial register data to RDAC. */
-void ad5110_WriteRdac(unsigned char rdacValue);
+void ad5110_WriteRdac(ad5110_dev *dev,
+		      unsigned char rdacValue);
 
 /*!< Read the content of RDAC register. */
-unsigned char ad5110_ReadRdac(void);
+unsigned char ad5110_ReadRdac(ad5110_dev *dev);
 
 /*!< Write the content of RDAC register to EEPROM. */
-void ad5110_WriteRdacEeprom(void);
+void ad5110_WriteRdacEeprom(ad5110_dev *dev);
 
 /*!< Read wiper position from EEPROM. */
-unsigned char ad5110_ReadWiper(void);
+unsigned char ad5110_ReadWiper(ad5110_dev *dev);
 
 /*!< Read resistor tolerance from EEPROM. */
-unsigned char ad5110_ReadResTolerance(void);
+unsigned char ad5110_ReadResTolerance(ad5110_dev *dev);
 
 /*!< Software reset; makes a refresh of RDAC register with EEPROM. */
-void ad5110_Reset(void);
+void ad5110_Reset(ad5110_dev *dev);
 
 /*!< Software shutdown. */
-void ad5110_ShutDown(unsigned char value);
+void ad5110_ShutDown(ad5110_dev *dev,
+		     unsigned char value);
 
 #endif  // _ad5110_H_
