@@ -43,12 +43,9 @@
 *******************************************************************************/
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
-#include "Communication.h"
-
-typedef enum
-{
+typedef enum {
     false,
     true
 } bool_t;
@@ -63,6 +60,33 @@ typedef enum {
     ID_AD5443,
     ID_AD5449,
 } AD5449_type_t;
+
+typedef struct {
+    unsigned char num_channels;
+    unsigned char resolution;
+    bool_t has_ctrl;
+} ad5449_chip_info;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_ldac;
+	gpio_desc		*gpio_clr;
+	/* Device Settings */
+	AD5449_type_t		act_device;
+	unsigned short		controlReg;
+} ad5449_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_ldac;
+	int8_t		gpio_clr;
+	/* Device Settings */
+	AD5449_type_t	act_device;
+} ad5449_init_param;
 
 /* Control Bits */
 #define AD5449_CTRL_NOP             0
@@ -104,13 +128,19 @@ typedef enum {
 #define AD5449_SCLK_BIT          7
 
 /* AD5449 GPIO */
-#define AD5449_LDAC_OUT             GPIO1_PIN_OUT
-#define AD5449_LDAC_LOW             GPIO1_LOW
-#define AD5449_LDAC_HIGH            GPIO1_HIGH
+#define AD5449_LDAC_OUT             gpio_direction_output(dev->gpio_ldac,   \
+			            GPIO_HIGH)
+#define AD5449_LDAC_LOW             gpio_set_value(dev->gpio_ldac,          \
+			            GPIO_LOW)
+#define AD5449_LDAC_HIGH            gpio_set_value(dev->gpio_ldac,          \
+			            GPIO_HIGH)
 
-#define AD5449_CLR_OUT              GPIO2_PIN_OUT
-#define AD5449_CLR_LOW              GPIO2_LOW
-#define AD5449_CLR_HIGH             GPIO2_HIGH
+#define AD5449_CLR_OUT              gpio_direction_output(dev->gpio_clr,   \
+			            GPIO_HIGH)
+#define AD5449_CLR_LOW              gpio_set_value(dev->gpio_clr,          \
+			            GPIO_LOW)
+#define AD5449_CLR_HIGH             gpio_set_value(dev->gpio_clr,          \
+			            GPIO_HIGH)
 
 /* SDO Control Bits */
 #define AD5449_SDO_FULL             0
@@ -118,45 +148,55 @@ typedef enum {
 #define AD5449_SDO_OPEN_DRAIN       2
 #define AD5449_SDO_DISABLE          3
 
-/* SPI slave device ID */
-#if(defined(AD5443) || defined(AD5432) || defined(AD5426))
-#define AD5449_SLAVE_ID             3
-#else
-#define AD5449_SLAVE_ID             1
-#endif
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+
 /* Initialize SPI and Initial Values for AD5449 Board. */
-char AD5449_Init(AD5449_type_t device);
+char AD5449_Init(ad5449_dev **device,
+		 ad5449_init_param init_param);
+
+/* Free the resources allocated by AD5449_Init(). */
+int32_t AD5449_remove(ad5449_dev *dev);
 
 /* Write to shift register via SPI. */
-unsigned short AD5449_SetInputShiftReg(unsigned short command,
+unsigned short AD5449_SetInputShiftReg(ad5449_dev *dev,
+				       unsigned short command,
                                        unsigned short data);
 
 /* Load and updates the selected DAC with a given value. */
-void AD5449_LoadUpdateChannel(unsigned char channel, unsigned short dacValue);
+void AD5449_LoadUpdateChannel(ad5449_dev *dev,
+			      unsigned char channel,
+			      unsigned short dacValue);
 
 /* Load selected DAC input register with a given value. */
-void AD5449_LoadChannel(unsigned char channel, unsigned short dacValue);
+void AD5449_LoadChannel(ad5449_dev *dev,
+			unsigned char channel,
+			unsigned short dacValue);
 
 /* Read from the selected DAC register. */
-unsigned short AD5449_ReadbackChannel(unsigned char channel);
+unsigned short AD5449_ReadbackChannel(ad5449_dev *dev,
+				      unsigned char channel);
 
 /* Update the DAC outputs (all channels). */
-void AD5449_UpdateAll(void);
+void AD5449_UpdateAll(ad5449_dev *dev);
 
 /* Load the DAC input registers. */
-void AD5449_LoadAll(short dacValue);
+void AD5449_LoadAll(ad5449_dev *dev,
+		    short dacValue);
 
 /* Set up the scale where to the output will be cleared on active CLR signal */
-void AD5449_ClearScaleSetup(char type);
+void AD5449_ClearScaleSetup(ad5449_dev *dev,
+			    char type);
 
 /* Enable/disable the Daisy-Chain mode */
-void AD5449_DaisyChainSetup(char value);
+void AD5449_DaisyChainSetup(ad5449_dev *dev,
+			    char value);
 
 /* Control the SDO output driver strength */
-void AD5449_SDOControl(char controlBits);
+void AD5449_SDOControl(ad5449_dev *dev,
+		       char controlBits);
 
 /* Set up the active clock edge of the SPI interface */
-void AD5449_SCLKSetup(char value);
+void AD5449_SCLKSetup(ad5449_dev *dev,
+		      char value);
