@@ -42,19 +42,6 @@
 #define __AD5755_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"  // Communication definitions.
-#include "TIME.h"
-
-/* Supported devices */
-typedef enum {
-    ID_AD5755,
-    ID_AD5755_1,
-    ID_AD5757,
-} AD5755_type_t;
-
-/******************************************************************************/
 /******************* Macros and Constants Definitions *************************/
 /******************************************************************************/
 
@@ -63,27 +50,36 @@ typedef enum {
 /******************************************************************************/
 
 /* LDAC */
-#define AD5755_LDAC_OUT        GPIO1_PIN_OUT
-#define AD5755_LDAC_LOW        GPIO1_LOW
-#define AD5755_LDAC_HIGH       GPIO1_HIGH
+#define AD5755_LDAC_OUT        gpio_direction_output(dev->gpio_ldac,  \
+			       GPIO_HIGH);
+#define AD5755_LDAC_LOW        gpio_set_value(dev->gpio_ldac,         \
+			       GPIO_LOW)
+#define AD5755_LDAC_HIGH       gpio_set_value(dev->gpio_ldac,         \
+			       GPIO_HIGH)
 
 /* RESET */
-#define AD5755_RESET_OUT       GPIO4_PIN_OUT
-#define AD5755_RESET_LOW       GPIO4_LOW
-#define AD5755_RESET_HIGH      GPIO4_HIGH
+#define AD5755_RESET_OUT       gpio_direction_output(dev->gpio_rst,  \
+			       GPIO_HIGH);
+#define AD5755_RESET_LOW       gpio_set_value(dev->gpio_rst,         \
+			       GPIO_LOW)
+#define AD5755_RESET_HIGH      gpio_set_value(dev->gpio_rst,         \
+			       GPIO_HIGH)
 
 /* CLEAR */
-#define AD5755_CLEAR_OUT        GPIO3_PIN_OUT
-#define AD5755_CLEAR_LOW        GPIO3_LOW
-#define AD5755_CLEAR_HIGH       GPIO3_HIGH
+#define AD5755_CLEAR_OUT        gpio_direction_output(dev->gpio_clr, \
+			        GPIO_HIGH);
+#define AD5755_CLEAR_LOW        gpio_set_value(dev->gpio_clr,        \
+			        GPIO_LOW)
+#define AD5755_CLEAR_HIGH       gpio_set_value(dev->gpio_clr,        \
+			        GPIO_HIGH)
 
 /* POC */
-#define AD5755_POC_OUT          GPIO6_PIN_OUT
-#define AD5755_POC_LOW          GPIO6_LOW
-#define AD5755_POC_HIGH         GPIO6_HIGH
-
-/* SPI slave device ID */
-#define AD5755_SLAVE_ID         1
+#define AD5755_POC_OUT          gpio_direction_output(dev->gpio_poc, \
+			        GPIO_HIGH);
+#define AD5755_POC_LOW          gpio_set_value(dev->gpio_poc,        \
+			        GPIO_LOW)
+#define AD5755_POC_HIGH         gpio_set_value(dev->gpio_poc,        \
+			        GPIO_HIGH)
 
 /* Input Shift Register Contents for a Write Operation. */
 #define AD5755_ISR_WRITE            (0ul << 23)           /* R/nW */
@@ -302,8 +298,7 @@ typedef enum {
  *               converter. Range 0..3
  *
  */
-typedef struct AD5755_InitialSettings
-{
+typedef struct {
     unsigned char pinAD0state;
     unsigned char pinAD1state;
     unsigned char enablePacketErrorCheck;
@@ -324,55 +319,111 @@ typedef struct AD5755_InitialSettings
     unsigned char dcDcMaxVBit;
 } AD5755_Setup;
 
+/* Supported devices */
+typedef enum {
+    ID_AD5755,
+    ID_AD5755_1,
+    ID_AD5757,
+} AD5755_type_t;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_ldac;
+	gpio_desc		*gpio_rst;
+	gpio_desc		*gpio_clr;
+	gpio_desc		*gpio_poc;
+	/* Device Settings */
+	AD5755_Setup *pAD5755_st;
+	AD5755_type_t this_device;
+} ad5755_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_ldac;
+	int8_t		gpio_rst;
+	int8_t		gpio_clr;
+	int8_t		gpio_poc;
+	/* Device Settings */
+	AD5755_type_t this_device;
+} ad5755_init_param;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the device and powers-up all channels. */
-char AD5755_Init(AD5755_type_t device);
+char AD5755_Init(ad5755_dev **device,
+		 ad5755_init_param init_param);
+
+/*! Free the resources allocated by AD5755_Init(). */
+int32_t AD5755_remove(ad5755_dev *dev);
 
 /*! Reads the value of a register. */
-long AD5755_GetRegisterValue(unsigned char registerAddress);
+long AD5755_GetRegisterValue(ad5755_dev *dev,
+			     unsigned char registerAddress);
 
 /*! Writes data into a register. */
-unsigned short AD5755_SetRegisterValue(unsigned char registerAddress,
+unsigned short AD5755_SetRegisterValue(ad5755_dev *dev,
+				       unsigned char registerAddress,
                                        unsigned char channel,
                                        unsigned short registerValue);
 
 /*! Performs a software reset to the device. */
-void AD5755_Software_Reset(void);
+void AD5755_Software_Reset(ad5755_dev *dev);
 
 /*! Enables/Disables watchdog timer and sets the timeout period. */
-void AD5755_WatchDogSetup(unsigned char wtdEnable, unsigned char timeout);
+void AD5755_WatchDogSetup(ad5755_dev *dev,
+			  unsigned char wtdEnable,
+			  unsigned char timeout);
 
 /*! Writes a "service pulse" to the AD5755 watchdog timer when enabled. */
-void AD5755_FeedWatchDogTimer(void);
+void AD5755_FeedWatchDogTimer(ad5755_dev *dev);
 
 /*! Configures one of the control registers. */
-void AD5755_SetControlRegisters(unsigned char  ctrlRegAddress,
+void AD5755_SetControlRegisters(ad5755_dev *dev,
+				unsigned char  ctrlRegAddress,
                                 unsigned char  channel,
                                 unsigned short regValue);
 
 /*! Computes the CRC for a data buffer. */
-unsigned char AD5755_CheckCrc(unsigned char* data, unsigned char bytesNumber);
+unsigned char AD5755_CheckCrc(unsigned char* data,
+			      unsigned char bytesNumber);
 
 /*! Allows power-up/down of the dc-to-dc converter, DAC and internal amplifiers
     for the selected channel. */
-void AD5755_SetChannelPower(unsigned char channel, unsigned char pwrStatus);
+void AD5755_SetChannelPower(ad5755_dev *dev,
+			    unsigned char channel,
+			    unsigned char pwrStatus);
 
 /*! Sets the range of a channel. */
-void AD5755_SetChannelRange(unsigned char channel, unsigned char range);
+void AD5755_SetChannelRange(ad5755_dev *dev,
+			    unsigned char channel,
+			    unsigned char range);
 
 /*! Selects if the channel clears when CLEAR pin is activated. */
-void AD5755_ChannelClearEnable(unsigned char channel, unsigned char clearEn);
+void AD5755_ChannelClearEnable(ad5755_dev *dev,
+			       unsigned char channel,
+			       unsigned char clearEn);
 
 /*! Configures the Digital Slew Rate Control. */
-void AD5755_SlewRateCtrl(char channel, char srEn, char updtFreq, char stepSize);
+void AD5755_SlewRateCtrl(ad5755_dev *dev,
+			 char channel,
+			 char srEn,
+			 char updtFreq,
+			 char stepSize);
 
 /*! Sets the output voltage of a channel. */
-float AD5755_SetVoltage(unsigned char channel, float voltage);
+float AD5755_SetVoltage(ad5755_dev *dev,
+			unsigned char channel,
+			float voltage);
 
 /*! Sets the output current of a channel. */
-float AD5755_SetCurrent(unsigned char channel, float mACurrent);
+float AD5755_SetCurrent(ad5755_dev *dev,
+			unsigned char channel,
+			float mACurrent);
 
 #endif // __AD5755_H__
