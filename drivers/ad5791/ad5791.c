@@ -41,17 +41,15 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "AD5791.h"    // AD5791 definitions.
-#include "TIME.h"      // TIME definitions.
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "ad5791.h"    // AD5791 definitions.
 
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-struct ad5791_chip_info {
-    unsigned int resolution;
-    };
-
-static const struct ad5791_chip_info ad5791_chip_info[] = {
+/*****************************************************************************/
+/***************************** Constant definition ***************************/
+/*****************************************************************************/
+static const ad5791_chip_info chip_info[] = {
     [ID_AD5760] = {
         .resolution = 16,
     },
@@ -69,21 +67,33 @@ static const struct ad5791_chip_info ad5791_chip_info[] = {
     }
 };
 
-AD5791_type act_device;
-
-
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-long AD5791_Init(AD5791_type device)
+long AD5791_Init(ad5791_dev **device,
+		 ad5791_init_param init_param)
 {
-    long status = -1;
+	ad5791_dev *dev;
+    long status;
 
-    act_device = device;
+	dev = (ad5791_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+    dev->act_device = init_param.act_device;
+
+	/* GPIO */
+	status = gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 
     AD5791_RESET_OUT;
     AD5791_RESET_HIGH;
@@ -92,17 +102,39 @@ long AD5791_Init(AD5791_type device)
     AD5791_CLR_OUT;
     AD5791_CLR_HIGH;
 
-    status = (long)SPI_Init(0,        // transfer format(MSB first)
-                            1000000,  // SPI clock frequency(1 MHz)
-                            1,        // SPI clock polarity(Idle High)
-                            1);       // SPI clock edge(active->idle edge)
+	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+
+	*device = dev;
 
     return status;
 }
 
 /***************************************************************************//**
+ * @brief Free the resources allocated by AD5791_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t AD5791_remove(ad5791_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_reset);
+	ret |= gpio_remove(dev->gpio_clr);
+	ret |= gpio_remove(dev->gpio_ldac);
+
+	free(dev);
+
+	return ret;
+}
+
+/***************************************************************************//**
  * @brief Writes data into a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
  *                          Example:
  *                          AD5791_REG_DAC          - DAC register
@@ -113,7 +145,8 @@ long AD5791_Init(AD5791_type device)
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-long AD5791_SetRegisterValue(unsigned char registerAddress,
+long AD5791_SetRegisterValue(ad5791_dev *dev,
+			     unsigned char registerAddress,
                              unsigned long registerValue)
 {
     unsigned char writeCommand[3] = {0, 0, 0};
@@ -126,7 +159,9 @@ long AD5791_SetRegisterValue(unsigned char registerAddress,
     writeCommand[0] = (spiWord >> 16) & 0x0000FF;
     writeCommand[1] = (spiWord >>  8) & 0x0000FF;
     writeCommand[2] = (spiWord >>  0) & 0x0000FF;
-    status = SPI_Write(AD5791_SLAVE_ID, writeCommand, 3);
+    status = spi_write_and_read(dev->spi_desc,
+				writeCommand,
+				3);
     if(status != 3)
     {
         return -1;
@@ -138,6 +173,7 @@ long AD5791_SetRegisterValue(unsigned char registerAddress,
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
+ * @param dev             - The device structure.
  * @param registerAddress - Address of the register.
  *                          Example:
  *                          AD5791_REG_DAC          - DAC register
@@ -147,14 +183,17 @@ long AD5791_SetRegisterValue(unsigned char registerAddress,
  *
  * @return dataRead       - The register's value or negative error code.
 *******************************************************************************/
-long AD5791_GetRegisterValue(unsigned char registerAddress)
+long AD5791_GetRegisterValue(ad5791_dev *dev,
+			     unsigned char registerAddress)
 {
     unsigned char registerWord[3] = {0, 0, 0};
     unsigned long dataRead        = 0x0;
     char          status          = 0;
 
     registerWord[0] = (AD5791_READ | AD5791_ADDR_REG(registerAddress)) >> 16;
-    status = SPI_Write(AD5791_SLAVE_ID, registerWord, 3);
+	status = spi_write_and_read(dev->spi_desc,
+				    registerWord,
+				    3);
     if(status != 3)
     {
         return -1;
@@ -162,7 +201,9 @@ long AD5791_GetRegisterValue(unsigned char registerAddress)
     registerWord[0] = 0x00;
     registerWord[1] = 0x00;
     registerWord[2] = 0x00;
-    status = SPI_Read(AD5791_SLAVE_ID, registerWord, 3);
+	status = spi_write_and_read(dev->spi_desc,
+				    registerWord,
+				    3);
     if(status != 3)
     {
         return -1;
@@ -177,6 +218,7 @@ long AD5791_GetRegisterValue(unsigned char registerAddress)
 /***************************************************************************//**
  * @brief Sets the DAC output in one of the three states.
  *
+ * @param dev   - The device structure.
  * @param state - The output state.
  *                Example:
  *                AD5791_OUT_NORMAL     - normal operation mode
@@ -185,13 +227,15 @@ long AD5791_GetRegisterValue(unsigned char registerAddress)
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
-long AD5791_DacOuputState(unsigned char state)
+long AD5791_DacOuputState(ad5791_dev *dev,
+			  unsigned char state)
 {
     unsigned long oldCtrl = 0;
     unsigned long newCtrl = 0;
     long          status  = 0;
 
-    status = AD5791_GetRegisterValue(AD5791_REG_CTRL);
+    status = AD5791_GetRegisterValue(dev,
+				     AD5791_REG_CTRL);
     if(status < 0)
     {
         return status;
@@ -202,7 +246,9 @@ long AD5791_DacOuputState(unsigned char state)
     /* Sets the new state provided by the user. */
     newCtrl = oldCtrl |
               ((state << 2) & (AD5791_CTRL_DACTRI | AD5791_CTRL_OPGND));
-    status = AD5791_SetRegisterValue(AD5791_REG_CTRL, newCtrl);
+    status = AD5791_SetRegisterValue(dev,
+				     AD5791_REG_CTRL,
+				     newCtrl);
 
     return status;
 }
@@ -210,17 +256,21 @@ long AD5791_DacOuputState(unsigned char state)
 /***************************************************************************//**
  * @brief Writes to the DAC register.
  *
+ * @param dev   - The device structure.
  * @param value - The value to be written to DAC.
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
-long AD5791_SetDacValue(unsigned long value)
+long AD5791_SetDacValue(ad5791_dev *dev,
+			unsigned long value)
 {
     long status = 0;
 
-    value = value << (MAX_RESOLUTION - ad5791_chip_info[act_device].resolution);
+    value = value << (MAX_RESOLUTION - chip_info[dev->act_device].resolution);
     AD5791_LDAC_LOW;
-    status = AD5791_SetRegisterValue(AD5791_REG_DAC, value);
+    status = AD5791_SetRegisterValue(dev,
+				     AD5791_REG_DAC,
+				     value);
     AD5791_LDAC_HIGH;
 
     return status;
@@ -229,6 +279,7 @@ long AD5791_SetDacValue(unsigned long value)
 /***************************************************************************//**
  * @brief Asserts RESET, CLR or LDAC in a software manner.
  *
+ * @param dev            - The device structure.
  * @param instructionBit - A Software Control Register bit.
  *                         Example:
  *                         AD5791_SOFT_CTRL_LDAC  - Load DAC
@@ -237,16 +288,19 @@ long AD5791_SetDacValue(unsigned long value)
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
-long AD5791_SoftInstruction(unsigned char instructionBit)
+long AD5791_SoftInstruction(ad5791_dev *dev,
+			    unsigned char instructionBit)
 {
     long status = 0;
 
-    status = AD5791_SetRegisterValue(AD5791_CMD_WR_SOFT_CTRL, instructionBit);
+    status = AD5791_SetRegisterValue(dev,
+				     AD5791_CMD_WR_SOFT_CTRL,
+				     instructionBit);
     if(status < 0)
     {
         return status;
     }
-    TIME_DelayMs(1);    // Wait for the instruction to take effect.
+    mdelay(1);    // Wait for the instruction to take effect.
 
     return status;
 }
@@ -255,6 +309,7 @@ long AD5791_SoftInstruction(unsigned char instructionBit)
  * @brief Configures the output amplifier, DAC coding, SDO state and the
  *        linearity error compensation.
  *
+ * @param dev       - The device structure.
  * @param setupWord - Is a 24-bit value that sets or clears the Control Register
  *                    bits : RBUF bit(AD5791_CTRL_RBUF),
  *                           BIN/2sC bit(AD5791_CTRL_BIN2SC),
@@ -266,7 +321,8 @@ long AD5791_SoftInstruction(unsigned char instructionBit)
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
-long AD5791_Setup(unsigned long setupWord)
+long AD5791_Setup(ad5791_dev *dev,
+		  unsigned long setupWord)
 {
     unsigned long oldCtrl = 0;
     unsigned long newCtrl = 0;
@@ -274,7 +330,8 @@ long AD5791_Setup(unsigned long setupWord)
 
     /* Reads the control register in order to save the options related to the
        DAC output state that may have been configured previously. */
-     status = AD5791_GetRegisterValue(AD5791_REG_CTRL);
+     status = AD5791_GetRegisterValue(dev,
+				      AD5791_REG_CTRL);
      if(status < 0)
      {
          return status;
@@ -287,7 +344,9 @@ long AD5791_Setup(unsigned long setupWord)
                           AD5791_CTRL_RBUF);
     /* Sets the new state provided by the user. */
     newCtrl = oldCtrl | setupWord;
-    status = AD5791_SetRegisterValue(AD5791_REG_CTRL, newCtrl);
+    status = AD5791_SetRegisterValue(dev,
+				     AD5791_REG_CTRL,
+				     newCtrl);
 
     return status;
 }

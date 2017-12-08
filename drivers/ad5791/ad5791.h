@@ -41,12 +41,7 @@
 #define __AD5791_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "Communication.h"    // Communication definitions
-
-/******************************************************************************/
-/******************* Macros and Constants Definitions *************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
 /* Supported devices */
 typedef enum {
@@ -57,27 +52,59 @@ typedef enum {
     ID_AD5791,
 } AD5791_type;
 
+typedef struct {
+    unsigned int resolution;
+} ad5791_chip_info;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_reset;
+	gpio_desc		*gpio_clr;
+	gpio_desc		*gpio_ldac;
+	/* Device Settings */
+	AD5791_type act_device;
+} ad5791_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_reset;
+	int8_t		gpio_clr;
+	int8_t		gpio_ldac;
+	/* Device Settings */
+	AD5791_type act_device;
+} ad5791_init_param;
+
 /******************************************************************************/
 /*********************************** GPIO *************************************/
 /******************************************************************************/
-#define AD5791_RESET_OUT       GPIO2_PIN_OUT
-#define AD5791_RESET_LOW       GPIO2_LOW
-#define AD5791_RESET_HIGH      GPIO2_HIGH
+#define AD5791_RESET_OUT       gpio_direction_output(dev->gpio_reset, \
+			       GPIO_HIGH);
+#define AD5791_RESET_LOW       gpio_set_value(dev->gpio_reset,        \
+			       GPIO_LOW)
+#define AD5791_RESET_HIGH      gpio_set_value(dev->gpio_reset,        \
+			       GPIO_HIGH)
 
-#define AD5791_CLR_OUT         GPIO3_PIN_OUT
-#define AD5791_CLR_LOW         GPIO3_LOW
-#define AD5791_CLR_HIGH        GPIO3_HIGH
+#define AD5791_CLR_OUT         gpio_direction_output(dev->gpio_clr,  \
+			       GPIO_HIGH);
+#define AD5791_CLR_LOW         gpio_set_value(dev->gpio_clr,         \
+			       GPIO_LOW)
+#define AD5791_CLR_HIGH        gpio_set_value(dev->gpio_clr,         \
+			       GPIO_HIGH)
 
-#define AD5791_LDAC_OUT        GPIO4_PIN_OUT
-#define AD5791_LDAC_LOW        GPIO4_LOW
-#define AD5791_LDAC_HIGH       GPIO4_HIGH
+#define AD5791_LDAC_OUT        gpio_direction_output(dev->gpio_ldac, \
+			       GPIO_HIGH);
+#define AD5791_LDAC_LOW        gpio_set_value(dev->gpio_ldac,        \
+			       GPIO_LOW)
+#define AD5791_LDAC_HIGH       gpio_set_value(dev->gpio_ldac,        \
+			       GPIO_HIGH)
 
 /******************************************************************************/
 /********************************** AD5791 ************************************/
 /******************************************************************************/
-
-/* SPI slave device ID */
-#define AD5791_SLAVE_ID         1
 
 /* Maximum resolution */
 #define MAX_RESOLUTION          20
@@ -117,26 +144,36 @@ typedef enum {
 /******************************************************************************/
 
 /*! Initializes the communication with the device. */
-long AD5791_Init(AD5791_type device);
+long AD5791_Init(ad5791_dev **device,
+		 ad5791_init_param init_param);
+
+/*! Free the resources allocated by AD5791_Init(). */
+int32_t AD5791_remove(ad5791_dev *dev);
 
 /*! Writes data into a register. */
- long AD5791_SetRegisterValue(unsigned char registerAddress,
+ long AD5791_SetRegisterValue(ad5791_dev *dev,
+			      unsigned char registerAddress,
                               unsigned long registerValue);
 
 /*! Reads the value of a register. */
-long AD5791_GetRegisterValue(unsigned char registerAddress);
+long AD5791_GetRegisterValue(ad5791_dev *dev,
+			     unsigned char registerAddress);
 
 /*! Sets the DAC output in one of the three states. */
-long AD5791_DacOuputState(unsigned char state);
+long AD5791_DacOuputState(ad5791_dev *dev,
+			  unsigned char state);
 
 /*! Writes to the DAC register. */
-long AD5791_SetDacValue(unsigned long value);
+long AD5791_SetDacValue(ad5791_dev *dev,
+			unsigned long value);
 
 /*! Asserts RESET, CLR or LDAC in a software manner. */
-long AD5791_SoftInstruction(unsigned char instructionBit);
+long AD5791_SoftInstruction(ad5791_dev *dev,
+			    unsigned char instructionBit);
 
 /*! Configures the output amplifier, DAC coding, SDO state and the linearity
     error compensation. */
-long AD5791_Setup(unsigned long setupWord);
+long AD5791_Setup(ad5791_dev *dev,
+		  unsigned long setupWord);
 
 #endif /* __AD5791_H__ */
