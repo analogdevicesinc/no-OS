@@ -44,13 +44,30 @@
 *******************************************************************************/
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
-#include "Communication.h"
+
+/* Custom type for active clock edge */
+typedef enum {
+    negedge,
+    posedge
+} active_clk_t;
+
+/* Custom boolean type */
+typedef enum {
+    false,
+    true
+} bool_t;
+
+/* Data structure for chip's attributes */
+typedef struct {
+    unsigned char resolution;
+    active_clk_t  data_clock_in;
+    bool_t        has_ctrl;
+} ad5446_chip_info;
 
 /* Supported output types */
-typedef enum
-{
+typedef enum {
     unipolar,       /* 0 .. Vref */
     unipolar_inv,   /* 0 .. -Vref */
     bipolar         /* -Vref .. Vref*/
@@ -71,38 +88,62 @@ typedef enum {
     ID_AD5444,
 } AD5446_type_t;
 
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_ladc;
+	gpio_desc		*gpio_clrout;
+	/* Device Settings */
+	AD5446_type_t act_device;
+} ad5446_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_ladc;
+	int8_t		gpio_clrout;
+	/* Device Settings */
+	AD5446_type_t act_device;
+} ad5446_init_param;
+
 /* Control Bits */
 #define AD5446_CTRL_LOAD_UPDATE     0x0
 #define AD5446_CTRL_ACTIVE_POSEDGE  0x3
 
 /* AD5446 GPIO */
-#define AD5446_LDAC_OUT             GPIO1_PIN_OUT
-#define AD5446_LDAC_LOW             GPIO1_LOW
-#define AD5446_LDAC_HIGH            GPIO1_HIGH
+#define AD5446_LDAC_OUT             gpio_direction_output(dev->gpio_ladc,   \
+			            GPIO_HIGH)
+#define AD5446_LDAC_LOW             gpio_set_value(dev->gpio_ladc,          \
+			            GPIO_LOW)
+#define AD5446_LDAC_HIGH            gpio_set_value(dev->gpio_ladc,          \
+			            GPIO_HIGH)
 
-#define AD5446_CLR_OUT              GPIO0_PIN_OUT
-#define AD5446_CLR_LOW              GPIO0_LOW
-#define AD5446_CLR_HIGH             GPIO0_HIGH
-
-/* SPI slave device ID
- * These are board specific defines
- * It should be defined in function of the current system configuration and architecture
- * */
-#if(defined(AD5446) || defined(AD5444))
-#define AD5446_SLAVE_ID             2
-#else
-#define AD5446_SLAVE_ID             1
-#endif
+#define AD5446_CLR_OUT              gpio_direction_output(dev->gpio_clrout, \
+			            GPIO_HIGH)
+#define AD5446_CLR_LOW              gpio_set_value(dev->gpio_clrout,        \
+			            GPIO_LOW)
+#define AD5446_CLR_HIGH             gpio_set_value(dev->gpio_clrout,        \
+			            GPIO_HIGH)
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize SPI and Initial Values for AD5446 Board. */
-char AD5446_Init(AD5446_type_t device);
+char AD5446_Init(ad5446_dev **device,
+		 ad5446_init_param init_param);
+
+/* Free the resources allocated by AD5446_Init(). */
+int32_t AD5446_remove(ad5446_dev *dev);
 
 /* Write to shift register via SPI. */
-void AD5446_SetRegister(unsigned char command,
-                         unsigned short data);
+void AD5446_SetRegister(ad5446_dev *dev,
+			unsigned char command,
+			unsigned short data);
 
 /* Sets the output voltage. */
-float AD5446_SetVoltage(float voltage, float vref, vout_type_t vout_type);
+float AD5446_SetVoltage(ad5446_dev *dev,
+			float voltage,
+			float vref,
+			vout_type_t vout_type);
