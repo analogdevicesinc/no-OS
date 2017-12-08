@@ -45,8 +45,10 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include "AD5446.h"
-#include "Communication.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "ad5446.h"
 
 #define MAX_RESOLUTION  16      /* Maximum resolution of supported devices */
 #define DATA_MASK(x)    (0xFFFF >> (MAX_RESOLUTION - (x)))
@@ -60,31 +62,11 @@
 #define PKT_LENGTH      2       /* SPI packet length in byte */
 
 /*****************************************************************************/
-/***************************** Variable definition ***************************/
+/***************************** Constant definition ***************************/
 /*****************************************************************************/
-/* Custom type for active clock edge */
-typedef enum
-{
-    negedge,
-    posedge
-} active_clk_t;
-
-/* Custom boolean type */
-typedef enum
-{
-    false,
-    true
-} bool_t;
-
-/* Data structure for chip's attributes */
-struct ad5446_chip_info {
-    unsigned char resolution;
-    active_clk_t  data_clock_in;
-    bool_t        has_ctrl;
-};
 
 /* Device 'table' */
-static const struct ad5446_chip_info chip_info[] = {
+static const ad5446_chip_info chip_info[] = {
     [ID_AD5553] = {
         .resolution = 14,
         .data_clock_in = posedge,
@@ -142,99 +124,133 @@ static const struct ad5446_chip_info chip_info[] = {
     }
 };
 
-/* Actual device type */
-AD5446_type_t act_device;
-
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for AD5446 Board.
  *
- * @param None.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return retValue - Result of the initialization.
  *                    Example: 0 - if initialization was successful;
  *                            -1 - if initialization was unsuccessful.
 ******************************************************************************/
-char AD5446_Init(AD5446_type_t device)
+char AD5446_Init(ad5446_dev **device,
+		 ad5446_init_param init_param)
 {
-    char status = -1;
+	ad5446_dev *dev;
+    char status;
 
-    act_device = device;
+	dev = (ad5446_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-    /* Initialize SPI communication. */
-    if(chip_info[act_device].data_clock_in == posedge)
-    {
-        status = SPI_Init(0, 1000000, 1, 0);
-    }
-    else
-    {
-        status = SPI_Init(0, 1000000, 0, 0);
-    }
+    dev->act_device = init_param.act_device;
+
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
+	/* GPIO */
+	status |= gpio_get(&dev->gpio_ladc, init_param.gpio_ladc);
+	status |= gpio_get(&dev->gpio_clrout, init_param.gpio_clrout);
 
     /* Initialize configuration pins, if exist. */
-    if(act_device == ID_AD5542A)
+    if(dev->act_device == ID_AD5542A)
     {
         AD5446_LDAC_OUT;
         AD5446_LDAC_LOW;
         AD5446_CLR_OUT;
         AD5446_CLR_HIGH;
     }
-    else if(act_device == ID_AD5541A)
+    else if(dev->act_device == ID_AD5541A)
     {
         AD5446_LDAC_OUT;
         AD5446_LDAC_LOW;
     }
-    else if(act_device == ID_AD5446) /* Enable the SDO line */
+    else if(dev->act_device == ID_AD5446) /* Enable the SDO line */
     {
         /* AD5446_CLR is mapped to GPIO0 */
         AD5446_CLR_OUT;
         AD5446_CLR_LOW;
     }
 
+	*device = dev;
+
 return status;
 }
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD5446_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t AD5446_remove(ad5446_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_ladc);
+	ret |= gpio_remove(dev->gpio_clrout);
+
+	free(dev);
+
+	return ret;
+}
+
 /**************************************************************************//**
  * @brief Writes to input register via SPI.
  *
- * @param   data - data to be written in input register.
+ * @param dev      - The device structure.
+ * @param command  - Command to be transmitted to the device.
+ * @param data     - Data to be written in input register.
  *
  * @return  None.
 ******************************************************************************/
-void AD5446_SetRegister(unsigned char command,
-                         unsigned short data)
+void AD5446_SetRegister(ad5446_dev *dev,
+			unsigned char command,
+			unsigned short data)
 {
     unsigned short inputShiftReg = 0;
     unsigned char spiData[PKT_LENGTH] = {0, 0};
 
-    if(chip_info[act_device].has_ctrl == true)
+    if(chip_info[dev->act_device].has_ctrl == true)
     {
         inputShiftReg = ((command & CMD_MASK) << CMD_OFFSET) |
-                     ( data & DATA_MASK(chip_info[act_device].resolution) \
-                      << DATA_OFFSET(chip_info[act_device].resolution));
+                     ( data & DATA_MASK(chip_info[dev->act_device].resolution) \
+                      << DATA_OFFSET(chip_info[dev->act_device].resolution));
         spiData[0] = (inputShiftReg & MSB_MASK) >> MSB_OFFSET;
         spiData[1] = (inputShiftReg & LSB_MASK) >> LSB_OFFSET;
     }
     else
     {
-        inputShiftReg = data & (DATA_MASK(chip_info[act_device].resolution));
+        inputShiftReg = data & (DATA_MASK(chip_info[dev->act_device].resolution));
         spiData[0] = (inputShiftReg & MSB_MASK) >> MSB_OFFSET;
         spiData[1] = (inputShiftReg & LSB_MASK);
     }
-    SPI_Write((unsigned char)AD5446_SLAVE_ID, spiData, PKT_LENGTH);
+	spi_write_and_read(dev->spi_desc,
+			   spiData,
+			   PKT_LENGTH);
 }
 /***************************************************************************//**
  * @brief Sets the output voltage.
  *
+ * @param dev        - The device structure.
  * @param outVoltage - The voltage value in volts
  * @param vref       - The voltage reference used by the device in volts.
  *
  * @return Actual voltage that the device can output.
 *******************************************************************************/
-float AD5446_SetVoltage(float voltage, float vref, vout_type_t vout_type)
+float AD5446_SetVoltage(ad5446_dev *dev,
+			float voltage,
+			float vref,
+			vout_type_t vout_type)
 {
     unsigned short  registerValue = 0;
     float           actualVout = 0;
     float           code = 0;
-    unsigned short  max_value = DATA_MASK(chip_info[act_device].resolution);
+    unsigned short  max_value = DATA_MASK(chip_info[dev->act_device].resolution);
 
     /* Get raw data from the user's desired voltage value. */
     switch(vout_type)
@@ -266,7 +282,9 @@ float AD5446_SetVoltage(float voltage, float vref, vout_type_t vout_type)
     }
 
     /* Write to DAC register. */
-    AD5446_SetRegister(0, registerValue);
+    AD5446_SetRegister(dev,
+		       0,
+		       registerValue);
     /* Calculate the output voltage value. */
     switch(vout_type)
     {
