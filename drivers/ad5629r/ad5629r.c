@@ -43,23 +43,15 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ad5629r.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-typedef enum
-{
-    com_spi,
-    com_i2c
-} comm_type_t; 
-
-struct ad5629r_chip_info {
-    unsigned int resolution;
-    comm_type_t communication;
-};
-
-static const struct ad5629r_chip_info ad5629r_chip_info[] = {
+static const ad5629r_chip_info chip_info[] = {
     [ID_AD5629R] = {
         .resolution = 12,
         .communication = com_i2c,
@@ -82,11 +74,6 @@ static const struct ad5629r_chip_info ad5629r_chip_info[] = {
     }
 };
 
-AD5629R_type act_device;
-
-unsigned char ad5629rDevAddr = 0;
-unsigned char bitsNumber     = 0;
-
 /******************************************************************************/
 /************************** Functions Definitions *****************************/
 /******************************************************************************/
@@ -105,49 +92,85 @@ unsigned char bitsNumber     = 0;
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char AD5629R_Init(unsigned char devAddr, AD5629R_type device)
+char AD5629R_Init(ad5629r_dev **device,
+		  ad5629r_init_param init_param)
 {
-    char status = -1;
+	ad5629r_dev *dev;
+    char status;
 
-    ad5629rDevAddr = devAddr;
-    act_device = device;
+	dev = (ad5629r_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
+    dev->act_device = init_param.act_device;
 
-    if (ad5629r_chip_info[act_device].communication == com_spi)
+    if (chip_info[dev->act_device].communication == com_spi)
     {
-        status = SPI_Init(0, 1000000, 1, 1);
+	    status = spi_init(&dev->spi_desc, init_param.spi_init);
     }
     else
     {
-        if (ad5629r_chip_info[act_device].communication == com_i2c)
-        {
-            status = I2C_Init(100000);
-        }
+	    status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
     }
+
+	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
+	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
 
     AD5629R_LDAC_OUT;
     AD5629R_LDAC_LOW;
     AD5629R_CLR_OUT;
     AD5629R_CLR_HIGH;
 
+	*device = dev;
+
     return status;
 }
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD5629R_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return ret - The result of the remove procedure.
+*******************************************************************************/
+int32_t AD5629R_remove(ad5629r_dev *dev)
+{
+	int32_t ret;
+
+	if (chip_info[dev->act_device].communication == com_spi)
+		ret = spi_remove(dev->spi_desc);
+	else
+		ret = i2c_remove(dev->i2c_desc);
+
+	if (dev->gpio_ldac)
+		ret |= gpio_remove(dev->gpio_ldac);
+
+	if (dev->gpio_clr)
+		ret |= gpio_remove(dev->gpio_clr);
+
+	free(dev);
+
+	return ret;
+}
+
 /**************************************************************************//**
  * @brief Write to input register and read from output register via SPI.
  *
- * @param   function - command control bits;
+ * @param   dev      - The device structure.
+ *          function - command control bits;
  *          dacN     - address of selected DAC;
  *          data     - data to be written in register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-void AD5629R_SetCtrl(unsigned char function,
+void AD5629R_SetCtrl(ad5629r_dev *dev,
+		     unsigned char function,
                      unsigned char dacN,
                      unsigned long data)
 {
     unsigned char  dataBuff[4]   = {0, 0, 0, 0};
 
-    if(ad5629r_chip_info[act_device].communication == com_spi)
+    if(chip_info[dev->act_device].communication == com_spi)
     {
         data = data & 0xFFFFF;
 
@@ -156,20 +179,22 @@ void AD5629R_SetCtrl(unsigned char function,
         dataBuff[2] = (0xFF00 & data) >> 8;
         dataBuff[3] = (0xFF & data);
 
-        SPI_Write(AD5629R_SLAVE_ID, dataBuff, 4);
+	    spi_write_and_read(dev->spi_desc,
+			       dataBuff,
+			       4);
     }
     else
     {
-        if (ad5629r_chip_info[act_device].communication == com_i2c)
+        if (chip_info[dev->act_device].communication == com_i2c)
         {
             dataBuff[0] = (function << 4) | dacN;
             dataBuff[1] = (data & 0xFF00) >> 8;
             dataBuff[2] = (data & 0x00FF) >> 0;
 
-            I2C_Write(AD5629R_I2C_ADDR_2,
-                      dataBuff,
-                      3,
-                      1);
+		i2c_write(dev->i2c_desc,
+			  dataBuff,
+			  3,
+			  1);
         }
     }
 }
@@ -177,22 +202,24 @@ void AD5629R_SetCtrl(unsigned char function,
 /**************************************************************************//**
  * @brief Write to input register and read from output register via SPI.
  *
- * @param   function - command control bits.
+ * @param   dev      - The device structure.
+ *          function - command control bits.
  *          dacN     - address of selected DAC;
  *          dacValue - data to be written in input register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-void AD5629R_SetInputReg(unsigned char function,
+void AD5629R_SetInputReg(ad5629r_dev *dev,
+			 unsigned char function,
                          unsigned char dacN,
                          unsigned short dacValue)
 {
     unsigned char  dataBuff[4]   = {0, 0, 0, 0};
 
     dacValue = dacValue << (MAX_RESOLUTION -
-               ad5629r_chip_info[act_device].resolution);
+               chip_info[dev->act_device].resolution);
 
-    if(ad5629r_chip_info[act_device].communication == com_spi)
+    if(chip_info[dev->act_device].communication == com_spi)
     {
         dacValue = dacValue & 0xFFFF;
 
@@ -201,7 +228,9 @@ void AD5629R_SetInputReg(unsigned char function,
         dataBuff[2] = (0xFF0 & dacValue) >> 4;
         dataBuff[3] = (0xF & dacValue) << 4;
 
-        SPI_Write(AD5629R_SLAVE_ID, dataBuff, 4);
+	    spi_write_and_read(dev->spi_desc,
+			       dataBuff,
+			       4);
     }
     else
     {
@@ -209,70 +238,94 @@ void AD5629R_SetInputReg(unsigned char function,
         dataBuff[1] = (dacValue & 0xFF00) >> 8;
         dataBuff[2] = (dacValue & 0x00FF) >> 0;
 
-        I2C_Write(AD5629R_I2C_ADDR_2,
-                  dataBuff,
-                  3,
-                  1);
+	    i2c_write(dev->i2c_desc,
+			  dataBuff,
+			  3,
+			  1);
     }
 }
 
 /***************************************************************************//**
  * @brief Writes a value to Input Register N of selected DAC channel.
  *
- * @param dacValue - Value to be written in register;
+ * @param dev      - The device structure.
+ *        dacValue - Value to be written in register;
  *        dacN     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegN(unsigned char dacN, unsigned short dacValue)
+void AD5629R_WriteRegN(ad5629r_dev *dev,
+		       unsigned char dacN,
+		       unsigned short dacValue)
 {
-    AD5629R_SetInputReg(AD5629R_WRITE_N, dacN, dacValue);
+    AD5629R_SetInputReg(dev,
+			AD5629R_WRITE_N,
+			dacN,
+			dacValue);
 }
 
 /***************************************************************************//**
  * @brief Updates selected DAC register.
  *
- * @param dacN - Address of selected DAC.
+ * @param dev  - The device structure.
+ *        dacN - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_UpdateDacN(unsigned char dacN)
+void AD5629R_UpdateDacN(ad5629r_dev *dev,
+			unsigned char dacN)
 {
-    AD5629R_SetInputReg(AD5629R_UPDATE_N, dacN, 0x0);
+    AD5629R_SetInputReg(dev,
+			AD5629R_UPDATE_N,
+			dacN,
+			0x0);
 }
 
 /***************************************************************************//**
  * @brief Writes a value to Input Register N of selected DAC channel, then
  *        updates all.
  *
- * @param dacValue - Value to be written in register;
+ * @param dev      - The device structure.
+ *        dacValue - Value to be written in register;
  *        dacN     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegNUpdateAll(unsigned char dacN, unsigned short dacValue)
+void AD5629R_WriteRegNUpdateAll(ad5629r_dev *dev,
+				unsigned char dacN,
+				unsigned short dacValue)
 {
-    AD5629R_SetInputReg(AD5629R_WRITE_N_UPDATE_ALL, dacN, dacValue);
+    AD5629R_SetInputReg(dev,
+			AD5629R_WRITE_N_UPDATE_ALL,
+			dacN,
+			dacValue);
 }
 
 /***************************************************************************//**
  * @brief Writes a value to Input Register N and updates the respective DAC
  *        channel.
  *
- * @param dacValue - Value to be written in register;
+ * @param dev      - The device structure.
+ *        dacValue - Value to be written in register;
  *        dacN     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegNUpdateN(unsigned char dacN, unsigned short dacValue)
+void AD5629R_WriteRegNUpdateN(ad5629r_dev *dev,
+			      unsigned char dacN,
+			      unsigned short dacValue)
 {
-    AD5629R_SetInputReg(AD5629R_WRITE_N_UPDATE_N, dacN, dacValue);
+    AD5629R_SetInputReg(dev,
+			AD5629R_WRITE_N_UPDATE_N,
+			dacN,
+			dacValue);
 }
 
 /***************************************************************************//**
  * @brief Sets the power mode for one or more selected DAC channels.
  *
- * @param dacSel - a byte where each bit is corresponding to a DAC; when a bit is
+ * @param dev    - The device structure.
+ *        dacSel - a byte where each bit is corresponding to a DAC; when a bit is
  *                 set to 1, the corresponding DAC is selected.
  *                 Example: DAC_A_SEL - the selected DAC is DAC A;
  *                          DAC_D_SEL | DAC_F_SEL | DAC_H_SEL - the selected DACs
@@ -285,19 +338,25 @@ void AD5629R_WriteRegNUpdateN(unsigned char dacN, unsigned short dacValue)
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_SetPowerMode(unsigned char dacSel, unsigned char mode)
+void AD5629R_SetPowerMode(ad5629r_dev *dev,
+			  unsigned char dacSel,
+			  unsigned char mode)
 {
     unsigned long data = 0;
 
     data = (mode << 8) | dacSel;
 
-    AD5629R_SetCtrl(AD5629R_POWER, 0x0, data);
+    AD5629R_SetCtrl(dev,
+		    AD5629R_POWER,
+		    0x0,
+		    data);
 }
 
 /***************************************************************************//**
  * @brief Loads the Clear Code Register with a certain value.
  *
- * @param clearValue - the value to be set in all DAC registers after a clear
+ * @param dev        - The device structure.
+ *        clearValue - the value to be set in all DAC registers after a clear
  *                     operation.
  *                     Example: CLR_TO_ZEROSCALE - clears to 0x0;
  *                              CLR_TO_MIDSCALE  - clears to 0x8000;
@@ -306,19 +365,24 @@ void AD5629R_SetPowerMode(unsigned char dacSel, unsigned char mode)
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_LoadClearCodeReg(unsigned char clearValue)
+void AD5629R_LoadClearCodeReg(ad5629r_dev *dev,
+			      unsigned char clearValue)
 {
     unsigned long data = 0;
 
     data = (unsigned long)clearValue;
 
-    AD5629R_SetCtrl(AD5629R_LOAD_CLEAR_REG, 0x0, data);
+    AD5629R_SetCtrl(dev,
+		    AD5629R_LOAD_CLEAR_REG,
+		    0x0,
+		    data);
 }
 
 /***************************************************************************//**
  * @brief Loads the LDAC register with a certain value.
  *
- * @param dacSel - a byte where each bit is corresponding to a DAC; when a bit is
+ * @param dev    - The device structure.
+ *        dacSel - a byte where each bit is corresponding to a DAC; when a bit is
  *                 set to 1, the corresponding DAC is selected to override LDAC
  *                 pin.
  *                 Example: DAC_A_SEL - the selected DAC to override the LDAC pin
@@ -328,39 +392,51 @@ void AD5629R_LoadClearCodeReg(unsigned char clearValue)
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_LoadLdacReg(unsigned char dacSel)
+void AD5629R_LoadLdacReg(ad5629r_dev *dev,
+			 unsigned char dacSel)
 {
     unsigned long data = 0;
 
     data = (unsigned long)dacSel;
 
-    AD5629R_SetCtrl(AD5629R_LOAD_LDAC_REG, 0x0, data);
+    AD5629R_SetCtrl(dev,
+		    AD5629R_LOAD_LDAC_REG,
+		    0x0,
+		    data);
 }
 
 /***************************************************************************//**
  * @brief Makes a power-on reset.
  *
- * @param none.
+ * @param dev - The device structure.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_Reset(void)
+void AD5629R_Reset(ad5629r_dev *dev)
 {
-    AD5629R_SetCtrl(AD5629R_RESET, 0x0, 0x0);
+    AD5629R_SetCtrl(dev,
+		    AD5629R_RESET,
+		    0x0,
+		    0x0);
 }
 
 /***************************************************************************//**
  * @brief Turns on/off the internal reference.
  *
- * @param status - the status of internal reference.
+ * @param dev    - The device structure.
+ *        status - the status of internal reference.
  *                 Example: REF_ON  - the reference is on;
  *                          REF_OFF - the reference is off.
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_SetRef(unsigned char status)
+void AD5629R_SetRef(ad5629r_dev *dev,
+		    unsigned char status)
 {
-    AD5629R_SetCtrl(AD5629R_REFERENCE, 0x0, (unsigned long)status);
+    AD5629R_SetCtrl(dev,
+		    AD5629R_REFERENCE,
+		    0x0,
+		    (unsigned long)status);
 }
 
 
