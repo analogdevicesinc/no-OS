@@ -63,10 +63,13 @@
 #define AD5421_CMD(x)			((x & 0xFF) << 16)
 
 /* AD5421 GPIO */
-#define AD5421_LDAC_OUT			GPIO0_PIN_OUT
-#define AD5421_LDAC_LOW			GPIO0_LOW
-#define AD5421_LDAC_HIGH		GPIO0_HIGH
-#define AD5421_FAULT_IN 		GPIO1_PIN_IN
+#define AD5421_LDAC_OUT			gpio_direction_output(dev->gpio_ldac,   \
+			                GPIO_HIGH)
+#define AD5421_LDAC_LOW			gpio_set_value(dev->gpio_ldac,          \
+			                GPIO_LOW)
+#define AD5421_LDAC_HIGH		gpio_set_value(dev->gpio_ldac,          \
+			                GPIO_HIGH)
+#define AD5421_FAULT_IN 		gpio_direction_input(dev->gpio_faultin)
 
 /* CONTROL register bits */
 #define CTRL_SPI_WATCHDOG		(1 << 12)
@@ -74,39 +77,61 @@
 #define CTRL_SEL_ADC_INPUT      (1 << 8)
 #define CTRL_ONCHIP_ADC         (1 << 7)
 
-/* SPI Configuration */
-#define AD5421_SLAVE_ID			1
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_ldac;
+	gpio_desc		*gpio_faultin;
+} ad5421_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_ldac;
+	int8_t		gpio_faultin;
+} ad5421_init_param;
 
 /*****************************************************************************/
 /************************* Functions Declarations ****************************/
 /*****************************************************************************/
 /* Initialize the communication with the device. */
-int   AD5421_Init(void);
-/* Initialize the communication with the device. */
-int   AD5421_UpdateParameters(void);
+int   AD5421_Init(ad5421_dev **device,
+		  ad5421_init_param init_param);
+/* Free the resources allocated by AD5421_Init(). */
+int32_t AD5421_remove(ad5421_dev *dev);
 /* Set the value of DAC register. */
-void  AD5421_SetDac(int dacValue);
+void  AD5421_SetDac(ad5421_dev *dev,
+		    int dacValue);
 /* Set the value of OFFSET register. */
-void  AD5421_SetOffset(int offsetValue);
+void  AD5421_SetOffset(ad5421_dev *dev,
+		       int offsetValue);
 /* Set the value of GAIN register. */
-void  AD5421_SetGain(int gainValue);
+void  AD5421_SetGain(ad5421_dev *dev,
+		     int gainValue);
 /* Read the DAC register. */
-int   AD5421_GetDac(void);
+int   AD5421_GetDac(ad5421_dev *dev);
 /* Read OFFSET register. */
-int   AD5421_GetOffset(void);
+int   AD5421_GetOffset(ad5421_dev *dev);
 /* Read GAIN register. */
-int   AD5421_GetGain(void);
+int   AD5421_GetGain(ad5421_dev *dev);
 /* Read FAULT register. */
-int   AD5421_GetFault(void);
+int   AD5421_GetFault(ad5421_dev *dev);
 /* Read the temperature from Fault register. */
-int   AD5421_GetTemp(void);
+int   AD5421_GetTemp(ad5421_dev *dev);
 /* Read VLoop-COM from Fault register. */
-float AD5421_GetVloop(void);
+float AD5421_GetVloop(ad5421_dev *dev);
 /* Send command via SPI. */
-int   AD5421_Set(int *iValue);
+int   AD5421_Set(ad5421_dev *dev,
+		 int *iValue);
 /* Receive value via SPI. */
-int   AD5421_Get(void);
+int   AD5421_Get(ad5421_dev *dev);
 /* Resets the AD5421 device. */
-void  AD5421_Reset(void);
+void  AD5421_Reset(ad5421_dev *dev);
 
 #endif /* _AD5421_H_ */
