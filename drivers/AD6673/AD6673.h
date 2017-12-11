@@ -43,11 +43,6 @@
 #define __AD6673_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-
-/******************************************************************************/
 /*********************************** AD6673 ***********************************/
 /******************************************************************************/
 
@@ -290,8 +285,7 @@
  *                1 = for lane speeds < 2 Gbps
  * @name: Device name.
  */
-struct ad6673_platform_data
-{
+typedef struct {
     /* Power configuration */
     int8_t extrnPDWNmode;
     /* Global clock */
@@ -305,7 +299,7 @@ struct ad6673_platform_data
     int8_t pllLowEncode;
     /* Device name */
     int8_t  name[16];
-};
+} ad6673_platform_data;
 
 /**
  * struct ad6673_jesd204b_cfg - JESD204B interface configuration.
@@ -381,8 +375,7 @@ struct ad6673_platform_data
  *               0 = assign Logical Lane 1 to Physical Lane A
  *               1 = assign Logical Lane 1 to Physical Lane B [default]
  */
-struct ad6673_jesd204b_cfg
-{
+typedef struct {
     /* Power configuration */
     int8_t jtxInStandBy;
     /* Output drive adjustment */
@@ -410,7 +403,7 @@ struct ad6673_jesd204b_cfg
     int8_t alignSysRef;
     int8_t lane0Assign;
     int8_t lane1Assign;
-};
+} ad6673_jesd204b_cfg;
 
 /**
  * struct ad6673_fast_detect_cfg - Fast Detect module configuration.
@@ -431,8 +424,7 @@ struct ad6673_jesd204b_cfg
  * @fdLowerTresh: Fast Detect Lower Threshold[14:0].
  * @dfDwellTime: Fast Detect Dwell Time[15:0].
  */
-struct ad6673_fast_detect_cfg
-{
+typedef struct {
     int8_t  enFd;
     int8_t  pinFunction;
     int8_t  forcePins;
@@ -440,79 +432,145 @@ struct ad6673_fast_detect_cfg
     int16_t fdUpperTresh;
     int16_t fdLowerTresh;
     int16_t dfDwellTime;
-};
+} ad6673_fast_detect_cfg;
 
-typedef struct _ad6673_typeBand
-{
+typedef struct {
     int32_t f0;
     int32_t fCenter;
     int32_t f1;
-}ad6673_typeBand;
+} ad6673_typeBand;
+
+typedef struct {
+    ad6673_platform_data   *pdata;
+    ad6673_jesd204b_cfg    *pJesd204b;
+    ad6673_fast_detect_cfg *pFd;
+} ad6673_state;
+
+typedef enum {
+    AD6673_SHD_REG_CLOCK = 1,
+    AD6673_SHD_REG_CLOCK_DIV,
+    AD6673_SHD_REG_TEST,
+    AD6673_SHD_REG_BIST,
+    AD6673_SHD_REG_OFFSET,
+    AD6673_SHD_REG_OUT_MODE,
+    AD6673_SHD_REG_VREF,
+    AD6673_SHD_REG_SYS_CTRL,
+    AD6673_REG_SHD_NSR_CTRL,
+    AD6673_REG_SHD_NSR_TUNING,
+    AD6673_SHD_REG_DCC_CTRL,
+    AD6673_SHD_REG_DCC_VAL,
+    AD6673_SHD_REG_FAST_DETECT,
+    AD6673_SHD_REG_FD_UPPER_THD,
+    AD6673_SHD_REG_FD_LOWER_THD,
+    AD6673_SHD_REG_FD_DWELL_TIME,
+    SHADOW_REGISTER_COUNT
+} shadowRegisters;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* Device Settings */
+	ad6673_state ad6673_st;
+	int32_t shadowRegs[SHADOW_REGISTER_COUNT];
+} ad6673_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+} ad6673_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Configures the device. */
-int32_t ad6673_setup(int32_t spiBaseAddr, int32_t ssNo);
+int32_t ad6673_setup(ad6673_dev **device,
+		     ad6673_init_param init_param);
+/*! Free the resources allocated by ad6673_setup(). */
+int32_t ad6673_remove(ad6673_dev *dev);
 /*! Reads the value of the selected register. */
-int32_t ad6673_read(int32_t registerAddress);
+int32_t ad6673_read(ad6673_dev *dev,
+		    int32_t registerAddress);
 /*! Writes a value to the selected register. */
-int32_t ad6673_write(int32_t registerAddress, int32_t registerValue);
+int32_t ad6673_write(ad6673_dev *dev,
+		     int32_t registerAddress,
+		     int32_t registerValue);
 /*! Initiates a transfer and waits for the operation to end. */
-int32_t ad6673_transfer(void);
+int32_t ad6673_transfer(ad6673_dev *dev);
 /*! Resets all registers to their default values. */
-int32_t ad6673_soft_reset(void);
+int32_t ad6673_soft_reset(ad6673_dev *dev);
 /*! Configures the power mode of the chip. */
-int32_t ad6673_chip_pwr_mode(int32_t mode);
+int32_t ad6673_chip_pwr_mode(ad6673_dev *dev,
+			     int32_t mode);
 /*! Selects a channel as the current channel for further configurations. */
-int32_t ad6673_select_channel_for_config(int32_t channel);
+int32_t ad6673_select_channel_for_config(ad6673_dev *dev,
+					 int32_t channel);
 /*! Sets the ADC's test mode. */
-int32_t ad6673_test_mode(int32_t mode);
+int32_t ad6673_test_mode(ad6673_dev *dev,
+			 int32_t mode);
 /*! Sets the offset adjustment. */
-int32_t ad6673_offset_adj(int32_t adj);
+int32_t ad6673_offset_adj(ad6673_dev *dev,
+			  int32_t adj);
 /*! Disables (1) or enables (0) the data output. */
-int32_t ad6673_output_disable(int32_t en);
+int32_t ad6673_output_disable(ad6673_dev *dev,
+			      int32_t en);
 /*! Activates the inverted (1) or normal (0) output mode. */
-int32_t ad6673_output_invert(int32_t invert);
+int32_t ad6673_output_invert(ad6673_dev *dev,
+			     int32_t invert);
 /*! Specifies the output format. */
-int32_t ad6673_output_format(int32_t format);
+int32_t ad6673_output_format(ad6673_dev *dev,
+			     int32_t format);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad6673_reset_PN9(int32_t rst);
+int32_t ad6673_reset_PN9(ad6673_dev *dev,
+			 int32_t rst);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad6673_reset_PN23(int32_t rst);
+int32_t ad6673_reset_PN23(ad6673_dev *dev,
+			  int32_t rst);
 /*! Configures a User Test Pattern. */
-int32_t ad6673_set_user_pattern(int32_t patternNo, int32_t user_pattern);
+int32_t ad6673_set_user_pattern(ad6673_dev *dev,
+				int32_t patternNo,
+				int32_t user_pattern);
 /*! Enables the Build-In-Self-Test. */
-int32_t ad6673_bist_enable(int32_t enable);
+int32_t ad6673_bist_enable(ad6673_dev *dev,
+			   int32_t enable);
 /*! Resets the Build-In-Self-Test. */
-int32_t ad6673_bist_reset(int32_t reset);
+int32_t ad6673_bist_reset(ad6673_dev *dev,
+			  int32_t reset);
 /*! Configures the JESD204B interface. */
-int32_t ad6673_jesd204b_setup(void);
+int32_t ad6673_jesd204b_setup(ad6673_dev *dev);
 /*! Configures the power mode of the JESD204B data transmit block. */
-int32_t ad6673_jesd204b_pwr_mode(int32_t mode);
-/*! Selects the point in the processing path of a lane, where the test data will 
+int32_t ad6673_jesd204b_pwr_mode(ad6673_dev *dev,
+				 int32_t mode);
+/*! Selects the point in the processing path of a lane, where the test data will
     be inserted. */
-int32_t ad6673_jesd204b_select_test_injection_point(int32_t injPoint);
+int32_t ad6673_jesd204b_select_test_injection_point(ad6673_dev *dev,
+						    int32_t injPoint);
 /*! Selects a JESD204B test mode. */
-int32_t ad6673_jesd204b_test_mode(int32_t testMode);
+int32_t ad6673_jesd204b_test_mode(ad6673_dev *dev,
+				  int32_t testMode);
 /*! Inverts the logic of JESD204B bits. */
-int32_t ad6673_jesd204b_invert_logic(int32_t invert);
+int32_t ad6673_jesd204b_invert_logic(ad6673_dev *dev,
+				     int32_t invert);
 /*! Configures the Fast-Detect module. */
-int32_t ad6673_fast_detect_setup(void);
+int32_t ad6673_fast_detect_setup(ad6673_dev *dev);
 /*! Enables DC correction for use in the output data signal path. */
-int32_t ad6673_dcc_enable(int32_t enable);
+int32_t ad6673_dcc_enable(ad6673_dev *dev,
+			  int32_t enable);
 /*! Selects the bandwidth value for the DC correction circuit. */
-int32_t ad6673_dcc_bandwidth(int32_t bw);
+int32_t ad6673_dcc_bandwidth(ad6673_dev *dev,
+			     int32_t bw);
 /*! Freezes DC correction value. */
-int32_t ad6673_dcc_freeze(int32_t freeze);
+int32_t ad6673_dcc_freeze(ad6673_dev *dev,
+			  int32_t freeze);
 /*! Enables the Noise shaped requantizer(NRS). */
-int32_t ad6673_nsr_enable(int32_t enable);
+int32_t ad6673_nsr_enable(ad6673_dev *dev,
+			  int32_t enable);
 /*! Selects the NSR Bandwidth mode. */
-int32_t ad6673_nsr_bandwidth_mode(int32_t mode);
+int32_t ad6673_nsr_bandwidth_mode(ad6673_dev *dev,
+				  int32_t mode);
 /*! Sets the NSR frequency range. */
-int32_t ad6673_nsr_tuning_freq(int64_t tuneFreq, 
-                               int64_t fAdc, 
+int32_t ad6673_nsr_tuning_freq(int64_t tuneFreq,
+                               int64_t fAdc,
                                ad6673_typeBand *pBand);
 
 #endif /* __AD6673_H__ */
