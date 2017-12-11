@@ -43,11 +43,6 @@
 #define __AD9250_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-
-/******************************************************************************/
 /*********************************** AD9250 ***********************************/
 /******************************************************************************/
 
@@ -281,8 +276,7 @@
  *		  1 = for lane speeds < 2 Gbps
  * @name: Device name.
  */
-struct ad9250_platform_data
-{
+typedef struct {
 	/* Power configuration */
 	int8_t extrnPDWNmode;
 	/* Global clock */
@@ -296,7 +290,7 @@ struct ad9250_platform_data
 	int8_t pllLowEncode;
 	/* Device name */
 	int8_t	name[16];
-};
+} ad9250_platform_data;
 
 /**
  * struct ad9250_jesd204b_cfg - JESD204B interface configuration.
@@ -372,8 +366,7 @@ struct ad9250_platform_data
 *		0 = assign Logical Lane 1 to Physical Lane A
 *		1 = assign Logical Lane 1 to Physical Lane B [default]
 */
-struct ad9250_jesd204b_cfg
-{
+typedef struct {
 	/* Power configuration */
 	int8_t jtxInStandBy;
 	/* Output drive adjustment */
@@ -401,7 +394,7 @@ struct ad9250_jesd204b_cfg
 	int8_t alignSysRef;
 	int8_t lane0Assign;
 	int8_t lane1Assign;
-};
+} ad9250_jesd204b_cfg;
 
 /**
  * struct ad9250_fast_detect_cfg - Fast Detect module configuration.
@@ -422,8 +415,7 @@ struct ad9250_jesd204b_cfg
  * @fdLowerTresh: Fast Detect Lower Threshold[14:0].
  * @dfDwellTime: Fast Detect Dwell Time[15:0].
  */
-struct ad9250_fast_detect_cfg
-{
+typedef struct {
 	int8_t	enFd;
 	int8_t	pinFunction;
 	int8_t	forcePins;
@@ -431,64 +423,127 @@ struct ad9250_fast_detect_cfg
 	int16_t fdUpperTresh;
 	int16_t fdLowerTresh;
 	int16_t dfDwellTime;
-};
+} ad9250_fast_detect_cfg;
+
+typedef struct {
+	ad9250_platform_data   *pdata;
+	ad9250_jesd204b_cfg    *pJesd204b;
+	ad9250_fast_detect_cfg *pFd;
+} ad9250_state;
+
+typedef enum {
+	AD9250_SHD_REG_CLOCK = 1,
+	AD9250_SHD_REG_CLOCK_DIV,
+	AD9250_SHD_REG_TEST,
+	AD9250_SHD_REG_BIST,
+	AD9250_SHD_REG_OFFSET,
+	AD9250_SHD_REG_OUT_MODE,
+	AD9250_SHD_REG_VREF,
+	AD9250_SHD_REG_SYS_CTRL,
+	AD9250_SHD_REG_DCC_CTRL,
+	AD9250_SHD_REG_DCC_VAL,
+	AD9250_SHD_REG_FAST_DETECT,
+	AD9250_SHD_REG_FD_UPPER_THD,
+	AD9250_SHD_REG_FD_LOWER_THD,
+	AD9250_SHD_REG_FD_DWELL_TIME,
+	SHADOW_REGISTER_COUNT
+} shadowRegisters;
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* Device Settings */
+	ad9250_state ad9250_st;
+	int32_t shadowRegs[SHADOW_REGISTER_COUNT];
+} ad9250_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+} ad9250_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Configures the device. */
-int32_t ad9250_setup(int32_t spiBaseAddr, int32_t ssNo);
+int32_t ad9250_setup(ad9250_dev **device,
+		     ad9250_init_param init_param);
+/*! Free the resources allocated by ad9250_setup(). */
+int32_t ad9250_remove(ad9250_dev *dev);
 /*! Reads the value of the selected register. */
-int32_t ad9250_read(int32_t registerAddress);
+int32_t ad9250_read(ad9250_dev *dev,
+		    int32_t registerAddress);
 /*! Writes a value to the selected register. */
-int32_t ad9250_write(int32_t registerAddress, int32_t registerValue);
+int32_t ad9250_write(ad9250_dev *dev,
+		     int32_t registerAddress,
+		     int32_t registerValue);
 /*! Initiates a transfer and waits for the operation to end. */
-int32_t ad9250_transfer(void);
+int32_t ad9250_transfer(ad9250_dev *dev);
 /*! Resets all registers to their default values. */
-int32_t ad9250_soft_reset(void);
+int32_t ad9250_soft_reset(ad9250_dev *dev);
 /*! Configures the power mode of the chip. */
-int32_t ad9250_chip_pwr_mode(int32_t mode);
+int32_t ad9250_chip_pwr_mode(ad9250_dev *dev,
+			     int32_t mode);
 /*! Selects a channel as the current channel for further configurations. */
-int32_t ad9250_select_channel_for_config(int32_t channel);
+int32_t ad9250_select_channel_for_config(ad9250_dev *dev,
+					 int32_t channel);
 /*! Sets the ADC's test mode. */
-int32_t ad9250_test_mode(int32_t mode);
+int32_t ad9250_test_mode(ad9250_dev *dev,
+			 int32_t mode);
 /*! Sets the offset adjustment. */
-int32_t ad9250_offset_adj(int32_t adj);
+int32_t ad9250_offset_adj(ad9250_dev *dev,
+			  int32_t adj);
 /*! Disables (1) or enables (0) the data output. */
-int32_t ad9250_output_disable(int32_t en);
+int32_t ad9250_output_disable(ad9250_dev *dev,
+			      int32_t en);
 /*! Activates the inverted (1) or normal (0) output mode. */
-int32_t ad9250_output_invert(int32_t invert);
+int32_t ad9250_output_invert(ad9250_dev *dev,
+			     int32_t invert);
 /*! Specifies the output format. */
-int32_t ad9250_output_format(int32_t format);
+int32_t ad9250_output_format(ad9250_dev *dev,
+			     int32_t format);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad9250_reset_PN29(int32_t rst);
+int32_t ad9250_reset_PN29(ad9250_dev *dev,
+			  int32_t rst);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad9250_reset_PN23(int32_t rst);
+int32_t ad9250_reset_PN23(ad9250_dev *dev,
+			  int32_t rst);
 /*! Configures a User Test Pattern. */
-int32_t ad9250_set_user_pattern(int32_t patternNo, int32_t user_pattern);
+int32_t ad9250_set_user_pattern(ad9250_dev *dev,
+				int32_t patternNo,
+				int32_t user_pattern);
 /*! Enables the Build-In-Self-Test. */
-int32_t ad9250_bist_enable(int32_t enable);
+int32_t ad9250_bist_enable(ad9250_dev *dev,
+			   int32_t enable);
 /*! Resets the Build-In-Self-Test. */
-int32_t ad9250_bist_reset(int32_t reset);
+int32_t ad9250_bist_reset(ad9250_dev *dev,
+			  int32_t reset);
 /*! Configures the JESD204B interface. */
-int32_t ad9250_jesd204b_setup(void);
+int32_t ad9250_jesd204b_setup(ad9250_dev *dev);
 /*! Configures the power mode of the JESD204B data transmit block. */
-int32_t ad9250_jesd204b_pwr_mode(int32_t mode);
+int32_t ad9250_jesd204b_pwr_mode(ad9250_dev *dev,
+				 int32_t mode);
 /*! Selects the point in the processing path of a lane, where the test data will
   be inserted. */
-int32_t ad9250_jesd204b_select_test_injection_point(int32_t injPoint);
+int32_t ad9250_jesd204b_select_test_injection_point(ad9250_dev *dev,
+						    int32_t injPoint);
 /*! Selects a JESD204B test mode. */
-int32_t ad9250_jesd204b_test_mode(int32_t testMode);
+int32_t ad9250_jesd204b_test_mode(ad9250_dev *dev,
+				  int32_t testMode);
 /*! Inverts the logic of JESD204B bits. */
-int32_t ad9250_jesd204b_invert_logic(int32_t invert);
+int32_t ad9250_jesd204b_invert_logic(ad9250_dev *dev,
+				     int32_t invert);
 /*! Configures the Fast-Detect module. */
-int32_t ad9250_fast_detect_setup(void);
+int32_t ad9250_fast_detect_setup(ad9250_dev *dev);
 /*! Enables DC correction for use in the output data signal path. */
-int32_t ad9250_dcc_enable(int32_t enable);
+int32_t ad9250_dcc_enable(ad9250_dev *dev,
+			  int32_t enable);
 /*! Selects the bandwidth value for the DC correction circuit. */
-int32_t ad9250_dcc_bandwidth(int32_t bw);
+int32_t ad9250_dcc_bandwidth(ad9250_dev *dev,
+			     int32_t bw);
 /*! Freezes DC correction value. */
-int32_t ad9250_dcc_freeze(int32_t freeze);
+int32_t ad9250_dcc_freeze(ad9250_dev *dev,
+			  int32_t freeze);
 
 #endif /* __AD9250_H__ */
