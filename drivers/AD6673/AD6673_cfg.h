@@ -50,7 +50,7 @@
 /******************************************************************************/
 /************************ Variables Declarations ******************************/
 /******************************************************************************/
-struct ad6673_platform_data ad6673_pdata_lpc =
+ad6673_platform_data ad6673_pdata_lpc =
 {
     0,           // extrnPDWNmode
     1,           // enClkDCS
@@ -62,7 +62,7 @@ struct ad6673_platform_data ad6673_pdata_lpc =
     "ad6673-lpc" //name
 };
 
-struct ad6673_jesd204b_cfg ad6673_jesd204b_interface =
+ad6673_jesd204b_cfg ad6673_jesd204b_interface =
 {
     0,      // jtxInStandBy
     3,      // cmlLevel
@@ -89,7 +89,7 @@ struct ad6673_jesd204b_cfg ad6673_jesd204b_interface =
     1,      // lane1Assign
 };
 
-struct ad6673_fast_detect_cfg ad6673_fast_detect =
+ad6673_fast_detect_cfg ad6673_fast_detect =
 {
     0,      // enFd
     0,      // pinFunction
