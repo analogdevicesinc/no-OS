@@ -45,10 +45,6 @@
 /******************************************************************************/
 /******************************** AD7303 **************************************/
 /******************************************************************************/
-
-/* SPI slave device ID */
-#define AD7303_SLAVE_ID     1
-
 /* Control Bits */
 #define AD7303_INT       (0 << 7)    // Selects internal reference.
 #define AD7303_EXT       (1 << 7)    // Selects external reference.
@@ -61,13 +57,33 @@
 #define AD7303_CR0       (1 << 0)    // Control Bit 0.
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+} ad7303_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+} ad7303_init_param;
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes SPI communication. */
-char AD7303_Init(void);
+char AD7303_Init(ad7303_dev **device,
+		 ad7303_init_param init_param);
+
+/*! Free the resources allocated by AD7303_Init(). */
+int32_t AD7303_remove(ad7303_dev *dev);
 
 /*! Sends data to AD7303. */
-void AD7303_Write(unsigned char controlReg, unsigned char dataReg);
+void AD7303_Write(ad7303_dev *dev,
+		  unsigned char controlReg,
+		  unsigned char dataReg);
 
 #endif /* __AD7303_H__ */

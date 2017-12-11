@@ -43,42 +43,79 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "AD7303.h"           // AD7303 definitions.
-#include "Communication.h"    // Communication definitions.
 
 /***************************************************************************//**
  * @brief Initializes SPI communication.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return Result of the initialization procedure.
  *            Example: -1 - SPI peripheral was not initialized.
  *                      0 - SPI peripheral is initialized.
 *******************************************************************************/
-char AD7303_Init(void)
+char AD7303_Init(ad7303_dev **device,
+		 ad7303_init_param init_param)
 {
-    char status = -1;
-    
-    status = SPI_Init(0, 1000000, 0, 1);
-    
+	ad7303_dev *dev;
+    char status;
+
+	dev = (ad7303_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
+	*device = dev;
+
     return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD7303_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t AD7303_remove(ad7303_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Sends data to AD7303.
  *
+ * @param dev        - The device structure.
  * @param controlReg - Value of control register.
- *                     Example: 
+ *                     Example:
  *                     AD7303_INT | AD7303_LDAC | AD7303_A  - enables internal
- *                     reference and loads DAC A input register from shift 
+ *                     reference and loads DAC A input register from shift
  *                     register and updates both DAC A and DAC B DAC registers.
  * @param dataReg    - Value of data register.
  *
  * @return None.
 *******************************************************************************/
-void AD7303_Write(unsigned char controlReg, unsigned char dataReg)
+void AD7303_Write(ad7303_dev *dev,
+		  unsigned char controlReg,
+		  unsigned char dataReg)
 {
     static unsigned char writeData[2] = {0, 0};
-    
+
     writeData[0] = controlReg;
     writeData[1] = dataReg;
-    SPI_Write(AD7303_SLAVE_ID, writeData, 2);
+	spi_write_and_read(dev->spi_desc,
+			   writeData,
+			   2);
 }
