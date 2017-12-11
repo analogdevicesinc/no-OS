@@ -50,7 +50,7 @@
 /*****************************************************************************/
 /************************ Variables Declarations *****************************/
 /*****************************************************************************/
-struct ad9250_platform_data ad9250_pdata_lpc =
+ad9250_platform_data ad9250_pdata_lpc =
 {
 	0,	// extrnPDWNmode
 	1,	// enClkDCS
@@ -62,7 +62,7 @@ struct ad9250_platform_data ad9250_pdata_lpc =
 	"ad9250-lpc" //name
 };
 
-struct ad9250_jesd204b_cfg ad9250_jesd204b_interface =
+ad9250_jesd204b_cfg ad9250_jesd204b_interface =
 {
 	0,	// jtxInStandBy
 	3,	// cmlLevel
@@ -89,7 +89,7 @@ struct ad9250_jesd204b_cfg ad9250_jesd204b_interface =
 	1,	// lane1Assign
 };
 
-struct ad9250_fast_detect_cfg ad9250_fast_detect =
+ad9250_fast_detect_cfg ad9250_fast_detect =
 {
 	0,	// enFd
 	0,	// pinFunction
