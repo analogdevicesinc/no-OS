@@ -12,13 +12,31 @@ else
   XSDB_CMD := xsdb 
 endif
 
+ifeq ($(CAPTURE_BADDR),)
+  CAPTURE_BADDR := 0x800000
+endif
+
+ifeq ($(CAPTURE_SIZE),)
+  CAPTURE_SIZE := 32768
+endif
+
+ifeq ($(NR_OF_CHAN),)
+  NR_OF_CHAN := 1
+endif
+
+ifeq ($(BITS_PER_SAMPLE),)
+  BITS_PER_SAMPLE := 16
+endif
+
 XSCT_LOG := xsct.log
 XSCT_SCRIPT := $(NOOS-DIR)/scripts/xsct.tcl
 XSDB_SCRIPT := $(NOOS-DIR)/scripts/xsdb.tcl
+XSDB_CAPTURE := $(NOOS-DIR)/scripts/xilinx_capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
 COMPILER_DEFINES += ZYNQ_PSU
+COMPILER_DEFINES += $(M_COMPILER_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
 P_HDR_FILES += xilsw/src/platform.h
@@ -34,15 +52,12 @@ SRC_FILES := $(P_SRC_FILES)
 SRC_FILES += $(M_SRC_FILES)
 SRC_FILES += $(foreach i_dir, $(M_INC_DIRS), $(wildcard $(i_dir)/*.c))
 
-CAPTURE_BADDR := 800000
-CAPTURE_SIZE := 32768
-
 .PHONY: all
 all: $(ELF_FILE)
 
 
 $(ELF_FILE): $(HDR_FILES) $(SRC_FILES)
-	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) > $(XSCT_LOG) 2>&1
+	$(XSCT_CMD) $(XSCT_SCRIPT) sources $(HDR_FILES) $(SRC_FILES) >> $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) build
 
 
@@ -67,5 +82,4 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PSU $(CAPTURE_BADDR) $(CAPTURE_SIZE)
-
+	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PSU $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)
