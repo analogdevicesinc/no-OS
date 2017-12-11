@@ -45,26 +45,24 @@
 #ifndef _AD7280A_H_
 #define _AD7280A_H_
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include "xil_types.h"
-#include "xparameters.h"
-
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD7280A_SLAVE_ID            1
-
 /* GPIOs */
-#define AD7280A_PD_OUT              GPIO5_PIN_OUT
-#define AD7280A_PD_HIGH             GPIO5_HIGH
-#define AD7280A_PD_LOW              GPIO5_LOW
-#define AD7280A_CNVST_OUT           GPIO7_PIN_OUT
-#define AD7280A_CNVST_HIGH          GPIO7_HIGH
-#define AD7280A_CNVST_LOW           GPIO7_LOW
+#define AD7280A_PD_OUT              gpio_direction_output(dev->gpio_pd,    \
+			            GPIO_HIGH)
+#define AD7280A_PD_HIGH             gpio_set_value(dev->gpio_pd,           \
+			            GPIO_HIGH)
+#define AD7280A_PD_LOW              gpio_set_value(dev->gpio_pd,           \
+			            GPIO_LOW)
+#define AD7280A_CNVST_OUT           gpio_direction_output(dev->gpio_cnvst, \
+			            GPIO_HIGH)
+#define AD7280A_CNVST_HIGH          gpio_set_value(dev->gpio_cnvst,        \
+			            GPIO_HIGH)
+#define AD7280A_CNVST_LOW           gpio_set_value(dev->gpio_cnvst,        \
+			            GPIO_LOW)
 
-#define AD7280A_ALERT_IN            GPIO6_PIN_IN
+#define AD7280A_ALERT_IN            gpio_direction_input(dev->gpio_alert)
 #define AD7280_ALERT                (1 << 6)
 
 /* Acquisition time */
@@ -161,14 +159,44 @@
 #define NUMBITS_READ        22   // Number of bits for CRC when reading
 #define NUMBITS_WRITE       21   // Number of bits for CRC when writing
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+typedef struct {
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* GPIO */
+	gpio_desc		*gpio_pd;
+	gpio_desc		*gpio_cnvst;
+	gpio_desc		*gpio_alert;
+	/* Device Settings */
+	unsigned long		readData[24];
+	float			cellVoltage[12];
+	float			auxADC[12];
+} ad7280a_dev;
+
+typedef struct {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* GPIO */
+	int8_t		gpio_pd;
+	int8_t		gpio_cnvst;
+	int8_t		gpio_alert;
+} ad7280a_init_param;
+
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 /* Initializes the communication with the device. */
-char AD7280A_Init(void);
+char AD7280A_Init(ad7280a_dev **device,
+		  ad7280a_init_param init_param);
+
+/* Free the resources allocated by AD7280A_Init(). */
+int32_t AD7280A_remove(ad7280a_dev *dev);
 
 /* Reads/transmits 32 data bits from/to AD7280A. */
-unsigned long AD7280A_Transfer_32bits(unsigned long data);
+unsigned long AD7280A_Transfer_32bits(ad7280a_dev *dev,
+				      unsigned long data);
 
 /* Computes the CRC value for a write transmission, and prepares the complete
  write codeword */
@@ -179,31 +207,37 @@ the same. */
 long AD7280A_CRC_Read(unsigned long message);
 
 /* Performs a read from all registers on 2 devices. */
-char AD7280A_Convert_Read_All(void);
+char AD7280A_Convert_Read_All(ad7280a_dev *dev);
 
 /* Converts acquired data to float values. */
-char AD7280A_Convert_Data_All(void);
+char AD7280A_Convert_Data_All(ad7280a_dev *dev);
 
 /* Reads the register content of one selected register. */
-short AD7280A_Read_Register(unsigned char devAddr,
+short AD7280A_Read_Register(ad7280a_dev *dev,
+			    unsigned char devAddr,
                             unsigned char readReg);
 
 /* Reads the conversion of one channel. */
-short AD7280A_Read_Conversion(unsigned char devAddr,
+short AD7280A_Read_Conversion(ad7280a_dev *dev,
+			      unsigned char devAddr,
                               unsigned char readReg);
 
 /* Converts the input data to a voltage value. */
-float AD7280A_Convert_Data(unsigned char type, unsigned short data);
+float AD7280A_Convert_Data(unsigned char type,
+			   unsigned short data);
 
 /* Writes the content of one selected register from the selected device. */
-void AD7280A_Write_Register(unsigned char devAddr,
+void AD7280A_Write_Register(ad7280a_dev *dev,
+			    unsigned char devAddr,
                             unsigned char readReg,
                             unsigned char regVal);
 
 /* Performs the self test for two devices(one master and one slave). */
-void AD7280A_Selftest_All(float *selfTestRegA, float *selfTestRegB);
+void AD7280A_Selftest_All(ad7280a_dev *dev,
+			  float *selfTestRegA,
+			  float *selfTestRegB);
 
 /* Reads the value of Alert Pin from the device. */
-unsigned char AD7280A_Alert_Pin(void);
+unsigned char AD7280A_Alert_Pin(ad7280a_dev *dev);
 
 #endif /*_AD7280A_H_*/

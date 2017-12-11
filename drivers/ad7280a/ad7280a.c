@@ -42,17 +42,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "ad7280a.h"
-#include "Communication.h"
-#include "Console.h"
-#include "TIME.h"
-
-/******************************************************************************/
-/************************** Variables Definitions *****************************/
-/******************************************************************************/
-unsigned long readData[24];
-float         cellVoltage[12];
-float         auxADC[12];
 
 /*****************************************************************************/
 /************************ Functions Definitions ******************************/
@@ -61,16 +54,29 @@ float         auxADC[12];
 /******************************************************************************
  * @brief Initializes the communication with the device.
  *
- * @param None.
+ * @param device     - The device structure.
+ *        init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 ******************************************************************************/
-char AD7280A_Init(void)
+char AD7280A_Init(ad7280a_dev **device,
+		  ad7280a_init_param init_param)
 {
-    char          status = -1;
+	ad7280a_dev *dev;
+    char          status;
     unsigned long value;
+
+	dev = (ad7280a_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* GPIO */
+	status = gpio_get(&dev->gpio_pd, init_param.gpio_pd);
+	status |= gpio_get(&dev->gpio_cnvst, init_param.gpio_cnvst);
+	status |= gpio_get(&dev->gpio_alert, init_param.gpio_alert);
 
     AD7280A_PD_OUT;
     AD7280A_PD_HIGH;
@@ -79,9 +85,10 @@ char AD7280A_Init(void)
     AD7280A_ALERT_IN;
 
     /* Wait 250us */
-    TIME_DelayUs(250);
+    mdelay(250);
 
-    status = SPI_Init(0, 1000000, 0, 0);
+    status |= spi_init(&dev->spi_desc, init_param.spi_init);
+
     /* Example 1 from the datasheet */
     /* Configure the Control LB register for all devices */
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_CONTROL_LB << 21) |
@@ -89,29 +96,60 @@ char AD7280A_Init(void)
                               AD7280A_CTRL_LB_LOCK_DEV_ADDR |
                               AD7280A_CTRL_LB_DAISY_CHAIN_RB_EN) << 13) |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Configure the Read Register for all devices */
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_READ << 21) |
                               (AD7280A_CONTROL_LB << 15) |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Read master address */
-    value = AD7280A_Transfer_32bits(AD7280A_READ_TXVAL);
-    //CONSOLE_Print("Master address=0x%x\r\n",(value >> 27));
+    value = AD7280A_Transfer_32bits(dev,
+				    AD7280A_READ_TXVAL);
+    //printf("Master address=0x%x\r\n",(value >> 27));
     /* Read slave address */
-    value = AD7280A_Transfer_32bits(AD7280A_READ_TXVAL);
-    //CONSOLE_Print("Slave address=0x%x\r\n",(value >> 27));
+    value = AD7280A_Transfer_32bits(dev,
+				    AD7280A_READ_TXVAL);
+    //printf("Slave address=0x%x\r\n",(value >> 27));
+
+	*device = dev;
 
     return status;
 }
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD7280A_Init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t AD7280A_remove(ad7280a_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	ret |= gpio_remove(dev->gpio_pd);
+	ret |= gpio_remove(dev->gpio_cnvst);
+	ret |= gpio_remove(dev->gpio_alert);
+
+	free(dev);
+
+	return ret;
+}
+
 /******************************************************************************
 * @brief Reads/transmits 32 data bits from/to AD7280A.
  *
- * @param data          - Data to be transmitted (MOSI pin).
+ * @param dev           - The device structure.
+ *        data          - Data to be transmitted (MOSI pin).
  *
  * @return receivedData - Received data (MISO pin).
 ******************************************************************************/
-unsigned long AD7280A_Transfer_32bits(unsigned long data)
+unsigned long AD7280A_Transfer_32bits(ad7280a_dev *dev,
+				      unsigned long data)
 {
     unsigned char dataBuf[4];
     unsigned long receivedData;
@@ -121,7 +159,9 @@ unsigned long AD7280A_Transfer_32bits(unsigned long data)
     dataBuf[2] = (data >> 8)  & 0xff;
     dataBuf[3] = (data >> 0)  & 0xff;
 
-    SPI_Read(AD7280A_SLAVE_ID, (unsigned char*)dataBuf, 4);
+	spi_write_and_read(dev->spi_desc,
+			   (unsigned char*)dataBuf,
+			   4);
 
     receivedData = ((unsigned long)dataBuf[0] << 24) +
                    ((unsigned long)dataBuf[1] << 16) +
@@ -190,8 +230,8 @@ unsigned long AD7280A_CRC_Write(unsigned long message)
  *
  * @param message : The received message
  *
- * @return TRUE if the two CRC are identical
- *         FALSE otherwise
+ * @return 1 if the two CRC are identical
+ *         0 otherwise
 ******************************************************************************/
 long AD7280A_CRC_Read(unsigned long message)
 {
@@ -237,25 +277,25 @@ long AD7280A_CRC_Read(unsigned long message)
                    (CRC6 ? (1 << 6) : 0) | (CRC7 ? (1 << 7) : 0);
     if (CRC_REC == CRC_COMPUTED)
     {
-        return TRUE;
+        return 1;
     }
     else
     {
-        return FALSE;
+        return 0;
     }
 }
 
 /******************************************************************************
  * @brief Performs a read from all registers on 2 devices.
  *
- * @param None.
+ * @param dev - The device structure.
  *
- * @return TRUE.
+ * @return 1.
 ******************************************************************************/
-char AD7280A_Convert_Read_All(void)
+char AD7280A_Convert_Read_All(ad7280a_dev *dev)
 {
     unsigned char i;
-    //long err = TRUE;
+    //long err = 1;
     unsigned long value;
 
     /* Configure Control HB register. Read all register, convert all registers,
@@ -266,72 +306,77 @@ char AD7280A_Convert_Read_All(void)
                                AD7280A_CTRL_HB_CONV_AVG_8) << 13) |
                                 (1 << 12));
     /* Configure the Read register for all devices */
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_READ << 21) |
                               (AD7280A_CELL_VOLTAGE_1 << 15) |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Configure the CNVST register, allow single CNVST pulse */
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_CNVST_N_CONTROL << 21) |
                               (2 << 13) |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Wait 100us */
-    TIME_DelayUs(100);
+    mdelay(100);
     /* Toggle CNVST pin */
     AD7280A_CNVST_LOW;
     /* Wait 50us */
-    TIME_DelayUs(50);
+    mdelay(50);
     AD7280A_CNVST_HIGH;
     /* Wait 300us */
-    TIME_DelayUs(300);
+    mdelay(300);
     /* Read data from both devices */
     for(i = 0; i < 24; i++)
     {
-        readData[i] = AD7280A_Transfer_32bits(AD7280A_READ_TXVAL);
+        dev->readData[i] = AD7280A_Transfer_32bits(dev,
+					      AD7280A_READ_TXVAL);
     }
 
     // Optionally check all received data to make sure CRC is correct
     /*for(i=0;i<24;i++)
     {
-        if ( crc_read(readData[i]) == FALSE )
+        if ( crc_read(dev->readData[i]) == 0 )
         {
-            err = FALSE;
+            err = 0;
         }
     }*/
 
     /* Convert the received data to float values. */
-    AD7280A_Convert_Data_All();
+    AD7280A_Convert_Data_All(dev);
 
-    return (TRUE);
+    return (1);
 }
 
 /******************************************************************************
  * @brief Converts acquired data from all channels to float values.
  *
- * @param None.
+ * @param dev - The device structure.
  *
- * @return TRUE.
+ * @return 1.
 ******************************************************************************/
-char AD7280A_Convert_Data_All(void)
+char AD7280A_Convert_Data_All(ad7280a_dev *dev)
 {
     unsigned char i;
 
     for(i = 0; i < 6; i++)
     {
-        cellVoltage[i]     = 1 + ((readData[i]    >> 11) & 0xfff) * 0.0009765625;
-        auxADC[i]          = ((readData[i+6]      >> 11) & 0xfff) * 0.001220703125;
-        cellVoltage[i + 6] = 1 + ((readData[i+12] >> 11) & 0xfff) * 0.0009765625;
-        auxADC[i + 6]      = ((readData[i+18]     >> 11) & 0xfff) * 0.001220703125;
+        dev->cellVoltage[i]     = 1 + ((dev->readData[i]    >> 11) & 0xfff) * 0.0009765625;
+        dev->auxADC[i]          = ((dev->readData[i+6]      >> 11) & 0xfff) * 0.001220703125;
+        dev->cellVoltage[i + 6] = 1 + ((dev->readData[i+12] >> 11) & 0xfff) * 0.0009765625;
+        dev->auxADC[i + 6]      = ((dev->readData[i+18]     >> 11) & 0xfff) * 0.001220703125;
     }
 
-    return (TRUE);
+    return (1);
 }
 
 /******************************************************************************
  * @brief Reads the register content of one selected register.
  *
- * @param  devAddr - the device address
+ * @param  dev     - The device structure.
+ *         devAddr - the device address
  *                   Example: 0 - master.
  *                            1 - slave.
  *         readReg - the address of the register to be read from the
@@ -340,7 +385,8 @@ char AD7280A_Convert_Data_All(void)
  *
  * @return readContent - register content.
 ******************************************************************************/
-short AD7280A_Read_Register(unsigned char devAddr,
+short AD7280A_Read_Register(ad7280a_dev *dev,
+			    unsigned char devAddr,
                             unsigned char readReg)
 {
      unsigned long value;
@@ -355,23 +401,27 @@ short AD7280A_Read_Register(unsigned char devAddr,
       value = AD7280A_CRC_Write((unsigned long) (AD7280A_CONTROL_HB << 21) |
                                  (AD7280A_CTRL_HB_CONV_RES_READ_NO << 13) |
                                  (1 << 12));
-      AD7280A_Transfer_32bits(value);
+      AD7280A_Transfer_32bits(dev,
+			      value);
       /* Enable reading on the selected device */
       value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                 (AD7280A_CONTROL_HB << 21) |
                                 ((AD7280A_CTRL_HB_CONV_RES_READ_ALL |
                                 AD7280A_CTRL_HB_CONV_INPUT_ALL) << 13));
-      AD7280A_Transfer_32bits(value);
+      AD7280A_Transfer_32bits(dev,
+			      value);
       /* Wait 100us */
-      TIME_DelayUs(100);
+      mdelay(100);
       /* Configure the Read register */
       value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                  (AD7280A_READ << 21) |
                                  (readReg << 15));
-      AD7280A_Transfer_32bits(value);
+      AD7280A_Transfer_32bits(dev,
+			      value);
       /* Perform the read */
-      value = AD7280A_Transfer_32bits(AD7280A_READ_TXVAL);
-      if (AD7280A_CRC_Read(value) == TRUE)
+      value = AD7280A_Transfer_32bits(dev,
+				      AD7280A_READ_TXVAL);
+      if (AD7280A_CRC_Read(value) == 1)
       {
           //readDevAddress = value >> 27;              // Extract the Device address
           //readRegAddress = (value >> 21 ) & 0x2F;    // Extract the Register address
@@ -389,7 +439,8 @@ short AD7280A_Read_Register(unsigned char devAddr,
 /******************************************************************************
  * @brief Reads the conversion of one channel.
  *
- * @param  devAddr - the device address
+ * @param  dev     - The device structure.
+ *         devAddr - the device address
  *                   Example: 0 - master.
  *                            1 - slave.
  *         readReg - the address of the register to be read from
@@ -397,7 +448,8 @@ short AD7280A_Read_Register(unsigned char devAddr,
  *
  * @return readConversion - ADC code or -1 if an error occured
 ******************************************************************************/
-short AD7280A_Read_Conversion(unsigned char devAddr,
+short AD7280A_Read_Conversion(ad7280a_dev *dev,
+			      unsigned char devAddr,
                               unsigned char readReg)
 {
     unsigned long  value;
@@ -411,40 +463,45 @@ short AD7280A_Read_Conversion(unsigned char devAddr,
     value = AD7280A_CRC_Write((unsigned long)(devAddr << 31) |
                               (AD7280A_READ << 21) |
                               (readReg << 15));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Disable reading on all devices */
     value = AD7280A_CRC_Write((unsigned long)(AD7280A_CONTROL_HB << 21) |
                               (AD7280A_CTRL_HB_CONV_RES_READ_NO << 13) |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Wait 100us */
-    TIME_DelayUs(100);
+    mdelay(100);
     /*  */
     value = AD7280A_CRC_Write((unsigned long)(devAddr << 31) |
                               (AD7280A_CONTROL_HB << 21) |
                               ((AD7280A_CTRL_HB_CONV_RES_READ_ALL |
                                AD7280A_CTRL_HB_CONV_INPUT_ALL) << 13));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Wait 100us */
-    TIME_DelayUs(100);
+    mdelay(100);
     /* Allow conversions to be initiated using CNVST pin on selected part */
     value=AD7280A_CRC_Write((unsigned long)(devAddr << 31) |
                             (AD7280A_CNVST_N_CONTROL << 21) |
                             (2 << 13));
     /* Write the CNVST_N register, allow single CNVST pulse */
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Initiate conversions through the falling edge of CNVST */
     AD7280A_CNVST_LOW;
     /* Allow sufficient time for all conversions to be completed */
     /* Wait 50us */
-    TIME_DelayUs(50);
+    mdelay(50);
     AD7280A_CNVST_HIGH;
     /* Wait 300us */
-    TIME_DelayUs(300);
+    mdelay(300);
     /* Perform the read */
-    value = AD7280A_Transfer_32bits(AD7280A_READ_TXVAL);
+    value = AD7280A_Transfer_32bits(dev,
+				    AD7280A_READ_TXVAL);
 
-    if (AD7280A_CRC_Read(value) == TRUE)
+    if (AD7280A_CRC_Read(value) == 1)
     {
         //readDevAddress = value >> 27;              // Extract the Device address
         //readRegAddress = (value >> 23 ) & 0x2F;    // Extract the Register address
@@ -492,7 +549,8 @@ float AD7280A_Convert_Data(unsigned char type,
 /******************************************************************************
  * @brief Writes the content of one selected register from the selected device.
  *
- * @param  devAddr - the device address
+ * @param  dev     - The device structure.
+ *         devAddr - the device address
  *                   Example: 0 - master.
  *                            1 - slave.
  *         readReg - the address of the register to be read from the
@@ -501,7 +559,8 @@ float AD7280A_Convert_Data(unsigned char type,
  *
  * @return none.
 ******************************************************************************/
-void AD7280A_Write_Register(unsigned char devAddr,
+void AD7280A_Write_Register(ad7280a_dev *dev,
+			    unsigned char devAddr,
                             unsigned char readReg,
                             unsigned char regVal)
 {
@@ -513,103 +572,120 @@ void AD7280A_Write_Register(unsigned char devAddr,
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CONTROL_HB << 21)      |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x0E:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CONTROL_LB << 21)      |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x0F:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31)  |
                                       (AD7280A_CELL_OVERVOLTAGE << 21) |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x10:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31)   |
                                       (AD7280A_CELL_UNDERVOLTAGE << 21) |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x11:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31)     |
                                       (AD7280A_AUX_ADC_OVERVOLTAGE << 21) |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x12:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31)      |
                                       (AD7280A_AUX_ADC_UNDERVOLTAGE << 21) |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x13:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_ALERT << 21)           |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x14:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CELL_BALANCE << 21)    |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x15:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB1_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x16:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB2_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x17:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB3_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x18:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB4_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x19:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB5_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x1A:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CB6_TIMER << 21)       |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x1B:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_PD_TIMER << 21)        |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x1C:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_READ << 21)            |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
         case 0x1D:
             value = AD7280A_CRC_Write((unsigned long) (devAddr << 31) |
                                       (AD7280A_CNVST_N_CONTROL << 21) |
                                       (regVal << 13));
-            AD7280A_Transfer_32bits(value);
+            AD7280A_Transfer_32bits(dev,
+				    value);
             break;
     }
 }
@@ -617,14 +693,17 @@ void AD7280A_Write_Register(unsigned char devAddr,
 /******************************************************************************
  * @brief Performs the self test for two devices(one master and one slave).
  *
- * @param   *selfTestRegA - the voltage corresponding to self test master
+ * @param   dev           - The device structure.
+ *          *selfTestRegA - the voltage corresponding to self test master
  *                          register.
  *          *selfTestRegB - the voltage corresponding to self test slave
  *                          register.
  *
  * @return none.
 ******************************************************************************/
-void AD7280A_Selftest_All(float *selfTestRegA, float *selfTestRegB)
+void AD7280A_Selftest_All(ad7280a_dev *dev,
+			  float *selfTestRegA,
+			  float *selfTestRegB)
 {
     unsigned long value;
 
@@ -634,57 +713,65 @@ void AD7280A_Selftest_All(float *selfTestRegA, float *selfTestRegB)
                                AD7280A_CTRL_HB_CONV_INPUT_SELF_TEST) << 13) |
                                (1 << 12));
     /* Select self test conversion and read on all parts */
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     /* Wait 100us */
-    TIME_DelayUs(100);
+    mdelay(100);
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_READ << 21) |
                               (AD7280A_SELF_TEST << 15)            |
                               (1 << 12));
     /* Write the read register with the address of the Self test register */
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_CNVST_N_CONTROL << 21) |
                                               (2 << 13)                       |
                                               (1 << 12));
     /* Write the CNVST_N register, allow single CNVST pulse */
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
     AD7280A_CNVST_LOW;
     /* wait 100us */
-    TIME_DelayUs(100);
+    mdelay(100);
     AD7280A_CNVST_HIGH;
     /* wait 300us */
-    TIME_DelayUs(300);
+    mdelay(300);
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_CNVST_N_CONTROL << 21) |
                                               (1 << 13)                       |
                                               (1 << 12));
     /* Update registers */
-    AD7280A_Transfer_32bits(value);
-    value = (AD7280A_Transfer_32bits(AD7280A_READ_TXVAL) >> 11) & 0xfff;
+    AD7280A_Transfer_32bits(dev,
+			    value);
+    value = (AD7280A_Transfer_32bits(dev,
+				     AD7280A_READ_TXVAL) >> 11) & 0xfff;
     /* Read master self test register */
     *selfTestRegA = (float)value * 0.001220703125;
-    value = (AD7280A_Transfer_32bits(AD7280A_READ_TXVAL) >> 11) & 0xfff;
+    value = (AD7280A_Transfer_32bits(dev,
+				     AD7280A_READ_TXVAL) >> 11) & 0xfff;
     /* Read slave self test register */
     *selfTestRegB = (float)value * 0.001220703125;
     value = AD7280A_CRC_Write((unsigned long) (AD7280A_CONTROL_HB << 21) |
                               ((AD7280A_CTRL_HB_CONV_RES_READ_ALL        |
                               AD7280A_CTRL_HB_CONV_INPUT_ALL) << 13)     |
                               (1 << 12));
-    AD7280A_Transfer_32bits(value);
+    AD7280A_Transfer_32bits(dev,
+			    value);
 }
 
 /******************************************************************************
  * @brief Reads the value of Alert Pin from the device.
  *
- * @param  none.
+ * @param dev - The device structure.
  *
  * @return alertAD7280A - the value read of the pin
  *                        Example: 0 - the pin is low.
  *                                 1 - the pin is high.
 ******************************************************************************/
-unsigned char AD7280A_Alert_Pin(void)
+unsigned char AD7280A_Alert_Pin(ad7280a_dev *dev)
 {
     unsigned char alertAD7280A = 0;
 
-    alertAD7280A = (GPIO_GET_DATA(GPIO_BASEADDR) & AD7280_ALERT) ? 1 : 0;
+	gpio_get_value(dev->gpio_alert,
+		       &alertAD7280A);
 
     return alertAD7280A;
 }
