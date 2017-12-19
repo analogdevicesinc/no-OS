@@ -3,7 +3,7 @@
  *   @brief  Header file of AD9528 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2015-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -43,7 +43,7 @@
 /*****************************************************************************/
 /***************************** Include Files *********************************/
 /*****************************************************************************/
-#include <stdint.h>
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /****************************** AD9528 ****************************************/
@@ -308,7 +308,8 @@
  * @channel_divider: 10-bit channel divider.
  * @extended_name: Optional descriptive channel name.
  */
-struct ad9528_channel_spec {
+typedef struct
+{
 	unsigned		channel_num;
 	unsigned char			sync_ignore_en;
 				 /* CH0..CH3 VCXO, CH4..CH9 VCO2 */
@@ -318,7 +319,7 @@ struct ad9528_channel_spec {
 	unsigned char		divider_phase;
 	unsigned short		channel_divider;
 	char			extended_name[16];
-};
+} ad9528_channel_spec;
 
 /**
  * struct ad9528_platform_data - platform specific information
@@ -356,7 +357,7 @@ struct ad9528_channel_spec {
  * @num_channels: Array size of struct ad9528_channel_spec.
  * @channels: Pointer to channel array.
  */
-struct ad9528_platform_data
+typedef struct
 {
 	uint32_t	vcxo_freq;
 	uint8_t	spi3wire;
@@ -408,16 +409,18 @@ struct ad9528_platform_data
 
 	/* Output Channel Configuration */
 	int							num_channels;
-	struct ad9528_channel_spec	*channels;
-};
+	ad9528_channel_spec	*channels;
+} ad9528_platform_data;
 
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9528_setup(uint32_t spi_device_id,
-					 uint8_t slave_select,
-					 struct ad9528_platform_data ad9528_pdata);
+
+int32_t ad9528_init(ad9528_platform_data *pdata);
+int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata);
+int32_t ad9528_spi_read(spi_device *dev, uint32_t reg_addr, uint32_t *reg_data);
+int32_t ad9528_spi_write(spi_device *dev, uint32_t reg_addr, uint32_t reg_data);
 
 #endif // __AD9528_H__

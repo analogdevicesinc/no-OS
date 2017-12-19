@@ -1,0 +1,49 @@
+Run generated ELFs using a more normal OS-style exec startup/teardown
+procedure.
+
+This allows running generated executables to properly support running in
+U-Boot. Without this, executables will run but never return execution control
+to U-Boot on completion.
+
+In addition, this also returns the exit status of the program so u-boot can use
+it as necessary.
+
+Note that for this to work properly the entry point must be changed from
+_vector_table to _start in the linker script or via an argument to ld.
+
+--- sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/xil-crt0.S
++++ sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/xil-crt0.S
+@@ -77,6 +77,10 @@
+ 
+ 	.globl	_start
+ _start:
++	/* Save u-boot state */
++	stmfd   sp!, {fp, lr}
++	add fp, sp, #4
++
+ 	bl      __cpu_init		/* Initialize the CPU first (BSP provides this) */
+ 
+ 	mov	r0, #0
+@@ -127,6 +131,9 @@
+ 	/* Let her rip */
+ 	bl	main
+ 
++	/* Save the return value for u-boot */
++	push {r0}
++
+    /* Cleanup global constructors */
+    bl __libc_fini_array
+ 
+@@ -135,7 +142,11 @@
+ 	bl	_profile_clean
+ #endif /* PROFILING */
+ 
+-        /* All done */
++	/* Return control to u-boot */
++	pop {r0}
++	sub sp, fp, #4
++	ldmfd   sp!, {fp, pc}
++
+ 	bl	exit
+ 
+ .Lexit:	/* should never get here */

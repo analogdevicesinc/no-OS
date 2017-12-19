@@ -40,9 +40,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+
 #include "platform_drivers.h"
 #include "dac_core.h"
+#include "dmac_core.h"
 #include "ad9739a.h"
 #include "adf4350.h"
 
@@ -55,64 +56,85 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 adf4350_init_param default_adf4350_init_param = {
+	/* SPI */
+	0,			// spi_chip_select
+	SPI_DEVICE_ID,		// spi_device_id
+	0,			// spi_cpha
+	0,			// spi_cpol
+
+	/* Device settings */
 	25000000,		// clkin;
 	10000,			// channel_spacing;
-	2500000000ul,	// power_up_frequency;
-	0,				// reference_div_factor;
-	0,				// reference_doubler_enable;
-	0,				// reference_div2_enable;
+	2500000000ul,		// power_up_frequency;
+	0,			// reference_div_factor;
+	0,			// reference_doubler_enable;
+	0,			// reference_div2_enable;
 
 	/* r2_user_settings */
-	1,		// phase_detector_polarity_positive_enable;
-	0,		// lock_detect_precision_6ns_enable;
-	0,		// lock_detect_function_integer_n_enable;
-	2500,	// charge_pump_current;
-	0,		// muxout_select;
-	0,		// low_spur_mode_enable;
+	1,			// phase_detector_polarity_positive_enable;
+	0,			// lock_detect_precision_6ns_enable;
+	0,			// lock_detect_function_integer_n_enable;
+	2500,			// charge_pump_current;
+	0,			// muxout_select;
+	0,			// low_spur_mode_enable;
 
 	/* r3_user_settings */
-	0,		// cycle_slip_reduction_enable;
-	0,		// charge_cancellation_enable;
-	0,		// anti_backlash_3ns_enable;
-	0,		// band_select_clock_mode_high_enable;
-	0,		// clk_divider_12bit;
-	0,		// clk_divider_mode;
+	0,			// cycle_slip_reduction_enable;
+	0,			// charge_cancellation_enable;
+	0,			// anti_backlash_3ns_enable;
+	0,			// band_select_clock_mode_high_enable;
+	0,			// clk_divider_12bit;
+	0,			// clk_divider_mode;
 
 	/* r4_user_settings */
-	0,		// aux_output_enable;
-	1,		// aux_output_fundamental_enable;
-	0,		// mute_till_lock_enable;
-	3,		// output_power;
-	0,		// aux_output_power;
+	0,			// aux_output_enable;
+	1,			// aux_output_fundamental_enable;
+	0,			// mute_till_lock_enable;
+	3,			// output_power;
+	0,			// aux_output_power;
 };
 
-ad9739a_init_param default_ad9739a_init_param = {
-	0xF,	// common_mode_voltage_dacclk_p
-	0xF,	// common_mode_voltage_dacclk_n
-	20.0,	// full_scale_current
-};
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	adf4350_setup(SPI_DEVICE_ID, 0, default_adf4350_init_param);
+	spi_device		ad9739a_device;
+	adf4350_dev		*adf4350_device;
+	dac_core 		ad9739a_core;
+	dac_channel		ad9739a_channel[1];
+	ad9739a_init_param	init_param;
 
-	dac_setup(XPAR_AXI_AD9739A_BASEADDR);
+	/* Device settings */
+	init_param.common_mode_voltage_dacclk_p = 0xF;	// common_mode_voltage_dacclk_p
+	init_param.common_mode_voltage_dacclk_n = 0xF;	// common_mode_voltage_dacclk_n
+	init_param.full_scale_current = 20.0;		// full_scale_current
 
-	ad9739a_setup(SPI_DEVICE_ID, 1, default_ad9739a_init_param);
+	ad9739a_core.base_address = XPAR_AXI_AD9739A_BASEADDR;
+	ad9739a_core.resolution = 16;
+	ad9739a_core.no_of_channels = 1;
+	ad9739a_core.channels = &ad9739a_channel[0];
 
-	dac_write(ADI_REG_CNTRL_2, ADI_DATA_FORMAT);
+	adf4350_setup(&adf4350_device, default_adf4350_init_param);
 
-	dds_set_frequency(0, 300000000);
-	dds_set_phase(0, 0);
-	dds_set_scale(0, 250000);
+	ad_spi_init(&ad9739a_device);
+	ad9739a_device.device_id = 0x0;
+	ad9739a_device.chip_select = 0x1;
 
-	dds_set_frequency(1, 300000000);
-	dds_set_phase(1, 0);
-	dds_set_scale(1, 250000);
-	printf("Done.\n");
+	dac_write(&ad9739a_core, DAC_REG_DATA_CONTROL, DAC_DATA_FORMAT);
+
+	ad9739a_channel[0].dds_dual_tone = 0;
+	ad9739a_channel[0].dds_frequency_0 = 33*1000*1000;
+	ad9739a_channel[0].dds_scale_0 = 250000;
+	ad9739a_channel[0].dds_phase_0 = 0;
+	ad9739a_channel[0].sel = DAC_SRC_DDS;
+
+	dac_setup(&ad9739a_core);
+
+	ad9739a_setup(&ad9739a_device, &init_param);
+
+	ad_printf("Done.\n");
 
 	return 0;
 }

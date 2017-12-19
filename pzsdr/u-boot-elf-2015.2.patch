@@ -1,0 +1,69 @@
+Run generated ELFs using a more normal OS-style exec startup/teardown
+procedure.
+
+This allows generated executables to properly support running in U-Boot.
+Without this, executables will run but never return execution control to U-Boot
+on completion.
+
+In addition, this also returns the exit status of the program so u-boot can use
+it as necessary.
+
+Note that this patch was generated against the 2015.2 release of the Xilinx SDK
+so it may need to be re-rolled for future versions.
+
+--- sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/asm_vectors.S
++++ sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/asm_vectors.S
+@@ -68,6 +68,10 @@
+ 
+ .section .vectors
+ _vector_table:
++	/* Save u-boot state */
++	stmfd   sp!, {fp, lr}
++	add fp, sp, #4
++
+ 	B	_boot
+ 	B	Undefined
+ 	B	SVCHandler
+--- sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/boot.S
++++ sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/boot.S
+@@ -192,11 +192,11 @@
+ 	str	r6, [r7]
+ 
+ 	/* Invalidate caches and TLBs */
+-	mov	r0,#0				/* r0 = 0  */
+-	mcr	p15, 0, r0, c8, c7, 0		/* invalidate TLBs */
+-	mcr	p15, 0, r0, c7, c5, 0		/* invalidate icache */
+-	mcr	p15, 0, r0, c7, c5, 6		/* Invalidate branch predictor array */
+-	bl	invalidate_dcache		/* invalidate dcache */
++	//mov	r0,#0				/* r0 = 0  */
++	//mcr	p15, 0, r0, c8, c7, 0		/* invalidate TLBs */
++	//mcr	p15, 0, r0, c7, c5, 0		/* invalidate icache */
++	//mcr	p15, 0, r0, c7, c5, 6		/* Invalidate branch predictor array */
++	//bl	invalidate_dcache		/* invalidate dcache */
+ 
+ 	/* Disable MMU, if enabled */
+ 	mrc	p15, 0, r0, c1, c0, 0		/* read CP15 register 1 */
+--- sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/xil-crt0.S
++++ sdk/bsp/ps7_cortexa9_0/libsrc/standalone_v5_1/src/xil-crt0.S
+@@ -127,6 +127,9 @@
+ 	/* Let her rip */
+ 	bl	main
+ 
++	/* Save the return value for u-boot */
++	push {r0}
++
+    /* Cleanup global constructors */
+    bl __libc_fini_array
+ 
+@@ -135,6 +138,11 @@
+ 	bl	_profile_clean
+ #endif /* PROFILING */
+ 
++	/* Return status and control to u-boot */
++	pop {r0}
++	sub sp, fp, #4
++	ldmfd   sp!, {fp, pc}
++
+         /* All done */
+ 	bl	exit
+ 

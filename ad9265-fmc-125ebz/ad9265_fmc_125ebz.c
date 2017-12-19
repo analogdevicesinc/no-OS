@@ -40,45 +40,57 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xil_cache.h>
-#include <xil_printf.h>
-#include "xparameters.h"
 #include "adc_core.h"
+#include "dmac_core.h"
+#include "platform_drivers.h"
 #include "ad9265.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define AD9265_CORE_BASEADDR	XPAR_AXI_AD9265_BASEADDR
-#define AD9265_DMA_BASEADDR		XPAR_AXI_AD9265_DMA_BASEADDR
-#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	spi_device			ad9265_device;
+	adc_core			ad9265_core;
+	dmac_core			ad9265_dma;
+	dmac_xfer			rx_xfer;
+	ad9265_init_param 	ad9265_init_param;
 
-	adc_core ad9625_core;
+	// base addresses
 
-	ad9625_core.adc_baseaddr = AD9265_CORE_BASEADDR;
-	ad9625_core.dmac_baseaddr = AD9265_DMA_BASEADDR;
-	ad9625_core.no_of_channels = 1;
-	adc_setup(ad9625_core);
+	ad9265_core.base_address = XPAR_AXI_AD9265_BASEADDR;
+	ad9265_dma.base_address = XPAR_AXI_AD9265_DMA_BASEADDR;
 
-	ad9265_setup(SPI_DEVICE_ID, 0, ad9625_core);
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
 
-	ad9265_testmode_set(0, TESTMODE_ONE_ZERO_TOGGLE);
+	ad9265_dma.type = DMAC_RX;
+	ad9265_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.no_of_samples = 32768;
 
-	adc_capture(ad9625_core, 32768, ADC_DDR_BASEADDR);
+	ad_spi_init(&ad9265_device);
+	ad9265_device.chip_select = 0x2;
 
-	xil_printf("Done\n");
+	ad9265_core.no_of_channels = 1;
+	ad9265_core.resolution = 16;
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	ad_platform_init();
+
+	adc_setup(ad9265_core);
+	ad9265_setup(&ad9265_device, &ad9265_init_param, ad9265_core);
+	ad9265_testmode_set(&ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
+
+	if(!dmac_start_transaction(ad9265_dma)){
+		ad_printf("ad9265: RX test capture done.\n");
+	};
+
+	ad9265_testmode_set(&ad9265_device, TESTMODE_OFF);
+
+	ad_printf("Done\n");
+
+	ad_platform_close();
 
 	return 0;
 }

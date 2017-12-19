@@ -1,7 +1,5 @@
-**AD9434-FMC-500EBZ**
+ **AD9434-FMC-500EBZ** For more info see: [https://wiki.analog.com/start?do=search&id=ad9434-fmc] (https://wiki.analog.com/start?do=search&id=ad9434-fmc)
 
-The following drivers are required for building the **AD9434-FMC-500EBZ** no-OS project:
- - AD9434-FMC-500EBZ Main Driver	-	[./] (./)
- - Xilinx Platform Drivers		-	[../common_drivers/xilinx_platform_drivers] (../common_drivers/xilinx_platform_drivers)
- - AD9434 Driver				-	[../drivers/ad9434] (../drivers/ad9434)
- - ADC Core Driver				-	[../common_drivers/adc_core] (../common_drivers/adc_core)
+Building Bare Metal software:
+- Go to one of the supported carrier boards (e.g. zc706) and use make [https://en.wikipedia.org/wiki/Makefile] (https://en.wikipedia.org/wiki/Makefile)
+- Or open ./ad9434_fmc_500ebz.mk and build the project manually (see platform_drivers.h and include your platform)

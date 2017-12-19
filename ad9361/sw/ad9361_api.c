@@ -238,8 +238,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->pdata->gain_ctrl.f_agc_allow_agc_gain_increase = init_param->fagc_allow_agc_gain_increase;
 	phy->pdata->gain_ctrl.f_agc_lp_thresh_increment_time = init_param->fagc_lp_thresh_increment_time;
 	phy->pdata->gain_ctrl.f_agc_lp_thresh_increment_steps = init_param->fagc_lp_thresh_increment_steps;
-	/* Fast AGC - Lock Level */
-	phy->pdata->gain_ctrl.f_agc_lock_level = init_param->fagc_lock_level;
+	/* Fast AGC - Lock Level (Lock Level is set via slow AGC inner high threshold) */
 	phy->pdata->gain_ctrl.f_agc_lock_level_lmt_gain_increase_en = init_param->fagc_lock_level_lmt_gain_increase_en;
 	phy->pdata->gain_ctrl.f_agc_lock_level_gain_increase_upper_limit = init_param->fagc_lock_level_gain_increase_upper_limit;
 	/* Fast AGC - Peak Detectors and Final Settling */
@@ -401,6 +400,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	phy->quad_track_en = true;
 
 	phy->bist_loopback_mode = 0;
+	phy->bist_config = 0;
 	phy->bist_prbs_mode = BIST_DISABLE;
 	phy->bist_tone_mode = BIST_DISABLE;
 	phy->bist_tone_freq_Hz = 0;
@@ -603,11 +603,6 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
 
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
-
 	rx_gain.gain_db = gain_db;
 	ret = ad9361_set_rx_gain(phy,
 					ad9361_1rx1tx_channel_map(phy, false,
@@ -633,11 +628,6 @@ int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 {
 	struct rf_rx_gain rx_gain = {0};
 	int32_t ret = 0;
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	ret = ad9361_get_rx_gain(phy, ad9361_1rx1tx_channel_map(phy,
 			false, ch + 1), &rx_gain);
@@ -788,35 +778,6 @@ int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[RX_RFPLL], int_ext);
 }
 
-
-/**
- * Power Down RX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd The power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd)
-{
-	return ad9361_synth_lo_powerdown(phy, (enum synth_pd_ctrl) pd, LO_DONTCARE);
-}
-
-/**
- * Get RX LO/Synthesizers power down state.
- * @param phy The AD9361 state structure.
- * @param pd A variable to store the pd state.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_get_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd)
-{
-	*pd = !!(phy->cached_synth_pd[1] & RX_LO_POWER_DOWN);
-
-	return 0;
-}
-
 /**
  * Get the RSSI for the selected channel.
  * @param phy The AD9361 current state structure.
@@ -833,11 +794,6 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 							uint8_t ch, struct rf_rssi *rssi)
 {
 	int32_t ret;
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	rssi->ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	rssi->duration = 1;
@@ -868,11 +824,6 @@ int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 										 uint8_t ch, uint8_t gc_mode)
 {
 	struct rf_gain_ctrl gc = {0};
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == RX2)) {
-		printf("%s : RX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	gc.ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	gc.mode = phy->agc_mode[ch] = gc_mode;
@@ -1261,11 +1212,6 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
 	int32_t ret;
 	int32_t channel;
 
-	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
-		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
-
 	channel = ad9361_1rx1tx_channel_map(phy, true, ch);
 	ret = ad9361_set_tx_atten(phy, attenuation_mdb,
 			channel == 0, channel == 1,
@@ -1290,11 +1236,6 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 								   uint8_t ch, uint32_t *attenuation_db)
 {
 	int32_t ret;
-
-	if ((phy->pdata->rx2tx2 == 0) && (ch == TX2)) {
-		printf("%s : TX2 is an invalid option in 1x1 mode!\n", __func__);
-		return -1;
-	}
 
 	ret = ad9361_get_tx_atten(phy,
 			ad9361_1rx1tx_channel_map(phy, true,
@@ -1446,34 +1387,6 @@ int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 	phy->pdata->use_ext_tx_lo = int_ext;
 
 	return ad9361_clk_mux_set_parent(phy->ref_clk_scale[TX_RFPLL], int_ext);
-}
-
-/**
- * Power Down TX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd The power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd)
-{
-	return ad9361_synth_lo_powerdown(phy, LO_DONTCARE, (enum synth_pd_ctrl) pd);
-}
-
-/**
- * Get TX LO/Synthesizers power down state.
- * @param phy The AD9361 state structure.
- * @param pd A variable to store the pd state.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_get_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd)
-{
-	*pd = !!(phy->cached_synth_pd[0] & TX_LO_POWER_DOWN);
-
-	return 0;
 }
 
 /**
@@ -1909,26 +1822,6 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master, struct ad9361_rf_phy *ph
 }
 
 /**
- * Power Down RX/TX LO/Synthesizers.
- * @param phy The AD9361 state structure.
- * @param pd_rx The RX LO power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON
- * @param pd_tx The TX LO power down state.
- * 			  Accepted values:
- * 			   LO_DONTCARE
- * 			   LO_OFF
- * 			   LO_ON * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_set_trx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd_rx,  uint8_t pd_tx)
-{
-	return ad9361_synth_lo_powerdown(phy, (enum synth_pd_ctrl) pd_rx,
-					 (enum synth_pd_ctrl) pd_tx);
-}
-
-/**
  * Enable/disable the TRX FIR filters.
  * @param phy The AD9361 current state structure.
  * @param en_dis The option (ENABLE, DISABLE).
@@ -2086,4 +1979,18 @@ int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 
 	return ad9361_set_dcxo_tune(phy, phy->pdata->dcxo_coarse,
 			phy->pdata->dcxo_fine);
+}
+
+/**
+ * Get the temperature.
+ * @param phy The AD9361 current state structure.
+ * @param temp The temperature (degrees C * 1000).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
+							   int32_t *temp)
+{
+	*temp = ad9361_get_temp(phy);
+
+	return 0;
 }

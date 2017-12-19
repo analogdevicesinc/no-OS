@@ -1,7 +1,8 @@
 /***************************************************************************//**
  *   @file   AD9739A.c
  *   @brief  Implementation of AD9739A Driver.
- *   @author Bancisor Mihai
+ *   @author 1 Bancisor Mihai
+ *   @author 2 Grozav Andrei
 ********************************************************************************
  * Copyright 2012-2015(c) Analog Devices, Inc.
  *
@@ -41,8 +42,6 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <malloc.h>
-#include <stdio.h>
 #include "platform_drivers.h"
 #include "ad9739a.h"
 
@@ -50,15 +49,6 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define FDATA 2500	// for 2.5 GSPS
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-uint8_t ad9739a_slave_select;
-struct ad9739a_state
-{
-	struct ad9739a_platform_data *pdata;
-}ad9739a_st;
 
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
@@ -68,15 +58,19 @@ struct ad9739a_state
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9739a_write(unsigned char registerAddress,
-					unsigned char registerValue)
+int32_t ad9739a_write(spi_device *dev,
+					  uint8_t registerAddress,
+					  uint8_t registerValue)
 {
 	uint8_t data[2] = {0, 0};
+	int32_t ret;
 
 	data[0] = AD9739A_WRITE | (0x7F & registerAddress);
 	data[1] = registerValue;
 
-	return spi_write_and_read(ad9739a_slave_select, data, 2);
+	ret = ad_spi_xfer(dev, data, 2);
+
+	return ret;
 }
 
 /***************************************************************************//**
@@ -86,16 +80,19 @@ int32_t ad9739a_write(unsigned char registerAddress,
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
-int32_t ad9739a_read(unsigned char registerAddress)
+int32_t ad9739a_read(spi_device *dev,
+					 uint8_t registerAddress,
+					 uint8_t *registerValue)
 {
 	uint8_t txData[2] = {0, 0};
 	int32_t ret;
 
 	txData[0] = AD9739A_READ | (0x7F & registerAddress);
 
-	ret = spi_write_and_read(ad9739a_slave_select, txData, 2);
+	ret = ad_spi_xfer(dev, txData, 2);
+	*registerValue = txData[1];
 
-	return (ret < 0 ? ret : (int32_t)txData[1]);
+	return ret;
 }
 
 /***************************************************************************//**
@@ -103,18 +100,18 @@ int32_t ad9739a_read(unsigned char registerAddress)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_reset(void)
+int32_t ad9739a_reset(spi_device *dev)
 {
 	int32_t ret;
 
 	/* Software reset to default SPI values. */
-	ret = ad9739a_write(AD9739A_REG_MODE,
+	ret = ad9739a_write(dev, AD9739A_REG_MODE,
 					   AD9739A_MODE_RESET);
 	if(ret < 0)
 	{
 		return ret;
 	}
-	ret = ad9739a_write(AD9739A_REG_MODE, 0x00);	// Clear the reset bit.
+	ret = ad9739a_write(dev, AD9739A_REG_MODE, 0x00);	// Clear the reset bit.
 
 	return ret;
 }
@@ -128,20 +125,21 @@ int32_t ad9739a_reset(void)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_power_down(unsigned char pwrConfig)
+int32_t ad9739a_power_down(spi_device *dev,
+						   uint8_t pwrConfig)
 {
 	int32_t ret;
-	int32_t regData;
+	uint8_t regData;
 
 	/* Write to register if pwrConfig contains valid parameters. Else read and
 	return the register value. */
 	if((pwrConfig & ((1 << 7) | (1 << 6) | (1 << 3) | (1 << 2))) == 0)
 	{
-		ret = ad9739a_write(AD9739A_REG_POWER_DOWN, pwrConfig);
+		ret = ad9739a_write(dev, AD9739A_REG_POWER_DOWN, pwrConfig);
 	}
 	else
 	{
-		regData = ad9739a_read(AD9739A_REG_POWER_DOWN);
+		ad9739a_read(dev, AD9739A_REG_POWER_DOWN, &regData);
 		return regData;
 	}
 
@@ -157,19 +155,20 @@ int32_t ad9739a_power_down(unsigned char pwrConfig)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_operation_mode(unsigned char mode)
+int32_t ad_serdes_clk(spi_device *dev,
+							   uint8_t mode)
 {
 	int32_t ret;
-	int32_t regData;
+	uint8_t regData;
 
 	if((mode == AD9739A_DAC_DEC_NORMAL_BASEBAND) |
 	  (mode == AD9739A_DAC_DEC_MIX_MODE))
 	{
-		ret = ad9739a_write(AD9739A_REG_DEC_CNT, AD9739A_DEC_CNT_DAC_DEC(mode));
+		ret = ad9739a_write(dev, AD9739A_REG_DEC_CNT, AD9739A_DEC_CNT_DAC_DEC(mode));
 	}
 	else
 	{
-		regData = ad9739a_read(AD9739A_REG_DEC_CNT);
+		ad9739a_read(dev, AD9739A_REG_DEC_CNT, &regData);
 		return regData;
 	}
 
@@ -185,21 +184,23 @@ int32_t ad9739a_operation_mode(unsigned char mode)
  *
  * @return Returns the actual set full-scale current or negative error code.
 *******************************************************************************/
-float ad9739a_DAC_fs_current(float fs_val)
+float ad9739a_DAC_fs_current(spi_device *dev,
+							 float fs_val)
 {
 	float   actual_fs = 0;
-	int16_t regData   = 0;
-	int32_t ret	   = 0;
+	uint8_t regData_r = 0;
+	int16_t regData = 0;
+	int32_t ret = 0;
 
 	if((fs_val >= 8.7) && (fs_val <= 31.7))
 	{
 		regData = (int16_t)((fs_val - 8.58) / 0.0226); 
-		ret = ad9739a_write(AD9739A_REG_FSC_1, (regData & 0xFF));
+		ret = ad9739a_write(dev, AD9739A_REG_FSC_1, (regData & 0xFF));
 		if(ret < 0)
 		{
 			return (float)ret;
 		}
-		ret = ad9739a_write(AD9739A_REG_FSC_2, ((regData & 0x300) >> 8));
+		ret = ad9739a_write(dev, AD9739A_REG_FSC_2, ((regData & 0x300) >> 8));
 		if(ret < 0)
 		{
 			return (float)ret;
@@ -207,7 +208,7 @@ float ad9739a_DAC_fs_current(float fs_val)
 	}
 	else if(fs_val == 0)
 	{
-		ret = ad9739a_write(AD9739A_REG_FSC_2, AD9739A_FSC_2_Sleep);
+		ret = ad9739a_write(dev, AD9739A_REG_FSC_2, AD9739A_FSC_2_Sleep);
 		if(ret < 0)
 		{
 			return (float)ret;
@@ -215,17 +216,17 @@ float ad9739a_DAC_fs_current(float fs_val)
 	}
 	else
 	{
-		regData = ad9739a_read(AD9739A_REG_FSC_1) & 0xFF;
-		if(regData < 0)
+		ad9739a_read(dev, AD9739A_REG_FSC_1, &regData_r);
+		if(regData_r < 0)
 		{
 			return -1;
 		}
-		ret = ad9739a_read(AD9739A_REG_FSC_2);
-		if(ret < 0)
+		ad9739a_read(dev, AD9739A_REG_FSC_2, &regData_r);
+		if(regData_r < 0)
 		{
-			return (float)ret;
+			return (float)regData_r;
 		}
-		regData |= (ret & 0x3) << 8;
+		regData |= (regData_r & 0x3) << 8;
 		actual_fs = (float)(regData * 0.0226  + 8.58);
 		return actual_fs;
 	}
@@ -266,48 +267,46 @@ int32_t delay_fdata_cycles(uint32_t cycles)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
-		ad9739a_init_param init_param)
+int32_t ad9739a_setup(spi_device *dev,
+					  ad9739a_init_param *init_param)
 {
-	struct  ad9739a_state *st = &ad9739a_st;
 	int32_t ret = 0;
 	float   fret = 0;
+	uint8_t chip_id = 0;
 	uint8_t dll_loop_lock_counter = 0;
 	uint8_t dll_loop_locked = 0;
+	uint8_t ad9739a_reg_mu_stat1_buf = 0;
+	uint8_t ad9739a_reg_lvds_rec_stat9_buf;
 
-	ad9739a_slave_select = slave_select;
-	spi_init(spi_device_id, 0, 0);
+	// Device ID
 
-	st->pdata = (struct ad9739a_platform_data *)malloc(sizeof(*st->pdata));
-	if (!st->pdata)
+	ad9739a_read(dev, AD9739A_REG_PART_ID, &chip_id);
+	if(chip_id != AD9739A_CHIP_ID)
+	{
+		ad_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
-
-	st->pdata->common_mode_voltage_dacclk_p =
-			init_param.common_mode_voltage_dacclk_p;
-	st->pdata->common_mode_voltage_dacclk_n =
-			init_param.common_mode_voltage_dacclk_n;
-	st->pdata->full_scale_current = init_param.full_scale_current;
+	}
 
 	/* Set 4-wire SPI, MSB first. */
-	ret = ad9739a_write(AD9739A_REG_MODE, 0x00);
+	ret |= ad9739a_write(dev, AD9739A_REG_MODE, 0x00);
 	if(ret < 0)
 	{
 		return ret;
 	}
-	ret = ad9739a_reset();
+	ret = ad9739a_reset(dev);
 	if(ret < 0)
 	{
 		return ret;
 	}
 	/* Set the common-mode voltage of DACCLK_P and DACCLK_N inputs. */
-	ret = ad9739a_write(AD9739A_REG_CROSS_CNT1,
-			AD9739A_CROSS_CNT1_CLKP_OFFSET(st->pdata->common_mode_voltage_dacclk_p));
+	ret = ad9739a_write(dev, AD9739A_REG_CROSS_CNT1,
+			AD9739A_CROSS_CNT1_CLKP_OFFSET(init_param->common_mode_voltage_dacclk_p));
 	if(ret < 0)
 	{
 		return ret;
 	}
-	ret = ad9739a_write(AD9739A_REG_CROSS_CNT2,
-			AD9739A_CROSS_CNT2_CLKN_OFFSET(st->pdata->common_mode_voltage_dacclk_n));
+	ret = ad9739a_write(dev, AD9739A_REG_CROSS_CNT2,
+			AD9739A_CROSS_CNT2_CLKN_OFFSET(init_param->common_mode_voltage_dacclk_n));
 	if(ret < 0)
 	{
 		return ret;
@@ -315,26 +314,26 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 
 	/* MU CONTROLLER Setup*/
 	/* Phase detector enable and boost bias bits. */
-	ret = ad9739a_write(AD9739A_REG_PHS_DET,
+	ret = ad9739a_write(dev, AD9739A_REG_PHS_DET,
 			AD9739A_PHS_DET_CMP_BST | AD9739A_PHS_DET_PHS_DET_AUTO_EN);
 	if(ret < 0)
 	{
 		return ret;
 	}
-	ret = ad9739a_write(AD9739A_REG_MU_DUTY, AD9739A_MU_DUTY_MU_DUTY_AUTO_EN);
+	ret = ad9739a_write(dev, AD9739A_REG_MU_DUTY, AD9739A_MU_DUTY_MU_DUTY_AUTO_EN);
 	if(ret < 0)
 	{
 		return ret;
 	}
 	/* Set the MU Controller search direction to UP and the target phase to 4.*/
-	ret = ad9739a_write(AD9739A_REG_MU_CNT2,
+	ret = ad9739a_write(dev, AD9739A_REG_MU_CNT2,
 					  AD9739A_MU_CNT2_SRCH_MODE(1) | AD9739A_MU_CNT2_SET_PHS(4));
 	if(ret < 0)
 	{
 		return ret;
 	}
 	/* Set the MU delay value at witch the controller begins its search to 216. */
-	ret = ad9739a_write(AD9739A_REG_MU_CNT3, AD9739A_MU_CNT3_MUDEL(0x6C));
+	ret = ad9739a_write(dev, AD9739A_REG_MU_CNT3, AD9739A_MU_CNT3_MUDEL(0x6C));
 	if(ret < 0)
 	{
 		return ret;
@@ -343,24 +342,25 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 	{
 		/* Set: find the exact targeted phase, retry the search until correct value is found,
 				continue if desired phase is not found, guard band set to optimal value: 0xB. */
-		ret = ad9739a_write(AD9739A_REG_MU_CNT4, AD9739A_MU_CNT4_SEARCH_TOL |
+		ret = ad9739a_write(dev, AD9739A_REG_MU_CNT4, AD9739A_MU_CNT4_SEARCH_TOL |
 						   AD9739A_MU_CNT4_RETRY | AD9739A_MU_CNT4_GUARD(0xB));
 		if(ret < 0)
 		{
 			return ret;
 		}
 		/* Set the MU controller tracking gain to the recommended value of 0x1. */
-		ret = ad9739a_write(AD9739A_REG_MU_CNT1, AD9739A_MU_CNT1_GAIN(0x1));
+		ret = ad9739a_write(dev, AD9739A_REG_MU_CNT1, AD9739A_MU_CNT1_GAIN(0x1));
 		if(ret < 0)
 		{
 			return ret;
 		}
 		/* Enable the MU controller. */
-		ret = ad9739a_write(AD9739A_REG_MU_CNT1,
+		ret = ad9739a_write(dev, AD9739A_REG_MU_CNT1,
 				AD9739A_MU_CNT1_GAIN(0x1) | AD9739A_MU_CNT1_ENABLE);
 		delay_fdata_cycles(180000);
 		dll_loop_lock_counter++;
-		if(ad9739a_read(AD9739A_REG_MU_STAT1) == AD9739A_MU_STAT1_MU_LKD)
+		ad9739a_read(dev, AD9739A_REG_MU_STAT1, &ad9739a_reg_mu_stat1_buf);
+		if(ad9739a_reg_mu_stat1_buf == AD9739A_MU_STAT1_MU_LKD)
 		{
 			dll_loop_locked = 1;
 		}
@@ -371,7 +371,7 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 		return -1;
 	}
 	/* Set FINE_DEL_SKEW to 2 for a larger DCI sampling window. */
-	ret = ad9739a_write(AD9739A_REG_LVDS_REC_CNT4,
+	ret = ad9739a_write(dev, AD9739A_REG_LVDS_REC_CNT4,
 					   AD9739A_LVDS_REC_CNT4_FINE_DEL_SKEW(2) |
 					   AD9739A_LVDS_REC_CNT4_DCI_DEL(0x7));
 	if(ret < 0)
@@ -383,20 +383,20 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 	do
 	{
 		/* Disable the data Rx controller before enabling it. */
-		ret = ad9739a_write(AD9739A_REG_LVDS_REC_CNT1, 0x00);
+		ret = ad9739a_write(dev, AD9739A_REG_LVDS_REC_CNT1, 0x00);
 		if(ret < 0)
 		{
 			return ret;
 		}
 		/* Enable the data Rx controller for loop and IRQ. */
-		ret = ad9739a_write(AD9739A_REG_LVDS_REC_CNT1,
+		ret = ad9739a_write(dev, AD9739A_REG_LVDS_REC_CNT1,
 				AD9739A_LVDS_REC_CNT1_RCVR_LOOP_ON);
 		if(ret < 0)
 		{
 			return ret;
 		}
 		/* Enable the data Rx controller for search and track mode. */
-		ret = ad9739a_write(AD9739A_REG_LVDS_REC_CNT1,
+		ret = ad9739a_write(dev, AD9739A_REG_LVDS_REC_CNT1,
 				AD9739A_LVDS_REC_CNT1_RCVR_LOOP_ON | AD9739A_LVDS_REC_CNT1_RCVR_CNT_ENA);
 		if(ret < 0)
 		{
@@ -404,8 +404,9 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 		}
 		delay_fdata_cycles(135000);
 		dll_loop_lock_counter++;
-		if(ad9739a_read(AD9739A_REG_LVDS_REC_STAT9) ==
-				(AD9739A_LVDS_REC_STAT9_RCVR_LCK | AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON))
+		ad9739a_read(dev, AD9739A_REG_LVDS_REC_STAT9, &ad9739a_reg_lvds_rec_stat9_buf);
+		if( ad9739a_reg_lvds_rec_stat9_buf == (AD9739A_LVDS_REC_STAT9_RCVR_LCK |
+							AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON))
 		{
 			dll_loop_locked = 1;
 		}
@@ -413,16 +414,16 @@ int32_t ad9739a_setup(uint32_t spi_device_id, uint8_t slave_select,
 	while((dll_loop_lock_counter <= 3) && (dll_loop_locked == 0));
 	if(dll_loop_locked == 0)
 	{
-		printf("AD9739A error: DLL unlocked.\n");
+		ad_printf("AD9739A error: DLL unlocked.\n");
 		return -1;
 	}
-	fret = ad9739a_DAC_fs_current(st->pdata->full_scale_current);
+	fret = ad9739a_DAC_fs_current(dev, init_param->full_scale_current);
 	if(fret < 0)
 	{
 		return (int32_t)fret;
 	}
 
-	printf("AD9739A successfully initialized.\n");
+	ad_printf("AD9739A successfully initialized.\n");
 
-	return 0;
+	return ret;
 }

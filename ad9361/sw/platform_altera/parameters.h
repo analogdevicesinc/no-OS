@@ -42,11 +42,17 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define CF_AD9361_RX_BASEADDR		0xFF220000
-#define CF_AD9361_TX_BASEADDR		0xFF220000 + 0x4000
+#define CF_AD9361_RX_BASEADDR		0xFF320000
+#define CF_AD9361_TX_BASEADDR		0xFF320000 + 0x4000
 
-#define SPI_BASEADDR				0xFF208000
-#define GPIO_BASEADDR				0xFF210090
+#define CF_AD9361_RX_DMA_BASEADDR	0xFF300000
+#define CF_AD9361_TX_DMA_BASEADDR	0xFF304000
+
+#define ADC_DDR_BASEADDR			0x20000000
+#define DAC_DDR_BASEADDR			0x30000000
+
+#define SPI_BASEADDR				0xFF308000
+#define GPIO_BASEADDR				0xFF309000
 
 #define GPIO_DEVICE_ID				0
 #define GPIO_RESET_PIN				4

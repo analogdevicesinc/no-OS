@@ -142,21 +142,20 @@ typedef struct
 	/* Fast AGC */
 	uint32_t	fagc_dec_pow_measuremnt_duration;	/* adi,fagc-dec-pow-measurement-duration */
 	uint32_t	fagc_state_wait_time_ns;	/* adi,fagc-state-wait-time-ns */
-		/* Fast AGC - Low Power */
+	/* Fast AGC - Low Power */
 	uint8_t		fagc_allow_agc_gain_increase;	/* adi,fagc-allow-agc-gain-increase-enable */
 	uint32_t	fagc_lp_thresh_increment_time;	/* adi,fagc-lp-thresh-increment-time */
 	uint32_t	fagc_lp_thresh_increment_steps;	/* adi,fagc-lp-thresh-increment-steps */
-		/* Fast AGC - Lock Level */
-	uint32_t	fagc_lock_level;	/* adi,fagc-lock-level */
+	/* Fast AGC - Lock Level (Lock Level is set via slow AGC inner high threshold) */
 	uint8_t		fagc_lock_level_lmt_gain_increase_en;	/* adi,fagc-lock-level-lmt-gain-increase-enable */
 	uint32_t	fagc_lock_level_gain_increase_upper_limit;	/* adi,fagc-lock-level-gain-increase-upper-limit */
-		/* Fast AGC - Peak Detectors and Final Settling */
+	/* Fast AGC - Peak Detectors and Final Settling */
 	uint32_t	fagc_lpf_final_settling_steps;	/* adi,fagc-lpf-final-settling-steps */
 	uint32_t	fagc_lmt_final_settling_steps;	/* adi,fagc-lmt-final-settling-steps */
 	uint32_t	fagc_final_overrange_count;	/* adi,fagc-final-overrange-count */
-		/* Fast AGC - Final Power Test */
+	/* Fast AGC - Final Power Test */
 	uint8_t		fagc_gain_increase_after_gain_lock_en;	/* adi,fagc-gain-increase-after-gain-lock-enable */
-		/* Fast AGC - Unlocking the Gain */
+	/* Fast AGC - Unlocking the Gain */
 	uint32_t	fagc_gain_index_type_after_exit_rx_mode;	/* adi,fagc-gain-index-type-after-exit-rx-mode */
 	uint8_t		fagc_use_last_lock_level_for_set_gain_en;	/* adi,fagc-use-last-lock-level-for-set-gain-enable */
 	uint8_t		fagc_rst_gla_stronger_sig_thresh_exceeded_en;	/* adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable */
@@ -417,10 +416,6 @@ int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save RX fastlock profile. */
 int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
-/* Set power down TX LO/Synthesizers */
-int32_t ad9361_set_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd);
-/* Get power down TX LO/Synthesizers */
-int32_t ad9361_get_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -465,16 +460,10 @@ int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save TX fastlock profile. */
 int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
-/* Set power down TX LO/Synthesizers */
-int32_t ad9361_set_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd);
-/* Get power down TX LO/Synthesizers */
-int32_t ad9361_get_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t *pd);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */
 int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
-/* Power Down RX/TX LO/Synthesizers */
-int32_t ad9361_set_trx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t pd_rx, uint8_t pd_tx);
 /* Set the number of channels mode. */
 int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode);
 /* Do multi chip synchronization. */
@@ -497,4 +486,7 @@ int32_t ad9361_do_dcxo_tune_coarse(struct ad9361_rf_phy *phy,
 /* Do DCXO fine tuning. */
 int32_t ad9361_do_dcxo_tune_fine(struct ad9361_rf_phy *phy,
 								   uint32_t fine);
+/* Get the temperature. */
+int32_t ad9361_get_temperature(struct ad9361_rf_phy *phy,
+							   int32_t *temp);
 #endif

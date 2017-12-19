@@ -202,13 +202,19 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 	if(dds_st[phy->id_no].rx2tx2)
 	{
 		dds_st[phy->id_no].num_buf_channels = 4;
-		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
+		if(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
+		else
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
 		reg_ctrl_2 &= ~DAC_R1_MODE;
 	}
 	else
 	{
 		dds_st[phy->id_no].num_buf_channels = 2;
-		dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
+		if(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
+		else
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(0));
 		reg_ctrl_2 |= DAC_R1_MODE;
 	}
 	dac_write(phy, DAC_REG_CNTRL_2, reg_ctrl_2);

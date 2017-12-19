@@ -40,45 +40,53 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xil_cache.h>
-#include <xil_printf.h>
-#include "xparameters.h"
 #include "adc_core.h"
+#include "dmac_core.h"
+#include "platform_drivers.h"
 #include "ad9434.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define AD9434_CORE_BASEADDR	XPAR_AXI_AD9434_BASEADDR
-#define AD9434_DMA_BASEADDR		XPAR_AXI_AD9434_DMA_BASEADDR
-#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	spi_device		ad9434_device;
+	adc_core		ad9434_core;
+	dmac_core		ad9434_dma;
+	dmac_xfer		rx_xfer;
+	uint8_t			nr_of_lanes = 12;
+	uint8_t			over_range_signal = 1;
+	ad_platform_init();
 
-	adc_core ad9434_core;
-
-	ad9434_core.adc_baseaddr = AD9434_CORE_BASEADDR;
-	ad9434_core.dmac_baseaddr = AD9434_DMA_BASEADDR;
+	ad9434_core.base_address = XPAR_AXI_AD9434_BASEADDR;
 	ad9434_core.no_of_channels = 1;
+	ad9434_core.resolution = 12;
+
+	ad9434_dma.base_address = XPAR_AXI_AD9434_DMA_BASEADDR;
+
+	ad_spi_init(&ad9434_device);
+	ad9434_device.chip_select = 0x2;
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+	ad9434_dma.type = DMAC_RX;
+	ad9434_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.no_of_samples = 32768;
+
+	ad9434_setup(&ad9434_device);
+
 	adc_setup(ad9434_core);
 
-	ad9434_setup(SPI_DEVICE_ID, 0, ad9434_core);
+	ad9434_testmode_set(&ad9434_device, TESTMODE_PN9_SEQ);
+	adc_delay_calibrate(ad9434_core, nr_of_lanes + over_range_signal, ADC_PN9);
 
-	ad9434_testmode_set(0, TESTMODE_ONE_ZERO_TOGGLE);
+	ad9434_testmode_set(&ad9434_device, TESTMODE_OFF);
+	ad9434_outputmode_set(&ad9434_device, OUTPUT_MODE_TWOS_COMPLEMENT);
+	if(!dmac_start_transaction(ad9434_dma)) {
+		ad_printf("Capture done!\n");
+	};
 
-	adc_capture(ad9434_core, 32768, ADC_DDR_BASEADDR);
-
-	xil_printf("Done\n");
-
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
-
+	ad_platform_close();
 	return 0;
 }

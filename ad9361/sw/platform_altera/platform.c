@@ -312,8 +312,8 @@ unsigned long msleep_interruptible(unsigned int msecs)
 *******************************************************************************/
 void axiadc_init(struct ad9361_rf_phy *phy)
 {
-	adc_init();
-	dac_init(phy, DATA_SEL_DDS);
+	adc_init(phy);
+	dac_init(phy, DATA_SEL_DDS, 0);
 }
 
 /***************************************************************************//**
@@ -331,7 +331,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 {
 	uint32_t val;
 
-	adc_read(reg, &val);
+	adc_read(st->phy, reg, &val);
 
 	return val;
 }
@@ -341,7 +341,7 @@ unsigned int axiadc_read(struct axiadc_state *st, unsigned long reg)
 *******************************************************************************/
 void axiadc_write(struct axiadc_state *st, unsigned reg, unsigned val)
 {
-	adc_write(reg, val);
+	adc_write(st->phy, reg, val);
 }
 
 /***************************************************************************//**

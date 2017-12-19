@@ -146,6 +146,13 @@ struct adf4350_platform_data
 
 typedef struct
 {
+	/* SPI */
+	uint8_t		spi_chip_select;
+	uint32_t	spi_device_id;
+	uint32_t	spi_cpha;
+	uint32_t	spi_cpol;
+
+	/* Device settings */
 	uint32_t	clkin;
 	uint32_t	channel_spacing;
 	uint32_t	power_up_frequency;
@@ -177,21 +184,42 @@ typedef struct
 	uint32_t	aux_output_power;
 }adf4350_init_param;
 
+typedef struct {
+	spi_device	spi_dev;
+	struct adf4350_platform_data *pdata;
+	uint32_t	clkin;
+	uint32_t	chspc;	/* Channel Spacing */
+	uint32_t	fpfd;	/* Phase Frequency Detector */
+	uint32_t	min_out_freq;
+	uint32_t	r0_fract;
+	uint32_t	r0_int;
+	uint32_t	r1_mod;
+	uint32_t	r4_rf_div_sel;
+	uint32_t	regs[6];
+	uint32_t	regs_hw[6];
+	uint32_t 	val;
+} adf4350_dev;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Initializes the ADF4350. */
-int32_t adf4350_setup(uint32_t spi_device_id, uint8_t slave_select,
-		adf4350_init_param init_param);
+int32_t adf4350_setup(adf4350_dev **device,
+					  adf4350_init_param init_param);
 /*! Writes 4 bytes of data to ADF4350. */
-int32_t adf4350_write(uint32_t data);
+int32_t adf4350_write(spi_device *dev,
+					  uint32_t data);
 /*! Stores PLL 0 frequency in Hz. */
-int64_t adf4350_out_altvoltage0_frequency(int64_t Hz);
+int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
+										  int64_t Hz);
 /*! Stores PLL 0 frequency resolution/channel spacing in Hz. */
-int32_t adf4350_out_altvoltage0_frequency_resolution(int32_t Hz);
+int32_t adf4350_out_altvoltage0_frequency_resolution(adf4350_dev *dev,
+													 int32_t Hz);
 /*! Sets PLL 0 REFin frequency in Hz. */
-int64_t adf4350_out_altvoltage0_refin_frequency(int64_t Hz);
+int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
+												int64_t Hz);
 /*! Powers down the PLL.  */
-int32_t adf4350_out_altvoltage0_powerdown(int32_t pwd);
+int32_t adf4350_out_altvoltage0_powerdown(adf4350_dev *dev,
+										  int32_t pwd);
 
 #endif // __ADF4350_H__

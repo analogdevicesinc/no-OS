@@ -41,7 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-#include <xil_printf.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "platform_drivers.h"
 #include "ad9517.h"
 
@@ -53,7 +54,9 @@ uint8_t ad9517_slave_select;
 /***************************************************************************//**
 * @brief ad9517_spi_read
 *******************************************************************************/
-int32_t ad9517_spi_read(uint16_t reg_addr, uint8_t *reg_data)
+int32_t ad9517_spi_read(spi_device *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -63,7 +66,7 @@ int32_t ad9517_spi_read(uint16_t reg_addr, uint8_t *reg_data)
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = 0x00;
 
-	ret = spi_write_and_read(ad9517_slave_select, buf, 4);
+	ret = ad_spi_xfer(dev, buf, 4);
 	*reg_data = buf[3];
 
 	return ret;
@@ -72,7 +75,9 @@ int32_t ad9517_spi_read(uint16_t reg_addr, uint8_t *reg_data)
 /***************************************************************************//**
 * @brief ad9517_spi_write
 *******************************************************************************/
-int32_t ad9517_spi_write(uint16_t reg_addr, uint8_t reg_data)
+int32_t ad9517_spi_write(spi_device *dev,
+						uint16_t reg_addr,
+						uint8_t reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -82,7 +87,7 @@ int32_t ad9517_spi_write(uint16_t reg_addr, uint8_t reg_data)
 	buf[2] = reg_addr & 0xFF;
 	buf[3] = reg_data;
 
-	ret = spi_write_and_read(ad9517_slave_select, buf, 4);
+	ret = ad_spi_xfer(dev, buf, 4);
 
 	return ret;
 }
@@ -90,45 +95,43 @@ int32_t ad9517_spi_write(uint16_t reg_addr, uint8_t reg_data)
 /***************************************************************************//**
 * @brief ad9517_setup
 *******************************************************************************/
-int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
+int32_t ad9517_setup(spi_device *dev)
 {
 	uint8_t stat;
+	int32_t ret;
 
-	ad9517_slave_select = slave_select;
-	spi_init(spi_device_id, 0, 0);
-
-	ad9517_spi_write(0x0010, 0x7c);
-	ad9517_spi_write(0x0014, 0x05);
-	ad9517_spi_write(0x0016, 0x05);
-	ad9517_spi_write(0x001c, 0x02);
-	ad9517_spi_write(0x00f1, 0x08);
-	ad9517_spi_write(0x00f5, 0x08);
-	ad9517_spi_write(0x0140, 0x42);
-	ad9517_spi_write(0x0141, 0x42);
-	ad9517_spi_write(0x0142, 0x42);
-	ad9517_spi_write(0x0143, 0x43);
-	ad9517_spi_write(0x0190, 0x21);
-	ad9517_spi_write(0x0191, 0x00);
-	ad9517_spi_write(0x0197, 0x80);
-	ad9517_spi_write(0x0198, 0x02);
-	ad9517_spi_write(0x0199, 0x21);
-	ad9517_spi_write(0x019c, 0x20);
-	ad9517_spi_write(0x019e, 0x21);
-	ad9517_spi_write(0x01a0, 0x11);
-	ad9517_spi_write(0x01a1, 0x20);
-	ad9517_spi_write(0x01e0, 0x00);
-	ad9517_spi_write(0x01e1, 0x02);
-	ad9517_spi_write(0x0232, 0x01);
-	ad9517_spi_write(0x0018, 0x06);
-	ad9517_spi_write(0x0232, 0x01);
+	ad9517_spi_write(dev, 0x0010, 0x7c);
+	ad9517_spi_write(dev, 0x0014, 0x05);
+	ad9517_spi_write(dev, 0x0016, 0x05);
+	ad9517_spi_write(dev, 0x001c, 0x02);
+	ad9517_spi_write(dev, 0x00f1, 0x08);
+	ad9517_spi_write(dev, 0x00f5, 0x08);
+	ad9517_spi_write(dev, 0x0140, 0x42);
+	ad9517_spi_write(dev, 0x0141, 0x42);
+	ad9517_spi_write(dev, 0x0142, 0x42);
+	ad9517_spi_write(dev, 0x0143, 0x43);
+	ad9517_spi_write(dev, 0x0190, 0x21);
+	ad9517_spi_write(dev, 0x0191, 0x00);
+	ad9517_spi_write(dev, 0x0197, 0x80);
+	ad9517_spi_write(dev, 0x0198, 0x02);
+	ad9517_spi_write(dev, 0x0199, 0x21);
+	ad9517_spi_write(dev, 0x019c, 0x20);
+	ad9517_spi_write(dev, 0x019e, 0x21);
+	ad9517_spi_write(dev, 0x01a0, 0x11);
+	ad9517_spi_write(dev, 0x01a1, 0x20);
+	ad9517_spi_write(dev, 0x01e0, 0x00);
+	ad9517_spi_write(dev, 0x01e1, 0x02);
+	ad9517_spi_write(dev, 0x0232, 0x01);
+	ad9517_spi_write(dev, 0x0018, 0x06);
+	ad9517_spi_write(dev, 0x0232, 0x01);
 	mdelay(50);
 
-	ad9517_spi_write(0x0018, 0x07);
-	ad9517_spi_write(0x0232, 0x01);
+	ad9517_spi_write(dev, 0x0018, 0x07);
+	ad9517_spi_write(dev, 0x0232, 0x01);
 	mdelay(50);
 
-	ad9517_spi_read(0x001f, &stat);
-	xil_printf("AD9517 PLL %s.\n", stat & 0x01 ? "ok" : "errors");
+	ad9517_spi_read(dev, 0x001f, &stat);
+	printf("AD9517 PLL %s.\n", stat & 0x01 ? "ok" : "errors");
 
-	return 0;
+	return ret;
 }

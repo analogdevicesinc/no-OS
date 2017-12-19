@@ -40,100 +40,178 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xil_cache.h>
-#include <xil_io.h>
-#include "xparameters.h"
+#include "platform_drivers.h"
 #include "ad9517.h"
 #include "ad9250.h"
-#include "jesd204b_gt.h"
-#include "jesd204b_v51.h"
 #include "adc_core.h"
+#include "xcvr_core.h"
+#include "jesd_core.h"
+#include "dmac_core.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#ifdef _XPARAMETERS_PS_H_
-#define SPI_DEVICE_ID			XPAR_PS7_SPI_0_DEVICE_ID
-#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
-#else
-#define SPI_DEVICE_ID			XPAR_SPI_0_DEVICE_ID
-#define ADC_DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
-#endif
-#define AD9250_GT_BASEADDR		XPAR_AXI_AD9250_GT_BASEADDR
-#define AD9250_JESD_BASEADDR	XPAR_AXI_AD9250_JESD_BASEADDR
-
-jesd204b_state jesd204b_st = {
-	1,	// lanesync_enable
-	1,	// scramble_enable
-	0,	// sysref_always_enable
-	32,	// frames_per_multiframe
-	1,	// bytes_per_frame
-	1,	// subclass
-};
-
-jesd204b_gt_link ad9680_gt_link = {
-	AD9250_GT_BASEADDR,		// gt_core_addr
-	JESD204B_GT_RX,			// tx_or_rx
-	0,						// first_lane
-	3,						// last_lane
-	JESD204B_GT_CPLL,		// qpll_or_cpll
-	JESD204B_GT_DFE,		// lpm_or_dfe
-	500,					// ref_clk
-	1000,					// lane_rate
-	JESD204B_GT_SYSREF_INT,	// sysref_int_or_ext
-	0,						// sys_clk_sel
-	2,						// out_clk_sel
-	0,						// gth_or_gtx
-};
+#define GPIO_JESD204_SYSREF		32
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	ad9250_dev		ad9250_0_device;
+	ad9250_dev		ad9250_1_device;
+	spi_device		ad9517_spi_device;
+	adc_core		ad9250_0_core;
+	adc_core		ad9250_1_core;
+	ad9250_init_param	ad9250_0_param;
+	ad9250_init_param	ad9250_1_param;
+	jesd_core		ad9250_jesd204;
+	xcvr_core		ad9250_xcvr;
+	dmac_core		ad9250_0_dma;
+	dmac_core		ad9250_1_dma;
+	dmac_xfer		rx_xfer_0;
+	dmac_xfer		rx_xfer_1;
 
-	adc_core ad9250_0_core;
-	adc_core ad9250_1_core;
+#ifdef XILINX
+	ad9250_xcvr.base_address = XPAR_AXI_AD9250_XCVR_BASEADDR;
+	ad9250_jesd204.base_address = XPAR_AXI_AD9250_JESD_RX_AXI_BASEADDR;
+	ad9250_0_core.base_address = XPAR_AXI_AD9250_0_CORE_BASEADDR;
+	ad9250_1_core.base_address = XPAR_AXI_AD9250_1_CORE_BASEADDR;
 
-	ad9517_setup(SPI_DEVICE_ID, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 0);
-	ad9250_setup(SPI_DEVICE_ID, 0, 1);
+	ad9250_0_dma.base_address = XPAR_AXI_AD9250_0_DMA_BASEADDR;
+	ad9250_1_dma.base_address = XPAR_AXI_AD9250_1_DMA_BASEADDR;
+#endif
 
-	jesd204b_gt_setup(ad9680_gt_link);
-	jesd204b_gt_en_sync_sysref(ad9680_gt_link);
+#ifdef ZYNQ
+	rx_xfer_0.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+	rx_xfer_1.start_address = XPAR_DDR_MEM_BASEADDR + 0x900000;
+#endif
 
-	jesd204b_setup(AD9250_JESD_BASEADDR, jesd204b_st);
+#ifdef MICROBLAZE
+	rx_xfer_0.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+	rx_xfer_1.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
+#endif
 
-	ad9250_0_core.adc_baseaddr = XPAR_AXI_AD9250_0_CORE_BASEADDR;
-	ad9250_0_core.dmac_baseaddr = XPAR_AXI_AD9250_0_DMA_BASEADDR;
+#ifdef ALTERA
+	ad9250_xcvr.base_address = AD9250_JESD204_LINK_MANAGEMENT_BASE;
+	ad9250_xcvr.dev.link_pll.base_address = AD9250_JESD204_LINK_PLL_RECONFIG_BASE;
+	ad9250_0_core.base_address = AXI_AD9250_CORE_0_BASE;
+	ad9250_0_core.base_address = AXI_AD9250_CORE_1_BASE;
+	ad9250_jesd204.base_address = AD9250_JESD204_LINK_RECONFIG_BASE;
+
+	ad9250_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
+	ad9250_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_BASE;
+
+	ad9250_0_dma.base_address = AXI_AD9250_DMA_0_BASE;
+	ad9250_1_dma.base_address = AXI_AD9250_DMA_1_BASE;
+	rx_xfer_0.start_address =  0x800000;
+	rx_xfer_1.start_address =  0x900000;
+#endif
+
+	// SPI configuration
+	ad_spi_init(&ad9517_spi_device);
+	ad9517_spi_device.chip_select = 0xe;
+	ad_spi_init(&ad9250_0_device.spi_dev);
+	ad9250_0_device.spi_dev.chip_select = 0xe;
+	ad9250_0_device.id_no = 0x0;
+	ad_spi_init(&ad9250_1_device.spi_dev);
+	ad9250_1_device.spi_dev.chip_select = 0xe;
+	ad9250_1_device.id_no = 0x1;
+
+	// ADC and receive path configuration
+	ad9250_0_param.lane_rate_kbps = 4915200;
+	ad9250_1_param.lane_rate_kbps = 4915200;
+
+	xcvr_getconfig(&ad9250_xcvr);
+
+	ad9250_xcvr.reconfig_bypass = 0;
+	ad9250_xcvr.lane_rate_kbps = ad9250_0_param.lane_rate_kbps;
+	ad9250_xcvr.ref_clock_khz = 245760;
+
+	ad9250_jesd204.scramble_enable = 1;
+	ad9250_jesd204.octets_per_frame = 1;
+	ad9250_jesd204.frames_per_multiframe = 32;
+	ad9250_jesd204.subclass_mode = 1;
+	ad9250_jesd204.sysref_type = INTERN;
+	ad9250_jesd204.sysref_gpio_pin = GPIO_JESD204_SYSREF;
+
 	ad9250_0_core.no_of_channels = 2;
 	ad9250_0_core.resolution = 14;
 
-	ad9250_1_core.adc_baseaddr = XPAR_AXI_AD9250_1_CORE_BASEADDR;
-	ad9250_1_core.dmac_baseaddr = XPAR_AXI_AD9250_1_DMA_BASEADDR;
 	ad9250_1_core.no_of_channels = 2;
 	ad9250_1_core.resolution = 14;
 
+	ad9250_0_dma.type = DMAC_RX;
+	ad9250_0_dma.transfer = &rx_xfer_0;
+	rx_xfer_0.id = 0;
+	rx_xfer_0.no_of_samples = 32768;
+
+	ad9250_1_dma.type = DMAC_RX;
+	ad9250_1_dma.transfer = &rx_xfer_1;
+	rx_xfer_1.id = 0;
+	rx_xfer_1.no_of_samples = 32768;
+
+	ad_platform_init();
+
+	// set up clock generator
+	ad9517_setup(&ad9517_spi_device);
+
+	// set up the devices
+	ad9250_setup(&ad9250_0_device);
+	ad9250_setup(&ad9250_1_device);
+
+	// set up the JESD core
+	jesd_setup(ad9250_jesd204);
+
+	// set up the XCVR core
+	xcvr_setup(&ad9250_xcvr);
+
+	// generate SYSREF
+	jesd_sysref_control(ad9250_jesd204,1);
+
+	// JESD core status
+	axi_jesd204_rx_status_read(ad9250_jesd204);
+
+	// set up interface core
 	adc_setup(ad9250_0_core);
 	adc_setup(ad9250_1_core);
 
-    ad9250_spi_write(0, 0x0d, 0x0f);
-    ad9250_spi_write(0, 0xff, 0x01);
+	// PRBS test
+	ad9250_test(&ad9250_0_device, AD9250_TEST_PNLONG);
+	if(adc_pn_mon(ad9250_0_core, ADC_PN23) == -1) {
+		ad_printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
+	};
+	ad9250_test(&ad9250_1_device, AD9250_TEST_PNLONG);
+	if(adc_pn_mon(ad9250_1_core, ADC_PN23) == -1) {
+		ad_printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
+	};
 
-    ad9250_spi_write(1, 0x0d, 0x0f);
-    ad9250_spi_write(1, 0xff, 0x01);
+	// set up ramp output
+	ad9250_test(&ad9250_0_device, AD9250_TEST_RAMP);
+	ad9250_test(&ad9250_1_device, AD9250_TEST_RAMP);
 
-	adc_capture(ad9250_0_core, 32768, ADC_DDR_BASEADDR);
-	adc_capture(ad9250_1_core, 32768, ADC_DDR_BASEADDR + 0x20000);
+	// test the captured data
+	if(!dmac_start_transaction(ad9250_0_dma)) {
+		adc_ramp_test(ad9250_0_core, 1, 1024, rx_xfer_0.start_address);
+	};
+	if(!dmac_start_transaction(ad9250_1_dma)) {
+		adc_ramp_test(ad9250_1_core, 1, 1024, rx_xfer_1.start_address);
+	};
 
-	xil_printf("Ramp capture done.\n");
+	// set up normal output
+	ad9250_test(&ad9250_0_device, AD9250_TEST_OFF);
+	ad9250_test(&ad9250_1_device, AD9250_TEST_OFF);
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	// capture data with DMA
 
-	xil_printf("Done.\n");
+	if(!dmac_start_transaction(ad9250_0_dma)) {
+		ad_printf("%s RX capture done!\n", __func__);
+	};
+	if(!dmac_start_transaction(ad9250_1_dma)) {
+		ad_printf("%s RX capture done!\n", __func__);
+	};
+
+	ad_platform_close();
 
 	return 0;
 }
