@@ -153,50 +153,50 @@ typedef enum {
 } ad738x_ref_sel;
 
 typedef struct {
-        /* SPI */
-        spi_desc		    *spi_desc;
-        /* Device Settings */
-        ad738x_conv_mode 	conv_mode;
-		ad738x_resolution 	resolution;
+	/* SPI */
+	spi_desc		*spi_desc;
+	/* Device Settings */
+	ad738x_conv_mode 	conv_mode;
+	ad738x_resolution 	resolution;
 } ad738x_dev;
 
 typedef struct {
-        /* SPI */
-        spi_init_param		    spi_init;
-        /* Device Settings */
-        ad738x_conv_mode 		conv_mode;
-        ad738x_ref_sel			ref_sel;
+	/* SPI */
+	spi_init_param		spi_init;
+	/* Device Settings */
+	ad738x_conv_mode	conv_mode;
+	ad738x_ref_sel		ref_sel;
 } ad738x_init_param;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad738x_init(ad738x_dev **device,
-                    ad738x_init_param init_param);
+		    ad738x_init_param init_param);
 int32_t ad738x_remove(ad738x_dev *dev);
 int32_t ad738x_spi_reg_read(ad738x_dev *dev,
-                            uint8_t reg_addr,
-                            uint16_t *reg_data);
+			    uint8_t reg_addr,
+			    uint16_t *reg_data);
 int32_t ad738x_spi_reg_write(ad738x_dev *dev,
-		 	 	 	 	 	 uint8_t reg_addr,
-							 uint16_t reg_data);
+			     uint8_t reg_addr,
+			     uint16_t reg_data);
 int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
-								 	 uint16_t *adc_data);
+				     uint16_t *adc_data);
 int32_t ad738x_spi_write_mask(ad738x_dev *dev,
-							   uint8_t reg_addr,
-							   uint32_t mask,
-							   uint16_t data);
+			      uint8_t reg_addr,
+			      uint32_t mask,
+			      uint16_t data);
 int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
-								   ad738x_conv_mode mode);
+				   ad738x_conv_mode mode);
 int32_t ad738x_reset(ad738x_dev *dev,
-					 ad738x_reset_type reset);
+		     ad738x_reset_type reset);
 int32_t ad738x_oversampling_config(ad738x_dev *dev,
-								   ad738x_os_mode os_mode,
-								   ad738x_os_ratio os_ratio,
-								   ad738x_resolution res);
+				   ad738x_os_mode os_mode,
+				   ad738x_os_ratio os_ratio,
+				   ad738x_resolution res);
 int32_t ad738x_power_down_mode(ad738x_dev *dev,
-							   ad738x_pwd_mode pmode);
+			       ad738x_pwd_mode pmode);
 int32_t ad738x_reference_sel(ad738x_dev *dev,
-							 ad738x_ref_sel ref_sel);
+			     ad738x_ref_sel ref_sel);
 void mdelay(uint32_t msecs);
 #endif /* SRC_AD738X_H_ */
