@@ -57,19 +57,19 @@
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_spi_reg_read(ad738x_dev *dev,
-                            uint8_t reg_addr,
-                            uint16_t *reg_data)
+			    uint8_t reg_addr,
+			    uint16_t *reg_data)
 {
-        int32_t ret;
-        uint8_t buf[2];
+	int32_t ret;
+	uint8_t buf[2];
 
-        buf[0] = AD738X_REG_READ(reg_addr);
-        buf[1] = 0x00;
+	buf[0] = AD738X_REG_READ(reg_addr);
+	buf[1] = 0x00;
 
-        ret = spi_write_and_read(dev->spi_desc, buf, 2);
-        *reg_data = (buf[0] << 8) | buf[1];
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	*reg_data = (buf[0] << 8) | buf[1];
 
-        return ret;
+	return ret;
 }
 
 /**
@@ -80,16 +80,16 @@ int32_t ad738x_spi_reg_read(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_spi_reg_write(ad738x_dev *dev,
-		 	 	 	 	 	 uint8_t reg_addr,
-							 uint16_t reg_data)
+			     uint8_t reg_addr,
+			     uint16_t reg_data)
 {
 	uint8_t buf[2];
 	int32_t ret;
 
-    buf[0] = AD738X_REG_WRITE(reg_addr) | ((reg_data & 0xF00) >> 8);
-    buf[1] = reg_data & 0xFFF;
+	buf[0] = AD738X_REG_WRITE(reg_addr) | ((reg_data & 0xF00) >> 8);
+	buf[1] = reg_data & 0xFFF;
 
-    ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -103,9 +103,9 @@ int32_t ad738x_spi_reg_write(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_spi_write_mask(ad738x_dev *dev,
-							  uint8_t reg_addr,
-							  uint32_t mask,
-							  uint16_t data)
+			      uint8_t reg_addr,
+			      uint32_t mask,
+			      uint16_t data)
 {
 	uint16_t reg_data;
 	int32_t ret;
@@ -125,29 +125,29 @@ int32_t ad738x_spi_write_mask(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
-								 	 uint16_t *adc_data)
+				     uint16_t *adc_data)
 {
 	uint8_t buf[4];
 	uint8_t rx_buf_len;
 	int32_t ret;
 
-    buf[0] = 0x00;
-    buf[1] = 0x00;
-    buf[2] = 0x00;
-    buf[3] = 0x00;
+	buf[0] = 0x00;
+	buf[1] = 0x00;
+	buf[2] = 0x00;
+	buf[3] = 0x00;
 
-    /* Conversion data is 2 bytes long */
-    rx_buf_len = 2 * dev->conv_mode + 2;
-    ret = spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
+	/* Conversion data is 2 bytes long */
+	rx_buf_len = 2 * dev->conv_mode + 2;
+	ret = spi_write_and_read(dev->spi_desc, buf, rx_buf_len);
 
-    /*
-     *  Conversion data is 16 bits long in 1-wire mode and
-     *  32 bits in 2-wire mode
-     */
-    adc_data[0] =  (buf[0] << 8) | buf[1];
-    adc_data[1] =  (buf[2] << 8) | buf[3];
+	/*
+	 *  Conversion data is 16 bits long in 1-wire mode and
+	 *  32 bits in 2-wire mode
+	 */
+	adc_data[0] =  (buf[0] << 8) | buf[1];
+	adc_data[1] =  (buf[2] << 8) | buf[3];
 
-    return ret;
+	return ret;
 }
 
 /**
@@ -160,14 +160,14 @@ int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
-								   ad738x_conv_mode mode)
+				   ad738x_conv_mode mode)
 {
 	int32_t ret;
 
 	ret = ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG2,
-								AD738X_CONFIG2_SDO2_MSK,
-								AD738X_CONFIG2_SDO2(mode));
+				    AD738X_REG_CONFIG2,
+				    AD738X_CONFIG2_SDO2_MSK,
+				    AD738X_CONFIG2_SDO2(mode));
 
 	dev->conv_mode = mode;
 
@@ -183,15 +183,15 @@ int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_reset(ad738x_dev *dev,
-					 ad738x_reset_type reset)
+		     ad738x_reset_type reset)
 {
 	int32_t ret;
 	uint32_t val = ((reset == HARD_RESET) ? 0xFF : 0x3C);
 
 	ret = ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG2,
-								AD738X_CONFIG2_RESET_MSK,
-								AD738X_CONFIG2_RESET(val));
+				    AD738X_REG_CONFIG2,
+				    AD738X_CONFIG2_RESET_MSK,
+				    AD738X_CONFIG2_RESET(val));
 
 	return ret;
 }
@@ -214,27 +214,27 @@ int32_t ad738x_reset(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_oversampling_config(ad738x_dev *dev,
-								   ad738x_os_mode os_mode,
-								   ad738x_os_ratio os_ratio,
-								   ad738x_resolution res)
+				   ad738x_os_mode os_mode,
+				   ad738x_os_ratio os_ratio,
+				   ad738x_resolution res)
 {
 	int32_t ret;
 	uint16_t reg_data;
 
 	ret = ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG1,
-								AD738X_CONFIG1_OS_MODE_MSK,
-								AD738X_CONFIG1_OS_MODE(os_mode));
+				    AD738X_REG_CONFIG1,
+				    AD738X_CONFIG1_OS_MODE_MSK,
+				    AD738X_CONFIG1_OS_MODE(os_mode));
 
 	ret |= ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG1,
-								AD738X_CONFIG1_OSR_MSK,
-								AD738X_CONFIG1_OSR(os_ratio));
+				     AD738X_REG_CONFIG1,
+				     AD738X_CONFIG1_OSR_MSK,
+				     AD738X_CONFIG1_OSR(os_ratio));
 
 	ret |= ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG1,
-								AD738X_CONFIG1_RES_MSK,
-								AD738X_CONFIG1_RES(res));
+				     AD738X_REG_CONFIG1,
+				     AD738X_CONFIG1_RES_MSK,
+				     AD738X_CONFIG1_RES(res));
 
 	ret |= ad738x_spi_reg_read(dev, AD738X_REG_CONFIG1, &reg_data);
 	dev->resolution = (reg_data & AD738X_CONFIG1_RES_MSK) >> 2;
@@ -251,14 +251,14 @@ int32_t ad738x_oversampling_config(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_power_down_mode(ad738x_dev *dev,
-							   ad738x_pwd_mode pmode)
+			       ad738x_pwd_mode pmode)
 {
 	int32_t ret;
 
 	ret = ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG1,
-								AD738X_CONFIG1_PMODE_MSK,
-								AD738X_CONFIG1_PMODE(pmode));
+				    AD738X_REG_CONFIG1,
+				    AD738X_CONFIG1_PMODE_MSK,
+				    AD738X_CONFIG1_PMODE(pmode));
 
 	return ret;
 }
@@ -272,14 +272,14 @@ int32_t ad738x_power_down_mode(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_reference_sel(ad738x_dev *dev,
-							 ad738x_ref_sel ref_sel)
+			     ad738x_ref_sel ref_sel)
 {
 	int32_t ret;
 
 	ret = ad738x_spi_write_mask(dev,
-								AD738X_REG_CONFIG1,
-								AD738X_CONFIG1_REFSEL_MSK,
-								AD738X_CONFIG1_REFSEL(ref_sel));
+				    AD738X_REG_CONFIG1,
+				    AD738X_CONFIG1_REFSEL_MSK,
+				    AD738X_CONFIG1_REFSEL(ref_sel));
 
 	return ret;
 }
@@ -292,31 +292,31 @@ int32_t ad738x_reference_sel(ad738x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad738x_init(ad738x_dev **device,
-                    ad738x_init_param init_param)
+		    ad738x_init_param init_param)
 {
-        ad738x_dev *dev;
-        int32_t ret;
+	ad738x_dev *dev;
+	int32_t ret;
 
-        dev = (ad738x_dev *)malloc(sizeof(*dev));
-        if (!dev)
-                return -1;
+	dev = (ad738x_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-        ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
-        ret |= ad738x_reset(dev, HARD_RESET);
-        mdelay(1000);
-        /* 1-wire or 2-wire mode */
-        ret |= ad738x_set_conversion_mode(dev, init_param.conv_mode);
-        /* Set internal or external reference */
-        ret |= ad738x_reference_sel(dev, init_param.ref_sel);
+	ret |= ad738x_reset(dev, HARD_RESET);
+	mdelay(1000);
+	/* 1-wire or 2-wire mode */
+	ret |= ad738x_set_conversion_mode(dev, init_param.conv_mode);
+	/* Set internal or external reference */
+	ret |= ad738x_reference_sel(dev, init_param.ref_sel);
 
-        *device = dev;
+	*device = dev;
 
-        if (!ret)
-                printf("ad738x successfully initialized\n");
-        mdelay(1000);
+	if (!ret)
+		printf("ad738x successfully initialized\n");
+	mdelay(1000);
 
-        return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -326,11 +326,11 @@ int32_t ad738x_init(ad738x_dev **device,
 *******************************************************************************/
 int32_t ad738x_remove(ad738x_dev *dev)
 {
-        int32_t ret;
+	int32_t ret;
 
-        ret = spi_remove(dev->spi_desc);
+	ret = spi_remove(dev->spi_desc);
 
-        free(dev);
+	free(dev);
 
-        return ret;
+	return ret;
 }
