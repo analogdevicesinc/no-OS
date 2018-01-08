@@ -51,27 +51,27 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-static const ad5629r_chip_info chip_info[] = {
-    [ID_AD5629R] = {
-        .resolution = 12,
-        .communication = com_i2c,
-    },
-    [ID_AD5669R] = {
-        .resolution = 16,
-        .communication = com_i2c,
-    },
-    [ID_AD5668] = {
-        .resolution = 16,
-        .communication = com_spi,
-    },
-    [ID_AD5648] = {
-        .resolution = 14,
-        .communication = com_spi,
-    },
-    [ID_AD5628] = {
-        .resolution = 12,
-        .communication = com_spi,
-    }
+static const struct ad5629r_chip_info chip_info[] = {
+	[ID_AD5629R] = {
+		.resolution = 12,
+		.communication = com_i2c,
+	},
+	[ID_AD5669R] = {
+		.resolution = 16,
+		.communication = com_i2c,
+	},
+	[ID_AD5668] = {
+		.resolution = 16,
+		.communication = com_spi,
+	},
+	[ID_AD5648] = {
+		.resolution = 14,
+		.communication = com_spi,
+	},
+	[ID_AD5628] = {
+		.resolution = 12,
+		.communication = com_spi,
+	}
 };
 
 /******************************************************************************/
@@ -92,38 +92,35 @@ static const ad5629r_chip_info chip_info[] = {
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char AD5629R_Init(ad5629r_dev **device,
-		  ad5629r_init_param init_param)
+int8_t ad5629r_init(struct ad5629r_dev **device,
+		    struct ad5629r_init_param init_param)
 {
-	ad5629r_dev *dev;
-    char status;
+	struct ad5629r_dev *dev;
+	int8_t status;
 
-	dev = (ad5629r_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5629r_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-    dev->act_device = init_param.act_device;
+	dev->act_device = init_param.act_device;
 
-    if (chip_info[dev->act_device].communication == com_spi)
-    {
-	    status = spi_init(&dev->spi_desc, init_param.spi_init);
-    }
-    else
-    {
-	    status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
-    }
+	if (chip_info[dev->act_device].communication == com_spi) {
+		status = spi_init(&dev->spi_desc, init_param.spi_init);
+	} else {
+		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	}
 
 	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
 
-    AD5629R_LDAC_OUT;
-    AD5629R_LDAC_LOW;
-    AD5629R_CLR_OUT;
-    AD5629R_CLR_HIGH;
+	AD5629R_LDAC_OUT;
+	AD5629R_LDAC_LOW;
+	AD5629R_CLR_OUT;
+	AD5629R_CLR_HIGH;
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
@@ -133,7 +130,7 @@ char AD5629R_Init(ad5629r_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD5629R_remove(ad5629r_dev *dev)
+int32_t ad5629r_remove(struct ad5629r_dev *dev)
 {
 	int32_t ret;
 
@@ -163,40 +160,36 @@ int32_t AD5629R_remove(ad5629r_dev *dev)
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-void AD5629R_SetCtrl(ad5629r_dev *dev,
-		     unsigned char function,
-                     unsigned char dacN,
-                     unsigned long data)
+void ad5629r_set_ctrl(struct ad5629r_dev *dev,
+		      uint8_t function,
+		      uint8_t dac_n,
+		      uint32_t data)
 {
-    unsigned char  dataBuff[4]   = {0, 0, 0, 0};
+	uint8_t data_buff [ 4 ]   = {0, 0, 0, 0};
 
-    if(chip_info[dev->act_device].communication == com_spi)
-    {
-        data = data & 0xFFFFF;
+	if(chip_info[dev->act_device].communication == com_spi) {
+		data = data & 0xFFFFF;
 
-        dataBuff[0] = function;
-        dataBuff[1] = (dacN << 4) | ((0xF0000 & data) >> 12);
-        dataBuff[2] = (0xFF00 & data) >> 8;
-        dataBuff[3] = (0xFF & data);
+		data_buff[0] = function;
+		data_buff[1] = (dac_n << 4) | ((0xF0000 & data) >> 12);
+		data_buff[2] = (0xFF00 & data) >> 8;
+		data_buff[3] = (0xFF & data);
 
-	    spi_write_and_read(dev->spi_desc,
-			       dataBuff,
-			       4);
-    }
-    else
-    {
-        if (chip_info[dev->act_device].communication == com_i2c)
-        {
-            dataBuff[0] = (function << 4) | dacN;
-            dataBuff[1] = (data & 0xFF00) >> 8;
-            dataBuff[2] = (data & 0x00FF) >> 0;
+		spi_write_and_read(dev->spi_desc,
+				   data_buff,
+				   4);
+	} else {
+		if (chip_info[dev->act_device].communication == com_i2c) {
+			data_buff[0] = (function << 4) | dac_n;
+			data_buff[1] = (data & 0xFF00) >> 8;
+			data_buff[2] = (data & 0x00FF) >> 0;
 
-		i2c_write(dev->i2c_desc,
-			  dataBuff,
-			  3,
-			  1);
-        }
-    }
+			i2c_write(dev->i2c_desc,
+				  data_buff,
+				  3,
+				  1);
+		}
+	}
 }
 
 /**************************************************************************//**
@@ -209,40 +202,37 @@ void AD5629R_SetCtrl(ad5629r_dev *dev,
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-void AD5629R_SetInputReg(ad5629r_dev *dev,
-			 unsigned char function,
-                         unsigned char dacN,
-                         unsigned short dacValue)
+void ad5629r_set_input_reg(struct ad5629r_dev *dev,
+			   uint8_t function,
+			   uint8_t dac_n,
+			   uint16_t dac_value)
 {
-    unsigned char  dataBuff[4]   = {0, 0, 0, 0};
+	uint8_t data_buff [ 4 ]   = {0, 0, 0, 0};
 
-    dacValue = dacValue << (MAX_RESOLUTION -
-               chip_info[dev->act_device].resolution);
+	dac_value = dac_value << (MAX_RESOLUTION -
+				  chip_info[dev->act_device].resolution);
 
-    if(chip_info[dev->act_device].communication == com_spi)
-    {
-        dacValue = dacValue & 0xFFFF;
+	if(chip_info[dev->act_device].communication == com_spi) {
+		dac_value = dac_value & 0xFFFF;
 
-        dataBuff[0] = function;
-        dataBuff[1] = (dacN << 4) | ((0xF000 & dacValue) >> 12);
-        dataBuff[2] = (0xFF0 & dacValue) >> 4;
-        dataBuff[3] = (0xF & dacValue) << 4;
+		data_buff[0] = function;
+		data_buff[1] = (dac_n << 4) | ((0xF000 & dac_value) >> 12);
+		data_buff[2] = (0xFF0 & dac_value) >> 4;
+		data_buff[3] = (0xF & dac_value) << 4;
 
-	    spi_write_and_read(dev->spi_desc,
-			       dataBuff,
-			       4);
-    }
-    else
-    {
-        dataBuff[0] = (function << 4) | dacN;
-        dataBuff[1] = (dacValue & 0xFF00) >> 8;
-        dataBuff[2] = (dacValue & 0x00FF) >> 0;
+		spi_write_and_read(dev->spi_desc,
+				   data_buff,
+				   4);
+	} else {
+		data_buff[0] = (function << 4) | dac_n;
+		data_buff[1] = (dac_value & 0xFF00) >> 8;
+		data_buff[2] = (dac_value & 0x00FF) >> 0;
 
-	    i2c_write(dev->i2c_desc,
-			  dataBuff,
+		i2c_write(dev->i2c_desc,
+			  data_buff,
 			  3,
 			  1);
-    }
+	}
 }
 
 /***************************************************************************//**
@@ -254,14 +244,14 @@ void AD5629R_SetInputReg(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegN(ad5629r_dev *dev,
-		       unsigned char dacN,
-		       unsigned short dacValue)
+void ad5629r_write_reg_n(struct ad5629r_dev *dev,
+			 uint8_t dac_n,
+			 uint16_t dac_value)
 {
-    AD5629R_SetInputReg(dev,
-			AD5629R_WRITE_N,
-			dacN,
-			dacValue);
+	ad5629r_set_input_reg(dev,
+			      AD5629R_WRITE_N,
+			      dac_n,
+			      dac_value);
 }
 
 /***************************************************************************//**
@@ -272,13 +262,13 @@ void AD5629R_WriteRegN(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_UpdateDacN(ad5629r_dev *dev,
-			unsigned char dacN)
+void ad5629r_update_dac_n(struct ad5629r_dev *dev,
+			  uint8_t dac_n)
 {
-    AD5629R_SetInputReg(dev,
-			AD5629R_UPDATE_N,
-			dacN,
-			0x0);
+	ad5629r_set_input_reg(dev,
+			      AD5629R_UPDATE_N,
+			      dac_n,
+			      0x0);
 }
 
 /***************************************************************************//**
@@ -291,14 +281,14 @@ void AD5629R_UpdateDacN(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegNUpdateAll(ad5629r_dev *dev,
-				unsigned char dacN,
-				unsigned short dacValue)
+void ad5629r_write_reg_nupdate_all(struct ad5629r_dev *dev,
+				   uint8_t dac_n,
+				   uint16_t dac_value)
 {
-    AD5629R_SetInputReg(dev,
-			AD5629R_WRITE_N_UPDATE_ALL,
-			dacN,
-			dacValue);
+	ad5629r_set_input_reg(dev,
+			      AD5629R_WRITE_N_UPDATE_ALL,
+			      dac_n,
+			      dac_value);
 }
 
 /***************************************************************************//**
@@ -311,14 +301,14 @@ void AD5629R_WriteRegNUpdateAll(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_WriteRegNUpdateN(ad5629r_dev *dev,
-			      unsigned char dacN,
-			      unsigned short dacValue)
+void ad5629r_write_reg_nupdate_n(struct ad5629r_dev *dev,
+				 uint8_t dac_n,
+				 uint16_t dac_value)
 {
-    AD5629R_SetInputReg(dev,
-			AD5629R_WRITE_N_UPDATE_N,
-			dacN,
-			dacValue);
+	ad5629r_set_input_reg(dev,
+			      AD5629R_WRITE_N_UPDATE_N,
+			      dac_n,
+			      dac_value);
 }
 
 /***************************************************************************//**
@@ -338,18 +328,18 @@ void AD5629R_WriteRegNUpdateN(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_SetPowerMode(ad5629r_dev *dev,
-			  unsigned char dacSel,
-			  unsigned char mode)
+void ad5629r_set_power_mode(struct ad5629r_dev *dev,
+			    uint8_t dac_sel,
+			    uint8_t mode)
 {
-    unsigned long data = 0;
+	uint32_t data = 0;
 
-    data = (mode << 8) | dacSel;
+	data = (mode << 8) | dac_sel;
 
-    AD5629R_SetCtrl(dev,
-		    AD5629R_POWER,
-		    0x0,
-		    data);
+	ad5629r_set_ctrl(dev,
+			 AD5629R_POWER,
+			 0x0,
+			 data);
 }
 
 /***************************************************************************//**
@@ -365,17 +355,17 @@ void AD5629R_SetPowerMode(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_LoadClearCodeReg(ad5629r_dev *dev,
-			      unsigned char clearValue)
+void ad5629r_load_clear_code_reg(struct ad5629r_dev *dev,
+				 uint8_t clear_value)
 {
-    unsigned long data = 0;
+	uint32_t data = 0;
 
-    data = (unsigned long)clearValue;
+	data = (uint32_t)clear_value;
 
-    AD5629R_SetCtrl(dev,
-		    AD5629R_LOAD_CLEAR_REG,
-		    0x0,
-		    data);
+	ad5629r_set_ctrl(dev,
+			 AD5629R_LOAD_CLEAR_REG,
+			 0x0,
+			 data);
 }
 
 /***************************************************************************//**
@@ -392,17 +382,17 @@ void AD5629R_LoadClearCodeReg(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_LoadLdacReg(ad5629r_dev *dev,
-			 unsigned char dacSel)
+void ad5629r_load_ldac_reg(struct ad5629r_dev *dev,
+			   uint8_t dac_sel)
 {
-    unsigned long data = 0;
+	uint32_t data = 0;
 
-    data = (unsigned long)dacSel;
+	data = (uint32_t)dac_sel;
 
-    AD5629R_SetCtrl(dev,
-		    AD5629R_LOAD_LDAC_REG,
-		    0x0,
-		    data);
+	ad5629r_set_ctrl(dev,
+			 AD5629R_LOAD_LDAC_REG,
+			 0x0,
+			 data);
 }
 
 /***************************************************************************//**
@@ -412,12 +402,12 @@ void AD5629R_LoadLdacReg(ad5629r_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_Reset(ad5629r_dev *dev)
+void ad5629r_reset(struct ad5629r_dev *dev)
 {
-    AD5629R_SetCtrl(dev,
-		    AD5629R_RESET,
-		    0x0,
-		    0x0);
+	ad5629r_set_ctrl(dev,
+			 AD5629R_RESET,
+			 0x0,
+			 0x0);
 }
 
 /***************************************************************************//**
@@ -430,13 +420,13 @@ void AD5629R_Reset(ad5629r_dev *dev)
  *
  * @return none.
 *******************************************************************************/
-void AD5629R_SetRef(ad5629r_dev *dev,
-		    unsigned char status)
+void ad5629r_set_ref(struct ad5629r_dev *dev,
+		     uint8_t status)
 {
-    AD5629R_SetCtrl(dev,
-		    AD5629R_REFERENCE,
-		    0x0,
-		    (unsigned long)status);
+	ad5629r_set_ctrl(dev,
+			 AD5629R_REFERENCE,
+			 0x0,
+			 (uint32_t)status);
 }
 
 
