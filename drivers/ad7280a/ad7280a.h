@@ -162,7 +162,7 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
+struct ad7280a_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -170,74 +170,74 @@ typedef struct {
 	gpio_desc		*gpio_cnvst;
 	gpio_desc		*gpio_alert;
 	/* Device Settings */
-	unsigned long		readData[24];
-	float			cellVoltage[12];
-	float			auxADC[12];
-} ad7280a_dev;
+	uint32_t		read_data[24];
+	float			cell_voltage[12];
+	float			aux_adc[12];
+};
 
-typedef struct {
+struct ad7280a_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_pd;
 	int8_t		gpio_cnvst;
 	int8_t		gpio_alert;
-} ad7280a_init_param;
+};
 
 /*****************************************************************************/
 /************************ Functions Declarations *****************************/
 /*****************************************************************************/
 /* Initializes the communication with the device. */
-char AD7280A_Init(ad7280a_dev **device,
-		  ad7280a_init_param init_param);
+int8_t ad7280a_init(struct ad7280a_dev **device,
+		    struct ad7280a_init_param init_param);
 
 /* Free the resources allocated by AD7280A_Init(). */
-int32_t AD7280A_remove(ad7280a_dev *dev);
+int32_t ad7280a_remove(struct ad7280a_dev *dev);
 
 /* Reads/transmits 32 data bits from/to AD7280A. */
-unsigned long AD7280A_Transfer_32bits(ad7280a_dev *dev,
-				      unsigned long data);
+uint32_t ad7280a_transfer_32bits(struct ad7280a_dev *dev,
+				 uint32_t data);
 
 /* Computes the CRC value for a write transmission, and prepares the complete
  write codeword */
-unsigned long AD7280A_CRC_Write(unsigned long message);
+uint32_t ad7280a_crc_write(uint32_t message);
 
 /* Checks the received message if the received CRC and computed CRC are
 the same. */
-long AD7280A_CRC_Read(unsigned long message);
+int32_t ad7280a_crc_read(uint32_t message);
 
 /* Performs a read from all registers on 2 devices. */
-char AD7280A_Convert_Read_All(ad7280a_dev *dev);
+int8_t ad7280a_convert_read_all(struct ad7280a_dev *dev);
 
 /* Converts acquired data to float values. */
-char AD7280A_Convert_Data_All(ad7280a_dev *dev);
+int8_t ad7280a_convert_data_all(struct ad7280a_dev *dev);
 
 /* Reads the register content of one selected register. */
-short AD7280A_Read_Register(ad7280a_dev *dev,
-			    unsigned char devAddr,
-                            unsigned char readReg);
+int16_t ad7280a_read_register(struct ad7280a_dev *dev,
+			      uint8_t dev_addr,
+			      uint8_t read_reg);
 
 /* Reads the conversion of one channel. */
-short AD7280A_Read_Conversion(ad7280a_dev *dev,
-			      unsigned char devAddr,
-                              unsigned char readReg);
+int16_t ad7280a_read_conversion(struct ad7280a_dev *dev,
+				uint8_t dev_addr,
+				uint8_t read_reg);
 
 /* Converts the input data to a voltage value. */
-float AD7280A_Convert_Data(unsigned char type,
-			   unsigned short data);
+float ad7280a_convert_data(uint8_t type,
+			   uint16_t data);
 
 /* Writes the content of one selected register from the selected device. */
-void AD7280A_Write_Register(ad7280a_dev *dev,
-			    unsigned char devAddr,
-                            unsigned char readReg,
-                            unsigned char regVal);
+void ad7280a_write_register(struct ad7280a_dev *dev,
+			    uint8_t dev_addr,
+			    uint8_t read_reg,
+			    uint8_t reg_val);
 
 /* Performs the self test for two devices(one master and one slave). */
-void AD7280A_Selftest_All(ad7280a_dev *dev,
-			  float *selfTestRegA,
-			  float *selfTestRegB);
+void ad7280a_selftest_all(struct ad7280a_dev *dev,
+			  float *self_test_reg_a,
+			  float *self_test_reg_b);
 
 /* Reads the value of Alert Pin from the device. */
-unsigned char AD7280A_Alert_Pin(ad7280a_dev *dev);
+uint8_t ad7280a_alert_pin(struct ad7280a_dev *dev);
 
 #endif /*_AD7280A_H_*/
