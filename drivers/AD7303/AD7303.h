@@ -60,30 +60,30 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7303_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
-} ad7303_dev;
+};
 
-typedef struct {
+struct ad7303_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} ad7303_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes SPI communication. */
-char AD7303_Init(ad7303_dev **device,
-		 ad7303_init_param init_param);
+int8_t ad7303_init(struct ad7303_dev **device,
+		   struct ad7303_init_param init_param);
 
 /*! Free the resources allocated by AD7303_Init(). */
-int32_t AD7303_remove(ad7303_dev *dev);
+int32_t ad7303_remove(struct ad7303_dev *dev);
 
 /*! Sends data to AD7303. */
-void AD7303_Write(ad7303_dev *dev,
-		  unsigned char controlReg,
-		  unsigned char dataReg);
+void ad7303_write(struct ad7303_dev *dev,
+		  uint8_t control_reg,
+		  uint8_t data_reg);
 
 #endif /* __AD7303_H__ */

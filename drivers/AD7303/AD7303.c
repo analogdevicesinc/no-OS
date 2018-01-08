@@ -59,13 +59,13 @@
  *            Example: -1 - SPI peripheral was not initialized.
  *                      0 - SPI peripheral is initialized.
 *******************************************************************************/
-char AD7303_Init(ad7303_dev **device,
-		 ad7303_init_param init_param)
+int8_t ad7303_init(struct ad7303_dev **device,
+		   struct ad7303_init_param init_param)
 {
-	ad7303_dev *dev;
-    char status;
+	struct ad7303_dev *dev;
+	int8_t status;
 
-	dev = (ad7303_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7303_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -73,7 +73,7 @@ char AD7303_Init(ad7303_dev **device,
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
@@ -83,7 +83,7 @@ char AD7303_Init(ad7303_dev **device,
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD7303_remove(ad7303_dev *dev)
+int32_t ad7303_remove(struct ad7303_dev *dev)
 {
 	int32_t ret;
 
@@ -107,15 +107,15 @@ int32_t AD7303_remove(ad7303_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void AD7303_Write(ad7303_dev *dev,
-		  unsigned char controlReg,
-		  unsigned char dataReg)
+void ad7303_write(struct ad7303_dev *dev,
+		  uint8_t control_reg,
+		  uint8_t data_reg)
 {
-    static unsigned char writeData[2] = {0, 0};
+	static uint8_t write_data [ 2 ] = {0, 0};
 
-    writeData[0] = controlReg;
-    writeData[1] = dataReg;
+	write_data[0] = control_reg;
+	write_data[1] = data_reg;
 	spi_write_and_read(dev->spi_desc,
-			   writeData,
+			   write_data,
 			   2);
 }
