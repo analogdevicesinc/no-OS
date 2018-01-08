@@ -120,25 +120,25 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 /* Supported devices */
-typedef enum {
-    ID_AD5629R,
-    ID_AD5669R,
-    ID_AD5668,
-    ID_AD5648,
-    ID_AD5628,
-} AD5629R_type;
+enum ad5629r_type {
+	ID_AD5629R,
+	ID_AD5669R,
+	ID_AD5668,
+	ID_AD5648,
+	ID_AD5628,
+};
 
-typedef enum {
-    com_spi,
-    com_i2c
-} comm_type_t;
+enum comm_type_t {
+	com_spi,
+	com_i2c
+};
 
-typedef struct {
-    unsigned int resolution;
-    comm_type_t communication;
-} ad5629r_chip_info;
+struct ad5629r_chip_info {
+	uint32_t resolution;
+	enum comm_type_t communication;
+};
 
-typedef struct {
+struct ad5629r_dev {
 	/* I2C */
 	i2c_desc		*i2c_desc;
 	/* SPI */
@@ -147,10 +147,10 @@ typedef struct {
 	gpio_desc		*gpio_ldac;
 	gpio_desc		*gpio_clr;
 	/* Device Settings */
-	AD5629R_type		act_device;
-} ad5629r_dev;
+	enum ad5629r_type		act_device;
+};
 
-typedef struct {
+struct ad5629r_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* SPI */
@@ -159,47 +159,47 @@ typedef struct {
 	int8_t		gpio_ldac;
 	int8_t		gpio_clr;
 	/* Device Settings */
-	AD5629R_type	act_device;
-} ad5629r_init_param;
+	enum ad5629r_type	act_device;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initializes the communication with the device. */
-char AD5629R_Init(ad5629r_dev **device,
-		  ad5629r_init_param init_param);
+int8_t ad5629r_init(struct ad5629r_dev **device,
+		    struct ad5629r_init_param init_param);
 /* Free the resources allocated by AD5629R_Init(). */
-int32_t AD5629R_remove(ad5629r_dev *dev);
+int32_t ad5629r_remove(struct ad5629r_dev *dev);
 /* Writes a value to Input Register N of selected DAC channel. */
-void AD5629R_WriteRegN(ad5629r_dev *dev,
-		       unsigned char dacN,
-		       unsigned short dacValue);
+void ad5629r_write_reg_n(struct ad5629r_dev *dev,
+			 uint8_t dac_n,
+			 uint16_t dac_value);
 /* Updates selected DAC register. */
-void AD5629R_UpdateDacN(ad5629r_dev *dev,
-			unsigned char dacN);
+void ad5629r_update_dac_n(struct ad5629r_dev *dev,
+			  uint8_t dac_n);
 /* Writes a value to Input Register N of selected DAC channel, then updates all. */
-void AD5629R_WriteRegNUpdateAll(ad5629r_dev *dev,
-				unsigned char dacN,
-				unsigned short dacValue);
+void ad5629r_write_reg_nupdate_all(struct ad5629r_dev *dev,
+				   uint8_t dac_n,
+				   uint16_t dac_value);
 /* Writes a value to Input Register N and updates the respective DAC channel. */
-void AD5629R_WriteRegNUpdateN(ad5629r_dev *dev,
-			      unsigned char dacN,
-			      unsigned short dacValue);
+void ad5629r_write_reg_nupdate_n(struct ad5629r_dev *dev,
+				 uint8_t dac_n,
+				 uint16_t dac_value);
 /* Sets the power mode for one or more selected DAC channels. */
-void AD5629R_SetPowerMode(ad5629r_dev *dev,
-			  unsigned char dacSel,
-			  unsigned char mode);
+void ad5629r_set_power_mode(struct ad5629r_dev *dev,
+			    uint8_t dac_sel,
+			    uint8_t mode);
 /* Loads the Clear Code Register with a certain value. */
-void AD5629R_LoadClearCodeReg(ad5629r_dev *dev,
-			      unsigned char clearValue);
+void ad5629r_load_clear_code_reg(struct ad5629r_dev *dev,
+				 uint8_t clear_value);
 /* Loads the LDAC register with a certain value. */
-void AD5629R_LoadLdacReg(ad5629r_dev *dev,
-			 unsigned char dacSel);
+void ad5629r_load_ldac_reg(struct ad5629r_dev *dev,
+			   uint8_t dac_sel);
 /* Makes a power-on reset. */
-void AD5629R_Reset(ad5629r_dev *dev);
+void ad5629r_reset(struct ad5629r_dev *dev);
 /* Turns on/off the internal reference. */
-void AD5629R_SetRef(ad5629r_dev *dev,
-		    unsigned char status);
+void ad5629r_set_ref(struct ad5629r_dev *dev,
+		     uint8_t status);
 
 
 #endif /* AD5629_H_ */
