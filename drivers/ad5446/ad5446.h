@@ -40,7 +40,6 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 *******************************************************************************/
 
 /******************************************************************************/
@@ -48,65 +47,65 @@
 /******************************************************************************/
 
 /* Custom type for active clock edge */
-typedef enum {
-    negedge,
-    posedge
-} active_clk_t;
+enum active_clk_t {
+	negedge,
+	posedge
+};
 
 /* Custom boolean type */
-typedef enum {
-    false,
-    true
-} bool_t;
+enum bool_t {
+	false,
+	true
+};
 
 /* Data structure for chip's attributes */
-typedef struct {
-    unsigned char resolution;
-    active_clk_t  data_clock_in;
-    bool_t        has_ctrl;
-} ad5446_chip_info;
+struct ad5446_chip_info {
+	uint8_t resolution;
+	enum active_clk_t  data_clock_in;
+	enum bool_t        has_ctrl;
+};
 
 /* Supported output types */
-typedef enum {
-    unipolar,       /* 0 .. Vref */
-    unipolar_inv,   /* 0 .. -Vref */
-    bipolar         /* -Vref .. Vref*/
-} vout_type_t;
+enum vout_type_t {
+	unipolar,       /* 0 .. Vref */
+	unipolar_inv,   /* 0 .. -Vref */
+	bipolar         /* -Vref .. Vref*/
+};
 
 /* Supported devices */
-typedef enum {
-    ID_AD5553,
-    ID_AD5543,
-    ID_AD5542A,
-    ID_AD5541A,
-    ID_AD5512A,
-    ID_AD5453,
-    ID_AD5452,
-    ID_AD5451,
-    ID_AD5450,
-    ID_AD5446,
-    ID_AD5444,
-} AD5446_type_t;
+enum ad5446_type_t {
+	ID_AD5553,
+	ID_AD5543,
+	ID_AD5542A,
+	ID_AD5541A,
+	ID_AD5512A,
+	ID_AD5453,
+	ID_AD5452,
+	ID_AD5451,
+	ID_AD5450,
+	ID_AD5446,
+	ID_AD5444,
+};
 
-typedef struct {
+struct ad5446_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
 	gpio_desc		*gpio_ladc;
 	gpio_desc		*gpio_clrout;
 	/* Device Settings */
-	AD5446_type_t act_device;
-} ad5446_dev;
+	enum ad5446_type_t act_device;
+};
 
-typedef struct {
+struct ad5446_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_ladc;
 	int8_t		gpio_clrout;
 	/* Device Settings */
-	AD5446_type_t act_device;
-} ad5446_init_param;
+	 enum ad5446_type_t act_device;
+};
 
 /* Control Bits */
 #define AD5446_CTRL_LOAD_UPDATE     0x0
@@ -131,19 +130,19 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize SPI and Initial Values for AD5446 Board. */
-char AD5446_Init(ad5446_dev **device,
-		 ad5446_init_param init_param);
+int8_t ad5446_init(struct ad5446_dev **device,
+		   struct ad5446_init_param init_param);
 
-/* Free the resources allocated by AD5446_Init(). */
-int32_t AD5446_remove(ad5446_dev *dev);
+/* Free the resources allocated by ad5446_init(). */
+int32_t ad5446_remove(struct ad5446_dev *dev);
 
 /* Write to shift register via SPI. */
-void AD5446_SetRegister(ad5446_dev *dev,
-			unsigned char command,
-			unsigned short data);
+void ad5446_set_register(struct ad5446_dev *dev,
+			 uint8_t command,
+			 uint16_t data);
 
 /* Sets the output voltage. */
-float AD5446_SetVoltage(ad5446_dev *dev,
-			float voltage,
-			float vref,
-			vout_type_t vout_type);
+float ad5446_set_voltage(struct ad5446_dev *dev,
+			 float voltage,
+			 float vref,
+			 enum vout_type_t vout_type);
