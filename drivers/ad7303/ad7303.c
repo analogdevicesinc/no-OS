@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   AD7303.h
- *   @brief  Header file of AD7303 Driver.
+ *   @file   AD7303.c
+ *   @brief  Implementation of AD7303 Driver.
  *   @author Mihai Bancisor(Mihai.Bancisor@analog.com)
 ********************************************************************************
  * Copyright 2012(c) Analog Devices, Inc.
@@ -35,55 +35,84 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
-*   SVN Revision: $WCREV$
 *******************************************************************************/
-#ifndef __AD7303_H__
-#define __AD7303_H__
 
 /******************************************************************************/
-/******************************** AD7303 **************************************/
+/***************************** Include Files **********************************/
 /******************************************************************************/
-/* Control Bits */
-#define AD7303_INT       (0 << 7)    // Selects internal reference.
-#define AD7303_EXT       (1 << 7)    // Selects external reference.
-#define AD7303_LDAC      (1 << 5)    // Load DAC bit.
-#define AD7303_PDB       (1 << 4)    // Power-down DAC B.
-#define AD7303_PDA       (1 << 3)    // Power-down DAC A.
-#define AD7303_A         (0 << 2)    // Address bit to select DAC A.
-#define AD7303_B         (1 << 2)    // Address bit to select DAC B.
-#define AD7303_CR1       (1 << 1)    // Control Bit 1.
-#define AD7303_CR0       (1 << 0)    // Control Bit 0.
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "ad7303.h"           // AD7303 definitions.
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-struct ad7303_dev {
-	/* SPI */
-	spi_desc		*spi_desc;
-};
-
-struct ad7303_init_param {
-	/* SPI */
-	spi_init_param	spi_init;
-};
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/*! Initializes SPI communication. */
+/***************************************************************************//**
+ * @brief Initializes SPI communication.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return Result of the initialization procedure.
+ *            Example: -1 - SPI peripheral was not initialized.
+ *                      0 - SPI peripheral is initialized.
+*******************************************************************************/
 int8_t ad7303_init(struct ad7303_dev **device,
-		   struct ad7303_init_param init_param);
+		   struct ad7303_init_param init_param)
+{
+	struct ad7303_dev *dev;
+	int8_t status;
 
-/*! Free the resources allocated by AD7303_Init(). */
-int32_t ad7303_remove(struct ad7303_dev *dev);
+	dev = (struct ad7303_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-/*! Sends data to AD7303. */
+	status = spi_init(&dev->spi_desc, init_param.spi_init);
+
+	*device = dev;
+
+	return status;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad7303_init().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad7303_remove(struct ad7303_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Sends data to AD7303.
+ *
+ * @param dev         - The device structure.
+ * @param control_reg - Value of control register.
+ *                     Example:
+ *                     AD7303_INT | AD7303_LDAC | AD7303_A  - enables internal
+ *                     reference and loads DAC A input register from shift
+ *                     register and updates both DAC A and DAC B DAC registers.
+ * @param data_reg    - Value of data register.
+ *
+ * @return None.
+*******************************************************************************/
 void ad7303_write(struct ad7303_dev *dev,
 		  uint8_t control_reg,
-		  uint8_t data_reg);
+		  uint8_t data_reg)
+{
+	static uint8_t write_data[2] = {0, 0};
 
-#endif /* __AD7303_H__ */
+	write_data[0] = control_reg;
+	write_data[1] = data_reg;
+	spi_write_and_read(dev->spi_desc,
+			   write_data,
+			   2);
+}
