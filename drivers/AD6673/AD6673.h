@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD6673_H__
 #define __AD6673_H__
@@ -252,27 +249,27 @@
 /**
  * struct ad6673_platform_data - Platform specific information.
  *
- * @extrnPDWNmode: External PDWN mode.
+ * @extrn_pdwnmode: External PDWN mode.
  *                 0 = PDWN is full power down
  *                 1 = PDWN puts device in standby
- * @enClkDCS: Clock duty cycle stabilizer enable.
+ * @en_clk_dcs: Clock duty cycle stabilizer enable.
  *            0 = disable
  *            1 = enable
- * @clkSelection: Clock selection.
+ * @clk_selection: Clock selection.
  *                0 = Nyquist clock
  *                2 = RF clock divide by 4
  *                3 = clock off
- * @clkDivRatio: Clock divider ratio relative to the encode clock.
+ * @clk_div_ratio: Clock divider ratio relative to the encode clock.
  *               0x00 = divide by 1
  *               0x01 = divide by 2
  *               ...
  *               0x07 = divide by 8
- * @clkDivPhase: Clock divide phase relative to the encode clock.
+ * @clk_div_phase: Clock divide phase relative to the encode clock.
  *               0x0 = 0 input clock cycles delayed
  *               0x1 = 1 input clock cycles delayed
  *               ...
  *               0x7 = 7 input clock cycles delayed
- * @adcVref: Main reference full-scale VREF adjustment.
+ * @adc_vref: Main reference full-scale VREF adjustment.
  *           0x0f = internal 2.087 V p-p
  *           ...
  *           0x01 = internal 1.772 V p-p
@@ -280,40 +277,40 @@
  *           0x1F = internal 1.727 V p-p
  *           ...
  *           0x10 = internal 1.383 V p-p
- * @pllLowEncode: PLL low encode.
+ * @pll_low_encode: PLL low encode.
  *                0 = for lane speeds > 2 Gbps
  *                1 = for lane speeds < 2 Gbps
  * @name: Device name.
  */
-typedef struct {
-    /* Power configuration */
-    int8_t extrnPDWNmode;
-    /* Global clock */
-    int8_t enClkDCS;
-    int8_t clkSelection;
-    int8_t clkDivRatio;
-    int8_t clkDivPhase;
-    /* ADC Vref */
-    int8_t adcVref;
-    /* PLL */
-    int8_t pllLowEncode;
-    /* Device name */
-    int8_t  name[16];
-} ad6673_platform_data;
+struct ad6673_platform_data {
+	/* Power configuration */
+	int8_t extrn_pdwnmode;
+	/* Global clock */
+	int8_t en_clk_dcs;
+	int8_t clk_selection;
+	int8_t clk_div_ratio;
+	int8_t clk_div_phase;
+	/* ADC Vref */
+	int8_t adc_vref;
+	/* PLL */
+	int8_t pll_low_encode;
+	/* Device name */
+	int8_t  name[16];
+};
 
 /**
  * struct ad6673_jesd204b_cfg - JESD204B interface configuration.
  *
- * @jtxInStandBy: JTX in standby.
+ * @jtx_in_standby: JTX in standby.
  *                0 = 204B core is unaffected in standby
  *                1 = 204B core is powered down except for PLL during standby
- * @cmlLevel: JESD204B CML differential output drive level adjustment.
+ * @cml_level: JESD204B CML differential output drive level adjustment.
  *            0 = 81% of nominal (that is, 238 mV)
  *            1 = 89% of nominal (that is, 262 mV)
  *            2 = 98% of nominal (that is, 286 mV)
  *            3 = nominal [default] (that is, 293 mV)
  *            6 = 126% of nominal (that is, 368 mV)
- * @quickCfgOption: Quick configuration register.
+ * @quick_cfg_option: Quick configuration register.
  *                  0x11 = M = 1, L = 1; one converter, one lane
  *                  0x12 = M = 1, L = 2; one converter, two lanes
  *                  0x21 = M = 2, L = 1; two converters, one lane
@@ -321,18 +318,18 @@ typedef struct {
  * @subclass: JESD204B subclass.
  *            0 = Subclass 0
  *            1 = Subclass 1
- * @ctrlBitsNo: Number of control bits (CS).
+ * @ctrl_bits_no: Number of control bits (CS).
  *              0 = no control bits(CS = 0)
  *              1 = 1 control bit  (CS = 1)
  *              2 = 2 control bits (CS = 2)
- * @ctrlBitsAssign: JTX CS bits assignment.
+ * @ctrl_bits_assign: JTX CS bits assignment.
  *                  0 = {overrange||underrange, valid}
  *                  1 = {overrange||underrange}
  *                  2 = {overrange||underrange, blank}
  *                  3 = {blank, valid}
  *                  4 = {blank, blank}
  *         All others = {overrange||underrange, valid}
- * @tailBitsMode: Tail bits: If CS bits are not enabled.
+ * @tail_bits_mode: Tail bits: If CS bits are not enabled.
  *                0 = extra bits are 0
  *                1 = extra bits are 9-bit PN
  * @did: JESD204B device identification value: DID[7:0]
@@ -344,233 +341,233 @@ typedef struct {
  * @scrambling: JESD204B scrambling (SCR).
  *              0 = disabled
  *              1 = enabled
- * @ilasMode: Initial lane alignment sequence (ILAS) mode.
+ * @ilas_mode: Initial lane alignment sequence (ILAS) mode.
  *            1 = ILAS normal mode enabled
  *            3 = ILAS always on, test mode
- * @enIlasTest: JESD204B test sample.
+ * @en_ilas_test: JESD204B test sample.
  *              0 = disabled
  *              1 = enabled
- * @invertLogicBits: Invert logic of JESD204B bits.
+ * @invert_logic_bits: Invert logic of JESD204B bits.
  *                   0 = non-invert
  *                   1 = invert
- * @enSysRef: SYSREF+- enable.
+ * @en_sys_ref: SYSREF+- enable.
  *            0 = disabled
  *            1 = enabled
- * @enSyncInB: Enable SYNCINB+- buffer.
+ * @en_sync_in_b: Enable SYNCINB+- buffer.
  *             0 = buffer disabled
  *             1 = buffer enabled
- * @sysRefMode: SYSREF+- mode.
+ * @sys_ref_mode: SYSREF+- mode.
  *              0 = continuous reset clock dividers
  *              1 = sync on next SYSREF+- rising edge only
- * @alignSyncInB: Options for interpreting single on SYNCINB+-.
+ * @align_sync_in_b: Options for interpreting single on SYNCINB+-.
  *                0 = normal mode
  *                1 = realign lanes on every active SYNCINB+-
- * @alignSysRef: Options for interpreting single on SYSREF+-.
+ * @align_sys_ref: Options for interpreting single on SYSREF+-.
  *               0 = normal mode;
  *               1 = realign lanes on every active SYSREF+-
- * @lane0Assign: Option to remap converter and lane assignments.
+ * @lane0_assign: Option to remap converter and lane assignments.
  *               0 = assign Logical Lane 0 to Physical Lane A [default]
  *               1 = assign Logical Lane 0 to Physical Lane B
- * @lane1Assign: Option to remap converter and lane assignments.
+ * @lane1_assign: Option to remap converter and lane assignments.
  *               0 = assign Logical Lane 1 to Physical Lane A
  *               1 = assign Logical Lane 1 to Physical Lane B [default]
  */
-typedef struct {
-    /* Power configuration */
-    int8_t jtxInStandBy;
-    /* Output drive adjustment */
-    int8_t cmlLevel;
-    /* Quick configuration */
-    int8_t quickCfgOption;
-    /* Detailed Options */
-    int8_t subclass;
-    int8_t ctrlBitsNo;
-    int8_t ctrlBitsAssign;
-    int8_t tailBitsMode;
-    int8_t did;
-    int8_t bid;
-    int8_t lid0;
-    int8_t lid1;
-    int8_t k;
-    int8_t scrambling;
-    int8_t ilasMode;
-    int8_t enIlasTest;
-    int8_t invertLogicBits;
-    int8_t enSysRef;
-    int8_t enSyncInB;
-    int8_t sysRefMode;
-    int8_t alignSyncInB;
-    int8_t alignSysRef;
-    int8_t lane0Assign;
-    int8_t lane1Assign;
-} ad6673_jesd204b_cfg;
+struct ad6673_jesd204b_cfg {
+	/* Power configuration */
+	int8_t jtx_in_standby;
+	/* Output drive adjustment */
+	int8_t cml_level;
+	/* Quick configuration */
+	int8_t quick_cfg_option;
+	/* Detailed Options */
+	int8_t subclass;
+	int8_t ctrl_bits_no;
+	int8_t ctrl_bits_assign;
+	int8_t tail_bits_mode;
+	int8_t did;
+	int8_t bid;
+	int8_t lid0;
+	int8_t lid1;
+	int8_t k;
+	int8_t scrambling;
+	int8_t ilas_mode;
+	int8_t en_ilas_test;
+	int8_t invert_logic_bits;
+	int8_t en_sys_ref;
+	int8_t en_sync_in_b;
+	int8_t sys_ref_mode;
+	int8_t align_sync_in_b;
+	int8_t align_sys_ref;
+	int8_t lane0_assign;
+	int8_t lane1_assign;
+};
 
 /**
  * struct ad6673_fast_detect_cfg - Fast Detect module configuration.
  *
- * @enFd: Enable fast detect output.
+ * @en_fd: Enable fast detect output.
  *        0 = disable
  *        1 = enable
- * @pinFunction: Pin function.
+ * @pin_function: Pin function.
  *               0 = fast detect
  *               1 = overrange
- * @forcePins: Force FDA/FDB pins
+ * @force_pins: Force FDA/FDB pins
  *             0 = normal function
  *             1 = force to value
- * @pinForceValue: Force value of FDA/FDB pins.
+ * @pin_force_value: Force value of FDA/FDB pins.
  *                 0 = output on FD pins will be 0
  *                 1 = output on FD pins will be 1
- * @fdUpperTresh: Fast Detect Upper Threshold[14:0].
- * @fdLowerTresh: Fast Detect Lower Threshold[14:0].
- * @dfDwellTime: Fast Detect Dwell Time[15:0].
+ * @fd_upper_tresh: Fast Detect Upper Threshold[14:0].
+ * @fd_lower_tresh: Fast Detect Lower Threshold[14:0].
+ * @df_dwell_time: Fast Detect Dwell Time[15:0].
  */
-typedef struct {
-    int8_t  enFd;
-    int8_t  pinFunction;
-    int8_t  forcePins;
-    int8_t  pinForceValue;
-    int16_t fdUpperTresh;
-    int16_t fdLowerTresh;
-    int16_t dfDwellTime;
-} ad6673_fast_detect_cfg;
+struct ad6673_fast_detect_cfg {
+	int8_t  en_fd;
+	int8_t  pin_function;
+	int8_t  force_pins;
+	int8_t  pin_force_value;
+	int16_t fd_upper_tresh;
+	int16_t fd_lower_tresh;
+	int16_t df_dwell_time;
+};
 
-typedef struct {
-    int32_t f0;
-    int32_t fCenter;
-    int32_t f1;
-} ad6673_typeBand;
+struct ad6673_type_band {
+	int32_t f0;
+	int32_t f_center;
+	int32_t f1;
+};
 
-typedef struct {
-    ad6673_platform_data   *pdata;
-    ad6673_jesd204b_cfg    *pJesd204b;
-    ad6673_fast_detect_cfg *pFd;
-} ad6673_state;
+struct ad6673_state {
+	struct ad6673_platform_data   *pdata;
+	struct ad6673_jesd204b_cfg    *p_jesd204b;
+	struct ad6673_fast_detect_cfg *p_fd;
+};
 
-typedef enum {
-    AD6673_SHD_REG_CLOCK = 1,
-    AD6673_SHD_REG_CLOCK_DIV,
-    AD6673_SHD_REG_TEST,
-    AD6673_SHD_REG_BIST,
-    AD6673_SHD_REG_OFFSET,
-    AD6673_SHD_REG_OUT_MODE,
-    AD6673_SHD_REG_VREF,
-    AD6673_SHD_REG_SYS_CTRL,
-    AD6673_REG_SHD_NSR_CTRL,
-    AD6673_REG_SHD_NSR_TUNING,
-    AD6673_SHD_REG_DCC_CTRL,
-    AD6673_SHD_REG_DCC_VAL,
-    AD6673_SHD_REG_FAST_DETECT,
-    AD6673_SHD_REG_FD_UPPER_THD,
-    AD6673_SHD_REG_FD_LOWER_THD,
-    AD6673_SHD_REG_FD_DWELL_TIME,
-    SHADOW_REGISTER_COUNT
-} shadowRegisters;
+enum shadow_registers {
+	AD6673_SHD_REG_CLOCK = 1,
+	AD6673_SHD_REG_CLOCK_DIV,
+	AD6673_SHD_REG_TEST,
+	AD6673_SHD_REG_BIST,
+	AD6673_SHD_REG_OFFSET,
+	AD6673_SHD_REG_OUT_MODE,
+	AD6673_SHD_REG_VREF,
+	AD6673_SHD_REG_SYS_CTRL,
+	AD6673_REG_SHD_NSR_CTRL,
+	AD6673_REG_SHD_NSR_TUNING,
+	AD6673_SHD_REG_DCC_CTRL,
+	AD6673_SHD_REG_DCC_VAL,
+	AD6673_SHD_REG_FAST_DETECT,
+	AD6673_SHD_REG_FD_UPPER_THD,
+	AD6673_SHD_REG_FD_LOWER_THD,
+	AD6673_SHD_REG_FD_DWELL_TIME,
+	SHADOW_REGISTER_COUNT
+};
 
-typedef struct {
+struct ad6673_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* Device Settings */
-	ad6673_state ad6673_st;
-	int32_t shadowRegs[SHADOW_REGISTER_COUNT];
-} ad6673_dev;
+	struct ad6673_state ad6673_st;
+	int32_t shadow_regs[SHADOW_REGISTER_COUNT];
+};
 
-typedef struct {
+struct ad6673_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} ad6673_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Configures the device. */
-int32_t ad6673_setup(ad6673_dev **device,
-		     ad6673_init_param init_param);
+int32_t ad6673_setup(struct ad6673_dev **device,
+		     struct ad6673_init_param init_param);
 /*! Free the resources allocated by ad6673_setup(). */
-int32_t ad6673_remove(ad6673_dev *dev);
+int32_t ad6673_remove(struct ad6673_dev *dev);
 /*! Reads the value of the selected register. */
-int32_t ad6673_read(ad6673_dev *dev,
-		    int32_t registerAddress);
+int32_t ad6673_read(struct ad6673_dev *dev,
+		    int32_t register_address);
 /*! Writes a value to the selected register. */
-int32_t ad6673_write(ad6673_dev *dev,
-		     int32_t registerAddress,
-		     int32_t registerValue);
+int32_t ad6673_write(struct ad6673_dev *dev,
+		     int32_t register_address,
+		     int32_t register_value);
 /*! Initiates a transfer and waits for the operation to end. */
-int32_t ad6673_transfer(ad6673_dev *dev);
+int32_t ad6673_transfer(struct ad6673_dev *dev);
 /*! Resets all registers to their default values. */
-int32_t ad6673_soft_reset(ad6673_dev *dev);
+int32_t ad6673_soft_reset(struct ad6673_dev *dev);
 /*! Configures the power mode of the chip. */
-int32_t ad6673_chip_pwr_mode(ad6673_dev *dev,
+int32_t ad6673_chip_pwr_mode(struct ad6673_dev *dev,
 			     int32_t mode);
 /*! Selects a channel as the current channel for further configurations. */
-int32_t ad6673_select_channel_for_config(ad6673_dev *dev,
+int32_t ad6673_select_channel_for_config(struct ad6673_dev *dev,
 					 int32_t channel);
 /*! Sets the ADC's test mode. */
-int32_t ad6673_test_mode(ad6673_dev *dev,
+int32_t ad6673_test_mode(struct ad6673_dev *dev,
 			 int32_t mode);
 /*! Sets the offset adjustment. */
-int32_t ad6673_offset_adj(ad6673_dev *dev,
+int32_t ad6673_offset_adj(struct ad6673_dev *dev,
 			  int32_t adj);
 /*! Disables (1) or enables (0) the data output. */
-int32_t ad6673_output_disable(ad6673_dev *dev,
+int32_t ad6673_output_disable(struct ad6673_dev *dev,
 			      int32_t en);
 /*! Activates the inverted (1) or normal (0) output mode. */
-int32_t ad6673_output_invert(ad6673_dev *dev,
+int32_t ad6673_output_invert(struct ad6673_dev *dev,
 			     int32_t invert);
 /*! Specifies the output format. */
-int32_t ad6673_output_format(ad6673_dev *dev,
+int32_t ad6673_output_format(struct ad6673_dev *dev,
 			     int32_t format);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad6673_reset_PN9(ad6673_dev *dev,
+int32_t ad6673_reset_pn9(struct ad6673_dev *dev,
 			 int32_t rst);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad6673_reset_PN23(ad6673_dev *dev,
+int32_t ad6673_reset_pn23(struct ad6673_dev *dev,
 			  int32_t rst);
 /*! Configures a User Test Pattern. */
-int32_t ad6673_set_user_pattern(ad6673_dev *dev,
-				int32_t patternNo,
+int32_t ad6673_set_user_pattern(struct ad6673_dev *dev,
+				int32_t pattern_no,
 				int32_t user_pattern);
 /*! Enables the Build-In-Self-Test. */
-int32_t ad6673_bist_enable(ad6673_dev *dev,
+int32_t ad6673_bist_enable(struct ad6673_dev *dev,
 			   int32_t enable);
 /*! Resets the Build-In-Self-Test. */
-int32_t ad6673_bist_reset(ad6673_dev *dev,
+int32_t ad6673_bist_reset(struct ad6673_dev *dev,
 			  int32_t reset);
 /*! Configures the JESD204B interface. */
-int32_t ad6673_jesd204b_setup(ad6673_dev *dev);
+int32_t ad6673_jesd204b_setup(struct ad6673_dev *dev);
 /*! Configures the power mode of the JESD204B data transmit block. */
-int32_t ad6673_jesd204b_pwr_mode(ad6673_dev *dev,
+int32_t ad6673_jesd204b_pwr_mode(struct ad6673_dev *dev,
 				 int32_t mode);
 /*! Selects the point in the processing path of a lane, where the test data will
     be inserted. */
-int32_t ad6673_jesd204b_select_test_injection_point(ad6673_dev *dev,
-						    int32_t injPoint);
+int32_t ad6673_jesd204b_select_test_injection_point(struct ad6673_dev *dev,
+						    int32_t inj_point);
 /*! Selects a JESD204B test mode. */
-int32_t ad6673_jesd204b_test_mode(ad6673_dev *dev,
-				  int32_t testMode);
+int32_t ad6673_jesd204b_test_mode(struct ad6673_dev *dev,
+				  int32_t test_mode);
 /*! Inverts the logic of JESD204B bits. */
-int32_t ad6673_jesd204b_invert_logic(ad6673_dev *dev,
+int32_t ad6673_jesd204b_invert_logic(struct ad6673_dev *dev,
 				     int32_t invert);
 /*! Configures the Fast-Detect module. */
-int32_t ad6673_fast_detect_setup(ad6673_dev *dev);
+int32_t ad6673_fast_detect_setup(struct ad6673_dev *dev);
 /*! Enables DC correction for use in the output data signal path. */
-int32_t ad6673_dcc_enable(ad6673_dev *dev,
+int32_t ad6673_dcc_enable(struct ad6673_dev *dev,
 			  int32_t enable);
 /*! Selects the bandwidth value for the DC correction circuit. */
-int32_t ad6673_dcc_bandwidth(ad6673_dev *dev,
+int32_t ad6673_dcc_bandwidth(struct ad6673_dev *dev,
 			     int32_t bw);
 /*! Freezes DC correction value. */
-int32_t ad6673_dcc_freeze(ad6673_dev *dev,
+int32_t ad6673_dcc_freeze(struct ad6673_dev *dev,
 			  int32_t freeze);
 /*! Enables the Noise shaped requantizer(NRS). */
-int32_t ad6673_nsr_enable(ad6673_dev *dev,
+int32_t ad6673_nsr_enable(struct ad6673_dev *dev,
 			  int32_t enable);
 /*! Selects the NSR Bandwidth mode. */
-int32_t ad6673_nsr_bandwidth_mode(ad6673_dev *dev,
+int32_t ad6673_nsr_bandwidth_mode(struct ad6673_dev *dev,
 				  int32_t mode);
 /*! Sets the NSR frequency range. */
-int32_t ad6673_nsr_tuning_freq(int64_t tuneFreq,
-                               int64_t fAdc,
-                               ad6673_typeBand *pBand);
+int32_t ad6673_nsr_tuning_freq(int64_t tune_freq,
+			       int64_t f_adc,
+			       struct ad6673_type_band *p_band);
 
 #endif /* __AD6673_H__ */
