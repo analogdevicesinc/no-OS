@@ -36,7 +36,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __AD5755_H__
 #define __AD5755_H__
@@ -227,8 +226,8 @@
 /* AD5755_SOFT_RESET_CODE(x) options. */
 #define AD5755_RESET_CODE       0x555 // Performs a reset of the AD5755.
 #define AD5755_SPI_CODE         0x195 // If watchdog is enabled, 0x195 must be
-                                      // written to the software register within
-                                      // the programmed timeout period.
+// written to the software register within
+// the programmed timeout period.
 
 /* Input Shift Register Contents for a Read Operation. */
 #define AD5755_ISR_READ             (1 << 23)
@@ -271,62 +270,62 @@
  * struct AD5755_InitialSettings - Stores the settings that will be written to
  *        the device when the "AD5755_Init" functions is called.
  *
- * @pinAD0state: Reflects the logic state of the external pin AD0. Range 0..1
- * @pinAD1state: Reflects the logic state of the external pin AD1. Range 0..1
- * @enablePacketErrorCheck: Enables/Disables the Packet Error Checking that is
+ * @pin_ad0state: Reflects the logic state of the external pin AD0. Range 0..1
+ * @pin_ad1state: Reflects the logic state of the external pin AD1. Range 0..1
+ * @enable_packet_error_check: Enables/Disables the Packet Error Checking that is
  *                          used during all SPI transfers. Range 0..1
- * @pocBit: Power-On Condition. Determines the state of the voltage output
+ * @poc_bit: Power-On Condition. Determines the state of the voltage output
  *          channels during normal operation.
  *          0 - The output goes to the value set by the POC hardware pin when
  *              the voltage output is not enabled;
  *          1 - The output goes to the opposite value of the POC hardware pin
  *              if the voltage output is not enabled.
- * @statReadBit: Enables/Disables status readback during a write. Range 0..1
- * @shtCcLimBit: Programmable short-circuit limit on the VOUT_x pin in the event
+ * @stat_readbit: Enables/Disables status readback during a write. Range 0..1
+ * @sht_cc_lim_bit: Programmable short-circuit limit on the VOUT_x pin in the event
  *               of a short-circuit condition: 0 - 16 mA
  *                                             1 - 8 mA
- * @rsetBits: Selects an internal or external current sense resistor for the
+ * @rset_bits: Selects an internal or external current sense resistor for the
  *            selected DAC channel: 0 - selects the external resistor
  *                                  1 - selects the internal resistor
- * @ovrngBits: Enables 20% overrange on voltage output channel only. Range 0..1
- * @dcDcCompBit: Selects between an internal and external compensation resistor
+ * @ovrng_bits: Enables 20% overrange on voltage output channel only. Range 0..1
+ * @dc_dc_comp_bit: Selects between an internal and external compensation resistor
  *               for the dc-to-dc converter. Range 0..1
- * @dcDcPhaseBit: User programmable dc-to-dc converter phase (between channels).
+ * @dc_dc_phase_bit: User programmable dc-to-dc converter phase (between channels).
  *                Range 0..3
- * @dcDcFreqBit: DC-to-dc switching frequency. Range 0..2
- * @dcDcMaxVBit: Maximum allowed VBOOST_x voltage supplied by the dc-to-dc
+ * @dc_dc_freq_bit: DC-to-dc switching frequency. Range 0..2
+ * @dc_dc_max_vbit: Maximum allowed VBOOST_x voltage supplied by the dc-to-dc
  *               converter. Range 0..3
  *
  */
-typedef struct {
-    unsigned char pinAD0state;
-    unsigned char pinAD1state;
-    unsigned char enablePacketErrorCheck;
+struct ad5755_setup {
+	uint8_t pin_ad0state;
+	uint8_t pin_ad1state;
+	uint8_t enable_packet_error_check;
 
-    /* Main Control Register bits */
-    unsigned char pocBit;
-    unsigned char statReadBit;
-    unsigned char shtCcLimBit;
+	/* Main Control Register bits */
+	uint8_t poc_bit;
+	uint8_t stat_readbit;
+	uint8_t sht_cc_lim_bit;
 
-    /* DAC Control Registers: A, B, C and D */
-    unsigned char rsetBits[4];
-    unsigned char ovrngBits[4];
+	/* DAC Control Registers: A, B, C and D */
+	uint8_t rset_bits[4];
+	uint8_t ovrng_bits[4];
 
-    /* DC-to-DC Control Register */
-    unsigned char dcDcCompBit;
-    unsigned char dcDcPhaseBit;
-    unsigned char dcDcFreqBit;
-    unsigned char dcDcMaxVBit;
-} AD5755_Setup;
+	/* DC-to-DC Control Register */
+	uint8_t dc_dc_comp_bit;
+	uint8_t dc_dc_phase_bit;
+	uint8_t dc_dc_freq_bit;
+	uint8_t dc_dc_max_vbit;
+};
 
 /* Supported devices */
-typedef enum {
-    ID_AD5755,
-    ID_AD5755_1,
-    ID_AD5757,
-} AD5755_type_t;
+enum ad5755_type_t {
+	ID_AD5755,
+	ID_AD5755_1,
+	ID_AD5757,
+};
 
-typedef struct {
+struct ad5755_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -335,11 +334,11 @@ typedef struct {
 	gpio_desc		*gpio_clr;
 	gpio_desc		*gpio_poc;
 	/* Device Settings */
-	AD5755_Setup *pAD5755_st;
-	AD5755_type_t this_device;
-} ad5755_dev;
+	struct ad5755_setup *p_ad5755_st;
+	enum ad5755_type_t this_device;
+};
 
-typedef struct {
+struct ad5755_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
@@ -348,82 +347,82 @@ typedef struct {
 	int8_t		gpio_clr;
 	int8_t		gpio_poc;
 	/* Device Settings */
-	AD5755_type_t this_device;
-} ad5755_init_param;
+	enum ad5755_type_t this_device;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the device and powers-up all channels. */
-char AD5755_Init(ad5755_dev **device,
-		 ad5755_init_param init_param);
+int8_t ad5755_init(struct ad5755_dev **device,
+		   struct ad5755_init_param init_param);
 
-/*! Free the resources allocated by AD5755_Init(). */
-int32_t AD5755_remove(ad5755_dev *dev);
+/*! Free the resources allocated by ad5755_init(). */
+int32_t ad5755_remove(struct ad5755_dev *dev);
 
 /*! Reads the value of a register. */
-long AD5755_GetRegisterValue(ad5755_dev *dev,
-			     unsigned char registerAddress);
+int32_t ad5755_get_register_value(struct ad5755_dev *dev,
+				  uint8_t register_address);
 
 /*! Writes data into a register. */
-unsigned short AD5755_SetRegisterValue(ad5755_dev *dev,
-				       unsigned char registerAddress,
-                                       unsigned char channel,
-                                       unsigned short registerValue);
+uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
+				   uint8_t register_address,
+				   uint8_t channel,
+				   uint16_t register_value);
 
 /*! Performs a software reset to the device. */
-void AD5755_Software_Reset(ad5755_dev *dev);
+void ad5755_software_reset(struct ad5755_dev *dev);
 
 /*! Enables/Disables watchdog timer and sets the timeout period. */
-void AD5755_WatchDogSetup(ad5755_dev *dev,
-			  unsigned char wtdEnable,
-			  unsigned char timeout);
+void ad5755_watch_dog_setup(struct ad5755_dev *dev,
+			    uint8_t wtd_enable,
+			    uint8_t timeout);
 
 /*! Writes a "service pulse" to the AD5755 watchdog timer when enabled. */
-void AD5755_FeedWatchDogTimer(ad5755_dev *dev);
+void ad5755_feed_watch_dog_timer(struct ad5755_dev *dev);
 
 /*! Configures one of the control registers. */
-void AD5755_SetControlRegisters(ad5755_dev *dev,
-				unsigned char  ctrlRegAddress,
-                                unsigned char  channel,
-                                unsigned short regValue);
+void ad5755_set_control_registers(struct ad5755_dev *dev,
+				  uint8_t  ctrl_reg_address,
+				  uint8_t  channel,
+				  uint16_t reg_value);
 
 /*! Computes the CRC for a data buffer. */
-unsigned char AD5755_CheckCrc(unsigned char* data,
-			      unsigned char bytesNumber);
+uint8_t ad5755_check_crc(uint8_t* data,
+			 uint8_t bytes_number);
 
 /*! Allows power-up/down of the dc-to-dc converter, DAC and internal amplifiers
     for the selected channel. */
-void AD5755_SetChannelPower(ad5755_dev *dev,
-			    unsigned char channel,
-			    unsigned char pwrStatus);
+void ad5755_set_channel_power(struct ad5755_dev *dev,
+			      uint8_t channel,
+			      uint8_t pwr_status);
 
 /*! Sets the range of a channel. */
-void AD5755_SetChannelRange(ad5755_dev *dev,
-			    unsigned char channel,
-			    unsigned char range);
+void ad5755_set_channel_range(struct ad5755_dev *dev,
+			      uint8_t channel,
+			      uint8_t range);
 
 /*! Selects if the channel clears when CLEAR pin is activated. */
-void AD5755_ChannelClearEnable(ad5755_dev *dev,
-			       unsigned char channel,
-			       unsigned char clearEn);
+void ad5755_channel_clear_enable(struct ad5755_dev *dev,
+				 uint8_t channel,
+				 uint8_t clear_en);
 
 /*! Configures the Digital Slew Rate Control. */
-void AD5755_SlewRateCtrl(ad5755_dev *dev,
-			 char channel,
-			 char srEn,
-			 char updtFreq,
-			 char stepSize);
+void ad5755_slew_rate_ctrl(struct ad5755_dev *dev,
+			   int8_t channel,
+			   int8_t sr_en,
+			   int8_t updt_freq,
+			   int8_t step_size);
 
 /*! Sets the output voltage of a channel. */
-float AD5755_SetVoltage(ad5755_dev *dev,
-			unsigned char channel,
-			float voltage);
+float ad5755_set_voltage(struct ad5755_dev *dev,
+			 uint8_t channel,
+			 float voltage);
 
 /*! Sets the output current of a channel. */
-float AD5755_SetCurrent(ad5755_dev *dev,
-			unsigned char channel,
-			float mACurrent);
+float ad5755_set_current(struct ad5755_dev *dev,
+			 uint8_t channel,
+			 float m_acurrent);
 
 #endif // __AD5755_H__
