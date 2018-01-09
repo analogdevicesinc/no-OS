@@ -39,7 +39,6 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 ******************************************************************************/
 
 /*****************************************************************************/
@@ -66,62 +65,62 @@
 /*****************************************************************************/
 
 /* Device 'table' */
-static const ad5446_chip_info chip_info[] = {
-    [ID_AD5553] = {
-        .resolution = 14,
-        .data_clock_in = posedge,
-        .has_ctrl = false,
-    },
-    [ID_AD5543] = {
-        .resolution = 16,
-        .data_clock_in = posedge,
-        .has_ctrl = false,
-    },
-    [ID_AD5542A] = {
-        .resolution = 16,
-        .data_clock_in = posedge,
-        .has_ctrl = false,
-    },
-    [ID_AD5541A] = {
-        .resolution = 16,
-        .data_clock_in = posedge,
-        .has_ctrl = false,
-    },
-    [ID_AD5512A] = {
-        .resolution = 12,
-        .data_clock_in = posedge,
-        .has_ctrl = false,
-    },
-    [ID_AD5453] = {
-        .resolution = 14,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    },
-    [ID_AD5452] = {
-        .resolution = 12,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    },
-    [ID_AD5451] = {
-        .resolution = 10,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    },
-    [ID_AD5450] = {
-        .resolution = 8,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    },
-    [ID_AD5446] = {
-        .resolution = 14,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    },
-    [ID_AD5444] = {
-        .resolution = 12,
-        .data_clock_in = negedge,
-        .has_ctrl = true,
-    }
+static const struct ad5446_chip_info chip_info[] = {
+	[ID_AD5553] = {
+		.resolution = 14,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
+	[ID_AD5543] = {
+		.resolution = 16,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
+	[ID_AD5542A] = {
+		.resolution = 16,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
+	[ID_AD5541A] = {
+		.resolution = 16,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
+	[ID_AD5512A] = {
+		.resolution = 12,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
+	[ID_AD5453] = {
+		.resolution = 14,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	},
+	[ID_AD5452] = {
+		.resolution = 12,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	},
+	[ID_AD5451] = {
+		.resolution = 10,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	},
+	[ID_AD5450] = {
+		.resolution = 8,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	},
+	[ID_AD5446] = {
+		.resolution = 14,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	},
+	[ID_AD5444] = {
+		.resolution = 12,
+		.data_clock_in = negedge,
+		.has_ctrl = true,
+	}
 };
 
 /**************************************************************************//**
@@ -135,17 +134,17 @@ static const ad5446_chip_info chip_info[] = {
  *                    Example: 0 - if initialization was successful;
  *                            -1 - if initialization was unsuccessful.
 ******************************************************************************/
-char AD5446_Init(ad5446_dev **device,
-		 ad5446_init_param init_param)
+int8_t ad5446_init(struct ad5446_dev **device,
+		   struct ad5446_init_param init_param)
 {
-	ad5446_dev *dev;
-    char status;
+	struct ad5446_dev *dev;
+	int8_t status;
 
-	dev = (ad5446_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5446_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-    dev->act_device = init_param.act_device;
+	dev->act_device = init_param.act_device;
 
 	status = spi_init(&dev->spi_desc, init_param.spi_init);
 
@@ -153,39 +152,34 @@ char AD5446_Init(ad5446_dev **device,
 	status |= gpio_get(&dev->gpio_ladc, init_param.gpio_ladc);
 	status |= gpio_get(&dev->gpio_clrout, init_param.gpio_clrout);
 
-    /* Initialize configuration pins, if exist. */
-    if(dev->act_device == ID_AD5542A)
-    {
-        AD5446_LDAC_OUT;
-        AD5446_LDAC_LOW;
-        AD5446_CLR_OUT;
-        AD5446_CLR_HIGH;
-    }
-    else if(dev->act_device == ID_AD5541A)
-    {
-        AD5446_LDAC_OUT;
-        AD5446_LDAC_LOW;
-    }
-    else if(dev->act_device == ID_AD5446) /* Enable the SDO line */
-    {
-        /* AD5446_CLR is mapped to GPIO0 */
-        AD5446_CLR_OUT;
-        AD5446_CLR_LOW;
-    }
+	/* Initialize configuration pins, if exist. */
+	if(dev->act_device == ID_AD5542A) {
+		AD5446_LDAC_OUT;
+		AD5446_LDAC_LOW;
+		AD5446_CLR_OUT;
+		AD5446_CLR_HIGH;
+	} else if(dev->act_device == ID_AD5541A) {
+		AD5446_LDAC_OUT;
+		AD5446_LDAC_LOW;
+	} else if(dev->act_device == ID_AD5446) { /* Enable the SDO line */
+		/* AD5446_CLR is mapped to GPIO0 */
+		AD5446_CLR_OUT;
+		AD5446_CLR_LOW;
+	}
 
 	*device = dev;
 
-return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5446_Init().
+ * @brief Free the resources allocated by ad5446_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD5446_remove(ad5446_dev *dev)
+int32_t ad5446_remove(struct ad5446_dev *dev)
 {
 	int32_t ret;
 
@@ -208,29 +202,26 @@ int32_t AD5446_remove(ad5446_dev *dev)
  *
  * @return  None.
 ******************************************************************************/
-void AD5446_SetRegister(ad5446_dev *dev,
-			unsigned char command,
-			unsigned short data)
+void ad5446_set_register(struct ad5446_dev *dev,
+			 uint8_t command,
+			 uint16_t data)
 {
-    unsigned short inputShiftReg = 0;
-    unsigned char spiData[PKT_LENGTH] = {0, 0};
+	uint16_t input_shift_reg = 0;
+	uint8_t spi_data[PKT_LENGTH] = {0, 0};
 
-    if(chip_info[dev->act_device].has_ctrl == true)
-    {
-        inputShiftReg = ((command & CMD_MASK) << CMD_OFFSET) |
-                     ( data & DATA_MASK(chip_info[dev->act_device].resolution) \
-                      << DATA_OFFSET(chip_info[dev->act_device].resolution));
-        spiData[0] = (inputShiftReg & MSB_MASK) >> MSB_OFFSET;
-        spiData[1] = (inputShiftReg & LSB_MASK) >> LSB_OFFSET;
-    }
-    else
-    {
-        inputShiftReg = data & (DATA_MASK(chip_info[dev->act_device].resolution));
-        spiData[0] = (inputShiftReg & MSB_MASK) >> MSB_OFFSET;
-        spiData[1] = (inputShiftReg & LSB_MASK);
-    }
+	if(chip_info[dev->act_device].has_ctrl == true) {
+		input_shift_reg = ((command & CMD_MASK) << CMD_OFFSET) |
+				  (data & DATA_MASK(chip_info[dev->act_device].resolution) \
+				   << DATA_OFFSET(chip_info[dev->act_device].resolution));
+		spi_data[0] = (input_shift_reg & MSB_MASK) >> MSB_OFFSET;
+		spi_data[1] = (input_shift_reg & LSB_MASK) >> LSB_OFFSET;
+	} else {
+		input_shift_reg = data & (DATA_MASK(chip_info[dev->act_device].resolution));
+		spi_data[0] = (input_shift_reg & MSB_MASK) >> MSB_OFFSET;
+		spi_data[1] = (input_shift_reg & LSB_MASK);
+	}
 	spi_write_and_read(dev->spi_desc,
-			   spiData,
+			   spi_data,
 			   PKT_LENGTH);
 }
 /***************************************************************************//**
@@ -242,68 +233,59 @@ void AD5446_SetRegister(ad5446_dev *dev,
  *
  * @return Actual voltage that the device can output.
 *******************************************************************************/
-float AD5446_SetVoltage(ad5446_dev *dev,
-			float voltage,
-			float vref,
-			vout_type_t vout_type)
+float ad5446_set_voltage(struct ad5446_dev *dev,
+			 float voltage,
+			 float vref,
+			 enum vout_type_t vout_type)
 {
-    unsigned short  registerValue = 0;
-    float           actualVout = 0;
-    float           code = 0;
-    unsigned short  max_value = DATA_MASK(chip_info[dev->act_device].resolution);
+	uint16_t register_value = 0;
+	float actual_vout = 0;
+	float code = 0;
+	uint16_t  max_value = DATA_MASK(chip_info[dev->act_device].resolution);
 
-    /* Get raw data from the user's desired voltage value. */
-    switch(vout_type)
-    {
-        case unipolar :
-        {
-            code = (voltage * max_value) / vref;
-            break;
-        }
-        case unipolar_inv :
-        {
-            code = (-1) * (voltage * max_value) / vref;
-            break;
-        }
-        case bipolar :
-        {
-            code = ((voltage + vref) * (max_value/2)) / vref;
-            break;
-        }
-    }
+	/* Get raw data from the user's desired voltage value. */
+	switch(vout_type) {
+	case unipolar : {
+		code = (voltage * max_value) / vref;
+		break;
+	}
+	case unipolar_inv : {
+		code = (-1) * (voltage * max_value) / vref;
+		break;
+	}
+	case bipolar : {
+		code = ((voltage + vref) * (max_value/2)) / vref;
+		break;
+	}
+	}
 
-    /* Round to the nearest integer. */
-    registerValue = (unsigned short)code;
+	/* Round to the nearest integer. */
+	register_value = (uint16_t)code;
 
-    /* Check to value which will be written to register. */
-    if (registerValue > (max_value - 1) )
-    {
-        registerValue = (max_value - 1);
-    }
+	/* Check to value which will be written to register. */
+	if (register_value > (max_value - 1) ) {
+		register_value = (max_value - 1);
+	}
 
-    /* Write to DAC register. */
-    AD5446_SetRegister(dev,
-		       0,
-		       registerValue);
-    /* Calculate the output voltage value. */
-    switch(vout_type)
-    {
-        case unipolar :
-        {
-            actualVout = ((float)registerValue / max_value) * vref;
-            break;
-        }
-        case unipolar_inv :
-        {
-            actualVout = (-1) * ((float)registerValue / max_value) * vref;
-            break;
-        }
-        case bipolar :
-        {
-            actualVout = (vref * (float)registerValue / (max_value/2)) - vref;
-            break;
-        }
-    }
+	/* Write to DAC register. */
+	ad5446_set_register(dev,
+			    0,
+			    register_value);
+	/* Calculate the output voltage value. */
+	switch(vout_type) {
+	case unipolar : {
+		actual_vout = ((float)register_value / max_value) * vref;
+		break;
+	}
+	case unipolar_inv : {
+		actual_vout = (-1) * ((float)register_value / max_value) * vref;
+		break;
+	}
+	case bipolar : {
+		actual_vout = (vref * (float)register_value / (max_value/2)) - vref;
+		break;
+	}
+	}
 
-return actualVout;
+	return actual_vout;
 }
