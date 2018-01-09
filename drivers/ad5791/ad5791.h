@@ -44,19 +44,19 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 /* Supported devices */
-typedef enum {
-    ID_AD5760,
-    ID_AD5780,
-    ID_AD5781,
-    ID_AD5790,
-    ID_AD5791,
-} AD5791_type;
+enum ad5791_type {
+	ID_AD5760,
+	ID_AD5780,
+	ID_AD5781,
+	ID_AD5790,
+	ID_AD5791
+};
 
-typedef struct {
-    unsigned int resolution;
-} ad5791_chip_info;
+struct ad5791_chip_info {
+	uint32_t resolution;
+};
 
-typedef struct {
+struct ad5791_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -64,10 +64,10 @@ typedef struct {
 	gpio_desc		*gpio_clr;
 	gpio_desc		*gpio_ldac;
 	/* Device Settings */
-	AD5791_type act_device;
-} ad5791_dev;
+	enum ad5791_type act_device;
+};
 
-typedef struct {
+struct ad5791_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
@@ -75,8 +75,8 @@ typedef struct {
 	int8_t		gpio_clr;
 	int8_t		gpio_ldac;
 	/* Device Settings */
-	AD5791_type act_device;
-} ad5791_init_param;
+	enum ad5791_type act_device;
+};
 
 /******************************************************************************/
 /*********************************** GPIO *************************************/
@@ -119,7 +119,7 @@ typedef struct {
 /* Input Shift Register bit definition. */
 #define AD5791_READ                (1ul << 23)
 #define AD5791_WRITE               (0ul << 23)
-#define AD5791_ADDR_REG(x)         (((unsigned long)(x) & 0x7) << 20)
+#define AD5791_ADDR_REG(x)         (((uint32_t)(x) & 0x7) << 20)
 
 /* Control Register bit Definition */
 #define AD5791_CTRL_LINCOMP(x)   (((x) & 0xF) << 6) // Linearity error compensation.
@@ -144,36 +144,36 @@ typedef struct {
 /******************************************************************************/
 
 /*! Initializes the communication with the device. */
-long AD5791_Init(ad5791_dev **device,
-		 ad5791_init_param init_param);
+int32_t ad5791_init(struct ad5791_dev **device,
+		    struct ad5791_init_param init_param);
 
-/*! Free the resources allocated by AD5791_Init(). */
-int32_t AD5791_remove(ad5791_dev *dev);
+/*! Free the resources allocated by ad5791_init(). */
+int32_t ad5791_remove(struct ad5791_dev *dev);
 
 /*! Writes data into a register. */
- long AD5791_SetRegisterValue(ad5791_dev *dev,
-			      unsigned char registerAddress,
-                              unsigned long registerValue);
+int32_t ad5791_set_register_value(struct ad5791_dev *dev,
+				  uint8_t register_address,
+				  uint32_t register_value);
 
 /*! Reads the value of a register. */
-long AD5791_GetRegisterValue(ad5791_dev *dev,
-			     unsigned char registerAddress);
+int32_t ad5791_get_register_value(struct ad5791_dev *dev,
+				  uint8_t register_address);
 
 /*! Sets the DAC output in one of the three states. */
-long AD5791_DacOuputState(ad5791_dev *dev,
-			  unsigned char state);
+int32_t ad5791_dac_ouput_state(struct ad5791_dev *dev,
+			       uint8_t state);
 
 /*! Writes to the DAC register. */
-long AD5791_SetDacValue(ad5791_dev *dev,
-			unsigned long value);
+int32_t ad5791_set_dac_value(struct ad5791_dev *dev,
+			     uint32_t value);
 
 /*! Asserts RESET, CLR or LDAC in a software manner. */
-long AD5791_SoftInstruction(ad5791_dev *dev,
-			    unsigned char instructionBit);
+int32_t ad5791_soft_instruction(struct ad5791_dev *dev,
+				uint8_t instruction_bit);
 
 /*! Configures the output amplifier, DAC coding, SDO state and the linearity
     error compensation. */
-long AD5791_Setup(ad5791_dev *dev,
-		  unsigned long setupWord);
+int32_t ad5791_setup(struct ad5791_dev *dev,
+		     uint32_t setup_word);
 
 #endif /* __AD5791_H__ */
