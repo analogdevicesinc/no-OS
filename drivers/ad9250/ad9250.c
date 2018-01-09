@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ********************************************************************************
- *   SVN Revision: $WCREV$
  *******************************************************************************/
 
 /******************************************************************************/
@@ -46,8 +43,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD9250.h"
-#include "AD9250_cfg.h"
+#include "ad9250.h"
+#include "ad9250_cfg.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
