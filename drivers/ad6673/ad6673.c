@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD6673.h"
-#include "AD6673_cfg.h"
+#include "ad6673.h"
+#include "ad6673_cfg.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
