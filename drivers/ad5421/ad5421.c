@@ -38,7 +38,6 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 ******************************************************************************/
 
 /*****************************************************************************/
@@ -64,68 +63,67 @@
  * 					  Example: 0 - if initialization was successful;
  *							  -1 - if initialization was unsuccessful.
 ******************************************************************************/
-int AD5421_Init(ad5421_dev **device,
-		ad5421_init_param init_param)
+int32_t ad5421_init(struct ad5421_dev **device,
+		    struct ad5421_init_param init_param)
 {
-	ad5421_dev *dev;
-    int spiData  = 0;
-    /* Set bits for initialization process. */
-    int cmdCheck = (CTRL_AUTO_FAULT_RDBK |
-                    CTRL_SEL_ADC_INPUT   |
-                    CTRL_ONCHIP_ADC      |
-                    !CTRL_SPI_WATCHDOG);
-    int retValue = -1;
+	struct ad5421_dev *dev;
+	int32_t spi_data = 0;
+	/* Set bits for initialization process. */
+	int32_t cmd_check = (CTRL_AUTO_FAULT_RDBK |
+			    CTRL_SEL_ADC_INPUT   |
+			    CTRL_ONCHIP_ADC      |
+			    !CTRL_SPI_WATCHDOG);
+	int32_t ret_value = -1;
 
-	dev = (ad5421_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5421_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
 	gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 	gpio_get(&dev->gpio_faultin, init_param.gpio_faultin);
 
-    /* Setup the SPI interface. */
+	/* Setup the SPI interface. */
 	spi_init(&dev->spi_desc, init_param.spi_init);
-    /* Setup AD5421 control register. */
-    /* Write to the control register. */
-    spiData = AD5421_CMD(AD5421_CMDWRCTRL);
-    /* Set certain bits. */
-    spiData += (CTRL_AUTO_FAULT_RDBK |
-                CTRL_SEL_ADC_INPUT   |
-                CTRL_ONCHIP_ADC		 |
-                CTRL_SPI_WATCHDOG);
-    /* Send data via SPI. */
-    AD5421_Set(dev,
-	       &spiData);
-    /* Read from the control register. */
-    spiData = AD5421_CMD(AD5421_CMDRDCTRL);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Receive data via SPI. */
-    spiData = AD5421_Get(dev);
+	/* Setup AD5421 control register. */
+	/* Write to the control register. */
+	spi_data = AD5421_CMD(AD5421_CMDWRCTRL);
+	/* Set certain bits. */
+	spi_data += (CTRL_AUTO_FAULT_RDBK |
+		     CTRL_SEL_ADC_INPUT   |
+		     CTRL_ONCHIP_ADC		 |
+		     CTRL_SPI_WATCHDOG);
+	/* Send data via SPI. */
+	ad5421_set(dev,
+		   &spi_data);
+	/* Read from the control register. */
+	spi_data = AD5421_CMD(AD5421_CMDRDCTRL);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Receive data via SPI. */
+	spi_data = ad5421_get(dev);
 
-    if (spiData & cmdCheck)
-    {
-        /* Check the echo. */
-        retValue = 0;
-    }
-    /* Set GPIO pins */
-    AD5421_LDAC_OUT;
-    AD5421_LDAC_LOW;
-    AD5421_FAULT_IN;
+	if (spi_data & cmd_check) {
+		/* Check the echo. */
+		ret_value = 0;
+	}
+	/* Set GPIO pins */
+	AD5421_LDAC_OUT;
+	AD5421_LDAC_LOW;
+	AD5421_FAULT_IN;
 
 	*device = dev;
 
-    return(retValue);
+	return(ret_value);
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5421_Init().
+ * @brief Free the resources allocated by ad5421_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD5421_remove(ad5421_dev *dev)
+int32_t ad5421_remove(struct ad5421_dev *dev)
 {
 	int32_t ret;
 
@@ -142,61 +140,61 @@ int32_t AD5421_remove(ad5421_dev *dev)
 /**************************************************************************//**
  * @brief Write to the DAC register.
  *
- * @param dev      - The device structure.
- * @param dacValue - desired value to be written in register.
+ * @param dev       - The device structure.
+ * @param dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5421_SetDac(ad5421_dev *dev,
-		   int dacValue)
+void ad5421_set_dac(struct ad5421_dev *dev,
+		    int32_t dac_value)
 {
-    int spiData = 0;
+	int32_t spi_data = 0;
 
-    /* Load data in DAC register. */
-    spiData = AD5421_CMD(AD5421_CMDWRDAC);
-    spiData += (dacValue);
-    AD5421_Set(dev,
-	       &spiData);
+	/* Load data in DAC register. */
+	spi_data = AD5421_CMD(AD5421_CMDWRDAC);
+	spi_data += (dac_value);
+	ad5421_set(dev,
+		   &spi_data);
 }
 
 /**************************************************************************//**
  * @brief Write to the Offset Adjust register.
  *
- * @param dev         - The device structure.
- * @param offsetValue - desired value to be written in register.
+ * @param dev          - The device structure.
+ * @param offset_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5421_SetOffset(ad5421_dev *dev,
-		      int offsetValue)
+void ad5421_set_offset(struct ad5421_dev *dev,
+		       int32_t offset_value)
 {
-    int spiData = 0;
+	int32_t spi_data = 0;
 
-    /* Load data in OFFSET register. */
-    spiData = AD5421_CMD(AD5421_CMDWROFFSET);
-    spiData += (offsetValue);
-    AD5421_Set(dev,
-	       &spiData);
+	/* Load data in OFFSET register. */
+	spi_data = AD5421_CMD(AD5421_CMDWROFFSET);
+	spi_data += (offset_value);
+	ad5421_set(dev,
+		   &spi_data);
 }
 
 /**************************************************************************//**
  * @brief Write to the Gain Adjust register
  *
- * @param dev       - The device structure.
- * @param gainValue - desired value to be written in register.
+ * @param dev        - The device structure.
+ * @param gain_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5421_SetGain(ad5421_dev *dev,
-		    int gainValue)
+void ad5421_set_gain(struct ad5421_dev *dev,
+		     int32_t gain_value)
 {
-    int spiData = 0;
+	int32_t spi_data = 0;
 
-    /* Load data in GAIN register. */
-    spiData = AD5421_CMD(AD5421_CMDWRGAIN);
-    spiData += (gainValue);
-    AD5421_Set(dev,
-	       &spiData);
+	/* Load data in GAIN register. */
+	spi_data = AD5421_CMD(AD5421_CMDWRGAIN);
+	spi_data += (gain_value);
+	ad5421_set(dev,
+		   &spi_data);
 }
 
 /**************************************************************************//**
@@ -206,18 +204,18 @@ void AD5421_SetGain(ad5421_dev *dev,
  *
  * @return dacValue - value read from the register.
 ******************************************************************************/
-int AD5421_GetDac(ad5421_dev *dev)
+int32_t ad5421_get_dac(struct ad5421_dev *dev)
 {
-    int spiData  = 0;
-    int dacValue = 0;
+	int32_t spi_data = 0;
+	int32_t dac_value = 0;
 
-    /* Read data from DAC register. */
-    spiData = AD5421_CMD(AD5421_CMDRDDAC);
-    AD5421_Set(dev,
-	       &spiData);
-    dacValue = AD5421_Get(dev);
+	/* Read data from DAC register. */
+	spi_data = AD5421_CMD(AD5421_CMDRDDAC);
+	ad5421_set(dev,
+		   &spi_data);
+	dac_value = ad5421_get(dev);
 
-    return(dacValue);
+	return(dac_value);
 }
 
 /**************************************************************************//**
@@ -227,18 +225,18 @@ int AD5421_GetDac(ad5421_dev *dev)
  *
  * @return offsetValue - value calculated according to the datasheet formula.
 ******************************************************************************/
-int AD5421_GetOffset(ad5421_dev *dev)
+int32_t ad5421_get_offset(struct ad5421_dev *dev)
 {
-    int spiData     = 0;
-    int offsetValue = 0;
+	int32_t spi_data = 0;
+	int32_t offset_value = 0;
 
-    /* Read data from OFFSET register. */
-    spiData = AD5421_CMD(AD5421_CMDRDOFFSET);
-    AD5421_Set(dev,
-	       &spiData);
-    offsetValue = AD5421_Get(dev);
+	/* Read data from OFFSET register. */
+	spi_data = AD5421_CMD(AD5421_CMDRDOFFSET);
+	ad5421_set(dev,
+		   &spi_data);
+	offset_value = ad5421_get(dev);
 
-    return(offsetValue);
+	return(offset_value);
 }
 
 /**************************************************************************//**
@@ -248,18 +246,18 @@ int AD5421_GetOffset(ad5421_dev *dev)
  *
  * @return gainValue - value calculated according to the datasheet formula
 ******************************************************************************/
-int AD5421_GetGain(ad5421_dev *dev)
+int32_t ad5421_get_gain(struct ad5421_dev *dev)
 {
-    int spiData   = 0;
-    int gainValue = 0;
+	int32_t spi_data = 0;
+	int32_t gain_value = 0;
 
-    /* Read from GAIN register. */
-    spiData = AD5421_CMD(AD5421_CMDRDGAIN);
-    AD5421_Set(dev,
-	       &spiData);
-    gainValue = AD5421_Get(dev);
+	/* Read from GAIN register. */
+	spi_data = AD5421_CMD(AD5421_CMDRDGAIN);
+	ad5421_set(dev,
+		   &spi_data);
+	gain_value = ad5421_get(dev);
 
-    return(gainValue);
+	return(gain_value);
 }
 
 /**************************************************************************//**
@@ -269,18 +267,18 @@ int AD5421_GetGain(ad5421_dev *dev)
  *
  * @return value - register content
 ******************************************************************************/
-int AD5421_GetFault(ad5421_dev *dev)
+int32_t ad5421_get_fault(struct ad5421_dev *dev)
 {
-    int spiData = 0;
-    int value   = 0;
+	int32_t spi_data = 0;
+	int32_t value = 0;
 
-    /* Read from GAIN register. */
-    spiData = AD5421_CMD(AD5421_CMDRDFAULT);
-    AD5421_Set(dev,
-	       &spiData);
-    value = AD5421_Get(dev);
+	/* Read from GAIN register. */
+	spi_data = AD5421_CMD(AD5421_CMDRDFAULT);
+	ad5421_set(dev,
+		   &spi_data);
+	value = ad5421_get(dev);
 
-    return(value);
+	return(value);
 }
 
 
@@ -291,38 +289,38 @@ int AD5421_GetFault(ad5421_dev *dev)
  *
  * @return tempValue - temperature value in Celsius degrees.
 ******************************************************************************/
-int AD5421_GetTemp(ad5421_dev *dev)
+int32_t ad5421_get_temp(struct ad5421_dev *dev)
 {
-    int   spiData       = 0;
-    int   tempValue     = 0;
-    /* Constant taken from datasheet formula */
-    float tempConstant1 = -1.559;
-    /* Constant taken from datasheet formula */
-    int   tempConstant2 = 312;
+	int32_t spi_data = 0;
+	int32_t temp_value = 0;
+	/* Constant taken from datasheet formula */
+	float temp_constant1 = -1.559;
+	/* Constant taken from datasheet formula */
+	int32_t temp_constant2 = 312;
 
-    /* Set CONTROL Register to measure temperature. */
-    spiData = AD5421_CMD(AD5421_CMDWRCTRL);
-    spiData += (CTRL_AUTO_FAULT_RDBK |
-    			CTRL_SEL_ADC_INPUT   |
-    			CTRL_ONCHIP_ADC      |
-    			CTRL_SPI_WATCHDOG);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Initiate temperature measurement. */
-    spiData = 0;
-    spiData = AD5421_CMD(AD5421_CMDMEASVTEMP);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Read temperature from Fault register. */
-    spiData = 0;
-    spiData = AD5421_CMD(AD5421_CMDRDFAULT);
-    AD5421_Set(dev,
-	       &spiData);
-    tempValue = AD5421_Get(dev) & 0x0FF;
-    /* Calculate temperature according to the datasheet formula. */
-    tempValue = (int) (tempConstant1 * tempValue) + tempConstant2;
+	/* Set CONTROL Register to measure temperature. */
+	spi_data = AD5421_CMD(AD5421_CMDWRCTRL);
+	spi_data += (CTRL_AUTO_FAULT_RDBK |
+		     CTRL_SEL_ADC_INPUT   |
+		     CTRL_ONCHIP_ADC      |
+		     CTRL_SPI_WATCHDOG);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Initiate temperature measurement. */
+	spi_data = 0;
+	spi_data = AD5421_CMD(AD5421_CMDMEASVTEMP);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Read temperature from Fault register. */
+	spi_data = 0;
+	spi_data = AD5421_CMD(AD5421_CMDRDFAULT);
+	ad5421_set(dev,
+		   &spi_data);
+	temp_value = ad5421_get(dev) & 0x0FF;
+	/* Calculate temperature according to the datasheet formula. */
+	temp_value = (int32_t) (temp_constant1 * temp_value) + temp_constant2;
 
-    return(tempValue);
+	return(temp_value);
 }
 
 /**************************************************************************//**
@@ -332,35 +330,35 @@ int AD5421_GetTemp(ad5421_dev *dev)
  *
  * @return vlopValue - value of the voltage drop between Vloop and COM.
 ******************************************************************************/
-float AD5421_GetVloop(ad5421_dev *dev)
+float ad5421_get_vloop(struct ad5421_dev *dev)
 {
-    int   spiData               = 0;
-    float vloopValue            = 0;
-    /* Constant taken from datasheet formula */
-    float divide_constant_vloop = 0.009765625;
+	int32_t spi_data = 0;
+	float vloop_value = 0;
+	/* Constant taken from datasheet formula */
+	float divide_constant_vloop = 0.009765625;
 
-    /* Set CONTROL Register to measure Vloop. */
-    spiData = AD5421_CMD(AD5421_CMDWRCTRL);
-    spiData += (CTRL_AUTO_FAULT_RDBK |
-    			CTRL_ONCHIP_ADC      |
-    			CTRL_SPI_WATCHDOG);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Initiate VLOOP measurement. */
-    spiData = 0;
-    spiData = AD5421_CMD(AD5421_CMDMEASVTEMP);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Read VLOOP from Fault register. */
-    spiData = 0;
-    spiData = AD5421_CMD(AD5421_CMDRDFAULT);
-    AD5421_Set(dev,
-	       &spiData);
-    /* Calculate Vloop according to the datasheet formula. */
-    vloopValue = (float) (AD5421_Get(dev) & 0x0FF);
-    vloopValue = divide_constant_vloop * vloopValue;
+	/* Set CONTROL Register to measure Vloop. */
+	spi_data = AD5421_CMD(AD5421_CMDWRCTRL);
+	spi_data += (CTRL_AUTO_FAULT_RDBK |
+		     CTRL_ONCHIP_ADC      |
+		     CTRL_SPI_WATCHDOG);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Initiate VLOOP measurement. */
+	spi_data = 0;
+	spi_data = AD5421_CMD(AD5421_CMDMEASVTEMP);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Read VLOOP from Fault register. */
+	spi_data = 0;
+	spi_data = AD5421_CMD(AD5421_CMDRDFAULT);
+	ad5421_set(dev,
+		   &spi_data);
+	/* Calculate Vloop according to the datasheet formula. */
+	vloop_value = (float) (ad5421_get(dev) & 0x0FF);
+	vloop_value = divide_constant_vloop * vloop_value;
 
-    return(vloopValue);
+	return(vloop_value);
 }
 
 /**************************************************************************//**
@@ -373,28 +371,25 @@ float AD5421_GetVloop(ad5421_dev *dev)
  * 		   		Example: 0 - if initialization was successful;
  *				        -1 - if initialization was unsuccessful.
 ******************************************************************************/
-int AD5421_Set(ad5421_dev *dev,
-	       int *value)
+int32_t ad5421_set(struct ad5421_dev *dev,
+		   int32_t *value)
 {
-    unsigned char txBuffer[3] = {0, 0, 0};
-    char          status      = 0;
+	uint8_t tx_buffer [ 3 ] = {0, 0, 0};
+	int8_t status = 0;
 
 	/* Arrange the data to be sent in 8 bit packets. */
-    txBuffer[0] = (unsigned char) ((*value & 0xff0000) >> 16);
-    txBuffer[1] = (unsigned char) ((*value & 0x00ff00) >> 8);
-    txBuffer[2] = (unsigned char) ((*value & 0x0000ff) >> 0);
-    /* Do a write operation via SPI. */
+	tx_buffer[0] = (uint8_t) ((*value & 0xff0000) >> 16);
+	tx_buffer[1] = (uint8_t) ((*value & 0x00ff00) >> 8);
+	tx_buffer[2] = (uint8_t) ((*value & 0x0000ff) >> 0);
+	/* Do a write operation via SPI. */
 	status = spi_write_and_read(dev->spi_desc,
-				    txBuffer,
+				    tx_buffer,
 				    3);
-    if (status != 3)
-    {
-    	return -1;
-    }
-    else
-    {
-    	return 0;
-    }
+	if (status != 3) {
+		return -1;
+	} else {
+		return 0;
+	}
 }
 
 /**************************************************************************//**
@@ -404,37 +399,36 @@ int AD5421_Set(ad5421_dev *dev,
  *
  * @return returnVal - Data read
 ******************************************************************************/
-int AD5421_Get(ad5421_dev *dev)
+int32_t ad5421_get(struct ad5421_dev *dev)
 {
-    int           returnVal   = 0;
-    unsigned char rxBuffer[3] = {0, 0, 0};
-    char          status      = 0;
+	int32_t return_val = 0;
+	uint8_t rx_buffer[3] = {0, 0, 0};
+	int8_t status = 0;
 
 	status = spi_write_and_read(dev->spi_desc,
-				    rxBuffer,
+				    rx_buffer,
 				    3);
-    if (status != 3)
-    {
-    	return -1;
-    }
-    returnVal |= (int) (rxBuffer[1] << 8);
-    returnVal |= (int) (rxBuffer[2] << 0);
+	if (status != 3) {
+		return -1;
+	}
+	return_val |= (int32_t) (rx_buffer[1] << 8);
+	return_val |= (int32_t) (rx_buffer[2] << 0);
 
-    return(returnVal);
+	return(return_val);
 }
 
 /**************************************************************************//**
- * @brief Resets the AD5421 device.
+ * @brief Resets the ad5421 device.
  *
  * @param dev - The device structure.
  *
  * @return None.
 ******************************************************************************/
-void AD5421_Reset(ad5421_dev *dev)
+void ad5421_reset(struct ad5421_dev *dev)
 {
-    int spiData = 0;
+	int32_t spi_data = 0;
 
-    spiData = AD5421_CMD(AD5421_CMDRST);
-    AD5421_Set(dev,
-	       &spiData);
+	spi_data = AD5421_CMD(AD5421_CMDRST);
+	ad5421_set(dev,
+		   &spi_data);
 }

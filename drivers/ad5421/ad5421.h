@@ -38,7 +38,6 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 ******************************************************************************/
 #ifndef _AD5421_H_
 #define _AD5421_H_
@@ -81,57 +80,57 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad5421_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
 	gpio_desc		*gpio_ldac;
 	gpio_desc		*gpio_faultin;
-} ad5421_dev;
+};
 
-typedef struct {
+struct ad5421_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_ldac;
 	int8_t		gpio_faultin;
-} ad5421_init_param;
+};
 
 /*****************************************************************************/
 /************************* Functions Declarations ****************************/
 /*****************************************************************************/
 /* Initialize the communication with the device. */
-int   AD5421_Init(ad5421_dev **device,
-		  ad5421_init_param init_param);
-/* Free the resources allocated by AD5421_Init(). */
-int32_t AD5421_remove(ad5421_dev *dev);
+int32_t ad5421_init(struct ad5421_dev **device,
+		      struct ad5421_init_param init_param);
+/* Free the resources allocated by ad5421_init(). */
+int32_t ad5421_remove(struct ad5421_dev *dev);
 /* Set the value of DAC register. */
-void  AD5421_SetDac(ad5421_dev *dev,
-		    int dacValue);
+void ad5421_set_dac(struct ad5421_dev *dev,
+		     int32_t dac_value);
 /* Set the value of OFFSET register. */
-void  AD5421_SetOffset(ad5421_dev *dev,
-		       int offsetValue);
+void ad5421_set_offset(struct ad5421_dev *dev,
+			int32_t offset_value);
 /* Set the value of GAIN register. */
-void  AD5421_SetGain(ad5421_dev *dev,
-		     int gainValue);
+void ad5421_set_gain(struct ad5421_dev *dev,
+		      int32_t gain_value);
 /* Read the DAC register. */
-int   AD5421_GetDac(ad5421_dev *dev);
+int32_t ad5421_get_dac(struct ad5421_dev *dev);
 /* Read OFFSET register. */
-int   AD5421_GetOffset(ad5421_dev *dev);
+int32_t ad5421_get_offset(struct ad5421_dev *dev);
 /* Read GAIN register. */
-int   AD5421_GetGain(ad5421_dev *dev);
+int32_t ad5421_get_gain(struct ad5421_dev *dev);
 /* Read FAULT register. */
-int   AD5421_GetFault(ad5421_dev *dev);
+int32_t ad5421_get_fault(struct ad5421_dev *dev);
 /* Read the temperature from Fault register. */
-int   AD5421_GetTemp(ad5421_dev *dev);
+int32_t ad5421_get_temp(struct ad5421_dev *dev);
 /* Read VLoop-COM from Fault register. */
-float AD5421_GetVloop(ad5421_dev *dev);
+float ad5421_get_vloop(struct ad5421_dev *dev);
 /* Send command via SPI. */
-int   AD5421_Set(ad5421_dev *dev,
-		 int *iValue);
+int32_t ad5421_set(struct ad5421_dev *dev,
+		   int32_t *i_value);
 /* Receive value via SPI. */
-int   AD5421_Get(ad5421_dev *dev);
+int32_t ad5421_get(struct ad5421_dev *dev);
 /* Resets the AD5421 device. */
-void  AD5421_Reset(ad5421_dev *dev);
+void ad5421_reset(struct ad5421_dev *dev);
 
 #endif /* _AD5421_H_ */
