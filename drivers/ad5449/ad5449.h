@@ -39,54 +39,53 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 *******************************************************************************/
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef enum {
-    false,
-    true
-} bool_t;
+enum bool_t {
+	false,
+	true
+};
 
 /* Supported devices */
-typedef enum {
-    ID_AD5415,
-    ID_AD5426,
-    ID_AD5429,
-    ID_AD5432,
-    ID_AD5439,
-    ID_AD5443,
-    ID_AD5449,
-} AD5449_type_t;
+enum ad5449_type_t {
+	ID_AD5415,
+	ID_AD5426,
+	ID_AD5429,
+	ID_AD5432,
+	ID_AD5439,
+	ID_AD5443,
+	ID_AD5449,
+};
 
-typedef struct {
-    unsigned char num_channels;
-    unsigned char resolution;
-    bool_t has_ctrl;
-} ad5449_chip_info;
+struct ad5449_chip_info {
+	uint8_t num_channels;
+	uint8_t resolution;
+	enum bool_t has_ctrl;
+};
 
-typedef struct {
+struct ad5449_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
 	gpio_desc		*gpio_ldac;
 	gpio_desc		*gpio_clr;
 	/* Device Settings */
-	AD5449_type_t		act_device;
-	unsigned short		controlReg;
-} ad5449_dev;
+	enum ad5449_type_t		act_device;
+	uint16_t		control_reg;
+};
 
-typedef struct {
+struct ad5449_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_ldac;
 	int8_t		gpio_clr;
 	/* Device Settings */
-	AD5449_type_t	act_device;
-} ad5449_init_param;
+	enum ad5449_type_t	act_device;
+};
 
 /* Control Bits */
 #define AD5449_CTRL_NOP             0
@@ -153,50 +152,50 @@ typedef struct {
 /******************************************************************************/
 
 /* Initialize SPI and Initial Values for AD5449 Board. */
-char AD5449_Init(ad5449_dev **device,
-		 ad5449_init_param init_param);
+int8_t ad5449_init(struct ad5449_dev **device,
+		   struct ad5449_init_param init_param);
 
 /* Free the resources allocated by AD5449_Init(). */
-int32_t AD5449_remove(ad5449_dev *dev);
+int32_t ad5449_remove(struct ad5449_dev *dev);
 
 /* Write to shift register via SPI. */
-unsigned short AD5449_SetInputShiftReg(ad5449_dev *dev,
-				       unsigned short command,
-                                       unsigned short data);
+uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
+				    uint16_t command,
+				    uint16_t data);
 
 /* Load and updates the selected DAC with a given value. */
-void AD5449_LoadUpdateChannel(ad5449_dev *dev,
-			      unsigned char channel,
-			      unsigned short dacValue);
+void ad5449_load_update_channel(struct ad5449_dev *dev,
+				uint8_t channel,
+				uint16_t dac_value);
 
 /* Load selected DAC input register with a given value. */
-void AD5449_LoadChannel(ad5449_dev *dev,
-			unsigned char channel,
-			unsigned short dacValue);
+void ad5449_load_channel(struct ad5449_dev *dev,
+			 uint8_t channel,
+			 uint16_t dac_value);
 
 /* Read from the selected DAC register. */
-unsigned short AD5449_ReadbackChannel(ad5449_dev *dev,
-				      unsigned char channel);
+uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
+				 uint8_t channel);
 
 /* Update the DAC outputs (all channels). */
-void AD5449_UpdateAll(ad5449_dev *dev);
+void ad5449_update_all(struct ad5449_dev *dev);
 
 /* Load the DAC input registers. */
-void AD5449_LoadAll(ad5449_dev *dev,
-		    short dacValue);
+void ad5449_load_all(struct ad5449_dev *dev,
+		     int16_t dac_value);
 
 /* Set up the scale where to the output will be cleared on active CLR signal */
-void AD5449_ClearScaleSetup(ad5449_dev *dev,
-			    char type);
+void ad5449_clear_scale_setup(struct ad5449_dev *dev,
+			      int8_t type);
 
 /* Enable/disable the Daisy-Chain mode */
-void AD5449_DaisyChainSetup(ad5449_dev *dev,
-			    char value);
+void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
+			      int8_t value);
 
 /* Control the SDO output driver strength */
-void AD5449_SDOControl(ad5449_dev *dev,
-		       char controlBits);
+void ad5449_sdocontrol(struct ad5449_dev *dev,
+		       int8_t control_bits);
 
 /* Set up the active clock edge of the SPI interface */
-void AD5449_SCLKSetup(ad5449_dev *dev,
-		      char value);
+void ad5449_sclksetup(struct ad5449_dev *dev,
+		      int8_t value);

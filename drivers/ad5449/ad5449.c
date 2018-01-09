@@ -37,7 +37,6 @@
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
 * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 * DAMAGE.
-*
 ******************************************************************************/
 
 /*****************************************************************************/
@@ -63,48 +62,48 @@
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
 /*****************************************************************************/
-static const ad5449_chip_info chip_info[] = {
-    [ID_AD5415] = {
-        .num_channels = 2,
-        .resolution = 12,
-        .has_ctrl = true,
-    },
-    [ID_AD5426] = {
-        .num_channels = 1,
-        .resolution = 8,
-        .has_ctrl = false,
-    },
-    [ID_AD5429] = {
-        .num_channels = 2,
-        .resolution = 8,
-        .has_ctrl = true,
-    },
-    [ID_AD5432] = {
-        .num_channels = 1,
-        .resolution = 10,
-        .has_ctrl = false,
-    },
-    [ID_AD5439] = {
-        .num_channels = 2,
-        .resolution = 10,
-        .has_ctrl = true,
-    },
-    [ID_AD5443] = {
-        .num_channels = 1,
-        .resolution = 12,
-        .has_ctrl = false,
-    },
-    [ID_AD5449] = {
-        .num_channels = 2,
-        .resolution = 12,
-        .has_ctrl = true,
-    }
+static const struct ad5449_chip_info chip_info[] = {
+	[ID_AD5415] = {
+		.num_channels = 2,
+		.resolution = 12,
+		.has_ctrl = true,
+	},
+	[ID_AD5426] = {
+		.num_channels = 1,
+		.resolution = 8,
+		.has_ctrl = false,
+	},
+	[ID_AD5429] = {
+		.num_channels = 2,
+		.resolution = 8,
+		.has_ctrl = true,
+	},
+	[ID_AD5432] = {
+		.num_channels = 1,
+		.resolution = 10,
+		.has_ctrl = false,
+	},
+	[ID_AD5439] = {
+		.num_channels = 2,
+		.resolution = 10,
+		.has_ctrl = true,
+	},
+	[ID_AD5443] = {
+		.num_channels = 1,
+		.resolution = 12,
+		.has_ctrl = false,
+	},
+	[ID_AD5449] = {
+		.num_channels = 2,
+		.resolution = 12,
+		.has_ctrl = true,
+	}
 };
 
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for AD5449 Board.
  *
- * @param device - The device structure.
+ * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
@@ -112,61 +111,58 @@ static const ad5449_chip_info chip_info[] = {
  *                    Example: 0 - if initialization was successful;
  *                            -1 - if initialization was unsuccessful.
 ******************************************************************************/
-char AD5449_Init(ad5449_dev **device,
-		 ad5449_init_param init_param)
+int8_t ad5449_init(struct ad5449_dev **device,
+		   struct ad5449_init_param init_param)
 {
-	ad5449_dev *dev;
-    char status;
+	struct ad5449_dev *dev;
+	int8_t status;
 
-	dev = (ad5449_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5449_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-    dev->act_device = init_param.act_device;
+	dev->act_device = init_param.act_device;
 
-    /* Initialize SPI communication. */
+	/* Initialize SPI communication. */
 	status = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* GPIO */
 	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
 	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
 
-    /* Set GPIO pins. */
-    AD5449_LDAC_OUT;
-    AD5449_LDAC_LOW;
-    AD5449_CLR_OUT;
-    AD5449_CLR_HIGH;
+	/* Set GPIO pins. */
+	AD5449_LDAC_OUT;
+	AD5449_LDAC_LOW;
+	AD5449_CLR_OUT;
+	AD5449_CLR_HIGH;
 
-    /* Initialize device */
-    dev->controlReg = (AD5449_SDO_FULL << AD5449_SDO_BIT) | \
-		      (AD5449_DAISY_CHAIN_DIS << AD5449_DSY_BIT) | \
-		      (AD5449_ZERO_SCALE << AD5449_HCLR_BIT) | \
-		      (AD5449_CLOCK_NEGEDGE << AD5449_SCLK_BIT);
-    if(chip_info[dev->act_device].has_ctrl)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_REG,
-				dev->controlReg);
-    }
-    else
-    {
-        AD5449_DaisyChainSetup(dev,
-			       AD5449_DAISY_CHAIN_DIS);
-    }
+	/* Initialize device */
+	dev->control_reg = (AD5449_SDO_FULL << AD5449_SDO_BIT) | \
+			   (AD5449_DAISY_CHAIN_DIS << AD5449_DSY_BIT) | \
+			   (AD5449_ZERO_SCALE << AD5449_HCLR_BIT) | \
+			   (AD5449_CLOCK_NEGEDGE << AD5449_SCLK_BIT);
+	if(chip_info[dev->act_device].has_ctrl) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_REG,
+					   dev->control_reg);
+	} else {
+		ad5449_daisy_chain_setup(dev,
+					 AD5449_DAISY_CHAIN_DIS);
+	}
 
 	*device = dev;
 
-return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5449_Init().
+ * @brief Free the resources allocated by ad5449_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD5449_remove(ad5449_dev *dev)
+int32_t ad5449_remove(struct ad5449_dev *dev)
 {
 	int32_t ret;
 
@@ -189,95 +185,86 @@ int32_t AD5449_remove(ad5449_dev *dev)
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-unsigned short AD5449_SetInputShiftReg(ad5449_dev *dev,
-				       unsigned short command,
-                                       unsigned short data)
+uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
+				    uint16_t command,
+				    uint16_t data)
 {
-    unsigned short inputShiftReg = 0;
-    unsigned short readBack = 0;
-    unsigned char spiData[PKT_LENGTH] = {0, 0};
-    unsigned char data_offset = MAX_RESOLUTION - \
-                                chip_info[dev->act_device].resolution;
+	uint16_t input_shift_reg = 0;
+	uint16_t readback = 0;
+	uint8_t spi_data[PKT_LENGTH] = {0, 0};
+	uint8_t data_offset = MAX_RESOLUTION - \
+			      chip_info[dev->act_device].resolution;
 
-    if(command == AD5449_CTRL_REG)
-    {
-        inputShiftReg = ((command & CMD_MASK) << CMD_OFFSET) | \
-                         (data & DATA_MASK);
-    }
-    else
-    {
-        inputShiftReg = ((command & CMD_MASK) << CMD_OFFSET) | \
-                        ((data & DATA_MASK) << data_offset);
-    }
+	if(command == AD5449_CTRL_REG) {
+		input_shift_reg = ((command & CMD_MASK) << CMD_OFFSET) | \
+				  (data & DATA_MASK);
+	} else {
+		input_shift_reg = ((command & CMD_MASK) << CMD_OFFSET) | \
+				  ((data & DATA_MASK) << data_offset);
+	}
 
-    spiData[0] = (inputShiftReg & MSB_MASK) >> MSB_OFFSET;
-    spiData[1] = (inputShiftReg & LSB_MASK) >> LSB_OFFSET;
+	spi_data[0] = (input_shift_reg & MSB_MASK) >> MSB_OFFSET;
+	spi_data[1] = (input_shift_reg & LSB_MASK) >> LSB_OFFSET;
 
 	spi_write_and_read(dev->spi_desc,
-			   spiData,
+			   spi_data,
 			   PKT_LENGTH);
-    readBack = ((unsigned short)spiData[0] << MSB_OFFSET) | \
-               ((unsigned short)spiData[1] << LSB_OFFSET);
+	readback = ((uint16_t)spi_data[0] << MSB_OFFSET) | \
+		   ((uint16_t)spi_data[1] << LSB_OFFSET);
 
-	return readBack;
+	return readback;
 }
 
 /**************************************************************************//**
  * @brief Loads and updates the selected DAC with a given value.
  *
- * @param   dev      - The device structure.
- *          channel  - the chosen channel to write to.
+ * @param   dev       - The device structure.
+ *          channel   - the chosen channel to write to.
  *                      Example: AD5449_CH_A = 0;
  *                               AD5449_CH_B = 1.
- *          dacValue - desired value to be written in register.
+ *          dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5449_LoadUpdateChannel(ad5449_dev *dev,
-			      unsigned char channel,
-			      unsigned short dacValue)
+void ad5449_load_update_channel(struct ad5449_dev *dev,
+				uint8_t channel,
+				uint16_t dac_value)
 {
-    if(chip_info[dev->act_device].num_channels > 1)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_LOADUPDATE(channel),
-				dacValue);
-    }
-    else
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_LOADUPDATE(AD5449_CH_A),
-				dacValue);
-    }
+	if(chip_info[dev->act_device].num_channels > 1) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_LOADUPDATE(channel),
+					   dac_value);
+	} else {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_LOADUPDATE(AD5449_CH_A),
+					   dac_value);
+	}
 }
 
 /**************************************************************************//**
  * @brief Load selected DAC input register with a given value.
  *
- * @param   dev      - The device structure.
- *          channel  - the chosen channel to write to.
+ * @param   dev       - The device structure.
+ *          channel   - the chosen channel to write to.
  *                      Example: AD5449_CH_A = 0;
  *                               AD5449_CH_B = 1.
- *          dacValue - desired value to be written in register.
+ *          dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5449_LoadChannel(ad5449_dev *dev,
-			unsigned char channel,
-			unsigned short dacValue)
+void ad5449_load_channel(struct ad5449_dev *dev,
+			 uint8_t channel,
+			 uint16_t dac_value)
 {
-    if(chip_info[dev->act_device].num_channels > 1)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_LOAD(channel),
-				dacValue);
-    }
-    else
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_LOAD(AD5449_CH_A),
-				dacValue);
-    }
+	if(chip_info[dev->act_device].num_channels > 1) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_LOAD(channel),
+					   dac_value);
+	} else {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_LOAD(AD5449_CH_A),
+					   dac_value);
+	}
 }
 
 /**************************************************************************//**
@@ -290,30 +277,27 @@ void AD5449_LoadChannel(ad5449_dev *dev,
  *
  * @return  dacValue - value read from the register.
 ******************************************************************************/
-unsigned short AD5449_ReadbackChannel(ad5449_dev *dev,
-				      unsigned char channel)
+uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
+				 uint8_t channel)
 {
-    unsigned short dacValue = 0;
+	uint16_t dac_value = 0;
 
-    if(chip_info[dev->act_device].num_channels > 1)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_READBACK(channel),
-				0x0);
-        dacValue = AD5449_SetInputShiftReg(dev,
-					   AD5449_CTRL_NOP,
-					   0x0) & DATA_MASK;
-    }
-    else
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_READBACK(AD5449_CH_A),
-				0x0);
-        dacValue = AD5449_SetInputShiftReg(dev,
-					   AD5449_CTRL_NOP,
-					   0x0) & DATA_MASK;
-    }
-return dacValue;
+	if(chip_info[dev->act_device].num_channels > 1) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_READBACK(channel),
+					   0x0);
+		dac_value = ad5449_set_input_shift_reg(dev,
+						       AD5449_CTRL_NOP,
+						       0x0) & DATA_MASK;
+	} else {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_READBACK(AD5449_CH_A),
+					   0x0);
+		dac_value = ad5449_set_input_shift_reg(dev,
+						       AD5449_CTRL_NOP,
+						       0x0) & DATA_MASK;
+	}
+	return dac_value;
 }
 
 /**************************************************************************//**
@@ -324,34 +308,32 @@ return dacValue;
  *
  * @return None.
 ******************************************************************************/
-void AD5449_UpdateAll(ad5449_dev *dev)
+void ad5449_update_all(struct ad5449_dev *dev)
 {
-    if(chip_info[dev->act_device].num_channels > 1)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_UPDATEALL,
-				0x0);
-    }
+	if(chip_info[dev->act_device].num_channels > 1) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_UPDATEALL,
+					   0x0);
+	}
 }
 
 /**************************************************************************//**
  * @brief Load the DAC input registers. This function has a physical result
  *        just with devices with two channels
  *
- * @param dev      - The device structure.
- *        dacValue - desired value to be written in register.
+ * @param dev       - The device structure.
+ *        dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
-void AD5449_LoadAll(ad5449_dev *dev,
-		    short dacValue)
+void ad5449_load_all(struct ad5449_dev *dev,
+		     int16_t dac_value)
 {
-    if(chip_info[dev->act_device].num_channels > 1)
-    {
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_LOADALL,
-				dacValue);
-    }
+	if(chip_info[dev->act_device].num_channels > 1) {
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_LOADALL,
+					   dac_value);
+	}
 }
 
 /**************************************************************************//**
@@ -365,43 +347,34 @@ void AD5449_LoadAll(ad5449_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void AD5449_ClearScaleSetup(ad5449_dev *dev,
-			    char type)
+void ad5449_clear_scale_setup(struct ad5449_dev *dev,
+			      int8_t type)
 {
-    if(chip_info[dev->act_device].has_ctrl)
-    {
-        if(type == AD5449_ZERO_SCALE)
-        {
-            /* Reset the HCLR bit in the Control Register */
-            dev->controlReg &= ~AD5449_HCLR_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-        else if(type == AD5449_MID_SCALE)
-        {
-            /* Set the HCLR bit in the Control Register */
-            dev->controlReg |= AD5449_HCLR_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-    }
-    else
-    {
-        if(type == AD5449_ZERO_SCALE)
-        {
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_CLR_ZERO,
-				    0x0);
-        }
-        else if (type == AD5449_MID_SCALE)
-        {
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_CLR_MID,
-				    0x0);
-        }
-    }
+	if(chip_info[dev->act_device].has_ctrl) {
+		if(type == AD5449_ZERO_SCALE) {
+			/* Reset the HCLR bit in the Control Register */
+			dev->control_reg &= ~AD5449_HCLR_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		} else if(type == AD5449_MID_SCALE) {
+			/* Set the HCLR bit in the Control Register */
+			dev->control_reg |= AD5449_HCLR_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		}
+	} else {
+		if(type == AD5449_ZERO_SCALE) {
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_CLR_ZERO,
+						   0x0);
+		} else if (type == AD5449_MID_SCALE) {
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_CLR_MID,
+						   0x0);
+		}
+	}
 }
 
 /**************************************************************************//**
@@ -414,113 +387,96 @@ void AD5449_ClearScaleSetup(ad5449_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void AD5449_DaisyChainSetup(ad5449_dev *dev,
-			    char value)
+void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
+			      int8_t value)
 {
-    if(chip_info[dev->act_device].has_ctrl)
-    {
-        if(value == AD5449_DAISY_CHAIN_EN)
-        {
-            /* Set the DSY bit in the Control Register */
-            dev->controlReg |= AD5449_DSY_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-        else if(value == AD5449_DAISY_CHAIN_DIS)
-        {
-            /* Reset the DSY bit in the Control Register */
-            dev->controlReg &= ~AD5449_DSY_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-    }
-    else
-    {
-        /* Disable daisy chain mode */
-        if (value == AD5449_DAISY_CHAIN_DIS)
-        {
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_DAISY_CHAIN,
-				    0x0);
-        }
-    }
+	if(chip_info[dev->act_device].has_ctrl) {
+		if(value == AD5449_DAISY_CHAIN_EN) {
+			/* Set the DSY bit in the Control Register */
+			dev->control_reg |= AD5449_DSY_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		} else if(value == AD5449_DAISY_CHAIN_DIS) {
+			/* Reset the DSY bit in the Control Register */
+			dev->control_reg &= ~AD5449_DSY_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		}
+	} else {
+		/* Disable daisy chain mode */
+		if (value == AD5449_DAISY_CHAIN_DIS) {
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_DAISY_CHAIN,
+						   0x0);
+		}
+	}
 }
 
 /**************************************************************************//**
  * @brief Control the SDO output driver strength. This function is supported
  * by the devices : AD5415, AD5429, AD5439, AD5449
  *
- * @param  dev  - The device structure.
- *         type - target scale when making a clear command
+ * @param  dev          - The device structure.
+ *         control_bits - target scale when making a clear command
  *                Example: AD5449_SDO_FULL = Full SDO driver.
  *                         AD5449_SDO_WEAK = Weak SDO driver.
  *                         AD5449_SDO_OPEN_DRAIN = SDO configured as open drain
  *                         AD5449_SDO_DISABLE = Disable SDO output
  * @return None.
 ******************************************************************************/
-void AD5449_SDOControl(ad5449_dev *dev,
-		       char controlBits)
+void ad5449_sdocontrol(struct ad5449_dev *dev,
+		       int8_t control_bits)
 {
-    /* Check if the current device supports this functions */
-    if(chip_info[dev->act_device].has_ctrl)
-    {
-        /* Reset the SDO bits of the local Control Register */
-        dev->controlReg &= ~AD5449_SDO_MASK;
-        /* Set up the new SDO bits */
-        dev->controlReg |= (controlBits & TWO_BIT_MASK) << AD5449_SDO_BIT;
-        /* Send the new Control Register value to the device */
-        AD5449_SetInputShiftReg(dev,
-				AD5449_CTRL_REG,
-				dev->controlReg);
-    }
-    else /* Do Nothing! */
-    {
+	/* Check if the current device supports this functions */
+	if(chip_info[dev->act_device].has_ctrl) {
+		/* Reset the SDO bits of the local Control Register */
+		dev->control_reg &= ~AD5449_SDO_MASK;
+		/* Set up the new SDO bits */
+		dev->control_reg |= (control_bits & TWO_BIT_MASK) << AD5449_SDO_BIT;
+		/* Send the new Control Register value to the device */
+		ad5449_set_input_shift_reg(dev,
+					   AD5449_CTRL_REG,
+					   dev->control_reg);
+	} else { /* Do Nothing! */
 
-    }
+	}
 }
 
 /**************************************************************************//**
  * @brief Set up the active clock edge of the SPI interface
  *
- * @param  dev  - The device structure.
- *         type - target scale when making a clear command
+ * @param  dev   - The device structure.
+ *         value - target scale when making a clear command
  *                Example: AD5449_CLOCK_NEGEDGE = Falling edge. (Default)
  *                         AD5449_CLOCK_POSEDGE = Rising edge.
  *
  * @return None.
 ******************************************************************************/
-void AD5449_SCLKSetup(ad5449_dev *dev,
-		      char value)
+void ad5449_sclksetup(struct ad5449_dev *dev,
+		      int8_t value)
 {
-    if(chip_info[dev->act_device].has_ctrl)
-    {
-        if(value == AD5449_CLOCK_POSEDGE)
-        {
-            /* Set the SCLK bit in the Control Register */
-            dev->controlReg |= AD5449_SCLK_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-        else if(value == AD5449_CLOCK_NEGEDGE)
-        {
-            /* Reset the SCLK bit in the Control Register */
-            dev->controlReg &= ~AD5449_SCLK_MASK;
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_REG,
-				    dev->controlReg);
-        }
-    }
-    else
-    {
-        /* Clock data on rising edge */
-        if (value == AD5449_CLOCK_POSEDGE)
-        {
-            AD5449_SetInputShiftReg(dev,
-				    AD5449_CTRL_CLK_EDGE,
-				    0x0);
-        }
-    }
+	if(chip_info[dev->act_device].has_ctrl) {
+		if(value == AD5449_CLOCK_POSEDGE) {
+			/* Set the SCLK bit in the Control Register */
+			dev->control_reg |= AD5449_SCLK_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		} else if(value == AD5449_CLOCK_NEGEDGE) {
+			/* Reset the SCLK bit in the Control Register */
+			dev->control_reg &= ~AD5449_SCLK_MASK;
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_REG,
+						   dev->control_reg);
+		}
+	} else {
+		/* Clock data on rising edge */
+		if (value == AD5449_CLOCK_POSEDGE) {
+			ad5449_set_input_shift_reg(dev,
+						   AD5449_CTRL_CLK_EDGE,
+						   0x0);
+		}
+	}
 }
