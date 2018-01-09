@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -63,112 +62,107 @@
  *          Example: -1 - SPI peripheral was not initialized.
  *                    0 - SPI peripheral is initialized.
 *******************************************************************************/
- char AD5755_Init(ad5755_dev **device,
-		  ad5755_init_param init_param)
- {
-	 ad5755_dev *dev;
-    unsigned char status;
-    unsigned char channel = 0;
-    unsigned short dacControlBuff[4] = {0, 0, 0, 0};
+int8_t ad5755_init(struct ad5755_dev **device,
+		   struct ad5755_init_param init_param)
+{
+	struct ad5755_dev *dev;
+	uint8_t status;
+	uint8_t channel = 0;
+	uint16_t dac_control_buff[4] = {0, 0, 0, 0};
 
-	dev = (ad5755_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5755_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	 dev->pAD5755_st = &AD5755_st;
-	 dev->this_device = init_param.this_device;
+	dev->p_ad5755_st = &AD5755_st;
+	dev->this_device = init_param.this_device;
 
-	 /* GPIO */
-	 status = gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
-	 status |= gpio_get(&dev->gpio_rst, init_param.gpio_rst);
-	 status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
-	 status |= gpio_get(&dev->gpio_poc, init_param.gpio_poc);
+	/* GPIO */
+	status = gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
+	status |= gpio_get(&dev->gpio_rst, init_param.gpio_rst);
+	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_poc, init_param.gpio_poc);
 
-    /* GPIO configuration. */
-    AD5755_LDAC_OUT;
-    AD5755_LDAC_LOW;
-    AD5755_RESET_OUT;
-    AD5755_RESET_HIGH;
-    AD5755_CLEAR_OUT;
-    AD5755_CLEAR_LOW;
-    AD5755_POC_OUT;
-    AD5755_POC_LOW;
+	/* GPIO configuration. */
+	AD5755_LDAC_OUT;
+	AD5755_LDAC_LOW;
+	AD5755_RESET_OUT;
+	AD5755_RESET_HIGH;
+	AD5755_CLEAR_OUT;
+	AD5755_CLEAR_LOW;
+	AD5755_POC_OUT;
+	AD5755_POC_LOW;
 
-	 status |= spi_init(&dev->spi_desc, init_param.spi_init);
-    /* Device Setup. */
-    /* Configure the POC bit, STATREAD bit and ShtCcLim bit. */
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_MAIN,
-                               0,
-                               (dev->pAD5755_st->pocBit * AD5755_MAIN_POC) |
-                               (dev->pAD5755_st->statReadBit * AD5755_MAIN_STATREAD) |
-                               AD5755_MAIN_SHTCCTLIM(dev->pAD5755_st->shtCcLimBit));
+	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+	/* Device Setup. */
+	/* Configure the POC bit, STATREAD bit and ShtCcLim bit. */
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_MAIN,
+				     0,
+				     (dev->p_ad5755_st->poc_bit * AD5755_MAIN_POC) |
+				     (dev->p_ad5755_st->stat_readbit * AD5755_MAIN_STATREAD) |
+				     AD5755_MAIN_SHTCCTLIM(dev->p_ad5755_st->sht_cc_lim_bit));
 
-    AD5755_Software_Reset(dev);
-    mdelay(100);
-    /* DC-to-DC configuration. */
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_DC_DC,
-                               0,
-                               (dev->pAD5755_st->dcDcCompBit * AD5755_DC_DC_COMP) |
-                               (AD5755_DC_DC_FREQ(dev->pAD5755_st->dcDcFreqBit)) |
-                               (AD5755_DC_DC_PHASE(dev->pAD5755_st->dcDcPhaseBit)) |
-                               (AD5755_DC_DC_MAX_V(dev->pAD5755_st->dcDcMaxVBit)));
-    /* Configure the DAC control register on a per channel basis. */
-    for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++)
-    {
-        if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1))
-        {
-            dacControlBuff[channel] = AD5755_DAC_INT_ENABLE |
-                                      AD5755_DAC_CLR_EN |
-                                      dev->pAD5755_st->rsetBits[channel] |
-                                      AD5755_DAC_DC_DC |
-                                      dev->pAD5755_st->ovrngBits[channel] |
-                                      AD5755_DAC_R(AD5755_R_0_5_V);
-        }
-        else
-        {
-            dacControlBuff[channel] = AD5755_DAC_INT_ENABLE |
-                                      AD5755_DAC_CLR_EN |
-                                      dev->pAD5755_st->rsetBits[channel] |
-                                      AD5755_DAC_DC_DC |
-                                      dev->pAD5755_st->ovrngBits[channel] |
-                                      AD5755_DAC_R(AD5755_R_4_20_MA);
-        }
-        AD5755_SetControlRegisters(dev,
-				   AD5755_CREG_DAC,
-				   channel,
-				   dacControlBuff[channel]);
-    }
-    /* Allow at least 200us before enabling the channel output. */
-   mdelay(200);
-    /* Enable the channel output. */
-   for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++)
-   {
-        /* Write to each DAC data register*/
-        AD5755_SetRegisterValue(dev,
-				AD5755_DREG_WR_DAC,
-                                channel,
-                                0x0000);
-        AD5755_SetControlRegisters(dev,
-				   AD5755_CREG_DAC,
-                                   channel,
-                                   dacControlBuff[channel] | AD5755_DAC_OUTEN);
-    }
+	ad5755_software_reset(dev);
+	mdelay(100);
+	/* DC-to-DC configuration. */
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_DC_DC,
+				     0,
+				     (dev->p_ad5755_st->dc_dc_comp_bit * AD5755_DC_DC_COMP) |
+				     (AD5755_DC_DC_FREQ(dev->p_ad5755_st->dc_dc_freq_bit)) |
+				     (AD5755_DC_DC_PHASE(dev->p_ad5755_st->dc_dc_phase_bit)) |
+				     (AD5755_DC_DC_MAX_V(dev->p_ad5755_st->dc_dc_max_vbit)));
+	/* Configure the DAC control register on a per channel basis. */
+	for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
+		if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
+			dac_control_buff[channel] = AD5755_DAC_INT_ENABLE |
+						    AD5755_DAC_CLR_EN |
+						    dev->p_ad5755_st->rset_bits[channel] |
+						    AD5755_DAC_DC_DC |
+						    dev->p_ad5755_st->ovrng_bits[channel] |
+						    AD5755_DAC_R(AD5755_R_0_5_V);
+		} else {
+			dac_control_buff[channel] = AD5755_DAC_INT_ENABLE |
+						    AD5755_DAC_CLR_EN |
+						    dev->p_ad5755_st->rset_bits[channel] |
+						    AD5755_DAC_DC_DC |
+						    dev->p_ad5755_st->ovrng_bits[channel] |
+						    AD5755_DAC_R(AD5755_R_4_20_MA);
+		}
+		ad5755_set_control_registers(dev,
+					     AD5755_CREG_DAC,
+					     channel,
+					     dac_control_buff[channel]);
+	}
+	/* Allow at least 200us before enabling the channel output. */
+	mdelay(200);
+	/* Enable the channel output. */
+	for(channel = AD5755_DAC_A; channel <= AD5755_DAC_D; channel++) {
+		/* Write to each DAC data register*/
+		ad5755_set_register_value(dev,
+					  AD5755_DREG_WR_DAC,
+					  channel,
+					  0x0000);
+		ad5755_set_control_registers(dev,
+					     AD5755_CREG_DAC,
+					     channel,
+					     dac_control_buff[channel] | AD5755_DAC_OUTEN);
+	}
 
-	 *device = dev;
+	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5755_Init().
+ * @brief Free the resources allocated by ad5755_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t AD5755_remove(ad5755_dev *dev)
+int32_t ad5755_remove(struct ad5755_dev *dev)
 {
 	int32_t ret;
 
@@ -187,8 +181,8 @@ int32_t AD5755_remove(ad5755_dev *dev)
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
  *                          Example:
  *                           AD5755_RD_DATA_REG(x)
  *                           AD5755_RD_CTRL_REG(x)
@@ -203,60 +197,56 @@ int32_t AD5755_remove(ad5755_dev *dev)
  *
  * @return regValue - Value of the register.
 *******************************************************************************/
- long AD5755_GetRegisterValue(ad5755_dev *dev,
-			      unsigned char registerAddress)
- {
-    unsigned char buffer[4] = {0, 0, 0, 0};
-    unsigned long command = 0;
-    long regValue = 0;
-    unsigned char crc = 0;
+int32_t ad5755_get_register_value(struct ad5755_dev *dev,
+				  uint8_t register_address)
+{
+	uint8_t buffer[4] = {0, 0, 0, 0};
+	uint32_t command = 0;
+	int32_t reg_value = 0;
+	uint8_t crc = 0;
 
-    command = AD5755_ISR_READ |
-              AD5755_ISR_DUT_AD1(dev->pAD5755_st->pinAD1state) |
-              AD5755_ISR_DUT_AD0(dev->pAD5755_st->pinAD0state) |
-              AD5755_ISR_RD(registerAddress);
-    buffer[0] = (command & 0xFF0000) >> 16;
-    buffer[1] = (command & 0x00FF00) >> 8;
-    buffer[2] = (command & 0x0000FF) >> 0;
-    if(dev->pAD5755_st->enablePacketErrorCheck)
-    {
-        buffer[3] = AD5755_CheckCrc(buffer, 3);
-    }
-	 spi_write_and_read(dev->spi_desc,
-			    buffer,
-			    3 + dev->pAD5755_st->enablePacketErrorCheck);
-    command = AD5755_ISR_WRITE |
-              AD5755_ISR_DUT_AD1(dev->pAD5755_st->pinAD1state) |
-              AD5755_ISR_DUT_AD0(dev->pAD5755_st->pinAD0state) |
-              AD5755_ISR_NOP;
-    buffer[0] = (command & 0xFF0000) >> 16;
-    buffer[1] = (command & 0x00FF00) >> 8;
-    buffer[2] = (command & 0x0000FF) >> 0;
-    if(dev->pAD5755_st->enablePacketErrorCheck)
-    {
-        buffer[3] = AD5755_CheckCrc(buffer, 3);
-    }
-	 spi_write_and_read(dev->spi_desc,
-			    buffer,
-			    3 + dev->pAD5755_st->enablePacketErrorCheck);
-    regValue = ((unsigned short)buffer[1] << 8) + buffer[2];
-    /* Check the CRC. */
-    if(dev->pAD5755_st->enablePacketErrorCheck)
-    {
-        crc = AD5755_CheckCrc(&buffer[1], 3);
-        if(crc != AD5755_CRC_CHECK_CODE)
-        {
-            regValue = -1;
-        }
-    }
-return regValue;
+	command = AD5755_ISR_READ |
+		  AD5755_ISR_DUT_AD1(dev->p_ad5755_st->pin_ad1state) |
+		  AD5755_ISR_DUT_AD0(dev->p_ad5755_st->pin_ad0state) |
+		  AD5755_ISR_RD(register_address);
+	buffer[0] = (command & 0xFF0000) >> 16;
+	buffer[1] = (command & 0x00FF00) >> 8;
+	buffer[2] = (command & 0x0000FF) >> 0;
+	if(dev->p_ad5755_st->enable_packet_error_check) {
+		buffer[3] = ad5755_check_crc(buffer, 3);
+	}
+	spi_write_and_read(dev->spi_desc,
+			   buffer,
+			   3 + dev->p_ad5755_st->enable_packet_error_check);
+	command = AD5755_ISR_WRITE |
+		  AD5755_ISR_DUT_AD1(dev->p_ad5755_st->pin_ad1state) |
+		  AD5755_ISR_DUT_AD0(dev->p_ad5755_st->pin_ad0state) |
+		  AD5755_ISR_NOP;
+	buffer[0] = (command & 0xFF0000) >> 16;
+	buffer[1] = (command & 0x00FF00) >> 8;
+	buffer[2] = (command & 0x0000FF) >> 0;
+	if(dev->p_ad5755_st->enable_packet_error_check) {
+		buffer[3] = ad5755_check_crc(buffer, 3);
+	}
+	spi_write_and_read(dev->spi_desc,
+			   buffer,
+			   3 + dev->p_ad5755_st->enable_packet_error_check);
+	reg_value = ((uint16_t)buffer[1] << 8) + buffer[2];
+	/* Check the CRC. */
+	if(dev->p_ad5755_st->enable_packet_error_check) {
+		crc = ad5755_check_crc(&buffer[1], 3);
+		if(crc != AD5755_CRC_CHECK_CODE) {
+			reg_value = -1;
+		}
+	}
+	return reg_value;
 }
 
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
  *                          Example:
  *                          AD5755_DREG_WR_DAC
  *                          AD5755_DREG_WR_GAIN
@@ -266,52 +256,48 @@ return regValue;
  *                          AD5755_DREG_WR_CLR_CODE
  *                          AD5755_DREG_WR_CTRL_REG
  *
- * @param channel        -  Channel option.
+ * @param channel         -  Channel option.
  *                          Example: AD5755_DAC_A
  *                           AD5755_DAC_B
  *                           AD5755_DAC_C
  *                           AD5755_DAC_D
- * @param registerValue - Data value to write.
+ * @param register_value - Data value to write.
  *
  * @return None.
 *******************************************************************************/
- unsigned short AD5755_SetRegisterValue(ad5755_dev *dev,
-					unsigned char registerAddress,
-                                        unsigned char channel,
-                                        unsigned short registerValue)
- {
-    unsigned char buff[4] = {0, 0, 0, 0};
-    unsigned long command = 0;
-    unsigned short statusReg = 0;
+uint16_t ad5755_set_register_value(struct ad5755_dev *dev,
+				   uint8_t register_address,
+				   uint8_t channel,
+				   uint16_t register_value)
+{
+	uint8_t buff[4] = {0, 0, 0, 0};
+	uint32_t command = 0;
+	uint16_t status_reg = 0;
 
-    command = AD5755_ISR_WRITE |
-              AD5755_ISR_DUT_AD1(dev->pAD5755_st->pinAD1state) |
-              AD5755_ISR_DUT_AD0(dev->pAD5755_st->pinAD0state) |
-              AD5755_ISR_DREG(registerAddress) |
-              AD5755_ISR_DAC_AD(channel)|
-              AD5755_ISR_DATA(registerValue);
-    buff[0] = (command & 0xFF0000) >> 16;
-    buff[1] = (command & 0x00FF00) >> 8;
-    buff[2] = (command & 0x0000FF) >> 0;
-    if(dev->pAD5755_st->enablePacketErrorCheck)
-    {
-        buff[3] = AD5755_CheckCrc(buff, 3);
-    }
-    if(dev->pAD5755_st->statReadBit == 0)
-    {
-	    spi_write_and_read(dev->spi_desc,
-			       buff,
-			       3 + dev->pAD5755_st->enablePacketErrorCheck);
-    }
-    else
-    {
-	    spi_write_and_read(dev->spi_desc,
-			       buff,
-			       3 + dev->pAD5755_st->enablePacketErrorCheck);
-        statusReg = (buff[1] << 8) + buff[2];
-    }
+	command = AD5755_ISR_WRITE |
+		  AD5755_ISR_DUT_AD1(dev->p_ad5755_st->pin_ad1state) |
+		  AD5755_ISR_DUT_AD0(dev->p_ad5755_st->pin_ad0state) |
+		  AD5755_ISR_DREG(register_address) |
+		  AD5755_ISR_DAC_AD(channel)|
+		  AD5755_ISR_DATA(register_value);
+	buff[0] = (command & 0xFF0000) >> 16;
+	buff[1] = (command & 0x00FF00) >> 8;
+	buff[2] = (command & 0x0000FF) >> 0;
+	if(dev->p_ad5755_st->enable_packet_error_check) {
+		buff[3] = ad5755_check_crc(buff, 3);
+	}
+	if(dev->p_ad5755_st->stat_readbit == 0) {
+		spi_write_and_read(dev->spi_desc,
+				   buff,
+				   3 + dev->p_ad5755_st->enable_packet_error_check);
+	} else {
+		spi_write_and_read(dev->spi_desc,
+				   buff,
+				   3 + dev->p_ad5755_st->enable_packet_error_check);
+		status_reg = (buff[1] << 8) + buff[2];
+	}
 
-return statusReg;
+	return status_reg;
 }
 
 
@@ -322,22 +308,22 @@ return statusReg;
  *
  * @return None.
 *******************************************************************************/
- void AD5755_Software_Reset(ad5755_dev *dev)
- {
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_SOFT,
-			       0,
-			       AD5755_RESET_CODE);
- }
+void ad5755_software_reset(struct ad5755_dev *dev)
+{
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_SOFT,
+				     0,
+				     AD5755_RESET_CODE);
+}
 
 /***************************************************************************//**
  * @brief Enables/Disables watchdog timer and sets the timeout period.
  *
- * @param dev       - The device structure.
- * @param wtdEnable - Watchdog enable option.
+ * @param dev        - The device structure.
+ * @param wtd_enable - Watchdog enable option.
  *                    Example: 0 - disables watchdog timer
  *                             1 - enabled watchdog timer
- * @param timeout   - Timeout period for the watchdog timer.
+ * @param timeout    - Timeout period for the watchdog timer.
  *                    Example: AD5755_WD_5MS
  *                             AD5755_WD_10MS
  *                             AD5755_WD_100MS
@@ -345,23 +331,23 @@ return statusReg;
  *
  * @return None.
 *******************************************************************************/
- void AD5755_WatchDogSetup(ad5755_dev *dev,
-			   unsigned char wtdEnable,
-			   unsigned char timeout)
- {
-    unsigned long oldMainCtrlReg = 0;
-    unsigned long newMainCtrlReg = 0;
+void ad5755_watch_dog_setup(struct ad5755_dev *dev,
+			    uint8_t wtd_enable,
+			    uint8_t timeout)
+{
+	uint32_t old_main_ctrl_reg = 0;
+	uint32_t new_main_ctrl_reg = 0;
 
-    oldMainCtrlReg = AD5755_GetRegisterValue(dev,
-					     AD5755_RD_MAIN_CTRL_REG);
-    oldMainCtrlReg &= ~(AD5755_MAIN_EWD | AD5755_MAIN_WD(3));
-    newMainCtrlReg = oldMainCtrlReg |
-                    (AD5755_MAIN_EWD * wtdEnable) |
-                    AD5755_MAIN_WD(timeout);
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_MAIN,
-                               0,
-                               newMainCtrlReg);
+	old_main_ctrl_reg = ad5755_get_register_value(dev,
+			    AD5755_RD_MAIN_CTRL_REG);
+	old_main_ctrl_reg &= ~(AD5755_MAIN_EWD | AD5755_MAIN_WD(3));
+	new_main_ctrl_reg = old_main_ctrl_reg |
+			    (AD5755_MAIN_EWD * wtd_enable) |
+			    AD5755_MAIN_WD(timeout);
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_MAIN,
+				     0,
+				     new_main_ctrl_reg);
 }
 
 /***************************************************************************//**
@@ -371,19 +357,19 @@ return statusReg;
  *
  * @return None.
 *******************************************************************************/
-void AD5755_FeedWatchDogTimer(ad5755_dev *dev)
+void ad5755_feed_watch_dog_timer(struct ad5755_dev *dev)
 {
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_SOFT,
-			       0,
-			       AD5755_SPI_CODE);
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_SOFT,
+				     0,
+				     AD5755_SPI_CODE);
 }
 
 /***************************************************************************//**
  * @brief Configures one of the control registers.
  *
- * @param dev            - The device structure.
- * @param ctrlRegAddress - Control Register Address.
+ * @param dev              - The device structure.
+ * @param ctrl_reg_address - Control Register Address.
  *                         Example:
  *                         AD5755_CREG_SLEW
  *                         AD5755_CREG_MAIN
@@ -391,97 +377,92 @@ void AD5755_FeedWatchDogTimer(ad5755_dev *dev)
  *                         AD5755_CREG_DC_DC
  *                         AD5755_CREG_SOFT
  *
- * @param channel        - Channel option.
+ * @param channel          - Channel option.
  *                         Example: AD5755_DAC_A
  *                                  AD5755_DAC_B
  *                                  AD5755_DAC_C
  *                                  AD5755_DAC_D
- * @param regValue - Value to be written to the selected Control Register.
+ * @param reg_value - Value to be written to the selected Control Register.
  *
  * @return None.
 *******************************************************************************/
-void AD5755_SetControlRegisters(ad5755_dev *dev,
-				unsigned char  ctrlRegAddress,
-                                unsigned char  channel,
-                                unsigned short regValue)
+void ad5755_set_control_registers(struct ad5755_dev *dev,
+				  uint8_t  ctrl_reg_address,
+				  uint8_t  channel,
+				  uint16_t reg_value)
 {
-    AD5755_SetRegisterValue(dev,
-			    AD5755_DREG_WR_CTRL_REG,
-                            channel,
-                            AD5755_CTRL_CREG(ctrlRegAddress) | regValue);
+	ad5755_set_register_value(dev,
+				  AD5755_DREG_WR_CTRL_REG,
+				  channel,
+				  AD5755_CTRL_CREG(ctrl_reg_address) | reg_value);
 }
 
 /***************************************************************************//**
  * @brief Computes the CRC for a data buffer.
  *
- * @param data        - Data buffer.
- * @param bytesNumber - Data buffer size in bytes.
+ * @param data         - Data buffer.
+ * @param bytes_number - Data buffer size in bytes.
  *
  * @return The computed CRC.
 *******************************************************************************/
-unsigned char AD5755_CheckCrc(unsigned char* data,
-			      unsigned char bytesNumber)
+uint8_t ad5755_check_crc(uint8_t* data,
+			 uint8_t bytes_number)
 {
-  unsigned char crc  = 0x00;
-  unsigned char byte = 0;
-  unsigned char bit  = 0;
+	uint8_t crc = 0x00;
+	uint8_t byte = 0;
+	uint8_t bit = 0;
 
-  /* Calculates 8-Bit checksum with given polynomial. */
-  for(byte = 0; byte < bytesNumber; byte++)
-  {
-    crc ^= (data[byte]);
-    for(bit = 8; bit > 0; bit--)
-    {
-        if (crc & 0x80)
-        {
-            crc = (crc << 1) ^ AD5755_CRC_POLYNOMIAL;
-        }
-        else
-        {
-            crc = (crc << 1);
-        }
-    }
-}
+	/* Calculates 8-Bit checksum with given polynomial. */
+	for(byte = 0; byte < bytes_number; byte++) {
+		crc ^= (data[byte]);
+		for(bit = 8; bit > 0; bit--) {
+			if (crc & 0x80) {
+				crc = (crc << 1) ^ AD5755_CRC_POLYNOMIAL;
+			} else {
+				crc = (crc << 1);
+			}
+		}
+	}
 
-return crc;
+	return crc;
 }
 
 /***************************************************************************//**
  * @brief Allows power-up/down of the dc-to-dc converter, DAC and internal
  *        amplifiers for the selected channel.
  *
- * @param dev       - The device structure.
- * @param channel   - Channel option.
+ * @param dev        - The device structure.
+ * @param channel    - Channel option.
  *                    Example: AD5755_DAC_A
  *                             AD5755_DAC_B
  *                             AD5755_DAC_C
  *                             AD5755_DAC_D
- * @param pwrStatus - Power mode.
+ * @param pwr_status - Power mode.
  *                    Example: 0 - power-down the channel;
  *                             1 - power-up the channel.
  *
  * @return None.
 *******************************************************************************/
- void AD5755_SetChannelPower(ad5755_dev *dev,
-			     unsigned char channel,
-			     unsigned char pwrStatus)
- {
-    unsigned long  oldDacCtrlReg = 0;
-    unsigned long  newDacCtrlReg = 0;
+void ad5755_set_channel_power(struct ad5755_dev *dev,
+			      uint8_t channel,
+			      uint8_t pwr_status)
+{
+	uint32_t old_dac_ctrl_reg = 0;
+	uint32_t new_dac_ctrl_reg = 0;
 
-    /* Read the content of the DAC Control Register of the selected channel. */
-    oldDacCtrlReg = AD5755_GetRegisterValue(dev,
-					    AD5755_RD_CTRL_REG(channel));
-    oldDacCtrlReg &= ~(AD5755_DAC_INT_ENABLE |
-                       AD5755_DAC_DC_DC |
-                       AD5755_DAC_OUTEN);
-    newDacCtrlReg = oldDacCtrlReg | (pwrStatus * (AD5755_DAC_INT_ENABLE |
-                                                  AD5755_DAC_DC_DC |
-                                                  AD5755_DAC_OUTEN));
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_DAC,
-                               AD5755_DAC_A,
-                               newDacCtrlReg);
+	/* Read the content of the DAC Control Register of the selected channel. */
+	old_dac_ctrl_reg = ad5755_get_register_value(dev,
+			   AD5755_RD_CTRL_REG(channel));
+	old_dac_ctrl_reg &= ~(AD5755_DAC_INT_ENABLE |
+			      AD5755_DAC_DC_DC |
+			      AD5755_DAC_OUTEN);
+	new_dac_ctrl_reg = old_dac_ctrl_reg | (pwr_status * (AD5755_DAC_INT_ENABLE |
+					       AD5755_DAC_DC_DC |
+					       AD5755_DAC_OUTEN));
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_DAC,
+				     AD5755_DAC_A,
+				     new_dac_ctrl_reg);
 }
 
 /***************************************************************************//**
@@ -505,110 +486,109 @@ return crc;
  *
  * @return None.
 *******************************************************************************/
-void AD5755_SetChannelRange(ad5755_dev *dev,
-			    unsigned char channel,
-			    unsigned char range)
+void ad5755_set_channel_range(struct ad5755_dev *dev,
+			      uint8_t channel,
+			      uint8_t range)
 {
-    unsigned short outputCode = 0x0000;
-    unsigned long  oldDacCtrlReg = 0;
-    unsigned long  newDacCtrlReg = 0;
+	uint16_t output_code = 0x0000;
+	uint32_t old_dac_ctrl_reg = 0;
+	uint32_t new_dac_ctrl_reg = 0;
 
-    /* Read the content of the DAC Control Register of the selected channel. */
-    oldDacCtrlReg = AD5755_GetRegisterValue(dev,
-					    AD5755_RD_CTRL_REG(channel));
-    /* Clear the bits that will be modified by this function. */
-    oldDacCtrlReg &= ~(AD5755_DAC_INT_ENABLE |
-                       AD5755_DAC_OUTEN |
-                       AD5755_DAC_DC_DC |
-                       AD5755_DAC_R(7));
-    /* Select the output code before changing the range. */
-    if((range == AD5755_R_M5_P5_V) || (range == AD5755_R_M10_P10_V))
-    {
-        outputCode = 0x8000;
-    }
-    /* Set the output code to zero or midscale. */
-    AD5755_SetRegisterValue(dev,
-			    AD5755_DREG_WR_DAC,
-			    channel,
-			    outputCode);
-    /* Set range. */
-    newDacCtrlReg = oldDacCtrlReg |
-                    AD5755_DAC_INT_ENABLE |
-                    AD5755_DAC_DC_DC |
-                    AD5755_DAC_R(range);
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_DAC,
-			       channel,
-			       newDacCtrlReg);
-    /* Set the output code to zero or midscale. */
-    AD5755_SetRegisterValue(dev,
-			    AD5755_DREG_WR_DAC,
-			    channel,
-			    outputCode);
-    mdelay(200);
-    /* Enable the output of the channel. */
-    newDacCtrlReg |= AD5755_DAC_OUTEN;
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_DAC,
-			       channel,
-			       newDacCtrlReg);
+	/* Read the content of the DAC Control Register of the selected channel. */
+	old_dac_ctrl_reg = ad5755_get_register_value(dev,
+			   AD5755_RD_CTRL_REG(channel));
+	/* Clear the bits that will be modified by this function. */
+	old_dac_ctrl_reg &= ~(AD5755_DAC_INT_ENABLE |
+			      AD5755_DAC_OUTEN |
+			      AD5755_DAC_DC_DC |
+			      AD5755_DAC_R(7));
+	/* Select the output code before changing the range. */
+	if((range == AD5755_R_M5_P5_V) || (range == AD5755_R_M10_P10_V)) {
+		output_code = 0x8000;
+	}
+	/* Set the output code to zero or midscale. */
+	ad5755_set_register_value(dev,
+				  AD5755_DREG_WR_DAC,
+				  channel,
+				  output_code);
+	/* Set range. */
+	new_dac_ctrl_reg = old_dac_ctrl_reg |
+			   AD5755_DAC_INT_ENABLE |
+			   AD5755_DAC_DC_DC |
+			   AD5755_DAC_R(range);
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_DAC,
+				     channel,
+				     new_dac_ctrl_reg);
+	/* Set the output code to zero or midscale. */
+	ad5755_set_register_value(dev,
+				  AD5755_DREG_WR_DAC,
+				  channel,
+				  output_code);
+	mdelay(200);
+	/* Enable the output of the channel. */
+	new_dac_ctrl_reg |= AD5755_DAC_OUTEN;
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_DAC,
+				     channel,
+				     new_dac_ctrl_reg);
 }
 
 /***************************************************************************//**
  * @brief Selects if the channel clears when CLEAR pin is activated.
  *
- * @param dev     - The device structure.
- * @param channel - Channel option.
+ * @param dev      - The device structure.
+ * @param channel  - Channel option.
  *                  Example: AD5755_DAC_A
  *                           AD5755_DAC_B
  *                           AD5755_DAC_C
  *                           AD5755_DAC_D
- * @param clearEn - Clear Enable option.
+ * @param clear_en - Clear Enable option.
  *                  Example:
  *                   1 - channel clears when the part is cleared;
  *                   0 - channel does not clear when the part is cleared.
  *
  * @return None.
 *******************************************************************************/
-void AD5755_ChannelClearEnable(ad5755_dev *dev,
-			       unsigned char channel,
-			       unsigned char clearEn)
+void ad5755_channel_clear_enable(struct ad5755_dev *dev,
+				 uint8_t channel,
+				 uint8_t clear_en)
 {
-    unsigned long  oldDacCtrlReg = 0;
-    unsigned long  newDacCtrlReg = 0;
+	uint32_t old_dac_ctrl_reg = 0;
+	uint32_t new_dac_ctrl_reg = 0;
 
-    /* Read the content of the DAC Control Register of the selected channel. */
-    oldDacCtrlReg = AD5755_GetRegisterValue(dev,
-					    AD5755_RD_CTRL_REG(channel));
-    /* Clear the CLR_EN bit. */
-    oldDacCtrlReg &= ~(AD5755_DAC_CLR_EN);
-    newDacCtrlReg |= oldDacCtrlReg | (clearEn * AD5755_DAC_CLR_EN);
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_DAC,
-			       channel,
-			       newDacCtrlReg);
+	/* Read the content of the DAC Control Register of the selected channel. */
+	old_dac_ctrl_reg = ad5755_get_register_value(dev,
+			   AD5755_RD_CTRL_REG(channel));
+	/* Clear the CLR_EN bit. */
+	old_dac_ctrl_reg &= ~(AD5755_DAC_CLR_EN);
+	new_dac_ctrl_reg |= old_dac_ctrl_reg | (clear_en * AD5755_DAC_CLR_EN);
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_DAC,
+				     channel,
+				     new_dac_ctrl_reg);
 }
 
 /***************************************************************************//**
  * @brief Configures the Digital Slew Rate Control.
  *
- * @param dev      - The device structure.
- * @param channel  - Channel option.
+ * @param dev       - The device structure.
+ * @param channel   - Channel option.
  *                   Example: AD5755_DAC_A
  *                            AD5755_DAC_B
  *                            AD5755_DAC_C
  *                            AD5755_DAC_D
- * @param srEn     - Enable/Disable the Slew Rate Control.
+ * @param sr_en     - Enable/Disable the Slew Rate Control.
  *                   Example: 0 - disable feature;
  *                            1 - enable feature.
- * @param updtFreq - Update Clock Frequency(Hz).
+ * @param updt_freq - Update Clock Frequency(Hz).
  *                   Example: AD5755_SR_CLK_64K
  *                            AD5755_SR_CLK_32k
  *                            ...
  *                            AD5755_SR_CLK_8
  *                            AD5755_SR_CLK_4
  *                            AD5755_SR_CLK_0_5
- * @param stepSize - Step Size (LSBs).
+ * @param step_size - Step Size (LSBs).
  *                   Example: AD5755_STEP_1
  *                            AD5755_STEP_2
  *                            ...
@@ -617,18 +597,18 @@ void AD5755_ChannelClearEnable(ad5755_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void AD5755_SlewRateCtrl(ad5755_dev *dev,
-			 char channel,
-			 char srEn,
-			 char updtFreq,
-			 char stepSize)
+void ad5755_slew_rate_ctrl(struct ad5755_dev *dev,
+			   int8_t channel,
+			   int8_t sr_en,
+			   int8_t updt_freq,
+			   int8_t step_size)
 {
-    AD5755_SetControlRegisters(dev,
-			       AD5755_CREG_SLEW,
-                               channel,
-                               srEn * (AD5755_SLEW_SREN) |
-                               AD5755_SLEW_SR_CLOCK(updtFreq) |
-                               AD5755_SLEW_SR_STEP(stepSize));
+	ad5755_set_control_registers(dev,
+				     AD5755_CREG_SLEW,
+				     channel,
+				     sr_en * (AD5755_SLEW_SREN) |
+				     AD5755_SLEW_SR_CLOCK(updt_freq) |
+				     AD5755_SLEW_SR_STEP(step_size));
 }
 
 /***************************************************************************//**
@@ -644,178 +624,158 @@ void AD5755_SlewRateCtrl(ad5755_dev *dev,
  *
  * @return The actual voltage value that can be outputted by the channel.
 *******************************************************************************/
-float AD5755_SetVoltage(ad5755_dev *dev,
-			unsigned char channel,
-			float voltage)
+float ad5755_set_voltage(struct ad5755_dev *dev,
+			 uint8_t channel,
+			 float voltage)
 {
-    unsigned long offset      = 0;
-    unsigned long gain        = 0;
-    unsigned long dacVal      = 0;
-    unsigned long code        = 0;
-    unsigned char range       = 0;
-    unsigned char resolution  = 0;
-    unsigned long rangeOffset = 0;
-    float         vRef        = 0;
-    float         realVoltage = 0;
+	uint32_t offset = 0;
+	uint32_t gain = 0;
+	uint32_t dac_val = 0;
+	uint32_t code = 0;
+	uint8_t range = 0;
+	uint8_t resolution = 0;
+	uint32_t range_offset = 0;
+	float v_ref = 0;
+	float real_voltage = 0;
 
-    if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1))
-    {
-        /* Get the offset, gain and range of the selected channel. */
-        offset = AD5755_GetRegisterValue(dev,
-					 AD5755_RD_OFFSET_REG(channel));
-        gain = AD5755_GetRegisterValue(dev,
-				       AD5755_RD_GAIN_REG(channel));
-        range = AD5755_GetRegisterValue(dev,
-					AD5755_RD_CTRL_REG(channel)) & 0x7;
-        switch(range)
-        {
-            case AD5755_R_0_5_V :
-            {
-                rangeOffset = 0;
-                vRef = 5.0;
-                resolution = 16;
-                break;
-            }
-            case AD5755_R_0_10_V :
-            {
-                rangeOffset = 0;
-                vRef = 10.0;
-                resolution = 16;
-                break;
-            }
-            case AD5755_R_M5_P5_V :
-            {
-                rangeOffset = 0x8000;
-                vRef = 5.0;
-                resolution = 15;
-                break;
-            }
-            case AD5755_R_M10_P10_V :
-            {
-                rangeOffset = 0x8000;
-                vRef = 10.0;
-                resolution = 15;
-                break;
-            }
-            default :
-            {
-                rangeOffset = 0;
-                vRef = 0;
-                resolution = 0;
-                break;
-            }
-        }
-        /* Compute the binary code from the users voltage value. */
-        code = (long)(voltage * (1l << resolution) / vRef) + rangeOffset;
-        if(code > 0xFFFF)
-        {
-            code = 0xFFFF;
-        }
-        /* Offset and Gain are used to obtain the correct value to be written
-         to the DAC register in order to output the voltage desired by the user.
-        */
-        if((code + (1l << 15) - offset) > 0)    // Avoid negative values
-        {
-            dacVal = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
-        }
-        else
-        {
-            dacVal = 0;
-        }
+	if((dev->this_device == ID_AD5755) || (dev->this_device == ID_AD5755_1)) {
+		/* Get the offset, gain and range of the selected channel. */
+		offset = ad5755_get_register_value(dev,
+						   AD5755_RD_OFFSET_REG(channel));
+		gain = ad5755_get_register_value(dev,
+						 AD5755_RD_GAIN_REG(channel));
+		range = ad5755_get_register_value(dev,
+						  AD5755_RD_CTRL_REG(channel)) & 0x7;
+		switch(range) {
+		case AD5755_R_0_5_V : {
+			range_offset = 0;
+			v_ref = 5.0;
+			resolution = 16;
+			break;
+		}
+		case AD5755_R_0_10_V : {
+			range_offset = 0;
+			v_ref = 10.0;
+			resolution = 16;
+			break;
+		}
+		case AD5755_R_M5_P5_V : {
+			range_offset = 0x8000;
+			v_ref = 5.0;
+			resolution = 15;
+			break;
+		}
+		case AD5755_R_M10_P10_V : {
+			range_offset = 0x8000;
+			v_ref = 10.0;
+			resolution = 15;
+			break;
+		}
+		default : {
+			range_offset = 0;
+			v_ref = 0;
+			resolution = 0;
+			break;
+		}
+		}
+		/* Compute the binary code from the users voltage value. */
+		code = (int32_t)(voltage * (1l << resolution) / v_ref) + range_offset;
+		if(code > 0xFFFF) {
+			code = 0xFFFF;
+		}
+		/* Offset and Gain are used to obtain the correct value to be written
+		 to the DAC register in order to output the voltage desired by the user.
+		*/
+		if((code + (1l << 15) - offset) > 0) {  // Avoid negative values
+			dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
+		} else {
+			dac_val = 0;
+		}
 
-        /* Write to the Data Register of the DAC. */
-        AD5755_SetRegisterValue(dev,
-				AD5755_DREG_WR_DAC,
-                                channel,
-                                dacVal);
-        realVoltage = ((long)(code - rangeOffset) * vRef) / (1l << resolution);
-    }
-return realVoltage;
+		/* Write to the Data Register of the DAC. */
+		ad5755_set_register_value(dev,
+					  AD5755_DREG_WR_DAC,
+					  channel,
+					  dac_val);
+		real_voltage = ((int32_t)(code - range_offset) * v_ref) / (1l << resolution);
+	}
+	return real_voltage;
 }
 
 /***************************************************************************//**
  * @brief Sets the output current of a channel.
  *
- * @param dev       - The device structure.
- * @param channel   - Channel option.
+ * @param dev        - The device structure.
+ * @param channel    - Channel option.
  *                    Example: AD5755_DAC_A
  *                             AD5755_DAC_B
  *                             AD5755_DAC_C
  *                             AD5755_DAC_D
- * @param mACurrent - Value to be outputted by the DAC(milliampere).
+ * @param m_acurrent - Value to be outputted by the DAC(milliampere).
  *
  * @return The actual current value that can be outputted by the channel.
 *******************************************************************************/
-float AD5755_SetCurrent(ad5755_dev *dev,
-			unsigned char channel,
-			float mACurrent)
+float ad5755_set_current(struct ad5755_dev *dev,
+			 uint8_t channel,
+			 float m_acurrent)
 {
-    long  offset      = 0;
-    long  gain        = 0;
-    long  range       = 0;
-    long  dacVal      = 0;
-    long  code        = 0;
-    char  rangeOffset = 0;
-    float iRef        = 0;
-    float realCurrent = 0;
+	int32_t offset = 0;
+	int32_t gain = 0;
+	int32_t range = 0;
+	int32_t dac_val = 0;
+	int32_t code = 0;
+	int8_t range_offset = 0;
+	float i_ref = 0;
+	float real_current = 0;
 
-    /* Get the offset, gain and range of the selected channel. */
-    offset = AD5755_GetRegisterValue(dev,
-				     AD5755_RD_OFFSET_REG(channel));
-    gain = AD5755_GetRegisterValue(dev,
-				   AD5755_RD_GAIN_REG(channel));
-    range = AD5755_GetRegisterValue(dev,
-				    AD5755_RD_CTRL_REG(channel)) & 0x7;
-    switch(range)
-    {
-        case AD5755_R_4_20_MA :
-        {
-            iRef = 16.0;        // mA
-            rangeOffset = 4;    // mA
-            break;
-        }
-        case AD5755_R_0_20_MA :
-        {
-            iRef = 20.0;        // mA
-            rangeOffset = 0;    // mA
-            break;
-        }
-        case AD5755_R_0_24_MA :
-        {
-            iRef = 24.0;        // mA
-            rangeOffset = 0;    // mA
-            break;
-        }
-        default :
-        {
-            iRef = 1;
-            rangeOffset = 0;
-            break;
-        }
-    }
-    /* Compute the binary code from the value(mA) provided by user. */
-        code = (long)((mACurrent - rangeOffset) * (1l << 16) / iRef);
-        if(code > 0xFFFF)
-        {
-            code = 0xFFFF;
-        }
-    /* Offset and Gain are used to obtain the correct value to be written to the
-       DAC register in order to output the current desired by the user. */
-    if((code + (1l << 15) - offset) > 0)    // Avoid negative values
-    {
-        dacVal = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
-    }
-    else
-    {
-        dacVal = 0;
-    }
-    /* Write to the Data Register of the DAC. */
-    AD5755_SetRegisterValue(dev,
-			    AD5755_DREG_WR_DAC,
-                            channel,
-                            dacVal);
+	/* Get the offset, gain and range of the selected channel. */
+	offset = ad5755_get_register_value(dev,
+					   AD5755_RD_OFFSET_REG(channel));
+	gain = ad5755_get_register_value(dev,
+					 AD5755_RD_GAIN_REG(channel));
+	range = ad5755_get_register_value(dev,
+					  AD5755_RD_CTRL_REG(channel)) & 0x7;
+	switch(range) {
+	case AD5755_R_4_20_MA : {
+		i_ref = 16.0;        // mA
+		range_offset = 4;    // mA
+		break;
+	}
+	case AD5755_R_0_20_MA : {
+		i_ref = 20.0;        // mA
+		range_offset = 0;    // mA
+		break;
+	}
+	case AD5755_R_0_24_MA : {
+		i_ref = 24.0;        // mA
+		range_offset = 0;    // mA
+		break;
+	}
+	default : {
+		i_ref = 1;
+		range_offset = 0;
+		break;
+	}
+	}
+	/* Compute the binary code from the value(mA) provided by user. */
+	code = (int32_t)((m_acurrent - range_offset) * (1l << 16) / i_ref);
+	if(code > 0xFFFF) {
+		code = 0xFFFF;
+	}
+	/* Offset and Gain are used to obtain the correct value to be written to the
+	   DAC register in order to output the current desired by the user. */
+	if((code + (1l << 15) - offset) > 0) {  // Avoid negative values
+		dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
+	} else {
+		dac_val = 0;
+	}
+	/* Write to the Data Register of the DAC. */
+	ad5755_set_register_value(dev,
+				  AD5755_DREG_WR_DAC,
+				  channel,
+				  dac_val);
 
-    realCurrent = (code * iRef / (float)(1l << 16)) + rangeOffset;
+	real_current = (code * i_ref / (float)(1l << 16)) + range_offset;
 
-    return realCurrent;
+	return real_current;
 }
