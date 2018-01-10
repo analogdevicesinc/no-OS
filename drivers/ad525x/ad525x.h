@@ -38,7 +38,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 ******************************************************************************/
 #ifndef __AD525X_H__
 #define __AD525X_H__
@@ -134,35 +133,35 @@
 /******************************************************************************/
 
 /* Custom boolean type */
-typedef enum {
-    false,
-    true
-} Bool_t;
+enum bool_t {
+	false,
+	true
+};
 
 /* Supported devices */
-typedef enum {
-    ID_AD5232,
-    ID_AD5235,
-    ID_ADN2850,
-    ID_AD5252,
-    ID_AD5251,
-    ID_AD5254,
-    ID_AD5253,
-} AD525X_type_t;
+enum ad525_x_type_t {
+	ID_AD5232,
+	ID_AD5235,
+	ID_ADN2850,
+	ID_AD5252,
+	ID_AD5251,
+	ID_AD5254,
+	ID_AD5253,
+};
 
 /* Communication types */
-typedef enum {
-    SPI,
-    I2C
-} CommType_t;
+enum comm_type_t {
+	SPI,
+	I2C
+};
 
-typedef struct {
-    unsigned char num_channels;
-    CommType_t comm_type;
-    unsigned short num_position;
-} ad525x_chip_info;
+struct ad525x_chip_info {
+	uint8_t num_channels;
+	enum comm_type_t comm_type;
+	uint16_t num_position;
+};
 
-typedef struct {
+struct ad525x_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* SPI */
@@ -173,10 +172,10 @@ typedef struct {
 	gpio_desc	*gpio_ready;
 	gpio_desc	*gpio_wpbf;
 	/* Device Settings */
-	AD525X_type_t	this_device;
-} ad525x_dev;
+	enum ad525_x_type_t	this_device;
+};
 
-typedef struct {
+struct ad525x_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* SPI */
@@ -187,40 +186,40 @@ typedef struct {
 	int8_t		gpio_ready;
 	int8_t		gpio_wpbf;
 	/* Device Settings */
-	AD525X_type_t	this_device;
-} ad525x_init_param;
+	enum ad525_x_type_t	this_device;
+};
 
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char AD525X_Init(ad525x_dev **device,
-		 ad525x_init_param init_param);
+int8_t ad525x_init(struct ad525x_dev **device,
+		   struct ad525x_init_param init_param);
 
-/* Free the resources allocated by AD525X_Init(). */
-int32_t ad525x_remove(ad525x_dev *dev);
+/* Free the resources allocated by ad525x_init(). */
+int32_t ad525x_remove(struct ad525x_dev *dev);
 
 /* Read data from the EEMEM */
-unsigned short AD525X_ReadMem(ad525x_dev *dev,
-                              unsigned char address);
+uint16_t ad525x_read_mem(struct ad525x_dev *dev,
+			 uint8_t address);
 
 /* Write data to EEMEM */
-void AD525X_WriteMem(ad525x_dev *dev,
-                     unsigned char address,
-                     unsigned short data);
+void ad525x_write_mem(struct ad525x_dev *dev,
+		      uint8_t address,
+		      uint16_t data);
 
 /* Read the value of the RDAC register */
-unsigned short AD525X_ReadRdac(ad525x_dev *dev,
-                               unsigned char address);
+uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
+			  uint8_t address);
 
 /* Write the value of the RDAC register */
-void AD525X_WriteRdac(ad525x_dev *dev,
-                      unsigned char address,
-                      unsigned short data);
+void ad525x_write_rdac(struct ad525x_dev *dev,
+		       uint8_t address,
+		       uint16_t data);
 
 /* Write quick commands to the device */
-void AD525X_WriteCommand(ad525x_dev *dev,
-                         unsigned char command,
-                         unsigned char address);
+void ad525x_write_command(struct ad525x_dev *dev,
+			  uint8_t command,
+			  uint8_t address);
 
 #endif // __AD525X_H__
