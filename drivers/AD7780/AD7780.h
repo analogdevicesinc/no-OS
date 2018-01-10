@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD7780_H__
 #define __AD7780_H__
@@ -90,25 +87,25 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7780_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_pdrst;
-	gpio_desc		*gpio_miso;
-	gpio_desc		*gpio_filter;
-	gpio_desc		*gpio_gain;
-} ad7780_dev;
+	gpio_desc	*gpio_pdrst;
+	gpio_desc	*gpio_miso;
+	gpio_desc	*gpio_filter;
+	gpio_desc	*gpio_gain;
+};
 
-typedef struct {
+struct ad7780_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_pdrst;
-	int8_t		gpio_miso;
-	int8_t		gpio_filter;
-	int8_t		gpio_gain;
-} ad7780_init_param;
+	int8_t	gpio_pdrst;
+	int8_t	gpio_miso;
+	int8_t	gpio_filter;
+	int8_t	gpio_gain;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -116,22 +113,22 @@ typedef struct {
 
 /*! Initializes the communication peripheral and checks if the device is
 present. */
-char AD7780_Init(ad7780_dev **device,
-		 ad7780_init_param init_param);
+int8_t ad7780_init(struct ad7780_dev **device,
+		   struct ad7780_init_param init_param);
 
-/*! Free the resources allocated by AD7780_Init(). */
-int32_t ad7780_remove(ad7780_dev *dev);
+/*! Free the resources allocated by ad7780_init(). */
+int32_t ad7780_remove(struct ad7780_dev *dev);
 
 /*! Waits for DOUT/RDY pin to go low. */
-char AD7780_WaitRdyGoLow(ad7780_dev *dev);
+int8_t ad7780_wait_rdy_go_low(struct ad7780_dev *dev);
 
 /*! Reads a 24-bit sample from the ADC. */
-long AD7780_ReadSample(ad7780_dev *dev,
-		       unsigned char* pStatus);
+int32_t ad7780_read_sample(struct ad7780_dev *dev,
+			   uint8_t* p_status);
 
 /*! Converts the 24-bit raw value to volts. */
-float AD7780_ConvertToVoltage(unsigned long rawSample,
-			      float vRef,
-			      unsigned char gain);
+float ad7780_convert_to_voltage(uint32_t raw_sample,
+				float v_ref,
+				uint8_t gain);
 
 #endif /* __AD7780_H__ */
