@@ -36,7 +36,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 *******************************************************************************/
 #ifndef _ADF4157_H_
 #define _ADF4157_H_
@@ -174,69 +173,69 @@
 /******************************************************************************/
 /**************************** Types Declarations ******************************/
 /******************************************************************************/
-typedef struct {
-        unsigned long       clkin;
-        unsigned char       ref_doubler_en;
-        unsigned char       ref_div2_en;
-        unsigned long       r0_user_settings;
-        unsigned long       r2_user_settings;
-        unsigned long       r3_user_settings;
-        unsigned long       r4_user_settings;
-} ADF4157_platform_data;
+struct adf4157_platform_data {
+	uint32_t	clkin;
+	uint8_t		ref_doubler_en;
+	uint8_t		ref_div2_en;
+	uint32_t	r0_user_settings;
+	uint32_t	r2_user_settings;
+	uint32_t	r3_user_settings;
+	uint32_t	r4_user_settings;
+};
 
-typedef struct {
-        ADF4157_platform_data   *pdata;
-        unsigned long       fpfd;               /* Phase Frequency Detector */
-        unsigned short      r_cnt;              /* R-counter */
-        unsigned long       r0_fract;           /* Fractional value */
-        unsigned long       r0_int;             /* Integer value */
-        unsigned long       r2_mod;             /* Modulus value */
-        float               channel_spacing;    /* Channel spacing */
-        unsigned long       reg_val[5];         /* Actual register value */
-} ADF4157_state;
+struct adf4157_state {
+	struct adf4157_platform_data	*pdata;
+	uint32_t			fpfd;               /* Phase Frequency Detector */
+	uint16_t			r_cnt;              /* R-counter */
+	uint32_t			r0_fract;           /* Fractional value */
+	uint32_t			r0_int;             /* Integer value */
+	uint32_t			r2_mod;             /* Modulus value */
+	float				channel_spacing;    /* Channel spacing */
+	uint32_t			reg_val[5];         /* Actual register value */
+};
 
-typedef struct {
+struct adf4157_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_le;
-	gpio_desc		*gpio_ce;
+	gpio_desc	*gpio_le;
+	gpio_desc	*gpio_ce;
 	/* Device Settings */
-	ADF4157_state adf4157_st;
-} ADF4157_dev;
+	struct		adf4157_state adf4157_st;
+};
 
-typedef struct {
+struct adf4157_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_le;
 	int8_t		gpio_ce;
-} ADF4157_init_param;
+};
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
 /* Initialize the SPI communication with the device. */
-char ADF4157_Init(ADF4157_dev **device,
-		  ADF4157_init_param init_param);
+int8_t adf4157_init(struct adf4157_dev **device,
+		    struct adf4157_init_param init_param);
 
-/* Free the resources allocated by ADF4157_Init(). */
-int32_t ADF4157_remove(ADF4157_dev *dev);
+/* Free the resources allocated by adf4157_init(). */
+int32_t adf4157_remove(struct adf4157_dev *dev);
 
 /* Transmits 32 bits on SPI. */
-char ADF4157_Set(ADF4157_dev *dev,
-		 unsigned long value);
+int8_t adf4157_set(struct adf4157_dev *dev,
+		   uint32_t value);
 
 /* Increases the R counter value until the PFD frequency is smaller than
 ADF4157_MAX_FREQ_PFD. */
-long ADF4157_tune_r_cnt(ADF4157_dev *dev,
-			long r_cnt);
+int32_t adf4157_tune_r_cnt(struct adf4157_dev *dev,
+			   int32_t r_cnt);
 
 /* Computes the greatest common divider of two numbers. */
-unsigned long gcd(unsigned long x, unsigned long y);
+uint32_t gcd(uint32_t x, uint32_t y);
 
 /* Sets the ADF4157 output frequency. */
-double adf4157_set_freq(ADF4157_dev *dev,
+double adf4157_set_freq(struct adf4157_dev *dev,
 			double freq);
 
 #endif /* _ADF4157_H_ */

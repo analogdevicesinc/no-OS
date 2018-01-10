@@ -50,15 +50,14 @@
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-static ADF4157_platform_data adf4157_pdata_lpc =
-{
-    10000000,                   //clkin
-    0,                          //ref_doubler_en
-    0,                          //ref_div2_en
-    ADF4157_INT_VAL(23),        //r0_user_settings
-    0,                          //r2_user_settings
-    ADF4157_PD_POL(1),          //r3_user_settings
-    0,                          //r4_user_settings
+static struct adf4157_platform_data adf4157_pdata_lpc = {
+	10000000,                   //clkin
+	0,                          //ref_doubler_en
+	0,                          //ref_div2_en
+	ADF4157_INT_VAL(23),        //r0_user_settings
+	0,                          //r2_user_settings
+	ADF4157_PD_POL(1),          //r3_user_settings
+	0,                          //r4_user_settings
 };
 
 #endif // __AD4157_CFG_H__
