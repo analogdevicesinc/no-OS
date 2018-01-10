@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __AD74XX_H__
@@ -58,7 +55,7 @@
 /******************************************************************************/
 
 /* Supported devices */
-typedef enum {
+enum ad74xx_type {
 	ID_AD7466  = 12,
 	ID_AD7467  = 10,
 	ID_AD7468  = 8,
@@ -70,51 +67,51 @@ typedef enum {
 	ID_AD7478  = 8,
 	ID_AD7478A = 8,
 	ID_AD7495  = 12
-} ad74xx_type;
+};
 
-typedef struct {
+struct ad74xx_dev {
 	/* SPI */
-	spi_desc	*spi_desc;
+	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc	*gpio_cs;
+	gpio_desc		*gpio_cs;
 	/* Device Settings */
-	char		deviceBitsNumber;
-	ad74xx_type	partNumber;
-} ad74xx_dev;
+	int8_t			device_bits_number;
+	enum ad74xx_type	part_number;
+};
 
-typedef struct {
+struct ad74xx_init_param {
 	/* SPI */
-	spi_init_param	spi_init;
+	spi_init_param		spi_init;
 	/* GPIO */
-	uint8_t		gpio_cs;
+	uint8_t			gpio_cs;
 	/* Device Settings */
-	char		deviceBitsNumber;
-	ad74xx_type	partNumber;
-} ad74xx_init_param;
+	int8_t			device_bits_number;
+	enum ad74xx_type	part_number;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes device. */
-char AD74xx_Init(ad74xx_dev **device,
-		 ad74xx_init_param init_param);
+int8_t ad74xx_init(struct ad74xx_dev **device,
+		   struct ad74xx_init_param init_param);
 
 /*! Free the resources allocated by AD74xx_Init(). */
-int32_t AD74xx_remove(ad74xx_dev *dev);
+int32_t ad74xx_remove(struct ad74xx_dev *dev);
 
 /*! Powers down the device. */
-void AD74xx_PowerDown(ad74xx_dev *dev);
+void ad74xx_power_down(struct ad74xx_dev *dev);
 
 /*! Powers up the device by performing a dummy read. */
-void AD74xx_PowerUp(ad74xx_dev *dev);
+void ad74xx_power_up(struct ad74xx_dev *dev);
 
 /*! Reads the conversion value. */
-unsigned short AD74xx_GetRegisterValue(ad74xx_dev *dev);
+uint16_t ad74xx_get_register_value(struct ad74xx_dev *dev);
 
 /*! Converts a raw sample to volts. */
-float AD74xx_ConvertToVolts(ad74xx_dev *dev,
-			    unsigned short rawValue,
-			    float vRef);
+float ad74xx_convert_to_volts(struct ad74xx_dev *dev,
+			      uint16_t raw_value,
+			      float v_ref);
 
 #endif /* __AD74XX_H__ */
