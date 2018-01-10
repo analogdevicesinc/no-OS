@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD799x.h"    // AD799x definitions.
+#include "ad799x.h"    // AD799x definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
