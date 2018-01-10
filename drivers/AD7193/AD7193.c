@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -66,19 +63,19 @@
  *                         0 - SPI peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-char AD7193_Init(ad7193_dev **device,
-		    ad7193_init_param init_param)
+int8_t ad7193_init(struct ad7193_dev **device,
+		   struct ad7193_init_param init_param)
 {
-	ad7193_dev *dev;
-    char          status = 0;
-    unsigned char regVal = 0;
+	struct ad7193_dev *dev;
+	int8_t status = 0;
+	uint8_t reg_val = 0;
 
-	dev = (ad7193_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7193_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	dev->currentPolarity = init_param.currentPolarity;
-	dev->currentGain = init_param.currentGain;
+	dev->current_polarity = init_param.current_polarity;
+	dev->current_gain = init_param.current_gain;
 
 	/* SPI */
 	status = spi_init(&dev->spi_desc, init_param.spi_init);
@@ -89,32 +86,31 @@ char AD7193_Init(ad7193_dev **device,
 
 	if (dev->gpio_cs)
 		status |= gpio_direction_output(dev->gpio_cs,
-					     GPIO_HIGH);
+						GPIO_HIGH);
 	if (dev->gpio_miso)
 		status |= gpio_direction_input(dev->gpio_miso);
 
-    regVal = AD7193_GetRegisterValue(dev,
-				     AD7193_REG_ID,
-				     1,
-				     1);
-    if((regVal & AD7193_ID_MASK) != ID_AD7193)
-    {
-        status = -1;
-    }
+	reg_val = ad7193_get_register_value(dev,
+					    AD7193_REG_ID,
+					    1,
+					    1);
+	if((reg_val & AD7193_ID_MASK) != ID_AD7193) {
+		status = -1;
+	}
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD7193_Init().
+ * @brief Free the resources allocated by ad7193_init().
  *
  * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD7193_remove(ad7193_dev *dev)
+int32_t ad7193_remove(struct ad7193_dev *dev)
 {
 	int32_t status;
 
@@ -131,71 +127,69 @@ int32_t AD7193_remove(ad7193_dev *dev)
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
- * @param registerValue   - Data value to write.
- * @param bytesNumber     - Number of bytes to be written.
- * @param modifyCS        - Allows Chip Select to be modified.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
+ * @param register_value   - Data value to write.
+ * @param bytes_number     - Number of bytes to be written.
+ * @param modify_cs        - Allows Chip Select to be modified.
  *
  * @return none.
 *******************************************************************************/
-void AD7193_SetRegisterValue(ad7193_dev *dev,
-			     unsigned char registerAddress,
-                             unsigned long registerValue,
-                             unsigned char bytesNumber,
-			     unsigned char modifyCS)
+void ad7193_set_register_value(struct ad7193_dev *dev,
+			       uint8_t register_address,
+			       uint32_t register_value,
+			       uint8_t bytes_number,
+			       uint8_t modify_cs)
 {
-    unsigned char writeCommand[5] = {0, 0, 0, 0, 0};
-    unsigned char* dataPointer    = (unsigned char*)&registerValue;
-    unsigned char bytesNr         = bytesNumber;
+	uint8_t write_command[5] = {0, 0, 0, 0, 0};
+	uint8_t* data_pointer    = (uint8_t*)&register_value;
+	uint8_t bytes_nr         = bytes_number;
 
-    writeCommand[0] = AD7193_COMM_WRITE |
-                      AD7193_COMM_ADDR(registerAddress);
-    while(bytesNr > 0)
-    {
-        writeCommand[bytesNr] = *dataPointer;
-        dataPointer ++;
-        bytesNr --;
-    }
-	if (modifyCS)
+	write_command[0] = AD7193_COMM_WRITE |
+			   AD7193_COMM_ADDR(register_address);
+	while(bytes_nr > 0) {
+		write_command[bytes_nr] = *data_pointer;
+		data_pointer ++;
+		bytes_nr --;
+	}
+	if (modify_cs)
 		AD7193_CS_LOW;
-	spi_write_and_read(dev->spi_desc, writeCommand, bytesNumber + 1);
-	if (modifyCS)
+	spi_write_and_read(dev->spi_desc, write_command, bytes_number + 1);
+	if (modify_cs)
 		AD7193_CS_HIGH;
 }
 
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
- * @param bytesNumber     - Number of bytes that will be read.
- * @param modifyCS        - Allows Chip Select to be modified.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
+ * @param bytes_number     - Number of bytes that will be read.
+ * @param modify_cs        - Allows Chip Select to be modified.
  *
- * @return buffer         - Value of the register.
+ * @return buffer          - Value of the register.
 *******************************************************************************/
-unsigned long AD7193_GetRegisterValue(ad7193_dev *dev,
-				      unsigned char registerAddress,
-                                      unsigned char bytesNumber,
-				      unsigned char modifyCS)
+uint32_t ad7193_get_register_value(struct ad7193_dev *dev,
+				   uint8_t register_address,
+				   uint8_t bytes_number,
+				   uint8_t modify_cs)
 {
-    unsigned char registerWord[5] = {0, 0, 0, 0, 0};
-    unsigned long buffer          = 0x0;
-    unsigned char i               = 0;
+	uint8_t register_word[5] = {0, 0, 0, 0, 0};
+	uint32_t buffer = 0x0;
+	uint8_t i = 0;
 
-    registerWord[0] = AD7193_COMM_READ |
-                      AD7193_COMM_ADDR(registerAddress);
-	if (modifyCS)
+	register_word[0] = AD7193_COMM_READ |
+			   AD7193_COMM_ADDR(register_address);
+	if (modify_cs)
 		AD7193_CS_LOW;
-	spi_write_and_read(dev->spi_desc, registerWord, bytesNumber + 1);
-	if (modifyCS)
+	spi_write_and_read(dev->spi_desc, register_word, bytes_number + 1);
+	if (modify_cs)
 		AD7193_CS_HIGH;
-    for(i = 1; i < bytesNumber + 1; i++)
-    {
-        buffer = (buffer << 8) + registerWord[i];
-    }
+	for(i = 1; i < bytes_number + 1; i++) {
+		buffer = (buffer << 8) + register_word[i];
+	}
 
-    return buffer;
+	return buffer;
 }
 
 /***************************************************************************//**
@@ -205,48 +199,48 @@ unsigned long AD7193_GetRegisterValue(ad7193_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD7193_Reset(ad7193_dev *dev)
+void ad7193_reset(struct ad7193_dev *dev)
 {
-    unsigned char registerWord[6] = {0, 0, 0, 0, 0, 0};
+	uint8_t register_word[6] = {0, 0, 0, 0, 0, 0};
 
-    registerWord[0] = 0xFF;
-    registerWord[1] = 0xFF;
-    registerWord[2] = 0xFF;
-    registerWord[3] = 0xFF;
-    registerWord[4] = 0xFF;
-    registerWord[5] = 0xFF;
-	spi_write_and_read(dev->spi_desc, registerWord, 6);
+	register_word[0] = 0xFF;
+	register_word[1] = 0xFF;
+	register_word[2] = 0xFF;
+	register_word[3] = 0xFF;
+	register_word[4] = 0xFF;
+	register_word[5] = 0xFF;
+	spi_write_and_read(dev->spi_desc, register_word, 6);
 }
 
 /***************************************************************************//**
  * @brief Set device to idle or power-down.
  *
- * @param dev     - The device structure.
- * @param pwrMode - Selects idle mode or power-down mode.
+ * @param dev      - The device structure.
+ * @param pwr_mode - Selects idle mode or power-down mode.
  *                  Example: 0 - power-down
  *                           1 - idle
  *
  * @return none.
 *******************************************************************************/
-void AD7193_SetPower(ad7193_dev *dev,
-		     unsigned char pwrMode)
+void ad7193_set_power(struct ad7193_dev *dev,
+		      uint8_t pwr_mode)
 {
-     unsigned long oldPwrMode = 0x0;
-     unsigned long newPwrMode = 0x0;
+	uint32_t old_pwr_mode = 0x0;
+	uint32_t new_pwr_mode = 0x0;
 
-     oldPwrMode  = AD7193_GetRegisterValue(dev,
-					   AD7193_REG_MODE,
-					   3,
-					   1);
-     oldPwrMode &= ~(AD7193_MODE_SEL(0x7));
-     newPwrMode  = oldPwrMode |
-                   AD7193_MODE_SEL((pwrMode * (AD7193_MODE_IDLE)) |
-                                  (!pwrMode * (AD7193_MODE_PWRDN)));
-     AD7193_SetRegisterValue(dev,
-			     AD7193_REG_MODE,
-			     newPwrMode,
-			     3,
-			     1);
+	old_pwr_mode  = ad7193_get_register_value(dev,
+			AD7193_REG_MODE,
+			3,
+			1);
+	old_pwr_mode &= ~(AD7193_MODE_SEL(0x7));
+	new_pwr_mode  = old_pwr_mode |
+			AD7193_MODE_SEL((pwr_mode * (AD7193_MODE_IDLE)) |
+					(!pwr_mode * (AD7193_MODE_PWRDN)));
+	ad7193_set_register_value(dev,
+				  AD7193_REG_MODE,
+				  new_pwr_mode,
+				  3,
+				  1);
 }
 
 /***************************************************************************//**
@@ -254,12 +248,12 @@ void AD7193_SetPower(ad7193_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD7193_WaitRdyGoLow(ad7193_dev *dev)
+void ad7193_wait_rdy_go_low(struct ad7193_dev *dev)
 {
 	uint8_t wait = 1;
 
-    while (wait)
-        AD7193_RDY_STATE(wait);
+	while (wait)
+		AD7193_RDY_STATE(wait);
 }
 
 /***************************************************************************//**
@@ -274,23 +268,23 @@ void AD7193_WaitRdyGoLow(ad7193_dev *dev)
  *
  * @return none.
 *******************************************************************************/
-void AD7193_ChannelSelect(ad7193_dev *dev,
-			  unsigned short channel)
+void ad7193_channel_select(struct ad7193_dev *dev,
+			   uint16_t channel)
 {
-    unsigned long oldRegValue = 0x0;
-    unsigned long newRegValue = 0x0;
+	uint32_t old_reg_value = 0x0;
+	uint32_t new_reg_value = 0x0;
 
-    oldRegValue  = AD7193_GetRegisterValue(dev,
-					   AD7193_REG_CONF,
-					   3,
-					   1);
-    oldRegValue &= ~(AD7193_CONF_CHAN(0x3FF));
-    newRegValue  = oldRegValue | AD7193_CONF_CHAN(1 << channel);
-    AD7193_SetRegisterValue(dev,
-			    AD7193_REG_CONF,
-			    newRegValue,
-			    3,
-			    1);
+	old_reg_value  = ad7193_get_register_value(dev,
+			 AD7193_REG_CONF,
+			 3,
+			 1);
+	old_reg_value &= ~(AD7193_CONF_CHAN(0x3FF));
+	new_reg_value  = old_reg_value | AD7193_CONF_CHAN(1 << channel);
+	ad7193_set_register_value(dev,
+				  AD7193_REG_CONF,
+				  new_reg_value,
+				  3,
+				  1);
 }
 
 /***************************************************************************//**
@@ -302,29 +296,29 @@ void AD7193_ChannelSelect(ad7193_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD7193_Calibrate(ad7193_dev *dev,
-		      unsigned char mode,
-		      unsigned char channel)
+void ad7193_calibrate(struct ad7193_dev *dev,
+		      uint8_t mode,
+		      uint8_t channel)
 {
-    unsigned long oldRegValue = 0x0;
-    unsigned long newRegValue = 0x0;
+	uint32_t old_reg_value = 0x0;
+	uint32_t new_reg_value = 0x0;
 
-    AD7193_ChannelSelect(dev,
-			 channel);
-    oldRegValue  = AD7193_GetRegisterValue(dev,
-					   AD7193_REG_MODE,
-					   3,
-					   1);
-    oldRegValue &= ~AD7193_MODE_SEL(0x7);
-    newRegValue  = oldRegValue | AD7193_MODE_SEL(mode);
-    AD7193_CS_LOW;
-    AD7193_SetRegisterValue(dev,
-			    AD7193_REG_MODE,
-			    newRegValue,
-			    3,
-			    0); // CS is not modified.
-    AD7193_WaitRdyGoLow(dev);
-    AD7193_CS_HIGH;
+	ad7193_channel_select(dev,
+			      channel);
+	old_reg_value  = ad7193_get_register_value(dev,
+			 AD7193_REG_MODE,
+			 3,
+			 1);
+	old_reg_value &= ~AD7193_MODE_SEL(0x7);
+	new_reg_value  = old_reg_value | AD7193_MODE_SEL(mode);
+	AD7193_CS_LOW;
+	ad7193_set_register_value(dev,
+				  AD7193_REG_MODE,
+				  new_reg_value,
+				  3,
+				  0); // CS is not modified.
+	ad7193_wait_rdy_go_low(dev);
+	AD7193_CS_HIGH;
 }
 
 /***************************************************************************//**
@@ -339,30 +333,30 @@ void AD7193_Calibrate(ad7193_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD7193_RangeSetup(ad7193_dev *dev,
-		       unsigned char polarity,
-		       unsigned char range)
+void ad7193_range_setup(struct ad7193_dev *dev,
+			uint8_t polarity,
+			uint8_t range)
 {
-    unsigned long oldRegValue = 0x0;
-    unsigned long newRegValue = 0x0;
+	uint32_t old_reg_value = 0x0;
+	uint32_t new_reg_value = 0x0;
 
-    oldRegValue  = AD7193_GetRegisterValue(dev,
-					   AD7193_REG_CONF,
-					   3,
-					   1);
-    oldRegValue &= ~(AD7193_CONF_UNIPOLAR |
-                     AD7193_CONF_GAIN(0x7));
-    newRegValue  = oldRegValue |
-                  (polarity * AD7193_CONF_UNIPOLAR) |
-                   AD7193_CONF_GAIN(range);
-    AD7193_SetRegisterValue(dev,
-			    AD7193_REG_CONF,
-			    newRegValue,
-			    3,
-			    1);
-    /* Store the last settings regarding polarity and gain. */
-    dev->currentPolarity = polarity;
-    dev->currentGain     = 1 << range;
+	old_reg_value  = ad7193_get_register_value(dev,
+			 AD7193_REG_CONF,
+			 3,
+			 1);
+	old_reg_value &= ~(AD7193_CONF_UNIPOLAR |
+			   AD7193_CONF_GAIN(0x7));
+	new_reg_value  = old_reg_value |
+			 (polarity * AD7193_CONF_UNIPOLAR) |
+			 AD7193_CONF_GAIN(range);
+	ad7193_set_register_value(dev,
+				  AD7193_REG_CONF,
+				  new_reg_value,
+				  3,
+				  1);
+	/* Store the last settings regarding polarity and gain. */
+	dev->current_polarity = polarity;
+	dev->current_gain     = 1 << range;
 }
 
 /***************************************************************************//**
@@ -372,28 +366,28 @@ void AD7193_RangeSetup(ad7193_dev *dev,
  *
  * @return regData - Result of a single analog-to-digital conversion.
 *******************************************************************************/
-unsigned long AD7193_SingleConversion(ad7193_dev *dev)
+uint32_t ad7193_single_conversion(struct ad7193_dev *dev)
 {
-    unsigned long command = 0x0;
-    unsigned long regData = 0x0;
+	uint32_t command = 0x0;
+	uint32_t reg_data = 0x0;
 
-    command = AD7193_MODE_SEL(AD7193_MODE_SINGLE) |
-              AD7193_MODE_CLKSRC(AD7193_CLK_INT) |
-              AD7193_MODE_RATE(0x060);
-    AD7193_CS_LOW;
-    AD7193_SetRegisterValue(dev,
-			    AD7193_REG_MODE,
-			    command,
-			    3,
-			    0); // CS is not modified.
-    AD7193_WaitRdyGoLow(dev);
-    regData = AD7193_GetRegisterValue(dev,
-				      AD7193_REG_DATA,
-				      3,
-				      0); // CS is not modified.
-    AD7193_CS_HIGH;
+	command = AD7193_MODE_SEL(AD7193_MODE_SINGLE) |
+		  AD7193_MODE_CLKSRC(AD7193_CLK_INT) |
+		  AD7193_MODE_RATE(0x060);
+	AD7193_CS_LOW;
+	ad7193_set_register_value(dev,
+				  AD7193_REG_MODE,
+				  command,
+				  3,
+				  0); // CS is not modified.
+	ad7193_wait_rdy_go_low(dev);
+	reg_data = ad7193_get_register_value(dev,
+					     AD7193_REG_DATA,
+					     3,
+					     0); // CS is not modified.
+	AD7193_CS_HIGH;
 
-    return regData;
+	return reg_data;
 }
 
 /***************************************************************************//**
@@ -403,34 +397,33 @@ unsigned long AD7193_SingleConversion(ad7193_dev *dev)
  *
  * @return samplesAverage - The average of the conversion results.
 *******************************************************************************/
-unsigned long AD7193_ContinuousReadAvg(ad7193_dev *dev,
-				       unsigned char sampleNumber)
+uint32_t ad7193_continuous_read_avg(struct ad7193_dev *dev,
+				    uint8_t sample_number)
 {
-    unsigned long samplesAverage = 0;
-    unsigned long command        = 0;
-    unsigned char count          = 0;
+	uint32_t samples_average = 0;
+	uint32_t command = 0;
+	uint8_t count = 0;
 
-    command = AD7193_MODE_SEL(AD7193_MODE_CONT) |
-              AD7193_MODE_CLKSRC(AD7193_CLK_INT) |
-              AD7193_MODE_RATE(0x060);
-    AD7193_CS_LOW;
-    AD7193_SetRegisterValue(dev,
-			    AD7193_REG_MODE,
-			    command,
-			    3,
-			    0); // CS is not modified.
-    for(count = 0; count < sampleNumber; count++)
-    {
-        AD7193_WaitRdyGoLow(dev);
-        samplesAverage += AD7193_GetRegisterValue(dev,
-						  AD7193_REG_DATA,
-						  3,
-						  0); // CS is not modified.
-    }
-    AD7193_CS_HIGH;
-    samplesAverage = samplesAverage / sampleNumber;
+	command = AD7193_MODE_SEL(AD7193_MODE_CONT) |
+		  AD7193_MODE_CLKSRC(AD7193_CLK_INT) |
+		  AD7193_MODE_RATE(0x060);
+	AD7193_CS_LOW;
+	ad7193_set_register_value(dev,
+				  AD7193_REG_MODE,
+				  command,
+				  3,
+				  0); // CS is not modified.
+	for(count = 0; count < sample_number; count++) {
+		ad7193_wait_rdy_go_low(dev);
+		samples_average += ad7193_get_register_value(dev,
+				   AD7193_REG_DATA,
+				   3,
+				   0); // CS is not modified.
+	}
+	AD7193_CS_HIGH;
+	samples_average = samples_average / sample_number;
 
-    return samplesAverage;
+	return samples_average;
 }
 
 /***************************************************************************//**
@@ -440,47 +433,44 @@ unsigned long AD7193_ContinuousReadAvg(ad7193_dev *dev,
  *
  * @return temperature - Celsius degrees.
 *******************************************************************************/
-float AD7193_TemperatureRead(ad7193_dev *dev)
+float ad7193_temperature_read(struct ad7193_dev *dev)
 {
-    unsigned long dataReg     = 0;
-    float temperature = 0;
+	uint32_t data_reg = 0;
+	float temperature = 0;
 
-    AD7193_RangeSetup(dev,
-		      0,
-		      AD7193_CONF_GAIN_1); // Bipolar operation, 0 Gain.
-    AD7193_ChannelSelect(dev,
-			 AD7193_CH_TEMP);
-    dataReg      = AD7193_SingleConversion(dev);
-    dataReg     -= 0x800000;
-    temperature  = (float) dataReg / 2815;   // Kelvin Temperature
-    temperature -= 273;                      // Celsius Temperature
+	ad7193_range_setup(dev,
+			   0,
+			   AD7193_CONF_GAIN_1); // Bipolar operation, 0 Gain.
+	ad7193_channel_select(dev,
+			      AD7193_CH_TEMP);
+	data_reg      = ad7193_single_conversion(dev);
+	data_reg     -= 0x800000;
+	temperature  = (float) data_reg / 2815;   // Kelvin Temperature
+	temperature -= 273;                      // Celsius Temperature
 
-    return temperature;
+	return temperature;
 }
 
 /***************************************************************************//**
  * @brief Converts 24-bit raw data to milivolts.
  *
- * @param dev      - The device structure.
- * @param rawData  - 24-bit data sample.
- * @param vRef     - The value of the voltage reference used by the device.
+ * @param dev       - The device structure.
+ * @param raw_data  - 24-bit data sample.
+ * @param v_ref     - The value of the voltage reference used by the device.
  *
  * @return voltage - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD7193_ConvertToVolts(ad7193_dev *dev,
-			    unsigned long rawData,
-			    float vRef)
+float ad7193_convert_to_volts(struct ad7193_dev *dev,
+			      uint32_t raw_data,
+			      float v_ref)
 {
-    float voltage = 0;
+	float voltage = 0;
 
-    if(dev->currentPolarity == 0 )   // Bipolar mode
-    {
-        voltage = 1000 * (((float)rawData / (1ul << 23)) - 1) * vRef / dev->currentGain;
-    }
-    else                        // Unipolar mode
-    {
-        voltage = 1000 * ((float)rawData * vRef) / (1ul << 24) / dev->currentGain;
-    }
+	if(dev->current_polarity == 0 ) { // Bipolar mode
+		voltage = 1000 * (((float)raw_data / (1ul << 23)) - 1) * v_ref / dev->current_gain;
+	} else {                    // Unipolar mode
+		voltage = 1000 * ((float)raw_data * v_ref) / (1ul << 24) / dev->current_gain;
+	}
 
-    return voltage;
+	return voltage;
 }

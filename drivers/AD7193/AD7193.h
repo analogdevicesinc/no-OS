@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __AD7193_H__
@@ -89,10 +86,10 @@
 #define AD7193_STAT_CH0         (1 << 0) // Channel 0.
 
 /* Mode Register Bit Designations (AD7193_REG_MODE) */
-#define AD7193_MODE_SEL(x)      (((unsigned long)(x) & 0x7) << 21) // Operation Mode Select.
-#define AD7193_MODE_DAT_STA     ((unsigned long)1 << 20)           // Status Register transmission.
-#define AD7193_MODE_CLKSRC(x)   (((unsigned long)(x) & 0x3) << 18) // Clock Source Select.
-#define AD7193_MODE_AVG(x)      (((unsigned long)(x) & 0x3) << 16) // Fast settling filter.
+#define AD7193_MODE_SEL(x)      (((uint32_t)(x) & 0x7) << 21) // Operation Mode Select.
+#define AD7193_MODE_DAT_STA     ((uint32_t)1 << 20)           // Status Register transmission.
+#define AD7193_MODE_CLKSRC(x)   (((uint32_t)(x) & 0x3) << 18) // Clock Source Select.
+#define AD7193_MODE_AVG(x)      (((uint32_t)(x) & 0x3) << 16) // Fast settling filter.
 #define AD7193_MODE_SINC3       (1 << 15)                          // SINC3 Filter Select.
 #define AD7193_MODE_ENPAR       (1 << 13)                          // Parity Enable.
 #define AD7193_MODE_CLKDIV      (1 << 12)                          // Clock divide by 2 (AD7190/2 only).
@@ -112,12 +109,12 @@
 
 /* Mode Register: AD7193_MODE_CLKSRC(x) options */
 #define AD7193_CLK_EXT_MCLK1_2          0 // External crystal. The external crystal
-                                          // is connected from MCLK1 to MCLK2.
+// is connected from MCLK1 to MCLK2.
 #define AD7193_CLK_EXT_MCLK2            1 // External Clock applied to MCLK2
 #define AD7193_CLK_INT                  2 // Internal 4.92 MHz clock.
-                                          // Pin MCLK2 is tristated.
+// Pin MCLK2 is tristated.
 #define AD7193_CLK_INT_CO               3 // Internal 4.92 MHz clock. The internal
-                                          // clock is available on MCLK2.
+// clock is available on MCLK2.
 
 /* Mode Register: AD7193_MODE_AVG(x) options */
 #define AD7193_AVG_NONE                 0 // No averaging (fast settling mode disabled).
@@ -126,10 +123,10 @@
 #define AD7193_AVG_BY_16                3 // Average by 16.
 
 /* Configuration Register Bit Designations (AD7193_REG_CONF) */
-#define AD7193_CONF_CHOP        ((unsigned long)1 << 23)            // CHOP enable.
-#define AD7193_CONF_REFSEL      ((unsigned long)1 << 20)            // REFIN1/REFIN2 Reference Select.
-#define AD7193_CONF_PSEUDO      ((unsigned long)1 << 18)            // Pseudo differential analog inputs.
-#define AD7193_CONF_CHAN(x)     ((unsigned long)((x) & 0x3FF) << 8) // Channel select.
+#define AD7193_CONF_CHOP        ((uint32_t)1 << 23)            // CHOP enable.
+#define AD7193_CONF_REFSEL      ((uint32_t)1 << 20)            // REFIN1/REFIN2 Reference Select.
+#define AD7193_CONF_PSEUDO      ((uint32_t)1 << 18)            // Pseudo differential analog inputs.
+#define AD7193_CONF_CHAN(x)     ((uint32_t)((x) & 0x3FF) << 8) // Channel select.
 #define AD7193_CONF_BURN        (1 << 7)                            // Burnout current enable.
 #define AD7193_CONF_REFDET      (1 << 6)                            // Reference detect enable.
 #define AD7193_CONF_BUF         (1 << 4)                            // Buffered Mode Enable.
@@ -175,89 +172,89 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7193_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc *gpio_cs;
-	gpio_desc *gpio_miso;
+	gpio_desc	*gpio_cs;
+	gpio_desc	*gpio_miso;
 	/* Device Settings */
-	unsigned char currentPolarity;
-	unsigned char currentGain;
-} ad7193_dev;
+	uint8_t		current_polarity;
+	uint8_t		current_gain;
+};
 
-typedef struct {
+struct ad7193_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t gpio_cs;
-	int8_t gpio_miso;
+	int8_t		gpio_cs;
+	int8_t		gpio_miso;
 	/* Device Settings */
-	unsigned char currentPolarity;
-	unsigned char currentGain;
-} ad7193_init_param;
+	uint8_t		current_polarity;
+	uint8_t		current_gain;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Checks if the AD7139 part is present. */
-char AD7193_Init(ad7193_dev **device,
-		    ad7193_init_param init_param);
+int8_t ad7193_init(struct ad7193_dev **device,
+		   struct ad7193_init_param init_param);
 
-/*! Free the resources allocated by AD7193_Init(). */
-int32_t AD7193_remove(ad7193_dev *dev);
+/*! Free the resources allocated by ad7193_init(). */
+int32_t ad7193_remove(struct ad7193_dev *dev);
 
 /*! Writes data into a register. */
-void AD7193_SetRegisterValue(ad7193_dev *dev,
-			     unsigned char registerAddress,
-                             unsigned long registerValue,
-                             unsigned char bytesNumber,
-			     unsigned char modifyCS);
+void ad7193_set_register_value(struct ad7193_dev *dev,
+			       uint8_t register_address,
+			       uint32_t register_value,
+			       uint8_t bytes_number,
+			       uint8_t modify_cs);
 
 /*! Reads the value of a register. */
-unsigned long AD7193_GetRegisterValue(ad7193_dev *dev,
-				      unsigned char registerAddress,
-                                      unsigned char bytesNumber,
-				      unsigned char modifyCS);
+uint32_t ad7193_get_register_value(struct ad7193_dev *dev,
+				   uint8_t register_address,
+				   uint8_t bytes_number,
+				   uint8_t modify_cs);
 
 /*! Resets the device. */
-void AD7193_Reset(ad7193_dev *dev);
+void ad7193_reset(struct ad7193_dev *dev);
 
 /*! Set device to idle or power-down. */
-void AD7193_SetPower(ad7193_dev *dev,
-		     unsigned char pwrMode);
+void ad7193_set_power(struct ad7193_dev *dev,
+		      uint8_t pwr_mode);
 
 /*! Waits for RDY pin to go low. */
-void AD7193_WaitRdyGoLow(ad7193_dev *dev);
+void ad7193_wait_rdy_go_low(struct ad7193_dev *dev);
 
 /*! Selects the channel to be enabled. */
-void AD7193_ChannelSelect(ad7193_dev *dev,
-			  unsigned short channel);
+void ad7193_channel_select(struct ad7193_dev *dev,
+			   uint16_t channel);
 
 /*! Performs the given calibration to the specified channel. */
-void AD7193_Calibrate(ad7193_dev *dev,
-		      unsigned char mode,
-		      unsigned char channel);
+void ad7193_calibrate(struct ad7193_dev *dev,
+		      uint8_t mode,
+		      uint8_t channel);
 
 /*! Selects the polarity of the conversion and the ADC input range. */
-void AD7193_RangeSetup(ad7193_dev *dev,
-		       unsigned char polarity,
-		       unsigned char range);
+void ad7193_range_setup(struct ad7193_dev *dev,
+			uint8_t polarity,
+			uint8_t range);
 
 /*! Returns the result of a single conversion. */
-unsigned long AD7193_SingleConversion(ad7193_dev *dev);
+uint32_t ad7193_single_conversion(struct ad7193_dev *dev);
 
 /*! Returns the average of several conversion results. */
-unsigned long AD7193_ContinuousReadAvg(ad7193_dev *dev,
-				       unsigned char sampleNumber);
+uint32_t ad7193_continuous_read_avg(struct ad7193_dev *dev,
+				    uint8_t sample_number);
 
 /*! Read data from temperature sensor and converts it to Celsius degrees. */
-float AD7193_TemperatureRead(ad7193_dev *dev);
+float ad7193_temperature_read(struct ad7193_dev *dev);
 
 /*! Converts 24-bit raw data to volts. */
-float AD7193_ConvertToVolts(ad7193_dev *dev,
-			    unsigned long rawData,
-			    float vRef);
+float ad7193_convert_to_volts(struct ad7193_dev *dev,
+			      uint32_t raw_data,
+			      float v_ref);
 
 #endif /* __AD7193_H__ */
