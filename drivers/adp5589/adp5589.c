@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "ADP5589.h"			// ADP5589 definitions.
+#include "adp5589.h"			// ADP5589 definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
