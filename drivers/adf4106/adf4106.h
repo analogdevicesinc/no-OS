@@ -37,7 +37,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 ******************************************************************************/
 #ifndef __ADF4106_H__
 #define __ADF4106_H__
@@ -255,89 +254,89 @@
 *                               reference frequency
 *   @refIn - the input reference frequency
 *                               Reference Latch
-*   @refCounter - the initial value of the 14 bit Reference Counter register
-*   @antiBacklashWidth - the width of the anti-backlash pulse, this pulse
+*   @ref_counter - the initial value of the 14 bit Reference Counter register
+*   @anti_backlash_width - the width of the anti-backlash pulse, this pulse
 *       ensures that no dead zone is in the PFD transfer function and minimizes
 *       phase noise and reference spurs.
-*   @testModeBits - Should be set to zero for Normal operation
-*   @lockDetectPrecision - determines the number of consecutive cycles of phase
+*   @test_mode_bits - Should be set to zero for Normal operation
+*   @lock_detect_precision - determines the number of consecutive cycles of phase
 *        delay, that must occur before lock detect is set
 *                               N Latch
-*   @aNCounter - a 6 bits counter is supported at ADF4106
-*   @bNCounter - a 13 bits counter
-*   @cpGain - determines which charge pump current settings is used
+*   @a_n_counter - a 6 bits counter is supported at ADF4106
+*   @b_n_counter - a 13 bits counter
+*   @cp_gain - determines which charge pump current settings is used
 *                        Function/Initialization Latch
-*   @counterReset - resets the R and N counters
-*   @powerDown1 - activate power down mode
-*   @muxoutControl - the type of the MUXOUT output
-*   @phaseDetectorPol - the polarity of the Phase Detector
-*   @cpType - the type of the Charge Pump output
-*   @fastLockMode - set the desired Fast Lock Mode
-*   @timerCounterControl - how long will be the secondary charge pump current
+*   @counter_reset - resets the R and N counters
+*   @power_down1 - activate power down mode
+*   @muxout_control - the type of the MUXOUT output
+*   @phase_detector_pol - the polarity of the Phase Detector
+*   @cp_type - the type of the Charge Pump output
+*   @fast_lock_mode - set the desired Fast Lock Mode
+*   @timer_counter_control - how long will be the secondary charge pump current
 *       active, before reverting to the primary current
-*   @currentSetting1 - is used when the RF output is stable and the system is
+*   @current_setting1 - is used when the RF output is stable and the system is
 *       in static state
-*   @currentSetting2 - is meant to be used when the system is dynamic and in a
+*   @current_setting2 - is meant to be used when the system is dynamic and in a
 *       state of change (i.e., when a new output frequency is programmed)
-*   @powerDown2 - define the type of the power down: asynchronous or
+*   @power_down2 - define the type of the power down: asynchronous or
 */
 
-typedef struct {
+struct adf4106_settings_t {
 
-    /* Reference Input Frequency*/
-    unsigned long refIn;
+	/* Reference Input Frequency*/
+	uint32_t ref_in;
 
-    /* PFD max frequency */
-    unsigned long pfdMax;
+	/* PFD max frequency */
+	uint32_t pfd_max;
 
-    /* Reference latch */
-    unsigned short refCounter : 14;
-    unsigned char antiBacklashWidth : 2;
-    unsigned char testModeBits : 1;
-    unsigned char lockDetectPrecision : 1;
+	/* Reference latch */
+	uint16_t ref_counter : 14;
+	uint8_t anti_backlash_width : 2;
+	uint8_t test_mode_bits : 1;
+	uint8_t lock_detect_precision : 1;
 
-    /* N Latch */
-    unsigned char aNCounter : 6;
-    unsigned short bNCounter : 13;
-    unsigned char cpGain : 1;
+	/* N Latch */
+	uint8_t a_n_counter : 6;
+	uint16_t b_n_counter : 13;
+	uint8_t cp_gain : 1;
 
-    /* Functional/Initialization latch */
-    unsigned char counterReset : 1;
-    unsigned char powerDown1 : 1;
-    unsigned char muxoutControl : 3;
-    unsigned char phaseDetectorPol : 1;
-    unsigned char cpType : 1;
-    unsigned char fastLockMode : 2;
-    unsigned char timerCounterControl : 4;
-    unsigned char currentSetting1 : 3;
-    unsigned char currentSetting2 : 3;
-    unsigned char powerDown2 : 1;
-    unsigned char prescalerValue : 2;
+	/* Functional/Initialization latch */
+	uint8_t counter_reset : 1;
+	uint8_t power_down1 : 1;
+	uint8_t muxout_control : 3;
+	uint8_t phase_detector_pol : 1;
+	uint8_t cp_type : 1;
+	uint8_t fast_lock_mode : 2;
+	uint8_t timer_counter_control : 4;
+	uint8_t current_setting1 : 3;
+	uint8_t current_setting2 : 3;
+	uint8_t power_down2 : 1;
+	uint8_t prescaler_value : 2;
 
-} ADF4106_settings_t;
+};
 
 /* Supported devices */
-typedef enum {
-    ID_ADF4001,
-    ID_ADF4002,
-    ID_ADF4106
-} ADF4106_type_t;
+enum adf4106_type_t {
+	ID_ADF4001,
+	ID_ADF4002,
+	ID_ADF4106
+};
 
 /* Initialization methods */
-typedef enum {
-    INIT_LATCH,
-    INIT_CEPIN,
-    INIT_COUNTER_RESET
-} ADF4106_init_t;
+enum adf4106_init_t {
+	INIT_LATCH,
+	INIT_CEPIN,
+	INIT_COUNTER_RESET
+};
 
-typedef struct {
-    unsigned long long vcoMaxFrequency;
-    unsigned long pfdMaxFrequency;
-    unsigned long vcoMinFrequency;
-    unsigned long pfdMinFrequency;
-} adf4106_chip_info;
+struct adf4106_chip_info {
+	uint64_t vco_max_frequency;
+	uint32_t pfd_max_frequency;
+	uint32_t vco_min_frequency;
+	uint32_t pfd_min_frequency;
+};
 
-typedef struct {
+struct adf4106_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -346,17 +345,17 @@ typedef struct {
 	gpio_desc		*gpio_le2;
 	gpio_desc		*gpio_ce2;
 	/* Device Settings */
-	adf4106_chip_info chip_info;
-	ADF4106_settings_t ADF4106_st;
-	ADF4106_type_t this_device;
+	struct adf4106_chip_info chip_info;
+	struct adf4106_settings_t adf4106_st;
+	enum adf4106_type_t this_device;
 	/* Internal buffers for each latch */
-	unsigned long rLatch;
-	unsigned long nLatch;
-	unsigned long fLatch;
-	unsigned long iLatch;
-} ADF4106_dev;
+	uint32_t r_latch;
+	uint32_t n_latch;
+	uint32_t f_latch;
+	uint32_t i_latch;
+};
 
-typedef struct {
+struct adf4106_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
@@ -365,36 +364,36 @@ typedef struct {
 	int8_t		gpio_le2;
 	int8_t		gpio_ce2;
 	/* Device Settings */
-	ADF4106_type_t this_device;
-	ADF4106_init_t initMethod;
-	ADF4106_settings_t ADF4106_st;
-} ADF4106_init_param;
+	enum adf4106_type_t this_device;
+	enum adf4106_init_t init_method;
+	struct adf4106_settings_t adf4106_st;
+};
 
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char ADF4106_Init(ADF4106_dev **device,
-		  ADF4106_init_param init_param);
+int8_t adf4106_init(struct adf4106_dev **device,
+		    struct adf4106_init_param init_param);
 
-/* Free the resources allocated by ADF4106_Init(). */
-int32_t ADF4106_remove(ADF4106_dev *dev);
+/* Free the resources allocated by adf4106_init(). */
+int32_t adf4106_remove(struct adf4106_dev *dev);
 
 /* Update register function */
-void ADF4106_UpdateLatch(ADF4106_dev *dev,
-			 unsigned long latchData);
+void adf4106_update_latch(struct adf4106_dev *dev,
+			  uint32_t latch_data);
 
 /* Return the value of a desired latch */
-unsigned long ADF4106_ReadLatch(ADF4106_dev *dev,
-				unsigned char latchType);
+uint32_t adf4106_read_latch(struct adf4106_dev *dev,
+			    uint8_t latch_type);
 
 /* PLL initialization functions */
-void ADF4106_InitLatchMethod(ADF4106_dev *dev);
-void ADF4106_InitCEPinMethod(ADF4106_dev *dev);
-void ADF4106_InitCounteResetMethod(ADF4106_dev *dev);
+void adf4106_init_latch_method(struct adf4106_dev *dev);
+void adf4106_init_cepin_method(struct adf4106_dev *dev);
+void adf4106_init_counte_reset_method(struct adf4106_dev *dev);
 
 /* Set the frequency to a desired value */
-unsigned long long ADF4106_SetFrequency(ADF4106_dev *dev,
-					unsigned long long frequency);
+uint64_t adf4106_set_frequency(struct adf4106_dev *dev,
+			       uint64_t frequency);
 
 #endif // __ADF4106_H__
