@@ -36,7 +36,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 *******************************************************************************/
 #ifndef _ADF4156_H_
 #define _ADF4156_H_
@@ -180,69 +179,69 @@
     ID_ADF4157,
 } ADF4156_type;
 */
-typedef struct {
-        unsigned long       clkin;
-        unsigned long       channel_spacing;
-        unsigned char       ref_doubler_en;
-        unsigned char       ref_div2_en;
-        unsigned long       r0_user_settings;
-        unsigned long       r2_user_settings;
-        unsigned long       r3_user_settings;
-        unsigned long       r4_user_settings;
-} adf4156_platform_data;
+struct adf4156_platform_data {
+	uint32_t	clkin;
+	uint32_t	channel_spacing;
+	uint8_t		ref_doubler_en;
+	uint8_t		ref_div2_en;
+	uint32_t	r0_user_settings;
+	uint32_t	r2_user_settings;
+	uint32_t	r3_user_settings;
+	uint32_t	r4_user_settings;
+};
 
-typedef struct {
-        adf4156_platform_data   *pdata;
-        unsigned long       fpfd;           /* Phase Frequency Detector */
-        unsigned short      r_cnt;          /* R-counter */
-        unsigned long       r0_fract;       /* Fractional value */
-        unsigned long       r0_int;         /* Integer value */
-        unsigned long       r2_mod;         /* Modulus value */
-        unsigned long       reg_val[5];     /* Actual register value */
-} adf4156_state;
+struct adf4156_state {
+	struct adf4156_platform_data	*pdata;
+	uint32_t	fpfd;           /* Phase Frequency Detector */
+	uint16_t	r_cnt;          /* R-counter */
+	uint32_t	r0_fract;       /* Fractional value */
+	uint32_t	r0_int;         /* Integer value */
+	uint32_t	r2_mod;         /* Modulus value */
+	uint32_t	reg_val[5];     /* Actual register value */
+};
 
-typedef struct {
+struct adf4156_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
 	gpio_desc		*gpio_le;
 	gpio_desc		*gpio_ce;
 	/* Device Settings */
-	adf4156_state adf4156_st;
-} adf4156_dev;
+	struct adf4156_state	adf4156_st;
+};
 
-typedef struct {
+struct adf4156_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_le;
 	int8_t		gpio_ce;
-} adf4156_init_param;
+};
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
 /* Initialize the SPI communication with the device. */
-char ADF4156_Init(adf4156_dev **device,
-		  adf4156_init_param init_param);
+int8_t adf4156_init(struct adf4156_dev **device,
+		    struct adf4156_init_param init_param);
 
-/* Free the resources allocated by ADF4156_Init(). */
-int32_t ADF4156_remove(adf4156_dev *dev);
+/* Free the resources allocated by adf4156_init(). */
+int32_t adf4156_remove(struct adf4156_dev *dev);
 
 /* Transmits 32 bits on SPI. */
-char ADF4156_Set(adf4156_dev *dev,
-		 unsigned long value);
+int8_t adf4156_set(struct adf4156_dev *dev,
+		   uint32_t value);
 
 /* Increases the R counter value until the PFD frequency is smaller than
 ADF4351_MAX_FREQ_PFD. */
-long adf4156_tune_r_cnt(adf4156_dev *dev,
-			long r_cnt);
+int32_t adf4156_tune_r_cnt(struct adf4156_dev *dev,
+			   int32_t r_cnt);
 
 /* Computes the greatest common divider of two numbers. */
-unsigned long gcd(unsigned long x, unsigned long y);
+uint32_t gcd(uint32_t x, uint32_t y);
 
 /* Sets the ADF4156 output frequency. */
-double adf4156_set_freq(adf4156_dev *dev,
+double adf4156_set_freq(struct adf4156_dev *dev,
 			double freq);
 
 #endif /* _ADF4156_H_ */

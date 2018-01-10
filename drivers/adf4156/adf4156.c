@@ -35,7 +35,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 *******************************************************************************/
 
 /******************************************************************************/
@@ -59,14 +58,14 @@
  *                  Example:  0 - if initialization was successful;
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-char ADF4156_Init(adf4156_dev **device,
-		  adf4156_init_param init_param)
+int8_t adf4156_init(struct adf4156_dev **device,
+		    struct adf4156_init_param init_param)
 {
-	adf4156_dev *dev;
-    unsigned long   cfgValue;
-    char            status;
+	struct adf4156_dev *dev;
+	uint32_t cfg_value;
+	int8_t status;
 
-	dev = (adf4156_dev *)malloc(sizeof(*dev));
+	dev = (struct adf4156_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -74,72 +73,72 @@ char ADF4156_Init(adf4156_dev **device,
 	status = gpio_get(&dev->gpio_le, init_param.gpio_le);
 	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
 
-    /* Setup Control GPIO Pins */
-    ADF4156_LE_OUT;
-    ADF4156_LE_LOW;
-    ADF4156_CE_OUT;
-    ADF4156_CE_HIGH;
-    //ADF4156_LE2_OUT;
-    //ADF4156_CE2_OUT;
+	/* Setup Control GPIO Pins */
+	ADF4156_LE_OUT;
+	ADF4156_LE_LOW;
+	ADF4156_CE_OUT;
+	ADF4156_CE_HIGH;
+	//ADF4156_LE2_OUT;
+	//ADF4156_CE2_OUT;
 
-    /* Setup SPI Interface */
+	/* Setup SPI Interface */
 	status |= spi_init(&dev->spi_desc, init_param.spi_init);
 
-    /* R4 */
-    cfgValue = adf4156_pdata_lpc.r4_user_settings |
-               ADF4156_R4_CTRL;
-    ADF4156_Set(dev,
-		cfgValue);
-    dev->adf4156_st.reg_val[ADF4156_REG4] = cfgValue;
+	/* R4 */
+	cfg_value = adf4156_pdata_lpc.r4_user_settings |
+		    ADF4156_R4_CTRL;
+	adf4156_set(dev,
+		    cfg_value);
+	dev->adf4156_st.reg_val[ADF4156_REG4] = cfg_value;
 
-    /* R3 */
-    cfgValue = adf4156_pdata_lpc.r3_user_settings |
-               ADF4156_R3_CTRL;
-    ADF4156_Set(dev,
-		cfgValue);
-    dev->adf4156_st.reg_val[ADF4156_REG3] = cfgValue;
+	/* R3 */
+	cfg_value = adf4156_pdata_lpc.r3_user_settings |
+		    ADF4156_R3_CTRL;
+	adf4156_set(dev,
+		    cfg_value);
+	dev->adf4156_st.reg_val[ADF4156_REG3] = cfg_value;
 
-    /* R2 */
-    cfgValue = adf4156_pdata_lpc.r2_user_settings |
-               ADF4156_PRESCALER(0)               |
-               (adf4156_pdata_lpc.ref_div2_en ? ADF4156_RDIV2(1) : ADF4156_RDIV2(0))        |
-               (adf4156_pdata_lpc.ref_doubler_en ? ADF4156_REF_DBL(1) : ADF4156_REF_DBL(0)) |
-               ADF4156_R_CNT(1)                   |
-               ADF4156_MOD_WORD(0)                |
-               ADF4156_R2_CTRL;
-    ADF4156_Set(dev,
-		cfgValue);
-    dev->adf4156_st.reg_val[ADF4156_REG2] = cfgValue;
+	/* R2 */
+	cfg_value = adf4156_pdata_lpc.r2_user_settings |
+		    ADF4156_PRESCALER(0)               |
+		    (adf4156_pdata_lpc.ref_div2_en ? ADF4156_RDIV2(1) : ADF4156_RDIV2(0))        |
+		    (adf4156_pdata_lpc.ref_doubler_en ? ADF4156_REF_DBL(1) : ADF4156_REF_DBL(0)) |
+		    ADF4156_R_CNT(1)                   |
+		    ADF4156_MOD_WORD(0)                |
+		    ADF4156_R2_CTRL;
+	adf4156_set(dev,
+		    cfg_value);
+	dev->adf4156_st.reg_val[ADF4156_REG2] = cfg_value;
 
-    /* R1 */
-    cfgValue = ADF4156_PHASE_VAL(1)     |
-               ADF4156_R1_CTRL;
-    ADF4156_Set(dev,
-		cfgValue);
-    dev->adf4156_st.reg_val[ADF4156_REG1] = cfgValue;
+	/* R1 */
+	cfg_value = ADF4156_PHASE_VAL(1)     |
+		    ADF4156_R1_CTRL;
+	adf4156_set(dev,
+		    cfg_value);
+	dev->adf4156_st.reg_val[ADF4156_REG1] = cfg_value;
 
-    /* R0 */
-    cfgValue = adf4156_pdata_lpc.r0_user_settings |
-               ADF4156_INT_VAL(1)                 |
-               ADF4156_FRAC_VAL(1)                |
-               ADF4156_R0_CTRL;
-    ADF4156_Set(dev,
-		cfgValue);
-    dev->adf4156_st.reg_val[ADF4156_REG0] = cfgValue;
+	/* R0 */
+	cfg_value = adf4156_pdata_lpc.r0_user_settings |
+		    ADF4156_INT_VAL(1)                 |
+		    ADF4156_FRAC_VAL(1)                |
+		    ADF4156_R0_CTRL;
+	adf4156_set(dev,
+		    cfg_value);
+	dev->adf4156_st.reg_val[ADF4156_REG0] = cfg_value;
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by ADF4156_Init().
+ * @brief Free the resources allocated by adf4156_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ADF4156_remove(adf4156_dev *dev)
+int32_t adf4156_remove(struct adf4156_dev *dev)
 {
 	int32_t ret;
 
@@ -161,29 +160,28 @@ int32_t ADF4156_remove(adf4156_dev *dev)
  *
  * @return none.
 ******************************************************************************/
-char ADF4156_Set(adf4156_dev *dev,
-		 unsigned long value)
+int8_t adf4156_set(struct adf4156_dev *dev,
+		   uint32_t value)
 {
-    char          validation  = 0;
-    char          status      = 0;
-    unsigned char txBuffer[4] = {0, 0, 0, 0}; // TX SPI Buffer
+	int8_t validation = 0;
+	int8_t status = 0;
+	uint8_t tx_buffer[4] = {0, 0, 0, 0};// TX SPI Buffer
 
-    txBuffer[0] = (unsigned char)((value & 0xFF000000) >> 24);
-    txBuffer[1] = (unsigned char)((value & 0x00FF0000) >> 16);
-    txBuffer[2] = (unsigned char)((value & 0x0000FF00) >> 8);
-    txBuffer[3] = (unsigned char)((value & 0x000000FF) >> 0);
+	tx_buffer[0] = (uint8_t)((value & 0xFF000000) >> 24);
+	tx_buffer[1] = (uint8_t)((value & 0x00FF0000) >> 16);
+	tx_buffer[2] = (uint8_t)((value & 0x0000FF00) >> 8);
+	tx_buffer[3] = (uint8_t)((value & 0x000000FF) >> 0);
 
-    ADF4156_LE_LOW;
+	ADF4156_LE_LOW;
 	validation = spi_write_and_read(dev->spi_desc,
-					txBuffer,
+					tx_buffer,
 					4);
-    if (validation != 4)
-    {
-        status = -1;
-    }
-    ADF4156_LE_HIGH;
+	if (validation != 4) {
+		status = -1;
+	}
+	ADF4156_LE_HIGH;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
@@ -195,19 +193,19 @@ char ADF4156_Set(adf4156_dev *dev,
  *
  * @return Final r_cnt value.
 *******************************************************************************/
-long adf4156_tune_r_cnt(adf4156_dev *dev,
-			long r_cnt)
+int32_t adf4156_tune_r_cnt(struct adf4156_dev *dev,
+			   int32_t r_cnt)
 {
-    adf4156_platform_data *pdata = dev->adf4156_st.pdata;
+	struct adf4156_platform_data *pdata = dev->adf4156_st.pdata;
 
-    do {
-            r_cnt++;
-            dev->adf4156_st.fpfd = (pdata->clkin * \
-				   (pdata->ref_doubler_en ? 2 : 1)) /
-		                   (r_cnt * (pdata->ref_div2_en ? 2 : 1));
-    } while (dev->adf4156_st.fpfd > ADF4156_MAX_FREQ_PFD);
+	do {
+		r_cnt++;
+		dev->adf4156_st.fpfd = (pdata->clkin * \
+					(pdata->ref_doubler_en ? 2 : 1)) /
+				       (r_cnt * (pdata->ref_div2_en ? 2 : 1));
+	} while (dev->adf4156_st.fpfd > ADF4156_MAX_FREQ_PFD);
 
-    return r_cnt;
+	return r_cnt;
 }
 
 /***************************************************************************//**
@@ -215,12 +213,11 @@ long adf4156_tune_r_cnt(adf4156_dev *dev,
  *
  * @return Returns the gcd.
 *******************************************************************************/
-unsigned long gcd(unsigned long x, unsigned long y)
+uint32_t gcd(uint32_t x, uint32_t y)
 {
-	unsigned long tmp;
+	uint32_t tmp;
 
-	while (y != 0)
-	{
+	while (y != 0) {
 		tmp = x % y;
 		x = y;
 		y = tmp;
@@ -237,101 +234,97 @@ unsigned long gcd(unsigned long x, unsigned long y)
  *
  * @return calculatedFrequency - The actual frequency value that was set.
 *******************************************************************************/
-double adf4156_set_freq(adf4156_dev *dev,
+double adf4156_set_freq(struct adf4156_dev *dev,
 			double freq)
 {
-        unsigned long long  tmp;
-        unsigned long       div_gcd, prescaler, chspc;
-        unsigned short      mdiv;
-        unsigned short      r_cnt = 0;
-        double              result;
+	uint64_t tmp;
+	uint32_t       div_gcd, prescaler, chspc;
+	uint16_t mdiv;
+	uint16_t r_cnt = 0;
+	double result;
 
 
-        if ((freq > ADF4156_MAX_OUT_FREQ) || (freq < ADF4156_MIN_OUT_FREQ))
-        {
-            return -1;
-        }
-        if (freq > ADF4156_MAX_FREQ_45_PRESC) {
-                prescaler = ADF4156_PRESCALER(1);
-                mdiv = 75;
-        } else {
-                prescaler = ADF4156_PRESCALER(0);
-                mdiv = 23;
-        }
+	if ((freq > ADF4156_MAX_OUT_FREQ) || (freq < ADF4156_MIN_OUT_FREQ)) {
+		return -1;
+	}
+	if (freq > ADF4156_MAX_FREQ_45_PRESC) {
+		prescaler = ADF4156_PRESCALER(1);
+		mdiv = 75;
+	} else {
+		prescaler = ADF4156_PRESCALER(0);
+		mdiv = 23;
+	}
 
-        freq *= 1000000;
-        chspc = dev->adf4156_st.pdata->channel_spacing;
+	freq *= 1000000;
+	chspc = dev->adf4156_st.pdata->channel_spacing;
 
-        if ((dev->adf4156_st.pdata->clkin > ADF4156_MAX_FREQ_REFIN) ||
-            (dev->adf4156_st.pdata->clkin < ADF4156_MIN_FREQ_REFIN))
-        {
-            return -1;
-        }
+	if ((dev->adf4156_st.pdata->clkin > ADF4156_MAX_FREQ_REFIN) ||
+	    (dev->adf4156_st.pdata->clkin < ADF4156_MIN_FREQ_REFIN)) {
+		return -1;
+	}
 
-        do{
-                do{
-                        r_cnt = adf4156_tune_r_cnt(dev, r_cnt);
-                        dev->adf4156_st.r2_mod = \
-				dev->adf4156_st.fpfd / chspc;
-                        if (r_cnt > ADF4156_MAX_R_CNT)
-                        {
-                            printf("Error! R-counter has a too high \
+	do {
+		do {
+			r_cnt = adf4156_tune_r_cnt(dev, r_cnt);
+			dev->adf4156_st.r2_mod = \
+						 dev->adf4156_st.fpfd / chspc;
+			if (r_cnt > ADF4156_MAX_R_CNT) {
+				printf("Error! R-counter has a too high \
 value for the selected spacing. Try with a higher spacing value.\r\n");
-                            return -1;
-                        }
-                   }while ((dev->adf4156_st.r2_mod > ADF4156_MAX_MODULUS) && r_cnt);
-             dev->adf4156_st.r_cnt = r_cnt;
-             tmp = freq * (unsigned long long)dev->adf4156_st.r2_mod + (dev->adf4156_st.fpfd >> 1);
-             tmp = (unsigned long long)(tmp / dev->adf4156_st.fpfd);
-             dev->adf4156_st.r0_fract = tmp % dev->adf4156_st.r2_mod;
-             tmp = tmp / dev->adf4156_st.r2_mod;
-             dev->adf4156_st.r0_int = (unsigned long)tmp;
-        }while (mdiv > dev->adf4156_st.r0_int);
+				return -1;
+			}
+		} while ((dev->adf4156_st.r2_mod > ADF4156_MAX_MODULUS) && r_cnt);
+		dev->adf4156_st.r_cnt = r_cnt;
+		tmp = freq * (uint64_t)dev->adf4156_st.r2_mod + (dev->adf4156_st.fpfd >> 1);
+		tmp = (uint64_t)(tmp / dev->adf4156_st.fpfd);
+		dev->adf4156_st.r0_fract = tmp % dev->adf4156_st.r2_mod;
+		tmp = tmp / dev->adf4156_st.r2_mod;
+		dev->adf4156_st.r0_int = (uint32_t)tmp;
+	} while (mdiv > dev->adf4156_st.r0_int);
 
-        if (dev->adf4156_st.r0_fract && dev->adf4156_st.r2_mod)
-        {
-            div_gcd = gcd(dev->adf4156_st.r2_mod, dev->adf4156_st.r0_fract);
-            dev->adf4156_st.r2_mod /= div_gcd;
-            dev->adf4156_st.r0_fract /= div_gcd;
-        }else
-        {
-            dev->adf4156_st.r0_fract = 0;
-            dev->adf4156_st.r2_mod = 1;
-        }
+	if (dev->adf4156_st.r0_fract && dev->adf4156_st.r2_mod) {
+		div_gcd = gcd(dev->adf4156_st.r2_mod,
+			      dev->adf4156_st.r0_fract);
+		dev->adf4156_st.r2_mod /= div_gcd;
+		dev->adf4156_st.r0_fract /= div_gcd;
+	} else {
+		dev->adf4156_st.r0_fract = 0;
+		dev->adf4156_st.r2_mod = 1;
+	}
 
-        /* register R3 */
-        dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
-        dev->adf4156_st.reg_val[ADF4156_REG3] |= (ADF4156_CNT_RST(1));
+	/* register R3 */
+	dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
+	dev->adf4156_st.reg_val[ADF4156_REG3] |= (ADF4156_CNT_RST(1));
 
-        ADF4156_Set(dev,
+	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG3]);
 
-        /* register R2 */
-        dev->adf4156_st.reg_val[ADF4156_REG2] &= ~(ADF4156_MOD_WORD(-1) |
-                                       ADF4156_R_CNT(-1)    |
-                                       ADF4156_PRESCALER(-1));
-        dev->adf4156_st.reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(dev->adf4156_st.r2_mod) |
-                                      ADF4156_R_CNT(dev->adf4156_st.r_cnt)     |
-                                      prescaler);
-        ADF4156_Set(dev,
+	/* register R2 */
+	dev->adf4156_st.reg_val[ADF4156_REG2] &= ~(ADF4156_MOD_WORD(-1) |
+			ADF4156_R_CNT(-1)    |
+			ADF4156_PRESCALER(-1));
+	dev->adf4156_st.reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(dev->adf4156_st.r2_mod) |
+			ADF4156_R_CNT(dev->adf4156_st.r_cnt)     |
+			prescaler);
+	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG2]);
 
-        /* register R0 */
-        dev->adf4156_st.reg_val[ADF4156_REG0] &= ~(ADF4156_INT_VAL(-1) |
-                                       ADF4156_FRAC_VAL(-1));
-        dev->adf4156_st.reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(dev->adf4156_st.r0_int) |
-                                      ADF4156_FRAC_VAL(dev->adf4156_st.r0_fract));
-        ADF4156_Set(dev,
+	/* register R0 */
+	dev->adf4156_st.reg_val[ADF4156_REG0] &= ~(ADF4156_INT_VAL(-1) |
+			ADF4156_FRAC_VAL(-1));
+	dev->adf4156_st.reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(dev->adf4156_st.r0_int) |
+			ADF4156_FRAC_VAL(dev->adf4156_st.r0_fract));
+	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG0]);
 
-        /* register R3 */
-        dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
-        ADF4156_Set(dev,
+	/* register R3 */
+	dev->adf4156_st.reg_val[ADF4156_REG3] &= ~(ADF4156_CNT_RST(-1));
+	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG3]);
 
-        result = dev->adf4156_st.r0_int * (float)(dev->adf4156_st.fpfd / 1000000);
-        result = result + ((float)dev->adf4156_st.r0_fract / dev->adf4156_st.r2_mod) *\
-		(dev->adf4156_st.fpfd / 1000000);
+	result = dev->adf4156_st.r0_int * (float)(dev->adf4156_st.fpfd / 1000000);
+	result = result + ((float)dev->adf4156_st.r0_fract / dev->adf4156_st.r2_mod) *\
+		 (dev->adf4156_st.fpfd / 1000000);
 
-        return result;
+	return result;
 }

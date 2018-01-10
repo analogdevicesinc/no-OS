@@ -50,16 +50,15 @@
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
-static adf4156_platform_data adf4156_pdata_lpc =
-{
-    10000000,                   //clkin in Hz
-    20000,                      //channel_spacing in Hz
-    1,                          //ref_doubler_en
-    0,                          //ref_div2_en
-    ADF4156_INT_VAL(23),        //r0_user_settings
-    ADF4156_MOD_WORD(2),        //r2_user_settings
-    ADF4156_PD_POL(1),          //r3_user_settings
-    0,                          //r4_user_settings
+static struct adf4156_platform_data adf4156_pdata_lpc = {
+	10000000,                   //clkin in Hz
+	20000,                      //channel_spacing in Hz
+	1,                          //ref_doubler_en
+	0,                          //ref_div2_en
+	ADF4156_INT_VAL(23),        //r0_user_settings
+	ADF4156_MOD_WORD(2),        //r2_user_settings
+	ADF4156_PD_POL(1),          //r3_user_settings
+	0,                          //r4_user_settings
 };
 
 #endif // __AD4156_CFG_H__
