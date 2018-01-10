@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD7780.h"
+#include "ad7780.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
