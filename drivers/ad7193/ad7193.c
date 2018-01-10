@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD7193.h"    // AD7193 definitions.
+#include "ad7193.h"    // AD7193 definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
