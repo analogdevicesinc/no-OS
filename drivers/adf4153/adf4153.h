@@ -37,7 +37,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 ******************************************************************************/
 #ifndef __ADF4153_H__
 #define __ADF4153_H__
@@ -248,80 +247,80 @@
 *                               reference frequency
 *
 *                               N Divider Register
-*   @fracValue  - these 12 bits control what is loaded as the FRAC value into
+*   @frac_value  - these 12 bits control what is loaded as the FRAC value into
 *                 the fractional interpolator.
-*   @intValue   - these nine bits control what is loaded as the INT value, this
+*   @int_value   - these nine bits control what is loaded as the INT value, this
 *                 is used to determine the overall division factor
 *   @fastlock   - when set to logic high fast-lock is enabled
 *
 *                               R Divider Register
-*   @modValue   - set the fractional modulus, this is the ratio of the PFD
+*   @mod_value   - set the fractional modulus, this is the ratio of the PFD
 *                 frequency to the channel step resolution on the RF output
-*   @rCounter   - the r counter allows the input reference frequency to
+*   @r_counter   - the r counter allows the input reference frequency to
 *                 be divided down to produce the reference clock to phase
 *                 frequency detector
 *   @prescaler  - the dual-modulus prescaler, along with the INT, FRAC and MOD
 *                 counters, determines the overall division ratio from the RFin
 *                 to PFD input
 *   @muxout     - the on chip multiplexer selection bits
-*   @loadControl - when set to logic high the value being programmed in the
+*   @load_control - when set to logic high the value being programmed in the
 *                  modulus is not loaded into the modulus. Instead, it sets the
 *                  resync delay of the Sigma-Delta.
 *
 *                                 Control Register
-*   @counterReset - resets the R and N counters
-*   @cpThreeState - puts the charge pump into three-state mode when programmed
+*   @counter_reset - resets the R and N counters
+*   @cp_three_state - puts the charge pump into three-state mode when programmed
 *                   to 1
-*   @powerDown  - activate power down mode
+*   @power_down  - activate power down mode
 *   @ldp        - lock detect precision
-*   @pdPolarity - phase detector polarity
-*   @cpCurrent  - Charge Pump Current settings, this should be set to the charge
+*   @pd_polarity - phase detector polarity
+*   @cp_current  - Charge Pump Current settings, this should be set to the charge
 *                 pump current that the loop filter is designed with
-*   @refDoubler - REFin Doubler, when the doubler is enabled, both the rising
+*   @ref_doubler - REFin Doubler, when the doubler is enabled, both the rising
 *                 and falling edges of REFin become active edges at the PFD input
 *   @resync     - define the time between two resync, if it is zero, than
 *                 the phase resync feature is disabled
 *
 *                              Noise and Spur register
-*   @noiseSpur  - allows the user to optimize a design either for improved
+*   @noise_spur  - allows the user to optimize a design either for improved
 *                 spurious performance or for improved phase noise performance
 */
 
-typedef struct {
+struct adf4153_settings_t {
 
-    /* Reference Input Frequency*/
-    unsigned long refIn;
-    /* Channel resolution or Channel spacing */
-    unsigned long channelSpacing;
+	/* Reference Input Frequency*/
+	uint32_t ref_in;
+	/* Channel resolution or Channel spacing */
+	uint32_t channel_spacing;
 
-    /* N Divider */
-    unsigned short fracValue : 12;
-    unsigned short intValue : 9;
-    unsigned char fastlock : 1;
+	/* N Divider */
+	uint16_t frac_value : 12;
+	uint16_t int_value : 9;
+	uint8_t fastlock : 1;
 
-    /* R Divider */
-    unsigned short modValue : 12;
-    unsigned char rCounter : 4;
-    unsigned char prescaler : 1;
-    unsigned char muxout : 3;
-    unsigned char loadControl : 1;
+	/* R Divider */
+	uint16_t mod_value : 12;
+	uint8_t r_counter : 4;
+	uint8_t prescaler : 1;
+	uint8_t muxout : 3;
+	uint8_t load_control : 1;
 
-    /* Control Register */
-    unsigned char counterReset : 1;
-    unsigned char cpThreeState : 1;
-    unsigned char powerDown : 1;
-    unsigned char ldp : 1;
-    unsigned char pdPolarity : 1;
-    unsigned char cpCurrent : 4;
-    unsigned char refDoubler : 1;
-    unsigned char resync : 4;
+	/* Control Register */
+	uint8_t counter_reset : 1;
+	uint8_t cp_three_state : 1;
+	uint8_t power_down : 1;
+	uint8_t ldp : 1;
+	uint8_t pd_polarity : 1;
+	uint8_t cp_current : 4;
+	uint8_t ref_doubler : 1;
+	uint8_t resync : 4;
 
-    /* Noise and Spur register */
-    unsigned char noiseSpur : 5;
+	/* Noise and Spur register */
+	uint8_t noise_spur : 5;
 
-} ADF4153_settings_t;
+};
 
-typedef struct {
+struct adf4153_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -330,26 +329,26 @@ typedef struct {
 	gpio_desc		*gpio_le2;
 	gpio_desc		*gpio_ce2;
 	/* Device Settings */
-	ADF4153_settings_t ADF4153_st;
+	struct adf4153_settings_t adf4153_st;
 	/* RF input frequency limits */
-	unsigned long ADF4153_RFIN_MIN_FRQ;
-	unsigned long ADF4153_RFIN_MAX_FRQ;
+	uint32_t adf4153_rfin_min_frq;
+	uint32_t adf4153_rfin_max_frq;
 	/* Maximum PFD frequency */
-	unsigned long ADF4153_PFD_MAX_FRQ;
+	uint32_t adf4153_pfd_max_frq;
 	/* VCO out frequency limits */
-	unsigned long ADF4153_VCO_MIN_FRQ;
-	unsigned long long ADF4153_VCO_MAX_FRQ;
+	uint32_t adf4153_vco_min_frq;
+	uint64_t adf4153_vco_max_frq;
 	/* maximum interpolator modulus value */
-	unsigned short ADF4153_MOD_MAX;
+	uint16_t adf4153_mod_max;
 
 	/* Internal buffers for each latch */
-	unsigned long r0;               /* the actual value of N Divider Register */
-	unsigned long r1;               /* the actual value of R Divider Register */
-	unsigned long r2;               /* the actual value of Control Register */
-	unsigned long r3;               /* the actual value of Noise and Spur Reg*/
-} ADF4153_dev;
+	uint32_t r0;               /* the actual value of N Divider Register */
+	uint32_t r1;               /* the actual value of R Divider Register */
+	uint32_t r2;               /* the actual value of Control Register */
+	uint32_t r3;               /* the actual value of Noise and Spur Reg*/
+};
 
-typedef struct {
+struct adf4153_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
@@ -358,32 +357,32 @@ typedef struct {
 	int8_t		gpio_le2;
 	int8_t		gpio_ce2;
 	/* Device Settings */
-	ADF4153_settings_t ADF4153_st;
-} ADF4153_init_param;
+	struct adf4153_settings_t adf4153_st;
+};
 
 /*****************************************************************************/
 /*  Functions Prototypes                                                     */
 /*****************************************************************************/
 /* Initialize the communication with the device */
-char ADF4153_Init(ADF4153_dev **device,
-		  ADF4153_init_param init_param);
+int8_t adf4153_init(struct adf4153_dev **device,
+		    struct adf4153_init_param init_param);
 
-/* Free the resources allocated by ADF4153_Init(). */
-int32_t ADF4153_remove(ADF4153_dev *dev);
+/* Free the resources allocated by adf4153_init(). */
+int32_t adf4153_remove(struct adf4153_dev *dev);
 
 /* Update register function */
-void ADF4153_UpdateLatch(ADF4153_dev *dev,
-			 unsigned long latchData);
+void adf4153_update_latch(struct adf4153_dev *dev,
+			  uint32_t latch_data);
 
 /* Return the value of a desired latch */
-unsigned long ADF4153_ReadLatch(ADF4153_dev *dev,
-				unsigned char latchType);
+uint32_t adf4153_read_latch(struct adf4153_dev *dev,
+			    uint8_t latch_type);
 
 /* Set the frequency to a desired value */
-unsigned long long ADF4153_SetFrequency(ADF4153_dev *dev,
-					unsigned long long frequency);
+uint64_t adf4153_set_frequency(struct adf4153_dev *dev,
+			       uint64_t frequency);
 
 /* Return the value of the channel spacing */
-unsigned long ADF4153_GetChannelSpacing(ADF4153_dev *dev);
+uint32_t adf4153_get_channel_spacing(struct adf4153_dev *dev);
 
 #endif // __ADF4153_H__
