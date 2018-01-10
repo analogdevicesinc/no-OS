@@ -36,7 +36,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 ******************************************************************************/
 #ifndef _ad5110_H_
 #define _ad5110_H_
@@ -65,52 +64,52 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
+struct ad5110_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* Device Settings */
-	unsigned char ad5110DevAddr;
-} ad5110_dev;
+	uint8_t ad5110_dev_addr;
+};
 
-typedef struct {
+struct ad5110_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* Device Settings */
-	unsigned char ad5110DevAddr;
-} ad5110_init_param;
+	uint8_t ad5110_dev_addr;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*!< Initializes the communication with the device. */
-char ad5110_Init(ad5110_dev **device,
-		 ad5110_init_param init_param);
+int8_t ad5110_init(struct ad5110_dev **device,
+		   struct ad5110_init_param init_param);
 
-/*!< Free the resources allocated by ad5110_Init(). */
-int32_t ad5110_remove(ad5110_dev *dev);
+/*!< Free the resources allocated by ad5110_init(). */
+int32_t ad5110_remove(struct ad5110_dev *dev);
 
 /*!< Write the content of serial register data to RDAC. */
-void ad5110_WriteRdac(ad5110_dev *dev,
-		      unsigned char rdacValue);
+void ad5110_write_rdac(struct ad5110_dev *dev,
+		       uint8_t rdac_value);
 
 /*!< Read the content of RDAC register. */
-unsigned char ad5110_ReadRdac(ad5110_dev *dev);
+uint8_t ad5110_read_rdac(struct ad5110_dev *dev);
 
 /*!< Write the content of RDAC register to EEPROM. */
-void ad5110_WriteRdacEeprom(ad5110_dev *dev);
+void ad5110_write_rdac_eeprom(struct ad5110_dev *dev);
 
 /*!< Read wiper position from EEPROM. */
-unsigned char ad5110_ReadWiper(ad5110_dev *dev);
+uint8_t ad5110_read_wiper(struct ad5110_dev *dev);
 
 /*!< Read resistor tolerance from EEPROM. */
-unsigned char ad5110_ReadResTolerance(ad5110_dev *dev);
+uint8_t ad5110_read_res_tolerance(struct ad5110_dev *dev);
 
 /*!< Software reset; makes a refresh of RDAC register with EEPROM. */
-void ad5110_Reset(ad5110_dev *dev);
+void ad5110_reset(struct ad5110_dev *dev);
 
 /*!< Software shutdown. */
-void ad5110_ShutDown(ad5110_dev *dev,
-		     unsigned char value);
+void ad5110_shut_down(struct ad5110_dev *dev,
+		      uint8_t value);
 
 #endif  // _ad5110_H_
