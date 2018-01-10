@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -66,13 +63,13 @@
  *                         0 - SPI peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-char AD74xx_Init(ad74xx_dev **device,
-		 ad74xx_init_param init_param)
+int8_t ad74xx_init(struct ad74xx_dev **device,
+		   struct ad74xx_init_param init_param)
 {
-	ad74xx_dev *dev;
-    unsigned char status;
+	struct ad74xx_dev *dev;
+	uint8_t status;
 
-	dev = (ad74xx_dev *)malloc(sizeof(*dev));
+	dev = (struct ad74xx_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -86,22 +83,22 @@ char AD74xx_Init(ad74xx_dev **device,
 		status |= gpio_direction_output(dev->gpio_cs,
 						GPIO_HIGH);
 
-	dev->deviceBitsNumber = init_param.deviceBitsNumber;
-	dev->partNumber = init_param.partNumber;
+	dev->device_bits_number = init_param.device_bits_number;
+	dev->part_number = init_param.part_number;
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD74xx_Init().
+ * @brief Free the resources allocated by ad74xx_init().
  *
  * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD74xx_remove(ad74xx_dev *dev)
+int32_t ad74xx_remove(struct ad74xx_dev *dev)
 {
 	int32_t status;
 
@@ -123,15 +120,15 @@ int32_t AD74xx_remove(ad74xx_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void AD74xx_PowerDown(ad74xx_dev *dev)
+void ad74xx_power_down(struct ad74xx_dev *dev)
 {
-    unsigned char dummyValue = 0;
+	uint8_t dummy_value = 0;
 
-    AD74XX_CS_LOW;
-	spi_write_and_read(dev->spi_desc, &dummyValue, 1);
-    AD74XX_CS_HIGH;     // CS is brought "High" between 2nd falling edge of SCLK
-                        // and 10th falling edge of SCLK(8th falling edge, here)
-	spi_write_and_read(dev->spi_desc, &dummyValue, 1);
+	AD74XX_CS_LOW;
+	spi_write_and_read(dev->spi_desc, &dummy_value, 1);
+	AD74XX_CS_HIGH;     // CS is brought "High" between 2nd falling edge of SCLK
+	// and 10th falling edge of SCLK(8th falling edge, here)
+	spi_write_and_read(dev->spi_desc, &dummy_value, 1);
 }
 
 /***************************************************************************//**
@@ -143,11 +140,11 @@ void AD74xx_PowerDown(ad74xx_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void AD74xx_PowerUp(ad74xx_dev *dev)
+void ad74xx_power_up(struct ad74xx_dev *dev)
 {
-    unsigned char dummyValue[2] = {0, 0};
+	uint8_t dummy_value[2] = {0, 0};
 
-	spi_write_and_read(dev->spi_desc, dummyValue, 2);
+	spi_write_and_read(dev->spi_desc, dummy_value, 2);
 }
 
 /***************************************************************************//**
@@ -157,53 +154,53 @@ void AD74xx_PowerUp(ad74xx_dev *dev)
  *
  * @return convResult - conversion data.
 *******************************************************************************/
-unsigned short AD74xx_GetRegisterValue(ad74xx_dev *dev)
+uint16_t ad74xx_get_register_value(struct ad74xx_dev *dev)
 {
-    unsigned char  dataWord[2] = {0, 0};
-    unsigned short convResult  = 0;
+	uint8_t data_word[2] = {0, 0};
+	uint16_t conv_result = 0;
 
-	spi_write_and_read(dev->spi_desc, dataWord, 2);
-    switch(dev->deviceBitsNumber){
-		case 8:
-			convResult = (((unsigned short)(dataWord[0] & 0x1F)) << 8) +
-                         (dataWord[1] & 0xE0);
-            convResult = convResult >> 5;
-			break;
-		case 10:
-			convResult = (((unsigned short)(dataWord[0] & 0x1F)) << 8) +
-                         (dataWord[1] & 0xF8);
-            convResult = convResult >> 3;
-			break;
-		case 12:
-			convResult = (((unsigned short)(dataWord[0] & 0x1F)) << 8) +
-                         (dataWord[1] & 0xFE);
-            convResult = convResult >> 1;
-			break;
-		default: // 16 bits
-			convResult = (((unsigned short)(dataWord[0] & 0xFF)) << 8) +
-                         dataWord[1];
-			break;
+	spi_write_and_read(dev->spi_desc, data_word, 2);
+	switch(dev->device_bits_number) {
+	case 8:
+		conv_result = (((uint16_t)(data_word[0] & 0x1F)) << 8) +
+			      (data_word[1] & 0xE0);
+		conv_result = conv_result >> 5;
+		break;
+	case 10:
+		conv_result = (((uint16_t)(data_word[0] & 0x1F)) << 8) +
+			      (data_word[1] & 0xF8);
+		conv_result = conv_result >> 3;
+		break;
+	case 12:
+		conv_result = (((uint16_t)(data_word[0] & 0x1F)) << 8) +
+			      (data_word[1] & 0xFE);
+		conv_result = conv_result >> 1;
+		break;
+	default: // 16 bits
+		conv_result = (((uint16_t)(data_word[0] & 0xFF)) << 8) +
+			      data_word[1];
+		break;
 	}
 
-    return convResult;
+	return conv_result;
 }
 
 /***************************************************************************//**
  * @brief Converts a raw sample to volts.
  *
- * @param dev      - The device structure.
- * @param rawValue - The data sample.
- * @param vRef     - The value of the voltage reference used by the device.
+ * @param dev       - The device structure.
+ * @param raw_value - The data sample.
+ * @param v_ref     - The value of the voltage reference used by the device.
  *
- * @return voltage - The result of the conversion expressed as volts.
+ * @return voltage  - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD74xx_ConvertToVolts(ad74xx_dev *dev,
-			    unsigned short rawValue,
-			    float vRef)
+float ad74xx_convert_to_volts(struct ad74xx_dev *dev,
+			      uint16_t raw_value,
+			      float v_ref)
 {
-    float voltage = 0;
+	float voltage = 0;
 
-    voltage = (rawValue) * vRef / (1 << dev->deviceBitsNumber);
+	voltage = (raw_value) * v_ref / (1 << dev->device_bits_number);
 
-    return voltage;
+	return voltage;
 }
