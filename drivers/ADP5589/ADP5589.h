@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __ADP5589_H__
 #define __ADP5589_H__
@@ -328,15 +325,15 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct adp5589_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
-} adp5589_dev;
+};
 
-typedef struct {
+struct adp5589_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
-} adp5589_init_param;
+};
 
 
 /******************************************************************************/
@@ -344,57 +341,57 @@ typedef struct {
 /******************************************************************************/
 
 /*! Writes data into a register. */
-void ADP5589_SetRegisterValue(adp5589_dev *dev,
-			      unsigned char registerAddress,
-                              unsigned char registerValue);
+void adp5589_set_register_value(struct adp5589_dev *dev,
+				uint8_t register_address,
+				uint8_t register_value);
 
 /*! Reads the value of a register. */
-unsigned char ADP5589_GetRegisterValue(adp5589_dev *dev,
-				       unsigned char registerAddress);
+uint8_t adp5589_get_register_value(struct adp5589_dev *dev,
+				   uint8_t register_address);
 
 /*! Initializes the communication peripheral and checks if the ADP5589
 	part is present. */
-char ADP5589_Init(adp5589_dev **device,
-		  adp5589_init_param init_param);
+int8_t adp5589_init(struct adp5589_dev **device,
+		    struct adp5589_init_param init_param);
 
-/*! Free the resources allocated by ADP5589_Init(). */
-int32_t adp5589_remove(adp5589_dev *dev);
+/*! Free the resources allocated by adp5589_init(). */
+int32_t adp5589_remove(struct adp5589_dev *dev);
 
 /*! Initializes the PWM generator in continuous mode. */
-void ADP5589_InitPwm(adp5589_dev *dev);
+void adp5589_init_pwm(struct adp5589_dev *dev);
 
 /*! Sets the PWM On and Off times. */
-void ADP5589_SetPwm(adp5589_dev *dev,
-		    unsigned short pwmOffTime,
-		    unsigned short pwmOnTime);
+void adp5589_set_pwm(struct adp5589_dev *dev,
+		     uint16_t pwm_off_time,
+		     uint16_t pwm_on_time);
 
 /*! Sets the direction of the pins. */
-void ADP5589_GpioDirection(adp5589_dev *dev,
-			   unsigned char reg,
-			   unsigned char val);
+void adp5589_gpio_direction(struct adp5589_dev *dev,
+			    uint8_t reg,
+			    uint8_t val);
 
 /*! Reads the state of the pins. */
-unsigned char ADP5589_GetPinState(adp5589_dev *dev,
-				  unsigned char reg);
+uint8_t adp5589_get_pin_state(struct adp5589_dev *dev,
+			      uint8_t reg);
 
 /*! Sets the state of the pins.*/
-void ADP5589_SetPinState(adp5589_dev *dev,
-			 unsigned char reg,
-			 unsigned char state);
+void adp5589_set_pin_state(struct adp5589_dev *dev,
+			   uint8_t reg,
+			   uint8_t state);
 
 /*! Initializes keyboard decoder. */
-void ADP5589_InitKey(adp5589_dev *dev,
-		     unsigned char pmodPort);
+void adp5589_init_key(struct adp5589_dev *dev,
+		      uint8_t pmod_port);
 
 /*! Decodes the key on the Pmod-KYPD. */
-unsigned char ADP5589_KeyDecode(unsigned char reg,
-                                unsigned char eventType,
-                                unsigned char pmodPort);
+uint8_t adp5589_key_decode(uint8_t reg,
+			   uint8_t event_type,
+			   uint8_t pmod_port);
 
 /*! Locks the ADP5589 and requests Password for unlock. */
-void ADP5589_KeyLock(adp5589_dev *dev,
-		     unsigned char firstEvent,
-                     unsigned char secondEvent,
-                     unsigned char pmodPort);
+void adp5589_key_lock(struct adp5589_dev *dev,
+		      uint8_t first_event,
+		      uint8_t second_event,
+		      uint8_t pmod_port);
 
 #endif	/* __ADP5589_H__ */
