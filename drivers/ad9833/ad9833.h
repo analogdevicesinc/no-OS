@@ -36,7 +36,6 @@
 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
 *******************************************************************************/
 #ifndef _AD9833_H_
 #define _AD9833_H_
@@ -98,83 +97,83 @@
 /******************************************************************************/
 
 /* Supported devices */
-typedef enum {
-    ID_AD9833,
-    ID_AD9834,
-    ID_AD9837,
-    ID_AD9838,
-} AD9833_type;
+enum ad9833_type {
+	ID_AD9833,
+	ID_AD9834,
+	ID_AD9837,
+	ID_AD9838,
+};
 
-typedef struct {
+struct ad9833_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	spi_desc			*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_psel;
-	gpio_desc		*gpio_fsel;
-	gpio_desc		*gpio_reset;
-	gpio_desc		*gpio_sleep;
+	gpio_desc			*gpio_psel;
+	gpio_desc			*gpio_fsel;
+	gpio_desc			*gpio_reset;
+	gpio_desc			*gpio_sleep;
 	/* Device Settings */
-	AD9833_type		act_device;
-	unsigned char		prog_method;
-	unsigned short		ctrlRegValue;
-	unsigned short		testOpbiten;
-} AD9833_dev;
+	enum ad9833_type		act_device;
+	uint8_t				prog_method;
+	uint16_t			ctrl_reg_value;
+	uint16_t			test_opbiten;
+};
 
-typedef struct {
+struct ad9833_init_param {
 	/* SPI */
-	spi_init_param		spi_init;
+	spi_init_param			spi_init;
 	/* GPIO */
-	int8_t			gpio_psel;
-	int8_t			gpio_fsel;
-	int8_t			gpio_reset;
-	int8_t			gpio_sleep;
+	int8_t				gpio_psel;
+	int8_t				gpio_fsel;
+	int8_t				gpio_reset;
+	int8_t				gpio_sleep;
 	/* Device Settings */
-	AD9833_type		act_device;
-} AD9833_init_param;
+	enum ad9833_type		act_device;
+};
 
-typedef struct {
-    unsigned long mclk;
-    float freq_const;
-} ad9833_chip_info;
+struct ad9833_chip_info {
+	uint32_t	mclk;
+	float		freq_const;
+};
 
 /******************************************************************************/
 /************************** Functions Declarations ****************************/
 /******************************************************************************/
 /* Initialize the SPI communication with the device. */
-char AD9833_Init(AD9833_dev **device,
-		 AD9833_init_param init_param);
+int8_t ad9833_init(struct ad9833_dev **device,
+		   struct ad9833_init_param init_param);
 /* Free the resources allocated by adf7023_init(). */
-int32_t AD9833_remove(AD9833_dev *dev);
+int32_t ad9833_remove(struct ad9833_dev *dev);
 /* Transmits 16 bits on SPI. */
-void AD9833_TxSpi(AD9833_dev *dev,
-		  short value);
+void ad9833_tx_spi(struct ad9833_dev *dev,
+		   int16_t value);
 /* Selects the type of output. */
-char AD9833_OutMode(AD9833_dev *dev,
-		    unsigned char vOutMode);
+int8_t ad9833_out_mode(struct ad9833_dev *dev,
+		       uint8_t v_out_mode);
 /* Loads a frequency value in a register. */
-void AD9833_SetFreq(AD9833_dev *dev,
-		    unsigned char registerNumber,
-		    unsigned long frequencyValue);
+void ad9833_set_freq(struct ad9833_dev *dev,
+		     uint8_t register_number,
+		     uint32_t frequency_value);
 /* Loads a phase value in a register. */
-void AD9833_SetPhase(AD9833_dev *dev,
-		     unsigned char registerNumber,
-		     float phaseValue);
+void ad9833_set_phase(struct ad9833_dev *dev,
+		      uint8_t register_number,
+		      float phase_value);
 /* Select the frequency register to be used. */
-void AD9833_SelectFreqReg(AD9833_dev *dev,
-			  unsigned char freqReg);
+void ad9833_select_freq_reg(struct ad9833_dev *dev,
+			    uint8_t freq_reg);
 /* Select the phase register to be used. */
-void AD9833_SelectPhaseReg(AD9833_dev *dev,
-			   unsigned char phaseReg);
+void ad9833_select_phase_reg(struct ad9833_dev *dev,
+			     uint8_t phase_reg);
 /* Enable / Disable the sleep function. */
-void AD9833_SleepMode(AD9833_dev *dev,
-		      unsigned char sleepMode);
+void ad9833_sleep_mode(struct ad9833_dev *dev,
+		       uint8_t sleep_mode);
 
-void AD9834_SelectProgMethod(AD9833_dev *dev,
-			     unsigned char value);
+void ad9834_select_prog_method(struct ad9833_dev *dev,
+			       uint8_t value);
 
-void AD9834_LogicOutput(AD9833_dev *dev,
-			unsigned char opbiten,
-                        unsigned char signpib,
-                        unsigned char div2);
+void ad9834_logic_output(struct ad9833_dev *dev,
+			 uint8_t opbiten,
+			 uint8_t signpib,
+			 uint8_t div2);
 
 #endif  /* _AD9833_H_ */
