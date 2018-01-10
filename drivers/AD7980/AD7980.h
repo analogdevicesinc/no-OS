@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD7980_H__
 #define __AD7980_H__
@@ -55,35 +52,35 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7980_dev {
 	/* SPI */
-	spi_desc		*spi_desc;
+	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_cs;
-} ad7980_dev;
+	gpio_desc	*gpio_cs;
+};
 
-typedef struct {
+struct ad7980_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_cs;
-} ad7980_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication peripheral. */
-char AD7980_Init(ad7980_dev **device,
-		 ad7980_init_param init_param);
+int8_t ad7980_init(struct ad7980_dev **device,
+		   struct ad7980_init_param init_param);
 
-/*! Free the resources allocated by AD7980_Init(). */
-int32_t ad7980_remove(ad7980_dev *dev);
+/*! Free the resources allocated by ad7980_init(). */
+int32_t ad7980_remove(struct ad7980_dev *dev);
 
 /*! Initiates conversion and reads data. */
-unsigned short AD7980_Conversion(ad7980_dev *dev);
+uint16_t ad7980_conversion(struct ad7980_dev *dev);
 
 /*! Converts a 16-bit raw sample to volts. */
-float AD7980_ConvertToVolts(unsigned short rawSample, float vRef);
+float ad7980_convert_to_volts(uint16_t raw_sample, float v_ref);
 
 #endif /* __AD7980_H__ */
