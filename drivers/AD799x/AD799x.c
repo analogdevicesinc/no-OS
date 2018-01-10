@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -63,46 +60,45 @@
  *                        Example: -1 - Initialization failed;
  *                                  0 - Initialization succeeded.
 *******************************************************************************/
-char AD799x_Init(ad799x_dev **device,
-		 ad799x_init_param init_param)
+int8_t ad799x_init(struct ad799x_dev **device,
+		   struct ad799x_init_param init_param)
 {
-	ad799x_dev *dev;
-    char status = -1;
+	struct ad799x_dev *dev;
+	int8_t status = -1;
 
-	dev = (ad799x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad799x_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-    /* Initialize I2C peripheral. */
+	/* Initialize I2C peripheral. */
 	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 
-    /* Determine the number of bits available for a conversion. */
-    switch(init_param.partNumber)
-    {
-        case AD7991:
-            dev->bitsNumber = 12;
-            break;
-        case AD7995:
-            dev->bitsNumber = 10;
-            break;
-        case AD7999:
-            dev->bitsNumber = 8;
-            break;
-    }
+	/* Determine the number of bits available for a conversion. */
+	switch(init_param.part_number) {
+	case AD7991:
+		dev->bits_number = 12;
+		break;
+	case AD7995:
+		dev->bits_number = 10;
+		break;
+	case AD7999:
+		dev->bits_number = 8;
+		break;
+	}
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD799x_Init().
+ * @brief Free the resources allocated by ad799x_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad799x_remove(ad799x_dev *dev)
+int32_t ad799x_remove(struct ad799x_dev *dev)
 {
 	int32_t ret;
 
@@ -116,54 +112,54 @@ int32_t ad799x_remove(ad799x_dev *dev)
 /***************************************************************************//**
  * @brief Writes data into the Configuration Register.
  *
- * @param dev           - The device structure.
- * @param registerValue - Data value to write.
+ * @param dev            - The device structure.
+ * @param register_value - Data value to write.
  *
  * @return None.
 *******************************************************************************/
-void AD799x_SetConfigurationReg(ad799x_dev *dev,
-				unsigned char registerValue)
+void ad799x_set_configuration_reg(struct ad799x_dev *dev,
+				  uint8_t register_value)
 {
-	i2c_write(dev->i2c_desc, &registerValue, 1, 1);
+	i2c_write(dev->i2c_desc, &register_value, 1, 1);
 }
 
 /***************************************************************************//**
  * @brief Reads the High byte and the Low byte of the conversion.
  *
- * @param dev       - The device structure.
- * @param convValue - It is used to store the conversion value.
- * @param channel   - Stores the channel number for the current conversion.
+ * @param dev        - The device structure.
+ * @param conv_value - It is used to store the conversion value.
+ * @param channel    - Stores the channel number for the current conversion.
  *
  * @return none.
 *******************************************************************************/
-void AD799x_GetConversionResult(ad799x_dev *dev,
-				short* convValue,
-				char* channel)
+void ad799x_get_conversion_result(struct ad799x_dev *dev,
+				  int16_t* conv_value,
+				  int8_t* channel)
 {
-    unsigned char rxData[2] = {0, 0};
-    short         convWord  = 0;
+	uint8_t rx_data[2] = {0, 0};
+	int16_t conv_word = 0;
 
-	i2c_read(dev->i2c_desc, rxData, 2, 1);
-    convWord = (rxData[0] << 8) + rxData[1];
-    *channel = (convWord & 0x3000) >> 12;
-    *convValue = (convWord & 0x0FFF) >> (12 - dev->bitsNumber);
+	i2c_read(dev->i2c_desc, rx_data, 2, 1);
+	conv_word = (rx_data[0] << 8) + rx_data[1];
+	*channel = (conv_word & 0x3000) >> 12;
+	*conv_value = (conv_word & 0x0FFF) >> (12 - dev->bits_number);
 }
 
 /***************************************************************************//**
  * @brief Converts a raw sample to volts.
  *
- * @param rawSample - The data sample.
- * @param vRef      - The value of the voltage reference used by the device.
+ * @param raw_sample - The data sample.
+ * @param v_ref      - The value of the voltage reference used by the device.
  *
  * @return voltage  - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD799x_ConvertToVolts(ad799x_dev *dev,
-			    short rawSample,
-			    float vRef)
+float ad799x_convert_to_volts(struct ad799x_dev *dev,
+			      int16_t raw_sample,
+			      float v_ref)
 {
-    float voltage = 0;
+	float voltage = 0;
 
-    voltage = vRef * (float)rawSample / (1 << dev->bitsNumber);
+	voltage = v_ref * (float)raw_sample / (1 << dev->bits_number);
 
-    return voltage;
+	return voltage;
 }
