@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD7980.h"           // AD7980 definitions.
+#include "ad7980.h"           // AD7980 definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
