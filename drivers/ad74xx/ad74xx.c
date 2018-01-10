@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD74xx.h"		// AD74xx definitions.
+#include "ad74xx.h"		// AD74xx definitions.
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
