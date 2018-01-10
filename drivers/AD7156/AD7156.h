@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __AD7156_H__
 #define __AD7156_H__
@@ -148,99 +147,99 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7156_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* Device Settings */
-	float ad7156Channel1Range;
-	float ad7156Channel2Range;
-} ad7156_dev;
+	float ad7156_channel1_range;
+	float ad7156_channel2_range;
+};
 
-typedef struct {
+struct ad7156_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* Device Settings */
-	float ad7156Channel1Range;
-	float ad7156Channel2Range;
-} ad7156_init_param;
+	float ad7156_channel1_range;
+	float ad7156_channel2_range;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*!< Performs a burst read of a specified number of registers. */
-void AD7156_GetRegisterValue(ad7156_dev *dev,
-			     unsigned char* pReadData,
-                             unsigned char registerAddress,
-                             unsigned char bytesNumber);
+void ad7156_get_register_value(struct ad7156_dev *dev,
+			       uint8_t* p_read_data,
+			       uint8_t register_address,
+			       uint8_t bytes_number);
 
 /*!< Writes data into one or two registers.. */
-void AD7156_SetRegisterValue(ad7156_dev *dev,
-			     unsigned short registerValue,
-                             unsigned char  registerAddress,
-                             unsigned char  bytesNumber);
+void ad7156_set_register_value(struct ad7156_dev *dev,
+			       uint16_t register_value,
+			       uint8_t  register_address,
+			       uint8_t  bytes_number);
 /*!< Initializes the communication peripheral and checks if the device is
     present. */
-char AD7156_Init(ad7156_dev **device,
-		 ad7156_init_param init_param);
+int8_t ad7156_init(struct ad7156_dev **device,
+		   struct ad7156_init_param init_param);
 
 /*! Free the resources allocated by ad7156_init(). */
-int32_t AD7156_remove(ad7156_dev *dev);
+int32_t ad7156_remove(struct ad7156_dev *dev);
 
 /*!< Resets the device. */
-void AD7156_Reset(ad7156_dev *dev);
+void ad7156_reset(struct ad7156_dev *dev);
 
 /*!< Sets the converter mode of operation. */
-void AD7156_SetPowerMode(ad7156_dev *dev,
-			 unsigned char pwrMode);
+void ad7156_set_power_mode(struct ad7156_dev *dev,
+			   uint8_t pwr_mode);
 
 /*!< Enables or disables conversion on the selected channel. */
-void AD7156_ChannelState(ad7156_dev *dev,
-			 unsigned char channel,
-			 unsigned char enableConv);
+void ad7156_channel_state(struct ad7156_dev *dev,
+			  uint8_t channel,
+			  uint8_t enable_conv);
 
 /*!< Sets the input range of the specified channel. */
-void AD7156_SetRange(ad7156_dev *dev,
-		     unsigned channel,
-		     unsigned char range);
+void ad7156_set_range(struct ad7156_dev *dev,
+		      uint32_t channel,
+		      uint8_t range);
 
 /*!< Reads the range bits from the device and returns the range in pF. */
-float AD7156_GetRange(ad7156_dev *dev,
-		      unsigned channel);
+float ad7156_get_range(struct ad7156_dev *dev,
+		       uint32_t channel);
 
 /*!< Selects the threshold mode of operation. */
-void AD7156_SetThresholdMode(ad7156_dev *dev,
-			     unsigned char thrMode,
-			     unsigned char thrFixed);
+void ad7156_set_threshold_mode(struct ad7156_dev *dev,
+			       uint8_t thr_mode,
+			       uint8_t thr_fixed);
 
 /*!< Writes to the threshold register when threshold fixed mode is enabled. */
-void AD7156_SetThreshold(ad7156_dev *dev,
-			 unsigned char channel,
-			 float pFthr);
+void ad7156_set_threshold(struct ad7156_dev *dev,
+			  uint8_t channel,
+			  float p_fthr);
 
 /*!< Writes a value(pF) to the sensitivity register. This functions
     should be used when adaptive threshold mode is selected. */
-void AD7156_SetSensitivity(ad7156_dev *dev,
-			   unsigned char channel,
-			   float pFsensitivity);
+void ad7156_set_sensitivity(struct ad7156_dev *dev,
+			    uint8_t channel,
+			    float p_fsensitivity);
 
 /*!< Reads a 12-bit sample from the selected channel */
-unsigned short AD7156_ReadChannelData(ad7156_dev *dev,
-				      unsigned char channel);
+uint16_t ad7156_read_channel_data(struct ad7156_dev *dev,
+				  uint8_t channel);
 
 /*!< Waits for a finished CDC conversion and reads a 12-bit sample from
     the selected channel. */
-unsigned short AD7156_WaitReadChannelData(ad7156_dev *dev,
-					  unsigned char channel);
+uint16_t ad7156_wait_read_channel_data(struct ad7156_dev *dev,
+				       uint8_t channel);
 
 /*!< Reads a sample the selected channel and converts the data to
    picofarads(pF). */
-float AD7156_ReadChannelCapacitance(ad7156_dev *dev,
-				    unsigned char channel);
+float ad7156_read_channel_capacitance(struct ad7156_dev *dev,
+				      uint8_t channel);
 
 /*!< Waits for a finished CDC conversion the selected channel, reads a
     sample and converts the data to picofarads(pF). */
-float AD7156_WaitReadChannelCapacitance(ad7156_dev *dev,
-					unsigned char channel);
+float ad7156_wait_read_channel_capacitance(struct ad7156_dev *dev,
+		uint8_t channel);
 
 #endif	/* __AD7156_H__ */
