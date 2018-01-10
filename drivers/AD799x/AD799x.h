@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __AD799X_H__
@@ -59,49 +56,49 @@
 /******************************************************************************/
 
 /* Supported devices */
-typedef enum {
-	ID_AD7991,
-	ID_AD7995,
-	ID_AD7999
-} ad799x_type;
+enum ad799x_type {
+	AD7991,
+	AD7995,
+	AD7999
+};
 
-typedef struct {
+struct ad799x_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* Device Settings */
-	uint8_t         bitsNumber;
-} ad799x_dev;
+	uint8_t         bits_number;
+};
 
-typedef struct {
+struct ad799x_init_param {
 	/* I2C */
-	i2c_init_param	i2c_init;
+	i2c_init_param		i2c_init;
 	/* Device Settings */
-	ad799x_type	partNumber;
-} ad799x_init_param;
+	enum ad799x_type	part_number;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes I2C. */
-char AD799x_Init(ad799x_dev **device,
-		 ad799x_init_param init_param);
+int8_t ad799x_init(struct ad799x_dev **device,
+		   struct ad799x_init_param init_param);
 
-/*! Free the resources allocated by AD799x_Init(). */
-int32_t ad799x_remove(ad799x_dev *dev);
+/*! Free the resources allocated by ad799x_init(). */
+int32_t ad799x_remove(struct ad799x_dev *dev);
 
 /*! Writes data into the Configuration Register. */
-void AD799x_SetConfigurationReg(ad799x_dev *dev,
-				unsigned char registerValue);
+void ad799x_set_configuration_reg(struct ad799x_dev *dev,
+				  uint8_t register_value);
 
 /*! Reads the High byte and the Low byte of the conversion. */
-void AD799x_GetConversionResult(ad799x_dev *dev,
-				short* convValue,
-				char* channel);
+void ad799x_get_conversion_result(struct ad799x_dev *dev,
+				  int16_t* conv_value,
+				  int8_t* channel);
 
 /*! Converts a raw sample to volts.*/
-float AD799x_ConvertToVolts(ad799x_dev *dev,
-			    short rawSample,
-			    float vRef);
+float ad799x_convert_to_volts(struct ad799x_dev *dev,
+			      int16_t raw_sample,
+			      float v_ref);
 
 #endif /* __AD799X_H__ */
