@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -63,13 +60,13 @@
  *                  Example: -1 - Initialization failed;
  *                            0 - Initialization succeeded.
 *******************************************************************************/
-char AD7980_Init(ad7980_dev **device,
-		 ad7980_init_param init_param)
+int8_t ad7980_init(struct ad7980_dev **device,
+		   struct ad7980_init_param init_param)
 {
-	ad7980_dev *dev;
-	unsigned char status;
+	struct ad7980_dev *dev;
+	uint8_t status;
 
-	dev = (ad7980_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7980_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -84,17 +81,17 @@ char AD7980_Init(ad7980_dev **device,
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD7980_Init().
+ * @brief Free the resources allocated by ad7980_init().
  *
  * @param dev - The device structure.
  *
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad7980_remove(ad7980_dev *dev)
+int32_t ad7980_remove(struct ad7980_dev *dev)
 {
 	int32_t ret;
 
@@ -114,41 +111,41 @@ int32_t ad7980_remove(ad7980_dev *dev)
  *
  * @return receivedData - Data read from the ADC.
 *******************************************************************************/
-unsigned short AD7980_Conversion(ad7980_dev *dev)
+uint16_t ad7980_conversion(struct ad7980_dev *dev)
 {
-	unsigned short receivedData = 0;
-	unsigned char  txData[1] = {0};
-	unsigned char  rxData[2] = {0, 0};
+	uint16_t received_data = 0;
+	uint8_t tx_data[1] = {0};
+	uint8_t rx_data[2] = {0, 0};
 
-    txData[0] = 0x7F;
+	tx_data[0] = 0x7F;
 	spi_write_and_read(dev->spi_desc,
-			   txData,
+			   tx_data,
 			   1);
 	AD7980_CS_LOW;
-    rxData[0] = 0xFF;
-    rxData[1] = 0xFF;
+	rx_data[0] = 0xFF;
+	rx_data[1] = 0xFF;
 	spi_write_and_read(dev->spi_desc,
-			   rxData,
+			   rx_data,
 			   2);
 	AD7980_CS_HIGH;
-	receivedData = (rxData[0] << 8) + rxData[1];
+	received_data = (rx_data[0] << 8) + rx_data[1];
 
-	return(receivedData);
+	return(received_data);
 }
 
 /***************************************************************************//**
  * @brief Converts a 16-bit raw sample to volts.
  *
- * @param rawSample - 16-bit data sample.
- * @param vRef      - The value of the voltage reference used by the device.
+ * @param raw_sample - 16-bit data sample.
+ * @param v_ref      - The value of the voltage reference used by the device.
  *
- * @return voltage  - The result of the conversion expressed as volts.
+ * @return voltage   - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD7980_ConvertToVolts(unsigned short rawSample, float vRef)
+float ad7980_convert_to_volts(uint16_t raw_sample, float v_ref)
 {
-    float voltage = 0;
+	float voltage = 0;
 
-    voltage = vRef * (float)rawSample / (1ul << 16);
+	voltage = v_ref * (float)raw_sample / (1ul << 16);
 
-    return voltage;
+	return voltage;
 }
