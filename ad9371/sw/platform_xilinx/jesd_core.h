@@ -51,9 +51,9 @@
 #define TX_XCVR_BASEADDR		XPAR_AXI_AD9371_TX_XCVR_BASEADDR
 #define RX_OS_XCVR_BASEADDR		XPAR_AXI_AD9371_RX_OS_XCVR_BASEADDR
 
-#define RX_JESD_BASEADDR		XPAR_AXI_AD9371_RX_JESD_BASEADDR
-#define TX_JESD_BASEADDR		XPAR_AXI_AD9371_TX_JESD_BASEADDR
-#define RX_OS_JESD_BASEADDR		XPAR_AXI_AD9371_RX_OS_JESD_BASEADDR
+#define RX_JESD_BASEADDR		XPAR_AXI_AD9371_RX_JESD_RX_AXI_BASEADDR
+#define TX_JESD_BASEADDR		XPAR_AXI_AD9371_TX_JESD_TX_AXI_BASEADDR
+#define RX_OS_JESD_BASEADDR		XPAR_AXI_AD9371_RX_OS_JESD_RX_AXI_BASEADDR
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -85,5 +85,6 @@ typedef struct {
 /******************************************************************************/
 int32_t xcvr_setup(mykonosDevice_t *myk_dev);
 int32_t jesd_setup(mykonosDevice_t *myk_dev);
-
+int32_t jesd_tx_enable(mykonosDevice_t *myk_dev);
+int32_t jesd_rx_enable(mykonosDevice_t *myk_dev);
 #endif

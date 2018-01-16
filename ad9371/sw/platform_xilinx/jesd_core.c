@@ -195,22 +195,8 @@
 
 #define ENC_8B10B					810
 
-#define JESD_REG_TRX_VERSION				0x00
-
-#define JESD_REG_TRX_RESET					0x04
-#define JESD_TRX_RESET						(1 << 0)
-
-#define JESD_REG_TRX_ILA_SUPPORT			0x08
-#define JESD_REG_TRX_SCRAMBLING				0x0c
-#define JESD_REG_TRX_SYSREF_HANDLING		0x10
-#define JESD_REG_TX_ILA_MULTIFRAMES			0x14
-#define JESD_REG_TRX_TEST_MODES				0x18
-#define JESD_REG_RX_LINK_ERROR_STATUS		0x1c
-#define JESD_REG_TRX_OCTETS_PER_FRAME		0x20
-#define JESD_REG_TRX_FRAMES_PER_MULTIFRAME	0x24
-#define JESD_REG_TRX_LANES_IN_USE			0x28
-#define JESD_REG_TRX_SUBCLASS_MODE			0x2c
-#define JESD_REG_TRX_SYNC_STATUS			0x38
+#define JESD204_REG_LINK_DISABLE	0xc0
+#define JESD204_REG_LINK_CONF0		0x210
 
 /***************************************************************************//**
  * @brief xcvr_write
@@ -865,46 +851,61 @@ int32_t jesd_setup(mykonosDevice_t *myk_dev)
 	jesd_device	rx_jesd;
 	jesd_device	tx_jesd;
 	jesd_device	rx_os_jesd;
+	uint32_t octets_per_frame;
+	uint32_t octets_per_multiframe;
 
 	rx_jesd.base_addr = RX_JESD_BASEADDR;
 	tx_jesd.base_addr = TX_JESD_BASEADDR;
 	rx_os_jesd.base_addr = RX_OS_JESD_BASEADDR;
 
-	jesd_write(&rx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(&rx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(&rx_jesd, JESD_REG_TRX_SCRAMBLING,
-							myk_dev->rx->framer->scramble ? 0x01 : 0x00);
-	jesd_write(&rx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(&rx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
-							myk_dev->rx->framer->K - 1);
-	jesd_write(&rx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x03);
-	jesd_write(&rx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
-							myk_dev->rx->framer->K - 1);
-	jesd_write(&rx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	octets_per_frame = 0x4;
+	octets_per_multiframe = octets_per_frame * myk_dev->rx->framer->K;
+	jesd_write(&rx_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&rx_jesd, JESD204_REG_LINK_DISABLE, 0x1);
 
-	jesd_write(&tx_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(&tx_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(&tx_jesd, JESD_REG_TRX_SCRAMBLING,
-							myk_dev->tx->deframer->scramble ? 0x01 : 0x00);
-	jesd_write(&tx_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(&tx_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
-							myk_dev->tx->deframer->K - 1);
-	jesd_write(&tx_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(&tx_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
-							myk_dev->tx->deframer->K - 1);
-	jesd_write(&tx_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	octets_per_frame = 0x2;
+	octets_per_multiframe = octets_per_frame * myk_dev->tx->deframer->K;
+	jesd_write(&tx_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&tx_jesd, JESD204_REG_LINK_DISABLE, 0x1);
 
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_RESET, JESD_TRX_RESET);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_ILA_SUPPORT, 0x01);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_SCRAMBLING,
-							myk_dev->obsRx->framer->scramble ? 0x01 : 0x00);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_SYSREF_HANDLING, 0x00);
-	jesd_write(&rx_os_jesd, JESD_REG_TX_ILA_MULTIFRAMES,
-							myk_dev->obsRx->framer->K - 1);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_OCTETS_PER_FRAME, 0x01);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_FRAMES_PER_MULTIFRAME,
-							myk_dev->obsRx->framer->K - 1);
-	jesd_write(&rx_os_jesd, JESD_REG_TRX_SUBCLASS_MODE, 0x01);
+	octets_per_frame = 0x2;
+	octets_per_multiframe = octets_per_frame * myk_dev->obsRx->framer->K;
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_DISABLE, 0x1);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief jesd_tx_enable
+ *******************************************************************************/
+int32_t jesd_tx_enable(mykonosDevice_t *myk_dev)
+{
+	jesd_device	tx_jesd;
+
+	tx_jesd.base_addr = TX_JESD_BASEADDR;
+
+	jesd_write(&tx_jesd, JESD204_REG_LINK_DISABLE, 0x0);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief jesd_rx_enable
+ *******************************************************************************/
+int32_t jesd_rx_enable(mykonosDevice_t *myk_dev)
+{
+	jesd_device	rx_jesd;
+	jesd_device	rx_os_jesd;
+
+	rx_jesd.base_addr = RX_JESD_BASEADDR;
+	rx_os_jesd.base_addr = RX_OS_JESD_BASEADDR;
+
+	jesd_write(&rx_jesd, JESD204_REG_LINK_DISABLE, 0x0);
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_DISABLE, 0x0);
 
 	return 0;
 }

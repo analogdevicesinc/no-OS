@@ -197,6 +197,13 @@ int main(void)
 		return -1;
 	}
 
+	/* Initialize ADXCVRs */
+	status = xcvr_setup(&mykDevice);
+	if (status != 0) {
+		printf("xcvr_setup() failed\n");
+		return -1;
+	}
+
 	/*************************************************************************/
 	/*****                Mykonos Initialization Sequence                *****/
 	/*************************************************************************/
@@ -474,6 +481,8 @@ int main(void)
 		goto error;
 	}
 
+	jesd_tx_enable(&mykDevice);
+
 	if ((mykError = MYKONOS_enableSysrefToDeframer(&mykDevice, 1)) != MYKONOS_ERR_OK) {
 		errorString = getMykonosErrorMessage(mykError);
 		goto error;
@@ -491,12 +500,7 @@ int main(void)
 
 	/*** < Info: Mykonos is actively transmitting CGS from the ObsRxFramer> ***/
 
-	/* Initialize ADXCVRs */
-	status = xcvr_setup(&mykDevice);
-	if (status != 0) {
-		printf("xcvr_setup() failed\n");
-		return -1;
-	}
+	jesd_rx_enable(&mykDevice);
 
 	/* Request two SYSREFs from the AD9528 */
 	AD9528_requestSysref(clockAD9528_device, 1);
