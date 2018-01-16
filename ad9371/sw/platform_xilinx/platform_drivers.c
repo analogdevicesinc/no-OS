@@ -55,19 +55,40 @@ spi_device spi_dev = {
 	0				// id_no
 };
 
-XGpioPs_Config	*gpio_config;
-XGpioPs			gpio_instance;
+static XGpioPs_Config	*gpio_config;
+static XGpioPs			gpio_instance;
+
+static XSpiPs_Config 	*spi_config;
+static XSpiPs			spi_instance;
 
 /***************************************************************************//**
  * @brief platform_init
 *******************************************************************************/
 int32_t platform_init(void)
 {
-	gpio_init(GPIO_DEVICE_ID);
+	if (gpio_init(GPIO_DEVICE_ID) != 0)
+		return -1;
+	if (spi_init(SPI_DEVICE_ID) != 0)
+		return -1;
 
 	gpio_direction_output(AD9371_RESET_B, 1);
 	gpio_direction_output(AD9528_RESET_B, 1);
 	gpio_direction_output(AD9528_SYSREF_REQ, 0);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief spi_init
+ *******************************************************************************/
+int32_t spi_init(uint16_t device_id)
+{
+	spi_config = XSpiPs_LookupConfig(device_id);
+	if (spi_config == NULL)
+		return -1;
+
+	if (XSpiPs_CfgInitialize(&spi_instance, spi_config, spi_config->BaseAddress) != 0)
+		return -1;
 
 	return 0;
 }
@@ -80,17 +101,6 @@ int32_t spi_write_and_read(spi_device *dev,
 						   uint8_t bytes_number)
 {
 	uint32_t initss;
-
-	XSpiPs  spi_instance;
-	XSpiPs_Config  *spi_config;
-
-	spi_config = XSpiPs_LookupConfig(dev->device_id);
-
-	if (spi_config == NULL)
-		return -1;
-
-	if (XSpiPs_CfgInitialize(&spi_instance, spi_config, spi_config->BaseAddress) != 0)
-		return -1;
 
 	initss = XSpiPs_ReadReg(dev->base_address, XSPIPS_CR_OFFSET);
 	initss = initss & (uint32_t)(~XSPIPS_CR_SSCTRL_MASK);
@@ -115,7 +125,11 @@ int32_t spi_write_and_read(spi_device *dev,
 int32_t gpio_init(uint16_t device_id)
 {
 	gpio_config = XGpioPs_LookupConfig(device_id);
-	XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr);
+	if (gpio_config == NULL)
+		return -1;
+
+	if (XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr) != 0)
+		return -1;
 
 	return 0;
 }

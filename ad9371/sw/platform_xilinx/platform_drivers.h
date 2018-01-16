@@ -109,6 +109,7 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t platform_init(void);
+int32_t spi_init(uint16_t device_id);
 int32_t spi_write_and_read(spi_device *dev,
 						   uint8_t *data,
 						   uint8_t bytes_number);
@@ -119,5 +120,4 @@ int32_t gpio_set_value(uint8_t gpio,
 					   uint8_t value);
 uint32_t ad_pow2(uint32_t number);
 uint32_t find_first_bit(uint32_t word);
-
 #endif
