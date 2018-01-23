@@ -1786,8 +1786,8 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 	/* We are restoring state only, so clear State bits first
 	* which might have set while forcing a particular state
 	*/
-	val &= ~(FORCE_TX_ON | FORCE_RX_ON |
-		TO_ALERT | FORCE_ALERT_STATE);
+	val &= ~(FORCE_TX_ON | FORCE_RX_ON | FORCE_ALERT_STATE);
+	val |= TO_ALERT;
 
 	switch (phy->prev_ensm_state) {
 
