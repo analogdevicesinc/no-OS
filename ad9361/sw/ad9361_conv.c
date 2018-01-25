@@ -47,6 +47,18 @@
 #include "config.h"
 
 #ifndef AXI_ADC_NOT_PRESENT
+
+/**
+ * Get the number of PHY channels.
+ * @return The number of PHY channels.
+ */
+static unsigned int ad9361_num_phy_chan(struct axiadc_converter *conv)
+{
+	if (conv->chip_info->num_channels > 4)
+		return 4;
+	return conv->chip_info->num_channels;
+}
+
 /**
  * HDL loopback enable/disable.
  * @param phy The AD9361 state structure.
@@ -144,7 +156,7 @@ static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
 	uint32_t s0, c0;
 	uint8_t field[32];
 
-	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
+	num_chan = ad9361_num_phy_chan(conv);
 
 	for (i = 0; i < 7; i++) {
 		for (j = 0; j < 32; j++) {
@@ -340,8 +352,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	if (!phy->pdata->fdd)
 		ad9361_set_ensm_mode(phy, true, false);
 
-	num_chan = (conv->chip_info->num_channels > 4) ? 4 :
-		conv->chip_info->num_channels;
+	num_chan = ad9361_num_phy_chan(conv);
 
 	ensm_state = ad9361_ensm_get_state(phy);
 	loopback = phy->bist_loopback_mode;
@@ -530,7 +541,7 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	int32_t tmp, num_chan, flags;
 	int32_t i, ret;
 
-	num_chan = (conv->chip_info->num_channels > 4) ? 4 : conv->chip_info->num_channels;
+	num_chan = ad9361_num_phy_chan(conv);
 
 	axiadc_write(st, ADI_REG_CNTRL, rx2tx2 ? 0 : ADI_R1_MODE);
 	tmp = axiadc_read(st, 0x4048);
@@ -563,8 +574,8 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 
 	flags = 0x0;
 
-	ret = ad9361_dig_tune(phy, ((conv->chip_info->num_channels > 4) ||
-		axiadc_read(st, 0x0004)) ? 0 : 61440000, flags);
+	ret = ad9361_dig_tune(phy, (axiadc_read(st, ADI_REG_ID)) ?
+		0 : 61440000, flags);
 	if (ret < 0)
 		return ret;
 
