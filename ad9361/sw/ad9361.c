@@ -1697,6 +1697,16 @@ out:
 }
 
 /**
+ * Get Enable State Machine (ENSM) state.
+ * @param phy The AD9361 state structure.
+ * @return The state.
+ */
+uint8_t ad9361_ensm_get_state(struct ad9361_rf_phy *phy)
+{
+	return ad9361_spi_readf(phy->spi, REG_STATE, ENSM_STATE(~0));
+}
+
+/**
  * Force Enable State Machine (ENSM) to the desired state (internally used only).
  * @param phy The AD9361 state structure.
  * @param ensm_state The ENSM state [ENSM_STATE_SLEEP_WAIT, ENSM_STATE_ALERT,
@@ -1771,11 +1781,12 @@ out:
 }
 
 /**
- * Restore the previous Enable State Machine (ENSM) state.
+ * Restore an Enable State Machine (ENSM) state.
  * @param phy The AD9361 state structure.
+ * @param ensm_state The state.
  * @return None.
  */
-void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
+void ad9361_ensm_restore_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 {
 	struct spi_device *spi = phy->spi;
 	int32_t rc;
@@ -1789,8 +1800,7 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 	val &= ~(FORCE_TX_ON | FORCE_RX_ON | FORCE_ALERT_STATE);
 	val |= TO_ALERT;
 
-	switch (phy->prev_ensm_state) {
-
+	switch (ensm_state) {
 	case ENSM_STATE_TX:
 	case ENSM_STATE_FDD:
 		val |= FORCE_TX_ON;
@@ -1803,11 +1813,11 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 		break;
 	case ENSM_STATE_INVALID:
 		dev_dbg(dev, "No need to restore, ENSM state wasn't saved");
-		goto out;
+		return;
 	default:
 		dev_dbg(dev, "Could not restore to %d ENSM state",
-			phy->prev_ensm_state);
-		goto out;
+				ensm_state);
+		return;
 	}
 
 	ad9361_spi_write(spi, REG_ENSM_CONFIG_1, TO_ALERT | FORCE_ALERT_STATE);
@@ -1815,7 +1825,7 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 	rc = ad9361_spi_write(spi, REG_ENSM_CONFIG_1, val);
 	if (rc) {
 		dev_err(dev, "Failed to write ENSM_CONFIG_1");
-		goto out;
+		return;
 	}
 
 	if (phy->ensm_pin_ctl_en) {
@@ -1824,9 +1834,16 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 		if (rc)
 			dev_err(dev, "Failed to write ENSM_CONFIG_1");
 	}
+}
 
-out:
-	return;
+/**
+ * Restore the previous Enable State Machine (ENSM) state.
+ * @param phy The AD9361 state structure.
+ * @return None.
+ */
+void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
+{
+	return ad9361_ensm_restore_state(phy, phy->prev_ensm_state);
 }
 
 /**
