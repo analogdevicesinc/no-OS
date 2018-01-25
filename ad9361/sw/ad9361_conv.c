@@ -361,8 +361,12 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 			}
 			for (i = 0; i < 2; i++) {
 				for (j = 0; j < 16; j++) {
-					ad9361_set_intf_delay(phy, t == 1, i ? j : 0,
-							i ? 0 : j, i || j == 0);
+					/*
+					 * i == 0: clock delay = 0, data delay from 0 to 15
+					 * i == 1: clock delay = 15, data delay from 15 to 0
+					 */
+					ad9361_set_intf_delay(phy, t == 1, i ? 15 : 0,
+							i ? 15 - j : j, j == 0);
 					for (chan = 0; chan < num_chan; chan++)
 						axiadc_write(st, ADI_REG_CHAN_STATUS(chan),
 						ADI_PN_ERR | ADI_PN_OOS);
