@@ -267,16 +267,25 @@ static void ad9361_set_intf_delay(struct ad9361_rf_phy *phy, bool tx,
 int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	char *buf, int32_t buflen)
 {
+	uint32_t loopback, bist, ensm_state;
 	int32_t i, j, len = 0;
 	uint8_t field[16][16];
-	uint8_t ensm_state;
 	uint8_t rx;
 
 	dev_dbg(&phy->spi->dev, "%s:\n", __func__);
 
+	loopback = phy->bist_loopback_mode;
+	bist = phy->bist_config;
 	ensm_state = ad9361_ensm_get_state(phy);
 	rx = ad9361_spi_read(phy->spi, REG_RX_CLOCK_DATA_DELAY);
 
+	/* Mute TX, we don't want to transmit the PRBS */
+	ad9361_tx_mute(phy, 1);
+
+	if (!phy->pdata->fdd)
+		ad9361_set_ensm_mode(phy, true, false);
+
+	ad9361_bist_loopback(phy, 0);
 	ad9361_bist_prbs(phy, BIST_INJ_RX);
 
 	for (i = 0; i < 16; i++) {
@@ -288,9 +297,14 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 
 	ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
 	ad9361_spi_write(phy->spi, REG_RX_CLOCK_DATA_DELAY, rx);
+	ad9361_bist_loopback(phy, loopback);
+	ad9361_spi_write(phy->spi, REG_BIST_CONFIG, bist);
+
+	if (!phy->pdata->fdd)
+		ad9361_set_ensm_mode(phy, phy->pdata->fdd, phy->pdata->ensm_pin_ctrl);
 	ad9361_ensm_restore_state(phy, ensm_state);
 
-	ad9361_bist_prbs(phy, BIST_DISABLE);
+	ad9361_tx_mute(phy, 0);
 
 	len += snprintf(buf + len, buflen, "CLK: %"PRIu32" Hz 'o' = PASS\n",
 		clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]));
