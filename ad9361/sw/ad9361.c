@@ -1773,13 +1773,13 @@ void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 
 	rc = ad9361_spi_write(spi, REG_ENSM_CONFIG_1, val);
 	if (rc) {
-		dev_err(dev, "Failed to restore state\n");
+		dev_err(dev, "Failed to write ENSM_CONFIG_1\n");
 		goto out;
 	}
 
-	do {
+	while (ad9361_ensm_get_state(phy) != ensm_state && --timeout) {
 		mdelay(1);
-	} while (ad9361_ensm_get_state(phy) != ensm_state && --timeout);
+	}
 
 	if (timeout == 0)
 		dev_err(dev, "Failed to restore state");
