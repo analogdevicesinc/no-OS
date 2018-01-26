@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __ADT7420_H__
 #define __ADT7420_H__
@@ -97,52 +96,52 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct adt7420_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* Device Settings */
 	uint8_t		resolution_setting;
-} adt7420_dev;
+};
 
-typedef struct {
+struct adt7420_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* Device Settings */
 	uint8_t		resolution_setting;
-} adt7420_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Reads the value of a register. */
-uint8_t adt7420_get_register_value(adt7420_dev *dev,
+uint8_t adt7420_get_register_value(struct adt7420_dev *dev,
 				   uint8_t register_address);
 
 /*! Sets the value of a register. */
-void adt7420_set_register_value(adt7420_dev *dev,
+void adt7420_set_register_value(struct adt7420_dev *dev,
 				uint8_t register_address,
 				uint8_t register_value);
 
 /*! Initializes the comm. peripheral and checks if the device is present. */
-int32_t adt7420_init(adt7420_dev **device,
-		     adt7420_init_param init_param);
+int32_t adt7420_init(struct adt7420_dev **device,
+		     struct adt7420_init_param init_param);
 
 /* Free the resources allocated by adt7420_init(). */
-int32_t adt7420_remove(adt7420_dev *dev);
+int32_t adt7420_remove(struct adt7420_dev *dev);
 
 /*! Resets the ADT7420. */
-void adt7420_reset(adt7420_dev *dev);
+void adt7420_reset(struct adt7420_dev *dev);
 
 /*! Sets the operational mode for ADT7420. */
-void adt7420_set_operation_mode(adt7420_dev *dev,
+void adt7420_set_operation_mode(struct adt7420_dev *dev,
 				uint8_t mode);
 
 /*! Sets the resolution for ADT7420. */
-void adt7420_set_resolution(adt7420_dev *dev,
+void adt7420_set_resolution(struct adt7420_dev *dev,
 			    uint8_t resolution);
 
 /*! Reads the temperature data and converts it to Celsius degrees. */
-float adt7420_get_temperature(adt7420_dev *dev);
+float adt7420_get_temperature(struct adt7420_dev *dev);
 
 #endif	/* __ADT7420_H__ */
