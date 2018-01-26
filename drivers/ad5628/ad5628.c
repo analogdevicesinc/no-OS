@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD5628.h"
+#include "ad5628.h"
 
 /***************************************************************************//**
  * @brief Initializes the communication peripheral and the initial Values for
