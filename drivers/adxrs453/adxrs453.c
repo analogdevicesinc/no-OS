@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -58,14 +57,14 @@
  *                                with 0x52).
  *                           -1 - if initialization was unsuccessful.
 *******************************************************************************/
-int32_t adxrs453_init(adxrs453_dev **device,
-		      adxrs453_init_param init_param)
+int32_t adxrs453_init(struct adxrs453_dev **device,
+		      struct adxrs453_init_param init_param)
 {
-	adxrs453_dev *dev;
-	int32_t      status      = 0;
-	uint16_t     adxrs453_id = 0;
+	struct adxrs453_dev *dev;
+	int32_t status = 0;
+	uint16_t adxrs453_id = 0;
 
-	dev = (adxrs453_dev *)malloc(sizeof(*dev));
+	dev = (struct adxrs453_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -88,7 +87,7 @@ int32_t adxrs453_init(adxrs453_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t adxrs453_remove(adxrs453_dev *dev)
+int32_t adxrs453_remove(struct adxrs453_dev *dev)
 {
 	int32_t ret;
 
@@ -107,13 +106,13 @@ int32_t adxrs453_remove(adxrs453_dev *dev)
  *
  * @return register_value  - Value of the register.
 *******************************************************************************/
-uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
+uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 				     uint8_t register_address)
 {
-	uint8_t  data_buffer[4] = {0, 0, 0, 0};
-	uint32_t command        = 0;
-	uint8_t  bit_no         = 0;
-	uint8_t  sum            = 0;
+	uint8_t data_buffer[4] = {0, 0, 0, 0};
+	uint32_t command = 0;
+	uint8_t bit_no = 0;
+	uint8_t sum = 0;
 	uint16_t register_value = 0;
 
 	data_buffer[0] = ADXRS453_READ | (register_address >> 7);
@@ -150,14 +149,14 @@ uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxrs453_set_register_value(adxrs453_dev *dev,
+void adxrs453_set_register_value(struct adxrs453_dev *dev,
 				 uint8_t register_address,
 				 uint16_t register_value)
 {
-	uint8_t  data_buffer[4] = {0, 0, 0, 0};
-	uint32_t command        = 0;
-	uint8_t  bit_no         = 0;
-	uint8_t  sum            = 0;
+	uint8_t data_buffer[4] = {0, 0, 0, 0};
+	uint32_t command = 0;
+	uint8_t bit_no = 0;
+	uint8_t sum = 0;
 
 	data_buffer[0] = ADXRS453_WRITE | (register_address >> 7);
 	data_buffer[1] = (register_address << 1) |
@@ -185,12 +184,12 @@ void adxrs453_set_register_value(adxrs453_dev *dev,
  *
  * @return register_value - The sensor data.
 *******************************************************************************/
-uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev)
+uint32_t adxrs453_get_sensor_data(struct adxrs453_dev *dev)
 {
-	uint8_t  data_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-	uint32_t command        = 0;
-	uint8_t  bit_no         = 0;
-	uint8_t  sum            = 0;
+	uint8_t data_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	uint32_t command = 0;
+	uint8_t bit_no = 0;
+	uint8_t sum = 0;
 	uint32_t register_value = 0;
 
 	data_buffer[0] = ADXRS453_SENSOR_DATA;
@@ -225,10 +224,10 @@ uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev)
  *
  * @return rate - The rate value in degrees/second.
 *******************************************************************************/
-float adxrs453_get_rate(adxrs453_dev *dev)
+float adxrs453_get_rate(struct adxrs453_dev *dev)
 {
 	uint16_t register_value = 0;
-	float    rate           = 0.0;
+	float rate = 0.0;
 
 	register_value = adxrs453_get_register_value(dev, ADXRS453_REG_RATE);
 
@@ -249,10 +248,10 @@ float adxrs453_get_rate(adxrs453_dev *dev)
  *
  * @return temperature - The temperature value in degrees Celsius.
 *******************************************************************************/
-float adxrs453_get_temperature(adxrs453_dev *dev)
+float adxrs453_get_temperature(struct adxrs453_dev *dev)
 {
 	uint32_t register_value = 0;
-	float    temperature    = 0;
+	float temperature = 0;
 
 	register_value = adxrs453_get_register_value(dev, ADXRS453_REG_TEM);
 	register_value = (register_value >> 6) - 0x31F;

@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __ADXRS453_H__
 #define __ADXRS453_H__
@@ -62,43 +61,43 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct adxrs453_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
-} adxrs453_dev;
+};
 
-typedef struct {
+struct adxrs453_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} adxrs453_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the ADXRS453 and checks if the device is present. */
-int32_t adxrs453_init(adxrs453_dev **device,
-		      adxrs453_init_param init_param);
+int32_t adxrs453_init(struct adxrs453_dev **device,
+		      struct adxrs453_init_param init_param);
 
 /*! Free the resources allocated by adxrs453_init(). */
-int32_t adxrs453_remove(adxrs453_dev *dev);
+int32_t adxrs453_remove(struct adxrs453_dev *dev);
 
 /*! Reads the value of a register. */
-uint16_t adxrs453_get_register_value(adxrs453_dev *dev,
+uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 				     uint8_t register_address);
 
 /*! Writes data into a register. */
-void adxrs453_set_register_value(adxrs453_dev *dev,
+void adxrs453_set_register_value(struct adxrs453_dev *dev,
 				 uint8_t register_address,
 				 uint16_t register_value);
 
 /*! Reads the sensor data. */
-uint32_t adxrs453_get_sensor_data(adxrs453_dev *dev);
+uint32_t adxrs453_get_sensor_data(struct adxrs453_dev *dev);
 
 /*! Reads the rate data and converts it to degrees/second. */
-float adxrs453_get_rate(adxrs453_dev *dev);
+float adxrs453_get_rate(struct adxrs453_dev *dev);
 
 /*! Reads the temperature sensor data and converts it to degrees Celsius. */
-float adxrs453_get_temperature(adxrs453_dev *dev);
+float adxrs453_get_temperature(struct adxrs453_dev *dev);
 
 #endif // __ADXRS453_H__
