@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __AD7091R_H__
@@ -47,40 +44,40 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad7091r_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
-} ad7091r_dev;
+};
 
-typedef struct {
+struct ad7091r_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} ad7091r_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the SPI communication peripheral. */
-char AD7091R_Init(ad7091r_dev **device,
-		  ad7091r_init_param init_param);
+int8_t ad7091r_init(struct ad7091r_dev **device,
+		    struct ad7091r_init_param init_param);
 
 /*! Free the resources allocated by ad7091r_init(). */
-int32_t ad5686_remove(ad7091r_dev *dev);
+int32_t ad5686_remove(struct ad7091r_dev *dev);
 
 /*! Initiate a software reset of the device. */
-void AD7091R_SoftwareReset(ad7091r_dev *dev);
+void ad7091r_software_reset(struct ad7091r_dev *dev);
 
 /*! Initiates one conversion and reads back the result. */
-unsigned short AD7091R_ReadSample(ad7091r_dev *dev);
+uint16_t ad7091r_read_sample(struct ad7091r_dev *dev);
 
 /*! Puts the device in power-down mode. */
-void AD7091R_PowerDown(ad7091r_dev *dev);
+void ad7091r_power_down(struct ad7091r_dev *dev);
 
 /*! Powers up the device. */
-void AD7091R_PowerUp(ad7091r_dev *dev);
+void ad7091r_power_up(struct ad7091r_dev *dev);
 
 /*! Converts a 12-bit raw sample to volts. */
-float AD7091R_ConvertToVolts(short rawSample, float vRef);
+float ad7091r_convert_to_volts(int16_t raw_sample, float v_ref);
 
 #endif /* __AD7091R_H__ */

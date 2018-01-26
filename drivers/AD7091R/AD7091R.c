@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -66,35 +63,35 @@
  *                         0 - SPI peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-char AD7091R_Init(ad7091r_dev **device,
-		  ad7091r_init_param init_param)
+int8_t ad7091r_init(struct ad7091r_dev **device,
+		    struct ad7091r_init_param init_param)
 {
-	ad7091r_dev *dev;
-    unsigned char status = 0;
-    unsigned char tmpVal = 0xFF;
+	struct ad7091r_dev *dev;
+	uint8_t status = 0;
+	uint8_t tmp_val = 0xFF;
 
-	dev = (ad7091r_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7091r_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
 	status = spi_init(&dev->spi_desc, init_param.spi_init);
-    /* Ensures that last state of SDO is high. */
-	spi_write_and_read(dev->spi_desc, &tmpVal, 1);
-    AD7091R_SoftwareReset(dev);
+	/* Ensures that last state of SDO is high. */
+	spi_write_and_read(dev->spi_desc, &tmp_val, 1);
+	ad7091r_software_reset(dev);
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by ad5686_init().
+ * @brief Free the resources allocated by ad7091r_init().
  *
  * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t ad7091r_remove(ad7091r_dev *dev)
+int32_t ad7091r_remove(struct ad7091r_dev *dev)
 {
 	int32_t ret;
 
@@ -113,18 +110,18 @@ int32_t ad7091r_remove(ad7091r_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void AD7091R_SoftwareReset(ad7091r_dev *dev)
+void ad7091r_software_reset(struct ad7091r_dev *dev)
 {
-    unsigned char writeByte   = 0xBF;
+	uint8_t write_byte = 0xBF;
 
-    /* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &writeByte, 1);
-    /* Short cycle the read operation. */
-    writeByte = 0xFF;
-	spi_write_and_read(dev->spi_desc, &writeByte, 1);
-    /* Perform another conversion in order to reset the device. */
-    writeByte = 0xBF;
-	spi_write_and_read(dev->spi_desc, &writeByte, 1);
+	/* Initiate a conversion. */
+	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	/* Short cycle the read operation. */
+	write_byte = 0xFF;
+	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	/* Perform another conversion in order to reset the device. */
+	write_byte = 0xBF;
+	spi_write_and_read(dev->spi_desc, &write_byte, 1);
 }
 
 /***************************************************************************//**
@@ -136,20 +133,20 @@ void AD7091R_SoftwareReset(ad7091r_dev *dev)
  *
  * @return conversionResult - 12bit conversion result.
 *******************************************************************************/
-unsigned short AD7091R_ReadSample(ad7091r_dev *dev)
+uint16_t ad7091r_read_sample(struct ad7091r_dev *dev)
 {
-    unsigned short conversionResult = 0;
-    unsigned char  writeByte        = 0xBF;
-    unsigned char  buffer[2]        = {0xFF, 0xFF};
+	uint16_t conversion_result = 0;
+	uint8_t write_byte         = 0xBF;
+	uint8_t buffer[2]          = {0xFF, 0xFF};
 
-    /* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &writeByte, 1);
-    /* Read conversion data. */
+	/* Initiate a conversion. */
+	spi_write_and_read(dev->spi_desc, &write_byte, 1);
+	/* Read conversion data. */
 	spi_write_and_read(dev->spi_desc, buffer, 2);
-    conversionResult = (buffer[0] << 8) + buffer[1];
-    conversionResult >>= 4;
+	conversion_result = (buffer[0] << 8) + buffer[1];
+	conversion_result >>= 4;
 
-    return conversionResult;
+	return conversion_result;
 }
 
 /***************************************************************************//**
@@ -159,14 +156,14 @@ unsigned short AD7091R_ReadSample(ad7091r_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void AD7091R_PowerDown(ad7091r_dev *dev)
+void ad7091r_power_down(struct ad7091r_dev *dev)
 {
-    unsigned char buffer[2]   = {0, 0};
-    unsigned char writeValue  = 0x00;
+	uint8_t buffer[2]   = {0, 0};
+	uint8_t write_value = 0x00;
 
-    /* Initiate a conversion. */
-	spi_write_and_read(dev->spi_desc, &writeValue, 1);
-    /* Perform a dummy read. */
+	/* Initiate a conversion. */
+	spi_write_and_read(dev->spi_desc, &write_value, 1);
+	/* Perform a dummy read. */
 	spi_write_and_read(dev->spi_desc, buffer, 2);
 }
 
@@ -181,12 +178,12 @@ void AD7091R_PowerDown(ad7091r_dev *dev)
  *
  * @return  None.
 *******************************************************************************/
-void AD7091R_PowerUp(ad7091r_dev *dev)
+void ad7091r_power_up(struct ad7091r_dev *dev)
 {
-    unsigned char writeValue = 0xFF;
+	uint8_t write_value = 0xFF;
 
-    /* Pull CONVST signal high. */
-	spi_write_and_read(dev->spi_desc, &writeValue, 1);
+	/* Pull CONVST signal high. */
+	spi_write_and_read(dev->spi_desc, &write_value, 1);
 }
 
 
@@ -198,15 +195,14 @@ void AD7091R_PowerUp(ad7091r_dev *dev)
  *
  * @return voltage  - The result of the conversion expressed as volts.
 *******************************************************************************/
-float AD7091R_ConvertToVolts(short rawSample, float vRef)
+float ad7091r_convert_to_volts(int16_t raw_sample, float v_ref)
 {
-    float voltage = 0;
+	float voltage = 0;
 
-    if(vRef == 0)
-    {
-        vRef = 2.5;
-    }
-    voltage = vRef * (float)rawSample / (1 << 12);
+	if(v_ref == 0) {
+		v_ref = 2.5;
+	}
+	voltage = v_ref * (float)raw_sample / (1 << 12);
 
-    return voltage;
+	return voltage;
 }
