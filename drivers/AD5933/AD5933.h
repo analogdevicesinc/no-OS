@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD5933_H__
 #define __AD5933_H__
@@ -109,81 +106,81 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad5933_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* Device Settings */
-	unsigned long currentSysClk;
-	unsigned char currentClockSource;
-	unsigned char currentGain;
-	unsigned char currentRange;
-} ad5933_dev;
+	uint32_t current_sys_clk;
+	uint8_t current_clock_source;
+	uint8_t current_gain;
+	uint8_t current_range;
+};
 
-typedef struct {
+struct ad5933_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* Device Settings */
-	unsigned long currentSysClk;
-	unsigned char currentClockSource;
-	unsigned char currentGain;
-	unsigned char currentRange;
-} ad5933_init_param;
+	uint32_t current_sys_clk;
+	uint8_t current_clock_source;
+	uint8_t current_gain;
+	uint8_t current_range;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the communication peripheral. */
-int32_t AD5933_Init(ad5933_dev **device,
-		    ad5933_init_param init_param);
+int32_t ad5933_init(struct ad5933_dev **device,
+		    struct ad5933_init_param init_param);
 
 /*! Free the resources allocated by ad5686_init(). */
-int32_t ad5933_remove(ad5933_dev *dev);
+int32_t ad5933_remove(struct ad5933_dev *dev);
 
 /*! Writes data into a register. */
-void AD5933_SetRegisterValue(ad5933_dev *dev,
-			     unsigned char registerAddress,
-                             unsigned long registerValue,
-                             unsigned char bytesNumber);
+void ad5933_set_register_value(struct ad5933_dev *dev,
+			       uint8_t register_address,
+			       uint32_t register_value,
+			       uint8_t bytes_number);
 
 /*! Reads the value of a register. */
-unsigned long AD5933_GetRegisterValue(ad5933_dev *dev,
-				      unsigned char registerAddress,
-                                      unsigned char bytesNumber);
+uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
+				   uint8_t register_address,
+				   uint8_t bytes_number);
 
 /*! Resets the device. */
-void AD5933_Reset(ad5933_dev *dev);
+void ad5933_reset(struct ad5933_dev *dev);
 
 /*! Selects the source of the system clock. */
-void AD5933_SetSystemClk(ad5933_dev *dev,
-			 char clkSource,
-			 unsigned long extClkFreq);
+void ad5933_set_system_clk(struct ad5933_dev *dev,
+			   int8_t clk_source,
+			   uint32_t ext_clk_freq);
 
 /*! Selects the range and gain of the device. */
-void AD5933_SetRangeAndGain(ad5933_dev *dev,
-			    char range,
-			    char gain);
+void ad5933_set_range_and_gain(struct ad5933_dev *dev,
+			       int8_t range,
+			       int8_t gain);
 
 /*! Reads the temp. from the part and returns the data in degrees Celsius. */
-float AD5933_GetTemperature(ad5933_dev *dev);
+float ad5933_get_temperature(struct ad5933_dev *dev);
 
 /*! Configures the sweep parameters. */
-void AD5933_ConfigSweep(ad5933_dev *dev,
-			unsigned long  startFreq,
-                        unsigned long  incFreq,
-                        unsigned short incNum);
+void ad5933_config_sweep(struct ad5933_dev *dev,
+			 uint32_t  start_freq,
+			 uint32_t  inc_freq,
+			 uint16_t inc_num);
 
 /*! Starts the sweep operation. */
-void AD5933_StartSweep(ad5933_dev *dev);
+void ad5933_start_sweep(struct ad5933_dev *dev);
 
 /*! Reads the real and the imaginary data and calculates the Gain Factor. */
-double AD5933_CalculateGainFactor(ad5933_dev *dev,
-				  unsigned long calibrationImpedance,
-                                  unsigned char freqFunction);
+double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
+				    uint32_t calibration_impedance,
+				    uint8_t freq_function);
 
 /*! Reads the real and the imaginary data and calculates the Impedance. */
-double AD5933_CalculateImpedance(ad5933_dev *dev,
-				 double gainFactor,
-                                 unsigned char freqFunction);
+double ad5933_calculate_impedance(struct ad5933_dev *dev,
+				  double gain_factor,
+				  uint8_t freq_function);
 
 #endif /* __AD5933_H__ */
