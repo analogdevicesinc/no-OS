@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __ADF7023_H__
 #define __ADF7023_H__
@@ -367,7 +366,7 @@ struct adf7023_bbram {
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct adf7023_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
@@ -375,71 +374,71 @@ typedef struct {
 	gpio_desc		*gpio_miso;
 	/* Device Settings */
 	struct adf7023_bbram	adf7023_bbram_current;
-} adf7023_dev;
+};
 
-typedef struct {
+struct adf7023_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
 	int8_t		gpio_cs;
 	int8_t		gpio_miso;
-} adf7023_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Initializes the ADF7023. */
-int32_t adf7023_init(adf7023_dev **device,
-		     adf7023_init_param init_param);
+int32_t adf7023_init(struct adf7023_dev **device,
+		     struct adf7023_init_param init_param);
 
 /* Free the resources allocated by adf7023_init(). */
-int32_t adf7023_remove(adf7023_dev *dev);
+int32_t adf7023_remove(struct adf7023_dev *dev);
 
 /* Reads the status word of the ADF7023. */
-void adf7023_get_status(adf7023_dev *dev,
+void adf7023_get_status(struct adf7023_dev *dev,
 			uint8_t* status);
 
 /* Initiates a command. */
-void adf7023_set_command(adf7023_dev *dev,
+void adf7023_set_command(struct adf7023_dev *dev,
 			 uint8_t command);
 
 /* Sets a FW state and waits until the device enters in that state. */
-void adf7023_set_fw_state(adf7023_dev *dev,
+void adf7023_set_fw_state(struct adf7023_dev *dev,
 			  uint8_t fw_state);
 
 /* Reads data from the RAM. */
-void adf7023_get_ram(adf7023_dev *dev,
+void adf7023_get_ram(struct adf7023_dev *dev,
 		     uint32_t address,
 		     uint32_t length,
 		     uint8_t* data);
 
 /* Writes data to RAM. */
-void adf7023_set_ram(adf7023_dev *dev,
+void adf7023_set_ram(struct adf7023_dev *dev,
 		     uint32_t address,
 		     uint32_t length,
 		     uint8_t* data);
 
 /* Receives one packet. */
-void adf7023_receive_packet(adf7023_dev *dev,
+void adf7023_receive_packet(struct adf7023_dev *dev,
 			    uint8_t* packet,
 			    uint8_t* length);
 
 /* Transmits one packet. */
-void adf7023_transmit_packet(adf7023_dev *dev,
+void adf7023_transmit_packet(struct adf7023_dev *dev,
 			     uint8_t* packet,
 			     uint8_t length);
 
 /* Sets the channel frequency. */
-void adf7023_set_channel_frequency(adf7023_dev *dev,
+void adf7023_set_channel_frequency(struct adf7023_dev *dev,
 				   uint32_t ch_freq);
 
 /* Sets the data rate. */
-void adf7023_set_data_rate(adf7023_dev *dev,
+void adf7023_set_data_rate(struct adf7023_dev *dev,
 			   uint32_t data_rate);
 
 /* Sets the frequency deviation. */
-void adf7023_set_frequency_deviation(adf7023_dev *dev,
+void adf7023_set_frequency_deviation(struct adf7023_dev *dev,
 				     uint32_t freq_dev);
 
 #endif // __ADF7023_H__

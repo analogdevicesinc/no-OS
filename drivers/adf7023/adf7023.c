@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -63,13 +62,13 @@
 /***************************************************************************//**
  * @brief Transfers one byte of data.
  *
- * @param dev - The device structure.
+ * @param dev        - The device structure.
  * @param write_byte - Write data.
- * @param read_byte - Read data.
+ * @param read_byte  - Read data.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_write_read_byte(adf7023_dev *dev,
+void adf7023_write_read_byte(struct adf7023_dev *dev,
 			     uint8_t write_byte,
 			     uint8_t* read_byte)
 {
@@ -86,7 +85,7 @@ void adf7023_write_read_byte(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Initializes the ADF7023.
  *
- * @param device - The device structure.
+ * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
@@ -94,16 +93,16 @@ void adf7023_write_read_byte(adf7023_dev *dev,
  *               Example: 0 - if initialization was successful;
  *                        -1 - if initialization was unsuccessful.
 *******************************************************************************/
-int32_t adf7023_init(adf7023_dev **device,
-		     adf7023_init_param init_param)
+int32_t adf7023_init(struct adf7023_dev **device,
+		     struct adf7023_init_param init_param)
 {
-	adf7023_dev *dev;
-	uint8_t  miso    = 0;
+	struct adf7023_dev *dev;
+	uint8_t miso = 0;
 	uint16_t timeout = 0;
-	uint8_t  status  = 0;
+	uint8_t status = 0;
 	int32_t ret = 0;
 
-	dev = (adf7023_dev *)malloc(sizeof(*dev));
+	dev = (struct adf7023_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -145,7 +144,7 @@ int32_t adf7023_init(adf7023_dev **device,
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t adf7023_remove(adf7023_dev *dev)
+int32_t adf7023_remove(struct adf7023_dev *dev)
 {
 	int32_t ret;
 
@@ -162,12 +161,12 @@ int32_t adf7023_remove(adf7023_dev *dev)
 /***************************************************************************//**
  * @brief Reads the status word of the ADF7023.
  *
- * @param dev - The device structure.
+ * @param dev    - The device structure.
  * @param status - Status word.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_get_status(adf7023_dev *dev,
+void adf7023_get_status(struct adf7023_dev *dev,
 			uint8_t* status)
 {
 	ADF7023_CS_ASSERT;
@@ -179,12 +178,12 @@ void adf7023_get_status(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Initiates a command.
  *
- * @param dev - The device structure.
+ * @param dev     - The device structure.
  * @param command - Command.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_set_command(adf7023_dev *dev,
+void adf7023_set_command(struct adf7023_dev *dev,
 			 uint8_t command)
 {
 	ADF7023_CS_ASSERT;
@@ -195,12 +194,12 @@ void adf7023_set_command(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Sets a FW state and waits until the device enters in that state.
  *
- * @param dev - The device structure.
+ * @param dev      - The device structure.
  * @param fw_state - FW state.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_set_fw_state(adf7023_dev *dev,
+void adf7023_set_fw_state(struct adf7023_dev *dev,
 			  uint8_t fw_state)
 {
 	uint8_t status = 0;
@@ -229,14 +228,14 @@ void adf7023_set_fw_state(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Reads data from the RAM.
  *
- * @param dev - The device structure.
+ * @param dev     - The device structure.
  * @param address - Start address.
- * @param length - Number of bytes to write.
- * @param data - Read buffer.
+ * @param length  - Number of bytes to write.
+ * @param data    - Read buffer.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_get_ram(adf7023_dev *dev,
+void adf7023_get_ram(struct adf7023_dev *dev,
 		     uint32_t address,
 		     uint32_t length,
 		     uint8_t* data)
@@ -254,14 +253,14 @@ void adf7023_get_ram(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Writes data to RAM.
  *
- * @param dev - The device structure.
+ * @param dev     - The device structure.
  * @param address - Start address.
- * @param length - Number of bytes to write.
- * @param data - Write buffer.
+ * @param length  - Number of bytes to write.
+ * @param data    - Write buffer.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_set_ram(adf7023_dev *dev,
+void adf7023_set_ram(struct adf7023_dev *dev,
 		     uint32_t address,
 		     uint32_t length,
 		     uint8_t* data)
@@ -278,28 +277,28 @@ void adf7023_set_ram(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Receives one packet.
  *
- * @param dev - The device structure.
+ * @param dev    - The device structure.
  * @param packet - Data buffer.
  * @param length - Number of received bytes.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_receive_packet(adf7023_dev *dev,
+void adf7023_receive_packet(struct adf7023_dev *dev,
 			    uint8_t* packet,
 			    uint8_t* length)
 {
-	uint8_t interruptReg = 0;
+	uint8_t interrupt_reg = 0;
 
 	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_RX);
-	while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT)) {
+	while(!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_CRC_CORRECT)) {
 		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
 				0x1,
-				&interruptReg);
+				&interrupt_reg);
 	}
 	adf7023_set_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
 			0x1,
-			&interruptReg);
+			&interrupt_reg);
 	adf7023_get_ram(dev, 0x10, 1, length);
 	adf7023_get_ram(dev, 0x12, *length - 2, packet);
 }
@@ -307,18 +306,18 @@ void adf7023_receive_packet(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Transmits one packet.
  *
- * @param dev - The device structure.
+ * @param dev    - The device structure.
  * @param packet - Data buffer.
  * @param length - Number of bytes to transmit.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_transmit_packet(adf7023_dev *dev,
+void adf7023_transmit_packet(struct adf7023_dev *dev,
 			     uint8_t* packet,
 			     uint8_t length)
 {
-	uint8_t interruptReg = 0;
-	uint8_t header[2]    = {0, 0};
+	uint8_t interrupt_reg = 0;
+	uint8_t header [ 2 ]    = {0, 0};
 
 	header[0] = 2 + length;
 	header[1] = dev->adf7023_bbram_current.address_match_offset;
@@ -326,41 +325,41 @@ void adf7023_transmit_packet(adf7023_dev *dev,
 	adf7023_set_ram(dev, 0x12, length, packet);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_ON);
 	adf7023_set_fw_state(dev, FW_STATE_PHY_TX);
-	while(!(interruptReg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF)) {
+	while(!(interrupt_reg & BBRAM_INTERRUPT_MASK_0_INTERRUPT_TX_EOF)) {
 		adf7023_get_ram(dev, MCR_REG_INTERRUPT_SOURCE_0,
 				0x1,
-				&interruptReg);
+				&interrupt_reg);
 	}
 }
 
 /***************************************************************************//**
  * @brief Sets the channel frequency.
  *
- * @param dev - The device structure.
+ * @param dev    - The device structure.
  * @param chFreq - Channel frequency.
  *
  * @return None.
 *******************************************************************************/
-void adf7023_set_channel_frequency(adf7023_dev *dev,
-				   uint32_t chFreq)
+void adf7023_set_channel_frequency(struct adf7023_dev *dev,
+				   uint32_t ch_freq)
 {
-	chFreq = (uint32_t)(((float)chFreq / 26000000) * 65535);
-	dev->adf7023_bbram_current.channel_freq0 = (chFreq & 0x0000FF) >> 0;
-	dev->adf7023_bbram_current.channel_freq1 = (chFreq & 0x00FF00) >> 8;
-	dev->adf7023_bbram_current.channel_freq2 = (chFreq & 0xFF0000) >> 16;
+	ch_freq = (uint32_t)(((float)ch_freq / 26000000) * 65535);
+	dev->adf7023_bbram_current.channel_freq0 = (ch_freq & 0x0000FF) >> 0;
+	dev->adf7023_bbram_current.channel_freq1 = (ch_freq & 0x00FF00) >> 8;
+	dev->adf7023_bbram_current.channel_freq2 = (ch_freq & 0xFF0000) >> 16;
 	adf7023_set_ram(dev, 0x100, 64, (uint8_t*)&dev->adf7023_bbram_current);
 }
 
 /***************************************************************************//**
  * @brief Sets the data rate.
  *
- * @param dev - The device structure.
+ * @param dev       - The device structure.
  * @param data_rate - Data rate.
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetDataRate(adf7023_dev *dev,
-			 uint32_t data_rate)
+void adf7023_set_data_rate(struct adf7023_dev *dev,
+			   uint32_t data_rate)
 {
 	data_rate = (uint32_t)(data_rate / 100);
 	dev->adf7023_bbram_current.radio_cfg0 =
@@ -376,13 +375,13 @@ void ADF7023_SetDataRate(adf7023_dev *dev,
 /***************************************************************************//**
  * @brief Sets the frequency deviation.
  *
- * @param dev - The device structure.
+ * @param dev      - The device structure.
  * @param freq_dev - Frequency deviation.
  *
  * @return None.
 *******************************************************************************/
-void ADF7023_SetFrequencyDeviation(adf7023_dev *dev,
-				   uint32_t freq_dev)
+void adf7023_set_frequency_deviation(struct adf7023_dev *dev,
+				     uint32_t freq_dev)
 {
 	freq_dev = (uint32_t)(freq_dev / 100);
 	dev->adf7023_bbram_current.radio_cfg1 &=
