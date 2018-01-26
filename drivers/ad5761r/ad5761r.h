@@ -88,24 +88,24 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum {
+enum ad5761r_type {
 	AD5761R,
 	AD5721R,
-} ad5761r_type;
+};
 
-typedef enum {
+enum ad5761r_reg {
 	AD5761R_REG_INPUT,
 	AD5761R_REG_DAC,
 	AD5761R_REG_CTRL,
-} ad5761r_reg;
+};
 
-typedef enum {
+enum ad5761r_scale {
 	AD5761R_SCALE_ZERO,
 	AD5761R_SCALE_HALF,
 	AD5761R_SCALE_FULL,
-} ad5761r_scale;
+};
 
-typedef enum {
+enum ad5761r_range {
 	AD5761R_RANGE_M_10V_TO_P_10V,
 	AD5761R_RANGE_0_V_TO_P_10V,
 	AD5761R_RANGE_M_5V_TO_P_5V,
@@ -114,9 +114,9 @@ typedef enum {
 	AD5761R_RANGE_M_3V_TO_P_3V,
 	AD5761R_RANGE_0V_TO_P_16V,
 	AD5761R_RANGE_0V_TO_P_20V,
-} ad5761r_range;
+};
 
-typedef struct {
+struct ad5761r_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
@@ -127,18 +127,18 @@ typedef struct {
 	gpio_desc	*gpio_ldac;
 	uint8_t		gpio_ldac_value;
 	/* Device Settings */
-	ad5761r_type	type;
-	ad5761r_range	ra;
-	ad5761r_scale	pv;
-	ad5761r_scale	cv;
+	enum ad5761r_type	type;
+	enum ad5761r_range	ra;
+	enum ad5761r_scale	pv;
+	enum ad5761r_scale	cv;
 	bool		int_ref_en;
 	bool		exc_temp_sd_en;
 	bool		b2c_range_en;
 	bool		ovr_en;
 	bool		daisy_chain_en;
-} ad5761r_dev;
+};
 
-typedef struct {
+struct ad5761r_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
@@ -149,122 +149,122 @@ typedef struct {
 	int8_t		gpio_ldac;
 	uint8_t		gpio_ldac_value;
 	/* Device Settings */
-	ad5761r_type	type;
-	ad5761r_range	out_range;
-	ad5761r_scale	pwr_voltage;
-	ad5761r_scale	clr_voltage;
+	enum ad5761r_type	type;
+	enum ad5761r_range	out_range;
+	enum ad5761r_scale	pwr_voltage;
+	enum ad5761r_scale	clr_voltage;
 	bool		int_ref_en;
 	bool		exc_temp_sd_en;
 	bool		b2c_range_en;
 	bool		ovr_en;
 	bool		daisy_chain_en;
-} ad5761r_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize the device. */
-int32_t ad5761r_init(ad5761r_dev **device,
-		     ad5761r_init_param init_param);
+int32_t ad5761r_init(struct ad5761r_dev **device,
+		     struct ad5761r_init_param init_param);
 /* Free the resources allocated by ad5761r_init(). */
-int32_t ad5761r_remove(ad5761r_dev *dev);
+int32_t ad5761r_remove(struct ad5761r_dev *dev);
 /* SPI write to device. */
-int32_t ad5761r_write(ad5761r_dev *dev,
+int32_t ad5761r_write(struct ad5761r_dev *dev,
 		      uint8_t reg_addr_cmd,
 		      uint16_t reg_data);
 /* SPI read from device. */
-int32_t ad5761r_read(ad5761r_dev *dev,
+int32_t ad5761r_read(struct ad5761r_dev *dev,
 		     uint8_t reg_addr_cmd,
 		     uint16_t *reg_data);
 /* Readback the register data. */
-int32_t ad5761r_register_readback(ad5761r_dev *dev,
-				  ad5761r_reg reg,
+int32_t ad5761r_register_readback(struct ad5761r_dev *dev,
+				  enum ad5761r_reg reg,
 				  uint16_t *reg_data);
 /* Configure the part based on the settings stored in the device structure. */
-int32_t ad5761r_config(ad5761r_dev *dev);
+int32_t ad5761r_config(struct ad5761r_dev *dev);
 /* Enable/disable daisy-chain mode. */
-int32_t ad5761r_set_daisy_chain_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_daisy_chain_en_dis(struct ad5761r_dev *dev,
 				       bool en_dis);
 /* Get the status of the daisy-chain mode. */
-int32_t ad5761r_get_daisy_chain_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_daisy_chain_en_dis(struct ad5761r_dev *dev,
 				       bool *en_dis);
 /* Set the output_range. */
-int32_t ad5761r_set_output_range(ad5761r_dev *dev,
-				 ad5761r_range out_range);
+int32_t ad5761r_set_output_range(struct ad5761r_dev *dev,
+				 enum ad5761r_range out_range);
 /* Get the output_range. */
-int32_t ad5761r_get_output_range(ad5761r_dev *dev,
-				 ad5761r_range *out_range);
+int32_t ad5761r_get_output_range(struct ad5761r_dev *dev,
+				 enum ad5761r_range *out_range);
 /* Set the power up voltage. */
-int32_t ad5761r_set_power_up_voltage(ad5761r_dev *dev,
-				     ad5761r_scale pv);
+int32_t ad5761r_set_power_up_voltage(struct ad5761r_dev *dev,
+				     enum ad5761r_scale pv);
 /* Get the power up voltage. */
-int32_t ad5761r_get_power_up_voltage(ad5761r_dev *dev,
-				     ad5761r_scale *pv);
+int32_t ad5761r_get_power_up_voltage(struct ad5761r_dev *dev,
+				     enum ad5761r_scale *pv);
 /* Set the clear voltage. */
-int32_t ad5761r_set_clear_voltage(ad5761r_dev *dev,
-				  ad5761r_scale cv);
+int32_t ad5761r_set_clear_voltage(struct ad5761r_dev *dev,
+				  enum ad5761r_scale cv);
 /* Get the clear voltage. */
-int32_t ad5761r_get_clear_voltage(ad5761r_dev *dev,
-				  ad5761r_scale *cv);
+int32_t ad5761r_get_clear_voltage(struct ad5761r_dev *dev,
+				  enum ad5761r_scale *cv);
 /* Enable/disable internal reference. */
-int32_t ad5761r_set_internal_reference_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_internal_reference_en_dis(struct ad5761r_dev *dev,
 		bool en_dis);
 /* Get the status of the internal reference. */
-int32_t ad5761r_get_internal_reference_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_internal_reference_en_dis(struct ad5761r_dev *dev,
 		bool *en_dis);
 /* Enable/disable ETS (exceed temperature shutdown) function. */
-int32_t ad5761r_set_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
 		bool en_dis);
 /* Get the status of the ETS (exceed temperature shutdown) function. */
-int32_t ad5761r_get_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
 		bool *en_dis);
 /* Enable/disable the twos complement bipolar output range. */
-int32_t ad5761r_set_2c_bipolar_range_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
 		bool en_dis);
 /* Get the status of the twos complement bipolar output range. */
-int32_t ad5761r_get_2c_bipolar_range_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
 		bool *en_dis);
 /* Enable/disable the 5% overrange. */
-int32_t ad5761r_set_overrange_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_overrange_en_dis(struct ad5761r_dev *dev,
 				     bool en_dis);
 /* Get the status of the 5% overrange. */
-int32_t ad5761r_get_overrange_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_overrange_en_dis(struct ad5761r_dev *dev,
 				     bool *en_dis);
 /* Get the short-circuit condition. */
-int32_t ad5761r_get_short_circuit_condition(ad5761r_dev *dev,
-		bool *sc);
+int32_t ad5761r_get_short_circuit_condition(struct ad5761r_dev *dev,
+					    bool *sc);
 /* Get the brownout condition. */
-int32_t ad5761r_get_brownout_condition(ad5761r_dev *dev,
+int32_t ad5761r_get_brownout_condition(struct ad5761r_dev *dev,
 				       bool *bo);
 /* Set the reset pin value. */
-int32_t ad5761r_set_reset_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_reset_pin(struct ad5761r_dev *dev,
 			      uint8_t value);
 /* Get the reset pin value. */
-int32_t ad5761r_get_reset_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_reset_pin(struct ad5761r_dev *dev,
 			      uint8_t *value);
 /* Set the clr pin value. */
-int32_t ad5761r_set_clr_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_clr_pin(struct ad5761r_dev *dev,
 			    uint8_t value);
 /* Get the clr pin value. */
-int32_t ad5761r_get_clr_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_clr_pin(struct ad5761r_dev *dev,
 			    uint8_t *value);
 /* Set the ldac pin value. */
-int32_t ad5761r_set_ldac_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_ldac_pin(struct ad5761r_dev *dev,
 			     uint8_t value);
 /* Get the ldac pin value. */
-int32_t ad5761r_get_ldac_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_ldac_pin(struct ad5761r_dev *dev,
 			     uint8_t *value);
 /* Write to input register. */
-int32_t ad5761r_write_input_register(ad5761r_dev *dev,
+int32_t ad5761r_write_input_register(struct ad5761r_dev *dev,
 				     uint16_t reg_data);
 /* Update DAC register. */
-int32_t ad5761r_update_dac_register(ad5761r_dev *dev);
+int32_t ad5761r_update_dac_register(struct ad5761r_dev *dev);
 /* Write to input register and update DAC register. */
-int32_t ad5761r_write_update_dac_register(ad5761r_dev *dev,
-		uint16_t reg_data);
+int32_t ad5761r_write_update_dac_register(struct ad5761r_dev *dev,
+					  uint16_t reg_data);
 /*Software data reset. */
-int32_t ad5761r_software_data_reset(ad5761r_dev *dev);
+int32_t ad5761r_software_data_reset(struct ad5761r_dev *dev);
 /* Software full reset. */
-int32_t ad5761r_software_full_reset(ad5761r_dev *dev);
+int32_t ad5761r_software_full_reset(struct ad5761r_dev *dev);
 
 #endif // AD5761R_H_

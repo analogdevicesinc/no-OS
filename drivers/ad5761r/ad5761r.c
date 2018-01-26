@@ -69,11 +69,12 @@
  * @param reg_data - The transmitted data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_write(ad5761r_dev *dev,
+int32_t ad5761r_write(struct ad5761r_dev *dev,
 		      uint8_t reg_addr_cmd,
 		      uint16_t reg_data)
 {
 	uint8_t data[3];
+
 	int32_t ret;
 
 	data[0] = reg_addr_cmd;
@@ -102,11 +103,12 @@ int32_t ad5761r_write(ad5761r_dev *dev,
  * @param - The received data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_read(ad5761r_dev *dev,
+int32_t ad5761r_read(struct ad5761r_dev *dev,
 		     uint8_t reg_addr_cmd,
 		     uint16_t *reg_data)
 {
 	uint8_t data[3];
+
 	int32_t ret;
 
 	data[0] = reg_addr_cmd;
@@ -129,8 +131,8 @@ int32_t ad5761r_read(ad5761r_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_register_readback(ad5761r_dev *dev,
-				  ad5761r_reg reg,
+int32_t ad5761r_register_readback(struct ad5761r_dev *dev,
+				  enum ad5761r_reg reg,
 				  uint16_t *reg_data)
 {
 	uint8_t reg_addr;
@@ -170,7 +172,7 @@ int32_t ad5761r_register_readback(ad5761r_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_config(ad5761r_dev *dev)
+int32_t ad5761r_config(struct ad5761r_dev *dev)
 {
 	uint16_t reg_data;
 
@@ -193,7 +195,7 @@ int32_t ad5761r_config(ad5761r_dev *dev)
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_daisy_chain_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_daisy_chain_en_dis(struct ad5761r_dev *dev,
 				       bool en_dis)
 {
 	dev->daisy_chain_en = en_dis;
@@ -208,7 +210,7 @@ int32_t ad5761r_set_daisy_chain_en_dis(ad5761r_dev *dev,
  * @param en_dis - The status of the daisy-chain mode (enabled, disabled).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_daisy_chain_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_daisy_chain_en_dis(struct ad5761r_dev *dev,
 				       bool *en_dis)
 {
 	*en_dis = dev->daisy_chain_en;
@@ -230,8 +232,8 @@ int32_t ad5761r_get_daisy_chain_en_dis(ad5761r_dev *dev,
  *				       AD5761R_RANGE_0V_TO_P_20V
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_output_range(ad5761r_dev *dev,
-				 ad5761r_range out_range)
+int32_t ad5761r_set_output_range(struct ad5761r_dev *dev,
+				 enum ad5761r_range out_range)
 {
 	dev->ra = out_range;
 
@@ -243,8 +245,8 @@ int32_t ad5761r_set_output_range(ad5761r_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_output_range(ad5761r_dev *dev,
-				 ad5761r_range *out_range)
+int32_t ad5761r_get_output_range(struct ad5761r_dev *dev,
+				 enum ad5761r_range *out_range)
 {
 	*out_range = dev->ra;
 
@@ -260,8 +262,8 @@ int32_t ad5761r_get_output_range(ad5761r_dev *dev,
  *				AD5761R_SCALE_FULL
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_power_up_voltage(ad5761r_dev *dev,
-				     ad5761r_scale pv)
+int32_t ad5761r_set_power_up_voltage(struct ad5761r_dev *dev,
+				     enum ad5761r_scale pv)
 {
 	dev->pv = pv;
 
@@ -274,8 +276,8 @@ int32_t ad5761r_set_power_up_voltage(ad5761r_dev *dev,
  * @param pv - The power up voltage.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_power_up_voltage(ad5761r_dev *dev,
-				     ad5761r_scale *pv)
+int32_t ad5761r_get_power_up_voltage(struct ad5761r_dev *dev,
+				     enum ad5761r_scale *pv)
 {
 	*pv = dev->pv;
 
@@ -291,8 +293,8 @@ int32_t ad5761r_get_power_up_voltage(ad5761r_dev *dev,
  *				AD5761R_SCALE_FULL
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_clear_voltage(ad5761r_dev *dev,
-				  ad5761r_scale cv)
+int32_t ad5761r_set_clear_voltage(struct ad5761r_dev *dev,
+				  enum ad5761r_scale cv)
 {
 	dev->cv = cv;
 
@@ -305,8 +307,8 @@ int32_t ad5761r_set_clear_voltage(ad5761r_dev *dev,
  * @param cv - The clear voltage.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_clear_voltage(ad5761r_dev *dev,
-				  ad5761r_scale *cv)
+int32_t ad5761r_get_clear_voltage(struct ad5761r_dev *dev,
+				  enum ad5761r_scale *cv)
 {
 	*cv = dev->cv;
 
@@ -321,8 +323,8 @@ int32_t ad5761r_get_clear_voltage(ad5761r_dev *dev,
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_internal_reference_en_dis(ad5761r_dev *dev,
-		bool en_dis)
+int32_t ad5761r_set_internal_reference_en_dis(struct ad5761r_dev *dev,
+					      bool en_dis)
 {
 	dev->int_ref_en = en_dis;
 
@@ -335,8 +337,8 @@ int32_t ad5761r_set_internal_reference_en_dis(ad5761r_dev *dev,
  * @param en_dis - The status of the internal reference (enabled, disabled).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_internal_reference_en_dis(ad5761r_dev *dev,
-		bool *en_dis)
+int32_t ad5761r_get_internal_reference_en_dis(struct ad5761r_dev *dev,
+					      bool *en_dis)
 {
 	*en_dis = dev->int_ref_en;
 
@@ -351,8 +353,8 @@ int32_t ad5761r_get_internal_reference_en_dis(ad5761r_dev *dev,
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
-		bool en_dis)
+int32_t ad5761r_set_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
+						bool en_dis)
 {
 	dev->exc_temp_sd_en = en_dis;
 
@@ -365,8 +367,8 @@ int32_t ad5761r_set_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
  * @param en_dis - The status of the ETS function (enabled, disabled).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
-		bool *en_dis)
+int32_t ad5761r_get_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
+						bool *en_dis)
 {
 	*en_dis = dev->exc_temp_sd_en;
 
@@ -382,8 +384,8 @@ int32_t ad5761r_get_exceed_temp_shutdown_en_dis(ad5761r_dev *dev,
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_2c_bipolar_range_en_dis(ad5761r_dev *dev,
-		bool en_dis)
+int32_t ad5761r_set_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
+					    bool en_dis)
 {
 	dev->b2c_range_en = en_dis;
 
@@ -397,8 +399,8 @@ int32_t ad5761r_set_2c_bipolar_range_en_dis(ad5761r_dev *dev,
  *		   (enabled, disabled).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_2c_bipolar_range_en_dis(ad5761r_dev *dev,
-		bool *en_dis)
+int32_t ad5761r_get_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
+					    bool *en_dis)
 {
 	*en_dis = dev->b2c_range_en;
 
@@ -413,7 +415,7 @@ int32_t ad5761r_get_2c_bipolar_range_en_dis(ad5761r_dev *dev,
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_overrange_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_set_overrange_en_dis(struct ad5761r_dev *dev,
 				     bool en_dis)
 {
 	dev->ovr_en = en_dis;
@@ -427,7 +429,7 @@ int32_t ad5761r_set_overrange_en_dis(ad5761r_dev *dev,
  * @param en_dis - The status of the twos 5% overrange (enabled, disabled).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_overrange_en_dis(ad5761r_dev *dev,
+int32_t ad5761r_get_overrange_en_dis(struct ad5761r_dev *dev,
 				     bool *en_dis)
 {
 	*en_dis = dev->ovr_en;
@@ -443,8 +445,8 @@ int32_t ad5761r_get_overrange_en_dis(ad5761r_dev *dev,
  *		   not detected).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_short_circuit_condition(ad5761r_dev *dev,
-		bool *sc)
+int32_t ad5761r_get_short_circuit_condition(struct ad5761r_dev *dev,
+					    bool *sc)
 {
 	uint16_t reg_data;
 	int32_t ret;
@@ -463,7 +465,7 @@ int32_t ad5761r_get_short_circuit_condition(ad5761r_dev *dev,
  *		   not detected).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_brownout_condition(ad5761r_dev *dev,
+int32_t ad5761r_get_brownout_condition(struct ad5761r_dev *dev,
 				       bool *bo)
 {
 	uint16_t reg_data;
@@ -483,7 +485,7 @@ int32_t ad5761r_get_brownout_condition(ad5761r_dev *dev,
  *  				   GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_reset_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_reset_pin(struct ad5761r_dev *dev,
 			      uint8_t value)
 {
 	if (dev->gpio_reset) {
@@ -500,7 +502,7 @@ int32_t ad5761r_set_reset_pin(ad5761r_dev *dev,
  * @param value - The pin value.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_reset_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_reset_pin(struct ad5761r_dev *dev,
 			      uint8_t *value)
 {
 	if (dev->gpio_reset) {
@@ -518,7 +520,7 @@ int32_t ad5761r_get_reset_pin(ad5761r_dev *dev,
  *  				   GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_clr_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_clr_pin(struct ad5761r_dev *dev,
 			    uint8_t value)
 {
 	if (dev->gpio_clr) {
@@ -535,7 +537,7 @@ int32_t ad5761r_set_clr_pin(ad5761r_dev *dev,
  * @param value - The pin value.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_clr_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_clr_pin(struct ad5761r_dev *dev,
 			    uint8_t *value)
 {
 	if (dev->gpio_clr) {
@@ -553,7 +555,7 @@ int32_t ad5761r_get_clr_pin(ad5761r_dev *dev,
  *  				   GPIO_HIGH
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_set_ldac_pin(ad5761r_dev *dev,
+int32_t ad5761r_set_ldac_pin(struct ad5761r_dev *dev,
 			     uint8_t value)
 {
 	if (dev->gpio_ldac) {
@@ -570,7 +572,7 @@ int32_t ad5761r_set_ldac_pin(ad5761r_dev *dev,
  * @param value - The pin value.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_get_ldac_pin(ad5761r_dev *dev,
+int32_t ad5761r_get_ldac_pin(struct ad5761r_dev *dev,
 			     uint8_t *value)
 {
 	if (dev->gpio_ldac) {
@@ -586,7 +588,7 @@ int32_t ad5761r_get_ldac_pin(ad5761r_dev *dev,
  * @param dac_data - The DAC data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_write_input_register(ad5761r_dev *dev,
+int32_t ad5761r_write_input_register(struct ad5761r_dev *dev,
 				     uint16_t dac_data)
 {
 	uint16_t reg_data;
@@ -604,7 +606,7 @@ int32_t ad5761r_write_input_register(ad5761r_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_update_dac_register(ad5761r_dev *dev)
+int32_t ad5761r_update_dac_register(struct ad5761r_dev *dev)
 {
 	return ad5761r_write(dev, CMD_UPDATE_DAC_REG, 0);
 }
@@ -615,8 +617,8 @@ int32_t ad5761r_update_dac_register(ad5761r_dev *dev)
  * @param dac_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_write_update_dac_register(ad5761r_dev *dev,
-		uint16_t dac_data)
+int32_t ad5761r_write_update_dac_register(struct ad5761r_dev *dev,
+					  uint16_t dac_data)
 {
 	uint16_t reg_data;
 
@@ -633,7 +635,7 @@ int32_t ad5761r_write_update_dac_register(ad5761r_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_software_data_reset(ad5761r_dev *dev)
+int32_t ad5761r_software_data_reset(struct ad5761r_dev *dev)
 {
 	return ad5761r_write(dev, CMD_SW_DATA_RESET, 0);
 }
@@ -643,7 +645,7 @@ int32_t ad5761r_software_data_reset(ad5761r_dev *dev)
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_software_full_reset(ad5761r_dev *dev)
+int32_t ad5761r_software_full_reset(struct ad5761r_dev *dev)
 {
 	return ad5761r_write(dev, CMD_SW_FULL_RESET, 0);
 }
@@ -655,13 +657,13 @@ int32_t ad5761r_software_full_reset(ad5761r_dev *dev)
  * 					   parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad5761r_init(ad5761r_dev **device,
-		     ad5761r_init_param init_param)
+int32_t ad5761r_init(struct ad5761r_dev **device,
+		     struct ad5761r_init_param init_param)
 {
-	ad5761r_dev *dev;
+	struct ad5761r_dev *dev;
 	int32_t ret = 0;
 
-	dev = (ad5761r_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5761r_dev *)malloc(sizeof(*dev));
 	if (!dev) {
 		return -1;
 	}
@@ -712,7 +714,7 @@ int32_t ad5761r_init(ad5761r_dev **device,
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad5761r_remove(ad5761r_dev *dev)
+int32_t ad5761r_remove(struct ad5761r_dev *dev)
 {
 	int32_t ret;
 
