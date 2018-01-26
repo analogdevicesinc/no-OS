@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /*****************************************************************************/
@@ -46,13 +43,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD5933.h"
+#include "ad5933.h"
 #include <math.h>
 
 /******************************************************************************/
 /************************** Constants Definitions *****************************/
 /******************************************************************************/
-const long POW_2_27 = 134217728ul;      // 2 to the power of 27
+const int32_t pow_2_27 = 134217728ul;      // 2 to the power of 27
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -72,36 +69,36 @@ const long POW_2_27 = 134217728ul;      // 2 to the power of 27
  *                         0 - I2C peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-int32_t AD5933_Init(ad5933_dev **device,
-		    ad5933_init_param init_param)
+int32_t ad5933_init(struct ad5933_dev **device,
+		    struct ad5933_init_param init_param)
 {
-	ad5933_dev *dev;
+	struct ad5933_dev *dev;
 	int32_t status;
 
-	dev = (ad5933_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5933_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	dev->currentSysClk = init_param.currentSysClk;
-	dev->currentClockSource = init_param.currentClockSource;
-	dev->currentGain = init_param.currentGain;
-	dev->currentRange = init_param.currentRange;
+	dev->current_sys_clk = init_param.current_sys_clk;
+	dev->current_clock_source = init_param.current_clock_source;
+	dev->current_gain = init_param.current_gain;
+	dev->current_range = init_param.current_range;
 
 	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5933_Init().
+ * @brief Free the resources allocated by ad5933_init().
  *
  * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD5933_remove(ad5933_dev *dev)
+int32_t ad5933_remove(struct ad5933_dev *dev)
 {
 	int32_t status;
 
@@ -115,61 +112,59 @@ int32_t AD5933_remove(ad5933_dev *dev)
 /***************************************************************************//**
  * @brief Writes data into a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
- * @param registerValue   - Data value to write.
- * @param bytesNumber     - Number of bytes.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
+ * @param register_value   - Data value to write.
+ * @param bytes_number     - Number of bytes.
  *
  * @return None.
 *******************************************************************************/
-void AD5933_SetRegisterValue(ad5933_dev *dev,
-			     unsigned char registerAddress,
-                             unsigned long registerValue,
-                             unsigned char bytesNumber)
+void ad5933_set_register_value(struct ad5933_dev *dev,
+			       uint8_t register_address,
+			       uint32_t register_value,
+			       uint8_t bytes_number)
 {
-    unsigned char byte          = 0;
-    unsigned char writeData[2]  = {0, 0};
+	uint8_t byte = 0;
+	uint8_t write_data[2] = {0, 0};
 
-    for(byte = 0;byte < bytesNumber; byte++)
-    {
-        writeData[0] = registerAddress + bytesNumber - byte - 1;
-        writeData[1] = (unsigned char)((registerValue >> (byte * 8)) & 0xFF);
-	    i2c_write(dev->i2c_desc, writeData, 2, 1);
-    }
+	for(byte = 0; byte < bytes_number; byte++) {
+		write_data[0] = register_address + bytes_number - byte - 1;
+		write_data[1] = (uint8_t)((register_value >> (byte * 8)) & 0xFF);
+		i2c_write(dev->i2c_desc, write_data, 2, 1);
+	}
 }
 
 /***************************************************************************//**
  * @brief Reads the value of a register.
  *
- * @param dev             - The device structure.
- * @param registerAddress - Address of the register.
- * @param bytesNumber     - Number of bytes.
+ * @param dev              - The device structure.
+ * @param register_address - Address of the register.
+ * @param bytes_number     - Number of bytes.
  *
  * @return registerValue  - Value of the register.
 *******************************************************************************/
-unsigned long AD5933_GetRegisterValue(ad5933_dev *dev,
-				      unsigned char registerAddress,
-                                      unsigned char bytesNumber)
+uint32_t ad5933_get_register_value(struct ad5933_dev *dev,
+				   uint8_t register_address,
+				   uint8_t bytes_number)
 {
-    unsigned long registerValue = 0;
-    unsigned char byte          = 0;
-    unsigned char writeData[2]  = {0, 0};
-    unsigned char readData[2]   = {0, 0};
+	uint32_t register_value = 0;
+	uint8_t byte = 0;
+	uint8_t write_data[2]   = {0, 0};
+	uint8_t read_data[2]    = {0, 0};
 
-    for(byte = 0;byte < bytesNumber;byte ++)
-    {
-        /* Set the register pointer. */
-        writeData[0] = AD5933_ADDR_POINTER;
-        writeData[1] = registerAddress + byte;
-	    i2c_write(dev->i2c_desc, writeData, 2, 1);
-        /* Read Register Data. */
-        readData[0] = 0xFF;
-	    i2c_read(dev->i2c_desc, readData, 1, 1);
-        registerValue = registerValue << 8;
-        registerValue += readData[0];
-    }
+	for(byte = 0; byte < bytes_number; byte ++) {
+		/* Set the register pointer. */
+		write_data[0] = AD5933_ADDR_POINTER;
+		write_data[1] = register_address + byte;
+		i2c_write(dev->i2c_desc, write_data, 2, 1);
+		/* Read Register Data. */
+		read_data[0] = 0xFF;
+		i2c_read(dev->i2c_desc, read_data, 1, 1);
+		register_value = register_value << 8;
+		register_value += read_data[0];
+	}
 
-    return registerValue;
+	return register_value;
 }
 
 /***************************************************************************//**
@@ -179,42 +174,39 @@ unsigned long AD5933_GetRegisterValue(ad5933_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void AD5933_Reset(ad5933_dev *dev)
+void ad5933_reset(struct ad5933_dev *dev)
 {
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_LB,
-                            AD5933_CONTROL_RESET | dev->currentClockSource,
-                            1);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_LB,
+				  AD5933_CONTROL_RESET | dev->current_clock_source,
+				  1);
 }
 
 /***************************************************************************//**
  * @brief Selects the source of the system clock.
  *
- * @param dev        - The device structure.
- * @param clkSource  - Selects the source of the system clock.
+ * @param dev          - The device structure.
+ * @param clk_source   - Selects the source of the system clock.
  *                     Example: AD5933_CONTROL_INT_SYSCLK
  *                              AD5933_CONTROL_EXT_SYSCLK
- * @param extClkFreq - Frequency value of the external clock, if used.
+ * @param ext_clk_freq - Frequency value of the external clock, if used.
  *
  * @return None.
 *******************************************************************************/
-void AD5933_SetSystemClk(ad5933_dev *dev,
-			 char clkSource,
-			 unsigned long extClkFreq)
+void ad5933_set_system_clk(struct ad5933_dev *dev,
+			   int8_t clk_source,
+			   uint32_t ext_clk_freq)
 {
-    dev->currentClockSource = clkSource;
-    if(clkSource == AD5933_CONTROL_EXT_SYSCLK)
-    {
-        dev->currentSysClk = extClkFreq;                 // External clock frequency
-    }
-    else
-    {
-        dev->currentSysClk = AD5933_INTERNAL_SYS_CLK;    // 16 MHz
-    }
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_LB,
-			    dev->currentClockSource,
-			    1);
+	dev->current_clock_source = clk_source;
+	if(clk_source == AD5933_CONTROL_EXT_SYSCLK) {
+		dev->current_sys_clk = ext_clk_freq;                 // External clock frequency
+	} else {
+		dev->current_sys_clk = AD5933_INTERNAL_SYS_CLK;    // 16 MHz
+	}
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_LB,
+				  dev->current_clock_source,
+				  1);
 }
 
 
@@ -234,19 +226,19 @@ void AD5933_SetSystemClk(ad5933_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void AD5933_SetRangeAndGain(ad5933_dev *dev,
-			    char range,
-			    char gain)
+void ad5933_set_range_and_gain(struct ad5933_dev *dev,
+			       int8_t range,
+			       int8_t gain)
 {
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-			    AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_NOP) |
-			    AD5933_CONTROL_RANGE(range) |
-			    AD5933_CONTROL_PGA_GAIN(gain),
-			    1);
-    /* Store the last settings made to range and gain. */
-    dev->currentRange = range;
-    dev->currentGain = gain;
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_NOP) |
+				  AD5933_CONTROL_RANGE(range) |
+				  AD5933_CONTROL_PGA_GAIN(gain),
+				  1);
+	/* Store the last settings made to range and gain. */
+	dev->current_range = range;
+	dev->current_gain = gain;
 }
 
 /***************************************************************************//**
@@ -257,91 +249,84 @@ void AD5933_SetRangeAndGain(ad5933_dev *dev,
  *
  * @return temperature - Temperature.
 *******************************************************************************/
-float AD5933_GetTemperature(ad5933_dev *dev)
+float ad5933_get_temperature(struct ad5933_dev *dev)
 {
-    float         temperature = 0;
-    unsigned char status      = 0;
+	float temperature = 0;
+	uint8_t status = 0;
 
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-			    AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_MEASURE_TEMP) |
-			    AD5933_CONTROL_RANGE(dev->currentRange) |
-			    AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-			    1);
-    while((status & AD5933_STAT_TEMP_VALID) == 0)
-    {
-        status = AD5933_GetRegisterValue(dev,
-					 AD5933_REG_STATUS,
-					 1);
-    }
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_MEASURE_TEMP) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	while((status & AD5933_STAT_TEMP_VALID) == 0) {
+		status = ad5933_get_register_value(dev,
+						   AD5933_REG_STATUS,
+						   1);
+	}
 
-    temperature = AD5933_GetRegisterValue(dev,
-					  AD5933_REG_TEMP_DATA,
-					  2);
-    if(temperature < 8192)
-    {
-        temperature /= 32;
-    }
-    else
-    {
-        temperature -= 16384;
-        temperature /= 32;
-    }
+	temperature = ad5933_get_register_value(dev,
+						AD5933_REG_TEMP_DATA,
+						2);
+	if(temperature < 8192) {
+		temperature /= 32;
+	} else {
+		temperature -= 16384;
+		temperature /= 32;
+	}
 
-    return temperature;
+	return temperature;
 }
 
 /***************************************************************************//**
  * @brief Configures the sweep parameters: Start frequency, Frequency increment
  *        and Number of increments.
  *
- * @param dev       - The device structure.
- * @param startFreq - Start frequency in Hz;
- * @param incFreq   - Frequency increment in Hz;
- * @param incNum    - Number of increments. Maximum value is 511(0x1FF).
+ * @param dev        - The device structure.
+ * @param start_freq - Start frequency in Hz;
+ * @param inc_freq   - Frequency increment in Hz;
+ * @param inc_num    - Number of increments. Maximum value is 511(0x1FF).
  *
  * @return None.
 *******************************************************************************/
-void AD5933_ConfigSweep(ad5933_dev *dev,
-			unsigned long  startFreq,
-                        unsigned long  incFreq,
-                        unsigned short incNum)
+void ad5933_config_sweep(struct ad5933_dev *dev,
+			 uint32_t  start_freq,
+			 uint32_t  inc_freq,
+			 uint16_t inc_num)
 {
-    unsigned long  startFreqReg = 0;
-    unsigned long  incFreqReg   = 0;
-    unsigned short incNumReg    = 0;
+	uint32_t start_freq_reg = 0;
+	uint32_t inc_freq_reg = 0;
+	uint16_t inc_num_reg = 0;
 
-    /* Ensure that incNum is a valid data. */
-    if(incNum > AD5933_MAX_INC_NUM)
-    {
-        incNumReg = AD5933_MAX_INC_NUM;
-    }
-    else
-    {
-        incNumReg = incNum;
-    }
+	/* Ensure that incNum is a valid data. */
+	if(inc_num > AD5933_MAX_INC_NUM) {
+		inc_num_reg = AD5933_MAX_INC_NUM;
+	} else {
+		inc_num_reg = inc_num;
+	}
 
-    /* Convert users start frequency to binary code. */
-    startFreqReg = (unsigned long)((double)startFreq * 4 / dev->currentSysClk *
-                                   POW_2_27);
+	/* Convert users start frequency to binary code. */
+	start_freq_reg = (uint32_t)((double)start_freq * 4 / dev->current_sys_clk *
+				    pow_2_27);
 
-    /* Convert users increment frequency to binary code. */
-    incFreqReg = (unsigned long)((double)incFreq * 4 / dev->currentSysClk *
-                                 POW_2_27);
+	/* Convert users increment frequency to binary code. */
+	inc_freq_reg = (uint32_t)((double)inc_freq * 4 / dev->current_sys_clk *
+				  pow_2_27);
 
-    /* Configure the device with the sweep parameters. */
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_FREQ_START,
-                            startFreqReg,
-                            3);
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_FREQ_INC,
-                            incFreqReg,
-                            3);
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_INC_NUM,
-                            incNumReg,
-                            2);
+	/* Configure the device with the sweep parameters. */
+	ad5933_set_register_value(dev,
+				  AD5933_REG_FREQ_START,
+				  start_freq_reg,
+				  3);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_FREQ_INC,
+				  inc_freq_reg,
+				  3);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_INC_NUM,
+				  inc_num_reg,
+				  2);
 }
 
 /***************************************************************************//**
@@ -351,44 +336,43 @@ void AD5933_ConfigSweep(ad5933_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void AD5933_StartSweep(ad5933_dev *dev)
+void ad5933_start_sweep(struct ad5933_dev *dev)
 {
-    unsigned char status = 0;
+	uint8_t status = 0;
 
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-                            AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_STANDBY) |
-                            AD5933_CONTROL_RANGE(dev->currentRange) |
-                            AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-                            1);
-    AD5933_Reset(dev);
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-			    AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_INIT_START_FREQ)|
-			    AD5933_CONTROL_RANGE(dev->currentRange) |
-			    AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-			    1);
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-			    AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_START_SWEEP) |
-			    AD5933_CONTROL_RANGE(dev->currentRange) |
-			    AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-			    1);
-    status = 0;
-    while((status & AD5933_STAT_DATA_VALID) == 0)
-    {
-        status = AD5933_GetRegisterValue(dev,
-					 AD5933_REG_STATUS,
-					 1);
-    };
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_STANDBY) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	ad5933_reset(dev);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_INIT_START_FREQ)|
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(AD5933_FUNCTION_START_SWEEP) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	status = 0;
+	while((status & AD5933_STAT_DATA_VALID) == 0) {
+		status = ad5933_get_register_value(dev,
+						   AD5933_REG_STATUS,
+						   1);
+	};
 }
 
 /***************************************************************************//**
  * @brief Reads the real and the imaginary data and calculates the Gain Factor.
  *
- * @param dev                  - The device structure.
- * @param calibrationImpedance - The calibration impedance value.
- * @param freqFunction         - Frequency function.
+ * @param dev                   - The device structure.
+ * @param calibration_impedance - The calibration impedance value.
+ * @param freq_function         - Frequency function.
  *                               Example: AD5933_FUNCTION_INC_FREQ - Increment
                                           freq.;
  *                                        AD5933_FUNCTION_REPEAT_FREQ - Repeat
@@ -396,84 +380,82 @@ void AD5933_StartSweep(ad5933_dev *dev)
  *
  * @return gainFactor          - Calculated gain factor.
 *******************************************************************************/
-double AD5933_CalculateGainFactor(ad5933_dev *dev,
-				  unsigned long calibrationImpedance,
-                                  unsigned char freqFunction)
+double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
+				    uint32_t calibration_impedance,
+				    uint8_t freq_function)
 {
-    double        gainFactor = 0;
-    double        magnitude  = 0;
-    signed short  realData   = 0;
-    signed short  imagData   = 0;
-    unsigned char status     = 0;
+	double gain_factor = 0;
+	double magnitude = 0;
+	signed short real_data = 0;
+	signed short imag_data = 0;
+	uint8_t status = 0;
 
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-                            AD5933_CONTROL_FUNCTION(freqFunction) |
-                            AD5933_CONTROL_RANGE(dev->currentRange) |
-                            AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-                            1);
-    status = 0;
-    while((status & AD5933_STAT_DATA_VALID) == 0)
-    {
-        status = AD5933_GetRegisterValue(dev,
-					 AD5933_REG_STATUS,
-					 1);
-    }
-    realData = AD5933_GetRegisterValue(dev,
-				       AD5933_REG_REAL_DATA,
-				       2);
-    imagData = AD5933_GetRegisterValue(dev,
-				       AD5933_REG_IMAG_DATA,
-				       2);
-    magnitude = sqrt((realData * realData) + (imagData * imagData));
-    gainFactor = 1 / (magnitude * calibrationImpedance);
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(freq_function) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	status = 0;
+	while((status & AD5933_STAT_DATA_VALID) == 0) {
+		status = ad5933_get_register_value(dev,
+						   AD5933_REG_STATUS,
+						   1);
+	}
+	real_data = ad5933_get_register_value(dev,
+					      AD5933_REG_REAL_DATA,
+					      2);
+	imag_data = ad5933_get_register_value(dev,
+					      AD5933_REG_IMAG_DATA,
+					      2);
+	magnitude = sqrt((real_data * real_data) + (imag_data * imag_data));
+	gain_factor = 1 / (magnitude * calibration_impedance);
 
-    return gainFactor;
+	return gain_factor;
 }
 
 /***************************************************************************//**
  * @brief Reads the real and the imaginary data and calculates the Impedance.
  *
- * @param dev          - The device structure.
- * @param gainFactor   - The gain factor.
- * @param freqFunction - Frequency function.
+ * @param dev           - The device structure.
+ * @param gain_factor   - The gain factor.
+ * @param freq_function - Frequency function.
  *                       Example: AD5933_FUNCTION_INC_FREQ - Increment freq.;
  *                                AD5933_FUNCTION_REPEAT_FREQ - Repeat freq..
  *
  * @return impedance   - Calculated impedance.
 *******************************************************************************/
-double AD5933_CalculateImpedance(ad5933_dev *dev,
-				 double gainFactor,
-                                 unsigned char freqFunction)
+double ad5933_calculate_impedance(struct ad5933_dev *dev,
+				  double gain_factor,
+				  uint8_t freq_function)
 {
-    signed short  realData  = 0;
-    signed short  imagData  = 0;
-    double        magnitude = 0;
-    double        impedance = 0;
-    unsigned char status    = 0;
+	signed short real_data = 0;
+	signed short imag_data = 0;
+	double magnitude = 0;
+	double impedance = 0;
+	uint8_t status = 0;
 
-    AD5933_SetRegisterValue(dev,
-			    AD5933_REG_CONTROL_HB,
-                            AD5933_CONTROL_FUNCTION(freqFunction) |
-                            AD5933_CONTROL_RANGE(dev->currentRange) |
-                            AD5933_CONTROL_PGA_GAIN(dev->currentGain),
-                            1);
-    status = 0;
-    while((status & AD5933_STAT_DATA_VALID) == 0)
-    {
-        status = AD5933_GetRegisterValue(dev,
-					 AD5933_REG_STATUS,
-					 1);
-    }
-    realData = AD5933_GetRegisterValue(dev,
-				       AD5933_REG_REAL_DATA,
-				       2);
-    imagData = AD5933_GetRegisterValue(dev,
-				       AD5933_REG_IMAG_DATA,
-				       2);
-    magnitude = sqrt((realData * realData) + (imagData * imagData));
+	ad5933_set_register_value(dev,
+				  AD5933_REG_CONTROL_HB,
+				  AD5933_CONTROL_FUNCTION(freq_function) |
+				  AD5933_CONTROL_RANGE(dev->current_range) |
+				  AD5933_CONTROL_PGA_GAIN(dev->current_gain),
+				  1);
+	status = 0;
+	while((status & AD5933_STAT_DATA_VALID) == 0) {
+		status = ad5933_get_register_value(dev,
+						   AD5933_REG_STATUS,
+						   1);
+	}
+	real_data = ad5933_get_register_value(dev,
+					      AD5933_REG_REAL_DATA,
+					      2);
+	imag_data = ad5933_get_register_value(dev,
+					      AD5933_REG_IMAG_DATA,
+					      2);
+	magnitude = sqrt((real_data * real_data) + (imag_data * imag_data));
 
-    impedance =  1 / (magnitude * gainFactor);
+	impedance =  1 / (magnitude * gain_factor);
 
-    return impedance;
+	return impedance;
 }
