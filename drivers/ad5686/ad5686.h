@@ -99,26 +99,26 @@
 /******************************************************************************/
 
 /* Supported devices */
-typedef enum {
+enum ad5686_type {
 	ID_AD5684R,
 	ID_AD5685R,
 	ID_AD5686R,
 	ID_AD5694R,
 	ID_AD5695R,
 	ID_AD5696R,
-} ad5686_type;
+};
 
-typedef enum {
+enum comm_type {
 	SPI,
 	I2C,
-} comm_type;
+};
 
-typedef struct {
+struct ad5686_chip_info {
 	uint8_t		resolution;
-	comm_type	communication;
-} ad5686_chip_info;
+	enum comm_type	communication;
+};
 
-typedef struct {
+struct ad5686_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* SPI */
@@ -127,10 +127,10 @@ typedef struct {
 	gpio_desc	*gpio_reset;
 	gpio_desc	*gpio_ldac;
 	/* Device Settings */
-	ad5686_type	act_device;
-} ad5686_dev;
+	enum ad5686_type	act_device;
+};
 
-typedef struct {
+struct ad5686_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* SPI */
@@ -139,63 +139,63 @@ typedef struct {
 	int8_t		gpio_reset;
 	int8_t		gpio_ldac;
 	/* Device Settings */
-	ad5686_type	act_device;
-} ad5686_init_param;
+	enum ad5686_type	act_device;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Initialize SPI and Initial Values for AD5449 Board. */
-int32_t ad5686_init(ad5686_dev **device,
-		    ad5686_init_param init_param);
+int32_t ad5686_init(struct ad5686_dev **device,
+		    struct ad5686_init_param init_param);
 
 /* Free the resources allocated by ad5686_init(). */
-int32_t ad5686_remove(ad5686_dev *dev);
+int32_t ad5686_remove(struct ad5686_dev *dev);
 
 /* Write to input register */
-uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
+uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 			      uint8_t command,
 			      uint8_t address,
 			      uint16_t data);
 
 /* Write to Input Register n (dependent on LDAC) */
-void ad5686_write_register(ad5686_dev *dev,
+void ad5686_write_register(struct ad5686_dev *dev,
 			   uint8_t address,
 			   uint16_t data);
 
 /* Update DAC Register n with contents of Input Register n */
-void ad5686_update_register(ad5686_dev *dev,
+void ad5686_update_register(struct ad5686_dev *dev,
 			    uint8_t address);
 
 /* Write to and update DAC channel n */
-void ad5686_write_update_register(ad5686_dev *dev,
+void ad5686_write_update_register(struct ad5686_dev *dev,
 				  uint8_t address,
 				  uint16_t data);
 
 /* Read back Input Register n */
-uint16_t ad5686_read_back_register(ad5686_dev *dev,
+uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 				   uint8_t address);
 
 /* Power down / power up DAC */
-void ad5686_power_mode(ad5686_dev *dev,
+void ad5686_power_mode(struct ad5686_dev *dev,
 		       uint8_t address,
 		       uint8_t mode);
 
 /* Set up LDAC mask register */
-void ad5686_ldac_mask(ad5686_dev *dev,
+void ad5686_ldac_mask(struct ad5686_dev *dev,
 		      uint8_t ldac_mask);
 
 /* Software reset (power-on reset) */
-void ad5686_software_reset(ad5686_dev *dev);
+void ad5686_software_reset(struct ad5686_dev *dev);
 
 /* Write to Internal reference setup register */
-void ad5686_internal_reference(ad5686_dev *dev,
+void ad5686_internal_reference(struct ad5686_dev *dev,
 			       uint8_t value);
 
 /* Set up DCEN register (daisy-chain enable) */
-void ad5686_daisy_chain_en(ad5686_dev *dev,
+void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 			   uint8_t value);
 
 /* Set up readback register (readback enable) */
-void ad5686_read_back_en(ad5686_dev *dev,
+void ad5686_read_back_en(struct ad5686_dev *dev,
 			 uint8_t value);
