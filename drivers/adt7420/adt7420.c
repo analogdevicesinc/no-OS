@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -54,7 +53,7 @@
  *
  * @return register_value  - Value of the register.
 *******************************************************************************/
-uint8_t adt7420_get_register_value(adt7420_dev *dev,
+uint8_t adt7420_get_register_value(struct adt7420_dev *dev,
 				   uint8_t register_address)
 {
 	uint8_t register_value = 0;
@@ -80,7 +79,7 @@ uint8_t adt7420_get_register_value(adt7420_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adt7420_set_register_value(adt7420_dev *dev,
+void adt7420_set_register_value(struct adt7420_dev *dev,
 				uint8_t register_address,
 				uint8_t register_value)
 {
@@ -108,14 +107,14 @@ void adt7420_set_register_value(adt7420_dev *dev,
  *                            0 - I2C peripheral was initialized and the
  *                                device is present.
 *******************************************************************************/
-int32_t adt7420_init(adt7420_dev **device,
-		     adt7420_init_param init_param)
+int32_t adt7420_init(struct adt7420_dev **device,
+		     struct adt7420_init_param init_param)
 {
-	adt7420_dev *dev;
+	struct adt7420_dev *dev;
 	int32_t status;
-	uint8_t test   = 0;
+	uint8_t test = 0;
 
-	dev = (adt7420_dev *)malloc(sizeof(*dev));
+	dev = (struct adt7420_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -141,7 +140,7 @@ int32_t adt7420_init(adt7420_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t adt7420_remove(adt7420_dev *dev)
+int32_t adt7420_remove(struct adt7420_dev *dev)
 {
 	int32_t ret;
 
@@ -161,7 +160,7 @@ int32_t adt7420_remove(adt7420_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adt7420_reset(adt7420_dev *dev)
+void adt7420_reset(struct adt7420_dev *dev)
 {
 	uint8_t register_address = ADT7420_REG_RESET;
 
@@ -184,7 +183,7 @@ void adt7420_reset(adt7420_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adt7420_set_operation_mode(adt7420_dev *dev,
+void adt7420_set_operation_mode(struct adt7420_dev *dev,
 				uint8_t mode)
 {
 	uint8_t register_value = 0;
@@ -205,7 +204,7 @@ void adt7420_set_operation_mode(adt7420_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adt7420_set_resolution(adt7420_dev *dev,
+void adt7420_set_resolution(struct adt7420_dev *dev,
 			    uint8_t resolution)
 {
 	uint8_t register_value = 0;
@@ -224,12 +223,12 @@ void adt7420_set_resolution(adt7420_dev *dev,
  *
  * @return temperature - Temperature in degrees Celsius.
 *******************************************************************************/
-float adt7420_get_temperature(adt7420_dev *dev)
+float adt7420_get_temperature(struct adt7420_dev *dev)
 {
-	uint8_t  msb_temp = 0;
-	uint8_t  lsb_temp = 0;
-	uint16_t temp     = 0;
-	float    temp_c   = 0;
+	uint8_t msb_temp = 0;
+	uint8_t lsb_temp = 0;
+	uint16_t temp = 0;
+	float temp_c = 0;
 
 	msb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_MSB);
 	lsb_temp = adt7420_get_register_value(dev, ADT7420_REG_TEMP_LSB);
