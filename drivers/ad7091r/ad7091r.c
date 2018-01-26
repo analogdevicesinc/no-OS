@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD7091R.h"
+#include "ad7091r.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
