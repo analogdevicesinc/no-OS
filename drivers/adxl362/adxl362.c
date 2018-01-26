@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -61,14 +60,14 @@
  * @return  0 - the initialization was successful and the device is present;
  *         -1 - an error occurred.
 *******************************************************************************/
-int32_t adxl362_init(adxl362_dev **device,
-		     adxl362_init_param init_param)
+int32_t adxl362_init(struct adxl362_dev **device,
+		     struct adxl362_init_param init_param)
 {
-	adxl362_dev *dev;
+	struct adxl362_dev *dev;
 	uint8_t reg_value = 0;
-	int32_t status    = -1;
+	int32_t status = -1;
 
-	dev = (adxl362_dev *)malloc(sizeof(*dev));
+	dev = (struct adxl362_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -93,7 +92,7 @@ int32_t adxl362_init(adxl362_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t adxl362_remove(adxl362_dev *dev)
+int32_t adxl362_remove(struct adxl362_dev *dev)
 {
 	int32_t ret;
 
@@ -114,7 +113,7 @@ int32_t adxl362_remove(adxl362_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adxl362_set_register_value(adxl362_dev *dev,
+void adxl362_set_register_value(struct adxl362_dev *dev,
 				uint16_t register_value,
 				uint8_t register_address,
 				uint8_t bytes_number)
@@ -140,12 +139,13 @@ void adxl362_set_register_value(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_get_register_value(adxl362_dev *dev,
+void adxl362_get_register_value(struct adxl362_dev *dev,
 				uint8_t* read_data,
 				uint8_t  register_address,
 				uint8_t  bytes_number)
 {
 	uint8_t buffer[32];
+
 	uint8_t index = 0;
 
 	buffer[0] = ADXL362_READ_REG;
@@ -168,11 +168,12 @@ void adxl362_get_register_value(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_get_fifo_value(adxl362_dev *dev,
+void adxl362_get_fifo_value(struct adxl362_dev *dev,
 			    uint8_t  *buffer,
 			    uint16_t bytes_number)
 {
-	uint8_t  spi_buffer[512];
+	uint8_t spi_buffer[512];
+
 	uint16_t index = 0;
 
 	spi_buffer[0] = ADXL362_WRITE_FIFO;
@@ -192,7 +193,7 @@ void adxl362_get_fifo_value(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_software_reset(adxl362_dev *dev)
+void adxl362_software_reset(struct adxl362_dev *dev)
 {
 	adxl362_set_register_value(dev,
 				   ADXL362_RESET_KEY,
@@ -210,7 +211,7 @@ void adxl362_software_reset(adxl362_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adxl362_set_power_mode(adxl362_dev *dev,
+void adxl362_set_power_mode(struct adxl362_dev *dev,
 			    uint8_t pwr_mode)
 {
 	uint8_t old_power_ctl = 0;
@@ -240,7 +241,7 @@ void adxl362_set_power_mode(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_set_range(adxl362_dev *dev,
+void adxl362_set_range(struct adxl362_dev *dev,
 		       uint8_t g_range)
 {
 	uint8_t old_filter_ctl = 0;
@@ -273,7 +274,7 @@ void adxl362_set_range(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_set_output_rate(adxl362_dev *dev,
+void adxl362_set_output_rate(struct adxl362_dev *dev,
 			     uint8_t out_rate)
 {
 	uint8_t old_filter_ctl = 0;
@@ -301,7 +302,7 @@ void adxl362_set_output_rate(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_get_xyz(adxl362_dev *dev,
+void adxl362_get_xyz(struct adxl362_dev *dev,
 		     int16_t* x,
 		     int16_t* y,
 		     int16_t* z)
@@ -327,7 +328,7 @@ void adxl362_get_xyz(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_get_g_xyz(adxl362_dev *dev,
+void adxl362_get_g_xyz(struct adxl362_dev *dev,
 		       float* x,
 		       float* y,
 		       float* z)
@@ -353,11 +354,11 @@ void adxl362_get_g_xyz(adxl362_dev *dev,
  *
  * @return temp_celsius - The value of the temperature(degree s Celsius).
 *******************************************************************************/
-float adxl362_read_temperature(adxl362_dev *dev)
+float adxl362_read_temperature(struct adxl362_dev *dev)
 {
 	uint8_t raw_temp_data[2] = {0, 0};
-	int16_t signed_temp      = 0;
-	float   temp_celsius     = 0;
+	int16_t signed_temp = 0;
+	float temp_celsius = 0;
 
 	adxl362_get_register_value(dev,
 				   raw_temp_data,
@@ -386,7 +387,7 @@ float adxl362_read_temperature(adxl362_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adxl362_fifo_setup(adxl362_dev *dev,
+void adxl362_fifo_setup(struct adxl362_dev *dev,
 			uint8_t  mode,
 			uint16_t water_mark_lvl,
 			uint8_t  en_temp_read)
@@ -421,7 +422,7 @@ void adxl362_fifo_setup(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_setup_activity_detection(adxl362_dev *dev,
+void adxl362_setup_activity_detection(struct adxl362_dev *dev,
 				      uint8_t  ref_or_abs,
 				      uint16_t threshold,
 				      uint8_t  time)
@@ -468,7 +469,7 @@ void adxl362_setup_activity_detection(adxl362_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl362_setup_inactivity_detection(adxl362_dev *dev,
+void adxl362_setup_inactivity_detection(struct adxl362_dev *dev,
 					uint8_t  ref_or_abs,
 					uint16_t threshold,
 					uint16_t time)
