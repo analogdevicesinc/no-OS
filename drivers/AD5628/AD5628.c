@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
-*   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -62,42 +59,42 @@
  *                         0 - SPI peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-int32_t AD5628_Init(ad5628_dev **device,
-		 ad5628_init_param init_param)
+int32_t ad5628_init(struct ad5628_dev **device,
+		    struct ad5628_init_param init_param)
 {
-	ad5628_dev *dev;
-    int32_t status;
+	struct ad5628_dev *dev;
+	int32_t status;
 
-	dev = (ad5628_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5628_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-    /* Initializes communication. */
+	/* Initializes communication. */
 	status = spi_init(&dev->spi_desc, init_param.spi_init);
 
-    /* Behaves as a power-on reset. */
-    AD5628_Reset(dev);
-    /* Turns on the on-board reference. */
-    AD5628_SetInputRegister(dev,
-			    AD5628_CMD(AD5628_CMD_SET_INT_REF)|
-                            AD5628_INT_REF_ON);
-    /* Clear code is set to 0x0000. */
-    AD5628_SetInputRegister(dev,
-			    AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE)|
-                            AD5628_CODE_0X0000);
+	/* Behaves as a power-on reset. */
+	ad5628_reset(dev);
+	/* Turns on the on-board reference. */
+	ad5628_set_input_register(dev,
+				  AD5628_CMD(AD5628_CMD_SET_INT_REF)|
+				  AD5628_INT_REF_ON);
+	/* Clear code is set to 0x0000. */
+	ad5628_set_input_register(dev,
+				  AD5628_CMD(AD5628_CMD_LOAD_CLEAR_CODE)|
+				  AD5628_CODE_0X0000);
 	*device = dev;
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
- * @brief Free the resources allocated by AD5628_Init().
+ * @brief Free the resources allocated by ad5628_init().
  *
  * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t AD5628_remove(ad5628_dev *dev)
+int32_t ad5628_remove(struct ad5628_dev *dev)
 {
 	int32_t status;
 
@@ -112,15 +109,15 @@ int32_t AD5628_remove(ad5628_dev *dev)
  * @brief Sets the device in a specific power mode.
  *
  *
- * @param dev - The device structure.
+ * @param dev      - The device structure.
  *
- * @param pwrMode - power mode of the device.
+ * @param pwr_mode - power mode of the device.
  *                  Example: AD5628_PWRDN_NONE
  *                           AD5628_PWRDN_1K
  *                           AD5628_PWRDN_100K
  *                           AD5628_PWRDN_3STATE
  *
- * @param channel - The channel or channels that are being configured.
+ * @param channel  - The channel or channels that are being configured.
  *                  Example:  AD5628_ADDR_DAC_A
  *                            AD5628_ADDR_DAC_B
  *                            ...
@@ -128,25 +125,22 @@ int32_t AD5628_remove(ad5628_dev *dev)
  *
  * @return none.
 *******************************************************************************/
-void AD5628_PowerMode(ad5628_dev *dev,
-		      unsigned char pwrMode,
-		      unsigned char channel)
+void ad5628_power_mode(struct ad5628_dev *dev,
+		       uint8_t pwr_mode,
+		       uint8_t channel)
 {
-    unsigned char selectedChannel = 0;
+	uint8_t selected_channel = 0;
 
-    if(channel == AD5628_ADDR_DAC_ALL)
-    {
-        selectedChannel = 0xFF;
-    }
-    else
-    {
-        selectedChannel = (1 << channel);
-    }
-    /* Selects a power mode for the selected channel. */
-    AD5628_SetInputRegister(dev,
-			    AD5628_CMD(AD5628_CMD_POWERDOWN) |
-                            AD5628_POWER_MODE(pwrMode) |
-                            selectedChannel);
+	if(channel == AD5628_ADDR_DAC_ALL) {
+		selected_channel = 0xFF;
+	} else {
+		selected_channel = (1 << channel);
+	}
+	/* Selects a power mode for the selected channel. */
+	ad5628_set_input_register(dev,
+				  AD5628_CMD(AD5628_CMD_POWERDOWN) |
+				  AD5628_POWER_MODE(pwr_mode) |
+				  selected_channel);
 }
 
 /***************************************************************************//**
@@ -156,28 +150,28 @@ void AD5628_PowerMode(ad5628_dev *dev,
  *
  * @return none.
 *******************************************************************************/
-void AD5628_Reset(ad5628_dev *dev)
+void ad5628_reset(struct ad5628_dev *dev)
 {
-     AD5628_SetInputRegister(dev, AD5628_CMD(AD5628_CMD_RESET));
+	ad5628_set_input_register(dev, AD5628_CMD(AD5628_CMD_RESET));
 }
 
 /***************************************************************************//**
  * @brief Writes a 32-bit data-word to the Input Register of the device.
  *
- * @param dev - The device structure.
+ * @param dev            - The device structure.
  *
- * @param registerValue - Value of the register.
+ * @param register_value - Value of the register.
  *
  * @return none.
 *******************************************************************************/
-void AD5628_SetInputRegister(ad5628_dev *dev,
-			     unsigned long registerValue)
+void ad5628_set_input_register(struct ad5628_dev *dev,
+			       uint32_t register_value)
 {
-    unsigned char registerWord[4] = {0, 0, 0, 0};
+	uint8_t register_word [ 4 ] = {0, 0, 0, 0};
 
-    registerWord[0] = (unsigned char)((registerValue & 0xFF000000) >> 24);
-    registerWord[1] = (unsigned char)((registerValue & 0x00FF0000) >> 16);
-    registerWord[2] = (unsigned char)((registerValue & 0x0000FF00) >> 8);
-    registerWord[3] = (unsigned char)((registerValue & 0x000000FF) >> 0);
-	spi_write_and_read(dev->spi_desc, registerWord, 4);
+	register_word[0] = (uint8_t)((register_value & 0xFF000000) >> 24);
+	register_word[1] = (uint8_t)((register_value & 0x00FF0000) >> 16);
+	register_word[2] = (uint8_t)((register_value & 0x0000FF00) >> 8);
+	register_word[3] = (uint8_t)((register_value & 0x000000FF) >> 0);
+	spi_write_and_read(dev->spi_desc, register_word, 4);
 }

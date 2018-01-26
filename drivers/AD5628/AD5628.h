@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
-*   SVN Revision: $WCREV$
 *******************************************************************************/
 
 #ifndef __AD5628_H__
@@ -51,9 +48,9 @@
 #define AD5628_SLAVE_ID     1
 
 /* AD5628 Input Register */
-#define AD5628_CMD(x)              ((0x000F & (long)(x)) << 24)
-#define AD5628_ADDR(x)             ((0x000F & (long)(x)) << 20)
-#define AD5628_DATA_BITS(x)        ((0x0FFF & (long)(x)) << 8)
+#define AD5628_CMD(x)              ((0x000F & (int32_t)(x)) << 24)
+#define AD5628_ADDR(x)             ((0x000F & (int32_t)(x)) << 20)
+#define AD5628_DATA_BITS(x)        ((0x0FFF & (int32_t)(x)) << 8)
 
 /* Command Definitions (AD5628_COMMAND(x) options) */
 #define AD5628_CMD_WRITE_INPUT_N             0 // Write to Input Register n.
@@ -82,7 +79,7 @@
 #define AD5628_INT_REF_ON      1
 
 /* Power-Down Modes of Operation */
-#define AD5628_POWER_MODE(x)      ((0x03 & (unsigned short) (x)) << 8)
+#define AD5628_POWER_MODE(x)      ((0x03 & (uint16_t) (x)) << 8)
 
 #define AD5628_PWRDN_NONE         0 // Normal operation
 #define AD5628_PWRDN_1K           1 // 1 KOhm to GND    (Power-down mode)
@@ -99,37 +96,37 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct ad5628_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
-} ad5628_dev;
+};
 
-typedef struct {
+struct ad5628_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} ad5628_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Resets the device and performs several initializations. */
-int32_t AD5628_Init(ad5628_dev **device,
-		 ad5628_init_param init_param);
+int32_t ad5628_init(struct ad5628_dev **device,
+		    struct ad5628_init_param init_param);
 
 /*! Free the resources allocated by AD5628_Init(). */
-int32_t ad5628_remove(ad5628_dev *dev);
+int32_t ad5628_remove(struct ad5628_dev *dev);
 
 /*! Sets the device in a specific power mode. */
-void AD5628_PowerMode(ad5628_dev *dev,
-		      unsigned char pwrMode,
-		      unsigned char channel);
+void ad5628_power_mode(struct ad5628_dev *dev,
+		       uint8_t pwr_mode,
+		       uint8_t channel);
 
 /*! Resets the device. */
-void AD5628_Reset(ad5628_dev *dev);
+void ad5628_reset(struct ad5628_dev *dev);
 
 /*! Writes a 32-bit data-word to the Input Register of the device. */
-void AD5628_SetInputRegister(ad5628_dev *dev,
-			     unsigned long registerValue);
+void ad5628_set_input_register(struct ad5628_dev *dev,
+			       uint32_t register_value);
 
 #endif /* __AD5628_H__ */
