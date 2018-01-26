@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 #ifndef __ADXL362_H__
@@ -190,91 +189,91 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
+struct adxl362_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* Device Settings */
 	uint8_t		selected_range;
-} adxl362_dev;
+};
 
-typedef struct {
+struct adxl362_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
-} adxl362_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Initializes the device. */
-int32_t adxl362_init(adxl362_dev **device,
-		     adxl362_init_param init_param);
+int32_t adxl362_init(struct adxl362_dev **device,
+		     struct adxl362_init_param init_param);
 
 /*! Free the resources allocated by adxl362_init(). */
-int32_t adxl362_remove(adxl362_dev *dev);
+int32_t adxl362_remove(struct adxl362_dev *dev);
 
 /*! Writes data into a register. */
-void adxl362_set_register_value(adxl362_dev *dev,
+void adxl362_set_register_value(struct adxl362_dev *dev,
 				uint16_t register_value,
 				uint8_t  register_address,
 				uint8_t  bytes_number);
 
 /*! Performs a burst read of a specified number of registers. */
-void adxl362_get_register_value(adxl362_dev *dev,
+void adxl362_get_register_value(struct adxl362_dev *dev,
 				uint8_t *read_data,
 				uint8_t  register_address,
 				uint8_t  bytes_number);
 
 /*! Reads multiple bytes from the device's FIFO buffer. */
-void adxl362_get_fifo_value(adxl362_dev *dev,
+void adxl362_get_fifo_value(struct adxl362_dev *dev,
 			    uint8_t *buffer,
 			    uint16_t bytes_number);
 
 /*! Resets the device via SPI communication bus. */
-void adxl362_software_reset(adxl362_dev *dev);
+void adxl362_software_reset(struct adxl362_dev *dev);
 
 /*! Places the device into standby/measure mode. */
-void adxl362_set_power_mode(adxl362_dev *dev,
+void adxl362_set_power_mode(struct adxl362_dev *dev,
 			    uint8_t pwr_mode);
 
 /*! Selects the measurement range. */
-void adxl362_set_range(adxl362_dev *dev,
-		       uint8_t gRange);
+void adxl362_set_range(struct adxl362_dev *dev,
+		       uint8_t g_range);
 
 /*! Selects the Output Data Rate of the device. */
-void adxl362_set_output_rate(adxl362_dev *dev,
-			     uint8_t outRate);
+void adxl362_set_output_rate(struct adxl362_dev *dev,
+			     uint8_t out_rate);
 
 /*! Reads the 3-axis raw data from the accelerometer. */
-void adxl362_get_xyz(adxl362_dev *dev,
+void adxl362_get_xyz(struct adxl362_dev *dev,
 		     int16_t *x,
 		     int16_t *y,
 		     int16_t *z);
 
 /*! Reads the 3-axis raw data from the accelerometer and converts it to g. */
-void adxl362_get_g_xyz(adxl362_dev *dev,
+void adxl362_get_g_xyz(struct adxl362_dev *dev,
 		       float* x,
 		       float* y,
 		       float* z);
 
 /*! Reads the temperature of the device. */
-float adxl362_read_temperature(adxl362_dev *dev);
+float adxl362_read_temperature(struct adxl362_dev *dev);
 
 /*! Configures the FIFO feature. */
-void adxl362_fifo_setup(adxl362_dev *dev,
+void adxl362_fifo_setup(struct adxl362_dev *dev,
 			uint8_t  mode,
-			uint16_t waterMarkLvl,
-			uint8_t  enTempRead);
+			uint16_t water_mark_lvl,
+			uint8_t  en_temp_read);
 
 /*! Configures activity detection. */
-void adxl362_setup_activity_detection(adxl362_dev *dev,
-				      uint8_t  refOrAbs,
+void adxl362_setup_activity_detection(struct adxl362_dev *dev,
+				      uint8_t  ref_or_abs,
 				      uint16_t threshold,
 				      uint8_t  time);
 
 /*! Configures inactivity detection. */
-void adxl362_setup_inactivity_detection(adxl362_dev *dev,
-					uint8_t  refOrAbs,
+void adxl362_setup_inactivity_detection(struct adxl362_dev *dev,
+					uint8_t  ref_or_abs,
 					uint16_t threshold,
 					uint16_t time);
 
