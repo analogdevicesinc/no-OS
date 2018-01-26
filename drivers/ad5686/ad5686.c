@@ -51,7 +51,7 @@
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
 /*****************************************************************************/
-static const ad5686_chip_info chip_info[] = {
+static const struct ad5686_chip_info chip_info[] = {
 	[ID_AD5684R] = {
 		.resolution = 12,
 		.communication = SPI,
@@ -92,13 +92,13 @@ static const ad5686_chip_info chip_info[] = {
  *                         0 - I2C peripheral was initialized and the
  *                             device is present.
 *******************************************************************************/
-int32_t ad5686_init(ad5686_dev **device,
-		    ad5686_init_param init_param)
+int32_t ad5686_init(struct ad5686_dev **device,
+		    struct ad5686_init_param init_param)
 {
-	ad5686_dev *dev;
-	int32_t     ret;
+	struct ad5686_dev *dev;
+	int32_t ret;
 
-	dev = (ad5686_dev *)malloc(sizeof(*dev));
+	dev = (struct ad5686_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -132,7 +132,7 @@ int32_t ad5686_init(ad5686_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t ad5686_remove(ad5686_dev *dev)
+int32_t ad5686_remove(struct ad5686_dev *dev)
 {
 	int32_t ret;
 
@@ -161,12 +161,12 @@ int32_t ad5686_remove(ad5686_dev *dev)
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
-uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
+uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 			      uint8_t command,
 			      uint8_t address,
 			      uint16_t data)
 {
-	uint8_t data_buff[PKT_LENGTH] = {0, 0, 0};
+	uint8_t data_buff [ PKT_LENGTH ] = {0, 0, 0};
 	uint16_t read_back_data = 0;
 
 	data_buff[0] = ((command & CMD_MASK) << CMD_OFFSET) | \
@@ -194,7 +194,7 @@ uint16_t ad5686_set_shift_reg(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_write_register(ad5686_dev *dev,
+void ad5686_write_register(struct ad5686_dev *dev,
 			   uint8_t address,
 			   uint16_t data)
 {
@@ -215,7 +215,7 @@ void ad5686_write_register(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_update_register(ad5686_dev *dev,
+void ad5686_update_register(struct ad5686_dev *dev,
 			    uint8_t address)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_UPDATE, address, 0);
@@ -232,7 +232,7 @@ void ad5686_update_register(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_write_update_register(ad5686_dev *dev,
+void ad5686_write_update_register(struct ad5686_dev *dev,
 				  uint8_t address,
 				  uint16_t data)
 {
@@ -255,7 +255,7 @@ void ad5686_write_update_register(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-uint16_t ad5686_read_back_register(ad5686_dev *dev,
+uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 				   uint8_t address)
 {
 
@@ -265,7 +265,8 @@ uint16_t ad5686_read_back_register(ad5686_dev *dev,
 
 	if(chip_info[dev->act_device].communication == SPI) {
 		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, address, 0);
-		read_back_data = ad5686_set_shift_reg(dev, AD5686_CTRL_NOP, 0, 0);
+		read_back_data = ad5686_set_shift_reg(dev, AD5686_CTRL_NOP, 0,
+						      0);
 		read_back_data >>= offset;
 	}
 
@@ -288,7 +289,7 @@ uint16_t ad5686_read_back_register(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_power_mode(ad5686_dev *dev,
+void ad5686_power_mode(struct ad5686_dev *dev,
 		       uint8_t address,
 		       uint8_t mode)
 {
@@ -317,7 +318,7 @@ void ad5686_power_mode(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_ldac_mask(ad5686_dev *dev,
+void ad5686_ldac_mask(struct ad5686_dev *dev,
 		      uint8_t ldac_mask)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_LDAC_MASK, 0, ldac_mask);
@@ -330,7 +331,7 @@ void ad5686_ldac_mask(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_software_reset(ad5686_dev *dev)
+void ad5686_software_reset(struct ad5686_dev *dev)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_SWRESET, 0, 0);
 }
@@ -346,7 +347,7 @@ void ad5686_software_reset(ad5686_dev *dev)
  *
  * @return None.
 ******************************************************************************/
-void ad5686_internal_reference(ad5686_dev *dev,
+void ad5686_internal_reference(struct ad5686_dev *dev,
 			       uint8_t value)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_IREF_REG, 0, value);
@@ -362,7 +363,7 @@ void ad5686_internal_reference(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_daisy_chain_en(ad5686_dev *dev,
+void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 			   uint8_t value)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_DCEN, 0, value);
@@ -378,7 +379,7 @@ void ad5686_daisy_chain_en(ad5686_dev *dev,
  *
  * @return None.
 ******************************************************************************/
-void ad5686_read_back_en(ad5686_dev *dev,
+void ad5686_read_back_en(struct ad5686_dev *dev,
 			 uint8_t value)
 {
 	ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, 0, value);
