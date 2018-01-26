@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 
 /******************************************************************************/
@@ -58,7 +57,7 @@
  *
  * @return register_value  - Value of the register.
 *******************************************************************************/
-uint8_t adxl345_get_register_value(adxl345_dev *dev,
+uint8_t adxl345_get_register_value(struct adxl345_dev *dev,
 				   uint8_t register_address)
 {
 	uint8_t data_buffer[2] = {0, 0};
@@ -94,7 +93,7 @@ uint8_t adxl345_get_register_value(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_register_value(adxl345_dev *dev,
+void adxl345_set_register_value(struct adxl345_dev *dev,
 				uint8_t register_address,
 				uint8_t register_value)
 {
@@ -130,13 +129,13 @@ void adxl345_set_register_value(adxl345_dev *dev,
  *                               0 - I2C/SPI peripheral is initialized and
  *                                   ADXL345 part is present.
 *******************************************************************************/
-int32_t adxl345_init(adxl345_dev **device,
-		     adxl345_init_param init_param)
+int32_t adxl345_init(struct adxl345_dev **device,
+		     struct adxl345_init_param init_param)
 {
-	adxl345_dev *dev;
-	int32_t     status = 0;
+	struct adxl345_dev *dev;
+	int32_t status = 0;
 
-	dev = (adxl345_dev *)malloc(sizeof(*dev));
+	dev = (struct adxl345_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
@@ -165,7 +164,7 @@ int32_t adxl345_init(adxl345_dev **device,
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
-int32_t adxl345_remove(adxl345_dev *dev)
+int32_t adxl345_remove(struct adxl345_dev *dev)
 {
 	int32_t ret;
 
@@ -189,7 +188,7 @@ int32_t adxl345_remove(adxl345_dev *dev)
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_power_mode(adxl345_dev *dev,
+void adxl345_set_power_mode(struct adxl345_dev *dev,
 			    uint8_t pwr_mode)
 {
 	uint8_t old_power_ctl = 0;
@@ -214,7 +213,7 @@ void adxl345_set_power_mode(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_get_xyz(adxl345_dev *dev,
+void adxl345_get_xyz(struct adxl345_dev *dev,
 		     int16_t* x,
 		     int16_t* y,
 		     int16_t* z)
@@ -263,7 +262,7 @@ void adxl345_get_xyz(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_get_g_xyz(adxl345_dev *dev,
+void adxl345_get_g_xyz(struct adxl345_dev *dev,
 		       float* x,
 		       float* y,
 		       float* z)
@@ -309,7 +308,7 @@ void adxl345_get_g_xyz(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_tap_detection(adxl345_dev *dev,
+void adxl345_set_tap_detection(struct adxl345_dev *dev,
 			       uint8_t tap_type,
 			       uint8_t tap_axes,
 			       uint8_t tap_dur,
@@ -318,10 +317,10 @@ void adxl345_set_tap_detection(adxl345_dev *dev,
 			       uint8_t tap_thresh,
 			       uint8_t tap_int)
 {
-	uint8_t old_tap_axes   = 0;
-	uint8_t new_tap_axes   = 0;
-	uint8_t old_int_map    = 0;
-	uint8_t new_int_map    = 0;
+	uint8_t old_tap_axes = 0;
+	uint8_t new_tap_axes = 0;
+	uint8_t old_int_map = 0;
+	uint8_t new_int_map = 0;
 	uint8_t old_int_enable = 0;
 	uint8_t new_int_enable = 0;
 
@@ -388,19 +387,19 @@ void adxl345_set_tap_detection(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_activity_detection(adxl345_dev *dev,
-				    uint8_t actOnOff,
-				    uint8_t actAxes,
-				    uint8_t actAcDc,
-				    uint8_t actThresh,
-				    uint8_t actInt)
+void adxl345_set_activity_detection(struct adxl345_dev *dev,
+				    uint8_t act_on_off,
+				    uint8_t act_axes,
+				    uint8_t act_ac_dc,
+				    uint8_t act_thresh,
+				    uint8_t act_int)
 {
 	uint8_t old_act_inact_ctl = 0;
 	uint8_t new_act_inact_ctl = 0;
-	uint8_t old_int_map       = 0;
-	uint8_t new_int_map       = 0;
-	uint8_t old_int_enable    = 0;
-	uint8_t new_int_enable    = 0;
+	uint8_t old_int_map = 0;
+	uint8_t new_int_map = 0;
+	uint8_t old_int_enable = 0;
+	uint8_t new_int_enable = 0;
 
 	old_act_inact_ctl = adxl345_get_register_value(dev,
 			    ADXL345_INT_ENABLE);
@@ -408,24 +407,24 @@ void adxl345_set_activity_detection(adxl345_dev *dev,
 			    ADXL345_ACT_X_EN |
 			    ADXL345_ACT_Y_EN |
 			    ADXL345_ACT_Z_EN);
-	new_act_inact_ctl = new_act_inact_ctl | (actAcDc | actAxes);
+	new_act_inact_ctl = new_act_inact_ctl | (act_ac_dc | act_axes);
 	adxl345_set_register_value(dev,
 				   ADXL345_ACT_INACT_CTL,
 				   new_act_inact_ctl);
 	adxl345_set_register_value(dev,
 				   ADXL345_THRESH_ACT,
-				   actThresh);
+				   act_thresh);
 	old_int_map = adxl345_get_register_value(dev,
 			ADXL345_INT_MAP);
 	new_int_map = old_int_map & ~(ADXL345_ACTIVITY);
-	new_int_map = new_int_map | actInt;
+	new_int_map = new_int_map | act_int;
 	adxl345_set_register_value(dev,
 				   ADXL345_INT_MAP,
 				   new_int_map);
 	old_int_enable = adxl345_get_register_value(dev,
 			 ADXL345_INT_ENABLE);
 	new_int_enable = old_int_enable & ~(ADXL345_ACTIVITY);
-	new_int_enable = new_int_enable | (ADXL345_ACTIVITY * actOnOff);
+	new_int_enable = new_int_enable | (ADXL345_ACTIVITY * act_on_off);
 	adxl345_set_register_value(dev,
 				   ADXL345_INT_ENABLE,
 				   new_int_enable);
@@ -456,7 +455,7 @@ void adxl345_set_activity_detection(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_inactivity_detection(adxl345_dev *dev,
+void adxl345_set_inactivity_detection(struct adxl345_dev *dev,
 				      uint8_t inact_on_off,
 				      uint8_t inact_axes,
 				      uint8_t inact_ac_dc,
@@ -466,10 +465,10 @@ void adxl345_set_inactivity_detection(adxl345_dev *dev,
 {
 	uint8_t old_act_inact_ctl = 0;
 	uint8_t new_act_inact_ctl = 0;
-	uint8_t old_int_map       = 0;
-	uint8_t new_int_map       = 0;
-	uint8_t old_int_enable    = 0;
-	uint8_t new_int_enable    = 0;
+	uint8_t old_int_map = 0;
+	uint8_t new_int_map = 0;
+	uint8_t old_int_enable = 0;
+	uint8_t new_int_enable = 0;
 
 	old_act_inact_ctl = adxl345_get_register_value(dev,
 			    ADXL345_INT_ENABLE);
@@ -521,14 +520,14 @@ void adxl345_set_inactivity_detection(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_free_fall_detection(adxl345_dev *dev,
+void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
 				     uint8_t ff_on_off,
 				     uint8_t ff_thresh,
 				     uint8_t ff_time,
 				     uint8_t ff_int)
 {
-	uint8_t old_int_map    = 0;
-	uint8_t new_int_map    = 0;
+	uint8_t old_int_map = 0;
+	uint8_t new_int_map = 0;
 	uint8_t old_int_enable = 0;
 	uint8_t new_int_enable = 0;
 
@@ -564,7 +563,7 @@ void adxl345_set_free_fall_detection(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void adxl345_set_offset(adxl345_dev *dev,
+void adxl345_set_offset(struct adxl345_dev *dev,
 			uint8_t x_offset,
 			uint8_t y_offset,
 			uint8_t z_offset)
@@ -595,7 +594,7 @@ void adxl345_set_offset(adxl345_dev *dev,
  *
  * @return None.
 *******************************************************************************/
-void ADXL345_set_range_resolution(adxl345_dev *dev,
+void adxl345_set_range_resolution(struct adxl345_dev *dev,
 				  uint8_t g_range,
 				  uint8_t full_res)
 {

@@ -35,7 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef __ADXL345_H__
 #define __ADXL345_H__
@@ -174,66 +173,66 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
+struct adxl345_dev {
 	/* I2C */
 	i2c_desc	*i2c_desc;
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* Device Settings */
-	char		communication_type;
-	char		selected_range;
-	char		full_resolution_set;
-} adxl345_dev;
+	uint8_t		communication_type;
+	uint8_t		selected_range;
+	uint8_t		full_resolution_set;
+};
 
-typedef struct {
+struct adxl345_init_param {
 	/* I2C */
 	i2c_init_param	i2c_init;
 	/* SPI */
 	spi_init_param	spi_init;
 	/* Device Settings */
-	char		communication_type;
-	char		selected_range;
-	char		full_resolution_set;
-} adxl345_init_param;
+	uint8_t		communication_type;
+	uint8_t		selected_range;
+	uint8_t		full_resolution_set;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /*! Reads the value of a register. */
-uint8_t adxl345_get_register_value(adxl345_dev *dev,
+uint8_t adxl345_get_register_value(struct adxl345_dev *dev,
 				   uint8_t register_address);
 
 /*! Writes data into a register. */
-void adxl345_set_register_value(adxl345_dev *dev,
+void adxl345_set_register_value(struct adxl345_dev *dev,
 				uint8_t register_address,
-				uint8_t registerValue);
+				uint8_t register_value);
 
 /*! Init. the comm. peripheral and checks if the ADXL345 part is present. */
-int32_t adxl345_init(adxl345_dev **device,
-		     adxl345_init_param init_param);
+int32_t adxl345_init(struct adxl345_dev **device,
+		     struct adxl345_init_param init_param);
 
 /*! Free the resources allocated by adxl345_init(). */
-int32_t adxl345_remove(adxl345_dev *dev);
+int32_t adxl345_remove(struct adxl345_dev *dev);
 
 /*! Places the device into standby/measure mode. */
-void adxl345_set_power_mode(adxl345_dev *dev,
+void adxl345_set_power_mode(struct adxl345_dev *dev,
 			    uint8_t pwr_mode);
 
 /*! Reads the raw output data of each axis. */
-void adxl345_get_xyz(adxl345_dev *dev,
+void adxl345_get_xyz(struct adxl345_dev *dev,
 		     int16_t* x,
 		     int16_t* y,
 		     int16_t* z);
 
 /*! Reads the raw output data of each axis and converts it to g. */
-void adxl345_get_g_xyz(adxl345_dev *dev,
+void adxl345_get_g_xyz(struct adxl345_dev *dev,
 		       float* x,
 		       float* y,
 		       float* z);
 
 /*! Enables/disables the tap detection. */
-void adxl345_set_tap_detection(adxl345_dev *dev,
+void adxl345_set_tap_detection(struct adxl345_dev *dev,
 			       uint8_t tap_type,
 			       uint8_t tap_axes,
 			       uint8_t tap_dur,
@@ -243,38 +242,38 @@ void adxl345_set_tap_detection(adxl345_dev *dev,
 			       uint8_t tap_int);
 
 /*! Enables/disables the activity detection. */
-void adxl345_set_activity_detection(adxl345_dev *dev,
-				    uint8_t actOnOff,
-				    uint8_t actAxes,
-				    uint8_t actAcDc,
-				    uint8_t actThresh,
-				    uint8_t actInt);
+void adxl345_set_activity_detection(struct adxl345_dev *dev,
+				    uint8_t act_on_off,
+				    uint8_t act_axes,
+				    uint8_t act_ac_dc,
+				    uint8_t act_thresh,
+				    uint8_t act_int);
 
 /*! Enables/disables the inactivity detection. */
-void adxl345_set_inactivity_detection(adxl345_dev *dev,
-				      uint8_t inactOnOff,
-				      uint8_t inactAxes,
-				      uint8_t inactAcDc,
-				      uint8_t inactThresh,
-				      uint8_t inactTime,
-				      uint8_t inactInt);
+void adxl345_set_inactivity_detection(struct adxl345_dev *dev,
+				      uint8_t inact_on_off,
+				      uint8_t inact_axes,
+				      uint8_t inact_ac_dc,
+				      uint8_t inact_thresh,
+				      uint8_t inact_time,
+				      uint8_t inact_int);
 
 /*! Enables/disables the free-fall detection. */
-void adxl345_set_free_fall_detection(adxl345_dev *dev,
-				     uint8_t ffOnOff,
-				     uint8_t ffThresh,
-				     uint8_t ffTime,
-				     uint8_t ffInt);
+void adxl345_set_free_fall_detection(struct adxl345_dev *dev,
+				     uint8_t ff_on_off,
+				     uint8_t ff_thresh,
+				     uint8_t ff_time,
+				     uint8_t ff_int);
 
 /*! Sets an offset value for each axis (Offset Calibration). */
-void adxl345_set_offset(adxl345_dev *dev,
-			uint8_t xOffset,
-			uint8_t yOffset,
-			uint8_t zOffset);
+void adxl345_set_offset(struct adxl345_dev *dev,
+			uint8_t x_offset,
+			uint8_t y_offset,
+			uint8_t z_offset);
 
 /*! Selects the measurement range. */
-void ADXL345_set_range_resolution(adxl345_dev *dev,
-				  uint8_t gRange,
-				  uint8_t fullRes);
+void adxl345_set_range_resolution(struct adxl345_dev *dev,
+				  uint8_t g_range,
+				  uint8_t full_res);
 
 #endif	/* __ADXL345_H__ */
