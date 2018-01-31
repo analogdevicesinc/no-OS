@@ -339,7 +339,7 @@ struct ad7124_dev {
 	spi_desc		*spi_desc;
 	/* Device Settings */
 	struct ad7124_st_reg	*regs;
-	int16_t useCRC;
+	int16_t use_crc;
 	int16_t check_ready;
 	int16_t spi_rdy_poll_cnt;
 };
@@ -364,54 +364,54 @@ struct ad7124_init_param {
 /******************************************************************************/
 
 /*! Reads the value of the specified register. */
-int32_t AD7124_ReadRegister(struct ad7124_dev *dev,
-			    struct ad7124_st_reg* pReg);
+int32_t ad7124_read_register(struct ad7124_dev *dev,
+			     struct ad7124_st_reg* p_reg);
 
 /*! Writes the value of the specified register. */
-int32_t AD7124_WriteRegister(struct ad7124_dev *dev,
-			     struct ad7124_st_reg reg);
+int32_t ad7124_write_register(struct ad7124_dev *dev,
+			      struct ad7124_st_reg reg);
 
 /*! Reads the value of the specified register without a device state check. */
-int32_t AD7124_NoCheckReadRegister(struct ad7124_dev *dev,
-				   struct ad7124_st_reg* pReg);
+int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
+				      struct ad7124_st_reg* p_reg);
 
 /*! Writes the value of the specified register without a device state check. */
-int32_t AD7124_NoCheckWriteRegister(struct ad7124_dev *dev,
-				    struct ad7124_st_reg reg);
+int32_t ad7124_no_check_write_register(struct ad7124_dev *dev,
+				       struct ad7124_st_reg reg);
 
 /*! Resets the device. */
-int32_t AD7124_Reset(struct ad7124_dev *dev);
+int32_t ad7124_reset(struct ad7124_dev *dev);
 
 /*! Waits until the device can accept read and write user actions. */
-int32_t AD7124_WaitForSpiReady(struct ad7124_dev *dev,
-			       uint32_t timeout);
+int32_t ad7124_wait_for_spi_ready(struct ad7124_dev *dev,
+				  uint32_t timeout);
 
 /*! Waits until the device finishes the power-on reset operation. */
-int32_t AD7124_WaitToPowerOn(struct ad7124_dev *dev,
-			     uint32_t timeout);
-
-/*! Waits until a new conversion result is available. */
-int32_t AD7124_WaitForConvReady(struct ad7124_dev *dev,
+int32_t ad7124_wait_to_power_on(struct ad7124_dev *dev,
 				uint32_t timeout);
 
+/*! Waits until a new conversion result is available. */
+int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
+				   uint32_t timeout);
+
 /*! Reads the conversion result from the device. */
-int32_t AD7124_ReadData(struct ad7124_dev *dev,
-			int32_t* pData);
+int32_t ad7124_read_data(struct ad7124_dev *dev,
+			 int32_t* p_data);
 
 /*! Computes the CRC checksum for a data buffer. */
-uint8_t AD7124_ComputeCRC8(uint8_t* pBuf,
-			   uint8_t bufSize);
+uint8_t ad7124_compute_crc8(uint8_t* p_buf,
+			    uint8_t buf_size);
 
 /*! Updates the CRC settings. */
-void AD7124_UpdateCRCSetting(struct ad7124_dev *dev);
+void ad7124_update_crcsetting(struct ad7124_dev *dev);
 
 /*! Updates the device SPI interface settings. */
-void AD7124_UpdateDevSpiSettings(struct ad7124_dev *dev);
+void ad7124_update_dev_spi_settings(struct ad7124_dev *dev);
 
 /*! Initializes the AD7124. */
-int32_t AD7124_Setup(struct ad7124_dev **device,
+int32_t ad7124_setup(struct ad7124_dev **device,
 		     struct ad7124_init_param init_param);
 /*! Free the resources allocated by AD7124_Setup(). */
-int32_t AD7124_remove(struct ad7124_dev *dev);
+int32_t ad7124_remove(struct ad7124_dev *dev);
 
 #endif /* __AD7124_H__ */
