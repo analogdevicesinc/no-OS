@@ -41,8 +41,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "Communication.h"
-#include "AD7124.h"
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
+#include "ad7124.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
@@ -50,17 +52,18 @@
 #define TIMEOUT     -3 /* A timeout has occured */
 
 /***************************************************************************//**
-* @brief Reads the value of the specified register without checking if the
-*        device is ready to accept user requests.
-*
-* @param device - The handler of the instance of the driver.
-* @param pReg - Pointer to the register structure holding info about the
-*               register to be read. The read value is stored inside the
-*               register structure.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Reads the value of the specified register without checking if the
+ *        device is ready to accept user requests.
+ *
+ * @param dev - The handler of the instance of the driver.
+ * @param pReg - Pointer to the register structure holding info about the
+ *               register to be read. The read value is stored inside the
+ *               register structure.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
+int32_t AD7124_NoCheckReadRegister(struct ad7124_dev *dev,
+				   struct ad7124_st_reg* pReg)
 {
 	int32_t ret       = 0;
 	uint8_t buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -68,7 +71,7 @@ int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
 	uint8_t check8    = 0;
 	uint8_t msgBuf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
-	if(!device || !pReg)
+	if(!dev || !pReg)
 		return INVALID_VAL;
 
 	/* Build the Command word */
@@ -76,17 +79,17 @@ int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
 	  		AD7124_COMM_REG_RA(pReg->addr);
 
 	/* Read data from the device */
-	ret = SPI_Read(device->slave_select_id,
-			buffer,
-			((device->useCRC != AD7124_DISABLE_CRC) ? pReg->size + 1
-							: pReg->size) + 1);
+	ret = spi_write_and_read(dev->spi_desc,
+				 buffer,
+				 ((dev->useCRC != AD7124_DISABLE_CRC) ? pReg->size + 1
+				  : pReg->size) + 1);
 	if(ret < 0)
 		return ret;
 
 	/* Check the CRC */
-	if(device->useCRC == AD7124_USE_CRC)
+	if(dev->useCRC == AD7124_USE_CRC)
 	{
-		msgBuf[0] = AD7124_COMM_REG_WEN | AD7124_COMM_REG_RD | 
+		msgBuf[0] = AD7124_COMM_REG_WEN | AD7124_COMM_REG_RD |
 		  		AD7124_COMM_REG_RA(pReg->addr);
 		for(i = 1; i < pReg->size + 2; ++i)
 		{
@@ -113,15 +116,16 @@ int32_t AD7124_NoCheckReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
 }
 
 /***************************************************************************//**
-* @brief Writes the value of the specified register without checking if the
-*        device is ready to accept user requests.
-*
-* @param device - The handler of the instance of the driver.
-* @param reg - Register structure holding info about the register to be written
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Writes the value of the specified register without checking if the
+ *        device is ready to accept user requests.
+ *
+ * @param dev - The handler of the instance of the driver.
+ * @param reg - Register structure holding info about the register to be written
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_NoCheckWriteRegister(ad7124_device *device, ad7124_st_reg reg)
+int32_t AD7124_NoCheckWriteRegister(struct ad7124_dev *dev,
+				    struct ad7124_st_reg reg)
 {
 	int32_t ret      = 0;
 	int32_t regValue = 0;
@@ -129,7 +133,7 @@ int32_t AD7124_NoCheckWriteRegister(ad7124_device *device, ad7124_st_reg reg)
 	uint8_t i        = 0;
 	uint8_t crc8     = 0;
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
 	/* Build the Command word */
@@ -145,120 +149,130 @@ int32_t AD7124_NoCheckWriteRegister(ad7124_device *device, ad7124_st_reg reg)
 	}
 
 	/* Compute the CRC */
-	if(device->useCRC != AD7124_DISABLE_CRC)
+	if(dev->useCRC != AD7124_DISABLE_CRC)
 	{
 		crc8 = AD7124_ComputeCRC8(wrBuf, reg.size + 1);
 		wrBuf[reg.size + 1] = crc8;
 	}
 
 	/* Write data to the device */
-	ret = SPI_Write(device->slave_select_id,
-			wrBuf,
-			(device->useCRC != AD7124_DISABLE_CRC) ? reg.size + 2
-							: reg.size + 1);
+	ret = spi_write_and_read(dev->spi_desc,
+				 wrBuf,
+				 (dev->useCRC != AD7124_DISABLE_CRC) ? reg.size + 2
+				 : reg.size + 1);
 
 	return ret;
 }
 
 /***************************************************************************//**
-* @brief Reads the value of the specified register only when the device is ready
-*        to accept user requests. If the device ready flag is deactivated the
-*        read operation will be executed without checking the device state.
-*
-* @param device - The handler of the instance of the driver.
-* @param pReg - Pointer to the register structure holding info about the
-*               register to be read. The read value is stored inside the
-*               register structure.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Reads the value of the specified register only when the device is ready
+ *        to accept user requests. If the device ready flag is deactivated the
+ *        read operation will be executed without checking the device state.
+ *
+ * @param dev - The handler of the instance of the driver.
+ * @param pReg - Pointer to the register structure holding info about the
+ *               register to be read. The read value is stored inside the
+ *               register structure.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_ReadRegister(ad7124_device *device, ad7124_st_reg* pReg)
+int32_t AD7124_ReadRegister(struct ad7124_dev *dev,
+			    struct ad7124_st_reg* pReg)
 {
 	int32_t ret;
-	
-	if (pReg->addr != AD7124_ERR_REG && device->check_ready)
+
+	if (pReg->addr != AD7124_ERR_REG && dev->check_ready)
 	{
-		ret = AD7124_WaitForSpiReady(device, device->spi_rdy_poll_cnt);
+		ret = AD7124_WaitForSpiReady(dev,
+					     dev->spi_rdy_poll_cnt);
 		if (ret < 0)
 			return ret;
 	}
-	ret = AD7124_NoCheckReadRegister(device, pReg);
-	
+	ret = AD7124_NoCheckReadRegister(dev,
+					 pReg);
+
 	return ret;
 }
 
 /***************************************************************************//**
-* @brief Writes the value of the specified register only when the device is
-*        ready to accept user requests. If the device ready flag is deactivated
-*        the write operation will be executed without checking the device state.
-*
-* @param device - The handler of the instance of the driver.
-* @param reg - Register structure holding info about the register to be written
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Writes the value of the specified register only when the device is
+ *        ready to accept user requests. If the device ready flag is deactivated
+ *        the write operation will be executed without checking the device state.
+ *
+ * @param dev - The handler of the instance of the driver.
+ * @param reg - Register structure holding info about the register to be written
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WriteRegister(ad7124_device *device, ad7124_st_reg pReg)
+int32_t AD7124_WriteRegister(struct ad7124_dev *dev,
+			     struct ad7124_st_reg pReg)
 {
 	int32_t ret;
-	
-	if (device->check_ready)
-	{  
-		ret = AD7124_WaitForSpiReady(device, device->spi_rdy_poll_cnt);
+
+	if (dev->check_ready)
+	{
+		ret = AD7124_WaitForSpiReady(dev,
+					     dev->spi_rdy_poll_cnt);
 		if (ret < 0)
 			return ret;
 	}
-	ret = AD7124_NoCheckWriteRegister(device, pReg);
-	
+	ret = AD7124_NoCheckWriteRegister(dev,
+					  pReg);
+
 	return ret;
 }
 
 /***************************************************************************//**
-* @brief Resets the device.
-*
-* @param device - The handler of the instance of the driver.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Resets the device.
+ *
+ * @param dev - The handler of the instance of the driver.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_Reset(ad7124_device *device)
+int32_t AD7124_Reset(struct ad7124_dev *dev)
 {
 	int32_t ret = 0;
 	uint8_t wrBuf[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
-	ret = SPI_Write(device->slave_select_id, wrBuf, 8);
+	ret = spi_write_and_read(dev->spi_desc,
+				 wrBuf,
+				 8);
 
 	/* Wait for the reset to complete */
-	ret = AD7124_WaitToPowerOn(device, device->spi_rdy_poll_cnt);
+	ret = AD7124_WaitToPowerOn(dev,
+				   dev->spi_rdy_poll_cnt);
 
 	return ret;
 }
 
 /***************************************************************************//**
-* @brief Waits until the device can accept read and write user actions.
-*
-* @param device - The handler of the instance of the driver.
-* @param timeout - Count representing the number of polls to be done until the
-*                  function returns.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Waits until the device can accept read and write user actions.
+ *
+ * @param dev     - The handler of the instance of the driver.
+ * @param timeout - Count representing the number of polls to be done until the
+ *                  function returns.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout)
+int32_t AD7124_WaitForSpiReady(struct ad7124_dev *dev,
+			       uint32_t timeout)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 	int32_t ret;
 	int8_t ready = 0;
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	regs = dev->regs;
 
 	while(!ready && --timeout)
 	{
 		/* Read the value of the Error Register */
-		ret = AD7124_ReadRegister(device, &regs[AD7124_Error]);
+		ret = AD7124_ReadRegister(dev, &regs[AD7124_Error]);
 		if(ret < 0)
 			return ret;
 
@@ -271,94 +285,98 @@ int32_t AD7124_WaitForSpiReady(ad7124_device *device, uint32_t timeout)
 }
 
 /***************************************************************************//**
-* @brief Waits until the device finishes the power-on reset operation.
-*
-* @param device - The handler of the instance of the driver.
-* @param timeout - Count representing the number of polls to be done until the
-*                  function returns.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Waits until the device finishes the power-on reset operation.
+ *
+ * @param dev     - The handler of the instance of the driver.
+ * @param timeout - Count representing the number of polls to be done until the
+ *                  function returns.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WaitToPowerOn(ad7124_device *device, uint32_t timeout)
+int32_t AD7124_WaitToPowerOn(struct ad7124_dev *dev,
+			     uint32_t timeout)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 	int32_t ret;
 	int8_t powered_on = 0;
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	regs = dev->regs;
 
 	while(!powered_on && timeout--)
 	{
-		ret = AD7124_ReadRegister(device, &regs[AD7124_Status]);
+		ret = AD7124_ReadRegister(dev,
+					  &regs[AD7124_Status]);
 		if(ret < 0)
 			return ret;
 
 		/* Check the POR_FLAG bit in the Status Register */
 		powered_on = (regs[AD7124_Status].value &
-				AD7124_STATUS_REG_POR_FLAG) == 0;
+			      AD7124_STATUS_REG_POR_FLAG) == 0;
 	}
 
 	return (timeout || powered_on) ? 0 : TIMEOUT;
 }
 
 /***************************************************************************//**
-* @brief Waits until a new conversion result is available.
-*
-* @param device - The handler of the instance of the driver.
-* @param timeout - Count representing the number of polls to be done until the
-*                  function returns if no new data is available.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Waits until a new conversion result is available.
+ *
+ * @param dev     - The handler of the instance of the driver.
+ * @param timeout - Count representing the number of polls to be done until the
+ *                  function returns if no new data is available.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_WaitForConvReady(ad7124_device *device, uint32_t timeout)
+int32_t AD7124_WaitForConvReady(struct ad7124_dev *dev,
+				uint32_t timeout)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 	int32_t ret;
 	int8_t ready = 0;
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	regs = dev->regs;
 
 	while(!ready && --timeout)
 	{
 		/* Read the value of the Status Register */
-		ret = AD7124_ReadRegister(device, &regs[AD7124_Status]);
+		ret = AD7124_ReadRegister(dev, &regs[AD7124_Status]);
 		if(ret < 0)
 			return ret;
 
 		/* Check the RDY bit in the Status Register */
 		ready = (regs[AD7124_Status].value &
-			 	AD7124_STATUS_REG_RDY) != 0;
+			 AD7124_STATUS_REG_RDY) != 0;
 	}
 
 	return timeout ? 0 : TIMEOUT;
 }
 
 /***************************************************************************//**
-* @brief Reads the conversion result from the device.
-*
-* @param device - The handler of the instance of the driver.
-* @param pData - Pointer to store the read data.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Reads the conversion result from the device.
+ *
+ * @param device - The handler of the instance of the driver.
+ * @param pData  - Pointer to store the read data.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_ReadData(ad7124_device *device, int32_t* pData)
+int32_t AD7124_ReadData(struct ad7124_dev *dev,
+			int32_t* pData)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 	int32_t ret;
 
-	if(!device)
+	if(!dev)
 		return INVALID_VAL;
 
-	regs = device->regs;
+	regs = dev->regs;
 
 	/* Read the value of the Status Register */
-	ret = AD7124_ReadRegister(device, &regs[AD7124_Data]);
+	ret = AD7124_ReadRegister(dev, &regs[AD7124_Data]);
 
 	/* Get the read result */
 	*pData = regs[AD7124_Data].value;
@@ -367,12 +385,12 @@ int32_t AD7124_ReadData(ad7124_device *device, int32_t* pData)
 }
 
 /***************************************************************************//**
-* @brief Computes the CRC checksum for a data buffer.
-*
-* @param pBuf - Data buffer
-* @param bufSize - Data buffer size in bytes
-*
-* @return Returns the computed CRC checksum.
+ * @brief Computes the CRC checksum for a data buffer.
+ *
+ * @param pBuf    - Data buffer
+ * @param bufSize - Data buffer size in bytes
+ *
+ * @return Returns the computed CRC checksum.
 *******************************************************************************/
 uint8_t AD7124_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 {
@@ -400,112 +418,132 @@ uint8_t AD7124_ComputeCRC8(uint8_t * pBuf, uint8_t bufSize)
 }
 
 /***************************************************************************//**
-* @brief Updates the CRC settings.
-*
-* @param device - The handler of the instance of the driver.
-*
-* @return None.
+ * @brief Updates the CRC settings.
+ *
+ * @param device - The handler of the instance of the driver.
+ *
+ * @return None.
 *******************************************************************************/
-void AD7124_UpdateCRCSetting(ad7124_device *device)
+void AD7124_UpdateCRCSetting(struct ad7124_dev *dev)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 
-	if(!device)
+	if(!dev)
 		return;
 
-	regs = device->regs;
-	
+	regs = dev->regs;
+
 	/* Get CRC State. */
 	if (regs[AD7124_Error_En].value & AD7124_ERREN_REG_SPI_CRC_ERR_EN)
 	{
-		device->useCRC = AD7124_USE_CRC;
+		dev->useCRC = AD7124_USE_CRC;
 	}
 	else
 	{
-		device->useCRC = AD7124_DISABLE_CRC;
+		dev->useCRC = AD7124_DISABLE_CRC;
 	}
 }
 
 /***************************************************************************//**
-* @brief Updates the device SPI interface settings.
-*
-* @param device - The handler of the instance of the driver.
-*
-* @return None.
+ * @brief Updates the device SPI interface settings.
+ *
+ * @param device - The handler of the instance of the driver.
+ *
+ * @return None.
 *******************************************************************************/
-void AD7124_UpdateDevSpiSettings(ad7124_device *device)
+void AD7124_UpdateDevSpiSettings(struct ad7124_dev *dev)
 {
-	ad7124_st_reg *regs;
+	struct ad7124_st_reg *regs;
 
-	if(!device)
+	if(!dev)
 		return;
 
-	regs = device->regs;
-	
+	regs = dev->regs;
+
 	if (regs[AD7124_Error_En].value & AD7124_ERREN_REG_SPI_IGNORE_ERR_EN)
 	{
-		device->check_ready = 1;
+		dev->check_ready = 1;
 	}
 	else
 	{
-		device->check_ready = 0;
+		dev->check_ready = 0;
 	}
 }
 
 /***************************************************************************//**
-* @brief Initializes the AD7124.
-*
-* @param device - The handler of the instance of the driver.
-* @param slave_select - The Slave Chip Select Id to be passed to the SPI calls.
-* @param regs - The list of registers of the device (initialized or not) to be
-*               added to the instance of the driver.
-*
-* @return Returns 0 for success or negative error code.
+ * @brief Initializes the AD7124.
+ *
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return Returns 0 for success or negative error code.
 *******************************************************************************/
-int32_t AD7124_Setup(ad7124_device *device, int slave_select,
-			ad7124_st_reg *regs)
+int32_t AD7124_Setup(struct ad7124_dev **device,
+		     struct ad7124_init_param init_param)
 {
 	int32_t ret;
 	enum ad7124_registers regNr;
+	struct ad7124_dev *dev;
 
-	if(!device || !regs)
+	dev = (struct ad7124_dev *)malloc(sizeof(*dev));
+	if (!dev)
 		return INVALID_VAL;
 
-	device->regs = regs;
-	device->slave_select_id = slave_select;
-	device->spi_rdy_poll_cnt = 25000;
+	dev->regs = init_param.regs;
+	dev->spi_rdy_poll_cnt = 25000;
 
 	/* Initialize the SPI communication. */
-	ret = SPI_Init(0, 1000000, 1, 0);
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 	if (ret < 0)
 		return ret;
 
 	/*  Reset the device interface.*/
-	ret = AD7124_Reset(device);
+	ret = AD7124_Reset(dev);
 	if (ret < 0)
 		return ret;
-	
+
 	/* Update the device structure with power-on/reset settings */
-	device->check_ready = 1;
+	dev->check_ready = 1;
 
 	/* Initialize registers AD7124_ADC_Control through AD7124_Filter_7. */
 	for(regNr = AD7124_Status; (regNr < AD7124_Offset_0) && !(ret < 0);
 		regNr++)
 	{
-		if (regs[regNr].rw == AD7124_RW)
+		if (dev->regs[regNr].rw == AD7124_RW)
 		{
-			ret = AD7124_WriteRegister(device, regs[regNr]);
+			ret = AD7124_WriteRegister(dev, dev->regs[regNr]);
 			if (ret < 0)
 		  		break;
 		}
-		
+
 		/* Get CRC State and device SPI interface settings */
 		if (regNr == AD7124_Error_En)
 		{
-			AD7124_UpdateCRCSetting(device);
-			AD7124_UpdateDevSpiSettings(device);
+			AD7124_UpdateCRCSetting(dev);
+			AD7124_UpdateDevSpiSettings(dev);
 		}
 	}
+
+	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by AD7124_Setup().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t AD7124_remove(struct ad7124_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
 
 	return ret;
 }
