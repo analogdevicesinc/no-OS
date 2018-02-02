@@ -55,11 +55,15 @@ spi_device spi_dev = {
 	0				// id_no
 };
 
+#ifdef _XPARAMETERS_PS_H_
 static XGpioPs_Config	*gpio_config;
 static XGpioPs			gpio_instance;
 
 static XSpiPs_Config 	*spi_config;
 static XSpiPs			spi_instance;
+#else
+static XGpio_Config		*gpio_config;
+#endif
 
 /***************************************************************************//**
  * @brief platform_init
@@ -83,13 +87,14 @@ int32_t platform_init(void)
  *******************************************************************************/
 int32_t spi_init(uint16_t device_id)
 {
+#if _XPARAMETERS_PS_H_
 	spi_config = XSpiPs_LookupConfig(device_id);
 	if (spi_config == NULL)
 		return -1;
 
 	if (XSpiPs_CfgInitialize(&spi_instance, spi_config, spi_config->BaseAddress) != 0)
 		return -1;
-
+#endif
 	return 0;
 }
 
@@ -100,6 +105,7 @@ int32_t spi_write_and_read(spi_device *dev,
 					   	   uint8_t *data,
 						   uint8_t bytes_number)
 {
+#if _XPARAMETERS_PS_H_
 	uint32_t initss;
 
 	initss = XSpiPs_ReadReg(dev->base_address, XSPIPS_CR_OFFSET);
@@ -115,7 +121,19 @@ int32_t spi_write_and_read(spi_device *dev,
 	XSpiPs_SetSlaveSelect(&spi_instance,  (uint8_t) dev->chip_select);
 	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
 	XSpiPs_SetSlaveSelect(&spi_instance,  (uint8_t) 0x7);
+#else
+	uint32_t i;
 
+	Xil_Out32((SPI_BASEADDR + 0x70), ~(dev->chip_select));
+	Xil_Out32((SPI_BASEADDR + 0x60), (0x086 | (dev->cpol<<3) | (dev->cpha<<4)));
+	for (i = 0; i < bytes_number; i++) {
+		Xil_Out32((SPI_BASEADDR + 0x68), *(data + i));
+		while ((Xil_In32(SPI_BASEADDR + 0x64) & 0x1) == 0x1) {}
+		*(data + i) = Xil_In32(SPI_BASEADDR + 0x6c) & 0xff;
+	}
+	Xil_Out32((SPI_BASEADDR + 0x70), 0xff);
+	Xil_Out32((SPI_BASEADDR + 0x60), (0x186 | (dev->cpol<<3) | (dev->cpha<<4)));
+#endif
 	return 0;
 }
 
@@ -124,13 +142,16 @@ int32_t spi_write_and_read(spi_device *dev,
  *******************************************************************************/
 int32_t gpio_init(uint16_t device_id)
 {
+#ifdef _XPARAMETERS_PS_H_
 	gpio_config = XGpioPs_LookupConfig(device_id);
 	if (gpio_config == NULL)
 		return -1;
 
 	if (XGpioPs_CfgInitialize(&gpio_instance, gpio_config, gpio_config->BaseAddr) != 0)
 		return -1;
-
+#else
+	gpio_config = XGpio_LookupConfig(device_id);
+#endif
 	return 0;
 }
 
@@ -139,10 +160,24 @@ int32_t gpio_init(uint16_t device_id)
  *******************************************************************************/
 int32_t gpio_direction_output(uint8_t gpio, uint8_t value)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&gpio_instance, gpio, 1);
 	XGpioPs_SetOutputEnablePin(&gpio_instance, gpio, 1);
 	XGpioPs_WritePin(&gpio_instance, gpio, value);
+#else
+	uint32_t config = 0;
+	uint32_t tri_reg_addr;
 
+	if (gpio >= 32) {
+		tri_reg_addr = XGPIO_TRI2_OFFSET;
+		gpio -= 32;
+	} else
+		tri_reg_addr = XGPIO_TRI_OFFSET;
+
+	config = Xil_In32((gpio_config->BaseAddress + tri_reg_addr));
+	config &= ~(1 << gpio);
+	Xil_Out32((gpio_config->BaseAddress + tri_reg_addr), config);
+#endif
 	return 0;
 }
 
@@ -151,8 +186,25 @@ int32_t gpio_direction_output(uint8_t gpio, uint8_t value)
  *******************************************************************************/
 int32_t gpio_set_value(uint8_t gpio, uint8_t value)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_WritePin(&gpio_instance, gpio, value);
+#else
+	uint32_t config = 0;
+	uint32_t data_reg_addr;
 
+	if (gpio >= 32) {
+		data_reg_addr = XGPIO_DATA2_OFFSET;
+		gpio -= 32;
+	} else
+		data_reg_addr = XGPIO_DATA_OFFSET;
+
+	config = Xil_In32((gpio_config->BaseAddress + data_reg_addr));
+	if(value)
+		config |= (1 << gpio);
+	else
+		config &= ~(1 << gpio);
+	Xil_Out32((gpio_config->BaseAddress + data_reg_addr), config);
+#endif
 	return 0;
 }
 
