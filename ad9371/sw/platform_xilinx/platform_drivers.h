@@ -42,8 +42,13 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <sleep.h>
+#ifdef _XPARAMETERS_PS_H_
 #include <xspips.h>
 #include <xgpiops.h>
+#else
+#include <xspi.h>
+#include <xgpio.h>
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -82,7 +87,11 @@
 #define AD9528_CHIP_SELECT	2
 #define AD9371_CHIP_SELECT	1
 
+#ifdef _XPARAMETERS_PS_H_
 #define mdelay(msecs)		usleep(1000*msecs)
+#else
+#define mdelay(msecs)		usleep(50*msecs)	// FIXME
+#endif
 #define udelay(usecs)		usleep(usecs)
 
 #define ARRAY_SIZE(ar)		(sizeof(ar)/sizeof(ar[0]))
@@ -100,9 +109,7 @@ typedef struct {
 } spi_device;
 
 typedef struct {
-	uint32_t		device_id;
-	XGpioPs_Config	*ps7_config;
-	XGpioPs			ps7_instance;
+	uint32_t	device_id;
 } gpio_device;
 
 /******************************************************************************/
