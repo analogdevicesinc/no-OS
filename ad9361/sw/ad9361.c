@@ -2044,7 +2044,7 @@ int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
 		SIZE_FULL_TABLE, 0);
 
 	rx_gain = &phy->rx_gain[TBL_1300_4000_MHZ];
-	ad9361_init_gain_info(rx_gain, RXGAIN_FULL_TBL, -4, 71, 1,
+	ad9361_init_gain_info(rx_gain, RXGAIN_FULL_TBL, -3, 71, 1,
 		SIZE_FULL_TABLE, 1);
 
 	rx_gain = &phy->rx_gain[TBL_4000_6000_MHZ];
