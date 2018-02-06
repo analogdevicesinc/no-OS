@@ -40,11 +40,6 @@
 #ifndef _AD9523_H_
 #define _AD9523_H_
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include "platform_drivers.h"
-
 /******************************************************************************/
 /****************************** AD9523 ****************************************/
 /******************************************************************************/
@@ -274,8 +269,7 @@
 /******************************************************************************/
 /************************ Types Definitions ***********************************/
 /******************************************************************************/
-enum outp_drv_mode
-{
+enum outp_drv_mode {
 	TRISTATE,
 	LVPECL_8mA,
 	LVDS_4mA,
@@ -293,8 +287,7 @@ enum outp_drv_mode
 	CMOS_CONF9
 };
 
-enum ref_sel_mode
-{
+enum ref_sel_mode {
 	NONEREVERTIVE_STAY_ON_REFB,
 	REVERT_TO_REFA,
 	SELECT_REFA,
@@ -318,19 +311,18 @@ enum ref_sel_mode
  * @extended_name: Optional descriptive channel name.
  */
 
-typedef struct
-{
-	unsigned channel_num;
-	unsigned char divider_output_invert_en;
-	unsigned char sync_ignore_en;
-	unsigned char low_power_mode_en;
-	unsigned char use_alt_clock_src; /* CH0..CH3 VCXO, CH4..CH9 VCO2 */
-	unsigned char output_dis;
-	unsigned char driver_mode;
-	unsigned char divider_phase;
-	unsigned short channel_divider;
-	char extended_name[16];
-} ad9523_channel_spec;
+struct ad9523_channel_spec {
+	uint8_t channel_num;
+	uint8_t divider_output_invert_en;
+	uint8_t sync_ignore_en;
+	uint8_t low_power_mode_en;
+	uint8_t use_alt_clock_src; /* CH0..CH3 VCXO, CH4..CH9 VCO2 */
+	uint8_t output_dis;
+	uint8_t driver_mode;
+	uint8_t divider_phase;
+	uint16_t channel_divider;
+	int8_t extended_name[16];
+};
 
 enum pll1_rzero_resistor {
 	RZERO_883_OHM,
@@ -407,83 +399,123 @@ enum cpole1_capacitor {
  * @name: Optional alternative iio device name.
  */
 
-typedef struct
-{
-	unsigned long vcxo_freq;
-	unsigned char spi3wire;
+struct ad9523_platform_data {
+	uint32_t vcxo_freq;
+	uint8_t spi3wire;
 
 	/* Differential/ Single-Ended Input Configuration */
-	unsigned char refa_diff_rcv_en;
-	unsigned char refb_diff_rcv_en;
-	unsigned char zd_in_diff_en;
-	unsigned char osc_in_diff_en;
+	uint8_t refa_diff_rcv_en;
+	uint8_t refb_diff_rcv_en;
+	uint8_t zd_in_diff_en;
+	uint8_t osc_in_diff_en;
 
 	/*
 	 * Valid if differential input disabled
 	 * if not true defaults to pos input
 	 */
-	unsigned char refa_cmos_neg_inp_en;
-	unsigned char refb_cmos_neg_inp_en;
-	unsigned char zd_in_cmos_neg_inp_en;
-	unsigned char osc_in_cmos_neg_inp_en;
+	uint8_t refa_cmos_neg_inp_en;
+	uint8_t refb_cmos_neg_inp_en;
+	uint8_t zd_in_cmos_neg_inp_en;
+	uint8_t osc_in_cmos_neg_inp_en;
 
 	/* PLL1 Setting */
-	unsigned short refa_r_div;
-	unsigned short refb_r_div;
-	unsigned short pll1_feedback_div;
-	unsigned short pll1_charge_pump_current_nA;
-	unsigned char zero_delay_mode_internal_en;
-	unsigned char osc_in_feedback_en;
-	unsigned char pll1_bypass_en;
-	unsigned char pll1_loop_filter_rzero;
+	uint16_t refa_r_div;
+	uint16_t refb_r_div;
+	uint16_t pll1_feedback_div;
+	uint16_t pll1_charge_pump_current_nA;
+	uint8_t zero_delay_mode_internal_en;
+	uint8_t osc_in_feedback_en;
+	uint8_t pll1_bypass_en;
+	uint8_t pll1_loop_filter_rzero;
 
 	/* Reference */
-	unsigned char ref_mode;
+	uint8_t ref_mode;
 
 	/* PLL2 Setting */
-	unsigned int pll2_charge_pump_current_nA;
-	unsigned char pll2_ndiv_a_cnt;
-	unsigned char pll2_ndiv_b_cnt;
-	unsigned char pll2_freq_doubler_en;
-	unsigned char pll2_r2_div;
-	unsigned char pll2_vco_diff_m1; /* 3..5 */
-	unsigned char pll2_vco_diff_m2; /* 3..5 */
+	uint32_t pll2_charge_pump_current_nA;
+	uint8_t pll2_ndiv_a_cnt;
+	uint8_t pll2_ndiv_b_cnt;
+	uint8_t pll2_freq_doubler_en;
+	uint8_t pll2_r2_div;
+	uint8_t pll2_vco_diff_m1; /* 3..5 */
+	uint8_t pll2_vco_diff_m2; /* 3..5 */
 
 	/* Loop Filter PLL2 */
-	unsigned char rpole2;
-	unsigned char rzero;
-	unsigned char cpole1;
-	unsigned char rzero_bypass_en;
+	uint8_t rpole2;
+	uint8_t rzero;
+	uint8_t cpole1;
+	uint8_t rzero_bypass_en;
 
 	/* Output Channel Configuration */
-	int num_channels;
-	ad9523_channel_spec *channels;
+	int32_t num_channels;
+	struct ad9523_channel_spec *channels;
 
-	char name[16];
-} ad9523_platform_data;
+	int8_t name[16];
+};
+
+struct ad9523_state {
+	struct ad9523_platform_data *pdata;
+	uint32_t vcxo_freq;
+	uint32_t vco_freq;
+	uint32_t vco_out_freq[3];
+	uint8_t vco_out_map[14];
+};
+
+enum ad9523_out_frequencies {
+	AD9523_VCO1,
+	AD9523_VCO2,
+	AD9523_VCXO,
+	AD9523_NUM_CLK_SRC,
+};
+
+struct ad9523_dev {
+	/* SPI */
+	spi_desc			*spi_desc;
+	/* Device Settings */
+	struct ad9523_state		ad9523_st;
+	struct ad9523_platform_data	*pdata;
+};
+
+struct ad9523_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* Device Settings */
+	struct ad9523_platform_data	*pdata;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Reads the value of the selected register. */
-int32_t ad9523_spi_read(spi_device *dev,
-		uint32_t reg_addr,
-		uint32_t *reg_data);
+int32_t ad9523_spi_read(struct ad9523_dev *dev,
+			uint32_t reg_addr,
+			uint32_t *reg_data);
+
 /* Writes a value to the selected register. */
-int32_t ad9523_spi_write(spi_device *dev,
-		uint32_t reg_addr,
-		uint32_t reg_data);
+int32_t ad9523_spi_write(struct ad9523_dev *dev,
+			 uint32_t reg_addr,
+			 uint32_t reg_data);
+
 /* Updates the AD9523 configuration */
-int32_t ad9523_io_update(spi_device *dev);
+int32_t ad9523_io_update(struct ad9523_dev *dev);
+
 /* Sets the clock provider for selected channel. */
-int32_t ad9523_vco_out_map(spi_device *dev,
-		uint32_t ch,
-		uint32_t out);
+int32_t ad9523_vco_out_map(struct ad9523_dev *dev,
+			   uint32_t ch,
+			   uint32_t out);
+
 /* Updates the AD9523 configuration. */
-int32_t ad9523_sync(spi_device *dev);
+int32_t ad9523_sync(struct ad9523_dev *dev);
+
 /* Initialize the AD9523 data structure*/
-int32_t ad9523_init(ad9523_platform_data *pdata);
+int32_t ad9523_init(struct ad9523_init_param *init_param);
+
 /* Configure the AD9523. */
-int32_t ad9523_setup(spi_device *dev,
-		ad9523_platform_data *pdata);
+int32_t ad9523_setup(struct ad9523_dev **device,
+		     struct ad9523_init_param init_param);
+
+/* Free the resources allocated by ad9523_setup(). */
+int32_t ad9523_remove(struct ad9523_dev *dev);
+
+int32_t ad9523_status(struct ad9523_dev *dev);
 #endif // __AD9523_H__
