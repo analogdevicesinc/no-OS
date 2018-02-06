@@ -40,23 +40,30 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "platform_drivers.h"
 #include "ad9144.h"
 
 /***************************************************************************//**
  * @brief ad9144_spi_read
  *******************************************************************************/
-int32_t ad9144_spi_read(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t *reg_data)
+int32_t ad9144_spi_read(struct ad9144_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = 0x80 | (reg_addr >> 8);
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc,
+				 buf,
+				 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -65,18 +72,21 @@ int32_t ad9144_spi_read(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_spi_write
  *******************************************************************************/
-int32_t ad9144_spi_write(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t reg_data)
+int32_t ad9144_spi_write(struct ad9144_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = reg_addr >> 8;
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc,
+				 buf,
+				 3);
 
 	return ret;
 }
@@ -84,15 +94,17 @@ int32_t ad9144_spi_write(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_spi_check_status
  *******************************************************************************/
-int32_t ad9144_spi_check_status(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t reg_mask,
-		uint8_t exp_reg_data)
+int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
+				uint16_t reg_addr,
+				uint8_t reg_mask,
+				uint8_t exp_reg_data)
 {
 	uint16_t timeout = 0;
 	uint8_t status = 0;
 	do {
-		ad9144_spi_read(dev, reg_addr, &status);
+		ad9144_spi_read(dev,
+				reg_addr,
+				&status);
 		if ((status & reg_mask) == exp_reg_data) {
 			return 0;
 		} else {
@@ -106,26 +118,35 @@ int32_t ad9144_spi_check_status(spi_device *dev,
 
 /***************************************************************************//**
  * @brief ad9144_setup
- *******************************************************************************/
-int32_t ad9144_setup(spi_device *dev,
-		ad9144_init_param init_param)
+********************************************************************************/
+int32_t ad9144_setup(struct ad9144_dev **device,
+		     struct ad9144_init_param init_param)
 {
 	uint8_t chip_id;
 	uint8_t scratchpad;
 	int32_t ret;
+	struct ad9144_dev *dev;
+
+	dev = (struct ad9144_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	if (ret == -1)
+		printf("%s : Device descriptor failed!\n", __func__);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
-	if(chip_id != AD9144_CHIP_ID)
-	{
-		ad_printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
+	if(chip_id != AD9144_CHIP_ID) {
+		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
 
 	ad9144_spi_write(dev, REG_SPI_SCRATCHPAD, 0xAD);
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
-	if(scratchpad != 0xAD)
-	{
-		ad_printf("%s : scratchpad read-write failed (0x%x)!\n", __func__, scratchpad);
+	if(scratchpad != 0xAD) {
+		printf("%s : scratchpad read-write failed (0x%x)!\n", __func__,
+		       scratchpad);
 		return -1;
 	}
 
@@ -188,27 +209,27 @@ int32_t ad9144_setup(spi_device *dev,
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
 	if (init_param.lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x0A);		// CDR_OVERSAMP
+	else if (init_param.lane_rate_kbps > 5520000)
+		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0,
+				 0x28);	// ENHALFRATE
 	else
-		if (init_param.lane_rate_kbps > 5520000)
-			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x28);	// ENHALFRATE
-		else
-			ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x08);
+		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0,
+				 0x08);
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x00);	// cdr reset
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x01);	// cdr reset
 	if (init_param.lane_rate_kbps < 2880000)
 		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x06);		// data-rate < 2.88 Gbps
+	else if (init_param.lane_rate_kbps > 5520000)
+		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x04);	// data-rate > 5.52 Gbps
 	else
-		if (init_param.lane_rate_kbps > 5520000)
-			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x04);	// data-rate > 5.52 Gbps
-		else
-			ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x05);
+		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x05);
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x05);	// enable serdes calibration
 	mdelay(20);
 
 	ret = ad9144_spi_check_status(dev, REG_PLL_STATUS, 0x01, 0x01);
 	if (ret == -1)
-		ad_printf("%s : PLL NOT locked!.\n", __func__);
+		printf("%s : PLL NOT locked!.\n", __func__);
 
 	ad9144_spi_write(dev, REG_EQ_BIAS_REG, 0x62);	// equalizer
 
@@ -237,15 +258,35 @@ int32_t ad9144_setup(spi_device *dev,
 
 	ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
 	if (ret == -1)
-		ad_printf("%s : dac-0 calibration failed!\n", __func__);
+		printf("%s : dac-0 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, REG_CAL_INDX, 0x02);	// read dac-1
 
 	ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
 	if (ret == -1)
-		ad_printf("%s : dac-1 calibration failed!\n", __func__);
+		printf("%s : dac-1 calibration failed!\n", __func__);
 
 	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x30);	// turn off cal clock
+
+	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad9144_setup().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad9144_remove(struct ad9144_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
 
 	return ret;
 }
@@ -253,7 +294,8 @@ int32_t ad9144_setup(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9144_status - return the status of the JESD interface
  *******************************************************************************/
-int32_t ad9144_status(spi_device *dev) {
+int32_t ad9144_status(struct ad9144_dev *dev)
+{
 
 	uint8_t status = 0;
 	int32_t ret = 0;
@@ -262,27 +304,23 @@ int32_t ad9144_status(spi_device *dev) {
 	// failures on top are 100% guaranteed to make subsequent status checks fail
 
 	ad9144_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("%s : CGS NOT received (%x)!.\n", __func__, status);
+	if (status != 0x0f) {
+		printf("%s : CGS NOT received (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_INITLANESYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("%s : ILAS NOT received (%x)!.\n", __func__, status);
+	if (status != 0x0f) {
+		printf("%s : ILAS NOT received (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_FRAMESYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("%s : framer OUT OF SYNC (%x)!.\n", __func__, status);
+	if (status != 0x0f) {
+		printf("%s : framer OUT OF SYNC (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_GOODCHKSUMFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("%s : check-sum MISMATCH (%x)!.\n", __func__, status);
+	if (status != 0x0f) {
+		printf("%s : check-sum MISMATCH (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 
@@ -292,7 +330,9 @@ int32_t ad9144_status(spi_device *dev) {
 /***************************************************************************//**
  * @brief ad9144_short_pattern_test
  *******************************************************************************/
-int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
+				  struct ad9144_init_param init_param)
+{
 
 	uint32_t dac = 0;
 	uint32_t sample = 0;
@@ -301,17 +341,27 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 
 	for (dac = 0; dac < init_param.active_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x00));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2, (init_param.stpl_samples[dac][sample]>>8));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1, (init_param.stpl_samples[dac][sample]>>0));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x03));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, ((sample << 4) | (dac << 2) | 0x01));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
+					 ((sample << 4) | (dac << 2) | 0x00));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2,
+					 (init_param.stpl_samples[dac][sample]>>8));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1,
+					 (init_param.stpl_samples[dac][sample]>>0));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
+					 ((sample << 4) | (dac << 2) | 0x01));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
+					 ((sample << 4) | (dac << 2) | 0x03));
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
+					 ((sample << 4) | (dac << 2) | 0x01));
 
-			ret = ad9144_spi_check_status(dev, REG_SHORT_TPL_TEST_3, 0x01, 0x00);
+			ret = ad9144_spi_check_status(dev,
+						      REG_SHORT_TPL_TEST_3,
+						      0x01, 0x00);
 			if (ret == -1)
-				ad_printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
-					__func__, dac, sample, init_param.stpl_samples[dac][sample], status);
+				printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+				       __func__, dac, sample,
+				       init_param.stpl_samples[dac][sample],
+				       status);
 		}
 	}
 	return 0;
@@ -320,7 +370,9 @@ int32_t ad9144_short_pattern_test(spi_device *dev, ad9144_init_param init_param)
 /***************************************************************************//**
  * @brief ad9144_datapath_prbs_test
  *******************************************************************************/
-int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param) {
+int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
+				  struct ad9144_init_param init_param)
+{
 
 	uint8_t status = 0;
 	int32_t ret = 0;
@@ -332,21 +384,20 @@ int32_t ad9144_datapath_prbs_test(spi_device *dev, ad9144_init_param init_param)
 
 	ad9144_spi_write(dev, REG_SPI_PAGEINDX, 0x01);
 	ad9144_spi_read(dev, REG_PRBS, &status);
-	if ((status & 0xc0) != 0xc0)
-	{
-		ad_printf("%s : PRBS OUT OF SYNC (%x)!.\n", __func__, status);
+	if ((status & 0xc0) != 0xc0) {
+		printf("%s : PRBS OUT OF SYNC (%x)!.\n", __func__, status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_PRBS_ERROR_I, &status);
-	if (status != 0x00)
-	{
-		ad_printf("%s : PRBS I channel ERRORS (%x)!.\n", __func__, status);
+	if (status != 0x00) {
+		printf("%s : PRBS I channel ERRORS (%x)!.\n", __func__,
+		       status);
 		ret = -1;
 	}
 	ad9144_spi_read(dev, REG_PRBS_ERROR_Q, &status);
-	if (status != 0x00)
-	{
-		ad_printf("%s : PRBS Q channel ERRORS (%x)!.\n", __func__, status);
+	if (status != 0x00) {
+		printf("%s : PRBS Q channel ERRORS (%x)!.\n", __func__,
+		       status);
 		ret = -1;
 	}
 
