@@ -40,11 +40,6 @@
 #define AD9680_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9680_REG_INTERFACE_CONF_A				0x000
@@ -78,18 +73,36 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+struct ad9680_dev {
+	/* SPI */
+	spi_desc	*spi_desc;
+};
 
-typedef struct {
-	uint32_t      lane_rate_kbps;
-} ad9680_init_param;
+struct ad9680_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* Device Settings */
+	uint32_t	lane_rate_kbps;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9680_spi_read(spi_device *dev, uint16_t reg_addr, uint8_t *reg_data);
-int32_t ad9680_spi_write(spi_device *dev, uint16_t reg_addr, uint8_t reg_data);
-int32_t ad9680_setup(spi_device *dev, ad9680_init_param init_param);
-int32_t ad9680_test(spi_device *dev, uint32_t test_mode);
+int32_t ad9680_spi_read(struct ad9680_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
+
+int32_t ad9680_spi_write(struct ad9680_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+
+int32_t ad9680_setup(struct ad9680_dev **device,
+		     struct ad9680_init_param init_param);
+
+int32_t ad9680_remove(struct ad9680_dev *dev);
+
+int32_t ad9680_test(struct ad9680_dev *dev,
+		    uint32_t test_mode);
 
 #endif
