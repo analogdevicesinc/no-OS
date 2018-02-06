@@ -106,11 +106,17 @@ int32_t jesd_setup(jesd_core core)
 *******************************************************************************/
 int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 {
+	gpio_desc *sysref_pin;
 	if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
 
 		// generate SYS_REF
 
-		ad_gpio_set(core.sysref_gpio_pin, enable);
+		gpio_get(&sysref_pin, core.sysref_gpio_pin);
+
+		gpio_set_value(sysref_pin, enable);
+
+		gpio_remove(sysref_pin);
+
 		mdelay(10);
 	}
 	return 0;

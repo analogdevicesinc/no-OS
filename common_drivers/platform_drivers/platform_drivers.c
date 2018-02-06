@@ -1,29 +1,29 @@
 /***************************************************************************//**
- * @file platform_drivers.c
- * @brief Implementation of Platform Drivers.
- * @author DBogdan (dragos.bogdan@analog.com)
- ********************************************************************************
- * Copyright 2014-2015(c) Analog Devices, Inc.
+ *   @file   platform_drivers.c
+ *   @brief  Implementation of Generic Platform Drivers.
+ *   @author DBogdan (dragos.bogdan@analog.com)
+********************************************************************************
+ * Copyright 2017(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in
- * the documentation and/or other materials provided with the
- * distribution.
- * - Neither the name of Analog Devices, Inc. nor the names of its
- * contributors may be used to endorse or promote products derived
- * from this software without specific prior written permission.
- * - The use of this software may or may not infringe the patent rights
- * of one or more patent holders. This license does not release you
- * from the requirement that you obtain separate licenses from these
- * patent holders to use this software.
- * - Use of the software either in source or binary form, must be run
- * on or directly connected to an Analog Devices Inc. component.
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
  *
  * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
@@ -35,12 +35,11 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+*******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-
 #include "platform_drivers.h"
 
 /******************************************************************************/
@@ -51,72 +50,215 @@ XSpiPs  m_spi;
 XSpiPs_Config  *m_spi_config;
 #endif
 
-/***************************************************************************//**
- * @brief ad_spi_init
- *******************************************************************************/
-// if not using the altera/xilinx spi cores, you may overwrite this function
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
-int32_t ad_spi_init(spi_device *dev)
+/**
+ * @brief Initialize the I2C communication peripheral.
+ * @param desc - The I2C descriptor.
+ * @param init_param - The structure that contains the I2C parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_init(i2c_desc **desc,
+		 i2c_init_param param)
 {
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
 
+	if (param.type) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Free the resources allocated by i2c_init().
+ * @param desc - The I2C descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_remove(i2c_desc *desc)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Write data to a slave device.
+ * @param desc - The I2C descriptor.
+ * @param data - Buffer that stores the transmission data.
+ * @param bytes_number - Number of bytes to write.
+ * @param stop_bit - Stop condition control.
+ *                   Example: 0 - A stop condition will not be generated;
+ *                            1 - A stop condition will be generated.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_write(i2c_desc *desc,
+		  uint8_t *data,
+		  uint8_t bytes_number,
+		  uint8_t stop_bit)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (stop_bit) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Read data from a slave device.
+ * @param desc - The I2C descriptor.
+ * @param data - Buffer that will store the received data.
+ * @param bytes_number - Number of bytes to read.
+ * @param stop_bit - Stop condition control.
+ *                   Example: 0 - A stop condition will not be generated;
+ *                            1 - A stop condition will be generated.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_read(i2c_desc *desc,
+		 uint8_t *data,
+		 uint8_t bytes_number,
+		 uint8_t stop_bit)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (stop_bit) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Initialize the SPI communication peripheral.
+ * @param desc - The SPI descriptor.
+ * @param init_param - The structure that contains the SPI parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_init(spi_desc **desc,
+		 spi_init_param param)
+{
+	spi_desc *dev;
+
+	dev = (spi_desc *)malloc(sizeof(*dev));
+	if (!dev)
+		return FAILURE;
+
+	dev->type = param.type;
+	dev->id = 0;
+
+	switch(dev->type) {
 #ifdef ZYNQ_PS7
-	dev->base_address = XPAR_PS7_SPI_0_BASEADDR;
-	dev->device_id = XPAR_PS7_SPI_0_DEVICE_ID;
+	case ZYNQ_PS7_SPI:
+		dev->base_address = XPAR_PS7_SPI_0_BASEADDR;
+		dev->device_id = XPAR_PS7_SPI_0_DEVICE_ID;
+		break;
 #endif
-
 #ifdef ZYNQ_PSU
-	dev->base_address = XPAR_PSU_SPI_0_BASEADDR;
-	dev->device_id = XPAR_PSU_SPI_0_DEVICE_ID;
+	case ZYNQ_PSU_SPI:
+		dev->base_address = XPAR_PSU_SPI_0_BASEADDR;
+		dev->device_id = XPAR_PSU_SPI_0_DEVICE_ID;
+		break;
 #endif
-
 #ifdef MICROBLAZE
+	case MICROBLAZE_SPI:
+		break;
 #endif
-
 #ifdef NIOS_II
+	case NIOS_II_SPI:
+		break;
 #endif
+	default:
+		return FAILURE;
+	}
 
-	dev->chip_select = 0xff;
-	dev->cpha = 0;
-	dev->cpol = 0;
+	dev->chip_select = param.chip_select;
+	dev->cpha = param.cpha;
+	dev->cpol = param.cpol;
 
 	#ifdef ZYNQ
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
 
 	if (m_spi_config == NULL) {
-		return(-1);
+		return FAILURE;
 	}
 
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
-		return(-1);
+		return FAILURE;
 	}
 	#endif
 
-	return(0);
+	*desc = dev;
+
+	return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief ad_spi_xfer
- *******************************************************************************/
-
-int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
+/**
+ * @brief Free the resources allocated by spi_init().
+ * @param desc - The SPI descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_remove(spi_desc *desc)
 {
+	free(desc);
 
+	return SUCCESS;
+}
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_write_and_read(spi_desc *desc,
+			   uint8_t *data,
+			   uint8_t bytes_number)
+{
 #ifdef ZYNQ
 
 	uint32_t initss;
 
-	initss = XSpiPs_ReadReg(dev->base_address, XSPIPS_CR_OFFSET);
+	initss = XSpiPs_ReadReg(desc->base_address, XSPIPS_CR_OFFSET);
 	initss = initss & (uint32_t)(~XSPIPS_CR_SSCTRL_MASK);
 	initss = initss | (0x7 << XSPIPS_CR_SSCTRL_SHIFT);
-	XSpiPs_WriteReg(dev->base_address, XSPIPS_CR_OFFSET, initss);
+	XSpiPs_WriteReg(desc->base_address, XSPIPS_CR_OFFSET, initss);
 	XSpiPs_SetOptions(&m_spi, XSPIPS_MASTER_OPTION |
 			XSPIPS_DECODE_SSELECT_OPTION | XSPIPS_FORCE_SSELECT_OPTION |
-			((dev->cpol == 1) ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			((dev->cpha == 1) ? XSPIPS_CLK_PHASE_1_OPTION : 0));
+			((desc->cpol == 1) ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+			((desc->cpha == 1) ? XSPIPS_CLK_PHASE_1_OPTION : 0));
 	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) 0x7);
 	XSpiPs_SetClkPrescaler(&m_spi, XSPIPS_CLK_PRESCALE_64);
-	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) dev->chip_select);
-	XSpiPs_PolledTransfer(&m_spi, data, data, no_of_bytes);
+	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) desc->chip_select);
+	XSpiPs_PolledTransfer(&m_spi, data, data, bytes_number);
 	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) 0x7);
 
 #endif
@@ -126,8 +268,8 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 	uint32_t i;
 
 	IOWR_32DIRECT(SYS_SPI_BASE, 0x0c, 0x400);
-	IOWR_32DIRECT(SYS_SPI_BASE, 0x14, ~(dev->chip_select));
-	for (i = 0; i < no_of_bytes; i++) {
+	IOWR_32DIRECT(SYS_SPI_BASE, 0x14, ~(desc->chip_select));
+	for (i = 0; i < bytes_number; i++) {
 		while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x40) == 0x00) {}
 		IOWR_32DIRECT(SYS_SPI_BASE, 0x04, *(data + i));
 		while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x80) == 0x00) {}
@@ -142,145 +284,257 @@ int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes)
 
 	uint32_t i;
 
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), dev->chip_select);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x086 | (dev->cpol<<3) | (dev->cpha<<4)));
-	for (i = 0; i < no_of_bytes; i++) {
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), desc->chip_select);
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x086 | (desc->cpol<<3) | (desc->cpha<<4)));
+	for (i = 0; i < bytes_number; i++) {
 		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x68), *(data + i));
 		while ((Xil_In32(XPAR_SPI_0_BASEADDR + 0x64) & 0x1) == 0x1) {}
 		*(data + i) = Xil_In32(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff;
 	}
 	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xff);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (dev->cpol<<3) | (dev->cpha<<4)));
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (desc->cpol<<3) | (desc->cpha<<4)));
 
 #endif
 
-	return(0);
+	return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief ad_gpio_set
- *******************************************************************************/
-
-int32_t ad_gpio_set(uint8_t pin, uint8_t data)
+/**
+ * @brief Obtain the GPIO decriptor.
+ * @param desc - The GPIO descriptor.
+ * @param gpio_number - The number of the GPIO.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_get(gpio_desc **desc,
+		 uint8_t gpio_number)
 {
+	gpio_desc *dev;
 
+	dev = (gpio_desc *)malloc(sizeof(*dev));
+	if (!dev)
+		return FAILURE;
+
+	if (gpio_number < 32) {
+		return FAILURE;
+	}
+
+	dev->number = gpio_number;
+	dev->id 	= 0;
+
+#ifdef ZYNQ_PS7
+	dev->type = ZYNQ_PS7_GPIO;
+#endif
+#ifdef ZYNQ_PSU
+	dev->type = ZYNQ_PSU_GPIO;
+#endif
+#ifdef NIOS_II
+	dev->type = NIOS_II_GPIO;
+#endif
+#ifdef MICROBLAZE
+	dev->type = MICROBLAZE_GPIO;
+#endif
+
+	*desc = dev;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Free the resources allocated by gpio_get().
+ * @param desc - The SPI descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_remove(gpio_desc *desc)
+{
+	free(desc);
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Enable the input direction of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_direction_input(gpio_desc *desc)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Enable the output direction of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param value - The value.
+ *                Example: GPIO_HIGH
+ *                         GPIO_LOW
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_direction_output(gpio_desc *desc,
+			      uint8_t value)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (value) {
+		// Unused variable - fix compiler warning
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Get the direction of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param direction - The direction.
+ *                    Example: GPIO_OUT
+ *                             GPIO_IN
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_get_direction(gpio_desc *desc,
+			   uint8_t *direction)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (direction) {
+		// Unused variable - fix compiler warning
+	}
+
+	return 0;
+}
+
+/**
+ * @brief Set the value of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param value - The value.
+ *                Example: GPIO_HIGH
+ *                         GPIO_LOW
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_set_value(gpio_desc *desc,
+		       uint8_t value)
+{
 	int32_t pstatus;
 	uint32_t ppos;
 	uint32_t pdata;
 	uint32_t pmask;
 
-	if (pin < 32) {
-		return(-1);
-	}
-
 	pstatus = -1;
-	ppos = pin - 32;
+	ppos = desc->number - 32;
 	pmask = 0x1 << ppos;
 
+	switch(desc->type) {
 #ifdef ZYNQ_PS7
-
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (data << ppos)));
-	pstatus = 0;
-
+	case ZYNQ_PS7_GPIO:
+		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
+		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata | pmask));
+		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
+		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
+		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
+		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (value << ppos)));
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef ZYNQ_PSU
-
-	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
-	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0308);
-	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0308), (pdata | pmask));
-	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
-	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050), ((pdata & ~pmask) | (data << ppos)));
-	pstatus = 0;
-
+	case ZYNQ_PSU_GPIO:
+		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
+		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata | pmask));
+		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0308);
+		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0308), (pdata | pmask));
+		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
+		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050), ((pdata & ~pmask) | (value << ppos)));
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef NIOS_II
-
-	pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
-	IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (data << ppos)));
-	pstatus = 0;
-
+	case NIOS_II_GPIO:
+		pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
+		IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (value << ppos)));
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef MICROBLAZE
-
-	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
-	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
-	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
-	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (data << ppos)));
-	pstatus = 0;
-
+	case MICROBLAZE_GPIO:
+		pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
+		Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
+		pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+		Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (value << ppos)));
+		pstatus = 0;
+		break;
 #endif
+	default:
+		break;
+	}
 
 	return(pstatus);
 }
 
-/***************************************************************************//**
- * @brief ad_gpio_get
- *******************************************************************************/
-
-int32_t ad_gpio_get(uint8_t pin, uint8_t *data)
+/**
+ * @brief Get the value of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param value - The value.
+ *                Example: GPIO_HIGH
+ *                         GPIO_LOW
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_get_value(gpio_desc *desc,
+		       uint8_t *value)
 {
-
 	int32_t pstatus;
 	uint32_t ppos;
 	uint32_t pdata;
-#ifdef ZYNQ
+	#ifdef ZYNQ
 	uint32_t pmask;
-#endif
-
-	if (pin < 32) {
-		return(-1);
-	}
+	#endif
 
 	pstatus = -1;
-	ppos = pin - 32;
-#ifdef ZYNQ
+	ppos = desc->number - 32;
+	#ifdef ZYNQ
 	pmask = 0x1 << ppos;
-#endif
+	#endif
 
+	switch(desc->type) {
 #ifdef ZYNQ_PS7
-
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata & ~pmask));
-	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-	*data = (pdata >> ppos) & 0x1;
-	pstatus = 0;
-
+	case ZYNQ_PS7_GPIO:
+		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c4);
+		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c4), (pdata & ~pmask));
+		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
+		*value = (pdata >> ppos) & 0x1;
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef ZYNQ_PSU
-
-	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
-	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata & ~pmask));
-	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
-	*data = (pdata >> ppos) & 0x1;
-	pstatus = 0;
-
+	case ZYNQ_PSU_GPIO:
+		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0304);
+		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0304), (pdata & ~pmask));
+		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
+		*value = (pdata >> ppos) & 0x1;
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef NIOS_II
-
-	pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
-	*data = (pdata >> ppos) & 0x1;
-	pstatus = 0;
-
+	case NIOS_II_GPIO:
+		pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
+		*value = (pdata >> ppos) & 0x1;
+		pstatus = 0;
+		break;
 #endif
-
 #ifdef MICROBLAZE
-
-	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
-	*data = (pdata >> ppos) & 0x1;
-	pstatus = 0;
-
+	case MICROBLAZE_GPIO:
+		pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
+		*value = (pdata >> ppos) & 0x1;
+		pstatus = 0;
+		break;
 #endif
+	default:
+		break;
+	}
 
 	return(pstatus);
 }

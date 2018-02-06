@@ -1,29 +1,29 @@
 /***************************************************************************//**
- * @file platform_drivers.h
- * @brief Header file of Platform Drivers.
- * @author DBogdan (dragos.bogdan@analog.com)
- ********************************************************************************
- * Copyright 2014-2015(c) Analog Devices, Inc.
+ *   @file   platform_drivers.h
+ *   @brief  Header file of Generic Platform Drivers.
+ *   @author DBogdan (dragos.bogdan@analog.com)
+********************************************************************************
+ * Copyright 2017(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * - Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
- * - Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in
- * the documentation and/or other materials provided with the
- * distribution.
- * - Neither the name of Analog Devices, Inc. nor the names of its
- * contributors may be used to endorse or promote products derived
- * from this software without specific prior written permission.
- * - The use of this software may or may not infringe the patent rights
- * of one or more patent holders. This license does not release you
- * from the requirement that you obtain separate licenses from these
- * patent holders to use this software.
- * - Use of the software either in source or binary form, must be run
- * on or directly connected to an Analog Devices Inc. component.
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
  *
  * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
@@ -35,15 +35,31 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+*******************************************************************************/
+
 #ifndef PLATFORM_DRIVERS_H_
 #define PLATFORM_DRIVERS_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
 #include "config.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define SUCCESS		0
+#define FAILURE		-1
+
+#define GPIO_OUT	0x01
+#define GPIO_IN		0x00
+
+#define GPIO_HIGH	0x01
+#define GPIO_LOW	0x00
 
 #ifdef ALTERA
 #include <io.h>
@@ -61,7 +77,7 @@
 #ifdef XILINX
 #include <xparameters.h>
 #include <xil_printf.h>
-#include "platform.h"
+//#include "platform.h"
 #endif
 
 #ifdef ZYNQ
@@ -178,29 +194,125 @@ void ad_platform_close(void);
 #endif
 
 /******************************************************************************/
-/********************** SPI structure and functions ***************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-// you may override the default spi structure-- the drivers simply turn around
-// the spi structure back to spi function calls.
+typedef enum {
+	GENERIC_I2C
+} i2c_type;
 
 typedef struct {
+	i2c_type	type;
+	uint32_t	id;
+	uint32_t	max_speed_hz;
+	uint8_t		slave_address;
+} i2c_init_param;
+
+typedef struct {
+	i2c_type	type;
+	uint32_t	id;
+	uint32_t	max_speed_hz;
+	uint8_t		slave_address;
+} i2c_desc;
+
+typedef enum {
+	ZYNQ_PS7_SPI,
+	ZYNQ_PSU_SPI,
+	MICROBLAZE_SPI,
+	NIOS_II_SPI
+} spi_type;
+
+typedef struct {
+	spi_type	type;
+	uint8_t     chip_select;
+	uint32_t    cpha;
+	uint32_t    cpol;
+} spi_init_param;
+
+typedef struct {
+	spi_type	type;
+	uint32_t	id;
 	uint32_t    base_address;
 	uint32_t    device_id;
 	uint8_t     chip_select;
 	uint32_t    cpha;
 	uint32_t    cpol;
-} spi_device;
+} spi_desc;
 
-int32_t ad_spi_init(spi_device *dev);
-int32_t ad_spi_xfer(spi_device *dev, uint8_t *data, uint8_t no_of_bytes);
+typedef enum {
+	ZYNQ_PS7_GPIO,
+	ZYNQ_PSU_GPIO,
+	MICROBLAZE_GPIO,
+	NIOS_II_GPIO
+} gpio_type;
+
+typedef struct {
+	gpio_type	type;
+	uint32_t	id;
+	uint8_t		number;
+} gpio_desc;
 
 /******************************************************************************/
-/********************* GPIO structure and functions ***************************/
+/************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad_gpio_set(uint8_t pin, uint8_t data);
-int32_t ad_gpio_get(uint8_t pin, uint8_t *data);
+/* Initialize the I2C communication peripheral. */
+int32_t i2c_init(i2c_desc **desc,
+		 i2c_init_param param);
+
+/* Free the resources allocated by i2c_init(). */
+int32_t i2c_remove(i2c_desc *desc);
+
+/* Write data to a slave device. */
+int32_t i2c_write(i2c_desc *desc,
+		  uint8_t *data,
+		  uint8_t bytes_number,
+		  uint8_t stop_bit);
+
+/* Read data from a slave device. */
+int32_t i2c_read(i2c_desc *desc,
+		 uint8_t *data,
+		 uint8_t bytes_number,
+		 uint8_t stop_bit);
+
+/* Initialize the SPI communication peripheral. */
+int32_t spi_init(spi_desc **desc,
+		 spi_init_param param);
+
+/* Free the resources allocated by spi_init() */
+int32_t spi_remove(spi_desc *desc);
+
+/* Write and read data to/from SPI. */
+int32_t spi_write_and_read(spi_desc *desc,
+			   uint8_t *data,
+			   uint8_t bytes_number);
+
+/* Obtain the GPIO decriptor. */
+int32_t gpio_get(gpio_desc **desc,
+		 uint8_t gpio_number);
+
+/* Free the resources allocated by gpio_get() */
+int32_t gpio_remove(gpio_desc *desc);
+
+/* Enable the input direction of the specified GPIO. */
+int32_t gpio_direction_input(gpio_desc *desc);
+
+/* Enable the output direction of the specified GPIO. */
+int32_t gpio_direction_output(gpio_desc *desc,
+			      uint8_t value);
+
+/* Get the direction of the specified GPIO. */
+int32_t gpio_get_direction(gpio_desc *desc,
+			   uint8_t *direction);
+
+/* Set the value of the specified GPIO. */
+int32_t gpio_set_value(gpio_desc *desc,
+		       uint8_t value);
+
+/* Get the value of the specified GPIO. */
+int32_t gpio_get_value(gpio_desc *desc,
+		       uint8_t *value);
+
 int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data);
 int32_t ad_gpio_get_range(uint8_t start_pin, uint8_t num_pins, uint32_t *data);
 
@@ -213,4 +325,7 @@ void ad_reg_write_16(uint32_t addr, uint32_t data);
 uint8_t ad_uart_read();
 uint32_t ad_pow2(uint32_t number);
 
-#endif
+/* Generate miliseconds delay. */
+//void mdelay(uint32_t msecs);
+
+#endif // PLATFORM_DRIVERS_H_

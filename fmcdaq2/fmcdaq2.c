@@ -83,9 +83,9 @@ enum ad9523_channels {
 /***************************************************************************//**
  * @brief main
  *******************************************************************************/
-int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
-		     ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
-		     ad9523_platform_data *p_ad9523_param)
+int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
+		     struct ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
+		     struct ad9523_platform_data *p_ad9523_param)
 {
 
 	uint8_t mode = 0;
@@ -202,14 +202,40 @@ int fmcdaq2_reconfig(ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr
  *******************************************************************************/
 int main(void)
 {
-	spi_device		ad9523_spi_device;
-	spi_device		ad9144_spi_device;
-	spi_device		ad9680_spi_device;
+	//spi_desc		*ad9523_spi_device;
+	//spi_desc		*ad9144_spi_device;
+	//spi_desc		*ad9680_spi_device;
 
-	ad9523_channel_spec	ad9523_channels[8];
-	ad9523_platform_data	ad9523_param;
-	ad9144_init_param	ad9144_param;
-	ad9680_init_param	ad9680_param;
+	spi_init_param	ad9523_spi_param;
+	spi_init_param	ad9144_spi_param;
+	spi_init_param	ad9680_spi_param;
+
+	ad9523_spi_param.type = ZYNQ_PS7_SPI;
+	ad9144_spi_param.type = ZYNQ_PS7_SPI;
+	ad9680_spi_param.type = ZYNQ_PS7_SPI;
+	ad9523_spi_param.chip_select = 0x6;
+	ad9144_spi_param.chip_select = 0x5;
+	ad9680_spi_param.chip_select = 0x3;
+	ad9523_spi_param.cpha = 0;
+	ad9144_spi_param.cpha = 0;
+	ad9680_spi_param.cpha = 0;
+	ad9523_spi_param.cpol = 0;
+	ad9144_spi_param.cpol = 0;
+	ad9680_spi_param.cpol = 0;
+
+	struct ad9523_channel_spec	ad9523_channels[8];
+	struct ad9523_platform_data	ad9523_pdata;
+	struct ad9523_init_param	ad9523_param;
+	struct ad9144_init_param	ad9144_param;
+	struct ad9680_init_param	ad9680_param;
+
+	ad9523_param.spi_init = ad9523_spi_param;
+	ad9144_param.spi_init = ad9144_spi_param;
+	ad9680_param.spi_init = ad9680_spi_param;
+
+	struct ad9523_dev *ad9523_device;
+	struct ad9144_dev *ad9144_device;
+	struct ad9680_dev *ad9680_device;
 
 	dac_core		ad9144_core;
 	dac_channel		ad9144_channels[2];
@@ -272,23 +298,12 @@ int main(void)
 #endif
 
 	//********************************************************************************
-	// SPI interface configuration
-	//********************************************************************************
-
-	ad_spi_init(&ad9523_spi_device);
-	ad_spi_init(&ad9144_spi_device);
-	ad_spi_init(&ad9680_spi_device);
-
-	ad9523_spi_device.chip_select = 0x6;
-	ad9144_spi_device.chip_select = 0x5;
-	ad9680_spi_device.chip_select = 0x3;
-
-	//********************************************************************************
 	// clock distribution device (AD9523) configuration
 	//********************************************************************************
 
-	ad9523_param.num_channels = 8;
-	ad9523_param.channels = &ad9523_channels[0];
+	ad9523_pdata.num_channels = 8;
+	ad9523_pdata.channels = &ad9523_channels[0];
+	ad9523_param.pdata = &ad9523_pdata;
 	ad9523_init(&ad9523_param);
 
 	// dac device-clk-sysref, fpga-clk-sysref
@@ -315,19 +330,19 @@ int main(void)
 
 	// VCXO 125MHz
 
-	ad9523_param.vcxo_freq = 125000000;
-	ad9523_param.spi3wire = 1;
-	ad9523_param.osc_in_diff_en = 1;
-	ad9523_param.pll2_charge_pump_current_nA = 413000;
-	ad9523_param.pll2_freq_doubler_en = 0;
-	ad9523_param.pll2_r2_div = 1;
-	ad9523_param.pll2_ndiv_a_cnt = 0;
-	ad9523_param.pll2_ndiv_b_cnt = 6;
-	ad9523_param.pll2_vco_diff_m1 = 3;
-	ad9523_param.pll2_vco_diff_m2 = 0;
-	ad9523_param.rpole2 = 0;
-	ad9523_param.rzero = 7;
-	ad9523_param.cpole1 = 2;
+	ad9523_pdata.vcxo_freq = 125000000;
+	ad9523_pdata.spi3wire = 1;
+	ad9523_pdata.osc_in_diff_en = 1;
+	ad9523_pdata.pll2_charge_pump_current_nA = 413000;
+	ad9523_pdata.pll2_freq_doubler_en = 0;
+	ad9523_pdata.pll2_r2_div = 1;
+	ad9523_pdata.pll2_ndiv_a_cnt = 0;
+	ad9523_pdata.pll2_ndiv_b_cnt = 6;
+	ad9523_pdata.pll2_vco_diff_m1 = 3;
+	ad9523_pdata.pll2_vco_diff_m2 = 0;
+	ad9523_pdata.rpole2 = 0;
+	ad9523_pdata.rzero = 7;
+	ad9523_pdata.cpole1 = 2;
 
 	ad9144_xcvr.ref_clock_khz = 500000;
 	ad9680_xcvr.ref_clock_khz = 500000;
@@ -418,7 +433,7 @@ int main(void)
 	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
 
 	// change the default JESD configurations, if required
-	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, &ad9523_param);
+	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, ad9523_param.pdata);
 
 	//********************************************************************************
 	// bring up the system
@@ -426,25 +441,34 @@ int main(void)
 
 	// setup GPIOs
 
-	ad_platform_init();
-	ad_gpio_set(GPIO_CLKD_SYNC, 0);
-	ad_gpio_set(GPIO_DAC_RESET, 0);
-	ad_gpio_set(GPIO_DAC_TXEN, 0);
-	ad_gpio_set(GPIO_ADC_PD, 1);
+	gpio_desc *clkd_sync;
+	gpio_desc *dac_reset;
+	gpio_desc *dac_txen;
+	gpio_desc *adc_pd;
+
+	gpio_get(&clkd_sync, GPIO_CLKD_SYNC);
+	gpio_get(&dac_reset, GPIO_DAC_RESET);
+	gpio_get(&dac_txen,  GPIO_DAC_TXEN);
+	gpio_get(&adc_pd,    GPIO_ADC_PD);
+
+	gpio_set_value(clkd_sync, 0);
+	gpio_set_value(dac_reset, 0);
+	gpio_set_value(dac_txen,  0);
+	gpio_set_value(adc_pd,    1);
 	mdelay(5);
 
-	ad_gpio_set(GPIO_CLKD_SYNC, 1);
-	ad_gpio_set(GPIO_DAC_RESET, 1);
-	ad_gpio_set(GPIO_DAC_TXEN, 1);
-	ad_gpio_set(GPIO_ADC_PD, 0);
+	gpio_set_value(clkd_sync, 1);
+	gpio_set_value(dac_reset, 1);
+	gpio_set_value(dac_txen,  1);
+	gpio_set_value(adc_pd,    0);
 
 	// setup clocks
 
-	ad9523_setup(&ad9523_spi_device, &ad9523_param);
+	ad9523_setup(&ad9523_device, ad9523_param);
 
 	// set up the devices
-	ad9680_setup(&ad9680_spi_device, ad9680_param);
-	ad9144_setup(&ad9144_spi_device, ad9144_param);
+	ad9680_setup(&ad9680_device, ad9680_param);
+	ad9144_setup(&ad9144_device, ad9144_param);
 
 	// set up the JESD core
 	jesd_setup(ad9680_jesd);
@@ -474,7 +498,7 @@ int main(void)
 	adc_setup(ad9680_core);
 	dac_setup(&ad9144_core);
 
-	ad9144_status(&ad9144_spi_device);
+	ad9144_status(ad9144_device);
 
 	//********************************************************************************
 	// transport path testing
@@ -483,7 +507,7 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(&ad9144_core);
-	ad9144_short_pattern_test(&ad9144_spi_device, ad9144_param);
+	ad9144_short_pattern_test(ad9144_device, ad9144_param);
 
 	// PN7 data path test
 
@@ -491,7 +515,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
 
 	// PN15 data path test
 
@@ -499,17 +523,17 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(&ad9144_spi_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
 
 	//********************************************************************************
 	// receive path testing
 	//********************************************************************************
 
-	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN9);
+	ad9680_test(ad9680_device, AD9680_TEST_PN9);
 	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
 		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
-	ad9680_test(&ad9680_spi_device, AD9680_TEST_PN23);
+	ad9680_test(ad9680_device, AD9680_TEST_PN23);
 	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
@@ -535,11 +559,21 @@ int main(void)
 	// external loopback - capture data with DMA
 	//********************************************************************************
 
-	ad9680_test(&ad9680_spi_device, AD9680_TEST_OFF);
+	ad9680_test(ad9680_device, AD9680_TEST_OFF);
 	if(!dmac_start_transaction(ad9680_dma)){
 		printf("daq2: RX capture done.\n");
 	};
 
-	ad_platform_close();
+	/* Memory deallocation for devices and spi */
+	ad9144_remove(ad9144_device);
+	ad9523_remove(ad9523_device);
+	ad9680_remove(ad9680_device);
+
+	/* Memory deallocation for gpios */
+	gpio_remove(clkd_sync);
+	gpio_remove(dac_reset);
+	gpio_remove(dac_txen);
+	gpio_remove(adc_pd);
+
 	return(0);
 }
