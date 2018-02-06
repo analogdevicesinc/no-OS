@@ -40,11 +40,6 @@
 #define AD9144_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define REG_SPI_INTFCONFA			0x000 /* Interface configuration A */
@@ -1355,8 +1350,14 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+struct ad9144_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
 
-typedef struct {
+struct ad9144_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
 	/* Device Settings */
 	uint8_t		jesd_xbar_lane0_sel;
 	uint8_t		jesd_xbar_lane1_sel;
@@ -1366,22 +1367,35 @@ typedef struct {
 	uint32_t	stpl_samples[4][4];
 	uint32_t	lane_rate_kbps;
 	uint32_t	prbs_type;
-} ad9144_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9144_setup(spi_device *dev,
-		ad9144_init_param init_param);
-int32_t ad9144_spi_read(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t *reg_data);
-int32_t ad9144_spi_write(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t reg_data);
-int32_t ad9144_short_pattern_test(spi_device *dev,
-		ad9144_init_param init_param);
-int32_t ad9144_status(spi_device *dev);
-int32_t ad9144_datapath_prbs_test(spi_device *dev,
-	       ad9144_init_param init_param);
+int32_t ad9144_setup(struct ad9144_dev **device,
+		     struct ad9144_init_param init_param);
+
+int32_t ad9144_remove(struct ad9144_dev *dev);
+
+int32_t ad9144_spi_read(struct ad9144_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
+
+int32_t ad9144_spi_write(struct ad9144_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+
+int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
+				uint16_t reg_addr,
+				uint8_t reg_mask,
+				uint8_t exp_reg_data);
+
+int32_t ad9144_status(struct ad9144_dev *dev);
+
+int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
+				  struct ad9144_init_param init_param);
+
+int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
+				  struct ad9144_init_param init_param);
+
 #endif
