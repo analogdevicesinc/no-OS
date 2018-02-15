@@ -41,6 +41,9 @@
 /******************************************************************************/
 #include "jesd_core.h"
 
+/***************************************************************************//**
+ * @brief xcvr_write
+ *******************************************************************************/
 void xcvr_write(xcvr_device *dev,
 				uint32_t reg,
 				uint32_t val)
@@ -48,12 +51,18 @@ void xcvr_write(xcvr_device *dev,
 	IOWR_32DIRECT(dev->xcvr_base_addr, reg, val);
 }
 
+/***************************************************************************//**
+ * @brief xcvr_read
+ *******************************************************************************/
 uint32_t xcvr_read(xcvr_device *dev,
 				   uint32_t reg_addr)
 {
 	return IORD_32DIRECT(dev->xcvr_base_addr, reg_addr);
 }
 
+/***************************************************************************//**
+ * @brief atx_pll_write
+ *******************************************************************************/
 void atx_pll_write(xcvr_device *dev,
 				   uint32_t reg,
 				   uint32_t val)
@@ -61,12 +70,18 @@ void atx_pll_write(xcvr_device *dev,
 	IOWR_32DIRECT(dev->atx_pll_base_addr, reg, val);
 }
 
+/***************************************************************************//**
+ * @brief atx_pll_read
+ *******************************************************************************/
 uint32_t atx_pll_read(xcvr_device *dev,
 				      uint32_t reg_addr)
 {
 	return IORD_32DIRECT(dev->atx_pll_base_addr, reg_addr);
 }
 
+/***************************************************************************//**
+ * @brief adxcfg_write
+ *******************************************************************************/
 void adxcfg_write(xcvr_device *dev,
 				  uint8_t lane,
 				  uint32_t reg,
@@ -75,6 +90,9 @@ void adxcfg_write(xcvr_device *dev,
 	IOWR_32DIRECT(dev->adxcfg_base_addr[lane], reg, val);
 }
 
+/***************************************************************************//**
+ * @brief adxcfg_read
+ *******************************************************************************/
 uint32_t adxcfg_read(xcvr_device *dev,
 				 	 uint8_t lane,
 				 	 uint32_t reg_addr)
@@ -82,7 +100,28 @@ uint32_t adxcfg_read(xcvr_device *dev,
 	return IORD_32DIRECT(dev->adxcfg_base_addr[lane], reg_addr);
 }
 
+/***************************************************************************//**
+ * @brief jesd_write
+ *******************************************************************************/
+void jesd_write(jesd_device *dev,
+				uint32_t reg,
+				uint32_t val)
+{
+	IOWR_32DIRECT(dev->base_addr, reg, val);
+}
 
+/***************************************************************************//**
+ * @brief jesd_read
+ *******************************************************************************/
+uint32_t jesd_read(jesd_device *dev,
+				   uint32_t reg_addr)
+{
+	return IORD_32DIRECT(dev->base_addr, reg_addr);
+}
+
+/***************************************************************************//**
+ * @brief atx_pll_calib
+ *******************************************************************************/
 uint8_t atx_pll_calib(xcvr_device *dev)
 {
 	uint8_t link = dev->link_num;
@@ -129,6 +168,9 @@ uint8_t atx_pll_calib(xcvr_device *dev)
 	}
 }
 
+/***************************************************************************//**
+ * @brief xcvr_calib_tx
+ *******************************************************************************/
 uint8_t xcvr_calib_tx(xcvr_device *dev)
 {
 	uint8_t link = dev->link_num;
@@ -187,6 +229,9 @@ uint8_t xcvr_calib_tx(xcvr_device *dev)
 	return err;
 }
 
+/***************************************************************************//**
+ * @brief xcvr_calib_tx
+ *******************************************************************************/
 uint8_t xcvr_calib_rx(xcvr_device *dev)
 {
 	uint8_t link = dev->link_num;
@@ -252,36 +297,39 @@ uint8_t xcvr_calib_rx(xcvr_device *dev)
 	return err;
 }
 
+/***************************************************************************//**
+ * @brief xcvr_calib_tx
+ *******************************************************************************/
 int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 {
 	uint32_t status = 0;
 	int32_t timeout;
+	int8_t i;
 	int32_t	ret = 0;
 	xcvr_device rx_xcvr;
 	xcvr_device tx_xcvr;
 	xcvr_device rx_os_xcvr;
 
-	rx_xcvr.xcvr_base_addr = AXI_AD9371_RX_XCVR_BASE;
+	rx_xcvr.xcvr_base_addr = AD9371_RX_JESD204_LINK_MANAGEMENT_BASE;
 	rx_xcvr.link_num = 0;
 	rx_xcvr.lanes_per_link = 2;
 	rx_xcvr.adxcfg_base_addr[0] = AVL_ADXCFG_0_RCFG_S1_BASE;
 	rx_xcvr.adxcfg_base_addr[1] = AVL_ADXCFG_1_RCFG_S1_BASE;
 
-	rx_os_xcvr.xcvr_base_addr = AXI_AD9371_RX_OS_XCVR_BASE;
+	rx_os_xcvr.xcvr_base_addr = AD9371_RX_OS_JESD204_LINK_MANAGEMENT_BASE;
 	rx_os_xcvr.link_num = 0;
 	rx_os_xcvr.lanes_per_link = 2;
 	rx_os_xcvr.adxcfg_base_addr[0] = AVL_ADXCFG_2_RCFG_S1_BASE;
 	rx_os_xcvr.adxcfg_base_addr[1] = AVL_ADXCFG_3_RCFG_S1_BASE;
 
-	tx_xcvr.xcvr_base_addr = AXI_AD9371_TX_XCVR_BASE;
-	tx_xcvr.atx_pll_base_addr = AVL_AD9371_TX_XCVR_LANE_PLL_RECONFIG_BASE;
+	tx_xcvr.xcvr_base_addr = AD9371_TX_JESD204_LINK_MANAGEMENT_BASE;
+	tx_xcvr.atx_pll_base_addr = AD9371_TX_JESD204_LANE_PLL_RECONFIG_BASE;
 	tx_xcvr.link_num = 0;
 	tx_xcvr.lanes_per_link = 4;
 	tx_xcvr.adxcfg_base_addr[0] = AVL_ADXCFG_0_RCFG_S0_BASE;
 	tx_xcvr.adxcfg_base_addr[1] = AVL_ADXCFG_1_RCFG_S0_BASE;
 	tx_xcvr.adxcfg_base_addr[2] = AVL_ADXCFG_2_RCFG_S0_BASE;
 	tx_xcvr.adxcfg_base_addr[3] = AVL_ADXCFG_3_RCFG_S0_BASE;
-
 
 	xcvr_write(&tx_xcvr, ADXCVR_REG_RESETN, 0);
 	if (atx_pll_calib(&tx_xcvr))
@@ -312,7 +360,17 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 			break;
 	}
 	if (status == 0) {
-		printf("RX_XCVR initialization failed\n");
+		status = xcvr_read(&rx_xcvr, ADXCVR_REG_STATUS2);
+		printf("RX_XCVR: Link activation error:\n");
+
+		printf("\tRX_XCVR: Link PLL %slocked\n",
+			(status & ADXCVR_STATUS2_XCVR(rx_xcvr.lanes_per_link)) ?
+				"" : "not ");
+		for (i = 0; i < rx_xcvr.lanes_per_link; i++) {
+			printf("\tRX_XCVR: Lane %d transceiver %sready\n", i,
+				(status & ADXCVR_STATUS2_XCVR(i)) ?
+					"" : "not ");
+		}
 		ret--;
 	} else
 		printf("RX_XCVR initialization OK\n");
@@ -326,7 +384,17 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 			break;
 	}
 	if (status == 0) {
-		printf("TX_XCVR initialization failed\n");
+		status = xcvr_read(&tx_xcvr, ADXCVR_REG_STATUS2);
+		printf("TX_XCVR: Link activation error:\n");
+
+		printf("\tTX_XCVR: Link PLL %slocked\n",
+			(status & ADXCVR_STATUS2_XCVR(rx_xcvr.lanes_per_link)) ?
+				"" : "not ");
+		for (i = 0; i < tx_xcvr.lanes_per_link; i++) {
+			printf("\tTX_XCVR: Lane %d transceiver %sready\n", i,
+				(status & ADXCVR_STATUS2_XCVR(i)) ?
+					"" : "not ");
+		}
 		ret--;
 	} else
 		printf("TX_XCVR initialization OK\n");
@@ -340,11 +408,22 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
 			break;
 	}
 	if (status == 0) {
-		printf("RX_OS_XCVR initialization failed\n");
+		status = xcvr_read(&tx_xcvr, ADXCVR_REG_STATUS2);
+		printf("RX_OS_XCVR: Link activation error:\n");
+
+		printf("\tRX_OS_XCVR: Link PLL %slocked\n",
+			(status & ADXCVR_STATUS2_XCVR(rx_xcvr.lanes_per_link)) ?
+				"" : "not ");
+		for (i = 0; i < tx_xcvr.lanes_per_link; i++) {
+			printf("\tRX_OS_XCVR: Lane %d transceiver %sready\n", i,
+				(status & ADXCVR_STATUS2_XCVR(i)) ?
+					"" : "not ");
+		}
 		ret--;
 	} else
 		printf("RX_OS_XCVR initialization OK\n");
 
+	return 0;
 	return ret;
 }
 
@@ -353,6 +432,64 @@ int32_t xcvr_setup(mykonosDevice_t *myk_dev)
  *******************************************************************************/
 int32_t jesd_setup(mykonosDevice_t *myk_dev)
 {
+	jesd_device	rx_jesd;
+	jesd_device	tx_jesd;
+	jesd_device	rx_os_jesd;
+	uint32_t octets_per_frame;
+	uint32_t octets_per_multiframe;
+
+	rx_jesd.base_addr = AD9371_RX_JESD204_LINK_RECONFIG_BASE;
+	tx_jesd.base_addr = AD9371_TX_JESD204_LINK_RECONFIG_BASE;
+	rx_os_jesd.base_addr = AD9371_RX_OS_JESD204_LINK_RECONFIG_BASE;
+
+	octets_per_frame = 0x4;
+	octets_per_multiframe = octets_per_frame * myk_dev->rx->framer->K;
+	jesd_write(&rx_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&rx_jesd, JESD204_REG_LINK_DISABLE, 0x1);
+
+	octets_per_frame = 0x2;
+	octets_per_multiframe = octets_per_frame * myk_dev->tx->deframer->K;
+	jesd_write(&tx_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&tx_jesd, JESD204_REG_LINK_DISABLE, 0x1);
+
+	octets_per_frame = 0x2;
+	octets_per_multiframe = octets_per_frame * myk_dev->obsRx->framer->K;
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_CONF0,
+			((octets_per_frame-1) << 16) | (octets_per_multiframe - 1));
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_DISABLE, 0x1);
+
 	return 0;
 }
 
+/***************************************************************************//**
+ * @brief jesd_tx_enable
+ *******************************************************************************/
+int32_t jesd_tx_enable(mykonosDevice_t *myk_dev)
+{
+	jesd_device	tx_jesd;
+
+	tx_jesd.base_addr = AD9371_TX_JESD204_LINK_RECONFIG_BASE;
+
+	jesd_write(&tx_jesd, JESD204_REG_LINK_DISABLE, 0x0);
+
+	return 0;
+}
+
+/***************************************************************************//**
+ * @brief jesd_rx_enable
+ *******************************************************************************/
+int32_t jesd_rx_enable(mykonosDevice_t *myk_dev)
+{
+	jesd_device	rx_jesd;
+	jesd_device	rx_os_jesd;
+
+	rx_jesd.base_addr = AD9371_RX_JESD204_LINK_RECONFIG_BASE;
+	rx_os_jesd.base_addr = AD9371_RX_OS_JESD204_LINK_RECONFIG_BASE;
+
+	jesd_write(&rx_jesd, JESD204_REG_LINK_DISABLE, 0x0);
+	jesd_write(&rx_os_jesd, JESD204_REG_LINK_DISABLE, 0x0);
+
+	return 0;
+}

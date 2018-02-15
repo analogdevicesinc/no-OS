@@ -49,7 +49,7 @@
 #include <alt_types.h>
 #include "altera_avalon_spi.h"
 #include "altera_avalon_spi_regs.h"
-#include "mykonos.h"
+#include "../mykonos/mykonos.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -122,18 +122,13 @@
 /* PCORE Version > 8.00 */
 #define ADI_REG_DELAY(l)			(0x0800 + (l) * 0x4)
 
-#define AD9371_GPINT       	56
-#define AD9371_TX1_ENABLE  	55
-#define AD9371_TX2_ENABLE  	54
-#define AD9371_RX1_ENABLE   53
-#define AD9371_RX2_ENABLE   52
-#define AD9371_TEST         51
-#define AD9371_RESET_B      50
-#define AD9528_SYSREF_REQ   49
-#define AD9528_RESET_B      48
+#define AD9371_RESET_B			52
+#define AD9528_SYSREF_REQ		58
+#define AD9528_RESET_B			59
+#define DAC_GPIO_PLDDR_BYPASS	60
 
-#define AD9528_CHIP_SELECT	2
-#define AD9371_CHIP_SELECT	1
+#define AD9528_CHIP_SELECT		0
+#define AD9371_CHIP_SELECT		1
 
 enum adc_data_sel {
 	ADC_DATA_SEL_NORM,
@@ -149,14 +144,6 @@ typedef struct {
 	uint32_t	cpol;
 	uint8_t		id_no;
 } spi_device;
-
-typedef struct {
-	uint32_t 	xcvr_base_addr;
-	uint32_t	atx_pll_base_addr;
-	uint32_t 	adxcfg_base_addr[4];
-	uint8_t		link_num;
-	uint8_t 	lanes_per_link;
-} xcvr_device;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
