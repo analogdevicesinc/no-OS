@@ -40,11 +40,6 @@
 #define AD9152_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define REG_SPI_INTFCONFA                        0x000 /* Interface configuration A */
@@ -1342,22 +1337,38 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct
-{
+struct ad9152_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t stpl_samples[2][4];
 	uint32_t interpolation;
 	uint32_t prbs_type;
 	uint32_t lane_rate_kbps;
-} ad9152_init_param;
+};
+
+struct ad9152_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9152_setup(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param);
-int32_t ad9152_status(spi_device *dev);
+int32_t ad9152_spi_read(struct ad9152_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
+int32_t ad9152_spi_write(struct ad9152_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+int32_t ad9152_setup(struct ad9152_dev **device,
+		     struct ad9152_init_param init_param);
+int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
+				  struct ad9152_init_param init_param);
+int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
+				  struct ad9152_init_param init_param);
+int32_t ad9152_status(struct ad9152_dev *dev);
+int32_t ad9152_remove(struct ad9152_dev *dev);
 
 #endif

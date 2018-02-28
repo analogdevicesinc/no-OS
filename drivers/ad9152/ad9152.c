@@ -40,23 +40,30 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "platform_drivers.h"
 #include "ad9152.h"
 
 /***************************************************************************//**
  * @brief ad9152_spi_read
  *******************************************************************************/
-int32_t ad9152_spi_read(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t *reg_data)
+int32_t ad9152_spi_read(struct ad9152_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = 0x80 | (reg_addr >> 8);
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc,
+				 buf,
+				 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -65,18 +72,21 @@ int32_t ad9152_spi_read(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9152_spi_write
  *******************************************************************************/
-int32_t ad9152_spi_write(spi_device *dev,
-		uint16_t reg_addr,
-		uint8_t reg_data)
+int32_t ad9152_spi_write(struct ad9152_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = reg_addr >> 8;
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc,
+				 buf,
+				 3);
 
 	return ret;
 }
@@ -84,19 +94,26 @@ int32_t ad9152_spi_write(spi_device *dev,
 /***************************************************************************//**
  * @brief ad9152_setup
  *******************************************************************************/
-int32_t ad9152_setup(spi_device *dev,
-		ad9152_init_param init_param)
+int32_t ad9152_setup(struct ad9152_dev **device,
+		     struct ad9152_init_param init_param)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
 	int32_t ret;
+	struct ad9152_dev *dev;
+
+	dev = (struct ad9152_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	ret = 0;
 
 	ad9152_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
-	if(chip_id != AD9152_CHIP_ID)
-	{
-		ad_printf("AD9152: Invalid CHIP ID (0x%x)!\n", chip_id);
+	if(chip_id != AD9152_CHIP_ID) {
+		printf("AD9152: Invalid CHIP ID (0x%x)!\n", chip_id);
 		return -1;
 	}
 
@@ -157,9 +174,8 @@ int32_t ad9152_setup(spi_device *dev,
 	mdelay(20);
 
 	ad9152_spi_read(dev, 0x281, &pll_stat);
-	if (pll_stat == 0)
-	{
-		ad_printf("AD9152: PLL is NOT locked!.\n");
+	if (pll_stat == 0) {
+		printf("AD9152: PLL is NOT locked!.\n");
 		ret = -1;
 	}
 
@@ -178,6 +194,24 @@ int32_t ad9152_setup(spi_device *dev,
 
 	ad9152_spi_write(dev, 0x0e7, 0x30);	// turn off cal clock
 
+	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad9152_setup().
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad9152_remove(struct ad9152_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
 	return ret;
 }
 
@@ -185,7 +219,8 @@ int32_t ad9152_setup(spi_device *dev,
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
+int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
+				  struct ad9152_init_param init_param)
 {
 	uint32_t dac;
 	uint32_t sample;
@@ -195,18 +230,26 @@ int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
 
 	for (dac = 0; dac < 2; dac++) {
 		for (sample = 0; sample < 4; sample++) {
-			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x00));
-			ad9152_spi_write(dev, 0x32e, (init_param.stpl_samples[dac][sample]>>8));
-			ad9152_spi_write(dev, 0x32d, (init_param.stpl_samples[dac][sample]>>0));
-			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
-			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x03));
-			ad9152_spi_write(dev, 0x32c, ((sample << 4) | (dac << 2) | 0x01));
+			ad9152_spi_write(dev, 0x32c,
+					 ((sample << 4) | (dac << 2) | 0x00));
+			ad9152_spi_write(dev, 0x32e,
+					 (init_param.stpl_samples[dac][sample]>>8));
+			ad9152_spi_write(dev, 0x32d,
+					 (init_param.stpl_samples[dac][sample]>>0));
+			ad9152_spi_write(dev, 0x32c,
+					 ((sample << 4) | (dac << 2) | 0x01));
+			ad9152_spi_write(dev, 0x32c,
+					 ((sample << 4) | (dac << 2) | 0x03));
+			ad9152_spi_write(dev, 0x32c,
+					 ((sample << 4) | (dac << 2) | 0x01));
 			mdelay(1);
 
 			ad9152_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
-				ad_printf("AD9152: short-pattern-test mismatch (%x, %d, %d, %x)!.\n",
-					dac, sample, init_param.stpl_samples[dac][sample], status);
+				printf("AD9152: short-pattern-test mismatch (%x, %d, %d, %x)!.\n",
+				       dac, sample,
+				       init_param.stpl_samples[dac][sample],
+				       status);
 		}
 	}
 	return(0);
@@ -216,7 +259,8 @@ int32_t ad9152_short_pattern_test(spi_device *dev, ad9152_init_param init_param)
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
+int32_t ad9152_datapath_prbs_test(struct ad9152_dev *dev,
+				  struct ad9152_init_param init_param)
 {
 
 	uint8_t status;
@@ -233,21 +277,18 @@ int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
 	mdelay(100);
 
 	ad9152_spi_read(dev, REG_PRBS, &status);
-	if ((status & 0xc0) != 0xc0)
-	{
-		ad_printf("AD9152: PRBS OUT OF SYNC (%x)!.\n", status);
+	if ((status & 0xc0) != 0xc0) {
+		printf("AD9152: PRBS OUT OF SYNC (%x)!.\n", status);
 		ret = -1;
 	}
 	ad9152_spi_read(dev, REG_PRBS_ERROR_I, &status);
-	if (status != 0x00)
-	{
-		ad_printf("AD9152: PRBS I channel ERRORS (%x)!.\n", status);
+	if (status != 0x00) {
+		printf("AD9152: PRBS I channel ERRORS (%x)!.\n", status);
 		ret = -1;
 	}
 	ad9152_spi_read(dev, REG_PRBS_ERROR_Q, &status);
-	if (status != 0x00)
-	{
-		ad_printf("AD9152: PRBS Q channel ERRORS (%x)!.\n", status);
+	if (status != 0x00) {
+		printf("AD9152: PRBS Q channel ERRORS (%x)!.\n", status);
 		ret = -1;
 	}
 
@@ -258,7 +299,7 @@ int32_t ad9152_datapath_prbs_test(spi_device *dev, ad9152_init_param init_param)
  * @brief ad9152_setup
  *******************************************************************************/
 
-int32_t ad9152_status(spi_device *dev)
+int32_t ad9152_status(struct ad9152_dev *dev)
 {
 
 	uint8_t status;
@@ -271,27 +312,23 @@ int32_t ad9152_status(spi_device *dev)
 	// failures on top are 100% guaranteed to make subsequent status checks fail
 
 	ad9152_spi_read(dev, REG_CODEGRPSYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("AD9152: CGS NOT received (%x)!.\n", status);
+	if (status != 0x0f) {
+		printf("AD9152: CGS NOT received (%x)!.\n", status);
 		ret = -1;
 	}
 	ad9152_spi_read(dev, REG_INITLANESYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("AD9152: ILAS NOT received (%x)!.\n", status);
+	if (status != 0x0f) {
+		printf("AD9152: ILAS NOT received (%x)!.\n", status);
 		ret = -1;
 	}
 	ad9152_spi_read(dev, REG_FRAMESYNCFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("AD9152: framer OUT OF SYNC (%x)!.\n", status);
+	if (status != 0x0f) {
+		printf("AD9152: framer OUT OF SYNC (%x)!.\n", status);
 		ret = -1;
 	}
 	ad9152_spi_read(dev, REG_GOODCHKSUMFLG, &status);
-	if (status != 0x0f)
-	{
-		ad_printf("AD9152: check-sum MISMATCH (%x)!.\n", status);
+	if (status != 0x0f) {
+		printf("AD9152: check-sum MISMATCH (%x)!.\n", status);
 		ret = -1;
 	}
 
