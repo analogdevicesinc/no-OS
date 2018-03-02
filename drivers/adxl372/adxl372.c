@@ -641,7 +641,13 @@ int32_t adxl372_get_highest_peak_data(adxl372_dev *dev,
 				      adxl372_xyz_accel_data *max_peak)
 {
 	uint8_t buf[6];
+	uint8_t status1, status2;
+	uint16_t fifo_entries;
 	int32_t ret;
+
+	do {
+		adxl372_get_status(dev, &status1, &status2, &fifo_entries);
+	} while(!(ADXL372_STATUS_1_DATA_RDY(status1)));
 
 	ret = adxl372_spi_reg_read_multiple(dev,
 					    ADXL372_X_MAXPEAK_H,
