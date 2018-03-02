@@ -434,9 +434,9 @@ int32_t adxl372_configure_fifo(adxl372_dev *dev,
 int32_t adxl372_get_fifo_xyz_data(adxl372_dev *dev,
 				  adxl372_xyz_accel_data *fifo_data,
 				  uint16_t cnt);
-int32_t adxl_service_fifo_ev(adxl372_dev *dev,
-			     adxl372_xyz_accel_data *fifo_data,
-			     uint16_t *fifo_entries);
+int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
+				adxl372_xyz_accel_data *fifo_data,
+				uint16_t *fifo_entries);
 int32_t adxl372_get_highest_peak_data(adxl372_dev *dev,
 				      adxl372_xyz_accel_data *max_peak);
 int32_t adxl372_get_accel_data(adxl372_dev *dev,

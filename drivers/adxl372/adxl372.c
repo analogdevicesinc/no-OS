@@ -565,9 +565,9 @@ int32_t adxl372_configure_fifo(adxl372_dev *dev,
  *			 samples present in the FIFO buffer
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl_service_fifo_ev(adxl372_dev *dev,
-			     adxl372_xyz_accel_data *fifo_data,
-			     uint16_t *fifo_entries)
+int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
+				adxl372_xyz_accel_data *fifo_data,
+				uint16_t *fifo_entries)
 {
 	uint8_t status1, status2;
 	int32_t ret;
