@@ -522,13 +522,6 @@ int32_t adxl372_configure_fifo(adxl372_dev *dev,
 
 	if (fifo_samples > 512)
 		return -1;
-	/*
-	 * From ADXL372 Datasheet, FIFO chapter:
-	 * When reading data from multiple axes from the FIFO, to ensure that
-	 * data is not overwritten and stored out of order, at least one sample
-	 * set must be left in the FIFO after every read.
-	 */
-	fifo_samples -= 1;
 
 	/*
 	 * All FIFO modes must be configured while in standby mode.
@@ -584,6 +577,13 @@ int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
 	if (dev->fifo_config.fifo_mode != ADXL372_FIFO_BYPASSED) {
 		if ((ADXL372_STATUS_1_FIFO_RDY(status1)) ||
 		    (ADXL372_STATUS_1_FIFO_FULL(status1))) {
+			/*
+			 * When reading data from multiple axes from the FIFO,
+			 * to ensure that data is not overwritten and stored out
+			 * of order, at least one sample set must be left in the
+			 * FIFO after every read.
+			 */
+			*fifo_entries -= 3;
 			ret = adxl372_get_fifo_xyz_data(dev, fifo_data,
 							*fifo_entries);
 		}
