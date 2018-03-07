@@ -150,7 +150,54 @@ int main(void)
 
 	// dac settings
 
+#ifdef ZYNQ
+	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+
+#ifdef MICROBLAZE
+	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
+	ad9680_dma.type = DMAC_RX;
+	ad9680_dma.transfer = &rx_xfer;
+	rx_xfer.id = 0;
+	rx_xfer.no_of_samples = 32768;
+
+	// base addresses
+
+#ifdef XILINX
+	ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
+	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
+	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
+	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
+	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_TX_AXI_BASEADDR;
+	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
+	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
+#endif
+#ifdef ALTERA
+	ad9152_xcvr.base_address = AD9152_JESD204_LINK_MANAGEMENT_BASE;
+	ad9152_xcvr.dev.link_pll.base_address = AD9152_JESD204_LINK_PLL_RECONFIG_BASE;
+	ad9152_xcvr.dev.atx_pll.base_address = AD9152_JESD204_LANE_PLL_RECONFIG_BASE;
+	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
+	AD9680_XCVR.BASE_ADDRESS = AD9680_JESD204_LINK_MANAGEMENT_BASE;
+	ad9680_xcvr.dev.link_pll.base_address = AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
+	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
+	ad9152_jesd.base_address = AD9152_JESD204_LINK_RECONFIG_BASE;
+	ad9680_jesd.base_address = AD9680_JESD204_LINK_RECONFIG_BASE;
+
+	ad9152_xcvr.dev.channel_pll[0].type = cmu_tx_type;
+	ad9680_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
+	ad9152_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S0_BASE;
+	ad9680_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S1_BASE;
+
+	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
+	ad9152_dma.base_address = AXI_AD9152_DMA_BASE;
+	rx_xfer.start_address =  0x800000;
+	tx_xfer.start_address =  0x900000;;
+#endif
+
+
 	xcvr_getconfig(&ad9152_xcvr);
+
 	ad9152_xcvr.reconfig_bypass = 0;
 	ad9152_xcvr.ref_clock_khz = 616500;
 	ad9152_xcvr.lane_rate_kbps = 12330000;
@@ -197,6 +244,7 @@ int main(void)
 	ad9680_param.lane_rate_kbps = 12330000;
 
 	xcvr_getconfig(&ad9680_xcvr);
+
 	ad9680_xcvr.reconfig_bypass = 0;
 	ad9680_xcvr.ref_clock_khz = 616500;
 	ad9680_xcvr.lane_rate_kbps = 12330000;
@@ -212,53 +260,6 @@ int main(void)
 
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
-
-        // receiver DMA configuration
-
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
-	ad9680_dma.type = DMAC_RX;
-	ad9680_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-
-	// base addresses
-
-#ifdef XILINX
-	ad9152_xcvr.base_address = XPAR_AXI_AD9152_XCVR_BASEADDR;
-	ad9152_core.base_address = XPAR_AXI_AD9152_CORE_BASEADDR;
-	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
-	ad9152_jesd.base_address = XPAR_AXI_AD9152_JESD_TX_AXI_BASEADDR;
-	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
-	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
-#endif
-#ifdef ALTERA
-	ad9152_xcvr.base_address = AD9152_JESD204_LINK_MANAGEMENT_BASE;
-	ad9152_xcvr.dev.link_pll.base_address = AD9152_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9152_xcvr.dev.atx_pll.base_address = AD9152_JESD204_LANE_PLL_RECONFIG_BASE;
-	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
-	AD9680_XCVR.BASE_ADDRESS = AD9680_JESD204_LINK_MANAGEMENT_BASE;
-	ad9680_xcvr.dev.link_pll.base_address = AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
-	ad9152_jesd.base_address = AD9152_JESD204_LINK_RECONFIG_BASE;
-	ad9680_jesd.base_address = AD9680_JESD204_LINK_RECONFIG_BASE;
-
-	ad9152_xcvr.dev.channel_pll[0].type = cmu_tx_type;
-	ad9680_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
-	ad9152_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S0_BASE;
-	ad9680_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S1_BASE;
-
-	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
-	ad9152_dma.base_address = AXI_AD9152_DMA_BASE;
-	rx_xfer.start_address =  0x800000;
-	tx_xfer.start_address =  0x900000;;
-#endif
 
 	// functions (do not modify below)
 
