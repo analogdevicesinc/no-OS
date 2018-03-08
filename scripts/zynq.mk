@@ -86,5 +86,5 @@ clean:
 
 
 .PHONY: capture
-capture: $(ELF_FILE)
+capture:
 	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)

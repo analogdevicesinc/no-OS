@@ -84,6 +84,6 @@ clean:
 	rm -rf hw bsp sw .metadata .Xil xilsw xsct.log SDK.log
 
 .PHONY: capture
-capture: $(ELF_FILE)
+capture:
 	$(XSDB_CMD) $(XSDB_CAPTURE) MICROBLAZE $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)
 
