@@ -3788,11 +3788,11 @@ static int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
 		val_mV = 306;
 
 	if (val_mV < 1888) {
-		val = ((val_mV - 306) * 1000) / 1404; /* Vref = 1V, Step = 2 */
+		val = ((val_mV - 306) * 1000) / 1469; /* Vref = 1V, Step = 2 */
 		tmp = AUXDAC_1_VREF(0);
 	}
 	else {
-		val = ((val_mV - 1761) * 1000) / 1836; /* Vref = 2.5V, Step = 2 */
+		val = ((val_mV - 1761) * 1000) / 1512; /* Vref = 2.5V, Step = 2 */
 		tmp = AUXDAC_1_VREF(3);
 	}
 
