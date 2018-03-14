@@ -2075,7 +2075,7 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 	 * ClkRF in MHz, delay in us
 	 */
 
-	reg = (200 * delay_lna) / 2 + (14000000UL / (clkrf / 500U));
+	reg = (200 + delay_lna) / 2 + (14000000UL / (clkrf / 500U));
 	reg = DIV_ROUND_UP(reg, 1000UL) +
 		phy->pdata->gain_ctrl.agc_attack_delay_extra_margin_us;
 	reg = clamp_t(uint8_t, reg, 0U, 31U);
