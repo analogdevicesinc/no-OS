@@ -40,9 +40,9 @@
 #ifndef _AD9528_H_
 #define _AD9528_H_
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
+/******************************************************************************/
+/****************************** Include Files *********************************/
+/******************************************************************************/
 #include "platform_drivers.h"
 
 /******************************************************************************/
@@ -108,12 +108,12 @@
 
 /* AD9528_PLL1_CHARGE_PUMP_CTRL */
 #define AD9528_PLL1_CHARGE_PUMP_AUTO_TRISTATE_DIS	(1 << 12)
-#define AD9528_PLL1_CHARGE_PUMP_MODE_NORMAL	(3 << 8)
-#define AD9528_PLL1_CHARGE_PUMP_MODE_PUMP_DOWN	(2 << 8)
-#define AD9528_PLL1_CHARGE_PUMP_MODE_PUMP_UP	(1 << 8)
-#define AD9528_PLL1_CHARGE_PUMP_MODE_TRISTATE	(0 << 8)
-#define AD9528_PLL1_CHARGE_PUMP_TRISTATE	(1 << 7)
-#define AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(x)	(((x) / 500) & 0x7F)
+#define AD9528_PLL1_CHARGE_PUMP_MODE_NORMAL		(3 << 8)
+#define AD9528_PLL1_CHARGE_PUMP_MODE_PUMP_DOWN		(2 << 8)
+#define AD9528_PLL1_CHARGE_PUMP_MODE_PUMP_UP		(1 << 8)
+#define AD9528_PLL1_CHARGE_PUMP_MODE_TRISTATE		(0 << 8)
+#define AD9528_PLL1_CHARGE_PUMP_TRISTATE		(1 << 7)
+#define AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(x)		(((x) / 500) & 0x7F)
 
 /* AD9528_PLL1_CTRL */
 #define AD9528_PLL1_OSC_CTRL_FAIL_VCC_BY2_EN	(1 << 18)
@@ -209,44 +209,44 @@
 #define AD9528_SYSREF_RESET			(1 << 0)
 
 /* AD9528_PD_EN */
-#define AD9528_PD_BIAS				(1 << 4)
-#define AD9528_PD_PLL2				(1 << 3)
-#define AD9528_PD_PLL1				(1 << 2)
-#define AD9528_PD_OUT_CLOCKS			(1 << 1)
-#define AD9528_PD_CHIP				(1 << 0)
+#define AD9528_PD_BIAS			(1 << 4)
+#define AD9528_PD_PLL2			(1 << 3)
+#define AD9528_PD_PLL1			(1 << 2)
+#define AD9528_PD_OUT_CLOCKS		(1 << 1)
+#define AD9528_PD_CHIP			(1 << 0)
 
 /* AD9528_CHANNEL_PD_EN */
-#define AD9528_CHANNEL_PD_MASK(x)		(((x) & 0x3FFF) << 0)
-#define AD9528_CHANNEL_PD_MASK_REV(x)		(((x) >> 0) & 0x3FFF)
+#define AD9528_CHANNEL_PD_MASK(x)	(((x) & 0x3FFF) << 0)
+#define AD9528_CHANNEL_PD_MASK_REV(x)	(((x) >> 0) & 0x3FFF)
 
 
 /* AD9528_READBACK */
 #define AD9528_IS_CALIBRATING		(1 << 8)
-#define	AD9528_PLL2_OK				(1 << 7)
-#define	AD9528_PLL1_OK				(1 << 6)
-#define AD9528_VCXO_OK				(1 << 5)
+#define	AD9528_PLL2_OK			(1 << 7)
+#define	AD9528_PLL1_OK			(1 << 6)
+#define AD9528_VCXO_OK			(1 << 5)
 #define AD9528_REFA_REFB_NOK		(1 << 4)
-#define AD9528_REFB_OK				(1 << 3)
-#define AD9528_REFA_OK				(1 << 2)
-#define AD9528_PLL2_LOCKED			(1 << 1)
-#define AD9528_PLL1_LOCKED			(1 << 0)
+#define AD9528_REFB_OK			(1 << 3)
+#define AD9528_REFA_OK			(1 << 2)
+#define AD9528_PLL2_LOCKED		(1 << 1)
+#define AD9528_PLL1_LOCKED		(1 << 0)
 
 
-#define AD9528_NUM_CHAN				14
+#define AD9528_NUM_CHAN			14
 
-#define AD9528_SPI_MAGIC			0x00FF05
+#define AD9528_SPI_MAGIC		0x00FF05
 
 /* Output Driver Mode */
-#define DRIVER_MODE_LVDS		0
+#define DRIVER_MODE_LVDS	0
 #define DRIVER_MODE_LVDS_BOOST	1
-#define DRIVER_MODE_HSTL		2
+#define DRIVER_MODE_HSTL	2
 
 /* Output Signal Source */
-#define SOURCE_VCO				0
-#define SOURCE_VCXO				1
-#define SOURCE_SYSREF_VCO		2
-#define SOURCE_SYSREF_VCXO		3
-#define SOURCE_VCXO_INV			5
+#define SOURCE_VCO		0
+#define SOURCE_VCXO		1
+#define SOURCE_SYSREF_VCO	2
+#define SOURCE_SYSREF_VCXO	3
+#define SOURCE_VCXO_INV		5
 #define SOURCE_SYSREF_VCXO_INV	7
 
 /* Reference Selection Mode */
@@ -254,18 +254,18 @@
 #define REF_MODE_REVERT_TO_REFA	1
 #define REF_MODE_SELECT_REFA	2
 #define REF_MODE_SELECT_REFB	3
-#define REF_MODE_EXT_REF		4
+#define REF_MODE_EXT_REF	4
 
 /* Sysref Source */
-#define SYSREF_SRC_EXTERNAL				0
+#define SYSREF_SRC_EXTERNAL		0
 #define SYSREF_SRC_EXTERNAL_RESAMPLED	1
-#define SYSREF_SRC_INTERNAL				2
+#define SYSREF_SRC_INTERNAL		2
 
 /* Sysref Pattern Mode */
-#define SYSREF_PATTERN_NSHOT			0
-#define SYSREF_PATTERN_CONTINUOUS		1
-#define SYSREF_PATTERN_PRBS				2
-#define SYSREF_PATTERN_STOP				3
+#define SYSREF_PATTERN_NSHOT		0
+#define SYSREF_PATTERN_CONTINUOUS	1
+#define SYSREF_PATTERN_PRBS		2
+#define SYSREF_PATTERN_STOP		3
 
 /* Rpole2 resistor */
 #define RPOLE2_900_OHM	0
@@ -284,8 +284,8 @@
 #define RZERO_1850_OHM	7
 
 /* Cpole1 capacitor */
-#define CPOLE1_0_PF		0
-#define CPOLE1_8_PF		1
+#define CPOLE1_0_PF	0
+#define CPOLE1_8_PF	1
 #define CPOLE1_16_PF	2
 #define CPOLE1_24_PF	3
 #define CPOLE1_32_PF	5
@@ -308,18 +308,17 @@
  * @channel_divider: 10-bit channel divider.
  * @extended_name: Optional descriptive channel name.
  */
-typedef struct
-{
-	unsigned		channel_num;
-	unsigned char			sync_ignore_en;
-				 /* CH0..CH3 VCXO, CH4..CH9 VCO2 */
-	unsigned char			output_dis;
-	unsigned char		driver_mode;
-	unsigned char		signal_source;
-	unsigned char		divider_phase;
-	unsigned short		channel_divider;
-	char			extended_name[16];
-} ad9528_channel_spec;
+struct ad9528_channel_spec {
+	uint8_t	 channel_num;
+	uint8_t	 sync_ignore_en;
+	/* CH0..CH3 VCXO, CH4..CH9 VCO2 */
+	uint8_t	 output_dis;
+	uint8_t	 driver_mode;
+	uint8_t	 signal_source;
+	uint8_t	 divider_phase;
+	uint16_t channel_divider;
+	int8_t   extended_name[16];
+};
 
 /**
  * struct ad9528_platform_data - platform specific information
@@ -357,10 +356,9 @@ typedef struct
  * @num_channels: Array size of struct ad9528_channel_spec.
  * @channels: Pointer to channel array.
  */
-typedef struct
-{
-	uint32_t	vcxo_freq;
-	uint8_t	spi3wire;
+struct ad9528_platform_data {
+	uint32_t vcxo_freq;
+	uint8_t	 spi3wire;
 
 	/* REFA / REFB input configuration */
 	uint8_t	refa_en;
@@ -380,26 +378,26 @@ typedef struct
 	uint8_t	osc_in_cmos_neg_inp_en;
 
 	/* PLL1 Setting */
-	uint16_t	refa_r_div;
-	uint16_t	refb_r_div;
-	uint16_t	pll1_feedback_div;
-	uint8_t	pll1_feedback_src_vcxo;
-	uint16_t	pll1_charge_pump_current_nA;
-	uint8_t	pll1_bypass_en;
+	uint16_t refa_r_div;
+	uint16_t refb_r_div;
+	uint16_t pll1_feedback_div;
+	uint8_t	 pll1_feedback_src_vcxo;
+	uint16_t pll1_charge_pump_current_n_a;
+	uint8_t	 pll1_bypass_en;
 
 	/* Reference */
-	uint8_t	ref_mode;
-	uint8_t	sysref_src;
-	uint16_t	sysref_k_div;
+	uint8_t	 ref_mode;
+	uint8_t	 sysref_src;
+	uint16_t sysref_k_div;
 
 	/* PLL2 Setting */
-	unsigned int	pll2_charge_pump_current_nA;
-	uint8_t	pll2_ndiv_a_cnt;
-	uint8_t	pll2_ndiv_b_cnt;
-	uint8_t	pll2_freq_doubler_en;
-	uint8_t	pll2_r1_div;
-	uint8_t	pll2_n2_div;
-	uint8_t	pll2_vco_diff_m1; /* 3..5 */
+	uint32_t pll2_charge_pump_current_n_a;
+	uint8_t	 pll2_ndiv_a_cnt;
+	uint8_t	 pll2_ndiv_b_cnt;
+	uint8_t	 pll2_freq_doubler_en;
+	uint8_t	 pll2_r1_div;
+	uint8_t	 pll2_n2_div;
+	uint8_t	 pll2_vco_diff_m1; /* 3..5 */
 
 	/* Loop Filter PLL2 */
 	uint8_t	rpole2;
@@ -408,9 +406,9 @@ typedef struct
 	uint8_t	rzero_bypass_en;
 
 	/* Output Channel Configuration */
-	int							num_channels;
-	ad9528_channel_spec	*channels;
-} ad9528_platform_data;
+	int32_t		    num_channels;
+	ad9528_channel_spec *channels;
+};
 
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
@@ -418,9 +416,14 @@ typedef struct
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9528_init(ad9528_platform_data *pdata);
-int32_t ad9528_setup(spi_device *dev, ad9528_platform_data *pdata);
-int32_t ad9528_spi_read(spi_device *dev, uint32_t reg_addr, uint32_t *reg_data);
-int32_t ad9528_spi_write(spi_device *dev, uint32_t reg_addr, uint32_t reg_data);
+int32_t ad9528_init(struct ad9528_platform_data *pdata);
+int32_t ad9528_setup(spi_device *dev,
+		     struct ad9528_platform_data *pdata);
+int32_t ad9528_spi_read(spi_device *dev,
+			uint32_t reg_addr,
+			uint32_t *reg_data);
+int32_t ad9528_spi_write(spi_device *dev,
+			 uint32_t reg_addr,
+			 uint32_t reg_data);
 
 #endif // __AD9528_H__
