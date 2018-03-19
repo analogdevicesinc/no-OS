@@ -80,6 +80,8 @@ int main(void)
 	jesd_core ad9152_jesd;
 	dac_channel ad9152_channels[2];
 	dac_core ad9152_core;
+	dmac_core ad9152_dma;
+	dmac_xfer tx_xfer;
 	xcvr_core ad9680_xcvr;
 	jesd_core ad9680_jesd;
 	adc_core ad9680_core;
@@ -178,7 +180,7 @@ int main(void)
 	ad9152_xcvr.dev.link_pll.base_address = AD9152_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9152_xcvr.dev.atx_pll.base_address = AD9152_JESD204_LANE_PLL_RECONFIG_BASE;
 	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
-	AD9680_XCVR.BASE_ADDRESS = AD9680_JESD204_LINK_MANAGEMENT_BASE;
+	ad9680_xcvr.base_address = AD9680_JESD204_LINK_MANAGEMENT_BASE;
 	ad9680_xcvr.dev.link_pll.base_address = AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
 	ad9152_jesd.base_address = AD9152_JESD204_LINK_RECONFIG_BASE;
@@ -191,8 +193,9 @@ int main(void)
 
 	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
 	ad9152_dma.base_address = AXI_AD9152_DMA_BASE;
+
 	rx_xfer.start_address =  0x800000;
-	tx_xfer.start_address =  0x900000;;
+	tx_xfer.start_address =  0x900000;
 #endif
 
 
