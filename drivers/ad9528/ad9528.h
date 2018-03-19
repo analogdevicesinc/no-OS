@@ -35,15 +35,9 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
 *******************************************************************************/
 #ifndef _AD9528_H_
 #define _AD9528_H_
-
-/******************************************************************************/
-/****************************** Include Files *********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
 
 /******************************************************************************/
 /****************************** AD9528 ****************************************/
@@ -406,24 +400,77 @@ struct ad9528_platform_data {
 	uint8_t	rzero_bypass_en;
 
 	/* Output Channel Configuration */
-	int32_t		    num_channels;
-	ad9528_channel_spec *channels;
+	uint32_t			   num_channels;
+	struct ad9528_channel_spec *channels;
 };
 
+enum {
+	AD9528_STAT_PLL1_LD,
+	AD9528_STAT_PLL2_LD,
+	AD9528_STAT_REFA,
+	AD9528_STAT_REFB,
+	AD9528_STAT_REFAB_MISSING,
+	AD9528_STAT_VCXO,
+	AD9528_STAT_PLL1_FB_CLK,
+	AD9528_STAT_PLL2_FB_CLK,
+	AD9528_SYNC,
+};
+
+enum {
+	AD9528_VCO,
+	AD9528_VCXO,
+	AD9528_NUM_CLK_SRC,
+};
+
+struct ad9528_state {
+	uint32_t vco_out_freq[AD9528_NUM_CLK_SRC];
+};
+
+struct ad9528_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+	/* Device Settings */
+	struct ad9528_state ad9528_st;
+	struct ad9528_platform_data *pdata;
+};
+
+struct ad9528_init_param {
+	/* SPI */
+	spi_init_param spi_init;
+	/* Device Settings */
+	struct ad9528_platform_data *pdata;
+};
+
+/* Helpers to avoid excess line breaks */
+#define AD_IFE(_pde, _a, _b) ((dev->pdata->_pde) ? _a : _b)
+#define AD_IF(_pde, _a) AD_IFE(_pde, _a, 0)
 #define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t ad9528_init(struct ad9528_platform_data *pdata);
-int32_t ad9528_setup(spi_device *dev,
-		     struct ad9528_platform_data *pdata);
-int32_t ad9528_spi_read(spi_device *dev,
+int32_t ad9528_init(struct ad9528_init_param *init_param);
+int32_t ad9528_setup(struct ad9528_dev **device,
+		     struct ad9528_init_param init_param);
+int32_t ad9528_spi_read(struct ad9528_dev *dev,
 			uint32_t reg_addr,
 			uint32_t *reg_data);
-int32_t ad9528_spi_write(spi_device *dev,
+int32_t ad9528_spi_write(struct ad9528_dev *dev,
 			 uint32_t reg_addr,
 			 uint32_t reg_data);
+int32_t ad9528_spi_read_n(struct ad9528_dev *dev,
+			  uint32_t reg_addr,
+			  uint32_t *reg_data);
+int32_t ad9528_spi_write_n(struct ad9528_dev *dev,
+			   uint32_t reg_addr,
+			   uint32_t reg_data);
+int32_t ad9528_poll(struct ad9528_dev *dev,
+		    uint32_t reg_addr,
+		    uint32_t mask,
+		    uint32_t data);
+int32_t ad9528_io_update(struct ad9528_dev *dev);
+int32_t ad9528_sync(struct ad9528_dev *dev);
+int32_t ad9528_remove(struct ad9528_dev *dev);
 
 #endif // __AD9528_H__
