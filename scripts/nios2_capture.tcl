@@ -109,7 +109,7 @@ for {set index 1} {$index < $num_sample_per_32bit_mm} {incr index 1} {
 		set sample [expr {$data & 0xFFFFFF}]
 		if { $num_of_channels == 1 } {
 			puts $f($ch_x_index) $sample
-		} else
+		} else {
 			for {set n 1} {$n < $num_of_channels } {incr n 1} {
 				if {$ch_x_index < $num_of_channels} {
 					set ch_x_index [expr $ch_x_index + 1]
