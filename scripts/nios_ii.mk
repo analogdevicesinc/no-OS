@@ -18,8 +18,8 @@ ifeq ($(CAPTURE_SIZE),)
   CAPTURE_SIZE := 32768
 endif
 
-ifeq ($(NR_CH),)
-  NR_CH := 1
+ifeq ($(NR_OF_CHAN),)
+  NR_OF_CHAN := 1
 endif
 
 ifeq ($(BITS_PER_SAMPLE),)
@@ -101,4 +101,4 @@ run: sw/$(ELF_FILE)
 
 .PHONY: capture
 capture: sw/$(ELF_FILE)
-	system-console --script=$(CAPTURE_SCRIPT) $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_CH) $(BITS_PER_SAMPLE)
+	system-console --script=$(CAPTURE_SCRIPT) $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)
