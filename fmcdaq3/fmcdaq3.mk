@@ -24,7 +24,7 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9152
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9528
 M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
+M_INC_DIRS += $(NOOS-DIR)/fmcdaq3
 
 M_HDR_FILES := $(NOOS-DIR)/fmcdaq3/config.h
-
 M_SRC_FILES := $(NOOS-DIR)/fmcdaq3/fmcdaq3.c
