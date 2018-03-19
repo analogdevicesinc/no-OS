@@ -96,7 +96,7 @@ clean-all:
 .PHONY: run
 run: sw/$(ELF_FILE)
 	nios2-configure-sof hw/system_top.sof
-	nios2-download -r sw/sw.elf
+	nios2-download -r sw/sw.elf -g
 	nios2-terminal -o 40
 
 .PHONY: capture
