@@ -40,11 +40,6 @@
 #define AD9625_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9625_REG_CHIP_PORT_CONF				0x000
@@ -80,21 +75,30 @@
 /******************************************************************************/
 
 struct ad9625_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
 	/* Device Settings */
 	uint32_t	lane_rate_kbps;
 	uint32_t	test_samples[4];
 };
 
+struct ad9625_dev {
+	/* SPI */
+	spi_desc		*spi_desc;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9625_spi_read(spi_device *dev,
+int32_t ad9625_spi_read(struct ad9625_dev *dev,
 			uint16_t reg_addr,
 			uint8_t *reg_data);
-int32_t ad9625_spi_write(spi_device *dev,
+int32_t ad9625_spi_write(struct ad9625_dev *dev,
 			 uint16_t reg_addr,
 			 uint8_t reg_data);
-int32_t ad9625_setup(spi_device *dev);
-int32_t ad9625_test(spi_device *dev, uint32_t test_mode);
+int32_t ad9625_setup(struct ad9625_dev **device,
+		     struct ad9625_init_param init_param);
+int32_t ad9625_remove(struct ad9625_dev *dev);
+int32_t ad9625_test(struct ad9625_dev *dev, uint32_t test_mode);
 
 #endif
