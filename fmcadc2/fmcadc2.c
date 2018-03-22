@@ -138,7 +138,10 @@ int main(void)
 	ad9625_test(ad9625_device, AD9625_TEST_RAMP);
 	// test the captured data
 	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_core, 1, rx_xfer.no_of_samples/ad9625_core.no_of_channels, rx_xfer.start_address);
+		adc_ramp_test(ad9625_core,
+					  1,
+					  rx_xfer.no_of_samples / ad9625_core.no_of_channels,
+					  rx_xfer.start_address);
 	};
 
 	// capture data with DMA
