@@ -51,13 +51,14 @@
 
 int main(void)
 {
-	spi_device		ad9625_spi_device;
+	struct ad9625_dev		*ad9625_device;
 	adc_core		ad9625_core;
-	ad9625_init_param	ad9625_param;
+	struct ad9625_init_param	ad9625_param;
 	jesd_core		ad9625_jesd;
 	xcvr_core		ad9625_xcvr;
 	dmac_core               ad9625_dma;
 	dmac_xfer               rx_xfer;
+	spi_init_param ad9526_spi_param;
 
 	// base addresses
 
@@ -76,8 +77,12 @@ int main(void)
 
 	// SPI configuration
 
-	ad_spi_init(&ad9625_spi_device);
-	ad9625_spi_device.chip_select = 0x6;
+	ad9526_spi_param.chip_select = 0x6;
+	ad9526_spi_param.cpha = 0;
+	ad9526_spi_param.cpol = 0;
+	ad9526_spi_param.type = ZYNQ_PS7_SPI;
+
+	ad9625_param.spi_init = ad9526_spi_param;
 
 	// ADC and receive path configuration
 
@@ -110,7 +115,7 @@ int main(void)
 	ad_platform_init();
 
 	// set up the device
-	ad9625_setup(&ad9625_spi_device);
+	ad9625_setup(&ad9625_device, ad9625_param);
 	// set up the JESD core
 	jesd_setup(ad9625_jesd);
 	// set up the XCVRs
@@ -124,20 +129,20 @@ int main(void)
 	adc_setup(ad9625_core);
 
 	// PRBS test
-	ad9625_test(&ad9625_spi_device, AD9625_TEST_PNLONG);
+	ad9625_test(ad9625_device, AD9625_TEST_PNLONG);
 	if(adc_pn_mon(ad9625_core, ADC_PN23) == -1) {
 		ad_printf("%s PN23 sequence mismatch at ad9625!\n", __func__);
 	};
 
 	// set up ramp output
-	ad9625_test(&ad9625_spi_device, AD9625_TEST_RAMP);
+	ad9625_test(ad9625_device, AD9625_TEST_RAMP);
 	// test the captured data
 	if(!dmac_start_transaction(ad9625_dma)) {
 		adc_ramp_test(ad9625_core, 1, rx_xfer.no_of_samples/ad9625_core.no_of_channels, rx_xfer.start_address);
 	};
 
 	// capture data with DMA
-	ad9625_test(&ad9625_spi_device, AD9625_TEST_OFF);
+	ad9625_test(ad9625_device, AD9625_TEST_OFF);
 	if(!dmac_start_transaction(ad9625_dma)) {
 		ad_printf("%s RX capture done!\n", __func__);
 	};
