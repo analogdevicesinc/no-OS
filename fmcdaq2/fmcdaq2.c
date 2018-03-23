@@ -2,7 +2,7 @@
  *   @file   ad_fmcdaq2_ebz.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
- ********************************************************************************
+ *******************************************************************************
  * Copyright 2014-2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -35,7 +35,7 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+ ******************************************************************************/
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -82,10 +82,12 @@ enum ad9523_channels {
 
 /***************************************************************************//**
  * @brief main
- *******************************************************************************/
-int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad9144_xcvr,
-		     struct ad9680_init_param *p_ad9680_param, xcvr_core *p_ad9680_xcvr,
-		     struct ad9523_platform_data *p_ad9523_param)
+ ******************************************************************************/
+int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
+					 xcvr_core *p_ad9144_xcvr,
+					 struct ad9680_init_param *p_ad9680_param,
+			 	 	 xcvr_core *p_ad9680_xcvr,
+					 struct ad9523_platform_data *p_ad9523_param)
 {
 
 	uint8_t mode = 0;
@@ -103,14 +105,22 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad91
 		case '4':
 			printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
 			p_ad9523_param->pll2_vco_diff_m1 = 5;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->channel_divider = 128;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 1;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->channel_divider = 128;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+					channel_divider = 1;
+			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+					channel_divider = 128;
+			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+					channel_divider = 128;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+					channel_divider = 1;
+			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+					channel_divider = 128;
+			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+					channel_divider = 128;
 			p_ad9144_xcvr->reconfig_bypass = 0;
 			p_ad9144_param->lane_rate_kbps = 6000000;
 			p_ad9144_xcvr->lane_rate_kbps = 6000000;
@@ -132,14 +142,22 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad91
 		case '3':
 			printf ("3 - ADC  500 MSPS; DAC  500 MSPS\n");
 			p_ad9523_param->pll2_vco_diff_m1 = 3;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 4;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->channel_divider = 256;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->channel_divider = 256;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+					channel_divider = 4;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+					channel_divider = 256;
+			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+					channel_divider = 256;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+					channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+					channel_divider = 256;
+			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+					channel_divider = 256;
 			p_ad9144_xcvr->reconfig_bypass = 0;
 			p_ad9144_param->lane_rate_kbps = 5000000;
 			p_ad9144_xcvr->lane_rate_kbps = 5000000;
@@ -161,14 +179,22 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad91
 		case '2':
 			printf ("2 - ADC  500 MSPS; DAC 1000 MSPS\n");
 			p_ad9523_param->pll2_vco_diff_m1 = 3;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->channel_divider = 1;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->channel_divider = 128;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->channel_divider = 4;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->channel_divider = 256;
+			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+					channel_divider = 1;
+			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+					channel_divider = 128;
+			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+					channel_divider = 128;
+			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+					channel_divider = 4;
+			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+					channel_divider = 2;
+			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+					channel_divider = 256;
+			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+					channel_divider = 256;
 			p_ad9144_xcvr->reconfig_bypass = 0;
 			p_ad9144_param->lane_rate_kbps = 10000000;
 			p_ad9144_xcvr->lane_rate_kbps = 10000000;
@@ -199,7 +225,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param, xcvr_core *p_ad91
 
 /***************************************************************************//**
  * @brief main
- *******************************************************************************/
+ ******************************************************************************/
 int main(void)
 {
 	//spi_desc		*ad9523_spi_device;
@@ -249,9 +275,9 @@ int main(void)
 	dmac_xfer               rx_xfer;
 	dmac_xfer               tx_xfer;
 
-	//********************************************************************************
-	// setup the base addresses
-	//********************************************************************************
+//******************************************************************************
+// setup the base addresses
+//******************************************************************************
 
 #ifdef XILINX
 	ad9144_xcvr.base_address = XPAR_AXI_AD9144_XCVR_BASEADDR;
@@ -275,15 +301,24 @@ int main(void)
 #endif
 
 #ifdef ALTERA
-	ad9144_xcvr.base_address = AD9144_JESD204_LINK_MANAGEMENT_BASE;
-	ad9144_xcvr.dev.link_pll.base_address = AD9144_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9144_xcvr.dev.atx_pll.base_address = AD9144_JESD204_LANE_PLL_RECONFIG_BASE;
-	ad9144_core.base_address = AXI_AD9144_CORE_BASE;
-	ad9680_xcvr.base_address = AD9680_JESD204_LINK_MANAGEMENT_BASE;
-	ad9680_xcvr.dev.link_pll.base_address = AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
-	ad9144_jesd.base_address = AD9144_JESD204_LINK_RECONFIG_BASE;
-	ad9680_jesd.base_address = AD9680_JESD204_LINK_RECONFIG_BASE;
+	ad9144_xcvr.base_address =
+			AD9144_JESD204_LINK_MANAGEMENT_BASE;
+	ad9144_xcvr.dev.link_pll.base_address =
+			AD9144_JESD204_LINK_PLL_RECONFIG_BASE;
+	ad9144_xcvr.dev.atx_pll.base_address =
+			AD9144_JESD204_LANE_PLL_RECONFIG_BASE;
+	ad9144_core.base_address =
+			AXI_AD9144_CORE_BASE;
+	ad9680_xcvr.base_address =
+			AD9680_JESD204_LINK_MANAGEMENT_BASE;
+	ad9680_xcvr.dev.link_pll.base_address =
+			AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
+	ad9680_core.base_address =
+			AXI_AD9680_CORE_BASE;
+	ad9144_jesd.base_address =
+			AD9144_JESD204_LINK_RECONFIG_BASE;
+	ad9680_jesd.base_address =
+			AD9680_JESD204_LINK_RECONFIG_BASE;
 
 	ad9144_xcvr.dev.channel_pll[0].type = cmu_tx_type;
 	ad9680_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
@@ -297,9 +332,9 @@ int main(void)
 
 #endif
 
-	//********************************************************************************
-	// clock distribution device (AD9523) configuration
-	//********************************************************************************
+//******************************************************************************
+// clock distribution device (AD9523) configuration
+//******************************************************************************
 
 	ad9523_pdata.num_channels = 8;
 	ad9523_pdata.channels = &ad9523_channels[0];
@@ -347,10 +382,10 @@ int main(void)
 	ad9144_xcvr.ref_clock_khz = 500000;
 	ad9680_xcvr.ref_clock_khz = 500000;
 
-	//********************************************************************************
-	// DAC (AD9144) and the transmit path (AXI_ADXCVR,
-	//	JESD204, AXI_AD9144, TX DMAC) configuration
-	//********************************************************************************
+//******************************************************************************
+// DAC (AD9144) and the transmit path (AXI_ADXCVR,
+//	JESD204, AXI_AD9144, TX DMAC) configuration
+//******************************************************************************
 
 	xcvr_getconfig(&ad9144_xcvr);
 	ad9144_xcvr.reconfig_bypass = 1;
@@ -385,19 +420,27 @@ int main(void)
 	ad9144_core.resolution = 16;
 	ad9144_core.channels = &ad9144_channels[0];
 
-	ad9144_param.stpl_samples[0][0] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[0][1] = (ad9144_channels[0].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[0][2] = (ad9144_channels[0].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[0][3] = (ad9144_channels[0].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[1][0] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[1][1] = (ad9144_channels[1].pat_data>>16) & 0xffff;
-	ad9144_param.stpl_samples[1][2] = (ad9144_channels[1].pat_data>> 0) & 0xffff;
-	ad9144_param.stpl_samples[1][3] = (ad9144_channels[1].pat_data>>16) & 0xffff;
+	ad9144_param.stpl_samples[0][0] =
+			(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+	ad9144_param.stpl_samples[0][1] =
+			(ad9144_channels[0].pat_data >> 16) & 0xffff;
+	ad9144_param.stpl_samples[0][2] =
+			(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+	ad9144_param.stpl_samples[0][3] =
+			(ad9144_channels[0].pat_data >> 16) & 0xffff;
+	ad9144_param.stpl_samples[1][0] =
+			(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+	ad9144_param.stpl_samples[1][1] =
+			(ad9144_channels[1].pat_data >> 16) & 0xffff;
+	ad9144_param.stpl_samples[1][2] =
+			(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+	ad9144_param.stpl_samples[1][3] =
+			(ad9144_channels[1].pat_data >> 16) & 0xffff;
 
-	//********************************************************************************
-	// ADC (AD9680) and the receive path ( AXI_ADXCVR,
-	//	JESD204, AXI_AD9680, TX DMAC) configuration
-	//********************************************************************************
+//******************************************************************************
+// ADC (AD9680) and the receive path ( AXI_ADXCVR,
+//	JESD204, AXI_AD9680, TX DMAC) configuration
+//******************************************************************************
 
 	ad9680_param.lane_rate_kbps = 10000000;
 
@@ -417,9 +460,9 @@ int main(void)
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
 
-	//********************************************************************************
-	// configure the receiver DMA
-	//********************************************************************************
+//******************************************************************************
+// configure the receiver DMA
+//******************************************************************************
 
 	ad9680_dma.type = DMAC_RX;
 	ad9680_dma.transfer = &rx_xfer;
@@ -433,11 +476,15 @@ int main(void)
 	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
 
 	// change the default JESD configurations, if required
-	fmcdaq2_reconfig(&ad9144_param, &ad9144_xcvr, &ad9680_param, &ad9680_xcvr, ad9523_param.pdata);
+	fmcdaq2_reconfig(&ad9144_param,
+					 &ad9144_xcvr,
+					 &ad9680_param,
+					 &ad9680_xcvr,
+					 ad9523_param.pdata);
 
-	//********************************************************************************
-	// bring up the system
-	//********************************************************************************
+//******************************************************************************
+// bring up the system
+//******************************************************************************
 
 	// setup GPIOs
 
@@ -500,9 +547,9 @@ int main(void)
 
 	ad9144_status(ad9144_device);
 
-	//********************************************************************************
-	// transport path testing
-	//********************************************************************************
+//******************************************************************************
+// transport path testing
+//******************************************************************************
 
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
@@ -525,9 +572,9 @@ int main(void)
 	ad9144_param.prbs_type = AD9144_PRBS15;
 	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
 
-	//********************************************************************************
-	// receive path testing
-	//********************************************************************************
+//******************************************************************************
+// receive path testing
+//******************************************************************************
 
 	ad9680_test(ad9680_device, AD9680_TEST_PN9);
 	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
@@ -555,9 +602,9 @@ int main(void)
 
 	printf("daq2: setup and configuration is done\n");
 #endif
-	//********************************************************************************
-	// external loopback - capture data with DMA
-	//********************************************************************************
+//******************************************************************************
+// external loopback - capture data with DMA
+//******************************************************************************
 
 	ad9680_test(ad9680_device, AD9680_TEST_OFF);
 	if(!dmac_start_transaction(ad9680_dma)){
