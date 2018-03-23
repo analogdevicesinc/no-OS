@@ -76,6 +76,7 @@ int main(void)
 	struct ad9528_init_param ad9528_param;
 	struct ad9152_init_param ad9152_param;
 	struct ad9680_init_param ad9680_param;
+	struct ad9528_platform_data ad9528_pdata;
 	spi_init_param ad9528_spi_param;
 	spi_init_param ad9152_spi_param;
 	spi_init_param ad9680_spi_param;
@@ -142,6 +143,8 @@ int main(void)
 	ad9152_param.spi_init = ad9152_spi_param;
 	ad9680_param.spi_init = ad9680_spi_param;
 	// ad9528 defaults
+
+	ad9528_param.pdata = &ad9528_pdata;
 
 	ad9528_param.pdata->num_channels = 8;
 	ad9528_param.pdata->channels = &ad9528_channels[0];
