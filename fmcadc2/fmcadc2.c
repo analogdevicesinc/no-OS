@@ -112,8 +112,6 @@ int main(void)
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 32768;
 
-	ad_platform_init();
-
 	// set up the device
 	ad9625_setup(&ad9625_device, ad9625_param);
 	// set up the JESD core
@@ -151,8 +149,6 @@ int main(void)
 	};
 
 	ad9625_remove(ad9625_device);
-
-	ad_platform_close();
 
 	return(0);
 }
