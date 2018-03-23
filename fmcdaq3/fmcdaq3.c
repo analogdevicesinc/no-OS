@@ -355,6 +355,12 @@ int main(void)
 		ad_printf("daq3: RX capture done.\n");
         };
 
+	ad9528_remove(ad9528_device);
+	ad9152_remove(ad9152_device);
+	ad9680_remove(ad9680_device);
+	gpio_remove(dac_txen);
+	gpio_remove(adc_pd);
+
 	ad_platform_close();
 
 	return(0);
