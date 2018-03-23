@@ -228,10 +228,6 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
  ******************************************************************************/
 int main(void)
 {
-	//spi_desc		*ad9523_spi_device;
-	//spi_desc		*ad9144_spi_device;
-	//spi_desc		*ad9680_spi_device;
-
 	spi_init_param	ad9523_spi_param;
 	spi_init_param	ad9144_spi_param;
 	spi_init_param	ad9680_spi_param;
