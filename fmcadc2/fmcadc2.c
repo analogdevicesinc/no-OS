@@ -150,6 +150,8 @@ int main(void)
 		ad_printf("%s RX capture done!\n", __func__);
 	};
 
+	ad9625_remove(ad9625_device);
+
 	ad_platform_close();
 
 	return(0);
