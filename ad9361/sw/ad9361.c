@@ -3264,7 +3264,9 @@ static int32_t ad9361_txmon_setup(struct ad9361_rf_phy *phy,
 			 (ctrl->one_shot_mode_en ? ONE_SHOT_MODE : 0) |
 			 TX_MON_DURATION(ilog2(ctrl->tx_mon_duration / 16)));
 
-	ad9361_spi_write(spi, REG_TX_MON_DELAY, ctrl->tx_mon_delay);
+	ad9361_spi_write(spi, REG_TX_MON_DELAY, ctrl->tx_mon_delay & 0xFF);
+	ad9361_spi_writef(spi, REG_TX_LEVEL_THRESH,
+			TX_MON_DELAY_COUNTER(~0), ctrl->tx_mon_delay >> 8);
 
 	ad9361_spi_write(spi, REG_TX_MON_1_CONFIG,
 			 TX_MON_1_LO_CM(ctrl->tx1_mon_lo_cm) |
