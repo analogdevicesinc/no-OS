@@ -60,57 +60,57 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum {
+typedef enum i2c_type {
 	GENERIC_I2C
 } i2c_type;
 
-typedef struct {
-	i2c_type	type;
+typedef struct i2c_init_param {
+	enum i2c_type	type;
 	uint32_t	id;
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
 } i2c_init_param;
 
-typedef struct {
-	i2c_type	type;
+typedef struct i2c_desc {
+	enum i2c_type	type;
 	uint32_t	id;
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
 } i2c_desc;
 
-typedef enum {
+typedef enum spi_type {
 	GENERIC_SPI
 } spi_type;
 
-typedef enum {
+typedef enum spi_mode {
 	SPI_MODE_0 = (0 | 0),
 	SPI_MODE_1 = (0 | SPI_CPHA),
 	SPI_MODE_2 = (SPI_CPOL | 0),
 	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
 } spi_mode;
 
-typedef struct {
-	spi_type	type;
+typedef struct spi_init_param {
+	enum spi_type	type;
 	uint32_t	id;
 	uint32_t	max_speed_hz;
-	spi_mode	mode;
+	enum spi_mode	mode;
 	uint8_t		chip_select;
 } spi_init_param;
 
-typedef struct {
-	spi_type	type;
+typedef struct spi_desc {
+	enum spi_type	type;
 	uint32_t	id;
 	uint32_t	max_speed_hz;
-	spi_mode	mode;
+	enum spi_mode	mode;
 	uint8_t		chip_select;
 } spi_desc;
 
-typedef enum {
+typedef enum gpio_type {
 	GENERIC_GPIO
 } gpio_type;
 
-typedef struct {
-	gpio_type	type;
+typedef struct gpio_desc {
+	enum gpio_type	type;
 	uint32_t	id;
 	uint8_t		number;
 } gpio_desc;
@@ -120,60 +120,60 @@ typedef struct {
 /******************************************************************************/
 
 /* Initialize the I2C communication peripheral. */
-int32_t i2c_init(i2c_desc **desc,
-		 i2c_init_param param);
+int32_t i2c_init(struct i2c_desc **desc,
+		 struct i2c_init_param param);
 
 /* Free the resources allocated by i2c_init(). */
-int32_t i2c_remove(i2c_desc *desc);
+int32_t i2c_remove(struct i2c_desc *desc);
 
 /* Write data to a slave device. */
-int32_t i2c_write(i2c_desc *desc,
+int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit);
 
 /* Read data from a slave device. */
-int32_t i2c_read(i2c_desc *desc,
+int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit);
 
 /* Initialize the SPI communication peripheral. */
-int32_t spi_init(spi_desc **desc,
-		 spi_init_param param);
+int32_t spi_init(struct spi_desc **desc,
+		 struct spi_init_param param);
 
 /* Free the resources allocated by spi_init() */
-int32_t spi_remove(spi_desc *desc);
+int32_t spi_remove(struct spi_desc *desc);
 
 /* Write and read data to/from SPI. */
-int32_t spi_write_and_read(spi_desc *desc,
+int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number);
 
 /* Obtain the GPIO decriptor. */
-int32_t gpio_get(gpio_desc **desc,
+int32_t gpio_get(struct gpio_desc **desc,
 		 uint8_t gpio_number);
 
 /* Free the resources allocated by gpio_get() */
-int32_t gpio_remove(gpio_desc *desc);
+int32_t gpio_remove(struct gpio_desc *desc);
 
 /* Enable the input direction of the specified GPIO. */
-int32_t gpio_direction_input(gpio_desc *desc);
+int32_t gpio_direction_input(struct gpio_desc *desc);
 
 /* Enable the output direction of the specified GPIO. */
-int32_t gpio_direction_output(gpio_desc *desc,
+int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value);
 
 /* Get the direction of the specified GPIO. */
-int32_t gpio_get_direction(gpio_desc *desc,
+int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction);
 
 /* Set the value of the specified GPIO. */
-int32_t gpio_set_value(gpio_desc *desc,
+int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value);
 
 /* Get the value of the specified GPIO. */
-int32_t gpio_get_value(gpio_desc *desc,
+int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value);
 
 /* Generate miliseconds delay. */

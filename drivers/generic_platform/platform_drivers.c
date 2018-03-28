@@ -53,8 +53,8 @@
  * @param init_param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_init(i2c_desc **desc,
-		 i2c_init_param param)
+int32_t i2c_init(struct i2c_desc **desc,
+		 struct i2c_init_param param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -72,7 +72,7 @@ int32_t i2c_init(i2c_desc **desc,
  * @param desc - The I2C descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_remove(i2c_desc *desc)
+int32_t i2c_remove(struct i2c_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -91,7 +91,7 @@ int32_t i2c_remove(i2c_desc *desc)
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_write(i2c_desc *desc,
+int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit)
@@ -125,7 +125,7 @@ int32_t i2c_write(i2c_desc *desc,
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_read(i2c_desc *desc,
+int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit)
@@ -155,8 +155,8 @@ int32_t i2c_read(i2c_desc *desc,
  * @param init_param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(spi_desc **desc,
-		 spi_init_param param)
+int32_t spi_init(struct spi_desc **desc,
+		 struct spi_init_param param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -174,7 +174,7 @@ int32_t spi_init(spi_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_remove(spi_desc *desc)
+int32_t spi_remove(struct spi_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -190,7 +190,7 @@ int32_t spi_remove(spi_desc *desc)
  * @param bytes_number - Number of bytes to write/read.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_write_and_read(spi_desc *desc,
+int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number)
 {
@@ -215,7 +215,7 @@ int32_t spi_write_and_read(spi_desc *desc,
  * @param gpio_number - The number of the GPIO.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get(gpio_desc **desc,
+int32_t gpio_get(struct gpio_desc **desc,
 		 uint8_t gpio_number)
 {
 	if (desc) {
@@ -234,7 +234,7 @@ int32_t gpio_get(gpio_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_remove(gpio_desc *desc)
+int32_t gpio_remove(struct gpio_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -248,7 +248,7 @@ int32_t gpio_remove(gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_input(gpio_desc *desc)
+int32_t gpio_direction_input(struct gpio_desc *desc)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -265,7 +265,7 @@ int32_t gpio_direction_input(gpio_desc *desc)
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_output(gpio_desc *desc,
+int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
 	if (desc) {
@@ -287,7 +287,7 @@ int32_t gpio_direction_output(gpio_desc *desc,
  *                             GPIO_IN
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_direction(gpio_desc *desc,
+int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction)
 {
 	if (desc) {
@@ -309,7 +309,7 @@ int32_t gpio_get_direction(gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_set_value(gpio_desc *desc,
+int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
 	if (desc) {
@@ -331,7 +331,7 @@ int32_t gpio_set_value(gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_value(gpio_desc *desc,
+int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
 	if (desc) {
