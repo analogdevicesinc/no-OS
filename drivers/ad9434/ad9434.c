@@ -40,6 +40,11 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "platform_drivers.h"
+#include "adc_core.h"
 #include "ad9434.h"
 
 #define DCO_DEBUG
@@ -47,18 +52,19 @@
 /***************************************************************************//**
 * @brief ad9434_spi_read
 *******************************************************************************/
-int32_t ad9434_spi_read(spi_device *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data)
+int32_t ad9434_spi_read(struct ad9434_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = 0x80 | (reg_addr >> 8);
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = 0x00;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
 	*reg_data = buf[2];
 
 	return ret;
@@ -67,18 +73,19 @@ int32_t ad9434_spi_read(spi_device *dev,
 /***************************************************************************//**
 * @brief ad9434_spi_write
 *******************************************************************************/
-int32_t ad9434_spi_write(spi_device *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+int32_t ad9434_spi_write(struct ad9434_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data)
 {
 	uint8_t buf[3];
+
 	int32_t ret;
 
 	buf[0] = reg_addr >> 8;
 	buf[1] = reg_addr & 0xFF;
 	buf[2] = reg_data;
 
-	ret = ad_spi_xfer(dev, buf, 3);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
@@ -86,8 +93,8 @@ int32_t ad9434_spi_write(spi_device *dev,
 /***************************************************************************//**
 * @brief ad9434_setup
 *******************************************************************************/
-int32_t ad9434_outputmode_set(spi_device *dev,
-							  uint8_t mode)
+int32_t ad9434_outputmode_set(struct ad9434_dev *dev,
+			      uint8_t mode)
 {
 	int32_t ret;
 
@@ -104,8 +111,8 @@ int32_t ad9434_outputmode_set(spi_device *dev,
 /***************************************************************************//**
 * @brief ad9434_testmode_set
 *******************************************************************************/
-int32_t ad9434_testmode_set(spi_device *dev,
-							uint8_t mode)
+int32_t ad9434_testmode_set(struct ad9434_dev *dev,
+			    uint8_t mode)
 {
 
 	ad9434_spi_write(dev, AD9434_REG_TEST_IO, 0x10);
@@ -122,7 +129,7 @@ int32_t ad9434_testmode_set(spi_device *dev,
 /***************************************************************************//**
 * @brief ad9434_data_delay
 *******************************************************************************/
-int32_t ad9434_data_delay(spi_device *dev, int16_t delay)
+int32_t ad9434_data_delay(struct ad9434_dev *dev, int16_t delay)
 {
 	int32_t ret = 0;
 
@@ -135,21 +142,45 @@ int32_t ad9434_data_delay(spi_device *dev, int16_t delay)
 /***************************************************************************//**
 * @brief ad9434_setup
 *******************************************************************************/
-int32_t ad9434_setup(spi_device *dev)
+int32_t ad9434_setup(struct ad9434_dev **device,
+		     struct ad9434_init_param init_param)
 {
 	uint8_t chip_id;
 	int32_t ret = 0;
+	struct ad9434_dev *dev;
+
+	dev = (struct ad9434_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	ret |= ad9434_spi_read(dev, AD9434_REG_CHIP_ID, &chip_id);
-	if(chip_id != AD9434_CHIP_ID)
-	{
-		ad_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+	if(chip_id != AD9434_CHIP_ID) {
+		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
 	ret |= ad9434_outputmode_set(dev, AD9434_DEF_OUTPUT_MODE);
 
-	ad_printf("AD9434 successfully initialized.\n");
+	*device = dev;
+
+	printf("AD9434 successfully initialized.\n");
+
+	return ret;
+}
+
+/***************************************************************************//**
+* @brief ad9434_remove
+*******************************************************************************/
+int32_t ad9434_remove(struct ad9434_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
 
 	return ret;
 }

@@ -40,12 +40,6 @@
 #define AD9434_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
-#include "adc_core.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9434_REG_CHIP_PORT_CONF	0x00
@@ -91,17 +85,33 @@
 #define AD9434_DEF_OUTPUT_MODE		0x00
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+struct ad9434_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
+
+struct ad9434_init_param {
+	/* SPI */
+	spi_init_param spi_init;
+};
+
+/******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9434_spi_read(spi_device *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data);
-int32_t ad9434_spi_write(spi_device *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data);
-int32_t ad9434_testmode_set(spi_device *dev,
-						uint8_t mode);
-int32_t ad9434_setup(spi_device *dev);
-int32_t ad9434_outputmode_set(spi_device *dev,
-						uint8_t mode);
+int32_t ad9434_spi_read(struct ad9434_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
+int32_t ad9434_spi_write(struct ad9434_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+int32_t ad9434_testmode_set(struct ad9434_dev *dev,
+			    uint8_t mode);
+int32_t ad9434_setup(struct ad9434_dev **device,
+		     struct ad9434_init_param init_param);
+int32_t ad9434_outputmode_set(struct ad9434_dev *dev,
+			      uint8_t mode);
+int32_t ad9434_remove(struct ad9434_dev *dev);
 #endif
