@@ -93,20 +93,20 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct {
+struct ad9265_init_param {
 	uint8_t		output_mode;
 	uint8_t		dco;			// data clock output
 	uint8_t		dco_en;			// dco enable
 	uint8_t		nb_lanes;		// number of lanes
-} ad9265_init_param;
+};
 
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9265_testmode_set(spi_device *dev,
-							uint8_t mode);
+			    uint8_t mode);
 int32_t ad9265_setup(spi_device *dev,
-					ad9265_init_param *init_param,
-					adc_core core);
+		     struct ad9265_init_param *init_param,
+		     adc_core core);
 #endif
