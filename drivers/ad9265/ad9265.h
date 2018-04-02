@@ -40,12 +40,6 @@
 #define AD9265_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "adc_core.h"
-#include "platform_drivers.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9265_REG_CHIP_PORT_CONF	0x00
@@ -94,19 +88,38 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 struct ad9265_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
+	/* Device Settings */
 	uint8_t		output_mode;
 	uint8_t		dco;			// data clock output
 	uint8_t		dco_en;			// dco enable
 	uint8_t		nb_lanes;		// number of lanes
 };
 
+struct ad9265_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9265_testmode_set(spi_device *dev,
+int32_t ad9265_testmode_set(struct ad9265_dev *dev,
 			    uint8_t mode);
-int32_t ad9265_setup(spi_device *dev,
-		     struct ad9265_init_param *init_param,
+int32_t ad9265_setup(struct ad9265_dev **device,
+		     struct ad9265_init_param init_param,
 		     adc_core core);
+int32_t ad9265_remove(struct ad9265_dev *dev);
+int32_t ad9265_calibrate(struct ad9265_dev *dev,
+			 struct ad9265_init_param init_param,
+			 adc_core core);
+int32_t ad9265_outputmode_set(struct ad9265_dev *dev,
+			      uint8_t mode);
+int32_t ad9265_spi_write(struct ad9265_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+int32_t ad9265_spi_read(struct ad9265_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
 #endif
