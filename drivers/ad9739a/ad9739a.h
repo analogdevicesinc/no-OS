@@ -43,11 +43,6 @@
 #define __AD9739A_H__
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-
-/******************************************************************************/
 /***************************** AD9739A ****************************************/
 /******************************************************************************/
 
@@ -215,6 +210,11 @@
 /************************ Types Definitions ***********************************/
 /******************************************************************************/
 
+struct ad9739a_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
+
 /**
  * struct ad9739a_platform_data - Platform specific information.
  *
@@ -223,6 +223,8 @@
 
  */
 struct ad9739a_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
 	/* Device settings */
 	uint8_t		common_mode_voltage_dacclk_p;
 	uint8_t		common_mode_voltage_dacclk_n;
@@ -234,28 +236,28 @@ struct ad9739a_init_param {
 /******************************************************************************/
 
 /*! Writes a value to the selected register. */
-int32_t ad9739a_write(spi_device *dev,
+int32_t ad9739a_write(struct ad9739a_dev *dev,
 		      uint8_t register_address,
 		      uint8_t register_value);
 /*! Reads the value of the selected register. */
-int32_t ad9739a_read(spi_device *dev,
+int32_t ad9739a_read(struct ad9739a_dev *dev,
 		     uint8_t register_address,
 		     uint8_t *register_value);
 /*! Resets the device. */
-int32_t ad9739a_reset(spi_device *dev);
+int32_t ad9739a_reset(struct ad9739a_dev *dev);
 /*! Powers down LVDS interface and TxDAC. */
-int32_t ad9739a_power_down(spi_device *dev,
+int32_t ad9739a_power_down(struct ad9739a_dev *dev,
 			   uint8_t pwr_config);
 /*! Sets the normal baseband mode or mix-mode. */
-int32_t ad9739a_operation_mode(spi_device *dev,
+int32_t ad9739a_operation_mode(struct ad9739a_dev *dev,
 			       uint8_t mode);
 /*! Sets the full-scale output current for the DAC.  */
-float ad9739a_dac_fs_current(spi_device *dev,
+float ad9739a_dac_fs_current(struct ad9739a_dev *dev,
 			     float fs_val);
 /*! Delay for a number of fdata clock cycles. */
 int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
-int32_t ad9739a_setup(spi_device *dev,
-		      struct ad9739a_init_param *init_param);
+int32_t ad9739a_setup(struct ad9739a_dev **device,
+		      struct ad9739a_init_param init_param);
 
 #endif /* __AD9739A_H__ */

@@ -42,6 +42,9 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "platform_drivers.h"
 #include "ad9739a.h"
 
@@ -58,7 +61,7 @@
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9739a_write(spi_device *dev,
+int32_t ad9739a_write(struct ad9739a_dev *dev,
 		      uint8_t register_address,
 		      uint8_t register_value)
 {
@@ -68,7 +71,7 @@ int32_t ad9739a_write(spi_device *dev,
 	data[0] = AD9739A_WRITE | (0x7F & register_address);
 	data[1] = register_value;
 
-	ret = ad_spi_xfer(dev, data, 2);
+	ret = spi_write_and_read(dev->spi_desc, data, 2);
 
 	return ret;
 }
@@ -80,7 +83,7 @@ int32_t ad9739a_write(spi_device *dev,
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
-int32_t ad9739a_read(spi_device *dev,
+int32_t ad9739a_read(struct ad9739a_dev *dev,
 		     uint8_t register_address,
 		     uint8_t *register_value)
 {
@@ -89,7 +92,7 @@ int32_t ad9739a_read(spi_device *dev,
 
 	tx_data[0] = AD9739A_READ | (0x7F & register_address);
 
-	ret = ad_spi_xfer(dev, tx_data, 2);
+	ret = spi_write_and_read(dev->spi_desc, tx_data, 2);
 	*register_value = tx_data[1];
 
 	return ret;
@@ -100,7 +103,7 @@ int32_t ad9739a_read(spi_device *dev,
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_reset(spi_device *dev)
+int32_t ad9739a_reset(struct ad9739a_dev *dev)
 {
 	int32_t ret;
 
@@ -127,7 +130,7 @@ int32_t ad9739a_reset(spi_device *dev)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_power_down(spi_device *dev,
+int32_t ad9739a_power_down(struct ad9739a_dev *dev,
 			   uint8_t pwr_config)
 {
 	int32_t ret;
@@ -156,7 +159,7 @@ int32_t ad9739a_power_down(spi_device *dev,
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad_serdes_clk(spi_device *dev,
+int32_t ad_serdes_clk(struct ad9739a_dev *dev,
 		      uint8_t mode)
 {
 	int32_t ret;
@@ -183,7 +186,7 @@ int32_t ad_serdes_clk(spi_device *dev,
  *
  * @return Returns the actual set full-scale current or negative error code.
 *******************************************************************************/
-float ad9739a_dac_fs_current(spi_device *dev,
+float ad9739a_dac_fs_current(struct ad9739a_dev *dev,
 			     float fs_val)
 {
 	float actual_fs = 0;
@@ -210,11 +213,11 @@ float ad9739a_dac_fs_current(spi_device *dev,
 		}
 	} else {
 		ad9739a_read(dev, AD9739A_REG_FSC_1, &reg_data_r);
-		if(reg_data_r < 0) {
+		if((int8_t)reg_data_r < 0) {
 			return -1;
 		}
 		ad9739a_read(dev, AD9739A_REG_FSC_2, &reg_data_r);
-		if(reg_data_r < 0) {
+		if((int8_t)reg_data_r < 0) {
 			return (float)reg_data_r;
 		}
 		reg_data |= (reg_data_r & 0x3) << 8;
@@ -261,8 +264,8 @@ int32_t delay_fdata_cycles(uint32_t cycles)
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
-int32_t ad9739a_setup(spi_device *dev,
-		      struct ad9739a_init_param *init_param)
+int32_t ad9739a_setup(struct ad9739a_dev **device,
+		      struct ad9739a_init_param init_param)
 {
 	int32_t ret = 0;
 	float fret = 0;
@@ -271,11 +274,19 @@ int32_t ad9739a_setup(spi_device *dev,
 	uint8_t dll_loop_locked = 0;
 	uint8_t ad9739a_reg_mu_stat1_buf = 0;
 	uint8_t ad9739a_reg_lvds_rec_stat9_buf;
+	struct ad9739a_dev *dev;
+
+	dev = (struct ad9739a_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
+
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* Device ID */
 	ad9739a_read(dev, AD9739A_REG_PART_ID, &chip_id);
 	if(chip_id != AD9739A_CHIP_ID) {
-		ad_printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
+		printf("Error: Invalid CHIP ID (0x%x).\n", chip_id);
 		return -1;
 	}
 
@@ -291,14 +302,14 @@ int32_t ad9739a_setup(spi_device *dev,
 	/* Set the common-mode voltage of DACCLK_P and DACCLK_N inputs. */
 	ret = ad9739a_write(dev,
 			    AD9739A_REG_CROSS_CNT1,
-			    AD9739A_CROSS_CNT1_CLKP_OFFSET(init_param->
+			    AD9739A_CROSS_CNT1_CLKP_OFFSET(init_param.
 						common_mode_voltage_dacclk_p));
 	if(ret < 0) {
 		return ret;
 	}
 	ret = ad9739a_write(dev,
 			    AD9739A_REG_CROSS_CNT2,
-			    AD9739A_CROSS_CNT2_CLKN_OFFSET(init_param->
+			    AD9739A_CROSS_CNT2_CLKN_OFFSET(init_param.
 						common_mode_voltage_dacclk_n));
 	if(ret < 0) {
 		return ret;
@@ -416,15 +427,17 @@ int32_t ad9739a_setup(spi_device *dev,
 		}
 	} while((dll_loop_lock_counter <= 3) && (dll_loop_locked == 0));
 	if(dll_loop_locked == 0) {
-		ad_printf("AD9739A error: DLL unlocked.\n");
+		printf("AD9739A error: DLL unlocked.\n");
 		return -1;
 	}
-	fret = ad9739a_dac_fs_current(dev, init_param->full_scale_current);
+	fret = ad9739a_dac_fs_current(dev, init_param.full_scale_current);
 	if(fret < 0) {
 		return (int32_t)fret;
 	}
 
-	ad_printf("AD9739A successfully initialized.\n");
+	printf("AD9739A successfully initialized.\n");
+
+	*device = dev;
 
 	return ret;
 }
