@@ -259,5 +259,7 @@ int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
 int32_t ad9739a_setup(struct ad9739a_dev **device,
 		      struct ad9739a_init_param init_param);
+/*! Free the resources allocated by ad9739a_setup(). */
+int32_t ad9739a_remove(struct ad9739a_dev *dev);
 
 #endif /* __AD9739A_H__ */
