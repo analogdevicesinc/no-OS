@@ -441,3 +441,21 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 
 	return ret;
 }
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad9739a_setup().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad9739a_remove(struct ad9739a_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
+
+	return ret;
+}
