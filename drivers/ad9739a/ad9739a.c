@@ -56,8 +56,9 @@
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
  *
- * @param registerAddress - The address of the register to write to.
- * @param registerValue   - The value to write to the register.
+ * @param dev              - The device structure.
+ * @param register_address - The address of the register to write to.
+ * @param register_value   - The value to write to the register.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -79,7 +80,9 @@ int32_t ad9739a_write(struct ad9739a_dev *dev,
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
- * @param regAddress	 - The address of the register to read.
+ * @param dev              - The device structure.
+ * @param register_address - The address of the register to read.
+ * @param register_value   - The value read from the register.
  *
  * @return registerValue - The register's value or negative error code.
 *******************************************************************************/
@@ -100,6 +103,8 @@ int32_t ad9739a_read(struct ad9739a_dev *dev,
 
 /***************************************************************************//**
  * @brief Resets the device.
+ *
+ * @param dev - The device structure.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
@@ -123,6 +128,7 @@ int32_t ad9739a_reset(struct ad9739a_dev *dev)
 /***************************************************************************//**
  * @brief Powers down LVDS interface and TxDAC.
  *
+ * @param dev       - The device structure.
  * @param pwrConfig - Selects the modules to be powered-down.
  * 		      Example:
  * 			AD9739A_POWER_DOWN_LVDS_DRVR_PD |
@@ -152,6 +158,7 @@ int32_t ad9739a_power_down(struct ad9739a_dev *dev,
 /***************************************************************************//**
  * @brief Sets the normal baseband mode or mix-mode.
  *
+ * @param dev  - The device structure.
  * @param mode - mode of operation.
  * 		 Example:
  * 			AD9739A_DAC_DEC_NORMAL_BASEBAND - normal baseband mode;
@@ -180,6 +187,7 @@ int32_t ad_serdes_clk(struct ad9739a_dev *dev,
 /***************************************************************************//**
  * @brief Sets the full-scale output current for the DAC.
  *
+ * @param dev    - The device structure.
  * @param fs_val - The desired full-scale output current. Accepted values:
  *		   8.7 to 32.7 (mA) and 0. When fs_val is set to 0 the DAC
  *		   output is disabled(sleep).
@@ -259,8 +267,9 @@ int32_t delay_fdata_cycles(uint32_t cycles)
 /***************************************************************************//**
  * @brief Initializes the AD9739A.
  *
- * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo	      - Slave select line on which the slave is connected.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return Returns negative error code or 0 in case of success.
 *******************************************************************************/
