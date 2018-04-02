@@ -123,8 +123,10 @@
 
 /* AD9739A_REG_DEC_CNT definitions, address 0x08 */
 #define AD9739A_DEC_CNT_DAC_DEC(x)		(((x) & 0x3) << 0)
-#define AD9739A_DAC_DEC_NORMAL_BASEBAND		0	// AD9739A_DEC_CNT_DAC_DEC(x) option.
-#define AD9739A_DAC_DEC_MIX_MODE		2	// AD9739A_DEC_CNT_DAC_DEC(x) option.
+/* AD9739A_DEC_CNT_DAC_DEC(x) option. */
+#define AD9739A_DAC_DEC_NORMAL_BASEBAND		0
+/* AD9739A_DEC_CNT_DAC_DEC(x) option. */
+#define AD9739A_DAC_DEC_MIX_MODE		2
 
 /* AD9739A_REG_LVDS_STAT1 definitions, address 0x0C */
 #define AD9739A_LVDS_STAT1_DCI_PRE_PH0		(1 << 2)
@@ -146,10 +148,10 @@
 #define AD9739A_LVDS_REC_CNT4_FINE_DEL_SKEW(x)		(((x) & 0xF) << 0)
 
 /* AD9739A_REG_LVDS_REC_CNT5 definitions, address 0x14 */
-#define AD9739A_LVDS_REC_CNT5_DCI_DEL(x)		(((x) & 0x3F) << 0)	
+#define AD9739A_LVDS_REC_CNT5_DCI_DEL(x)		(((x) & 0x3F) << 0)
 
 /* AD9739A_REG_LVDS_REC_STAT1 definitions, address 0x19 */
-#define AD9739A_LVDS_REC_STAT1_SMP_DEL(x)		(((x) & 0x3) << 6)	
+#define AD9739A_LVDS_REC_STAT1_SMP_DEL(x)		(((x) & 0x3) << 6)
 
 /* AD9739A_REG_LVDS_REC_STAT2 definitions, address 0x1A */
 #define AD9739A_LVDS_REC_STAT2_SMP_DEL(x)		(((x) & 0xFF) << 0)
@@ -217,16 +219,15 @@
  * struct ad9739a_platform_data - Platform specific information.
  *
  * @common_mode_voltage_dacclk_p: magnitude of the offset for the DACCLK_P.
- * @common_mode_voltage_dacclk_n: magnitude of the offset for the DACCLK_N. 
+ * @common_mode_voltage_dacclk_n: magnitude of the offset for the DACCLK_N.
 
  */
-typedef struct
-{
+struct ad9739a_init_param {
 	/* Device settings */
 	uint8_t		common_mode_voltage_dacclk_p;
 	uint8_t		common_mode_voltage_dacclk_n;
 	float		full_scale_current;
-}ad9739a_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -234,27 +235,27 @@ typedef struct
 
 /*! Writes a value to the selected register. */
 int32_t ad9739a_write(spi_device *dev,
-					  uint8_t registerAddress,
-					  uint8_t registerValue);
+		      uint8_t register_address,
+		      uint8_t register_value);
 /*! Reads the value of the selected register. */
 int32_t ad9739a_read(spi_device *dev,
-					 uint8_t registerAddress,
-					 uint8_t *registerValue);
+		     uint8_t register_address,
+		     uint8_t *register_value);
 /*! Resets the device. */
 int32_t ad9739a_reset(spi_device *dev);
 /*! Powers down LVDS interface and TxDAC. */
 int32_t ad9739a_power_down(spi_device *dev,
-						   uint8_t pwrConfig);
+			   uint8_t pwr_config);
 /*! Sets the normal baseband mode or mix-mode. */
 int32_t ad9739a_operation_mode(spi_device *dev,
-							   uint8_t mode);
+			       uint8_t mode);
 /*! Sets the full-scale output current for the DAC.  */
-float ad9739a_DAC_fs_current(spi_device *dev,
-							 float fs_val);
+float ad9739a_dac_fs_current(spi_device *dev,
+			     float fs_val);
 /*! Delay for a number of fdata clock cycles. */
 int32_t delay_fdata_cycles(uint32_t cycles);
 /*! Initializes the AD9739A. */
 int32_t ad9739a_setup(spi_device *dev,
-					  ad9739a_init_param *init_param);
+		      struct ad9739a_init_param *init_param);
 
 #endif /* __AD9739A_H__ */
