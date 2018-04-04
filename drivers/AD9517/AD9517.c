@@ -40,109 +40,92 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdint.h>
+#include <stdlib.h>
+#include "platform_drivers.h"
 #include "AD9517.h"
 #include "AD9517_cfg.h"
-#include "spi.h"
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-struct ad9517_state {
-	struct ad9517_platform_data	     *pdata;
-	struct ad9517_lvpecl_channel_spec    *lvpecl_channels;
-	struct ad9517_lvds_cmos_channel_spec *lvds_cmos_channels;
-	uint32_t			     r_counter;
-	uint8_t 			     a_counter;
-	uint16_t			     b_counter;
-	uint8_t				     vco_divider;
-	uint8_t				     prescaler_p;
-	uint8_t				     antibacklash_pulse_width;
-} ad9517_st;
-
-#ifdef OLD_VERSION
-int32_t spi_base_address = 0;
-int32_t spi_slave_select = 0;
-#else
-static uint8_t ad9517_slave_select;
-#endif
 
 /***************************************************************************//**
  * @brief Initializes the AD9517.
  *
- * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo        - Slave select line on which the slave is connected.
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-#ifdef OLD_VERSION
-int32_t ad9517_setup(int32_t spi_base_addr, int32_t ss_no)
-#else
-int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
-#endif
+int32_t ad9517_setup(struct ad9517_dev **device,
+		     struct ad9517_init_param init_param)
 {
-	struct ad9517_state *st = &ad9517_st;
 	int32_t		    ret = 0;
 	int8_t		    index = 0;
 	uint16_t	    reg_address = 0;
 	int8_t		    reg_value = 0;
+	struct ad9517_dev   *dev;
 
-	st->pdata = &ad9517_pdata_lpc;
-	st->lvpecl_channels = &ad9517_lvpecl_channels[0];
-	st->lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
+	dev = (struct ad9517_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return -1;
 
-#ifdef OLD_VERSION
-	spi_base_address = spi_base_addr;
-	spi_slave_select = ss_no;
+	dev->ad9517_st = init_param.ad9517_st;
+
+	dev->ad9517_st.pdata = &ad9517_pdata_lpc;
+	dev->ad9517_st.lvpecl_channels = &ad9517_lvpecl_channels[0];
+	dev->ad9517_st.lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
 
 	/* Initializes the SPI peripheral */
-	ret = SPI_Init(spi_base_address, 0, 0, 0);
-	if(ret < 0)
-		return ret;
-#else
-	ad9517_slave_select = slave_select;
-	spi_init(spi_device_id, 0, 0);
-#endif
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+
 	/* Configure serial port for long instructions and reset the serial
 	 * interface. */
-	ret = ad9517_write(AD9517_REG_SERIAL_PORT_CONFIG,
+	ret = ad9517_write(dev,
+			   AD9517_REG_SERIAL_PORT_CONFIG,
 			   AD9517_SOFT_RESET | AD9517_LONG_INSTRUCTION);
 	if(ret < 0)
 		return ret;
-	ret = ad9517_update();
+	ret = ad9517_update(dev);
 	if(ret < 0)
 		return ret;
 	/* Clear AD9517_SOFT_RESET bit to complete reset operation. */
-	ret = ad9517_write(AD9517_REG_SERIAL_PORT_CONFIG,
+	ret = ad9517_write(dev,
+			   AD9517_REG_SERIAL_PORT_CONFIG,
 			   AD9517_LONG_INSTRUCTION);
 	if(ret < 0)
 		return ret;
-	ret = ad9517_update();
+	ret = ad9517_update(dev);
 	if(ret < 0)
 		return ret;
 	/* Selects the PLL reference mode. */
-	reg_value = st->pdata->diff_ref_en * AD9517_DIFF_REF |
-		    st->pdata->ref_1_power_on * AD9517_REF1_POWER_ON |
-		    st->pdata->ref_2_power_on * AD9517_REF2_POWER_ON |
-		    st->pdata->ref_sel_pin_en * AD9517_USE_REF_SEL_PIN |
-		    st->pdata->ref_2_en * AD9517_SELECT_REF2;
-	ret = ad9517_write(AD9517_REG_PLL_CTRL_7, reg_value);
+	reg_value = dev->ad9517_st.pdata->diff_ref_en * AD9517_DIFF_REF |
+		    dev->ad9517_st.pdata->ref_1_power_on * AD9517_REF1_POWER_ON |
+		    dev->ad9517_st.pdata->ref_2_power_on * AD9517_REF2_POWER_ON |
+		    dev->ad9517_st.pdata->ref_sel_pin_en * AD9517_USE_REF_SEL_PIN |
+		    dev->ad9517_st.pdata->ref_2_en * AD9517_SELECT_REF2;
+	ret = ad9517_write(dev,
+			   AD9517_REG_PLL_CTRL_7,
+			   reg_value);
 	if(ret < 0)
 		return ret;
 	/* Select CLK input. */
-	reg_value = st->pdata->vco_clk_sel * AD9517_SEL_VCO_CLK |
-		    st->pdata->power_down_vco_clk * AD9517_POWER_DOWN_VCO_CLK;
-	ret = ad9517_write(AD9517_REG_INPUT_CLKS, reg_value);
+	reg_value = dev->ad9517_st.pdata->vco_clk_sel * AD9517_SEL_VCO_CLK |
+		    dev->ad9517_st.pdata->power_down_vco_clk * AD9517_POWER_DOWN_VCO_CLK;
+	ret = ad9517_write(dev,
+			   AD9517_REG_INPUT_CLKS,
+			   reg_value);
 	if(ret < 0)
 		return ret;
 	/* Update the device with user settings for the LVPECL output
 	 * channels. */
 	for(index = 0; index < 4; index++) {
 		reg_address = AD9517_REG_LVPECL_OUT0 + index;
-		reg_value = st->lvpecl_channels[index].out_invert_en *
+		reg_value = dev->ad9517_st.lvpecl_channels[index].out_invert_en *
 			    AD9517_OUT_LVPECL_INVERT |
-			    AD9517_OUT_LVPECL_DIFF_VOLTAGE(st->
+			    AD9517_OUT_LVPECL_DIFF_VOLTAGE(dev->ad9517_st.
 				lvpecl_channels[index].out_diff_voltage);
-		ret = ad9517_write(reg_address, reg_value);
+		ret = ad9517_write(dev,
+				   reg_address,
+				   reg_value);
 		if(ret < 0)
 			return ret;
 	}
@@ -151,21 +134,44 @@ int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
 	for(index = 0; index < 4; index++) {
 		reg_address = AD9517_REG_LVDS_CMOS_OUT4 + index;
 		reg_value = AD9517_OUT_LVDS_CMOS_INVERT(
-			    st->lvds_cmos_channels[index].out_invert) |
-			    st->lvds_cmos_channels[index].logic_level *
+			    dev->ad9517_st.lvds_cmos_channels[index].out_invert) |
+			    dev->ad9517_st.lvds_cmos_channels[index].logic_level *
 			    AD9517_OUT_LVDS_CMOS |
-			    st->lvds_cmos_channels[index].cmos_b_en *
+			    dev->ad9517_st.lvds_cmos_channels[index].cmos_b_en *
 			    AD9517_OUT_CMOS_B |
-			    AD9517_OUT_LVDS_OUTPUT_CURRENT(st->
+			    AD9517_OUT_LVDS_OUTPUT_CURRENT(dev->ad9517_st.
 				lvds_cmos_channels[index].out_lvds_current);
-		ret = ad9517_write (reg_address, reg_value);
+		ret = ad9517_write(dev,
+				   reg_address,
+				   reg_value);
 		if(ret < 0)
 			return ret;
 	}
 	/* Check if VCO is selected as input. */
-	if(st->pdata->vco_clk_sel)
+	if(dev->ad9517_st.pdata->vco_clk_sel)
 		/* Sets the VCO frequency. */
-		ad9517_vco_frequency(st->pdata->int_vco_freq);
+		ad9517_vco_frequency(dev,
+				     dev->ad9517_st.pdata->int_vco_freq);
+
+	*device = dev;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Free the resources allocated by ad9517_setup().
+ *
+ * @param dev - The device structure.
+ *
+ * @return SUCCESS in case of success, negative error code otherwise.
+*******************************************************************************/
+int32_t ad9517_remove(struct ad9517_dev *dev)
+{
+	int32_t ret;
+
+	ret = spi_remove(dev->spi_desc);
+
+	free(dev);
 
 	return ret;
 }
@@ -173,23 +179,21 @@ int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select)
 /***************************************************************************//**
 * @brief Writes data into a register.
 *
-* @param regAddr - The address of the register to be written.
-* @param regVal  - The value to be written into the register.
+* @param dev      - The device structure.
+* @param reg_addr - The address of the register to be written.
+* @param reg_val  - The value to be written into the register.
 *
 * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9517_write(uint32_t reg_addr, uint16_t reg_val)
+int32_t ad9517_write(struct ad9517_dev *dev,
+		     uint32_t reg_addr,
+		     uint16_t reg_val)
 {
 	uint8_t i = 0;
 	int32_t ret = 0;
 	uint16_t reg_address = 0;
-#ifdef OLD_VERSION
 	int8_t reg_value = 0;
-	int8_t tx_buffer[3] = {0, 0, 0};
-#else
-	uint8_t reg_value = 0;
 	uint8_t tx_buffer[3] = {0, 0, 0};
-#endif
 
 	reg_address = AD9517_WRITE + AD9517_ADDR(reg_addr);
 	for(i = 0; i < AD9517_TRANSF_LEN(reg_addr); i++) {
@@ -198,12 +202,9 @@ int32_t ad9517_write(uint32_t reg_addr, uint16_t reg_val)
 		tx_buffer[0] = (reg_address & 0xFF00) >> 8;
 		tx_buffer[1] = reg_address & 0x00FF;
 		tx_buffer[2] = reg_value;
-#ifdef OLD_VERSION
-		ret          = SPI_TransferData(spi_base_address, 3, tx_buffer,
-					       0, NULL, spi_slave_select);
-#else
-		ret = spi_write_and_read(ad9517_slave_select, tx_buffer, 3);
-#endif
+
+		ret = spi_write_and_read(dev->spi_desc, tx_buffer, 3);
+
 		if(ret < 0)
 			return ret;
 		reg_address--;
@@ -212,22 +213,22 @@ int32_t ad9517_write(uint32_t reg_addr, uint16_t reg_val)
 	return ret;
 }
 
-/**************************************************************************//**
+/***************************************************************************//**
 * @brief Reads data from a register.
 *
-* @param regAddr - The address of the register to be read.
+* @param dev      - The device structure.
+* @param reg_addr - The address of the register to be read.
+* @param reg_val  - Pointer to the value to be read from the register.
 *
 * @return Returns the read data or negative error code.
-******************************************************************************/
-int32_t ad9517_read(uint32_t reg_addr)
+*******************************************************************************/
+int32_t ad9517_read(struct ad9517_dev *dev,
+		    uint32_t reg_addr,
+		    uint32_t *reg_value)
 {
 	uint32_t reg_address = 0;
-#ifdef OLD_VERSION
-	uint8_t rx_buffer[3] = {0, 0, 0};
 	int32_t ret = 0;
-#endif
 	uint8_t tx_buffer[3] = {0, 0, 0};
-	uint32_t reg_value = 0;
 	uint8_t i = 0;
 
 	reg_address = AD9517_READ + AD9517_ADDR(reg_addr);
@@ -235,51 +236,46 @@ int32_t ad9517_read(uint32_t reg_addr)
 		tx_buffer[0] = (reg_address & 0xFF00) >> 8;
 		tx_buffer[1] = reg_address & 0x00FF;
 		tx_buffer[2] = 0;
-#ifdef OLD_VERSION
-		ret         = SPI_TransferData(spi_base_address, 3,
-					       (int8_t*)tx_buffer, 3,
-					       (int8_t*)rx_buffer,
-					       spi_slave_select);
-		if(ret < 0) {
-			return ret;
-		}
-#else
-		spi_write_and_read(ad9517_slave_select, tx_buffer, 3);
-#endif
+
+		ret = spi_write_and_read(dev->spi_desc, tx_buffer, 3);
+
 		reg_address--;
-		reg_value <<= 8;
-#ifdef OLD_VERSION
-		reg_value |= rx_buffer[2];
-#else
-		reg_value |= tx_buffer[2];
-#endif
+
+		*reg_value <<= 8;
+
+		*reg_value |= tx_buffer[2];
 	}
 
-	return reg_value;
+	return ret;
 }
 
 /***************************************************************************//**
  * @brief Transfers the contents of the buffer registers into the active
  *        registers.
  *
+ * @param dev - The device structure.
+ *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
-int32_t ad9517_update(void)
+int32_t ad9517_update(struct ad9517_dev *dev)
 {
-	return ad9517_write(AD9517_REG_UPDATE_ALL_REGS, AD9517_UPDATE_ALL_REGS);
+	return ad9517_write(dev,
+			    AD9517_REG_UPDATE_ALL_REGS,
+			    AD9517_UPDATE_ALL_REGS);
 }
 
 
 /***************************************************************************//**
  * @brief Sets the VCO frequency.
  *
+ * @param dev       - The device structure.
  * @param frequency - The desired frequency value.
  *
  * @return vco_freq - The actual frequency value that was set.
 *******************************************************************************/
-int64_t ad9517_vco_frequency(int64_t frequency)
+int64_t ad9517_vco_frequency(struct ad9517_dev *dev,
+			     int64_t frequency)
 {
-	struct ad9517_state *st	= &ad9517_st;
 	int32_t	ref_freq = 0;
 	int32_t pfd_freq = 0;
 	int32_t n_divider = 0;
@@ -290,67 +286,74 @@ int64_t ad9517_vco_frequency(int64_t frequency)
 	int32_t vco_freq = 0;
 	int32_t good_values = 0;
 	uint8_t prescaler = 0;
-	int32_t reg_value = 0;
+	uint32_t reg_value = 0;
 
 	if((frequency < AD9517_MIN_VCO_FREQ) ||
 	   (frequency > AD9517_MAX_VCO_FREQ))
 		return -1;
-	if(st->pdata->ref_sel_pin_en)
+	if(dev->ad9517_st.pdata->ref_sel_pin_en)
 		/* Reference selection is made using REF_SEL pin. */
-		ref_freq = st->pdata->ref_sel_pin ?
-			st->pdata->ref_2_freq : st->pdata->ref_1_freq;
+		ref_freq = dev->ad9517_st.pdata->ref_sel_pin ?
+			dev->ad9517_st.pdata->ref_2_freq : dev->ad9517_st.pdata->ref_1_freq;
 	else
 		/* Reference selection is made using bit AD9517_SELECT_REF2 from
 		 * AD9517_REG_PLL_CTRL_7. */
-		ref_freq = st->pdata->ref_2_en ?
-			st->pdata->ref_2_freq : st->pdata->ref_1_freq;
-	st->r_counter = 1;
-	pfd_freq = ref_freq / st->r_counter;
+		ref_freq = dev->ad9517_st.pdata->ref_2_en ?
+			dev->ad9517_st.pdata->ref_2_freq : dev->ad9517_st.pdata->ref_1_freq;
+	dev->ad9517_st.r_counter = 1;
+	pfd_freq = ref_freq / dev->ad9517_st.r_counter;
 	while(pfd_freq > AD9517_MAX_PFD_FREQ) {
-		st->r_counter++;
-		pfd_freq = ref_freq / st->r_counter;
+		dev->ad9517_st.r_counter++;
+		pfd_freq = ref_freq / dev->ad9517_st.r_counter;
 	}
 	/* Dual Modulus Mode */
 	while(good_values == 0) {
 		for(index = 0; index < 5; index++) {
 			if(frequency <= prescaler_limit[index]) {
 				n_divider = (int32_t)(frequency / pfd_freq);
-				st->prescaler_p = prescaler_value[index];
+				dev->ad9517_st.prescaler_p = prescaler_value[index];
 				prescaler = index + 2;
-				st->b_counter = n_divider / st->prescaler_p;
-				st->a_counter = n_divider % st->prescaler_p;
-				if((st->b_counter >= 3) &&
-				   ((st->b_counter > st->a_counter))) {
+				dev->ad9517_st.b_counter = n_divider / dev->ad9517_st.prescaler_p;
+				dev->ad9517_st.a_counter = n_divider % dev->ad9517_st.prescaler_p;
+				if((dev->ad9517_st.b_counter >= 3) &&
+				   ((dev->ad9517_st.b_counter > dev->ad9517_st.a_counter))) {
 					good_values = 1;
 					break;
 				}
 			}
 		}
 		if(good_values == 0) {
-			st->r_counter++;
-			pfd_freq = ref_freq / st->r_counter;
+			dev->ad9517_st.r_counter++;
+			pfd_freq = ref_freq / dev->ad9517_st.r_counter;
 		}
 	}
 	if(pfd_freq > 50000000)
 		/* This setting may be necessary if the PFD frequency >
 		 * 50 MHz. */
-		st->antibacklash_pulse_width = 1;
-	reg_value = ad9517_read(AD9517_REG_PLL_CTRL_1);
-	if(reg_value < 0)
+		dev->ad9517_st.antibacklash_pulse_width = 1;
+	ad9517_read(dev, AD9517_REG_PLL_CTRL_1, &reg_value);
+	if((int32_t)reg_value < 0)
 		return reg_value;
 	reg_value &= ~AD9517_PRESCALER_P(0x7);
 	reg_value |= AD9517_PRESCALER_P(prescaler);
-	ad9517_write(AD9517_REG_PLL_CTRL_1, reg_value);
-	ad9517_write(AD9517_REG_A_COUNTER, AD9517_A_COUNTER(st->a_counter));
-	ad9517_write(AD9517_REG_B_COUNTER, AD9517_B_COUNTER(st->b_counter));
-	ad9517_write(AD9517_REG_R_COUNTER, AD9517_R_COUNTER(st->r_counter));
+	ad9517_write(dev, AD9517_REG_PLL_CTRL_1, reg_value);
+	ad9517_write(dev,
+		     AD9517_REG_A_COUNTER,
+		     AD9517_A_COUNTER(dev->ad9517_st.a_counter));
+	ad9517_write(dev,
+		     AD9517_REG_B_COUNTER,
+		     AD9517_B_COUNTER(dev->ad9517_st.b_counter));
+	ad9517_write(dev,
+		     AD9517_REG_R_COUNTER,
+		     AD9517_R_COUNTER(dev->ad9517_st.r_counter));
 
 	/* Compute the frequency obtained with the calculated values. */
-	vco_freq = (ref_freq / st->r_counter) *
-		   (st->prescaler_p * st->b_counter + st->a_counter);
+	vco_freq = (ref_freq / dev->ad9517_st.r_counter) *
+		   (dev->ad9517_st.prescaler_p * dev->ad9517_st.b_counter +
+		    dev->ad9517_st.a_counter);
 
 	/* Update vco_freq value. */
-	st->pdata->int_vco_freq = vco_freq;
+	dev->ad9517_st.pdata->int_vco_freq = vco_freq;
 
 	return vco_freq;
 }
@@ -383,14 +386,16 @@ int8_t dividers_checker(int32_t number)
 /***************************************************************************//**
  * @brief Sets the frequency on the specified channel.
  *
+ * @param dev       - The device structure.
  * @param channel   - The channel.
  * @param frequency - The desired frequency value.
  *
  * @return set_freq - The actual frequency value that was set.
 *******************************************************************************/
-int64_t ad9517_frequency(int32_t channel, int64_t frequency)
+int64_t ad9517_frequency(struct ad9517_dev *dev,
+			 int32_t channel,
+			 int64_t frequency)
 {
-	struct   ad9517_state *st = &ad9517_st;
 	/* The frequency that is applied to the channel dividers. */
 	int64_t freq_to_chan_div = 0;
 	int64_t freq_to_chan_div_backup = 0;
@@ -403,29 +408,29 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 	int32_t divider_1 = 0;
 	int32_t divider_2 = 0;
 	int64_t set_freq = 0;
-	int16_t reg_value = 0;
+	uint32_t reg_value = 0;
 	int32_t reg_address = 0;
-	uint32_t ret = 0;
+	int32_t ret = 0;
 
-	if(st->pdata->vco_clk_sel) {
+	if(dev->ad9517_st.pdata->vco_clk_sel) {
 		/* VCO is selected as input. */
-		freq_to_chan_div = st->pdata->int_vco_freq;
+		freq_to_chan_div = dev->ad9517_st.pdata->int_vco_freq;
 		freq_to_chan_div_backup = freq_to_chan_div;
 		/* VCO divider cannot be bypassed when VCO is selected as
 		 * input. */
-		st->vco_divider = 2;
+		dev->ad9517_st.vco_divider = 2;
 		freq_to_chan_div >>= 1;
 	} else {
 		/* External Clock is selected as input. */
-		freq_to_chan_div = st->pdata->ext_clk_freq;
+		freq_to_chan_div = dev->ad9517_st.pdata->ext_clk_freq;
 		freq_to_chan_div_backup = freq_to_chan_div;
-		st->vco_divider = 1;
+		dev->ad9517_st.vco_divider = 1;
 	}
 	/* The maximum frequency that can be applied to the channel dividers
 	 * is 1600 MHz. */
 	while(freq_to_chan_div > 1600000000) {
-		st->vco_divider++;
-		freq_to_chan_div = freq_to_chan_div_backup / st->vco_divider;
+		dev->ad9517_st.vco_divider++;
+		freq_to_chan_div = freq_to_chan_div_backup / dev->ad9517_st.vco_divider;
 	}
 	/* The range of division for the LVPECL outputs is 1 to 32. */
 	if((channel >= 0) && (channel <= 3))
@@ -435,11 +440,11 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 	if((channel >= 4) && (channel <= 7))
 		divider_max = 1024;
 	/* Increase vco_divider if the divider is greater than divider_max. */
-	while(st->vco_divider < 6) {
+	while(dev->ad9517_st.vco_divider < 6) {
 		divider = freq_to_chan_div / frequency;
 		if(divider > divider_max) {
-			st->vco_divider++;
-			freq_to_chan_div = freq_to_chan_div_backup / st->vco_divider;
+			dev->ad9517_st.vco_divider++;
+			freq_to_chan_div = freq_to_chan_div_backup / dev->ad9517_st.vco_divider;
 		} else {
 			break;
 		}
@@ -454,18 +459,19 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 		divider = 0;
 	}
 	/* Write the VCO divider value. */
-	reg_value = ad9517_read(AD9517_REG_INPUT_CLKS);
-	if(reg_value < 0)
+	ad9517_read(dev, AD9517_REG_INPUT_CLKS, &reg_value);
+	if((int32_t)reg_value < 0)
 		return reg_value;
-	if((st->vco_divider == 1) && ((reg_value & AD9517_SEL_VCO_CLK) == 0)) {
+	if((dev->ad9517_st.vco_divider == 1) && ((reg_value & AD9517_SEL_VCO_CLK) == 0)) {
 		reg_value |= AD9517_BYPASS_VCO_DIVIDER;
-		ret = ad9517_write(AD9517_REG_INPUT_CLKS, reg_value);
+		ret = ad9517_write(dev, AD9517_REG_INPUT_CLKS, reg_value);
 		if(ret < 0) {
 			return ret;
 		}
 	} else {
-		ret = ad9517_write(AD9517_REG_VCO_DIVIDER,
-				   AD9517_VCO_DIVIDER((st->vco_divider - 2)));
+		ret = ad9517_write(dev,
+				   AD9517_REG_VCO_DIVIDER,
+				   AD9517_VCO_DIVIDER((dev->ad9517_st.vco_divider - 2)));
 		if(ret < 0) {
 			return ret;
 		}
@@ -511,8 +517,8 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 				} else {
 					reg_address = AD9517_REG_DIVIDER_0_1;
 				}
-				reg_value = ad9517_read(reg_address);
-				if(reg_value < 0) {
+				ad9517_read(dev, reg_address, &reg_value);
+				if((int32_t)reg_value < 0) {
 					return reg_value;
 				}
 				reg_value |= AD9517_DIVIDER_BYPASS;
@@ -526,7 +532,7 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 				reg_value = AD9517_DIVIDER_LOW_CYCLES(((divider / 2) - 1)) |
 					    AD9517_DIVIDER_HIGH_CYCLES(((divider / 2) + (divider % 2) - 1));
 			}
-			ret = ad9517_write(reg_address, reg_value);
+			ret = ad9517_write(dev, reg_address, reg_value);
 			if(ret < 0) {
 				return ret;
 			}
@@ -539,12 +545,12 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 				} else {
 					reg_address = AD9517_REG_LVDS_CMOS_DIVIDER_2_3;
 				}
-				reg_value = ad9517_read(reg_address);
-				if(reg_value < 0) {
+				ad9517_read(dev, reg_address, &reg_value);
+				if((int32_t)reg_value < 0) {
 					return reg_value;
 				}
 				reg_value |= (AD9517_BYPASS_DIVIDER_2 | AD9517_BYPASS_DIVIDER_1);
-				ret = ad9517_write(reg_address, reg_value);
+				ret = ad9517_write(dev, reg_address, reg_value);
 				if(ret < 0) {
 					return ret;
 				}
@@ -556,12 +562,13 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 					} else {
 						reg_address = AD9517_REG_LVDS_CMOS_DIVIDER_2_3;
 					}
-					reg_value = ad9517_read(reg_address);
-					if(reg_value < 0) {
+					ad9517_read(dev, reg_address, &reg_value);
+					if((int32_t)reg_value < 0) {
 						return reg_value;
 					}
 					reg_value |= AD9517_BYPASS_DIVIDER_2;
-					ret = ad9517_write(reg_address,
+					ret = ad9517_write(dev,
+							   reg_address,
 							   reg_value);
 					if(ret < 0) {
 						return ret;
@@ -574,7 +581,8 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 					/* The duty cycle closest to 50% is selected. */
 					reg_value = AD9517_LOW_CYCLES_DIVIDER_1(((divider / 2) - 1)) |
 						    AD9517_HIGH_CYCLES_DIVIDER_1(((divider / 2) + (divider % 2) - 1));
-					ret = ad9517_write(reg_address,
+					ret = ad9517_write(dev,
+							   reg_address,
 							   reg_value);
 					if(ret < 0) {
 						return ret;
@@ -598,7 +606,8 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 					/* The duty cycle closest to 50% is selected. */
 					reg_value = AD9517_LOW_CYCLES_DIVIDER_1(((divider_1 / 2) - 1)) |
 						    AD9517_HIGH_CYCLES_DIVIDER_1(((divider_1 / 2) + (divider_1 % 2) - 1));
-					ret = ad9517_write(reg_address,
+					ret = ad9517_write(dev,
+							   reg_address,
 							   reg_value);
 					if(ret < 0) {
 						return ret;
@@ -611,7 +620,8 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 					/* The duty cycle closest to 50% is selected. */
 					reg_value = AD9517_LOW_CYCLES_DIVIDER_2(((divider_2 / 2) - 1)) |
 						    AD9517_HIGH_CYCLES_DIVIDER_2(((divider_2 / 2) + (divider_2 % 2) - 1));
-					ret = ad9517_write(reg_address,
+					ret = ad9517_write(dev,
+							   reg_address,
 							   reg_value);
 					if(ret < 0) {
 						return ret;
@@ -630,16 +640,17 @@ int64_t ad9517_frequency(int32_t channel, int64_t frequency)
 /***************************************************************************//**
  * @brief Sets the phase on the specified channel.
  *
+ * @param dev     - The device structure.
  * @param channel - The channel.
  * @param phase   - The desired phase value.
  *
  * @return Returns the phase or negative error code.
 *******************************************************************************/
-int32_t ad9517_phase(int32_t channel, int32_t phase)
+int32_t ad9517_phase(struct ad9517_dev *dev, int32_t channel, int32_t phase)
 {
-	uint8_t reg_value = 0;
+	uint32_t reg_value = 0;
 	int32_t reg_address = 0;
-	uint32_t ret = 0;
+	int32_t ret = 0;
 
 	if((channel >= 0) && (channel <= 7)) {
 		if((channel >= 0) && (channel <= 3)) {
@@ -649,8 +660,8 @@ int32_t ad9517_phase(int32_t channel, int32_t phase)
 				reg_address = AD9517_REG_DIVIDER_0_1;
 			}
 
-			reg_value = ad9517_read(reg_address);
-			if(reg_value < 0) {
+			ad9517_read(dev, reg_address, &reg_value);
+			if((int32_t)reg_value < 0) {
 				return reg_value;
 			}
 			reg_value &= ~AD9517_DIVIDER_PHASE_OFFSET(0xF);
@@ -664,7 +675,7 @@ int32_t ad9517_phase(int32_t channel, int32_t phase)
 			reg_value = AD9517_PHASE_OFFSET_DIVIDER_2(((phase / 2) + (phase % 2))) |
 				    AD9517_PHASE_OFFSET_DIVIDER_1(phase / 2);
 		}
-		ret = ad9517_write(reg_address, reg_value);
+		ret = ad9517_write(dev, reg_address, reg_value);
 		if(ret < 0) {
 			return ret;
 		}
@@ -676,14 +687,14 @@ int32_t ad9517_phase(int32_t channel, int32_t phase)
 /***************************************************************************//**
  * @brief Sets the power mode of the specified channel.
  *
+ * @param dev     - The device structure.
  * @param channel - The channel.
  * @param mode    - Power mode.
  *
  * @return Returns the mode or negative error code.
 *******************************************************************************/
-int32_t ad9517_power_mode(int32_t channel, int32_t mode)
+int32_t ad9517_power_mode(struct ad9517_dev *dev, int32_t channel, int32_t mode)
 {
-	struct ad9517_state *st = &ad9517_st;
 	struct ad9517_lvpecl_channel_spec *lvpecl_channel;
 	struct ad9517_lvds_cmos_channel_spec *lvds_cmos_channel;
 	uint8_t reg_value = 0;
@@ -691,7 +702,7 @@ int32_t ad9517_power_mode(int32_t channel, int32_t mode)
 	uint32_t ret = 0;
 
 	if((channel >= 0) && (channel <= 3)) {
-		lvpecl_channel = &st->lvpecl_channels[channel];
+		lvpecl_channel = &dev->ad9517_st.lvpecl_channels[channel];
 		switch(channel) {
 		case 0:
 			reg_address = AD9517_REG_LVPECL_OUT0;
@@ -709,21 +720,21 @@ int32_t ad9517_power_mode(int32_t channel, int32_t mode)
 			reg_value = lvpecl_channel->out_invert_en * AD9517_OUT_LVPECL_INVERT |
 				    AD9517_OUT_LVPECL_DIFF_VOLTAGE(lvpecl_channel->out_diff_voltage) |
 				    AD9517_OUT_LVPECL_POWER_DOWN(mode);
-			ret = ad9517_write(reg_address, reg_value);
-			if(ret < 0) {
+			ret = ad9517_write(dev, reg_address, reg_value);
+			if((int32_t)ret < 0) {
 				return ret;
 			}
 			return mode;
 		} else {
-			ret = ad9517_read(reg_address);
-			if(ret < 0) {
+			ad9517_read(dev, reg_address, &ret);
+			if((int32_t)ret < 0) {
 				return ret;
 			}
 			return (ret & AD9517_OUT_LVPECL_POWER_DOWN(0x3));
 		}
 	} else {
 		if((channel >= 4) && (channel <= 7)) {
-			lvds_cmos_channel = &st->lvds_cmos_channels[0];
+			lvds_cmos_channel = &dev->ad9517_st.lvds_cmos_channels[0];
 			switch(channel) {
 			case 4:
 				reg_address = AD9517_REG_LVDS_CMOS_OUT4;
@@ -743,14 +754,14 @@ int32_t ad9517_power_mode(int32_t channel, int32_t mode)
 					    lvds_cmos_channel->logic_level * AD9517_OUT_LVDS_CMOS |
 					    AD9517_OUT_LVDS_OUTPUT_CURRENT(lvds_cmos_channel->out_lvds_current) |
 					    mode * AD9517_OUT_LVDS_CMOS_POWER_DOWN;
-				ret = ad9517_write(reg_address, reg_value);
-				if(ret < 0) {
+				ret = ad9517_write(dev, reg_address, reg_value);
+				if((int32_t)ret < 0) {
 					return ret;
 				}
 				return mode;
 			} else {
-				ret = ad9517_read(reg_address);
-				if(ret < 0) {
+				ad9517_read(dev, reg_address, &ret);
+				if((int32_t)ret < 0) {
 					return ret;
 				}
 				return (ret & AD9517_OUT_LVDS_CMOS_POWER_DOWN);

@@ -39,11 +39,6 @@
 #ifndef __AD9517_H__
 #define __AD9517_H__
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include <stdint.h>
-
 /******************************************************************************/
 /****************************** AD9517 ****************************************/
 /******************************************************************************/
@@ -299,6 +294,10 @@
 #define AD9517_MAX_PFD_FREQ			100000000
 #define AD9517_MAX_PRESCLAER_OUT_FREQ		300000000
 
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
 /* Platform specific information */
 struct ad9517_platform_data {
 	/* PLL Reference */
@@ -361,28 +360,64 @@ enum out_lvds_current_options {
 	LVDS_7mA,
 };
 
+struct ad9517_state {
+	struct ad9517_platform_data	     *pdata;
+	struct ad9517_lvpecl_channel_spec    *lvpecl_channels;
+	struct ad9517_lvds_cmos_channel_spec *lvds_cmos_channels;
+	uint32_t			     r_counter;
+	uint8_t 			     a_counter;
+	uint16_t			     b_counter;
+	uint8_t				     vco_divider;
+	uint8_t				     prescaler_p;
+	uint8_t				     antibacklash_pulse_width;
+};
+
+struct ad9517_dev {
+	/* SPI */
+	spi_desc	    *spi_desc;
+	/* Device Settings */
+	struct ad9517_state ad9517_st;
+};
+
+struct ad9517_init_param {
+	/* SPI */
+	spi_init_param	    spi_init;
+	/* Device Settings */
+	struct ad9517_state ad9517_st;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Initializes the AD9517. */
-#ifdef OLD_VERSION
-int32_t ad9517_setup(int32_t spi_base_addr, int32_t ss_no);
-#else
-int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select);
-#endif
+int32_t ad9517_setup(struct ad9517_dev **device,
+		     struct ad9517_init_param init_param);
+/*! Free the resources allocated by ad9517_setup(). */
+int32_t ad9517_remove(struct ad9517_dev *dev);
 /*!  Writes data into a register. */
-int32_t ad9517_write(uint32_t reg_addr, uint16_t reg_val);
+int32_t ad9517_write(struct ad9517_dev *dev,
+		     uint32_t reg_addr,
+		     uint16_t reg_val);
 /*! Reads data from a register. */
-int32_t ad9517_read(uint32_t reg_addr);
+int32_t ad9517_read(struct ad9517_dev *dev,
+		    uint32_t reg_addr,
+		    uint32_t *reg_value);
 /*! Transfers the contents of the buffer registers into the active registers. */
-int32_t ad9517_update(void);
+int32_t ad9517_update(struct ad9517_dev *dev);
 /*! Sets the VCO frequency. */
-int64_t ad9517_vco_frequency(int64_t frequency);
+int64_t ad9517_vco_frequency(struct ad9517_dev *dev,
+			     int64_t frequency);
 /*! Sets the frequency on the specified channel. */
-int64_t ad9517_frequency(int32_t channel, int64_t frequency);
+int64_t ad9517_frequency(struct ad9517_dev *dev,
+			 int32_t channel,
+			 int64_t frequency);
 /*! Sets the phase on the specified channel. */
-int32_t ad9517_phase(int32_t channel, int32_t phase);
+int32_t ad9517_phase(struct ad9517_dev *dev,
+		     int32_t channel,
+		     int32_t phase);
 /*! Sets the power mode of the specified channel. */
-int32_t ad9517_power_mode(int32_t channel, int32_t mode);
+int32_t ad9517_power_mode(struct ad9517_dev *dev,
+			  int32_t channel,
+			  int32_t mode);
 
 #endif // __AD9517_H__
