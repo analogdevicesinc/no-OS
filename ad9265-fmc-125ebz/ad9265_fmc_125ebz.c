@@ -50,13 +50,18 @@
 *******************************************************************************/
 int main(void)
 {
-	spi_device			ad9265_device;
-	adc_core			ad9265_core;
-	dmac_core			ad9265_dma;
-	dmac_xfer			rx_xfer;
-	ad9265_init_param 	ad9265_init_param;
+	struct ad9265_dev		 *ad9265_device;
+	adc_core				 ad9265_core;
+	dmac_core				 ad9265_dma;
+	dmac_xfer				 rx_xfer;
+	struct ad9265_init_param ad9265_init_param;
 
-	// base addresses
+	ad9265_init_param.spi_init.chip_select = 0x2;
+	ad9265_init_param.spi_init.cpha = 0;
+	ad9265_init_param.spi_init.cpol = 0;
+	ad9265_init_param.spi_init.type = ZYNQ_PS7_SPI;
+
+	/* base addresses */
 
 	ad9265_core.base_address = XPAR_AXI_AD9265_BASEADDR;
 	ad9265_dma.base_address = XPAR_AXI_AD9265_DMA_BASEADDR;
@@ -70,27 +75,20 @@ int main(void)
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 32768;
 
-	ad_spi_init(&ad9265_device);
-	ad9265_device.chip_select = 0x2;
-
 	ad9265_core.no_of_channels = 1;
 	ad9265_core.resolution = 16;
 
-	ad_platform_init();
-
 	adc_setup(ad9265_core);
-	ad9265_setup(&ad9265_device, &ad9265_init_param, ad9265_core);
-	ad9265_testmode_set(&ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
+	ad9265_setup(&ad9265_device, ad9265_init_param, ad9265_core);
+	ad9265_testmode_set(ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
 
 	if(!dmac_start_transaction(ad9265_dma)){
 		ad_printf("ad9265: RX test capture done.\n");
 	};
 
-	ad9265_testmode_set(&ad9265_device, TESTMODE_OFF);
+	ad9265_testmode_set(ad9265_device, TESTMODE_OFF);
 
 	ad_printf("Done\n");
-
-	ad_platform_close();
 
 	return 0;
 }
