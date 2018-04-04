@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD9517_H__
 #define __AD9517_H__
@@ -303,8 +300,7 @@
 #define AD9517_MAX_PRESCLAER_OUT_FREQ		300000000
 
 /* Platform specific information */
-struct ad9517_platform_data 
-{
+struct ad9517_platform_data {
 	/* PLL Reference */
 	int32_t ref_1_freq;	// Frequency of the Reference 1.
 	int32_t ref_2_freq;	// Frequency of the Reference 2.
@@ -314,31 +310,29 @@ struct ad9517_platform_data
 	uint8_t ref_sel_pin_en;	// Set method of PLL reference selection.
 	uint8_t ref_sel_pin;	// State of the REF_SEL pin.
 	uint8_t ref_2_en;	// Select Reference 2.
-	
+
 	/* External Clock  */
 	int64_t ext_clk_freq;	// Frequency of the external clock.
 
 	/* VCO  */
 	int64_t int_vco_freq;	// Frequency of the internal VCO.
-	
+
 	/* External Clock or VCO selection */
 	int32_t vco_clk_sel;
-	
+
 	uint8_t power_down_vco_clk;
 	uint8_t name[16];
 };
 
 /* LVPECL output channel configuration. */
-struct ad9517_lvpecl_channel_spec 
-{
-    uint8_t channel_num;		// Output channel number.
-	uint8_t out_invert_en;		// Invert the polarity of the output clock.
-	uint8_t out_diff_voltage;	// LVPECL output differential voltage.
-	uint8_t name[16];		// Optional descriptive channel name.
+struct ad9517_lvpecl_channel_spec {
+	uint8_t channel_num;	  // Output channel number.
+	uint8_t out_invert_en;	  // Invert the polarity of the output clock.
+	uint8_t out_diff_voltage; // LVPECL output differential voltage.
+	uint8_t name[16];	  // Optional descriptive channel name.
 };
 
-enum out_diff_voltage_options 
-{
+enum out_diff_voltage_options {
 	LVPECL_400mV,
 	LVPECL_600mV,
 	LVPECL_780mV,
@@ -346,24 +340,21 @@ enum out_diff_voltage_options
 };
 
 /* LVDS/CMOS output channel configuration. */
-struct ad9517_lvds_cmos_channel_spec 
-{
-    uint8_t channel_num;		// Output channel number.
-	uint8_t out_invert;		// Invert the polarity of the output clock.
-	uint8_t logic_level;		// Select LVDS or CMOS logic levels.
-	uint8_t cmos_b_en;		// In CMOS mode, turn on/off the CMOS B output.
-	uint8_t out_lvds_current;	// LVDS output current level.
-	uint8_t name[16];		// Optional descriptive channel name.
+struct ad9517_lvds_cmos_channel_spec {
+	uint8_t channel_num;	  // Output channel number.
+	uint8_t out_invert;	  // Invert the polarity of the output clock.
+	uint8_t logic_level;	  // Select LVDS or CMOS logic levels.
+	uint8_t cmos_b_en;	  // In CMOS mode, turn on/off the CMOS B output
+	uint8_t out_lvds_current; // LVDS output current level.
+	uint8_t name[16];	  // Optional descriptive channel name.
 };
 
-enum logic_level_options
-{
+enum logic_level_options {
 	LVDS,
 	CMOS
 };
 
-enum out_lvds_current_options
-{
+enum out_lvds_current_options {
 	LVDS_1_75mA,
 	LVDS_3_5mA,
 	LVDS_5_25mA,
@@ -375,14 +366,14 @@ enum out_lvds_current_options
 /******************************************************************************/
 /*! Initializes the AD9517. */
 #ifdef OLD_VERSION
-int32_t ad9517_setup(int32_t spiBaseAddr, int32_t ssNo);
+int32_t ad9517_setup(int32_t spi_base_addr, int32_t ss_no);
 #else
 int32_t ad9517_setup(uint32_t spi_device_id, uint8_t slave_select);
 #endif
 /*!  Writes data into a register. */
-int32_t ad9517_write(uint32_t regAddr, uint16_t regVal);
+int32_t ad9517_write(uint32_t reg_addr, uint16_t reg_val);
 /*! Reads data from a register. */
-int32_t ad9517_read(uint32_t regAddr);
+int32_t ad9517_read(uint32_t reg_addr);
 /*! Transfers the contents of the buffer registers into the active registers. */
 int32_t ad9517_update(void);
 /*! Sets the VCO frequency. */
