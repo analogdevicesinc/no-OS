@@ -2265,6 +2265,7 @@
 *	REG_RX_CP_CONFIG
 */
 #define HALF_VCO_CAL_CLK		     (1 << 7) /* Half Vco Cal Clk */
+#define CP_OFFSET_OFF			     (1 << 4) /* CP Offset Off */
 #define F_CPCAL				     (1 << 3) /* F Cpcal */
 #define CP_CAL_ENABLE			     (1 << 2) /* Cp Cal Enable */
 
