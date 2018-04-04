@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "platform_drivers.h"
-#include "AD9517.h"
-#include "AD9517_cfg.h"
+#include "ad9517.h"
+#include "ad9517_cfg.h"
 
 /***************************************************************************//**
  * @brief Initializes the AD9517.
