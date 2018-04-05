@@ -41,11 +41,6 @@
 #define AD6676_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "platform_drivers.h"
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD6676_SPI_CONFIG		0x000
@@ -296,7 +291,7 @@
 #define CHIP_ID1_AD6676			0x03
 #define CHIP_ID0_AD6676			0xBB
 
-typedef struct {
+struct ad6676_init_param {
 	uint32_t 	ref_clk; // reference_clk rate Hz
 	uint32_t	f_adc_hz; // adc frequency Hz
 	uint32_t	f_if_hz; // intermediate frequency hz
@@ -320,27 +315,34 @@ typedef struct {
 	uint8_t 	n_lanes; // lanes
 	uint8_t 	frames_per_multiframe;
 	uint64_t	m;
-} ad6676_init_param;
+	/* SPI */
+	spi_init_param	spi_init;
+};
+
+struct ad6676_dev {
+	/* SPI */
+	spi_desc *spi_desc;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad6676_spi_read(spi_device *dev,
-							uint16_t reg_addr,
-							uint8_t *reg_data);
-int32_t ad6676_spi_write(spi_device *dev,
-							uint16_t reg_addr,
-							uint8_t reg_data);
-int32_t ad6676_setup(spi_device *dev,
-							ad6676_init_param *init_param);
-int32_t ad6676_update(spi_device *dev,
-							ad6676_init_param *init_param);
-int32_t ad6676_set_attenuation(spi_device *dev,
-							ad6676_init_param *init_param);
-int32_t ad6676_set_fif(spi_device *dev,
-							ad6676_init_param *init_param);
-uint64_t ad6676_get_fif(spi_device *dev,
-							ad6676_init_param *init_param);
-int32_t ad6676_test(spi_device *dev,
-							uint32_t test_mode);
+int32_t ad6676_spi_read(struct ad6676_dev *dev,
+			uint16_t reg_addr,
+			uint8_t *reg_data);
+int32_t ad6676_spi_write(struct ad6676_dev *dev,
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
+int32_t ad6676_setup(struct ad6676_dev **device,
+		     struct ad6676_init_param init_param);
+int32_t ad6676_update(struct ad6676_dev *dev,
+		      struct ad6676_init_param *init_param);
+int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
+			       struct ad6676_init_param *init_param);
+int32_t ad6676_set_fif(struct ad6676_dev *dev,
+		       struct ad6676_init_param *init_param);
+uint64_t ad6676_get_fif(struct ad6676_dev *dev,
+			struct ad6676_init_param *init_param);
+int32_t ad6676_test(struct ad6676_dev *dev,
+		    uint32_t test_mode);
 #endif
