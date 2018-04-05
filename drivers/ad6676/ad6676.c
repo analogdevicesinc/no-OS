@@ -263,7 +263,8 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	freq = clamp_t(uint32_t, freq, MIN_FADC_INT_SYNTH, MAX_FADC);
 
 	reg_val = freq / (f_pfd / 2);
-	ret = ad6676_set_splitreg(dev, AD6676_CLKSYN_INT_N_LSB, reg_val); /* 2A0 */
+	/* 2A0 */
+	ret = ad6676_set_splitreg(dev, AD6676_CLKSYN_INT_N_LSB, reg_val);
 	if (ret < 0)
 		return ret;
 
@@ -278,7 +279,8 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	do_div(&val64, reg_val);
 	reg_val = min_t(uint64_t, 64U, val64 - 1);
 
-	ret = ad6676_spi_write(dev, AD6676_CLKSYN_I_CP, reg_val); /* I_CP 2AC */
+	/* I_CP 2AC */
+	ret = ad6676_spi_write(dev, AD6676_CLKSYN_I_CP, reg_val);
 	if (ret < 0)
 		return ret;
 
@@ -298,8 +300,9 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	if (ret < 0)
 		return ret;
 
+	/* Reference Div 2BB */
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_R_DIV,
-			div_val | CLKSYN_R_DIV_RESERVED); /* Reference Div 2BB */
+			div_val | CLKSYN_R_DIV_RESERVED);
 	if (ret < 0)
 		return ret;
 
@@ -336,8 +339,10 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	do {
 		mdelay(1);
 		ad6676_spi_read(dev, AD6676_CLKSYN_STATUS, (uint8_t *)&reg_val);
-		reg_val &= SYN_STAT_PLL_LCK | SYN_STAT_VCO_CAL_BUSY | SYN_STAT_CP_CAL_DONE;
-	} while (--tout && (reg_val != (SYN_STAT_PLL_LCK | SYN_STAT_CP_CAL_DONE)));
+		reg_val &= SYN_STAT_PLL_LCK | SYN_STAT_VCO_CAL_BUSY |
+			   SYN_STAT_CP_CAL_DONE;
+	} while (--tout && (reg_val != (SYN_STAT_PLL_LCK |
+					SYN_STAT_CP_CAL_DONE)));
 
 	if (!tout) {
 		printf("AD6676 Synthesizer PLL unlocked (0x%X)\n", reg_val);
@@ -378,15 +383,17 @@ static int32_t ad6676_jesd_setup(struct ad6676_dev *dev,
 {
 	int32_t ret;
 
+	// sysref power down
 	ret = ad6676_spi_write(dev, AD6676_SYNCB_CTRL,
-		(init_param->sysref_pd ? PD_SYSREF_RX : 0) | // sysref power down
+		(init_param->sysref_pd ? PD_SYSREF_RX : 0) |
 		(init_param->lvds_syncb ? LVDS_SYNCB : 0)); // lvds sync_n
 	ret |= ad6676_spi_write(dev, AD6676_DID, 0x01); // device id
 	ret |= ad6676_spi_write(dev, AD6676_BID, 0x05); // bank id
 	ret |= ad6676_spi_write(dev, AD6676_L, (init_param->n_lanes - 1) |
 		(init_param->scrambling_en ? SCR : 0)); // scrambling, 2 lanes
 	ret |= ad6676_spi_write(dev, AD6676_F, 0x01); // 2 bytes/frame
-	ret |= ad6676_spi_write(dev, AD6676_K, init_param->frames_per_multiframe - 1);
+	ret |= ad6676_spi_write(dev, AD6676_K, init_param->
+				frames_per_multiframe - 1);
 	ret |= ad6676_spi_write(dev, AD6676_M, 0x01); // 2 converters
 	ret |= ad6676_spi_write(dev, AD6676_S, 0x00); // 1 samples per frame
 	ret |= ad6676_spi_write(dev, AD6676_SER2, 0xBD);
@@ -440,7 +447,9 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 
 		if (!done) {
 			printf("AD6676 CAL timeout (0x%X)\n", cal);
-			ad6676_spi_write(dev, AD6676_FORCE_END_CAL, FORCE_END_CAL);
+			ad6676_spi_write(dev,
+					 AD6676_FORCE_END_CAL,
+					 FORCE_END_CAL);
 			ad6676_spi_write(dev, AD6676_FORCE_END_CAL, 0);
 		} else {
 			return 0;
@@ -525,19 +534,19 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	ad6676_spi_read(dev, AD6676_CHIP_ID0, &reg_id);
 	if (reg_id != CHIP_ID0_AD6676) {
 		printf("Unrecognized CHIP_ID 0x%X\n", reg_id);
-			return -1;
+		return -1;
 	}
 
 	ret = ad6676_reset(dev, init_param.spi3wire);
 	if (ret < 0)
 		return ret;
 
-	if (!init_param.use_extclk) {
-		ad6676_set_clk_synth(dev, init_param.ref_clk, init_param.f_adc_hz);
-	}
-	else {
+	if (!init_param.use_extclk)
+		ad6676_set_clk_synth(dev,
+				     init_param.ref_clk,
+				     init_param.f_adc_hz);
+	else
 		ad6676_set_extclk_cntl(dev, init_param.f_adc_hz);
-	}
 
 	scale = clamp(init_param.scale, 0, 64);
 
@@ -547,17 +556,28 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	ret |= ad6676_set_fif(dev, &init_param);
 	ret |= ad6676_set_bw(dev, init_param.bw_hz);
 
-	ret |= ad6676_spi_write(dev, AD6676_LEXT, init_param.ext_l);
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_L, init_param.bw_margin_low_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_U, init_param.bw_margin_high_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_IF, init_param.bw_margin_if_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_XSCALE_1, scale);
+	ret |= ad6676_spi_write(dev,
+				AD6676_LEXT,
+				init_param.ext_l);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_L,
+				init_param.bw_margin_low_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_U,
+				init_param.bw_margin_high_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_IF,
+				init_param.bw_margin_if_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_XSCALE_1,
+				scale);
 
 	ret |= ad6676_calibrate(dev, RESON1_CAL | INIT_ADC);
 
 	ret |= ad6676_set_decimation(dev, &init_param);
 
-	ret |= ad6676_calibrate(dev, XCMD0 | XCMD1 | INIT_ADC | TUNE_ADC | FLASH_CAL);
+	ret |= ad6676_calibrate(dev, XCMD0 | XCMD1 | INIT_ADC | TUNE_ADC |
+				FLASH_CAL);
 
 	ret |= ad6676_spi_read(dev, AD6676_JESDSYN_STATUS, (uint8_t *)&reg_val);
 	reg_val &= SYN_STAT_PLL_LCK;
@@ -599,25 +619,37 @@ int32_t ad6676_update(struct ad6676_dev *dev,
 				    init_param->f_adc_hz / 200,
 			     init_param->f_adc_hz / 20);
 
-	init_param->f_if_hz = clamp_t(uint32_t, init_param->f_if_hz, MIN_FIF, MAX_FIF);
+	init_param->f_if_hz = clamp_t(uint32_t,
+				      init_param->f_if_hz,
+				      MIN_FIF,
+				      MAX_FIF);
 
 	ret = ad6676_set_fif(dev, init_param);
 	ret |= ad6676_set_bw(dev, init_param->bw_hz);
 
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_L, init_param->bw_margin_low_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_U, init_param->bw_margin_high_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_MRGN_IF, init_param->bw_margin_if_mhz);
-	ret |= ad6676_spi_write(dev, AD6676_XSCALE_1, scale);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_L,
+				init_param->bw_margin_low_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_U,
+				init_param->bw_margin_high_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_MRGN_IF,
+				init_param->bw_margin_if_mhz);
+	ret |= ad6676_spi_write(dev,
+				AD6676_XSCALE_1,
+				scale);
 
 	ret = ad6676_calibrate(dev, RESON1_CAL | INIT_ADC);
-	ret = ad6676_calibrate(dev, XCMD0 | XCMD1 | INIT_ADC | TUNE_ADC | FLASH_CAL);
+	ret = ad6676_calibrate(dev, XCMD0 | XCMD1 | INIT_ADC | TUNE_ADC |
+			       FLASH_CAL);
 
 	return ret;
 }
 
 /***************************************************************************//**
  * @brief ad6676_test
- *******************************************************************************/
+ ******************************************************************************/
 int32_t ad6676_test(struct ad6676_dev *dev,
 		    uint32_t test_mode)
 {
