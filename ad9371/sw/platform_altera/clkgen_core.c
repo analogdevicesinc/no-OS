@@ -343,6 +343,7 @@ static int32_t altera_a10_fpll_set_rate(a10_fpll *fpll,
 										uint32_t rate,
 										uint32_t parent_rate)
 {
+	uint32_t feedback;
 	uint32_t n, m, c0;
 	uint32_t fvco;
 	uint32_t div0, div1;
@@ -378,9 +379,16 @@ static int32_t altera_a10_fpll_set_rate(a10_fpll *fpll,
 	altera_a10_fpll_update(fpll, 0x134, 0x70, (cpc & 0x7) << 4);
 	altera_a10_fpll_update(fpll, 0x135, 0x07, (cpc & 0x38) >> 3);
 
+	/* Calibration needs to run with internal feedback */
+	feedback = altera_a10_fpll_read(fpll, 0x126);
+	altera_a10_fpll_write(fpll, 0x126, feedback | 1);
+
 	altera_a10_fpll_update(fpll, 0x100, 0x2, 0x2);
 	altera_a10_release_arbitration(fpll, true);
 	altera_a10_fpll_pll_calibration_check(fpll);
+
+	/* Restore original feedback configuration */
+	altera_a10_fpll_write(fpll, 0x126, feedback);
 
 	return 0;
 }
