@@ -68,43 +68,69 @@
 * @brief ad6676_gpio_config
 *******************************************************************************/
 
-int32_t ad6676_gpio_config(ad6676_init_param init_param)
+int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 {
+	gpio_desc *gpio_adc_oen;
+	gpio_desc *gpio_adc_s0;
+	gpio_desc *gpio_adc_s1;
+	gpio_desc *gpio_adc_sela;
+	gpio_desc *gpio_adc_selb;
+	gpio_desc *gpio_adc_resetb;
+	gpio_desc *gpio_adc_agc1;
+	gpio_desc *gpio_adc_agc2;
 
-	ad_gpio_set(GPIO_ADC_OEN, 0);
+	gpio_get(&gpio_adc_oen, GPIO_ADC_OEN);
+	gpio_get(&gpio_adc_s0, GPIO_ADC_S0);
+	gpio_get(&gpio_adc_s1, GPIO_ADC_S1);
+	gpio_get(&gpio_adc_sela, GPIO_ADC_SELA);
+	gpio_get(&gpio_adc_selb, GPIO_ADC_SELB);
+	gpio_get(&gpio_adc_resetb, GPIO_ADC_RESETB);
+	gpio_get(&gpio_adc_agc1, GPIO_ADC_AGC1);
+	gpio_get(&gpio_adc_agc2, GPIO_ADC_AGC2);
+
+	gpio_set_value(gpio_adc_oen, 0);
 
 	switch (init_param.decimation) {
 	case 12:
-		ad_gpio_set(GPIO_ADC_S0, 1);
-		ad_gpio_set(GPIO_ADC_S1, 1);
+		gpio_set_value(gpio_adc_s0, 1);
+		gpio_set_value(gpio_adc_s1, 1);
 		break;
 	case 16:
-		ad_gpio_set(GPIO_ADC_S0, 0);
-		ad_gpio_set(GPIO_ADC_S1, 1);
+		gpio_set_value(gpio_adc_s0, 0);
+		gpio_set_value(gpio_adc_s1, 1);
 		break;
 	case 24:
-		ad_gpio_set(GPIO_ADC_S0, 0);
-		ad_gpio_set(GPIO_ADC_S1, 1);
+		gpio_set_value(gpio_adc_s0, 0);
+		gpio_set_value(gpio_adc_s1, 1);
 		break;
 	case 32:
-		ad_gpio_set(GPIO_ADC_S0, 0);
-		ad_gpio_set(GPIO_ADC_S1, 0);
+		gpio_set_value(gpio_adc_s0, 0);
+		gpio_set_value(gpio_adc_s1, 0);
 		break;
 	default:
 		return -1;
 	}
 
 	if (init_param.use_extclk) {
-		ad_gpio_set(GPIO_ADC_SELA, 1);
-		ad_gpio_set(GPIO_ADC_SELB, 0);
+		gpio_set_value(gpio_adc_sela, 1);
+		gpio_set_value(gpio_adc_selb, 0);
 	} else {
-		ad_gpio_set(GPIO_ADC_SELA, 0);
-		ad_gpio_set(GPIO_ADC_SELB, 1);
+		gpio_set_value(gpio_adc_sela, 0);
+		gpio_set_value(gpio_adc_selb, 1);
 	}
 
-	ad_gpio_set(GPIO_ADC_RESETB, 1);
-	ad_gpio_set(GPIO_ADC_AGC1, 0);
-	ad_gpio_set(GPIO_ADC_AGC2, 0);
+	gpio_set_value(gpio_adc_resetb, 1);
+	gpio_set_value(gpio_adc_agc1, 0);
+	gpio_set_value(gpio_adc_agc2, 0);
+
+	gpio_remove(gpio_adc_oen);
+	gpio_remove(gpio_adc_s0);
+	gpio_remove(gpio_adc_s1);
+	gpio_remove(gpio_adc_sela);
+	gpio_remove(gpio_adc_selb);
+	gpio_remove(gpio_adc_resetb);
+	gpio_remove(gpio_adc_agc1);
+	gpio_remove(gpio_adc_agc2);
 
 	return 0;
 }
@@ -115,10 +141,10 @@ int32_t ad6676_gpio_config(ad6676_init_param init_param)
 int main(void)
 {
 	adc_core		ad6676_core;
-	ad6676_init_param 	ad6676_param;
+	struct ad6676_init_param 	ad6676_param;
 	jesd_core		ad6676_jesd;
 	xcvr_core		ad6676_xcvr;
-	spi_device		ad6676_spi_device;
+	struct ad6676_dev		*ad6676_device;
 	dmac_core		ad6676_dma;
 	dmac_xfer		rx_xfer;
 
@@ -126,8 +152,10 @@ int main(void)
 
 	// base addresses
 
-	ad_spi_init(&ad6676_spi_device);
-	ad6676_spi_device.chip_select = 0x0;
+	ad6676_param.spi_init.chip_select = 0x0;
+	ad6676_param.spi_init.cpha = 0;
+	ad6676_param.spi_init.cpol = 0;
+	ad6676_param.spi_init.type = ZYNQ_PS7_SPI;
 
 	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
 	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
@@ -176,7 +204,7 @@ int main(void)
 	ad6676_core.no_of_channels = 2;
 	ad6676_core.resolution = 16;
 
-        // receiver DMA configuration
+	// receiver DMA configuration
 
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
@@ -196,13 +224,11 @@ int main(void)
 #endif
 	xcvr_getconfig(&ad6676_xcvr);
 
-	ad_platform_init();
-
 	// set up clock
 	ad6676_gpio_config(ad6676_param);
 
 	// set up the device
-	ad6676_setup(&ad6676_spi_device, &ad6676_param);
+	ad6676_setup(&ad6676_device, ad6676_param);
 
 	// set up the JESD core
 	jesd_setup(ad6676_jesd);
@@ -220,13 +246,13 @@ int main(void)
 	adc_setup(ad6676_core);
 
 	// PRBS test
-	ad6676_test(&ad6676_spi_device, TESTGENMODE_PN9_SEQ);
+	ad6676_test(ad6676_device, TESTGENMODE_PN9_SEQ);
 	adc_pn_mon(ad6676_core, ADC_PN9);
-	ad6676_test(&ad6676_spi_device, TESTGENMODE_PN23_SEQ);
+	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
 	adc_pn_mon(ad6676_core, ADC_PN23A);
 
 	// set up ramp output
-	ad6676_test(&ad6676_spi_device, TESTGENMODE_RAMP);
+	ad6676_test(ad6676_device, TESTGENMODE_RAMP);
 	// test the captured data
 	if(!dmac_start_transaction(ad6676_dma)) {
 		store_samples = rx_xfer.no_of_samples/ad6676_core.no_of_channels;
@@ -234,12 +260,10 @@ int main(void)
 	};
 
 	// capture data with DMA
-	ad6676_test(&ad6676_spi_device, TESTGENMODE_OFF);
+	ad6676_test(ad6676_device, TESTGENMODE_OFF);
 	if(!dmac_start_transaction(ad6676_dma)) {
 		ad_printf("RX capture done!\n");
 	};
-
-	ad_platform_close();
 
 	return 0;
 }
