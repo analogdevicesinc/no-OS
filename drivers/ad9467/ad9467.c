@@ -43,7 +43,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "AD9467.h"
+#include "ad9467.h"
 #include "spi.h"
 
 /******************************************************************************/
@@ -127,7 +127,7 @@ int32_t ad9467_write(uint16_t regAddr, uint8_t regVal)
 	write_buffer[2] = regVal;
 
 #ifdef OLD_VERSION
-	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 0, NULL, 
+	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 0, NULL,
 			spiSlaveSelect);
 #else
 	ret = spi_write_and_read(ad9467_slave_select, write_buffer, 3);
@@ -158,7 +158,7 @@ int32_t ad9467_read(uint16_t regAddr)
 	write_buffer[2] = 0;
 
 #ifdef OLD_VERSION
-	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 3, (char*)read_buffer, 
+	ret = SPI_TransferData(spiBaseAddress, 3, (char*)write_buffer, 3, (char*)read_buffer,
 			spiSlaveSelect);
 	if(ret < 0)
 	{
@@ -210,8 +210,8 @@ uint32_t ad9467_set_bits_to_reg(uint16_t registerAddress,
  * @brief Configures the power mode.
  *
  * @param mode - The power mode.
- *				 Example: 00 – normal operation(default);
- *						  01 – full power-down.
+ *				 Example: 00 ï¿½ normal operation(default);
+ *						  01 ï¿½ full power-down.
  *
  * @return Negative error code or the set power mode.
 *******************************************************************************/
@@ -532,10 +532,10 @@ int32_t ad9467_output_invert(int32_t invert)
  * @brief Specifies the output format.
  *
  * @param format - The output format.
- *				   Example: 0 – offset binary(default);
- *							1 – two's complement;
- *							2 – gray code;
- *							3 – reserved.
+ *				   Example: 0 ï¿½ offset binary(default);
+ *							1 ï¿½ two's complement;
+ *							2 ï¿½ gray code;
+ *							3 ï¿½ reserved.
  *
  * @return Negative error code or the set output format.
 *******************************************************************************/
