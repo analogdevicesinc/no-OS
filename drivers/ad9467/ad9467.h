@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 #ifndef __AD9467_H__
 #define __AD9467_H__
@@ -144,15 +141,19 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 /*! Free the resources allocated by ad9467_setup(). */
 int32_t ad9467_remove(struct ad9467_dev *dev);
 /*! Writes data into a register.  */
-int32_t ad9467_write(struct ad9467_dev *dev, uint16_t regAddr, uint8_t regVal);
+int32_t ad9467_write(struct ad9467_dev *dev,
+		     uint16_t reg_addr,
+		     uint8_t reg_val);
 /*! Reads data from a register. */
 /*! Sets a bit or a group of bits inside a register without modifying the other
     bits. */
-int32_t ad9467_read(struct ad9467_dev *dev, uint16_t regAddr, uint8_t *reg_val);
+int32_t ad9467_read(struct ad9467_dev *dev,
+		    uint16_t reg_addr,
+		    uint8_t *reg_val);
 uint32_t ad9467_set_bits_to_reg(struct ad9467_dev *dev,
-				uint16_t registerAddress,
-                                uint8_t bitsValue,
-                                uint8_t mask);
+				uint16_t register_address,
+				uint8_t bits_value,
+				uint8_t mask);
 /*! Configures the power mode. */
 int32_t ad9467_pwr_mode(struct ad9467_dev *dev,
 			int32_t mode,
@@ -162,11 +163,11 @@ int32_t ad9467_test_mode(struct ad9467_dev *dev,
 			 int32_t mode,
 			 int32_t *ret_mode);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad9467_reset_PN9(struct ad9467_dev *dev,
+int32_t ad9467_reset_pn9(struct ad9467_dev *dev,
 			 int32_t rst,
 			 int32_t *ret_stat);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad9467_reset_PN23(struct ad9467_dev *dev,
+int32_t ad9467_reset_pn23(struct ad9467_dev *dev,
 			  int32_t rst,
 			  int32_t *ret_stat);
 /*!  Enables (1) or disables (0) the external voltage reference. */
@@ -195,7 +196,7 @@ int32_t ad9467_output_format(struct ad9467_dev *dev,
 			     int32_t format,
 			     int32_t *ret_stat);
 /*! Determines LVDS output properties. */
-int32_t ad9467_coarse_LVDS_adj(struct ad9467_dev *dev,
+int32_t ad9467_coarse_lvds_adj(struct ad9467_dev *dev,
 			       int32_t lvds_adj,
 			       int32_t *ret_stat);
 /*! Sets the output current adjustment. */
@@ -212,8 +213,8 @@ int32_t ad9467_dco_output_clock_delay(struct ad9467_dev *dev,
 				      int32_t *ret_stat);
 /*! Configures the full-scale input voltage selection. */
 int32_t ad9467_full_scale_range(struct ad9467_dev *dev,
-			      float v_fs,
-			      float *ret_stat);
+				float v_fs,
+				float *ret_stat);
 /*! Sets the AC coupling(0) or DC coupling(1) mode. */
 int32_t ad9467_analog_input_coupling(struct ad9467_dev *dev,
 				     int32_t coupling_mode,
