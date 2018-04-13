@@ -35,9 +35,6 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-********************************************************************************
- *   SVN Revision: $WCREV$
 *******************************************************************************/
 
 /******************************************************************************/
@@ -60,7 +57,7 @@
 int32_t ad9467_setup(struct ad9467_dev **device,
 		     struct ad9467_init_param init_param)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	struct ad9467_dev *dev;
 
 	dev = (struct ad9467_dev *)malloc(sizeof(*dev));
@@ -71,27 +68,21 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	/* Disable test mode. */
-    ret = ad9467_write(dev, AD9467_REG_TEST_IO, 0x00);
-    if(ret < 0)
-    {
-        return ret;
-    }
+	ret = ad9467_write(dev, AD9467_REG_TEST_IO, 0x00);
+	if(ret < 0)
+		return ret;
 	/* Enable digital output, disable output invert and set data format to
 	   binary offset. */
-    ret = ad9467_write(dev, AD9467_REG_OUT_MODE, 0x08);
-    if(ret < 0)
-    {
-        return ret;
-    }
-    ret = ad9467_transfer(dev);
-    if(ret < 0)
-    {
-        return ret;
-    }
+	ret = ad9467_write(dev, AD9467_REG_OUT_MODE, 0x08);
+	if(ret < 0)
+		return ret;
+	ret = ad9467_transfer(dev);
+	if(ret < 0)
+		return ret;
 
 	*device = dev;
 
-    return 0;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -115,50 +106,50 @@ int32_t ad9467_remove(struct ad9467_dev *dev)
 /**************************************************************************//**
 * @brief Writes data into a register.
 *
-* @param dev     - The device structure.
-* @param regAddr - The address of the register to be written.
-* @param regVal  - The value to be written into the register.
+* @param dev      - The device structure.
+* @param reg_addr - The address of the register to be written.
+* @param reg_val  - The value to be written into the register.
 *
 * @return Returns 0 in case of success or negative error code.
 ******************************************************************************/
 int32_t ad9467_write(struct ad9467_dev *dev,
-		     uint16_t regAddr,
-		     uint8_t regVal)
+		     uint16_t reg_addr,
+		     uint8_t reg_val)
 {
 	int32_t ret;
-	uint8_t	write_buffer[3];
+	uint8_t write_buffer[3];
 
-    regAddr += AD9467_WRITE;
+	reg_addr += AD9467_WRITE;
 
-	write_buffer[0] = (uint8_t)((regAddr & 0xFF00) >> 8);
-	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
-	write_buffer[2] = regVal;
+	write_buffer[0] = (uint8_t)((reg_addr & 0xFF00) >> 8);
+	write_buffer[1] = (uint8_t)(reg_addr & 0x00FF);
+	write_buffer[2] = reg_val;
 
 	ret = spi_write_and_read(dev->spi_desc, write_buffer, 3);
 
-    return ret;
+	return ret;
 }
 
 /**************************************************************************//**
 * @brief Reads data from a register.
 *
-* @param dev     - The device structure.
-* @param regAddr - The address of the register to be read.
-* @param reg_val - The value read from the register.
+* @param dev      - The device structure.
+* @param reg_addr - The address of the register to be read.
+* @param reg_val  - The value read from the register.
 *
 * @return Returns the read data or negative error code.
 ******************************************************************************/
 int32_t ad9467_read(struct ad9467_dev *dev,
-		    uint16_t regAddr,
+		    uint16_t reg_addr,
 		    uint8_t *reg_val)
 {
 	int32_t ret;
-	uint8_t	write_buffer[3];
+	uint8_t write_buffer[3];
 
-	regAddr += AD9467_READ;
+	reg_addr += AD9467_READ;
 
-	write_buffer[0] = (uint8_t)((regAddr & 0xFF00) >> 8);
-	write_buffer[1] = (uint8_t)(regAddr & 0x00FF);
+	write_buffer[0] = (uint8_t)((reg_addr & 0xFF00) >> 8);
+	write_buffer[1] = (uint8_t)(reg_addr & 0x00FF);
 	write_buffer[2] = 0;
 
 	ret = spi_write_and_read(dev->spi_desc, write_buffer, 3);
@@ -172,35 +163,31 @@ int32_t ad9467_read(struct ad9467_dev *dev,
  * @brief Sets a bit or a group of bits inside a register without modifying
  *        the other bits.
  *
- * @param dev             - The device structure.
- * @param registerAddress - The address of the register to be written.
- * @param bitsValue       - The value of the bit/bits.
- * @param mask            - The bit/bits position in the register.
+ * @param dev              - The device structure.
+ * @param register_address - The address of the register to be written.
+ * @param bits_value       - The value of the bit/bits.
+ * @param mask             - The bit/bits position in the register.
  *
  * @return Negative error code or 0 in case of success.
 *******************************************************************************/
 uint32_t ad9467_set_bits_to_reg(struct ad9467_dev *dev,
-				uint16_t registerAddress,
-                                uint8_t bitsValue,
-                                uint8_t mask)
+				uint16_t register_address,
+				uint8_t bits_value,
+				uint8_t mask)
 {
-    uint8_t regValue = 0;
-    int32_t ret      = 0;
+	uint8_t reg_value = 0;
+	int32_t ret = 0;
 
-    ret = ad9467_read(dev, registerAddress, &regValue);
-    if(ret < 0)
-    {
-        return ret;
-    }
-    regValue &= (~mask);
-    regValue |= bitsValue;
-    ret = ad9467_write(dev, registerAddress, regValue);
-    if(ret < 0)
-    {
-        return ret;
-    }
+	ret = ad9467_read(dev, register_address, &reg_value);
+	if(ret < 0)
+		return ret;
+	reg_value &= (~mask);
+	reg_value |= bits_value;
+	ret = ad9467_write(dev, register_address, reg_value);
+	if(ret < 0)
+		return ret;
 
-    return 0;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -214,34 +201,31 @@ uint32_t ad9467_set_bits_to_reg(struct ad9467_dev *dev,
  *
  * @return Error code.
 *******************************************************************************/
-int32_t ad9467_pwr_mode(struct ad9467_dev *dev, int32_t mode, int32_t *ret_mode)
+int32_t ad9467_pwr_mode(struct ad9467_dev *dev,
+			int32_t mode,
+			int32_t *ret_mode)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((mode == 0) || (mode == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_MODES,
-                                     AD9467_MODES_INT_PD_MODE(mode),
-                                     AD9467_MODES_INT_PD_MODE(0x3));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_mode = mode;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_MODES, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_mode = (read & AD9467_MODES_INT_PD_MODE(0x3)) == 0x01;
-    }
+	if((mode == 0) || (mode == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_MODES,
+					     AD9467_MODES_INT_PD_MODE(mode),
+					     AD9467_MODES_INT_PD_MODE(0x3));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_mode = mode;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_MODES, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_mode = (read & AD9467_MODES_INT_PD_MODE(0x3)) == 0x01;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -265,32 +249,27 @@ int32_t ad9467_test_mode(struct ad9467_dev *dev,
 			 int32_t mode,
 			 int32_t *ret_mode)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((mode >= 0) && (mode <= 7))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_TEST_IO,
-                                     AD9467_TEST_IO_OUT_TEST(mode),
-                                     AD9467_TEST_IO_OUT_TEST(0xF));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_mode = mode;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_mode = (read & AD9467_TEST_IO_OUT_TEST(0xF)) >> 0;
-    }
+	if((mode >= 0) && (mode <= 7)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_TEST_IO,
+					     AD9467_TEST_IO_OUT_TEST(mode),
+					     AD9467_TEST_IO_OUT_TEST(0xF));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_mode = mode;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_mode = (read & AD9467_TEST_IO_OUT_TEST(0xF)) >> 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -305,34 +284,31 @@ int32_t ad9467_test_mode(struct ad9467_dev *dev,
  *
  * @return Error code.
 *******************************************************************************/
-int32_t ad9467_reset_PN9(struct ad9467_dev *dev, int32_t rst, int32_t *ret_stat)
+int32_t ad9467_reset_pn9(struct ad9467_dev *dev,
+			 int32_t rst,
+			 int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((rst == 0) || (rst == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_TEST_IO,
-                                     rst * AD9467_TEST_IO_RST_PN_SHORT,
-                                     AD9467_TEST_IO_RST_PN_SHORT);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = rst;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_TEST_IO_RST_PN_SHORT) != 0;
-    }
+	if((rst == 0) || (rst == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_TEST_IO,
+					     rst * AD9467_TEST_IO_RST_PN_SHORT,
+					     AD9467_TEST_IO_RST_PN_SHORT);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = rst;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_TEST_IO_RST_PN_SHORT) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -347,36 +323,31 @@ int32_t ad9467_reset_PN9(struct ad9467_dev *dev, int32_t rst, int32_t *ret_stat)
  *
  * @return Error code.
 *******************************************************************************/
-int32_t ad9467_reset_PN23(struct ad9467_dev *dev,
+int32_t ad9467_reset_pn23(struct ad9467_dev *dev,
 			  int32_t rst,
 			  int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((rst == 0) || (rst == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_TEST_IO,
-                                     rst * AD9467_TEST_IO_RST_PN_LONG,
-                                     AD9467_TEST_IO_RST_PN_LONG);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = rst;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_TEST_IO_RST_PN_LONG) != 0;
-    }
+	if((rst == 0) || (rst == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_TEST_IO,
+					     rst * AD9467_TEST_IO_RST_PN_LONG,
+					     AD9467_TEST_IO_RST_PN_LONG);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = rst;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_TEST_IO, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_TEST_IO_RST_PN_LONG) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -395,32 +366,27 @@ int32_t ad9467_external_ref(struct ad9467_dev *dev,
 			    int32_t en,
 			    int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((en == 0) || (en == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_ADC_INPUT,
-                                     en * AD9467_ADC_INPUT_XVREF,
-                                     AD9467_ADC_INPUT_XVREF);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = en;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_ADC_INPUT, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_ADC_INPUT_XVREF) != 0;
-    }
+	if((en == 0) || (en == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_ADC_INPUT,
+					     en * AD9467_ADC_INPUT_XVREF,
+					     AD9467_ADC_INPUT_XVREF);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = en;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_ADC_INPUT, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_ADC_INPUT_XVREF) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -439,32 +405,27 @@ int32_t ad9467_analog_input_disconnect(struct ad9467_dev *dev,
 				       int32_t en,
 				       int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((en == 0) || (en == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_ADC_INPUT,
-                                     en * AD9467_ADC_INPUT_ANALOG_DSCN,
-                                     AD9467_ADC_INPUT_ANALOG_DSCN);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = en;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_ADC_INPUT, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_ADC_INPUT_ANALOG_DSCN) != 0;
-    }
+	if((en == 0) || (en == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_ADC_INPUT,
+					     en * AD9467_ADC_INPUT_ANALOG_DSCN,
+					     AD9467_ADC_INPUT_ANALOG_DSCN);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = en;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_ADC_INPUT, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_ADC_INPUT_ANALOG_DSCN) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -480,25 +441,21 @@ int32_t ad9467_offset_adj(struct ad9467_dev *dev,
 			  int32_t adj,
 			  int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((adj >= -128) && (adj <= 127))
-    {
-        ret = ad9467_write(dev, AD9467_REG_OFFSET, adj);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = adj;
-    }
-    else
-    {
-	    ret = ad9467_read(dev, AD9467_REG_OFFSET, &read);
-	    *ret_stat = read;
-    }
+	if((adj >= -128) && (adj <= 127)) {
+		ret = ad9467_write(dev, AD9467_REG_OFFSET, adj);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = adj;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OFFSET, &read);
+		*ret_stat = read;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -516,32 +473,27 @@ int32_t ad9467_output_disable(struct ad9467_dev *dev,
 			      int32_t en,
 			      int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((en == 0) || (en == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_MODE,
-                                     en * AD9467_OUT_MODE_DOUT_DISBL,
-                                     AD9467_OUT_MODE_DOUT_DISBL);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = en;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_MODE_DOUT_DISBL) != 0;
-    }
+	if((en == 0) || (en == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_MODE,
+					     en * AD9467_OUT_MODE_DOUT_DISBL,
+					     AD9467_OUT_MODE_DOUT_DISBL);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = en;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_MODE_DOUT_DISBL) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -559,32 +511,27 @@ int32_t ad9467_output_invert(struct ad9467_dev *dev,
 			     int32_t invert,
 			     int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if( (invert == 0) || (invert == 1))
-	{
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_MODE,
-                                     invert * AD9467_OUT_MODE_OUT_INV,
-                                     AD9467_OUT_MODE_OUT_INV);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = invert;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_MODE_OUT_INV) != 0;
-    }
+	if( (invert == 0) || (invert == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_MODE,
+					     invert * AD9467_OUT_MODE_OUT_INV,
+					     AD9467_OUT_MODE_OUT_INV);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = invert;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_MODE_OUT_INV) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -604,32 +551,27 @@ int32_t ad9467_output_format(struct ad9467_dev *dev,
 			     int32_t format,
 			     int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if( (format == 0) || (format == 1) || (format == 2))
-	{
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_MODE,
-                                     AD9467_OUT_MODE_DATA_FORMAT(format),
-                                     AD9467_OUT_MODE_DATA_FORMAT(0x3));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = format;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_MODE_DATA_FORMAT(0x3)) >> 0;
-    }
+	if( (format == 0) || (format == 1) || (format == 2)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_MODE,
+					     AD9467_OUT_MODE_DATA_FORMAT(format),
+					     AD9467_OUT_MODE_DATA_FORMAT(0x3));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = format;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_MODE, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_MODE_DATA_FORMAT(0x3)) >> 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -643,36 +585,31 @@ int32_t ad9467_output_format(struct ad9467_dev *dev,
  *
  * @return Error code.
 *******************************************************************************/
-int32_t ad9467_coarse_LVDS_adj(struct ad9467_dev *dev,
+int32_t ad9467_coarse_lvds_adj(struct ad9467_dev *dev,
 			       int32_t lvds_adj,
 			       int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((lvds_adj == 0) || (lvds_adj == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_ADJ,
-                                     lvds_adj * AD9467_OUT_ADJ_LVDS,
-                                     AD9467_OUT_ADJ_LVDS);
-        if(ret < 0)
-            {
-                return ret;
-            }
-	    *ret_stat = lvds_adj;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_ADJ, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_ADJ_LVDS) != 0;
-    }
+	if((lvds_adj == 0) || (lvds_adj == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_ADJ,
+					     lvds_adj * AD9467_OUT_ADJ_LVDS,
+					     AD9467_OUT_ADJ_LVDS);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = lvds_adj;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_ADJ, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_ADJ_LVDS) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -695,32 +632,27 @@ int32_t ad9467_output_current_adj(struct ad9467_dev *dev,
 				  int32_t adj,
 				  int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((adj > 0) || (adj <= 7))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_ADJ,
-                                     AD9467_OUT_ADJ_OUT_CURRENT(adj),
-                                     AD9467_OUT_ADJ_OUT_CURRENT(0x7));
-        if(ret < 0)
-            {
-                return ret;
-            }
-	    *ret_stat = adj;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_ADJ, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_ADJ_OUT_CURRENT(0x7)) >> 0;
-    }
+	if((adj > 0) || (adj <= 7)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_ADJ,
+					     AD9467_OUT_ADJ_OUT_CURRENT(adj),
+					     AD9467_OUT_ADJ_OUT_CURRENT(0x7));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = adj;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_ADJ, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_ADJ_OUT_CURRENT(0x7)) >> 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -738,32 +670,27 @@ int32_t ad9467_dco_clock_invert(struct ad9467_dev *dev,
 				int32_t invert,
 				int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((invert == 0) || (invert == 1))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_OUT_PHASE,
-                                     invert * AD9467_OUT_PHASE_DCO_INV,
-                                     AD9467_OUT_PHASE_DCO_INV);
-        if(ret < 0)
-            {
-                return ret;
-            }
-	    *ret_stat = invert;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_PHASE, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_OUT_PHASE_DCO_INV) != 0;
-    }
+	if((invert == 0) || (invert == 1)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_OUT_PHASE,
+					     invert * AD9467_OUT_PHASE_DCO_INV,
+					     AD9467_OUT_PHASE_DCO_INV);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = invert;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_PHASE, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_OUT_PHASE_DCO_INV) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -780,49 +707,38 @@ int32_t ad9467_dco_output_clock_delay(struct ad9467_dev *dev,
 				      int32_t delay,
 				      int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if(!delay)
-    {
-        ret = ad9467_write(dev, AD9467_REG_OUT_DELAY, 0x00);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = 0x00;
-    }
-    else if( delay <= 3200)
-    {
-	    *ret_stat = delay;
-        delay = (delay - 100) / 100;
-        ret = ad9467_write(dev,
-			   AD9467_REG_OUT_DELAY,
-                           AD9467_OUT_DELAY_DCO_DLY_EN |
-                           AD9467_OUT_DELAY_OUT_DLY(delay));
-        if(ret < 0)
-        {
-            return ret;
-        }
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_OUT_DELAY, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-        if(read & AD9467_OUT_DELAY_DCO_DLY_EN)
-        {
-            *ret_stat = (read & AD9467_OUT_DELAY_OUT_DLY(0x1F)) * 100 + 100;
-        }
-        else
-        {
-            *ret_stat = 0;
-        }
-    }
+	if(!delay) {
+		ret = ad9467_write(dev, AD9467_REG_OUT_DELAY, 0x00);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = 0x00;
+	} else if(delay <= 3200) {
+		*ret_stat = delay;
+		delay = (delay - 100) / 100;
+		ret = ad9467_write(dev,
+				   AD9467_REG_OUT_DELAY,
+				   AD9467_OUT_DELAY_DCO_DLY_EN |
+				   AD9467_OUT_DELAY_OUT_DLY(delay));
+		if(ret < 0) {
+			return ret;
+		}
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_OUT_DELAY, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		if(read & AD9467_OUT_DELAY_DCO_DLY_EN) {
+			*ret_stat = (read & AD9467_OUT_DELAY_OUT_DLY(0x1F)) * 100 + 100;
+		} else {
+			*ret_stat = 0;
+		}
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -844,49 +760,37 @@ int32_t ad9467_full_scale_range(struct ad9467_dev *dev,
 				float v_fs,
 				float *ret_stat)
 {
-    int32_t ret = 0;
-    int8_t  val = -1;
+	int32_t ret = 0;
+	int8_t val = -1;
 	uint8_t read;
 
-    if(v_fs == 2.0)
-    {
-        val = 0x00;
-    }
-    else if((v_fs >= 2.1) && (v_fs <= 2.5))
-    {
-        val = ((int8_t)(v_fs * 10) % 20) + 0x05;
-    }
-    if(val != -1)
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_V_REF,
-                                     AD9467_V_REF_IN_FS_RANGE(val),
-                                     AD9467_V_REF_IN_FS_RANGE(0xF));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = v_fs;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_V_REF, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-        val = read & AD9467_V_REF_IN_FS_RANGE(0xF);
-        if(val == 0x00)
-        {
-            *ret_stat = 2.0;
-        }
-        else
-        {
-            *ret_stat = (((float)(val - 0x05) / 10) + 2.0);
-        }
-    }
+	if(v_fs == 2.0)
+		val = 0x00;
+	else if((v_fs >= 2.1) && (v_fs <= 2.5))
+		val = ((int8_t)(v_fs * 10) % 20) + 0x05;
+	if(val != -1) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_V_REF,
+					     AD9467_V_REF_IN_FS_RANGE(val),
+					     AD9467_V_REF_IN_FS_RANGE(0xF));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = v_fs;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_V_REF, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		val = read & AD9467_V_REF_IN_FS_RANGE(0xF);
+		if(val == 0x00) {
+			*ret_stat = 2.0;
+		} else {
+			*ret_stat = (((float)(val - 0x05) / 10) + 2.0);
+		}
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -904,32 +808,28 @@ int32_t ad9467_analog_input_coupling(struct ad9467_dev *dev,
 				     int32_t coupling_mode,
 				     int32_t *ret_stat)
 {
-    int32_t ret = 0;
+	int32_t ret = 0;
 	uint8_t read;
 
-    if((coupling_mode == 0) || (coupling_mode == 7))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				   AD9467_REG_ANALOG_INPUT,
-                                   coupling_mode * AD9467_ANALOG_INPUT_COUPLING,
-                                   AD9467_ANALOG_INPUT_COUPLING);
-        if(ret < 0)
-            {
-                return ret;
-            }
-	    *ret_stat = coupling_mode;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_ANALOG_INPUT, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = (read & AD9467_ANALOG_INPUT_COUPLING) != 0;
-    }
+	if((coupling_mode == 0) || (coupling_mode == 7)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_ANALOG_INPUT,
+					     coupling_mode *
+					     AD9467_ANALOG_INPUT_COUPLING,
+					     AD9467_ANALOG_INPUT_COUPLING);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = coupling_mode;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_ANALOG_INPUT, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = (read & AD9467_ANALOG_INPUT_COUPLING) != 0;
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -958,38 +858,32 @@ int32_t ad9467_buffer_current_1(struct ad9467_dev *dev,
 				int32_t percentage,
 				int32_t *ret_stat)
 {
-    int32_t ret = 0;
-    int8_t  val = 0;
+	int32_t ret = 0;
+	int8_t val = 0;
 	uint8_t read;
 
-    if((percentage >= -100) && (percentage <= 530))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_BUFF_CURRENT_1,
-                                     AD9467_BUFF_CURRENT_1(percentage / 10),
-                                     AD9467_BUFF_CURRENT_1(0x3F));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = percentage;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_BUFF_CURRENT_1, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-        val = (read & AD9467_BUFF_CURRENT_1(0x3F)) >> 2;
-        if(val > 53)
-        {
-            val -= 0x40;
-        }
-        *ret_stat = (val * 10);
-    }
+	if((percentage >= -100) && (percentage <= 530)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_BUFF_CURRENT_1,
+					     AD9467_BUFF_CURRENT_1(percentage / 10),
+					     AD9467_BUFF_CURRENT_1(0x3F));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = percentage;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_BUFF_CURRENT_1, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		val = (read & AD9467_BUFF_CURRENT_1(0x3F)) >> 2;
+		if(val > 53) {
+			val -= 0x40;
+		}
+		*ret_stat = (val * 10);
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -1017,38 +911,32 @@ int32_t ad9467_buffer_current_2(struct ad9467_dev *dev,
 				int32_t percentage,
 				int32_t *ret_stat)
 {
-    int32_t ret = 0;
-    int8_t  val = 0;
+	int32_t ret = 0;
+	int8_t val = 0;
 	uint8_t read;
 
-    if((percentage >= -100) && (percentage <= 530))
-    {
-        ret = ad9467_set_bits_to_reg(dev,
-				     AD9467_REG_BUFF_CURRENT_2,
-                                     AD9467_BUFF_CURRENT_2(percentage / 10),
-                                     AD9467_BUFF_CURRENT_2(0x3F));
-        if(ret < 0)
-        {
-            return ret;
-        }
-	    *ret_stat = percentage;
-    }
-    else
-    {
-        ret = ad9467_read(dev, AD9467_REG_BUFF_CURRENT_2, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-        val = (read & AD9467_BUFF_CURRENT_2(0x3F)) >> 2;
-        if(val > 53)
-        {
-            val -= 0x40;
-        }
-        *ret_stat = (val * 10);
-    }
+	if((percentage >= -100) && (percentage <= 530)) {
+		ret = ad9467_set_bits_to_reg(dev,
+					     AD9467_REG_BUFF_CURRENT_2,
+					     AD9467_BUFF_CURRENT_2(percentage / 10),
+					     AD9467_BUFF_CURRENT_2(0x3F));
+		if(ret < 0) {
+			return ret;
+		}
+		*ret_stat = percentage;
+	} else {
+		ret = ad9467_read(dev, AD9467_REG_BUFF_CURRENT_2, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		val = (read & AD9467_BUFF_CURRENT_2(0x3F)) >> 2;
+		if(val > 53) {
+			val -= 0x40;
+		}
+		*ret_stat = (val * 10);
+	}
 
-    return ret;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -1058,24 +946,23 @@ int32_t ad9467_buffer_current_2(struct ad9467_dev *dev,
 *******************************************************************************/
 int32_t ad9467_transfer(struct ad9467_dev *dev)
 {
-    int32_t ret    = 0;
-    int8_t  sw_bit = 0;
+	int32_t ret = 0;
+	int8_t sw_bit = 0;
 	uint8_t read;
 
-    ret = ad9467_write(dev, AD9467_REG_DEVICE_UPDATE, AD9467_DEVICE_UPDATE_SW);
-    if(ret < 0)
-    {
-        return ret;
-    }
-    do
-    {
-        ret = ad9467_read(dev, AD9467_REG_DEVICE_UPDATE, &read);
-        if(ret < 0)
-        {
-            return ret;
-        }
-        sw_bit = read & AD9467_REG_DEVICE_UPDATE;
-    }while(sw_bit == 1);
+	ret = ad9467_write(dev,
+			   AD9467_REG_DEVICE_UPDATE,
+			   AD9467_DEVICE_UPDATE_SW);
+	if(ret < 0) {
+		return ret;
+	}
+	do {
+		ret = ad9467_read(dev, AD9467_REG_DEVICE_UPDATE, &read);
+		if(ret < 0) {
+			return ret;
+		}
+		sw_bit = read & AD9467_REG_DEVICE_UPDATE;
+	} while(sw_bit == 1);
 
-    return 0;
+	return 0;
 }
