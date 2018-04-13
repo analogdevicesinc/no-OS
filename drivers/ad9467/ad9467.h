@@ -42,11 +42,6 @@
 #ifndef __AD9467_H__
 #define __AD9467_H__
 
-/*****************************************************************************/
-/***************************** Include Files *********************************/
-/*****************************************************************************/
-#include <stdint.h>
-
 /******************************************************************************/
 /*********************************** AD9467 ***********************************/
 /******************************************************************************/
@@ -130,58 +125,108 @@
 /******************************************************************************/
 /************************ Types Definitions ***********************************/
 /******************************************************************************/
+struct ad9467_dev {
+	/* SPI */
+	spi_desc	*spi_desc;
+};
+
+struct ad9467_init_param {
+	/* SPI */
+	spi_init_param	spi_init;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /*! Configures the test mode and the output mode to a default state. */
-#ifdef OLD_VERSION
-int32_t ad9467_setup(int32_t spiBaseAddr, int32_t ssNo);
-#else
-int32_t ad9467_setup(uint32_t spi_device_id, uint8_t slave_select);
-#endif
+int32_t ad9467_setup(struct ad9467_dev **device,
+		     struct ad9467_init_param init_param);
+/*! Free the resources allocated by ad9467_setup(). */
+int32_t ad9467_remove(struct ad9467_dev *dev);
 /*! Writes data into a register.  */
-int32_t ad9467_write(uint16_t regAddr, uint8_t regVal);
+int32_t ad9467_write(struct ad9467_dev *dev, uint16_t regAddr, uint8_t regVal);
 /*! Reads data from a register. */
-int32_t ad9467_read(uint16_t regAddr);
+/*! Sets a bit or a group of bits inside a register without modifying the other
+    bits. */
+int32_t ad9467_read(struct ad9467_dev *dev, uint16_t regAddr, uint8_t *reg_val);
+uint32_t ad9467_set_bits_to_reg(struct ad9467_dev *dev,
+				uint16_t registerAddress,
+                                uint8_t bitsValue,
+                                uint8_t mask);
 /*! Configures the power mode. */
-int32_t ad9467_pwr_mode(int32_t mode);
+int32_t ad9467_pwr_mode(struct ad9467_dev *dev,
+			int32_t mode,
+			int32_t *ret_mode);
 /*! Sets the ADC's test mode. */
-int32_t ad9467_test_mode(int32_t mode);
+int32_t ad9467_test_mode(struct ad9467_dev *dev,
+			 int32_t mode,
+			 int32_t *ret_mode);
 /*! Sets (1) or clears (0) the reset short PN sequence bit(PN9). */
-int32_t ad9467_reset_PN9(int32_t rst);
+int32_t ad9467_reset_PN9(struct ad9467_dev *dev,
+			 int32_t rst,
+			 int32_t *ret_stat);
 /*! Sets (1) or clears (0) the reset long PN sequence bit(PN23). */
-int32_t ad9467_reset_PN23(int32_t rst);
+int32_t ad9467_reset_PN23(struct ad9467_dev *dev,
+			  int32_t rst,
+			  int32_t *ret_stat);
 /*!  Enables (1) or disables (0) the external voltage reference. */
-int32_t ad9467_external_ref(int32_t en);
+int32_t ad9467_external_ref(struct ad9467_dev *dev,
+			    int32_t en,
+			    int32_t *ret_stat);
 /*! Disconnects (1) or connects (0) the analog input from or to the ADC
     channel. */
-int32_t ad9467_analog_input_disconnect(int32_t en);
+int32_t ad9467_analog_input_disconnect(struct ad9467_dev *dev,
+				       int32_t en,
+				       int32_t *ret_stat);
 /*! Sets the offset adjustment. */
-int32_t ad9467_offset_adj(int32_t adj);
+int32_t ad9467_offset_adj(struct ad9467_dev *dev,
+			  int32_t adj,
+			  int32_t *ret_stat);
 /*! Disables (1) or enables (0) the data output. */
-int32_t ad9467_output_disable(int32_t en);
+int32_t ad9467_output_disable(struct ad9467_dev *dev,
+			      int32_t en,
+			      int32_t *ret_stat);
 /*! Activates the inverted (1) or normal (0) output mode. */
-int32_t ad9467_output_invert(int32_t invert);
+int32_t ad9467_output_invert(struct ad9467_dev *dev,
+			     int32_t invert,
+			     int32_t *ret_stat);
 /*! Specifies the output format. */
-int32_t ad9467_output_format(int32_t format);
+int32_t ad9467_output_format(struct ad9467_dev *dev,
+			     int32_t format,
+			     int32_t *ret_stat);
 /*! Determines LVDS output properties. */
-int32_t ad9467_coarse_LVDS_adj(int32_t lvds_adj);
+int32_t ad9467_coarse_LVDS_adj(struct ad9467_dev *dev,
+			       int32_t lvds_adj,
+			       int32_t *ret_stat);
 /*! Sets the output current adjustment. */
-int32_t ad9467_output_current_adj(int32_t adj);
+int32_t ad9467_output_current_adj(struct ad9467_dev *dev,
+				  int32_t adj,
+				  int32_t *ret_stat);
 /*! Activates the normal (0) or inverted (1) DCO clock. */
-int32_t ad9467_dco_clock_invert(int32_t invert);
+int32_t ad9467_dco_clock_invert(struct ad9467_dev *dev,
+				int32_t invert,
+				int32_t *ret_stat);
 /*! Configures the clock delay setting. */
-int32_t ad9467_dco_output_clock_delay(int32_t delay);
+int32_t ad9467_dco_output_clock_delay(struct ad9467_dev *dev,
+				      int32_t delay,
+				      int32_t *ret_stat);
 /*! Configures the full-scale input voltage selection. */
-float ad9467_full_scale_range(float v_fs);
+int32_t ad9467_full_scale_range(struct ad9467_dev *dev,
+			      float v_fs,
+			      float *ret_stat);
 /*! Sets the AC coupling(0) or DC coupling(1) mode. */
-int32_t ad9467_analog_input_coupling(int32_t coupling_mode);
+int32_t ad9467_analog_input_coupling(struct ad9467_dev *dev,
+				     int32_t coupling_mode,
+				     int32_t *ret_stat);
 /*! Changes the input buffer current(1). */
-int32_t ad9467_buffer_current_1(int32_t percentage);
+int32_t ad9467_buffer_current_1(struct ad9467_dev *dev,
+				int32_t percentage,
+				int32_t *ret_stat);
 /*! Changes the input buffer current(2). */
-int32_t ad9467_buffer_current_2(int32_t percentage);
+int32_t ad9467_buffer_current_2(struct ad9467_dev *dev,
+				int32_t percentage,
+				int32_t *ret_stat);
 /*! Initiates a transfer and waits for the operation to end. */
-int32_t ad9467_transfer(void);
+int32_t ad9467_transfer(struct ad9467_dev *dev);
 
 #endif /* __AD9467_H__ */
