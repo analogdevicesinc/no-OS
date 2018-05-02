@@ -205,7 +205,8 @@ uint32_t adc_delay_calibrate(adc_core core,
 				start_invalid_delay = 32;
 			}
 			cnt_valid[interval]++;
-		} else {
+		}
+		if((err_field[val] == 1) || (val == max_val - 1)) {
 			if (start_invalid_delay == 32) {
 				start_invalid_delay = val;
 			}
@@ -227,7 +228,7 @@ uint32_t adc_delay_calibrate(adc_core core,
 		}
 	}
 
-	delay = (valid_range[max_interval] + invalid_range[max_interval] -1)/2;
+	delay = (valid_range[max_interval] + invalid_range[max_interval] - 1) / 2;
 
 	ad_printf("adc_delay: setting zero error delay (%d)\n\r", delay);
 	adc_set_delay(core, no_of_lanes, delay);
