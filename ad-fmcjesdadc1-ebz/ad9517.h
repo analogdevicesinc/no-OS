@@ -40,13 +40,33 @@
 #define AD9517_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
-#include <stdint.h>
+
+struct ad9517_dev {
+	/* SPI */
+	spi_desc 	   *spi_desc;
+};
+
+struct ad9517_init_param {
+	/* SPI */
+	spi_init_param spi_init;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9517_setup(spi_device *dev);
+int32_t ad9517_setup(struct ad9517_dev **device,
+					 struct ad9517_init_param init_param);
+
+int32_t ad9517_spi_read(struct ad9517_dev *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
+
+int32_t ad9517_spi_write(struct ad9517_dev *dev,
+						 uint16_t reg_addr,
+						 uint8_t reg_data);
+
+int32_t ad9517_remove(struct ad9517_dev *dev);
 
 #endif

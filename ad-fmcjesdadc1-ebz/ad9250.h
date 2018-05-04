@@ -40,11 +40,6 @@
 #define AD9250_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include <stdint.h>
-
-/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9250_REG_CHIP_PORT_CONF				0x00
@@ -81,28 +76,35 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct {
-       spi_device      spi_dev;
-       uint8_t         id_no;
-} ad9250_dev;
+struct ad9250_dev {
+	/* SPI */
+	spi_desc      *spi_dev;
+	/* Device properties */
+	uint8_t       id_no;
+};
 
 
-typedef struct {
-	uint32_t	lane_rate_kbps;
-	uint8_t		id_no;
-} ad9250_init_param;
+struct ad9250_init_param {
+	/* SPI */
+	spi_init_param spi_init;
+	/* Device properties */
+	uint32_t	   lane_rate_kbps;
+	uint8_t		   id_no;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9250_spi_read(ad9250_dev *dev,
-			uint16_t reg_addr,
-			uint8_t *reg_data);
-int32_t ad9250_spi_write(ad9250_dev *dev,
-			uint16_t reg_addr,
-			uint8_t reg_data);
-int32_t ad9250_setup(ad9250_dev *dev);
-int32_t ad9250_test(ad9250_dev *dev, 
-			uint32_t test_mode);
+int32_t ad9250_spi_read(struct ad9250_dev *dev,
+						uint16_t reg_addr,
+						uint8_t *reg_data);
+int32_t ad9250_spi_write(struct ad9250_dev *dev,
+						 uint16_t reg_addr,
+						 uint8_t reg_data);
+int32_t ad9250_setup(struct ad9250_dev **device,
+					 struct ad9250_init_param init_param);
+int32_t ad9250_test(struct ad9250_dev *dev,
+					uint32_t test_mode);
+int32_t ad9250_remove(struct ad9250_dev *dev);
 
 #endif

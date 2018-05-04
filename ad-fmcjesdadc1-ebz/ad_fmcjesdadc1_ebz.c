@@ -58,13 +58,14 @@
 *******************************************************************************/
 int main(void)
 {
-	ad9250_dev		ad9250_0_device;
-	ad9250_dev		ad9250_1_device;
-	spi_device		ad9517_spi_device;
+	struct ad9250_dev		*ad9250_0_device;
+	struct ad9250_dev		*ad9250_1_device;
+	struct ad9517_dev		*ad9517_device;
 	adc_core		ad9250_0_core;
 	adc_core		ad9250_1_core;
-	ad9250_init_param	ad9250_0_param;
-	ad9250_init_param	ad9250_1_param;
+	struct ad9250_init_param	ad9250_0_param;
+	struct ad9250_init_param	ad9250_1_param;
+	struct ad9517_init_param	ad9517_param;
 	jesd_core		ad9250_jesd204;
 	xcvr_core		ad9250_xcvr;
 	dmac_core		ad9250_0_dma;
@@ -109,14 +110,21 @@ int main(void)
 #endif
 
 	// SPI configuration
-	ad_spi_init(&ad9517_spi_device);
-	ad9517_spi_device.chip_select = 0xe;
-	ad_spi_init(&ad9250_0_device.spi_dev);
-	ad9250_0_device.spi_dev.chip_select = 0xe;
-	ad9250_0_device.id_no = 0x0;
-	ad_spi_init(&ad9250_1_device.spi_dev);
-	ad9250_1_device.spi_dev.chip_select = 0xe;
-	ad9250_1_device.id_no = 0x1;
+
+	ad9517_param.spi_init.chip_select = 0xe;
+	ad9517_param.spi_init.cpha = 0;
+	ad9517_param.spi_init.cpol = 0;
+	ad9517_param.spi_init.type = ZYNQ_PS7_SPI;
+	ad9250_0_param.spi_init.chip_select = 0xe;
+	ad9250_0_param.spi_init.cpha = 0;
+	ad9250_0_param.spi_init.cpol = 0;
+	ad9250_0_param.spi_init.type = ZYNQ_PS7_SPI;
+	ad9250_1_param.spi_init.chip_select = 0xe;
+	ad9250_1_param.spi_init.cpha = 0;
+	ad9250_1_param.spi_init.cpol = 0;
+	ad9250_1_param.spi_init.type = ZYNQ_PS7_SPI;
+	ad9250_0_param.id_no = 0x0;
+	ad9250_1_param.id_no = 0x1;
 
 	// ADC and receive path configuration
 	ad9250_0_param.lane_rate_kbps = 4915200;
@@ -151,14 +159,12 @@ int main(void)
 	rx_xfer_1.id = 0;
 	rx_xfer_1.no_of_samples = 32768;
 
-	ad_platform_init();
-
 	// set up clock generator
-	ad9517_setup(&ad9517_spi_device);
+	ad9517_setup(&ad9517_device, ad9517_param);
 
 	// set up the devices
-	ad9250_setup(&ad9250_0_device);
-	ad9250_setup(&ad9250_1_device);
+	ad9250_setup(&ad9250_0_device, ad9250_0_param);
+	ad9250_setup(&ad9250_1_device, ad9250_1_param);
 
 	// set up the JESD core
 	jesd_setup(ad9250_jesd204);
@@ -177,18 +183,18 @@ int main(void)
 	adc_setup(ad9250_1_core);
 
 	// PRBS test
-	ad9250_test(&ad9250_0_device, AD9250_TEST_PNLONG);
+	ad9250_test(ad9250_0_device, AD9250_TEST_PNLONG);
 	if(adc_pn_mon(ad9250_0_core, ADC_PN23) == -1) {
 		ad_printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
 	};
-	ad9250_test(&ad9250_1_device, AD9250_TEST_PNLONG);
+	ad9250_test(ad9250_1_device, AD9250_TEST_PNLONG);
 	if(adc_pn_mon(ad9250_1_core, ADC_PN23) == -1) {
 		ad_printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
 	};
 
 	// set up ramp output
-	ad9250_test(&ad9250_0_device, AD9250_TEST_RAMP);
-	ad9250_test(&ad9250_1_device, AD9250_TEST_RAMP);
+	ad9250_test(ad9250_0_device, AD9250_TEST_RAMP);
+	ad9250_test(ad9250_1_device, AD9250_TEST_RAMP);
 
 	// test the captured data
 	if(!dmac_start_transaction(ad9250_0_dma)) {
@@ -199,8 +205,8 @@ int main(void)
 	};
 
 	// set up normal output
-	ad9250_test(&ad9250_0_device, AD9250_TEST_OFF);
-	ad9250_test(&ad9250_1_device, AD9250_TEST_OFF);
+	ad9250_test(ad9250_0_device, AD9250_TEST_OFF);
+	ad9250_test(ad9250_1_device, AD9250_TEST_OFF);
 
 	// capture data with DMA
 
@@ -211,7 +217,9 @@ int main(void)
 		ad_printf("%s RX capture done!\n", __func__);
 	};
 
-	ad_platform_close();
+	ad9517_remove(ad9517_device);
+	ad9250_remove(ad9250_0_device);
+	ad9250_remove(ad9250_1_device);
 
 	return 0;
 }
