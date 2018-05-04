@@ -37,7 +37,6 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************/
 
-#ifdef XILINX
 #ifndef XILINX_XCVR_CHANNEL_H
 #define XILINX_XCVR_CHANNEL_H
 
@@ -47,6 +46,8 @@
 
 #include "platform_drivers.h"
 #include "xcvr_core.h"
+
+#ifdef XILINX
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
