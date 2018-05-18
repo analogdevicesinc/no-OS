@@ -48,7 +48,13 @@
 #include "ad6676.h"
 
 /***************************************************************************//**
-* @brief ad6676_spi_read
+ * @brief SPI read from device.
+ *
+ * @param dev      - The device structure.
+ * @param reg_addr - Adress of register to be read.
+ * @param reg_data - Register data.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_spi_read(struct ad6676_dev *dev,
 			uint16_t reg_addr,
@@ -68,7 +74,13 @@ int32_t ad6676_spi_read(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_spi_write
+ * @brief SPI write to device.
+ *
+ * @param dev      - The device structure.
+ * @param reg_addr - Adress of register to be written.
+ * @param reg_data - Register data.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_spi_write(struct ad6676_dev *dev,
 			 uint16_t reg_addr,
@@ -87,7 +99,13 @@ int32_t ad6676_spi_write(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_splitreg
+ * @brief SPI write a 16 bit register as two consecutive registers, LSB first.
+ *
+ * @param dev - The device structure.
+ * @param reg - Adress of register to be written.
+ * @param val - Register data.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_splitreg(struct ad6676_dev *dev,
 				   uint32_t reg,
@@ -102,7 +120,14 @@ static int32_t ad6676_set_splitreg(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_get_splitreg
+ * @brief SPI read from a 16 bit register as two consecutive registers,
+ *        LSB first.
+ *
+ * @param dev - The device structure.
+ * @param reg - Adress of register to be written.
+ * @param val - Register data.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static inline int32_t ad6676_get_splitreg(struct ad6676_dev *dev,
 					  uint32_t reg,
@@ -127,7 +152,12 @@ static inline int32_t ad6676_get_splitreg(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_fadc
+ * @brief Set ADC clock frequency.
+ *
+ * @param dev - The device structure.
+ * @param val - New frequency.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_fadc(struct ad6676_dev *dev,
 			       uint32_t val)
@@ -137,7 +167,11 @@ static int32_t ad6676_set_fadc(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_get_fadc
+ * @brief Get the ADC clock frequency.
+ *
+ * @param dev - The device structure.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static inline uint32_t ad6676_get_fadc(struct ad6676_dev *dev)
 {
@@ -150,7 +184,13 @@ static inline uint32_t ad6676_get_fadc(struct ad6676_dev *dev)
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_fif
+ * @brief Set the target IF frequency.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_set_fif(struct ad6676_dev *dev,
 		       struct ad6676_init_param *init_param)
@@ -160,7 +200,13 @@ int32_t ad6676_set_fif(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_get_fif
+ * @brief Get the target IF frequency.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 uint64_t ad6676_get_fif(struct ad6676_dev *dev,
 			struct ad6676_init_param *init_param)
@@ -180,7 +226,12 @@ uint64_t ad6676_get_fif(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_bw
+ * @brief Set the target BW frequency.
+ *
+ * @param dev - The device structure.
+ * @param val - New bandwidth frequency.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_bw(struct ad6676_dev *dev,
 			     uint32_t val)
@@ -190,7 +241,11 @@ static int32_t ad6676_set_bw(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_get_bw
+ * @brief Get the target BW frequency.
+ *
+ * @param dev - The device structure.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static inline uint32_t ad6676_get_bw(struct ad6676_dev *dev)
 {
@@ -203,7 +258,13 @@ static inline uint32_t ad6676_get_bw(struct ad6676_dev *dev)
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_decimation
+ * @brief Set decimation factor in the decimation mode register.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_decimation(struct ad6676_dev *dev,
 				     struct ad6676_init_param *init_param)
@@ -233,7 +294,14 @@ static int32_t ad6676_set_decimation(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_clk_synth
+ * @brief Set the clock synthesizer to generate a specific frequency using a
+ *        given refrence clock and do VCO and CP calibration.
+ *
+ * @param dev      - The device structure.
+ * @param refin_Hz - Reference clock frequency.
+ * @param freq     - Synthesizer output frequency.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 				    uint32_t refin_Hz,
@@ -353,7 +421,12 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_extclk_cntl
+ * @brief Enable external clock for the ADC.
+ *
+ * @param dev  - The device structure.
+ * @param freq - External clock frequency.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_set_extclk_cntl(struct ad6676_dev *dev,
 				      uint32_t freq)
@@ -376,7 +449,13 @@ static int32_t ad6676_set_extclk_cntl(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_jesd_setup
+ * @brief Setup JESD204 link parameters.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_jesd_setup(struct ad6676_dev *dev,
 				 struct ad6676_init_param *init_param)
@@ -403,7 +482,13 @@ static int32_t ad6676_jesd_setup(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_shuffle_setup
+ * @brief Setup shuffling rate and threshold for the adaptive shuffler.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_shuffle_setup(struct ad6676_dev *dev,
 			     struct ad6676_init_param *init_param)
@@ -427,7 +512,12 @@ int32_t ad6676_shuffle_setup(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_calibrate
+ * @brief Do internal calibration of JESD, ADC or flash.
+ *
+ * @param dev - The device structure.
+ * @param cal - Calibration options.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 				uint32_t cal)
@@ -463,7 +553,12 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_reset
+ * @brief Software reset all SPI registers to default value.
+ *
+ * @param dev      - The device structure.
+ * @param spi3wire - True for 3 wire SPI, false for 4 wire SPI.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_reset(struct ad6676_dev *dev,
 			    uint8_t spi3wire)
@@ -479,7 +574,12 @@ static int32_t ad6676_reset(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_outputmode_set
+ * @brief Set output mode as twos complement or straight binary.
+ *
+ * @param dev  - The device structure.
+ * @param mode - 0 for twos complement; 1 for straight binary.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 static int32_t ad6676_outputmode_set(struct ad6676_dev *dev,
 				     uint32_t mode)
@@ -494,7 +594,13 @@ static int32_t ad6676_outputmode_set(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_set_attenuation
+ * @brief Set attenuation in decibels or disable attenuator.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
 			       struct ad6676_init_param *init_param)
@@ -509,9 +615,14 @@ int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
-* @brief ad6676_setup
+ * @brief Initialize the device.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
-
 int32_t ad6676_setup(struct ad6676_dev **device,
 		     struct ad6676_init_param init_param)
 {
@@ -605,7 +716,14 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 }
 
 /***************************************************************************//**
-* @brief ad6676_update
+ * @brief Reconfigure device for other target frequency and bandwidth and
+ *        recalibrate.
+ *
+ * @param dev        - The device structure.
+ * @param init_param - The structure that contains the device initial
+ * 		       parameters.
+ *
+ * @return 0 in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad6676_update(struct ad6676_dev *dev,
 		      struct ad6676_init_param *init_param)
@@ -648,8 +766,13 @@ int32_t ad6676_update(struct ad6676_dev *dev,
 }
 
 /***************************************************************************//**
- * @brief ad6676_test
- ******************************************************************************/
+ * @brief Perform an interface test.
+ *
+ * @param dev       - The device structure.
+ * @param test_mode - Test mode to perform.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+*******************************************************************************/
 int32_t ad6676_test(struct ad6676_dev *dev,
 		    uint32_t test_mode)
 {
