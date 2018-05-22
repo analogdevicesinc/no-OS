@@ -94,9 +94,10 @@ int32_t jesd_write(jesd_core core,
 *******************************************************************************/
 int32_t jesd_setup(jesd_core core)
 {
-	jesd_write(core, 0x210, (((core.octets_per_frame-1) << 16) |
+	jesd_write(core, JESD204_REG_LINK_DISABLE, 1);
+	jesd_write(core, JESD204_REG_LINK_CONF0, (((core.octets_per_frame-1) << 16) |
 		((core.frames_per_multiframe*core.octets_per_frame)-1)));
-	jesd_write(core, 0x0c0, 0);
+	jesd_write(core, JESD204_REG_LINK_DISABLE, 0);
 	mdelay(100);
 	return(0);
 }
