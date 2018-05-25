@@ -147,10 +147,7 @@ struct adf4350_platform_data
 typedef struct
 {
 	/* SPI */
-	uint8_t		spi_chip_select;
-	uint32_t	spi_device_id;
-	uint32_t	spi_cpha;
-	uint32_t	spi_cpol;
+	spi_init_param	spi_init;
 
 	/* Device settings */
 	uint32_t	clkin;
@@ -185,7 +182,7 @@ typedef struct
 }adf4350_init_param;
 
 typedef struct {
-	spi_device	spi_dev;
+	spi_desc	*spi_desc;
 	struct adf4350_platform_data *pdata;
 	uint32_t	clkin;
 	uint32_t	chspc;	/* Channel Spacing */
@@ -207,7 +204,7 @@ typedef struct {
 int32_t adf4350_setup(adf4350_dev **device,
 					  adf4350_init_param init_param);
 /*! Writes 4 bytes of data to ADF4350. */
-int32_t adf4350_write(spi_device *dev,
+int32_t adf4350_write(adf4350_dev *dev,
 					  uint32_t data);
 /*! Stores PLL 0 frequency in Hz. */
 int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
