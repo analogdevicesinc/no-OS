@@ -43,24 +43,21 @@
 
 #include "platform_drivers.h"
 #include "dac_core.h"
-#include "dmac_core.h"
 #include "ad9739a.h"
 #include "adf4350.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define SPI_DEVICE_ID	XPAR_PS7_SPI_0_DEVICE_ID
-
-/******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+
 adf4350_init_param default_adf4350_init_param = {
 	/* SPI */
-	0,			// spi_chip_select
-	SPI_DEVICE_ID,		// spi_device_id
-	0,			// spi_cpha
-	0,			// spi_cpol
+	{
+		ZYNQ_PS7_SPI,	// type
+		0,				// chip_select
+		0,				// cpha
+		0,				// cpol
+	},
 
 	/* Device settings */
 	25000000,		// clkin;
@@ -100,12 +97,20 @@ adf4350_init_param default_adf4350_init_param = {
 *******************************************************************************/
 int main(void)
 {
-	spi_device		ad9739a_device;
-	adf4350_dev		*adf4350_device;
-	dac_core 		ad9739a_core;
-	dac_channel		ad9739a_channel[1];
-	ad9739a_init_param	init_param;
+	spi_init_param		spi_param;
+	struct ad9739a_dev	*ad9739a_device;
+	adf4350_dev			*adf4350_device;
+	dac_core 			ad9739a_core;
+	dac_channel			ad9739a_channel[1];
+	struct ad9739a_init_param	init_param;
 
+	spi_param.type = ZYNQ_PS7_SPI;
+	spi_param.chip_select = 0x1;
+	spi_param.cpha = 0;
+	spi_param.cpol = 0;
+
+	/* SPI */
+	init_param.spi_init = spi_param;
 	/* Device settings */
 	init_param.common_mode_voltage_dacclk_p = 0xF;	// common_mode_voltage_dacclk_p
 	init_param.common_mode_voltage_dacclk_n = 0xF;	// common_mode_voltage_dacclk_n
@@ -118,10 +123,6 @@ int main(void)
 
 	adf4350_setup(&adf4350_device, default_adf4350_init_param);
 
-	ad_spi_init(&ad9739a_device);
-	ad9739a_device.device_id = 0x0;
-	ad9739a_device.chip_select = 0x1;
-
 	dac_write(&ad9739a_core, DAC_REG_DATA_CONTROL, DAC_DATA_FORMAT);
 
 	ad9739a_channel[0].dds_dual_tone = 0;
@@ -132,9 +133,9 @@ int main(void)
 
 	dac_setup(&ad9739a_core);
 
-	ad9739a_setup(&ad9739a_device, &init_param);
+	ad9739a_setup(&ad9739a_device, init_param);
 
-	ad_printf("Done.\n");
+	printf("Done.\n");
 
 	return 0;
 }
