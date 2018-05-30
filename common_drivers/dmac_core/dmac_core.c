@@ -105,6 +105,8 @@ int32_t dmac_start_transaction(dmac_core dma)
 	dmac_write(dma, DMAC_REG_Y_LENGTH, 0x0);
 
 	dmac_write(dma, DMAC_REG_START_TRANSFER, 0x1);
+	if (dma.flags & DMAC_FLAGS_CYCLIC)
+		return 0;
 	/* Wait until the new transfer is queued. */
 	do {
 		dmac_read(dma, DMAC_REG_START_TRANSFER, &reg_val);
