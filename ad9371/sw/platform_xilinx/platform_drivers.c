@@ -118,7 +118,7 @@ int32_t spi_write_and_read(spi_device *dev,
 			((dev->cpha == 1) ? XSPIPS_CLK_PHASE_1_OPTION : 0));
 	XSpiPs_SetSlaveSelect(&spi_instance, (uint8_t) 0x7);
 	XSpiPs_SetClkPrescaler(&spi_instance, XSPIPS_CLK_PRESCALE_64);
-	XSpiPs_SetSlaveSelect(&spi_instance,  (uint8_t) dev->chip_select);
+	XSpiPs_SetSlaveSelect(&spi_instance,  (uint8_t) (0x7 & ~dev->chip_select));
 	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
 	XSpiPs_SetSlaveSelect(&spi_instance,  (uint8_t) 0x7);
 #else
