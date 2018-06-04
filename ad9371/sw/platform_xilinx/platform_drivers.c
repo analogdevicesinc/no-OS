@@ -87,7 +87,7 @@ int32_t platform_init(void)
  *******************************************************************************/
 int32_t spi_init(uint16_t device_id)
 {
-#if _XPARAMETERS_PS_H_
+#ifdef _XPARAMETERS_PS_H_
 	spi_config = XSpiPs_LookupConfig(device_id);
 	if (spi_config == NULL)
 		return -1;
@@ -105,7 +105,7 @@ int32_t spi_write_and_read(spi_device *dev,
 					   	   uint8_t *data,
 						   uint8_t bytes_number)
 {
-#if _XPARAMETERS_PS_H_
+#ifdef _XPARAMETERS_PS_H_
 	uint32_t initss;
 
 	initss = XSpiPs_ReadReg(dev->base_address, XSPIPS_CR_OFFSET);
