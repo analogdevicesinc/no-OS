@@ -110,7 +110,13 @@ int main(){
     /* base addresses */
     ad9467_core.base_address = XPAR_AXI_AD9467_BASEADDR;
     ad9467_dma.base_address = XPAR_AXI_AD9467_DMA_BASEADDR;
-    rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#ifdef ZYNQ
+	x_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+#endif
+
+#ifdef MICROBLAZE
+	x_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+#endif
 
 	ad9467_core.no_of_channels = 1;
 	ad9467_core.resolution = 16;
@@ -118,14 +124,21 @@ int main(){
 	ad9467_dma.type = DMAC_RX;
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 8192;
+#ifdef ZYNQ
+	ad9467_init.spi_init.type = ZYNQ_PS7_SPI,;
+	ad9517_init.spi_init.type = ZYNQ_PS7_SPI,;
+#endif
+
+#ifdef MICROBLAZE
+	ad9467_init.spi_init.type = MICROBLAZE_SPI;
+	ad9517_init.spi_init.type = MICROBLAZE_SPI;
+#endif
     ad9467_init.spi_init.chip_select = 0x0E;
 	ad9467_init.spi_init.cpha = 0;
 	ad9467_init.spi_init.cpol = 0;
-	ad9467_init.spi_init.type = MICROBLAZE_SPI;
 	ad9517_init.spi_init.chip_select = 0x0D;
 	ad9517_init.spi_init.cpha = 0;
 	ad9517_init.spi_init.cpol = 0;
-	ad9517_init.spi_init.type = MICROBLAZE_SPI;
 
     /* AD9467 Setup. */
     ad9467_setup(&ad9467_device, ad9467_init);
