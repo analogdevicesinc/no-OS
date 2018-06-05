@@ -46,7 +46,6 @@
 #include "platform_drivers.h"
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "xcvr_core.h"
 #include "adc_core.h"
 #include "dmac_core.h"
 #include "ad9467.h"
@@ -79,7 +78,6 @@ typedef enum typeTestModes {
     ONE_ZERO_TOGGLE
 }typeTestModes;
 
-void xil_printf(const char *ctrl1, ...);
 void adc_test(adc_core adc,
 			  dmac_core dma,
 			  struct ad9467_dev *dev,
@@ -112,7 +110,7 @@ int main(){
     /* base addresses */
     ad9467_core.base_address = XPAR_AXI_AD9467_BASEADDR;
     ad9467_dma.base_address = XPAR_AXI_AD9467_DMA_BASEADDR;
-    rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
+    rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
 
 	ad9467_core.no_of_channels = 1;
 	ad9467_core.resolution = 16;
@@ -143,15 +141,15 @@ int main(){
     ad9517_update(ad9517_device);
 
     /* Read the device ID for AD9467 and AD9517. */
-    xil_printf("\n\r********************************************************************\r\n");
-    xil_printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
+    printf("\n\r********************************************************************\r\n");
+    printf("  ADI AD9467-FMC-EBZ Reference Design\n\r");
     ad9467_read(ad9467_device, AD9467_REG_CHIP_ID, &ret_val);
-    xil_printf("  AD9467 CHIP ID: 0x%02x\n\r", ret_val);
+    printf("  AD9467 CHIP ID: 0x%02x\n\r", ret_val);
     ad9467_read(ad9467_device, AD9467_REG_CHIP_GRADE, &ret_val);
-    xil_printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ret_val);
+    printf("  AD9467 CHIP GRADE: 0x%02x\n\r", ret_val);
     ad9517_read(ad9517_device, AD9517_REG_PART_ID, &ret_val_32);
-    xil_printf("  AD9517 CHIP ID: 0x%02x", ret_val_32);
-    xil_printf("\n\r********************************************************************\r\n");
+    printf("  AD9517 CHIP ID: 0x%02x", ret_val_32);
+    printf("\n\r********************************************************************\r\n");
 
     /* AD9467 test. */
     adc_setup(ad9467_core);
@@ -162,7 +160,7 @@ int main(){
     ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
 
     ad9467_read(ad9467_device, AD9467_REG_OUT_PHASE, &ret_val);
-	xil_printf("AD9467[0x016]: %02x\n\r", ret_val);
+	printf("AD9467[0x016]: %02x\n\r", ret_val);
 	// setup adc core
 	adc_write(ad9467_core, ADC_REG_CNTRL, 0x2);
 	for(i = 0; i < ad9467_core.no_of_channels; i++) {
@@ -174,15 +172,15 @@ int main(){
 	mdelay(10);
 	if (adc_delay_calibrate(ad9467_core, 8, 1)) {
 		ad9467_read(ad9467_device, 0x16, &ret_val);
-		xil_printf("AD9467[0x016]: %02x\n\r", ret_val);
+		printf("AD9467[0x016]: %02x\n\r", ret_val);
 		ad9467_write(ad9467_device, AD9467_REG_OUT_PHASE, 0x80);
 		ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x01);
 		ad9467_write(ad9467_device, AD9467_REG_DEVICE_UPDATE, 0x00);
 		ad9467_read(ad9467_device, 0x16, &ret_val);
-		xil_printf("AD9467[0x016]: %02x\n\r", ret_val);
+		printf("AD9467[0x016]: %02x\n\r", ret_val);
 		mdelay(10);
 		if (adc_delay_calibrate(ad9467_core, 16, 1)) {
-			xil_printf("adc_setup: can not set a zero error delay!\n\r");
+			printf("adc_setup: can not set a zero error delay!\n\r");
 		}
 	}
 
@@ -194,7 +192,7 @@ int main(){
         /* Data format is twos complement */
         adc_test(ad9467_core, ad9467_dma, ad9467_device, mode, TWOS_COMPLEMENT);
     }
-    xil_printf("Testing done.\n\r");
+    printf("Testing done.\n\r");
     /* AD9467 Setup for data acquisition */
     ad9467_output_invert(ad9467_device, 0, &status);    // Output invert Off
     ad9467_transfer(ad9467_device);          // Synchronously update registers
@@ -207,11 +205,11 @@ int main(){
     ad9467_test_mode(ad9467_device, 0, &status);        // Test mode Off
     ad9467_transfer(ad9467_device);          // Synchronously update registers
 
-    xil_printf("Start capturing data...\n\r");
+    printf("Start capturing data...\n\r");
 
     dmac_start_transaction(ad9467_dma);
 
-    xil_printf("Done.\n\r");
+    printf("Done.\n\r");
 
     ad9467_remove(ad9467_device);
     ad9517_remove(ad9517_device);
@@ -241,7 +239,7 @@ void adc_test(adc_core adc,
     DisplayTestMode(mode, format);
     if ((mode == PN_23_SEQUENCE) || (mode == PN_9_SEQUENCE)) {
         if (format == TWOS_COMPLEMENT) {
-            xil_printf("          Test skipped\r\n");
+            printf("          Test skipped\r\n");
             return;
         }
 
@@ -258,9 +256,9 @@ void adc_test(adc_core adc,
                      CF_DATA_MONITOR_PN_SYNC |
                      CF_DATA_MONITOR_PN_OVER_RNG)) != 0) {
         	adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
-            xil_printf("  ERROR: PN status(%04x).\n\r", rdata);
+            printf("  ERROR: PN status(%04x).\n\r", rdata);
         } else {
-            xil_printf("          Test passed\r\n");
+            printf("          Test passed\r\n");
         }
         return;
     }
@@ -289,14 +287,14 @@ void adc_test(adc_core adc,
             edata = (edata == 0xffff) ? 0x0000ffff : 0xffff0000;
         if (rdata != edata)
         {
-            xil_printf("  ERROR[%2d]: rcv(%08x), exp(%08x)\n\r", n, rdata,
+            printf("  ERROR[%2d]: rcv(%08x), exp(%08x)\n\r", n, rdata,
                        edata);
             error = 1;
         }
     }
     if(error == 0)
     {
-        xil_printf("          Test passed\r\n");
+        printf("          Test passed\r\n");
     }
 }
 
@@ -350,7 +348,7 @@ void DisplayTestMode(uint32_t mode, uint32_t format)
                 sMode = "";
                 break;
         }
-    xil_printf("ADC Test: mode - %s\r\n          format - %s\n\r",
+    printf("ADC Test: mode - %s\r\n          format - %s\n\r",
     		   sMode,
 			   sFormat);
 }
