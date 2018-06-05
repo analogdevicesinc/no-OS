@@ -180,7 +180,7 @@ int32_t ad5761r_config(struct ad5761r_dev *dev)
 		   (dev->ovr_en ? AD5761R_CTRL_OVR : 0) |
 		   (dev->b2c_range_en? AD5761R_CTRL_B2C : 0) |
 		   (dev->exc_temp_sd_en ? AD5761R_CTRL_ETS : 0) |
-		   (dev->int_ref_en ? 0 : AD5761R_CTRL_IRO) |
+		   (dev->int_ref_en ? AD5761R_CTRL_IRO : 0) |
 		   AD5761R_CTRL_PV(dev->pv) |
 		   AD5761R_CTRL_RA(dev->ra);
 
