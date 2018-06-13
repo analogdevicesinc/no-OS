@@ -412,11 +412,11 @@ int main(void)
 	if (AD9363A_DEVICE)
 		default_init_param.dev_sel = ID_AD9363A;
 
-#if defined FMCOMMS5 || defined PICOZED_SDR || defined PICOZED_SDR_CMOS
+#if defined FMCOMMS5 || defined ADI_RF_SOM || defined ADI_RF_SOM_CMOS
 	default_init_param.xo_disable_use_ext_refclk_enable = 1;
 #endif
 
-#ifdef PICOZED_SDR_CMOS
+#ifdef ADI_RF_SOM_CMOS
 	default_init_param.swap_ports_enable = 1;
 	default_init_param.lvds_mode_enable = 0;
 	default_init_param.lvds_rx_onchip_termination_enable = 0;
@@ -453,7 +453,7 @@ int main(void)
 
 #ifndef AXI_ADC_NOT_PRESENT
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
-#ifdef DAC_DMA
+#ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
 	dac_init(ad9361_phy_b, DATA_SEL_DMA, 0);
 #endif
@@ -472,7 +472,7 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && defined CAPTURE_SCRIPT
+#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && defined ADC_DMA_EXAMPLE
     // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size
