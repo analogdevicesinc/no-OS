@@ -480,7 +480,12 @@ int main(void)
 	mdelay(1000);
 	adc_capture(16384, ADC_DDR_BASEADDR);
 #ifdef XILINX_PLATFORM
-    Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384);
+#ifdef FMCOMMS5
+	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384 * 16);
+#else
+	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
+			ad9361_phy->pdata->rx2tx2 ? 16384 * 8 : 16384 * 4);
+#endif
 #endif
 #endif
 #endif
