@@ -55,7 +55,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-//#define FMCOMMS5
 #if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
 #define ADC_DMA_INT_ID			89
 #define ADC_DMA_TRANSFER_SIZE	32768
