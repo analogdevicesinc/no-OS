@@ -147,7 +147,7 @@
 #define ADXL372_TIMING_WAKE_UP_RATE_MSK		GENMASK(4, 2)
 #define ADXL372_TIMING_WAKE_UP_RATE_MODE(x)	(((x) & 0x7) << 2)
 #define ADXL372_TIMING_EXT_CLK_MSK		BIT(1)
-#define ADXL372_TIMING_EXT_CLK_MODE(x)		(((x) & 0x1) << 1
+#define ADXL372_TIMING_EXT_CLK_MODE(x)		(((x) & 0x1) << 1)
 #define ADXL372_TIMING_EXT_SYNC_MSK		BIT(0)
 #define ADXL372_TIMING_EXT_SYNC_MODE(x)		(((x) & 0x1) << 0)
 
