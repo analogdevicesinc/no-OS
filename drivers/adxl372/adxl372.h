@@ -204,6 +204,11 @@
 #define ADXL372_INT2_MAP_LOW_MSK		BIT(7)
 #define ADXL372_INT2_MAP_LOW_MODE(x)		(((x) & 0x1) << 7)
 
+#define ADXL372_SELF_TEST_ST_DONE_MSK		BIT(1)
+#define ADXL372_SELF_TEST_ST_DONE_MODE(x)	(((x) & 0x1) << 1)
+#define ADXL372_SELF_TEST_USER_ST_MSK		BIT(2)
+#define ADXL372_SELF_TEST_USER_ST_MODE(x)	(((x) & 0x1) << 2)
+
 static const int adxl372_th_reg_addr_h[3][3] = {
 	{
 		ADXL372_X_THRESH_ACT_H,
