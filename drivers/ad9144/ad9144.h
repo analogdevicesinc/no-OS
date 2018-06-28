@@ -1373,7 +1373,7 @@ struct ad9144_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9144_setup(struct ad9144_dev **device,
-		     struct ad9144_init_param init_param);
+		     const struct ad9144_init_param *init_param);
 
 int32_t ad9144_remove(struct ad9144_dev *dev);
 
@@ -1393,9 +1393,9 @@ int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
 int32_t ad9144_status(struct ad9144_dev *dev);
 
 int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
-				  struct ad9144_init_param init_param);
+				  const struct ad9144_init_param *init_param);
 
 int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
-				  struct ad9144_init_param init_param);
+				  const struct ad9144_init_param *init_param);
 
 #endif
