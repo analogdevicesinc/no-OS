@@ -327,7 +327,7 @@ int main(void)
 	ad9152_param.prbs_type = AD9152_TEST_PN15;
 	ad9152_datapath_prbs_test(ad9152_device, ad9152_param);
 
-	ad9680_setup(&ad9680_device, ad9680_param);
+	ad9680_setup(&ad9680_device, &ad9680_param);
 	jesd_setup(ad9680_jesd);
 	xcvr_setup(&ad9680_xcvr);
 	axi_jesd204_tx_status_read(ad9680_jesd);

@@ -115,7 +115,7 @@ int32_t ad9680_test(struct ad9680_dev *dev,
  * @brief ad9680_setup
  *******************************************************************************/
 int32_t ad9680_setup(struct ad9680_dev **device,
-		     struct ad9680_init_param init_param)
+		     const struct ad9680_init_param *init_param)
 {
 	uint8_t chip_id;
 	uint8_t pll_stat;
@@ -129,7 +129,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_CHIP_ID_LOW,
@@ -159,7 +159,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 	ad9680_spi_write(dev,
 			 AD9680_REG_JESD204B_QUICK_CONFIG,
 			 0x88);	// m=2, l=4, f= 1
-	if (init_param.lane_rate_kbps < 6250000)
+	if (init_param->lane_rate_kbps < 6250000)
 		ad9680_spi_write(dev,
 				 AD9680_REG_JESD204B_LANE_RATE_CTRL,
 				 0x10);	// low line rate mode must be enabled

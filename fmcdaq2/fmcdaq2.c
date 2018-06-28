@@ -510,7 +510,7 @@ int main(void)
 	ad9523_setup(&ad9523_device, &ad9523_param);
 
 	// set up the devices
-	ad9680_setup(&ad9680_device, ad9680_param);
+	ad9680_setup(&ad9680_device, &ad9680_param);
 	ad9144_setup(&ad9144_device, &ad9144_param);
 
 	// set up the JESD core
