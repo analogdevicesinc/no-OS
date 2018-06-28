@@ -511,7 +511,7 @@ int main(void)
 
 	// set up the devices
 	ad9680_setup(&ad9680_device, ad9680_param);
-	ad9144_setup(&ad9144_device, ad9144_param);
+	ad9144_setup(&ad9144_device, &ad9144_param);
 
 	// set up the JESD core
 	jesd_setup(ad9680_jesd);
@@ -550,7 +550,7 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(&ad9144_core);
-	ad9144_short_pattern_test(ad9144_device, ad9144_param);
+	ad9144_short_pattern_test(ad9144_device, &ad9144_param);
 
 	// PN7 data path test
 
@@ -558,7 +558,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
 	// PN15 data path test
 
@@ -566,7 +566,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
 //******************************************************************************
 // receive path testing
