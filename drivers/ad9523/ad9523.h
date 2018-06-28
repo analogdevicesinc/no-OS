@@ -512,7 +512,7 @@ int32_t ad9523_init(struct ad9523_init_param *init_param);
 
 /* Configure the AD9523. */
 int32_t ad9523_setup(struct ad9523_dev **device,
-		     struct ad9523_init_param init_param);
+		     const struct ad9523_init_param *init_param);
 
 /* Free the resources allocated by ad9523_setup(). */
 int32_t ad9523_remove(struct ad9523_dev *dev);

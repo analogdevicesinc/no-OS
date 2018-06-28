@@ -409,7 +409,7 @@ int32_t ad9523_init(struct ad9523_init_param *init_param)
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 int32_t ad9523_setup(struct ad9523_dev **device,
-		     struct ad9523_init_param init_param)
+		     const struct ad9523_init_param *init_param)
 
 {
 	struct ad9523_channel_spec *chan;
@@ -424,11 +424,11 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
-	dev->pdata = init_param.pdata;
+	dev->pdata = init_param->pdata;
 
 	ret = ad9523_spi_write(dev,
 			       AD9523_SERIAL_PORT_CONFIG,

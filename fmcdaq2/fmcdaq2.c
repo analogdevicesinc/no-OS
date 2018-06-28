@@ -507,7 +507,7 @@ int main(void)
 
 	// setup clocks
 
-	ad9523_setup(&ad9523_device, ad9523_param);
+	ad9523_setup(&ad9523_device, &ad9523_param);
 
 	// set up the devices
 	ad9680_setup(&ad9680_device, ad9680_param);
