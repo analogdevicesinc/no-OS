@@ -1364,6 +1364,7 @@ struct ad9144_init_param {
 	uint8_t		jesd_xbar_lane2_sel;
 	uint8_t		jesd_xbar_lane3_sel;
 	uint8_t		active_converters;
+	uint8_t		spi3wire; // set device spi intereface 3/4 wires
 	uint32_t	stpl_samples[4][4];
 	uint32_t	lane_rate_kbps;
 	uint32_t	prbs_type;

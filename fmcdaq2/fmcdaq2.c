@@ -411,6 +411,7 @@ int main(void)
 
 	ad9144_param.lane_rate_kbps = 10000000;
 	ad9144_param.active_converters = 2;
+	ad9144_param.spi3wire = 1;
 
 	ad9144_core.no_of_channels = ad9144_param.active_converters;
 	ad9144_core.resolution = 16;

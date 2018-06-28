@@ -138,7 +138,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	// reset
 	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);
-	ad9144_spi_write(dev, REG_SPI_INTFCONFA, 0x00);
+	ad9144_spi_write(dev, REG_SPI_INTFCONFA, init_param->spi3wire ? 0x00 : 0x18);
 	mdelay(1);
 
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
