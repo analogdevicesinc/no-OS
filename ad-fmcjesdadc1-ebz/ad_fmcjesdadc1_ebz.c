@@ -166,14 +166,14 @@ int main(void)
 	ad9250_setup(&ad9250_0_device, ad9250_0_param);
 	ad9250_setup(&ad9250_1_device, ad9250_1_param);
 
-	// set up the JESD core
-	jesd_setup(ad9250_jesd204);
+	// generate SYSREF
+	jesd_sysref_control(ad9250_jesd204,1);
 
 	// set up the XCVR core
 	xcvr_setup(&ad9250_xcvr);
 
-	// generate SYSREF
-	jesd_sysref_control(ad9250_jesd204,1);
+	// set up the JESD core
+	jesd_setup(ad9250_jesd204);
 
 	// JESD core status
 	axi_jesd204_rx_status_read(ad9250_jesd204);

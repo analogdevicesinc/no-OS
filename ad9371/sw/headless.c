@@ -44,7 +44,7 @@
 #include "common.h"
 #include "ad9528.h"
 #include "mykonos.h"
-#include "mykonos_m3.h"
+#include "Mykonos_M3.h"
 #include "mykonos_gpio.h"
 #include "platform_drivers.h"
 #include "adc_core.h"

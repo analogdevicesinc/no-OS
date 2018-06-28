@@ -327,22 +327,38 @@ struct ad6676_dev {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+/* SPI read from device. */
 int32_t ad6676_spi_read(struct ad6676_dev *dev,
 			uint16_t reg_addr,
 			uint8_t *reg_data);
+
+/* SPI write to device. */
 int32_t ad6676_spi_write(struct ad6676_dev *dev,
 			 uint16_t reg_addr,
 			 uint8_t reg_data);
+
+/* Initialize the device. */
 int32_t ad6676_setup(struct ad6676_dev **device,
 		     struct ad6676_init_param init_param);
+
+/* Reconfigure device for other target frequency and bandwidth and
+ * recalibrate. */
 int32_t ad6676_update(struct ad6676_dev *dev,
 		      struct ad6676_init_param *init_param);
+
+/* Set attenuation in decibels or disable attenuator. */
 int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
 			       struct ad6676_init_param *init_param);
+
+/* Set the target IF frequency. */
 int32_t ad6676_set_fif(struct ad6676_dev *dev,
 		       struct ad6676_init_param *init_param);
+
+/* Get the target IF frequency. */
 uint64_t ad6676_get_fif(struct ad6676_dev *dev,
 			struct ad6676_init_param *init_param);
+
+/* Perform an interface test. */
 int32_t ad6676_test(struct ad6676_dev *dev,
 		    uint32_t test_mode);
 #endif

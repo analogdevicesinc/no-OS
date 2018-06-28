@@ -53,7 +53,7 @@
  *
  * @return Returns 0 in case of success or negative error code..
 *******************************************************************************/
-int32_t adf4350_write(spi_device *dev,
+int32_t adf4350_write(adf4350_dev *dev,
 					  uint32_t data)
 {
 	uint8_t txData[4];
@@ -63,7 +63,7 @@ int32_t adf4350_write(spi_device *dev,
 	txData[2] = (data & 0x0000FF00) >> 8;
 	txData[3] = (data & 0x000000FF) >> 0;
 
-	return ad_spi_xfer(dev, txData, 4);
+	return spi_write_and_read(dev->spi_desc, txData, 4);
 }
 
 /***************************************************************************//**
@@ -91,7 +91,7 @@ int32_t adf4350_sync_config(adf4350_dev *dev)
 			}
 
 			dev->val = (dev->regs[i] | i);
-			ret = adf4350_write(&dev->spi_dev, dev->val);
+			ret = adf4350_write(dev, dev->val);
 			if (ret < 0)
 				return ret;
 			dev->regs_hw[i] = dev->regs[i];
@@ -301,15 +301,8 @@ int32_t adf4350_setup(adf4350_dev **device,
 		return -1;
 	}
 
-
-	ret = ad_spi_init(&dev->spi_dev);
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.cpha = init_param.spi_cpha;
-
-	dev->spi_dev.cpol = init_param.spi_cpol;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-
-
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param.spi_init);
 
 	dev->pdata = (struct adf4350_platform_data *)malloc(sizeof(*dev->pdata));
 	if (!dev->pdata)

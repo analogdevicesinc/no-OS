@@ -198,7 +198,11 @@ commonErr_t CMB_wait_us(uint32_t time_us)
 
 commonErr_t CMB_setTimeout_ms(uint32_t timeOut_ms)
 {
+#ifdef _XPARAMETERS_PS_H_
 	_desired_time_to_elapse_us = timeOut_ms * 1000;
+#else
+	_desired_time_to_elapse_us = timeOut_ms * 50;	// FIXME
+#endif
 
 	return(COMMONERR_OK);
 }

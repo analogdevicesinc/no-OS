@@ -58,9 +58,10 @@
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
 //#define FMCOMMS5
-//#define PICOZED_SDR
-//#define PICOZED_SDR_CMOS
-//#define CAPTURE_SCRIPT
+//#define ADI_RF_SOM
+//#define ADI_RF_SOM_CMOS
+//#define ADC_DMA_EXAMPLE
+//#define DAC_DMA_EXAMPLE
 //#define AXI_ADC_NOT_PRESENT
 //#define TDD_SWITCH_STATE_EXAMPLE
 

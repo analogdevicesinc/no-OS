@@ -275,6 +275,7 @@ void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
 			}
 			dac_dma_write(AXI_DMAC_REG_CTRL, 0);
 			dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+			dac_dma_write(AXI_DMAC_REG_FLAGS, DMAC_FLAGS_CYCLIC);
 			dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
 			dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
 			dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);

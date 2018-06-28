@@ -145,6 +145,9 @@ enum dds_data_select {
 #define AXI_DMAC_IRQ_SOT				(1 << 0)
 #define AXI_DMAC_IRQ_EOT				(1 << 1)
 
+#define DMAC_FLAGS_CYCLIC				(1 << 0)
+#define DMAC_FLAGS_TLAST				(1 << 1)
+
 struct dds_state
 {
 	uint32_t	cached_freq[8];

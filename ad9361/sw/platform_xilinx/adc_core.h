@@ -140,8 +140,8 @@
 #define AXI_DMAC_CTRL_ENABLE			(1 << 0)
 #define AXI_DMAC_CTRL_PAUSE				(1 << 1)
 
-#define AXI_DMAC_IRQ_SOT				(1 << 0)
-#define AXI_DMAC_IRQ_EOT				(1 << 1)
+#define IRQ_TRANSFER_QUEUED				(1 << 0)
+#define IRQ_TRANSFER_COMPLETED			(1 << 1)
 
 struct adc_state
 {
