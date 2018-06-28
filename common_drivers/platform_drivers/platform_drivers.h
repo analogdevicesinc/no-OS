@@ -258,7 +258,7 @@ typedef struct {
 
 /* Initialize the I2C communication peripheral. */
 int32_t i2c_init(i2c_desc **desc,
-		 i2c_init_param param);
+		 const i2c_init_param *param);
 
 /* Free the resources allocated by i2c_init(). */
 int32_t i2c_remove(i2c_desc *desc);

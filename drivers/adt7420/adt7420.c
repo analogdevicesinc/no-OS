@@ -119,7 +119,7 @@ int32_t adt7420_init(struct adt7420_dev **device,
 		return -1;
 
 	/* I2C */
-	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	/* Device Settings */
 	dev->resolution_setting = init_param.resolution_setting;

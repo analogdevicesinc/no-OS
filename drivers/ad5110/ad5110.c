@@ -68,7 +68,7 @@ int8_t ad5110_init(struct ad5110_dev **device,
 		return -1;
 
 	dev->ad5110_dev_addr = init_param.ad5110_dev_addr;
-	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	*device = dev;
 

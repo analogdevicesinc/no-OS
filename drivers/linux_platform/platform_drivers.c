@@ -61,7 +61,7 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(i2c_desc **desc,
-		 i2c_init_param param)
+		 const i2c_init_param *param)
 {
 	i2c_desc *descriptor;
 
@@ -69,13 +69,13 @@ int32_t i2c_init(i2c_desc **desc,
 	if (!descriptor)
 		return FAILURE;
 
-	descriptor->fd = open(param.pathname, O_RDWR);
+	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
 		return FAILURE;
 	}
 
-	descriptor->slave_address = param.slave_address;
+	descriptor->slave_address = param->slave_address;
 
 	*desc = descriptor;
 
