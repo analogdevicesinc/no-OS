@@ -105,7 +105,7 @@ int32_t ad9625_setup(struct ad9625_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ad9625_spi_write(dev, AD9625_REG_CHIP_PORT_CONF, 0x18);
 	ad9625_spi_write(dev, AD9625_REG_TRANSFER, 0x01);

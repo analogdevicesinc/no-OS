@@ -132,7 +132,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret == -1)
 		printf("%s : Device descriptor failed!\n", __func__);
 

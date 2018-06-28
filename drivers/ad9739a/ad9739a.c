@@ -290,7 +290,7 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Device ID */
 	ad9739a_read(dev, AD9739A_REG_PART_ID, &chip_id);

@@ -124,7 +124,7 @@ int8_t ad5449_init(struct ad5449_dev **device,
 	dev->act_device = init_param.act_device;
 
 	/* Initialize SPI communication. */
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);

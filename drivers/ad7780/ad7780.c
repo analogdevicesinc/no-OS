@@ -92,7 +92,7 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	AD7780_FILTER_LOW;   // The update rate is set to 16.7 Hz.
 	AD7780_GAIN_HIGH;    // Gain is set to 1.
 	/* SPI */
-	init_status = spi_init(&dev->spi_desc, init_param.spi_init);
+	init_status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	if(init_status != 0) {
 		return -1;

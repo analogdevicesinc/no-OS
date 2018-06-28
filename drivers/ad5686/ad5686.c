@@ -105,7 +105,7 @@ int32_t ad5686_init(struct ad5686_dev **device,
 	dev->act_device = init_param.act_device;
 
 	if (chip_info[dev->act_device].communication == SPI)
-		ret = spi_init(&dev->spi_desc, init_param.spi_init);
+		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
 		ret = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 

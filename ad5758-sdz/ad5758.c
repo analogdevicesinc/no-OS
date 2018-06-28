@@ -796,7 +796,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 	ret |= gpio_set_value(dev->ldac_n, GPIO_LOW);
 
 	/* Initialize the SPI communication */
-	ret |= spi_init(&dev->spi_desc, init_param.spi_init);
+	ret |= spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Perform a software reset */
 	ret |= ad5758_soft_reset(dev);

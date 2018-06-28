@@ -650,7 +650,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 		return FAILURE;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
 
 	/* Query device presence */
 	ad5770r_spi_reg_read(dev, AD5770R_PRODUCT_ID_L, &product_id_l);

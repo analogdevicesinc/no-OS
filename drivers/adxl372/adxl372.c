@@ -715,7 +715,7 @@ int32_t adxl372_init(adxl372_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_int1,

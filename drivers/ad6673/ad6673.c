@@ -104,7 +104,7 @@ int32_t ad6673_setup(struct ad6673_dev **device,
 		return -1;
 
 	/* Initializes the SPI peripheral */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if(ret != SUCCESS) {
 		return ret;
 	}

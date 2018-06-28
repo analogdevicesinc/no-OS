@@ -142,7 +142,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	dev->communication_type = init_param.communication_type;
 
 	if (dev->communication_type == ADXL345_SPI_COMM)
-		status = spi_init(&dev->spi_desc, init_param.spi_init);
+		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
 		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
 

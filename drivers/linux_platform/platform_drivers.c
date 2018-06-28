@@ -180,8 +180,7 @@ int32_t i2c_read(i2c_desc *desc,
  * @param init_param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(spi_desc **desc,
-		 spi_init_param param)
+int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 {
 	spi_desc *descriptor;
 	int ret;
@@ -190,21 +189,21 @@ int32_t spi_init(spi_desc **desc,
 	if (!descriptor)
 		return FAILURE;
 
-	descriptor->fd = open(param.pathname, O_RDWR);
+	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
 		return FAILURE;
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MODE,
-			&param.mode);
+			&param->mode);
 	if (ret == -1) {
 		printf("%s: Can't set mode\n\r", __func__);
 		return FAILURE;
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MAX_SPEED_HZ,
-			&param.max_speed_hz);
+			&param->max_speed_hz);
 	if (ret == -1) {
 		printf("%s: Can't set speed\n\r", __func__);
 		return FAILURE;

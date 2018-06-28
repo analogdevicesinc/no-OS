@@ -74,7 +74,7 @@ int8_t ad7091r_init(struct ad7091r_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Ensures that last state of SDO is high. */
 	spi_write_and_read(dev->spi_desc, &tmp_val, 1);
 	ad7091r_software_reset(dev);

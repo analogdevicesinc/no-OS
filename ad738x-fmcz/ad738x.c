@@ -301,7 +301,7 @@ int32_t ad738x_init(ad738x_dev **device,
 	if (!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ret |= ad738x_reset(dev, HARD_RESET);
 	mdelay(1000);

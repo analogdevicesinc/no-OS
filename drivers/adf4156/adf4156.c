@@ -82,7 +82,7 @@ int8_t adf4156_init(struct adf4156_dev **device,
 	//ADF4156_CE2_OUT;
 
 	/* Setup SPI Interface */
-	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* R4 */
 	cfg_value = adf4156_pdata_lpc.r4_user_settings |

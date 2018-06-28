@@ -122,7 +122,7 @@ int8_t ad9833_init(struct ad9833_dev **device,
 
 	/* Setup SPI interface. */
 	status = spi_init(&dev->spi_desc,
-			  init_param.spi_init);
+			  &init_param.spi_init);
 	/* Initialize board. */
 	spi_data |= AD9833_CTRLRESET;
 	ad9833_tx_spi(dev,

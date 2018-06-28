@@ -65,7 +65,7 @@ int32_t ad9467_setup(struct ad9467_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Disable test mode. */
 	ret = ad9467_write(dev, AD9467_REG_TEST_IO, 0x00);

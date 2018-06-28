@@ -72,7 +72,7 @@ int32_t adxl362_init(struct adxl362_dev **device,
 		return -1;
 
 	/* SPI */
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	adxl362_get_register_value(dev, &reg_value, ADXL362_REG_PARTID, 1);
 	if((reg_value != ADXL362_PART_ID))

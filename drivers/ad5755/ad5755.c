@@ -93,7 +93,7 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	AD5755_POC_OUT;
 	AD5755_POC_LOW;
 
-	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Device Setup. */
 	/* Configure the POC bit, STATREAD bit and ShtCcLim bit. */
 	ad5755_set_control_registers(dev,

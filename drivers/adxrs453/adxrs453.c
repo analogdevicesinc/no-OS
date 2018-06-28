@@ -68,7 +68,7 @@ int32_t adxrs453_init(struct adxrs453_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Read the value of the ADXRS453 ID register. */
 	adxrs453_id = adxrs453_get_register_value(dev, ADXRS453_REG_PID);
