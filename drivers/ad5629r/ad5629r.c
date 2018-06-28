@@ -107,7 +107,7 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 	if (chip_info[dev->act_device].communication == com_spi) {
 		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
-		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
 	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);

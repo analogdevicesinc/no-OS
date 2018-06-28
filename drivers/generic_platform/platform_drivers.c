@@ -54,13 +54,13 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
-		 struct i2c_init_param param)
+		 const struct i2c_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
 
-	if (param.type) {
+	if (param->type) {
 		// Unused variable - fix compiler warning
 	}
 

@@ -84,7 +84,7 @@ int32_t ad5933_init(struct ad5933_dev **device,
 	dev->current_gain = init_param.current_gain;
 	dev->current_range = init_param.current_range;
 
-	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	*device = dev;
 

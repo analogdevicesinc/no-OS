@@ -144,7 +144,7 @@ int32_t adxl345_init(struct adxl345_dev **device,
 	if (dev->communication_type == ADXL345_SPI_COMM)
 		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	else
-		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
 	if (adxl345_get_register_value(dev, ADXL345_DEVID) != ADXL345_ID)
 		status = -1;
