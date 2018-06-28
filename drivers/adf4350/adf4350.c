@@ -302,7 +302,7 @@ int32_t adf4350_setup(adf4350_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	dev->pdata = (struct adf4350_platform_data *)malloc(sizeof(*dev->pdata));
 	if (!dev->pdata)

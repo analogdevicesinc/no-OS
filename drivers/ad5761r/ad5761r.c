@@ -669,7 +669,7 @@ int32_t ad5761r_init(struct ad5761r_dev **device,
 	}
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);

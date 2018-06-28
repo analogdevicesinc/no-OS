@@ -117,7 +117,7 @@ int8_t adf4106_init(struct adf4106_dev **device,
 	dev->i_latch = 0;
 
 	/* CPHA = 1; CPOL = 0; */
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= gpio_get(&dev->gpio_le, init_param.gpio_le);

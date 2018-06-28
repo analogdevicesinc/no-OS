@@ -104,7 +104,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 		return -1;
 
 	/* Setup SPI descriptor */
-	ret = spi_init(&dev->spi_dev, init_param.spi_init);
+	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
 
 	dev->id_no = init_param.id_no;
 

@@ -293,7 +293,7 @@ int32_t ad713x_init(ad713x_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_mode1, init_param.gpio_mode1);
 	ret |= gpio_get(&dev->gpio_mode2, init_param.gpio_mode2);

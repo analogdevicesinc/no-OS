@@ -344,7 +344,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	dev->pdata = init_param.pdata;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		return ret;
 

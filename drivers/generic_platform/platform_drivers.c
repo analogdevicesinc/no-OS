@@ -156,13 +156,13 @@ int32_t i2c_read(struct i2c_desc *desc,
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
-		 struct spi_init_param param)
+		 const struct spi_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
 
-	if (param.type) {
+	if (param->type) {
 		// Unused variable - fix compiler warning
 	}
 

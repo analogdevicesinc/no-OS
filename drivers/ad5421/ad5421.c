@@ -83,7 +83,7 @@ int32_t ad5421_init(struct ad5421_dev **device,
 	gpio_get(&dev->gpio_faultin, init_param.gpio_faultin);
 
 	/* Setup the SPI interface. */
-	spi_init(&dev->spi_desc, init_param.spi_init);
+	spi_init(&dev->spi_desc, &init_param.spi_init);
 	/* Setup AD5421 control register. */
 	/* Write to the control register. */
 	spi_data = AD5421_CMD(AD5421_CMDWRCTRL);

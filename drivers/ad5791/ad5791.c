@@ -102,7 +102,7 @@ int32_t ad5791_init(struct ad5791_dev **device,
 	AD5791_CLR_OUT;
 	AD5791_CLR_HIGH;
 
-	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	*device = dev;
 

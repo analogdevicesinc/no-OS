@@ -129,7 +129,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ad9680_spi_read(dev,
 			AD9680_REG_CHIP_ID_LOW,
