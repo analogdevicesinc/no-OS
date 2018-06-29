@@ -200,8 +200,8 @@ int main(void)
 	i5g_init_param.regs = XPAR_AXI_FMCADC5_SYNC_BASEADDR;
 
 	/* Set up the JESD core */
-	jesd_setup(ad9625_0_jesd);
-	jesd_setup(ad9625_1_jesd);
+	jesd_setup(&ad9625_0_jesd);
+	jesd_setup(&ad9625_1_jesd);
 
 	/* Set up the XCVRs */
 	xcvr_setup(&ad9625_0_xcvr);
@@ -212,14 +212,14 @@ int main(void)
 	adc_setup(ad9625_1_core);
 
 	/* JESD core status */
-	axi_jesd204_rx_status_read(ad9625_0_jesd);
-	axi_jesd204_rx_status_read(ad9625_1_jesd);
+	axi_jesd204_rx_status_read(&ad9625_0_jesd);
+	axi_jesd204_rx_status_read(&ad9625_1_jesd);
 
 	i5g_setup(&i5g_core, i5g_init_param);
 
 	/* JESD core status */
-	axi_jesd204_rx_status_read(ad9625_0_jesd);
-	axi_jesd204_rx_status_read(ad9625_1_jesd);
+	axi_jesd204_rx_status_read(&ad9625_0_jesd);
+	axi_jesd204_rx_status_read(&ad9625_1_jesd);
 
 	/* PRBS test */
 	ad9625_test(ad9625_0_device, AD9625_TEST_PNLONG);

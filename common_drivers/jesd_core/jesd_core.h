@@ -159,14 +159,14 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t jesd_read(jesd_core core, uint32_t reg_addr, uint32_t *reg_data);
-int32_t jesd_write(jesd_core core, uint32_t reg_addr, uint32_t reg_data);
+int32_t jesd_read(jesd_core *jesd, uint32_t reg_addr, uint32_t *reg_data);
+int32_t jesd_write(jesd_core *jesd, uint32_t reg_addr, uint32_t reg_data);
 
-int32_t jesd_setup(jesd_core core);
-int32_t jesd_status(jesd_core core);
-int32_t axi_jesd204_rx_status_read(jesd_core jesd);
-int32_t axi_jesd204_tx_status_read(jesd_core jesd);
-int32_t axi_jesd204_rx_laneinfo_read(jesd_core jesd, uint32_t lane);
-int32_t jesd_sysref_control(jesd_core core, uint32_t enable);
+int32_t jesd_setup(jesd_core *jesd);
+int32_t jesd_status(jesd_core *jesd);
+int32_t axi_jesd204_rx_status_read(jesd_core *jesd);
+int32_t axi_jesd204_tx_status_read(jesd_core *jesd);
+int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane);
+int32_t jesd_sysref_control(jesd_core *jesd, uint32_t enable);
 
 #endif
