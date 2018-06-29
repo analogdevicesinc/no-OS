@@ -67,11 +67,11 @@ const char *axi_jesd204_rx_lane_status_label[4] = {
 /***************************************************************************//**
 * @brief jesd_read
 *******************************************************************************/
-int32_t jesd_read(jesd_core core,
+int32_t jesd_read(jesd_core *jesd,
 					uint32_t reg_addr,
 					uint32_t *reg_data)
 {
-	*reg_data = ad_reg_read((core.base_address + reg_addr));
+	*reg_data = ad_reg_read((jesd->base_address + reg_addr));
 
 	return 0;
 }
@@ -79,11 +79,11 @@ int32_t jesd_read(jesd_core core,
 /***************************************************************************//**
 * @brief jesd_write
 *******************************************************************************/
-int32_t jesd_write(jesd_core core,
+int32_t jesd_write(jesd_core *jesd,
 					uint32_t reg_addr,
 					uint32_t reg_data)
 {
-	ad_reg_write((core.base_address + reg_addr), reg_data);
+	ad_reg_write((jesd->base_address + reg_addr), reg_data);
 
 	return 0;
 }
@@ -92,12 +92,12 @@ int32_t jesd_write(jesd_core core,
 /***************************************************************************//**
 * @brief jesd_init
 *******************************************************************************/
-int32_t jesd_setup(jesd_core core)
+int32_t jesd_setup(jesd_core *jesd)
 {
-	jesd_write(core, JESD204_REG_LINK_DISABLE, 1);
-	jesd_write(core, JESD204_REG_LINK_CONF0, (((core.octets_per_frame-1) << 16) |
-		((core.frames_per_multiframe*core.octets_per_frame)-1)));
-	jesd_write(core, JESD204_REG_LINK_DISABLE, 0);
+	jesd_write(jesd, JESD204_REG_LINK_DISABLE, 1);
+	jesd_write(jesd, JESD204_REG_LINK_CONF0, (((jesd->octets_per_frame-1) << 16) |
+		((jesd->frames_per_multiframe*jesd->octets_per_frame)-1)));
+	jesd_write(jesd, JESD204_REG_LINK_DISABLE, 0);
 	mdelay(100);
 	return(0);
 }
@@ -105,14 +105,14 @@ int32_t jesd_setup(jesd_core core)
 /***************************************************************************//**
 * @brief jesd generate SYSREF if necessar
 *******************************************************************************/
-int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
+int32_t jesd_sysref_control(jesd_core *jesd, uint32_t enable)
 {
 	gpio_desc *sysref_pin;
-	if ((core.sysref_type == INTERN) && (core.subclass_mode >= 1)) {
+	if ((jesd->sysref_type == INTERN) && (jesd->subclass_mode >= 1)) {
 
 		// generate SYS_REF
 
-		gpio_get(&sysref_pin, core.sysref_gpio_pin);
+		gpio_get(&sysref_pin, jesd->sysref_gpio_pin);
 
 		gpio_set_value(sysref_pin, enable);
 
@@ -126,7 +126,7 @@ int32_t jesd_sysref_control(jesd_core core, uint32_t enable)
 /***************************************************************************//**
 * @brief jesd_read_status generic
 *******************************************************************************/
-int32_t jesd_status(jesd_core core)
+int32_t jesd_status(jesd_core *jesd)
 {
 	uint32_t status;
 	int32_t timeout;
@@ -136,7 +136,7 @@ int32_t jesd_status(jesd_core core)
 	timeout = 100;
 	while (timeout > 0) {
 		mdelay(1);
-		jesd_read(core, 0x280, &status);
+		jesd_read(jesd, 0x280, &status);
 		if ((status & 0x13) == 0x13) break;
 		timeout = timeout - 1;
 	}
@@ -156,7 +156,7 @@ int32_t jesd_status(jesd_core core)
 /***************************************************************************//**
 * @brief axi_jesd204_rx_status_read
 *******************************************************************************/
-int32_t axi_jesd204_rx_status_read(jesd_core jesd)
+int32_t axi_jesd204_rx_status_read(jesd_core *jesd)
 {
 	uint32_t sysref_status;
 	uint32_t link_disabled;
@@ -200,7 +200,7 @@ int32_t axi_jesd204_rx_status_read(jesd_core jesd)
 /***************************************************************************//**
 * @brief axi_jesd204_tx_status_read
 *******************************************************************************/
-int32_t axi_jesd204_tx_status_read(jesd_core jesd)
+int32_t axi_jesd204_tx_status_read(jesd_core *jesd)
 {
 	uint32_t sysref_status;
 	uint32_t link_disabled;
@@ -244,7 +244,7 @@ int32_t axi_jesd204_tx_status_read(jesd_core jesd)
 * @brief axi_jesd204_rx_laneinfo_read
 *******************************************************************************/
 /* FIXME: This violates every single sysfs ABI recommendation */
-int32_t axi_jesd204_rx_laneinfo_read(jesd_core jesd, uint32_t lane)
+int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane)
 {
 	uint32_t lane_status;
 	uint32_t lane_latency;

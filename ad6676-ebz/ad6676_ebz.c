@@ -231,16 +231,16 @@ int main(void)
 	ad6676_setup(&ad6676_device, ad6676_param);
 
 	// set up the JESD core
-	jesd_setup(ad6676_jesd);
+	jesd_setup(&ad6676_jesd);
 
 	// set up the XCVRs
 	xcvr_setup(&ad6676_xcvr);
 
 	// generate SYSREF
-	jesd_sysref_control(ad6676_jesd, 1);
+	jesd_sysref_control(&ad6676_jesd, 1);
 
 	// JESD core status
-	axi_jesd204_rx_status_read(ad6676_jesd);
+	axi_jesd204_rx_status_read(&ad6676_jesd);
 
 	// interface core setup
 	adc_setup(ad6676_core);

@@ -300,9 +300,9 @@ int main(void)
 
 	ad9152_setup(&ad9152_device, ad9152_param);
 
-	jesd_setup(ad9152_jesd);
+	jesd_setup(&ad9152_jesd);
 	xcvr_setup(&ad9152_xcvr);
-	axi_jesd204_tx_status_read(ad9152_jesd);
+	axi_jesd204_tx_status_read(&ad9152_jesd);
 	dac_setup(&ad9152_core);
 	ad9152_status(ad9152_device);
 
@@ -328,9 +328,9 @@ int main(void)
 	ad9152_datapath_prbs_test(ad9152_device, ad9152_param);
 
 	ad9680_setup(&ad9680_device, &ad9680_param);
-	jesd_setup(ad9680_jesd);
+	jesd_setup(&ad9680_jesd);
 	xcvr_setup(&ad9680_xcvr);
-	axi_jesd204_tx_status_read(ad9680_jesd);
+	axi_jesd204_tx_status_read(&ad9680_jesd);
 	adc_setup(ad9680_core);
 	ad9680_test(ad9680_device, AD9680_TEST_PN9);
 	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {

@@ -514,8 +514,8 @@ int main(void)
 	ad9144_setup(&ad9144_device, &ad9144_param);
 
 	// set up the JESD core
-	jesd_setup(ad9680_jesd);
-	jesd_setup(ad9144_jesd);
+	jesd_setup(&ad9680_jesd);
+	jesd_setup(&ad9144_jesd);
 
 	// set up the XCVRs
 #ifdef ALTERA
@@ -534,8 +534,8 @@ int main(void)
 #endif
 
 	// JESD core status
-	axi_jesd204_tx_status_read(ad9144_jesd);
-	axi_jesd204_rx_status_read(ad9680_jesd);
+	axi_jesd204_tx_status_read(&ad9144_jesd);
+	axi_jesd204_rx_status_read(&ad9680_jesd);
 
 	// interface core set up
 	adc_setup(ad9680_core);

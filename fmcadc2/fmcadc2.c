@@ -115,13 +115,13 @@ int main(void)
 	// set up the device
 	ad9625_setup(&ad9625_device, ad9625_param);
 	// set up the JESD core
-	jesd_setup(ad9625_jesd);
+	jesd_setup(&ad9625_jesd);
 	// set up the XCVRs
 	xcvr_setup(&ad9625_xcvr);
 	// generate SYSREF
-	jesd_sysref_control(ad9625_jesd, 1);
+	jesd_sysref_control(&ad9625_jesd, 1);
 	// JESD core status
-	axi_jesd204_rx_status_read(ad9625_jesd);
+	axi_jesd204_rx_status_read(&ad9625_jesd);
 
 	// interface core setup
 	adc_setup(ad9625_core);
