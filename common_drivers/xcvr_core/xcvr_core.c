@@ -192,7 +192,7 @@ int32_t xcvr_setup(xcvr_core *core)
 		altera_a10_calib_tx_pll(core);
 	}
 
-	xcvr_filalize_lane_rate_change(core); // bring out of reset - print  status
+	xcvr_finalize_lane_rate_change(core); // bring out of reset - print  status
 
 #endif
 #ifdef XILINX
@@ -369,9 +369,9 @@ int32_t xcvr_reset(xcvr_core *core)
 #ifdef ALTERA
 
 /*******************************************************************************
- * @brief xcvr_reset
+ * @brief xcvr_finalize_lane_rate_change
  *******************************************************************************/
-void xcvr_filalize_lane_rate_change(xcvr_core *core)
+void xcvr_finalize_lane_rate_change(xcvr_core *core)
 {
 	uint32_t status;
 	int timeout = 1000;
