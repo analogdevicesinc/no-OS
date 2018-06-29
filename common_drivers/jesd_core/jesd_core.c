@@ -43,21 +43,21 @@
 #include "jesd_core.h"
 
 /*******************************************************************************/
-const char *axi_jesd204_rx_link_status_label[4] = {
+static const char *axi_jesd204_rx_link_status_label[4] = {
 	"RESET",	// 0
 	"WAIT FOR PHY",	// 1
 	"CGS",		// 2
 	"DATA"		// 3
 };
 
-const char *axi_jesd204_tx_link_status_label[] = {
+static const char *axi_jesd204_tx_link_status_label[] = {
 	"WAIT",
 	"CGS",
 	"ILAS",
 	"DATA"
 };
 
-const char *axi_jesd204_rx_lane_status_label[4] = {
+static const char *axi_jesd204_rx_lane_status_label[4] = {
 	"INIT",		// 0
 	"CHECK",	// 1
 	"DATA",		// 2
