@@ -178,6 +178,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	uint32_t serdes_cdr;
 	uint8_t chip_id;
 	uint8_t scratchpad;
+	uint32_t val;
 	int32_t ret;
 	struct ad9144_dev *dev;
 
@@ -222,7 +223,22 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	// digital data path
 
-	ad9144_spi_write(dev, REG_INTERP_MODE, 0x00);	// interpolation (bypass)
+	switch (init_param->interpolation) {
+	case 2:
+		val = 0x01;
+		break;
+	case 4:
+		val = 0x03;
+		break;
+	case 8:
+		val = 0x04;
+		break;
+	default:
+		val = 0x00;
+		break;
+	}
+
+	ad9144_spi_write(dev, REG_INTERP_MODE, val);
 	ad9144_spi_write(dev, REG_DATA_FORMAT, 0x00);	// 2's complement
 
 	// transport layer
