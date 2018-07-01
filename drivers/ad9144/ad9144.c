@@ -116,6 +116,58 @@ int32_t ad9144_spi_check_status(struct ad9144_dev *dev,
 	return -1;
 }
 
+struct ad9144_reg_seq {
+	uint16_t reg;
+	uint16_t val;
+};
+
+int32_t ad9144_spi_write_seq(struct ad9144_dev *dev,
+	const struct ad9144_reg_seq *seq, uint32_t num)
+{
+	int32_t ret = 0;
+
+	while (num) {
+		ret |= ad9144_spi_write(dev, seq->reg, seq->val);
+		num--;
+		seq++;
+	}
+
+	return 0;
+}
+
+/*
+ * Required device configuration as per table 16 from the AD9144
+ * datasheet Rev B.
+ */
+static const struct ad9144_reg_seq ad9144_required_device_config[] = {
+	{ 0x12d, 0x8b },
+	{ 0x146, 0x01 },
+	{ 0x2a4, 0xff },
+	{ 0x232, 0xff },
+	{ 0x333, 0x01 },
+};
+
+/*
+ * Optimal settings for the SERDES PLL, as per table 39 of the AD9144 datasheet.
+ */
+static const struct ad9144_reg_seq ad9144_optimal_serdes_settings[] = {
+	{ 0x284, 0x62 },
+	{ 0x285, 0xc9 },
+	{ 0x286, 0x0e },
+	{ 0x287, 0x12 },
+	{ 0x28a, 0x7b },
+	{ 0x28b, 0x00 },
+	{ 0x290, 0x89 },
+	{ 0x294, 0x24 },
+	{ 0x296, 0x03 },
+	{ 0x297, 0x0d },
+	{ 0x299, 0x02 },
+	{ 0x29a, 0x8e },
+	{ 0x29c, 0x2a },
+	{ 0x29f, 0x78 },
+	{ 0x2a0, 0x06 },
+};
+
 /***************************************************************************//**
  * @brief ad9144_setup
 ********************************************************************************/
@@ -161,16 +213,10 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_SYSREF_ACTRL0, 0x00);	// sysref - power up/falling edge
 
 	// required device configurations
-
-	ad9144_spi_write(dev, REG_DATA_PATH_FLUSH_COUNT0, 0x8b);	// data-path
-	ad9144_spi_write(dev, REG_BLSM_CTRL, 0x01);			// data-path
-	ad9144_spi_write(dev, REG_DEV_CONFIG_8, 0xff);			// clock
-	ad9144_spi_write(dev, REG_DACPLLT17, 0x73);			// dac-pll
-	ad9144_spi_write(dev, REG_SERDES_PLL_CTRL, 0x49);		// serdes-pll
-	ad9144_spi_write(dev, REG_SERDES_PLL_CP3, 0x24);		// serde-pll
-	ad9144_spi_write(dev, REG_SERDES_PLL_VAR3, 0x73);		// serde-pll
-	ad9144_spi_write(dev, REG_CONFIG_REG3, 0xff);			// jesd
-	ad9144_spi_write(dev, REG_DEVICE_CONFIG_REG_13, 0x01);		// jesd
+	ad9144_spi_write_seq(dev, ad9144_required_device_config,
+		ARRAY_SIZE(ad9144_required_device_config));
+	ad9144_spi_write_seq(dev, ad9144_optimal_serdes_settings,
+		ARRAY_SIZE(ad9144_optimal_serdes_settings));
 
 	// digital data path
 
