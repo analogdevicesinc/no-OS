@@ -136,6 +136,11 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	if (ret == -1)
 		printf("%s : Device descriptor failed!\n", __func__);
 
+	// reset
+	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);
+	ad9144_spi_write(dev, REG_SPI_INTFCONFA, 0x00);
+	mdelay(1);
+
 	ad9144_spi_read(dev, REG_SPI_PRODIDL, &chip_id);
 	if(chip_id != AD9144_CHIP_ID) {
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
@@ -151,11 +156,6 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	}
 
 	// power-up and dac initialization
-
-	ad9144_spi_write(dev, REG_SPI_INTFCONFA, SOFTRESET_M | SOFTRESET);	// reset
-	ad9144_spi_write(dev, REG_SPI_INTFCONFA, 0x00);	// reset
-	mdelay(1);
-
 	ad9144_spi_write(dev, REG_PWRCNTRL0, 0x00);	// dacs - power up everything
 	ad9144_spi_write(dev, REG_CLKCFG0, 0x00);	// clocks - power up everything
 	ad9144_spi_write(dev, REG_SYSREF_ACTRL0, 0x00);	// sysref - power up/falling edge
