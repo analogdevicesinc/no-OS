@@ -174,6 +174,8 @@ static const struct ad9144_reg_seq ad9144_optimal_serdes_settings[] = {
 int32_t ad9144_setup(struct ad9144_dev **device,
 		     const struct ad9144_init_param *init_param)
 {
+	uint32_t serdes_plldiv;
+	uint32_t serdes_cdr;
 	uint8_t chip_id;
 	uint8_t scratchpad;
 	int32_t ret;
@@ -246,6 +248,17 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	// physical layer
 
+	if (init_param->lane_rate_kbps < 2880000) {
+		serdes_cdr = 0x0a;
+		serdes_plldiv = 0x06;
+	} else if (init_param->lane_rate_kbps < 5750000) {
+		serdes_cdr = 0x08;
+		serdes_plldiv = 0x05;
+	} else {
+		serdes_cdr = 0x28;
+		serdes_plldiv = 0x04;
+	}
+
 	ad9144_spi_write(dev, REG_DEV_CONFIG_9, 0xb7);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_10, 0x87);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_11, 0xb7);		// jesd termination
@@ -253,22 +266,10 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_TERM_BLK1_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
-	if (init_param->lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, 0x0A);		// CDR_OVERSAMP
-	else if (init_param->lane_rate_kbps > 5520000)
-		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0,
-				 0x28);	// ENHALFRATE
-	else
-		ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0,
-				 0x08);
+	ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, serdes_cdr);
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x00);	// cdr reset
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x01);	// cdr reset
-	if (init_param->lane_rate_kbps < 2880000)
-		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x06);		// data-rate < 2.88 Gbps
-	else if (init_param->lane_rate_kbps > 5520000)
-		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x04);	// data-rate > 5.52 Gbps
-	else
-		ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, 0x05);
+	ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, serdes_plldiv);
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x05);	// enable serdes calibration
 	mdelay(20);
