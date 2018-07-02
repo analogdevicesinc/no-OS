@@ -1353,22 +1353,25 @@
 struct ad9144_dev {
 	/* SPI */
 	spi_desc *spi_desc;
+
+	uint8_t num_converters;
+	uint8_t num_lanes;
 };
 
 struct ad9144_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* Device Settings */
-	uint8_t		jesd_xbar_lane0_sel;
-	uint8_t		jesd_xbar_lane1_sel;
-	uint8_t		jesd_xbar_lane2_sel;
-	uint8_t		jesd_xbar_lane3_sel;
-	uint8_t		active_converters;
 	uint8_t		spi3wire; // set device spi intereface 3/4 wires
 	uint8_t		interpolation; // interpolation factor
 	uint32_t	stpl_samples[4][4];
 	uint32_t	lane_rate_kbps;
 	uint32_t	prbs_type;
+
+	uint8_t		jesd204_mode;
+	uint8_t		jesd204_subclass;
+	uint8_t		jesd204_scrambling;
+	uint8_t		jesd204_lane_xbar[8];
 };
 
 /******************************************************************************/
