@@ -217,7 +217,7 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 	case 32:
 		fbdiv = 96;
 		break;
-	case 44:
+	case 40:
 		fbdiv = 128;
 		break;
 	case 64:
