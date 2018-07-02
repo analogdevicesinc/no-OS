@@ -410,10 +410,16 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 
 	ad9144_param.lane_rate_kbps = 10000000;
-	ad9144_param.active_converters = 2;
 	ad9144_param.spi3wire = 1;
+	ad9144_param.jesd204_subclass = 1;
+	ad9144_param.jesd204_scrambling = 1;
+	ad9144_param.jesd204_mode = 4;
+	ad9144_param.jesd204_lane_xbar[0] = 0;
+	ad9144_param.jesd204_lane_xbar[1] = 1;
+	ad9144_param.jesd204_lane_xbar[2] = 2;
+	ad9144_param.jesd204_lane_xbar[3] = 3;
 
-	ad9144_core.no_of_channels = ad9144_param.active_converters;
+	ad9144_core.no_of_channels = 2;
 	ad9144_core.resolution = 16;
 	ad9144_core.channels = &ad9144_channels[0];
 
