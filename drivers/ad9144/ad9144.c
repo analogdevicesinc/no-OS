@@ -46,26 +46,37 @@
 #include "platform_drivers.h"
 #include "ad9144.h"
 
+enum ad9144_device_type {
+	AD9144 = 0,
+	AD9135 = 4,
+	AD9136 = 6,
+};
+
 struct ad9144_jesd204_link_mode {
 	uint8_t id;
 	uint8_t M;
 	uint8_t L;
 	uint8_t F;
 	uint8_t S;
+	uint8_t devices;
 };
 
 static const struct ad9144_jesd204_link_mode ad9144_jesd204_link_modes[] = {
 	/* ID, M, L, F, S */
-	{  0, 4, 8, 1, 1 },
-	{  1, 4, 8, 2, 2 },
-	{  2, 4, 4, 1, 2 },
-	{  3, 4, 2, 1, 4 },
-	{  4, 2, 4, 1, 1 },
-	{  5, 2, 4, 2, 2 },
-	{  6, 2, 2, 1, 2 },
-	{  7, 1, 1, 1, 4 },
-	{  9, 1, 2, 1, 1 },
-	{ 10, 1, 1, 1, 2 },
+	{   0, 4, 8, 1, 1, BIT(AD9144) },
+	{   1, 4, 8, 2, 2, BIT(AD9144) },
+	{   2, 4, 4, 1, 2, BIT(AD9144) },
+	{   3, 4, 2, 1, 4, BIT(AD9144) },
+	{   4, 2, 4, 1, 1, BIT(AD9144) },
+	{   5, 2, 4, 2, 2, BIT(AD9144) },
+	{   6, 2, 2, 1, 2, BIT(AD9144) },
+	{   7, 1, 1, 1, 4, BIT(AD9144) },
+	{   8, 1, 4, 1, 2, BIT(AD9135) | BIT(AD9136) },
+	{   9, 1, 2, 1, 1, BIT(AD9135) | BIT(AD9136) | BIT(AD9144) },
+	{  10, 1, 1, 1, 2, BIT(AD9135) | BIT(AD9136) | BIT(AD9144) },
+	{  11, 2, 8, 1, 2, BIT(AD9135) | BIT(AD9136) },
+	{  12, 2, 4, 1, 1, BIT(AD9135) | BIT(AD9136) },
+	{  13, 2, 2, 2, 1, BIT(AD9135) | BIT(AD9136) },
 };
 
 /***************************************************************************//**
@@ -190,31 +201,69 @@ static const struct ad9144_reg_seq ad9144_optimal_serdes_settings[] = {
 	{ 0x2a0, 0x06 },
 };
 
+static const struct ad9144_jesd204_link_mode *ad9144_get_link_mode_by_id(
+	uint32_t id)
+{
+	if (id >= ARRAY_SIZE(ad9144_jesd204_link_modes))
+		return NULL;
+
+	return &ad9144_jesd204_link_modes[id];
+}
+
+static const char *ad9144_get_part_name(struct ad9144_dev *dev)
+{
+	switch (dev->type) {
+	case AD9135:
+		return "AD9135";
+	case AD9136:
+		return "AD9136";
+	case AD9144:
+		return "AD9144";
+	default:
+		return "Unkown";
+	}
+}
+
 int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 				  const struct ad9144_init_param *init_param)
 {
-	const struct ad9144_jesd204_link_mode *link_mode = NULL;
+	const struct ad9144_jesd204_link_mode *link_mode;
 	unsigned int lane_mask;
-	unsigned int val;
-	unsigned int i;
+	uint8_t val;
+	uint32_t L, M;
 
-	for (i = 0; i < ARRAY_SIZE(ad9144_jesd204_link_modes); i++) {
-		if (ad9144_jesd204_link_modes[i].id == init_param->jesd204_mode) {
-			link_mode = &ad9144_jesd204_link_modes[i];
-			break;
-		}
+	link_mode = ad9144_get_link_mode_by_id(init_param->jesd204_mode);
+	if (!link_mode) {
+		ad_printf("Link mode %d is not supported\n", init_param->jesd204_mode);
+		return -1;
 	}
 
-	if (!link_mode)
+	if (!(link_mode->devices & BIT(dev->type))) {
+		ad_printf("Link mode %d not supported by %s\n", link_mode->id,
+			ad9144_get_part_name(dev));
 		return -1;
-
-	lane_mask = (1 << link_mode->L) - 1;
+	}
 
 	ad9144_spi_write(dev, REG_ILS_DID, 0x00);
 	ad9144_spi_write(dev, REG_ILS_BID, 0x00);
 	ad9144_spi_write(dev, REG_ILS_LID0, 0x00);
 
-	val = link_mode->L - 1;
+	/*
+	 * Mode 11, 12, 13 are special. M and L need to be set to half their
+	 * actual value.
+	 */
+	if (link_mode->id >= 11) {
+		L = link_mode->L / 2 - 1;
+		M = 0;
+		lane_mask = (1 << (link_mode->L / 2)) - 1;
+		lane_mask |= lane_mask << 4;
+	} else {
+		L = link_mode->L - 1;
+		M = link_mode->M - 1;
+		lane_mask = (1 << link_mode->L) - 1;
+	}
+
+	val = L;
 	if (init_param->jesd204_scrambling)
 		val |= 0x80;
 	ad9144_spi_write(dev, REG_ILS_SCR_L, val);
@@ -223,7 +272,7 @@ int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 	ad9144_spi_write(dev, REG_ILS_F, val);
 	ad9144_spi_write(dev, REG_ILS_K, 0x1f);
 
-	val = link_mode->M - 1;
+	val = M;
 	ad9144_spi_write(dev, REG_ILS_M, val);
 	ad9144_spi_write(dev, REG_ILS_CS_N, 0x0f); // 16 bits per sample
 
@@ -373,7 +422,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 {
 	uint32_t serdes_plldiv;
 	uint32_t serdes_cdr;
-	uint8_t chip_id;
+	uint8_t chip_id, chip_grade;
 	uint8_t scratchpad;
 	uint32_t val;
 	int32_t ret;
@@ -398,6 +447,9 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 		printf("%s : Invalid CHIP ID (0x%x).\n", __func__, chip_id);
 		return -1;
 	}
+
+	ad9144_spi_read(dev, REG_SPI_CHIPGRADE, &chip_grade);
+	dev->type = chip_grade >> 4;
 
 	ad9144_spi_write(dev, REG_SPI_SCRATCHPAD, 0xAD);
 	ad9144_spi_read(dev, REG_SPI_SCRATCHPAD, &scratchpad);
@@ -509,7 +561,14 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
 	unsigned int i;
 	int ret;
 
-	dac_mask = (1 << dev->num_converters) - 1;
+	if (dev->type == AD9144) {
+		dac_mask = (1 << dev->num_converters) - 1;
+	} else {
+		if (dev->num_converters == 2)
+			dac_mask = 0x5;
+		else
+			dac_mask = 0x1;
+	}
 
 	/*
 	 * DAC calibration sequence as per table 86 AD9144 datasheet Rev B.
@@ -522,7 +581,11 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
 	mdelay(10);
 
 	for (i = 0; i < dev->num_converters; i++) {
-		ad9144_spi_write(dev, REG_CAL_INDX, BIT(i));	// read dac-i
+		if (dev->type == AD9144)
+			dac_mask = BIT(i);
+		else
+			dac_mask = BIT(2*i);
+		ad9144_spi_write(dev, REG_CAL_INDX, dac_mask);	// read dac-i
 
 		ret = ad9144_spi_check_status(dev, REG_CAL_CTRL, 0xc0, 0x80);
 		if (ret == -1)
@@ -602,22 +665,24 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 	uint32_t sample = 0;
 	int32_t failed = 0;
 	uint8_t status;
-	int32_t ret;
+	int32_t ret = 0;
+	uint16_t pattern;
+	uint8_t sel;
 
 	for (dac = 0; dac < dev->num_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
-					 ((sample << 4) | (dac << 2) | 0x00));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2,
-					 (init_param->stpl_samples[dac][sample]>>8));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1,
-					 (init_param->stpl_samples[dac][sample]>>0));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
-					 ((sample << 4) | (dac << 2) | 0x01));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
-					 ((sample << 4) | (dac << 2) | 0x03));
-			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
-					 ((sample << 4) | (dac << 2) | 0x01));
+			if (dev->type == AD9144)
+				sel = (sample << 4) | (dac << 2);
+			else
+				sel = (sample << 4) | (dac << 3);
+			pattern = init_param->stpl_samples[dac][sample];
+
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, sel | 0x0);
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_2, pattern >> 8);
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_1, pattern & 0xff);
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, sel | 0x1);
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, sel | 0x3);
+			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0, sel | 0x1);
 
 			mdelay(1);
 			ret = ad9144_spi_read(dev, REG_SHORT_TPL_TEST_3, &status);

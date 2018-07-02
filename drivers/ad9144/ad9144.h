@@ -1357,6 +1357,7 @@ struct ad9144_dev {
 
 	uint8_t num_converters;
 	uint8_t num_lanes;
+	uint8_t type;
 };
 
 struct ad9144_init_param {
