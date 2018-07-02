@@ -293,6 +293,16 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x01);	// enable link
 
 	// dac calibration
+	ad9144_dac_calibrate(dev);
+
+	*device = dev;
+
+	return ret;
+}
+
+int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
+{
+	int ret;
 
 	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x38);	// set calibration clock to 1m
 	ad9144_spi_write(dev, REG_CAL_INIT, 0xa6);	// use isb reference of 38 to set cal
@@ -315,9 +325,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x30);	// turn off cal clock
 
-	*device = dev;
-
-	return ret;
+	return 0;
 }
 
 /***************************************************************************//**
