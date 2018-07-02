@@ -1399,4 +1399,6 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 				  const struct ad9144_init_param *init_param);
 
+int32_t ad9144_dac_calibrate(struct ad9144_dev *dev);
+
 #endif
