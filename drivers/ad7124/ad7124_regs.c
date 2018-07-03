@@ -8,7 +8,7 @@ struct ad7124_st_reg ad7124_regs[AD7124_REG_NO] = {
 	{0x04, 0x0000, 2, 1}, /* AD7124_IOCon2 */
 	{0x05, 0x02,   1, 2}, /* AD7124_ID */
 	{0x06, 0x0000, 3, 2}, /* AD7124_Error */
-	{0x07, 0x0044, 3, 1}, /* AD7124_Error_En */
+	{0x07, 0x0040, 3, 1}, /* AD7124_Error_En */
 	{0x08, 0x00,   1, 2}, /* AD7124_Mclk_Count */
 	{0x09, 0x8001, 2, 1}, /* AD7124_Channel_0 */
 	{0x0A, 0x0001, 2, 1}, /* AD7124_Channel_1 */
