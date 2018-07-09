@@ -232,9 +232,26 @@ int main(void)
 	spi_init_param	ad9144_spi_param;
 	spi_init_param	ad9680_spi_param;
 
+#ifdef ALTERA
+	ad9523_spi_param.type = NIOS_II_SPI;
+	ad9144_spi_param.type = NIOS_II_SPI;
+	ad9680_spi_param.type = NIOS_II_SPI;
+#endif
+#ifdef ZYNQ_PS7
 	ad9523_spi_param.type = ZYNQ_PS7_SPI;
 	ad9144_spi_param.type = ZYNQ_PS7_SPI;
 	ad9680_spi_param.type = ZYNQ_PS7_SPI;
+#endif
+#ifdef ZYNQ_PSU
+	ad9523_spi_param.type = ZYNQ_PSU_SPI;
+	ad9144_spi_param.type = ZYNQ_PSU_SPI;
+	ad9680_spi_param.type = ZYNQ_PSU_SPI;
+#endif
+#ifdef MICROBLAZE
+	ad9523_spi_param.type = MICROBLAZE_SPI;
+	ad9144_spi_param.type = MICROBLAZE_SPI;
+	ad9680_spi_param.type = MICROBLAZE_SPI;
+#endif
 	ad9523_spi_param.chip_select = 0x6;
 	ad9144_spi_param.chip_select = 0x5;
 	ad9680_spi_param.chip_select = 0x3;
