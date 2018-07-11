@@ -155,7 +155,18 @@ int main(void)
 	ad6676_param.spi_init.chip_select = 0x0;
 	ad6676_param.spi_init.cpha = 0;
 	ad6676_param.spi_init.cpol = 0;
+#ifdef ZYNQ_PS7
 	ad6676_param.spi_init.type = ZYNQ_PS7_SPI;
+#endif
+#ifdef ZYNQ_PSU
+	ad6676_param.spi_init.type = ZYNQ_PSU_SPI;
+#endif
+#ifdef ALTERA
+	ad6676_param.spi_init.type = NIOS_II_SPI;
+#endif
+#ifdef MICROBLAZE
+	ad6676_param.spi_init.type = MICROBLAZE_SPI;
+#endif
 
 	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
 	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
