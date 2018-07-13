@@ -1193,6 +1193,33 @@ int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uin
 }
 
 /**
+ * Power down the RX Local Oscillator.
+ * @param phy The AD9361 state structure.
+ * @param option The option (ON, OFF).
+ * 				 Accepted values:
+ * 				  ON (0)
+ * 				  OFF (1)
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option)
+{
+	return ad9361_synth_lo_powerdown(phy, option ? LO_OFF : LO_ON, LO_DONTCARE);
+}
+
+/**
+ * Get the RX Local Oscillator power status.
+ * @param phy The AD9361 state structure.
+ * @param option Store the option (ON, OFF).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_rx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option)
+{
+	*option = (phy->cached_synth_pd[1] & RX_LO_POWER_DOWN) ? OFF : ON;
+
+	return 0;
+}
+
+/**
  * Set the transmit attenuation for the selected channel.
  * @param phy The AD9361 current state structure.
  * @param ch The desired channel number (TX1, TX2).
@@ -1674,6 +1701,33 @@ int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uin
 int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values)
 {
 	return ad9361_fastlock_save(phy, 1, profile, values);
+}
+
+/**
+ * Power down the TX Local Oscillator.
+ * @param phy The AD9361 state structure.
+ * @param option The option (ON, OFF).
+ * 				 Accepted values:
+ * 				  ON (0)
+ * 				  OFF (1)
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option)
+{
+	return ad9361_synth_lo_powerdown(phy, LO_DONTCARE, option ? LO_OFF : LO_ON);
+}
+
+/**
+ * Get the TX Local Oscillator power status.
+ * @param phy The AD9361 state structure.
+ * @param option Store the option (ON, OFF).
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_get_tx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option)
+{
+	*option = (phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) ? OFF : ON;
+
+	return 0;
 }
 
 /**

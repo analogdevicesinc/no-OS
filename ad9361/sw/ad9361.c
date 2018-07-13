@@ -3177,10 +3177,17 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 				TX_VCO_DIVIDER(~0), enable ? 7 :
 				phy->cached_tx_rfpll_div);
 
+		if (enable)
+			phy->cached_synth_pd[0] |= TX_SYNTH_VCO_ALC_POWER_DOWN |
+							TX_SYNTH_PTAT_POWER_DOWN |
+							TX_SYNTH_VCO_POWER_DOWN;
+		else
+			phy->cached_synth_pd[0] &= ~(TX_SYNTH_VCO_ALC_POWER_DOWN |
+							TX_SYNTH_PTAT_POWER_DOWN |
+							TX_SYNTH_VCO_POWER_DOWN);
+
 		ret |= ad9361_spi_write(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
-				enable ? TX_SYNTH_VCO_ALC_POWER_DOWN |
-				TX_SYNTH_PTAT_POWER_DOWN |
-				TX_SYNTH_VCO_POWER_DOWN : 0);
+				phy->cached_synth_pd[0]);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
 				TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
@@ -3196,10 +3203,17 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 				RX_VCO_DIVIDER(~0), enable ? 7 :
 				phy->cached_rx_rfpll_div);
 
+		if (enable)
+			phy->cached_synth_pd[1] |= RX_SYNTH_VCO_ALC_POWER_DOWN |
+							RX_SYNTH_PTAT_POWER_DOWN |
+							RX_SYNTH_VCO_POWER_DOWN;
+		else
+			phy->cached_synth_pd[1] &= ~(TX_SYNTH_VCO_ALC_POWER_DOWN |
+							RX_SYNTH_PTAT_POWER_DOWN |
+							RX_SYNTH_VCO_POWER_DOWN);
+
 		ret |= ad9361_spi_write(phy->spi, REG_RX_SYNTH_POWER_DOWN_OVERRIDE,
-				enable ? RX_SYNTH_VCO_ALC_POWER_DOWN |
-				RX_SYNTH_PTAT_POWER_DOWN |
-				RX_SYNTH_VCO_POWER_DOWN : 0);
+				phy->cached_synth_pd[1]);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
 				RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
@@ -3209,6 +3223,45 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 	}
 
 	return ret;
+}
+
+/**
+ * Power down the TX and/or RX Local Oscillators.
+ * @param phy The AD9361 state structure.
+ * @param rx The RX LO setting.
+ * @param tx The TX LO setting.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
+		enum synth_pd_ctrl rx,
+		enum synth_pd_ctrl tx)
+{
+	dev_dbg(&phy->spi->dev, "%s : RX(%d) TX(%d)",__func__, rx, tx);
+
+	switch (rx) {
+	case LO_OFF:
+		phy->cached_synth_pd[1] |= RX_LO_POWER_DOWN;
+		break;
+	case LO_ON:
+		phy->cached_synth_pd[1] &= ~RX_LO_POWER_DOWN;
+		break;
+	case LO_DONTCARE:
+		break;
+	}
+
+	switch (tx) {
+	case LO_OFF:
+		phy->cached_synth_pd[0] |= TX_LO_POWER_DOWN;
+		break;
+	case LO_ON:
+		phy->cached_synth_pd[0] &= ~TX_LO_POWER_DOWN;
+		break;
+	case LO_DONTCARE:
+		break;
+	}
+
+	return ad9361_spi_writem(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
+				phy->cached_synth_pd, 2);
 }
 
 /**
@@ -4982,6 +5035,8 @@ void ad9361_clear_state(struct ad9361_rf_phy *phy)
 	phy->current_rx_lo_freq = 0;
 	phy->current_tx_use_tdd_table = false;
 	phy->current_rx_use_tdd_table = false;
+	phy->cached_synth_pd[0] = 0;
+	phy->cached_synth_pd[1] = 0;
 
 	memset(&phy->fastlock, 0, sizeof(phy->fastlock));
 }
