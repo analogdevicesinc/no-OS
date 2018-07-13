@@ -1214,7 +1214,7 @@ int32_t ad9361_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option)
  */
 int32_t ad9361_get_rx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option)
 {
-	*option = (phy->cached_synth_pd[1] & RX_LO_POWER_DOWN) ? OFF : ON;
+	*option = !(phy->cached_synth_pd[1] & RX_LO_POWER_DOWN) ? OFF : ON;
 
 	return 0;
 }
@@ -1725,7 +1725,7 @@ int32_t ad9361_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option)
  */
 int32_t ad9361_get_tx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option)
 {
-	*option = (phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) ? OFF : ON;
+	*option = !(phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) ? OFF : ON;
 
 	return 0;
 }
