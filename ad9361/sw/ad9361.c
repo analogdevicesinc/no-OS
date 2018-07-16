@@ -2926,6 +2926,17 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	const uint8_t(*tab)[3];
 	uint32_t index_max, i, lpf_tia_mask;
 
+	if (phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) {
+		if (phy->pdata->lo_powerdown_managed_en) {
+			ad9361_spi_writef(spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
+					TX_LO_POWER_DOWN, 0);
+		} else {
+			dev_err(dev,
+				"%s : Tx QUAD Cal abort due to TX LO in powerdown\n",
+				__func__);
+			return -EFAULT;
+		}
+	}
 	/*
 	* Find NCO frequency that matches this equation:
 	* BW / 4 = Rx NCO freq = Tx NCO freq:
@@ -3002,7 +3013,7 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 		/* Make sure the BW during calibration is wide enough */
 		ret = __ad9361_update_rf_bandwidth(phy, txnco_freq * 8, txnco_freq * 8);
 		if (ret < 0)
-			return ret;
+			goto out_restore;
 	}
 
 	if (phy->pdata->rx1rx2_phase_inversion_en ||
@@ -3076,6 +3087,12 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 			phy->current_rx_bw_Hz,
 			phy->current_tx_bw_Hz);
 	}
+
+out_restore:
+	/* Restore synthesizer powerdown configuration */
+	if (phy->pdata->lo_powerdown_managed_en &&
+		(phy->cached_synth_pd[0] & TX_LO_POWER_DOWN))
+		ad9361_synth_lo_powerdown(phy, LO_DONTCARE, LO_DONTCARE);
 
 	return ret;
 }
@@ -3154,9 +3171,9 @@ static int32_t ad9361_trx_vco_cal_control(struct ad9361_rf_phy *phy,
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
-	bool tx, bool enable)
+		bool tx, bool enable)
 {
-	int32_t val = enable ? ~0 : 0;
+	uint32_t val = enable ? ~0 : 0;
 	int32_t ret;
 
 	/* REVIST:
@@ -3164,62 +3181,63 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
 	 */
 
 	bool mcs_rf_enable = ad9361_spi_readf(phy->spi,
-		REG_MULTICHIP_SYNC_AND_TX_MON_CTRL, MCS_RF_ENABLE);
+					      REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
+					      MCS_RF_ENABLE);
 
-	dev_dbg(&phy->spi->dev, "%s : %s state %d",
-		__func__, tx ? "TX" : "RX", enable);
+	dev_dbg(&phy->spi->dev, "%s : %s state %d", __func__,
+		tx ? "TX" : "RX", enable);
 
 	if (tx) {
 		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-				POWER_DOWN_TX_SYNTH, mcs_rf_enable ? 0 : enable);
+					POWER_DOWN_TX_SYNTH, mcs_rf_enable ? 0 : enable);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
-				TX_VCO_DIVIDER(~0), enable ? 7 :
-				phy->cached_tx_rfpll_div);
+						TX_VCO_DIVIDER(~0), enable ? 7 :
+						phy->cached_tx_rfpll_div);
 
 		if (enable)
 			phy->cached_synth_pd[0] |= TX_SYNTH_VCO_ALC_POWER_DOWN |
-							TX_SYNTH_PTAT_POWER_DOWN |
-							TX_SYNTH_VCO_POWER_DOWN;
+						TX_SYNTH_PTAT_POWER_DOWN |
+						TX_SYNTH_VCO_POWER_DOWN;
 		else
 			phy->cached_synth_pd[0] &= ~(TX_SYNTH_VCO_ALC_POWER_DOWN |
-							TX_SYNTH_PTAT_POWER_DOWN |
-							TX_SYNTH_VCO_POWER_DOWN);
+						TX_SYNTH_PTAT_POWER_DOWN |
+						TX_SYNTH_VCO_POWER_DOWN);
+
 
 		ret |= ad9361_spi_write(phy->spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
-				phy->cached_synth_pd[0]);
+					phy->cached_synth_pd[0]);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
-				TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
+					 TX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
 
 		ret |= ad9361_spi_write(phy->spi, REG_TX_LO_GEN_POWER_MODE,
-				TX_LO_GEN_POWER_MODE(val));
-	}
-	else {
+					TX_LO_GEN_POWER_MODE(val));
+	} else {
 		ret = ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-				POWER_DOWN_RX_SYNTH, mcs_rf_enable ? 0 : enable);
+					POWER_DOWN_RX_SYNTH, mcs_rf_enable ? 0 : enable);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_RFPLL_DIVIDERS,
-				RX_VCO_DIVIDER(~0), enable ? 7 :
-				phy->cached_rx_rfpll_div);
+					RX_VCO_DIVIDER(~0), enable ? 7 :
+					phy->cached_rx_rfpll_div);
 
 		if (enable)
 			phy->cached_synth_pd[1] |= RX_SYNTH_VCO_ALC_POWER_DOWN |
-							RX_SYNTH_PTAT_POWER_DOWN |
-							RX_SYNTH_VCO_POWER_DOWN;
+						RX_SYNTH_PTAT_POWER_DOWN |
+						RX_SYNTH_VCO_POWER_DOWN;
 		else
 			phy->cached_synth_pd[1] &= ~(TX_SYNTH_VCO_ALC_POWER_DOWN |
-							RX_SYNTH_PTAT_POWER_DOWN |
-							RX_SYNTH_VCO_POWER_DOWN);
+						RX_SYNTH_PTAT_POWER_DOWN |
+						RX_SYNTH_VCO_POWER_DOWN);
 
 		ret |= ad9361_spi_write(phy->spi, REG_RX_SYNTH_POWER_DOWN_OVERRIDE,
-				phy->cached_synth_pd[1]);
+						phy->cached_synth_pd[1]);
 
 		ret |= ad9361_spi_writef(phy->spi, REG_ANALOG_POWER_DOWN_OVERRIDE,
-				RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
+					 RX_EXT_VCO_BUFFER_POWER_DOWN, !enable);
 
 		ret |= ad9361_spi_write(phy->spi, REG_RX_LO_GEN_POWER_MODE,
-				RX_LO_GEN_POWER_MODE(val));
+					RX_LO_GEN_POWER_MODE(val));
 	}
 
 	return ret;
@@ -3236,7 +3254,7 @@ int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
 		enum synth_pd_ctrl rx,
 		enum synth_pd_ctrl tx)
 {
-	dev_dbg(&phy->spi->dev, "%s : RX(%d) TX(%d)",__func__, rx, tx);
+	dev_dbg(&phy->spi->dev, "%s : RX(%d) TX(%d)", __func__, rx, tx);
 
 	switch (rx) {
 	case LO_OFF:

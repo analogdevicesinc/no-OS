@@ -80,6 +80,7 @@ typedef struct
 	/* ENSM Control */
 	uint8_t		ensm_enable_pin_pulse_mode_enable;	/* adi,ensm-enable-pin-pulse-mode-enable */
 	uint8_t		ensm_enable_txnrx_control_enable;	/* adi,ensm-enable-txnrx-control-enable */
+	uint8_t		tx_lo_powerdown_managed_enable;		/* adi,tx-lo-powerdown-managed-enable */
 	/* LO Control */
 	uint64_t	rx_synthesizer_frequency_hz;	/* adi,rx-synthesizer-frequency-hz */
 	uint64_t	tx_synthesizer_frequency_hz;	/* adi,tx-synthesizer-frequency-hz */

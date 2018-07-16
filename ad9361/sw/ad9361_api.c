@@ -156,6 +156,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy, AD9361_InitParam *init_p
 	/* LO Control */
 	phy->pdata->rx_synth_freq = init_param->rx_synthesizer_frequency_hz;
 	phy->pdata->tx_synth_freq = init_param->tx_synthesizer_frequency_hz;
+	phy->pdata->lo_powerdown_managed_en = init_param->tx_lo_powerdown_managed_enable;
 
 	/* Rate & BW Control */
 	for(i = 0; i < 6; i++) {
