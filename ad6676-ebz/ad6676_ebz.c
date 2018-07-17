@@ -241,11 +241,11 @@ int main(void)
 	// set up the device
 	ad6676_setup(&ad6676_device, ad6676_param);
 
-	// set up the JESD core
-	jesd_setup(&ad6676_jesd);
-
 	// set up the XCVRs
 	xcvr_setup(&ad6676_xcvr);
+
+	// set up the JESD core
+	jesd_setup(&ad6676_jesd);
 
 	// generate SYSREF
 	jesd_sysref_control(&ad6676_jesd, 1);
@@ -261,6 +261,7 @@ int main(void)
 	adc_pn_mon(ad6676_core, ADC_PN9);
 	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
 	adc_pn_mon(ad6676_core, ADC_PN23A);
+
 
 	// set up ramp output
 	ad6676_test(ad6676_device, TESTGENMODE_RAMP);
