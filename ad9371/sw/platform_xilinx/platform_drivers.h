@@ -53,7 +53,12 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define GPIO_OFFSET			54
+#ifdef _XPARAMETERS_PS_H_
+#define GPIO_OFFSET	54
+#else
+#define GPIO_OFFSET	0
+#endif
+
 #define DAC_GPIO_PLDDR_BYPASS	GPIO_OFFSET + 60
 #define AD9528_RESET_B      GPIO_OFFSET + 59
 #define AD9528_SYSREF_REQ   GPIO_OFFSET + 58
