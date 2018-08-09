@@ -87,11 +87,19 @@
 
 /* Supported devices */
 enum ad5686_type {
+	ID_AD5671R,
+	ID_AD5672R,
+	ID_AD5675R,
+	ID_AD5676,
+	ID_AD5676R,
+	ID_AD5686,
 	ID_AD5684R,
 	ID_AD5685R,
 	ID_AD5686R,
+	ID_AD5694,
 	ID_AD5694R,
 	ID_AD5695R,
+	ID_AD5696,
 	ID_AD5696R,
 };
 
@@ -105,6 +113,10 @@ enum ad5686_dac_channels {
 	AD5686_CH_1,
 	AD5686_CH_2,
 	AD5686_CH_3,
+	AD5686_CH_4,
+	AD5686_CH_5,
+	AD5686_CH_6,
+	AD5686_CH_7,
 };
 
 struct ad5686_chip_info {

@@ -58,7 +58,43 @@ static const unsigned int ad5686_channel_addr[] = {
 	[AD5686_CH_3] = 8,
 };
 
+static const unsigned int ad5676_channel_addr[] = {
+	[AD5686_CH_0] = 0,
+	[AD5686_CH_1] = 1,
+	[AD5686_CH_2] = 2,
+	[AD5686_CH_3] = 3,
+	[AD5686_CH_4] = 4,
+	[AD5686_CH_5] = 5,
+	[AD5686_CH_6] = 6,
+	[AD5686_CH_7] = 7,
+};
+
 static const struct ad5686_chip_info chip_info[] = {
+	[ID_AD5671R] = {
+		.resolution = 12,
+		.communication = I2C,
+		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5672R] = {
+		.resolution = 12,
+		.communication = SPI,
+		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5675R] = {
+		.resolution = 16,
+		.communication = I2C,
+		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5676] = {
+		.resolution = 16,
+		.communication = SPI,
+		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5676R] = {
+		.resolution = 16,
+		.communication = SPI,
+		.channel_addr = ad5676_channel_addr,
+	},
 	[ID_AD5684R] = {
 		.resolution = 12,
 		.communication = SPI,
@@ -69,9 +105,19 @@ static const struct ad5686_chip_info chip_info[] = {
 		.communication = SPI,
 		.channel_addr = ad5686_channel_addr,
 	},
+	[ID_AD5686] = {
+		.resolution = 16,
+		.communication = SPI,
+		.channel_addr = ad5686_channel_addr,
+	},
 	[ID_AD5686R] = {
 		.resolution = 16,
 		.communication = SPI,
+		.channel_addr = ad5686_channel_addr,
+	},
+	[ID_AD5694] = {
+		.resolution = 12,
+		.communication = I2C,
 		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5694R] = {
@@ -81,6 +127,11 @@ static const struct ad5686_chip_info chip_info[] = {
 	},
 	[ID_AD5695R] = {
 		.resolution = 14,
+		.communication = I2C,
+		.channel_addr = ad5686_channel_addr,
+	},
+	[ID_AD5696] = {
+		.resolution = 16,
 		.communication = I2C,
 		.channel_addr = ad5686_channel_addr,
 	},
@@ -207,6 +258,10 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @param data - desired value to be written in register.
  *
  * @return None.
@@ -232,6 +287,10 @@ void ad5686_write_register(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @return None.
 ******************************************************************************/
 void ad5686_update_register(struct ad5686_dev *dev,
@@ -251,6 +310,10 @@ void ad5686_update_register(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @param data    - Desired value to be written in register.
  *
  * @return None.
@@ -279,6 +342,10 @@ void ad5686_write_update_register(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @return None.
 ******************************************************************************/
 uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
@@ -309,6 +376,10 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @param mode    - Power-down operation modes.
  *                  Accepted values:
  *                  'AD5686_PWRM_NORMAL' - Normal Mode
@@ -341,6 +412,10 @@ void ad5686_power_mode(struct ad5686_dev *dev,
  *					AD5686_CH_1
  *					AD5686_CH_2
  *					AD5686_CH_3
+ *					AD5686_CH_4
+ * 					AD5686_CH_5
+ *					AD5686_CH_6
+ * 					AD5686_CH_7
  * @return None.
 ******************************************************************************/
 void ad5686_ldac_mask(struct ad5686_dev *dev,
