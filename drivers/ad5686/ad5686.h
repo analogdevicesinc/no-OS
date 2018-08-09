@@ -54,13 +54,6 @@
 #define AD5686_CTRL_DCEN         8
 #define AD5686_CTRL_RB_REG       9
 
-/* AD5686 channels */
-#define AD5686_CH_A              1
-#define AD5686_CH_B              2
-#define AD5686_CH_C              4
-#define AD5686_CH_D              8
-#define AD5686_CH_ALL            0xF
-
 /* Power-down operation modes masks */
 #define AD5686_PWRM_NORMAL       0
 #define AD5686_PWRM_1K           1
@@ -68,12 +61,6 @@
 #define AD5686_PWRM_THREESTATE   3
 
 #define AD5686_PWRM_MASK         3
-
-/* Power-down operation modes offset for each channel */
-#define AD5686_PWRM_CHA_OFFSET   0
-#define AD5686_PWRM_CHB_OFFSET   2
-#define AD5686_PWRM_CHC_OFFSET   4
-#define AD5686_PWRM_CHD_OFFSET   6
 
 /* Enable/disable defines */
 #define AD5686_INTREF_EN        1
@@ -113,9 +100,17 @@ enum comm_type {
 	I2C,
 };
 
+enum ad5686_dac_channels {
+	AD5686_CH_0 = 0,
+	AD5686_CH_1,
+	AD5686_CH_2,
+	AD5686_CH_3,
+};
+
 struct ad5686_chip_info {
 	uint8_t		resolution;
 	enum comm_type	communication;
+	const uint32_t *channel_addr;
 };
 
 struct ad5686_dev {
@@ -128,6 +123,8 @@ struct ad5686_dev {
 	gpio_desc	*gpio_ldac;
 	/* Device Settings */
 	enum ad5686_type	act_device;
+	uint32_t power_down_mask;
+	uint32_t ldac_mask;
 };
 
 struct ad5686_init_param {
@@ -160,30 +157,31 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 
 /* Write to Input Register n (dependent on LDAC) */
 void ad5686_write_register(struct ad5686_dev *dev,
-			   uint8_t address,
+			   enum ad5686_dac_channels channel,
 			   uint16_t data);
 
 /* Update DAC Register n with contents of Input Register n */
 void ad5686_update_register(struct ad5686_dev *dev,
-			    uint8_t address);
+			    enum ad5686_dac_channels channel);
 
 /* Write to and update DAC channel n */
 void ad5686_write_update_register(struct ad5686_dev *dev,
-				  uint8_t address,
+				  enum ad5686_dac_channels channel,
 				  uint16_t data);
 
 /* Read back Input Register n */
 uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
-				   uint8_t address);
+				   enum ad5686_dac_channels channel);
 
 /* Power down / power up DAC */
 void ad5686_power_mode(struct ad5686_dev *dev,
-		       uint8_t address,
+		       enum ad5686_dac_channels channel,
 		       uint8_t mode);
 
 /* Set up LDAC mask register */
 void ad5686_ldac_mask(struct ad5686_dev *dev,
-		      uint8_t ldac_mask);
+		      enum ad5686_dac_channels channel,
+		      uint8_t enable);
 
 /* Software reset (power-on reset) */
 void ad5686_software_reset(struct ad5686_dev *dev);

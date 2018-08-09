@@ -51,30 +51,43 @@
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
 /*****************************************************************************/
+static const unsigned int ad5686_channel_addr[] = {
+	[AD5686_CH_0] = 1,
+	[AD5686_CH_1] = 2,
+	[AD5686_CH_2] = 4,
+	[AD5686_CH_3] = 8,
+};
+
 static const struct ad5686_chip_info chip_info[] = {
 	[ID_AD5684R] = {
 		.resolution = 12,
 		.communication = SPI,
+		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5685R] = {
 		.resolution = 14,
 		.communication = SPI,
+		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5686R] = {
 		.resolution = 16,
 		.communication = SPI,
+		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5694R] = {
 		.resolution = 12,
 		.communication = I2C,
+		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5695R] = {
 		.resolution = 14,
 		.communication = I2C,
+		.channel_addr = ad5686_channel_addr,
 	},
 	[ID_AD5696R] = {
 		.resolution = 16,
 		.communication = I2C,
+		.channel_addr = ad5686_channel_addr,
 	}
 };
 
@@ -103,6 +116,8 @@ int32_t ad5686_init(struct ad5686_dev **device,
 		return -1;
 
 	dev->act_device = init_param.act_device;
+	dev->power_down_mask = 0;
+	dev->ldac_mask = 0;
 
 	if (chip_info[dev->act_device].communication == SPI)
 		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -187,19 +202,22 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
  * @brief Write to Input Register n (dependent on LDAC)
  *
  * @param dev      - The device structure.
- * @param address  - The chosen channel to write to.
- *                    Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                              channel A and C
+ * @param channel  - The chosen channel to write to.
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @param data - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
 void ad5686_write_register(struct ad5686_dev *dev,
-			   uint8_t address,
+			   enum ad5686_dac_channels channel,
 			   uint16_t data)
 {
 	uint8_t data_offset = MAX_RESOLUTION - \
 			      chip_info[dev->act_device].resolution;
+	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
 	ad5686_set_shift_reg(dev, AD5686_CTRL_WRITE, address,
 			     data << data_offset);
@@ -209,15 +227,18 @@ void ad5686_write_register(struct ad5686_dev *dev,
  * @brief Update DAC Register n with contents of Input Register n
  *
  * @param dev     - The device structure.
- * @param address - The chosen channel to write to.
- *                  Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                            channel A and C
- *
+ * @param channel  - The chosen channel to write to.
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @return None.
 ******************************************************************************/
 void ad5686_update_register(struct ad5686_dev *dev,
-			    uint8_t address)
+			    enum ad5686_dac_channels channel)
 {
+	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
+
 	ad5686_set_shift_reg(dev, AD5686_CTRL_UPDATE, address, 0);
 }
 
@@ -225,19 +246,22 @@ void ad5686_update_register(struct ad5686_dev *dev,
  * @brief Write to and update DAC channel n
  *
  * @param dev     - The device structure.
- * @param address - The chosen channel to write to.
- *                  Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                            channel A and C
+ * @param channel  - The chosen channel to write to.
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @param data    - Desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
 void ad5686_write_update_register(struct ad5686_dev *dev,
-				  uint8_t address,
+				  enum ad5686_dac_channels channel,
 				  uint16_t data)
 {
 	uint8_t data_offset = MAX_RESOLUTION - \
 			      chip_info[dev->act_device].resolution;
+	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
 	ad5686_set_shift_reg(dev, AD5686_CTRL_WRITEUPDATE, address,
 			     data << data_offset);
@@ -247,21 +271,24 @@ void ad5686_write_update_register(struct ad5686_dev *dev,
  * @brief Read back Input Register n
  *
  * @param dev     - The device structure.
- * @param address - The channel which will be read back. Note: only one
+ * @param channel - The channel which will be read back. Note: only one
  *                  channel should be selected, if there will be selected
  *                  more than one channel, the channel A will be read back
  *                  by default
- *                  Example: 'AD5686_CH_C' will read back the channel C
- *
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @return None.
 ******************************************************************************/
 uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
-				   uint8_t address)
+				   enum ad5686_dac_channels channel)
 {
 
 	uint16_t read_back_data = 0;
 	uint16_t offset = MAX_RESOLUTION - \
 			  chip_info[dev->act_device].resolution;
+	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
 	if(chip_info[dev->act_device].communication == SPI) {
 		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, address, 0);
@@ -277,9 +304,11 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
  * @brief Write to and update DAC channel n
  *
  * @param dev     - The device structure.
- * @param address - The chosen channel to write to.
- *                  Example : 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                             channel A and C
+ * @param channel  - The chosen channel to change the power-down mode.
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @param mode    - Power-down operation modes.
  *                  Accepted values:
  *                  'AD5686_PWRM_NORMAL' - Normal Mode
@@ -290,21 +319,16 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
  * @return None.
 ******************************************************************************/
 void ad5686_power_mode(struct ad5686_dev *dev,
-		       uint8_t address,
+		       enum ad5686_dac_channels channel,
 		       uint8_t mode)
 {
-	uint16_t data = 0;
+	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
-	data |= (address & AD5686_CH_A) ?
-		(mode << AD5686_PWRM_CHA_OFFSET) : 0x0;
-	data |= (address & AD5686_CH_B) ?
-		(mode << AD5686_PWRM_CHB_OFFSET) : 0x0;
-	data |= (address & AD5686_CH_C) ?
-		(mode << AD5686_PWRM_CHC_OFFSET) : 0x0;
-	data |= (address & AD5686_CH_D) ?
-		(mode << AD5686_PWRM_CHD_OFFSET) : 0x0;
+	dev->power_down_mask &= ~(0x3 << (channel *2));
+	dev->power_down_mask |= (mode << (channel *2));
 
-	ad5686_set_shift_reg(dev, AD5686_CTRL_PWR, address, data);
+	ad5686_set_shift_reg(dev, AD5686_CTRL_PWR, address,
+			     dev->power_down_mask);
 }
 
 /**************************************************************************//**
@@ -313,15 +337,20 @@ void ad5686_power_mode(struct ad5686_dev *dev,
  * @param dev       - The device structure.
  * @param ldac_mask - In case of which channel ignore transitions on the LDAC
  *                    pin.
- *                    Example: 'AD5686_CH_A | AD5686_CH_C' will write to \
- *                              channel A and C
- *
+ *                    Accepted values:	AD5686_CH_0
+ *					AD5686_CH_1
+ *					AD5686_CH_2
+ *					AD5686_CH_3
  * @return None.
 ******************************************************************************/
 void ad5686_ldac_mask(struct ad5686_dev *dev,
-		      uint8_t ldac_mask)
+		      enum ad5686_dac_channels channel,
+		      uint8_t enable)
 {
-	ad5686_set_shift_reg(dev, AD5686_CTRL_LDAC_MASK, 0, ldac_mask);
+	dev->ldac_mask &= ~(0x1 << channel);
+	dev->ldac_mask |= (enable << channel);
+
+	ad5686_set_shift_reg(dev, AD5686_CTRL_LDAC_MASK, 0, dev->ldac_mask);
 }
 
 /**************************************************************************//**
