@@ -308,7 +308,7 @@ int32_t ad9265_setup(struct ad9265_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ad9265_spi_read(dev, AD9265_REG_CHIP_ID, &chip_id);
 	if(chip_id != AD9265_CHIP_ID) {

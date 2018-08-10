@@ -398,7 +398,7 @@ int32_t AD717X_Init(ad717x_dev **device,
         dev->num_regs = init_param.num_regs;
 
         /* Initialize the SPI communication. */
-        ret = spi_init(&dev->spi_desc, init_param.spi_init);
+        ret = spi_init(&dev->spi_desc, &init_param.spi_init);
         if (ret < 0)
                 return ret;
 

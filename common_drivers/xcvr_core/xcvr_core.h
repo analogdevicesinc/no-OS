@@ -189,6 +189,6 @@ int32_t xcvr_setup(xcvr_core *core);
 int32_t xcvr_status(xcvr_core *core);
 int32_t xcvr_getconfig(xcvr_core *core);
 int32_t xcvr_reset(xcvr_core *core);
-void xcvr_filalize_lane_rate_change(xcvr_core *core);
+void xcvr_finalize_lane_rate_change(xcvr_core *core);
 
 #endif

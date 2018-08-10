@@ -232,9 +232,26 @@ int main(void)
 	spi_init_param	ad9144_spi_param;
 	spi_init_param	ad9680_spi_param;
 
+#ifdef ALTERA
+	ad9523_spi_param.type = NIOS_II_SPI;
+	ad9144_spi_param.type = NIOS_II_SPI;
+	ad9680_spi_param.type = NIOS_II_SPI;
+#endif
+#ifdef ZYNQ_PS7
 	ad9523_spi_param.type = ZYNQ_PS7_SPI;
 	ad9144_spi_param.type = ZYNQ_PS7_SPI;
 	ad9680_spi_param.type = ZYNQ_PS7_SPI;
+#endif
+#ifdef ZYNQ_PSU
+	ad9523_spi_param.type = ZYNQ_PSU_SPI;
+	ad9144_spi_param.type = ZYNQ_PSU_SPI;
+	ad9680_spi_param.type = ZYNQ_PSU_SPI;
+#endif
+#ifdef MICROBLAZE
+	ad9523_spi_param.type = MICROBLAZE_SPI;
+	ad9144_spi_param.type = MICROBLAZE_SPI;
+	ad9680_spi_param.type = MICROBLAZE_SPI;
+#endif
 	ad9523_spi_param.chip_select = 0x6;
 	ad9144_spi_param.chip_select = 0x5;
 	ad9680_spi_param.chip_select = 0x3;
@@ -410,9 +427,16 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 
 	ad9144_param.lane_rate_kbps = 10000000;
-	ad9144_param.active_converters = 2;
+	ad9144_param.spi3wire = 1;
+	ad9144_param.jesd204_subclass = 1;
+	ad9144_param.jesd204_scrambling = 1;
+	ad9144_param.jesd204_mode = 4;
+	ad9144_param.jesd204_lane_xbar[0] = 0;
+	ad9144_param.jesd204_lane_xbar[1] = 1;
+	ad9144_param.jesd204_lane_xbar[2] = 2;
+	ad9144_param.jesd204_lane_xbar[3] = 3;
 
-	ad9144_core.no_of_channels = ad9144_param.active_converters;
+	ad9144_core.no_of_channels = 2;
 	ad9144_core.resolution = 16;
 	ad9144_core.channels = &ad9144_channels[0];
 
@@ -507,15 +531,15 @@ int main(void)
 
 	// setup clocks
 
-	ad9523_setup(&ad9523_device, ad9523_param);
+	ad9523_setup(&ad9523_device, &ad9523_param);
 
 	// set up the devices
-	ad9680_setup(&ad9680_device, ad9680_param);
-	ad9144_setup(&ad9144_device, ad9144_param);
+	ad9680_setup(&ad9680_device, &ad9680_param);
+	ad9144_setup(&ad9144_device, &ad9144_param);
 
 	// set up the JESD core
-	jesd_setup(ad9680_jesd);
-	jesd_setup(ad9144_jesd);
+	jesd_setup(&ad9680_jesd);
+	jesd_setup(&ad9144_jesd);
 
 	// set up the XCVRs
 #ifdef ALTERA
@@ -534,8 +558,8 @@ int main(void)
 #endif
 
 	// JESD core status
-	axi_jesd204_tx_status_read(ad9144_jesd);
-	axi_jesd204_rx_status_read(ad9680_jesd);
+	axi_jesd204_tx_status_read(&ad9144_jesd);
+	axi_jesd204_rx_status_read(&ad9680_jesd);
 
 	// interface core set up
 	adc_setup(ad9680_core);
@@ -550,7 +574,7 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_SED;
 	ad9144_channels[1].sel = DAC_SRC_SED;
 	dac_data_setup(&ad9144_core);
-	ad9144_short_pattern_test(ad9144_device, ad9144_param);
+	ad9144_short_pattern_test(ad9144_device, &ad9144_param);
 
 	// PN7 data path test
 
@@ -558,7 +582,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN23;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
 	// PN15 data path test
 
@@ -566,7 +590,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_PN31;
 	dac_data_setup(&ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(ad9144_device, ad9144_param);
+	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
 //******************************************************************************
 // receive path testing

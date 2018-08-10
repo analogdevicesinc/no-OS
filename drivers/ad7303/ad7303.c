@@ -66,7 +66,7 @@ int8_t ad7303_init(struct ad7303_dev **device,
 	if (!dev)
 		return -1;
 
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	*device = dev;
 

@@ -61,13 +61,13 @@ XSpiPs_Config  *m_spi_config;
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(i2c_desc **desc,
-		 i2c_init_param param)
+		 const i2c_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
 
-	if (param.type) {
+	if (param->type) {
 		// Unused variable - fix compiler warning
 	}
 
@@ -163,7 +163,7 @@ int32_t i2c_read(i2c_desc *desc,
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(spi_desc **desc,
-		 spi_init_param param)
+		 const spi_init_param *param)
 {
 	spi_desc *dev;
 
@@ -171,7 +171,7 @@ int32_t spi_init(spi_desc **desc,
 	if (!dev)
 		return FAILURE;
 
-	dev->type = param.type;
+	dev->type = param->type;
 	dev->id = 0;
 
 	switch(dev->type) {
@@ -199,9 +199,9 @@ int32_t spi_init(spi_desc **desc,
 		return FAILURE;
 	}
 
-	dev->chip_select = param.chip_select;
-	dev->cpha = param.cpha;
-	dev->cpol = param.cpol;
+	dev->chip_select = param->chip_select;
+	dev->cpha = param->cpha;
+	dev->cpol = param->cpol;
 
 	#ifdef ZYNQ
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);

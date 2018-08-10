@@ -400,7 +400,7 @@ int32_t adgs1408_init(struct adgs1408_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	ret |= adgs1408_do_soft_reset(dev);
 
 	/* Device Settings */

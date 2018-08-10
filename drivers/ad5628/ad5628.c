@@ -70,7 +70,7 @@ int32_t ad5628_init(struct ad5628_dev **device,
 		return -1;
 
 	/* Initializes communication. */
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Behaves as a power-on reset. */
 	ad5628_reset(dev);

@@ -146,7 +146,7 @@ int8_t ad5446_init(struct ad5446_dev **device,
 
 	dev->act_device = init_param.act_device;
 
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= gpio_get(&dev->gpio_ladc, init_param.gpio_ladc);

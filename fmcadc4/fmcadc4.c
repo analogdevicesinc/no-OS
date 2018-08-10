@@ -254,11 +254,11 @@ int main(void)
 
 	ad9528_setup(&ad9528_device, ad9528_param);
 
-	ad9680_setup(&ad9680_0_device, ad9680_0_param);
-	ad9680_setup(&ad9680_1_device, ad9680_1_param);
-	jesd_setup(ad9680_jesd);
+	ad9680_setup(&ad9680_0_device, &ad9680_0_param);
+	ad9680_setup(&ad9680_1_device, &ad9680_1_param);
+	jesd_setup(&ad9680_jesd);
 	xcvr_setup(&ad9680_xcvr);
-	axi_jesd204_rx_status_read(ad9680_jesd);
+	axi_jesd204_rx_status_read(&ad9680_jesd);
 
 	adc_setup(ad9680_0_core);
 	ad9680_test(ad9680_0_device, AD9680_TEST_PN9);

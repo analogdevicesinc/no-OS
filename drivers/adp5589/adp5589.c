@@ -115,7 +115,7 @@ int8_t adp5589_init(struct adp5589_dev **device,
 	if (!dev)
 		return -1;
 
-	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	if((adp5589_get_register_value(dev,ADP5589_ADR_ID) & ADP5589_ID_MAN_ID) !=
 	    ADP5589_ID) {
 		status = -1;

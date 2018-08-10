@@ -78,7 +78,7 @@ int8_t ad7193_init(struct ad7193_dev **device,
 	dev->current_gain = init_param.current_gain;
 
 	/* SPI */
-	status = spi_init(&dev->spi_desc, init_param.spi_init);
+	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
 	status |= gpio_get(&dev->gpio_cs, init_param.gpio_cs);

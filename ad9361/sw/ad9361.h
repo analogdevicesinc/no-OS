@@ -3157,6 +3157,7 @@ struct ad9361_phy_platform_data {
 	uint8_t			rf_dc_offset_count_low;
 	uint8_t			dig_interface_tune_skipmode;
 	uint8_t			dig_interface_tune_fir_disable;
+	uint8_t			lo_powerdown_managed_en;
 	uint32_t			dcxo_coarse;
 	uint32_t			dcxo_fine;
 	uint32_t			rf_rx_input_sel;
@@ -3301,6 +3302,12 @@ enum ad9361_bist_mode {
 	BIST_INJ_RX,
 };
 
+enum synth_pd_ctrl {
+	LO_DONTCARE,
+	LO_OFF,
+	LO_ON,
+};
+
 enum dev_id {
 	ID_AD9361,
 	ID_AD9364,
@@ -3323,6 +3330,7 @@ struct ad9361_rf_phy {
 	uint8_t			curr_ensm_state;
 	uint8_t			cached_rx_rfpll_div;
 	uint8_t			cached_tx_rfpll_div;
+	uint8_t			cached_synth_pd[2];
 	struct rx_gain_info rx_gain[RXGAIN_TBLS_END];
 	enum rx_gain_table_name current_table;
 	bool 			ensm_pin_ctl_en;
@@ -3505,4 +3513,7 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
 uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw);
 int32_t ad9361_get_temp(struct ad9361_rf_phy *phy);
+int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
+		enum synth_pd_ctrl rx,
+		enum synth_pd_ctrl tx);
 #endif

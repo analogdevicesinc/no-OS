@@ -75,7 +75,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	dev->ad9517_st.lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
 
 	/* Initializes the SPI peripheral */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Configure serial port for long instructions and reset the serial
 	 * interface. */

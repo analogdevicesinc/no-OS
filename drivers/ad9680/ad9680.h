@@ -98,7 +98,7 @@ int32_t ad9680_spi_write(struct ad9680_dev *dev,
 			 uint8_t reg_data);
 
 int32_t ad9680_setup(struct ad9680_dev **device,
-		     struct ad9680_init_param init_param);
+		     const struct ad9680_init_param *init_param);
 
 int32_t ad9680_remove(struct ad9680_dev *dev);
 

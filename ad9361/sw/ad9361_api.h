@@ -83,6 +83,7 @@ typedef struct
 	/* LO Control */
 	uint64_t	rx_synthesizer_frequency_hz;	/* adi,rx-synthesizer-frequency-hz */
 	uint64_t	tx_synthesizer_frequency_hz;	/* adi,tx-synthesizer-frequency-hz */
+	uint8_t		tx_lo_powerdown_managed_enable;	/* adi,tx-lo-powerdown-managed-enable */
 	/* Rate & BW Control */
 	uint32_t	rx_path_clock_frequencies[6];	/* adi,rx-path-clock-frequencies */
 	uint32_t	tx_path_clock_frequencies[6];	/* adi,tx-path-clock-frequencies */
@@ -351,6 +352,9 @@ enum ad9361_ensm_mode {
 #define INT_LO		0
 #define EXT_LO		1
 
+#define ON			0
+#define OFF			1
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -416,6 +420,10 @@ int32_t ad9361_rx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_rx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save RX fastlock profile. */
 int32_t ad9361_rx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
+/* Power down the RX Local Oscillator. */
+int32_t ad9361_rx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option);
+/* Get the RX Local Oscillator power status. */
+int32_t ad9361_get_rx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option);
 /* Set the transmit attenuation for the selected channel. */
 int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy, uint8_t ch, uint32_t attenuation_mdb);
 /* Get current transmit attenuation for the selected channel. */
@@ -460,6 +468,10 @@ int32_t ad9361_tx_fastlock_recall(struct ad9361_rf_phy *phy, uint32_t profile);
 int32_t ad9361_tx_fastlock_load(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
 /* Save TX fastlock profile. */
 int32_t ad9361_tx_fastlock_save(struct ad9361_rf_phy *phy, uint32_t profile, uint8_t *values);
+/* Power down the TX Local Oscillator. */
+int32_t ad9361_tx_lo_powerdown(struct ad9361_rf_phy *phy, uint8_t option);
+/* Get the TX Local Oscillator power status. */
+int32_t ad9361_get_tx_lo_power(struct ad9361_rf_phy *phy, uint8_t *option);
 /* Set the RX and TX path rates. */
 int32_t ad9361_set_trx_path_clks(struct ad9361_rf_phy *phy, uint32_t *rx_path_clks, uint32_t *tx_path_clks);
 /* Get the RX and TX path rates. */

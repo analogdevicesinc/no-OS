@@ -107,7 +107,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	ret = 0;
 

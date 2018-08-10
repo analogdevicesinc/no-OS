@@ -155,7 +155,18 @@ int main(void)
 	ad6676_param.spi_init.chip_select = 0x0;
 	ad6676_param.spi_init.cpha = 0;
 	ad6676_param.spi_init.cpol = 0;
+#ifdef ZYNQ_PS7
 	ad6676_param.spi_init.type = ZYNQ_PS7_SPI;
+#endif
+#ifdef ZYNQ_PSU
+	ad6676_param.spi_init.type = ZYNQ_PSU_SPI;
+#endif
+#ifdef ALTERA
+	ad6676_param.spi_init.type = NIOS_II_SPI;
+#endif
+#ifdef MICROBLAZE
+	ad6676_param.spi_init.type = MICROBLAZE_SPI;
+#endif
 
 	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
 	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
@@ -230,17 +241,17 @@ int main(void)
 	// set up the device
 	ad6676_setup(&ad6676_device, ad6676_param);
 
-	// set up the JESD core
-	jesd_setup(ad6676_jesd);
-
 	// set up the XCVRs
 	xcvr_setup(&ad6676_xcvr);
 
+	// set up the JESD core
+	jesd_setup(&ad6676_jesd);
+
 	// generate SYSREF
-	jesd_sysref_control(ad6676_jesd, 1);
+	jesd_sysref_control(&ad6676_jesd, 1);
 
 	// JESD core status
-	axi_jesd204_rx_status_read(ad6676_jesd);
+	axi_jesd204_rx_status_read(&ad6676_jesd);
 
 	// interface core setup
 	adc_setup(ad6676_core);
@@ -250,6 +261,7 @@ int main(void)
 	adc_pn_mon(ad6676_core, ADC_PN9);
 	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
 	adc_pn_mon(ad6676_core, ADC_PN23A);
+
 
 	// set up ramp output
 	ad6676_test(ad6676_device, TESTGENMODE_RAMP);

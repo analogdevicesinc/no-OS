@@ -105,7 +105,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 		dev->shadow_regs[i] = shadow_regs[i];
 
 	/* Initializes the SPI peripheral */
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if(ret != SUCCESS) {
 		return ret;
 	}

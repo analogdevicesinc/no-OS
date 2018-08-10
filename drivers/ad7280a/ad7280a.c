@@ -87,7 +87,7 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 	/* Wait 250us */
 	mdelay(250);
 
-	status |= spi_init(&dev->spi_desc, init_param.spi_init);
+	status |= spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* Example 1 from the datasheet */
 	/* Configure the Control LB register for all devices */

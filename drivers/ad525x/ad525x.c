@@ -118,9 +118,9 @@ int8_t ad525x_init(struct ad525x_dev **device,
 
 	if(chip_info[dev->this_device].comm_type == SPI) {
 		/* CPHA = 0; CPOL = 0; */
-		status = spi_init(&dev->spi_desc, init_param.spi_init);
+		status = spi_init(&dev->spi_desc, &init_param.spi_init);
 	} else {
-		status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
 	status |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);

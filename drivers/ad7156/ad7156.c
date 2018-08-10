@@ -119,7 +119,7 @@ int8_t ad7156_init(struct ad7156_dev **device,
 	dev->ad7156_channel1_range = init_param.ad7156_channel1_range;
 	dev->ad7156_channel2_range = init_param.ad7156_channel2_range;
 
-	status = i2c_init(&dev->i2c_desc, init_param.i2c_init);
+	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	ad7156_get_register_value(dev,
 				  &test,
 				  AD7156_REG_CHIP_ID,

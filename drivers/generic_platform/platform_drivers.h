@@ -121,7 +121,7 @@ typedef struct gpio_desc {
 
 /* Initialize the I2C communication peripheral. */
 int32_t i2c_init(struct i2c_desc **desc,
-		 struct i2c_init_param param);
+		 const struct i2c_init_param *param);
 
 /* Free the resources allocated by i2c_init(). */
 int32_t i2c_remove(struct i2c_desc *desc);
@@ -140,7 +140,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 
 /* Initialize the SPI communication peripheral. */
 int32_t spi_init(struct spi_desc **desc,
-		 struct spi_init_param param);
+		 const struct spi_init_param *param);
 
 /* Free the resources allocated by spi_init() */
 int32_t spi_remove(struct spi_desc *desc);
