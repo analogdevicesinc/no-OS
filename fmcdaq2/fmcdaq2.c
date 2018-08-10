@@ -428,6 +428,7 @@ int main(void)
 
 	ad9144_param.lane_rate_kbps = 10000000;
 	ad9144_param.spi3wire = 1;
+	ad9144_param.interpolation = 1;
 	ad9144_param.jesd204_subclass = 1;
 	ad9144_param.jesd204_scrambling = 1;
 	ad9144_param.jesd204_mode = 4;
