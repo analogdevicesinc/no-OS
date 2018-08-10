@@ -97,11 +97,22 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 	printf ("\t2 - ADC  500 MSPS; DAC 1000 MSPS\n");
 	printf ("\t3 - ADC  500 MSPS; DAC  500 MSPS\n");
 	printf ("\t4 - ADC  600 MSPS; DAC  600 MSPS\n");
+	printf ("\t5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
 	printf ("choose an option [default 1]:\n");
 
 	mode = ad_uart_read();
 
 	switch (mode) {
+		case '5':
+			/* REF clock = 100 MHz */
+			p_ad9523_param->channels[DAC_DEVICE_CLK].channel_divider = 10;
+			p_ad9144_param->pll_ref_frequency_khz = 100000;
+
+			/* DAC at 2 GHz using the internal PLL and 2 times interpolation */
+			p_ad9144_param->interpolation = 2;
+			p_ad9144_param->pll_enable = 1;
+			p_ad9144_param->pll_dac_frequency_khz = 2000000;
+			break;
 		case '4':
 			printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
 			p_ad9523_param->pll2_vco_diff_m1 = 5;
