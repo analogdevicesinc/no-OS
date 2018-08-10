@@ -544,8 +544,6 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 
 		if (ret == -EIO)
 			restore = true;
-		if (!max_freq)
-			ret = 0;
 	}
 
 	if (restore) {
