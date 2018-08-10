@@ -272,6 +272,95 @@ int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 	return 0;
 }
 
+/*
+ * PLL fixed register writes according to table 17 of the
+ * AD9144 datasheet Rev. B.
+ */
+static const struct ad9144_reg_seq ad9144_pll_fixed_writes[] = {
+	{ 0x87, 0x62 },
+	{ 0x88, 0xc0 },
+	{ 0x89, 0x0e },
+	{ 0x8a, 0x12 },
+	{ 0x8d, 0x7b },
+	{ 0x1b0, 0x00 },
+	{ 0x1b9, 0x24 },
+	{ 0x1bc, 0x0d },
+	{ 0x1be, 0x02 },
+	{ 0x1bf, 0x8e },
+	{ 0x1c0, 0x2a },
+	{ 0x1c1, 0x2a },
+	{ 0x1c4, 0x7e },
+};
+
+static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
+				const struct ad9144_init_param *init_param)
+{
+	uint32_t fref, fdac;
+	uint32_t lo_div_mode;
+	uint32_t ref_div_mode = 0;
+	uint8_t vco_param[3];
+	uint32_t bcount;
+	uint32_t fvco;
+	int32_t ret;
+
+	fref = init_param->pll_ref_frequency_khz;
+	fdac = init_param->pll_dac_frequency_khz;
+
+	if (fref > 1000000 || fref < 35000)
+		return -1;
+
+	if (fdac > 2800000 || fdac < 420000)
+		return -1;
+
+	if (fdac >= 1500000)
+		lo_div_mode = 1;
+	else if (fdac >= 750000)
+		lo_div_mode = 2;
+	else
+		lo_div_mode = 3;
+
+	while (fref > 80000) {
+		ref_div_mode++;
+		fref /= 2;
+	}
+
+	fvco = fdac << (lo_div_mode + 1);
+	bcount = fdac / (2 * fref);
+
+	if (fvco < 6300000) {
+		vco_param[0] = 0x08;
+		vco_param[1] = 0x03;
+		vco_param[2] = 0x07;
+	} else if (fvco < 7250000) {
+		vco_param[0] = 0x09;
+		vco_param[1] = 0x03;
+		vco_param[2] = 0x06;
+	} else {
+		vco_param[0] = 0x09;
+		vco_param[1] = 0x13;
+		vco_param[2] = 0x06;
+	}
+
+	ad9144_spi_write_seq(dev, ad9144_pll_fixed_writes,
+		ARRAY_SIZE(ad9144_pll_fixed_writes));
+
+	ad9144_spi_write(dev, REG_DACLOGENCNTRL, lo_div_mode);
+	ad9144_spi_write(dev, REG_DACLDOCNTRL1, ref_div_mode);
+	ad9144_spi_write(dev, REG_DACINTEGERWORD0, bcount);
+
+	ad9144_spi_write(dev, REG_DACPLLT5, vco_param[0]);
+	ad9144_spi_write(dev, REG_DACPLLTB, vco_param[1]);
+	ad9144_spi_write(dev, REG_DACPLLT18, vco_param[2]);
+
+	ad9144_spi_write(dev, REG_DACPLLCNTRL, 0x10);
+
+	ret = ad9144_spi_check_status(dev, REG_DACPLLSTATUS, 0x22, 0x22);
+	if (ret == -1)
+		printf("%s : DAC PLL NOT locked!.\n", __func__);
+
+	return ret;
+}
+
 /***************************************************************************//**
  * @brief ad9144_setup
 ********************************************************************************/
@@ -324,6 +413,9 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 		ARRAY_SIZE(ad9144_required_device_config));
 	ad9144_spi_write_seq(dev, ad9144_optimal_serdes_settings,
 		ARRAY_SIZE(ad9144_optimal_serdes_settings));
+
+	if (init_param->pll_enable)
+		ad9144_pll_setup(dev, init_param);
 
 	// digital data path
 

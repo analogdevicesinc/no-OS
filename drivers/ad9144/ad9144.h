@@ -182,7 +182,8 @@
 #define REG_DACPLLT5				0x1B5 /* ALC/Varactor control */
 #define REG_DACPLLTB				0x1BB /* VCO Bias Control */
 #define REG_DACPLLTD				0x1BD /* VCO Cal control */
-#define REG_DACPLLT17				0x1C4 /* Varactor ControlV */
+#define REG_DACPLLT17				0x1C4 /* Varactor Control 1 */
+#define REG_DACPLLT18				0x1C5 /* Varactor Control 2 */
 #define REG_ASPI_SPARE0				0x1C6 /* Spare Register 0 */
 #define REG_ASPI_SPARE1				0x1C7 /* Spare Register 1 */
 #define REG_SPISTRENGTH				0x1DF /* Reg 70 Description */
@@ -1372,6 +1373,13 @@ struct ad9144_init_param {
 	uint8_t		jesd204_subclass;
 	uint8_t		jesd204_scrambling;
 	uint8_t		jesd204_lane_xbar[8];
+
+	/* Whether to enable the internal DAC PLL (0=disable, 1=enable) */
+	uint8_t		pll_enable;
+	/* When using the DAC PLL this specifies the external reference clock frequency in kHz. */
+	uint32_t	pll_ref_frequency_khz;
+	/* When using the DAC PLL this specifies the target PLL output frequency in kHz. */
+	uint32_t	pll_dac_frequency_khz;
 };
 
 /******************************************************************************/
