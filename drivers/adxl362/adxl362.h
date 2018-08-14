@@ -40,6 +40,8 @@
 #ifndef __ADXL362_H__
 #define __ADXL362_H__
 
+#include "platform_drivers.h" 
+
 /******************************************************************************/
 /********************************* ADXL362 ************************************/
 /******************************************************************************/
@@ -47,7 +49,7 @@
 /* ADXL362 communication commands */
 #define ADXL362_WRITE_REG               0x0A
 #define ADXL362_READ_REG                0x0B
-#define ADXL362_WRITE_FIFO              0x0D
+#define ADXL362_READ_FIFO               0x0D
 
 /* Registers */
 #define ADXL362_REG_DEVID_AD            0x00

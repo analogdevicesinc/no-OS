@@ -176,7 +176,7 @@ void adxl362_get_fifo_value(struct adxl362_dev *dev,
 
 	uint16_t index = 0;
 
-	spi_buffer[0] = ADXL362_WRITE_FIFO;
+	spi_buffer[0] = ADXL362_READ_FIFO;
 	for(index = 0; index < bytes_number; index++)
 		spi_buffer[index + 1] = buffer[index];
 	spi_write_and_read(dev->spi_desc,
