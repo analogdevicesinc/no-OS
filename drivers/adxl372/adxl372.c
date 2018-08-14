@@ -775,7 +775,7 @@ int32_t adxl372_init(adxl372_dev **device,
 	if (!ret)
 		printf("adxl372 successfully initialized\n");
 	else
-		printf("adxl372 initialization error (%d)\n", ret);
+		printf("adxl372 initialization error (%ld)\n", ret);
 
 	mdelay(1000);
 
