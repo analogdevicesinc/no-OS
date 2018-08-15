@@ -205,7 +205,7 @@ int32_t spi_init(spi_desc **desc,
 	dev->cpha = param->cpha;
 	dev->cpol = param->cpol;
 
-	#ifdef ZYNQ
+#ifdef ZYNQ
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
 
 	if (m_spi_config == NULL) {
@@ -215,7 +215,7 @@ int32_t spi_init(spi_desc **desc,
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
 		return FAILURE;
 	}
-	#endif
+#endif
 
 	*desc = dev;
 
