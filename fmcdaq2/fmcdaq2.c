@@ -252,9 +252,10 @@ int main(void)
 	ad9144_spi_param.type = MICROBLAZE_SPI;
 	ad9680_spi_param.type = MICROBLAZE_SPI;
 #endif
-	ad9523_spi_param.chip_select = 0x6;
-	ad9144_spi_param.chip_select = 0x5;
-	ad9680_spi_param.chip_select = 0x3;
+	// one-hot active-low chip selects
+	ad9523_spi_param.chip_select = ~(1 << 0);
+	ad9144_spi_param.chip_select = ~(1 << 1);
+	ad9680_spi_param.chip_select = ~(1 << 2);
 	ad9523_spi_param.cpha = 0;
 	ad9144_spi_param.cpha = 0;
 	ad9680_spi_param.cpha = 0;
