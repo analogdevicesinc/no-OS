@@ -111,15 +111,15 @@ int main(void)
 
 	// SPI configuration
 
-	ad9517_param.spi_init.chip_select = 0xe;
+	ad9517_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9517_param.spi_init.cpha = 0;
 	ad9517_param.spi_init.cpol = 0;
 	ad9517_param.spi_init.type = ZYNQ_PS7_SPI;
-	ad9250_0_param.spi_init.chip_select = 0xe;
+	ad9250_0_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9250_0_param.spi_init.cpha = 0;
 	ad9250_0_param.spi_init.cpol = 0;
 	ad9250_0_param.spi_init.type = ZYNQ_PS7_SPI;
-	ad9250_1_param.spi_init.chip_select = 0xe;
+	ad9250_1_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9250_1_param.spi_init.cpha = 0;
 	ad9250_1_param.spi_init.cpol = 0;
 	ad9250_1_param.spi_init.type = ZYNQ_PS7_SPI;

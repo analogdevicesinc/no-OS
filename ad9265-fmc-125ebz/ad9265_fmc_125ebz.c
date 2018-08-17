@@ -56,7 +56,7 @@ int main(void)
 	dmac_xfer				 rx_xfer;
 	struct ad9265_init_param ad9265_init_param;
 
-	ad9265_init_param.spi_init.chip_select = 0x2;
+	ad9265_init_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9265_init_param.spi_init.cpha = 0;
 	ad9265_init_param.spi_init.cpol = 0;
 	ad9265_init_param.spi_init.type = ZYNQ_PS7_SPI;

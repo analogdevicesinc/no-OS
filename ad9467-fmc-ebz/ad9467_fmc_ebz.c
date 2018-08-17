@@ -120,11 +120,11 @@ int main(){
 	ad9467_dma.type = DMAC_RX;
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 8192;
-    ad9467_init.spi_init.chip_select = 0x0E;
+	ad9467_init.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9467_init.spi_init.cpha = 0;
 	ad9467_init.spi_init.cpol = 0;
 	ad9467_init.spi_init.type = MICROBLAZE_SPI;
-	ad9517_init.spi_init.chip_select = 0x0D;
+	ad9517_init.spi_init.chip_select = SPI_CHIP_SELECT(1);
 	ad9517_init.spi_init.cpha = 0;
 	ad9517_init.spi_init.cpol = 0;
 	ad9517_init.spi_init.type = MICROBLAZE_SPI;

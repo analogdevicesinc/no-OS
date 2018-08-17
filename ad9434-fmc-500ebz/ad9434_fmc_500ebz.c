@@ -65,7 +65,7 @@ int main(void)
 	ad9434_dma.base_address = XPAR_AXI_AD9434_DMA_BASEADDR;
 
 	ad_spi_init(&ad9434_device);
-	ad9434_device.chip_select = 0x2;
+	ad9434_device.chip_select = SPI_CHIP_SELECT(0);
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
 #endif
