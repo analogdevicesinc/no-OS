@@ -326,6 +326,10 @@ static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
 
 	fvco = fdac << (lo_div_mode + 1);
 	bcount = fdac / (2 * fref);
+	if (bcount < 6) {
+		bcount *= 2;
+		ref_div_mode++;
+	}
 
 	if (fvco < 6300000) {
 		vco_param[0] = 0x08;
