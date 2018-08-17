@@ -91,11 +91,11 @@ int main(void)
 	gpio_desc				 *gpio_pwr_good;
 
 	/* Device initialization parameters */
-	ad9625_0_param.spi_init.chip_select = 0xe;
+	ad9625_0_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9625_0_param.spi_init.cpha = 0;
 	ad9625_0_param.spi_init.cpol = 0;
 	ad9625_0_param.spi_init.type = MICROBLAZE_SPI;
-	ad9625_1_param.spi_init.chip_select = 0xd;
+	ad9625_1_param.spi_init.chip_select = SPI_CHIP_SELECT(1);
 	ad9625_1_param.spi_init.cpha = 0;
 	ad9625_1_param.spi_init.cpol = 0;
 	ad9625_1_param.spi_init.type = MICROBLAZE_SPI;

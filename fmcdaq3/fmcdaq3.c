@@ -129,9 +129,9 @@ int main(void)
 	ad9528_spi_param.type = ZYNQ_PS7_SPI;
 	ad9152_spi_param.type = ZYNQ_PS7_SPI;
 	ad9680_spi_param.type = ZYNQ_PS7_SPI;
-	ad9528_spi_param.chip_select = 0x6;
-	ad9152_spi_param.chip_select = 0x5;
-	ad9680_spi_param.chip_select = 0x3;
+	ad9528_spi_param.chip_select = SPI_CHIP_SELECT(0);
+	ad9152_spi_param.chip_select = SPI_CHIP_SELECT(1);
+	ad9680_spi_param.chip_select = SPI_CHIP_SELECT(2);
 	ad9528_spi_param.cpha = 0;
 	ad9152_spi_param.cpha = 0;
 	ad9680_spi_param.cpha = 0;

@@ -105,7 +105,7 @@ int main(void)
 	struct ad9739a_init_param	init_param;
 
 	spi_param.type = ZYNQ_PS7_SPI;
-	spi_param.chip_select = 0x1;
+	spi_param.chip_select = SPI_CHIP_SELECT(1);
 	spi_param.cpha = 0;
 	spi_param.cpol = 0;
 

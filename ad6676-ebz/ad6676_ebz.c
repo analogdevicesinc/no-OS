@@ -152,7 +152,7 @@ int main(void)
 
 	// base addresses
 
-	ad6676_param.spi_init.chip_select = 0x0;
+	ad6676_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad6676_param.spi_init.cpha = 0;
 	ad6676_param.spi_init.cpol = 0;
 #ifdef ZYNQ_PS7
