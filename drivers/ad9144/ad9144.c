@@ -441,7 +441,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 
 	ad9144_spi_write(dev, REG_MASTER_PD, 0x00);	// phy - power up
 	ad9144_spi_write(dev, REG_PHY_PD, 0x00);	// phy - power up
-	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x01);	// single link - link 0
+	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x00);	// single link - link 0
 	ad9144_setup_jesd204_link(dev, init_param);
 
 	// physical layer
