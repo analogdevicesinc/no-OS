@@ -170,6 +170,11 @@
 #define ADXL372_STATUS_1_AWAKE(x)		(((x) >> 6) & 0x1)
 #define ADXL372_STATUS_1_ERR_USR_REGS(x)	(((x) >> 7) & 0x1)
 
+/* ADXL372_STATUS_2 */
+#define ADXL372_STATUS_2_ACTIVITY_2(x)          (((x) >> 6) & 0x1)
+#define ADXL372_STATUS_2_ACTIVITY(x)            (((x) >> 5) & 0x1)
+#define ADXL372_STATUS_2_INACTIVITY(x)          (((x) >> 4) & 0x1)
+
 /* ADXL372_INT1_MAP */
 #define ADXL372_INT1_MAP_DATA_RDY_MSK		BIT(0)
 #define ADXL372_INT1_MAP_DATA_RDY_MODE(x)	(((x) & 0x1) << 0)
