@@ -4,6 +4,14 @@ set m_type [lindex $argv 0]
 
 connect
 
+# Reset and stop the ARM CPU before we re-program the FPGA if we are on a ZYNQ.
+# Otherwise undefined behavior can occur.
+if {[string match "ZYNQ_*" $m_type]} {
+  targets -set -filter {name =~ "APU*"}
+  stop
+  rst
+}
+
 if {$m_type == "ZYNQ_PSU"} {
   targets -set -filter {name =~ "PSU"}
 }
