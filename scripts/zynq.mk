@@ -1,4 +1,7 @@
-# 7series zynq
+# Common support for zynq PS7 and UltraScale
+
+# Fallback to PS7 if no target was explicitly defined
+ZYNQ_TARGET ?= ZYNQ_PS7
 
 ifeq ($(HDF-FILE),)
   HDF-FILE := $(M_HDF_FILE)
@@ -35,7 +38,7 @@ XSDB_CAPTURE := $(NOOS-DIR)/scripts/xilinx_capture.tcl
 
 COMPILER_DEFINES := XILINX
 COMPILER_DEFINES += ZYNQ
-COMPILER_DEFINES += ZYNQ_PS7
+COMPILER_DEFINES += $(ZYNQ_TARGET)
 COMPILER_DEFINES += $(M_COMPILER_DEFINES)
 
 P_HDR_FILES := xilsw/src/platform_config.h
@@ -78,7 +81,7 @@ hw/system_top.bit: $(HDF-FILE)
 
 .PHONY: run
 run: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_SCRIPT) ZYNQ_PS7
+	$(XSDB_CMD) $(XSDB_SCRIPT) $(ZYNQ_TARGET)
 
 .PHONY: clean
 clean: 
@@ -87,4 +90,4 @@ clean:
 
 .PHONY: capture
 capture: $(ELF_FILE)
-	$(XSDB_CMD) $(XSDB_CAPTURE) ZYNQ_PS7 $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)
+	$(XSDB_CMD) $(XSDB_CAPTURE) $(ZYNQ_TARGET) $(CAPTURE_BADDR) $(CAPTURE_SIZE) $(NR_OF_CHAN) $(BITS_PER_SAMPLE)

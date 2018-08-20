@@ -8,4 +8,4 @@ M_COMPILER_DEFINES := CONFIG_H_
 M_COMPILER_DEFINES += PICOZED_SDR_CMOS
 
 include $(NOOS-DIR)/adrv9361z7035/adrv9361z7035.mk
-include $(NOOS-DIR)/scripts/zynq.mk
+include $(NOOS-DIR)/scripts/zynq_ps7.mk
