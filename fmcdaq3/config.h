@@ -41,7 +41,7 @@
 #define CONFIG_H_
 
 // #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
- #define DEBUG		 /* For Debug purposes only */
+// #define DEBUG		 /* For Debug purposes only */
 
 /******************************************************************************/
 /****************************** Carrier Vendors *******************************/
