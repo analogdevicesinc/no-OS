@@ -298,10 +298,15 @@ int main(void)
 
 	ad9528_setup(&ad9528_device, ad9528_param);
 
-	ad9152_setup(&ad9152_device, ad9152_param);
+	// Recommended DAC JESD204 link startup sequence
+	//   1. FPGA JESD204 Link Layer
+	//   2. FPGA JESD204 PHY Layer
+	//   3. DAC
 
 	jesd_setup(&ad9152_jesd);
 	xcvr_setup(&ad9152_xcvr);
+	ad9152_setup(&ad9152_device, ad9152_param);
+
 	axi_jesd204_tx_status_read(&ad9152_jesd);
 	dac_setup(&ad9152_core);
 	ad9152_status(ad9152_device);
