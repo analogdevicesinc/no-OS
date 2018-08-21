@@ -546,21 +546,32 @@ int main(void)
 
 	ad9523_setup(&ad9523_device, &ad9523_param);
 
-	// set up the devices
-	ad9680_setup(&ad9680_device, &ad9680_param);
-	ad9144_setup(&ad9144_device, &ad9144_param);
+	// Recommended DAC JESD204 link startup sequence
+	//   1. FPGA JESD204 Link Layer
+	//   2. FPGA JESD204 PHY Layer
+	//   3. DAC
+	//
+	// Recommended ADC JESD204 link startup sequence
+	//   1. ADC
+	//   2. FPGA JESD204 PHY Layer
+	//   2. FPGA JESD204 Link Layer
+	//
+	// Both sequences are interleaved here so that the transceivers which might
+	// be shared between the DAC and ADC link are enabled at the same time.
 
-	// set up the JESD core
-	jesd_setup(&ad9680_jesd);
+
+	// ADC
+	ad9680_setup(&ad9680_device, &ad9680_param);
+
+	// DAC FPGA JESD204 link layer
 	jesd_setup(&ad9144_jesd);
 
-	// set up the XCVRs
+	// ADC and DAC FPGA JESD204 PHY layer
 #ifdef ALTERA
 	xcvr_setup(&ad9144_xcvr);
 	xcvr_setup(&ad9680_xcvr);
 #endif
 #ifdef XILINX
-	// set up the XCVRs
 	if (ad9144_xcvr.dev.qpll_enable) {	// DAC_XCVR controls the QPLL reset
 		xcvr_setup(&ad9144_xcvr);
 		xcvr_setup(&ad9680_xcvr);
@@ -569,6 +580,12 @@ int main(void)
 		xcvr_setup(&ad9144_xcvr);
 	}
 #endif
+
+	// ADC FPGA JESD204 link layer
+	jesd_setup(&ad9680_jesd);
+
+	// DAC
+	ad9144_setup(&ad9144_device, &ad9144_param);
 
 	// JESD core status
 	axi_jesd204_tx_status_read(&ad9144_jesd);
