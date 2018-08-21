@@ -140,7 +140,7 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ad9152_spi_write(dev, 0x201, 0x00);	// phy - power up
 	ad9152_spi_write(dev, 0x230, 0x28);	// half-rate CDR
 	ad9152_spi_write(dev, 0x312, 0x20);	// half-rate CDR
-	ad9152_spi_write(dev, 0x300, 0x01);	// single link - link 0
+	ad9152_spi_write(dev, 0x300, 0x00);	// single link - link 0
 	ad9152_spi_write(dev, 0x450, 0x00);	// device id (0x400)
 	ad9152_spi_write(dev, 0x451, 0x00);	// bank id (0x401)
 	ad9152_spi_write(dev, 0x452, 0x04);	// lane-id (0x402)
