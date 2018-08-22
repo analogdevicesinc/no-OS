@@ -74,6 +74,7 @@ enum vout_type_t {
 
 /* Supported devices */
 enum ad5446_type_t {
+	ID_AD5600,
 	ID_AD5553,
 	ID_AD5543,
 	ID_AD5542A,

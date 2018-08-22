@@ -66,6 +66,11 @@
 
 /* Device 'table' */
 static const struct ad5446_chip_info chip_info[] = {
+	[ID_AD5600] = {
+		.resolution = 16,
+		.data_clock_in = posedge,
+		.has_ctrl = false,
+	},
 	[ID_AD5553] = {
 		.resolution = 14,
 		.data_clock_in = posedge,
@@ -158,7 +163,8 @@ int8_t ad5446_init(struct ad5446_dev **device,
 		AD5446_LDAC_LOW;
 		AD5446_CLR_OUT;
 		AD5446_CLR_HIGH;
-	} else if(dev->act_device == ID_AD5541A) {
+	} else if(dev->act_device == ID_AD5541A ||
+		  dev->act_device == ID_AD5600) {
 		AD5446_LDAC_OUT;
 		AD5446_LDAC_LOW;
 	} else if(dev->act_device == ID_AD5446) { /* Enable the SDO line */
