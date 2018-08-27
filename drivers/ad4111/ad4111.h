@@ -1,0 +1,267 @@
+/***************************************************************************//**
+ *   @file   ad4111.h
+ *   @brief  Header file of the AD4111 driver.
+ *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
+********************************************************************************
+ * Copyright 2018(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
+
+#ifndef AD4111_H_
+#define AD4111_H_
+
+#include <stdint.h>
+#include "platform_drivers.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+enum ad4111_crc_mode {
+	AD4111_DISABLE,
+	AD4111_USE_CRC,
+	AD4111_USE_XOR,
+};
+
+/*! ad4111 register info */
+struct ad4111_st_reg {
+	int32_t addr;
+	int32_t value;
+	int32_t size;
+};
+
+/*
+ * The structure describes the device and is used with the ad4111 driver.
+ * @slave_select_id: The ID of the Slave Select to be passed to the SPI calls.
+ * @regs: A reference to the register list of the device that the user must
+ *       provide when calling the Setup() function.
+ * @num_regs: The length of the register list.
+ * @userCRC: Error check type to use on SPI transfers.
+ */
+struct ad4111_dev {
+	/* SPI */
+	struct spi_desc		 *spi_desc;
+	/* Device Settings */
+	struct ad4111_st_reg *regs;
+	uint8_t				 num_regs;
+	enum ad4111_crc_mode useCRC;
+};
+
+struct ad4111_init_param {
+	/* SPI */
+	struct spi_init_param spi_init;
+	/* Device Settings */
+	struct ad4111_st_reg  *regs;
+	uint8_t				  num_regs;
+};
+
+/*****************************************************************************/
+/***************** AD4111 Register Definitions *******************************/
+/*****************************************************************************/
+
+/* AD4111 Register Map */
+#define AD4111_COMMS_REG      0x00
+#define AD4111_STATUS_REG     0x00
+#define AD4111_ADCMODE_REG    0x01
+#define AD4111_IFMODE_REG     0x02
+#define AD4111_REGCHECK_REG   0x03
+#define AD4111_DATA_REG       0x04
+#define AD4111_GPIOCON_REG    0x06
+#define AD4111_ID_REG         0x07
+#define AD4111_CHMAP0_REG     0x10
+#define AD4111_CHMAP1_REG     0x11
+#define AD4111_CHMAP2_REG     0x12
+#define AD4111_CHMAP3_REG     0x13
+#define AD4111_CHMAP4_REG     0x14
+#define AD4111_CHMAP5_REG     0x15
+#define AD4111_CHMAP6_REG     0x16
+#define AD4111_CHMAP7_REG     0x17
+#define AD4111_CHMAP8_REG     0x18
+#define AD4111_CHMAP9_REG     0x19
+#define AD4111_CHMAP10_REG    0x1A
+#define AD4111_CHMAP11_REG    0x1B
+#define AD4111_CHMAP12_REG    0x1C
+#define AD4111_CHMAP13_REG    0x1D
+#define AD4111_CHMAP14_REG    0x1E
+#define AD4111_CHMAP15_REG    0x1F
+#define AD4111_SETUPCON0_REG  0x20
+#define AD4111_SETUPCON1_REG  0x21
+#define AD4111_SETUPCON2_REG  0x22
+#define AD4111_SETUPCON3_REG  0x23
+#define AD4111_SETUPCON4_REG  0x24
+#define AD4111_SETUPCON5_REG  0x25
+#define AD4111_SETUPCON6_REG  0x26
+#define AD4111_SETUPCON7_REG  0x27
+#define AD4111_FILTCON0_REG   0x28
+#define AD4111_FILTCON1_REG   0x29
+#define AD4111_FILTCON2_REG   0x2A
+#define AD4111_FILTCON3_REG   0x2B
+#define AD4111_FILTCON4_REG   0x2C
+#define AD4111_FILTCON5_REG   0x2D
+#define AD4111_FILTCON6_REG   0x2E
+#define AD4111_FILTCON7_REG   0x2F
+#define AD4111_OFFSET0_REG    0x30
+#define AD4111_OFFSET1_REG    0x31
+#define AD4111_OFFSET2_REG    0x32
+#define AD4111_OFFSET3_REG    0x33
+#define AD4111_OFFSET4_REG    0x34
+#define AD4111_OFFSET5_REG    0x35
+#define AD4111_OFFSET6_REG    0x36
+#define AD4111_OFFSET7_REG    0x37
+#define AD4111_GAIN0_REG      0x38
+#define AD4111_GAIN1_REG      0x39
+#define AD4111_GAIN2_REG      0x3A
+#define AD4111_GAIN3_REG      0x3B
+#define AD4111_GAIN4_REG      0x3C
+#define AD4111_GAIN5_REG      0x3D
+#define AD4111_GAIN6_REG      0x3E
+#define AD4111_GAIN7_REG      0x3F
+
+/* Communication Register bits */
+#define AD4111_COMM_REG_WEN    (0 << 7)
+#define AD4111_COMM_REG_WR     (0 << 6)
+#define AD4111_COMM_REG_RD     (1 << 6)
+#define AD4111_COMM_REG_RA(x)  ((x) & 0x3F)
+
+/* Status Register bits */
+#define AD4111_STATUS_REG_RDY      (1 << 7)
+#define AD4111_STATUS_REG_ADC_ERR  (1 << 6)
+#define AD4111_STATUS_REG_CRC_ERR  (1 << 5)
+#define AD4111_STATUS_REG_REG_ERR  (1 << 4)
+#define AD4111_STATUS_REG_CH(x)    ((x) & 0x0F)
+
+/* ADC Mode Register bits */
+#define AD4111_ADCMODE_REG_REF_EN     (1 << 15)
+#define AD4111_ADCMODE_REG_HIDE_DELAY (1 << 14)
+#define AD4111_ADCMODE_SING_CYC       (1 << 13)
+#define AD4111_ADCMODE_REG_DELAY(x)   (((x) & 0x7) << 8)
+#define AD4111_ADCMODE_REG_MODE(x)    (((x) & 0x7) << 4)
+#define AD4111_ADCMODE_REG_CLKSEL(x)) (((x) & 0x3) << 2)
+
+/* Interface Mode Register bits */
+#define AD4111_IFMODE_REG_ALT_SYNC      (1 << 12)
+#define AD4111_IFMODE_REG_IOSTRENGTH    (1 << 11)
+#define AD4111_IFMODE_REG_DOUT_RESET    (1 << 8)
+#define AD4111_IFMODE_REG_CONT_READ     (1 << 7)
+#define AD4111_IFMODE_REG_DATA_STAT     (1 << 6)
+#define AD4111_IFMODE_REG_REG_CHECK     (1 << 5)
+#define AD4111_IFMODE_REG_XOR_EN        (0x01 << 2)
+#define AD4111_IFMODE_REG_CRC_EN        (0x02 << 2)
+#define AD4111_IFMODE_REG_XOR_STAT(x)   (((x) & AD4111_IFMODE_REG_XOR_EN) == AD4111_IFMODE_REG_XOR_EN)
+#define AD4111_IFMODE_REG_CRC_STAT(x)   (((x) & AD4111_IFMODE_REG_CRC_EN) == AD4111_IFMODE_REG_CRC_EN)
+#define AD4111_IFMODE_REG_DATA_WL16     (1 << 0)
+
+/* GPIO Configuration Register bits */
+#define AD4111_GPIOCON_REG_OP_EN0_1    (1 << 13)
+#define AD4111_GPIOCON_REG_OW_EN       (1 << 12)
+#define AD4111_GPIOCON_REG_SYNC_EN     (1 << 11)
+#define AD4111_GPIOCON_REG_ERR_EN(x)   (((x) & 0x3) << 9)
+#define AD4111_GPIOCON_REG_ERR_DAT     (1 << 8)
+#define AD4111_GPIOCON_REG_DATA1       (1 << 7)
+#define AD4111_GPIOCON_REG_DATA0       (1 << 6)
+
+/* Channel Map Register 0-3 bits */
+#define AD4111_CHMAP_REG_CH_EN         (1 << 15)
+#define AD4111_CHMAP_REG_SETUP_SEL(x)  (((x) & 0x7) << 12)
+#define AD4111_CHMAP_REG_INPUT(x)      (((x) & 0x3FF) << 0)
+
+/* Setup Configuration Register 0-3 bits */
+#define AD4111_SETUP_CONF_REG_BI_UNIPOLAR  (1 << 12)
+#define AD4111_SETUP_CONF_REG_REFPOS_BUF   (1 << 11)
+#define AD4111_SETUP_CONF_REG_REFNEG_BUF   (1 << 10)
+#define AD4111_SETUP_CONF_REG_AIN_BUF(x)   (((x) & 0x3) << 8)
+#define AD4111_SETUP_CONF_REG_BUFCHOPMAX   (1 << 6)
+#define AD4111_SETUP_CONF_REG_REF_SEL(x)   (((x) & 0x3) << 4)
+
+/* Filter Configuration Register 0-3 bits */
+#define AD4111_FILT_CONF_REG_SINC3_MAP    (1 << 15)
+#define AD4111_FILT_CONF_REG_ENHFILTEN    (1 << 11)
+#define AD4111_FILT_CONF_REG_ENHFILT(x)   (((x) & 0x7) << 8)
+#define AD4111_FILT_CONF_REG_ORDER(x)     (((x) & 0x3) << 5)
+#define AD4111_FILT_CONF_REG_ODR(x)       (((x) & 0x1F) << 0)
+
+/******************************************************************************/
+/******************** AD4111 Constants ****************************************/
+/******************************************************************************/
+#define AD4111_CRC8_POLYNOMIAL_REPRESENTATION 0x07 /* x8 + x2 + x + 1 */
+
+/******************************************************************************/
+/************************* Functions Declarations *****************************/
+/******************************************************************************/
+
+/*! Retrieves a pointer to the register that matches the given address */
+struct ad4111_st_reg *ad4111_get_reg(struct ad4111_dev *device,
+			     uint8_t reg_address);
+
+/*! Reads the value of the specified register. */
+int32_t ad4111_read_register(struct ad4111_dev *device,
+			    uint8_t addr);
+
+/*! Writes the value of the specified register. */
+int32_t ad4111_write_register(struct ad4111_dev *device,
+			     uint8_t);
+
+/*! Resets the device. */
+int32_t ad4111_reset(struct ad4111_dev *device);
+
+/*! Waits until a new conversion result is available. */
+int32_t ad4111_wait_for_ready(struct ad4111_dev *device,
+			    uint32_t timeout);
+
+/*! Reads the conversion result from the device. */
+int32_t ad4111_read_data(struct ad4111_dev *device,
+			int32_t* pData);
+
+/*! Computes the CRC checksum for a data buffer. */
+uint8_t ad4111_compute_crc8(uint8_t* pBuf,
+			   uint8_t bufSize);
+
+/*! Computes the XOR checksum for a data buffer. */
+uint8_t ad4111_compute_xor8(uint8_t * pBuf,
+			   uint8_t bufSize);
+
+/*! Computes data register read size to account for bit number and status
+ *  read. */
+int32_t ad4111_compute_datareg_size(struct ad4111_dev *device);
+
+/*! Updates the CRC settings. */
+int32_t ad4111_update_crc_setting(struct ad4111_dev *device);
+
+/*! Initializes the AD4111. */
+int32_t ad4111_init(struct ad4111_dev **device,
+		    struct ad4111_init_param init_param);
+
+/*! Free the resources allocated by ad4111_init(). */
+int32_t ad4111_remove(struct ad4111_dev *dev);
+
+#endif /* AD4111_H_ */
