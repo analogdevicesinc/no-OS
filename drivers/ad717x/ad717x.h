@@ -158,7 +158,7 @@ typedef struct {
 #define AD717X_STATUS_REG_ADC_ERR  (1 << 6)
 #define AD717X_STATUS_REG_CRC_ERR  (1 << 5)
 #define AD717X_STATUS_REG_REG_ERR  (1 << 4)
-#define AD717X_STATUS_REG_CH(x)    ((x) & 0x03)
+#define AD717X_STATUS_REG_CH(x)    ((x) & 0x0F)
 
 /* ADC Mode Register bits */
 #define AD717X_ADCMODE_REG_REF_EN     (1 << 15)
@@ -208,7 +208,7 @@ typedef struct {
 
 /* Channel Map Register 0-3 bits */
 #define AD717X_CHMAP_REG_CH_EN         (1 << 15)
-#define AD717X_CHMAP_REG_SETUP_SEL(x)  (((x) & 0x3) << 12)
+#define AD717X_CHMAP_REG_SETUP_SEL(x)  (((x) & 0x7) << 12)
 #define AD717X_CHMAP_REG_AINPOS(x)     (((x) & 0x1F) << 5)
 #define AD717X_CHMAP_REG_AINNEG(x)     (((x) & 0x1F) << 0)
 
