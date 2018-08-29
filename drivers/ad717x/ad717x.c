@@ -439,6 +439,11 @@ int32_t AD717X_Init(ad717x_dev **device,
                 preg ++;
         }
 
+        /* Read ID register to identify the part */
+        ret = AD717X_ReadRegister(dev, AD717X_ID_REG);
+        if(ret < 0)
+                return ret;
+
         *device = dev;
 
         return ret;
