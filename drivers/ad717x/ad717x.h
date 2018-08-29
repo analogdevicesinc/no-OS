@@ -301,6 +301,10 @@ int32_t AD717X_WaitForReady(ad717x_dev *device,
 int32_t AD717X_ReadData(ad717x_dev *device,
 			int32_t* pData);
 
+/*! Computes data register read size to account for bit number and status
+ *  read. */
+int32_t AD717X_ComputeDataregSize(ad717x_dev *device);
+
 /*! Computes the CRC checksum for a data buffer. */
 uint8_t AD717X_ComputeCRC8(uint8_t* pBuf,
 			   uint8_t bufSize);
