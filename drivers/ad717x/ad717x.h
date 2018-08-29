@@ -2,7 +2,7 @@
 *   @file    AD717X.h
 *   @brief   AD717X header file.
 *   @devices AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2,
-*            AD7177-2
+*            AD7177-2, AD4111
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
 *******************************************************************************
@@ -167,7 +167,7 @@ typedef struct {
 #define AD717X_ADCMODE_REG_MODE(x)    (((x) & 0x7) << 4)
 #define AD717X_ADCMODE_REG_CLKSEL(x)) (((x) & 0x3) << 2)
 
-/* ADC Mode Register additional bits for AD7172-2 and AD7172-4 */
+/* ADC Mode Register additional bits for AD7172-2, AD7172-4 and AD4111 */
 #define AD717X_ADCMODE_REG_HIDE_DELAY   (1 << 14)
 
 /* Interface Mode Register bits */
@@ -206,11 +206,20 @@ typedef struct {
 #define AD717X_GPIOCON_REG_PDSW        (1 << 14)
 #define AD717X_GPIOCON_REG_OP_EN2_3    (1 << 13)
 
+/* GPIO Configuration Register additional bits for AD4111 */
+#define AD4111_GPIOCON_REG_OP_EN0_1    (1 << 13)
+#define AD4111_GPIOCON_REG_OW_EN       (1 << 12)
+#define AD4111_GPIOCON_REG_DATA1       (1 << 7)
+#define AD4111_GPIOCON_REG_DATA0       (1 << 6)
+
 /* Channel Map Register 0-3 bits */
 #define AD717X_CHMAP_REG_CH_EN         (1 << 15)
 #define AD717X_CHMAP_REG_SETUP_SEL(x)  (((x) & 0x7) << 12)
 #define AD717X_CHMAP_REG_AINPOS(x)     (((x) & 0x1F) << 5)
 #define AD717X_CHMAP_REG_AINNEG(x)     (((x) & 0x1F) << 0)
+
+/* Channel Map Register additional bits for AD4111 */
+#define AD4111_CHMAP_REG_INPUT(x)      (((x) & 0x3FF) << 0)
 
 /* Setup Configuration Register 0-3 bits */
 #define AD717X_SETUP_CONF_REG_BI_UNIPOLAR  (1 << 12)
@@ -228,12 +237,37 @@ typedef struct {
 #define AD717X_SETUP_CONF_REG_AINBUF_P    (1 << 9)
 #define AD717X_SETUP_CONF_REG_AINBUF_N    (1 << 8)
 
+/* Setup Configuration Register additional bits for AD4111 */
+#define AD4111_SETUP_CONF_REG_REFPOS_BUF   (1 << 11)
+#define AD4111_SETUP_CONF_REG_REFNEG_BUF   (1 << 10)
+#define AD4111_SETUP_CONF_REG_AIN_BUF(x)   (((x) & 0x3) << 8)
+#define AD4111_SETUP_CONF_REG_BUFCHOPMAX   (1 << 6)
+
 /* Filter Configuration Register 0-3 bits */
 #define AD717X_FILT_CONF_REG_SINC3_MAP    (1 << 15)
 #define AD717X_FILT_CONF_REG_ENHFILTEN    (1 << 11)
 #define AD717X_FILT_CONF_REG_ENHFILT(x)   (((x) & 0x7) << 8)
 #define AD717X_FILT_CONF_REG_ORDER(x)     (((x) & 0x3) << 5)
 #define AD717X_FILT_CONF_REG_ODR(x)       (((x) & 0x1F) << 0)
+
+/* ID register mask for relevant bits */
+#define AD717X_ID_REG_MASK	  0xFFF0
+/* AD7172-2 ID */
+#define AD7172_2_ID_REG_VALUE 0x00D0
+/* AD7172-4 ID */
+#define AD7172_4_ID_REG_VALUE 0x2050
+/* AD7173-8 ID */
+#define AD7173_8_ID_REG_VALUE 0x30D0
+/* AD7175-2 ID */
+#define AD7175_2_ID_REG_VALUE 0x0CD0
+/* AD7175-8 ID */
+#define AD7175_8_ID_REG_VALUE 0x3CD0
+/* AD7176-2 ID */
+#define AD7176_2_ID_REG_VALUE 0x0C90
+/* AD7177-2 ID */
+#define AD7177_2_ID_REG_VALUE 0x4FD0
+/* AD4111 ID */
+#define AD4111_ID_REG_VALUE   0x30D0
 
 /*****************************************************************************/
 /******************* AD717X Constants ****************************************/
