@@ -506,7 +506,7 @@ int main(void)
 	ad9144_dma.transfer = &tx_xfer;
 	ad9144_dma.flags = DMAC_FLAGS_TLAST;
 	tx_xfer.id = 0;
-	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
+	tx_xfer.no_of_samples = dac_buffer_load(&ad9144_core, tx_xfer.start_address);
 
 	// change the default JESD configurations, if required
 	fmcdaq2_reconfig(&ad9144_param,

@@ -46,7 +46,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-uint32_t dac_buffer_load(dac_core core, uint32_t start_address);
+uint32_t dac_buffer_load(const dac_core *core, uint32_t start_address);
 
 #endif
 

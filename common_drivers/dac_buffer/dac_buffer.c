@@ -163,7 +163,7 @@ static const uint16_t sine_lut[1024] = {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-uint32_t dac_buffer_load(dac_core core, uint32_t start_address) {
+uint32_t dac_buffer_load(const dac_core *core, uint32_t start_address) {
 
 	uint32_t no_of_samples;
 	uint32_t index_i, index_q;
@@ -175,7 +175,7 @@ uint32_t dac_buffer_load(dac_core core, uint32_t start_address) {
 		 /* Phase shifted by 90 degree */
 		index_q = (index_i + 256) % no_of_samples;
 
-		switch (core.no_of_channels) {
+		switch (core->no_of_channels) {
 			case 1:
 				ad_reg_write_16(start_address + index_mem * 2, sine_lut[index_i]);
 				index_mem += 1;
@@ -200,6 +200,6 @@ uint32_t dac_buffer_load(dac_core core, uint32_t start_address) {
 
 	ad_dcache_flush();
 
-	return (core.no_of_channels * no_of_samples);
+	return (core->no_of_channels * no_of_samples);
 }
 
