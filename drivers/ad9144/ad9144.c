@@ -410,6 +410,7 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	// power-up and dac initialization
 	ad9144_spi_write(dev, REG_PWRCNTRL0, 0x00);	// dacs - power up everything
 	ad9144_spi_write(dev, REG_CLKCFG0, 0x00);	// clocks - power up everything
+	mdelay(1);
 	ad9144_spi_write(dev, REG_SYSREF_ACTRL0, 0x00);	// sysref - power up/falling edge
 
 	// required device configurations
