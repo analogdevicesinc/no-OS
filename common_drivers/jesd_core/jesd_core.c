@@ -153,6 +153,15 @@ int32_t jesd_status(jesd_core *jesd)
 	return(ret);
 }
 
+uint32_t axi_jesd204_get_link_rate_khz(jesd_core *jesd)
+{
+	uint32_t clock_ratio;
+
+	jesd_read(jesd, JESD204_REG_LINK_CLK_RATIO, &clock_ratio);
+
+	return ((clock_ratio * 100 + 0x7fff) >> 16) * 1000;
+}
+
 /***************************************************************************//**
 * @brief axi_jesd204_rx_status_read
 *******************************************************************************/

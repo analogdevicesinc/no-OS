@@ -169,4 +169,6 @@ int32_t axi_jesd204_tx_status_read(jesd_core *jesd);
 int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane);
 int32_t jesd_sysref_control(jesd_core *jesd, uint32_t enable);
 
+uint32_t axi_jesd204_get_link_rate_khz(jesd_core *jesd);
+
 #endif
