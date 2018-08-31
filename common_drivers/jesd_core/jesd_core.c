@@ -184,10 +184,8 @@ int32_t axi_jesd204_rx_status_read(jesd_core *jesd)
 			axi_jesd204_rx_link_status_label[link_status & 0x3]);
 		ad_printf("SYSREF captured: %s\n",
 			(sysref_status & 1) ? "Yes" : "No");
-		if (sysref_status & 2) {
-			ad_printf("SYSREF alignment ERROR\n",
-				(sysref_status & 2) ? "Yes" : "No");
-		}
+		if (sysref_status & 2)
+			ad_printf("SYSREF alignment ERROR.\n");
 
 	} else {
 		ad_printf("External reset is %s\n",
@@ -228,10 +226,8 @@ int32_t axi_jesd204_tx_status_read(jesd_core *jesd)
 			axi_jesd204_tx_link_status_label[link_status & 0x3]);
 		ad_printf("SYSREF captured: %s\n",
 			(sysref_status & 1) ? "Yes" : "No");
-		if (sysref_status & 2) {
-			ad_printf("SYSREF alignment ERROR\n",
-				(sysref_status & 2) ? "Yes" : "No");
-		}
+		if (sysref_status & 2)
+			ad_printf("SYSREF alignment ERROR\n");
 	} else {
 		ad_printf("External reset is %s\n",
 			(link_disabled & 0x2) ? "asserted" : "deasserted");
