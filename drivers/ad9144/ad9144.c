@@ -600,8 +600,8 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 
 	uint32_t dac = 0;
 	uint32_t sample = 0;
-	uint8_t status = 0;
-	int32_t ret = 0;
+	uint8_t status;
+	int32_t ret;
 
 	for (dac = 0; dac < dev->num_converters; dac++) {
 		for (sample = 0; sample < 4; sample++) {
@@ -618,14 +618,12 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 			ad9144_spi_write(dev, REG_SHORT_TPL_TEST_0,
 					 ((sample << 4) | (dac << 2) | 0x01));
 
-			ret = ad9144_spi_check_status(dev,
-						      REG_SHORT_TPL_TEST_3,
-						      0x01, 0x00);
-			if (ret == -1)
-				printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+			mdelay(1);
+			ret = ad9144_spi_read(dev, REG_SHORT_TPL_TEST_3, &status);
+			if (ret != 0 || (status & 1))
+				printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x)!.\n",
 				       __func__, dac, sample,
-				       init_param->stpl_samples[dac][sample],
-				       status);
+				       init_param->stpl_samples[dac][sample]);
 		}
 	}
 	return 0;
