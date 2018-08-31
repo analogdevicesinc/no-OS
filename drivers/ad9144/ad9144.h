@@ -1367,7 +1367,7 @@ struct ad9144_init_param {
 	uint8_t		spi3wire; // set device spi intereface 3/4 wires
 	uint8_t		interpolation; // interpolation factor
 	uint32_t	stpl_samples[4][4];
-	uint32_t	lane_rate_kbps;
+	uint32_t	sample_rate_khz;
 	uint32_t	prbs_type;
 
 	uint8_t		jesd204_mode;
@@ -1414,4 +1414,5 @@ int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 
 int32_t ad9144_dac_calibrate(struct ad9144_dev *dev);
 
+uint32_t ad9144_jesd204_get_lane_rate_kbps(const struct ad9144_init_param *param);
 #endif

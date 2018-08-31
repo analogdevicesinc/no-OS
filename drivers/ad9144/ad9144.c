@@ -414,19 +414,40 @@ static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
 	return ret;
 }
 
+static uint32_t ad9144_sample_rate_khz(const struct ad9144_init_param *init_param)
+{
+	if (init_param->pll_enable)
+		return init_param->pll_dac_frequency_khz;
+	else
+		return init_param->sample_rate_khz;
+}
+
+uint32_t ad9144_jesd204_get_lane_rate_kbps(const struct ad9144_init_param *init_param)
+{
+	const struct ad9144_jesd204_link_mode *mode;
+
+	mode = ad9144_get_link_mode_by_id(init_param->jesd204_mode);
+	if (!mode)
+		return 0;
+
+	return (ad9144_sample_rate_khz(init_param) * mode->M * 20) /
+				(init_param->interpolation * mode->L);
+}
+
 /***************************************************************************//**
  * @brief ad9144_setup
 ********************************************************************************/
 int32_t ad9144_setup(struct ad9144_dev **device,
 		     const struct ad9144_init_param *init_param)
 {
+	unsigned int lane_rate_kbps;
+	struct ad9144_dev *dev;
 	uint32_t serdes_plldiv;
 	uint32_t serdes_cdr;
 	uint8_t chip_id, chip_grade;
 	uint8_t scratchpad;
 	uint32_t val;
 	int32_t ret;
-	struct ad9144_dev *dev;
 
 	dev = (struct ad9144_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -499,14 +520,17 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_MASTER_PD, 0x00);	// phy - power up
 	ad9144_spi_write(dev, REG_PHY_PD, 0x00);	// phy - power up
 	ad9144_spi_write(dev, REG_GENERAL_JRX_CTRL_0, 0x00);	// single link - link 0
-	ad9144_setup_jesd204_link(dev, init_param);
+	ret = ad9144_setup_jesd204_link(dev, init_param);
+	if (ret)
+		return ret;
 
 	// physical layer
 
-	if (init_param->lane_rate_kbps < 2880000) {
+	lane_rate_kbps = ad9144_jesd204_get_lane_rate_kbps(init_param);
+	if (lane_rate_kbps < 2880000) {
 		serdes_cdr = 0x0a;
 		serdes_plldiv = 0x06;
-	} else if (init_param->lane_rate_kbps < 5750000) {
+	} else if (lane_rate_kbps < 5750000) {
 		serdes_cdr = 0x08;
 		serdes_plldiv = 0x05;
 	} else {

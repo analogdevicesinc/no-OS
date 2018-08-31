@@ -133,7 +133,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 					channel_divider = 128;
 			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 6000000;
+			p_ad9144_param->sample_rate_khz = 600000;
 			p_ad9144_xcvr->lane_rate_kbps = 6000000;
 			p_ad9144_xcvr->ref_clock_khz = 300000;
 			p_ad9680_xcvr->reconfig_bypass = 0;
@@ -170,7 +170,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 					channel_divider = 256;
 			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 5000000;
+			p_ad9144_param->sample_rate_khz = 500000;
 			p_ad9144_xcvr->lane_rate_kbps = 5000000;
 			p_ad9144_xcvr->ref_clock_khz = 250000;
 			p_ad9680_xcvr->reconfig_bypass = 0;
@@ -207,7 +207,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 					channel_divider = 256;
 			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 10000000;
+			p_ad9144_param->sample_rate_khz = 1000000;
 			p_ad9144_xcvr->lane_rate_kbps = 10000000;
 			p_ad9144_xcvr->ref_clock_khz = 500000;
 			p_ad9680_xcvr->reconfig_bypass = 0;
@@ -437,7 +437,7 @@ int main(void)
 	ad9144_channels[0].sel = DAC_SRC_DDS;
 	ad9144_channels[1].sel = DAC_SRC_DDS;
 
-	ad9144_param.lane_rate_kbps = 10000000;
+	ad9144_param.sample_rate_khz = 1000000;
 	ad9144_param.spi3wire = 1;
 	ad9144_param.interpolation = 1;
 	ad9144_param.pll_enable = 0;
