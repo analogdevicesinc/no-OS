@@ -434,6 +434,28 @@ uint32_t ad9144_jesd204_get_lane_rate_kbps(const struct ad9144_init_param *init_
 				(init_param->interpolation * mode->L);
 }
 
+uint32_t ad9144_jesd204_get_lmfc_ratio(const struct ad9144_init_param *init_param)
+{
+	const struct ad9144_jesd204_link_mode *mode;
+
+	mode = ad9144_get_link_mode_by_id(init_param->jesd204_mode);
+	if (!mode)
+		return 0;
+
+	return (init_param->interpolation * mode->L * mode->F * 16) / (mode->M);
+}
+
+uint32_t ad9144_jesd204_get_lmfc_khz(const struct ad9144_init_param *init_param)
+{
+	uint32_t ratio;
+
+	ratio = ad9144_jesd204_get_lmfc_ratio(init_param);
+	if (ratio == 0)
+		return 0;
+
+	return ad9144_sample_rate_khz(init_param) / ratio;
+}
+
 /***************************************************************************//**
  * @brief ad9144_setup
 ********************************************************************************/

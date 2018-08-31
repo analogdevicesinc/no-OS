@@ -1415,4 +1415,6 @@ int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 int32_t ad9144_dac_calibrate(struct ad9144_dev *dev);
 
 uint32_t ad9144_jesd204_get_lane_rate_kbps(const struct ad9144_init_param *param);
+uint32_t ad9144_jesd204_get_lmfc_ratio(const struct ad9144_init_param *init_param);
+uint32_t ad9144_jesd204_get_lmfc_khz(const struct ad9144_init_param *init_param);
 #endif
