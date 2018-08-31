@@ -781,3 +781,26 @@ int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 	return ret;
 }
 
+int32_t ad9144_report_lane_errors(struct ad9144_dev *dev)
+{
+	unsigned int i;
+	uint8_t errors;
+
+	for (i = 0; i < dev->num_lanes; i++) {
+		ad_printf("Errors for lane %d\n", i);
+
+		ad9144_spi_write(dev, 0x6b, (i << 4) | 0);
+		ad9144_spi_read(dev, 0x46b, &errors);
+		ad_printf("\tBad disparity: %d\n", errors);
+
+		ad9144_spi_write(dev, 0x46b, (i << 4) | 1);
+		ad9144_spi_read(dev, 0x46b, &errors);
+		ad_printf("\tNot in table: %d\n", errors);
+
+		ad9144_spi_write(dev, 0x46b, (i << 4) | 2);
+		ad9144_spi_read(dev, 0x46b, &errors);
+		ad_printf("\tUnknown character: %d\n", errors);
+	}
+
+	return 0;
+}
