@@ -58,7 +58,7 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_reg_read(adxl372_dev *dev,
+int32_t adxl372_spi_reg_read(struct adxl372_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t *reg_data)
 {
@@ -83,7 +83,7 @@ int32_t adxl372_spi_reg_read(adxl372_dev *dev,
  * @param count - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_reg_read_multiple(adxl372_dev *dev,
+int32_t adxl372_spi_reg_read_multiple(struct adxl372_dev *dev,
 				      uint8_t reg_addr,
 				      uint8_t *reg_data,
 				      uint16_t count)
@@ -110,7 +110,7 @@ int32_t adxl372_spi_reg_read_multiple(adxl372_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_reg_write(adxl372_dev *dev,
+int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
 			      uint8_t reg_addr,
 			      uint8_t reg_data)
 {
@@ -133,7 +133,7 @@ int32_t adxl372_spi_reg_write(adxl372_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_write_mask(adxl372_dev *dev,
+int32_t adxl372_spi_write_mask(struct adxl372_dev *dev,
 			       uint8_t reg_addr,
 			       uint32_t mask,
 			       uint8_t data)
@@ -162,8 +162,8 @@ int32_t adxl372_spi_write_mask(adxl372_dev *dev,
  * @param enable - Enable activity detection using all 3-axis data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_activity_threshold(adxl372_dev *dev,
-				       adxl372_th_activity act,
+int32_t adxl372_set_activity_threshold(struct adxl372_dev *dev,
+				       enum adxl372_th_activity act,
 				       uint16_t thresh,
 				       bool referenced,
 				       bool enable)
@@ -196,7 +196,8 @@ int32_t adxl372_set_activity_threshold(adxl372_dev *dev,
  *				 ADXL372_FULL_BW_MEASUREMENT
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_op_mode(adxl372_dev *dev, adxl372_op_mode op_mode)
+int32_t adxl372_set_op_mode(struct adxl372_dev *dev,
+			    enum adxl372_op_mode op_mode)
 {
 	int32_t ret;
 
@@ -216,7 +217,7 @@ int32_t adxl372_set_op_mode(adxl372_dev *dev, adxl372_op_mode op_mode)
  *				    false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_autosleep(adxl372_dev *dev, bool enable)
+int32_t adxl372_set_autosleep(struct adxl372_dev *dev, bool enable)
 {
 	int32_t ret;
 
@@ -239,7 +240,8 @@ int32_t adxl372_set_autosleep(adxl372_dev *dev, bool enable)
  *				 ADXL372_BW_3200HZ
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_bandwidth(adxl372_dev *dev, adxl372_bandwidth bw)
+int32_t adxl372_set_bandwidth(struct adxl372_dev *dev,
+			      enum adxl372_bandwidth bw)
 {
 	int32_t ret;
 
@@ -261,7 +263,8 @@ int32_t adxl372_set_bandwidth(adxl372_dev *dev, adxl372_bandwidth bw)
  *				 ADXL372_LOOPED
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_act_proc_mode(adxl372_dev *dev, adxl372_act_proc_mode mode)
+int32_t adxl372_set_act_proc_mode(struct adxl372_dev *dev,
+				  enum adxl372_act_proc_mode mode)
 {
 	int32_t ret;
 
@@ -286,7 +289,8 @@ int32_t adxl372_set_act_proc_mode(adxl372_dev *dev, adxl372_act_proc_mode mode)
  *				 ADXL372_ODR_6400HZ
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_odr(adxl372_dev *dev, adxl372_odr odr)
+int32_t adxl372_set_odr(struct adxl372_dev *dev,
+			enum adxl372_odr odr)
 {
 	int32_t ret;
 
@@ -307,8 +311,8 @@ int32_t adxl372_set_odr(adxl372_dev *dev, adxl372_odr odr)
  *				 ADXL372_INSTANT_ON_HIGH_TH
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_instant_on_th(adxl372_dev *dev,
-				  adxl372_instant_on_th_mode mode)
+int32_t adxl372_set_instant_on_th(struct adxl372_dev *dev,
+				  enum adxl372_instant_on_th_mode mode)
 {
 	int32_t ret;
 
@@ -336,8 +340,8 @@ int32_t adxl372_set_instant_on_th(adxl372_dev *dev,
  *				 ADXL372_WUR_24576ms
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_wakeup_rate(adxl372_dev *dev,
-				adxl372_wakeup_rate wur)
+int32_t adxl372_set_wakeup_rate(struct adxl372_dev *dev,
+				enum adxl372_wakeup_rate wur)
 {
 	int32_t ret;
 
@@ -357,7 +361,7 @@ int32_t adxl372_set_wakeup_rate(adxl372_dev *dev,
  * @param time - The value set in this register.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_activity_time(adxl372_dev *dev, uint8_t time)
+int32_t adxl372_set_activity_time(struct adxl372_dev *dev, uint8_t time)
 {
 	int32_t ret;
 
@@ -373,7 +377,7 @@ int32_t adxl372_set_activity_time(adxl372_dev *dev, uint8_t time)
  * 		(eight LSBs) and the TIME_INACT_H register (eight MSBs).
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_inactivity_time(adxl372_dev *dev, uint16_t time)
+int32_t adxl372_set_inactivity_time(struct adxl372_dev *dev, uint16_t time)
 {
 	int32_t ret;
 
@@ -391,8 +395,8 @@ int32_t adxl372_set_inactivity_time(adxl372_dev *dev, uint16_t time)
  *				 ADXL372_FILTER_SETTLE_16
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_set_filter_settle(adxl372_dev *dev,
-				  adxl372_filter_settle mode)
+int32_t adxl372_set_filter_settle(struct adxl372_dev *dev,
+				  enum adxl372_filter_settle mode)
 {
 	int32_t ret;
 
@@ -411,9 +415,9 @@ int32_t adxl372_set_filter_settle(adxl372_dev *dev,
  * @param int2 -  INT2 interrupt pins.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_interrupt_config(adxl372_dev *dev,
-				 adxl372_irq_config int1,
-				 adxl372_irq_config int2)
+int32_t adxl372_interrupt_config(struct adxl372_dev *dev,
+				 struct adxl372_irq_config int1,
+				 struct adxl372_irq_config int2)
 {
 	uint8_t int1_config, int2_config;
 	int32_t ret;
@@ -451,7 +455,7 @@ int32_t adxl372_interrupt_config(adxl372_dev *dev,
  *			 FIFO buffer (0 to 512)
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_get_status(adxl372_dev *dev,
+int32_t adxl372_get_status(struct adxl372_dev *dev,
 			   uint8_t *status1,
 			   uint8_t *status2,
 			   uint16_t *fifo_entries)
@@ -475,7 +479,7 @@ int32_t adxl372_get_status(adxl372_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_reset(adxl372_dev *dev)
+int32_t adxl372_reset(struct adxl372_dev *dev)
 {
 	int32_t ret;
 
@@ -512,9 +516,9 @@ int32_t adxl372_reset(adxl372_dev *dev)
 
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_configure_fifo(adxl372_dev *dev,
-			       adxl372_fifo_mode mode,
-			       adxl372_fifo_format format,
+int32_t adxl372_configure_fifo(struct adxl372_dev *dev,
+			       enum adxl372_fifo_mode mode,
+			       enum adxl372_fifo_format format,
 			       uint16_t fifo_samples)
 {
 	uint8_t fifo_config;
@@ -558,8 +562,8 @@ int32_t adxl372_configure_fifo(adxl372_dev *dev,
  *			 samples present in the FIFO buffer
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
-				adxl372_xyz_accel_data *fifo_data,
+int32_t adxl372_service_fifo_ev(struct adxl372_dev *dev,
+				struct adxl372_xyz_accel_data *fifo_data,
 				uint16_t *fifo_entries)
 {
 	uint8_t status1, status2;
@@ -599,8 +603,8 @@ int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
  * @param cnt - How many samples should be retrieved from the FIFO DATA reg
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_get_fifo_xyz_data(adxl372_dev *dev,
-				  adxl372_xyz_accel_data *samples,
+int32_t adxl372_get_fifo_xyz_data(struct adxl372_dev *dev,
+				  struct adxl372_xyz_accel_data *samples,
 				  uint16_t cnt)
 {
 	uint8_t buf[1024];
@@ -637,8 +641,8 @@ int32_t adxl372_get_fifo_xyz_data(adxl372_dev *dev,
  *		      where (x, y, z) max values will be stored.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_get_highest_peak_data(adxl372_dev *dev,
-				      adxl372_xyz_accel_data *max_peak)
+int32_t adxl372_get_highest_peak_data(struct adxl372_dev *dev,
+				      struct adxl372_xyz_accel_data *max_peak)
 {
 	uint8_t buf[6];
 	uint8_t status1, status2;
@@ -670,8 +674,8 @@ int32_t adxl372_get_highest_peak_data(adxl372_dev *dev,
  *		      where (x, y, z) acceleration data will be stored.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_get_accel_data(adxl372_dev *dev,
-			       adxl372_xyz_accel_data *accel_data)
+int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
+			       struct adxl372_xyz_accel_data *accel_data)
 {
 	uint8_t buf[6];
 	uint8_t status1, status2;
@@ -703,14 +707,14 @@ int32_t adxl372_get_accel_data(adxl372_dev *dev,
  *		       parameters.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t adxl372_init(adxl372_dev **device,
-		     adxl372_init_param init_param)
+int32_t adxl372_init(struct adxl372_dev **device,
+		     struct adxl372_init_param init_param)
 {
-	adxl372_dev	*dev;
+	struct adxl372_dev	*dev;
 	uint8_t dev_id, part_id;
 	int32_t ret;
 
-	dev = (adxl372_dev *)malloc(sizeof(*dev));
+	dev = (struct adxl372_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 

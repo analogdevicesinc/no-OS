@@ -236,47 +236,47 @@ static const int adxl372_th_reg_addr_l[3][3] = {
 	}
 };
 
-typedef enum {
+enum adxl372_axis {
 	ADXL372_X_AXIS,
 	ADXL372_Y_AXIS,
 	ADXL372_Z_AXIS
-} adxl372_axis;
+};
 
-typedef enum {
+enum adxl372_op_mode {
 	ADXL372_STANDBY,
 	ADXL372_WAKE_UP,
 	ADXL372_INSTANT_ON,
 	ADXL372_FULL_BW_MEASUREMENT
-} adxl372_op_mode;
+};
 
-typedef enum {
+enum adxl372_bandwidth {
 	ADXL372_BW_200HZ,
 	ADXL372_BW_400HZ,
 	ADXL372_BW_800HZ,
 	ADXL372_BW_1600HZ,
 	ADXL372_BW_3200HZ
-} adxl372_bandwidth;
+};
 
-typedef enum {
+enum adxl372_act_proc_mode {
 	ADXL372_DEFAULT,
 	ADXL372_LINKED,
 	ADXL372_LOOPED
-} adxl372_act_proc_mode;
+};
 
-typedef enum {
+enum adxl372_odr {
 	ADXL372_ODR_400HZ,
 	ADXL372_ODR_800HZ,
 	ADXL372_ODR_1600HZ,
 	ADXL372_ODR_3200HZ,
 	ADXL372_ODR_6400HZ
-} adxl372_odr;
+};
 
-typedef enum {
+enum adxl372_instant_on_th_mode {
 	ADXL372_INSTANT_ON_LOW_TH,
 	ADXL372_INSTANT_ON_HIGH_TH
-} adxl372_instant_on_th_mode;
+};
 
-typedef enum {
+enum adxl372_wakeup_rate {
 	ADXL372_WUR_52ms,
 	ADXL372_WUR_104ms,
 	ADXL372_WUR_208ms,
@@ -285,20 +285,20 @@ typedef enum {
 	ADXL372_WUR_4096ms,
 	ADXL372_WUR_8192ms,
 	ADXL372_WUR_24576ms
-} adxl372_wakeup_rate;
+};
 
-typedef enum {
+enum adxl372_th_activity {
 	ADXL372_ACTIVITY,
 	ADXL372_ACTIVITY2,
 	ADXL372_INACTIVITY
-} adxl372_th_activity;
+};
 
-typedef enum {
+enum adxl372_filter_settle {
 	ADXL372_FILTER_SETTLE_370,
 	ADXL372_FILTER_SETTLE_16
-} adxl372_filter_settle;
+};
 
-typedef enum {
+enum adxl372_fifo_format {
 	ADXL372_XYZ_FIFO,
 	ADXL372_X_FIFO,
 	ADXL372_Y_FIFO,
@@ -307,34 +307,34 @@ typedef enum {
 	ADXL372_XZ_FIFO,
 	ADXL372_YZ_FIFO,
 	ADXL372_XYZ_PEAK_FIFO,
-} adxl372_fifo_format;
+};
 
-typedef enum {
+enum adxl372_fifo_mode {
 	ADXL372_FIFO_BYPASSED,
 	ADXL372_FIFO_STREAMED,
 	ADXL372_FIFO_TRIGGERED,
 	ADXL372_FIFO_OLD_SAVED
-} adxl372_fifo_mode;
+};
 
-typedef struct {
-	adxl372_fifo_mode fifo_mode;
-	adxl372_fifo_format fifo_format;
+struct adxl372_fifo_config {
+	enum adxl372_fifo_mode fifo_mode;
+	enum adxl372_fifo_format fifo_format;
 	uint16_t fifo_samples;
-} adxl372_fifo_config;
+};
 
-typedef struct {
+struct adxl372_activity_threshold {
 	uint16_t thresh;
 	bool referenced;
 	bool enable;
-} adxl372_activity_threshold;
+};
 
-typedef struct {
+struct adxl372_xyz_accel_data {
 	uint16_t x;
 	uint16_t y;
 	uint16_t z;
-} adxl372_xyz_accel_data;
+} ;
 
-typedef struct {
+struct adxl372_irq_config {
 	bool data_rdy;
 	bool fifo_rdy;
 	bool fifo_full;
@@ -343,105 +343,109 @@ typedef struct {
 	bool activity;
 	bool awake;
 	bool low_operation;
-} adxl372_irq_config;
+};
 
-typedef struct {
+struct adxl372_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
 	/* GPIO */
 	gpio_desc			*gpio_int1;
 	gpio_desc			*gpio_int2;
 	/* Device Settings */
-	adxl372_bandwidth		bw;
-	adxl372_odr			odr;
-	adxl372_wakeup_rate		wur;
-	adxl372_act_proc_mode		act_proc_mode;
-	adxl372_instant_on_th_mode	th_mode;
-	adxl372_fifo_config		fifo_config;
-} adxl372_dev;
+	enum adxl372_bandwidth		bw;
+	enum adxl372_odr		odr;
+	enum adxl372_wakeup_rate	wur;
+	enum adxl372_act_proc_mode	act_proc_mode;
+	enum adxl372_instant_on_th_mode	th_mode;
+	struct adxl372_fifo_config	fifo_config;
+};
 
-typedef struct {
+struct adxl372_init_param {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* GPIO */
 	int8_t				gpio_int1;
 	int8_t				gpio_int2;
 	/* Device Settings */
-	adxl372_bandwidth		bw;
-	adxl372_odr			odr;
-	adxl372_wakeup_rate		wur;
-	adxl372_act_proc_mode		act_proc_mode;
-	adxl372_instant_on_th_mode	th_mode;
-	adxl372_activity_threshold	activity_th;
-	adxl372_activity_threshold	activity2_th;
-	adxl372_activity_threshold	inactivity_th;
-	uint8_t				activity_time;
-	uint16_t			inactivity_time;
-	adxl372_filter_settle		filter_settle;
-	adxl372_fifo_config		fifo_config;
-	adxl372_irq_config		int1_config;
-	adxl372_irq_config		int2_config;
-	adxl372_op_mode			op_mode;
-} adxl372_init_param;
+	enum adxl372_bandwidth			bw;
+	enum adxl372_odr			odr;
+	enum adxl372_wakeup_rate		wur;
+	enum adxl372_act_proc_mode		act_proc_mode;
+	enum adxl372_instant_on_th_mode		th_mode;
+	struct adxl372_activity_threshold	activity_th;
+	struct adxl372_activity_threshold	activity2_th;
+	struct adxl372_activity_threshold	inactivity_th;
+	uint8_t					activity_time;
+	uint16_t				inactivity_time;
+	enum adxl372_filter_settle		filter_settle;
+	struct adxl372_fifo_config		fifo_config;
+	struct adxl372_irq_config		int1_config;
+	struct adxl372_irq_config		int2_config;
+	enum adxl372_op_mode			op_mode;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t adxl372_spi_reg_read(adxl372_dev *dev,
+int32_t adxl372_spi_reg_read(struct adxl372_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t *reg_data);
-int32_t adxl372_spi_reg_read_multiple(adxl372_dev *dev,
+int32_t adxl372_spi_reg_read_multiple(struct adxl372_dev *dev,
 				      uint8_t reg_addr,
 				      uint8_t *reg_data,
 				      uint16_t count);
-int32_t adxl372_spi_reg_write(adxl372_dev *dev,
+int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
 			      uint8_t reg_addr,
 			      uint8_t reg_data);
-int32_t adxl372_spi_write_mask(adxl372_dev *dev,
+int32_t adxl372_spi_write_mask(struct adxl372_dev *dev,
 			       uint8_t reg_addr,
 			       uint32_t mask,
 			       uint8_t data);
-int32_t adxl372_set_activity_threshold(adxl372_dev *dev,
-				       adxl372_th_activity act,
+int32_t adxl372_set_activity_threshold(struct adxl372_dev *dev,
+				       enum adxl372_th_activity act,
 				       uint16_t thresh,
 				       bool referenced,
 				       bool enable);
-int32_t adxl372_set_op_mode(adxl372_dev *dev, adxl372_op_mode op_mode);
-int32_t adxl372_set_autosleep(adxl372_dev *dev, bool enable);
-int32_t adxl372_set_bandwidth(adxl372_dev *dev, adxl372_bandwidth bw);
-int32_t adxl372_set_act_proc_mode(adxl372_dev *dev, adxl372_act_proc_mode mode);
-int32_t adxl372_set_odr(adxl372_dev *dev, adxl372_odr odr);
-int32_t adxl372_set_instant_on_th(adxl372_dev *dev,
-				  adxl372_instant_on_th_mode mode);
-int32_t adxl372_set_wakeup_rate(adxl372_dev *dev,
-				adxl372_wakeup_rate wur);
-int32_t adxl372_set_activity_time(adxl372_dev *dev, uint8_t time);
-int32_t adxl372_set_inactivity_time(adxl372_dev *dev, uint16_t time);
-int32_t adxl372_interrupt_config(adxl372_dev *dev,
-				 adxl372_irq_config int1,
-				 adxl372_irq_config int2);
-int32_t adxl372_set_filter_settle(adxl372_dev *dev,
-				  adxl372_filter_settle mode);
-int32_t adxl372_get_status(adxl372_dev *dev,
+int32_t adxl372_set_op_mode(struct adxl372_dev *dev,
+			    enum adxl372_op_mode op_mode);
+int32_t adxl372_set_autosleep(struct adxl372_dev *dev, bool enable);
+int32_t adxl372_set_bandwidth(struct adxl372_dev *dev,
+			      enum adxl372_bandwidth bw);
+int32_t adxl372_set_act_proc_mode(struct adxl372_dev *dev,
+				  enum adxl372_act_proc_mode mode);
+int32_t adxl372_set_odr(struct adxl372_dev *dev,
+			enum adxl372_odr odr);
+int32_t adxl372_set_instant_on_th(struct adxl372_dev *dev,
+				  enum adxl372_instant_on_th_mode mode);
+int32_t adxl372_set_wakeup_rate(struct adxl372_dev *dev,
+				enum adxl372_wakeup_rate wur);
+int32_t adxl372_set_activity_time(struct adxl372_dev *dev, uint8_t time);
+int32_t adxl372_set_inactivity_time(struct adxl372_dev *dev, uint16_t time);
+int32_t adxl372_interrupt_config(struct adxl372_dev *dev,
+				 struct adxl372_irq_config int1,
+				 struct adxl372_irq_config int2);
+int32_t adxl372_set_filter_settle(struct adxl372_dev *dev,
+				  enum adxl372_filter_settle mode);
+int32_t adxl372_get_status(struct adxl372_dev *dev,
 			   uint8_t *status1,
 			   uint8_t *status2,
 			   uint16_t *fifo_entries);
-int32_t adxl372_reset(adxl372_dev *dev);
-int32_t adxl372_configure_fifo(adxl372_dev *dev,
-			       adxl372_fifo_mode mode,
-			       adxl372_fifo_format format,
+int32_t adxl372_reset(struct adxl372_dev *dev);
+int32_t adxl372_configure_fifo(struct adxl372_dev *dev,
+			       enum adxl372_fifo_mode mode,
+			       enum adxl372_fifo_format format,
 			       uint16_t fifo_samples);
-int32_t adxl372_get_fifo_xyz_data(adxl372_dev *dev,
-				  adxl372_xyz_accel_data *fifo_data,
+int32_t adxl372_get_fifo_xyz_data(struct adxl372_dev *dev,
+				  struct adxl372_xyz_accel_data *fifo_data,
 				  uint16_t cnt);
-int32_t adxl372_service_fifo_ev(adxl372_dev *dev,
-				adxl372_xyz_accel_data *fifo_data,
+int32_t adxl372_service_fifo_ev(struct adxl372_dev *dev,
+				struct adxl372_xyz_accel_data *fifo_data,
 				uint16_t *fifo_entries);
-int32_t adxl372_get_highest_peak_data(adxl372_dev *dev,
-				      adxl372_xyz_accel_data *max_peak);
-int32_t adxl372_get_accel_data(adxl372_dev *dev,
-			       adxl372_xyz_accel_data *accel_data);
-int32_t adxl372_init(adxl372_dev **device,
-		     adxl372_init_param init_param);
+int32_t adxl372_get_highest_peak_data(struct adxl372_dev *dev,
+				      struct adxl372_xyz_accel_data *max_peak);
+int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
+			       struct adxl372_xyz_accel_data *accel_data);
+int32_t adxl372_init(struct adxl372_dev **device,
+		     struct adxl372_init_param init_param);
 
 #endif // ADXL372_H_
