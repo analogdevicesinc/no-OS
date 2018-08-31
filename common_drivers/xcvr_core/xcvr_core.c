@@ -90,6 +90,8 @@ int32_t xcvr_drp_read(xcvr_core *core, uint8_t drp_sel,
 	uint32_t timeout = 20;
 	uint32_t val = 0;
 
+	drp_sel = drp_sel == XCVR_REG_CH_SEL ? 1 : 0;
+
 	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
 
 	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
@@ -119,6 +121,8 @@ int32_t xcvr_drp_write(xcvr_core *core, uint8_t drp_sel,
 {
 	uint32_t timeout = 20;
 	uint32_t val = 0;
+
+	drp_sel = drp_sel == XCVR_REG_CH_SEL ? 1 : 0;
 
 	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
 
