@@ -48,15 +48,23 @@
 #include "parameters.h"
 #include "util.h"
 #include "config.h"
-#if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
+#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef _XPARAMETERS_PS_H_
 #include <xscugic.h>
+#elif defined _MICROBLAZE_INTERFACE_H_
+#include <xintc.h>
+#endif
 #endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
+#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef _XPARAMETERS_PS_H_
 #define ADC_DMA_INT_ID			89
+#elif defined _MICROBLAZE_INTERFACE_H_
+#define ADC_DMA_INT_ID			12
+#endif
 #define ADC_DMA_TRANSFER_SIZE	32768
 #endif
 
@@ -64,7 +72,7 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct adc_state adc_st;
-#if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
+#ifdef ADC_DMA_IRQ_EXAMPLE
 uint8_t  dma_transfer_queued_flag		= 0;
 uint8_t  dma_transfer_completed_flag	= 0;
 uint32_t dma_start_address				= 0;
@@ -149,7 +157,7 @@ void adc_init(struct ad9361_rf_phy *phy)
 	}
 }
 
-#if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
+#ifdef ADC_DMA_IRQ_EXAMPLE
 /***************************************************************************//**
  * @brief adc_dma_isr
 *******************************************************************************/
@@ -205,7 +213,8 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
 
-#if defined ADC_DMA_IRQ_EXAMPLE && defined _XPARAMETERS_PS_H_
+#ifdef ADC_DMA_IRQ_EXAMPLE
+#ifdef _XPARAMETERS_PS_H_
 	XScuGic_Config	*gic_config;
 	XScuGic			gic;
 	int32_t			status;
@@ -233,6 +242,31 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
 			(Xil_ExceptionHandler)XScuGic_InterruptHandler, (void *)&gic);
 	Xil_ExceptionEnable();
+#elif defined _MICROBLAZE_INTERFACE_H_
+	XIntc	intc;
+	int32_t	status;
+
+	status = XIntc_Initialize(&intc, XPAR_AXI_INTC_DEVICE_ID);
+	if(status)
+		printf("XIntc_Initialize Error\n");
+
+	status = XIntc_Connect(&intc, ADC_DMA_INT_ID,
+			(Xil_ExceptionHandler)adc_dma_isr, NULL);
+	if(status)
+		printf("XIntc_Connect Error\n");
+
+	XIntc_Enable(&intc, ADC_DMA_INT_ID);
+
+	status = XIntc_Start(&intc, XIN_REAL_MODE);
+	if(status)
+		printf("XIntc_Start Error\n");
+
+	Xil_ExceptionInit();
+
+	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
+			(Xil_ExceptionHandler)XIntc_InterruptHandler, (void *)&intc);
+	Xil_ExceptionEnable();
+#endif
 
 	dma_start_address = start_address;
 
