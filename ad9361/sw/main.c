@@ -473,7 +473,8 @@ int main(void)
 #endif
 
 #ifndef AXI_ADC_NOT_PRESENT
-#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && defined ADC_DMA_EXAMPLE
+#if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
+	(defined ADC_DMA_EXAMPLE || defined ADC_DMA_IRQ_EXAMPLE)
     // NOTE: To prevent unwanted data loss, it's recommended to invalidate
     // cache after each adc_capture() call, keeping in mind that the
     // size of the capture and the start address must be alinged to the size

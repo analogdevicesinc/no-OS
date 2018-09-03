@@ -61,6 +61,7 @@
 //#define ADI_RF_SOM
 //#define ADI_RF_SOM_CMOS
 //#define ADC_DMA_EXAMPLE
+//#define ADC_DMA_IRQ_EXAMPLE
 //#define DAC_DMA_EXAMPLE
 //#define AXI_ADC_NOT_PRESENT
 //#define TDD_SWITCH_STATE_EXAMPLE
