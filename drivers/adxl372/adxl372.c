@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   adxl372.c
- *   @brief  Implementation of adxl372 Driver.
+ *   @brief  Implementation of adxl372 Core Driver.
  *   @author SPopa (stefan.popa@analog.com)
 ********************************************************************************
  * Copyright 2018(c) Analog Devices, Inc.
@@ -51,100 +51,71 @@
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
+
 /**
- * Read from device.
+ * Wrapper used to read device registers.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_reg_read(struct adxl372_dev *dev,
-			     uint8_t reg_addr,
-			     uint8_t *reg_data)
+int32_t adxl372_read_reg(struct adxl372_dev *dev,
+			 uint8_t reg_addr,
+			 uint8_t *reg_data)
 {
-	uint8_t buf[2];
-	int32_t ret;
-
-	buf[0] = ADXL372_REG_READ(reg_addr);
-	buf[1] = 0x00;
-
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-	*reg_data = buf[1];
-
-	return ret;
+	return dev->reg_read(dev, reg_addr, reg_data);
 }
 
 /**
- * Multibyte read from device. A register read begins with the address
- * and autoincrements for each aditional byte in the transfer.
+ * Wrapper used to write to device registers.
+ * @param dev - The device structure.
+ * @param reg_addr - The register address.
+ * @param reg_data - The register data.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t adxl372_write_reg(struct adxl372_dev *dev,
+			  uint8_t reg_addr,
+			  uint8_t reg_data)
+{
+	return dev->reg_write(dev, reg_addr, reg_data);
+}
+
+/**
+ * Wrapper used of multibyte reads.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  * @param count - Number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_reg_read_multiple(struct adxl372_dev *dev,
-				      uint8_t reg_addr,
-				      uint8_t *reg_data,
-				      uint16_t count)
+int32_t adxl372_read_reg_multiple(struct adxl372_dev *dev,
+				  uint8_t reg_addr,
+				  uint8_t *reg_data,
+				  uint16_t count)
 {
-	uint8_t buf[1024];
-	uint16_t i;
-	int32_t ret;
-
-	buf[0] = ADXL372_REG_READ(reg_addr);
-	memset(&buf[1], 0x00, count);
-
-	ret = spi_write_and_read(dev->spi_desc, buf, count + 1);
-
-	for (i = 0; i <= count; i++)
-		reg_data[i] = buf[i+1];
-
-	return ret;
+	return dev->reg_read_multiple(dev, reg_addr, reg_data, count);
 }
 
 /**
- * Write to device.
- * @param dev - The device structure.
- * @param reg_addr - The register address.
- * @param reg_data - The register data.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
-			      uint8_t reg_addr,
-			      uint8_t reg_data)
-{
-	int32_t ret;
-	uint8_t buf[2];
-
-	buf[0] = ADXL372_REG_WRITE(reg_addr);
-	buf[1] = reg_data & 0xFF;
-
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-
-	return ret;
-}
-
-/**
- * SPI write to device using a mask.
+ * Write to device using a mask.
  * @param dev - The device structure.
  * @param reg_addr - The register address.
  * @param mask - The mask.
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adxl372_spi_write_mask(struct adxl372_dev *dev,
-			       uint8_t reg_addr,
-			       uint32_t mask,
-			       uint8_t data)
+int32_t adxl372_write_mask(struct adxl372_dev *dev,
+			   uint8_t reg_addr,
+			   uint32_t mask,
+			   uint8_t data)
 {
 	uint8_t reg_data;
 	int32_t ret;
 
-	ret = adxl372_spi_reg_read(dev, reg_addr, &reg_data);
+	ret = adxl372_read_reg(dev, reg_addr, &reg_data);
 	reg_data &= ~mask;
 	reg_data |= data;
-	ret |= adxl372_spi_reg_write(dev, reg_addr, reg_data);
+	ret |= adxl372_write_reg(dev, reg_addr, reg_data);
 
 	return ret;
 }
@@ -175,12 +146,12 @@ int32_t adxl372_set_activity_threshold(struct adxl372_dev *dev,
 	th_val_l = (thresh << 5) | (referenced << 1) | enable;
 
 	for (i = 0; i < 3; i++) {
-		ret |= adxl372_spi_reg_write(dev,
-					     adxl372_th_reg_addr_h[act][i],
-					     th_val_h);
-		ret |= adxl372_spi_reg_write(dev,
-					     adxl372_th_reg_addr_l[act][i],
-					     th_val_l);
+		ret |= adxl372_write_reg(dev,
+					 adxl372_th_reg_addr_h[act][i],
+					 th_val_h);
+		ret |= adxl372_write_reg(dev,
+					 adxl372_th_reg_addr_l[act][i],
+					 th_val_l);
 	}
 
 	return ret;
@@ -201,10 +172,10 @@ int32_t adxl372_set_op_mode(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_POWER_CTL,
-				     ADXL372_POWER_CTL_MODE_MSK,
-				     ADXL372_POWER_CTL_MODE(op_mode));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_POWER_CTL,
+				 ADXL372_POWER_CTL_MODE_MSK,
+				 ADXL372_POWER_CTL_MODE(op_mode));
 
 	return ret;
 }
@@ -221,10 +192,10 @@ int32_t adxl372_set_autosleep(struct adxl372_dev *dev, bool enable)
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_MEASURE,
-				     ADXL372_MEASURE_AUTOSLEEP_MSK,
-				     ADXL372_MEASURE_AUTOSLEEP_MODE(enable));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_MEASURE,
+				 ADXL372_MEASURE_AUTOSLEEP_MSK,
+				 ADXL372_MEASURE_AUTOSLEEP_MODE(enable));
 
 	return ret;
 }
@@ -245,10 +216,10 @@ int32_t adxl372_set_bandwidth(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_MEASURE,
-				     ADXL372_MEASURE_BANDWIDTH_MSK,
-				     ADXL372_MEASURE_BANDWIDTH_MODE(bw));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_MEASURE,
+				 ADXL372_MEASURE_BANDWIDTH_MSK,
+				 ADXL372_MEASURE_BANDWIDTH_MODE(bw));
 	dev->bw = bw;
 
 	return ret;
@@ -268,10 +239,10 @@ int32_t adxl372_set_act_proc_mode(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_MEASURE,
-				     ADXL372_MEASURE_LINKLOOP_MSK,
-				     ADXL372_MEASURE_LINKLOOP_MODE(mode));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_MEASURE,
+				 ADXL372_MEASURE_LINKLOOP_MSK,
+				 ADXL372_MEASURE_LINKLOOP_MODE(mode));
 
 	dev->act_proc_mode = mode;
 
@@ -294,10 +265,10 @@ int32_t adxl372_set_odr(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_TIMING,
-				     ADXL372_TIMING_ODR_MSK,
-				     ADXL372_TIMING_ODR_MODE(odr));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_TIMING,
+				 ADXL372_TIMING_ODR_MSK,
+				 ADXL372_TIMING_ODR_MODE(odr));
 	dev->odr = odr;
 
 	return ret;
@@ -316,10 +287,10 @@ int32_t adxl372_set_instant_on_th(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_POWER_CTL,
-				     ADXL372_POWER_CTL_INSTANT_ON_TH_MSK,
-				     ADXL372_POWER_CTL_INSTANT_ON_TH_MODE(mode));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_POWER_CTL,
+				 ADXL372_POWER_CTL_INSTANT_ON_TH_MSK,
+				 ADXL372_POWER_CTL_INSTANT_ON_TH_MODE(mode));
 
 	dev->th_mode = mode;
 
@@ -345,10 +316,10 @@ int32_t adxl372_set_wakeup_rate(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_TIMING,
-				     ADXL372_TIMING_WAKE_UP_RATE_MSK,
-				     ADXL372_TIMING_WAKE_UP_RATE_MODE(wur));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_TIMING,
+				 ADXL372_TIMING_WAKE_UP_RATE_MSK,
+				 ADXL372_TIMING_WAKE_UP_RATE_MODE(wur));
 
 	dev->wur = wur;
 
@@ -365,7 +336,7 @@ int32_t adxl372_set_activity_time(struct adxl372_dev *dev, uint8_t time)
 {
 	int32_t ret;
 
-	ret = adxl372_spi_reg_write(dev, ADXL372_TIME_ACT, time);
+	ret = adxl372_write_reg(dev, ADXL372_TIME_ACT, time);
 
 	return ret;
 }
@@ -381,8 +352,8 @@ int32_t adxl372_set_inactivity_time(struct adxl372_dev *dev, uint16_t time)
 {
 	int32_t ret;
 
-	ret = adxl372_spi_reg_write(dev, ADXL372_TIME_INACT_H, time >> 8);
-	ret |= adxl372_spi_reg_write(dev, ADXL372_TIME_INACT_L, time & 0xFF);
+	ret = adxl372_write_reg(dev, ADXL372_TIME_INACT_H, time >> 8);
+	ret |= adxl372_write_reg(dev, ADXL372_TIME_INACT_L, time & 0xFF);
 
 	return ret;
 }
@@ -400,10 +371,10 @@ int32_t adxl372_set_filter_settle(struct adxl372_dev *dev,
 {
 	int32_t ret;
 
-	ret = adxl372_spi_write_mask(dev,
-				     ADXL372_POWER_CTL,
-				     ADXL372_POWER_CTL_FIL_SETTLE_MSK,
-				     ADXL372_POWER_CTL_FIL_SETTLE_MODE(mode));
+	ret = adxl372_write_mask(dev,
+				 ADXL372_POWER_CTL,
+				 ADXL372_POWER_CTL_FIL_SETTLE_MSK,
+				 ADXL372_POWER_CTL_FIL_SETTLE_MODE(mode));
 
 	return ret;
 }
@@ -440,8 +411,8 @@ int32_t adxl372_interrupt_config(struct adxl372_dev *dev,
 		       ADXL372_INT2_MAP_AWAKE_MODE(int2.awake) |
 		       ADXL372_INT2_MAP_LOW_MODE(int2.low_operation));
 
-	ret = adxl372_spi_reg_write(dev, ADXL372_INT1_MAP, int1_config);
-	ret |= adxl372_spi_reg_write(dev, ADXL372_INT2_MAP, int2_config);
+	ret = adxl372_write_reg(dev, ADXL372_INT1_MAP, int1_config);
+	ret |= adxl372_write_reg(dev, ADXL372_INT2_MAP, int2_config);
 
 	return ret;
 }
@@ -463,9 +434,7 @@ int32_t adxl372_get_status(struct adxl372_dev *dev,
 	uint8_t buf[4];
 	int32_t ret;
 
-	ret = adxl372_spi_reg_read_multiple(dev,
-					    ADXL372_STATUS_1,
-					    buf, 4);
+	ret = adxl372_read_reg_multiple(dev, ADXL372_STATUS_1, buf, 4);
 
 	*status1 = buf[0];
 	*status2 = buf[1];
@@ -485,9 +454,7 @@ int32_t adxl372_reset(struct adxl372_dev *dev)
 
 	ret = adxl372_set_op_mode(dev, ADXL372_STANDBY);
 	/* Writing code 0x52 resets the device */
-	ret |= adxl372_spi_reg_write(dev,
-				     ADXL372_RESET,
-				     ADXL372_RESET_CODE);
+	ret |= adxl372_write_reg(dev, ADXL372_RESET, ADXL372_RESET_CODE);
 	mdelay(1);
 
 	return ret;
@@ -536,10 +503,9 @@ int32_t adxl372_configure_fifo(struct adxl372_dev *dev,
 		       ADXL372_FIFO_CTL_MODE_MODE(mode) |
 		       ADXL372_FIFO_CTL_SAMPLES_MODE(fifo_samples));
 
-	ret |= adxl372_spi_reg_write(dev, ADXL372_FIFO_CTL, fifo_config);
-	ret |= adxl372_spi_reg_write(dev,
-				     ADXL372_FIFO_SAMPLES,
-				     fifo_samples & 0xFF);
+	ret |= adxl372_write_reg(dev, ADXL372_FIFO_CTL, fifo_config);
+	ret |= adxl372_write_reg(dev, ADXL372_FIFO_SAMPLES,
+				 fifo_samples & 0xFF);
 
 	if (ret)
 		return -1;
@@ -618,10 +584,10 @@ int32_t adxl372_get_fifo_xyz_data(struct adxl372_dev *dev,
 	 * The FIFO can hold up to 512 samples.
 	 * Each sample is 2 bytes, that's why we read (cnt * 2) bytes
 	 */
-	ret = adxl372_spi_reg_read_multiple(dev,
-					    ADXL372_FIFO_DATA,
-					    buf,
-					    cnt * 2);
+	ret = adxl372_read_reg_multiple(dev,
+					ADXL372_FIFO_DATA,
+					buf,
+					cnt * 2);
 
 	for (i = 0; i < cnt * 2; i += 6) {
 		samples->x = ((buf[i] << 4) | (buf[i+1] >> 4));
@@ -653,9 +619,7 @@ int32_t adxl372_get_highest_peak_data(struct adxl372_dev *dev,
 		adxl372_get_status(dev, &status1, &status2, &fifo_entries);
 	} while(!(ADXL372_STATUS_1_DATA_RDY(status1)));
 
-	ret = adxl372_spi_reg_read_multiple(dev,
-					    ADXL372_X_MAXPEAK_H,
-					    buf, 6);
+	ret = adxl372_read_reg_multiple(dev, ADXL372_X_MAXPEAK_H, buf, 6);
 
 	if (ret)
 		return -1;
@@ -686,9 +650,9 @@ int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
 		adxl372_get_status(dev, &status1, &status2, &fifo_entries);
 	} while(!(ADXL372_STATUS_1_DATA_RDY(status1)));
 
-	ret = adxl372_spi_reg_read_multiple(dev,
-					    ADXL372_X_DATA_H,
-					    buf, 6);
+	ret = adxl372_read_reg_multiple(dev,
+					ADXL372_X_DATA_H,
+					buf, 6);
 
 	if (ret)
 		return -1;
@@ -718,6 +682,10 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	if (!dev)
 		return -1;
 
+	dev->reg_read = adxl372_spi_reg_read;
+	dev->reg_write = adxl372_spi_reg_write;
+	dev->reg_read_multiple = adxl372_spi_reg_read_multiple;
+
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
@@ -730,8 +698,8 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	ret |= gpio_direction_input(dev->gpio_int2);
 
 	/* Query device presence */
-	adxl372_spi_reg_read(dev, ADXL372_DEVID, &dev_id);
-	adxl372_spi_reg_read(dev, ADXL372_PARTID, &part_id);
+	adxl372_read_reg(dev, ADXL372_DEVID, &dev_id);
+	adxl372_read_reg(dev, ADXL372_PARTID, &part_id);
 
 	if (dev_id != ADXL372_DEVID_VAL || part_id != ADXL372_PARTID_VAL) {
 		printf("failed to read id (0x%X : 0x%X)\n", dev_id, part_id);

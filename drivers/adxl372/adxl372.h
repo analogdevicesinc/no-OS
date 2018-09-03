@@ -345,6 +345,19 @@ struct adxl372_irq_config {
 	bool low_operation;
 };
 
+struct adxl372_dev;
+
+typedef int32_t (*adxl372_reg_read_func)(struct adxl372_dev *dev,
+					 uint8_t reg_addr,
+					 uint8_t *reg_data);
+typedef int32_t (*adxl372_reg_write_func)(struct adxl372_dev *dev,
+					  uint8_t reg_addr,
+					  uint8_t reg_data);
+typedef int32_t (*adxl372_reg_read_multi_func)(struct adxl372_dev *dev,
+					       uint8_t reg_addr,
+					       uint8_t *reg_data,
+					       uint16_t count);
+
 struct adxl372_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
@@ -352,6 +365,9 @@ struct adxl372_dev {
 	gpio_desc			*gpio_int1;
 	gpio_desc			*gpio_int2;
 	/* Device Settings */
+	adxl372_reg_read_func		reg_read;
+	adxl372_reg_write_func		reg_write;
+	adxl372_reg_read_multi_func	reg_read_multiple;
 	enum adxl372_bandwidth		bw;
 	enum adxl372_odr		odr;
 	enum adxl372_wakeup_rate	wur;
@@ -397,10 +413,10 @@ int32_t adxl372_spi_reg_read_multiple(struct adxl372_dev *dev,
 int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
 			      uint8_t reg_addr,
 			      uint8_t reg_data);
-int32_t adxl372_spi_write_mask(struct adxl372_dev *dev,
-			       uint8_t reg_addr,
-			       uint32_t mask,
-			       uint8_t data);
+int32_t adxl372_write_mask(struct adxl372_dev *dev,
+			   uint8_t reg_addr,
+			   uint32_t mask,
+			   uint8_t data);
 int32_t adxl372_set_activity_threshold(struct adxl372_dev *dev,
 				       enum adxl372_th_activity act,
 				       uint16_t thresh,
