@@ -88,7 +88,7 @@ int32_t adxl372_i2c_reg_write(struct adxl372_dev *dev,
 	buf[0] = reg_addr;
 	buf[1] = reg_data & 0xFF;
 
-	return i2c_write(dev->i2c_desc, buf, 2, 0);
+	return i2c_write(dev->i2c_desc, buf, ARRAY_SIZE(buf), 0);
 }
 
 /**
