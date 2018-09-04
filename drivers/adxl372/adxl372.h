@@ -316,6 +316,11 @@ enum adxl372_fifo_mode {
 	ADXL372_FIFO_OLD_SAVED
 };
 
+enum adxl372_comm_type {
+	SPI,
+	I2C,
+};
+
 struct adxl372_fifo_config {
 	enum adxl372_fifo_mode fifo_mode;
 	enum adxl372_fifo_format fifo_format;
@@ -361,6 +366,8 @@ typedef int32_t (*adxl372_reg_read_multi_func)(struct adxl372_dev *dev,
 struct adxl372_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
+	/* I2C */
+	i2c_desc			*i2c_desc;
 	/* GPIO */
 	gpio_desc			*gpio_int1;
 	gpio_desc			*gpio_int2;
@@ -374,11 +381,14 @@ struct adxl372_dev {
 	enum adxl372_act_proc_mode	act_proc_mode;
 	enum adxl372_instant_on_th_mode	th_mode;
 	struct adxl372_fifo_config	fifo_config;
+	enum adxl372_comm_type		comm_type;
 };
 
 struct adxl372_init_param {
 	/* SPI */
 	spi_init_param			spi_init;
+	/* I2C */
+	i2c_init_param			i2c_init;
 	/* GPIO */
 	int8_t				gpio_int1;
 	int8_t				gpio_int2;
@@ -398,6 +408,7 @@ struct adxl372_init_param {
 	struct adxl372_irq_config		int1_config;
 	struct adxl372_irq_config		int2_config;
 	enum adxl372_op_mode			op_mode;
+	enum adxl372_comm_type			comm_type;
 };
 
 /******************************************************************************/
@@ -413,6 +424,16 @@ int32_t adxl372_spi_reg_read_multiple(struct adxl372_dev *dev,
 int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
 			      uint8_t reg_addr,
 			      uint8_t reg_data);
+int32_t adxl372_i2c_reg_read(struct adxl372_dev *dev,
+			     uint8_t reg_addr,
+			     uint8_t *reg_data);
+int32_t adxl372_i2c_reg_write(struct adxl372_dev *dev,
+			      uint8_t reg_addr,
+			      uint8_t reg_data);
+int32_t adxl372_i2c_reg_read_multiple(struct adxl372_dev *dev,
+				      uint8_t reg_addr,
+				      uint8_t *reg_data,
+				      uint16_t count);
 int32_t adxl372_write_mask(struct adxl372_dev *dev,
 			   uint8_t reg_addr,
 			   uint32_t mask,

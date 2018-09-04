@@ -675,20 +675,32 @@ int32_t adxl372_init(struct adxl372_dev **device,
 		     struct adxl372_init_param init_param)
 {
 	struct adxl372_dev	*dev;
-	uint8_t dev_id, part_id;
+	uint8_t dev_id, part_id, rev_id;
 	int32_t ret;
 
 	dev = (struct adxl372_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	dev->reg_read = adxl372_spi_reg_read;
-	dev->reg_write = adxl372_spi_reg_write;
-	dev->reg_read_multiple = adxl372_spi_reg_read_multiple;
+	dev->comm_type = init_param.comm_type;
+	if (dev->comm_type == SPI) {
+		/* SPI */
+		ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+		dev->reg_read = adxl372_spi_reg_read;
+		dev->reg_write = adxl372_spi_reg_write;
+		dev->reg_read_multiple = adxl372_spi_reg_read_multiple;
+	} else { /* I2C */
+		ret = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
+		dev->reg_read = adxl372_i2c_reg_read;
+		dev->reg_write = adxl372_i2c_reg_write;
+		dev->reg_read_multiple = adxl372_i2c_reg_read_multiple;
 
-	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
-
+		ret |= adxl372_read_reg(dev, ADXL372_REVID, &rev_id);
+		/* Starting with the 3rd revision an I2C chip bug was fixed */
+		if (rev_id < 3) {
+			printf("I2C might not work properly with other "
+			       "devices present on the bus\n");
+	}
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_int1,
 			init_param.gpio_int1);
