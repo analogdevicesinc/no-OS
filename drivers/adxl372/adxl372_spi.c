@@ -60,7 +60,7 @@ int32_t adxl372_spi_reg_read(struct adxl372_dev *dev,
 	buf[0] = ADXL372_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 	*reg_data = buf[1];
 
 	return ret;
@@ -83,7 +83,7 @@ int32_t adxl372_spi_reg_write(struct adxl372_dev *dev,
 	buf[0] = ADXL372_REG_WRITE(reg_addr);
 	buf[1] = reg_data & 0xFF;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 
 	return ret;
 }

@@ -204,6 +204,8 @@
 #define ADXL372_INT2_MAP_LOW_MSK		BIT(7)
 #define ADXL372_INT2_MAP_LOW_MODE(x)		(((x) & 0x1) << 7)
 
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 static const int adxl372_th_reg_addr_h[3][3] = {
 	{
 		ADXL372_X_THRESH_ACT_H,

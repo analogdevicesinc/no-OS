@@ -434,7 +434,8 @@ int32_t adxl372_get_status(struct adxl372_dev *dev,
 	uint8_t buf[4];
 	int32_t ret;
 
-	ret = adxl372_read_reg_multiple(dev, ADXL372_STATUS_1, buf, 4);
+	ret = adxl372_read_reg_multiple(dev, ADXL372_STATUS_1, buf,
+					ARRAY_SIZE(buf));
 
 	*status1 = buf[0];
 	*status2 = buf[1];
@@ -619,7 +620,8 @@ int32_t adxl372_get_highest_peak_data(struct adxl372_dev *dev,
 		adxl372_get_status(dev, &status1, &status2, &fifo_entries);
 	} while(!(ADXL372_STATUS_1_DATA_RDY(status1)));
 
-	ret = adxl372_read_reg_multiple(dev, ADXL372_X_MAXPEAK_H, buf, 6);
+	ret = adxl372_read_reg_multiple(dev, ADXL372_X_MAXPEAK_H, buf,
+					ARRAY_SIZE(buf));
 
 	if (ret)
 		return -1;
@@ -652,7 +654,7 @@ int32_t adxl372_get_accel_data(struct adxl372_dev *dev,
 
 	ret = adxl372_read_reg_multiple(dev,
 					ADXL372_X_DATA_H,
-					buf, 6);
+					buf, ARRAY_SIZE(buf));
 
 	if (ret)
 		return -1;
