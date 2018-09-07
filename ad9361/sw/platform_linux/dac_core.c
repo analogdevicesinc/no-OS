@@ -433,7 +433,9 @@ void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t scale_micro
 		}
 		dds_st[phy->id_no].cached_scale[chan] = scale_micro_units;
 		fract_part = (uint32_t)(scale_micro_units);
-		scale_reg = 500000 / fract_part;
+		if(fract_part != 0){
+			scale_reg = 500000 / fract_part;
+		}	
 	}
 	dac_stop(phy);
 	dac_write(phy, DAC_REG_CHAN_CNTRL_1_IIOCHAN(chan), DAC_DDS_SCALE(scale_reg));
