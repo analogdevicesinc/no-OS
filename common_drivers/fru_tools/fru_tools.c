@@ -610,6 +610,7 @@ static unsigned int insert_str(unsigned char *buf, const unsigned char * str, bo
 			}
 			buf[0] = tmp | (FRU_STRING_ASCII << 6);
 			memcpy(&buf[1], &str[1], tmp);
+			free(six);
 			return tmp + 1;
 		}
 		if (tmp > 0x3F) {
