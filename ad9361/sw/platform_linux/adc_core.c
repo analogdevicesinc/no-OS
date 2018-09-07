@@ -146,6 +146,7 @@ int32_t get_file_info(const char *filename, uint32_t *info)
 	ret = fscanf(fp,"0x%x", info);
 	if (ret < 0) {
 		printf("%s: Cannot read info from file %s.", __func__, filename);
+		fclose(fp);
 		return -1;
 	}
 	fclose(fp);
