@@ -184,6 +184,12 @@ int32_t ad5766_core_setup(ad5766_core **ad_core,
 	core->rate_hz = init_param.rate_hz;
 	core->spi_clk_hz = init_param.spi_clk_hz;
 
+	rate_reg = ref_clk_hz / core->rate_hz;
+	if (rate_reg > 0xFFFF){
+		free(core);
+		return FAILURE;
+	}
+
 	ad5766_core_write(core, 0x00001100, 0x00020);	// DAC0
 	ad5766_core_write(core, 0x00001104, 0x00021);	// DAC1
 	ad5766_core_write(core, 0x00001108, 0x00022);	// DAC2
@@ -200,10 +206,6 @@ int32_t ad5766_core_setup(ad5766_core **ad_core,
 	ad5766_core_write(core, 0x00001134, 0x0002D);	// DAC13
 	ad5766_core_write(core, 0x00001138, 0x0002E);	// DAC14
 	ad5766_core_write(core, 0x0000113C, 0x1002F);	// DAC15
-
-	rate_reg = ref_clk_hz / core->rate_hz;
-	if (rate_reg > 0xFFFF)
-		return FAILURE;
 
 	ad5766_core_write(core, 0x00000040, 0x0003);
 	ad5766_core_write(core, 0x0000004C, rate_reg);
