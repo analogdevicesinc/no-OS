@@ -5859,10 +5859,10 @@ int32_t ad9361_validate_enable_fir(struct ad9361_rf_phy *phy)
 #else
 		int32_t i;
 		uint32_t num;
-		num = sizeof(rx);
+		num = sizeof(rx) / sizeof(rx[0]);
 		for (i = 0; i < num; i++)
 			rx[i] = phy->filt_rx_path_clks[i];
-		num = sizeof(tx);
+		num = sizeof(tx) / sizeof(rx[0]);
 		for (i = 0; i < num; i++)
 			tx[i] = phy->filt_tx_path_clks[i];
 #endif
