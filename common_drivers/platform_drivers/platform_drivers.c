@@ -196,6 +196,7 @@ int32_t spi_init(spi_desc **desc,
 		break;
 #endif
 	default:
+		free(dev);
 		return FAILURE;
 	}
 
@@ -207,10 +208,12 @@ int32_t spi_init(spi_desc **desc,
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
 
 	if (m_spi_config == NULL) {
+		free(dev);
 		return FAILURE;
 	}
 
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
+		free(dev)
 		return FAILURE;
 	}
 	#endif
@@ -310,13 +313,12 @@ int32_t gpio_get(gpio_desc **desc,
 {
 	gpio_desc *dev;
 
+	if (gpio_number < 32)
+		return FAILURE;
+
 	dev = (gpio_desc *)malloc(sizeof(*dev));
 	if (!dev)
 		return FAILURE;
-
-	if (gpio_number < 32) {
-		return FAILURE;
-	}
 
 	dev->number = gpio_number;
 	dev->id 	= 0;
