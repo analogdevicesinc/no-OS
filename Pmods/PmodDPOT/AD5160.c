@@ -108,7 +108,7 @@ void AD5160_DisplayMenu(void)
 ******************************************************************************/
 int AD5160_Set(void)
 {
-	char  rx;			            // Character received from UART
+	char  rx    = 0;	            // Character received from UART
 	char  c[]         = "000";      // Variable in which we store received data
 	char  *c_ptr;                   // Pointer to c[]
 	int   i           = 0;			// Used to keep track of how many characters we have received from UART
