@@ -72,6 +72,7 @@ int32_t i2c_init(i2c_desc **desc,
 	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -192,6 +193,7 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -199,6 +201,8 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 			&param->mode);
 	if (ret == -1) {
 		printf("%s: Can't set mode\n\r", __func__);
+		close(descriptor->fd);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -206,6 +210,8 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 			&param->max_speed_hz);
 	if (ret == -1) {
 		printf("%s: Can't set speed\n\r", __func__);
+		close(descriptor->fd);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -285,6 +291,7 @@ int32_t gpio_get(gpio_desc **desc,
 	fd = open("/sys/class/gpio/export", O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -292,12 +299,15 @@ int32_t gpio_get(gpio_desc **desc,
 	ret = write(fd, buf, len);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
+		close(fd);
+		free(descriptor);
 		return FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
+		free(descriptor);
 		return FAILURE;
 	}
 
