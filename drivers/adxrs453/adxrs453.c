@@ -109,7 +109,7 @@ int32_t adxrs453_remove(struct adxrs453_dev *dev)
 uint16_t adxrs453_get_register_value(struct adxrs453_dev *dev,
 				     uint8_t register_address)
 {
-	uint8_t data_buffer[4] = {0, 0, 0, 0};
+	uint8_t data_buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint32_t command = 0;
 	uint8_t bit_no = 0;
 	uint8_t sum = 0;
