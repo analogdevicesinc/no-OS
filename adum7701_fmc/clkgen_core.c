@@ -404,22 +404,18 @@ uint32_t clkgen_get_rate(clkgen_device *dev,
 int32_t clkgen_setup(clkgen_device **clkgen_dev,
 		clkgen_init_params init_params)
 {
-	clkgen_device	*adc_clkgen;
+	clkgen_device	adc_clkgen;
 	uint32_t	reg_val;
 	int32_t		status = 0;
 
-	adc_clkgen = (clkgen_device *)malloc(sizeof(*adc_clkgen));
-        if (!adc_clkgen)
-                return -1;
-
-	adc_clkgen->base_addr = init_params.base_addr;
-	clkgen_set_rate(adc_clkgen,
+	adc_clkgen.base_addr = init_params.base_addr;
+	clkgen_set_rate(&adc_clkgen,
 			init_params.rate,
 			init_params.parent_rate);
 
 	mdelay(1);
 
-	clkgen_read(adc_clkgen, CLKGEN_REG_STATUS, &reg_val);
+	clkgen_read(&adc_clkgen, CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & CLKGEN_STATUS) == 0x0) {
 		printf("clkgen_setup failed");
 		status--;
