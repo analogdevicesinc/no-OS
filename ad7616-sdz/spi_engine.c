@@ -327,6 +327,8 @@ int32_t spi_engine_offload_load_msg(spi_message *msg)
 	for (i = 0; i < p->length; i++)
 		spi_engine_write(SPI_ENGINE_REG_OFFLOAD_CMD_MEM(0), p->instructions[i]);
 
+	free(p);
+
 	return 0;
 }
 
