@@ -5632,8 +5632,8 @@ int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 {
 	char *line;
 	int32_t i = 0, ret, txc, rxc;
-	int32_t tx = -1, tx_gain, tx_int;
-	int32_t rx = -1, rx_gain, rx_dec;
+	int32_t tx = -1, tx_gain = 0, tx_int = 0;
+	int32_t rx = -1, rx_gain = 0, rx_dec = 0;
 	int32_t rtx = -1, rrx = -1;
 	int16_t coef_tx[128];
 	int16_t coef_rx[128];
