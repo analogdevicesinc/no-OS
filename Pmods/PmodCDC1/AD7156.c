@@ -173,12 +173,12 @@ void AD7156_WriteReg(int reg, unsigned char txData)
 void AD7156_BurstWriteReg(int reg, char size, int txData)
 {
 	unsigned char txBuffer[4] = {0x00, 0x00, 0x00, 0x00};
+	int i;
 
-	txBuffer[0] = (txData & (0xFF << 8 * (size - 1))) >> (8 * (size - 1));
-	txBuffer[1] = (txData & (0xFF << 8 * (size - 2))) >> (8 * (size - 2));
-	txBuffer[2] = (txData & (0xFF << 8 * (size - 3))) >> (8 * (size - 3));
-	txBuffer[3] =  txData & (0xFF << 8 * (size - 4));
-
+	if (size < 1 || size > (sizeof(txBuffer)/sizeof(txBuffer[0])))
+		return;
+	for(i = 0; i < size; i++)
+		txBuffer[i] = (txData >> (8 * (size - i - 1))) & 0xff;
 	I2C_Write(I2C_BASEADDR, AD7156_I2C_ADDR, reg, size, txBuffer);
 }
 
