@@ -198,6 +198,7 @@ int main(void)
 	i5g_init_param.ad9625_cs_0 = 1;
 	i5g_init_param.ad9625_cs_1 = 2;
 	i5g_init_param.regs = XPAR_AXI_FMCADC5_SYNC_BASEADDR;
+	i5g_init_param.sysref_delay = 0;
 
 	/* Set up the JESD core */
 	jesd_setup(&ad9625_0_jesd);
