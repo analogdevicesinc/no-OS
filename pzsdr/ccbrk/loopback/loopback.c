@@ -68,7 +68,7 @@ int main()
 
 	/* walking 1 */
 	for(n = 0; n < 32; n++) {
-		wdata = 1 << n;
+		wdata = 1U << n;
 		gpio_write(wdata);
 		gpio_wait();
 		if (gpio_read(n, wdata) != XST_SUCCESS)
@@ -77,7 +77,7 @@ int main()
 
 	/* walking 0 */
 	for(n = 0; n < 32; n++) {
-		wdata = 1 << n;
+		wdata = 1U << n;
 		wdata = ~wdata;
 		gpio_write(wdata);
 		gpio_wait();
