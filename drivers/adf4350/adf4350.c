@@ -248,7 +248,7 @@ int64_t adf4350_set_freq(adf4350_dev *dev,
 		(dev->pdata->r2_user_settings & (ADF4350_REG2_PD_POLARITY_POS |
 		ADF4350_REG2_LDP_6ns | ADF4350_REG2_LDF_INT_N |
 		ADF4350_REG2_CHARGE_PUMP_CURR_uA(5000) |
-		ADF4350_REG2_MUXOUT(0x7) | ADF4350_REG2_NOISE_MODE(0x9)));
+		ADF4350_REG2_MUXOUT(0x7) | ADF4350_REG2_NOISE_MODE(0x3)));
 
 	dev->regs[ADF4350_REG3] = dev->pdata->r3_user_settings &
 				 (ADF4350_REG3_12BIT_CLKDIV(0xFFF) |

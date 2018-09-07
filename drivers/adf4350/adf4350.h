@@ -85,7 +85,7 @@
 #define ADF4350_REG2_RDIV2_EN					(1 << 24)
 #define ADF4350_REG2_RMULT2_EN					(1 << 25)
 #define ADF4350_REG2_MUXOUT(x)					((x) << 26)
-#define ADF4350_REG2_NOISE_MODE(x)				((x) << 29)
+#define ADF4350_REG2_NOISE_MODE(x)				(((x) & 0x3) << 29)
 
 /* REG3 Bit Definitions */
 #define ADF4350_REG3_12BIT_CLKDIV(x)			((x) << 3)
