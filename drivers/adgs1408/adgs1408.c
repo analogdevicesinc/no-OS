@@ -338,7 +338,7 @@ int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev, uint8_t cnv_pol
 			     ADGS1408_RROBIN_SW5(dev->rrobin_sw_config.rrobin_sw5) |
 			     ADGS1408_RROBIN_SW6(dev->rrobin_sw_config.rrobin_sw6) |
 			     ADGS1408_RROBIN_SW7(dev->rrobin_sw_config.rrobin_sw7) |
-			     ADGS1408_RROBIN_SW8(dev->rrobin_sw_config.rrobin_sw8;
+			     ADGS1408_RROBIN_SW8(dev->rrobin_sw_config.rrobin_sw8);
 	} else {
 		reg_config = ADGS1408_RROBIN_SW1(dev->rrobin_sw_config.rrobin_sw1) |
 			     ADGS1408_RROBIN_SW2(dev->rrobin_sw_config.rrobin_sw2) |
