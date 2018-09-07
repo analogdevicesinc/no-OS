@@ -141,7 +141,7 @@ void AD7991_Print(u32 nr_cnv, u32 vref)
 {
     int rxData;
     unsigned char rxBuffer[2] = {0x00, 0x00};
-    char c[7] = {'0','.','0','0','0',0};
+    char c[8] = {'0','.','0','0','0','0',0};
     u32 nr;
 	int i;
 	int j;
