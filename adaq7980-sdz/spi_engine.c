@@ -316,7 +316,7 @@ int32_t spi_eng_transfer_message(spi_dev *dev, spi_msg *msg)
 	spi_transfer_fifo *xfer;
 	uint8_t words_number;
 	uint32_t data;
-	uint8_t *reg_data;// = (uint8_t*)dev->rx_dma_startaddr;
+	uint8_t *reg_data = NULL;// = (uint8_t*)dev->rx_dma_startaddr;
 
 	size = sizeof(*xfer->cmd_fifo) * (msg->msg_cmd_len + 3);
 
