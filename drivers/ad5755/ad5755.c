@@ -697,7 +697,8 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 					  AD5755_DREG_WR_DAC,
 					  channel,
 					  dac_val);
-		real_voltage = ((int32_t)(code - range_offset) * v_ref) / (1l << resolution);
+		real_voltage = ((int32_t)(dac_val - range_offset) * v_ref) /
+				(1l << resolution);
 	}
 	return real_voltage;
 }
