@@ -153,7 +153,7 @@ int main(void)
 	uint32_t			status;
 
 	/* Allocating memory for the errorString */
-	errorString = (const char*) malloc(sizeof(char) * 200);
+	errorString = NULL;
 
 	printf("Please wait...\n");
 
