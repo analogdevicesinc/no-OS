@@ -631,7 +631,7 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 	uint32_t offset = 0;
 	uint32_t gain = 0;
 	uint32_t dac_val = 0;
-	uint32_t code = 0;
+	int32_t code = 0;
 	uint8_t range = 0;
 	uint8_t resolution = 0;
 	uint32_t range_offset = 0;
@@ -686,7 +686,7 @@ float ad5755_set_voltage(struct ad5755_dev *dev,
 		/* Offset and Gain are used to obtain the correct value to be written
 		 to the DAC register in order to output the voltage desired by the user.
 		*/
-		if((code + (1l << 15) - offset) > 0) {  // Avoid negative values
+		if((int32_t)(code + (1l << 15) - offset) > 0) { // Avoid negative values
 			dac_val = (code + (1l << 15) - offset) * (1l << 16) / (gain + 1);
 		} else {
 			dac_val = 0;
