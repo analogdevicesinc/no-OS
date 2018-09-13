@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+brew update
+
+brew_install_or_upgrade() {
+    brew install $1 || \
+            brew upgrade $1 || \
+            brew ls --versions $1 # check if installed last-ly
+}
+
+brew_install_or_upgrade libmatio
+brew_install_or_upgrade cppcheck
