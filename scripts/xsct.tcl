@@ -59,5 +59,8 @@ if {$m_mode == "make-bsp-xilsw"} {
 }
 
 sdk projects -build -type app -name sw
+if {![file exists sw/Release/sw.elf]} {
+  exit 1
+}
 exit
 
