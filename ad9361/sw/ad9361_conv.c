@@ -381,9 +381,10 @@ static int32_t ad9361_dig_tune_delay(struct ad9361_rf_phy *phy,
 			tx ? "TX" : "RX");
 		return -EIO;
 	} else if (flags & BE_VERBOSE) {
-		ad9361_dig_tune_verbose_print(phy, field, tx,
-					      c1 > c0 ? (s1 + c1 / 2) : -1,
-					      c1 > c0 ? -1 : (s0 + c0 / 2));
+		if (c1 > c0)
+			ad9361_dig_tune_verbose_print(phy, field, tx, (s1 + c1 / 2), -1);
+		else
+			ad9361_dig_tune_verbose_print(phy, field, tx, -1, (s0 + c0 / 2));
 	}
 
 	if (c1 > c0)
