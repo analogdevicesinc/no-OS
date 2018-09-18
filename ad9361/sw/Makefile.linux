@@ -4,7 +4,7 @@ PLATFORM = platform_linux
 SYMBOLS = -DLINUX_PLATFORM -DDMA_UIO
 
 LIBS = -lmatio
-CFLAGS = -Wall -Wextra -I$(PLATFORM) $(SYMBOLS) -Os -ffunction-sections -fdata-sections
+CFLAGS = -Wall -Werror -Wextra -I$(PLATFORM) $(SYMBOLS) -Os -ffunction-sections -fdata-sections
 
 LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
 LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))

@@ -1,6 +1,6 @@
 PLATFORM=platform_generic
 
-CFLAGS=-c -Wall -I$(PLATFORM) -Os -ffunction-sections -fdata-sections -Iconsole_commands #-DCONSOLE_COMMANDS
+CFLAGS=-c -Wall -Werror -I$(PLATFORM) -Os -ffunction-sections -fdata-sections -Iconsole_commands #-DCONSOLE_COMMANDS
 
 ifeq ($(shell uname -s), Darwin)
 LINKFLAGS = -Wl,-dead_strip
