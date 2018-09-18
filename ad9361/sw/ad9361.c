@@ -50,6 +50,8 @@
 #include "util.h"
 #include "config.h"
 
+#define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
+
 /* Used for static code size optimization: please see config.h */
 const bool has_split_gt = HAVE_SPLIT_GAIN_TABLE;
 const bool have_tdd_tables = HAVE_TDD_SYNTH_TABLE;
@@ -4330,7 +4332,7 @@ out:
 static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 		uint32_t *rx_path_clks)
 {
-	int32_t i;
+	uint32_t i;
 	uint32_t data_clk;
 
 	data_clk = (phy->pdata->rx2tx2 ? 4 : 2) /
@@ -4346,12 +4348,12 @@ static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 	}
 
 	for (i = 1; i <= 3; i++) {
-		if (abs(rx_path_clks[ADC_FREQ] / i - data_clk) < 4)
+		if ((rx_path_clks[ADC_FREQ] / diff_abs(i, data_clk)) < 4)
 			return 0;
 	}
 
 	for (i = 1; i <= 4; i++) {
-		if (abs((rx_path_clks[R2_FREQ] >> i) - data_clk) < 4)
+		if (diff_abs((rx_path_clks[R2_FREQ] >> i), data_clk) < 4)
 			return 0;
 	}
 
@@ -6833,8 +6835,8 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 		* so for now do nothing here.
 		*/
 		if (phy->auto_cal_en && !phy->pdata->use_ext_tx_lo)
-			if (abs((int64_t)(phy->last_tx_quad_cal_freq - ad9361_from_clk(rate))) >
-				(int64_t)phy->cal_threshold_freq) {
+			if ((diff_abs(phy->last_tx_quad_cal_freq, ad9361_from_clk(rate))) >
+				phy->cal_threshold_freq) {
 				ret = ad9361_do_calib_run(phy, TX_QUAD_CAL, -1);
 				if (ret < 0)
 					dev_err(&phy->spi->dev,
