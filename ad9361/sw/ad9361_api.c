@@ -601,7 +601,7 @@ int32_t ad9361_get_en_state_machine_mode (struct ad9361_rf_phy *phy,
 int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 							   uint8_t ch, int32_t gain_db)
 {
-	struct rf_rx_gain rx_gain = {0};
+	struct rf_rx_gain rx_gain = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int32_t ret = 0;
 
 	rx_gain.gain_db = gain_db;
@@ -627,7 +627,7 @@ int32_t ad9361_set_rx_rf_gain (struct ad9361_rf_phy *phy,
 int32_t ad9361_get_rx_rf_gain (struct ad9361_rf_phy *phy,
 							   uint8_t ch, int32_t *gain_db)
 {
-	struct rf_rx_gain rx_gain = {0};
+	struct rf_rx_gain rx_gain = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int32_t ret = 0;
 
 	ret = ad9361_get_rx_gain(phy, ad9361_1rx1tx_channel_map(phy,
@@ -824,7 +824,7 @@ int32_t ad9361_get_rx_rssi (struct ad9361_rf_phy *phy,
 int32_t ad9361_set_rx_gain_control_mode (struct ad9361_rf_phy *phy,
 										 uint8_t ch, uint8_t gc_mode)
 {
-	struct rf_gain_ctrl gc = {0};
+	struct rf_gain_ctrl gc = {0, 0};
 
 	gc.ant = ad9361_1rx1tx_channel_map(phy, false, ch + 1);
 	gc.mode = phy->agc_mode[ch] = gc_mode;
