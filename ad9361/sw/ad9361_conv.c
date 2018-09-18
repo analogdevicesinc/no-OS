@@ -511,7 +511,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	if (!conv)
 		return -ENODEV;
 
-	dev_dbg(&phy->spi->dev, "%s: freq %lu flags 0x%X\n", __func__,
+	dev_dbg(&phy->spi->dev, "%s: freq %u flags 0x%X\n", __func__,
 		max_freq, flags);
 
 	ensm_state = ad9361_ensm_get_state(phy);
