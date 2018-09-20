@@ -11,10 +11,10 @@ compiler:
   - clang
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./CI/travis/before_install_darwin ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./CI/travis/before_install_linux ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./ci/travis/before_install_darwin ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./ci/travis/before_install_linux ; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make -C ${TRAVIS_BUILD_DIR}/ad9361/sw/ -f Makefile.linux ; fi
-  - make -C ${TRAVIS_BUILD_DIR}/ad9361/sw/ -f Makefile.generic
-  - cppcheck --quiet --force --error-exitcode=1 .
+  - ./ci/scripts/build_projects.sh
+  - ./ci/scripts/cppcheck.sh
+  - ./ci/scripts/astyle.sh
