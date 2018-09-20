@@ -1,0 +1,3 @@
+--style=linux 
+--indent=force-tab=8 
+--max-code-length=80
