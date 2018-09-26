@@ -330,7 +330,7 @@ enum ad7124_registers {
 
 /*
  * The structure describes the device and is used with the ad7124 driver.
- * @slave_select_id: The ID of the Slave Select to be passed to the SPI calls.
+ * @spi_desc: A reference to the SPI configuration of the device.
  * @regs: A reference to the register list of the device that the user must
  *       provide when calling the Setup() function.
  * @userCRC: Whether to do or not a cyclic redundancy check on SPI transfers.
