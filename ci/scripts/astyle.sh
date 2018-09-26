@@ -27,7 +27,7 @@ is_source_file() {
 for file in $FILES; do
 	if is_source_file $file
 	then 
-		astyle --options=./astyle_config $file
+		astyle --options=./ci/scripts/astyle_config $file
 	fi
 done;
 
