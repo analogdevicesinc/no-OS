@@ -272,7 +272,7 @@ enum ad7124_registers {
 	AD7124_ADC_Control,
 	AD7124_Data,
 	AD7124_IOCon1,
-	AD7124_IOCon2_,
+	AD7124_IOCon2,
 	AD7124_ID,
 	AD7124_Error,
 	AD7124_Error_En,
