@@ -2,7 +2,7 @@
  * @file xilinx_qpll.c
  * @brief part of xcvr dynamic reconfiguration driver..
  * @author andrei.grozav@analog.com)
- ********************************************************************************
+ *******************************************************************************
  * Copyright 2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -35,13 +35,13 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+ ******************************************************************************/
 
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
- 
+
 #include "xilinx_qpll.h"
 
 #ifdef XILINX
@@ -50,10 +50,10 @@
 * @brief xilinx_xcvr_calc_qpll_config
 *******************************************************************************/
 int32_t xilinx_xcvr_calc_qpll_config(xcvr_core *core,
-		  uint32_t refclk_khz,
-		  uint32_t lane_rate_khz,
-		  struct xilinx_xcvr_qpll_config *conf,
-		  uint32_t *out_div)
+				     uint32_t refclk_khz,
+				     uint32_t lane_rate_khz,
+				     struct xilinx_xcvr_qpll_config *conf,
+				     uint32_t *out_div)
 {
 	uint32_t n, d, m;
 	uint32_t vco_freq;
@@ -66,7 +66,8 @@ int32_t xilinx_xcvr_calc_qpll_config(xcvr_core *core,
 
 	static const uint8_t N_gtx2[] = {16, 20, 32, 40, 64, 66, 80, 100, 0};
 	static const uint8_t N_gth34[] = {16, 20, 32, 40, 64, 66, 75, 80, 100,
-			112, 120, 125, 150, 160, 0};
+					  112, 120, 125, 150, 160, 0
+					 };
 
 	switch (core->dev.type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
@@ -121,8 +122,8 @@ int32_t xilinx_xcvr_calc_qpll_config(xcvr_core *core,
 		}
 	}
 
-	printf("%s: Failed to find matching dividers for %lu kHz rate\n",
-			__func__, lane_rate_khz);
+	printf("%s: Failed to find matching dividers for %u kHz rate\n",
+	       __func__, lane_rate_khz);
 
 	return -1;
 }
@@ -163,9 +164,6 @@ int32_t xilinx_xcvr_gth34_qpll_read_config(xcvr_core *core,
 	conf->fb_div = (val & 0xff) + 2;
 
 	conf->band = 0;
-
-//	dev_err(core->dev, "qpll: fb_div=%d, qpll: refclk_div=%d\n",
-//			conf->fb_div, conf->refclk_div);
 
 	return 0;
 }
@@ -240,8 +238,8 @@ int32_t xilinx_xcvr_gtx2_qpll_read_config(xcvr_core *core,
 }
 
 int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
-		uint32_t drp_port,
-		struct xilinx_xcvr_qpll_config *conf)
+				     uint32_t drp_port,
+				     struct xilinx_xcvr_qpll_config *conf)
 {
 	switch (core->dev.type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
@@ -278,7 +276,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(xcvr_core *core,
 		cfg1 = QPLL_REFCLK_DIV_M(2);
 		break;
 	default:
-		printf("Invalid refclk divider: %lu\n", conf->refclk_div);
+		printf("Invalid refclk divider: %u\n", conf->refclk_div);
 		return -1;
 	}
 
@@ -311,7 +309,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(xcvr_core *core,
 		fbdiv = 368;
 		break;
 	default:
-		printf("Invalid feedback divider: %lu\n", conf->fb_div);
+		printf("Invalid feedback divider: %u\n", conf->fb_div);
 		return -1;
 	}
 
@@ -321,22 +319,22 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(xcvr_core *core,
 		cfg0 = QPLL_CFG0_LOWBAND_MASK;
 
 	ret = xcvr_drp_update(core, drp_port, QPLL_CFG0_ADDR,
-		QPLL_CFG0_LOWBAND_MASK, cfg0);
+			      QPLL_CFG0_LOWBAND_MASK, cfg0);
 	if (ret < 0)
 		return ret;
 
 	ret = xcvr_drp_update(core, drp_port, QPLL_CFG1_ADDR,
-		QPLL_REFCLK_DIV_M_MASK, cfg1);
+			      QPLL_REFCLK_DIV_M_MASK, cfg1);
 	if (ret < 0)
 		return ret;
 
 	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV_N_ADDR,
-		QPLL_FBDIV_N_MASK, fbdiv);
+			      QPLL_FBDIV_N_MASK, fbdiv);
 	if (ret < 0)
 		return ret;
 
 	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV_RATIO_ADDR,
-		QPLL_FBDIV_RATIO_MASK, fbdiv_ratio);
+			      QPLL_FBDIV_RATIO_MASK, fbdiv_ratio);
 	if (ret < 0)
 		return ret;
 
@@ -369,25 +367,25 @@ int32_t xilinx_xcvr_gth34_qpll_write_config(xcvr_core *core,
 		refclk = 2;
 		break;
 	default:
-		printf("Invalid refclk divider: %lu\n", conf->refclk_div);
+		printf("Invalid refclk divider: %u\n", conf->refclk_div);
 		return -1;
 	}
 
 	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV(0),
-		0xff, fbdiv);
+			      0xff, fbdiv);
 	if (ret < 0)
 		return ret;
 
 	return xcvr_drp_update(core, drp_port, QPLL_REFCLK_DIV(0),
-		0xf80, refclk << 7);
+			       0xf80, refclk << 7);
 }
 
 /***************************************************************************//**
 * @brief xcvr_qpll_write_config
 *******************************************************************************/
 int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
-		uint32_t drp_port,
-		const struct xilinx_xcvr_qpll_config *conf)
+				      uint32_t drp_port,
+				      const struct xilinx_xcvr_qpll_config *conf)
 {
 	switch (core->dev.type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
@@ -416,5 +414,5 @@ uint32_t xilinx_xcvr_qpll_calc_lane_rate(xcvr_core *core,
 
 #endif
 
-/*******************************************************************************/
-/*******************************************************************************/
+/******************************************************************************/
+/******************************************************************************/

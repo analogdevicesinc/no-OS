@@ -104,13 +104,13 @@ int main(void)
 #ifdef ALTERA
 	ad9152_xcvr.base_address = AD9152_JESD204_LINK_MANAGEMENT_BASE;
 	ad9152_xcvr.dev.link_pll.base_address =
-			AD9152_JESD204_LINK_PLL_RECONFIG_BASE;
+		AD9152_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9152_xcvr.dev.atx_pll.base_address =
-			AD9152_JESD204_LANE_PLL_RECONFIG_BASE;
+		AD9152_JESD204_LANE_PLL_RECONFIG_BASE;
 	ad9152_core.base_address = AXI_AD9152_CORE_BASE;
 	AD9680_XCVR.BASE_ADDRESS = AD9680_JESD204_LINK_MANAGEMENT_BASE;
 	ad9680_xcvr.dev.link_pll.base_address =
-			AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
+		AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9680_core.base_address = AXI_AD9680_CORE_BASE;
 	ad9152_jesd.base_address = AD9152_JESD204_LINK_RECONFIG_BASE;
 	ad9680_jesd.base_address = AD9680_JESD204_LINK_RECONFIG_BASE;
@@ -247,21 +247,21 @@ int main(void)
 	ad9152_core.channels = &ad9152_channels[0];
 
 	ad9152_param.stpl_samples[0][0] =
-			(ad9152_channels[0].pat_data >> 0)  & 0xffff;
+		(ad9152_channels[0].pat_data >> 0)  & 0xffff;
 	ad9152_param.stpl_samples[0][1] =
-			(ad9152_channels[0].pat_data >> 16) & 0xffff;
+		(ad9152_channels[0].pat_data >> 16) & 0xffff;
 	ad9152_param.stpl_samples[0][2] =
-			(ad9152_channels[0].pat_data >> 0)  & 0xffff;
+		(ad9152_channels[0].pat_data >> 0)  & 0xffff;
 	ad9152_param.stpl_samples[0][3] =
-			(ad9152_channels[0].pat_data >> 16) & 0xffff;
+		(ad9152_channels[0].pat_data >> 16) & 0xffff;
 	ad9152_param.stpl_samples[1][0] =
-			(ad9152_channels[1].pat_data >> 0)  & 0xffff;
+		(ad9152_channels[1].pat_data >> 0)  & 0xffff;
 	ad9152_param.stpl_samples[1][1] =
-			(ad9152_channels[1].pat_data >> 16) & 0xffff;
+		(ad9152_channels[1].pat_data >> 16) & 0xffff;
 	ad9152_param.stpl_samples[1][2] =
-			(ad9152_channels[1].pat_data >> 0)  & 0xffff;
+		(ad9152_channels[1].pat_data >> 0)  & 0xffff;
 	ad9152_param.stpl_samples[1][3] =
-			(ad9152_channels[1].pat_data >> 16) & 0xffff;
+		(ad9152_channels[1].pat_data >> 16) & 0xffff;
 	ad9152_param.interpolation = 1;
 	ad9152_param.lane_rate_kbps = 12330000;
 
@@ -286,7 +286,7 @@ int main(void)
 	ad9680_core.no_of_channels = 2;
 	ad9680_core.resolution = 14;
 
-        // receiver DMA configuration
+	// receiver DMA configuration
 
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
@@ -369,11 +369,11 @@ int main(void)
 	ad9680_test(ad9680_device, AD9680_TEST_OFF);
 	ad_printf("daq3: setup and configuration is done\n");
 
-        // capture data with DMA
+	// capture data with DMA
 
-	if(!dmac_start_transaction(ad9680_dma)){
+	if(!dmac_start_transaction(ad9680_dma)) {
 		ad_printf("daq3: RX capture done.\n");
-        };
+	};
 
 	ad9528_remove(ad9528_device);
 	ad9152_remove(ad9152_device);
