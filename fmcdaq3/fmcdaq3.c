@@ -308,7 +308,6 @@ int main(void)
 	gpio_get(&dac_txen, GPIO_DAC_TXEN);
 	gpio_get(&adc_pd, GPIO_ADC_PD);
 
-	ad_platform_init();
 	gpio_set_value(dac_txen, 0x1);
 	gpio_set_value(adc_pd, 0x0);
 
@@ -381,8 +380,6 @@ int main(void)
 	ad9680_remove(ad9680_device);
 	gpio_remove(dac_txen);
 	gpio_remove(adc_pd);
-
-	ad_platform_close();
 
 	return(0);
 }
