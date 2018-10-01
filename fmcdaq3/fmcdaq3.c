@@ -125,10 +125,26 @@ int main(void)
 	rx_xfer.start_address =  0x800000;
 	tx_xfer.start_address =  0x900000;;
 #endif
-
+#ifdef ZYNQ_PS7
 	ad9528_spi_param.type = ZYNQ_PS7_SPI;
 	ad9152_spi_param.type = ZYNQ_PS7_SPI;
 	ad9680_spi_param.type = ZYNQ_PS7_SPI;
+#endif
+#ifdef ZYNQ_PSU
+	ad9528_spi_param.type = ZYNQ_PSU_SPI;
+	ad9152_spi_param.type = ZYNQ_PSU_SPI;
+	ad9680_spi_param.type = ZYNQ_PSU_SPI;
+#endif
+#ifdef MICROBLAZE
+	ad9528_spi_param.type = MICROBLAZE_SPI;
+	ad9152_spi_param.type = MICROBLAZE_SPI;
+	ad9680_spi_param.type = MICROBLAZE_SPI;
+#endif
+#ifdef NIOS_II
+	ad9528_spi_param.type = NIOS_II_SPI;
+	ad9152_spi_param.type = NIOS_II_SPI;
+	ad9680_spi_param.type = NIOS_II_SPI;
+#endif
 	ad9528_spi_param.chip_select = SPI_CHIP_SELECT(0);
 	ad9152_spi_param.chip_select = SPI_CHIP_SELECT(1);
 	ad9680_spi_param.chip_select = SPI_CHIP_SELECT(2);
