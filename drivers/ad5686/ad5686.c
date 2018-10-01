@@ -225,7 +225,7 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
  * @param command - Command control bits.
  * @param data    - Data to be written in input register.
  *
- * @return  readBack - value read from register.
+ * @return  read_back_data - value read from register.
 ******************************************************************************/
 uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
 			      uint8_t command,
@@ -346,7 +346,7 @@ void ad5686_write_update_register(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
- * @return None.
+ * @return read_back_data - value read from register.
 ******************************************************************************/
 uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 				   enum ad5686_dac_channels channel)
@@ -368,7 +368,7 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 }
 
 /**************************************************************************//**
- * @brief Write to and update DAC channel n
+ * @brief Set Power-down mode for DAC channel n
  *
  * @param dev     - The device structure.
  * @param channel  - The chosen channel to change the power-down mode.

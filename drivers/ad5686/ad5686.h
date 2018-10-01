@@ -154,7 +154,7 @@ struct ad5686_init_param {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-/* Initialize SPI and Initial Values for AD5449 Board. */
+/* Initialize SPI and Initial Values for AD5686 Board. */
 int32_t ad5686_init(struct ad5686_dev **device,
 		    struct ad5686_init_param init_param);
 
