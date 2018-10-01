@@ -2,7 +2,7 @@
  * @file xilinx_xcvr_channel.h
  * @brief part of xcvr dynamic reconfiguration driver.
  * @author andrei.grozav@analog.com)
- ********************************************************************************
+ *******************************************************************************
  * Copyright 2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -35,7 +35,7 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+ ******************************************************************************/
 
 #ifndef XILINX_XCVR_CHANNEL_H
 #define XILINX_XCVR_CHANNEL_H
@@ -69,9 +69,9 @@ typedef struct {
 #define CPLL_CFG1_ADDR			0x5d
 #define CPLL_CFG1_MASK			0xffff
 
-#define CPLL_REFCLK_DIV_M_ADDR		0x5e
-#define CPLL_REFCLK_DIV_M_MASK		0x1f00
-#define CPLL_FB_DIV_45_N1_MASK		0x0080
+#define CPLL_REFCLK_DIV_M_ADDR	0x5e
+#define CPLL_REFCLK_DIV_M_MASK	0x1f00
+#define CPLL_FB_DIV_45_N1_MASK	0x0080
 #define CPLL_FBDIV_N2_MASK		0x007f
 
 #define OUT_DIV_ADDR			0x88
@@ -103,17 +103,17 @@ typedef struct {
 #define TX_CLK25_DIV			0x6a
 #define TX_CLK25_DIV_MASK		0x1f
 
-#define ENC_8B10B			810
+#define ENC_8B10B				810
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 int32_t xilinx_xcvr_calc_cpll_config(xcvr_core *core,
-		uint32_t refclk_khz,
-		uint32_t lane_rate_khz,
-		struct xilinx_xcvr_cpll_config *conf,
-		uint32_t *out_div);
+				     uint32_t refclk_khz,
+				     uint32_t lane_rate_khz,
+				     struct xilinx_xcvr_cpll_config *conf,
+				     uint32_t *out_div);
 
 int32_t xilinx_xcvr_gth34_cpll_read_config(xcvr_core *core,
 		uint32_t drp_port,
@@ -124,8 +124,8 @@ int32_t xilinx_xcvr_gtx2_cpll_read_config(xcvr_core *core,
 		struct xilinx_xcvr_cpll_config *conf);
 
 int32_t xilinx_xcvr_cpll_read_config(xcvr_core *core,
-		uint32_t drp_port,
-		struct xilinx_xcvr_cpll_config *conf);
+				     uint32_t drp_port,
+				     struct xilinx_xcvr_cpll_config *conf);
 
 int32_t xilinx_xcvr_gtx2_cpll_write_config(xcvr_core *core,
 		uint32_t drp_port,
@@ -136,8 +136,8 @@ int32_t xilinx_xcvr_gth34_cpll_write_config(xcvr_core *core,
 		const struct xilinx_xcvr_cpll_config *conf);
 
 int32_t xilinx_xcvr_cpll_write_config(xcvr_core *core,
-		uint32_t drp_port,
-		const struct xilinx_xcvr_cpll_config *conf);
+				      uint32_t drp_port,
+				      const struct xilinx_xcvr_cpll_config *conf);
 
 uint32_t xilinx_xcvr_cpll_calc_lane_rate(xcvr_core *core,
 		uint32_t refclk_hz,
@@ -145,65 +145,65 @@ uint32_t xilinx_xcvr_cpll_calc_lane_rate(xcvr_core *core,
 		uint32_t out_div);
 
 int32_t xilinx_xcvr_gth3_configure_cdr(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t out_div);
+				       uint32_t drp_port,
+				       uint32_t out_div);
 
 int32_t xilinx_xcvr_gtx2_configure_cdr(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t lane_rate,
-		uint32_t out_div,
-		uint8_t lpm_enable);
+				       uint32_t drp_port,
+				       uint32_t lane_rate,
+				       uint32_t out_div,
+				       uint8_t lpm_enable);
 
 int32_t xilinx_xcvr_configure_cdr(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t lane_rate,
-		uint32_t out_div,
-		uint8_t lpm_enable);
+				  uint32_t drp_port,
+				  uint32_t lane_rate,
+				  uint32_t out_div,
+				  uint8_t lpm_enable);
 
 int32_t xilinx_xcvr_configure_lpm_dfe_mode(xcvr_core *core,
 		uint32_t drp_port,
 		uint8_t lpm);
 
 int32_t xilinx_xcvr_gth34_read_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t *rx_out_div,
-		uint32_t *tx_out_div);
+				       uint32_t drp_port,
+				       uint32_t *rx_out_div,
+				       uint32_t *tx_out_div);
 
 int32_t xilinx_xcvr_gtx2_read_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t *rx_out_div,
-		uint32_t *tx_out_div);
+				      uint32_t drp_port,
+				      uint32_t *rx_out_div,
+				      uint32_t *tx_out_div);
 
 int32_t xilinx_xcvr_read_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t *rx_out_div,
-		uint32_t *tx_out_div);
+				 uint32_t drp_port,
+				 uint32_t *rx_out_div,
+				 uint32_t *tx_out_div);
 
 int32_t xilinx_xcvr_gtx2_write_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		int32_t rx_out_div,
-		int32_t tx_out_div);
+				       uint32_t drp_port,
+				       int32_t rx_out_div,
+				       int32_t tx_out_div);
 
 int32_t xilinx_xcvr_gth34_write_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		int32_t rx_out_div,
-		int32_t tx_out_div);
+					uint32_t drp_port,
+					int32_t rx_out_div,
+					int32_t tx_out_div);
 
 int32_t xilinx_xcvr_write_out_div(xcvr_core *core,
-		uint32_t drp_port,
-		int32_t rx_out_div,
-		int32_t tx_out_div);
+				  uint32_t drp_port,
+				  int32_t rx_out_div,
+				  int32_t tx_out_div);
 
 int32_t xilinx_xcvr_write_rx_clk25_div(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t div);
+				       uint32_t drp_port,
+				       uint32_t div);
 
 int32_t xilinx_xcvr_write_tx_clk25_div(xcvr_core *core,
-		uint32_t drp_port,
-		uint32_t div);
+				       uint32_t drp_port,
+				       uint32_t div);
 
 #endif
 #endif
 
-/*******************************************************************************/
-/*******************************************************************************/
+/******************************************************************************/
+/******************************************************************************/

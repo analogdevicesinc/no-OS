@@ -2,7 +2,7 @@
  * @file adxcvr.h
  * @brief Header file of XCVR Driver.
  * @author DBogdan (dragos.bogdan@analog.com)
- ********************************************************************************
+ *******************************************************************************
  * Copyright 2016(c) Analog Devices, Inc.
  *
  * All rights reserved.
@@ -35,7 +35,7 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *******************************************************************************/
+ ******************************************************************************/
 #ifndef XCVR_CORE_H_
 #define XCVR_CORE_H_
 
@@ -129,10 +129,11 @@ typedef struct {
 #define XCVR_REG_SCRATCH			0x0008
 
 #define XCVR_REG_RESETN				0x0010
-#define XCVR_RESETN				(1 << 0)
+
+#define XCVR_RESETN					(1 << 0)
 
 #define XCVR_REG_STATUS				0x0014
-#define XCVR_STATUS				(1 << 0)
+#define XCVR_STATUS					(1 << 0)
 
 #define XCVR_REG_CONTROL			0x0020
 #define XCVR_LPM_DFE_N				(1 << 12)
@@ -157,12 +158,12 @@ typedef struct {
 #define XCVR_CM_ADDR(x)				(((x) & 0xFFF) << 16)
 #define XCVR_CM_WDATA(x)			(((x) & 0xFFFF) << 0)
 
-#define XCVR_REG_DRP_SEL(x)		(0x0040 + (x))
+#define XCVR_REG_DRP_SEL(x)			(0x0040 + (x))
 
-#define XCVR_REG_DRP_CTRL(x)	(0x0044 + (x))
-#define XCVR_DRP_CTRL_WR		(1 << 28)
-#define XCVR_DRP_CTRL_ADDR(x)	(((x) & 0xFFF) << 16)
-#define XCVR_DRP_CTRL_WDATA(x)	(((x) & 0xFFFF) << 0)
+#define XCVR_REG_DRP_CTRL(x)		(0x0044 + (x))
+#define XCVR_DRP_CTRL_WR			(1 << 28)
+#define XCVR_DRP_CTRL_ADDR(x)		(((x) & 0xFFF) << 16)
+#define XCVR_DRP_CTRL_WDATA(x)		(((x) & 0xFFFF) << 0)
 
 #define XCVR_REG_DRP_STATUS(x)		(0x0048 + (x))
 #define XCVR_DRP_STATUS_BUSY		(1 << 16)
@@ -195,17 +196,13 @@ int32_t xcvr_write(xcvr_core *core, uint32_t reg_addr, uint32_t reg_data);
 
 #ifdef XILINX
 
-	int32_t xcvr_drp_wait_idle(xcvr_core *core, uint32_t drp_addr);
-	int32_t xilinx_xcvr_drp_read(xcvr_core *core, uint32_t drp_port,uint32_t reg);
-	int32_t xilinx_xcvr_drp_write(xcvr_core *core,
-			uint32_t drp_port,
-			uint32_t reg,
-			uint32_t val);
-	int32_t xcvr_drp_update(xcvr_core *core,
-			uint32_t drp_port,
-			uint32_t reg,
-			uint32_t mask,
-			uint32_t val);
+int32_t xcvr_drp_wait_idle(xcvr_core *core, uint32_t drp_addr);
+int32_t xilinx_xcvr_drp_read(xcvr_core *core,
+			     uint32_t drp_port,uint32_t reg);
+int32_t xilinx_xcvr_drp_write(xcvr_core *core, uint32_t drp_port, uint32_t reg,
+			      uint32_t val);
+int32_t xcvr_drp_update(xcvr_core *core, uint32_t drp_port, uint32_t reg,
+			uint32_t mask, uint32_t val);
 
 #endif
 
