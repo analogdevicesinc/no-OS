@@ -217,10 +217,10 @@ int main(void)
 	// dac settings
 	xcvr_getconfig(&ad9152_xcvr);
 	ad9152_xcvr.reconfig_bypass = 0;
-	ad9152_xcvr.ref_clock_khz = 616500;
-	ad9152_xcvr.lane_rate_kbps = 12330000;
+	ad9152_xcvr.ref_rate_khz = 616500;
+	ad9152_xcvr.lane_rate_khz = 12330000;
 #ifdef XILINX
-	ad9152_xcvr.dev.qpll_enable = 1;
+	ad9152_xcvr.dev.cpll_enable = 0;
 #endif
 
 	ad9152_jesd.rx_tx_n = 0;
@@ -271,10 +271,10 @@ int main(void)
 
 	xcvr_getconfig(&ad9680_xcvr);
 	ad9680_xcvr.reconfig_bypass = 0;
-	ad9680_xcvr.ref_clock_khz = 616500;
-	ad9680_xcvr.lane_rate_kbps = 12330000;
+	ad9680_xcvr.ref_rate_khz = 616500;
+	ad9680_xcvr.lane_rate_khz = 12330000;
 #ifdef XILINX
-	ad9680_xcvr.dev.qpll_enable = 1;
+	ad9680_xcvr.dev.cpll_enable = 0;
 #endif
 
 	ad9680_jesd.rx_tx_n = 1;
