@@ -54,6 +54,9 @@
 #define AD5686_CTRL_DCEN         8
 #define AD5686_CTRL_RB_REG       9
 
+#define AD5683_CMD_WR_CTRL_REG   4
+#define AD5683_CTRL_RB_REG       5
+
 /* Power-down operation modes masks */
 #define AD5686_PWRM_NORMAL       0
 #define AD5686_PWRM_1K           1
@@ -72,14 +75,35 @@
 
 #define MAX_RESOLUTION  16     // Maximum resolution of the supported devices
 
-#define CMD_MASK        0xFF   // Mask for Command bits
-#define ADDR_MASK       0xFF   // Mask for Address bits
-#define CMD_OFFSET      4      // Offset for Command
-#define MSB_MASK        0xFF00 // Most significant byte of the data word
-#define MSB_OFFSET      8
-#define LSB_MASK        0x00FF // Least significant byte of the data word
-#define LSB_OFFSET      0
-#define PKT_LENGTH      3      // SPI packet length in byte
+#define PKT_LENGTH               3      // SPI packet length in byte
+
+#define ADDR_MASK                0xFF   // Mask for Address bits
+#define CMD_OFFSET               4      // Offset for Command
+
+#define AD5686_CMD_MASK          0xFF
+#define AD5686_MSB_MASK          0xFF00 // Most significant byte of the data word
+#define AD5686_MSB_OFFSET        8
+#define AD5686_LSB_MASK          0x00FF // Least significant byte of the data word
+#define AD5686_LSB_OFFSET        0
+
+#define AD5683_MIDB_OFFSET       4	   // Offset for middle bits
+#define AD5683_MIDB_MASK         0xFF
+#define AD5683_MSB_OFFSET        12
+#define AD5683_MSB_MASK          0xF
+#define AD5683_CMD_MASK          0xF
+#define AD5683_LSB_MASK          0xF
+#define AD5683_LSB_OFFSET        4
+
+#define AD5683_REG_MAP           0
+#define AD5686_REG_MAP           1
+
+/********************** AD5683 Write Control Register Bits ********************/
+
+#define AD5683_CTRL_DCEN(x)      (((((x) & 0x1) << 0) << 10) & 0xFC00)
+#define AD5683_CTRL_GM(x)        (((((x) & 0x1) << 1) << 10) & 0xFC00)
+#define AD5683_CTRL_INT_REF(x)   (((((x) & 0x1) << 2) << 10) & 0xFC00)
+#define AD5683_CTRL_PWRM(x)      (((((x) & 0x3) << 3) << 10) & 0xFC00)
+#define AD5683_SW_RESET          ((((0x1) << 5) << 10) & 0xFC00)
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -101,6 +125,14 @@ enum ad5686_type {
 	ID_AD5695R,
 	ID_AD5696,
 	ID_AD5696R,
+	ID_AD5681R,
+	ID_AD5682R,
+	ID_AD5683R,
+	ID_AD5683,
+	ID_AD5691R,
+	ID_AD5692R,
+	ID_AD5693R,
+	ID_AD5693
 };
 
 enum comm_type {
@@ -121,6 +153,7 @@ enum ad5686_dac_channels {
 
 struct ad5686_chip_info {
 	uint8_t		resolution;
+	uint8_t		register_map;
 	enum comm_type	communication;
 	const uint32_t *channel_addr;
 };
@@ -209,3 +242,6 @@ void ad5686_daisy_chain_en(struct ad5686_dev *dev,
 /* Set up readback register (readback enable) */
 void ad5686_read_back_en(struct ad5686_dev *dev,
 			 uint8_t value);
+
+/* Set Gain mode */
+int32_t ad5686_gain_mode(struct ad5686_dev *dev, uint8_t value);
