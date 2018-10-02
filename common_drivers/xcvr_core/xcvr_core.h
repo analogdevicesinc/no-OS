@@ -179,9 +179,17 @@ int32_t xcvr_write(xcvr_core *core, uint32_t reg_addr, uint32_t reg_data);
 
 #ifdef XILINX
 
-	int32_t xcvr_drp_read(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t *drp_data);
-	int32_t xcvr_drp_write(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t drp_data);
-	int32_t xcvr_drp_update(xcvr_core *core, uint8_t drp_sel, uint32_t drp_addr, uint32_t mask, uint32_t val);
+	int32_t xcvr_drp_wait_idle(xcvr_core *core, uint32_t drp_addr);
+	int32_t xilinx_xcvr_drp_read(xcvr_core *core, uint32_t drp_port,uint32_t reg);
+	int32_t xilinx_xcvr_drp_write(xcvr_core *core,
+			uint32_t drp_port,
+			uint32_t reg,
+			uint32_t val);
+	int32_t xcvr_drp_update(xcvr_core *core,
+			uint32_t drp_port,
+			uint32_t reg,
+			uint32_t mask,
+			uint32_t val);
 
 #endif
 

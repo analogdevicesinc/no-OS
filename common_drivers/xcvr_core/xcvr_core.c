@@ -81,82 +81,107 @@ int32_t xcvr_write(xcvr_core *core,
 #ifdef XILINX
 
 /***************************************************************************//**
- * @brief xcvr_drp_read Dynamic reconfiguration port read access for Xilinx devices
- *******************************************************************************/
-int32_t xcvr_drp_read(xcvr_core *core, uint8_t drp_sel,
-				uint32_t drp_addr,
-				uint32_t *drp_data)
+ * @brief xcvr_drp_wait_idle
+ ******************************************************************************/
+int32_t xcvr_drp_wait_idle(xcvr_core *core,
+						   uint32_t drp_addr)
 {
-	uint32_t timeout = 20;
-	uint32_t val = 0;
-
-	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
-
-	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
-				 XCVR_CM_ADDR(drp_addr));
+	uint32_t val;
+	int32_t timeout = 20;
 
 	do {
-		xcvr_read(core, drp_sel ? XCVR_REG_CH_STATUS : XCVR_REG_CM_STATUS, &val);
-		if (val & (drp_sel ? XCVR_CH_BUSY : XCVR_CM_BUSY)) {
-			mdelay(1);
-			continue;
-		}
+		xcvr_read(core, XCVR_REG_DRP_STATUS(drp_addr), &val);
+		if (!(val & XCVR_DRP_STATUS_BUSY))
+			return XCVR_DRP_STATUS_RDATA(val);
 
-		*drp_data = drp_sel ? XCVR_CH_RDATA(val) : XCVR_CM_RDATA(val);
-		return 0;
+		mdelay(1);
 	} while (timeout--);
 
-	xil_printf("%s: Timeout!\n", __func__);
+	printf("%s: Timeout!", __func__);
+
 	return -1;
 }
 
 /***************************************************************************//**
- * @brief xcvr_drp_write Dynamic reconfiguration port write access for Xilinx devices
+ * @brief xilinx_xcvr_drp_read Dynamic reconfiguration port read access for
+ * 		  Xilinx devices
  *******************************************************************************/
-int32_t xcvr_drp_write(xcvr_core *core, uint8_t drp_sel,
-				uint32_t drp_addr,
-				uint32_t drp_data)
+int32_t xilinx_xcvr_drp_read(xcvr_core *core,
+		uint32_t drp_port,
+		uint32_t reg)
 {
-	uint32_t timeout = 20;
-	uint32_t val = 0;
+	uint32_t drp_sel = XCVR_DRP_PORT_CHANNEL_BCAST;
+	uint32_t drp_addr;
+	int32_t ret;
 
-	xcvr_write(core, drp_sel ? XCVR_REG_CH_SEL : XCVR_REG_CM_SEL, XCVR_BROADCAST);
+	if (drp_port == XCVR_DRP_PORT_COMMON) {
+		drp_addr = XCVR_DRP_PORT_ADDR_COMMON;
+	} else {
+		drp_addr = XCVR_DRP_PORT_ADDR_CHANNEL;
+		if (drp_port != XCVR_DRP_PORT_CHANNEL_BCAST)
+			drp_sel = drp_port - 1;
+	}
 
-	xcvr_write(core, drp_sel ? XCVR_REG_CH_CONTROL : XCVR_REG_CM_CONTROL,
-			drp_sel ? (XCVR_CH_WR | XCVR_CH_ADDR(drp_addr) | XCVR_CH_WDATA(drp_data)) :
-			(XCVR_CM_WR | XCVR_CM_ADDR(drp_addr) | XCVR_CM_WDATA(drp_data)));
+	xcvr_write(core, XCVR_REG_DRP_SEL(drp_addr), drp_sel);
+	xcvr_write(core, XCVR_REG_DRP_CTRL(drp_addr), XCVR_DRP_CTRL_ADDR(reg));
 
-	do {
-		xcvr_read(core, drp_sel ? XCVR_REG_CH_STATUS : XCVR_REG_CM_STATUS, &val);
-		if (val & (drp_sel ? XCVR_CH_BUSY : XCVR_CM_BUSY)) {
-			mdelay(1);
-			continue;
-		}
+	ret = xcvr_drp_wait_idle(core, drp_addr);
+	if (ret < 0)
+		return ret;
 
-		return 0;
-	} while (timeout--);
+	return ret & 0xffff;
+}
 
-	xil_printf("%s: Timeout!\n", __func__);
-	return -1;
+/***************************************************************************//**
+ * @brief xilinx_xcvr_drp_write Dynamic reconfiguration port write access for
+ * 		  Xilinx devices
+ ******************************************************************************/
+int32_t xilinx_xcvr_drp_write(xcvr_core *core,
+		uint32_t drp_port,
+		uint32_t reg,
+		uint32_t val)
+{
+	uint32_t drp_sel = XCVR_DRP_PORT_CHANNEL_BCAST;
+	uint32_t drp_addr;
+	int32_t ret;
+
+	if (drp_port == XCVR_DRP_PORT_COMMON) {
+		drp_addr = XCVR_DRP_PORT_ADDR_COMMON;
+	} else {
+		drp_addr = XCVR_DRP_PORT_ADDR_CHANNEL;
+		if (drp_port != XCVR_DRP_PORT_CHANNEL_BCAST)
+			drp_sel = drp_port - 1;
+	}
+
+	xcvr_write(core, XCVR_REG_DRP_SEL(drp_addr), drp_sel);
+	xcvr_write(core, XCVR_REG_DRP_CTRL(drp_addr), (XCVR_DRP_CTRL_WR |
+		XCVR_DRP_CTRL_ADDR(reg) | XCVR_DRP_CTRL_WDATA(val)));
+
+	ret = xcvr_drp_wait_idle(core, drp_addr);
+	if (ret < 0)
+		return ret;
+
+	return 0;
 }
 
 /***************************************************************************//**
  * @brief xcvr_drp_update Dynamic reconfiguration port access for Xilinx devices
  *******************************************************************************/
-int32_t xcvr_drp_update(xcvr_core *core, uint8_t drp_sel,
-					uint32_t drp_addr,
-					uint32_t mask,
-					uint32_t val)
+int32_t xcvr_drp_update(xcvr_core *core,
+		uint32_t drp_port,
+		uint32_t reg,
+		uint32_t mask,
+		uint32_t val)
 {
-	uint32_t ret;
+	int32_t ret;
 
-	xcvr_drp_read(core, drp_sel, drp_addr, &ret);
+	ret = xilinx_xcvr_drp_read(core, drp_port, reg);
 	if (ret < 0)
 		return ret;
 
 	val |= ret & ~mask;
 
-	return xcvr_drp_write(core, drp_sel, drp_addr, val);
+	return xilinx_xcvr_drp_write(core, drp_port, reg, val);
 }
 
 #endif
