@@ -228,73 +228,93 @@ int32_t xcvr_setup(xcvr_core *core)
 	uint32_t rx_out_div;
 	uint32_t tx_out_div;
 	uint32_t ln_rate_kbps;
-	xcvr_cpll cpll_config;
-	xcvr_qpll qpll_config;
+	struct xilinx_xcvr_cpll_config cpll_config;
+	struct xilinx_xcvr_qpll_config qpll_config;
 
 	xcvr_write(core, XCVR_REG_RESETN, 0);  // enter reset state
 
 	if (core->reconfig_bypass == 0)
 	{
-		if (core->lane_rate_kbps > 12500000){
+		if (core->lane_rate_khz > 12500000){
 			printf("ERROR: Max qpll lane_rate: %d", 12500000);
 			return -1;
 		}
-		if (core->lane_rate_kbps < 1250000){
+		if (core->lane_rate_khz < 1250000){
 			printf("ERROR: Min cpll lane_rate: %d", 1250000);
 			return -1;
 		}
 
-		if (core->dev.qpll_enable) {
+		if (core->dev.cpll_enable == 0) {
 			printf("\nQPLL ENABLE\n");
-			ret |= xilinx_xcvr_calc_qpll_config(core->ref_clock_khz,
-					core->lane_rate_kbps, &qpll_config);
-			out_div = qpll_config.out_div;
+			ret |= xilinx_xcvr_calc_qpll_config(core, core->ref_rate_khz,
+					core->lane_rate_khz, &qpll_config, &core->dev.out_div);
+			out_div = core->dev.out_div;
 
-			ln_rate_kbps = xilinx_xcvr_qpll_calc_lane_rate(
-					core->ref_clock_khz, &qpll_config);
+			ln_rate_kbps = xilinx_xcvr_qpll_calc_lane_rate(core,
+					core->ref_rate_khz,
+					&qpll_config,
+					out_div);
 
-			xilinx_xcvr_qpll_write_config(core, &qpll_config);
+			xilinx_xcvr_qpll_write_config(core,
+					XCVR_DRP_PORT_COMMON,
+					&qpll_config);
 			local_sys_clk_sel = 0x3;
 		} else {
 			printf("\nCPLL ENABLE\n");
-			ret |= xilinx_xcvr_calc_cpll_config(core->ref_clock_khz,
-					core->lane_rate_kbps, &cpll_config);
-			out_div = cpll_config.out_div;
+			ret |= xilinx_xcvr_calc_cpll_config(core, core->ref_rate_khz,
+					core->lane_rate_khz, &cpll_config, &core->dev.out_div);
+			out_div = core->dev.out_div;
 
-			ln_rate_kbps = xilinx_xcvr_cpll_calc_lane_rate(
-					core->ref_clock_khz, &cpll_config);
+			ln_rate_kbps = xilinx_xcvr_cpll_calc_lane_rate(core,
+					core->ref_rate_khz,
+					&cpll_config,
+					out_div);
 
-			xilinx_xcvr_cpll_write_config(core, &cpll_config);
+			xilinx_xcvr_cpll_write_config(core,
+					XCVR_DRP_PORT_CHANNEL_BCAST,
+					&cpll_config);
 			local_sys_clk_sel = 0;
 		}
 
 
-		if ((ln_rate_kbps == 0) || (ln_rate_kbps != core->lane_rate_kbps)) {
+		if ((ln_rate_kbps == 0) || (ln_rate_kbps != core->lane_rate_khz)) {
 			printf("%s: Faild to set line rate!",__func__);
 			printf("Desired rate: %lu, obtained rate: %lu\n",
-				core->lane_rate_kbps, ln_rate_kbps);
+				core->lane_rate_khz, ln_rate_kbps);
 			return -1;
 		}
 
 		core->dev.sys_clk_sel = local_sys_clk_sel;
 
-		xilinx_xcvr_read_out_div(core, &rx_out_div, &tx_out_div);
+		xilinx_xcvr_read_out_div(core,
+				XCVR_DRP_PORT_COMMON,
+				&rx_out_div,
+				&tx_out_div);
 
 		if (core->rx_tx_n) {
-			xilinx_xcvr_configure_lpm_dfe_mode(core, core->dev.lpm_enable);
-			xilinx_xcvr_configure_cdr(core, core->lane_rate_kbps,
-				out_div, core->dev.lpm_enable);
+			xilinx_xcvr_configure_lpm_dfe_mode(core,
+					XCVR_DRP_PORT_COMMON,
+					core->dev.lpm_enable);
+			xilinx_xcvr_configure_cdr(core,
+					XCVR_DRP_PORT_COMMON,
+					core->lane_rate_khz,
+					out_div,
+					core->dev.lpm_enable);
 			rx_out_div = out_div;
 		} else {
 			tx_out_div = out_div;
 		}
 
 		core->dev.out_div = out_div;
-		xilinx_xcvr_write_out_div(core, rx_out_div, tx_out_div);
+		xilinx_xcvr_write_out_div(core,
+				XCVR_DRP_PORT_COMMON,
+				rx_out_div,
+				tx_out_div);
 
-		xcvr_write(core, XCVR_REG_CONTROL, (core->dev.lpm_enable ? XCVR_LPM_DFE_N : 0) |
-							XCVR_SYSCLK_SEL(core->dev.sys_clk_sel) |
-							XCVR_OUTCLK_SEL(core->dev.out_clk_sel));
+		xcvr_write(core, XCVR_REG_CONTROL,
+				(core->dev.lpm_enable ? XCVR_LPM_DFE_N : 0) |
+				XCVR_SYSCLK_SEL(core->dev.sys_clk_sel) |
+				XCVR_OUTCLK_SEL(core->dev.out_clk_sel));
 
 	}
 
@@ -327,13 +347,14 @@ int32_t xcvr_getconfig(xcvr_core *core)
 {
 	uint32_t regbuf;
 
-	xcvr_read(core, XCVR_REG_PARAMS, &regbuf);
-	core->lanes_per_link = (regbuf & XCVR_NUM_OF_LANES_MASK) >> XCVR_NUM_OF_LANES_OFFSET;
-	core->rx_tx_n = ((regbuf & XCVR_TX_OR_RXN_MASK) >> XCVR_TX_OR_RXN_OFFSET) ? 0 : 1;
+	xcvr_read(core, XCVR_REG_SYNTH, &regbuf);
+	core->num_lanes = (regbuf & XCVR_NUM_OF_LANES_MASK) >> XCVR_NUM_OF_LANES_OFFSET;
+	core->rx_tx_n = ((regbuf & XCVR_TX_OR_RXN_MASK) >> XCVR_TX_OR_RXN_OFFSET);
 
 #ifdef XILINX
-	core->dev.gt_type = (regbuf & XCVR_GT_TYPE_MASK) >> XCVR_GT_TYPE_OFFSET;
-	core->dev.qpll_enable = (regbuf & XCVR_QPLL_ENABLE_MASK) >> XCVR_QPLL_ENABLE_OFFSET;
+	core->dev.type = (regbuf & XCVR_GT_TYPE_MASK) >> XCVR_GT_TYPE_OFFSET;
+	core->dev.cpll_enable = ((regbuf & XCVR_QPLL_ENABLE_MASK) >>
+			XCVR_QPLL_ENABLE_OFFSET) ? 0 : 1;
 
 	xcvr_read(core, XCVR_REG_CONTROL, &regbuf);
 	core->dev.lpm_enable = (regbuf & (0x1 << 12)) >> 12;
