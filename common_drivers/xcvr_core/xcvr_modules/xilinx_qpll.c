@@ -49,50 +49,71 @@
 /*******************************************************************************
 * @brief xilinx_xcvr_calc_qpll_config
 *******************************************************************************/
-int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
-		uint32_t lane_rate_khz,	xcvr_qpll *qpll_config)
+int32_t xilinx_xcvr_calc_qpll_config(xcvr_core *core,
+		  uint32_t refclk_khz,
+		  uint32_t lane_rate_khz,
+		  struct xilinx_xcvr_qpll_config *conf,
+		  uint32_t *out_div)
 {
 	uint32_t n, d, m;
 	uint32_t vco_freq;
 	uint32_t band;
+	uint32_t vco0_min;
+	uint32_t vco0_max;
+	uint32_t vco1_min;
+	uint32_t vco1_max;
+	const uint8_t *N_gt;
 
-	qpll_config->refclk_div_M = 0;
-	qpll_config->out_div = 0;
-	qpll_config->fb_div = 0;
-	qpll_config->band = 0;
+	static const uint8_t N_gtx2[] = {16, 20, 32, 40, 64, 66, 80, 100, 0};
+	static const uint8_t N_gth34[] = {16, 20, 32, 40, 64, 66, 75, 80, 100,
+			112, 120, 125, 150, 160, 0};
 
-	const uint8_t N[] = {16, 20, 32, 40, 64, 66, 80, 100};
+	switch (core->dev.type) {
+	case XILINX_XCVR_TYPE_S7_GTX2:
+		N_gt = N_gtx2;
+		vco0_min = 5930000;
+		vco0_max = 8000000;
+		vco1_min = 9800000;
+		vco1_max = 12500000;
+		break;
+	case XILINX_XCVR_TYPE_US_GTH3:
+	case XILINX_XCVR_TYPE_US_GTH4:
+		N_gt = N_gth34;
+		vco0_min = 9800000;
+		vco0_max = 16375000;
+		vco1_min = vco0_min;
+		vco1_max = vco0_max;
+		break;
+	default:
+		return -1;
+	}
 
 	for (m = 1; m <= 4; m++) {
 		for (d = 1; d <= 16; d <<= 1) {
-			for (n = 0; n < ARRAY_SIZE(N); n++) {
-				vco_freq = refclk_khz * N[n] / m;
+			for (n = 0; N_gt[n] != 0; n++) {
+				vco_freq = refclk_khz * N_gt[n] / m;
 
 				/*
 				 * high band = 9.8G to 12.5GHz VCO
 				 * low band = 5.93G to 8.0GHz VCO
 				 */
-				if (vco_freq >= 9800000 && vco_freq <= 12500000)
+				if (vco_freq >= vco1_min && vco_freq <= vco1_max)
 					band = 1;
-				else if (vco_freq >= 5930000 && vco_freq <= 8000000)
+				else if (vco_freq >= vco0_min && vco_freq <= vco0_max)
 					band = 0;
 				else
 					continue;
 
-				if (vco_freq / d == lane_rate_khz) {
+				if (refclk_khz / m / d == lane_rate_khz / N_gt[n]) {
 
-					qpll_config->refclk_div_M = m;
-					qpll_config->fb_div = N[n];
-					qpll_config->band = band;
-					qpll_config->out_div = d;
+					if (conf) {
+						conf->refclk_div = m;
+						conf->fb_div = N_gt[n];
+						conf->band = band;
+					}
 
-#ifdef DEBUG
-					printf("QPLL config:\n");
-					printf("\trefclk_div_M = %lu\n", m);
-					printf("\tfb_div = %d\n", N[n]);
-					printf("\tband = %lu\n", band);
-					printf("\tout_div = %lu\n", d);
-#endif
+					if (out_div)
+						*out_div = d;
 
 					return 0;
 				}
@@ -100,93 +121,150 @@ int32_t xilinx_xcvr_calc_qpll_config(uint32_t refclk_khz,
 		}
 	}
 
-	printf("%s: Faild to find config for lane_rate_khz=%lu, ref_clock_khz=%lu\n",
-		__func__, lane_rate_khz, refclk_khz);
+	printf("%s: Failed to find matching dividers for %lu kHz rate\n",
+			__func__, lane_rate_khz);
 
 	return -1;
 }
 
-/*******************************************************************************
-* @brief xilinx_xcvr_qpll_read_config
-*******************************************************************************/
-int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
-	xcvr_qpll *qpll_config)
+int32_t xilinx_xcvr_gth34_qpll_read_config(xcvr_core *core,
+		uint32_t drp_port,
+		struct xilinx_xcvr_qpll_config *conf)
 {
-	uint32_t val;
-	int32_t ret;
+	uint32_t qpll = 0;
+	int32_t val;
 
-	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_CFG1_ADDR, &val);
-	if (ret < 0)
-		return ret;
+	val = xilinx_xcvr_drp_read(core, drp_port, QPLL_REFCLK_DIV(qpll));
+	if (val < 0)
+		return val;
 
-	switch ((val & QPLL_REFCLK_DIV_M_MASK) >> QPLL_REFCLK_DIV_M_OFFSET) {
+	switch ((val >> 7) & 0x1f) {
 	case 16:
-		qpll_config->refclk_div_M = 1;
+		conf->refclk_div = 1;
 		break;
 	case 0:
-		qpll_config->refclk_div_M = 2;
+		conf->refclk_div = 2;
 		break;
 	case 1:
-		qpll_config->refclk_div_M = 3;
+		conf->refclk_div = 3;
 		break;
 	case 2:
-		qpll_config->refclk_div_M = 4;
+		conf->refclk_div = 4;
+		break;
+	default:
+		conf->refclk_div = 5;
 		break;
 	}
 
-	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_FBDIV_N_ADDR, &val);
-	if (ret < 0)
-		return ret;
+	val = xilinx_xcvr_drp_read(core, drp_port, QPLL_FBDIV(qpll));
+	if (val < 0)
+		return val;
 
-	switch (val & QPLL_FBDIV_N_MASK) {
-	case 32:
-		qpll_config->fb_div = 16;
-		break;
-	case 48:
-		qpll_config->fb_div = 20;
-		break;
-	case 96:
-		qpll_config->fb_div = 32;
-		break;
-	case 128:
-		qpll_config->fb_div = 40;
-		break;
-	case 224:
-		qpll_config->fb_div = 64;
-		break;
-	case 320:
-		qpll_config->fb_div = 66;
-		break;
-	case 288:
-		qpll_config->fb_div = 80;
-		break;
-	case 368:
-		qpll_config->fb_div = 100;
-		break;
-	}
+	conf->fb_div = (val & 0xff) + 2;
 
-	ret = xcvr_drp_read(core, XCVR_REG_CM_SEL, QPLL_CFG0_ADDR, &val);
-	if (ret < 0)
-		return 0;
+	conf->band = 0;
 
-	if (val & QPLL_CFG0_LOWBAND_MASK)
-		qpll_config->band = 0;
-	else
-		qpll_config->band = 1;
+//	dev_err(core->dev, "qpll: fb_div=%d, qpll: refclk_div=%d\n",
+//			conf->fb_div, conf->refclk_div);
 
 	return 0;
 }
 
-/*******************************************************************************
-* @brief xilinx_xcvr_qpll_write_config
+
+int32_t xilinx_xcvr_gtx2_qpll_read_config(xcvr_core *core,
+		uint32_t drp_port,
+		struct xilinx_xcvr_qpll_config *conf)
+{
+	int32_t val;
+
+	val = xilinx_xcvr_drp_read(core, drp_port, QPLL_CFG1_ADDR);
+	if (val < 0)
+		return val;
+
+	switch ((val & QPLL_REFCLK_DIV_M_MASK) >> QPLL_REFCLK_DIV_M_OFFSET) {
+	case 16:
+		conf->refclk_div = 1;
+		break;
+	case 0:
+		conf->refclk_div = 2;
+		break;
+	case 1:
+		conf->refclk_div = 3;
+		break;
+	case 2:
+		conf->refclk_div = 4;
+		break;
+	}
+
+	val = xilinx_xcvr_drp_read(core, drp_port, QPLL_FBDIV_N_ADDR);
+	if (val < 0)
+		return val;
+
+	switch (val & QPLL_FBDIV_N_MASK) {
+	case 32:
+		conf->fb_div = 16;
+		break;
+	case 48:
+		conf->fb_div = 20;
+		break;
+	case 96:
+		conf->fb_div = 32;
+		break;
+	case 128:
+		conf->fb_div = 40;
+		break;
+	case 224:
+		conf->fb_div = 64;
+		break;
+	case 320:
+		conf->fb_div = 66;
+		break;
+	case 288:
+		conf->fb_div = 80;
+		break;
+	case 368:
+		conf->fb_div = 100;
+		break;
+	}
+
+	val = xilinx_xcvr_drp_read(core, drp_port, QPLL_CFG0_ADDR);
+	if (val < 0)
+		return 0;
+
+	if (val & QPLL_CFG0_LOWBAND_MASK)
+		conf->band = 0;
+	else
+		conf->band = 1;
+
+	return 0;
+}
+
+int32_t xilinx_xcvr_qpll_read_config(xcvr_core *core,
+		uint32_t drp_port,
+		struct xilinx_xcvr_qpll_config *conf)
+{
+	switch (core->dev.type) {
+	case XILINX_XCVR_TYPE_S7_GTX2:
+		return xilinx_xcvr_gtx2_qpll_read_config(core, drp_port, conf);
+	case XILINX_XCVR_TYPE_US_GTH3:
+	case XILINX_XCVR_TYPE_US_GTH4:
+		return xilinx_xcvr_gth34_qpll_read_config(core, drp_port, conf);
+	default:
+		return -1;
+	}
+}
+
+/***************************************************************************//**
+* @brief xcvr_qpll_write_config
 *******************************************************************************/
-int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
-	xcvr_qpll *qpll_config)
+int32_t xilinx_xcvr_gtx2_qpll_write_config(xcvr_core *core,
+		uint32_t drp_port,
+		const struct xilinx_xcvr_qpll_config *conf)
 {
 	uint32_t cfg0, cfg1, fbdiv, fbdiv_ratio;
 	int32_t ret;
 
-	switch (qpll_config->refclk_div_M) {
+	switch (conf->refclk_div) {
 	case 1:
 		cfg1 = QPLL_REFCLK_DIV_M(16);
 		break;
@@ -200,14 +278,13 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 		cfg1 = QPLL_REFCLK_DIV_M(2);
 		break;
 	default:
-		printf("Invalid refclk divider: %lu\n",
-			qpll_config->refclk_div_M);
+		printf("Invalid refclk divider: %lu\n", conf->refclk_div);
 		return -1;
 	}
 
 	fbdiv_ratio = QPLL_FBDIV_RATIO_MASK;
 
-	switch (qpll_config->fb_div) {
+	switch (conf->fb_div) {
 	case 16:
 		fbdiv = 32;
 		break;
@@ -234,32 +311,31 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 		fbdiv = 368;
 		break;
 	default:
-		printf("Invalid feedback divider: %lu\n",
-			qpll_config->fb_div);
+		printf("Invalid feedback divider: %lu\n", conf->fb_div);
 		return -1;
 	}
 
-	if (qpll_config->band)
+	if (conf->band)
 		cfg0 = 0;
 	else
 		cfg0 = QPLL_CFG0_LOWBAND_MASK;
 
-	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_CFG0_ADDR,
+	ret = xcvr_drp_update(core, drp_port, QPLL_CFG0_ADDR,
 		QPLL_CFG0_LOWBAND_MASK, cfg0);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_CFG1_ADDR,
+	ret = xcvr_drp_update(core, drp_port, QPLL_CFG1_ADDR,
 		QPLL_REFCLK_DIV_M_MASK, cfg1);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_FBDIV_N_ADDR,
+	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV_N_ADDR,
 		QPLL_FBDIV_N_MASK, fbdiv);
 	if (ret < 0)
 		return ret;
 
-	ret = xcvr_drp_update(core, XCVR_REG_CM_SEL, QPLL_FBDIV_RATIO_ADDR,
+	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV_RATIO_ADDR,
 		QPLL_FBDIV_RATIO_MASK, fbdiv_ratio);
 	if (ret < 0)
 		return ret;
@@ -267,16 +343,75 @@ int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
 	return 0;
 }
 
+/***************************************************************************//**
+* @brief xcvr_gth34_qpll_write_config
+*******************************************************************************/
+int32_t xilinx_xcvr_gth34_qpll_write_config(xcvr_core *core,
+		uint32_t drp_port,
+		const struct xilinx_xcvr_qpll_config *conf)
+{
+	uint32_t refclk, fbdiv;
+	int32_t ret;
+
+	fbdiv = conf->fb_div - 2;
+
+	switch (conf->refclk_div) {
+	case 1:
+		refclk = 16;
+		break;
+	case 2:
+		refclk = 0;
+		break;
+	case 3:
+		refclk = 1;
+		break;
+	case 4:
+		refclk = 2;
+		break;
+	default:
+		printf("Invalid refclk divider: %lu\n", conf->refclk_div);
+		return -1;
+	}
+
+	ret = xcvr_drp_update(core, drp_port, QPLL_FBDIV(0),
+		0xff, fbdiv);
+	if (ret < 0)
+		return ret;
+
+	return xcvr_drp_update(core, drp_port, QPLL_REFCLK_DIV(0),
+		0xf80, refclk << 7);
+}
+
+/***************************************************************************//**
+* @brief xcvr_qpll_write_config
+*******************************************************************************/
+int32_t xilinx_xcvr_qpll_write_config(xcvr_core *core,
+		uint32_t drp_port,
+		const struct xilinx_xcvr_qpll_config *conf)
+{
+	switch (core->dev.type) {
+	case XILINX_XCVR_TYPE_S7_GTX2:
+		return xilinx_xcvr_gtx2_qpll_write_config(core, drp_port, conf);
+	case XILINX_XCVR_TYPE_US_GTH3:
+	case XILINX_XCVR_TYPE_US_GTH4:
+		return xilinx_xcvr_gth34_qpll_write_config(core, drp_port, conf);
+	default:
+		return -1;
+	}
+}
+
 /*******************************************************************************
 * @brief xilinx_xcvr_qpll_calc_lane_rate
 *******************************************************************************/
-uint32_t xilinx_xcvr_qpll_calc_lane_rate(uint32_t ref_clk_khz,
-		xcvr_qpll *qpll_config)
+uint32_t xilinx_xcvr_qpll_calc_lane_rate(xcvr_core *core,
+		uint32_t refclk_hz,
+		const struct xilinx_xcvr_qpll_config *conf,
+		uint32_t out_div)
 {
-	if (qpll_config->refclk_div_M == 0 || qpll_config->out_div == 0)
+	if (conf->refclk_div == 0 || out_div == 0)
 		return 0;
 
-	return (ref_clk_khz * qpll_config->fb_div) / (qpll_config->refclk_div_M * qpll_config->out_div);
+	return (refclk_hz * conf->fb_div) / (conf->refclk_div * out_div);
 }
 
 #endif
