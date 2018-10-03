@@ -54,13 +54,13 @@ typedef enum {
 	PM_300,
 	PM_500,
 	PM_1000,
-} clk_ppm;
+} xilinx_xcvr_refclk_ppm;
 
-typedef struct {
+struct fpga_dev {
 	xcvr_pll		link_pll;
 	xcvr_pll		atx_pll;
 	xcvr_pll		channel_pll[8];	// max 8
-} fpga_dev;
+};
 #endif
 
 #ifdef XILINX
@@ -68,30 +68,46 @@ typedef enum {
 	PM_200,
 	PM_700,
 	PM_1250,
-} clk_ppm;
+} xilinx_xcvr_refclk_ppm;
 
-typedef struct {
-	uint8_t			gt_type;
-	uint8_t			qpll_enable;
-	uint8_t			lpm_enable;
-	uint32_t		sys_clk_sel;
-	uint32_t		out_clk_sel;
-	uint32_t		out_div;
-} fpga_dev;
+typedef enum {
+	XILINX_XCVR_TYPE_S7_GTX2,
+	XILINX_XCVR_TYPE_US_GTH3,
+	XILINX_XCVR_TYPE_US_GTH4,
+} xilinx_xcvr_type;
+
+struct xilinx_xcvr_qpll_config {
+	uint32_t refclk_div;
+	uint32_t fb_div;
+	uint32_t band;
+};
+
+struct xilinx_xcvr_cpll_config {
+	uint32_t refclk_div;
+	uint32_t fb_div_N1;
+	uint32_t fb_div_N2;
+};
+
+struct fpga_dev {
+	uint32_t			   sys_clk_sel;
+	uint32_t			   out_clk_sel;
+	uint32_t			   out_div;
+	uint8_t				   lpm_enable;
+	uint8_t				   cpll_enable;
+	xilinx_xcvr_type	   type;
+};
 #endif
 
 typedef struct {
-	uint32_t		base_address;
-	uint8_t			initial_recalc;
-	uint8_t			reconfig_bypass;
-	uint32_t		ref_clock_khz;
-	uint32_t		link_clk_khz;
-	uint32_t		lane_rate_kbps;
-	uint32_t		lanes_per_link;
-	uint16_t		encoding;
-	uint8_t 		rx_tx_n;
-	clk_ppm			refclk_ppm;
-	fpga_dev		dev;
+	uint8_t				   num_lanes;
+	uint8_t				   rx_tx_n;
+	uint32_t			   base_address;
+	xilinx_xcvr_refclk_ppm ppm;
+	uint16_t			   encoding;
+	uint32_t			   lane_rate_khz;
+	uint32_t			   ref_rate_khz;
+	uint8_t				   reconfig_bypass;
+	struct fpga_dev		   dev;
 } xcvr_core;
 
 /******************************************************************************/
@@ -124,9 +140,9 @@ typedef struct {
 #define XCVR_SYSCLK_SEL(x)			(((x) & 0x3) << 4)
 #define XCVR_OUTCLK_SEL(x)			(((x) & 0x7) << 0)
 
-#define XCVR_REG_PARAMS				0x0024
-#define XCVR_QPLL_ENABLE_MASK			0x01
-#define XCVR_GT_TYPE_MASK			0x0f
+#define XCVR_REG_SYNTH				0x24
+#define XCVR_QPLL_ENABLE_MASK		(0x01 << XCVR_QPLL_ENABLE_OFFSET)
+#define XCVR_GT_TYPE_MASK			(0x0f << XCVR_GT_TYPE_OFFSET)
 #define XCVR_TX_OR_RXN_MASK			0x100
 #define XCVR_NUM_OF_LANES_MASK			0xff
 #define XCVR_QPLL_ENABLE_OFFSET			20
@@ -141,23 +157,23 @@ typedef struct {
 #define XCVR_CM_ADDR(x)				(((x) & 0xFFF) << 16)
 #define XCVR_CM_WDATA(x)			(((x) & 0xFFFF) << 0)
 
-#define XCVR_REG_CM_STATUS			0x0048
-#define XCVR_CM_BUSY				(1 << 16)
-#define XCVR_CM_RDATA(x)			(((x) & 0xFFFF) << 0)
+#define XCVR_REG_DRP_SEL(x)		(0x0040 + (x))
 
-#define XCVR_REG_CH_SEL				0x0060
+#define XCVR_REG_DRP_CTRL(x)	(0x0044 + (x))
+#define XCVR_DRP_CTRL_WR		(1 << 28)
+#define XCVR_DRP_CTRL_ADDR(x)	(((x) & 0xFFF) << 16)
+#define XCVR_DRP_CTRL_WDATA(x)	(((x) & 0xFFFF) << 0)
 
-#define XCVR_REG_CH_CONTROL			0x0064
-#define XCVR_CH_WR				(1 << 28)
-#define XCVR_CH_ADDR(x)				(((x) & 0xFFF) << 16)
-#define XCVR_CH_WDATA(x)			(((x) & 0xFFFF) << 0)
+#define XCVR_REG_DRP_STATUS(x)		(0x0048 + (x))
+#define XCVR_DRP_STATUS_BUSY		(1 << 16)
+#define XCVR_DRP_STATUS_RDATA(x)	(((x) & 0xFFFF) << 0)
 
-#define XCVR_REG_CH_STATUS			0x0068
-#define XCVR_CH_BUSY				(1 << 16)
-#define XCVR_CH_RDATA(x)			(((x) & 0xFFFF) << 0)
+#define XCVR_DRP_PORT_ADDR_COMMON	0x00
+#define XCVR_DRP_PORT_ADDR_CHANNEL	0x20
 
-#define XCVR_BROADCAST				0xff
-#define ENC_8B10B				810
+#define XCVR_DRP_PORT_COMMON		0x00
+#define XCVR_DRP_PORT_CHANNEL(x)	(0x1 + x)
+#define XCVR_DRP_PORT_CHANNEL_BCAST	0xff
 
 #ifdef ALTERA
 #define XCVR_REG_STATUS2			0x0018
