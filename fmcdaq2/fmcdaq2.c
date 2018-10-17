@@ -84,10 +84,10 @@ enum ad9523_channels {
  * @brief main
  ******************************************************************************/
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
-					 xcvr_core *p_ad9144_xcvr,
-					 struct ad9680_init_param *p_ad9680_param,
-			 	 	 xcvr_core *p_ad9680_xcvr,
-					 struct ad9523_platform_data *p_ad9523_param)
+		     xcvr_core *p_ad9144_xcvr,
+		     struct ad9680_init_param *p_ad9680_param,
+		     xcvr_core *p_ad9680_xcvr,
+		     struct ad9523_platform_data *p_ad9523_param)
 {
 
 	uint8_t mode = 0;
@@ -103,132 +103,132 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 	mode = ad_uart_read();
 
 	switch (mode) {
-		case '5':
-			/* REF clock = 100 MHz */
-			p_ad9523_param->channels[DAC_DEVICE_CLK].channel_divider = 10;
-			p_ad9144_param->pll_ref_frequency_khz = 100000;
+	case '5':
+		/* REF clock = 100 MHz */
+		p_ad9523_param->channels[DAC_DEVICE_CLK].channel_divider = 10;
+		p_ad9144_param->pll_ref_frequency_khz = 100000;
 
-			/* DAC at 2 GHz using the internal PLL and 2 times interpolation */
-			p_ad9144_param->interpolation = 2;
-			p_ad9144_param->pll_enable = 1;
-			p_ad9144_param->pll_dac_frequency_khz = 2000000;
-			break;
-		case '4':
-			printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
-			p_ad9523_param->pll2_vco_diff_m1 = 5;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
-					channel_divider = 1;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
-					channel_divider = 128;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
-					channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
-					channel_divider = 1;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
-					channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
-					channel_divider = 128;
-			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 6000000;
-			p_ad9144_xcvr->lane_rate_kbps = 6000000;
-			p_ad9144_xcvr->ref_clock_khz = 300000;
-			p_ad9680_xcvr->reconfig_bypass = 0;
-			p_ad9680_param->lane_rate_kbps = 6000000;
-			p_ad9680_xcvr->lane_rate_kbps = 6000000;
-			p_ad9680_xcvr->ref_clock_khz = 300000;
+		/* DAC at 2 GHz using the internal PLL and 2 times interpolation */
+		p_ad9144_param->interpolation = 2;
+		p_ad9144_param->pll_enable = 1;
+		p_ad9144_param->pll_dac_frequency_khz = 2000000;
+		break;
+	case '4':
+		printf ("4 - ADC  600 MSPS; DAC  600 MSPS\n");
+		p_ad9523_param->pll2_vco_diff_m1 = 5;
+		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+		channel_divider = 1;
+		(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+		channel_divider = 128;
+		(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+		channel_divider = 128;
+		(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+		channel_divider = 1;
+		(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+		channel_divider = 128;
+		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+		channel_divider = 128;
+		p_ad9144_xcvr->reconfig_bypass = 0;
+		p_ad9144_param->lane_rate_kbps = 6000000;
+		p_ad9144_xcvr->lane_rate_kbps = 6000000;
+		p_ad9144_xcvr->ref_clock_khz = 300000;
+		p_ad9680_xcvr->reconfig_bypass = 0;
+		p_ad9680_param->lane_rate_kbps = 6000000;
+		p_ad9680_xcvr->lane_rate_kbps = 6000000;
+		p_ad9680_xcvr->ref_clock_khz = 300000;
 #ifdef XILINX
-			p_ad9144_xcvr->dev.lpm_enable = 0;
-			p_ad9144_xcvr->dev.qpll_enable = 0;
-			p_ad9144_xcvr->dev.out_clk_sel = 4;
+		p_ad9144_xcvr->dev.lpm_enable = 0;
+		p_ad9144_xcvr->dev.qpll_enable = 0;
+		p_ad9144_xcvr->dev.out_clk_sel = 4;
 
-			p_ad9680_xcvr->dev.lpm_enable = 1;
-			p_ad9680_xcvr->dev.qpll_enable = 0;
-			p_ad9680_xcvr->dev.out_clk_sel = 4;
+		p_ad9680_xcvr->dev.lpm_enable = 1;
+		p_ad9680_xcvr->dev.qpll_enable = 0;
+		p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
-			break;
-		case '3':
-			printf ("3 - ADC  500 MSPS; DAC  500 MSPS\n");
-			p_ad9523_param->pll2_vco_diff_m1 = 3;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
-					channel_divider = 4;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
-					channel_divider = 256;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
-					channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
-					channel_divider = 4;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
-					channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
-					channel_divider = 256;
-			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 5000000;
-			p_ad9144_xcvr->lane_rate_kbps = 5000000;
-			p_ad9144_xcvr->ref_clock_khz = 250000;
-			p_ad9680_xcvr->reconfig_bypass = 0;
-			p_ad9680_param->lane_rate_kbps = 5000000;
-			p_ad9680_xcvr->lane_rate_kbps = 5000000;
-			p_ad9680_xcvr->ref_clock_khz = 250000;
+		break;
+	case '3':
+		printf ("3 - ADC  500 MSPS; DAC  500 MSPS\n");
+		p_ad9523_param->pll2_vco_diff_m1 = 3;
+		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+		channel_divider = 4;
+		(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+		channel_divider = 256;
+		(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+		channel_divider = 256;
+		(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+		channel_divider = 4;
+		(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+		channel_divider = 256;
+		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+		channel_divider = 256;
+		p_ad9144_xcvr->reconfig_bypass = 0;
+		p_ad9144_param->lane_rate_kbps = 5000000;
+		p_ad9144_xcvr->lane_rate_kbps = 5000000;
+		p_ad9144_xcvr->ref_clock_khz = 250000;
+		p_ad9680_xcvr->reconfig_bypass = 0;
+		p_ad9680_param->lane_rate_kbps = 5000000;
+		p_ad9680_xcvr->lane_rate_kbps = 5000000;
+		p_ad9680_xcvr->ref_clock_khz = 250000;
 #ifdef XILINX
-			p_ad9144_xcvr->dev.lpm_enable = 1;
-			p_ad9144_xcvr->dev.qpll_enable = 0;
-			p_ad9144_xcvr->dev.out_clk_sel = 4;
+		p_ad9144_xcvr->dev.lpm_enable = 1;
+		p_ad9144_xcvr->dev.qpll_enable = 0;
+		p_ad9144_xcvr->dev.out_clk_sel = 4;
 
-			p_ad9680_xcvr->dev.lpm_enable = 1;
-			p_ad9680_xcvr->dev.qpll_enable = 0;
-			p_ad9680_xcvr->dev.out_clk_sel = 4;
+		p_ad9680_xcvr->dev.lpm_enable = 1;
+		p_ad9680_xcvr->dev.qpll_enable = 0;
+		p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
-			break;
-		case '2':
-			printf ("2 - ADC  500 MSPS; DAC 1000 MSPS\n");
-			p_ad9523_param->pll2_vco_diff_m1 = 3;
-			(&p_ad9523_param->channels[DAC_FPGA_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
-					channel_divider = 1;
-			(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
-					channel_divider = 128;
-			(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
-					channel_divider = 128;
-			(&p_ad9523_param->channels[ADC_FPGA_CLK])->
-					channel_divider = 4;
-			(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
-					channel_divider = 2;
-			(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
-					channel_divider = 256;
-			(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
-					channel_divider = 256;
-			p_ad9144_xcvr->reconfig_bypass = 0;
-			p_ad9144_param->lane_rate_kbps = 10000000;
-			p_ad9144_xcvr->lane_rate_kbps = 10000000;
-			p_ad9144_xcvr->ref_clock_khz = 500000;
-			p_ad9680_xcvr->reconfig_bypass = 0;
-			p_ad9680_param->lane_rate_kbps = 5000000;
-			p_ad9680_xcvr->lane_rate_kbps = 5000000;
-			p_ad9680_xcvr->ref_clock_khz = 250000;
+		break;
+	case '2':
+		printf ("2 - ADC  500 MSPS; DAC 1000 MSPS\n");
+		p_ad9523_param->pll2_vco_diff_m1 = 3;
+		(&p_ad9523_param->channels[DAC_FPGA_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[DAC_DEVICE_CLK])->
+		channel_divider = 1;
+		(&p_ad9523_param->channels[DAC_DEVICE_SYSREF])->
+		channel_divider = 128;
+		(&p_ad9523_param->channels[DAC_FPGA_SYSREF])->
+		channel_divider = 128;
+		(&p_ad9523_param->channels[ADC_FPGA_CLK])->
+		channel_divider = 4;
+		(&p_ad9523_param->channels[ADC_DEVICE_CLK])->
+		channel_divider = 2;
+		(&p_ad9523_param->channels[ADC_DEVICE_SYSREF])->
+		channel_divider = 256;
+		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
+		channel_divider = 256;
+		p_ad9144_xcvr->reconfig_bypass = 0;
+		p_ad9144_param->lane_rate_kbps = 10000000;
+		p_ad9144_xcvr->lane_rate_kbps = 10000000;
+		p_ad9144_xcvr->ref_clock_khz = 500000;
+		p_ad9680_xcvr->reconfig_bypass = 0;
+		p_ad9680_param->lane_rate_kbps = 5000000;
+		p_ad9680_xcvr->lane_rate_kbps = 5000000;
+		p_ad9680_xcvr->ref_clock_khz = 250000;
 #ifdef XILINX
-			p_ad9144_xcvr->dev.lpm_enable = 0;
-			p_ad9144_xcvr->dev.qpll_enable = 1;
-			p_ad9144_xcvr->dev.out_clk_sel = 4;
+		p_ad9144_xcvr->dev.lpm_enable = 0;
+		p_ad9144_xcvr->dev.qpll_enable = 1;
+		p_ad9144_xcvr->dev.out_clk_sel = 4;
 
-			p_ad9680_xcvr->dev.lpm_enable = 1;
-			p_ad9680_xcvr->dev.qpll_enable = 0;
-			p_ad9680_xcvr->dev.out_clk_sel = 4;
+		p_ad9680_xcvr->dev.lpm_enable = 1;
+		p_ad9680_xcvr->dev.qpll_enable = 0;
+		p_ad9680_xcvr->dev.out_clk_sel = 4;
 #endif
-			break;
-		default:
-			printf ("1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
-			p_ad9144_xcvr->ref_clock_khz = 500000;
-			p_ad9680_xcvr->ref_clock_khz = 500000;
-			break;
+		break;
+	default:
+		printf ("1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
+		p_ad9144_xcvr->ref_clock_khz = 500000;
+		p_ad9680_xcvr->ref_clock_khz = 500000;
+		break;
 	}
 
 	return(0);
@@ -326,23 +326,23 @@ int main(void)
 
 #ifdef ALTERA
 	ad9144_xcvr.base_address =
-			AD9144_JESD204_LINK_MANAGEMENT_BASE;
+		AD9144_JESD204_LINK_MANAGEMENT_BASE;
 	ad9144_xcvr.dev.link_pll.base_address =
-			AD9144_JESD204_LINK_PLL_RECONFIG_BASE;
+		AD9144_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9144_xcvr.dev.atx_pll.base_address =
-			AD9144_JESD204_LANE_PLL_RECONFIG_BASE;
+		AD9144_JESD204_LANE_PLL_RECONFIG_BASE;
 	ad9144_core.base_address =
-			AXI_AD9144_CORE_BASE;
+		AXI_AD9144_CORE_BASE;
 	ad9680_xcvr.base_address =
-			AD9680_JESD204_LINK_MANAGEMENT_BASE;
+		AD9680_JESD204_LINK_MANAGEMENT_BASE;
 	ad9680_xcvr.dev.link_pll.base_address =
-			AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
+		AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
 	ad9680_core.base_address =
-			AXI_AD9680_CORE_BASE;
+		AXI_AD9680_CORE_BASE;
 	ad9144_jesd.base_address =
-			AD9144_JESD204_LINK_RECONFIG_BASE;
+		AD9144_JESD204_LINK_RECONFIG_BASE;
 	ad9680_jesd.base_address =
-			AD9680_JESD204_LINK_RECONFIG_BASE;
+		AD9680_JESD204_LINK_RECONFIG_BASE;
 
 	ad9144_xcvr.dev.channel_pll[0].type = cmu_tx_type;
 	ad9680_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
@@ -454,21 +454,21 @@ int main(void)
 	ad9144_core.channels = &ad9144_channels[0];
 
 	ad9144_param.stpl_samples[0][0] =
-			(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
 	ad9144_param.stpl_samples[0][1] =
-			(ad9144_channels[0].pat_data >> 16) & 0xffff;
+		(ad9144_channels[0].pat_data >> 16) & 0xffff;
 	ad9144_param.stpl_samples[0][2] =
-			(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
 	ad9144_param.stpl_samples[0][3] =
-			(ad9144_channels[0].pat_data >> 16) & 0xffff;
+		(ad9144_channels[0].pat_data >> 16) & 0xffff;
 	ad9144_param.stpl_samples[1][0] =
-			(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
 	ad9144_param.stpl_samples[1][1] =
-			(ad9144_channels[1].pat_data >> 16) & 0xffff;
+		(ad9144_channels[1].pat_data >> 16) & 0xffff;
 	ad9144_param.stpl_samples[1][2] =
-			(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
 	ad9144_param.stpl_samples[1][3] =
-			(ad9144_channels[1].pat_data >> 16) & 0xffff;
+		(ad9144_channels[1].pat_data >> 16) & 0xffff;
 
 //******************************************************************************
 // ADC (AD9680) and the receive path ( AXI_ADXCVR,
@@ -510,10 +510,10 @@ int main(void)
 
 	// change the default JESD configurations, if required
 	fmcdaq2_reconfig(&ad9144_param,
-					 &ad9144_xcvr,
-					 &ad9680_param,
-					 &ad9680_xcvr,
-					 ad9523_param.pdata);
+			 &ad9144_xcvr,
+			 &ad9680_param,
+			 &ad9680_xcvr,
+			 ad9523_param.pdata);
 
 //******************************************************************************
 // bring up the system
@@ -642,7 +642,7 @@ int main(void)
 	ad9144_channels[1].sel = DAC_SRC_DMA;
 	dac_data_setup(&ad9144_core);
 
-	if(!dmac_start_transaction(ad9144_dma)){
+	if(!dmac_start_transaction(ad9144_dma)) {
 		printf("daq2: transmit data from memory\n");
 	};
 #else
@@ -657,7 +657,7 @@ int main(void)
 //******************************************************************************
 
 	ad9680_test(ad9680_device, AD9680_TEST_OFF);
-	if(!dmac_start_transaction(ad9680_dma)){
+	if(!dmac_start_transaction(ad9680_dma)) {
 		printf("daq2: RX capture done.\n");
 	};
 
