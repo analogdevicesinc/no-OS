@@ -213,7 +213,7 @@ int32_t spi_init(spi_desc **desc,
 	}
 
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
-		free(dev)
+		free(dev);
 		return FAILURE;
 	}
 	#endif
