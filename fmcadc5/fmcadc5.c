@@ -187,8 +187,6 @@ int main(void)
 	rx_xfer.id = 0;
 	rx_xfer.no_of_samples = 32768;
 
-	ad_platform_init();
-
 	/* Set up the device */
 	ad9625_setup(&ad9625_0_device, ad9625_0_param);
 	ad9625_setup(&ad9625_1_device, ad9625_1_param);
@@ -261,8 +259,6 @@ int main(void)
 	gpio_remove(gpio_pwr_good);
 
 	i5g_remove(i5g_core);
-
-	ad_platform_close();
 
 	printf("Done\n");
 
