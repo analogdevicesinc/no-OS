@@ -134,10 +134,10 @@ int main(void)
 	if (!pwr_good) {
 		xil_printf("Error: GPIO Power Good NOT set.\n\r");
 		return -1;
-    }
+	}
 	gpio_set_value(gpio_rst_0, 1);
 	gpio_set_value(gpio_rst_1, 1);
-        	mdelay(100);
+	mdelay(100);
 
 	/* ADC and receive path configuration */
 	ad9625_0_param.lane_rate_kbps = 6250000;
