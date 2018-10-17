@@ -213,7 +213,7 @@ int main(void)
 	ad9680_1_core.no_of_channels = 2;
 	ad9680_1_core.resolution = 14;
 
-    // receiver DMA configuration
+	// receiver DMA configuration
 
 #ifdef ZYNQ
 	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
@@ -285,15 +285,15 @@ int main(void)
 	ad9680_test(ad9680_0_device, AD9680_TEST_RAMP);
 	ad9680_test(ad9680_1_device, AD9680_TEST_RAMP);
 
-	if(!dmac_start_transaction(ad9680_dma)){
+	if(!dmac_start_transaction(ad9680_dma)) {
 		adc_ramp_test(ad9680_0_core, 2,
-					  rx_xfer.no_of_samples / (2*ad9680_0_core.no_of_channels),
-					  rx_xfer.start_address);
+			      rx_xfer.no_of_samples / (2*ad9680_0_core.no_of_channels),
+			      rx_xfer.start_address);
 	};
 
 	ad9680_test(ad9680_0_device, AD9680_TEST_OFF);
 	ad9680_test(ad9680_1_device, AD9680_TEST_OFF);
-	if(!dmac_start_transaction(ad9680_dma)){
+	if(!dmac_start_transaction(ad9680_dma)) {
 		ad_printf("RX capture done.\n");
 	};
 
