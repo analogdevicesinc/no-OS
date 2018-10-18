@@ -367,7 +367,7 @@ uint32_t xilinx_xcvr_cpll_calc_lane_rate(xcvr_core *core,
 		return 0;
 
 	return (refclk_hz * conf->fb_div_N1 * conf->fb_div_N2 * 2) /
-	       (conf->refclk_div * out_div * 1000);
+	       (conf->refclk_div * out_div);
 }
 
 /***************************************************************************//**
