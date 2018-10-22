@@ -2,7 +2,7 @@
 Additional required source files:
 	cp ../../drivers/axi_adc_core/axi_adc_core.c devices/adi_hal/
 	cp ../../drivers/axi_adc_core/axi_adc_core.h devices/adi_hal/
-	cp ../../drivers/axi_dac_core/axi_dac_core.h devices/adi_hal/
+	cp ../../drivers/axi_dac_core/axi_dac_core.c devices/adi_hal/
 	cp ../../drivers/axi_dac_core/axi_dac_core.h devices/adi_hal/
 	cp ../../drivers/axi_dmac/axi_dmac.c devices/adi_hal/
 	cp ../../drivers/axi_dmac/axi_dmac.h devices/adi_hal/
