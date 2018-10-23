@@ -204,7 +204,7 @@ int32_t spi_init(spi_desc **desc,
 	dev->cpha = param->cpha;
 	dev->cpol = param->cpol;
 
-	#ifdef ZYNQ
+#ifdef ZYNQ
 	m_spi_config = XSpiPs_LookupConfig(dev->device_id);
 
 	if (m_spi_config == NULL) {
@@ -212,11 +212,12 @@ int32_t spi_init(spi_desc **desc,
 		return FAILURE;
 	}
 
-	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config, m_spi_config->BaseAddress) != 0) {
+	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config,
+				 m_spi_config->BaseAddress) != 0) {
 		free(dev);
 		return FAILURE;
 	}
-	#endif
+#endif
 
 	*desc = dev;
 
@@ -255,9 +256,9 @@ int32_t spi_write_and_read(spi_desc *desc,
 	initss = initss | (0x7 << XSPIPS_CR_SSCTRL_SHIFT);
 	XSpiPs_WriteReg(desc->base_address, XSPIPS_CR_OFFSET, initss);
 	XSpiPs_SetOptions(&m_spi, XSPIPS_MASTER_OPTION |
-			XSPIPS_DECODE_SSELECT_OPTION | XSPIPS_FORCE_SSELECT_OPTION |
-			((desc->cpol == 1) ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			((desc->cpha == 1) ? XSPIPS_CLK_PHASE_1_OPTION : 0));
+			  XSPIPS_DECODE_SSELECT_OPTION | XSPIPS_FORCE_SSELECT_OPTION |
+			  ((desc->cpol == 1) ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+			  ((desc->cpha == 1) ? XSPIPS_CLK_PHASE_1_OPTION : 0));
 	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) 0x7);
 	XSpiPs_SetClkPrescaler(&m_spi, XSPIPS_CLK_PRESCALE_64);
 	XSpiPs_SetSlaveSelect(&m_spi,  (uint8_t) (desc->chip_select & 0x7));
@@ -288,14 +289,16 @@ int32_t spi_write_and_read(spi_desc *desc,
 	uint32_t i;
 
 	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), desc->chip_select);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x086 | (desc->cpol<<3) | (desc->cpha<<4)));
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60),
+		  (0x086 | (desc->cpol<<3) | (desc->cpha<<4)));
 	for (i = 0; i < bytes_number; i++) {
 		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x68), *(data + i));
 		while ((Xil_In32(XPAR_SPI_0_BASEADDR + 0x64) & 0x1) == 0x1) {}
 		*(data + i) = Xil_In32(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff;
 	}
 	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xff);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60), (0x186 | (desc->cpol<<3) | (desc->cpha<<4)));
+	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60),
+		  (0x186 | (desc->cpol<<3) | (desc->cpha<<4)));
 
 #endif
 
@@ -439,7 +442,8 @@ int32_t gpio_set_value(gpio_desc *desc,
 		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
 		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
 		pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (value << ppos)));
+		Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c),
+			  ((pdata & ~pmask) | (value << ppos)));
 		pstatus = 0;
 		break;
 #endif
@@ -450,14 +454,16 @@ int32_t gpio_set_value(gpio_desc *desc,
 		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0308);
 		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0308), (pdata | pmask));
 		pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
-		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050), ((pdata & ~pmask) | (value << ppos)));
+		Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050),
+			  ((pdata & ~pmask) | (value << ppos)));
 		pstatus = 0;
 		break;
 #endif
 #ifdef NIOS_II
 	case NIOS_II_GPIO:
 		pdata = IORD_32DIRECT(SYS_GPIO_OUT_BASE, 0x0);
-		IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0, ((pdata & ~pmask) | (value << ppos)));
+		IOWR_32DIRECT(SYS_GPIO_OUT_BASE, 0x0,
+			      ((pdata & ~pmask) | (value << ppos)));
 		pstatus = 0;
 		break;
 #endif
@@ -466,7 +472,8 @@ int32_t gpio_set_value(gpio_desc *desc,
 		pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
 		Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
 		pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
-		Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (value << ppos)));
+		Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8),
+			  ((pdata & ~pmask) | (value << ppos)));
 		pstatus = 0;
 		break;
 #endif
@@ -491,15 +498,15 @@ int32_t gpio_get_value(gpio_desc *desc,
 	int32_t pstatus;
 	uint32_t ppos;
 	uint32_t pdata;
-	#ifdef ZYNQ
+#ifdef ZYNQ
 	uint32_t pmask;
-	#endif
+#endif
 
 	pstatus = -1;
 	ppos = desc->number - 32;
-	#ifdef ZYNQ
+#ifdef ZYNQ
 	pmask = 0x1 << ppos;
-	#endif
+#endif
 
 	switch(desc->type) {
 #ifdef ZYNQ_PS7
@@ -543,7 +550,7 @@ int32_t gpio_get_value(gpio_desc *desc,
 
 /***************************************************************************//**
  * @brief ad_gpio_set_range
- *******************************************************************************/
+ ******************************************************************************/
 
 int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
 {
@@ -568,7 +575,8 @@ int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
 	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x02c8);
 	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x02c8), (pdata | pmask));
 	pdata = Xil_In32(XPAR_PS7_GPIO_0_BASEADDR + 0x004c);
-	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c), ((pdata & ~pmask) | (data << ppos)));
+	Xil_Out32((XPAR_PS7_GPIO_0_BASEADDR + 0x004c),
+		  ((pdata & ~pmask) | (data << ppos)));
 	pstatus = 0;
 
 #endif
@@ -580,7 +588,8 @@ int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
 	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0308);
 	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0308), (pdata | pmask));
 	pdata = Xil_In32(XPAR_PSU_GPIO_0_BASEADDR + 0x0050);
-	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050), ((pdata & ~pmask) | (data << ppos)));
+	Xil_Out32((XPAR_PSU_GPIO_0_BASEADDR + 0x0050),
+		  ((pdata & ~pmask) | (data << ppos)));
 	pstatus = 0;
 
 #endif
@@ -598,7 +607,8 @@ int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
 	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0xc);
 	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0xc), (pdata & ~pmask));
 	pdata = Xil_In32(XPAR_AXI_GPIO_BASEADDR + 0x8);
-	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8), ((pdata & ~pmask) | (data << ppos)));
+	Xil_Out32((XPAR_AXI_GPIO_BASEADDR + 0x8),
+		  ((pdata & ~pmask) | (data << ppos)));
 	pstatus = 0;
 
 #endif
@@ -608,7 +618,7 @@ int32_t ad_gpio_set_range(uint8_t start_pin, uint8_t num_pins, uint8_t data)
 
 /***************************************************************************//**
  * @brief ad_gpio_get_range
- *******************************************************************************/
+ ******************************************************************************/
 
 int32_t ad_gpio_get_range(uint8_t start_pin, uint8_t num_pins, uint32_t *data)
 {
@@ -667,7 +677,7 @@ int32_t ad_gpio_get_range(uint8_t start_pin, uint8_t num_pins, uint32_t *data)
 
 /***************************************************************************//**
  * @brief do_div
- *******************************************************************************/
+ ******************************************************************************/
 uint64_t do_div(uint64_t* n, uint64_t base)
 {
 	uint64_t mod = 0;
@@ -680,7 +690,7 @@ uint64_t do_div(uint64_t* n, uint64_t base)
 
 /***************************************************************************//**
  * @brief ad_reg_write_16
- *******************************************************************************/
+ ******************************************************************************/
 void ad_reg_write_16(uint32_t addr, uint32_t data)
 {
 	uint32_t m_data;
@@ -723,7 +733,7 @@ void usleep(uint32_t us_count)
 
 /***************************************************************************//**
  * @brief ad_uart_read
- *******************************************************************************/
+ ******************************************************************************/
 uint8_t ad_uart_read()
 {
 #ifdef ZYNQ_PS7
@@ -748,8 +758,9 @@ uint8_t ad_uart_read()
 
 /***************************************************************************//**
  * @brief ad_pow2 Create a mask for a given number of bit
- *******************************************************************************/
-uint32_t ad_pow2(uint32_t number) {
+ ******************************************************************************/
+uint32_t ad_pow2(uint32_t number)
+{
 
 	uint32_t index;
 	uint32_t mask = 1;
