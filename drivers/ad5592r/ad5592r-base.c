@@ -63,7 +63,7 @@ int32_t ad5592r_base_reg_write(struct ad5592r_dev *dev, uint8_t reg,
  * @return 0 in case of success, negative error code otherwise
  */
 int32_t ad5592r_base_reg_read(struct ad5592r_dev *dev, uint8_t reg,
-			      uint16_t value)
+			      uint16_t *value)
 {
 	return dev->ops->reg_read(dev, reg, value);
 }
