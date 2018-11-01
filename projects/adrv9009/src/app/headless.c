@@ -20,13 +20,19 @@
 
 #include <stdio.h>
 #include "adi_hal.h"
+#include "platform_drivers.h"
 #include "parameters.h"
 #include "util.h"
 #include "ad9528.h"
+#ifdef ALTERA_PLATFORM
+#include "clk_altera_a10_fpll.h"
+#include "altera_adxcvr.h"
+#else
 #include "clk_axi_clkgen.h"
+#include "axi_adxcvr.h"
+#endif
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
-#include "axi_adxcvr.h"
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
@@ -55,6 +61,26 @@ int main(void)
 		&clockSysrefSettings
 	};
 	ad9528Device_t *clockAD9528_device = &clockAD9528_;
+#ifdef ALTERA_PLATFORM
+	struct altera_a10_fpll_init rx_device_clk_pll_init = {
+		"rx_device_clk_pll",
+		RX_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll_init tx_device_clk_pll_init = {
+		"tx_device_clk_pll",
+		TX_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll_init rx_os_device_clk_pll_init = {
+		"rx_os_device_clk_pll",
+		RX_OS_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll *rx_device_clk_pll;
+	struct altera_a10_fpll *tx_device_clk_pll;
+	struct altera_a10_fpll *rx_os_device_clk_pll;
+#else
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -73,6 +99,7 @@ int main(void)
 	struct axi_clkgen *rx_clkgen;
 	struct axi_clkgen *tx_clkgen;
 	struct axi_clkgen *rx_os_clkgen;
+#endif
 	uint32_t rx_lane_rate_khz = talInit.rx.rxProfile.rxOutputRate_kHz *
 				    talInit.jesd204Settings.framerA.M * (20 /
 						    hweight8(talInit.jesd204Settings.framerA.serializerLanesEnabled));
@@ -121,6 +148,32 @@ int main(void)
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
 	struct axi_jesd204_rx *rx_os_jesd;
+#ifdef ALTERA_PLATFORM
+	struct adxcvr_init rx_adxcvr_init = {
+		"rx_adxcvr",
+		RX_XCVR_BASEADDR,
+		{RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, 0, 0},
+		0,
+		rx_lane_rate_khz,
+		talInit.clocks.deviceClock_kHz,
+	};
+	struct adxcvr_init tx_adxcvr_init = {
+		"tx_adxcvr",
+		TX_XCVR_BASEADDR,
+		{TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
+		TX_PLL_BASEADDR,
+		tx_lane_rate_khz,
+		talInit.clocks.deviceClock_kHz,
+	};
+	struct adxcvr_init rx_os_adxcvr_init = {
+		"rx_os_adxcvr",
+		RX_OS_XCVR_BASEADDR,
+		{RX_OS_ADXCFG_0_BASEADDR, RX_OS_ADXCFG_1_BASEADDR, 0, 0},
+		0,
+		rx_os_lane_rate_khz,
+		talInit.clocks.deviceClock_kHz,
+	};
+#else
 	struct adxcvr_init rx_adxcvr_init = {
 		"rx_adxcvr",
 		RX_XCVR_BASEADDR,
@@ -151,6 +204,7 @@ int main(void)
 		rx_os_lane_rate_khz,
 		talInit.clocks.deviceClock_kHz,
 	};
+#endif
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
 	struct adxcvr *rx_os_adxcvr;
@@ -168,7 +222,7 @@ int main(void)
 	struct axi_dac *tx_dac;
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
-		XPAR_AXI_ADRV9009_RX_DMA_BASEADDR,
+		RX_DMA_BASEADDR,
 		DMA_DEV_TO_MEM,
 		0,
 	};
@@ -241,6 +295,58 @@ int main(void)
 		printf("warning: AD9528_initialize() issues. "
 		       "Possible cause: REF_CLK not connected\n");
 
+#ifdef ALTERA_PLATFORM
+	/* Initialize A10 FPLLs */
+	status = altera_a10_fpll_init(&rx_device_clk_pll,
+				      &rx_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_1;
+	}
+	status = altera_a10_fpll_init(&tx_device_clk_pll,
+				      &tx_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_2;
+	}
+	status = altera_a10_fpll_init(&rx_os_device_clk_pll,
+				      &rx_os_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_3;
+	}
+
+	altera_a10_fpll_disable(rx_device_clk_pll);
+	status = altera_a10_fpll_set_rate(rx_device_clk_pll,
+					  rx_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       rx_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(rx_device_clk_pll);
+	altera_a10_fpll_disable(tx_device_clk_pll);
+	status = altera_a10_fpll_set_rate(tx_device_clk_pll,
+					  tx_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       tx_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(tx_device_clk_pll);
+	altera_a10_fpll_disable(rx_os_device_clk_pll);
+	status = altera_a10_fpll_set_rate(rx_os_device_clk_pll,
+					  rx_os_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       rx_os_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(rx_os_device_clk_pll);
+#else
 	/* Initialize CLKGEN */
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
 	if (status != SUCCESS) {
@@ -273,6 +379,7 @@ int main(void)
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
 		goto error_4;
 	}
+#endif
 
 	/*** < Insert User BBIC JESD204B Initialization Code Here > ***/
 
@@ -309,6 +416,7 @@ int main(void)
 		printf("error: %s: adxcvr_init() failed\n", rx_os_adxcvr_init.name);
 		goto error_9;
 	}
+#ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(rx_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
@@ -324,7 +432,7 @@ int main(void)
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
 		goto error_10;
 	}
-
+#endif
 	/*******************************/
 	/**** Talise Initialization ***/
 	/*******************************/
@@ -657,7 +765,7 @@ int main(void)
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	axi_dmac_transfer(rx_dmac,
-			  XPAR_DDR_MEM_BASEADDR + 0x800000,
+			  DDR_MEM_BASEADDR + 0x800000,
 			  16384 * 8);
 
 	/***********************************************
@@ -686,9 +794,15 @@ int main(void)
 	axi_jesd204_rx_remove(rx_os_jesd);
 	axi_jesd204_tx_remove(tx_jesd);
 	axi_jesd204_rx_remove(rx_jesd);
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(rx_device_clk_pll);
+	altera_a10_fpll_remove(tx_device_clk_pll);
+	altera_a10_fpll_remove(rx_os_device_clk_pll);
+#else
 	axi_clkgen_remove(rx_os_clkgen);
 	axi_clkgen_remove(tx_clkgen);
 	axi_clkgen_remove(rx_clkgen);
+#endif
 	AD9528_remove(clockAD9528_device);
 
 	printf("Bye\n");
@@ -710,11 +824,23 @@ error_6:
 error_5:
 	axi_jesd204_rx_remove(rx_jesd);
 error_4:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(rx_os_device_clk_pll);
+#else
 	axi_clkgen_remove(rx_os_clkgen);
+#endif
 error_3:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(tx_device_clk_pll);
+#else
 	axi_clkgen_remove(tx_clkgen);
+#endif
 error_2:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(rx_device_clk_pll);
+#else
 	axi_clkgen_remove(rx_clkgen);
+#endif
 error_1:
 	AD9528_remove(clockAD9528_device);
 error_0:
