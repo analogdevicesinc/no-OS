@@ -3,7 +3,7 @@ set -e
 
 brew update
 
-PACKAGES="libmatio cppcheck astyle"
+PACKAGES="libmatio cppcheck"
 
 brew_install_or_upgrade() {
     brew install $1 || \

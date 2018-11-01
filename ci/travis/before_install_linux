@@ -2,4 +2,5 @@
 set -e
 
 sudo apt-get update
-sudo apt-get install libmatio-dev cppcheck astyle
+sudo apt-get install libmatio-dev cppcheck 
+
