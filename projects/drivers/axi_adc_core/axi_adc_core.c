@@ -43,6 +43,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "platform_drivers.h"
+#ifdef ALTERA_PLATFORM
+#include "io.h"
+#else
+#include "xil_io.h"
+#endif
 #include "util.h"
 #include "axi_adc_core.h"
 
@@ -84,7 +89,11 @@ int32_t axi_adc_read(struct axi_adc *adc,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
+#ifdef ALTERA_PLATFORM
+	*reg_data = IORD_32DIRECT(adc->base, reg_addr);
+#else
 	*reg_data = Xil_In32((adc->base + reg_addr));
+#endif
 
 	return SUCCESS;
 }
@@ -96,7 +105,11 @@ int32_t axi_adc_write(struct axi_adc *adc,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
+#ifdef ALTERA_PLATFORM
+	IOWR_32DIRECT(adc->base, reg_addr, reg_data);
+#else
 	Xil_Out32((adc->base + reg_addr), reg_data);
+#endif
 
 	return SUCCESS;
 }
