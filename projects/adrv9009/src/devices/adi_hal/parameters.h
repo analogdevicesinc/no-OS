@@ -42,11 +42,60 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "platform_drivers.h"
+#ifdef ALTERA_PLATFORM
+#include "system.h"
+#else
 #include "xparameters.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#ifdef ALTERA_PLATFORM
+#define GPIO_OFFSET		0
+#define CLK_CS			1
+#define ADRV_CS			2
+
+#define ADRV_RESETB		GPIO_OFFSET + 52
+#define ADRV_SYSREF_REQ	GPIO_OFFSET + 58
+#define CLK_RESETB		GPIO_OFFSET + 59
+
+#define RX_A10_FPLL_BASEADDR	ADRV9009_RX_JESD204_LINK_PLL_RECONFIG_BASE
+#define TX_A10_FPLL_BASEADDR	ADRV9009_TX_JESD204_LINK_PLL_RECONFIG_BASE
+#define RX_OS_A10_FPLL_BASEADDR	ADRV9009_RX_OS_JESD204_LINK_PLL_RECONFIG_BASE
+
+#define RX_JESD_BASEADDR		ADRV9009_RX_JESD204_LINK_RECONFIG_BASE
+#define TX_JESD_BASEADDR		ADRV9009_TX_JESD204_LINK_RECONFIG_BASE
+#define RX_OS_JESD_BASEADDR		ADRV9009_RX_OS_JESD204_LINK_RECONFIG_BASE
+
+#define RX_XCVR_BASEADDR		ADRV9009_RX_JESD204_LINK_MANAGEMENT_BASE
+#define TX_XCVR_BASEADDR		ADRV9009_TX_JESD204_LINK_MANAGEMENT_BASE
+#define RX_OS_XCVR_BASEADDR		ADRV9009_RX_OS_JESD204_LINK_MANAGEMENT_BASE
+
+#define RX_ADXCFG_0_BASEADDR	AVL_ADXCFG_0_RCFG_S1_BASE
+#define RX_ADXCFG_1_BASEADDR	AVL_ADXCFG_1_RCFG_S1_BASE
+#define TX_ADXCFG_0_BASEADDR	AVL_ADXCFG_0_RCFG_S0_BASE
+#define TX_ADXCFG_1_BASEADDR	AVL_ADXCFG_1_RCFG_S0_BASE
+#define TX_ADXCFG_2_BASEADDR	AVL_ADXCFG_2_RCFG_S0_BASE
+#define TX_ADXCFG_3_BASEADDR	AVL_ADXCFG_3_RCFG_S0_BASE
+#define RX_OS_ADXCFG_0_BASEADDR	AVL_ADXCFG_2_RCFG_S1_BASE
+#define RX_OS_ADXCFG_1_BASEADDR	AVL_ADXCFG_3_RCFG_S1_BASE
+
+#define TX_PLL_BASEADDR			ADRV9009_TX_JESD204_LANE_PLL_RECONFIG_BASE
+
+#define RX_CORE_BASEADDR		AXI_ADRV9009_BASE
+#define TX_CORE_BASEADDR		AXI_ADRV9009_BASE + 0x4000
+#define RX_OS_CORE_BASEADDR		AXI_ADRV9009_BASE + 0x8000
+
+#define RX_DMA_BASEADDR			AXI_ADRV9009_RX_DMA_BASE
+
+#define DDR_MEM_BASEADDR		SYS_DDR3_CNTRL_ARCH_BASE
+
+#define GPIO_BASEADDR			SYS_GPIO_OUT_BASE
+
+#define SPI_BASEADDR			SYS_SPI_BASE
+#else
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET		78
 #define CLK_CS			1
@@ -77,4 +126,8 @@
 #define TX_CORE_BASEADDR		XPAR_AXI_ADRV9009_CORE_BASEADDR + 0x4000
 #define RX_OS_CORE_BASEADDR		XPAR_AXI_ADRV9009_CORE_BASEADDR + 0x8000
 
+#define RX_DMA_BASEADDR			XPAR_AXI_ADRV9009_RX_DMA_BASEADDR
+
+#define DDR_MEM_BASEADDR		XPAR_DDR_MEM_BASEADDR
+#endif
 #endif
