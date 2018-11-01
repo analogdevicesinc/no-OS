@@ -110,7 +110,7 @@ struct ad5592r_dev {
 int32_t ad5592r_base_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 			       uint16_t value);
 int32_t ad5592r_base_reg_read(struct ad5592r_dev *dev, uint8_t reg,
-			      uint16_t value);
+			      uint16_t *value);
 int32_t ad5592r_gpio_get(struct ad5592r_dev *dev, uint8_t offset);
 int32_t ad5592r_gpio_set(struct ad5592r_dev *dev, uint8_t offset,
 			 int32_t value);
