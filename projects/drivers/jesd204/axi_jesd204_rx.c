@@ -43,9 +43,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include <xil_io.h>
-#include "util.h"
 #include "platform_drivers.h"
+#ifdef ALTERA_PLATFORM
+#include "io.h"
+#else
+#include "xil_io.h"
+#endif
+#include "util.h"
 #include "axi_jesd204_rx.h"
 
 /******************************************************************************/
@@ -112,7 +116,11 @@ const char *axi_jesd204_rx_lane_status_label[] = {
 int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
+#ifdef ALTERA_PLATFORM
+	IOWR_32DIRECT(jesd->base, reg_addr, reg_val);
+#else
 	Xil_Out32((jesd->base + reg_addr), reg_val);
+#endif
 
 	return SUCCESS;
 }
@@ -123,7 +131,11 @@ int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
+#ifdef ALTERA_PLATFORM
+	*reg_val = IORD_32DIRECT(jesd->base, reg_addr);
+#else
 	*reg_val = Xil_In32(jesd->base + reg_addr);
+#endif
 
 	return SUCCESS;
 }
