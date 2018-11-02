@@ -1,0 +1,534 @@
+<?xml version="1.0"?>
+<!--VisualAnalog Canvas File - DO NOT EDIT MANUALLY-->
+<canvas program_version="1.9.47.1" display_name="Untitled" s_name="Canvas1" description="" hidden="False" locked="False" securityLevel="Normal">
+  <BlockList>
+    <Count>9</Count>
+    <Block_0>
+      <Type>ResultsBlockControls.RB_Graph</Type>
+      <Assembly>ResultsBlockControls, Version=2.4.7.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>32</X>
+        <Y>240</Y>
+      </Location>
+      <Size>
+        <Width>664</Width>
+        <Height>672</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>4</Count>
+          <Node_0 />
+          <Node_1 />
+          <Node_2 />
+          <Node_3 />
+        </InputPort>
+      </PortSettings>
+      <display name="" append_date="False" append_time="False" />
+      <graph_settings refresh_mode="Update" />
+      <data_settings auto_append="False" append_mode="Update" auto_save="False" save_mode="Update" />
+      <form state="Normal" bounds="{X=32,Y=32,Width=736,Height=512}" auto_float="False" auto_pic="False" pic_mode="Update" pic_file="" pic_date_time="False" />
+      <graphs count="2" split_value="0.5">
+        <graph index="0" highlights="True" labels="True" circle="True" radius="2">
+          <visible>True</visible>
+          <selected>True</selected>
+        </graph>
+        <graph index="1" highlights="True" labels="True" circle="True" radius="2">
+          <visible>False</visible>
+          <selected>False</selected>
+        </graph>
+      </graphs>
+      <zoom_method>Zoom_XY</zoom_method>
+      <results split_position="48" visible="True" />
+      <data_list>
+        <data index="0" display_name="Input 1" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="1" display_name="Input 2" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="2" display_name="Input 3" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="3" display_name="Input 4" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+      </data_list>
+    </Block_0>
+    <Block_1>
+      <Type>ProcessBlockControls.PB_InputFormatter</Type>
+      <Assembly>ProcessBlockControls, Version=2.6.0.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>424</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>128</Width>
+        <Height>64</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </InputPort>
+        <OutputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </OutputPort>
+      </PortSettings>
+      <alignment>16</alignment>
+      <resolution>16</resolution>
+      <number_format>Two's Complement</number_format>
+      <doConvert>1</doConvert>
+      <doWeight>1</doWeight>
+    </Block_1>
+    <Block_2>
+      <Type>ProcessBlockControls.PB_Router</Type>
+      <Assembly>ProcessBlockControls, Version=2.6.0.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>568</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>96</Width>
+        <Height>56</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </InputPort>
+        <OutputPort>
+          <Count>2</Count>
+          <Node_0 />
+          <Node_1 />
+        </OutputPort>
+      </PortSettings>
+    </Block_2>
+    <Block_3>
+      <Type>ProcessBlockControls.PB_Window</Type>
+      <Assembly>ProcessBlockControls, Version=2.6.0.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>680</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>256</Width>
+        <Height>64</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </InputPort>
+        <OutputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </OutputPort>
+      </PortSettings>
+      <WindowRoutine>wndHanning</WindowRoutine>
+    </Block_3>
+    <Block_4>
+      <Type>ProcessBlockControls.PB_FFT</Type>
+      <Assembly>ProcessBlockControls, Version=2.6.0.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>952</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>96</Width>
+        <Height>64</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </InputPort>
+        <OutputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </OutputPort>
+      </PortSettings>
+    </Block_4>
+    <Block_5>
+      <Type>ResultsBlockControls.RB_Graph</Type>
+      <Assembly>ResultsBlockControls, Version=2.4.7.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>720</X>
+        <Y>240</Y>
+      </Location>
+      <Size>
+        <Width>824</Width>
+        <Height>664</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>5</Count>
+          <Node_0 />
+          <Node_1 />
+          <Node_2 />
+          <Node_3 />
+          <Node_4 />
+        </InputPort>
+      </PortSettings>
+      <display name="" append_date="False" append_time="False" />
+      <graph_settings refresh_mode="Update" />
+      <data_settings auto_append="False" append_mode="Update" auto_save="False" save_mode="Update" />
+      <form state="Normal" bounds="{X=0,Y=0,Width=736,Height=512}" auto_float="False" auto_pic="False" pic_mode="Update" pic_file="" pic_date_time="False" />
+      <graphs count="2" split_value="0.931972789115646">
+        <graph index="0" highlights="True" labels="True" circle="True" radius="2">
+          <visible>True</visible>
+          <selected>True</selected>
+        </graph>
+        <graph index="1" highlights="True" labels="True" circle="True" radius="2">
+          <visible>False</visible>
+          <selected>False</selected>
+        </graph>
+      </graphs>
+      <zoom_method>Zoom_XY</zoom_method>
+      <results split_position="230" visible="True" />
+      <data_list>
+        <data index="0" display_name="Input 1" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="1" display_name="Input 2" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="2" display_name="Input 3" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="3" display_name="Input 4" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+        <data index="4" display_name="Input 5" device_name="" comments="" plot_index="-1" results_append="False" results_file_name="" data_save="False" data_file_name="" data_append_date_time="False" />
+      </data_list>
+    </Block_5>
+    <Block_6>
+      <Type>DataAnalysis.Blocks.PB_FFTAnalysis</Type>
+      <Assembly>DataAnalysis.Blocks, Version=2.4.3.0, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>1176</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>128</Width>
+        <Height>64</Height>
+      </Size>
+      <data_analysis>
+        <calculations abn="True" nph="True" snr="True" snr_fs="True" sfdr="True" thd="True" sinad="True" />
+        <advanced name="AD6643 NSR" enabled="False" nsr_mode="0" tw="0" bw="22" />
+        <freq_bands>
+          <freq_band name="DC" symbol="" freq="0" ssb="6" ssb_units="Bins" calc="SpurExclude" power="" locate="Frequency" var="" />
+          <freq_band name="Fund" symbol="" freq="" ssb="10" ssb_units="Bins" calc="Reference" power="" locate="NextMaxPower" var="fund" />
+          <freq_band name="Harm 2" symbol="2" freq="2 * fund" ssb="3" ssb_units="Bins" calc="Harmonic" power="" locate="Frequency" var="" />
+          <freq_band name="Harm 3" symbol="3" freq="3 * fund" ssb="3" ssb_units="Bins" calc="Harmonic" power="" locate="Frequency" var="" />
+          <freq_band name="Harm 4" symbol="4" freq="4 * fund" ssb="3" ssb_units="Bins" calc="Harmonic" power="" locate="Frequency" var="" />
+          <freq_band name="Harm 5" symbol="5" freq="5 * fund" ssb="3" ssb_units="Bins" calc="Harmonic" power="" locate="Frequency" var="" />
+          <freq_band name="Harm 6" symbol="6" freq="6 * fund" ssb="3" ssb_units="Bins" calc="Harmonic" power="" locate="Frequency" var="" />
+          <freq_band name="Worst Other" symbol="+" freq="" ssb="3" ssb_units="Bins" calc="SpurInclude" power="" locate="NextMaxPower" var="" />
+        </freq_bands>
+      </data_analysis>
+    </Block_6>
+    <Block_7>
+      <Type>ProcessBlockControls.PB_Router</Type>
+      <Assembly>ProcessBlockControls, Version=2.6.0.1, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>1064</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>96</Width>
+        <Height>56</Height>
+      </Size>
+      <PortSettings>
+        <InputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </InputPort>
+        <OutputPort>
+          <Count>2</Count>
+          <Node_0 />
+          <Node_1 />
+        </OutputPort>
+      </PortSettings>
+    </Block_7>
+    <Block_8>
+      <Type>SourceBlockControls.SB_PatternLoader</Type>
+      <Assembly>SourceBlockControls, Version=2.7.3.0, Culture=neutral, PublicKeyToken=null</Assembly>
+      <Location>
+        <X>32</X>
+        <Y>32</Y>
+      </Location>
+      <Size>
+        <Width>376</Width>
+        <Height>184</Height>
+      </Size>
+      <PortSettings>
+        <OutputPort>
+          <Count>1</Count>
+          <Node_0 />
+        </OutputPort>
+      </PortSettings>
+      <SampleFrequency>122880000</SampleFrequency>
+      <FileFormat>I/Q - Interleaved</FileFormat>
+      <auto_load>True</auto_load>
+      <File_0>
+      </File_0>
+      <File_1>C:\Workspace\xilinx\vivado_2016_2\adrv9371x_zc706_working\capture\q2.csv</File_1>
+      <Loaded>True</Loaded>
+    </Block_8>
+  </BlockList>
+  <WireList>
+    <Count>9</Count>
+    <Wire_0>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>567</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>551</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_0>
+    <Wire_1>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>951</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>935</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_1>
+    <Wire_2>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>1063</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>1047</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_2>
+    <Wire_3>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>1175</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>1159</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_3>
+    <Wire_4>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>679</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>663</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_4>
+    <Wire_5>
+      <Points>
+        <Count>2</Count>
+        <Point_0>
+          <X>423</X>
+          <Y>56</Y>
+        </Point_0>
+        <Point_1>
+          <X>407</X>
+          <Y>56</Y>
+        </Point_1>
+      </Points>
+    </Wire_5>
+    <Wire_6>
+      <Points>
+        <Count>6</Count>
+        <Point_0>
+          <X>31</X>
+          <Y>264</Y>
+        </Point_0>
+        <Point_1>
+          <X>16</X>
+          <Y>264</Y>
+        </Point_1>
+        <Point_2>
+          <X>16</X>
+          <Y>224</Y>
+        </Point_2>
+        <Point_3>
+          <X>672</X>
+          <Y>224</Y>
+        </Point_3>
+        <Point_4>
+          <X>672</X>
+          <Y>68</Y>
+        </Point_4>
+        <Point_5>
+          <X>663</X>
+          <Y>68</Y>
+        </Point_5>
+      </Points>
+    </Wire_6>
+    <Wire_7>
+      <Points>
+        <Count>6</Count>
+        <Point_0>
+          <X>719</X>
+          <Y>264</Y>
+        </Point_0>
+        <Point_1>
+          <X>712</X>
+          <Y>264</Y>
+        </Point_1>
+        <Point_2>
+          <X>712</X>
+          <Y>120</Y>
+        </Point_2>
+        <Point_3>
+          <X>1312</X>
+          <Y>120</Y>
+        </Point_3>
+        <Point_4>
+          <X>1312</X>
+          <Y>56</Y>
+        </Point_4>
+        <Point_5>
+          <X>1303</X>
+          <Y>56</Y>
+        </Point_5>
+      </Points>
+    </Wire_7>
+    <Wire_8>
+      <Points>
+        <Count>6</Count>
+        <Point_0>
+          <X>719</X>
+          <Y>288</Y>
+        </Point_0>
+        <Point_1>
+          <X>704</X>
+          <Y>288</Y>
+        </Point_1>
+        <Point_2>
+          <X>704</X>
+          <Y>104</Y>
+        </Point_2>
+        <Point_3>
+          <X>1168</X>
+          <Y>104</Y>
+        </Point_3>
+        <Point_4>
+          <X>1168</X>
+          <Y>68</Y>
+        </Point_4>
+        <Point_5>
+          <X>1159</X>
+          <Y>68</Y>
+        </Point_5>
+      </Points>
+    </Wire_8>
+  </WireList>
+  <Connections>
+    <Count>9</Count>
+    <Connection_0>
+      <Wire>0</Wire>
+      <Source>
+        <Block>1</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>2</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_0>
+    <Connection_1>
+      <Wire>1</Wire>
+      <Source>
+        <Block>3</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>4</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_1>
+    <Connection_2>
+      <Wire>2</Wire>
+      <Source>
+        <Block>4</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>7</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_2>
+    <Connection_3>
+      <Wire>3</Wire>
+      <Source>
+        <Block>7</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>6</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_3>
+    <Connection_4>
+      <Wire>4</Wire>
+      <Source>
+        <Block>2</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>3</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_4>
+    <Connection_5>
+      <Wire>5</Wire>
+      <Source>
+        <Block>8</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>1</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_5>
+    <Connection_6>
+      <Wire>6</Wire>
+      <Source>
+        <Block>2</Block>
+        <Node>1</Node>
+      </Source>
+      <Destination>
+        <Block>0</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_6>
+    <Connection_7>
+      <Wire>7</Wire>
+      <Source>
+        <Block>6</Block>
+        <Node>0</Node>
+      </Source>
+      <Destination>
+        <Block>5</Block>
+        <Node>0</Node>
+      </Destination>
+    </Connection_7>
+    <Connection_8>
+      <Wire>8</Wire>
+      <Source>
+        <Block>7</Block>
+        <Node>1</Node>
+      </Source>
+      <Destination>
+        <Block>5</Block>
+        <Node>2</Node>
+      </Destination>
+    </Connection_8>
+  </Connections>
+</canvas>
