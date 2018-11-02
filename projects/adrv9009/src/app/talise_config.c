@@ -125,8 +125,8 @@ taliseInit_t talInit = {
 		.rxGainCtrl =
 		{
 			.gainMode = TAL_MGC,            /* taliserxGainMode_t gainMode */
-			.rx1GainIndex = 255,            /* uint8_t rx1GainIndex */
-			.rx2GainIndex = 255,            /* uint8_t rx2GainIndex */
+			.rx1GainIndex = 240,            /* uint8_t rx1GainIndex */
+			.rx2GainIndex = 240,            /* uint8_t rx2GainIndex */
 			.rx1MaxGainIndex = 255,            /* uint8_t rx1MaxGainIndex */
 			.rx1MinGainIndex = 195,            /* uint8_t rx1MinGainIndex */
 			.rx2MaxGainIndex = 255,            /* uint8_t rx2MaxGainIndex */
@@ -194,8 +194,8 @@ taliseInit_t talInit = {
 		.orxGainCtrl =
 		{
 			.gainMode = TAL_MGC,
-			.orx1GainIndex = 255,
-			.orx2GainIndex = 255,
+			.orx1GainIndex = 240,
+			.orx2GainIndex = 240,
 			.orx1MaxGainIndex = 255,
 			.orx1MinGainIndex = 195,
 			.orx2MaxGainIndex = 255,
