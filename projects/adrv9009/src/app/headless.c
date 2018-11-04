@@ -97,7 +97,7 @@ int main(void)
 	struct jesd204_tx_init tx_jesd_init = {
 		"tx_jesd",
 		TX_JESD_BASEADDR,
-		4,
+		2,
 		32,
 		4,
 		14,

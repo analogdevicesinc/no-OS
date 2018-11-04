@@ -273,8 +273,8 @@ taliseInit_t talInit = {
 			.K = 32,                        /* K  #frames in a multiframe (default=32), F*K=multiple of 4. (F=2*M/numberOfLanes) */
 			.scramble = 1,                    /* scramble  scrambling off if scramble= 0 */
 			.externalSysref = 1,            /* externalSysref  0= use internal SYSREF, 1= external SYSREF */
-			.deserializerLanesEnabled = 0x09,    /* deserializerLanesEnabled  bit per lane, [0] = Lane0 enabled */
-			.deserializerLaneCrossbar = 0x6C,    /* deserializerLaneCrossbar */
+			.deserializerLanesEnabled = 0x0F,    /* deserializerLanesEnabled  bit per lane, [0] = Lane0 enabled */
+			.deserializerLaneCrossbar = 0xE4,    /* deserializerLaneCrossbar */
 			.lmfcOffset = 17,                /* lmfcOffset	 LMFC offset value to adjust deterministic latency */
 			.newSysrefOnRelink = 0,            /* newSysrefOnRelink */
 			.syncbOutSelect = 0,                /* SYNCBOUT0/1 select */
@@ -283,7 +283,7 @@ taliseInit_t talInit = {
 			.syncbOutLvdsPnInvert = 0,
 			.syncbOutCmosSlewRate = 0,
 			.syncbOutCmosDriveLevel = 0,
-			.enableManualLaneXbar = 1 /* 0=auto, 1=manual */
+			.enableManualLaneXbar = 0 /* 0=auto, 1=manual */
 		},
 		/* Deframer B settings */
 		.deframerB =
