@@ -572,7 +572,7 @@ int main(void)
 	xcvr_setup(&ad9680_xcvr);
 #endif
 #ifdef XILINX
-	if (ad9144_xcvr.dev.qpll_enable) {	// DAC_XCVR controls the QPLL reset
+	if (!ad9144_xcvr.dev.cpll_enable) {	// DAC_XCVR controls the QPLL reset
 		xcvr_setup(&ad9144_xcvr);
 		xcvr_setup(&ad9680_xcvr);
 	} else {				// ADC_XCVR controls the CPLL reset
