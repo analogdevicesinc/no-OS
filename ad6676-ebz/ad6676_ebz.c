@@ -208,7 +208,7 @@ int main(void)
 	ad6676_xcvr.dev.sys_clk_sel = 0;
 	ad6676_xcvr.reconfig_bypass = 0;
 	ad6676_xcvr.lane_rate_kbps = 4000000;
-	ad6676_xcvr.ref_clock_khz = 200000;
+	ad6676_xcvr.ref_rate_khz = 200000;
 
 	// adc settings
 
