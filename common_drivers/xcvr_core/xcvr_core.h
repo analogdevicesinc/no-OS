@@ -104,7 +104,7 @@ typedef struct {
 	uint32_t			   base_address;
 	xilinx_xcvr_refclk_ppm ppm;
 	uint16_t			   encoding;
-	uint32_t			   lane_rate_khz;
+	uint32_t			   lane_rate_kbps;
 	uint32_t			   ref_rate_khz;
 	uint8_t				   reconfig_bypass;
 	struct fpga_dev		   dev;
