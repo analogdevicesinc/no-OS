@@ -238,11 +238,11 @@ int32_t xcvr_setup(xcvr_core *core)
 	xcvr_write(core, XCVR_REG_RESETN, 0);  // enter reset state
 
 	if (core->reconfig_bypass == 0) {
-		if (core->lane_rate_khz > 12500000) {
+		if (core->lane_rate_kbps > 12500000) {
 			printf("ERROR: Max qpll lane_rate: %d", 12500000);
 			return -1;
 		}
-		if (core->lane_rate_khz < 1250000) {
+		if (core->lane_rate_kbps < 1250000) {
 			printf("ERROR: Min cpll lane_rate: %d", 1250000);
 			return -1;
 		}
@@ -250,7 +250,8 @@ int32_t xcvr_setup(xcvr_core *core)
 		if (core->dev.cpll_enable == 0) {
 			printf("\nQPLL ENABLE\n");
 			ret |= xilinx_xcvr_calc_qpll_config(core, core->ref_rate_khz,
-							    core->lane_rate_khz, &qpll_config, &core->dev.out_div);
+							    core->lane_rate_kbps, &qpll_config,
+							    &core->dev.out_div);
 			out_div = core->dev.out_div;
 
 			ln_rate_kbps = xilinx_xcvr_qpll_calc_lane_rate(core,
@@ -263,7 +264,8 @@ int32_t xcvr_setup(xcvr_core *core)
 		} else {
 			printf("\nCPLL ENABLE\n");
 			ret |= xilinx_xcvr_calc_cpll_config(core, core->ref_rate_khz,
-							    core->lane_rate_khz, &cpll_config, &core->dev.out_div);
+							    core->lane_rate_kbps, &cpll_config,
+							    &core->dev.out_div);
 			out_div = core->dev.out_div;
 
 			ln_rate_kbps = xilinx_xcvr_cpll_calc_lane_rate(core,
@@ -276,10 +278,10 @@ int32_t xcvr_setup(xcvr_core *core)
 		}
 
 
-		if ((ln_rate_kbps == 0) || (ln_rate_kbps != core->lane_rate_khz)) {
+		if ((ln_rate_kbps == 0) || (ln_rate_kbps != core->lane_rate_kbps)) {
 			printf("%s: Faild to set line rate!",__func__);
 			printf("Desired rate: %lu, obtained rate: %lu\n",
-			       core->lane_rate_khz, ln_rate_kbps);
+			       core->lane_rate_kbps, ln_rate_kbps);
 			return -1;
 		}
 
@@ -296,7 +298,7 @@ int32_t xcvr_setup(xcvr_core *core)
 							   core->dev.lpm_enable);
 			xilinx_xcvr_configure_cdr(core,
 						  XCVR_DRP_PORT_COMMON,
-						  core->lane_rate_khz,
+						  core->lane_rate_kbps,
 						  out_div,
 						  core->dev.lpm_enable);
 			rx_out_div = out_div;
