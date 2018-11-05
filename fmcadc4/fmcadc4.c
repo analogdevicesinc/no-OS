@@ -238,9 +238,9 @@ int main(void)
 
 	xcvr_getconfig(&ad9680_xcvr);
 	ad9680_xcvr.reconfig_bypass = 0;
-	ad9680_xcvr.ref_clock_khz = 500000;
+	ad9680_xcvr.ref_rate_khz = 500000;
 	ad9680_xcvr.lane_rate_kbps = ad9680_0_param.lane_rate_kbps;
-	ad9680_xcvr.dev.qpll_enable = 1;
+	ad9680_xcvr.dev.cpll_enable = 0;
 
 	gpio_get(&gpio_ad9528_status, GPIO_AD9528_STATUS);
 	gpio_get(&gpio_ad9528_rstn, GPIO_AD9528_RSTN);
