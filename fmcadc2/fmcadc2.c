@@ -95,7 +95,7 @@ int main(void)
 	xcvr_getconfig(&ad9625_xcvr);
 	ad9625_xcvr.reconfig_bypass = 0;
 	ad9625_xcvr.lane_rate_kbps = ad9625_param.lane_rate_kbps;
-	ad9625_xcvr.ref_clock_khz = 625000;
+	ad9625_xcvr.ref_rate_khz = 625000;
 
 	ad9625_jesd.scramble_enable = 1;
 	ad9625_jesd.octets_per_frame = 1;
