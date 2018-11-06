@@ -341,12 +341,14 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 		return ret;
 
 	/* Compute I_CP val */
-
-	reg_val = (f_pfd / MHz) * (freq / MHz) * (freq / MHz);
-	val64 = 13300000000ULL + reg_val / 2;
-	do_div(&val64, reg_val);
-	reg_val = min_t(uint64_t, 64U, val64 - 1);
-
+	if(freq == MAX_FADC) {
+		reg_val = 0x12;
+	} else {
+		reg_val = (f_pfd / MHz) * (freq / MHz) * (freq / MHz);
+		val64 = 13300000000ULL + reg_val / 2;
+		do_div(&val64, reg_val);
+		reg_val = min_t(uint64_t, 64U, val64 - 1);
+	}
 	/* I_CP 2AC */
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_I_CP, reg_val);
 	if (ret < 0)
@@ -367,6 +369,13 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_VCO_VAR, reg_val); /* 2B7 */
 	if (ret < 0)
 		return ret;
+
+	if(freq == MAX_FADC) {
+		ret = ad6676_spi_write(dev, AD6676_CLKSYN_KVCO_VCO, 0x2A); /* 2A9 */
+		if (ret < 0) {
+			return ret;
+		}
+	}
 
 	/* Reference Div 2BB */
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_R_DIV,
