@@ -127,8 +127,8 @@ int main(){
 	rx_xfer.no_of_samples = 8192;
 
 #ifdef ZYNQ
-	ad9467_init.spi_init.type = ZYNQ_PS7_SPI,;
-	ad9517_init.spi_init.type = ZYNQ_PS7_SPI,;
+	ad9467_init.spi_init.type = ZYNQ_PS7_SPI;
+	ad9517_init.spi_init.type = ZYNQ_PS7_SPI;
 #endif
 
 #ifdef MICROBLAZE
