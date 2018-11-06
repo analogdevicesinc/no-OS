@@ -46,7 +46,6 @@
 #include "platform_drivers.h"
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "xcvr_core.h"
 #include "adc_core.h"
 #include "dmac_core.h"
 #include "ad9467.h"
