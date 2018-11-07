@@ -40,12 +40,10 @@ then
 	popd
 fi
 
-export PATH="build/astyle/build/gcc;$PATH"
-
 for file in $FILES; do
 	if is_source_file $file
 	then 
-		astyle --options=./ci/scripts/astyle_config $file
+		./build/astyle/build/gcc/bin/astyle --options=./ci/scripts/astyle_config $file
 	fi
 done;
 
