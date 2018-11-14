@@ -83,8 +83,8 @@ XGpio_Config	*gpio_config;
  * @brief spi_init
 *******************************************************************************/
 int32_t spi_init(uint32_t device_id,
-				 uint8_t  clk_pha,
-				 uint8_t  clk_pol)
+		 uint8_t  clk_pha,
+		 uint8_t  clk_pol)
 {
 
 	uint32_t base_addr	 = 0;
@@ -97,9 +97,9 @@ int32_t spi_init(uint32_t device_id,
 	XSpiPs_CfgInitialize(&spi_instance, spi_config, base_addr);
 
 	spi_options = XSPIPS_MASTER_OPTION |
-			(clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			(clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
-			XSPIPS_FORCE_SSELECT_OPTION;
+		      (clk_pol ? XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+		      (clk_pha ? XSPIPS_CLK_PHASE_1_OPTION : 0) |
+		      XSPIPS_FORCE_SSELECT_OPTION;
 
 	XSpiPs_SetOptions(&spi_instance, spi_options);
 
@@ -111,8 +111,8 @@ int32_t spi_init(uint32_t device_id,
 	base_addr = spi_config->BaseAddress;
 	XSpi_CfgInitialize(&spi_instance, spi_config, base_addr);
 	spi_options = XSP_MASTER_OPTION |
-				  XSP_CLK_PHASE_1_OPTION |
-				  XSP_MANUAL_SSELECT_OPTION;
+		      XSP_CLK_PHASE_1_OPTION |
+		      XSP_MANUAL_SSELECT_OPTION;
 	XSpi_SetOptions(&spi_instance, spi_options);
 	XSpi_Start(&spi_instance);
 	XSpi_IntrGlobalDisable(&spi_instance);
@@ -125,8 +125,8 @@ int32_t spi_init(uint32_t device_id,
  * @brief spi_read
 *******************************************************************************/
 int32_t spi_read(struct spi_device *spi,
-				 uint8_t *data,
-				 uint8_t bytes_number)
+		 uint8_t *data,
+		 uint8_t bytes_number)
 {
 #ifdef _XPARAMETERS_PS_H_
 	XSpiPs_SetSlaveSelect(&spi_instance, (spi->id_no == 0 ? 0 : 1));
@@ -137,8 +137,7 @@ int32_t spi_read(struct spi_device *spi,
 #if defined(XPAR_AXI_SPI_0_DEVICE_ID) || defined(XPAR_SPI_0_DEVICE_ID)
 	uint8_t send_buffer[20];
 
-	for(cnt = 0; cnt < bytes_number; cnt++)
-	{
+	for(cnt = 0; cnt < bytes_number; cnt++) {
 		send_buffer[cnt] = data[cnt];
 	}
 
@@ -146,12 +145,12 @@ int32_t spi_read(struct spi_device *spi,
 #else
 	Xil_Out32((spi_instance.BaseAddr + 0x60), 0x1e6);
 	Xil_Out32((spi_instance.BaseAddr + 0x70), 0x000);
-	while(cnt < bytes_number)
-	{
+	while(cnt < bytes_number) {
 		Xil_Out32((spi_instance.BaseAddr + 0x68), data[cnt]);
 		Xil_Out32((spi_instance.BaseAddr + 0x60), 0x096);
-		do {usleep(100);}
-		while ((Xil_In32((spi_instance.BaseAddr + 0x64)) & 0x4) == 0x0);
+		do {
+			usleep(100);
+		} while ((Xil_In32((spi_instance.BaseAddr + 0x64)) & 0x4) == 0x0);
 		Xil_Out32((spi_instance.BaseAddr + 0x60), 0x186);
 		data[cnt] = Xil_In32(spi_instance.BaseAddr + 0x6c);
 		cnt++;
@@ -167,21 +166,20 @@ int32_t spi_read(struct spi_device *spi,
  * @brief spi_write_then_read
 *******************************************************************************/
 int spi_write_then_read(struct spi_device *spi,
-		const unsigned char *txbuf, unsigned n_tx,
-		unsigned char *rxbuf, unsigned n_rx)
+			const unsigned char *txbuf, unsigned n_tx,
+			unsigned char *rxbuf, unsigned n_rx)
 {
 	uint8_t buffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-						  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-						  0x00, 0x00, 0x00, 0x00};
+			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			      0x00, 0x00, 0x00, 0x00
+			     };
 	uint8_t byte;
 
-	for(byte = 0; byte < n_tx; byte++)
-	{
+	for(byte = 0; byte < n_tx; byte++) {
 		buffer[byte] = (unsigned char)txbuf[byte];
 	}
 	spi_read(spi, buffer, n_tx + n_rx);
-	for(byte = n_tx; byte < n_tx + n_rx; byte++)
-	{
+	for(byte = n_tx; byte < n_tx + n_rx; byte++) {
 		rxbuf[byte - n_tx] = buffer[byte];
 	}
 
@@ -220,12 +218,9 @@ void gpio_direction(uint8_t pin, uint8_t direction)
 		tri_reg_addr = XGPIO_TRI_OFFSET;
 
 	config = Xil_In32((gpio_config->BaseAddress + tri_reg_addr));
-	if(direction)
-	{
+	if(direction) {
 		config &= ~(1 << pin);
-	}
-	else
-	{
+	} else {
 		config |= (1 << pin);
 	}
 	Xil_Out32((gpio_config->BaseAddress + tri_reg_addr), config);
@@ -261,12 +256,9 @@ void gpio_data(uint8_t pin, uint8_t data)
 		data_reg_addr = XGPIO_DATA_OFFSET;
 
 	config = Xil_In32((gpio_config->BaseAddress + data_reg_addr));
-	if(data)
-	{
+	if(data) {
 		config |= (1 << pin);
-	}
-	else
-	{
+	} else {
 		config &= ~(1 << pin);
 	}
 	Xil_Out32((gpio_config->BaseAddress + data_reg_addr), config);
@@ -381,15 +373,15 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
  * @brief axiadc_idelay_set
 *******************************************************************************/
 void axiadc_idelay_set(struct axiadc_state *st,
-				unsigned lane, unsigned val)
+		       unsigned lane, unsigned val)
 {
 	if (PCORE_VERSION_MAJOR(st->pcore_version) > 8) {
 		axiadc_write(st, ADI_REG_DELAY(lane), val);
 	} else {
 		axiadc_write(st, ADI_REG_DELAY_CNTRL, 0);
 		axiadc_write(st, ADI_REG_DELAY_CNTRL,
-				ADI_DELAY_ADDRESS(lane)
-				| ADI_DELAY_WDATA(val)
-				| ADI_DELAY_SEL);
+			     ADI_DELAY_ADDRESS(lane)
+			     | ADI_DELAY_WDATA(val)
+			     | ADI_DELAY_SEL);
 	}
 }
