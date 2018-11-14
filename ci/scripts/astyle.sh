@@ -35,7 +35,7 @@ then
 	wget "https://sourceforge.net/projects/astyle/files/astyle/astyle 3.1/astyle_3.1_linux.tar.gz"
 	tar -xzf astyle_3.1_linux.tar.gz
 	pushd ./astyle/build/gcc
-	make
+	make -j3
 	popd
 	popd
 fi
