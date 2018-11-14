@@ -134,7 +134,7 @@ int32_t spi_read(struct spi_device *spi,
 	XSpiPs_PolledTransfer(&spi_instance, data, data, bytes_number);
 #else
 	uint32_t cnt = 0;
-#ifdef XPAR_AXI_SPI_0_DEVICE_ID
+#if defined(XPAR_AXI_SPI_0_DEVICE_ID) || defined(XPAR_SPI_0_DEVICE_ID)
 	uint8_t send_buffer[20];
 
 	for(cnt = 0; cnt < bytes_number; cnt++)
