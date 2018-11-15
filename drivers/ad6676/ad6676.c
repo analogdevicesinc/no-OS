@@ -379,7 +379,8 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 
 	/* Reference Div 2BB */
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_R_DIV,
-			       div_val | CLKSYN_R_DIV_RESERVED);
+			       div_val | CLKSYN_R_DIV_RESERVED | CLKSYN_R_DIV_SYSREF_CTRL |
+			       CLKSYN_R_DIV_CLKIN_IMPED);
 	if (ret < 0)
 		return ret;
 
