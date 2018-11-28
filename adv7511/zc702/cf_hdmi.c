@@ -48,6 +48,7 @@
 #include "cf_hdmi_demo.h"
 #include "xil_cache.h"
 #include "xdmaps.h"
+#include "dmac_core.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -315,20 +316,23 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x0);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x1);
 
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_DMA_CTRL),
-			  0x00000003); // enable circular mode
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_1),
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
+			  0x0); // reset DMAC
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
+			  DMAC_CTRL_ENABLE); // enable DMAC
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_FLAGS,
+			  DMAC_FLAGS_CYCLIC | DMAC_FLAGS_TLAST); // enable circular mode
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_SRC_ADDRESS,
 			  VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_2),
-			  VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_3),
-			  VIDEO_BASEADDR); // start address
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_FRMDLY_STRIDE),
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_X_LENGTH,
+			  ((horizontalActiveTime*4)-1)); // h size
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_SRC_STRIDE,
 			  (horizontalActiveTime*4)); // h offset
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_H_SIZE),
-			  (horizontalActiveTime*4)); // h size
-	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_V_SIZE),
-			  verticalActiveTime); // v size
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_Y_LENGTH,
+			  (verticalActiveTime-1)); // v size
+	Xil_Out32(VDMA_BASEADDR + DMAC_REG_START_TRANSFER,
+			  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
+
 }
 
 /***************************************************************************//**
