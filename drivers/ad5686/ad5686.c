@@ -73,6 +73,25 @@ static const unsigned int ad5676_channel_addr[] = {
 	[AD5686_CH_7] = 7,
 };
 
+static const unsigned int ad5679_channel_addr[] = {
+	[AD5686_CH_0] = 0,
+	[AD5686_CH_1] = 1,
+	[AD5686_CH_2] = 2,
+	[AD5686_CH_3] = 3,
+	[AD5686_CH_4] = 4,
+	[AD5686_CH_5] = 5,
+	[AD5686_CH_6] = 6,
+	[AD5686_CH_7] = 7,
+	[AD5686_CH_8] = 8,
+	[AD5686_CH_9] = 9,
+	[AD5686_CH_10] = 10,
+	[AD5686_CH_11] = 11,
+	[AD5686_CH_12] = 12,
+	[AD5686_CH_13] = 13,
+	[AD5686_CH_14] = 14,
+	[AD5686_CH_15] = 15,
+};
+
 static const struct ad5686_chip_info chip_info[] = {
 	[ID_AD5671R] = {
 		.resolution = 12,
@@ -85,6 +104,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.register_map = AD5686_REG_MAP,
 		.communication = SPI,
 		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5674R] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5679_channel_addr,
 	},
 	[ID_AD5675R] = {
 		.resolution = 16,
@@ -103,6 +128,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.register_map = AD5686_REG_MAP,
 		.communication = SPI,
 		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5679R] = {
+		.resolution = 16,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5679_channel_addr,
 	},
 	[ID_AD5684R] = {
 		.resolution = 12,
@@ -340,6 +371,14 @@ uint16_t ad5686_set_shift_reg(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
  * @param data - desired value to be written in register.
  *
  * @return None.
@@ -369,7 +408,15 @@ void ad5686_write_register(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
- * @return None.
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
+  * @return None.
 ******************************************************************************/
 void ad5686_update_register(struct ad5686_dev *dev,
 			    enum ad5686_dac_channels channel)
@@ -392,6 +439,14 @@ void ad5686_update_register(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
  * @param data    - Desired value to be written in register.
  *
  * @return None.
@@ -424,6 +479,14 @@ void ad5686_write_update_register(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
  * @return read_back_data - value read from register.
 ******************************************************************************/
 uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
@@ -458,12 +521,21 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
  * @param mode    - Power-down operation modes.
  *                  Accepted values:
  *                  'AD5686_PWRM_NORMAL' - Normal Mode
  *                  'AD5686_PWRM_1K' - Power-down mode 1kOhm to GND
  *                  'AD5686_PWRM_100K' - Power-down mode 100kOhm to GND
  *                  'AD5686_PWRM_THREESTATE' - Three-State
+ *                  'AD5686_PWRM_100K' is not available for AD5674R/AD5679R.
  *
  * @return None.
 ******************************************************************************/
@@ -474,6 +546,9 @@ void ad5686_power_mode(struct ad5686_dev *dev,
 	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
 
 	if(chip_info[dev->act_device].register_map == AD5686_REG_MAP) {
+		/* AD5674R/AD5679R have 16 channels and 2 powerdown registers */
+		if (channel > AD5686_CH_7)
+			channel -= AD5686_CH_7 + 1;
 		dev->power_down_mask &= ~(0x3 << (channel *2));
 		dev->power_down_mask |= (mode << (channel *2));
 		ad5686_set_shift_reg(dev, AD5686_CTRL_PWR, address,
@@ -499,6 +574,14 @@ void ad5686_power_mode(struct ad5686_dev *dev,
  * 					AD5686_CH_5
  *					AD5686_CH_6
  * 					AD5686_CH_7
+ *					AD5686_CH_8
+ *                              	AD5686_CH_9
+ *					AD5686_CH_10
+ *					AD5686_CH_11
+ *					AD5686_CH_12
+ *					AD5686_CH_13
+ *					AD5686_CH_14
+ *					AD5686_CH_15
  * @return None.
 ******************************************************************************/
 void ad5686_ldac_mask(struct ad5686_dev *dev,
