@@ -1,0 +1,28 @@
+
+EXEC = ad9361_linux
+PLATFORM = platform_linux
+SYMBOLS = -DLINUX_PLATFORM -DDMA_UIO
+
+LIBS = -lmatio
+CFLAGS = -Wall -Werror -Wextra -I$(PLATFORM) $(SYMBOLS) -Os -ffunction-sections -fdata-sections
+
+LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
+LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))
+
+all: $(EXEC)
+
+lib_objects: $(LIB_C_SOURCES)
+	$(CC) $(CFLAGS) $(LIBS) -c $(LIB_C_SOURCES)
+
+libad9361.a: $(LIB_SOURCES)
+	$(AR) rvs libad9361.a $+
+
+$(EXEC): libad9361.a main.c
+	$(CC) $(CFLAGS) $(LIBS) main.c -lad9361 -Wl,--gc-sections -L. -o $@
+
+clean:
+	-rm -f *.o
+	-rm -f $(PLATFORM)/*.o
+	-rm -f $(EXEC)
+	-rm -f $(EXEC)
+	-rm -f libad9361.a

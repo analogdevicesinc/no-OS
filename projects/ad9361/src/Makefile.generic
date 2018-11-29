@@ -1,0 +1,43 @@
+PLATFORM=platform_generic
+
+CFLAGS=-c -Wall -Werror -I$(PLATFORM) -Os -ffunction-sections -fdata-sections -Iconsole_commands #-DCONSOLE_COMMANDS
+
+ifeq ($(shell uname -s), Darwin)
+LINKFLAGS = -Wl,-dead_strip
+else
+LINKFLAGS = -Wl,--gc-sections
+endif
+
+LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
+LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))
+LIB_INCLUDES := $(wildcard *.h) $(wildcard $(PLATFORM)/*.h)
+
+MAIN_SOURCES := main.c #console_commands/command.c console_commands/console.c
+
+EXEC=ad9361_generic
+
+all: $(SOURCES) $(EXEC)
+
+$(EXEC): libad9361.a $(MAIN_SOURCES)
+	$(CC) $(LDFLAGS) $(MAIN_SOURCES) -o $@ -I$(PLATFORM) -lad9361 -L. $(LINKFLAGS)
+
+libad9361.a: $(LIB_SOURCES)
+	$(AR) rvs libad9361.a $+
+
+ad9361_api.o: ad9361_api.c ad9361.h common.h ad9361_api.h util.h \
+	$(PLATFORM)/platform.h util.h
+
+ad9361.o: ad9361.c ad9361.h common.h $(PLATFORM)/platform.h util.h ad9361.h \
+	common.h util.h
+
+util.o: util.c util.h ad9361.h common.h
+
+$(PLATFORM)/platform.o: $(PLATFORM)/platform.c util.h ad9361.h common.h \
+	$(PLATFORM)/parameters.h
+
+.c.o:
+	$(CC) $(CFLAGS) $< -o $@
+
+clean:
+	rm -rf *.a *.o */*.o
+	rm -f $(EXEC)
