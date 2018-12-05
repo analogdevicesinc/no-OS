@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdio.h>
 #include "adi_hal.h"
 #include "parameters.h"
 
@@ -213,10 +214,29 @@ adiHalErr_t  ADIHAL_wait_us(void *devHalInfo, uint32_t time_us)
 adiHalErr_t ADIHAL_writeToLog(void *devHalInfo,
 			      adiLogLevel_t logLevel, uint32_t errorCode, const char *comment)
 {
+	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
+
+	if (devHalInfo == NULL)
+		return (ADIHAL_GEN_SW);
+
+	if ((dev_hal_data->log_level & ADIHAL_LOG_ERR) &&
+			(logLevel == ADIHAL_LOG_ERR))
+		printf("ERROR: %d: %s", (int)errorCode, comment);
+	else if ((dev_hal_data->log_level & ADIHAL_LOG_WARN) &&
+			(logLevel == ADIHAL_LOG_WARN))
+		printf("WARNING: %d: %s", (int)errorCode, comment);
+
 	return ADIHAL_OK;
 }
 
 adiHalErr_t ADIHAL_setLogLevel(void *devHalInfo, uint16_t logLevel)
 {
+	struct adi_hal *dev_hal_data = (struct adi_hal *)devHalInfo;
+
+	if (devHalInfo == NULL)
+		return (ADIHAL_GEN_SW);
+
+	dev_hal_data->log_level = logLevel;
+
 	return ADIHAL_OK;
 }
