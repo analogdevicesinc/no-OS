@@ -2,10 +2,14 @@
 
 set -e
 
+. ./ci/travis/lib.sh
+
 echo_red() { printf "\033[1;31m$*\033[m\n"; }
 
+ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
+
 COMMIT_RANGE="$1"
-if [ -z "$COMMIT_RANGE"]
+if [ -z "$COMMIT_RANGE" ]
 then 
 	COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
 	if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]
@@ -15,14 +19,11 @@ then
 	fi
 fi
 
-FILES=$(git diff --name-only $COMMIT_RANGE)
-
 is_source_file() {
 	local file="$1"
-	local ext_list=".c .h"
 
-	for ext in $ext_list; do
-		[[ "${file: -2}" == "$ext" ]] && return 0
+	for ext in $ASTYLE_EXT_LIST; do
+		[[ "${file: -2}" == "$ext" || "${file: -3}" == "$ext" ]] && return 0
 	done;
 
 	return 1
@@ -40,10 +41,10 @@ then
 	popd
 fi
 
-for file in $FILES; do
-	if is_source_file $file
+git diff --name-only $COMMIT_RANGE | while read -r file; do
+	if is_source_file "$file"
 	then 
-		./build/astyle/build/gcc/bin/astyle --options=./ci/scripts/astyle_config $file
+		./build/astyle/build/gcc/bin/astyle --options="$(get_script_path astyle_config)" "$file"
 	fi
 done;
 

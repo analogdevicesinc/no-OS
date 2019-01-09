@@ -2,6 +2,8 @@
 
 set -e
 
+. ./ci/travis/lib.sh
+
 build_default() {
     . ./ci/travis/build_projects.sh
     . ./ci/travis/cppcheck.sh
