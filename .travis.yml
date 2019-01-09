@@ -20,4 +20,4 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./ci/travis/before_install_linux ; fi
 
 script:
-  - ./ci/scripts/run_build.sh
+  - ./ci/travis/run_build.sh
