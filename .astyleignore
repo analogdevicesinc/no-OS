@@ -1,0 +1,6 @@
+# Mykonos API files
+projects/ad9371/src/app/myk.c
+projects/ad9371/src/app/myk.h
+projects/ad9371/src/app/myk_ad9528init.c
+projects/ad9371/src/devices/ad9528/
+projects/ad9371/src/devices/mykonos/
