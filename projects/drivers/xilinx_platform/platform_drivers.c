@@ -162,10 +162,10 @@ int32_t spi_init(struct spi_desc **desc,
 	spi_desc *descriptor;
 	int32_t ret;
 
-	descriptor = (struct spi_desc *) malloc(sizeof(*descriptor));
+	descriptor = (struct spi_desc *) calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return FAILURE;
-
+#ifdef _XPARAMETERS_PS_H_
 	descriptor->config = XSpiPs_LookupConfig(param->id);
 	if (descriptor->config == NULL)
 		goto error;
@@ -188,7 +188,22 @@ int32_t spi_init(struct spi_desc **desc,
 			       XSPIPS_CLK_PRESCALE_64);
 
 	XSpiPs_SetSlaveSelect(&descriptor->instance, 0xf);
+#else
+	ret = XSpi_Initialize(&descriptor->instance, param->id);
+	if (ret != 0)
+		goto error;
 
+	XSpi_SetOptions(&descriptor->instance,
+			XSP_MASTER_OPTION |
+			((descriptor->mode & SPI_CPOL) ?
+			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+			((descriptor->mode & SPI_CPHA) ?
+			 XSP_CLK_PHASE_1_OPTION : 0));
+
+	XSpi_Start(&descriptor->instance);
+
+	XSpi_IntrGlobalDisable(&descriptor->instance);
+#endif
 	descriptor->chip_select = param->chip_select;
 
 	descriptor->mode = param->mode;
@@ -229,6 +244,7 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XSpiPs_SetOptions(&desc->instance,
 			  XSPIPS_MASTER_OPTION |
 			  XSPIPS_DECODE_SSELECT_OPTION |
@@ -242,7 +258,20 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			      0xf & ~desc->chip_select);
 	XSpiPs_PolledTransfer(&desc->instance,
 			      data, data, bytes_number);
+#else
+	XSpi_SetOptions(&desc->instance,
+			XSP_MASTER_OPTION |
+			((desc->mode & SPI_CPOL) ?
+			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+			((desc->mode & SPI_CPHA) ?
+			 XSP_CLK_PHASE_1_OPTION : 0));
 
+	XSpi_SetSlaveSelect(&desc->instance,
+			    desc->chip_select);
+
+	XSpi_Transfer(&desc->instance,
+		      data, data, bytes_number);
+#endif
 	return 0;
 }
 
@@ -262,6 +291,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 	if (!descriptor)
 		return FAILURE;
 
+#ifdef _XPARAMETERS_PS_H_
 	descriptor->config = XGpioPs_LookupConfig(0);
 	if (descriptor->config == NULL)
 		goto error;
@@ -270,6 +300,11 @@ int32_t gpio_get(struct gpio_desc **desc,
 				    descriptor->config, descriptor->config->BaseAddr);
 	if (ret != 0)
 		goto error;
+#else
+	ret = XGpio_Initialize(&descriptor->instance, 0);
+	if (ret != 0)
+		goto error;
+#endif
 
 	descriptor->number = gpio_number;
 
@@ -322,11 +357,34 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_SetDirectionPin(&desc->instance, desc->number, 1);
 
 	XGpioPs_SetOutputEnablePin(&desc->instance, desc->number, 1);
 
 	XGpioPs_WritePin(&desc->instance, desc->number, value);
+#else
+	uint8_t pin = desc->number;
+	uint8_t channel;
+	uint32_t reg_val;
+
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
+	} else
+		channel = 1;
+
+	reg_val = XGpio_GetDataDirection(&desc->instance, channel);
+	reg_val &= ~(1 << pin);
+	XGpio_SetDataDirection(&desc->instance, channel, reg_val);
+
+	reg_val = XGpio_DiscreteRead(&desc->instance, channel);
+	if(value)
+		reg_val |= (1 << pin);
+	else
+		reg_val &= ~(1 << pin);
+	XGpio_DiscreteWrite(&desc->instance, channel, reg_val);
+#endif
 
 	return SUCCESS;
 }
@@ -414,5 +472,9 @@ void udelay(uint32_t usecs)
  */
 void mdelay(uint32_t msecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
+#else
+	usleep(msecs * 50);	// FIXME
+#endif
 }

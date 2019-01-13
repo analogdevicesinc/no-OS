@@ -44,8 +44,14 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <xparameters.h>
+#ifdef _XPARAMETERS_PS_H_
 #include <xspips.h>
 #include <xgpiops.h>
+#else
+#include <xspi.h>
+#include <xgpio.h>
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -110,8 +116,12 @@ typedef struct spi_desc {
 	uint32_t		max_speed_hz;
 	enum spi_mode	mode;
 	uint8_t			chip_select;
+#ifdef _XPARAMETERS_PS_H_
 	XSpiPs_Config	*config;
 	XSpiPs			instance;
+#else
+	XSpi			instance;
+#endif
 } spi_desc;
 
 typedef enum gpio_type {
@@ -122,8 +132,12 @@ typedef struct gpio_desc {
 	enum gpio_type	type;
 	uint32_t		id;
 	uint8_t			number;
+#ifdef _XPARAMETERS_PS_H_
 	XGpioPs_Config	*config;
 	XGpioPs			instance;
+#else
+	XGpio			instance;
+#endif
 } gpio_desc;
 
 /******************************************************************************/
