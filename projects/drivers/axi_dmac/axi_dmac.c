@@ -65,6 +65,7 @@
 
 #define AXI_DMAC_REG_TRANSFER_ID	0x404
 #define AXI_DMAC_REG_START_TRANSFER	0x408
+#define AXI_DMAC_REG_FLAGS			0x40c
 #define AXI_DMAC_REG_DEST_ADDRESS	0x410
 #define AXI_DMAC_REG_SRC_ADDRESS	0x414
 #define AXI_DMAC_REG_X_LENGTH		0x418
@@ -138,6 +139,8 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, size - 1);
 	axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
 
+	axi_dmac_write(dmac, AXI_DMAC_REG_FLAGS, dmac->flags);
+
 	axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
 
 	if (dmac->flags & DMA_CYCLIC)
@@ -177,6 +180,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->name = init->name;
 	dmac->base = init->base;
 	dmac->direction = init->direction;
+	dmac->flags = init->flags;
 
 	*dmac_core = dmac;
 
