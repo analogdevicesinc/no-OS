@@ -31,23 +31,20 @@ extern "C" {
  * Enums and structures
  *=======================================*/
 /* proposed to increase number of error return values to make unique for each return */
-typedef enum
-{
+typedef enum {
 	ADIERR_OK=0,
 	ADIERR_INV_PARM,
 	ADIERR_FAILED
 } ADI_ERR;
 
 /*!< \brief COMMON layer error reporting enumerated types */
-typedef enum
-{
+typedef enum {
 	COMMONERR_OK=0,
 	COMMONERR_FAILED
 } commonErr_t;
 
 /* bit 0 is MESSAGE, bit 1 is WARNING, bit 2 is ERROR */
-typedef enum
-{
+typedef enum {
 	ADIHAL_LOG_NONE	= 0x0,
 	ADIHAL_LOG_MESSAGE = 0x1,
 	ADIHAL_LOG_WARNING = 0x2,
@@ -61,8 +58,7 @@ typedef enum
 /**
  * \brief Data structure to hold SPI settings for all system device types
  */
-typedef struct
-{
+typedef struct {
 	uint8_t chipSelectIndex;		///< valid 1~8
 	uint8_t writeBitPolarity;		///< the level of the write bit of a SPI write instruction word, value is inverted for SPI read operation
 	uint8_t longInstructionWord;	///< 1 = 16bit instruction word, 0 = 8bit instruction word
@@ -88,13 +84,22 @@ commonErr_t CMB_setGPIO(uint32_t GPIO);
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex);
 
 /* SPI read/write functions */
-commonErr_t CMB_setSPIOptions(spiSettings_t *spiSettings); /* allows the platform HAL to work with devices with various SPI settings */
-commonErr_t CMB_setSPIChannel(uint16_t chipSelectIndex );  /* value of 0 deasserts all chip selects */
-commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr, uint8_t data); /* single SPI byte write function */
-commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr, uint8_t *data, uint32_t count);
-commonErr_t CMB_SPIReadByte (spiSettings_t *spiSettings, uint16_t addr, uint8_t *readdata); /* single SPI byte read function */
-commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr, uint8_t  field_val, uint8_t mask, uint8_t start_bit); /* write a field in a single register */
-commonErr_t CMB_SPIReadField (spiSettings_t *spiSettings, uint16_t addr, uint8_t *field_val, uint8_t mask, uint8_t start_bit);	/* read a field in a single register */
+commonErr_t CMB_setSPIOptions(spiSettings_t
+			      *spiSettings); /* allows the platform HAL to work with devices with various SPI settings */
+commonErr_t CMB_setSPIChannel(uint16_t
+			      chipSelectIndex );  /* value of 0 deasserts all chip selects */
+commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
+			     uint8_t data); /* single SPI byte write function */
+commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr,
+			      uint8_t *data, uint32_t count);
+commonErr_t CMB_SPIReadByte (spiSettings_t *spiSettings, uint16_t addr,
+			     uint8_t *readdata); /* single SPI byte read function */
+commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr,
+			      uint8_t  field_val, uint8_t mask,
+			      uint8_t start_bit); /* write a field in a single register */
+commonErr_t CMB_SPIReadField (spiSettings_t *spiSettings, uint16_t addr,
+			      uint8_t *field_val, uint8_t mask,
+			      uint8_t start_bit);	/* read a field in a single register */
 
 /* platform timer functions */
 commonErr_t CMB_wait_ms(uint32_t time_ms);
@@ -106,7 +111,8 @@ commonErr_t CMB_hasTimeoutExpired();
 /* platform logging functions */
 commonErr_t CMB_openLog(const char *filename);
 commonErr_t CMB_closeLog(void);
-commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex, uint32_t errorCode, const char *comment);
+commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex,
+			   uint32_t errorCode, const char *comment);
 commonErr_t CMB_flushLog(void);
 
 /* platform FPGA AXI register read/write functions */
@@ -116,6 +122,9 @@ commonErr_t CMB_regWrite(uint32_t offset, uint32_t data);
 /* platform DDR3 memory read/write functions */
 commonErr_t CMB_memRead(uint32_t offset, uint32_t *data, uint32_t len);
 commonErr_t CMB_memWrite(uint32_t offset, uint32_t *data, uint32_t len);
+
+int32_t platform_init(void);
+int32_t platform_remove(void);
 
 #ifdef __cplusplus
 }

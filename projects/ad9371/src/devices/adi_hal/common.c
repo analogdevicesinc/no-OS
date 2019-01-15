@@ -18,11 +18,45 @@
 #include "common.h"
 
 #include "platform_drivers.h"
+#include "parameters.h"
 
 ADI_LOGLEVEL CMB_LOGLEVEL = ADIHAL_LOG_NONE;
 
 static uint32_t _desired_time_to_elapse_us = 0;
-extern spi_device spi_dev;
+struct spi_desc 	*spi_ad_desc;
+struct gpio_desc	*gpio_ad9371_resetb;
+struct gpio_desc	*gpio_ad9528_resetb;
+struct gpio_desc	*gpio_ad9528_sysref_req;
+
+int32_t platform_init(void)
+{
+	struct spi_init_param spi_param;
+	int32_t status = 0;
+
+	status = gpio_get(&gpio_ad9371_resetb, AD9371_RESET_B);
+	status = gpio_get(&gpio_ad9528_resetb, AD9528_RESET_B);
+	status = gpio_get(&gpio_ad9528_sysref_req, AD9528_SYSREF_REQ);
+
+	spi_param.id = SPI_DEVICE_ID;
+	spi_param.mode = SPI_MODE_0;
+	spi_param.chip_select = AD9371_CS;
+	status |= spi_init(&spi_ad_desc, &spi_param);
+
+	return status;
+}
+
+int32_t platform_remove(void)
+{
+	int32_t status;
+
+	status = gpio_remove(gpio_ad9371_resetb);
+	status |= gpio_remove(gpio_ad9528_resetb);
+	status |= gpio_remove(gpio_ad9528_sysref_req);
+
+	status |= spi_remove(spi_ad_desc);
+
+	return status;
+}
 
 commonErr_t CMB_closeHardware(void)
 {
@@ -36,24 +70,24 @@ commonErr_t CMB_setGPIO(uint32_t GPIO)
 
 commonErr_t CMB_hardReset(uint8_t spiChipSelectIndex)
 {
-	uint32_t resetGPIO = 0;
+	struct gpio_desc *reset_gpio;
 
 	switch (spiChipSelectIndex) {
-	case AD9371_CHIP_SELECT:
-		resetGPIO = AD9371_RESET_B;
+	case AD9371_CS:
+		reset_gpio = gpio_ad9371_resetb;
 		break;
-	case AD9528_CHIP_SELECT:
-		resetGPIO = AD9528_RESET_B;
+	case AD9528_CS:
+		reset_gpio = gpio_ad9528_resetb;
 		break;
 	default:
 		return(COMMONERR_FAILED);
 	}
 
-	gpio_set_value(resetGPIO, 0x1);
+	gpio_direction_output(reset_gpio, 1);
 	CMB_wait_ms(1);
-	gpio_set_value(resetGPIO, 0x0);
+	gpio_direction_output(reset_gpio, 0);
 	CMB_wait_ms(1);
-	gpio_set_value(resetGPIO, 0x1);
+	gpio_direction_output(reset_gpio, 1);
 	CMB_wait_ms(1);
 
 	return(COMMONERR_OK);
@@ -69,49 +103,54 @@ commonErr_t CMB_setSPIChannel(uint16_t chipSelectIndex )
 	return(COMMONERR_OK);
 }
 
-commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr, uint8_t data)
+commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
+			     uint8_t data)
 {
 	uint8_t buf[3];
 
-	spi_dev.chip_select = spiSettings->chipSelectIndex;
+	spi_ad_desc->chip_select = spiSettings->chipSelectIndex;
 
 	buf[0] = (uint8_t) ((addr >> 8) & 0x7f);
 	buf[1] = (uint8_t) (addr & 0xff);
 	buf[2] = (uint8_t) data;
 
-	spi_write_and_read(&spi_dev, buf, 3);
+	spi_write_and_read(spi_ad_desc, buf, 3);
 
 	return(COMMONERR_OK);
 }
 
-commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr, uint8_t *data, uint32_t count)
+commonErr_t CMB_SPIWriteBytes(spiSettings_t *spiSettings, uint16_t *addr,
+			      uint8_t *data, uint32_t count)
 {
 	uint32_t index;
 
 	for (index = 0; index < count; index++)
-		if (CMB_SPIWriteByte(spiSettings, *(addr + index), *(data + index)) != COMMONERR_OK)
+		if (CMB_SPIWriteByte(spiSettings, *(addr + index),
+				     *(data + index)) != COMMONERR_OK)
 			return(COMMONERR_FAILED);
 
 	return(COMMONERR_OK);
 }
 
-commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr, uint8_t *readdata)
+commonErr_t CMB_SPIReadByte(spiSettings_t *spiSettings, uint16_t addr,
+			    uint8_t *readdata)
 {
 	uint8_t buf[3];
 
-	spi_dev.chip_select = spiSettings->chipSelectIndex;
+	spi_ad_desc->chip_select = spiSettings->chipSelectIndex;
 
 	buf[0] = (uint8_t) ((addr >> 8) | 0x80);
 	buf[1] = (uint8_t) (addr & 0xff);
 	buf[2] = (uint8_t) 0x00;
 
-	spi_write_and_read(&spi_dev, buf, 3);
+	spi_write_and_read(spi_ad_desc, buf, 3);
 	*readdata = buf[2];
 
 	return(COMMONERR_OK);
 }
 
-commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr, uint8_t field_val, uint8_t mask, uint8_t start_bit)
+commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr,
+			      uint8_t field_val, uint8_t mask, uint8_t start_bit)
 {
 	uint8_t data;
 
@@ -127,7 +166,8 @@ commonErr_t CMB_SPIWriteField(spiSettings_t *spiSettings, uint16_t addr, uint8_t
 }
 
 /* read a field in a single register space (not multibyte fields) */
-commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr, uint8_t *field_val, uint8_t mask, uint8_t start_bit)
+commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr,
+			     uint8_t *field_val, uint8_t mask, uint8_t start_bit)
 {
 	uint8_t data;
 
@@ -140,26 +180,21 @@ commonErr_t CMB_SPIReadField(spiSettings_t *spiSettings, uint16_t addr, uint8_t 
 	return(COMMONERR_OK);
 }
 
-commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex, uint32_t errorCode, const char *comment){
+commonErr_t CMB_writeToLog(ADI_LOGLEVEL level, uint8_t deviceIndex,
+			   uint32_t errorCode, const char *comment)
+{
 
-	if((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR))
-	{
+	if((CMB_LOGLEVEL & ADIHAL_LOG_ERROR) && (level == ADIHAL_LOG_ERROR)) {
 		printf("ERROR: %d: %s", (int)errorCode, comment);
-	}
-	else if((CMB_LOGLEVEL & ADIHAL_LOG_WARNING) && (level == ADIHAL_LOG_WARNING))
-	{
+	} else if((CMB_LOGLEVEL & ADIHAL_LOG_WARNING)
+		  && (level == ADIHAL_LOG_WARNING)) {
 		printf("WARNING: %d: %s",(int)errorCode, comment);
-	}
-	else if((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE) && (level == ADIHAL_LOG_MESSAGE))
-	{
+	} else if((CMB_LOGLEVEL & ADIHAL_LOG_MESSAGE)
+		  && (level == ADIHAL_LOG_MESSAGE)) {
 		printf("MESSAGE: %d: %s",(int)errorCode, comment);
-	}
-	else if(CMB_LOGLEVEL == ADIHAL_LOG_NONE )
-	{
+	} else if(CMB_LOGLEVEL == ADIHAL_LOG_NONE ) {
 		//printf("MESSAGE: %d: %s",(int)errorCode, comment);
-	}
-	else
-	{
+	} else {
 		printf("Undefined Log Level: 0x%X", level);
 	}
 
