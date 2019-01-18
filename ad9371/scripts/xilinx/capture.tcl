@@ -1,4 +1,5 @@
-connect arm hw
+connect
+targets -set -filter {(name =~ "*Cortex-A9*#0*") || (name =~ "*Cortex-A53*#0*") || (name =~ "*MicroBlaze*#0*")}
 
 puts "Transfering data..."
 
@@ -10,26 +11,25 @@ set fp2 [ open iq_rx2.csv a ]
 for {set index 1} {$index < 65536} {incr index 4} {
 	set data [lindex $readData $index]
 	set intData [expr 0x$data]
-	
-	set sampleI1 [expr {$intData & 0xFFFF}]
-	set sampleQ1 [expr {($intData >> 16) & 0xFFFF}]
-	
+
+	set sampleQ1 [expr {$intData & 0xFFFF}]
+	set sampleI1 [expr {($intData >> 16) & 0xFFFF}]
+
 	set data [lindex $readData [expr {$index + 2}]]
 	set intData [expr 0x$data]
-	
-	set sampleI2 [expr {$intData & 0xFFFF}]
-	set sampleQ2 [expr {($intData >> 16) & 0xFFFF}]
-	
+
+	set sampleQ2 [expr {$intData & 0xFFFF}]
+	set sampleI2 [expr {($intData >> 16) & 0xFFFF}]
+
 	puts $fp1 $sampleI1
 	puts $fp1 $sampleQ1
 	puts $fp2 $sampleI2
 	puts $fp2 $sampleQ2
-	
 }
 close $fp1
 close $fp2
 
 puts "Done."
 
-disconnect 64
+disconnect
 exit
