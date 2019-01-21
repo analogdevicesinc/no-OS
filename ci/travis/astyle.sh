@@ -41,7 +41,7 @@ then
 	popd
 fi
 
-git diff --name-only $COMMIT_RANGE | while read -r file; do
+git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
 	if is_source_file "$file"
 	then 
 		./build/astyle/build/gcc/bin/astyle --options="$(get_script_path astyle_config)" "$file"
