@@ -197,6 +197,7 @@ typedef struct {
 	uint8_t		cs_delay;
 	uint8_t		spi_config;
 	uint32_t 	spi_clk_hz;
+	uint32_t	spi_clk_hz_reg_access;
 	uint32_t	ref_clk_hz;
 	uint8_t 	spi_offload_rx_support_en;
 	uint32_t	spi_offload_rx_dma_baseaddr;
