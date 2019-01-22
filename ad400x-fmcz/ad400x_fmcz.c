@@ -101,7 +101,6 @@ int main()
 		offload_data = (uint32_t *)dev->spi_desc->rx_dma_startaddr;
 
 		for(i = 0; i < dev->spi_desc->rx_length/4; i++) {
-			*offload_data *= 2;
 			data = *offload_data & 0xFFFFF;
 			if (data > 524287)
 				data = data - 1048576;
