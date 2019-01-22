@@ -82,7 +82,6 @@ int main()
 		if (!msg)
 			return -1;
 
-		msg->spi_msg_cmds = malloc(sizeof(spi_eng_msg_cmds));
 		msg->spi_msg_cmds = spi_eng_msg_cmds;
 		msg->msg_cmd_len = ARRAY_SIZE(spi_eng_msg_cmds);
 		msg->rx_buf_addr = 0x800000;
@@ -97,7 +96,6 @@ int main()
 
 		mdelay(2000);
 
-		free(msg->spi_msg_cmds);
 		free(msg);
 
 		offload_data = (uint32_t *)dev->spi_desc->rx_dma_startaddr;
