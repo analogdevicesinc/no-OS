@@ -19,6 +19,16 @@ then
 	fi
 fi
 
+is_valid_file(){
+	[[ -f ".astyleignore" ]] &&
+	while read -r fpath
+	do
+		[[ -z "$fpath" ]] && continue
+		[[ "$file" == *"$fpath"* ]] && return 1
+	done < ".astyleignore"
+	return 0
+}
+
 is_source_file() {
 	local file="$1"
 
@@ -42,7 +52,7 @@ then
 fi
 
 git diff --name-only --diff-filter=d $COMMIT_RANGE | while read -r file; do
-	if is_source_file "$file"
+	if is_source_file "$file" && is_valid_file "$file"
 	then 
 		./build/astyle/build/gcc/bin/astyle --options="$(get_script_path astyle_config)" "$file"
 	fi
