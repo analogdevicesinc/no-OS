@@ -479,8 +479,47 @@ static const uint8_t full_gain_table[RXGAIN_TBLS_END][SIZE_FULL_TABLE][3] = {
 	}
 };
 
+static const int8_t full_gain_table_abs_gain[RXGAIN_TBLS_END][SIZE_FULL_TABLE]
+= {
+	{  /* 800 MHz */
+		-1, -1, -1, 0, 1, 2, 3, 4,
+			5, 6, 7, 8, 9, 10, 11, 12,
+			13, 14, 15, 16, 17, 18, 19, 20,
+			21, 22, 23, 24, 25, 26, 27, 28,
+			29, 30, 31, 32, 33, 34, 35, 36,
+			37, 38, 39, 40, 41, 42, 43, 44,
+			45, 46, 47, 48, 49, 50, 51, 52,
+			53, 54, 55, 56, 57, 58, 59, 60,
+			61, 62, 63, 64, 65, 66, 67, 68,
+			69, 70, 71, 72, 73
+		}, {  /* 2300 MHz */
+		-3, -3, -3, -2, -1, 0, 1, 2,
+			3, 4, 5, 6, 7, 8, 9, 10,
+			11, 12, 13, 14, 15, 16, 17, 18,
+			19, 20, 21, 22, 23, 24, 25, 26,
+			27, 28, 29, 30, 31, 32, 33, 34,
+			35, 36, 37, 38, 39, 40, 41, 42,
+			43, 44, 45, 46, 47, 48, 49, 50,
+			51, 52, 53, 54, 55, 56, 57, 58,
+			59, 60, 61, 62, 63, 64, 65, 66,
+			67, 68, 69, 70, 71
+		}, {  /* 5500 MHz */
+		-10, -10, -10, -10, -10, -9, -8, -7,
+			-6, -5, -4, -3, -2, -1, 0, 1,
+			2, 3, 4, 5, 6, 7, 8, 9,
+			10, 11, 12, 13, 14, 15, 16, 17,
+			18, 19, 20, 21, 22, 23, 24, 25,
+			26, 27, 28, 29, 30, 31, 32, 33,
+			34, 35, 36, 37, 38, 39, 40, 41,
+			42, 43, 44, 45, 46, 47, 48, 49,
+			50, 51, 52, 53, 54, 55, 56, 57,
+			58, 59, 60, 61, 62
+		}
+};
+
 #define SIZE_SPLIT_TABLE		41
 
+#if HAVE_SPLIT_GAIN_TABLE
 static const uint8_t split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] = {
 	{  /* 800 MHz */
 		{ 0x00, 0x18, 0x20 }, { 0x00, 0x18, 0x00 }, { 0x00, 0x18, 0x00 },
@@ -528,6 +567,78 @@ static const uint8_t split_gain_table[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE][3] = {
 		{ 0x6B, 0x38, 0x20 }, { 0x6C, 0x38, 0x20 }, { 0x6D, 0x38, 0x20 },
 		{ 0x6E, 0x38, 0x20 }, { 0x6F, 0x38, 0x20 },
 	}
+};
+
+static const uint8_t
+split_gain_table_abs_gain[RXGAIN_TBLS_END][SIZE_SPLIT_TABLE] = {
+	{  /* 800 MHz */
+		-1, -1, -1, -1, -1, -1, -1, 2,
+			8, 13, 19, 20, 21, 22, 23, 24,
+			25, 26, 27, 28, 29, 30, 31, 32,
+			33, 34, 35, 36, 37, 38, 39, 40,
+			41, 42, 43, 44, 45, 46, 47, 48,
+			49
+		}, {  /* 2300 MHz */
+		-3, -3, -3, -3, -3, -3, -3, -3,
+			0, 6, 12, 18, 19, 20, 21, 22,
+			23, 24, 25, 26, 27, 28, 29, 30,
+			31, 32, 33, 34, 35, 36, 37, 38,
+			39, 40, 41, 42, 43, 44, 45, 46,
+			47
+		}, {  /* 5500 MHz */
+		-10, -10, -10, -10, -10, -10, -10, -10,
+			-10, -10, -7, -2, 3, 9, 10, 11,
+			12, 13, 14, 15, 16, 17, 18, 19,
+			20, 22, 24, 25, 26, 27, 28, 29,
+			30, 31, 32, 33, 34, 35, 36, 37,
+			38
+		}
+};
+#endif
+
+struct gain_table_info ad9361_adi_gt_info[] = {
+	{
+		.start = 0,
+		.end = 1300000000ULL,
+		.max_index = SIZE_FULL_TABLE,
+		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_200_1300_MHZ],
+		.tab = (uint8_t (*)[3]) full_gain_table[TBL_200_1300_MHZ],
+	},{
+		.start = 1300000000ULL,
+		.end = 4000000000ULL,
+		.max_index = SIZE_FULL_TABLE,
+		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_1300_4000_MHZ],
+		.tab = (uint8_t (*)[3]) full_gain_table[TBL_1300_4000_MHZ],
+	},{
+		.start = 4000000000ULL,
+		.end = 6000000000ULL,
+		.max_index = SIZE_FULL_TABLE,
+		.abs_gain_tbl = (int8_t *) &full_gain_table_abs_gain[TBL_4000_6000_MHZ],
+		.tab = (uint8_t (*)[3]) full_gain_table[TBL_4000_6000_MHZ],
+#if HAVE_SPLIT_GAIN_TABLE
+	},{
+		.start = 0,
+		.end = 1300000000ULL,
+		.max_index = SIZE_SPLIT_TABLE,
+		.split_table = 1,
+		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_200_1300_MHZ],
+		.tab = (uint8_t (*)[3]) split_gain_table[TBL_200_1300_MHZ],
+	},{
+		.start = 1300000000ULL,
+		.end = 4000000000ULL,
+		.max_index = SIZE_SPLIT_TABLE,
+		.split_table = 1,
+		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_1300_4000_MHZ],
+		.tab = (uint8_t (*)[3]) split_gain_table[TBL_1300_4000_MHZ],
+	},{
+		.start = 4000000000ULL,
+		.end = 6000000000ULL,
+		.max_index = SIZE_SPLIT_TABLE,
+		.split_table = 1,
+		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_4000_6000_MHZ],
+		.tab = (uint8_t (*)[3]) split_gain_table[TBL_4000_6000_MHZ],
+#endif
+	},{ }, /* Don't Remove */
 };
 
 /* Mixer GM Sub-table */
@@ -1190,15 +1301,37 @@ static int32_t ad9361_run_calibration(struct ad9361_rf_phy *phy, uint32_t mask)
  * @param freq The frequency value [Hz].
  * @return The index to the RX gain table.
  */
-static enum rx_gain_table_name ad9361_gt_tableindex(uint64_t freq)
+static int32_t ad9361_gt_tableindex(struct ad9361_rf_phy *phy, uint64_t freq)
 {
-	if (freq <= 1300000000ULL)
-		return TBL_200_1300_MHZ;
+	int32_t i;
 
-	if (freq <= 4000000000ULL)
-		return TBL_1300_4000_MHZ;
+	for (i = 0; phy->gt_info[i].tab != NULL; i++) {
+		if ((phy->pdata->split_gt == phy->gt_info[i].split_table) &&
+		    (phy->gt_info[i].start < freq) &&
+		    (freq <= phy->gt_info[i].end)) {
+			return i;
+		}
+	}
 
-	return TBL_4000_6000_MHZ;
+	dev_err(&phy->spi->dev,
+		"%s: Failed to find suitable gain table (%"PRIu64")", __func__, freq);
+
+	return 0;
+}
+
+/**
+ * Return the current gain table index.
+ * @param phy The AD9361 state structure.
+ * @return The current gain table index or 0 if the table was not chosen.
+ */
+static int32_t ad9361_gt(struct ad9361_rf_phy *phy)
+{
+	if (phy->current_table == -1) {
+		dev_err(&phy->spi->dev, "%s: ERROR", __func__);
+		return 0;
+	}
+
+	return phy->current_table;
 }
 
 /**
@@ -1224,6 +1357,32 @@ uint64_t ad9361_from_clk(uint32_t freq)
 }
 
 /**
+ * Find the corresponding table index for a specific gain value.
+ * @param phy The AD9361 state structure.
+ * @param gain The gain value.
+ * @return The table index.
+ */
+static int find_table_index(struct ad9361_rf_phy *phy, int gain)
+{
+	uint32_t i, nm1, n;
+
+	for (i = 0; i < phy->gt_info[ad9361_gt(phy)].max_index; i++) {
+		if (phy->gt_info[ad9361_gt(phy)].abs_gain_tbl[i] >= gain) {
+			nm1 = abs(phy->gt_info[ad9361_gt(phy)].abs_gain_tbl[
+					  (i > 0) ? i - 1 : i] - gain);
+			n = abs(phy->gt_info[ad9361_gt(phy)].abs_gain_tbl[i]
+				- gain);
+			if (nm1 < n)
+				return (i > 0) ? i - 1 : i;
+			else
+				return i;
+		}
+	}
+
+	return -EINVAL;
+}
+
+/**
  * Load the gain table for the selected frequency range and receiver.
  * @param phy The AD9361 state structure.
  * @param freq The frequency value [Hz].
@@ -1234,13 +1393,13 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 			      uint32_t dest)
 {
 	struct spi_device *spi = phy->spi;
-	const uint8_t(*tab)[3];
-	enum rx_gain_table_name band;
-	uint32_t index_max, i, lna;
+	uint8_t (*tab)[3];
+	uint32_t band, index_max, i, lna, lpf_tia_mask, set_gain;
+	int32_t ret, rx1_gain, rx2_gain;
 
 	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64, __func__, freq);
 
-	band = ad9361_gt_tableindex(freq);
+	band = ad9361_gt_tableindex(phy, freq);
 
 	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64" (band %d)",
 		__func__, freq, band);
@@ -1249,15 +1408,37 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	if (phy->current_table == band)
 		return 0;
 
+	tab = phy->gt_info[band].tab;
+	index_max = phy->gt_info[band].max_index;
+
 	ad9361_spi_writef(spi, REG_AGC_CONFIG_2,
 			  AGC_USE_FULL_GAIN_TABLE, !phy->pdata->split_gt);
 
-	if (has_split_gt && phy->pdata->split_gt) {
-		tab = &split_gain_table[band][0];
-		index_max = SIZE_SPLIT_TABLE;
+	ad9361_spi_write(spi, REG_MAX_LMT_FULL_GAIN,
+			 index_max - 1); /* Max Full/LMT Gain Table Index */
+
+	set_gain = ad9361_spi_readf(spi, REG_RX1_MANUAL_LMT_FULL_GAIN,
+				    RX_FULL_TBL_IDX_MASK);
+
+	if (phy->current_table >= 0) {
+		rx1_gain = phy->gt_info[phy->current_table].abs_gain_tbl[set_gain];
 	} else {
-		tab = &full_gain_table[band][0];
-		index_max = SIZE_FULL_TABLE;
+		if (set_gain > (index_max - 1))
+			set_gain = index_max - 1;
+
+		rx1_gain = phy->gt_info[band].abs_gain_tbl[set_gain];
+	}
+
+	set_gain = ad9361_spi_readf(spi, REG_RX2_MANUAL_LMT_FULL_GAIN,
+				    RX_FULL_TBL_IDX_MASK);
+
+	if (phy->current_table >= 0) {
+		rx2_gain = phy->gt_info[phy->current_table].abs_gain_tbl[set_gain];
+	} else {
+		if (set_gain > (index_max - 1))
+			set_gain = index_max - 1;
+
+		rx2_gain = phy->gt_info[band].abs_gain_tbl[set_gain];
 	}
 
 	lna = phy->pdata->elna_ctrl.elna_in_gaintable_all_index_en ?
@@ -1265,6 +1446,14 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 
 	ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG, START_GAIN_TABLE_CLOCK |
 			 RECEIVER_SELECT(dest)); /* Start Gain Table Clock */
+
+	/* TX QUAD Calibration */
+	if (phy->pdata->split_gt)
+		lpf_tia_mask = 0x20;
+	else
+		lpf_tia_mask = 0x3F;
+
+	phy->tx_quad_lpf_tia_match = -EINVAL;
 
 	for (i = 0; i < index_max; i++) {
 		ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, i); /* Gain Table Index */
@@ -1282,6 +1471,10 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 				 0); /* Dummy Write to delay 3 ADCCLK/16 cycles */
 		ad9361_spi_write(spi, REG_GAIN_TABLE_READ_DATA1,
 				 0); /* Dummy Write to delay ~1u */
+
+		if ((tab[i][1] & lpf_tia_mask) == 0x20)
+			phy->tx_quad_lpf_tia_match = i;
+
 	}
 
 	ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG, START_GAIN_TABLE_CLOCK |
@@ -1293,6 +1486,20 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	ad9361_spi_write(spi, REG_GAIN_TABLE_CONFIG, 0); /* Stop Gain Table Clock */
 
 	phy->current_table = band;
+
+	ret = find_table_index(phy, rx1_gain);
+	if (ret < 0)
+		ret = phy->gt_info[band].max_index - 1;
+
+	ad9361_spi_writef(spi, REG_RX1_MANUAL_LMT_FULL_GAIN,
+			  RX_FULL_TBL_IDX_MASK, ret); /* Rx1 Full/LMT Gain Index */
+
+	ret = find_table_index(phy, rx2_gain);
+	if (ret < 0)
+		ret = phy->gt_info[band].max_index - 1;
+
+	ad9361_spi_write(spi, REG_RX2_MANUAL_LMT_FULL_GAIN,
+			 ret); /* Rx2 Full/LMT Gain Index */
 
 	return 0;
 }
@@ -1518,11 +1725,13 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 		else
 			phy->current_rx_use_tdd_table = false;
 	} else {
-		tab = &SynthLUT_TDD[range][0];
-		if (tx)
-			phy->current_tx_use_tdd_table = true;
-		else
-			phy->current_rx_use_tdd_table = true;
+		if (have_tdd_tables) {
+			tab = &SynthLUT_TDD[range][0];
+			if (tx)
+				phy->current_tx_use_tdd_table = true;
+			else
+				phy->current_rx_use_tdd_table = true;
+		}
 	}
 
 	if (tx)
@@ -1584,6 +1793,7 @@ static int32_t ad9361_get_split_table_gain(struct ad9361_rf_phy *phy,
 	uint32_t val, tbl_addr;
 	int32_t rc = 0;
 
+
 	rx_gain->fgt_lmt_index = ad9361_spi_readf(spi, idx_reg,
 				 FULL_TABLE_GAIN_INDEX(~0));
 	tbl_addr = ad9361_spi_read(spi, REG_GAIN_TABLE_ADDRESS);
@@ -1596,8 +1806,8 @@ static int32_t ad9361_get_split_table_gain(struct ad9361_rf_phy *phy,
 
 	rx_gain->tia_index = ad9361_spi_readf(spi, REG_GAIN_TABLE_READ_DATA2, TIA_GAIN);
 
-	rx_gain->lmt_gain = lna_table[phy->current_table][rx_gain->lna_index] +
-			    mixer_table[phy->current_table][rx_gain->mixer_index] +
+	rx_gain->lmt_gain = lna_table[ad9361_gt(phy)][rx_gain->lna_index] +
+			    mixer_table[ad9361_gt(phy)][rx_gain->mixer_index] +
 			    tia_table[rx_gain->tia_index];
 
 	ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, tbl_addr);
@@ -1626,32 +1836,17 @@ static int32_t ad9361_get_full_table_gain(struct ad9361_rf_phy *phy,
 		struct rf_rx_gain *rx_gain)
 {
 	struct spi_device *spi = phy->spi;
-	int32_t val;
-	enum rx_gain_table_name tbl;
-	struct rx_gain_info *gain_info;
-	int32_t rc = 0, rx_gain_db;
-
-	tbl = ad9361_gt_tableindex(
-		      ad9361_from_clk(clk_get_rate(phy, phy->ref_clk_scale[RX_RFPLL])));
+	uint32_t val;
 
 	rx_gain->fgt_lmt_index = val = ad9361_spi_readf(spi, idx_reg,
 				       FULL_TABLE_GAIN_INDEX(~0));
-	gain_info = &phy->rx_gain[tbl];
-	if (val > gain_info->idx_step_offset) {
-		val = val - gain_info->idx_step_offset;
-		rx_gain_db = gain_info->starting_gain_db +
-			     ((val)* gain_info->gain_step_db);
-	} else {
-		rx_gain_db = gain_info->starting_gain_db;
-	}
-
 	/* Read Digital Gain */
 	rx_gain->digital_gain = ad9361_spi_readf(spi, idx_reg + 2,
 				DIGITAL_GAIN_RX(~0));
 
-	rx_gain->gain_db = rx_gain_db;
+	rx_gain->gain_db = phy->gt_info[ad9361_gt(phy)].abs_gain_tbl[val];
 
-	return rc;
+	return 0;
 }
 
 /**
@@ -1905,15 +2100,18 @@ static int32_t set_split_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 		rc = -EINVAL;
 		goto out;
 	}
-	if (rx_gain->gain_db > 0)
-		dev_dbg(dev, "Ignoring rx_gain value in split table mode.");
-	if (rx_gain->fgt_lmt_index == 0 && rx_gain->lpf_gain == 0 &&
-	    rx_gain->digital_gain == 0) {
-		dev_err(dev,
-			"In split table mode, All LMT/LPF/digital gains cannot be 0");
-		rc = -EINVAL;
+
+	rc = find_table_index(phy, rx_gain->gain_db);
+	if (rc < 0) {
+		dev_err(dev, "Invalid gain %d, supported range [%d - %d]\n",
+			rx_gain->gain_db, phy->gt_info[ad9361_gt(phy)].
+			abs_gain_tbl[0],
+			phy->gt_info[ad9361_gt(phy)].abs_gain_tbl
+			[phy->gt_info[ad9361_gt(phy)].max_index - 1]);
 		goto out;
 	}
+
+	rx_gain->fgt_lmt_index = rc;
 
 	ad9361_spi_writef(spi, idx_reg, RX_FULL_TBL_IDX_MASK, rx_gain->fgt_lmt_index);
 	ad9361_spi_writef(spi, idx_reg + 1, RX_LPF_IDX_MASK, rx_gain->lpf_gain);
@@ -1925,7 +2123,7 @@ static int32_t set_split_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 		dev_err(dev, "Digital gain is disabled and cannot be set");
 	}
 out:
-	return rc;
+	return 0;
 }
 
 /**
@@ -1939,36 +2137,24 @@ static int32_t set_full_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 				   struct rf_rx_gain *rx_gain)
 {
 	struct spi_device *spi = phy->spi;
-	enum rx_gain_table_name tbl;
-	struct rx_gain_info *gain_info;
-	uint32_t val;
-	int32_t rc = 0;
+	int rc = 0;
 
-	if (rx_gain->fgt_lmt_index != (uint32_t)~0
-	    || (int64_t)rx_gain->lpf_gain != (uint32_t)~0 ||
+	if (rx_gain->fgt_lmt_index != ~0 || rx_gain->lpf_gain != ~0 ||
 	    rx_gain->digital_gain > 0)
 		dev_dbg(dev,
 			"Ignoring lmt/lpf/digital gains in Single Table mode");
 
-	tbl = ad9361_gt_tableindex(
-		      ad9361_from_clk(clk_get_rate(phy, phy->ref_clk_scale[RX_RFPLL])));
-
-	gain_info = &phy->rx_gain[tbl];
-	if ((rx_gain->gain_db < gain_info->starting_gain_db) ||
-	    (rx_gain->gain_db > gain_info->max_gain_db)) {
-
-		dev_err(dev, "Invalid gain %"PRId32", supported range [%"PRId32" - %"PRId32"]",
-			rx_gain->gain_db, gain_info->starting_gain_db,
-			gain_info->max_gain_db);
-		rc = -EINVAL;
+	rc = find_table_index(phy, rx_gain->gain_db);
+	if (rc < 0) {
+		dev_err(dev, "Invalid gain %d, supported range [%d - %d]\n",
+			rx_gain->gain_db, phy->gt_info[ad9361_gt(phy)].
+			abs_gain_tbl[0],
+			phy->gt_info[ad9361_gt(phy)].abs_gain_tbl
+			[phy->gt_info[ad9361_gt(phy)].max_index - 1]);
 		goto out;
-
 	}
 
-	val = ((rx_gain->gain_db - gain_info->starting_gain_db) /
-	       gain_info->gain_step_db) + gain_info->idx_step_offset;
-	ad9361_spi_writef(spi, idx_reg, RX_FULL_TBL_IDX_MASK, val);
-
+	rc = ad9361_spi_writef(spi, idx_reg, RX_FULL_TBL_IDX_MASK, rc);
 out:
 	return rc;
 }
@@ -2024,57 +2210,6 @@ int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 out:
 	return rc;
 
-}
-
-/**
- * Initialize the rx_gain_info structure.
- * @param rx_gain The rx_gain_info structure pointer.
- * @param type Either Full or Split Table
- * @param starting_gain The starting gain value.
- * @param max_gain The maximum gain value.
- * @param gain_step The gain step.
- * @param max_idx The max table size.
- * @param idx_offset Offset in the table where linear progression starts
- * @return None
- */
-static void ad9361_init_gain_info(struct rx_gain_info *rx_gain,
-				  enum rx_gain_table_type type, int32_t starting_gain,
-				  int32_t max_gain, int32_t gain_step, int32_t max_idx, int32_t idx_offset)
-{
-	rx_gain->tbl_type = type;
-	rx_gain->starting_gain_db = starting_gain;
-	rx_gain->max_gain_db = max_gain;
-	rx_gain->gain_step_db = gain_step;
-	rx_gain->max_idx = max_idx;
-	rx_gain->idx_step_offset = idx_offset;
-}
-
-/**
- * Initialize the gain table information.
- * @param phy The AD9361 state structure.
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad9361_init_gain_tables(struct ad9361_rf_phy *phy)
-{
-	struct rx_gain_info *rx_gain;
-
-	/* Intialize Meta data according to default gain tables
-	* of AD9631. Changing/Writing of gain tables is not
-	* supported yet.
-	*/
-	rx_gain = &phy->rx_gain[TBL_200_1300_MHZ];
-	ad9361_init_gain_info(rx_gain, RXGAIN_FULL_TBL, 1, 77, 1,
-			      SIZE_FULL_TABLE, 0);
-
-	rx_gain = &phy->rx_gain[TBL_1300_4000_MHZ];
-	ad9361_init_gain_info(rx_gain, RXGAIN_FULL_TBL, -3, 71, 1,
-			      SIZE_FULL_TABLE, 1);
-
-	rx_gain = &phy->rx_gain[TBL_4000_6000_MHZ];
-	ad9361_init_gain_info(rx_gain, RXGAIN_FULL_TBL, -10, 62, 1,
-			      SIZE_FULL_TABLE, 4);
-
-	return 0;
 }
 
 /**
@@ -2940,16 +3075,16 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy,
  * @param rx_phase The optional RX phase value overwrite (set to zero).
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
-				    uint32_t bw_rx, uint32_t bw_tx,
-				    int32_t rx_phase)
+
+static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
+				uint32_t bw_rx, uint32_t bw_tx,
+				int32_t rx_phase)
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t clktf, clkrf;
 	int32_t txnco_word, rxnco_word, txnco_freq, ret;
-	uint8_t __rx_phase = 0, reg_inv_bits = 0, val, decim;
-	const uint8_t(*tab)[3];
-	uint32_t index_max, i, lpf_tia_mask;
+	uint8_t __rx_phase = 0, reg_inv_bits, val, decim;
+	bool phase_inversion_en;
 
 	if (phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) {
 		if (phy->pdata->lo_powerdown_managed_en) {
@@ -3026,7 +3161,6 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 		dev_err(dev, "Unhandled case in %s line %d clkrf %"PRIu32" clktf %"PRIu32,
 			__func__, __LINE__, clkrf, clktf);
 
-
 	if (rx_phase >= 0)
 		__rx_phase = rx_phase;
 
@@ -3039,9 +3173,10 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 			goto out_restore;
 	}
 
-	if (phy->pdata->rx1rx2_phase_inversion_en ||
-	    (phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
+	phase_inversion_en = phy->pdata->rx1rx2_phase_inversion_en ||
+			     (phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2);
 
+	if (phase_inversion_en) {
 		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 0);
 
 		reg_inv_bits = ad9361_spi_read(spi, REG_INVERT_BITS);
@@ -3058,48 +3193,38 @@ static int32_t ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH, 0x01);
 	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH_2, 0x01);
 
-	if (has_split_gt && phy->pdata->split_gt) {
-		tab = &split_gain_table[phy->current_table][0];
-		index_max = SIZE_SPLIT_TABLE;
-		lpf_tia_mask = 0x20;
-	} else {
-		tab = &full_gain_table[phy->current_table][0];
-		index_max = SIZE_FULL_TABLE;
-		lpf_tia_mask = 0x3F;
-	}
-
-	for (i = 0; i < index_max; i++)
-		if ((tab[i][1] & lpf_tia_mask) == 0x20) {
-			ad9361_spi_write(spi, REG_TX_QUAD_FULL_LMT_GAIN, i);
-			break;
-		}
-
-	if (i >= index_max)
-		dev_err(dev, "failed to find suitable LPF TIA value in gain table");
+	if (phy->tx_quad_lpf_tia_match < 0) /* set in ad9361_load_gt() */
+		dev_err(dev, "failed to find suitable LPF TIA value in gain table\n");
+	else
+		ad9361_spi_write(spi, REG_TX_QUAD_FULL_LMT_GAIN,
+				 phy->tx_quad_lpf_tia_match);
 
 	ad9361_spi_write(spi, REG_QUAD_SETTLE_COUNT, 0xF0);
 	ad9361_spi_write(spi, REG_TX_QUAD_LPF_GAIN, 0x00);
 
-	ret = __ad9361_tx_quad_calib(phy, __rx_phase, rxnco_word, decim, &val);
+	if (rx_phase != -2) {
+		ret = __ad9361_tx_quad_calib(phy, __rx_phase, rxnco_word, decim, &val);
 
-	dev_dbg(dev, "LO leakage: %d Quadrature Calibration: %d : rx_phase %d",
-		!!(val & TX1_LO_CONV), !!(val & TX1_SSB_CONV), __rx_phase);
+		dev_dbg(dev, "LO leakage: %d Quadrature Calibration: %d : rx_phase %d\n",
+			!!(val & TX1_LO_CONV), !!(val & TX1_SSB_CONV), __rx_phase);
 
-	/* Calibration failed -> try last phase offset */
-	if (val != (TX1_LO_CONV | TX1_SSB_CONV)) {
-		if (phy->last_tx_quad_cal_phase < 31)
-			ret = __ad9361_tx_quad_calib(phy, phy->last_tx_quad_cal_phase,
-						     rxnco_word, decim, &val);
+		/* Calibration failed -> try last phase offset */
+		if (val != (TX1_LO_CONV | TX1_SSB_CONV)) {
+			if (phy->last_tx_quad_cal_phase < 31)
+				ret = __ad9361_tx_quad_calib(phy, phy->last_tx_quad_cal_phase,
+							     rxnco_word, decim, &val);
+		} else {
+			phy->last_tx_quad_cal_phase = __rx_phase;
+		}
 	} else {
-		phy->last_tx_quad_cal_phase = __rx_phase;
+		/* force phase search */
+		val = 0;
 	}
-
 	/* Calibration failed -> loop through all 32 phase offsets */
 	if (val != (TX1_LO_CONV | TX1_SSB_CONV))
 		ret = ad9361_tx_quad_phase_search(phy, rxnco_word, decim);
 
-	if (phy->pdata->rx1rx2_phase_inversion_en ||
-	    (phy->pdata->port_ctrl.pp_conf[1] & INVERT_RX2)) {
+	if (phase_inversion_en) {
 		ad9361_spi_writef(spi, REG_PARALLEL_PORT_CONF_2, INVERT_RX2, 1);
 		ad9361_spi_write(spi, REG_INVERT_BITS, reg_inv_bits);
 	}
@@ -5070,7 +5195,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
  */
 void ad9361_clear_state(struct ad9361_rf_phy *phy)
 {
-	phy->current_table = RXGAIN_TBLS_END;
+	phy->current_table = -1;
 	phy->bypass_tx_fir = true;
 	phy->bypass_rx_fir = true;
 	phy->rate_governor = 1;
