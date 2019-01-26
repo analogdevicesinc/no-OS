@@ -12,14 +12,14 @@ for {set index 1} {$index < 65536} {incr index 4} {
 	set data [lindex $readData $index]
 	set intData [expr 0x$data]
 
-	set sampleQ1 [expr {$intData & 0xFFFF}]
-	set sampleI1 [expr {($intData >> 16) & 0xFFFF}]
+	set sampleI1 [expr {$intData & 0xFFFF}]
+	set sampleQ1 [expr {($intData >> 16) & 0xFFFF}]
 
 	set data [lindex $readData [expr {$index + 2}]]
 	set intData [expr 0x$data]
 
-	set sampleQ2 [expr {$intData & 0xFFFF}]
-	set sampleI2 [expr {($intData >> 16) & 0xFFFF}]
+	set sampleI2 [expr {$intData & 0xFFFF}]
+	set sampleQ2 [expr {($intData >> 16) & 0xFFFF}]
 
 	puts $fp1 $sampleI1
 	puts $fp1 $sampleQ1
