@@ -694,7 +694,7 @@ int main(void)
 			&deframerStatus)) != MYKONOS_ERR_OK) {
 		errorString = getMykonosErrorMessage(mykError);
 		goto error_11;
-	} else if (deframerStatus != 0x68)
+	} else if (deframerStatus != 0x28)
 		printf("DeframerStatus = 0x%x\n", deframerStatus);
 
 	/*************************************************************************/
