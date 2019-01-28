@@ -11,7 +11,7 @@
 ## M_SRC_FILES:
 ##		if you want to hand pick files, use this variable to list source files.
 
-M_INC_DIRS +=  $(NOOS-DIR)/ad7768-evb/
+M_INC_DIRS +=  $(NOOS-DIR)/ad7768-evb
 M_INC_DIRS +=  $(NOOS-DIR)/drivers/ad7768
 
 M_HDR_FILES :=
