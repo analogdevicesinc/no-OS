@@ -48,7 +48,6 @@
 #include <xil_cache.h>
 #include <xparameters.h>
 #include "xil_printf.h"
-#include "platform_drivers.h"
 #include "ad77681.h"
 #include "spi_engine.h"
 
@@ -136,6 +135,16 @@ ad77681_init_param ADC2_default_init_param = {
 	AD77681_CRC, 				// crc_sel
 	0 							// status_bit
 };
+
+/**
+ * @brief Generate miliseconds delay.
+ * @param msecs - Delay in miliseconds.
+ * @return None.
+ */
+void mdelay(uint32_t msecs)
+{
+	usleep(msecs * 1000);
+}
 
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
 

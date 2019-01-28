@@ -43,7 +43,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#include "platform_drivers.h"
 #include "ad77681.h"
 
 /******************************************************************************/

@@ -48,7 +48,6 @@
 #include <xil_io.h>
 #include <xscugic.h>
 #include <xparameters.h>
-#include "platform_drivers.h"
 #include "spi_engine.h"
 
 /******************************************************************************/
