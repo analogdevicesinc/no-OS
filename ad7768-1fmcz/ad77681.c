@@ -129,8 +129,6 @@ int32_t ad77681_spi_reg_read(ad77681_dev *dev,
 
 	ret |= spi_eng_transfer_message(dev->spi_eng_dev, msg);
 
-	mdelay(1000);
-
 	reg_data[0] = msg->rx_buf[0];
 	reg_data[1] = msg->rx_buf[1]; // reg_data
 	reg_data[2] = msg->rx_buf[2]; // crc
@@ -538,6 +536,5 @@ int32_t ad77681_setup(ad77681_dev **device,
 	if (!ret)
 		printf("ad77681 successfully initialized\n");
 
-	mdelay(1000);
 	return ret;
 }
