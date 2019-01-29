@@ -167,7 +167,7 @@ typedef struct {
 #define AD717X_ADCMODE_REG_MODE(x)    (((x) & 0x7) << 4)
 #define AD717X_ADCMODE_REG_CLKSEL(x)) (((x) & 0x3) << 2)
 
-/* ADC Mode Register additional bits for AD7172-2, AD7172-4 and AD4111 */
+/* ADC Mode Register additional bits for AD7172-2, AD7172-4, AD4111 and AD4112 */
 #define AD717X_ADCMODE_REG_HIDE_DELAY   (1 << 14)
 
 /* Interface Mode Register bits */
@@ -206,11 +206,13 @@ typedef struct {
 #define AD717X_GPIOCON_REG_PDSW        (1 << 14)
 #define AD717X_GPIOCON_REG_OP_EN2_3    (1 << 13)
 
-/* GPIO Configuration Register additional bits for AD4111 */
+/* GPIO Configuration Register additional bits for AD4111, AD4112 */
 #define AD4111_GPIOCON_REG_OP_EN0_1    (1 << 13)
-#define AD4111_GPIOCON_REG_OW_EN       (1 << 12)
 #define AD4111_GPIOCON_REG_DATA1       (1 << 7)
 #define AD4111_GPIOCON_REG_DATA0       (1 << 6)
+
+/* GPIO Configuration Register additional bits for AD4111 */
+#define AD4111_GPIOCON_REG_OW_EN       (1 << 12)
 
 /* Channel Map Register 0-3 bits */
 #define AD717X_CHMAP_REG_CH_EN         (1 << 15)
@@ -218,7 +220,7 @@ typedef struct {
 #define AD717X_CHMAP_REG_AINPOS(x)     (((x) & 0x1F) << 5)
 #define AD717X_CHMAP_REG_AINNEG(x)     (((x) & 0x1F) << 0)
 
-/* Channel Map Register additional bits for AD4111 */
+/* Channel Map Register additional bits for AD4111, AD4112 */
 #define AD4111_CHMAP_REG_INPUT(x)      (((x) & 0x3FF) << 0)
 
 /* Setup Configuration Register 0-3 bits */
@@ -237,7 +239,7 @@ typedef struct {
 #define AD717X_SETUP_CONF_REG_AINBUF_P    (1 << 9)
 #define AD717X_SETUP_CONF_REG_AINBUF_N    (1 << 8)
 
-/* Setup Configuration Register additional bits for AD4111 */
+/* Setup Configuration Register additional bits for AD4111, AD4112 */
 #define AD4111_SETUP_CONF_REG_REFPOS_BUF   (1 << 11)
 #define AD4111_SETUP_CONF_REG_REFNEG_BUF   (1 << 10)
 #define AD4111_SETUP_CONF_REG_AIN_BUF(x)   (((x) & 0x3) << 8)
@@ -266,8 +268,8 @@ typedef struct {
 #define AD7176_2_ID_REG_VALUE 0x0C90
 /* AD7177-2 ID */
 #define AD7177_2_ID_REG_VALUE 0x4FD0
-/* AD4111 ID */
-#define AD4111_ID_REG_VALUE   0x30D0
+/* AD411x ID */
+#define AD411X_ID_REG_VALUE   0x30D0
 
 /*****************************************************************************/
 /******************* AD717X Constants ****************************************/
