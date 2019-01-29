@@ -160,6 +160,9 @@
 #define	TRANSFER_R_W_CMD		5 << 28
 #define	TRANSFER_R_W(x)			(TRANSFER_R_W_CMD | (x & 0xF))
 
+/* Size of an array in bytes */
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -181,6 +184,7 @@ typedef struct {
 	uint32_t	tx_dma_startaddr;
 	uint8_t		offload_configured;
 	uint8_t		data_width;
+	uint8_t 	max_data_width;
 } spi_dev;
 
 typedef struct {
@@ -230,9 +234,12 @@ int32_t spi_eng_dma_read(spi_dev *dev,
 						 uint32_t reg_addr,
 						 uint32_t *reg_data);
 
+int32_t spi_write_and_read(spi_dev *dev,
+			   uint8_t *data,
+			   uint8_t bytes_number);
 
-int32_t spi_eng_setup(spi_dev **device,
-				  	  spi_init_param init_param);
+int32_t spi_init(spi_dev **device,
+				spi_init_param init_param);
 
 int32_t spi_eng_offload_load_msg(spi_dev *dev, spi_msg *msg);
 

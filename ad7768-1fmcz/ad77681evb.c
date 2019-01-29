@@ -81,22 +81,20 @@
 
 uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_W(2), TRANSFER_R(4), CS_ASSERT};
 
-spi_init_param spi_default_init_param = {
-		AD77681_SPI1_ENGINE_BASEADDR, 	 // adc_baseaddr
-		AD77681_SPI_CS,					 // chip_select
-		SPI_ENGINE_CONFIG_CPOL |
-		SPI_ENGINE_CONFIG_CPHA,			 // spi_config
-		1000000,						 // spi_clk_hz
-		100000000,						 // ref_clk_hz
-		1,								 // spi_offload_rx_support_en
-		AD77681_DMA_1_BASEADDR,			 // spi_offload_rx_dma_baseaddr
-		1,								 // spi_offload_tx_support_en
-		AD77681_DMA_1_BASEADDR,			 // spi_offload_tx_dma_baseaddr
-};
-
 struct ad77681_init_param ADC_default_init_param = {
 	/* SPI */
-	&spi_default_init_param,
+	{
+		AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
+		AD77681_SPI_CS,			// chip_select
+		SPI_ENGINE_CONFIG_CPOL |
+		SPI_ENGINE_CONFIG_CPHA,		// spi_config
+		1000000,			// spi_clk_hz
+		100000000,			// ref_clk_hz
+		1,				// spi_offload_rx_support_en
+		AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
+		1,				// spi_offload_tx_support_en
+		AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
+	},
 	/* Configuration */
 	AD77681_FAST,				// power_mode
 	AD77681_MCLK_DIV_8,			// mclk_div
