@@ -79,22 +79,24 @@
 #define GPIO_1_SYNC_OUT						GPIO_OFFSET + 17 // 49
 #define GPIO_1_RESET						GPIO_OFFSET + 16 // 48
 
-uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_W(2), TRANSFER_R(4), CS_ASSERT};
+uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_BYTES_W(2), TRANSFER_BYTES_R(4), CS_ASSERT};
 
 struct ad77681_init_param ADC_default_init_param = {
-	/* SPI */
-	{
-		AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
-		AD77681_SPI_CS,			// chip_select
-		SPI_ENGINE_CONFIG_CPOL |
-		SPI_ENGINE_CONFIG_CPHA,		// spi_config
-		1000000,			// spi_clk_hz
-		100000000,			// ref_clk_hz
-		1,				// spi_offload_rx_support_en
-		AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
-		1,				// spi_offload_tx_support_en
-		AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
-	},
+		/* SPI */
+		{
+			AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
+			AD77681_SPI_CS,			// chip_select
+			1,				// cs_delay
+			SPI_ENGINE_CONFIG_CPOL |
+			SPI_ENGINE_CONFIG_CPHA,		// spi_config
+			1000000,			// spi_clk_hz
+			1000000,			// spi_clk_hz_reg_access
+			100000000,			// ref_clk_hz
+			1,				// spi_offload_rx_support_en
+			AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
+			1,				// spi_offload_tx_support_en
+			AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
+		},
 	/* Configuration */
 	AD77681_FAST,				// power_mode
 	AD77681_MCLK_DIV_8,			// mclk_div
@@ -121,7 +123,7 @@ void mdelay(uint32_t msecs)
 int main()
 {
 	struct ad77681_dev	*adc_dev;
-	spi_msg 		*msg;
+	spi_eng_msg 		*msg;
 	uint8_t			adc_data[5];
 	uint8_t 		*data;
 	uint32_t 		i;
@@ -142,7 +144,7 @@ int main()
 			mdelay(1000);
 		}
 	} else { // offload example
-		msg = (spi_msg *)malloc(sizeof(*msg));
+		msg = (spi_eng_msg *)malloc(sizeof(*msg));
 		if (!msg)
 			return -1;
 
@@ -154,14 +156,14 @@ int main()
 		msg->tx_buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
 		msg->tx_buf[1] = 0x00;
 
-		spi_eng_offload_load_msg(adc_dev->spi_eng_dev, msg);
-		spi_eng_transfer_multiple_msgs(adc_dev->spi_eng_dev, 8);
+		spi_eng_offload_load_msg(adc_dev->spi_desc, msg);
+		spi_eng_transfer_multiple_msgs(adc_dev->spi_desc, 8);
 
-		data = (uint8_t*)adc_dev->spi_eng_dev->rx_dma_startaddr;
+		data = (uint8_t*)adc_dev->spi_desc->rx_dma_startaddr;
 
 		mdelay(10000);
 
-        for(i = 0; i < adc_dev->spi_eng_dev->rx_length; i++) {
+        for(i = 0; i < adc_dev->spi_desc->rx_length; i++) {
     		printf("%x\r\n", *data);
     		data += sizeof(uint8_t);
         }

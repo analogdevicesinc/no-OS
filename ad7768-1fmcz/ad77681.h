@@ -311,7 +311,7 @@ enum ad77681_crc_sel {
 
 struct ad77681_dev {
 	/* SPI */
-	spi_dev					*spi_eng_dev;
+	spi_desc			*spi_desc;
 	/* Configuration */
 	enum ad77681_power_mode		power_mode;
 	enum ad77681_mclk_div		mclk_div;
@@ -346,9 +346,6 @@ uint8_t ad77681_compute_xor(uint8_t *data,
 						    uint8_t data_size);
 int32_t ad77681_setup(struct ad77681_dev **device,
 					  struct ad77681_init_param init_param);
-int32_t ad77681_spi_cmd_write(spi_dev *dev,
-							  uint8_t cmd,
-							  uint8_t data);
 int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		 	 	 	 	 	 uint8_t reg_addr,
 							 uint8_t *reg_data);

@@ -114,7 +114,7 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 	buf[0] = AD77681_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_eng_dev, buf, buf_len);
+	ret = spi_write_and_read(dev->spi_desc, buf, buf_len);
 	if (ret < 0)
 		return ret;
 
@@ -139,7 +139,7 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 	buf[0] = AD77681_REG_WRITE(reg_addr);
 	buf[1] = reg_data;
 
-	return spi_write_and_read(dev->spi_eng_dev, buf, ARRAY_SIZE(buf));
+	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 }
 
 /**
@@ -228,7 +228,7 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 	buf[2] = 0x00;
 	buf[3] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_eng_dev, buf, rx_tx_buf_len);
+	ret = spi_write_and_read(dev->spi_desc, buf, rx_tx_buf_len);
 	if (ret < 0)
 		return ret;
 
@@ -473,7 +473,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->crc_sel = init_param.crc_sel;
 	dev->status_bit = init_param.status_bit;
 
-	spi_init(&dev->spi_eng_dev, init_param.spi_eng_dev_init);
+	spi_init(&dev->spi_desc, init_param.spi_eng_dev_init);
 
 	ret |= ad77681_soft_reset(dev);
 	ret |= ad77681_set_power_mode(dev, dev->power_mode);
