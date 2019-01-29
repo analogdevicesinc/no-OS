@@ -39,39 +39,40 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 /******************************************************************************/
-#define BIT(x)								(1UL << (x))
+//#define DUAL_SPI
 
-#define SPI_ENGINE_VERSION_MAJOR(x)			((x >> 16) & 0xff)
-#define SPI_ENGINE_VERSION_MINOR(x)			((x >> 8) & 0xff)
-#define SPI_ENGINE_VERSION_PATCH(x)			(x & 0xff)
+#define BIT(x)					(1UL << (x))
 
-#define SPI_ENGINE_REG_VERSION				0x00
+#define SPI_ENGINE_VERSION_MAJOR(x)		((x >> 16) & 0xff)
+#define SPI_ENGINE_VERSION_MINOR(x)		((x >> 8) & 0xff)
+#define SPI_ENGINE_VERSION_PATCH(x)		(x & 0xff)
 
-#define SPI_ENGINE_REG_DATA_WIDTH			0x0C
+#define SPI_ENGINE_REG_VERSION			0x00
 
-#define SPI_ENGINE_REG_RESET				0x40
+#define SPI_ENGINE_REG_DATA_WIDTH		0x0C
 
-#define SPI_ENGINE_REG_INT_ENABLE			0x80
-#define SPI_ENGINE_REG_INT_PENDING			0x84
-#define SPI_ENGINE_REG_INT_SOURCE			0x88
+#define SPI_ENGINE_REG_RESET			0x40
 
-#define SPI_ENGINE_REG_SYNC_ID				0xc0
+#define SPI_ENGINE_REG_INT_ENABLE		0x80
+#define SPI_ENGINE_REG_INT_PENDING		0x84
+#define SPI_ENGINE_REG_INT_SOURCE		0x88
+
+#define SPI_ENGINE_REG_SYNC_ID			0xc0
 
 #define SPI_ENGINE_REG_CMD_FIFO_ROOM		0xd0
 #define SPI_ENGINE_REG_SDO_FIFO_ROOM		0xd4
 #define SPI_ENGINE_REG_SDI_FIFO_LEVEL		0xd8
 
-#define SPI_ENGINE_REG_CMD_FIFO				0xe0
+#define SPI_ENGINE_REG_CMD_FIFO			0xe0
 #define SPI_ENGINE_REG_SDO_DATA_FIFO		0xe4
 #define SPI_ENGINE_REG_SDI_DATA_FIFO		0xe8
 #define SPI_ENGINE_REG_SDI_DATA_FIFO_PEEK	0xec
 
-#define SPI_ENGINE_REG_OFFLOAD_CTRL(x)		(0x100 + (0x20 * x))
+#define SPI_ENGINE_REG_OFFLOAD_CTRL(x)      	(0x100 + (0x20 * x))
 #define SPI_ENGINE_REG_OFFLOAD_STATUS(x)	(0x104 + (0x20 * x))
 #define SPI_ENGINE_REG_OFFLOAD_RESET(x)		(0x108 + (0x20 * x))
 #define SPI_ENGINE_REG_OFFLOAD_CMD_MEM(x)	(0x110 + (0x20 * x))
@@ -80,25 +81,26 @@
 #define SPI_ENGINE_INT_CMD_ALMOST_EMPTY		BIT(0)
 #define SPI_ENGINE_INT_SDO_ALMOST_EMPTY		BIT(1)
 #define SPI_ENGINE_INT_SDI_ALMOST_FULL		BIT(2)
-#define SPI_ENGINE_INT_SYNC					BIT(3)
+#define SPI_ENGINE_INT_SYNC			BIT(3)
 
 #define SPI_ENGINE_OFFLOAD_CTRL_ENABLE		BIT(0)
 #define SPI_ENGINE_OFFLOAD_STATUS_ENABLED	BIT(0)
 
-#define SPI_ENGINE_CONFIG_CPHA				BIT(0)
-#define SPI_ENGINE_CONFIG_CPOL				BIT(1)
-#define SPI_ENGINE_CONFIG_3WIRE				BIT(2)
+#define SPI_ENGINE_CONFIG_CPHA			BIT(0)
+#define SPI_ENGINE_CONFIG_CPOL			BIT(1)
+#define SPI_ENGINE_CONFIG_3WIRE			BIT(2)
 
-#define SPI_ENGINE_INST_TRANSFER			0x0
-#define SPI_ENGINE_INST_ASSERT				0x1
-#define SPI_ENGINE_INST_WRITE				0x2
-#define SPI_ENGINE_INST_MISC				0x3
+#define SPI_ENGINE_INST_TRANSFER		0x0
+#define SPI_ENGINE_INST_ASSERT			0x1
+#define SPI_ENGINE_INST_WRITE			0x2
+#define SPI_ENGINE_INST_MISC			0x3
 
-#define SPI_ENGINE_CMD_REG_CLK_DIV			0x0
-#define SPI_ENGINE_CMD_REG_CONFIG			0x1
+#define SPI_ENGINE_CMD_REG_CLK_DIV				0x0
+#define SPI_ENGINE_CMD_REG_CONFIG				0x1
+#define SPI_ENGINE_CMD_DATA_TRANSFER_LEN		0x2
 
-#define SPI_ENGINE_MISC_SYNC				0x0
-#define SPI_ENGINE_MISC_SLEEP				0x1
+#define SPI_ENGINE_MISC_SYNC			0x0
+#define SPI_ENGINE_MISC_SLEEP			0x1
 
 #define SPI_ENGINE_CMD(inst, arg1, arg2) \
 	(((inst) << 12) | ((arg1) << 8) | (arg2))
@@ -114,51 +116,48 @@
 #define SPI_ENGINE_CMD_SYNC(id) \
 	SPI_ENGINE_CMD(SPI_ENGINE_INST_MISC, SPI_ENGINE_MISC_SYNC, (id))
 
-
-#define DMAC_REG_IRQ_MASK			0x80
+#define DMAC_REG_IRQ_MASK		0x80
 #define DMAC_REG_IRQ_PENDING		0x84
-#define DMAC_REG_IRQ_SOURCE			0x88
+#define DMAC_REG_IRQ_SOURCE		0x88
 
-#define DMAC_REG_CTRL				0x400
+#define DMAC_REG_CTRL			0x400
 #define DMAC_REG_TRANSFER_ID		0x404
 #define DMAC_REG_START_TRANSFER		0x408
-#define DMAC_REG_FLAGS				0x40c
+#define DMAC_REG_FLAGS			0x40c
 #define DMAC_REG_DEST_ADDRESS		0x410
 #define DMAC_REG_SRC_ADDRESS		0x414
-#define DMAC_REG_X_LENGTH			0x418
-#define DMAC_REG_Y_LENGTH			0x41c
+#define DMAC_REG_X_LENGTH		0x418
+#define DMAC_REG_Y_LENGTH		0x41c
 #define DMAC_REG_DEST_STRIDE		0x420
-#define DMAC_REG_SRC_STRIDE			0x424
+#define DMAC_REG_SRC_STRIDE		0x424
 #define DMAC_REG_TRANSFER_DONE		0x428
-#define DMAC_REG_ACTIVE_TRANSFER_ID 0x42c
-#define DMAC_REG_STATUS				0x430
+#define DMAC_REG_ACTIVE_TRANSFER_ID 	0x42c
+#define DMAC_REG_STATUS			0x430
 #define DMAC_REG_CURRENT_DEST_ADDR	0x434
 #define DMAC_REG_CURRENT_SRC_ADDR	0x438
-#define DMAC_REG_DBG0				0x43c
-#define DMAC_REG_DBG1				0x440
+#define DMAC_REG_DBG0			0x43c
+#define DMAC_REG_DBG1			0x440
 
-#define DMAC_CTRL_ENABLE			(1 << 0)
-#define DMAC_CTRL_PAUSE				(1 << 1)
+#define DMAC_CTRL_ENABLE		(1 << 0)
+#define DMAC_CTRL_PAUSE			(1 << 1)
 
-#define DMAC_IRQ_SOT				(1 << 0)
-#define DMAC_IRQ_EOT				(1 << 1)
+#define DMAC_IRQ_SOT			(1 << 0)
+#define DMAC_IRQ_EOT			(1 << 1)
 
+#define CS_DEASSERT			0 << 28
+#define CS_ASSERT			1 << 28
 
-#define CS_DEASSERT				0 << 28
-
-#define CS_ASSERT				1 << 28
-
-#define	SLEEP_CMD				2 << 28
-#define SLEEP(x)				(SLEEP_CMD | (x & ( ~(0xF << 28) )))
+#define	SLEEP_CMD			2 << 28
+#define SLEEP(x)			(SLEEP_CMD | (x & ( ~(0xF << 28) )))
 
 #define TRANSFER_R_CMD			3 << 28
-#define TRANSFER_R(x)			(TRANSFER_R_CMD | (x & 0xF))
+#define TRANSFER_BYTES_R(x)		(TRANSFER_R_CMD | (x & 0xF))
 
 #define	TRANSFER_W_CMD			4 << 28
-#define	TRANSFER_W(x)			(TRANSFER_W_CMD | (x & 0xF))
+#define	TRANSFER_BYTES_W(x)		(TRANSFER_W_CMD | (x & 0xF))
 
 #define	TRANSFER_R_W_CMD		5 << 28
-#define	TRANSFER_R_W(x)			(TRANSFER_R_W_CMD | (x & 0xF))
+#define	TRANSFER_BYTES_R_W(x)		(TRANSFER_R_W_CMD | (x & 0xF))
 
 /* Size of an array in bytes */
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
@@ -166,12 +165,13 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-
 typedef struct {
 	uint32_t	spi_baseaddr;
 	uint8_t		chip_select;
+	uint8_t		cs_delay;
 	uint8_t		spi_config;
 	uint32_t 	spi_clk_hz;
+	uint32_t	spi_clk_hz_reg_access;
 	uint32_t	ref_clk_hz;
 	uint32_t	clk_div;
 	uint32_t	rx_length;
@@ -185,66 +185,115 @@ typedef struct {
 	uint8_t		offload_configured;
 	uint8_t		data_width;
 	uint8_t 	max_data_width;
-} spi_dev;
+#ifdef DUAL_SPI
+} spi_eng_desc;
+#else
+} spi_desc;
+#endif
 
 typedef struct {
 	uint32_t 	spi_baseaddr;
 	uint8_t		chip_select;
+	uint8_t		cs_delay;
 	uint8_t		spi_config;
 	uint32_t 	spi_clk_hz;
+	uint32_t	spi_clk_hz_reg_access;
 	uint32_t	ref_clk_hz;
 	uint8_t 	spi_offload_rx_support_en;
 	uint32_t	spi_offload_rx_dma_baseaddr;
 	uint8_t		spi_offload_tx_support_en;
 	uint32_t	spi_offload_tx_dma_baseaddr;
+#ifdef DUAL_SPI
+} spi_eng_init_param;
+#else
 } spi_init_param;
+#endif
 
 typedef struct {
-	uint32_t		tx_buf_addr;
-	uint32_t		rx_buf_addr;
-	uint8_t			rx_buf[5];
-	uint8_t			tx_buf[2];
-	uint32_t		*spi_msg_cmds;
-	uint8_t			msg_cmd_len;
-} spi_msg;
-
+	uint32_t	tx_buf_addr;
+	uint32_t	rx_buf_addr;
+	uint32_t	rx_buf[4];
+	uint32_t	tx_buf[4];
+	uint32_t	*spi_msg_cmds;
+	uint8_t		msg_cmd_len;
+} spi_eng_msg;
 
 typedef struct {
-	uint32_t		cmd_fifo_len;
-	uint16_t		cmd_fifo[];
-} spi_transfer_fifo;
+	uint32_t	cmd_fifo_len;
+	uint16_t	cmd_fifo[];
+} spi_eng_transfer_fifo;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+#ifdef DUAL_SPI
+int32_t spi_eng_write(spi_eng_desc *desc,
+		      uint32_t reg_addr,
+		      uint32_t ui32data);
 
-int32_t spi_eng_write(spi_dev *dev,
-				  	  uint32_t reg_addr,
-					  uint32_t ui32data);
+int32_t spi_eng_read(spi_eng_desc *desc,
+		     uint32_t reg_addr,
+		     uint32_t *reg_data);
 
-int32_t spi_eng_read(spi_dev *dev,
-					 uint32_t reg_addr,
-					 uint32_t *reg_data);
+int32_t spi_eng_dma_write(spi_eng_desc *desc,
+			  uint32_t reg_addr,
+			  uint32_t reg_data);
 
-int32_t spi_eng_dma_write(spi_dev *dev,
-					  	  uint32_t reg_addr,
-						  uint32_t reg_data);
+int32_t spi_eng_dma_read(spi_eng_desc *desc,
+			 uint32_t reg_addr,
+			 uint32_t *reg_data);
 
-int32_t spi_eng_dma_read(spi_dev *dev,
-						 uint32_t reg_addr,
-						 uint32_t *reg_data);
+int32_t spi_eng_write_and_read(spi_eng_desc *desc,
+			       uint8_t *data,
+			       uint8_t bytes_number);
 
-int32_t spi_write_and_read(spi_dev *dev,
+int32_t spi_eng_init(spi_eng_desc **descriptor,
+		     spi_eng_init_param init_param);
+
+int32_t spi_eng_remove(spi_eng_desc *desc);
+
+int32_t spi_eng_offload_load_msg(spi_eng_desc *desc, spi_eng_msg *msg);
+
+int32_t spi_eng_transfer_message(spi_eng_desc *desc, spi_eng_msg *msg);
+
+int32_t spi_eng_transfer_multiple_msgs(spi_eng_desc *desc,
+				       uint32_t no_of_messages);
+
+void spi_set_transfer_length(spi_eng_desc *desc, uint8_t data_length);
+
+#else
+int32_t spi_eng_write(spi_desc *desc,
+		      uint32_t reg_addr,
+		      uint32_t ui32data);
+
+int32_t spi_eng_read(spi_desc *desc,
+		     uint32_t reg_addr,
+		     uint32_t *reg_data);
+
+int32_t spi_eng_dma_write(spi_desc *desc,
+			  uint32_t reg_addr,
+			  uint32_t reg_data);
+
+int32_t spi_eng_dma_read(spi_desc *desc,
+			 uint32_t reg_addr,
+			 uint32_t *reg_data);
+
+int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number);
 
-int32_t spi_init(spi_dev **device,
-				spi_init_param init_param);
+int32_t spi_init(spi_desc **descriptor,
+		 spi_init_param init_param);
 
-int32_t spi_eng_offload_load_msg(spi_dev *dev, spi_msg *msg);
+int32_t spi_remove(spi_desc *desc);
 
-int32_t spi_eng_transfer_message(spi_dev *dev, spi_msg *msg);
+int32_t spi_eng_offload_load_msg(spi_desc *desc, spi_eng_msg *msg);
 
-int32_t spi_eng_transfer_multiple_msgs(spi_dev *dev, uint8_t no_of_messages);
+int32_t spi_eng_transfer_message(spi_desc *desc, spi_eng_msg *msg);
+
+int32_t spi_eng_transfer_multiple_msgs(spi_desc *desc, uint32_t no_of_messages);
+
+void spi_set_transfer_length(spi_desc *desc, uint8_t data_length);
+#endif
 
 #endif // SPI_H_
