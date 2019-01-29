@@ -56,7 +56,7 @@
  * @return CRC8 checksum.
  */
 uint8_t ad77681_compute_crc8(uint8_t *data,
-							 uint8_t data_size)
+			     uint8_t data_size)
 {
 	uint8_t i;
 	uint8_t crc = 0;
@@ -82,13 +82,13 @@ uint8_t ad77681_compute_crc8(uint8_t *data,
  * @return XOR checksum.
  */
 uint8_t ad77681_compute_xor(uint8_t *data,
-						    uint8_t data_size)
+			    uint8_t data_size)
 {
 	uint8_t crc = 0;
 	uint8_t buf[3];
 	uint8_t i;
 
-	for (i = 0; i < data_size; i++){
+	for (i = 0; i < data_size; i++) {
 		buf[i] = *data;
 		crc ^= buf[i];
 		data++;
@@ -104,8 +104,8 @@ uint8_t ad77681_compute_xor(uint8_t *data,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
-		 	 	 	 	 	 uint8_t reg_addr,
-							 uint8_t *reg_data)
+			     uint8_t reg_addr,
+			     uint8_t *reg_data)
 {
 	int32_t ret;
 	uint8_t buf[3];
@@ -131,8 +131,8 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
-		 	 	 	 	 	  uint8_t reg_addr,
-							  uint8_t reg_data)
+			      uint8_t reg_addr,
+			      uint8_t reg_data)
 {
 	uint8_t buf[2];
 
@@ -151,9 +151,9 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_read_mask(struct ad77681_dev *dev,
-							  uint8_t reg_addr,
-							  uint8_t mask,
-							  uint8_t *data)
+			      uint8_t reg_addr,
+			      uint8_t mask,
+			      uint8_t *data)
 {
 	uint8_t reg_data[3];
 	int32_t ret;
@@ -173,9 +173,9 @@ int32_t ad77681_spi_read_mask(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_write_mask(struct ad77681_dev *dev,
-							   uint8_t reg_addr,
-							   uint8_t mask,
-							   uint8_t data)
+			       uint8_t reg_addr,
+			       uint8_t mask,
+			       uint8_t data)
 {
 	uint8_t reg_data[3];
 	int32_t ret;
@@ -217,7 +217,7 @@ uint8_t ad77681_get_rx_buf_len(struct ad77681_dev *dev)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
-								  uint8_t *adc_data)
+				  uint8_t *adc_data)
 {
 	uint8_t crc_calc_buf[4], buf[4], crc;
 	uint8_t rx_tx_buf_len = ad77681_get_rx_buf_len(dev) + 1;
@@ -257,14 +257,14 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
-							   enum ad77681_power_mode mode)
+			       enum ad77681_power_mode mode)
 {
 	int32_t ret = 0;
 
 	ret |= ad77681_spi_write_mask(dev,
-								  AD77681_REG_POWER_CLOCK,
-						          AD77681_POWER_CLK_PWRMODE_MSK,
-						          AD77681_POWER_CLK_PWRMODE(mode));
+				      AD77681_REG_POWER_CLOCK,
+				      AD77681_POWER_CLK_PWRMODE_MSK,
+				      AD77681_POWER_CLK_PWRMODE(mode));
 
 	return ret;
 }
@@ -280,12 +280,12 @@ int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
-							 enum ad77681_mclk_div clk_div)
+			     enum ad77681_mclk_div clk_div)
 {
 	ad77681_spi_write_mask(dev,
-						   AD77681_REG_POWER_CLOCK,
-						   AD77681_POWER_CLK_MCLK_DIV_MSK,
-						   AD77681_POWER_CLK_MCLK_DIV(clk_div));
+			       AD77681_REG_POWER_CLOCK,
+			       AD77681_POWER_CLK_MCLK_DIV_MSK,
+			       AD77681_POWER_CLK_MCLK_DIV(clk_div));
 
 	dev->mclk_div = clk_div;
 
@@ -311,24 +311,24 @@ int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
-							  enum ad77681_conv_mode conv_mode,
-							  enum ad77681_conv_diag_mux diag_mux_sel,
-							  bool conv_diag_sel)
+			      enum ad77681_conv_mode conv_mode,
+			      enum ad77681_conv_diag_mux diag_mux_sel,
+			      bool conv_diag_sel)
 {
 	ad77681_spi_write_mask(dev,
-						   AD77681_REG_CONVERSION,
-						   AD77681_CONVERSION_MODE_MSK,
-						   AD77681_CONVERSION_MODE(conv_mode));
+			       AD77681_REG_CONVERSION,
+			       AD77681_CONVERSION_MODE_MSK,
+			       AD77681_CONVERSION_MODE(conv_mode));
 
 	ad77681_spi_write_mask(dev,
-						   AD77681_REG_CONVERSION,
-						   AD77681_CONVERSION_DIAG_MUX_MSK,
-						   AD77681_CONVERSION_DIAG_MUX_SEL(diag_mux_sel));
+			       AD77681_REG_CONVERSION,
+			       AD77681_CONVERSION_DIAG_MUX_MSK,
+			       AD77681_CONVERSION_DIAG_MUX_SEL(diag_mux_sel));
 
 	ad77681_spi_write_mask(dev,
-						   AD77681_REG_CONVERSION,
-						   AD77681_CONVERSION_DIAG_SEL_MSK,
-						   AD77681_CONVERSION_DIAG_SEL(conv_diag_sel));
+			       AD77681_REG_CONVERSION,
+			       AD77681_CONVERSION_DIAG_SEL_MSK,
+			       AD77681_CONVERSION_DIAG_SEL(conv_diag_sel));
 
 	dev->conv_mode = conv_mode;
 	dev->diag_mux_sel = diag_mux_sel;
@@ -346,14 +346,14 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_convlen(struct ad77681_dev *dev,
-							enum ad77681_conv_len conv_len)
+			    enum ad77681_conv_len conv_len)
 {
 	int32_t ret = 0;
 
 	ret |= 	ad77681_spi_write_mask(dev,
-								   AD77681_REG_INTERFACE_FORMAT,
-								   AD77681_INTERFACE_CONVLEN_MSK,
-								   AD77681_INTERFACE_CONVLEN(conv_len));
+				       AD77681_REG_INTERFACE_FORMAT,
+				       AD77681_INTERFACE_CONVLEN_MSK,
+				       AD77681_INTERFACE_CONVLEN(conv_len));
 
 
 	dev->conv_len = conv_len;
@@ -372,26 +372,25 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
-							enum ad77681_crc_sel crc_sel)
+			    enum ad77681_crc_sel crc_sel)
 {
 	int32_t ret = 0;
 
 	if (crc_sel == AD77681_NO_CRC) {
 		ret |= 	ad77681_spi_write_mask(dev,
-									   AD77681_REG_INTERFACE_FORMAT,
-									   AD77681_INTERFACE_CRC_EN_MSK,
-									   AD77681_INTERFACE_CRC_EN(0));
-	}
-	else {
+					       AD77681_REG_INTERFACE_FORMAT,
+					       AD77681_INTERFACE_CRC_EN_MSK,
+					       AD77681_INTERFACE_CRC_EN(0));
+	} else {
 		ret |= 	ad77681_spi_write_mask(dev,
-									   AD77681_REG_INTERFACE_FORMAT,
-									   AD77681_INTERFACE_CRC_EN_MSK,
-									   AD77681_INTERFACE_CRC_EN(1));
+					       AD77681_REG_INTERFACE_FORMAT,
+					       AD77681_INTERFACE_CRC_EN_MSK,
+					       AD77681_INTERFACE_CRC_EN(1));
 
 		ret |= 	ad77681_spi_write_mask(dev,
-									   AD77681_REG_INTERFACE_FORMAT,
-									   AD77681_INTERFACE_CRC_TYPE_MSK,
-									   AD77681_INTERFACE_CRC_TYPE(crc_sel));
+					       AD77681_REG_INTERFACE_FORMAT,
+					       AD77681_INTERFACE_CRC_TYPE_MSK,
+					       AD77681_INTERFACE_CRC_TYPE(crc_sel));
 	}
 
 	dev->crc_sel = crc_sel;
@@ -408,15 +407,15 @@ int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
-							   bool status_bit)
+			       bool status_bit)
 {
 	int32_t ret = 0;
 
 	// Set status bit
 	ret |= 	ad77681_spi_write_mask(dev,
-								   AD77681_REG_INTERFACE_FORMAT,
-								   AD77681_INTERFACE_STATUS_EN_MSK,
-								   AD77681_INTERFACE_STATUS_EN(status_bit));
+				       AD77681_REG_INTERFACE_FORMAT,
+				       AD77681_INTERFACE_STATUS_EN_MSK,
+				       AD77681_INTERFACE_STATUS_EN(status_bit));
 
 	dev->status_bit = status_bit;
 
@@ -434,14 +433,14 @@ int32_t ad77681_soft_reset(struct ad77681_dev *dev)
 
 	// Two writes are required to initialize the reset
 	ret |= 	ad77681_spi_write_mask(dev,
-								   AD77681_REG_SYNC_RESET,
-								   AD77681_SYNC_RST_SPI_RESET_MSK,
-								   AD77681_SYNC_RST_SPI_RESET(0x3));
+				       AD77681_REG_SYNC_RESET,
+				       AD77681_SYNC_RST_SPI_RESET_MSK,
+				       AD77681_SYNC_RST_SPI_RESET(0x3));
 
 	ret |= 	ad77681_spi_write_mask(dev,
-								   AD77681_REG_SYNC_RESET,
-								   AD77681_SYNC_RST_SPI_RESET_MSK,
-								   AD77681_SYNC_RST_SPI_RESET(0x2));
+				       AD77681_REG_SYNC_RESET,
+				       AD77681_SYNC_RST_SPI_RESET_MSK,
+				       AD77681_SYNC_RST_SPI_RESET(0x2));
 
 	return ret;
 }
@@ -454,7 +453,7 @@ int32_t ad77681_soft_reset(struct ad77681_dev *dev)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_setup(struct ad77681_dev **device,
-					  struct ad77681_init_param init_param)
+		      struct ad77681_init_param init_param)
 {
 	struct ad77681_dev *dev;
 	int32_t ret = 0;
@@ -479,9 +478,9 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	ret |= ad77681_set_power_mode(dev, dev->power_mode);
 	ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
 	ret |= ad77681_set_conv_mode(dev,
-						  dev->conv_mode,
-						  dev->diag_mux_sel,
-						  dev->conv_diag_sel);
+				     dev->conv_mode,
+				     dev->diag_mux_sel,
+				     dev->conv_diag_sel);
 	ret |= ad77681_set_convlen(dev, dev->conv_len);
 	ret |= ad77681_set_status_bit(dev, dev->status_bit);
 	ret |= ad77681_set_crc_sel(dev, dev->crc_sel);

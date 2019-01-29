@@ -82,21 +82,21 @@
 uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_BYTES_W(2), TRANSFER_BYTES_R(4), CS_ASSERT};
 
 struct ad77681_init_param ADC_default_init_param = {
-		/* SPI */
-		{
-			AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
-			AD77681_SPI_CS,			// chip_select
-			1,				// cs_delay
-			SPI_ENGINE_CONFIG_CPOL |
-			SPI_ENGINE_CONFIG_CPHA,		// spi_config
-			1000000,			// spi_clk_hz
-			1000000,			// spi_clk_hz_reg_access
-			100000000,			// ref_clk_hz
-			1,				// spi_offload_rx_support_en
-			AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
-			1,				// spi_offload_tx_support_en
-			AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
-		},
+	/* SPI */
+	{
+		AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
+		AD77681_SPI_CS,			// chip_select
+		1,				// cs_delay
+		SPI_ENGINE_CONFIG_CPOL |
+		SPI_ENGINE_CONFIG_CPHA,		// spi_config
+		1000000,			// spi_clk_hz
+		1000000,			// spi_clk_hz_reg_access
+		100000000,			// ref_clk_hz
+		1,				// spi_offload_rx_support_en
+		AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
+		1,				// spi_offload_tx_support_en
+		AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
+	},
 	/* Configuration */
 	AD77681_FAST,				// power_mode
 	AD77681_MCLK_DIV_8,			// mclk_div
@@ -131,10 +131,10 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-    ad77681_setup(&adc_dev, ADC_default_init_param);
+	ad77681_setup(&adc_dev, ADC_default_init_param);
 
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
-		while(1){
+		while(1) {
 			ad77681_spi_read_adc_data(adc_dev, adc_data);
 			printf("[ADC DATA]: 0x");
 			for(i = 0; i < sizeof(adc_data) / sizeof(uint8_t); i++) {
@@ -163,11 +163,11 @@ int main()
 
 		mdelay(10000);
 
-        for(i = 0; i < adc_dev->spi_desc->rx_length; i++) {
-    		printf("%x\r\n", *data);
-    		data += sizeof(uint8_t);
-        }
-        free(msg);
+		for(i = 0; i < adc_dev->spi_desc->rx_length; i++) {
+			printf("%x\r\n", *data);
+			data += sizeof(uint8_t);
+		}
+		free(msg);
 	}
 
 	printf("Bye\n");
@@ -175,5 +175,5 @@ int main()
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 
-    return 0;
+	return 0;
 }
