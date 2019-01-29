@@ -341,36 +341,36 @@ struct ad77681_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 uint8_t ad77681_compute_crc8(uint8_t *data,
-							 uint8_t data_size);
+			     uint8_t data_size);
 uint8_t ad77681_compute_xor(uint8_t *data,
-						    uint8_t data_size);
+			    uint8_t data_size);
 int32_t ad77681_setup(struct ad77681_dev **device,
-					  struct ad77681_init_param init_param);
+		      struct ad77681_init_param init_param);
 int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
-		 	 	 	 	 	 uint8_t reg_addr,
-							 uint8_t *reg_data);
+			     uint8_t reg_addr,
+			     uint8_t *reg_data);
 int32_t ad77681_spi_read_mask(struct ad77681_dev *dev,
-							 uint8_t reg_addr,
-							 uint8_t mask,
-							 uint8_t *data);
+			      uint8_t reg_addr,
+			      uint8_t mask,
+			      uint8_t *data);
 int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
-		 	 	 	 	 	  uint8_t reg_addr,
-							  uint8_t reg_data);
+			      uint8_t reg_addr,
+			      uint8_t reg_data);
 int32_t ad77681_spi_write_mask(struct ad77681_dev *dev,
-							   uint8_t reg_addr,
-							   uint8_t mask,
-							   uint8_t data);
+			       uint8_t reg_addr,
+			       uint8_t mask,
+			       uint8_t data);
 int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
-							   enum ad77681_power_mode mode);
+			       enum ad77681_power_mode mode);
 int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
-							enum ad77681_mclk_div clk_div);
+			     enum ad77681_mclk_div clk_div);
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
-								  uint8_t *adc_data);
+				  uint8_t *adc_data);
 int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
-							  enum ad77681_conv_mode conv_mode,
-							  enum ad77681_conv_diag_mux diag_mux_sel,
-							  bool conv_diag_sel);
+			      enum ad77681_conv_mode conv_mode,
+			      enum ad77681_conv_diag_mux diag_mux_sel,
+			      bool conv_diag_sel);
 int32_t ad77681_set_convlen(struct ad77681_dev *dev,
-							enum ad77681_conv_len conv_len);
+			    enum ad77681_conv_len conv_len);
 int32_t ad77681_soft_reset(struct ad77681_dev *dev);
 #endif /* SRC_AD77681_H_ */
