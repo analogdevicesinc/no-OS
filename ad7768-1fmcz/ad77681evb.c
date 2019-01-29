@@ -94,7 +94,7 @@ spi_init_param spi_default_init_param = {
 		AD77681_DMA_1_BASEADDR,			 // spi_offload_tx_dma_baseaddr
 };
 
-ad77681_init_param ADC_default_init_param = {
+struct ad77681_init_param ADC_default_init_param = {
 	/* SPI */
 	&spi_default_init_param,
 	/* Configuration */
@@ -122,7 +122,7 @@ void mdelay(uint32_t msecs)
 
 int main()
 {
-	ad77681_dev		*adc_dev;
+	struct ad77681_dev	*adc_dev;
 	spi_msg 		*msg;
 	uint8_t			adc_data[5];
 	uint8_t 		*data;

@@ -266,76 +266,76 @@
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef enum {
+enum ad77681_power_mode {
 	AD77681_ECO = 0,
 	AD77681_MEDIAN = 2,
 	AD77681_FAST = 3,
-} ad77681_power_mode;
+};
 
-typedef enum {
+enum ad77681_mclk_div {
 	AD77681_MCLK_DIV_16 = 0,
 	AD77681_MCLK_DIV_8 = 1,
 	AD77681_MCLK_DIV_4 = 2,
 	AD77681_MCLK_DIV_2 = 3
-} ad77681_mclk_div;
+};
 
-typedef enum {
+enum ad77681_conv_mode {
 	AD77681_CONV_CONTINUOUS = 0,
 	AD77681_CONV_ONE_SHOT = 1,
 	AD77681_CONV_SINGLE = 2,
 	AD77681_CONV_PERIODIC = 3
-} ad77681_conv_mode;
+};
 
-typedef enum {
+enum ad77681_conv_len {
 	AD77681_CONV_24BIT = 0,
 	AD77681_CONV_16BIT = 1
-} ad77681_conv_len;
+};
 
-typedef enum {
+enum ad77681_rdy_dout {
 	AD77681_RDY_DOUT_EN,
 	AD77681_RDY_DOUT_DIS
-} ad77681_rdy_dout;
+};
 
-typedef enum {
+enum ad77681_conv_diag_mux {
 	AD77681_TEMP_SENSOR = 0x0,
 	AD77681_AIN_SHORT= 0x8,
 	AD77681_POSITIVE_FS = 0x9,
 	AD77681_NEGATIVE_FS = 0xA
-} ad77681_conv_diag_mux;
+};
 
-typedef enum {
+enum ad77681_crc_sel {
 	AD77681_CRC,
 	AD77681_XOR,
 	AD77681_NO_CRC
-} ad77681_crc_sel;
+};
 
-typedef struct {
+struct ad77681_dev {
 	/* SPI */
 	spi_dev					*spi_eng_dev;
 	/* Configuration */
-	ad77681_power_mode		power_mode;
-	ad77681_mclk_div		mclk_div;
-	ad77681_conv_mode 		conv_mode;
-	ad77681_conv_diag_mux 	diag_mux_sel;
+	enum ad77681_power_mode		power_mode;
+	enum ad77681_mclk_div		mclk_div;
+	enum ad77681_conv_mode 		conv_mode;
+	enum ad77681_conv_diag_mux 	diag_mux_sel;
 	bool 					conv_diag_sel;
-	ad77681_conv_len		conv_len;
-	ad77681_crc_sel 		crc_sel;
+	enum ad77681_conv_len		conv_len;
+	enum ad77681_crc_sel 		crc_sel;
 	uint8_t					status_bit;
-} ad77681_dev;
+};
 
-typedef struct {
+struct ad77681_init_param {
 	/* SPI */
 	spi_init_param			*spi_eng_dev_init;
 	/* Configuration */
-	ad77681_power_mode		power_mode;
-	ad77681_mclk_div		mclk_div;
-	ad77681_conv_mode 		conv_mode;
-	ad77681_conv_diag_mux 	diag_mux_sel;
+	enum ad77681_power_mode		power_mode;
+	enum ad77681_mclk_div		mclk_div;
+	enum ad77681_conv_mode 		conv_mode;
+	enum ad77681_conv_diag_mux 	diag_mux_sel;
 	bool 					conv_diag_sel;
-	ad77681_conv_len		conv_len;
-	ad77681_crc_sel 		crc_sel;
+	enum ad77681_conv_len		conv_len;
+	enum ad77681_crc_sel 		crc_sel;
 	uint8_t					status_bit;
-} ad77681_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -344,36 +344,36 @@ uint8_t ad77681_compute_crc8(uint8_t *data,
 							 uint8_t data_size);
 uint8_t ad77681_compute_xor(uint8_t *data,
 						    uint8_t data_size);
-int32_t ad77681_setup(ad77681_dev **device,
-					  ad77681_init_param init_param);
+int32_t ad77681_setup(struct ad77681_dev **device,
+					  struct ad77681_init_param init_param);
 int32_t ad77681_spi_cmd_write(spi_dev *dev,
 							  uint8_t cmd,
 							  uint8_t data);
-int32_t ad77681_spi_reg_read(ad77681_dev *dev,
+int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		 	 	 	 	 	 uint8_t reg_addr,
 							 uint8_t *reg_data);
-int32_t ad77681_spi_read_mask(ad77681_dev *dev,
+int32_t ad77681_spi_read_mask(struct ad77681_dev *dev,
 							 uint8_t reg_addr,
 							 uint8_t mask,
 							 uint8_t *data);
-int32_t ad77681_spi_reg_write(ad77681_dev *dev,
+int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 		 	 	 	 	 	  uint8_t reg_addr,
 							  uint8_t reg_data);
-int32_t ad77681_spi_write_mask(ad77681_dev *dev,
+int32_t ad77681_spi_write_mask(struct ad77681_dev *dev,
 							   uint8_t reg_addr,
 							   uint8_t mask,
 							   uint8_t data);
-int32_t ad77681_set_power_mode(ad77681_dev *dev,
-							   ad77681_power_mode mode);
-int32_t ad77681_set_mclk_div(ad77681_dev *dev,
-							 ad77681_mclk_div clk_div);
-int32_t ad77681_spi_read_adc_data(ad77681_dev *dev,
+int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
+							   enum ad77681_power_mode mode);
+int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
+							enum ad77681_mclk_div clk_div);
+int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 								  uint8_t *adc_data);
-int32_t ad77681_set_conv_mode(ad77681_dev *dev,
-							  ad77681_conv_mode conv_mode,
-							  ad77681_conv_diag_mux diag_mux_sel,
+int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
+							  enum ad77681_conv_mode conv_mode,
+							  enum ad77681_conv_diag_mux diag_mux_sel,
 							  bool conv_diag_sel);
-int32_t ad77681_set_convlen(ad77681_dev *dev,
-							ad77681_conv_len conv_len);
-int32_t ad77681_soft_reset(ad77681_dev *dev);
+int32_t ad77681_set_convlen(struct ad77681_dev *dev,
+							enum ad77681_conv_len conv_len);
+int32_t ad77681_soft_reset(struct ad77681_dev *dev);
 #endif /* SRC_AD77681_H_ */
