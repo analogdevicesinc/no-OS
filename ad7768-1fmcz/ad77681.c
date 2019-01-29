@@ -43,6 +43,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#include <string.h>
 #include "ad77681.h"
 
 /******************************************************************************/
@@ -106,35 +107,20 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		 	 	 	 	 	 uint8_t reg_addr,
 							 uint8_t *reg_data)
 {
-	spi_msg 	*msg;
-	int32_t 	ret = 0;
-	uint8_t 	i;
-	uint8_t 	buf_len = (dev->crc_sel == AD77681_NO_CRC) ? 2 : 3;
-	uint32_t 	spi_msg_cmds[5] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_R_W(buf_len), CS_ASSERT};
+	int32_t ret;
+	uint8_t buf[3];
+	uint8_t buf_len = (dev->crc_sel == AD77681_NO_CRC) ? 2 : 3;
 
-	msg = (spi_msg *)malloc(sizeof(*msg));
-	if (!msg)
-		return -1;
-	msg->spi_msg_cmds = malloc(sizeof(spi_msg_cmds));
+	buf[0] = AD77681_REG_READ(reg_addr);
+	buf[1] = 0x00;
 
-	msg->spi_msg_cmds = spi_msg_cmds;
-	msg->msg_cmd_len = sizeof(spi_msg_cmds) / sizeof(uint32_t);
-	msg->tx_buf[0] = AD77681_REG_READ(reg_addr);
-	msg->tx_buf[1] = 0x00;
+	ret = spi_write_and_read(dev->spi_eng_dev, buf, buf_len);
+	if (ret < 0)
+		return ret;
 
-	// Init the rx buffer with 0s
-	for (i = 0; i < sizeof(msg->rx_buf) / sizeof(uint8_t); i++)
-		msg->rx_buf[i] = 0;
+	memcpy(reg_data, buf, ARRAY_SIZE(buf));
 
-	ret |= spi_eng_transfer_message(dev->spi_eng_dev, msg);
-
-	reg_data[0] = msg->rx_buf[0];
-	reg_data[1] = msg->rx_buf[1]; // reg_data
-	reg_data[2] = msg->rx_buf[2]; // crc
-
-	free(msg);
-
-	return ret;
+	return 0;
 }
 
 /**
@@ -148,23 +134,12 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 		 	 	 	 	 	  uint8_t reg_addr,
 							  uint8_t reg_data)
 {
-	spi_msg		*msg;
-	int32_t 	ret = 0;
-	uint32_t 	spi_msg_cmds[5] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_W(2), CS_ASSERT};
+	uint8_t buf[2];
 
-	msg = (spi_msg *)malloc(sizeof(*msg));
-	if (!msg)
-		return -1;
-	msg->spi_msg_cmds = malloc(sizeof(spi_msg_cmds));
-	msg->spi_msg_cmds = spi_msg_cmds;
-	msg->msg_cmd_len = sizeof(spi_msg_cmds) / sizeof(uint32_t);
-	msg->tx_buf[0] = AD77681_REG_WRITE(reg_addr);
-	msg->tx_buf[1] = reg_data;
+	buf[0] = AD77681_REG_WRITE(reg_addr);
+	buf[1] = reg_data;
 
-	ret |= spi_eng_transfer_message(dev->spi_eng_dev, msg);
-
-	free(msg);
-	return ret;
+	return spi_write_and_read(dev->spi_eng_dev, buf, ARRAY_SIZE(buf));
 }
 
 /**
@@ -244,50 +219,32 @@ uint8_t ad77681_get_rx_buf_len(struct ad77681_dev *dev)
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 								  uint8_t *adc_data)
 {
-	spi_msg 	*msg;
-	int32_t 	ret = 0;
-	uint8_t 	crc_calc_buf[4], crc, i;
-	uint8_t 	rx_tx_buf_len = ad77681_get_rx_buf_len(dev) + 1;
-	uint32_t 	spi_msg_cmds[5] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_R_W(rx_tx_buf_len), CS_ASSERT};
+	uint8_t crc_calc_buf[4], buf[4], crc;
+	uint8_t rx_tx_buf_len = ad77681_get_rx_buf_len(dev) + 1;
+	int32_t ret;
 
-	msg = (spi_msg *)malloc(sizeof(*msg));
-	if (!msg)
-		return -1;
-	msg->spi_msg_cmds = malloc(sizeof(spi_msg_cmds));
-	msg->spi_msg_cmds = spi_msg_cmds;
-	msg->msg_cmd_len = sizeof(spi_msg_cmds) / sizeof(uint32_t);
-	msg->tx_buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
-	msg->tx_buf[1] = 0x00;
+	buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
+	buf[1] = 0x00;
+	buf[2] = 0x00;
+	buf[3] = 0x00;
 
-	// Init the rx buffer with 0s
-	for (i = 0; i < sizeof(msg->rx_buf) / sizeof(uint8_t); i++) {
-		msg->rx_buf[i] = 0;
-		adc_data[i] = 0;
-	}
-
-	ret |= spi_eng_transfer_message(dev->spi_eng_dev, msg);
+	ret = spi_write_and_read(dev->spi_eng_dev, buf, rx_tx_buf_len);
+	if (ret < 0)
+		return ret;
 
 	if (dev->crc_sel == AD77681_CRC) {
-		crc_calc_buf[0] = msg->tx_buf[0];
-		crc_calc_buf[1] = msg->rx_buf[1]; // ignore the first byte which is always 0
-		crc_calc_buf[2] = msg->rx_buf[2];
-		crc_calc_buf[3] = msg->rx_buf[3];
-
+		memcpy(crc_calc_buf, buf, ARRAY_SIZE(buf));
 		crc = ad77681_compute_crc8(crc_calc_buf, 4);
-		if (crc !=  msg->rx_buf[4]) {
+		if (crc != buf[3]) {
 			printf("%s: CRC Error.\n", __func__);
 			ret = -1;
 		}
 	}
 
-	// Fill the adc_data buffer
-	for (i = 0; i < rx_tx_buf_len; i++) {
-		adc_data[i] = msg->rx_buf[i];
-	}
+	/* Fill the adc_data buffer */
+	memcpy(adc_data, buf, ARRAY_SIZE(buf));
 
-	free(msg);
-
-	return ret;
+	return 0;
 }
 
 /**
@@ -507,7 +464,6 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 		return -1;
 	}
 
-	dev->spi_eng_dev = malloc(sizeof*(dev->spi_eng_dev));
 	dev->power_mode = init_param.power_mode;
 	dev->mclk_div = init_param.mclk_div;
 	dev->conv_diag_sel = init_param.conv_diag_sel;
@@ -517,7 +473,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->crc_sel = init_param.crc_sel;
 	dev->status_bit = init_param.status_bit;
 
-	spi_eng_setup(&dev->spi_eng_dev, (spi_init_param )(*init_param.spi_eng_dev_init));
+	spi_init(&dev->spi_eng_dev, init_param.spi_eng_dev_init);
 
 	ret |= ad77681_soft_reset(dev);
 	ret |= ad77681_set_power_mode(dev, dev->power_mode);

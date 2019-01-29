@@ -103,6 +103,63 @@ int32_t spi_eng_dma_read(spi_dev *dev,
 }
 
 /***************************************************************************//**
+ * @brief Write and read data to/from SPI.
+*******************************************************************************/
+int32_t spi_write_and_read(spi_dev *dev,
+			   uint8_t *data,
+			   uint8_t bytes_number)
+{
+	/*
+	 * Note:  This function works like a classic SPI
+	 */
+	spi_msg *msg;
+	uint8_t i;
+	uint32_t spi_eng_msg_cmds[4];
+	uint32_t xfer_bytes_number;
+	uint8_t data_width, data_width_bytes;
+	int32_t ret;
+
+	data_width = dev->max_data_width;
+	data_width_bytes = data_width / 8;
+	/*
+	 * Each spi engine transaction equals data_width bytes
+	 */
+	xfer_bytes_number = (bytes_number % data_width_bytes) == 0 ?
+			    bytes_number : bytes_number + 1;
+	spi_eng_msg_cmds[0] = CS_ASSERT;
+	spi_eng_msg_cmds[1] = CS_DEASSERT;
+	spi_eng_msg_cmds[2] = TRANSFER_R_W(xfer_bytes_number);
+	spi_eng_msg_cmds[3] = CS_ASSERT;
+
+	msg = (spi_msg *)malloc(sizeof(*msg));
+	if (!msg)
+		return -1;
+
+	msg->spi_msg_cmds = malloc(sizeof(spi_eng_msg_cmds));
+	msg->spi_msg_cmds = spi_eng_msg_cmds;
+	msg->msg_cmd_len = ARRAY_SIZE(spi_eng_msg_cmds);
+
+	// Init the rx and tx buffers with 0s
+	for (i = 0; i < ARRAY_SIZE(msg->tx_buf); i++) {
+		msg->tx_buf[i] = 0;
+		msg->rx_buf[i] = 0;
+	}
+
+	for (i = 0; i < bytes_number; i++)
+		msg->tx_buf[i/data_width_bytes] |= data[i] << (data_width - 8 - 8 * i);
+
+	ret = spi_eng_transfer_message(dev, msg);
+	usleep(1000000); // 1s
+
+	for (i = 0; i < bytes_number; i++)
+		data[i] = msg->rx_buf[i / data_width_bytes]; //>> (data_width - 8 - 8 * i);
+
+	free(msg);
+
+	return ret;
+}
+
+/***************************************************************************//**
 * @brief spi_eng_program_add_cmd
 *******************************************************************************/
 void spi_eng_program_add_cmd(spi_transfer_fifo *xfer,
@@ -439,8 +496,8 @@ int32_t spi_eng_transfer_multiple_msgs(spi_dev *dev, uint8_t no_of_messages)
 /***************************************************************************//**
 * @brief spi_eng_setup
 *******************************************************************************/
-int32_t spi_eng_setup(spi_dev **device,
-				  	  spi_init_param init_param)
+int32_t spi_init(spi_dev **device,
+				spi_init_param init_param)
 {
 	spi_dev		*dev;
 
