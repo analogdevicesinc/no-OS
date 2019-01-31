@@ -64,7 +64,66 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.num_channels = 8,
 		.has_oversampling = true,
 	},
+	[ID_AD7606B] = {
+		.num_channels = 8,
+		.has_oversampling = true,
+		.has_registers = true,
+	},
 };
+
+int32_t ad7606_spi_reg_read(struct ad7606_dev *dev,
+			    uint8_t reg_addr,
+			    uint8_t *reg_data)
+{
+	uint8_t buf[2];
+	int32_t ret;
+
+	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
+	buf[1] = 0x00;
+	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	if (ret < 0)
+		return ret;
+
+	buf[0] = AD7606_RD_FLAG_MSK(reg_addr);
+	buf[1] = 0x00;
+	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	if (ret < 0)
+		return ret;
+
+	*reg_data = buf[1];
+
+	return ret;
+}
+
+int32_t ad7606_spi_reg_write(struct ad7606_dev *dev,
+			     uint8_t reg_addr,
+			     uint8_t reg_data)
+{
+	uint8_t buf[2];
+
+	buf[0] = AD7606_WR_FLAG_MSK(reg_addr);
+	buf[1] = reg_data;
+
+	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+}
+
+static int ad7606_spi_write_mask(struct ad7606_dev *dev,
+				 uint32_t addr,
+				 uint32_t mask,
+				 uint32_t val)
+{
+	uint8_t reg_data;
+	int ret;
+
+	ret = ad7606_spi_reg_read(dev, addr, &reg_data);
+	if (ret < 0)
+		return ret;
+
+	reg_data &= ~mask;
+	reg_data |= val;
+
+	return ad7606_spi_reg_write(dev, addr, reg_data);
+}
 
 int32_t ad7606_spi_read_bulk(struct ad7606_dev *dev)
 {
@@ -151,22 +210,58 @@ int32_t ad7606_set_os_ratio(struct ad7606_dev *dev,
 {
 	int32_t ret;
 
-	ret = gpio_set_value(dev->gpio_os0, ((osr & 0x01) >> 0));
-	if (ret < 0)
-		return ret;
+	if (dev->sw_mode_en) {
+		ret = ad7606_spi_reg_write(dev, AD7606_OS_MODE, osr);
+		if (ret < 0)
+			return ret;
+	} else {
+		/* In hardware mode, OSR 128 and 256 are not avaialable */
+		if (osr > AD7606_OSR_64)
+			osr = AD7606_OSR_64;
 
-	ret = gpio_set_value(dev->gpio_os1, ((osr & 0x02) >> 1));
-	if (ret < 0)
-		return ret;
+		ret = gpio_set_value(dev->gpio_os0, ((osr & 0x01) >> 0));
+		if (ret < 0)
+			return ret;
 
-	return gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
+		ret = gpio_set_value(dev->gpio_os1, ((osr & 0x02) >> 1));
+		if (ret < 0)
+			return ret;
+
+		ret = gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
+		if (ret < 0)
+			return ret;
+	}
+
+	return 0;
+}
+
+int32_t ad7606_set_ch_range(struct ad7606_dev *dev, uint8_t ch,
+			    enum ad7606_range range)
+{
+	uint8_t value;
+	int32_t ret;
+
+	if (dev->sw_mode_en) {
+		ret = ad7606_spi_write_mask(dev, AD7606_RANGE_CH_ADDR(ch),
+					    AD7606_RANGE_CH_MSK(ch),
+					    AD7606_RANGE_CH_MODE(ch, range));
+	} else {
+		value = 0;
+		if (range > AD7606_RANGE_5V)
+			value = 1;
+
+		ret = gpio_set_value(dev->gpio_range, value);
+	}
+
+	return ret;
 }
 
 int32_t ad7606_init(struct ad7606_dev **device,
 		    struct ad7606_init_param *init_param)
 {
 	struct ad7606_dev *dev;
-	int32_t ret;
+	uint8_t nr_ch;
+	int32_t i, ret;
 
 	dev = (struct ad7606_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
@@ -177,6 +272,8 @@ int32_t ad7606_init(struct ad7606_dev **device,
 		goto error;
 
 	dev->device_id = init_param->device_id;
+	if (ad7606_chip_info_tbl[dev->device_id].has_registers)
+		dev->sw_mode_en = init_param->sw_mode_en;
 
 	ret = ad7606_request_gpios(dev, init_param);
 	if (ret < 0)
@@ -186,9 +283,19 @@ int32_t ad7606_init(struct ad7606_dev **device,
 	if (ret < 0)
 		goto error;
 
-	ret = gpio_set_value(dev->gpio_range, init_param->range);
-	if (ret < 0)
-		goto error;
+	/* Set the range */
+	if (dev->sw_mode_en) {
+		nr_ch = ad7606_chip_info_tbl[dev->device_id].num_channels;
+		for (i = 0; i < nr_ch; i++) {
+			ret = ad7606_set_ch_range(dev, i, init_param->range);
+			if (ret < 0)
+				goto error;
+		}
+	} else {
+		ret = ad7606_set_ch_range(dev, 0, init_param->range);
+		if (ret < 0)
+			goto error;
+	}
 
 	ret = gpio_set_value(dev->gpio_convst, 1);
 	if (ret < 0)
