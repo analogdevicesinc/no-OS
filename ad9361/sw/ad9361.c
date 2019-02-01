@@ -52,6 +52,8 @@
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
 
+#define NO_GAIN_TABLE		((uint32_t)-1)
+
 /* Used for static code size optimization: please see config.h */
 const bool has_split_gt = HAVE_SPLIT_GAIN_TABLE;
 const bool have_tdd_tables = HAVE_TDD_SYNTH_TABLE;
@@ -1324,9 +1326,9 @@ static int32_t ad9361_gt_tableindex(struct ad9361_rf_phy *phy, uint64_t freq)
  * @param phy The AD9361 state structure.
  * @return The current gain table index or 0 if the table was not chosen.
  */
-static int32_t ad9361_gt(struct ad9361_rf_phy *phy)
+static uint32_t ad9361_gt(struct ad9361_rf_phy *phy)
 {
-	if (phy->current_table == -1) {
+	if (phy->current_table == NO_GAIN_TABLE) {
 		dev_err(&phy->spi->dev, "%s: ERROR", __func__);
 		return 0;
 	}
@@ -1420,7 +1422,7 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	set_gain = ad9361_spi_readf(spi, REG_RX1_MANUAL_LMT_FULL_GAIN,
 				    RX_FULL_TBL_IDX_MASK);
 
-	if (phy->current_table >= 0) {
+	if (phy->current_table != NO_GAIN_TABLE) {
 		rx1_gain = phy->gt_info[phy->current_table].abs_gain_tbl[set_gain];
 	} else {
 		if (set_gain > (index_max - 1))
@@ -1432,7 +1434,7 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 	set_gain = ad9361_spi_readf(spi, REG_RX2_MANUAL_LMT_FULL_GAIN,
 				    RX_FULL_TBL_IDX_MASK);
 
-	if (phy->current_table >= 0) {
+	if (phy->current_table != NO_GAIN_TABLE) {
 		rx2_gain = phy->gt_info[phy->current_table].abs_gain_tbl[set_gain];
 	} else {
 		if (set_gain > (index_max - 1))
@@ -2139,7 +2141,8 @@ static int32_t set_full_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 	struct spi_device *spi = phy->spi;
 	int rc = 0;
 
-	if (rx_gain->fgt_lmt_index != ~0 || rx_gain->lpf_gain != ~0 ||
+	if (rx_gain->fgt_lmt_index != ((uint32_t)~0) ||
+	    rx_gain->lpf_gain != ((uint32_t)~0) ||
 	    rx_gain->digital_gain > 0)
 		dev_dbg(dev,
 			"Ignoring lmt/lpf/digital gains in Single Table mode");
@@ -5196,7 +5199,7 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
  */
 void ad9361_clear_state(struct ad9361_rf_phy *phy)
 {
-	phy->current_table = -1;
+	phy->current_table = NO_GAIN_TABLE;
 	phy->bypass_tx_fir = true;
 	phy->bypass_rx_fir = true;
 	phy->rate_governor = 1;
