@@ -3086,6 +3086,7 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	uint8_t __rx_phase = 0, reg_inv_bits, val, decim;
 	bool phase_inversion_en;
 
+	ret = 0;
 	if (phy->cached_synth_pd[0] & TX_LO_POWER_DOWN) {
 		if (phy->pdata->lo_powerdown_managed_en) {
 			ad9361_spi_writef(spi, REG_TX_SYNTH_POWER_DOWN_OVERRIDE,
