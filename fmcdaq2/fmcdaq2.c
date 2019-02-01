@@ -239,6 +239,8 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
  ******************************************************************************/
 int main(void)
 {
+	int n;
+
 	spi_init_param	ad9523_spi_param;
 	spi_init_param	ad9144_spi_param;
 	spi_init_param	ad9680_spi_param;
@@ -444,10 +446,8 @@ int main(void)
 	ad9144_param.jesd204_subclass = 1;
 	ad9144_param.jesd204_scrambling = 1;
 	ad9144_param.jesd204_mode = 4;
-	ad9144_param.jesd204_lane_xbar[0] = 0;
-	ad9144_param.jesd204_lane_xbar[1] = 1;
-	ad9144_param.jesd204_lane_xbar[2] = 2;
-	ad9144_param.jesd204_lane_xbar[3] = 3;
+	for(n=0; n<ARRAY_SIZE(ad9144_param.jesd204_lane_xbar); n++)
+		ad9144_param.jesd204_lane_xbar[n] = n;
 
 	ad9144_core.no_of_channels = 2;
 	ad9144_core.resolution = 16;
