@@ -640,7 +640,14 @@ struct gain_table_info ad9361_adi_gt_info[] = {
 		.abs_gain_tbl = (int8_t *) &split_gain_table_abs_gain[TBL_4000_6000_MHZ],
 		.tab = (uint8_t (*)[3]) split_gain_table[TBL_4000_6000_MHZ],
 #endif
-	},{ }, /* Don't Remove */
+	},{
+		.start = 0,
+		.end = 0,
+		.max_index = 0,
+		.split_table = 0,
+		.abs_gain_tbl = NULL,
+		.tab = NULL,
+	}, /* Don't Remove */
 };
 
 /* Mixer GM Sub-table */
