@@ -3345,7 +3345,7 @@ struct ad9361_rf_phy {
 	uint8_t			cached_tx_rfpll_div;
 	uint8_t			cached_synth_pd[2];
 	int32_t			tx_quad_lpf_tia_match;
-	int32_t			current_table;
+	uint32_t		current_table;
 	struct gain_table_info  *gt_info;
 	bool 			ensm_pin_ctl_en;
 
