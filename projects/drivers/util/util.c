@@ -144,3 +144,17 @@ uint32_t hweight8(uint32_t word)
 
 	return count;
 }
+
+/**
+ * Calculate the quotient and the remainder of an integer division.
+ */
+uint64_t do_div(uint64_t* n,
+		uint64_t base)
+{
+	uint64_t mod = 0;
+
+	mod = *n % base;
+	*n = *n / base;
+
+	return mod;
+}
