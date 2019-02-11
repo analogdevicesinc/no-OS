@@ -60,11 +60,57 @@ struct axi_adc_init {
 	uint8_t	num_channels;
 };
 
+enum axi_adc_pn_sel {
+	AXI_ADC_PN9 = 0,
+	AXI_ADC_PN23A = 1,
+	AXI_ADC_PN7 = 4,
+	AXI_ADC_PN15 = 5,
+	AXI_ADC_PN23 = 6,
+	AXI_ADC_PN31 = 7,
+	AXI_ADC_PN_CUSTOM = 9,
+	AXI_ADC_PN_END = 10,
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t axi_adc_init(struct axi_adc **adc_core,
 		     const struct axi_adc_init *init);
 int32_t axi_adc_remove(struct axi_adc *adc);
-
+int32_t axi_adc_read(struct axi_adc *adc,
+		     uint32_t reg_addr,
+		     uint32_t *reg_data);
+int32_t axi_adc_write(struct axi_adc *adc,
+		      uint32_t reg_addr,
+		      uint32_t reg_data);
+int32_t axi_adc_set_pnsel(struct axi_adc *adc,
+			  uint32_t chan,
+			  enum axi_adc_pn_sel sel);
+void axi_adc_idelay_set(struct axi_adc *adc,
+			uint32_t lane,
+			uint32_t val);
+int32_t axi_adc_set_calib_phase(struct axi_adc *adc,
+				uint32_t chan,
+				int32_t val,
+				int32_t val2);
+int32_t axi_adc_get_calib_phase(struct axi_adc *adc,
+				uint32_t chan,
+				int32_t *val,
+				int32_t *val2);
+int32_t axi_adc_set_calib_scale(struct axi_adc *adc,
+				uint32_t chan,
+				int32_t val,
+				int32_t val2);
+int32_t axi_adc_get_calib_scale(struct axi_adc *adc,
+				uint32_t chan,
+				int32_t *val,
+				int32_t *val2);
+int32_t axi_adc_set_calib_bias(struct axi_adc *adc,
+			       uint32_t chan,
+			       int32_t val,
+			       int32_t val2);
+int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
+			       uint32_t chan,
+			       int32_t *val,
+			       int32_t *val2);
 #endif
