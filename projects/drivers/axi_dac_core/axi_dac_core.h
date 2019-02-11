@@ -60,10 +60,62 @@ struct axi_dac_init {
 	uint8_t	num_channels;
 };
 
+enum axi_dac_data_sel {
+	AXI_DAC_DATA_SEL_DDS,
+	AXI_DAC_DATA_SEL_SED,
+	AXI_DAC_DATA_SEL_DMA,
+	AXI_DAC_DATA_SEL_ZERO,
+	AXI_DAC_DATA_SEL_PN7,
+	AXI_DAC_DATA_SEL_PN15,
+	AXI_DAC_DATA_SEL_PN23,
+	AXI_DAC_DATA_SEL_PN31,
+	AXI_DAC_DATA_SEL_LB,
+	AXI_DAC_DATA_SEL_PNXX,
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t axi_dac_init(struct axi_dac **dac_core,
 		     const struct axi_dac_init *init);
 int32_t axi_dac_remove(struct axi_dac *dac);
+int32_t axi_dac_set_datasel(struct axi_dac *dac,
+			    int32_t chan,
+			    enum axi_dac_data_sel sel);
+int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
+				  uint32_t chan, uint32_t freq_hz);
+int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
+				  uint32_t chan, uint32_t *freq);
+int32_t axi_dac_dds_set_phase(struct axi_dac *dac,
+			      uint32_t chan, uint32_t phase);
+int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
+			      uint32_t chan, uint32_t *phase);
+int32_t axi_dac_dds_set_scale(struct axi_dac *dac,
+			      uint32_t chan,
+			      int32_t scale_micro_units);
+int32_t axi_dac_dds_get_scale(struct axi_dac *dac,
+			      uint32_t chan,
+			      int32_t *scale_micro_units);
+int32_t axi_dac_set_buff(struct axi_dac *dac,
+			 uint32_t address,
+			 uint16_t *buff,
+			 uint32_t buff_size);
+uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
+			      uint32_t address);
+int32_t axi_dac_dds_get_calib_scale(struct axi_dac *dac,
+				    uint32_t chan,
+				    int32_t *val,
+				    int32_t *val2);
+int32_t axi_dac_dds_get_calib_phase(struct axi_dac *dac,
+				    uint32_t chan,
+				    int32_t *val,
+				    int32_t *val2);
+int32_t axi_dac_dds_set_calib_scale(struct axi_dac *dac,
+				    uint32_t chan,
+				    int32_t val,
+				    int32_t val2);
+int32_t axi_dac_dds_set_calib_phase(struct axi_dac *dac,
+				    uint32_t chan,
+				    int32_t val,
+				    int32_t val2);
 #endif
