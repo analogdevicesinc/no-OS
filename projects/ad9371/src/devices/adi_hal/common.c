@@ -40,6 +40,9 @@ int32_t platform_init(void)
 	spi_param.id = SPI_DEVICE_ID;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = AD9371_CS;
+#ifndef ALTERA_PLATFORM
+	spi_param.flags = SPI_CS_DECODE;
+#endif
 	status |= spi_init(&spi_ad_desc, &spi_param);
 
 	return status;

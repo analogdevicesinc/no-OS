@@ -63,6 +63,8 @@
 #define	SPI_CPHA	0x01
 #define	SPI_CPOL	0x02
 
+#define SPI_CS_DECODE	0x01
+
 #define GPIO_OUT	0x01
 #define GPIO_IN		0x00
 
@@ -108,6 +110,7 @@ typedef struct spi_init_param {
 	uint32_t	max_speed_hz;
 	enum spi_mode	mode;
 	uint8_t		chip_select;
+	uint32_t	flags;
 } spi_init_param;
 
 typedef struct spi_desc {
@@ -116,6 +119,7 @@ typedef struct spi_desc {
 	uint32_t		max_speed_hz;
 	enum spi_mode	mode;
 	uint8_t			chip_select;
+	uint32_t		flags;
 #ifdef _XPARAMETERS_PS_H_
 	XSpiPs_Config	*config;
 	XSpiPs			instance;
