@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include "platform_drivers.h"
 #ifdef ALTERA_PLATFORM
 #include "io.h"
@@ -248,7 +249,8 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	}
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	printf("%s: Successfully initialized (%lu Hz)\n", dac->name, dac->clock_hz);
+	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
+	       dac->name, dac->clock_hz);
 
 	*dac_core = dac;
 

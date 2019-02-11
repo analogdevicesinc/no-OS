@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include "platform_drivers.h"
 #ifdef ALTERA_PLATFORM
 #include "io.h"
@@ -156,7 +157,8 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 	adc->clock_hz = freq * ratio;
 	adc->clock_hz = (adc->clock_hz * 390625) >> 8;
 
-	printf("%s: Successfully initialized (%lu Hz)\n", adc->name, adc->clock_hz);
+	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
+	       adc->name, adc->clock_hz);
 
 	*adc_core = adc;
 
