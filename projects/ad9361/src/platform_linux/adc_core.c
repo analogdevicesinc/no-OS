@@ -159,12 +159,11 @@ int32_t get_file_info(const char *filename, uint32_t *info)
 void adc_init(struct ad9361_rf_phy *phy)
 {
 	ad9361_uio_fd = open(AD9361_UIO_DEV, O_RDWR);
-	if(ad9361_uio_fd < 1)
-	{
+	if(ad9361_uio_fd < 1) {
 		printf("%s: Can't open ad9361_uio device\n\r", __func__);
 		return;
 	}
-	
+
 	ad9361_uio_addr = mmap(NULL,
 			       24576,
 			       PROT_READ|PROT_WRITE,
@@ -173,49 +172,46 @@ void adc_init(struct ad9361_rf_phy *phy)
 			       0);
 #ifdef FMCOMMS5
 	ad9361_b_uio_fd = open(AD9361_B_UIO_DEV, O_RDWR);
-	if(ad9361_b_uio_fd < 1)
-	{
+	if(ad9361_b_uio_fd < 1) {
 		printf("%s: Can't open ad9361_b_uio device\n\r", __func__);
 		return;
 	}
 
 	ad9361_b_uio_addr = mmap(NULL,
-			       24576,
-			       PROT_READ|PROT_WRITE,
-			       MAP_SHARED,
-			       ad9361_b_uio_fd,
-			       0);
+				 24576,
+				 PROT_READ|PROT_WRITE,
+				 MAP_SHARED,
+				 ad9361_b_uio_fd,
+				 0);
 #endif
 
 #ifdef DMA_UIO
 	rx_dma_uio_fd = open(RX_DMA_UIO_DEV, O_RDWR);
-	if(rx_dma_uio_fd < 1)
-	{
+	if(rx_dma_uio_fd < 1) {
 		printf("%s: Can't open rx_dma_uio device\n\r", __func__);
 		return;
 	}
-	
+
 	rx_dma_uio_addr = mmap(NULL,
-			      4096,
-			      PROT_READ|PROT_WRITE,
-			      MAP_SHARED,
-			      rx_dma_uio_fd,
-			      0);
+			       4096,
+			       PROT_READ|PROT_WRITE,
+			       MAP_SHARED,
+			       rx_dma_uio_fd,
+			       0);
 #endif
 	adc_write(phy, ADC_REG_RSTN, 0);
 	adc_write(phy, ADC_REG_RSTN, ADC_RSTN);
 
 	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
-		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+		  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_write(phy, ADC_REG_CHAN_CNTRL(1),
-		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+		  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_st.rx2tx2 = phy->pdata->rx2tx2;
-	if(adc_st.rx2tx2)
-	{
+	if(adc_st.rx2tx2) {
 		adc_write(phy, ADC_REG_CHAN_CNTRL(2),
-			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+			  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 		adc_write(phy, ADC_REG_CHAN_CNTRL(3),
-			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+			  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	}
 }
 
@@ -233,12 +229,9 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	get_file_info(RX_BUFF_MEM_ADDR, &rx_buff_mem_addr);
 	start_address = rx_buff_mem_addr;
 
-	if(adc_st.rx2tx2)
-	{
+	if(adc_st.rx2tx2) {
 		length = (size * 8);
-	}
-	else
-	{
+	} else {
 		length = (size * 4);
 	}
 
@@ -247,7 +240,8 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 #endif
 
 	if(length > rx_buff_mem_size) {
-		printf("%s: Desired length (%d) is bigger than the buffer size (%d).", __func__, length, rx_buff_mem_size);
+		printf("%s: Desired length (%d) is bigger than the buffer size (%d).", __func__,
+		       length, rx_buff_mem_size);
 		return -1;
 	}
 
@@ -269,21 +263,18 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	/* Wait until the new transfer is queued. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_START_TRANSFER, &reg_val);
-	}
-	while(reg_val == 1);
+	} while(reg_val == 1);
 
 	/* Wait until the current transfer is completed. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-	}
-	while(reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT));
+	} while(reg_val != (AXI_DMAC_IRQ_SOT | AXI_DMAC_IRQ_EOT));
 	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
 
 	/* Wait until the transfer with the ID transfer_id is completed. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
-	}
-	while((reg_val & (1 << transfer_id)) != (uint32_t)(1 << transfer_id));
+	} while((reg_val & (1 << transfer_id)) != (uint32_t)(1 << transfer_id));
 #endif
 
 	return 0;
@@ -293,8 +284,8 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
  * @brief adc_save_file
 *******************************************************************************/
 int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
-			  const char * filename, uint8_t bin_file,
-			  uint8_t ch_no)
+			      const char * filename, uint8_t bin_file,
+			      uint8_t ch_no)
 {
 #ifdef DMA_UIO
 	int dev_mem_fd;
@@ -314,8 +305,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	start_address = rx_buff_mem_addr;
 
 	dev_mem_fd = open("/dev/mem", O_RDWR | O_SYNC);
-	if(dev_mem_fd == -1)
-	{
+	if(dev_mem_fd == -1) {
 		printf("%s: Can't open /dev/mem device\n\r", __func__);
 		return -1;
 	}
@@ -324,40 +314,32 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 	mapping_length = ((((size * 8) / page_size) + 1) * page_size);
 	page_mask = (page_size - 1);
 	mapping_addr = mmap(NULL,
-			   mapping_length,
-			   PROT_READ | PROT_WRITE,
-			   MAP_SHARED,
-			   dev_mem_fd,
-			   (start_address & ~page_mask));
-	if(mapping_addr == MAP_FAILED)
-	{
+			    mapping_length,
+			    PROT_READ | PROT_WRITE,
+			    MAP_SHARED,
+			    dev_mem_fd,
+			    (start_address & ~page_mask));
+	if(mapping_addr == MAP_FAILED) {
 		printf("%s: mmap error\n\r", __func__);
 		return -1;
 	}
 
 	rx_buff_virt_addr = (mapping_addr + (start_address & page_mask));
 
-	if(bin_file)
-	{
+	if(bin_file) {
 		f = fopen(filename, "wb");
-	}
-	else
-	{
+	} else {
 		f = fopen(filename, "w");
 	}
-	if(f == NULL)
-	{
+	if(f == NULL) {
 		munmap(mapping_addr, mapping_length);
 		close(dev_mem_fd);
 		return -1;
 	}
 
-	if(adc_st.rx2tx2)
-	{
+	if(adc_st.rx2tx2) {
 		length = (size * 2);
-	}
-	else
-	{
+	} else {
 		length = (size * 1);
 	}
 
@@ -366,8 +348,7 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 #endif
 
 #ifdef FMCOMMS5
-	for(index = 0; index < length; index += 4)
-	{
+	for(index = 0; index < length; index += 4) {
 		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
 		data_q1 = (data & 0xFFFF);
 		data_i1 = (data >> 16) & 0xFFFF;
@@ -382,17 +363,14 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 		data_q4 = (data & 0xFFFF);
 		data_i4 = (data >> 16) & 0xFFFF;
 
-		if(bin_file)
-		{
+		if(bin_file) {
 			ch1 = (data_i1 << 16) | data_q1;
 			fwrite(&ch1,1,4,f);
-			if(ch_no == 2)
-			{
+			if(ch_no == 2) {
 				ch2 = (data_i2 << 16) | data_q2;
 				fwrite(&ch2,1,4,f);
 			}
-			if(ch_no == 4)
-			{
+			if(ch_no == 4) {
 				ch2 = (data_i2 << 16) | data_q2;
 				fwrite(&ch2,1,4,f);
 				ch3 = (data_i3 << 16) | data_q3;
@@ -400,54 +378,38 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
 				ch4 = (data_i4 << 16) | data_q4;
 				fwrite(&ch4,1,4,f);
 			}
-		}
-		else
-		{
-			if(ch_no == 4)
-			{
+		} else {
+			if(ch_no == 4) {
 				fprintf(f, "%d,%d,%d,%d,%d,%d,%d,%d\n", data_q1, data_i1,
 					data_q2, data_i2, data_q3, data_i3, data_q4, data_i4);
-			}
-			else
-			{
-				if(ch_no == 2)
-				{
+			} else {
+				if(ch_no == 2) {
 					fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
-				}
-				else
-				{
+				} else {
 					fprintf(f, "%d,%d\n", data_q1, data_i1);
 				}
 			}
 		}
 	}
 #else
-	for(index = 0; index < length; index += 2)
-	{
+	for(index = 0; index < length; index += 2) {
 		data = *((unsigned *) (rx_buff_virt_addr + (index * 4)));
 		data_q1 = (data & 0xFFFF);
 		data_i1 = (data >> 16) & 0xFFFF;
 		data = *((unsigned *) (rx_buff_virt_addr + ((index + 1) * 4)));
 		data_q2 = (data & 0xFFFF);
 		data_i2 = (data >> 16) & 0xFFFF;
-		if(bin_file)
-		{
+		if(bin_file) {
 			ch1 = (data_i1 << 16) | data_q1;
 			fwrite(&ch1,1,4,f);
-			if(ch_no == 2)
-			{
+			if(ch_no == 2) {
 				ch2 = (data_i2 << 16) | data_q2;
 				fwrite(&ch2,1,4,f);
 			}
-		}
-		else
-		{
-			if(ch_no == 2)
-			{
+		} else {
+			if(ch_no == 2) {
 				fprintf(f, "%d,%d,%d,%d\n", data_q1, data_i1, data_q2, data_i2);
-			}
-			else
-			{
+			} else {
 				fprintf(f, "%d,%d\n", data_q1, data_i1);
 			}
 		}
@@ -466,10 +428,10 @@ int32_t adc_capture_save_file(uint32_t size, uint32_t start_address,
  * @brief adc_set_calib_scale_phase
 *******************************************************************************/
 int32_t adc_set_calib_scale_phase(struct ad9361_rf_phy *phy,
-								  uint32_t phase,
-								  uint32_t chan,
-								  int32_t val,
-								  int32_t val2)
+				  uint32_t phase,
+				  uint32_t chan,
+				  int32_t val,
+				  int32_t val2)
 {
 	uint32_t fract;
 	uint64_t llval;
@@ -516,10 +478,10 @@ int32_t adc_set_calib_scale_phase(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_scale_phase
 *******************************************************************************/
 int32_t adc_get_calib_scale_phase(struct ad9361_rf_phy *phy,
-								  uint32_t phase,
-								  uint32_t chan,
-								  int32_t *val,
-								  int32_t *val2)
+				  uint32_t phase,
+				  uint32_t chan,
+				  int32_t *val,
+				  int32_t *val2)
 {
 	uint32_t tmp;
 	int32_t sign;
@@ -561,9 +523,9 @@ int32_t adc_get_calib_scale_phase(struct ad9361_rf_phy *phy,
  * @brief adc_set_calib_scale
 *******************************************************************************/
 int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2)
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2)
 {
 	return adc_set_calib_scale_phase(phy, 0, chan, val, val2);
 }
@@ -572,9 +534,9 @@ int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_scale
 *******************************************************************************/
 int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2)
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2)
 {
 	return adc_get_calib_scale_phase(phy, 0, chan, val, val2);
 }
@@ -583,9 +545,9 @@ int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
  * @brief adc_set_calib_phase
 *******************************************************************************/
 int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2)
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2)
 {
 	return adc_set_calib_scale_phase(phy, 1, chan, val, val2);
 }
@@ -594,9 +556,9 @@ int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_phase
 *******************************************************************************/
 int32_t adc_get_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2)
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2)
 {
 	return adc_get_calib_scale_phase(phy, 1, chan, val, val2);
 }

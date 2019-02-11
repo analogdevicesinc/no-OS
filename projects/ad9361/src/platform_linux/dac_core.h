@@ -148,8 +148,7 @@ enum dds_data_select {
 #define DMAC_FLAGS_CYCLIC				(1 << 0)
 #define DMAC_FLAGS_TLAST				(1 << 1)
 
-struct dds_state
-{
+struct dds_state {
 	uint32_t	cached_freq[8];
 	uint32_t	cached_phase[8];
 	int32_t		cached_scale[8];
@@ -179,23 +178,25 @@ struct dds_state
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma);
 void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq);
 void dds_set_phase(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t phase);
-void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan, int32_t scale_micro_units);
+void dds_set_scale(struct ad9361_rf_phy *phy, uint32_t chan,
+		   int32_t scale_micro_units);
 void dds_update(struct ad9361_rf_phy *phy);
-int dac_datasel(struct ad9361_rf_phy *phy, int32_t chan, enum dds_data_select sel);
+int dac_datasel(struct ad9361_rf_phy *phy, int32_t chan,
+		enum dds_data_select sel);
 int32_t dds_set_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2);
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2);
 int32_t dds_get_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2);
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2);
 int32_t dds_set_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2);
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2);
 int32_t dds_get_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2);
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2);
 #endif
