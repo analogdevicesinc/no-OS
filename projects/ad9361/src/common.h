@@ -71,7 +71,7 @@ struct clk {
 };
 
 struct clk_hw {
-		struct clk *clk;
+	struct clk *clk;
 };
 
 struct clk_init_data {

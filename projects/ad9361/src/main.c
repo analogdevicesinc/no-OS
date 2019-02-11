@@ -69,8 +69,9 @@ char				param_no		 =  0;
 int					cmd_type		 = -1;
 char				invalid_cmd		 =  0;
 char				received_cmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-										0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-										0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+						    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+						    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+			   };
 #endif
 
 AD9361_InitParam default_init_param = {
@@ -318,50 +319,54 @@ AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	3, // rx
 	0, // rx_gain
 	1, // rx_dec
-	{-4, -6, -37, 35, 186, 86, -284, -315,
-	 107, 219, -4, 271, 558, -307, -1182, -356,
-	 658, 157, 207, 1648, 790, -2525, -2553, 748,
-	 865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
-	 14819, -5278, -14731, -3583, 6560, 3737, -476, 865,
-	 748, -2553, -2525, 790, 1648, 207, 157, 658,
-	 -356, -1182, -307, 558, 271, -4, 219, 107,
-	 -315, -284, 86, 186, 35, -37, -6, -4,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0}, // rx_coef[128]
-	 64, // rx_coef_size
-	 {0, 0, 0, 0, 0, 0}, //rx_path_clks[6]
-	 0 // rx_bandwidth
+	{
+		-4, -6, -37, 35, 186, 86, -284, -315,
+			107, 219, -4, 271, 558, -307, -1182, -356,
+			658, 157, 207, 1648, 790, -2525, -2553, 748,
+			865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
+			14819, -5278, -14731, -3583, 6560, 3737, -476, 865,
+			748, -2553, -2525, 790, 1648, 207, 157, 658,
+			-356, -1182, -307, 558, 271, -4, 219, 107,
+			-315, -284, 86, 186, 35, -37, -6, -4,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0
+		}, // rx_coef[128]
+	64, // rx_coef_size
+	{0, 0, 0, 0, 0, 0}, //rx_path_clks[6]
+	0 // rx_bandwidth
 };
 
 AD9361_TXFIRConfig tx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
 	3, // tx
 	-6, // tx_gain
 	1, // tx_int
-	{-4, -6, -37, 35, 186, 86, -284, -315,
-	 107, 219, -4, 271, 558, -307, -1182, -356,
-	 658, 157, 207, 1648, 790, -2525, -2553, 748,
-	 865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
-	 14819, -5278, -14731, -3583, 6560, 3737, -476, 865,
-	 748, -2553, -2525, 790, 1648, 207, 157, 658,
-	 -356, -1182, -307, 558, 271, -4, 219, 107,
-	 -315, -284, 86, 186, 35, -37, -6, -4,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0,
-	 0, 0, 0, 0, 0, 0, 0, 0}, // tx_coef[128]
-	 64, // tx_coef_size
-	 {0, 0, 0, 0, 0, 0}, // tx_path_clks[6]
-	 0 // tx_bandwidth
+	{
+		-4, -6, -37, 35, 186, 86, -284, -315,
+			107, 219, -4, 271, 558, -307, -1182, -356,
+			658, 157, 207, 1648, 790, -2525, -2553, 748,
+			865, -476, 3737, 6560, -3583, -14731, -5278, 14819,
+			14819, -5278, -14731, -3583, 6560, 3737, -476, 865,
+			748, -2553, -2525, 790, 1648, 207, 157, 658,
+			-356, -1182, -307, 558, 271, -4, 219, 107,
+			-315, -284, 86, 186, 35, -37, -6, -4,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0
+		}, // tx_coef[128]
+	64, // tx_coef_size
+	{0, 0, 0, 0, 0, 0}, // tx_path_clks[6]
+	0 // tx_bandwidth
 };
 struct ad9361_rf_phy *ad9361_phy;
 #ifdef FMCOMMS5
@@ -475,10 +480,10 @@ int main(void)
 #ifndef AXI_ADC_NOT_PRESENT
 #if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
 	(defined ADC_DMA_EXAMPLE || defined ADC_DMA_IRQ_EXAMPLE)
-    // NOTE: To prevent unwanted data loss, it's recommended to invalidate
-    // cache after each adc_capture() call, keeping in mind that the
-    // size of the capture and the start address must be alinged to the size
-    // of the cache line.
+	// NOTE: To prevent unwanted data loss, it's recommended to invalidate
+	// cache after each adc_capture() call, keeping in mind that the
+	// size of the capture and the start address must be alinged to the size
+	// of the cache line.
 	mdelay(1000);
 	adc_capture(16384, ADC_DDR_BASEADDR);
 #ifdef XILINX_PLATFORM
@@ -486,7 +491,7 @@ int main(void)
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384 * 16);
 #else
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
-			ad9361_phy->pdata->rx2tx2 ? 16384 * 8 : 16384 * 4);
+				  ad9361_phy->pdata->rx2tx2 ? 16384 * 8 : 16384 * 4);
 #endif
 #endif
 #endif
@@ -495,26 +500,20 @@ int main(void)
 #ifdef CONSOLE_COMMANDS
 	get_help(NULL, 0);
 
-	while(1)
-	{
+	while(1) {
 		console_get_command(received_cmd);
 		invalid_cmd = 0;
-		for(cmd = 0; cmd < cmd_no; cmd++)
-		{
+		for(cmd = 0; cmd < cmd_no; cmd++) {
 			param_no = 0;
 			cmd_type = console_check_commands(received_cmd, cmd_list[cmd].name,
-											  param, &param_no);
-			if(cmd_type == UNKNOWN_CMD)
-			{
+							  param, &param_no);
+			if(cmd_type == UNKNOWN_CMD) {
 				invalid_cmd++;
-			}
-			else
-			{
+			} else {
 				cmd_list[cmd].function(param, param_no);
 			}
 		}
-		if(invalid_cmd == cmd_no)
-		{
+		if(invalid_cmd == cmd_no) {
 			console_print("Invalid command!\n");
 		}
 	}
@@ -533,7 +532,7 @@ int main(void)
 			udelay(10);
 			ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 			printf("TXNRX control - Alert: %s\n",
-					ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+			       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 			mdelay(1000);
 
 			if (ad9361_phy->pdata->ensm_pin_pulse_mode) {
@@ -545,7 +544,7 @@ int main(void)
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - RX: %s\n",
-							ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_ENABLE_PIN, 1);
@@ -553,7 +552,7 @@ int main(void)
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
-							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_TXNRX_PIN, 1);
@@ -563,7 +562,7 @@ int main(void)
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - TX: %s\n",
-							ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_ENABLE_PIN, 1);
@@ -571,7 +570,7 @@ int main(void)
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX Pulse control - Alert: %s\n",
-							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 				}
 			} else {
@@ -582,14 +581,14 @@ int main(void)
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - RX: %s\n",
-							ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",
-							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_TXNRX_PIN, 1);
@@ -598,14 +597,14 @@ int main(void)
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - TX: %s\n",
-							ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
 					mdelay(1000);
 
 					gpio_set_value(GPIO_ENABLE_PIN, 0);
 					udelay(10);
 					ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 					printf("TXNRX control - Alert: %s\n",
-							ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+					       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 					mdelay(1000);
 				}
 			}
@@ -614,25 +613,25 @@ int main(void)
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_RX);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - RX: %s\n",
-						ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
+				       ensm_mode == ENSM_MODE_RX ? "OK" : "Error");
 				mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - Alert: %s\n",
-						ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+				       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 				mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_TX);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - TX: %s\n",
-						ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
+				       ensm_mode == ENSM_MODE_TX ? "OK" : "Error");
 				mdelay(1000);
 
 				ad9361_set_en_state_machine_mode(ad9361_phy, ENSM_MODE_ALERT);
 				ad9361_get_en_state_machine_mode(ad9361_phy, &ensm_mode);
 				printf("SPI control - Alert: %s\n",
-						ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
+				       ensm_mode == ENSM_MODE_ALERT ? "OK" : "Error");
 				mdelay(1000);
 			}
 		}
