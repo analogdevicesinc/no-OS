@@ -165,6 +165,10 @@ int32_t spi_init(struct spi_desc **desc,
 	descriptor = (struct spi_desc *) calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return FAILURE;
+
+	descriptor->mode = param->mode;
+	descriptor->chip_select = param->chip_select;
+
 #ifdef _XPARAMETERS_PS_H_
 	descriptor->config = XSpiPs_LookupConfig(param->id);
 	if (descriptor->config == NULL)
@@ -204,9 +208,6 @@ int32_t spi_init(struct spi_desc **desc,
 
 	XSpi_IntrGlobalDisable(&descriptor->instance);
 #endif
-	descriptor->chip_select = param->chip_select;
-
-	descriptor->mode = param->mode;
 
 	*desc = descriptor;
 
