@@ -61,8 +61,8 @@ void console_get_command(char* command);
 
 /* Compares two commands and returns the type of the command. */
 int console_check_commands(char*	   received_cmd,
-						   const char* expected_cmd,
-						   double*	   param,
-						   char*	   param_no);
+			   const char* expected_cmd,
+			   double*	   param,
+			   char*	   param_no);
 
 #endif /*__CONSOLE_H__*/

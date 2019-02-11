@@ -96,8 +96,7 @@ void uart_read_char(char * data)
 *******************************************************************************/
 void uart_write_string(const char* string)
 {
-	while(*string)
-	{
+	while(*string) {
 		uart_write_char(*string++);
 	}
 }
@@ -119,23 +118,17 @@ char *int_to_str(long number, char base)
 	static char   buffer[17] = "                ";
 	char*		  buffer_ptr = &buffer[16];
 
-	if((number < 0) && (base == 10))
-	{
+	if((number < 0) && (base == 10)) {
 		neg_sign = 1;
 		pos_number = -1 * number;
-	}
-	else
-	{
+	} else {
 		pos_number = (unsigned long)number;
 	}
-	do
-	{
+	do {
 		*buffer_ptr-- = digits[pos_number % base];
 		pos_number /= base;
-	}
-	while(pos_number != 0);
-	if(neg_sign)
-	{
+	} while(pos_number != 0);
+	if(neg_sign) {
 		*buffer_ptr-- = '-';
 	}
 	*buffer_ptr++;
@@ -165,34 +158,28 @@ void console_print(char* str, ...)
 	va_list		  argp;
 
 	va_start(argp, str);
-	for(string_ptr = str; *string_ptr != '\0'; string_ptr++)
-	{
-		if(*string_ptr!='%')
-		{
+	for(string_ptr = str; *string_ptr != '\0'; string_ptr++) {
+		if(*string_ptr!='%') {
 			uart_write_char(*string_ptr);
 			continue;
 		}
 		string_ptr++;
 		first_param = 0;
-		while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
-		{
+		while((*string_ptr >= 0x30) & (*string_ptr <= 0x39)) {
 			first_param *= 10;
 			first_param += (*string_ptr - 0x30);
 			string_ptr++;
 		}
-		if(*string_ptr == '.')
-		{
+		if(*string_ptr == '.') {
 			string_ptr++;
 			second_param = 0;
-			while((*string_ptr >= 0x30) & (*string_ptr <= 0x39))
-			{
+			while((*string_ptr >= 0x30) & (*string_ptr <= 0x39)) {
 				second_param *= 10;
 				second_param += (*string_ptr - 0x30);
 				string_ptr++;
 			}
 		}
-		switch(*string_ptr)
-		{
+		switch(*string_ptr) {
 		case 'c':
 			long_arg = va_arg(argp, long);
 			uart_write_char((char)long_arg);
@@ -209,36 +196,30 @@ void console_print(char* str, ...)
 			long_arg = va_arg(argp, long);
 			x_mask = 268435456;
 			ch_number = 8;
-			while(x_mask > long_arg)
-			{
+			while(x_mask > long_arg) {
 				x_mask /= 16;
 				ch_number--;
 			}
-			while(ch_number < first_param)
-			{
+			while(ch_number < first_param) {
 				uart_write_char('0');
 				ch_number++;
 			}
-			if(long_arg != 0)
-			{
+			if(long_arg != 0) {
 				uart_write_string(int_to_str(long_arg, 16));
 			}
 			break;
 		case 'f':
 			double_arg = va_arg(argp, double);
-			if(second_param == 0)
-			{
+			if(second_param == 0) {
 				second_param = 3;
 			}
 			ch_number = second_param;
-			while(ch_number > 0)
-			{
+			while(ch_number > 0) {
 				multiplier *= 10;
 				ch_number--;
 			}
 			double_arg *= multiplier;
-			if(double_arg < 0)
-			{
+			if(double_arg < 0) {
 				double_arg *= -1;
 				uart_write_char('-');
 			}
@@ -247,18 +228,15 @@ void console_print(char* str, ...)
 			uart_write_char('.');
 			d_mask = 1000000000;
 			ch_number = 10;
-			while(d_mask > (long)(long_arg % multiplier))
-			{
+			while(d_mask > (long)(long_arg % multiplier)) {
 				d_mask /= 10;
 				ch_number--;
 			}
-			while(ch_number < second_param)
-			{
+			while(ch_number < second_param) {
 				uart_write_char('0');
 				ch_number++;
 			}
-			if((long_arg % multiplier) != 0)
-			{
+			if((long_arg % multiplier) != 0) {
 				uart_write_string(int_to_str((long_arg % multiplier), 10));
 			}
 			break;
@@ -294,8 +272,7 @@ void console_get_command(char* command)
 	char		  received_char	= 0;
 	unsigned char char_number	= 0;
 
-	while((received_char != '\n') && (received_char != '\r'))
-	{
+	while((received_char != '\n') && (received_char != '\r')) {
 		uart_read_char(&received_char);
 		command[char_number++] = received_char;
 	}
@@ -316,9 +293,9 @@ void console_get_command(char* command)
  *                                WRITE_CMD   - Write command (=).
 *******************************************************************************/
 int console_check_commands(char*	   received_cmd,
-						   const char* expected_cmd,
-						   double*	   param,
-						   char*	   param_no)
+			   const char* expected_cmd,
+			   double*	   param,
+			   char*	   param_no)
 {
 	int			  cmd_type		   = 1;
 	unsigned char char_index	   = 0;
@@ -329,128 +306,88 @@ int console_check_commands(char*	   received_cmd,
 	unsigned char digit_index	   = 0;
 
 	while((expected_cmd[char_index] != '!') &&
-		  (expected_cmd[char_index] != '?') &&
-		  (expected_cmd[char_index] != '=') &&
-		  (cmd_type != UNKNOWN_CMD))
-	{
-		if(expected_cmd[char_index] != received_cmd[char_index])
-		{
+	      (expected_cmd[char_index] != '?') &&
+	      (expected_cmd[char_index] != '=') &&
+	      (cmd_type != UNKNOWN_CMD)) {
+		if(expected_cmd[char_index] != received_cmd[char_index]) {
 			cmd_type = UNKNOWN_CMD;
 		}
 		char_index++;
 	}
-	if(cmd_type != UNKNOWN_CMD)
-	{
-		if(expected_cmd[char_index] == '!')
-		{
-			if(received_cmd[char_index] == '!')
-			{
+	if(cmd_type != UNKNOWN_CMD) {
+		if(expected_cmd[char_index] == '!') {
+			if(received_cmd[char_index] == '!') {
 				cmd_type = DO_CMD;
-			}
-			else
-			{
+			} else {
 				cmd_type = UNKNOWN_CMD;
 			}
 		}
-		if(expected_cmd[char_index] == '?')
-		{
-			if(received_cmd[char_index] == '?')
-			{
+		if(expected_cmd[char_index] == '?') {
+			if(received_cmd[char_index] == '?') {
 				cmd_type = READ_CMD;
-			}
-			else
-			{
+			} else {
 				cmd_type = UNKNOWN_CMD;
 			}
 		}
-		if(expected_cmd[char_index] == '=')
-		{
-			if(received_cmd[char_index] == '=')
-			{
+		if(expected_cmd[char_index] == '=') {
+			if(received_cmd[char_index] == '=') {
 				cmd_type = WRITE_CMD;
-			}
-			else
-			{
+			} else {
 				cmd_type = UNKNOWN_CMD;
 			}
 		}
-		if((cmd_type == WRITE_CMD) || (cmd_type == READ_CMD))
-		{
+		if((cmd_type == WRITE_CMD) || (cmd_type == READ_CMD)) {
 			char_index++;
 			while((received_cmd[char_index] != '\n') &&
-				  (received_cmd[char_index] != '\r'))
-			{
-				if((received_cmd[char_index] == 0x20))
-				{
+			      (received_cmd[char_index] != '\r')) {
+				if((received_cmd[char_index] == 0x20)) {
 					*param = 0;
-					if((param_string[0] == '0') && (param_string[1] == 'x'))
-					{
-						for(index = 2; index < param_index; index++)
-						{
-							for(digit_index = 0; digit_index < 16; digit_index++)
-							{
-								if(param_string[index] == digits[digit_index])
-								{
+					if((param_string[0] == '0') && (param_string[1] == 'x')) {
+						for(index = 2; index < param_index; index++) {
+							for(digit_index = 0; digit_index < 16; digit_index++) {
+								if(param_string[index] == digits[digit_index]) {
 									*param = *param * 16;
 									*param = *param + digit_index;
 								}
 							}
 						}
-					}
-					else
-					{
-						if(param_string[0] == '-')
-						{
+					} else {
+						if(param_string[0] == '-') {
 							*param = atof((const char*)(&param_string[1]));
 							*param *= (-1);
-						}
-						else
-						{
+						} else {
 							*param = atof((const char*)param_string);
 						}
 					}
 					param++;
 					*param_no += 1;
-					for(param_index = 0; param_index < 10; param_index++)
-					{
+					for(param_index = 0; param_index < 10; param_index++) {
 						param_string[param_index] = 0;
 					}
 					param_index = 0;
 					char_index++;
-				}
-				else
-				{
+				} else {
 					param_string[param_index] = received_cmd[char_index];
 					char_index++;
 					param_index++;
 				}
 			}
-			if(param_index)
-			{
+			if(param_index) {
 				*param = 0;
-				if((param_string[0] == '0') && (param_string[1] == 'x'))
-				{
-					for(index = 2; index < param_index; index++)
-					{
-						for(digit_index = 0; digit_index < 16; digit_index++)
-						{
-							if(param_string[index] == digits[digit_index])
-							{
+				if((param_string[0] == '0') && (param_string[1] == 'x')) {
+					for(index = 2; index < param_index; index++) {
+						for(digit_index = 0; digit_index < 16; digit_index++) {
+							if(param_string[index] == digits[digit_index]) {
 								*param *= 16;
 								*param += digit_index;
 							}
 						}
 					}
-				}
-				else
-				{
-					if(param_string[0] == '-')
-					{
+				} else {
+					if(param_string[0] == '-') {
 						*param = atof((const char*)(&param_string[1]));
 						*param *= (-1);
-					}
-					else
-					{
+					} else {
 						*param = atof((const char*)param_string);
 					}
 				}

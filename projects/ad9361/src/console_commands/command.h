@@ -50,13 +50,12 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 typedef void (*cmd_function)(double* param, char param_no);
-typedef struct
-{
+typedef struct {
 	const char* name;
 	const char* description;
 	const char* example;
 	cmd_function function;
-}command;
+} command;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

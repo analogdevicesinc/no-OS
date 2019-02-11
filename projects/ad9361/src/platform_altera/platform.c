@@ -87,12 +87,11 @@ int32_t altera_bridge_init(void)
 
 	status = alt_bridge_init(ALT_BRIDGE_LWH2F, NULL, NULL);
 
-	if (status == 0)
-	{
+	if (status == 0) {
 		status = alt_addr_space_remap(ALT_ADDR_SPACE_MPU_ZERO_AT_BOOTROM,
-									  ALT_ADDR_SPACE_NONMPU_ZERO_AT_OCRAM,
-									  ALT_ADDR_SPACE_H2F_ACCESSIBLE,
-									  ALT_ADDR_SPACE_LWH2F_ACCESSIBLE);
+					      ALT_ADDR_SPACE_NONMPU_ZERO_AT_OCRAM,
+					      ALT_ADDR_SPACE_H2F_ACCESSIBLE,
+					      ALT_ADDR_SPACE_LWH2F_ACCESSIBLE);
 	}
 
 	return status;
@@ -105,9 +104,9 @@ int32_t altera_bridge_uninit(void)
 {
 	int32_t status = 0;
 
-    status = alt_bridge_uninit(ALT_BRIDGE_LWH2F, NULL, NULL);
+	status = alt_bridge_uninit(ALT_BRIDGE_LWH2F, NULL, NULL);
 
-    return status;
+	return status;
 }
 
 /***************************************************************************//**
@@ -134,8 +133,8 @@ void alt_avl_spi_write(uint32_t reg_addr, uint32_t reg_data)
  * @brief spi_init
 *******************************************************************************/
 int32_t spi_init(uint32_t device_id,
-				 uint8_t  clk_pha,
-				 uint8_t  clk_pol)
+		 uint8_t  clk_pha,
+		 uint8_t  clk_pol)
 {
 	return 0;
 }
@@ -144,7 +143,7 @@ int32_t spi_init(uint32_t device_id,
  * @brief spi_read
 *******************************************************************************/
 int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number)
+		 uint8_t bytes_number)
 {
 	uint32_t cnt = 0;
 
@@ -155,16 +154,15 @@ int32_t spi_read(uint8_t *data,
 	/* Discard any stale data, in case previous communication was interrupted. */
 	alt_avl_spi_read(ALT_AVL_SPI_RXDATA_REG);
 
-	while(cnt < bytes_number)
-	{
+	while(cnt < bytes_number) {
 		/* Wait until txdata register is empty. */
 		while((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) &
-					ALT_AVL_SPI_STATUS_TRDY_MSK) == 0);
+		       ALT_AVL_SPI_STATUS_TRDY_MSK) == 0);
 		/* Write data to txdata register. */
 		alt_avl_spi_write(ALT_AVL_SPI_TXDATA_REG, data[cnt]);
 		/* Wait until rxdata register is full. */
 		while ((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG)
-					& ALT_AVL_SPI_STATUS_RRDY_MSK) == 0);
+			& ALT_AVL_SPI_STATUS_RRDY_MSK) == 0);
 		/* Read data from rxdata register. */
 		data[cnt] = alt_avl_spi_read(ALT_AVL_SPI_RXDATA_REG);
 		cnt++;
@@ -172,7 +170,7 @@ int32_t spi_read(uint8_t *data,
 
 	/* Wait until the interface has finished transmitting. */
 	while((alt_avl_spi_read(ALT_AVL_SPI_STATUS_REG) &
-				ALT_AVL_SPI_STATUS_TMT_MSK) == 0);
+	       ALT_AVL_SPI_STATUS_TMT_MSK) == 0);
 	/* Clear the SSO bit (release chip select). */
 	alt_avl_spi_write(ALT_AVL_SPI_CONTROL_REG, 0);
 
@@ -183,21 +181,20 @@ int32_t spi_read(uint8_t *data,
  * @brief spi_write_then_read
 *******************************************************************************/
 int spi_write_then_read(struct spi_device *spi,
-		const unsigned char *txbuf, unsigned n_tx,
-		unsigned char *rxbuf, unsigned n_rx)
+			const unsigned char *txbuf, unsigned n_tx,
+			unsigned char *rxbuf, unsigned n_rx)
 {
 	uint8_t buffer[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-						  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-						  0x00, 0x00, 0x00, 0x00};
+			      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			      0x00, 0x00, 0x00, 0x00
+			     };
 	uint8_t byte;
 
-	for(byte = 0; byte < n_tx; byte++)
-	{
+	for(byte = 0; byte < n_tx; byte++) {
 		buffer[byte] = (unsigned char)txbuf[byte];
 	}
 	spi_read(buffer, n_tx + n_rx);
-	for(byte = n_tx; byte < n_tx + n_rx; byte++)
-	{
+	for(byte = n_tx; byte < n_tx + n_rx; byte++) {
 		rxbuf[byte - n_tx] = buffer[byte];
 	}
 
@@ -381,15 +378,15 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
  * @brief axiadc_idelay_set
 *******************************************************************************/
 void axiadc_idelay_set(struct axiadc_state *st,
-				unsigned lane, unsigned val)
+		       unsigned lane, unsigned val)
 {
 	if (PCORE_VERSION_MAJOR(st->pcore_version) > 8) {
 		axiadc_write(st, ADI_REG_DELAY(lane), val);
 	} else {
 		axiadc_write(st, ADI_REG_DELAY_CNTRL, 0);
 		axiadc_write(st, ADI_REG_DELAY_CNTRL,
-				ADI_DELAY_ADDRESS(lane)
-				| ADI_DELAY_WDATA(val)
-				| ADI_DELAY_SEL);
+			     ADI_DELAY_ADDRESS(lane)
+			     | ADI_DELAY_WDATA(val)
+			     | ADI_DELAY_SEL);
 	}
 }

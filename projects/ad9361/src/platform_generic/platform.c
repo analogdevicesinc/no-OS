@@ -56,8 +56,8 @@ static inline void usleep(unsigned long usleep)
  * @brief spi_init
 *******************************************************************************/
 int32_t spi_init(uint32_t device_id,
-				 uint8_t  clk_pha,
-				 uint8_t  clk_pol)
+		 uint8_t  clk_pha,
+		 uint8_t  clk_pol)
 {
 	return 0;
 }
@@ -66,7 +66,7 @@ int32_t spi_init(uint32_t device_id,
  * @brief spi_read
 *******************************************************************************/
 int32_t spi_read(uint8_t *data,
-				 uint8_t bytes_number)
+		 uint8_t bytes_number)
 {
 	return 0;
 }
@@ -75,8 +75,8 @@ int32_t spi_read(uint8_t *data,
  * @brief spi_write_then_read
 *******************************************************************************/
 int spi_write_then_read(struct spi_device *spi,
-		const unsigned char *txbuf, unsigned n_tx,
-		unsigned char *rxbuf, unsigned n_rx)
+			const unsigned char *txbuf, unsigned n_tx,
+			unsigned char *rxbuf, unsigned n_rx)
 {
 	return 0;
 }
@@ -190,7 +190,7 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
  * @brief axiadc_idelay_set
 *******************************************************************************/
 void axiadc_idelay_set(struct axiadc_state *st,
-				unsigned lane, unsigned val)
+		       unsigned lane, unsigned val)
 {
 
 }

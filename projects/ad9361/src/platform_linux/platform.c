@@ -67,8 +67,8 @@ int spidev_b_fd;
  * @brief spi_init
 *******************************************************************************/
 int32_t spi_init(uint32_t device_id,
-			uint8_t  clk_pha,
-			uint8_t  clk_pol)
+		 uint8_t  clk_pha,
+		 uint8_t  clk_pol)
 {
 	uint8_t mode = SPI_CPHA;
 	uint8_t bits = 8;
@@ -102,7 +102,7 @@ int32_t spi_init(uint32_t device_id,
 		printf("%s: Can't set bits per word\n\r", __func__);
 		return ret;
 	}
-	
+
 	ret = ioctl(spidev_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1) {
 		printf("%s: Can't set max speed hz\n\r", __func__);
@@ -126,7 +126,7 @@ int32_t spi_init(uint32_t device_id,
 		printf("%s: Can't set bits per word\n\r", __func__);
 		return ret;
 	}
-	
+
 	ret = ioctl(spidev_b_fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1) {
 		printf("%s: Can't set max speed hz\n\r", __func__);
@@ -143,8 +143,8 @@ int32_t spi_init(uint32_t device_id,
  * @brief spi_write_then_read
 *******************************************************************************/
 int spi_write_then_read(struct spi_device *spi,
-		const unsigned char *txbuf, unsigned n_tx,
-		unsigned char *rxbuf, unsigned n_rx)
+			const unsigned char *txbuf, unsigned n_tx,
+			unsigned char *rxbuf, unsigned n_rx)
 {
 	int ret = 0;
 
@@ -195,7 +195,7 @@ void gpio_init(uint32_t device_id)
 		printf("%s: Can't export GPIO\n\r", __func__);
 		return;
 	}
-	
+
 	len = snprintf(buf, sizeof(buf), "%d", device_id);
 	ret = write(fd, buf, len);
 	if (ret == -1) {
@@ -379,15 +379,15 @@ int axiadc_set_pnsel(struct axiadc_state *st, int channel, enum adc_pn_sel sel)
  * @brief axiadc_idelay_set
 *******************************************************************************/
 void axiadc_idelay_set(struct axiadc_state *st,
-				unsigned lane, unsigned val)
+		       unsigned lane, unsigned val)
 {
 	if (PCORE_VERSION_MAJOR(st->pcore_version) > 8) {
 		axiadc_write(st, ADI_REG_DELAY(lane), val);
 	} else {
 		axiadc_write(st, ADI_REG_DELAY_CNTRL, 0);
 		axiadc_write(st, ADI_REG_DELAY_CNTRL,
-				ADI_DELAY_ADDRESS(lane)
-				| ADI_DELAY_WDATA(val)
-				| ADI_DELAY_SEL);
+			     ADI_DELAY_ADDRESS(lane)
+			     | ADI_DELAY_WDATA(val)
+			     | ADI_DELAY_SEL);
 	}
 }

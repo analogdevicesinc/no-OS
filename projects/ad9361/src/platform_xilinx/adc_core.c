@@ -83,8 +83,7 @@ uint32_t dma_start_address				= 0;
 *******************************************************************************/
 void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 {
-	switch (phy->id_no)
-	{
+	switch (phy->id_no) {
 	case 0:
 		*data = Xil_In32(AD9361_RX_0_BASEADDR + regAddr);
 		break;
@@ -101,8 +100,7 @@ void adc_read(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t *data)
 *******************************************************************************/
 void adc_write(struct ad9361_rf_phy *phy, uint32_t regAddr, uint32_t data)
 {
-	switch (phy->id_no)
-	{
+	switch (phy->id_no) {
 	case 0:
 		Xil_Out32(AD9361_RX_0_BASEADDR + regAddr, data);
 		break;
@@ -139,19 +137,16 @@ void adc_init(struct ad9361_rf_phy *phy)
 	adc_write(phy, ADC_REG_RSTN, ADC_RSTN);
 
 	adc_write(phy, ADC_REG_CHAN_CNTRL(0),
-		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+		  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_write(phy, ADC_REG_CHAN_CNTRL(1),
-		ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+		  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 	adc_st.rx2tx2 = phy->pdata->rx2tx2;
-	if(adc_st.rx2tx2)
-	{
+	if(adc_st.rx2tx2) {
 		adc_write(phy, ADC_REG_CHAN_CNTRL(2),
-			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+			  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
 		adc_write(phy, ADC_REG_CHAN_CNTRL(3),
-			ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
-	}
-	else
-	{
+			  ADC_IQCOR_ENB | ADC_FORMAT_SIGNEXT | ADC_FORMAT_ENABLE | ADC_ENABLE);
+	} else {
 		adc_write(phy, ADC_REG_CHAN_CNTRL(2), 0);
 		adc_write(phy, ADC_REG_CHAN_CNTRL(3), 0);
 	}
@@ -167,16 +162,14 @@ void adc_dma_isr(void *instance)
 
 	adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
 	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
-	if(reg_val & IRQ_TRANSFER_QUEUED)
-	{
+	if(reg_val & IRQ_TRANSFER_QUEUED) {
 		dma_transfer_queued_flag = 1;
 		dma_start_address += ADC_DMA_TRANSFER_SIZE;
 		adc_dma_write(AXI_DMAC_REG_DEST_ADDRESS, dma_start_address);
 		/* The current transfer was started and a new one is queued. */
 		adc_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
 	}
-	if(reg_val & IRQ_TRANSFER_COMPLETED)
-	{
+	if(reg_val & IRQ_TRANSFER_COMPLETED) {
 		dma_transfer_completed_flag = 1;
 	}
 }
@@ -191,12 +184,9 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	uint32_t transfer_id;
 	uint32_t length;
 
-	if(adc_st.rx2tx2)
-	{
+	if(adc_st.rx2tx2) {
 		length = (size * 8);
-	}
-	else
-	{
+	} else {
 		length = (size * 4);
 	}
 
@@ -224,14 +214,14 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 		printf("XScuGic_LookupConfig Error\n");
 
 	status = XScuGic_CfgInitialize(&gic,
-			gic_config, gic_config->CpuBaseAddress);
+				       gic_config, gic_config->CpuBaseAddress);
 	if(status)
 		printf("XScuGic_CfgInitialize Error\n");
 
 	XScuGic_SetPriorityTriggerType(&gic, ADC_DMA_INT_ID, 0x0, 0x3);
 
 	status = XScuGic_Connect(&gic,
-			ADC_DMA_INT_ID, (Xil_ExceptionHandler)adc_dma_isr, NULL);
+				 ADC_DMA_INT_ID, (Xil_ExceptionHandler)adc_dma_isr, NULL);
 	if(status)
 		printf("XScuGic_Connect Error\n");
 
@@ -240,7 +230,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	Xil_ExceptionInit();
 
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
-			(Xil_ExceptionHandler)XScuGic_InterruptHandler, (void *)&gic);
+				     (Xil_ExceptionHandler)XScuGic_InterruptHandler, (void *)&gic);
 	Xil_ExceptionEnable();
 #elif defined _MICROBLAZE_INTERFACE_H_
 	XIntc	intc;
@@ -251,7 +241,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 		printf("XIntc_Initialize Error\n");
 
 	status = XIntc_Connect(&intc, ADC_DMA_INT_ID,
-			(Xil_ExceptionHandler)adc_dma_isr, NULL);
+			       (Xil_ExceptionHandler)adc_dma_isr, NULL);
 	if(status)
 		printf("XIntc_Connect Error\n");
 
@@ -264,7 +254,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	Xil_ExceptionInit();
 
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
-			(Xil_ExceptionHandler)XIntc_InterruptHandler, (void *)&intc);
+				     (Xil_ExceptionHandler)XIntc_InterruptHandler, (void *)&intc);
 	Xil_ExceptionEnable();
 #endif
 
@@ -289,21 +279,18 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	/* Wait until the new transfer is queued. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_START_TRANSFER, &reg_val);
-	}
-	while(reg_val == 1);
+	} while(reg_val == 1);
 
 	/* Wait until the current transfer is completed. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_IRQ_PENDING, &reg_val);
-	}
-	while(reg_val != (IRQ_TRANSFER_QUEUED | IRQ_TRANSFER_COMPLETED));
+	} while(reg_val != (IRQ_TRANSFER_QUEUED | IRQ_TRANSFER_COMPLETED));
 	adc_dma_write(AXI_DMAC_REG_IRQ_PENDING, reg_val);
 
 	/* Wait until the transfer with the ID transfer_id is completed. */
 	do {
 		adc_dma_read(AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
-	}
-	while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+	} while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
 #endif
 	return 0;
 }
@@ -312,10 +299,10 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
  * @brief adc_set_calib_scale_phase
 *******************************************************************************/
 int32_t adc_set_calib_scale_phase(struct ad9361_rf_phy *phy,
-								  uint32_t phase,
-								  uint32_t chan,
-								  int32_t val,
-								  int32_t val2)
+				  uint32_t phase,
+				  uint32_t chan,
+				  int32_t val,
+				  int32_t val2)
 {
 	uint32_t fract;
 	uint64_t llval;
@@ -362,10 +349,10 @@ int32_t adc_set_calib_scale_phase(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_scale_phase
 *******************************************************************************/
 int32_t adc_get_calib_scale_phase(struct ad9361_rf_phy *phy,
-								  uint32_t phase,
-								  uint32_t chan,
-								  int32_t *val,
-								  int32_t *val2)
+				  uint32_t phase,
+				  uint32_t chan,
+				  int32_t *val,
+				  int32_t *val2)
 {
 	uint32_t tmp;
 	int32_t sign;
@@ -407,9 +394,9 @@ int32_t adc_get_calib_scale_phase(struct ad9361_rf_phy *phy,
  * @brief adc_set_calib_scale
 *******************************************************************************/
 int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2)
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2)
 {
 	return adc_set_calib_scale_phase(phy, 0, chan, val, val2);
 }
@@ -418,9 +405,9 @@ int32_t adc_set_calib_scale(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_scale
 *******************************************************************************/
 int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2)
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2)
 {
 	return adc_get_calib_scale_phase(phy, 0, chan, val, val2);
 }
@@ -429,9 +416,9 @@ int32_t adc_get_calib_scale(struct ad9361_rf_phy *phy,
  * @brief adc_set_calib_phase
 *******************************************************************************/
 int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t val,
-							int32_t val2)
+			    uint32_t chan,
+			    int32_t val,
+			    int32_t val2)
 {
 	return adc_set_calib_scale_phase(phy, 1, chan, val, val2);
 }
@@ -440,9 +427,9 @@ int32_t adc_set_calib_phase(struct ad9361_rf_phy *phy,
  * @brief adc_get_calib_phase
 *******************************************************************************/
 int32_t adc_get_calib_phase(struct ad9361_rf_phy *phy,
-							uint32_t chan,
-							int32_t *val,
-							int32_t *val2)
+			    uint32_t chan,
+			    int32_t *val,
+			    int32_t *val2)
 {
 	return adc_get_calib_scale_phase(phy, 1, chan, val, val2);
 }

@@ -48,20 +48,22 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 char rx_fields[11][16] = {"BBPLL", "ADC", "R2", "R1",
-						  "RF", "RXSAMP", "Coefficient", "CoefficientSize",
-						  "Decimation", "Gain", "RFBandwidth"};
+			  "RF", "RXSAMP", "Coefficient", "CoefficientSize",
+			  "Decimation", "Gain", "RFBandwidth"
+			 };
 char tx_fields[11][16] = {"BBPLL", "DAC", "T2", "T1",
-						  "TF", "TXSAMP", "Coefficient", "CoefficientSize",
-						  "Interp", "Gain", "RFBandwidth"};
+			  "TF", "TXSAMP", "Coefficient", "CoefficientSize",
+			  "Interp", "Gain", "RFBandwidth"
+			 };
 
 /***************************************************************************//**
  * @brief parse_mat_fir_file
 *******************************************************************************/
 int32_t parse_mat_fir_file(char *mat_fir_filename,
-						   uint8_t *fir_type,
-						   FIRConfig *fir_config,
-						   uint32_t *bandwidth,
-						   uint32_t *path_clks)
+			   uint8_t *fir_type,
+			   FIRConfig *fir_config,
+			   uint32_t *bandwidth,
+			   uint32_t *path_clks)
 {
 	mat_t *matfp;
 	matvar_t *matvar;
@@ -72,58 +74,46 @@ int32_t parse_mat_fir_file(char *mat_fir_filename,
 	int32_t ret = 0;
 
 	matfp = Mat_Open(mat_fir_filename, MAT_ACC_RDONLY);
-	if(matfp == NULL)
-	{
+	if(matfp == NULL) {
 		printf("Error opening MAT file \"%s\".\n", mat_fir_filename);
 		return -1;
-	}
-	else
-	{
+	} else {
 		matvar = Mat_VarRead(matfp,"tohwrx");
-		if(matvar == NULL)
-		{
+		if(matvar == NULL) {
 			matvar = Mat_VarRead(matfp,"tohwtx");
-			if(matvar != NULL)
-			{
+			if(matvar != NULL) {
 				fields = tx_fields;
 				*fir_type = 1;
-			}
-			else
-			{
+			} else {
 				printf("Invalid MAT file.\n");
 				return -1;
 			}
-		}
-		else
-		{
+		} else {
 			fields = rx_fields;
 			*fir_type = 0;
 		}
-		for(field_index = 0; field_index < 11; field_index++)
-		{
+		for(field_index = 0; field_index < 11; field_index++) {
 			struct_field = Mat_VarGetStructField(matvar, fields[field_index],
-												 1, 0);
-			switch (field_index)
-			{
+							     1, 0);
+			switch (field_index) {
 			case 0 ... 5:
 				path_clks[field_index] = *(double*) struct_field->data;
 				break;
 			case 6:
-				for(coeff_index = 0; coeff_index < 128; coeff_index++)
-				{
+				for(coeff_index = 0; coeff_index < 128; coeff_index++) {
 					fir_config->coef[coeff_index] =
-									(int16_t)(*(double*) (struct_field->data +
-											  coeff_index * sizeof(double)));
+						(int16_t)(*(double*) (struct_field->data +
+								      coeff_index * sizeof(double)));
 				}
 				break;
 			case 7:
-				fir_config->coef_size = 
-								(uint8_t)(*(double*) struct_field->data);
+				fir_config->coef_size =
+					(uint8_t)(*(double*) struct_field->data);
 
 				break;
 			case 8:
 				fir_config->dec_int =
-								(uint32_t)(*(double*) struct_field->data);
+					(uint32_t)(*(double*) struct_field->data);
 				break;
 			case 9:
 				fir_config->gain = (int32_t)(*(double*) struct_field->data);
@@ -152,8 +142,8 @@ error:
  * @brief load_fir_files
 *******************************************************************************/
 int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
-							  char *tx_mat_fir_filename,
-							  char *rx_mat_fir_filename)
+			      char *tx_mat_fir_filename,
+			      char *rx_mat_fir_filename)
 {
 #ifdef DEBUG
 	uint8_t index;
@@ -166,7 +156,8 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 	AD9361_RXFIRConfig rx_fir;
 	AD9361_TXFIRConfig tx_fir;
 
-	parse_mat_fir_file(tx_mat_fir_filename, &fir_type, (FIRConfig*)&tx_fir, &tx_bandwidth, tx_path_clks);
+	parse_mat_fir_file(tx_mat_fir_filename, &fir_type, (FIRConfig*)&tx_fir,
+			   &tx_bandwidth, tx_path_clks);
 
 	if (!fir_type) {
 		printf("Invalid TX filter configuration.\n");
@@ -203,7 +194,8 @@ int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
 			printf(", ");
 	}
 #endif
-	parse_mat_fir_file(rx_mat_fir_filename, &fir_type, (FIRConfig *)&rx_fir, &rx_bandwidth, rx_path_clks);
+	parse_mat_fir_file(rx_mat_fir_filename, &fir_type, (FIRConfig *)&rx_fir,
+			   &rx_bandwidth, rx_path_clks);
 
 	if (fir_type) {
 		printf("Invalid RX filter configuration.\n");

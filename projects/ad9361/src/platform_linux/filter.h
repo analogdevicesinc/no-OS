@@ -47,24 +47,23 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef struct
-{
+typedef struct {
 	uint32_t ch;
 	int32_t gain;
 	uint32_t dec_int;
 	int16_t coef[128];
 	uint8_t coef_size;
-}FIRConfig;
+} FIRConfig;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t parse_mat_fir_file(char *mat_fir_filename,
-						   uint8_t *fir_type,
-						   FIRConfig *fir_config,
-						   uint32_t *bandwidth,
-						   uint32_t *path_clks);
+			   uint8_t *fir_type,
+			   FIRConfig *fir_config,
+			   uint32_t *bandwidth,
+			   uint32_t *path_clks);
 int32_t load_enable_fir_files(struct ad9361_rf_phy *phy,
-							  char *tx_mat_fir_filename,
-							  char *rx_mat_fir_filename);
+			      char *tx_mat_fir_filename,
+			      char *rx_mat_fir_filename);
 #endif
