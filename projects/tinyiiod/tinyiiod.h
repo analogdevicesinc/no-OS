@@ -32,14 +32,15 @@
 struct tinyiiod;
 
 struct tinyiiod_ops {
-	int (*read)(char *buf, size_t len);
+	int32_t (*read)(int32_t *instance_id, char *buf, size_t len);
 	/* Read from the input stream */
-	int (*read_line)(char *buf);
-	int (*read_nonbloking)(char *buf, size_t len);
-	int (*read_wait)(size_t len);
+	int32_t (*read_line)(int32_t *instance_id, char *buf);
+	int32_t (*read_nonbloking)(int32_t *instance_id, char *buf, size_t len);
+	int32_t (*read_wait)(int32_t *instance_id, size_t len);
 
 	/* Write to the output stream */
-	void (*write)(const char *buf, size_t len);
+	void (*write)(int32_t instance_id, const char *buf, size_t len);
+	int32_t (*exit)(int32_t instance_id);
 
 	ssize_t (*read_attr)(const char *device, const char *attr,
 			     char *buf, size_t len, bool debug);
@@ -52,24 +53,24 @@ struct tinyiiod_ops {
 				 bool ch_out, const char *attr,
 				 const char *buf, size_t len);
 
-	int (*open)(const char *device, size_t sample_size, uint32_t mask);
-	int (*close)(const char *device);
+	int32_t (*open)(const char *device, size_t sample_size, uint32_t mask);
+	int32_t (*close)(const char *device);
 
 	ssize_t (*read_device)(const char *device, char **pbuf, size_t bytes_count);
 	ssize_t (*write_device)(const char *device, const char *buf,
 				size_t bytes_count);
-	int (*read_reg)(unsigned int addr, int32_t *value);
-	int (*write_reg)(unsigned int addr, uint32_t value);
+	int32_t (*read_reg)(uint32_t addr, int32_t *value);
+	int32_t (*write_reg)(uint32_t addr, uint32_t value);
 
-	int (*get_mask)(const char *device, uint32_t *mask);
+	int32_t (*get_mask)(const char *device, uint32_t *mask);
 };
 
 struct tinyiiod * tinyiiod_create(const char *xml,
 				  const struct tinyiiod_ops *ops);
 void tinyiiod_destroy(struct tinyiiod *iiod);
-int tinyiiod_read_command(struct tinyiiod *iiod);
-int tinyiiod_do_writebuf(struct tinyiiod *iiod, const char *device,
-			 size_t bytes_count);
+int32_t tinyiiod_read_command(struct tinyiiod *iiod);
+int32_t tinyiiod_do_writebuf(struct tinyiiod *iiod, const char *device,
+			     size_t bytes_count);
 
 #endif /* TINYIIOD_H */
 

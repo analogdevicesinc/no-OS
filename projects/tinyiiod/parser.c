@@ -25,7 +25,10 @@
 #define TINYIIOD_VERSION_MINOR 1
 #define TINYIIOD_VERSION_GIT "v0.1"
 
-static int parse_rw_string(struct tinyiiod *iiod, char *str, bool write)
+/***************************************************************************//**
+ * @brief parse_rw_string
+*******************************************************************************/
+static int32_t parse_rw_string(struct tinyiiod *iiod, char *str, bool write)
 {
 	char *device, *channel, *attr, *ptr;
 	bool is_channel = false, output = false, debug = false;
@@ -64,7 +67,7 @@ static int parse_rw_string(struct tinyiiod *iiod, char *str, bool write)
 	}
 
 	ptr = strchr(str, ' ');
-	if (!!ptr ^ write)
+	if ((!!ptr )^ write)
 		return -EINVAL;
 
 	attr = str;
@@ -83,10 +86,14 @@ static int parse_rw_string(struct tinyiiod *iiod, char *str, bool write)
 
 	tinyiiod_do_write_attr(iiod, device, channel,
 			       output, attr, (size_t) bytes, debug);
+
 	return 0;
 }
 
-static int parse_open_string(struct tinyiiod *iiod, char *str)
+/***************************************************************************//**
+ * @brief parse_open_string
+*******************************************************************************/
+static int32_t parse_open_string(struct tinyiiod *iiod, char *str)
 {
 	char *device, *ptr;
 	long samples_count;
@@ -107,10 +114,14 @@ static int parse_open_string(struct tinyiiod *iiod, char *str)
 	str = ptr + 1;
 	mask = strtoul(str, NULL, 16);
 	tinyiiod_do_open(iiod, device, (size_t) samples_count, mask);
+
 	return 0;
 }
 
-static int parse_writebuf_string(struct tinyiiod *iiod, char *str)
+/***************************************************************************//**
+ * @brief parse_writebuf_string
+*******************************************************************************/
+static int32_t parse_writebuf_string(struct tinyiiod *iiod, char *str)
 {
 	char *device, *ptr;
 	long bytes_count;
@@ -127,11 +138,13 @@ static int parse_writebuf_string(struct tinyiiod *iiod, char *str)
 	if (str == ptr || *ptr != '\0' || bytes_count < 0)
 		return -EINVAL;
 
-
 	return tinyiiod_do_writebuf(iiod, device, (size_t) bytes_count);
 }
 
-static int parse_readbuf_string(struct tinyiiod *iiod, char *str)
+/***************************************************************************//**
+ * @brief parse_readbuf_string
+*******************************************************************************/
+static int32_t parse_readbuf_string(struct tinyiiod *iiod, char *str)
 {
 	char *device, *ptr;
 	long bytes_count;
@@ -149,49 +162,52 @@ static int parse_readbuf_string(struct tinyiiod *iiod, char *str)
 		return -EINVAL;
 
 	tinyiiod_do_readbuf(iiod, device, (size_t) bytes_count);
+
 	return 0;
 }
 
-int tinyiiod_parse_string(struct tinyiiod *iiod, char *str)
+/***************************************************************************//**
+ * @brief tinyiiod_parse_string
+*******************************************************************************/
+int32_t tinyiiod_parse_string(struct tinyiiod *iiod, char *str)
 {
 	if (str[0] == '\0')
 		return 0;
 
-	if (!strncmp(str, "VERSION", sizeof("VERSION"))) {
+	if (!strncmp(str, "VERSION", sizeof("VERSION") - 1)) {
 		char buf[32];
 
-		snprintf(buf, sizeof(buf), "%u.%u.%-7.7s\n",
+		snprintf(buf, sizeof(buf), "%d.%d.%-7.7s\n",
 			 TINYIIOD_VERSION_MAJOR,
 			 TINYIIOD_VERSION_MINOR,
 			 TINYIIOD_VERSION_GIT);
 		tinyiiod_write_string(iiod, buf);
 		return 0;
-	}
-
-	if (!strncmp(str, "PRINT", sizeof("PRINT") - 1)) {
+	} else if (!strncmp(str, "PRINT", sizeof("PRINT") - 1)) {
 		tinyiiod_write_xml(iiod);
 		return 0;
-	}
-
-	if (!strncmp(str, "READ ", sizeof("READ ") - 1))
+	} else if (!strncmp(str, "READ ", sizeof("READ ") - 1)) {
 		return parse_rw_string(iiod, str + sizeof("READ ") - 1, false);
-
-	if (!strncmp(str, "WRITE ", sizeof("WRITE ") -1))
+	} else if (!strncmp(str, "WRITE ", sizeof("WRITE ") -1)) {
 		return parse_rw_string(iiod, str + sizeof("WRITE ") - 1, true);
-
-	if (!strncmp(str, "OPEN ", sizeof("OPEN ") -1))
+	} else if (!strncmp(str, "OPEN ", sizeof("OPEN ") -1)) {
 		return parse_open_string(iiod, str + sizeof("OPEN ") - 1);
-
-	if (!strncmp(str, "CLOSE ", sizeof("CLOSE ") -1)) {
+	} else if (!strncmp(str, "CLOSE ", sizeof("CLOSE ") -1)) {
 		tinyiiod_do_close(iiod, str + sizeof("CLOSE ") - 1);
 		return 0;
-	}
-
-	if (!strncmp(str, "READBUF ", sizeof("READBUF ") -1))
+	} else if (!strncmp(str, "READBUF ", sizeof("READBUF ") -1)) {
 		return parse_readbuf_string(iiod, str + sizeof("READBUF ") - 1);
-	if (!strncmp(str, "WRITEBUF ", sizeof("WRITEBUF ") -1))
+	} else if (!strncmp(str, "WRITEBUF ", sizeof("WRITEBUF ") -1)) {
 		return parse_writebuf_string(iiod, str + sizeof("WRITEBUF ") - 1);
-
+	} else if (!strncmp(str, "EXIT", sizeof("EXIT") - 1)) {
+		return tinyiiod_do_exit(iiod);
+	} else if (!strncmp(str, "TIMEOUT", sizeof("TIMEOUT") - 1)) {
+		tinyiiod_write_value(iiod, 0);
+		return 0;
+	} else if (!strncmp(str, "GETTRIG", sizeof("GETTRIG") - 1)) {
+		tinyiiod_write_value(iiod, -ENODEV);
+		return 0;
+	}
 
 	return -EINVAL;
 }

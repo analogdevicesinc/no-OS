@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Parameters Definitions.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   serial.h
+ *   @brief  Header file of Serial interface.
+ *   @author CPop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -36,26 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define CF_AD9361_RX_BASEADDR		0xFF320000
-#define CF_AD9361_TX_BASEADDR		0xFF320000 + 0x4000
+#ifndef SRC_SERIAL_H_
+#define SRC_SERIAL_H_
 
-#define CF_AD9361_RX_DMA_BASEADDR	0xFF300000
-#define CF_AD9361_TX_DMA_BASEADDR	0xFF304000
+int32_t serial_read_line(int32_t *instance_id, char *buf);
 
-#define ADC_DDR_BASEADDR			0x20000000
-#define DAC_DDR_BASEADDR			0x30000000
+int32_t serial_read(int32_t *instance_id, char *buf, size_t len);
 
-#define SPI_BASEADDR				0xFF308000
-#define GPIO_BASEADDR				0xFF309000
+int32_t serial_read_nonblocking(int32_t *instance_id, char *buf, size_t len);
 
-#define GPIO_DEVICE_ID				0
-#define GPIO_RESET_PIN				4
-#define SPI_DEVICE_ID				0
+int32_t serial_read_wait(int32_t *instance_id, size_t len);
 
-#endif // __PARAMETERS_H__
+void serial_write_data(int32_t instance_id, const char *buf, size_t len);
+
+int32_t serial_init(void);
+
+#endif /* SRC_SERIAL_H_ */

@@ -14,7 +14,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
-
+#include <inttypes.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -24,20 +24,23 @@
 #include <stdlib.h>
 #include "tinyiiod.h"
 #include "tinyiiod_user.h"
-#include "adc_core.h"
-#include "dac_core.h"
-#include "parameters.h"
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
+#include "axi_dmac.h"
+#include "ad9361_parameters.h"
+#include "util.h"
 #include "xil_io.h"
 #include "ad9361_api.h"
-#include "serial.h"
-#include "xil_cache.h"
-#include "platform.h"
 
+#ifdef UART_INTERFACE
+#include "serial.h"
+#endif // UART_INTERFACE
+#include "xil_cache.h"
+#include "platform_drivers.h"
 static uint32_t request_mask;
 // mask for cf-ad9361-lpc 0x0F, it has 4 channels
 static uint32_t input_channel_mask = 0x0F;
 extern struct ad9361_rf_phy *ad9361_phy;
-extern struct adc_state adc_st;
 
 static const char * const ad9361_agc_modes[] =
 {"manual", "fast_attack", "slow_attack", "hybrid"};
@@ -50,59 +53,6 @@ static const char * const ad9361_rf_tx_port[] =
 {"A", "B"};
 static const char * const ad9361_calib_mode[] =
 {"auto", "manual", "tx_quad", "rf_dc_offs", "rssi_gain_step"};
-
-/**
- * Read char array terminated with "\r\n"
- * @param *buf pointer to string
- * @return length of string
- */
-static int read_line(char *buf)
-{
-	return serial_read_line(buf);
-}
-
-/**
- * Read "len" number of characters
- * @param *buf pointer to string
- * @param len length of string
- * @return length of string
- */
-static int read(char *buf, size_t len)
-{
-	return serial_read(buf, len);
-}
-
-/**
- * Read "len" number of characters non bloking
- * @param *buf pointer to string
- * @param len length of string
- * @return length of string
- */
-static int read_nonbloking(char *buf, size_t len)
-{
-	return serial_read_nonblocking(buf, len);
-}
-
-/**
- * Wait until read is finished, "len" number of characters are read
- * @param len length of string
- * @return length of string
- */
-static int read_wait(size_t len)
-{
-	return serial_read_wait(len);
-}
-
-/**
- * Write "len" number of characters
- * @param *buf pointer to string
- * @param len length of string
- */
-static void write_data(const char *buf, size_t len)
-{
-	for ( int i = 0; i < len; i++)
-		outbyte(buf[i]);
-}
 
 /**
  * Compare two strings
@@ -165,7 +115,7 @@ static unsigned long read_ul_value(const char *str)
  * @param *ch_name channel name
  * @return channel number
  */
-int get_channel(char *ch, char *ch_name)
+int32_t get_channel(char *ch, char *ch_name)
 {
 	char *p = strstr(ch, ch_name);
 	if(p == NULL) {
@@ -176,8 +126,8 @@ int get_channel(char *ch, char *ch_name)
 	}
 }
 
-extern int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg);
-extern int32_t ad9361_spi_write(struct spi_device *spi, uint32_t reg,
+extern int32_t ad9361_spi_read(struct spi_desc *spi, uint32_t reg);
+extern int32_t ad9361_spi_write(struct spi_desc *spi, uint32_t reg,
 				uint32_t val);
 
 /**
@@ -186,7 +136,7 @@ extern int32_t ad9361_spi_write(struct spi_device *spi, uint32_t reg,
  * @param value
  * @return 0 on success, negative value on failure
  */
-static int write_reg(unsigned int addr, uint32_t value)
+static int32_t write_reg(uint32_t addr, uint32_t value)
 {
 	return ad9361_spi_write(ad9361_phy->spi, addr, value);
 }
@@ -197,11 +147,12 @@ static int write_reg(unsigned int addr, uint32_t value)
  * @param *value
  * @return 0 on success, negative value on failure
  */
-static int read_reg(unsigned int addr, int32_t *value)
+static int32_t read_reg(uint32_t addr, int32_t *value)
 {
 	*value = ad9361_spi_read(ad9361_phy->spi, addr);
 	if(*value < 0)
 		return *value;
+
 	return 0;
 }
 
@@ -210,7 +161,7 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 				char *data, uint32_t size);
 
 struct channel_info {
-	int ch_num;
+	int32_t ch_num;
 	bool ch_out;
 };
 
@@ -227,7 +178,7 @@ struct attrtibute_map {
  * @return attribute ID, or negative value if attribute is not found
  */
 int16_t get_attribute_id(const char *attr, const struct attrtibute_map* map,
-			 int map_size)
+			 int32_t map_size)
 {
 	int16_t i;
 	for(i = 0; i < map_size; i++) {
@@ -238,6 +189,7 @@ int16_t get_attribute_id(const char *attr, const struct attrtibute_map* map,
 	if(i >= map_size) {
 		i = -ENODEV;
 	}
+
 	return i;
 }
 
@@ -270,7 +222,8 @@ ssize_t get_rx_path_rates(char *buf, size_t len,
 {
 	unsigned long clk[6];
 	ad9361_get_trx_clock_chain(ad9361_phy, clk, NULL);
-	return sprintf(buf, "BBPLL:%lu ADC:%lu R2:%lu R1:%lu RF:%lu RXSAMP:%lu",
+	return sprintf(buf,
+		       "BBPLL:%"PRIu32" ADC:%"PRIu32" R2:%"PRIu32" R1:%"PRIu32" RF:%"PRIu32" RXSAMP:%"PRIu32"",
 		       clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
 
@@ -286,6 +239,7 @@ ssize_t get_trx_rate_governor(char *buf, size_t len,
 {
 	uint32_t rate_governor;
 	ad9361_get_trx_rate_gov (ad9361_phy, &rate_governor);
+
 	return sprintf(buf, "%s", rate_governor ? "nominal" : "highest_osr");
 }
 
@@ -427,6 +381,7 @@ ssize_t get_tx_path_rates(char *buf, size_t len,
 {
 	unsigned long clk[6];
 	ad9361_get_trx_clock_chain(ad9361_phy, NULL, clk);
+
 	return sprintf(buf, "BBPLL:%lu DAC:%lu T2:%lu T1:%lu TF:%lu TXSAMP:%lu",
 		       clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
@@ -475,6 +430,7 @@ ssize_t get_ensm_mode(char *buf, size_t len,
 	    ad9361_ensm_states[ret] == NULL) {
 		return -EIO;
 	}
+
 	return sprintf(buf, "%s", ad9361_ensm_states[ret]);
 }
 
@@ -505,6 +461,7 @@ ssize_t get_calib_mode(char *buf, size_t len,
 {
 	uint8_t en_dis;
 	ad9361_get_tx_auto_cal_en_dis(ad9361_phy, &en_dis);
+
 	return (ssize_t) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
 
@@ -519,7 +476,7 @@ ssize_t get_calib_mode(char *buf, size_t len,
  */
 static ssize_t read_all_attr(char *buf, size_t len,
 			     const struct channel_info *channel, const struct attrtibute_map* map,
-			     int map_size)
+			     int32_t map_size)
 {
 	int16_t i, j = 0;
 	char local_buf[0x1000];
@@ -537,6 +494,7 @@ static ssize_t read_all_attr(char *buf, size_t len,
 			j += attr_length;
 		}
 	}
+
 	return j;
 }
 
@@ -551,7 +509,7 @@ static ssize_t read_all_attr(char *buf, size_t len,
  */
 static ssize_t write_all_attr(char *buf, size_t len,
 			      const struct channel_info *channel, const struct attrtibute_map* map,
-			      int map_size)
+			      int32_t map_size)
 {
 	return 0;
 }
@@ -562,8 +520,8 @@ static struct attrtibute_map global_read_attrtibute_map[] = {
 	{"trx_rate_governor", get_trx_rate_governor},
 	{"calib_mode_available", get_calib_mode_available},
 	{"xo_correction_available", get_xo_correction_available},
-	{"get_gain_table_config", get_gain_table_config},
-	{"get_dcxo_tune_fine", get_dcxo_tune_fine},
+	{"gain_table_config", get_gain_table_config},
+	{"dcxo_tune_fine", get_dcxo_tune_fine},
 	{"dcxo_tune_fine_available", get_dcxo_tune_fine_available},
 	{"ensm_mode_available", get_ensm_mode_available},
 	{"multichip_sync", get_multichip_sync},
@@ -607,6 +565,7 @@ static ssize_t read_attr(const char *device, const char *attr,
 	} else if(strequal(device, "cf-ad9361-lpc")) {
 
 	}
+
 	return -ENODEV;
 }
 
@@ -627,6 +586,7 @@ ssize_t set_trx_rate_governor(char *buf, size_t len,
 		ad9361_set_trx_rate_gov (ad9361_phy, 0);
 	} else
 		ret =  -ENOENT;
+
 	return ret;
 }
 
@@ -646,6 +606,7 @@ ssize_t set_dcxo_tune_coarse(char *buf, size_t len,
 	ad9361_phy->pdata->dcxo_coarse = dcxo_coarse;
 	ret = ad9361_set_dcxo_tune(ad9361_phy, ad9361_phy->pdata->dcxo_coarse,
 				   ad9361_phy->pdata->dcxo_fine);
+
 	return ret;
 }
 
@@ -665,6 +626,7 @@ ssize_t set_dcxo_tune_fine(char *buf, size_t len,
 	ad9361_phy->pdata->dcxo_fine = dcxo_fine;
 	ret = ad9361_set_dcxo_tune(ad9361_phy, ad9361_phy->pdata->dcxo_coarse,
 				   ad9361_phy->pdata->dcxo_fine);
+
 	return ret;
 }
 
@@ -678,7 +640,7 @@ ssize_t set_dcxo_tune_fine(char *buf, size_t len,
 ssize_t set_calib_mode(char *buf, size_t len,
 		       const struct channel_info *channel)
 {
-	int arg = -1;
+	int32_t arg = -1;
 	ssize_t ret = 0;
 	u32 val = 0;
 	val = 0;
@@ -687,7 +649,7 @@ ssize_t set_calib_mode(char *buf, size_t len,
 	} else if (strequal(buf, "manual")) {
 		ad9361_set_tx_auto_cal_en_dis (ad9361_phy, 0);
 	} else if (!strncmp(buf, "tx_quad", 7)) {
-		ret = sscanf(buf, "tx_quad %d", &arg);
+		ret = sscanf(buf, "tx_quad %"PRIi32, &arg);
 		if (ret != 1)
 			arg = -1;
 		val = TX_QUAD_CAL;
@@ -742,6 +704,7 @@ ssize_t set_ensm_mode(char *buf, size_t len,
 
 	ad9361_set_ensm_mode(ad9361_phy, ad9361_phy->pdata->fdd, res);
 	ret = ad9361_ensm_set_state(ad9361_phy, val, res);
+
 	return ret;
 }
 
@@ -757,9 +720,8 @@ ssize_t set_multichip_sync(char *buf, size_t len,
 {
 	ssize_t ret = 0;
 	uint32_t readin = read_ul_value(buf);
-	if (ret < 0)
-		return ret;
 	ret = ad9361_mcs(ad9361_phy, readin);
+
 	return ret;
 }
 
@@ -816,6 +778,7 @@ static ssize_t write_attr(const char *device, const char *attr,
 	} else if(strequal(device, "cf-ad9361-lpc")) {
 
 	}
+
 	return -ENODEV;
 }
 
@@ -844,28 +807,33 @@ ssize_t get_sampling_frequency(char *buf, size_t len,
 ssize_t get_sampling_frequency_available(char *buf, size_t len,
 		const struct channel_info *channel)
 {
-	int int_dec;
+	int32_t int_dec;
 	uint32_t max;
-
-	if (ad9361_phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)
+	ssize_t ret;
+	if (ad9361_phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) {
 		max = 61440000U;
-	else
+	} else {
 		max = 61440000U / (ad9361_phy->pdata->rx2tx2 ? 2 : 1);
+	}
 
 	if (channel->ch_out) {
-		if (ad9361_phy->bypass_tx_fir)
+		if (ad9361_phy->bypass_tx_fir) {
 			int_dec = 1;
-		else
+		} else {
 			int_dec = ad9361_phy->tx_fir_int;
+		}
 
 	} else {
-		if (ad9361_phy->bypass_rx_fir)
+		if (ad9361_phy->bypass_rx_fir) {
 			int_dec = 1;
-		else
+		} else {
 			int_dec = ad9361_phy->rx_fir_dec;
+		}
 	}
-	return (ssize_t) snprintf(buf, len, "[%lu %d %lu]",
-				  MIN_ADC_CLK / (12 * int_dec), 1, max);
+	ret = (ssize_t) snprintf(buf, len, "[%"PRIu32" %d %"PRIu32"]",
+				 MIN_ADC_CLK / (12 * int_dec), 1, max);
+
+	return ret;
 }
 
 /**
@@ -884,6 +852,7 @@ ssize_t get_filter_fir_en(char *buf, size_t len,
 	} else {
 		ad9361_get_rx_fir_en_dis (ad9361_phy, &en_dis);
 	}
+
 	return (ssize_t) snprintf(buf, len, "%d", en_dis);
 }
 
@@ -901,6 +870,7 @@ ssize_t get_bb_dc_offset_tracking_en(char *buf, size_t len,
 		buf[1] = 0;
 		return (ssize_t) sprintf(buf, "%d", ad9361_phy->bbdc_track_en) + 1;
 	}
+
 	return -ENOENT;
 }
 
@@ -918,6 +888,7 @@ ssize_t get_rf_dc_offset_tracking_en(char *buf, size_t len,
 		buf[1] = 0;
 		return (ssize_t) sprintf(buf, "%d", ad9361_phy->rfdc_track_en) + 1;
 	}
+
 	return -ENOENT;
 }
 
@@ -935,6 +906,7 @@ ssize_t get_quadrature_tracking_en(char *buf, size_t len,
 		buf[1] = 0;
 		return (ssize_t) sprintf(buf, "%d", ad9361_phy->quad_track_en) + 1;
 	}
+
 	return -ENOENT;
 }
 
@@ -954,12 +926,12 @@ ssize_t get_rssi(char *buf, size_t len, const struct channel_info *channel)
 		if (ret < 0) {
 			return -EINVAL;
 		}
-		return ret < 0 ? ret : sprintf(buf, "%lu.%02lu dB",
+		return ret < 0 ? ret : sprintf(buf, "%"PRIu32".%02"PRIu32" dB",
 					       rssi_db_x_1000 / 1000, rssi_db_x_1000 % 1000);
 	} else {
 		struct rf_rssi rssi = {0};
 		ret = ad9361_get_rx_rssi (ad9361_phy, channel->ch_num, &rssi);
-		return ret < 0 ? ret : sprintf(buf, "%lu.%02lu dB",
+		return ret < 0 ? ret : sprintf(buf, "%"PRIu32".%02"PRIu32" dB",
 					       rssi.symbol / rssi.multiplier, rssi.symbol % rssi.multiplier);
 	}
 }
@@ -975,9 +947,9 @@ ssize_t get_rf_bandwidth(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	if(channel->ch_out) {
-		return sprintf(buf, "%lu", ad9361_phy->current_tx_bw_Hz);
+		return sprintf(buf, "%"PRIu32"", ad9361_phy->current_tx_bw_Hz);
 	} else {
-		return sprintf(buf, "%lu", ad9361_phy->current_rx_bw_Hz);
+		return sprintf(buf, "%"PRIu32"", ad9361_phy->current_rx_bw_Hz);
 	}
 }
 
@@ -1014,7 +986,7 @@ ssize_t get_rf_port_select_available(char *buf, size_t len,
 					 ad9361_rf_tx_port[1]);
 	} else {
 		ssize_t bytes_no = 0;
-		for(int i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]);
+		for(int16_t i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]);
 		    i++) {
 			if(i > 0 ) {
 				bytes_no += sprintf(buf + bytes_no, " ");
@@ -1094,7 +1066,7 @@ ssize_t get_hardwaregain_available(char *buf, size_t len,
 	if (channel->ch_out) {
 		return (ssize_t) snprintf(buf, len, "[%d, %d, %d]", 0, 250, 89750);
 	} else {
-		return (ssize_t) snprintf(buf, len, "[%ld, %d, %ld]",
+		return (ssize_t) snprintf(buf, len, "[%"PRIi32", %d, %"PRIi32"]",
 					  ad9361_phy->rx_gain[ad9361_phy->current_table].starting_gain_db,
 					  1,
 					  ad9361_phy->rx_gain[ad9361_phy->current_table].max_gain_db);
@@ -1122,12 +1094,13 @@ ssize_t get_hardwaregain(char *buf, size_t len,
 			val2 *= -1;
 
 		}
-		int i = 0;
+		int32_t i = 0;
 		if(val2 < 0 && val1 >= 0) {
 			ret = (ssize_t) snprintf(buf, len, "-");
 			i++;
 		}
-		ret = i + (ssize_t) snprintf(&buf[i], len, "%ld.%.6ld dB", val1, labs(val2));
+		ret = i + (ssize_t) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32" dB", val1,
+					     labs(val2));
 		return ret;
 	} else {
 		struct rf_rx_gain rx_gain = {0};
@@ -1198,8 +1171,8 @@ ssize_t get_fastlock_save(char *buf, size_t len,
 {
 	u8 faslock_vals[16];
 	size_t length;
-	int ret = 0;
-	int i;
+	int32_t ret = 0;
+	int32_t i;
 	ret = ad9361_fastlock_save(ad9361_phy, channel->ch_num == 1,
 				   ad9361_phy->fastlock.save_profile, faslock_vals);
 	length = sprintf(buf, "%u ", ad9361_phy->fastlock.save_profile);
@@ -1209,6 +1182,7 @@ ssize_t get_fastlock_save(char *buf, size_t len,
 				  i == 15 ? '\n' : ',');
 	if(ret < 0)
 		return ret;
+
 	return length;
 }
 
@@ -1322,15 +1296,18 @@ ssize_t get_dds_calibscale(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
-	ssize_t ret = dds_get_calib_scale(ad9361_phy, channel->ch_num, &val, &val2);
-	int i = 0;
+	ssize_t ret = axi_dac_dds_get_calib_scale(ad9361_phy->tx_dac, channel->ch_num,
+			&val, &val2);
+	int32_t i = 0;
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
 		ret = (ssize_t) snprintf(buf, len, "-");
 		i++;
 	}
-	ret = i + (ssize_t) snprintf(&buf[i], len, "%ld.%.6ld", val, labs(val2));
+	ret = i + (ssize_t) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
+				     labs(val2));
+
 	return ret;
 }
 
@@ -1345,15 +1322,15 @@ ssize_t get_dds_calibphase(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
-	int i = 0;
-	ssize_t ret = dds_get_calib_phase(ad9361_phy, channel->ch_num, &val, &val2);
+	int32_t i = 0;
+	ssize_t ret = axi_dac_dds_get_calib_phase(ad9361_phy->tx_dac, channel->ch_num,
+			&val, &val2);
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
-		ret = (ssize_t) snprintf(buf, len, "-");
 		i++;
 	}
-	return i + snprintf(&buf[i], len, "%ld.%.6ld", val, labs(val2));
+	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, labs(val2));
 }
 
 /**
@@ -1386,8 +1363,8 @@ ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase;
-	dds_get_phase(ad9361_phy, channel->ch_num, &phase);
-	return snprintf(buf, len, "%lu", phase);
+	axi_dac_dds_get_phase(ad9361_phy->tx_dac, channel->ch_num, &phase);
+	return snprintf(buf, len, "%"PRIu32"", phase);
 }
 
 /**
@@ -1401,8 +1378,10 @@ ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t scale;
-	dds_get_scale(ad9361_phy, channel->ch_num, &scale);
-	return snprintf(buf, len, "%ld.%.6ld", (scale / 1000000), (scale % 1000000));
+	axi_dac_dds_get_scale(ad9361_phy->tx_dac, channel->ch_num, &scale);
+
+	return snprintf(buf, len, "%"PRIi32".%.6"PRIi32"", (scale / 1000000),
+			(scale % 1000000));
 }
 
 /**
@@ -1416,8 +1395,9 @@ ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq;
-	dds_get_frequency(ad9361_phy, channel->ch_num, &freq);
-	return snprintf(buf, len, "%ld", freq);
+	axi_dac_dds_get_frequency(ad9361_phy->tx_dac, channel->ch_num, &freq);
+
+	return snprintf(buf, len, "%"PRIi32"", freq);
 }
 
 extern int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac);
@@ -1431,7 +1411,7 @@ extern int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac);
 ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
-	return snprintf(buf, len, "%ld", ad9361_auxdac_get(ad9361_phy,
+	return snprintf(buf, len, "%"PRIi32"", ad9361_auxdac_get(ad9361_phy,
 			channel->ch_num));
 }
 
@@ -1467,15 +1447,17 @@ ssize_t get_cf_calibphase(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
-	int i = 0;
-	ssize_t ret = adc_get_calib_phase(ad9361_phy, channel->ch_num, &val, &val2);
+	int32_t i = 0;
+	ssize_t ret = axi_adc_get_calib_phase(ad9361_phy->rx_adc, channel->ch_num, &val,
+					      &val2);
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
-		ret = (ssize_t) snprintf(buf, len, "-");
+		snprintf(buf, len, "-");
 		i++;
 	}
-	return i + snprintf(&buf[i], len, "%ld.%.6ld", val, labs(val2));
+
+	return i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val, labs(val2));
 }
 
 /**
@@ -1488,11 +1470,13 @@ ssize_t get_cf_calibphase(char *buf, size_t len,
 ssize_t get_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
-	int val;
-	unsigned int tmp = axiadc_read(ad9361_phy->adc_state,
-				       ADI_REG_CHAN_CNTRL_1(channel->ch_num));
-	val = (short)ADI_TO_DCFILT_OFFSET(tmp);
-	return snprintf(buf, len, "%d", val);
+	int32_t val;
+	axi_adc_get_calib_bias(ad9361_phy->rx_adc,
+			       channel->ch_num,
+			       &val,
+			       NULL);
+
+	return snprintf(buf, len, "%"PRIi32"", val);
 }
 
 /**
@@ -1506,15 +1490,18 @@ ssize_t get_cf_calibscale(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
-	ssize_t ret = adc_get_calib_scale(ad9361_phy, channel->ch_num, &val, &val2);
-	int i = 0;
+	ssize_t ret = axi_adc_get_calib_scale(ad9361_phy->rx_adc, channel->ch_num, &val,
+					      &val2);
+	int32_t i = 0;
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
 		ret = (ssize_t) snprintf(buf, len, "-");
 		i++;
 	}
-	ret = i + (ssize_t) snprintf(&buf[i], len, "%ld.%.6ld", val, labs(val2));
+	ret = i + (ssize_t) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
+				     labs(val2));
+
 	return ret;
 }
 
@@ -1543,6 +1530,7 @@ ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 {
 	uint32_t sampling_freq_hz;
 	ad9361_get_rx_sampling_freq (ad9361_phy, &sampling_freq_hz);
+
 	return (ssize_t) snprintf(buf, len, "%d", (int)sampling_freq_hz);
 }
 
@@ -1672,10 +1660,9 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 						     cf_voltage_read_attrtibute_map, ARRAY_SIZE(cf_voltage_read_attrtibute_map));
 			}
 		}
-
-
 		return -ENOENT;
 	}
+
 	return -ENOENT;
 }
 
@@ -1707,7 +1694,7 @@ ssize_t set_hardwaregain(char *buf, size_t len,
 	int32_t val1 = (int32_t)gain;
 	int32_t val2 = (int32_t)(gain * 1000) % 1000;
 	if (channel->ch_out) {
-		int ch;
+		int32_t ch;
 		if (val1 > 0 || (val1 == 0 && val2 > 0)) {
 			return -EINVAL;
 		}
@@ -1727,6 +1714,7 @@ ssize_t set_hardwaregain(char *buf, size_t len,
 			return -EINVAL;
 		}
 	}
+
 	return len;
 }
 
@@ -1790,7 +1778,7 @@ ssize_t set_gain_control_mode(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	struct rf_gain_ctrl gc = {0};
-	int i;
+	int32_t i;
 	for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
 		if(strequal(ad9361_agc_modes[i], buf)) {
 			break;
@@ -1805,6 +1793,7 @@ ssize_t set_gain_control_mode(char *buf, size_t len,
 	gc.ant = ad9361_1rx1tx_channel_map(ad9361_phy, false, channel->ch_num + 1);
 	gc.mode = ad9361_phy->agc_mode[channel->ch_num] = mode;
 	ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+
 	return len;
 }
 
@@ -1848,6 +1837,7 @@ ssize_t set_rf_bandwidth(char *buf, size_t len,
 	if(ret < 0) {
 		return ret;
 	}
+
 	return len;
 }
 
@@ -1870,6 +1860,7 @@ ssize_t set_rf_dc_offset_tracking_en(char *buf, size_t len,
 		return ad9361_tracking_control(ad9361_phy, ad9361_phy->bbdc_track_en,
 					       ad9361_phy->rfdc_track_en, ad9361_phy->quad_track_en);
 	}
+
 	return -ENOENT;
 }
 
@@ -1905,6 +1896,7 @@ ssize_t set_quadrature_tracking_en(char *buf, size_t len,
 		return ad9361_tracking_control(ad9361_phy, ad9361_phy->bbdc_track_en,
 					       ad9361_phy->rfdc_track_en, ad9361_phy->quad_track_en);
 	}
+
 	return -ENOENT;
 }
 
@@ -1920,6 +1912,7 @@ ssize_t set_sampling_frequency(char *buf, size_t len,
 {
 	uint32_t sampling_freq_hz = read_ul_value(buf);
 	ad9361_set_rx_sampling_freq (ad9361_phy, sampling_freq_hz);
+
 	return len;
 }
 
@@ -1934,7 +1927,7 @@ ssize_t set_gain_control_mode_available(char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	struct rf_gain_ctrl gc = {0};
-	int i;
+	int32_t i;
 	for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
 		if(strequal(ad9361_agc_modes[i], buf)) {
 			break;
@@ -1949,6 +1942,7 @@ ssize_t set_gain_control_mode_available(char *buf, size_t len,
 	gc.ant = ad9361_1rx1tx_channel_map(ad9361_phy, false, channel->ch_num + 1);
 	gc.mode = ad9361_phy->agc_mode[channel->ch_num] = mode;
 	ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+
 	return len;
 }
 
@@ -1972,6 +1966,7 @@ ssize_t set_filter_fir_en(char *buf, size_t len,
 	} else {
 		ad9361_set_rx_fir_en_dis (ad9361_phy, en_dis);
 	}
+
 	return len;
 }
 
@@ -2007,6 +2002,7 @@ ssize_t set_bb_dc_offset_tracking_en(char *buf, size_t len,
 		return ad9361_tracking_control(ad9361_phy, ad9361_phy->bbdc_track_en,
 					       ad9361_phy->rfdc_track_en, ad9361_phy->quad_track_en);
 	}
+
 	return -ENOENT;
 }
 
@@ -2066,6 +2062,7 @@ ssize_t set_fastlock_save(char *buf, size_t len,
 {
 	u32 readin = read_ul_value(buf);
 	ad9361_phy->fastlock.save_profile = readin;
+
 	return len;
 }
 
@@ -2091,6 +2088,7 @@ ssize_t set_powerdown(char *buf, size_t len,
 	}
 	if(ret < 0)
 		return ret;
+
 	return len;
 }
 
@@ -2107,13 +2105,13 @@ ssize_t set_fastlock_load(char *buf, size_t len,
 	ssize_t ret = 0;
 	char *line, *ptr = (char*) buf;
 	u8 faslock_vals[16];
-	unsigned int profile = 0, val, val2, i = 0;
+	uint32_t profile = 0, val, val2, i = 0;
 
 	while ((line = strsep(&ptr, ","))) {
 		if (line >= buf + len)
 			break;
 
-		ret = sscanf(line, "%u %u", &val, &val2);
+		ret = sscanf(line, "%"PRIu32" %"PRIu32"", &val, &val2);
 		if (ret == 1) {
 			faslock_vals[i++] = val;
 			continue;
@@ -2130,6 +2128,7 @@ ssize_t set_fastlock_load(char *buf, size_t len,
 		ret = -EINVAL;
 	if(ret < 0)
 		return ret;
+
 	return len;
 }
 
@@ -2144,6 +2143,7 @@ ssize_t set_fastlock_store(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	uint32_t profile = read_ul_value(buf);
+
 	return ad9361_fastlock_store(ad9361_phy, channel->ch_num == 1, profile);
 }
 
@@ -2173,6 +2173,7 @@ ssize_t set_frequency(char *buf, size_t len,
 	}
 	if(ret < 0)
 		return ret;
+
 	return len;
 }
 
@@ -2193,6 +2194,7 @@ ssize_t set_external(char *buf, size_t len, const struct channel_info *channel)
 		ret = ad9361_set_tx_lo_int_ext(ad9361_phy, select);
 	if(ret < 0)
 		return ret;
+
 	return len;
 }
 
@@ -2238,7 +2240,8 @@ ssize_t set_dds_calibscale(char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	dds_set_calib_scale(ad9361_phy, channel->ch_num, val, val2);
+	axi_dac_dds_set_calib_scale(ad9361_phy->tx_dac, channel->ch_num, val, val2);
+
 	return len;
 }
 
@@ -2255,7 +2258,8 @@ ssize_t set_dds_calibphase(char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	dds_set_calib_phase(ad9361_phy, channel->ch_num, val, val2);
+	axi_dac_dds_set_calib_phase(ad9361_phy->tx_dac, channel->ch_num, val, val2);
+
 	return len;
 }
 
@@ -2289,7 +2293,8 @@ ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
-	dds_set_phase(ad9361_phy, channel->ch_num, phase);
+	axi_dac_dds_set_phase(ad9361_phy->tx_dac, channel->ch_num, phase);
+
 	return len;
 }
 
@@ -2305,7 +2310,8 @@ ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
 {
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
-	dds_set_scale(ad9361_phy, channel->ch_num, scale);
+	axi_dac_dds_set_scale(ad9361_phy->tx_dac, channel->ch_num, scale);
+
 	return len;
 }
 
@@ -2320,7 +2326,8 @@ ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
-	dds_set_frequency(ad9361_phy, channel->ch_num, freq);
+	axi_dac_dds_set_frequency(ad9361_phy->tx_dac, channel->ch_num, freq);
+
 	return len;
 }
 
@@ -2336,7 +2343,13 @@ extern int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
 ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
-	ad9361_auxdac_set(ad9361_phy, channel->ch_num, read_ul_value(buf));
+	uint32_t dds_mode = read_ul_value(buf);
+	if(dds_mode) { 		//DDS mode selected
+		axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	} else {				//DMA mode selected
+		axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	}
+
 	return len;
 }
 
@@ -2374,7 +2387,8 @@ ssize_t set_cf_calibphase(char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	adc_set_calib_phase(ad9361_phy, channel->ch_num, val, val2);
+	axi_adc_set_calib_phase(ad9361_phy->rx_adc, channel->ch_num, val, val2);
+
 	return len;
 }
 
@@ -2388,12 +2402,12 @@ ssize_t set_cf_calibphase(char *buf, size_t len,
 ssize_t set_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
-	int val = read_value(buf);
-	unsigned int tmp = axiadc_read(ad9361_phy->adc_state,
-				       ADI_REG_CHAN_CNTRL_1(channel->ch_num));
-	tmp &= ~ADI_DCFILT_OFFSET(~0);
-	tmp |= ADI_DCFILT_OFFSET((short)val);
-	axiadc_write(ad9361_phy->adc_state, ADI_REG_CHAN_CNTRL_1(channel->ch_num), tmp);
+	int32_t val = read_value(buf);
+	axi_adc_set_calib_bias(ad9361_phy->rx_adc,
+			       channel->ch_num,
+			       val,
+			       0);
+
 	return len;
 }
 
@@ -2410,7 +2424,8 @@ ssize_t set_cf_calibscale(char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	adc_set_calib_scale(ad9361_phy, channel->ch_num, val, val2);
+	axi_adc_set_calib_scale(ad9361_phy->rx_adc, channel->ch_num, val, val2);
+
 	return len;
 }
 
@@ -2523,8 +2538,8 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
 						&channel_info);
 			}
 			if(strequal(attr, "")) {
-				return read_all_attr((char*)buf, len, &channel_info,
-						     dds_voltage_write_attrtibute_map, ARRAY_SIZE(dds_voltage_write_attrtibute_map));
+				return write_all_attr((char*)buf, len, &channel_info,
+						      dds_voltage_write_attrtibute_map, ARRAY_SIZE(dds_voltage_write_attrtibute_map));
 			}
 		} else if(NULL != strstr(channel, "altvoltage")) {
 			attribute_id = get_attribute_id(attr, dds_altvoltage_write_attrtibute_map,
@@ -2538,9 +2553,9 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
 						&channel_info);
 			}
 			if(strequal(attr, "")) {
-				return read_all_attr((char*)buf, len, &channel_info,
-						     dds_altvoltage_write_attrtibute_map,
-						     ARRAY_SIZE(dds_altvoltage_write_attrtibute_map));
+				return write_all_attr((char*)buf, len, &channel_info,
+						      dds_altvoltage_write_attrtibute_map,
+						      ARRAY_SIZE(dds_altvoltage_write_attrtibute_map));
 			}
 		}
 		return -ENOENT;
@@ -2557,13 +2572,14 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
 						&channel_info);
 			}
 			if(strequal(attr, "")) {
-				return read_all_attr((char*)buf, len, &channel_info,
-						     cf_voltage_write_attrtibute_map, ARRAY_SIZE(cf_voltage_write_attrtibute_map));
+				return write_all_attr((char*)buf, len, &channel_info,
+						      cf_voltage_write_attrtibute_map, ARRAY_SIZE(cf_voltage_write_attrtibute_map));
 			}
 		}
 
 		return -ENOENT;
 	}
+
 	return -ENOENT;
 }
 
@@ -2574,7 +2590,7 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
  * @param mask
  * @return 0 on success, otherwise negative value
  */
-static int open_dev(const char *device, size_t sample_size, uint32_t mask)
+static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
 {
 	if (!dev_is_ad9361_module(device))
 		return -ENODEV;
@@ -2583,6 +2599,7 @@ static int open_dev(const char *device, size_t sample_size, uint32_t mask)
 		return -ENOENT;
 
 	request_mask = mask;
+
 	return 0;
 }
 
@@ -2591,7 +2608,7 @@ static int open_dev(const char *device, size_t sample_size, uint32_t mask)
  * @param *device name
  * @return 0 on success, otherwise negative value
  */
-static int close_dev(const char *device)
+static int32_t close_dev(const char *device)
 {
 	return dev_is_ad9361_module(device) ? 0 : -ENODEV;
 }
@@ -2602,11 +2619,12 @@ static int close_dev(const char *device)
  * @param *device mask
  * @return 0 on success, otherwise negative value
  */
-static int get_mask(const char *device, uint32_t *mask)
+static int32_t get_mask(const char *device, uint32_t *mask)
 {
 	if (!dev_is_ad9361_module(device))
 		return -ENODEV;
 	*mask = input_channel_mask; // this way client has to do demux of data
+
 	return 0;
 }
 
@@ -2620,7 +2638,12 @@ static int get_mask(const char *device, uint32_t *mask)
 static ssize_t write_dev(const char *device, const char *buf,
 			 size_t bytes_count)
 {
-	dac_write_buffer(ad9361_phy, (uint16_t *)buf, bytes_count);
+	ad9361_phy->tx_dmac->flags = DMA_CYCLIC;
+	axi_dac_set_buff(ad9361_phy->tx_dac, DAC_DDR_BASEADDR, (uint16_t *)buf,
+			 bytes_count);
+	axi_dmac_transfer(ad9361_phy->tx_dmac, DAC_DDR_BASEADDR, bytes_count);
+	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+
 	return bytes_count;
 }
 
@@ -2633,30 +2656,26 @@ static ssize_t write_dev(const char *device, const char *buf,
  */
 static ssize_t read_dev(const char *device, char **pbuf, size_t bytes_count)
 {
-	int sampleSize;
-
 	if (!dev_is_ad9361_module(device))
 		return -ENODEV;
-
-	if(adc_st.rx2tx2) {
-		sampleSize = bytes_count / 8;
-	} else {
-		sampleSize = bytes_count / 4;
-	}
-
-	adc_capture(sampleSize, ADC_DDR_BASEADDR);
+	ad9361_phy->rx_dmac->flags = 0;
+	axi_dmac_transfer(ad9361_phy->rx_dmac,
+			  ADC_DDR_BASEADDR, bytes_count);
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,	bytes_count);
 	*pbuf = (char *)ADC_DDR_BASEADDR;
+
 	return bytes_count;
 }
 
 const struct tinyiiod_ops ops = {
 	//communication
-	.read = read,
-	.read_line = read_line,
-	.read_nonbloking = read_nonbloking,
-	.read_wait = read_wait,
-	.write = write_data,
+#ifdef UART_INTERFACE
+	.read = serial_read,
+	.read_line = serial_read_line,
+	.read_nonbloking = serial_read_nonblocking,
+	.read_wait = serial_read_wait,
+	.write = serial_write_data,
+#endif // UART_INTERFACE
 
 	//device operations
 	.read_attr = read_attr,

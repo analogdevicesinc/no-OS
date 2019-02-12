@@ -3319,7 +3319,16 @@ enum dev_id {
 struct ad9361_rf_phy {
 	enum dev_id		dev_sel;
 	uint8_t 		id_no;
-	struct spi_device 	*spi;
+	struct spi_desc 	*spi;
+	struct gpio_desc 	*gpio_desc_device_id;
+	struct gpio_desc 	*gpio_desc_resetb;
+	struct gpio_desc 	*gpio_desc_sync;
+	struct axi_adc_init *rx_adc_init;
+	struct axi_adc *rx_adc;
+	struct axi_dac_init *tx_dac_init;
+	struct axi_dac *tx_dac;
+	struct axi_dmac *rx_dmac;
+	struct axi_dmac *tx_dmac;
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
@@ -3387,7 +3396,7 @@ struct ad9361_rf_phy {
 };
 
 struct refclk_scale {
-	struct spi_device	*spi;
+	struct spi_desc	*spi;
 	struct ad9361_rf_phy	*phy;
 	uint32_t			mult;
 	uint32_t			div;
@@ -3409,10 +3418,10 @@ enum debugfs_cmd {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
+int32_t ad9361_spi_readm(struct spi_desc *spi, uint32_t reg,
 			 uint8_t *rbuf, uint32_t num);
-int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg);
-int32_t ad9361_spi_write(struct spi_device *spi,
+int32_t ad9361_spi_read(struct spi_desc *spi, uint32_t reg);
+int32_t ad9361_spi_write(struct spi_desc *spi,
 			 uint32_t reg, uint32_t val);
 int32_t ad9361_reset(struct ad9361_rf_phy *phy);
 int32_t register_clocks(struct ad9361_rf_phy *phy);
@@ -3528,7 +3537,7 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 int32_t ad9361_tx_mute(struct ad9361_rf_phy *phy, uint32_t state);
 uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw);
 int32_t ad9361_get_temp(struct ad9361_rf_phy *phy);
-int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
-			      enum synth_pd_ctrl rx,
-			      enum synth_pd_ctrl tx);
+int32_t ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
+				  enum synth_pd_ctrl rx,
+				  enum synth_pd_ctrl tx);
 #endif

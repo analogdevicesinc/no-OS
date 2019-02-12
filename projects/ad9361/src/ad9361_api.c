@@ -42,10 +42,14 @@
 /******************************************************************************/
 #include "ad9361.h"
 #include "ad9361_api.h"
-#include "platform.h"
+#include "platform_drivers.h"
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
 #include "util.h"
 #include "config.h"
 #include <string.h>
+
+#define ADI_REG_VERSION			0x0000
 
 #ifndef AXI_ADC_NOT_PRESENT
 /******************************************************************************/
@@ -84,11 +88,17 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		return -ENOMEM;
 	}
 
-	phy->spi = (struct spi_device *)zmalloc(sizeof(*phy->spi));
+	phy->spi = (struct spi_desc *)zmalloc(sizeof(*phy->spi));
 	if (!phy->spi) {
 		return -ENOMEM;
 	}
-
+	phy->tx_dac_init = init_param->tx_dac_init;
+	phy->spi = init_param->spi;
+	phy->gpio_desc_device_id = init_param->gpio_desc_device_id;
+	phy->gpio_desc_resetb = init_param->gpio_desc_resetb;
+	phy->gpio_desc_sync= init_param->gpio_desc_sync;
+	phy->rx_adc_init= init_param->rx_adc_init;
+	phy->tx_dac_init= init_param->tx_dac_init;
 	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return -ENOMEM;
@@ -115,7 +125,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
-	phy->spi->id_no = init_param->id_no;
+	phy->spi->id = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */
@@ -531,10 +541,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	if (ret < 0)
 		goto out;
 
-#ifndef AXI_ADC_NOT_PRESENT
-	axiadc_init(phy);
-	phy->adc_state->pcore_version = axiadc_read(phy->adc_state, ADI_REG_VERSION);
-#endif
 
 	ad9361_init_gain_tables(phy);
 
@@ -543,8 +549,14 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		goto out;
 
 #ifndef AXI_ADC_NOT_PRESENT
+	axi_dac_init(&phy->tx_dac, phy->tx_dac_init);
+	axi_adc_init(&phy->rx_adc, phy->rx_adc_init);
+	axi_adc_read(phy->rx_adc, ADI_REG_VERSION, &phy->adc_state->pcore_version);
+#endif
+
+#ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
-	ret = axiadc_post_setup(phy);
+	ret = ad9361_post_setup(phy);
 	if (ret < 0)
 		goto out;
 #endif
@@ -1949,12 +1961,12 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 					    phy->ref_clk_scale[TX_RFPLL]);
 
 #ifndef AXI_ADC_NOT_PRESENT
-	axiadc_init(phy);
+	axi_adc_init(&phy->rx_adc, phy->rx_adc_init);
 #endif
 	ad9361_setup(phy);
 #ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
-	axiadc_post_setup(phy);
+	ad9361_post_setup(phy);
 #endif
 
 	return 0;

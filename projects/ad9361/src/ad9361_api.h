@@ -42,7 +42,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "util.h"
+#include "ad9361_util.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -284,6 +284,14 @@ typedef struct {
 			uint32_t rate);
 	int32_t		(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv,
 			uint32_t rate);
+	struct spi_desc 	*spi;
+	struct gpio_desc 	*gpio_desc_device_id;
+	struct gpio_desc 	*gpio_desc_resetb;
+	struct gpio_desc 	*gpio_desc_sync;
+	struct axi_adc_init *rx_adc_init;
+	struct axi_dac_init *tx_dac_init;
+	struct axi_dmac_init *rx_dmac_init;
+	struct axi_dmac_init *tx_dmac_init;
 } AD9361_InitParam;
 
 typedef struct {
