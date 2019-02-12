@@ -3876,8 +3876,8 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
  * @param val_mV The value.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
-				 int32_t val_mV)
+int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
+			  int32_t val_mV)
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t val, tmp;

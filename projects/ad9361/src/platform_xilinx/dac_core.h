@@ -177,6 +177,8 @@ struct dds_state {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma);
+void dac_write_buffer(struct ad9361_rf_phy *phy, uint16_t *buf,
+		      uint32_t buff_size);
 void dds_set_frequency(struct ad9361_rf_phy *phy, uint32_t chan, uint32_t freq);
 void dds_get_frequency(struct ad9361_rf_phy *phy, uint32_t chan,
 		       uint32_t *freq);

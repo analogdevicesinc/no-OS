@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   config.h
- *   @brief  Config file of AD9361/API Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   serial.h
+ *   @brief  Header file of Serial interface.
+ *   @author CPop (cristian.pop@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2013(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,35 +36,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CONFIG_H_
-#define CONFIG_H_
 
-#define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
-//#define HAVE_DEBUG_MESSAGES /* For Debug purposes only */
+#ifndef SRC_SERIAL_H_
+#define SRC_SERIAL_H_
 
-/*
- * In case memory footprint is a concern these options allow
- * to disable unused functionality which may free up a few kb
- */
+int serial_read_line(char *buf);
 
-#define HAVE_SPLIT_GAIN_TABLE	1 /* only set to 0 in case split_gain_table_mode_enable = 0*/
-#define HAVE_TDD_SYNTH_TABLE	1 /* only set to 0 in case split_gain_table_mode_enable = 0*/
+int serial_read(char *buf, size_t len);
 
-#define AD9361_DEVICE			1 /* set it 1 if AD9361 device is used, 0 otherwise */
-#define AD9364_DEVICE			0 /* set it 1 if AD9364 device is used, 0 otherwise */
-#define AD9363A_DEVICE			0 /* set it 1 if AD9363A device is used, 0 otherwise */
+int serial_read_nonblocking(char *buf, size_t len);
 
-//#define USE_LIBIIO
-//#define CONSOLE_COMMANDS
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
-//#define FMCOMMS5
-//#define ADI_RF_SOM
-//#define ADI_RF_SOM_CMOS
-//#define ADC_DMA_EXAMPLE
-//#define ADC_DMA_IRQ_EXAMPLE
-//#define DAC_DMA_EXAMPLE
-//#define AXI_ADC_NOT_PRESENT
-//#define TDD_SWITCH_STATE_EXAMPLE
+int serial_read_wait(size_t len);
 
-#endif
+int init_uart(void);
+
+#endif /* SRC_SERIAL_H_ */

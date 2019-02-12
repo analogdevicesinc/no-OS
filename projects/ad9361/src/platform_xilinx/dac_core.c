@@ -170,6 +170,90 @@ void dac_start_sync(struct ad9361_rf_phy *phy, bool force_on)
 }
 
 /***************************************************************************//**
+ * @dac_write_buffer
+*******************************************************************************/
+void dac_write_buffer(struct ad9361_rf_phy *phy, uint16_t *buf,
+		      uint32_t buff_size)
+{
+	uint8_t config_dma = 1;
+	uint32_t tx_count = buff_size;
+	uint32_t index;
+	uint32_t data_i1;
+	uint32_t data_q1;
+	uint32_t data_i2;
+	uint32_t data_q2;
+	uint32_t length;
+	uint32_t reg_ctrl_2;
+	dac_write(phy, DAC_REG_RSTN, 0x0);
+	dac_write(phy, DAC_REG_RSTN, DAC_RSTN | DAC_MMCM_RSTN);
+
+	dds_st[phy->id_no].dac_clk = &phy->clks[TX_SAMPL_CLK]->rate;
+	dds_st[phy->id_no].rx2tx2 = phy->pdata->rx2tx2;
+	dac_read(phy, DAC_REG_CNTRL_2, &reg_ctrl_2);
+	if(dds_st[phy->id_no].rx2tx2) {
+		dds_st[phy->id_no].num_buf_channels = 4;
+		if(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(3));
+		else
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
+		reg_ctrl_2 &= ~DAC_R1_MODE;
+	} else {
+		dds_st[phy->id_no].num_buf_channels = 2;
+		if(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE)
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(1));
+		else
+			dac_write(phy, DAC_REG_RATECNTRL, DAC_RATE(0));
+		reg_ctrl_2 |= DAC_R1_MODE;
+	}
+	dac_write(phy, DAC_REG_CNTRL_2, reg_ctrl_2);
+
+	dac_read(phy, DAC_REG_VERSION, &dds_st[phy->id_no].pcore_version);
+
+	dac_stop(phy);
+	if(config_dma) {
+		if(dds_st[phy->id_no].rx2tx2) {
+#ifdef FMCOMMS5 // todo test it with FMCOMMS5, it should work
+			for(index = 0; index < tx_count; index += 8)
+#else
+			for(index = 0; index < tx_count; index += 4)
+#endif
+			{
+				data_i1 = (buf[index]);
+				data_q1 = (buf[index + 1] << 16);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 2, data_i1 | data_q1);
+
+				data_i2 = (buf[index + 2]);
+				data_q2 = (buf[index + 3] << 16);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 2 + 4, data_i2 | data_q2);
+#ifdef FMCOMMS5
+				Xil_Out32(DAC_DDR_BASEADDR + index * 2 + 8, data_i1 | data_q1);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 2 + 12, data_i2 | data_q2);
+#endif
+			}
+		} else {
+			for(index = 0; index < tx_count; index += 2) {
+				data_i1 = (buf[index]);
+				data_q1 = (buf[index + 1] << 16);
+				Xil_Out32(DAC_DDR_BASEADDR + index * 2, data_i1 | data_q1);
+			}
+		}
+		Xil_DCacheFlush();
+		length = tx_count;
+		dac_dma_write(AXI_DMAC_REG_CTRL, 0);
+		dac_dma_write(AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
+		dac_dma_write(AXI_DMAC_REG_FLAGS, DMAC_FLAGS_CYCLIC);
+		dac_dma_write(AXI_DMAC_REG_SRC_ADDRESS, DAC_DDR_BASEADDR);
+		dac_dma_write(AXI_DMAC_REG_SRC_STRIDE, 0x0);
+		dac_dma_write(AXI_DMAC_REG_X_LENGTH, length - 1);
+		dac_dma_write(AXI_DMAC_REG_Y_LENGTH, 0x0);
+		dac_dma_write(AXI_DMAC_REG_START_TRANSFER, 0x1);
+	}
+	dac_datasel(phy, -1, DATA_SEL_DMA);
+	dds_st[phy->id_no].enable = true;
+	dac_start_sync(phy, 0);
+}
+
+/***************************************************************************//**
  * @brief dac_init
 *******************************************************************************/
 void dac_init(struct ad9361_rf_phy *phy, uint8_t data_sel, uint8_t config_dma)
