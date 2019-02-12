@@ -10,4 +10,4 @@
 // as libraries/modules and are outside of the scope of this repository. 
 //
 // Another alternative is using inline suppressions. Please see Cppcheck manual
-// for further information: https://cppcheck.sourceforge.net/manual.pdf 
+// for further information: https://cppcheck.sourceforge.net/manual.pdf

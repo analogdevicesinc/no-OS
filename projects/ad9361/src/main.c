@@ -57,6 +57,9 @@
 #ifdef UART_INTERFACE
 #include "serial.h"
 #endif // UART_INTERFACE
+#ifdef TCPIP_INTERFACE
+#include "network.h"
+#endif // TCPIP_INTERFACE
 #include "tinyiiod.h"
 #include "tinyiiod_user.h"
 #endif // USE_LIBIIO
@@ -412,7 +415,7 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 #endif
-
+	printf("\n\n\n");
 #ifdef ALTERA_PLATFORM
 	if (altera_bridge_init()) {
 		printf("Altera Bridge Init Error!\n");
@@ -566,6 +569,14 @@ int main(void)
 		tinyiiod_read_command(iiod);
 	}
 #endif // UART_INTERFACE
+
+#ifdef TCPIP_INTERFACE
+	network_init();
+	while(1) {
+		network_keep_alive();
+		tinyiiod_read_command(iiod);
+	}
+#endif // TCPIP_INTERFACE
 
 #endif // USE_LIBIIO
 

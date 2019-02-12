@@ -35,6 +35,9 @@
 #ifdef UART_INTERFACE
 #include "serial.h"
 #endif // UART_INTERFACE
+#ifdef TCPIP_INTERFACE
+#include "network.h"
+#endif // TCPIP_INTERFACE
 #include "xil_cache.h"
 #include "platform_drivers.h"
 static uint32_t request_mask;
@@ -2677,6 +2680,14 @@ const struct tinyiiod_ops ops = {
 	.write = serial_write_data,
 #endif // UART_INTERFACE
 
+#ifdef TCPIP_INTERFACE
+	.read = network_read,
+	.read_line = network_read_line,
+	.read_nonbloking = network_read_nonblocking,
+	.read_wait = network_read_wait,
+	.write = network_write_data,
+	.exit = network_exit,
+#endif // TCPIP_INTERFACE
 	//device operations
 	.read_attr = read_attr,
 	.write_attr = write_attr,

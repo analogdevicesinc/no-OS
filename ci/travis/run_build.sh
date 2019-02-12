@@ -5,6 +5,7 @@ set -e
 . ./ci/travis/lib.sh
 
 build_default() {
+    export CPPCHECK_OPTIONS="--inline-suppr"
     . ./ci/travis/build_projects.sh
     . ./ci/travis/cppcheck.sh
 }
