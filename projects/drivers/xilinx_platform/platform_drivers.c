@@ -426,13 +426,26 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+#ifdef _XPARAMETERS_PS_H_
+	XGpioPs_WritePin(&desc->instance, desc->number, value);
+#else
+	uint8_t pin = desc->number;
+	uint8_t channel;
+	uint32_t reg_val;
 
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
+	if (pin >= 32) {
+		channel = 2;
+		pin -= 32;
+	} else
+		channel = 1;
+
+	reg_val = XGpio_DiscreteRead(&desc->instance, channel);
+	if(value)
+		reg_val |= (1 << pin);
+	else
+		reg_val &= ~(1 << pin);
+	XGpio_DiscreteWrite(&desc->instance, channel, reg_val);
+#endif
 
 	return 0;
 }
