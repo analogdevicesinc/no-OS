@@ -50,15 +50,16 @@
 /******************************************************************************/
 /*!< List of available commands */
 const char* cmdList[] = {"help?",
-                         "mode=",
-                         "mode?",
-                         "voltage=",
-                         "voltage?",
-                         "register=",
-                         "register?"};
+			 "mode=",
+			 "mode?",
+			 "voltage=",
+			 "voltage?",
+			 "register=",
+			 "register?"
+			};
 const char* cmdDescription[] = {
-"  -  Displays all available commands.",
-"  -  Selects a mode of operation for selected channel. Accepted values:\r\n\
+	"  -  Displays all available commands.",
+	"  -  Selects a mode of operation for selected channel. Accepted values:\r\n\
 \tchannel: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
 \t15 - All channels. \r\n\
@@ -67,38 +68,40 @@ const char* cmdDescription[] = {
 \t1 - 1 KOhm to GND (Power down mode). \r\n\
 \t2 - 100 KOhm to GND (Power down mode). \r\n\
 \t3 - Three-state (Power down mode).",
-"  -  Displays the selected mode of operation for the selected channel. Accepted\
+	"  -  Displays the selected mode of operation for the selected channel. Accepted\
  values: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
 \t15 - All channels.",
-"  -  Sets the output voltage for the selected channel. Accepted values: \r\n\
+	"  -  Sets the output voltage for the selected channel. Accepted values: \r\n\
 \tchannel: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
 \t15 - All channels. \r\n\
 \toutput voltage:\r\n\
 \t0 .. 2500 - desired output voltage in milivolts.",
-"  -  Displays the output voltage of the selected channel. Accepted values: \r\n\
+	"  -  Displays the output voltage of the selected channel. Accepted values: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
 \t15 - All channels.",
-"  -  Writes the value into the DAC register of the selected channel.\
+	"  -  Writes the value into the DAC register of the selected channel.\
  Accepted values: \r\n\
 \tchannel: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
 \t15 - All channels. \r\n\
 \tregister value:\r\n\
 \t0 .. 4095 - the value written to the DAC.",
-"  -  Displays the value written in the DAC register of the selected channel. \
+	"  -  Displays the value written in the DAC register of the selected channel. \
 Accepted values: \r\n\
 \t0 .. 7 - Channel A .. H(one channel)\r\n\
-\t15 - All channels."};
+\t15 - All channels."
+};
 const char* cmdExample[] = {
-"",
-"To select the power down mode 1KOhm to GND for channel C, type: mode=2 1",
-"To display the mode of operation for channel A, type: mode?0",
-"To set the output voltage to 1250mV for all channels, type: voltage=15 1250",
-"To display the output voltage for channel H, type: voltage?7",
-"To set DAC register value to 2500 for channel D, type: register=3 2500",
-"To display the value of the DAC register for channel G, type: register?6"};
+	"",
+	"To select the power down mode 1KOhm to GND for channel C, type: mode=2 1",
+	"To display the mode of operation for channel A, type: mode?0",
+	"To set the output voltage to 1250mV for all channels, type: voltage=15 1250",
+	"To display the output voltage for channel H, type: voltage?7",
+	"To set DAC register value to 2500 for channel D, type: register=3 2500",
+	"To display the value of the DAC register for channel G, type: register?6"
+};
 const char  cmdNo = (sizeof(cmdList) / sizeof(const char*));
 const float VREF = 1.25; /*!< Vref = 1.25V */
 
@@ -106,11 +109,14 @@ const float VREF = 1.25; /*!< Vref = 1.25V */
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 cmdFunction cmdFunctions[7] = {GetHelp, SetMode, GetMode, SetVoltage,
-                               GetVoltage, SetRegister, GetRegister};
+			       GetVoltage, SetRegister, GetRegister
+			      };
 /*!< Variables holding information about the device */
-unsigned char  powerMode       = 0; /*!< Last powerMode value written to the device */
+unsigned char  powerMode       =
+	0; /*!< Last powerMode value written to the device */
 unsigned char  currentChannel  = 0; /*!< Last channel selected */
-unsigned short registerValue   = 0; /*!< Last register value written to the device */
+unsigned short registerValue   =
+	0; /*!< Last register value written to the device */
 unsigned short dacRegArray[16]  = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned char  powerArray[16]   = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -121,14 +127,13 @@ unsigned char  powerArray[16]   = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 *******************************************************************************/
 void GetHelp(double* param, char paramNo) /*!< "help?" command */
 {
-    char displayCmd;
+	char displayCmd;
 
-    CONSOLE_Print("Available commands:\r\n");
-    for(displayCmd = 0; displayCmd < cmdNo; displayCmd++)
-    {
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[displayCmd],
-                                  (char*)cmdDescription[displayCmd]);
-    }
+	CONSOLE_Print("Available commands:\r\n");
+	for(displayCmd = 0; displayCmd < cmdNo; displayCmd++) {
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[displayCmd],
+			      (char*)cmdDescription[displayCmd]);
+	}
 }
 
 /***************************************************************************//**
@@ -142,17 +147,14 @@ void GetHelp(double* param, char paramNo) /*!< "help?" command */
 *******************************************************************************/
 char DoDeviceInit(void)
 {
-    if(AD5628_Init() == 0)
-    {
-        CONSOLE_Print("AD5628 OK\r\n");
-        GetHelp(NULL, 0);
-        return SUCCESS;
-    }
-    else
-    {
-        CONSOLE_Print("AD5628 Error\r\n");
-        return ERROR;
-    }
+	if(AD5628_Init() == 0) {
+		CONSOLE_Print("AD5628 OK\r\n");
+		GetHelp(NULL, 0);
+		return SUCCESS;
+	} else {
+		CONSOLE_Print("AD5628 Error\r\n");
+		return ERROR;
+	}
 }
 
 /***************************************************************************//**
@@ -163,71 +165,64 @@ char DoDeviceInit(void)
 void SetMode(double* param, char paramNo) /*!< "mode=" command */
 {
 
-    /*!< Check if the parameters are valid */
-    if(paramNo >= 2)
-    {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
-        currentChannel = (char)param[0];
+	/*!< Check if the parameters are valid */
+	if(paramNo >= 2) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
+		currentChannel = (char)param[0];
 
-        if(param[1] < 0)
-        {
-            param[1] = 0;
-        }
-        if(param[1] > 4)
-        {
-            param[1] = 4;
-        }
-        powerMode = (unsigned char)param[1];
+		if(param[1] < 0) {
+			param[1] = 0;
+		}
+		if(param[1] > 4) {
+			param[1] = 4;
+		}
+		powerMode = (unsigned char)param[1];
 
-        powerArray[currentChannel] = powerMode;
-        /*!< Set the power mode of the selected channel. */
-        AD5628_PowerMode(powerMode, currentChannel);
-        /*!< Send feedback to user */
-        CONSOLE_Print("%s%d for ",(char*)cmdList[1],powerMode);
-        switch (currentChannel)
-        {   case 0:
-                CONSOLE_Print("channel A\r\n");
-                break;
-            case 1:
-                CONSOLE_Print("channel B\r\n");
-                break;
-            case 2:
-                CONSOLE_Print("channel C\r\n");
-                break;
-            case 3:
-                CONSOLE_Print("channel D\r\n");
-                break;
-            case 4:
-                CONSOLE_Print("channel E\r\n");
-                break;
-            case 5:
-                CONSOLE_Print("channel F\r\n");
-                break;
-            case 6:
-                CONSOLE_Print("channel G\r\n");
-                break;
-            case 7:
-                CONSOLE_Print("channel H\r\n");
-                break;
-            default:
-                CONSOLE_Print("all channels\r\n");
-                break;
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[1], (char*)cmdDescription[1]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[1]);
-    }
+		powerArray[currentChannel] = powerMode;
+		/*!< Set the power mode of the selected channel. */
+		AD5628_PowerMode(powerMode, currentChannel);
+		/*!< Send feedback to user */
+		CONSOLE_Print("%s%d for ",(char*)cmdList[1],powerMode);
+		switch (currentChannel) {
+		case 0:
+			CONSOLE_Print("channel A\r\n");
+			break;
+		case 1:
+			CONSOLE_Print("channel B\r\n");
+			break;
+		case 2:
+			CONSOLE_Print("channel C\r\n");
+			break;
+		case 3:
+			CONSOLE_Print("channel D\r\n");
+			break;
+		case 4:
+			CONSOLE_Print("channel E\r\n");
+			break;
+		case 5:
+			CONSOLE_Print("channel F\r\n");
+			break;
+		case 6:
+			CONSOLE_Print("channel G\r\n");
+			break;
+		case 7:
+			CONSOLE_Print("channel H\r\n");
+			break;
+		default:
+			CONSOLE_Print("all channels\r\n");
+			break;
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[1], (char*)cmdDescription[1]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[1]);
+	}
 }
 
 /***************************************************************************//**
@@ -237,58 +232,53 @@ void SetMode(double* param, char paramNo) /*!< "mode=" command */
 *******************************************************************************/
 void GetMode(double* param, char paramNo) /*!< "mode?" command */
 {
-    /*!< Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
-        currentChannel = (char)param[0];
-        /*!< Send feedback to user */
-        CONSOLE_Print("%s%d for ",(char*)cmdList[1],
-                                           powerArray[currentChannel]);
-        switch (currentChannel)
-        {   case 0:
-                CONSOLE_Print("channel A\r\n");
-                break;
-            case 1:
-                CONSOLE_Print("channel B\r\n");
-                break;
-            case 2:
-                CONSOLE_Print("channel C\r\n");
-                break;
-            case 3:
-                CONSOLE_Print("channel D\r\n");
-                break;
-            case 4:
-                CONSOLE_Print("channel E\r\n");
-                break;
-            case 5:
-                CONSOLE_Print("channel F\r\n");
-                break;
-            case 6:
-                CONSOLE_Print("channel G\r\n");
-                break;
-            case 7:
-                CONSOLE_Print("channel H\r\n");
-                break;
-            default:
-                CONSOLE_Print("all channels\r\n");
-                break;
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[2], (char*)cmdDescription[2]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[2]);
-    }
+	/*!< Check if the parameter is valid */
+	if(paramNo >= 1) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
+		currentChannel = (char)param[0];
+		/*!< Send feedback to user */
+		CONSOLE_Print("%s%d for ",(char*)cmdList[1],
+			      powerArray[currentChannel]);
+		switch (currentChannel) {
+		case 0:
+			CONSOLE_Print("channel A\r\n");
+			break;
+		case 1:
+			CONSOLE_Print("channel B\r\n");
+			break;
+		case 2:
+			CONSOLE_Print("channel C\r\n");
+			break;
+		case 3:
+			CONSOLE_Print("channel D\r\n");
+			break;
+		case 4:
+			CONSOLE_Print("channel E\r\n");
+			break;
+		case 5:
+			CONSOLE_Print("channel F\r\n");
+			break;
+		case 6:
+			CONSOLE_Print("channel G\r\n");
+			break;
+		case 7:
+			CONSOLE_Print("channel H\r\n");
+			break;
+		default:
+			CONSOLE_Print("all channels\r\n");
+			break;
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[2], (char*)cmdDescription[2]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[2]);
+	}
 }
 
 /***************************************************************************//**
@@ -298,89 +288,79 @@ void GetMode(double* param, char paramNo) /*!< "mode?" command */
 *******************************************************************************/
 void SetVoltage(double* param, char paramNo) /*!< "voltage=" command */
 {
-    double outVoltage = 0;
-    double tempFloat  = 0;
+	double outVoltage = 0;
+	double tempFloat  = 0;
 
-    /*!< Check if the parameters are valid */
-    if(paramNo >= 2)
-    {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
-        currentChannel = (char)param[0];
+	/*!< Check if the parameters are valid */
+	if(paramNo >= 2) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
+		currentChannel = (char)param[0];
 
-        if(param[1] < 0)
-        {
-            param[1] = 0;
-        }
-        if(param[1] > 2499.999)
-        {
-            param[1] = 2499.999;
-        }
-        outVoltage = param[1] / 1000;
-        
-        /*!< Find the binary value corresponding to the output voltage*/
-        tempFloat = (outVoltage / (double)(2 * VREF)) * 4096;
-        registerValue = (short) tempFloat;
-        dacRegArray[currentChannel] = registerValue;
-        /*!< Select a channel and write to its register */
-        AD5628_SetInputRegister(
-                      AD5628_CMD(AD5628_CMD_WRITE_INPUT_N_UPDATE_N)|
-                      AD5628_ADDR(currentChannel)|
-                      AD5628_DATA_BITS(registerValue));
-        outVoltage = 2000 * VREF * ((double)registerValue / 4096);
-        /*!< Send feedback to user */
-        if (powerArray[currentChannel] > 0)
-        {
-            CONSOLE_Print("The selected channel is powered down. Please use \
+		if(param[1] < 0) {
+			param[1] = 0;
+		}
+		if(param[1] > 2499.999) {
+			param[1] = 2499.999;
+		}
+		outVoltage = param[1] / 1000;
+
+		/*!< Find the binary value corresponding to the output voltage*/
+		tempFloat = (outVoltage / (double)(2 * VREF)) * 4096;
+		registerValue = (short) tempFloat;
+		dacRegArray[currentChannel] = registerValue;
+		/*!< Select a channel and write to its register */
+		AD5628_SetInputRegister(
+			AD5628_CMD(AD5628_CMD_WRITE_INPUT_N_UPDATE_N)|
+			AD5628_ADDR(currentChannel)|
+			AD5628_DATA_BITS(registerValue));
+		outVoltage = 2000 * VREF * ((double)registerValue / 4096);
+		/*!< Send feedback to user */
+		if (powerArray[currentChannel] > 0) {
+			CONSOLE_Print("The selected channel is powered down. Please use \
 'mode=%d 0' command in order to power it up.\r\n",currentChannel);
-        }
-        else
-        {
-            CONSOLE_Print("%s%.1f [mV] for ",(char*)cmdList[3], outVoltage);
-            switch (currentChannel)
-            {   case 0:
-                    CONSOLE_Print("channel A\r\n");
-                    break;
-                case 1:
-                    CONSOLE_Print("channel B\r\n");
-                    break;
-                case 2:
-                    CONSOLE_Print("channel C\r\n");
-                    break;
-                case 3:
-                    CONSOLE_Print("channel D\r\n");
-                    break;
-                case 4:
-                    CONSOLE_Print("channel E\r\n");
-                    break;
-                case 5:
-                    CONSOLE_Print("channel F\r\n");
-                    break;
-                case 6:
-                    CONSOLE_Print("channel G\r\n");
-                    break;
-                case 7:
-                    CONSOLE_Print("channel H\r\n");
-                    break;
-                default:
-                    CONSOLE_Print("all channels\r\n");
-                    break;
-            }
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[3], (char*)cmdDescription[3]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[3]);
-    }
+		} else {
+			CONSOLE_Print("%s%.1f [mV] for ",(char*)cmdList[3], outVoltage);
+			switch (currentChannel) {
+			case 0:
+				CONSOLE_Print("channel A\r\n");
+				break;
+			case 1:
+				CONSOLE_Print("channel B\r\n");
+				break;
+			case 2:
+				CONSOLE_Print("channel C\r\n");
+				break;
+			case 3:
+				CONSOLE_Print("channel D\r\n");
+				break;
+			case 4:
+				CONSOLE_Print("channel E\r\n");
+				break;
+			case 5:
+				CONSOLE_Print("channel F\r\n");
+				break;
+			case 6:
+				CONSOLE_Print("channel G\r\n");
+				break;
+			case 7:
+				CONSOLE_Print("channel H\r\n");
+				break;
+			default:
+				CONSOLE_Print("all channels\r\n");
+				break;
+			}
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[3], (char*)cmdDescription[3]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[3]);
+	}
 }
 
 /***************************************************************************//**
@@ -390,71 +370,63 @@ void SetVoltage(double* param, char paramNo) /*!< "voltage=" command */
 *******************************************************************************/
 void GetVoltage(double* param, char paramNo) /*!< "voltage?" command */
 {
-    double outVoltage = 0;
+	double outVoltage = 0;
 
-    /*!< Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
+	/*!< Check if the parameter is valid */
+	if(paramNo >= 1) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
 
-        currentChannel = (char)param[0];
-        registerValue = dacRegArray[currentChannel];
-        /*!< Get the output voltage using data from registerValue */
-        outVoltage = 2000 * VREF * ((double)registerValue / 4096);
-        /*!< Send the requested value to user */
-        if (powerArray[currentChannel] > 0)
-        {
-            CONSOLE_Print("The selected channel is powered down. Please use \
+		currentChannel = (char)param[0];
+		registerValue = dacRegArray[currentChannel];
+		/*!< Get the output voltage using data from registerValue */
+		outVoltage = 2000 * VREF * ((double)registerValue / 4096);
+		/*!< Send the requested value to user */
+		if (powerArray[currentChannel] > 0) {
+			CONSOLE_Print("The selected channel is powered down. Please use \
 'mode=%d 0' command in order to power it up.\r\n",currentChannel);
-        }
-        else
-        {
-            CONSOLE_Print("%s%.1f [mV] for ",(char*)cmdList[3], outVoltage);
-            switch (currentChannel)
-            {   case 0:
-                    CONSOLE_Print("channel A\r\n");
-                    break;
-                case 1:
-                    CONSOLE_Print("channel B\r\n");
-                    break;
-                case 2:
-                    CONSOLE_Print("channel C\r\n");
-                    break;
-                case 3:
-                    CONSOLE_Print("channel D\r\n");
-                    break;
-                case 4:
-                    CONSOLE_Print("channel E\r\n");
-                    break;
-                case 5:
-                    CONSOLE_Print("channel F\r\n");
-                    break;
-                case 6:
-                    CONSOLE_Print("channel G\r\n");
-                    break;
-                case 7:
-                    CONSOLE_Print("channel H\r\n");
-                    break;
-                default:
-                    CONSOLE_Print("all channels\r\n");
-                    break;
-            }
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[4], (char*)cmdDescription[4]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[4]);
-    }
+		} else {
+			CONSOLE_Print("%s%.1f [mV] for ",(char*)cmdList[3], outVoltage);
+			switch (currentChannel) {
+			case 0:
+				CONSOLE_Print("channel A\r\n");
+				break;
+			case 1:
+				CONSOLE_Print("channel B\r\n");
+				break;
+			case 2:
+				CONSOLE_Print("channel C\r\n");
+				break;
+			case 3:
+				CONSOLE_Print("channel D\r\n");
+				break;
+			case 4:
+				CONSOLE_Print("channel E\r\n");
+				break;
+			case 5:
+				CONSOLE_Print("channel F\r\n");
+				break;
+			case 6:
+				CONSOLE_Print("channel G\r\n");
+				break;
+			case 7:
+				CONSOLE_Print("channel H\r\n");
+				break;
+			default:
+				CONSOLE_Print("all channels\r\n");
+				break;
+			}
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[4], (char*)cmdDescription[4]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[4]);
+	}
 }
 
 /***************************************************************************//**
@@ -464,83 +436,73 @@ void GetVoltage(double* param, char paramNo) /*!< "voltage?" command */
 *******************************************************************************/
 void SetRegister(double* param, char paramNo) /*!< "register=" command */
 {
-    double outVoltage = 0;
+	double outVoltage = 0;
 
-    /*!< Check if the parameters are valid */
-    if(paramNo >= 2)
-    {
-        if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
-        currentChannel = (char)param[0];
-        if(param[1] < 0)
-        {
-            param[1] = 0;
-        }
-        if(param[1] > 4095)
-        {
-            param[1] = 4095;
-        }
-        registerValue = (unsigned short)param[1];
+	/*!< Check if the parameters are valid */
+	if(paramNo >= 2) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
+		currentChannel = (char)param[0];
+		if(param[1] < 0) {
+			param[1] = 0;
+		}
+		if(param[1] > 4095) {
+			param[1] = 4095;
+		}
+		registerValue = (unsigned short)param[1];
 
-        dacRegArray[currentChannel] = registerValue;
-        /*!< Select a channel and write to its register */
-        AD5628_SetInputRegister(
-                          AD5628_CMD(AD5628_CMD_WRITE_INPUT_N_UPDATE_N)|
-                          AD5628_ADDR(currentChannel)|
-                          AD5628_DATA_BITS(registerValue));
-        /*!< Send feedback to user */
-        if (powerArray[currentChannel] > 0)
-        {
-            CONSOLE_Print("The selected channel is powered down. Please use \
+		dacRegArray[currentChannel] = registerValue;
+		/*!< Select a channel and write to its register */
+		AD5628_SetInputRegister(
+			AD5628_CMD(AD5628_CMD_WRITE_INPUT_N_UPDATE_N)|
+			AD5628_ADDR(currentChannel)|
+			AD5628_DATA_BITS(registerValue));
+		/*!< Send feedback to user */
+		if (powerArray[currentChannel] > 0) {
+			CONSOLE_Print("The selected channel is powered down. Please use \
 'mode=%d 0' command in order to power it up.\r\n",currentChannel);
-        }
-        else
-        {
-            CONSOLE_Print("%s%d for ",(char*)cmdList[5],registerValue);
-            switch (currentChannel)
-            {   case 0:
-                    CONSOLE_Print("channel A\r\n");
-                    break;
-                case 1:
-                    CONSOLE_Print("channel B\r\n");
-                    break;
-                case 2:
-                    CONSOLE_Print("channel C\r\n");
-                    break;
-                case 3:
-                    CONSOLE_Print("channel D\r\n");
-                    break;
-                case 4:
-                    CONSOLE_Print("channel E\r\n");
-                    break;
-                case 5:
-                    CONSOLE_Print("channel F\r\n");
-                    break;
-                case 6:
-                    CONSOLE_Print("channel G\r\n");
-                    break;
-                case 7:
-                    CONSOLE_Print("channel H\r\n");
-                    break;
-                default:
-                    CONSOLE_Print("all channels\r\n");
-                    break;
-            }
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[5], (char*)cmdDescription[5]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[5]);
-    }
+		} else {
+			CONSOLE_Print("%s%d for ",(char*)cmdList[5],registerValue);
+			switch (currentChannel) {
+			case 0:
+				CONSOLE_Print("channel A\r\n");
+				break;
+			case 1:
+				CONSOLE_Print("channel B\r\n");
+				break;
+			case 2:
+				CONSOLE_Print("channel C\r\n");
+				break;
+			case 3:
+				CONSOLE_Print("channel D\r\n");
+				break;
+			case 4:
+				CONSOLE_Print("channel E\r\n");
+				break;
+			case 5:
+				CONSOLE_Print("channel F\r\n");
+				break;
+			case 6:
+				CONSOLE_Print("channel G\r\n");
+				break;
+			case 7:
+				CONSOLE_Print("channel H\r\n");
+				break;
+			default:
+				CONSOLE_Print("all channels\r\n");
+				break;
+			}
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[5], (char*)cmdDescription[5]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[5]);
+	}
 }
 
 /***************************************************************************//**
@@ -551,65 +513,57 @@ void SetRegister(double* param, char paramNo) /*!< "register=" command */
 void GetRegister(double* param, char paramNo) /*!< "register?" command */
 {
 
-    /*!< Check if the parameter is valid */
-    if(paramNo >= 1)
-    {
-       if(param[0] < 0)
-        {
-            param[0] = 0;
-        }
-        if(param[0] > 7)
-        {
-            param[0] = 15;
-        }
-        currentChannel = (char)param[0];
-        registerValue = dacRegArray[currentChannel];
-        /*!< Send the requested value to user */
-        if (powerArray[currentChannel] > 0)
-        {
-            CONSOLE_Print("The selected channel is powered down. Please use \
+	/*!< Check if the parameter is valid */
+	if(paramNo >= 1) {
+		if(param[0] < 0) {
+			param[0] = 0;
+		}
+		if(param[0] > 7) {
+			param[0] = 15;
+		}
+		currentChannel = (char)param[0];
+		registerValue = dacRegArray[currentChannel];
+		/*!< Send the requested value to user */
+		if (powerArray[currentChannel] > 0) {
+			CONSOLE_Print("The selected channel is powered down. Please use \
 'mode=%d 0' command in order to power it up.\r\n",currentChannel);
-        }
-        else
-        {
-            CONSOLE_Print("%s%d for ",(char*)cmdList[5],registerValue);
-            switch (currentChannel)
-            {   case 0:
-                    CONSOLE_Print("channel A\r\n");
-                    break;
-                case 1:
-                    CONSOLE_Print("channel B\r\n");
-                    break;
-                case 2:
-                    CONSOLE_Print("channel C\r\n");
-                    break;
-                case 3:
-                    CONSOLE_Print("channel D\r\n");
-                    break;
-                case 4:
-                    CONSOLE_Print("channel E\r\n");
-                    break;
-                case 5:
-                    CONSOLE_Print("channel F\r\n");
-                    break;
-                case 6:
-                    CONSOLE_Print("channel G\r\n");
-                    break;
-                case 7:
-                    CONSOLE_Print("channel H\r\n");
-                    break;
-                default:
-                    CONSOLE_Print("all channels\r\n");
-                    break;
-            }
-        }
-    }
-    else
-    {
-        /*!< Display error messages */
-        CONSOLE_Print("Invalid parameter!\r\n");
-        CONSOLE_Print("%s%s\r\n", (char*)cmdList[6], (char*)cmdDescription[6]);
-        CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[6]);
-    }
+		} else {
+			CONSOLE_Print("%s%d for ",(char*)cmdList[5],registerValue);
+			switch (currentChannel) {
+			case 0:
+				CONSOLE_Print("channel A\r\n");
+				break;
+			case 1:
+				CONSOLE_Print("channel B\r\n");
+				break;
+			case 2:
+				CONSOLE_Print("channel C\r\n");
+				break;
+			case 3:
+				CONSOLE_Print("channel D\r\n");
+				break;
+			case 4:
+				CONSOLE_Print("channel E\r\n");
+				break;
+			case 5:
+				CONSOLE_Print("channel F\r\n");
+				break;
+			case 6:
+				CONSOLE_Print("channel G\r\n");
+				break;
+			case 7:
+				CONSOLE_Print("channel H\r\n");
+				break;
+			default:
+				CONSOLE_Print("all channels\r\n");
+				break;
+			}
+		}
+	} else {
+		/*!< Display error messages */
+		CONSOLE_Print("Invalid parameter!\r\n");
+		CONSOLE_Print("%s%s\r\n", (char*)cmdList[6], (char*)cmdDescription[6]);
+		CONSOLE_Print("Example: %s\r\n", (char*)cmdExample[6]);
+	}
 }
 
