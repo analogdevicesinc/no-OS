@@ -111,8 +111,8 @@ cmdFunction cmdFunctions[7] = {GetHelp, SetMode, GetMode, SetVoltage,
 unsigned char  powerMode       = 0; /*!< Last powerMode value written to the device */
 unsigned char  currentChannel  = 0; /*!< Last channel selected */
 unsigned short registerValue   = 0; /*!< Last register value written to the device */
-unsigned short dacRegArray[8]  = {0, 0, 0, 0, 0, 0, 0, 0};
-unsigned char  powerArray[8]   = {0, 0, 0, 0, 0, 0, 0, 0};
+unsigned short dacRegArray[16]  = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+unsigned char  powerArray[16]   = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 /***************************************************************************//**
  * @brief Displays all available commands.
