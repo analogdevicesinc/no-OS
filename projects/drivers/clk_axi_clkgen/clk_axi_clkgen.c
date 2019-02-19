@@ -51,6 +51,25 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+#define AXI_PCORE_VER(major, minor, letter)     ((major << 16) | (minor << 8) | letter)
+#define AXI_PCORE_VER_MAJOR(version)    (version >> 16)
+#define AXI_PCORE_VER_MINOR(version)    ((version >> 8) & 0xff)
+#define AXI_PCORE_VER_LETTER(version)   (version & 0xff)
+
+#define AXI_REG_VERSION                 0x0000
+#define AXI_VERSION(x)                  (((x) & 0xffffffff) << 0)
+#define AXI_VERSION_IS(x, y, z)         ((x) << 16 | (y) << 8 | (z))
+#define AXI_VERSION_MAJOR(x)            ((x) >> 16)
+
+#define AXI_REG_FPGA_INFO               0x001C
+#define AXI_REG_FPGA_VOLTAGE            0x0140
+
+#define AXI_INFO_FPGA_TECH(info)        ((info) >> 24)
+#define AXI_INFO_FPGA_FAMILY(info)      (((info) >> 16) & 0xff)
+#define AXI_INFO_FPGA_SPEED_GRADE(info) (((info) >> 8) & 0xff)
+#define AXI_INFO_FPGA_DEV_PACKAGE(info) ((info) & 0xff)
+#define AXI_INFO_FPGA_VOLTAGE(val)      ((val) & 0xffff)
+
 #define AXI_CLKGEN_REG_RESETN		0x40
 #define AXI_CLKGEN_MMCM_RESETN		BIT(1)
 #define AXI_CLKGEN_RESETN			BIT(0)
@@ -103,6 +122,34 @@ static const uint32_t axi_clkgen_lock_table[] = {
 	0x1f1f0190, 0x1f1f0177, 0x1f1f015e, 0x1f1f015e,
 	0x1f1f0145, 0x1f1f0145, 0x1f1f012c, 0x1f1f012c,
 	0x1f1f012c, 0x1f1f0113, 0x1f1f0113, 0x1f1f0113
+};
+
+enum axi_fgpa_technology {
+	AXI_FPGA_TECH_UNKNOWN = 0,
+	AXI_FPGA_TECH_SERIES7,
+	AXI_FPGA_TECH_ULTRASCALE,
+	AXI_FPGA_TECH_ULTRASCALE_PLUS,
+};
+
+enum axi_fpga_family {
+	AXI_FPGA_FAMILY_UNKNOWN = 0,
+	AXI_FPGA_FAMILY_ARTIX,
+	AXI_FPGA_FAMILY_KINTEX,
+	AXI_FPGA_FAMILY_VIRTEX,
+	AXI_FPGA_FAMILY_ZYNQ,
+};
+
+enum axi_fpga_speed_grade {
+	AXI_FPGA_SPEED_UNKNOWN	= 0,
+	AXI_FPGA_SPEED_1	= 10,
+	AXI_FPGA_SPEED_1L	= 11,
+	AXI_FPGA_SPEED_1H	= 12,
+	AXI_FPGA_SPEED_1HV	= 13,
+	AXI_FPGA_SPEED_1LV	= 14,
+	AXI_FPGA_SPEED_2	= 20,
+	AXI_FPGA_SPEED_2L	= 21,
+	AXI_FPGA_SPEED_2LV	= 22,
+	AXI_FPGA_SPEED_3	= 30,
 };
 
 /**
@@ -216,18 +263,67 @@ static uint32_t axi_clkgen_lookup_lock(uint32_t m)
 }
 
 /**
+ * @brief axi_clkgen_setup_ranges
+ */
+static void axi_clkgen_setup_ranges(struct axi_clkgen *axi_clkgen,
+				    uint32_t *fpfd_min, uint32_t *fpfd_max,
+				    uint32_t *fvco_min, uint32_t *fvco_max)
+{
+	uint32_t reg_value;
+	uint32_t tech, family, speed_grade, voltage;
+
+	axi_clkgen_read(axi_clkgen, AXI_REG_FPGA_INFO, &reg_value);
+	tech = AXI_INFO_FPGA_TECH(reg_value);
+	family = AXI_INFO_FPGA_FAMILY(reg_value);
+	speed_grade = AXI_INFO_FPGA_SPEED_GRADE(reg_value);
+
+	axi_clkgen_read(axi_clkgen, AXI_REG_FPGA_VOLTAGE, &reg_value);
+	voltage = AXI_INFO_FPGA_VOLTAGE(reg_value);
+
+	switch (speed_grade) {
+	case AXI_FPGA_SPEED_1 ... AXI_FPGA_SPEED_1LV:
+		*fvco_max = 1200000;
+		*fpfd_max = 450000;
+		break;
+	case AXI_FPGA_SPEED_2 ... AXI_FPGA_SPEED_2LV:
+		*fvco_max = 1440000;
+		*fpfd_max = 500000;
+		if ((family == AXI_FPGA_FAMILY_KINTEX) |
+		    (family == AXI_FPGA_FAMILY_ARTIX)) {
+			if (voltage < 950) {
+				*fvco_max = 1200000;
+				*fpfd_max = 450000;
+			}
+		}
+		break;
+	case AXI_FPGA_SPEED_3:
+		*fvco_max = 1600000;
+		*fpfd_max = 550000;
+		break;
+	default:
+		break;
+	};
+
+	if (tech == AXI_FPGA_TECH_ULTRASCALE_PLUS) {
+		*fvco_max = 1600000;
+		*fvco_min = 800000;
+	}
+}
+
+/**
  * @brief axi_clkgen_calc_params
  */
-void axi_clkgen_calc_params(uint32_t fin,
+void axi_clkgen_calc_params(struct axi_clkgen *axi_clkgen,
+			    uint32_t fin,
 			    uint32_t fout,
 			    uint32_t *best_d,
 			    uint32_t *best_m,
 			    uint32_t *best_dout)
 {
-	const uint32_t fpfd_min	= 10000;
-	const uint32_t fpfd_max	= 300000;
-	const uint32_t fvco_min	= 600000;
-	const uint32_t fvco_max	= 1200000;
+	uint32_t fpfd_min	= 10000;
+	uint32_t fpfd_max	= 300000;
+	uint32_t fvco_min	= 600000;
+	uint32_t fvco_max	= 1200000;
 	uint32_t	   d		= 0;
 	uint32_t	   d_min	= 0;
 	uint32_t	   d_max	= 0;
@@ -240,6 +336,12 @@ void axi_clkgen_calc_params(uint32_t fin,
 	uint32_t	   fvco		= 0;
 	int32_t		   f		= 0;
 	int32_t		   best_f	= 0;
+	uint32_t pcore_version;
+
+	axi_clkgen_read(axi_clkgen, AXI_REG_VERSION, &pcore_version);
+	if (AXI_PCORE_VER_MAJOR(pcore_version) > 0x04)
+		axi_clkgen_setup_ranges(axi_clkgen, &fpfd_min, &fpfd_max,
+					&fvco_min, &fvco_max);
 
 	fin /= 1000;
 	fout /= 1000;
@@ -328,7 +430,7 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 	if (clkgen->parent_rate == 0 || rate == 0)
 		return 0;
 
-	axi_clkgen_calc_params(clkgen->parent_rate, rate, &d, &m, &dout);
+	axi_clkgen_calc_params(clkgen, clkgen->parent_rate, rate, &d, &m, &dout);
 
 	if (d == 0 || dout == 0 || m == 0)
 		return 0;
