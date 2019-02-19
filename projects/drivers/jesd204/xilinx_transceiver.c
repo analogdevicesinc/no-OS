@@ -345,6 +345,51 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 	return SUCCESS;
 }
 
+static void xilinx_xcvr_setup_cpll_vco_range(struct xilinx_xcvr *xcvr,
+					     uint32_t *vco_max)
+{
+	if  ((xcvr->type == XILINX_XCVR_TYPE_US_GTH3) |
+	     (xcvr->type == XILINX_XCVR_TYPE_US_GTH4)) {
+		if (xcvr->voltage < 850)
+			*vco_max = 4250000;
+		else if ((xcvr->speed_grade / 10) == 1)
+			*vco_max = 4250000;
+	}
+}
+
+static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
+					     uint32_t *vco0_min,
+					     uint32_t *vco0_max,
+					     uint32_t *vco1_min,
+					     uint32_t *vco1_max)
+{
+	switch (xcvr->type) {
+	case XILINX_XCVR_TYPE_S7_GTX2:
+		if ((xcvr->dev_package == AXI_FPGA_DEV_FB) |
+		    (xcvr->dev_package == AXI_FPGA_DEV_SB))
+			*vco0_max = 6600000;
+		if ((xcvr->speed_grade / 10) == 2)
+			*vco1_max = 10312500;
+		break;
+	case XILINX_XCVR_TYPE_US_GTH3:
+	case XILINX_XCVR_TYPE_US_GTH4:
+		*vco1_min = 8000000;
+		*vco1_max = 13000000;
+		if (((xcvr->voltage < 900) | (xcvr->voltage > 720)) &
+		    ((xcvr->speed_grade / 10) == 1)) {
+			*vco0_max = 12500000;
+			*vco1_max = *vco0_max;
+		}
+		if (xcvr->voltage == 720) {
+			if ((xcvr->speed_grade / 10) == 2)
+				*vco0_max = 12500000;
+			else if ((xcvr->speed_grade / 10) == 1)
+				*vco0_max = 10312500;
+			*vco1_max = *vco0_max;
+		}
+	}
+}
+
 /**
  * @brief xilinx_xcvr_calc_cpll_config
  */
@@ -370,6 +415,9 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 	default:
 		return FAILURE;
 	}
+
+	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10)
+		xilinx_xcvr_setup_cpll_vco_range(xcvr, &vco_max);
 
 	for (m = 1; m <= 2; m++) {
 		for (d = 1; d <= 8; d <<= 1) {
@@ -440,6 +488,11 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 	default:
 		return FAILURE;
 	}
+
+	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10)
+		xilinx_xcvr_setup_qpll_vco_range(xcvr,
+						 &vco0_min, &vco0_max,
+						 &vco1_min, &vco1_max);
 
 	for (m = 1; m <= 4; m++) {
 		for (d = 1; d <= 16; d <<= 1) {

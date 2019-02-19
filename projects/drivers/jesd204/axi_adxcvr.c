@@ -301,13 +301,30 @@ int32_t adxcvr_clk_disable(struct adxcvr *xcvr)
 }
 
 /**
+ * @brief adxcvr_get_info
+ */
+static void adxcvr_get_info(struct adxcvr *xcvr)
+{
+	uint32_t reg_value;
+
+	adxcvr_read(xcvr, AXI_REG_FPGA_INFO, &reg_value);
+	xcvr->xlx_xcvr.tech = AXI_INFO_FPGA_TECH(reg_value);
+	xcvr->xlx_xcvr.family = AXI_INFO_FPGA_FAMILY(reg_value);
+	xcvr->xlx_xcvr.speed_grade = AXI_INFO_FPGA_SPEED_GRADE(reg_value);
+	xcvr->xlx_xcvr.dev_package = AXI_INFO_FPGA_DEV_PACKAGE(reg_value);
+
+	adxcvr_read(xcvr, AXI_REG_FPGA_VOLTAGE, &reg_value);
+	xcvr->xlx_xcvr.voltage = AXI_INFO_FPGA_VOLTAGE(reg_value);
+}
+
+/**
  * @brief adxcvr_init
  */
 int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		    const struct adxcvr_init *init)
 {
 	struct adxcvr *xcvr;
-	uint32_t synth_conf;
+	uint32_t synth_conf, xcvr_type;
 
 	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
 	if (!xcvr)
@@ -327,7 +344,29 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	xcvr->tx_enable = (synth_conf >> 8) & 1;
 	xcvr->num_lanes = synth_conf & 0xff;
 
-	xcvr->xlx_xcvr.type = (synth_conf >> 16) & 0xf;
+	xcvr_type = (synth_conf >> 16) & 0xf;
+
+	adxcvr_read(xcvr, AXI_REG_VERSION, &xcvr->xlx_xcvr.version);
+	if (AXI_PCORE_VER_MAJOR(xcvr->xlx_xcvr.version) > 0x10)
+		adxcvr_get_info(xcvr);
+
+	/* Ensure compliance with legacy xcvr type */
+	if (AXI_PCORE_VER_MAJOR(xcvr->xlx_xcvr.version) <= 0x10) {
+		switch (xcvr_type) {
+		case XILINX_XCVR_LEGACY_TYPE_S7_GTX2:
+			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_S7_GTX2;
+			break;
+		case XILINX_XCVR_LEGACY_TYPE_US_GTH3:
+			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_US_GTH3;
+			break;
+		case XILINX_XCVR_LEGACY_TYPE_US_GTH4:
+			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_US_GTH3;
+			break;
+		default:
+			goto err;
+		}
+	} else
+		xcvr->xlx_xcvr.type = xcvr_type;
 
 	switch (xcvr->xlx_xcvr.type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
