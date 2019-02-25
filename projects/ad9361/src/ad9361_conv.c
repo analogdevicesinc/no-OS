@@ -163,12 +163,12 @@ static uint32_t ad9361_num_phy_chan(struct axiadc_converter *conv)
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_check_pn(struct ad9361_rf_phy *phy, bool tx,
-			       unsigned int delay)
+			       uint32_t delay)
 {
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axi_adc *axi_adc = phy->rx_adc;
-	unsigned int num_chan = ad9361_num_phy_chan(conv);
-	unsigned int chan;
+	uint32_t num_chan = ad9361_num_phy_chan(conv);
+	uint32_t chan;
 
 	for (chan = 0; chan < num_chan; chan++)
 		axi_adc_write(axi_adc, ADI_REG_CHAN_STATUS(chan),
@@ -347,8 +347,8 @@ static void ad9361_dig_tune_verbose_print(struct ad9361_rf_phy *phy,
  * @return None.
  */
 static void ad9361_set_intf_delay(struct ad9361_rf_phy *phy, bool tx,
-				  unsigned int clock_delay,
-				  unsigned int data_delay, bool clock_changed)
+				  uint32_t clock_delay,
+				  uint32_t data_delay, bool clock_changed)
 {
 	if (clock_changed)
 		ad9361_ensm_force_state(phy, ENSM_STATE_ALERT);
@@ -509,7 +509,7 @@ static int32_t ad9361_dig_tune_rx(struct ad9361_rf_phy *phy, uint32_t max_freq,
 				  enum dig_tune_flags flags)
 {
 	struct axi_adc *rx_adc = phy->rx_adc;
-	int ret;
+	int32_t ret;
 
 	ad9361_bist_loopback(phy, 0);
 	ad9361_bist_prbs(phy, BIST_INJ_RX);
@@ -537,10 +537,10 @@ static int32_t ad9361_dig_tune_tx(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axi_adc *rx_adc = phy->rx_adc;
 	uint32_t saved_dsel[4], saved_chan_ctrl6[4], saved_chan_ctrl0[4];
-	unsigned int chan, num_chan;
+	uint32_t chan, num_chan;
 	uint32_t hdl_dac_version;
 	uint32_t tmp, saved = 0;
-	int ret;
+	int32_t ret;
 
 	num_chan = ad9361_num_phy_chan(conv);
 	axi_adc_read(rx_adc, 0x4000, &hdl_dac_version);
@@ -615,7 +615,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	if (!conv)
 		return -ENODEV;
 
-	dev_dbg(&phy->spi->dev, "%s: freq %u flags 0x%X\n", __func__,
+	dev_dbg(&phy->spi->dev, "%s: freq %"PRIu32" flags 0x%X\n", __func__,
 		max_freq, flags);
 
 	ensm_state = ad9361_ensm_get_state(phy);
