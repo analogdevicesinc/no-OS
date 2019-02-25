@@ -44,10 +44,6 @@
 #include "ad9361_api.h"
 #include "parameters.h"
 #include "platform.h"
-#ifdef CONSOLE_COMMANDS
-#include "command.h"
-#include "console.h"
-#endif
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
@@ -59,20 +55,6 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-#ifdef CONSOLE_COMMANDS
-extern command	  	cmd_list[];
-extern char			cmd_no;
-extern cmd_function	cmd_functions[11];
-unsigned char		cmd				 =  0;
-double				param[5]		 = {0, 0, 0, 0, 0};
-char				param_no		 =  0;
-int					cmd_type		 = -1;
-char				invalid_cmd		 =  0;
-char				received_cmd[30] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						    0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-						    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-			   };
-#endif
 
 AD9361_InitParam default_init_param = {
 	/* Device selection */
@@ -495,28 +477,6 @@ int main(void)
 #endif
 #endif
 #endif
-#endif
-
-#ifdef CONSOLE_COMMANDS
-	get_help(NULL, 0);
-
-	while(1) {
-		console_get_command(received_cmd);
-		invalid_cmd = 0;
-		for(cmd = 0; cmd < cmd_no; cmd++) {
-			param_no = 0;
-			cmd_type = console_check_commands(received_cmd, cmd_list[cmd].name,
-							  param, &param_no);
-			if(cmd_type == UNKNOWN_CMD) {
-				invalid_cmd++;
-			} else {
-				cmd_list[cmd].function(param, param_no);
-			}
-		}
-		if(invalid_cmd == cmd_no) {
-			console_print("Invalid command!\n");
-		}
-	}
 #endif
 
 	printf("Done.\n");
