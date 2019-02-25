@@ -3277,9 +3277,9 @@ static int32_t ad9361_trx_ext_lo_control(struct ad9361_rf_phy *phy,
  * @param tx The TX LO setting.
  * @return 0 in case of success, negative error code otherwise.
  */
-int ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
-			      enum synth_pd_ctrl rx,
-			      enum synth_pd_ctrl tx)
+int32_t ad9361_synth_lo_powerdown(struct ad9361_rf_phy *phy,
+				  enum synth_pd_ctrl rx,
+				  enum synth_pd_ctrl tx)
 {
 	dev_dbg(&phy->spi->dev, "%s : RX(%d) TX(%d)", __func__, rx, tx);
 
