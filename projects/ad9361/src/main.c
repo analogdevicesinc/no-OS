@@ -43,20 +43,40 @@
 #include <inttypes.h>
 #include "config.h"
 #include "ad9361_api.h"
-#include "parameters.h"
-#include "platform.h"
+#include "ad9361_parameters.h"
 #include "platform_drivers.h"
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
-#if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
-#include "adc_core.h"
-#include "dac_core.h"
-#endif
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
+#include "axi_dmac.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+struct axi_adc_init rx_adc_init = {
+	"rx_adc",
+	RX_CORE_BASEADDR,
+	4,
+};
+struct axi_dac_init tx_dac_init = {
+	"tx_dac",
+	TX_CORE_BASEADDR,
+	4,
+};
+struct axi_dmac_init rx_dmac_init = {
+	"rx_dmac",
+	CF_AD9361_RX_DMA_BASEADDR,
+	DMA_DEV_TO_MEM,
+	0,
+};
+struct axi_dmac_init tx_dmac_init = {
+	"tx_dmac",
+	CF_AD9361_TX_DMA_BASEADDR,
+	DMA_MEM_TO_DEV,
+	0,
+};
 
 AD9361_InitParam default_init_param = {
 	/* Device selection */
@@ -301,6 +321,10 @@ AD9361_InitParam default_init_param = {
 	NULL,	//gpio_desc *gpio_device_id
 	NULL,	//gpio_desc *gpio_resetb
 	NULL, 	//gpio_desc *gpio_desc_sync;
+	&rx_adc_init,	// *rx_adc_init
+	&tx_dac_init,   // *tx_dac_init
+	&rx_dmac_init,	// *rx_dmac_init
+	&tx_dmac_init,	// *tx_dmac_init
 };
 
 AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
@@ -479,19 +503,33 @@ int main(void)
 	ad9361_set_tx_fir_config(ad9361_phy_b, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy_b, rx_fir_config);
 #endif
-
+	status = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
+	if (status < 0) {
+		printf("axi_dmac_init tx init error: %"PRIi32"\n", status);
+		return status;
+	}
+	status = axi_dmac_init(&ad9361_phy->rx_dmac, default_init_param.rx_dmac_init);
+	if (status < 0) {
+		printf("axi_dmac_init rx init error: %"PRIi32"\n", status);
+		return status;
+	}
 #ifndef AXI_ADC_NOT_PRESENT
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
-	dac_init(ad9361_phy_b, DATA_SEL_DMA, 0);
+	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 #endif
-	dac_init(ad9361_phy, DATA_SEL_DMA, 1);
+	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	axi_dac_set_sine_lut(ad9361_phy->tx_dac, DAC_DDR_BASEADDR);
 #else
 #ifdef FMCOMMS5
-	dac_init(ad9361_phy_b, DATA_SEL_DDS, 0);
+	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
-	dac_init(ad9361_phy, DATA_SEL_DDS, 1);
+	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
 #endif
 #endif
@@ -508,7 +546,7 @@ int main(void)
 	// size of the capture and the start address must be alinged to the size
 	// of the cache line.
 	mdelay(1000);
-	adc_capture(16384, ADC_DDR_BASEADDR);
+	axi_dmac_transfer(ad9361_phy->rx_dmac, ADC_DDR_BASEADDR, 16384 * 16);
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384 * 16);
