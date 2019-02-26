@@ -553,6 +553,24 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 }
 
 /***************************************************************************//**
+ * @brief dac_datasel
+*******************************************************************************/
+int32_t axi_dac_datasel(struct axi_dac *dac, int32_t chan,
+			enum axi_dac_data_sel sel)
+{
+	int32_t i;
+	if (chan < 0) { /* ALL */
+		for (i = 0; i < dac->num_channels; i++) {
+			axi_dac_write(dac, AXI_DAC_REG_CHAN_CNTRL_8(i), sel);
+		}
+	} else {
+		axi_dac_write(dac, AXI_DAC_REG_CHAN_CNTRL_8(chan), sel);
+	}
+	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
+	return 0;
+}
+
+/***************************************************************************//**
  * @brief axi_dac_set_buff
 *******************************************************************************/
 int32_t axi_dac_set_buff(struct axi_dac *dac,
