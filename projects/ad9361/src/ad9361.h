@@ -3323,6 +3323,12 @@ struct ad9361_rf_phy {
 	struct gpio_desc 	*gpio_desc_device_id;
 	struct gpio_desc 	*gpio_desc_resetb;
 	struct gpio_desc 	*gpio_desc_sync;
+	struct axi_adc_init	*rx_adc_init;
+	struct axi_adc		*rx_adc;
+	struct axi_dac_init	*tx_dac_init;
+	struct axi_dac		*tx_dac;
+	struct axi_dmac		*rx_dmac;
+	struct axi_dmac		*tx_dmac;
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];

@@ -46,8 +46,8 @@
 #include <string.h>
 #include <inttypes.h>
 #include "ad9361.h"
-#include "platform.h"
 #include "platform_drivers.h"
+#include "ad9361_util.h"
 #include "util.h"
 #include "config.h"
 
