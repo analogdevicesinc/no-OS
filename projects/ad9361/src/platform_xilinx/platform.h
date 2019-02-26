@@ -45,6 +45,15 @@
 #include <stdint.h>
 #include "util.h"
 
+#include <xparameters.h>
+#ifdef _XPARAMETERS_PS_H_
+#include <xspips.h>
+#include <xgpiops.h>
+#else
+#include <xspi.h>
+#include <xgpio.h>
+#endif
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -136,21 +145,6 @@ enum adc_data_sel {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t spi_init(uint32_t device_id,
-		 uint8_t  clk_pha,
-		 uint8_t  clk_pol);
-int32_t spi_read(struct spi_device *spi,
-		 uint8_t *data,
-		 uint8_t bytes_number);
-int spi_write_then_read(struct spi_device *spi,
-			const unsigned char *txbuf, unsigned n_tx,
-			unsigned char *rxbuf, unsigned n_rx);
-void gpio_init(uint32_t device_id);
-void gpio_direction(uint8_t pin, uint8_t direction);
-bool gpio_is_valid(int number);
-void gpio_set_value(unsigned gpio, int value);
-void udelay(unsigned long usecs);
-void mdelay(unsigned long msecs);
 unsigned long msleep_interruptible(unsigned int msecs);
 void axiadc_init(struct ad9361_rf_phy *phy);
 int axiadc_post_setup(struct ad9361_rf_phy *phy);

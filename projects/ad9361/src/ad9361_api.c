@@ -43,6 +43,7 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 #include "platform.h"
+#include "platform_drivers.h"
 #include "util.h"
 #include "config.h"
 #include <string.h>
@@ -84,11 +85,14 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		return -ENOMEM;
 	}
 
-	phy->spi = (struct spi_device *)zmalloc(sizeof(*phy->spi));
+	phy->spi = zmalloc(sizeof(*phy->spi));
 	if (!phy->spi) {
 		return -ENOMEM;
 	}
-
+	phy->spi = init_param->spi;
+	phy->gpio_desc_device_id = init_param->gpio_desc_device_id;
+	phy->gpio_desc_resetb = init_param->gpio_desc_resetb;
+	phy->gpio_desc_sync= init_param->gpio_desc_sync;
 	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return -ENOMEM;
@@ -115,7 +119,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
-	phy->spi->id_no = init_param->id_no;
+	phy->spi->id = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */

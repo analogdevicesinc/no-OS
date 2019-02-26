@@ -123,4 +123,6 @@
 #endif
 #endif
 
+#define CLK_CS			0x0f
+
 #endif // __PARAMETERS_H__
