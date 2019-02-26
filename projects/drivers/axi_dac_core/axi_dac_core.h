@@ -102,6 +102,8 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 			 uint32_t buff_size);
 uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			      uint32_t address);
+int32_t axi_dac_datasel(struct axi_dac *dac, int32_t chan,
+			enum axi_dac_data_sel sel);
 int32_t axi_dac_dds_get_calib_scale(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t *val,
