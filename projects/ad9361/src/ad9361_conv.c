@@ -44,6 +44,7 @@
 #include <string.h>
 #include "ad9361.h"
 #include "platform.h"
+#include "platform_drivers.h"
 #include "config.h"
 
 #ifndef AXI_ADC_NOT_PRESENT

@@ -43,6 +43,7 @@
 #include "util.h"
 #include "string.h"
 #include "platform.h"
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /*************************** Macros Definitions *******************************/
