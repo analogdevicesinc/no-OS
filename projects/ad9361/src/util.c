@@ -255,7 +255,7 @@ int32_t ilog2(int32_t x)
 {
 	int32_t A = !(!(x >> 16));
 	int32_t count = 0;
-	int32_t x_copy = x;
+	int32_t x_copy;
 
 	count = count + (A << 4);
 
