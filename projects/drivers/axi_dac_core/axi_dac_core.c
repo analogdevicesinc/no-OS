@@ -511,7 +511,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
 #ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address + index_mem * 4, data_i1 | data_q1);
+			IOWR_32DIRECT(address, index_mem * 4, data_i1 | data_q1);
 #else
 			Xil_Out32(address + index_mem * 4, data_i1 | data_q1);
 #endif
@@ -525,7 +525,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
 #ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address + (index_mem + 1) * 4, data_i2 | data_q2);
+			IOWR_32DIRECT(address, (index_mem + 1) * 4, data_i2 | data_q2);
 #else
 			Xil_Out32(address + (index_mem + 1) * 4, data_i2 | data_q2);
 #endif
@@ -539,7 +539,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1] << 20);
 			data_q1 = (sine_lut[index_q1] << 4);
 #ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address + index * 4, data_i1 | data_q1);
+			IOWR_32DIRECT(address, index * 4, data_i1 | data_q1);
 #else
 			Xil_Out32(address + index * 4, data_i1 | data_q1);
 #endif
