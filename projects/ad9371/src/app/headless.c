@@ -49,10 +49,15 @@
 #include "platform_drivers.h"
 #include "parameters.h"
 #include "util.h"
+#ifdef ALTERA_PLATFORM
+#include "clk_altera_a10_fpll.h"
+#include "altera_adxcvr.h"
+#else
 #include "clk_axi_clkgen.h"
+#include "axi_adxcvr.h"
+#endif
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
-#include "axi_adxcvr.h"
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
@@ -93,6 +98,26 @@ int main(void)
 				   TRACK_RX2_QEC | TRACK_TX1_QEC | TRACK_TX2_QEC;
 	uint32_t status;
 	int32_t ret;
+#ifdef ALTERA_PLATFORM
+	struct altera_a10_fpll_init rx_device_clk_pll_init = {
+		"rx_device_clk_pll",
+		RX_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll_init tx_device_clk_pll_init = {
+		"tx_device_clk_pll",
+		TX_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll_init rx_os_device_clk_pll_init = {
+		"rx_os_device_clk_pll",
+		RX_OS_A10_FPLL_BASEADDR,
+		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+	};
+	struct altera_a10_fpll *rx_device_clk_pll;
+	struct altera_a10_fpll *tx_device_clk_pll;
+	struct altera_a10_fpll *rx_os_device_clk_pll;
+#else
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -111,6 +136,7 @@ int main(void)
 	struct axi_clkgen *rx_clkgen;
 	struct axi_clkgen *tx_clkgen;
 	struct axi_clkgen *rx_os_clkgen;
+#endif
 	uint32_t rx_lane_rate_khz = mykDevice.rx->rxProfile->iqRate_kHz *
 				    mykDevice.rx->framer->M * (20 /
 						    hweight8(mykDevice.rx->framer->serializerLanesEnabled));
@@ -159,6 +185,32 @@ int main(void)
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
 	struct axi_jesd204_rx *rx_os_jesd;
+#ifdef ALTERA_PLATFORM
+	struct adxcvr_init rx_adxcvr_init = {
+		"rx_adxcvr",
+		RX_XCVR_BASEADDR,
+		{RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, 0, 0},
+		0,
+		rx_lane_rate_khz,
+		mykDevice.clocks->deviceClock_kHz,
+	};
+	struct adxcvr_init tx_adxcvr_init = {
+		"tx_adxcvr",
+		TX_XCVR_BASEADDR,
+		{TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
+		TX_PLL_BASEADDR,
+		tx_lane_rate_khz,
+		mykDevice.clocks->deviceClock_kHz,
+	};
+	struct adxcvr_init rx_os_adxcvr_init = {
+		"rx_os_adxcvr",
+		RX_OS_XCVR_BASEADDR,
+		{RX_OS_ADXCFG_0_BASEADDR, RX_OS_ADXCFG_1_BASEADDR, 0, 0},
+		0,
+		rx_os_lane_rate_khz,
+		mykDevice.clocks->deviceClock_kHz,
+	};
+#else
 	struct adxcvr_init rx_adxcvr_init = {
 		"rx_adxcvr",
 		RX_XCVR_BASEADDR,
@@ -189,6 +241,7 @@ int main(void)
 		rx_os_lane_rate_khz,
 		mykDevice.clocks->deviceClock_kHz,
 	};
+#endif
 	struct adxcvr *rx_adxcvr;
 	struct adxcvr *tx_adxcvr;
 	struct adxcvr *rx_os_adxcvr;
@@ -251,6 +304,58 @@ int main(void)
 	if (error != ADIERR_OK)
 		printf("WARNING: AD9528_initialize() issues. Possible cause: REF_CLK not connected.\n");
 
+#ifdef ALTERA_PLATFORM
+	/* Initialize A10 FPLLs */
+	status = altera_a10_fpll_init(&rx_device_clk_pll,
+				      &rx_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_1;
+	}
+	status = altera_a10_fpll_init(&tx_device_clk_pll,
+				      &tx_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_2;
+	}
+	status = altera_a10_fpll_init(&rx_os_device_clk_pll,
+				      &rx_os_device_clk_pll_init);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       rx_os_device_clk_pll_init.name);
+		goto error_3;
+	}
+
+	altera_a10_fpll_disable(rx_device_clk_pll);
+	status = altera_a10_fpll_set_rate(rx_device_clk_pll,
+					  rx_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       rx_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(rx_device_clk_pll);
+	altera_a10_fpll_disable(tx_device_clk_pll);
+	status = altera_a10_fpll_set_rate(tx_device_clk_pll,
+					  tx_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       tx_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(tx_device_clk_pll);
+	altera_a10_fpll_disable(rx_os_device_clk_pll);
+	status = altera_a10_fpll_set_rate(rx_os_device_clk_pll,
+					  rx_os_div40_rate_hz);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       rx_os_device_clk_pll->name);
+		goto error_4;
+	}
+	altera_a10_fpll_enable(rx_os_device_clk_pll);
+#else
 	/* Initialize CLKGEN */
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
 	if (status != SUCCESS) {
@@ -283,6 +388,7 @@ int main(void)
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
 		goto error_4;
 	}
+#endif
 
 	/* Initialize JESDs */
 	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
@@ -624,11 +730,13 @@ int main(void)
 		goto error_11;
 	}
 
+#ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(tx_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
 		goto error_10;
 	}
+#endif
 	axi_jesd204_tx_lane_clk_enable(tx_jesd);
 
 	if ((mykError = MYKONOS_enableSysrefToDeframer(&mykDevice,
@@ -649,17 +757,21 @@ int main(void)
 
 	/*** < Info: Mykonos is actively transmitting CGS from the ObsRxFramer> ***/
 
+#ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(rx_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
 		goto error_10;
 	}
+#endif
 	axi_jesd204_rx_lane_clk_enable(rx_jesd);
+#ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(rx_os_adxcvr);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
 		goto error_10;
 	}
+#endif
 	axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
 
 	/* Request two SYSREFs from the AD9528 */
@@ -763,7 +875,9 @@ int main(void)
 
 error_11:
 	printf("%s", errorString);
+#ifndef ALTERA_PLATFORM
 error_10:
+#endif
 	adxcvr_remove(rx_os_adxcvr);
 error_9:
 	adxcvr_remove(tx_adxcvr);
@@ -776,11 +890,23 @@ error_6:
 error_5:
 	axi_jesd204_rx_remove(rx_jesd);
 error_4:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(rx_os_device_clk_pll);
+#else
 	axi_clkgen_remove(rx_os_clkgen);
+#endif
 error_3:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(tx_device_clk_pll);
+#else
 	axi_clkgen_remove(tx_clkgen);
+#endif
 error_2:
+#ifdef ALTERA_PLATFORM
+	altera_a10_fpll_remove(rx_device_clk_pll);
+#else
 	axi_clkgen_remove(rx_clkgen);
+#endif
 error_1:
 	platform_remove();
 error_0:
