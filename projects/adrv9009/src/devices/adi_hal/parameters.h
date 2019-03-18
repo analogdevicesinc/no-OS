@@ -98,13 +98,12 @@
 #else
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET		78
-#define CLK_CS			1
-#define ADRV_CS			2
 #else
 #define GPIO_OFFSET		54
-#define CLK_CS			2
-#define ADRV_CS			1
 #endif
+
+#define CLK_CS			1
+#define ADRV_CS			2
 
 #define ADRV_RESETB		GPIO_OFFSET + 52
 #define ADRV_SYSREF_REQ	GPIO_OFFSET + 58
