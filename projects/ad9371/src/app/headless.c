@@ -68,6 +68,9 @@
 extern ad9528Device_t clockAD9528_;
 extern mykonosDevice_t mykDevice;
 
+#define AD9371_PRODID		0x03
+#define IS_AD9371(prodid)	(prodid == AD9371_PRODID)
+
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -264,6 +267,7 @@ int main(void)
 		0,
 	};
 	struct axi_dmac *rx_dmac;
+	uint8_t product_id;
 	uint32_t i;
 
 	/* Allocating memory for the errorString */
@@ -439,6 +443,20 @@ int main(void)
 		goto error_11;
 	}
 
+	if ((mykError = MYKONOS_getProductId(&mykDevice,
+			&product_id)) != MYKONOS_ERR_OK) {
+		errorString = getMykonosErrorMessage(mykError);
+		goto error_11;
+	}
+
+	if (!IS_AD9371(product_id)) {
+		mykDevice.tx->txProfile->enableDpdDataPath = 1;
+		if ((mykError = MYKONOS_initialize(&mykDevice)) != MYKONOS_ERR_OK) {
+			errorString = getMykonosErrorMessage(mykError);
+			goto error_11;
+		}
+	}
+
 	/*************************************************************************/
 	/*****                Mykonos CLKPLL Status Check                    *****/
 	/*************************************************************************/
@@ -551,6 +569,26 @@ int main(void)
 		goto error_2;
 	}
 
+	if (!IS_AD9371(product_id)) {
+		mykError = MYKONOS_configDpd(&mykDevice);
+		if (mykError != MYKONOS_ERR_OK) {
+			errorString = getMykonosErrorMessage(mykError);
+			goto error_11;
+		}
+
+		mykError = MYKONOS_configClgc(&mykDevice);
+		if (mykError != MYKONOS_ERR_OK) {
+			errorString = getMykonosErrorMessage(mykError);
+			goto error_11;
+		}
+
+		mykError = MYKONOS_configVswr(&mykDevice);
+		if (mykError != MYKONOS_ERR_OK) {
+			errorString = getMykonosErrorMessage(mykError);
+			goto error_11;
+		}
+	}
+
 	/*************************************************************************/
 	/*****                Mykonos Set GPIOs                              *****/
 	/*************************************************************************/
@@ -646,6 +684,7 @@ int main(void)
 	/*****           Mykonos ARM Initialization Calibrations             *****/
 	/*************************************************************************/
 
+	initCalMask |= (!IS_AD9371(product_id) ? DPD_INIT | CLGC_INIT | VSWR_INIT : 0);
 	if ((mykError = MYKONOS_runInitCals(&mykDevice,
 					    (initCalMask & ~TX_LO_LEAKAGE_EXTERNAL))) != MYKONOS_ERR_OK) {
 		errorString = getMykonosErrorMessage(mykError);

@@ -406,9 +406,9 @@ static mykonosTxSettings_t txSettings =
     TXATTEN_0P05_DB,/* Initial and current Tx1 Attenuation*/
     10000,          /* Initial and current Tx1 Attenuation mdB*/
     10000,          /* Initial and current Tx2 Attenuation mdB*/
-    NULL,           /* DPD,CLGC,VSWR settings. Only valid for AD9373 device, set pointer to NULL otherwise*/
-    NULL,           /* CLGC Config Structure. Only valid for AD9373 device, set pointer to NULL otherwise*/
-    NULL            /* VSWR Config Structure. Only valid for AD9373 device, set pointer to NULL otherwise*/
+    &dpdConfig,     /* DPD,CLGC,VSWR settings. Only valid for AD9373 device, set pointer to NULL otherwise*/
+    &clgcConfig,    /* CLGC Config Structure. Only valid for AD9373 device, set pointer to NULL otherwise*/
+    &vswrConfig     /* VSWR Config Structure. Only valid for AD9373 device, set pointer to NULL otherwise*/
 };
 
 
