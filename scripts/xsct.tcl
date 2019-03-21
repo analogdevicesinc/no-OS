@@ -33,7 +33,7 @@ if {$m_mode == "library"} {
 if {$m_mode == "defines"} {
 
   sdk configapp -app sw build-config debug
-  for {set i 1} {$i < $argc} {incr i} {
+  for {set i 2} {$i < $argc} {incr i} {
     set compiler_define [lindex $argv $i]
     if { [regexp [ 0-9] $compiler_define ] } {
 	regsub -all { } $compiler_define {=} compiler_define
@@ -41,12 +41,19 @@ if {$m_mode == "defines"} {
     sdk configapp -app sw define-compiler-symbols $compiler_define
   }
   sdk configapp -app sw build-config release
-  for {set i 1} {$i < $argc} {incr i} {
+  for {set i 2} {$i < $argc} {incr i} {
     set compiler_define [lindex $argv $i]
     if { [regexp [ 0-9] $compiler_define ] } {
 	regsub -all { } $compiler_define {=} compiler_define
     }
     sdk configapp -app sw define-compiler-symbols $compiler_define
+  }
+
+  set hdf_file [lindex $argv 1]
+  hsi open_hw_design $hdf_file
+  set cpu_name [lindex [hsi get_cells -filter {IP_TYPE==PROCESSOR}] 0]
+  if { $cpu_name == "sys_mb" } {	  
+	  sdk configapp -app sw -set linker-misc {-Xlinker --defsym=_HEAP_SIZE=0x2000 -Xlinker --defsym=_STACK_SIZE=0x2000}
   }
   exit
 }
