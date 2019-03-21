@@ -21,7 +21,7 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core/xcvr_modules
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/jesd_core
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad6676
+M_INC_DIRS += $(NOOS-DIR)/drivers/adc/ad6676
 
 M_HDR_FILES := $(NOOS-DIR)/ad6676-ebz/config.h
 
