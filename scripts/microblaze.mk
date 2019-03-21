@@ -71,7 +71,7 @@ $(P_SRC_FILES): hw/system_top.bit
 hw/system_top.bit: $(HDF-FILE)
 	rm -fr .metadata .Xil hw bsp xilsw sw xsct.log
 	$(XSCT_CMD) $(XSCT_SCRIPT) init $(HDF-FILE) > $(XSCT_LOG) 2>&1
-	$(XSCT_CMD) $(XSCT_SCRIPT) defines $(COMPILER_DEFINES) >> $(XSCT_LOG) 2>&1
+	$(XSCT_CMD) $(XSCT_SCRIPT) defines $(HDF-FILE) $(COMPILER_DEFINES) >> $(XSCT_LOG) 2>&1
 	$(XSCT_CMD) $(XSCT_SCRIPT) make-bsp-xilsw >> $(XSCT_LOG) 2>&1
 
 
