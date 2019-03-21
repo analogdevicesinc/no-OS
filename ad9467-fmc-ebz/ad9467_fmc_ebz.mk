@@ -17,8 +17,8 @@ NR_OF_CHAN := 1
 M_INC_DIRS := $(NOOS-DIR)/common_drivers/platform_drivers
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/adc_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad9467
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad9517
+M_INC_DIRS += $(NOOS-DIR)/drivers/adc/ad9467
+M_INC_DIRS += $(NOOS-DIR)/drivers/frequency/ad9517
 M_INC_DIRS += $(NOOS-DIR)/ad9467-fmc-ebz
 
 M_HDR_FILES :=

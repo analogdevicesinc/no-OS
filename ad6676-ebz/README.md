@@ -3,7 +3,7 @@
 The following drivers are required for building the **AD6676-EBZ** no-OS project:
  - AD6676-EBZ Main Driver	-	[./] (./)
  - Platform Drivers		-	[../common_drivers/xilinx_platform_drivers] (../common_drivers/xilinx_platform_drivers)
- - AD6676 Driver		-	[../drivers/ad6676] (../drivers/ad6676)
+ - AD6676 Driver		-	[../drivers/adc/ad6676] (../drivers/adc/ad6676)
  - ADC Core Driver		-	[../common_drivers/adc_core] (../common_drivers/adc_core)
  - ADXCVR Driver		-       [../common_drivers/adxcvr_core] (../common_drivers/adxcvr_core)
  - JESD Driver			-       [../common_drivers/jesd_core] (../common_drivers/jesd_core)

@@ -21,9 +21,9 @@ M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/xcvr_core/xcvr_modules
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/jesd_core
 M_INC_DIRS += $(NOOS-DIR)/common_drivers/dmac_core
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad9152
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad9528
-M_INC_DIRS += $(NOOS-DIR)/drivers/ad9680
+M_INC_DIRS += $(NOOS-DIR)/drivers/dac/ad9152
+M_INC_DIRS += $(NOOS-DIR)/drivers/frequency/ad9528
+M_INC_DIRS += $(NOOS-DIR)/drivers/adc/ad9680
 
 M_HDR_FILES := $(NOOS-DIR)/fmcdaq3/config.h
 
