@@ -3,7 +3,7 @@
  * \brief Contains top level Talise related function prototypes for
  *        talise.c
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -233,6 +233,64 @@ uint32_t TALISE_getMultiChipSyncStatus(taliseDevice_t *device,
  */
 uint32_t TALISE_enableMultichipSync(taliseDevice_t *device, uint8_t enableMcs,
 				    uint8_t *mcsStatus);
+
+/**
+ * \brief Resets the JESD204 serializer
+ *
+ * \dep_begin
+ * \dep{device->devHalInfo}
+ * \dep_end
+ *
+ * \param device is a pointer to the device settings structure
+ *
+ * \retval TALACT_WARN_RESET_LOG Recovery action for log reset
+ * \retval TALACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval TALACT_ERR_RESET_SPI Recovery action for SPI reset required
+ * \retval TALACT_NO_ACTION Function completed successfully, no action required
+ */
+uint32_t TALISE_serializerReset(taliseDevice_t *device);
+
+/**
+ * \brief Sets up the chip for multichip LOs Phase synchronization
+ *
+ *  LOs on multiple chips can be phase synchronized to support active
+ *  antenna system and beam forming applications.This function should
+ *  be run after all transceivers have finished the TALISE_setRfPllFrequency(),
+ *  and before TALISE_runInitCals().
+ *
+ *  When the enableDigTestClk parameter = 1, this function will reset the MCS state
+ *  machine in the Talise device and switch the ARM to run on device clock scaled instead of HSDIGCLK
+ *
+ *  When the enableDigTestClk parameter = 0, this function will enable Mcs Digital Clocks Sync and JESD204 sysref,
+ *  switch the ARM back the HSDIGCLK.
+ *
+ *  Typical sequence:
+ *  1) Initialize all Talise devices in system using TALISE_initialize(),load the ARM and stream processor
+ *  2) Set the RF PLL frequency with TALISE_setRfPllFrequency
+ *  3) Run TALISE_enableMultichipRfLOPhaseSync with enableDigTestClk = 1 before TALISE_runInitCals()
+ *  4) Send at least 4 SYSREF pulses
+ *  5) Run TALISE_enableMultichipRfLOPhaseSync with enableDigTestClk = 0
+ *  6) Send at least 4 SYSREF pulses
+ *  7) Continue with init sequence ...Run initCals, bring up JESD204, etc
+ *
+ * \pre This function is called after the device has been initialized, ARM is loaded and PLL lock status has
+ * been verified
+ *
+ * \dep_begin
+ * \dep{device->devHalInfo}
+ * \dep_end
+ *
+ * \param device is a pointer to the device settings structure
+ * \param enableDigTestClk =1 will enable/reset the MCS state machine and switch between device clock scaled and
+ * HSDIGCLK
+ *
+ * \retval TALACT_WARN_RESET_LOG Recovery action for log reset
+ * \retval TALACT_ERR_CHECK_PARAM Recovery action for bad parameter check
+ * \retval TALACT_ERR_RESET_SPI Recovery action for SPI reset required
+ * \retval TALACT_NO_ACTION Function completed successfully, no action required
+ */
+uint32_t TALISE_enableMultichipRfLOPhaseSync(taliseDevice_t *device,
+		uint8_t enableDigTestClk);
 
 /****************************************************************************
  * Runtime functions

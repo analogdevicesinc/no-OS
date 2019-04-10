@@ -2,7 +2,7 @@
  * \file talise_reg_addr_macros.h
  * \brief Contains Talise API address macro definitions
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -244,6 +244,8 @@ extern "C" {
 #define TALISE_ADDR_ADC_BIAS_FLASH_VISB                            0x09C4
 #define TALISE_ADDR_DIGITAL_DC_OFFSET_SHIFT                        0x0B01
 #define TALISE_ADDR_DIGITAL_DC_OFFSET_ORX_SHIFT                    0x0B43
+#define TALISE_ADDR_DIGITAL_DC_OFFSET_CONFIG                       0x0B02
+#define TALISE_DIGITAL_DC_OFFSET_ORX_LOOPBACK_CONFIG               0x0B40
 #define TALISE_ADDR_TX_FILTER_CONFIGURATION                        0x0D45
 #define TALISE_ADDR_TX1_ATTENUATION_0_READBACK                     0x0E00
 #define TALISE_ADDR_TX1_ATTENUATION_1_READBACK                     0x0E01

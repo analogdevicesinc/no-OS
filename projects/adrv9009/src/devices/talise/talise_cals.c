@@ -2,7 +2,7 @@
  * \file talise_cals.c
  * \brief Contains functions to support Talise init and tracking calibrations
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -1678,6 +1678,107 @@ uint32_t TALISE_getDigDcOffsetMShift(taliseDevice_t *device,
 	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
 				  TALACT_ERR_RESET_SPI);
 	IF_ERR_RETURN_U32(retVal);
+
+	return (uint32_t)retVal;
+}
+
+uint32_t TALISE_setDigDcOffsetEn(taliseDevice_t *device, uint8_t enableMask)
+{
+	talRecoveryActions_t retVal = TALACT_NO_ACTION;
+	adiHalErr_t halError = ADIHAL_OK;
+	uint16_t REG_ADDRESS = 0x00;
+	uint8_t dataToWrite = 0x00;
+
+#if (TALISE_VERBOSE == 1)
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_setDigDcOffsetEn()\n");
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
+				  TALACT_WARN_RESET_LOG);
+#endif
+
+	if (enableMask & ~((uint8_t)TAL_DC_OFFSET_ALL_ON)) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_DIG_DC_OFFSET_INV_ENABLE_MASK, retVal,
+						  TALACT_ERR_CHECK_PARAM);
+	}
+
+	REG_ADDRESS =
+		TALISE_ADDR_DIGITAL_DC_OFFSET_CONFIG;                           /* Address for Rx Digital tracking Enable bits register */
+	if (enableMask & ((uint8_t)TAL_DC_OFFSET_RX1 | (uint8_t)
+			  TAL_DC_OFFSET_RX2)) { /* Enable / Disable  Rx1 and/or Rx2 */
+		dataToWrite |= (enableMask & ((uint8_t)TAL_DC_OFFSET_RX1 |
+					      (uint8_t) TAL_DC_OFFSET_RX2));
+	}
+
+	halError = talSpiWriteField(device->devHalInfo,  REG_ADDRESS, dataToWrite, 0x06,
+				    1); /* Write RX enable bits to the register */
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	dataToWrite =
+		0x0;                                                             /* Reset dataToWrite */
+	REG_ADDRESS =
+		TALISE_DIGITAL_DC_OFFSET_ORX_LOOPBACK_CONFIG;                    /* Address for ORx Digital trackingEnable bits register */
+	if (enableMask & ((uint8_t)TAL_DC_OFFSET_ORX1 | (uint8_t)
+			  TAL_DC_OFFSET_ORX2)) { /* Check for channel  ORx and/or Sniffer */
+		dataToWrite |= ((enableMask & ((uint8_t)TAL_DC_OFFSET_ORX1 |
+					       (uint8_t)TAL_DC_OFFSET_ORX2)) >> 2);
+	}
+
+	halError = talSpiWriteField(device->devHalInfo,  REG_ADDRESS, dataToWrite, 0x03,
+				    0);  /* Write Loopback, ORx1 and ORx2 enable bits to the register */
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+
+	return (uint32_t)retVal;
+}
+
+uint32_t TALISE_getDigDcOffsetEn(taliseDevice_t *device,uint8_t *enableMask)
+{
+	talRecoveryActions_t retVal = TALACT_NO_ACTION;
+	adiHalErr_t halError = ADIHAL_OK;
+	uint16_t REG_ADDRESS = 0;
+	uint8_t readbackData = 0;
+	uint8_t enableMaskData = 0;
+
+#if (TALISE_VERBOSE == 1)
+	halError = talWriteToLog(device->devHalInfo, ADIHAL_LOG_MSG, TAL_ERR_OK,
+				 "TALISE_getDigDcOffsetEn()\n");
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_LOG, halError, retVal,
+				  TALACT_WARN_RESET_LOG);
+#endif
+
+	if (enableMask == NULL) {
+		return (uint32_t)talApiErrHandler(device, TAL_ERRHDL_INVALID_PARAM,
+						  TAL_ERR_DIG_DC_OFFSET_NULL_ENABLE_MASK, retVal,
+						  TALACT_ERR_CHECK_PARAM);
+	}
+
+	/* Read back Rx1/Rx2 Dig DC offset enable setting */
+	REG_ADDRESS =
+		TALISE_ADDR_DIGITAL_DC_OFFSET_CONFIG;  /* register address of Rx1 and Rx2 enable bits*/
+	halError = talSpiReadField(device->devHalInfo, REG_ADDRESS, &readbackData, 0x06,
+				   1);
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+	enableMaskData |=
+		readbackData;  /* adjust bits to match channel :refer enum mykonosRfDcOffsettEn_t. */
+
+	readbackData = 0x00;
+	REG_ADDRESS =
+		TALISE_DIGITAL_DC_OFFSET_ORX_LOOPBACK_CONFIG;  /* register address of Orx and sniffer enable bits*/
+	halError = talSpiReadField(device->devHalInfo, REG_ADDRESS, &readbackData, 0x03,
+				   0);
+	retVal = talApiErrHandler(device, TAL_ERRHDL_HAL_SPI, halError, retVal,
+				  TALACT_ERR_RESET_SPI);
+	IF_ERR_RETURN_U32(retVal);
+	enableMaskData |= (uint8_t)(readbackData <<
+				    2);  /* adjust bits to match channel :refer enum mykonosRfDcOffsettEn_t. */
+
+	*enableMask = enableMaskData;
 
 	return (uint32_t)retVal;
 }
