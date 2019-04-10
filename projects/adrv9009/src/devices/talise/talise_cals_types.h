@@ -2,7 +2,7 @@
  * \file talise_cals_types.h
  * \brief Contains Talise API Calibration data types
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -74,6 +74,18 @@ typedef enum {
 	TAL_DC_OFFSET_RX_CHN = 0,
 	TAL_DC_OFFSET_ORX_CHN = 1
 } taliseDcOffsetChannels_t;
+
+/**
+ *  \brief Enum of Rx/ORx channels mask  for configuring (Enable /disable) DC offsets.
+ */
+typedef enum {
+	TAL_DC_OFFSET_ALL_OFF = 0x00,               /*!< Disable all the channels */
+	TAL_DC_OFFSET_RX1 = 0x01,                   /*!< Enables Rx1  */
+	TAL_DC_OFFSET_RX2 = 0x02,                   /*!< Enables Rx2  */
+	TAL_DC_OFFSET_ORX1 = 0x04,                   /*!< Enables ORx1  */
+	TAL_DC_OFFSET_ORX2 = 0x08,                   /*!< Enables ORx2  */
+	TAL_DC_OFFSET_ALL_ON = 0x0F              /*!< Enables all the channels  */
+} taliseRxDcOffsettEn_t;
 
 /**
  * \brief Data structure to hold Tx LOL Status

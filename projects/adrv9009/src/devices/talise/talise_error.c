@@ -4,7 +4,7 @@
  *        These functions are public to the customer for getting more details on
  *        errors and debugging.
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -1086,6 +1086,10 @@ const char* TALISE_getErrorMessage(uint32_t errSrc, uint32_t errCode)
 			return "TALISE_setExtLoOutCfg(): Can not enable Ext LO output because Ext LO input was enabled during init.\n";
 		case TAL_ERR_GETEXTLOOUT_NULL_PARAM:
 			return "TALISE_getExtLoOutCfg(): Null function parameter\n";
+		case TAL_ERR_DIG_DC_OFFSET_INV_ENABLE_MASK:
+			return "TALISE_setDigDcOffsetEn(): Invalid enable mask parameter\n";
+		case TAL_ERR_DIG_DC_OFFSET_NULL_ENABLE_MASK:
+			return "TALISE_getDigDcOffsetEn(): NULL enable mask parameter\n";
 		case TAL_ERR_NUMBER_OF_ERRORS:
 			return "Invalid API error passed, last in error list\n"; /*Use for TestApiErrorStrings */
 		default:

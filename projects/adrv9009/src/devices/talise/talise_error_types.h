@@ -2,7 +2,7 @@
  * \file talise_error_types.h
  * \brief Contains Talise data types for API Error messaging
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -517,6 +517,8 @@ typedef enum {
 	TAL_ERR_SETEXTLOOUT_INV_DIV_PARAM,
 	TAL_ERR_SETEXTLOOUT_LO_IN_ENABLED,
 	TAL_ERR_GETEXTLOOUT_NULL_PARAM,
+	TAL_ERR_DIG_DC_OFFSET_INV_ENABLE_MASK,
+	TAL_ERR_DIG_DC_OFFSET_NULL_ENABLE_MASK,
 	TAL_ERR_NUMBER_OF_ERRORS /* Keep this ENUM last as a reference to the total number of error enum values */
 } taliseErr_t;
 

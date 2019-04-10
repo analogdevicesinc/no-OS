@@ -3,7 +3,7 @@
  * \brief Contains functions to support interfacing with the TALISE internal
  *          ARM processor
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
@@ -174,7 +174,17 @@ uint32_t TALISE_writeArmProfile(taliseDevice_t *device, taliseInit_t *init)
 		init->clocks.rfPllUseExternalLo;
 
 	cfgData[13] = (init->clocks.rfPllPhaseSyncMode & 0x03); /* RFPLL MCS control */
-	cfgData[14] = 0x00; /* Not used...padding */
+	if ((init->obsRx.orxProfile.rfBandwidth_Hz > 200000000) &&
+	    (device->devStateInfo.orxAdcStitchingEnabled == 0)) {
+		/* Override stitching for bandwidth above 200 MHz,if all MergeFilter */
+		/* values are zero */
+		/* 1 - Override ADC stitching - meaning do not do ADC stitching. */
+		/* 0 - Do not override ADC stitching */
+		cfgData[14] = 1;
+	} else {
+		cfgData[14] = 0x00;
+	}
+
 	cfgData[15] = 0x00; /* Not used...padding */
 
 	if (device->devStateInfo.profilesValid & TX_PROFILE_VALID) {

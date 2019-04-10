@@ -2,7 +2,7 @@
  * \file talise_user.c
  * \brief Contains Talise API default gain table values for Rx and ObsRx channels.  This file contains information which can be modified by the user.
  *
- * Talise API version: 3.5.0.2
+ * Talise API version: 3.6.0.5
  *
  * Copyright 2015-2017 Analog Devices Inc.
  * Released under the AD9378-AD9379 API license, for more information see the "LICENSE.txt" file in this zip file.
