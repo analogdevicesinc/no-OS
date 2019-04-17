@@ -281,6 +281,18 @@ int32_t ad5758_set_dc_dc_conv_mode(struct ad5758_dev *dev,
 	uint16_t reg_data;
 	int32_t ret;
 
+	/*
+	 * The ENABLE_PPC_BUFFERS bit must be set prior to enabling PPC current
+	 * mode.
+	 */
+	if (mode == PPC_CURRENT_MODE) {
+		ret  = ad5758_spi_write_mask(st, AD5758_ADC_CONFIG,
+					     AD5758_ADC_CONFIG_PPC_BUF_MSK,
+					     AD5758_ADC_CONFIG_PPC_BUF_EN(1));
+		if (ret < 0)
+			return ret;
+	}
+
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_DCDC_CONFIG1,
 				    AD5758_DCDC_CONFIG1_DCDC_MODE_MSK,
 				    AD5758_DCDC_CONFIG1_DCDC_MODE_MODE(mode));
@@ -324,39 +336,6 @@ int32_t ad5758_set_dc_dc_ilimit(struct ad5758_dev *dev,
 	ret = ad5758_spi_write_mask(dev, AD5758_REG_DCDC_CONFIG2,
 				    AD5758_DCDC_CONFIG2_ILIMIT_MSK,
 				    AD5758_DCDC_CONFIG2_ILIMIT_MODE(ilimit));
-
-	if (ret < 0) {
-		printf("%s: Failed.\n", __func__);
-
-		return FAILURE;
-	}
-	/*
-	 * Poll the BUSY_3WI bit in the DCDC_CONFIG2 register until it is 0.
-	 * This allows the 3-wire interface communication to complete.
-	 */
-	do {
-		ad5758_spi_reg_read(dev, AD5758_REG_DCDC_CONFIG2, &reg_data);
-	} while (reg_data & AD5758_DCDC_CONFIG2_BUSY_3WI_MSK);
-
-	return SUCCESS;
-}
-
-/**
- * Enable/disable VIOUT Fault Protection Switch.
- * @param dev - The device structure.
- * @param enable - enable or disable
- * Accepted values: 0: disable
- * 		    1: enable
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad5758_fault_prot_switch_en(struct ad5758_dev *dev, uint8_t enable)
-{
-	uint16_t reg_data;
-	int32_t ret;
-
-	ret = ad5758_spi_write_mask(dev, AD5758_REG_DCDC_CONFIG1,
-				    AD5758_DCDC_CONFIG1_FAULT_PROT_SW_EN_MSK,
-				    AD5758_DCDC_CONFIG1_FAULT_PROT_SW_EN_MODE(enable));
 
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
@@ -816,9 +795,6 @@ int32_t ad5758_init(struct ad5758_dev **device,
 
 	/* Set up the dc-to-dc converter mode */
 	ret |= ad5758_set_dc_dc_conv_mode(dev, init_param.dc_dc_mode);
-
-	/* Enable the VIOUT fault protection switch (FPS is closed) */
-	ret |= ad5758_fault_prot_switch_en(dev, 1);
 
 	/* Power up the DAC and internal (INT) amplifiers */
 	ret |= ad5758_internal_buffers_en(dev, 1);
