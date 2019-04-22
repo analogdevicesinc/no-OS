@@ -163,8 +163,8 @@ taliseInit_t talInit = {
 		.deframerSel = TAL_DEFRAMER_A,                    /* Talise JESD204b deframer config for the Tx data path */
 		.txChannels = TAL_TX1TX2,                            /* The desired Tx channels to enable during initialization */
 		.txAttenStepSize = TAL_TXATTEN_0P05_DB,            /* Tx Attenuation step size */
-		.tx1Atten_mdB = 0,                            /* Initial Tx1 Attenuation */
-		.tx2Atten_mdB = 0,                            /* Initial Tx2 Attenuation */
+		.tx1Atten_mdB = 10000,                            /* Initial Tx1 Attenuation */
+		.tx2Atten_mdB = 10000,                            /* Initial Tx2 Attenuation */
 		.disTxDataIfPllUnlock = TAL_TXDIS_TX_RAMP_DOWN_TO_ZERO    /* Options to disable the transmit data when the RFPLL unlocks. */
 	},
 
