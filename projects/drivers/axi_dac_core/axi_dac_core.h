@@ -120,4 +120,8 @@ int32_t axi_dac_dds_set_calib_phase(struct axi_dac *dac,
 				    uint32_t chan,
 				    int32_t val,
 				    int32_t val2);
+int32_t axi_dac_load_custom_data(struct axi_dac *dac,
+				 const uint32_t *custom_data_iq,
+				 uint32_t custom_tx_count,
+				 uint32_t address);
 #endif

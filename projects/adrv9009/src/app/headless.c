@@ -28,6 +28,7 @@
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"
 #else
+#include "xil_cache.h"
 #include "clk_axi_clkgen.h"
 #include "axi_adxcvr.h"
 #endif
@@ -227,6 +228,17 @@ int main(void)
 		0,
 	};
 	struct axi_dmac *rx_dmac;
+#ifdef DAC_DMA_EXAMPLE
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_CYCLIC,
+	};
+	struct axi_dmac *tx_dmac;
+	struct gpio_desc *gpio_plddrbypass;
+	extern const uint32_t sine_lut_iq[1024];
+#endif
 	struct adi_hal hal;
 	taliseDevice_t talDev = {
 		.devHalInfo = &hal,
@@ -760,6 +772,17 @@ int main(void)
 	/* Initialize the ADC core */
 	axi_adc_init(&rx_adc, &rx_adc_init);
 
+#ifdef DAC_DMA_EXAMPLE
+	gpio_get(&gpio_plddrbypass, DAC_FIFO_BYPASS);
+	gpio_direction_output(gpio_plddrbypass, 1);
+	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
+				 ARRAY_SIZE(sine_lut_iq),
+				 DDR_MEM_BASEADDR + 0xA000000);
+	axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR + 0xA000000,
+			  sizeof(sine_lut_iq) * 2);
+#endif
+
 	mdelay(1000);
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
@@ -767,6 +790,9 @@ int main(void)
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,
 			  16384 * 8);
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
+#endif
 
 	/***********************************************
 	* Shutdown Procedure *
