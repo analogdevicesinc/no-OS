@@ -215,7 +215,7 @@ int main(void)
 	};
 	struct axi_adc *rx_adc;
 	struct axi_dac_init tx_dac_init = {
-		"rx_dac",
+		"tx_dac",
 		TX_CORE_BASEADDR,
 		4,
 	};
