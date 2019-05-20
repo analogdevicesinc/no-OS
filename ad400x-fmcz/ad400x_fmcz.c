@@ -23,9 +23,9 @@ struct ad400x_init_param ad400x_init_param = {
 	{
 		AD400X_SPI_ENGINE_BASEADDR,	/* adc_baseaddr */
 		AD400x_SPI_CS,			/* chip_select */
-		1,				/* cs_delay */
+		0,				/* cs_delay */
 		0,				/* spi_config */
-		50000000,			/* spi_clk_hz */
+		71000000,			/* spi_clk_hz */
 		2000000,			/* spi_clk_hz_reg_access */
 		100000000,			/* ref_clk_hz */
 		1,				/* spi_offload_rx_support_en */
