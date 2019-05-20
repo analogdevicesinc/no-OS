@@ -86,7 +86,8 @@ int main()
 		msg->msg_cmd_len = ARRAY_SIZE(spi_eng_msg_cmds);
 		msg->rx_buf_addr = 0x800000;
 		msg->tx_buf_addr = 0xA000000;
-		msg->tx_buf[0] = 0x00;
+		msg->tx_buf[0] = 0xFF;
+		msg->tx_buf[1] = 0xFF;
 
 		/* Init the rx buffer with 0s */
 		memset(msg->rx_buf, 0, 4 * ARRAY_SIZE(msg->rx_buf));
