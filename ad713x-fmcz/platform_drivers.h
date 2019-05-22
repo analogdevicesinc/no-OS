@@ -136,7 +136,7 @@ typedef struct {
 
 /* Initialize the SPI communication peripheral. */
 int32_t spi_init(spi_desc **desc,
-		 spi_init_param param);
+		 const spi_init_param *param);
 
 /* Free the resources allocated by spi_init() */
 int32_t spi_remove(spi_desc *desc);
