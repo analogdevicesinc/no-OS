@@ -274,7 +274,7 @@ int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t bytes_number);
 
 int32_t spi_init(spi_desc **descriptor,
-		 spi_init_param init_param);
+		 const spi_init_param *init_param);
 
 int32_t spi_remove(spi_desc *desc);
 
