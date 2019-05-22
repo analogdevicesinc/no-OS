@@ -603,10 +603,10 @@ int32_t spi_eng_transfer_multiple_msgs(spi_desc *desc, uint32_t no_of_messages)
 *******************************************************************************/
 #ifdef DUAL_SPI
 int32_t spi_eng_init(spi_eng_desc **descriptor,
-		     spi_eng_init_param init_param)
+		     const spi_eng_init_param *init_param)
 #else
 int32_t spi_init(spi_desc **descriptor,
-		 spi_init_param init_param)
+		 const spi_init_param *init_param)
 #endif
 {
 #ifdef DUAL_SPI
@@ -621,20 +621,20 @@ int32_t spi_init(spi_desc **descriptor,
 
 	uint32_t        data_width;
 
-	desc->spi_baseaddr = init_param.spi_baseaddr;
-	desc->spi_clk_hz = init_param.spi_clk_hz;
-	desc->ref_clk_hz = init_param.ref_clk_hz;
-	desc->chip_select = init_param.chip_select;
-	desc->spi_config = init_param.spi_config;
+	desc->spi_baseaddr = init_param->spi_baseaddr;
+	desc->spi_clk_hz = init_param->spi_clk_hz;
+	desc->ref_clk_hz = init_param->ref_clk_hz;
+	desc->chip_select = init_param->chip_select;
+	desc->spi_config = init_param->spi_config;
 	desc->rx_length = 0;
 	desc->tx_length = 0;
 
 	desc->clk_div = desc->ref_clk_hz / (2 * desc->spi_clk_hz) - 1;
 
-	desc->spi_offload_rx_support_en = init_param.spi_offload_rx_support_en;
-	desc->spi_offload_tx_support_en = init_param.spi_offload_tx_support_en;
-	desc->spi_offload_tx_dma_baseaddr = init_param.spi_offload_tx_dma_baseaddr;
-	desc->spi_offload_rx_dma_baseaddr = init_param.spi_offload_rx_dma_baseaddr;
+	desc->spi_offload_rx_support_en = init_param->spi_offload_rx_support_en;
+	desc->spi_offload_tx_support_en = init_param->spi_offload_tx_support_en;
+	desc->spi_offload_tx_dma_baseaddr = init_param->spi_offload_tx_dma_baseaddr;
+	desc->spi_offload_rx_dma_baseaddr = init_param->spi_offload_rx_dma_baseaddr;
 
 	// perform a reset
 	spi_eng_write(desc, SPI_ENGINE_REG_RESET, 0x01);
