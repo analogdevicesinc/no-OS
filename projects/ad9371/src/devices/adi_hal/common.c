@@ -111,7 +111,7 @@ commonErr_t CMB_SPIWriteByte(spiSettings_t *spiSettings, uint16_t addr,
 {
 	uint8_t buf[3];
 
-	spi_ad_desc->chip_select = spiSettings->chipSelectIndex;
+	spi_ad_desc->chip_select = spiSettings->chipSelectIndex - 1;
 
 	buf[0] = (uint8_t) ((addr >> 8) & 0x7f);
 	buf[1] = (uint8_t) (addr & 0xff);
