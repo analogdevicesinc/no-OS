@@ -177,7 +177,7 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg, uint16_t *value)
 	if (ret < 0)
 		return ret;
 
-	*value = swab16(dev->spi_msg);
+	*value = dev->spi_msg;
 
 	return 0;
 }
@@ -205,7 +205,7 @@ int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
 	if (ret < 0)
 		return ret;
 
-	*value = (uint8_t) swab16(dev->spi_msg);
+	*value = (uint8_t)dev->spi_msg;
 
 	return 0;
 }
