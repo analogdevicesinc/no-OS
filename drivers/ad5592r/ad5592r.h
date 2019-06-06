@@ -49,7 +49,6 @@
 	((((x) & 0x00ff) << 8) | \
 	 (((x) & 0xff00) >> 8))
 
-int32_t ad5592r_spi_wnop_r16(struct ad5592r_dev *dev, uint16_t *buf);
 int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 			  uint16_t value);
 int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
