@@ -337,7 +337,7 @@ int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
 
 		/* Check the RDY bit in the Status Register */
 		ready = (regs[AD7124_Status].value &
-			 AD7124_STATUS_REG_RDY) != 0;
+			 AD7124_STATUS_REG_RDY) == 0;
 	}
 
 	return timeout ? 0 : TIMEOUT;
