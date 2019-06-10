@@ -890,7 +890,7 @@ int main(void)
 			  DDR_MEM_BASEADDR + 0x800000,
 			  16384 * 8);
 #ifndef ALTERA_PLATFORM
-	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
+	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
 #endif
 
 	printf("Done\n");
