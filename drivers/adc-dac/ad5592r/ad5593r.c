@@ -211,9 +211,11 @@ int32_t ad5593r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t ad5593r_init(struct ad5592r_dev *dev)
+int32_t ad5593r_init(struct ad5592r_dev *dev,
+		     struct ad5592r_init_param *init_param)
 {
 	int32_t ret;
+	uint16_t temp_reg_val;
 
 	if (!dev)
 		return FAILURE;
@@ -222,5 +224,18 @@ int32_t ad5593r_init(struct ad5592r_dev *dev)
 	if (ret < 0)
 		return ret;
 
-	return ad5592r_set_channel_modes(dev);
+	ret = ad5592r_set_channel_modes(dev);
+	if (ret < 0)
+		return ret;
+
+	if(init_param->int_ref) {
+		ret = ad5593r_reg_read(dev, AD5592R_REG_PD, &temp_reg_val);
+		if (ret < 0)
+			return ret;
+		temp_reg_val |= AD5592R_REG_PD_EN_REF;
+
+		return ad5593r_reg_write(dev, AD5592R_REG_PD, temp_reg_val);
+	}
+
+	return ret;
 }

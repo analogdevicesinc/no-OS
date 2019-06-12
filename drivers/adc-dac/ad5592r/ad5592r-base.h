@@ -91,6 +91,10 @@ struct ad5592r_rw_ops {
 	int32_t (*gpio_read)(struct ad5592r_dev *dev, uint8_t *value);
 };
 
+struct ad5592r_init_param {
+	bool int_ref;
+};
+
 struct ad5592r_dev {
 	const struct ad5592r_rw_ops *ops;
 	i2c_desc *i2c;
