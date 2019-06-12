@@ -58,6 +58,7 @@ int32_t ad5592r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
 			 uint16_t *value);
 int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value);
-int32_t ad5592r_init(struct ad5592r_dev *dev);
+int32_t ad5592r_init(struct ad5592r_dev *dev,
+		     struct ad5592r_init_param *init_param);
 
 #endif /* AD5592R_H_ */
