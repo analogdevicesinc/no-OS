@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include <stdbool.h>
 #include <stdint.h>
+#include "platform_drivers.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -91,4 +92,6 @@ struct hmc7044_init_param {
 /* Initialize the device. */
 int32_t hmc7044_init(struct hmc7044_dev **device,
 		     const struct hmc7044_init_param *init_param);
+/* Remove the device. */
+int32_t hmc7044_remove(struct hmc7044_dev *device);
 #endif // HMC7044_H_
