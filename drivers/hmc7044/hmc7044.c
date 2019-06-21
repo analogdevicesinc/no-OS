@@ -49,6 +49,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define HMC7044_WRITE		(0 << 15)
+#define HMC7044_READ		(1 << 15)
 #define HMC7044_CNT(x)		(((x) - 1) << 13)
 #define HMC7044_ADDR(x)		((x) & 0xFFF)
 
@@ -233,6 +234,35 @@ static int hmc7044_write(struct hmc7044_dev *dev,
 	buf[2] = val;
 
 	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+}
+
+/**
+ * SPI register read from device.
+ * @param dev - The device structure.
+ * @param reg - The register address.
+ * @param val - The register data.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+static int hmc7044_read(struct hmc7044_dev *dev,
+			uint16_t reg,
+			uint8_t *val)
+{
+	uint8_t buf[3];
+	uint16_t cmd;
+	int ret;
+
+	cmd = HMC7044_READ | HMC7044_CNT(1) | HMC7044_ADDR(reg);
+	buf[0] = cmd >> 8;
+	buf[1] = cmd & 0xFF;
+	buf[2] = 0;
+
+	ret = spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
+	if (ret < 0)
+		return ret;
+
+	*val = buf[2];
+
+	return SUCCESS;
 }
 
 /**
@@ -547,4 +577,20 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	*device = dev;
 
 	return hmc7044_setup(dev);
+}
+
+/**
+ * Remove the device - release resources.
+ * @param device - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t hmc7044_remove(struct hmc7044_dev *device)
+{
+	int32_t ret;
+
+	ret = spi_remove(device->spi_desc);
+	free(device->channels);
+	free(device);
+
+	return ret;
 }
