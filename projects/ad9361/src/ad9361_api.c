@@ -1885,6 +1885,8 @@ int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy,
 /**
  * Set the number of channels mode.
  * @param phy The AD9361 state structure.
+ * Note: This function also resets the device, some additional
+ *       configurations might be necessary
  * @param ch_mode Number of channels mode (MODE_1x1, MODE_2x2).
  * 				  Accepted values:
  * 				   MODE_1x1 (1)
@@ -1911,6 +1913,8 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 	ad9361_reset(phy);
 	ad9361_spi_write(phy->spi, REG_SPI_CONF, SOFT_RESET | _SOFT_RESET);
 	ad9361_spi_write(phy->spi, REG_SPI_CONF, 0x0);
+
+	ad9361_clear_state(phy);
 
 	phy->clks[TX_REFCLK]->rate = ad9361_clk_factor_recalc_rate(
 					     phy->ref_clk_scale[TX_REFCLK], phy->clk_refin->rate);
