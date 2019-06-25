@@ -339,7 +339,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 				    HMC7044_N1_MAX, HMC7044_R1_MAX,
 				    &n1, &r1);
 
-	pfd1_freq = vcxo_freq / r1;
+	pfd1_freq = vcxo_freq / n1;
 	while ((pfd1_freq > HMC7044_RECOMM_FPD1) &&
 	       (n1 <= HMC7044_N1_MAX / 2) &&
 	       (r1 <= HMC7044_R1_MAX / 2)) {
