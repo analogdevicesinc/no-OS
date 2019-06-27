@@ -83,6 +83,19 @@
 #define round_up(x,y) \
 		(((x)+(y)-1)/(y))
 
+#define BITS_PER_LONG 32
+
+#define GENMASK(h, l) ({ 										\
+		uint32_t t = (~0UL);									\
+		t = t << (BITS_PER_LONG - (h - l + 1));					\
+		t = t >> (BITS_PER_LONG - (h + 1));						\
+		t;														\
+})
+
+#define U16_MAX		((uint16_t)~0U)
+#define S16_MAX		((int16_t)(U16_MAX>>1))
+
+#define DIV_U64(x, y) (x / y)
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
