@@ -51,18 +51,18 @@
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
 /*****************************************************************************/
-static const unsigned int ad5683_channel_addr [] = {
+static const uint32_t ad5683_channel_addr [] = {
 	[AD5686_CH_0] = 0,
 };
 
-static const unsigned int ad5686_channel_addr[] = {
+static const uint32_t ad5686_channel_addr[] = {
 	[AD5686_CH_0] = 1,
 	[AD5686_CH_1] = 2,
 	[AD5686_CH_2] = 4,
 	[AD5686_CH_3] = 8,
 };
 
-static const unsigned int ad5676_channel_addr[] = {
+static const uint32_t ad5676_channel_addr[] = {
 	[AD5686_CH_0] = 0,
 	[AD5686_CH_1] = 1,
 	[AD5686_CH_2] = 2,
@@ -73,7 +73,7 @@ static const unsigned int ad5676_channel_addr[] = {
 	[AD5686_CH_7] = 7,
 };
 
-static const unsigned int ad5679_channel_addr[] = {
+static const uint32_t ad5679_channel_addr[] = {
 	[AD5686_CH_0] = 0,
 	[AD5686_CH_1] = 1,
 	[AD5686_CH_2] = 2,
