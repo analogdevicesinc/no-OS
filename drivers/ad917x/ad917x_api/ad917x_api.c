@@ -602,6 +602,8 @@ int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
 	}
 	/*Call Set Dac Frequency Sequence*/
 	err = ad917x_set_dac_clk_freq(h, dac_clk_freq_hz);
+	if (err != API_ERROR_OK)
+		return err;
 	return API_ERROR_OK;
 
 }

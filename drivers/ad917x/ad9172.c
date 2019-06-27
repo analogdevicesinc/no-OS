@@ -226,8 +226,11 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 	if (st->interpolation > 1) {
 		chan_mask = GENMASK(st->appJesdConfig.jesd_M / 2, 0);
 		ret = ad917x_set_page_idx(ad917x_h, AD917X_DAC_NONE, chan_mask);
-
+		if (ret != 0)
+			return -EIO;
 		ret = ad917x_set_channel_gain(ad917x_h, 2048); /* GAIN = 1 */
+		if (ret != 0)
+			return -EIO;
 
 		st->nco_main_enable = dac_mask;
 
