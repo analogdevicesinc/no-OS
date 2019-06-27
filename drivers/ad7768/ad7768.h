@@ -40,6 +40,12 @@
 #define AD7768_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "platform_drivers.h"
+
+/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD7768_REG_CH_STANDBY				0x00
@@ -183,13 +189,12 @@ typedef enum {
 
 typedef struct {
 	spi_device			spi_dev;
-	gpio_device			gpio_dev;
-	int8_t				gpio_reset;
+	gpio_desc			*gpio_reset;
 	uint8_t				gpio_reset_value;
-	int8_t				gpio_mode0;
-	int8_t				gpio_mode1;
-	int8_t				gpio_mode2;
-	int8_t				gpio_mode3;
+	gpio_desc			*gpio_mode0;
+	gpio_desc			*gpio_mode1;
+	gpio_desc			*gpio_mode2;
+	gpio_desc			*gpio_mode3;
 	uint8_t				pin_spi_input_value;
 	ad7768_pin_spi_ctrl	pin_spi_ctrl;
 	ad7768_sleep_mode	sleep_mode;
@@ -212,8 +217,6 @@ typedef struct
 	spi_type			spi_type;
 	uint32_t			spi_device_id;
 	/* GPIO */
-	gpio_type			gpio_type;
-	uint32_t			gpio_device_id;
 	int8_t				gpio_reset;
 	uint8_t				gpio_reset_value;
 	int8_t				gpio_mode0;
