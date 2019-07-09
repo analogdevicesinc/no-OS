@@ -133,6 +133,9 @@
 #define ADXL372_POWER_CTL_MODE_MSK		GENMASK(1, 0)
 #define ADXL372_POWER_CTL_MODE(x)		(((x) & 0x3) << 0)
 
+#define ADXL372_OFFSET_Z_MODE_MSK               GENMASK(3, 0)
+#define ADXL372_OFFSET_Z_MODE(x)                (((x) & 0xF) << 0)
+
 /* ADXL372_MEASURE */
 #define ADXL372_MEASURE_AUTOSLEEP_MSK		BIT(6)
 #define ADXL372_MEASURE_AUTOSLEEP_MODE(x)	(((x) & 0x1) << 6)
