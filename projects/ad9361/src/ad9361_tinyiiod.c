@@ -1617,7 +1617,7 @@ static struct attrtibute_map cf_voltage_read_attrtibute_map[] = {
 };
 
 
-static ssize_t ch_read_phy_attr_(const char *channel,
+static ssize_t ch_exec_read_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len, struct attrtibute_map *map)
 {
 	int16_t attribute_id;
@@ -1640,13 +1640,13 @@ static ssize_t ch_read_phy_attr(const char *channel,
 {
 	if(channel == strstr(channel, "voltage")) {
 		struct attrtibute_map *map = ch_out ? voltage_output_map : voltage_input_read_map;
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, map);
 	} else if (NULL != strstr(channel, "altvoltage")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, altvoltage_read_attrtibute_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, altvoltage_read_attrtibute_map);
 	} else if (strequal(channel, "temp0")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, tmp0_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, tmp0_map);
 	} else if (strequal(channel, "out")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, out_read_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, out_read_map);
 	}
 
 	return -ENOENT;
@@ -1656,9 +1656,9 @@ static ssize_t ch_read_dac_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len) {
 
 	if(channel == strstr(channel, "voltage")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, dds_voltage_read_attrtibute_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, dds_voltage_read_attrtibute_map);
 	} else if (NULL != strstr(channel, "altvoltage")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, dds_altvoltage_read_attrtibute_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, dds_altvoltage_read_attrtibute_map);
 	}
 
 	return -ENOENT;
@@ -1668,7 +1668,7 @@ static ssize_t ch_read_adc_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len) {
 
 	if(channel == strstr(channel, "voltage")) {
-		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, cf_voltage_read_attrtibute_map);
+		return ch_exec_read_attr(channel, ch_out, attr, buf, len, cf_voltage_read_attrtibute_map);
 	}
 
 	return -ENOENT;
@@ -2520,44 +2520,7 @@ static struct attrtibute_map cf_voltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-
-
-//static ssize_t ch_read_phy_attr_(const char *channel,
-//			    bool ch_out, const char *attr, char *buf, size_t len, struct attrtibute_map *map)
-//{
-//	int16_t attribute_id;
-//	const struct channel_info channel_info = {
-//		get_channel_number(channel),
-//		ch_out
-//	};
-//	attribute_id = get_attribute_id(attr, map);
-//	if(attribute_id >= 0) {
-//		return map[attribute_id].exec(buf, len, &channel_info);
-//	}
-//	if(strequal(attr, "")) {
-//		return read_all_attr(buf, len, &channel_info, map);
-//	}
-//	return -ENOENT;
-//}
-//
-//static ssize_t ch_read_phy_attr(const char *channel,
-//			    bool ch_out, const char *attr, char *buf, size_t len)
-//{
-//	if(channel == strstr(channel, "voltage")) {
-//		struct attrtibute_map *map = ch_out ? voltage_output_map : voltage_input_read_map;
-//		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, map);
-//	} else if (NULL != strstr(channel, "altvoltage")) {
-//		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, altvoltage_read_attrtibute_map);
-//	} else if (strequal(channel, "temp0")) {
-//		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, tmp0_map);
-//	} else if (strequal(channel, "out")) {
-//		return ch_read_phy_attr_(channel, ch_out, attr, buf, len, out_map);
-//	}
-//
-//	return -ENOENT;
-//}
-
-static ssize_t ch_write_phy_attr_(const char *channel,
+static ssize_t ch_exec_write_attr(const char *channel,
 			    bool ch_out, const char *attr, const char *buf, size_t len, struct attrtibute_map *map)
 {
 	int16_t attribute_id;
@@ -2580,11 +2543,11 @@ static ssize_t ch_write_phy_attr(const char *channel,
 {
 	if(channel == strstr(channel, "voltage")) {
 		struct attrtibute_map *map = ch_out ? ch_out_write_attrtibute_map : ch_in_write_attrtibute_map;
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, map);
 	} else if(NULL != strstr(channel, "altvoltage")) {
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, altvoltage_write_attrtibute_map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, altvoltage_write_attrtibute_map);
 	} else if(strequal(channel, "out")) {
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, out_wr_map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, out_wr_map);
 	}
 
 	return -ENOENT;
@@ -2594,9 +2557,9 @@ static ssize_t ch_write_dac_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {
 	if(channel == strstr(channel, "voltage")) {
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, dds_voltage_write_attrtibute_map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, dds_voltage_write_attrtibute_map);
 	} else if(NULL != strstr(channel, "altvoltage")) {
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, dds_altvoltage_write_attrtibute_map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, dds_altvoltage_write_attrtibute_map);
 	}
 
 	return -ENOENT;
@@ -2606,7 +2569,7 @@ static ssize_t ch_write_adc_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {
 	if(channel == strstr(channel, "voltage")) {
-		return ch_write_phy_attr_(channel, ch_out, attr, buf, len, cf_voltage_write_attrtibute_map);
+		return ch_exec_write_attr(channel, ch_out, attr, buf, len, cf_voltage_write_attrtibute_map);
 	}
 
 	return -ENOENT;
