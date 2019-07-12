@@ -37,16 +37,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-
-#include "tinyiiod_adc.h"
-#include "tinyiiod.h"
-#include "ad9361_api.h"
+#include "ad9361_api.h" //todo remove
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
+#include <tinyiiod_util.h>
+#include <xil_cache.h>
+#include "tinyiiod_adc.h"
 #include "axi_adc_core.h"
+#include "axi_dmac.h"
+#include "axi_dmac.h"
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
+static uint32_t adc_ddr_baseaddr; //todo init
+
+ssize_t tinyiiod_adc_configure(uint32_t adc_ddr_base)
+{
+	adc_ddr_baseaddr = adc_ddr_base;
+	return 0;
+}
 
 /**
  * get_cf_calibphase
@@ -275,4 +284,38 @@ ssize_t write_adc_attr(const char *attr,
 			  const char *buf, size_t len, bool debug)
 {
 	return -ENOENT;
+}
+
+/**
+ * transfer_dev_to_mem data from ADC into RAM
+ * @param *device name
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
+{
+//	if (!supporter_dev(device))
+//		return -ENODEV;
+	ad9361_phy->rx_dmac->flags = 0;
+	axi_dmac_transfer(ad9361_phy->rx_dmac,
+			adc_ddr_baseaddr, bytes_count);
+	Xil_DCacheInvalidateRange(adc_ddr_baseaddr,	bytes_count);
+
+	return bytes_count;
+}
+
+/**
+ * read data from RAM to pbuf, use "capture()" first
+ * @param *device name
+ * @param *buff where data's are stored
+ * @param *offset to the remaining data
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t read_dev(const char *device, char *pbuf, size_t offset,
+			size_t bytes_count)
+{
+	memcpy(pbuf, (char *)adc_ddr_baseaddr + offset, bytes_count);
+
+	return bytes_count;
 }

@@ -38,12 +38,12 @@
 *******************************************************************************/
 
 #include "tinyiiod_phy.h"
-#include "tinyiiod.h"
 #include "ad9361_api.h"
 #include "util.h"
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
+#include <tinyiiod_util.h>
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 

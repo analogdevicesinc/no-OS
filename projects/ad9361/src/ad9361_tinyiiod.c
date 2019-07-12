@@ -36,34 +36,18 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#include <ad9361_tinyiiod.h>
-#include <inttypes.h>
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include "tinyiiod.h"
-#include "axi_adc_core.h"
-#include "axi_dac_core.h"
-#include "axi_dmac.h"
+#include "ad9361_tinyiiod.h"
 #include "ad9361_parameters.h"
-#include "util.h"
-#include "xil_io.h"
-#include "ad9361_api.h"
-
-#ifdef UART_INTERFACE
-#include "serial.h"
-#endif /* UART_INTERFACE */
-#include "xil_cache.h"
-#include "platform_drivers.h"
+#include "tinyiiod.h"
+#include "config.h"
+#include "tinyiiod_util.h"
 #include "tinyiiod_phy.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_adc.h"
 
+#ifdef UART_INTERFACE
+#include "serial.h"
+#endif /* UART_INTERFACE */
 
 static uint32_t request_mask;
 /* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
@@ -75,7 +59,7 @@ extern struct ad9361_rf_phy *ad9361_phy;
  * @param *device
  * @return TRUE if valid device is found
  */
-static bool dev_is_ad9361_module(const char *device)
+static bool supporter_dev(const char *device)
 {
 	return strequal(device, "ad9361-phy")
 	       || strequal(device, "cf-ad9361-lpc")
@@ -94,7 +78,7 @@ static bool dev_is_ad9361_module(const char *device)
 static ssize_t read_attr(const char *device, const char *attr,
 			 char *buf, size_t len, bool debug)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 	if(strequal(device, "ad9361-phy")) {
 		return read_phy_attr(attr, buf, len, debug);
@@ -119,7 +103,7 @@ static ssize_t read_attr(const char *device, const char *attr,
 static ssize_t write_attr(const char *device, const char *attr,
 			  const char *buf, size_t len, bool debug)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 	if(strequal(device, "ad9361-phy")) {
 		return write_phy_attr(attr, buf, len, debug);
@@ -145,7 +129,7 @@ static ssize_t write_attr(const char *device, const char *attr,
 static ssize_t ch_read_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 
 	if(strequal(device, "ad9361-phy")) {
@@ -172,7 +156,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 static ssize_t ch_write_attr(const char *device, const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 	if(strequal(device, "ad9361-phy")) {
 		return ch_write_phy_attr(channel, ch_out, attr, buf, len);
@@ -194,7 +178,7 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
  */
 static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 
 	if (mask & ~input_channel_mask)
@@ -212,7 +196,7 @@ static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
  */
 static int32_t close_dev(const char *device)
 {
-	return dev_is_ad9361_module(device) ? 0 : -ENODEV;
+	return supporter_dev(device) ? 0 : -ENODEV;
 }
 
 /**
@@ -223,86 +207,11 @@ static int32_t close_dev(const char *device)
  */
 static int32_t get_mask(const char *device, uint32_t *mask)
 {
-	if (!dev_is_ad9361_module(device))
+	if (!supporter_dev(device))
 		return -ENODEV;
 	*mask = input_channel_mask; /*  this way client has to do demux of data */
 
 	return 0;
-}
-
-/**
- * transfer_mem_to_dev write data to DAC
- * @param *device name
- * @param *buff
- * @param bytes_count
- * @return bytes_count
- */
-static ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
-{
-	ad9361_phy->tx_dmac->flags = DMA_CYCLIC;
-	ssize_t ret = axi_dmac_transfer(ad9361_phy->tx_dmac, DAC_DDR_BASEADDR,
-					bytes_count);
-	if(ret < 0)
-		return ret;
-	ret = axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	if(ret < 0)
-		return ret;
-
-	return bytes_count;
-}
-
-/**
- * write data to RAM
- * @param *device name
- * @param *buff
- * @param *offset in memory, used if some data have been already written
- * @param bytes_count
- * @return bytes_count
- */
-static ssize_t write_dev(const char *device, const char *buf,
-			 size_t offset,  size_t bytes_count)
-{
-	ssize_t ret = axi_dac_set_buff(ad9361_phy->tx_dac, DAC_DDR_BASEADDR + offset,
-				       (uint16_t *)buf,
-				       bytes_count);
-	if(ret < 0)
-		return ret;
-
-	return bytes_count;
-}
-
-/**
- * transfer_dev_to_mem data from DAC into RAM
- * @param *device name
- * @param bytes_count
- * @return bytes_count
- */
-static ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
-{
-	if (!dev_is_ad9361_module(device))
-		return -ENODEV;
-	ad9361_phy->rx_dmac->flags = 0;
-	axi_dmac_transfer(ad9361_phy->rx_dmac,
-			  ADC_DDR_BASEADDR, bytes_count);
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,	bytes_count);
-
-	return bytes_count;
-}
-
-/**
- * read data from RAM to pbuf, use "capture()" first
- * @param *device name
- * @param *buff where data's are stored
- * @param *offset to the remaining data
- * @param bytes_count
- * @return bytes_count
- */
-static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
-			size_t bytes_count)
-{
-	memcpy(pbuf, (char *)ADC_DDR_BASEADDR + offset, bytes_count);
-
-	return bytes_count;
 }
 
 const struct tinyiiod_ops ops = {
@@ -327,3 +236,10 @@ const struct tinyiiod_ops ops = {
 	.close = close_dev,
 	.get_mask = get_mask,
 };
+
+struct tinyiiod * ad9361_tinyiiod_create()
+{
+	tinyiiod_adc_configure(ADC_DDR_BASEADDR);
+	tinyiiod_dac_configure(DAC_DDR_BASEADDR);
+	return tinyiiod_create(xml, &ops);
+}

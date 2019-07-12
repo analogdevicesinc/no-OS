@@ -39,14 +39,22 @@
 
 
 #include "tinyiiod_dac.h"
-#include "tinyiiod.h"
 #include "ad9361_api.h"
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
+#include <tinyiiod_util.h>
 #include "axi_dac_core.h"
+#include "axi_dmac.h"
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
+static uint32_t dac_ddr_baseaddr; //todo set this
+
+ssize_t tinyiiod_dac_configure(uint32_t dac_ddr_base)
+{
+	dac_ddr_baseaddr = dac_ddr_baseaddr;
+	return 0;
+}
 
 /**
  * get_dds_calibscale
@@ -384,4 +392,45 @@ ssize_t write_dac_attr(const char *attr,
 			  const char *buf, size_t len, bool debug)
 {
 	return -ENOENT;
+}
+
+/**
+ * transfer_mem_to_dev write data to DAC
+ * @param *device name
+ * @param *buff
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
+{
+	ad9361_phy->tx_dmac->flags = DMA_CYCLIC;
+	ssize_t ret = axi_dmac_transfer(ad9361_phy->tx_dmac, dac_ddr_baseaddr,
+					bytes_count);
+	if(ret < 0)
+		return ret;
+	ret = axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	if(ret < 0)
+		return ret;
+
+	return bytes_count;
+}
+
+/**
+ * write data to RAM
+ * @param *device name
+ * @param *buff
+ * @param *offset in memory, used if some data have been already written
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t write_dev(const char *device, const char *buf,
+			 size_t offset,  size_t bytes_count)
+{
+	ssize_t ret = axi_dac_set_buff(ad9361_phy->tx_dac, dac_ddr_baseaddr + offset,
+				       (uint16_t *)buf,
+				       bytes_count);
+	if(ret < 0)
+		return ret;
+
+	return bytes_count;
 }
