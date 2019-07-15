@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Generic Platform Drivers.
+ *   @file   delay.c
+ *   @brief  Implementation of Generic Platform Drivers.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +37,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
 
-#endif // PLATFORM_DRIVERS_H_
+#include "delay.h"
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+
+/**
+ * @brief Generate miliseconds delay.
+ * @param msecs - Delay in miliseconds.
+ * @return None.
+ */
+void mdelay(uint32_t msecs)
+{
+	if (msecs) {
+		// Unused variable - fix compiler warning
+	}
+}

@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Generic Platform Drivers.
+ *   @file   spi.h
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +36,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
+#ifndef SPI_H_
+#define SPI_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
 
-#endif // PLATFORM_DRIVERS_H_
+#include <stdint.h>
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define	SPI_CPHA	0x01
+#define	SPI_CPOL	0x02
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef enum spi_mode {
+	SPI_MODE_0 = (0 | 0),
+	SPI_MODE_1 = (0 | SPI_CPHA),
+	SPI_MODE_2 = (SPI_CPOL | 0),
+	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
+} spi_mode;
+
+typedef struct spi_init_param {
+	uint32_t	max_speed_hz;
+	uint8_t		chip_select;
+	enum spi_mode	mode;
+} spi_init_param;
+
+typedef struct spi_desc {
+	uint32_t	max_speed_hz;
+	uint8_t		chip_select;
+	enum spi_mode	mode;
+} spi_desc;
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+/* Initialize the SPI communication peripheral. */
+int32_t spi_init(struct spi_desc **desc,
+		 const struct spi_init_param *param);
+
+/* Free the resources allocated by spi_init(). */
+int32_t spi_remove(struct spi_desc *desc);
+
+/* Write and read data to/from SPI. */
+int32_t spi_write_and_read(struct spi_desc *desc,
+			   uint8_t *data,
+			   uint8_t bytes_number);
+
+#endif // SPI_H_
