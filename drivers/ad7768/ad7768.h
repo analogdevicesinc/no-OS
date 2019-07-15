@@ -188,7 +188,7 @@ typedef enum {
 } ad7768_dec_rate;
 
 typedef struct {
-	spi_device			spi_dev;
+	spi_desc			*spi_desc;
 	gpio_desc			*gpio_reset;
 	uint8_t				gpio_reset_value;
 	gpio_desc			*gpio_mode0;
@@ -212,10 +212,7 @@ typedef struct {
 typedef struct
 {
 	/* SPI */
-	uint8_t				spi_chip_select;
-	spi_mode			spi_mode;
-	spi_type			spi_type;
-	uint32_t			spi_device_id;
+	spi_init_param			spi_init;
 	/* GPIO */
 	int8_t				gpio_reset;
 	uint8_t				gpio_reset_value;
