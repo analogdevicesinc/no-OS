@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "platform_drivers.h"
+#include "error.h"
 #include "adxl372.h"
 
 /**
@@ -126,4 +126,3 @@ int32_t adxl372_i2c_reg_read_multiple(struct adxl372_dev *dev,
 
 	return ret;
 }
-
