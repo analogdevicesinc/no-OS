@@ -40,18 +40,23 @@
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "tinyiiod_dac.h"
-#include "ad9361_api.h"
-#include "tinyiiod_util.h"
+
+#include "ad9361_api.h" //todo remove
+#include "axi_dac_core.h"
 #include "axi_dmac.h"
+#include "tinyiiod_dac.h"
+#include "tinyiiod_util.h"
+
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t dac_ddr_baseaddr;
 static struct axi_dac *tx_dac;
+static struct axi_dmac	*tx_dmac;
 
-ssize_t tinyiiod_dac_configure(struct axi_dac *dac, uint32_t dac_ddr_base)
+ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint32_t dac_ddr_base)
 {
 	tx_dac = dac;
+	tx_dmac = dmac;
 	dac_ddr_baseaddr = dac_ddr_baseaddr;
 	return 0;
 }
@@ -403,8 +408,8 @@ ssize_t write_dac_attr(const char *attr,
  */
 ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
-	ad9361_phy->tx_dmac->flags = DMA_CYCLIC;
-	ssize_t ret = axi_dmac_transfer(ad9361_phy->tx_dmac, dac_ddr_baseaddr,
+	tx_dmac->flags = DMA_CYCLIC;
+	ssize_t ret = axi_dmac_transfer(tx_dmac, dac_ddr_baseaddr,
 					bytes_count);
 	if(ret < 0)
 		return ret;

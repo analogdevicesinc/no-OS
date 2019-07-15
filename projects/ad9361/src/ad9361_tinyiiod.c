@@ -240,7 +240,7 @@ const struct tinyiiod_ops ops = {
 
 struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
 {
-	tinyiiod_adc_configure(phy->rx_adc, ADC_DDR_BASEADDR);
-	tinyiiod_dac_configure(phy->tx_dac, DAC_DDR_BASEADDR);
+	tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
+	tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
 	return tinyiiod_create(xml, &ops);
 }

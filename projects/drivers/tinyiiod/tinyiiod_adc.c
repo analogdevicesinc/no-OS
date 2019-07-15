@@ -37,24 +37,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include <tinyiiod_util.h>
 #include <xil_cache.h>
 #include "ad9361_api.h" //todo remove
-#include <inttypes.h>
-#include "tinyiiod_adc.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
-#include "axi_dmac.h"
+#include "tinyiiod_adc.h"
+#include "tinyiiod_util.h"
+
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t adc_ddr_baseaddr;
 static struct axi_adc *rx_adc;
+static struct axi_dmac	*rx_dmac;
 
-ssize_t tinyiiod_adc_configure(struct axi_adc *adc, uint32_t adc_ddr_base)
+ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base)
 {
 	rx_adc = adc;
+	rx_dmac = dmac;
 	adc_ddr_baseaddr = adc_ddr_base;
 	return 0;
 }
@@ -296,8 +298,8 @@ ssize_t write_adc_attr(const char *attr,
  */
 ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
-	ad9361_phy->rx_dmac->flags = 0;
-	axi_dmac_transfer(ad9361_phy->rx_dmac,
+	rx_dmac->flags = 0;
+	axi_dmac_transfer(rx_dmac,
 			adc_ddr_baseaddr, bytes_count);
 	Xil_DCacheInvalidateRange(adc_ddr_baseaddr,	bytes_count);
 
