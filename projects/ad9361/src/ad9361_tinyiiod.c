@@ -36,12 +36,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#include <ad9361_tinyiiod_phy.h>
+#include "ad9361.h"
 #include "ad9361_tinyiiod.h"
 #include "ad9361_parameters.h"
 #include "tinyiiod.h"
 #include "config.h"
 #include "tinyiiod_util.h"
-#include "tinyiiod_phy.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_adc.h"
 
@@ -52,7 +53,7 @@
 static uint32_t request_mask;
 /* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
 static uint32_t input_channel_mask = 0x0F;
-extern struct ad9361_rf_phy *ad9361_phy;
+//static struct ad9361_rf_phy *ad9361_phy;
 
 /**
  * Check device
@@ -237,9 +238,9 @@ const struct tinyiiod_ops ops = {
 	.get_mask = get_mask,
 };
 
-struct tinyiiod * ad9361_tinyiiod_create()
+struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
 {
-	tinyiiod_adc_configure(ADC_DDR_BASEADDR);
-	tinyiiod_dac_configure(DAC_DDR_BASEADDR);
+	tinyiiod_adc_configure(phy->rx_adc, ADC_DDR_BASEADDR);
+	tinyiiod_dac_configure(phy->tx_dac, DAC_DDR_BASEADDR);
 	return tinyiiod_create(xml, &ops);
 }

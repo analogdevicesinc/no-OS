@@ -594,7 +594,7 @@ int main(void)
 	axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
 	axi_dmac_init(&ad9361_phy->rx_dmac, default_init_param.rx_dmac_init);
 	/* Create the ad9361_tinyiiod */
-	iiod = ad9361_tinyiiod_create();
+	iiod = ad9361_tinyiiod_create(ad9361_phy);
 
 #ifdef UART_INTERFACE
 	int32_t ret = serial_init();

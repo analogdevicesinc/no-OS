@@ -41,7 +41,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-ssize_t tinyiiod_adc_configure(uint32_t adc_ddr_base);
+ssize_t tinyiiod_adc_configure(struct axi_adc *adc, uint32_t adc_ddr_base);
 ssize_t ch_read_adc_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len);
 ssize_t ch_write_adc_attr(const char *channel,

@@ -37,10 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <ad9361_tinyiiod_phy.h>
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "tinyiiod_phy.h"
 #include "ad9361_api.h"
 #include "util.h"
 #include "tinyiiod_util.h"

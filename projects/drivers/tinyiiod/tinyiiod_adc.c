@@ -50,9 +50,11 @@
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t adc_ddr_baseaddr;
+static struct axi_adc *rx_adc;
 
-ssize_t tinyiiod_adc_configure(uint32_t adc_ddr_base)
+ssize_t tinyiiod_adc_configure(struct axi_adc *adc, uint32_t adc_ddr_base)
 {
+	rx_adc = adc;
 	adc_ddr_baseaddr = adc_ddr_base;
 	return 0;
 }
@@ -69,7 +71,7 @@ ssize_t get_cf_calibphase(char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	ssize_t ret = axi_adc_get_calib_phase(ad9361_phy->rx_adc, channel->ch_num, &val,
+	ssize_t ret = axi_adc_get_calib_phase(rx_adc, channel->ch_num, &val,
 					      &val2);
 	if(ret < 0)
 		return ret;
@@ -92,7 +94,7 @@ ssize_t get_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val;
-	axi_adc_get_calib_bias(ad9361_phy->rx_adc,
+	axi_adc_get_calib_bias(rx_adc,
 			       channel->ch_num,
 			       &val,
 			       NULL);
@@ -111,7 +113,7 @@ ssize_t get_cf_calibscale(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
-	ssize_t ret = axi_adc_get_calib_scale(ad9361_phy->rx_adc, channel->ch_num, &val,
+	ssize_t ret = axi_adc_get_calib_scale(rx_adc, channel->ch_num, &val,
 					      &val2);
 	int32_t i = 0;
 	if(ret < 0)
@@ -187,7 +189,7 @@ ssize_t set_cf_calibphase(char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	axi_adc_set_calib_phase(ad9361_phy->rx_adc, channel->ch_num, val, val2);
+	axi_adc_set_calib_phase(rx_adc, channel->ch_num, val, val2);
 
 	return len;
 }
@@ -203,7 +205,7 @@ ssize_t set_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val = read_value(buf);
-	axi_adc_set_calib_bias(ad9361_phy->rx_adc,
+	axi_adc_set_calib_bias(rx_adc,
 			       channel->ch_num,
 			       val,
 			       0);
@@ -224,7 +226,7 @@ ssize_t set_cf_calibscale(char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	axi_adc_set_calib_scale(ad9361_phy->rx_adc, channel->ch_num, val, val2);
+	axi_adc_set_calib_scale(rx_adc, channel->ch_num, val, val2);
 
 	return len;
 }

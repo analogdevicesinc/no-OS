@@ -40,8 +40,9 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include "axi_dac_core.h"
 
-ssize_t tinyiiod_dac_configure(uint32_t dac_ddr_base);
+ssize_t tinyiiod_dac_configure(struct axi_dac *dac, uint32_t dac_ddr_base);
 ssize_t ch_read_dac_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len);
 ssize_t ch_write_dac_attr(const char *channel,

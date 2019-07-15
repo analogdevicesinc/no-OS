@@ -502,5 +502,5 @@ static const char * const  xml =
 	"<debug-attribute name=\"direct_reg_access\" />"
 	"</device>"
 	"</context>";
-struct tinyiiod * ad9361_tinyiiod_create();
+struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy);
 #endif /* AD9361_TINYIIOD_H */
