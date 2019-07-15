@@ -41,6 +41,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+ssize_t tinyiiod_dac_configure(uint32_t dac_ddr_base);
 ssize_t ch_read_dac_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len);
 ssize_t ch_write_dac_attr(const char *channel,
@@ -49,5 +50,8 @@ ssize_t read_dac_attr(const char *attr,
 			 char *buf, size_t len, bool debug);
 ssize_t write_dac_attr(const char *attr,
 			  const char *buf, size_t len, bool debug);
+ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count);
+ssize_t write_dev(const char *device, const char *buf,
+			 size_t offset,  size_t bytes_count);
 
 #endif /* __TINYIIOD_DAC_H__ */

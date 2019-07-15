@@ -26,4 +26,5 @@ ssize_t read_all_attr(char *buf, size_t len,
 			     const struct channel_info *channel, const struct attrtibute_map* map);
 ssize_t write_all_attr(char *buf, size_t len,
 			      const struct channel_info *channel, const struct attrtibute_map* map);
+
 #endif /* __TINYIIOD_H__ */

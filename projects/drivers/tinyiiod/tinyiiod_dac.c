@@ -37,18 +37,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-
-#include "tinyiiod_dac.h"
-#include "ad9361_api.h"
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include <tinyiiod_util.h>
+#include "tinyiiod_dac.h"
+#include "ad9361_api.h"
+#include "tinyiiod_util.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
-static uint32_t dac_ddr_baseaddr; //todo set this
+static uint32_t dac_ddr_baseaddr;
 
 ssize_t tinyiiod_dac_configure(uint32_t dac_ddr_base)
 {

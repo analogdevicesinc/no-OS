@@ -1,8 +1,9 @@
-#include "tinyiiod.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
 #include <xil_io.h>
+#include "tinyiiod.h"
+#include "tinyiiod_util.h"
 
 /**
  * Get channel number
@@ -174,3 +175,5 @@ uint32_t read_ul_value(const char *str)
 	else
 		return value;
 }
+
+

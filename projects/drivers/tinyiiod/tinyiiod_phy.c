@@ -37,13 +37,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "tinyiiod_phy.h"
-#include "ad9361_api.h"
-#include "util.h"
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include <tinyiiod_util.h>
+#include "tinyiiod_phy.h"
+#include "ad9361_api.h"
+#include "util.h"
+#include "tinyiiod_util.h"
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 
