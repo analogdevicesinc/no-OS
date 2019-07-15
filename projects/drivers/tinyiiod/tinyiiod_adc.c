@@ -45,7 +45,6 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_adc.h"
-#include "tinyiiod_util.h"
 
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
@@ -159,7 +158,7 @@ ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%d", (int)sampling_freq_hz);
 }
 
-static struct attrtibute_map cf_voltage_read_attrtibute_map[] = {
+static attrtibute_map cf_voltage_read_attrtibute_map[] = {
 	{"calibphase", get_cf_calibphase},
 	{"calibbias", get_cf_calibbias},
 	{"calibscale", get_cf_calibscale},
@@ -167,6 +166,16 @@ static struct attrtibute_map cf_voltage_read_attrtibute_map[] = {
 	{"sampling_frequency", get_cf_sampling_frequency},
 	{NULL, NULL},
 };
+
+static attrtibute_map ch_read_adc_attr_map[] = {
+	{"voltage", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
+	{NULL, NULL},
+};
+
+attrtibute_map *get_ch_read_adc_attr_map()
+{
+	return ch_read_adc_attr_map;
+}
 
 ssize_t ch_read_adc_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len) {
@@ -259,7 +268,7 @@ ssize_t set_cf_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static struct attrtibute_map cf_voltage_write_attrtibute_map[] = {
+static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 	{"calibphase", set_cf_calibphase},
 	{"calibbias", set_cf_calibbias},
 	{"calibscale", set_cf_calibscale},

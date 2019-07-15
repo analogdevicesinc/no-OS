@@ -43,7 +43,7 @@
 #include <errno.h>
 #include "ad9361_api.h"
 #include "util.h"
-#include "tinyiiod_util.h"
+
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 
@@ -309,7 +309,7 @@ ssize_t get_rf_bandwidth(char *buf, size_t len,
 	}
 }
 
-static struct attrtibute_map voltage_output_map[] = {
+static attrtibute_map voltage_output_map[] = {
 	{"rf_port_select", get_rf_port_select},
 	{"hardwaregain", get_hardwaregain},
 	{"rssi", get_rssi},
@@ -408,7 +408,7 @@ ssize_t get_bb_dc_offset_tracking_en(char *buf, size_t len,
 	return -ENOENT;
 }
 
-static struct attrtibute_map voltage_input_read_map[] = {
+static attrtibute_map voltage_input_read_map[] = {
 	{"hardwaregain_available", get_hardwaregain_available},
 	{"hardwaregain", get_hardwaregain},
 	{"rssi", get_rssi},
@@ -556,7 +556,7 @@ ssize_t get_fastlock_recall(char *buf, size_t len,
 		       ad9361_phy->fastlock.current_profile[channel->ch_num]);
 }
 
-static struct attrtibute_map altvoltage_read_attrtibute_map[] = {
+static attrtibute_map altvoltage_read_attrtibute_map[] = {
 	{"frequency_available", get_frequency_available},
 	{"fastlock_save", get_fastlock_save},
 	{"powerdown", get_powerdown},
@@ -583,7 +583,7 @@ ssize_t get_temp0_input(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%d", (int)temp);
 }
 
-static struct attrtibute_map tmp0_map[] = {
+static attrtibute_map tmp0_map[] = {
 	{"input", get_temp0_input},
 	{NULL, NULL},
 };
@@ -606,16 +606,29 @@ ssize_t get_voltage_filter_fir_en(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%d", en_dis_rx && en_dis_tx);
 }
 
-static struct attrtibute_map out_read_map[] = {
+static attrtibute_map out_read_map[] = {
 	{"voltage_filter_fir_en", get_voltage_filter_fir_en},
 	{NULL, NULL},
 };
+
+static attrtibute_map ch_read_phy_attr_map[] = {
+	{"voltage", NULL, voltage_input_read_map, voltage_output_map},
+	{"altvoltage", NULL, altvoltage_read_attrtibute_map, altvoltage_read_attrtibute_map},
+	{"temp0", NULL, tmp0_map, tmp0_map},
+	{"out", NULL, out_read_map, out_read_map},
+	{NULL, NULL, NULL},
+};
+
+attrtibute_map *get_ch_read_phy_attr_map()
+{
+	return ch_read_phy_attr_map;
+}
 
 ssize_t ch_read_phy_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
 	if(channel == strstr(channel, "voltage")) {
-		struct attrtibute_map *map = ch_out ? voltage_output_map : voltage_input_read_map;
+		attrtibute_map *map = ch_out ? voltage_output_map : voltage_input_read_map;
 		return ch_exec_read_attr(channel, ch_out, attr, buf, len, map);
 	} else if (NULL != strstr(channel, "altvoltage")) {
 		return ch_exec_read_attr(channel, ch_out, attr, buf, len, altvoltage_read_attrtibute_map);
@@ -968,7 +981,7 @@ ssize_t set_bb_dc_offset_tracking_en(char *buf, size_t len,
 	return -ENOENT;
 }
 
-static struct attrtibute_map ch_in_write_attrtibute_map[] = {
+static attrtibute_map ch_in_write_attrtibute_map[] = {
 	{"hardwaregain_available", set_hardwaregain_available},
 	{"hardwaregain", set_hardwaregain},
 	{"rssi", set_rssi},
@@ -987,7 +1000,7 @@ static struct attrtibute_map ch_in_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static struct attrtibute_map ch_out_write_attrtibute_map[] = {
+static attrtibute_map ch_out_write_attrtibute_map[] = {
 	{"rf_port_select", set_rf_port_select},
 	{"hardwaregain", set_hardwaregain},
 	{"rssi", set_rssi},
@@ -1180,7 +1193,7 @@ ssize_t set_fastlock_recall(char *buf, size_t len,
 	return len;
 }
 
-static struct attrtibute_map altvoltage_write_attrtibute_map[] = {
+static attrtibute_map altvoltage_write_attrtibute_map[] = {
 	{"frequency_available", set_frequency_available},
 	{"fastlock_save", set_fastlock_save},
 	{"powerdown", set_powerdown},
@@ -1203,7 +1216,7 @@ ssize_t voltage_filter_fir_en(char *buf, size_t len,
 	return len;
 }
 
-static struct attrtibute_map out_wr_map[] = {
+static attrtibute_map out_wr_map[] = {
 	{"voltage_filter_fir_en", voltage_filter_fir_en},
 	{NULL, NULL},
 };
@@ -1212,7 +1225,7 @@ ssize_t ch_write_phy_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {
 	if(channel == strstr(channel, "voltage")) {
-		struct attrtibute_map *map = ch_out ? ch_out_write_attrtibute_map : ch_in_write_attrtibute_map;
+		attrtibute_map *map = ch_out ? ch_out_write_attrtibute_map : ch_in_write_attrtibute_map;
 		return ch_exec_write_attr(channel, ch_out, attr, buf, len, map);
 	} else if(NULL != strstr(channel, "altvoltage")) {
 		return ch_exec_write_attr(channel, ch_out, attr, buf, len, altvoltage_write_attrtibute_map);
@@ -1494,7 +1507,7 @@ ssize_t get_calib_mode(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
 
-static struct attrtibute_map global_read_attrtibute_map[] = {
+static attrtibute_map global_read_attrtibute_map[] = {
 	{"dcxo_tune_coarse", get_dcxo_tune_coarse},
 	{"rx_path_rates", get_rx_path_rates},
 	{"trx_rate_governor", get_trx_rate_governor},
@@ -1697,7 +1710,7 @@ ssize_t set_filter_fir_config(char *buf, size_t len,
 	return ad9361_parse_fir(ad9361_phy, (char *)buf, len);
 }
 
-static struct attrtibute_map global_write_attrtibute_map[] = {
+static attrtibute_map global_write_attrtibute_map[] = {
 	{"trx_rate_governor", set_trx_rate_governor},
 	{"dcxo_tune_coarse", set_dcxo_tune_coarse},
 	{"dcxo_tune_fine", set_dcxo_tune_fine},

@@ -53,7 +53,6 @@
 static uint32_t request_mask;
 /* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
 static uint32_t input_channel_mask = 0x0F;
-//static struct ad9361_rf_phy *ad9361_phy;
 
 /**
  * Check device
@@ -117,6 +116,14 @@ static ssize_t write_attr(const char *device, const char *attr,
 	return -ENODEV;
 }
 
+static attrtibute_map ch_read_attr_map[] = {
+	{"ad9361-phy", NULL, NULL},
+	{"cf-ad9361-dds-core-lpc", NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL},
+	{NULL, NULL},
+};
+
+
 /**
  * read channel attribute
  * @param *device name
@@ -127,22 +134,49 @@ static ssize_t write_attr(const char *device, const char *attr,
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
-static ssize_t ch_read_attr(const char *device, const char *channel,
+ssize_t ch_read_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
 	if (!supporter_dev(device))
 		return -ENODEV;
+	element_info el_info;
+	el_info.name[DEVICE_EL] = device;
+	el_info.name[CHANNEL_EL] = channel;
+	el_info.name[ATTRIBUTE_EL] = attr;
+	el_info.crnt_level = DEVICE_EL;
+	el_info.ch_out = ch_out;
+	return ch_read_attribute(&el_info, buf, len, ch_read_attr_map);
 
-	if(strequal(device, "ad9361-phy")) {
-		return ch_read_phy_attr(channel, ch_out, attr, buf, len);
-	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-		return ch_read_dac_attr(channel, ch_out, attr, buf, len);
-	} else if(strequal(device, "cf-ad9361-lpc")) {
-		return ch_read_adc_attr(channel, ch_out, attr, buf, len);
-	}
 
 	return -ENOENT;
 }
+
+/**
+ * read channel attribute
+ * @param *device name
+ * @param *channel name
+ * @param *ch_out type: input/output
+ * @param *attr name
+ * @param *buff where value is stored
+ * @param len maximum length of value to be stored in buf
+ * @return length of chars written in buf
+ */
+//static ssize_t ch_read_attr(const char *device, const char *channel,
+//			    bool ch_out, const char *attr, char *buf, size_t len)
+//{
+//	if (!supporter_dev(device))
+//		return -ENODEV;
+//
+//	if(strequal(device, "ad9361-phy")) {
+//		return ch_read_phy_attr(channel, ch_out, attr, buf, len);
+//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
+//		return ch_read_dac_attr(channel, ch_out, attr, buf, len);
+//	} else if(strequal(device, "cf-ad9361-lpc")) {
+//		return ch_read_adc_attr(channel, ch_out, attr, buf, len);
+//	}
+//
+//	return -ENOENT;
+//}
 
 /**
  * write channel attribute
@@ -240,6 +274,14 @@ const struct tinyiiod_ops ops = {
 
 struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
 {
+	ch_read_attr_map[0].map = get_ch_read_phy_attr_map();
+	ch_read_attr_map[1].map = get_ch_read_dac_attr_map();
+	ch_read_attr_map[2].map = get_ch_read_adc_attr_map();
+
+	ch_read_attr_map[0].map_out = get_ch_read_phy_attr_map();
+	ch_read_attr_map[1].map_out = get_ch_read_dac_attr_map();
+	ch_read_attr_map[2].map_out = get_ch_read_adc_attr_map();
+
 	tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
 	tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
 	return tinyiiod_create(xml, &ops);

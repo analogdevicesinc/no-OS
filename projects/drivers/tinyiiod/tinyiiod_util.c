@@ -32,7 +32,7 @@ static int32_t get_channel_number(const char *ch)
  * @param map_size map_size element numbers of the map
  * @return attribute ID, or negative value if attribute is not found
  */
-int16_t get_attribute_id(const char *attr, const struct attrtibute_map* map)
+int16_t get_attribute_id(const char *attr, const attrtibute_map* map)
 {
 	int16_t i = 0;
 
@@ -41,7 +41,8 @@ int16_t get_attribute_id(const char *attr, const struct attrtibute_map* map)
 
 	while(map[i].attr_name)
 	{
-		if (strequal(attr, map[i].attr_name ))
+		char *pos = strstr(attr, map[i].attr_name );
+		if (pos == attr)
 			return i;
 		i++;
 	}
@@ -59,7 +60,7 @@ int16_t get_attribute_id(const char *attr, const struct attrtibute_map* map)
  * @return length of chars written in buf
  */
 ssize_t read_all_attr(char *buf, size_t len,
-			     const struct channel_info *channel, const struct attrtibute_map* map)
+			     const struct channel_info *channel, const attrtibute_map* map)
 {
 	int16_t i = 0, j = 0;
 	char local_buf[0x1000];
@@ -92,13 +93,13 @@ ssize_t read_all_attr(char *buf, size_t len,
  * @return length of chars written in buf
  */
 ssize_t write_all_attr(char *buf, size_t len,
-			      const struct channel_info *channel, const struct attrtibute_map* map)
+			      const struct channel_info *channel, const attrtibute_map* map)
 {
 	return 0;
 }
 
 ssize_t ch_exec_read_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len, struct attrtibute_map *map)
+			    bool ch_out, const char *attr, char *buf, size_t len, attrtibute_map *map)
 {
 	int16_t attribute_id;
 	const struct channel_info channel_info = {
@@ -119,6 +120,10 @@ ssize_t ch_exec_write_attr(const char *channel,
 			    bool ch_out, const char *attr, const char *buf, size_t len, struct attrtibute_map *map)
 {
 	int16_t attribute_id;
+
+	if(!map)
+		return -ENOENT;
+
 	const struct channel_info channel_info = {
 		get_channel_number(channel),
 		ch_out
@@ -130,6 +135,53 @@ ssize_t ch_exec_write_attr(const char *channel,
 	if(strequal(attr, "")) {
 		return write_all_attr((char*)buf, len, &channel_info, map);
 	}
+
+	return -ENOENT;
+}
+
+
+/**
+ * read channel attribute
+ * @param *device name
+ * @param *channel name
+ * @param *ch_out type: input/output
+ * @param *attr name
+ * @param *buff where value is stored
+ * @param len maximum length of value to be stored in buf
+ * @return length of chars written in buf
+ */
+ssize_t ch_read_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map)
+{
+	int16_t attribute_id;
+
+	if(!map)
+		return -ENOENT;
+
+	attribute_id = get_attribute_id(el_info->name[el_info->crnt_level], map);
+	if(attribute_id < 0 && el_info->crnt_level == ATTRIBUTE_EL && strequal(el_info->name[el_info->crnt_level], "")) {
+		const struct channel_info channel_info = {
+			get_channel_number(el_info->name[CHANNEL_EL]),
+			el_info->ch_out
+		};
+		return read_all_attr(buf, len, &channel_info, map);
+	}
+	if(attribute_id >= 0)
+	{
+		if(map[attribute_id].exec)
+		{
+			const struct channel_info channel_info = {
+					get_channel_number(el_info->name[CHANNEL_EL]),
+					el_info->ch_out
+				};
+			return map[attribute_id].exec((char*)buf, len, &channel_info);
+		}
+		else
+		{
+			el_info->crnt_level++;
+			return ch_read_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map);
+		}
+	}
+
 	return -ENOENT;
 }
 

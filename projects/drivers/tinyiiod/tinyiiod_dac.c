@@ -45,7 +45,7 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
-#include "tinyiiod_util.h"
+
 
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
@@ -122,7 +122,7 @@ ssize_t get_dds_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static struct attrtibute_map dds_voltage_read_attrtibute_map[] = {
+static attrtibute_map dds_voltage_read_attrtibute_map[] = {
 	{"calibphase", get_dds_calibphase},
 	{"calibscale", get_dds_calibscale},
 	{"sampling_frequency", get_dds_sampling_frequency},
@@ -205,7 +205,7 @@ ssize_t get_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static struct attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
+static attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
 	{"phase", get_dds_altvoltage_phase},
 	{"scale", get_dds_altvoltage_scale},
 	{"frequency", get_dds_altvoltage_frequency},
@@ -213,6 +213,17 @@ static struct attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
 	{"sampling_frequency", get_dds_altvoltage_sampling_frequency},
 	{NULL, NULL},
 };
+
+static attrtibute_map ch_read_dac_attr_map[] = {
+	{"voltage", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
+	{"altvoltage", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{NULL, NULL, NULL},
+};
+
+attrtibute_map *get_ch_read_dac_attr_map()
+{
+	return ch_read_dac_attr_map;
+}
 
 ssize_t ch_read_dac_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len) {
@@ -275,7 +286,7 @@ ssize_t set_dds_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static struct attrtibute_map dds_voltage_write_attrtibute_map[] = {
+static attrtibute_map dds_voltage_write_attrtibute_map[] = {
 	{"calibphase", set_dds_calibphase},
 	{"calibscale", set_dds_calibscale},
 	{"sampling_frequency", set_dds_sampling_frequency},
@@ -366,7 +377,7 @@ ssize_t set_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static struct attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
+static attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
 	{"phase", set_dds_altvoltage_phase},
 	{"scale", set_dds_altvoltage_scale},
 	{"frequency", set_dds_altvoltage_frequency},
