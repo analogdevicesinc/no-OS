@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Generic Platform Drivers.
+ *   @file   gpio.h
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +36,61 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
+#ifndef GPIO_H_
+#define GPIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
 
-#endif // PLATFORM_DRIVERS_H_
+#include <stdint.h>
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define GPIO_OUT	0x01
+#define GPIO_IN		0x00
+
+#define GPIO_HIGH	0x01
+#define GPIO_LOW	0x00
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct gpio_desc {
+	uint8_t		number;
+} gpio_desc;
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+/* Obtain the GPIO decriptor. */
+int32_t gpio_get(struct gpio_desc **desc,
+		 uint8_t gpio_number);
+
+/* Free the resources allocated by gpio_get() */
+int32_t gpio_remove(struct gpio_desc *desc);
+
+/* Enable the input direction of the specified GPIO. */
+int32_t gpio_direction_input(struct gpio_desc *desc);
+
+/* Enable the output direction of the specified GPIO. */
+int32_t gpio_direction_output(struct gpio_desc *desc,
+			      uint8_t value);
+
+/* Get the direction of the specified GPIO. */
+int32_t gpio_get_direction(struct gpio_desc *desc,
+			   uint8_t *direction);
+
+/* Set the value of the specified GPIO. */
+int32_t gpio_set_value(struct gpio_desc *desc,
+		       uint8_t value);
+
+/* Get the value of the specified GPIO. */
+int32_t gpio_get_value(struct gpio_desc *desc,
+		       uint8_t *value);
+
+#endif // GPIO_H_

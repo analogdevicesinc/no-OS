@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Generic Platform Drivers.
+ *   @file   spi.c
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +36,73 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
+
 #include "error.h"
-#include "gpio.h"
-#include "i2c.h"
 #include "spi.h"
 
-#endif // PLATFORM_DRIVERS_H_
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+
+/**
+ * @brief Initialize the SPI communication peripheral.
+ * @param desc - The SPI descriptor.
+ * @param init_param - The structure that contains the SPI parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_init(struct spi_desc **desc,
+		 const struct spi_init_param *param)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (param->max_speed_hz) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Free the resources allocated by spi_init().
+ * @param desc - The SPI descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_remove(struct spi_desc *desc)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_write_and_read(struct spi_desc *desc,
+			   uint8_t *data,
+			   uint8_t bytes_number)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}

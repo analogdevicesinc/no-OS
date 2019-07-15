@@ -1,9 +1,8 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Generic Platform Drivers.
+ *   @file   i2c.h
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +36,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
+#ifndef I2C_H_
+#define I2C_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
 
-#endif // PLATFORM_DRIVERS_H_
+#include <stdint.h>
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+typedef struct i2c_init_param {
+	uint32_t	max_speed_hz;
+	uint8_t		slave_address;
+} i2c_init_param;
+
+typedef struct i2c_desc {
+	uint32_t	max_speed_hz;
+	uint8_t		slave_address;
+} i2c_desc;
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+/* Initialize the I2C communication peripheral. */
+int32_t i2c_init(struct i2c_desc **desc,
+		 const struct i2c_init_param *param);
+
+/* Free the resources allocated by i2c_init(). */
+int32_t i2c_remove(struct i2c_desc *desc);
+
+/* Write data to a slave device. */
+int32_t i2c_write(struct i2c_desc *desc,
+		  uint8_t *data,
+		  uint8_t bytes_number,
+		  uint8_t stop_bit);
+
+/* Read data from a slave device. */
+int32_t i2c_read(struct i2c_desc *desc,
+		 uint8_t *data,
+		 uint8_t bytes_number,
+		 uint8_t stop_bit);
+
+#endif // I2C_H_
