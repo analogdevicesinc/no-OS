@@ -150,7 +150,7 @@ ssize_t ch_exec_write_attr(const char *channel,
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
-ssize_t ch_read_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map)
+ssize_t ch_rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write)
 {
 	int16_t attribute_id;
 
@@ -163,7 +163,10 @@ ssize_t ch_read_attribute(element_info *el_info, char *buf, size_t len, attrtibu
 			get_channel_number(el_info->name[CHANNEL_EL]),
 			el_info->ch_out
 		};
-		return read_all_attr(buf, len, &channel_info, map);
+		if(is_write)
+			return write_all_attr(buf, len, &channel_info, map);
+		else
+			return read_all_attr(buf, len, &channel_info, map);
 	}
 	if(attribute_id >= 0)
 	{
@@ -178,7 +181,7 @@ ssize_t ch_read_attribute(element_info *el_info, char *buf, size_t len, attrtibu
 		else
 		{
 			el_info->crnt_level++;
-			return ch_read_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map);
+			return ch_rd_wr_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map, is_write);
 		}
 	}
 

@@ -43,6 +43,7 @@
 #include "tinyiiod_util.h"
 
 attrtibute_map *get_ch_read_adc_attr_map();
+attrtibute_map *get_ch_write_adc_attr_map();
 
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
 ssize_t ch_read_adc_attr(const char *channel,

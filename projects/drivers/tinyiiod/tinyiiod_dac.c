@@ -386,6 +386,17 @@ static attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+static attrtibute_map ch_write_dac_attr_map[] = {
+	{"voltage", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
+	{"altvoltage", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{NULL, NULL, NULL},
+};
+
+attrtibute_map *get_ch_write_dac_attr_map()
+{
+	return ch_write_dac_attr_map;
+}
+
 ssize_t ch_write_dac_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {

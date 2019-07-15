@@ -1221,6 +1221,18 @@ static attrtibute_map out_wr_map[] = {
 	{NULL, NULL},
 };
 
+static attrtibute_map ch_write_phy_attr_map[] = {
+	{"voltage", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
+	{"altvoltage", NULL, altvoltage_write_attrtibute_map, altvoltage_write_attrtibute_map},
+	{"out", NULL, out_wr_map, out_wr_map},
+	{NULL, NULL, NULL},
+};
+
+attrtibute_map *get_ch_write_phy_attr_map()
+{
+	return ch_write_phy_attr_map;
+}
+
 ssize_t ch_write_phy_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {

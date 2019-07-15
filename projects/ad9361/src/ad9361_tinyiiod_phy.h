@@ -43,6 +43,7 @@
 #include "tinyiiod_util.h"
 
 attrtibute_map *get_ch_read_phy_attr_map();
+attrtibute_map *get_ch_write_phy_attr_map();
 
 ssize_t ch_read_phy_attr(const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len);

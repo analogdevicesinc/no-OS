@@ -41,7 +41,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "tinyiiod_util.h"
+
 attrtibute_map *get_ch_read_dac_attr_map();
+attrtibute_map *get_ch_write_dac_attr_map();
 
 ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint32_t dac_ddr_base);
 ssize_t ch_read_dac_attr(const char *channel,

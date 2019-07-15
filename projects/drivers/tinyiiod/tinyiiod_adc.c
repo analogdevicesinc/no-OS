@@ -277,6 +277,16 @@ static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+static attrtibute_map ch_write_adc_attr_map[] = {
+	{"voltage", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{NULL, NULL},
+};
+
+attrtibute_map *get_ch_write_adc_attr_map()
+{
+	return ch_write_adc_attr_map;
+}
+
 ssize_t ch_write_adc_attr(const char *channel,
 			     bool ch_out, const char *attr, const char *buf, size_t len)
 {
