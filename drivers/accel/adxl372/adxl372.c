@@ -147,8 +147,8 @@ int32_t adxl372_set_activity_threshold(struct adxl372_dev *dev,
 
 	for (i = 0; i < 3; i++) {
 		ret = adxl372_write_reg(dev,
-					 adxl372_th_reg_addr_h[act][i],
-					 th_val_h);
+					adxl372_th_reg_addr_h[act][i],
+					th_val_h);
 		if (ret < 0)
 			return ret;
 
@@ -522,7 +522,7 @@ int32_t adxl372_configure_fifo(struct adxl372_dev *dev,
 		return ret;
 
 	ret = adxl372_write_reg(dev, ADXL372_FIFO_SAMPLES,
-				 fifo_samples & 0xFF);
+				fifo_samples & 0xFF);
 	if (ret)
 		return ret;
 
@@ -737,7 +737,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	}
 	/* GPIO */
 	ret = gpio_get(&dev->gpio_int1,
-			init_param.gpio_int1);
+		       init_param.gpio_int1);
 	if (ret < 0)
 		goto error;
 

@@ -364,15 +364,15 @@ struct adxl372_irq_config {
 struct adxl372_dev;
 
 typedef int32_t (*adxl372_reg_read_func)(struct adxl372_dev *dev,
-					 uint8_t reg_addr,
-					 uint8_t *reg_data);
+		uint8_t reg_addr,
+		uint8_t *reg_data);
 typedef int32_t (*adxl372_reg_write_func)(struct adxl372_dev *dev,
-					  uint8_t reg_addr,
-					  uint8_t reg_data);
+		uint8_t reg_addr,
+		uint8_t reg_data);
 typedef int32_t (*adxl372_reg_read_multi_func)(struct adxl372_dev *dev,
-					       uint8_t reg_addr,
-					       uint8_t *reg_data,
-					       uint16_t count);
+		uint8_t reg_addr,
+		uint8_t *reg_data,
+		uint16_t count);
 
 struct adxl372_dev {
 	/* SPI */
