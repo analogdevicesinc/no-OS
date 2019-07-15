@@ -45,7 +45,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "platform_drivers.h"
 #include "adxl372.h"
 
 /******************************************************************************/
