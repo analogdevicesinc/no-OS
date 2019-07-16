@@ -52,11 +52,13 @@
 typedef struct i2c_init_param {
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
+	void		*extra;
 } i2c_init_param;
 
 typedef struct i2c_desc {
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
+	void		*extra;
 } i2c_desc;
 
 /******************************************************************************/

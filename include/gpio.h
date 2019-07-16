@@ -61,6 +61,7 @@
 
 typedef struct gpio_desc {
 	uint8_t		number;
+	void		*extra;
 } gpio_desc;
 
 /******************************************************************************/
