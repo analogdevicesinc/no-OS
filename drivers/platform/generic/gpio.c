@@ -64,7 +64,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -92,7 +92,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -114,7 +114,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -136,7 +136,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -158,7 +158,7 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -180,5 +180,5 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
