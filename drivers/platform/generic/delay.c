@@ -48,6 +48,18 @@
 /******************************************************************************/
 
 /**
+ * @brief Generate microseconds delay.
+ * @param usecs - Delay in microseconds.
+ * @return None.
+ */
+void udelay(uint32_t usecs)
+{
+	if (usecs) {
+		// Unused variable - fix compiler warning
+	}
+}
+
+/**
  * @brief Generate miliseconds delay.
  * @param msecs - Delay in miliseconds.
  * @return None.

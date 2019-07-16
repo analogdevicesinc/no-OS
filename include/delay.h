@@ -49,6 +49,9 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+/* Generate microseconds delay. */
+void udelay(uint32_t usecs);
+
 /* Generate miliseconds delay. */
 void mdelay(uint32_t msecs);
 
