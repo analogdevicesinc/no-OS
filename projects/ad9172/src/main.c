@@ -63,7 +63,7 @@ int main(void)
 	struct hmc7044_chan_spec chan_spec[4] = {
 		{.disable = 0, .num = 2, .divider = 8, .driver_mode = 1},		/* DAC_CLK */
 		{.disable = 0, .num = 3, .divider = 512, .driver_mode = 1},		/* DAC_SYSREF */
-		{.disable = 0, .num = 12, .divider = 8, .driver_mode = 2},		/* FPGA_CLK */
+		{.disable = 0, .num = 12, .divider = 16, .driver_mode = 2},		/* FPGA_CLK */
 		{.disable = 0, .num = 13, .divider = 512, .driver_mode = 2},	/* FPGA_SYSREF */
 	};
 
@@ -93,8 +93,8 @@ int main(void)
 		.high_density = false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
-		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.device_clk_khz = 92160,	/* (lane_clk_khz / 40) */
+		.lane_clk_khz = 3686400,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -104,8 +104,8 @@ int main(void)
 		.out_clk_sel = 4,
 		.cpll_enable = 0,
 		.lpm_enable = 1,
-		.lane_rate_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
-		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
+		.lane_rate_khz = 3686400,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.ref_rate_khz = 184320,		/* FPGA_CLK, output 12 of HMC 7044 */
 	};
 
 	struct spi_init_param ad9172_spi_param = {
@@ -120,7 +120,7 @@ int main(void)
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_txen0 = 54 + 22,
 		.gpio_txen1 = 54 + 23,
-		.dac_rate_khz = 11796480,		/* or sample rate */
+		.dac_rate_khz = 5898240,		/* or sample rate */
 		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
 		.jesd_link_mode = 4,
 		.jesd_subclass = 0,
