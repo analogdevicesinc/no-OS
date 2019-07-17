@@ -123,7 +123,7 @@ int main(void)
 		.dac_rate_khz = 11796480,		/* or sample rate */
 		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
 		.jesd_link_mode = 4,
-		.jesd_subclass = 0,
+		.jesd_subclass = 1,
 		.dac_interpolation = 8,
 		.channel_interpolation = 4,
 		.clock_output_config = 4,
