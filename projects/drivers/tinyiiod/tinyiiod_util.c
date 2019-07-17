@@ -150,6 +150,64 @@ ssize_t ch_exec_write_attr(const char *channel,
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
+//ssize_t read_phy_attr(const char *attr,
+//			 char *buf, size_t len, bool debug)
+//{
+//	int16_t attribute_id = get_attribute_id(attr, global_read_attrtibute_map);
+//	if(attribute_id >= 0) {
+//		return global_read_attrtibute_map[attribute_id].exec(buf, len, NULL);
+//	}
+//	if(strequal(attr, "")) {
+//		return read_all_attr(buf, len, NULL, global_read_attrtibute_map);
+//	}
+//	return -ENOENT;
+//}
+//ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write)
+//{
+//	int16_t attribute_id;
+//
+//	if(!map)
+//		return -ENOENT;
+//
+//	if(el_info->crnt_level == CHANNEL_EL)
+//		el_info->crnt_level++;
+//
+//	attribute_id = get_attribute_id(el_info->name[el_info->crnt_level], map);
+//	if(attribute_id < 0 && el_info->crnt_level == ATTRIBUTE_EL && strequal(el_info->name[el_info->crnt_level], "")) {
+//		if(is_write)
+//			return write_all_attr(buf, len, NULL, map);
+//		else
+//			return read_all_attr(buf, len, NULL, map);
+//	}
+//	if(attribute_id >= 0)
+//	{
+//		if(map[attribute_id].exec)
+//		{
+//			const struct channel_info channel_info = {
+//					get_channel_number(el_info->name[CHANNEL_EL]),
+//					el_info->ch_out
+//				};
+//			return map[attribute_id].exec((char*)buf, len, &channel_info);
+//		}
+//		else
+//		{
+//			el_info->crnt_level++;
+//			return rd_wr_attribute(el_info, buf, len, map[attribute_id].map, is_write);
+//		}
+//	}
+//
+//	return -ENOENT;
+//}
+/**
+ * read channel attribute
+ * @param *device name
+ * @param *channel name
+ * @param *ch_out type: input/output
+ * @param *attr name
+ * @param *buff where value is stored
+ * @param len maximum length of value to be stored in buf
+ * @return length of chars written in buf
+ */
 ssize_t ch_rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write)
 {
 	int16_t attribute_id;
@@ -157,8 +215,12 @@ ssize_t ch_rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtib
 	if(!map)
 		return -ENOENT;
 
+	if(el_info->crnt_level == CHANNEL_EL && strequal(el_info->name[CHANNEL_EL], ""))
+		el_info->crnt_level++;
+
 	attribute_id = get_attribute_id(el_info->name[el_info->crnt_level], map);
-	if(attribute_id < 0 && el_info->crnt_level == ATTRIBUTE_EL && strequal(el_info->name[el_info->crnt_level], "")) {
+	if(attribute_id < 0 && el_info->crnt_level == ATTRIBUTE_EL && strequal(el_info->name[el_info->crnt_level], "")) /* element not fond, but try to rd/wr all if element is ATTRIBUTE_EL and name is "" */
+	{
 		const struct channel_info channel_info = {
 			get_channel_number(el_info->name[CHANNEL_EL]),
 			el_info->ch_out
@@ -168,7 +230,7 @@ ssize_t ch_rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtib
 		else
 			return read_all_attr(buf, len, &channel_info, map);
 	}
-	if(attribute_id >= 0)
+	if(attribute_id >= 0)  /* element fond */
 	{
 		if(map[attribute_id].exec)
 		{

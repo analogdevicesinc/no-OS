@@ -1541,6 +1541,11 @@ static attrtibute_map global_read_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+attrtibute_map *get_read_phy_attr_map()
+{
+	return global_read_attrtibute_map;
+}
+
 ssize_t read_phy_attr(const char *attr,
 			 char *buf, size_t len, bool debug)
 {

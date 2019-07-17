@@ -47,5 +47,6 @@ ssize_t read_all_attr(char *buf, size_t len,
 			     const struct channel_info *channel, const attrtibute_map* map);
 ssize_t write_all_attr(char *buf, size_t len,
 			      const struct channel_info *channel, const attrtibute_map* map);
+ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write);
 ssize_t ch_rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write);
 #endif /* __TINYIIOD_H__ */
