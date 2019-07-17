@@ -66,9 +66,6 @@ static bool supporter_dev(const char *device)
 	       || strequal(device, "cf-ad9361-dds-core-lpc");
 }
 
-
-
-
 static attrtibute_map read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
@@ -95,34 +92,8 @@ ssize_t read_attr(const char *device, const char *attr, char *buf, size_t len, b
 	el_info.name[ATTRIBUTE_EL] = attr;
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = 0;
-	return ch_rd_wr_attribute(&el_info, buf, len, read_attr_map, 0);
+	return rd_wr_attribute(&el_info, buf, len, read_attr_map, 0);
 }
-
-///**
-// * read global attribute
-// * @param *device name
-// * @param *attr name
-// * @param *buff where value is stored
-// * @param len maximum length of value to be stored in buf
-// * @param debug
-// * @return length of chars written in buf
-// */
-//static ssize_t read_attr_1(const char *device, const char *attr,
-//			 char *buf, size_t len, bool debug)
-//{
-//	if (!supporter_dev(device))
-//		return -ENODEV;
-//	if(strequal(device, "ad9361-phy")) {
-//		return read_phy_attr(attr, buf, len, debug);
-//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-//		return read_dac_attr(attr, buf, len, debug);
-//	} else if(strequal(device, "cf-ad9361-lpc")) {
-//		return read_adc_attr(attr, buf, len, debug);
-//	}
-//
-//	return -ENODEV;
-//}
-
 
 static attrtibute_map write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
@@ -131,6 +102,15 @@ static attrtibute_map write_attr_map[] = {
 	{NULL, NULL},
 };
 
+/**
+ * write global attribute
+ * @param *device name
+ * @param *attr name
+ * @param *buff value to write
+ * @param len maximum length of value to be stored in buf
+ * @param debug
+ * @return length of chars written in buf
+ */
 ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t len, bool debug)
 {
 	if (!supporter_dev(device))
@@ -141,32 +121,8 @@ ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t
 	el_info.name[ATTRIBUTE_EL] = attr;
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = 0;
-	return ch_rd_wr_attribute(&el_info, (char*)buf, len, write_attr_map, 1);
+	return rd_wr_attribute(&el_info, (char*)buf, len, write_attr_map, 1);
 }
-/**
- * write global attribute
- * @param *device name
- * @param *attr name
- * @param *buff where value is stored
- * @param len length of the value
- * @debug
- * @return length of chars written to attribute, negative value in case of failure
- */
-//static ssize_t write_attr(const char *device, const char *attr,
-//			  const char *buf, size_t len, bool debug)
-//{
-//	if (!supporter_dev(device))
-//		return -ENODEV;
-//	if(strequal(device, "ad9361-phy")) {
-//		return write_phy_attr(attr, buf, len, debug);
-//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-//		return write_dac_attr(attr, buf, len, debug);
-//	} else if(strequal(device, "cf-ad9361-lpc")) {
-//		return write_adc_attr(attr, buf, len, debug);
-//	}
-//
-//	return -ENODEV;
-//}
 
 static attrtibute_map ch_read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
@@ -174,7 +130,6 @@ static attrtibute_map ch_read_attr_map[] = {
 	{"cf-ad9361-lpc", NULL, NULL},
 	{NULL, NULL},
 };
-
 
 /**
  * read channel attribute
@@ -197,36 +152,8 @@ ssize_t ch_read_attr(const char *device, const char *channel,
 	el_info.name[ATTRIBUTE_EL] = attr;
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = ch_out;
-	return ch_rd_wr_attribute(&el_info, buf, len, ch_read_attr_map, 0);
+	return rd_wr_attribute(&el_info, buf, len, ch_read_attr_map, 0);
 }
-
-/**
- * read channel attribute
- * @param *device name
- * @param *channel name
- * @param *ch_out type: input/output
- * @param *attr name
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @return length of chars written in buf
- */
-//static ssize_t ch_read_attr(const char *device, const char *channel,
-//			    bool ch_out, const char *attr, char *buf, size_t len)
-//{
-//	if (!supporter_dev(device))
-//		return -ENODEV;
-//
-//	if(strequal(device, "ad9361-phy")) {
-//		return ch_read_phy_attr(channel, ch_out, attr, buf, len);
-//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-//		return ch_read_dac_attr(channel, ch_out, attr, buf, len);
-//	} else if(strequal(device, "cf-ad9361-lpc")) {
-//		return ch_read_adc_attr(channel, ch_out, attr, buf, len);
-//	}
-//
-//	return -ENOENT;
-//}
-
 
 static attrtibute_map ch_write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
@@ -234,31 +161,6 @@ static attrtibute_map ch_write_attr_map[] = {
 	{"cf-ad9361-lpc", NULL, NULL},
 	{NULL, NULL},
 };
-
-
-/**
- * read channel attribute
- * @param *device name
- * @param *channel name
- * @param *ch_out type: input/output
- * @param *attr name
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @return length of chars written in buf
- */
-ssize_t ch_write_attr(const char *device, const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len)
-{
-	if (!supporter_dev(device))
-		return -ENODEV;
-	element_info el_info;
-	el_info.name[DEVICE_EL] = device;
-	el_info.name[CHANNEL_EL] = channel;
-	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
-	el_info.ch_out = ch_out;
-	return ch_rd_wr_attribute(&el_info, buf, len, ch_write_attr_map, 1);
-}
 
 ///**
 // * write channel attribute
@@ -270,29 +172,20 @@ ssize_t ch_write_attr(const char *device, const char *channel,
 // * @param len length of the value
 // * @return length of chars written to attribute, negative value in case of failure
 // */
-//static ssize_t ch_write_attr(const char *device, const char *channel,
-//			     bool ch_out, const char *attr, const char *buf, size_t len)
-//{
-//	if (!supporter_dev(device))
-//		return -ENODEV;
-//	if(strequal(device, "ad9361-phy")) {
-//		return ch_write_phy_attr(channel, ch_out, attr, buf, len);
-//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-//		return ch_write_dac_attr(channel, ch_out, attr, buf, len);
-//	} else if(strequal(device, "cf-ad9361-lpc")) {
-//		return ch_write_adc_attr(channel, ch_out, attr, buf, len);
-//	}
-//
-//	return -ENOENT;
-//}
+ssize_t ch_write_attr(const char *device, const char *channel,
+			    bool ch_out, const char *attr, char *buf, size_t len)
+{
+	if (!supporter_dev(device))
+		return -ENODEV;
+	element_info el_info;
+	el_info.name[DEVICE_EL] = device;
+	el_info.name[CHANNEL_EL] = channel;
+	el_info.name[ATTRIBUTE_EL] = attr;
+	el_info.crnt_level = DEVICE_EL;
+	el_info.ch_out = ch_out;
+	return rd_wr_attribute(&el_info, buf, len, ch_write_attr_map, 1);
+}
 
-/**
- * open device
- * @param *device name
- * @param sample_size
- * @param mask
- * @return 0 on success, otherwise negative value
- */
 static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
 {
 	if (!supporter_dev(device))

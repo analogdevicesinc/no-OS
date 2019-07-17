@@ -67,7 +67,7 @@ ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint3
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_cf_calibphase(char *buf, size_t len,
+static ssize_t get_cf_calibphase(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -91,7 +91,7 @@ ssize_t get_cf_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_cf_calibbias(char *buf, size_t len,
+static ssize_t get_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val;
@@ -110,13 +110,13 @@ ssize_t get_cf_calibbias(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_cf_calibscale(char *buf, size_t len,
+static ssize_t get_cf_calibscale(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
+	int32_t i = 0;
 	ssize_t ret = axi_adc_get_calib_scale(rx_adc, channel->ch_num, &val,
 					      &val2);
-	int32_t i = 0;
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
@@ -136,7 +136,7 @@ ssize_t get_cf_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_cf_samples_pps(char *buf, size_t len,
+static ssize_t get_cf_samples_pps(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -149,7 +149,7 @@ ssize_t get_cf_samples_pps(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_cf_sampling_frequency(char *buf, size_t len,
+static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	uint32_t sampling_freq_hz;
@@ -172,19 +172,14 @@ static attrtibute_map ch_read_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
+/**
+ * get_ch_read_dac_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_read_adc_attr_map()
 {
 	return ch_read_adc_attr_map;
-}
-
-ssize_t ch_read_adc_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len) {
-
-	if(channel == strstr(channel, "voltage")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, cf_voltage_read_attrtibute_map);
-	}
-
-	return -ENOENT;
 }
 
 /**
@@ -194,7 +189,7 @@ ssize_t ch_read_adc_attr(const char *channel,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_cf_calibphase(char *buf, size_t len,
+static ssize_t set_cf_calibphase(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
@@ -212,7 +207,7 @@ ssize_t set_cf_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_cf_calibbias(char *buf, size_t len,
+static ssize_t set_cf_calibbias(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val = read_value(buf);
@@ -231,7 +226,7 @@ ssize_t set_cf_calibbias(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_cf_calibscale(char *buf, size_t len,
+static ssize_t set_cf_calibscale(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
@@ -249,7 +244,7 @@ ssize_t set_cf_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_cf_samples_pps(char *buf, size_t len,
+static ssize_t set_cf_samples_pps(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -262,7 +257,7 @@ ssize_t set_cf_samples_pps(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_cf_sampling_frequency(char *buf, size_t len,
+static ssize_t set_cf_sampling_frequency(char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -282,31 +277,14 @@ static attrtibute_map ch_write_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
+/**
+ * get_ch_write_adc_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_write_adc_attr_map()
 {
 	return ch_write_adc_attr_map;
-}
-
-ssize_t ch_write_adc_attr(const char *channel,
-			     bool ch_out, const char *attr, const char *buf, size_t len)
-{
-	if(channel == strstr(channel, "voltage")) {
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, cf_voltage_write_attrtibute_map);
-	}
-
-	return -ENOENT;
-}
-
-ssize_t read_adc_attr(const char *attr,
-			 char *buf, size_t len, bool debug)
-{
-	return -ENOENT;
-}
-
-ssize_t write_adc_attr(const char *attr,
-			  const char *buf, size_t len, bool debug)
-{
-	return -ENOENT;
 }
 
 /**

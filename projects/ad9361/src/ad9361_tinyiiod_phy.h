@@ -47,12 +47,4 @@ attrtibute_map *get_write_phy_attr_map();
 attrtibute_map *get_ch_read_phy_attr_map();
 attrtibute_map *get_ch_write_phy_attr_map();
 
-ssize_t ch_read_phy_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len);
-ssize_t ch_write_phy_attr(const char *channel,
-			     bool ch_out, const char *attr, const char *buf, size_t len);
-ssize_t read_phy_attr(const char *attr,
-			 char *buf, size_t len, bool debug);
-ssize_t write_phy_attr(const char *attr,
-			  const char *buf, size_t len, bool debug);
 #endif /* __TINYIIOD_PHY_H__ */

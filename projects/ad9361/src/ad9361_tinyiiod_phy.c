@@ -46,6 +46,7 @@
 
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
+extern const char *ad9361_ensm_states[12];
 
 static const char * const ad9361_calib_mode[] =
 {"auto", "manual", "tx_quad", "rf_dc_offs", "rssi_gain_step"};
@@ -62,8 +63,6 @@ static const char * const ad9361_rf_tx_port[] =
 static const char * const ad9361_agc_modes[] =
 {"manual", "fast_attack", "slow_attack", "hybrid"};
 
-extern const char *ad9361_ensm_states[12];
-
 /**
  * get_rf_port_select
  * @param *buff where value is stored
@@ -71,7 +70,7 @@ extern const char *ad9361_ensm_states[12];
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rf_port_select(char *buf, size_t len,
+static ssize_t get_rf_port_select(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -93,7 +92,7 @@ ssize_t get_rf_port_select(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_hardwaregain(char *buf, size_t len,
+static ssize_t get_hardwaregain(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	struct rf_rx_gain rx_gain = {0};
@@ -134,7 +133,7 @@ ssize_t get_hardwaregain(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rssi(char *buf, size_t len, const struct channel_info *channel)
+static ssize_t get_rssi(char *buf, size_t len, const struct channel_info *channel)
 {
 	ssize_t ret = 0;
 	if(channel->ch_out) {
@@ -160,7 +159,7 @@ ssize_t get_rssi(char *buf, size_t len, const struct channel_info *channel)
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_hardwaregain_available(char *buf, size_t len,
+static ssize_t get_hardwaregain_available(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	if (channel->ch_out) {
@@ -180,7 +179,7 @@ ssize_t get_hardwaregain_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_sampling_frequency_available(char *buf, size_t len,
+static ssize_t get_sampling_frequency_available(char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	int32_t int_dec;
@@ -218,7 +217,7 @@ ssize_t get_sampling_frequency_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rf_port_select_available(char *buf, size_t len,
+static ssize_t get_rf_port_select_available(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	if(channel->ch_out) {
@@ -248,7 +247,7 @@ ssize_t get_rf_port_select_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_filter_fir_en(char *buf, size_t len,
+static ssize_t get_filter_fir_en(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	uint8_t en_dis;
@@ -267,7 +266,7 @@ ssize_t get_filter_fir_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_sampling_frequency(char *buf, size_t len,
+static ssize_t get_sampling_frequency(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	uint32_t sampling_freq_hz;
@@ -282,7 +281,7 @@ ssize_t get_sampling_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rf_bandwidth_available(char *buf, size_t len,
+static ssize_t get_rf_bandwidth_available(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	if(channel->ch_out) {
@@ -299,7 +298,7 @@ ssize_t get_rf_bandwidth_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rf_bandwidth(char *buf, size_t len,
+static ssize_t get_rf_bandwidth(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	if(channel->ch_out) {
@@ -330,7 +329,7 @@ static attrtibute_map voltage_output_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_gain_control_mode(char *buf, size_t len,
+static ssize_t get_gain_control_mode(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%s",
@@ -344,7 +343,7 @@ ssize_t get_gain_control_mode(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rf_dc_offset_tracking_en(char *buf, size_t len,
+static ssize_t get_rf_dc_offset_tracking_en(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	if(!channel->ch_out) {
@@ -362,7 +361,7 @@ ssize_t get_rf_dc_offset_tracking_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_quadrature_tracking_en(char *buf, size_t len,
+static ssize_t get_quadrature_tracking_en(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	if(!channel->ch_out) {
@@ -380,7 +379,7 @@ ssize_t get_quadrature_tracking_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_gain_control_mode_available(char *buf, size_t len,
+static ssize_t get_gain_control_mode_available(char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%s %s %s %s",
@@ -397,7 +396,7 @@ ssize_t get_gain_control_mode_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_bb_dc_offset_tracking_en(char *buf, size_t len,
+static ssize_t get_bb_dc_offset_tracking_en(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	if(!channel->ch_out) {
@@ -434,7 +433,7 @@ static attrtibute_map voltage_input_read_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_frequency_available(char *buf, size_t len,
+static ssize_t get_frequency_available(char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	return sprintf(buf, "[%llu 1 %llu]", AD9363A_MIN_CARRIER_FREQ_HZ,
@@ -448,7 +447,7 @@ ssize_t get_frequency_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_fastlock_save(char *buf, size_t len,
+static ssize_t get_fastlock_save(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	uint8_t faslock_vals[16];
@@ -475,7 +474,7 @@ ssize_t get_fastlock_save(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_powerdown(char *buf, size_t len,
+static ssize_t get_powerdown(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	uint64_t val = 0;
@@ -491,7 +490,7 @@ ssize_t get_powerdown(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_fastlock_load(char *buf, size_t len,
+static ssize_t get_fastlock_load(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -504,7 +503,7 @@ ssize_t get_fastlock_load(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_fastlock_store(char *buf, size_t len,
+static ssize_t get_fastlock_store(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -517,7 +516,7 @@ ssize_t get_fastlock_store(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_frequency(char *buf, size_t len,
+static ssize_t get_frequency(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	uint64_t val = 0;
@@ -534,7 +533,7 @@ ssize_t get_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_external(char *buf, size_t len, const struct channel_info *channel)
+static ssize_t get_external(char *buf, size_t len, const struct channel_info *channel)
 {
 	if(channel->ch_num == 0)
 		return (ssize_t) sprintf(buf, "%d", ad9361_phy->pdata->use_ext_rx_lo);
@@ -549,7 +548,7 @@ ssize_t get_external(char *buf, size_t len, const struct channel_info *channel)
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_fastlock_recall(char *buf, size_t len,
+static ssize_t get_fastlock_recall(char *buf, size_t len,
 			    const struct channel_info *channel)
 {
 	return sprintf(buf, "%d",
@@ -575,7 +574,7 @@ static attrtibute_map altvoltage_read_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_temp0_input(char *buf, size_t len,
+static ssize_t get_temp0_input(char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	int32_t temp;
@@ -595,7 +594,7 @@ static attrtibute_map tmp0_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_voltage_filter_fir_en(char *buf, size_t len,
+static ssize_t get_voltage_filter_fir_en(char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	uint8_t en_dis_tx, en_dis_rx;
@@ -619,26 +618,14 @@ static attrtibute_map ch_read_phy_attr_map[] = {
 	{NULL, NULL, NULL},
 };
 
+/**
+ * get_ch_read_phy_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_read_phy_attr_map()
 {
 	return ch_read_phy_attr_map;
-}
-
-ssize_t ch_read_phy_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len)
-{
-	if(channel == strstr(channel, "voltage")) {
-		attrtibute_map *map = ch_out ? voltage_output_map : voltage_input_read_map;
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, map);
-	} else if (NULL != strstr(channel, "altvoltage")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, altvoltage_read_attrtibute_map);
-	} else if (strequal(channel, "temp0")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, tmp0_map);
-	} else if (strequal(channel, "out")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, out_read_map);
-	}
-
-	return -ENOENT;
 }
 
 /**
@@ -648,7 +635,7 @@ ssize_t ch_read_phy_attr(const char *channel,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_hardwaregain_available(char *buf, size_t len,
+static ssize_t set_hardwaregain_available(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -661,7 +648,7 @@ ssize_t set_hardwaregain_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_hardwaregain(char *buf, size_t len,
+static ssize_t set_hardwaregain(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -700,7 +687,7 @@ ssize_t set_hardwaregain(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rssi(char *buf, size_t len, const struct channel_info *channel)
+static ssize_t set_rssi(char *buf, size_t len, const struct channel_info *channel)
 {
 	return -ENODEV;
 }
@@ -712,7 +699,7 @@ ssize_t set_rssi(char *buf, size_t len, const struct channel_info *channel)
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rf_port_select(char *buf, size_t len,
+static ssize_t set_rf_port_select(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -749,7 +736,7 @@ ssize_t set_rf_port_select(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_gain_control_mode(char *buf, size_t len,
+static ssize_t set_gain_control_mode(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	struct rf_gain_ctrl gc = {0};
@@ -779,7 +766,7 @@ ssize_t set_gain_control_mode(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rf_port_select_available(char *buf, size_t len,
+static ssize_t set_rf_port_select_available(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -792,7 +779,7 @@ ssize_t set_rf_port_select_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rf_bandwidth(char *buf, size_t len,
+static ssize_t set_rf_bandwidth(char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -823,7 +810,7 @@ ssize_t set_rf_bandwidth(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rf_dc_offset_tracking_en(char *buf, size_t len,
+static ssize_t set_rf_dc_offset_tracking_en(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	int8_t en_dis = read_value(buf);
@@ -846,7 +833,7 @@ ssize_t set_rf_dc_offset_tracking_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_sampling_frequency_available(char *buf, size_t len,
+static ssize_t set_sampling_frequency_available(char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -859,7 +846,7 @@ ssize_t set_sampling_frequency_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_quadrature_tracking_en(char *buf, size_t len,
+static ssize_t set_quadrature_tracking_en(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	int8_t en_dis = read_value(buf);
@@ -882,7 +869,7 @@ ssize_t set_quadrature_tracking_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_sampling_frequency(char *buf, size_t len,
+static ssize_t set_sampling_frequency(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	uint32_t sampling_freq_hz = read_ul_value(buf);
@@ -898,7 +885,7 @@ ssize_t set_sampling_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_gain_control_mode_available(char *buf, size_t len,
+static ssize_t set_gain_control_mode_available(char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	struct rf_gain_ctrl gc = {0};
@@ -928,7 +915,7 @@ ssize_t set_gain_control_mode_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_filter_fir_en(char *buf, size_t len,
+static ssize_t set_filter_fir_en(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int8_t en_dis = read_value(buf);
@@ -952,7 +939,7 @@ ssize_t set_filter_fir_en(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_rf_bandwidth_available(char *buf, size_t len,
+static ssize_t set_rf_bandwidth_available(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -965,7 +952,7 @@ ssize_t set_rf_bandwidth_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_bb_dc_offset_tracking_en(char *buf, size_t len,
+static ssize_t set_bb_dc_offset_tracking_en(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	int8_t en_dis = read_value(buf);
@@ -1021,7 +1008,7 @@ static attrtibute_map ch_out_write_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_frequency_available(char *buf, size_t len,
+static ssize_t set_frequency_available(char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -1034,7 +1021,7 @@ ssize_t set_frequency_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_fastlock_save(char *buf, size_t len,
+static ssize_t set_fastlock_save(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	uint32_t readin = read_ul_value(buf);
@@ -1050,7 +1037,7 @@ ssize_t set_fastlock_save(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_powerdown(char *buf, size_t len,
+static ssize_t set_powerdown(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -1076,7 +1063,7 @@ ssize_t set_powerdown(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_fastlock_load(char *buf, size_t len,
+static ssize_t set_fastlock_load(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -1116,7 +1103,7 @@ ssize_t set_fastlock_load(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_fastlock_store(char *buf, size_t len,
+static ssize_t set_fastlock_store(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	uint32_t profile = read_ul_value(buf);
@@ -1131,7 +1118,7 @@ ssize_t set_fastlock_store(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_frequency(char *buf, size_t len,
+static ssize_t set_frequency(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	uint64_t lo_freq_hz = read_ul_value(buf);
@@ -1161,7 +1148,7 @@ ssize_t set_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_external(char *buf, size_t len, const struct channel_info *channel)
+static ssize_t set_external(char *buf, size_t len, const struct channel_info *channel)
 {
 	bool select = read_value(buf) ? 1 : 0;
 	ssize_t ret = 0;
@@ -1182,7 +1169,7 @@ ssize_t set_external(char *buf, size_t len, const struct channel_info *channel)
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_fastlock_recall(char *buf, size_t len,
+static ssize_t set_fastlock_recall(char *buf, size_t len,
 			    const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -1205,7 +1192,7 @@ static attrtibute_map altvoltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-ssize_t voltage_filter_fir_en(char *buf, size_t len,
+static ssize_t voltage_filter_fir_en(char *buf, size_t len,
 			    const struct channel_info *channel)
 {
 	int8_t en_dis = read_value(buf) ? 1 : 0;
@@ -1228,24 +1215,14 @@ static attrtibute_map ch_write_phy_attr_map[] = {
 	{NULL, NULL, NULL},
 };
 
+/**
+ * get_ch_write_phy_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_write_phy_attr_map()
 {
 	return ch_write_phy_attr_map;
-}
-
-ssize_t ch_write_phy_attr(const char *channel,
-			     bool ch_out, const char *attr, const char *buf, size_t len)
-{
-	if(channel == strstr(channel, "voltage")) {
-		attrtibute_map *map = ch_out ? ch_out_write_attrtibute_map : ch_in_write_attrtibute_map;
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, map);
-	} else if(NULL != strstr(channel, "altvoltage")) {
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, altvoltage_write_attrtibute_map);
-	} else if(strequal(channel, "out")) {
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, out_wr_map);
-	}
-
-	return -ENOENT;
 }
 
 /**
@@ -1255,7 +1232,7 @@ ssize_t ch_write_phy_attr(const char *channel,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dcxo_tune_coarse(char *buf, size_t len,
+static ssize_t get_dcxo_tune_coarse(char *buf, size_t len,
 			     const struct channel_info *channel)
 {
 
@@ -1272,7 +1249,7 @@ ssize_t get_dcxo_tune_coarse(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rx_path_rates(char *buf, size_t len,
+static ssize_t get_rx_path_rates(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	unsigned long clk[6];
@@ -1289,7 +1266,7 @@ ssize_t get_rx_path_rates(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_trx_rate_governor(char *buf, size_t len,
+static ssize_t get_trx_rate_governor(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	uint32_t rate_governor;
@@ -1305,7 +1282,7 @@ ssize_t get_trx_rate_governor(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_calib_mode_available(char *buf, size_t len,
+static ssize_t get_calib_mode_available(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%s %s %s %s %s", ad9361_calib_mode[0],
@@ -1320,7 +1297,7 @@ ssize_t get_calib_mode_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_xo_correction_available(char *buf, size_t len,
+static ssize_t get_xo_correction_available(char *buf, size_t len,
 				    const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
@@ -1333,7 +1310,7 @@ ssize_t get_xo_correction_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_gain_table_config(char *buf, size_t len,
+static ssize_t get_gain_table_config(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
@@ -1346,7 +1323,7 @@ ssize_t get_gain_table_config(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dcxo_tune_fine(char *buf, size_t len,
+static ssize_t get_dcxo_tune_fine(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	if (ad9361_phy->pdata->use_extclk)
@@ -1362,7 +1339,7 @@ ssize_t get_dcxo_tune_fine(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dcxo_tune_fine_available(char *buf, size_t len,
+static ssize_t get_dcxo_tune_fine_available(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	return sprintf(buf, "%s",
@@ -1376,7 +1353,7 @@ ssize_t get_dcxo_tune_fine_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_ensm_mode_available(char *buf, size_t len,
+static ssize_t get_ensm_mode_available(char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%s", ad9361_phy->pdata->fdd ?
@@ -1391,7 +1368,7 @@ ssize_t get_ensm_mode_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_multichip_sync(char *buf, size_t len,
+static ssize_t get_multichip_sync(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0);  /* dummy */
@@ -1404,7 +1381,7 @@ ssize_t get_multichip_sync(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_rssi_gain_step_error(char *buf, size_t len,
+static ssize_t get_rssi_gain_step_error(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0);  /* dummy */
@@ -1417,7 +1394,7 @@ ssize_t get_rssi_gain_step_error(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dcxo_tune_coarse_available(char *buf, size_t len,
+static ssize_t get_dcxo_tune_coarse_available(char *buf, size_t len,
 				       const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%s",
@@ -1431,7 +1408,7 @@ ssize_t get_dcxo_tune_coarse_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_tx_path_rates(char *buf, size_t len,
+static ssize_t get_tx_path_rates(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	unsigned long clk[6];
@@ -1448,7 +1425,7 @@ ssize_t get_tx_path_rates(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_trx_rate_governor_available(char *buf, size_t len,
+static ssize_t get_trx_rate_governor_available(char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	return sprintf(buf, "%s", "nominal highest_osr");
@@ -1461,7 +1438,7 @@ ssize_t get_trx_rate_governor_available(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_xo_correction(char *buf, size_t len,
+static ssize_t get_xo_correction(char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
@@ -1474,7 +1451,7 @@ ssize_t get_xo_correction(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_ensm_mode(char *buf, size_t len,
+static ssize_t get_ensm_mode(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -1495,7 +1472,7 @@ ssize_t get_ensm_mode(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_filter_fir_config(char *buf, size_t len,
+static ssize_t get_filter_fir_config(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	return sprintf(buf, "FIR Rx: %d,%d Tx: %d,%d",
@@ -1510,7 +1487,7 @@ ssize_t get_filter_fir_config(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_calib_mode(char *buf, size_t len,
+static ssize_t get_calib_mode(char *buf, size_t len,
 		       const struct channel_info *channel)
 {
 	uint8_t en_dis;
@@ -1541,25 +1518,15 @@ static attrtibute_map global_read_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+/**
+ * get_read_phy_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_read_phy_attr_map()
 {
 	return global_read_attrtibute_map;
 }
-
-ssize_t read_phy_attr(const char *attr,
-			 char *buf, size_t len, bool debug)
-{
-	int16_t attribute_id = get_attribute_id(attr, global_read_attrtibute_map);
-	if(attribute_id >= 0) {
-		return global_read_attrtibute_map[attribute_id].exec(buf, len, NULL);
-	}
-	if(strequal(attr, "")) {
-		return read_all_attr(buf, len, NULL, global_read_attrtibute_map);
-	}
-	return -ENOENT;
-}
-
-
 
 /**
  * set_trx_rate_governor
@@ -1568,7 +1535,7 @@ ssize_t read_phy_attr(const char *attr,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_trx_rate_governor(char *buf, size_t len,
+static ssize_t set_trx_rate_governor(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	ssize_t ret = 0;
@@ -1590,7 +1557,7 @@ ssize_t set_trx_rate_governor(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dcxo_tune_coarse(char *buf, size_t len,
+static ssize_t set_dcxo_tune_coarse(char *buf, size_t len,
 			     const struct channel_info *channel)
 {
 	uint32_t dcxo_coarse = read_ul_value(buf);
@@ -1608,7 +1575,7 @@ ssize_t set_dcxo_tune_coarse(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dcxo_tune_fine(char *buf, size_t len,
+static ssize_t set_dcxo_tune_fine(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	uint32_t dcxo_fine = read_ul_value(buf);
@@ -1626,7 +1593,7 @@ ssize_t set_dcxo_tune_fine(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_calib_mode(char *buf, size_t len,
+static ssize_t set_calib_mode(char *buf, size_t len,
 		       const struct channel_info *channel)
 {
 	int32_t arg = -1;
@@ -1662,7 +1629,7 @@ ssize_t set_calib_mode(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_ensm_mode(char *buf, size_t len,
+static ssize_t set_ensm_mode(char *buf, size_t len,
 		      const struct channel_info *channel)
 {
 	uint32_t val = 0;
@@ -1703,7 +1670,7 @@ ssize_t set_ensm_mode(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_multichip_sync(char *buf, size_t len,
+static ssize_t set_multichip_sync(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	uint32_t readin = read_ul_value(buf);
@@ -1721,7 +1688,7 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_filter_fir_config(char *buf, size_t len,
+static ssize_t set_filter_fir_config(char *buf, size_t len,
 			      const struct channel_info *channel)
 {
 	return ad9361_parse_fir(ad9361_phy, (char *)buf, len);
@@ -1738,22 +1705,12 @@ static attrtibute_map global_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+/**
+ * get_write_phy_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_write_phy_attr_map()
 {
 	return global_write_attrtibute_map;
 }
-
-ssize_t write_phy_attr(const char *attr,
-			  const char *buf, size_t len, bool debug)
-{
-	int16_t attribute_id = get_attribute_id(attr, global_write_attrtibute_map);
-	if(attribute_id >= 0) {
-		return global_write_attrtibute_map[attribute_id].exec((char*)buf, len, NULL);
-	}
-	if(strequal(attr, "")) {
-		return write_all_attr((char*)buf, len, NULL, global_write_attrtibute_map);
-	}
-
-	return -ENOENT;
-}
-

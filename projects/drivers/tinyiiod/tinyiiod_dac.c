@@ -40,13 +40,10 @@
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-
 #include "ad9361_api.h" //todo remove
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
-
-
 
 extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t dac_ddr_baseaddr;
@@ -68,7 +65,7 @@ ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint3
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_calibscale(char *buf, size_t len,
+static ssize_t get_dds_calibscale(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -94,7 +91,7 @@ ssize_t get_dds_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_calibphase(char *buf, size_t len,
+static ssize_t get_dds_calibphase(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -116,7 +113,7 @@ ssize_t get_dds_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_sampling_frequency(char *buf, size_t len,
+static ssize_t get_dds_sampling_frequency(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -136,7 +133,7 @@ static attrtibute_map dds_voltage_read_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase;
@@ -151,7 +148,7 @@ ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t scale;
@@ -168,7 +165,7 @@ ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq;
@@ -185,7 +182,7 @@ extern int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac);
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	return snprintf(buf, len, "%"PRIi32"", ad9361_auxdac_get(ad9361_phy,
@@ -199,7 +196,7 @@ ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-ssize_t get_dds_altvoltage_sampling_frequency(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -220,21 +217,14 @@ static attrtibute_map ch_read_dac_attr_map[] = {
 	{NULL, NULL, NULL},
 };
 
+/**
+ * get_ch_read_dac_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_read_dac_attr_map()
 {
 	return ch_read_dac_attr_map;
-}
-
-ssize_t ch_read_dac_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len) {
-
-	if(channel == strstr(channel, "voltage")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, dds_voltage_read_attrtibute_map);
-	} else if (NULL != strstr(channel, "altvoltage")) {
-		return ch_exec_read_attr(channel, ch_out, attr, buf, len, dds_altvoltage_read_attrtibute_map);
-	}
-
-	return -ENOENT;
 }
 
 /**
@@ -244,7 +234,7 @@ ssize_t ch_read_dac_attr(const char *channel,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_calibscale(char *buf, size_t len,
+static ssize_t set_dds_calibscale(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
@@ -262,7 +252,7 @@ ssize_t set_dds_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_calibphase(char *buf, size_t len,
+static ssize_t set_dds_calibphase(char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
@@ -280,7 +270,7 @@ ssize_t set_dds_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_sampling_frequency(char *buf, size_t len,
+static ssize_t set_dds_sampling_frequency(char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -300,7 +290,7 @@ static attrtibute_map dds_voltage_write_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
@@ -316,7 +306,7 @@ ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	float fscale = strtof(buf, NULL);
@@ -333,7 +323,7 @@ ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
@@ -351,7 +341,7 @@ extern int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	uint32_t dds_mode = read_ul_value(buf);
@@ -371,7 +361,7 @@ ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-ssize_t set_dds_altvoltage_sampling_frequency(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -392,33 +382,14 @@ static attrtibute_map ch_write_dac_attr_map[] = {
 	{NULL, NULL, NULL},
 };
 
+/**
+ * get_ch_write_dac_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
 attrtibute_map *get_ch_write_dac_attr_map()
 {
 	return ch_write_dac_attr_map;
-}
-
-ssize_t ch_write_dac_attr(const char *channel,
-			     bool ch_out, const char *attr, const char *buf, size_t len)
-{
-	if(channel == strstr(channel, "voltage")) {
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, dds_voltage_write_attrtibute_map);
-	} else if(NULL != strstr(channel, "altvoltage")) {
-		return ch_exec_write_attr(channel, ch_out, attr, buf, len, dds_altvoltage_write_attrtibute_map);
-	}
-
-	return -ENOENT;
-}
-
-ssize_t read_dac_attr(const char *attr,
-			 char *buf, size_t len, bool debug)
-{
-	return -ENOENT;
-}
-
-ssize_t write_dac_attr(const char *attr,
-			  const char *buf, size_t len, bool debug)
-{
-	return -ENOENT;
 }
 
 /**

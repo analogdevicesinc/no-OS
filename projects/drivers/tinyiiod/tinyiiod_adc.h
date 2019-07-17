@@ -44,17 +44,9 @@
 
 attrtibute_map *get_ch_read_adc_attr_map();
 attrtibute_map *get_ch_write_adc_attr_map();
-
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
-ssize_t ch_read_adc_attr(const char *channel,
-			    bool ch_out, const char *attr, char *buf, size_t len);
-ssize_t ch_write_adc_attr(const char *channel,
-			     bool ch_out, const char *attr, const char *buf, size_t len);
-ssize_t read_adc_attr(const char *attr,
-			 char *buf, size_t len, bool debug);
-ssize_t write_adc_attr(const char *attr,
-			  const char *buf, size_t len, bool debug);
 ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count);
 ssize_t read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count);
+
 #endif /* __TINYIIOD_ADC_H__ */
