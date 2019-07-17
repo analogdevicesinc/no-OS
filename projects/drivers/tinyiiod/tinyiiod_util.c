@@ -41,8 +41,7 @@ static int16_t get_attribute_id(const char *attr, const attrtibute_map* map)
 
 	while(map[i].attr_name)
 	{
-		char *pos = strstr(attr, map[i].attr_name );
-		if (pos == attr)
+		if (strequal(attr, map[i].attr_name))
 			return i;
 		i++;
 	}

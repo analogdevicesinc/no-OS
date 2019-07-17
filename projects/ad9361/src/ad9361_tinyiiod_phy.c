@@ -611,8 +611,12 @@ static attrtibute_map out_read_map[] = {
 };
 
 static attrtibute_map ch_read_phy_attr_map[] = {
-	{"voltage", NULL, voltage_input_read_map, voltage_output_map},
-	{"altvoltage", NULL, altvoltage_read_attrtibute_map, altvoltage_read_attrtibute_map},
+	{"voltage0", NULL, voltage_input_read_map, voltage_output_map},
+	{"voltage1", NULL, voltage_input_read_map, voltage_output_map},
+	{"voltage2", NULL, voltage_input_read_map, voltage_output_map},
+	{"voltage3", NULL, voltage_input_read_map, voltage_output_map},
+	{"altvoltage0", NULL, altvoltage_read_attrtibute_map, altvoltage_read_attrtibute_map},
+	{"altvoltage1", NULL, altvoltage_read_attrtibute_map, altvoltage_read_attrtibute_map},
 	{"temp0", NULL, tmp0_map, tmp0_map},
 	{"out", NULL, out_read_map, out_read_map},
 	{NULL, NULL, NULL},
@@ -1209,8 +1213,12 @@ static attrtibute_map out_wr_map[] = {
 };
 
 static attrtibute_map ch_write_phy_attr_map[] = {
-	{"voltage", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
-	{"altvoltage", NULL, altvoltage_write_attrtibute_map, altvoltage_write_attrtibute_map},
+	{"voltage0", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
+	{"voltage1", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
+	{"voltage2", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
+	{"voltage3", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
+	{"altvoltage0", NULL, altvoltage_write_attrtibute_map, altvoltage_write_attrtibute_map},
+	{"altvoltage1", NULL, altvoltage_write_attrtibute_map, altvoltage_write_attrtibute_map},
 	{"out", NULL, out_wr_map, out_wr_map},
 	{NULL, NULL, NULL},
 };

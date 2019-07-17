@@ -168,7 +168,10 @@ static attrtibute_map cf_voltage_read_attrtibute_map[] = {
 };
 
 static attrtibute_map ch_read_adc_attr_map[] = {
-	{"voltage", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
+	{"voltage0", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
+	{"voltage1", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
+	{"voltage2", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
+	{"voltage3", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
 	{NULL, NULL},
 };
 
@@ -273,7 +276,10 @@ static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 };
 
 static attrtibute_map ch_write_adc_attr_map[] = {
-	{"voltage", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{"voltage0", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{"voltage1", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{"voltage2", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{"voltage3", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
 	{NULL, NULL},
 };
 

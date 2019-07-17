@@ -212,8 +212,18 @@ static attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
 };
 
 static attrtibute_map ch_read_dac_attr_map[] = {
-	{"voltage", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
-	{"altvoltage", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"voltage0", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
+	{"voltage1", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
+	{"voltage2", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
+	{"voltage3", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
+	{"altvoltage0", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage1", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage2", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage3", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage4", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage5", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage6", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
+	{"altvoltage7", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
 	{NULL, NULL, NULL},
 };
 
@@ -377,8 +387,18 @@ static attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
 };
 
 static attrtibute_map ch_write_dac_attr_map[] = {
-	{"voltage", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
-	{"altvoltage", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"voltage0", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
+	{"voltage1", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
+	{"voltage2", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
+	{"voltage3", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
+	{"altvoltage0", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage1", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage2", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage3", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage4", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage5", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage6", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
+	{"altvoltage7", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
 	{NULL, NULL, NULL},
 };
 
