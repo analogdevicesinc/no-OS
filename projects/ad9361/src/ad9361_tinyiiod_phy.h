@@ -43,6 +43,7 @@
 #include "tinyiiod_util.h"
 
 attrtibute_map *get_read_phy_attr_map();
+attrtibute_map *get_write_phy_attr_map();
 attrtibute_map *get_ch_read_phy_attr_map();
 attrtibute_map *get_ch_write_phy_attr_map();
 

@@ -1738,6 +1738,11 @@ static attrtibute_map global_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
+attrtibute_map *get_write_phy_attr_map()
+{
+	return global_write_attrtibute_map;
+}
+
 ssize_t write_phy_attr(const char *attr,
 			  const char *buf, size_t len, bool debug)
 {

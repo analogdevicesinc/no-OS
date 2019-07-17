@@ -124,7 +124,25 @@ ssize_t read_attr(const char *device, const char *attr, char *buf, size_t len, b
 //}
 
 
+static attrtibute_map write_attr_map[] = {
+	{"ad9361-phy", NULL, NULL},
+	{"cf-ad9361-dds-core-lpc", NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL},
+	{NULL, NULL},
+};
 
+ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t len, bool debug)
+{
+	if (!supporter_dev(device))
+		return -ENODEV;
+	element_info el_info;
+	el_info.name[DEVICE_EL] = device;
+	el_info.name[CHANNEL_EL] = "";
+	el_info.name[ATTRIBUTE_EL] = attr;
+	el_info.crnt_level = DEVICE_EL;
+	el_info.ch_out = 0;
+	return ch_rd_wr_attribute(&el_info, (char*)buf, len, write_attr_map, 1);
+}
 /**
  * write global attribute
  * @param *device name
@@ -134,21 +152,21 @@ ssize_t read_attr(const char *device, const char *attr, char *buf, size_t len, b
  * @debug
  * @return length of chars written to attribute, negative value in case of failure
  */
-static ssize_t write_attr(const char *device, const char *attr,
-			  const char *buf, size_t len, bool debug)
-{
-	if (!supporter_dev(device))
-		return -ENODEV;
-	if(strequal(device, "ad9361-phy")) {
-		return write_phy_attr(attr, buf, len, debug);
-	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
-		return write_dac_attr(attr, buf, len, debug);
-	} else if(strequal(device, "cf-ad9361-lpc")) {
-		return write_adc_attr(attr, buf, len, debug);
-	}
-
-	return -ENODEV;
-}
+//static ssize_t write_attr(const char *device, const char *attr,
+//			  const char *buf, size_t len, bool debug)
+//{
+//	if (!supporter_dev(device))
+//		return -ENODEV;
+//	if(strequal(device, "ad9361-phy")) {
+//		return write_phy_attr(attr, buf, len, debug);
+//	} else if(strequal(device, "cf-ad9361-dds-core-lpc")) {
+//		return write_dac_attr(attr, buf, len, debug);
+//	} else if(strequal(device, "cf-ad9361-lpc")) {
+//		return write_adc_attr(attr, buf, len, debug);
+//	}
+//
+//	return -ENODEV;
+//}
 
 static attrtibute_map ch_read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
@@ -353,6 +371,8 @@ struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
 	ch_write_attr_map[2].map_out = ch_write_attr_map[2].map;
 
 	read_attr_map[0].map = get_read_phy_attr_map();
+	write_attr_map[0].map = get_write_phy_attr_map();
+
 	tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
 	tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
 	return tinyiiod_create(xml, &ops);
