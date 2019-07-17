@@ -94,7 +94,20 @@ static ssize_t read_all_attr(char *buf, size_t len,
 static ssize_t write_all_attr(char *buf, size_t len,
 			      const struct channel_info *channel, const attrtibute_map* map)
 {
-	return 0;
+	int16_t i = 0, j = 0;
+
+	while(map[i].attr_name)
+	{
+		int16_t attr_length = Xil_EndianSwap32((uint32_t)(buf + j));
+		j += 4;
+		map[i].exec((buf + j), attr_length, channel);
+		j += attr_length;
+		if (j & 0x3)
+			j = ((j >> 2) + 1) << 2;
+		i++;
+	}
+
+	return len;
 }
 
 /**
