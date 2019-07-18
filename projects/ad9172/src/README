@@ -15,6 +15,8 @@
 	cp ../../drivers/jesd204/axi_adxcvr.c ./
 	cp ../../drivers/axi_dac_core/axi_dac_core.h ./
 	cp ../../drivers/axi_dac_core/axi_dac_core.c ./
+	cp ../../drivers/axi_dmac/axi_dmac.h ./
+	cp ../../drivers/axi_dmac/axi_dmac.c ./
 	cp ../../../drivers/frequency/hmc7044/hmc7044.h ./
 	cp ../../../drivers/frequency/hmc7044/hmc7044.c ./
 	cp ../../../drivers/ad917x/ad9172.h ./

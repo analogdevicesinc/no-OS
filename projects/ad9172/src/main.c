@@ -50,6 +50,10 @@
 #include "parameters.h"
 #include "inttypes.h"
 
+#ifdef DAC_DMA_EXAMPLE
+#include "axi_dmac.h"
+#endif /* DAC_DMA_EXAMPLE */
+
 int main(void)
 {
 	struct spi_init_param hmc7044_spi_param = {
@@ -137,6 +141,16 @@ int main(void)
 		4,
 	};
 
+#ifdef DAC_DMA_EXAMPLE
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_LAST,
+	};
+	struct axi_dmac *tx_dmac;
+#endif /* DAC_DMA_EXAMPLE */
+
 	struct hmc7044_dev *hmc7044_device;
 	struct ad9172_dev *ad9172_device;
 	struct axi_jesd204_tx *tx_jesd;
@@ -192,6 +206,15 @@ int main(void)
 		goto error_5;
 	}
 
+#ifdef DAC_DMA_EXAMPLE
+	extern const uint32_t sine_lut_iq[1024];
+	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
+				 ARRAY_SIZE(sine_lut_iq),
+				 DDR_MEM_BASEADDR);
+	axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR,
+			  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
+#else /* DAC_DMA_EXAMPLE */
 	printf("Set dds frequency at 40MHz\n");
 
 	axi_dac_dds_set_frequency(tx_dac, 0, 40000000);	/* TX1_I_F1 */
@@ -227,6 +250,7 @@ int main(void)
 	axi_dac_dds_set_phase(tx_dac, 7, 0);
 
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+#endif /* DAC_DMA_EXAMPLE */
 
 	printf("Bye\n");
 
