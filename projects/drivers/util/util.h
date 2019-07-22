@@ -120,5 +120,11 @@ uint32_t hweight8(uint32_t word);
 /* Calculate the quotient and the remainder of an integer division. */
 uint64_t do_div(uint64_t* n,
 		uint64_t base);
+/* Unsigned 64bit divide with 64bit divisor and remainder */
+uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor, uint64_t *remainder);
+/* Unsigned 64bit divide with 32bit divisor with remainder */
+uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder);
+/* Unsigned 64bit divide with 32bit divisor */
+uint64_t div_u64(uint64_t dividend, uint32_t divisor);
 #endif // UTIL_H_
 
