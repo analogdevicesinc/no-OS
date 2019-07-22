@@ -362,6 +362,9 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		case XILINX_XCVR_LEGACY_TYPE_US_GTH4:
 			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_US_GTH3;
 			break;
+		case XILINX_XCVR_LEGACY_TYPE_US_GTY4:
+			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_US_GTY4;
+			break;
 		default:
 			goto err;
 		}
@@ -372,6 +375,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	case XILINX_XCVR_TYPE_S7_GTX2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
+	case XILINX_XCVR_TYPE_US_GTY4:
 		break;
 	default:
 		printf("Unknown transceiver type: %d\n", xcvr->xlx_xcvr.type);
