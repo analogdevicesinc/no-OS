@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad6673.h"
 #include "ad6673_cfg.h"
 
