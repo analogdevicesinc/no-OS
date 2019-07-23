@@ -65,7 +65,7 @@ int main(void)
 	};
 
 	struct hmc7044_chan_spec chan_spec[4] = {
-		{.disable = 0, .num = 2, .divider = 8, .driver_mode = 1},		/* DAC_CLK */
+		{.disable = 0, .num = 2, .divider = 32, .driver_mode = 1},		/* DAC_CLK */
 		{.disable = 0, .num = 3, .divider = 512, .driver_mode = 1},		/* DAC_SYSREF */
 		{.disable = 0, .num = 12, .divider = 8, .driver_mode = 2},		/* FPGA_CLK */
 		{.disable = 0, .num = 13, .divider = 512, .driver_mode = 2},	/* FPGA_SYSREF */
@@ -89,15 +89,15 @@ int main(void)
 	struct jesd204_tx_init tx_jesd_init = {
 		.name = "tx_jesd",
 		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = 2,
+		.octets_per_frame = 1,
 		.frames_per_multiframe = 32,
-		.converters_per_device = 4,
+		.converters_per_device = 1,
 		.converter_resolution = 16,
 		.bits_per_sample = 16,
 		.high_density = false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
+		.device_clk_khz = 7372800/40,	/* (lane_clk_khz / 40) */
 		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 	};
 
@@ -124,12 +124,12 @@ int main(void)
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_txen0 = 54 + 22,
 		.gpio_txen1 = 54 + 23,
-		.dac_rate_khz = 11796480,		/* or sample rate */
-		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
-		.jesd_link_mode = 4,
+		.dac_rate_khz = 2949120,		/* or sample rate */
+		.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
+		.jesd_link_mode = 20,
 		.jesd_subclass = 1,
-		.dac_interpolation = 8,
-		.channel_interpolation = 4,
+		.dac_interpolation = 1,
+		.channel_interpolation = 1,
 		.clock_output_config = 4,
 		.syncoutb_type = SIGNAL_LVDS,
 		.sysref_coupling = COUPLING_AC,
@@ -138,7 +138,7 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
-		4,
+		1,
 	};
 
 #ifdef DAC_DMA_EXAMPLE
