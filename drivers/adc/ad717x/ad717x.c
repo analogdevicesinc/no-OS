@@ -46,7 +46,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad717x.h"
 
 /* Error codes */

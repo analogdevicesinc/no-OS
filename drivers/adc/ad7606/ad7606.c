@@ -44,7 +44,6 @@
 #include "stdint.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#include "platform_drivers.h"
 #include "ad7606.h"
 
 static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
