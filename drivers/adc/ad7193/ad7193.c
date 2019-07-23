@@ -465,7 +465,8 @@ float ad7193_convert_to_volts(struct ad7193_dev *dev,
 	float voltage = 0;
 
 	if(dev->current_polarity == 0 ) { // Bipolar mode
-		voltage = 1000 * (((float)raw_data / (1ul << 23)) - 1) * v_ref / dev->current_gain;
+		voltage = 1000 * (((float)raw_data / (1ul << 23)) - 1) * v_ref /
+			  dev->current_gain;
 	} else {                    // Unipolar mode
 		voltage = 1000 * ((float)raw_data * v_ref) / (1ul << 24) / dev->current_gain;
 	}

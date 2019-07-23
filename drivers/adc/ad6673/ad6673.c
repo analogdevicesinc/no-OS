@@ -449,7 +449,7 @@ int32_t ad6673_chip_pwr_mode(struct ad6673_dev *dev,
  * @return Returns negative error code or the selected channel.
 *******************************************************************************/
 int32_t ad6673_select_channel_for_config(struct ad6673_dev *dev,
-					 int32_t channel)
+		int32_t channel)
 {
 	int32_t ret = 0;
 
@@ -979,7 +979,8 @@ int32_t ad6673_jesd204b_setup(struct ad6673_dev *dev)
 			   dev->ad6673_st.p_jesd204b->en_sys_ref * AD6673_SYS_CTRL_SYSREF_EN |
 			   dev->ad6673_st.p_jesd204b->sys_ref_mode * AD6673_SYS_CTRL_SYSREF_MODE |
 			   dev->ad6673_st.p_jesd204b->align_sys_ref * AD6673_SYS_CTRL_REALIGN_ON_SYSREF |
-			   dev->ad6673_st.p_jesd204b->align_sync_in_b * AD6673_SYS_CTRL_REALIGN_ON_SYNCINB);
+			   dev->ad6673_st.p_jesd204b->align_sync_in_b *
+			   AD6673_SYS_CTRL_REALIGN_ON_SYNCINB);
 	if(ret != SUCCESS) {
 		return ret;
 	}
@@ -1061,7 +1062,7 @@ int32_t ad6673_jesd204b_pwr_mode(struct ad6673_dev *dev,
  * @return Returns negative error code or the status of the data injection point bit.
 *******************************************************************************/
 int32_t ad6673_jesd204b_select_test_injection_point(struct ad6673_dev *dev,
-						    int32_t inj_point)
+		int32_t inj_point)
 {
 	int32_t ret = 0;
 
@@ -1380,11 +1381,15 @@ int32_t ad6673_nsr_tuning_freq(int64_t tune_freq,
 	int32_t bw_mode = 22;
 	float bw_percent = (float)bw_mode / 100.0;
 
-	tune_word = (int32_t)( ( (tune_freq * 200) / (float)f_adc) + 0.5) - bw_mode;   // TW = ((fCenter/fAdc) - 0.11[or 0.165]) / 0.005
+	tune_word = (int32_t)( ( (tune_freq * 200) / (float)f_adc) + 0.5) -
+		    bw_mode;   // TW = ((fCenter/fAdc) - 0.11[or 0.165]) / 0.005
 	if((tune_word >= 0) && (tune_word < 57)) {
-		p_band->f0 = (int32_t)(f_adc * 0.005 * tune_word);                        // f0 = fAdc * 0.005 * TW
-		p_band->f_center = p_band->f0 + (int32_t)(bw_percent / 2 * f_adc);          // fCenter = f0 + 0.11[or 0.165] * fAdc
-		p_band->f1 = p_band->f0 + (int32_t)(bw_percent * f_adc);                   // f1 = f0 + 0.22[or 0.33] * fAdc
+		p_band->f0 = (int32_t)(f_adc * 0.005 *
+				       tune_word);                        // f0 = fAdc * 0.005 * TW
+		p_band->f_center = p_band->f0 + (int32_t)(bw_percent / 2 *
+				   f_adc);          // fCenter = f0 + 0.11[or 0.165] * fAdc
+		p_band->f1 = p_band->f0 + (int32_t)(bw_percent *
+						    f_adc);                   // f1 = f0 + 0.22[or 0.33] * fAdc
 	} else {
 		p_band->f0 = 0;
 		p_band->f_center = 0;
