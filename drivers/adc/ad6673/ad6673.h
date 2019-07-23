@@ -508,7 +508,7 @@ int32_t ad6673_chip_pwr_mode(struct ad6673_dev *dev,
 			     int32_t mode);
 /*! Selects a channel as the current channel for further configurations. */
 int32_t ad6673_select_channel_for_config(struct ad6673_dev *dev,
-					 int32_t channel);
+		int32_t channel);
 /*! Sets the ADC's test mode. */
 int32_t ad6673_test_mode(struct ad6673_dev *dev,
 			 int32_t mode);
@@ -548,7 +548,7 @@ int32_t ad6673_jesd204b_pwr_mode(struct ad6673_dev *dev,
 /*! Selects the point in the processing path of a lane, where the test data will
     be inserted. */
 int32_t ad6673_jesd204b_select_test_injection_point(struct ad6673_dev *dev,
-						    int32_t inj_point);
+		int32_t inj_point);
 /*! Selects a JESD204B test mode. */
 int32_t ad6673_jesd204b_test_mode(struct ad6673_dev *dev,
 				  int32_t test_mode);

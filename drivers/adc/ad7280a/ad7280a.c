@@ -355,10 +355,14 @@ int8_t ad7280a_convert_data_all(struct ad7280a_dev *dev)
 	uint8_t i;
 
 	for(i = 0; i < 6; i++) {
-		dev->cell_voltage[i]     = 1 + ((dev->read_data[i]    >> 11) & 0xfff) * 0.0009765625;
-		dev->aux_adc[i]          = ((dev->read_data[i+6]      >> 11) & 0xfff) * 0.001220703125;
-		dev->cell_voltage[i + 6] = 1 + ((dev->read_data[i+12] >> 11) & 0xfff) * 0.0009765625;
-		dev->aux_adc[i + 6]      = ((dev->read_data[i+18]     >> 11) & 0xfff) * 0.001220703125;
+		dev->cell_voltage[i]     = 1 + ((dev->read_data[i]    >> 11) & 0xfff) *
+					   0.0009765625;
+		dev->aux_adc[i]          = ((dev->read_data[i+6]      >> 11) & 0xfff) *
+					   0.001220703125;
+		dev->cell_voltage[i + 6] = 1 + ((dev->read_data[i+12] >> 11) & 0xfff) *
+					   0.0009765625;
+		dev->aux_adc[i + 6]      = ((dev->read_data[i+18]     >> 11) & 0xfff) *
+					   0.001220703125;
 	}
 
 	return (1);
