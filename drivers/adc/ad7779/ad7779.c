@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad7779.h"
+#include "error.h"
 
 /******************************************************************************/
 /*************************** Constants Definitions ****************************/
