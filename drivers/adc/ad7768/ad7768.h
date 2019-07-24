@@ -210,8 +210,7 @@ typedef struct {
 	ad7768_dec_rate		dec_rate[2];
 } ad7768_dev;
 
-typedef struct
-{
+typedef struct {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* GPIO */
@@ -236,86 +235,86 @@ typedef struct
 /******************************************************************************/
 /* SPI read from device. */
 int32_t ad7768_spi_read(ad7768_dev *dev,
-						uint8_t reg_addr,
-						uint8_t *reg_data);
+			uint8_t reg_addr,
+			uint8_t *reg_data);
 /* SPI write to device. */
 int32_t ad7768_spi_write(ad7768_dev *dev,
-						 uint8_t reg_addr,
-						 uint8_t reg_data);
+			 uint8_t reg_addr,
+			 uint8_t reg_data);
 /* SPI read from device using a mask. */
 int32_t ad7768_spi_read_mask(ad7768_dev *dev,
-							 uint8_t reg_addr,
-							 uint8_t mask,
-							 uint8_t *data);
+			     uint8_t reg_addr,
+			     uint8_t mask,
+			     uint8_t *data);
 /* SPI write to device using a mask. */
 int32_t ad7768_spi_write_mask(ad7768_dev *dev,
-							  uint8_t reg_addr,
-							  uint8_t mask,
-							  uint8_t data);
+			      uint8_t reg_addr,
+			      uint8_t mask,
+			      uint8_t data);
 /* Set the device sleep mode. */
 int32_t ad7768_set_sleep_mode(ad7768_dev *dev,
-							  ad7768_sleep_mode mode);
+			      ad7768_sleep_mode mode);
 /* Get the device sleep mode. */
 int32_t ad7768_get_sleep_mode(ad7768_dev *dev,
-							  ad7768_sleep_mode *mode);
+			      ad7768_sleep_mode *mode);
 /* Set the device power mode. */
 int32_t ad7768_set_power_mode(ad7768_dev *dev,
-							  ad7768_power_mode mode);
+			      ad7768_power_mode mode);
 /* Get the device power mode. */
 int32_t ad7768_get_power_mode(ad7768_dev *dev,
-							  ad7768_power_mode *mode);
+			      ad7768_power_mode *mode);
 /* Set the MCLK divider. */
 int32_t ad7768_set_mclk_div(ad7768_dev *dev,
-							ad7768_mclk_div clk_div);
+			    ad7768_mclk_div clk_div);
 /* Get the MCLK divider. */
 int32_t ad7768_get_mclk_div(ad7768_dev *dev,
-							ad7768_mclk_div *clk_div);
+			    ad7768_mclk_div *clk_div);
 /* Set the DCLK divider. */
 int32_t ad7768_set_dclk_div(ad7768_dev *dev,
-							ad7768_dclk_div clk_div);
+			    ad7768_dclk_div clk_div);
 /* Get the DCLK divider. */
 int32_t ad7768_get_dclk_div(ad7768_dev *dev,
-							ad7768_dclk_div *clk_div);
+			    ad7768_dclk_div *clk_div);
 /* Set the conversion operation mode. */
 int32_t ad7768_set_conv_op(ad7768_dev *dev,
-						   ad7768_conv_op conv_op);
+			   ad7768_conv_op conv_op);
 /* Get the conversion operation mode. */
 int32_t ad7768_get_conv_op(ad7768_dev *dev,
-						   ad7768_conv_op *conv_op);
+			   ad7768_conv_op *conv_op);
 /* Set the CRC selection. */
 int32_t ad7768_set_crc_sel(ad7768_dev *dev,
-						   ad7768_crc_sel crc_sel);
+			   ad7768_crc_sel crc_sel);
 /* Get the CRC selection. */
 int32_t ad7768_get_crc_sel(ad7768_dev *dev,
-						   ad7768_crc_sel *crc_sel);
+			   ad7768_crc_sel *crc_sel);
 /* Set the channel state. */
 int32_t ad7768_set_ch_state(ad7768_dev *dev,
-							ad7768_ch ch,
-							ad7768_ch_state state);
+			    ad7768_ch ch,
+			    ad7768_ch_state state);
 /* Get the channel state. */
 int32_t ad7768_get_ch_state(ad7768_dev *dev,
-							ad7768_ch ch,
-							ad7768_ch_state *state);
+			    ad7768_ch ch,
+			    ad7768_ch_state *state);
 /* Set the mode configuration. */
 int32_t ad7768_set_mode_config(ad7768_dev *dev,
-							   ad7768_ch_mode mode,
-							   ad7768_filt_type filt_type,
-							   ad7768_dec_rate dec_rate);
+			       ad7768_ch_mode mode,
+			       ad7768_filt_type filt_type,
+			       ad7768_dec_rate dec_rate);
 /* Get the mode configuration. */
 int32_t ad7768_get_mode_config(ad7768_dev *dev,
-							   ad7768_ch_mode mode,
-							   ad7768_filt_type *filt_type,
-							   ad7768_dec_rate *dec_rate);
+			       ad7768_ch_mode mode,
+			       ad7768_filt_type *filt_type,
+			       ad7768_dec_rate *dec_rate);
 /* Set the channel mode. */
 int32_t ad7768_set_ch_mode(ad7768_dev *dev,
-						   ad7768_ch ch,
-						   ad7768_ch_mode mode);
+			   ad7768_ch ch,
+			   ad7768_ch_mode mode);
 /* Get the channel mode. */
 int32_t ad7768_get_ch_mode(ad7768_dev *dev,
-						   ad7768_ch ch,
-						   ad7768_ch_mode *mode);
+			   ad7768_ch ch,
+			   ad7768_ch_mode *mode);
 /* Initialize the device. */
 int32_t ad7768_setup(ad7768_dev **device,
-					 ad7768_init_param init_param);
+		     ad7768_init_param init_param);
 
 #endif // AD7768_H_

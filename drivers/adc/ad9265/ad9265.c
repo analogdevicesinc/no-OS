@@ -257,11 +257,11 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 #ifdef DCO_DEBUG
 	if (init_param.dco)
 		printf(" %s DCO 0x%X\n", cnt ? "INVERT" : "",
-			  val > 0 ?
-			  (uint16_t)((val - 1) | init_param.dco_en) : 0);
+		       val > 0 ?
+		       (uint16_t)((val - 1) | init_param.dco_en) : 0);
 	else
 		printf(" %s IDELAY 0x%x\n", cnt ? "INVERT" : "",
-			  (uint16_t)val);
+		       (uint16_t)val);
 #endif
 
 	ad9265_testmode_set(dev, TESTMODE_OFF);
@@ -315,7 +315,7 @@ int32_t ad9265_setup(struct ad9265_dev **device,
 	}
 
 	init_param.output_mode = AD9265_DEF_OUTPUT_MODE |
-				  OUTPUT_MODE_TWOS_COMPLEMENT;
+				 OUTPUT_MODE_TWOS_COMPLEMENT;
 	ad9265_outputmode_set(dev, init_param.output_mode);
 
 	init_param.dco = 1;
