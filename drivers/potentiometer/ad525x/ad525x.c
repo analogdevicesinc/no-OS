@@ -43,7 +43,6 @@
 /*****************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad525x.h"
 
 #define MSB_BYTE_MASK       0xFF00

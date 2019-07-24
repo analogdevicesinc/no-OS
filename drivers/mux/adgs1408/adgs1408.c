@@ -44,8 +44,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "platform_drivers.h"
 #include "adgs1408.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
