@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adgs5412.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

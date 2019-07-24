@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adf7023_config.h"
 #include "adf7023.h"
 

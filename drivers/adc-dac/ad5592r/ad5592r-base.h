@@ -40,7 +40,9 @@
 #define AD5592R_BASE_H_
 
 #include "stdint.h"
-#include "platform_drivers.h"
+#include "delay.h"
+#include "spi.h"
+#include "i2c.h"
 
 #define BIT(n) (1<<(n))
 

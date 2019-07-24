@@ -38,8 +38,8 @@
 *******************************************************************************/
 
 #include "ad5592r-base.h"
+#include "error.h"
 #include "ad5593r.h"
-#include "platform_drivers.h"
 
 #define AD5593R_MODE_CONF		(0 << 4)
 #define AD5593R_MODE_DAC_WRITE		(1 << 4)
