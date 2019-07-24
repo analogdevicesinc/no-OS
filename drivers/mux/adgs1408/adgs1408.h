@@ -213,7 +213,8 @@ int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 /* Enter round robin mode. */
 int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev);
 /* Configure Round Robin Mode. */
-int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev, uint8_t cnv_polarity);
+int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
+				       uint8_t cnv_polarity);
 /* Exit Round Robin Mode. */
 int32_t adgs1408_exit_round_robin(struct adgs1408_dev *dev);
 /* Initialize the device. */

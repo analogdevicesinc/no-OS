@@ -414,7 +414,8 @@ void ad7156_set_sensitivity(struct ad7156_dev *dev,
 
 	sensitivity_reg_addr = (channel == 1) ? AD7156_REG_CH1_SENS_THRSH_H :
 			       AD7156_REG_CH2_SENS_THRSH_H;
-	range = (channel == 1) ? dev->ad7156_channel1_range : dev->ad7156_channel2_range;
+	range = (channel == 1) ? dev->ad7156_channel1_range :
+		dev->ad7156_channel2_range;
 	raw_sensitivity = (uint16_t)(p_fsensitivity * 0xA00 / range);
 	raw_sensitivity = (raw_sensitivity << 4) & 0x0FF0;
 	ad7156_set_register_value(dev,
@@ -511,7 +512,8 @@ float ad7156_read_channel_capacitance(struct ad7156_dev *dev,
 	float ch_range = 0;
 	float p_fdata = 0;
 
-	ch_range = (channel == 1) ? dev->ad7156_channel1_range : dev->ad7156_channel2_range;
+	ch_range = (channel == 1) ? dev->ad7156_channel1_range :
+		   dev->ad7156_channel2_range;
 	raw_ch = ad7156_read_channel_data(dev,
 					  channel);
 	if(raw_ch < 0x3000) {
@@ -541,7 +543,8 @@ float ad7156_wait_read_channel_capacitance(struct ad7156_dev *dev,
 	float ch_range = 0;
 	float p_fdata = 0;
 
-	ch_range = (channel == 1) ? dev->ad7156_channel1_range : dev->ad7156_channel2_range;
+	ch_range = (channel == 1) ? dev->ad7156_channel1_range :
+		   dev->ad7156_channel2_range;
 	raw_ch = ad7156_wait_read_channel_data(dev,
 					       channel);
 	if(raw_ch < 0x3000) {
