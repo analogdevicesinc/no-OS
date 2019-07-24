@@ -153,10 +153,10 @@ int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
 	int32_t ret;
 
 	ret = ad4110_spi_int_reg_write_msk(dev,
-				A4110_AFE,
-				AD4110_REG_PGA_RTD_CTRL,
-				AD4110_REG_PGA_RTD_CTRL_GAIN_CH(gain),
-				AD4110_REG_PGA_RTD_CTRL_GAIN_CH(0xF));
+					   A4110_AFE,
+					   AD4110_REG_PGA_RTD_CTRL,
+					   AD4110_REG_PGA_RTD_CTRL_GAIN_CH(gain),
+					   AD4110_REG_PGA_RTD_CTRL_GAIN_CH(0xF));
 
 	return ret;
 }
@@ -185,127 +185,127 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 	case AD4110_VOLTAGE_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_DISABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_DISABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		break;
 	case AD4110_CURRENT_MODE:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_ENABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_ENABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 
 		break;
 
 	case AD4110_CURRENT_MODE_EXT_R_SEL:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_ENABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_ENABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 
 		// set EXT_R_SEL
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_ENABLE,
-					AD4110_REG_AFE_CNTRL2_EXT_R_SEL_MSK);
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_ENABLE,
+						    AD4110_REG_AFE_CNTRL2_EXT_R_SEL_MSK);
 		break;
 
 	case AD4110_THERMOCOUPLE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_DISABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_DISABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 
 		// enable VBIAS
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
-					AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
+						    AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
 		break;
 
 	case AD4110_FLD_POWER_MODE:
 		// set IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_ENABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_ENABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 
 		// set EN_FLD_PWR
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_ENABLE,
-					AD4110_REG_AFE_CNTRL2_EN_FLD_PWR_MSK);
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_ENABLE,
+						    AD4110_REG_AFE_CNTRL2_EN_FLD_PWR_MSK);
 
 		break;
 
 	case AD4110_RTD_4W_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_DISABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_DISABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		// clear RTD_3W4W bit
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_PGA_RTD_CTRL,
-					AD4110_DISABLE,
-					AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
+						    A4110_AFE,
+						    AD4110_REG_PGA_RTD_CTRL,
+						    AD4110_DISABLE,
+						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 		break;
 
 	case AD4110_RTD_3W_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_DISABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_DISABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		// set RTD_3W4W bit
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_PGA_RTD_CTRL,
-					AD4110_ENABLE,
-					AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
+						    A4110_AFE,
+						    AD4110_REG_PGA_RTD_CTRL,
+						    AD4110_ENABLE,
+						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 		break;
 
 	case AD4110_RTD_2W_MODE:
 		// clear IMODE bit
 		ret = ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_DISABLE,
-					AD4110_REG_AFE_CNTRL2_IMODE_MSK);
+						   A4110_AFE,
+						   AD4110_REG_AFE_CNTRL2,
+						   AD4110_DISABLE,
+						   AD4110_REG_AFE_CNTRL2_IMODE_MSK);
 		// set RTD_3W4W bit
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_PGA_RTD_CTRL,
-					AD4110_ENABLE,
-					AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
+						    A4110_AFE,
+						    AD4110_REG_PGA_RTD_CTRL,
+						    AD4110_ENABLE,
+						    AD4110_REG_PGA_RTD_CTRL_23W_EN_MSK);
 		// enable VBIAS
 		ret |=
 			ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
-					AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
+						     A4110_AFE,
+						     AD4110_REG_AFE_CNTRL2,
+						     AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_ON),
+						     AD4110_AFE_VBIAS(AD4110_AFE_VBIAS_OFF));
 
 		// enable the 100 �A pull-down current source on AIN(-)
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL2,
-					AD4110_REG_AFE_CNTRL2_AINN_DN100,
-					AD4110_REG_AFE_CNTRL2_AINN_DN100);
+						    A4110_AFE,
+						    AD4110_REG_AFE_CNTRL2,
+						    AD4110_REG_AFE_CNTRL2_AINN_DN100,
+						    AD4110_REG_AFE_CNTRL2_AINN_DN100);
 		break;
 
 	default:
@@ -546,36 +546,36 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 
 	if(init_param.data_stat == AD4110_ENABLE) {
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_ADC,
-					AD4110_REG_ADC_INTERFACE,
-					AD4110_DATA_STAT_EN,
-					AD4110_REG_ADC_INTERFACE_DS_MSK);
+						    A4110_ADC,
+						    AD4110_REG_ADC_INTERFACE,
+						    AD4110_DATA_STAT_EN,
+						    AD4110_REG_ADC_INTERFACE_DS_MSK);
 	}
 	dev->data_stat = init_param.data_stat;
 
 	if(init_param.data_length == AD4110_DATA_WL16) {
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-					A4110_ADC,
-					AD4110_REG_ADC_INTERFACE,
-					AD4110_DATA_WL16,
-					AD4110_REG_ADC_INTERFACE_WL16_MSK);
+						    A4110_ADC,
+						    AD4110_REG_ADC_INTERFACE,
+						    AD4110_DATA_WL16,
+						    AD4110_REG_ADC_INTERFACE_WL16_MSK);
 	}
 	dev->data_length = init_param.data_length;
 
 	if(init_param.afe_crc_en != AD4110_AFE_CRC_DISABLE) {
 		ret |= ad4110_spi_int_reg_write(dev,
-					A4110_AFE,
-					AD4110_REG_AFE_CNTRL1,
-					AD4110_REG_AFE_CNTRL1_CRC_EN);
+						A4110_AFE,
+						AD4110_REG_AFE_CNTRL1,
+						AD4110_REG_AFE_CNTRL1_CRC_EN);
 	}
 	dev->afe_crc_en = init_param.afe_crc_en;
 
 	if(init_param.adc_crc_en != AD4110_ADC_CRC_DISABLE) {
 		ret |= ad4110_spi_int_reg_write_msk(dev,
-				A4110_ADC,
-				AD4110_REG_ADC_INTERFACE,
-				AD4110_ADC_CRC_EN(init_param.adc_crc_en),
-				AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
+						    A4110_ADC,
+						    AD4110_REG_ADC_INTERFACE,
+						    AD4110_ADC_CRC_EN(init_param.adc_crc_en),
+						    AD4110_REG_ADC_INTERFACE_CRC_EN_MSK);
 	}
 	dev->adc_crc_en = init_param.adc_crc_en;
 

@@ -323,7 +323,8 @@ int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
  * @param cnv_polarity - The CNV pin polarity.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev, uint8_t cnv_polarity)
+int32_t adgs1408_configure_round_robin(struct adgs1408_dev *dev,
+				       uint8_t cnv_polarity)
 {
 	uint8_t reg_config;
 	uint8_t buf[2];

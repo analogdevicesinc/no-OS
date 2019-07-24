@@ -251,7 +251,8 @@ void ad525x_write_mem(struct ad525x_dev *dev,
 		/* Sending the command, reading the result on the next frame */
 		data_buffer[0] |= AD525X_CMD_SPI_SREG2MEM << AD525X_CMD_SPI_OFFSET;
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK;
-		if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
+		if((dev->this_device == ID_AD5235)
+		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
 			data_buffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
 			data_buffer[2] = data & LSB_BYTE_MASK;
 			spi_write_and_read(dev->spi_desc,
@@ -358,7 +359,8 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
 		/* Sending the command, reading the result on the next frame */
 		data_buffer[0] |= AD525X_CMD_SPI_SREG2RDAC << AD525X_CMD_SPI_OFFSET;
 		data_buffer[0] |= address & AD525X_MEM_ADDR_MASK;
-		if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
+		if((dev->this_device == ID_AD5235)
+		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
 			data_buffer[1] = (data & MSB_BYTE_MASK) >> ONEBYTE_OFFSET;
 			data_buffer[2] = data & LSB_BYTE_MASK;
 			spi_write_and_read(dev->spi_desc,
@@ -416,7 +418,8 @@ void ad525x_write_command(struct ad525x_dev *dev,
 			data_buffer[0] |= (address & AD525X_RDAC_ADDR_MASK_1BIT);
 		}
 
-		if((dev->this_device == ID_AD5235) || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
+		if((dev->this_device == ID_AD5235)
+		    || (dev->this_device == ID_ADN2850)) { /* 3 byte data word */
 			spi_write_and_read(dev->spi_desc,
 					   data_buffer,
 					   3);
