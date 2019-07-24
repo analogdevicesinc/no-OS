@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include "ad9250.h"
 #include "ad9250_cfg.h"
-#include "error.h" 
+#include "error.h"
 
 /*****************************************************************************/
 /***************************** Constant definition ***************************/
@@ -449,7 +449,7 @@ int32_t ad9250_chip_pwr_mode(struct ad9250_dev *dev,
  * @return Returns negative error code or the selected channel.
  *******************************************************************************/
 int32_t ad9250_select_channel_for_config(struct ad9250_dev *dev,
-					 int32_t channel)
+		int32_t channel)
 {
 	int32_t ret = 0;
 
@@ -979,7 +979,8 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 			   dev->ad9250_st.p_jesd204b->en_sys_ref * AD9250_SYS_CTRL_SYSREF_EN |
 			   dev->ad9250_st.p_jesd204b->sys_ref_mode * AD9250_SYS_CTRL_SYSREF_MODE |
 			   dev->ad9250_st.p_jesd204b->align_sys_ref * AD9250_SYS_CTRL_REALIGN_ON_SYSREF |
-			   dev->ad9250_st.p_jesd204b->align_sync_in_b * AD9250_SYS_CTRL_REALIGN_ON_SYNCINB);
+			   dev->ad9250_st.p_jesd204b->align_sync_in_b *
+			   AD9250_SYS_CTRL_REALIGN_ON_SYNCINB);
 	if(ret != SUCCESS) {
 		return ret;
 	}
@@ -1061,7 +1062,7 @@ int32_t ad9250_jesd204b_pwr_mode(struct ad9250_dev *dev,
  * @return Returns negative error code or the status of the data injection point bit.
  *******************************************************************************/
 int32_t ad9250_jesd204b_select_test_injection_point(struct ad9250_dev *dev,
-						    int32_t inj_point)
+		int32_t inj_point)
 {
 	int32_t ret = 0;
 
