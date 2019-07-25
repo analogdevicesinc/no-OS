@@ -239,7 +239,7 @@ int32_t ad5761r_get_overrange_en_dis(struct ad5761r_dev *dev,
 				     bool *en_dis);
 /* Get the short-circuit condition. */
 int32_t ad5761r_get_short_circuit_condition(struct ad5761r_dev *dev,
-					    bool *sc);
+		bool *sc);
 /* Get the brownout condition. */
 int32_t ad5761r_get_brownout_condition(struct ad5761r_dev *dev,
 				       bool *bo);
@@ -268,7 +268,7 @@ int32_t ad5761r_write_input_register(struct ad5761r_dev *dev,
 int32_t ad5761r_update_dac_register(struct ad5761r_dev *dev);
 /* Write to input register and update DAC register. */
 int32_t ad5761r_write_update_dac_register(struct ad5761r_dev *dev,
-					  uint16_t reg_data);
+		uint16_t reg_data);
 /*Software data reset. */
 int32_t ad5761r_software_data_reset(struct ad5761r_dev *dev);
 /* Software full reset. */

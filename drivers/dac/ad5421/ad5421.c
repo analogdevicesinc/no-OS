@@ -68,9 +68,9 @@ int32_t ad5421_init(struct ad5421_dev **device,
 	int32_t spi_data = 0;
 	/* Set bits for initialization process. */
 	int32_t cmd_check = (CTRL_AUTO_FAULT_RDBK |
-			    CTRL_SEL_ADC_INPUT   |
-			    CTRL_ONCHIP_ADC      |
-			    !CTRL_SPI_WATCHDOG);
+			     CTRL_SEL_ADC_INPUT   |
+			     CTRL_ONCHIP_ADC      |
+			     !CTRL_SPI_WATCHDOG);
 	int32_t ret_value = -1;
 
 	dev = (struct ad5421_dev *)malloc(sizeof(*dev));

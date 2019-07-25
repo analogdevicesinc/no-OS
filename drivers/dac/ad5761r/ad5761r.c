@@ -322,7 +322,7 @@ int32_t ad5761r_get_clear_voltage(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_internal_reference_en_dis(struct ad5761r_dev *dev,
-					      bool en_dis)
+		bool en_dis)
 {
 	dev->int_ref_en = en_dis;
 
@@ -336,7 +336,7 @@ int32_t ad5761r_set_internal_reference_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_get_internal_reference_en_dis(struct ad5761r_dev *dev,
-					      bool *en_dis)
+		bool *en_dis)
 {
 	*en_dis = dev->int_ref_en;
 
@@ -352,7 +352,7 @@ int32_t ad5761r_get_internal_reference_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
-						bool en_dis)
+		bool en_dis)
 {
 	dev->exc_temp_sd_en = en_dis;
 
@@ -366,7 +366,7 @@ int32_t ad5761r_set_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_get_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
-						bool *en_dis)
+		bool *en_dis)
 {
 	*en_dis = dev->exc_temp_sd_en;
 
@@ -383,7 +383,7 @@ int32_t ad5761r_get_exceed_temp_shutdown_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_set_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
-					    bool en_dis)
+		bool en_dis)
 {
 	dev->b2c_range_en = en_dis;
 
@@ -398,7 +398,7 @@ int32_t ad5761r_set_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_get_2c_bipolar_range_en_dis(struct ad5761r_dev *dev,
-					    bool *en_dis)
+		bool *en_dis)
 {
 	*en_dis = dev->b2c_range_en;
 
@@ -444,7 +444,7 @@ int32_t ad5761r_get_overrange_en_dis(struct ad5761r_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_get_short_circuit_condition(struct ad5761r_dev *dev,
-					    bool *sc)
+		bool *sc)
 {
 	uint16_t reg_data;
 	int32_t ret;
@@ -616,7 +616,7 @@ int32_t ad5761r_update_dac_register(struct ad5761r_dev *dev)
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_write_update_dac_register(struct ad5761r_dev *dev,
-					  uint16_t dac_data)
+		uint16_t dac_data)
 {
 	uint16_t reg_data;
 

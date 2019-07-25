@@ -142,7 +142,7 @@ struct ad9144_reg_seq {
 };
 
 int32_t ad9144_spi_write_seq(struct ad9144_dev *dev,
-	const struct ad9144_reg_seq *seq, uint32_t num)
+			     const struct ad9144_reg_seq *seq, uint32_t num)
 {
 	int32_t ret = 0;
 
@@ -344,7 +344,7 @@ static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
 	}
 
 	ad9144_spi_write_seq(dev, ad9144_pll_fixed_writes,
-		ARRAY_SIZE(ad9144_pll_fixed_writes));
+			     ARRAY_SIZE(ad9144_pll_fixed_writes));
 
 	ad9144_spi_write(dev, REG_DACLOGENCNTRL, lo_div_mode);
 	ad9144_spi_write(dev, REG_DACLDOCNTRL1, ref_div_mode);
@@ -408,13 +408,14 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	// power-up and dac initialization
 	ad9144_spi_write(dev, REG_PWRCNTRL0, 0x00);	// dacs - power up everything
 	ad9144_spi_write(dev, REG_CLKCFG0, 0x00);	// clocks - power up everything
-	ad9144_spi_write(dev, REG_SYSREF_ACTRL0, 0x00);	// sysref - power up/falling edge
+	ad9144_spi_write(dev, REG_SYSREF_ACTRL0,
+			 0x00);	// sysref - power up/falling edge
 
 	// required device configurations
 	ad9144_spi_write_seq(dev, ad9144_required_device_config,
-		ARRAY_SIZE(ad9144_required_device_config));
+			     ARRAY_SIZE(ad9144_required_device_config));
 	ad9144_spi_write_seq(dev, ad9144_optimal_serdes_settings,
-		ARRAY_SIZE(ad9144_optimal_serdes_settings));
+			     ARRAY_SIZE(ad9144_optimal_serdes_settings));
 
 	if (init_param->pll_enable)
 		ad9144_pll_setup(dev, init_param);
@@ -463,15 +464,18 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 	ad9144_spi_write(dev, REG_DEV_CONFIG_10, 0x87);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_11, 0xb7);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_12, 0x87);		// jesd termination
-	ad9144_spi_write(dev, REG_TERM_BLK1_CTRLREG0, 0x01);	// input termination calibration
-	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0, 0x01);	// input termination calibration
+	ad9144_spi_write(dev, REG_TERM_BLK1_CTRLREG0,
+			 0x01);	// input termination calibration
+	ad9144_spi_write(dev, REG_TERM_BLK2_CTRLREG0,
+			 0x01);	// input termination calibration
 	ad9144_spi_write(dev, REG_SERDES_SPI_REG, 0x01);	// pclk == qbd master clock
 	ad9144_spi_write(dev, REG_CDR_OPERATING_MODE_REG_0, serdes_cdr);
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x00);	// cdr reset
 	ad9144_spi_write(dev, REG_CDR_RESET, 0x01);	// cdr reset
 	ad9144_spi_write(dev, REG_REF_CLK_DIVIDER_LDO, serdes_plldiv);
 	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x01);	// enable serdes pll
-	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL, 0x05);	// enable serdes calibration
+	ad9144_spi_write(dev, REG_SYNTH_ENABLE_CNTRL,
+			 0x05);	// enable serdes calibration
 	mdelay(20);
 
 	ret = ad9144_spi_check_status(dev, REG_PLL_STATUS, 0x01, 0x01);

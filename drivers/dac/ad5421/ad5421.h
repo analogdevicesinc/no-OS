@@ -108,18 +108,18 @@ struct ad5421_init_param {
 /*****************************************************************************/
 /* Initialize the communication with the device. */
 int32_t ad5421_init(struct ad5421_dev **device,
-		      struct ad5421_init_param init_param);
+		    struct ad5421_init_param init_param);
 /* Free the resources allocated by ad5421_init(). */
 int32_t ad5421_remove(struct ad5421_dev *dev);
 /* Set the value of DAC register. */
 void ad5421_set_dac(struct ad5421_dev *dev,
-		     int32_t dac_value);
+		    int32_t dac_value);
 /* Set the value of OFFSET register. */
 void ad5421_set_offset(struct ad5421_dev *dev,
-			int32_t offset_value);
+		       int32_t offset_value);
 /* Set the value of GAIN register. */
 void ad5421_set_gain(struct ad5421_dev *dev,
-		      int32_t gain_value);
+		     int32_t gain_value);
 /* Read the DAC register. */
 int32_t ad5421_get_dac(struct ad5421_dev *dev);
 /* Read OFFSET register. */
