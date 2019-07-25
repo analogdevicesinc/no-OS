@@ -129,24 +129,22 @@
 /******************************************************************************/
 /************************ Types Definitions ***********************************/
 /******************************************************************************/
-struct adf4350_platform_data
-{
+struct adf4350_platform_data {
 	uint32_t	clkin;
 	uint32_t	channel_spacing;
 	uint64_t	power_up_frequency;
- 
+
 	uint16_t	ref_div_factor; /* 10-bit R counter */
 	uint8_t	    ref_doubler_en;
 	uint8_t	    ref_div2_en;
- 
+
 	uint32_t    r2_user_settings;
 	uint32_t    r3_user_settings;
 	uint32_t    r4_user_settings;
 	int32_t	    gpio_lock_detect;
 };
 
-typedef struct
-{
+typedef struct {
 	/* SPI */
 	spi_init_param	spi_init;
 
@@ -180,7 +178,7 @@ typedef struct
 	uint8_t		mute_till_lock_enable;
 	uint32_t	output_power;
 	uint32_t	aux_output_power;
-}adf4350_init_param;
+} adf4350_init_param;
 
 typedef struct {
 	spi_desc	*spi_desc;
@@ -203,21 +201,21 @@ typedef struct {
 /******************************************************************************/
 /*! Initializes the ADF4350. */
 int32_t adf4350_setup(adf4350_dev **device,
-					  adf4350_init_param init_param);
+		      adf4350_init_param init_param);
 /*! Writes 4 bytes of data to ADF4350. */
 int32_t adf4350_write(adf4350_dev *dev,
-					  uint32_t data);
+		      uint32_t data);
 /*! Stores PLL 0 frequency in Hz. */
 int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
-										  int64_t Hz);
+		int64_t Hz);
 /*! Stores PLL 0 frequency resolution/channel spacing in Hz. */
 int32_t adf4350_out_altvoltage0_frequency_resolution(adf4350_dev *dev,
-													 int32_t Hz);
+		int32_t Hz);
 /*! Sets PLL 0 REFin frequency in Hz. */
 int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
-												int64_t Hz);
+		int64_t Hz);
 /*! Powers down the PLL.  */
 int32_t adf4350_out_altvoltage0_powerdown(adf4350_dev *dev,
-										  int32_t pwd);
+		int32_t pwd);
 
 #endif // __ADF4350_H__
