@@ -57,7 +57,7 @@
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
 {
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 	i2c_desc *dev;
 	int32_t ret;
 
@@ -97,7 +97,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 
 #endif
 	return SUCCESS;
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 error:
 	free(dev);
 
@@ -112,7 +112,7 @@ error:
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 	int32_t ret;
 
 	ret = XIic_Stop(&desc->instance);
@@ -139,7 +139,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit)
 {
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 	return XIic_Send(desc->instance.BaseAddress, desc->slave_address, data,
 			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
 #else
@@ -162,7 +162,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit)
 {
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 	return XIic_Recv(desc->instance.BaseAddress, desc->slave_address, data,
 			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
 #else
