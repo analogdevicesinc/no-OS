@@ -43,7 +43,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adf4156.h"
 #include "adf4156_cfg.h"
 

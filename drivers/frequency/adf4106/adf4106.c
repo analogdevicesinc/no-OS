@@ -43,7 +43,6 @@
 /*****************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adf4106.h"
 
 #define DATA_MASK_MSB8      0xFF0000

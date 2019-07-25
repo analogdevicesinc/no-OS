@@ -43,7 +43,6 @@
 /*****************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adf4153.h"
 
 /* For round up division */

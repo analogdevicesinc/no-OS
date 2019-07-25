@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "adf4157.h"
 #include "adf4157_cfg.h"
 

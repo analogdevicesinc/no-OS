@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
-#include "platform_drivers.h"
+#include "error.h"
 #include "util.h"
 #include "hmc7044.h"
 
