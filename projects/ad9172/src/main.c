@@ -49,13 +49,41 @@
 #include "axi_dac_core.h"
 #include "parameters.h"
 #include "inttypes.h"
-
+#define DAC_DMA_EXAMPLE
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
 #endif /* DAC_DMA_EXAMPLE */
 
-int main(void)
-{
+#define AD9172_MAX_MODES 22
+
+jesd_param_t ad9172_modes[AD9172_MAX_MODES] = {
+	{.jesd_L = 1, .jesd_M = 2, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 0 */
+	{.jesd_L = 2, .jesd_M = 4, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 1 */
+	{.jesd_L = 3, .jesd_M = 6, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 2 */
+	{.jesd_L = 2, .jesd_M = 2, .jesd_F = 2, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 3 */
+	{.jesd_L = 4, .jesd_M = 4, .jesd_F = 2, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 4 */
+	{.jesd_L = 1, .jesd_M = 2, .jesd_F = 3, .jesd_S = 1, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 5 */
+	{.jesd_L = 2, .jesd_M = 4, .jesd_F = 3, .jesd_S = 1, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 6 */
+	{.jesd_L = 1, .jesd_M = 4, .jesd_F = 8, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 7 */
+	{.jesd_L = 4, .jesd_M = 2, .jesd_F = 1, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 8 */
+	{.jesd_L = 4, .jesd_M = 2, .jesd_F = 2, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 9 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 1, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 10 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 2, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 11 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 3, .jesd_S = 8, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 12 */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 13 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 14 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 15 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 16 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 17 invalid */
+	{.jesd_L = 4, .jesd_M = 1, .jesd_F = 1, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 18 */
+	{.jesd_L = 4, .jesd_M = 1, .jesd_F = 2, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 19 */
+	{.jesd_L = 8, .jesd_M = 1, .jesd_F = 1, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 20 */
+	{.jesd_L = 8, .jesd_M = 1, .jesd_F = 2, .jesd_S = 8, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 21 */
+};
+
+
+int32_t ad9172_system_init(uint8_t mode) {
+
 	struct spi_init_param hmc7044_spi_param = {
 		.id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
@@ -65,7 +93,7 @@ int main(void)
 	};
 
 	struct hmc7044_chan_spec chan_spec[4] = {
-		{.disable = 0, .num = 2, .divider = 8, .driver_mode = 1},		/* DAC_CLK */
+		{.disable = 0, .num = 2, .divider = 32, .driver_mode = 1},		/* DAC_CLK */
 		{.disable = 0, .num = 3, .divider = 512, .driver_mode = 1},		/* DAC_SYSREF */
 		{.disable = 0, .num = 12, .divider = 8, .driver_mode = 2},		/* FPGA_CLK */
 		{.disable = 0, .num = 13, .divider = 512, .driver_mode = 2},	/* FPGA_SYSREF */
@@ -89,15 +117,15 @@ int main(void)
 	struct jesd204_tx_init tx_jesd_init = {
 		.name = "tx_jesd",
 		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = 2,
-		.frames_per_multiframe = 32,
-		.converters_per_device = 4,
-		.converter_resolution = 16,
-		.bits_per_sample = 16,
-		.high_density = false,
+		.octets_per_frame = ad9172_modes[mode].jesd_F,
+		.frames_per_multiframe = ad9172_modes[mode].jesd_K,
+		.converters_per_device = ad9172_modes[mode].jesd_M,
+		.converter_resolution = ad9172_modes[mode].jesd_N,
+		.bits_per_sample = ad9172_modes[mode].jesd_NP,
+		.high_density = ad9172_modes[mode].jesd_HD, //false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
+		.device_clk_khz = 7372800 / 40,	/* (lane_clk_khz / 40) */
 		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 	};
 
@@ -107,7 +135,7 @@ int main(void)
 		.sys_clk_sel = 3,
 		.out_clk_sel = 4,
 		.cpll_enable = 0,
-		.lpm_enable = 1,
+		.lpm_enable = 1,			/* line rates up to 11.2 Gb/s for short reach */
 		.lane_rate_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
 	};
@@ -124,38 +152,25 @@ int main(void)
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_txen0 = 54 + 22,
 		.gpio_txen1 = 54 + 23,
-		.dac_rate_khz = 11796480,		/* or sample rate */
-		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
-		.jesd_link_mode = 4,
+		.dac_rate_khz = 2949120,		/* or sample rate */
+		.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
+		.jesd_link_mode = 20,
 		.jesd_subclass = 1,
-		.dac_interpolation = 8,
-		.channel_interpolation = 4,
+		.dac_interpolation = 1,
+		.channel_interpolation = 1,
 		.clock_output_config = 4,
 		.syncoutb_type = SIGNAL_LVDS,
 		.sysref_coupling = COUPLING_AC,
 	};
 
-	struct axi_dac_init tx_dac_init = {
-		"tx_dac",
-		TX_CORE_BASEADDR,
-		4,
-	};
 
-#ifdef DAC_DMA_EXAMPLE
-	struct axi_dmac_init tx_dmac_init = {
-		"tx_dmac",
-		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_LAST,
-	};
-	struct axi_dmac *tx_dmac;
-#endif /* DAC_DMA_EXAMPLE */
+
 
 	struct hmc7044_dev *hmc7044_device;
 	struct ad9172_dev *ad9172_device;
 	struct axi_jesd204_tx *tx_jesd;
 	struct adxcvr *tx_adxcvr;
-	struct axi_dac *tx_dac;
+
 	int32_t status;
 
 	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
@@ -200,11 +215,55 @@ int main(void)
 		goto error_4;
 	}
 
+	return 0;
+
+	error_4:
+		ad9172_remove(ad9172_device);
+	error_3:
+		adxcvr_remove(tx_adxcvr);
+	error_2:
+		axi_jesd204_tx_remove(tx_jesd);
+	error_1:
+		hmc7044_remove(hmc7044_device);
+
+	return status;
+
+}
+
+
+int main(void)
+{
+
+	struct axi_dac_init tx_dac_init = {
+		"tx_dac",
+		TX_CORE_BASEADDR,
+		1,
+	};
+#ifdef DAC_DMA_EXAMPLE
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_LAST,
+	};
+	struct axi_dmac *tx_dmac;
+#endif /* DAC_DMA_EXAMPLE */
+
+	struct axi_dac *tx_dac;
+	int32_t status;
+
+	status = ad9172_system_init(20);
+	if (status != SUCCESS) {
+		printf("ad9172_system_init() error: %"PRIi32"\n", status);
+		goto error_5;
+	}
 	status = axi_dac_init(&tx_dac, &tx_dac_init);
 	if (status != SUCCESS) {
 		printf("axi_dac_init() error: %"PRIi32"\n", status);
 		goto error_5;
 	}
+
+
 
 #ifdef DAC_DMA_EXAMPLE
 	extern const uint32_t sine_lut_iq[1024];
@@ -216,16 +275,17 @@ int main(void)
 			  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
 #else /* DAC_DMA_EXAMPLE */
 	printf("Set dds frequency at 40MHz\n");
+	uint32_t ch1_freq_hz = 1200000000;
+	uint32_t ch2_freq_hz = 400000000;
+	axi_dac_dds_set_frequency(tx_dac, 0, ch1_freq_hz);	/* TX1_I_F1 */
+	axi_dac_dds_set_frequency(tx_dac, 1, ch1_freq_hz);	/* TX1_I_F2 */
+	axi_dac_dds_set_frequency(tx_dac, 2, ch2_freq_hz);	/* TX2_Q_F1 */
+	axi_dac_dds_set_frequency(tx_dac, 3, ch2_freq_hz);	/* TX2_Q_F2 */
 
-	axi_dac_dds_set_frequency(tx_dac, 0, 40000000);	/* TX1_I_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 1, 40000000);	/* TX1_I_F2 */
-	axi_dac_dds_set_frequency(tx_dac, 2, 40000000);	/* TX1_Q_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 3, 40000000);	/* TX1_Q_F2 */
-
-	axi_dac_dds_set_frequency(tx_dac, 4, 40000000); /* TX2_I_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 5, 40000000); /* TX2_I_F2 */
-	axi_dac_dds_set_frequency(tx_dac, 6, 40000000); /* TX2_Q_F1 */
-	axi_dac_dds_set_frequency(tx_dac, 7, 40000000); /* TX2_Q_F2 */
+	axi_dac_dds_set_frequency(tx_dac, 4, ch1_freq_hz); /* TX1_I_F1 */
+	axi_dac_dds_set_frequency(tx_dac, 5, ch1_freq_hz); /* TX1_I_F2 */
+	axi_dac_dds_set_frequency(tx_dac, 6, ch2_freq_hz); /* TX2_Q_F1 */
+	axi_dac_dds_set_frequency(tx_dac, 7, ch2_freq_hz); /* TX2_Q_F2 */
 
 
 	axi_dac_dds_set_scale(tx_dac, 0, 250000);
@@ -254,16 +314,11 @@ int main(void)
 
 	printf("Bye\n");
 
-error_5:
-	axi_dac_remove(tx_dac);
-error_4:
-	ad9172_remove(ad9172_device);
-error_3:
-	adxcvr_remove(tx_adxcvr);
-error_2:
-	axi_jesd204_tx_remove(tx_jesd);
-error_1:
-	hmc7044_remove(hmc7044_device);
+	while(1)
+	{}
+
+	error_5:
+		axi_dac_remove(tx_dac);
 
 	return 0;
 }
