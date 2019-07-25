@@ -46,7 +46,6 @@
 /*****************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad5446.h"
 
 #define MAX_RESOLUTION  16      /* Maximum resolution of supported devices */

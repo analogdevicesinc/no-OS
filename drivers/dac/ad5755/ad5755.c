@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad5755.h"         // AD5755 definitions.
 #include "ad5755_cfg.h"     // AD5755_cfg definitions.
 
