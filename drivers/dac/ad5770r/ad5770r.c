@@ -346,7 +346,8 @@ int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
 				    AD5770R_ALARM_CONFIG_OVER_TEMP_ALARM_MASK(alarm_config->over_temp_msk) |
 				    AD5770R_ALARM_CONFIG_NEGATIVE_CHANNEL0_ALARM_MASK(alarm_config->neg_ch0_msk) |
 				    AD5770R_ALARM_CONFIG_IREF_FAULT_ALARM_MASK(alarm_config->iref_fault_msk) |
-				    AD5770R_ALARM_CONFIG_BACKGROUND_CRC_ALARM_MASK(alarm_config->background_crc_msk));
+				    AD5770R_ALARM_CONFIG_BACKGROUND_CRC_ALARM_MASK(
+					    alarm_config->background_crc_msk));
 
 	if (ret)
 		return ret;

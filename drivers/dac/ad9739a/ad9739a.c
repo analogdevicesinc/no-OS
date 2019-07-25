@@ -310,14 +310,14 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 	ret = ad9739a_write(dev,
 			    AD9739A_REG_CROSS_CNT1,
 			    AD9739A_CROSS_CNT1_CLKP_OFFSET(init_param.
-						common_mode_voltage_dacclk_p));
+					    common_mode_voltage_dacclk_p));
 	if(ret < 0) {
 		return ret;
 	}
 	ret = ad9739a_write(dev,
 			    AD9739A_REG_CROSS_CNT2,
 			    AD9739A_CROSS_CNT2_CLKN_OFFSET(init_param.
-						common_mode_voltage_dacclk_n));
+					    common_mode_voltage_dacclk_n));
 	if(ret < 0) {
 		return ret;
 	}
@@ -428,8 +428,8 @@ int32_t ad9739a_setup(struct ad9739a_dev **device,
 		ad9739a_read(dev, AD9739A_REG_LVDS_REC_STAT9,
 			     &ad9739a_reg_lvds_rec_stat9_buf);
 		if(ad9739a_reg_lvds_rec_stat9_buf ==
-		   (AD9739A_LVDS_REC_STAT9_RCVR_LCK |
-		   AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON)) {
+		    (AD9739A_LVDS_REC_STAT9_RCVR_LCK |
+		     AD9739A_LVDS_REC_STAT9_RCVR_TRK_ON)) {
 			dll_loop_locked = 1;
 		}
 	} while((dll_loop_lock_counter <= 3) && (dll_loop_locked == 0));

@@ -112,7 +112,7 @@ struct ad5446_init_param {
 	int8_t		gpio_ladc;
 	int8_t		gpio_clrout;
 	/* Device Settings */
-	 enum ad5446_type_t act_device;
+	enum ad5446_type_t act_device;
 };
 
 /* Control Bits */

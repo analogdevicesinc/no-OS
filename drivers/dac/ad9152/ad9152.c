@@ -148,7 +148,8 @@ int32_t ad9152_setup(struct ad9152_dev **device,
 	ad9152_spi_write(dev, 0x456, 0x01);	// no-of-converters (2)
 	ad9152_spi_write(dev, 0x457, 0x0f);	// no CS bits, 16bit dac
 	ad9152_spi_write(dev, 0x458, 0x2f);	// subclass 1, 16bits per sample
-	ad9152_spi_write(dev, 0x459, 0x20);	// jesd204b, 1 samples per converter per device
+	ad9152_spi_write(dev, 0x459,
+			 0x20);	// jesd204b, 1 samples per converter per device
 	ad9152_spi_write(dev, 0x45a, 0x80);	// HD mode, no CS bits
 	ad9152_spi_write(dev, 0x45d, 0x49);	// check-sum of 0x450 to 0x45c
 	ad9152_spi_write(dev, 0x478, 0x01);	// ilas mf count
