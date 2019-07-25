@@ -301,7 +301,8 @@ value for the selected spacing. Try with a higher spacing value.\r\n");
 	dev->adf4156_st.reg_val[ADF4156_REG2] &= ~(ADF4156_MOD_WORD(-1) |
 			ADF4156_R_CNT(-1)    |
 			ADF4156_PRESCALER(-1));
-	dev->adf4156_st.reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(dev->adf4156_st.r2_mod) |
+	dev->adf4156_st.reg_val[ADF4156_REG2] |= (ADF4156_MOD_WORD(
+				dev->adf4156_st.r2_mod) |
 			ADF4156_R_CNT(dev->adf4156_st.r_cnt)     |
 			prescaler);
 	adf4156_set(dev,
@@ -310,7 +311,8 @@ value for the selected spacing. Try with a higher spacing value.\r\n");
 	/* register R0 */
 	dev->adf4156_st.reg_val[ADF4156_REG0] &= ~(ADF4156_INT_VAL(-1) |
 			ADF4156_FRAC_VAL(-1));
-	dev->adf4156_st.reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(dev->adf4156_st.r0_int) |
+	dev->adf4156_st.reg_val[ADF4156_REG0] |= (ADF4156_INT_VAL(
+				dev->adf4156_st.r0_int) |
 			ADF4156_FRAC_VAL(dev->adf4156_st.r0_fract));
 	adf4156_set(dev,
 		    dev->adf4156_st.reg_val[ADF4156_REG0]);

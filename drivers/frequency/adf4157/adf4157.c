@@ -281,19 +281,22 @@ double adf4157_set_freq(struct adf4157_dev *dev,
 	/* register R2 */
 	dev->adf4157_st.reg_val[ADF4157_REG2] &= ~(ADF4157_R_CNT(-1)    |
 			ADF4157_PRESCALER(-1));
-	dev->adf4157_st.reg_val[ADF4157_REG2] |= (ADF4157_R_CNT(dev->adf4157_st.r_cnt)     |
+	dev->adf4157_st.reg_val[ADF4157_REG2] |= (ADF4157_R_CNT(
+				dev->adf4157_st.r_cnt)     |
 			prescaler);
 	adf4157_set(dev,
 		    dev->adf4157_st.reg_val[ADF4157_REG2]);
 	/* register R1 */
 	dev->adf4157_st.reg_val[ADF4157_REG1] &= ~ADF4157_FRAC_VAL_LSB(-1);
-	dev->adf4157_st.reg_val[ADF4157_REG1] |= ADF4157_FRAC_VAL_LSB(dev->adf4157_st.r0_fract);
+	dev->adf4157_st.reg_val[ADF4157_REG1] |= ADF4157_FRAC_VAL_LSB(
+				dev->adf4157_st.r0_fract);
 	adf4157_set(dev,
 		    dev->adf4157_st.reg_val[ADF4157_REG1]);
 	/* register R0 */
 	dev->adf4157_st.reg_val[ADF4157_REG0] &= ~(ADF4157_INT_VAL(-1) |
 			ADF4157_FRAC_VAL_MSB(-1));
-	dev->adf4157_st.reg_val[ADF4157_REG0] |= (ADF4157_INT_VAL(dev->adf4157_st.r0_int) |
+	dev->adf4157_st.reg_val[ADF4157_REG0] |= (ADF4157_INT_VAL(
+				dev->adf4157_st.r0_int) |
 			ADF4157_FRAC_VAL_MSB(dev->adf4157_st.r0_fract));
 	adf4157_set(dev,
 		    dev->adf4157_st.reg_val[ADF4157_REG0]);
@@ -304,7 +307,8 @@ double adf4157_set_freq(struct adf4157_dev *dev,
 		    dev->adf4157_st.reg_val[ADF4157_REG3]);
 
 	result = dev->adf4157_st.r0_int * (float)(dev->adf4157_st.fpfd / 1000000);
-	result = result + ((float)dev->adf4157_st.r0_fract / dev->adf4157_st.r2_mod) * (dev->adf4157_st.fpfd / 1000000);
+	result = result + ((float)dev->adf4157_st.r0_fract / dev->adf4157_st.r2_mod) *
+		 (dev->adf4157_st.fpfd / 1000000);
 
 	return result;
 }

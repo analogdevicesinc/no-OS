@@ -306,7 +306,7 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
 		(&init_param->pdata->channels[i])->sync_ignore_en = 0;
 		(&init_param->pdata->channels[i])->output_dis = 0;
 		(&init_param->pdata->channels[i])->
-			driver_mode = DRIVER_MODE_LVDS;
+		driver_mode = DRIVER_MODE_LVDS;
 		(&init_param->pdata->channels[i])->signal_source = SOURCE_VCO;
 		(&init_param->pdata->channels[i])->divider_phase = 0;
 		(&init_param->pdata->channels[i])->channel_divider = 1;
@@ -397,45 +397,45 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		return ret;
 
 	ret = ad9528_spi_write_n(dev,
-		AD9528_PLL1_CHARGE_PUMP_CTRL,
-		AD_IFE(pll1_bypass_en,
-			AD9528_PLL1_CHARGE_PUMP_TRISTATE,
-			AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(dev->pdata->
-				pll1_charge_pump_current_n_a) |
-			AD9528_PLL1_CHARGE_PUMP_MODE_NORMAL |
-			AD9528_PLL1_CHARGE_PUMP_AUTO_TRISTATE_DIS));
+				 AD9528_PLL1_CHARGE_PUMP_CTRL,
+				 AD_IFE(pll1_bypass_en,
+					AD9528_PLL1_CHARGE_PUMP_TRISTATE,
+					AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(dev->pdata->
+							pll1_charge_pump_current_n_a) |
+					AD9528_PLL1_CHARGE_PUMP_MODE_NORMAL |
+					AD9528_PLL1_CHARGE_PUMP_AUTO_TRISTATE_DIS));
 	if (ret < 0)
 		return ret;
 
 	ret = ad9528_spi_write_n(dev,
-		AD9528_PLL1_CTRL,
-		AD_IFE(pll1_bypass_en,
-			AD_IF(osc_in_diff_en,
-			      AD9528_PLL1_OSC_IN_DIFF_EN) |
-			AD_IF(osc_in_cmos_neg_inp_en,
-			      AD9528_PLL1_OSC_IN_CMOS_NEG_INP_EN) |
-			AD9528_PLL1_REFB_BYPASS_EN |
-			AD9528_PLL1_REFA_BYPASS_EN |
-			AD9528_PLL1_FEEDBACK_BYPASS_EN,
-			AD_IF(refa_en,
-			      AD9528_PLL1_REFA_RCV_EN) |
-			AD_IF(refb_en,
-			      AD9528_PLL1_REFB_RCV_EN) |
-			AD_IF(osc_in_diff_en,
-			      AD9528_PLL1_OSC_IN_DIFF_EN) |
-			AD_IF(osc_in_cmos_neg_inp_en,
-			      AD9528_PLL1_OSC_IN_CMOS_NEG_INP_EN) |
-			AD_IF(refa_diff_rcv_en,
-		      AD9528_PLL1_REFA_DIFF_RCV_EN) |
-			AD_IF(refb_diff_rcv_en,
-		      AD9528_PLL1_REFB_DIFF_RCV_EN)) |
-		AD_IF(refa_cmos_neg_inp_en,
-		      AD9528_PLL1_REFA_CMOS_NEG_INP_EN) |
-		AD_IF(refb_cmos_neg_inp_en,
-		      AD9528_PLL1_REFB_CMOS_NEG_INP_EN) |
-		AD_IF(pll1_feedback_src_vcxo,
-		      AD9528_PLL1_SOURCE_VCXO) |
-		AD9528_PLL1_REF_MODE(dev->pdata->ref_mode));
+				 AD9528_PLL1_CTRL,
+				 AD_IFE(pll1_bypass_en,
+					AD_IF(osc_in_diff_en,
+					      AD9528_PLL1_OSC_IN_DIFF_EN) |
+					AD_IF(osc_in_cmos_neg_inp_en,
+					      AD9528_PLL1_OSC_IN_CMOS_NEG_INP_EN) |
+					AD9528_PLL1_REFB_BYPASS_EN |
+					AD9528_PLL1_REFA_BYPASS_EN |
+					AD9528_PLL1_FEEDBACK_BYPASS_EN,
+					AD_IF(refa_en,
+					      AD9528_PLL1_REFA_RCV_EN) |
+					AD_IF(refb_en,
+					      AD9528_PLL1_REFB_RCV_EN) |
+					AD_IF(osc_in_diff_en,
+					      AD9528_PLL1_OSC_IN_DIFF_EN) |
+					AD_IF(osc_in_cmos_neg_inp_en,
+					      AD9528_PLL1_OSC_IN_CMOS_NEG_INP_EN) |
+					AD_IF(refa_diff_rcv_en,
+					      AD9528_PLL1_REFA_DIFF_RCV_EN) |
+					AD_IF(refb_diff_rcv_en,
+					      AD9528_PLL1_REFB_DIFF_RCV_EN)) |
+				 AD_IF(refa_cmos_neg_inp_en,
+				       AD9528_PLL1_REFA_CMOS_NEG_INP_EN) |
+				 AD_IF(refb_cmos_neg_inp_en,
+				       AD9528_PLL1_REFB_CMOS_NEG_INP_EN) |
+				 AD_IF(pll1_feedback_src_vcxo,
+				       AD9528_PLL1_SOURCE_VCXO) |
+				 AD9528_PLL1_REF_MODE(dev->pdata->ref_mode));
 	if (ret < 0)
 		return ret;
 
@@ -453,9 +453,9 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_FEEDBACK_DIVIDER_AB,
 				 AD9528_PLL2_FB_NDIV_A_CNT(dev->pdata->
-							   pll2_ndiv_a_cnt) |
+						 pll2_ndiv_a_cnt) |
 				 AD9528_PLL2_FB_NDIV_B_CNT(dev->pdata->
-							   pll2_ndiv_b_cnt));
+						 pll2_ndiv_b_cnt));
 	if (ret < 0)
 		return ret;
 
@@ -484,7 +484,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_VCO_DIVIDER,
 				 AD9528_PLL2_VCO_DIV_M1(dev->pdata->
-							pll2_vco_diff_m1) |
+						 pll2_vco_diff_m1) |
 				 AD_IFE(pll2_vco_diff_m1,
 					0,
 					AD9528_PLL2_VCO_DIV_M1_PWR_DOWN_EN));
@@ -512,12 +512,12 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		return ret;
 
 	ret = ad9528_spi_write_n(dev,
-		AD9528_PLL2_LOOP_FILTER_CTRL,
-		AD9528_PLL2_LOOP_FILTER_CPOLE1(dev->pdata->cpole1) |
-		AD9528_PLL2_LOOP_FILTER_RZERO(dev->pdata->rzero) |
-		AD9528_PLL2_LOOP_FILTER_RPOLE2(dev->pdata->rpole2) |
-		AD_IF(rzero_bypass_en,
-		      AD9528_PLL2_LOOP_FILTER_RZERO_BYPASS_EN));
+				 AD9528_PLL2_LOOP_FILTER_CTRL,
+				 AD9528_PLL2_LOOP_FILTER_CPOLE1(dev->pdata->cpole1) |
+				 AD9528_PLL2_LOOP_FILTER_RZERO(dev->pdata->rzero) |
+				 AD9528_PLL2_LOOP_FILTER_RPOLE2(dev->pdata->rpole2) |
+				 AD_IF(rzero_bypass_en,
+				       AD9528_PLL2_LOOP_FILTER_RZERO_BYPASS_EN));
 	if (ret < 0)
 		return ret;
 
@@ -534,11 +534,11 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 				ignoresync_mask |= (1 << chan->channel_num);
 
 			ret = ad9528_spi_write_n(dev,
-				AD9528_CHANNEL_OUTPUT(chan->channel_num),
-				AD9528_CLK_DIST_DRIVER_MODE(chan->driver_mode) |
-				AD9528_CLK_DIST_DIV(chan->channel_divider) |
-				AD9528_CLK_DIST_DIV_PHASE(chan->divider_phase) |
-				AD9528_CLK_DIST_CTRL(chan->signal_source));
+						 AD9528_CHANNEL_OUTPUT(chan->channel_num),
+						 AD9528_CLK_DIST_DRIVER_MODE(chan->driver_mode) |
+						 AD9528_CLK_DIST_DIV(chan->channel_divider) |
+						 AD9528_CLK_DIST_DIV_PHASE(chan->divider_phase) |
+						 AD9528_CLK_DIST_CTRL(chan->signal_source));
 			if (ret < 0)
 				return ret;
 		}

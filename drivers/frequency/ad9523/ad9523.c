@@ -284,7 +284,8 @@ int32_t ad9523_status(struct ad9523_dev *dev)
 		printf("AD9523: VCXO status errors (%x)!\n", reg_data);
 		ret = -1;
 	}
-	if ((reg_data & AD9523_READBACK_0_STAT_PLL2_LD) != AD9523_READBACK_0_STAT_PLL2_LD) {
+	if ((reg_data & AD9523_READBACK_0_STAT_PLL2_LD) !=
+	    AD9523_READBACK_0_STAT_PLL2_LD) {
 		printf("AD9523: PLL2 NOT locked (%x)!\n", reg_data);
 		ret = -1;
 	}
@@ -579,7 +580,8 @@ int32_t ad9523_setup(struct ad9523_dev **device,
 	if (ret < 0)
 		return ret;
 
-	dev->ad9523_st.vco_freq = (dev->pdata->vcxo_freq * (dev->pdata->pll2_freq_doubler_en ? 2 : 1)
+	dev->ad9523_st.vco_freq = (dev->pdata->vcxo_freq *
+				   (dev->pdata->pll2_freq_doubler_en ? 2 : 1)
 				   / dev->pdata->pll2_r2_div) * AD9523_PLL2_FB_NDIV(dev->pdata->
 						   pll2_ndiv_a_cnt,
 						   dev->pdata->
