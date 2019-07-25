@@ -43,7 +43,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "platform_drivers.h"
 #include "ad9152.h"
 
 /***************************************************************************//**

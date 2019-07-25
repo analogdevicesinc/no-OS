@@ -44,7 +44,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad5761r.h"
 
 /******************************************************************************/
