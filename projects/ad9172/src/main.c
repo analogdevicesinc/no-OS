@@ -136,7 +136,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.out_clk_sel = 4,
 		.cpll_enable = 0,
 		.lpm_enable = 1,			/* line rates up to 11.2 Gb/s for short reach */
-		.lane_rate_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.lane_rate_khz =  7000000,  /* desired lane rate */
 		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
 	};
 
@@ -179,15 +179,17 @@ int32_t ad9172_system_init(uint8_t mode) {
 		goto error_1;
 	}
 
-	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
-		goto error_2;
-	}
+
 
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
+		goto error_2;
+	}
+
+	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
 		goto error_3;
 	}
 
@@ -220,9 +222,9 @@ int32_t ad9172_system_init(uint8_t mode) {
 	error_4:
 		ad9172_remove(ad9172_device);
 	error_3:
-		adxcvr_remove(tx_adxcvr);
-	error_2:
 		axi_jesd204_tx_remove(tx_jesd);
+	error_2:
+		adxcvr_remove(tx_adxcvr);
 	error_1:
 		hmc7044_remove(hmc7044_device);
 
