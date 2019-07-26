@@ -43,6 +43,7 @@
 #include "delay.h"
 #include "spi.h"
 #include "i2c.h"
+#include <stdbool.h>
 
 #define BIT(n) (1<<(n))
 
