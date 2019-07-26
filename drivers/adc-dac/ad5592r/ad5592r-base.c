@@ -310,7 +310,7 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
  */
 int32_t ad5592r_reset_channel_modes(struct ad5592r_dev *dev)
 {
-	int32_t i;
+	uint32_t i;
 
 	if (!dev)
 		return FAILURE;
