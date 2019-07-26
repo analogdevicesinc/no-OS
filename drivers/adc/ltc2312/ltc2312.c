@@ -74,7 +74,7 @@ int32_t ltc2312_setup(struct ltc2312_dev **device,
 	if(!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
 	if(ret != 0)
 		goto error;
 
