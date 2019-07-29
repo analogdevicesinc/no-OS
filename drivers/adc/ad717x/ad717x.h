@@ -171,7 +171,7 @@ typedef struct {
 #define AD717X_ADCMODE_SING_CYC       (1 << 13)
 #define AD717X_ADCMODE_REG_DELAY(x)   (((x) & 0x7) << 8)
 #define AD717X_ADCMODE_REG_MODE(x)    (((x) & 0x7) << 4)
-#define AD717X_ADCMODE_REG_CLKSEL(x)) (((x) & 0x3) << 2)
+#define AD717X_ADCMODE_REG_CLKSEL(x)  (((x) & 0x3) << 2)
 
 /* ADC Mode Register additional bits for AD7172-2, AD7172-4, AD4111 and AD4112 */
 #define AD717X_ADCMODE_REG_HIDE_DELAY   (1 << 14)
