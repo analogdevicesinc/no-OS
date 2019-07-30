@@ -594,6 +594,10 @@ int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
 		if (h->delay_us != NULL)
 			h->delay_us(h->user_data, 100000);
 
+		uint64_t calc_dac_clk_freq_hz = (8 * n_div * ref_clk_freq_hz) / m_div / pll_vco_div;
+		if(calc_dac_clk_freq_hz != dac_clk_freq_hz)
+			return API_ERROR_INVALID_PARAM;
+
 		/*Set the PLL Dividers */
 		err = ad917x_set_dac_pll_config(h, 1, m_div, n_div, pll_vco_div);
 		if (err != API_ERROR_OK)
