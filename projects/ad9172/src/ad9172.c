@@ -295,7 +295,7 @@ extern jesd_param_t ad9172_modes[];
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad9172_init(ad9172_dev **device,
-		    ad9172_init_param * init_param, uint32_t lane_rate)
+		    ad9172_init_param * init_param)
 {
 	int32_t ret;
 	ad9172_dev *dev;
@@ -343,11 +343,6 @@ int32_t ad9172_init(ad9172_dev **device,
 	st->syncoutb_type = init_param->syncoutb_type;
 	st->sysref_coupling = init_param->sysref_coupling;
 
-
-
-	st->dac_rate_khz = (lane_rate * ad9172_modes[st->jesd_link_mode].jesd_L * 8) / (ad9172_modes[st->jesd_link_mode].jesd_M * ad9172_modes[st->jesd_link_mode].jesd_NP * 10);
-	st->dac_rate_khz *= st->channel_interpolation * st->dac_interpolation;
-
 	st->dac_h.user_data = dev->spi_desc;
 	st->dac_h.sdo = SPI_SDO;
 	st->dac_h.dev_xfer = ad9172_spi_xfer;
@@ -357,23 +352,32 @@ int32_t ad9172_init(ad9172_dev **device,
 	st->dac_h.syncoutb = st->syncoutb_type;
 	st->dac_h.sysref = st->sysref_coupling;
 
-	ret = ad9172_setup(st);
+	*device = dev;
+	return 0;
+
+	error_3:
+		spi_remove(dev->spi_desc);
+	error_2:
+		free(st);
+	error_1:
+		free(dev);
+
+		return ret;
+}
+
+int32_t ad9172_auto_init(ad9172_dev *device, uint32_t lane_rate)
+	{
+	int32_t ret;
+	device->st->dac_rate_khz = (lane_rate * ad9172_modes[device->st->jesd_link_mode].jesd_L * 8) / (ad9172_modes[device->st->jesd_link_mode].jesd_M * ad9172_modes[device->st->jesd_link_mode].jesd_NP * 10);
+	device->st->dac_rate_khz *= device->st->channel_interpolation * device->st->dac_interpolation;
+	ret = ad9172_setup(device->st);
 	if (ret < 0) {
 		printf("Failed to setup device\n");
-		goto error_3;
+		return ret;
 	}
 
 	printf("%s : AD936x Rev %d successfully initialized\n", __func__, 1);
-	*device = dev;
 
-	return 0;
-
-error_3:
-	spi_remove(dev->spi_desc);
-error_2:
-	free(st);
-error_1:
-	free(dev);
 
 	return ret;
 }

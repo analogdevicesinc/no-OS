@@ -94,10 +94,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 	};
 
 	struct hmc7044_chan_spec chan_spec[4] = {
-		{.disable = 0, .num = 2, .divider = 8/*32*/, .driver_mode = 1},		/* DAC_CLK */
-		{.disable = 0, .num = 3, .divider = 2*64/*512*/, .driver_mode = 1},		/* DAC_SYSREF */
-		{.disable = 0, .num = 12, .divider = 8, .driver_mode = 2},		/* FPGA_CLK */
-		{.disable = 0, .num = 13, .divider = 512, .driver_mode = 2},	/* FPGA_SYSREF */
+		{.disable = 0, .num = 2, .divider = 1/* 8 */, .driver_mode = 1},		/* DAC_CLK */
+		{.disable = 0, .num = 3, .divider = 1/* 2*64 */, .driver_mode = 1},		/* DAC_SYSREF */
+		{.disable = 0, .num = 12, .divider = 1/* 8 */, .driver_mode = 2},		/* FPGA_CLK */
+		{.disable = 0, .num = 13, .divider = 1/* 512 */, .driver_mode = 2},	/* FPGA_SYSREF */
 	};
 
 	struct hmc7044_init_param hmc7044_param = {
@@ -180,12 +180,20 @@ int32_t ad9172_system_init(uint8_t mode) {
 		goto error_2;
 	}
 
+	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
+
 	if (status != SUCCESS) {
 		printf("hmc7044_init() error: %"PRIi32"\n", status);
 	//	continue;
 		//goto error_1;
 	}
-	//while(1)
+	status = ad9172_init(&ad9172_device, &ad9172_param);
+	if (status != SUCCESS) {
+		printf("ad9172_init() error: %"PRIi32"\n", status);
+	//	continue;
+		//goto error_1;
+	}
+	while(1)
 	{
 
 
@@ -200,10 +208,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 		}
 
 		for (uint8_t i = 1; i < 4094; i <<= 1) {
-			hmc7044_param.pll2_freq = i * tx_adxcvr->ref_rate_khz * 1000;
-			hmc7044_param.channels[2].divider = i;
-			hmc7044_param.channels[3].divider = i * 16;
-			status = hmc7044_init(&hmc7044_device, &hmc7044_param);
+			hmc7044_device->pll2_freq = i * tx_adxcvr->ref_rate_khz * 1000;
+			hmc7044_device->channels[2].divider = i;
+			hmc7044_device->channels[3].divider = i * 16;
+			status = hmc7044_auto_init(hmc7044_device);
 			if(status >= 0)
 				break;
 		}
@@ -232,13 +240,13 @@ int32_t ad9172_system_init(uint8_t mode) {
 
 		for (uint8_t i = 1; i < 4094; i <<= 1) {
 
-			 hmc7044_param.channels[0].divider = i;
-			 hmc7044_param.channels[1].divider = i * 64;
-			status = hmc7044_init(&hmc7044_device, &hmc7044_param);
+			 hmc7044_device->channels[0].divider = i;
+			 hmc7044_device->channels[1].divider = i * 64;
+			status = hmc7044_auto_init(hmc7044_device);
 			if(status < 0)
 				printf("hmc7044_init() error: %"PRIi32"\n", status);
-			ad9172_param.dac_clkin_Hz = hmc7044_device->pll2_freq / i;
-			status = ad9172_init(&ad9172_device, &ad9172_param, lane_rate_kHz);
+			ad9172_device->st->dac_clkin_Hz = hmc7044_device->pll2_freq / i;
+			status = ad9172_auto_init(ad9172_device, lane_rate_kHz);
 			if(status >= 0)
 				break;
 //			if (status != SUCCESS) {
@@ -268,7 +276,6 @@ int32_t ad9172_system_init(uint8_t mode) {
 	return status;
 
 }
-
 
 int main(void)
 {

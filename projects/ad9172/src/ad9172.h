@@ -99,6 +99,8 @@ typedef struct ad9172_init_param {
 } ad9172_init_param;
 
 int32_t ad9172_init(ad9172_dev **device,
-		    ad9172_init_param *init_param, uint32_t lane_rate);
+		    ad9172_init_param *init_param);
+int32_t ad9172_auto_init(ad9172_dev *device, uint32_t lane_rate);
+
 int32_t ad9172_remove(ad9172_dev *device);
 #endif // __AD9172_H__

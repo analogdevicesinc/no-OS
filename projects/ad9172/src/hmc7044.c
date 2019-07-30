@@ -576,7 +576,65 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 	*device = dev;
 
-	return hmc7044_setup(dev);
+//	return hmc7044_setup(dev);
+	return ret;
+}
+
+int32_t hmc7044_auto_init(struct hmc7044_dev *device)
+{
+//	struct hmc7044_dev *dev;
+//	int32_t ret;
+//	unsigned int i;
+//
+//	dev = (struct hmc7044_dev *)malloc(sizeof(*dev));
+//	if (!dev)
+//		return FAILURE;
+//
+//	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+//	if (ret < 0)
+//		return ret;
+//
+//	dev->clkin_freq[0] = init_param->clkin_freq[0];
+//	dev->clkin_freq[1] = init_param->clkin_freq[1];
+//	dev->clkin_freq[2] = init_param->clkin_freq[2];
+//	dev->clkin_freq[3] = init_param->clkin_freq[3];
+//
+//	dev->vcxo_freq = init_param->vcxo_freq;
+//	dev->pll2_freq = init_param->pll2_freq;
+//	dev->pll1_loop_bw = init_param->pll1_loop_bw;
+//
+//	dev->sysref_timer_div = init_param->sysref_timer_div;
+//	dev->pulse_gen_mode = init_param->pulse_gen_mode;
+//
+//	dev->in_buf_mode[0] = init_param->in_buf_mode[0];
+//	dev->in_buf_mode[1] = init_param->in_buf_mode[1];
+//	dev->in_buf_mode[2] = init_param->in_buf_mode[2];
+//	dev->in_buf_mode[3] = init_param->in_buf_mode[3];
+//	dev->in_buf_mode[4] = init_param->in_buf_mode[4];
+//
+//	dev->gpi_ctrl[0] = init_param->gpi_ctrl[0];
+//	dev->gpi_ctrl[1] = init_param->gpi_ctrl[1];
+//	dev->gpi_ctrl[2] = init_param->gpi_ctrl[2];
+//	dev->gpi_ctrl[3] = init_param->gpi_ctrl[3];
+//
+//	dev->gpo_ctrl[0] = init_param->gpo_ctrl[0];
+//	dev->gpo_ctrl[1] = init_param->gpo_ctrl[1];
+//	dev->gpo_ctrl[2] = init_param->gpo_ctrl[2];
+//	dev->gpo_ctrl[3] = init_param->gpo_ctrl[3];
+//
+//	dev->num_channels = init_param->num_channels;
+//	dev->channels = (struct hmc7044_chan_spec *)
+//			malloc(sizeof(*dev->channels) * dev->num_channels);
+
+//	for (i = 0; i < device->num_channels; i++) {
+//		device->channels[i].num = init_param->channels[i].num;
+//		dev->channels[i].disable = init_param->channels[i].disable;
+//		dev->channels[i].divider = init_param->channels[i].divider;
+//		dev->channels[i].driver_mode =
+//			init_param->channels[i].driver_mode;
+//	}
+
+	return hmc7044_setup(device);
 }
 
 /**
