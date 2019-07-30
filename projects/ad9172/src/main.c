@@ -49,6 +49,7 @@
 #include "axi_dac_core.h"
 #include "parameters.h"
 #include "inttypes.h"
+#include "autoconfig.h"
 #define DAC_DMA_EXAMPLE
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
@@ -125,8 +126,8 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.high_density = ad9172_modes[mode].jesd_HD, //false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-		.device_clk_khz = 7372800 / 40,	/* (lane_clk_khz / 40) */
-		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+//		.device_clk_khz = 7372800 / 40,	/* (lane_clk_khz / 40) */
+//		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -134,10 +135,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.base = TX_XCVR_BASEADDR,
 		.sys_clk_sel = 3,
 		.out_clk_sel = 4,
-		.cpll_enable = 0,
+		//.cpll_enable = 0,
 		.lpm_enable = 1,			/* line rates up to 11.2 Gb/s for short reach */
-		.lane_rate_khz =  7000000,  /* desired lane rate */
-		.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
+		//.lane_rate_khz = 7372800,   /* desired lane rate */
+		//.ref_rate_khz = 368640,		/* FPGA_CLK, output 12 of HMC 7044 */
 	};
 
 	struct spi_init_param ad9172_spi_param = {
@@ -152,8 +153,8 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_txen0 = 54 + 22,
 		.gpio_txen1 = 54 + 23,
-		.dac_rate_khz = 2949120,		/* or sample rate */
-		.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
+		//.dac_rate_khz = 2949120,		/* or sample rate */
+		//.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
 		.jesd_link_mode = 20,
 		.jesd_subclass = 1,
 		.dac_interpolation = 1,
@@ -173,48 +174,76 @@ int32_t ad9172_system_init(uint8_t mode) {
 
 	int32_t status;
 
-	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
-	if (status != SUCCESS) {
-		printf("hmc7044_init() error: %"PRIi32"\n", status);
-		goto error_1;
-	}
-
-
-
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
 		goto error_2;
 	}
 
-	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
-		goto error_3;
+		printf("hmc7044_init() error: %"PRIi32"\n", status);
+	//	continue;
+		//goto error_1;
 	}
+	//while(1)
+	{
 
-	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
-		goto error_3;
-	}
 
-	status = axi_jesd204_tx_lane_clk_enable(tx_jesd);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n", tx_jesd->name);
-		goto error_3;
-	}
+		uint32_t lane_rate = 7372800;
+		autoconfig(tx_adxcvr, lane_rate);
 
-	status = ad9172_init(&ad9172_device, &ad9172_param);
-	if (status != SUCCESS) {
-		printf("ad9172_init() error: %"PRIi32"\n", status);
-		goto error_4;
-	}
+		if (status != SUCCESS) {
+			printf("hmc7044_init() error: %"PRIi32"\n", status);
+		//	continue;
+			//goto error_1;
+		}
 
-	status = axi_jesd204_tx_status_read(tx_jesd);
-	if (status != SUCCESS) {
-		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
-		goto error_4;
+		for (uint8_t i = 8/*1*/; i < 4094; i <<= 1) {
+			hmc7044_param.pll2_freq = i * tx_adxcvr->ref_rate_khz * 1000;
+			hmc7044_param.channels[2].divider = i;
+			status = hmc7044_init(&hmc7044_device, &hmc7044_param);
+			if(status >= 0)
+				break;
+		}
+
+
+
+		status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init, lane_rate);
+		if (status != SUCCESS) {
+			printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
+			//goto error_3;
+		}
+
+		status = adxcvr_clk_enable(tx_adxcvr);
+		if (status != SUCCESS) {
+			printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
+			//goto error_3;
+		}
+
+		status = axi_jesd204_tx_lane_clk_enable(tx_jesd);
+		if (status != SUCCESS) {
+			printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n", tx_jesd->name);
+			//goto error_3;
+		}
+
+
+		for (uint8_t i = 2; i < 4094; i <<= 1) {
+			 ad9172_param.dac_clkin_Hz = hmc7044_device->pll2_freq / i;
+			hmc7044_device->channels[1].divider = i;
+			status = ad9172_init(&ad9172_device, &ad9172_param, lane_rate);
+			if(status >= 0)
+				break;
+//			if (status != SUCCESS) {
+//				printf("ad9172_init() error: %"PRIi32"\n", status);
+//				//goto error_4;
+			//}
+		}
+
+		status = axi_jesd204_tx_status_read(tx_jesd);
+		if (status != SUCCESS) {
+			printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+			//goto error_4;
+		}
 	}
 
 	return 0;

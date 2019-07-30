@@ -9,7 +9,7 @@
 #include "autoconfig.h"
 
 int32_t autoconfig(struct adxcvr *xcvr,
-			    uint32_t line_rate)
+			    uint32_t lane_rate)
 {
 	struct xilinx_xcvr_cpll_config cpll_conf;
 	struct xilinx_xcvr_qpll_config qpll_conf = {0};
@@ -17,7 +17,12 @@ int32_t autoconfig(struct adxcvr *xcvr,
 	uint32_t i;
 	int32_t ret;
 
-	ret = xilinx_xcvr_get_qpll_next_config(&xcvr->xlx_xcvr, &ref_rate, line_rate, &qpll_conf);
+	ret = xilinx_xcvr_get_qpll_next_config(&xcvr->xlx_xcvr, &ref_rate, lane_rate, &qpll_conf);
+	xcvr->cpll_enable = 0;
+	xcvr->lane_rate_khz = lane_rate;
+	xcvr->ref_rate_khz = ref_rate;
+	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz)
+			adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 
 
 	return ret;
