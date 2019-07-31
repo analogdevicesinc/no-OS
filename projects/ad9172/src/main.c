@@ -200,7 +200,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 	uint16_t i = 1;
 	while(1) {
 
-
+		uint32_t pll2_calc_freq;
 		//get FPGA ref
 		status = autoconfig(tx_adxcvr, lane_rate_kHz); // get tx_adxcvr->ref_rate_khz
 		if (status != SUCCESS) {
@@ -214,14 +214,14 @@ int32_t ad9172_system_init(uint8_t mode) {
 			uint32_t vcxo_freq_khz = hmc7044_param.vcxo_freq / 1000;
 			uint32_t n2[2], r2[2], divider;
 			uint8_t pll2_freq_doubler;
-			uint32_t pll2_desired_freq, pll2_calc_freq;
+			uint32_t pll2_desired_freq;
 
 #define HMC7044_R2_MAX		4095
 #define HMC7044_N2_MAX		65535
 
 #define HMC7044_N2_MIN		8
 #define HMC7044_R2_MIN		1
-
+			// check if HMC7044 can generate this FPGA fref
 			for(divider = 1; divider <= 4094; divider++) {
 
 				pll2_desired_freq = ref_rate_khz * divider;
@@ -291,37 +291,28 @@ int32_t ad9172_system_init(uint8_t mode) {
 		for (m_div = 1; m_div <= 4; m_div++) {
 			for (n_div = 2; n_div <= 50; n_div++) {
 				uint32_t rem = (dac_rate_kHz * m_div * pll_vco_div) % (8 * n_div);
-				uint32_t dac_fref = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
+				uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
 				if(rem)
 					continue;
-				if ((dac_fref < 30000/*REF_CLK_FREQ_MHZ_MIN*/) ||
-						(dac_fref > 2000000/*REF_CLK_FREQ_MHZ_MAX*/)) {
+				if ((dac_fref_khz < 30000/*REF_CLK_FREQ_MHZ_MIN*/) ||
+						(dac_fref_khz > 2000000/*REF_CLK_FREQ_MHZ_MAX*/)) {
 					continue;
 				}
 				printf("found valid DAC fref \n");
 
 
-				//check if HMC7044 can generate this frefs
+				//check if HMC7044 can generate this DAC fref
 				{
-					uint32_t ref_rate_khz = dac_fref;
-					uint32_t vcxo_freq = hmc7044_param.vcxo_freq;
-					uint32_t n2, r2, divider, doubler;
-					uint32_t pll2_freq;
-					uint32_t ref_calc;
-					for(doubler = 2; doubler >= 1; doubler--) {
-						for(divider = 1; divider <= 4094; divider++) {
-							for(n2 = 1; n2 <= 4095; n2++) {
-								for(r2 = 1; r2 <= 4095; r2++) {
-									pll2_freq = vcxo_freq * doubler * n2 / r2;
-									ref_calc = pll2_freq / divider;
-
-									if(ref_rate_khz == ref_calc) {
-										printf("found");
-									}
-								}
-							}
-						}
+					uint32_t pll2_desired_freq;
+//					uint8_t pll2_freq_doubler;
+					uint32_t /* n2[2], r2[2], */ divider;
+					for(divider = 1; divider <= 4094; divider++) {
+						pll2_desired_freq = dac_fref_khz * divider;
 					}
+					if(pll2_desired_freq == pll2_calc_freq) {
+						printf("found, DAC divider = %"PRIi32"\n", divider);
+					}
+
 				}
 
 
