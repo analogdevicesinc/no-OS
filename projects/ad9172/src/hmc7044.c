@@ -310,9 +310,14 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	uint32_t vco_limit;
 	uint32_t n2[2], r2[2];
 	uint32_t i;
+	int32_t ret;
 
 	vcxo_freq = dev->vcxo_freq / 1000;
 	pll2_freq = dev->pll2_freq / 1000;
+
+	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
+		pll2_freq > HMC7044_HIGH_VCO_MAX)
+		return FAILURE;
 
 	lcm_freq = vcxo_freq;
 	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
@@ -335,9 +340,11 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	pll1_lock_detect = log_base_2((lcm_freq * 4000) / dev->pll1_loop_bw);
 
 	/* fVCXO / N1 = fLCM / R1 */
-	rational_best_approximation(vcxo_freq, lcm_freq,
+	ret = rational_best_approximation(vcxo_freq, lcm_freq,
 				    HMC7044_N1_MAX, HMC7044_R1_MAX,
 				    &n1, &r1);
+	if (ret < 0)
+		return ret;
 
 	pfd1_freq = vcxo_freq / n1;
 	while ((pfd1_freq > HMC7044_RECOMM_FPD1) &&
@@ -348,10 +355,6 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		r1 *= 2;
 	}
 
-	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
-	    pll2_freq > HMC7044_HIGH_VCO_MAX)
-		return FAILURE;
-
 	vco_limit = (HMC7044_LOW_VCO_MAX + HMC7044_HIGH_VCO_MIN) / 2;
 	if (pll2_freq >= vco_limit)
 		high_vco_en = true;
@@ -360,14 +363,18 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	/* fVCO / N2 = fVCXO * doubler / R2 */
 	pll2_freq_doubler_en = true;
-	rational_best_approximation(pll2_freq, vcxo_freq * 2,
+	ret = rational_best_approximation(pll2_freq, vcxo_freq * 2,
 				    HMC7044_N2_MAX, HMC7044_R2_MAX,
 				    &n2[0], &r2[0]);
+	if (ret < 0)
+		return ret;
 
 	if (pll2_freq != vcxo_freq * n2[0] / r2[0]) {
-		rational_best_approximation(pll2_freq, vcxo_freq,
+		ret = rational_best_approximation(pll2_freq, vcxo_freq,
 					    HMC7044_N2_MAX, HMC7044_R2_MAX,
 					    &n2[1], &r2[1]);
+		if (ret < 0)
+			return ret;
 
 		if (abs((int)pll2_freq - (int)(vcxo_freq * 2 * n2[0] / r2[0])) >
 		    abs((int)pll2_freq - (int)(vcxo_freq * n2[1] / r2[1]))) {

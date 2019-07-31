@@ -188,6 +188,18 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 		       clock_rate / 1000, clock_rate % 1000,
 		       link_rate / 1000, link_rate % 1000);
 
+		if((link_status & 0x3) == 1)
+		{
+			printf("------------------CGS------------------\n");
+		}
+		if((link_status & 0x3) == 2)
+		{
+			printf("------------------ILAS------------------\n");
+		}
+		if((link_status & 0x3) == 0)
+		{
+			printf("------------------WAIT------------------\n");
+		}
 		printf("\tSYNC~: %s\n"
 		       "\tLink status: %s\n"
 		       "\tSYSREF captured: %s\n"

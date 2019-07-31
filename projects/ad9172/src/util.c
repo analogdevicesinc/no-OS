@@ -108,7 +108,7 @@ uint32_t greatest_common_divisor(uint32_t a,
 /**
  * Calculate best rational approximation for a given fraction.
  */
-void rational_best_approximation(uint32_t given_numerator,
+int32_t rational_best_approximation(uint32_t given_numerator,
 				 uint32_t given_denominator,
 				 uint32_t max_numerator,
 				 uint32_t max_denominator,
@@ -126,7 +126,9 @@ void rational_best_approximation(uint32_t given_numerator,
 	    (*best_denominator > max_denominator)) {
 		*best_numerator = 0;
 		*best_denominator = 0;
+		return -1;
 	}
+	return 0;
 }
 
 /**
