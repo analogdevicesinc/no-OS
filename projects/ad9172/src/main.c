@@ -194,7 +194,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 		//goto error_1;
 	}
 	uint32_t lane_rate_kHz = 7372800;
-	//uint32_t lane_rate_kHz =   3686400;
+	//uint32_t lane_rate_kHz =   7372808;
 	uint32_t data_rate_kHz = (lane_rate_kHz * ad9172_modes[mode].jesd_L * 8) / (ad9172_modes[mode].jesd_M * ad9172_modes[mode].jesd_NP * 10);
 	uint32_t dac_rate_kHz = data_rate_kHz * 1;
 	uint16_t i = 1;
@@ -209,6 +209,8 @@ int32_t ad9172_system_init(uint8_t mode) {
 			//goto error_1;
 		}
 
+
+		// check if HMC7044 can generate this FPGA fref
 		{
 			uint32_t ref_rate_khz = tx_adxcvr->ref_rate_khz;
 			uint32_t vcxo_freq_khz = hmc7044_param.vcxo_freq / 1000;
@@ -221,7 +223,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 
 #define HMC7044_N2_MIN		8
 #define HMC7044_R2_MIN		1
-			// check if HMC7044 can generate this FPGA fref
+
 			for(divider = 1; divider <= 4094; divider++) {
 
 				pll2_desired_freq = ref_rate_khz * divider;
@@ -254,6 +256,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 
 				if(pll2_desired_freq == pll2_calc_freq) {
 					printf("found, divider = %"PRIi32"\n", divider);
+					break;
 				}
 			}
 		}
@@ -272,6 +275,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 			printf("please set other lane_rate_kHz, data_rate_kHz out of bounds:\n");
 			printf("lane_rate_kHz = %"PRIi32"\n", lane_rate_kHz);
 			printf("data_rate_kHz = %"PRIi32"\n", data_rate_kHz);
+			return -1;
 		}
 		if ((dac_clk_freq_mhz > range_boundary[0]) &&
 			(dac_clk_freq_mhz < range_boundary[1])) {
@@ -286,19 +290,20 @@ int32_t ad9172_system_init(uint8_t mode) {
 			printf("please set other lane_rate_kHz, data_rate_kHz out of bounds:\n");
 			printf("lane_rate_kHz = %"PRIi32"\n", lane_rate_kHz);
 			printf("data_rate_kHz = %"PRIi32"\n", data_rate_kHz);
+			return -1;
 		}
 
 		for (m_div = 1; m_div <= 4; m_div++) {
 			for (n_div = 2; n_div <= 50; n_div++) {
 				uint32_t rem = (dac_rate_kHz * m_div * pll_vco_div) % (8 * n_div);
-				uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
 				if(rem)
 					continue;
+				uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
 				if ((dac_fref_khz < 30000/*REF_CLK_FREQ_MHZ_MIN*/) ||
 						(dac_fref_khz > 2000000/*REF_CLK_FREQ_MHZ_MAX*/)) {
 					continue;
 				}
-				printf("found valid DAC fref \n");
+				//printf("found valid DAC fref \n");
 
 
 				//check if HMC7044 can generate this DAC fref
@@ -308,25 +313,15 @@ int32_t ad9172_system_init(uint8_t mode) {
 					uint32_t /* n2[2], r2[2], */ divider;
 					for(divider = 1; divider <= 4094; divider++) {
 						pll2_desired_freq = dac_fref_khz * divider;
+						if(pll2_desired_freq > pll2_calc_freq)
+							break; /* and reconfigure DAC PLL*/
+						if(pll2_desired_freq == pll2_calc_freq) {
+							printf("found, DAC divider = %"PRIi32"\n", divider);
+						}
 					}
-					if(pll2_desired_freq == pll2_calc_freq) {
-						printf("found, DAC divider = %"PRIi32"\n", divider);
-					}
-
 				}
-
-
-
-
-
-
 			}
 		}
-
-
-
-
-
 
 
 	}

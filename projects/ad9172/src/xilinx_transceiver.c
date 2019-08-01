@@ -528,6 +528,7 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 					tmp_conf.m_refclk_div = m;
 					tmp_conf.N_fb_div = N[n];
 					tmp_conf.band = band;
+					tmp_conf.D = d;
 					tmp_out_div = d;
 				}
 			}
@@ -594,7 +595,7 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 		conf->m_refclk_div = 1;	/* m */
 		conf->D = 1;			/* D */
 		conf->N_fb_div = 20 /*16*/;		/* N */
-		conf->N_fb_div_idx = 1;
+		conf->N_fb_div_idx = 0;
 	}
 	else {
 		if (conf->D < 16) {
@@ -627,6 +628,10 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 	else if (vco_freq >= vco0_min && vco_freq <= vco0_max)
 		conf->band = 0;
 	else
+		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+
+	uint32_t rem = lane_rate_khz * conf->m_refclk_div * conf->D % conf->N_fb_div;
+	if(rem)
 		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	*refclk_khz = lane_rate_khz * conf->m_refclk_div * conf->D / conf->N_fb_div;

@@ -18,11 +18,13 @@ int32_t autoconfig(struct adxcvr *xcvr,
 	int32_t ret;
 
 	ret = xilinx_xcvr_get_qpll_next_config(&xcvr->xlx_xcvr, &ref_rate, lane_rate, &qpll_conf);
+	if(ret < 0)
+		return ret;
 	xcvr->cpll_enable = 0;
 	xcvr->lane_rate_khz = lane_rate;
 	xcvr->ref_rate_khz = ref_rate;
 	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz)
-			adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
+			return adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 
 
 	return ret;
