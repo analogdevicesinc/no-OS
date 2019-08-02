@@ -92,7 +92,8 @@ struct hmc7044_init_param {
 /* Initialize the device. */
 int32_t hmc7044_init(struct hmc7044_dev **device,
 		     const struct hmc7044_init_param *init_param);
-int32_t hmc7044_auto_init(struct hmc7044_dev *device);
+int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uint32_t *pll2_freq);
+int32_t hmc7044_auto_init_check(uint32_t divider);
 /* Remove the device. */
 int32_t hmc7044_remove(struct hmc7044_dev *device);
 #endif // HMC7044_H_

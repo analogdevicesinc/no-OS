@@ -149,9 +149,10 @@ struct xilinx_xcvr {
 };
 
 struct xilinx_xcvr_cpll_config {
-	uint32_t refclk_div;
-	uint32_t fb_div_N1;
-	uint32_t fb_div_N2;
+	uint32_t m_refclk_div;	/* M */
+	uint32_t fb_div_N1; 	/* N1 */
+	uint32_t fb_div_N2;		/* N2 */
+	uint32_t D;				/* D */
 };
 
 struct xilinx_xcvr_qpll_config {
@@ -205,4 +206,8 @@ int32_t xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 				     uint32_t *refclk_khz, uint32_t lane_rate_khz,
 				     struct xilinx_xcvr_qpll_config *conf);
+
+int32_t xilinx_xcvr_get_cpll_next_config(struct xilinx_xcvr *xcvr,
+				     uint32_t *refclk_khz, uint32_t lane_rate_khz,
+				     struct xilinx_xcvr_cpll_config *conf);
 #endif

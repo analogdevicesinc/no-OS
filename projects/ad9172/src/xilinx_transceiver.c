@@ -435,7 +435,7 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 					tmp_lane_rate_khz = refclk_khz * n1 * n2 *2 / (m * d);
 					if (abs(tmp_lane_rate_khz - *lane_rate_khz) < abs(prev_lane_rate_khz - *lane_rate_khz)) {
 						prev_lane_rate_khz = tmp_lane_rate_khz;
-						tmp_conf.refclk_div = m;
+						tmp_conf.m_refclk_div = m;
 						tmp_conf.fb_div_N1 = n1;
 						tmp_conf.fb_div_N2 = n2;
 						tmp_out_div = d;
@@ -547,6 +547,91 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 }
 
 /**
+ * @brief xilinx_xcvr_calc_cpll_config
+ */
+int32_t xilinx_xcvr_get_cpll_next_config(struct xilinx_xcvr *xcvr,
+				     uint32_t *refclk_khz, uint32_t lane_rate_khz,
+				     struct xilinx_xcvr_cpll_config *conf)
+{
+	uint32_t vco_freq;
+	uint32_t vco_min;
+	uint32_t vco_max;
+
+	switch (xcvr->type) {
+	case XILINX_XCVR_TYPE_S7_GTX2:
+		vco_min = 1600000;
+		vco_max = 3300000;
+		break;
+	case XILINX_XCVR_TYPE_US_GTH3:
+	case XILINX_XCVR_TYPE_US_GTH4:
+		vco_min = 2000000;
+		vco_max = 6250000;
+		break;
+	default:
+		return FAILURE;
+	}
+
+	if (AXI_PCORE_VER_MAJOR(xcvr->version) > 0x10)
+		xilinx_xcvr_setup_cpll_vco_range(xcvr, &vco_max);
+
+	if(conf->D == 0)
+	{
+		conf->m_refclk_div = 1;	/* m */
+		conf->D = 1;			/* D */
+		conf->fb_div_N1 = 4;		/* N */
+		conf->fb_div_N2 = 5;
+	}
+	else {
+		if (conf->D < 8) {
+			conf->D <<= 1;
+		}
+		else {
+			conf->D = 1;
+
+			if (conf->m_refclk_div < 2) {
+				conf->m_refclk_div++;
+			}
+			else {
+				conf->m_refclk_div = 1;
+
+				if (conf->fb_div_N1 < 5) {
+					conf->fb_div_N1++;
+				}
+				else {
+					conf->fb_div_N1 = 4;
+
+					if (conf->fb_div_N2 < 5) {
+						conf->fb_div_N2++;
+					}
+					else {
+						return FAILURE;
+					}
+				}
+			}
+		}
+	}
+	vco_freq = conf->D * lane_rate_khz / 2;
+
+	if (vco_freq >= vco_min && vco_freq <= vco_max) {
+
+	}
+	else
+		return xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+
+	uint32_t rem = vco_freq * conf->m_refclk_div % (conf->fb_div_N1 * conf->fb_div_N2);
+	if(rem)
+		return xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+	*refclk_khz = vco_freq * conf->m_refclk_div / (conf->fb_div_N1 * conf->fb_div_N2);
+
+	uint32_t clk25_div = DIV_ROUND_CLOSEST(*refclk_khz, 25000);
+	if(clk25_div > 25)
+		return xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+
+	return SUCCESS;
+}
+
+
+/**
  * @brief xilinx_xcvr_calc_qpll_config
  */
 int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
@@ -594,7 +679,7 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 	{
 		conf->m_refclk_div = 1;	/* m */
 		conf->D = 1;			/* D */
-		conf->N_fb_div = 20 /*16*/;		/* N */
+		conf->N_fb_div = 16;		/* N */
 		conf->N_fb_div_idx = 0;
 	}
 	else {
@@ -635,6 +720,11 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	*refclk_khz = lane_rate_khz * conf->m_refclk_div * conf->D / conf->N_fb_div;
+
+	uint32_t clk25_div = DIV_ROUND_CLOSEST(*refclk_khz, 25000);
+	if(clk25_div > 25)
+		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+
 
 	return SUCCESS;
 }
@@ -680,13 +770,13 @@ int32_t xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 		return ret;
 
 	if (val & 0xf800)
-		conf->refclk_div = 1;
+		conf->m_refclk_div = 1;
 	else
-		conf->refclk_div = 2;
+		conf->m_refclk_div = 2;
 
 	printf("%s: cpll: fb_div_N1=%"PRIu32"\ncpll: fb_div_N2=%"PRIu32"\ncpll:"
 	       " refclk_div=%"PRIu32"\n", __func__, conf->fb_div_N1,
-	       conf->fb_div_N2, conf->refclk_div);
+	       conf->fb_div_N2, conf->m_refclk_div);
 
 	return SUCCESS;
 }
@@ -728,9 +818,9 @@ int32_t xilinx_xcvr_gtx2_cpll_read_config(struct xilinx_xcvr *xcvr,
 	}
 
 	if (val & CPLL_REFCLK_DIV_M_MASK)
-		conf->refclk_div = 1;
+		conf->m_refclk_div = 1;
 	else
-		conf->refclk_div = 2;
+		conf->m_refclk_div = 2;
 
 	return SUCCESS;
 }
@@ -798,7 +888,7 @@ int32_t xilinx_xcvr_gth34_cpll_write_config(struct xilinx_xcvr *xcvr,
 	if (ret)
 		return ret;
 
-	switch (conf->refclk_div) {
+	switch (conf->m_refclk_div) {
 	case 1:
 		val = 16;
 		break;
@@ -852,7 +942,7 @@ int32_t xilinx_xcvr_gtx2_cpll_write_config(struct xilinx_xcvr *xcvr,
 		return FAILURE;
 	}
 
-	switch (conf->refclk_div) {
+	switch (conf->m_refclk_div) {
 	case 1:
 		val |= CPLL_REFCLK_DIV_M_MASK;
 		break;
@@ -891,12 +981,12 @@ int32_t xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					uint32_t refclk_khz, const struct xilinx_xcvr_cpll_config *conf,
 					uint32_t out_div)
 {
-	if (conf->refclk_div == 0 || out_div == 0)
+	if (conf->m_refclk_div == 0 || out_div == 0)
 		return SUCCESS;
 
 	return DIV_ROUND_CLOSEST_ULL((uint64_t)refclk_khz *
 				     conf->fb_div_N1 * conf->fb_div_N2 * 2,
-				     conf->refclk_div * out_div * 1000);
+				     conf->m_refclk_div * out_div * 1000);
 }
 
 /**
