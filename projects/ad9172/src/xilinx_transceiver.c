@@ -683,6 +683,9 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 		conf->N_fb_div_idx = 0;
 	}
 	else {
+		if(N[conf->N_fb_div_idx] == 0)
+			return FAILURE;
+
 		if (conf->D < 16) {
 			conf->D <<= 1;
 		}
@@ -695,11 +698,12 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 			else {
 				conf->m_refclk_div = 1;
 
-				if (N[conf->N_fb_div_idx++] != 0) {
+				if (N[conf->N_fb_div_idx + 1] != 0) {
 					conf->N_fb_div_idx++;
 					conf->N_fb_div = N[conf->N_fb_div_idx];
 				}
 				else {
+					conf->N_fb_div_idx++;
 					return FAILURE;
 				}
 			}

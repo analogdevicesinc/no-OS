@@ -26,7 +26,7 @@ int32_t autoconfig(struct adxcvr *xcvr,
 	xcvr->lane_rate_khz = lane_rate;
 	xcvr->ref_rate_khz = ref_rate;
 	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz)
-			return adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
+		return adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 
 
 	return ret;

@@ -92,7 +92,7 @@ int32_t ad9172_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq)
 
 	if ((dac_rate_kHz > 12000000 /* DAC_CLK_FREQ_MAX_HZ */) ||
 				(dac_rate_kHz < 2900000 /*DAC_CLK_FREQ_MIN_HZ*/)) {
-		printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
 		return FAILURE;
 	}
 	if ((dac_clk_freq_mhz > range_boundary[0]) &&
@@ -105,7 +105,7 @@ int32_t ad9172_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq)
 		   (dac_clk_freq_mhz < range_boundary[5])) {
 		pll_vco_div = 1;
 	} else {
-		printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
 		return FAILURE;
 	}
 
@@ -245,24 +245,26 @@ int32_t ad9172_system_init(uint8_t mode) {
 	uint32_t data_rate_kHz = (lane_rate_kHz * ad9172_modes[mode].jesd_L * 8) / (ad9172_modes[mode].jesd_M * ad9172_modes[mode].jesd_NP * 10);
 	uint32_t dac_rate_kHz = data_rate_kHz * 1;
 	status = -1;
-	while(status < 0) {
+	while(1 /*status < 0*/) {
 		uint32_t pll2_freq;
-
+		printf("\n");
 		//get FPGA ref
 		status = autoconfig(tx_adxcvr, lane_rate_kHz); // get tx_adxcvr->ref_rate_khz
+		printf("lane_rate_kHz = %"PRIi32" FPGA ref_rate_kHz = %"PRIi32"", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
 		if (status != SUCCESS) {
-			printf("autoconfig() error: %"PRIi32"\n", status);
-			continue;
+			printf("autoconfig() error: lane_rate_kHz %"PRIi32":\n", lane_rate_kHz);
+			return FAILURE;
 			//goto error_1;
 		}
 		// check HMC can calc ref_rate_khz, and get a pll2_freq
 		status = hmc7044_auto_init(hmc7044_device, tx_adxcvr->ref_rate_khz, &pll2_freq);
 		if(status < 0)
 			continue; // try another ref_rate_khz
+		printf(" HMC7044 pll2_freq = %"PRIi32" ", pll2_freq);
 
 		status = ad9172_autoconfig(dac_rate_kHz, pll2_freq);
 		if(status == SUCCESS)
-			break;
+			printf(" AD9172 success = %"PRIi32" ", pll2_freq);
 	}
 
 //	while(i < 4094 / 16)
