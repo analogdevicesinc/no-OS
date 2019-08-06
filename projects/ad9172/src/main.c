@@ -82,7 +82,7 @@ jesd_param_t ad9172_modes[AD9172_MAX_MODES] = {
 	{.jesd_L = 8, .jesd_M = 1, .jesd_F = 2, .jesd_S = 8, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 21 */
 };
 
-
+#define AUTOCONFIG
 
 int32_t ad9172_system_init(uint8_t mode) {
 
@@ -105,7 +105,9 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.spi_init = &hmc7044_spi_param,
 		.clkin_freq = {122880000, 0, 0, 0},
 		.vcxo_freq = 122880000,
-		//.pll2_freq = 2304000000,
+#ifndef AUTOCONFIG
+		.pll2_freq = 2304000000,
+#endif // AUTOCONFIG
 		.pll1_loop_bw = 200,
 		.sysref_timer_div = 1024,
 		.pulse_gen_mode = 0,
@@ -127,8 +129,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.high_density = ad9172_modes[mode].jesd_HD, //false,
 		.control_bits_per_sample = 0,
 		.subclass = 1,
-//		.device_clk_khz = 7372800 / 40,	/* (lane_clk_khz / 40) */
-//		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+#ifndef AUTOCONFIG
+		.device_clk_khz = 7372800 / 40,	/* (lane_clk_khz / 40) */
+		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+#endif // AUTOCONFIG
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -138,8 +142,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.out_clk_sel = 4,
 		.cpll_enable = 0,
 		.lpm_enable = 1,			/* lane rates up to 11.2 Gb/s for short reach */
-//		.lane_rate_khz = 7372800,   /* desired lane rate */
-//		.ref_rate_khz = 460800,		/* FPGA_CLK, output 12 of HMC 7044 */
+#ifndef AUTOCONFIG
+		.lane_rate_khz = 7372800,   /* desired lane rate */
+		.ref_rate_khz = 460800,		/* FPGA_CLK, output 12 of HMC 7044 */
+#endif
 	};
 
 	struct spi_init_param ad9172_spi_param = {
@@ -154,8 +160,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
 		.gpio_txen0 = 54 + 22,
 		.gpio_txen1 = 54 + 23,
-//		.dac_rate_khz = 2949120,		/* or sample rate */
-//		.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
+#ifndef AUTOCONFIG
+		.dac_rate_khz = 2949120,		/* or sample rate */
+		.dac_clkin_Hz = 92160000,		/* DAC_CLK, output 2 of HMC 7044 */
+#endif // AUTOCONFIG
 		.jesd_link_mode = 20,
 		.jesd_subclass = 1,
 		.dac_interpolation = 1,
@@ -186,6 +194,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 		//goto error_1;
 	}
 
+#ifdef AUTOCONFIG
 	uint32_t lane_rate_kHz = 7372800;
 	//uint32_t lane_rate_kHz =   3686400;
 	//uint32_t lane_rate_kHz = 7372880;
@@ -223,10 +232,10 @@ int32_t ad9172_system_init(uint8_t mode) {
 				if(status == SUCCESS) {
 					sol_no++;
 					printf("lane_rate_kHz = %"PRIi32" FPGA ref_rate_kHz = %"PRIi32"", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
-					printf(" HMC7044 pll2_freq = %"PRIi32" ", pll2_freq_khz);
+					printf(" HMC7044 pll2_freq_khz = %"PRIi32" ", pll2_freq_khz);
 					printf(" AD9172 ad9172_ref_rate_kHz = %"PRIi32" \n", ad9172_ref_rate_kHz);
 					//if (pll2_freq_khz == 2949120 && tx_adxcvr->ref_rate_khz == 368640 && ad9172_ref_rate_kHz == 737280)
-					if(sol_no == 2)
+					if(sol_no == 40)
 						found_sol = 1;
 				}
 			}
@@ -234,7 +243,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 	}
 
 	tx_jesd_init.lane_clk_khz = lane_rate_kHz;
-	tx_jesd_init.device_clk_khz = lane_rate_kHz / 40;
+	tx_jesd_init.device_clk_khz = lane_rate_kHz / 80;
 
 	tx_adxcvr_init.lane_rate_khz = lane_rate_kHz;
 	tx_adxcvr_init.ref_rate_khz = lane_rate_kHz;
@@ -245,6 +254,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 	hmc7044_device->channels[0].divider = dac_ch_divider;
 	hmc7044_device->channels[2].divider = fpga_ch_divider;
 	hmc7044_device->pll2_freq = pll2_freq_khz * 1000;
+#endif // AUTOCONFIG
 
 	status = hmc7044_setup(hmc7044_device);
 	if (status != SUCCESS) {

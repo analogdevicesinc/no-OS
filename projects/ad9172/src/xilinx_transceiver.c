@@ -727,6 +727,8 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	*refclk_khz = lane_rate_khz * conf->m_refclk_div * conf->D / conf->N_fb_div;
+	if(lane_rate_khz / 40 != *refclk_khz)
+		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	uint32_t clk25_div = DIV_ROUND_CLOSEST(*refclk_khz, 25000);
 	if(clk25_div > 25)

@@ -104,10 +104,13 @@ static int32_t ad9172_setup(struct ad9172_state *st)
 
 	printf("PLL Input rate %"PRIu64"\n", dac_clkin_Hz);
 
-	pll_mult = DIV_ROUND_CLOSEST(st->dac_rate_khz, dac_clkin_Hz / 1000);
-
-	ret = ad917x_set_dac_clk(ad917x_h, (u64)dac_clkin_Hz * pll_mult,
-				 1, dac_clkin_Hz);
+//	pll_mult = DIV_ROUND_CLOSEST(st->dac_rate_khz, dac_clkin_Hz / 1000);
+//
+//	ret = ad917x_set_dac_clk(ad917x_h, (u64)dac_clkin_Hz * pll_mult,
+//				 1, dac_clkin_Hz);
+	//todo cristi discuss this DAC PLL can have a better config here, is not necessary to have an int pll_mult
+		ret = ad917x_set_dac_clk(ad917x_h, (u64)st->dac_rate_khz * 1000,
+					 1, dac_clkin_Hz);
 	if (ret != 0) {
 		printf("ad917x_set_dac_clk failed (%"PRIi32")\n", ret);
 		return ret;
