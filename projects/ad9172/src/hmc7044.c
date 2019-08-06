@@ -603,7 +603,7 @@ int32_t hmc7044_auto_config(struct hmc7044_dev *device, uint32_t ref_rate_khz, u
 	if (divider == 0) {
 		divider = HMC7044_OUT_DIV_MIN;
 	} else {
-		if (divider <= HMC7044_OUT_DIV_MAX) {
+		if (divider < HMC7044_OUT_DIV_MAX) {
 			divider++;
 		}
 		else {

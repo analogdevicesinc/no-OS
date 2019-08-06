@@ -517,7 +517,7 @@ int32_t ad917x_set_clkout_config(ad917x_handle_t *h, uint8_t l_div)
 }
 
 
-int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *ref_rate_kHz, uint32_t *ch_divider)
+int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_t *ref_rate_kHz, uint32_t *ch_divider)
 {
 	//get DAC ref
 	extern uint16_t range_boundary[];// = {2910, 4140, 4370, 6210, 8740, 12420};
@@ -548,13 +548,13 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *r
 		m_div = 1;
 		n_div = 2;
 	} else {
-		if (m_div <= 4) {
+		if (m_div < 4) {
 			m_div++;
 		}
 		else
 		{
 			m_div = 1;
-			if (n_div <= 50) {
+			if (n_div < 50) {
 				n_div++;
 			}
 			else {
@@ -566,17 +566,17 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *r
 
 	uint32_t rem = (dac_rate_kHz * m_div * pll_vco_div) % (8 * n_div);
 	if(rem)
-		return ad917x_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 	uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
 	if ((dac_fref_khz < REF_CLK_FREQ_MHZ_MIN * 1000) ||
 			(dac_fref_khz > REF_CLK_FREQ_MHZ_MAX * 1000)) {
-		return ad917x_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 	}
 	//printf("found valid DAC fref \n");
-	uint32_t reminder = pll2_freq % dac_fref_khz;
+	uint32_t reminder = pll2_freq_khz % dac_fref_khz;
 	if(reminder)
-		return ad917x_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
-	uint32_t divider = pll2_freq / dac_fref_khz;
+		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
+	uint32_t divider = pll2_freq_khz / dac_fref_khz;
 	status = hmc7044_auto_config_check(divider);
 	if(!status) {
 		*ref_rate_kHz = dac_fref_khz;
@@ -584,7 +584,7 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *r
 		return API_ERROR_OK;
 	}
 
-	return ad917x_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+	return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 }
 
 int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
