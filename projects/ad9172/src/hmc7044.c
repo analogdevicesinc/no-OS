@@ -589,7 +589,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 
 /* check if HMC7044 can generate this FPGA fref */
-int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uint32_t *pll2_freq, uint32_t *ch_divider)
+int32_t hmc7044_auto_config(struct hmc7044_dev *device, uint32_t ref_rate_khz, uint32_t *pll2_freq, uint32_t *ch_divider)
 {
 	static uint32_t divider = 0;
 	uint32_t pll2_calc_freq;
@@ -615,7 +615,7 @@ int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uin
 	pll2_desired_freq_khz = ref_rate_khz * divider;
 	if (pll2_desired_freq_khz < HMC7044_LOW_VCO_MIN  ||
 			pll2_desired_freq_khz > HMC7044_HIGH_VCO_MAX)
-	return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+	return hmc7044_auto_config(device, ref_rate_khz, pll2_freq, ch_divider);
 
 	pll2_freq_doubler = 2;
 	status = rational_best_approximation(pll2_desired_freq_khz, vcxo_freq_khz * pll2_freq_doubler,
@@ -632,7 +632,7 @@ int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uin
 								HMC7044_N2_MAX, HMC7044_R2_MAX,
 								&n2[1], &r2[1]);
 		if(status < 0)
-			return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+			return hmc7044_auto_config(device, ref_rate_khz, pll2_freq, ch_divider);
 
 		if (abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * 2 * n2[0] / r2[0])) >
 			abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * n2[1] / r2[1]))) {
@@ -649,7 +649,7 @@ int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uin
 	}
 
 	if (n2[0] < HMC7044_N2_MIN)
-		return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+		return hmc7044_auto_config(device, ref_rate_khz, pll2_freq, ch_divider);
 
 	pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
 
@@ -659,11 +659,11 @@ int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uin
 
 		return SUCCESS;
 	}
-	return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+	return hmc7044_auto_config(device, ref_rate_khz, pll2_freq, ch_divider);
 }
 
 /* check if HMC7044 can generate this DAC fref */
-int32_t hmc7044_auto_init_check(uint32_t divider)
+int32_t hmc7044_auto_config_check(uint32_t divider)
 {
 	if((HMC7044_OUT_DIV_MIN < divider) && (divider < HMC7044_OUT_DIV_MAX)) {
 		return SUCCESS;
