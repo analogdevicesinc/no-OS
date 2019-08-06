@@ -106,6 +106,8 @@
 
 #define TX_CLK25_DIV			0x6a
 #define TX_CLK25_DIV_MASK		0x1f
+#define REFCLK_MIN_KHZ 60000
+#define REFCLK_MAX_KHZ 670000
 
 /**
  * @brief xilinx_xcvr_write
@@ -606,7 +608,8 @@ int32_t xilinx_xcvr_get_cpll_next_config(struct xilinx_xcvr *xcvr,
 	if(rem)
 		return xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 	*refclk_khz = vco_freq * conf->m_refclk_div / (conf->fb_div_N1 * conf->fb_div_N2);
-
+	if(*refclk_khz < REFCLK_MIN_KHZ || *refclk_khz > REFCLK_MAX_KHZ)
+		xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 	uint32_t clk25_div = DIV_ROUND_CLOSEST(*refclk_khz, 25000);
 	if(clk25_div > 25)
 		return xilinx_xcvr_get_cpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
@@ -727,7 +730,9 @@ int32_t xilinx_xcvr_get_qpll_next_config(struct xilinx_xcvr *xcvr,
 		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	*refclk_khz = lane_rate_khz * conf->m_refclk_div * conf->D / conf->N_fb_div;
-	if(lane_rate_khz / 40 != *refclk_khz)
+	if(*refclk_khz < REFCLK_MIN_KHZ || *refclk_khz > REFCLK_MAX_KHZ)
+		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
+	if (lane_rate_khz / 40 != *refclk_khz)
 		return xilinx_xcvr_get_qpll_next_config(xcvr, refclk_khz, lane_rate_khz, conf);
 
 	uint32_t clk25_div = DIV_ROUND_CLOSEST(*refclk_khz, 25000);

@@ -139,7 +139,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 		.name = "tx_adxcvr",
 		.base = TX_XCVR_BASEADDR,
 		.sys_clk_sel = 3,
-		.out_clk_sel = 4,
+		.out_clk_sel = 3,
 		.cpll_enable = 0,
 		.lpm_enable = 1,			/* lane rates up to 11.2 Gb/s for short reach */
 #ifndef AUTOCONFIG
@@ -234,8 +234,8 @@ int32_t ad9172_system_init(uint8_t mode) {
 					printf("lane_rate_kHz = %"PRIi32" FPGA ref_rate_kHz = %"PRIi32"", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
 					printf(" HMC7044 pll2_freq_khz = %"PRIi32" ", pll2_freq_khz);
 					printf(" AD9172 ad9172_ref_rate_kHz = %"PRIi32" \n", ad9172_ref_rate_kHz);
-					//if (pll2_freq_khz == 2949120 && tx_adxcvr->ref_rate_khz == 368640 && ad9172_ref_rate_kHz == 737280)
-					if(sol_no == 40)
+					//if (pll2_freq_khz == 2949120/* && tx_adxcvr->ref_rate_khz == 368640 && ad9172_ref_rate_kHz == 737280*/)
+					if(sol_no == 2)
 						found_sol = 1;
 				}
 			}
@@ -243,7 +243,7 @@ int32_t ad9172_system_init(uint8_t mode) {
 	}
 
 	tx_jesd_init.lane_clk_khz = lane_rate_kHz;
-	tx_jesd_init.device_clk_khz = lane_rate_kHz / 80;
+	tx_jesd_init.device_clk_khz = lane_rate_kHz / 40;
 
 	tx_adxcvr_init.lane_rate_khz = lane_rate_kHz;
 	tx_adxcvr_init.ref_rate_khz = lane_rate_kHz;
