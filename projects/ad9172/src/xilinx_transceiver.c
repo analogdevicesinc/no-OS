@@ -394,13 +394,9 @@ static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
  * @brief xilinx_xcvr_calc_cpll_config
  */
 int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_khz, uint32_t *lane_rate_khz,
+				     uint32_t refclk_khz, uint32_t lane_rate_khz,
 				     struct xilinx_xcvr_cpll_config *conf, uint32_t *out_div)
 {
-	uint32_t tmp_out_div;
-	struct xilinx_xcvr_cpll_config tmp_conf;
-	uint32_t tmp_lane_rate_khz;
-	uint32_t prev_lane_rate_khz = 0;
 	uint32_t n1, n2, d, m;
 	uint32_t vco_freq;
 	uint32_t vco_min;
@@ -432,25 +428,21 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 					if (vco_freq > vco_max || vco_freq < vco_min)
 						continue;
 
-					tmp_lane_rate_khz = refclk_khz * n1 * n2 *2 / (m * d);
-					if (abs(tmp_lane_rate_khz - *lane_rate_khz) < abs(prev_lane_rate_khz - *lane_rate_khz)) {
-						prev_lane_rate_khz = tmp_lane_rate_khz;
-						tmp_conf.m_refclk_div = m;
-						tmp_conf.fb_div_N1 = n1;
-						tmp_conf.fb_div_N2 = n2;
-						tmp_out_div = d;
+					if (refclk_khz / m / d == lane_rate_khz / (2 * n1 * n2)) {
+						if (conf) {
+							conf->m_refclk_div = m;
+							conf->fb_div_N1 = n1;
+							conf->fb_div_N2 = n2;
+						}
+
+						if (out_div)
+							*out_div = d;
+
+						return SUCCESS;
 					}
 				}
 			}
 		}
-	}
-	if (prev_lane_rate_khz) {
-		*lane_rate_khz = prev_lane_rate_khz;
-		if (conf)
-			memcpy(conf, &tmp_conf, sizeof(struct xilinx_xcvr_cpll_config));
-		if (out_div)
-			*out_div = tmp_out_div;
-		return SUCCESS;
 	}
 
 	return FAILURE;
@@ -460,13 +452,9 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
  * @brief xilinx_xcvr_calc_qpll_config
  */
 int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_khz, uint32_t *lane_rate_khz,
+				     uint32_t refclk_khz, uint32_t lane_rate_khz,
 				     struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div)
 {
-	uint32_t tmp_out_div;
-	struct xilinx_xcvr_qpll_config tmp_conf;
-	uint32_t tmp_lane_rate_khz;
-	uint32_t prev_lane_rate_khz = 0;
 	uint32_t n, d, m;
 	uint32_t vco_freq;
 	uint32_t band;
@@ -522,25 +510,21 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 				else
 					continue;
 
-				tmp_lane_rate_khz = (refclk_khz * N[n] )/ (m * d);
-				if (abs(tmp_lane_rate_khz - *lane_rate_khz) < abs(prev_lane_rate_khz - *lane_rate_khz)) {
-					prev_lane_rate_khz = tmp_lane_rate_khz;
-					tmp_conf.m_refclk_div = m;
-					tmp_conf.N_fb_div = N[n];
-					tmp_conf.band = band;
-					tmp_conf.D = d;
-					tmp_out_div = d;
+				if (refclk_khz / m / d == lane_rate_khz / N[n]) {
+
+					if (conf) {
+						conf->m_refclk_div = m;
+						conf->N_fb_div = N[n];
+						conf->band = band;
+					}
+
+					if (out_div)
+						*out_div = d;
+
+					return SUCCESS;
 				}
 			}
 		}
-	}
-	if (prev_lane_rate_khz) {
-		*lane_rate_khz = prev_lane_rate_khz;
-		if (conf)
-			memcpy(conf, &tmp_conf, sizeof(struct xilinx_xcvr_qpll_config));
-		if (out_div)
-			*out_div = tmp_out_div;
-		return SUCCESS;
 	}
 
 	return FAILURE;

@@ -516,6 +516,77 @@ int32_t ad917x_set_clkout_config(ad917x_handle_t *h, uint8_t l_div)
 	return API_ERROR_OK;
 }
 
+
+int32_t ad9172_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *ref_rate_kHz, uint32_t *ch_divider)
+{
+	//get DAC ref
+	extern uint16_t range_boundary[];// = {2910, 4140, 4370, 6210, 8740, 12420};
+	uint32_t dac_clk_freq_mhz = dac_rate_kHz / 1000;
+	static uint8_t m_div = 0, n_div = 0;
+	uint8_t pll_vco_div;
+	int32_t status;
+
+	if ((dac_rate_kHz * 1000 > DAC_CLK_FREQ_MAX_HZ ) ||
+				(dac_rate_kHz * 1000 < DAC_CLK_FREQ_MIN_HZ)) {
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		return API_ERROR_NOT_SUPPORTED;
+	}
+	if ((dac_clk_freq_mhz > range_boundary[0]) &&
+		(dac_clk_freq_mhz < range_boundary[1])) {
+		pll_vco_div = 3;
+	} else if ((dac_clk_freq_mhz > range_boundary[2]) &&
+		   (dac_clk_freq_mhz < range_boundary[3])) {
+		pll_vco_div = 2;
+	} else if ((dac_clk_freq_mhz > range_boundary[4]) &&
+		   (dac_clk_freq_mhz < range_boundary[5])) {
+		pll_vco_div = 1;
+	} else {
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		return API_ERROR_NOT_SUPPORTED;
+	}
+	if (m_div == 0) {
+		m_div = 1;
+		n_div = 2;
+	} else {
+		if (m_div <= 4) {
+			m_div++;
+		}
+		else
+		{
+			m_div = 1;
+			if (n_div <= 50) {
+				n_div++;
+			}
+			else {
+				m_div = 0;
+				return API_ERROR_NOT_SUPPORTED;
+			}
+		}
+	}
+
+	uint32_t rem = (dac_rate_kHz * m_div * pll_vco_div) % (8 * n_div);
+	if(rem)
+		return ad9172_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+	uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
+	if ((dac_fref_khz < REF_CLK_FREQ_MHZ_MIN * 1000) ||
+			(dac_fref_khz > REF_CLK_FREQ_MHZ_MAX * 1000)) {
+		return ad9172_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+	}
+	//printf("found valid DAC fref \n");
+	uint32_t reminder = pll2_freq % dac_fref_khz;
+	if(reminder)
+		return ad9172_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+	uint32_t divider = pll2_freq / dac_fref_khz;
+	status = hmc7044_auto_init_check(divider);
+	if(!status) {
+		*ref_rate_kHz = dac_fref_khz;
+		*ch_divider = divider;
+		return API_ERROR_OK;
+	}
+
+	return API_ERROR_NOT_SUPPORTED;ad9172_autoconfig(dac_rate_kHz, pll2_freq, ref_rate_kHz, ch_divider);
+}
+
 int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
 			   uint64_t dac_clk_freq_hz, uint8_t dac_pll_en, uint64_t ref_clk_freq_hz)
 {

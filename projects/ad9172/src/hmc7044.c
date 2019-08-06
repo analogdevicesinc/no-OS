@@ -295,7 +295,7 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-static int32_t hmc7044_setup(struct hmc7044_dev *dev)
+int32_t hmc7044_setup(struct hmc7044_dev *dev)
 {
 	struct hmc7044_chan_spec *chan;
 	bool high_vco_en;
@@ -589,66 +589,77 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 
 /* check if HMC7044 can generate this FPGA fref */
-int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uint32_t *pll2_freq)
+int32_t hmc7044_auto_init(struct hmc7044_dev *device, uint32_t ref_rate_khz, uint32_t *pll2_freq, uint32_t *ch_divider)
 {
+	static uint32_t divider = 0;
 	uint32_t pll2_calc_freq;
 	uint32_t vcxo_freq_khz = device->vcxo_freq / 1000;
-	uint32_t n2[2], r2[2], divider;
+	uint32_t n2[2], r2[2];
 	uint8_t pll2_freq_doubler;
 	uint32_t pll2_desired_freq_khz;
 	int32_t status;
 
-	for(divider = HMC7044_OUT_DIV_MIN; divider <= HMC7044_OUT_DIV_MAX; divider++) {
 
-		pll2_desired_freq_khz = ref_rate_khz * divider;
-
-		if(HMC7044_LOW_VCO_MIN < pll2_desired_freq_khz || pll2_desired_freq_khz > HMC7044_HIGH_VCO_MAX)
-			continue;
-
-		pll2_freq_doubler = 2;
-		status = rational_best_approximation(pll2_desired_freq_khz, vcxo_freq_khz * pll2_freq_doubler,
-							HMC7044_N2_MAX, HMC7044_R2_MAX,
-							&n2[0], &r2[0]);
-
-		if(status < 0)
-			pll2_calc_freq = 0;
-		else
-			pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
-
-		if (pll2_desired_freq_khz != pll2_calc_freq) {
-			status = rational_best_approximation(pll2_desired_freq_khz, vcxo_freq_khz,
-									HMC7044_N2_MAX, HMC7044_R2_MAX,
-									&n2[1], &r2[1]);
-			if(status < 0)
-				continue;
-
-			if (abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * 2 * n2[0] / r2[0])) >
-				abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * n2[1] / r2[1]))) {
-				n2[0] = n2[1];
-				r2[0] = r2[1];
-				pll2_freq_doubler = 1;
-				pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
-			}
+	if (divider == 0) {
+		divider = HMC7044_OUT_DIV_MIN;
+	} else {
+		if (divider <= HMC7044_OUT_DIV_MAX) {
+			divider++;
 		}
-
-		while ((n2[0] < HMC7044_N2_MIN) && (r2[0] <= HMC7044_R2_MAX / 2)) {
-			n2[0] *= 2;
-			r2[0] *= 2;
-		}
-
-		if (n2[0] < HMC7044_N2_MIN)
+		else {
+			divider = 0;
 			return FAILURE;
-
-		pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
-
-		if(pll2_desired_freq_khz == pll2_calc_freq) {
-			*pll2_freq = pll2_calc_freq;
-
-			return SUCCESS;
 		}
 	}
 
-	return FAILURE;
+	pll2_desired_freq_khz = ref_rate_khz * divider;
+	if (pll2_desired_freq_khz < HMC7044_LOW_VCO_MIN  ||
+			pll2_desired_freq_khz > HMC7044_HIGH_VCO_MAX)
+	return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+
+	pll2_freq_doubler = 2;
+	status = rational_best_approximation(pll2_desired_freq_khz, vcxo_freq_khz * pll2_freq_doubler,
+						HMC7044_N2_MAX, HMC7044_R2_MAX,
+						&n2[0], &r2[0]);
+
+	if(status < 0)
+		pll2_calc_freq = 0;
+	else
+		pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
+
+	if (pll2_desired_freq_khz != pll2_calc_freq) {
+		status = rational_best_approximation(pll2_desired_freq_khz, vcxo_freq_khz,
+								HMC7044_N2_MAX, HMC7044_R2_MAX,
+								&n2[1], &r2[1]);
+		if(status < 0)
+			return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+
+		if (abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * 2 * n2[0] / r2[0])) >
+			abs((int)pll2_desired_freq_khz - (int)(vcxo_freq_khz * n2[1] / r2[1]))) {
+			n2[0] = n2[1];
+			r2[0] = r2[1];
+			pll2_freq_doubler = 1;
+			pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
+		}
+	}
+
+	while ((n2[0] < HMC7044_N2_MIN) && (r2[0] <= HMC7044_R2_MAX / 2)) {
+		n2[0] *= 2;
+		r2[0] *= 2;
+	}
+
+	if (n2[0] < HMC7044_N2_MIN)
+		return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
+
+	pll2_calc_freq = pll2_freq_doubler * vcxo_freq_khz * n2[0] / r2[0];
+
+	if(pll2_desired_freq_khz == pll2_calc_freq) {
+		*pll2_freq = pll2_calc_freq;
+		*ch_divider = divider;
+
+		return SUCCESS;
+	}
+	return hmc7044_auto_init(device, ref_rate_khz, pll2_freq, ch_divider);
 }
 
 /* check if HMC7044 can generate this DAC fref */

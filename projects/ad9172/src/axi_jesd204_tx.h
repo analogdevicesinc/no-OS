@@ -98,6 +98,6 @@ int32_t axi_jesd204_tx_lane_clk_enable(struct axi_jesd204_tx *jesd);
 int32_t axi_jesd204_tx_lane_clk_disable(struct axi_jesd204_tx *jesd);
 uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd);
 int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
-			    const struct jesd204_tx_init *init, uint32_t lane_rate);
+	    const struct jesd204_tx_init *init);
 int32_t axi_jesd204_tx_remove(struct axi_jesd204_tx *jesd);
 #endif

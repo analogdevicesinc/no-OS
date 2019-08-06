@@ -333,7 +333,7 @@ int32_t ad9172_init(ad9172_dev **device,
 	if (ret < 0)
 		goto error_3;
 
-
+	st->dac_rate_khz = init_param->dac_rate_khz;
 	st->dac_clkin_Hz = init_param->dac_clkin_Hz;
 	st->jesd_link_mode = init_param->jesd_link_mode;
 	st->jesd_subclass = init_param->jesd_subclass;
@@ -352,17 +352,25 @@ int32_t ad9172_init(ad9172_dev **device,
 	st->dac_h.syncoutb = st->syncoutb_type;
 	st->dac_h.sysref = st->sysref_coupling;
 
+	ret = ad9172_setup(st);
+	if (ret < 0) {
+		printf("Failed to setup device\n");
+		goto error_3;
+	}
+
+	printf("%s : AD936x Rev %d successfully initialized\n", __func__, 1);
 	*device = dev;
+
 	return 0;
 
-	error_3:
-		spi_remove(dev->spi_desc);
-	error_2:
-		free(st);
-	error_1:
-		free(dev);
+error_3:
+	spi_remove(dev->spi_desc);
+error_2:
+	free(st);
+error_1:
+	free(dev);
 
-		return ret;
+	return ret;
 }
 
 int32_t ad9172_auto_init(ad9172_dev *device, uint32_t lane_rate)

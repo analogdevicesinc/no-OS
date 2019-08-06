@@ -174,7 +174,7 @@ int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, bool lpm);
 int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_hz, uint32_t *lane_rate_khz,
+				     uint32_t refclk_hz, uint32_t lane_rate_khz,
 				     struct xilinx_xcvr_cpll_config *conf, uint32_t *out_div);
 int32_t xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 				     uint32_t drp_port, struct xilinx_xcvr_cpll_config *conf);
@@ -184,7 +184,7 @@ int32_t xilinx_xcvr_cpll_calc_lane_rate(struct xilinx_xcvr *xcvr,
 					uint32_t refclk_khz, const struct xilinx_xcvr_cpll_config *conf,
 					uint32_t out_div);
 int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
-				     uint32_t refclk_khz, uint32_t *lane_rate_khz,
+				     uint32_t refclk_khz, uint32_t lane_rate_khz,
 				     struct xilinx_xcvr_qpll_config *conf, uint32_t *out_div);
 int32_t xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 				     uint32_t drp_port, struct xilinx_xcvr_qpll_config *conf);

@@ -328,7 +328,7 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
  * @brief axi_jesd204_tx_init
  */
 int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
-			    const struct jesd204_tx_init *init, uint32_t lane_rate)
+			    const struct jesd204_tx_init *init)
 {
 	struct axi_jesd204_tx *jesd;
 	uint32_t magic;
@@ -341,8 +341,8 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 
 	jesd->base = init->base;
 	jesd->name = init->name;
-	jesd->device_clk_khz = lane_rate / 40;
-	jesd->lane_clk_khz = lane_rate;
+	jesd->device_clk_khz = init->device_clk_khz;
+	jesd->lane_clk_khz = init->lane_clk_khz;
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_MAGIC, &magic);
 	if (magic != JESD204_TX_MAGIC) {
