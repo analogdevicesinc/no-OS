@@ -386,7 +386,9 @@ uint8_t ad7124_compute_crc8(uint8_t * p_buf, uint8_t buf_size)
 
 	while(buf_size) {
 		for(i = 0x80; i != 0; i >>= 1) {
-			if(((crc & 0x80) != 0) != ((*p_buf & i) != 0)) { /* MSB of CRC register XOR input Bit from Data */
+			bool cmp1 = (crc & 0x80) != 0;
+			bool cmp2 = (*p_buf & i) != 0;
+			if(cmp1 != cmp2) { /* MSB of CRC register XOR input Bit from Data */
 				crc <<= 1;
 				crc ^= AD7124_CRC8_POLYNOMIAL_REPRESENTATION;
 			} else {
