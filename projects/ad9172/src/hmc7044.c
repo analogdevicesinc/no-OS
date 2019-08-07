@@ -605,6 +605,12 @@ int32_t hmc7044_auto_config(struct hmc7044_dev *device, uint32_t ref_rate_khz, u
 	} else {
 		if (divider < HMC7044_OUT_DIV_MAX) {
 			divider++;
+			if ((divider != 1) && (divider != 3) && (divider != 5) && (divider % 2))
+				divider++;
+			if(divider > HMC7044_OUT_DIV_MAX) {
+				divider = 0;
+				return FAILURE;
+			}
 		}
 		else {
 			divider = 0;
@@ -666,7 +672,8 @@ int32_t hmc7044_auto_config(struct hmc7044_dev *device, uint32_t ref_rate_khz, u
 int32_t hmc7044_auto_config_check(uint32_t divider)
 {
 	if((HMC7044_OUT_DIV_MIN < divider) && (divider < HMC7044_OUT_DIV_MAX)) {
-		return SUCCESS;
+		if ((divider == 1) || (divider == 3) || (divider == 5) || 0 == (divider % 2))
+			return SUCCESS;
 	}
 
 	return FAILURE;

@@ -225,17 +225,20 @@ int32_t ad9172_system_init(uint8_t mode) {
 				break; // try another FPGA ref_rate_khz
 
 			while(!found_sol) {
-
+				if(sol_no == 1)
+					printf("found");
 				status = ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, &ad9172_ref_rate_kHz, &dac_ch_divider);
 				if(status < 0)
 					break; // try another HMC config
 				if(status == SUCCESS) {
 					sol_no++;
-					printf("lane_rate_kHz = %"PRIi32" FPGA ref_rate_kHz = %"PRIi32"", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
-					printf(" HMC7044 pll2_freq_khz = %"PRIi32" ", pll2_freq_khz);
-					printf(" AD9172 ad9172_ref_rate_kHz = %"PRIi32" \n", ad9172_ref_rate_kHz);
+					printf("sol_no:%"PRIi32"  ", sol_no);
+					printf("lane_rate_kHz=%"PRIi32"  FPGA_ref_rate_kHz=%"PRIi32"  ", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
+					printf("HMC7044 pll2_freq_khz=%"PRIi32"  ", pll2_freq_khz);
+					printf("AD9172 ad9172_ref_rate_kHz=%"PRIi32" \n", ad9172_ref_rate_kHz);
 					//if (pll2_freq_khz == 2949120/* && tx_adxcvr->ref_rate_khz == 368640 && ad9172_ref_rate_kHz == 737280*/)
-					if(sol_no == 2)
+					//if (pll2_freq_khz == 2764800/* && tx_adxcvr->ref_rate_khz == 368640 && ad9172_ref_rate_kHz == 737280*/)
+					if(sol_no == 3)
 						found_sol = 1;
 				}
 			}
