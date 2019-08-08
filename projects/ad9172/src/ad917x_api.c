@@ -38,6 +38,8 @@
  *=====================================*/
 static uint8_t api_revision[3] = {1, 1, 1};
 uint16_t range_boundary[6] = {2910, 4140, 4370, 6210, 8740, 12420};
+/* https://www.analog.com/media/en/technical-documentation/data-sheets/AD9172.pdf pg. Table 2. pg. 5 */
+uint32_t fref_domains[8] = {25000, 770000, 50000, 1540000, 75000, 2310000, 100000, 3080000};
 
 /*DataSheet Table 41*/
 /*Engineering Sample Data*/
@@ -519,8 +521,6 @@ int32_t ad917x_set_clkout_config(ad917x_handle_t *h, uint8_t l_div)
 
 int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_t *ref_rate_kHz, uint32_t *ch_divider)
 {
-	//get DAC ref
-	extern uint16_t range_boundary[];// = {2910, 4140, 4370, 6210, 8740, 12420};
 	uint32_t dac_clk_freq_mhz = dac_rate_kHz / 1000;
 	uint16_t target_pfd, fvco_freq_mhz = 0x0;
 	static uint8_t m_div = 0, n_div = 0;
@@ -585,6 +585,9 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	if ((dac_fref_khz / 1000) % target_pfd)
 		m_div_tmp++;
 	if(m_div_tmp != m_div)
+		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
+
+	if(dac_fref_khz < fref_domains[m_div - 1] || dac_fref_khz > fref_domains[m_div])
 		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 
 	if ((dac_fref_khz < REF_CLK_FREQ_MHZ_MIN * 1000) ||
