@@ -187,17 +187,11 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 		goto error_2;
 	}
 
-	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
-
-	if (status != SUCCESS) {
-		printf("hmc7044_init() error: %"PRIi32"\n", status);
-	//	continue;
-		//goto error_1;
-	}
-
 #ifdef AUTOCONFIG
 
+
 	uint32_t data_rate_kHz = (lane_rate_kHz * ad9172_modes[mode].jesd_L * 8) / (ad9172_modes[mode].jesd_M * ad9172_modes[mode].jesd_NP * 10);
+	uint32_t LMFK_rate_kHz = data_rate_kHz / (ad9172_modes[mode].jesd_K * ad9172_modes[mode].jesd_L);
 	uint32_t dac_rate_kHz = data_rate_kHz * 1;
 	uint32_t ad9172_ref_rate_kHz = 0;
 	uint32_t fpga_ch_divider;
@@ -219,7 +213,9 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 		}
 		while(!found_sol) {
 			// check HMC can calc ref_rate_khz, and get a pll2_freq
-			status = hmc7044_auto_config(hmc7044_device, tx_adxcvr->ref_rate_khz, &pll2_freq_khz, &fpga_ch_divider);
+			status = hmc7044_auto_config(hmc7044_param.vcxo_freq, tx_adxcvr->ref_rate_khz, &pll2_freq_khz, &fpga_ch_divider);
+			if(pll2_freq_khz % LMFK_rate_kHz)
+				break;
 			if(status < 0)
 				break; // try another FPGA ref_rate_khz
 
@@ -229,6 +225,10 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 				status = ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, &ad9172_ref_rate_kHz, &dac_ch_divider);
 				if(status < 0)
 					break; // try another HMC config
+
+
+
+
 				if(status == SUCCESS) {
 					sol_no++;
 					printf("sol_no:%"PRIi32"  ", sol_no);
@@ -239,7 +239,7 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 //					if (pll2_freq_khz == 2211840)
 //					if (pll2_freq_khz == 2580480)
 //					if (pll2_freq_khz == 2949120)
-//					if(sol_no != 10)
+//					if(sol_no != 2)
 //						continue;
 //						found_sol = 1;
 
@@ -254,12 +254,16 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 					ad9172_param.dac_rate_khz = dac_rate_kHz;
 					ad9172_param.dac_clkin_Hz = ad9172_ref_rate_kHz * 1000;
 
-					hmc7044_device->channels[0].divider = dac_ch_divider;
-					hmc7044_device->channels[2].divider = fpga_ch_divider;
-					hmc7044_device->pll2_freq = pll2_freq_khz * 1000;
+					hmc7044_param.channels[0].divider = dac_ch_divider;
+					hmc7044_param.channels[2].divider = fpga_ch_divider;
+					hmc7044_param.channels[1].divider = pll2_freq_khz / LMFK_rate_kHz;
+					hmc7044_param.channels[3].divider = pll2_freq_khz / LMFK_rate_kHz;
+					hmc7044_param.pll2_freq = pll2_freq_khz * 1000;
+
 				#endif // AUTOCONFIG
 
-					status = hmc7044_setup(hmc7044_device);
+					status = hmc7044_init(&hmc7044_device, &hmc7044_param);
+
 					if (status != SUCCESS) {
 						printf("hmc7044_init() error: %"PRIi32"\n", status);
 						goto error_1;
@@ -308,7 +312,13 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 						goto error_4;
 					}
 
-
+//					ad9172_remove(ad9172_device);
+//
+//					axi_jesd204_tx_remove(tx_jesd);
+//
+//					adxcvr_remove(tx_adxcvr);
+//
+//					hmc7044_remove(hmc7044_device);
 
 				}
 			}
