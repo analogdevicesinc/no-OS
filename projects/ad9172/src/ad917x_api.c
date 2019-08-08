@@ -522,6 +522,7 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	//get DAC ref
 	extern uint16_t range_boundary[];// = {2910, 4140, 4370, 6210, 8740, 12420};
 	uint32_t dac_clk_freq_mhz = dac_rate_kHz / 1000;
+	uint16_t target_pfd, fvco_freq_mhz = 0x0;
 	static uint8_t m_div = 0, n_div = 0;
 	uint8_t pll_vco_div;
 	int32_t status;
@@ -544,6 +545,16 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
 		return API_ERROR_NOT_SUPPORTED;
 	}
+
+	fvco_freq_mhz = (dac_clk_freq_mhz * pll_vco_div);
+	if ((fvco_freq_mhz >= 9960) && (fvco_freq_mhz <= 10870))
+		target_pfd = 220; /* less than 225 */
+	else
+		target_pfd = 500; /* less than 770 */
+
+
+
+
 	if (m_div == 0) {
 		m_div = 1;
 		n_div = 2;
@@ -568,6 +579,14 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	if(rem)
 		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 	uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
+
+
+	uint8_t m_div_tmp = (dac_fref_khz / 1000) / target_pfd;
+	if ((dac_fref_khz / 1000) % target_pfd)
+		m_div_tmp++;
+	if(m_div_tmp != m_div)
+		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
+
 	if ((dac_fref_khz < REF_CLK_FREQ_MHZ_MIN * 1000) ||
 			(dac_fref_khz > REF_CLK_FREQ_MHZ_MAX * 1000)) {
 		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
