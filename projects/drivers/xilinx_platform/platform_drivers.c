@@ -43,6 +43,7 @@
 #include <stdlib.h>
 #include <sleep.h>
 #include "platform_drivers.h"
+#include "xil_drivers.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -59,36 +60,47 @@ int32_t i2c_init(struct i2c_desc **desc,
 {
 #ifdef XIIC_H
 	i2c_desc *dev;
+	xil_i2c_desc *xil_dev;
+	xil_i2c_init_param *xil_param;
 	int32_t ret;
 
 	dev = calloc(1, sizeof *dev);
 	if(!dev)
 		return FAILURE;
 
-	dev->type = param->type;
-	dev->id = param->id;
+	dev->extra = calloc(1, sizeof *xil_dev);
+	if(!(dev->extra)){
+		free(dev);
+		return FAILURE;
+	}
+
+	xil_dev = dev->extra;
+	xil_param = param->extra;
+
+	xil_dev->type = xil_param->type;
+	xil_dev->id = xil_param->id;
 	dev->max_speed_hz = param->max_speed_hz;
 	dev->slave_address = param->slave_address;
 
-	dev->config = XIic_LookupConfig(dev->id);
-	if (dev->config == NULL)
+	xil_dev->config = XIic_LookupConfig(xil_dev->id);
+	if (xil_dev->config == NULL)
 		goto error;
 
-	ret = XIic_CfgInitialize(&dev->instance, dev->config,
-				 dev->config->BaseAddress);
+	ret = XIic_CfgInitialize(&xil_dev->instance, xil_dev->config,
+				 xil_dev->config->BaseAddress);
 	if(ret != 0)
 		goto error;
 
 	Xil_ExceptionInit();
 
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_IRQ_INT,
-				     XIic_InterruptHandler, &dev->instance);
+				     XIic_InterruptHandler, &xil_dev->instance);
 
-	ret = XIic_Start(&dev->instance);
+	ret = XIic_Start(&xil_dev->instance);
 	if(ret != 0)
 		goto error;
 
-	ret = XIic_SetAddress(&dev->instance, XII_ADDR_TO_SEND_TYPE,
+	ret = XIic_SetAddress(&xil_dev->instance, XII_ADDR_TO_SEND_TYPE,
 			      dev->slave_address);
 	if(ret != 0)
 		goto error;
@@ -114,8 +126,10 @@ int32_t i2c_remove(struct i2c_desc *desc)
 {
 #ifdef XIIC_H
 	int32_t ret;
+	xil_i2c_desc *xil_desc;
+	xil_desc = desc->extra;
 
-	ret = XIic_Stop(&desc->instance);
+	ret = XIic_Stop(&xil_desc->instance);
 	if(ret != 0)
 		return FAILURE;
 
@@ -140,7 +154,9 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t stop_bit)
 {
 #ifdef XIIC_H
-	return XIic_Send(desc->instance.BaseAddress, desc->slave_address, data,
+	xil_i2c_desc *xil_desc;
+	xil_desc = desc->extra;
+	return XIic_Send(xil_desc->instance.BaseAddress, desc->slave_address, data,
 			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
 #else
 	return SUCCESS;
@@ -163,7 +179,10 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t stop_bit)
 {
 #ifdef XIIC_H
-	return XIic_Recv(desc->instance.BaseAddress, desc->slave_address, data,
+	xil_i2c_desc *xil_desc;
+	xil_desc = desc->extra;
+
+	return XIic_Recv(xil_desc->instance.BaseAddress, desc->slave_address, data,
 			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
 #else
 	return SUCCESS;
@@ -180,29 +199,40 @@ int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
 	spi_desc *descriptor;
+	xil_spi_desc *xil_descriptor;
+	xil_spi_init_param *xil_param;
 	int32_t ret;
 
-	descriptor = (struct spi_desc *) calloc(1, sizeof(*descriptor));
+	descriptor = calloc(1, sizeof *descriptor);
 	if (!descriptor)
 		return FAILURE;
 
+	descriptor->extra = calloc(1, sizeof *xil_descriptor);
+	if (!(descriptor->extra)){
+		free(descriptor);
+		return FAILURE;
+	}
+	
+	xil_descriptor = descriptor->extra;
+	xil_param = param->extra;
+
 	descriptor->mode = param->mode;
 	descriptor->chip_select = param->chip_select;
-	descriptor->flags = param->flags;
+	xil_descriptor->flags = xil_param->flags;
 
 #ifdef _XPARAMETERS_PS_H_
-	descriptor->config = XSpiPs_LookupConfig(param->id);
-	if (descriptor->config == NULL)
+	xil_descriptor->config = XSpiPs_LookupConfig(xil_param->id);
+	if (xil_descriptor->config == NULL)
 		goto error;
 
-	ret = XSpiPs_CfgInitialize(&descriptor->instance,
-				   descriptor->config, descriptor->config->BaseAddress);
+	ret = XSpiPs_CfgInitialize(&xil_descriptor->instance,
+				   xil_descriptor->config, xil_descriptor->config->BaseAddress);
 	if (ret != 0)
 		goto error;
 
-	XSpiPs_SetOptions(&descriptor->instance,
+	XSpiPs_SetOptions(&xil_descriptor->instance,
 			  XSPIPS_MASTER_OPTION |
-			  ((descriptor->flags & SPI_CS_DECODE) ?
+			  ((xil_descriptor->flags & SPI_CS_DECODE) ?
 			   XSPIPS_DECODE_SSELECT_OPTION : 0) |
 			  XSPIPS_FORCE_SSELECT_OPTION |
 			  ((descriptor->mode & SPI_CPOL) ?
@@ -210,25 +240,25 @@ int32_t spi_init(struct spi_desc **desc,
 			  ((descriptor->mode & SPI_CPHA) ?
 			   XSPIPS_CLK_PHASE_1_OPTION : 0));
 
-	XSpiPs_SetClkPrescaler(&descriptor->instance,
+	XSpiPs_SetClkPrescaler(&xil_descriptor->instance,
 			       XSPIPS_CLK_PRESCALE_64);
 
-	XSpiPs_SetSlaveSelect(&descriptor->instance, 0xf);
+	XSpiPs_SetSlaveSelect(&xil_descriptor->instance, 0xf);
 #else
-	ret = XSpi_Initialize(&descriptor->instance, param->id);
+	ret = XSpi_Initialize(&xil_descriptor->instance, xil_param->id);
 	if (ret != 0)
 		goto error;
 
-	XSpi_SetOptions(&descriptor->instance,
+	XSpi_SetOptions(&xil_descriptor->instance,
 			XSP_MASTER_OPTION |
 			((descriptor->mode & SPI_CPOL) ?
 			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 			((descriptor->mode & SPI_CPHA) ?
 			 XSP_CLK_PHASE_1_OPTION : 0));
 
-	XSpi_Start(&descriptor->instance);
+	XSpi_Start(&xil_descriptor->instance);
 
-	XSpi_IntrGlobalDisable(&descriptor->instance);
+	XSpi_IntrGlobalDisable(&xil_descriptor->instance);
 #endif
 
 	*desc = descriptor;
@@ -267,10 +297,13 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number)
 {
+	xil_spi_desc *xil_desc;
+	xil_desc = desc->extra;
+
 #ifdef _XPARAMETERS_PS_H_
-	XSpiPs_SetOptions(&desc->instance,
+	XSpiPs_SetOptions(&xil_desc->instance,
 			  XSPIPS_MASTER_OPTION |
-			  ((desc->flags & SPI_CS_DECODE) ?
+			  ((xil_desc->flags & SPI_CS_DECODE) ?
 			   XSPIPS_DECODE_SSELECT_OPTION : 0) |
 			  XSPIPS_FORCE_SSELECT_OPTION |
 			  ((desc->mode & SPI_CPOL) ?
@@ -278,25 +311,25 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			  ((desc->mode & SPI_CPHA) ?
 			   XSPIPS_CLK_PHASE_1_OPTION : 0));
 
-	XSpiPs_SetSlaveSelect(&desc->instance,
+	XSpiPs_SetSlaveSelect(&xil_desc->instance,
 			      desc->chip_select);
-	XSpiPs_PolledTransfer(&desc->instance,
+	XSpiPs_PolledTransfer(&xil_desc->instance,
 			      data, data, bytes_number);
 #else
-	XSpi_SetOptions(&desc->instance,
+	XSpi_SetOptions(&xil_desc->instance,
 			XSP_MASTER_OPTION |
 			((desc->mode & SPI_CPOL) ?
 			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 			((desc->mode & SPI_CPHA) ?
 			 XSP_CLK_PHASE_1_OPTION : 0));
 
-	XSpi_SetSlaveSelect(&desc->instance,
+	XSpi_SetSlaveSelect(&xil_desc->instance,
 			    0x01 << desc->chip_select);
 
 	XSpi_Transfer(&desc->instance,
 		      data, data, bytes_number);
 #endif
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -309,23 +342,32 @@ int32_t gpio_get(struct gpio_desc **desc,
 		 uint8_t gpio_number)
 {
 	gpio_desc *descriptor;
+	xil_gpio_desc *xil_descriptor;
 	int32_t ret;
 
-	descriptor = (struct gpio_desc *) malloc(sizeof(*descriptor));
+	descriptor = calloc(1, sizeof *descriptor);
 	if (!descriptor)
 		return FAILURE;
 
+	descriptor->extra = calloc(1, sizeof *xil_descriptor);
+	if (!(descriptor->extra)){
+		free(descriptor);
+		return FAILURE;
+	}
+
+	xil_descriptor = descriptor->extra;
+
 #ifdef _XPARAMETERS_PS_H_
-	descriptor->config = XGpioPs_LookupConfig(0);
-	if (descriptor->config == NULL)
+	xil_descriptor->config = XGpioPs_LookupConfig(0);
+	if (xil_descriptor->config == NULL)
 		goto error;
 
-	ret = XGpioPs_CfgInitialize(&descriptor->instance,
-				    descriptor->config, descriptor->config->BaseAddr);
+	ret = XGpioPs_CfgInitialize(&xil_descriptor->instance,
+				    xil_descriptor->config, xil_descriptor->config->BaseAddr);
 	if (ret != 0)
 		goto error;
 #else
-	ret = XGpio_Initialize(&descriptor->instance, 0);
+	ret = XGpio_Initialize(&xil_descriptor->instance, 0);
 	if (ret != 0)
 		goto error;
 #endif
@@ -367,7 +409,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -381,12 +423,15 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
+	xil_gpio_desc *xil_desc;
+	xil_desc = desc->extra;
+
 #ifdef _XPARAMETERS_PS_H_
-	XGpioPs_SetDirectionPin(&desc->instance, desc->number, 1);
+	XGpioPs_SetDirectionPin(&xil_desc->instance, desc->number, 1);
 
-	XGpioPs_SetOutputEnablePin(&desc->instance, desc->number, 1);
+	XGpioPs_SetOutputEnablePin(&xil_desc->instance, desc->number, 1);
 
-	XGpioPs_WritePin(&desc->instance, desc->number, value);
+	XGpioPs_WritePin(&xil_desc->instance, desc->number, value);
 #else
 	uint8_t pin = desc->number;
 	uint8_t channel;
@@ -398,16 +443,16 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 	} else
 		channel = 1;
 
-	reg_val = XGpio_GetDataDirection(&desc->instance, channel);
+	reg_val = XGpio_GetDataDirection(&xil_desc->instance, channel);
 	reg_val &= ~(1 << pin);
-	XGpio_SetDataDirection(&desc->instance, channel, reg_val);
+	XGpio_SetDataDirection(&xil_desc->instance, channel, reg_val);
 
-	reg_val = XGpio_DiscreteRead(&desc->instance, channel);
+	reg_val = XGpio_DiscreteRead(&xil_desc->instance, channel);
 	if(value)
 		reg_val |= (1 << pin);
 	else
 		reg_val &= ~(1 << pin);
-	XGpio_DiscreteWrite(&desc->instance, channel, reg_val);
+	XGpio_DiscreteWrite(&xil_desc->instance, channel, reg_val);
 #endif
 
 	return SUCCESS;
@@ -432,7 +477,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -446,8 +491,11 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
+	xil_gpio_desc *xil_desc;
+	xil_desc = desc->extra;
+
 #ifdef _XPARAMETERS_PS_H_
-	XGpioPs_WritePin(&desc->instance, desc->number, value);
+	XGpioPs_WritePin(&xil_desc->instance, desc->number, value);
 #else
 	uint8_t pin = desc->number;
 	uint8_t channel;
@@ -459,15 +507,15 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 	} else
 		channel = 1;
 
-	reg_val = XGpio_DiscreteRead(&desc->instance, channel);
+	reg_val = XGpio_DiscreteRead(&xil_desc->instance, channel);
 	if(value)
 		reg_val |= (1 << pin);
 	else
 		reg_val &= ~(1 << pin);
-	XGpio_DiscreteWrite(&desc->instance, channel, reg_val);
+	XGpio_DiscreteWrite(&xil_desc->instance, channel, reg_val);
 #endif
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -489,7 +537,7 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
