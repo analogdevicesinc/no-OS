@@ -291,6 +291,66 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
 }
 
 /**
+ * Recalculate rate corresponding to a channel.
+ * @param dev - The device structure.
+ * @param chan - Channel number.
+ * @param rate - Channel rate.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
+				 uint32_t *rate)
+{
+	if (chan > dev->num_channels)
+		return FAILURE;
+
+	*rate = dev->pll2_freq / dev->channels[chan].divider;
+
+	return SUCCESS;
+}
+
+/**
+ * Calculate closest possible rate
+ * @param rate - The desired rate.
+ * @param parent_rate - The parent rate.
+ * @return The closest possible rate of desired rate.
+ */
+uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
+				uint32_t parent_rate)
+{
+	uint32_t div = hmc7044_calc_out_div(rate, parent_rate);
+
+	return DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+}
+
+/**
+ * Set channel rate.
+ * @param dev - The device structure.
+ * @param chan - Channel number.
+ * @param rate - Channel rate.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
+			      uint32_t rate)
+{
+	uint32_t div;
+	int32_t ret;
+
+	if (chan >= dev->num_channels)
+		return FAILURE;
+
+	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
+	dev->channels[chan].divider = div;
+
+	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan),
+			    HMC7044_DIV_LSB(div));
+	if(ret < 0)
+		return ret;
+
+	return hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan),
+			     HMC7044_DIV_MSB(div));
+}
+
+/**
  * Setup the device.
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
@@ -486,7 +546,6 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	/* Program the output channels */
 	for (i = 0; i < dev->num_channels; i++) {
 		chan = &dev->channels[i];
-
 		if (chan->num >= HMC7044_NUM_CHAN || chan->disable)
 			continue;
 
