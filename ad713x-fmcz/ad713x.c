@@ -57,7 +57,7 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_spi_reg_read(ad713x_dev *dev,
+int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
 			    uint8_t reg_addr,
 			    uint8_t *reg_data)
 {
@@ -80,7 +80,7 @@ int32_t ad713x_spi_reg_read(ad713x_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_spi_reg_write(ad713x_dev *dev,
+int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t reg_data)
 {
@@ -103,7 +103,7 @@ int32_t ad713x_spi_reg_write(ad713x_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_spi_write_mask(ad713x_dev *dev,
+int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t mask,
 			      uint8_t data)
@@ -127,8 +127,8 @@ int32_t ad713x_spi_write_mask(ad713x_dev *dev,
  * 					 HIGH_POWER
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_set_power_mode(ad713x_dev *dev,
-			      ad713x_power_mode mode)
+int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
+			      enum ad713x_power_mode mode)
 {
 	int32_t ret;
 
@@ -148,7 +148,7 @@ int32_t ad713x_set_power_mode(ad713x_dev *dev,
  * 					 false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_dout0_enable(ad713x_dev *dev,
+int32_t ad713x_dout0_enable(struct ad713x_dev *dev,
 			    bool dout0_en)
 {
 	int32_t ret;
@@ -174,9 +174,9 @@ int32_t ad713x_dout0_enable(ad713x_dev *dev,
  * 						 CRC_8
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_set_out_data_frame(ad713x_dev *dev,
-				  ad713x_adc_data_len adc_data_len,
-				  ad713x_crc_header crc_header)
+int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
+				  enum ad713x_adc_data_len adc_data_len,
+				  enum ad713x_crc_header crc_header)
 {
 	int32_t ret;
 	uint8_t id;
@@ -210,8 +210,8 @@ int32_t ad713x_set_out_data_frame(ad713x_dev *dev,
  * 					 CH_AVG_MODE
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_dout_format_config(ad713x_dev *dev,
-				  ad713x_doutx_format format)
+int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
+				  enum ad713x_doutx_format format)
 {
 	int32_t ret;
 
@@ -231,7 +231,7 @@ int32_t ad713x_dout_format_config(ad713x_dev *dev,
  * 						 false
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_mag_phase_clk_delay(ad713x_dev *dev,
+int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
 				   bool clk_delay_en)
 {
 	int32_t ret;
@@ -260,9 +260,9 @@ int32_t ad713x_mag_phase_clk_delay(ad713x_dev *dev,
  * 							 CH3
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_dig_filter_sel_ch(ad713x_dev *dev,
-				 ad713x_dig_filter_sel filter,
-				 ad713x_channels ch)
+int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
+				 enum ad713x_dig_filter_sel filter,
+				 enum ad713x_channels ch)
 {
 	int32_t ret;
 
@@ -281,10 +281,10 @@ int32_t ad713x_dig_filter_sel_ch(ad713x_dev *dev,
  *                     parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad713x_init(ad713x_dev **device,
-		    ad713x_init_param init_param)
+int32_t ad713x_init(struct ad713x_dev **device,
+		    struct ad713x_init_param init_param)
 {
-	ad713x_dev *dev;
+	struct ad713x_dev *dev;
 	uint8_t buf[3];
 	int32_t ret;
 
@@ -372,7 +372,7 @@ int32_t ad713x_init(ad713x_dev **device,
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
-int32_t ad713x_remove(ad713x_dev *dev)
+int32_t ad713x_remove(struct ad713x_dev *dev)
 {
 	int32_t ret;
 

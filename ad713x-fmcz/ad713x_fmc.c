@@ -83,8 +83,10 @@
 spi_eng_init_param spi_eng_init_params = {
 	AD7134_SPI_ENGINE_BASEADDR,    // adc_baseaddr
 	AD7134_SPI_CS,                 // chip_select
+	0,                             // cs delay
 	SPI_MODE_1,                    // spi_config
 	2000000,                       // spi_clk_hz
+	2000000,                       // spi_clk_hz_reg_access
 	100000000,                     // ref_clk_hz
 	1,                             // spi_offload_rx_support_en
 	AD7134_DMA_BASEADDR,           // spi_offload_rx_dma_baseaddr
@@ -92,7 +94,7 @@ spi_eng_init_param spi_eng_init_params = {
 	AD7134_DMA_BASEADDR,           // spi_offload_tx_dma_baseaddr
 };
 
-ad713x_init_param ad713x_default_init_param = {
+struct ad713x_init_param ad713x_default_init_param = {
 	/* SPI */
 	{
 		PS7_SPI,
@@ -142,15 +144,11 @@ ad713x_init_param ad713x_default_init_param = {
 	ID_AD7134, 		// dev_id
 	ADC_24_BIT_DATA, 	// adc_data_len
 	NO_CRC,			// crc_header
-	HIGH_POWER,		// power_mode
-	true,			// dout0_en
-	QUAD_CH_DC,		// format
-	true,			// clk_delay_en
 };
 
 int main()
 {
-	ad713x_dev *dev;
+	struct ad713x_dev *dev;
 	spi_eng_desc *desc;
 	uint32_t *offload_data;
 	spi_eng_msg *msg;
@@ -163,7 +161,7 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	ad713x_init(&dev, ad713x_default_init_param);
+	ad713x_init(&dev, &ad713x_default_init_param);
 
 	spi_eng_init(&desc, spi_eng_init_params);
 

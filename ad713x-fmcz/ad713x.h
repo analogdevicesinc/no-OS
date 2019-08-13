@@ -637,50 +637,56 @@
 #define QUAD_CH_DC QUAD_CH_PO /* This macro is to ensure backwards compatibility. */
 /* Can be removed if the aplication is updated. */
 
-typedef enum ad713x_supported_dev_ids {
+enum ad713x_supported_dev_ids {
 	ID_AD7132,
 	ID_AD7134,
 	ID_AD7136
-} ad713x_supported_dev_ids;
+};
 
-typedef enum {
-	LOW_POWER = 0x01,
+enum ad713x_power_mode {
+	LOW_POWER,
 	HIGH_POWER
-} ad713x_power_mode;
+};
 
-typedef enum {
+enum ad713x_adc_data_len {
 	ADC_16_BIT_DATA,
 	ADC_24_BIT_DATA,
 	ADC_32_BIT_DATA,
 	INVALID
-} ad713x_adc_data_len;
+};
 
-typedef enum {
+enum ad713x_crc_header {
 	NO_CRC,
 	CRC_6,
 	CRC_8
-} ad713x_crc_header;
+};
 
-typedef enum {
+enum ad713x_doutx_format {
 	SINGLE_CH_DC,
 	DUAL_CH_DC,
-	QUAD_CH_DC,
+	QUAD_CH_PO,
 	CH_AVG_MODE
-} ad713x_doutx_format;
+};
 
-typedef enum {
+enum ad713x_dig_filter_sel {
 	FIR,
 	SINC6,
 	SINC3,
 	SINC3_50_60_REJ
-} ad713x_dig_filter_sel;
+};
 
-typedef enum {
+enum ad713x_channels {
 	CH0,
 	CH1,
 	CH2,
 	CH3
-} ad713x_channels;
+};
+
+enum ad717x_mpc_clkdel {
+	DELAY_NONE,
+	DELAY_1_CLOCKS,
+	DELAY_2_CLOCKS
+};
 
 static const int ad713x_output_data_frame[3][9][2] = {
 	{
@@ -711,7 +717,7 @@ static const int ad713x_output_data_frame[3][9][2] = {
 	},
 };
 
-typedef struct {
+struct ad713x_dev {
 	/* SPI */
 	spi_desc        	*spi_desc;
 	/* GPIO */
@@ -725,12 +731,12 @@ typedef struct {
 	gpio_desc		*gpio_pnd1;
 	gpio_desc		*gpio_pnd2;
 	/* Device Settings */
-	ad713x_supported_dev_ids dev_id;
-	ad713x_adc_data_len	adc_data_len;
-	ad713x_crc_header	crc_header;
-} ad713x_dev;
+	enum ad713x_supported_dev_ids dev_id;
+	enum ad713x_adc_data_len	adc_data_len;
+	enum ad713x_crc_header	crc_header;
+};
 
-typedef struct {
+struct ad713x_init_param {
 	/* SPI */
 	spi_init_param      	spi_init;
 	/* GPIO */
@@ -744,41 +750,41 @@ typedef struct {
 	gpio_init_param		gpio_pnd1;
 	gpio_init_param		gpio_pnd2;
 	/* Device Settings */
-	ad713x_supported_dev_ids dev_id;
-	ad713x_adc_data_len	adc_data_len;
-	ad713x_crc_header	crc_header;
-	ad713x_power_mode 	power_mode;
+	enum ad713x_supported_dev_ids dev_id;
+	enum ad713x_adc_data_len	adc_data_len;
+	enum ad713x_crc_header	crc_header;
+	enum ad713x_power_mode 	power_mode;
 	bool			dout0_en;
-	ad713x_doutx_format	format;
+	enum ad713x_doutx_format	format;
 	bool 			clk_delay_en;
-} ad713x_init_param;
+};
 
-int32_t ad713x_spi_reg_read(ad713x_dev *dev,
+int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
 			    uint8_t reg_addr,
 			    uint8_t *reg_data);
-int32_t ad713x_spi_reg_write(ad713x_dev *dev,
+int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t reg_data);
-int32_t ad713x_spi_write_mask(ad713x_dev *dev,
+int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t mask,
 			      uint8_t data);
-int32_t ad713x_set_power_mode(ad713x_dev *dev,
-			      ad713x_power_mode mode);
-int32_t ad713x_dout0_enable(ad713x_dev *dev,
+int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
+			      enum ad713x_power_mode mode);
+int32_t ad713x_dout0_enable(struct ad713x_dev *dev,
 			    bool dout0_en);
-int32_t ad713x_set_out_data_frame(ad713x_dev *dev,
-				  ad713x_adc_data_len adc_data_len,
-				  ad713x_crc_header crc_header);
-int32_t ad713x_dout_format_config(ad713x_dev *dev,
-				  ad713x_doutx_format format);
-int32_t ad713x_mag_phase_clk_delay(ad713x_dev *dev,
+int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
+				  enum ad713x_adc_data_len adc_data_len,
+				  enum ad713x_crc_header crc_header);
+int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
+				  enum ad713x_doutx_format format);
+int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
 				   bool clk_delay_en);
-int32_t ad713x_dig_filter_sel_ch(ad713x_dev *dev,
-				 ad713x_dig_filter_sel filter,
-				 ad713x_channels	ch);
-int32_t ad713x_init(ad713x_dev **device,
-		    ad713x_init_param init_param);
-int32_t ad713x_remove(ad713x_dev *dev);
+int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
+				 enum ad713x_dig_filter_sel filter,
+				 enum ad713x_channels	ch);
+int32_t ad713x_init(struct ad713x_dev **device,
+		    struct ad713x_init_param init_param);
+int32_t ad713x_remove(struct ad713x_dev *dev);
 #endif /* SRC_AD713X_H_ */
 
