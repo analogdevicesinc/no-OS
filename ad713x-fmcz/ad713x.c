@@ -167,9 +167,9 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 		if((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
 		    (crc_header == ad713x_output_data_frame[id][i][1])) {
 			ret = ad713x_spi_write_mask(dev,
-						    AD713X_REG_DEVICE_CONFIG3,
-						    AD713X_DEV_CONFIG3_FRAME_MSK,
-						    AD713X_DEV_CONFIG3_FRAME_MODE(i));
+						    AD713X_REG_DATA_PACKET_CONFIG,
+						    AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
+						    AD713X_DATA_PACKET_CONFIG_FRAME_MODE(i));
 			return ret;
 		}
 		i++;
@@ -185,7 +185,7 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
  * 		   Quad channel parallel output mode. Channel data averaging mode.
  * 			Accepted values: SINGLE_CH_DC
  * 					 DUAL_CH_DC
- * 					 QUAD_CH_DC
+ * 					 QUAD_CH_PO
  * 					 CH_AVG_MODE
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -195,9 +195,9 @@ int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
 	int32_t ret;
 
 	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_DEVICE_CONFIG4,
-				    AD713X_DEV_CONFIG4_FORMAT_MSK,
-				    AD713X_DEV_CONFIG4_FORMAT_MODE(format));
+				    AD713X_REG_DIGITAL_INTERFACE_CONFIG,
+				    AD713X_DIG_INT_CONFIG_FORMAT_MSK,
+				    AD713X_DIG_INT_CONFIG_FORMAT_MODE(format));
 
 	return ret;
 }
