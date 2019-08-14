@@ -497,3 +497,68 @@ int main(void)
 
 	return 0;
 }
+
+#define get_link_rate
+#define link_get_next_ref_rate(x, y) 0
+#define xcvr_get_next_ref_rate(x, y) 0
+#define device_get_next_ref_rate(x, y) 0
+#define device_clk_force_rate(ch, x, y) x-1
+#define device_clk_set_rate(ch, x) x-1
+
+typedef enum channels{
+	CHAN_LINK,
+	CHAN_XCVR_REF,
+	CHAN_DEVICE1_REF,
+}channels;
+
+int32_t autoconfig(uint32_t lane_rate)
+{
+	uint32_t xcvr_ref_rate, device_ref_rate, link_rate, clk_pll, link_ref_rate;
+	int32_t ret;
+	bool sol_foud = 0;
+
+	clk_pll = 0;
+	sol_foud = 0;
+
+	xcvr_ref_rate = 0;
+	device_ref_rate = 0;
+	link_ref_rate = 0;
+
+	while (!sol_foud)
+	{
+
+		do {
+			ret = xcvr_get_next_ref_rate(lane_rate, &xcvr_ref_rate);
+			if (ret < 0)
+				break;
+			ret = device_clk_force_rate(CHAN_XCVR_REF, xcvr_ref_rate, &clk_pll);		/* set clock chip with new PLL value */
+		} while(!ret);
+
+//		link_rate = lane_rate / 40;
+//		ret = device_clk_set_rate(CHAN_LINK, link_rate);
+
+		do {
+			ret = link_get_next_ref_rate(lane_rate, &link_ref_rate);
+			if (ret < 0)
+				return FAILURE;
+			ret = device_clk_set_rate(CHAN_LINK, link_ref_rate);
+		} while(!ret);
+		if(ret < 0)
+			continue;
+
+
+		do {
+			ret = device_get_next_ref_rate(lane_rate, &device_ref_rate);
+			if (ret < 0)
+				break;
+			ret = device_clk_set_rate(CHAN_DEVICE1_REF, device_ref_rate);	/* set clock chip with new div value */
+		} while(!ret);
+		if(ret < 0)
+			continue;
+
+
+		sol_foud = true;
+	}
+
+	return SUCCESS;
+}
