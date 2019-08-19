@@ -43,8 +43,9 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#include "platform_drivers.h"
 #include "ad713x.h"
+#include "delay.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -68,6 +69,8 @@ int32_t ad713x_spi_reg_read(struct ad713x_dev *dev,
 	buf[1] = 0x00;
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 2);
+	if(ret != 0)
+		return ret;
 	*reg_data = buf[1];
 
 	return ret;
@@ -84,15 +87,12 @@ int32_t ad713x_spi_reg_write(struct ad713x_dev *dev,
 			     uint8_t reg_addr,
 			     uint8_t reg_data)
 {
-	int32_t ret;
 	uint8_t buf[2];
 
 	buf[0] = reg_addr;
 	buf[1] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-
-	return ret;
+	return spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -112,11 +112,11 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 	int32_t ret;
 
 	ret = ad713x_spi_reg_read(dev, reg_addr, &reg_data);
+	if(ret != 0)
+		return ret;
 	reg_data &= ~mask;
 	reg_data |= data;
-	ret |= ad713x_spi_reg_write(dev, reg_addr, reg_data);
-
-	return ret;
+	return ad713x_spi_reg_write(dev, reg_addr, reg_data);
 }
 
 /**
@@ -130,14 +130,10 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
 			      enum ad713x_power_mode mode)
 {
-	int32_t ret;
-
-	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_DEVICE_CONFIG,
-				    AD713X_DEV_CONFIG_PWR_MODE_MSK,
-				    AD713X_DEV_CONFIG_PWR_MODE(mode));
-
-	return ret;
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_DEVICE_CONFIG,
+				     AD713X_DEV_CONFIG_PWR_MODE_MSK,
+				     AD713X_DEV_CONFIG_PWR_MODE(mode));
 }
 
 /**
@@ -157,7 +153,6 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 				  enum ad713x_adc_data_len adc_data_len,
 				  enum ad713x_crc_header crc_header)
 {
-	int32_t ret;
 	uint8_t id;
 	uint8_t i = 0;
 
@@ -166,11 +161,10 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 	while (ad713x_output_data_frame[id][i][0] != INVALID) {
 		if((adc_data_len == ad713x_output_data_frame[id][i][0]) &&
 		    (crc_header == ad713x_output_data_frame[id][i][1])) {
-			ret = ad713x_spi_write_mask(dev,
-						    AD713X_REG_DATA_PACKET_CONFIG,
-						    AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
-						    AD713X_DATA_PACKET_CONFIG_FRAME_MODE(i));
-			return ret;
+			return ad713x_spi_write_mask(dev,
+						     AD713X_REG_DATA_PACKET_CONFIG,
+						     AD713X_DATA_PACKET_CONFIG_FRAME_MSK,
+						     AD713X_DATA_PACKET_CONFIG_FRAME_MODE(i));
 		}
 		i++;
 	}
@@ -192,14 +186,10 @@ int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
 				  enum ad713x_doutx_format format)
 {
-	int32_t ret;
-
-	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_DIGITAL_INTERFACE_CONFIG,
-				    AD713X_DIG_INT_CONFIG_FORMAT_MSK,
-				    AD713X_DIG_INT_CONFIG_FORMAT_MODE(format));
-
-	return ret;
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_DIGITAL_INTERFACE_CONFIG,
+				     AD713X_DIG_INT_CONFIG_FORMAT_MSK,
+				     AD713X_DIG_INT_CONFIG_FORMAT_MODE(format));
 }
 
 /**
@@ -283,12 +273,120 @@ int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
 				 enum ad713x_dig_filter_sel filter,
 				 enum ad713x_channels ch)
 {
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_CHAN_DIG_FILTER_SEL,
+				     AD713X_DIGFILTER_SEL_CH_MSK(ch),
+				     AD713X_DIGFILTER_SEL_CH_MODE(filter, ch));
+}
+
+/**
+ * Enable/Disable CLKOUT output.
+ *
+ * @param [in] dev - The device structure.
+ * @param [in] enable - true to enable the clkout output;
+ *                      false to disable the clkout output.
+ *
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t ad713x_clkout_output_en(struct ad713x_dev *dev, bool enable)
+{
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_DEVICE_CONFIG1,
+				     AD713X_DEV_CONFIG1_CLKOUT_EN_MSK,
+				     AD713X_DEV_CONFIG1_CLKOUT_EN_MODE(enable));
+}
+
+/**
+ * Enable/Disable reference gain correction.
+ *
+ * @param [in] dev - The device structure.
+ * @param [in] enable - true to enable the reference gain correction;
+ *                      false to disable the reference gain correction.
+ *
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t ad713x_ref_gain_correction_en(struct ad713x_dev *dev, bool enable)
+{
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_DEVICE_CONFIG1,
+				     AD713X_DEV_CONFIG1_REF_GAIN_CORR_EN_MSK,
+				     AD713X_DEV_CONFIG1_REF_GAIN_CORR_EN_MODE(enable));
+}
+
+/**
+ * Select the wideband filter bandwidth for a channel.
+ *
+ * The option is relative to ODR, so it's a fraction of it.
+ *
+ * @param [in] dev - The device structure.
+ * @param [in] ch - Number of the channel to which to set the wideband filter
+ *                  option.
+ * @param [in] wb_opt - Option to set the wideband filter:
+ *                      Values are:
+ *                          0 - bandwidth of 0.443 * ODR;
+ *                          1 - bandwidth of 0.10825 * ODR.
+ *
+ * @return 0 in case of success, error code otherwise.
+ */
+int32_t ad713x_wideband_bw_sel(struct ad713x_dev *dev,
+			       enum ad713x_channels ch, uint8_t wb_opt)
+{
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_FIR_BW_SEL,
+				     AD713X_FIR_BW_SEL_CH_MSK(ch),
+				     AD713X_FIR_BW_SEL_CH_MODE(wb_opt, ch));
+}
+
+/**
+ * Initialize GPIO driver handlers for the GPIOs in the system.
+ *
+ * ad713x_init() helper function.
+ *
+ * @param [out] dev - AD713X device handler.
+ * @param [in] init_param - Pointer to the initialization structure.
+ *
+ * @return 0 in case of success, error code otherwise.
+ */
+static int32_t ad713x_init_gpio(struct ad713x_dev *dev,
+				struct ad713x_init_param *init_param)
+{
+
 	int32_t ret;
 
-	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_CHAN_DIG_FILTER_SEL,
-				    AD713X_DIGFILTER_SEL_CH_MSK(ch),
-				    AD713X_DIGFILTER_SEL_CH_MODE(filter, ch));
+	ret = gpio_get(&dev->gpio_mode, init_param->gpio_mode);
+	if(ret != 0)
+		return ret;
+	ret = gpio_get(&dev->gpio_dclkmode, init_param->gpio_dclkmode);
+	if(ret != 0)
+		return ret;
+	ret = gpio_get(&dev->gpio_dclkio, init_param->gpio_dclkio);
+	if(ret != 0)
+		return ret;
+	ret = gpio_get(&dev->gpio_resetn, init_param->gpio_resetn);
+	if(ret != 0)
+		return ret;
+	return gpio_get(&dev->gpio_pnd, init_param->gpio_pnd);
+}
+
+/**
+ * Initialize the wideband filter bandwidth for every channel.
+ *
+ * ad713x_init() helper function.
+ *
+ * @param [in] dev - AD713X device handler.
+ *
+ * @return 0 in case of success, error code otherwise.
+ */
+static int32_t ad713x_init_chan_bw(struct ad713x_dev *dev)
+{
+	int8_t i;
+	int32_t ret;
+
+	for(i = CH3; i >= 0; i--) {
+		ret = ad713x_wideband_bw_sel(dev, i, 0);
+		if(ret != 0)
+			break;
+	}
 
 	return ret;
 }
@@ -301,86 +399,89 @@ int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad713x_init(struct ad713x_dev **device,
-		    struct ad713x_init_param init_param)
+		    struct ad713x_init_param *init_param)
 {
 	struct ad713x_dev *dev;
 	uint8_t buf[3];
 	int32_t ret;
 
-	dev = (ad713x_dev *)malloc(sizeof(*dev));
+	dev = calloc(1, sizeof *dev);
 	if (!dev)
 		return -1;
 
 	/* SPI */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param->spi_init_prm);
+	if(ret != 0)
+		goto error;
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_mode1, init_param.gpio_mode1);
-	ret |= gpio_get(&dev->gpio_mode2, init_param.gpio_mode2);
-	ret |= gpio_get(&dev->gpio_dclkmode, init_param.gpio_dclkmode);
-	ret |= gpio_get(&dev->gpio_dclkio1, init_param.gpio_dclkio1);
-	ret |= gpio_get(&dev->gpio_dclkio2, init_param.gpio_dclkio2);
-	ret |= gpio_get(&dev->gpio_resetn1, init_param.gpio_resetn1);
-	ret |= gpio_get(&dev->gpio_resetn2, init_param.gpio_resetn2);
-	ret |= gpio_get(&dev->gpio_pnd1, init_param.gpio_pnd1);
-	ret |= gpio_get(&dev->gpio_pnd2, init_param.gpio_pnd2);
+	ret = ad713x_init_gpio(dev, init_param);
+	if(ret != 0)
+		goto error;
 	/*
 	 * Tie this pin to IOVDD for master mode operation,
 	 * tie this pin to IOGND for slave mode operation.
 	 */
-	gpio_set_value(dev->gpio_mode1, GPIO_HIGH);
-	gpio_set_value(dev->gpio_mode1, GPIO_LOW);
+	gpio_direction_output(dev->gpio_mode, init_param->mode_master_nslave);
 	/* Tie this pin low to ground to make DLCK operating in gated mode */
-	gpio_set_value(dev->gpio_dclkmode, GPIO_LOW);
+	gpio_direction_output(dev->gpio_dclkmode, init_param->dclkmode_free_ngated);
 	/*
 	 * Tie this pin high to make DCLK an output,
 	 * tie this pin low to make DLCK an input.
 	 */
-	gpio_set_value(dev->gpio_dclkio1, GPIO_LOW);
-	gpio_set_value(dev->gpio_dclkio2, GPIO_LOW);
-
-	/* Get the ADCs out of reset state */
-	gpio_set_value(dev->gpio_resetn1, GPIO_HIGH);
-	gpio_set_value(dev->gpio_resetn2, GPIO_HIGH);
+	gpio_direction_output(dev->gpio_dclkio, init_param->dclkio_out_nin);
 
 	/* Get the ADCs out of power down state */
-	gpio_set_value(dev->gpio_pnd1, GPIO_HIGH);
-	gpio_set_value(dev->gpio_pnd2, GPIO_HIGH);
+	gpio_direction_output(dev->gpio_pnd, init_param->pnd);
+
+	/* Reset to configure pins */
+	gpio_direction_output(dev->gpio_resetn, false);
+	mdelay(100);
+	gpio_set_value(dev->gpio_resetn, true);
 
 	mdelay(100);
 
-	dev->dev_id = init_param.dev_id;
+	dev->dev_id = init_param->dev_id;
 
 	/* Disable CRC checks */
 	buf[0] = AD713X_REG_DIAGNOSTIC_CONTROL;
 	buf[1] = 0x00;
 	buf[2] = 0x9C;
-	ret |= spi_write_and_read(dev->spi_desc, buf, 3);
 
-	ret |= ad713x_set_power_mode(dev, init_param.power_mode);
-	ret |= ad713x_set_out_data_frame(dev,
-					 init_param.adc_data_len,
-					 init_param.crc_header);
-	ret |= ad713x_dout_format_config(dev,
-					 init_param.format);
-	ret |= ad713x_mag_phase_clk_delay(dev, init_param.clk_delay_en);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	if(ret != 0)
+		goto error;
 
-	/*
-	 * ODR/MCLK ratio. In master mode where ODR pin is configured as output,
-	 * user can program this register to set the ODR output frequency based on
-	 * MCLK frequency.
-	 */
-	ad713x_spi_reg_write(dev, AD713X_REG_ODR_MCLK_RATIO_MSB, 0x10);
-	/*
-	 * Master slave transfer bit. When this bit is set, data that has been
-	 * entered into the master registers will be transferred to the slave.
-	 */
-	ad713x_spi_reg_write(dev, AD713X_REG_TRANSFER_REGISTER, 0x01);
+	ret = ad713x_set_out_data_frame(dev,
+					init_param->adc_data_len,
+					init_param->crc_header);
+	if(ret != 0)
+		goto error;
+	ret = ad713x_dout_format_config(dev,
+					init_param->format);
+	if(ret != 0)
+		goto error;
+	ret = ad713x_mag_phase_clk_delay(dev, init_param->clk_delay_en);
+	if(ret != 0)
+		goto error;
+	ret = ad713x_clkout_output_en(dev, true);
+	if(ret != 0)
+		goto error;
+	ret = ad713x_ref_gain_correction_en(dev, true);
+	if(ret != 0)
+		goto error;
+	ret = ad713x_init_chan_bw(dev);
+	if(ret != 0)
+		goto error;
 
 	*device = dev;
 
 	if (!ret)
 		printf("ad713x successfully initialized\n");
 	mdelay(1000);
+
+	return ret;
+error:
+	ad713x_remove(dev);
 
 	return ret;
 }
@@ -394,16 +495,27 @@ int32_t ad713x_remove(struct ad713x_dev *dev)
 {
 	int32_t ret;
 
+	if(!dev)
+		return 0;
+
 	ret = spi_remove(dev->spi_desc);
-	ret |= gpio_remove(dev->gpio_dclkio1);
-	ret |= gpio_remove(dev->gpio_dclkio2);
-	ret |= gpio_remove(dev->gpio_dclkmode);
-	ret |= gpio_remove(dev->gpio_mode1);
-	ret |= gpio_remove(dev->gpio_mode2);
-	ret |= gpio_remove(dev->gpio_pnd1);
-	ret |= gpio_remove(dev->gpio_pnd2);
-	ret |= gpio_remove(dev->gpio_resetn1);
-	ret |= gpio_remove(dev->gpio_resetn2);
+	if(ret != 0)
+		return ret;
+	ret = gpio_remove(dev->gpio_dclkio);
+	if(ret != 0)
+		return ret;
+	ret = gpio_remove(dev->gpio_dclkmode);
+	if(ret != 0)
+		return ret;
+	ret = gpio_remove(dev->gpio_mode);
+	if(ret != 0)
+		return ret;
+	ret = gpio_remove(dev->gpio_pnd);
+	if(ret != 0)
+		return ret;
+	ret = gpio_remove(dev->gpio_resetn);
+	if(ret != 0)
+		return ret;
 
 	free(dev);
 

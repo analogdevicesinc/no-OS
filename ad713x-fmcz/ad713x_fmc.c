@@ -47,10 +47,13 @@
 #include <stdlib.h>
 #include <xil_cache.h>
 #include <xparameters.h>
+#include <math.h>
 #include "xil_printf.h"
-#include "spi_engine.h"
-#include "platform_drivers.h"
+#include "spi_engine_offload.h"
 #include "ad713x.h"
+#include "xilinx_platform_drivers.h"
+#include "spi.h"
+#include "delay.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -58,7 +61,8 @@
 #define SPI_DEVICE_ID                   XPAR_PS7_SPI_0_DEVICE_ID
 #define AD7134_DMA_BASEADDR             XPAR_AXI_AD7134_DMA_BASEADDR
 #define AD7134_SPI_ENGINE_BASEADDR      XPAR_DUAL_AD7134_AXI_BASEADDR
-#define AD7134_SPI_CS                   0
+#define AD7134_1_SPI_CS                   0
+#define AD7134_2_SPI_CS                   1
 #define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
 #define GPIO_OFFSET			54
 #define GPIO_RESETN_1			GPIO_OFFSET + 32
@@ -79,124 +83,143 @@
 #define GPIO_DCLKIO_2			GPIO_OFFSET + 47
 #define GPIO_PINBSPI			GPIO_OFFSET + 48
 #define GPIO_DCLKMODE			GPIO_OFFSET + 49
-
-spi_eng_init_param spi_eng_init_params = {
-	AD7134_SPI_ENGINE_BASEADDR,    // adc_baseaddr
-	AD7134_SPI_CS,                 // chip_select
-	0,                             // cs delay
-	SPI_MODE_1,                    // spi_config
-	2000000,                       // spi_clk_hz
-	2000000,                       // spi_clk_hz_reg_access
-	100000000,                     // ref_clk_hz
-	1,                             // spi_offload_rx_support_en
-	AD7134_DMA_BASEADDR,           // spi_offload_rx_dma_baseaddr
-	1,                             // spi_offload_tx_support_en
-	AD7134_DMA_BASEADDR,           // spi_offload_tx_dma_baseaddr
-};
-
-struct ad713x_init_param ad713x_default_init_param = {
-	/* SPI */
-	{
-		PS7_SPI,
-		SPI_DEVICE_ID,
-		100000000,
-		SPI_MODE_0,
-		AD7134_SPI_CS,
-	},
-	/* GPIO */
-	/* gpio_mode1 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_MODE_1
-	},
-	/* gpio_mode2 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_MODE_2
-	},
-	/* gpio_dclkmode */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_DCLKMODE
-	},
-	/* gpio_dclkio1 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_DCLKIO_1
-	},
-	/* gpio_dclkio2 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_DCLKIO_2
-	},
-	/* gpio_resetn1 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_RESETN_1
-	},
-	/* gpio_resetn2 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_RESETN_2
-	},
-	/* gpio_pnd1 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_PDN_1
-	},
-	/* gpio_pnd2 */
-	{
-		PS7_GPIO, GPIO_DEVICE_ID, GPIO_PDN_2
-	},
-	/* Configuration */
-	ID_AD7134, 		// dev_id
-	ADC_24_BIT_DATA, 	// adc_data_len
-	NO_CRC,			// crc_header
-};
+#define ARRAY_SIZE(Array)		(sizeof(Array) / sizeof((Array)[0]))
+#define AD7134_FMC_CH_NO		8
+#define AD7134_FMC_SAMPLE_NO	1024
 
 int main()
 {
-	struct ad713x_dev *dev;
-	spi_eng_desc *desc;
+	struct ad713x_dev *ad713x_dev_1;
+	struct ad713x_dev *ad713x_dev_2;
+	struct ad713x_init_param ad713x_init_param_1;
+	struct ad713x_init_param ad713x_init_param_2;
+	struct xil_spi_init_param spi_ps_extra;
+	struct spi_desc *spi_eng_desc;
 	uint32_t *offload_data;
-	spi_eng_msg *msg;
+	struct spi_eng_msg *msg;
 	uint32_t i;
 	uint32_t spi_eng_msg_cmds[2];
+	struct spi_init_param spi_eng_inits;
+	struct spi_init_param_extra extra_param;
 
-	spi_eng_msg_cmds[0] = SLEEP(2000); // 2us
-	spi_eng_msg_cmds[1] = TRANSFER_BYTES_R(3);
+	spi_eng_inits.chip_select = AD7134_1_SPI_CS;
+	spi_eng_inits.max_speed_hz = 100000000UL;
+	spi_eng_inits.mode = SPI_MODE_1;
+	extra_param.cs_delay = 0;
+	extra_param.spi_baseaddr = AD7134_SPI_ENGINE_BASEADDR;
+	extra_param.spi_clk_hz = 50000000;
+	extra_param.spi_clk_hz_reg_access = 50000000;
+	extra_param.spi_offload_rx_dma_baseaddr = AD7134_DMA_BASEADDR;
+	extra_param.spi_offload_rx_support_en = 1;
+	extra_param.spi_offload_tx_dma_baseaddr = AD7134_DMA_BASEADDR;
+	extra_param.spi_offload_tx_support_en = 1;
+	spi_eng_inits.extra = &extra_param;
+
+	spi_ps_extra.flags = 0;
+	spi_ps_extra.id = SPI_DEVICE_ID;
+	spi_ps_extra.type = XILINX_SPI;
+
+	ad713x_init_param_1.adc_data_len = ADC_24_BIT_DATA;
+	ad713x_init_param_1.clk_delay_en = false;
+	ad713x_init_param_1.crc_header = NO_CRC;
+	ad713x_init_param_1.dev_id = ID_AD7134;
+	ad713x_init_param_1.format = QUAD_CH_PO;
+	ad713x_init_param_1.gpio_dclkio = GPIO_DCLKIO_1;
+	ad713x_init_param_1.gpio_dclkmode = GPIO_DCLKMODE;
+	ad713x_init_param_1.gpio_mode = GPIO_MODE_1;
+	ad713x_init_param_1.gpio_pnd = GPIO_PDN_1;
+	ad713x_init_param_1.gpio_resetn = GPIO_RESETN_1;
+	ad713x_init_param_1.mode_master_nslave = false;
+	ad713x_init_param_1.dclkmode_free_ngated = false;
+	ad713x_init_param_1.dclkio_out_nin = false;
+	ad713x_init_param_1.pnd = true;
+	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
+	ad713x_init_param_1.spi_init_prm.max_speed_hz = 100000000;
+	ad713x_init_param_1.spi_init_prm.mode = SPI_MODE_0;
+	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_ps_extra;
+
+	ad713x_init_param_2.adc_data_len = ADC_24_BIT_DATA;
+	ad713x_init_param_2.clk_delay_en = false;
+	ad713x_init_param_2.crc_header = NO_CRC;
+	ad713x_init_param_2.dev_id = ID_AD7134;
+	ad713x_init_param_2.format = QUAD_CH_PO;
+	ad713x_init_param_2.gpio_dclkio = GPIO_DCLKIO_2;
+	ad713x_init_param_2.gpio_dclkmode = GPIO_DCLKMODE;
+	ad713x_init_param_2.gpio_mode = GPIO_MODE_2;
+	ad713x_init_param_2.gpio_pnd = GPIO_PDN_2;
+	ad713x_init_param_2.gpio_resetn = GPIO_RESETN_2;
+	ad713x_init_param_2.mode_master_nslave = true;
+	ad713x_init_param_2.dclkmode_free_ngated = false;
+	ad713x_init_param_2.dclkio_out_nin = false;
+	ad713x_init_param_2.pnd = true;
+	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
+	ad713x_init_param_2.spi_init_prm.max_speed_hz = 100000000;
+	ad713x_init_param_2.spi_init_prm.mode = SPI_MODE_0;
+	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_ps_extra;
+
+	spi_eng_msg_cmds[0] = SLEEP(300); // 2us
+	spi_eng_msg_cmds[1] = TRANSFER_BYTES_R(1);
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	ad713x_init(&dev, &ad713x_default_init_param);
+	ad713x_init(&ad713x_dev_1, &ad713x_init_param_1);
 
-	spi_eng_init(&desc, spi_eng_init_params);
+	ad713x_init(&ad713x_dev_2, &ad713x_init_param_2);
 
-	ad713x_dig_filter_sel_ch(dev, SINC3, CH0);
+	spi_eng_offload_init(&spi_eng_desc, &spi_eng_inits);
 
-	/* For this example, only offload is supported*/
-	msg = (spi_eng_msg *)malloc(sizeof(*msg));
+	/* For this example, only offload is supported */
+	msg = calloc(1, sizeof *msg);
 	if (!msg)
 		return -1;
+
+	spi_eng_set_transfer_length(spi_eng_desc, 24);
 
 	msg->spi_msg_cmds = malloc(sizeof(spi_eng_msg_cmds));
 	msg->spi_msg_cmds = spi_eng_msg_cmds;
 	msg->msg_cmd_len = ARRAY_SIZE(spi_eng_msg_cmds);
 	msg->rx_buf_addr = 0x800000;
 	msg->tx_buf_addr = 0xA000000;
+	msg->rx_buf = calloc((AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO),
+			sizeof(uint32_t));
 
-	/* Init the rx buffer with 0s */
-	for (i = 0; i < ARRAY_SIZE(msg->rx_buf); i++)
-		msg->rx_buf[i] = 0;
+	spi_eng_offload_load_msg(spi_eng_desc, msg);
+	spi_eng_transfer_multiple_msgs(spi_eng_desc,
+			(AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
 
-	spi_eng_offload_load_msg(desc, msg);
-	spi_eng_transfer_multiple_msgs(desc, 1024);
+	mdelay(5000);
 
-	mdelay(10000);
+//	Xil_DCacheInvalidateRange(0x800000, 16384 * 16);
 
 	free(msg);
 
-	offload_data = (uint32_t*)desc->rx_dma_startaddr;
-	for(i = 0; i < (desc->rx_length/4); i++) {
-		printf("CH%lu: 0x%lx\r\n", i%8, *offload_data);
-		offload_data += 1; // go to the next address in memory
+	const float lsb = 4.096 / (pow(2, 23));
+	float data;
+	uint8_t j;
+
+	offload_data = (uint32_t*)((struct spi_desc_extra *)spi_eng_desc->extra)->
+			rx_dma_startaddr;
+	for(i = 0;
+			i < AD7134_FMC_SAMPLE_NO;
+			i++) {
+		j = 0;
+		while(j < 8) {
+			printf("CH%lu: 0x%lx\r\n", j, *(offload_data + j));
+//			if(j == 4) {
+//				printf("%d CH%lu: 0x%lx ", i, j, *(offload_data + j));
+//				data = lsb * (*(offload_data + j) & 0xFFFFFF);
+//				if(data > 4.09599)
+//					data = data - 8.192;
+//				printf("%fV\n", data);
+//			}
+			j++;
+		}
+		offload_data += j; /* go to the next address in memory */
 	}
 
-	spi_eng_remove(desc);
-	ad713x_remove(dev);
+	ad713x_remove(ad713x_dev_1);
+	ad713x_remove(ad713x_dev_2);
 	print("Bye\n\r");
 
 	Xil_DCacheDisable();

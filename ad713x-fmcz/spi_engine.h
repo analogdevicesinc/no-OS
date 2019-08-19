@@ -242,7 +242,7 @@ int32_t spi_eng_write_and_read(spi_eng_desc *desc,
 			       uint8_t bytes_number);
 
 int32_t spi_eng_init(spi_eng_desc **descriptor,
-		     spi_eng_init_param init_param);
+		     const spi_eng_init_param *init_param);
 
 int32_t spi_eng_remove(spi_eng_desc *desc);
 

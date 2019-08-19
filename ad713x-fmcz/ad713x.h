@@ -40,6 +40,9 @@
 #ifndef SRC_AD713X_H_
 #define SRC_AD713X_H_
 
+#include "spi.h"
+#include "gpio.h"
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -47,8 +50,10 @@
  * Create a contiguous bitmask starting at bit position @l and ending at
  * position @h.
  */
-#define GENMASK(h, l) \
-		(((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
+#ifndef GENMASK
+#define GENMASK(h, l) (((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
+#endif
+#define BIT(x)					(1UL << (x))
 
 /*
  * AD713X registers definition
@@ -719,17 +724,13 @@ static const int ad713x_output_data_frame[3][9][2] = {
 
 struct ad713x_dev {
 	/* SPI */
-	spi_desc        	*spi_desc;
+	struct spi_desc        	*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_mode1;
-	gpio_desc		*gpio_mode2;
-	gpio_desc		*gpio_dclkmode;
-	gpio_desc		*gpio_dclkio1;
-	gpio_desc		*gpio_dclkio2;
-	gpio_desc		*gpio_resetn1;
-	gpio_desc		*gpio_resetn2;
-	gpio_desc		*gpio_pnd1;
-	gpio_desc		*gpio_pnd2;
+	struct gpio_desc		*gpio_mode;
+	struct gpio_desc		*gpio_dclkmode;
+	struct gpio_desc		*gpio_dclkio;
+	struct gpio_desc		*gpio_resetn;
+	struct gpio_desc		*gpio_pnd;
 	/* Device Settings */
 	enum ad713x_supported_dev_ids dev_id;
 	enum ad713x_adc_data_len	adc_data_len;
@@ -738,22 +739,22 @@ struct ad713x_dev {
 
 struct ad713x_init_param {
 	/* SPI */
-	spi_init_param      	spi_init;
+	struct spi_init_param spi_init_prm;
 	/* GPIO */
-	gpio_init_param		gpio_mode1;
-	gpio_init_param		gpio_mode2;
-	gpio_init_param		gpio_dclkmode;
-	gpio_init_param		gpio_dclkio1;
-	gpio_init_param		gpio_dclkio2;
-	gpio_init_param		gpio_resetn1;
-	gpio_init_param		gpio_resetn2;
-	gpio_init_param		gpio_pnd1;
-	gpio_init_param		gpio_pnd2;
+	uint8_t		gpio_mode;
+	uint8_t		gpio_dclkmode;
+	uint8_t		gpio_dclkio;
+	uint8_t		gpio_resetn;
+	uint8_t		gpio_pnd;
+	/* GPIO state */
+	bool mode_master_nslave;
+	bool dclkmode_free_ngated;
+	bool dclkio_out_nin;
+	bool pnd;
 	/* Device Settings */
 	enum ad713x_supported_dev_ids dev_id;
 	enum ad713x_adc_data_len	adc_data_len;
 	enum ad713x_crc_header	crc_header;
-	enum ad713x_power_mode 	power_mode;
 	enum ad713x_doutx_format	format;
 	bool 			clk_delay_en;
 };
@@ -780,8 +781,12 @@ int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
 int32_t ad713x_dig_filter_sel_ch(struct ad713x_dev *dev,
 				 enum ad713x_dig_filter_sel filter,
 				 enum ad713x_channels	ch);
+int32_t ad713x_clkout_output_en(struct ad713x_dev *dev, bool enable);
+int32_t ad713x_ref_gain_correction_en(struct ad713x_dev *dev, bool enable);
+int32_t ad713x_wideband_bw_sel(struct ad713x_dev *dev,
+			       enum ad713x_channels ch, uint8_t wb_opt);
 int32_t ad713x_init(struct ad713x_dev **device,
-		    struct ad713x_init_param init_param);
+		    struct ad713x_init_param *init_param);
 int32_t ad713x_remove(struct ad713x_dev *dev);
 #endif /* SRC_AD713X_H_ */
 
