@@ -208,6 +208,7 @@
 #define AD7124_ERR_REG_SPI_WRITE_ERR      (1 << 3)
 #define AD7124_ERR_REG_SPI_CRC_ERR        (1 << 2)
 #define AD7124_ERR_REG_MM_CRC_ERR         (1 << 1)
+#define AD7124_ERR_REG_ROM_CRC_ERR        (1 << 0)
 
 /* Error_En Register bits */
 #define AD7124_ERREN_REG_MCLK_CNT_EN           (1 << 22)
@@ -231,6 +232,7 @@
 #define AD7124_ERREN_REG_SPI_WRITE_ERR_EN      (1 << 3)
 #define AD7124_ERREN_REG_SPI_CRC_ERR_EN        (1 << 2)
 #define AD7124_ERREN_REG_MM_CRC_ERR_EN         (1 << 1)
+#define AD7124_ERREN_REG_ROM_CRC_ERR_EN        (1 << 0)
 
 /* Channel Registers 0-15 bits */
 #define AD7124_CH_MAP_REG_CH_ENABLE    (1 << 15)
