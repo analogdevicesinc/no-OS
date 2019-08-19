@@ -141,27 +141,6 @@ int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
 }
 
 /**
- * DOUT0 output enable control
- * @param dev - The device structure.
- * @param dout0_en - Enable or disable DOUT0
- * 			Accepted values: true
- * 					 false
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad713x_dout0_enable(struct ad713x_dev *dev,
-			    bool dout0_en)
-{
-	int32_t ret;
-
-	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_DEVICE_CONFIG0,
-				    AD713X_DEV_CONFIG0_DOUT0_EN_MSK,
-				    AD713X_DEV_CONFIG0_DOUT0_EN_MODE(dout0_en));
-
-	return ret;
-}
-
-/**
  * ADC conversion data output frame control.
  * @param dev - The device structure.
  * @param adc_data_len - Data conversion length
@@ -338,7 +317,6 @@ int32_t ad713x_init(struct ad713x_dev **device,
 	ret |= spi_write_and_read(dev->spi_desc, buf, 3);
 
 	ret |= ad713x_set_power_mode(dev, init_param.power_mode);
-	ret |= ad713x_dout0_enable(dev, init_param.dout0_en);
 	ret |= ad713x_set_out_data_frame(dev,
 					 init_param.adc_data_len,
 					 init_param.crc_header);

@@ -754,7 +754,6 @@ struct ad713x_init_param {
 	enum ad713x_adc_data_len	adc_data_len;
 	enum ad713x_crc_header	crc_header;
 	enum ad713x_power_mode 	power_mode;
-	bool			dout0_en;
 	enum ad713x_doutx_format	format;
 	bool 			clk_delay_en;
 };
@@ -771,8 +770,6 @@ int32_t ad713x_spi_write_mask(struct ad713x_dev *dev,
 			      uint8_t data);
 int32_t ad713x_set_power_mode(struct ad713x_dev *dev,
 			      enum ad713x_power_mode mode);
-int32_t ad713x_dout0_enable(struct ad713x_dev *dev,
-			    bool dout0_en);
 int32_t ad713x_set_out_data_frame(struct ad713x_dev *dev,
 				  enum ad713x_adc_data_len adc_data_len,
 				  enum ad713x_crc_header crc_header);
