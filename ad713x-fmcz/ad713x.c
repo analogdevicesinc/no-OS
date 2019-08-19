@@ -203,7 +203,13 @@ int32_t ad713x_dout_format_config(struct ad713x_dev *dev,
 }
 
 /**
- * Magnitude and phase matching calibration clock delay enable.
+ * Magnitude and phase matching calibration clock delay enable for all channels
+ * at 2 clock delay.
+ *
+ * This function is kept for backwards compatibility with the current
+ * application source, but it is deprecated. Use
+ * ad713x_mag_phase_clk_delay_chan().
+ *
  * @param dev - The device structure.
  * @param clk_delay_en - Enable or disable Mag/Phase clock delay.
  * 				Accepted values: true
@@ -214,13 +220,47 @@ int32_t ad713x_mag_phase_clk_delay(struct ad713x_dev *dev,
 				   bool clk_delay_en)
 {
 	int32_t ret;
+	int8_t i;
+	int8_t temp_clk_delay;
 
-	ret = ad713x_spi_write_mask(dev,
-				    AD713X_REG_DEVICE_CONFIG5,
-				    AD713X_DEV_CONFIG5_MPC_CLKDEL_EN_MSK,
-				    AD713X_DEV_CONFIG4_MPC_CLKDEL_EN_MODE(clk_delay_en));
+	if(clk_delay_en)
+		temp_clk_delay = DELAY_2_CLOCKS;
+	else
+		temp_clk_delay = DELAY_NONE;
+	for(i = CH3; i >= 0; i--) {
+		ret = ad713x_spi_write_mask(dev,
+					    AD713X_REG_MPC_CONFIG,
+					    AD713X_MPC_CLKDEL_EN_CH_MSK(i),
+					    AD713X_MPC_CLKDEL_EN_CH_MODE(temp_clk_delay, i));
+		if(ret != 0)
+			break;
+	}
 
 	return ret;
+}
+
+/**
+ * Change magnitude and phase calibration clock delay mode for a specific
+ * channel.
+ *
+ * @param dev - The device structure.
+ * @param chan - ID of the channel to be changed.
+ * 				Accepted values: CH0, CH1, CH2, CH3
+ * @param mode - Delay in clock periods.
+ * 				Accepted values: DELAY_NONE,
+ * 						 DELAY_1_CLOCKS,
+ *						 DELAY_2_CLOCKS
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad713x_mag_phase_clk_delay_chan(struct ad713x_dev *dev,
+					enum ad713x_channels chan,
+					enum ad717x_mpc_clkdel mode)
+{
+	return ad713x_spi_write_mask(dev,
+				     AD713X_REG_MPC_CONFIG,
+				     AD713X_MPC_CLKDEL_EN_CH_MSK(chan),
+				     AD713X_MPC_CLKDEL_EN_CH_MODE(mode, chan));
 }
 
 /**
