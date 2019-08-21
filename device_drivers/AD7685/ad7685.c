@@ -80,10 +80,11 @@ char ad7685_GetConversion(char partsNo, unsigned short *dataDac)
 {
     unsigned char bytesRead = 0;
     unsigned char bytesNo   = 0;
-    unsigned char data[]    = {0,};
+    unsigned char *data        ;
     unsigned char count     = 0;
 
     bytesNo = partsNo * 2;
+    data = calloc(bytesNo, sizeof (unsigned char));
     bytesRead = SPI_Read(ad7685_SLAVE_ID, data, bytesNo);
     if (bytesRead != bytesNo)
     {
@@ -93,6 +94,8 @@ char ad7685_GetConversion(char partsNo, unsigned short *dataDac)
     {
         dataDac[count] = (data[2 * count] << 8) + (data[2 * count + 1] << 0);
     }
+
+    free(data);
 
     return 0;
 }
