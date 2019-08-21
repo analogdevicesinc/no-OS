@@ -4821,7 +4821,7 @@ int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
 
 	val = ad9361_spi_read(phy->spi, REG_ENSM_CONFIG_2);
 	val &= POWER_DOWN_RX_SYNTH | POWER_DOWN_TX_SYNTH |
-		RX_SYNTH_READY_MASK | TX_SYNTH_READY_MASK;
+	       RX_SYNTH_READY_MASK | TX_SYNTH_READY_MASK;
 
 	if (fdd)
 		ret = ad9361_spi_write(phy->spi, REG_ENSM_CONFIG_2,
