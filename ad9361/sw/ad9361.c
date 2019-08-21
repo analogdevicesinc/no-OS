@@ -3093,7 +3093,7 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	struct spi_device *spi = phy->spi;
 	uint32_t clktf, clkrf;
 	int32_t txnco_word, rxnco_word, txnco_freq, ret;
-	uint8_t __rx_phase = 0, reg_inv_bits, val, decim;
+	uint8_t __rx_phase = 0, reg_inv_bits = 0, val, decim;
 	bool phase_inversion_en;
 
 	ret = 0;
