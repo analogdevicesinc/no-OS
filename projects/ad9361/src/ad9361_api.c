@@ -43,6 +43,7 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 #include "platform_drivers.h"
+#include "xil_drivers.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "util.h"
@@ -125,7 +126,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
-	phy->spi->id = init_param->id_no;
+	((xil_spi_desc*)phy->spi->extra)->id = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */

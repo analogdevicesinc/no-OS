@@ -45,6 +45,7 @@
 #include "ad9361_api.h"
 #include "ad9361_parameters.h"
 #include "platform_drivers.h"
+#include "xil_drivers.h"
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
@@ -385,7 +386,8 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
-struct spi_init_param spi_param = {.id = SPI_DEVICE_ID, .mode = SPI_MODE_1, .chip_select = CLK_CS, .flags = 0};
+struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = CLK_CS};
+struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
 
 /***************************************************************************//**
  * @brief main
