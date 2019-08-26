@@ -2,8 +2,8 @@
 
 struct ad7124_st_reg ad7124_regs[AD7124_REG_NO] = {
 	{0x00, 0x00,   1, 2}, /* AD7124_Status */
-	{0x01, 0x0000, 2, 1}, /* AD7124_ADC_Control */
-	{0x02, 0x0000, 3, 2}, /* AD7124_Data */
+	{0x01, 0x0400, 2, 1}, /* AD7124_ADC_Control */
+	{0x02, 0x0000, 4, 2}, /* AD7124_Data */
 	{0x03, 0x0000, 3, 1}, /* AD7124_IOCon1 */
 	{0x04, 0x0000, 2, 1}, /* AD7124_IOCon2 */
 	{0x05, 0x02,   1, 2}, /* AD7124_ID */
