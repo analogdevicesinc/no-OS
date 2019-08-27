@@ -231,6 +231,9 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
 				 wr_buf,
 				 8);
 
+	/* CRC is disabled after reset */
+	dev->use_crc = AD7124_DISABLE_CRC;
+
 	/* Wait for the reset to complete */
 	ret = ad7124_wait_to_power_on(dev,
 				      dev->spi_rdy_poll_cnt);
