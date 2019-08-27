@@ -56,7 +56,7 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
-		 struct spi_init_param param)
+		 struct spi_init_param *param)
 {
 	uint8_t  clk_pha;
 	uint8_t  clk_pol;
@@ -67,11 +67,11 @@ int32_t spi_init(struct spi_desc **desc,
 	if (!d)
 		return -1;
 
-	d->type = param.type;
-	d->id = param.id;
-	d->chip_select = param.chip_select;
-	d->max_speed_hz = param.max_speed_hz;
-	d->mode = param.mode;
+	d->type = param->type;
+	d->id = param->id;
+	d->chip_select = param->chip_select;
+	d->max_speed_hz = param->max_speed_hz;
+	d->mode = param->mode;
 	d->ps7_config = XSpiPs_LookupConfig(d->id);
 
 	XSpiPs_CfgInitialize(&d->ps7_instance,
