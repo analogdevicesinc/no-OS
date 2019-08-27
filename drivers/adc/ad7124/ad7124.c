@@ -66,7 +66,7 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 	int32_t ret = 0;
 	uint8_t buffer[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 	uint8_t i = 0;
-	uint8_t check8 = 0;
+	uint8_t check8 = 0, add_status_length = 0;
 	uint8_t msg_buf[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 	if(!dev || !p_reg)
@@ -76,11 +76,20 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 	buffer[0] = AD7124_COMM_REG_WEN | AD7124_COMM_REG_RD |
 		    AD7124_COMM_REG_RA(p_reg->addr);
 
+	/*
+	 * If this is an AD7124_DATA register read, and the DATA_STATUS bit is set
+	 * in ADC_CONTROL, need to read 4, not 3 bytes for DATA with STATUS
+	 */
+	if ((p_reg->addr == AD7124_DATA_REG) &&
+	    (dev->regs[AD7124_ADC_Control].value & AD7124_ADC_CTRL_REG_DATA_STATUS)) {
+		add_status_length = 1;
+	}
+
 	/* Read data from the device */
 	ret = spi_write_and_read(dev->spi_desc,
 				 buffer,
 				 ((dev->use_crc != AD7124_DISABLE_CRC) ? p_reg->size + 1
-				  : p_reg->size) + 1);
+				  : p_reg->size) + 1 + add_status_length);
 	if(ret < 0)
 		return ret;
 
@@ -88,15 +97,23 @@ int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
 	if(dev->use_crc == AD7124_USE_CRC) {
 		msg_buf[0] = AD7124_COMM_REG_WEN | AD7124_COMM_REG_RD |
 			     AD7124_COMM_REG_RA(p_reg->addr);
-		for(i = 1; i < p_reg->size + 2; ++i) {
+		for(i = 1; i < p_reg->size + 2 + add_status_length; ++i) {
 			msg_buf[i] = buffer[i];
 		}
-		check8 = ad7124_compute_crc8(msg_buf, p_reg->size + 2);
+		check8 = ad7124_compute_crc8(msg_buf, p_reg->size + 2 + add_status_length);
 	}
 
 	if(check8 != 0) {
 		/* ReadRegister checksum failed. */
 		return COMM_ERR;
+	}
+
+	/*
+	 * if reading Data with 4 bytes, need to copy the status byte to the STATUS
+	 * register struct value member
+	 */
+	if (add_status_length) {
+		dev->regs[AD7124_Status].value = buffer[p_reg->size + 1];
 	}
 
 	/* Build the result */
