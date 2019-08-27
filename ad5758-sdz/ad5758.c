@@ -286,7 +286,7 @@ int32_t ad5758_set_dc_dc_conv_mode(struct ad5758_dev *dev,
 	 * mode.
 	 */
 	if (mode == PPC_CURRENT_MODE) {
-		ret  = ad5758_spi_write_mask(st, AD5758_ADC_CONFIG,
+		ret  = ad5758_spi_write_mask(dev, AD5758_REG_ADC_CONFIG,
 					     AD5758_ADC_CONFIG_PPC_BUF_MSK,
 					     AD5758_ADC_CONFIG_PPC_BUF_EN(1));
 		if (ret < 0)
