@@ -123,7 +123,7 @@ struct gpio_desc {
 /******************************************************************************/
 /* Initialize the SPI communication peripheral. */
 int32_t spi_init(struct spi_desc **desc,
-		 struct spi_init_param param);
+		 struct spi_init_param *param);
 
 /* Free the resources allocated by spi_init() */
 int32_t spi_remove(struct spi_desc *desc);
