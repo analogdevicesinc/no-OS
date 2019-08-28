@@ -1,0 +1,8 @@
+* text=auto
+
+*.c text
+*.cpp text
+*.h text
+*.txt text
+*.xml text
+Makefile text
