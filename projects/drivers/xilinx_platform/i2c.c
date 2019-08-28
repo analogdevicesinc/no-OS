@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "error.h"
 #include "i2c.h"
-#include "xil_drivers.h"
+#include "xilinx_platform_drivers.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

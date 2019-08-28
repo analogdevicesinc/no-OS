@@ -46,7 +46,7 @@
 #include "ad9361_parameters.h"
 #include "spi.h"
 #include "gpio.h"
-#include "xil_drivers.h"
+#include "xilinx_platform_drivers.h"
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
