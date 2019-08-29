@@ -42,7 +42,8 @@
 /******************************************************************************/
 #include "ad9361.h"
 #include "ad9361_api.h"
-#include "platform_drivers.h"
+#include "delay.h"
+#include "spi.h"
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "util.h"
