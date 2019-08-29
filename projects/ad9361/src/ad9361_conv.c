@@ -43,7 +43,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include "ad9361.h"
-#include "platform_drivers.h"
+#include "delay.h"
 #include "config.h"
 #include "ad9361_util.h"
 #include "util.h"
