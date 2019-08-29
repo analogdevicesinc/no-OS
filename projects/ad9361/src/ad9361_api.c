@@ -125,7 +125,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
-	phy->spi->id = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */
