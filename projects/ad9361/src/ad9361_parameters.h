@@ -123,7 +123,8 @@
 #endif
 #endif
 
-#define CLK_CS			0x00
+#define SPI_CS                  0
+#define SPI_CS_2                1
 
 #define RX_CORE_BASEADDR	AD9361_RX_0_BASEADDR
 #define TX_CORE_BASEADDR	AD9361_TX_0_BASEADDR

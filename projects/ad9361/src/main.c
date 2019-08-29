@@ -45,6 +45,7 @@
 #include "ad9361_api.h"
 #include "ad9361_parameters.h"
 #include "platform_drivers.h"
+#include "xil_drivers.h"
 #ifdef XILINX_PLATFORM
 #include <xil_cache.h>
 #endif
@@ -385,7 +386,8 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
-struct spi_init_param spi_param = {.id = SPI_DEVICE_ID, .mode = SPI_MODE_1, .chip_select = CLK_CS, .flags = 0};
+struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
+struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
 /***************************************************************************//**
  * @brief main
@@ -396,6 +398,7 @@ int main(void)
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
+	(xil_spi_init_param) spi_param.extra = xil_spi_param;
 #endif
 
 #ifdef ALTERA_PLATFORM
@@ -481,7 +484,7 @@ int main(void)
 		return status;
 	}
 	gpio_direction_output(default_init_param.gpio_desc_sync, 1);
-	default_init_param.id_no = 1;
+	default_init_param.id_no = SPI_CS_2;
 	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_resetb);
@@ -498,6 +501,15 @@ int main(void)
 		return status;
 	}
 	gpio_direction_output(default_init_param.gpio_desc_resetb, 1);
+
+	spi_param.chip_select = default_init_param.id_no;
+
+	status = spi_init(&default_init_param.spi, &spi_param);
+	if (status != SUCCESS) {
+		printf("spi_init() error: %"PRIi32"\n", status);
+		return status;
+	}
+
 	ad9361_init(&ad9361_phy_b, &default_init_param);
 
 	ad9361_set_tx_fir_config(ad9361_phy_b, tx_fir_config);
