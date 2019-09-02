@@ -1,10 +1,10 @@
 /***************************************************************************//**
-*   @file    AD7124.c
+*   @file    ad7124.c
 *   @brief   AD7124 implementation file.
 *   @devices AD7124-4, AD7124-8
 *
 ********************************************************************************
-* Copyright 2015(c) Analog Devices, Inc.
+* Copyright 2015-2019(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -48,6 +48,14 @@
 #define INVALID_VAL -1 /* Invalid argument */
 #define COMM_ERR    -2 /* Communication error on receive */
 #define TIMEOUT     -3 /* A timeout has occured */
+
+/*
+ * Post reset delay required to ensure all internal config done
+ * A time of 2ms should be enough based on the data sheet, but 4ms
+ * chosen to provide enough margin, in case mdelay is not accurate.
+ */
+#define AD7124_POST_RESET_DELAY      4
+
 
 /***************************************************************************//**
  * @brief Reads the value of the specified register without checking if the
@@ -234,9 +242,11 @@ int32_t ad7124_reset(struct ad7124_dev *dev)
 	/* CRC is disabled after reset */
 	dev->use_crc = AD7124_DISABLE_CRC;
 
-	/* Wait for the reset to complete */
+	/* Read POR bit to clear */
 	ret = ad7124_wait_to_power_on(dev,
 				      dev->spi_rdy_poll_cnt);
+
+	mdelay(AD7124_POST_RESET_DELAY);
 
 	return ret;
 }
