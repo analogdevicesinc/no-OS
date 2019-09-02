@@ -399,7 +399,7 @@ int main(void)
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-	(xil_spi_init_param) spi_param.extra = xil_spi_param;
+	spi_param.extra = &xil_spi_param;
 #endif
 
 #ifdef ALTERA_PLATFORM
