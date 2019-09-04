@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   xil_drivers.h
+ *   @file   xilinx_platform_drivers.h
  *   @brief  Header file of Xilinx Platform Drivers.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef XIL_DRIVERS_H_
-#define XIL_DRIVERS_H_
+#ifndef XILINX_PLATFORM_DRIVERS_H_
+#define XILINX_PLATFORM_DRIVERS_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -121,6 +121,6 @@ typedef struct xil_gpio_desc {
 #endif
 } xil_gpio_desc;
 
-#endif // XIL_DRIVERS_H_
+#endif // XILINX_PLATFORM_DRIVERS_H_
 
 
