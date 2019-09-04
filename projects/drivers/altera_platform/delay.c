@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
+ *   @file   delay.c
+ *   @brief  Implementation of Altera Delay Functions.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,22 +37,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+
 #include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-#define ALTERA_PLATFORM
+/**
+ * @brief Generate microseconds delay.
+ * @param usecs - Delay in microseconds.
+ * @return None.
+ */
+void udelay(uint32_t usecs)
+{
+	usleep(usecs);
+}
 
-#endif // PLATFORM_DRIVERS_H_
+/**
+ * @brief Generate miliseconds delay.
+ * @param msecs - Delay in miliseconds.
+ * @return None.
+ */
+void mdelay(uint32_t msecs)
+{
+	usleep(msecs * 1000);
+}

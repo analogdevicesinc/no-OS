@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   platform_drivers.c
- *   @brief  Implementation of Altera Platform Drivers.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   gpio.c
+ *   @brief  Implementation of Altera GPIO Generic Driver.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2019(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,195 +40,16 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+
 #include <stdlib.h>
 #include <altera_avalon_spi_regs.h>
+#include "gpio.h"
+#include "error.h"
 #include "parameters.h"
-#include "platform_drivers.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
-
-/**
- * @brief Initialize the I2C communication peripheral.
- * @param desc - The I2C descriptor.
- * @param init_param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param)
-{
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (param->type) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
-}
-
-/**
- * @brief Free the resources allocated by i2c_init().
- * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t i2c_remove(struct i2c_desc *desc)
-{
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
-}
-
-/**
- * @brief Write data to a slave device.
- * @param desc - The I2C descriptor.
- * @param data - Buffer that stores the transmission data.
- * @param bytes_number - Number of bytes to write.
- * @param stop_bit - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t i2c_write(struct i2c_desc *desc,
-		  uint8_t *data,
-		  uint8_t bytes_number,
-		  uint8_t stop_bit)
-{
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
-}
-
-/**
- * @brief Read data from a slave device.
- * @param desc - The I2C descriptor.
- * @param data - Buffer that will store the received data.
- * @param bytes_number - Number of bytes to read.
- * @param stop_bit - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t i2c_read(struct i2c_desc *desc,
-		 uint8_t *data,
-		 uint8_t bytes_number,
-		 uint8_t stop_bit)
-{
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
-}
-
-/**
- * @brief Initialize the SPI communication peripheral.
- * @param desc - The SPI descriptor.
- * @param init_param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t spi_init(struct spi_desc **desc,
-		 const struct spi_init_param *param)
-{
-	spi_desc *descriptor;
-
-	descriptor = (struct spi_desc *) malloc(sizeof(*descriptor));
-	if (!descriptor)
-		return FAILURE;
-
-	descriptor->chip_select = param->chip_select;
-
-	descriptor->mode = param->mode;
-
-	*desc = descriptor;
-
-	return SUCCESS;
-}
-
-/**
- * @brief Free the resources allocated by spi_init().
- * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t spi_remove(struct spi_desc *desc)
-{
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
-}
-
-/**
- * @brief Write and read data to/from SPI.
- * @param desc - The SPI descriptor.
- * @param data - The buffer with the transmitted/received data.
- * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-
-int32_t spi_write_and_read(struct spi_desc *desc,
-			   uint8_t *data,
-			   uint8_t bytes_number)
-{
-	uint32_t i;
-
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_CONTROL_REG * 4),
-		      ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4),
-		      desc->chip_select);
-	for (i = 0; i < bytes_number; i++) {
-		while ((IORD_32DIRECT(SPI_BASEADDR,
-				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
-			ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0x00) {}
-		IOWR_32DIRECT(SPI_BASEADDR,
-			      (ALTERA_AVALON_SPI_TXDATA_REG * 4),
-			      *(data + i));
-		while ((IORD_32DIRECT(SPI_BASEADDR,
-				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
-			ALTERA_AVALON_SPI_STATUS_RRDY_MSK) == 0x00) {}
-		*(data + i) = IORD_32DIRECT(SPI_BASEADDR,
-					    (ALTERA_AVALON_SPI_RXDATA_REG * 4));
-	}
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4), 0x000);
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_CONTROL_REG * 4), 0x000);
-
-	return SUCCESS;
-}
 
 /**
  * @brief Obtain the GPIO decriptor.
@@ -373,24 +194,4 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 	}
 
 	return 0;
-}
-
-/**
- * @brief Generate microseconds delay.
- * @param usecs - Delay in microseconds.
- * @return None.
- */
-void udelay(uint32_t usecs)
-{
-	usleep(usecs);
-}
-
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- * @return None.
- */
-void mdelay(uint32_t msecs)
-{
-	usleep(msecs * 1000);
 }

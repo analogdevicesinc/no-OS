@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
+ *   @file   altera_platform_drivers.h
  *   @brief  Header file of Altera Platform Drivers.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -37,22 +37,48 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
+#ifndef ALTERA_PLATFORM_DRIVERS_H_
+#define ALTERA_PLATFORM_DRIVERS_H_
 
 /******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-#include "delay.h"
-#include "error.h"
-#include "gpio.h"
-#include "i2c.h"
-#include "spi.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-#define ALTERA_PLATFORM
+typedef enum i2c_type {
+	ALTERA_I2C
+} i2c_type;
 
-#endif // PLATFORM_DRIVERS_H_
+typedef struct altera_i2c_init_param {
+	enum i2c_type	type;
+	uint32_t	id;
+} altera_i2c_init_param;
+
+typedef struct altera_i2c_desc {
+	enum i2c_type	type;
+	uint32_t	id;
+} altera_i2c_desc;
+
+typedef enum spi_type {
+	ALTERA_SPI
+} spi_type;
+
+typedef struct altera_spi_init_param {
+	enum spi_type	type;
+	uint32_t	id;
+} altera_spi_init_param;
+
+typedef struct altera_spi_desc {
+	enum spi_type	type;
+	uint32_t		id;
+} altera_spi_desc;
+
+typedef enum gpio_type {
+	ALTERA_GPIO
+} gpio_type;
+
+typedef struct altera_gpio_desc {
+	enum gpio_type	type;
+	uint32_t		id;
+} altera_gpio_desc;
+
+#endif /* ALTERA_PLATFORM_DRIVERS_H_ */
