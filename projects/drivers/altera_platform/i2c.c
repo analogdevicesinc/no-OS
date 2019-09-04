@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
+ *   @file   i2c.c
+ *   @brief  Implementation of Altera I2C Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,22 +37,117 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
+
+#include <stdlib.h>
 #include "error.h"
-#include "gpio.h"
 #include "i2c.h"
-#include "spi.h"
+#include "altera_platform_drivers.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-#define ALTERA_PLATFORM
+/**
+ * @brief Initialize the I2C communication peripheral.
+ * @param desc - The I2C descriptor.
+ * @param init_param - The structure that contains the I2C parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_init(struct i2c_desc **desc,
+		 const struct i2c_init_param *param)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
 
-#endif // PLATFORM_DRIVERS_H_
+	if (((altera_i2c_init_param *)param->extra)->type) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Free the resources allocated by i2c_init().
+ * @param desc - The I2C descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_remove(struct i2c_desc *desc)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Write data to a slave device.
+ * @param desc - The I2C descriptor.
+ * @param data - Buffer that stores the transmission data.
+ * @param bytes_number - Number of bytes to write.
+ * @param stop_bit - Stop condition control.
+ *                   Example: 0 - A stop condition will not be generated;
+ *                            1 - A stop condition will be generated.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_write(struct i2c_desc *desc,
+		  uint8_t *data,
+		  uint8_t bytes_number,
+		  uint8_t stop_bit)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (stop_bit) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Read data from a slave device.
+ * @param desc - The I2C descriptor.
+ * @param data - Buffer that will store the received data.
+ * @param bytes_number - Number of bytes to read.
+ * @param stop_bit - Stop condition control.
+ *                   Example: 0 - A stop condition will not be generated;
+ *                            1 - A stop condition will be generated.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t i2c_read(struct i2c_desc *desc,
+		 uint8_t *data,
+		 uint8_t bytes_number,
+		 uint8_t stop_bit)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (stop_bit) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}

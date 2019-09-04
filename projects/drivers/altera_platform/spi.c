@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
+ *   @file   spi.c
+ *   @brief  Implementation of Altera SPI Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,22 +37,97 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef PLATFORM_DRIVERS_H_
-#define PLATFORM_DRIVERS_H_
-
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "delay.h"
+
+#include <stdlib.h>
+#include <altera_avalon_spi_regs.h>
+#include "parameters.h"
 #include "error.h"
-#include "gpio.h"
-#include "i2c.h"
 #include "spi.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
+/************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-#define ALTERA_PLATFORM
+/**
+ * @brief Initialize the SPI communication peripheral.
+ * @param desc - The SPI descriptor.
+ * @param init_param - The structure that contains the SPI parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_init(struct spi_desc **desc,
+		 const struct spi_init_param *param)
+{
+	spi_desc *descriptor;
 
-#endif // PLATFORM_DRIVERS_H_
+	descriptor = malloc(sizeof(*descriptor));
+	if (!descriptor)
+		return FAILURE;
+
+	descriptor->chip_select = param->chip_select;
+
+	descriptor->mode = param->mode;
+
+	*desc = descriptor;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Free the resources allocated by spi_init().
+ * @param desc - The SPI descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t spi_remove(struct spi_desc *desc)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Write and read data to/from SPI.
+ * @param desc - The SPI descriptor.
+ * @param data - The buffer with the transmitted/received data.
+ * @param bytes_number - Number of bytes to write/read.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+
+int32_t spi_write_and_read(struct spi_desc *desc,
+			   uint8_t *data,
+			   uint8_t bytes_number)
+{
+	uint32_t i;
+
+	IOWR_32DIRECT(SPI_BASEADDR,
+		      (ALTERA_AVALON_SPI_CONTROL_REG * 4),
+		      ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
+	IOWR_32DIRECT(SPI_BASEADDR,
+		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4),
+		      desc->chip_select);
+	for (i = 0; i < bytes_number; i++) {
+		while ((IORD_32DIRECT(SPI_BASEADDR,
+				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
+			ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0x00) {}
+		IOWR_32DIRECT(SPI_BASEADDR,
+			      (ALTERA_AVALON_SPI_TXDATA_REG * 4),
+			      *(data + i));
+		while ((IORD_32DIRECT(SPI_BASEADDR,
+				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
+			ALTERA_AVALON_SPI_STATUS_RRDY_MSK) == 0x00) {}
+		*(data + i) = IORD_32DIRECT(SPI_BASEADDR,
+					    (ALTERA_AVALON_SPI_RXDATA_REG * 4));
+	}
+	IOWR_32DIRECT(SPI_BASEADDR,
+		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4), 0x000);
+	IOWR_32DIRECT(SPI_BASEADDR,
+		      (ALTERA_AVALON_SPI_CONTROL_REG * 4), 0x000);
+
+	return SUCCESS;
+}
+
+
