@@ -317,9 +317,9 @@ uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
 uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 				uint32_t parent_rate)
 {
-	uint32_t div = hmc7044_calc_out_div(rate, dev->pll2_freq);
+	uint32_t div = hmc7044_calc_out_div(rate, parent_rate);
 
-	return DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+	return DIV_ROUND_CLOSEST(parent_rate, div);
 }
 
 /**
@@ -353,30 +353,90 @@ uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
 uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
 			      uint32_t rate_khz)
 {
+	uint32_t n2[2], r2[2];
+	bool pll2_freq_doubler_en;
 	uint32_t calc_div = 0;
 	uint32_t div = 1;
 	int32_t ret;
-	uint32_t pll2_rate_khz = rate_khz;
+	uint32_t vco_limit;
+	bool high_vco_en;
+
+	uint32_t vcxo_freq = dev->vcxo_freq / 1000;
+	uint32_t pll2_freq = rate_khz;
 
 	if (chan >= dev->num_channels)
 		return FAILURE;
 
-	if (pll2_rate_khz > HMC7044_HIGH_VCO_MAX)
+	if (pll2_freq > HMC7044_HIGH_VCO_MAX)
 		return FAILURE;
 
-	while (pll2_rate_khz < HMC7044_LOW_VCO_MIN || calc_div != div)
+	while (pll2_freq < HMC7044_LOW_VCO_MIN || calc_div != div)
 	{
 		div++;
-		pll2_rate_khz = rate_khz * div;
-		calc_div = hmc7044_calc_out_div(rate_khz, pll2_rate_khz);
+		pll2_freq = rate_khz * div;
+		calc_div = hmc7044_calc_out_div(rate_khz, pll2_freq);
 		if (calc_div == div)
 			break;
 	}
 
+	vco_limit = (HMC7044_LOW_VCO_MAX + HMC7044_HIGH_VCO_MIN) / 2;
+	if (pll2_freq >= vco_limit)
+		high_vco_en = true;
+	else
+		high_vco_en = false;
 
+	pll2_freq_doubler_en = true;
+	ret = rational_best_approximation(pll2_freq, vcxo_freq * 2,
+					HMC7044_N2_MAX, HMC7044_R2_MAX,
+					&n2[0], &r2[0]);
+	if (ret < 0)
+		return ret;
 
-//	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
-//	dev->channels[chan].divider = div;
+	if (pll2_freq != vcxo_freq * n2[0] / r2[0]) {
+		ret = rational_best_approximation(pll2_freq, vcxo_freq,
+						HMC7044_N2_MAX, HMC7044_R2_MAX,
+						&n2[1], &r2[1]);
+		if (ret < 0)
+			return ret;
+
+		if (abs((int)pll2_freq - (int)(vcxo_freq * 2 * n2[0] / r2[0])) >
+			abs((int)pll2_freq - (int)(vcxo_freq * n2[1] / r2[1]))) {
+			n2[0] = n2[1];
+			r2[0] = r2[1];
+			pll2_freq_doubler_en = false;
+		}
+	}
+
+	while ((n2[0] < HMC7044_N2_MIN) && (r2[0] <= HMC7044_R2_MAX / 2)) {
+		n2[0] *= 2;
+		r2[0] *= 2;
+	}
+	if (n2[0] < HMC7044_N2_MIN)
+		return -FAILURE;
+	/* Program PLL2 */
+
+	/* Program the reference doubler */
+	hmc7044_write(dev, HMC7044_REG_PLL2_FREQ_DOUBLER,
+		      pll2_freq_doubler_en ? 0 : HMC7044_PLL2_FREQ_DOUBLER_DIS);
+
+	/* Select the VCO range */
+	hmc7044_write(dev, HMC7044_REG_EN_CTRL_0,
+		      HMC7044_RF_RESEEDER_EN |
+		      HMC7044_VCO_SEL(high_vco_en ?
+				      HMC7044_VCO_HIGH :
+				      HMC7044_VCO_LOW) |
+		      HMC7044_SYSREF_TIMER_EN | HMC7044_PLL2_EN |
+		      HMC7044_PLL1_EN);
+
+	/* Program the dividers */
+	hmc7044_write(dev, HMC7044_REG_PLL2_R_LSB,
+		      HMC7044_R2_LSB(r2[0]));
+	hmc7044_write(dev, HMC7044_REG_PLL2_R_MSB,
+		      HMC7044_R2_MSB(r2[0]));
+	hmc7044_write(dev, HMC7044_REG_PLL2_N_LSB,
+		      HMC7044_N2_LSB(n2[0]));
+	hmc7044_write(dev, HMC7044_REG_PLL2_N_MSB,
+		      HMC7044_N2_MSB(n2[0]));
 
 	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan),
 		      HMC7044_DIV_LSB(div));
