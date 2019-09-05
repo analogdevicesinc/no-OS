@@ -291,6 +291,103 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
 }
 
 /**
+ * Recalculate rate corresponding to a channel.
+ * @param dev - The device structure.
+ * @param chan - Channel number.
+ * @param rate - Channel rate.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
+				 uint32_t *rate)
+{
+	if (chan > dev->num_channels)
+		return FAILURE;
+
+	*rate = dev->pll2_freq / dev->channels[chan].divider;
+
+	return SUCCESS;
+}
+
+/**
+ * Calculate closest possible rate
+ * @param rate - The desired rate.
+ * @param parent_rate - The parent rate.
+ * @return The closest possible rate of desired rate.
+ */
+uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
+				uint32_t parent_rate)
+{
+	uint32_t div = hmc7044_calc_out_div(rate, dev->pll2_freq);
+
+	return DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+}
+
+/**
+ * Set channel rate.
+ * @param dev - The device structure.
+ * @param chan - Channel number.
+ * @param rate - Channel rate.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
+			      uint32_t rate)
+{
+	uint32_t div;
+	int32_t ret;
+
+	if (chan >= dev->num_channels)
+		return FAILURE;
+
+	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
+	dev->channels[chan].divider = div;
+
+	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan),
+		      HMC7044_DIV_LSB(div));
+	if(ret < 0)
+		return ret;
+
+	return hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan),
+		      HMC7044_DIV_MSB(div));
+}
+
+uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
+			      uint32_t rate_khz)
+{
+	uint32_t calc_div = 0;
+	uint32_t div = 1;
+	int32_t ret;
+	uint32_t pll2_rate_khz = rate_khz;
+
+	if (chan >= dev->num_channels)
+		return FAILURE;
+
+	if (pll2_rate_khz > HMC7044_HIGH_VCO_MAX)
+		return FAILURE;
+
+	while (pll2_rate_khz < HMC7044_LOW_VCO_MIN || calc_div != div)
+	{
+		div++;
+		pll2_rate_khz = rate_khz * div;
+		calc_div = hmc7044_calc_out_div(rate_khz, pll2_rate_khz);
+		if (calc_div == div)
+			break;
+	}
+
+
+
+//	div = hmc7044_calc_out_div(rate, dev->pll2_freq);
+//	dev->channels[chan].divider = div;
+
+	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan),
+		      HMC7044_DIV_LSB(div));
+	if(ret < 0)
+		return ret;
+
+	return hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan),
+		      HMC7044_DIV_MSB(div));
+}
+
+/**
  * Setup the device.
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
@@ -314,10 +411,6 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	vcxo_freq = dev->vcxo_freq / 1000;
 	pll2_freq = dev->pll2_freq / 1000;
-
-	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
-		pll2_freq > HMC7044_HIGH_VCO_MAX)
-		return FAILURE;
 
 	lcm_freq = vcxo_freq;
 	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
@@ -354,6 +447,10 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		n1 *= 2;
 		r1 *= 2;
 	}
+
+	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
+	    pll2_freq > HMC7044_HIGH_VCO_MAX)
+		return FAILURE;
 
 	vco_limit = (HMC7044_LOW_VCO_MAX + HMC7044_HIGH_VCO_MIN) / 2;
 	if (pll2_freq >= vco_limit)
@@ -586,6 +683,21 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	return hmc7044_setup(dev);
 }
 
+/**
+ * Remove the device - release resources.
+ * @param device - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t hmc7044_remove(struct hmc7044_dev *device)
+{
+	int32_t ret;
+
+	ret = spi_remove(device->spi_desc);
+	free(device->channels);
+	free(device);
+
+	return ret;
+}
 
 /* check if HMC7044 can generate this FPGA fref */
 int32_t hmc7044_auto_config(uint32_t vcxo_freq, uint32_t ref_rate_khz, uint32_t *pll2_freq, uint32_t *ch_divider)
@@ -678,18 +790,3 @@ int32_t hmc7044_auto_config_check(uint32_t divider)
 	return FAILURE;
 }
 
-/**
- * Remove the device - release resources.
- * @param device - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
- */
-int32_t hmc7044_remove(struct hmc7044_dev *device)
-{
-	int32_t ret;
-
-	ret = spi_remove(device->spi_desc);
-	free(device->channels);
-	free(device);
-
-	return ret;
-}
