@@ -335,6 +335,7 @@ int32_t ad917x_get_dac_clk_status(ad917x_handle_t *h,
 int32_t ad917x_set_clkout_config(ad917x_handle_t *h, uint8_t l_div);
 
 int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq, uint32_t *ref_rate_kHz, uint32_t *ch_divider);
+int32_t device_get_next_ref_rate(uint32_t lane_rate_kHz, uint8_t mode, uint32_t *ref_rate_kHz);
 /**
  * \brief Configure the DAC Clock Input path based on a the desired dac clock
  * frequency, the applied reference clock and the onchip PLL

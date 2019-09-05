@@ -32,6 +32,31 @@
 #define DAC_9171_CLK_FREQ_MAX_HZ 6000000000ull
 #define DAC_CLK_FREQ_MAX_HZ 12000000000ull
 #define DAC_CLK_FREQ_MIN_HZ 2900000000ull
+#define AD9172_MAX_MODES 22
+jesd_param_t ad9172_modes[AD9172_MAX_MODES] = {
+	{.jesd_L = 1, .jesd_M = 2, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 0 */
+	{.jesd_L = 2, .jesd_M = 4, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 1 */
+	{.jesd_L = 3, .jesd_M = 6, .jesd_F = 4, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 2 */
+	{.jesd_L = 2, .jesd_M = 2, .jesd_F = 2, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 3 */
+	{.jesd_L = 4, .jesd_M = 4, .jesd_F = 2, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 4 */
+	{.jesd_L = 1, .jesd_M = 2, .jesd_F = 3, .jesd_S = 1, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 5 */
+	{.jesd_L = 2, .jesd_M = 4, .jesd_F = 3, .jesd_S = 1, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 6 */
+	{.jesd_L = 1, .jesd_M = 4, .jesd_F = 8, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 7 */
+	{.jesd_L = 4, .jesd_M = 2, .jesd_F = 1, .jesd_S = 1, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 8 */
+	{.jesd_L = 4, .jesd_M = 2, .jesd_F = 2, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 9 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 1, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 10 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 2, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 11 */
+	{.jesd_L = 8, .jesd_M = 2, .jesd_F = 3, .jesd_S = 8, .jesd_NP = 12, .jesd_N = 12, .jesd_K = 32, .jesd_HD = 1}, /* mode 12 */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 13 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 14 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 15 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 16 invalid */
+	{.jesd_L = 0, .jesd_M = 0, .jesd_F = 0, .jesd_S = 0, .jesd_NP = 0, .jesd_N = 0, .jesd_K = 32, .jesd_HD = 1}, /* mode 17 invalid */
+	{.jesd_L = 4, .jesd_M = 1, .jesd_F = 1, .jesd_S = 2, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 18 */
+	{.jesd_L = 4, .jesd_M = 1, .jesd_F = 2, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 19 */
+	{.jesd_L = 8, .jesd_M = 1, .jesd_F = 1, .jesd_S = 4, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 20 */
+	{.jesd_L = 8, .jesd_M = 1, .jesd_F = 2, .jesd_S = 8, .jesd_NP = 16, .jesd_N = 16, .jesd_K = 32, .jesd_HD = 1}, /* mode 21 */
+};
 
 /*======================================
  * Revision Data
@@ -552,9 +577,6 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	else
 		target_pfd = 500; /* less than 770 */
 
-
-
-
 	if (m_div == 0) {
 		m_div = 1;
 		n_div = 2;
@@ -579,9 +601,8 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	if(rem)
 		return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
 	uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
-
-
 	uint8_t m_div_tmp = (dac_fref_khz / 1000) / target_pfd;
+
 	if ((dac_fref_khz / 1000) % target_pfd)
 		m_div_tmp++;
 	if(m_div_tmp != m_div)
@@ -607,6 +628,86 @@ int32_t ad917x_autoconfig(uint32_t dac_rate_kHz, uint32_t pll2_freq_khz, uint32_
 	}
 
 	return ad917x_autoconfig(dac_rate_kHz, pll2_freq_khz, ref_rate_kHz, ch_divider);
+}
+
+int32_t device_get_next_ref_rate(uint32_t lane_rate_kHz, uint8_t mode, uint32_t *ref_rate_kHz)
+{
+
+	uint16_t target_pfd, fvco_freq_mhz = 0x0;
+	static uint8_t m_div = 0, n_div = 0;
+	uint8_t pll_vco_div;
+
+	uint32_t data_rate_kHz = (lane_rate_kHz * ad9172_modes[mode].jesd_L * 8) / (ad9172_modes[mode].jesd_M * ad9172_modes[mode].jesd_NP * 10);
+	uint32_t dac_rate_kHz = data_rate_kHz * 1;
+	uint32_t dac_clk_freq_mhz = dac_rate_kHz / 1000;
+
+	if ((dac_rate_kHz * 1000 > DAC_CLK_FREQ_MAX_HZ ) ||
+				(dac_rate_kHz * 1000 < DAC_CLK_FREQ_MIN_HZ)) {
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		return API_ERROR_NOT_SUPPORTED;
+	}
+	if ((dac_clk_freq_mhz > range_boundary[0]) &&
+		(dac_clk_freq_mhz < range_boundary[1])) {
+		pll_vco_div = 3;
+	} else if ((dac_clk_freq_mhz > range_boundary[2]) &&
+		   (dac_clk_freq_mhz < range_boundary[3])) {
+		pll_vco_div = 2;
+	} else if ((dac_clk_freq_mhz > range_boundary[4]) &&
+		   (dac_clk_freq_mhz < range_boundary[5])) {
+		pll_vco_div = 1;
+	} else {
+		//printf("please set other lane_rate_kHz, data_rate_kHz out of bounds %"PRIu32":\n", dac_rate_kHz);
+		return API_ERROR_NOT_SUPPORTED;
+	}
+
+	fvco_freq_mhz = (dac_clk_freq_mhz * pll_vco_div);
+	if ((fvco_freq_mhz >= 9960) && (fvco_freq_mhz <= 10870))
+		target_pfd = 220; /* less than 225 */
+	else
+		target_pfd = 500; /* less than 770 */
+
+	if (m_div == 0) {
+		m_div = 1;
+		n_div = 2;
+	} else {
+		if (m_div < 4) {
+			m_div++;
+		}
+		else
+		{
+			m_div = 1;
+			if (n_div < 50) {
+				n_div++;
+			}
+			else {
+				m_div = 0;
+				return API_ERROR_NOT_SUPPORTED;
+			}
+		}
+	}
+
+	uint32_t rem = (dac_rate_kHz * m_div * pll_vco_div) % (8 * n_div);
+	if(rem)
+		return device_get_next_ref_rate(lane_rate_kHz, mode, ref_rate_kHz);
+	uint32_t dac_fref_khz = (dac_rate_kHz * m_div * pll_vco_div) / (8 * n_div);
+	uint8_t m_div_tmp = (dac_fref_khz / 1000) / target_pfd;
+
+	if ((dac_fref_khz / 1000) % target_pfd)
+		m_div_tmp++;
+	if(m_div_tmp != m_div)
+		return device_get_next_ref_rate(lane_rate_kHz, mode, ref_rate_kHz);
+
+	if(dac_fref_khz < fref_domains[m_div - 1] || dac_fref_khz > fref_domains[m_div])
+		return device_get_next_ref_rate(lane_rate_kHz, mode, ref_rate_kHz);
+
+	if ((dac_fref_khz < REF_CLK_FREQ_MHZ_MIN * 1000) ||
+			(dac_fref_khz > REF_CLK_FREQ_MHZ_MAX * 1000)) {
+		return device_get_next_ref_rate(lane_rate_kHz, mode, ref_rate_kHz);
+	}
+
+	*ref_rate_kHz = dac_fref_khz;
+
+	return API_ERROR_OK;
 }
 
 int32_t ad917x_set_dac_clk(ad917x_handle_t *h,
