@@ -399,6 +399,16 @@ err:
 	return FAILURE;
 }
 
+int32_t link_get_next_ref_rate(uint32_t lane_rate_kHz, uint32_t *ref_rate_kHz)
+{
+	uint32_t rem = lane_rate_kHz % 40;
+	if(rem)
+		return FAILURE;
+	*ref_rate_kHz = lane_rate_kHz / 40;
+
+	return SUCCESS;
+}
+
 /**
  * @brief axi_jesd204_tx_remove
  */
@@ -408,3 +418,5 @@ int32_t axi_jesd204_tx_remove(struct axi_jesd204_tx *jesd)
 
 	return SUCCESS;
 }
+
+

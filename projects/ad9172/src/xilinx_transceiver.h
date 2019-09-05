@@ -212,4 +212,5 @@ int32_t xilinx_xcvr_get_cpll_next_config(struct xilinx_xcvr *xcvr,
 				     struct xilinx_xcvr_cpll_config *conf);
 int32_t xilinx_xcvr_autoconfig(struct adxcvr *xcvr,
 			    uint32_t lane_rate);
+int32_t xcvr_get_next_ref_rate(struct adxcvr *xcvr, uint32_t lane_rate_khz, uint32_t *xcvr_ref_rate_khz);
 #endif

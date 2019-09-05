@@ -100,4 +100,5 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd);
 int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	    const struct jesd204_tx_init *init);
 int32_t axi_jesd204_tx_remove(struct axi_jesd204_tx *jesd);
+int32_t link_get_next_ref_rate(uint32_t lane_rate_kHz, uint32_t *ref_rate_kHz);
 #endif
