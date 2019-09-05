@@ -827,7 +827,7 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 		/* Send the same data on all the channels */
 		for (chan = 0; chan < num_tx_channels; chan++) {
 #ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address + index_mem * sizeof(uint32_t),
+			IOWR_32DIRECT(address, index_mem * sizeof(uint32_t),
 				      custom_data_iq[index]);
 #else
 			Xil_Out32(address + index_mem * sizeof(uint32_t),
