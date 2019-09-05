@@ -1,7 +1,7 @@
 
 Additional required source files:
 
-#ifndef ALTERA_PLATFORM
+#ifdef ALTERA_PLATFORM
 	cp ../../drivers/altera_platform/platform_drivers.c devices/adi_hal/
 	cp ../../drivers/altera_platform/platform_drivers.h devices/adi_hal/
 	cp ../../drivers/axi_adc_core/axi_adc_core.c devices/adi_hal/
