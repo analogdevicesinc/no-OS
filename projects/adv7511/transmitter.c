@@ -43,12 +43,8 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include "atv_types.h"
-#include "atv_platform.h"
-#include "atv_common.h"
 #include "transmitter.h"
 #include "tx_lib.h"
-#include "edid.h"
 #include "cf_hdmi.h"
 #include "xil_io.h"
 #include "wrapper.h"
@@ -445,8 +441,8 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 {
 	UCHAR  		   EdidData[256];
 	UINT16 		   SpaOffset;
-	EDID_STRUCT    *Edid;
-	STD_TIMING     *TDesc;
+	struct edid_struct    *Edid;
+	struct std_timing     *TDesc;
 	unsigned short horizontalActiveTime     = 0;
 	unsigned short verticalActiveTime       = 0;
 	unsigned short horizontalBlankingTime   = 0;

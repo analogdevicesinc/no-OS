@@ -42,36 +42,35 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdio.h>
-#include "xil_cache.h"
-#include "xbasic_types.h"
-#include "xil_io.h"
+#include <xil_printf.h>
+#include "platform_drivers.h"
+#include "tx_lib.h"
 #include "cf_hdmi.h"
-#include "atv_platform.h"
+#include <stdlib.h>
+#include "timer.h"
 #include "transmitter.h"
-#include "xil_exception.h"
-#include "xuartps.h"
+#include "wrapper.h"
+#include "tx_isr.h"
+#include "config.h"
 
-extern void delay_ms(u32 ms_count);
-extern char inbyte(void);
+#define HDMI_CALL_INTERVAL_MS 10
 
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
-#define HDMI_CALL_INTERVAL_MS	10			/* Interval between two         */
-											/* iterations of the main loop  */
-#define DBG_MSG                 xil_printf
+static uint8_t    major_rev;      /* Major Release Number */
+static uint8_t    minor_rev;      /* Usually used for code-drops */
+static uint8_t    rc_rev;         /* Release Candidate Number */
+static bool     driver_enable;
+static bool     last_enable;
+extern struct i2c_desc *i2c_handler;
+extern volatile uint32_t timer_counter_intr;
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-static UCHAR    MajorRev;      /* Major Release Number */
-static UCHAR    MinorRev;      /* Usually used for code-drops */
-static UCHAR    RcRev;         /* Release Candidate Number */
-static BOOL     DriverEnable;
-static BOOL     LastEnable;
-
-/***************************************************************************//**
- * @brief Enables the driver.
+/**
+ * Enables the driver.
  *
  * @return Returns ATVERR_OK.
 *******************************************************************************/
@@ -120,21 +119,24 @@ static void APP_PrintRevisions (void)
 *******************************************************************************/
 static void APP_ChangeResolution (void)
 {
-	char *resolutions[7] = {"640x480", "800x600", "1024x768", "1280x720", "1360x768", "1600x900", "1920x1080"};
-	char receivedChar    = 0;
+	char *resolutions[7] = {
+		"640x480", "800x600", "1024x768", "1280x720", "1360x768",
+		"1600x900", "1920x1080"
+	};
+	char received_char    = 0;
 
-	if(XUartPs_IsReceiveData(UART_BASEADDR))
-	{
-		receivedChar = inbyte();
-		if((receivedChar >= 0x30) && (receivedChar <= 0x36))
-		{
-			SetVideoResolution(receivedChar - 0x30);
-			DBG_MSG("Resolution was changed to %s \r\n", resolutions[receivedChar - 0x30]);
-		}
-		else
-		{
-			if((receivedChar != 0x0A) && (receivedChar != 0x0D))
-			{
+#if defined(_XPARAMETERS_PS_H_)
+	if(XUartPs_IsReceiveData(UART_BASEADDR)) {
+#else
+	if(!XUartLite_IsReceiveEmpty(UART_BASEADDR)) {
+#endif
+		received_char = inbyte();
+		if((received_char >= 0x30) && (received_char <= 0x36)) {
+			SetVideoResolution(received_char - 0x30);
+			DBG_MSG("Resolution was changed to %s \r\n",
+				resolutions[received_char - 0x30]);
+		} else {
+			if((received_char != 0x0A) && (received_char != 0x0D)) {
 				SetVideoResolution(RESOLUTION_640x480);
 				DBG_MSG("Resolution was changed to %s \r\n", resolutions[0]);
 			}
