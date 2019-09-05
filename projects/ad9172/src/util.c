@@ -106,6 +106,15 @@ uint32_t greatest_common_divisor(uint32_t a,
 }
 
 /**
+ * Find least common multiple of the given two numbers.
+ */
+uint32_t least_common_multiple(uint32_t a,
+				 uint32_t b)
+{
+	return ((uint64_t)a * b) / greatest_common_divisor(a, b);
+}
+
+/**
  * Calculate best rational approximation for a given fraction.
  */
 int32_t rational_best_approximation(uint32_t given_numerator,
