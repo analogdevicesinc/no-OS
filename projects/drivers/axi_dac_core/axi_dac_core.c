@@ -43,8 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "error.h"
-#include "delay.h"
+#include "platform_drivers.h"
 #ifdef ALTERA_PLATFORM
 #include "io.h"
 #else
