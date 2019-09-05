@@ -172,8 +172,7 @@
 #define MMCM_REG_FILTER1		0x4e
 #define MMCM_REG_FILTER2		0x4f
 
-enum videoResolution
-{
+enum videoResolution {
 	RESOLUTION_640x480,
 	RESOLUTION_800x600,
 	RESOLUTION_1024x768,
@@ -187,18 +186,18 @@ enum videoResolution
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
-						unsigned short horizontalBlankingTime,
-						unsigned short horizontalSyncOffset,
-						unsigned short horizontalSyncPulseWidth,
-						unsigned short verticalActiveTime,
-						unsigned short verticalBlankingTime,
-						unsigned short verticalSyncOffset,
-						unsigned short verticalSyncPulseWidth);
+			unsigned short horizontalBlankingTime,
+			unsigned short horizontalSyncOffset,
+			unsigned short horizontalSyncPulseWidth,
+			unsigned short verticalActiveTime,
+			unsigned short verticalBlankingTime,
+			unsigned short verticalSyncOffset,
+			unsigned short verticalSyncPulseWidth);
 void SetVideoResolution(unsigned char resolution);
 void InitHdmiAudioPcore(void);
 void AudioClick(void);
 int CLKGEN_SetRate(unsigned long rate,
-				   unsigned long parent_rate);
+		   unsigned long parent_rate);
 unsigned long CLKGEN_GetRate(unsigned long parent_rate);
 
 #endif /* CF_HDMI_H_ */
