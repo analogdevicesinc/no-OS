@@ -43,6 +43,9 @@
 #include <stdio.h>
 #include "adi_hal.h"
 #include "parameters.h"
+#ifndef ALTERA_PLATFORM
+#include "xilinx_platform_drivers.h"
+#endif
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -61,11 +64,11 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 
 	status = gpio_get(&dev_hal_data->gpio_adrv_resetb, ADRV_RESETB);
 
-	spi_param.id = 0;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = ADRV_CS;
 #ifndef ALTERA_PLATFORM
-	spi_param.flags = SPI_CS_DECODE;
+	xil_spi_init_param xil_spi_param = {.id = 0, .flags = SPI_CS_DECODE};
+	spi_param.extra = &xil_spi_param;
 #endif
 	status |= spi_init(&dev_hal_data->spi_adrv_desc, &spi_param);
 
