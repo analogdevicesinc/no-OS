@@ -47,8 +47,10 @@
 #include "cf_hdmi.h"
 #include "cf_hdmi_demo.h"
 #include "xil_cache.h"
-#include "xdmaps.h"
 #include "dmac_core.h"
+#if defined (_XPARAMETERS_PS_H_)
+#include "xdmaps.h"
+#endif
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -168,9 +170,31 @@ void DDRAudioWr(void)
 	u32 sincr = 0;
 
 	sincr = (65536*2)/AUDIO_LENGTH;
-	for (n = 0; n < AUDIO_LENGTH; n++)
-	{
+#if (CURRENT_PLATFORM == PLATFORM_KC705) || \
+	(CURRENT_PLATFORM == PLATFORM_AC701) || (CURRENT_PLATFORM == PLATFORM_VC707)
+	for (n = 0; n < 32; n++) {
+		Xil_Out32((AUDIO_BASEADDR+(n*4)), 0x00); // init descriptors
+	}
+	Xil_Out32((AUDIO_BASEADDR+0x00), (AUDIO_BASEADDR + 0x40)); // next descriptor
+	Xil_Out32((AUDIO_BASEADDR+0x08), (AUDIO_BASEADDR + 0x80)); // start address
+	Xil_Out32((AUDIO_BASEADDR+0x40), (AUDIO_BASEADDR + 0x00)); // next descriptor
+	Xil_Out32((AUDIO_BASEADDR+0x48), (AUDIO_BASEADDR + 0x80)); // start address
+	Xil_Out32((AUDIO_BASEADDR+0x18),
+		  (0x8000000 | (AUDIO_LENGTH*8))); // no. of bytes
+	Xil_Out32((AUDIO_BASEADDR+0x58),
+		  (0x4000000 | (AUDIO_LENGTH*8))); // no. of bytes
+	Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
+	Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
+#endif
+	for (n = 0; n < AUDIO_LENGTH; n++) {
+#if (CURRENT_PLATFORM == PLATFORM_KC705) || \
+	(CURRENT_PLATFORM == PLATFORM_AC701) || (CURRENT_PLATFORM == PLATFORM_VC707)
+		Xil_Out32((AUDIO_BASEADDR+0x80+(n*4)), ((scnt << 16) | scnt));
+#elif (CURRENT_PLATFORM == PLATFORM_ZC702) || \
+		(CURRENT_PLATFORM == PLATFORM_ZC706) || \
+		(CURRENT_PLATFORM == PLATFORM_ZED)
 		Xil_Out32((AUDIO_BASEADDR+(n*4)), ((scnt << 16) | scnt));
+#endif
 		scnt = (n > (AUDIO_LENGTH/2)) ? (scnt-sincr) : (scnt+sincr);
 	}
 	Xil_DCacheFlush();
@@ -234,6 +258,9 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x0);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x1);
 
+#if (CURRENT_PLATFORM == PLATFORM_ZED) || \
+	(CURRENT_PLATFORM == PLATFORM_ZC702) || \
+	(CURRENT_PLATFORM == PLATFORM_ZC706)
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
 			  0x0); // reset DMAC
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
@@ -249,8 +276,23 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_Y_LENGTH,
 			  (verticalActiveTime-1)); // v size
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_START_TRANSFER,
-			  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
-
+		  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
+#else
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_DMA_CTRL),
+		  0x00000003); // enable circular mode
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_1),
+		  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_2),
+		  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_START_3),
+		  VIDEO_BASEADDR); // start address
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_FRMDLY_STRIDE),
+		  (horizontalActiveTime*4)); // h offset
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_H_SIZE),
+		  (horizontalActiveTime*4)); // h size
+	Xil_Out32((VDMA_BASEADDR + AXI_VDMA_REG_V_SIZE),
+		  verticalActiveTime); // v size
+#endif
 }
 
 /***************************************************************************//**
@@ -274,6 +316,11 @@ void SetVideoResolution(unsigned char resolution)
 *******************************************************************************/
 void InitHdmiAudioPcore(void)
 {
+#if (CURRENT_PLATFORM == PLATFORM_KC705) || \
+	(CURRENT_PLATFORM == PLATFORM_AC701) || (CURRENT_PLATFORM == PLATFORM_VC707)
+	DDRAudioWr();
+#endif
+
 	Xil_Out32((CFA_BASEADDR + 0x04), 0x040); // sample frequency
 #if (CURRENT_PLATFORM == PLATFORM_KC705) || \
 	(CURRENT_PLATFORM == PLATFORM_AC701) || (CURRENT_PLATFORM == PLATFORM_VC707)

@@ -51,6 +51,9 @@
 #include "edid.h"
 #include "cf_hdmi.h"
 #include "xil_io.h"
+#include "wrapper.h"
+#include "edid.h"
+#include "config.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -87,25 +90,36 @@ UCHAR							MuteState;
 *******************************************************************************/
 ATV_ERR ADIAPI_TransmitterInit(void)
 {
-    LastDetMode							= MODE_INVALID;
-    TransmitterParm.Changed				= TRUE;
-    TransmitterParm.Mode				= MODE_NONE;
-    TransmitterParm.ReqOutputMode		= OUT_MODE_HDMI;
-    TransmitterParm.InPixelBitsPerColor = 8;
-    TransmitterParm.InPixelFormat 		= SDR_422_SEP_SYNC;
-    TransmitterParm.InPixelStyle 		= 2;
-    TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
-    TransmitterParm.OutPixelEncFormat 	= OUT_ENC_RGB_444;
-    TransmitterParm.InColorSpace 		= TX_CS_YUV_601;
-    TransmitterParm.OutColorSpace 		= TX_CS_RGB;
-    TransmitterParm.AudInterface		= TX_SPDIF;
-    TransmitterParm.DebugControl		= 1;
-    MuteState							= MUTE_ENABLE;
+	LastDetMode							= MODE_INVALID;
+	TransmitterParm.Changed				= TRUE;
+	TransmitterParm.Mode				= MODE_NONE;
+	TransmitterParm.ReqOutputMode		= OUT_MODE_HDMI;
+#if (CURRENT_PLATFORM == PLATFORM_KC705) || \
+	(CURRENT_PLATFORM == PLATFORM_ZC702) || \
+	(CURRENT_PLATFORM == PLATFORM_ZED)
+	TransmitterParm.InPixelBitsPerColor = 8;
+	TransmitterParm.InPixelFormat 		= SDR_422_SEP_SYNC;
+#elif (CURRENT_PLATFORM == PLATFORM_VC707)
+	TransmitterParm.InPixelBitsPerColor = 12;
+	TransmitterParm.InPixelFormat 		= SDR_444_SEP_SYNC;
+#elif (CURRENT_PLATFORM == PLATFORM_AC701) || \
+	(CURRENT_PLATFORM == PLATFORM_ZC706)
+	TransmitterParm.InPixelBitsPerColor = 8;
+	TransmitterParm.InPixelFormat 		= SDR_444_SEP_SYNC;
+#endif
+	TransmitterParm.InPixelStyle 		= 2;
+	TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
+	TransmitterParm.OutPixelEncFormat 	= OUT_ENC_RGB_444;
+	TransmitterParm.InColorSpace 		= TX_CS_YUV_601;
+	TransmitterParm.OutColorSpace 		= TX_CS_RGB;
+	TransmitterParm.AudInterface		= TX_SPDIF;
+	TransmitterParm.DebugControl		= 1;
+	MuteState							= MUTE_ENABLE;
 
-    TRANSMITTER_SoftwareInit();
-    TRANSMITTER_HardwareInit();
+	TRANSMITTER_SoftwareInit();
+	TRANSMITTER_HardwareInit();
 
-    return ATVERR_OK;
+	return ATVERR_OK;
 }
 
 /***************************************************************************//**
