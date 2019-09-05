@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "error.h"
+#include "platform_drivers.h"
 #ifdef ALTERA_PLATFORM
 #include "io.h"
 #else
