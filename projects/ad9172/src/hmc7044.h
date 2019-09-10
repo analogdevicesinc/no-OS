@@ -98,6 +98,8 @@ uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
 				 uint32_t *rate);
 uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
 				uint32_t parent_rate);
+uint32_t hmc7044_clk_force_round_rate(struct hmc7044_dev *dev, uint32_t rate,
+				uint32_t parent_rate);
 uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
 			      uint32_t rate);
 uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,

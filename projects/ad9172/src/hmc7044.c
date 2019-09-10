@@ -350,8 +350,14 @@ uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
 		      HMC7044_DIV_MSB(div));
 }
 
-uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
-			      uint32_t rate_khz)
+struct pll_settings{
+	uint32_t n2;
+	uint32_t r2;
+	bool freq_doubler_en;
+	bool high_vco_en;
+};
+
+static uint32_t calc_pll_settings(struct hmc7044_dev *dev, uint32_t rate_khz, struct pll_settings *pll_settings)
 {
 	uint32_t n2[2], r2[2];
 	bool pll2_freq_doubler_en;
@@ -363,9 +369,6 @@ uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
 
 	uint32_t vcxo_freq = dev->vcxo_freq / 1000;
 	uint32_t pll2_freq = rate_khz;
-
-	if (chan >= dev->num_channels)
-		return FAILURE;
 
 	if (pll2_freq > HMC7044_HIGH_VCO_MAX)
 		return FAILURE;
@@ -412,17 +415,55 @@ uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
 		r2[0] *= 2;
 	}
 	if (n2[0] < HMC7044_N2_MIN)
-		return -FAILURE;
+		return FAILURE;
 	/* Program PLL2 */
+
+	pll_settings->n2 = n2[0];
+	pll_settings->r2 = r2[0];
+	pll_settings->freq_doubler_en = pll2_freq_doubler_en;
+	pll_settings->high_vco_en = high_vco_en;
+
+	return SUCCESS;
+}
+
+uint32_t hmc7044_clk_force_round_rate(struct hmc7044_dev *dev, uint32_t rate,
+				uint32_t parent_rate)
+{
+	struct pll_settings pll_settings;
+	int32_t ret;
+
+	ret = calc_pll_settings(dev, rate, &pll_settings);
+
+	if(ret < 0)
+		return 0;
+	uint32_t pll2_freq_khz = dev->vcxo_freq * pll_settings.n2 / pll_settings.r2;
+
+	return pll2_freq_khz;
+
+}
+
+uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
+			      uint32_t rate_khz)
+{
+	struct pll_settings pll_settings;
+	uint32_t div = 1;
+	int32_t ret;
+
+	if (chan >= dev->num_channels)
+		return FAILURE;
+
+	ret = calc_pll_settings(dev, rate_khz, &pll_settings);
+	if (ret < 0)
+		return ret;
 
 	/* Program the reference doubler */
 	hmc7044_write(dev, HMC7044_REG_PLL2_FREQ_DOUBLER,
-		      pll2_freq_doubler_en ? 0 : HMC7044_PLL2_FREQ_DOUBLER_DIS);
+			pll_settings.freq_doubler_en ? 0 : HMC7044_PLL2_FREQ_DOUBLER_DIS);
 
 	/* Select the VCO range */
 	hmc7044_write(dev, HMC7044_REG_EN_CTRL_0,
 		      HMC7044_RF_RESEEDER_EN |
-		      HMC7044_VCO_SEL(high_vco_en ?
+		      HMC7044_VCO_SEL(pll_settings.high_vco_en ?
 				      HMC7044_VCO_HIGH :
 				      HMC7044_VCO_LOW) |
 		      HMC7044_SYSREF_TIMER_EN | HMC7044_PLL2_EN |
@@ -430,13 +471,13 @@ uint32_t device_clk_force_rate(struct hmc7044_dev *dev, uint32_t chan,
 
 	/* Program the dividers */
 	hmc7044_write(dev, HMC7044_REG_PLL2_R_LSB,
-		      HMC7044_R2_LSB(r2[0]));
+		      HMC7044_R2_LSB(pll_settings.r2));
 	hmc7044_write(dev, HMC7044_REG_PLL2_R_MSB,
-		      HMC7044_R2_MSB(r2[0]));
+		      HMC7044_R2_MSB(pll_settings.r2));
 	hmc7044_write(dev, HMC7044_REG_PLL2_N_LSB,
-		      HMC7044_N2_LSB(n2[0]));
+		      HMC7044_N2_LSB(pll_settings.n2));
 	hmc7044_write(dev, HMC7044_REG_PLL2_N_MSB,
-		      HMC7044_N2_MSB(n2[0]));
+		      HMC7044_N2_MSB(pll_settings.n2));
 
 	ret = hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan),
 		      HMC7044_DIV_LSB(div));
@@ -546,7 +587,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		r2[0] *= 2;
 	}
 	if (n2[0] < HMC7044_N2_MIN)
-		return -FAILURE;
+		return FAILURE;
 
 	/* Resets all registers to default values */
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);

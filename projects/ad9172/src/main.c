@@ -182,197 +182,47 @@ int32_t ad9172_system_init(uint32_t lane_rate_kHz, uint8_t mode) {
 	uint32_t xcvr_ref_rate_khz, link_ref_rate_khz, device_ref_rate_khz;
 
 	printf("------------------------------------------\n");
-	while(!found_sol) {
-
-		status = link_get_next_ref_rate(lane_rate_kHz, &link_ref_rate_khz);
-		if (status != SUCCESS)
-		{
-			printf("link_get_next_ref_rate() error: %"PRIi32"\n", status);
-			break;
-		}
-
-
-		do {
-			status = xcvr_get_next_ref_rate(tx_adxcvr, lane_rate_kHz, &xcvr_ref_rate_khz);
-			if (status < 0)
-				break;
-			/* link clock is derived from fpga ref clock, in this case */
-			if (link_ref_rate_khz != xcvr_ref_rate_khz)
-				status = FAILURE;
-		} while(status < 0);
-		if (status < 0)
-			break;
-
-
-		status = device_get_next_ref_rate(lane_rate_kHz, mode, &device_ref_rate_khz);
-		uint32_t pll = least_common_multiple(xcvr_ref_rate_khz, device_ref_rate_khz);
-
-		status = device_clk_force_rate(hmc7044_device, FPGA_CLK_CH, pll);		/* set clock chip with new PLL value */
-
-		status = hmc7044_clk_set_rate(hmc7044_device, FPGA_CLK_CH, xcvr_ref_rate_khz);
-		status = hmc7044_clk_set_rate(hmc7044_device, DAC_CLK_CH, device_ref_rate_khz);
-		status = hmc7044_clk_set_rate(hmc7044_device, DAC_SYSREF_CH, device_ref_rate_khz);
-		status = hmc7044_clk_set_rate(hmc7044_device, FPGA_SYSREF_CH, device_ref_rate_khz);
-
-
-		if(status == SUCCESS) {
-			sol_no++;
-			printf("sol_no:%"PRIi32"  ", sol_no);
-			printf("lane_rate_kHz=%"PRIi32"  FPGA_ref_rate_kHz=%"PRIi32"  ", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
-			printf("HMC7044 pll2_freq_khz=%"PRIi32"  ", pll2_freq_khz);
-			printf("AD9172 ad9172_ref_rate_kHz=%"PRIi32" \n", ad9172_ref_rate_kHz);
-
-//					if (pll2_freq_khz == 2211840)
-//					if (pll2_freq_khz == 2580480)
-//					if (pll2_freq_khz == 2949120)
-//					if(sol_no != 2)
-//						continue;
-//						found_sol = 1;
-
-
-
-			tx_jesd_init.lane_clk_khz = lane_rate_kHz;
-			tx_jesd_init.device_clk_khz = lane_rate_kHz / 40;
-
-			tx_adxcvr_init.lane_rate_khz = lane_rate_kHz;
-			tx_adxcvr_init.ref_rate_khz = lane_rate_kHz;
-
-			ad9172_param.dac_rate_khz = dac_rate_kHz;
-			ad9172_param.dac_clkin_Hz = ad9172_ref_rate_kHz * 1000;
-
-			hmc7044_param.channels[0].divider = dac_ch_divider;
-			hmc7044_param.channels[2].divider = fpga_ch_divider;
-			hmc7044_param.channels[1].divider = pll2_freq_khz / LMFK_rate_kHz;
-			hmc7044_param.channels[3].divider = pll2_freq_khz / LMFK_rate_kHz;
-			hmc7044_param.pll2_freq = pll2_freq_khz * 1000;
-
-			continue;
-
-			status = hmc7044_init(&hmc7044_device, &hmc7044_param);
-
-			if (status != SUCCESS) {
-				printf("hmc7044_init() error: %"PRIi32"\n", status);
-				goto error_1;
-			}
-
-			status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-			if (status != SUCCESS) {
-				printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
-				goto error_2;
-			}
-
-		//	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-		//	if (status != SUCCESS) {
-		//		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
-		//		goto error_3;
-		//	}
-
-
-			status = adxcvr_clk_set_rate(tx_adxcvr, tx_adxcvr->lane_rate_khz, tx_adxcvr->ref_rate_khz);
-			if (status != SUCCESS) {
-				printf("error: %s: adxcvr_clk_set_rate() failed\n", tx_adxcvr->name);
-				goto error_3;
-			}
-
-			status = adxcvr_clk_enable(tx_adxcvr);
-			if (status != SUCCESS) {
-				printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
-				goto error_3;
-			}
-
-			status = axi_jesd204_tx_lane_clk_enable(tx_jesd);
-			if (status != SUCCESS) {
-				printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n", tx_jesd->name);
-				goto error_3;
-			}
-
-			status = ad9172_init(&ad9172_device, &ad9172_param);
-			if (status != SUCCESS) {
-				printf("ad9172_init() error: %"PRIi32"\n", status);
-				goto error_4;
-			}
-
-			status = axi_jesd204_tx_status_read(tx_jesd);
-			if (status != SUCCESS) {
-				printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
-				goto error_4;
-			}
-
-//					ad9172_remove(ad9172_device);
-//
-//					axi_jesd204_tx_remove(tx_jesd);
-//
-//					adxcvr_remove(tx_adxcvr);
-//
-//					hmc7044_remove(hmc7044_device);
-
-		}
+	status = link_get_next_ref_rate(lane_rate_kHz, &link_ref_rate_khz);
+	if (status != SUCCESS)
+	{
+		printf("link_get_next_ref_rate() error: %"PRIi32"\n", status);
+		return FAILURE;
 	}
 
+	xcvr_ref_rate_khz = 0;
+	while(!found_sol) {
+		device_ref_rate_khz = 0;
+		status = xcvr_get_next_ref_rate(tx_adxcvr, lane_rate_kHz, &xcvr_ref_rate_khz);
+		if (status < 0) {
+			printf("autoconfig() error: lane_rate_kHz %"PRIi32":\n", lane_rate_kHz);
+			return FAILURE;
+		}
+		/* link clock is derived from fpga ref clock, in this case */
+		if (link_ref_rate_khz == xcvr_ref_rate_khz)
+		{
+			while(!found_sol) {
+				status = device_get_next_ref_rate(lane_rate_kHz, mode, &device_ref_rate_khz);
+//				if (status < 0)
+//					break; // try another xcvr_ref_rate_khz
+//
+//				uint32_t pll_rate = least_common_multiple(xcvr_ref_rate_khz, device_ref_rate_khz);
+//				uint32_t pll_closest_rate = hmc7044_clk_force_round_rate(hmc7044_device, pll_rate, 1);
+//				uint32_t div1_closest_rate = hmc7044_clk_round_rate(hmc7044_device, xcvr_ref_rate_khz, pll_closest_rate);
+//				uint32_t div2_closest_rate = hmc7044_clk_round_rate(hmc7044_device, device_ref_rate_khz, pll_closest_rate);
+//				if(pll_closest_rate / div1_closest_rate == xcvr_ref_rate_khz &&
+//					pll_closest_rate / div2_closest_rate == device_ref_rate_khz)
+//				{
+//					sol_no++;
+//					printf("sol_no:%"PRIi32"  ", sol_no);
+//					printf("lane_rate_kHz=%"PRIi32"  FPGA_ref_rate_kHz=%"PRIi32"  ", lane_rate_kHz, tx_adxcvr->ref_rate_khz);
+//					printf("HMC7044 pll2_freq_khz=%"PRIi32"  ", pll_closest_rate);
+//					printf("AD9172 ad9172_ref_rate_kHz=%"PRIi32" \n", ad9172_ref_rate_kHz);
+//				}
+			}
+		}
 
+	}
 
-//	tx_jesd_init.lane_clk_khz = lane_rate_kHz;
-//	tx_jesd_init.device_clk_khz = lane_rate_kHz / 40;
-//
-//	tx_adxcvr_init.lane_rate_khz = lane_rate_kHz;
-//	tx_adxcvr_init.ref_rate_khz = lane_rate_kHz;
-//
-//	ad9172_param.dac_rate_khz = dac_rate_kHz;
-//	ad9172_param.dac_clkin_Hz = ad9172_ref_rate_kHz * 1000;
-//
-//	hmc7044_device->channels[0].divider = dac_ch_divider;
-//	hmc7044_device->channels[2].divider = fpga_ch_divider;
-//	hmc7044_device->pll2_freq = pll2_freq_khz * 1000;
-//#endif // AUTOCONFIG
-//
-//	status = hmc7044_setup(hmc7044_device);
-//	if (status != SUCCESS) {
-//		printf("hmc7044_init() error: %"PRIi32"\n", status);
-//		goto error_1;
-//	}
-//
-//	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-//	if (status != SUCCESS) {
-//		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
-//		goto error_2;
-//	}
-//
-////	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-////	if (status != SUCCESS) {
-////		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
-////		goto error_3;
-////	}
-//
-//
-//	status = adxcvr_clk_set_rate(tx_adxcvr, tx_adxcvr->lane_rate_khz, tx_adxcvr->ref_rate_khz);
-//	if (status != SUCCESS) {
-//		printf("error: %s: adxcvr_clk_set_rate() failed\n", tx_adxcvr->name);
-//		goto error_3;
-//	}
-//
-//	status = adxcvr_clk_enable(tx_adxcvr);
-//	if (status != SUCCESS) {
-//		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
-//		goto error_3;
-//	}
-//
-//	status = axi_jesd204_tx_lane_clk_enable(tx_jesd);
-//	if (status != SUCCESS) {
-//		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n", tx_jesd->name);
-//		goto error_3;
-//	}
-//
-//	status = ad9172_init(&ad9172_device, &ad9172_param);
-//	if (status != SUCCESS) {
-//		printf("ad9172_init() error: %"PRIi32"\n", status);
-//		goto error_4;
-//	}
-//
-//	status = axi_jesd204_tx_status_read(tx_jesd);
-//	if (status != SUCCESS) {
-//		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
-//		goto error_4;
-//	}
 
 
 	error_4:
