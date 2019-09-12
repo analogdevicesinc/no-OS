@@ -39,6 +39,9 @@
 #ifndef AD9361_TINYIIOD_H
 #define AD9361_TINYIIOD_H
 
+#include <stdint.h>
+#include "tinyiiod.h"
+
 static const char * const  xml =
 	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 	"<!DOCTYPE context ["
@@ -502,5 +505,7 @@ static const char * const  xml =
 	"<debug-attribute name=\"direct_reg_access\" />"
 	"</device>"
 	"</context>";
-struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy);
+
+ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod);
+
 #endif /* AD9361_TINYIIOD_H */

@@ -37,15 +37,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include <ad9361_tinyiiod_phy.h>
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "ad9361_api.h"
+#include "ad9361_tinyiiod_phy.h"
 #include "util.h"
 
 
-extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
+static struct ad9361_rf_phy *ad9361_phy;
 extern const char *ad9361_ensm_states[12];
 
 static const char * const ad9361_calib_mode[] =
@@ -1721,4 +1720,11 @@ static attrtibute_map global_write_attrtibute_map[] = {
 attrtibute_map *get_write_phy_attr_map()
 {
 	return global_write_attrtibute_map;
+}
+
+ssize_t tinyiiod_phy_configure(struct ad9361_rf_phy *phy)
+{
+	ad9361_phy = phy;
+
+	return 0;
 }

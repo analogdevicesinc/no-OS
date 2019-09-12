@@ -591,13 +591,22 @@ int main(void)
 #endif
 
 #ifdef USE_LIBIIO
-	axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
-	axi_dmac_init(&ad9361_phy->rx_dmac, default_init_param.rx_dmac_init);
+	int32_t ret;
+	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
+	if(ret < 0)
+		return ret;
+
+	ret = axi_dmac_init(&ad9361_phy->rx_dmac, default_init_param.rx_dmac_init);
+	if(ret < 0)
+		return ret;
+
 	/* Create the ad9361_tinyiiod */
-	iiod = ad9361_tinyiiod_create(ad9361_phy);
+	ret = ad9361_tinyiiod_create(ad9361_phy, &iiod);
+	if(ret < 0)
+		return ret;
 
 #ifdef UART_INTERFACE
-	int32_t ret = serial_init();
+	ret = serial_init();
 	if(ret < 0)
 		return ret;
 	while(1) {

@@ -40,7 +40,6 @@
 #include "ad9361.h"
 #include "ad9361_tinyiiod.h"
 #include "ad9361_parameters.h"
-#include "tinyiiod.h"
 #include "config.h"
 #include "tinyiiod_util.h"
 #include "tinyiiod_dac.h"
@@ -52,7 +51,7 @@
 
 static uint32_t request_mask;
 /* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
-static uint32_t input_channel_mask = 0x0F;
+static const uint32_t input_channel_mask = 0x0F;
 
 /**
  * Check device
@@ -82,7 +81,7 @@ static attrtibute_map read_attr_map[] = {
  * @param debug
  * @return length of chars written in buf
  */
-ssize_t read_attr(const char *device, const char *attr, char *buf, size_t len, bool debug)
+static ssize_t read_attr(const char *device, const char *attr, char *buf, size_t len, bool debug)
 {
 	if (!supporter_dev(device))
 		return -ENODEV;
@@ -111,7 +110,7 @@ static attrtibute_map write_attr_map[] = {
  * @param debug
  * @return length of chars written in buf
  */
-ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t len, bool debug)
+static ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t len, bool debug)
 {
 	if (!supporter_dev(device))
 		return -ENODEV;
@@ -125,10 +124,10 @@ ssize_t write_attr(const char *device, const char *attr, const char *buf, size_t
 }
 
 static attrtibute_map ch_read_attr_map[] = {
-	{"ad9361-phy", NULL, NULL},
-	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"cf-ad9361-lpc", NULL, NULL},
-	{NULL, NULL},
+	{"ad9361-phy", NULL, NULL, NULL},
+	{"cf-ad9361-dds-core-lpc", NULL, NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL, NULL},
+	{NULL, NULL, NULL, NULL},
 };
 
 /**
@@ -141,7 +140,7 @@ static attrtibute_map ch_read_attr_map[] = {
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
-ssize_t ch_read_attr(const char *device, const char *channel,
+static ssize_t ch_read_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
 	if (!supporter_dev(device))
@@ -172,7 +171,7 @@ static attrtibute_map ch_write_attr_map[] = {
 // * @param len length of the value
 // * @return length of chars written to attribute, negative value in case of failure
 // */
-ssize_t ch_write_attr(const char *device, const char *channel,
+static ssize_t ch_write_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
 	if (!supporter_dev(device))
@@ -247,8 +246,10 @@ const struct tinyiiod_ops ops = {
 	.get_mask = get_mask,
 };
 
-struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
+ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod)
 {
+	ssize_t ret;
+
 	ch_read_attr_map[0].map = get_ch_read_phy_attr_map();
 	ch_read_attr_map[1].map = get_ch_read_dac_attr_map();
 	ch_read_attr_map[2].map = get_ch_read_adc_attr_map();
@@ -266,7 +267,19 @@ struct tinyiiod * ad9361_tinyiiod_create(struct ad9361_rf_phy *phy)
 	read_attr_map[0].map = get_read_phy_attr_map();
 	write_attr_map[0].map = get_write_phy_attr_map();
 
-	tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
-	tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
-	return tinyiiod_create(xml, &ops);
+	ret = tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
+	if(ret < 0)
+		return ret;
+
+	ret = tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
+	if(ret < 0)
+		return ret;
+
+	ret = tinyiiod_phy_configure(phy);
+	if(ret < 0)
+		return ret;
+
+	*iiod = tinyiiod_create(xml, &ops);
+
+	return 0;
 }

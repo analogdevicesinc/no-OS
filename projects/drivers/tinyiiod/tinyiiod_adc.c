@@ -40,14 +40,12 @@
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
 #include <xil_cache.h>
-#include "ad9361_api.h" //todo remove
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_adc.h"
 
-
-extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t adc_ddr_baseaddr;
 static struct axi_adc *rx_adc;
 static struct axi_dmac	*rx_dmac;
@@ -152,10 +150,7 @@ static ssize_t get_cf_samples_pps(char *buf, size_t len,
 static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 				  const struct channel_info *channel)
 {
-	uint32_t sampling_freq_hz;
-	ad9361_get_rx_sampling_freq (ad9361_phy, &sampling_freq_hz);
-
-	return (ssize_t) snprintf(buf, len, "%d", (int)sampling_freq_hz);
+	return -ENODEV;
 }
 
 static attrtibute_map cf_voltage_read_attrtibute_map[] = {

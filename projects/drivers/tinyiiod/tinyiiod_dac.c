@@ -40,12 +40,11 @@
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "ad9361_api.h" //todo remove
+#include <stdlib.h>
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
 
-extern struct ad9361_rf_phy *ad9361_phy; //todo remove this
 static uint32_t dac_ddr_baseaddr;
 static struct axi_dac *tx_dac;
 static struct axi_dmac	*tx_dmac;
@@ -174,7 +173,6 @@ static ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
 	return snprintf(buf, len, "%"PRIi32"", freq);
 }
 
-extern int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac);
 /**
  * get_dds_altvoltage_raw
  * @param *buff where value is stored
@@ -185,8 +183,7 @@ extern int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac);
 static ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
 			       const struct channel_info *channel)
 {
-	return snprintf(buf, len, "%"PRIi32"", ad9361_auxdac_get(ad9361_phy,
-			channel->ch_num));
+	return -ENODEV;
 }
 
 /**
@@ -342,8 +339,6 @@ static ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
 	return len;
 }
 
-extern int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
-				 int32_t val_mV);
 /**
  * set_dds_altvoltage_raw
  * @param *buff value to be written to attribute

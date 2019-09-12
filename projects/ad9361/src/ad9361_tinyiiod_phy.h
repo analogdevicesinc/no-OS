@@ -41,10 +41,12 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "tinyiiod_util.h"
+#include "ad9361_api.h"
 
 attrtibute_map *get_read_phy_attr_map();
 attrtibute_map *get_write_phy_attr_map();
 attrtibute_map *get_ch_read_phy_attr_map();
 attrtibute_map *get_ch_write_phy_attr_map();
+ssize_t tinyiiod_phy_configure(struct ad9361_rf_phy *phy);
 
 #endif /* __TINYIIOD_PHY_H__ */
