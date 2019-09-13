@@ -150,7 +150,12 @@ static ssize_t get_cf_samples_pps(char *buf, size_t len,
 static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 				  const struct channel_info *channel)
 {
-	return -ENODEV;
+	uint64_t sampling_freq;
+	ssize_t ret = axi_adc_get_sampling_freq(rx_adc, channel->ch_num, &sampling_freq);
+	if(ret < 0)
+		return ret;
+
+	return snprintf(buf, len, "%"PRIi64"", sampling_freq);
 }
 
 static attrtibute_map cf_voltage_read_attrtibute_map[] = {
