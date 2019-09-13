@@ -25,7 +25,7 @@ struct channel_info {
 typedef struct attrtibute_map {
 	char *attr_name;
 	ssize_t (*exec)(char *buf, size_t len, const struct channel_info *channel);
-	struct attrtibute_map *map; 	/* in */
+	struct attrtibute_map *map_in; 	/* in */
 	struct attrtibute_map *map_out; /* out */
 }attrtibute_map;
 

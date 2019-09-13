@@ -156,7 +156,7 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute
 		else
 		{
 			el_info->crnt_level++;
-			return rd_wr_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map, is_write);
+			return rd_wr_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map_in, is_write);
 		}
 	}
 

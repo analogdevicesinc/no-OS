@@ -250,22 +250,22 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 {
 	ssize_t ret;
 
-	ch_read_attr_map[0].map = get_ch_read_phy_attr_map();
-	ch_read_attr_map[1].map = get_ch_read_dac_attr_map();
-	ch_read_attr_map[2].map = get_ch_read_adc_attr_map();
-	ch_read_attr_map[0].map_out = ch_read_attr_map[0].map;
-	ch_read_attr_map[1].map_out = ch_read_attr_map[1].map;
-	ch_read_attr_map[2].map_out = ch_read_attr_map[2].map;
+	ch_read_attr_map[0].map_in = get_ch_read_phy_attr_map();
+	ch_read_attr_map[1].map_in = get_ch_read_dac_attr_map();
+	ch_read_attr_map[2].map_in = get_ch_read_adc_attr_map();
+	ch_read_attr_map[0].map_out = ch_read_attr_map[0].map_in;
+	ch_read_attr_map[1].map_out = ch_read_attr_map[1].map_in;
+	ch_read_attr_map[2].map_out = ch_read_attr_map[2].map_in;
 
-	ch_write_attr_map[0].map = get_ch_write_phy_attr_map();
-	ch_write_attr_map[1].map = get_ch_write_dac_attr_map();
-	ch_write_attr_map[2].map = get_ch_write_adc_attr_map();
-	ch_write_attr_map[0].map_out = ch_write_attr_map[0].map;
-	ch_write_attr_map[1].map_out = ch_write_attr_map[1].map;
-	ch_write_attr_map[2].map_out = ch_write_attr_map[2].map;
+	ch_write_attr_map[0].map_in = get_ch_write_phy_attr_map();
+	ch_write_attr_map[1].map_in = get_ch_write_dac_attr_map();
+	ch_write_attr_map[2].map_in = get_ch_write_adc_attr_map();
+	ch_write_attr_map[0].map_out = ch_write_attr_map[0].map_in;
+	ch_write_attr_map[1].map_out = ch_write_attr_map[1].map_in;
+	ch_write_attr_map[2].map_out = ch_write_attr_map[2].map_in;
 
-	read_attr_map[0].map = get_read_phy_attr_map();
-	write_attr_map[0].map = get_write_phy_attr_map();
+	read_attr_map[0].map_in = get_read_phy_attr_map();
+	write_attr_map[0].map_in = get_write_phy_attr_map();
 
 	ret = tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
 	if(ret < 0)
