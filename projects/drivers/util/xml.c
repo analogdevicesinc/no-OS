@@ -16,12 +16,13 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value)
 	if (!(*attribute))
 		return -ENOMEM;
 
-	(*attribute)->name = malloc(sizeof(name));
+	(*attribute)->name = malloc(strlen(name));
 	if (!(*attribute)->name)
 		return -ENOMEM;
 	strcpy((*attribute)->name, name);
 
-	(*attribute)->value = malloc(sizeof(value));
+	(*attribute)->value = malloc(strlen(value));
+
 	if (!(*attribute)->value)
 		return -ENOMEM;
 	strcpy((*attribute)->value, value);
@@ -37,7 +38,7 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value)
  */
 ssize_t xml_add_attribute(xml_node *node, xml_attribute *attribute) {
 	if (!node->attributes) {
-		node->attributes = malloc(sizeof(xml_attribute));
+		node->attributes = malloc(sizeof(xml_attribute*));
 		if (!node->attributes)
 			return -ENOMEM;
 	}
@@ -67,7 +68,7 @@ ssize_t xml_create_node(xml_node **node, char *name) {
 	(*node)->attr_cnt = 0;
 	(*node)->children = NULL;
 	(*node)->children_cnt = 0;
-	(*node)->name = malloc(sizeof(name));
+	(*node)->name = malloc(strlen(name));
 	if (!(*node)->name)
 		return -ENOMEM;
 	strcpy((*node)->name, name);
@@ -83,7 +84,7 @@ ssize_t xml_create_node(xml_node **node, char *name) {
  */
 ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child) {
 	if (!node_parent->children) {
-		node_parent->children = malloc(sizeof(xml_node));
+		node_parent->children = malloc(sizeof(xml_node*));
 		if (!node_parent->children)
 			return -ENOMEM;
 	}
@@ -143,7 +144,7 @@ ssize_t xml_delete_node(xml_node *node) {
 ssize_t xml_create_document(xml_document **document, xml_node *node) {
 	uint8_t i;
 
-	const uint16_t buff_increments = 256;
+	const uint16_t buff_increments = 1024;
 	if (!(*document)) {
 		*document = malloc(sizeof(xml_document));
 		if (!(*document))
@@ -169,6 +170,12 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
 	for (i = 0; i < node->attr_cnt; i++) {
 		(*document)->index += sprintf(&(*document)->buff[(*document)->index], "%s=\"%s\" ", node->attributes[i]->name, node->attributes[i]->value);
 	}
+	if (node->children_cnt == 0)
+	{
+		(*document)->index += sprintf(&(*document)->buff[(*document)->index], "/>\n");
+		return 0;
+	}
+
 	(*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
 	for (i = 0; i < node->children_cnt; i++) {
 		xml_create_document(document, node->children[i]);
