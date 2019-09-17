@@ -50,7 +50,7 @@
 #endif /* UART_INTERFACE */
 
 static uint32_t request_mask;
-/* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
+/* mask for axi_adc_device 0x0F, it has 4 channels */
 static const uint32_t input_channel_mask = 0x0F;
 
 /**
@@ -61,14 +61,14 @@ static const uint32_t input_channel_mask = 0x0F;
 static bool supporter_dev(const char *device)
 {
 	return strequal(device, "ad9361-phy")
-	       || strequal(device, "cf-ad9361-lpc")
+	       || strequal(device, "axi_adc_device")
 	       || strequal(device, "cf-ad9361-dds-core-lpc");
 }
 
 static attrtibute_map read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"cf-ad9361-lpc", NULL, NULL},
+	{"axi_adc_device", NULL, NULL},
 	{NULL, NULL},
 };
 
@@ -97,7 +97,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf, size_t
 static attrtibute_map write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"cf-ad9361-lpc", NULL, NULL},
+	{"axi_adc_device", NULL, NULL},
 	{NULL, NULL},
 };
 
@@ -126,7 +126,7 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 static attrtibute_map ch_read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL, NULL},
-	{"cf-ad9361-lpc", NULL, NULL, NULL},
+	{"axi_adc_device", NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL},
 };
 
@@ -157,7 +157,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 static attrtibute_map ch_write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"cf-ad9361-lpc", NULL, NULL},
+	{"axi_adc_device", NULL, NULL},
 	{NULL, NULL},
 };
 
