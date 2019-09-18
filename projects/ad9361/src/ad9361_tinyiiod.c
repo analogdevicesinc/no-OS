@@ -44,6 +44,8 @@
 #include "tinyiiod_util.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_adc.h"
+#include "axi_dac_core.h"
+#include "axi_adc_core.h"
 
 #ifdef UART_INTERFACE
 #include "serial.h"
@@ -223,6 +225,61 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 	return 0;
 }
 
+static ssize_t get_xml(struct ad9361_rf_phy *phy, char **outxml)
+{
+	char *xml, *tmp_xml;
+	uint32_t length;
+
+	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+			"<!DOCTYPE context ["
+				"<!ELEMENT context (device | context-attribute)*>"
+				"<!ELEMENT context-attribute EMPTY>"
+				"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+				"<!ELEMENT channel (scan-element?, attribute*)>"
+				"<!ELEMENT attribute EMPTY>"
+				"<!ELEMENT scan-element EMPTY>"
+				"<!ELEMENT debug-attribute EMPTY>"
+				"<!ELEMENT buffer-attribute EMPTY>"
+				"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
+				"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
+				"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
+				"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
+				"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
+				"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+			"]>"
+			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
+				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
+
+	char header2[] = "</context>";
+
+	xml = malloc(strlen(header) + 1);
+	strcpy(xml, header);
+
+	get_dac_xml(&tmp_xml, phy->tx_dac->num_channels);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	get_adc_xml(&tmp_xml, phy->rx_adc->num_channels);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	get_phy_xml(&tmp_xml);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+	strcpy((xml + length), header2);
+
+	*outxml = xml;
+
+	return 0;
+}
 const struct tinyiiod_ops ops = {
 	/* communication */
 #ifdef UART_INTERFACE
@@ -248,6 +305,7 @@ const struct tinyiiod_ops ops = {
 
 ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod)
 {
+	char *xml;
 	ssize_t ret;
 
 	ch_read_attr_map[0].map_in = get_ch_read_phy_attr_map();
@@ -278,54 +336,8 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 	ret = tinyiiod_phy_configure(phy);
 	if(ret < 0)
 		return ret;
-	char *xml, *tmp_xml;
-	uint32_t length;
-	printf("\n\n\n");
-	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-			"<!DOCTYPE context ["
-				"<!ELEMENT context (device | context-attribute)*>"
-				"<!ELEMENT context-attribute EMPTY>"
-				"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
-				"<!ELEMENT channel (scan-element?, attribute*)>"
-				"<!ELEMENT attribute EMPTY>"
-				"<!ELEMENT scan-element EMPTY>"
-				"<!ELEMENT debug-attribute EMPTY>"
-				"<!ELEMENT buffer-attribute EMPTY>"
-				"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
-				"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
-				"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
-				"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
-				"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
-				"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
-				"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
-				"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
-			"]>"
-			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
-				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
-	char header2[] = "</context>";
 
-	xml = malloc(strlen(header) + 1);
-	strcpy(xml, header);
-
-	get_dac_xml(&tmp_xml, 4);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	get_adc_xml(&tmp_xml, 4);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	get_phy_xml(&tmp_xml, 4);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
-	strcpy((xml + length), header2);
-	printf("xml = %s\n\n\n", xml);
+	get_xml(phy, &xml);
 	*iiod = tinyiiod_create(xml, &ops);
 
 	return 0;

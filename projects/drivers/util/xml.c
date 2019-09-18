@@ -104,9 +104,13 @@ ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child) {
  * @param *attribute
  * @return 0 in case of success or negative value otherwise
  */
-ssize_t xml_delete_attribute(xml_attribute *attribute) {
-	free(attribute->name);
-	free(attribute->value);
+ssize_t xml_delete_attribute(xml_attribute **attribute) {
+	free((*attribute)->name);
+	free((*attribute)->value);
+	(*attribute)->name = NULL;
+	(*attribute)->value = NULL;
+	free(*attribute);
+	*attribute = NULL;
 
 	return 0;
 }
@@ -116,20 +120,23 @@ ssize_t xml_delete_attribute(xml_attribute *attribute) {
  * @param *node
  * @return 0 in case of success or negative value otherwise
  */
-ssize_t xml_delete_node(xml_node *node) {
+ssize_t xml_delete_node(xml_node **node) {
 	uint8_t i;
 
-	free(node->name);
-	for (i = 0; i < node->attr_cnt; i++) {
-		xml_delete_attribute(node->attributes[i]);
+	free((*node)->name);
+	(*node)->name = NULL;
+	for (i = 0; i < (*node)->attr_cnt; i++) {
+		xml_delete_attribute(&(*node)->attributes[i]);
 	}
-	free(node->attributes);
-	node->attr_cnt = 0;
-	for (i = 0; i < node->children_cnt; i++) {
-		xml_delete_node(node->children[i]);
+	free((*node)->attributes);
+	(*node)->attributes = NULL;
+	(*node)->attr_cnt = 0;
+	for (i = 0; i < (*node)->children_cnt; i++) {
+		xml_delete_node(&(*node)->children[i]);
 	}
-	free(node->children);
-	node->children_cnt = 0;
+	free((*node)->children);
+	(*node)->children = NULL;
+	(*node)->children_cnt = 0;
 
 	return 0;
 }
@@ -189,9 +196,11 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
  * @param **document pointer ti document
  * @return 0 in case of success or negative value otherwise
  */
-ssize_t xml_delete_document(xml_document *document) {
-	free(document->buff);
-	free(document);
+ssize_t xml_delete_document(xml_document **document) {
+	free((*document)->buff);
+	(*document)->buff = NULL;
+	free((*document));
+	*document = NULL;
 
 	return 0;
 }

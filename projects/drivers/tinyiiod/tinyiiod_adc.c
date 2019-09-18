@@ -360,21 +360,16 @@ ssize_t get_adc_xml(char** xml, uint8_t ch_no) {
 
 	ret = xml_create_document(&document, device);
 	if(ret < 0)
+	{
+		if(document)
+			xml_delete_document(&document);
 		goto error;
+	}
 	*xml = document->buff;
-	xml_delete_node(device);
 
 error:
 	if(device)
-		xml_delete_node(device);
-	if(channel)
-		xml_delete_node(channel);
-	if(attribute)
-		xml_delete_node(attribute);
-	if(att)
-		xml_delete_attribute(att);
-	if(document)
-		xml_delete_document(document);
+		xml_delete_node(&device);
 
 	return ret;
 }

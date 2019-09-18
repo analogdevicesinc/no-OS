@@ -2046,7 +2046,7 @@ ssize_t tinyiiod_phy_configure(struct ad9361_rf_phy *phy)
 	return 0;
 }
 
-ssize_t get_phy_xml(char** xml, uint8_t ch_no)
+ssize_t get_phy_xml(char** xml)
 {
 	*xml = phy_xml;
 
