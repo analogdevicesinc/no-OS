@@ -36,16 +36,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include <ad9361_tinyiiod_phy.h>
-#include "ad9361.h"
-#include "ad9361_tinyiiod.h"
-#include "ad9361_parameters.h"
+#include "ad9361_tinyiiod_phy.h"
+#include "tinyiiod.h"
 #include "config.h"
 #include "tinyiiod_util.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_adc.h"
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
+#include "axi_dmac.h"
 
 #ifdef UART_INTERFACE
 #include "serial.h"
@@ -257,12 +256,12 @@ static ssize_t get_xml(struct ad9361_rf_phy *phy, char **outxml)
 	xml = malloc(strlen(header) + 1);
 	strcpy(xml, header);
 
-	get_dac_xml(&tmp_xml, phy->tx_dac->num_channels);
+	get_dac_xml(&tmp_xml, "cf-ad9361-dds-core-lpc", phy->tx_dac->num_channels);
 	length = strlen(xml);
 	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 	strcpy((xml + length), tmp_xml);
 
-	get_adc_xml(&tmp_xml, phy->rx_adc->num_channels);
+	get_adc_xml(&tmp_xml, "cf-ad9361-lpc", phy->rx_adc->num_channels);
 	length = strlen(xml);
 	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 	strcpy((xml + length), tmp_xml);
@@ -280,6 +279,7 @@ static ssize_t get_xml(struct ad9361_rf_phy *phy, char **outxml)
 
 	return 0;
 }
+
 const struct tinyiiod_ops ops = {
 	/* communication */
 #ifdef UART_INTERFACE

@@ -274,7 +274,7 @@ static attrtibute_map ch_write_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
-ssize_t get_adc_xml(char** xml, uint8_t ch_no) {
+ssize_t get_adc_xml(char** xml, char *device_name, uint8_t ch_no) {
 	char buff[256];
 	xml_node *device = NULL;
 	xml_node *channel = NULL;
@@ -286,13 +286,13 @@ ssize_t get_adc_xml(char** xml, uint8_t ch_no) {
 	ret = xml_create_node(&device, "device");
 	if (ret < 0)
 		goto error;
-	ret = xml_create_attribute(&att, "id", "cf-ad9361-lpc");
+	ret = xml_create_attribute(&att, "id", device_name);
 	if (ret < 0)
 		goto error;
 	ret = xml_add_attribute(device, att);
 	if (ret < 0)
 		goto error;
-	ret = xml_create_attribute(&att, "name", "cf-ad9361-lpc");
+	ret = xml_create_attribute(&att, "name", device_name);
 	if (ret < 0)
 		goto error;
 	ret = xml_add_attribute(device, att);

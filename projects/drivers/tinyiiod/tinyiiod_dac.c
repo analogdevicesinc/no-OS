@@ -537,7 +537,7 @@ ssize_t write_dev(const char *device, const char *buf,
 	return bytes_count;
 }
 
-ssize_t get_dac_xml(char** xml, uint8_t ch_no)
+ssize_t get_dac_xml(char** xml,  char *device_name, uint8_t ch_no)
 {
 	*xml = dac_xml;
 
