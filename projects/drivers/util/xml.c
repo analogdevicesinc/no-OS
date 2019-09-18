@@ -16,12 +16,12 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value)
 	if (!(*attribute))
 		return -ENOMEM;
 
-	(*attribute)->name = malloc(strlen(name));
+	(*attribute)->name = malloc(strlen(name) + 1);
 	if (!(*attribute)->name)
 		return -ENOMEM;
 	strcpy((*attribute)->name, name);
 
-	(*attribute)->value = malloc(strlen(value));
+	(*attribute)->value = malloc(strlen(value) + 1);
 
 	if (!(*attribute)->value)
 		return -ENOMEM;
@@ -68,7 +68,7 @@ ssize_t xml_create_node(xml_node **node, char *name) {
 	(*node)->attr_cnt = 0;
 	(*node)->children = NULL;
 	(*node)->children_cnt = 0;
-	(*node)->name = malloc(strlen(name));
+	(*node)->name = malloc(strlen(name) + 1);
 	if (!(*node)->name)
 		return -ENOMEM;
 	strcpy((*node)->name, name);
@@ -192,7 +192,7 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
  */
 ssize_t xml_delete_document(xml_document **document) {
 	free((*document)->buff);
-	free(document);
+	free(*document);
 
 	return 0;
 }
