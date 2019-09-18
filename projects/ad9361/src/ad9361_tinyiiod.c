@@ -37,6 +37,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "ad9361_tinyiiod_phy.h"
+#include "ad9361_parameters.h"
 #include "tinyiiod.h"
 #include "config.h"
 #include "tinyiiod_util.h"
