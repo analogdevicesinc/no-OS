@@ -45,6 +45,7 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_adc.h"
+#include "xml.h"
 
 static uint32_t adc_ddr_baseaddr;
 static struct axi_adc *rx_adc;
@@ -158,33 +159,6 @@ static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
 	return snprintf(buf, len, "%"PRIi64"", sampling_freq);
 }
 
-static attrtibute_map cf_voltage_read_attrtibute_map[] = {
-	{"calibphase", get_cf_calibphase},
-	{"calibbias", get_cf_calibbias},
-	{"calibscale", get_cf_calibscale},
-	{"samples_pps", get_cf_samples_pps},
-	{"sampling_frequency", get_cf_sampling_frequency},
-	{NULL, NULL},
-};
-
-static attrtibute_map ch_read_adc_attr_map[] = {
-	{"voltage0", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
-	{"voltage1", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
-	{"voltage2", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
-	{"voltage3", NULL, cf_voltage_read_attrtibute_map, cf_voltage_read_attrtibute_map},
-	{NULL, NULL},
-};
-
-/**
- * get_ch_read_dac_attr_map
- * get map between attribute name and corresponding function
- * @return map
- */
-attrtibute_map *get_ch_read_adc_attr_map()
-{
-	return ch_read_adc_attr_map;
-}
-
 /**
  * set_cf_calibphase
  * @param *buff value to be written to attribute
@@ -266,6 +240,23 @@ static ssize_t set_cf_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
+static attrtibute_map cf_voltage_read_attrtibute_map[] = {
+	{"calibphase", get_cf_calibphase},
+	{"calibbias", get_cf_calibbias},
+	{"calibscale", get_cf_calibscale},
+	{"samples_pps", get_cf_samples_pps},
+	{"sampling_frequency", get_cf_sampling_frequency},
+	{NULL, NULL},
+};
+
+static attrtibute_map ch_read_adc_attr_map[] = {
+	{"voltage0", NULL, cf_voltage_read_attrtibute_map, NULL},
+	{"voltage1", NULL, cf_voltage_read_attrtibute_map, NULL},
+	{"voltage2", NULL, cf_voltage_read_attrtibute_map, NULL},
+	{"voltage3", NULL, cf_voltage_read_attrtibute_map, NULL},
+	{NULL, NULL},
+};
+
 static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 	{"calibphase", set_cf_calibphase},
 	{"calibbias", set_cf_calibbias},
@@ -276,10 +267,10 @@ static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 };
 
 static attrtibute_map ch_write_adc_attr_map[] = {
-	{"voltage0", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
-	{"voltage1", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
-	{"voltage2", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
-	{"voltage3", NULL, cf_voltage_write_attrtibute_map, cf_voltage_write_attrtibute_map},
+	{"voltage0", NULL, cf_voltage_write_attrtibute_map, NULL},
+	{"voltage1", NULL, cf_voltage_write_attrtibute_map, NULL},
+	{"voltage2", NULL, cf_voltage_write_attrtibute_map, NULL},
+	{"voltage3", NULL, cf_voltage_write_attrtibute_map, NULL},
 	{NULL, NULL},
 };
 

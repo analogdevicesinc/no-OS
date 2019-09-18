@@ -48,5 +48,7 @@ ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint3
 ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count);
 ssize_t write_dev(const char *device, const char *buf,
 			 size_t offset,  size_t bytes_count);
+ssize_t get_dac_xml(char** xml, uint8_t ch_no);
+
 
 #endif /* __TINYIIOD_DAC_H__ */

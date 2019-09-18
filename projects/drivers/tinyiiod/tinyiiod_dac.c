@@ -45,6 +45,95 @@
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
 
+static const char * const  dac_xml =
+
+		"<device id=\"cf-ad9361-dds-core-lpc\" name=\"cf-ad9361-dds-core-lpc\" >"
+			"<channel id=\"voltage0\" type=\"output\" >"
+				"<scan-element index=\"0\" format=\"le:S16/16&gt;&gt;0\" />"
+				"<attribute name=\"calibscale\" filename=\"out_voltage0_calibscale\" />"
+				"<attribute name=\"calibphase\" filename=\"out_voltage0_calibphase\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"voltage1\" type=\"output\" >"
+				"<scan-element index=\"1\" format=\"le:S16/16&gt;&gt;0\" />"
+				"<attribute name=\"calibphase\" filename=\"out_voltage1_calibphase\" />"
+				"<attribute name=\"calibscale\" filename=\"out_voltage1_calibscale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"voltage2\" type=\"output\" >"
+				"<scan-element index=\"2\" format=\"le:S16/16&gt;&gt;0\" />"
+				"<attribute name=\"calibphase\" filename=\"out_voltage2_calibphase\" />"
+				"<attribute name=\"calibscale\" filename=\"out_voltage2_calibscale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"voltage3\" type=\"output\" >"
+				"<scan-element index=\"3\" format=\"le:S16/16&gt;&gt;0\" />"
+				"<attribute name=\"calibphase\" filename=\"out_voltage3_calibphase\" />"
+				"<attribute name=\"calibscale\" filename=\"out_voltage3_calibscale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage3\" name=\"TX1_Q_F2\" type=\"output\" >"
+				"<attribute name=\"raw\" filename=\"out_altvoltage3_TX1_Q_F2_raw\" />"
+				"<attribute name=\"phase\" filename=\"out_altvoltage3_TX1_Q_F2_phase\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage3_TX1_Q_F2_frequency\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage3_TX1_Q_F2_scale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage1\" name=\"TX1_I_F2\" type=\"output\" >"
+				"<attribute name=\"phase\" filename=\"out_altvoltage1_TX1_I_F2_phase\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage1_TX1_I_F2_scale\" />"
+				"<attribute name=\"raw\" filename=\"out_altvoltage1_TX1_I_F2_raw\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage1_TX1_I_F2_frequency\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage0\" name=\"TX1_I_F1\" type=\"output\" >"
+				"<attribute name=\"phase\" filename=\"out_altvoltage0_TX1_I_F1_phase\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage0_TX1_I_F1_scale\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage0_TX1_I_F1_frequency\" />"
+				"<attribute name=\"raw\" filename=\"out_altvoltage0_TX1_I_F1_raw\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage7\" name=\"TX2_Q_F2\" type=\"output\" >"
+				"<attribute name=\"raw\" filename=\"out_altvoltage7_TX2_Q_F2_raw\" />"
+				"<attribute name=\"phase\" filename=\"out_altvoltage7_TX2_Q_F2_phase\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage7_TX2_Q_F2_scale\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage7_TX2_Q_F2_frequency\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage6\" name=\"TX2_Q_F1\" type=\"output\" >"
+				"<attribute name=\"phase\" filename=\"out_altvoltage6_TX2_Q_F1_phase\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage6_TX2_Q_F1_scale\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage6_TX2_Q_F1_frequency\" />"
+				"<attribute name=\"raw\" filename=\"out_altvoltage6_TX2_Q_F1_raw\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage5\" name=\"TX2_I_F2\" type=\"output\" >"
+				"<attribute name=\"raw\" filename=\"out_altvoltage5_TX2_I_F2_raw\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage5_TX2_I_F2_frequency\" />"
+				"<attribute name=\"phase\" filename=\"out_altvoltage5_TX2_I_F2_phase\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage5_TX2_I_F2_scale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage2\" name=\"TX1_Q_F1\" type=\"output\" >"
+				"<attribute name=\"raw\" filename=\"out_altvoltage2_TX1_Q_F1_raw\" />"
+				"<attribute name=\"phase\" filename=\"out_altvoltage2_TX1_Q_F1_phase\" />"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage2_TX1_Q_F1_frequency\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage2_TX1_Q_F1_scale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<channel id=\"altvoltage4\" name=\"TX2_I_F1\" type=\"output\" >"
+				"<attribute name=\"frequency\" filename=\"out_altvoltage4_TX2_I_F1_frequency\" />"
+				"<attribute name=\"phase\" filename=\"out_altvoltage4_TX2_I_F1_phase\" />"
+				"<attribute name=\"raw\" filename=\"out_altvoltage4_TX2_I_F1_raw\" />"
+				"<attribute name=\"scale\" filename=\"out_altvoltage4_TX2_I_F1_scale\" />"
+				"<attribute name=\"sampling_frequency\" filename=\"out_altvoltage_sampling_frequency\" />"
+			"</channel>"
+			"<buffer-attribute name=\"watermark\" />"
+			"<buffer-attribute name=\"data_available\" />"
+			"<debug-attribute name=\"direct_reg_access\" />"
+		"</device>";
+
+
 static uint32_t dac_ddr_baseaddr;
 static struct axi_dac *tx_dac;
 static struct axi_dmac	*tx_dmac;
@@ -446,4 +535,11 @@ ssize_t write_dev(const char *device, const char *buf,
 		return ret;
 
 	return bytes_count;
+}
+
+ssize_t get_dac_xml(char** xml, uint8_t ch_no)
+{
+	*xml = dac_xml;
+
+	return 0;
 }

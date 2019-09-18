@@ -50,7 +50,7 @@
 #endif /* UART_INTERFACE */
 
 static uint32_t request_mask;
-/* mask for axi_adc_device 0x0F, it has 4 channels */
+/* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
 static const uint32_t input_channel_mask = 0x0F;
 
 /**
@@ -61,14 +61,14 @@ static const uint32_t input_channel_mask = 0x0F;
 static bool supporter_dev(const char *device)
 {
 	return strequal(device, "ad9361-phy")
-	       || strequal(device, "axi_adc_device")
+	       || strequal(device, "cf-ad9361-lpc")
 	       || strequal(device, "cf-ad9361-dds-core-lpc");
 }
 
 static attrtibute_map read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"axi_adc_device", NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL},
 	{NULL, NULL},
 };
 
@@ -97,7 +97,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf, size_t
 static attrtibute_map write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"axi_adc_device", NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL},
 	{NULL, NULL},
 };
 
@@ -126,7 +126,7 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 static attrtibute_map ch_read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL, NULL},
-	{"axi_adc_device", NULL, NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL},
 };
 
@@ -157,7 +157,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 static attrtibute_map ch_write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
-	{"axi_adc_device", NULL, NULL},
+	{"cf-ad9361-lpc", NULL, NULL},
 	{NULL, NULL},
 };
 
@@ -278,7 +278,60 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 	ret = tinyiiod_phy_configure(phy);
 	if(ret < 0)
 		return ret;
+	char *xml, *new_xml, *tmp_xml;
+	uint32_t length;
+	printf("\n\n\n");
+	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+			"<!DOCTYPE context ["
+				"<!ELEMENT context (device | context-attribute)*>"
+				"<!ELEMENT context-attribute EMPTY>"
+				"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+				"<!ELEMENT channel (scan-element?, attribute*)>"
+				"<!ELEMENT attribute EMPTY>"
+				"<!ELEMENT scan-element EMPTY>"
+				"<!ELEMENT debug-attribute EMPTY>"
+				"<!ELEMENT buffer-attribute EMPTY>"
+				"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
+				"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
+				"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
+				"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
+				"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
+				"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+			"]>"
+			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
+				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
+	char header2[] = "</context>";
+//	length = strlen(header);
+//	printf("header[%"PRIu32"] = %s\n\n\n", length, header);
+	length = strlen(header2);
+//	printf("header2[%"PRIu32"] = %s\n\n\n", length, header2);
+	length = strlen(header) + 1;
+	xml = malloc(length);
 
+	strcpy(xml, header);
+//	printf("xml intermidiate = %s\n\n\n", xml);
+
+	get_dac_xml(&tmp_xml, 4);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	get_adc_xml(&tmp_xml, 4);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	get_phy_xml(&tmp_xml, 4);
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+	strcpy((xml + length), tmp_xml);
+
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+	strcpy((xml + length), header2);
+	printf("xml = %s\n\n\n", xml);
 	*iiod = tinyiiod_create(xml, &ops);
 
 	return 0;
