@@ -22,7 +22,6 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value)
 	strcpy((*attribute)->name, name);
 
 	(*attribute)->value = malloc(strlen(value) + 1);
-
 	if (!(*attribute)->value)
 		return -ENOMEM;
 	strcpy((*attribute)->value, value);
@@ -190,9 +189,9 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
  * @param **document pointer ti document
  * @return 0 in case of success or negative value otherwise
  */
-ssize_t xml_delete_document(xml_document **document) {
-	free((*document)->buff);
-	free(*document);
+ssize_t xml_delete_document(xml_document *document) {
+	free(document->buff);
+	free(document);
 
 	return 0;
 }

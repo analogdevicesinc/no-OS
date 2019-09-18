@@ -278,7 +278,7 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 	ret = tinyiiod_phy_configure(phy);
 	if(ret < 0)
 		return ret;
-	char *xml, *new_xml, *tmp_xml;
+	char *xml, *tmp_xml;
 	uint32_t length;
 	printf("\n\n\n");
 	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -303,15 +303,9 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
 				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
 	char header2[] = "</context>";
-//	length = strlen(header);
-//	printf("header[%"PRIu32"] = %s\n\n\n", length, header);
-	length = strlen(header2);
-//	printf("header2[%"PRIu32"] = %s\n\n\n", length, header2);
-	length = strlen(header) + 1;
-	xml = malloc(length);
 
+	xml = malloc(strlen(header) + 1);
 	strcpy(xml, header);
-//	printf("xml intermidiate = %s\n\n\n", xml);
 
 	get_dac_xml(&tmp_xml, 4);
 	length = strlen(xml);

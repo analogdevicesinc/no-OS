@@ -29,6 +29,6 @@ ssize_t xml_create_node(xml_node **node, char *name);
 ssize_t xml_delete_node(xml_node *node);
 ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child);
 ssize_t xml_create_document(xml_document **document, xml_node *node);
-ssize_t xml_delete_document(xml_document **document);
+ssize_t xml_delete_document(xml_document *document);
 
 #endif // ___XML_H__
