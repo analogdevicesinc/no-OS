@@ -283,6 +283,107 @@ static attrtibute_map ch_write_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
+ssize_t get_adc_xml(char** xml, uint8_t ch_no) {
+	char buff[256];
+	xml_node *device;
+	xml_node *channel;
+	xml_node *attribute;
+	xml_attribute *att;
+	xml_document *document = NULL;
+	ssize_t ret;
+
+	ret = xml_create_node(&device, "device");
+	if (ret < 0)
+		return ret;
+	ret = xml_create_attribute(&att, "id", "cf-ad9361-lpc");
+	if (ret < 0)
+		return ret;
+	ret = xml_add_attribute(device, att);
+	if (ret < 0)
+		return ret;
+	ret = xml_create_attribute(&att, "name", "cf-ad9361-lpc");
+	if (ret < 0)
+		return ret;
+	ret = xml_add_attribute(device, att);
+	if (ret < 0)
+		return ret;
+
+	for (uint8_t i = 0; i < ch_no; i++) {
+		ret = xml_create_node(&channel, "channel");
+		if (ret < 0)
+			return ret;
+		sprintf(buff, "voltage%d", i);
+		ret = xml_create_attribute(&att, "id", buff);
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(channel, att);
+		if (ret < 0)
+			return ret;
+		ret = xml_create_attribute(&att, "type", "input");
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(channel, att);
+		if (ret < 0)
+			return ret;
+
+
+		ret = xml_create_node(&attribute, "scan-element");
+		if (ret < 0)
+			return ret;
+		sprintf(buff, "%d", i);
+		ret = xml_create_attribute(&att, "index", buff);
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(attribute, att);
+		if (ret < 0)
+			return ret;
+		ret = xml_create_attribute(&att, "format", "le:S12/16&gt;&gt;0"); // todo
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(attribute, att);
+		if (ret < 0)
+			return ret;
+		xml_add_node(channel, attribute);
+
+		for (uint8_t j = 0; cf_voltage_read_attrtibute_map[j].attr_name != NULL; j++) {
+			ret = xml_create_node(&attribute, "attribute");
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "name", cf_voltage_read_attrtibute_map[j].attr_name);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			sprintf(buff, "in_voltage%d_%s", i, cf_voltage_read_attrtibute_map[j].attr_name);
+			ret = xml_create_attribute(&att, "filename", buff);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			xml_add_node(channel, attribute);
+		}
+		xml_add_node(device, channel);
+	}
+
+	xml_create_document(&document, device);
+	*xml = document->buff;
+	xml_delete_node(device);
+
+	return 0;
+}
+
+/**
+ * get_ch_read_dac_attr_map
+ * get map between attribute name and corresponding function
+ * @return map
+ */
+attrtibute_map *get_ch_read_adc_attr_map()
+{
+	return ch_read_adc_attr_map;
+}
+
 /**
  * get_ch_write_adc_attr_map
  * get map between attribute name and corresponding function
