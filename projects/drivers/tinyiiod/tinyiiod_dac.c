@@ -45,6 +45,7 @@
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
 #include "platform_drivers.h"
+#include "util.h"
 
 static const char * const  dac_xml =
 
@@ -549,9 +550,9 @@ ssize_t write_dev(const char *device, const char *buf,
 	return bytes_count;
 }
 
-ssize_t get_dac_xml(char** xml,  char *device_name, uint8_t ch_no)
+ssize_t get_dac_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
-	*xml = dac_xml;
+	*xml = (char *)dac_xml; // todo
 
 	return 0;
 }

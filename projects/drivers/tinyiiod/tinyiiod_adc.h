@@ -61,5 +61,5 @@ ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par
 ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count);
 ssize_t read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count);
-ssize_t get_adc_xml(char** xml, char *device_name, uint8_t ch_no);
+ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no);
 #endif /* __TINYIIOD_ADC_H__ */

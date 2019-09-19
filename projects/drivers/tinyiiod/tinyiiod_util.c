@@ -165,7 +165,7 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_
 	return -ENOENT;
 }
 
-ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no)) {
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no)) {
 	if (!(tinyiiod_devs)) {
 		tinyiiod_devs = malloc(sizeof(tinyiiod_devices*));
 		tinyiiod_devs->number_of_dev = 1;
@@ -177,8 +177,10 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name, 
 	}
 	tinyiiod_device *device = malloc(sizeof(tinyiiod_device));
 	device->pointer = device_address;
-	device->name = malloc(strlen(device_name) + 1);
-	strcpy(device->name, device_name);
+//	device->name = malloc(strlen(device_name) + 1);
+//	strcpy(device->name, device_name);
+	device->name = device_name;
+
 	device->number_of_channels = number_of_channels;
 	device->get_device_xml = get_device_xml;
 	tinyiiod_devs->devices[tinyiiod_devs->number_of_dev - 1] = device;

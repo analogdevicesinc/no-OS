@@ -22,7 +22,7 @@ typedef struct xml_document {
 	uint32_t index;
 }xml_document;
 
-ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value);
+ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *value);
 ssize_t xml_delete_attribute(xml_attribute **attribute);
 ssize_t xml_add_attribute(xml_node *node, xml_attribute *attribute);
 ssize_t xml_create_node(xml_node **node, char *name);

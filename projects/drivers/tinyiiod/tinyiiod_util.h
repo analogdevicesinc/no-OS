@@ -7,10 +7,10 @@
 #include "tinyiiod_types.h"
 
 typedef struct tinyiiod_device {
-	char *name;
+	const char *name;
 	void *pointer;
 	uint16_t number_of_channels;
-	ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no);
+	ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
 }tinyiiod_device;
 
 typedef struct tinyiiod_devices {
@@ -33,7 +33,7 @@ typedef struct element_info {
 }element_info;
 
 ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_map *map, bool is_write);
-ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no));
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no));
 ssize_t get_xml(char **outxml);
 
 #endif /* __TINYIIOD_H__ */

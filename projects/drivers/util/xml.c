@@ -11,7 +11,7 @@
  * @param *value attribute value
  * @return 0 in case of success or negative value otherwise
  */
-ssize_t xml_create_attribute(xml_attribute **attribute, char *name, char *value) {
+ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *value) {
 	*attribute = malloc(sizeof(xml_attribute));
 	if (!(*attribute))
 		return -ENOMEM;

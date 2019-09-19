@@ -287,7 +287,7 @@ static attribute_map ch_write_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
-ssize_t get_adc_xml(char** xml, char *device_name, uint8_t ch_no) {
+ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no) {
 	char buff[256];
 	xml_node *device = NULL;
 	xml_node *channel = NULL;
