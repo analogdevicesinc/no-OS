@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include "util.h"
 #include "errno.h"
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -162,41 +163,22 @@ uint64_t do_div(uint64_t* n,
 }
 
 /**
- * Unsigned 64bit divide with 64bit divisor and remainder
+ * Compare two strings
+ * @param *str1 pointer to string 1
+ * @param *str2 pointer to string 2
+ * @return TRUE if strings are equal, 0 otherwise
  */
-uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor, uint64_t *remainder)
+bool strequal(const char *str1, const char *str2)
 {
-	*remainder = dividend % divisor;
-
-	return dividend / divisor;
+	return !strcmp(str1, str2);
 }
 
 /**
- * Unsigned 64bit divide with 32bit divisor with remainder
- */
-uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder)
-{
-	*remainder = do_div(&dividend, divisor);
-
-	return dividend;
-}
-
-/**
- * Unsigned 64bit divide with 32bit divisor
- */
-uint64_t div_u64(uint64_t dividend, uint32_t divisor)
-{
-	uint32_t remainder;
-
-	return div_u64_rem(dividend, divisor, &remainder);
-}
-
-/**
- * Converts from string to int32_t
+ * Converts from string to long value
  * @param *str
- * @return int32_t
+ * @return long value
  */
-int32_t str_to_int32(const char *str)
+int32_t read_value(const char *str)
 {
 	char *end;
 	int32_t value = strtol(str, &end, 0);
@@ -208,11 +190,11 @@ int32_t str_to_int32(const char *str)
 }
 
 /**
- * Converts from string to uint32_t
+ * Converts from string to unsigned long value
  * @param *str
- * @return uint32_t
+ * @return long value
  */
-uint32_t srt_to_uint32(const char *str)
+uint32_t read_ul_value(const char *str)
 {
 	char *end;
 	uint32_t value = strtoul(str, &end, 0);

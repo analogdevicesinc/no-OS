@@ -624,7 +624,7 @@ static ssize_t get_rf_bandwidth(char *buf, size_t len,
 	}
 }
 
-static attrtibute_map voltage_output_map[] = {
+static attribute_map voltage_output_map[] = {
 	{"rf_port_select", get_rf_port_select},
 	{"hardwaregain", get_hardwaregain},
 	{"rssi", get_rssi},
@@ -723,7 +723,7 @@ static ssize_t get_bb_dc_offset_tracking_en(char *buf, size_t len,
 	return -ENOENT;
 }
 
-static attrtibute_map voltage_input_read_map[] = {
+static attribute_map voltage_input_read_map[] = {
 	{"hardwaregain_available", get_hardwaregain_available},
 	{"hardwaregain", get_hardwaregain},
 	{"rssi", get_rssi},
@@ -871,7 +871,7 @@ static ssize_t get_fastlock_recall(char *buf, size_t len,
 		       ad9361_phy->fastlock.current_profile[channel->ch_num]);
 }
 
-static attrtibute_map altvoltage_read_attrtibute_map[] = {
+static attribute_map altvoltage_read_attrtibute_map[] = {
 	{"frequency_available", get_frequency_available},
 	{"fastlock_save", get_fastlock_save},
 	{"powerdown", get_powerdown},
@@ -898,7 +898,7 @@ static ssize_t get_temp0_input(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%d", (int)temp);
 }
 
-static attrtibute_map tmp0_map[] = {
+static attribute_map tmp0_map[] = {
 	{"input", get_temp0_input},
 	{NULL, NULL},
 };
@@ -921,12 +921,12 @@ static ssize_t get_voltage_filter_fir_en(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%d", en_dis_rx && en_dis_tx);
 }
 
-static attrtibute_map out_read_map[] = {
+static attribute_map out_read_map[] = {
 	{"voltage_filter_fir_en", get_voltage_filter_fir_en},
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_read_phy_attr_map[] = {
+static attribute_map ch_read_phy_attr_map[] = {
 	{"voltage0", NULL, voltage_input_read_map, voltage_output_map},
 	{"voltage1", NULL, voltage_input_read_map, voltage_output_map},
 	{"voltage2", NULL, voltage_input_read_map, voltage_output_map},
@@ -943,7 +943,7 @@ static attrtibute_map ch_read_phy_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_read_phy_attr_map()
+attribute_map *get_ch_read_phy_attr_map()
 {
 	return ch_read_phy_attr_map;
 }
@@ -1288,7 +1288,7 @@ static ssize_t set_bb_dc_offset_tracking_en(char *buf, size_t len,
 	return -ENOENT;
 }
 
-static attrtibute_map ch_in_write_attrtibute_map[] = {
+static attribute_map ch_in_write_attrtibute_map[] = {
 	{"hardwaregain_available", set_hardwaregain_available},
 	{"hardwaregain", set_hardwaregain},
 	{"rssi", set_rssi},
@@ -1307,7 +1307,7 @@ static attrtibute_map ch_in_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_out_write_attrtibute_map[] = {
+static attribute_map ch_out_write_attrtibute_map[] = {
 	{"rf_port_select", set_rf_port_select},
 	{"hardwaregain", set_hardwaregain},
 	{"rssi", set_rssi},
@@ -1500,7 +1500,7 @@ static ssize_t set_fastlock_recall(char *buf, size_t len,
 	return len;
 }
 
-static attrtibute_map altvoltage_write_attrtibute_map[] = {
+static attribute_map altvoltage_write_attrtibute_map[] = {
 	{"frequency_available", set_frequency_available},
 	{"fastlock_save", set_fastlock_save},
 	{"powerdown", set_powerdown},
@@ -1523,12 +1523,12 @@ static ssize_t voltage_filter_fir_en(char *buf, size_t len,
 	return len;
 }
 
-static attrtibute_map out_wr_map[] = {
+static attribute_map out_wr_map[] = {
 	{"voltage_filter_fir_en", voltage_filter_fir_en},
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_write_phy_attr_map[] = {
+static attribute_map ch_write_phy_attr_map[] = {
 	{"voltage0", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
 	{"voltage1", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
 	{"voltage2", NULL, ch_in_write_attrtibute_map, ch_out_write_attrtibute_map},
@@ -1544,7 +1544,7 @@ static attrtibute_map ch_write_phy_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_write_phy_attr_map()
+attribute_map *get_ch_write_phy_attr_map()
 {
 	return ch_write_phy_attr_map;
 }
@@ -1820,7 +1820,7 @@ static ssize_t get_calib_mode(char *buf, size_t len,
 	return (ssize_t) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
 
-static attrtibute_map global_read_attrtibute_map[] = {
+static attribute_map global_read_attrtibute_map[] = {
 	{"dcxo_tune_coarse", get_dcxo_tune_coarse},
 	{"rx_path_rates", get_rx_path_rates},
 	{"trx_rate_governor", get_trx_rate_governor},
@@ -1847,7 +1847,7 @@ static attrtibute_map global_read_attrtibute_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_read_phy_attr_map()
+attribute_map *get_read_phy_attr_map()
 {
 	return global_read_attrtibute_map;
 }
@@ -2018,7 +2018,7 @@ static ssize_t set_filter_fir_config(char *buf, size_t len,
 	return ad9361_parse_fir(ad9361_phy, (char *)buf, len);
 }
 
-static attrtibute_map global_write_attrtibute_map[] = {
+static attribute_map global_write_attrtibute_map[] = {
 	{"trx_rate_governor", set_trx_rate_governor},
 	{"dcxo_tune_coarse", set_dcxo_tune_coarse},
 	{"dcxo_tune_fine", set_dcxo_tune_fine},
@@ -2034,7 +2034,7 @@ static attrtibute_map global_write_attrtibute_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_write_phy_attr_map()
+attribute_map *get_write_phy_attr_map()
 {
 	return global_write_attrtibute_map;
 }

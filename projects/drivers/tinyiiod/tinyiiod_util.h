@@ -1,8 +1,23 @@
 #ifndef __TINYIIOD_H__
 #define __TINYIIOD_H__
 
-#include <stdio.h>
 #include <stdbool.h>
+#include "tinyiiod_adc.h"
+#include "tinyiiod_dac.h"
+#include "tinyiiod_types.h"
+
+typedef struct tinyiiod_device {
+	char *name;
+	void *pointer;
+	uint16_t number_of_channels;
+	ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no);
+}tinyiiod_device;
+
+typedef struct tinyiiod_devices {
+	tinyiiod_device **devices;
+	uint8_t number_of_dev;
+}tinyiiod_devices;
+
 
 enum elem_level {
 	DEVICE_EL,
@@ -17,20 +32,8 @@ typedef struct element_info {
 	enum elem_level crnt_level;
 }element_info;
 
-struct channel_info {
-	int32_t ch_num;
-	bool ch_out;
-};
+ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_map *map, bool is_write);
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no));
+ssize_t get_xml(char **outxml);
 
-typedef struct attrtibute_map {
-	char *attr_name;
-	ssize_t (*exec)(char *buf, size_t len, const struct channel_info *channel);
-	struct attrtibute_map *map_in; 	/* in */
-	struct attrtibute_map *map_out; /* out */
-}attrtibute_map;
-
-bool strequal(const char *str1, const char *str2);
-int32_t read_value(const char *str);
-uint32_t read_ul_value(const char *str);
-ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write);
 #endif /* __TINYIIOD_H__ */

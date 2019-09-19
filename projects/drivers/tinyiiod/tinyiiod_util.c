@@ -4,6 +4,8 @@
 #include <xil_io.h>
 #include "tinyiiod.h"
 #include "tinyiiod_util.h"
+#include "util.h"
+static tinyiiod_devices *tinyiiod_devs = NULL;
 
 /**
  * Get channel number
@@ -32,7 +34,7 @@ static int32_t get_channel_number(const char *ch)
  * @param map_size map_size element numbers of the map
  * @return attribute ID, or negative value if attribute is not found
  */
-static int16_t get_attribute_id(const char *attr, const attrtibute_map* map)
+static int16_t get_attribute_id(const char *attr, const attribute_map* map)
 {
 	int16_t i = 0;
 
@@ -59,7 +61,7 @@ static int16_t get_attribute_id(const char *attr, const attrtibute_map* map)
  * @return length of chars written in buf
  */
 static ssize_t read_all_attr(char *buf, size_t len,
-			     const struct channel_info *channel, const attrtibute_map* map)
+			     const struct channel_info *channel, const attribute_map* map)
 {
 	int16_t i = 0, j = 0;
 	char local_buf[0x1000];
@@ -92,7 +94,7 @@ static ssize_t read_all_attr(char *buf, size_t len,
  * @return length of chars written in buf
  */
 static ssize_t write_all_attr(char *buf, size_t len,
-			      const struct channel_info *channel, const attrtibute_map* map)
+			      const struct channel_info *channel, const attribute_map* map)
 {
 	int16_t i = 0, j = 0;
 
@@ -120,7 +122,7 @@ static ssize_t write_all_attr(char *buf, size_t len,
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
-ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute_map *map, bool is_write)
+ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_map *map, bool is_write)
 {
 	int16_t attribute_id;
 
@@ -163,45 +165,71 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attrtibute
 	return -ENOENT;
 }
 
-/**
- * Compare two strings
- * @param *str1 pointer to string 1
- * @param *str2 pointer to string 2
- * @return TRUE if strings are equal, 0 otherwise
- */
-bool strequal(const char *str1, const char *str2)
-{
-	return !strcmp(str1, str2);
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml,  char *device_name, uint8_t ch_no)) {
+	if (!(tinyiiod_devs)) {
+		tinyiiod_devs = malloc(sizeof(tinyiiod_devices*));
+		tinyiiod_devs->number_of_dev = 1;
+		tinyiiod_devs->devices = malloc(sizeof(tinyiiod_device*));
+	}
+	else {
+		tinyiiod_devs->number_of_dev++;
+		tinyiiod_devs->devices = realloc(tinyiiod_devs->devices, tinyiiod_devs->number_of_dev * sizeof(tinyiiod_device*));
+	}
+	tinyiiod_device *device = malloc(sizeof(tinyiiod_device));
+	device->pointer = device_address;
+	device->name = malloc(strlen(device_name) + 1);
+	strcpy(device->name, device_name);
+	device->number_of_channels = number_of_channels;
+	device->get_device_xml = get_device_xml;
+	tinyiiod_devs->devices[tinyiiod_devs->number_of_dev - 1] = device;
+
+	return 0;
 }
 
-/**
- * Converts from string to long value
- * @param *str
- * @return long value
- */
-int32_t read_value(const char *str)
+ssize_t get_xml(char **outxml)
 {
-	char *end;
-	int32_t value = strtol(str, &end, 0);
+	char *xml, *tmp_xml;
+	uint32_t length;
 
-	if (end == str)
-		return -EINVAL;
-	else
-		return value;
-}
+	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+			"<!DOCTYPE context ["
+				"<!ELEMENT context (device | context-attribute)*>"
+				"<!ELEMENT context-attribute EMPTY>"
+				"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+				"<!ELEMENT channel (scan-element?, attribute*)>"
+				"<!ELEMENT attribute EMPTY>"
+				"<!ELEMENT scan-element EMPTY>"
+				"<!ELEMENT debug-attribute EMPTY>"
+				"<!ELEMENT buffer-attribute EMPTY>"
+				"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
+				"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
+				"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
+				"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
+				"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
+				"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
+				"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+			"]>"
+			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
+				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
 
-/**
- * Converts from string to unsigned long value
- * @param *str
- * @return long value
- */
-uint32_t read_ul_value(const char *str)
-{
-	char *end;
-	uint32_t value = strtoul(str, &end, 0);
+	char header2[] = "</context>";
 
-	if (end == str)
-		return -EINVAL;
-	else
-		return value;
+	xml = malloc(strlen(header) + 1);
+	strcpy(xml, header);
+
+	for (uint16_t i = 0; i < tinyiiod_devs->number_of_dev; i++) {
+		tinyiiod_devs->devices[i]->get_device_xml(&tmp_xml, tinyiiod_devs->devices[i]->name, tinyiiod_devs->devices[i]->number_of_channels);
+		length = strlen(xml);
+		xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+		strcpy((xml + length), tmp_xml);
+	}
+
+	length = strlen(xml);
+	xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+	strcpy((xml + length), header2);
+
+	*outxml = xml;
+
+	return 0;
 }

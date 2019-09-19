@@ -42,14 +42,27 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <xil_cache.h>
+#include "platform_drivers.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_adc.h"
 #include "xml.h"
+#include "util.h"
 
 static uint32_t adc_ddr_baseaddr;
 static struct axi_adc *rx_adc;
 static struct axi_dmac	*rx_dmac;
+
+ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par *init) {
+	*tinyiiod_adc = malloc(sizeof(*tinyiiod_adc));
+	if (!(*tinyiiod_adc))
+		return FAILURE;
+	(*tinyiiod_adc)->adc = init->adc;
+	(*tinyiiod_adc)->dmac = init->dmac;
+	(*tinyiiod_adc)->adc_ddr_base = init->adc_ddr_base;
+
+	return SUCCESS;
+}
 
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base)
 {
@@ -240,7 +253,7 @@ static ssize_t set_cf_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static attrtibute_map cf_voltage_read_attrtibute_map[] = {
+static attribute_map cf_voltage_read_attrtibute_map[] = {
 	{"calibphase", get_cf_calibphase},
 	{"calibbias", get_cf_calibbias},
 	{"calibscale", get_cf_calibscale},
@@ -249,7 +262,7 @@ static attrtibute_map cf_voltage_read_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_read_adc_attr_map[] = {
+static attribute_map ch_read_adc_attr_map[] = {
 	{"voltage0", NULL, cf_voltage_read_attrtibute_map, NULL},
 	{"voltage1", NULL, cf_voltage_read_attrtibute_map, NULL},
 	{"voltage2", NULL, cf_voltage_read_attrtibute_map, NULL},
@@ -257,7 +270,7 @@ static attrtibute_map ch_read_adc_attr_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map cf_voltage_write_attrtibute_map[] = {
+static attribute_map cf_voltage_write_attrtibute_map[] = {
 	{"calibphase", set_cf_calibphase},
 	{"calibbias", set_cf_calibbias},
 	{"calibscale", set_cf_calibscale},
@@ -266,7 +279,7 @@ static attrtibute_map cf_voltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_write_adc_attr_map[] = {
+static attribute_map ch_write_adc_attr_map[] = {
 	{"voltage0", NULL, cf_voltage_write_attrtibute_map, NULL},
 	{"voltage1", NULL, cf_voltage_write_attrtibute_map, NULL},
 	{"voltage2", NULL, cf_voltage_write_attrtibute_map, NULL},
@@ -379,7 +392,7 @@ error:
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_read_adc_attr_map()
+attribute_map *get_ch_read_adc_attr_map()
 {
 	return ch_read_adc_attr_map;
 }
@@ -389,7 +402,7 @@ attrtibute_map *get_ch_read_adc_attr_map()
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_write_adc_attr_map()
+attribute_map *get_ch_write_adc_attr_map()
 {
 	return ch_write_adc_attr_map;
 }

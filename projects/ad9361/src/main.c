@@ -61,28 +61,32 @@
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
 #include "ad9361_tinyiiod.h"
+#include "tinyiiod_adc.h"
+#include "tinyiiod_dac.h"
+#include "tinyiiod_util.h"
 #endif // USE_LIBIIO
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct axi_adc_init rx_adc_init = {
-	"rx_adc",
+	"cf-ad9361-lpc",
 	RX_CORE_BASEADDR,
 	4
 };
+
 struct axi_dac_init tx_dac_init = {
-	"tx_dac",
+	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
 	4
 };
 struct axi_dmac_init rx_dmac_init = {
-	"rx_dmac",
+	"cf-ad9361-lpc_rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
 	DMA_DEV_TO_MEM,
 	0
 };
 struct axi_dmac_init tx_dmac_init = {
-	"tx_dmac",
+	"cf-ad9361-dds-core-lpc_tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
 	0
@@ -591,7 +595,22 @@ int main(void)
 #endif
 
 #ifdef USE_LIBIIO
+
 	int32_t ret;
+	tinyiiod_adc_init_par tinyiiod_adc_init_par = {
+		.adc = ad9361_phy->rx_adc,
+		.dmac = ad9361_phy->rx_dmac,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
+	};
+	tinyiiod_adc *tinyiiod_adc;
+
+	tinyiiod_dac_init_par tinyiiod_dac_init_par = {
+		.dac = ad9361_phy->tx_dac,
+		.dmac = ad9361_phy->tx_dmac,
+		.dac_ddr_base = DAC_DDR_BASEADDR,
+	};
+	tinyiiod_dac *tinyiiod_dac;
+
 	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
 	if(ret < 0)
 		return ret;
@@ -600,8 +619,13 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
+	tinyiiod_axi_adc_init(&tinyiiod_adc, &tinyiiod_adc_init_par);
+	tinyiiod_axi_dac_init(&tinyiiod_dac, &tinyiiod_dac_init_par);
+	tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml);
+	tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_adc->adc->num_channels, get_dac_xml);
+
 	/* Create the ad9361_tinyiiod */
-	ret = ad9361_tinyiiod_create(ad9361_phy, &iiod);
+	ret = ad9361_tinyiiod_create(&iiod);
 	if(ret < 0)
 		return ret;
 

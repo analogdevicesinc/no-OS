@@ -44,6 +44,7 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "tinyiiod_dac.h"
+#include "platform_drivers.h"
 
 static const char * const  dac_xml =
 
@@ -138,6 +139,17 @@ static uint32_t dac_ddr_baseaddr;
 static struct axi_dac *tx_dac;
 static struct axi_dmac	*tx_dmac;
 
+ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par *init) {
+	*tinyiiod_dac = malloc(sizeof(*tinyiiod_dac));
+	if (!(*tinyiiod_dac))
+		return FAILURE;
+	(*tinyiiod_dac)->dac = init->dac;
+	(*tinyiiod_dac)->dmac = init->dmac;
+	(*tinyiiod_dac)->dac_ddr_base = init->dac_ddr_base;
+
+	return SUCCESS;
+}
+
 ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint32_t dac_ddr_base)
 {
 	tx_dac = dac;
@@ -207,7 +219,7 @@ static ssize_t get_dds_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static attrtibute_map dds_voltage_read_attrtibute_map[] = {
+static attribute_map dds_voltage_read_attrtibute_map[] = {
 	{"calibphase", get_dds_calibphase},
 	{"calibscale", get_dds_calibscale},
 	{"sampling_frequency", get_dds_sampling_frequency},
@@ -288,7 +300,7 @@ static ssize_t get_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
+static attribute_map dds_altvoltage_read_attrtibute_map[] = {
 	{"phase", get_dds_altvoltage_phase},
 	{"scale", get_dds_altvoltage_scale},
 	{"frequency", get_dds_altvoltage_frequency},
@@ -297,7 +309,7 @@ static attrtibute_map dds_altvoltage_read_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_read_dac_attr_map[] = {
+static attribute_map ch_read_dac_attr_map[] = {
 	{"voltage0", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
 	{"voltage1", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
 	{"voltage2", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
@@ -318,7 +330,7 @@ static attrtibute_map ch_read_dac_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_read_dac_attr_map()
+attribute_map *get_ch_read_dac_attr_map()
 {
 	return ch_read_dac_attr_map;
 }
@@ -372,7 +384,7 @@ static ssize_t set_dds_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static attrtibute_map dds_voltage_write_attrtibute_map[] = {
+static attribute_map dds_voltage_write_attrtibute_map[] = {
 	{"calibphase", set_dds_calibphase},
 	{"calibscale", set_dds_calibscale},
 	{"sampling_frequency", set_dds_sampling_frequency},
@@ -461,7 +473,7 @@ static ssize_t set_dds_altvoltage_sampling_frequency(char *buf, size_t len,
 	return -ENODEV;
 }
 
-static attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
+static attribute_map dds_altvoltage_write_attrtibute_map[] = {
 	{"phase", set_dds_altvoltage_phase},
 	{"scale", set_dds_altvoltage_scale},
 	{"frequency", set_dds_altvoltage_frequency},
@@ -470,7 +482,7 @@ static attrtibute_map dds_altvoltage_write_attrtibute_map[] = {
 	{NULL, NULL},
 };
 
-static attrtibute_map ch_write_dac_attr_map[] = {
+static attribute_map ch_write_dac_attr_map[] = {
 	{"voltage0", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
 	{"voltage1", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
 	{"voltage2", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
@@ -491,7 +503,7 @@ static attrtibute_map ch_write_dac_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attrtibute_map *get_ch_write_dac_attr_map()
+attribute_map *get_ch_write_dac_attr_map()
 {
 	return ch_write_dac_attr_map;
 }

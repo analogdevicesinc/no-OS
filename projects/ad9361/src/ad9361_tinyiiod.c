@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include "ad9361_tinyiiod_phy.h"
-#include "ad9361_parameters.h"
+//#include "ad9361_tinyiiod_phy.h"
+//#include "ad9361_parameters.h"
 #include "tinyiiod.h"
 #include "config.h"
 #include "tinyiiod_util.h"
@@ -46,6 +46,7 @@
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
+#include "util.h"
 
 #ifdef UART_INTERFACE
 #include "serial.h"
@@ -67,7 +68,7 @@ static bool supporter_dev(const char *device)
 	       || strequal(device, "cf-ad9361-dds-core-lpc");
 }
 
-static attrtibute_map read_attr_map[] = {
+static attribute_map read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
 	{"cf-ad9361-lpc", NULL, NULL},
@@ -96,7 +97,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf, size_t
 	return rd_wr_attribute(&el_info, buf, len, read_attr_map, 0);
 }
 
-static attrtibute_map write_attr_map[] = {
+static attribute_map write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
 	{"cf-ad9361-lpc", NULL, NULL},
@@ -125,7 +126,7 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 	return rd_wr_attribute(&el_info, (char*)buf, len, write_attr_map, 1);
 }
 
-static attrtibute_map ch_read_attr_map[] = {
+static attribute_map ch_read_attr_map[] = {
 	{"ad9361-phy", NULL, NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL, NULL},
 	{"cf-ad9361-lpc", NULL, NULL, NULL},
@@ -156,7 +157,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 	return rd_wr_attribute(&el_info, buf, len, ch_read_attr_map, 0);
 }
 
-static attrtibute_map ch_write_attr_map[] = {
+static attribute_map ch_write_attr_map[] = {
 	{"ad9361-phy", NULL, NULL},
 	{"cf-ad9361-dds-core-lpc", NULL, NULL},
 	{"cf-ad9361-lpc", NULL, NULL},
@@ -225,62 +226,6 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 	return 0;
 }
 
-static ssize_t get_xml(struct ad9361_rf_phy *phy, char **outxml)
-{
-	char *xml, *tmp_xml;
-	uint32_t length;
-
-	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-			"<!DOCTYPE context ["
-				"<!ELEMENT context (device | context-attribute)*>"
-				"<!ELEMENT context-attribute EMPTY>"
-				"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
-				"<!ELEMENT channel (scan-element?, attribute*)>"
-				"<!ELEMENT attribute EMPTY>"
-				"<!ELEMENT scan-element EMPTY>"
-				"<!ELEMENT debug-attribute EMPTY>"
-				"<!ELEMENT buffer-attribute EMPTY>"
-				"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
-				"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
-				"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
-				"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
-				"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
-				"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
-				"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
-				"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
-			"]>"
-			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
-				"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
-
-	char header2[] = "</context>";
-
-	xml = malloc(strlen(header) + 1);
-	strcpy(xml, header);
-
-	get_dac_xml(&tmp_xml, "cf-ad9361-dds-core-lpc", phy->tx_dac->num_channels);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	get_adc_xml(&tmp_xml, "cf-ad9361-lpc", phy->rx_adc->num_channels);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	get_phy_xml(&tmp_xml);
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-	strcpy((xml + length), tmp_xml);
-
-	length = strlen(xml);
-	xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
-	strcpy((xml + length), header2);
-
-	*outxml = xml;
-
-	return 0;
-}
-
 const struct tinyiiod_ops ops = {
 	/* communication */
 #ifdef UART_INTERFACE
@@ -304,10 +249,9 @@ const struct tinyiiod_ops ops = {
 	.get_mask = get_mask,
 };
 
-ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod)
+ssize_t ad9361_tinyiiod_create(struct tinyiiod **iiod)
 {
 	char *xml;
-	ssize_t ret;
 
 	ch_read_attr_map[0].map_in = get_ch_read_phy_attr_map();
 	ch_read_attr_map[1].map_in = get_ch_read_dac_attr_map();
@@ -323,22 +267,22 @@ ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod
 	ch_write_attr_map[1].map_out = ch_write_attr_map[1].map_in;
 	ch_write_attr_map[2].map_out = ch_write_attr_map[2].map_in;
 
-	read_attr_map[0].map_in = get_read_phy_attr_map();
-	write_attr_map[0].map_in = get_write_phy_attr_map();
+//	read_attr_map[0].map_in = get_read_phy_attr_map();
+//	write_attr_map[0].map_in = get_write_phy_attr_map();
 
-	ret = tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
-	if(ret < 0)
-		return ret;
+//	ret = tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
+//	if(ret < 0)
+//		return ret;
+//
+//	ret = tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
+//	if(ret < 0)
+//		return ret;
+//
+//	ret = tinyiiod_phy_configure(phy);
+//	if(ret < 0)
+//		return ret;
 
-	ret = tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
-	if(ret < 0)
-		return ret;
-
-	ret = tinyiiod_phy_configure(phy);
-	if(ret < 0)
-		return ret;
-
-	get_xml(phy, &xml);
+	get_xml(&xml);
 	*iiod = tinyiiod_create(xml, &ops);
 
 	return 0;

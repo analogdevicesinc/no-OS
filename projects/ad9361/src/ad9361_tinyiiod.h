@@ -42,6 +42,6 @@
 #include <stdint.h>
 #include "tinyiiod.h"
 
-ssize_t ad9361_tinyiiod_create(struct ad9361_rf_phy *phy, struct tinyiiod **iiod);
+ssize_t ad9361_tinyiiod_create(struct tinyiiod **iiod);
 
 #endif /* AD9361_TINYIIOD_H */
