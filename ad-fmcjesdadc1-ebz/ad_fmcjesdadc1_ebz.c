@@ -88,9 +88,25 @@ int main(void)
 	rx_xfer_1.start_address = XPAR_DDR_MEM_BASEADDR + 0x900000;
 #endif
 
+#ifdef ZYNQ_PS7
+	ad9517_param.spi_init.type = ZYNQ_PS7_SPI;
+	ad9250_0_param.spi_init.type = ZYNQ_PS7_SPI;
+	ad9250_1_param.spi_init.type = ZYNQ_PS7_SPI;
+#endif
+
+#ifdef ZYNQ_PSU
+	ad9517_param.spi_init.type = ZYNQ_PSU_SPI;
+	ad9250_0_param.spi_init.type = ZYNQ_PSU_SPI;
+	ad9250_1_param.spi_init.type = ZYNQ_PSU_SPI;
+#endif
+
 #ifdef MICROBLAZE
 	rx_xfer_0.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
 	rx_xfer_1.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
+
+	ad9517_param.spi_init.type = MICROBLAZE_SPI;
+	ad9250_0_param.spi_init.type = MICROBLAZE_SPI;
+	ad9250_1_param.spi_init.type = MICROBLAZE_SPI;
 #endif
 
 #ifdef ALTERA
@@ -107,6 +123,10 @@ int main(void)
 	ad9250_1_dma.base_address = AXI_AD9250_DMA_1_BASE;
 	rx_xfer_0.start_address =  0x800000;
 	rx_xfer_1.start_address =  0x900000;
+
+	ad9517_param.spi_init.type = NIOS_II_SPI;
+	ad9250_0_param.spi_init.type = NIOS_II_SPI;
+	ad9250_1_param.spi_init.type = NIOS_II_SPI;
 #endif
 
 	// SPI configuration
@@ -114,15 +134,15 @@ int main(void)
 	ad9517_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9517_param.spi_init.cpha = 0;
 	ad9517_param.spi_init.cpol = 0;
-	ad9517_param.spi_init.type = ZYNQ_PS7_SPI;
+
 	ad9250_0_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9250_0_param.spi_init.cpha = 0;
 	ad9250_0_param.spi_init.cpol = 0;
-	ad9250_0_param.spi_init.type = ZYNQ_PS7_SPI;
+
 	ad9250_1_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
 	ad9250_1_param.spi_init.cpha = 0;
 	ad9250_1_param.spi_init.cpol = 0;
-	ad9250_1_param.spi_init.type = ZYNQ_PS7_SPI;
+
 	ad9250_0_param.id_no = 0x0;
 	ad9250_1_param.id_no = 0x1;
 
