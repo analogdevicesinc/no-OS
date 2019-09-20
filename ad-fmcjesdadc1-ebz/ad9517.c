@@ -55,8 +55,8 @@ uint8_t ad9517_slave_select;
 * @brief ad9517_spi_read
 *******************************************************************************/
 int32_t ad9517_spi_read(struct ad9517_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data)
+			uint16_t reg_addr,
+			uint8_t *reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -76,8 +76,8 @@ int32_t ad9517_spi_read(struct ad9517_dev *dev,
 * @brief ad9517_spi_write
 *******************************************************************************/
 int32_t ad9517_spi_write(struct ad9517_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+			 uint16_t reg_addr,
+			 uint8_t reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -96,7 +96,7 @@ int32_t ad9517_spi_write(struct ad9517_dev *dev,
 * @brief ad9517_setup
 *******************************************************************************/
 int32_t ad9517_setup(struct ad9517_dev **device,
-					 struct ad9517_init_param init_param)
+		     struct ad9517_init_param init_param)
 {
 	uint8_t stat;
 	int32_t ret;
