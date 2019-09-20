@@ -50,8 +50,8 @@
 * @brief ad9250_spi_read
 *******************************************************************************/
 int32_t ad9250_spi_read(struct ad9250_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data)
+			uint16_t reg_addr,
+			uint8_t *reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -71,8 +71,8 @@ int32_t ad9250_spi_read(struct ad9250_dev *dev,
 * @brief ad9250_spi_write
 *******************************************************************************/
 int32_t ad9250_spi_write(struct ad9250_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data)
+			 uint16_t reg_addr,
+			 uint8_t reg_data)
 {
 	uint8_t buf[4];
 	int32_t ret;
@@ -91,7 +91,7 @@ int32_t ad9250_spi_write(struct ad9250_dev *dev,
 * @brief ad9250_setup
 *******************************************************************************/
 int32_t ad9250_setup(struct ad9250_dev **device,
-					 struct ad9250_init_param init_param)
+		     struct ad9250_init_param init_param)
 {
 	uint8_t chip_id;
 	uint8_t stat;
@@ -110,7 +110,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 
 	ad9250_spi_read(dev, AD9250_REG_CHIP_ID, &chip_id);
 	printf("AD9250 CHIP ID %s (0x%x).\n",
-			(chip_id == AD9250_CHIP_ID) ? "ok" : "errors", chip_id);
+	       (chip_id == AD9250_CHIP_ID) ? "ok" : "errors", chip_id);
 
 	ad9250_spi_write(dev, AD9250_REG_JESD204B_LINK_CNTRL_1, (0x16 | 0x1));
 	ad9250_spi_write(dev, AD9250_REG_JESD204B_QUICK_CONFIG, 0x22);
@@ -126,7 +126,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 	mdelay(10);
 	ad9250_spi_read(dev, AD9250_REG_PLL_STATUS, &stat);
 	printf("AD9250 PLL/link %s (0x%x).\n",
-			(stat == 0x81) ? "ok" : "errors", stat);
+	       (stat == 0x81) ? "ok" : "errors", stat);
 
 	*device = dev;
 
@@ -151,10 +151,10 @@ int32_t ad9250_remove(struct ad9250_dev *dev)
  * @brief ad9250_test
  *******************************************************************************/
 int32_t ad9250_test(struct ad9250_dev *dev,
-					uint32_t test_mode)
+		    uint32_t test_mode)
 {
-        ad9250_spi_write(dev, AD9250_REG_TEST_CNTRL, test_mode);
-        ad9250_spi_write(dev, AD9250_REG_TRANSFER, 0x01);
+	ad9250_spi_write(dev, AD9250_REG_TEST_CNTRL, test_mode);
+	ad9250_spi_write(dev, AD9250_REG_TRANSFER, 0x01);
 
 	return 0;
 }
