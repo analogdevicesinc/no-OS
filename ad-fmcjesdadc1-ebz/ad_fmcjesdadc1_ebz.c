@@ -72,6 +72,7 @@ int main(void)
 	dmac_core		ad9250_1_dma;
 	dmac_xfer		rx_xfer_0;
 	dmac_xfer		rx_xfer_1;
+	int32_t ret;
 
 #ifdef XILINX
 	ad9250_xcvr.base_address = XPAR_AXI_AD9250_XCVR_BASEADDR;
@@ -180,11 +181,16 @@ int main(void)
 	rx_xfer_1.no_of_samples = 32768;
 
 	// set up clock generator
-	ad9517_setup(&ad9517_device, ad9517_param);
-
+	ret = ad9517_setup(&ad9517_device, ad9517_param);
+	if(ret < 0)
+		ad_printf("Error ad9517_setup()\n");
 	// set up the devices
-	ad9250_setup(&ad9250_0_device, ad9250_0_param);
-	ad9250_setup(&ad9250_1_device, ad9250_1_param);
+	ret = ad9250_setup(&ad9250_0_device, ad9250_0_param);
+	if(ret < 0)
+		ad_printf("Error ad9250_setup()\n");
+	ret = ad9250_setup(&ad9250_1_device, ad9250_1_param);
+	if(ret < 0)
+		ad_printf("Error ad9250_setup()\n");
 
 	// generate SYSREF
 	jesd_sysref_control(&ad9250_jesd204, 1);

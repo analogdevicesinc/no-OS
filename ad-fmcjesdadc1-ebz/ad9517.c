@@ -109,6 +109,10 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 
 	/* Setup SPI descriptor */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	if(ret < 0) {
+		ad_printf("Error spi_init()\n");
+		return ret;
+	}
 
 	ad9517_spi_write(dev, 0x0010, 0x7c);
 	ad9517_spi_write(dev, 0x0014, 0x05);
