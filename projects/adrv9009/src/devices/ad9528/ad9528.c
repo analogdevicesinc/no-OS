@@ -12,9 +12,6 @@
 
 #include "parameters.h"
 #include "ad9528.h"
-#ifndef ALTERA_PLATFORM
-#include "xilinx_platform_drivers.h"
-#endif
 
 static uint32_t _desired_time_to_elapse_ms = 0;
 
@@ -232,10 +229,8 @@ adiHalErr_t AD9528_initDeviceDataStruct(ad9528Device_t *device,
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = CLK_CS;
 
-#ifndef ALTERA_PLATFORM
-	xil_spi_init_param xil_spi_param = {.id = 0};
-	spi_param.extra = &xil_spi_param;
-#endif
+	if(device->extra)
+		(device->extra)(&spi_param);
 
 	status |= spi_init(&device->spi_desc, &spi_param);
 
