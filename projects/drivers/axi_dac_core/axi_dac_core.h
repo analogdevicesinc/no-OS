@@ -52,12 +52,18 @@ struct axi_dac {
 	uint32_t base;
 	uint8_t	num_channels;
 	uint64_t clock_hz;
+	uint32_t (*dac_read)(uint32_t, uint32_t);
+	void (*dac_write)(uint32_t, uint32_t, uint32_t);
+	void (*extra)();
 };
 
 struct axi_dac_init {
 	const char *name;
 	uint32_t base;
 	uint8_t	num_channels;
+	uint32_t (*dac_read)(uint32_t, uint32_t);
+	void (*dac_write)(uint32_t, uint32_t, uint32_t);
+	void (*extra)();
 };
 
 enum axi_dac_data_sel {

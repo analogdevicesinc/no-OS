@@ -44,12 +44,6 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "platform_drivers.h"
-#ifdef ALTERA_PLATFORM
-#include "io.h"
-#else
-#include "xil_io.h"
-#include "xil_cache.h"
-#endif
 #include "util.h"
 #include "axi_dac_core.h"
 
@@ -345,11 +339,7 @@ int32_t axi_dac_read(struct axi_dac *dac,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	*reg_data = IORD_32DIRECT(dac->base, reg_addr);
-#else
-	*reg_data = Xil_In32((dac->base + reg_addr));
-#endif
+	*reg_data = dac->dac_read(dac->base, reg_addr);
 
 	return SUCCESS;
 }
@@ -361,11 +351,7 @@ int32_t axi_dac_write(struct axi_dac *dac,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	IOWR_32DIRECT(dac->base, reg_addr, reg_data);
-#else
-	Xil_Out32((dac->base + reg_addr), reg_data);
-#endif
+	dac->dac_write(dac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -721,11 +707,8 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 				index_q1 -= (tx_count * 2);
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
-#ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address, index_mem * 4, data_i1 | data_q1);
-#else
-			Xil_Out32(address + index_mem * 4, data_i1 | data_q1);
-#endif
+
+			dac->dac_write(address, index_mem * 4, data_i1 | data_q1);
 
 			index_i2 = index_i1;
 			index_q2 = index_q1;
@@ -735,11 +718,9 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 				index_q2 -= (tx_count * 2);
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
-#ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address, (index_mem + 1) * 4, data_i2 | data_q2);
-#else
-			Xil_Out32(address + (index_mem + 1) * 4, data_i2 | data_q2);
-#endif
+
+			dac->dac_write(address, (index_mem + 1) * 4, data_i2 | data_q2);
+
 		}
 	} else {
 		for(index = 0; index < tx_count; index += 1) {
@@ -749,16 +730,13 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 				index_q1 -= tx_count;
 			data_i1 = (sine_lut[index_i1] << 20);
 			data_q1 = (sine_lut[index_q1] << 4);
-#ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address, index * 4, data_i1 | data_q1);
-#else
-			Xil_Out32(address + index * 4, data_i1 | data_q1);
-#endif
+
+			dac->dac_write(address, index * 4, data_i1 | data_q1);
 		}
 	}
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheFlush();
-#endif
+
+	dac->extra();
+
 	length = tx_count * dac->num_channels * 2;
 	return length;
 }
@@ -796,16 +774,11 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 	for(index = 0; index < buff_size; index += 2) {
 		data_i = (buff[index]);
 		data_q = (buff[index + 1] << 16);
-#ifdef ALTERA_PLATFORM
-		IOWR_32DIRECT(address, index * 2, data_i | data_q);
-#else
-		Xil_Out32(address + index * 2, data_i | data_q);
-#endif
+
+		dac->dac_write(address, index * 2, data_i | data_q);
 	}
 
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheFlush();
-#endif
+	dac->extra();
 
 	return SUCCESS;
 }
@@ -825,19 +798,15 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	for(index = 0; index < custom_tx_count; index++) {
 		/* Send the same data on all the channels */
 		for (chan = 0; chan < num_tx_channels; chan++) {
-#ifdef ALTERA_PLATFORM
-			IOWR_32DIRECT(address, index_mem * sizeof(uint32_t),
+
+			dac->dac_write(address, index_mem * sizeof(uint32_t),
 				      custom_data_iq[index]);
-#else
-			Xil_Out32(address + index_mem * sizeof(uint32_t),
-				  custom_data_iq[index]);
-#endif
+
 			index_mem++;
 		}
 	}
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheFlush();
-#endif
+
+	dac->extra();
 
 	for (chan = 0; chan < dac->num_channels; chan++) {
 		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((chan*2)+0), 0x2);
@@ -868,6 +837,9 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	dac->name = init->name;
 	dac->base = init->base;
 	dac->num_channels = init->num_channels;
+	dac->dac_read = init->dac_read;
+	dac->dac_write = init->dac_write;
+	dac->extra = init->extra;
 
 	axi_dac_write(dac, AXI_DAC_REG_RSTN, 0);
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,
