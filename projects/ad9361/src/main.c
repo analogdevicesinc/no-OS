@@ -60,7 +60,6 @@
 #include "serial.h"
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
-#include "ad9361_tinyiiod.h"
 #include "tinyiiod_adc.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_util.h"
@@ -621,11 +620,11 @@ int main(void)
 
 	tinyiiod_axi_adc_init(&tinyiiod_adc, &tinyiiod_adc_init_par);
 	tinyiiod_axi_dac_init(&tinyiiod_dac, &tinyiiod_dac_init_par);
-	tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml);
-	tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_adc->adc->num_channels, get_dac_xml);
+	tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml, get_ch_read_adc_attr_map());
+	tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_adc->adc->num_channels, get_dac_xml, NULL);
 
 	/* Create the ad9361_tinyiiod */
-	ret = ad9361_tinyiiod_create(&iiod);
+	ret = iiod_create(&iiod);
 	if(ret < 0)
 		return ret;
 

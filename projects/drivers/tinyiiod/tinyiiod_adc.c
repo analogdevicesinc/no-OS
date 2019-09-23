@@ -49,10 +49,6 @@
 #include "xml.h"
 #include "util.h"
 
-static uint32_t adc_ddr_baseaddr;
-static struct axi_adc *rx_adc;
-static struct axi_dmac	*rx_dmac;
-
 ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par *init) {
 	*tinyiiod_adc = malloc(sizeof(*tinyiiod_adc));
 	if (!(*tinyiiod_adc))
@@ -64,14 +60,6 @@ ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par
 	return SUCCESS;
 }
 
-ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base)
-{
-	rx_adc = adc;
-	rx_dmac = dmac;
-	adc_ddr_baseaddr = adc_ddr_base;
-	return 0;
-}
-
 /**
  * get_cf_calibphase
  * @param *buff where value is stored
@@ -79,13 +67,16 @@ ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint3
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibphase(char *buf, size_t len,
+static ssize_t get_cf_calibphase(void *device, char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	ssize_t ret = axi_adc_get_calib_phase(rx_adc, channel->ch_num, &val,
 					      &val2);
+
+
 	if(ret < 0)
 		return ret;
 	if(val2 < 0 && val >= 0) {
@@ -103,10 +94,11 @@ static ssize_t get_cf_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibbias(char *buf, size_t len,
+static ssize_t get_cf_calibbias(void *device, char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	axi_adc_get_calib_bias(rx_adc,
 			       channel->ch_num,
 			       &val,
@@ -122,11 +114,12 @@ static ssize_t get_cf_calibbias(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibscale(char *buf, size_t len,
+static ssize_t get_cf_calibscale(void *device, char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	ssize_t ret = axi_adc_get_calib_scale(rx_adc, channel->ch_num, &val,
 					      &val2);
 	if(ret < 0)
@@ -148,7 +141,7 @@ static ssize_t get_cf_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_samples_pps(char *buf, size_t len,
+static ssize_t get_cf_samples_pps(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -161,10 +154,11 @@ static ssize_t get_cf_samples_pps(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
+static ssize_t get_cf_sampling_frequency(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	uint64_t sampling_freq;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	ssize_t ret = axi_adc_get_sampling_freq(rx_adc, channel->ch_num, &sampling_freq);
 	if(ret < 0)
 		return ret;
@@ -179,12 +173,13 @@ static ssize_t get_cf_sampling_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibphase(char *buf, size_t len,
+static ssize_t set_cf_calibphase(void *device, char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	axi_adc_set_calib_phase(rx_adc, channel->ch_num, val, val2);
 
 	return len;
@@ -197,10 +192,11 @@ static ssize_t set_cf_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibbias(char *buf, size_t len,
+static ssize_t set_cf_calibbias(void *device, char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val = read_value(buf);
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	axi_adc_set_calib_bias(rx_adc,
 			       channel->ch_num,
 			       val,
@@ -216,12 +212,13 @@ static ssize_t set_cf_calibbias(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibscale(char *buf, size_t len,
+static ssize_t set_cf_calibscale(void *device, char *buf, size_t len,
 			  const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	struct axi_adc* rx_adc = (struct axi_adc*)device;
 	axi_adc_set_calib_scale(rx_adc, channel->ch_num, val, val2);
 
 	return len;
@@ -234,7 +231,7 @@ static ssize_t set_cf_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_samples_pps(char *buf, size_t len,
+static ssize_t set_cf_samples_pps(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -247,7 +244,7 @@ static ssize_t set_cf_samples_pps(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_sampling_frequency(char *buf, size_t len,
+static ssize_t set_cf_sampling_frequency(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -392,7 +389,7 @@ error:
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_ch_read_adc_attr_map()
+attribute_map *get_ch_read_adc_attr_map(void)
 {
 	return ch_read_adc_attr_map;
 }
@@ -402,7 +399,7 @@ attribute_map *get_ch_read_adc_attr_map()
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_ch_write_adc_attr_map()
+attribute_map *get_ch_write_adc_attr_map(void)
 {
 	return ch_write_adc_attr_map;
 }
@@ -413,12 +410,12 @@ attribute_map *get_ch_write_adc_attr_map()
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
+ssize_t adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t address, size_t bytes_count)
 {
 	rx_dmac->flags = 0;
 	axi_dmac_transfer(rx_dmac,
-			adc_ddr_baseaddr, bytes_count);
-	Xil_DCacheInvalidateRange(adc_ddr_baseaddr,	bytes_count);
+			address, bytes_count);
+	Xil_DCacheInvalidateRange(address,	bytes_count);
 
 	return bytes_count;
 }
@@ -431,10 +428,10 @@ ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t read_dev(const char *device, char *pbuf, size_t offset,
+ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
 			size_t bytes_count)
 {
-	memcpy(pbuf, (char *)adc_ddr_baseaddr + offset, bytes_count);
+	memcpy(pbuf, adc_ddr_baseaddr + offset, bytes_count);
 
 	return bytes_count;
 }

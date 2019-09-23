@@ -54,12 +54,12 @@ typedef struct tinyiiod_adc {
 	uint32_t adc_ddr_base;
 }tinyiiod_adc;
 
-attribute_map *get_ch_read_adc_attr_map();
-attribute_map *get_ch_write_adc_attr_map();
+attribute_map *get_ch_read_adc_attr_map(void);
+attribute_map *get_ch_write_adc_attr_map(void);
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
 ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par *init);
-ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count);
-ssize_t read_dev(const char *device, char *pbuf, size_t offset,
+ssize_t adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size_t bytes_count);
+ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
 			size_t bytes_count);
 ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no);
 #endif /* __TINYIIOD_ADC_H__ */
