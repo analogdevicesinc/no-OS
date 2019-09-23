@@ -42,6 +42,8 @@
 #include "talise_arm_binary.h"
 #include "talise_stream_binary.h"
 
+#include "adrv9009_wrappers.h"
+
 /**********************************************************/
 /**********************************************************/
 /********** Talise Data Structure Initializations ********/
@@ -59,7 +61,8 @@ int main(void)
 		&clockPll1Settings,
 		&clockPll2Settings,
 		&clockOutputSettings,
-		&clockSysrefSettings
+		&clockSysrefSettings,
+		NULL
 	};
 	ad9528Device_t *clockAD9528_device = &clockAD9528_;
 #ifdef ALTERA_PLATFORM
@@ -82,6 +85,7 @@ int main(void)
 	struct altera_a10_fpll *tx_device_clk_pll;
 	struct altera_a10_fpll *rx_os_device_clk_pll;
 #else
+	clockAD9528_.extra = spi_wrapper;
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -121,6 +125,8 @@ int main(void)
 		1,
 		rx_div40_rate_hz / 1000,
 		rx_lane_rate_khz,
+		read_wrapper,
+		write_wrapper
 	};
 	struct jesd204_tx_init tx_jesd_init = {
 		"tx_jesd",
@@ -135,6 +141,8 @@ int main(void)
 		1,
 		tx_div40_rate_hz / 1000,
 		tx_lane_rate_khz,
+		read_wrapper,
+		write_wrapper
 	};
 
 	struct jesd204_rx_init rx_os_jesd_init = {
@@ -145,6 +153,8 @@ int main(void)
 		1,
 		rx_os_div40_rate_hz / 1000,
 		rx_os_lane_rate_khz,
+		read_wrapper,
+		write_wrapper
 	};
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
@@ -213,12 +223,19 @@ int main(void)
 		"rx_adc",
 		RX_CORE_BASEADDR,
 		4,
+		read_wrapper,
+		write_wrapper
 	};
 	struct axi_adc *rx_adc;
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
 		4,
+		read_wrapper,
+		write_wrapper,
+#ifndef ALTERA_PLATFORM
+		cache_flush_wrapper
+#endif
 	};
 	struct axi_dac *tx_dac;
 	struct axi_dmac_init rx_dmac_init = {
@@ -226,6 +243,8 @@ int main(void)
 		RX_DMA_BASEADDR,
 		DMA_DEV_TO_MEM,
 		0,
+		read_wrapper,
+		write_wrapper
 	};
 	struct axi_dmac *rx_dmac;
 #ifdef DAC_DMA_EXAMPLE
@@ -234,12 +253,17 @@ int main(void)
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
 		DMA_CYCLIC,
+		read_wrapper,
+		write_wrapper
 	};
 	struct axi_dmac *tx_dmac;
 	struct gpio_desc *gpio_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
 #endif
 	struct adi_hal hal;
+#ifndef ALTERA_PLATFORM
+	hal.extra = spi_wrapper;
+#endif
 	taliseDevice_t talDev = {
 		.devHalInfo = &hal,
 		.devStateInfo = {0}
