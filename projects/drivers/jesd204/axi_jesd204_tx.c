@@ -44,11 +44,6 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "platform_drivers.h"
-#ifdef ALTERA_PLATFORM
-#include "io.h"
-#else
-#include "xil_io.h"
-#endif
 #include "util.h"
 #include "axi_jesd204_tx.h"
 
@@ -101,13 +96,9 @@ const char *axi_jesd204_tx_link_status_label[] = {
 int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
-#ifdef ALTERA_PLATFORM
-	IOWR_32DIRECT(jesd->base, reg_addr, reg_val);
-#else
-	Xil_Out32((jesd->base + reg_addr), reg_val);
-#endif
+	jesd->jesd_write(jesd->base, reg_addr, reg_val);
 
-	return SUCCESS;
+		return SUCCESS;
 }
 
 /**
@@ -116,11 +107,7 @@ int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 int32_t axi_jesd204_tx_read(struct axi_jesd204_tx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
-#ifdef ALTERA_PLATFORM
-	*reg_val = IORD_32DIRECT(jesd->base, reg_addr);
-#else
-	*reg_val = Xil_In32(jesd->base + reg_addr);
-#endif
+	*reg_val = jesd->jesd_read(jesd->base, reg_addr);
 
 	return SUCCESS;
 }
@@ -331,6 +318,8 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	jesd->name = init->name;
 	jesd->device_clk_khz = init->device_clk_khz;
 	jesd->lane_clk_khz = init->lane_clk_khz;
+	jesd->jesd_read = init->jesd_read;
+	jesd->jesd_write = init->jesd_write;
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_MAGIC, &magic);
 	if (magic != JESD204_TX_MAGIC) {
