@@ -52,12 +52,16 @@ struct axi_adc {
 	uint32_t base;
 	uint8_t	num_channels;
 	uint64_t clock_hz;
+	uint32_t (*adc_read)(uint32_t, uint32_t);
+	void (*adc_write)(uint32_t, uint32_t, uint32_t);
 };
 
 struct axi_adc_init {
 	const char *name;
 	uint32_t base;
 	uint8_t	num_channels;
+	uint32_t (*adc_read)(uint32_t, uint32_t);
+	void (*adc_write)(uint32_t, uint32_t, uint32_t);
 };
 
 enum axi_adc_pn_sel {
