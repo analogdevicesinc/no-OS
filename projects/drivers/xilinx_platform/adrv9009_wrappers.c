@@ -55,7 +55,8 @@
  * @param param - The structure that contains the SPI parameters.
  * @return none
  */
-void spi_wrapper(spi_init_param *param){
+void spi_wrapper(spi_init_param *param)
+{
 	xil_spi_init_param *xil_spi_param = calloc(1, sizeof(xil_spi_init_param));
 	xil_spi_param->id = 0;
 	xil_spi_param->flags = SPI_CS_DECODE;
@@ -68,7 +69,8 @@ void spi_wrapper(spi_init_param *param){
  * @param offset - Address offset of the register.
  * @return data
  */
-int32_t read_wrapper(uint32_t base, uint32_t offset){
+int32_t read_wrapper(uint32_t base, uint32_t offset)
+{
 	return Xil_In32(base + offset);
 }
 
@@ -79,7 +81,8 @@ int32_t read_wrapper(uint32_t base, uint32_t offset){
  * @param data - data to be written.
  * @return none
  */
-void write_wrapper(uint32_t base, uint32_t offset, uint32_t data){
+void write_wrapper(uint32_t base, uint32_t offset, uint32_t data)
+{
 	Xil_Out32(base + offset, data);
 }
 
@@ -87,6 +90,7 @@ void write_wrapper(uint32_t base, uint32_t offset, uint32_t data){
  * @brief Wrap Xilinx cache flush function.
  * @return none
  */
-void cache_flush_wrapper(){
+void cache_flush_wrapper()
+{
 	Xil_DCacheFlush();
 }

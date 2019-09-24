@@ -54,7 +54,8 @@
  * @param offset - Address offset of the register.
  * @return data
  */
-int32_t read_wrapper(uint32_t base, uint32_t offset){
+int32_t read_wrapper(uint32_t base, uint32_t offset)
+{
 	return IORD_32DIRECT(base, offset);
 }
 
@@ -65,7 +66,8 @@ int32_t read_wrapper(uint32_t base, uint32_t offset){
  * @param data - data to be written.
  * @return none
  */
-void write_wrapper(uint32_t base, uint32_t offset, uint32_t data){
+void write_wrapper(uint32_t base, uint32_t offset, uint32_t data)
+{
 	IOWR_32DIRECT(base, offset, data);
 }
 
