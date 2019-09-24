@@ -401,14 +401,10 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 	el_info.name[DEVICE_EL] = device;
 	el_info.name[CHANNEL_EL] = channel;
 	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
+	el_info.crnt_level = CHANNEL_EL;
 	el_info.ch_out = ch_out;
-	for (i = 0; i < tinyiiod_devs->number_of_dev; i++) {
-		if(strequal(device, tinyiiod_devs->devices[i]->name)) {
-			break;
-		}
-	}
-	tinyiiod_device *iiod_device = get_device(tinyiiod_devs->devices[i]->name, tinyiiod_devs);
+
+	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
 	if(!device)
 		return -ENOENT;
 
@@ -507,7 +503,12 @@ static ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
 static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count)
 {
-	return adc_read_dev(NULL, pbuf, offset, bytes_count);
+	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	if(!device)
+		return -ENOENT;
+	tinyiiod_adc *iiod_adc = (tinyiiod_adc *)(iiod_device->pointer);
+
+	return adc_read_dev((char*)iiod_adc->adc_ddr_base, pbuf, offset, bytes_count);
 }
 
 
