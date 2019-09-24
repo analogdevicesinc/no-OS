@@ -4,6 +4,7 @@
 #include <xil_io.h>
 #include "tinyiiod.h"
 #include "tinyiiod_util.h"
+#include "axi_dmac.h"
 #include "util.h"
 #include "config.h"
 #include "serial.h"
@@ -394,7 +395,6 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 static ssize_t ch_read_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
-	uint8_t i;
 	if (!supporter_dev(device))
 		return -ENODEV;
 	element_info el_info;
@@ -485,7 +485,7 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 static ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
-	if(!device)
+	if(!iiod_device)
 		return -ENOENT;
 	tinyiiod_adc *iiod_adc = (tinyiiod_adc *)(iiod_device->pointer);
 
@@ -504,11 +504,47 @@ static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count)
 {
 	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
-	if(!device)
+	if(!iiod_device)
 		return -ENOENT;
 	tinyiiod_adc *iiod_adc = (tinyiiod_adc *)(iiod_device->pointer);
 
 	return adc_read_dev((char*)iiod_adc->adc_ddr_base, pbuf, offset, bytes_count);
+}
+
+/**
+ * transfer_mem_to_dev write data to DAC
+ * @param *device name
+ * @param *buff
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
+{
+	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	if(!device)
+		return -ENOENT;
+	tinyiiod_dac *iiod_dac = (tinyiiod_dac *)(iiod_device->pointer);
+
+	return dac_transfer_mem_to_dev(iiod_dac->dmac, iiod_dac->dac_ddr_base, bytes_count);
+}
+
+/**
+ * write data to RAM
+ * @param *device name
+ * @param *buff
+ * @param *offset in memory, used if some data have been already written
+ * @param bytes_count
+ * @return bytes_count
+ */
+ssize_t write_dev(const char *device, const char *buf,
+			 size_t offset,  size_t bytes_count)
+{
+	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	if(!device)
+		return -ENOENT;
+	tinyiiod_dac *iiod_dac = (tinyiiod_dac *)(iiod_device->pointer);
+
+	return dac_write_dev(iiod_dac, buf, offset, bytes_count);
 }
 
 

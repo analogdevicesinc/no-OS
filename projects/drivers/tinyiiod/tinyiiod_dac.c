@@ -136,9 +136,6 @@ static const char * const  dac_xml =
 		"</device>";
 
 
-static uint32_t dac_ddr_baseaddr;
-static struct axi_dac *tx_dac;
-static struct axi_dmac	*tx_dmac;
 
 ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par *init) {
 	*tinyiiod_dac = malloc(sizeof(*tinyiiod_dac));
@@ -151,14 +148,6 @@ ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par
 	return SUCCESS;
 }
 
-ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint32_t dac_ddr_base)
-{
-	tx_dac = dac;
-	tx_dmac = dmac;
-	dac_ddr_baseaddr = dac_ddr_baseaddr;
-	return 0;
-}
-
 /**
  * get_dds_calibscale
  * @param *buff where value is stored
@@ -166,10 +155,11 @@ ssize_t tinyiiod_dac_configure(struct axi_dac *dac, struct axi_dmac	*dmac, uint3
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_calibscale(char *buf, size_t len,
+static ssize_t get_dds_calibscale(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	ssize_t ret = axi_dac_dds_get_calib_scale(tx_dac, channel->ch_num,
 			&val, &val2);
 	int32_t i = 0;
@@ -192,11 +182,12 @@ static ssize_t get_dds_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_calibphase(char *buf, size_t len,
+static ssize_t get_dds_calibphase(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	ssize_t ret = axi_dac_dds_get_calib_phase(tx_dac, channel->ch_num,
 			&val, &val2);
 	if(ret < 0)
@@ -214,7 +205,7 @@ static ssize_t get_dds_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_sampling_frequency(char *buf, size_t len,
+static ssize_t get_dds_sampling_frequency(void *device, char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -234,10 +225,11 @@ static attribute_map dds_voltage_read_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_phase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_get_phase(tx_dac, channel->ch_num, &phase);
 	return snprintf(buf, len, "%"PRIu32"", phase);
 }
@@ -249,10 +241,11 @@ static ssize_t get_dds_altvoltage_phase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_scale(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t scale;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_get_scale(tx_dac, channel->ch_num, &scale);
 
 	return snprintf(buf, len, "%"PRIi32".%.6"PRIi32"", (scale / 1000000),
@@ -266,10 +259,11 @@ static ssize_t get_dds_altvoltage_scale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_frequency(void *device, char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_get_frequency(tx_dac, channel->ch_num, &freq);
 
 	return snprintf(buf, len, "%"PRIi32"", freq);
@@ -282,7 +276,7 @@ static ssize_t get_dds_altvoltage_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_raw(void *device, char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -295,7 +289,7 @@ static ssize_t get_dds_altvoltage_raw(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_sampling_frequency(char *buf, size_t len,
+static ssize_t get_dds_altvoltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -343,12 +337,13 @@ attribute_map *get_ch_read_dac_attr_map()
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_calibscale(char *buf, size_t len,
+static ssize_t set_dds_calibscale(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_set_calib_scale(tx_dac, channel->ch_num, val, val2);
 
 	return len;
@@ -361,12 +356,13 @@ static ssize_t set_dds_calibscale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_calibphase(char *buf, size_t len,
+static ssize_t set_dds_calibphase(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_set_calib_phase(tx_dac, channel->ch_num, val, val2);
 
 	return len;
@@ -379,7 +375,7 @@ static ssize_t set_dds_calibphase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_sampling_frequency(char *buf, size_t len,
+static ssize_t set_dds_sampling_frequency(void *device, char *buf, size_t len,
 				   const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -399,10 +395,11 @@ static attribute_map dds_voltage_write_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_phase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_set_phase(tx_dac, channel->ch_num, phase);
 
 	return len;
@@ -415,11 +412,12 @@ static ssize_t set_dds_altvoltage_phase(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_scale(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_set_scale(tx_dac, channel->ch_num, scale);
 
 	return len;
@@ -432,10 +430,11 @@ static ssize_t set_dds_altvoltage_scale(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_frequency(void *device, char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	axi_dac_dds_set_frequency(tx_dac, channel->ch_num, freq);
 
 	return len;
@@ -448,10 +447,11 @@ static ssize_t set_dds_altvoltage_frequency(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_raw(void *device, char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	uint32_t dds_mode = read_ul_value(buf);
+	struct axi_dac* tx_dac = (struct axi_dac*)device;
 	if(dds_mode) { 		/* DDS mode selected */
 		axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 	} else {				/* DMA mode selected */
@@ -468,7 +468,7 @@ static ssize_t set_dds_altvoltage_raw(char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_sampling_frequency(char *buf, size_t len,
+static ssize_t set_dds_altvoltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -516,16 +516,14 @@ attribute_map *get_ch_write_dac_attr_map()
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
+ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count)
 {
 	tx_dmac->flags = DMA_CYCLIC;
 	ssize_t ret = axi_dmac_transfer(tx_dmac, dac_ddr_baseaddr,
 					bytes_count);
 	if(ret < 0)
 		return ret;
-	ret = axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
-	if(ret < 0)
-		return ret;
+
 
 	return bytes_count;
 }
@@ -538,10 +536,14 @@ ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t write_dev(const char *device, const char *buf,
+ssize_t dac_write_dev(tinyiiod_dac *iiod_dac, const char *buf,
 			 size_t offset,  size_t bytes_count)
 {
-	ssize_t ret = axi_dac_set_buff(tx_dac, dac_ddr_baseaddr + offset,
+	ssize_t ret = axi_dac_set_datasel(iiod_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);
+	if(ret < 0)
+		return ret;
+
+	ret = axi_dac_set_buff(iiod_dac->dac, iiod_dac->dac_ddr_base + offset,
 				       (uint16_t *)buf,
 				       bytes_count);
 	if(ret < 0)
