@@ -527,7 +527,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	ret = ad9361_spi_read(phy->spi, REG_PRODUCT_ID);
 	if ((ret & PRODUCT_ID_MASK) != PRODUCT_ID_9361) {
-		printf("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
+		dev_err("%s : Unsupported PRODUCT_ID 0x%X", __func__, (unsigned int)ret);
 		ret = -ENODEV;
 		goto out;
 	}
@@ -556,7 +556,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		goto out;
 #endif
 
-	printf("%s : AD936x Rev %d successfully initialized\n", __func__, (int)rev);
+	dev_dbg("%s : AD936x Rev %d successfully initialized\n", __func__, (int)rev);
 
 	*ad9361_phy = phy;
 
@@ -571,7 +571,7 @@ out:
 	free(phy->clk_refin);
 	free(phy->pdata);
 	free(phy);
-	printf("%s : AD936x initialization error\n", __func__);
+	dev_err("%s : AD936x initialization error\n", __func__);
 
 	return -ENODEV;
 }
@@ -876,7 +876,7 @@ int32_t ad9361_get_rx_lo_freq (struct ad9361_rf_phy *phy,
 int32_t ad9361_set_rx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
 	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
-		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
+		dev_err("%s : EXT_LO is not supported by AD9363!\n", __func__);
 		return -1;
 	}
 
@@ -1516,7 +1516,7 @@ int32_t ad9361_get_tx_lo_freq (struct ad9361_rf_phy *phy,
 int32_t ad9361_set_tx_lo_int_ext(struct ad9361_rf_phy *phy, uint8_t int_ext)
 {
 	if ((phy->dev_sel == ID_AD9363A) && (int_ext = EXT_LO)) {
-		printf("%s : EXT_LO is not supported by AD9363!\n", __func__);
+		dev_err("%s : EXT_LO is not supported by AD9363!\n", __func__);
 		return -1;
 	}
 
@@ -1988,7 +1988,7 @@ int32_t ad9361_do_mcs(struct ad9361_rf_phy *phy_master,
 
 	if ((phy_master->dev_sel == ID_AD9363A) ||
 	    (phy_slave->dev_sel == ID_AD9363A)) {
-		printf("%s : MCS is not supported by AD9363!\n", __func__);
+		dev_err("%s : MCS is not supported by AD9363!\n", __func__);
 		return -1;
 	}
 

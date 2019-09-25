@@ -126,7 +126,7 @@ int32_t adxcvr_drp_wait_idle(struct adxcvr *xcvr,
 		mdelay(1);
 	} while (timeout--);
 
-	printf("%s: %s: Timeout!", xcvr->name, __func__);
+	dev_err("%s: %s: Timeout!", xcvr->name, __func__);
 
 	return FAILURE;
 }
@@ -277,7 +277,7 @@ int32_t adxcvr_status_error(struct adxcvr *xcvr)
 	if (!status)
 		return FAILURE;
 
-	printf("%s: OK (%"PRId32" kHz)\n", xcvr->name, xcvr->lane_rate_khz);
+	dev_dbg("%s: OK (%"PRId32" kHz)\n", xcvr->name, xcvr->lane_rate_khz);
 
 	return SUCCESS;
 }
@@ -382,7 +382,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	case XILINX_XCVR_TYPE_US_GTY4:
 		break;
 	default:
-		printf("Unknown transceiver type: %d\n", xcvr->xlx_xcvr.type);
+		dev_err("Unknown transceiver type: %d\n", xcvr->xlx_xcvr.type);
 		goto err;
 	}
 

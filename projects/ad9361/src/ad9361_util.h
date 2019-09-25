@@ -74,12 +74,10 @@
 #else
 #define dev_dbg(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
 #endif
-#define printk(format, ...)			printf(format, ## __VA_ARGS__)
 #else
 #define dev_err(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
 #define dev_warn(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
 #define dev_dbg(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
-#define printk(format, ...)			({ if (0) printf(format, ## __VA_ARGS__); })
 #endif
 
 struct device {

@@ -474,11 +474,11 @@ int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen,
 
 	axi_clkgen_read(clkgen, AXI_CLKGEN_REG_STATUS, &reg_val);
 	if ((reg_val & AXI_CLKGEN_STATUS) == 0x0) {
-		printf("%s: MMCM-PLL NOT locked (%"PRIu32" Hz)\n", clkgen->name, rate);
+		dev_err("%s: MMCM-PLL NOT locked (%"PRIu32" Hz)\n", clkgen->name, rate);
 		return FAILURE;
 
 	} else {
-		printf("%s: MMCM-PLL locked (%"PRIu32" Hz)\n", clkgen->name, rate);
+		dev_dbg("%s: MMCM-PLL locked (%"PRIu32" Hz)\n", clkgen->name, rate);
 	}
 
 	return SUCCESS;

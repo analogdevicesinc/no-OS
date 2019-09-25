@@ -877,7 +877,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	axi_dac_read(dac, AXI_DAC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
-		printf("%s: Status errors\n", dac->name);
+		dev_err("%s: Status errors\n", dac->name);
 		goto error;
 	}
 
@@ -900,7 +900,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	}
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
+	dev_dbg("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       dac->name, dac->clock_hz);
 
 	*dac_core = dac;

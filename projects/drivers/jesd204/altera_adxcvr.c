@@ -123,7 +123,7 @@ void adxcvr_acquire_arbitration(struct adxcvr *xcvr,
 		udelay(10);
 	} while (timeout++ < 10000);
 
-	printf("%s: Failed to acquire arbitration\n", xcvr->name);
+	dev_err("%s: Failed to acquire arbitration\n", xcvr->name);
 }
 
 /**
@@ -263,13 +263,13 @@ int32_t atx_pll_calibration_check(struct adxcvr *xcvr)
 		atx_pll_read(xcvr, XCVR_REG_CAPAB_ATX_PLL_STAT, &val);
 		if ((val & XCVR_CAPAB_ATX_PLL_CAL_BSY_MASK) ==
 		    XCVR_CAPAB_ATX_PLL_CAL_DONE) {
-			printf("%s: ATX PLL calibration OK (%"PRIu32" ms)\n", xcvr->name,
+			dev_dbg("%s: ATX PLL calibration OK (%"PRIu32" ms)\n", xcvr->name,
 			       timeout * 10);
 			return 0;
 		}
 	} while (timeout++ < 10);
 
-	printf("%s: ATX PLL calibration FAILED\n", xcvr->name);
+	dev_err("%s: ATX PLL calibration FAILED\n", xcvr->name);
 
 	return 1;
 }
@@ -300,13 +300,13 @@ int32_t adxcfg_calibration_check(struct adxcvr *xcvr, uint32_t lane,
 		/* Read PMA calibration status from capability register */
 		adxcfg_read(xcvr, lane, XCVR_REG_CAPAB_PMA, &val);
 		if ((val & mask) == 0) {
-			printf("%s: Lane %"PRIu32" %s OK (%"PRIu32" us)\n", xcvr->name,
+			dev_dbg("%s: Lane %"PRIu32" %s OK (%"PRIu32" us)\n", xcvr->name,
 			       lane, msg, timeout * 100);
 			return 0;
 		}
 	} while (timeout++ < 1000);
 
-	printf("%s: Lane %"PRIu32" %s FAILED\n", xcvr->name, lane, msg);
+	dev_err("%s: Lane %"PRIu32" %s FAILED\n", xcvr->name, lane, msg);
 
 	return 1;
 }
@@ -380,12 +380,12 @@ void adxcvr_finalize_lane_rate_change(struct adxcvr *xcvr)
 
 	if (timeout < 0) {
 		adxcvr_read(xcvr, ADXCVR_REG_STATUS2, &status);
-		printf("%s: Link activation error:\n", xcvr->name);
-		printf("\tLink PLL %slocked\n",
+		dev_err("%s: Link activation error:\n", xcvr->name);
+		dev_err("\tLink PLL %slocked\n",
 		       (status & ADXCVR_STATUS2_XCVR(xcvr->lanes_per_link)) ?
 		       "" : "not ");
 		for (i = 0; i < xcvr->lanes_per_link; i++) {
-			printf("\tLane %"PRIu32" transceiver %sready\n", i,
+			dev_err("\tLane %"PRIu32" transceiver %sready\n", i,
 			       (status & ADXCVR_STATUS2_XCVR(i)) ?
 			       "" : "not ");
 		}
@@ -467,7 +467,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		if (init->adxcfg_base[i] != 0)
 			xcvr->adxcfg_base[i] = init->adxcfg_base[i];
 		else {
-			printf("%s: Only up to %"PRIu32" lanes supported.\n",
+			dev_err("%s: Only up to %"PRIu32" lanes supported.\n",
 			       xcvr->name, i);
 			goto err;
 		}

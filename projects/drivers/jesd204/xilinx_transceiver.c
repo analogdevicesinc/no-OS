@@ -136,7 +136,7 @@ int32_t xilinx_xcvr_drp_read(struct xilinx_xcvr *xcvr,
 	ret = xilinx_xcvr_read(xcvr, drp_port, reg, val);
 
 	if (ret < 0) {
-		printf("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		dev_err("%s: Failed to read reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
 		       __func__, drp_port, reg, ret);
 
 		return FAILURE;
@@ -156,14 +156,14 @@ int32_t xilinx_xcvr_drp_write(struct xilinx_xcvr *xcvr,
 
 	ret = xilinx_xcvr_write(xcvr, drp_port, reg, val);
 	if (ret < 0) {
-		printf("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
+		dev_err("%s: Failed to write reg %"PRIu32"-0x%"PRIX32": %"PRId32"\n",
 		       __func__, drp_port, reg, ret);
 		return ret;
 	}
 
 	xilinx_xcvr_drp_read(xcvr, drp_port, reg, &read_val);
 	if (read_val != val)
-		printf("%s: read-write mismatch: reg 0x%"PRIX32","
+		dev_dbg("%s: read-write mismatch: reg 0x%"PRIX32","
 		       "val 0x%4"PRIX32", expected val 0x%4"PRIX32"\n",
 		       __func__, reg, val, read_val);
 
@@ -581,7 +581,7 @@ int32_t xilinx_xcvr_gth34_cpll_read_config(struct xilinx_xcvr *xcvr,
 	else
 		conf->refclk_div = 2;
 
-	printf("%s: cpll: fb_div_N1=%"PRIu32"\ncpll: fb_div_N2=%"PRIu32"\ncpll:"
+	dev_dbg("%s: cpll: fb_div_N1=%"PRIu32"\ncpll: fb_div_N2=%"PRIu32"\ncpll:"
 	       " refclk_div=%"PRIu32"\n", __func__, conf->fb_div_N1,
 	       conf->fb_div_N2, conf->refclk_div);
 
@@ -846,7 +846,7 @@ int32_t xilinx_xcvr_gth34_qpll_read_config(struct xilinx_xcvr *xcvr,
 
 	conf->band = 0;
 
-	printf("%s: qpll: fb_div=%"PRIu32", qpll: refclk_div=%"PRIu32"\n",
+	dev_dbg("%s: qpll: fb_div=%"PRIu32", qpll: refclk_div=%"PRIu32"\n",
 	       __func__, conf->fb_div, conf->refclk_div);
 
 	return SUCCESS;
@@ -966,7 +966,7 @@ int32_t xilinx_xcvr_gth34_qpll_write_config(struct xilinx_xcvr *xcvr,
 		refclk = 2;
 		break;
 	default:
-		printf("%s: Invalid refclk divider: %"PRIu32"\n",
+		dev_err("%s: Invalid refclk divider: %"PRIu32"\n",
 		       __func__, conf->refclk_div);
 		return FAILURE;
 	}
@@ -1003,7 +1003,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 		cfg1 = QPLL_REFCLK_DIV_M(2);
 		break;
 	default:
-		printf("%s: Invalid refclk divider: %"PRIu32"\n",
+		dev_err("%s: Invalid refclk divider: %"PRIu32"\n",
 		       __func__, conf->refclk_div);
 		return FAILURE;
 	}
@@ -1037,7 +1037,7 @@ int32_t xilinx_xcvr_gtx2_qpll_write_config(struct xilinx_xcvr *xcvr,
 		fbdiv = 368;
 		break;
 	default:
-		printf("%s: Invalid feedback divider: %"PRIu32"\n",
+		dev_err("%s: Invalid feedback divider: %"PRIu32"\n",
 		       __func__, conf->fb_div);
 		return FAILURE;
 	}

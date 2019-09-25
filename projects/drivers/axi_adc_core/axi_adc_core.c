@@ -368,7 +368,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	axi_adc_read(adc, AXI_ADC_REG_STATUS, &reg_data);
 	if(reg_data == 0x0) {
-		printf("%s: Status errors\n", adc->name);
+		dev_err("%s: Status errors\n", adc->name);
 		goto error;
 	}
 
@@ -377,7 +377,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 	adc->clock_hz = freq * ratio;
 	adc->clock_hz = (adc->clock_hz * 390625) >> 8;
 
-	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
+	dev_dbg("%s: Successfully initialized (%"PRIu64" Hz)\n",
 	       adc->name, adc->clock_hz);
 
 	*adc_core = adc;

@@ -2920,13 +2920,13 @@ static int32_t ad9361_tx_quad_phase_search(struct ad9361_rf_phy *phy,
 
 #ifdef _DEBUG
 	for (i = 0; i < 64; i++) {
-		printk("%c", (field[i] ? '#' : 'o'));
+		dev_dbg("%c", (field[i] ? '#' : 'o'));
 	}
 #ifdef WIN32
-	printk(" RX_NCO_PHASE_OFFSET(%d, 0x%X) \n", phy->last_tx_quad_cal_phase,
+	dev_dbg(" RX_NCO_PHASE_OFFSET(%d, 0x%X) \n", phy->last_tx_quad_cal_phase,
 	       phy->last_tx_quad_cal_phase);
 #else
-	printk(" RX_NCO_PHASE_OFFSET(%"PRIu32", 0x%"PRIX32") \n",
+	dev_dbg(" RX_NCO_PHASE_OFFSET(%"PRIu32", 0x%"PRIX32") \n",
 	       phy->last_tx_quad_cal_phase,
 	       phy->last_tx_quad_cal_phase);
 #endif

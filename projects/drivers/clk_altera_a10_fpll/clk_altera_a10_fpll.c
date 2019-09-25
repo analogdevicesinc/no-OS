@@ -121,7 +121,7 @@ uint32_t altera_a10_acquire_arbitration(struct altera_a10_fpll *fpll)
 		udelay(10);
 	} while (timeout++ < 10000);
 
-	printf("%s: Failed to acquire arbitration\n", fpll->name);
+	dev_err("%s: Failed to acquire arbitration\n", fpll->name);
 
 	return 0;
 }
@@ -325,13 +325,13 @@ int32_t altera_a10_fpll_pll_calibration_check(struct altera_a10_fpll *fpll)
 		/* Read FPLL calibration status from capability register */
 		val = altera_a10_fpll_read(fpll, 0x280);
 		if ((val & 0x02) == 0x00) {
-			printf("%s: FPLL PLL calibration OK (%"PRIu32" us)\n", fpll->name,
+			dev_dbg("%s: FPLL PLL calibration OK (%"PRIu32" us)\n", fpll->name,
 			       timeout * 200);
 			return 0;
 		}
 	} while (timeout++ < 50);
 
-	printf("%s: FPLL PLL calibration FAILED\n", fpll->name);
+	dev_err("%s: FPLL PLL calibration FAILED\n", fpll->name);
 
 	return 1;
 }

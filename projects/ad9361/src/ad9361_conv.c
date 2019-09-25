@@ -318,15 +318,15 @@ static void ad9361_dig_tune_verbose_print(struct ad9361_rf_phy *phy,
 	int32_t i, j;
 	char c;
 
-	printk("SAMPL CLK: %"PRIu32" tuning: %s\n",
+	dev_dbg("SAMPL CLK: %"PRIu32" tuning: %s\n",
 	       clk_get_rate(phy, phy->ref_clk_scale[RX_SAMPL_CLK]), tx ? "TX" : "RX");
-	printk("  ");
+	dev_dbg("  ");
 	for (i = 0; i < 16; i++)
-		printk("%"PRIx32":", i);
-	printk("\n");
+		dev_dbg("%"PRIx32":", i);
+	dev_dbg("\n");
 
 	for (i = 0; i < 2; i++) {
-		printk("%"PRIx32":", i);
+		dev_dbg("%"PRIx32":", i);
 		for (j = 0; j < 16; j++) {
 			if (field[i][j])
 				c = '#';
@@ -335,9 +335,9 @@ static void ad9361_dig_tune_verbose_print(struct ad9361_rf_phy *phy,
 				c = 'O';
 			else
 				c = 'o';
-			printk("%c ", c);
+			dev_dbg("%c ", c);
 		}
-		printk("\n");
+		dev_dbg("\n");
 	}
 }
 
