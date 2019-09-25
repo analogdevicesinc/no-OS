@@ -43,11 +43,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "platform_drivers.h"
-#ifdef ALTERA_PLATFORM
-#include "io.h"
-#else
-#include "xil_io.h"
-#endif
 #include "util.h"
 #include "axi_dmac.h"
 
@@ -81,11 +76,7 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 		      uint32_t reg_addr,
 		      uint32_t *reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	*reg_data = IORD_32DIRECT(dmac->base, reg_addr);
-#else
-	*reg_data = Xil_In32((dmac->base + reg_addr));
-#endif
+	dmac->axi_io_read(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -97,11 +88,7 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 		       uint32_t reg_addr,
 		       uint32_t reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	IOWR_32DIRECT(dmac->base, reg_addr, reg_data);
-#else
-	Xil_Out32((dmac->base + reg_addr), reg_data);
-#endif
+	dmac->axi_io_write(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -181,6 +168,8 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->base = init->base;
 	dmac->direction = init->direction;
 	dmac->flags = init->flags;
+	dmac->axi_io_read = init->axi_io_read;
+	dmac->axi_io_write = init->axi_io_write;
 
 	*dmac_core = dmac;
 
