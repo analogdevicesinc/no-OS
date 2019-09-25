@@ -72,8 +72,8 @@ static ssize_t get_cf_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	ssize_t ret = axi_adc_get_calib_phase(rx_adc, channel->ch_num, &val,
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 
 
@@ -98,8 +98,8 @@ static ssize_t get_cf_calibbias(void *device, char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	axi_adc_get_calib_bias(rx_adc,
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	axi_adc_get_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
 			       &val,
 			       NULL);
@@ -119,8 +119,8 @@ static ssize_t get_cf_calibscale(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	ssize_t ret = axi_adc_get_calib_scale(rx_adc, channel->ch_num, &val,
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	ssize_t ret = axi_adc_get_calib_scale(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if(ret < 0)
 		return ret;
@@ -158,8 +158,8 @@ static ssize_t get_cf_sampling_frequency(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	uint64_t sampling_freq;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	ssize_t ret = axi_adc_get_sampling_freq(rx_adc, channel->ch_num, &sampling_freq);
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num, &sampling_freq);
 	if(ret < 0)
 		return ret;
 
@@ -179,8 +179,8 @@ static ssize_t set_cf_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	axi_adc_set_calib_phase(rx_adc, channel->ch_num, val, val2);
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
 
 	return len;
 }
@@ -196,8 +196,8 @@ static ssize_t set_cf_calibbias(void *device, char *buf, size_t len,
 			 const struct channel_info *channel)
 {
 	int32_t val = read_value(buf);
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	axi_adc_set_calib_bias(rx_adc,
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	axi_adc_set_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
 			       val,
 			       0);
@@ -218,8 +218,8 @@ static ssize_t set_cf_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct axi_adc* rx_adc = (struct axi_adc*)device;
-	axi_adc_set_calib_scale(rx_adc, channel->ch_num, val, val2);
+	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
+	axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val, val2);
 
 	return len;
 }
@@ -251,37 +251,42 @@ static ssize_t set_cf_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 static attribute_map cf_voltage_read_attrtibute_map[] = {
-	{"calibphase", get_cf_calibphase},
-	{"calibbias", get_cf_calibbias},
-	{"calibscale", get_cf_calibscale},
-	{"samples_pps", get_cf_samples_pps},
-	{"sampling_frequency", get_cf_sampling_frequency},
-	{NULL, NULL},
+	{.name = "calibphase", .exec = get_cf_calibphase},
+	{.name = "calibbias", .exec = get_cf_calibbias},
+	{.name = "calibscale", .exec = get_cf_calibscale},
+	{.name = "samples_pps", .exec = get_cf_samples_pps},
+	{.name = "sampling_frequency", .exec = get_cf_sampling_frequency},
+	{NULL},
 };
 
 static attribute_map ch_read_adc_attr_map[] = {
-	{"voltage0", NULL, cf_voltage_read_attrtibute_map, NULL},
-	{"voltage1", NULL, cf_voltage_read_attrtibute_map, NULL},
-	{"voltage2", NULL, cf_voltage_read_attrtibute_map, NULL},
-	{"voltage3", NULL, cf_voltage_read_attrtibute_map, NULL},
-	{NULL, NULL},
+	{.name = "voltage0", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
+	{.name = "voltage1", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
+	{.name = "voltage2", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
+	{.name = "voltage3", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
+	{.name = NULL},
 };
 
 static attribute_map cf_voltage_write_attrtibute_map[] = {
-	{"calibphase", set_cf_calibphase},
-	{"calibbias", set_cf_calibbias},
-	{"calibscale", set_cf_calibscale},
-	{"samples_pps", set_cf_samples_pps},
-	{"sampling_frequency", set_cf_sampling_frequency},
-	{NULL, NULL},
+	{.name = "calibphase", .exec = set_cf_calibphase},
+	{.name = "calibbias", .exec = set_cf_calibbias},
+	{.name = "calibscale", .exec = set_cf_calibscale},
+	{.name = "samples_pps", .exec = set_cf_samples_pps},
+	{.name = "sampling_frequency", .exec = set_cf_sampling_frequency},
+	{.name = NULL},
 };
 
 static attribute_map ch_write_adc_attr_map[] = {
-	{"voltage0", NULL, cf_voltage_write_attrtibute_map, NULL},
-	{"voltage1", NULL, cf_voltage_write_attrtibute_map, NULL},
-	{"voltage2", NULL, cf_voltage_write_attrtibute_map, NULL},
-	{"voltage3", NULL, cf_voltage_write_attrtibute_map, NULL},
-	{NULL, NULL},
+	{.name = "voltage0", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
+	{.name = "voltage1", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
+	{.name = "voltage2", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
+	{.name = "voltage3", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
+	{.name = NULL},
+};
+
+static attribute_map adc_attr_map[] = {
+	{.name = "NULL", .exec = NULL, .map_in = ch_read_adc_attr_map, .map_out = ch_write_adc_attr_map},
+	{.name = NULL},
 };
 
 ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no) {
@@ -346,17 +351,17 @@ ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no) {
 			goto error;
 		xml_add_node(channel, attribute);
 
-		for (uint8_t j = 0; cf_voltage_read_attrtibute_map[j].attr_name != NULL; j++) {
+		for (uint8_t j = 0; cf_voltage_read_attrtibute_map[j].name != NULL; j++) {
 			ret = xml_create_node(&attribute, "attribute");
 			if (ret < 0)
 				goto error;
-			ret = xml_create_attribute(&att, "name", cf_voltage_read_attrtibute_map[j].attr_name);
+			ret = xml_create_attribute(&att, "name", cf_voltage_read_attrtibute_map[j].name);
 			if (ret < 0)
 				goto error;
 			ret = xml_add_attribute(attribute, att);
 			if (ret < 0)
 				goto error;
-			sprintf(buff, "in_voltage%d_%s", i, cf_voltage_read_attrtibute_map[j].attr_name);
+			sprintf(buff, "in_voltage%d_%s", i, cf_voltage_read_attrtibute_map[j].name);
 			ret = xml_create_attribute(&att, "filename", buff);
 			if (ret < 0)
 				goto error;
@@ -389,19 +394,10 @@ error:
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_ch_read_adc_attr_map(void)
+attribute_map *get_adc_attr_map(const char *device_name)
 {
-	return ch_read_adc_attr_map;
-}
-
-/**
- * get_ch_write_adc_attr_map
- * get map between attribute name and corresponding function
- * @return map
- */
-attribute_map *get_ch_write_adc_attr_map(void)
-{
-	return ch_write_adc_attr_map;
+	adc_attr_map[0].name = device_name;
+	return adc_attr_map;
 }
 
 /**

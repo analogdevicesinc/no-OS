@@ -159,8 +159,8 @@ static ssize_t get_dds_calibscale(void *device, char *buf, size_t len,
 			   const struct channel_info *channel)
 {
 	int32_t val, val2;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	ssize_t ret = axi_dac_dds_get_calib_scale(tx_dac, channel->ch_num,
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	ssize_t ret = axi_dac_dds_get_calib_scale(tinyiiod_dac->dac, channel->ch_num,
 			&val, &val2);
 	int32_t i = 0;
 	if(ret < 0)
@@ -187,8 +187,8 @@ static ssize_t get_dds_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	ssize_t ret = axi_dac_dds_get_calib_phase(tx_dac, channel->ch_num,
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	ssize_t ret = axi_dac_dds_get_calib_phase(tinyiiod_dac->dac, channel->ch_num,
 			&val, &val2);
 	if(ret < 0)
 		return ret;
@@ -212,10 +212,10 @@ static ssize_t get_dds_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 static attribute_map dds_voltage_read_attrtibute_map[] = {
-	{"calibphase", get_dds_calibphase},
-	{"calibscale", get_dds_calibscale},
-	{"sampling_frequency", get_dds_sampling_frequency},
-	{NULL, NULL},
+	{.name = "calibphase", .exec = get_dds_calibphase},
+	{.name = "calibscale", .exec = get_dds_calibscale},
+	{.name = "sampling_frequency", .exec = get_dds_sampling_frequency},
+	{.name = NULL},
 };
 
 /**
@@ -229,8 +229,8 @@ static ssize_t get_dds_altvoltage_phase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_get_phase(tx_dac, channel->ch_num, &phase);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_get_phase(tinyiiod_dac->dac, channel->ch_num, &phase);
 	return snprintf(buf, len, "%"PRIu32"", phase);
 }
 
@@ -245,8 +245,8 @@ static ssize_t get_dds_altvoltage_scale(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t scale;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_get_scale(tx_dac, channel->ch_num, &scale);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_get_scale(tinyiiod_dac->dac, channel->ch_num, &scale);
 
 	return snprintf(buf, len, "%"PRIi32".%.6"PRIi32"", (scale / 1000000),
 			(scale % 1000000));
@@ -263,8 +263,8 @@ static ssize_t get_dds_altvoltage_frequency(void *device, char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_get_frequency(tx_dac, channel->ch_num, &freq);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_get_frequency(tinyiiod_dac->dac, channel->ch_num, &freq);
 
 	return snprintf(buf, len, "%"PRIi32"", freq);
 }
@@ -296,28 +296,28 @@ static ssize_t get_dds_altvoltage_sampling_frequency(void *device, char *buf, si
 }
 
 static attribute_map dds_altvoltage_read_attrtibute_map[] = {
-	{"phase", get_dds_altvoltage_phase},
-	{"scale", get_dds_altvoltage_scale},
-	{"frequency", get_dds_altvoltage_frequency},
-	{"raw", get_dds_altvoltage_raw},
-	{"sampling_frequency", get_dds_altvoltage_sampling_frequency},
-	{NULL, NULL},
+	{.name = "phase", .exec = get_dds_altvoltage_phase},
+	{.name = "scale", .exec = get_dds_altvoltage_scale},
+	{.name = "frequency", .exec = get_dds_altvoltage_frequency},
+	{.name = "raw", .exec = get_dds_altvoltage_raw},
+	{.name = "sampling_frequency", .exec = get_dds_altvoltage_sampling_frequency},
+	{.name = NULL},
 };
 
 static attribute_map ch_read_dac_attr_map[] = {
-	{"voltage0", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
-	{"voltage1", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
-	{"voltage2", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
-	{"voltage3", NULL, dds_voltage_read_attrtibute_map, dds_voltage_read_attrtibute_map},
-	{"altvoltage0", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage1", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage2", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage3", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage4", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage5", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage6", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{"altvoltage7", NULL, dds_altvoltage_read_attrtibute_map, dds_altvoltage_read_attrtibute_map},
-	{NULL, NULL, NULL},
+	{.name = "voltage0", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
+	{.name = "voltage1", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
+	{.name = "voltage2", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
+	{.name = "voltage3", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
+	{.name = "altvoltage0", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage1", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage2", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage3", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage4", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage5", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage6", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = "altvoltage7", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
+	{.name = NULL},
 };
 
 /**
@@ -325,7 +325,7 @@ static attribute_map ch_read_dac_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_ch_read_dac_attr_map()
+attribute_map *get_ch_read_dac_attr_map(const char *device_name)
 {
 	return ch_read_dac_attr_map;
 }
@@ -343,8 +343,8 @@ static ssize_t set_dds_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_set_calib_scale(tx_dac, channel->ch_num, val, val2);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_set_calib_scale(tinyiiod_dac->dac, channel->ch_num, val, val2);
 
 	return len;
 }
@@ -362,8 +362,8 @@ static ssize_t set_dds_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_set_calib_phase(tx_dac, channel->ch_num, val, val2);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_set_calib_phase(tinyiiod_dac->dac, channel->ch_num, val, val2);
 
 	return len;
 }
@@ -382,10 +382,10 @@ static ssize_t set_dds_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 static attribute_map dds_voltage_write_attrtibute_map[] = {
-	{"calibphase", set_dds_calibphase},
-	{"calibscale", set_dds_calibscale},
-	{"sampling_frequency", set_dds_sampling_frequency},
-	{NULL, NULL},
+	{.name = "calibphase", .exec = set_dds_calibphase},
+	{.name = "calibscale", .exec = set_dds_calibscale},
+	{.name = "sampling_frequency", .exec = set_dds_sampling_frequency},
+	{.name = NULL},
 };
 
 /**
@@ -399,8 +399,8 @@ static ssize_t set_dds_altvoltage_phase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_set_phase(tx_dac, channel->ch_num, phase);
+	struct tinyiiod_dac * iiod_dac = (tinyiiod_dac *)device;
+	axi_dac_dds_set_phase(iiod_dac->dac, channel->ch_num, phase);
 
 	return len;
 }
@@ -417,8 +417,8 @@ static ssize_t set_dds_altvoltage_scale(void *device, char *buf, size_t len,
 {
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_set_scale(tx_dac, channel->ch_num, scale);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_set_scale(tinyiiod_dac->dac, channel->ch_num, scale);
 
 	return len;
 }
@@ -434,8 +434,8 @@ static ssize_t set_dds_altvoltage_frequency(void *device, char *buf, size_t len,
 				     const struct channel_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
-	axi_dac_dds_set_frequency(tx_dac, channel->ch_num, freq);
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
+	axi_dac_dds_set_frequency(tinyiiod_dac->dac, channel->ch_num, freq);
 
 	return len;
 }
@@ -451,11 +451,11 @@ static ssize_t set_dds_altvoltage_raw(void *device, char *buf, size_t len,
 			       const struct channel_info *channel)
 {
 	uint32_t dds_mode = read_ul_value(buf);
-	struct axi_dac* tx_dac = (struct axi_dac*)device;
+	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
 	if(dds_mode) { 		/* DDS mode selected */
-		axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+		axi_dac_set_datasel(tinyiiod_dac->dac, -1, AXI_DAC_DATA_SEL_DDS);
 	} else {				/* DMA mode selected */
-		axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+		axi_dac_set_datasel(tinyiiod_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);
 	}
 
 	return len;
@@ -475,28 +475,33 @@ static ssize_t set_dds_altvoltage_sampling_frequency(void *device, char *buf, si
 }
 
 static attribute_map dds_altvoltage_write_attrtibute_map[] = {
-	{"phase", set_dds_altvoltage_phase},
-	{"scale", set_dds_altvoltage_scale},
-	{"frequency", set_dds_altvoltage_frequency},
-	{"raw", set_dds_altvoltage_raw},
-	{"sampling_frequency", set_dds_altvoltage_sampling_frequency},
-	{NULL, NULL},
+	{.name = "phase", .exec = set_dds_altvoltage_phase},
+	{.name = "scale", .exec = set_dds_altvoltage_scale},
+	{.name = "frequency", .exec = set_dds_altvoltage_frequency},
+	{.name = "raw", .exec = set_dds_altvoltage_raw},
+	{.name = "sampling_frequency", .exec = set_dds_altvoltage_sampling_frequency},
+	{.name = NULL, NULL},
 };
 
 static attribute_map ch_write_dac_attr_map[] = {
-	{"voltage0", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
-	{"voltage1", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
-	{"voltage2", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
-	{"voltage3", NULL, dds_voltage_write_attrtibute_map, dds_voltage_write_attrtibute_map},
-	{"altvoltage0", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage1", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage2", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage3", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage4", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage5", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage6", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{"altvoltage7", NULL, dds_altvoltage_write_attrtibute_map, dds_altvoltage_write_attrtibute_map},
-	{NULL, NULL, NULL},
+	{.name = "voltage0", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
+	{.name = "voltage1", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
+	{.name = "voltage2", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
+	{.name = "voltage3", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
+	{.name = "altvoltage0", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage1", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage2", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage3", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage4", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage5",.exec =  NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage6", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = "altvoltage7", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
+	{.name = NULL},
+};
+
+static attribute_map dac_attr_map[] = {
+	{.name = "NULL", .exec = NULL, .map_in = ch_read_dac_attr_map, .map_out = ch_write_dac_attr_map},
+	{.name = NULL},
 };
 
 /**
@@ -504,9 +509,10 @@ static attribute_map ch_write_dac_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_ch_write_dac_attr_map()
+attribute_map *get_dac_attr_map(const char *device_name)
 {
-	return ch_write_dac_attr_map;
+	dac_attr_map[0].name = device_name;
+	return dac_attr_map;
 }
 
 /**

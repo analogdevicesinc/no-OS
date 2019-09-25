@@ -3317,6 +3317,7 @@ enum dev_id {
 };
 
 struct ad9361_rf_phy {
+	const char *name;
 	enum dev_id		dev_sel;
 	uint8_t 		id_no;
 	struct spi_desc 	*spi;

@@ -54,8 +54,8 @@ typedef struct tinyiiod_dac {
 	uint32_t dac_ddr_base;
 }tinyiiod_dac;
 
-attribute_map *get_ch_read_dac_attr_map();
-attribute_map *get_ch_write_dac_attr_map();
+attribute_map *get_ch_read_dac_attr_map(const char *device_name);
+attribute_map *get_dac_attr_map(const char *device_name);
 ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par *init);
 ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count);
 ssize_t dac_write_dev(tinyiiod_dac *iiod_dac, const char *buf,

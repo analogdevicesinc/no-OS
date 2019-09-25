@@ -45,9 +45,9 @@ static int16_t get_attribute_id(const char *attr, const attribute_map* map)
 	if(!map)
 		return -EINVAL;
 
-	while(map[i].attr_name)
+	while(map[i].name)
 	{
-		if (strequal(attr, map[i].attr_name))
+		if (strequal(attr, map[i].name))
 			return i;
 		i++;
 	}
@@ -79,7 +79,7 @@ static ssize_t read_all_attr(void *device, char *buf, size_t len,
 {
 	int16_t i = 0, j = 0;
 	char local_buf[0x1000];
-	while(map[i].attr_name)
+	while(map[i].name)
 	{
 		int16_t attr_length = map[i].exec(device, (local_buf), len, channel);
 		int32_t *len = (int32_t *)(buf + j);
@@ -112,7 +112,7 @@ static ssize_t write_all_attr(void *device, char *buf, size_t len,
 {
 	int16_t i = 0, j = 0;
 
-	while(map[i].attr_name)
+	while(map[i].name)
 	{
 		int16_t attr_length = Xil_EndianSwap32((uint32_t)(buf + j));
 		j += 4;
@@ -143,25 +143,39 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_
 	if(!map)
 		return -ENOENT;
 
-	if(el_info->crnt_level == CHANNEL_EL && strequal(el_info->name[CHANNEL_EL], ""))
-		el_info->crnt_level++;
+//	if(el_info->crnt_level == CHANNEL_EL && strequal(el_info->name[CHANNEL_EL], "")) {
+//		el_info->crnt_level++;
+//		map = 1 ? map->map_in_global : map->map_out_global;
+//	}
 
 	attribute_id = get_attribute_id(el_info->name[el_info->crnt_level], map);
 
-	if(attribute_id < 0 && el_info->crnt_level == ATTRIBUTE_EL && strequal(el_info->name[el_info->crnt_level], "")) /* element not fond, but try to rd/wr all if element is ATTRIBUTE_EL and name is "" */
+	if(el_info->crnt_level == DEVICE_EL &&
+			strequal(el_info->name[CHANNEL_EL], "")) /* element not fond, but try to rd/wr all if element is ATTRIBUTE_EL and name is "" */
 	{
-		const struct channel_info channel_info = {
-			get_channel_number(el_info->name[CHANNEL_EL]),
-			el_info->ch_out
-		};
-		tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
-		if(!device)
-			return -ENOENT;
-		if(is_write)
-			return write_all_attr(device->pointer, buf, len, &channel_info, map);
+		if (strequal(el_info->name[ATTRIBUTE_EL], ""))
+		{
+			const struct channel_info channel_info = {
+				get_channel_number(el_info->name[CHANNEL_EL]),
+				el_info->ch_out
+			};
+			tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
+			if(!device)
+				return -ENOENT;
+
+
+			if(is_write)
+				return write_all_attr(device->pointer, buf, len, &channel_info, map->map_out_global);
+			else
+				return read_all_attr(device->pointer, buf, len, &channel_info, map->map_in_global);
+		}
 		else
-			return read_all_attr(device->pointer, buf, len, &channel_info, map);
+		{
+			map = el_info->ch_out ? map->map_out_global : map->map_in_global;
+			attribute_id = get_attribute_id(el_info->name[ATTRIBUTE_EL], map);
+		}
 	}
+
 	if(attribute_id >= 0)  /* element fond */
 	{
 		if(map[attribute_id].exec)
@@ -179,7 +193,10 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_
 		else
 		{
 			el_info->crnt_level++;
-			return rd_wr_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map_in, is_write);
+			if(el_info->crnt_level == CHANNEL_EL)
+				return rd_wr_attribute(el_info, buf, len, is_write ? map[attribute_id].map_out : map[attribute_id].map_in, is_write);
+			if(el_info->crnt_level == ATTRIBUTE_EL)
+				return rd_wr_attribute(el_info, buf, len, el_info->ch_out ? map[attribute_id].map_out : map[attribute_id].map_in, is_write);
 		}
 	}
 
@@ -401,7 +418,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 	el_info.name[DEVICE_EL] = device;
 	el_info.name[CHANNEL_EL] = channel;
 	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = CHANNEL_EL;
+	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = ch_out;
 
 	tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);

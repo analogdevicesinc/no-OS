@@ -14,10 +14,12 @@ struct channel_info {
 };
 
 typedef struct attribute_map {
-	char *attr_name;
+	const char *name;
 	ssize_t (*exec)(void *device, char *buf, size_t len, const struct channel_info *channel);
 	struct attribute_map *map_in; 	/* in */
 	struct attribute_map *map_out; /* out */
+	struct attribute_map *map_in_global;
+	struct attribute_map *map_out_global;
 }attribute_map;
 
 typedef struct tinyiiod_device {

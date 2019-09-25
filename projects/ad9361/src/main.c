@@ -63,6 +63,7 @@
 #include "tinyiiod_adc.h"
 #include "tinyiiod_dac.h"
 #include "tinyiiod_util.h"
+#include "ad9361_tinyiiod_phy.h"
 #endif // USE_LIBIIO
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -92,6 +93,7 @@ struct axi_dmac_init tx_dmac_init = {
 };
 
 AD9361_InitParam default_init_param = {
+	"ad9361-phy",
 	/* Device selection */
 	ID_AD9361,	// dev_sel
 	/* Identification number */
@@ -620,8 +622,9 @@ int main(void)
 
 	tinyiiod_axi_adc_init(&tinyiiod_adc, &tinyiiod_adc_init_par);
 	tinyiiod_axi_dac_init(&tinyiiod_dac, &tinyiiod_dac_init_par);
-	tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml, get_ch_read_adc_attr_map());
-	tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_adc->adc->num_channels, get_dac_xml, NULL);
+	tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml, get_adc_attr_map(tinyiiod_adc->adc->name));
+	tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_dac->dac->num_channels, get_dac_xml, get_dac_attr_map(tinyiiod_dac->dac->name));
+	tinyiiod_register_device(ad9361_phy, ad9361_phy->name, 0, get_phy_xml, get_phy_attr_map(ad9361_phy->name));
 
 	/* Create the ad9361_tinyiiod */
 	ret = iiod_create(&iiod);

@@ -43,10 +43,8 @@
 #include "tinyiiod_util.h"
 #include "ad9361_api.h"
 
-attribute_map *get_read_phy_attr_map();
-attribute_map *get_write_phy_attr_map();
-attribute_map *get_ch_read_phy_attr_map();
+attribute_map *get_phy_attr_map(const char *device_name);
 attribute_map *get_ch_write_phy_attr_map();
-ssize_t get_phy_xml(const char** xml);
+ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no);
 
 #endif /* __TINYIIOD_PHY_H__ */
