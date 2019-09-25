@@ -351,7 +351,7 @@ int32_t spi_eng_gen_transfer(spi_desc_extra *desc,
 	 */
 
 	spi_eng_program_add_cmd(xfer,
-				SPI_ENGINE_CMD_TRANSFER(write, read, words_number);
+				SPI_ENGINE_CMD_TRANSFER(write, read, words_number));
 
 	return SUCCESS;
 }
