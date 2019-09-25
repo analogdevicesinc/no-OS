@@ -43,23 +43,23 @@
 #include "stdio.h"
 
 typedef struct xml_attribute {
-	char *name;
-	char *value;
-}xml_attribute;
+    char *name;
+    char *value;
+} xml_attribute;
 
 typedef struct xml_node {
-	char *name;
-	xml_attribute **attributes;
-	uint16_t attr_cnt;
-	struct xml_node **children;
-	uint16_t children_cnt;
-}xml_node;
+    char *name;
+    xml_attribute **attributes;
+    uint16_t attr_cnt;
+    struct xml_node **children;
+    uint16_t children_cnt;
+} xml_node;
 
 typedef struct xml_document {
-	char *buff;
-	uint32_t size;
-	uint32_t index;
-}xml_document;
+    char *buff;
+    uint32_t size;
+    uint32_t index;
+} xml_document;
 
 ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *value);
 ssize_t xml_delete_attribute(xml_attribute **attribute);

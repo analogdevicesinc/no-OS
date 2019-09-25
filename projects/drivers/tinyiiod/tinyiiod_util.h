@@ -46,17 +46,17 @@
 #include "tinyiiod.h"
 
 enum elem_level {
-	DEVICE_EL,
-	CHANNEL_EL,
-	ATTRIBUTE_EL,
-	MAX_EL
+    DEVICE_EL,
+    CHANNEL_EL,
+    ATTRIBUTE_EL,
+    MAX_EL
 };
 
 typedef struct element_info {
-	const char *name[MAX_EL];
-	bool ch_out;
-	enum elem_level crnt_level;
-}element_info;
+    const char *name[MAX_EL];
+    bool ch_out;
+    enum elem_level crnt_level;
+} element_info;
 
 ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), attribute_map *attr_map);
 ssize_t iiod_create(struct tinyiiod **iiod);
