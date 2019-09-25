@@ -60,6 +60,14 @@ ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par
     return SUCCESS;
 }
 
+ssize_t tinyiiod_axi_adc_remove(tinyiiod_adc *tinyiiod_adc)
+{
+
+	free(tinyiiod_adc);
+
+	return SUCCESS;
+}
+
 /**
  * get_cf_calibphase
  * @param *buff where value is stored

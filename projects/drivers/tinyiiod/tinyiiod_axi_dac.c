@@ -148,6 +148,14 @@ ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par
     return SUCCESS;
 }
 
+ssize_t tinyiiod_axi_dac_remove(tinyiiod_dac *tinyiiod_dac)
+{
+
+	free(tinyiiod_dac);
+
+	return SUCCESS;
+}
+
 /**
  * get_dds_calibscale
  * @param *buff where value is stored

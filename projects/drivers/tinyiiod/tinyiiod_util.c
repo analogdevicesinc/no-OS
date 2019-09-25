@@ -292,10 +292,23 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name, 
     return 0;
 }
 
+ssize_t tinyiiod_remove(void)
+{
+	uint8_t i;
+	for (i = 0; i < tinyiiod_devs->number_of_dev; i++)
+	{
+		free(tinyiiod_devs->devices[i]);
+	}
+	free(tinyiiod_devs);
+
+	return 0;
+}
+
 static ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
 {
-    char *xml, *tmp_xml;
+    char *xml, *tmp_xml, *tmp_xml2;
     uint32_t length;
+    ssize_t error = 0;
 
     char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
                     "<!DOCTYPE context ["
@@ -322,22 +335,34 @@ static ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
     char header2[] = "</context>";
 
     xml = malloc(strlen(header) + 1);
+    if(!xml)
+    	return -ENOMEM;
+
     strcpy(xml, header);
 
     for (uint16_t i = 0; i < devs->number_of_dev; i++) {
         devs->devices[i]->get_device_xml(&tmp_xml, devs->devices[i]->name, devs->devices[i]->number_of_channels);
         length = strlen(xml);
-        xml = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+        tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+        if(!tmp_xml2)
+        	error = -EACCES;
+        else
+        	xml = tmp_xml2;
         strcpy((xml + length), tmp_xml);
     }
 
     length = strlen(xml);
-    xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+    tmp_xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+    if(!tmp_xml) {
+    	free(tmp_xml);
+        return -ENOMEM;
+    }
+    xml = tmp_xml;
     strcpy((xml + length), header2);
 
     *outxml = xml;
 
-    return 0;
+    return error;
 }
 
 /**
@@ -603,6 +628,16 @@ ssize_t iiod_create(struct tinyiiod **iiod)
     if(ret < 0)
         return ret;
     *iiod = tinyiiod_create(xml, &ops);
+    if(!(*iiod))
+    	return -ENOMEM;
 
     return 0;
+}
+
+ssize_t iiod_remove(struct tinyiiod *iiod)
+{
+	// free(iiod->xml); // todo
+	tinyiiod_destroy(iiod);
+
+	return 0;
 }
