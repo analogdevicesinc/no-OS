@@ -1,3 +1,42 @@
+/***************************************************************************//**
+ *   @file   tinyiiod_util.c
+ *   @brief  Implementation of tinyiiod_util
+ *   @author Cristian Pop (cristian.pop@analog.com)
+********************************************************************************
+ * Copyright 2019(c) Analog Devices, Inc.
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *  - Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *  - Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *  - Neither the name of Analog Devices, Inc. nor the names of its
+ *    contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *  - The use of this software may or may not infringe the patent rights
+ *    of one or more patent holders.  This license does not release you
+ *    from the requirement that you obtain separate licenses from these
+ *    patent holders to use this software.
+ *  - Use of the software either in source or binary form, must be run
+ *    on or directly connected to an Analog Devices Inc. component.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*******************************************************************************/
+
 #include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
@@ -9,7 +48,10 @@
 #include "config.h"
 #include "serial.h"
 
-tinyiiod_devices *tinyiiod_devs = NULL;
+static tinyiiod_devices *tinyiiod_devs = NULL;
+static uint32_t request_mask;
+/* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
+static const uint32_t input_channel_mask = 0x0F;
 
 /**
  * Get channel number
@@ -143,11 +185,6 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_
 	if(!map)
 		return -ENOENT;
 
-//	if(el_info->crnt_level == CHANNEL_EL && strequal(el_info->name[CHANNEL_EL], "")) {
-//		el_info->crnt_level++;
-//		map = 1 ? map->map_in_global : map->map_out_global;
-//	}
-
 	attribute_id = get_attribute_id(el_info->name[el_info->crnt_level], map);
 
 	if(el_info->crnt_level == DEVICE_EL &&
@@ -223,28 +260,39 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name, 
 		ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no),
 		attribute_map *attr_map) {
 
+	tinyiiod_device *device;
+
 	if (!(tinyiiod_devs)) {
 		tinyiiod_devs = malloc(sizeof(tinyiiod_devices*));
+		if(!tinyiiod_devs)
+			return -ENOMEM;
 		tinyiiod_devs->number_of_dev = 1;
 		tinyiiod_devs->devices = malloc(sizeof(tinyiiod_device*));
+		if(!tinyiiod_devs->devices)
+			return -ENOMEM;
 	}
 	else {
 		tinyiiod_devs->number_of_dev++;
 		tinyiiod_devs->devices = realloc(tinyiiod_devs->devices, tinyiiod_devs->number_of_dev * sizeof(tinyiiod_device*));
+		if(!tinyiiod_devs->devices)
+			return -ENOMEM;
 	}
-	tinyiiod_device *device = malloc(sizeof(tinyiiod_device));
+	device = malloc(sizeof(tinyiiod_device));
+	if(!device)
+		return -ENOMEM;
+
 	device->pointer = device_address;
 	device->name = device_name;
-
 	device->number_of_channels = number_of_channels;
 	device->get_device_xml = get_device_xml;
 	device->attr_map = attr_map;
+
 	tinyiiod_devs->devices[tinyiiod_devs->number_of_dev - 1] = device;
 
 	return 0;
 }
 
-ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
+static ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
 {
 	char *xml, *tmp_xml;
 	uint32_t length;
@@ -291,64 +339,6 @@ ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
 
 	return 0;
 }
-
-
-/***************************************************************************//**
- *   @file   ad9361_tinyiiod.c
- *   @brief  Implementation of ad9361_tinyiiod
- *   @author Cristian Pop (cristian.pop@analog.com)
-********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
- *
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *  - Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *  - The use of this software may or may not infringe the patent rights
- *    of one or more patent holders.  This license does not release you
- *    from the requirement that you obtain separate licenses from these
- *    patent holders to use this software.
- *  - Use of the software either in source or binary form, must be run
- *    on or directly connected to an Analog Devices Inc. component.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
-
-//#include "tinyiiod.h"
-//#include "config.h"
-//#include "tinyiiod_util.h"
-//#include "tinyiiod_dac.h"
-//#include "tinyiiod_adc.h"
-//#include "axi_dac_core.h"
-//#include "axi_adc_core.h"
-//#include "axi_dmac.h"
-//#include "util.h"
-//
-//#ifdef UART_INTERFACE
-//#include "serial.h"
-//#endif /* UART_INTERFACE */
-
-static uint32_t request_mask;
-/* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
-static const uint32_t input_channel_mask = 0x0F;
 
 /**
  * Check device
@@ -606,24 +596,12 @@ const struct tinyiiod_ops ops = {
 
 ssize_t iiod_create(struct tinyiiod **iiod)
 {
+	ssize_t ret;
 	char *xml;
 
-//	read_attr_map[0].map_in = get_read_phy_attr_map();
-//	write_attr_map[0].map_in = get_write_phy_attr_map();
-
-//	ret = tinyiiod_adc_configure(phy->rx_adc, phy->rx_dmac, ADC_DDR_BASEADDR);
-//	if(ret < 0)
-//		return ret;
-//
-//	ret = tinyiiod_dac_configure(phy->tx_dac, phy->tx_dmac, DAC_DDR_BASEADDR);
-//	if(ret < 0)
-//		return ret;
-//
-//	ret = tinyiiod_phy_configure(phy);
-//	if(ret < 0)
-//		return ret;
-
-	get_xml(tinyiiod_devs, &xml);
+	ret = get_xml(tinyiiod_devs, &xml);
+	if(ret < 0)
+		return ret;
 	*iiod = tinyiiod_create(xml, &ops);
 
 	return 0;

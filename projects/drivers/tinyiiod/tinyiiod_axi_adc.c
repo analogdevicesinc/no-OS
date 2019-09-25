@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   tinyiiod_adc.c
- *   @brief  Implementation of tinyiiod_adc
+ *   @file   tinyiiod_axi_adc.c
+ *   @brief  Implementation of tinyiiod_axi_adc
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -41,11 +41,11 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <tinyiiod_axi_adc.h>
 #include <xil_cache.h>
 #include "platform_drivers.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
-#include "tinyiiod_adc.h"
 #include "xml.h"
 #include "util.h"
 

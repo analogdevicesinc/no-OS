@@ -1,6 +1,7 @@
  /***************************************************************************//**
- *   @file   tinyiiod_phy.h
- *   @brief  Header file of tinyiiod_phy
+ *   @file   ad9361_tinyiiod_phy.h
+ *   @brief  Header file of ad9361_tinyiiod_phy
+ *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *

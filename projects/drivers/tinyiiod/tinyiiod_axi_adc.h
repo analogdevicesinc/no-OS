@@ -1,6 +1,7 @@
  /***************************************************************************//**
- *   @file   tinyiiod_adc.h
- *   @brief  Header file of tinyiiod_adc.
+ *   @file   tinyiiod_axi_adc.h
+ *   @brief  Header file of tinyiiod_axi_adc
+ *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -35,32 +36,30 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __TINYIIOD_DAC_H__
-#define __TINYIIOD_DAC_H__
+#ifndef __TINYIIOD_ADC_H__
+#define __TINYIIOD_ADC_H__
 
 #include <stdio.h>
 #include <stdbool.h>
 #include "tinyiiod_types.h"
 
-typedef struct tinyiiod_dac_init_par {
-	struct axi_dac *dac;
+typedef struct tinyiiod_adc_init_par {
+	struct axi_adc *adc;
 	struct axi_dmac *dmac;
-	uint32_t dac_ddr_base;
-}tinyiiod_dac_init_par;
+	uint32_t adc_ddr_base;
+}tinyiiod_adc_init_par;
 
-typedef struct tinyiiod_dac {
-	struct axi_dac *dac;
+typedef struct tinyiiod_adc {
+	struct axi_adc *adc;
 	struct axi_dmac *dmac;
-	uint32_t dac_ddr_base;
-}tinyiiod_dac;
+	uint32_t adc_ddr_base;
+}tinyiiod_adc;
 
-attribute_map *get_ch_read_dac_attr_map(const char *device_name);
-attribute_map *get_dac_attr_map(const char *device_name);
-ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par *init);
-ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count);
-ssize_t dac_write_dev(tinyiiod_dac *iiod_dac, const char *buf,
-			 size_t offset,  size_t bytes_count);
-ssize_t get_dac_xml(char** xml, const char *device_name, uint8_t ch_no);
-
-
-#endif /* __TINYIIOD_DAC_H__ */
+attribute_map *get_adc_attr_map(const char *device_name);
+ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
+ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par *init);
+ssize_t adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size_t bytes_count);
+ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
+			size_t bytes_count);
+ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no);
+#endif /* __TINYIIOD_ADC_H__ */
