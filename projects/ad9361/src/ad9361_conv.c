@@ -296,8 +296,7 @@ static int32_t ad9361_dig_tune_iodelay(struct ad9361_rf_phy *phy, bool tx)
 		c0 = ad9361_find_opt(&field[0], 32, &s0);
 		ad9361_iodelay_set(st, i, s0 + c0 / 2, tx);
 
-		dev_dbg(&phy->spi->dev,
-			"%s Lane %"PRId32", window cnt %"PRIu32" , start %"PRIu32", IODELAY set to %"PRIu32"\n",
+		dev_dbg("%s Lane %"PRId32", window cnt %"PRIu32" , start %"PRIu32", IODELAY set to %"PRIu32"\n",
 			tx ? "TX" :"RX",  i, c0, s0, s0 + c0 / 2);
 	}
 
@@ -375,7 +374,7 @@ int32_t ad9361_dig_interface_timing_analysis(struct ad9361_rf_phy *phy,
 	uint8_t field[16][16];
 	uint8_t rx;
 
-	dev_dbg(&phy->spi->dev, "%s:\n", __func__);
+	dev_dbg("%s:\n", __func__);
 
 	loopback = phy->bist_loopback_mode;
 	bist = phy->bist_config;
@@ -480,7 +479,7 @@ static int32_t ad9361_dig_tune_delay(struct ad9361_rf_phy *phy,
 
 	if (!c0 && !c1) {
 		ad9361_dig_tune_verbose_print(phy, field, tx, -1, -1);
-		dev_err(&phy->spi->dev, "%s: Tuning %s FAILED!", __func__,
+		dev_err("%s: Tuning %s FAILED!\n", __func__,
 			tx ? "TX" : "RX");
 		return -EIO;
 	} else if (flags & BE_VERBOSE) {
@@ -615,7 +614,7 @@ int32_t ad9361_dig_tune(struct ad9361_rf_phy *phy, uint32_t max_freq,
 	if (!conv)
 		return -ENODEV;
 
-	dev_dbg(&phy->spi->dev, "%s: freq %"PRIu32" flags 0x%X\n", __func__,
+	dev_dbg("%s: freq %"PRIu32" flags 0x%X\n", __func__,
 		max_freq, flags);
 
 	ensm_state = ad9361_ensm_get_state(phy);

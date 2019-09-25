@@ -67,17 +67,17 @@
 #define CLK_GET_RATE_NOCACHE					BIT(6)
 
 #if defined(HAVE_VERBOSE_MESSAGES)
-#define dev_err(dev, format, ...)		({printf(format, ## __VA_ARGS__);printf("\n"); })
-#define dev_warn(dev, format, ...)		({printf(format, ## __VA_ARGS__);printf("\n"); })
+#define dev_err(dev, format, ...)		do {printf(format, ## __VA_ARGS__);printf("\n"); } while(0)
+#define dev_warn(dev, format, ...)		do {printf(format, ## __VA_ARGS__);printf("\n"); } while(0)
 #if defined(HAVE_DEBUG_MESSAGES)
-#define dev_dbg(dev, format, ...)		({printf(format, ## __VA_ARGS__);printf("\n"); })
+#define dev_dbg(dev, format, ...)		do {printf(format, ## __VA_ARGS__);printf("\n"); } while(0)
 #else
-#define dev_dbg(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
+#define dev_dbg(dev, format, ...)		do { if (0) printf(format, ## __VA_ARGS__); } while(0)
 #endif
 #else
-#define dev_err(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
-#define dev_warn(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
-#define dev_dbg(dev, format, ...)	({ if (0) printf(format, ## __VA_ARGS__); })
+#define dev_err(dev, format, ...)		do { if (0) printf(format, ## __VA_ARGS__); } while(0)
+#define dev_warn(dev, format, ...)		do { if (0) printf(format, ## __VA_ARGS__); } while(0)
+#define dev_dbg(dev, format, ...)		do { if (0) printf(format, ## __VA_ARGS__); } while(0)
 #endif
 
 struct device {
