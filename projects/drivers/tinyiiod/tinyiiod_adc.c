@@ -157,13 +157,13 @@ static ssize_t get_cf_samples_pps(void *device, char *buf, size_t len,
 static ssize_t get_cf_sampling_frequency(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
-	uint64_t sampling_freq;
+	uint64_t sampling_freq_hz;
 	struct tinyiiod_adc *iiod_adc = (tinyiiod_adc *)device;
-	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num, &sampling_freq);
+	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num, &sampling_freq_hz);
 	if(ret < 0)
 		return ret;
 
-	return snprintf(buf, len, "%"PRIi64"", sampling_freq);
+	return snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
 }
 
 /**

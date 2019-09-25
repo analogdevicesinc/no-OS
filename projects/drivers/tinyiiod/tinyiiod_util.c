@@ -176,6 +176,22 @@ ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_
 		}
 	}
 
+	if(el_info->crnt_level == CHANNEL_EL &&
+				strequal(el_info->name[ATTRIBUTE_EL], "")) {
+		const struct channel_info channel_info = {
+				get_channel_number(el_info->name[CHANNEL_EL]),
+								el_info->ch_out
+		};
+		tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
+		if(!device)
+			return -ENOENT;
+		if(is_write)
+			return write_all_attr(device->pointer, buf, len, &channel_info, map->map_out);
+		else
+			return read_all_attr(device->pointer, buf, len, &channel_info, map->map_in);
+
+	}
+
 	if(attribute_id >= 0)  /* element fond */
 	{
 		if(map[attribute_id].exec)
