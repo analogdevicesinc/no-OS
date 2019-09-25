@@ -184,6 +184,7 @@ typedef struct {
 	ad9528pll2Settings_t *pll2Settings;
 	ad9528outputSettings_t *outputSettings;
 	ad9528sysrefSettings_t *sysrefSettings;
+	void *extra;
 } ad9528Device_t;
 
 typedef enum {
