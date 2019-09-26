@@ -52,6 +52,7 @@
 typedef struct tinyiiod_device {
     const char *name;
     uint16_t number_of_channels;
+    uint32_t opened_ch_mask;
     void *pointer;
     attribute_map *attr_map;
     ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
@@ -76,9 +77,6 @@ typedef struct element_info {
 } element_info;
 
 static tinyiiod_devices *tinyiiod_devs = NULL;
-static uint32_t request_mask;
-/* mask for cf-ad9361-lpc 0x0F, it has 4 channels */
-static const uint32_t input_channel_mask = 0x0F;
 
 /**
  * Get channel number
@@ -517,10 +515,13 @@ static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
     if (!supporter_dev(device))
         return -ENODEV;
 
-    if (mask & ~input_channel_mask)
+    tinyiiod_device * dev = get_device(device, tinyiiod_devs);
+    uint32_t ch_mask = 0xFFFFFFFF >> (32 - dev->number_of_channels);
+
+    if (mask & ~ch_mask)
         return -ENOENT;
 
-    request_mask = mask;
+    dev->opened_ch_mask = ch_mask;
 
     return 0;
 }
@@ -545,7 +546,9 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 {
     if (!supporter_dev(device))
         return -ENODEV;
-    *mask = input_channel_mask; /*  this way client has to do demux of data */
+    tinyiiod_device * dev = get_device(device, tinyiiod_devs);
+    uint32_t ch_mask = 0xFFFFFFFF >> (32 - dev->number_of_channels);
+    *mask = ch_mask; /*  this way client has to do demux of data */
 
     return 0;
 }

@@ -69,24 +69,24 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct axi_adc_init rx_adc_init = {
-	"cf-ad9361-lpc",
+	"rx_adc",
 	RX_CORE_BASEADDR,
 	4
 };
 
 struct axi_dac_init tx_dac_init = {
-	"cf-ad9361-dds-core-lpc",
+	"tx_adc",
 	TX_CORE_BASEADDR,
 	4
 };
 struct axi_dmac_init rx_dmac_init = {
-	"cf-ad9361-lpc_rx_dmac",
+	"rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
 	DMA_DEV_TO_MEM,
 	0
 };
 struct axi_dmac_init tx_dmac_init = {
-	"cf-ad9361-dds-core-lpc_tx_dmac",
+	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
 	0

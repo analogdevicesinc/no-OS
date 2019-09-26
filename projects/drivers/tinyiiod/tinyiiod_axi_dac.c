@@ -49,7 +49,7 @@
 
 static const char * const  dac_xml =
 
-    "<device id=\"cf-ad9361-dds-core-lpc\" name=\"cf-ad9361-dds-core-lpc\" >"
+    "<device id=\"tx_adc\" name=\"tx_adc\" >"
     "<channel id=\"voltage0\" type=\"output\" >"
     "<scan-element index=\"0\" format=\"le:S16/16&gt;&gt;0\" />"
     "<attribute name=\"calibscale\" filename=\"out_voltage0_calibscale\" />"
