@@ -53,17 +53,13 @@ typedef struct attribute_map {
     struct attribute_map *map_out_global;
 } attribute_map;
 
-typedef struct tinyiiod_device {
-    const char *name;
-    uint16_t number_of_channels;
-    void *pointer;
-    attribute_map *attr_map;
-    ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
-} tinyiiod_device;
+typedef struct tinyiiod_comm_ops {
+	/* Read from the input stream */
+	ssize_t (*read)(char *buf, size_t len);
 
-typedef struct tinyiiod_devices {
-    tinyiiod_device **devices;
-    uint8_t number_of_dev;
-} tinyiiod_devices;
+	/* Write to the output stream */
+	ssize_t (*write)(const char *buf, size_t len);
+	ssize_t (*read_line)(char *buf, size_t len);
+}tinyiiod_comm_ops;
 
 #endif /* SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_ */

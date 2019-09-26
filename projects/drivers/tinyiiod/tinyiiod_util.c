@@ -45,8 +45,35 @@
 #include "tinyiiod_util.h"
 #include "axi_dmac.h"
 #include "util.h"
-#include "config.h"
+#include "tinyiiod_axi_adc.h"
+#include "tinyiiod_axi_dac.h"
 #include "serial.h"
+
+typedef struct tinyiiod_device {
+    const char *name;
+    uint16_t number_of_channels;
+    void *pointer;
+    attribute_map *attr_map;
+    ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
+} tinyiiod_device;
+
+typedef struct tinyiiod_devices {
+    tinyiiod_device **devices;
+    uint8_t number_of_dev;
+} tinyiiod_devices;
+
+enum elem_level {
+    DEVICE_EL,
+    CHANNEL_EL,
+    ATTRIBUTE_EL,
+    MAX_EL
+};
+
+typedef struct element_info {
+    const char *name[MAX_EL];
+    bool ch_out;
+    enum elem_level crnt_level;
+} element_info;
 
 static tinyiiod_devices *tinyiiod_devs = NULL;
 static uint32_t request_mask;
@@ -566,7 +593,7 @@ static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
+static ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
     tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
     if(!device)
@@ -584,7 +611,7 @@ ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t write_dev(const char *device, const char *buf,
+static ssize_t write_dev(const char *device, const char *buf,
                   size_t offset,  size_t bytes_count)
 {
     tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
@@ -596,13 +623,11 @@ ssize_t write_dev(const char *device, const char *buf,
 }
 
 
-const struct tinyiiod_ops ops = {
+struct tinyiiod_ops ops = {
     /* communication */
-#ifdef UART_INTERFACE
-    .read = serial_read,
-    .read_line = serial_read_line,
-    .write = serial_write_data,
-#endif /* UART_INTERFACE */
+    .read = NULL,
+    .read_line = NULL,
+    .write = NULL,
 
     /* device operations */
     .read_attr = read_attr,
@@ -619,10 +644,14 @@ const struct tinyiiod_ops ops = {
     .get_mask = get_mask,
 };
 
-ssize_t iiod_create(struct tinyiiod **iiod)
+ssize_t iiod_create(struct tinyiiod **iiod, tinyiiod_comm_ops *comm_ops)
 {
     ssize_t ret;
     char *xml;
+
+    ops.read = comm_ops->read;
+    ops.read_line = comm_ops->read_line;
+    ops.write = comm_ops->write;
 
     ret = get_xml(tinyiiod_devs, &xml);
     if(ret < 0)
