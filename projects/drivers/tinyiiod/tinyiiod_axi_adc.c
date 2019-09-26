@@ -41,8 +41,8 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <tinyiiod_axi_adc.h>
 #include <xil_cache.h>
+#include "tinyiiod_axi_adc.h"
 #include "platform_drivers.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"

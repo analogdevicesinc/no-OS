@@ -399,9 +399,7 @@ static ssize_t get_xml(tinyiiod_devices *devs, char **outxml)
  */
 static bool supporter_dev(const char *device)
 {
-    return strequal(device, "ad9361-phy")
-           || strequal(device, "cf-ad9361-lpc")
-           || strequal(device, "cf-ad9361-dds-core-lpc");
+	return (NULL != get_device(device, tinyiiod_devs));
 }
 
 /**

@@ -41,7 +41,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <tinyiiod_axi_dac.h>
+#include "tinyiiod_axi_dac.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "platform_drivers.h"
