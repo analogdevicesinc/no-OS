@@ -1,0 +1,3 @@
+[submodule "libraries/libtinyiiod"]
+	path = libraries/libtinyiiod
+	url = https://github.com/analogdevicesinc/libtinyiiod
