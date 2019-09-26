@@ -203,7 +203,7 @@ static ssize_t write_all_attr(void *device, char *buf, size_t len,
  * @param len maximum length of value to be stored in buf
  * @return length of chars written in buf
  */
-ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_map *map, bool is_write)
+static ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, attribute_map *map, bool is_write)
 {
     int16_t attribute_id;
 
@@ -493,7 +493,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 // * @return length of chars written to attribute, negative value in case of failure
 // */
 static ssize_t ch_write_attr(const char *device, const char *channel,
-                             bool ch_out, const char *attr, char *buf, size_t len)
+                             bool ch_out, const char *attr, const char *buf, size_t len)
 {
     if (!supporter_dev(device))
         return -ENODEV;
@@ -507,7 +507,7 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
     if(!iiod_device)
         return -ENOENT;
 
-    return rd_wr_attribute(&el_info, buf, len, iiod_device->attr_map, 1);
+    return rd_wr_attribute(&el_info, (char*)buf, len, iiod_device->attr_map, 1);
 }
 
 static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
