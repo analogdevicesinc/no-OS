@@ -503,6 +503,9 @@ int main(void)
 	}
 	gpio_direction_output(default_init_param.gpio_desc_resetb, 1);
 
+	rx_adc_init.base = AD9361_RX_1_BASEADDR;
+	tx_dac_init.base = AD9361_TX_1_BASEADDR;
+
 	spi_param.chip_select = default_init_param.id_no;
 
 	status = spi_init(&default_init_param.spi, &spi_param);
