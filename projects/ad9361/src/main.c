@@ -46,8 +46,9 @@
 #include "ad9361_parameters.h"
 #include "spi.h"
 #include "gpio.h"
-#include "xilinx_platform_drivers.h"
+#include "axi_io.h"
 #ifdef XILINX_PLATFORM
+#include "xilinx_platform_drivers.h"
 #include <xil_cache.h>
 #endif
 #include "axi_adc_core.h"
@@ -61,23 +62,31 @@ struct axi_adc_init rx_adc_init = {
 	"rx_adc",
 	RX_CORE_BASEADDR,
 	4,
+	axi_io_read,
+	axi_io_write
 };
 struct axi_dac_init tx_dac_init = {
 	"tx_dac",
 	TX_CORE_BASEADDR,
 	4,
+	axi_io_read,
+	axi_io_write
 };
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
 	DMA_DEV_TO_MEM,
 	0,
+	axi_io_read,
+	axi_io_write
 };
 struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
 	0,
+	axi_io_read,
+	axi_io_write
 };
 
 AD9361_InitParam default_init_param = {
