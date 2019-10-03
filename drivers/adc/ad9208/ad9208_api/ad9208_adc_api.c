@@ -297,7 +297,7 @@ int ad9208_adc_set_input_cfg(ad9208_handle_t *h,
 	}
 	/*Set Analog Input Mode Optimization */
 	tmp_reg = analog_input_mode ? AD9208_DC_COUPLE_EN(1) :
-		AD9208_DC_COUPLE_EN(0);
+		  AD9208_DC_COUPLE_EN(0);
 	err = ad9208_register_write(h, AD9208_ANALOG_CFG_REG, tmp_reg);
 	if (err != API_ERROR_OK)
 		return err;
@@ -468,7 +468,7 @@ int ad9208_adc_set_data_format(ad9208_handle_t *h,
 		return err;
 	tmp_reg &= ~AD9208_ADC_Q_IGNORE;
 	tmp_reg |= (op_data_frmt == AD9208_DATA_FRMT_COMPLEX) ? 0 :
-		AD9208_ADC_Q_IGNORE;
+		   AD9208_ADC_Q_IGNORE;
 	err = ad9208_register_write(h, AD9208_ADC_MODE_REG, tmp_reg);
 	if (err != API_ERROR_OK)
 		return err;
@@ -483,9 +483,9 @@ int ad9208_adc_set_data_format(ad9208_handle_t *h,
 		tmp_reg &= ~(AD9208_DDCX_MIXER_SEL |
 			     AD9208_DDCX_COMPLEX_TO_REAL);
 		tmp_reg |= (ip_data_frmt == AD9208_DATA_FRMT_COMPLEX) ?
-			    AD9208_DDCX_MIXER_SEL : 0;
+			   AD9208_DDCX_MIXER_SEL : 0;
 		tmp_reg |= (op_data_frmt == AD9208_DATA_FRMT_COMPLEX) ?
-			    0 : AD9208_DDCX_COMPLEX_TO_REAL;
+			   0 : AD9208_DDCX_COMPLEX_TO_REAL;
 		err = ad9208_register_write(h, AD9208_DDCX_CTRL0_REG + offset,
 					    tmp_reg);
 		if (err != API_ERROR_OK)
