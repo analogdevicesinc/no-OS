@@ -54,17 +54,20 @@
 #include "parameters.h"
 #include "xil_printf.h"
 #include "platform.h"
+#include "xilinx_platform_drivers.h"
+#include "axi_io.h"
 
 int main(void)
 {
 	init_platform();
 
+	struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
+
 	struct spi_init_param hmc7044_spi_param = {
-		.id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_HMC7044_CS,
-		.flags = 0
+		.extra = &xil_spi_param
 	};
 
 	struct hmc7044_chan_spec chan_spec[8] = {
@@ -134,19 +137,17 @@ int main(void)
 	};
 
 	struct spi_init_param ad9208_0_spi_param = {
-		.id = SPI_0_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_3,
 		.chip_select = SPI_AD9208_0_CS,
-		.flags = 0,
+		.extra = &xil_spi_param
 	};
 
 	struct spi_init_param ad9208_1_spi_param = {
-		.id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_3,
 		.chip_select = SPI_AD9208_CS,
-		.flags = 0,
+		.extra = &xil_spi_param
 	};
 
 	struct ad9208_ddc ad9208_0_ddc_init[1] = {
@@ -216,6 +217,8 @@ int main(void)
 		.device_clk_khz = 375000,
 		/* LaneRate = (M/L)*NP*(10/8)*DataRate */
 		.lane_clk_khz = 15000000,
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write,
 	};
 
 	struct jesd204_rx_init rx_1_jesd_init = {
@@ -228,18 +231,24 @@ int main(void)
 		.device_clk_khz = 375000,
 		/* LaneRate = (M/L)*NP*(10/8)*DataRate */
 		.lane_clk_khz = 15000000,
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write,
 	};
 
 	struct axi_adc_init rx_0_adc_init = {
 		.name = "rx_0_adc",
 		.base = RX_0_CORE_BASEADDR,
 		.num_channels = 2,
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write,
 	};
 
 	struct axi_adc_init rx_1_adc_init = {
 		.name = "rx_1_adc",
 		.base = RX_1_CORE_BASEADDR,
 		.num_channels = 2,
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write,
 	};
 
 	struct axi_dmac_init rx_dmac_init = {
@@ -247,6 +256,8 @@ int main(void)
 		.base = RX_DMA_BASEADDR,
 		.direction = DMA_DEV_TO_MEM,
 		.flags = 0,
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write,
 	};
 
 	struct ad9208_init_param ad9208_0_param = {
