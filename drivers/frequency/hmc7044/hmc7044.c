@@ -172,6 +172,7 @@
 #define HMC7044_HI_PERF_MODE		BIT(7)
 #define HMC7044_SYNC_EN			BIT(6)
 #define HMC7044_CH_EN			BIT(0)
+#define HMC7044_START_UP_MODE_DYN_EN	(BIT(3) | BIT(2))
 
 #define HMC7044_REG_CH_OUT_CRTL_1(ch)	(0x00C9 + 0xA * (ch))
 #define HMC7044_DIV_LSB(x)		((x) & 0xFF)
@@ -550,8 +551,13 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			continue;
 
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
-			      HMC7044_HI_PERF_MODE | HMC7044_SYNC_EN |
+			      (chan->start_up_mode_dynamic_enable ?
+			       HMC7044_START_UP_MODE_DYN_EN : 0) |
+			      (chan->output_control0_rb4_enable ? BIT(4) : 0) |
+			      (chan->high_performance_mode_dis ?
+			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
+
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
 			      HMC7044_DIV_LSB(chan->divider));
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
@@ -631,6 +637,12 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 		dev->channels[i].divider = init_param->channels[i].divider;
 		dev->channels[i].driver_mode =
 			init_param->channels[i].driver_mode;
+		dev->channels[i].high_performance_mode_dis =
+			init_param->channels[i].high_performance_mode_dis;
+		dev->channels[i].start_up_mode_dynamic_enable =
+			init_param->channels[i].start_up_mode_dynamic_enable;
+		dev->channels[i].output_control0_rb4_enable =
+			init_param->channels[i].output_control0_rb4_enable;
 	}
 
 	*device = dev;

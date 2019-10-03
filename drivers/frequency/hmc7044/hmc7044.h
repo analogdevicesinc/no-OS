@@ -53,6 +53,9 @@
 struct hmc7044_chan_spec {
 	unsigned int	num;
 	bool		disable;
+	bool			high_performance_mode_dis;
+	bool			start_up_mode_dynamic_enable;
+	bool			output_control0_rb4_enable;
 	unsigned int	divider;
 	unsigned int	driver_mode;
 };
