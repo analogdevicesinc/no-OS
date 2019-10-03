@@ -43,11 +43,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "error.h"
-#include "delay.h"
+#include "platform_drivers.h"
 #include "util.h"
 #include "axi_dac_core.h"
-#include "axi_io.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -341,7 +339,7 @@ int32_t axi_dac_read(struct axi_dac *dac,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-	axi_io_read(dac->base, reg_addr, reg_data);
+	dac->axi_io_read(dac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -353,7 +351,7 @@ int32_t axi_dac_write(struct axi_dac *dac,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-	axi_io_write(dac->base, reg_addr, reg_data);
+	dac->axi_io_write(dac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -710,7 +708,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1 / 2] << 20);
 			data_q1 = (sine_lut[index_q1 / 2] << 4);
 
-			axi_io_write(address, index_mem * 4, data_i1 | data_q1);
+			dac->axi_io_write(address, index_mem * 4, data_i1 | data_q1);
 
 			index_i2 = index_i1;
 			index_q2 = index_q1;
@@ -721,7 +719,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i2 = (sine_lut[index_i2 / 2] << 20);
 			data_q2 = (sine_lut[index_q2 / 2] << 4);
 
-			axi_io_write(address, (index_mem + 1) * 4, data_i2 | data_q2);
+			dac->axi_io_write(address, (index_mem + 1) * 4, data_i2 | data_q2);
 
 		}
 	} else {
@@ -733,7 +731,7 @@ uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			data_i1 = (sine_lut[index_i1] << 20);
 			data_q1 = (sine_lut[index_q1] << 4);
 
-			axi_io_write(address, index * 4, data_i1 | data_q1);
+			dac->axi_io_write(address, index * 4, data_i1 | data_q1);
 		}
 	}
 
@@ -775,7 +773,7 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 		data_i = (buff[index]);
 		data_q = (buff[index + 1] << 16);
 
-		axi_io_write(address, index * 2, data_i | data_q);
+		dac->axi_io_write(address, index * 2, data_i | data_q);
 	}
 
 	return SUCCESS;
@@ -797,8 +795,8 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 		/* Send the same data on all the channels */
 		for (chan = 0; chan < num_tx_channels; chan++) {
 
-			axi_io_write(address, index_mem * sizeof(uint32_t),
-				     custom_data_iq[index]);
+			dac->axi_io_write(address, index_mem * sizeof(uint32_t),
+				      custom_data_iq[index]);
 
 			index_mem++;
 		}
@@ -833,6 +831,8 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	dac->name = init->name;
 	dac->base = init->base;
 	dac->num_channels = init->num_channels;
+	dac->axi_io_read = init->axi_io_read;
+	dac->axi_io_write = init->axi_io_write;
 
 	axi_dac_write(dac, AXI_DAC_REG_RSTN, 0);
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,

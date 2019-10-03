@@ -44,11 +44,6 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "platform_drivers.h"
-#ifdef ALTERA_PLATFORM
-#include "io.h"
-#else
-#include "xil_io.h"
-#endif
 #include "util.h"
 #include "axi_adc_core.h"
 
@@ -110,11 +105,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	*reg_data = IORD_32DIRECT(adc->base, reg_addr);
-#else
-	*reg_data = Xil_In32((adc->base + reg_addr));
-#endif
+	adc->axi_io_read(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -126,11 +117,7 @@ int32_t axi_adc_write(struct axi_adc *adc,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-#ifdef ALTERA_PLATFORM
-	IOWR_32DIRECT(adc->base, reg_addr, reg_data);
-#else
-	Xil_Out32((adc->base + reg_addr), reg_data);
-#endif
+	adc->axi_io_write(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -153,17 +140,6 @@ int32_t axi_adc_set_pnsel(struct axi_adc *adc,
 }
 
 /***************************************************************************//**
- * @brief axi_adc_idelay_set
-*******************************************************************************/
-void axi_adc_idelay_set(struct axi_adc *adc,
-			uint32_t lane,
-			uint32_t val)
-{
-	axi_adc_write(adc, AXI_ADC_REG_DELAY(lane), val);
-
-}
-
-/***************************************************************************//**
  * @brief axi_adc_get_sampling_freq
 *******************************************************************************/
 int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
@@ -179,6 +155,17 @@ int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
 	*sampling_freq = ((*sampling_freq) * 390625) >> 8;
 
 	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief axi_adc_idelay_set
+*******************************************************************************/
+void axi_adc_idelay_set(struct axi_adc *adc,
+			uint32_t lane,
+			uint32_t val)
+{
+	axi_adc_write(adc, AXI_ADC_REG_DELAY(lane), val);
+
 }
 
 /***************************************************************************//**
@@ -372,6 +359,8 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 	adc->name = init->name;
 	adc->base = init->base;
 	adc->num_channels = init->num_channels;
+	adc->axi_io_read = init->axi_io_read;
+	adc->axi_io_write = init->axi_io_write;
 
 	axi_adc_write(adc, AXI_ADC_REG_RSTN, 0);
 	axi_adc_write(adc, AXI_ADC_REG_RSTN,

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   clk_axi_clkgen.h
- *   @brief  Driver for the Analog Devices AXI CLKGEN.
+ *   @file   axi_dmac.h
+ *   @brief  Driver for the Analog Devices AXI-DMAC core.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2018(c) Analog Devices, Inc.
@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef CLK_AXI_CLKGEN_H_
-#define CLK_AXI_CLKGEN_H_
+#ifndef AXI_DMAC_H_
+#define AXI_DMAC_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -47,25 +47,40 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-struct axi_clkgen {
-	const char	*name;
-	uint32_t	base;
-	uint32_t	parent_rate;
+enum dma_direction {
+	DMA_DEV_TO_MEM,
+	DMA_MEM_TO_DEV
 };
 
-struct axi_clkgen_init {
-	const char	*name;
-	uint32_t	base;
-	uint32_t	parent_rate;
+enum dma_flags {
+	DMA_CYCLIC = 1,
+	DMA_LAST = 2
+};
+
+struct axi_dmac {
+	const char *name;
+	uint32_t base;
+	enum dma_direction direction;
+	enum dma_flags flags;
+	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
+	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
+};
+
+struct axi_dmac_init {
+	const char *name;
+	uint32_t base;
+	enum dma_direction direction;
+	enum dma_flags flags;
+	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
+	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t axi_clkgen_set_rate(struct axi_clkgen *clkgen, uint32_t rate);
-int32_t axi_clkgen_get_rate(struct axi_clkgen *clkgen, uint32_t *rate);
-int32_t axi_clkgen_init(struct axi_clkgen **clk,
-			const struct axi_clkgen_init *init);
-int32_t axi_clkgen_remove(struct axi_clkgen *clkgen);
+int32_t axi_dmac_transfer(struct axi_dmac *dmac,
+			  uint32_t address, uint32_t size);
+int32_t axi_dmac_init(struct axi_dmac **adc_core,
+		      const struct axi_dmac_init *init);
 
 #endif

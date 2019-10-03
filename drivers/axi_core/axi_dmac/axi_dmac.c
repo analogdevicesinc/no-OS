@@ -42,10 +42,32 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "axi_io.h"
-#include "error.h"
-#include "delay.h"
+#include "platform_drivers.h"
+#include "util.h"
 #include "axi_dmac.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+#define AXI_DMAC_REG_IRQ_MASK		0x80
+#define AXI_DMAC_REG_IRQ_PENDING	0x84
+#define AXI_DMAC_IRQ_SOT			BIT(0)
+#define AXI_DMAC_IRQ_EOT			BIT(1)
+
+#define AXI_DMAC_REG_CTRL			0x400
+#define AXI_DMAC_CTRL_ENABLE		BIT(0)
+#define AXI_DMAC_CTRL_PAUSE			BIT(1)
+
+#define AXI_DMAC_REG_TRANSFER_ID	0x404
+#define AXI_DMAC_REG_START_TRANSFER	0x408
+#define AXI_DMAC_REG_FLAGS			0x40c
+#define AXI_DMAC_REG_DEST_ADDRESS	0x410
+#define AXI_DMAC_REG_SRC_ADDRESS	0x414
+#define AXI_DMAC_REG_X_LENGTH		0x418
+#define AXI_DMAC_REG_Y_LENGTH		0x41c
+#define AXI_DMAC_REG_DEST_STRIDE	0x420
+#define AXI_DMAC_REG_SRC_STRIDE		0x424
+#define AXI_DMAC_REG_TRANSFER_DONE	0x428
 
 /***************************************************************************//**
  * @brief axi_dmac_read
@@ -54,7 +76,7 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 		      uint32_t reg_addr,
 		      uint32_t *reg_data)
 {
-	axi_io_read(dmac->base, reg_addr, reg_data);
+	dmac->axi_io_read(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -66,7 +88,7 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 		       uint32_t reg_addr,
 		       uint32_t reg_data)
 {
-	axi_io_write(dmac->base, reg_addr, reg_data);
+	dmac->axi_io_write(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -146,21 +168,10 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->base = init->base;
 	dmac->direction = init->direction;
 	dmac->flags = init->flags;
+	dmac->axi_io_read = init->axi_io_read;
+	dmac->axi_io_write = init->axi_io_write;
 
 	*dmac_core = dmac;
-
-	return SUCCESS;
-}
-
-/***************************************************************************//**
- * @brief axi_dmac_remove
- *******************************************************************************/
-int32_t axi_dmac_remove(struct axi_dmac *dmac)
-{
-	if(!dmac)
-		return FAILURE;
-
-	free(dmac);
 
 	return SUCCESS;
 }

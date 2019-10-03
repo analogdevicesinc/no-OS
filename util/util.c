@@ -44,7 +44,6 @@
 #include <stdlib.h>
 #include "util.h"
 #include "errno.h"
-
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -160,6 +159,36 @@ uint64_t do_div(uint64_t* n,
 	*n = *n / base;
 
 	return mod;
+}
+
+/**
+ * Unsigned 64bit divide with 64bit divisor and remainder
+ */
+uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor, uint64_t *remainder)
+{
+	*remainder = dividend % divisor;
+
+	return dividend / divisor;
+}
+
+/**
+ * Unsigned 64bit divide with 32bit divisor with remainder
+ */
+uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder)
+{
+	*remainder = do_div(&dividend, divisor);
+
+	return dividend;
+}
+
+/**
+ * Unsigned 64bit divide with 32bit divisor
+ */
+uint64_t div_u64(uint64_t dividend, uint32_t divisor)
+{
+	uint32_t remainder;
+
+	return div_u64_rem(dividend, divisor, &remainder);
 }
 
 /**

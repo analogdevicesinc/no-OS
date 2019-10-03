@@ -46,7 +46,7 @@
 #include "ad9361_parameters.h"
 #include "spi.h"
 #include "gpio.h"
-#include "delay.h"
+#include "axi_io.h"
 #ifdef XILINX_PLATFORM
 #include "xilinx_platform_drivers.h"
 #include <xil_cache.h>
@@ -54,6 +54,7 @@
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
+
 
 #ifdef USE_LIBIIO
 #ifdef UART_INTERFACE
@@ -71,25 +72,32 @@
 struct axi_adc_init rx_adc_init = {
 	"cf-ad9361-lpc",
 	RX_CORE_BASEADDR,
-	4
+	4,
+	axi_io_read,
+	axi_io_write
 };
-
 struct axi_dac_init tx_dac_init = {
 	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
-	4
+	4,
+	axi_io_read,
+	axi_io_write
 };
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
 	CF_AD9361_RX_DMA_BASEADDR,
 	DMA_DEV_TO_MEM,
-	0
+	0,
+	axi_io_read,
+	axi_io_write
 };
 struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
-	0
+	0,
+	axi_io_read,
+	axi_io_write
 };
 
 AD9361_InitParam default_init_param = {
@@ -402,10 +410,6 @@ struct ad9361_rf_phy *ad9361_phy_b;
 
 struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
 struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
-#ifdef USE_LIBIIO
-extern struct tinyiiod_ops ops;
-#endif
-
 
 /***************************************************************************//**
  * @brief main
@@ -413,14 +417,14 @@ extern struct tinyiiod_ops ops;
 int main(void)
 {
 	int32_t status;
-#ifdef	USE_LIBIIO
-	struct tinyiiod *iiod;
-#endif
-
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 	spi_param.extra = &xil_spi_param;
+#endif
+
+#ifdef	USE_LIBIIO
+	struct tinyiiod *iiod;
 #endif
 
 #ifdef ALTERA_PLATFORM
@@ -594,6 +598,8 @@ int main(void)
 #endif
 #endif
 #endif
+
+
 
 #ifdef USE_LIBIIO
 

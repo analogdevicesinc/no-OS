@@ -44,8 +44,6 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
-
-
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -85,6 +83,19 @@
 #define round_up(x,y) \
 		(((x)+(y)-1)/(y))
 
+#define BITS_PER_LONG 32
+
+#define GENMASK(h, l) ({ 										\
+		uint32_t t = (~0UL);									\
+		t = t << (BITS_PER_LONG - (h - l + 1));					\
+		t = t >> (BITS_PER_LONG - (h + 1));						\
+		t;														\
+})
+
+#define U16_MAX		((uint16_t)~0U)
+#define S16_MAX		((int16_t)(U16_MAX>>1))
+
+#define DIV_U64(x, y) (x / y)
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -109,10 +120,15 @@ uint32_t hweight8(uint32_t word);
 /* Calculate the quotient and the remainder of an integer division. */
 uint64_t do_div(uint64_t* n,
 		uint64_t base);
+/* Unsigned 64bit divide with 64bit divisor and remainder */
+uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor, uint64_t *remainder);
+/* Unsigned 64bit divide with 32bit divisor with remainder */
+uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder);
+/* Unsigned 64bit divide with 32bit divisor */
+uint64_t div_u64(uint64_t dividend, uint32_t divisor);
 
 bool strequal(const char *str1, const char *str2);
 int32_t read_value(const char *str);
 uint32_t read_ul_value(const char *str);
-
 #endif // UTIL_H_
 
