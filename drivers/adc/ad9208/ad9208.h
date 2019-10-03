@@ -78,10 +78,10 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 struct ad9208_ddc {
-	u32 decimation;
-	u32 nco_mode;
-	u64 carrier_freq_hz;
-	u64 po;
+	uint32_t decimation;
+	uint32_t nco_mode;
+	uint64_t carrier_freq_hz;
+	uint64_t po;
 	bool gain_db;
 };
 
