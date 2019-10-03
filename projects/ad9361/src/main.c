@@ -69,13 +69,13 @@
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct axi_adc_init rx_adc_init = {
-	"rx_adc",
+	"cf-ad9361-lpc",
 	RX_CORE_BASEADDR,
 	4
 };
 
 struct axi_dac_init tx_dac_init = {
-	"tx_adc",
+	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
 	4
 };
