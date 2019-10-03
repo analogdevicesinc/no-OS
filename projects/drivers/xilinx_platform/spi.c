@@ -187,7 +187,7 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	XSpi_SetSlaveSelect(&xil_desc->instance,
 			    0x01 << desc->chip_select);
 
-	XSpi_Transfer(&desc->instance,
+	XSpi_Transfer(&xil_desc->instance,
 		      data, data, bytes_number);
 #endif
 	return SUCCESS;
