@@ -49,6 +49,9 @@
 #include "axi_dac_core.h"
 #include "parameters.h"
 #include "inttypes.h"
+#include "error.h"
+#include "xilinx_platform_drivers.h"
+#include "axi_io.h"
 
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
@@ -56,12 +59,13 @@
 
 int main(void)
 {
+	struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
+
 	struct spi_init_param hmc7044_spi_param = {
-		.id = SPI_DEVICE_ID,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_HMC7044_CS,
-		.flags = 0
+		.extra = &xil_spi_param
 	};
 
 	struct hmc7044_chan_spec chan_spec[4] = {
@@ -99,6 +103,8 @@ int main(void)
 		.subclass = 1,
 		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
 		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
+		.axi_io_read = axi_io_read,
+		.axi_io_write = axi_io_write
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -113,11 +119,10 @@ int main(void)
 	};
 
 	struct spi_init_param ad9172_spi_param = {
-		.id = SPI_DEVICE_ID,
 		.max_speed_hz = 1000000,
 		.mode = SPI_MODE_0,
 		.chip_select = SPI_AD9172_CS,
-		.flags = 0
+		.extra = &xil_spi_param
 	};
 
 	struct ad9172_init_param ad9172_param = {
@@ -139,6 +144,8 @@ int main(void)
 		"tx_dac",
 		TX_CORE_BASEADDR,
 		4,
+		axi_io_read,
+		axi_io_write
 	};
 
 #ifdef DAC_DMA_EXAMPLE
@@ -147,6 +154,8 @@ int main(void)
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
 		DMA_LAST,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_dmac *tx_dmac;
 #endif /* DAC_DMA_EXAMPLE */
@@ -211,6 +220,9 @@ int main(void)
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
 				 DDR_MEM_BASEADDR);
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheFlush();
+#endif
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR,
 			  sizeof(sine_lut_iq) * (tx_dac->num_channels / 2));
