@@ -87,7 +87,7 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
         *p_fifo = p;
     } else {
         p = get_last(*p_fifo);
-        p->next = new_buffer(0);
+        p->next = new_buffer(len);
         if(!p->next)
             return -ENOMEM;
         p = p->next;
