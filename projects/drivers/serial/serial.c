@@ -245,7 +245,8 @@ static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData)
      * timeout just indicates the data stopped for 8 character times
      */
     if (Event == XUARTPS_EVENT_RECV_TOUT) {
-        fifo_insert_tail(&serial_fifo, buff, EventData, 0);
+    	if(EventData > 0)
+    		fifo_insert_tail(&serial_fifo, buff, EventData, 0);
         XUartPs_Recv(&UartPs, (u8*)buff, BUFF_LENGTH);
     }
 

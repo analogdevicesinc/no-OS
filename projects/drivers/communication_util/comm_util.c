@@ -93,6 +93,7 @@ static struct fifo * new_buffer()
     if(!buf)
         return NULL;
     buf->len = 0;
+    buf->index = 0;
     buf->data = NULL;
     buf->next = NULL;
 
@@ -121,6 +122,8 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len,
 {
     SYS_ARCH_DECL_PROTECT(level);
     SYS_ARCH_PROTECT(level);
+    if(len <= 0)
+    	return 0;
 
     struct fifo *p = NULL;
     if(!(*p_fifo)) {
@@ -179,6 +182,34 @@ void set_keep_alive(void (*kp_alive)(void))
     keep_alive = kp_alive;
 }
 
+int32_t comm_read_byte(struct fifo **fifo, int32_t *instance_id, char *buf)
+{
+	while(*fifo == NULL) {
+		if(keep_alive)
+			keep_alive();
+	}
+
+	*buf = (*fifo)->data[(*fifo)->index];
+	(*fifo)->index++;
+
+	if ((*fifo)->len - (*fifo)->index <= 0) {
+		(*fifo) = fifo_remove_head(*fifo);
+	}
+	return 1;
+}
+
+/***************************************************************************//**
+ * @brief comm_read
+*******************************************************************************/
+int32_t comm_read(struct fifo **fifo, int32_t *instance_id, char *buf,
+                  size_t len) {
+	for (uint32_t i = 0; i < len; i++) {
+		comm_read_byte(fifo, instance_id, &buf[i]);
+	}
+	return len;
+}
+
+
 /***************************************************************************//**
  * @brief comm_read_line
 *******************************************************************************/
@@ -224,45 +255,46 @@ int32_t comm_read_line(struct fifo **fifo, int32_t *instance_id, char *buf,
     return length;
 }
 
-/***************************************************************************//**
- * @brief comm_read
-*******************************************************************************/
-int32_t comm_read(struct fifo **fifo, int32_t *instance_id, char *buf,
-                  size_t len)
-{
-    int32_t temp_len = 0;
+///***************************************************************************//**
+// * @brief comm_read
+//*******************************************************************************/
+//int32_t comm_read(struct fifo **fifo, int32_t *instance_id, char *buf,
+//                  size_t len)
+//{
+//    int32_t temp_len = 0;
+//
+//    while(*fifo == NULL) {
+//        if(keep_alive)
+//            keep_alive();
+//    }
+//    if(instance_id)
+//        *instance_id = (*fifo)->instance_id;
+//    if((*fifo)->len == len) {
+//        memcpy(buf, (*fifo)->data, len);
+//        (*fifo) = fifo_remove_head(*fifo);
+//        temp_len =  len;
+//    } else if ((*fifo)->len < len) {
+//        char *pbuf = buf;
+//        do {
+//            if(*fifo) {
+//                memcpy(pbuf, (*fifo)->data, (*fifo)->len);
+//                pbuf = pbuf + (*fifo)->len;
+//                temp_len += (*fifo)->len;
+//                *fifo = fifo_remove_head(*fifo);
+//            }
+//            if(keep_alive && temp_len < len)
+//                keep_alive();
+//        } while(temp_len < len);
+//    } else {
+//        memcpy(buf, (*fifo)->data, len);
+//        (*fifo)->len = (*fifo)->len - len; /* new length */
+//        char * remaining = malloc((*fifo)->len);
+//        memcpy(remaining, (*fifo)->data + len, (*fifo)->len);
+//        free((*fifo)->data);
+//        (*fifo)->data = remaining;
+//        temp_len =  len;
+//    }
+//
+//    return temp_len;
+//}
 
-    while(*fifo == NULL) {
-        if(keep_alive)
-            keep_alive();
-    }
-    if(instance_id)
-        *instance_id = (*fifo)->instance_id;
-    if((*fifo)->len == len) {
-        memcpy(buf, (*fifo)->data, len);
-        (*fifo) = fifo_remove_head(*fifo);
-        temp_len =  len;
-    } else if ((*fifo)->len < len) {
-        char *pbuf = buf;
-        do {
-            if(*fifo) {
-                memcpy(pbuf, (*fifo)->data, (*fifo)->len);
-                pbuf = pbuf + (*fifo)->len;
-                temp_len += (*fifo)->len;
-                *fifo = fifo_remove_head(*fifo);
-            }
-            if(keep_alive && temp_len < len)
-                keep_alive();
-        } while(temp_len < len);
-    } else {
-        memcpy(buf, (*fifo)->data, len);
-        (*fifo)->len = (*fifo)->len - len; /* new length */
-        char * remaining = malloc((*fifo)->len);
-        memcpy(remaining, (*fifo)->data + len, (*fifo)->len);
-        free((*fifo)->data);
-        (*fifo)->data = remaining;
-        temp_len =  len;
-    }
-
-    return temp_len;
-}

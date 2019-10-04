@@ -620,7 +620,8 @@ int main(void)
 
 	tinyiiod_comm_ops comm_ops = {
 	    .read = serial_read,
-	    .read_line = serial_read_line,
+//	    .read_line = serial_read_line,
+		.read_line = NULL,
 	    .write = serial_write_data,
 	};
 

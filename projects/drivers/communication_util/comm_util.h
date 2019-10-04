@@ -47,6 +47,7 @@ struct fifo {
     struct fifo *next;
     char *data;
     uint16_t len;
+    uint16_t index;
 };
 
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len,

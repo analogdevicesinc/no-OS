@@ -233,7 +233,7 @@ static ssize_t rd_wr_attribute(element_info *el_info, char *buf, size_t len, att
         }
         else
         {
-            map = el_info->ch_out ? map->map_out_global : map->map_in_global;
+            map = is_write ? map->map_out_global : map->map_in_global;
             attribute_id = get_attribute_id(el_info->name[ATTRIBUTE_EL], map);
         }
     }
