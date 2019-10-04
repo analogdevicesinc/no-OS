@@ -43,20 +43,14 @@
 #include <stdlib.h>
 
 struct fifo {
-    int32_t instance_id; /*current client instance*/
     struct fifo *next;
     char *data;
     uint16_t len;
     uint16_t index;
 };
 
-int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len,
-                         int32_t id);
+int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
 struct fifo * fifo_remove_head(struct fifo *p_fifo);
 void set_keep_alive(void (*kp_alive)(void));
-int32_t comm_read_line(struct fifo **network_fifo, int32_t *instance_id,
-                       char *buf, size_t len);
-int32_t comm_read(struct fifo **network_fifo, int32_t *instance_id, char *buf,
-                  size_t len);
 
 #endif /* COMMUNICATION_UTIL */

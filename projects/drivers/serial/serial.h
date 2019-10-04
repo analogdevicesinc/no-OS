@@ -40,8 +40,6 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
-ssize_t serial_read_line(char *buf, size_t len);
-
 ssize_t serial_read(char *buf, size_t len);
 
 ssize_t serial_write_data(const char *buf, size_t len);

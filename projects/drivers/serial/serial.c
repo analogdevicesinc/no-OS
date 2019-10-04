@@ -67,6 +67,7 @@
 
 #define BUFF_LENGTH 256
 static char buff[BUFF_LENGTH];
+static uint32_t bytes_reveived = 0;
 
 static struct fifo *serial_fifo = NULL;
 int32_t TotalErrorCount;
@@ -83,12 +84,27 @@ static ssize_t serial_setup_interrupt_system(INTC *IntcInstancePtr,
 
 static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData);
 
-/***************************************************************************//**
- * @brief network_read_line
-*******************************************************************************/
-ssize_t serial_read_line(char *buf, size_t len)
+void uart_keep_alive (void) {
+	if (bytes_reveived > 0) {
+		fifo_insert_tail(&serial_fifo, buff, bytes_reveived);
+		bytes_reveived = 0;
+		XUartPs_Recv(&UartPs, (u8*)buff, BUFF_LENGTH);
+	}
+}
+
+int32_t comm_read_byte(struct fifo **fifo, char *buf)
 {
-    return comm_read_line(&serial_fifo, NULL, buf, len);
+	while (*fifo == NULL) { /* nothing in fifo */
+		uart_keep_alive();
+	}
+
+	*buf = (*fifo)->data[(*fifo)->index];
+	(*fifo)->index++;
+
+	if ((*fifo)->len - (*fifo)->index <= 0) {
+		(*fifo) = fifo_remove_head(*fifo);
+	}
+	return 1;
 }
 
 /***************************************************************************//**
@@ -96,7 +112,10 @@ ssize_t serial_read_line(char *buf, size_t len)
 *******************************************************************************/
 ssize_t serial_read(char *buf, size_t len)
 {
-    return comm_read(&serial_fifo, NULL, buf, len);
+    for (uint32_t i = 0; i < len; i++) {
+		comm_read_byte(&serial_fifo, &buf[i]);
+	}
+	return len;
 }
 
 /***************************************************************************//**
@@ -122,6 +141,7 @@ ssize_t serial_init(void)
     if (Status != XST_SUCCESS) {
         return XST_FAILURE;
     }
+
     XUartPs_Recv(&UartPs, (u8*)buff, BUFF_LENGTH);
 
     return XST_SUCCESS;
@@ -236,8 +256,7 @@ static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData)
 {
     /* All of the data has been received */
     if (Event == XUARTPS_EVENT_RECV_DATA) {
-        fifo_insert_tail(&serial_fifo, buff, EventData, 0);
-        XUartPs_Recv(&UartPs, (u8*)buff, BUFF_LENGTH);
+    	bytes_reveived = EventData;
     }
 
     /*
@@ -245,9 +264,7 @@ static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData)
      * timeout just indicates the data stopped for 8 character times
      */
     if (Event == XUARTPS_EVENT_RECV_TOUT) {
-    	if(EventData > 0)
-    		fifo_insert_tail(&serial_fifo, buff, EventData, 0);
-        XUartPs_Recv(&UartPs, (u8*)buff, BUFF_LENGTH);
+    	bytes_reveived = EventData;
     }
 
     /*
