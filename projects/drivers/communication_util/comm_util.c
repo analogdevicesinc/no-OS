@@ -76,24 +76,26 @@ static struct fifo *get_last(struct fifo *p_fifo)
 *******************************************************************************/
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
 {
+	struct fifo *p, *q;
+
     if(len <= 0)
     	return 0;
 
-    struct fifo *p = NULL;
-    if(!(*p_fifo)) {
-        p = new_buffer(len);
-        if(!p)
-            return -ENOMEM;
-        *p_fifo = p;
-    } else {
-        p = get_last(*p_fifo);
-        p->next = new_buffer(len);
-        if(!p->next)
-            return -ENOMEM;
-        p = p->next;
+
+    q = new_buffer(len);
+    if (!q)
+    	return -ENOMEM;
+
+    memcpy(q->data, buff, len);
+    q->len = len;
+
+    if (!(*p_fifo)) {
+    	*p_fifo = q;
     }
-    memcpy(p->data, buff, len);
-    p->len = len;
+    else {
+    	p = get_last(*p_fifo);
+    	p->next = q;
+    }
 
     return len;
 }
