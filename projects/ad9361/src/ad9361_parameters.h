@@ -98,6 +98,7 @@
 #define GPIO_ENABLE_PIN				101
 #define GPIO_TXNRX_PIN        		102
 #define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
+#define UART_DEVICE_ID              XPAR_XUARTPS_0_DEVICE_ID
 #endif
 #define GPIO_RESET_PIN_ZC702		84
 #define GPIO_RESET_PIN_ZC706		83

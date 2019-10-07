@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   fifo.h
- *   @brief  Implementation of fifo
+ *   @file   serial.h
+ *   @brief  Header file of Serial interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -36,19 +36,26 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef COMMUNICATION_UTIL
-#define COMMUNICATION_UTIL
 
-#include <stdint.h>
+#ifndef SERIAL_H_
+#define SERIAL_H_
+#include "fifo.h"
 
-struct fifo {
-    struct fifo *next;
-    char *data;
-    uint16_t len;
-    uint16_t index;
+struct uart_init_par {
+	uint32_t id;
+	uint32_t baud_rate;
 };
 
-int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
-struct fifo * fifo_remove_head(struct fifo *p_fifo);
+struct uart_desc {
+	uint32_t id;
+	uint32_t baud_rate;
+	struct fifo *fifo;
+};
 
-#endif /* COMMUNICATION_UTIL */
+ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len);
+
+ssize_t uart_write(struct uart_desc *desc, const char *buf, size_t len);
+
+ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
+
+#endif /* SERIAL_H_ */

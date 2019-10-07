@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   comm_util.c
+ *   @file   fifo.c
  *   @brief  Implementation of fifo.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -38,20 +38,25 @@
 *******************************************************************************/
 #include <string.h>
 #include <errno.h>
-#include <fifo.h>
+#include <stdlib.h>
+#include "fifo.h"
 
 /***************************************************************************//**
- * @brief new_buffer
+ * @brief fifo_new_element
 *******************************************************************************/
 static struct fifo * fifo_new_element(char *buff, uint32_t len)
 {
-    struct fifo *q= malloc(sizeof(struct fifo));
+    struct fifo *q = malloc(sizeof(struct fifo));
 
-    if(!q)
+    if (!q)
         return NULL;
     q->len = len;
     q->index = 0;
     q->data = malloc(len);
+    if (!(q->data)) {
+    	free(q);
+    	return NULL;
+    }
     memcpy(q->data, buff, len);
     q->next = NULL;
 
@@ -59,7 +64,7 @@ static struct fifo * fifo_new_element(char *buff, uint32_t len)
 }
 
 /***************************************************************************//**
- * @brief get_last
+ * @brief fifo_get_last
 *******************************************************************************/
 static struct fifo *fifo_get_last(struct fifo *p_fifo)
 {
@@ -79,7 +84,7 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
 {
 	struct fifo *p, *q;
 
-    if(len <= 0)
+    if (len <= 0)
     	return 0;
 
     q = fifo_new_element(buff, len);
@@ -104,7 +109,7 @@ struct fifo * fifo_remove_head(struct fifo *p_fifo)
 {
     struct fifo *p = p_fifo;
 
-    if(p_fifo != NULL) {
+    if (p_fifo != NULL) {
         p_fifo = p_fifo->next;
         free(p->data);
         p->len = 0;
@@ -113,6 +118,7 @@ struct fifo * fifo_remove_head(struct fifo *p_fifo)
         free(p);
         p = NULL;
     }
+
     return p_fifo;
 }
 

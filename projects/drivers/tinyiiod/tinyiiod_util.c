@@ -47,7 +47,7 @@
 #include "util.h"
 #include "tinyiiod_axi_adc.h"
 #include "tinyiiod_axi_dac.h"
-#include "serial.h"
+#include "uart.h"
 
 typedef struct tinyiiod_device {
     const char *name;

@@ -58,7 +58,7 @@
 
 #ifdef USE_LIBIIO
 #ifdef UART_INTERFACE
-#include "serial.h"
+#include "uart.h"
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
 #include <tinyiiod_axi_adc.h>
@@ -411,6 +411,19 @@ struct ad9361_rf_phy *ad9361_phy_b;
 struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
 struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
+
+struct uart_desc *uart_device;
+
+ssize_t iiod_write(const char *buf, size_t len) {
+
+	return uart_write(uart_device, buf, len);
+}
+
+ssize_t iiod_read(char *buf, size_t len) {
+
+	return uart_read(uart_device, buf, len);
+}
+
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -619,11 +632,17 @@ int main(void)
 	tinyiiod_dac *tinyiiod_dac;
 
 	tinyiiod_comm_ops comm_ops = {
-	    .read = serial_read,
+	    .read = iiod_read,
 //	    .read_line = serial_read_line,
 		.read_line = NULL,
-	    .write = serial_write_data,
+	    .write = iiod_write,
 	};
+
+	struct uart_init_par uart_init_par = {
+		.baud_rate = 921600,
+		.id = UART_DEVICE_ID,
+	};
+
 
 	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
 	if(ret < 0)
@@ -657,7 +676,7 @@ int main(void)
 		return ret;
 
 #ifdef UART_INTERFACE
-	ret = serial_init();
+	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)
 		return ret;
 	while(1) {
