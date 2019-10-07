@@ -51,6 +51,5 @@ struct fifo {
 
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
 struct fifo * fifo_remove_head(struct fifo *p_fifo);
-void set_keep_alive(void (*kp_alive)(void));
 
 #endif /* COMMUNICATION_UTIL */

@@ -38,29 +38,30 @@
 *******************************************************************************/
 #include <string.h>
 #include <errno.h>
-#include "comm_util.h"
+#include <fifo.h>
 
 /***************************************************************************//**
  * @brief new_buffer
 *******************************************************************************/
-static struct fifo * new_buffer(uint32_t len)
+static struct fifo * fifo_new_element(char *buff, uint32_t len)
 {
-    struct fifo *buf = malloc(sizeof(struct fifo));
+    struct fifo *q= malloc(sizeof(struct fifo));
 
-    if(!buf)
+    if(!q)
         return NULL;
-    buf->len = 0;
-    buf->index = 0;
-    buf->data = malloc(len);
-    buf->next = NULL;
+    q->len = len;
+    q->index = 0;
+    q->data = malloc(len);
+    memcpy(q->data, buff, len);
+    q->next = NULL;
 
-    return buf;
+    return q;
 }
 
 /***************************************************************************//**
  * @brief get_last
 *******************************************************************************/
-static struct fifo *get_last(struct fifo *p_fifo)
+static struct fifo *fifo_get_last(struct fifo *p_fifo)
 {
     if(p_fifo == NULL)
         return NULL;
@@ -81,19 +82,15 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
     if(len <= 0)
     	return 0;
 
-
-    q = new_buffer(len);
+    q = fifo_new_element(buff, len);
     if (!q)
     	return -ENOMEM;
-
-    memcpy(q->data, buff, len);
-    q->len = len;
 
     if (!(*p_fifo)) {
     	*p_fifo = q;
     }
     else {
-    	p = get_last(*p_fifo);
+    	p = fifo_get_last(*p_fifo);
     	p->next = q;
     }
 
