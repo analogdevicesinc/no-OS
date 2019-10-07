@@ -40,6 +40,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "error.h"
 #include "xuartps.h"
 #include "uart.h"
 #ifdef XPAR_INTC_0_DEVICE_ID
@@ -53,14 +54,13 @@ static char buff[BUFF_LENGTH];
 static volatile uint32_t bytes_reveived = 0;
 static int32_t TotalErrorCount;
 
-
 static ssize_t serial_ps_intr(struct uart_desc *descriptor);
 
 static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor);
 
 static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData);
 
-static void uart_keep_alive (struct uart_desc *desc) {
+static void uart_receive (struct uart_desc *desc) {
 	if (bytes_reveived > 0) {
 		fifo_insert_tail(&desc->fifo, buff, bytes_reveived);
 		bytes_reveived = 0;
@@ -68,10 +68,11 @@ static void uart_keep_alive (struct uart_desc *desc) {
 	}
 }
 
-static int32_t uart_read_byte(struct uart_desc *desc, char *buf)
+static ssize_t uart_read_byte(struct uart_desc *desc, char *buf)
 {
-	while (desc->fifo == NULL) { /* nothing in fifo */
-		uart_keep_alive(desc);
+	while (desc->fifo == NULL) {
+		/* nothing in fifo, wait until something is received */
+		uart_receive(desc);
 	}
 
 	*buf = desc->fifo->data[desc->fifo->index];
@@ -80,7 +81,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, char *buf)
 	if (desc->fifo->len - desc->fifo->index <= 0) {
 		desc->fifo = fifo_remove_head(desc->fifo);
 	}
-	return 1;
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -88,9 +89,13 @@ static int32_t uart_read_byte(struct uart_desc *desc, char *buf)
 *******************************************************************************/
 ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len)
 {
+	ssize_t ret;
     for (uint32_t i = 0; i < len; i++) {
-		uart_read_byte(desc, &buf[i]);
+    	ret = uart_read_byte(desc, &buf[i]);
+    	if (ret < 0)
+    		return ret;
 	}
+
 	return len;
 }
 
@@ -101,7 +106,7 @@ ssize_t uart_write(struct uart_desc *desc, const char *buf, size_t len)
 {
     for ( int32_t i = 0; i < len; i++)
         outbyte(buf[i]);
-    return 0;
+    return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -117,20 +122,20 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     descriptor->UartDeviceId = par->id;
     descriptor->uart_irq_id = par->uart_irq_id;
     descriptor->ctrl_irq_id = par->ctrl_irq_id;
-    descriptor->IntcInstancePtr = malloc(sizeof(XScuGic));
-    descriptor->UartInstancePtr = malloc(sizeof(XUartPs));
+    descriptor->IntcInstancePtr = calloc(1, sizeof(XScuGic));
+    descriptor->UartInstancePtr = calloc(1, sizeof(XUartPs));
 
 
     /* Run the UartPs Interrupt example, specify the the Device ID */
     Status = serial_ps_intr(descriptor);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     XUartPs_Recv(descriptor->UartInstancePtr, (u8*)buff, BUFF_LENGTH);
     *desc = descriptor;
 
-    return XST_SUCCESS;
+    return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -148,18 +153,18 @@ static ssize_t serial_ps_intr(struct uart_desc *descriptor)
      */
     Config = XUartPs_LookupConfig(descriptor->UartDeviceId);
     if (NULL == Config) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     Status = XUartPs_CfgInitialize(descriptor->UartInstancePtr, Config, Config->BaseAddress);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     /* Check hardware build */
     Status = XUartPs_SelfTest(descriptor->UartInstancePtr);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     /*
@@ -168,7 +173,7 @@ static ssize_t serial_ps_intr(struct uart_desc *descriptor)
      */
     Status = serial_setup_interrupt_system(descriptor);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     /*
@@ -207,7 +212,7 @@ static ssize_t serial_ps_intr(struct uart_desc *descriptor)
      */
     XUartPs_SetRecvTimeout(descriptor->UartInstancePtr, 8);
 
-    return XST_SUCCESS;
+    return SUCCESS;
 }
 
 /**************************************************************************/
@@ -300,13 +305,13 @@ static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor)
     /* Initialize the interrupt controller driver */
     IntcConfig = XScuGic_LookupConfig(descriptor->ctrl_irq_id);
     if (NULL == IntcConfig) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     Status = XScuGic_CfgInitialize(descriptor->IntcInstancePtr, IntcConfig,
                                    IntcConfig->CpuBaseAddress);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     /*
@@ -327,7 +332,7 @@ static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor)
                              (Xil_ExceptionHandler) XUartPs_InterruptHandler,
                              (void *) descriptor->UartInstancePtr);
     if (Status != XST_SUCCESS) {
-        return XST_FAILURE;
+        return FAILURE;
     }
 
     /* Enable the interrupt for the device */
@@ -339,7 +344,7 @@ static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor)
     Xil_ExceptionEnable();
 
 
-    return XST_SUCCESS;
+    return SUCCESS;
 }
 
 

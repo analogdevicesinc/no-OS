@@ -46,19 +46,17 @@
 *******************************************************************************/
 static struct fifo * fifo_new_element(char *buff, uint32_t len)
 {
-    struct fifo *q = malloc(sizeof(struct fifo));
-
+    struct fifo *q = calloc(1, sizeof(struct fifo));
     if (!q)
         return NULL;
+
     q->len = len;
-    q->index = 0;
-    q->data = malloc(len);
+    q->data = calloc(1, len);
     if (!(q->data)) {
     	free(q);
     	return NULL;
     }
     memcpy(q->data, buff, len);
-    q->next = NULL;
 
     return q;
 }
