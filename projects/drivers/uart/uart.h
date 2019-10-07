@@ -40,16 +40,23 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 #include "fifo.h"
-
+#include <xscugic.h>
+#include <xuartps.h>
 struct uart_init_par {
 	uint32_t id;
+	uint32_t uart_irq_id;
+	uint32_t ctrl_irq_id;
 	uint32_t baud_rate;
 };
 
 struct uart_desc {
-	uint32_t id;
+	uint32_t UartDeviceId;
+	uint32_t uart_irq_id;
+	uint32_t ctrl_irq_id;
 	uint32_t baud_rate;
 	struct fifo *fifo;
+	XScuGic *IntcInstancePtr;	/* Instance of the Interrupt Controller */
+	XUartPs *UartInstancePtr;		/* Instance of the UART Device */
 };
 
 ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len);
