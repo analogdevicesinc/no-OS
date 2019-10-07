@@ -36,11 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#include <fifo.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include "error.h"
+#include "fifo.h"
 #include "xuartps.h"
 #include "uart.h"
 #ifdef XPAR_INTC_0_DEVICE_ID
@@ -104,8 +104,12 @@ ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len)
 *******************************************************************************/
 ssize_t uart_write(struct uart_desc *desc, const char *buf, size_t len)
 {
-    for ( int32_t i = 0; i < len; i++)
-        outbyte(buf[i]);
+	size_t total_sent = XUartPs_Send(desc->UartInstancePtr, (u8*)buf, len);
+
+	while (XUartPs_IsSending(desc->UartInstancePtr));
+	if (total_sent < len)
+		return FAILURE;
+
     return SUCCESS;
 }
 
