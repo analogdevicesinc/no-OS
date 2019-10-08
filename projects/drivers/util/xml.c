@@ -56,13 +56,18 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *
         return -ENOMEM;
 
     (*attribute)->name = malloc(strlen(name) + 1);
-    if (!(*attribute)->name)
+    if (!(*attribute)->name) {
+    	free(*attribute);
         return -ENOMEM;
+    }
     strcpy((*attribute)->name, name);
 
     (*attribute)->value = malloc(strlen(value) + 1);
-    if (!(*attribute)->value)
+    if (!(*attribute)->value) {
+    	free((*attribute)->name);
+    	free(*attribute);
         return -ENOMEM;
+    }
     strcpy((*attribute)->value, value);
 
     return 0;
@@ -107,8 +112,10 @@ ssize_t xml_create_node(xml_node **node, char *name) {
     (*node)->children = NULL;
     (*node)->children_cnt = 0;
     (*node)->name = malloc(strlen(name) + 1);
-    if (!(*node)->name)
+    if (!(*node)->name) {
+    	free(*node);
         return -ENOMEM;
+    }
     strcpy((*node)->name, name);
 
     return 0;
@@ -188,6 +195,7 @@ ssize_t xml_delete_node(xml_node **node) {
  */
 ssize_t xml_create_document(xml_document **document, xml_node *node) {
     uint8_t i;
+    ssize_t ret;
 
     const uint16_t buff_increments = 1024;
     if (!(*document)) {
@@ -195,8 +203,10 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
         if (!(*document))
             return -ENOMEM;
         (*document)->buff = malloc(buff_increments * 2);
-        if (!(*document)->buff)
+        if (!(*document)->buff) {
+        	free(*document);
             return -ENOMEM;
+        }
         (*document)->size = buff_increments * 2;
         (*document)->index = 0;
     }
@@ -205,8 +215,11 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
     if ((*document)->index > (*document)->size - buff_increments)
     {
         char *buff = realloc((*document)->buff, (*document)->size + buff_increments);
-        if (!buff)
+        if (!buff) {
+        	free((*document)->buff);
+        	free(*document);
             return -ENOMEM;
+        }
         (*document)->buff = buff;
         (*document)->size += buff_increments;
     }
@@ -223,7 +236,9 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
 
     (*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
     for (i = 0; i < node->children_cnt; i++) {
-        xml_create_document(document, node->children[i]);
+    	ret = xml_create_document(document, node->children[i]);
+    	if (ret < 0)
+    		return ret;
     }
     (*document)->index += sprintf(&(*document)->buff[(*document)->index], "</%s>\n", node->name);
 

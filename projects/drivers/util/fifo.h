@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef COMMUNICATION_UTIL
-#define COMMUNICATION_UTIL
+#ifndef FIFO_H_
+#define FIFO_H_
 
 #include <stdint.h>
 
@@ -51,4 +51,4 @@ struct fifo {
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
 struct fifo * fifo_remove_head(struct fifo *p_fifo);
 
-#endif /* COMMUNICATION_UTIL */
+#endif /* FIFO_H_ */
