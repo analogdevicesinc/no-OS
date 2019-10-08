@@ -218,6 +218,9 @@ int main()
 		offload_data += j; /* go to the next address in memory */
 	}
 
+	free(msg->spi_msg_cmds);
+	free(msg->rx_buf);
+
 	ad713x_remove(ad713x_dev_1);
 	ad713x_remove(ad713x_dev_2);
 	print("Bye\n\r");
