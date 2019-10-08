@@ -646,8 +646,8 @@ int main(void)
 
 	struct uart_init_par uart_init_par = {
 		.baud_rate = 921600,
-		.id = UART_DEVICE_ID,
-		.uart_irq_id = UART_IRQ_ID,
+		.device_id = UART_DEVICE_ID,
+		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};
 

@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   serial.h
- *   @brief  Header file of Serial interface.
+ *   @file   uart.h
+ *   @brief  Header file of UART interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -36,25 +36,25 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#ifndef SERIAL_H_
-#define SERIAL_H_
-#include "fifo.h"
+#ifndef UART_H_
+#define UART_H_
 #include <xscugic.h>
 #include <xuartps.h>
+#include "fifo.h"
+
 struct uart_init_par {
-	uint32_t id;
-	uint32_t uart_irq_id;
+	uint32_t device_id;
+	uint32_t irq_id;
 	uint32_t baud_rate;
 	struct irq_desc *irq_desc;
 };
 
 struct uart_desc {
-	uint32_t UartDeviceId;
-	uint32_t uart_irq_id;
+	uint32_t device_id;
+	uint32_t irq_id;
 	uint32_t baud_rate;
 	struct fifo *fifo;
-	XUartPs *UartInstancePtr;		/* Instance of the UART Device */
+	XUartPs *instance;
 	struct irq_desc *irq_desc;
 };
 

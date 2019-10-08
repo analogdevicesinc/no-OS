@@ -1,5 +1,6 @@
 /***************************************************************************//**
  *   @file   irq.h
+ *   @brief  Header file of IRQ interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -63,11 +64,21 @@ int32_t irq_init(struct irq_desc **desc,
 		 const struct irq_init_param *param);
 
 /* Registers a generic IRQ handling function */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *irq_callback_ref);
-int32_t irq_enable(void);
-int32_t irq_disable(void);
+int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *extra);
 
 /* Free the resources allocated by irq_init(). */
 int32_t irq_remove(struct irq_desc *desc);
+
+/* Global interrupt enable */
+int32_t irq_enable(void);
+
+/* Global interrupt disable */
+int32_t irq_disable(void);
+
+/* Enable specific interrupt */
+int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id);
+
+/* Disable specific interrupt */
+int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id);
 
 #endif // IRQ_H_

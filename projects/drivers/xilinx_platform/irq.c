@@ -69,8 +69,22 @@ int32_t irq_disable(void) {
 	return SUCCESS;
 }
 
+int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id) {
+	xil_irq_desc *xil_dev = desc->extra;
+    XScuGic_Enable(xil_dev->gic, irq_id);
+
+	return SUCCESS;
+}
+
+int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id) {
+	xil_irq_desc *xil_dev = desc->extra;
+    XScuGic_Disable(xil_dev->gic, irq_id);
+
+	return SUCCESS;
+}
+
 /* Registers a generic IRQ handling function */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *irq_callback_ref) {
+int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *extra) {
 
 	int32_t status;
 	xil_irq_desc *xil_dev = desc->extra;
@@ -81,13 +95,10 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)
      */
 	status = XScuGic_Connect(xil_dev->gic, irq_id,
                              irq_handler,
-							 irq_callback_ref);
+							 extra);
     if (status != XST_SUCCESS) {
         return FAILURE;
     }
-
-    /* Enable the interrupt for the device */
-    XScuGic_Enable(xil_dev->gic, irq_id);
 
 	return SUCCESS;
 }
