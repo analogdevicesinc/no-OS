@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   uart.h
- *   @brief  Header file of UART interface.
+ *   @file   serial.h
+ *   @brief  Header file of Serial interface.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -36,43 +36,34 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef UART_H_
-#define UART_H_
 
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
+#ifndef SERIAL_H_
+#define SERIAL_H_
+#include "fifo.h"
+#include <xscugic.h>
+#include <xuartps.h>
 struct uart_init_par {
-	uint8_t	device_id;
-	uint32_t 	baud_rate;
-	void 		*extra;
+	uint32_t id;
+	uint32_t uart_irq_id;
+	uint32_t baud_rate;
+	struct irq_desc *irq_desc;
 };
 
 struct uart_desc {
-	uint8_t 	device_id;
-	uint32_t 	baud_rate;
-	void 		*extra;
+	uint32_t UartDeviceId;
+	uint32_t uart_irq_id;
+	uint32_t baud_rate;
+	struct fifo *fifo;
+	XUartPs *UartInstancePtr;		/* Instance of the UART Device */
+	struct irq_desc *irq_desc;
 };
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
+ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len);
 
-/* Read data to UART. */
-int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number);
+ssize_t uart_write(struct uart_desc *desc, const char *buf, size_t len);
 
-/* Write data to UART. */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
-		   uint32_t bytes_number);
+ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
 
-/* Initialize the UART communication peripheral. */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
+ssize_t uart_remove(struct uart_desc *desc);
 
-/* Free the resources allocated by uart_init(). */
-int32_t uart_remove(struct uart_desc *desc);
-
-/* Check if UART errors occurred. */
-uint32_t uart_get_errors(struct uart_desc *desc);
-
-#endif /* UART_H_ */
+#endif /* SERIAL_H_ */
