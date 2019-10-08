@@ -117,6 +117,7 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 {
     int32_t status;
     struct uart_desc *descriptor;
+    XUartPs_Config *config;
 
     descriptor = calloc(1, sizeof(struct uart_desc));
     descriptor->baud_rate = par->baud_rate;
@@ -124,6 +125,39 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     descriptor->irq_id = par->irq_id;
     descriptor->instance = calloc(1, sizeof(XUartPs));
     descriptor->irq_desc = par->irq_desc;
+
+
+    /*
+     * Initialize the UART driver so that it's ready to use
+     * Look up the configuration in the config table, then initialize it.
+     */
+    config = XUartPs_LookupConfig(descriptor->device_id);
+    if (!config) {
+        return FAILURE;
+    }
+
+    status = XUartPs_CfgInitialize(descriptor->instance, config, config->BaseAddress);
+    if (status != XST_SUCCESS) {
+        return FAILURE;
+    }
+
+    XUartPs_SetOperMode(descriptor->instance, XUARTPS_OPER_MODE_NORMAL);
+
+    status = XUartPs_SetBaudRate(descriptor->instance, descriptor->baud_rate);
+    if (status != XST_SUCCESS) {
+		return FAILURE;
+	}
+
+    /*
+     * Set the receiver timeout. If it is not set, and the last few bytes
+     * of data do not trigger the over-water or full interrupt, the bytes
+     * will not be received. By default it is disabled.
+     *
+     * The setting of 8 will timeout after 8 x 4 = 32 character times.
+     * Increase the time out value if baud rate is high, decrease it if
+     * baud rate is low.
+     */
+    XUartPs_SetRecvTimeout(descriptor->instance, 8);
 
     status = uart_irq_init(descriptor);
     if (status != XST_SUCCESS) {
@@ -137,6 +171,9 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 }
 
 ssize_t uart_remove(struct uart_desc *desc) {
+	free(desc->instance);
+	free(desc);
+
 	return SUCCESS;
 }
 
@@ -145,27 +182,12 @@ ssize_t uart_remove(struct uart_desc *desc) {
 *******************************************************************************/
 static ssize_t uart_irq_init(struct uart_desc *descriptor)
 {
-    XUartPs_Config *config;
-    int32_t status;
-    u32 intr_mask;
-    /*
-     * Initialize the UART driver so that it's ready to use
-     * Look up the configuration in the config table, then initialize it.
-     */
-    config = XUartPs_LookupConfig(descriptor->device_id);
-    if (NULL == config) {
-        return FAILURE;
-    }
-
-    status = XUartPs_CfgInitialize(descriptor->instance, config, config->BaseAddress);
-    if (status != XST_SUCCESS) {
-        return FAILURE;
-    }
-
-    irq_register(descriptor->irq_desc, descriptor->irq_id,
+    uint32_t uart_irq_mask;
+    int32_t status = irq_register(descriptor->irq_desc, descriptor->irq_id,
     		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
     		                             descriptor->instance);
-
+    if (status < 0)
+    	return status;
     /*
      * Setup the handlers for the UART that will be called from the
      * interrupt context when data has been sent and received, specify
@@ -178,33 +200,24 @@ static ssize_t uart_irq_init(struct uart_desc *descriptor)
      * Enable the interrupt of the UART so interrupts will occur, setup
      * a local loopback so data that is sent will be received.
      */
-    intr_mask =
+    uart_irq_mask =
         XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
         XUARTPS_IXR_OVER | XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_RXFULL |
         XUARTPS_IXR_RXOVR;
 
     if (descriptor->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
-        intr_mask |= XUARTPS_IXR_RBRK;
+        uart_irq_mask |= XUARTPS_IXR_RBRK;
     }
 
-    XUartPs_SetInterruptMask(descriptor->instance, intr_mask);
+    XUartPs_SetInterruptMask(descriptor->instance, uart_irq_mask);
 
-    XUartPs_SetOperMode(descriptor->instance, XUARTPS_OPER_MODE_NORMAL);
-    XUartPs_SetBaudRate(descriptor->instance, descriptor->baud_rate);
-    /*
-     * Set the receiver timeout. If it is not set, and the last few bytes
-     * of data do not trigger the over-water or full interrupt, the bytes
-     * will not be received. By default it is disabled.
-     *
-     * The setting of 8 will timeout after 8 x 4 = 32 character times.
-     * Increase the time out value if baud rate is high, decrease it if
-     * baud rate is low.
-     */
-    XUartPs_SetRecvTimeout(descriptor->instance, 8);
+    status = irq_source_enable(descriptor->irq_desc, descriptor->irq_id);
+    if (status < 0)
+        return status;
 
-    irq_source_enable(descriptor->irq_desc, descriptor->irq_id);
-
-    irq_enable();
+    status = irq_enable();
+    if (status < 0)
+        return status;
 
     return SUCCESS;
 }
