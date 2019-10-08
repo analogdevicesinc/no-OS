@@ -417,12 +417,12 @@ struct uart_desc *uart_device;
 
 ssize_t iiod_write(const char *buf, size_t len) {
 
-	return uart_write(uart_device, buf, len);
+	return uart_write(uart_device, (const uint8_t *)buf, len);
 }
 
 ssize_t iiod_read(char *buf, size_t len) {
 
-	return uart_read(uart_device, buf, len);
+	return uart_read(uart_device, (uint8_t *)buf, len);
 }
 
 /***************************************************************************//**

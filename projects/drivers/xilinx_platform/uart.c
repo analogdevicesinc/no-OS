@@ -65,14 +65,14 @@ static void uart_receive (struct uart_desc *desc) {
 	}
 }
 
-static ssize_t uart_read_byte(struct uart_desc *desc, char *buf)
+static ssize_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
 	while (desc->fifo == NULL) {
 		/* nothing in fifo, wait until something is received */
 		uart_receive(desc);
 	}
 
-	*buf = desc->fifo->data[desc->fifo->index];
+	*data = desc->fifo->data[desc->fifo->index];
 	desc->fifo->index++;
 
 	if (desc->fifo->len - desc->fifo->index <= 0) {
@@ -84,27 +84,27 @@ static ssize_t uart_read_byte(struct uart_desc *desc, char *buf)
 /***************************************************************************//**
  * @brief network_read
 *******************************************************************************/
-ssize_t uart_read(struct uart_desc *desc, char *buf, size_t len)
+ssize_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
 	ssize_t ret;
-    for (uint32_t i = 0; i < len; i++) {
-    	ret = uart_read_byte(desc, &buf[i]);
+    for (uint32_t i = 0; i < bytes_number; i++) {
+    	ret = uart_read_byte(desc, &data[i]);
     	if (ret < 0)
     		return ret;
 	}
 
-	return len;
+	return bytes_number;
 }
 
 /***************************************************************************//**
  * @brief serial_write_data
 *******************************************************************************/
-ssize_t uart_write(struct uart_desc *desc, const char *buf, size_t len)
+ssize_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
 {
-	size_t total_sent = XUartPs_Send(desc->instance, (u8*)buf, len);
+	size_t total_sent = XUartPs_Send(desc->instance, (u8*)data, bytes_number);
 
 	while (XUartPs_IsSending(desc->instance));
-	if (total_sent < len)
+	if (total_sent < bytes_number)
 		return FAILURE;
 
     return SUCCESS;
