@@ -46,6 +46,7 @@
 
 #include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
+#include <xscugic.h>
 #include <xspips.h>
 #include <xgpiops.h>
 #include <xiic.h>
@@ -64,6 +65,22 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+typedef struct xil_irq_init_param {
+
+} xil_irq_init_param;
+
+typedef struct xil_irq_desc {
+	XScuGic 	*gic;
+} xil_irq_desc;
+
+typedef struct xil_uart_init_param {
+	uint32_t	id;
+} xil_uart_init_param;
+
+typedef struct xil_uart_desc {
+	uint32_t	id;
+} xil_uart_desc;
 
 typedef enum i2c_type {
 	XILINX_I2C

@@ -58,6 +58,7 @@
 
 #ifdef USE_LIBIIO
 #ifdef UART_INTERFACE
+#include "irq.h"
 #include "uart.h"
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
@@ -638,11 +639,16 @@ int main(void)
 	    .write = iiod_write,
 	};
 
+	struct irq_init_param irq_init_param = {
+		.irq_id = INTC_DEVICE_ID,
+	};
+	struct irq_desc *irq_desc;
+
 	struct uart_init_par uart_init_par = {
 		.baud_rate = 921600,
 		.id = UART_DEVICE_ID,
 		.uart_irq_id = UART_IRQ_ID,
-		.ctrl_irq_id = INTC_DEVICE_ID,
+		.irq_desc = irq_desc,
 	};
 
 
@@ -676,7 +682,10 @@ int main(void)
 	ret = iiod_create(&iiod, &comm_ops);
 	if(ret < 0)
 		return ret;
-
+	ret = irq_init(&irq_desc, &irq_init_param);
+	if(ret < 0)
+		return ret;
+	uart_init_par.irq_desc = irq_desc;
 #ifdef UART_INTERFACE
 	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)
