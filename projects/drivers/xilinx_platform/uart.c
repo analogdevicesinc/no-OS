@@ -43,11 +43,8 @@
 #include "fifo.h"
 #include "xuartps.h"
 #include "uart.h"
-#ifdef XPAR_INTC_0_DEVICE_ID
-#include "xintc.h"
-#else
-#include "xscugic.h"
-#endif
+#include "irq.h"
+#include "xilinx_platform_drivers.h"
 
 #define BUFF_LENGTH 256
 static char buff[BUFF_LENGTH];
@@ -56,7 +53,7 @@ static int32_t TotalErrorCount;
 
 static ssize_t serial_ps_intr(struct uart_desc *descriptor);
 
-static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor);
+//static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor);
 
 static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData);
 
@@ -125,9 +122,8 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     descriptor->baud_rate = par->baud_rate;
     descriptor->UartDeviceId = par->id;
     descriptor->uart_irq_id = par->uart_irq_id;
-    descriptor->ctrl_irq_id = par->ctrl_irq_id;
-    descriptor->IntcInstancePtr = calloc(1, sizeof(XScuGic));
     descriptor->UartInstancePtr = calloc(1, sizeof(XUartPs));
+    descriptor->irq_desc = par->irq_desc;
 
 
     /* Run the UartPs Interrupt example, specify the the Device ID */
@@ -135,11 +131,15 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     if (Status != XST_SUCCESS) {
         return FAILURE;
     }
-
+    irq_enable();
     XUartPs_Recv(descriptor->UartInstancePtr, (u8*)buff, BUFF_LENGTH);
     *desc = descriptor;
 
     return SUCCESS;
+}
+
+ssize_t uart_remove(struct uart_desc *desc) {
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -150,7 +150,6 @@ static ssize_t serial_ps_intr(struct uart_desc *descriptor)
     XUartPs_Config *Config;
     int32_t Status;
     u32 IntrMask;
-
     /*
      * Initialize the UART driver so that it's ready to use
      * Look up the configuration in the config table, then initialize it.
@@ -170,15 +169,17 @@ static ssize_t serial_ps_intr(struct uart_desc *descriptor)
     if (Status != XST_SUCCESS) {
         return FAILURE;
     }
-
+    irq_register(descriptor->irq_desc, descriptor->uart_irq_id,
+    		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
+    		                             (void *) descriptor->UartInstancePtr);
     /*
      * Connect the UART to the interrupt subsystem such that interrupts
      * can occur. This function is application specific.
      */
-    Status = serial_setup_interrupt_system(descriptor);
-    if (Status != XST_SUCCESS) {
-        return FAILURE;
-    }
+//    Status = serial_setup_interrupt_system(descriptor);
+//    if (Status != XST_SUCCESS) {
+//        return FAILURE;
+//    }
 
     /*
      * Setup the handlers for the UART that will be called from the
@@ -282,74 +283,74 @@ static void serial_handler(void *CallBackRef, u32 Event, uint32_t EventData)
 }
 
 
-/*****************************************************************************/
-/**
-*
-* This function sets up the interrupt system so interrupts can occur for the
-* Uart. This function is application-specific. The user should modify this
-* function to fit the application.
-*
-* @param	IntcInstancePtr is a pointer to the instance of the INTC.
-* @param	UartInstancePtr contains a pointer to the instance of the UART
-*		driver which is going to be connected to the interrupt
-*		controller.
-* @param	UartIntrId is the interrupt Id and is typically
-*		XPAR_<UARTPS_instance>_INTR value from xparameters.h.
-*
-* @return	XST_SUCCESS if successful, otherwise XST_FAILURE.
-*
-* @note		None.
-*
-****************************************************************************/
-static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor)
-{
-    int32_t Status;
-    XScuGic_Config *IntcConfig; /* Config for interrupt controller */
-
-    /* Initialize the interrupt controller driver */
-    IntcConfig = XScuGic_LookupConfig(descriptor->ctrl_irq_id);
-    if (NULL == IntcConfig) {
-        return FAILURE;
-    }
-
-    Status = XScuGic_CfgInitialize(descriptor->IntcInstancePtr, IntcConfig,
-                                   IntcConfig->CpuBaseAddress);
-    if (Status != XST_SUCCESS) {
-        return FAILURE;
-    }
-
-    /*
-     * Connect the interrupt controller interrupt handler to the
-     * hardware interrupt handling logic in the processor.
-     */
-    Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
-                                 (Xil_ExceptionHandler) XScuGic_InterruptHandler,
-								 descriptor->IntcInstancePtr);
-
-
-    /*
-     * Connect a device driver handler that will be called when an
-     * interrupt for the device occurs, the device driver handler
-     * performs the specific interrupt processing for the device
-     */
-    Status = XScuGic_Connect(descriptor->IntcInstancePtr, descriptor->uart_irq_id,
-                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
-                             (void *) descriptor->UartInstancePtr);
-    if (Status != XST_SUCCESS) {
-        return FAILURE;
-    }
-
-    /* Enable the interrupt for the device */
-    XScuGic_Enable(descriptor->IntcInstancePtr, descriptor->uart_irq_id);
-
-
-
-    /* Enable interrupts */
-    Xil_ExceptionEnable();
-
-
-    return SUCCESS;
-}
+///*****************************************************************************/
+///**
+//*
+//* This function sets up the interrupt system so interrupts can occur for the
+//* Uart. This function is application-specific. The user should modify this
+//* function to fit the application.
+//*
+//* @param	IntcInstancePtr is a pointer to the instance of the INTC.
+//* @param	UartInstancePtr contains a pointer to the instance of the UART
+//*		driver which is going to be connected to the interrupt
+//*		controller.
+//* @param	UartIntrId is the interrupt Id and is typically
+//*		XPAR_<UARTPS_instance>_INTR value from xparameters.h.
+//*
+//* @return	XST_SUCCESS if successful, otherwise XST_FAILURE.
+//*
+//* @note		None.
+//*
+//****************************************************************************/
+//static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor)
+//{
+//    int32_t Status;
+//    XScuGic_Config *IntcConfig; /* Config for interrupt controller */
+//
+//    /* Initialize the interrupt controller driver */
+//    IntcConfig = XScuGic_LookupConfig(descriptor->ctrl_irq_id);
+//    if (NULL == IntcConfig) {
+//        return FAILURE;
+//    }
+//
+//    Status = XScuGic_CfgInitialize(descriptor->IntcInstancePtr, IntcConfig,
+//                                   IntcConfig->CpuBaseAddress);
+//    if (Status != XST_SUCCESS) {
+//        return FAILURE;
+//    }
+//
+//    /*
+//     * Connect the interrupt controller interrupt handler to the
+//     * hardware interrupt handling logic in the processor.
+//     */
+//    Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
+//                                 (Xil_ExceptionHandler) XScuGic_InterruptHandler,
+//								 descriptor->IntcInstancePtr);
+//
+//
+//    /*
+//     * Connect a device driver handler that will be called when an
+//     * interrupt for the device occurs, the device driver handler
+//     * performs the specific interrupt processing for the device
+//     */
+//    Status = XScuGic_Connect(descriptor->IntcInstancePtr, descriptor->uart_irq_id,
+//                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
+//                             (void *) descriptor->UartInstancePtr);
+//    if (Status != XST_SUCCESS) {
+//        return FAILURE;
+//    }
+//
+//    /* Enable the interrupt for the device */
+//    XScuGic_Enable(descriptor->IntcInstancePtr, descriptor->uart_irq_id);
+//
+//
+//
+//    /* Enable interrupts */
+//    Xil_ExceptionEnable();
+//
+//
+//    return SUCCESS;
+//}
 
 
 
