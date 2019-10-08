@@ -58,25 +58,27 @@ static ssize_t uart_irq_init(struct uart_desc *descriptor);
 static void serial_handler(void *call_back_ref, u32 event, uint32_t data_len);
 
 static void uart_receive (struct uart_desc *desc) {
+	xil_uart_desc *xil_uart_desc = desc->extra;
 	if (bytes_reveived > 0) {
-		fifo_insert_tail(&desc->fifo, buff, bytes_reveived);
+		fifo_insert_tail(&xil_uart_desc->fifo, buff, bytes_reveived);
 		bytes_reveived = 0;
-		XUartPs_Recv(desc->instance, (u8*)buff, BUFF_LENGTH);
+		XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
 	}
 }
 
 static ssize_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
-	while (desc->fifo == NULL) {
+	xil_uart_desc *xil_uart_desc = desc->extra;
+	while (xil_uart_desc->fifo == NULL) {
 		/* nothing in fifo, wait until something is received */
 		uart_receive(desc);
 	}
 
-	*data = desc->fifo->data[desc->fifo->index];
-	desc->fifo->index++;
+	*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo->index];
+	xil_uart_desc->fifo->index++;
 
-	if (desc->fifo->len - desc->fifo->index <= 0) {
-		desc->fifo = fifo_remove_head(desc->fifo);
+	if (xil_uart_desc->fifo->len - xil_uart_desc->fifo->index <= 0) {
+		xil_uart_desc->fifo = fifo_remove_head(xil_uart_desc->fifo);
 	}
 	return SUCCESS;
 }
@@ -101,9 +103,10 @@ ssize_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 *******************************************************************************/
 ssize_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
 {
-	size_t total_sent = XUartPs_Send(desc->instance, (u8*)data, bytes_number);
+	xil_uart_desc *xil_uart_desc = desc->extra;
+	size_t total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data, bytes_number);
 
-	while (XUartPs_IsSending(desc->instance));
+	while (XUartPs_IsSending(xil_uart_desc->instance));
 	if (total_sent < bytes_number)
 		return FAILURE;
 
@@ -118,14 +121,20 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     int32_t status;
     struct uart_desc *descriptor;
     XUartPs_Config *config;
+    xil_uart_init_param *xil_uart_init_param;
+    xil_uart_desc *xil_uart_desc;
 
     descriptor = calloc(1, sizeof(struct uart_desc));
+    xil_uart_desc = calloc(1, sizeof(struct xil_uart_desc));
+    descriptor->extra = xil_uart_desc;
     descriptor->baud_rate = par->baud_rate;
     descriptor->device_id = par->device_id;
-    descriptor->irq_id = par->irq_id;
-    descriptor->instance = calloc(1, sizeof(XUartPs));
-    descriptor->irq_desc = par->irq_desc;
 
+    xil_uart_init_param = par->extra;
+    xil_uart_desc = descriptor->extra;
+    xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
+    xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
+    xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
 
     /*
      * Initialize the UART driver so that it's ready to use
@@ -136,14 +145,14 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
         return FAILURE;
     }
 
-    status = XUartPs_CfgInitialize(descriptor->instance, config, config->BaseAddress);
+    status = XUartPs_CfgInitialize(xil_uart_desc->instance, config, config->BaseAddress);
     if (status != XST_SUCCESS) {
         return FAILURE;
     }
 
-    XUartPs_SetOperMode(descriptor->instance, XUARTPS_OPER_MODE_NORMAL);
+    XUartPs_SetOperMode(xil_uart_desc->instance, XUARTPS_OPER_MODE_NORMAL);
 
-    status = XUartPs_SetBaudRate(descriptor->instance, descriptor->baud_rate);
+    status = XUartPs_SetBaudRate(xil_uart_desc->instance, descriptor->baud_rate);
     if (status != XST_SUCCESS) {
 		return FAILURE;
 	}
@@ -157,7 +166,7 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
      * Increase the time out value if baud rate is high, decrease it if
      * baud rate is low.
      */
-    XUartPs_SetRecvTimeout(descriptor->instance, 8);
+    XUartPs_SetRecvTimeout(xil_uart_desc->instance, 8);
 
     status = uart_irq_init(descriptor);
     if (status != XST_SUCCESS) {
@@ -165,13 +174,14 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     }
     *desc = descriptor;
 
-    XUartPs_Recv(descriptor->instance, (u8*)buff, BUFF_LENGTH);
+    XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
 
     return SUCCESS;
 }
 
 ssize_t uart_remove(struct uart_desc *desc) {
-	free(desc->instance);
+	xil_uart_desc *xil_uart_desc = desc->extra;
+	free(xil_uart_desc->instance);
 	free(desc);
 
 	return SUCCESS;
@@ -183,9 +193,10 @@ ssize_t uart_remove(struct uart_desc *desc) {
 static ssize_t uart_irq_init(struct uart_desc *descriptor)
 {
     uint32_t uart_irq_mask;
-    int32_t status = irq_register(descriptor->irq_desc, descriptor->irq_id,
+    xil_uart_desc *xil_uart_desc = descriptor->extra;
+    int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
     		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
-    		                             descriptor->instance);
+										 xil_uart_desc->instance);
     if (status < 0)
     	return status;
     /*
@@ -194,7 +205,7 @@ static ssize_t uart_irq_init(struct uart_desc *descriptor)
      * a pointer to the UART driver instance as the callback reference
      * so the handlers are able to access the instance data
      */
-    XUartPs_SetHandler(descriptor->instance, serial_handler, descriptor->instance);
+    XUartPs_SetHandler(xil_uart_desc->instance, serial_handler, xil_uart_desc->instance);
 
     /*
      * Enable the interrupt of the UART so interrupts will occur, setup
@@ -205,13 +216,13 @@ static ssize_t uart_irq_init(struct uart_desc *descriptor)
         XUARTPS_IXR_OVER | XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_RXFULL |
         XUARTPS_IXR_RXOVR;
 
-    if (descriptor->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
+    if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
         uart_irq_mask |= XUARTPS_IXR_RBRK;
     }
 
-    XUartPs_SetInterruptMask(descriptor->instance, uart_irq_mask);
+    XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
 
-    status = irq_source_enable(descriptor->irq_desc, descriptor->irq_id);
+    status = irq_source_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
     if (status < 0)
         return status;
 

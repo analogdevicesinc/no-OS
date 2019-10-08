@@ -48,18 +48,14 @@
 
 struct uart_init_par {
 	uint32_t device_id;
-	uint32_t irq_id;
 	uint32_t baud_rate;
-	struct irq_desc *irq_desc;
+	void *extra;
 };
 
 struct uart_desc {
 	uint32_t device_id;
-	uint32_t irq_id;
 	uint32_t baud_rate;
-	struct fifo *fifo;
-	XUartPs *instance;
-	struct irq_desc *irq_desc;
+	void *extra;
 };
 
 /******************************************************************************/

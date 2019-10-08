@@ -47,6 +47,7 @@
 #include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
 #include <xscugic.h>
+#include <xuartps.h>
 #include <xspips.h>
 #include <xgpiops.h>
 #include <xiic.h>
@@ -75,11 +76,15 @@ typedef struct xil_irq_desc {
 } xil_irq_desc;
 
 typedef struct xil_uart_init_param {
-	uint32_t	id;
+	uint32_t irq_id;
+	struct irq_desc *irq_desc;
 } xil_uart_init_param;
 
 typedef struct xil_uart_desc {
-	uint32_t	id;
+	uint32_t irq_id;
+	struct irq_desc *irq_desc;
+	XUartPs *instance;
+	struct fifo *fifo;
 } xil_uart_desc;
 
 typedef enum i2c_type {

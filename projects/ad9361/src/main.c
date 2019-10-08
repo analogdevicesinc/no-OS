@@ -644,12 +644,16 @@ int main(void)
 	};
 	struct irq_desc *irq_desc;
 
-	struct uart_init_par uart_init_par = {
-		.baud_rate = 921600,
-		.device_id = UART_DEVICE_ID,
+	xil_uart_init_param xil_uart_init_par = {
 		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};
+	struct uart_init_par uart_init_par = {
+		.baud_rate = 921600,
+		.device_id = UART_1_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
 
 
 	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
@@ -685,7 +689,7 @@ int main(void)
 	ret = irq_init(&irq_desc, &irq_init_param);
 	if(ret < 0)
 		return ret;
-	uart_init_par.irq_desc = irq_desc;
+	xil_uart_init_par.irq_desc = irq_desc;
 #ifdef UART_INTERFACE
 	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)

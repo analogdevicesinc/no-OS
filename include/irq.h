@@ -47,7 +47,6 @@
 
 typedef struct irq_init_param {
 	uint32_t	irq_id;
-	void		*extra;
 } irq_init_param;
 
 typedef struct irq_desc {
