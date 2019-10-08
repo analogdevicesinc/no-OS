@@ -72,19 +72,19 @@ typedef struct xil_irq_init_param {
 } xil_irq_init_param;
 
 typedef struct xil_irq_desc {
-	XScuGic 	*gic;
+	XScuGic 		*gic;
 } xil_irq_desc;
 
 typedef struct xil_uart_init_param {
-	uint32_t irq_id;
+	uint32_t		irq_id;
 	struct irq_desc *irq_desc;
 } xil_uart_init_param;
 
 typedef struct xil_uart_desc {
-	uint32_t irq_id;
-	struct irq_desc *irq_desc;
-	XUartPs *instance;
-	struct fifo *fifo;
+	uint32_t		irq_id;
+	struct irq_desc	*irq_desc;
+	XUartPs			*instance;
+	struct fifo		*fifo;
 } xil_uart_desc;
 
 typedef enum i2c_type {

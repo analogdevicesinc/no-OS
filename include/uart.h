@@ -47,15 +47,15 @@
 /******************************************************************************/
 
 struct uart_init_par {
-	uint32_t device_id;
-	uint32_t baud_rate;
-	void *extra;
+	uint32_t	device_id;
+	uint32_t 	baud_rate;
+	void 		*extra;
 };
 
 struct uart_desc {
-	uint32_t device_id;
-	uint32_t baud_rate;
-	void *extra;
+	uint32_t 	device_id;
+	uint32_t 	baud_rate;
+	void 		*extra;
 };
 
 /******************************************************************************/

@@ -47,6 +47,7 @@
 
 typedef struct irq_init_param {
 	uint32_t	irq_id;
+	void		*extra;
 } irq_init_param;
 
 typedef struct irq_desc {
@@ -62,11 +63,11 @@ typedef struct irq_desc {
 int32_t irq_init(struct irq_desc **desc,
 		 const struct irq_init_param *param);
 
-/* Registers a generic IRQ handling function */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *extra);
-
 /* Free the resources allocated by irq_init(). */
 int32_t irq_remove(struct irq_desc *desc);
+
+/* Registers a generic IRQ handling function */
+int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *extra);
 
 /* Global interrupt enable */
 int32_t irq_enable(void);
