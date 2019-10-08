@@ -654,8 +654,6 @@ int main(void)
 		.extra = &xil_uart_init_par,
 	};
 
-
-
 	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
 	if(ret < 0)
 		return ret;
@@ -694,6 +692,9 @@ int main(void)
 	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)
 		return ret;
+	status = irq_enable();
+	if (status < 0)
+		return status;
 	while(1) {
 		tinyiiod_read_command(iiod);
 	}

@@ -129,7 +129,6 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     descriptor->extra = xil_uart_desc;
     descriptor->baud_rate = par->baud_rate;
     descriptor->device_id = par->device_id;
-
     xil_uart_init_param = par->extra;
     xil_uart_desc = descriptor->extra;
     xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
@@ -182,6 +181,7 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 ssize_t uart_remove(struct uart_desc *desc) {
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	free(xil_uart_desc->instance);
+	free(xil_uart_desc);
 	free(desc);
 
 	return SUCCESS;
@@ -223,10 +223,6 @@ static ssize_t uart_irq_init(struct uart_desc *descriptor)
     XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
 
     status = irq_source_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
-    if (status < 0)
-        return status;
-
-    status = irq_enable();
     if (status < 0)
         return status;
 
