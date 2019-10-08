@@ -51,9 +51,7 @@ static char buff[BUFF_LENGTH];
 static volatile uint32_t bytes_reveived = 0;
 static int32_t total_error_count;
 
-static ssize_t uart_irq_init(struct uart_desc *descriptor);
-
-//static ssize_t serial_setup_interrupt_system(struct uart_desc *descriptor);
+static int32_t uart_irq_init(struct uart_desc *descriptor);
 
 static void serial_handler(void *call_back_ref, u32 event, uint32_t data_len);
 
@@ -66,7 +64,7 @@ static void uart_receive (struct uart_desc *desc) {
 	}
 }
 
-static ssize_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
+static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	while (xil_uart_desc->fifo == NULL) {
@@ -86,7 +84,7 @@ static ssize_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 /***************************************************************************//**
  * @brief network_read
 *******************************************************************************/
-ssize_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
+int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
 	ssize_t ret;
     for (uint32_t i = 0; i < bytes_number; i++) {
@@ -101,7 +99,7 @@ ssize_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 /***************************************************************************//**
  * @brief serial_write_data
 *******************************************************************************/
-ssize_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
+int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
 {
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	size_t total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data, bytes_number);
@@ -116,7 +114,7 @@ ssize_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_n
 /***************************************************************************//**
  * @brief serial_init
 *******************************************************************************/
-ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
+int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 {
     int32_t status;
     struct uart_desc *descriptor;
@@ -178,7 +176,7 @@ ssize_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     return SUCCESS;
 }
 
-ssize_t uart_remove(struct uart_desc *desc) {
+int32_t uart_remove(struct uart_desc *desc) {
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	free(xil_uart_desc->instance);
 	free(xil_uart_desc);
@@ -190,7 +188,7 @@ ssize_t uart_remove(struct uart_desc *desc) {
 /***************************************************************************//**
  * @brief uart_irq_init
 *******************************************************************************/
-static ssize_t uart_irq_init(struct uart_desc *descriptor)
+static int32_t uart_irq_init(struct uart_desc *descriptor)
 {
     uint32_t uart_irq_mask;
     xil_uart_desc *xil_uart_desc = descriptor->extra;
