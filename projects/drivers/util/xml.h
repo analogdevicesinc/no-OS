@@ -61,13 +61,28 @@ typedef struct xml_document {
     uint32_t index;
 } xml_document;
 
+/* Create xml attribute. */
 ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *value);
+
+/* Delete xml attribute. */
 ssize_t xml_delete_attribute(xml_attribute **attribute);
+
+/* Add xml attribute to node. */
 ssize_t xml_add_attribute(xml_node *node, xml_attribute *attribute);
+
+/* Create xml node. */
 ssize_t xml_create_node(xml_node **node, char *name);
+
+/* Delete xml node. */
 ssize_t xml_delete_node(xml_node **node);
+
+/* Add xml node to a parent node. */
 ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child);
+
+/* Create xml document. */
 ssize_t xml_create_document(xml_document **document, xml_node *node);
+
+/* Delete xml document. */
 ssize_t xml_delete_document(xml_document **document);
 
 #endif // ___XML_H__
