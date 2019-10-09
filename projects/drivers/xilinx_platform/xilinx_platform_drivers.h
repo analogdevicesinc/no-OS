@@ -47,6 +47,7 @@
 #include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
 #include <xscugic.h>
+#include <xscutimer.h>
 #include <xuartps.h>
 #include <xspips.h>
 #include <xgpiops.h>
@@ -71,7 +72,7 @@ typedef struct xil_irq_init_param {
 
 } xil_irq_init_param;
 
-typedef struct xil_irq_desc {
+struct xil_irq_desc {
 	XScuGic 		*gic;
 } xil_irq_desc;
 
@@ -86,6 +87,17 @@ typedef struct xil_uart_desc {
 	XUartPs			*instance;
 	struct fifo		*fifo;
 } xil_uart_desc;
+
+typedef struct xil_timer_init_param {
+	uint32_t		irq_id;
+	struct irq_desc *irq_desc;
+} xil_timer_init_param;
+
+typedef struct xil_timer_desc {
+	uint32_t		irq_id;
+	struct irq_desc	*irq_desc;
+	XScuTimer			*instance;
+} xil_timer_desc;
 
 typedef enum i2c_type {
 	XILINX_I2C

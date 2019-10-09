@@ -45,12 +45,12 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef struct irq_init_param {
+struct irq_init_param {
 	uint32_t	irq_id;
 	void		*extra;
 } irq_init_param;
 
-typedef struct irq_desc {
+struct irq_desc {
 	uint32_t	irq_id;
 	void		*extra;
 } irq_desc;
