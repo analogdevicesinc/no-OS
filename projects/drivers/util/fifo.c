@@ -36,10 +36,19 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <string.h>
 #include <stdlib.h>
 #include "fifo.h"
 #include "error.h"
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 /**
  * @brief Create new fifo element
@@ -49,19 +58,19 @@
  */
 static struct fifo * fifo_new_element(char *buff, uint32_t len)
 {
-    struct fifo *q = calloc(1, sizeof(struct fifo));
-    if (!q)
-        return NULL;
+	struct fifo *q = calloc(1, sizeof(struct fifo));
+	if (!q)
+		return NULL;
 
-    q->len = len;
-    q->data = calloc(1, len);
-    if (!(q->data)) {
-    	free(q);
-    	return NULL;
-    }
-    memcpy(q->data, buff, len);
+	q->len = len;
+	q->data = calloc(1, len);
+	if (!(q->data)) {
+		free(q);
+		return NULL;
+	}
+	memcpy(q->data, buff, len);
 
-    return q;
+	return q;
 }
 
 /**
@@ -71,13 +80,13 @@ static struct fifo * fifo_new_element(char *buff, uint32_t len)
  */
 static struct fifo *fifo_get_last(struct fifo *p_fifo)
 {
-    if(p_fifo == NULL)
-        return NULL;
-    while (p_fifo->next) {
-        p_fifo = p_fifo->next;
-    }
+	if(p_fifo == NULL)
+		return NULL;
+	while (p_fifo->next) {
+		p_fifo = p_fifo->next;
+	}
 
-    return p_fifo;
+	return p_fifo;
 }
 
 /**
@@ -91,22 +100,21 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
 {
 	struct fifo *p, *q;
 
-    if (len <= 0)
-    	return FAILURE;
+	if (len <= 0)
+		return FAILURE;
 
-    q = fifo_new_element(buff, len);
-    if (!q)
-    	return FAILURE;
+	q = fifo_new_element(buff, len);
+	if (!q)
+		return FAILURE;
 
-    if (!(*p_fifo)) {
-    	*p_fifo = q;
-    }
-    else {
-    	p = fifo_get_last(*p_fifo);
-    	p->next = q;
-    }
+	if (!(*p_fifo)) {
+		*p_fifo = q;
+	} else {
+		p = fifo_get_last(*p_fifo);
+		p->next = q;
+	}
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -116,21 +124,17 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
  */
 struct fifo * fifo_remove_head(struct fifo *p_fifo)
 {
-    struct fifo *p = p_fifo;
+	struct fifo *p = p_fifo;
 
-    if (p_fifo != NULL) {
-        p_fifo = p_fifo->next;
-        free(p->data);
-        p->len = 0;
-        p->next = NULL;
-        p->data = NULL;
-        free(p);
-        p = NULL;
-    }
+	if (p_fifo != NULL) {
+		p_fifo = p_fifo->next;
+		free(p->data);
+		p->len = 0;
+		p->next = NULL;
+		p->data = NULL;
+		free(p);
+		p = NULL;
+	}
 
-    return p_fifo;
+	return p_fifo;
 }
-
-
-
-
