@@ -47,6 +47,7 @@
 #include "util.h"
 #include "platform_drivers.h"
 #include "clk_axi_clkgen.h"
+#include "xil_io.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
