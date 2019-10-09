@@ -37,13 +37,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <string.h>
-#include <errno.h>
 #include <stdlib.h>
 #include "fifo.h"
+#include "error.h"
 
-/***************************************************************************//**
- * @brief fifo_new_element
-*******************************************************************************/
+/**
+ * @brief Create new fifo element
+ * @param buff - Data to be saved in fifo.
+ * @param len - Length of the data.
+ * @return fifo element in case of success, NULL otherwise
+ */
 static struct fifo * fifo_new_element(char *buff, uint32_t len)
 {
     struct fifo *q = calloc(1, sizeof(struct fifo));
@@ -61,9 +64,11 @@ static struct fifo * fifo_new_element(char *buff, uint32_t len)
     return q;
 }
 
-/***************************************************************************//**
- * @brief fifo_get_last
-*******************************************************************************/
+/**
+ * @brief Get last element in fifo
+ * @param p_fifo - pointer to fifo
+ * @return fifo last element if exists, NULL otherwise
+ */
 static struct fifo *fifo_get_last(struct fifo *p_fifo)
 {
     if(p_fifo == NULL)
@@ -75,19 +80,23 @@ static struct fifo *fifo_get_last(struct fifo *p_fifo)
     return p_fifo;
 }
 
-/***************************************************************************//**
- * @brief fifo_insert_tail
-*******************************************************************************/
+/**
+ * @brief Insert element to fifo, in the last position.
+ * @param pfifo - Pointer to fifo.
+ * @param buff - Data to be saved in fifo.
+ * @param len - Length of the data.
+ * @return SUCCESS in case of success, FAILURE otherwise
+ */
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
 {
 	struct fifo *p, *q;
 
     if (len <= 0)
-    	return 0;
+    	return FAILURE;
 
     q = fifo_new_element(buff, len);
     if (!q)
-    	return -ENOMEM;
+    	return FAILURE;
 
     if (!(*p_fifo)) {
     	*p_fifo = q;
@@ -97,12 +106,14 @@ int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len)
     	p->next = q;
     }
 
-    return len;
+    return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief fifo_remove_head
-*******************************************************************************/
+/**
+ * @brief Remove fifo head
+ * @param pfifo - Pointer to fifo.
+ * @return next element in fifo if exists, NULL otherwise.
+ */
 struct fifo * fifo_remove_head(struct fifo *p_fifo)
 {
     struct fifo *p = p_fifo;

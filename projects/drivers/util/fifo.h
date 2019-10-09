@@ -48,7 +48,10 @@ struct fifo {
     uint16_t index;
 };
 
+/* Insert element to fifo tail. */
 int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
+
+/* Remove fifo head. */
 struct fifo * fifo_remove_head(struct fifo *p_fifo);
 
 #endif /* FIFO_H_ */
