@@ -8,3 +8,4 @@ sw.elf
 xsct.log
 RemoteSystemsTempFiles
 build
+*.orig
