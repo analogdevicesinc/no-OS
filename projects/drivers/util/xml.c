@@ -49,8 +49,8 @@
  * @param *value attribute value
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *value) {
-    *attribute = calloc(1, sizeof(xml_attribute));
+ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name, const char *value) {
+    *attribute = calloc(1, sizeof(struct xml_attribute));
     if (!(*attribute))
         return FAILURE;
 
@@ -78,14 +78,14 @@ ssize_t xml_create_attribute(xml_attribute **attribute, char *name, const char *
  * @param *attribute attribute
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_add_attribute(xml_node *node, xml_attribute *attribute) {
+ssize_t xml_add_attribute(struct xml_node *node, struct xml_attribute *attribute) {
     if (!node->attributes) {
-        node->attributes = calloc(1, sizeof(xml_attribute*));
+        node->attributes = calloc(1, sizeof(struct xml_attribute*));
         if (!node->attributes)
             return FAILURE;
     }
     else {
-        xml_attribute **buff = realloc(node->attributes, (node->attr_cnt + 1) * sizeof(xml_attribute*));
+    	struct xml_attribute **buff = realloc(node->attributes, (node->attr_cnt + 1) * sizeof(struct xml_attribute*));
         if (!buff)
             return FAILURE;
         node->attributes = buff;
@@ -102,7 +102,7 @@ ssize_t xml_add_attribute(xml_node *node, xml_attribute *attribute) {
  * @param *name
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_node(xml_node **node, char *name) {
+ssize_t xml_create_node(struct xml_node **node, char *name) {
     *node = calloc(1, sizeof(xml_node));
     if (!(*node))
         return FAILURE;
@@ -122,14 +122,14 @@ ssize_t xml_create_node(xml_node **node, char *name) {
  * @param *node_child
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child) {
+ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child) {
     if (!node_parent->children) {
-        node_parent->children = calloc(1, sizeof(xml_node*));
+        node_parent->children = calloc(1, sizeof(struct xml_node*));
         if (!node_parent->children)
             return FAILURE;
     }
     else {
-        struct xml_node **buff = realloc(node_parent->children, (node_parent->children_cnt + 1) * sizeof(xml_node*));
+        struct xml_node **buff = realloc(node_parent->children, (node_parent->children_cnt + 1) * sizeof(struct xml_node*));
         if (!buff)
             return FAILURE;
         node_parent->children = buff;
@@ -145,7 +145,7 @@ ssize_t xml_add_node(xml_node *node_parent, xml_node *node_child) {
  * @param *attribute
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_attribute(xml_attribute **attribute) {
+ssize_t xml_delete_attribute(struct xml_attribute **attribute) {
     free((*attribute)->name);
     free((*attribute)->value);
     (*attribute)->name = NULL;
@@ -161,7 +161,7 @@ ssize_t xml_delete_attribute(xml_attribute **attribute) {
  * @param *node
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_node(xml_node **node) {
+ssize_t xml_delete_node(struct xml_node **node) {
     uint8_t i;
 
     free((*node)->name);
@@ -188,7 +188,7 @@ ssize_t xml_delete_node(xml_node **node) {
  * @param *node pointer to parent node, that contains the xml tree
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_document(xml_document **document, xml_node *node) {
+ssize_t xml_create_document(struct xml_document **document, struct xml_node *node) {
     uint8_t i;
     ssize_t ret;
 
@@ -245,7 +245,7 @@ ssize_t xml_create_document(xml_document **document, xml_node *node) {
  * @param **document pointer ti document
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_document(xml_document **document) {
+ssize_t xml_delete_document(struct xml_document **document) {
     free((*document)->buff);
     (*document)->buff = NULL;
     free((*document));

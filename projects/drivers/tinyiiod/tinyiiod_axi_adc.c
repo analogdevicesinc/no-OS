@@ -299,11 +299,11 @@ static attribute_map adc_attr_map[] = {
 
 ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no) {
     char buff[256];
-    xml_node *device = NULL;
-    xml_node *channel = NULL;
-    xml_node *attribute = NULL;
-    xml_attribute *att = NULL;
-    xml_document *document = NULL;
+    struct xml_node *device = NULL;
+    struct xml_node *channel = NULL;
+    struct xml_node *attribute = NULL;
+    struct xml_attribute *att = NULL;
+    struct xml_document *document = NULL;
     ssize_t ret;
 
     ret = xml_create_node(&device, "device");
