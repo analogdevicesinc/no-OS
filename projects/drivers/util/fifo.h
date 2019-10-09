@@ -49,11 +49,10 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-struct fifo {
-	struct fifo *next;
+struct fifo_element {
+	struct fifo_element *next;
 	char *data;
-	uint16_t len;
-	uint16_t index;
+	uint32_t len;
 };
 
 /******************************************************************************/
@@ -61,9 +60,9 @@ struct fifo {
 /******************************************************************************/
 
 /* Insert element to fifo tail. */
-int32_t fifo_insert_tail(struct fifo **p_fifo, char *buff, int32_t len);
+int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len);
 
 /* Remove fifo head. */
-struct fifo * fifo_remove_head(struct fifo *p_fifo);
+struct fifo_element *fifo_remove(struct fifo_element *p_fifo);
 
 #endif /* FIFO_H_ */

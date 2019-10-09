@@ -58,7 +58,7 @@ static void serial_handler(void *call_back_ref, u32 event, uint32_t data_len);
 static void uart_receive (struct uart_desc *desc) {
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	if (bytes_reveived > 0) {
-		fifo_insert_tail(&xil_uart_desc->fifo, buff, bytes_reveived);
+		fifo_insert(&xil_uart_desc->fifo, buff, bytes_reveived);
 		bytes_reveived = 0;
 		XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
 	}
@@ -72,11 +72,12 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 		uart_receive(desc);
 	}
 
-	*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo->index];
-	xil_uart_desc->fifo->index++;
+	*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
+	xil_uart_desc->fifo_read_offset++;
 
-	if (xil_uart_desc->fifo->len - xil_uart_desc->fifo->index <= 0) {
-		xil_uart_desc->fifo = fifo_remove_head(xil_uart_desc->fifo);
+	if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
+		xil_uart_desc->fifo_read_offset = 0;
+		xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
 	}
 	return SUCCESS;
 }

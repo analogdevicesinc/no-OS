@@ -85,7 +85,8 @@ typedef struct xil_uart_desc {
 	uint32_t		irq_id;
 	struct irq_desc	*irq_desc;
 	XUartPs			*instance;
-	struct fifo		*fifo;
+	struct fifo_element		*fifo;
+	uint32_t fifo_read_offset;
 } xil_uart_desc;
 
 typedef struct xil_timer_init_param {
