@@ -62,6 +62,7 @@
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
+#include "axi_io.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -158,6 +159,8 @@ int main(void)
 		1,
 		rx_div40_rate_hz / 1000,
 		rx_lane_rate_khz,
+		axi_io_read,
+		axi_io_write
 	};
 	struct jesd204_tx_init tx_jesd_init = {
 		"tx_jesd",
@@ -172,6 +175,8 @@ int main(void)
 		1,
 		tx_div40_rate_hz / 1000,
 		tx_lane_rate_khz,
+		axi_io_read,
+		axi_io_write
 	};
 
 	struct jesd204_rx_init rx_os_jesd_init = {
@@ -182,6 +187,8 @@ int main(void)
 		1,
 		rx_os_div40_rate_hz / 1000,
 		rx_os_lane_rate_khz,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_jesd204_rx *rx_jesd;
 	struct axi_jesd204_tx *tx_jesd;
@@ -250,12 +257,16 @@ int main(void)
 		"tx_dac",
 		TX_CORE_BASEADDR,
 		4,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_dac *tx_dac;
 	struct axi_adc_init rx_adc_init = {
 		"rx_adc",
 		RX_CORE_BASEADDR,
 		4,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_adc *rx_adc;
 	struct axi_dmac_init rx_dmac_init = {
@@ -263,6 +274,8 @@ int main(void)
 		RX_DMA_BASEADDR,
 		DMA_DEV_TO_MEM,
 		0,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_dmac *rx_dmac;
 #ifdef DAC_DMA_EXAMPLE
@@ -271,6 +284,8 @@ int main(void)
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
 		DMA_LAST,
+		axi_io_read,
+		axi_io_write
 	};
 	struct axi_dmac *tx_dmac;
 	extern const uint32_t sine_lut_iq[1024];
