@@ -57,27 +57,29 @@
  * @param *value attribute value
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name, const char *value) {
-    *attribute = calloc(1, sizeof(struct xml_attribute));
-    if (!(*attribute))
-        return FAILURE;
+ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name,
+			     const char *value)
+{
+	*attribute = calloc(1, sizeof(struct xml_attribute));
+	if (!(*attribute))
+		return FAILURE;
 
-    (*attribute)->name = calloc(1, strlen(name) + 1);
-    if (!(*attribute)->name) {
-    	free(*attribute);
-        return FAILURE;
-    }
-    strcpy((*attribute)->name, name);
+	(*attribute)->name = calloc(1, strlen(name) + 1);
+	if (!(*attribute)->name) {
+		free(*attribute);
+		return FAILURE;
+	}
+	strcpy((*attribute)->name, name);
 
-    (*attribute)->value = calloc(1, strlen(value) + 1);
-    if (!(*attribute)->value) {
-    	free((*attribute)->name);
-    	free(*attribute);
-        return FAILURE;
-    }
-    strcpy((*attribute)->value, value);
+	(*attribute)->value = calloc(1, strlen(value) + 1);
+	if (!(*attribute)->value) {
+		free((*attribute)->name);
+		free(*attribute);
+		return FAILURE;
+	}
+	strcpy((*attribute)->value, value);
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -86,22 +88,24 @@ ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name, const
  * @param *attribute attribute
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_add_attribute(struct xml_node *node, struct xml_attribute *attribute) {
-    if (!node->attributes) {
-        node->attributes = calloc(1, sizeof(struct xml_attribute*));
-        if (!node->attributes)
-            return FAILURE;
-    }
-    else {
-    	struct xml_attribute **buff = realloc(node->attributes, (node->attr_cnt + 1) * sizeof(struct xml_attribute*));
-        if (!buff)
-            return FAILURE;
-        node->attributes = buff;
-    }
-    node->attributes[node->attr_cnt] = attribute;
-    node->attr_cnt++;
+ssize_t xml_add_attribute(struct xml_node *node,
+			  struct xml_attribute *attribute)
+{
+	if (!node->attributes) {
+		node->attributes = calloc(1, sizeof(struct xml_attribute*));
+		if (!node->attributes)
+			return FAILURE;
+	} else {
+		struct xml_attribute **buff = realloc(node->attributes,
+						      (node->attr_cnt + 1) * sizeof(struct xml_attribute*));
+		if (!buff)
+			return FAILURE;
+		node->attributes = buff;
+	}
+	node->attributes[node->attr_cnt] = attribute;
+	node->attr_cnt++;
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -110,18 +114,19 @@ ssize_t xml_add_attribute(struct xml_node *node, struct xml_attribute *attribute
  * @param *name
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_node(struct xml_node **node, char *name) {
-    *node = calloc(1, sizeof(xml_node));
-    if (!(*node))
-        return FAILURE;
-    (*node)->name = calloc(1, strlen(name) + 1);
-    if (!(*node)->name) {
-    	free(*node);
-        return FAILURE;
-    }
-    strcpy((*node)->name, name);
+ssize_t xml_create_node(struct xml_node **node, char *name)
+{
+	*node = calloc(1, sizeof(xml_node));
+	if (!(*node))
+		return FAILURE;
+	(*node)->name = calloc(1, strlen(name) + 1);
+	if (!(*node)->name) {
+		free(*node);
+		return FAILURE;
+	}
+	strcpy((*node)->name, name);
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -130,22 +135,23 @@ ssize_t xml_create_node(struct xml_node **node, char *name) {
  * @param *node_child
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child) {
-    if (!node_parent->children) {
-        node_parent->children = calloc(1, sizeof(struct xml_node*));
-        if (!node_parent->children)
-            return FAILURE;
-    }
-    else {
-        struct xml_node **buff = realloc(node_parent->children, (node_parent->children_cnt + 1) * sizeof(struct xml_node*));
-        if (!buff)
-            return FAILURE;
-        node_parent->children = buff;
-    }
-    node_parent->children[node_parent->children_cnt] = node_child;
-    node_parent->children_cnt++;
+ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child)
+{
+	if (!node_parent->children) {
+		node_parent->children = calloc(1, sizeof(struct xml_node*));
+		if (!node_parent->children)
+			return FAILURE;
+	} else {
+		struct xml_node **buff = realloc(node_parent->children,
+						 (node_parent->children_cnt + 1) * sizeof(struct xml_node*));
+		if (!buff)
+			return FAILURE;
+		node_parent->children = buff;
+	}
+	node_parent->children[node_parent->children_cnt] = node_child;
+	node_parent->children_cnt++;
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -153,15 +159,16 @@ ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child) 
  * @param *attribute
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_attribute(struct xml_attribute **attribute) {
-    free((*attribute)->name);
-    free((*attribute)->value);
-    (*attribute)->name = NULL;
-    (*attribute)->value = NULL;
-    free(*attribute);
-    *attribute = NULL;
+ssize_t xml_delete_attribute(struct xml_attribute **attribute)
+{
+	free((*attribute)->name);
+	free((*attribute)->value);
+	(*attribute)->name = NULL;
+	(*attribute)->value = NULL;
+	free(*attribute);
+	*attribute = NULL;
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -169,25 +176,26 @@ ssize_t xml_delete_attribute(struct xml_attribute **attribute) {
  * @param *node
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_node(struct xml_node **node) {
-    uint8_t i;
+ssize_t xml_delete_node(struct xml_node **node)
+{
+	uint8_t i;
 
-    free((*node)->name);
-    (*node)->name = NULL;
-    for (i = 0; i < (*node)->attr_cnt; i++) {
-        xml_delete_attribute(&(*node)->attributes[i]);
-    }
-    free((*node)->attributes);
-    (*node)->attributes = NULL;
-    (*node)->attr_cnt = 0;
-    for (i = 0; i < (*node)->children_cnt; i++) {
-        xml_delete_node(&(*node)->children[i]);
-    }
-    free((*node)->children);
-    (*node)->children = NULL;
-    (*node)->children_cnt = 0;
+	free((*node)->name);
+	(*node)->name = NULL;
+	for (i = 0; i < (*node)->attr_cnt; i++) {
+		xml_delete_attribute(&(*node)->attributes[i]);
+	}
+	free((*node)->attributes);
+	(*node)->attributes = NULL;
+	(*node)->attr_cnt = 0;
+	for (i = 0; i < (*node)->children_cnt; i++) {
+		xml_delete_node(&(*node)->children[i]);
+	}
+	free((*node)->children);
+	(*node)->children = NULL;
+	(*node)->children_cnt = 0;
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -196,56 +204,59 @@ ssize_t xml_delete_node(struct xml_node **node) {
  * @param *node pointer to parent node, that contains the xml tree
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_create_document(struct xml_document **document, struct xml_node *node) {
-    uint8_t i;
-    ssize_t ret;
+ssize_t xml_create_document(struct xml_document **document,
+			    struct xml_node *node)
+{
+	uint8_t i;
+	ssize_t ret;
 
-    const uint16_t buff_increments = 1024;
-    if (!(*document)) {
-        *document = calloc(1, sizeof(xml_document));
-        if (!(*document))
-            return FAILURE;
-        (*document)->buff = calloc(1, buff_increments * 2);
-        if (!(*document)->buff) {
-        	free(*document);
-            return FAILURE;
-        }
-        (*document)->size = buff_increments * 2;
-        (*document)->index = 0;
-    }
+	const uint16_t buff_increments = 1024;
+	if (!(*document)) {
+		*document = calloc(1, sizeof(xml_document));
+		if (!(*document))
+			return FAILURE;
+		(*document)->buff = calloc(1, buff_increments * 2);
+		if (!(*document)->buff) {
+			free(*document);
+			return FAILURE;
+		}
+		(*document)->size = buff_increments * 2;
+		(*document)->index = 0;
+	}
 
-    /* increase memory */
-    if ((*document)->index > (*document)->size - buff_increments)
-    {
-        char *buff = realloc((*document)->buff, (*document)->size + buff_increments);
-        if (!buff) {
-        	free((*document)->buff);
-        	free(*document);
-            return FAILURE;
-        }
-        (*document)->buff = buff;
-        (*document)->size += buff_increments;
-    }
+	/* increase memory */
+	if ((*document)->index > (*document)->size - buff_increments) {
+		char *buff = realloc((*document)->buff, (*document)->size + buff_increments);
+		if (!buff) {
+			free((*document)->buff);
+			free(*document);
+			return FAILURE;
+		}
+		(*document)->buff = buff;
+		(*document)->size += buff_increments;
+	}
 
-    (*document)->index += sprintf(&(*document)->buff[(*document)->index], "<%s ", node->name);
-    for (i = 0; i < node->attr_cnt; i++) {
-        (*document)->index += sprintf(&(*document)->buff[(*document)->index], "%s=\"%s\" ", node->attributes[i]->name, node->attributes[i]->value);
-    }
-    if (node->children_cnt == 0)
-    {
-        (*document)->index += sprintf(&(*document)->buff[(*document)->index], "/>\n");
-        return SUCCESS;
-    }
+	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "<%s ",
+				      node->name);
+	for (i = 0; i < node->attr_cnt; i++) {
+		(*document)->index += sprintf(&(*document)->buff[(*document)->index],
+					      "%s=\"%s\" ", node->attributes[i]->name, node->attributes[i]->value);
+	}
+	if (node->children_cnt == 0) {
+		(*document)->index += sprintf(&(*document)->buff[(*document)->index], "/>\n");
+		return SUCCESS;
+	}
 
-    (*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
-    for (i = 0; i < node->children_cnt; i++) {
-    	ret = xml_create_document(document, node->children[i]);
-    	if (ret < 0)
-    		return ret;
-    }
-    (*document)->index += sprintf(&(*document)->buff[(*document)->index], "</%s>\n", node->name);
+	(*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
+	for (i = 0; i < node->children_cnt; i++) {
+		ret = xml_create_document(document, node->children[i]);
+		if (ret < 0)
+			return ret;
+	}
+	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "</%s>\n",
+				      node->name);
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 /**
@@ -253,11 +264,12 @@ ssize_t xml_create_document(struct xml_document **document, struct xml_node *nod
  * @param **document pointer ti document
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_document(struct xml_document **document) {
-    free((*document)->buff);
-    (*document)->buff = NULL;
-    free((*document));
-    *document = NULL;
+ssize_t xml_delete_document(struct xml_document **document)
+{
+	free((*document)->buff);
+	(*document)->buff = NULL;
+	free((*document));
+	*document = NULL;
 
-    return SUCCESS;
+	return SUCCESS;
 }

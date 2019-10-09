@@ -51,22 +51,22 @@
 /******************************************************************************/
 
 struct xml_attribute {
-    char *name;
-    char *value;
+	char *name;
+	char *value;
 } xml_attribute;
 
 struct xml_node {
-    char *name;
-    struct xml_attribute **attributes;
-    uint16_t attr_cnt;
-    struct xml_node **children;
-    uint16_t children_cnt;
+	char *name;
+	struct xml_attribute **attributes;
+	uint16_t attr_cnt;
+	struct xml_node **children;
+	uint16_t children_cnt;
 } xml_node;
 
 struct xml_document {
-    char *buff;
-    uint32_t size;
-    uint32_t index;
+	char *buff;
+	uint32_t size;
+	uint32_t index;
 } xml_document;
 
 /******************************************************************************/
@@ -74,13 +74,15 @@ struct xml_document {
 /******************************************************************************/
 
 /* Create xml attribute. */
-ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name, const char *value);
+ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name,
+			     const char *value);
 
 /* Delete xml attribute. */
 ssize_t xml_delete_attribute(struct xml_attribute **attribute);
 
 /* Add xml attribute to node. */
-ssize_t xml_add_attribute(struct xml_node *node, struct xml_attribute *attribute);
+ssize_t xml_add_attribute(struct xml_node *node,
+			  struct xml_attribute *attribute);
 
 /* Create xml node. */
 ssize_t xml_create_node(struct xml_node **node, char *name);
@@ -92,7 +94,8 @@ ssize_t xml_delete_node(struct xml_node **node);
 ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child);
 
 /* Create xml document. */
-ssize_t xml_create_document(struct xml_document **document, struct xml_node *node);
+ssize_t xml_create_document(struct xml_document **document,
+			    struct xml_node *node);
 
 /* Delete xml document. */
 ssize_t xml_delete_document(struct xml_document **document);
