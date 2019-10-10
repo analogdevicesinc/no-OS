@@ -65,7 +65,6 @@ struct xml_node {
 
 struct xml_document {
 	char *buff;
-	uint32_t size;
 	uint32_t index;
 } xml_document;
 

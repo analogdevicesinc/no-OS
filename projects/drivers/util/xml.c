@@ -163,10 +163,7 @@ ssize_t xml_delete_attribute(struct xml_attribute **attribute)
 {
 	free((*attribute)->name);
 	free((*attribute)->value);
-	(*attribute)->name = NULL;
-	(*attribute)->value = NULL;
 	free(*attribute);
-	*attribute = NULL;
 
 	return SUCCESS;
 }
@@ -178,22 +175,17 @@ ssize_t xml_delete_attribute(struct xml_attribute **attribute)
  */
 ssize_t xml_delete_node(struct xml_node **node)
 {
-	uint8_t i;
-
-	free((*node)->name);
-	(*node)->name = NULL;
+	uint16_t i;
 	for (i = 0; i < (*node)->attr_cnt; i++) {
 		xml_delete_attribute(&(*node)->attributes[i]);
 	}
-	free((*node)->attributes);
-	(*node)->attributes = NULL;
-	(*node)->attr_cnt = 0;
 	for (i = 0; i < (*node)->children_cnt; i++) {
 		xml_delete_node(&(*node)->children[i]);
 	}
+	free((*node)->name);
+	free((*node)->attributes);
 	free((*node)->children);
-	(*node)->children = NULL;
-	(*node)->children_cnt = 0;
+	free(*node);
 
 	return SUCCESS;
 }
@@ -209,54 +201,70 @@ ssize_t xml_create_document(struct xml_document **document,
 {
 	uint8_t i;
 	ssize_t ret;
+	uint32_t len;
 
-	const uint16_t buff_increments = 1024;
 	if (!(*document)) {
 		*document = calloc(1, sizeof(xml_document));
 		if (!(*document))
 			return FAILURE;
-		(*document)->buff = calloc(1, buff_increments * 2);
-		if (!(*document)->buff) {
-			free(*document);
-			return FAILURE;
-		}
-		(*document)->size = buff_increments * 2;
-		(*document)->index = 0;
 	}
 
-	/* increase memory */
-	if ((*document)->index > (*document)->size - buff_increments) {
-		char *buff = realloc((*document)->buff, (*document)->size + buff_increments);
-		if (!buff) {
-			free((*document)->buff);
-			free(*document);
-			return FAILURE;
-		}
-		(*document)->buff = buff;
-		(*document)->size += buff_increments;
-	}
-
+	len = strlen(node->name) + 3;
+	char *buff = realloc((*document)->buff, (*document)->index + len);
+	if (!buff)
+		goto error;
+	(*document)->buff = buff;
 	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "<%s ",
 				      node->name);
+
 	for (i = 0; i < node->attr_cnt; i++) {
+		len = strlen(node->attributes[i]->name) + strlen(node->attributes[i]->value) +
+		      5;
+		buff = realloc((*document)->buff, (*document)->index + len);
+		if (!buff)
+			goto error;
+		(*document)->buff = buff;
 		(*document)->index += sprintf(&(*document)->buff[(*document)->index],
 					      "%s=\"%s\" ", node->attributes[i]->name, node->attributes[i]->value);
 	}
+
 	if (node->children_cnt == 0) {
+		len = 4;
+		buff = realloc((*document)->buff, (*document)->index + len);
+		if (!buff)
+			goto error;
+		(*document)->buff = buff;
 		(*document)->index += sprintf(&(*document)->buff[(*document)->index], "/>\n");
 		return SUCCESS;
 	}
-
+	len = 3;
+	buff = realloc((*document)->buff, (*document)->index + len);
+	if (!buff)
+		goto error;
+	(*document)->buff = buff;
 	(*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
+
 	for (i = 0; i < node->children_cnt; i++) {
 		ret = xml_create_document(document, node->children[i]);
 		if (ret < 0)
 			return ret;
 	}
+
+	len = strlen(node->name) + 5;
+	buff = realloc((*document)->buff, (*document)->index + len);
+	if (!buff)
+		goto error;
+	(*document)->buff = buff;
 	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "</%s>\n",
 				      node->name);
 
 	return SUCCESS;
+
+error:
+	free((*document)->buff);
+	free(*document);
+
+	return FAILURE;
 }
 
 /**
@@ -267,9 +275,7 @@ ssize_t xml_create_document(struct xml_document **document,
 ssize_t xml_delete_document(struct xml_document **document)
 {
 	free((*document)->buff);
-	(*document)->buff = NULL;
 	free((*document));
-	*document = NULL;
 
 	return SUCCESS;
 }
