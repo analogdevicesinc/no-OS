@@ -116,7 +116,7 @@ ssize_t xml_add_attribute(struct xml_node *node,
  */
 ssize_t xml_create_node(struct xml_node **node, char *name)
 {
-	*node = calloc(1, sizeof(xml_node));
+	*node = calloc(1, sizeof(struct xml_node));
 	if (!(*node))
 		return FAILURE;
 	(*node)->name = calloc(1, strlen(name) + 1);
@@ -159,11 +159,11 @@ ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child)
  * @param *attribute
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_attribute(struct xml_attribute **attribute)
+ssize_t xml_delete_attribute(struct xml_attribute *attribute)
 {
-	free((*attribute)->name);
-	free((*attribute)->value);
-	free(*attribute);
+	free(attribute->name);
+	free(attribute->value);
+	free(attribute);
 
 	return SUCCESS;
 }
@@ -173,19 +173,19 @@ ssize_t xml_delete_attribute(struct xml_attribute **attribute)
  * @param *node
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_node(struct xml_node **node)
+ssize_t xml_delete_node(struct xml_node *node)
 {
 	uint16_t i;
-	for (i = 0; i < (*node)->attr_cnt; i++) {
-		xml_delete_attribute(&(*node)->attributes[i]);
+	for (i = 0; i < node->attr_cnt; i++) {
+		xml_delete_attribute(node->attributes[i]);
 	}
-	for (i = 0; i < (*node)->children_cnt; i++) {
-		xml_delete_node(&(*node)->children[i]);
+	for (i = 0; i < node->children_cnt; i++) {
+		xml_delete_node(node->children[i]);
 	}
-	free((*node)->name);
-	free((*node)->attributes);
-	free((*node)->children);
-	free(*node);
+	free(node->name);
+	free(node->attributes);
+	free(node->children);
+	free(node);
 
 	return SUCCESS;
 }
@@ -204,7 +204,7 @@ ssize_t xml_create_document(struct xml_document **document,
 	uint32_t len;
 
 	if (!(*document)) {
-		*document = calloc(1, sizeof(xml_document));
+		*document = calloc(1, sizeof(struct xml_document));
 		if (!(*document))
 			return FAILURE;
 	}
@@ -269,13 +269,13 @@ error:
 
 /**
  * delete xml document
- * @param **document pointer ti document
+ * @param **document pointer to document
  * @return SUCCESS in case of success or negative value otherwise
  */
-ssize_t xml_delete_document(struct xml_document **document)
+ssize_t xml_delete_document(struct xml_document *document)
 {
-	free((*document)->buff);
-	free((*document));
+	free(document->buff);
+	free(document);
 
 	return SUCCESS;
 }
