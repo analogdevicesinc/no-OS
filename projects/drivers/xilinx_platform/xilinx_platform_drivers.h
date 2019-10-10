@@ -73,7 +73,10 @@ typedef struct xil_irq_init_param {
 } xil_irq_init_param;
 
 struct xil_irq_desc {
+#ifdef _XPARAMETERS_PS_H_
 	XScuGic 		*gic;
+#else
+#endif
 } xil_irq_desc;
 
 typedef struct xil_uart_init_param {
@@ -84,9 +87,12 @@ typedef struct xil_uart_init_param {
 typedef struct xil_uart_desc {
 	uint32_t		irq_id;
 	struct irq_desc	*irq_desc;
-	XUartPs			*instance;
 	struct fifo_element		*fifo;
 	uint32_t fifo_read_offset;
+#ifdef _XPARAMETERS_PS_H_
+	XUartPs			*instance;
+#else
+#endif
 } xil_uart_desc;
 
 typedef struct xil_timer_init_param {
@@ -97,7 +103,10 @@ typedef struct xil_timer_init_param {
 typedef struct xil_timer_desc {
 	uint32_t		irq_id;
 	struct irq_desc	*irq_desc;
+#ifdef _XPARAMETERS_PS_H_
 	XScuTimer			*instance;
+#else
+#endif
 } xil_timer_desc;
 
 typedef enum i2c_type {
