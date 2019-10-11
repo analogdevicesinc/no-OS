@@ -108,7 +108,7 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 		      ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
 	IOWR_32DIRECT(SPI_BASEADDR,
 		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4),
-		      desc->chip_select);
+		      (0x1 << (desc->chip_select)));
 	for (i = 0; i < bytes_number; i++) {
 		while ((IORD_32DIRECT(SPI_BASEADDR,
 				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
