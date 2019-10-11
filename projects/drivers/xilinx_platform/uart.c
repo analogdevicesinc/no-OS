@@ -37,39 +37,45 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include <stdio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include "error.h"
 #include "fifo.h"
-#include "xuartps.h"
 #include "uart.h"
 #include "irq.h"
 #include "xilinx_platform_drivers.h"
 
 #define BUFF_LENGTH 256
 static char buff[BUFF_LENGTH];
-static volatile uint32_t bytes_reveived = 0;
+static uint32_t bytes_reveived = 0;
 static int32_t total_error_count;
 
 static int32_t uart_irq_init(struct uart_desc *descriptor);
 
 static void serial_handler(void *call_back_ref, u32 event, uint32_t data_len);
 
-static void uart_receive (struct uart_desc *desc) {
+static int32_t uart_receive (struct uart_desc *desc) {
+	int32_t ret;
 	xil_uart_desc *xil_uart_desc = desc->extra;
 	if (bytes_reveived > 0) {
-		fifo_insert(&xil_uart_desc->fifo, buff, bytes_reveived);
+		ret = fifo_insert(&xil_uart_desc->fifo, buff, bytes_reveived);
+		if (ret < 0)
+			return ret;
 		bytes_reveived = 0;
 		XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
 	}
+	return SUCCESS;
 }
 
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
 	xil_uart_desc *xil_uart_desc = desc->extra;
+	int32_t ret;
+
 	while (xil_uart_desc->fifo == NULL) {
 		/* nothing in fifo, wait until something is received */
-		uart_receive(desc);
+		ret = uart_receive(desc);
+		if (ret < 0)
+			return ret;
 	}
 
 	*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
@@ -79,6 +85,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 		xil_uart_desc->fifo_read_offset = 0;
 		xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
 	}
+
 	return SUCCESS;
 }
 
