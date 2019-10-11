@@ -54,8 +54,6 @@
 /******************************************************************************/
 #ifdef ALTERA_PLATFORM
 #define GPIO_OFFSET		0
-#define CLK_CS			1
-#define ADRV_CS			2
 
 #define ADRV_RESETB		GPIO_OFFSET + 52
 #define ADRV_SYSREF_REQ	GPIO_OFFSET + 58
@@ -103,9 +101,6 @@
 #define GPIO_OFFSET		54
 #endif
 
-#define CLK_CS			0
-#define ADRV_CS			1
-
 #define ADRV_RESETB		GPIO_OFFSET + 52
 #define ADRV_SYSREF_REQ	GPIO_OFFSET + 58
 #define CLK_RESETB		GPIO_OFFSET + 59
@@ -138,4 +133,8 @@
 
 #define DDR_MEM_BASEADDR		XPAR_DDR_MEM_BASEADDR
 #endif
+
+#define CLK_CS			0
+#define ADRV_CS			1
+
 #endif
