@@ -1,7 +1,0 @@
-Windows
-
-C:\Xilinx\SDK\<version>\bin\xsct.bat capture.tcl
-
-Linux:
-
-/opt/Xilinx/SDK/<version>/bin/xsct capture.tcl
