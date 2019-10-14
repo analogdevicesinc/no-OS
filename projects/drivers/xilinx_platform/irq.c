@@ -103,7 +103,6 @@ int32_t irq_init(struct irq_desc **desc,
     Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
                                  (Xil_ExceptionHandler) XScuGic_InterruptHandler,
 								 gic);
-
     *desc = descriptor;
 
     return SUCCESS;
@@ -169,17 +168,25 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)
 
 	int32_t status;
 	struct xil_irq_desc *xil_dev = desc->extra;
-    /*
-     * Connect a device driver handler that will be called when an
-     * interrupt for the device occurs, the device driver handler
-     * performs the specific interrupt processing for the device
-     */
 	status = XScuGic_Connect(xil_dev->gic, irq_id,
                              irq_handler,
 							 extra);
     if (status != XST_SUCCESS) {
         return FAILURE;
     }
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Unregisters a generic IRQ handling function.
+ * @param desc - The IRQ descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id) {
+	struct xil_irq_desc *xil_dev = desc->extra;
+	XScuGic_Disconnect(xil_dev->gic, irq_id);
 
 	return SUCCESS;
 }

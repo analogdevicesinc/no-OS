@@ -45,34 +45,30 @@
 #include "irq.h"
 #include "xilinx_platform_drivers.h"
 
-#define BUFF_LENGTH 256
-static char buff[BUFF_LENGTH];
-static volatile uint32_t insert_fifo = 0;
-static volatile uint32_t bytes_reveived = 0;
-static int32_t total_error_count;
-
 static int32_t uart_irq_init(struct uart_desc *descriptor);
-
-static void serial_handler(void *call_back_ref, u32 event, uint32_t data_len);
 
 static int32_t uart_receive (struct uart_desc *desc) {
 	int32_t ret;
-	xil_uart_desc *xil_uart_desc = desc->extra;
-//	if (bytes_reveived > 0) {
-	if (insert_fifo > 0) {
-		ret = fifo_insert(&xil_uart_desc->fifo, buff, bytes_reveived);
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	struct irq_desc	*irq_desc = xil_uart_desc->irq_desc;
+
+	if (xil_uart_desc->insert_fifo > 0) {
+		irq_source_disable(irq_desc, xil_uart_desc->irq_id);
+		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff, xil_uart_desc->bytes_reveived);
 		if (ret < 0)
 			return ret;
-		insert_fifo = 0;
-		bytes_reveived = 0;
-		XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
+		xil_uart_desc->insert_fifo = 0;
+		xil_uart_desc->bytes_reveived = 0;
+		XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff), BUFF_LENGTH);
+		irq_source_enable(irq_desc, xil_uart_desc->irq_id);
 	}
+
 	return SUCCESS;
 }
 
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
-	xil_uart_desc *xil_uart_desc = desc->extra;
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	int32_t ret;
 
 	while (xil_uart_desc->fifo == NULL) {
@@ -134,8 +130,8 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     int32_t status;
     struct uart_desc *descriptor;
     XUartPs_Config *config;
-    xil_uart_init_param *xil_uart_init_param;
-    xil_uart_desc *xil_uart_desc;
+    struct xil_uart_init_param *xil_uart_init_param;
+    struct xil_uart_desc *xil_uart_desc;
 
     descriptor = calloc(1, sizeof(struct uart_desc));
     xil_uart_desc = calloc(1, sizeof(struct xil_uart_desc));
@@ -188,13 +184,13 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     }
     *desc = descriptor;
 
-    XUartPs_Recv(xil_uart_desc->instance, (u8*)buff, BUFF_LENGTH);
+    XUartPs_Recv(xil_uart_desc->instance, (u8*)xil_uart_desc->buff, BUFF_LENGTH);
 
     return SUCCESS;
 }
 
 int32_t uart_remove(struct uart_desc *desc) {
-	xil_uart_desc *xil_uart_desc = desc->extra;
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	free(xil_uart_desc->instance);
 	free(xil_uart_desc);
 	free(desc);
@@ -202,8 +198,9 @@ int32_t uart_remove(struct uart_desc *desc) {
 	return SUCCESS;
 }
 
-void uart_irq_handler(XUartPs *InstancePtr)
+void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 {
+	XUartPs *InstancePtr = xil_uart_desc->instance;
 	u32 IsrStatus;
 	u32 CsrRegister;
 
@@ -226,24 +223,24 @@ void uart_irq_handler(XUartPs *InstancePtr)
 		/* Received data interrupt */
 		//ReceiveDataHandler(InstancePtr);
 
-			if(bytes_reveived != 0)
+			if(xil_uart_desc->bytes_reveived != 0)
 				CsrRegister = 1;
 			CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 						XUARTPS_SR_OFFSET);
-			while((bytes_reveived < BUFF_LENGTH)&&
+			while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
 					(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-				buff[bytes_reveived] =
+				xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
 					XUartPs_ReadReg(InstancePtr->Config.
 						  BaseAddress,
 						  XUARTPS_FIFO_OFFSET);
 
-				bytes_reveived++;
+				xil_uart_desc->bytes_reveived++;
 
 				CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 										XUARTPS_SR_OFFSET);
 			}
-			if(bytes_reveived > 0)
-				insert_fifo = 1;
+			if(xil_uart_desc->bytes_reveived > 0)
+				xil_uart_desc->insert_fifo = 1;
 
 	}
 
@@ -258,24 +255,24 @@ void uart_irq_handler(XUartPs *InstancePtr)
 			(u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK)) != (u32)0) {
 		/* Received Error Status interrupt */
 //		ReceiveErrorHandler(InstancePtr, IsrStatus);
-		if(bytes_reveived != 0)
+		if(xil_uart_desc->bytes_reveived != 0)
 						CsrRegister = 1;
 					CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 								XUARTPS_SR_OFFSET);
-					while((bytes_reveived < BUFF_LENGTH)&&
+					while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
 							(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-						buff[bytes_reveived] =
+						xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
 							XUartPs_ReadReg(InstancePtr->Config.
 								  BaseAddress,
 								  XUARTPS_FIFO_OFFSET);
 
-						bytes_reveived++;
+						xil_uart_desc->bytes_reveived++;
 
 						CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 												XUARTPS_SR_OFFSET);
 					}
-					if(bytes_reveived > 0)
-						insert_fifo = 1;
+					if(xil_uart_desc->bytes_reveived > 0)
+						xil_uart_desc->insert_fifo = 1;
 	}
 
 	if((IsrStatus & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
@@ -287,24 +284,24 @@ void uart_irq_handler(XUartPs *InstancePtr)
 //					insert_fifo = 1;
 //
 //			}
-			if(bytes_reveived != 0)
+			if(xil_uart_desc->bytes_reveived != 0)
 							CsrRegister = 1;
 						CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 									XUARTPS_SR_OFFSET);
-						while((bytes_reveived < BUFF_LENGTH)&&
+						while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
 								(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-							buff[bytes_reveived] =
+							xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
 								XUartPs_ReadReg(InstancePtr->Config.
 									  BaseAddress,
 									  XUARTPS_FIFO_OFFSET);
 
-							bytes_reveived++;
+							xil_uart_desc->bytes_reveived++;
 
 							CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 													XUARTPS_SR_OFFSET);
 						}
-						if(bytes_reveived > 0)
-							insert_fifo = 1;
+						if(xil_uart_desc->bytes_reveived > 0)
+							xil_uart_desc->insert_fifo = 1;
 	}
 
 	if((IsrStatus & ((u32)XUARTPS_IXR_DMS)) != (u32)0) {
@@ -315,19 +312,6 @@ void uart_irq_handler(XUartPs *InstancePtr)
 	/* Clear the interrupt status. */
 	XUartPs_WriteReg(InstancePtr->Config.BaseAddress, XUARTPS_ISR_OFFSET,
 		IsrStatus);
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 /***************************************************************************//**
  * @brief uart_irq_init
@@ -335,13 +319,13 @@ void uart_irq_handler(XUartPs *InstancePtr)
 static int32_t uart_irq_init(struct uart_desc *descriptor)
 {
     uint32_t uart_irq_mask;
-    xil_uart_desc *xil_uart_desc = descriptor->extra;
+    struct xil_uart_desc *xil_uart_desc = descriptor->extra;
 //    int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
 //    		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
 //										 xil_uart_desc->instance);
     int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
     		                             (Xil_ExceptionHandler) uart_irq_handler,
-										 xil_uart_desc->instance);
+										 xil_uart_desc);
 
     if (status < 0)
     	return status;
@@ -374,51 +358,3 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 
     return SUCCESS;
 }
-
-/**************************************************************************/
-/**
-* serial_handler
-***************************************************************************/
-static void serial_handler(void *call_back_ref, uint32_t event, uint32_t data_len)
-{
-    /* All of the data has been received */
-    if (event == XUARTPS_EVENT_RECV_DATA) {
-    	bytes_reveived = data_len;
-    }
-
-    /*
-     * Data was received, but not the expected number of bytes, a
-     * timeout just indicates the data stopped for 8 character times
-     */
-    if (event == XUARTPS_EVENT_RECV_TOUT) {
-    	bytes_reveived = data_len;
-    }
-
-    /*
-     * Data was received with an error, keep the data but determine
-     * what kind of errors occurred
-     */
-    if (event == XUARTPS_EVENT_RECV_ERROR) {
-        total_error_count++;
-    }
-
-    /*
-     * Data was received with an parity or frame or break error, keep the data
-     * but determine what kind of errors occurred. Specific to Zynq Ultrascale+
-     * MP.
-     */
-    if (event == XUARTPS_EVENT_PARE_FRAME_BRKE) {
-        total_error_count++;
-    }
-
-    /*
-     * Data was received with an overrun error, keep the data but determine
-     * what kind of errors occurred. Specific to Zynq Ultrascale+ MP.
-     */
-    if (event == XUARTPS_EVENT_RECV_ORERR) {
-        total_error_count++;
-    }
-}
-
-
-

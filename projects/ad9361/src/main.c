@@ -644,7 +644,7 @@ int main(void)
 	};
 	struct irq_desc *irq_desc;
 
-	xil_uart_init_param xil_uart_init_par = {
+	struct xil_uart_init_param xil_uart_init_par = {
 		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};

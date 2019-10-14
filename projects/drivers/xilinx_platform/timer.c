@@ -100,8 +100,8 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_par *par)
 	int32_t status;
 	XScuTimer_Config *ConfigPtr;
 	struct timer_desc *descriptor;
-	xil_timer_init_param *xil_uart_init_param;
-	xil_timer_desc *xil_timer_desc;
+	struct xil_timer_init_param *xil_uart_init_param;
+	struct xil_timer_desc *xil_timer_desc;
 
 	descriptor = calloc(1, sizeof(struct timer_desc));
 	xil_timer_desc = calloc(1, sizeof(struct xil_uart_desc));
@@ -125,8 +125,7 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_par *par)
 	}
 
 	status = irq_register(xil_timer_desc->irq_desc, xil_timer_desc->irq_id,
-			      (Xil_ExceptionHandler) timer_interrupt_handler,
-			      xil_timer_desc->instance);
+			      (Xil_ExceptionHandler) timer_interrupt_handler, xil_timer_desc->instance);
 	status = irq_source_enable(xil_timer_desc->irq_desc, xil_timer_desc->irq_id);
 	if (status < 0)
 		return status;
@@ -143,7 +142,7 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_par *par)
 /* Free the resources allocated by timer_init(). */
 int32_t timer_remove(struct timer_desc *desc)
 {
-	xil_timer_desc *xil_timer_desc = desc->extra;
+	struct xil_timer_desc *xil_timer_desc = desc->extra;
 	free(xil_timer_desc->instance);
 	free(xil_timer_desc);
 	free(desc);
@@ -160,7 +159,7 @@ int32_t timer_read(struct timer_desc *desc, uint32_t data)
 /* Write timer value. */
 int32_t timer_write(struct timer_desc *desc, const uint32_t data)
 {
-	xil_timer_desc *xil_timer_desc = desc->extra;
+	struct xil_timer_desc *xil_timer_desc = desc->extra;
 	XScuTimer_LoadTimer(xil_timer_desc->instance, data);
 
 	return SUCCESS;
@@ -169,7 +168,7 @@ int32_t timer_write(struct timer_desc *desc, const uint32_t data)
 /* Start timer. */
 int32_t timer_start(struct timer_desc *desc)
 {
-	xil_timer_desc *xil_timer_desc = desc->extra;
+	struct xil_timer_desc *xil_timer_desc = desc->extra;
 	XScuTimer_Start(xil_timer_desc->instance);
 
 	return SUCCESS;
@@ -178,7 +177,7 @@ int32_t timer_start(struct timer_desc *desc)
 /* Stop timer. */
 int32_t timer_stop(struct timer_desc *desc)
 {
-	xil_timer_desc *xil_timer_desc = desc->extra;
+	struct xil_timer_desc *xil_timer_desc = desc->extra;
 	XScuTimer_Stop(xil_timer_desc->instance);
 
 	return SUCCESS;

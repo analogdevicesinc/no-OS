@@ -70,6 +70,9 @@ int32_t irq_remove(struct irq_desc *desc);
 int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *extra);
 
+/* Unregisters a generic IRQ handling function */
+int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id);
+
 /* Global interrupt enable */
 int32_t irq_enable(void);
 
