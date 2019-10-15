@@ -71,4 +71,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
 /* Free the resources allocated by uart_init(). */
 int32_t uart_remove(struct uart_desc *desc);
 
+/* Check if UART errors occurred. */
+uint32_t uart_get_errors(struct uart_desc *desc);
+
 #endif /* SERIAL_H_ */

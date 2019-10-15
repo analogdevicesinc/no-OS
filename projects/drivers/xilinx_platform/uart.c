@@ -45,8 +45,6 @@
 #include "irq.h"
 #include "xilinx_platform_drivers.h"
 
-static int32_t uart_irq_init(struct uart_desc *descriptor);
-
 static int32_t uart_receive (struct uart_desc *desc) {
 	int32_t ret;
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
@@ -114,6 +112,86 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_n
 	while (XUartPs_IsSending(xil_uart_desc->instance));
 	if (total_sent < bytes_number)
 		return FAILURE;
+
+    return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief uart_handler
+*******************************************************************************/
+static void uart_handler(void *call_back_ref, uint32_t event, uint32_t data_len)
+{
+	struct xil_uart_desc *xil_uart_desc = call_back_ref;
+    /* All of the data has been received */
+    if (event == XUARTPS_EVENT_RECV_DATA) {
+    	xil_uart_desc->bytes_reveived = data_len;
+    }
+
+    /*
+     * Data was received, but not the expected number of bytes, a
+     * timeout just indicates the data stopped for 8 character times
+     */
+    if (event == XUARTPS_EVENT_RECV_TOUT) {
+    	xil_uart_desc->bytes_reveived = data_len;
+    }
+
+    /*
+     * Data was received with an error, keep the data but determine
+     * what kind of errors occurred
+     */
+    if (event == XUARTPS_EVENT_RECV_ERROR) {
+    	xil_uart_desc->total_error_count++;
+    }
+
+    /*
+     * Data was received with an parity or frame or break error, keep the data
+     * but determine what kind of errors occurred. Specific to Zynq Ultrascale+
+     * MP.
+     */
+    if (event == XUARTPS_EVENT_PARE_FRAME_BRKE) {
+    	xil_uart_desc->total_error_count++;
+    }
+
+    /*
+     * Data was received with an overrun error, keep the data but determine
+     * what kind of errors occurred. Specific to Zynq Ultrascale+ MP.
+     */
+    if (event == XUARTPS_EVENT_RECV_ORERR) {
+    	xil_uart_desc->total_error_count++;
+    }
+}
+
+/***************************************************************************//**
+ * @brief uart_irq_init
+*******************************************************************************/
+static int32_t uart_irq_init(struct uart_desc *descriptor)
+{
+    uint32_t uart_irq_mask;
+    struct xil_uart_desc *xil_uart_desc = descriptor->extra;
+
+    int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
+        		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler, xil_uart_desc->instance);
+    if (status < 0)
+    	return status;
+    XUartPs_SetHandler(xil_uart_desc->instance, uart_handler, xil_uart_desc);
+    /*
+     * Enable the interrupt of the UART so interrupts will occur, setup
+     * a local loopback so data that is sent will be received.
+     */
+    uart_irq_mask =
+        XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
+        XUARTPS_IXR_OVER | /*XUARTPS_IXR_TXEMPTY | */XUARTPS_IXR_RXFULL |
+        XUARTPS_IXR_RXOVR;
+
+    if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
+        uart_irq_mask |= XUARTPS_IXR_RBRK;
+    }
+
+    XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
+
+    status = irq_source_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
+    if (status < 0)
+        return status;
 
     return SUCCESS;
 }
@@ -192,124 +270,13 @@ int32_t uart_remove(struct uart_desc *desc) {
 	return SUCCESS;
 }
 
-void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
-{
-	XUartPs *InstancePtr = xil_uart_desc->instance;
-	uint32_t isr_status;
+uint32_t uart_get_errors(struct uart_desc *desc) {
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	uint32_t total_error_count = xil_uart_desc->total_error_count;
+	xil_uart_desc->total_error_count = 0;
 
-	isr_status = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-				   XUARTPS_IMR_OFFSET);
-
-	isr_status &= XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-				   XUARTPS_ISR_OFFSET);
-
-	if((isr_status & ((u32)XUARTPS_IXR_RXOVR | (u32)XUARTPS_IXR_RXEMPTY |
-			(u32)XUARTPS_IXR_RXFULL)) != (u32)0) {
-		/* Received data interrupt */
-		 if (InstancePtr->ReceiveBuffer.RemainingBytes != 0) {
-			XUartPs_ReceiveBuffer(InstancePtr);
-		}
-		 xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
-		 				 InstancePtr->ReceiveBuffer.RemainingBytes;
-	}
-
-	if((isr_status & (XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_TXFULL))
-									 != 0) {
-		/* Transmit data interrupt */
-		if (InstancePtr->SendBuffer.RemainingBytes == (u32)0) {
-			XUartPs_WriteReg(InstancePtr->Config.BaseAddress,
-					XUARTPS_IDR_OFFSET,
-					((u32)XUARTPS_IXR_TXEMPTY | (u32)XUARTPS_IXR_TXFULL));
-		}
-
-		/* If TX FIFO is empty, send more. */
-		else if((isr_status & (XUARTPS_IXR_TXEMPTY)) != 0) {
-			XUartPs_SendBuffer(InstancePtr);
-		}
-		else {
-			/* Else with dummy entry for MISRA-C Compliance.*/
-			;
-		}
-	}
-
-	/* XUARTPS_IXR_RBRK is applicable only for Zynq Ultrascale+ MP */
-	if ((isr_status & ((u32)XUARTPS_IXR_OVER | (u32)XUARTPS_IXR_FRAMING |
-			(u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK)) != (u32)0) {
-		/* Received Error Status interrupt */
-
-		InstancePtr->is_rxbs_error = 0;
-
-		if ((InstancePtr->Platform == XPLAT_ZYNQ_ULTRA_MP) &&
-			(isr_status & ((u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK
-						| (u32)XUARTPS_IXR_FRAMING))) {
-			InstancePtr->is_rxbs_error = 1;
-		}
-		/*
-		 * If there are bytes still to be received in the specified buffer
-		 * go ahead and receive them. Removing bytes from the RX FIFO will
-		 * clear the interrupt.
-		 */
-
-		XUartPs_ReceiveBuffer(InstancePtr);
-
-		if (!(InstancePtr->is_rxbs_error)) {
-			xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
-				InstancePtr->ReceiveBuffer.RemainingBytes;
-		}
-	}
-
-	if((isr_status & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
-//		ReceiveTimeoutHandler(InstancePtr);
-		if (InstancePtr->ReceiveBuffer.RemainingBytes != (u32)0) {
-			(void)XUartPs_ReceiveBuffer(InstancePtr);
-		}
-		xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
-				 InstancePtr->ReceiveBuffer.RemainingBytes;
-	}
-
-	if((isr_status & ((u32)XUARTPS_IXR_DMS)) != (u32)0) {
-		/* Modem status interrupt */
-		XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-					  XUARTPS_MODEMSR_OFFSET);
-	}
-
-	/* Clear the interrupt status. */
-	XUartPs_WriteReg(InstancePtr->Config.BaseAddress, XUARTPS_ISR_OFFSET,
-		isr_status);
+	return total_error_count;
 }
-/***************************************************************************//**
- * @brief uart_irq_init
-*******************************************************************************/
-static int32_t uart_irq_init(struct uart_desc *descriptor)
-{
-    uint32_t uart_irq_mask;
-    struct xil_uart_desc *xil_uart_desc = descriptor->extra;
 
-    int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
-    		                             (Xil_ExceptionHandler) uart_irq_handler,
-										 xil_uart_desc);
 
-    if (status < 0)
-    	return status;
 
-    /*
-     * Enable the interrupt of the UART so interrupts will occur, setup
-     * a local loopback so data that is sent will be received.
-     */
-    uart_irq_mask =
-        XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
-        XUARTPS_IXR_OVER | /*XUARTPS_IXR_TXEMPTY | */XUARTPS_IXR_RXFULL |
-        XUARTPS_IXR_RXOVR;
-
-    if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
-        uart_irq_mask |= XUARTPS_IXR_RBRK;
-    }
-
-    XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
-
-    status = irq_source_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
-    if (status < 0)
-        return status;
-
-    return SUCCESS;
-}

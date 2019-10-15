@@ -91,6 +91,7 @@ struct xil_uart_desc {
 	uint32_t 			fifo_read_offset;
 	char buff[256];
 	uint32_t bytes_reveived;
+	uint32_t total_error_count;
 #ifdef _XPARAMETERS_PS_H_
 	XUartPs				*instance;
 #else
