@@ -90,7 +90,6 @@ struct xil_uart_desc {
 	struct fifo_element	*fifo;
 	uint32_t 			fifo_read_offset;
 	char buff[256];
-	uint32_t insert_fifo;
 	uint32_t bytes_reveived;
 #ifdef _XPARAMETERS_PS_H_
 	XUartPs				*instance;

@@ -52,12 +52,11 @@ static int32_t uart_receive (struct uart_desc *desc) {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	struct irq_desc	*irq_desc = xil_uart_desc->irq_desc;
 
-	if (xil_uart_desc->insert_fifo > 0) {
+	if (xil_uart_desc->bytes_reveived > 0) {
 		irq_source_disable(irq_desc, xil_uart_desc->irq_id);
 		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff, xil_uart_desc->bytes_reveived);
 		if (ret < 0)
 			return ret;
-		xil_uart_desc->insert_fifo = 0;
 		xil_uart_desc->bytes_reveived = 0;
 		XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff), BUFF_LENGTH);
 		irq_source_enable(irq_desc, xil_uart_desc->irq_id);
@@ -109,15 +108,12 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 *******************************************************************************/
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
 {
-//	xil_uart_desc *xil_uart_desc = desc->extra;
-//	size_t total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data, bytes_number);
-//
-//	while (XUartPs_IsSending(xil_uart_desc->instance));
-//	if (total_sent < bytes_number)
-//		return FAILURE;
-	for ( int32_t i = 0; i < bytes_number; i++)
-	        outbyte(data[i]);
-	    return 0;
+	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	size_t total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data, bytes_number);
+
+	while (XUartPs_IsSending(xil_uart_desc->instance));
+	if (total_sent < bytes_number)
+		return FAILURE;
 
     return SUCCESS;
 }
@@ -143,8 +139,6 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
     xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
     xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
-
-
 
     /*
      * Initialize the UART driver so that it's ready to use
@@ -202,7 +196,6 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 {
 	XUartPs *InstancePtr = xil_uart_desc->instance;
 	u32 IsrStatus;
-	u32 CsrRegister;
 
 	Xil_AssertVoid(InstancePtr != NULL);
 	Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
@@ -222,32 +215,42 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 			(u32)XUARTPS_IXR_RXFULL)) != (u32)0) {
 		/* Received data interrupt */
 		//ReceiveDataHandler(InstancePtr);
+		/*
+		 * If there are bytes still to be received in the specified buffer
+		 * go ahead and receive them. Removing bytes from the RX FIFO will
+		 * clear the interrupt.
+		 */
+		 if (InstancePtr->ReceiveBuffer.RemainingBytes != (u32)0) {
+			(void)XUartPs_ReceiveBuffer(InstancePtr);
+		}
 
-			if(xil_uart_desc->bytes_reveived != 0)
-				CsrRegister = 1;
-			CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-						XUARTPS_SR_OFFSET);
-			while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
-					(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-				xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
-					XUartPs_ReadReg(InstancePtr->Config.
-						  BaseAddress,
-						  XUARTPS_FIFO_OFFSET);
-
-				xil_uart_desc->bytes_reveived++;
-
-				CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-										XUARTPS_SR_OFFSET);
-			}
-			if(xil_uart_desc->bytes_reveived > 0)
-				xil_uart_desc->insert_fifo = 1;
-
+		 xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
+		 				 InstancePtr->ReceiveBuffer.RemainingBytes;
 	}
 
 	if((IsrStatus & ((u32)XUARTPS_IXR_TXEMPTY | (u32)XUARTPS_IXR_TXFULL))
 									 != (u32)0) {
 		/* Transmit data interrupt */
 //		SendDataHandler(InstancePtr, IsrStatus);
+		/*
+		 * If there are not bytes to be sent from the specified buffer then disable
+		 * the transmit interrupt so it will stop interrupting as it interrupts
+		 * any time the FIFO is empty
+		 */
+		if (InstancePtr->SendBuffer.RemainingBytes == (u32)0) {
+			XUartPs_WriteReg(InstancePtr->Config.BaseAddress,
+					XUARTPS_IDR_OFFSET,
+					((u32)XUARTPS_IXR_TXEMPTY | (u32)XUARTPS_IXR_TXFULL));
+		}
+
+		/* If TX FIFO is empty, send more. */
+		else if((IsrStatus & ((u32)XUARTPS_IXR_TXEMPTY)) != (u32)0) {
+			(void)XUartPs_SendBuffer(InstancePtr);
+		}
+		else {
+			/* Else with dummy entry for MISRA-C Compliance.*/
+			;
+		}
 	}
 
 	/* XUARTPS_IXR_RBRK is applicable only for Zynq Ultrascale+ MP */
@@ -255,58 +258,42 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 			(u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK)) != (u32)0) {
 		/* Received Error Status interrupt */
 //		ReceiveErrorHandler(InstancePtr, IsrStatus);
-		if(xil_uart_desc->bytes_reveived != 0)
-						CsrRegister = 1;
-					CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-								XUARTPS_SR_OFFSET);
-					while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
-							(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-						xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
-							XUartPs_ReadReg(InstancePtr->Config.
-								  BaseAddress,
-								  XUARTPS_FIFO_OFFSET);
 
-						xil_uart_desc->bytes_reveived++;
+		InstancePtr->is_rxbs_error = 0;
 
-						CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-												XUARTPS_SR_OFFSET);
-					}
-					if(xil_uart_desc->bytes_reveived > 0)
-						xil_uart_desc->insert_fifo = 1;
+		if ((InstancePtr->Platform == XPLAT_ZYNQ_ULTRA_MP) &&
+			(IsrStatus & ((u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK
+						| (u32)XUARTPS_IXR_FRAMING))) {
+			InstancePtr->is_rxbs_error = 1;
+		}
+		/*
+		 * If there are bytes still to be received in the specified buffer
+		 * go ahead and receive them. Removing bytes from the RX FIFO will
+		 * clear the interrupt.
+		 */
+
+		(void)XUartPs_ReceiveBuffer(InstancePtr);
+
+		if (!(InstancePtr->is_rxbs_error)) {
+			xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
+				InstancePtr->ReceiveBuffer.RemainingBytes;
+		}
 	}
 
 	if((IsrStatus & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
-//		/* Received Timeout interrupt */
 //		ReceiveTimeoutHandler(InstancePtr);
-//			if((IsrStatus & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
-//				/* Received Timeout interrupt */
-//				if(bytes_reveived > 0)
-//					insert_fifo = 1;
-//
-//			}
-			if(xil_uart_desc->bytes_reveived != 0)
-							CsrRegister = 1;
-						CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-									XUARTPS_SR_OFFSET);
-						while((xil_uart_desc->bytes_reveived < BUFF_LENGTH)&&
-								(((CsrRegister & XUARTPS_SR_RXEMPTY) == (u32)0))){
-							xil_uart_desc->buff[xil_uart_desc->bytes_reveived] =
-								XUartPs_ReadReg(InstancePtr->Config.
-									  BaseAddress,
-									  XUARTPS_FIFO_OFFSET);
-
-							xil_uart_desc->bytes_reveived++;
-
-							CsrRegister = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
-													XUARTPS_SR_OFFSET);
-						}
-						if(xil_uart_desc->bytes_reveived > 0)
-							xil_uart_desc->insert_fifo = 1;
+		if (InstancePtr->ReceiveBuffer.RemainingBytes != (u32)0) {
+			(void)XUartPs_ReceiveBuffer(InstancePtr);
+		}
+		xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
+				 InstancePtr->ReceiveBuffer.RemainingBytes;
 	}
 
 	if((IsrStatus & ((u32)XUARTPS_IXR_DMS)) != (u32)0) {
 		/* Modem status interrupt */
-		ModemHandler(InstancePtr);
+//		ModemHandler(InstancePtr);
+		XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
+					  XUARTPS_MODEMSR_OFFSET);
 	}
 
 	/* Clear the interrupt status. */
@@ -320,22 +307,13 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 {
     uint32_t uart_irq_mask;
     struct xil_uart_desc *xil_uart_desc = descriptor->extra;
-//    int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
-//    		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler,
-//										 xil_uart_desc->instance);
+
     int32_t status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
     		                             (Xil_ExceptionHandler) uart_irq_handler,
 										 xil_uart_desc);
 
     if (status < 0)
     	return status;
-    /*
-     * Setup the handlers for the UART that will be called from the
-     * interrupt context when data has been sent and received, specify
-     * a pointer to the UART driver instance as the callback reference
-     * so the handlers are able to access the instance data
-     */
-//    XUartPs_SetHandler(xil_uart_desc->instance, serial_handler, xil_uart_desc->instance);
 
     /*
      * Enable the interrupt of the UART so interrupts will occur, setup
@@ -343,7 +321,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
      */
     uart_irq_mask =
         XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
-        XUARTPS_IXR_OVER | XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_RXFULL |
+        XUARTPS_IXR_OVER | /*XUARTPS_IXR_TXEMPTY | */XUARTPS_IXR_RXFULL |
         XUARTPS_IXR_RXOVR;
 
     if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
