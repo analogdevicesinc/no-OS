@@ -63,6 +63,7 @@
 /******************************************************************************/
 
 #define SPI_CS_DECODE	0x01
+#define UART_BUFF_LENGTH 256
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -83,13 +84,13 @@ struct xil_uart_init_param {
 	uint32_t		irq_id;
 	struct irq_desc *irq_desc;
 };
-#define BUFF_LENGTH 256
+
 struct xil_uart_desc {
 	uint32_t			irq_id;
 	struct irq_desc		*irq_desc;
 	struct fifo_element	*fifo;
 	uint32_t 			fifo_read_offset;
-	char buff[256];
+	char buff[UART_BUFF_LENGTH];
 	uint32_t bytes_reveived;
 	uint32_t total_error_count;
 #ifdef _XPARAMETERS_PS_H_

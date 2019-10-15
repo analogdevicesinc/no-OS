@@ -62,7 +62,8 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 		if (ret < 0)
 			return ret;
 		xil_uart_desc->bytes_reveived = 0;
-		XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff), BUFF_LENGTH);
+		XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff),
+			     UART_BUFF_LENGTH);
 		ret = irq_source_enable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
@@ -209,7 +210,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 	 */
 	uart_irq_mask =
 		XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
-		XUARTPS_IXR_OVER | /*XUARTPS_IXR_TXEMPTY | */XUARTPS_IXR_RXFULL |
+		XUARTPS_IXR_OVER | XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_RXFULL |
 		XUARTPS_IXR_RXOVR;
 
 	if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
@@ -240,7 +241,13 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 	struct xil_uart_desc *xil_uart_desc;
 
 	descriptor = calloc(1, sizeof(struct uart_desc));
+	if (!descriptor)
+		return FAILURE;
 	xil_uart_desc = calloc(1, sizeof(struct xil_uart_desc));
+	if (!xil_uart_desc) {
+		free(descriptor);
+		return FAILURE;
+	}
 	descriptor->extra = xil_uart_desc;
 	descriptor->baud_rate = par->baud_rate;
 	descriptor->device_id = par->device_id;
@@ -249,6 +256,11 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
 	xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
 	xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
+	if (!(xil_uart_desc->instance)) {
+		free(descriptor);
+		free(xil_uart_desc);
+		return FAILURE;
+	}
 
 	/*
 	 * Initialize the UART driver so that it's ready to use
@@ -289,7 +301,8 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 	}
 	*desc = descriptor;
 
-	XUartPs_Recv(xil_uart_desc->instance, (u8*)xil_uart_desc->buff, BUFF_LENGTH);
+	XUartPs_Recv(xil_uart_desc->instance, (u8*)xil_uart_desc->buff,
+		     UART_BUFF_LENGTH);
 
 	return SUCCESS;
 }
