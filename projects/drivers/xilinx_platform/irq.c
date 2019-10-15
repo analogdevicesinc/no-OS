@@ -61,7 +61,7 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 		      const struct irq_init_param *param)
 {
 	int32_t status;
-	XScuGic_Config *IntcConfig; /* Config for interrupt controller */
+	XScuGic_Config *IntcConfig;
 	XScuGic *gic;
 	struct xil_irq_desc *xil_dev;
 
@@ -87,12 +87,18 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 	/* Initialize the interrupt controller driver */
 	IntcConfig = XScuGic_LookupConfig(param->irq_id);
 	if (NULL == IntcConfig) {
+		free(gic);
+		free(descriptor->extra);
+		free(descriptor);
 		return FAILURE;
 	}
 
 	status = XScuGic_CfgInitialize(gic, IntcConfig,
 				       IntcConfig->CpuBaseAddress);
 	if (status != XST_SUCCESS) {
+		free(gic);
+		free(descriptor->extra);
+		free(descriptor);
 		return FAILURE;
 	}
 
@@ -171,7 +177,6 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance)
 {
-
 	int32_t status;
 	struct xil_irq_desc *xil_dev = desc->extra;
 	status = XScuGic_Connect(xil_dev->gic, irq_id,
@@ -207,6 +212,7 @@ int32_t irq_ctrl_remove(struct irq_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 	free(xil_dev->gic);
+	free(desc->extra);
 	free(desc);
 
 	return SUCCESS;

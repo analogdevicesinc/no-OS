@@ -78,7 +78,7 @@ struct xil_irq_desc {
 	XScuGic 		*gic;
 #else
 #endif
-} xil_irq_desc;
+};
 
 struct xil_uart_init_param {
 	uint32_t		irq_id;

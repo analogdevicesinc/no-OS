@@ -60,6 +60,13 @@
 ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name,
 			     const char *value)
 {
+	if(!attribute)
+		return FAILURE;
+	if(!name)
+		return FAILURE;
+	if(!value)
+		return FAILURE;
+
 	*attribute = calloc(1, sizeof(struct xml_attribute));
 	if (!(*attribute))
 		return FAILURE;
@@ -91,6 +98,11 @@ ssize_t xml_create_attribute(struct xml_attribute **attribute, char *name,
 ssize_t xml_add_attribute(struct xml_node *node,
 			  struct xml_attribute *attribute)
 {
+	if(!node)
+		return FAILURE;
+	if(!attribute)
+		return FAILURE;
+
 	if (!node->attributes) {
 		node->attributes = calloc(1, sizeof(struct xml_attribute*));
 		if (!node->attributes)
@@ -116,6 +128,11 @@ ssize_t xml_add_attribute(struct xml_node *node,
  */
 ssize_t xml_create_node(struct xml_node **node, char *name)
 {
+	if(!node)
+		return FAILURE;
+	if(!name)
+		return FAILURE;
+
 	*node = calloc(1, sizeof(struct xml_node));
 	if (!(*node))
 		return FAILURE;
@@ -137,6 +154,11 @@ ssize_t xml_create_node(struct xml_node **node, char *name)
  */
 ssize_t xml_add_node(struct xml_node *node_parent, struct xml_node *node_child)
 {
+	if(!node_parent)
+		return FAILURE;
+	if(!node_child)
+		return FAILURE;
+
 	if (!node_parent->children) {
 		node_parent->children = calloc(1, sizeof(struct xml_node*));
 		if (!node_parent->children)
@@ -191,6 +213,29 @@ ssize_t xml_delete_node(struct xml_node *node)
 }
 
 /**
+ * print string to xml_document.
+ * @param *doc
+ * @param *data to be written.
+ * @return SUCCESS in case of success or negative value otherwise
+ */
+static ssize_t xml_print_to_doc(struct xml_document *doc, char *data)
+{
+	uint32_t calc_len, print_len;
+
+	calc_len = strlen(data) + 1;
+	char *buff = realloc(doc->buff, doc->index + calc_len);
+	if (!buff)
+		return FAILURE;
+	doc->buff = buff;
+	print_len = sprintf(&(doc->buff[doc->index]), "%s", data);
+	if(print_len != calc_len - 1)
+		return FAILURE;
+	doc->index +=print_len;
+
+	return SUCCESS;
+}
+
+/**
  * print xml tree into a xml document
  * @param **document
  * @param *node pointer to parent node, that contains the xml tree
@@ -199,50 +244,58 @@ ssize_t xml_delete_node(struct xml_node *node)
 ssize_t xml_create_document(struct xml_document **document,
 			    struct xml_node *node)
 {
-	uint8_t i;
+	uint16_t i;
 	ssize_t ret;
-	uint32_t len;
+	struct xml_document *doc;
+
+	if(!document)
+		return FAILURE;
+	if(!node)
+		return FAILURE;
 
 	if (!(*document)) {
 		*document = calloc(1, sizeof(struct xml_document));
 		if (!(*document))
 			return FAILURE;
 	}
+	doc = *document;
 
-	len = strlen(node->name) + 3;
-	char *buff = realloc((*document)->buff, (*document)->index + len);
-	if (!buff)
+	ret = xml_print_to_doc(doc, "<");
+	if (ret < 0)
 		goto error;
-	(*document)->buff = buff;
-	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "<%s ",
-				      node->name);
+	ret = xml_print_to_doc(doc, node->name);
+	if (ret < 0)
+		goto error;
+	ret = xml_print_to_doc(doc, " ");
+	if (ret < 0)
+		goto error;
 
 	for (i = 0; i < node->attr_cnt; i++) {
-		len = strlen(node->attributes[i]->name) + strlen(node->attributes[i]->value) +
-		      5;
-		buff = realloc((*document)->buff, (*document)->index + len);
-		if (!buff)
+		ret = xml_print_to_doc(doc, node->attributes[i]->name);
+		if (ret < 0)
 			goto error;
-		(*document)->buff = buff;
-		(*document)->index += sprintf(&(*document)->buff[(*document)->index],
-					      "%s=\"%s\" ", node->attributes[i]->name, node->attributes[i]->value);
+		ret = xml_print_to_doc(doc, "=\"");
+		if (ret < 0)
+			goto error;
+		ret = xml_print_to_doc(doc, node->attributes[i]->value);
+		if (ret < 0)
+			goto error;
+		ret = xml_print_to_doc(doc, "\" ");
+		if (ret < 0)
+			goto error;
 	}
 
 	if (node->children_cnt == 0) {
-		len = 4;
-		buff = realloc((*document)->buff, (*document)->index + len);
-		if (!buff)
+		ret = xml_print_to_doc(doc, "/>\n");
+		if (ret < 0)
 			goto error;
-		(*document)->buff = buff;
-		(*document)->index += sprintf(&(*document)->buff[(*document)->index], "/>\n");
+
 		return SUCCESS;
+	} else {
+		ret = xml_print_to_doc(doc, ">\n");
+		if (ret < 0)
+			goto error;
 	}
-	len = 3;
-	buff = realloc((*document)->buff, (*document)->index + len);
-	if (!buff)
-		goto error;
-	(*document)->buff = buff;
-	(*document)->index += sprintf(&(*document)->buff[(*document)->index], ">\n");
 
 	for (i = 0; i < node->children_cnt; i++) {
 		ret = xml_create_document(document, node->children[i]);
@@ -250,19 +303,21 @@ ssize_t xml_create_document(struct xml_document **document,
 			return ret;
 	}
 
-	len = strlen(node->name) + 5;
-	buff = realloc((*document)->buff, (*document)->index + len);
-	if (!buff)
+	ret = xml_print_to_doc(doc, "</");
+	if (ret < 0)
 		goto error;
-	(*document)->buff = buff;
-	(*document)->index += sprintf(&(*document)->buff[(*document)->index], "</%s>\n",
-				      node->name);
+	ret = xml_print_to_doc(doc, node->name);
+	if (ret < 0)
+		goto error;
+	ret = xml_print_to_doc(doc, ">\n");
+	if (ret < 0)
+		goto error;
 
 	return SUCCESS;
 
 error:
-	free((*document)->buff);
-	free(*document);
+	free(doc->buff);
+	free(doc);
 
 	return FAILURE;
 }
