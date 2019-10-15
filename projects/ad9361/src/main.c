@@ -415,12 +415,14 @@ struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
 struct uart_desc *uart_device;
 
-ssize_t iiod_write(const char *buf, size_t len) {
+ssize_t iiod_write(const char *buf, size_t len)
+{
 
 	return uart_write(uart_device, (const uint8_t *)buf, len);
 }
 
-ssize_t iiod_read(char *buf, size_t len) {
+ssize_t iiod_read(char *buf, size_t len)
+{
 
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
@@ -633,10 +635,10 @@ int main(void)
 	tinyiiod_dac *tinyiiod_dac;
 
 	tinyiiod_comm_ops comm_ops = {
-	    .read = iiod_read,
+		.read = iiod_read,
 //	    .read_line = serial_read_line,
 		.read_line = NULL,
-	    .write = iiod_write,
+		.write = iiod_write,
 	};
 
 	struct irq_init_param irq_init_param = {
@@ -670,14 +672,19 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name, tinyiiod_adc->adc->num_channels, get_adc_xml, get_adc_attr_map(tinyiiod_adc->adc->name));
+	ret = tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name,
+				       tinyiiod_adc->adc->num_channels, get_adc_xml,
+				       get_adc_attr_map(tinyiiod_adc->adc->name));
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name, tinyiiod_dac->dac->num_channels, get_dac_xml, get_dac_attr_map(tinyiiod_dac->dac->name));
+	ret = tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name,
+				       tinyiiod_dac->dac->num_channels, get_dac_xml,
+				       get_dac_attr_map(tinyiiod_dac->dac->name));
 	if(ret < 0)
 		return ret;
-	ret = tinyiiod_register_device(ad9361_phy, ad9361_phy->name, 0, get_phy_xml, get_phy_attr_map(ad9361_phy->name));
+	ret = tinyiiod_register_device(ad9361_phy, ad9361_phy->name, 0, get_phy_xml,
+				       get_phy_attr_map(ad9361_phy->name));
 	if(ret < 0)
 		return ret;
 

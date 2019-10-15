@@ -61,7 +61,7 @@ struct irq_desc {
 
 /* Initialize a interrupt controller peripheral. */
 int32_t irq_ctrl_init(struct irq_desc **desc,
-		 const struct irq_init_param *param);
+		      const struct irq_init_param *param);
 
 /* Free the resources allocated by irq_ctrl_init(). */
 int32_t irq_ctrl_remove(struct irq_desc *desc);
