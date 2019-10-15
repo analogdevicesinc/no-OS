@@ -195,48 +195,27 @@ int32_t uart_remove(struct uart_desc *desc) {
 void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 {
 	XUartPs *InstancePtr = xil_uart_desc->instance;
-	u32 IsrStatus;
+	uint32_t isr_status;
 
-	Xil_AssertVoid(InstancePtr != NULL);
-	Xil_AssertVoid(InstancePtr->IsReady == XIL_COMPONENT_IS_READY);
-
-	/*
-	 * Read the interrupt ID register to determine which
-	 * interrupt is active
-	 */
-	IsrStatus = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
+	isr_status = XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 				   XUARTPS_IMR_OFFSET);
 
-	IsrStatus &= XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
+	isr_status &= XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 				   XUARTPS_ISR_OFFSET);
 
-	/* Dispatch an appropriate handler. */
-	if((IsrStatus & ((u32)XUARTPS_IXR_RXOVR | (u32)XUARTPS_IXR_RXEMPTY |
+	if((isr_status & ((u32)XUARTPS_IXR_RXOVR | (u32)XUARTPS_IXR_RXEMPTY |
 			(u32)XUARTPS_IXR_RXFULL)) != (u32)0) {
 		/* Received data interrupt */
-		//ReceiveDataHandler(InstancePtr);
-		/*
-		 * If there are bytes still to be received in the specified buffer
-		 * go ahead and receive them. Removing bytes from the RX FIFO will
-		 * clear the interrupt.
-		 */
-		 if (InstancePtr->ReceiveBuffer.RemainingBytes != (u32)0) {
-			(void)XUartPs_ReceiveBuffer(InstancePtr);
+		 if (InstancePtr->ReceiveBuffer.RemainingBytes != 0) {
+			XUartPs_ReceiveBuffer(InstancePtr);
 		}
-
 		 xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
 		 				 InstancePtr->ReceiveBuffer.RemainingBytes;
 	}
 
-	if((IsrStatus & ((u32)XUARTPS_IXR_TXEMPTY | (u32)XUARTPS_IXR_TXFULL))
-									 != (u32)0) {
+	if((isr_status & (XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_TXFULL))
+									 != 0) {
 		/* Transmit data interrupt */
-//		SendDataHandler(InstancePtr, IsrStatus);
-		/*
-		 * If there are not bytes to be sent from the specified buffer then disable
-		 * the transmit interrupt so it will stop interrupting as it interrupts
-		 * any time the FIFO is empty
-		 */
 		if (InstancePtr->SendBuffer.RemainingBytes == (u32)0) {
 			XUartPs_WriteReg(InstancePtr->Config.BaseAddress,
 					XUARTPS_IDR_OFFSET,
@@ -244,8 +223,8 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 		}
 
 		/* If TX FIFO is empty, send more. */
-		else if((IsrStatus & ((u32)XUARTPS_IXR_TXEMPTY)) != (u32)0) {
-			(void)XUartPs_SendBuffer(InstancePtr);
+		else if((isr_status & (XUARTPS_IXR_TXEMPTY)) != 0) {
+			XUartPs_SendBuffer(InstancePtr);
 		}
 		else {
 			/* Else with dummy entry for MISRA-C Compliance.*/
@@ -254,15 +233,14 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 	}
 
 	/* XUARTPS_IXR_RBRK is applicable only for Zynq Ultrascale+ MP */
-	if ((IsrStatus & ((u32)XUARTPS_IXR_OVER | (u32)XUARTPS_IXR_FRAMING |
+	if ((isr_status & ((u32)XUARTPS_IXR_OVER | (u32)XUARTPS_IXR_FRAMING |
 			(u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK)) != (u32)0) {
 		/* Received Error Status interrupt */
-//		ReceiveErrorHandler(InstancePtr, IsrStatus);
 
 		InstancePtr->is_rxbs_error = 0;
 
 		if ((InstancePtr->Platform == XPLAT_ZYNQ_ULTRA_MP) &&
-			(IsrStatus & ((u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK
+			(isr_status & ((u32)XUARTPS_IXR_PARITY | (u32)XUARTPS_IXR_RBRK
 						| (u32)XUARTPS_IXR_FRAMING))) {
 			InstancePtr->is_rxbs_error = 1;
 		}
@@ -272,7 +250,7 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 		 * clear the interrupt.
 		 */
 
-		(void)XUartPs_ReceiveBuffer(InstancePtr);
+		XUartPs_ReceiveBuffer(InstancePtr);
 
 		if (!(InstancePtr->is_rxbs_error)) {
 			xil_uart_desc->bytes_reveived = InstancePtr->ReceiveBuffer.RequestedBytes -
@@ -280,7 +258,7 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 		}
 	}
 
-	if((IsrStatus & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
+	if((isr_status & ((u32)XUARTPS_IXR_TOUT)) != (u32)0) {
 //		ReceiveTimeoutHandler(InstancePtr);
 		if (InstancePtr->ReceiveBuffer.RemainingBytes != (u32)0) {
 			(void)XUartPs_ReceiveBuffer(InstancePtr);
@@ -289,16 +267,15 @@ void uart_irq_handler(struct xil_uart_desc *xil_uart_desc)
 				 InstancePtr->ReceiveBuffer.RemainingBytes;
 	}
 
-	if((IsrStatus & ((u32)XUARTPS_IXR_DMS)) != (u32)0) {
+	if((isr_status & ((u32)XUARTPS_IXR_DMS)) != (u32)0) {
 		/* Modem status interrupt */
-//		ModemHandler(InstancePtr);
 		XUartPs_ReadReg(InstancePtr->Config.BaseAddress,
 					  XUARTPS_MODEMSR_OFFSET);
 	}
 
 	/* Clear the interrupt status. */
 	XUartPs_WriteReg(InstancePtr->Config.BaseAddress, XUARTPS_ISR_OFFSET,
-		IsrStatus);
+		isr_status);
 }
 /***************************************************************************//**
  * @brief uart_irq_init
