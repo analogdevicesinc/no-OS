@@ -1,68 +1,80 @@
-/***************************************************************************//**
- *   @file   serial.c
- *   @brief  Header file of Serial interface.
- *   @author Cristian Pop (cristian.pop@analog.com)
-********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
- *
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *  - Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *  - Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
- *    the documentation and/or other materials provided with the
- *    distribution.
- *  - Neither the name of Analog Devices, Inc. nor the names of its
- *    contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *  - The use of this software may or may not infringe the patent rights
- *    of one or more patent holders.  This license does not release you
- *    from the requirement that you obtain separate licenses from these
- *    patent holders to use this software.
- *  - Use of the software either in source or binary form, must be run
- *    on or directly connected to an Analog Devices Inc. component.
- *
- * THIS SOFTWARE IS PROVIDED BY ANALOG DEVICES "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, NON-INFRINGEMENT,
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL ANALOG DEVICES BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
- * LIMITED TO, INTELLECTUAL PROPERTY RIGHTS, PROCUREMENT OF SUBSTITUTE GOODS OR
- * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
- * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*******************************************************************************/
+/******************************************************************************
+*
+* Copyright (C) 2010 - 2014 Xilinx, Inc.  All rights reserved.
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+* XILINX  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
+* OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*
+* Except as contained in this notice, the name of the Xilinx shall not be used
+* in advertising or otherwise to promote the sale, use or other dealings in
+* this Software without prior written authorization from Xilinx.
+*
+******************************************************************************/
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "xuartps.h"
 #include "error.h"
 #include "fifo.h"
 #include "uart.h"
 #include "irq.h"
 #include "xilinx_platform_drivers.h"
 
-static int32_t uart_receive (struct uart_desc *desc) {
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
+
+/**
+ * @brief Save received data into fifo.
+ * @param desc - Instance descriptor containing a fifo element.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+static int32_t uart_fifo_insert(struct uart_desc *desc) {
 	int32_t ret;
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	struct irq_desc	*irq_desc = xil_uart_desc->irq_desc;
 
 	if (xil_uart_desc->bytes_reveived > 0) {
-		irq_source_disable(irq_desc, xil_uart_desc->irq_id);
+		ret = irq_source_disable(irq_desc, xil_uart_desc->irq_id);
+		if (ret < 0)
+			return ret;
 		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff, xil_uart_desc->bytes_reveived);
 		if (ret < 0)
 			return ret;
 		xil_uart_desc->bytes_reveived = 0;
 		XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff), BUFF_LENGTH);
-		irq_source_enable(irq_desc, xil_uart_desc->irq_id);
+		ret = irq_source_enable(irq_desc, xil_uart_desc->irq_id);
+		if (ret < 0)
+			return ret;
 	}
 
 	return SUCCESS;
 }
 
+/**
+ * @brief Read byte from fifo.
+ * @param desc - Instance descriptor containing a fifo element
+ * @param data - read value.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
@@ -70,7 +82,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 
 	while (xil_uart_desc->fifo == NULL) {
 		/* nothing in fifo, wait until something is received */
-		ret = uart_receive(desc);
+		ret = uart_fifo_insert(desc);
 		if (ret < 0)
 			return ret;
 	}
@@ -86,9 +98,13 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 	return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief network_read
-*******************************************************************************/
+/**
+ * @brief Read data from UART device.
+ * @param desc - Instance of UART.
+ * @param data - Pointer to buffer containing data.
+ * @param bytes_number - Number of bytes to read.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
 	ssize_t ret;
@@ -101,14 +117,17 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 	return bytes_number;
 }
 
-/***************************************************************************//**
- * @brief serial_write_data
-*******************************************************************************/
+/**
+ * @brief Write data to UART device.
+ * @param desc - Instance of UART.
+ * @param data - Pointer to buffer containing data.
+ * @param bytes_number - Number of bytes to read.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	size_t total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data, bytes_number);
-
 	while (XUartPs_IsSending(xil_uart_desc->instance));
 	if (total_sent < bytes_number)
 		return FAILURE;
@@ -116,10 +135,13 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_n
     return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief uart_handler
-*******************************************************************************/
-static void uart_handler(void *call_back_ref, uint32_t event, uint32_t data_len)
+/**
+ * @brief UART interrupt handler.
+ * @param call_back_ref - Instance of UART.
+ * @param event - Event that caused the interrupt.
+ * @param data_len - number of bytes received.
+ */
+static void uart_irq_handler(void *call_back_ref, uint32_t event, uint32_t data_len)
 {
 	struct xil_uart_desc *xil_uart_desc = call_back_ref;
     /* All of the data has been received */
@@ -161,9 +183,11 @@ static void uart_handler(void *call_back_ref, uint32_t event, uint32_t data_len)
     }
 }
 
-/***************************************************************************//**
- * @brief uart_irq_init
-*******************************************************************************/
+/**
+ * @brief UART interrupt init.
+ * @param desc - Instance of UART containing a pointer to handler.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 static int32_t uart_irq_init(struct uart_desc *descriptor)
 {
     uint32_t uart_irq_mask;
@@ -173,7 +197,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
         		                             (Xil_ExceptionHandler) XUartPs_InterruptHandler, xil_uart_desc->instance);
     if (status < 0)
     	return status;
-    XUartPs_SetHandler(xil_uart_desc->instance, uart_handler, xil_uart_desc);
+    XUartPs_SetHandler(xil_uart_desc->instance, uart_irq_handler, xil_uart_desc);
     /*
      * Enable the interrupt of the UART so interrupts will occur, setup
      * a local loopback so data that is sent will be received.
@@ -196,9 +220,12 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
     return SUCCESS;
 }
 
-/***************************************************************************//**
- * @brief serial_init
-*******************************************************************************/
+/**
+ * @brief Initialize the UART communication peripheral.
+ * @param desc - The UART descriptor.
+ * @param init_param - The structure that contains the UART parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 {
     int32_t status;
@@ -226,7 +253,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     if (!config) {
         return FAILURE;
     }
-    XUartPs_ResetHw(config->BaseAddress);
+
     status = XUartPs_CfgInitialize(xil_uart_desc->instance, config, config->BaseAddress);
     if (status != XST_SUCCESS) {
         return FAILURE;
@@ -261,6 +288,11 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
     return SUCCESS;
 }
 
+/**
+ * @brief Free the resources allocated by uart_init().
+ * @param desc - The UART descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
 int32_t uart_remove(struct uart_desc *desc) {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	free(xil_uart_desc->instance);
@@ -270,6 +302,11 @@ int32_t uart_remove(struct uart_desc *desc) {
 	return SUCCESS;
 }
 
+/**
+ * @brief Get number of UART errors.
+ * @param desc - The UART descriptor.
+ * @return number of errors.
+ */
 uint32_t uart_get_errors(struct uart_desc *desc) {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	uint32_t total_error_count = xil_uart_desc->total_error_count;
