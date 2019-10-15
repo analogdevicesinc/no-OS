@@ -684,7 +684,7 @@ int main(void)
 	ret = iiod_create(&iiod, &comm_ops);
 	if(ret < 0)
 		return ret;
-	ret = irq_init(&irq_desc, &irq_init_param);
+	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(ret < 0)
 		return ret;
 	xil_uart_init_par.irq_desc = irq_desc;

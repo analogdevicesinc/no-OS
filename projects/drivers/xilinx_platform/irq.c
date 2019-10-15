@@ -57,7 +57,7 @@
  * @param init_param - The structure that contains the IRQ parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_init(struct irq_desc **desc,
+int32_t irq_ctrl_init(struct irq_desc **desc,
 		 const struct irq_init_param *param)
 {
     int32_t status;
@@ -161,16 +161,16 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id) {
  * @param desc - The IRQ descriptor.
  * @param irq_id - Interrupt identifier.
  * @param irq_handler - The IRQ handler.
- * @param extra - extra configurations parameter.
+ * @param dev_instance - device instance.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *extra) {
+int32_t irq_register(struct irq_desc *desc, uint32_t irq_id, void (*irq_handler)(void *data), void *dev_instance) {
 
 	int32_t status;
 	struct xil_irq_desc *xil_dev = desc->extra;
 	status = XScuGic_Connect(xil_dev->gic, irq_id,
                              irq_handler,
-							 extra);
+							 dev_instance);
     if (status != XST_SUCCESS) {
         return FAILURE;
     }
@@ -192,11 +192,11 @@ int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id) {
 }
 
 /**
- * @brief Free the resources allocated by irq_init().
+ * @brief Free the resources allocated by irq_ctrl_init().
  * @param desc - The IRQ descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_remove(struct irq_desc *desc) {
+int32_t irq_ctrl_remove(struct irq_desc *desc) {
 	struct xil_irq_desc *xil_dev = desc->extra;
 	free(xil_dev->gic);
 	free(desc);

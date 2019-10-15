@@ -59,16 +59,16 @@ struct irq_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Initialize the interrupt request peripheral. */
-int32_t irq_init(struct irq_desc **desc,
+/* Initialize a interrupt controller peripheral. */
+int32_t irq_ctrl_init(struct irq_desc **desc,
 		 const struct irq_init_param *param);
 
-/* Free the resources allocated by irq_init(). */
-int32_t irq_remove(struct irq_desc *desc);
+/* Free the resources allocated by irq_ctrl_init(). */
+int32_t irq_ctrl_remove(struct irq_desc *desc);
 
 /* Registers a generic IRQ handling function */
 int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *extra);
+		     void (*irq_handler)(void *data), void *dev_instance);
 
 /* Unregisters a generic IRQ handling function */
 int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id);
