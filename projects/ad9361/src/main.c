@@ -699,7 +699,7 @@ int main(void)
 	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)
 		return ret;
-	status = irq_enable();
+	status = irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
 	while(1) {

@@ -70,37 +70,24 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 		return FAILURE;
 
 	descriptor->extra = calloc(1, sizeof(struct xil_irq_desc));
-	if(!(descriptor->extra)) {
-		free(descriptor);
-		return FAILURE;
-	}
+	if(!(descriptor->extra))
+		goto error_free_descriptor;
 
 	gic = calloc(1, sizeof(XScuGic));
-	if (!gic) {
-		free(descriptor->extra);
-		free(descriptor);
-		return FAILURE;
-	}
+	if (!gic)
+		goto error_free_extra;
 
 	xil_dev = descriptor->extra;
 	xil_dev->gic = gic;
 	/* Initialize the interrupt controller driver */
 	IntcConfig = XScuGic_LookupConfig(param->irq_id);
-	if (NULL == IntcConfig) {
-		free(gic);
-		free(descriptor->extra);
-		free(descriptor);
-		return FAILURE;
-	}
+	if (NULL == IntcConfig)
+		goto error_free_gic;
 
 	status = XScuGic_CfgInitialize(gic, IntcConfig,
 				       IntcConfig->CpuBaseAddress);
-	if (status != XST_SUCCESS) {
-		free(gic);
-		free(descriptor->extra);
-		free(descriptor);
-		return FAILURE;
-	}
+	if (status != XST_SUCCESS)
+		goto error_free_gic;
 
 	/*
 	 * Connect the interrupt controller interrupt handler to the
@@ -112,13 +99,21 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 	*desc = descriptor;
 
 	return SUCCESS;
+
+error_free_gic:
+	free(gic);
+error_free_extra:
+	free(descriptor->extra);
+error_free_descriptor:
+	free(descriptor);
+	return FAILURE;
 }
 
 /**
  * @brief Enable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_enable(void)
+int32_t irq_global_enable(struct irq_desc *desc)
 {
 	/* Enable interrupts */
 	Xil_ExceptionEnable();
@@ -130,7 +125,7 @@ int32_t irq_enable(void)
  * @brief Disable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_disable(void)
+int32_t irq_global_disable(struct irq_desc *desc)
 {
 	/* Disable interrupts */
 	Xil_ExceptionDisable();
