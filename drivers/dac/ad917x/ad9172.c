@@ -44,6 +44,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ad9172.h"
 #include <inttypes.h>
 
