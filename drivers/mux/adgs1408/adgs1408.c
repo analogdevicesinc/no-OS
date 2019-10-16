@@ -302,7 +302,6 @@ int32_t adgs1408_send_daisy_chain_cmds(struct adgs1408_dev *dev,
 int32_t adgs1408_enter_round_robin(struct adgs1408_dev *dev)
 {
 	uint8_t buf[2];
-	int32_t ret;
 
 	if (dev->round_robin_en == ADGS1408_ENABLE) {
 		printf("%s: This feature is not available in Round Robin mode.\n",

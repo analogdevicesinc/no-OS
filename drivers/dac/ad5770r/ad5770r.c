@@ -418,7 +418,6 @@ int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 			      uint16_t dac_value, enum ad5770r_channels channel)
 {
 	uint8_t data[2];
-	int32_t ret;
 
 	if (!dev)
 		return FAILURE;
@@ -442,7 +441,6 @@ int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
 			      uint16_t dac_input, enum ad5770r_channels channel)
 {
 	uint8_t data[2];
-	int32_t ret;
 
 	if (!dev)
 		return FAILURE;
