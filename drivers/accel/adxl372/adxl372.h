@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include "util.h"
 #include "delay.h"
 #include "gpio.h"
 #include "i2c.h"
@@ -52,14 +53,6 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define BIT(x)					(1UL << (x))
-/*
- * Create a contiguous bitmask starting at bit position @l and ending at
- * position @h.
- */
-#define GENMASK(h, l) \
-		(((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
-
 /*
  * ADXL372 registers definition
  */
@@ -212,8 +205,6 @@
 #define ADXL372_INT2_MAP_AWAKE_MODE(x)		(((x) & 0x1) << 6)
 #define ADXL372_INT2_MAP_LOW_MSK		BIT(7)
 #define ADXL372_INT2_MAP_LOW_MODE(x)		(((x) & 0x1) << 7)
-
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 static const int adxl372_th_reg_addr_h[3][3] = {
 	{
