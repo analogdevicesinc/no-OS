@@ -43,9 +43,13 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
 #include "ad9208_api.h"
 #include "ad9208_reg.h"
-#include "platform_drivers.h"
+#include "gpio.h"
+#include "spi.h"
+#include "delay.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
