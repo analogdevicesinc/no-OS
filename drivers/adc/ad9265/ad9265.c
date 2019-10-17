@@ -42,7 +42,7 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
-#include "adc_core.h"
+#include "axi_adc_core.h"
 #include "ad9265.h"
 
 #define DCO_DEBUG
@@ -123,7 +123,7 @@ int32_t ad9265_testmode_set(struct ad9265_dev *dev,
 *******************************************************************************/
 int32_t ad9265_calibrate(struct ad9265_dev *dev,
 			 struct ad9265_init_param init_param,
-			 adc_core core)
+			 struct axi_adc core)
 {
 	int32_t ret, val, cnt, start, max_start, max_cnt;
 	uint32_t stat, inv_range = 0, do_inv, lane,
@@ -138,23 +138,23 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 	if (ret < 0)
 		return ret;
 
-	adc_read(core, ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
+	axi_adc_read(&core, AXI_ADC_REG_CHAN_CNTRL(0), &chan_ctrl0);
 
 	do {
 		if (!init_param.dco) {
-			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
+			axi_adc_read(&core, AXI_ADC_REG_CNTRL, &reg_cntrl);
 
 			if (inv_range)
-				reg_cntrl |= ADC_DDR_EDGESEL;
+				reg_cntrl |= AXI_ADC_DDR_EDGESEL;
 			else
-				reg_cntrl &= ~ADC_DDR_EDGESEL;
-			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
+				reg_cntrl &= ~AXI_ADC_DDR_EDGESEL;
+			axi_adc_write(&core, AXI_ADC_REG_CNTRL, reg_cntrl);
 		}
 
 		ad9265_testmode_set(dev, TESTMODE_PN9_SEQ);
-		adc_write(core, ADC_REG_CHAN_CNTRL(0), ADC_ENABLE);
-		adc_set_pnsel(core, 0, ADC_PN9);
-		adc_write(core, ADC_REG_CHAN_STATUS(0), ~0);
+		axi_adc_write(&core, AXI_ADC_REG_CHAN_CNTRL(0), AXI_ADC_ENABLE);
+		axi_adc_set_pnsel(&core, 0, AXI_ADC_PN9);
+		axi_adc_write(&core, AXI_ADC_REG_CHAN_STATUS(0), ~0);
 
 		for (val = 0; (uint32_t)val <= max_val; val++) {
 			if (init_param.dco) {
@@ -168,24 +168,19 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 				for (lane = 0;
 				     lane < init_param.nb_lanes;
 				     lane++) {
-					adc_write(core, ADC_REG_DELAY_CNTRL,
-						  0);
-
-					adc_write(core, ADC_REG_DELAY_CNTRL,
-						  ADC_DELAY_ADDRESS(lane)
-						  | ADC_DELAY_WDATA(val)
-						  | ADC_DELAY_SEL);
+					axi_adc_idelay_set(&core, lane, val);
 				}
 			}
 
-			adc_write(core, ADC_REG_CHAN_STATUS(0), ~0);
+			axi_adc_write(&core, AXI_ADC_REG_CHAN_STATUS(0), ~0);
 
 			mdelay(1);
 
-			adc_read(core, ADC_REG_CHAN_STATUS(0), &stat);
+			axi_adc_read(&core, AXI_ADC_REG_CHAN_STATUS(0), &stat);
 
 			err_field[val + (inv_range * (max_val + 1))] =
-				! !(stat & (ADC_PN_ERR | ADC_PN_OOS));
+				! !(stat & (AXI_ADC_PN_ERR |
+					    AXI_ADC_PN_OOS));
 		}
 
 		for (val = 0, cnt = 0, max_cnt = 0, start = -1, max_start = 0;
@@ -237,9 +232,9 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 	if ((uint32_t)val > max_val) {
 		val -= max_val + 1;
 		if (!init_param.dco) {
-			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
-			reg_cntrl |= ADC_DDR_EDGESEL;
-			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
+			axi_adc_read(&core, AXI_ADC_REG_CNTRL, &reg_cntrl);
+			reg_cntrl |= AXI_ADC_DDR_EDGESEL;
+			axi_adc_write(&core, AXI_ADC_REG_CNTRL, reg_cntrl);
 		}
 		cnt = 1;
 	} else {
@@ -247,9 +242,9 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 			ad9265_spi_write(dev, AD9265_REG_OUTPUT_PHASE,
 					 OUTPUT_EVEN_ODD_MODE_EN);
 		} else {
-			adc_read(core, ADC_REG_CNTRL, &reg_cntrl);
-			reg_cntrl &= ~ADC_DDR_EDGESEL;
-			adc_write(core, ADC_REG_CNTRL, reg_cntrl);
+			axi_adc_read(&core, AXI_ADC_REG_CNTRL, &reg_cntrl);
+			reg_cntrl &= ~AXI_ADC_DDR_EDGESEL;
+			axi_adc_write(&core, AXI_ADC_REG_CNTRL, reg_cntrl);
 		}
 		cnt = 0;
 	}
@@ -272,16 +267,11 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 		ad9265_spi_write(dev, AD9265_REG_TRANSFER, TRANSFER_SYNC);
 	} else {
 		for (lane = 0; lane < init_param.nb_lanes; lane++) {
-			adc_write(core, ADC_REG_DELAY_CNTRL, 0);
-
-			adc_write(core, ADC_REG_DELAY_CNTRL,
-				  ADC_DELAY_ADDRESS(lane)
-				  | ADC_DELAY_WDATA(val)
-				  | ADC_DELAY_SEL);
+			axi_adc_idelay_set(&core, lane, val);
 		}
 	}
 
-	adc_write(core, ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
+	axi_adc_write(&core, AXI_ADC_REG_CHAN_CNTRL(0), chan_ctrl0);
 
 	ret = ad9265_outputmode_set(dev, init_param.output_mode);
 	if (ret < 0)
@@ -295,7 +285,7 @@ int32_t ad9265_calibrate(struct ad9265_dev *dev,
 *******************************************************************************/
 int32_t ad9265_setup(struct ad9265_dev **device,
 		     struct ad9265_init_param init_param,
-		     adc_core core)
+		     struct axi_adc core)
 {
 	uint8_t chip_id;
 	int32_t ret;
