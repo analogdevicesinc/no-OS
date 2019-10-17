@@ -63,7 +63,8 @@ struct uart_desc {
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number);
 
 /* Write data to UART. */
-int32_t uart_write(struct uart_desc *desc, const uint8_t *data, uint32_t bytes_number);
+int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
+		   uint32_t bytes_number);
 
 /* Initialize the UART communication peripheral. */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
@@ -74,4 +75,4 @@ int32_t uart_remove(struct uart_desc *desc);
 /* Check if UART errors occurred. */
 uint32_t uart_get_errors(struct uart_desc *desc);
 
-#endif /* SERIAL_H_ */
+#endif /* UART_H_ */

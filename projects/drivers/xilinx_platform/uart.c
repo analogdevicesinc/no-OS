@@ -336,6 +336,3 @@ uint32_t uart_get_errors(struct uart_desc *desc)
 
 	return total_error_count;
 }
-
-
-
