@@ -30,13 +30,18 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <xparameters.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "error.h"
 #include "fifo.h"
-#include "uart.h"
 #include "irq.h"
-#include "xilinx_platform_drivers.h"
+#include "uart.h"
+#include "uart_extra.h"
+#ifdef XPAR_XUARTPS_NUM_INSTANCES
+#include <xil_exception.h>
+#include <xuartps.h>
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -211,11 +216,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 	uart_irq_mask =
 		XUARTPS_IXR_TOUT | XUARTPS_IXR_PARITY | XUARTPS_IXR_FRAMING |
 		XUARTPS_IXR_OVER | XUARTPS_IXR_TXEMPTY | XUARTPS_IXR_RXFULL |
-		XUARTPS_IXR_RXOVR;
-
-	if (xil_uart_desc->instance->Platform == XPLAT_ZYNQ_ULTRA_MP) {
-		uart_irq_mask |= XUARTPS_IXR_RBRK;
-	}
+		XUARTPS_IXR_RXOVR | XUARTPS_IXR_RBRK;
 
 	XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
 

@@ -41,11 +41,14 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <xparameters.h>
 #include <stdlib.h>
-#include <xscugic.h>
 #include "error.h"
 #include "irq.h"
-#include "xilinx_platform_drivers.h"
+#include "irq_extra.h"
+#ifdef XPAR_XSCUGIC_NUM_INSTANCES
+#include <xscugic.h>
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -78,7 +81,7 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 		goto error_free_extra;
 
 	xil_dev = descriptor->extra;
-	xil_dev->gic = gic;
+	xil_dev->instance = gic;
 	/* Initialize the interrupt controller driver */
 	IntcConfig = XScuGic_LookupConfig(param->irq_id);
 	if (NULL == IntcConfig)
@@ -142,7 +145,7 @@ int32_t irq_global_disable(struct irq_desc *desc)
 int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Enable(xil_dev->gic, irq_id);
+	XScuGic_Enable(xil_dev->instance, irq_id);
 
 	return SUCCESS;
 }
@@ -156,7 +159,7 @@ int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Disable(xil_dev->gic, irq_id);
+	XScuGic_Disable(xil_dev->instance, irq_id);
 
 	return SUCCESS;
 }
@@ -174,7 +177,7 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 {
 	int32_t status;
 	struct xil_irq_desc *xil_dev = desc->extra;
-	status = XScuGic_Connect(xil_dev->gic, irq_id,
+	status = XScuGic_Connect(xil_dev->instance, irq_id,
 				 irq_handler,
 				 dev_instance);
 	if (status != XST_SUCCESS) {
@@ -193,7 +196,7 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Disconnect(xil_dev->gic, irq_id);
+	XScuGic_Disconnect(xil_dev->instance, irq_id);
 
 	return SUCCESS;
 }
@@ -206,7 +209,7 @@ int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 int32_t irq_ctrl_remove(struct irq_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	free(xil_dev->gic);
+	free(xil_dev->instance);
 	free(desc->extra);
 	free(desc);
 

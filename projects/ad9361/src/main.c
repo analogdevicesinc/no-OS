@@ -59,7 +59,9 @@
 #ifdef USE_LIBIIO
 #ifdef UART_INTERFACE
 #include "irq.h"
+#include "irq_extra.h"
 #include "uart.h"
+#include "uart_extra.h"
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
 #include <tinyiiod_axi_adc.h>
@@ -641,12 +643,19 @@ int main(void)
 		.write = iiod_write,
 	};
 
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PL,
+	};
+
 	struct irq_init_param irq_init_param = {
 		.irq_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
 	};
+
 	struct irq_desc *irq_desc;
 
 	struct xil_uart_init_param xil_uart_init_par = {
+		.type = UART_PL,
 		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};

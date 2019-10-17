@@ -104,7 +104,7 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_par *par)
 	struct xil_timer_desc *xil_timer_desc;
 
 	descriptor = calloc(1, sizeof(struct timer_desc));
-	xil_timer_desc = calloc(1, sizeof(struct xil_uart_desc));
+	xil_timer_desc = calloc(1, sizeof(struct xil_timer_desc));
 	descriptor->extra = xil_timer_desc;
 	descriptor->device_id = par->device_id;
 	xil_uart_init_param = par->extra;
