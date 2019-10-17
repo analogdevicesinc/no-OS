@@ -47,57 +47,6 @@
 #include "util.h"
 #include "axi_adc_core.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define AXI_ADC_REG_RSTN		0x0040
-#define AXI_ADC_MMCM_RSTN		BIT(1)
-#define AXI_ADC_RSTN			BIT(0)
-
-#define AXI_ADC_REG_CLK_FREQ	0x0054
-#define AXI_ADC_CLK_FREQ(x)		(((x) & 0xFFFFFFFF) << 0)
-#define AXI_ADC_TO_CLK_FREQ(x)	(((x) >> 0) & 0xFFFFFFFF)
-
-#define AXI_ADC_REG_CLK_RATIO	0x0058
-#define AXI_ADC_CLK_RATIO(x)	(((x) & 0xFFFFFFFF) << 0)
-#define AXI_ADC_TO_CLK_RATIO(x)	(((x) >> 0) & 0xFFFFFFFF)
-
-#define AXI_ADC_REG_STATUS		0x005C
-#define AXI_ADC_MUX_PN_ERR		BIT(3)
-#define AXI_ADC_MUX_PN_OOS		BIT(2)
-#define AXI_ADC_MUX_OVER_RANGE	BIT(1)
-#define AXI_ADC_STATUS			BIT(0)
-
-#define AXI_ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
-#define AXI_ADC_PN_SEL				BIT(10)
-#define AXI_ADC_IQCOR_ENB			BIT(9)
-#define AXI_ADC_DCFILT_ENB			BIT(8)
-#define AXI_ADC_FORMAT_SIGNEXT		BIT(6)
-#define AXI_ADC_FORMAT_TYPE			BIT(5)
-#define AXI_ADC_FORMAT_ENABLE		BIT(4)
-#define AXI_ADC_PN23_TYPE			BIT(1)
-#define AXI_ADC_ENABLE				BIT(0)
-
-#define AXI_ADC_REG_CHAN_CNTRL_1(c)	(0x0410 + (c) * 0x40)
-#define AXI_ADC_DCFILT_OFFSET(x)	(((x) & 0xFFFF) << 16)
-#define AXI_ADC_TO_DCFILT_OFFSET(x)	(((x) >> 16) & 0xFFFF)
-#define AXI_ADC_DCFILT_COEFF(x)		(((x) & 0xFFFF) << 0)
-#define AXI_ADC_TO_DCFILT_COEFF(x)	(((x) >> 0) & 0xFFFF)
-
-#define AXI_ADC_REG_CHAN_CNTRL_2(c)	(0x0414 + (c) * 0x40)
-#define AXI_ADC_IQCOR_COEFF_1(x)	(((x) & 0xFFFF) << 16)
-#define AXI_ADC_TO_IQCOR_COEFF_1(x)	(((x) >> 16) & 0xFFFF)
-#define AXI_ADC_IQCOR_COEFF_2(x)	(((x) & 0xFFFF) << 0)
-#define AXI_ADC_TO_IQCOR_COEFF_2(x)	(((x) >> 0) & 0xFFFF)
-
-#define AXI_ADC_REG_CHAN_CNTRL_3(c)	(0x0418 + (c) * 0x40)
-#define AXI_ADC_ADC_PN_SEL(x)		(((x) & 0xF) << 16)
-#define AXI_ADC_TO_ADC_PN_SEL(x)	(((x) >> 16) & 0xF)
-#define AXI_ADC_ADC_DATA_SEL(x)		(((x) & 0xF) << 0)
-#define AXI_ADC_TO_ADC_DATA_SEL(x)	(((x) >> 0) & 0xF)
-
-#define AXI_ADC_REG_DELAY(l)		(0x0800 + (l) * 0x4)
-
 /***************************************************************************//**
  * @brief axi_adc_read
  *******************************************************************************/
