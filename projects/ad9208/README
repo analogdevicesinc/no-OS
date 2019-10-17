@@ -1,7 +1,5 @@
 # Additional required source files:
 
-	cp ../../drivers/xilinx_platform/platform_drivers.h ./
-	cp ../../drivers/xilinx_platform/xilinx_platform_drivers.h ./
 	cp ../../../include/axi_io.h ./
 	cp ../../../include/error.h ./
 	cp ../../../include/spi.h ./
@@ -9,10 +7,12 @@
 	cp ../../../include/gpio.h ./
 	cp ../../../include/delay.h ./
 	cp ../../../drivers/platform/xilinx/axi_io.c ./
-	cp ../../drivers/xilinx_platform/spi.c ./
-	cp ../../drivers/xilinx_platform/i2c.c ./
-	cp ../../drivers/xilinx_platform/gpio.c ./
-	cp ../../drivers/xilinx_platform/delay.c ./
+	cp ../../../drivers/platform/xilinx/platform_drivers.h ./
+	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h ./
+	cp ../../../drivers/platform/xilinx/spi.c ./
+	cp ../../../drivers/platform/xilinx/i2c.c ./
+	cp ../../../drivers/platform/xilinx/gpio.c ./
+	cp ../../../drivers/platform/xilinx/delay.c ./
 	cp ../../drivers/util/util.c ./
 	cp ../../drivers/util/util.h ./
 	cp ../../drivers/jesd204/xilinx_transceiver.h ./
