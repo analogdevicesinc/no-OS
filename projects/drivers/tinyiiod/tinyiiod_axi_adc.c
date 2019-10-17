@@ -77,7 +77,7 @@ ssize_t tinyiiod_axi_adc_remove(tinyiiod_adc *tinyiiod_adc)
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibphase(void *device, char *buf, size_t len,
+static ssize_t get_calibphase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -104,7 +104,7 @@ static ssize_t get_cf_calibphase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibbias(void *device, char *buf, size_t len,
+static ssize_t get_calibbias(void *device, char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	int32_t val;
@@ -124,7 +124,7 @@ static ssize_t get_cf_calibbias(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_calibscale(void *device, char *buf, size_t len,
+static ssize_t get_calibscale(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -151,7 +151,7 @@ static ssize_t get_cf_calibscale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_samples_pps(void *device, char *buf, size_t len,
+static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -164,7 +164,7 @@ static ssize_t get_cf_samples_pps(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_cf_sampling_frequency(void *device, char *buf, size_t len,
+static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	uint64_t sampling_freq_hz;
@@ -184,7 +184,7 @@ static ssize_t get_cf_sampling_frequency(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibphase(void *device, char *buf, size_t len,
+static ssize_t set_calibphase(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
@@ -203,7 +203,7 @@ static ssize_t set_cf_calibphase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibbias(void *device, char *buf, size_t len,
+static ssize_t set_calibbias(void *device, char *buf, size_t len,
 				const struct channel_info *channel)
 {
 	int32_t val = read_value(buf);
@@ -223,7 +223,7 @@ static ssize_t set_cf_calibbias(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_calibscale(void *device, char *buf, size_t len,
+static ssize_t set_calibscale(void *device, char *buf, size_t len,
 				 const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
@@ -242,7 +242,7 @@ static ssize_t set_cf_calibscale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_samples_pps(void *device, char *buf, size_t len,
+static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -255,50 +255,72 @@ static ssize_t set_cf_samples_pps(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_cf_sampling_frequency(void *device, char *buf, size_t len,
+static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
 }
 
-static attribute_map cf_voltage_read_attrtibute_map[] = {
-	{.name = "calibphase", .exec = get_cf_calibphase},
-	{.name = "calibbias", .exec = get_cf_calibbias},
-	{.name = "calibscale", .exec = get_cf_calibscale},
-	{.name = "samples_pps", .exec = get_cf_samples_pps},
-	{.name = "sampling_frequency", .exec = get_cf_sampling_frequency},
-	{NULL},
+static struct iio_attribute iio_attr_calibphase = {
+	.name = "calibphase",
+	.show = get_calibphase,
+	.store = set_calibphase,
 };
 
-static attribute_map ch_read_adc_attr_map[] = {
-	{.name = "voltage0", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
-	{.name = "voltage1", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
-	{.name = "voltage2", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
-	{.name = "voltage3", .exec = NULL, .map_in = cf_voltage_read_attrtibute_map, NULL},
-	{.name = NULL},
+static struct iio_attribute iio_attr_calibbias = {
+	.name = "calibbias",
+	.show = get_calibbias,
+	.store = set_calibbias,
+};
+static struct iio_attribute iio_attr_calibscale = {
+	.name = "calibscale",
+	.show = get_calibscale,
+	.store = set_calibscale,
+};
+static struct iio_attribute iio_attr_samples_pps = {
+	.name = "samples_pps",
+	.show = get_samples_pps,
+	.store = set_samples_pps,
+};
+static struct iio_attribute iio_attr_sampling_frequency = {
+	.name = "sampling_frequency",
+	.show = get_sampling_frequency,
+	.store = set_sampling_frequency,
+};
+static struct iio_attribute *iio_voltage_attributes[] = {
+	&iio_attr_calibphase,
+	&iio_attr_calibbias,
+	&iio_attr_calibscale,
+	&iio_attr_samples_pps,
+	&iio_attr_sampling_frequency,
+	NULL,
+};
+static struct iio_channel iio_channel_voltage0 = {
+	.name = "voltage0",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage1 = {
+	.name = "voltage1",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage2 = {
+	.name = "voltage2",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage3 = {
+	.name = "voltage3",
+	.attributes = iio_voltage_attributes,
 };
 
-static attribute_map cf_voltage_write_attrtibute_map[] = {
-	{.name = "calibphase", .exec = set_cf_calibphase},
-	{.name = "calibbias", .exec = set_cf_calibbias},
-	{.name = "calibscale", .exec = set_cf_calibscale},
-	{.name = "samples_pps", .exec = set_cf_samples_pps},
-	{.name = "sampling_frequency", .exec = set_cf_sampling_frequency},
-	{.name = NULL},
+static struct iio_channel *iio_adc_channels[] = {
+	&iio_channel_voltage0,
+	&iio_channel_voltage1,
+	&iio_channel_voltage2,
+	&iio_channel_voltage3,
+	NULL,
 };
 
-static attribute_map ch_write_adc_attr_map[] = {
-	{.name = "voltage0", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
-	{.name = "voltage1", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
-	{.name = "voltage2", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
-	{.name = "voltage3", .exec = NULL, .map_in = cf_voltage_write_attrtibute_map, NULL},
-	{.name = NULL},
-};
-
-static attribute_map adc_attr_map[] = {
-	{.name = "NULL", .exec = NULL, .map_in = ch_read_adc_attr_map, .map_out = ch_write_adc_attr_map},
-	{.name = NULL},
-};
+static struct iio_device *iio_adc_device;
 
 ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
@@ -363,18 +385,18 @@ ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no)
 			goto error;
 		xml_add_node(channel, attribute);
 
-		for (uint8_t j = 0; cf_voltage_read_attrtibute_map[j].name != NULL; j++) {
+		for (uint8_t j = 0; iio_voltage_attributes[j] != NULL; j++) {
 			ret = xml_create_node(&attribute, "attribute");
 			if (ret < 0)
 				goto error;
 			ret = xml_create_attribute(&att, "name",
-						   cf_voltage_read_attrtibute_map[j].name);
+					iio_voltage_attributes[j]->name);
 			if (ret < 0)
 				goto error;
 			ret = xml_add_attribute(attribute, att);
 			if (ret < 0)
 				goto error;
-			sprintf(buff, "in_voltage%d_%s", i, cf_voltage_read_attrtibute_map[j].name);
+			sprintf(buff, "in_voltage%d_%s", i, iio_voltage_attributes[j]->name);
 			ret = xml_create_attribute(&att, "filename", buff);
 			if (ret < 0)
 				goto error;
@@ -402,14 +424,19 @@ error:
 }
 
 /**
- * get_ch_read_dac_attr_map
+ * get_adc_device
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_adc_attr_map(const char *device_name)
+struct iio_device *get_adc_device(const char *device_name)
 {
-	adc_attr_map[0].name = device_name;
-	return adc_attr_map;
+	iio_adc_device = calloc(1, sizeof(struct iio_device));
+	if (!iio_adc_device)
+		return NULL;
+	iio_adc_device->name = device_name;
+	iio_adc_device->channels = iio_adc_channels;
+
+	return iio_adc_device;
 }
 
 /**

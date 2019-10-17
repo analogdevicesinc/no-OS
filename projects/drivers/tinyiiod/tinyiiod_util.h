@@ -43,7 +43,7 @@
 #include "tinyiiod_types.h"
 #include "tinyiiod.h"
 
-ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), attribute_map *attr_map);
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), struct iio_device *iio_device);
 ssize_t iiod_create(struct tinyiiod **iiod, tinyiiod_comm_ops *comm_ops);
 
 #endif /* __TINYIIOD_UTIL_H__ */

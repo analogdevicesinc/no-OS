@@ -53,6 +53,24 @@ typedef struct attribute_map {
     struct attribute_map *map_out_global;
 } attribute_map;
 
+
+struct iio_attribute {
+    const char *name;
+    ssize_t (*show)(void *device, char *buf, size_t len, const struct channel_info *channel);
+    ssize_t (*store)(void *device, char *buf, size_t len, const struct channel_info *channel);
+};
+
+struct iio_channel {
+	char *name;
+	struct iio_attribute **attributes;
+};
+
+struct iio_device {
+	const char *name;
+	struct iio_channel **channels;
+	struct iio_attribute **attributes;
+};
+
 typedef struct tinyiiod_comm_ops {
 	/* Read from the input stream */
 	ssize_t (*read)(char *buf, size_t len);

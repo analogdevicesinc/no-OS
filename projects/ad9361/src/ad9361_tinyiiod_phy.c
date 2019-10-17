@@ -1567,16 +1567,6 @@ static attribute_map ch_write_phy_attr_map[] = {
 };
 
 /**
- * get_ch_write_phy_attr_map
- * get map between attribute name and corresponding function
- * @return map
- */
-attribute_map *get_ch_write_phy_attr_map()
-{
-    return ch_write_phy_attr_map;
-}
-
-/**
  * get_dcxo_tune_coarse
  * @param *buff where value is stored
  * @param len maximum length of value to be stored in buf
@@ -2079,9 +2069,13 @@ static attribute_map phy_attr_map[] = {
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_phy_attr_map(const char *device_name)
+struct iio_device *get_phy_device(const char *device_name)
 {
-    phy_attr_map->name = device_name;
+	iio_adc_device = calloc(1, sizeof(struct iio_device));
+	if (!iio_adc_device)
+		return NULL;
+	iio_adc_device->name = device_name;
+	iio_adc_device->channels = iio_ad9361_channels;
 
-    return phy_attr_map;
+	return iio_adc_device;
 }

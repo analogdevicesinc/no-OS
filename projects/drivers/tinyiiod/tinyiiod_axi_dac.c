@@ -163,7 +163,7 @@ ssize_t tinyiiod_axi_dac_remove(tinyiiod_dac *tinyiiod_dac)
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_calibscale(void *device, char *buf, size_t len,
+static ssize_t get_voltage_calibscale(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -190,7 +190,7 @@ static ssize_t get_dds_calibscale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_calibphase(void *device, char *buf, size_t len,
+static ssize_t get_voltage_calibphase(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	int32_t val, val2;
@@ -213,18 +213,11 @@ static ssize_t get_dds_calibphase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_sampling_frequency(void *device, char *buf, size_t len,
+static ssize_t get_voltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
 }
-
-static attribute_map dds_voltage_read_attrtibute_map[] = {
-	{.name = "calibphase", .exec = get_dds_calibphase},
-	{.name = "calibscale", .exec = get_dds_calibscale},
-	{.name = "sampling_frequency", .exec = get_dds_sampling_frequency},
-	{.name = NULL},
-};
 
 /**
  * get_dds_altvoltage_phase
@@ -233,7 +226,7 @@ static attribute_map dds_voltage_read_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_phase(void *device, char *buf, size_t len,
+static ssize_t get_altvoltage_phase(void *device, char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	uint32_t phase;
@@ -249,7 +242,7 @@ static ssize_t get_dds_altvoltage_phase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_scale(void *device, char *buf, size_t len,
+static ssize_t get_altvoltage_scale(void *device, char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	int32_t scale;
@@ -267,7 +260,7 @@ static ssize_t get_dds_altvoltage_scale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_frequency(void *device, char *buf, size_t len,
+static ssize_t get_altvoltage_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	uint32_t freq;
@@ -284,7 +277,7 @@ static ssize_t get_dds_altvoltage_frequency(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_raw(void *device, char *buf, size_t len,
+static ssize_t get_altvoltage_raw(void *device, char *buf, size_t len,
 				      const struct channel_info *channel)
 {
 	return -ENODEV;
@@ -297,46 +290,11 @@ static ssize_t get_dds_altvoltage_raw(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written in buf, or negative value on failure
  */
-static ssize_t get_dds_altvoltage_sampling_frequency(void *device, char *buf,
+static ssize_t get_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
-}
-
-static attribute_map dds_altvoltage_read_attrtibute_map[] = {
-	{.name = "phase", .exec = get_dds_altvoltage_phase},
-	{.name = "scale", .exec = get_dds_altvoltage_scale},
-	{.name = "frequency", .exec = get_dds_altvoltage_frequency},
-	{.name = "raw", .exec = get_dds_altvoltage_raw},
-	{.name = "sampling_frequency", .exec = get_dds_altvoltage_sampling_frequency},
-	{.name = NULL},
-};
-
-static attribute_map ch_read_dac_attr_map[] = {
-	{.name = "voltage0", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
-	{.name = "voltage1", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
-	{.name = "voltage2", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
-	{.name = "voltage3", .exec = NULL, .map_in = dds_voltage_read_attrtibute_map, .map_out = dds_voltage_read_attrtibute_map},
-	{.name = "altvoltage0", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage1", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage2", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage3", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage4", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage5", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage6", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = "altvoltage7", .exec = NULL, .map_in = dds_altvoltage_read_attrtibute_map, .map_out = dds_altvoltage_read_attrtibute_map},
-	{.name = NULL},
-};
-
-/**
- * get_ch_read_dac_attr_map
- * get map between attribute name and corresponding function
- * @return map
- */
-attribute_map *get_ch_read_dac_attr_map(const char *device_name)
-{
-	return ch_read_dac_attr_map;
 }
 
 /**
@@ -346,7 +304,7 @@ attribute_map *get_ch_read_dac_attr_map(const char *device_name)
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_calibscale(void *device, char *buf, size_t len,
+static ssize_t set_voltage_calibscale(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	float calib= strtof(buf, NULL);
@@ -365,7 +323,7 @@ static ssize_t set_dds_calibscale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_calibphase(void *device, char *buf, size_t len,
+static ssize_t set_voltage_calibphase(void *device, char *buf, size_t len,
 				  const struct channel_info *channel)
 {
 	float calib = strtof(buf, NULL);
@@ -384,18 +342,11 @@ static ssize_t set_dds_calibphase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_sampling_frequency(void *device, char *buf, size_t len,
+static ssize_t set_voltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
 }
-
-static attribute_map dds_voltage_write_attrtibute_map[] = {
-	{.name = "calibphase", .exec = set_dds_calibphase},
-	{.name = "calibscale", .exec = set_dds_calibscale},
-	{.name = "sampling_frequency", .exec = set_dds_sampling_frequency},
-	{.name = NULL},
-};
 
 /**
  * set_dds_altvoltage_phase
@@ -404,7 +355,7 @@ static attribute_map dds_voltage_write_attrtibute_map[] = {
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_phase(void *device, char *buf, size_t len,
+static ssize_t set_altvoltage_phase(void *device, char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
@@ -421,7 +372,7 @@ static ssize_t set_dds_altvoltage_phase(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_scale(void *device, char *buf, size_t len,
+static ssize_t set_altvoltage_scale(void *device, char *buf, size_t len,
 					const struct channel_info *channel)
 {
 	float fscale = strtof(buf, NULL);
@@ -439,7 +390,7 @@ static ssize_t set_dds_altvoltage_scale(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_frequency(void *device, char *buf, size_t len,
+static ssize_t set_altvoltage_frequency(void *device, char *buf, size_t len,
 		const struct channel_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
@@ -456,7 +407,7 @@ static ssize_t set_dds_altvoltage_frequency(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_raw(void *device, char *buf, size_t len,
+static ssize_t set_altvoltage_raw(void *device, char *buf, size_t len,
 				      const struct channel_info *channel)
 {
 	uint32_t dds_mode = read_ul_value(buf);
@@ -477,52 +428,153 @@ static ssize_t set_dds_altvoltage_raw(void *device, char *buf, size_t len,
  * @param *channel channel properties
  * @return length of chars written to attribute, or negative value on failure
  */
-static ssize_t set_dds_altvoltage_sampling_frequency(void *device, char *buf,
+static ssize_t set_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
 		const struct channel_info *channel)
 {
 	return -ENODEV;
 }
 
-static attribute_map dds_altvoltage_write_attrtibute_map[] = {
-	{.name = "phase", .exec = set_dds_altvoltage_phase},
-	{.name = "scale", .exec = set_dds_altvoltage_scale},
-	{.name = "frequency", .exec = set_dds_altvoltage_frequency},
-	{.name = "raw", .exec = set_dds_altvoltage_raw},
-	{.name = "sampling_frequency", .exec = set_dds_altvoltage_sampling_frequency},
-	{.name = NULL, NULL},
+static struct iio_attribute iio_attr_voltage_calibphase = {
+	.name = "calibphase",
+	.show = get_voltage_calibphase,
+	.store = set_voltage_calibphase,
 };
 
-static attribute_map ch_write_dac_attr_map[] = {
-	{.name = "voltage0", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
-	{.name = "voltage1", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
-	{.name = "voltage2", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
-	{.name = "voltage3", .exec = NULL, .map_in = dds_voltage_write_attrtibute_map, .map_out = dds_voltage_write_attrtibute_map},
-	{.name = "altvoltage0", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage1", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage2", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage3", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage4", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage5",.exec =  NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage6", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = "altvoltage7", .exec = NULL, .map_in = dds_altvoltage_write_attrtibute_map, .map_out = dds_altvoltage_write_attrtibute_map},
-	{.name = NULL},
+static struct iio_attribute iio_attr_voltage_calibscale = {
+	.name = "calibscale",
+	.show = get_voltage_calibscale,
+	.store = set_voltage_calibscale,
 };
 
-static attribute_map dac_attr_map[] = {
-	{.name = "NULL", .exec = NULL, .map_in = ch_read_dac_attr_map, .map_out = ch_write_dac_attr_map},
-	{.name = NULL},
+static struct iio_attribute iio_attr_voltage_sampling_frequency = {
+	.name = "sampling_frequency",
+	.show = get_voltage_sampling_frequency,
+	.store = set_voltage_sampling_frequency,
 };
+
+static struct iio_attribute iio_attr_altvoltage_raw = {
+	.name = "raw",
+	.show = get_altvoltage_raw,
+	.store = set_altvoltage_raw,
+};
+static struct iio_attribute iio_attr_altvoltage_phase = {
+	.name = "phase",
+	.show = get_altvoltage_phase,
+	.store = set_altvoltage_phase,
+};
+static struct iio_attribute iio_attr_altvoltage_frequency = {
+	.name = "frequency",
+	.show = get_altvoltage_frequency,
+	.store = set_altvoltage_frequency,
+};
+static struct iio_attribute iio_attr_altvoltage_scale = {
+	.name = "scale",
+	.show = get_altvoltage_scale,
+	.store = set_altvoltage_scale,
+};
+static struct iio_attribute iio_attr_altvoltage_sampling_frequency = {
+	.name = "sampling_frequency",
+	.show = get_altvoltage_sampling_frequency,
+	.store = set_altvoltage_sampling_frequency,
+};
+
+static struct iio_attribute *iio_voltage_attributes[] = {
+	&iio_attr_voltage_calibphase,
+	&iio_attr_voltage_calibscale,
+	&iio_attr_voltage_sampling_frequency,
+	NULL,
+};
+static struct iio_attribute *iio_altvoltage_attributes[] = {
+	&iio_attr_altvoltage_raw,
+	&iio_attr_altvoltage_phase,
+	&iio_attr_altvoltage_frequency,
+	&iio_attr_altvoltage_scale,
+	&iio_attr_altvoltage_sampling_frequency,
+	NULL,
+};
+static struct iio_channel iio_channel_voltage0 = {
+	.name = "voltage0",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage1 = {
+	.name = "voltage1",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage2 = {
+	.name = "voltage2",
+	.attributes = iio_voltage_attributes,
+};
+static struct iio_channel iio_channel_voltage3 = {
+	.name = "voltage3",
+	.attributes = iio_voltage_attributes,
+};
+
+static struct iio_channel iio_channel_altvoltage0 = {
+	.name = "altvoltage0",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage1 = {
+	.name = "altvoltage1",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage2 = {
+	.name = "altvoltage2",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage3 = {
+	.name = "altvoltage3",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage4 = {
+	.name = "altvoltage4",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage5 = {
+	.name = "altvoltage5",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage6 = {
+	.name = "altvoltage6",
+	.attributes = iio_altvoltage_attributes,
+};
+static struct iio_channel iio_channel_altvoltage7 = {
+	.name = "altvoltage7",
+	.attributes = iio_altvoltage_attributes,
+};
+
+static struct iio_channel *iio_dac_channels[] = {
+	&iio_channel_voltage0,
+	&iio_channel_voltage1,
+	&iio_channel_voltage2,
+	&iio_channel_voltage3,
+	&iio_channel_altvoltage0,
+	&iio_channel_altvoltage1,
+	&iio_channel_altvoltage2,
+	&iio_channel_altvoltage3,
+	&iio_channel_altvoltage4,
+	&iio_channel_altvoltage5,
+	&iio_channel_altvoltage6,
+	&iio_channel_altvoltage7,
+	NULL,
+};
+
+static struct iio_device *iio_dac_device;
 
 /**
  * get_ch_write_dac_attr_map
  * get map between attribute name and corresponding function
  * @return map
  */
-attribute_map *get_dac_attr_map(const char *device_name)
+struct iio_device *get_dac_device(const char *device_name)
 {
-	dac_attr_map[0].name = device_name;
-	return dac_attr_map;
+	iio_dac_device = calloc(1, sizeof(struct iio_device));
+	if (!iio_dac_device)
+		return NULL;
+	iio_dac_device->name = device_name;
+	iio_dac_device->channels = iio_dac_channels;
+
+	return iio_dac_device;
 }
 
 /**
