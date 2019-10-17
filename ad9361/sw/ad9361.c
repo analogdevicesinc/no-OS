@@ -6773,6 +6773,7 @@ int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate)
 			round_rate = ad9361_rfpll_int_round_rate(phy->ref_clk_scale[RX_RFPLL_INT], rate,
 							&phy->clks[phy->ref_clk_scale[RX_RFPLL_INT]->parent_source]->rate);
 		}
+		break;
 	case TX_RFPLL:
 		if (phy->pdata->use_ext_tx_lo) {
 			if (phy->ad9361_rfpll_ext_round_rate)
