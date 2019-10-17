@@ -116,11 +116,11 @@ int32_t ad9265_testmode_set(struct ad9265_dev *dev,
 			    uint8_t mode);
 int32_t ad9265_setup(struct ad9265_dev **device,
 		     struct ad9265_init_param init_param,
-		     adc_core core);
+		     struct axi_adc core);
 int32_t ad9265_remove(struct ad9265_dev *dev);
 int32_t ad9265_calibrate(struct ad9265_dev *dev,
 			 struct ad9265_init_param init_param,
-			 adc_core core);
+			 struct axi_adc core);
 int32_t ad9265_outputmode_set(struct ad9265_dev *dev,
 			      uint8_t mode);
 int32_t ad9265_spi_write(struct ad9265_dev *dev,
