@@ -1,6 +1,7 @@
-/***************************************************************************//**
- *   @file   i2c.h
- *   @author DBogdan (dragos.bogdan@analog.com)
+/*******************************************************************************
+ *   @file   i2c_extra.h
+ *   @brief  Header containing types used in the i2c driver.
+ *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -36,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef I2C_H_
-#define I2C_H_
+#ifndef I2C_EXTRA_H_
+#define I2C_EXTRA_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -49,45 +50,20 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum i2c_transfer_mode {
-	i2c_general_call =	0x01,
-	i2c_repeated_start =	0x02,
-	i2c_10_bit_transfer =	0x04
-} i2c_transfer_mode;
+enum xil_i2c_type {
+	IIC_PL,
+	IIC_PS
+} xil_i2c_type;
 
-typedef struct i2c_init_param {
-	uint32_t	max_speed_hz;
-	uint8_t		slave_address;
-	void		*extra;
-} i2c_init_param;
+typedef struct xil_i2c_init {
+	enum xil_i2c_type	type;
+	uint32_t		device_id;
+} xil_i2c_init;
 
-typedef struct i2c_desc {
-	uint32_t	max_speed_hz;
-	uint8_t		slave_address;
-	void		*extra;
-} i2c_desc;
+typedef struct xil_i2c_desc {
+	enum xil_i2c_type	type;
+	void			*config;
+	void			*instance;
+} xil_i2c_desc;
 
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* Initialize the I2C communication peripheral. */
-int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param);
-
-/* Free the resources allocated by i2c_init(). */
-int32_t i2c_remove(struct i2c_desc *desc);
-
-/* Write data to a slave device. */
-int32_t i2c_write(struct i2c_desc *desc,
-		  uint8_t *data,
-		  uint8_t bytes_number,
-		  uint8_t option);
-
-/* Read data from a slave device. */
-int32_t i2c_read(struct i2c_desc *desc,
-		 uint8_t *data,
-		 uint8_t bytes_number,
-		 uint8_t option);
-
-#endif // I2C_H_
+#endif // I2C_EXTRA_H_

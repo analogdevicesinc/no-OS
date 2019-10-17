@@ -42,9 +42,18 @@
 /******************************************************************************/
 
 #include <stdlib.h>
+
+#include <xparameters.h>
+#ifdef XPAR_XIIC_NUM_INSTANCES
+#include <xiic.h>
+#endif
+#ifdef XPAR_XIICPS_NUM_INSTANCES
+#include <xiicps.h>
+#endif
+
 #include "error.h"
 #include "i2c.h"
-#include "xilinx_platform_drivers.h"
+#include "i2c_extra.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -57,65 +66,105 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param)
+		 const struct i2c_init_param *init_param)
 {
+	int32_t		ret;
+	i2c_desc	*idesc;
+	xil_i2c_desc	*xdesc;
+	xil_i2c_init	*xinit;
+
+	idesc = (struct i2c_desc *)malloc(sizeof(*idesc));
+	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
+
+	if(!idesc || !xdesc)
+		goto error;
+
+	idesc->max_speed_hz = init_param->max_speed_hz;
+	idesc->slave_address = init_param->slave_address;
+	xinit = init_param->extra;
+
+	idesc->extra = xdesc;
+	xdesc->type = xinit->type;
+	switch (xinit->type) {
+	case IIC_PL:
 #ifdef XIIC_H
-	i2c_desc *dev;
-	xil_i2c_desc *xil_dev;
-	xil_i2c_init_param *xil_param;
-	int32_t ret;
+		xdesc->instance = (XIic *)malloc(sizeof(XIic));
+		if(!xdesc->instance)
+			goto pl_error;
 
-	dev = calloc(1, sizeof *dev);
-	if(!dev)
-		return FAILURE;
+		xdesc->config = XIic_LookupConfig(xinit->device_id);
+		if(xdesc->config == NULL)
+			goto pl_error;
 
-	dev->extra = calloc(1, sizeof *xil_dev);
-	if(!(dev->extra)) {
-		free(dev);
-		return FAILURE;
+		ret = XIic_CfgInitialize(xdesc->instance,
+					 xdesc->config,
+					 ((XIic_Config*)xdesc->config)
+					 ->BaseAddress);
+		if(ret != SUCCESS)
+			goto pl_error;
+
+		ret = XIic_Start(xdesc->instance);
+		if(ret != SUCCESS)
+			goto pl_error;
+
+		ret = XIic_SetAddress(xdesc->instance,
+				      XII_ADDR_TO_SEND_TYPE,
+				      init_param->slave_address);
+		if(ret != SUCCESS)
+			goto pl_error;
+
+		ret = XIic_SelfTest(xdesc->instance);
+		if(ret < 0)
+			goto pl_error;
+
+		ret = XIic_SetGpOutput(xdesc->instance, 1);
+		if(ret < 0)
+			goto pl_error;
+
+		break;
+pl_error:
+		free(xdesc->instance);
+#endif
+		goto error;
+	case IIC_PS:
+#ifdef XIICPS_H
+		xdesc->instance = (XIicPs *)malloc(sizeof(XIicPs));
+		if(!xdesc->instance)
+			goto ps_error;
+
+		xdesc->config = XIicPs_LookupConfig(xinit->device_id);
+		if(xdesc->config == NULL)
+			goto ps_error;
+
+		ret = XIicPs_CfgInitialize(xdesc->instance,
+					   xdesc->config,
+					   ((XIicPs_Config*)xdesc->config)
+					   ->BaseAddress);
+		if(ret != SUCCESS)
+			goto ps_error;
+
+		XIicPs_SetSClk(xdesc->instance, init_param->max_speed_hz);
+
+		break;
+ps_error:
+		free(xdesc->instance);
+#endif
+		goto error;
+
+	default:
+		goto error;
+		break;
 	}
 
-	xil_dev = dev->extra;
-	xil_param = param->extra;
+	*desc = idesc;
 
-	xil_dev->type = xil_param->type;
-	xil_dev->id = xil_param->id;
-	dev->max_speed_hz = param->max_speed_hz;
-	dev->slave_address = param->slave_address;
-
-	xil_dev->config = XIic_LookupConfig(xil_dev->id);
-	if (xil_dev->config == NULL)
-		goto error;
-
-	ret = XIic_CfgInitialize(&xil_dev->instance, xil_dev->config,
-				 xil_dev->config->BaseAddress);
-	if(ret != 0)
-		goto error;
-
-	Xil_ExceptionInit();
-
-	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_IRQ_INT,
-				     XIic_InterruptHandler, &xil_dev->instance);
-
-	ret = XIic_Start(&xil_dev->instance);
-	if(ret != 0)
-		goto error;
-
-	ret = XIic_SetAddress(&xil_dev->instance, XII_ADDR_TO_SEND_TYPE,
-			      dev->slave_address);
-	if(ret != 0)
-		goto error;
-
-	*desc = dev;
-
-#endif
 	return SUCCESS;
-#ifdef XIIC_H
+
 error:
-	free(dev);
+	free(idesc);
+	free(xdesc);
 
 	return FAILURE;
-#endif
 }
 
 /**
@@ -125,17 +174,37 @@ error:
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
+	xil_i2c_desc	*xdesc;
+	int32_t		ret;
+
+	xdesc = desc->extra;
+
+	switch (xdesc->type) {
+	case IIC_PL:
 #ifdef XIIC_H
-	int32_t ret;
-	xil_i2c_desc *xil_desc;
-	xil_desc = desc->extra;
+		ret = XIic_Stop(((XIic *)xdesc->instance));
 
-	ret = XIic_Stop(&xil_desc->instance);
-	if(ret != 0)
-		return FAILURE;
-
-	free(desc);
+		if(ret != SUCCESS)
+			goto error;
+		break;
 #endif
+		goto error;
+	case IIC_PS:
+#ifdef XIICPS_H
+		break;
+#endif
+		/* Intended fallthrough */
+error:
+	default:
+
+		return FAILURE;
+		break;
+	}
+
+	free(xdesc->instance);
+	free(desc->extra);
+	free(desc);
+
 	return SUCCESS;
 }
 
@@ -152,16 +221,50 @@ int32_t i2c_remove(struct i2c_desc *desc)
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t stop_bit)
+		  uint8_t option)
 {
+	xil_i2c_desc	*xdesc;
+	int32_t		ret;
+
+	xdesc = desc->extra;
+
+	switch (xdesc->type) {
+	case IIC_PL:
 #ifdef XIIC_H
-	xil_i2c_desc *xil_desc;
-	xil_desc = desc->extra;
-	return XIic_Send(xil_desc->instance.BaseAddress, desc->slave_address, data,
-			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
-#else
-	return SUCCESS;
+		XIic_Send(((XIic*)xdesc->instance)->BaseAddress,
+			  desc->slave_address,
+			  data,
+			  bytes_number,
+			  option ? XIIC_STOP : XIIC_REPEATED_START);
+		break;
 #endif
+		goto error;
+	case IIC_PS:
+#ifdef XIICPS_H
+
+		ret = XIicPs_SetOptions(xdesc->instance,
+					option);
+		if(ret != SUCCESS)
+			goto error;
+
+		XIicPs_MasterSend(xdesc->instance,
+				  data,
+				  bytes_number,
+				  desc->slave_address);
+		if(ret != SUCCESS)
+			goto error;
+
+		break;
+#endif
+		/* Intended fallthrough */
+error:
+	default:
+
+		return FAILURE;
+		break;
+	}
+
+	return SUCCESS;
 }
 
 /**
@@ -177,16 +280,51 @@ int32_t i2c_write(struct i2c_desc *desc,
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t stop_bit)
+		 uint8_t option)
 {
+	xil_i2c_desc	*xdesc;
+	int32_t		ret;
+
+	xdesc = desc->extra;
+
+	switch (xdesc->type) {
+	case IIC_PL:
 #ifdef XIIC_H
-	xil_i2c_desc *xil_desc;
-	xil_desc = desc->extra;
+		ret = XIic_Recv(((XIic*)xdesc->instance)->BaseAddress,
+				desc->slave_address,
+				data,
+				bytes_number,
+				option ? XIIC_STOP : XIIC_REPEATED_START);
+		if(ret != SUCCESS)
+			goto error;
 
-	return XIic_Recv(xil_desc->instance.BaseAddress, desc->slave_address, data,
-			 bytes_number, stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
-#else
-	return SUCCESS;
+		break;
 #endif
-}
+		goto error;
+	case IIC_PS:
+#ifdef XIICPS_H
 
+		ret = XIicPs_SetOptions(xdesc->instance,
+					option);
+		if(ret != SUCCESS)
+			goto error;
+
+		XIicPs_MasterRecv(xdesc->instance,
+				  data,
+				  bytes_number,
+				  desc->slave_address);
+		if(ret != SUCCESS)
+			goto error;
+
+		break;
+#endif
+		/* Intended fallthrough */
+error:
+	default:
+		return FAILURE;
+
+		break;
+	}
+
+	return SUCCESS;
+}
