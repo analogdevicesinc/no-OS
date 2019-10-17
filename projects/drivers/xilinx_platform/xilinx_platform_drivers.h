@@ -48,11 +48,14 @@
 #ifdef _XPARAMETERS_PS_H_
 #include <xspips.h>
 #include <xgpiops.h>
-#include <xiic.h>
 #include <xil_exception.h>
 #else
 #include <xspi.h>
 #include <xgpio.h>
+#endif
+
+#ifdef XIIC_H
+#include <xiic.h>
 #endif
 
 /******************************************************************************/
@@ -77,7 +80,7 @@ typedef struct xil_i2c_init_param {
 typedef struct xil_i2c_desc {
 	enum i2c_type	type;
 	uint32_t	id;
-#ifdef _XPARAMETERS_PS_H_
+#ifdef XIIC_H
 	XIic_Config *config;
 	XIic instance;
 #else
