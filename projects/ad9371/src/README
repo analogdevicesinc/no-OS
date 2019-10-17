@@ -36,8 +36,6 @@
 	cp ../../drivers/util/util.c devices/adi_hal/
 	cp ../../drivers/util/util.h devices/adi_hal/
 #else
-	cp ../../drivers/xilinx_platform/platform_drivers.h devices/adi_hal/
-	cp ../../drivers/xilinx_platform/xilinx_platform_drivers.h devices/adi_hal/
 	cp ../../../include/axi_io.h devices/adi_hal/
 	cp ../../../include/error.h devices/adi_hal/
 	cp ../../../include/spi.h devices/adi_hal/
@@ -45,10 +43,12 @@
 	cp ../../../include/gpio.h devices/adi_hal/
 	cp ../../../include/delay.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
-	cp ../../drivers/xilinx_platform/spi.c devices/adi_hal/
-	cp ../../drivers/xilinx_platform/i2c.c devices/adi_hal/
-	cp ../../drivers/xilinx_platform/gpio.c devices/adi_hal/
-	cp ../../drivers/xilinx_platform/delay.c devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/platform_drivers.h devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/i2c.c devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/delay.c devices/adi_hal/
 	cp ../../drivers/axi_adc_core/axi_adc_core.c devices/adi_hal/
 	cp ../../drivers/axi_adc_core/axi_adc_core.h devices/adi_hal/
 	cp ../../drivers/axi_dac_core/axi_dac_core.c devices/adi_hal/
