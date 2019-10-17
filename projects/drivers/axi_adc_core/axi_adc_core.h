@@ -43,6 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -79,6 +80,11 @@
 #define AXI_ADC_FORMAT_ENABLE		BIT(4)
 #define AXI_ADC_PN23_TYPE		BIT(1)
 #define AXI_ADC_ENABLE			BIT(0)
+
+#define AXI_ADC_REG_CHAN_STATUS(c)	(0x0404 + (c) * 0x40)
+#define AXI_ADC_PN_ERR			BIT(2)
+#define AXI_ADC_PN_OOS			BIT(1)
+#define AXI_ADC_OVER_RANGE		BIT(0)
 
 #define AXI_ADC_REG_CHAN_CNTRL_1(c)	(0x0410 + (c) * 0x40)
 #define AXI_ADC_DCFILT_OFFSET(x)	(((x) & 0xFFFF) << 16)
