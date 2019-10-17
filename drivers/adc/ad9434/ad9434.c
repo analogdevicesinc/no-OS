@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
-#include "adc_core.h"
 #include "ad9434.h"
 
 #define DCO_DEBUG
