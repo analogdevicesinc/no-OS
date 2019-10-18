@@ -632,19 +632,7 @@ static ssize_t get_rf_bandwidth(void *device, char *buf, size_t len,
     }
 }
 
-static attribute_map voltage_output_write_map[] = {
-    {.name = "rf_port_select", .exec = get_rf_port_select},
-    {.name = "hardwaregain", .exec = get_hardwaregain},
-    {.name = "rssi", .exec = get_rssi},
-    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
-    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
-    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
-    {.name = "filter_fir_en", .exec = get_filter_fir_en},
-    {.name = "sampling_frequency", .exec = get_sampling_frequency},
-    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
-    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
-    {.name = NULL},
-};
+
 
 /**
  * get_gain_control_mode
@@ -735,24 +723,6 @@ static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
     return -ENOENT;
 }
 
-static attribute_map voltage_input_read_map[] = {
-    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
-    {.name = "hardwaregain", .exec = get_hardwaregain},
-    {.name = "rssi", .exec = get_rssi},
-    {.name = "rf_port_select", .exec = get_rf_port_select},
-    {.name = "gain_control_mode", .exec = get_gain_control_mode},
-    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
-    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
-    {.name = "rf_dc_offset_tracking_en", .exec = get_rf_dc_offset_tracking_en},
-    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
-    {.name = "quadrature_tracking_en", .exec = get_quadrature_tracking_en},
-    {.name = "sampling_frequency", .exec = get_sampling_frequency},
-    {.name = "gain_control_mode_available", .exec = get_gain_control_mode_available},
-    {.name = "filter_fir_en", .exec = get_filter_fir_en},
-    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
-    {.name = "bb_dc_offset_tracking_en", .exec = get_bb_dc_offset_tracking_en},
-    {.name = NULL},
-};
 
 /**
  * get_frequency_available
@@ -888,18 +858,6 @@ static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
                    ad9361_phy->fastlock.current_profile[channel->ch_num]);
 }
 
-static attribute_map altvoltage_read_attrtibute_map[] = {
-    {.name = "frequency_available", .exec = get_frequency_available},
-    {.name = "fastlock_save", .exec = get_fastlock_save},
-    {.name = "powerdown", .exec = get_powerdown},
-    {.name = "fastlock_load", .exec = get_fastlock_load},
-    {.name = "fastlock_store", .exec = get_fastlock_store},
-    {.name = "frequency", .exec = get_frequency},
-    {.name = "external", .exec = get_external},
-    {.name = "fastlock_recall", .exec = get_fastlock_recall},
-    {NULL},
-};
-
 /**
  * get_temp0_input
  * @param *buff where value is stored
@@ -915,11 +873,6 @@ static ssize_t get_temp0_input(void *device, char *buf, size_t len,
     ad9361_get_temperature(ad9361_phy, &temp);
     return (ssize_t) snprintf(buf, len, "%d", (int)temp);
 }
-
-static attribute_map tmp0_map[] = {
-    {.name = "input", .exec = get_temp0_input},
-    {.name = NULL},
-};
 
 /**
  * get_voltage_filter_fir_en
@@ -940,22 +893,7 @@ static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
     return (ssize_t) snprintf(buf, len, "%d", en_dis_rx && en_dis_tx);
 }
 
-static attribute_map out_read_map[] = {
-    {.name = "voltage_filter_fir_en", .exec = get_voltage_filter_fir_en},
-    {.name = NULL},
-};
 
-static attribute_map ch_read_phy_attr_map[] = {
-    {.name = "voltage0", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-    {.name = "voltage1", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-    {.name = "voltage2", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-    {.name = "voltage3", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
-    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
-    {.name = "temp0", .exec = NULL, .map_in = tmp0_map, .map_out = tmp0_map},
-    {.name = "out", .exec = NULL, .map_in = out_read_map, .map_out = out_read_map},
-    {.name = NULL},
-};
 
 /**
  * set_hardwaregain_available
@@ -1307,39 +1245,6 @@ static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
     return -ENOENT;
 }
 
-static attribute_map ch_in_write_attrtibute_map[] = {
-    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
-    {.name = "hardwaregain", .exec = set_hardwaregain},
-    {.name = "rssi", .exec = set_rssi},
-    {.name = "rf_port_select", .exec = set_rf_port_select},
-    {.name = "gain_control_mode", .exec = set_gain_control_mode},
-    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
-    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
-    {.name = "rf_dc_offset_tracking_en", .exec = set_rf_dc_offset_tracking_en},
-    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
-    {.name = "quadrature_tracking_en", .exec = set_quadrature_tracking_en},
-    {.name = "sampling_frequency", .exec = set_sampling_frequency},
-    {.name = "gain_control_mode_available", .exec = set_gain_control_mode_available},
-    {.name = "filter_fir_en", .exec = set_filter_fir_en},
-    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
-    {.name = "bb_dc_offset_tracking_en", .exec = set_bb_dc_offset_tracking_en},
-    {.name = NULL},
-};
-
-static attribute_map ch_out_write_attrtibute_map[] = {
-    {.name = "rf_port_select", .exec = set_rf_port_select},
-    {.name = "hardwaregain", .exec = set_hardwaregain},
-    {.name = "rssi", .exec = set_rssi},
-    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
-    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
-    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
-    {.name = "filter_fir_en", .exec = set_filter_fir_en},
-    {.name = "sampling_frequency", .exec = set_sampling_frequency},
-    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
-    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
-    {.name = NULL},
-};
-
 /**
  * set_frequency_available
  * @param *buff value to be written to attribute
@@ -1526,19 +1431,7 @@ static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
     return len;
 }
 
-static attribute_map altvoltage_write_attrtibute_map[] = {
-    {.name = "frequency_available", .exec = set_frequency_available},
-    {.name = "fastlock_save", .exec = set_fastlock_save},
-    {.name = "powerdown", .exec = set_powerdown},
-    {.name = "fastlock_load", .exec = set_fastlock_load},
-    {.name = "fastlock_store", .exec = set_fastlock_store},
-    {.name = "frequency", .exec = set_frequency},
-    {.name = "external", .exec = set_external},
-    {.name = "fastlock_recall", .exec = set_fastlock_recall},
-    {.name = NULL},
-};
-
-static ssize_t voltage_filter_fir_en(void *device, char *buf, size_t len,
+static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
                                      const struct channel_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
@@ -1549,22 +1442,6 @@ static ssize_t voltage_filter_fir_en(void *device, char *buf, size_t len,
 
     return len;
 }
-
-static attribute_map out_wr_map[] = {
-    {.name = "voltage_filter_fir_en", .exec = voltage_filter_fir_en},
-    {.name = NULL},
-};
-
-static attribute_map ch_write_phy_attr_map[] = {
-    {.name = "voltage0", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-    {.name = "voltage1", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-    {.name = "voltage2", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-    {.name = "voltage3", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
-    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
-    {.name = "out", .exec = NULL, .map_in = out_wr_map, .map_out = out_wr_map},
-    {.name = NULL},
-};
 
 /**
  * get_dcxo_tune_coarse
@@ -1847,28 +1724,6 @@ static ssize_t get_calib_mode(void *device, char *buf, size_t len,
     return (ssize_t) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
 
-static attribute_map global_read_attrtibute_map[] = {
-    {.name = "dcxo_tune_coarse", .exec = get_dcxo_tune_coarse},
-    {.name = "rx_path_rates", .exec = get_rx_path_rates},
-    {.name = "trx_rate_governor", .exec = get_trx_rate_governor},
-    {.name = "calib_mode_available", .exec = get_calib_mode_available},
-    {.name = "xo_correction_available", .exec = get_xo_correction_available},
-    {.name = "gain_table_config", .exec = get_gain_table_config},
-    {.name = "dcxo_tune_fine", .exec = get_dcxo_tune_fine},
-    {.name = "dcxo_tune_fine_available", .exec = get_dcxo_tune_fine_available},
-    {.name = "ensm_mode_available", .exec = get_ensm_mode_available},
-    {.name = "multichip_sync", .exec = get_multichip_sync},
-    {.name = "rssi_gain_step_error", .exec = get_rssi_gain_step_error},
-    {.name = "dcxo_tune_coarse_available", .exec = get_dcxo_tune_coarse_available},
-    {.name = "tx_path_rates", .exec = get_tx_path_rates},
-    {.name = "trx_rate_governor_available", .exec = get_trx_rate_governor_available},
-    {.name = "xo_correction", .exec = get_xo_correction},
-    {.name = "ensm_mode", .exec = get_ensm_mode},
-    {.name = "filter_fir_config", .exec = get_filter_fir_config},
-    {.name = "calib_mode", .exec = get_calib_mode},
-    {.name = NULL},
-};
-
 /**
  * set_trx_rate_governor
  * @param *buff value to be written to attribute
@@ -2042,17 +1897,6 @@ static ssize_t set_filter_fir_config(void *device, char *buf, size_t len,
     return ad9361_parse_fir(ad9361_phy, (char *)buf, len);
 }
 
-static attribute_map global_write_attrtibute_map[] = {
-    {.name = "trx_rate_governor", .exec = set_trx_rate_governor},
-    {.name = "dcxo_tune_coarse", .exec = set_dcxo_tune_coarse},
-    {.name = "dcxo_tune_fine", .exec = set_dcxo_tune_fine},
-    {.name = "calib_mode", .exec = set_calib_mode},
-    {.name = "ensm_mode", .exec = set_ensm_mode},
-    {.name = "multichip_sync", .exec = set_multichip_sync},
-    {.name = "filter_fir_config", .exec = set_filter_fir_config},
-    {.name = NULL},
-};
-
 ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
     *xml = (char*)phy_xml;
@@ -2060,22 +1904,557 @@ ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no)
     return 0;
 }
 
-static attribute_map phy_attr_map[] = {
-    {.name = "", .exec = NULL, .map_in = ch_read_phy_attr_map, .map_out = ch_write_phy_attr_map, .map_in_global = global_read_attrtibute_map, .map_out_global = global_write_attrtibute_map},
-    {.name = NULL},
+static struct iio_attribute iio_attr_rf_port_select = {
+	.name = "rf_port_select",
+	.show = get_rf_port_select,
+	.store = set_rf_port_select,
 };
+
+static struct iio_attribute iio_attr_hardwaregain = {
+	.name = "hardwaregain",
+	.show = get_hardwaregain,
+	.store = set_hardwaregain,
+};
+
+static struct iio_attribute iio_attr_rssi = {
+	.name = "rssi",
+	.show = get_rssi,
+	.store = set_rssi,
+};
+
+static struct iio_attribute iio_attr_hardwaregain_available = {
+	.name = "hardwaregain_available",
+	.show = get_hardwaregain_available,
+	.store = set_hardwaregain_available,
+};
+
+static struct iio_attribute iio_attr_sampling_frequency_available = {
+	.name = "sampling_frequency_available",
+	.show = get_sampling_frequency_available,
+	.store = set_sampling_frequency_available,
+};
+
+static struct iio_attribute iio_attr_rf_port_select_available = {
+	.name = "rf_port_select_available",
+	.show = get_rf_port_select_available,
+	.store = set_rf_port_select_available,
+};
+
+static struct iio_attribute iio_attr_filter_fir_en = {
+	.name = "filter_fir_en",
+	.show = get_filter_fir_en,
+	.store = set_filter_fir_en,
+};
+
+static struct iio_attribute iio_attr_sampling_frequency = {
+	.name = "sampling_frequency",
+	.show = get_sampling_frequency,
+	.store = set_sampling_frequency,
+};
+
+static struct iio_attribute iio_attr_rf_bandwidth_available = {
+	.name = "rf_bandwidth_available",
+	.show = get_rf_bandwidth_available,
+	.store = set_rf_bandwidth_available,
+};
+
+static struct iio_attribute iio_attr_rf_bandwidth = {
+	.name = "rf_bandwidth",
+	.show = get_rf_bandwidth,
+	.store = set_rf_bandwidth,
+};
+
+static struct iio_attribute iio_attr_gain_control_mode = {
+	.name = "gain_control_mode",
+	.show = get_gain_control_mode,
+	.store = set_gain_control_mode,
+};
+
+static struct iio_attribute iio_attr_rf_dc_offset_tracking_en = {
+	.name = "rf_dc_offset_tracking_en",
+	.show = get_rf_dc_offset_tracking_en,
+	.store = set_rf_dc_offset_tracking_en,
+};
+
+static struct iio_attribute iio_attr_quadrature_tracking_en = {
+	.name = "quadrature_tracking_en",
+	.show = get_quadrature_tracking_en,
+	.store = set_quadrature_tracking_en,
+};
+
+static struct iio_attribute iio_attr_gain_control_mode_available = {
+	.name = "gain_control_mode_available",
+	.show = get_gain_control_mode_available,
+	.store = set_gain_control_mode_available,
+};
+
+static struct iio_attribute iio_attr_bb_dc_offset_tracking_en = {
+	.name = "bb_dc_offset_tracking_en",
+	.show = get_bb_dc_offset_tracking_en,
+	.store = set_bb_dc_offset_tracking_en,
+};
+
+struct iio_attribute *voltage_attributes[] = {
+	&iio_attr_hardwaregain_available,
+	&iio_attr_hardwaregain,
+	&iio_attr_rssi,
+	&iio_attr_rf_port_select,
+	&iio_attr_gain_control_mode,
+	&iio_attr_rf_port_select_available,
+	&iio_attr_rf_bandwidth,
+	&iio_attr_rf_dc_offset_tracking_en,
+	&iio_attr_sampling_frequency_available,
+	&iio_attr_quadrature_tracking_en,
+	&iio_attr_sampling_frequency,
+	&iio_attr_gain_control_mode_available,
+	&iio_attr_filter_fir_en,
+	&iio_attr_rf_bandwidth_available,
+	&iio_attr_bb_dc_offset_tracking_en,
+	NULL,
+};
+
+static struct iio_attribute iio_attr_frequency_available = {
+	.name = "frequency_available",
+	.show = get_frequency_available,
+	.store = set_frequency_available,
+};
+
+static struct iio_attribute iio_attr_fastlock_save = {
+	.name = "fastlock_save",
+	.show = get_fastlock_save,
+	.store = set_fastlock_save,
+};
+
+static struct iio_attribute iio_attr_powerdown = {
+	.name = "powerdown",
+	.show = get_powerdown,
+	.store = set_powerdown,
+};
+
+static struct iio_attribute iio_attr_fastlock_load = {
+	.name = "fastlock_load",
+	.show = get_fastlock_load,
+	.store = set_fastlock_load,
+};
+
+static struct iio_attribute iio_attr_fastlock_store = {
+	.name = "fastlock_store",
+	.show = get_fastlock_store,
+	.store = set_fastlock_store,
+};
+
+static struct iio_attribute iio_attr_frequency = {
+	.name = "frequency",
+	.show = get_frequency,
+	.store = set_frequency,
+};
+
+static struct iio_attribute iio_attr_external = {
+	.name = "external",
+	.show = get_external,
+	.store = set_external,
+};
+
+static struct iio_attribute iio_attr_fastlock_recall = {
+	.name = "fastlock_recall",
+	.show = get_fastlock_recall,
+	.store = set_fastlock_recall,
+};
+
+struct iio_attribute *altvoltage_attributes[] = {
+	&iio_attr_frequency_available,
+	&iio_attr_fastlock_save,
+	&iio_attr_powerdown,
+	&iio_attr_fastlock_load,
+	&iio_attr_fastlock_store,
+	&iio_attr_frequency,
+	&iio_attr_external,
+	&iio_attr_fastlock_recall,
+	NULL,
+};
+
+static struct iio_attribute iio_attr_voltage_filter_fir_en = {
+	.name = "voltage_filter_fir_en",
+	.show = get_voltage_filter_fir_en,
+	.store = set_voltage_filter_fir_en,
+};
+
+struct iio_attribute *out_attributes[] = {
+	&iio_attr_voltage_filter_fir_en,
+	NULL,
+};
+
+static struct iio_attribute iio_attr_temp0_input = {
+	.name = "input",
+	.show = get_temp0_input,
+	.store = NULL, //
+};
+
+struct iio_attribute *temp0_attributes[] = {
+	&iio_attr_temp0_input,
+	NULL,
+};
+
+static struct iio_attribute iio_attr_dcxo_tune_coarse = {
+	.name = "dcxo_tune_coarse",
+	.show = get_dcxo_tune_coarse,
+	.store = set_dcxo_tune_coarse,
+};
+
+static struct iio_attribute iio_attr_rx_path_rates = {
+	.name = "rx_path_rates",
+	.show = get_rx_path_rates,
+	.store = NULL, // set_rx_path_rates,
+};
+
+static struct iio_attribute iio_attr_trx_rate_governor = {
+	.name = "trx_rate_governor",
+	.show = get_trx_rate_governor,
+	.store = set_trx_rate_governor,
+};
+
+static struct iio_attribute iio_attr_calib_mode_available = {
+	.name = "calib_mode_available",
+	.show = get_calib_mode_available,
+	.store = NULL, // set_calib_mode_available,
+};
+
+static struct iio_attribute iio_attr_xo_correction_available = {
+	.name = "xo_correction_available",
+	.show = get_xo_correction_available,
+	.store = NULL,
+};
+
+static struct iio_attribute iio_attr_gain_table_config = {
+	.name = "gain_table_config",
+	.show = get_gain_table_config,
+	.store = NULL, // set_gain_table_config,
+};
+
+static struct iio_attribute iio_attr_dcxo_tune_fine = {
+	.name = "dcxo_tune_fine",
+	.show = get_dcxo_tune_fine,
+	.store = set_dcxo_tune_fine,
+};
+
+static struct iio_attribute iio_attr_dcxo_tune_fine_available = {
+	.name = "dcxo_tune_fine_available",
+	.show = get_dcxo_tune_fine_available,
+	.store = NULL,
+};
+
+static struct iio_attribute iio_attr_ensm_mode_available = {
+	.name = "ensm_mode_available",
+	.show = get_ensm_mode_available,
+	.store = NULL,
+};
+
+static struct iio_attribute iio_attr_multichip_sync = {
+	.name = "multichip_sync",
+	.show = get_multichip_sync,
+	.store = set_multichip_sync,
+};
+
+static struct iio_attribute iio_attr_rssi_gain_step_error = {
+	.name = "rssi_gain_step_error",
+	.show = get_rssi_gain_step_error,
+	.store = NULL, //set_rssi_gain_step_error,
+};
+
+static struct iio_attribute iio_attr_dcxo_tune_coarse_available = {
+	.name = "dcxo_tune_coarse_available",
+	.show = get_dcxo_tune_coarse_available,
+	.store = NULL,
+};
+
+static struct iio_attribute iio_attr_tx_path_rates = {
+	.name = "tx_path_rates",
+	.show = get_tx_path_rates,
+	.store = NULL, // set_tx_path_rates,
+};
+
+static struct iio_attribute iio_attr_trx_rate_governor_available = {
+	.name = "trx_rate_governor_available",
+	.show = get_trx_rate_governor_available,
+	.store = NULL,
+};
+
+static struct iio_attribute iio_attr_xo_correction = {
+	.name = "xo_correction",
+	.show = get_xo_correction,
+	.store = NULL, //set_xo_correction,
+};
+
+static struct iio_attribute iio_attr_ensm_mode = {
+	.name = "ensm_mode",
+	.show = get_ensm_mode,
+	.store = set_ensm_mode,
+};
+
+static struct iio_attribute iio_attr_filter_fir_config = {
+	.name = "filter_fir_config",
+	.show = get_filter_fir_config,
+	.store = set_filter_fir_config,
+};
+
+static struct iio_attribute iio_attr_calib_mode = {
+	.name = "calib_mode",
+	.show = get_calib_mode,
+	.store = set_calib_mode,
+};
+
+struct iio_attribute *global_attributes[] = {
+	&iio_attr_dcxo_tune_coarse,
+	&iio_attr_rx_path_rates,
+	&iio_attr_trx_rate_governor,
+	&iio_attr_calib_mode_available,
+	&iio_attr_xo_correction_available,
+	&iio_attr_gain_table_config,
+	&iio_attr_dcxo_tune_fine,
+	&iio_attr_dcxo_tune_fine_available,
+	&iio_attr_ensm_mode_available,
+	&iio_attr_multichip_sync,
+	&iio_attr_rssi_gain_step_error,
+	&iio_attr_dcxo_tune_coarse_available,
+	&iio_attr_tx_path_rates,
+	&iio_attr_trx_rate_governor_available,
+	&iio_attr_xo_correction,
+	&iio_attr_ensm_mode,
+	&iio_attr_filter_fir_config,
+	&iio_attr_calib_mode,
+	NULL,
+};
+
+struct iio_channel iio_channel_voltage0 = {
+	.name = "voltage0",
+	.attributes = voltage_attributes,
+};
+
+struct iio_channel iio_channel_voltage1 = {
+	.name = "voltage1",
+	.attributes = voltage_attributes,
+};
+
+struct iio_channel iio_channel_voltage2 = {
+	.name = "voltage2",
+	.attributes = voltage_attributes,
+};
+
+struct iio_channel iio_channel_voltage3 = {
+	.name = "voltage3",
+	.attributes = voltage_attributes,
+};
+
+struct iio_channel iio_channel_altvoltage0 = {
+	.name = "altvoltage0",
+	.attributes = altvoltage_attributes,
+};
+
+struct iio_channel iio_channel_altvoltage1 = {
+	.name = "altvoltage1",
+	.attributes = altvoltage_attributes,
+};
+
+struct iio_channel iio_channel_temp0 = {
+	.name = "temp0",
+	.attributes = temp0_attributes,
+};
+
+struct iio_channel iio_channel_out = {
+	.name = "out",
+	.attributes = out_attributes,
+};
+
+struct iio_channel *iio_ad9361_channels[] = {
+	&iio_channel_voltage0,
+	&iio_channel_voltage1,
+	&iio_channel_voltage2,
+	&iio_channel_voltage3,
+	&iio_channel_altvoltage0,
+	&iio_channel_altvoltage1,
+	&iio_channel_temp0,
+	&iio_channel_out,
+	NULL,
+};
+
+struct iio_device *iio_ad9361_device;
+
+
+
+//static attribute_map altvoltage_read_attrtibute_map[] = {
+//    {.name = "frequency_available", .exec = get_frequency_available},
+//    {.name = "fastlock_save", .exec = get_fastlock_save},
+//    {.name = "powerdown", .exec = get_powerdown},
+//    {.name = "fastlock_load", .exec = get_fastlock_load},
+//    {.name = "fastlock_store", .exec = get_fastlock_store},
+//    {.name = "frequency", .exec = get_frequency},
+//    {.name = "external", .exec = get_external},
+//    {.name = "fastlock_recall", .exec = get_fastlock_recall},
+//    {NULL},
+//};
+
+//static attribute_map voltage_output_write_map[] = {
+//    {.name = "rf_port_select", .exec = get_rf_port_select},
+//    {.name = "hardwaregain", .exec = get_hardwaregain},
+//    {.name = "rssi", .exec = get_rssi},
+//    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
+//    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
+//    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
+//    {.name = "filter_fir_en", .exec = get_filter_fir_en},
+//    {.name = "sampling_frequency", .exec = get_sampling_frequency},
+//    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
+//    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
+//    {.name = NULL},
+//};
+//
+//static attribute_map voltage_input_read_map[] = {
+//    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
+//    {.name = "hardwaregain", .exec = get_hardwaregain},
+//    {.name = "rssi", .exec = get_rssi},
+//    {.name = "rf_port_select", .exec = get_rf_port_select},
+//    {.name = "gain_control_mode", .exec = get_gain_control_mode},
+//    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
+//    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
+//    {.name = "rf_dc_offset_tracking_en", .exec = get_rf_dc_offset_tracking_en},
+//    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
+//    {.name = "quadrature_tracking_en", .exec = get_quadrature_tracking_en},
+//    {.name = "sampling_frequency", .exec = get_sampling_frequency},
+//    {.name = "gain_control_mode_available", .exec = get_gain_control_mode_available},
+//    {.name = "filter_fir_en", .exec = get_filter_fir_en},
+//    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
+//    {.name = "bb_dc_offset_tracking_en", .exec = get_bb_dc_offset_tracking_en},
+//    {.name = NULL},
+//};
+//static attribute_map out_read_map[] = {
+//    {.name = "voltage_filter_fir_en", .exec = get_voltage_filter_fir_en},
+//    {.name = NULL},
+//};
+//
+//static attribute_map tmp0_map[] = {
+//    {.name = "input", .exec = get_temp0_input},
+//    {.name = NULL},
+//};
+//
+//static attribute_map ch_read_phy_attr_map[] = {
+//    {.name = "voltage0", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
+//    {.name = "voltage1", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
+//    {.name = "voltage2", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
+//    {.name = "voltage3", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
+//    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
+//    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
+//    {.name = "temp0", .exec = NULL, .map_in = tmp0_map, .map_out = tmp0_map},
+//    {.name = "out", .exec = NULL, .map_in = out_read_map, .map_out = out_read_map},
+//    {.name = NULL},
+//};
+//
+//static attribute_map ch_in_write_attrtibute_map[] = {
+//    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
+//    {.name = "hardwaregain", .exec = set_hardwaregain},
+//    {.name = "rssi", .exec = set_rssi},
+//    {.name = "rf_port_select", .exec = set_rf_port_select},
+//    {.name = "gain_control_mode", .exec = set_gain_control_mode},
+//    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
+//    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
+//    {.name = "rf_dc_offset_tracking_en", .exec = set_rf_dc_offset_tracking_en},
+//    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
+//    {.name = "quadrature_tracking_en", .exec = set_quadrature_tracking_en},
+//    {.name = "sampling_frequency", .exec = set_sampling_frequency},
+//    {.name = "gain_control_mode_available", .exec = set_gain_control_mode_available},
+//    {.name = "filter_fir_en", .exec = set_filter_fir_en},
+//    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
+//    {.name = "bb_dc_offset_tracking_en", .exec = set_bb_dc_offset_tracking_en},
+//    {.name = NULL},
+//};
+//
+//static attribute_map ch_out_write_attrtibute_map[] = {
+//    {.name = "rf_port_select", .exec = set_rf_port_select},
+//    {.name = "hardwaregain", .exec = set_hardwaregain},
+//    {.name = "rssi", .exec = set_rssi},
+//    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
+//    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
+//    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
+//    {.name = "filter_fir_en", .exec = set_filter_fir_en},
+//    {.name = "sampling_frequency", .exec = set_sampling_frequency},
+//    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
+//    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
+//    {.name = NULL},
+//};
+//
+//static attribute_map out_wr_map[] = {
+//    {.name = "voltage_filter_fir_en", .exec = voltage_filter_fir_en},
+//    {.name = NULL},
+//};
+//static attribute_map altvoltage_write_attrtibute_map[] = {
+//    {.name = "frequency_available", .exec = set_frequency_available},
+//    {.name = "fastlock_save", .exec = set_fastlock_save},
+//    {.name = "powerdown", .exec = set_powerdown},
+//    {.name = "fastlock_load", .exec = set_fastlock_load},
+//    {.name = "fastlock_store", .exec = set_fastlock_store},
+//    {.name = "frequency", .exec = set_frequency},
+//    {.name = "external", .exec = set_external},
+//    {.name = "fastlock_recall", .exec = set_fastlock_recall},
+//    {.name = NULL},
+//};
+//static attribute_map ch_write_phy_attr_map[] = {
+//    {.name = "voltage0", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
+//    {.name = "voltage1", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
+//    {.name = "voltage2", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
+//    {.name = "voltage3", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
+//    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
+//    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
+//    {.name = "out", .exec = NULL, .map_in = out_wr_map, .map_out = out_wr_map},
+//    {.name = NULL},
+//};
+//static attribute_map global_read_attrtibute_map[] = {
+//    {.name = "dcxo_tune_coarse", .exec = get_dcxo_tune_coarse},
+//    {.name = "rx_path_rates", .exec = get_rx_path_rates},
+//    {.name = "trx_rate_governor", .exec = get_trx_rate_governor},
+//    {.name = "calib_mode_available", .exec = get_calib_mode_available},
+//    {.name = "xo_correction_available", .exec = get_xo_correction_available},
+//    {.name = "gain_table_config", .exec = get_gain_table_config},
+//    {.name = "dcxo_tune_fine", .exec = get_dcxo_tune_fine},
+//    {.name = "dcxo_tune_fine_available", .exec = get_dcxo_tune_fine_available},
+//    {.name = "ensm_mode_available", .exec = get_ensm_mode_available},
+//    {.name = "multichip_sync", .exec = get_multichip_sync},
+//    {.name = "rssi_gain_step_error", .exec = get_rssi_gain_step_error},
+//    {.name = "dcxo_tune_coarse_available", .exec = get_dcxo_tune_coarse_available},
+//    {.name = "tx_path_rates", .exec = get_tx_path_rates},
+//    {.name = "trx_rate_governor_available", .exec = get_trx_rate_governor_available},
+//    {.name = "xo_correction", .exec = get_xo_correction},
+//    {.name = "ensm_mode", .exec = get_ensm_mode},
+//    {.name = "filter_fir_config", .exec = get_filter_fir_config},
+//    {.name = "calib_mode", .exec = get_calib_mode},
+//    {.name = NULL},
+//};
+//static attribute_map global_write_attrtibute_map[] = {
+//    {.name = "trx_rate_governor", .exec = set_trx_rate_governor},
+//    {.name = "dcxo_tune_coarse", .exec = set_dcxo_tune_coarse},
+//    {.name = "dcxo_tune_fine", .exec = set_dcxo_tune_fine},
+//    {.name = "calib_mode", .exec = set_calib_mode},
+//    {.name = "ensm_mode", .exec = set_ensm_mode},
+//    {.name = "multichip_sync", .exec = set_multichip_sync},
+//    {.name = "filter_fir_config", .exec = set_filter_fir_config},
+//    {.name = NULL},
+//};
+//
+//static attribute_map phy_attr_map[] = {
+//    {.name = "", .exec = NULL, .map_in = ch_read_phy_attr_map, .map_out = ch_write_phy_attr_map, .map_in_global = global_read_attrtibute_map, .map_out_global = global_write_attrtibute_map},
+//    {.name = NULL},
+//};
 /**
  * get_ch_read_phy_attr_map
  * get map between attribute name and corresponding function
  * @return map
  */
+
 struct iio_device *get_phy_device(const char *device_name)
 {
-	iio_adc_device = calloc(1, sizeof(struct iio_device));
-	if (!iio_adc_device)
+	iio_ad9361_device = calloc(1, sizeof(struct iio_device));
+	if (!iio_ad9361_device)
 		return NULL;
-	iio_adc_device->name = device_name;
-	iio_adc_device->channels = iio_ad9361_channels;
+	iio_ad9361_device->name = device_name;
+	iio_ad9361_device->channels = iio_ad9361_channels;
+	iio_ad9361_device->attributes = global_attributes;
 
-	return iio_adc_device;
+	return iio_ad9361_device;
 }
