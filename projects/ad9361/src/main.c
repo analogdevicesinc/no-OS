@@ -644,7 +644,7 @@ int main(void)
 	};
 
 	struct xil_irq_init_param xil_irq_init_par = {
-		.type = IRQ_PL,
+		.type = IRQ_PS,
 	};
 
 	struct irq_init_param irq_init_param = {
@@ -655,7 +655,7 @@ int main(void)
 	struct irq_desc *irq_desc;
 
 	struct xil_uart_init_param xil_uart_init_par = {
-		.type = UART_PL,
+		.type = UART_PS,
 		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};

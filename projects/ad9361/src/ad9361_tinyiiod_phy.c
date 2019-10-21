@@ -2279,8 +2279,6 @@ struct iio_channel *iio_ad9361_channels[] = {
 
 struct iio_device *iio_ad9361_device;
 
-
-
 //static attribute_map altvoltage_read_attrtibute_map[] = {
 //    {.name = "frequency_available", .exec = get_frequency_available},
 //    {.name = "fastlock_save", .exec = get_fastlock_save},
