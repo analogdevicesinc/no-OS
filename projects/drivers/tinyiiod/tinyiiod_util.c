@@ -230,7 +230,7 @@ static ssize_t rd_wr_channel_attribute(element_info *el_info, char *buf, size_t 
 	}
 	else
 	{
-		attribute_id = get_attribute_id(el_info->name[CHANNEL_EL], channel->attributes);
+		attribute_id = get_attribute_id(el_info->name[ATTRIBUTE_EL], channel->attributes);
 		if (attribute_id >= 0)
 		{
 			if(is_write)
