@@ -37,16 +37,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include <stdlib.h>
-#include <ctype.h>
 #include <xil_io.h>
 #include "tinyiiod.h"
 #include "tinyiiod_util.h"
-#include "axi_dmac.h"
 #include "util.h"
 #include "tinyiiod_axi_adc.h"
 #include "tinyiiod_axi_dac.h"
-#include "uart.h"
 #include "error.h"
 
 struct tinyiiod_device {
