@@ -151,3 +151,16 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	return SUCCESS;
 }
+
+/***************************************************************************//**
+ * @brief axi_dmac_remove
+ *******************************************************************************/
+int32_t axi_dmac_remove(struct axi_dmac *dmac)
+{
+	if(!dmac)
+		return FAILURE;
+
+	free(dmac);
+
+	return SUCCESS;
+}
