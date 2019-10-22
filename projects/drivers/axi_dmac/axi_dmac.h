@@ -110,5 +110,6 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 			  uint32_t address, uint32_t size);
 int32_t axi_dmac_init(struct axi_dmac **adc_core,
 		      const struct axi_dmac_init *init);
+int32_t axi_dmac_remove(struct axi_dmac *dmac);
 
 #endif
