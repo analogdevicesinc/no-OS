@@ -218,15 +218,18 @@ static ssize_t rd_wr_channel_attribute(element_info *el_info, char *buf, size_t 
 			       struct iio_channel *channel, bool is_write)
 {
 	int16_t attribute_id;
-
 	tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
+	const struct channel_info channel_info = {
+						get_channel_number(el_info->name[CHANNEL_EL]),
+						el_info->ch_out
+					};
 
 	if (strequal(el_info->name[ATTRIBUTE_EL], ""))
 	{
 		if(is_write)
-			return write_all_attr(device->pointer, buf, len, NULL, channel->attributes);
+			return write_all_attr(device->pointer, buf, len, &channel_info, channel->attributes);
 		else
-			return read_all_attr(device->pointer, buf, len, NULL, channel->attributes);
+			return read_all_attr(device->pointer, buf, len, &channel_info, channel->attributes);
 	}
 	else
 	{
@@ -234,9 +237,9 @@ static ssize_t rd_wr_channel_attribute(element_info *el_info, char *buf, size_t 
 		if (attribute_id >= 0)
 		{
 			if(is_write)
-				return channel->attributes[attribute_id]->store(device->pointer, (char*)buf, len, NULL);
+				return channel->attributes[attribute_id]->store(device->pointer, (char*)buf, len, &channel_info);
 			else
-				return channel->attributes[attribute_id]->show(device->pointer, (char*)buf, len, NULL);
+				return channel->attributes[attribute_id]->show(device->pointer, (char*)buf, len, &channel_info);
 		}
 	}
 
