@@ -43,22 +43,22 @@
 #include <stdbool.h>
 #include "tinyiiod_types.h"
 
-typedef struct tinyiiod_dac_init_par {
+struct tinyiiod_dac_init_par {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
-} tinyiiod_dac_init_par;
+};
 
-typedef struct tinyiiod_dac {
+struct tinyiiod_dac {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
-} tinyiiod_dac;
+};
 
 struct iio_device *get_dac_device(const char *device_name);
-ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac, tinyiiod_dac_init_par *init);
+ssize_t tinyiiod_axi_dac_init(struct tinyiiod_dac **tinyiiod_dac, struct tinyiiod_dac_init_par *init);
 ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count);
-ssize_t dac_write_dev(tinyiiod_dac *iiod_dac, const char *buf,
+ssize_t dac_write_dev(struct tinyiiod_dac *iiod_dac, const char *buf,
                       size_t offset,  size_t bytes_count);
 ssize_t get_dac_xml(char** xml, const char *device_name, uint8_t ch_no);
 

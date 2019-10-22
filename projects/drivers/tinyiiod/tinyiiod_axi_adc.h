@@ -43,21 +43,21 @@
 #include <stdbool.h>
 #include "tinyiiod_types.h"
 
-typedef struct tinyiiod_adc_init_par {
+struct tinyiiod_adc_init_par {
     struct axi_adc *adc;
     struct axi_dmac *dmac;
     uint32_t adc_ddr_base;
-} tinyiiod_adc_init_par;
+};
 
-typedef struct tinyiiod_adc {
+struct tinyiiod_adc {
     struct axi_adc *adc;
     struct axi_dmac *dmac;
     uint32_t adc_ddr_base;
-} tinyiiod_adc;
+};
 
 struct iio_device *get_adc_device(const char *device_name);
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
-ssize_t tinyiiod_axi_adc_init(tinyiiod_adc **tinyiiod_adc, tinyiiod_adc_init_par *init);
+ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc, struct tinyiiod_adc_init_par *init);
 ssize_t adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size_t bytes_count);
 ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
                      size_t bytes_count);

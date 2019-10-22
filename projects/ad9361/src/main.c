@@ -622,23 +622,22 @@ int main(void)
 #ifdef USE_LIBIIO
 
 	int32_t ret;
-	tinyiiod_adc_init_par tinyiiod_adc_init_par = {
+	struct tinyiiod_adc_init_par tinyiiod_adc_init_par = {
 		.adc = ad9361_phy->rx_adc,
 		.dmac = ad9361_phy->rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
-	tinyiiod_adc *tinyiiod_adc;
+	struct tinyiiod_adc *tinyiiod_adc;
 
-	tinyiiod_dac_init_par tinyiiod_dac_init_par = {
+	struct tinyiiod_dac_init_par tinyiiod_dac_init_par = {
 		.dac = ad9361_phy->tx_dac,
 		.dmac = ad9361_phy->tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 	};
-	tinyiiod_dac *tinyiiod_dac;
+	struct tinyiiod_dac *tinyiiod_dac;
 
-	tinyiiod_comm_ops comm_ops = {
+	struct iio_server_ops uart_iio_server_ops = {
 		.read = iiod_read,
-//	    .read_line = serial_read_line,
 		.read_line = NULL,
 		.write = iiod_write,
 	};
@@ -697,7 +696,7 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
-	ret = iiod_create(&iiod, &comm_ops);
+	ret = iiod_create(&iiod, &uart_iio_server_ops);
 	if(ret < 0)
 		return ret;
 	ret = irq_ctrl_init(&irq_desc, &irq_init_param);

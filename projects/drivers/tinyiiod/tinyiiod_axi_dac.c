@@ -135,8 +135,8 @@ static const char * const  dac_xml =
 	"<debug-attribute name=\"direct_reg_access\" />"
 	"</device>";
 
-ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac,
-			      tinyiiod_dac_init_par *init)
+ssize_t tinyiiod_axi_dac_init(struct tinyiiod_dac **tinyiiod_dac,
+		struct tinyiiod_dac_init_par *init)
 {
 	*tinyiiod_dac = calloc(1, sizeof(*tinyiiod_dac));
 	if (!(*tinyiiod_dac))
@@ -148,7 +148,7 @@ ssize_t tinyiiod_axi_dac_init(tinyiiod_dac **tinyiiod_dac,
 	return SUCCESS;
 }
 
-ssize_t tinyiiod_axi_dac_remove(tinyiiod_dac *tinyiiod_dac)
+ssize_t tinyiiod_axi_dac_remove(struct tinyiiod_dac *tinyiiod_dac)
 {
 
 	free(tinyiiod_dac);
@@ -164,7 +164,7 @@ ssize_t tinyiiod_axi_dac_remove(tinyiiod_dac *tinyiiod_dac)
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_voltage_calibscale(void *device, char *buf, size_t len,
-				  const struct channel_info *channel)
+				  const struct iio_ch_info *channel)
 {
 	int32_t val, val2;
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -191,7 +191,7 @@ static ssize_t get_voltage_calibscale(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_voltage_calibphase(void *device, char *buf, size_t len,
-				  const struct channel_info *channel)
+				  const struct iio_ch_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
@@ -214,7 +214,7 @@ static ssize_t get_voltage_calibphase(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_voltage_sampling_frequency(void *device, char *buf, size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -227,7 +227,7 @@ static ssize_t get_voltage_sampling_frequency(void *device, char *buf, size_t le
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_altvoltage_phase(void *device, char *buf, size_t len,
-					const struct channel_info *channel)
+					const struct iio_ch_info *channel)
 {
 	uint32_t phase;
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -243,7 +243,7 @@ static ssize_t get_altvoltage_phase(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_altvoltage_scale(void *device, char *buf, size_t len,
-					const struct channel_info *channel)
+					const struct iio_ch_info *channel)
 {
 	int32_t scale;
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -261,7 +261,7 @@ static ssize_t get_altvoltage_scale(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_altvoltage_frequency(void *device, char *buf, size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	uint32_t freq;
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -278,7 +278,7 @@ static ssize_t get_altvoltage_frequency(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_altvoltage_raw(void *device, char *buf, size_t len,
-				      const struct channel_info *channel)
+				      const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -292,7 +292,7 @@ static ssize_t get_altvoltage_raw(void *device, char *buf, size_t len,
  */
 static ssize_t get_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -305,7 +305,7 @@ static ssize_t get_altvoltage_sampling_frequency(void *device, char *buf,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_voltage_calibscale(void *device, char *buf, size_t len,
-				  const struct channel_info *channel)
+				  const struct iio_ch_info *channel)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
@@ -324,7 +324,7 @@ static ssize_t set_voltage_calibscale(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_voltage_calibphase(void *device, char *buf, size_t len,
-				  const struct channel_info *channel)
+				  const struct iio_ch_info *channel)
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
@@ -343,7 +343,7 @@ static ssize_t set_voltage_calibphase(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_voltage_sampling_frequency(void *device, char *buf, size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -356,10 +356,10 @@ static ssize_t set_voltage_sampling_frequency(void *device, char *buf, size_t le
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_altvoltage_phase(void *device, char *buf, size_t len,
-					const struct channel_info *channel)
+					const struct iio_ch_info *channel)
 {
 	uint32_t phase = read_ul_value(buf);
-	struct tinyiiod_dac * iiod_dac = (tinyiiod_dac *)device;
+	struct tinyiiod_dac * iiod_dac = (struct tinyiiod_dac *)device;
 	axi_dac_dds_set_phase(iiod_dac->dac, channel->ch_num, phase);
 
 	return len;
@@ -373,7 +373,7 @@ static ssize_t set_altvoltage_phase(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_altvoltage_scale(void *device, char *buf, size_t len,
-					const struct channel_info *channel)
+					const struct iio_ch_info *channel)
 {
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
@@ -391,7 +391,7 @@ static ssize_t set_altvoltage_scale(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_altvoltage_frequency(void *device, char *buf, size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	uint32_t freq = read_ul_value(buf);
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -408,7 +408,7 @@ static ssize_t set_altvoltage_frequency(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_altvoltage_raw(void *device, char *buf, size_t len,
-				      const struct channel_info *channel)
+				      const struct iio_ch_info *channel)
 {
 	uint32_t dds_mode = read_ul_value(buf);
 	struct tinyiiod_dac* tinyiiod_dac = (struct tinyiiod_dac*)device;
@@ -430,7 +430,7 @@ static ssize_t set_altvoltage_raw(void *device, char *buf, size_t len,
  */
 static ssize_t set_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
-		const struct channel_info *channel)
+		const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -605,7 +605,7 @@ ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac,
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t dac_write_dev(tinyiiod_dac *iiod_dac, const char *buf,
+ssize_t dac_write_dev(struct tinyiiod_dac *iiod_dac, const char *buf,
 		      size_t offset,  size_t bytes_count)
 {
 	ssize_t ret = axi_dac_set_datasel(iiod_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);

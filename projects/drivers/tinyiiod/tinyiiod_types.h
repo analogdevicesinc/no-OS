@@ -39,25 +39,15 @@
 #ifndef SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_
 #define SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_
 
-struct channel_info {
+struct iio_ch_info {
     int32_t ch_num;
     bool ch_out;
 };
 
-typedef struct attribute_map {
-    const char *name;
-    ssize_t (*exec)(void *device, char *buf, size_t len, const struct channel_info *channel);
-    struct attribute_map *map_in; 	/* in */
-    struct attribute_map *map_out; /* out */
-    struct attribute_map *map_in_global;
-    struct attribute_map *map_out_global;
-} attribute_map;
-
-
 struct iio_attribute {
     const char *name;
-    ssize_t (*show)(void *device, char *buf, size_t len, const struct channel_info *channel);
-    ssize_t (*store)(void *device, char *buf, size_t len, const struct channel_info *channel);
+    ssize_t (*show)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
+    ssize_t (*store)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
 };
 
 struct iio_channel {
@@ -71,13 +61,13 @@ struct iio_device {
 	struct iio_attribute **attributes;
 };
 
-typedef struct tinyiiod_comm_ops {
+struct iio_server_ops {
 	/* Read from the input stream */
 	ssize_t (*read)(char *buf, size_t len);
 
 	/* Write to the output stream */
 	ssize_t (*write)(const char *buf, size_t len);
 	ssize_t (*read_line)(char *buf, size_t len);
-}tinyiiod_comm_ops;
+};
 
 #endif /* SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_ */
