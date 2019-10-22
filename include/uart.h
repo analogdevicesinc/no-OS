@@ -59,7 +59,7 @@ struct uart_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* READ data to UART. */
+/* Read data to UART. */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number);
 
 /* Write data to UART. */
