@@ -38,7 +38,6 @@
 *******************************************************************************/
 
 #include <stdlib.h>
-#include <errno.h>
 #include <ctype.h>
 #include <xil_io.h>
 #include "tinyiiod.h"
@@ -48,6 +47,7 @@
 #include "tinyiiod_axi_adc.h"
 #include "tinyiiod_axi_dac.h"
 #include "uart.h"
+#include "error.h"
 
 struct tinyiiod_device {
 	const char *name;
@@ -429,7 +429,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf,
 			 size_t len, bool debug)
 {
 	if (!supporter_dev(device))
-		return -ENODEV;
+		return FAILURE;
 	struct element_info el_info;
 	el_info.name[DEVICE_EL] = device;
 	el_info.name[CHANNEL_EL] = "";
@@ -438,7 +438,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf,
 	el_info.ch_out = 0;
 	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
-		return -ENOENT;
+		return FAILURE;
 
 	return rd_wr_attribute(&el_info, buf, len, iiod_device->iio, 0);
 }
@@ -466,7 +466,7 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 
 	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
-		return -ENOENT;
+		return FAILURE;
 
 	return rd_wr_attribute(&el_info, (char*)buf, len, iiod_device->iio, 1);
 }
@@ -485,7 +485,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 			    bool ch_out, const char *attr, char *buf, size_t len)
 {
 	if (!supporter_dev(device))
-		return -ENODEV;
+		return FAILURE;
 	struct element_info el_info;
 	el_info.name[DEVICE_EL] = device;
 	el_info.name[CHANNEL_EL] = channel;
@@ -495,7 +495,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 
 	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
 	if(!device)
-		return -ENOENT;
+		return FAILURE;
 
 	return rd_wr_attribute(&el_info, buf, len, iiod_device->iio, 0);
 }
@@ -541,7 +541,7 @@ static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
 
 	dev->ch_mask = ch_mask;
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -568,7 +568,7 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 	uint32_t ch_mask = 0xFFFFFFFF >> (32 - dev->num_channels);
 	*mask = ch_mask; /*  this way client has to do demux of data */
 
-	return 0;
+	return SUCCESS;
 }
 /**
  * transfer_dev_to_mem data from ADC into RAM
@@ -643,51 +643,53 @@ static ssize_t write_dev(const char *device, const char *buf,
 	return dac_write_dev(iiod_dac, buf, offset, bytes_count);
 }
 
-
-struct iio_ops ops = {
-	/* communication */
-	.read = NULL,
-	.read_line = NULL,
-	.write = NULL,
-
-	/* device operations */
-	.read_attr = read_attr,
-	.write_attr = write_attr,
-	.ch_read_attr = ch_read_attr,
-	.ch_write_attr = ch_write_attr,
-	.transfer_dev_to_mem = transfer_dev_to_mem,
-	.read_data = read_dev,
-	.transfer_mem_to_dev = transfer_mem_to_dev,
-	.write_data = write_dev,
-
-	.open = open_dev,
-	.close = close_dev,
-	.get_mask = get_mask,
-};
-
 ssize_t iiod_create(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
 	ssize_t ret;
 	char *xml;
+	struct iio_ops *ops = calloc(1, sizeof(struct iio_ops));
+	if(!ops)
+		return FAILURE;
 
-	ops.read = iio_server_ops->read;
-	ops.read_line = iio_server_ops->read_line;
-	ops.write = iio_server_ops->write;
+	/* device operations */
+	ops->read_attr = read_attr;
+	ops->write_attr = write_attr;
+	ops->ch_read_attr = ch_read_attr;
+	ops->ch_write_attr = ch_write_attr;
+	ops->transfer_dev_to_mem = transfer_dev_to_mem;
+	ops->read_data = read_dev;
+	ops->transfer_mem_to_dev = transfer_mem_to_dev;
+	ops->write_data = write_dev;
+
+	ops->open = open_dev;
+	ops->close = close_dev;
+	ops->get_mask = get_mask;
+
+	ops->read = iio_server_ops->read;
+	ops->read_line = iio_server_ops->read_line;
+	ops->write = iio_server_ops->write;
 
 	ret = get_xml(tinyiiod_devs, &xml);
 	if(ret < 0)
-		return ret;
-	*iiod = tinyiiod_create(xml, &ops);
-	if(!(*iiod))
-		return -ENOMEM;
+		goto error_free_ops;
 
-	return 0;
+	*iiod = tinyiiod_create(xml, ops);
+	if(!(*iiod))
+		goto error_free_ops;
+
+	return SUCCESS;
+
+error_free_ops:
+	free(ops);
+
+	return FAILURE;
 }
 
 ssize_t iiod_remove(struct tinyiiod *iiod)
 {
-	// free(iiod->xml); // todo
+//	free(iiod->xml); // todo
+//	free(iiod->ops); // todo
 	tinyiiod_destroy(iiod);
 
-	return 0;
+	return SUCCESS;
 }
