@@ -41,7 +41,8 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "tinyiiod_types.h"
+
+#include "iio_types.h"
 
 struct tinyiiod_dac_init_par {
     struct axi_dac *dac;

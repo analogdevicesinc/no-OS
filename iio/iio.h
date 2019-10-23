@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   tinyiiod_types.h
- *   @brief  Header file for tinyiiod_types
+ *   @file   tinyiiod_util.h
+ *   @brief  Header file of tinyiiod_util
  *   @author CPop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -36,38 +36,14 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_
-#define SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_
 
-struct iio_ch_info {
-    int32_t ch_num;
-    bool ch_out;
-};
+#ifndef __TINYIIOD_UTIL_H__
+#define __TINYIIOD_UTIL_H__
 
-struct iio_attribute {
-    const char *name;
-    ssize_t (*show)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
-    ssize_t (*store)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
-};
+#include "tinyiiod.h"
+#include "iio_types.h"
 
-struct iio_channel {
-	char *name;
-	struct iio_attribute **attributes;
-};
+ssize_t tinyiiod_register_device(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), struct iio_device *iio_device);
+ssize_t iiod_create(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 
-struct iio_device {
-	const char *name;
-	struct iio_channel **channels;
-	struct iio_attribute **attributes;
-};
-
-struct iio_server_ops {
-	/* Read from the input stream */
-	ssize_t (*read)(char *buf, size_t len);
-
-	/* Write to the output stream */
-	ssize_t (*write)(const char *buf, size_t len);
-	ssize_t (*read_line)(char *buf, size_t len);
-};
-
-#endif /* SRC_DRIVERS_TINYIIOD_TINYIIOD_TYPES_H_ */
+#endif /* __TINYIIOD_UTIL_H__ */

@@ -37,11 +37,12 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include "iio_axi_dac.h"
+
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include "tinyiiod_axi_dac.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "platform_drivers.h"

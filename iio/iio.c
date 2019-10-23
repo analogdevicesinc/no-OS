@@ -37,15 +37,17 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include "iio.h"
+
 #include <xil_io.h>
 #include "tinyiiod.h"
-#include "tinyiiod_util.h"
 #include "util.h"
-#include "tinyiiod_axi_adc.h"
-#include "tinyiiod_axi_dac.h"
 #include "error.h"
 
-struct tinyiiod_device {
+#include "iio_axi_adc.h" //todo remove this
+#include "iio_axi_dac.h"
+
+struct iio_interface {
 	const char *name;
 	uint16_t num_channels;
 	uint32_t ch_mask;
@@ -54,9 +56,9 @@ struct tinyiiod_device {
 	ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
 };
 
-struct tinyiiod_devices {
-	struct tinyiiod_device **devices;
-	uint8_t number_of_dev;
+struct iio_interfaces {
+	struct iio_interface **interfaces;
+	uint8_t num_interfaces;
 };
 
 enum elem_level {
@@ -72,7 +74,7 @@ struct element_info {
 	enum elem_level crnt_level;
 };
 
-static struct tinyiiod_devices *tinyiiod_devs = NULL;
+static struct iio_interfaces *tinyiiod_devs = NULL;
 
 /**
  * Get channel number
@@ -140,13 +142,13 @@ static int16_t get_attribute_id(const char *attr, struct iio_attribute **attribu
 	return -ENODEV;
 }
 
-static struct tinyiiod_device *get_device(const char *device_name,
-				   struct tinyiiod_devices *tinyiiod_devs)
+static struct iio_interface *get_device(const char *device_name,
+				   struct iio_interfaces *iio_interfaces)
 {
 	int16_t i = 0;
-	for (i = 0; i < tinyiiod_devs->number_of_dev; i++) {
-		if(strequal(device_name, tinyiiod_devs->devices[i]->name)) {
-			return tinyiiod_devs->devices[i];
+	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
+		if(strequal(device_name, iio_interfaces->interfaces[i]->name)) {
+			return iio_interfaces->interfaces[i];
 		}
 	}
 	return NULL;
@@ -214,7 +216,7 @@ static ssize_t rd_wr_channel_attribute(struct element_info *el_info, char *buf, 
 			       struct iio_channel *channel, bool is_write)
 {
 	int16_t attribute_id;
-	struct tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
+	struct iio_interface *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
 	const struct iio_ch_info channel_info = {
 						get_channel_number(el_info->name[CHANNEL_EL]),
 						el_info->ch_out
@@ -263,7 +265,7 @@ static ssize_t rd_wr_attribute(struct element_info *el_info, char *buf, size_t l
 
 	if(strequal(el_info->name[CHANNEL_EL], ""))
 	{
-		struct tinyiiod_device *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
+		struct iio_interface *device = get_device(el_info->name[DEVICE_EL], tinyiiod_devs);
 
 		if(strequal(el_info->name[ATTRIBUTE_EL], ""))
 		{
@@ -297,24 +299,24 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name,
 				 ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no),
 				 struct iio_device *iio_device)
 {
-	struct tinyiiod_device *device;
+	struct iio_interface *device;
 
 	if (!(tinyiiod_devs)) {
-		tinyiiod_devs = calloc(1, sizeof(struct tinyiiod_devices*));
+		tinyiiod_devs = calloc(1, sizeof(struct iio_interfaces*));
 		if(!tinyiiod_devs)
 			return -ENOMEM;
-		tinyiiod_devs->number_of_dev = 1;
-		tinyiiod_devs->devices = calloc(1, sizeof(struct tinyiiod_device*));
-		if(!tinyiiod_devs->devices)
+		tinyiiod_devs->num_interfaces = 1;
+		tinyiiod_devs->interfaces = calloc(1, sizeof(struct iio_interface*));
+		if(!tinyiiod_devs->interfaces)
 			return -ENOMEM;
 	} else {
-		tinyiiod_devs->number_of_dev++;
-		tinyiiod_devs->devices = realloc(tinyiiod_devs->devices,
-						 tinyiiod_devs->number_of_dev * sizeof(struct tinyiiod_device*));
-		if(!tinyiiod_devs->devices)
+		tinyiiod_devs->num_interfaces++;
+		tinyiiod_devs->interfaces = realloc(tinyiiod_devs->interfaces,
+						 tinyiiod_devs->num_interfaces * sizeof(struct iio_interface*));
+		if(!tinyiiod_devs->interfaces)
 			return -ENOMEM;
 	}
-	device = calloc(1, sizeof(struct tinyiiod_device));
+	device = calloc(1, sizeof(struct iio_interface));
 	if(!device)
 		return -ENOMEM;
 
@@ -324,7 +326,7 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name,
 	device->get_device_xml = get_device_xml;
 	device->iio = iio_device;
 
-	tinyiiod_devs->devices[tinyiiod_devs->number_of_dev - 1] = device;
+	tinyiiod_devs->interfaces[tinyiiod_devs->num_interfaces - 1] = device;
 
 	return 0;
 }
@@ -332,15 +334,15 @@ ssize_t tinyiiod_register_device(void* device_address, const char *device_name,
 ssize_t tinyiiod_remove(void)
 {
 	uint8_t i;
-	for (i = 0; i < tinyiiod_devs->number_of_dev; i++) {
-		free(tinyiiod_devs->devices[i]);
+	for (i = 0; i < tinyiiod_devs->num_interfaces; i++) {
+		free(tinyiiod_devs->interfaces[i]);
 	}
 	free(tinyiiod_devs);
 
 	return 0;
 }
 
-static ssize_t get_xml(struct tinyiiod_devices *devs, char **outxml)
+static ssize_t get_xml(struct iio_interfaces *devs, char **outxml)
 {
 	char *xml, *tmp_xml, *tmp_xml2;
 	uint32_t length;
@@ -376,9 +378,9 @@ static ssize_t get_xml(struct tinyiiod_devices *devs, char **outxml)
 
 	strcpy(xml, header);
 
-	for (uint16_t i = 0; i < devs->number_of_dev; i++) {
-		devs->devices[i]->get_device_xml(&tmp_xml, devs->devices[i]->name,
-						 devs->devices[i]->num_channels);
+	for (uint16_t i = 0; i < devs->num_interfaces; i++) {
+		devs->interfaces[i]->get_device_xml(&tmp_xml, devs->interfaces[i]->name,
+						 devs->interfaces[i]->num_channels);
 		length = strlen(xml);
 		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 		if(!tmp_xml2)
@@ -432,7 +434,7 @@ static ssize_t read_attr(const char *device, const char *attr, char *buf,
 	el_info.name[ATTRIBUTE_EL] = attr;
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = 0;
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
 		return FAILURE;
 
@@ -460,7 +462,7 @@ static ssize_t write_attr(const char *device, const char *attr, const char *buf,
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = 0;
 
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
 		return FAILURE;
 
@@ -489,7 +491,7 @@ static ssize_t ch_read_attr(const char *device, const char *channel,
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = ch_out;
 
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!device)
 		return FAILURE;
 
@@ -517,7 +519,7 @@ static ssize_t ch_write_attr(const char *device, const char *channel,
 	el_info.name[ATTRIBUTE_EL] = attr;
 	el_info.crnt_level = DEVICE_EL;
 	el_info.ch_out = ch_out;
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
 		return -ENOENT;
 
@@ -529,7 +531,7 @@ static int32_t open_dev(const char *device, size_t sample_size, uint32_t mask)
 	if (!supporter_dev(device))
 		return -ENODEV;
 
-	struct tinyiiod_device * dev = get_device(device, tinyiiod_devs);
+	struct iio_interface * dev = get_device(device, tinyiiod_devs);
 	uint32_t ch_mask = 0xFFFFFFFF >> (32 - dev->num_channels);
 
 	if (mask & ~ch_mask)
@@ -560,7 +562,7 @@ static int32_t get_mask(const char *device, uint32_t *mask)
 {
 	if (!supporter_dev(device))
 		return -ENODEV;
-	struct tinyiiod_device * dev = get_device(device, tinyiiod_devs);
+	struct iio_interface * dev = get_device(device, tinyiiod_devs);
 	uint32_t ch_mask = 0xFFFFFFFF >> (32 - dev->num_channels);
 	*mask = ch_mask; /*  this way client has to do demux of data */
 
@@ -574,7 +576,7 @@ static int32_t get_mask(const char *device, uint32_t *mask)
  */
 static ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
 		return -ENOENT;
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)(iiod_device->dev_instance);
@@ -594,7 +596,7 @@ static ssize_t transfer_dev_to_mem(const char *device, size_t bytes_count)
 static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count)
 {
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!iiod_device)
 		return -ENOENT;
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)(iiod_device->dev_instance);
@@ -611,7 +613,7 @@ static ssize_t read_dev(const char *device, char *pbuf, size_t offset,
  */
 static ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!device)
 		return -ENOENT;
 	struct tinyiiod_dac *iiod_dac = (struct tinyiiod_dac *)(iiod_device->dev_instance);
@@ -631,7 +633,7 @@ static ssize_t transfer_mem_to_dev(const char *device, size_t bytes_count)
 static ssize_t write_dev(const char *device, const char *buf,
 			 size_t offset,  size_t bytes_count)
 {
-	struct tinyiiod_device *iiod_device = get_device(device, tinyiiod_devs);
+	struct iio_interface *iiod_device = get_device(device, tinyiiod_devs);
 	if(!device)
 		return -ENOENT;
 	struct tinyiiod_dac *iiod_dac = (struct tinyiiod_dac *)(iiod_device->dev_instance);
@@ -683,8 +685,6 @@ error_free_ops:
 
 ssize_t iiod_remove(struct tinyiiod *iiod)
 {
-//	free(iiod->xml); // todo
-//	free(iiod->ops); // todo
 	tinyiiod_destroy(iiod);
 
 	return SUCCESS;

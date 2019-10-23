@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   tinyiiod_types.h
- *   @brief  Header file for tinyiiod_types
- *   @author CPop (cristian.pop@analog.com)
+ *   @file   iio_types.h
+ *   @brief  Header file for iio_types
+ *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -36,38 +36,77 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef SRC_DRIVERS_IIO_IIO_TYPES_H_
-#define SRC_DRIVERS_IIO_IIO_TYPES_H_
+#ifndef IIO_TYPES_H_
+#define IIO_TYPES_H_
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include <stdbool.h>
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
 struct iio_ch_info {
-    int32_t ch_num;
-    bool ch_out;
+	int16_t ch_num;
+	bool ch_out;
 };
 
 struct iio_attribute {
-    const char *name;
-    ssize_t (*show)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
-    ssize_t (*store)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
+	const char *name;
+	ssize_t (*show)(void *device, char *buf, size_t len,
+			const struct iio_ch_info *channel);
+	ssize_t (*store)(void *device, char *buf, size_t len,
+			 const struct iio_ch_info *channel);
 };
 
 struct iio_channel {
 	char *name;
 	struct iio_attribute **attributes;
+	bool ch_out;
 };
 
 struct iio_device {
 	const char *name;
+	uint16_t num_ch;
 	struct iio_channel **channels;
 	struct iio_attribute **attributes;
 };
 
-struct iio_server_ops {
-	/* Read from the input stream */
-	ssize_t (*read)(char *buf, size_t len);
-
-	/* Write to the output stream */
-	ssize_t (*write)(const char *buf, size_t len);
-	ssize_t (*read_line)(char *buf, size_t len);
+/**
+ * struct iio_interface_init_par - iio interface init par.
+ * @dev_name: device name.
+ * @num_ch: number of channels.
+ * @dev_instance: physical instance of a device.
+ * @iio_device: device descriptor(describes channels and attributes)
+ * @get_xml: Generate device xml.
+ * @transfer_dev_to_mem: transfer data from ADC into RAM.
+ * @read_data: Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem".
+ * @transfer_mem_to_dev: Transfer data from RAM to DAC.
+ * @write_data: Write data to RAM. It should be called before "transfer_mem_to_dev".
+ */
+struct iio_interface_init_par {
+	const char *dev_name;
+	void *dev_instance;
+	struct iio_device *iio_device;
+	ssize_t (*get_xml)(char** xml, struct iio_device *iio_dev);
+	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
+	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
+			     size_t bytes_count, uint32_t ch_mask);
+	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
+	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
+			      size_t bytes_count, uint32_t ch_mask);
 };
 
-#endif /* SRC_DRIVERS_IIO_IIO_TYPES_H_ */
+struct iio_server_ops {
+	/* Read from from a peripheral device (UART, USB, NETWORK) */
+	ssize_t (*read)(char *buf, size_t len);
+	/* Write to a peripheral device (UART, USB, NETWORK) */
+	ssize_t (*write)(const char *buf, size_t len);
+};
+
+#endif /* IIO_TYPES_H_ */

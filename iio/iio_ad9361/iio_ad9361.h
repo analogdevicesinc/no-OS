@@ -1,6 +1,6 @@
 /***************************************************************************//**
-*   @file   tinyiiod_axi_adc.h
-*   @brief  Header file of tinyiiod_axi_adc
+*   @file   ad9361_tinyiiod_phy.h
+*   @brief  Header file of ad9361_tinyiiod_phy
 *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
 * Copyright 2019(c) Analog Devices, Inc.
@@ -36,30 +36,15 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __TINYIIOD_ADC_H__
-#define __TINYIIOD_ADC_H__
+#ifndef __TINYIIOD_PHY_H__
+#define __TINYIIOD_PHY_H__
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "tinyiiod_types.h"
+#include "ad9361_api.h"
+#include "iio.h"
 
-struct tinyiiod_adc_init_par {
-    struct axi_adc *adc;
-    struct axi_dmac *dmac;
-    uint32_t adc_ddr_base;
-};
+struct iio_device *get_phy_device(const char *device_name);
+ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no);
 
-struct tinyiiod_adc {
-    struct axi_adc *adc;
-    struct axi_dmac *dmac;
-    uint32_t adc_ddr_base;
-};
-
-struct iio_device *get_adc_device(const char *device_name);
-ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
-ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc, struct tinyiiod_adc_init_par *init);
-ssize_t adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size_t bytes_count);
-ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
-                     size_t bytes_count);
-ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no);
-#endif /* __TINYIIOD_ADC_H__ */
+#endif /* __TINYIIOD_PHY_H__ */

@@ -64,10 +64,10 @@
 #include "uart_extra.h"
 #endif // UART_INTERFACE
 #include "tinyiiod.h"
-#include <tinyiiod_axi_adc.h>
-#include <tinyiiod_axi_dac.h>
-#include "tinyiiod_util.h"
-#include "ad9361_tinyiiod_phy.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
+#include "iio.h"
+#include "iio_ad9361.h"
 #endif // USE_LIBIIO
 /******************************************************************************/
 /************************ Variables Definitions *******************************/

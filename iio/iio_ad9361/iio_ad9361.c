@@ -37,10 +37,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include "iio_ad9361.h"
+
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "ad9361_tinyiiod_phy.h"
 #include "util.h"
 
 static const char * const  phy_xml =
