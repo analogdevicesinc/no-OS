@@ -680,23 +680,23 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_register_device(tinyiiod_adc, tinyiiod_adc->adc->name,
+	ret = iio_register(tinyiiod_adc, tinyiiod_adc->adc->name,
 				       tinyiiod_adc->adc->num_channels, get_adc_xml,
 				       get_adc_device(tinyiiod_adc->adc->name));
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_register_device(tinyiiod_dac, tinyiiod_dac->dac->name,
+	ret = iio_register(tinyiiod_dac, tinyiiod_dac->dac->name,
 				       tinyiiod_dac->dac->num_channels, get_dac_xml,
 					   get_dac_device(tinyiiod_dac->dac->name));
 	if(ret < 0)
 		return ret;
-	ret = tinyiiod_register_device(ad9361_phy, ad9361_phy->name, 0, get_phy_xml,
+	ret = iio_register(ad9361_phy, ad9361_phy->name, 0, get_phy_xml,
 				       get_phy_device(ad9361_phy->name));
 	if(ret < 0)
 		return ret;
 
-	ret = iiod_create(&iiod, &uart_iio_server_ops);
+	ret = iio_init(&iiod, &uart_iio_server_ops);
 	if(ret < 0)
 		return ret;
 	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
