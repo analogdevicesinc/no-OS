@@ -331,17 +331,6 @@ ssize_t iio_register(void* device_address, const char *device_name,
 	return 0;
 }
 
-ssize_t iio_remove(void)
-{
-	uint8_t i;
-	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		free(iio_interfaces->interfaces[i]);
-	}
-	free(iio_interfaces);
-
-	return 0;
-}
-
 static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
 {
 	char *xml, *tmp_xml, *tmp_xml2;
@@ -683,8 +672,14 @@ error_free_ops:
 	return FAILURE;
 }
 
-ssize_t iiod_remove(struct tinyiiod *iiod)
+ssize_t iio_remove(struct tinyiiod *iiod)
 {
+	uint8_t i;
+	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
+		free(iio_interfaces->interfaces[i]);
+	}
+	free(iio_interfaces);
+
 	tinyiiod_destroy(iiod);
 
 	return SUCCESS;
