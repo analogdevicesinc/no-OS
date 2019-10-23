@@ -643,7 +643,7 @@ ssize_t iiod_create(struct tinyiiod **iiod, struct iio_server_ops *iio_server_op
 {
 	ssize_t ret;
 	char *xml;
-	struct iio_ops *ops = calloc(1, sizeof(struct iio_ops));
+	struct tinyiiod_ops *ops = calloc(1, sizeof(struct tinyiiod_ops));
 	if(!ops)
 		return FAILURE;
 
