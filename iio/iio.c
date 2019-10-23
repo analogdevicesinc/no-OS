@@ -294,105 +294,6 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf, size
 	return 0;
 }
 
-ssize_t iio_register(void* device_address, const char *device_name,
-				 uint16_t number_of_channels,
-				 ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no),
-				 struct iio_device *iio_device)
-{
-	struct iio_interface *device;
-
-	if (!(iio_interfaces)) {
-		iio_interfaces = calloc(1, sizeof(struct iio_interfaces*));
-		if(!iio_interfaces)
-			return -ENOMEM;
-		iio_interfaces->num_interfaces = 1;
-		iio_interfaces->interfaces = calloc(1, sizeof(struct iio_interface*));
-		if(!iio_interfaces->interfaces)
-			return -ENOMEM;
-	} else {
-		iio_interfaces->num_interfaces++;
-		iio_interfaces->interfaces = realloc(iio_interfaces->interfaces,
-						 iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
-		if(!iio_interfaces->interfaces)
-			return -ENOMEM;
-	}
-	device = calloc(1, sizeof(struct iio_interface));
-	if(!device)
-		return -ENOMEM;
-
-	device->dev_instance = device_address;
-	device->name = device_name;
-	device->num_channels = number_of_channels;
-	device->get_device_xml = get_device_xml;
-	device->iio = iio_device;
-
-	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = device;
-
-	return 0;
-}
-
-static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
-{
-	char *xml, *tmp_xml, *tmp_xml2;
-	uint32_t length;
-	ssize_t error = 0;
-
-	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-			"<!DOCTYPE context ["
-			"<!ELEMENT context (device | context-attribute)*>"
-			"<!ELEMENT context-attribute EMPTY>"
-			"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
-			"<!ELEMENT channel (scan-element?, attribute*)>"
-			"<!ELEMENT attribute EMPTY>"
-			"<!ELEMENT scan-element EMPTY>"
-			"<!ELEMENT debug-attribute EMPTY>"
-			"<!ELEMENT buffer-attribute EMPTY>"
-			"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
-			"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
-			"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
-			"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
-			"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
-			"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
-			"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
-			"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
-			"]>"
-			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
-			"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
-
-	char header2[] = "</context>";
-
-	xml = calloc(1, strlen(header) + 1);
-	if(!xml)
-		return -ENOMEM;
-
-	strcpy(xml, header);
-
-	for (uint16_t i = 0; i < devs->num_interfaces; i++) {
-		devs->interfaces[i]->get_device_xml(&tmp_xml, devs->interfaces[i]->name,
-						 devs->interfaces[i]->num_channels);
-		length = strlen(xml);
-		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-		if(!tmp_xml2)
-			error = -EACCES;
-		else
-			xml = tmp_xml2;
-		strcpy((xml + length), tmp_xml);
-	}
-
-	length = strlen(xml);
-	tmp_xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
-	if(!tmp_xml) {
-		free(tmp_xml);
-		return -ENOMEM;
-	}
-	xml = tmp_xml;
-	strcpy((xml + length), header2);
-
-	*outxml = xml;
-
-	return error;
-}
-
 /**
  * Check device
  * @param *device
@@ -628,6 +529,105 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 	struct tinyiiod_dac *iiod_dac = (struct tinyiiod_dac *)(iiod_device->dev_instance);
 
 	return dac_write_dev(iiod_dac, buf, offset, bytes_count);
+}
+
+static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
+{
+	char *xml, *tmp_xml, *tmp_xml2;
+	uint32_t length;
+	ssize_t error = 0;
+
+	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+			"<!DOCTYPE context ["
+			"<!ELEMENT context (device | context-attribute)*>"
+			"<!ELEMENT context-attribute EMPTY>"
+			"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+			"<!ELEMENT channel (scan-element?, attribute*)>"
+			"<!ELEMENT attribute EMPTY>"
+			"<!ELEMENT scan-element EMPTY>"
+			"<!ELEMENT debug-attribute EMPTY>"
+			"<!ELEMENT buffer-attribute EMPTY>"
+			"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
+			"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
+			"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
+			"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
+			"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
+			"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
+			"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
+			"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+			"]>"
+			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
+			"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
+
+	char header2[] = "</context>";
+
+	xml = calloc(1, strlen(header) + 1);
+	if(!xml)
+		return -ENOMEM;
+
+	strcpy(xml, header);
+
+	for (uint16_t i = 0; i < devs->num_interfaces; i++) {
+		devs->interfaces[i]->get_device_xml(&tmp_xml, devs->interfaces[i]->name,
+						 devs->interfaces[i]->num_channels);
+		length = strlen(xml);
+		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
+		if(!tmp_xml2)
+			error = -EACCES;
+		else
+			xml = tmp_xml2;
+		strcpy((xml + length), tmp_xml);
+	}
+
+	length = strlen(xml);
+	tmp_xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
+	if(!tmp_xml) {
+		free(tmp_xml);
+		return -ENOMEM;
+	}
+	xml = tmp_xml;
+	strcpy((xml + length), header2);
+
+	*outxml = xml;
+
+	return error;
+}
+
+ssize_t iio_register(void* device_address, const char *device_name,
+				 uint16_t number_of_channels,
+				 ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no),
+				 struct iio_device *iio_device)
+{
+	struct iio_interface *iio_interface;
+
+	if (!(iio_interfaces)) {
+		iio_interfaces = calloc(1, sizeof(struct iio_interfaces*));
+		if(!iio_interfaces)
+			return -ENOMEM;
+		iio_interfaces->num_interfaces = 1;
+		iio_interfaces->interfaces = calloc(1, sizeof(struct iio_interface*));
+		if(!iio_interfaces->interfaces)
+			return -ENOMEM;
+	} else {
+		iio_interfaces->num_interfaces++;
+		iio_interfaces->interfaces = realloc(iio_interfaces->interfaces,
+						 iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
+		if(!iio_interfaces->interfaces)
+			return -ENOMEM;
+	}
+	iio_interface = calloc(1, sizeof(struct iio_interface));
+	if(!iio_interface)
+		return -ENOMEM;
+
+	iio_interface->dev_instance = device_address;
+	iio_interface->name = device_name;
+	iio_interface->num_channels = number_of_channels;
+	iio_interface->get_device_xml = get_device_xml;
+	iio_interface->iio = iio_device;
+
+	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = iio_interface;
+
+	return 0;
 }
 
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
