@@ -1,6 +1,6 @@
 /***************************************************************************//**
-*   @file   tinyiiod_axi_adc.h
-*   @brief  Header file of tinyiiod_axi_adc.
+*   @file   iio_axi_dac.h
+*   @brief  Header file of iio_axi_dac.
 *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
 * Copyright 2019(c) Analog Devices, Inc.
@@ -36,12 +36,11 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __TINYIIOD_DAC_H__
-#define __TINYIIOD_DAC_H__
+
+#ifndef IIO_AXI_DAC_H_
+#define IIO_AXI_DAC_H_
 
 #include <stdio.h>
-#include <stdbool.h>
-
 #include "iio_types.h"
 
 struct tinyiiod_dac_init_par {
@@ -64,4 +63,4 @@ ssize_t dac_write_dev(struct tinyiiod_dac *iiod_dac, const char *buf,
 ssize_t get_dac_xml(char** xml, const char *device_name, uint8_t ch_no);
 
 
-#endif /* __TINYIIOD_DAC_H__ */
+#endif /* IIO_AXI_DAC_H_ */

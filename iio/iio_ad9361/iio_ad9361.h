@@ -1,6 +1,6 @@
 /***************************************************************************//**
-*   @file   ad9361_tinyiiod_phy.h
-*   @brief  Header file of ad9361_tinyiiod_phy
+*   @file   iio_ad9361.h
+*   @brief  Header file of iio_ad9361
 *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
 * Copyright 2019(c) Analog Devices, Inc.
@@ -36,8 +36,8 @@
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __TINYIIOD_PHY_H__
-#define __TINYIIOD_PHY_H__
+#ifndef IIO_AD9361_H_
+#define IIO_AD9361_H_
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -47,4 +47,4 @@
 struct iio_device *get_phy_device(const char *device_name);
 ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no);
 
-#endif /* __TINYIIOD_PHY_H__ */
+#endif /* IIO_AD9361_H_ */

@@ -36,8 +36,10 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef SRC_DRIVERS_IIO_IIO_TYPES_H_
-#define SRC_DRIVERS_IIO_IIO_TYPES_H_
+#ifndef IIO_TYPES_H_
+#define IIO_TYPES_H_
+
+#include <stdbool.h>
 
 struct iio_ch_info {
     int32_t ch_num;
@@ -70,4 +72,4 @@ struct iio_server_ops {
 	ssize_t (*read_line)(char *buf, size_t len);
 };
 
-#endif /* SRC_DRIVERS_IIO_IIO_TYPES_H_ */
+#endif /* IIO_TYPES_H_ */

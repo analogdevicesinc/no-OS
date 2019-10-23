@@ -36,15 +36,13 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#include "iio_axi_adc.h"
-
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <xil_cache.h>
-#include "platform_drivers.h"
+#include <xil_cache.h> //remove this
+#include "iio_axi_adc.h"
+#include "error.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "xml.h"
