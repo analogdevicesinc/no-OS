@@ -38,13 +38,12 @@
 *******************************************************************************/
 
 #include "iio.h"
-
-#include <xil_io.h>
+#include "ctype.h"
 #include "tinyiiod.h"
 #include "util.h"
 #include "error.h"
 
-#include "iio_axi_adc.h" //todo remove this
+#include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 
 struct iio_interface {
@@ -166,11 +165,11 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel, struct iio_attribute **attributes)
 {
 	int16_t i = 0, j = 0;
-	char local_buf[0x1000];
+	char local_buf[256];
 	while(attributes[i]) {
-		int16_t attr_length = attributes[i]->show(device, (local_buf), len, channel);
-		int32_t *len = (int32_t *)(buf + j);
-		*len = Xil_EndianSwap32(attr_length);
+		ssize_t attr_length = attributes[i]->show(device, (local_buf), len, channel);
+		uint32_t *len = (uint32_t *)(buf + j);
+		*len = bswap_constant_32(attr_length);
 
 		j += 4;
 		if(attr_length >= 0) {
@@ -200,7 +199,7 @@ static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 	int16_t i = 0, j = 0;
 
 	while(attributes[i]) {
-		int16_t attr_length = Xil_EndianSwap32((uint32_t)(buf + j));
+		int16_t attr_length = bswap_constant_32((uint32_t)(buf + j));
 		j += 4;
 		attributes[i]->store(device, (buf + j), attr_length, channel);
 		j += attr_length;
