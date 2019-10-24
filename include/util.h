@@ -133,8 +133,8 @@ uint64_t div_u64(uint64_t dividend, uint32_t divisor);
 /* Verify if str1 equals str2 */
 bool strequal(const char *str1, const char *str2);
 /* Converts from string to int32_t */
-int32_t read_value(const char *str);
+int32_t str_to_int32(const char *str);
 /* Converts from string to uint32_t */
-uint32_t read_ul_value(const char *str);
+uint32_t srt_to_uint32(const char *str);
 #endif // UTIL_H_
 

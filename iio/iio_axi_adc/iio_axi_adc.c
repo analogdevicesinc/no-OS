@@ -226,7 +226,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
 {
-	int32_t val = read_value(buf);
+	int32_t val = str_to_int32(buf);
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
 	axi_adc_set_calib_bias(iiod_adc->adc,

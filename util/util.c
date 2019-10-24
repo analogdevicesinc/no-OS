@@ -207,7 +207,7 @@ bool strequal(const char *str1, const char *str2)
  * @param *str
  * @return int32_t
  */
-int32_t read_value(const char *str)
+int32_t str_to_int32(const char *str)
 {
 	char *end;
 	int32_t value = strtol(str, &end, 0);
@@ -223,7 +223,7 @@ int32_t read_value(const char *str)
  * @param *str
  * @return uint32_t
  */
-uint32_t read_ul_value(const char *str)
+uint32_t srt_to_uint32(const char *str)
 {
 	char *end;
 	uint32_t value = strtoul(str, &end, 0);
