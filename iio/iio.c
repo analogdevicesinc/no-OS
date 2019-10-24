@@ -42,7 +42,6 @@
 #include "tinyiiod.h"
 #include "util.h"
 #include "error.h"
-
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 
@@ -60,17 +59,11 @@ struct iio_interfaces {
 	uint8_t num_interfaces;
 };
 
-enum elem_level {
-	DEVICE_EL,
-	CHANNEL_EL,
-	ATTRIBUTE_EL,
-	MAX_EL
-};
-
 struct element_info {
-	const char *name[MAX_EL];
+	const char *device_name;
+	const char *channel_name;
+	const char *attribute_name;
 	bool ch_out;
-	enum elem_level crnt_level;
 };
 
 static struct iio_interfaces *iio_interfaces = NULL;
@@ -220,13 +213,13 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info, char *b
 			       struct iio_channel *channel, bool is_write)
 {
 	int16_t attribute_id;
-	struct iio_interface *device = iio_get_interface(el_info->name[DEVICE_EL], iio_interfaces);
+	struct iio_interface *device = iio_get_interface(el_info->device_name, iio_interfaces);
 	const struct iio_ch_info channel_info = {
-						iio_get_channel_number(el_info->name[CHANNEL_EL]),
+						iio_get_channel_number(el_info->channel_name),
 						el_info->ch_out
 					};
 
-	if (strequal(el_info->name[ATTRIBUTE_EL], ""))
+	if (strequal(el_info->attribute_name, ""))
 	{
 		/* read / write all channel attributes */
 		if (is_write)
@@ -237,7 +230,7 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info, char *b
 	else
 	{
 		/* read / write single channel attribute, if attribute found */
-		attribute_id = iio_get_attribute_id(el_info->name[ATTRIBUTE_EL], channel->attributes);
+		attribute_id = iio_get_attribute_id(el_info->attribute_name, channel->attributes);
 		if (attribute_id >= 0)
 		{
 			if (is_write)
@@ -269,12 +262,12 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf, size
 	if (!iio_device)
 		return -ENOENT;
 
-	if (strequal(el_info->name[CHANNEL_EL], ""))
+	if (strequal(el_info->channel_name, ""))
 	{
 		/* it is attribute of a device */
-		device = iio_get_interface(el_info->name[DEVICE_EL], iio_interfaces);
+		device = iio_get_interface(el_info->device_name, iio_interfaces);
 
-		if (strequal(el_info->name[ATTRIBUTE_EL], ""))
+		if (strequal(el_info->attribute_name, ""))
 		{
 			/* read / write all device attributes */
 			if (is_write)
@@ -285,7 +278,7 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf, size
 		else
 		{
 			/* read / write single device attribute, if attribute found */
-			attribute_id = iio_get_attribute_id(el_info->name[ATTRIBUTE_EL], iio_device->attributes);
+			attribute_id = iio_get_attribute_id(el_info->attribute_name, iio_device->attributes);
 			if (attribute_id < 0)
 				return -ENOENT;
 			if (is_write)
@@ -297,7 +290,7 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf, size
 	else
 	{
 		/* it is attribute of a channel */
-		channel_id = iio_get_channel_id(el_info->name[CHANNEL_EL], iio_device->channels);
+		channel_id = iio_get_channel_id(el_info->channel_name, iio_device->channels);
 		return iio_rd_wr_channel_attribute(el_info, buf, len, iio_device->channels[channel_id], is_write);
 	}
 
@@ -332,10 +325,9 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 	if (!iio_supporter_dev(device))
 		return FAILURE;
 
-	el_info.name[DEVICE_EL] = device;
-	el_info.name[CHANNEL_EL] = "";
-	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
+	el_info.device_name = device;
+	el_info.channel_name = "";
+	el_info.attribute_name = attr;
 	el_info.ch_out = 0; 	/* set to 0, there is no channel here */
 
 	iiod_device = iio_get_interface(device, iio_interfaces);
@@ -363,10 +355,9 @@ static ssize_t iio_write_attr(const char *device, const char *attr, const char *
 	if (!iio_supporter_dev(device))
 		return -ENODEV;
 
-	el_info.name[DEVICE_EL] = device;
-	el_info.name[CHANNEL_EL] = "";
-	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
+	el_info.device_name = device;
+	el_info.channel_name = "";
+	el_info.attribute_name = attr;
 	el_info.ch_out = 0;		/* set to 0, there is no channel here */
 
 	iiod_device = iio_get_interface(device, iio_interfaces);
@@ -395,10 +386,9 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 	if (!iio_supporter_dev(device))
 		return FAILURE;
 
-	el_info.name[DEVICE_EL] = device;
-	el_info.name[CHANNEL_EL] = channel;
-	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
+	el_info.device_name = device;
+	el_info.channel_name = channel;
+	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
 
 	iiod_device = iio_get_interface(device, iio_interfaces);
@@ -427,12 +417,10 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 	if (!iio_supporter_dev(device))
 		return -ENODEV;
 
-	el_info.name[DEVICE_EL] = device;
-	el_info.name[CHANNEL_EL] = channel;
-	el_info.name[ATTRIBUTE_EL] = attr;
-	el_info.crnt_level = DEVICE_EL;
+	el_info.device_name = device;
+	el_info.channel_name = channel;
+	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
-
 	iiod_device = iio_get_interface(device, iio_interfaces);
 
 	if (!iiod_device)
