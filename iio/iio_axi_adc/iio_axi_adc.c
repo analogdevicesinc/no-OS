@@ -63,7 +63,6 @@ ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc,
 
 ssize_t tinyiiod_axi_adc_remove(struct tinyiiod_adc *tinyiiod_adc)
 {
-
 	free(tinyiiod_adc);
 
 	return SUCCESS;

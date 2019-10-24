@@ -203,9 +203,9 @@ bool strequal(const char *str1, const char *str2)
 }
 
 /**
- * Converts from string to long value
+ * Converts from string to int32_t
  * @param *str
- * @return long value
+ * @return int32_t
  */
 int32_t read_value(const char *str)
 {
@@ -219,9 +219,9 @@ int32_t read_value(const char *str)
 }
 
 /**
- * Converts from string to unsigned long value
+ * Converts from string to uint32_t
  * @param *str
- * @return long value
+ * @return uint32_t
  */
 uint32_t read_ul_value(const char *str)
 {
