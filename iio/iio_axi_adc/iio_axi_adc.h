@@ -68,7 +68,7 @@ struct iiod_axi_adc {
 
 ssize_t iio_axi_adc_init(struct iiod_axi_adc **tinyiiod_adc, struct iio_axi_adc_init_par *init);
 ssize_t iio_axi_adc_remove(struct iiod_axi_adc *tinyiiod_adc);
-struct iio_device *iio_axi_adc_get_device(const char *device_name);
+struct iio_device *iio_axi_adc_crate_device(const char *device_name);
 ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size_t bytes_count);
 ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
                      size_t bytes_count);

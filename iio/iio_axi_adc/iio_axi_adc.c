@@ -331,8 +331,6 @@ static struct iio_channel *iio_adc_channels[] = {
 	NULL,
 };
 
-static struct iio_device *iio_adc_device;
-
 ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
 	char buff[256];
@@ -439,14 +437,17 @@ error:
  * get map between attribute name and corresponding function
  * @return map
  */
-struct iio_device *iio_axi_adc_get_device(const char *device_name)
+struct iio_device *iio_axi_adc_crate_device(const char *device_name)
 {
+	struct iio_device *iio_adc_device;
+
 	iio_adc_device = calloc(1, sizeof(struct iio_device));
 	if (!iio_adc_device)
 		return NULL;
 
 	iio_adc_device->name = device_name;
 	iio_adc_device->channels = iio_adc_channels;
+	iio_adc_device->attributes = NULL; /* no device attribute */
 
 	return iio_adc_device;
 }

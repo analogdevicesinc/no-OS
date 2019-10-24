@@ -565,20 +565,21 @@ static struct iio_channel *iio_dac_channels[] = {
 	NULL,
 };
 
-static struct iio_device *iio_dac_device;
-
 /**
  * get_ch_write_dac_attr_map
  * get map between attribute name and corresponding function
  * @return map
  */
-struct iio_device *iio_axi_dac_get_device(const char *device_name)
+struct iio_device *iio_axi_dac_create_device(const char *device_name)
 {
+	struct iio_device *iio_dac_device;
+
 	iio_dac_device = calloc(1, sizeof(struct iio_device));
 	if (!iio_dac_device)
 		return NULL;
 	iio_dac_device->name = device_name;
 	iio_dac_device->channels = iio_dac_channels;
+	iio_dac_device->attributes = NULL; /* no device attribute */
 
 	return iio_dac_device;
 }
