@@ -55,8 +55,8 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-ssize_t iio_register(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), struct iio_device *iio_device);
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 ssize_t iio_remove(struct tinyiiod *iiod);
+ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, ssize_t (*get_device_xml)(char** xml, const char *dev_name, uint8_t ch_no), struct iio_device *iio_device);
 
 #endif /* __TINYIIOD_UTIL_H__ */

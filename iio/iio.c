@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   tinyiiod_util.c
- *   @brief  Implementation of tinyiiod_util
+ *   @file   iio.c
+ *   @brief  Implementation of iio
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,6 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include "iio.h"
 #include "ctype.h"
 #include "tinyiiod.h"
@@ -44,6 +48,10 @@
 #include "error.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
 struct iio_interface {
 	const char *name;
@@ -66,7 +74,14 @@ struct element_info {
 	bool ch_out;
 };
 
+/* iio_read_attr(), iio_write_attr() functions, they need to know about
+ *
+ * */
 static struct iio_interfaces *iio_interfaces = NULL;
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 /**
  * Get channel number
@@ -625,10 +640,7 @@ static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
 	return error;
 }
 
-ssize_t iio_register(void* device_address, const char *device_name,
-				 uint16_t number_of_channels,
-				 ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no),
-				 struct iio_device *iio_device)
+ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, ssize_t (*get_device_xml)(char** xml, const char *dev_name, uint8_t num_ch), struct iio_device *iio_device)
 {
 	struct iio_interface *iio_interface;
 
@@ -652,9 +664,9 @@ ssize_t iio_register(void* device_address, const char *device_name,
 	if (!iio_interface)
 		return -ENOMEM;
 
-	iio_interface->dev_instance = device_address;
-	iio_interface->name = device_name;
-	iio_interface->num_channels = number_of_channels;
+	iio_interface->dev_instance = dev_instance;
+	iio_interface->name = dev_name;
+	iio_interface->num_channels = num_ch;
 	iio_interface->get_device_xml = get_device_xml;
 	iio_interface->iio = iio_device;
 
