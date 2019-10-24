@@ -419,13 +419,11 @@ struct uart_desc *uart_device;
 
 ssize_t iiod_write(const char *buf, size_t len)
 {
-
 	return uart_write(uart_device, (const uint8_t *)buf, len);
 }
 
 ssize_t iiod_read(char *buf, size_t len)
 {
-
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
 
@@ -638,7 +636,6 @@ int main(void)
 
 	struct iio_server_ops uart_iio_server_ops = {
 		.read = iiod_read,
-		.read_line = NULL,
 		.write = iiod_write,
 	};
 

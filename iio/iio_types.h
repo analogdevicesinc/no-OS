@@ -74,10 +74,8 @@ struct iio_device {
 struct iio_server_ops {
 	/* Read from the input stream */
 	ssize_t (*read)(char *buf, size_t len);
-
 	/* Write to the output stream */
 	ssize_t (*write)(const char *buf, size_t len);
-	ssize_t (*read_line)(char *buf, size_t len);
 };
 
 #endif /* IIO_TYPES_H_ */

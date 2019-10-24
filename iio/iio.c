@@ -687,7 +687,6 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 	ops->get_mask = iio_get_mask;
 
 	ops->read = iio_server_ops->read;
-	ops->read_line = iio_server_ops->read_line;
 	ops->write = iio_server_ops->write;
 
 	ret = iio_get_xml(iio_interfaces, &xml);
