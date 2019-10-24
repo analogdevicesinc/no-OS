@@ -37,12 +37,36 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_ad9361.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
+#include "iio_ad9361.h"
 #include "util.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+static const char * const ad9361_calib_mode[] =
+{"auto", "manual", "tx_quad", "rf_dc_offs", "rssi_gain_step"};
+
+static const char * const ad9361_rf_rx_port[] = {
+    "A_BALANCED", "B_BALANCED", "C_BALANCED",
+    "A_N", "A_P", "B_N", "B_P", "C_N", "C_P", "TX_MONITOR1",
+    "TX_MONITOR2", "TX_MONITOR1_2"
+};
+
+static const char * const ad9361_rf_tx_port[] =
+{"A", "B"};
+
+static const char * const ad9361_agc_modes[] =
+{"manual", "fast_attack", "slow_attack", "hybrid"};
+
+extern const char *ad9361_ensm_states[12];
 
 static const char * const  phy_xml =
     "<device id=\"ad9361-phy\" name=\"ad9361-phy\" >"
@@ -362,23 +386,10 @@ static const char * const  phy_xml =
     "<debug-attribute name=\"adi,frequency-division-duplex-mode-enable\" />"
     "<debug-attribute name=\"direct_reg_access\" />"
     "</device>";
-//static struct ad9361_rf_phy *ad9361_phy;
-extern const char *ad9361_ensm_states[12];
 
-static const char * const ad9361_calib_mode[] =
-{"auto", "manual", "tx_quad", "rf_dc_offs", "rssi_gain_step"};
-
-static const char * const ad9361_rf_rx_port[] = {
-    "A_BALANCED", "B_BALANCED", "C_BALANCED",
-    "A_N", "A_P", "B_N", "B_P", "C_N", "C_P", "TX_MONITOR1",
-    "TX_MONITOR2", "TX_MONITOR1_2"
-};
-
-static const char * const ad9361_rf_tx_port[] =
-{"A", "B"};
-
-static const char * const ad9361_agc_modes[] =
-{"manual", "fast_attack", "slow_attack", "hybrid"};
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 /**
  * get_rf_port_select

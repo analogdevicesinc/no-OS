@@ -39,8 +39,16 @@
 #ifndef IIO_AXI_ADC_H_
 #define IIO_AXI_ADC_H_
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <stdio.h>
 #include "iio_types.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
 
 struct tinyiiod_adc_init_par {
     struct axi_adc *adc;
@@ -54,6 +62,10 @@ struct tinyiiod_adc {
     uint32_t adc_ddr_base;
 };
 
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
 struct iio_device *get_adc_device(const char *device_name);
 ssize_t tinyiiod_adc_configure(struct axi_adc *adc, struct axi_dmac	*dmac, uint32_t adc_ddr_base);
 ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc, struct tinyiiod_adc_init_par *init);
@@ -61,4 +73,5 @@ ssize_t adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac, uint32_t address, size
 ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
                      size_t bytes_count);
 ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no);
+
 #endif /* IIO_AXI_ADC_H_ */

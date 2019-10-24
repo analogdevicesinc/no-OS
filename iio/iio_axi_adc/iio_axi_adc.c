@@ -36,6 +36,11 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
@@ -47,6 +52,10 @@
 #include "axi_dmac.h"
 #include "xml.h"
 #include "util.h"
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc,
 		struct tinyiiod_adc_init_par *init)
@@ -84,10 +93,9 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 
-
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
+	if (val2 < 0 && val >= 0) {
 		snprintf(buf, len, "-");
 		i++;
 	}
@@ -107,6 +115,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 {
 	int32_t val;
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+
 	axi_adc_get_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
 			       &val,
@@ -130,13 +139,14 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
 	ssize_t ret = axi_adc_get_calib_scale(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
-	if(val2 < 0 && val >= 0) {
-		ret = (ssize_t) snprintf(buf, len, "-");
+
+	if (val2 < 0 && val >= 0) {
+		ret = snprintf(buf, len, "-");
 		i++;
 	}
-	ret = i + (ssize_t) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
+	ret = i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
 				     labs(val2));
 
 	return ret;
@@ -169,7 +179,7 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
 	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
-	if(ret < 0)
+	if (ret < 0)
 		return ret;
 
 	return snprintf(buf, len, "%"PRIi64"", sampling_freq_hz);
@@ -189,6 +199,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+
 	axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
 
 	return len;
@@ -206,6 +217,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 {
 	int32_t val = read_value(buf);
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+
 	axi_adc_set_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
 			       val,
@@ -228,6 +240,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+
 	axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val, val2);
 
 	return len;
@@ -407,15 +420,15 @@ ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no)
 	}
 
 	ret = xml_create_document(&document, device);
-	if(ret < 0) {
-		if(document)
+	if (ret < 0) {
+		if (document)
 			xml_delete_document(document);
 		goto error;
 	}
 	*xml = document->buff;
 
 error:
-	if(device)
+	if (device)
 		xml_delete_node(device);
 
 	return ret;
@@ -431,6 +444,7 @@ struct iio_device *get_adc_device(const char *device_name)
 	iio_adc_device = calloc(1, sizeof(struct iio_device));
 	if (!iio_adc_device)
 		return NULL;
+
 	iio_adc_device->name = device_name;
 	iio_adc_device->channels = iio_adc_channels;
 

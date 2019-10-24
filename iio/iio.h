@@ -40,8 +40,20 @@
 #ifndef __TINYIIOD_UTIL_H__
 #define __TINYIIOD_UTIL_H__
 
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
 #include "tinyiiod.h"
 #include "iio_types.h"
+
+/******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
 ssize_t iio_register(void* device_address, const char *device_name, uint16_t number_of_channels, ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no), struct iio_device *iio_device);
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);

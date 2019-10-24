@@ -37,19 +37,21 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#include "iio_axi_dac.h"
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
 
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include "iio_axi_dac.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "platform_drivers.h"
 #include "util.h"
 
 static const char * const  dac_xml =
-
 	"<device id=\"cf-ad9361-dds-core-lpc\" name=\"cf-ad9361-dds-core-lpc\" >"
 	"<channel id=\"voltage0\" type=\"output\" >"
 	"<scan-element index=\"0\" format=\"le:S16/16&gt;&gt;0\" />"
@@ -135,6 +137,10 @@ static const char * const  dac_xml =
 	"<buffer-attribute name=\"data_available\" />"
 	"<debug-attribute name=\"direct_reg_access\" />"
 	"</device>";
+
+/******************************************************************************/
+/************************ Functions Definitions *******************************/
+/******************************************************************************/
 
 ssize_t tinyiiod_axi_dac_init(struct tinyiiod_dac **tinyiiod_dac,
 		struct tinyiiod_dac_init_par *init)
