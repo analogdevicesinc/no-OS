@@ -386,7 +386,7 @@ ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 		ret = xml_add_attribute(attribute, att);
 		if (ret < 0)
 			goto error;
-		ret = xml_create_attribute(&att, "format", "le:S12/16&gt;&gt;0"); // todo
+		ret = xml_create_attribute(&att, "format", "le:S12/16&gt;&gt;0");
 		if (ret < 0)
 			goto error;
 		ret = xml_add_attribute(attribute, att);
