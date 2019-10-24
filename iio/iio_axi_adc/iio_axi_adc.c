@@ -57,8 +57,8 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc,
-		struct tinyiiod_adc_init_par *init)
+ssize_t iio_axi_adc_init(struct iiod_axi_adc **tinyiiod_adc,
+		struct iio_axi_adc_init_par *init)
 {
 	*tinyiiod_adc = calloc(1, sizeof(*tinyiiod_adc));
 	if (!(*tinyiiod_adc))
@@ -70,7 +70,7 @@ ssize_t tinyiiod_axi_adc_init(struct tinyiiod_adc **tinyiiod_adc,
 	return SUCCESS;
 }
 
-ssize_t tinyiiod_axi_adc_remove(struct tinyiiod_adc *tinyiiod_adc)
+ssize_t iio_axi_adc_remove(struct iiod_axi_adc *tinyiiod_adc)
 {
 	free(tinyiiod_adc);
 
@@ -89,7 +89,7 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 
@@ -114,7 +114,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
 {
 	int32_t val;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 
 	axi_adc_get_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
@@ -136,7 +136,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 	ssize_t ret = axi_adc_get_calib_scale(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
@@ -176,7 +176,7 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
 	if (ret < 0)
@@ -198,7 +198,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 
 	axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
 
@@ -216,7 +216,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
 {
 	int32_t val = read_value(buf);
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 
 	axi_adc_set_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
@@ -239,7 +239,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct tinyiiod_adc *iiod_adc = (struct tinyiiod_adc *)device;
+	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
 
 	axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val, val2);
 
@@ -333,7 +333,7 @@ static struct iio_channel *iio_adc_channels[] = {
 
 static struct iio_device *iio_adc_device;
 
-ssize_t get_adc_xml(char** xml, const char *device_name, uint8_t ch_no)
+ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
 	char buff[256];
 	struct xml_node *device = NULL;
@@ -439,7 +439,7 @@ error:
  * get map between attribute name and corresponding function
  * @return map
  */
-struct iio_device *get_adc_device(const char *device_name)
+struct iio_device *iio_axi_adc_get_device(const char *device_name)
 {
 	iio_adc_device = calloc(1, sizeof(struct iio_device));
 	if (!iio_adc_device)
@@ -457,7 +457,7 @@ struct iio_device *get_adc_device(const char *device_name)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t address,
+ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t address,
 				size_t bytes_count)
 {
 	rx_dmac->flags = 0;
@@ -476,7 +476,7 @@ ssize_t adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t address,
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
+ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
 		     size_t bytes_count)
 {
 	memcpy(pbuf, adc_ddr_baseaddr + offset, bytes_count);

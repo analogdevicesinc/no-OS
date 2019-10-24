@@ -51,13 +51,13 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-struct tinyiiod_dac_init_par {
+struct iio_axi_dac_init_par {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
 };
 
-struct tinyiiod_dac {
+struct iio_axi_dac {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
@@ -67,12 +67,12 @@ struct tinyiiod_dac {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-struct iio_device *get_dac_device(const char *device_name);
-ssize_t tinyiiod_axi_dac_init(struct tinyiiod_dac **tinyiiod_dac, struct tinyiiod_dac_init_par *init);
-ssize_t dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count);
-ssize_t dac_write_dev(struct tinyiiod_dac *iiod_dac, const char *buf,
+ssize_t iio_axi_dac_init(struct iio_axi_dac **tinyiiod_dac, struct iio_axi_dac_init_par *init);
+ssize_t iio_axi_dac_remove(struct iio_axi_dac *tinyiiod_dac);
+struct iio_device *iio_axi_dac_get_device(const char *device_name);
+ssize_t iio_axi_dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac, uint32_t dac_ddr_baseaddr, size_t bytes_count);
+ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
                       size_t offset,  size_t bytes_count);
-ssize_t get_dac_xml(char** xml, const char *device_name, uint8_t ch_no);
-
+ssize_t iio_axi_dac_get_xml(char** xml, const char *device_name, uint8_t ch_no);
 
 #endif /* IIO_AXI_DAC_H_ */
