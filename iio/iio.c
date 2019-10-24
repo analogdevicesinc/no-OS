@@ -74,9 +74,9 @@ struct element_info {
 	bool ch_out;
 };
 
-/* iio_read_attr(), iio_write_attr() functions, they need to know about
- *
- * */
+/**
+ * iio_read_attr(), iio_write_attr() functions, they need to know about iio_interfaces
+ */
 static struct iio_interfaces *iio_interfaces = NULL;
 
 /******************************************************************************/
@@ -577,11 +577,16 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 	return iio_axi_dac_write_dev(iiod_dac, buf, offset, bytes_count);
 }
 
+/**
+ * @brief Get a merged xml containing all devices.
+ * @param devs - physical device instance.
+ * @param outxml - device name.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
 {
 	char *xml, *tmp_xml, *tmp_xml2;
 	uint32_t length;
-	ssize_t error = 0;
 	uint16_t i;
 
 	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -605,41 +610,51 @@ static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
 			"]>"
 			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
 			"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
-
-	char header2[] = "</context>";
+	char header_end[] = "</context>";
 
 	xml = calloc(1, strlen(header) + 1);
 	if (!xml)
-		return -ENOMEM;
+		return FAILURE;
 
 	strcpy(xml, header);
-
 	for (i = 0; i < devs->num_interfaces; i++) {
 		devs->interfaces[i]->get_device_xml(&tmp_xml, devs->interfaces[i]->name,
 						 devs->interfaces[i]->num_channels);
 		length = strlen(xml);
 		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 		if (!tmp_xml2)
-			error = -EACCES;
-		else
-			xml = tmp_xml2;
+			goto error;
+
+		xml = tmp_xml2;
 		strcpy((xml + length), tmp_xml);
 	}
 
 	length = strlen(xml);
-	tmp_xml = realloc(xml, strlen(xml) + strlen(header2) + 1);
-	if (!tmp_xml) {
-		free(tmp_xml);
-		return -ENOMEM;
-	}
+	tmp_xml = realloc(xml, strlen(xml) + strlen(header_end) + 1);
+	if (!tmp_xml)
+		goto error;
+
 	xml = tmp_xml;
-	strcpy((xml + length), header2);
+	strcpy((xml + length), header_end);
 
 	*outxml = xml;
 
-	return error;
+	return SUCCESS;
+error:
+	free(xml);
+
+	return FAILURE;
 }
 
+/**
+ * @brief Connect "iio_dev" and "get_device_xml" to a "dev_instance" physical device.
+ * @param dev_instance - physical device instance.
+ * @param dev_name - device name.
+ * @param num_ch - number of channels.
+ * @param get_device_xml - get corresponding xml.
+ * @param iio_device.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, ssize_t (*get_device_xml)(char** xml, const char *dev_name, uint8_t num_ch), struct iio_device *iio_device)
 {
 	struct iio_interface *iio_interface;
@@ -672,9 +687,15 @@ ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, 
 
 	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = iio_interface;
 
-	return 0;
+	return SUCCESS;
 }
 
+/**
+ * @brief Init iio.
+ * @param iiod - pointer to iiod.
+ * @param iio_server_ops.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
 	ssize_t ret;
@@ -717,6 +738,11 @@ error_free_ops:
 	return FAILURE;
 }
 
+/**
+ * @brief Free the resources allocated by iio_init().
+ * @param iiod - pointer to iiod.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_remove(struct tinyiiod *iiod)
 {
 	uint8_t i;
