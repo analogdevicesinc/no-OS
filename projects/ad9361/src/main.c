@@ -622,19 +622,19 @@ int main(void)
 #ifdef USE_LIBIIO
 
 	int32_t ret;
-	struct tinyiiod_adc_init_par tinyiiod_adc_init_par = {
+	struct iio_axi_adc_init_par iio_axi_adc_init_par = {
 		.adc = ad9361_phy->rx_adc,
 		.dmac = ad9361_phy->rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
-	struct tinyiiod_adc *tinyiiod_adc;
+	struct iiod_axi_adc *iio_axi_adc_inst;
 
-	struct tinyiiod_dac_init_par tinyiiod_dac_init_par = {
+	struct iio_axi_dac_init_par iio_axi_dac_init_par = {
 		.dac = ad9361_phy->tx_dac,
 		.dmac = ad9361_phy->tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 	};
-	struct tinyiiod_dac *tinyiiod_dac;
+	struct iio_axi_dac *iio_axi_dac_inst;
 
 	struct iio_server_ops uart_iio_server_ops = {
 		.read = iiod_read,
@@ -672,23 +672,23 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_axi_adc_init(&tinyiiod_adc, &tinyiiod_adc_init_par);
+	ret = iio_axi_adc_init(&iio_axi_adc_inst, &iio_axi_adc_init_par);
 	if(ret < 0)
 		return ret;
 
-	ret = tinyiiod_axi_dac_init(&tinyiiod_dac, &tinyiiod_dac_init_par);
+	ret = iio_axi_dac_init(&iio_axi_dac_inst, &iio_axi_dac_init_par);
 	if(ret < 0)
 		return ret;
 
-	ret = iio_register(tinyiiod_adc, tinyiiod_adc->adc->name,
-				       tinyiiod_adc->adc->num_channels, get_adc_xml,
-				       get_adc_device(tinyiiod_adc->adc->name));
+	ret = iio_register(iio_axi_adc_inst, iio_axi_adc_inst->adc->name,
+				       iio_axi_adc_inst->adc->num_channels, iio_axi_adc_get_xml,
+				       iio_axi_adc_crate_device(iio_axi_adc_inst->adc->name));
 	if(ret < 0)
 		return ret;
 
-	ret = iio_register(tinyiiod_dac, tinyiiod_dac->dac->name,
-				       tinyiiod_dac->dac->num_channels, get_dac_xml,
-					   get_dac_device(tinyiiod_dac->dac->name));
+	ret = iio_register(iio_axi_dac_inst, iio_axi_dac_inst->dac->name,
+				       iio_axi_dac_inst->dac->num_channels, iio_axi_dac_get_xml,
+					   iio_axi_dac_create_device(iio_axi_dac_inst->dac->name));
 	if(ret < 0)
 		return ret;
 	ret = iio_register(ad9361_phy, ad9361_phy->name, 0, get_phy_xml,
