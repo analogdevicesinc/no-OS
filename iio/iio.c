@@ -487,11 +487,11 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-	struct iiod_axi_adc *iiod_adc;
+	struct iio_axi_adc *iiod_adc;
 
 	if (!iiod_device)
 		return -ENOENT;
-	iiod_adc = (struct iiod_axi_adc *)(iiod_device->dev_instance);
+	iiod_adc = (struct iio_axi_adc *)(iiod_device->dev_instance);
 
 	return iio_axi_adc_transfer_dev_to_mem(iiod_adc->dmac, iiod_adc->adc_ddr_base,
 				       bytes_count);
@@ -509,12 +509,12 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			size_t bytes_count)
 {
 	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-	struct iiod_axi_adc *iiod_adc;
+	struct iio_axi_adc *iiod_adc;
 
 	if (!iiod_device)
 		return -ENOENT;
 
-	iiod_adc = (struct iiod_axi_adc *)(iiod_device->dev_instance);
+	iiod_adc = (struct iio_axi_adc *)(iiod_device->dev_instance);
 
 	return iio_axi_adc_read_dev((char*)iiod_adc->adc_ddr_base, pbuf, offset, bytes_count);
 }

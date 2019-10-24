@@ -625,7 +625,7 @@ int main(void)
 		.dmac = ad9361_phy->rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
-	struct iiod_axi_adc *iio_axi_adc_inst;
+	struct iio_axi_adc *iio_axi_adc_inst;
 
 	struct iio_axi_dac_init_par iio_axi_dac_init_par = {
 		.dac = ad9361_phy->tx_dac,

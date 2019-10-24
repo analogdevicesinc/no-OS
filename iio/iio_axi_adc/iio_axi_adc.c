@@ -57,22 +57,33 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-ssize_t iio_axi_adc_init(struct iiod_axi_adc **tinyiiod_adc,
+/**
+ * @brief Init and create iio_axi_adc.
+ * @param iio_axi_adc - pointer to iio_axi_adc.
+ * @param init - init parameters.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 		struct iio_axi_adc_init_par *init)
 {
-	*tinyiiod_adc = calloc(1, sizeof(*tinyiiod_adc));
-	if (!(*tinyiiod_adc))
+	*iio_axi_adc = calloc(1, sizeof(*iio_axi_adc));
+	if (!(*iio_axi_adc))
 		return FAILURE;
-	(*tinyiiod_adc)->adc = init->adc;
-	(*tinyiiod_adc)->dmac = init->dmac;
-	(*tinyiiod_adc)->adc_ddr_base = init->adc_ddr_base;
+	(*iio_axi_adc)->adc = init->adc;
+	(*iio_axi_adc)->dmac = init->dmac;
+	(*iio_axi_adc)->adc_ddr_base = init->adc_ddr_base;
 
 	return SUCCESS;
 }
 
-ssize_t iio_axi_adc_remove(struct iiod_axi_adc *tinyiiod_adc)
+/**
+ * @brief Free the resources allocated by iio_axi_adc_init().
+ * @param iio_axi_adc - pointer to iio_axi_adc.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
 {
-	free(tinyiiod_adc);
+	free(iio_axi_adc);
 
 	return SUCCESS;
 }
@@ -89,7 +100,7 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 
@@ -114,7 +125,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
 {
 	int32_t val;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
 	axi_adc_get_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
@@ -136,7 +147,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 	ssize_t ret = axi_adc_get_calib_scale(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
@@ -176,7 +187,7 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
 	if (ret < 0)
@@ -198,7 +209,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
 	axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
 
@@ -216,7 +227,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
 {
 	int32_t val = read_value(buf);
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
 	axi_adc_set_calib_bias(iiod_adc->adc,
 			       channel->ch_num,
@@ -239,7 +250,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct iiod_axi_adc *iiod_adc = (struct iiod_axi_adc *)device;
+	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
 	axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val, val2);
 
@@ -331,6 +342,13 @@ static struct iio_channel *iio_adc_channels[] = {
 	NULL,
 };
 
+/**
+ * @brief Get an axi_adc xml.
+ * @param xml - xml string.
+ * @param device_name.
+ * @param ch_no.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
 	char buff[256];
@@ -433,11 +451,11 @@ error:
 }
 
 /**
- * get_adc_device
- * get map between attribute name and corresponding function
- * @return map
+ * Create iio_device
+ * @param *device name
+ * @return iio_device or NULL, in case of failure
  */
-struct iio_device *iio_axi_adc_crate_device(const char *device_name)
+struct iio_device *iio_axi_adc_create_device(const char *device_name)
 {
 	struct iio_device *iio_adc_device;
 
@@ -470,7 +488,7 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t addre
 }
 
 /**
- * read data from RAM to pbuf, use "capture()" first
+ * Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()"
  * @param *device name
  * @param *buff where data's are stored
  * @param *offset to the remaining data

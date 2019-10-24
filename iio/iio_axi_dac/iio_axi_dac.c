@@ -142,22 +142,33 @@ static const char * const  dac_xml =
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-ssize_t iio_axi_dac_init(struct iio_axi_dac **tinyiiod_dac,
+/**
+ * @brief Init and create iio_axi_dac.
+ * @param iio_axi_adc - pointer to iio_axi_dac.
+ * @param init - init parameters.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_axi_dac,
 		struct iio_axi_dac_init_par *init)
 {
-	*tinyiiod_dac = calloc(1, sizeof(*tinyiiod_dac));
-	if (!(*tinyiiod_dac))
+	*iio_axi_dac = calloc(1, sizeof(*iio_axi_dac));
+	if (!(*iio_axi_dac))
 		return FAILURE;
-	(*tinyiiod_dac)->dac = init->dac;
-	(*tinyiiod_dac)->dmac = init->dmac;
-	(*tinyiiod_dac)->dac_ddr_base = init->dac_ddr_base;
+	(*iio_axi_dac)->dac = init->dac;
+	(*iio_axi_dac)->dmac = init->dmac;
+	(*iio_axi_dac)->dac_ddr_base = init->dac_ddr_base;
 
 	return SUCCESS;
 }
 
-ssize_t iio_axi_dac_remove(struct iio_axi_dac *tinyiiod_dac)
+/**
+ * @brief Free the resources allocated by iio_axi_dac_init().
+ * @param iio_axi_dac - pointer to iio_axi_adc.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_axi_dac_remove(struct iio_axi_dac *iio_axi_dac)
 {
-	free(tinyiiod_dac);
+	free(iio_axi_dac);
 
 	return SUCCESS;
 }
@@ -566,9 +577,9 @@ static struct iio_channel *iio_dac_channels[] = {
 };
 
 /**
- * get_ch_write_dac_attr_map
- * get map between attribute name and corresponding function
- * @return map
+ * Create iio_device
+ * @param *device name
+ * @return iio_device or NULL, in case of failure
  */
 struct iio_device *iio_axi_dac_create_device(const char *device_name)
 {
@@ -585,7 +596,7 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name)
 }
 
 /**
- * transfer_mem_to_dev write data to DAC
+ * Transfer data from RAM to DAC
  * @param *device name
  * @param *buff
  * @param bytes_count
@@ -605,7 +616,7 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac,
 }
 
 /**
- * write data to RAM
+ * Write data to RAM
  * @param *device name
  * @param *buff
  * @param *offset in memory, used if some data have been already written
@@ -628,9 +639,16 @@ ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
 	return bytes_count;
 }
 
+/**
+ * @brief Get an axi_dac xml.
+ * @param xml - xml string.
+ * @param device_name.
+ * @param ch_no.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_axi_dac_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
 	*xml = (char *)dac_xml; // todo
 
-	return 0;
+	return SUCCESS;
 }
