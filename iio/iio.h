@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   tinyiiod_util.h
- *   @brief  Header file of tinyiiod_util
- *   @author CPop (cristian.pop@analog.com)
+ *   @file   iio.h
+ *   @brief  Header file of iio
+ *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef __TINYIIOD_UTIL_H__
-#define __TINYIIOD_UTIL_H__
+#ifndef IIO_H_
+#define IIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -55,11 +55,12 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Init iio. */
+/* Set communication ops and read/write ops that will be called from
+ * "libtinyiiod". */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 /* Free the resources allocated by iio_init(). */
 ssize_t iio_remove(struct tinyiiod *iiod);
 /* Connect "iio_dev" and "get_device_xml" to a "dev_instance" physical device. */
 ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, ssize_t (*get_device_xml)(char** xml, const char *dev_name, uint8_t ch_no), struct iio_device *iio_device);
 
-#endif /* __TINYIIOD_UTIL_H__ */
+#endif /* IIO_H_ */

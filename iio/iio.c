@@ -691,9 +691,10 @@ ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, 
 }
 
 /**
- * @brief Init iio.
+ * @brief Set communication ops and read/write ops that will be called from
+ * "libtinyiiod"
  * @param iiod - pointer to iiod.
- * @param iio_server_ops.
+ * @param iio_server_ops - read/write ops (Ex: read/write to UART).
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
