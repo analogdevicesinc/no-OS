@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   tinyiiod_axi_adc.c
- *   @brief  Implementation of tinyiiod_axi_adc
+ *   @file   iio_axi_adc.c
+ *   @brief  Implementation of iio_axi_adc
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -64,7 +64,7 @@
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
-		struct iio_axi_adc_init_par *init)
+			 struct iio_axi_adc_init_par *init)
 {
 	*iio_axi_adc = calloc(1, sizeof(*iio_axi_adc));
 	if (!(*iio_axi_adc))
@@ -96,7 +96,7 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
-				 const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
@@ -122,7 +122,7 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_calibbias(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+			     const struct iio_ch_info *channel)
 {
 	int32_t val;
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
@@ -143,7 +143,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_calibscale(void *device, char *buf, size_t len,
-				 const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel)
 {
 	int32_t val, val2;
 	int32_t i = 0;
@@ -158,7 +158,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 		i++;
 	}
 	ret = i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
-				     labs(val2));
+			   labs(val2));
 
 	return ret;
 }
@@ -171,7 +171,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_samples_pps(void *device, char *buf, size_t len,
-				  const struct iio_ch_info *channel)
+			       const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -184,7 +184,7 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
  * @return length of chars written in buf, or negative value on failure
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
-		const struct iio_ch_info *channel)
+				      const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
@@ -204,7 +204,7 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
-				 const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel)
 {
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
@@ -224,7 +224,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+			     const struct iio_ch_info *channel)
 {
 	int32_t val = read_value(buf);
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
@@ -245,7 +245,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_calibscale(void *device, char *buf, size_t len,
-				 const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
@@ -265,7 +265,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
-				  const struct iio_ch_info *channel)
+			       const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -278,7 +278,7 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
  * @return length of chars written to attribute, or negative value on failure
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
-		const struct iio_ch_info *channel)
+				      const struct iio_ch_info *channel)
 {
 	return -ENODEV;
 }
@@ -417,7 +417,7 @@ ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 			if (ret < 0)
 				goto error;
 			ret = xml_create_attribute(&att, "name",
-					iio_voltage_attributes[j]->name);
+						   iio_voltage_attributes[j]->name);
 			if (ret < 0)
 				goto error;
 			ret = xml_add_attribute(attribute, att);
@@ -476,8 +476,9 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t address,
-				size_t bytes_count)
+ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac,
+					uint32_t address,
+					size_t bytes_count)
 {
 	rx_dmac->flags = 0;
 	axi_dmac_transfer(rx_dmac,
@@ -496,7 +497,7 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac, uint32_t addre
  * @return bytes_count
  */
 ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
-		     size_t bytes_count)
+			     size_t bytes_count)
 {
 	memcpy(pbuf, adc_ddr_baseaddr + offset, bytes_count);
 

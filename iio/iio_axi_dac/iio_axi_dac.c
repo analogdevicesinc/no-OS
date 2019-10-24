@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   tinyiiod_axi_dac.c
- *   @brief  Implementation of tinyiiod_axi_dac
+ *   @file   iio_axi_dac.c
+ *   @brief  Implementation of iio_axi_dac
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

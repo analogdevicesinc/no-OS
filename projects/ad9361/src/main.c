@@ -679,7 +679,7 @@ int main(void)
 
 	ret = iio_register(iio_axi_adc_inst, iio_axi_adc_inst->adc->name,
 				       iio_axi_adc_inst->adc->num_channels, iio_axi_adc_get_xml,
-				       iio_axi_adc_crate_device(iio_axi_adc_inst->adc->name));
+				       iio_axi_adc_create_device(iio_axi_adc_inst->adc->name));
 	if(ret < 0)
 		return ret;
 

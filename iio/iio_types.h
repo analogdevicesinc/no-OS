@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   tinyiiod_types.h
- *   @brief  Header file for tinyiiod_types
- *   @author CPop (cristian.pop@analog.com)
+ *   @file   iio_types.h
+ *   @brief  Header file for iio_types
+ *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -50,14 +50,16 @@
 /******************************************************************************/
 
 struct iio_ch_info {
-    int16_t ch_num;
-    bool ch_out;
+	int16_t ch_num;
+	bool ch_out;
 };
 
 struct iio_attribute {
-    const char *name;
-    ssize_t (*show)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
-    ssize_t (*store)(void *device, char *buf, size_t len, const struct iio_ch_info *channel);
+	const char *name;
+	ssize_t (*show)(void *device, char *buf, size_t len,
+			const struct iio_ch_info *channel);
+	ssize_t (*store)(void *device, char *buf, size_t len,
+			 const struct iio_ch_info *channel);
 };
 
 struct iio_channel {
