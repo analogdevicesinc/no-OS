@@ -403,6 +403,7 @@ static ssize_t get_rf_port_select(void *device, char *buf, size_t len,
 {
     ssize_t ret = 0;
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if(channel->ch_out) {
         uint32_t mode;
         ret = ad9361_get_tx_rf_port_output(ad9361_phy, &mode);
@@ -467,6 +468,7 @@ static ssize_t get_rssi(void *device, char *buf, size_t len, const struct iio_ch
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
+
     if(channel->ch_out) {
         uint32_t rssi_db_x_1000;
         ret = ad9361_get_tx_rssi(ad9361_phy, channel->ch_num, &rssi_db_x_1000);
@@ -494,6 +496,7 @@ static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if (channel->ch_out) {
         return (ssize_t) snprintf(buf, len, "[%d, %d, %d]", 0, 250, 89750);
     } else {
@@ -585,10 +588,14 @@ static ssize_t get_filter_fir_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint8_t en_dis;
+    ssize_t ret;
+
     if(channel->ch_out)
-        ad9361_get_tx_fir_en_dis (ad9361_phy, &en_dis);
+        ret = ad9361_get_tx_fir_en_dis (ad9361_phy, &en_dis);
     else
-        ad9361_get_rx_fir_en_dis (ad9361_phy, &en_dis);
+    	ret = ad9361_get_rx_fir_en_dis (ad9361_phy, &en_dis);
+    if (ret < 0)
+        return ret;
 
     return (ssize_t) snprintf(buf, len, "%d", en_dis);
 }
@@ -605,7 +612,11 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t sampling_freq_hz;
-    ad9361_get_rx_sampling_freq (ad9361_phy, &sampling_freq_hz);
+    ssize_t ret = ad9361_get_rx_sampling_freq (ad9361_phy, &sampling_freq_hz);
+
+    if (ret < 0)
+    	return ret;
+
     return (ssize_t) snprintf(buf, len, "%d", (int)sampling_freq_hz);
 }
 
@@ -672,6 +683,7 @@ static ssize_t get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if(!channel->ch_out) {
         buf[1] = 0;
         return (ssize_t) sprintf(buf, "%d", ad9361_phy->rfdc_track_en) + 1;
@@ -691,6 +703,7 @@ static ssize_t get_quadrature_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if(!channel->ch_out) {
         buf[1] = 0;
         return (ssize_t) sprintf(buf, "%d", ad9361_phy->quad_track_en) + 1;
@@ -727,6 +740,7 @@ static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if(!channel->ch_out) {
         buf[1] = 0;
         return (ssize_t) sprintf(buf, "%d", ad9361_phy->bbdc_track_en) + 1;
@@ -765,15 +779,16 @@ static ssize_t get_fastlock_save(void *device, char *buf, size_t len,
     size_t length;
     int32_t ret = 0;
     int32_t i;
+
     ret = ad9361_fastlock_save(ad9361_phy, channel->ch_num == 1,
                                ad9361_phy->fastlock.save_profile, faslock_vals);
+    if (ret < 0)
+        return ret;
     length = sprintf(buf, "%u ", ad9361_phy->fastlock.save_profile);
 
     for (i = 0; i < RX_FAST_LOCK_CONFIG_WORD_NUM; i++)
         length += sprintf(buf + length, "%u%c", faslock_vals[i],
                           i == 15 ? '\n' : ',');
-    if(ret < 0)
-        return ret;
 
     return length;
 }
@@ -790,6 +805,7 @@ static ssize_t get_powerdown(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint64_t val = 0;
+
     val = !!(ad9361_phy->cached_synth_pd[channel->ch_num ? 0 : 1] &
              RX_LO_POWER_DOWN);
     return sprintf(buf, "%llu", val);
@@ -833,6 +849,7 @@ static ssize_t get_frequency(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint64_t val = 0;
+
     val = ad9361_from_clk(clk_get_rate(ad9361_phy,
                                        ad9361_phy->ref_clk_scale[channel->ch_num ?
                                                                TX_RFPLL : RX_RFPLL]));
@@ -849,6 +866,7 @@ static ssize_t get_frequency(void *device, char *buf, size_t len,
 static ssize_t get_external(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if(channel->ch_num == 0)
         return (ssize_t) sprintf(buf, "%d", ad9361_phy->pdata->use_ext_rx_lo);
     else
@@ -866,6 +884,7 @@ static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
                                    const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     return sprintf(buf, "%d",
                    ad9361_phy->fastlock.current_profile[channel->ch_num]);
 }
@@ -882,7 +901,10 @@ static ssize_t get_temp0_input(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int32_t temp;
-    ad9361_get_temperature(ad9361_phy, &temp);
+    ssize_t ret = ad9361_get_temperature(ad9361_phy, &temp);
+
+    if (ret < 0)
+        return ret;
     return (ssize_t) snprintf(buf, len, "%d", (int)temp);
 }
 
@@ -898,9 +920,14 @@ static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint8_t en_dis_tx, en_dis_rx;
+    ssize_t ret;
 
-    ad9361_get_tx_fir_en_dis (ad9361_phy, &en_dis_tx);
-    ad9361_get_rx_fir_en_dis (ad9361_phy, &en_dis_rx);
+    ret = ad9361_get_tx_fir_en_dis (ad9361_phy, &en_dis_tx);
+    if (ret < 0)
+        return ret;
+    ret = ad9361_get_rx_fir_en_dis (ad9361_phy, &en_dis_rx);
+    if (ret < 0)
+        return ret;
 
     return (ssize_t) snprintf(buf, len, "%d", en_dis_rx && en_dis_tx);
 }
@@ -935,6 +962,7 @@ static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
     float gain = strtof(buf, NULL);
     int32_t val1 = (int32_t)gain;
     int32_t val2 = (int32_t)(gain * 1000) % 1000;
+
     if (channel->ch_out) {
         int32_t ch;
         if (val1 > 0 || (val1 == 0 && val2 > 0)) {
@@ -985,6 +1013,7 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
     uint32_t i = 0;
+
     if(channel->ch_out) {
         for(i = 0; i < sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]); i++) {
             if(!strcmp(ad9361_rf_tx_port[i], buf)) {
@@ -1006,7 +1035,10 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
             return -EINVAL;
         }
         ret = ad9361_set_rx_rf_port_input(ad9361_phy, i);
-        return ret < 0 ? ret : len;
+        if (ret < 0)
+            return ret;
+
+        return len;
     }
 }
 
@@ -1023,6 +1055,8 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     struct rf_gain_ctrl gc = {0};
     int32_t i;
+    ssize_t ret;
+
     for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
         if(!strcmp(ad9361_agc_modes[i], buf)) {
             break;
@@ -1036,7 +1070,9 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
         return len;
     gc.ant = ad9361_1rx1tx_channel_map(ad9361_phy, false, channel->ch_num + 1);
     gc.mode = ad9361_phy->agc_mode[channel->ch_num] = mode;
-    ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+    ret = ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+    if (ret < 0)
+        return ret;
 
     return len;
 }
@@ -1065,8 +1101,9 @@ static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-    ssize_t ret = 0;
+    ssize_t ret = -ENODEV;
     uint32_t rf_bandwidth = srt_to_uint32(buf);
+
     rf_bandwidth = ad9361_validate_rf_bw(ad9361_phy, rf_bandwidth);
     if(channel->ch_out) {
         if(ad9361_phy->current_tx_bw_Hz != rf_bandwidth) {
@@ -1098,6 +1135,7 @@ static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int8_t en_dis = str_to_int32(buf);
+
     if(en_dis < 0) {
         return en_dis;
     }
@@ -1135,6 +1173,7 @@ static ssize_t set_quadrature_tracking_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int8_t en_dis = str_to_int32(buf);
+
     if(en_dis < 0) {
         return en_dis;
     }
@@ -1159,7 +1198,10 @@ static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t sampling_freq_hz = srt_to_uint32(buf);
-    ad9361_set_rx_sampling_freq (ad9361_phy, sampling_freq_hz);
+    ssize_t ret = ad9361_set_rx_sampling_freq (ad9361_phy, sampling_freq_hz);
+
+    if (ret < 0)
+    	return ret;
 
     return len;
 }
@@ -1177,6 +1219,8 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf, size_t l
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     struct rf_gain_ctrl gc = {0};
     int32_t i;
+    ssize_t ret;
+
     for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
         if(!strcmp(ad9361_agc_modes[i], buf)) {
             break;
@@ -1190,7 +1234,9 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf, size_t l
         return len;
     gc.ant = ad9361_1rx1tx_channel_map(ad9361_phy, false, channel->ch_num + 1);
     gc.mode = ad9361_phy->agc_mode[channel->ch_num] = mode;
-    ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+    ret = ad9361_set_gain_ctrl_mode(ad9361_phy, &gc);
+    if (ret < 0)
+    	return ret;
 
     return len;
 }
@@ -1207,15 +1253,19 @@ static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int8_t en_dis = str_to_int32(buf);
+    ssize_t ret;
+
     if(en_dis < 0) {
         return en_dis;
     }
     en_dis = en_dis ? 1 : 0;
     if(channel->ch_out) {
-        ad9361_set_tx_fir_en_dis (ad9361_phy, en_dis);
+        ret = ad9361_set_tx_fir_en_dis (ad9361_phy, en_dis);
     } else {
-        ad9361_set_rx_fir_en_dis (ad9361_phy, en_dis);
+        ret = ad9361_set_rx_fir_en_dis (ad9361_phy, en_dis);
     }
+    if (ret < 0)
+    	return ret;
 
     return len;
 }
@@ -1245,6 +1295,7 @@ static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int8_t en_dis = str_to_int32(buf);
+
     if(en_dis < 0) {
         return en_dis;
     }
@@ -1282,6 +1333,7 @@ static ssize_t set_fastlock_save(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t readin = srt_to_uint32(buf);
+
     ad9361_phy->fastlock.save_profile = readin;
 
     return len;
@@ -1300,6 +1352,7 @@ static ssize_t set_powerdown(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
     bool res = str_to_int32(buf) ? 1 : 0;
+
     switch (channel->ch_num) {
     case 0:
         ret = ad9361_synth_lo_powerdown(ad9361_phy, res ? LO_OFF : LO_ON, LO_DONTCARE);
@@ -1384,6 +1437,7 @@ static ssize_t set_frequency(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint64_t lo_freq_hz = srt_to_uint32(buf);
     ssize_t ret = 0;
+
     switch (channel->ch_num) {
     case 0:
         ret = clk_set_rate(ad9361_phy, ad9361_phy->ref_clk_scale[RX_RFPLL],
@@ -1414,6 +1468,7 @@ static ssize_t set_external(void *device, char *buf, size_t len, const struct ii
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     bool select = str_to_int32(buf) ? 1 : 0;
     ssize_t ret = 0;
+
     if(channel->ch_num == 0)
         ret = ad9361_set_rx_lo_int_ext(ad9361_phy, select);
     else
@@ -1437,6 +1492,7 @@ static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
     uint32_t profile = srt_to_uint32(buf);
+
     ret = ad9361_fastlock_recall(ad9361_phy, channel->ch_num == 1, profile);
     if(ret < 0)
         return ret;
@@ -1448,9 +1504,14 @@ static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     int8_t en_dis = str_to_int32(buf) ? 1 : 0;
+    ssize_t ret;
 
-    ad9361_set_tx_fir_en_dis (ad9361_phy, en_dis);
+    ret = ad9361_set_tx_fir_en_dis (ad9361_phy, en_dis);
+    if (ret < 0)
+        	return ret;
     ad9361_set_rx_fir_en_dis (ad9361_phy, en_dis);
+    if (ret < 0)
+        	return ret;
 
     return len;
 }
@@ -1466,6 +1527,7 @@ static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
                                     const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if (ad9361_phy->pdata->use_extclk)
         return -ENODEV;
     else
@@ -1484,7 +1546,11 @@ static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     unsigned long clk[6];
-    ad9361_get_trx_clock_chain(ad9361_phy, clk, NULL);
+    ssize_t ret = ad9361_get_trx_clock_chain(ad9361_phy, clk, NULL);
+
+    if (ret < 0)
+        	return ret;
+
     return sprintf(buf,
                    "BBPLL:%"PRIu32" ADC:%"PRIu32" R2:%"PRIu32" R1:%"PRIu32" RF:%"PRIu32" RXSAMP:%"PRIu32"",
                    clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
@@ -1502,7 +1568,10 @@ static ssize_t get_trx_rate_governor(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t rate_governor;
-    ad9361_get_trx_rate_gov (ad9361_phy, &rate_governor);
+    ssize_t ret = ad9361_get_trx_rate_gov (ad9361_phy, &rate_governor);
+
+    if (ret < 0)
+        	return ret;
 
     return sprintf(buf, "%s", rate_governor ? "nominal" : "highest_osr");
 }
@@ -1559,6 +1628,7 @@ static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     if (ad9361_phy->pdata->use_extclk)
         return -ENODEV;
     else
@@ -1576,6 +1646,7 @@ static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     return sprintf(buf, "%s",
                    ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 8191]");
 }
@@ -1591,6 +1662,7 @@ static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
                                        const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     return (ssize_t) sprintf(buf, "%s", ad9361_phy->pdata->fdd ?
                              "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
                              "sleep wait alert rx tx pinctrl");
@@ -1633,6 +1705,7 @@ static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf, size_t le
         const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     return (ssize_t) sprintf(buf, "%s",
                              ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
 }
@@ -1649,7 +1722,10 @@ static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     unsigned long clk[6];
-    ad9361_get_trx_clock_chain(ad9361_phy, NULL, clk);
+    ssize_t ret = ad9361_get_trx_clock_chain(ad9361_phy, NULL, clk);
+
+    if (ret < 0)
+        	return ret;
 
     return sprintf(buf, "BBPLL:%lu DAC:%lu T2:%lu T1:%lu TF:%lu TXSAMP:%lu",
                    clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
@@ -1692,8 +1768,8 @@ static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-    ssize_t ret = 0;
-    ret = ad9361_ensm_get_state(ad9361_phy);
+    ssize_t ret = ad9361_ensm_get_state(ad9361_phy);
+
     if (ret < 0)
         return ret;
     if (ret >= ARRAY_SIZE(ad9361_ensm_states) ||
@@ -1714,6 +1790,7 @@ static ssize_t get_filter_fir_config(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
+
     return sprintf(buf, "FIR Rx: %d,%d Tx: %d,%d",
                    ad9361_phy->rx_fir_ntaps, ad9361_phy->rx_fir_dec,
                    ad9361_phy->tx_fir_ntaps, ad9361_phy->tx_fir_int);
@@ -1731,7 +1808,10 @@ static ssize_t get_calib_mode(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint8_t en_dis;
-    ad9361_get_tx_auto_cal_en_dis(ad9361_phy, &en_dis);
+    ssize_t ret = ad9361_get_tx_auto_cal_en_dis(ad9361_phy, &en_dis);
+
+    if (ret < 0)
+        	return ret;
 
     return (ssize_t) snprintf(buf, len, "%s", en_dis ? "auto" : "manual");
 }
@@ -1748,6 +1828,7 @@ static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
+
     if(!strcmp(buf, "nominal")) {
         ad9361_set_trx_rate_gov (ad9361_phy, 1);
     } else if(!strcmp(buf, "highest_osr")) {
@@ -1771,6 +1852,7 @@ static ssize_t set_dcxo_tune_coarse(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t dcxo_coarse = srt_to_uint32(buf);
+
     dcxo_coarse = clamp_t(uint32_t, dcxo_coarse, 0, 63U);
     ad9361_phy->pdata->dcxo_coarse = dcxo_coarse;
 
@@ -1790,6 +1872,7 @@ static ssize_t set_dcxo_tune_fine(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t dcxo_fine = srt_to_uint32(buf);
+
     dcxo_fine = clamp_t(uint32_t, dcxo_fine, 0, 8191U);
     ad9361_phy->pdata->dcxo_fine = dcxo_fine;
 
@@ -1812,6 +1895,7 @@ static ssize_t set_calib_mode(void *device, char *buf, size_t len,
     ssize_t ret = 0;
     uint32_t val = 0;
     val = 0;
+
     if (!strcmp(buf, "auto")) {
         ad9361_set_tx_auto_cal_en_dis (ad9361_phy, 1);
     } else if (!strcmp(buf, "manual")) {
@@ -1847,6 +1931,8 @@ static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     uint32_t val = 0;
     bool res = false;
+    ssize_t ret ;
+
     ad9361_phy->pdata->fdd_independent_mode = false;
 
     if (!strcmp(buf, "tx")) {
@@ -1871,7 +1957,9 @@ static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
         return -ENOENT;
     }
 
-    ad9361_set_ensm_mode(ad9361_phy, ad9361_phy->pdata->fdd, res);
+    ret = ad9361_set_ensm_mode(ad9361_phy, ad9361_phy->pdata->fdd, res);
+    if (ret < 0)
+        	return ret;
 
     return ad9361_ensm_set_state(ad9361_phy, val, res);
 }
@@ -2290,172 +2378,6 @@ struct iio_channel *iio_ad9361_channels[] = {
 };
 
 struct iio_device *iio_ad9361_device;
-
-//static attribute_map altvoltage_read_attrtibute_map[] = {
-//    {.name = "frequency_available", .exec = get_frequency_available},
-//    {.name = "fastlock_save", .exec = get_fastlock_save},
-//    {.name = "powerdown", .exec = get_powerdown},
-//    {.name = "fastlock_load", .exec = get_fastlock_load},
-//    {.name = "fastlock_store", .exec = get_fastlock_store},
-//    {.name = "frequency", .exec = get_frequency},
-//    {.name = "external", .exec = get_external},
-//    {.name = "fastlock_recall", .exec = get_fastlock_recall},
-//    {NULL},
-//};
-
-//static attribute_map voltage_output_write_map[] = {
-//    {.name = "rf_port_select", .exec = get_rf_port_select},
-//    {.name = "hardwaregain", .exec = get_hardwaregain},
-//    {.name = "rssi", .exec = get_rssi},
-//    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
-//    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
-//    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
-//    {.name = "filter_fir_en", .exec = get_filter_fir_en},
-//    {.name = "sampling_frequency", .exec = get_sampling_frequency},
-//    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
-//    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
-//    {.name = NULL},
-//};
-//
-//static attribute_map voltage_input_read_map[] = {
-//    {.name = "hardwaregain_available", .exec = get_hardwaregain_available},
-//    {.name = "hardwaregain", .exec = get_hardwaregain},
-//    {.name = "rssi", .exec = get_rssi},
-//    {.name = "rf_port_select", .exec = get_rf_port_select},
-//    {.name = "gain_control_mode", .exec = get_gain_control_mode},
-//    {.name = "rf_port_select_available", .exec = get_rf_port_select_available},
-//    {.name = "rf_bandwidth", .exec = get_rf_bandwidth},
-//    {.name = "rf_dc_offset_tracking_en", .exec = get_rf_dc_offset_tracking_en},
-//    {.name = "sampling_frequency_available", .exec = get_sampling_frequency_available},
-//    {.name = "quadrature_tracking_en", .exec = get_quadrature_tracking_en},
-//    {.name = "sampling_frequency", .exec = get_sampling_frequency},
-//    {.name = "gain_control_mode_available", .exec = get_gain_control_mode_available},
-//    {.name = "filter_fir_en", .exec = get_filter_fir_en},
-//    {.name = "rf_bandwidth_available", .exec = get_rf_bandwidth_available},
-//    {.name = "bb_dc_offset_tracking_en", .exec = get_bb_dc_offset_tracking_en},
-//    {.name = NULL},
-//};
-//static attribute_map out_read_map[] = {
-//    {.name = "voltage_filter_fir_en", .exec = get_voltage_filter_fir_en},
-//    {.name = NULL},
-//};
-//
-//static attribute_map tmp0_map[] = {
-//    {.name = "input", .exec = get_temp0_input},
-//    {.name = NULL},
-//};
-//
-//static attribute_map ch_read_phy_attr_map[] = {
-//    {.name = "voltage0", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-//    {.name = "voltage1", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-//    {.name = "voltage2", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-//    {.name = "voltage3", .exec = NULL, .map_in = voltage_input_read_map, .map_out = voltage_output_write_map},
-//    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
-//    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_read_attrtibute_map, .map_out = altvoltage_read_attrtibute_map},
-//    {.name = "temp0", .exec = NULL, .map_in = tmp0_map, .map_out = tmp0_map},
-//    {.name = "out", .exec = NULL, .map_in = out_read_map, .map_out = out_read_map},
-//    {.name = NULL},
-//};
-//
-//static attribute_map ch_in_write_attrtibute_map[] = {
-//    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
-//    {.name = "hardwaregain", .exec = set_hardwaregain},
-//    {.name = "rssi", .exec = set_rssi},
-//    {.name = "rf_port_select", .exec = set_rf_port_select},
-//    {.name = "gain_control_mode", .exec = set_gain_control_mode},
-//    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
-//    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
-//    {.name = "rf_dc_offset_tracking_en", .exec = set_rf_dc_offset_tracking_en},
-//    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
-//    {.name = "quadrature_tracking_en", .exec = set_quadrature_tracking_en},
-//    {.name = "sampling_frequency", .exec = set_sampling_frequency},
-//    {.name = "gain_control_mode_available", .exec = set_gain_control_mode_available},
-//    {.name = "filter_fir_en", .exec = set_filter_fir_en},
-//    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
-//    {.name = "bb_dc_offset_tracking_en", .exec = set_bb_dc_offset_tracking_en},
-//    {.name = NULL},
-//};
-//
-//static attribute_map ch_out_write_attrtibute_map[] = {
-//    {.name = "rf_port_select", .exec = set_rf_port_select},
-//    {.name = "hardwaregain", .exec = set_hardwaregain},
-//    {.name = "rssi", .exec = set_rssi},
-//    {.name = "hardwaregain_available", .exec = set_hardwaregain_available},
-//    {.name = "sampling_frequency_available", .exec = set_sampling_frequency_available},
-//    {.name = "rf_port_select_available", .exec = set_rf_port_select_available},
-//    {.name = "filter_fir_en", .exec = set_filter_fir_en},
-//    {.name = "sampling_frequency", .exec = set_sampling_frequency},
-//    {.name = "rf_bandwidth_available", .exec = set_rf_bandwidth_available},
-//    {.name = "rf_bandwidth", .exec = set_rf_bandwidth},
-//    {.name = NULL},
-//};
-//
-//static attribute_map out_wr_map[] = {
-//    {.name = "voltage_filter_fir_en", .exec = voltage_filter_fir_en},
-//    {.name = NULL},
-//};
-//static attribute_map altvoltage_write_attrtibute_map[] = {
-//    {.name = "frequency_available", .exec = set_frequency_available},
-//    {.name = "fastlock_save", .exec = set_fastlock_save},
-//    {.name = "powerdown", .exec = set_powerdown},
-//    {.name = "fastlock_load", .exec = set_fastlock_load},
-//    {.name = "fastlock_store", .exec = set_fastlock_store},
-//    {.name = "frequency", .exec = set_frequency},
-//    {.name = "external", .exec = set_external},
-//    {.name = "fastlock_recall", .exec = set_fastlock_recall},
-//    {.name = NULL},
-//};
-//static attribute_map ch_write_phy_attr_map[] = {
-//    {.name = "voltage0", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-//    {.name = "voltage1", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-//    {.name = "voltage2", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-//    {.name = "voltage3", .exec = NULL, .map_in = ch_in_write_attrtibute_map, .map_out = ch_out_write_attrtibute_map},
-//    {.name = "altvoltage0", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
-//    {.name = "altvoltage1", .exec = NULL, .map_in = altvoltage_write_attrtibute_map, .map_out = altvoltage_write_attrtibute_map},
-//    {.name = "out", .exec = NULL, .map_in = out_wr_map, .map_out = out_wr_map},
-//    {.name = NULL},
-//};
-//static attribute_map global_read_attrtibute_map[] = {
-//    {.name = "dcxo_tune_coarse", .exec = get_dcxo_tune_coarse},
-//    {.name = "rx_path_rates", .exec = get_rx_path_rates},
-//    {.name = "trx_rate_governor", .exec = get_trx_rate_governor},
-//    {.name = "calib_mode_available", .exec = get_calib_mode_available},
-//    {.name = "xo_correction_available", .exec = get_xo_correction_available},
-//    {.name = "gain_table_config", .exec = get_gain_table_config},
-//    {.name = "dcxo_tune_fine", .exec = get_dcxo_tune_fine},
-//    {.name = "dcxo_tune_fine_available", .exec = get_dcxo_tune_fine_available},
-//    {.name = "ensm_mode_available", .exec = get_ensm_mode_available},
-//    {.name = "multichip_sync", .exec = get_multichip_sync},
-//    {.name = "rssi_gain_step_error", .exec = get_rssi_gain_step_error},
-//    {.name = "dcxo_tune_coarse_available", .exec = get_dcxo_tune_coarse_available},
-//    {.name = "tx_path_rates", .exec = get_tx_path_rates},
-//    {.name = "trx_rate_governor_available", .exec = get_trx_rate_governor_available},
-//    {.name = "xo_correction", .exec = get_xo_correction},
-//    {.name = "ensm_mode", .exec = get_ensm_mode},
-//    {.name = "filter_fir_config", .exec = get_filter_fir_config},
-//    {.name = "calib_mode", .exec = get_calib_mode},
-//    {.name = NULL},
-//};
-//static attribute_map global_write_attrtibute_map[] = {
-//    {.name = "trx_rate_governor", .exec = set_trx_rate_governor},
-//    {.name = "dcxo_tune_coarse", .exec = set_dcxo_tune_coarse},
-//    {.name = "dcxo_tune_fine", .exec = set_dcxo_tune_fine},
-//    {.name = "calib_mode", .exec = set_calib_mode},
-//    {.name = "ensm_mode", .exec = set_ensm_mode},
-//    {.name = "multichip_sync", .exec = set_multichip_sync},
-//    {.name = "filter_fir_config", .exec = set_filter_fir_config},
-//    {.name = NULL},
-//};
-//
-//static attribute_map phy_attr_map[] = {
-//    {.name = "", .exec = NULL, .map_in = ch_read_phy_attr_map, .map_out = ch_write_phy_attr_map, .map_in_global = global_read_attrtibute_map, .map_out_global = global_write_attrtibute_map},
-//    {.name = NULL},
-//};
-/**
- * get_ch_read_phy_attr_map
- * get map between attribute name and corresponding function
- * @return map
- */
 
 struct iio_device *get_phy_device(const char *device_name)
 {
