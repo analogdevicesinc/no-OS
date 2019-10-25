@@ -192,17 +192,6 @@ uint64_t div_u64(uint64_t dividend, uint32_t divisor)
 }
 
 /**
- * Compare two strings
- * @param *str1 pointer to string 1
- * @param *str2 pointer to string 2
- * @return TRUE if strings are equal, 0 otherwise
- */
-bool strequal(const char *str1, const char *str2)
-{
-	return !strcmp(str1, str2);
-}
-
-/**
  * Converts from string to int32_t
  * @param *str
  * @return int32_t

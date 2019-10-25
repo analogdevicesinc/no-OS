@@ -130,8 +130,6 @@ uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor, uint64_t *remainder)
 uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder);
 /* Unsigned 64bit divide with 32bit divisor */
 uint64_t div_u64(uint64_t dividend, uint32_t divisor);
-/* Verify if str1 equals str2 */
-bool strequal(const char *str1, const char *str2);
 /* Converts from string to int32_t */
 int32_t str_to_int32(const char *str);
 /* Converts from string to uint32_t */

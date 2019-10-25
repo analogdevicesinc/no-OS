@@ -118,7 +118,7 @@ static int16_t iio_get_channel_id(const char *channel, struct iio_channel **chan
 		return -EINVAL;
 
 	while (channels[i]) {
-		if (strequal(channel, channels[i]->name))
+		if (!strcmp(channel, channels[i]->name))
 			return i;
 		i++;
 	}
@@ -141,7 +141,7 @@ static int16_t iio_get_attribute_id(const char *attr, struct iio_attribute **att
 		return -EINVAL;
 
 	while (attributes[i]) {
-		if (strequal(attr, attributes[i]->name))
+		if (!strcmp(attr, attributes[i]->name))
 			return i;
 		i++;
 	}
@@ -155,7 +155,7 @@ static struct iio_interface *iio_get_interface(const char *device_name,
 	int16_t i = 0;
 
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		if (strequal(device_name, iio_interfaces->interfaces[i]->name)) {
+		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name)) {
 			return iio_interfaces->interfaces[i];
 		}
 	}
@@ -234,7 +234,7 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info, char *b
 						el_info->ch_out
 					};
 
-	if (strequal(el_info->attribute_name, ""))
+	if (!strcmp(el_info->attribute_name, ""))
 	{
 		/* read / write all channel attributes */
 		if (is_write)
@@ -277,12 +277,12 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf, size
 	if (!iio_device)
 		return -ENOENT;
 
-	if (strequal(el_info->channel_name, ""))
+	if (!strcmp(el_info->channel_name, ""))
 	{
 		/* it is attribute of a device */
 		device = iio_get_interface(el_info->device_name, iio_interfaces);
 
-		if (strequal(el_info->attribute_name, ""))
+		if (!strcmp(el_info->attribute_name, ""))
 		{
 			/* read / write all device attributes */
 			if (is_write)

@@ -987,7 +987,7 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
     uint32_t i = 0;
     if(channel->ch_out) {
         for(i = 0; i < sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]); i++) {
-            if(strequal(ad9361_rf_tx_port[i], buf)) {
+            if(!strcmp(ad9361_rf_tx_port[i], buf)) {
                 break;
             }
         }
@@ -998,7 +998,7 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
         return ret < 0 ? ret : len;
     } else {
         for(i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]); i++) {
-            if(strequal(ad9361_rf_rx_port[i], buf)) {
+            if(!strcmp(ad9361_rf_rx_port[i], buf)) {
                 break;
             }
         }
@@ -1024,7 +1024,7 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
     struct rf_gain_ctrl gc = {0};
     int32_t i;
     for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
-        if(strequal(ad9361_agc_modes[i], buf)) {
+        if(!strcmp(ad9361_agc_modes[i], buf)) {
             break;
         }
     }
@@ -1178,7 +1178,7 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf, size_t l
     struct rf_gain_ctrl gc = {0};
     int32_t i;
     for(i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
-        if(strequal(ad9361_agc_modes[i], buf)) {
+        if(!strcmp(ad9361_agc_modes[i], buf)) {
             break;
         }
     }
@@ -1748,9 +1748,9 @@ static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
     ssize_t ret = 0;
-    if(strequal(buf, "nominal")) {
+    if(!strcmp(buf, "nominal")) {
         ad9361_set_trx_rate_gov (ad9361_phy, 1);
-    } else if(strequal(buf, "highest_osr")) {
+    } else if(!strcmp(buf, "highest_osr")) {
         ad9361_set_trx_rate_gov (ad9361_phy, 0);
     } else {
         ret =  -ENOENT;
@@ -1812,18 +1812,18 @@ static ssize_t set_calib_mode(void *device, char *buf, size_t len,
     ssize_t ret = 0;
     uint32_t val = 0;
     val = 0;
-    if (strequal(buf, "auto")) {
+    if (!strcmp(buf, "auto")) {
         ad9361_set_tx_auto_cal_en_dis (ad9361_phy, 1);
-    } else if (strequal(buf, "manual")) {
+    } else if (!strcmp(buf, "manual")) {
         ad9361_set_tx_auto_cal_en_dis (ad9361_phy, 0);
     } else if (!strncmp(buf, "tx_quad", 7)) {
         ret = sscanf(buf, "tx_quad %"PRIi32, &arg);
         if (ret != 1)
             arg = -1;
         val = TX_QUAD_CAL;
-    } else if (strequal(buf, "rf_dc_offs"))
+    } else if (!strcmp(buf, "rf_dc_offs"))
         val = RFDC_CAL;
-    else if (strequal(buf, "rssi_gain_step"))
+    else if (!strcmp(buf, "rssi_gain_step"))
         ret = ad9361_rssi_gain_step_calib(ad9361_phy);
     else
         return -ENOENT;
@@ -1849,22 +1849,22 @@ static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
     bool res = false;
     ad9361_phy->pdata->fdd_independent_mode = false;
 
-    if (strequal(buf, "tx")) {
+    if (!strcmp(buf, "tx")) {
         val = ENSM_STATE_TX;
-    } else if (strequal(buf, "rx")) {
+    } else if (!strcmp(buf, "rx")) {
         val = ENSM_STATE_RX;
-    } else if (strequal(buf, "alert")) {
+    } else if (!strcmp(buf, "alert")) {
         val = ENSM_STATE_ALERT;
-    } else if (strequal(buf, "fdd")) {
+    } else if (!strcmp(buf, "fdd")) {
         val = ENSM_STATE_FDD;
-    } else if (strequal(buf, "wait")) {
+    } else if (!strcmp(buf, "wait")) {
         val = ENSM_STATE_SLEEP_WAIT;
-    } else if (strequal(buf, "sleep")) {
+    } else if (!strcmp(buf, "sleep")) {
         val = ENSM_STATE_SLEEP;
-    } else if (strequal(buf, "pinctrl")) {
+    } else if (!strcmp(buf, "pinctrl")) {
         res = true;
         val = ENSM_STATE_SLEEP_WAIT;
-    } else if (strequal(buf, "pinctrl_fdd_indep")) {
+    } else if (!strcmp(buf, "pinctrl_fdd_indep")) {
         val = ENSM_STATE_FDD;
         ad9361_phy->pdata->fdd_independent_mode = true;
     } else {
