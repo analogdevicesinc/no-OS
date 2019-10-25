@@ -5022,12 +5022,6 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 	dev_dbg(&phy->spi->dev, "%s: MCS step %"PRId32, __func__, step);
 
 	switch (step) {
-	case 0:
-		/* REVIST:
-		 * POWER_DOWN_TRX_SYNTH and MCS_RF_ENABLE somehow conflict
-		 */
-		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
-				  POWER_DOWN_TX_SYNTH | POWER_DOWN_RX_SYNTH, 0);
 	case 1:
 		/* REVIST:
 		* POWER_DOWN_TRX_SYNTH and MCS_RF_ENABLE somehow conflict
