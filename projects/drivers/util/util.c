@@ -40,8 +40,10 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <string.h>
+#include <stdlib.h>
 #include "util.h"
-
+#include "errno.h"
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -187,4 +189,36 @@ uint64_t div_u64(uint64_t dividend, uint32_t divisor)
 	uint32_t remainder;
 
 	return div_u64_rem(dividend, divisor, &remainder);
+}
+
+/**
+ * Converts from string to int32_t
+ * @param *str
+ * @return int32_t
+ */
+int32_t str_to_int32(const char *str)
+{
+	char *end;
+	int32_t value = strtol(str, &end, 0);
+
+	if (end == str)
+		return -EINVAL;
+	else
+		return value;
+}
+
+/**
+ * Converts from string to uint32_t
+ * @param *str
+ * @return uint32_t
+ */
+uint32_t srt_to_uint32(const char *str)
+{
+	char *end;
+	uint32_t value = strtoul(str, &end, 0);
+
+	if (end == str)
+		return -EINVAL;
+	else
+		return value;
 }
