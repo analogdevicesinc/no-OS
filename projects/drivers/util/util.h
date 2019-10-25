@@ -43,7 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-
+#include <stdbool.h>
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -92,6 +92,10 @@
 		t;														\
 })
 
+#define bswap_constant_32(x) \
+	((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) | \
+	 (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
+
 #define U16_MAX		((uint16_t)~0U)
 #define S16_MAX		((int16_t)(U16_MAX>>1))
 
@@ -127,5 +131,9 @@ uint64_t div64_u64_rem(uint64_t dividend, uint64_t divisor,
 uint64_t div_u64_rem(uint64_t dividend, uint32_t divisor, uint32_t *remainder);
 /* Unsigned 64bit divide with 32bit divisor */
 uint64_t div_u64(uint64_t dividend, uint32_t divisor);
+/* Converts from string to int32_t */
+int32_t str_to_int32(const char *str);
+/* Converts from string to uint32_t */
+uint32_t srt_to_uint32(const char *str);
 #endif // UTIL_H_
 
