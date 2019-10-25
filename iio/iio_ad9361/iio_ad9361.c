@@ -1997,13 +1997,6 @@ static ssize_t set_filter_fir_config(void *device, char *buf, size_t len,
     return ad9361_parse_fir(ad9361_phy, (char *)buf, len);
 }
 
-ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no)
-{
-    *xml = (char*)phy_xml;
-
-    return 0;
-}
-
 static struct iio_attribute iio_attr_rf_port_select = {
 	.name = "rf_port_select",
 	.show = get_rf_port_select,
@@ -2377,10 +2370,17 @@ struct iio_channel *iio_ad9361_channels[] = {
 	NULL,
 };
 
-struct iio_device *iio_ad9361_device;
-
-struct iio_device *get_phy_device(const char *device_name)
+ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
+    *xml = (char*)phy_xml;
+
+    return SUCCESS;
+}
+
+struct iio_device *iio_ad9361_create_device(const char *device_name)
+{
+	struct iio_device *iio_ad9361_device;
+
 	iio_ad9361_device = calloc(1, sizeof(struct iio_device));
 	if (!iio_ad9361_device)
 		return NULL;
