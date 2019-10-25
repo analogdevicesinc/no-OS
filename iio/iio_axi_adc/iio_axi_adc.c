@@ -125,12 +125,15 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
 {
 	int32_t val;
+	ssize_t ret;
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
-	axi_adc_get_calib_bias(iiod_adc->adc,
-			       channel->ch_num,
-			       &val,
-			       NULL);
+	ret = axi_adc_get_calib_bias(iiod_adc->adc,
+				     channel->ch_num,
+				     &val,
+				     NULL);
+	if (ret < 0)
+		return ret;
 
 	return snprintf(buf, len, "%"PRIi32"", val);
 }
@@ -208,12 +211,15 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
 {
+	ssize_t ret;
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 
-	axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
+	ret = axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -230,11 +236,14 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 {
 	int32_t val = str_to_int32(buf);
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
+	ssize_t ret;
 
-	axi_adc_set_calib_bias(iiod_adc->adc,
-			       channel->ch_num,
-			       val,
-			       0);
+	ret = axi_adc_set_calib_bias(iiod_adc->adc,
+				     channel->ch_num,
+				     val,
+				     0);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -253,8 +262,10 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
-
-	axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val, val2);
+	ssize_t ret = axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val,
+					      val2);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -395,7 +406,6 @@ ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 		if (ret < 0)
 			goto error;
 
-
 		ret = xml_create_node(&attribute, "scan-element");
 		if (ret < 0)
 			goto error;
@@ -412,7 +422,9 @@ ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 		ret = xml_add_attribute(attribute, att);
 		if (ret < 0)
 			goto error;
-		xml_add_node(channel, attribute);
+		ret = xml_add_node(channel, attribute);
+		if (ret < 0)
+			goto error;
 
 		for (uint8_t j = 0; iio_voltage_attributes[j] != NULL; j++) {
 			ret = xml_create_node(&attribute, "attribute");
@@ -432,9 +444,13 @@ ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 			ret = xml_add_attribute(attribute, att);
 			if (ret < 0)
 				goto error;
-			xml_add_node(channel, attribute);
+			ret = xml_add_node(channel, attribute);
+			if (ret < 0)
+				goto error;
 		}
-		xml_add_node(device, channel);
+		ret = xml_add_node(device, channel);
+		if (ret < 0)
+			goto error;
 	}
 
 	ret = xml_create_document(&document, device);
@@ -482,9 +498,14 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac,
 					uint32_t address,
 					size_t bytes_count)
 {
+	ssize_t ret;
+
 	rx_dmac->flags = 0;
-	axi_dmac_transfer(rx_dmac,
-			  address, bytes_count);
+	ret = axi_dmac_transfer(rx_dmac,
+				address, bytes_count);
+	if (ret < 0)
+		return ret;
+
 	Xil_DCacheInvalidateRange(address,	bytes_count);
 
 	return bytes_count;
