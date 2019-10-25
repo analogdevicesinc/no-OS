@@ -248,7 +248,10 @@ static ssize_t get_altvoltage_phase(void *device, char *buf, size_t len,
 {
 	uint32_t phase;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_get_phase(tinyiiod_dac->dac, channel->ch_num, &phase);
+	ssize_t ret = axi_dac_dds_get_phase(tinyiiod_dac->dac, channel->ch_num, &phase);
+	if (ret < 0)
+		return ret;
+
 	return snprintf(buf, len, "%"PRIu32"", phase);
 }
 
@@ -264,7 +267,9 @@ static ssize_t get_altvoltage_scale(void *device, char *buf, size_t len,
 {
 	int32_t scale;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_get_scale(tinyiiod_dac->dac, channel->ch_num, &scale);
+	ssize_t ret = axi_dac_dds_get_scale(tinyiiod_dac->dac, channel->ch_num, &scale);
+	if (ret < 0)
+		return ret;
 
 	return snprintf(buf, len, "%"PRIi32".%.6"PRIi32"", (scale / 1000000),
 			(scale % 1000000));
@@ -282,7 +287,9 @@ static ssize_t get_altvoltage_frequency(void *device, char *buf, size_t len,
 {
 	uint32_t freq;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_get_frequency(tinyiiod_dac->dac, channel->ch_num, &freq);
+	ssize_t ret = axi_dac_dds_get_frequency(tinyiiod_dac->dac, channel->ch_num, &freq);
+	if (ret < 0)
+		return ret;
 
 	return snprintf(buf, len, "%"PRIi32"", freq);
 }
@@ -328,7 +335,9 @@ static ssize_t set_voltage_calibscale(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_set_calib_scale(tinyiiod_dac->dac, channel->ch_num, val, val2);
+	ssize_t ret = axi_dac_dds_set_calib_scale(tinyiiod_dac->dac, channel->ch_num, val, val2);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -347,7 +356,9 @@ static ssize_t set_voltage_calibphase(void *device, char *buf, size_t len,
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_set_calib_phase(tinyiiod_dac->dac, channel->ch_num, val, val2);
+	ssize_t ret = axi_dac_dds_set_calib_phase(tinyiiod_dac->dac, channel->ch_num, val, val2);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -377,7 +388,9 @@ static ssize_t set_altvoltage_phase(void *device, char *buf, size_t len,
 {
 	uint32_t phase = srt_to_uint32(buf);
 	struct iio_axi_dac * iiod_dac = (struct iio_axi_dac *)device;
-	axi_dac_dds_set_phase(iiod_dac->dac, channel->ch_num, phase);
+	ssize_t ret = axi_dac_dds_set_phase(iiod_dac->dac, channel->ch_num, phase);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -395,7 +408,9 @@ static ssize_t set_altvoltage_scale(void *device, char *buf, size_t len,
 	float fscale = strtof(buf, NULL);
 	int32_t scale = fscale * 1000000;
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_set_scale(tinyiiod_dac->dac, channel->ch_num, scale);
+	ssize_t ret = axi_dac_dds_set_scale(tinyiiod_dac->dac, channel->ch_num, scale);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -412,7 +427,9 @@ static ssize_t set_altvoltage_frequency(void *device, char *buf, size_t len,
 {
 	uint32_t freq = srt_to_uint32(buf);
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	axi_dac_dds_set_frequency(tinyiiod_dac->dac, channel->ch_num, freq);
+	ssize_t ret = axi_dac_dds_set_frequency(tinyiiod_dac->dac, channel->ch_num, freq);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
@@ -429,11 +446,10 @@ static ssize_t set_altvoltage_raw(void *device, char *buf, size_t len,
 {
 	uint32_t dds_mode = srt_to_uint32(buf);
 	struct iio_axi_dac* tinyiiod_dac = (struct iio_axi_dac*)device;
-	if(dds_mode) { 		/* DDS mode selected */
-		axi_dac_set_datasel(tinyiiod_dac->dac, -1, AXI_DAC_DATA_SEL_DDS);
-	} else {				/* DMA mode selected */
-		axi_dac_set_datasel(tinyiiod_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);
-	}
+	ssize_t ret;
+	ret = axi_dac_set_datasel(tinyiiod_dac->dac, -1, dds_mode ? AXI_DAC_DATA_SEL_DDS : AXI_DAC_DATA_SEL_DMA);
+	if (ret < 0)
+		return ret;
 
 	return len;
 }
