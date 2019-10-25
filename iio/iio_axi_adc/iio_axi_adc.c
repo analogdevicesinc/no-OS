@@ -155,6 +155,8 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 
 	if (val2 < 0 && val >= 0) {
 		ret = snprintf(buf, len, "-");
+		if (ret < 0)
+			return ret;
 		i++;
 	}
 	ret = i + snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
