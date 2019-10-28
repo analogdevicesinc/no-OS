@@ -56,7 +56,7 @@
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-struct iio_device *get_phy_device(const char *device_name);
-ssize_t get_phy_xml(char** xml, const char *device_name, uint8_t ch_no);
+struct iio_device *iio_ad9361_create_device(const char *device_name);
+ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no);
 
 #endif /* IIO_AD9361_H_ */
