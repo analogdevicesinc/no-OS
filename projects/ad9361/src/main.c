@@ -677,6 +677,10 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
+	ret = iio_init(&iiod, &uart_iio_server_ops);
+	if(ret < 0)
+		return ret;
+
 	ret = iio_register(iio_axi_adc_inst, iio_axi_adc_inst->adc->name,
 				       iio_axi_adc_inst->adc->num_channels, iio_axi_adc_get_xml,
 				       iio_axi_adc_create_device(iio_axi_adc_inst->adc->name));
@@ -688,14 +692,11 @@ int main(void)
 					   iio_axi_dac_create_device(iio_axi_dac_inst->dac->name));
 	if(ret < 0)
 		return ret;
-	ret = iio_register(ad9361_phy, ad9361_phy->name, 0, get_phy_xml,
-				       get_phy_device(ad9361_phy->name));
+	ret = iio_register(ad9361_phy, ad9361_phy->name, 0, iio_ad9361_get_xml,
+				       iio_ad9361_create_device(ad9361_phy->name));
 	if(ret < 0)
 		return ret;
 
-	ret = iio_init(&iiod, &uart_iio_server_ops);
-	if(ret < 0)
-		return ret;
 	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(ret < 0)
 		return ret;

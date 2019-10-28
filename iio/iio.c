@@ -583,7 +583,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
  * @param outxml - device name.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
+static ssize_t iio_get_xml(char **outxml)
 {
 	char *xml, *tmp_xml, *tmp_xml2;
 	uint32_t length;
@@ -617,9 +617,9 @@ static ssize_t iio_get_xml(struct iio_interfaces *devs, char **outxml)
 		return FAILURE;
 
 	strcpy(xml, header);
-	for (i = 0; i < devs->num_interfaces; i++) {
-		devs->interfaces[i]->get_device_xml(&tmp_xml, devs->interfaces[i]->name,
-						 devs->interfaces[i]->num_channels);
+	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
+		iio_interfaces->interfaces[i]->get_device_xml(&tmp_xml, iio_interfaces->interfaces[i]->name,
+				iio_interfaces->interfaces[i]->num_channels);
 		length = strlen(xml);
 		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 		if (!tmp_xml2)
@@ -699,8 +699,6 @@ ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch, 
  */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
-	ssize_t ret;
-	char *xml;
 	struct tinyiiod_ops *ops = calloc(1, sizeof(struct tinyiiod_ops));
 
 	if (!ops)
@@ -722,12 +720,9 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 
 	ops->read = iio_server_ops->read;
 	ops->write = iio_server_ops->write;
+	ops->get_xml = iio_get_xml;
 
-	ret = iio_get_xml(iio_interfaces, &xml);
-	if (ret < 0)
-		goto error_free_ops;
-
-	*iiod = tinyiiod_create(xml, ops);
+	*iiod = tinyiiod_create(ops);
 	if (!(*iiod))
 		goto error_free_ops;
 
