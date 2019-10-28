@@ -821,7 +821,10 @@ static ssize_t get_powerdown(void *device, char *buf, size_t len,
 static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -834,7 +837,10 @@ static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
 static ssize_t get_fastlock_store(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -944,7 +950,10 @@ static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
 static ssize_t set_hardwaregain_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -997,7 +1006,10 @@ static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
  */
 static ssize_t set_rssi(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -1087,7 +1099,10 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
 static ssize_t set_rf_port_select_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -1101,7 +1116,7 @@ static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
 {
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
-    ssize_t ret = -ENODEV;
+    ssize_t ret = -ENOENT;
     uint32_t rf_bandwidth = srt_to_uint32(buf);
 
     rf_bandwidth = ad9361_validate_rf_bw(ad9361_phy, rf_bandwidth);
@@ -1158,7 +1173,10 @@ static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 static ssize_t set_sampling_frequency_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -1280,7 +1298,10 @@ static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
 static ssize_t set_rf_bandwidth_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -1318,7 +1339,10 @@ static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 static ssize_t set_frequency_available(void *device, char *buf, size_t len,
                                        const struct iio_ch_info *channel)
 {
-    return -ENODEV;
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+    return -ENOENT;
 }
 
 /**
@@ -1529,7 +1553,7 @@ static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
     if (ad9361_phy->pdata->use_extclk)
-        return -ENODEV;
+        return -ENOENT;
     else
         return sprintf(buf, "%d", (int)ad9361_phy->pdata->dcxo_coarse);
 }
@@ -1630,7 +1654,7 @@ static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
     struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 
     if (ad9361_phy->pdata->use_extclk)
-        return -ENODEV;
+        return -ENOENT;
     else
         return sprintf(buf, "%d", (int)ad9361_phy->pdata->dcxo_fine);
 }

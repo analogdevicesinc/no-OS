@@ -233,7 +233,10 @@ static ssize_t get_voltage_calibphase(void *device, char *buf, size_t len,
 static ssize_t get_voltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_dac_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -304,7 +307,10 @@ static ssize_t get_altvoltage_frequency(void *device, char *buf, size_t len,
 static ssize_t get_altvoltage_raw(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_dac_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -318,7 +324,10 @@ static ssize_t get_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_dac_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -373,7 +382,10 @@ static ssize_t set_voltage_calibphase(void *device, char *buf, size_t len,
 static ssize_t set_voltage_sampling_frequency(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_dac_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -465,7 +477,10 @@ static ssize_t set_altvoltage_sampling_frequency(void *device, char *buf,
 		size_t len,
 		const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_dac_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 static struct iio_attribute iio_attr_voltage_calibphase = {

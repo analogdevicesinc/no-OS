@@ -103,9 +103,9 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
 	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
 					      &val2);
-
 	if (ret < 0)
 		return ret;
+
 	if (val2 < 0 && val >= 0) {
 		snprintf(buf, len, "-");
 		i++;
@@ -178,7 +178,10 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_adc_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -280,7 +283,10 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_adc_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -293,7 +299,10 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
 {
-	return -ENODEV;
+	/* This function doesn't have an equivalent function in axi_adc_core,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 static struct iio_attribute iio_attr_calibphase = {
