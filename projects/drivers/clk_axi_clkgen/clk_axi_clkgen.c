@@ -45,7 +45,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include "util.h"
-#include "platform_drivers.h"
+#include "error.h"
 #include "clk_axi_clkgen.h"
 #include "xil_io.h"
 

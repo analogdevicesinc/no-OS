@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "platform_drivers.h"
+#include "error.h"
 #include "util.h"
 #include "axi_jesd204_tx.h"
 #include "axi_io.h"

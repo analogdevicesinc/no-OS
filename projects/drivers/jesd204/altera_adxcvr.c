@@ -43,8 +43,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include "platform_drivers.h"
 #include "io.h"
+#include "error.h"
 #include "util.h"
 #include "altera_a10_atx_pll.h"
 #include "altera_a10_cdr_pll.h"
