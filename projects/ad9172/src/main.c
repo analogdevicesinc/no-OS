@@ -51,7 +51,6 @@
 #include "inttypes.h"
 #include "error.h"
 #include "xilinx_platform_drivers.h"
-#include "axi_io.h"
 
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
@@ -103,8 +102,6 @@ int main(void)
 		.subclass = 1,
 		.device_clk_khz = 184320,	/* (lane_clk_khz / 40) */
 		.lane_clk_khz = 7372800,	/* LaneRate = ( M/L)*NP*(10/8)*DataRate */
-		.axi_io_read = axi_io_read,
-		.axi_io_write = axi_io_write
 	};
 
 	struct adxcvr_init tx_adxcvr_init = {
@@ -143,9 +140,7 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
-		4,
-		axi_io_read,
-		axi_io_write
+		4
 	};
 
 #ifdef DAC_DMA_EXAMPLE
