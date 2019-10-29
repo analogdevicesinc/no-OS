@@ -66,7 +66,7 @@
 ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 			 struct iio_axi_adc_init_par *init)
 {
-	*iio_axi_adc = calloc(1, sizeof(*iio_axi_adc));
+	*iio_axi_adc = calloc(1, sizeof(struct iio_axi_adc));
 	if (!(*iio_axi_adc))
 		return FAILURE;
 	(*iio_axi_adc)->adc = init->adc;

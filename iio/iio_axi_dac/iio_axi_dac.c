@@ -152,7 +152,7 @@ static const char * const  dac_xml =
 ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_axi_dac,
 		struct iio_axi_dac_init_par *init)
 {
-	*iio_axi_dac = calloc(1, sizeof(*iio_axi_dac));
+	*iio_axi_dac = calloc(1, sizeof(struct iio_axi_dac));
 	if (!(*iio_axi_dac))
 		return FAILURE;
 	(*iio_axi_dac)->dac = init->dac;
