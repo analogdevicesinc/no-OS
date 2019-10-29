@@ -59,7 +59,7 @@ struct iio_interface {
 	uint32_t ch_mask;
 	void *dev_instance;
 	struct iio_device *iio;
-	ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*get_device_xml)(char **xml, const char *device_name, uint8_t ch_no);
 };
 
 struct iio_interfaces {
@@ -124,7 +124,7 @@ static int16_t iio_get_channel_id(const char *channel,
 		i++;
 	}
 
-	return -ENODEV;
+	return -ENOENT;
 }
 
 /**
@@ -148,22 +148,28 @@ static int16_t iio_get_attribute_id(const char *attr,
 		i++;
 	}
 
-	return -ENODEV;
+	return -ENOENT;
 }
 
+/**
+ * Find interface with "device_name".
+ * @param @device_name.
+ * @param iio_interfaces - list of interfaces.
+ * @return interface pointer if interface is found, NULL otherwise.
+ */
 static struct iio_interface *iio_get_interface(const char *device_name,
 		struct iio_interfaces *iio_interfaces)
 {
-	int16_t i = 0;
+	int16_t i;
 
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name)) {
+		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name))
 			return iio_interfaces->interfaces[i];
-		}
 	}
 
 	return NULL;
 }
+
 /**
  * read all attributes from map
  * @param *buff where value is stored
@@ -182,7 +188,7 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 	uint32_t *pattr_length;
 
 	while (attributes[i]) {
-		attr_length = attributes[i]->show(device, (local_buf), len, channel);
+		attr_length = attributes[i]->show(device, local_buf, len, channel);
 		pattr_length = (uint32_t *)(buf + j);
 		*pattr_length = bswap_constant_32(attr_length);
 		j += 4;
@@ -226,6 +232,15 @@ static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 	return len;
 }
 
+/**
+ * read/write channel attribute.
+ * @param *el_info.
+ * @param *buf, read / write value.
+ * @param len.
+ * @param *channel.
+ * @param is_write
+ * @return length of chars written in buf or negative value in case of error
+ */
 static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 		char *buf, size_t len,
 		struct iio_channel *channel, bool is_write)
@@ -262,6 +277,7 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 
 	return -ENOENT;
 }
+
 /**
  * read write attribute
  * @param *device name
@@ -451,6 +467,13 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iiod_device->iio, 1);
 }
 
+/**
+ * open device
+ * @param *device name.
+ * @param *sample_size.
+ * @param *mask of channels to be opened.
+ * @return SUCCESS, negative value in case of failure.
+ */
 static int32_t iio_open_dev(const char *device, size_t sample_size,
 			    uint32_t mask)
 {
