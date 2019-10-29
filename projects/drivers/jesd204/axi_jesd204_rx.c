@@ -111,7 +111,7 @@ const char *axi_jesd204_rx_lane_status_label[] = {
 int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
-	jesd->axi_io_write(jesd->base, reg_addr, reg_val);
+	axi_io_write(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -122,7 +122,7 @@ int32_t axi_jesd204_rx_write(struct axi_jesd204_rx *jesd,
 int32_t axi_jesd204_rx_read(struct axi_jesd204_rx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
-	jesd->axi_io_read(jesd->base, reg_addr, reg_val);
+	axi_io_read(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -410,8 +410,6 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 	jesd->base = init->base;
 	jesd->device_clk_khz = init->device_clk_khz;
 	jesd->lane_clk_khz = init->lane_clk_khz;
-	jesd->axi_io_read = init->axi_io_read;
-	jesd->axi_io_write = init->axi_io_write;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_MAGIC, &magic);
 	if (magic != JESD204_RX_MAGIC) {
