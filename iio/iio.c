@@ -672,7 +672,7 @@ ssize_t iio_register(void* dev_instance, const char *dev_name, uint16_t num_ch,
 	struct iio_interface *iio_interface;
 
 	if (!(iio_interfaces)) {
-		iio_interfaces = calloc(1, sizeof(struct iio_interfaces*));
+		iio_interfaces = calloc(1, sizeof(struct iio_interfaces));
 		if (!iio_interfaces)
 			return -ENOMEM;
 
