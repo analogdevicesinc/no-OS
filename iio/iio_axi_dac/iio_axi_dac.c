@@ -49,6 +49,7 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "platform_drivers.h"
+#include "xml.h"
 #include "util.h"
 
 static const char * const  dac_xml =
@@ -669,8 +670,121 @@ ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
 	return bytes_count;
 }
 
+enum ch_type{
+	CH_VOLTGE,
+	CH_ALTVOLTGE,
+};
+
 /**
- * @brief Get an axi_dac xml.
+ * @brief Fill device with channels
+ * @param device.
+ * @param ch_no.
+ * @param ch_t - channel type.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+static ssize_t iio_axi_dac_channel_xml(struct xml_node *device, uint8_t ch_no, enum ch_type ch_t)
+{
+	char *ch_id[] = {"voltage", "altvoltage"};
+	char *ch_name[] = {"_I_F", "_Q_F"};
+	struct iio_attribute **iio_attributes;
+	struct xml_node *attribute, *channel;
+	struct xml_attribute *att = NULL;
+	char buff[256];
+	uint8_t i, j;
+	ssize_t ret;
+
+	for (i = 0; i < ch_no; i++) {
+		ret = xml_create_node(&channel, "channel");
+		if (ret < 0)
+			return ret;
+		ret = sprintf(buff, "%s%d", ch_id[ch_t], i);
+		if (ret < 0)
+			return ret;
+		ret = xml_create_attribute(&att, "id", buff);
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(channel, att);
+		if (ret < 0)
+			return ret;
+		ret = xml_create_attribute(&att, "type", "output");
+		if (ret < 0)
+			return ret;
+		ret = xml_add_attribute(channel, att);
+		if (ret < 0)
+			return ret;
+
+		if (ch_t == CH_VOLTGE) {
+			ret = xml_create_node(&attribute, "scan-element");
+			if (ret < 0)
+				return ret;
+			ret = sprintf(buff, "%d", i);
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "index", buff);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "format", "le:S16/16&gt;&gt;0");
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_node(channel, attribute);
+			if (ret < 0)
+				return ret;
+		}
+		else
+		{
+			/* CH_ALTVOLTGE */
+			ret = sprintf(buff, "TX%d%s%d", (i / 4) + 1, ch_name[(i % 4) / 2], (i % 2) + 1);
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "name", buff);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(channel, att);
+			if (ret < 0)
+				return ret;
+		}
+		iio_attributes = (ch_t == CH_VOLTGE) ? iio_voltage_attributes : iio_altvoltage_attributes;
+
+		for (j = 0; iio_attributes[j] != NULL; j++) {
+			ret = xml_create_node(&attribute, "attribute");
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "name",
+					iio_attributes[j]->name);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			ret = sprintf(buff, "out_%s%d_%s", ch_id[ch_t], i, iio_attributes[j]->name);
+			if (ret < 0)
+				return ret;
+			ret = xml_create_attribute(&att, "filename", buff);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_attribute(attribute, att);
+			if (ret < 0)
+				return ret;
+			ret = xml_add_node(channel, attribute);
+			if (ret < 0)
+				return ret;
+		}
+		ret = xml_add_node(device, channel);
+		if (ret < 0)
+			return ret;
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Get an axi_adc xml.
  * @param xml - xml string.
  * @param device_name.
  * @param ch_no.
@@ -678,7 +792,43 @@ ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
  */
 ssize_t iio_axi_dac_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
-	*xml = (char *)dac_xml; // todo
+	struct xml_node *device;
+	struct xml_attribute *att;
+	struct xml_document *document = NULL;
+	ssize_t ret;
 
-	return SUCCESS;
+	ret = xml_create_node(&device, "device");
+	if (ret < 0)
+		goto error;
+	ret = xml_create_attribute(&att, "id", device_name);
+	if (ret < 0)
+		goto error;
+	ret = xml_add_attribute(device, att);
+	if (ret < 0)
+		goto error;
+	ret = xml_create_attribute(&att, "name", device_name);
+	if (ret < 0)
+		goto error;
+	ret = xml_add_attribute(device, att);
+	if (ret < 0)
+		goto error;
+	ret = iio_axi_dac_channel_xml(device, ch_no, CH_VOLTGE);
+	if (ret < 0)
+		goto error;
+	ret = iio_axi_dac_channel_xml(device, ch_no * 2, CH_ALTVOLTGE);
+	if (ret < 0)
+		goto error;
+	ret = xml_create_document(&document, device);
+	if (ret < 0) {
+		if (document)
+			xml_delete_document(document);
+		goto error;
+	}
+	*xml = document->buff;
+
+error:
+	if (device)
+		xml_delete_node(device);
+
+	return ret;
 }
