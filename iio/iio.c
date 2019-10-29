@@ -539,8 +539,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 		return -ENOENT;
 	iiod_adc = (struct iio_axi_adc *)(iiod_device->dev_instance);
 
-	return iio_axi_adc_transfer_dev_to_mem(iiod_adc->dmac, iiod_adc->adc_ddr_base,
-					       bytes_count);
+	return iio_axi_adc_transfer_dev_to_mem(iiod_adc, bytes_count);
 }
 
 /**

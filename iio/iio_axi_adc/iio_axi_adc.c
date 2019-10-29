@@ -45,7 +45,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <xil_cache.h> //remove this
 #include "iio_axi_adc.h"
 #include "error.h"
 #include "axi_adc_core.h"
@@ -72,6 +71,7 @@ ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 	(*iio_axi_adc)->adc = init->adc;
 	(*iio_axi_adc)->dmac = init->dmac;
 	(*iio_axi_adc)->adc_ddr_base = init->adc_ddr_base;
+	(*iio_axi_adc)->dcache_invalidate_range = init->dcache_invalidate_range;
 
 	return SUCCESS;
 }
@@ -503,19 +503,18 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac	*rx_dmac,
-					uint32_t address,
-					size_t bytes_count)
+ssize_t iio_axi_adc_transfer_dev_to_mem(struct iio_axi_adc *iiod_adc, size_t bytes_count)
 {
 	ssize_t ret;
 
-	rx_dmac->flags = 0;
-	ret = axi_dmac_transfer(rx_dmac,
-				address, bytes_count);
+	iiod_adc->dmac->flags = 0;
+	ret = axi_dmac_transfer(iiod_adc->dmac,
+			iiod_adc->adc_ddr_base, bytes_count);
 	if (ret < 0)
 		return ret;
 
-	Xil_DCacheInvalidateRange(address,	bytes_count);
+	if(iiod_adc->dcache_invalidate_range)
+		iiod_adc->dcache_invalidate_range(iiod_adc->adc_ddr_base, bytes_count);
 
 	return bytes_count;
 }

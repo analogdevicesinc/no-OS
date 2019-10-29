@@ -55,12 +55,14 @@ struct iio_axi_dac_init_par {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
+    void (*dcache_flush)(void);
 };
 
 struct iio_axi_dac {
     struct axi_dac *dac;
     struct axi_dmac *dmac;
     uint32_t dac_ddr_base;
+    void (*dcache_flush)(void);
 };
 
 /******************************************************************************/

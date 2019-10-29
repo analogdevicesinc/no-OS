@@ -158,6 +158,7 @@ ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_axi_dac,
 	(*iio_axi_dac)->dac = init->dac;
 	(*iio_axi_dac)->dmac = init->dmac;
 	(*iio_axi_dac)->dac_ddr_base = init->dac_ddr_base;
+	(*iio_axi_dac)->dcache_flush = init->dcache_flush;
 
 	return SUCCESS;
 }
@@ -666,6 +667,9 @@ ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
 			       bytes_count);
 	if(ret < 0)
 		return ret;
+
+	if(iiod_dac->dcache_flush)
+		iiod_dac->dcache_flush();
 
 	return bytes_count;
 }

@@ -54,12 +54,14 @@ struct iio_axi_adc_init_par {
 	struct axi_adc *adc;
 	struct axi_dmac *dmac;
 	uint32_t adc_ddr_base;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 struct iio_axi_adc {
 	struct axi_adc *adc;
 	struct axi_dmac *dmac;
 	uint32_t adc_ddr_base;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /******************************************************************************/
@@ -73,8 +75,7 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *tinyiiod_adc);
 /* Create iio_device. */
 struct iio_device *iio_axi_adc_create_device(const char *device_name);
 /* Transfer data from ADC into RAM: "capture" */
-ssize_t iio_axi_adc_transfer_dev_to_mem(struct axi_dmac *rx_dmac,
-					uint32_t address, size_t bytes_count);
+ssize_t iio_axi_adc_transfer_dev_to_mem(struct iio_axi_adc *iiod_adc, size_t bytes_count);
 /* Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()" */
 ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
 			     size_t bytes_count);
