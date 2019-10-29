@@ -528,16 +528,16 @@ static struct iio_attribute iio_attr_altvoltage_sampling_frequency = {
 };
 
 static struct iio_attribute *iio_voltage_attributes[] = {
-	&iio_attr_voltage_calibphase,
 	&iio_attr_voltage_calibscale,
+	&iio_attr_voltage_calibphase,
 	&iio_attr_voltage_sampling_frequency,
 	NULL,
 };
 static struct iio_attribute *iio_altvoltage_attributes[] = {
 	&iio_attr_altvoltage_raw,
 	&iio_attr_altvoltage_phase,
-	&iio_attr_altvoltage_frequency,
 	&iio_attr_altvoltage_scale,
+	&iio_attr_altvoltage_frequency,
 	&iio_attr_altvoltage_sampling_frequency,
 	NULL,
 };
