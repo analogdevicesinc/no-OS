@@ -96,7 +96,7 @@ const char *axi_jesd204_tx_link_status_label[] = {
 int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 			     uint32_t reg_addr, uint32_t reg_val)
 {
-	jesd->axi_io_write(jesd->base, reg_addr, reg_val);
+	axi_io_write(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -107,7 +107,7 @@ int32_t axi_jesd204_tx_write(struct axi_jesd204_tx *jesd,
 int32_t axi_jesd204_tx_read(struct axi_jesd204_tx *jesd,
 			    uint32_t reg_addr, uint32_t *reg_val)
 {
-	jesd->axi_io_read(jesd->base, reg_addr, reg_val);
+	axi_io_read(jesd->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -318,8 +318,6 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 	jesd->name = init->name;
 	jesd->device_clk_khz = init->device_clk_khz;
 	jesd->lane_clk_khz = init->lane_clk_khz;
-	jesd->axi_io_read = init->axi_io_read;
-	jesd->axi_io_write = init->axi_io_write;
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_MAGIC, &magic);
 	if (magic != JESD204_TX_MAGIC) {

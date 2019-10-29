@@ -86,8 +86,6 @@ struct axi_dmac {
 	uint32_t base;
 	enum dma_direction direction;
 	uint32_t flags;
-	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
-	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
 };
 
 struct axi_dmac_init {
@@ -95,8 +93,6 @@ struct axi_dmac_init {
 	uint32_t base;
 	enum dma_direction direction;
 	uint32_t flags;
-	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
-	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
 };
 
 /******************************************************************************/

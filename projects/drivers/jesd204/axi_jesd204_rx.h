@@ -63,8 +63,6 @@ struct axi_jesd204_rx {
 	struct jesd204_rx_config config;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
-	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
-	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
 };
 
 struct jesd204_rx_init {
@@ -75,8 +73,6 @@ struct jesd204_rx_init {
 	uint8_t subclass;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
-	int32_t (*axi_io_read)(uint32_t, uint32_t, uint32_t*);
-	int32_t (*axi_io_write)(uint32_t, uint32_t, uint32_t);
 };
 
 /******************************************************************************/

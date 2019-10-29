@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include "axi_io.h"
 #include "error.h"
 #include "axi_dmac.h"
 
@@ -52,7 +53,7 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 		      uint32_t reg_addr,
 		      uint32_t *reg_data)
 {
-	dmac->axi_io_read(dmac->base, reg_addr, reg_data);
+	axi_io_read(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -64,7 +65,7 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 		       uint32_t reg_addr,
 		       uint32_t reg_data)
 {
-	dmac->axi_io_write(dmac->base, reg_addr, reg_data);
+	axi_io_write(dmac->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -144,8 +145,6 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 	dmac->base = init->base;
 	dmac->direction = init->direction;
 	dmac->flags = init->flags;
-	dmac->axi_io_read = init->axi_io_read;
-	dmac->axi_io_write = init->axi_io_write;
 
 	*dmac_core = dmac;
 

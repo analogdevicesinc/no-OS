@@ -54,7 +54,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 		     uint32_t reg_addr,
 		     uint32_t *reg_data)
 {
-	adc->axi_io_read(adc->base, reg_addr, reg_data);
+	axi_io_read(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -66,7 +66,7 @@ int32_t axi_adc_write(struct axi_adc *adc,
 		      uint32_t reg_addr,
 		      uint32_t reg_data)
 {
-	adc->axi_io_write(adc->base, reg_addr, reg_data);
+	axi_io_write(adc->base, reg_addr, reg_data);
 
 	return SUCCESS;
 }
@@ -308,8 +308,6 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 	adc->name = init->name;
 	adc->base = init->base;
 	adc->num_channels = init->num_channels;
-	adc->axi_io_read = init->axi_io_read;
-	adc->axi_io_write = init->axi_io_write;
 
 	axi_adc_write(adc, AXI_ADC_REG_RSTN, 0);
 	axi_adc_write(adc, AXI_ADC_REG_RSTN,
