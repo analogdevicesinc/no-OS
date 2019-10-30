@@ -46,6 +46,7 @@
 #include "platform_drivers.h"
 #include "util.h"
 #include "axi_adc_core.h"
+#include "axi_io.h"
 
 /***************************************************************************//**
  * @brief axi_adc_read

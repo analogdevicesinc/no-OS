@@ -46,6 +46,7 @@
 #include "platform_drivers.h"
 #include "util.h"
 #include "axi_jesd204_tx.h"
+#include "axi_io.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
