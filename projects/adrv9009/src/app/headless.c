@@ -239,8 +239,6 @@ int main(void)
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
 		DMA_CYCLIC,
-		read_wrapper,
-		write_wrapper
 	};
 	struct axi_dmac *tx_dmac;
 	struct gpio_desc *gpio_plddrbypass;
