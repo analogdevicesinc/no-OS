@@ -73,10 +73,20 @@ struct iio_device {
 	struct iio_attribute **attributes;
 };
 
+typedef struct iio_interface_init_par {
+	const char *dev_name;
+	uint16_t num_ch;
+	void *dev_instance;
+	struct iio_device *iio_device;
+	ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*transfer)(void *dev_instance, size_t bytes_count);
+	ssize_t (*read_or_write_dev)(void *dev_instance, char *pbuf, size_t offset, size_t bytes_count);
+} tinyiiod_device_init_par;
+
 struct iio_server_ops {
-	/* Read from the input stream */
+	/* Read from from a peripheral device (UART, USB, NETWORK) */
 	ssize_t (*read)(char *buf, size_t len);
-	/* Write to the output stream */
+	/* Write to a peripheral device */
 	ssize_t (*write)(const char *buf, size_t len);
 };
 

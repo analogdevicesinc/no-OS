@@ -548,11 +548,11 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac,
-				uint32_t dac_ddr_baseaddr, size_t bytes_count)
+ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count)
 {
-	tx_dmac->flags = DMA_CYCLIC;
-	ssize_t ret = axi_dmac_transfer(tx_dmac, dac_ddr_baseaddr,
+	struct iio_axi_dac *iio_dac = iio_inst;
+	iio_dac->dmac->flags = DMA_CYCLIC;
+	ssize_t ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
 					bytes_count);
 	if(ret < 0)
 		return ret;
@@ -568,21 +568,22 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(struct axi_dmac	*tx_dmac,
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_dac_write_dev(struct iio_axi_dac *iiod_dac, const char *buf,
+ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 		      size_t offset,  size_t bytes_count)
 {
-	ssize_t ret = axi_dac_set_datasel(iiod_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);
+	struct iio_axi_dac *iio_dac = iio_inst;
+	ssize_t ret = axi_dac_set_datasel(iio_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);
 	if(ret < 0)
 		return ret;
 
-	ret = axi_dac_set_buff(iiod_dac->dac, iiod_dac->dac_ddr_base + offset,
+	ret = axi_dac_set_buff(iio_dac->dac, iio_dac->dac_ddr_base + offset,
 			       (uint16_t *)buf,
 			       bytes_count);
 	if(ret < 0)
 		return ret;
 
-	if(iiod_dac->dcache_flush)
-		iiod_dac->dcache_flush();
+	if(iio_dac->dcache_flush)
+		iio_dac->dcache_flush();
 
 	return bytes_count;
 }

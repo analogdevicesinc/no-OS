@@ -75,9 +75,9 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *tinyiiod_adc);
 /* Create iio_device. */
 struct iio_device *iio_axi_adc_create_device(const char *device_name);
 /* Transfer data from ADC into RAM: "capture" */
-ssize_t iio_axi_adc_transfer_dev_to_mem(struct iio_axi_adc *iiod_adc, size_t bytes_count);
+ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count);
 /* Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()" */
-ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
+ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count);
 /* Get an axi_adc xml */
 ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no);

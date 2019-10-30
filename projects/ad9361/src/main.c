@@ -624,6 +624,7 @@ int main(void)
 		.adc = ad9361_phy->rx_adc,
 		.dmac = ad9361_phy->rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
+		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 	struct iio_axi_adc *iio_axi_adc_inst;
 
@@ -631,6 +632,7 @@ int main(void)
 		.dac = ad9361_phy->tx_dac,
 		.dmac = ad9361_phy->tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
+		.dcache_flush = Xil_DCacheFlush,
 	};
 	struct iio_axi_dac *iio_axi_dac_inst;
 
@@ -681,19 +683,43 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
-	ret = iio_register(iio_axi_adc_inst, iio_axi_adc_inst->adc->name,
-				       iio_axi_adc_inst->adc->num_channels, iio_axi_adc_get_xml,
-				       iio_axi_adc_create_device(iio_axi_adc_inst->adc->name));
+	struct iio_interface_init_par iio_axi_adc_intf_par = {
+		.dev_name = iio_axi_adc_inst->adc->name,
+		.num_ch = iio_axi_adc_inst->adc->num_channels,
+		.dev_instance = iio_axi_adc_inst,
+		.iio_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name),
+		.get_device_xml = iio_axi_adc_get_xml,
+		.transfer = iio_axi_adc_transfer_dev_to_mem,
+		.read_or_write_dev = iio_axi_adc_read_dev,
+	};
+
+	ret = iio_register_interface(&iio_axi_adc_intf_par);
 	if(ret < 0)
 		return ret;
 
-	ret = iio_register(iio_axi_dac_inst, iio_axi_dac_inst->dac->name,
-				       iio_axi_dac_inst->dac->num_channels, iio_axi_dac_get_xml,
-					   iio_axi_dac_create_device(iio_axi_dac_inst->dac->name));
+	struct iio_interface_init_par iio_axi_dac_intf_par = {
+		.dev_name = iio_axi_dac_inst->dac->name,
+		.num_ch = iio_axi_dac_inst->dac->num_channels,
+		.dev_instance = iio_axi_dac_inst,
+		.iio_device = iio_axi_dac_create_device(iio_axi_adc_inst->adc->name),
+		.get_device_xml = iio_axi_dac_get_xml,
+		.transfer = iio_axi_dac_transfer_mem_to_dev,
+		.read_or_write_dev = iio_axi_dac_write_dev,
+	};
+	ret = iio_register_interface(&iio_axi_dac_intf_par);
 	if(ret < 0)
 		return ret;
-	ret = iio_register(ad9361_phy, ad9361_phy->name, 0, iio_ad9361_get_xml,
-				       iio_ad9361_create_device(ad9361_phy->name));
+
+	struct iio_interface_init_par iio_ad9361_intf_par = {
+		.dev_name = ad9361_phy->name,
+		.num_ch = 0,
+		.dev_instance = ad9361_phy,
+		.iio_device = iio_ad9361_create_device(ad9361_phy->name),
+		.get_device_xml = iio_ad9361_get_xml,
+		.transfer = NULL,
+		.read_or_write_dev = NULL,
+	};
+	ret = iio_register_interface(&iio_ad9361_intf_par);
 	if(ret < 0)
 		return ret;
 

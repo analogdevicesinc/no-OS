@@ -503,18 +503,19 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name)
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_adc_transfer_dev_to_mem(struct iio_axi_adc *iiod_adc, size_t bytes_count)
+ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 {
+	struct iio_axi_adc *iio_adc = iio_inst;
 	ssize_t ret;
 
-	iiod_adc->dmac->flags = 0;
-	ret = axi_dmac_transfer(iiod_adc->dmac,
-			iiod_adc->adc_ddr_base, bytes_count);
+	iio_adc->dmac->flags = 0;
+	ret = axi_dmac_transfer(iio_adc->dmac,
+			iio_adc->adc_ddr_base, bytes_count);
 	if (ret < 0)
 		return ret;
 
-	if(iiod_adc->dcache_invalidate_range)
-		iiod_adc->dcache_invalidate_range(iiod_adc->adc_ddr_base, bytes_count);
+	if(iio_adc->dcache_invalidate_range)
+		iio_adc->dcache_invalidate_range(iio_adc->adc_ddr_base, bytes_count);
 
 	return bytes_count;
 }
@@ -527,10 +528,11 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(struct iio_axi_adc *iiod_adc, size_t byt
  * @param bytes_count
  * @return bytes_count
  */
-ssize_t iio_axi_adc_read_dev(char *adc_ddr_baseaddr, char *pbuf, size_t offset,
+ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count)
 {
-	memcpy(pbuf, adc_ddr_baseaddr + offset, bytes_count);
+	struct iio_axi_adc *iio_adc = iio_inst;
+	memcpy(pbuf, (char*)iio_adc->adc_ddr_base + offset, bytes_count);
 
 	return bytes_count;
 }
