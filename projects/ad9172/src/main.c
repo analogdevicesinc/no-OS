@@ -51,6 +51,7 @@
 #include "inttypes.h"
 #include "error.h"
 #include "xilinx_platform_drivers.h"
+#include "app_config.h"
 
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
