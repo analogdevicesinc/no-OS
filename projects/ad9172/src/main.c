@@ -149,8 +149,6 @@ int main(void)
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
 		DMA_LAST,
-		axi_io_read,
-		axi_io_write
 	};
 	struct axi_dmac *tx_dmac;
 #endif /* DAC_DMA_EXAMPLE */
