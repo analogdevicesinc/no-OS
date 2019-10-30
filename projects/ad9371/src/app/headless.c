@@ -62,6 +62,7 @@
 #include "axi_dac_core.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
+#include "app_config.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
