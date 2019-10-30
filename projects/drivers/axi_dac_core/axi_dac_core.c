@@ -797,7 +797,7 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 		for (chan = 0; chan < num_tx_channels; chan++) {
 
 			axi_io_write(address, index_mem * sizeof(uint32_t),
-					  custom_data_iq[index]);
+				     custom_data_iq[index]);
 
 			index_mem++;
 		}
