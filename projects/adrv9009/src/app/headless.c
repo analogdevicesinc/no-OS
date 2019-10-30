@@ -43,6 +43,7 @@
 #include "talise_config_ad9528.h"
 #include "talise_arm_binary.h"
 #include "talise_stream_binary.h"
+#include "app_config.h"
 
 /**********************************************************/
 /**********************************************************/
