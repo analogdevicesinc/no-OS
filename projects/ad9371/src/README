@@ -2,7 +2,6 @@
 # Additional required source files:
 
 #ifdef ALTERA_PLATFORM
-	cp ../../drivers/altera_platform/platform_drivers.h devices/adi_hal/
 	cp ../../drivers/altera_platform/altera_platform_drivers.h devices/adi_hal/
 	cp ../../../include/axi_io.h devices/adi_hal/
 	cp ../../../include/error.h devices/adi_hal/
@@ -40,7 +39,6 @@
 	cp ../../../include/gpio.h devices/adi_hal/
 	cp ../../../include/delay.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
-	cp ../../../drivers/platform/xilinx/platform_drivers.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/

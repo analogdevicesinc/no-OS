@@ -7,7 +7,6 @@
 	cp ../../../include/gpio.h ./
 	cp ../../../include/delay.h ./
 	cp ../../../drivers/platform/xilinx/axi_io.c ./
-	cp ../../../drivers/platform/xilinx/platform_drivers.h ./
 	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h ./
 	cp ../../../drivers/platform/xilinx/spi.c ./
 	cp ../../../drivers/platform/xilinx/gpio.c ./
