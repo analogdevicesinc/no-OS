@@ -274,6 +274,7 @@ int32_t ad5686_init(struct ad5686_dev **device,
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
 	ret |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
+	ret |= gpio_get(&dev->gpio_gain, init_param.gpio_gain);
 
 	if (dev->gpio_ldac)
 		ret |= gpio_direction_output(dev->gpio_ldac, GPIO_LOW);
@@ -281,6 +282,8 @@ int32_t ad5686_init(struct ad5686_dev **device,
 	if (dev->gpio_reset)
 		ret |= gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
 
+	if (dev->gpio_gain)
+		ret |= gpio_direction_output(dev->gpio_gain, GPIO_LOW);
 	*device = dev;
 
 	return ret;
@@ -307,6 +310,9 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
 
 	if (dev->gpio_reset)
 		ret |= gpio_remove(dev->gpio_reset);
+
+	if (dev->gpio_gain)
+		ret |= gpio_remove(dev->gpio_gain);
 
 	free(dev);
 
