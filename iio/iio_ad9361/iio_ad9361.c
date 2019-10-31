@@ -2394,6 +2394,13 @@ struct iio_channel *iio_ad9361_channels[] = {
 	NULL,
 };
 
+/**
+ * @brief Get an ad9361 xml.
+ * @param xml - xml string.
+ * @param device_name.
+ * @param ch_no.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
 ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
 	*xml = calloc(1, strlen(ad9361_phy_xml) + 1);
@@ -2405,6 +2412,11 @@ ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
     return SUCCESS;
 }
 
+/**
+ * Create iio_device
+ * @param *device name
+ * @return iio_device or NULL, in case of failure
+ */
 struct iio_device *iio_ad9361_create_device(const char *device_name)
 {
 	struct iio_device *iio_ad9361_device;
