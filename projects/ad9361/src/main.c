@@ -688,9 +688,11 @@ int main(void)
 		.num_ch = iio_axi_adc_inst->adc->num_channels,
 		.dev_instance = iio_axi_adc_inst,
 		.iio_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name),
-		.get_device_xml = iio_axi_adc_get_xml,
-		.transfer = iio_axi_adc_transfer_dev_to_mem,
-		.read_or_write_dev = iio_axi_adc_read_dev,
+		.get_xml = iio_axi_adc_get_xml,
+		.transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem,
+		.transfer_mem_to_dev = NULL,
+		.read_data = iio_axi_adc_read_dev,
+		.write_data = NULL,
 	};
 
 	ret = iio_register_interface(&iio_axi_adc_intf_par);
@@ -702,9 +704,11 @@ int main(void)
 		.num_ch = iio_axi_dac_inst->dac->num_channels,
 		.dev_instance = iio_axi_dac_inst,
 		.iio_device = iio_axi_dac_create_device(iio_axi_adc_inst->adc->name),
-		.get_device_xml = iio_axi_dac_get_xml,
-		.transfer = iio_axi_dac_transfer_mem_to_dev,
-		.read_or_write_dev = iio_axi_dac_write_dev,
+		.get_xml = iio_axi_dac_get_xml,
+		.transfer_dev_to_mem = NULL,
+		.transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev,
+		.read_data = NULL,
+		.write_data = iio_axi_dac_write_dev,
 	};
 	ret = iio_register_interface(&iio_axi_dac_intf_par);
 	if(ret < 0)
@@ -715,9 +719,11 @@ int main(void)
 		.num_ch = 0,
 		.dev_instance = ad9361_phy,
 		.iio_device = iio_ad9361_create_device(ad9361_phy->name),
-		.get_device_xml = iio_ad9361_get_xml,
-		.transfer = NULL,
-		.read_or_write_dev = NULL,
+		.get_xml = iio_ad9361_get_xml,
+		.transfer_dev_to_mem = NULL,
+		.transfer_mem_to_dev = NULL,
+		.read_data = NULL,
+		.write_data = NULL,
 	};
 	ret = iio_register_interface(&iio_ad9361_intf_par);
 	if(ret < 0)

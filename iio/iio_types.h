@@ -79,19 +79,24 @@ struct iio_device {
  * @num_ch: number of channels.
  * @dev_instance: physical instance of a device.
  * @iio_device: device descriptor(describes channels and attributes)
- * @get_device_xml: Generate device xml.
- * @transfer: transfer to/from DMA ARM from/to physical device.
- * @read_or_write_dev: read/write form/to DMA RAM memory.
+ * @get_xml: Generate device xml.
+ * @transfer_dev_to_mem: transfer data from ADC into RAM.
+ * @read_data: Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem".
+ * @transfer_mem_to_dev: Transfer data from RAM to DAC.
+ * @write_data: Write data to RAM. It should be called before "transfer_mem_to_dev".
  */
 struct iio_interface_init_par {
 	const char *dev_name;
 	uint16_t num_ch;
 	void *dev_instance;
 	struct iio_device *iio_device;
-	ssize_t (*get_device_xml)(char** xml, const char *device_name, uint8_t ch_no);
-	ssize_t (*transfer)(void *dev_instance, size_t bytes_count);
-	ssize_t (*read_or_write_dev)(void *dev_instance, char *pbuf, size_t offset,
-				     size_t bytes_count);
+	ssize_t (*get_xml)(char** xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
+	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
+		     size_t bytes_count);
+	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count);
+	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
+		     size_t bytes_count);
 };
 
 struct iio_server_ops {

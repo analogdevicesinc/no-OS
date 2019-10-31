@@ -58,9 +58,11 @@
  * @ch_mask: opened channels.
  * @dev_instance: physical instance of a device.
  * @iio: device descriptor(describes channels and attributes)
- * @get_device_xml: Generate device xml.
- * @transfer: transfer to/from DMA ARM from/to physical device.
- * @read_or_write_dev: read/write form/to DMA RAM memory.
+ * @get_xml: Generate device xml.
+ * @transfer_dev_to_mem: transfer data from ADC into RAM.
+ * @read_data: Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem".
+ * @transfer_mem_to_dev: Transfer data from RAM to DAC.
+ * @write_data: Write data to RAM. It should be called before "transfer_mem_to_dev".
  */
 struct iio_interface {
 	const char *name;
@@ -68,9 +70,13 @@ struct iio_interface {
 	uint32_t ch_mask;
 	void *dev_instance;
 	struct iio_device *iio;
-	ssize_t (*get_device_xml)(char **xml, const char *device_name, uint8_t ch_no);
-	ssize_t (*transfer)(void *dev_instance, size_t bytes_count);
-	ssize_t (*read_or_write_dev)(void *dev_instance, char *pbuf, size_t offset, size_t bytes_count);
+	ssize_t (*get_xml)(char **xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
+	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
+			 size_t bytes_count);
+	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count);
+	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
+			 size_t bytes_count);
 };
 
 struct iio_interfaces {
@@ -546,8 +552,8 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if (iio_interface->transfer)
-		return iio_interface->transfer(iio_interface->dev_instance, bytes_count);
+	if (iio_interface->transfer_dev_to_mem)
+		return iio_interface->transfer_dev_to_mem(iio_interface->dev_instance, bytes_count);
 
 	return -ENOENT;
 }
@@ -565,8 +571,8 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if(iio_interface->read_or_write_dev)
-		return iio_interface->read_or_write_dev(iio_interface->dev_instance, pbuf, offset, bytes_count);
+	if(iio_interface->read_data)
+		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset, bytes_count);
 
 	return -ENOENT;
 }
@@ -582,8 +588,8 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if (iio_interface->transfer)
-		return iio_interface->transfer(iio_interface->dev_instance, bytes_count);
+	if (iio_interface->transfer_mem_to_dev)
+		return iio_interface->transfer_mem_to_dev(iio_interface->dev_instance, bytes_count);
 
 	return -ENOENT;
 }
@@ -600,8 +606,8 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset,  size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
-	if(iio_interface->read_or_write_dev)
-		return iio_interface->read_or_write_dev(iio_interface->dev_instance, (char*)buf, offset, bytes_count);
+	if(iio_interface->write_data)
+		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf, offset, bytes_count);
 
 	return -ENOENT;
 }
@@ -647,7 +653,7 @@ static ssize_t iio_get_xml(char **outxml)
 
 	strcpy(xml, header);
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		iio_interfaces->interfaces[i]->get_device_xml(&tmp_xml,
+		iio_interfaces->interfaces[i]->get_xml(&tmp_xml,
 				iio_interfaces->interfaces[i]->name,
 				iio_interfaces->interfaces[i]->num_channels);
 		length = strlen(xml);
@@ -713,9 +719,11 @@ ssize_t iio_register_interface(struct iio_interface_init_par *init_par)
 	iio_interface->name = init_par->dev_name;
 	iio_interface->num_channels = init_par->num_ch;
 	iio_interface->iio = init_par->iio_device;
-	iio_interface->get_device_xml = init_par->get_device_xml;
-	iio_interface->transfer = init_par->transfer;
-	iio_interface->read_or_write_dev = init_par->read_or_write_dev;
+	iio_interface->get_xml = init_par->get_xml;
+	iio_interface->transfer_dev_to_mem = init_par->transfer_dev_to_mem;
+	iio_interface->transfer_mem_to_dev = init_par->transfer_mem_to_dev;
+	iio_interface->read_data = init_par->read_data;
+	iio_interface->write_data = init_par->write_data;
 
 	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = iio_interface;
 
