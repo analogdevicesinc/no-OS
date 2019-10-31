@@ -501,12 +501,17 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 	uint16_t offset = MAX_RESOLUTION - \
 			  chip_info[dev->act_device].resolution;
 	uint8_t address = chip_info[dev->act_device].channel_addr[channel];
+	uint8_t rb_data_i2c[2] = { 0 };
 
 	if(chip_info[dev->act_device].communication == SPI) {
 		ad5686_set_shift_reg(dev, AD5686_CTRL_RB_REG, address, 0);
 		read_back_data = ad5686_set_shift_reg(dev, AD5686_CTRL_NOP, 0,
 						      0);
 		read_back_data >>= offset;
+	} else {
+		i2c_write(dev->i2c_desc, &address, 1, NO_STOP_BIT);
+		i2c_read(dev->i2c_desc, rb_data_i2c, 2, STOP_BIT);
+		read_back_data = (rb_data_i2c[1] << 8) | rb_data_i2c[0];
 	}
 
 	return read_back_data;
