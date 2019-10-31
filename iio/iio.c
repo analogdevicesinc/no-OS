@@ -73,10 +73,10 @@ struct iio_interface {
 	ssize_t (*get_xml)(char **xml, const char *device_name, uint8_t ch_no);
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
 	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			 size_t bytes_count);
+			     size_t bytes_count);
 	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count);
 	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			 size_t bytes_count);
+			      size_t bytes_count);
 };
 
 struct iio_interfaces {
@@ -553,7 +553,8 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
 	if (iio_interface->transfer_dev_to_mem)
-		return iio_interface->transfer_dev_to_mem(iio_interface->dev_instance, bytes_count);
+		return iio_interface->transfer_dev_to_mem(iio_interface->dev_instance,
+				bytes_count);
 
 	return -ENOENT;
 }
@@ -572,7 +573,8 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
 	if(iio_interface->read_data)
-		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset, bytes_count);
+		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset,
+						bytes_count);
 
 	return -ENOENT;
 }
@@ -589,7 +591,8 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
 	if (iio_interface->transfer_mem_to_dev)
-		return iio_interface->transfer_mem_to_dev(iio_interface->dev_instance, bytes_count);
+		return iio_interface->transfer_mem_to_dev(iio_interface->dev_instance,
+				bytes_count);
 
 	return -ENOENT;
 }
@@ -607,7 +610,8 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 	if(iio_interface->write_data)
-		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf, offset, bytes_count);
+		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf,
+						 offset, bytes_count);
 
 	return -ENOENT;
 }
@@ -623,6 +627,7 @@ static ssize_t iio_get_xml(char **outxml)
 	char *xml, *tmp_xml, *tmp_xml2;
 	uint32_t length;
 	uint16_t i;
+	ssize_t ret;
 
 	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 			"<!DOCTYPE context ["
@@ -653,9 +658,12 @@ static ssize_t iio_get_xml(char **outxml)
 
 	strcpy(xml, header);
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		iio_interfaces->interfaces[i]->get_xml(&tmp_xml,
+		ret = iio_interfaces->interfaces[i]->get_xml(&tmp_xml,
 				iio_interfaces->interfaces[i]->name,
 				iio_interfaces->interfaces[i]->num_channels);
+		if (ret < 0)
+			goto error;
+
 		length = strlen(xml);
 		tmp_xml2 = realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
 		if (!tmp_xml2)
@@ -683,15 +691,11 @@ error:
 }
 
 /**
- * @brief Connect "iio_dev" and "get_device_xml" to a "dev_instance" physical device.
- * @param dev_instance - physical device instance.
- * @param dev_name - device name.
- * @param num_ch - number of channels.
- * @param get_device_xml - get corresponding xml.
- * @param iio_device.
+ * @brief Register interface.
+ * @param init_par.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_register_interface(struct iio_interface_init_par *init_par)
+ssize_t iio_register(struct iio_interface_init_par *init_par)
 {
 	struct iio_interface *iio_interface;
 

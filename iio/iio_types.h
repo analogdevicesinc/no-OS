@@ -93,10 +93,10 @@ struct iio_interface_init_par {
 	ssize_t (*get_xml)(char** xml, const char *device_name, uint8_t ch_no);
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
 	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-		     size_t bytes_count);
+			     size_t bytes_count);
 	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count);
 	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-		     size_t bytes_count);
+			      size_t bytes_count);
 };
 
 struct iio_server_ops {

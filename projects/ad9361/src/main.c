@@ -695,7 +695,7 @@ int main(void)
 		.write_data = NULL,
 	};
 
-	ret = iio_register_interface(&iio_axi_adc_intf_par);
+	ret = iio_register(&iio_axi_adc_intf_par);
 	if(ret < 0)
 		return ret;
 
@@ -710,7 +710,7 @@ int main(void)
 		.read_data = NULL,
 		.write_data = iio_axi_dac_write_dev,
 	};
-	ret = iio_register_interface(&iio_axi_dac_intf_par);
+	ret = iio_register(&iio_axi_dac_intf_par);
 	if(ret < 0)
 		return ret;
 
@@ -725,7 +725,7 @@ int main(void)
 		.read_data = NULL,
 		.write_data = NULL,
 	};
-	ret = iio_register_interface(&iio_ad9361_intf_par);
+	ret = iio_register(&iio_ad9361_intf_par);
 	if(ret < 0)
 		return ret;
 

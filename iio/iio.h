@@ -60,7 +60,7 @@
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 /* Free the resources allocated by iio_init(). */
 ssize_t iio_remove(struct tinyiiod *iiod);
-/* Connect "iio_dev" and "get_device_xml" to a "dev_instance" physical device. */
-ssize_t iio_register_interface(struct iio_interface_init_par *init_par);
+/* Register interface. */
+ssize_t iio_register(struct iio_interface_init_par *init_par);
 
 #endif /* IIO_H_ */
