@@ -107,6 +107,8 @@ static ssize_t get_voltage_calibscale(void *device, char *buf, size_t len,
 		return ret;
 	if(val2 < 0 && val >= 0) {
 		ret = (ssize_t) snprintf(buf, len, "-");
+		if(ret < 0)
+			return ret;
 		i++;
 	}
 	ret = i + (ssize_t) snprintf(&buf[i], len, "%"PRIi32".%.6"PRIi32"", val,
