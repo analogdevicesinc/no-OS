@@ -51,6 +51,17 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * struct iio_interface - iio interface.
+ * @dev_name: device name.
+ * @num_ch: number of channels.
+ * @ch_mask: opened channels.
+ * @dev_instance: physical instance of a device.
+ * @iio: device descriptor(describes channels and attributes)
+ * @get_device_xml: Generate device xml.
+ * @transfer: transfer to/from DMA ARM from/to physical device.
+ * @read_or_write_dev: read/write form/to DMA RAM memory.
+ */
 struct iio_interface {
 	const char *name;
 	uint16_t num_channels;

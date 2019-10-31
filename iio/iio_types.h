@@ -73,6 +73,16 @@ struct iio_device {
 	struct iio_attribute **attributes;
 };
 
+/**
+ * struct iio_interface_init_par - iio interface init par.
+ * @dev_name: device name.
+ * @num_ch: number of channels.
+ * @dev_instance: physical instance of a device.
+ * @iio_device: device descriptor(describes channels and attributes)
+ * @get_device_xml: Generate device xml.
+ * @transfer: transfer to/from DMA ARM from/to physical device.
+ * @read_or_write_dev: read/write form/to DMA RAM memory.
+ */
 struct iio_interface_init_par {
 	const char *dev_name;
 	uint16_t num_ch;
@@ -86,7 +96,7 @@ struct iio_interface_init_par {
 struct iio_server_ops {
 	/* Read from from a peripheral device (UART, USB, NETWORK) */
 	ssize_t (*read)(char *buf, size_t len);
-	/* Write to a peripheral device */
+	/* Write to a peripheral device (UART, USB, NETWORK) */
 	ssize_t (*write)(const char *buf, size_t len);
 };
 
