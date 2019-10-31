@@ -184,6 +184,7 @@ struct ad5686_dev {
 	/* GPIO */
 	gpio_desc	*gpio_reset;
 	gpio_desc	*gpio_ldac;
+	gpio_desc	*gpio_gain;
 	/* Device Settings */
 	enum ad5686_type	act_device;
 	uint32_t power_down_mask;
@@ -196,6 +197,7 @@ struct ad5686_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
+	gpio_desc	gpio_gain;
 	int8_t		gpio_reset;
 	int8_t		gpio_ldac;
 	/* Device Settings */
