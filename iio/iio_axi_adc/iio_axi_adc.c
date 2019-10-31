@@ -100,8 +100,8 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
-	ssize_t ret = axi_adc_get_calib_phase(iiod_adc->adc, channel->ch_num, &val,
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	ssize_t ret = axi_adc_get_calib_phase(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
 		return ret;
@@ -126,9 +126,9 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 {
 	int32_t val;
 	ssize_t ret;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
 
-	ret = axi_adc_get_calib_bias(iiod_adc->adc,
+	ret = axi_adc_get_calib_bias(iio_adc->adc,
 				     channel->ch_num,
 				     &val,
 				     NULL);
@@ -150,8 +150,8 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
-	ssize_t ret = axi_adc_get_calib_scale(iiod_adc->adc, channel->ch_num, &val,
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	ssize_t ret = axi_adc_get_calib_scale(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
 		return ret;
@@ -195,8 +195,8 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
-	ssize_t ret = axi_adc_get_sampling_freq(iiod_adc->adc, channel->ch_num,
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	ssize_t ret = axi_adc_get_sampling_freq(iio_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
 	if (ret < 0)
 		return ret;
@@ -218,9 +218,9 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
 
-	ret = axi_adc_set_calib_phase(iiod_adc->adc, channel->ch_num, val, val2);
+	ret = axi_adc_set_calib_phase(iio_adc->adc, channel->ch_num, val, val2);
 	if (ret < 0)
 		return ret;
 
@@ -238,10 +238,10 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
 {
 	int32_t val = str_to_int32(buf);
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
 	ssize_t ret;
 
-	ret = axi_adc_set_calib_bias(iiod_adc->adc,
+	ret = axi_adc_set_calib_bias(iio_adc->adc,
 				     channel->ch_num,
 				     val,
 				     0);
@@ -264,8 +264,8 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct iio_axi_adc *iiod_adc = (struct iio_axi_adc *)device;
-	ssize_t ret = axi_adc_set_calib_scale(iiod_adc->adc, channel->ch_num, val,
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	ssize_t ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
 					      val2);
 	if (ret < 0)
 		return ret;

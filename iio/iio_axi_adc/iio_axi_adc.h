@@ -68,10 +68,10 @@ struct iio_axi_adc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Init axi_adc. */
-ssize_t iio_axi_adc_init(struct iio_axi_adc **tinyiiod_adc,
+ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 			 struct iio_axi_adc_init_par *init);
 /* Free the resources allocated by iio_axi_adc_init(). */
-ssize_t iio_axi_adc_remove(struct iio_axi_adc *tinyiiod_adc);
+ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc);
 /* Create iio_device. */
 struct iio_device *iio_axi_adc_create_device(const char *device_name);
 /* Transfer data from ADC into RAM: "capture" */

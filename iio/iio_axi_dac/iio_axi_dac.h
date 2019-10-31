@@ -69,9 +69,9 @@ struct iio_axi_dac {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 /* Init axi_dac. */
-ssize_t iio_axi_dac_init(struct iio_axi_dac **tinyiiod_dac, struct iio_axi_dac_init_par *init);
+ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_dac, struct iio_axi_dac_init_par *init);
 /* Free the resources allocated by iio_axi_adc_init(). */
-ssize_t iio_axi_dac_remove(struct iio_axi_dac *tinyiiod_dac);
+ssize_t iio_axi_dac_remove(struct iio_axi_dac *iio_dac);
 /* Create iio_device. */
 struct iio_device *iio_axi_dac_create_device(const char *device_name);
 /* Transfer data from RAM to DAC */

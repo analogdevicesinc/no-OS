@@ -46,8 +46,6 @@
 #include "tinyiiod.h"
 #include "util.h"
 #include "error.h"
-#include "iio_axi_adc.h"
-#include "iio_axi_dac.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -358,7 +356,7 @@ static bool iio_supporter_dev(const char *device)
 static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 			     size_t len, bool debug)
 {
-	struct iio_interface *iiod_device;
+	struct iio_interface *iio_device;
 	struct element_info el_info;
 
 	if (!iio_supporter_dev(device))
@@ -369,11 +367,11 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 	el_info.attribute_name = attr;
 	el_info.ch_out = 0; 	/* set to 0, there is no channel here */
 
-	iiod_device = iio_get_interface(device, iio_interfaces);
-	if (!iiod_device)
+	iio_device = iio_get_interface(device, iio_interfaces);
+	if (!iio_device)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, buf, len, iiod_device->iio, 0);
+	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->iio, 0);
 }
 
 /**
@@ -390,7 +388,7 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 			      size_t len, bool debug)
 {
 	struct element_info el_info;
-	struct iio_interface *iiod_device;
+	struct iio_interface *iio_interface;
 
 	if (!iio_supporter_dev(device))
 		return -ENODEV;
@@ -400,11 +398,11 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 	el_info.attribute_name = attr;
 	el_info.ch_out = 0;		/* set to 0, there is no channel here */
 
-	iiod_device = iio_get_interface(device, iio_interfaces);
-	if (!iiod_device)
+	iio_interface = iio_get_interface(device, iio_interfaces);
+	if (!iio_interface)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iiod_device->iio, 1);
+	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iio_interface->iio, 1);
 }
 
 /**
@@ -421,7 +419,7 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 				bool ch_out, const char *attr, char *buf, size_t len)
 {
 	struct element_info el_info;
-	struct iio_interface *iiod_device;
+	struct iio_interface *iio_interface;
 
 	if (!iio_supporter_dev(device))
 		return FAILURE;
@@ -431,11 +429,11 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
 
-	iiod_device = iio_get_interface(device, iio_interfaces);
+	iio_interface = iio_get_interface(device, iio_interfaces);
 	if (!device)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, buf, len, iiod_device->iio, 0);
+	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->iio, 0);
 }
 
 ///**
@@ -452,7 +450,7 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 				 bool ch_out, const char *attr, const char *buf, size_t len)
 {
 	struct element_info el_info;
-	struct iio_interface *iiod_device;
+	struct iio_interface *iio_interface;
 
 	if (!iio_supporter_dev(device))
 		return -ENODEV;
@@ -461,12 +459,12 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 	el_info.channel_name = channel;
 	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
-	iiod_device = iio_get_interface(device, iio_interfaces);
+	iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if (!iiod_device)
+	if (!iio_interface)
 		return -ENOENT;
 
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iiod_device->iio, 1);
+	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iio_interface->iio, 1);
 }
 
 /**
@@ -527,90 +525,6 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 	return SUCCESS;
 }
 
-///**
-// * transfer_dev_to_mem data from ADC into RAM
-// * @param *device name
-// * @param bytes_count
-// * @return bytes_count
-// */
-//static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
-//{
-//	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-//	struct iio_axi_adc *iiod_adc;
-//
-//	if (!iiod_device)
-//		return -ENOENT;
-//	iiod_adc = (struct iio_axi_adc *)(iiod_device->dev_instance);
-//
-//	return iio_axi_adc_transfer_dev_to_mem(iiod_adc, bytes_count);
-//}
-//
-///**
-// * read data from RAM to pbuf, use "capture()" first
-// * @param *device name
-// * @param *buff where data's are stored
-// * @param *offset to the remaining data
-// * @param bytes_count
-// * @return bytes_count
-// */
-//static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
-//			    size_t bytes_count)
-//{
-//	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-//	struct iio_axi_adc *iiod_adc;
-//
-//	if (!iiod_device)
-//		return -ENOENT;
-//
-//	iiod_adc = (struct iio_axi_adc *)(iiod_device->dev_instance);
-//
-//	return iio_axi_adc_read_dev((char*)iiod_adc->adc_ddr_base, pbuf, offset,
-//				    bytes_count);
-//}
-//
-///**
-// * transfer_mem_to_dev write data to DAC
-// * @param *device name
-// * @param *buff
-// * @param bytes_count
-// * @return bytes_count
-// */
-//static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
-//{
-//	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-//	struct iio_axi_dac *iiod_dac;
-//
-//	if (!device)
-//		return -ENOENT;
-//
-//	iiod_dac = (struct iio_axi_dac *)(iiod_device->dev_instance);
-//
-//	return iio_axi_dac_transfer_mem_to_dev(iiod_dac->dmac, iiod_dac->dac_ddr_base,
-//					       bytes_count);
-//}
-//
-///**
-// * write data to RAM
-// * @param *device name
-// * @param *buff
-// * @param *offset in memory, used if some data have been already written
-// * @param bytes_count
-// * @return bytes_count
-// */
-//static ssize_t iio_write_dev(const char *device, const char *buf,
-//			     size_t offset,  size_t bytes_count)
-//{
-//	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-//	struct iio_axi_dac *iiod_dac;
-//
-//	if (!device)
-//		return -ENOENT;
-//
-//	iiod_dac = (struct iio_axi_dac *)(iiod_device->dev_instance);
-//
-//	return iio_axi_dac_write_dev(iiod_dac, buf, offset, bytes_count);
-//}
-
 /**
  * transfer_dev_to_mem data from ADC into RAM
  * @param *device name
@@ -619,10 +533,10 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
  */
 static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
-	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
+	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if (iiod_device->transfer)
-		return iiod_device->transfer(iiod_device->dev_instance, bytes_count);
+	if (iio_interface->transfer)
+		return iio_interface->transfer(iio_interface->dev_instance, bytes_count);
 
 	return -ENOENT;
 }
@@ -638,10 +552,10 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			    size_t bytes_count)
 {
-	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
+	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if(iiod_device->read_or_write_dev)
-		return iiod_device->read_or_write_dev(iiod_device->dev_instance, pbuf, offset, bytes_count);
+	if(iio_interface->read_or_write_dev)
+		return iio_interface->read_or_write_dev(iio_interface->dev_instance, pbuf, offset, bytes_count);
 
 	return -ENOENT;
 }
@@ -655,10 +569,10 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
  */
 static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
-	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
+	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if (iiod_device->transfer)
-		return iiod_device->transfer(iiod_device->dev_instance, bytes_count);
+	if (iio_interface->transfer)
+		return iio_interface->transfer(iio_interface->dev_instance, bytes_count);
 
 	return -ENOENT;
 }
@@ -674,9 +588,9 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset,  size_t bytes_count)
 {
-	struct iio_interface *iiod_device = iio_get_interface(device, iio_interfaces);
-	if(iiod_device->read_or_write_dev)
-		return iiod_device->read_or_write_dev(iiod_device->dev_instance, (char*)buf, offset, bytes_count);
+	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
+	if(iio_interface->read_or_write_dev)
+		return iio_interface->read_or_write_dev(iio_interface->dev_instance, (char*)buf, offset, bytes_count);
 
 	return -ENOENT;
 }

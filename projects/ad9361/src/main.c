@@ -417,12 +417,12 @@ struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
 struct uart_desc *uart_device;
 
-ssize_t iiod_write(const char *buf, size_t len)
+ssize_t iio_uart_write(const char *buf, size_t len)
 {
 	return uart_write(uart_device, (const uint8_t *)buf, len);
 }
 
-ssize_t iiod_read(char *buf, size_t len)
+ssize_t iio_uart_read(char *buf, size_t len)
 {
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
@@ -637,8 +637,8 @@ int main(void)
 	struct iio_axi_dac *iio_axi_dac_inst;
 
 	struct iio_server_ops uart_iio_server_ops = {
-		.read = iiod_read,
-		.write = iiod_write,
+		.read = iio_uart_read,
+		.write = iio_uart_write,
 	};
 
 	struct xil_irq_init_param xil_irq_init_par = {
@@ -735,7 +735,9 @@ int main(void)
 	if (status < 0)
 		return status;
 	while(1) {
-		tinyiiod_read_command(iiod);
+		ret = tinyiiod_read_command(iiod);
+		if(ret < 0)
+			return ret;
 	}
 #endif // UART_INTERFACE
 #endif // USE_LIBIIO
