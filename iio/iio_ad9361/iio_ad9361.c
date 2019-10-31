@@ -68,7 +68,7 @@ static const char * const ad9361_agc_modes[] =
 
 extern const char *ad9361_ensm_states[12];
 
-static const char * const  phy_xml =
+static const char * const  ad9361_phy_xml =
     "<device id=\"ad9361-phy\" name=\"ad9361-phy\" >"
     "<channel id=\"altvoltage1\" name=\"TX_LO\" type=\"output\" >"
     "<attribute name=\"external\" filename=\"out_altvoltage1_TX_LO_external\" />"
@@ -2396,7 +2396,11 @@ struct iio_channel *iio_ad9361_channels[] = {
 
 ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 {
-    *xml = (char*)phy_xml;
+	*xml = calloc(1, strlen(ad9361_phy_xml) + 1);
+	if (!(*xml))
+		return -ENOMEM;
+
+	memcpy(*xml, ad9361_phy_xml, strlen(ad9361_phy_xml));
 
     return SUCCESS;
 }
