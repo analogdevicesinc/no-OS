@@ -775,7 +775,6 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 
 		dac->axi_io_write(address, index * 2, data_i | data_q);
 	}
-	Xil_DCacheFlush();
 
 	return SUCCESS;
 }
