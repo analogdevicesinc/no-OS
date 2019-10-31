@@ -100,9 +100,9 @@ struct iio_interface_init_par {
 };
 
 struct iio_server_ops {
-	/* Read from the input stream */
+	/* Read from from a peripheral device (UART, USB, NETWORK) */
 	ssize_t (*read)(char *buf, size_t len);
-	/* Write to the output stream */
+	/* Write to a peripheral device (UART, USB, NETWORK) */
 	ssize_t (*write)(const char *buf, size_t len);
 };
 
