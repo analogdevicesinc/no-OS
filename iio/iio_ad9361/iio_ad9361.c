@@ -2395,7 +2395,7 @@ static struct iio_attribute iio_attr_calib_mode = {
 	.store = set_calib_mode,
 };
 
-struct iio_attribute *global_attributes[] = {
+static struct iio_attribute *global_attributes[] = {
 	&iio_attr_dcxo_tune_coarse,
 	&iio_attr_rx_path_rates,
 	&iio_attr_trx_rate_governor,
@@ -2417,47 +2417,47 @@ struct iio_attribute *global_attributes[] = {
 	NULL,
 };
 
-struct iio_channel iio_channel_voltage0 = {
+static struct iio_channel iio_channel_voltage0 = {
 	.name = "voltage0",
 	.attributes = voltage_attributes,
 };
 
-struct iio_channel iio_channel_voltage1 = {
+static struct iio_channel iio_channel_voltage1 = {
 	.name = "voltage1",
 	.attributes = voltage_attributes,
 };
 
-struct iio_channel iio_channel_voltage2 = {
+static struct iio_channel iio_channel_voltage2 = {
 	.name = "voltage2",
 	.attributes = voltage_attributes,
 };
 
-struct iio_channel iio_channel_voltage3 = {
+static struct iio_channel iio_channel_voltage3 = {
 	.name = "voltage3",
 	.attributes = voltage_attributes,
 };
 
-struct iio_channel iio_channel_altvoltage0 = {
+static struct iio_channel iio_channel_altvoltage0 = {
 	.name = "altvoltage0",
 	.attributes = altvoltage_attributes,
 };
 
-struct iio_channel iio_channel_altvoltage1 = {
+static struct iio_channel iio_channel_altvoltage1 = {
 	.name = "altvoltage1",
 	.attributes = altvoltage_attributes,
 };
 
-struct iio_channel iio_channel_temp0 = {
+static struct iio_channel iio_channel_temp0 = {
 	.name = "temp0",
 	.attributes = temp0_attributes,
 };
 
-struct iio_channel iio_channel_out = {
+static struct iio_channel iio_channel_out = {
 	.name = "out",
 	.attributes = out_attributes,
 };
 
-struct iio_channel *iio_ad9361_channels[] = {
+static struct iio_channel *iio_ad9361_channels[] = {
 	&iio_channel_voltage0,
 	&iio_channel_voltage1,
 	&iio_channel_voltage2,
