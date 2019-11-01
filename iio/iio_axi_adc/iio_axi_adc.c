@@ -89,11 +89,12 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
 }
 
 /**
- * get_cf_calibphase
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_cf_calibphase.
+ * @param *device instance.
+ * @param *buff where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -115,11 +116,12 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 }
 
 /**
- * get_cf_calibbias
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_cf_calibbias.
+ * @param *device instance.
+ * @param *buff where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -139,11 +141,12 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 }
 
 /**
- * get_cf_calibscale
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_cf_calibscale.
+ * @param *device instance.
+ * @param *buff where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -169,11 +172,12 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 }
 
 /**
- * get_cf_samples_pps
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_cf_samples_pps.
+ * @param *device instance.
+ * @param *buff where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
@@ -185,11 +189,12 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 }
 
 /**
- * get_cf_sampling_frequency
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_cf_sampling_frequency.
+ * @param *device instance.
+ * @param *buff where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
@@ -205,11 +210,12 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * set_cf_calibphase
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_cf_calibphase.
+ * @param *device instance.
+ * @param *buff value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -228,11 +234,12 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 }
 
 /**
- * set_cf_calibbias
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_cf_calibbias.
+ * @param *device instance.
+ * @param *buff value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -252,11 +259,12 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 }
 
 /**
- * set_cf_calibscale
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_cf_calibscale.
+ * @param *device instance.
+ * @param *buff value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -274,11 +282,12 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 }
 
 /**
- * set_cf_samples_pps
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_cf_samples_pps.
+ * @param *device instance.
+ * @param *buff value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
@@ -290,11 +299,12 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 }
 
 /**
- * set_cf_sampling_frequency
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_cf_sampling_frequency.
+ * @param *device instance.
+ * @param *buff value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
@@ -478,9 +488,9 @@ error:
 }
 
 /**
- * Create iio_device
- * @param *device name
- * @return iio_device or NULL, in case of failure
+ * Create iio_device.
+ * @param *device name.
+ * @return iio_device or NULL, in case of failure.
  */
 struct iio_device *iio_axi_adc_create_device(const char *device_name)
 {
@@ -498,10 +508,10 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name)
 }
 
 /**
- * transfer_dev_to_mem data from ADC into RAM
- * @param *device name
- * @param bytes_count
- * @return bytes_count
+ * @brief Transfer_dev_to_mem data from ADC into RAM.
+ * @param *device name.
+ * @param bytes_count.
+ * @return bytes_count.
  */
 ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 {
@@ -521,12 +531,12 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 }
 
 /**
- * Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()"
- * @param *device name
- * @param *buff where data's are stored
- * @param *offset to the remaining data
- * @param bytes_count
- * @return bytes_count
+ * @brief Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()".
+ * @param *device name.
+ * @param *buff where data's are stored.
+ * @param *offset to the remaining data.
+ * @param bytes_count.
+ * @return bytes_count.
  */
 ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count)
