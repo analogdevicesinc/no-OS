@@ -16,8 +16,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "common.h"
+#include "spi.h"
 
-#include "platform_drivers.h"
 #include "parameters.h"
 
 #ifndef ALTERA_PLATFORM
