@@ -43,6 +43,9 @@
 #include <stdio.h>
 #include "adi_hal.h"
 #include "parameters.h"
+#include "spi.h"
+#include "gpio.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/

@@ -43,7 +43,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "app_config.h"
-#include "platform_drivers.h"
 #ifdef ALTERA_PLATFORM
 #include "system.h"
 #else

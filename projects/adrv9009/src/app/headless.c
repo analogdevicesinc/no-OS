@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include "adi_hal.h"
-#include "platform_drivers.h"
+#include "error.h"
 #include "parameters.h"
 #include "util.h"
 #include "ad9528.h"

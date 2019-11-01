@@ -13,7 +13,7 @@
 #ifndef _AD9528_TYPES_H_
 #define _AD9528_TYPES_H_
 
-#include "platform_drivers.h"
+#include <stdint.h>
 
 /* AD9528 SPI Address defines */
 #define AD9528_ADDR_ADI_SPI_CONFIG_A	0x000

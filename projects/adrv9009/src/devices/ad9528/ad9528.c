@@ -12,6 +12,8 @@
 
 #include "parameters.h"
 #include "ad9528.h"
+#include "spi.h"
+#include "error.h"
 
 static uint32_t _desired_time_to_elapse_ms = 0;
 
