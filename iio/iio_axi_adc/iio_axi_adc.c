@@ -223,7 +223,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	ssize_t ret;
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
-	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
+	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
 	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
 
 	ret = axi_adc_set_calib_phase(iio_adc->adc, channel->ch_num, val, val2);
