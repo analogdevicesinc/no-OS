@@ -392,11 +392,12 @@ static const char * const  ad9361_phy_xml =
 /******************************************************************************/
 
 /**
- * get_rf_port_select
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rf_port_select.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_port_select(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -416,11 +417,12 @@ static ssize_t get_rf_port_select(void *device, char *buf, size_t len,
 }
 
 /**
- * get_hardwaregain
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_hardwaregain.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_hardwaregain(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
@@ -458,11 +460,12 @@ static ssize_t get_hardwaregain(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rssi
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rssi.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rssi(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
@@ -486,11 +489,12 @@ static ssize_t get_rssi(void *device, char *buf, size_t len, const struct iio_ch
 }
 
 /**
- * get_hardwaregain_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_hardwaregain_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -508,11 +512,12 @@ static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_sampling_frequency_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_sampling_frequency_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -547,11 +552,12 @@ static ssize_t get_sampling_frequency_available(void *device, char *buf, size_t 
 }
 
 /**
- * get_rf_port_select_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rf_port_select_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_port_select_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -577,11 +583,12 @@ static ssize_t get_rf_port_select_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_filter_fir_en
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_filter_fir_en.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_filter_fir_en(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -601,11 +608,12 @@ static ssize_t get_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * get_sampling_frequency
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_sampling_frequency.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
                                       const struct iio_ch_info *channel)
@@ -621,11 +629,12 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rf_bandwidth_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rf_bandwidth_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_bandwidth_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -638,11 +647,12 @@ static ssize_t get_rf_bandwidth_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rf_bandwidth
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rf_bandwidth.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_bandwidth(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
@@ -655,14 +665,13 @@ static ssize_t get_rf_bandwidth(void *device, char *buf, size_t len,
     }
 }
 
-
-
 /**
- * get_gain_control_mode
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_gain_control_mode.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_control_mode(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -673,11 +682,12 @@ static ssize_t get_gain_control_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rf_dc_offset_tracking_en
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rf_dc_offset_tracking_en.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -693,11 +703,12 @@ static ssize_t get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * get_quadrature_tracking_en
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_quadrature_tracking_en.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_quadrature_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -713,11 +724,12 @@ static ssize_t get_quadrature_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * get_gain_control_mode_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_gain_control_mode_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_control_mode_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -730,11 +742,12 @@ static ssize_t get_gain_control_mode_available(void *device, char *buf, size_t l
 }
 
 /**
- * get_bb_dc_offset_tracking_en
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_bb_dc_offset_tracking_en.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -749,13 +762,13 @@ static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
     return -ENOENT;
 }
 
-
 /**
- * get_frequency_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_frequency_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_frequency_available(void *device, char *buf, size_t len,
                                        const struct iio_ch_info *channel)
@@ -765,11 +778,12 @@ static ssize_t get_frequency_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_fastlock_save
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_fastlock_save.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_save(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -794,11 +808,12 @@ static ssize_t get_fastlock_save(void *device, char *buf, size_t len,
 }
 
 /**
- * get_powerdown
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_powerdown.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_powerdown(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -812,11 +827,12 @@ static ssize_t get_powerdown(void *device, char *buf, size_t len,
 }
 
 /**
- * get_fastlock_load
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_fastlock_load.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -828,11 +844,12 @@ static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
 }
 
 /**
- * get_fastlock_store
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_fastlock_store.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_store(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -844,11 +861,12 @@ static ssize_t get_fastlock_store(void *device, char *buf, size_t len,
 }
 
 /**
- * get_frequency
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_frequency.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_frequency(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -863,11 +881,12 @@ static ssize_t get_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * get_external
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_external.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_external(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
@@ -880,11 +899,12 @@ static ssize_t get_external(void *device, char *buf, size_t len, const struct ii
 }
 
 /**
- * get_fastlock_recall
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_fastlock_recall.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
                                    const struct iio_ch_info *channel)
@@ -896,11 +916,12 @@ static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
 }
 
 /**
- * get_temp0_input
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_temp0_input.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_temp0_input(void *device, char *buf, size_t len,
                                const struct iio_ch_info *channel)
@@ -915,11 +936,12 @@ static ssize_t get_temp0_input(void *device, char *buf, size_t len,
 }
 
 /**
- * get_voltage_filter_fir_en
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_voltage_filter_fir_en.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -938,14 +960,13 @@ static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
     return (ssize_t) snprintf(buf, len, "%d", en_dis_rx && en_dis_tx);
 }
 
-
-
 /**
- * set_hardwaregain_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_hardwaregain_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_hardwaregain_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -957,11 +978,12 @@ static ssize_t set_hardwaregain_available(void *device, char *buf, size_t len,
 }
 
 /**
- * set_hardwaregain
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_hardwaregain.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
@@ -998,11 +1020,12 @@ static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
 }
 
 /**
- * set_rssi
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rssi.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rssi(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
@@ -1013,11 +1036,12 @@ static ssize_t set_rssi(void *device, char *buf, size_t len, const struct iio_ch
 }
 
 /**
- * set_rf_port_select
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rf_port_select.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -1055,11 +1079,12 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
 }
 
 /**
- * set_gain_control_mode
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_gain_control_mode.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -1090,11 +1115,12 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * set_rf_port_select_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rf_port_select_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rf_port_select_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1106,11 +1132,12 @@ static ssize_t set_rf_port_select_available(void *device, char *buf, size_t len,
 }
 
 /**
- * set_rf_bandwidth
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rf_bandwidth.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
                                 const struct iio_ch_info *channel)
@@ -1139,11 +1166,12 @@ static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
 }
 
 /**
- * set_rf_dc_offset_tracking_en
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rf_dc_offset_tracking_en.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1164,11 +1192,12 @@ static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * set_sampling_frequency_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_sampling_frequency_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_sampling_frequency_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1180,11 +1209,12 @@ static ssize_t set_sampling_frequency_available(void *device, char *buf, size_t 
 }
 
 /**
- * set_quadrature_tracking_en
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_quadrature_tracking_en.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_quadrature_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1205,11 +1235,12 @@ static ssize_t set_quadrature_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * set_sampling_frequency
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_sampling_frequency.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
                                       const struct iio_ch_info *channel)
@@ -1225,11 +1256,12 @@ static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * set_gain_control_mode_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_gain_control_mode_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_gain_control_mode_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1260,11 +1292,12 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf, size_t l
 }
 
 /**
- * set_filter_fir_en
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_filter_fir_en.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1289,11 +1322,12 @@ static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * set_rf_bandwidth_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_rf_bandwidth_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_rf_bandwidth_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1305,11 +1339,12 @@ static ssize_t set_rf_bandwidth_available(void *device, char *buf, size_t len,
 }
 
 /**
- * set_bb_dc_offset_tracking_en
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_bb_dc_offset_tracking_en.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1330,11 +1365,12 @@ static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * set_frequency_available
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_frequency_available.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_frequency_available(void *device, char *buf, size_t len,
                                        const struct iio_ch_info *channel)
@@ -1346,11 +1382,12 @@ static ssize_t set_frequency_available(void *device, char *buf, size_t len,
 }
 
 /**
- * set_fastlock_save
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_fastlock_save.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_fastlock_save(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1364,11 +1401,12 @@ static ssize_t set_fastlock_save(void *device, char *buf, size_t len,
 }
 
 /**
- * set_powerdown
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_powerdown.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_powerdown(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -1392,11 +1430,12 @@ static ssize_t set_powerdown(void *device, char *buf, size_t len,
 }
 
 /**
- * set_fastlock_load
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_fastlock_load.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_fastlock_load(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1433,11 +1472,12 @@ static ssize_t set_fastlock_load(void *device, char *buf, size_t len,
 }
 
 /**
- * set_fastlock_store
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_fastlock_store.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_fastlock_store(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -1449,11 +1489,12 @@ static ssize_t set_fastlock_store(void *device, char *buf, size_t len,
 }
 
 /**
- * set_frequency
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_frequency.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_frequency(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -1481,11 +1522,12 @@ static ssize_t set_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * set_external
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_external.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_external(void *device, char *buf, size_t len, const struct iio_ch_info *channel)
 {
@@ -1504,11 +1546,12 @@ static ssize_t set_external(void *device, char *buf, size_t len, const struct ii
 }
 
 /**
- * set_fastlock_recall
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_fastlock_recall.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
                                    const struct iio_ch_info *channel)
@@ -1523,6 +1566,14 @@ static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
     return len;
 }
 
+/**
+ * @brief set_voltage_filter_fir_en.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
+ */
 static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
 {
@@ -1541,11 +1592,12 @@ static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * get_dcxo_tune_coarse
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_dcxo_tune_coarse.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
                                     const struct iio_ch_info *channel)
@@ -1559,11 +1611,12 @@ static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rx_path_rates
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rx_path_rates.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1581,11 +1634,12 @@ static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
 }
 
 /**
- * get_trx_rate_governor
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_trx_rate_governor.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_trx_rate_governor(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -1601,11 +1655,12 @@ static ssize_t get_trx_rate_governor(void *device, char *buf, size_t len,
 }
 
 /**
- * get_calib_mode_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_calib_mode_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calib_mode_available(void *device, char *buf, size_t len,
                                         const struct iio_ch_info *channel)
@@ -1616,11 +1671,12 @@ static ssize_t get_calib_mode_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_xo_correction_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_xo_correction_available.
+ * @param *device instance.
+ * @param *buf where value is stored
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_xo_correction_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1629,11 +1685,11 @@ static ssize_t get_xo_correction_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_gain_table_config
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_gain_table_config.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_table_config(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -1642,11 +1698,12 @@ static ssize_t get_gain_table_config(void *device, char *buf, size_t len,
 }
 
 /**
- * get_dcxo_tune_fine
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_dcxo_tune_fine.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -1660,11 +1717,12 @@ static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
 }
 
 /**
- * get_dcxo_tune_fine_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_dcxo_tune_fine_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1676,11 +1734,12 @@ static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_ensm_mode_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_ensm_mode_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
                                        const struct iio_ch_info *channel)
@@ -1693,11 +1752,12 @@ static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
 }
 
 /**
- * get_multichip_sync
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_multichip_sync.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_multichip_sync(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -1706,11 +1766,12 @@ static ssize_t get_multichip_sync(void *device, char *buf, size_t len,
 }
 
 /**
- * get_rssi_gain_step_error
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_rssi_gain_step_error.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rssi_gain_step_error(void *device, char *buf, size_t len,
                                         const struct iio_ch_info *channel)
@@ -1719,11 +1780,12 @@ static ssize_t get_rssi_gain_step_error(void *device, char *buf, size_t len,
 }
 
 /**
- * get_dcxo_tune_coarse_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_dcxo_tune_coarse_available.
+ * @param *device instance.
+ * @param *buf where value is stored
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1735,11 +1797,12 @@ static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf, size_t le
 }
 
 /**
- * get_tx_path_rates
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_tx_path_rates.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1756,11 +1819,12 @@ static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
 }
 
 /**
- * get_trx_rate_governor_available
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_trx_rate_governor_available.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_trx_rate_governor_available(void *device, char *buf, size_t len,
         const struct iio_ch_info *channel)
@@ -1769,11 +1833,12 @@ static ssize_t get_trx_rate_governor_available(void *device, char *buf, size_t l
 }
 
 /**
- * get_xo_correction
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_xo_correction.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_xo_correction(void *device, char *buf, size_t len,
                                  const struct iio_ch_info *channel)
@@ -1782,11 +1847,12 @@ static ssize_t get_xo_correction(void *device, char *buf, size_t len,
 }
 
 /**
- * get_ensm_mode
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_ensm_mode.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -1804,11 +1870,12 @@ static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * get_filter_fir_config
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_filter_fir_config.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_filter_fir_config(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -1821,11 +1888,12 @@ static ssize_t get_filter_fir_config(void *device, char *buf, size_t len,
 }
 
 /**
- * get_calib_mode
- * @param *buff where value is stored
- * @param len maximum length of value to be stored in buf
- * @param *channel channel properties
- * @return length of chars written in buf, or negative value on failure
+ * @brief get_calib_mode.
+ * @param *device instance.
+ * @param *buf where value is stored.
+ * @param len maximum length of value to be stored in buf.
+ * @param *channel channel properties.
+ * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calib_mode(void *device, char *buf, size_t len,
                               const struct iio_ch_info *channel)
@@ -1841,11 +1909,12 @@ static ssize_t get_calib_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * set_trx_rate_governor
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_trx_rate_governor.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -1865,11 +1934,12 @@ static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
 }
 
 /**
- * set_dcxo_tune_coarse
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_dcxo_tune_coarse.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_dcxo_tune_coarse(void *device, char *buf, size_t len,
                                     const struct iio_ch_info *channel)
@@ -1885,11 +1955,12 @@ static ssize_t set_dcxo_tune_coarse(void *device, char *buf, size_t len,
 }
 
 /**
- * set_dcxo_tune_fine
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_dcxo_tune_fine.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_dcxo_tune_fine(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -1905,11 +1976,12 @@ static ssize_t set_dcxo_tune_fine(void *device, char *buf, size_t len,
 }
 
 /**
- * set_calib_mode
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_calib_mode.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_calib_mode(void *device, char *buf, size_t len,
                               const struct iio_ch_info *channel)
@@ -1943,11 +2015,12 @@ static ssize_t set_calib_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * set_ensm_mode
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_ensm_mode.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
                              const struct iio_ch_info *channel)
@@ -1989,11 +2062,12 @@ static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * set_multichip_sync
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_multichip_sync.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_multichip_sync(void *device, char *buf, size_t len,
                                   const struct iio_ch_info *channel)
@@ -2008,11 +2082,12 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
                                 char *data, uint32_t size);
 
 /**
- * set_filter_fir_config
- * @param *buff value to be written to attribute
- * @param len of the value
- * @param *channel channel properties
- * @return length of chars written to attribute, or negative value on failure
+ * @brief set_filter_fir_config.
+ * @param *device instance.
+ * @param *buf value to be written to attribute.
+ * @param len of the value.
+ * @param *channel channel properties.
+ * @return length of chars written to attribute, or negative value on failure.
  */
 static ssize_t set_filter_fir_config(void *device, char *buf, size_t len,
                                      const struct iio_ch_info *channel)
@@ -2204,7 +2279,7 @@ struct iio_attribute *out_attributes[] = {
 static struct iio_attribute iio_attr_temp0_input = {
 	.name = "input",
 	.show = get_temp0_input,
-	.store = NULL, //
+	.store = NULL,
 };
 
 struct iio_attribute *temp0_attributes[] = {
@@ -2221,7 +2296,7 @@ static struct iio_attribute iio_attr_dcxo_tune_coarse = {
 static struct iio_attribute iio_attr_rx_path_rates = {
 	.name = "rx_path_rates",
 	.show = get_rx_path_rates,
-	.store = NULL, // set_rx_path_rates,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_trx_rate_governor = {
@@ -2233,7 +2308,7 @@ static struct iio_attribute iio_attr_trx_rate_governor = {
 static struct iio_attribute iio_attr_calib_mode_available = {
 	.name = "calib_mode_available",
 	.show = get_calib_mode_available,
-	.store = NULL, // set_calib_mode_available,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_xo_correction_available = {
@@ -2245,7 +2320,7 @@ static struct iio_attribute iio_attr_xo_correction_available = {
 static struct iio_attribute iio_attr_gain_table_config = {
 	.name = "gain_table_config",
 	.show = get_gain_table_config,
-	.store = NULL, // set_gain_table_config,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_dcxo_tune_fine = {
@@ -2275,7 +2350,7 @@ static struct iio_attribute iio_attr_multichip_sync = {
 static struct iio_attribute iio_attr_rssi_gain_step_error = {
 	.name = "rssi_gain_step_error",
 	.show = get_rssi_gain_step_error,
-	.store = NULL, //set_rssi_gain_step_error,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_dcxo_tune_coarse_available = {
@@ -2287,7 +2362,7 @@ static struct iio_attribute iio_attr_dcxo_tune_coarse_available = {
 static struct iio_attribute iio_attr_tx_path_rates = {
 	.name = "tx_path_rates",
 	.show = get_tx_path_rates,
-	.store = NULL, // set_tx_path_rates,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_trx_rate_governor_available = {
@@ -2299,7 +2374,7 @@ static struct iio_attribute iio_attr_trx_rate_governor_available = {
 static struct iio_attribute iio_attr_xo_correction = {
 	.name = "xo_correction",
 	.show = get_xo_correction,
-	.store = NULL, //set_xo_correction,
+	.store = NULL,
 };
 
 static struct iio_attribute iio_attr_ensm_mode = {
@@ -2413,9 +2488,9 @@ ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
 }
 
 /**
- * Create iio_device
- * @param *device name
- * @return iio_device or NULL, in case of failure
+ * Create iio_device.
+ * @param *device name.
+ * @return iio_device or NULL, in case of failure.
  */
 struct iio_device *iio_ad9361_create_device(const char *device_name)
 {
