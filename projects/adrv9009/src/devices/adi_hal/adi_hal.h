@@ -13,8 +13,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "platform_drivers.h"
-
 /*========================================
  * Enums and structures
  *=======================================*/
