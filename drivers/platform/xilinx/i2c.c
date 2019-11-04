@@ -235,7 +235,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 			  desc->slave_address,
 			  data,
 			  bytes_number,
-			  option ? XIIC_STOP : XIIC_REPEATED_START);
+			  option ? XIIC_REPEATED_START : XIIC_STOP);
 		break;
 #endif
 		goto error;
@@ -294,7 +294,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 				desc->slave_address,
 				data,
 				bytes_number,
-				option ? XIIC_STOP : XIIC_REPEATED_START);
+				option ? XIIC_REPEATED_START : XIIC_STOP);
 		if(ret != SUCCESS)
 			goto error;
 
