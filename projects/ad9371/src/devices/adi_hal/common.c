@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include "common.h"
 #include "spi.h"
+#include "gpio.h"
 
 #include "parameters.h"
 
