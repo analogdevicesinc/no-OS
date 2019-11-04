@@ -55,6 +55,7 @@
 #include "xil_printf.h"
 #include "xilinx_platform_drivers.h"
 #include "error.h"
+#include "delay.h"
 
 int main(void)
 {
