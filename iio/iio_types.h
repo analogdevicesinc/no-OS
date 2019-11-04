@@ -69,6 +69,7 @@ struct iio_channel {
 
 struct iio_device {
 	const char *name;
+	uint16_t num_ch;
 	struct iio_channel **channels;
 	struct iio_attribute **attributes;
 };
@@ -87,10 +88,9 @@ struct iio_device {
  */
 struct iio_interface_init_par {
 	const char *dev_name;
-	uint16_t num_ch;
 	void *dev_instance;
 	struct iio_device *iio_device;
-	ssize_t (*get_xml)(char** xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*get_xml)(char** xml, struct iio_device *iio_dev);
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
 	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
 			     size_t bytes_count);
