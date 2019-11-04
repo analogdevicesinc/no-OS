@@ -46,6 +46,7 @@
 #include <inttypes.h>
 #include "util.h"
 #include "error.h"
+#include "delay.h"
 #include "clk_axi_clkgen.h"
 #include "xil_io.h"
 
