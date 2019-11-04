@@ -53,14 +53,11 @@
 #include "axi_dmac.h"
 #include "parameters.h"
 #include "xil_printf.h"
-#include "platform.h"
 #include "xilinx_platform_drivers.h"
 #include "error.h"
 
 int main(void)
 {
-	init_platform();
-
 	struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
 
 	struct spi_init_param hmc7044_spi_param = {
@@ -492,8 +489,6 @@ error_1:
 	hmc7044_remove(hmc7044_device);
 
 	xil_printf("Bye\n");
-
-	cleanup_platform();
 
 	return 0;
 }
