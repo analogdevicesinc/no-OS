@@ -59,6 +59,6 @@
 /* Create iio_device. */
 struct iio_device *iio_ad9361_create_device(const char *device_name);
 /* Get an xml describing ad9361 device */
-ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no);
+ssize_t iio_ad9361_get_xml(char** xml, struct iio_device *iio_dev);
 
 #endif /* IIO_AD9361_H_ */

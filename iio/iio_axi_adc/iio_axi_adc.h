@@ -73,13 +73,15 @@ ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 /* Free the resources allocated by iio_axi_adc_init(). */
 ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc);
 /* Create iio_device. */
-struct iio_device *iio_axi_adc_create_device(const char *device_name);
+struct iio_device *iio_axi_adc_create_device(const char *device_name, uint16_t num_ch);
+/* Delete iio_device. */
+ssize_t iio_axi_adc_delete_device(struct iio_device *iio_adc_device);
 /* Transfer data from ADC into RAM: "capture" */
 ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count);
 /* Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()" */
 ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count);
 /* Get an axi_adc xml */
-ssize_t iio_axi_adc_get_xml(char** xml, const char *device_name, uint8_t ch_no);
+ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev);
 
 #endif /* IIO_AXI_ADC_H_ */

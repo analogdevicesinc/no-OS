@@ -2471,12 +2471,11 @@ static struct iio_channel *iio_ad9361_channels[] = {
 
 /**
  * @brief Get an ad9361 xml.
- * @param xml - xml string.
- * @param device_name.
- * @param ch_no.
+ * @param **xml - xml string.
+ * @param *iio_dev.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_ad9361_get_xml(char** xml, const char *device_name, uint8_t ch_no)
+ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 {
 	*xml = calloc(1, strlen(ad9361_phy_xml) + 1);
 	if (!(*xml))

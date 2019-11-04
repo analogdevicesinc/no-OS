@@ -66,11 +66,10 @@
  */
 struct iio_interface {
 	const char *name;
-	uint16_t num_channels;
 	uint32_t ch_mask;
 	void *dev_instance;
 	struct iio_device *iio;
-	ssize_t (*get_xml)(char **xml, const char *device_name, uint8_t ch_no);
+	ssize_t (*get_xml)(char **xml, struct iio_device *iio);
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
 	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
 			     size_t bytes_count);
@@ -498,7 +497,7 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 		return -ENODEV;
 
 	dev = iio_get_interface(device, iio_interfaces);
-	ch_mask = 0xFFFFFFFF >> (32 - dev->num_channels);
+	ch_mask = 0xFFFFFFFF >> (32 - dev->iio->num_ch);
 
 	if (mask & ~ch_mask)
 		return -ENOENT;
@@ -533,7 +532,7 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 		return -ENODEV;
 
 	dev = iio_get_interface(device, iio_interfaces);
-	ch_mask = 0xFFFFFFFF >> (32 - dev->num_channels);
+	ch_mask = 0xFFFFFFFF >> (32 - dev->iio->num_ch);
 	*mask = ch_mask;
 
 	return SUCCESS;
@@ -653,9 +652,7 @@ static ssize_t iio_get_xml(char **outxml)
 
 	strcpy(xml, header);
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		ret = iio_interfaces->interfaces[i]->get_xml(&tmp_xml,
-				iio_interfaces->interfaces[i]->name,
-				iio_interfaces->interfaces[i]->num_channels);
+		ret = iio_interfaces->interfaces[i]->get_xml(&tmp_xml, iio_interfaces->interfaces[i]->iio);
 		if (ret < 0)
 			goto error;
 
@@ -716,7 +713,6 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 
 	iio_interface->dev_instance = init_par->dev_instance;
 	iio_interface->name = init_par->dev_name;
-	iio_interface->num_channels = init_par->num_ch;
 	iio_interface->iio = init_par->iio_device;
 	iio_interface->get_xml = init_par->get_xml;
 	iio_interface->transfer_dev_to_mem = init_par->transfer_dev_to_mem;

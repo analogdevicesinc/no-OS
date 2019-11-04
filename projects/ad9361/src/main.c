@@ -676,9 +676,8 @@ int main(void)
 
 	struct iio_interface_init_par iio_axi_adc_intf_par = {
 		.dev_name = iio_axi_adc_inst->adc->name,
-		.num_ch = iio_axi_adc_inst->adc->num_channels,
 		.dev_instance = iio_axi_adc_inst,
-		.iio_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name),
+		.iio_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name, iio_axi_adc_inst->adc->num_channels),
 		.get_xml = iio_axi_adc_get_xml,
 		.transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem,
 		.transfer_mem_to_dev = NULL,
@@ -692,9 +691,8 @@ int main(void)
 
 	struct iio_interface_init_par iio_axi_dac_intf_par = {
 		.dev_name = iio_axi_dac_inst->dac->name,
-		.num_ch = iio_axi_dac_inst->dac->num_channels,
 		.dev_instance = iio_axi_dac_inst,
-		.iio_device = iio_axi_dac_create_device(iio_axi_adc_inst->adc->name),
+		.iio_device = iio_axi_dac_create_device(iio_axi_dac_inst->dac->name, iio_axi_dac_inst->dac->num_channels),
 		.get_xml = iio_axi_dac_get_xml,
 		.transfer_dev_to_mem = NULL,
 		.transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev,
@@ -707,7 +705,6 @@ int main(void)
 
 	struct iio_interface_init_par iio_ad9361_intf_par = {
 		.dev_name = ad9361_phy->name,
-		.num_ch = 0,
 		.dev_instance = ad9361_phy,
 		.iio_device = iio_ad9361_create_device(ad9361_phy->name),
 		.get_xml = iio_ad9361_get_xml,

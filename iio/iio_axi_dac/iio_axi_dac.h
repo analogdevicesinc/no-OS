@@ -74,13 +74,15 @@ ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_dac,
 /* Free the resources allocated by iio_axi_adc_init(). */
 ssize_t iio_axi_dac_remove(struct iio_axi_dac *iio_dac);
 /* Create iio_device. */
-struct iio_device *iio_axi_dac_create_device(const char *device_name);
+struct iio_device *iio_axi_dac_create_device(const char *device_name, uint16_t num_ch);
+/* Delete iio_device. */
+ssize_t iio_axi_dac_delete_device(struct iio_device *iio_dac_device);
 /* Transfer data from RAM to DAC */
 ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count);
 /* Write data to RAM */
 ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 			      size_t offset,  size_t bytes_count);
 /* Get an axi_dac xml */
-ssize_t iio_axi_dac_get_xml(char** xml, const char *device_name, uint8_t ch_no);
+ssize_t iio_axi_dac_get_xml(char** xml, struct iio_device *iio_dev);
 
 #endif /* IIO_AXI_DAC_H_ */

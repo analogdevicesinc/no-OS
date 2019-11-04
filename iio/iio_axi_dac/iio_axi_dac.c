@@ -444,21 +444,25 @@ static struct iio_attribute iio_attr_altvoltage_raw = {
 	.show = get_altvoltage_raw,
 	.store = set_altvoltage_raw,
 };
+
 static struct iio_attribute iio_attr_altvoltage_phase = {
 	.name = "phase",
 	.show = get_altvoltage_phase,
 	.store = set_altvoltage_phase,
 };
+
 static struct iio_attribute iio_attr_altvoltage_frequency = {
 	.name = "frequency",
 	.show = get_altvoltage_frequency,
 	.store = set_altvoltage_frequency,
 };
+
 static struct iio_attribute iio_attr_altvoltage_scale = {
 	.name = "scale",
 	.show = get_altvoltage_scale,
 	.store = set_altvoltage_scale,
 };
+
 static struct iio_attribute iio_attr_altvoltage_sampling_frequency = {
 	.name = "sampling_frequency",
 	.show = get_altvoltage_sampling_frequency,
@@ -471,6 +475,7 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 	&iio_attr_voltage_sampling_frequency,
 	NULL,
 };
+
 static struct iio_attribute *iio_altvoltage_attributes[] = {
 	&iio_attr_altvoltage_raw,
 	&iio_attr_altvoltage_phase,
@@ -479,90 +484,6 @@ static struct iio_attribute *iio_altvoltage_attributes[] = {
 	&iio_attr_altvoltage_sampling_frequency,
 	NULL,
 };
-static struct iio_channel iio_channel_voltage0 = {
-	.name = "voltage0",
-	.attributes = iio_voltage_attributes,
-};
-static struct iio_channel iio_channel_voltage1 = {
-	.name = "voltage1",
-	.attributes = iio_voltage_attributes,
-};
-static struct iio_channel iio_channel_voltage2 = {
-	.name = "voltage2",
-	.attributes = iio_voltage_attributes,
-};
-static struct iio_channel iio_channel_voltage3 = {
-	.name = "voltage3",
-	.attributes = iio_voltage_attributes,
-};
-
-static struct iio_channel iio_channel_altvoltage0 = {
-	.name = "altvoltage0",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage1 = {
-	.name = "altvoltage1",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage2 = {
-	.name = "altvoltage2",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage3 = {
-	.name = "altvoltage3",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage4 = {
-	.name = "altvoltage4",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage5 = {
-	.name = "altvoltage5",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage6 = {
-	.name = "altvoltage6",
-	.attributes = iio_altvoltage_attributes,
-};
-static struct iio_channel iio_channel_altvoltage7 = {
-	.name = "altvoltage7",
-	.attributes = iio_altvoltage_attributes,
-};
-
-static struct iio_channel *iio_dac_channels[] = {
-	&iio_channel_voltage0,
-	&iio_channel_voltage1,
-	&iio_channel_voltage2,
-	&iio_channel_voltage3,
-	&iio_channel_altvoltage0,
-	&iio_channel_altvoltage1,
-	&iio_channel_altvoltage2,
-	&iio_channel_altvoltage3,
-	&iio_channel_altvoltage4,
-	&iio_channel_altvoltage5,
-	&iio_channel_altvoltage6,
-	&iio_channel_altvoltage7,
-	NULL,
-};
-
-/**
- * Create iio_device.
- * @param *device name.
- * @return iio_device or NULL, in case of failure.
- */
-struct iio_device *iio_axi_dac_create_device(const char *device_name)
-{
-	struct iio_device *iio_dac_device;
-
-	iio_dac_device = calloc(1, sizeof(struct iio_device));
-	if (!iio_dac_device)
-		return NULL;
-	iio_dac_device->name = device_name;
-	iio_dac_device->channels = iio_dac_channels;
-	iio_dac_device->attributes = NULL; /* no device attribute */
-
-	return iio_dac_device;
-}
 
 /**
  * @brief Transfer data from RAM to DAC.
@@ -726,37 +647,36 @@ static ssize_t iio_axi_dac_channel_xml(struct xml_node *device, uint8_t ch_no,
 
 /**
  * @brief Get an axi_adc xml.
- * @param xml - xml string.
- * @param device_name.
- * @param ch_no.
+ * @param **xml - xml string.
+ * @param *iio_dev.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_axi_dac_get_xml(char** xml, const char *device_name, uint8_t ch_no)
+ssize_t iio_axi_dac_get_xml(char** xml, struct iio_device *iio_dev)
 {
-	struct xml_node *device;
-	struct xml_attribute *att;
 	struct xml_document *document = NULL;
+	struct xml_attribute *att;
+	struct xml_node *device;
 	ssize_t ret;
 
 	ret = xml_create_node(&device, "device");
 	if (ret < 0)
 		goto error;
-	ret = xml_create_attribute(&att, "id", device_name);
+	ret = xml_create_attribute(&att, "id", iio_dev->name);
 	if (ret < 0)
 		goto error;
 	ret = xml_add_attribute(device, att);
 	if (ret < 0)
 		goto error;
-	ret = xml_create_attribute(&att, "name", device_name);
+	ret = xml_create_attribute(&att, "name", iio_dev->name);
 	if (ret < 0)
 		goto error;
 	ret = xml_add_attribute(device, att);
 	if (ret < 0)
 		goto error;
-	ret = iio_axi_dac_channel_xml(device, ch_no, CH_VOLTGE);
+	ret = iio_axi_dac_channel_xml(device, iio_dev->num_ch, CH_VOLTGE);
 	if (ret < 0)
 		goto error;
-	ret = iio_axi_dac_channel_xml(device, ch_no * 2, CH_ALTVOLTGE);
+	ret = iio_axi_dac_channel_xml(device, iio_dev->num_ch * 2, CH_ALTVOLTGE);
 	if (ret < 0)
 		goto error;
 	ret = xml_create_document(&document, device);
@@ -772,4 +692,96 @@ error:
 		xml_delete_node(device);
 
 	return ret;
+}
+
+/**
+ * Delete iio_device.
+ * @param *device name.
+ * @return iio_device or NULL, in case of failure.
+ */
+ssize_t iio_axi_dac_delete_device(struct iio_device *iio_device)
+{
+	uint16_t i = 0;
+
+	if(!iio_device)
+		return SUCCESS;
+
+	if(iio_device->channels) {
+		while (iio_device->channels[i]) {
+			if(iio_device->channels[i]->name)
+				free(iio_device->channels[i]->name);
+			if(iio_device->channels[i])
+				free(iio_device->channels[i]);
+			i++;
+		}
+		free(iio_device->channels);
+	}
+	if(iio_device)
+		free(iio_device);
+
+	return SUCCESS;
+}
+
+/**
+ * Create iio_device.
+ * @param *device name.
+ * @param num_ch.
+ * @return iio_device or NULL, in case of failure.
+ */
+struct iio_device *iio_axi_dac_create_device(const char *device_name, uint16_t num_ch)
+{
+	struct iio_device *iio_device;
+	const uint8_t num_ch_digits = 3;
+	char ch_altvoltage[] = "altvoltage";
+	char ch_voltage[] = "voltage";
+	uint16_t i, len;
+	ssize_t ret;
+
+	iio_device = calloc(1, sizeof(struct iio_device));
+	if (!iio_device)
+		return NULL;
+
+	iio_device->name = device_name;
+	iio_device->num_ch = num_ch;
+	iio_device->attributes = NULL; /* no device attribute */
+	iio_device->channels = calloc(num_ch + num_ch * 2 + 1, sizeof(struct iio_channel *));
+	if (!iio_device->channels)
+		goto error;
+
+	for (i = 0; i < num_ch; i++) {
+		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
+		if (!iio_device->channels[i])
+			goto error;
+		len = strlen(ch_voltage) + num_ch_digits + 1;
+		iio_device->channels[i]->name = calloc(1, len);
+		if (!iio_device->channels[i]->name)
+			goto error;
+		ret = sprintf(iio_device->channels[i]->name, "%s%d", ch_voltage, i);
+		if (ret < 0)
+			goto error;
+		iio_device->channels[i]->attributes = iio_voltage_attributes;
+	}
+
+	for (i = num_ch; i < num_ch + num_ch * 2; i++) {
+		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
+		if (!iio_device->channels[i])
+			goto error;
+		len = strlen(ch_altvoltage) + num_ch_digits + 1;
+		iio_device->channels[i]->name = calloc(1, len);
+		if (!iio_device->channels[i]->name)
+			goto error;
+		ret = sprintf(iio_device->channels[i]->name, "%s%d", ch_altvoltage, i - num_ch);
+		if (ret < 0)
+			goto error;
+		iio_device->channels[i]->attributes = iio_altvoltage_attributes;
+	}
+
+	iio_device->channels[i] = NULL;
+
+	return iio_device;
+
+error:
+	iio_axi_dac_delete_device(iio_device);
+
+	return NULL;
 }
