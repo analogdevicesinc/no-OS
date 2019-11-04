@@ -46,6 +46,7 @@
 #include <xil_io.h>
 #include "util.h"
 #include "error.h"
+#include "delay.h"
 #include "xilinx_transceiver.h"
 #include "axi_adxcvr.h"
 

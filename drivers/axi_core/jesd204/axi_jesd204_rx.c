@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include "error.h"
+#include "delay.h"
 #include "util.h"
 #include "axi_jesd204_rx.h"
 #include "axi_io.h"

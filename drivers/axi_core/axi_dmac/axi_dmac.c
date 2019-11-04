@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include "axi_io.h"
 #include "error.h"
+#include "delay.h"
 #include "axi_dmac.h"
 
 /***************************************************************************//**
