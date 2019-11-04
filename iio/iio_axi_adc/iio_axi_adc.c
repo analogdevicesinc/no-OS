@@ -500,7 +500,8 @@ ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
  * @param num_ch.
  * @return iio_device or NULL, in case of failure.
  */
-struct iio_device *iio_axi_adc_create_device(const char *device_name, uint16_t num_ch)
+struct iio_device *iio_axi_adc_create_device(const char *device_name,
+		uint16_t num_ch)
 {
 	struct iio_device *iio_device;
 	const uint8_t num_ch_digits = 3;
@@ -556,7 +557,7 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac,
-			iio_adc->adc_ddr_base, bytes_count);
+				iio_adc->adc_ddr_base, bytes_count);
 	if (ret < 0)
 		return ret;
 

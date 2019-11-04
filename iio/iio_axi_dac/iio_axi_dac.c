@@ -728,7 +728,8 @@ ssize_t iio_axi_dac_delete_device(struct iio_device *iio_device)
  * @param num_ch.
  * @return iio_device or NULL, in case of failure.
  */
-struct iio_device *iio_axi_dac_create_device(const char *device_name, uint16_t num_ch)
+struct iio_device *iio_axi_dac_create_device(const char *device_name,
+		uint16_t num_ch)
 {
 	struct iio_device *iio_device;
 	const uint8_t num_ch_digits = 3;
@@ -744,7 +745,8 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name, uint16_t n
 	iio_device->name = device_name;
 	iio_device->num_ch = num_ch;
 	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(num_ch + num_ch * 2 + 1, sizeof(struct iio_channel *));
+	iio_device->channels = calloc(num_ch + num_ch * 2 + 1,
+				      sizeof(struct iio_channel *));
 	if (!iio_device->channels)
 		goto error;
 

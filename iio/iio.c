@@ -606,7 +606,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 	if(iio_interface->write_data)
 		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf,
-					offset, bytes_count);
+						 offset, bytes_count);
 
 	return -ENOENT;
 }
@@ -652,7 +652,8 @@ static ssize_t iio_get_xml(char **outxml)
 
 	strcpy(xml, header);
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
-		ret = iio_interfaces->interfaces[i]->get_xml(&tmp_xml, iio_interfaces->interfaces[i]->iio);
+		ret = iio_interfaces->interfaces[i]->get_xml(&tmp_xml,
+				iio_interfaces->interfaces[i]->iio);
 		if (ret < 0)
 			goto error;
 
