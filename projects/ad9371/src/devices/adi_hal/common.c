@@ -16,6 +16,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include "common.h"
+#include "delay.h"
 #include "spi.h"
 
 #include "parameters.h"

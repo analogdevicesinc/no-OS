@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include "adi_hal.h"
 #include "error.h"
+#include "delay.h"
 #include "parameters.h"
 #include "util.h"
 #include "ad9528.h"
