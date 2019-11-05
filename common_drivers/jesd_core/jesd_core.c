@@ -185,8 +185,7 @@ int32_t axi_jesd204_rx_status_read(jesd_core *jesd)
 		ad_printf("SYSREF captured: %s\n",
 			(sysref_status & 1) ? "Yes" : "No");
 		if (sysref_status & 2) {
-			ad_printf("SYSREF alignment ERROR\n",
-				(sysref_status & 2) ? "Yes" : "No");
+			ad_printf("SYSREF alignment ERROR\n");
 		}
 
 	} else {
@@ -229,8 +228,7 @@ int32_t axi_jesd204_tx_status_read(jesd_core *jesd)
 		ad_printf("SYSREF captured: %s\n",
 			(sysref_status & 1) ? "Yes" : "No");
 		if (sysref_status & 2) {
-			ad_printf("SYSREF alignment ERROR\n",
-				(sysref_status & 2) ? "Yes" : "No");
+			ad_printf("SYSREF alignment ERROR\n");
 		}
 	} else {
 		ad_printf("External reset is %s\n",
