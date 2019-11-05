@@ -189,10 +189,12 @@ int32_t spi_init(spi_desc **desc,
 #endif
 #ifdef MICROBLAZE
 	case MICROBLAZE_SPI:
+		dev->base_address = XPAR_SPI_0_BASEADDR;
 		break;
 #endif
 #ifdef NIOS_II
 	case NIOS_II_SPI:
+		dev->base_address = SYS_SPI_BASE;
 		break;
 #endif
 	default:
@@ -271,16 +273,16 @@ int32_t spi_write_and_read(spi_desc *desc,
 
 	uint32_t i;
 
-	IOWR_32DIRECT(SYS_SPI_BASE, 0x0c, 0x400);
-	IOWR_32DIRECT(SYS_SPI_BASE, 0x14, ~(desc->chip_select));
+	IOWR_32DIRECT(desc->base_address, 0x0c, 0x400);
+	IOWR_32DIRECT(desc->base_address, 0x14, ~(desc->chip_select));
 	for (i = 0; i < bytes_number; i++) {
-		while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x40) == 0x00) {}
-		IOWR_32DIRECT(SYS_SPI_BASE, 0x04, *(data + i));
-		while ((IORD_32DIRECT(SYS_SPI_BASE, 0x08) & 0x80) == 0x00) {}
-		*(data + i) = IORD_32DIRECT(SYS_SPI_BASE, 0x00);
+		while ((IORD_32DIRECT(desc->base_address, 0x08) & 0x40) == 0x00) {}
+		IOWR_32DIRECT(desc->base_address, 0x04, *(data + i));
+		while ((IORD_32DIRECT(desc->base_address, 0x08) & 0x80) == 0x00) {}
+		*(data + i) = IORD_32DIRECT(desc->base_address, 0x00);
 	}
-	IOWR_32DIRECT(SYS_SPI_BASE, 0x14, 0x000);
-	IOWR_32DIRECT(SYS_SPI_BASE, 0x0c, 0x000);
+	IOWR_32DIRECT(desc->base_address, 0x14, 0x000);
+	IOWR_32DIRECT(desc->base_address, 0x0c, 0x000);
 
 #endif
 
@@ -288,16 +290,16 @@ int32_t spi_write_and_read(spi_desc *desc,
 
 	uint32_t i;
 
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), desc->chip_select);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60),
+	Xil_Out32((desc->base_address + 0x70), desc->chip_select);
+	Xil_Out32((desc->base_address + 0x60),
 		  (0x086 | (desc->cpol<<3) | (desc->cpha<<4)));
 	for (i = 0; i < bytes_number; i++) {
-		Xil_Out32((XPAR_SPI_0_BASEADDR + 0x68), *(data + i));
-		while ((Xil_In32(XPAR_SPI_0_BASEADDR + 0x64) & 0x1) == 0x1) {}
-		*(data + i) = Xil_In32(XPAR_SPI_0_BASEADDR + 0x6c) & 0xff;
+		Xil_Out32((desc->base_address + 0x68), *(data + i));
+		while ((Xil_In32(desc->base_address + 0x64) & 0x1) == 0x1) {}
+		*(data + i) = Xil_In32(desc->base_address + 0x6c) & 0xff;
 	}
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x70), 0xff);
-	Xil_Out32((XPAR_SPI_0_BASEADDR + 0x60),
+	Xil_Out32((desc->base_address + 0x70), 0xff);
+	Xil_Out32((desc->base_address + 0x60),
 		  (0x186 | (desc->cpol<<3) | (desc->cpha<<4)));
 
 #endif
