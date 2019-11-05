@@ -68,8 +68,8 @@ static const char *axi_jesd204_rx_lane_status_label[4] = {
 * @brief jesd_read
 *******************************************************************************/
 int32_t jesd_read(jesd_core *jesd,
-					uint32_t reg_addr,
-					uint32_t *reg_data)
+		  uint32_t reg_addr,
+		  uint32_t *reg_data)
 {
 	*reg_data = ad_reg_read((jesd->base_address + reg_addr));
 
@@ -80,8 +80,8 @@ int32_t jesd_read(jesd_core *jesd,
 * @brief jesd_write
 *******************************************************************************/
 int32_t jesd_write(jesd_core *jesd,
-					uint32_t reg_addr,
-					uint32_t reg_data)
+		   uint32_t reg_addr,
+		   uint32_t reg_data)
 {
 	ad_reg_write((jesd->base_address + reg_addr), reg_data);
 
@@ -96,7 +96,7 @@ int32_t jesd_setup(jesd_core *jesd)
 {
 	jesd_write(jesd, JESD204_REG_LINK_DISABLE, 1);
 	jesd_write(jesd, JESD204_REG_LINK_CONF0, (((jesd->octets_per_frame-1) << 16) |
-		((jesd->frames_per_multiframe*jesd->octets_per_frame)-1)));
+			((jesd->frames_per_multiframe*jesd->octets_per_frame)-1)));
 	jesd_write(jesd, JESD204_REG_LINK_DISABLE, 0);
 	mdelay(100);
 	return(0);
@@ -170,27 +170,27 @@ int32_t axi_jesd204_rx_status_read(jesd_core *jesd)
 	ret |= jesd_read(jesd, JESD204_REG_LINK_CLK_RATIO, &clock_ratio);
 
 	ad_printf("Rx link is %s\n",
-		(link_disabled & 0x1) ? "disabled" : "enabled");
+		  (link_disabled & 0x1) ? "disabled" : "enabled");
 
 	if (clock_ratio == 0) {
 		ad_printf("Measured Link Clock: off\n");
 	} else {
 		ad_printf("Measured Link Clock: %d MHz\n",
-			(clock_ratio * 100 + 0x7fff) >> 16);
+			  (clock_ratio * 100 + 0x7fff) >> 16);
 	}
 
 	if (!link_disabled) {
 		ad_printf("Link status: %s\n",
-			axi_jesd204_rx_link_status_label[link_status & 0x3]);
+			  axi_jesd204_rx_link_status_label[link_status & 0x3]);
 		ad_printf("SYSREF captured: %s\n",
-			(sysref_status & 1) ? "Yes" : "No");
+			  (sysref_status & 1) ? "Yes" : "No");
 		if (sysref_status & 2) {
 			ad_printf("SYSREF alignment ERROR\n");
 		}
 
 	} else {
 		ad_printf("External reset is %s\n",
-			(link_disabled & 0x2) ? "asserted" : "deasserted");
+			  (link_disabled & 0x2) ? "asserted" : "deasserted");
 	}
 
 	return ret;
@@ -213,26 +213,26 @@ int32_t axi_jesd204_tx_status_read(jesd_core *jesd)
 	ret |= jesd_read(jesd, JESD204_REG_LINK_CLK_RATIO, &clock_ratio);
 
 	ad_printf("Tx link is %s\n",
-		(link_disabled & 0x1) ? "disabled" : "enabled");
+		  (link_disabled & 0x1) ? "disabled" : "enabled");
 
 	if (clock_ratio == 0) {
 		ad_printf("Measured Link Clock: off\n");
 	} else {
 		ad_printf("Measured Link Clock: %d MHz\n",
-			(clock_ratio * 100 + 0x7fff) >> 16);;
+			  (clock_ratio * 100 + 0x7fff) >> 16);;
 	}
 
 	if (!link_disabled) {
 		ad_printf("Link status: %s\n",
-			axi_jesd204_tx_link_status_label[link_status & 0x3]);
+			  axi_jesd204_tx_link_status_label[link_status & 0x3]);
 		ad_printf("SYSREF captured: %s\n",
-			(sysref_status & 1) ? "Yes" : "No");
+			  (sysref_status & 1) ? "Yes" : "No");
 		if (sysref_status & 2) {
 			ad_printf("SYSREF alignment ERROR\n");
 		}
 	} else {
 		ad_printf("External reset is %s\n",
-			(link_disabled & 0x2) ? "asserted" : "deasserted");
+			  (link_disabled & 0x2) ? "asserted" : "deasserted");
 	}
 
 	return ret;
@@ -253,10 +253,10 @@ int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane)
 	ret |= jesd_read(jesd, JESD204_RX_REG_LANE_STATUS(lane), &lane_status);
 
 	ad_printf("CGS state: %s\n",
-		axi_jesd204_rx_lane_status_label[lane_status & 0x3]);
+		  axi_jesd204_rx_lane_status_label[lane_status & 0x3]);
 
 	ad_printf("Initial Frame Synchronization: %s\n",
-				(lane_status & BIT(4)) ? "Yes" : "No");
+		  (lane_status & BIT(4)) ? "Yes" : "No");
 
 	if (!(lane_status & BIT(4)))
 		return ret;
@@ -267,11 +267,11 @@ int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane)
 
 	ret |= jesd_read(jesd, JESD204_RX_REG_LANE_LATENCY(lane), &lane_latency);
 	ad_printf("Lane Latency: %d Multi-frames and %d Octets\n",
-			lane_latency / octets_per_multiframe,
-			lane_latency % octets_per_multiframe);
+		  lane_latency / octets_per_multiframe,
+		  lane_latency % octets_per_multiframe);
 
 	ad_printf("Initial Lane Alignment Sequence: %s\n",
-				(lane_status & BIT(5)) ? "Yes" : "No");
+		  (lane_status & BIT(5)) ? "Yes" : "No");
 
 	if (!(lane_status & BIT(5)))
 		return ret;
@@ -282,36 +282,36 @@ int32_t axi_jesd204_rx_laneinfo_read(jesd_core *jesd, uint32_t lane)
 	ret |= jesd_read(jesd, JESD204_RX_REG_ILAS(lane, 3), &val[3]);
 
 	ad_printf("DID: %d, BID: %d, LID: %d, L: %d, SCR: %d, F: %d\n",
-		(val[0] >> 16) & 0xff,
-		(val[0] >> 24) & 0xf,
-		(val[1] >> 0) & 0x1f,
-		(val[1] >> 8) & 0x1f,
-		(val[1] >> 15) & 0x1,
-		(val[1] >> 16) & 0xff
-	);
+		  (val[0] >> 16) & 0xff,
+		  (val[0] >> 24) & 0xf,
+		  (val[1] >> 0) & 0x1f,
+		  (val[1] >> 8) & 0x1f,
+		  (val[1] >> 15) & 0x1,
+		  (val[1] >> 16) & 0xff
+		 );
 
 	ad_printf("K: %d, M: %d, N: %d, CS: %d, N': %d, S: %d, HD: %d\n",
-		(val[1] >> 24) & 0x1f,
-		(val[2] >> 0) & 0xff,
-		(val[2] >> 8) & 0x1f,
-		(val[2] >> 14) & 0x3,
-		(val[2] >> 16) & 0x1f,
-		(val[2] >> 24) & 0x1f,
-		(val[3] >> 7) & 0x1
-	);
+		  (val[1] >> 24) & 0x1f,
+		  (val[2] >> 0) & 0xff,
+		  (val[2] >> 8) & 0x1f,
+		  (val[2] >> 14) & 0x3,
+		  (val[2] >> 16) & 0x1f,
+		  (val[2] >> 24) & 0x1f,
+		  (val[3] >> 7) & 0x1
+		 );
 
 	ad_printf("FCHK: 0x%X, CF: %d\n",
-		(val[3] >> 24) & 0xff,
-		(val[3] >> 0) & 0x1f
-	);
+		  (val[3] >> 24) & 0xff,
+		  (val[3] >> 0) & 0x1f
+		 );
 
 	ad_printf("ADJCNT: %d, PHADJ: %d, ADJDIR: %d, JESDV: %d, SUBCLASS: %d\n",
-		(val[0] >> 28) & 0xff,
-		(val[1] >> 5) & 0x1,
-		(val[1] >> 6) & 0x1,
-		(val[2] >> 29) & 0x7,
-		(val[2] >> 21) & 0x7
-	);
+		  (val[0] >> 28) & 0xff,
+		  (val[1] >> 5) & 0x1,
+		  (val[1] >> 6) & 0x1,
+		  (val[2] >> 29) & 0x7,
+		  (val[2] >> 21) & 0x7
+		 );
 
 	return ret;
 }
