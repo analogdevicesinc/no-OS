@@ -18,6 +18,7 @@
 #include "common.h"
 #include "spi.h"
 #include "gpio.h"
+#include "delay.h"
 
 #include "parameters.h"
 
