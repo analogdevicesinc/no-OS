@@ -95,7 +95,6 @@ struct axi_dmac_init tx_dmac_init = {
 };
 
 AD9361_InitParam default_init_param = {
-	"ad9361-phy",
 	/* Device selection */
 	ID_AD9361,	// dev_sel
 	/* Identification number */
@@ -702,11 +701,11 @@ int main(void)
 	ret = iio_register(&iio_axi_dac_intf_par);
 	if(ret < 0)
 		return ret;
-
+	char dev_name[] = "ad9361-phy";
 	struct iio_interface_init_par iio_ad9361_intf_par = {
-		.dev_name = ad9361_phy->name,
+		.dev_name = dev_name,
 		.dev_instance = ad9361_phy,
-		.iio_device = iio_ad9361_create_device(ad9361_phy->name),
+		.iio_device = iio_ad9361_create_device(dev_name),
 		.get_xml = iio_ad9361_get_xml,
 		.transfer_dev_to_mem = NULL,
 		.transfer_mem_to_dev = NULL,

@@ -48,7 +48,6 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 typedef struct {
-	char *name;
 	/* Device selection */
 	enum dev_id	dev_sel;
 	/* Identification number */

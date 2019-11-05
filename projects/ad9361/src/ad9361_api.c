@@ -93,7 +93,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	if (!phy->spi) {
 		return -ENOMEM;
 	}
-	phy->name = init_param->name;
 	phy->spi = init_param->spi;
 	phy->gpio_desc_device_id = init_param->gpio_desc_device_id;
 	phy->gpio_desc_resetb = init_param->gpio_desc_resetb;
