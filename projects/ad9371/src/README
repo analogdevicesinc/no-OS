@@ -30,8 +30,8 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_rx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
-	cp ../../drivers/util/util.c devices/adi_hal/
-	cp ../../drivers/util/util.h devices/adi_hal/
+	cp ../../../util/util.c devices/adi_hal/
+	cp ../../../include/util.h devices/adi_hal/
 #else
 	cp ../../../include/axi_io.h devices/adi_hal/
 	cp ../../../include/error.h devices/adi_hal/
@@ -59,6 +59,6 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.h devices/adi_hal/
-	cp ../../drivers/util/util.c devices/adi_hal/
-	cp ../../drivers/util/util.h devices/adi_hal/
+	cp ../../../util/util.c devices/adi_hal/
+	cp ../../../include/util.h devices/adi_hal/
 #endif

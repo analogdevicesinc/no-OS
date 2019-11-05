@@ -11,8 +11,8 @@
 	cp ../../../drivers/platform/xilinx/spi.c ./
 	cp ../../../drivers/platform/xilinx/gpio.c ./
 	cp ../../../drivers/platform/xilinx/delay.c ./
-	cp ../../drivers/util/util.c ./
-	cp ../../drivers/util/util.h ./
+	cp ../../../util/util.c ./
+	cp ../../../include/util.h ./
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.h ./
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.c ./
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h ./
