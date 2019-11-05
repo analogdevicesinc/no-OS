@@ -49,6 +49,9 @@
 #ifdef XPAR_XSCUGIC_NUM_INSTANCES
 #include <xscugic.h>
 #endif
+#ifdef XPAR_XINTC_NUM_INSTANCES
+#include <xintc.h>
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -64,51 +67,83 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 		      const struct irq_init_param *param)
 {
 	int32_t status;
-	XScuGic_Config *IntcConfig;
-	XScuGic *gic;
+	struct irq_desc *descriptor;
 	struct xil_irq_desc *xil_dev;
+	void *config;
 
-	struct irq_desc *descriptor = calloc(1, sizeof(struct irq_desc));
-	if (!descriptor)
+	descriptor = (struct irq_desc *)calloc(1, sizeof *descriptor);
+	if(!descriptor)
 		return FAILURE;
+	xil_dev = (struct xil_irq_desc *)calloc(1, sizeof *xil_dev);
+	if(!xil_dev) {
+		free(descriptor);
+		return FAILURE;
+	}
 
-	descriptor->extra = calloc(1, sizeof(struct xil_irq_desc));
-	if(!(descriptor->extra))
-		goto error_free_descriptor;
+	Xil_ExceptionInit();
 
-	gic = calloc(1, sizeof(XScuGic));
-	if (!gic)
-		goto error_free_extra;
+	descriptor->irq_id = param->irq_id;
+	descriptor->extra = xil_dev;
+	xil_dev->type = ((struct xil_irq_init_param *)param->extra)->type;
 
-	xil_dev = descriptor->extra;
-	xil_dev->instance = gic;
-	/* Initialize the interrupt controller driver */
-	IntcConfig = XScuGic_LookupConfig(param->irq_id);
-	if (NULL == IntcConfig)
-		goto error_free_gic;
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		xil_dev->instance = calloc(1, sizeof(XScuGic));
+		if(!xil_dev->instance)
+			goto error;
 
-	status = XScuGic_CfgInitialize(gic, IntcConfig,
-				       IntcConfig->CpuBaseAddress);
-	if (status != XST_SUCCESS)
-		goto error_free_gic;
+		config = XScuGic_LookupConfig(descriptor->irq_id);
+		if(!config)
+			goto ps_error;
 
-	/*
-	 * Connect the interrupt controller interrupt handler to the
-	 * hardware interrupt handling logic in the processor.
-	 */
-	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
-				     (Xil_ExceptionHandler) XScuGic_InterruptHandler,
-				     gic);
+		status = XScuGic_CfgInitialize(xil_dev->instance, config,
+					       ((XScuGic_Config *)config)->CpuBaseAddress);
+		if (status != SUCCESS)
+			goto ps_error;
+
+		Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
+					     (Xil_ExceptionHandler)XScuGic_InterruptHandler,
+					     xil_dev->instance);
+
+		break;
+ps_error:
+		free(xil_dev->instance);
+#endif
+		goto error;
+	case IRQ_PL:
+#ifdef XINTC_H
+		xil_dev->instance = calloc(1, sizeof(XIntc));
+		if(!xil_dev->instance)
+			goto error;
+
+		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_id);
+		if(status != SUCCESS)
+			goto pl_error;
+
+		status = XIntc_Start(xil_dev->instance, XIN_REAL_MODE);
+		if(status != SUCCESS)
+			goto pl_error;
+
+		break;
+pl_error:
+		free(xil_dev->instance);
+#endif
+		goto error;
+	default:
+		goto error;
+
+		break;
+	}
+
 	*desc = descriptor;
 
 	return SUCCESS;
 
-error_free_gic:
-	free(gic);
-error_free_extra:
-	free(descriptor->extra);
-error_free_descriptor:
+error:
+	free(xil_dev);
 	free(descriptor);
+
 	return FAILURE;
 }
 
@@ -145,7 +180,22 @@ int32_t irq_global_disable(struct irq_desc *desc)
 int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Enable(xil_dev->instance, irq_id);
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		XScuGic_Enable(xil_dev->instance, irq_id);
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		XIntc_Enable(xil_dev->instance, irq_id);
+#endif
+		break;
+	default:
+
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }
@@ -159,7 +209,22 @@ int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Disable(xil_dev->instance, irq_id);
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		XScuGic_Disable(xil_dev->instance, irq_id);
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		XIntc_Disable(xil_dev->instance, irq_id);
+#endif
+		break;
+	default:
+
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }
@@ -175,16 +240,26 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance)
 {
-	int32_t status;
 	struct xil_irq_desc *xil_dev = desc->extra;
-	status = XScuGic_Connect(xil_dev->instance, irq_id,
-				 irq_handler,
-				 dev_instance);
-	if (status != XST_SUCCESS) {
-		return FAILURE;
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		return XScuGic_Connect(xil_dev->instance, irq_id, irq_handler,
+				       dev_instance);
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		return XIntc_Connect(xil_dev->instance, irq_id, irq_handler,
+				     dev_instance);
+#endif
+		break;
+	default:
+		break;
 	}
 
-	return SUCCESS;
+	return FAILURE;
 }
 
 /**
@@ -196,7 +271,22 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
-	XScuGic_Disconnect(xil_dev->instance, irq_id);
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		XScuGic_Disconnect(xil_dev->instance, irq_id);
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		XIntc_Disconnect(xil_dev->instance, irq_id);
+#endif
+		break;
+	default:
+
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }
