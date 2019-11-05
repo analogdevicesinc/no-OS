@@ -49,6 +49,7 @@
 #include "parameters.h"
 #include "util.h"
 #include "error.h"
+#include "delay.h"
 #ifdef ALTERA_PLATFORM
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"

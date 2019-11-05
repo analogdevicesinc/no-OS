@@ -46,6 +46,7 @@
 #include "ad9361_parameters.h"
 #include "spi.h"
 #include "gpio.h"
+#include "delay.h"
 #ifdef XILINX_PLATFORM
 #include "xilinx_platform_drivers.h"
 #include <xil_cache.h>
