@@ -731,6 +731,50 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 }
 
 /**
+ * @brief Unregister interface.
+ * @param *device_name - String containing device name.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_unregister(const char *device_name)
+{
+	struct iio_interface *iio_interface = iio_get_interface(device_name, iio_interfaces);
+	struct iio_interfaces *interfaces = NULL;
+	int16_t i, j;
+
+	if (!iio_interface)
+		return FAILURE;
+
+	interfaces = calloc(1, sizeof(struct iio_interfaces));
+	if (!interfaces)
+		return FAILURE;
+
+	interfaces->interfaces = calloc(iio_interfaces->num_interfaces - 1, sizeof(struct iio_interface*));
+	if (!interfaces->interfaces)
+	{
+		free(interfaces);
+		return FAILURE;
+	}
+
+	for(i = 0, j = 0; j < iio_interfaces->num_interfaces; i++, j++)
+	{
+		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name))
+		{
+			free(iio_interfaces->interfaces[j]);
+			/* skip this interface */
+			j++;
+			continue;
+		}
+		interfaces->interfaces[i] = iio_interfaces->interfaces[j];
+	}
+
+	interfaces->num_interfaces = iio_interfaces->num_interfaces - 1;
+	free(iio_interfaces);
+	iio_interfaces = interfaces;
+
+	return SUCCESS;
+}
+
+/**
  * @brief Set communication ops and read/write ops that will be called from
  * "libtinyiiod".
  * @param **iiod - Structure containing new tinyiiod instance.

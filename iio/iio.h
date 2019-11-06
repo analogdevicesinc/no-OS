@@ -62,5 +62,7 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 ssize_t iio_remove(struct tinyiiod *iiod);
 /* Register interface. */
 ssize_t iio_register(struct iio_interface_init_par *init_par);
+/* Unregister interface. */
+ssize_t iio_unregister(const char *device_name);
 
 #endif /* IIO_H_ */
