@@ -737,9 +737,10 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
  */
 ssize_t iio_unregister(const char *device_name)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device_name, iio_interfaces);
-	struct iio_interfaces *interfaces = NULL;
-	int16_t i, j;
+	struct iio_interface *iio_interface = iio_get_interface(device_name,
+					      iio_interfaces);
+	struct iio_interfaces *interfaces;
+	int16_t i, deleted = 0;
 
 	if (!iio_interface)
 		return FAILURE;
@@ -748,23 +749,20 @@ ssize_t iio_unregister(const char *device_name)
 	if (!interfaces)
 		return FAILURE;
 
-	interfaces->interfaces = calloc(iio_interfaces->num_interfaces - 1, sizeof(struct iio_interface*));
-	if (!interfaces->interfaces)
-	{
+	interfaces->interfaces = calloc(iio_interfaces->num_interfaces - 1,
+					sizeof(struct iio_interface*));
+	if (!interfaces->interfaces) {
 		free(interfaces);
 		return FAILURE;
 	}
 
-	for(i = 0, j = 0; j < iio_interfaces->num_interfaces; i++, j++)
-	{
-		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name))
-		{
-			free(iio_interfaces->interfaces[j]);
-			/* skip this interface */
-			j++;
+	for(i = 0; i < iio_interfaces->num_interfaces; i++) {
+		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name)) {
+			free(iio_interfaces->interfaces[i]);
+			deleted = 1;
 			continue;
 		}
-		interfaces->interfaces[i] = iio_interfaces->interfaces[j];
+		interfaces->interfaces[i - deleted] = iio_interfaces->interfaces[i];
 	}
 
 	interfaces->num_interfaces = iio_interfaces->num_interfaces - 1;
