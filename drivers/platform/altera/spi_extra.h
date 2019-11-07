@@ -1,6 +1,5 @@
 /***************************************************************************//**
- *   @file   altera_platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
+ *   @file   spi_extra.h
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,48 +36,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef ALTERA_PLATFORM_DRIVERS_H_
-#define ALTERA_PLATFORM_DRIVERS_H_
+#ifndef SPI_EXTRA_H_
+#define SPI_EXTRA_H_
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum i2c_type {
-	ALTERA_I2C
-} i2c_type;
-
-typedef struct altera_i2c_init_param {
-	enum i2c_type	type;
-	uint32_t	id;
-} altera_i2c_init_param;
-
-typedef struct altera_i2c_desc {
-	enum i2c_type	type;
-	uint32_t	id;
-} altera_i2c_desc;
-
-typedef enum spi_type {
-	ALTERA_SPI
+enum spi_type {
+	NIOS_II_SPI
 } spi_type;
 
-typedef struct altera_spi_init_param {
+struct altera_spi_init_param {
 	enum spi_type	type;
-	uint32_t	id;
+	uint32_t	device_id;
+	uint32_t	base_address;
 } altera_spi_init_param;
 
-typedef struct altera_spi_desc {
+struct altera_spi_desc {
 	enum spi_type	type;
-	uint32_t		id;
+	uint32_t		device_id;
+	uint32_t	base_address;
 } altera_spi_desc;
 
-typedef enum gpio_type {
-	ALTERA_GPIO
-} gpio_type;
-
-typedef struct altera_gpio_desc {
-	enum gpio_type	type;
-	uint32_t		id;
-} altera_gpio_desc;
-
-#endif /* ALTERA_PLATFORM_DRIVERS_H_ */
+#endif /* SPI_EXTRA_H_ */

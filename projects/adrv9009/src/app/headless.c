@@ -20,6 +20,8 @@
 
 #include <stdio.h>
 #include "adi_hal.h"
+#include "gpio.h"
+#include "spi.h"
 #include "error.h"
 #include "delay.h"
 #include "parameters.h"
@@ -28,7 +30,8 @@
 #ifdef ALTERA_PLATFORM
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"
-#include "altera_platform_drivers.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
 #else
 #include "xil_cache.h"
 #include "clk_axi_clkgen.h"
@@ -68,6 +71,11 @@ int main(void)
 	};
 	ad9528Device_t *clockAD9528_device = &clockAD9528_;
 #ifdef ALTERA_PLATFORM
+	struct altera_spi_init_param ad9528_spi_param = {
+		.device_id = 0, 
+		.base_address = SPI_BASEADDR
+		};
+	clockAD9528_.extra = &ad9528_spi_param;
 	struct altera_a10_fpll_init rx_device_clk_pll_init = {
 		"rx_device_clk_pll",
 		RX_A10_FPLL_BASEADDR,
@@ -249,8 +257,13 @@ int main(void)
 	struct adi_hal hal;
 #ifndef ALTERA_PLATFORM
 	xil_spi_init_param hal_spi_param = {.id = 0, .flags = SPI_CS_DECODE};
-	hal.extra = &hal_spi_param;
+#else
+	struct altera_spi_init_param hal_spi_param = {
+		.type = NIOS_II_SPI, 
+		.base_address = SPI_BASEADDR
+		};
 #endif
+	hal.extra = &hal_spi_param;
 	taliseDevice_t talDev = {
 		.devHalInfo = &hal,
 		.devStateInfo = {0}

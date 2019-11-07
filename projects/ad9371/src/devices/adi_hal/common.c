@@ -25,7 +25,8 @@
 #ifndef ALTERA_PLATFORM
 #include "xilinx_platform_drivers.h"
 #else
-#include "altera_platform_drivers.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
 #endif
 
 ADI_LOGLEVEL CMB_LOGLEVEL = ADIHAL_LOG_NONE;
@@ -51,7 +52,11 @@ int32_t platform_init(void)
 	struct xil_spi_init_param xil_param = {.id = SPI_DEVICE_ID, .flags = SPI_CS_DECODE};
 	spi_param.extra = &xil_param;
 #else
-	struct altera_spi_init_param altera_param = {.id = SPI_DEVICE_ID};
+	struct altera_spi_init_param altera_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = NIOS_II_GPIO,
+		.base_address = SPI_BASEADDR
+	};
 	spi_param.extra = &altera_param;
 #endif
 	status |= spi_init(&spi_ad_desc, &spi_param);

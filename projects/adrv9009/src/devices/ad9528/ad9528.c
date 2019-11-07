@@ -13,6 +13,7 @@
 #include "parameters.h"
 #include "ad9528.h"
 #include "spi.h"
+#include "gpio.h"
 #include "error.h"
 #include "delay.h"
 
