@@ -45,6 +45,7 @@
 #include <string.h>
 #include <errno.h>
 #include "iio_ad9361.h"
+#include "ad9361_api.h"
 #include "util.h"
 
 /******************************************************************************/

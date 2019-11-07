@@ -45,7 +45,6 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "ad9361_api.h"
 #include "iio.h"
 
 /******************************************************************************/
