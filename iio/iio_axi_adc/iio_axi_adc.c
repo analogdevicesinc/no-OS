@@ -1,6 +1,7 @@
 /***************************************************************************//**
  *   @file   iio_axi_adc.c
- *   @brief  Implementation of iio_axi_adc
+ *   @brief  Implementation of iio_axi_adc.
+ *   This module is a wrapper over "axi_adc", and it is used by "iio".
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -58,8 +59,8 @@
 
 /**
  * @brief Init and create iio_axi_adc.
- * @param iio_axi_adc - pointer to iio_axi_adc.
- * @param init - init parameters.
+ * @param iio_axi_adc - Pointer to iio_axi_adc.
+ * @param init - Init parameters.
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
@@ -78,7 +79,7 @@ ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 
 /**
  * @brief Free the resources allocated by iio_axi_adc_init().
- * @param iio_axi_adc - pointer to iio_axi_adc.
+ * @param iio_axi_adc - Pointer to iio_axi_adc.
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
@@ -90,12 +91,13 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
 
 /**
  * @brief get_cf_calibphase.
- * @param *device instance.
- * @param *buff where value is stored.
- * @param len maximum length of value to be stored in buf.
- * @param *channel channel properties.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
+
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
 {
@@ -117,10 +119,10 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_calibbias.
- * @param *device instance.
- * @param *buff where value is stored.
- * @param len maximum length of value to be stored in buf.
- * @param *channel channel properties.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibbias(void *device, char *buf, size_t len,
@@ -142,10 +144,10 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_calibscale.
- * @param *device instance.
- * @param *buff where value is stored.
- * @param len maximum length of value to be stored in buf.
- * @param *channel channel properties.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibscale(void *device, char *buf, size_t len,
@@ -173,10 +175,10 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_samples_pps.
- * @param *device instance.
- * @param *buff where value is stored.
- * @param len maximum length of value to be stored in buf.
- * @param *channel channel properties.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_samples_pps(void *device, char *buf, size_t len,
@@ -190,10 +192,10 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_sampling_frequency.
- * @param *device instance.
- * @param *buff where value is stored.
- * @param len maximum length of value to be stored in buf.
- * @param *channel channel properties.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
@@ -211,11 +213,11 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibphase.
- * @param *device instance.
- * @param *buff value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Value to be written to attribute.
+ * @param len - Length of the data in "buf".
+ * @param *channel - Channel properties.
+ * @return number of bytes written in buf, or negative value on failure.
  */
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -235,11 +237,11 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibbias.
- * @param *device instance.
- * @param *buff value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Value to be written to attribute.
+ * @param len - Length of the data in "buf".
+ * @param *channel - Channel properties.
+ * @return number of bytes written in buf, or negative value on failure.
  */
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -260,11 +262,11 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibscale.
- * @param *device instance.
- * @param *buff value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Value to be written to attribute.
+ * @param len - Length of the data in "buf".
+ * @param *channel - Channel properties.
+ * @return number of bytes written in buf, or negative value on failure.
  */
 static ssize_t set_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -283,11 +285,11 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_samples_pps.
- * @param *device instance.
- * @param *buff value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Value to be written to attribute.
+ * @param len - Length of the data in "buf".
+ * @param *channel - Channel properties.
+ * @return number of bytes written in buf, or negative value on failure.
  */
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
@@ -300,11 +302,11 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_sampling_frequency.
- * @param *device instance.
- * @param *buff value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *buf - Value to be written to attribute.
+ * @param len - Length of the data in "buf".
+ * @param *channel - Channel properties.
+ * @return number of bytes written in buf, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
@@ -356,8 +358,8 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 
 /**
  * @brief Get an axi_adc xml.
- * @param **xml - xml string.
- * @param *iio_dev.
+ * @param **xml - Xml containing description of a device.
+ * @param *iio_dev - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
@@ -468,7 +470,7 @@ error:
 
 /**
  * Delete iio_device.
- * @param *device name.
+ * @param *iio_device - Structure describing a device, channels and attributes.
  * @return iio_device or NULL, in case of failure.
  */
 ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
@@ -495,9 +497,9 @@ ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
 }
 
 /**
- * Create iio_device.
- * @param *device name.
- * @param num_ch.
+ * Create structure describing a device, channels and attributes.
+ * @param *device - Device name.
+ * @param num_ch - Number of channels that the device has.
  * @return iio_device or NULL, in case of failure.
  */
 struct iio_device *iio_axi_adc_create_device(const char *device_name,
@@ -545,10 +547,10 @@ error:
 }
 
 /**
- * @brief Transfer_dev_to_mem data from ADC into RAM.
- * @param *device name.
- * @param bytes_count.
- * @return bytes_count.
+ * @brief Transfer data from ADC into RAM.
+ * @param *iio_inst - Physical instance of a iio_axi_adc device.
+ * @param bytes_count - Number of bytes to transfer.
+ * @return bytes_count or negative value in case of error.
  */
 ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 {
@@ -568,12 +570,16 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
 }
 
 /**
- * @brief Read data from RAM to pbuf. It should be called after "iio_axi_adc_transfer_dev_to_mem()".
- * @param *device name.
- * @param *buff where data's are stored.
- * @param *offset to the remaining data.
- * @param bytes_count.
- * @return bytes_count.
+ * @brief Read chunk of data from RAM to pbuf.
+ * Call "iio_axi_adc_transfer_dev_to_mem" first.
+ * This function is probably called multiple times by libtinyiiod after a
+ * "iio_axi_adc_transfer_dev_to_mem" call, since we can only read "bytes_count"
+ * bytes.
+ * @param *iio_inst - Physical instance of a iio_axi_adc device.
+ * @param *pbuf - Buffer where value is stored.
+ * @param *offset - Offset to the remaining data after reading n chunks.
+ * @param bytes_count - Number of bytes to read.
+ * @return bytes_count or negative value in case of error.
  */
 ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count)

@@ -1,6 +1,8 @@
 /***************************************************************************//**
  *   @file   iio.c
- *   @brief  Implementation of iio
+ *   @brief  Implementation of iio.
+ *   This module implements read/write ops, required by libtinyiiod and further
+ *   calls show/store functions, corresponding to device/channel/attribute.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -361,7 +363,7 @@ static bool iio_supported_dev(const char *device)
  * @brief Read global attribute of a device.
  * @param *device - String containing device name.
  * @param *attr - String containing attribute name.
- * @param *buff - Buffer where value is read.
+ * @param *buf - Buffer where value is read.
  * @param len - Maximum length of value to be stored in buf.
  * @param debug.
  * @return number of bytes read.
@@ -596,10 +598,10 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 /**
  * @brief Write chunk of data into RAM.
  * This function is probably called multiple times by libtinyiiod before a
- * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes.
+ * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes
+ * at a time.
  * @param *device - String containing device name.
- * @param *device - String containing device name.
- * @param *buff - Values to write.
+ * @param *buf - Values to write.
  * @param *offset - Offset in memory after the nth chunk of data.
  * @param bytes_count - Number of bytes to write.
  * @return bytes_count or negative value in case of error.
