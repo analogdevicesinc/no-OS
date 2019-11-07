@@ -97,7 +97,6 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
  * @param *channel - Channel properties.
  * @return length of chars written in buf, or negative value on failure.
  */
-
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
 {
@@ -213,11 +212,11 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibphase.
- * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *device - Physical instance of a iio_axi_dac device.
  * @param *buf - Value to be written to attribute.
  * @param len - Length of the data in "buf".
  * @param *channel - Channel properties.
- * @return number of bytes written in buf, or negative value on failure.
+ * @return number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -237,11 +236,11 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibbias.
- * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *device - Physical instance of a iio_axi_dac device.
  * @param *buf - Value to be written to attribute.
  * @param len - Length of the data in "buf".
  * @param *channel - Channel properties.
- * @return number of bytes written in buf, or negative value on failure.
+ * @return number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -262,11 +261,11 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_calibscale.
- * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *device - Physical instance of a iio_axi_dac device.
  * @param *buf - Value to be written to attribute.
  * @param len - Length of the data in "buf".
  * @param *channel - Channel properties.
- * @return number of bytes written in buf, or negative value on failure.
+ * @return number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibscale(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -285,11 +284,11 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_samples_pps.
- * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *device - Physical instance of a iio_axi_dac device.
  * @param *buf - Value to be written to attribute.
  * @param len - Length of the data in "buf".
  * @param *channel - Channel properties.
- * @return number of bytes written in buf, or negative value on failure.
+ * @return number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
@@ -302,11 +301,11 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
 
 /**
  * @brief set_cf_sampling_frequency.
- * @param *device - Physical instance of a iio_axi_adc device.
+ * @param *device - Physical instance of a iio_axi_dac device.
  * @param *buf - Value to be written to attribute.
  * @param len - Length of the data in "buf".
  * @param *channel - Channel properties.
- * @return number of bytes written in buf, or negative value on failure.
+ * @return number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
