@@ -54,7 +54,8 @@
 /******************************************************************************/
 
 /**
- * struct iio_interface - iio interface.
+ * struct iio_interface - Links a physical device instance "void *dev_instance"
+ * with a "iio_device *iio" that describes capabilities of the device.
  * @dev_name: device name.
  * @num_ch: number of channels.
  * @ch_mask: opened channels.
@@ -648,8 +649,8 @@ static ssize_t iio_get_xml(char **outxml)
 			"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 			"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
 			"]>"
-			"<context name=\"xml\" description=\"Linux analog 4.9.0-g2398d50 #189 SMP PREEMPT Tue Jun 26 09:52:32 IST 2018 armv7l\" >"
-			"<context-attribute name=\"local,kernel\" value=\"4.9.0-g2398d50\" />";
+			"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 SMP PREEMPT Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
+			"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
 	char header_end[] = "</context>";
 
 	xml = calloc(1, strlen(header) + 1);
