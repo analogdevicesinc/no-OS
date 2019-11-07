@@ -122,7 +122,7 @@ static int32_t iio_get_channel_number(const char *ch)
 }
 
 /**
- * @brief Get attribute ID from map based on attribute name.
+ * @brief Get channel ID from a list of channels.
  * @param *channel - Channel name.
  * @param *channels - List of channels.
  * @return Channel ID, or negative value if attribute is not found.
@@ -187,7 +187,7 @@ static struct iio_interface *iio_get_interface(const char *device_name,
 }
 
 /**
- * @brief Read all attributes from map.
+ * @brief Read all attributes from an attribute list of attributes.
  * @param *device - Physical instance of a device.
  * @param *buf - Buffer where values are read.
  * @param len - Maximum length of value to be stored in buf.
@@ -221,7 +221,7 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief Write all attributes from map.
+ * @brief Write all attributes from an attribute list of attributes.
  * @param *device - Physical instance of a device.
  * @param *buf - Values to be written.
  * @param len - Length of buf.
