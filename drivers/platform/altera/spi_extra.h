@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   gpio.h
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   spi_extra.h
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -36,66 +36,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef GPIO_H_
-#define GPIO_H_
+#ifndef SPI_EXTRA_H_
+#define SPI_EXTRA_H_
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
+typedef enum spi_type {
+	NIOS_II_SPI
+} spi_type;
 
-#include <stdint.h>
+typedef struct altera_spi_init_param {
+	enum spi_type	type;
+	uint32_t	device_id;
+	uint32_t	base_address;
+} altera_spi_init_param;
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
+typedef struct altera_spi_desc {
+	enum spi_type	type;
+	uint32_t		device_id;
+	uint32_t	base_address;
+} altera_spi_desc;
 
-#define GPIO_OUT	0x01
-#define GPIO_IN		0x00
-
-#define GPIO_HIGH	0x01
-#define GPIO_LOW	0x00
-
-/******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-typedef struct gpio_desc {
-	uint8_t		number;
-	void		*extra;
-} gpio_desc;
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
-/* Obtain the GPIO decriptor. */
-int32_t gpio_get(struct gpio_desc **desc,
-		 uint8_t gpio_number);
-
-/* Free the resources allocated by gpio_get() */
-int32_t gpio_remove(struct gpio_desc *desc);
-
-/* Enable the input direction of the specified GPIO. */
-int32_t gpio_direction_input(struct gpio_desc *desc);
-
-/* Enable the output direction of the specified GPIO. */
-int32_t gpio_direction_output(struct gpio_desc *desc,
-			      uint8_t value);
-
-/* Get the direction of the specified GPIO. */
-int32_t gpio_get_direction(struct gpio_desc *desc,
-			   uint8_t *direction);
-
-/* Set the value of the specified GPIO. */
-int32_t gpio_set_value(struct gpio_desc *desc,
-		       uint8_t value);
-
-/* Get the value of the specified GPIO. */
-int32_t gpio_get_value(struct gpio_desc *desc,
-		       uint8_t *value);
-
-/* Initialize GPIO. */
-int32_t gpio_init(struct gpio_desc **desc,
-		  uint32_t type, uint32_t base_address);
-
-#endif // GPIO_H_
+#endif /* SPI_EXTRA_H_ */

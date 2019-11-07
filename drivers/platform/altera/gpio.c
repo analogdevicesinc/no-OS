@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <altera_avalon_spi_regs.h>
 #include "gpio.h"
+#include "gpio_extra.h"
 #include "error.h"
 #include "parameters.h"
 
@@ -52,7 +53,7 @@
 /******************************************************************************/
 
 /**
- * @brief Obtain the GPIO decriptor.
+ * @brief Get the number of GPIO.
  * @param desc - The GPIO descriptor.
  * @param gpio_number - The number of the GPIO.
  * @return SUCCESS in case of success, FAILURE otherwise.
@@ -61,15 +62,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 		 uint8_t gpio_number)
 {
 
-	gpio_desc *descriptor;
-
-	descriptor = (struct gpio_desc *) malloc(sizeof(*descriptor));
-	if (!descriptor)
-		return FAILURE;
-
-	descriptor->number = gpio_number;
-
-	*desc = descriptor;
+	(*desc)->number = gpio_number;
 
 	return SUCCESS;
 }
@@ -117,15 +110,25 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 	uint32_t pdata;
 	uint32_t pmask;
 
+	altera_gpio_desc *altera_desc;
+	altera_desc = desc->extra;
+
 	if (desc->number < 32)
 		return FAILURE;
 
-	ppos = desc->number - 32;
-	pmask = 0x1 << ppos;
+	switch(altera_desc->type) {
+	case(NIOS_II_GPIO):
+		ppos = desc->number - 32;
+		pmask = 0x1 << ppos;
 
-	pdata = IORD_32DIRECT(GPIO_BASEADDR, 0x0);
-	IOWR_32DIRECT(GPIO_BASEADDR,
-		      0x0, ((pdata & ~pmask) | (value << ppos)));
+		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
+		IOWR_32DIRECT(altera_desc->base_address,
+			      0x0, ((pdata & ~pmask) | (value << ppos)));
+
+		break;
+	default:
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }
@@ -149,7 +152,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -171,7 +174,7 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -193,5 +196,39 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return 0;
+	return SUCCESS;
+}
+
+/**
+ * @brief Initialize GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param type - GPIO implemetation type.
+ * @param base_address - GPIO base address.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_init(struct gpio_desc **desc,
+		  uint32_t type, uint32_t base_address)
+{
+
+	gpio_desc *descriptor;
+	altera_gpio_desc *altera_descriptor;
+
+	descriptor = (struct gpio_desc *) malloc(sizeof(*descriptor));
+	if (!descriptor)
+		return FAILURE;
+
+	descriptor->extra = (struct gpio_desc *) malloc(sizeof(*altera_descriptor));
+	if (!(descriptor->extra)){
+		free(descriptor);
+		return FAILURE;
+	}
+
+	altera_descriptor = descriptor->extra;
+
+	altera_descriptor->type = type;
+	altera_descriptor->base_address = base_address;
+
+	*desc = descriptor;
+
+	return SUCCESS;
 }

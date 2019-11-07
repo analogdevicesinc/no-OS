@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "error.h"
 #include "i2c.h"
-#include "altera_platform_drivers.h"
+#include "i2c_extra.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/

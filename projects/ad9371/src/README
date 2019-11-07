@@ -2,7 +2,8 @@
 # Additional required source files:
 
 #ifdef ALTERA_PLATFORM
-	cp ../../../drivers/platform/altera/altera_platform_drivers.h devices/adi_hal/
+	cp ../../../drivers/platform/altera/spi_extra.h devices/adi_hal/
+	cp ../../../drivers/platform/altera/gpio_extra.h devices/adi_hal/
 	cp ../../../include/axi_io.h devices/adi_hal/
 	cp ../../../include/error.h devices/adi_hal/
 	cp ../../../include/spi.h devices/adi_hal/
