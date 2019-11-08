@@ -72,9 +72,9 @@ int main(void)
 	ad9528Device_t *clockAD9528_device = &clockAD9528_;
 #ifdef ALTERA_PLATFORM
 	struct altera_spi_init_param ad9528_spi_param = {
-		.device_id = 0, 
+		.device_id = 0,
 		.base_address = SPI_BASEADDR
-		};
+	};
 	clockAD9528_.extra = &ad9528_spi_param;
 	struct altera_a10_fpll_init rx_device_clk_pll_init = {
 		"rx_device_clk_pll",
@@ -259,9 +259,9 @@ int main(void)
 	xil_spi_init_param hal_spi_param = {.id = 0, .flags = SPI_CS_DECODE};
 #else
 	struct altera_spi_init_param hal_spi_param = {
-		.type = NIOS_II_SPI, 
+		.type = NIOS_II_SPI,
 		.base_address = SPI_BASEADDR
-		};
+	};
 #endif
 	hal.extra = &hal_spi_param;
 	taliseDevice_t talDev = {
