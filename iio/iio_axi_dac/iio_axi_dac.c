@@ -490,9 +490,11 @@ static struct iio_attribute *iio_altvoltage_attributes[] = {
  * @brief Transfer data from RAM to DAC.
  * @param *iio_inst - Physical instance of a iio_axi_dac device.
  * @param bytes_count - Number of bytes to transfer.
+ * @param ch_mask - Opened channels mask.
  * @return number of bytes transfered, or negative value in case of failure.
  */
-ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count)
+ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count,
+					uint32_t ch_mask)
 {
 	struct iio_axi_dac *iio_dac = iio_inst;
 	iio_dac->dmac->flags = DMA_CYCLIC;
@@ -513,10 +515,11 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count)
  * @param *buf - Values to write.
  * @param *offset - Offset in memory after the nth chunk of data.
  * @param bytes_count - Number of bytes to write.
+ * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
 ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
-			      size_t offset,  size_t bytes_count)
+			      size_t offset,  size_t bytes_count, uint32_t ch_mask)
 {
 	struct iio_axi_dac *iio_dac = iio_inst;
 	ssize_t ret = axi_dac_set_datasel(iio_dac->dac, -1, AXI_DAC_DATA_SEL_DMA);

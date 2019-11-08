@@ -73,12 +73,14 @@ struct iio_interface {
 	void *dev_instance;
 	struct iio_device *iio;
 	ssize_t (*get_xml)(char **xml, struct iio_device *iio);
-	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count);
+	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
 	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			     size_t bytes_count);
-	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count);
+			     size_t bytes_count, uint32_t ch_mask);
+	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
 	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			      size_t bytes_count);
+			      size_t bytes_count, uint32_t ch_mask);
 };
 
 struct iio_interfaces {
@@ -103,8 +105,8 @@ static struct iio_interfaces *iio_interfaces = NULL;
 /******************************************************************************/
 
 /**
- * @brief Get channel number
- * @param *ch - String containing channel name + channel number
+ * @brief Get channel number.
+ * @param *ch - String containing channel name + channel number.
  * @return channel number. Ex: for "altvoltage0" return 0, for "voltage2" return 2.
  */
 static int32_t iio_get_channel_number(const char *ch)
@@ -188,7 +190,7 @@ static struct iio_interface *iio_get_interface(const char *device_name,
 }
 
 /**
- * @brief Read all attributes from an attribute list of attributes.
+ * @brief Read all attributes from an attribute list.
  * @param *device - Physical instance of a device.
  * @param *buf - Buffer where values are read.
  * @param len - Maximum length of value to be stored in buf.
@@ -222,7 +224,7 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief Write all attributes from an attribute list of attributes.
+ * @brief Write all attributes from an attribute list.
  * @param *device - Physical instance of a device.
  * @param *buf - Values to be written.
  * @param len - Length of buf.
@@ -503,7 +505,7 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 	if (mask & ~ch_mask)
 		return -ENOENT;
 
-	dev->ch_mask = ch_mask;
+	dev->ch_mask = mask;
 
 	return SUCCESS;
 }
@@ -527,14 +529,12 @@ static int32_t iio_close_dev(const char *device)
 static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
 	struct iio_interface *dev;
-	uint32_t ch_mask;
 
 	if (!iio_supported_dev(device))
 		return -ENODEV;
 
 	dev = iio_get_interface(device, iio_interfaces);
-	ch_mask = 0xFFFFFFFF >> (32 - dev->iio->num_ch);
-	*mask = ch_mask;
+	*mask = dev->ch_mask;
 
 	return SUCCESS;
 }
@@ -551,7 +551,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 
 	if (iio_interface->transfer_dev_to_mem)
 		return iio_interface->transfer_dev_to_mem(iio_interface->dev_instance,
-				bytes_count);
+				bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }
@@ -572,9 +572,10 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if(iio_interface->read_data)
+	if(iio_interface->read_data) {
 		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset,
-						bytes_count);
+						bytes_count, iio_interface->ch_mask);
+	}
 
 	return -ENOENT;
 }
@@ -591,7 +592,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 
 	if (iio_interface->transfer_mem_to_dev)
 		return iio_interface->transfer_mem_to_dev(iio_interface->dev_instance,
-				bytes_count);
+				bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }
@@ -613,7 +614,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 	if(iio_interface->write_data)
 		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf,
-						 offset, bytes_count);
+						 offset, bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }

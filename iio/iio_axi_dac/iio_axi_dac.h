@@ -79,10 +79,11 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name,
 /* Delete iio_device. */
 ssize_t iio_axi_dac_delete_device(struct iio_device *iio_dac_device);
 /* Transfer data from RAM to DAC */
-ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count);
+ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count,
+					uint32_t ch_mask);
 /* Write data to RAM */
 ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
-			      size_t offset,  size_t bytes_count);
+			      size_t offset,  size_t bytes_count, uint32_t ch_mask);
 /* Get an axi_dac xml */
 ssize_t iio_axi_dac_get_xml(char** xml, struct iio_device *iio_dev);
 

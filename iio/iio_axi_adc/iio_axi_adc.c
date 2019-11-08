@@ -549,21 +549,24 @@ error:
  * @brief Transfer data from ADC into RAM.
  * @param *iio_inst - Physical instance of a iio_axi_adc device.
  * @param bytes_count - Number of bytes to transfer.
+ * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
-ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
+ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
+					uint32_t ch_mask)
 {
 	struct iio_axi_adc *iio_adc = iio_inst;
 	ssize_t ret;
+	size_t bytes = (bytes_count * iio_adc->adc->num_channels) / bit_count(ch_mask);
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac,
-				iio_adc->adc_ddr_base, bytes_count);
+				iio_adc->adc_ddr_base, bytes);
 	if (ret < 0)
 		return ret;
 
 	if(iio_adc->dcache_invalidate_range)
-		iio_adc->dcache_invalidate_range(iio_adc->adc_ddr_base, bytes_count);
+		iio_adc->dcache_invalidate_range(iio_adc->adc_ddr_base, bytes);
 
 	return bytes_count;
 }
@@ -578,13 +581,32 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count)
  * @param *pbuf - Buffer where value is stored.
  * @param *offset - Offset to the remaining data after reading n chunks.
  * @param bytes_count - Number of bytes to read.
+ * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
 ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
-			     size_t bytes_count)
+			     size_t bytes_count, uint32_t ch_mask)
 {
 	struct iio_axi_adc *iio_adc = iio_inst;
-	memcpy(pbuf, (char*)iio_adc->adc_ddr_base + offset, bytes_count);
+	uint32_t i, j = 0, current_ch = 0;
+	uint16_t *pbuf16 = (uint16_t*)pbuf;
+	size_t samples = (bytes_count * iio_adc->adc->num_channels) / bit_count(
+				 ch_mask);
+	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
+	offset = (offset * iio_adc->adc->num_channels) / bit_count(ch_mask);
+
+	for (i = 0; i < samples; i++) {
+
+		if (ch_mask & BIT(current_ch)) {
+			pbuf16[j] = *(uint16_t*)(iio_adc->adc_ddr_base + offset + i * 2);
+			j++;
+		}
+
+		if (current_ch < iio_adc->adc->num_channels - 1)
+			current_ch++;
+		else
+			current_ch = 0;
+	}
 
 	return bytes_count;
 }
