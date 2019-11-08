@@ -56,15 +56,15 @@
 /**
  * struct iio_interface - Links a physical device instance "void *dev_instance"
  * with a "iio_device *iio" that describes capabilities of the device.
- * @dev_name: device name.
+ * @name: device name.
  * @num_ch: number of channels.
  * @ch_mask: opened channels.
  * @dev_instance: physical instance of a device.
  * @iio: device descriptor(describes channels and attributes)
  * @get_xml: Generate device xml.
- * @transfer_dev_to_mem: transfer data from ADC into RAM.
+ * @transfer_dev_to_mem: transfer data from device into RAM.
  * @read_data: Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem".
- * @transfer_mem_to_dev: Transfer data from RAM to DAC.
+ * @transfer_mem_to_dev: Transfer data from RAM to device.
  * @write_data: Write data to RAM. It should be called before "transfer_mem_to_dev".
  */
 struct iio_interface {
@@ -83,11 +83,23 @@ struct iio_interface {
 			      size_t bytes_count, uint32_t ch_mask);
 };
 
+/**
+ * struct iio_interfaces - Structure containing all interfaces.
+ * @interfaces: List containing all interfaces.
+ * @num_interfaces: Number of Interfaces.
+ */
 struct iio_interfaces {
 	struct iio_interface **interfaces;
 	uint8_t num_interfaces;
 };
 
+/**
+ * struct element_info - Structure informations about a specific parameter.
+ * @device_name: Device name.
+ * @channel_name: Channel name.
+ * @attribute_name: Attribute name.
+ * @ch_out: If set, is an output channel.
+ */
 struct element_info {
 	const char *device_name;
 	const char *channel_name;
@@ -181,6 +193,9 @@ static struct iio_interface *iio_get_interface(const char *device_name,
 {
 	int16_t i;
 
+	if (!iio_interfaces)
+		return NULL;
+
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
 		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name))
 			return iio_interfaces->interfaces[i];
@@ -196,7 +211,7 @@ static struct iio_interface *iio_get_interface(const char *device_name,
  * @param len - Maximum length of value to be stored in buf.
  * @param *channel - Channel properties.
  * @param **attributes - List of attributes to be read.
- * @return number of bytes read.
+ * @return number of bytes read or negative value in case of error.
  */
 static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel, struct iio_attribute **attributes)
@@ -205,6 +220,12 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 	char local_buf[256];
 	ssize_t attr_length;
 	uint32_t *pattr_length;
+
+	if (!attributes)
+		return FAILURE;
+
+	if (!buf)
+		return FAILURE;
 
 	while (attributes[i]) {
 		attr_length = attributes[i]->show(device, local_buf, len, channel);
@@ -230,13 +251,19 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
  * @param len - Length of buf.
  * @param *channel - Channel properties.
  * @param **attributes - List of attributes to be written.
- * @return number of written bytes.
+ * @return number of written bytes or negative value in case of error.
  */
 static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, struct iio_attribute **attributes)
 {
 	int16_t i = 0, j = 0;
 	int16_t attr_length;
+
+	if (!attributes)
+		return FAILURE;
+
+	if (!buf)
+		return FAILURE;
 
 	while (attributes[i]) {
 		attr_length = bswap_constant_32((uint32_t)(buf + j));
@@ -265,8 +292,8 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 		struct iio_channel *channel, bool is_write)
 {
 	int16_t attribute_id;
-	struct iio_interface *device = iio_get_interface(el_info->device_name,
-				       iio_interfaces);
+	struct iio_interface *iface = iio_get_interface(el_info->device_name,
+				      iio_interfaces);
 	const struct iio_ch_info channel_info = {
 		iio_get_channel_number(el_info->channel_name),
 		el_info->ch_out
@@ -275,10 +302,10 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 	if (!strcmp(el_info->attribute_name, "")) {
 		/* read / write all channel attributes */
 		if (is_write)
-			return iio_write_all_attr(device->dev_instance, buf, len, &channel_info,
+			return iio_write_all_attr(iface->dev_instance, buf, len, &channel_info,
 						  channel->attributes);
 		else
-			return iio_read_all_attr(device->dev_instance, buf, len, &channel_info,
+			return iio_read_all_attr(iface->dev_instance, buf, len, &channel_info,
 						 channel->attributes);
 	} else {
 		/* read / write single channel attribute, if attribute found */
@@ -286,10 +313,10 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 						    channel->attributes);
 		if (attribute_id >= 0) {
 			if (is_write)
-				return channel->attributes[attribute_id]->store(device->dev_instance,
+				return channel->attributes[attribute_id]->store(iface->dev_instance,
 						(char*)buf, len, &channel_info);
 			else
-				return channel->attributes[attribute_id]->show(device->dev_instance, (char*)buf,
+				return channel->attributes[attribute_id]->show(iface->dev_instance, (char*)buf,
 						len, &channel_info);
 		}
 	}
@@ -312,22 +339,22 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 {
 	int16_t channel_id;
 	int16_t attribute_id;
-	struct iio_interface *device;
+	struct iio_interface *iface;
 
 	if (!iio_device)
 		return -ENOENT;
 
 	if (!strcmp(el_info->channel_name, "")) {
 		/* it is attribute of a device */
-		device = iio_get_interface(el_info->device_name, iio_interfaces);
+		iface = iio_get_interface(el_info->device_name, iio_interfaces);
 
 		if (!strcmp(el_info->attribute_name, "")) {
 			/* read / write all device attributes */
 			if (is_write)
-				return iio_write_all_attr(device->dev_instance, buf, len, NULL,
+				return iio_write_all_attr(iface->dev_instance, buf, len, NULL,
 							  iio_device->attributes);
 			else
-				return iio_read_all_attr(device->dev_instance, buf, len, NULL,
+				return iio_read_all_attr(iface->dev_instance, buf, len, NULL,
 							 iio_device->attributes);
 		} else {
 			/* read / write single device attribute, if attribute found */
@@ -336,10 +363,10 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 			if (attribute_id < 0)
 				return -ENOENT;
 			if (is_write)
-				return iio_device->attributes[attribute_id]->store(device->dev_instance,
+				return iio_device->attributes[attribute_id]->store(iface->dev_instance,
 						(char*)buf, len, NULL);
 			else
-				return iio_device->attributes[attribute_id]->show(device->dev_instance,
+				return iio_device->attributes[attribute_id]->show(iface->dev_instance,
 						(char*)buf, len, NULL);
 		}
 	} else {
@@ -493,19 +520,19 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 static int32_t iio_open_dev(const char *device, size_t sample_size,
 			    uint32_t mask)
 {
-	struct iio_interface *dev;
+	struct iio_interface *iface;
 	uint32_t ch_mask;
 
 	if (!iio_supported_dev(device))
 		return -ENODEV;
 
-	dev = iio_get_interface(device, iio_interfaces);
-	ch_mask = 0xFFFFFFFF >> (32 - dev->iio->num_ch);
+	iface = iio_get_interface(device, iio_interfaces);
+	ch_mask = 0xFFFFFFFF >> (32 - iface->iio->num_ch);
 
 	if (mask & ~ch_mask)
 		return -ENOENT;
 
-	dev->ch_mask = mask;
+	iface->ch_mask = mask;
 
 	return SUCCESS;
 }
@@ -517,7 +544,14 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
  */
 static int32_t iio_close_dev(const char *device)
 {
-	return iio_supported_dev(device) ? SUCCESS : FAILURE;
+	struct iio_interface *iface;
+
+	if (!iio_supported_dev(device))
+		return FAILURE;
+	iface = iio_get_interface(device, iio_interfaces);
+	iface->ch_mask = 0;
+
+	return SUCCESS;
 }
 
 /**
@@ -528,19 +562,19 @@ static int32_t iio_close_dev(const char *device)
  */
 static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
-	struct iio_interface *dev;
+	struct iio_interface *iface;
 
 	if (!iio_supported_dev(device))
 		return -ENODEV;
 
-	dev = iio_get_interface(device, iio_interfaces);
-	*mask = dev->ch_mask;
+	iface = iio_get_interface(device, iio_interfaces);
+	*mask = iface->ch_mask;
 
 	return SUCCESS;
 }
 
 /**
- * @brief Transfer data from ADC into RAM.
+ * @brief Transfer data from device into RAM.
  * @param *device - String containing device name.
  * @param bytes_count - Number of bytes.
  * @return bytes_count or negative value in case of error.
@@ -572,16 +606,15 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device, iio_interfaces);
 
-	if(iio_interface->read_data) {
+	if (iio_interface->read_data)
 		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset,
 						bytes_count, iio_interface->ch_mask);
-	}
 
 	return -ENOENT;
 }
 
 /**
- * @brief Transfer memory to device, write data to DAC.
+ * @brief Transfer memory to device.
  * @param *device - String containing device name.
  * @param bytes_count - Number of bytes to transfer.
  * @return bytes_count or negative value in case of error.
@@ -650,9 +683,12 @@ static ssize_t iio_get_xml(char **outxml)
 			"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
 			"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
 			"]>"
-			"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 SMP PREEMPT Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
+			"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
 			"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
 	char header_end[] = "</context>";
+
+	if (!outxml)
+		return FAILURE;
 
 	xml = calloc(1, strlen(header) + 1);
 	if (!xml)
@@ -699,6 +735,7 @@ error:
 ssize_t iio_register(struct iio_interface_init_par *init_par)
 {
 	struct iio_interface *iio_interface;
+	struct iio_interface **temp_interfaces;
 
 	if (!(iio_interfaces)) {
 		iio_interfaces = calloc(1, sizeof(struct iio_interfaces));
@@ -711,10 +748,13 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 			return -ENOMEM;
 	} else {
 		iio_interfaces->num_interfaces++;
-		iio_interfaces->interfaces = realloc(iio_interfaces->interfaces,
-						     iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
-		if (!iio_interfaces->interfaces)
+		temp_interfaces = realloc(iio_interfaces->interfaces,
+					  iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
+		if (!temp_interfaces) {
+			free(iio_interfaces->interfaces);
 			return -ENOMEM;
+		}
+		iio_interfaces->interfaces = temp_interfaces;
 	}
 	iio_interface = calloc(1, sizeof(struct iio_interface));
 	if (!iio_interface)
@@ -809,15 +849,12 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 	ops->get_xml = iio_get_xml;
 
 	*iiod = tinyiiod_create(ops);
-	if (!(*iiod))
-		goto error_free_ops;
-
-	return SUCCESS;
-
-error_free_ops:
-	free(ops);
-
-	return FAILURE;
+	if (!(*iiod)) {
+		free(ops);
+		return FAILURE;
+	} else {
+		return SUCCESS;
+	}
 }
 
 /**
@@ -829,9 +866,9 @@ ssize_t iio_remove(struct tinyiiod *iiod)
 {
 	uint8_t i;
 
-	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
+	for (i = 0; i < iio_interfaces->num_interfaces; i++)
 		free(iio_interfaces->interfaces[i]);
-	}
+
 	free(iio_interfaces);
 	tinyiiod_destroy(iiod);
 
