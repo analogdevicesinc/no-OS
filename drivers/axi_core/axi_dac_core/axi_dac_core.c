@@ -780,56 +780,6 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 	return SUCCESS;
 }
 
-int32_t axi_dac_set_buff_mask(struct axi_dac *dac,
-			 uint32_t address,
-			 uint16_t *buff,
-			 uint32_t buff_size,
-			 uint32_t mask)
-{
-	uint32_t index, current_ch = 0, j = 0;
-	uint32_t data_i;
-	uint32_t data_q;
-	uint32_t data_iq;
-	uint32_t samples = (buff_size * dac->num_channels) / bit_count(
-			mask);
-
-	for(index = 0; index < samples; index += 2) {
-		axi_io_read(address, index * 2, &data_iq);
-
-		if ((1 << current_ch) & mask)
-		{
-			data_i = buff[j];
-			j++;
-		}
-		else
-			data_i = (0xffff & data_iq);
-
-		if (current_ch < dac->num_channels - 1)
-			current_ch++;
-		else
-			current_ch = 0;
-
-		if ((1 << current_ch) & mask)
-		{
-			data_q = (buff[j] << 16);
-			j++;
-		}
-		else
-			data_q = (0xffff0000 & data_iq);
-
-
-		if (current_ch < dac->num_channels - 1)
-			current_ch++;
-		else
-			current_ch = 0;
-
-		axi_io_write(address, index * 2, data_i | data_q);
-
-	}
-
-	return SUCCESS;
-}
-
 /***************************************************************************//**
  * @brief axi_dac_load_custom_data
  *******************************************************************************/
