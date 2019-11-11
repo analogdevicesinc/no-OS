@@ -66,13 +66,17 @@
 ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 			 struct iio_axi_adc_init_par *init)
 {
-	*iio_axi_adc = calloc(1, sizeof(struct iio_axi_adc));
-	if (!(*iio_axi_adc))
+	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)calloc(1, sizeof(struct iio_axi_adc));
+
+	if (!(iio_adc))
 		return FAILURE;
-	(*iio_axi_adc)->adc = init->adc;
-	(*iio_axi_adc)->dmac = init->dmac;
-	(*iio_axi_adc)->adc_ddr_base = init->adc_ddr_base;
-	(*iio_axi_adc)->dcache_invalidate_range = init->dcache_invalidate_range;
+
+	iio_adc->adc = init->adc;
+	iio_adc->dmac = init->dmac;
+	iio_adc->adc_ddr_base = init->adc_ddr_base;
+	iio_adc->dcache_invalidate_range = init->dcache_invalidate_range;
+
+	*iio_axi_adc = iio_adc;
 
 	return SUCCESS;
 }
@@ -372,6 +376,11 @@ ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
 	ssize_t ret;
 	uint16_t i;
 
+	if (!xml)
+		return FAILURE;
+	if (!iio_dev)
+			return FAILURE;
+
 	ret = xml_create_node(&device, "device");
 	if (ret < 0)
 		goto error;
@@ -476,20 +485,20 @@ ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
 {
 	uint16_t i = 0;
 
-	if(!iio_device)
+	if (!iio_device)
 		return SUCCESS;
 
-	if(iio_device->channels) {
+	if (iio_device->channels) {
 		while (iio_device->channels[i]) {
-			if(iio_device->channels[i]->name)
+			if (iio_device->channels[i]->name)
 				free(iio_device->channels[i]->name);
-			if(iio_device->channels[i])
+			if (iio_device->channels[i])
 				free(iio_device->channels[i]);
 			i++;
 		}
 		free(iio_device->channels);
 	}
-	if(iio_device)
+	if (iio_device)
 		free(iio_device);
 
 	return SUCCESS;
@@ -510,7 +519,10 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name,
 	uint16_t i, len;
 	ssize_t ret;
 
-	iio_device = calloc(1, sizeof(struct iio_device));
+	if (!device_name)
+		return NULL;
+
+	iio_device = (struct iio_device *)calloc(1, sizeof(struct iio_device));
 	if (!iio_device)
 		return NULL;
 
@@ -555,9 +567,14 @@ error:
 ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
 					uint32_t ch_mask)
 {
-	struct iio_axi_adc *iio_adc = iio_inst;
-	ssize_t ret;
-	size_t bytes = (bytes_count * iio_adc->adc->num_channels) / bit_count(ch_mask);
+	struct iio_axi_adc *iio_adc;
+	ssize_t ret, bytes;
+
+	if (!iio_inst)
+		return FAILURE;
+
+	iio_adc = (struct iio_axi_adc *)iio_inst;
+	bytes = (bytes_count * iio_adc->adc->num_channels) / bit_count(ch_mask);
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac,
@@ -565,7 +582,7 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
 	if (ret < 0)
 		return ret;
 
-	if(iio_adc->dcache_invalidate_range)
+	if (iio_adc->dcache_invalidate_range)
 		iio_adc->dcache_invalidate_range(iio_adc->adc_ddr_base, bytes);
 
 	return bytes_count;
@@ -587,11 +604,22 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
 ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			     size_t bytes_count, uint32_t ch_mask)
 {
-	struct iio_axi_adc *iio_adc = iio_inst;
+	struct iio_axi_adc *iio_adc;
 	uint32_t i, j = 0, current_ch = 0;
-	uint16_t *pbuf16 = (uint16_t*)pbuf;
-	size_t samples = (bytes_count * iio_adc->adc->num_channels) / bit_count(
+	uint16_t *pbuf16;
+	size_t samples;
+
+	if (!iio_inst)
+		return FAILURE;
+
+	if (!pbuf)
+		return FAILURE;
+
+	iio_adc = (struct iio_axi_adc *)iio_inst;
+	pbuf16 = (uint16_t*)pbuf;
+	samples = (bytes_count * iio_adc->adc->num_channels) / bit_count(
 				 ch_mask);
+
 	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
 	offset = (offset * iio_adc->adc->num_channels) / bit_count(ch_mask);
 

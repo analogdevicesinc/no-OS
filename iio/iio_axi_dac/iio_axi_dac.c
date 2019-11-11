@@ -497,9 +497,12 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count,
 					uint32_t ch_mask)
 {
 	struct iio_axi_dac *iio_dac = iio_inst;
+	ssize_t ret;
+	size_t bytes = (bytes_count * iio_dac->dac->num_channels) / bit_count(ch_mask);
+
 	iio_dac->dmac->flags = DMA_CYCLIC;
-	ssize_t ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
-					bytes_count);
+	ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
+			bytes);
 	if(ret < 0)
 		return ret;
 
