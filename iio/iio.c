@@ -293,7 +293,7 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 {
 	int16_t attribute_id;
 	struct iio_interface *iface = iio_get_interface(el_info->device_name,
-				       iio_interfaces);
+				      iio_interfaces);
 	const struct iio_ch_info channel_info = {
 		iio_get_channel_number(el_info->channel_name),
 		el_info->ch_out
@@ -738,18 +738,20 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 	struct iio_interface **temp_interfaces;
 
 	if (!(iio_interfaces)) {
-		iio_interfaces = (struct iio_interfaces *)calloc(1, sizeof(struct iio_interfaces));
+		iio_interfaces = (struct iio_interfaces *)calloc(1,
+				 sizeof(struct iio_interfaces));
 		if (!iio_interfaces)
 			return -ENOMEM;
 
 		iio_interfaces->num_interfaces = 1;
-		iio_interfaces->interfaces = (struct iio_interface **)calloc(1, sizeof(struct iio_interface*));
+		iio_interfaces->interfaces = (struct iio_interface **)calloc(1,
+					     sizeof(struct iio_interface*));
 		if (!iio_interfaces->interfaces)
 			return -ENOMEM;
 	} else {
 		iio_interfaces->num_interfaces++;
 		temp_interfaces = (struct iio_interface **)realloc(iio_interfaces->interfaces,
-						     iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
+				  iio_interfaces->num_interfaces * sizeof(struct iio_interface*));
 		if (!temp_interfaces) {
 			free(iio_interfaces->interfaces);
 			return -ENOMEM;
@@ -793,8 +795,9 @@ ssize_t iio_unregister(const char *device_name)
 	if (!interfaces)
 		return FAILURE;
 
-	interfaces->interfaces = (struct iio_interface **)calloc(iio_interfaces->num_interfaces - 1,
-					sizeof(struct iio_interface*));
+	interfaces->interfaces = (struct iio_interface **)calloc(
+					 iio_interfaces->num_interfaces - 1,
+					 sizeof(struct iio_interface*));
 	if (!interfaces->interfaces) {
 		free(interfaces);
 		return FAILURE;
@@ -825,7 +828,8 @@ ssize_t iio_unregister(const char *device_name)
  */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
-	struct tinyiiod_ops *ops = (struct tinyiiod_ops *)calloc(1, sizeof(struct tinyiiod_ops));
+	struct tinyiiod_ops *ops = (struct tinyiiod_ops *)calloc(1,
+				   sizeof(struct tinyiiod_ops));
 
 	if (!ops)
 		return FAILURE;
@@ -852,9 +856,7 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 	if (!(*iiod)) {
 		free(ops);
 		return FAILURE;
-	}
-	else
-	{
+	} else {
 		return SUCCESS;
 	}
 }
