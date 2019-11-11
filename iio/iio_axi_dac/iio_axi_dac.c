@@ -502,7 +502,7 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count,
 
 	iio_dac->dmac->flags = DMA_CYCLIC;
 	ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
-			bytes);
+				bytes);
 	if(ret < 0)
 		return ret;
 
@@ -534,9 +534,9 @@ ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 //			       bytes_count);
 	offset = (offset * iio_dac->dac->num_channels) / bit_count(ch_mask);
 	ret = axi_dac_set_buff_mask(iio_dac->dac, iio_dac->dac_ddr_base + offset,
-				       (uint16_t *)buf,
-				       bytes_count,
-					   ch_mask);
+				    (uint16_t *)buf,
+				    bytes_count,
+				    ch_mask);
 	if(ret < 0)
 		return ret;
 
