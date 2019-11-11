@@ -529,9 +529,14 @@ ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 	if(ret < 0)
 		return ret;
 
-	ret = axi_dac_set_buff(iio_dac->dac, iio_dac->dac_ddr_base + offset,
-			       (uint16_t *)buf,
-			       bytes_count);
+//	ret = axi_dac_set_buff(iio_dac->dac, iio_dac->dac_ddr_base + offset,
+//			       (uint16_t *)buf,
+//			       bytes_count);
+	offset = (offset * iio_dac->dac->num_channels) / bit_count(ch_mask);
+	ret = axi_dac_set_buff_mask(iio_dac->dac, iio_dac->dac_ddr_base + offset,
+				       (uint16_t *)buf,
+				       bytes_count,
+					   ch_mask);
 	if(ret < 0)
 		return ret;
 

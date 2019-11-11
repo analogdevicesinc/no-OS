@@ -100,6 +100,11 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 			 uint32_t address,
 			 uint16_t *buff,
 			 uint32_t buff_size);
+int32_t axi_dac_set_buff_mask(struct axi_dac *dac,
+			 uint32_t address,
+			 uint16_t *buff,
+			 uint32_t buff_size,
+			 uint32_t mask);
 uint32_t axi_dac_set_sine_lut(struct axi_dac *dac,
 			      uint32_t address);
 int32_t axi_dac_datasel(struct axi_dac *dac, int32_t chan,
