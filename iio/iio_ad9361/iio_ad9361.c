@@ -2446,19 +2446,19 @@ static struct iio_attribute *global_attributes[] = {
 
 static struct iio_channel iio_channel_voltage0_in = {
 	.name = "voltage0",
-	.attributes = voltage_output_attributes,
+	.attributes = voltage_input_attributes,
 	.ch_out = false,
 };
 
 static struct iio_channel iio_channel_voltage1_in = {
 	.name = "voltage1",
-	.attributes = voltage_output_attributes,
+	.attributes = voltage_input_attributes,
 	.ch_out = false,
 };
 
 static struct iio_channel iio_channel_voltage2_in = {
 	.name = "voltage2",
-	.attributes = voltage_output_attributes,
+	.attributes = voltage_input_attributes,
 	.ch_out = false,
 };
 
