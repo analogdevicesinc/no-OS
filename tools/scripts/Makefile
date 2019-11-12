@@ -31,8 +31,8 @@ endif
 
 EXEC = release
 TIMESTAMP = $(shell date +"%T")
-ECHO = @echo -n "\\e[32m[$(TIMESTAMP)]\\e[39m"
-ERROR = @echo -n "\\e[32m[$(TIMESTAMP)]\\e[31m"
+ECHO = @echo -n -e "\\e[32m[$(TIMESTAMP)]\\e[39m"
+ERROR = @echo -n -e "\\e[32m[$(TIMESTAMP)]\\e[31m"
 CC ?= gcc
 
 # Xilinx platform handling
