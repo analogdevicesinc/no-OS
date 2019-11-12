@@ -65,6 +65,7 @@ struct iio_attribute {
 struct iio_channel {
 	char *name;
 	struct iio_attribute **attributes;
+	bool ch_out;
 };
 
 struct iio_device {
