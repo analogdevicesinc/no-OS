@@ -2199,7 +2199,21 @@ static struct iio_attribute iio_attr_bb_dc_offset_tracking_en = {
 	.store = set_bb_dc_offset_tracking_en,
 };
 
-struct iio_attribute *voltage_attributes[] = {
+struct iio_attribute *voltage_output_attributes[] = {
+	&iio_attr_rf_port_select,
+	&iio_attr_hardwaregain,
+	&iio_attr_rssi,
+	&iio_attr_hardwaregain_available,
+	&iio_attr_sampling_frequency_available,
+	&iio_attr_rf_port_select_available,
+	&iio_attr_filter_fir_en,
+	&iio_attr_sampling_frequency,
+	&iio_attr_rf_bandwidth_available,
+	&iio_attr_rf_bandwidth,
+	NULL,
+};
+
+struct iio_attribute *voltage_input_attributes[] = {
 	&iio_attr_hardwaregain_available,
 	&iio_attr_hardwaregain,
 	&iio_attr_rssi,
@@ -2430,51 +2444,80 @@ static struct iio_attribute *global_attributes[] = {
 	NULL,
 };
 
-static struct iio_channel iio_channel_voltage0 = {
+static struct iio_channel iio_channel_voltage0_in = {
 	.name = "voltage0",
-	.attributes = voltage_attributes,
+	.attributes = voltage_output_attributes,
+	.ch_out = false,
 };
 
-static struct iio_channel iio_channel_voltage1 = {
+static struct iio_channel iio_channel_voltage1_in = {
 	.name = "voltage1",
-	.attributes = voltage_attributes,
+	.attributes = voltage_output_attributes,
+	.ch_out = false,
 };
 
-static struct iio_channel iio_channel_voltage2 = {
+static struct iio_channel iio_channel_voltage2_in = {
 	.name = "voltage2",
-	.attributes = voltage_attributes,
+	.attributes = voltage_output_attributes,
+	.ch_out = false,
 };
 
-static struct iio_channel iio_channel_voltage3 = {
+static struct iio_channel iio_channel_voltage0_out = {
+	.name = "voltage0",
+	.attributes = voltage_output_attributes,
+	.ch_out = true,
+};
+
+static struct iio_channel iio_channel_voltage1_out = {
+	.name = "voltage1",
+	.attributes = voltage_output_attributes,
+	.ch_out = true,
+};
+
+static struct iio_channel iio_channel_voltage2_out = {
+	.name = "voltage2",
+	.attributes = voltage_output_attributes,
+	.ch_out = true,
+};
+
+static struct iio_channel iio_channel_voltage3_out = {
 	.name = "voltage3",
-	.attributes = voltage_attributes,
+	.attributes = voltage_output_attributes,
+	.ch_out = true,
 };
 
 static struct iio_channel iio_channel_altvoltage0 = {
 	.name = "altvoltage0",
 	.attributes = altvoltage_attributes,
+	.ch_out = true,
 };
 
 static struct iio_channel iio_channel_altvoltage1 = {
 	.name = "altvoltage1",
 	.attributes = altvoltage_attributes,
+	.ch_out = true,
 };
 
 static struct iio_channel iio_channel_temp0 = {
 	.name = "temp0",
 	.attributes = temp0_attributes,
+	.ch_out = false,
 };
 
 static struct iio_channel iio_channel_out = {
 	.name = "out",
 	.attributes = out_attributes,
+	.ch_out = false,
 };
 
 static struct iio_channel *iio_ad9361_channels[] = {
-	&iio_channel_voltage0,
-	&iio_channel_voltage1,
-	&iio_channel_voltage2,
-	&iio_channel_voltage3,
+	&iio_channel_voltage0_in,
+	&iio_channel_voltage1_in,
+	&iio_channel_voltage2_in,
+	&iio_channel_voltage0_out,
+	&iio_channel_voltage1_out,
+	&iio_channel_voltage2_out,
+	&iio_channel_voltage3_out,
 	&iio_channel_altvoltage0,
 	&iio_channel_altvoltage1,
 	&iio_channel_temp0,

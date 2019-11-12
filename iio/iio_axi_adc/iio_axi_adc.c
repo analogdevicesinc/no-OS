@@ -546,6 +546,7 @@ struct iio_device *iio_axi_adc_create_device(const char *device_name,
 		if (ret < 0)
 			goto error;
 		iio_device->channels[i]->attributes = iio_voltage_attributes;
+		iio_device->channels[i]->ch_out = false;
 	}
 
 	iio_device->channels[i] = NULL;

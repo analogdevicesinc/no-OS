@@ -143,7 +143,7 @@ static int32_t iio_get_channel_number(const char *ch)
  * @return Channel ID, or negative value if attribute is not found.
  */
 static int16_t iio_get_channel_id(const char *channel,
-				  struct iio_channel **channels)
+				  struct iio_channel **channels, bool ch_out)
 {
 	int16_t i = 0;
 
@@ -151,7 +151,7 @@ static int16_t iio_get_channel_id(const char *channel,
 		return -EINVAL;
 
 	while (channels[i]) {
-		if (!strcmp(channel, channels[i]->name))
+		if (!strcmp(channel, channels[i]->name) && (channels[i]->ch_out == ch_out))
 			return i;
 		i++;
 	}
@@ -371,7 +371,8 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 		}
 	} else {
 		/* it is attribute of a channel */
-		channel_id = iio_get_channel_id(el_info->channel_name, iio_device->channels);
+		channel_id = iio_get_channel_id(el_info->channel_name, iio_device->channels,
+						el_info->ch_out);
 		return iio_rd_wr_channel_attribute(el_info, buf, len,
 						   iio_device->channels[channel_id], is_write);
 	}

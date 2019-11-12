@@ -775,6 +775,7 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name,
 		if (ret < 0)
 			goto error;
 		iio_device->channels[i]->attributes = iio_voltage_attributes;
+		iio_device->channels[i]->ch_out = true;
 	}
 
 	for (i = num_ch; i < num_ch + num_ch * 2; i++) {
@@ -789,6 +790,7 @@ struct iio_device *iio_axi_dac_create_device(const char *device_name,
 		if (ret < 0)
 			goto error;
 		iio_device->channels[i]->attributes = iio_altvoltage_attributes;
+		iio_device->channels[i]->ch_out = true;
 	}
 
 	iio_device->channels[i] = NULL;
