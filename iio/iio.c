@@ -140,6 +140,7 @@ static int32_t iio_get_channel_number(const char *ch)
  * @brief Get channel ID from a list of channels.
  * @param *channel - Channel name.
  * @param *channels - List of channels.
+ * @param ch_out - If "true" is output channel, if "false" is input channel.
  * @return Channel ID, or negative value if attribute is not found.
  */
 static int16_t iio_get_channel_id(const char *channel,
