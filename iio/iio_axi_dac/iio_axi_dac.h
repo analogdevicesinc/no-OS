@@ -51,6 +51,13 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * struct iio_axi_dac_init_par - Initialization parameters for "iio_axi_dac".
+ * @dac:		Pointer to "axi_dac" instance.
+ * @dac:		Pointer to "axi_dmac" instance.
+ * @dac_ddr_base:	Address used by DMA, for sending data to device.
+ * @dcache_flush:	Function pointer to flush the entire data cache.
+ */
 struct iio_axi_dac_init_par {
 	struct axi_dac *dac;
 	struct axi_dmac *dmac;
@@ -58,6 +65,13 @@ struct iio_axi_dac_init_par {
 	void (*dcache_flush)(void);
 };
 
+/**
+ * struct iio_axi_dac - Structure with references to DAC and DMA cores.
+ * @dac:		Pointer to "axi_dac" instance.
+ * @dac:		Pointer to "axi_dmac" instance.
+ * @dac_ddr_base:	Address used by DMA, for sending data to device.
+ * @dcache_flush:	Function pointer to flush the entire data cache.
+ */
 struct iio_axi_dac {
 	struct axi_dac *dac;
 	struct axi_dmac *dmac;
