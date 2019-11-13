@@ -56,16 +56,18 @@
 /**
  * struct iio_interface - Links a physical device instance "void *dev_instance"
  * with a "iio_device *iio" that describes capabilities of the device.
- * @name: device name.
- * @num_ch: number of channels.
- * @ch_mask: opened channels.
- * @dev_instance: physical instance of a device.
- * @iio: device descriptor(describes channels and attributes)
- * @get_xml: Generate device xml.
- * @transfer_dev_to_mem: transfer data from device into RAM.
- * @read_data: Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem".
- * @transfer_mem_to_dev: Transfer data from RAM to device.
- * @write_data: Write data to RAM. It should be called before "transfer_mem_to_dev".
+ * @name:			Device name.
+ * @ch_mask:			Opened channels.
+ * @dev_instance:		Physical instance of a device.
+ * @iio:			Device descriptor(describes channels and
+ *				attributes).
+ * @get_xml:			Generate device xml.
+ * @transfer_dev_to_mem:	Transfer data from device into RAM.
+ * @read_data:			Read data from RAM to pbuf. It should be called
+ *				after "transfer_dev_to_mem".
+ * @transfer_mem_to_dev:	Transfer data from RAM to device.
+ * @write_data:			Write data to RAM. It should be called before
+ *				"transfer_mem_to_dev".
  */
 struct iio_interface {
 	const char *name;
@@ -85,8 +87,8 @@ struct iio_interface {
 
 /**
  * struct iio_interfaces - Structure containing all interfaces.
- * @interfaces: List containing all interfaces.
- * @num_interfaces: Number of Interfaces.
+ * @interfaces:		List containing all interfaces.
+ * @num_interfaces:	Number of Interfaces.
  */
 struct iio_interfaces {
 	struct iio_interface **interfaces;
@@ -95,10 +97,10 @@ struct iio_interfaces {
 
 /**
  * struct element_info - Structure informations about a specific parameter.
- * @device_name: Device name.
- * @channel_name: Channel name.
- * @attribute_name: Attribute name.
- * @ch_out: If set, is an output channel.
+ * @device_name:	Device name.
+ * @channel_name:	Channel name.
+ * @attribute_name:	Attribute name.
+ * @ch_out:		If set, is an output channel.
  */
 struct element_info {
 	const char *device_name;
@@ -117,9 +119,10 @@ static struct iio_interfaces *iio_interfaces = NULL;
 /******************************************************************************/
 
 /**
- * @brief Get channel number.
- * @param *ch - String containing channel name + channel number.
- * @return channel number. Ex: for "altvoltage0" return 0, for "voltage2" return 2.
+ * iio_get_channel_number() - Get channel number.
+ * @ch: String containing channel name + channel number.
+ * Return: Channel number. Ex: for "altvoltage0" return 0, for "voltage2"
+ * return 2.
  */
 static int32_t iio_get_channel_number(const char *ch)
 {
@@ -137,11 +140,11 @@ static int32_t iio_get_channel_number(const char *ch)
 }
 
 /**
- * @brief Get channel ID from a list of channels.
- * @param *channel - Channel name.
- * @param *channels - List of channels.
- * @param ch_out - If "true" is output channel, if "false" is input channel.
- * @return Channel ID, or negative value if attribute is not found.
+ * iio_get_channel_id() - Get channel ID from a list of channels.
+ * @channel:	Channel name.
+ * @channels:	List of channels.
+ * @ch_out:	If "true" is output channel, if "false" is input channel.
+ * Return: Channel ID, or negative value if attribute is not found.
  */
 static int16_t iio_get_channel_id(const char *channel,
 				  struct iio_channel **channels, bool ch_out)
@@ -161,10 +164,10 @@ static int16_t iio_get_channel_id(const char *channel,
 }
 
 /**
- * @brief Get attribute ID from a list of attributes.
- * @param *attr - Attribute name.
- * @param *attributes - List of attributes.
- * @return attribute ID, or negative value if attribute is not found.
+ * iio_get_attribute_id() - Get attribute ID from a list of attributes.
+ * @attr:	Attribute name.
+ * @attributes:	List of attributes.
+ * Return: Attribute ID, or negative value if attribute is not found.
  */
 static int16_t iio_get_attribute_id(const char *attr,
 				    struct iio_attribute **attributes)
@@ -184,10 +187,10 @@ static int16_t iio_get_attribute_id(const char *attr,
 }
 
 /**
- * @brief Find interface with "device_name".
- * @param @device_name - Device name.
- * @param iio_interfaces - List of interfaces.
- * @return interface pointer if interface is found, NULL otherwise.
+ * iio_get_interface() - Find interface with "device_name".
+ * @device_name:	Device name.
+ * @iio_interfaces:	List of interfaces.
+ * Return: Interface pointer if interface is found, NULL otherwise.
  */
 static struct iio_interface *iio_get_interface(const char *device_name,
 		struct iio_interfaces *iio_interfaces)
@@ -206,13 +209,13 @@ static struct iio_interface *iio_get_interface(const char *device_name,
 }
 
 /**
- * @brief Read all attributes from an attribute list.
- * @param *device - Physical instance of a device.
- * @param *buf - Buffer where values are read.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @param **attributes - List of attributes to be read.
- * @return number of bytes read or negative value in case of error.
+ * iio_read_all_attr() - Read all attributes from an attribute list.
+ * @device:		Physical instance of a device.
+ * @buf:		Buffer where values are read.
+ * @len:		Maximum length of value to be stored in buf.
+ * @channel:		Channel properties.
+ * @attributes:		List of attributes to be read.
+ * Return: Number of bytes read or negative value in case of error.
  */
 static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel, struct iio_attribute **attributes)
@@ -246,13 +249,13 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief Write all attributes from an attribute list.
- * @param *device - Physical instance of a device.
- * @param *buf - Values to be written.
- * @param len - Length of buf.
- * @param *channel - Channel properties.
- * @param **attributes - List of attributes to be written.
- * @return number of written bytes or negative value in case of error.
+ * iio_write_all_attr() - Write all attributes from an attribute list.
+ * @device:	Physical instance of a device.
+ * @buf:	Values to be written.
+ * @len:	Length of buf.
+ * @channel:	Channel properties.
+ * @attributes:	List of attributes to be written.
+ * Return: Number of written bytes or negative value in case of error.
  */
 static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel, struct iio_attribute **attributes)
@@ -280,13 +283,14 @@ static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief Read/write channel attribute.
- * @param *el_info - Structure describing element to be written.
- * @param *buf - Read/write value.
- * @param len - Length of data in "buf" parameter.
- * @param *channel - Structure describing channel attributes.
- * @param is_write - If it has value "1", writes attribute, otherwise reads attribute.
- * @return length of chars written/read or negative value in case of error.
+ * iio_rd_wr_channel_attribute() - Read/write channel attribute.
+ * @el_info:	Structure describing element to be written.
+ * @buf:	Read/write value.
+ * @len:	Length of data in "buf" parameter.
+ * @channel: 	Structure describing channel attributes.
+ * @is_write:	If it has value "1", writes attribute, otherwise reads
+ * 		attribute.
+ * Return: Length of chars written/read or negative value in case of error.
  */
 static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 		char *buf, size_t len,
@@ -326,13 +330,14 @@ static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
 }
 
 /**
- * @brief Read/write attribute.
- * @param *el_info - Structure describing element to be written.
- * @param *buf - Read/write value.
- * @param len - Length of data in "buf" parameter.
- * @param *iio_device - Physical instance of a device.
- * @param is_write - If it has value "1", writes attribute, otherwise reads attribute.
- * @return length of chars written/read or negative value in case of error.
+ * iio_rd_wr_attribute() - Read/write attribute.
+ * @el_info:	Structure describing element to be written.
+ * @buf:	Read/write value.
+ * @len:	Length of data in "buf" parameter.
+ * @iio_device:	Physical instance of a device.
+ * @is_write:	If it has value "1", writes attribute, otherwise reads
+ * 		attribute.
+ * Return: Length of chars written/read or negative value in case of error.
  */
 static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 				   size_t len,
@@ -382,9 +387,9 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 }
 
 /**
- * @brief Check if device is supported.
- * @param *device - Device name.
- * @return TRUE if device is supported, FALSE otherwise.
+ * iio_supported_dev() - Check if device is supported.
+ * @device:	Device name.
+ * Return: TRUE if device is supported, FALSE otherwise.
  */
 static bool iio_supported_dev(const char *device)
 {
@@ -392,13 +397,13 @@ static bool iio_supported_dev(const char *device)
 }
 
 /**
- * @brief Read global attribute of a device.
- * @param *device - String containing device name.
- * @param *attr - String containing attribute name.
- * @param *buf - Buffer where value is read.
- * @param len - Maximum length of value to be stored in buf.
- * @param debug.
- * @return number of bytes read.
+ * iio_read_attr() - Read global attribute of a device.
+ * @device:	String containing device name.
+ * @attr:	String containing attribute name.
+ * @buf:	Buffer where value is read.
+ * @len:	Maximum length of value to be stored in buf.
+ * @debug:	Read raw value if set.
+ * Return: Number of bytes read.
  */
 static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 			     size_t len, bool debug)
@@ -421,13 +426,13 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 }
 
 /**
- * @brief Write global attribute of a device.
- * @param *device - String containing device name.
- * @param *attr - String containing attribute name.
- * @param *buf - Value to be written.
- * @param len - Length of data.
- * @param debug.
- * @return  number of written bytes.
+ * iio_write_attr() - Write global attribute of a device.
+ * @device:	String containing device name.
+ * @attr:	String containing attribute name.
+ * @buf:	Value to be written.
+ * @len:	Length of data.
+ * @debug:	Write raw value if set.
+ * Return: Number of written bytes.
  */
 static ssize_t iio_write_attr(const char *device, const char *attr,
 			      const char *buf,
@@ -451,14 +456,14 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 }
 
 /**
- * @brief Read channel attribute.
- * @param *device - String containing device name.
- * @param *channel - String containing channel name.
- * @param *ch_out - Channel type input/output.
- * @param *attr - String containing attribute name.
- * @param *buf - Buffer where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @return number of bytes read.
+ * iio_ch_read_attr() - Read channel attribute.
+ * @device:	String containing device name.
+ * @channel:	String containing channel name.
+ * @ch_out:	Channel type input/output.
+ * @attr:	String containing attribute name.
+ * @buf:	Buffer where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * Return: Number of bytes read.
  */
 static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 				bool ch_out, const char *attr, char *buf, size_t len)
@@ -482,14 +487,14 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 }
 
 /**
- * @brief Write channel attribute.
- * @param *device - String containing device name.
- * @param *channel - String containing channel name.
- * @param *ch_out - Channel type input/output.
- * @param *attr - String containing attribute name.
- * @param *buf - Value to be written.
- * @param len - Length of data in "buf" parameter.
- * @return number of written bytes.
+ * iio_ch_write_attr() - Write channel attribute.
+ * @device:	String containing device name.
+ * @channel:	String containing channel name.
+ * @ch_out:	Channel type input/output.
+ * @attr:	String containing attribute name.
+ * @buf:	Value to be written.
+ * @len:	Length of data in "buf" parameter.
+ * Return: Number of written bytes.
  */
 static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 				 bool ch_out, const char *attr, const char *buf, size_t len)
@@ -513,11 +518,11 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 }
 
 /**
- * @brief Open device.
- * @param *device - String containing device name.
- * @param *sample_size - Sample size.
- * @param *mask - Channels to be opened.
- * @return SUCCESS, negative value in case of failure.
+ * iio_open_dev() - Open device.
+ * @device:		String containing device name.
+ * @sample_size:	Sample size.
+ * @mask:		Channels to be opened.
+ * Return: SUCCESS, negative value in case of failure.
  */
 static int32_t iio_open_dev(const char *device, size_t sample_size,
 			    uint32_t mask)
@@ -540,9 +545,9 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 }
 
 /**
- * @brief Close device.
- * @param *device - String containing device name.
- * @return SUCCESS, negative value in case of failure.
+ * iio_close_dev() - Close device.
+ * @device:	String containing device name.
+ * Return: SUCCESS, negative value in case of failure.
  */
 static int32_t iio_close_dev(const char *device)
 {
@@ -557,10 +562,10 @@ static int32_t iio_close_dev(const char *device)
 }
 
 /**
- * @brief Get device mask, this specifies the channels that are used.
- * @param *device - String containing device name.
- * @param *mask - Channels that are opened.
- * @return SUCCESS, negative value in case of failure.
+ * iio_get_mask() - Get device mask, this specifies the channels that are used.
+ * @device:	String containing device name.
+ * @mask:	Channels that are opened.
+ * Return: SUCCESS, negative value in case of failure.
  */
 static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
@@ -576,10 +581,10 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 }
 
 /**
- * @brief Transfer data from device into RAM.
- * @param *device - String containing device name.
- * @param bytes_count - Number of bytes.
- * @return bytes_count or negative value in case of error.
+ * iio_transfer_dev_to_mem() - Transfer data from device into RAM.
+ * @device:		String containing device name.
+ * @bytes_count:	Number of bytes.
+ * Return: Bytes_count or negative value in case of error.
  */
 static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
@@ -593,15 +598,15 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 }
 
 /**
- * @brief Read chunk of data from RAM to pbuf. Call "iio_transfer_dev_to_mem()"
- * first.
+ * iio_read_dev() - Read chunk of data from RAM to pbuf. Call
+ * "iio_transfer_dev_to_mem()" first.
  * This function is probably called multiple times by libtinyiiod after a
  * "iio_transfer_dev_to_mem" call, since we can only read "bytes_count" bytes.
- * @param *device - String containing device name.
- * @param *pbuf - Buffer where value is stored.
- * @param *offset - Offset to the remaining data after reading n chunks.
- * @param bytes_count - Number of bytes to read.
- * @return bytes_count or negative value in case of error.
+ * @device:		String containing device name.
+ * @pbuf:		Buffer where value is stored.
+ * @offset:		Offset to the remaining data after reading n chunks.
+ * @bytes_count:	Number of bytes to read.
+ * Return: Bytes_count or negative value in case of error.
  */
 static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			    size_t bytes_count)
@@ -616,10 +621,10 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Transfer memory to device.
- * @param *device - String containing device name.
- * @param bytes_count - Number of bytes to transfer.
- * @return bytes_count or negative value in case of error.
+ * iio_transfer_mem_to_dev() - Transfer memory to device.
+ * @device:		String containing device name.
+ * @bytes_count:	Number of bytes to transfer.
+ * Return: Bytes_count or negative value in case of error.
  */
 static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
@@ -633,15 +638,15 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 }
 
 /**
- * @brief Write chunk of data into RAM.
+ * iio_write_dev() - Write chunk of data into RAM.
  * This function is probably called multiple times by libtinyiiod before a
  * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes
  * at a time.
- * @param *device - String containing device name.
- * @param *buf - Values to write.
- * @param *offset - Offset in memory after the nth chunk of data.
- * @param bytes_count - Number of bytes to write.
- * @return bytes_count or negative value in case of error.
+ * @device:		String containing device name.
+ * @buf:		Values to write.
+ * @offset:		Offset in memory after the nth chunk of data.
+ * @bytes_count:	Number of bytes to write.
+ * Return: Bytes_count or negative value in case of error.
  */
 static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
@@ -655,9 +660,9 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 }
 
 /**
- * @brief Get a merged xml containing all devices.
- * @param **outxml - generated xml.
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_get_xml() - Get a merged xml containing all devices.
+ * @outxml:	Generated xml.
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 static ssize_t iio_get_xml(char **outxml)
 {
@@ -730,9 +735,10 @@ error:
 }
 
 /**
- * @brief Register interface.
- * @param *init_par - Structure containing physical device instance and device descriptor.
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_register() - Register interface.
+ * @init_par:	Structure containing physical device instance and device
+ * 		descriptor.
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_register(struct iio_interface_init_par *init_par)
 {
@@ -779,9 +785,9 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 }
 
 /**
- * @brief Unregister interface.
- * @param *device_name - String containing device name.
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_unregister() - Unregister interface.
+ * @device_name: String containing device name.
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_unregister(const char *device_name)
 {
@@ -822,11 +828,12 @@ ssize_t iio_unregister(const char *device_name)
 }
 
 /**
- * @brief Set communication ops and read/write ops that will be called from
- * "libtinyiiod".
- * @param **iiod - Structure containing new tinyiiod instance.
- * @param iio_server_ops - Structure containing read/write ops (Ex: read/write to UART).
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_init() - Set communication ops and read/write ops that will be called
+ * from "libtinyiiod".
+ * @*iiod:		Structure containing new tinyiiod instance.
+ * @iio_server_ops:	Structure containing read/write ops (Ex: read/write to
+ * 			UART).
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
@@ -864,9 +871,9 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 }
 
 /**
- * @brief Free the resources allocated by "iio_init()".
- * @param iiod - Structure containing tinyiiod instance.
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_remove() - Free the resources allocated by "iio_init()".
+ * @iiod: Structure containing tinyiiod instance.
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_remove(struct tinyiiod *iiod)
 {
