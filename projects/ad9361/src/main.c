@@ -649,7 +649,7 @@ int main(void)
 	};
 	struct uart_init_par uart_init_par = {
 		.baud_rate = 921600,
-		.device_id = UART_1_DEVICE_ID,
+		.device_id = UART_DEVICE_ID,
 		.extra = &xil_uart_init_par,
 	};
 
@@ -684,10 +684,6 @@ int main(void)
 		.write_data = NULL,
 	};
 
-	ret = iio_register(&iio_axi_adc_intf_par);
-	if(ret < 0)
-		return ret;
-
 	struct iio_interface_init_par iio_axi_dac_intf_par = {
 		.dev_name = iio_axi_dac_inst->dac->name,
 		.dev_instance = iio_axi_dac_inst,
@@ -698,9 +694,7 @@ int main(void)
 		.read_data = NULL,
 		.write_data = iio_axi_dac_write_dev,
 	};
-	ret = iio_register(&iio_axi_dac_intf_par);
-	if(ret < 0)
-		return ret;
+
 	char dev_name[] = "ad9361-phy";
 	struct iio_interface_init_par iio_ad9361_intf_par = {
 		.dev_name = dev_name,
@@ -712,6 +706,15 @@ int main(void)
 		.read_data = NULL,
 		.write_data = NULL,
 	};
+
+	ret = iio_register(&iio_axi_adc_intf_par);
+	if(ret < 0)
+		return ret;
+
+	ret = iio_register(&iio_axi_dac_intf_par);
+	if(ret < 0)
+		return ret;
+
 	ret = iio_register(&iio_ad9361_intf_par);
 	if(ret < 0)
 		return ret;
