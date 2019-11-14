@@ -435,7 +435,7 @@ static struct iio_attribute iio_attr_voltage_calibphase = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "calibscale" attribute.
+ * struct iio_attr_voltage_calibscale - Structure for "calibscale" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -447,7 +447,8 @@ static struct iio_attribute iio_attr_voltage_calibscale = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "sampling_frequency"
+ * struct iio_attr_voltage_sampling_frequency - Structure for
+ * "sampling_frequency".
  * attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
@@ -460,7 +461,7 @@ static struct iio_attribute iio_attr_voltage_sampling_frequency = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "raw" attribute.
+ * struct iio_attr_altvoltage_raw - Structure for "raw" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -472,7 +473,7 @@ static struct iio_attribute iio_attr_altvoltage_raw = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "phase" attribute.
+ * struct iio_attr_altvoltage_phase - Structure for "phase" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -484,7 +485,7 @@ static struct iio_attribute iio_attr_altvoltage_phase = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "frequency" attribute.
+ * struct iio_attr_altvoltage_frequency - Structure for "frequency" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -496,7 +497,7 @@ static struct iio_attribute iio_attr_altvoltage_frequency = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "scale" attribute.
+ * struct iio_attr_altvoltage_scale - Structure for "scale" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -508,7 +509,8 @@ static struct iio_attribute iio_attr_altvoltage_scale = {
 };
 
 /**
- * struct iio_attr_voltage_calibphase - Structure for "sampling_frequency" attribute.
+ * struct iio_attr_altvoltage_sampling_frequency - Structure for
+ * "sampling_frequency" attribute.
  * @name:	Attribute name.
  * @show:	Read attribute from device.
  * @store:	Write attribute to device.
@@ -520,7 +522,7 @@ static struct iio_attribute iio_attr_altvoltage_sampling_frequency = {
 };
 
 /**
- * List containing attributes corresponding to "voltage" channels.
+ * List containing attributes, corresponding to "voltage" channels.
  */
 static struct iio_attribute *iio_voltage_attributes[] = {
 	&iio_attr_voltage_calibscale,
@@ -530,7 +532,7 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 };
 
 /**
- * List containing attributes corresponding to "altvoltage" channels.
+ * List containing attributes, corresponding to "altvoltage" channels.
  */
 static struct iio_attribute *iio_altvoltage_attributes[] = {
 	&iio_attr_altvoltage_raw,

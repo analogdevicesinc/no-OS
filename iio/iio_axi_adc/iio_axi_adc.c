@@ -321,36 +321,69 @@ static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 	return -ENOENT;
 }
 
+/**
+ * struct iio_attr_calibphase - Structure for "calibphase" attribute.
+ * @name:	Attribute name.
+ * @show:	Read attribute from device.
+ * @store:	Write attribute to device.
+ */
 static struct iio_attribute iio_attr_calibphase = {
 	.name = "calibphase",
 	.show = get_calibphase,
 	.store = set_calibphase,
 };
 
+/**
+ * struct iio_attr_calibbias - Structure for "calibbias" attribute.
+ * @name:	Attribute name.
+ * @show:	Read attribute from device.
+ * @store:	Write attribute to device.
+ */
 static struct iio_attribute iio_attr_calibbias = {
 	.name = "calibbias",
 	.show = get_calibbias,
 	.store = set_calibbias,
 };
 
+/**
+ * struct iio_attr_calibscale - Structure for "calibscale" attribute.
+ * @name:	Attribute name.
+ * @show:	Read attribute from device.
+ * @store:	Write attribute to device.
+ */
 static struct iio_attribute iio_attr_calibscale = {
 	.name = "calibscale",
 	.show = get_calibscale,
 	.store = set_calibscale,
 };
 
+/**
+ * struct iio_attr_samples_pps - Structure for "samples_pps" attribute.
+ * @name:	Attribute name.
+ * @show:	Read attribute from device.
+ * @store:	Write attribute to device.
+ */
 static struct iio_attribute iio_attr_samples_pps = {
 	.name = "samples_pps",
 	.show = get_samples_pps,
 	.store = set_samples_pps,
 };
 
+/**
+ * struct iio_attr_sampling_frequency - Structure for "sampling_frequency" attribute.
+ * @name:	Attribute name.
+ * @show:	Read attribute from device.
+ * @store:	Write attribute to device.
+ */
 static struct iio_attribute iio_attr_sampling_frequency = {
 	.name = "sampling_frequency",
 	.show = get_sampling_frequency,
 	.store = set_sampling_frequency,
 };
 
+/**
+ * List containing attributes, corresponding to "voltage" channels.
+ */
 static struct iio_attribute *iio_voltage_attributes[] = {
 	&iio_attr_calibphase,
 	&iio_attr_calibbias,
@@ -362,8 +395,8 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 
 /**
  * iio_axi_adc_get_xml() - Get xml corresponding to an "axi_adc" device.
- * @*xml: Xml containing description of a device.
- * @iio_dev: Structure describing a device, channels and attributes.
+ * @xml:	Xml containing description of a device.
+ * @iio_dev:	Structure describing a device, channels and attributes.
  * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
