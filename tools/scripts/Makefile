@@ -31,8 +31,12 @@ endif
 
 EXEC = release
 TIMESTAMP = $(shell date +"%T")
-ECHO = @echo -n -e "\\e[32m[$(TIMESTAMP)]\\e[39m"
-ERROR = @echo -n -e "\\e[32m[$(TIMESTAMP)]\\e[31m"
+define print
+	@printf "\\e[32m[$(TIMESTAMP)]\\e[39m $(1)"
+endef
+define print_err
+	@printf "\\e[32m[$(TIMESTAMP)]\\e[31m $(1)"
+endef
 CC ?= gcc
 
 # Xilinx platform handling
@@ -129,7 +133,7 @@ OBJS = $(SRCS:.c=.o)
 
 # Compile all the source files
 %.o : %.c
-	$(ECHO) [CC]	$(notdir $<) '\n'
+	$(call print, [CC] $(notdir $<) \n)
 	$(MUTE)$(CC) $(CFLAGS) $(INC_PATHS) $(EXTRA_INCS)		\
 	-c $(addprefix $(BUILD_DIR)/app/src/,$(notdir $<))		\
 	-o $(addprefix $(OBJECTS_DIR)/,$(notdir $@))
@@ -137,7 +141,7 @@ OBJS = $(SRCS:.c=.o)
 # Link the resulted object files
 $(EXEC): check-srcs $(subst LOCAL_PLATFORM,xilinx,$(OBJS))		\
 		$(BUILD_DIR)/app/src/lscript.ld
-	$(ECHO) [LD] $(shell ls $(OBJECTS_DIR)) '\n'
+	$(call print, [LD] $(shell ls $(OBJECTS_DIR)) \n)
 	$(MUTE)$(CC) $(LDFLAGS) $(LIB_PATHS) 				\
 	$(OBJECTS_DIR)/*.o						\
 	$(LIBS) -o $(BUILD_DIR)/$(EXEC).elf
@@ -174,7 +178,8 @@ ifeq (xilinx,$(strip $(PLATFORM)))
 endif
 
 clean:
-	$(ECHO) Cleaning build workspace '\n'
+
+	$(call print,Cleaning build workspace \n)
 	$(MUTE)rm -rf temp
 	$(MUTE)rm -rf $(BUILD_DIR)
 	@$(MAKE) -s xil-pre-cleanup
@@ -195,7 +200,7 @@ ifndef $(HARDWARE)
 	fi;))
 endif
 # Assign the platform based on the hardware file extension
-	$(ECHO) Evaluating hardware : $(notdir $(HARDWARE))\\n
+	$(call print,Evaluating hardware : $(notdir $(HARDWARE))\n)
 	$(eval PLATFORM:= $(shell \
 	if [ "$(findstring hdf,$(notdir $(HARDWARE)))" = "hdf" ]; then	\
 		echo xilinx;						\
@@ -205,10 +210,10 @@ endif
 		echo none;						\
 	fi;))
 	@ if [ "$(PLATFORM)" = "none" ]; then				\
-		echo  \\e[32m[$(TIMESTAMP)]\\e[31m Platform not found\\e[39m;\
+		echo \\e[32m[$(TIMESTAMP)]\\e[31m Platform not found\\e[39m;\
 		exit 1;							\
 	fi;
-	$(ECHO) "Found platform : \e[33m$(PLATFORM)\e[39m\\n";
+	$(call print,Found platform : \e[33m$(PLATFORM)\e[39m\n)
 
 pre-build:
 	@$(MAKE) -s xil-pre-cleanup
@@ -226,7 +231,7 @@ xilinx:	xil-pre-cleanup eval-hardware pre-build xil-prepare-project
 	$(call copy_srcs,xilinx)
 	@$(MAKE) -s compile
 	$(MUTE)rm -rf $(BUILD_DIR)/SDK.log
-	$(ECHO) Done \\n
+	$(call print,Done \n)
 
 xil-extract-hdf-info:
 	$(MUTE)mkdir -p temp
@@ -245,7 +250,7 @@ xil-pre-cleanup:
 	$(MUTE)rm -rf \.metadata
 
 xil-prepare-project: xil-extract-hdf-info xil-update-hdf-info
-	$(ECHO) Building hardware specification and bsp '\n'
+	$(call print,Building hardware specification and bsp \n)
 # Create the local sdk project
 	$(MUTE)xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl	\
 	$(SDK_WORKSPACE) $(HARDWARE) $(PROCESSOR_CORE) $(NULL)
