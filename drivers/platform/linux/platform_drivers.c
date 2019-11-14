@@ -198,7 +198,7 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MODE,
-			&param->mode);
+		    &param->mode);
 	if (ret == -1) {
 		printf("%s: Can't set mode\n\r", __func__);
 		close(descriptor->fd);
@@ -207,7 +207,7 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MAX_SPEED_HZ,
-			&param->max_speed_hz);
+		    &param->max_speed_hz);
 	if (ret == -1) {
 		printf("%s: Can't set speed\n\r", __func__);
 		close(descriptor->fd);
@@ -458,9 +458,9 @@ int32_t gpio_get_direction(gpio_desc *desc,
 	}
 
 	if(data == 'o')
-		 *direction = GPIO_OUT;
+		*direction = GPIO_OUT;
 	else
-		 *direction = GPIO_IN;
+		*direction = GPIO_IN;
 
 	ret = close(fd);
 	if (ret < 0) {
@@ -541,9 +541,9 @@ int32_t gpio_get_value(gpio_desc *desc,
 	}
 
 	if(data == '0')
-		 *value = GPIO_LOW;
+		*value = GPIO_LOW;
 	else
-		 *value = GPIO_HIGH;
+		*value = GPIO_HIGH;
 
 	ret = close(fd);
 	if (ret < 0) {

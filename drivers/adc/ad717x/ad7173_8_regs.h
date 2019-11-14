@@ -45,12 +45,11 @@
 
 #ifdef AD7173_8_INIT
 /*! Array holding the info for the AD7173_8 registers - address, initial value, size */
-ad717x_st_reg ad7173_8_regs[] =
-{
+ad717x_st_reg ad7173_8_regs[] = {
 	{ AD717X_STATUS_REG, 0x00, 1 },
 	{ AD717X_ADCMODE_REG, 0x0000, 2 },
 	{
-		AD717X_IFMODE_REG, 
+		AD717X_IFMODE_REG,
 		AD717X_IFMODE_REG_DOUT_RESET | AD717X_IFMODE_REG_CRC_EN,
 		2
 	},
@@ -59,7 +58,7 @@ ad717x_st_reg ad7173_8_regs[] =
 	{ AD717X_GPIOCON_REG, 0x0000, 2 },
 	{ AD717X_ID_REG, 0x0000, 2 },
 	{
-		AD717X_CHMAP0_REG, 
+		AD717X_CHMAP0_REG,
 		AD717X_CHMAP_REG_CH_EN | AD717X_CHMAP_REG_AINNEG(2),
 		2
 	},

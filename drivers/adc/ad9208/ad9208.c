@@ -171,7 +171,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 	}
 
 	ret = ad9208_set_input_clk_duty_cycle_stabilizer(ad9208_h,
-							 st->duty_cycle_stabilizer_en);
+			st->duty_cycle_stabilizer_en);
 	if (ret < 0) {
 		printf("Failed to set clk duty cycle stabilizer (%d)\n", ret);
 		goto error;
