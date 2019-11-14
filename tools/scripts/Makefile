@@ -57,7 +57,6 @@ CFLAGS = -Wall 								\
 	 -Wno-unused-parameter						\
 	 -fdata-sections						\
 	 -ffunction-sections 						\
-	 -std=gnu90							\
 	 -O2 								\
 	 -g3								\
 	 -MMD 								\
