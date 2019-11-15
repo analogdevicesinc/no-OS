@@ -245,7 +245,7 @@ int32_t ad9152_short_pattern_test(struct ad9152_dev *dev,
 
 			ad9152_spi_read(dev, 0x32f, &status);
 			if ((status & 0x1) == 0x1)
-				printf("AD9152: short-pattern-test mismatch (%x, %d, %d, %x)!.\n",
+				printf("AD9152: short-pattern-test mismatch (%lu, %ld, %ld, %d)!.\n",
 				       dac, sample,
 				       init_param.stpl_samples[dac][sample],
 				       status);

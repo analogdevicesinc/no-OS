@@ -635,7 +635,7 @@ int32_t ad9144_short_pattern_test(struct ad9144_dev *dev,
 						      REG_SHORT_TPL_TEST_3,
 						      0x01, 0x00);
 			if (ret == -1)
-				printf("%s : short-pattern-test mismatch (0x%x, 0x%x 0x%x, 0x%x)!.\n",
+				printf("%s : short-pattern-test mismatch (0x%lx, 0x%lx 0x%lx, 0x%x)!.\n",
 				       __func__, dac, sample,
 				       init_param->stpl_samples[dac][sample],
 				       status);

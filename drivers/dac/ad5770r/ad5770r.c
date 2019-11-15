@@ -707,7 +707,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	if (!ret)
 		printf("ad5770r successfully initialized\n");
 	else
-		printf("ad5770r initialization error (%d)\n", ret);
+		printf("ad5770r initialization error (%ld)\n", ret);
 
 	return ret;
 }

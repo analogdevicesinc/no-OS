@@ -811,7 +811,7 @@ int32_t adxl372_init(struct adxl372_dev **device,
 		return ret;
 	}
 error:
-	printf("adxl372 initialization error (%d)\n", ret);
+	printf("adxl372 initialization error (%ld)\n", ret);
 	free(dev);
 	mdelay(1000);
 	return ret;

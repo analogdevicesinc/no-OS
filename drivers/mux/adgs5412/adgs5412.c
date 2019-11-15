@@ -364,7 +364,7 @@ int32_t adgs5412_init(adgs5412_dev **device,
 	if (!ret)
 		printf("ADGS5412 successfully initialized\n");
 	else
-		printf("ADGS5412 initialization error (%d)\n", ret);
+		printf("ADGS5412 initialization error (%ld)\n", ret);
 
 	return ret;
 }

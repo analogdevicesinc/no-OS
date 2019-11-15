@@ -440,7 +440,7 @@ int32_t adgs1408_init(struct adgs1408_dev **device,
 	if (!ret)
 		printf("ADGS1408 successfully initialized\n");
 	else
-		printf("ADGS1408 initialization error (%d)\n", ret);
+		printf("ADGS1408 initialization error (%ld)\n", ret);
 
 	return ret;
 }

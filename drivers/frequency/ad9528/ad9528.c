@@ -371,7 +371,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		return ret;
 
 	if ((reg_data & 0xFFFFFF) != AD9528_SPI_MAGIC) {
-		printf("AD9528 SPI Read Verify failed (0x%X).\n", reg_data);
+		printf("AD9528 SPI Read Verify failed (0x%lx).\n", reg_data);
 		return -1;
 	}
 

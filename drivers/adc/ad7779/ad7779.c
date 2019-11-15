@@ -1376,7 +1376,7 @@ int32_t ad7779_init(ad7779_dev **device,
 	if (!ret)
 		printf("AD7779 successfully initialized\n");
 	else
-		printf("AD7779 initialization error (%d)\n", ret);
+		printf("AD7779 initialization error (%ld)\n", ret);
 
 	return ret;
 }

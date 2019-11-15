@@ -127,20 +127,20 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 
 	ret = ad9208_init(ad9208_h);
 	if (ret < 0) {
-		printf("ad9208 init failed (%d)\n", ret);
+		printf("ad9208 init failed (%ld)\n", ret);
 		return -ENODEV;
 	}
 
 	ret = ad9208_reset(ad9208_h, 0);
 	if (ret < 0) {
-		printf("ad9298 reset failed (%d)\n", ret);
+		printf("ad9298 reset failed (%ld)\n", ret);
 		ret = -ENODEV;
 		goto error;
 	}
 
 	ret = ad9208_get_chip_id(ad9208_h, &chip_id);
 	if (ret < 0) {
-		printf("ad9208_get_chip_id failed (%d)\n", ret);
+		printf("ad9208_get_chip_id failed (%ld)\n", ret);
 		ret = -ENODEV;
 		goto error;
 	}
@@ -159,21 +159,21 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 
 	ret = ad9208_adc_set_channel_select(ad9208_h, AD9208_ADC_CH_ALL);
 	if (ret < 0) {
-		printf( "Failed to select channels (%d)\n", ret);
+		printf( "Failed to select channels (%ld)\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_set_pdn_pin_mode(ad9208_h, st->powerdown_pin_en,
 				      st->powerdown_mode);
 	if (ret < 0) {
-		printf("Failed to set PWDN pin mode (%d)\n", ret);
+		printf("Failed to set PWDN pin mode (%ld)\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_set_input_clk_duty_cycle_stabilizer(ad9208_h,
 			st->duty_cycle_stabilizer_en);
 	if (ret < 0) {
-		printf("Failed to set clk duty cycle stabilizer (%d)\n", ret);
+		printf("Failed to set clk duty cycle stabilizer (%ld)\n", ret);
 		goto error;
 	}
 
@@ -182,7 +182,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 	ret = ad9208_set_input_clk_cfg(ad9208_h, sample_rate,
 				       st->input_div);
 	if (ret < 0) {
-		printf("Failed to set input clk config (%d)\n", ret);
+		printf("Failed to set input clk config (%ld)\n", ret);
 		goto error;
 	}
 
@@ -190,20 +190,20 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 				       st->analog_input_mode ? COUPLING_DC : COUPLING_AC,
 				       st->ext_vref_en, st->current_scale);
 	if (ret < 0) {
-		printf("Failed to set adc input config: %d\n", ret);
+		printf("Failed to set adc input config: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_adc_set_input_buffer_cfg(ad9208_h, st->buff_curr_n,
 					      st->buff_curr_p, AD9208_BUFF_CURR_600_UA);
 	if (ret < 0) {
-		printf("Failed to set input buffer config: %d\n", ret);
+		printf("Failed to set input buffer config: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_adc_set_fc_ch_mode(ad9208_h, st->fc_ch);
 	if (ret < 0) {
-		printf("Failed to set channel mode: %d\n", ret);
+		printf("Failed to set channel mode: %ld\n", ret);
 		goto error;
 	}
 
@@ -217,7 +217,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 
 	ret = ad9208_adc_set_dcm_mode(ad9208_h, dcm);
 	if (ret < 0) {
-		printf("Failed to set decimation mode: %d\n", ret);
+		printf("Failed to set decimation mode: %ld\n", ret);
 		goto error;
 	}
 
@@ -234,7 +234,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 
 	ret = ad9208_adc_set_data_format(ad9208_h, input_fmt, output_fmt);
 	if (ret < 0) {
-		printf("Failed to set data format: %d\n", ret);
+		printf("Failed to set data format: %ld\n", ret);
 		goto error;
 	}
 
@@ -242,54 +242,54 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 		ret = ad9208_adc_set_ddc_gain(ad9208_h, i,
 					      st->ddc[i].gain_db ? 6 : 0);
 		if (ret < 0) {
-			printf("Failed to set ddc gain: %d\n", ret);
+			printf("Failed to set ddc gain: %ld\n", ret);
 			goto error;
 		}
 
 		ret = ad9208_adc_set_ddc_dcm(ad9208_h, i,
 					     st->ddc[i].decimation);
 		if (ret < 0) {
-			printf("Failed to set ddc decimation mode: %d\n", ret);
+			printf("Failed to set ddc decimation mode: %ld\n", ret);
 			goto error;
 		}
 
 		ret = ad9208_adc_set_ddc_nco_mode(ad9208_h, i,
 						  st->ddc[i].nco_mode);
 		if (ret < 0) {
-			printf("Failed to set ddc nco mode: %d\n", ret);
+			printf("Failed to set ddc nco mode: %ld\n", ret);
 			goto error;
 		}
 
 		ret = ad9208_adc_set_ddc_nco(ad9208_h, i,
 					     st->ddc[i].carrier_freq_hz);
 		if (ret < 0) {
-			printf("Failed to set ddc nco frequency: %d\n", ret);
+			printf("Failed to set ddc nco frequency: %ld\n", ret);
 			goto error;
 		}
 
 		ret = ad9208_adc_set_ddc_nco_phase(ad9208_h, i, st->ddc[i].po);
 		if (ret < 0) {
-			printf("Failed to set ddc nco phase: %d\n", ret);
+			printf("Failed to set ddc nco phase: %ld\n", ret);
 			goto error;
 		}
 	}
 
 	ret = ad9208_testmode_set(st, 0, st->test_mode_ch0);
 	if (ret < 0) {
-		printf("Failed to set test mode for ch 0: %d\n", ret);
+		printf("Failed to set test mode for ch 0: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_testmode_set(st, 1, st->test_mode_ch1);
 	if (ret < 0) {
-		printf("Failed to set test mode for ch 1: %d\n", ret);
+		printf("Failed to set test mode for ch 1: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_syref_lmfc_offset_set(ad9208_h,
 						st->sysref_lmfc_offset);
 	if (ret < 0) {
-		printf("Failed to set SYSREF lmfc offset: %d\n", ret);
+		printf("Failed to set SYSREF lmfc offset: %ld\n", ret);
 		goto error;
 	}
 
@@ -298,39 +298,39 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 					   st->sysref_neg_window_skew,
 					   st->sysref_pos_window_skew);
 	if (ret < 0) {
-		printf("Failed to set SYSREF sig capture settings: %d\n", ret);
+		printf("Failed to set SYSREF sig capture settings: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_syref_mode_set(ad9208_h, st->sysref_mode,
 					 st->sysref_count);
 	if (ret < 0) {
-		printf("Failed to Set JESD SYNCHRONIZATION Mode: %d\n", ret);
+		printf("Failed to Set JESD SYNCHRONIZATION Mode: %ld\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_set_if_config(ad9208_h, (jesd_param_t )*st->jesd_param,
 					&lane_rate_kbps);
 	if (ret < 0) {
-		printf("Failed to set JESD204 interface config (%d)\n", ret);
+		printf("Failed to set JESD204 interface config (%ld)\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_subclass_set(ad9208_h, st->jesd_subclass);
 	if (ret < 0) {
-		printf("Failed to set subclass (%d)\n", ret);
+		printf("Failed to set subclass (%ld)\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_enable_scrambler(ad9208_h, 1);
 	if (ret < 0) {
-		printf("Failed to enable scrambler (%d)\n", ret);
+		printf("Failed to enable scrambler (%ld)\n", ret);
 		goto error;
 	}
 
 	ret = ad9208_jesd_enable_link(ad9208_h, 1);
 	if (ret < 0) {
-		printf("Failed to enabled JESD204 link (%d)\n", ret);
+		printf("Failed to enabled JESD204 link (%ld)\n", ret);
 		goto error;
 	}
 
@@ -340,7 +340,7 @@ static int32_t ad9208_setup(struct ad9208_state *st)
 		mdelay(10);
 		ret = ad9208_jesd_get_pll_status(ad9208_h, &pll_stat);
 		if (ret < 0) {
-			printf("Failed to get pll status (%d)\n", ret);
+			printf("Failed to get pll status (%ld)\n", ret);
 			goto error;
 		}
 	} while (!(pll_stat & AD9208_JESD_PLL_LOCK_STAT) && timeout--);

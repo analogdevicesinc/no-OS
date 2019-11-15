@@ -590,7 +590,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	if (!ret)
 		printf("AD4110 successfully initialized\n");
 	else
-		printf("AD4110 initialization error (%d)\n", ret);
+		printf("AD4110 initialization error (%ld)\n", ret);
 
 	return ret;
 }

@@ -403,7 +403,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 	} while (--tout && (reg_val & SYN_STAT_VCO_CAL_BUSY));
 
 	if (!tout)
-		printf("VCO CAL failed (0x%X)\n", reg_val);
+		printf("VCO CAL failed (0x%lx)\n", reg_val);
 
 
 	/* Start CP calibration */
@@ -421,7 +421,7 @@ static int32_t ad6676_set_clk_synth(struct ad6676_dev *dev,
 					SYN_STAT_CP_CAL_DONE)));
 
 	if (!tout) {
-		printf("AD6676 Synthesizer PLL unlocked (0x%X)\n", reg_val);
+		printf("AD6676 Synthesizer PLL unlocked (0x%lx)\n", reg_val);
 		return -1;
 	}
 
@@ -441,7 +441,7 @@ static int32_t ad6676_set_extclk_cntl(struct ad6676_dev *dev,
 {
 	int ret;
 
-	printf("%s: frequency %u\n", __func__, freq);
+	printf("%s: frequency %lu\n", __func__, freq);
 
 	ret = ad6676_spi_write(dev, AD6676_CLKSYN_LOGEN, 0x5);
 	if (ret < 0)
@@ -544,7 +544,7 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 		} while (tout_i-- && !done);
 
 		if (!done) {
-			printf("AD6676 CAL timeout (0x%X)\n", cal);
+			printf("AD6676 CAL timeout (0x%lx)\n", cal);
 			ad6676_spi_write(dev,
 					 AD6676_FORCE_END_CAL,
 					 FORCE_END_CAL);
@@ -555,7 +555,7 @@ static int32_t ad6676_calibrate(struct ad6676_dev *dev,
 
 	} while (tout_o--);
 
-	printf("AD6676 CAL failed (0x%X)\n", cal);
+	printf("AD6676 CAL failed (0x%lx)\n", cal);
 
 	return -1;
 }
@@ -702,7 +702,7 @@ int32_t ad6676_setup(struct ad6676_dev **device,
 	reg_val &= SYN_STAT_PLL_LCK;
 
 	if (reg_val != SYN_STAT_PLL_LCK) {
-		printf("AD6676 JESD PLL unlocked (0x%X)\n", reg_val);
+		printf("AD6676 JESD PLL unlocked (0x%lx)\n", reg_val);
 		return -1;
 	}
 

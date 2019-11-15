@@ -326,7 +326,7 @@ int32_t ad5766_init(struct ad5766_dev **device,
 	if (!ret)
 		printf("AD5766 successfully initialized\n");
 	else
-		printf("AD5766 initialization error (%d)\n", ret);
+		printf("AD5766 initialization error (%ld)\n", ret);
 
 	return ret;
 }
