@@ -30,8 +30,6 @@ adiHalErr_t AD9528_setupSYSREF(ad9528Device_t *device,
 			       uint16_t divideFromPll1Out,  sysrefPatternMode_t sysrefPatternMode,
 			       sysrefNshotMode_t nShotPulses);
 adiHalErr_t AD9528_requestSysref(ad9528Device_t *device, uint8_t enableSYSREF);
-adiHalErr_t AD9528_sysrefReq(ad9528Device_t *device,
-			     ad9528SysrefReqMode_t mode);
 adiHalErr_t AD9528_remove(ad9528Device_t *device);
 
 #endif
