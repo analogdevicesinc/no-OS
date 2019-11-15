@@ -62,16 +62,6 @@ typedef enum spi_type {
 	ALTERA_SPI
 } spi_type;
 
-typedef struct altera_spi_init_param {
-	enum spi_type	type;
-	uint32_t	id;
-} altera_spi_init_param;
-
-typedef struct altera_spi_desc {
-	enum spi_type	type;
-	uint32_t		id;
-} altera_spi_desc;
-
 typedef enum gpio_type {
 	ALTERA_GPIO
 } gpio_type;

@@ -46,6 +46,7 @@
 #include "parameters.h"
 #include "error.h"
 #include "spi.h"
+#include "spi_extra.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
