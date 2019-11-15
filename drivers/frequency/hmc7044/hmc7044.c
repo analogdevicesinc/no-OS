@@ -244,9 +244,8 @@ static int hmc7044_write(struct hmc7044_dev *dev,
  * @param val - The register data.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-static int hmc7044_read(struct hmc7044_dev *dev,
-			uint16_t reg,
-			uint8_t *val)
+
+int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val)
 {
 	uint8_t buf[3];
 	uint16_t cmd;

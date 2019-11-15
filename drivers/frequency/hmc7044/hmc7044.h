@@ -98,6 +98,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 		     const struct hmc7044_init_param *init_param);
 /* Remove the device. */
 int32_t hmc7044_remove(struct hmc7044_dev *device);
+int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val);
 uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
 				 uint32_t *rate);
 uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
