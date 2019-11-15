@@ -177,7 +177,6 @@ typedef struct {
 /// Structure to hold AD9528 settings
 typedef struct {
 	struct gpio_desc *gpio_resetb;
-	struct gpio_desc *gpio_sysref_req;
 	struct spi_desc *spi_desc;
 	ad9528spiSettings_t *spiSettings;
 	ad9528pll1Settings_t *pll1Settings;
@@ -187,10 +186,5 @@ typedef struct {
 	void *extra;
 } ad9528Device_t;
 
-typedef enum {
-	SYSREF_CONT_ON,
-	SYSREF_CONT_OFF,
-	SYSREF_PULSE,
-} ad9528SysrefReqMode_t;
 
 #endif

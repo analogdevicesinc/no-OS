@@ -227,7 +227,6 @@ adiHalErr_t AD9528_initDeviceDataStruct(ad9528Device_t *device,
 	int32_t status;
 
 	status = gpio_get(&device->gpio_resetb, CLK_RESETB);
-	status |= gpio_get(&device->gpio_sysref_req, ADRV_SYSREF_REQ);
 
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = CLK_CS;
@@ -726,23 +725,6 @@ adiHalErr_t AD9528_setupSYSREF(ad9528Device_t *device,
 	return ADIHAL_OK;
 }
 
-adiHalErr_t AD9528_sysrefReq(ad9528Device_t *device,
-			     ad9528SysrefReqMode_t mode)
-{
-	if (mode == SYSREF_CONT_ON)
-		gpio_direction_output(device->gpio_sysref_req, 1);
-	else if (mode == SYSREF_CONT_OFF)
-		gpio_direction_output(device->gpio_sysref_req, 0);
-	else if (mode == SYSREF_PULSE) {
-		gpio_direction_output(device->gpio_sysref_req, 1);
-		mdelay(1);
-		gpio_direction_output(device->gpio_sysref_req, 0);
-	} else
-		return ADIHAL_ERR;
-
-	return ADIHAL_OK;
-}
-
 /**
  * \brief Free the allocated resources
  */
@@ -751,7 +733,6 @@ adiHalErr_t AD9528_remove(ad9528Device_t *device)
 	int32_t status;
 
 	status = gpio_remove(device->gpio_resetb);
-	status |= gpio_remove(device->gpio_sysref_req);
 	status |= spi_remove(device->spi_desc);
 
 	if (status != SUCCESS)
