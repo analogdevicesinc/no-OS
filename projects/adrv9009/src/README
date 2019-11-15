@@ -10,6 +10,7 @@
 	cp ../../../include/delay.h devices/adi_hal/
 	cp ../../../drivers/platform/altera/axi_io.c devices/adi_hal/
 	cp ../../../drivers/platform/altera/spi.c devices/adi_hal/
+	cp ../../../drivers/platform/altera/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/altera/gpio.c devices/adi_hal/
 	cp ../../../drivers/platform/altera/delay.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.c devices/adi_hal/
@@ -41,6 +42,7 @@
 	cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
+	cp ../../../drivers/platform/altera/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/delay.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.c devices/adi_hal/

@@ -1,7 +1,7 @@
-/***************************************************************************//**
- *   @file   xilinx_platform_drivers.h
- *   @brief  Header file of Xilinx Platform Drivers.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+/*******************************************************************************
+ *   @file   spi_extra.h
+ *   @brief  Header containing extra types used in the spi driver.
+ *   @author scuciurean (sergiu.cuciurean@analog.com) 
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -36,67 +36,45 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-
-#ifndef XILINX_PLATFORM_DRIVERS_H_
-#define XILINX_PLATFORM_DRIVERS_H_
+#ifndef SPI_EXTRA_H_
+#define SPI_EXTRA_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <xparameters.h>
-#ifdef _XPARAMETERS_PS_H_
-#include <xspips.h>
-#include <xgpiops.h>
-#include <xil_exception.h>
-#include "spi_extra.h"
-#else
-#include <xspi.h>
-#include <xgpio.h>
-#endif
+#include <stdint.h>
 
-#ifdef XIIC_H
-#include <xiic.h>
-#endif
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define SPI_CS_DECODE 0x01
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum i2c_type {
-	XILINX_I2C
-} i2c_type;
+typedef enum spi_type {
+	XILINX_SPI
+} spi_type;
 
-typedef struct xil_i2c_init_param {
-	enum i2c_type	type;
+typedef struct xil_spi_init_param {
+	enum spi_type	type;
 	uint32_t	id;
-} xil_i2c_init_param;
+	uint32_t	flags;
+} xil_spi_init_param;
 
-typedef struct xil_i2c_desc {
-	enum i2c_type	type;
-	uint32_t	id;
-#ifdef XIIC_H
-	XIic_Config *config;
-	XIic instance;
-#else
-#endif
-} xil_i2c_desc;
-
-typedef enum gpio_type {
-	XILINX_GPIO
-} gpio_type;
-
-typedef struct xil_gpio_desc {
-	enum gpio_type	type;
+typedef struct xil_spi_desc {
+	enum spi_type	type;
 	uint32_t		id;
+	uint32_t		flags;
 #ifdef _XPARAMETERS_PS_H_
-	XGpioPs_Config	*config;
-	XGpioPs			instance;
+	XSpiPs_Config	*config;
+	XSpiPs			instance;
 #else
-	XGpio			instance;
+	XSpi			instance;
 #endif
-} xil_gpio_desc;
+} xil_spi_desc;
 
-#endif // XILINX_PLATFORM_DRIVERS_H_
-
-
+#endif // SPI_EXTRA_H_
