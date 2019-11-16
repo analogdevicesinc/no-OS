@@ -2,5 +2,5 @@
 set -e
 
 sudo apt-get update
-sudo apt-get install libmatio-dev cppcheck 
+sudo apt-get install libmatio-dev cppcheck gcc-arm-none-eabi libnewlib-arm-none-eabi
 
