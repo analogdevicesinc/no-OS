@@ -95,6 +95,11 @@
 
 #define SPI_BASEADDR			SYS_SPI_BASE
 #else
+#ifdef PLATFORM_ZYNQMP
+#define GPIO_DEVICE_ID				XPAR_PSU_GPIO_0_DEVICE_ID
+#else
+#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+#endif
 #ifdef XPS_BOARD_ZCU102
 #define GPIO_OFFSET		78
 #else

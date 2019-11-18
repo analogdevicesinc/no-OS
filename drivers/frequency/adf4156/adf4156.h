@@ -211,8 +211,8 @@ struct adf4156_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_le;
-	gpio_desc		*gpio_ce;
+	struct gpio_desc	*gpio_le;
+	struct gpio_desc	*gpio_ce;
 	/* Device Settings */
 	struct adf4156_state	adf4156_st;
 };
@@ -221,8 +221,8 @@ struct adf4156_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_le;
-	int8_t		gpio_ce;
+	struct gpio_init_param	gpio_le;
+	struct gpio_init_param	gpio_ce;
 };
 
 /******************************************************************************/

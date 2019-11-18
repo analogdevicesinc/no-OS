@@ -184,6 +184,7 @@ typedef struct {
 	ad9528outputSettings_t *outputSettings;
 	ad9528sysrefSettings_t *sysrefSettings;
 	void *extra_spi;
+	void *extra_gpio;
 } ad9528Device_t;
 
 

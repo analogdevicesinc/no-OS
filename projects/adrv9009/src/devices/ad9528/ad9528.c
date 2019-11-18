@@ -13,6 +13,7 @@
 #include "parameters.h"
 #include "ad9528.h"
 #include "spi.h"
+#include "gpio.h"
 #include "error.h"
 #include "delay.h"
 
@@ -224,9 +225,20 @@ adiHalErr_t AD9528_initDeviceDataStruct(ad9528Device_t *device,
 	static const uint64_t PLL2_MAX_VCO_FREQ_HZ = 4025000000ULL;
 
 	struct spi_init_param spi_param;
+	struct gpio_init_param gpio_resetb_param;
+	struct gpio_init_param gpio_sysref_req_param;
 	int32_t status;
 
-	status = gpio_get(&device->gpio_resetb, CLK_RESETB);
+	gpio_resetb_param.number = CLK_RESETB;
+	gpio_sysref_req_param.number = ADRV_SYSREF_REQ;
+
+	if(device->extra_gpio) {
+		gpio_resetb_param.extra = device->extra_gpio;
+		gpio_sysref_req_param.extra = device->extra_gpio;
+	}
+
+	status = gpio_get(&device->gpio_resetb, &gpio_resetb_param);
+	status |= gpio_get(&device->gpio_sysref_req, &gpio_sysref_req_param);
 
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = CLK_CS;

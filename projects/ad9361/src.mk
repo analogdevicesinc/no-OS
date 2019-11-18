@@ -41,8 +41,8 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.h			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h
-INCS +=	$(PLATFORM_DRIVERS)/xilinx_platform_drivers.h			\
-	$(PLATFORM_DRIVERS)/spi_extra.h
+INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
+	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/spi.h						\
 	$(INCLUDE)/gpio.h						\

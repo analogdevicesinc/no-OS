@@ -337,10 +337,10 @@ struct ad5755_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_ldac;
-	gpio_desc		*gpio_rst;
-	gpio_desc		*gpio_clr;
-	gpio_desc		*gpio_poc;
+	struct gpio_desc	*gpio_ldac;
+	struct gpio_desc	*gpio_rst;
+	struct gpio_desc	*gpio_clr;
+	struct gpio_desc	*gpio_poc;
 	/* Device Settings */
 	struct ad5755_setup *p_ad5755_st;
 	enum ad5755_type_t this_device;
@@ -350,10 +350,10 @@ struct ad5755_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_ldac;
-	int8_t		gpio_rst;
-	int8_t		gpio_clr;
-	int8_t		gpio_poc;
+	struct gpio_init_param	gpio_ldac;
+	struct gpio_init_param	gpio_rst;
+	struct gpio_init_param	gpio_clr;
+	struct gpio_init_param	gpio_poc;
 	/* Device Settings */
 	enum ad5755_type_t this_device;
 };

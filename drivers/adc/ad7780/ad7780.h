@@ -98,20 +98,20 @@ struct ad7780_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc	*gpio_pdrst;
-	gpio_desc	*gpio_miso;
-	gpio_desc	*gpio_filter;
-	gpio_desc	*gpio_gain;
+	struct gpio_desc	*gpio_pdrst;
+	struct gpio_desc	*gpio_miso;
+	struct gpio_desc	*gpio_filter;
+	struct gpio_desc	*gpio_gain;
 };
 
 struct ad7780_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t	gpio_pdrst;
-	int8_t	gpio_miso;
-	int8_t	gpio_filter;
-	int8_t	gpio_gain;
+	struct gpio_init_param	gpio_pdrst;
+	struct gpio_init_param	gpio_miso;
+	struct gpio_init_param	gpio_filter;
+	struct gpio_init_param	gpio_gain;
 };
 
 /******************************************************************************/

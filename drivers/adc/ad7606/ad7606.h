@@ -107,13 +107,13 @@ struct ad7606_dev {
 	/* SPI */
 	spi_desc *spi_desc;
 	/* GPIO */
-	gpio_desc *gpio_reset;
-	gpio_desc *gpio_convst;
-	gpio_desc *gpio_busy;
-	gpio_desc *gpio_range;
-	gpio_desc *gpio_os0;
-	gpio_desc *gpio_os1;
-	gpio_desc *gpio_os2;
+	struct gpio_desc *gpio_reset;
+	struct gpio_desc *gpio_convst;
+	struct gpio_desc *gpio_busy;
+	struct gpio_desc *gpio_range;
+	struct gpio_desc *gpio_os0;
+	struct gpio_desc *gpio_os1;
+	struct gpio_desc *gpio_os2;
 	/* Device Settings */
 	uint8_t device_id;
 	/* Buffer to store the conv result */
@@ -125,13 +125,13 @@ struct ad7606_init_param {
 	/* SPI */
 	spi_init_param spi_init;
 	/* GPIO */
-	int8_t	gpio_reset;
-	int8_t	gpio_convst;
-	int8_t	gpio_busy;
-	int8_t	gpio_range;
-	int8_t	gpio_os0;
-	int8_t	gpio_os1;
-	int8_t	gpio_os2;
+	struct gpio_init_param	gpio_reset;
+	struct gpio_init_param	gpio_convst;
+	struct gpio_init_param	gpio_busy;
+	struct gpio_init_param	gpio_range;
+	struct gpio_init_param	gpio_os0;
+	struct gpio_init_param	gpio_os1;
+	struct gpio_init_param	gpio_os2;
 	/* Device Settings */
 	uint8_t device_id;
 	enum ad7606_range range;

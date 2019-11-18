@@ -47,10 +47,10 @@
 #include "spi.h"
 #include "spi_extra.h"
 #include "gpio.h"
+#include "gpio_extra.h"
 #include "delay.h"
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
-#include "xilinx_platform_drivers.h"
 #include <xil_cache.h>
 #endif
 #include "axi_adc_core.h"
@@ -81,6 +81,15 @@ struct axi_dmac_init tx_dmac_init = {
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
 	0
+};
+
+struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+	.type = GPIO_PL,
+#else
+	.type = GPIO_PS,
+#endif
+	.device_id = GPIO_DEVICE_ID
 };
 
 AD9361_InitParam default_init_param = {
@@ -313,11 +322,25 @@ AD9361_InitParam default_init_param = {
 	48,		//tx1_mon_lo_cm *** adi,txmon-1-lo-cm
 	48,		//tx2_mon_lo_cm *** adi,txmon-2-lo-cm
 	/* GPIO definitions */
-	-1,		//gpio_resetb *** reset-gpios
+	{
+		.number = -1,
+		.extra = &xil_gpio_param
+	},		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
-	-1,		//gpio_sync *** sync-gpios
-	-1,		//gpio_cal_sw1 *** cal-sw1-gpios
-	-1,		//gpio_cal_sw2 *** cal-sw2-gpios
+	{
+		.number = -1,
+		.extra = &xil_gpio_param
+	},		//gpio_sync *** sync-gpios
+
+	{
+		.number = -1,
+		.extra = &xil_gpio_param
+	},		//gpio_cal_sw1 *** cal-sw1-gpios
+
+	{
+		.number = -1,
+		.extra = &xil_gpio_param
+	},		//gpio_cal_sw2 *** cal-sw2-gpios
 	/* External LO clocks */
 	NULL,	//(*ad9361_rfpll_ext_recalc_rate)()
 	NULL,	//(*ad9361_rfpll_ext_round_rate)()
@@ -396,12 +419,14 @@ struct xil_spi_init_param xil_spi_param = {
 #else
 	.type = SPI_PS,
 #endif
-	.device_id = SPI_DEVICE_ID, 
-	.flags = 0};
+	.device_id = SPI_DEVICE_ID,
+	.flags = 0
+};
 struct spi_init_param spi_param = {
-	.mode = SPI_MODE_1, 
+	.mode = SPI_MODE_1,
 	.chip_select = SPI_CS,
-	.extra = &xil_spi_param};
+	.extra = &xil_spi_param
+};
 
 /***************************************************************************//**
  * @brief main
@@ -414,6 +439,8 @@ int main(void)
 	Xil_DCacheEnable();
 	spi_param.extra = &xil_spi_param;
 #endif
+	struct gpio_init_param 	gpio_init;
+	gpio_init.extra = &xil_gpio_param;
 
 #ifdef ALTERA_PLATFORM
 	if (altera_bridge_init()) {
@@ -424,34 +451,36 @@ int main(void)
 
 	// NOTE: The user has to choose the GPIO numbers according to desired
 	// carrier board.
-	default_init_param.gpio_resetb = GPIO_RESET_PIN;
+	default_init_param.gpio_resetb.number = GPIO_RESET_PIN;
 	status = gpio_get(&default_init_param.gpio_desc_resetb,
-			  default_init_param.gpio_resetb);
+			  &default_init_param.gpio_resetb);
 	if (status != SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
 #ifdef FMCOMMS5
-	default_init_param.gpio_sync = GPIO_SYNC_PIN;
-	status = gpio_get(&default_init_param.gpio_desc_sync, GPIO_SYNC_PIN);
+	default_init_param.gpio_sync.number = GPIO_SYNC_PIN;
+	status = gpio_get(&default_init_param.gpio_desc_sync,
+			  &default_init_param.gpio_sync);
 	if (status != SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
-	default_init_param.gpio_cal_sw1 = GPIO_CAL_SW1_PIN;
-	default_init_param.gpio_cal_sw2 = GPIO_CAL_SW2_PIN;
+	default_init_param.gpio_cal_sw1.number = GPIO_CAL_SW1_PIN;
+	default_init_param.gpio_cal_sw2.number = GPIO_CAL_SW2_PIN;
 	default_init_param.rx1rx2_phase_inversion_en = 1;
 #else
-	default_init_param.gpio_sync = -1;
-	default_init_param.gpio_cal_sw1 = -1;
-	default_init_param.gpio_cal_sw2 = -1;
+	default_init_param.gpio_sync.number = -1;
+	default_init_param.gpio_cal_sw1.number = -1;
+	default_init_param.gpio_cal_sw2.number = -1;
 #endif
 
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_resetb);
 #else
+	gpio_init.number = GPIO_DEVICE_ID;
 	status = gpio_get(&default_init_param.gpio_desc_device_id,
-			  GPIO_DEVICE_ID);
+			  &gpio_init);
 	if (status != SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
@@ -492,24 +521,24 @@ int main(void)
 	gpio_init(default_init_param.gpio_sync);
 #endif
 	status = gpio_get(&default_init_param.gpio_desc_sync,
-			  default_init_param.gpio_sync);
+			  &default_init_param.gpio_sync);
 	if (status != SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
 	gpio_direction_output(default_init_param.gpio_desc_sync, 1);
 	default_init_param.id_no = SPI_CS_2;
-	default_init_param.gpio_resetb = GPIO_RESET_PIN_2;
+	default_init_param.gpio_resetb.number = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_resetb);
 #endif
-	default_init_param.gpio_sync = -1;
-	default_init_param.gpio_cal_sw1 = -1;
-	default_init_param.gpio_cal_sw2 = -1;
+	default_init_param.gpio_sync.number = -1;
+	default_init_param.gpio_cal_sw1.number = -1;
+	default_init_param.gpio_cal_sw2.number = -1;
 	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
 	status = gpio_get(&default_init_param.gpio_desc_resetb,
-			  default_init_param.gpio_resetb);
+			  &default_init_param.gpio_resetb);
 	if (status != SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
@@ -595,13 +624,15 @@ int main(void)
 	struct gpio_desc 	*gpio_txnrx_pin;
 	if (!ad9361_phy->pdata->fdd) {
 		if (ad9361_phy->pdata->ensm_pin_ctrl) {
-			status = gpio_get(&gpio_enable_pin, GPIO_ENABLE_PIN);
+			gpio_init.number = GPIO_ENABLE_PIN;
+			status = gpio_get(&gpio_enable_pin, gpio_init);
 			if (status != SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
 			gpio_direction_output(gpio_enable_pin, 1);
-			status = gpio_get(&gpio_txnrx_pin, GPIO_TXNRX_PIN);
+			gpio_init.number = GPIO_TXNRX_PIN;
+			status = gpio_get(&gpio_txnrx_pin, gpio_init);
 			if (status != SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;

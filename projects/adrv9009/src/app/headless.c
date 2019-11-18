@@ -22,6 +22,7 @@
 #include "adi_hal.h"
 #include "spi.h"
 #include "spi_extra.h"
+#include "gpio_extra.h"
 #include "error.h"
 #include "delay.h"
 #include "parameters.h"
@@ -30,12 +31,10 @@
 #ifdef ALTERA_PLATFORM
 #include "clk_altera_a10_fpll.h"
 #include "altera_adxcvr.h"
-#include "altera_platform_drivers.h"
 #else
 #include "xil_cache.h"
 #include "clk_axi_clkgen.h"
 #include "axi_adxcvr.h"
-#include "xilinx_platform_drivers.h"
 #endif
 #include "axi_jesd204_rx.h"
 #include "axi_jesd204_tx.h"
@@ -68,6 +67,7 @@ int main(void)
 		&clockPll2Settings,
 		&clockOutputSettings,
 		&clockSysrefSettings,
+		NULL,
 		NULL
 	};
 	ad9528Device_t *clockAD9528_device = &clockAD9528_;
@@ -78,6 +78,12 @@ int main(void)
 		.base_address = SPI_BASEADDR
 	};
 	clockAD9528_.extra_spi = &ad9528_spi_param;
+	struct altera_gpio_init_param ad9528_gpio_param = {
+		.type = NIOS_II_GPIO,
+		.device_id = 0,
+		.base_address = GPIO_BASEADDR
+	};
+	clockAD9528_.extra_gpio = &ad9528_gpio_param;
 	struct altera_a10_fpll_init rx_device_clk_pll_init = {
 		"rx_device_clk_pll",
 		RX_A10_FPLL_BASEADDR,
@@ -103,8 +109,18 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = 0};
+		.device_id = 0
+	};
 	clockAD9528_.extra_spi = &ad9528_spi_param;
+	struct xil_gpio_init_param ad9528_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID,
+	};
+	clockAD9528_.extra_gpio = &ad9528_gpio_param;
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -260,6 +276,7 @@ int main(void)
 	};
 	struct axi_dmac *tx_dmac;
 	struct gpio_desc *gpio_plddrbypass;
+	struct gpio_init_param gpio_init_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
 #endif
 	struct adi_hal hal;
@@ -270,14 +287,31 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = 0, 
-		.flags = SPI_CS_DECODE};
+		.device_id = 0,
+		.flags = SPI_CS_DECODE
+	};
+	struct xil_gpio_init_param hal_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
+	hal.extra_gpio= &hal_gpio_param;
 #else
 	struct altera_spi_init_param hal_spi_param = {
 		.type = NIOS_II_SPI,
 		.device_id = 0,
 		.base_address = SPI_BASEADDR
 	};
+	struct altera_gpio_init_param hal_gpio_param = {
+		.type = NIOS_II_GPIO,
+		.device_id = 0,
+		.base_address = GPIO_BASEADDR
+	};
+
+	hal.extra_gpio = &hal_gpio_param;
 #endif
 	hal.extra_spi = &hal_spi_param;
 	taliseDevice_t talDev = {
@@ -818,7 +852,9 @@ int main(void)
 	axi_adc_init(&rx_adc, &rx_adc_init);
 
 #ifdef DAC_DMA_EXAMPLE
-	gpio_get(&gpio_plddrbypass, DAC_FIFO_BYPASS);
+	gpio_init_plddrbypass.extra = &ad9528_gpio_param;
+	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS;
+	gpio_get(&gpio_plddrbypass, gpio_init_plddrbypass);
 	gpio_direction_output(gpio_plddrbypass, 1);
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),

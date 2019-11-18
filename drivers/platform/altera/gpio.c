@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <altera_avalon_spi_regs.h>
 #include "gpio.h"
+#include "gpio_extra.h"
 #include "error.h"
 #include "parameters.h"
 
@@ -58,16 +59,32 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc,
-		 uint8_t gpio_number)
+		 const struct gpio_init_param *param)
 {
 
-	gpio_desc *descriptor;
+	struct gpio_desc *descriptor;
+	struct altera_gpio_desc *altera_descriptor;
+	struct altera_gpio_init_param *altera_param;
 
-	descriptor = (struct gpio_desc *) malloc(sizeof(*descriptor));
+	descriptor = calloc(1, sizeof(*descriptor));
+
 	if (!descriptor)
 		return FAILURE;
 
-	descriptor->number = gpio_number;
+	descriptor->extra = calloc(1, sizeof *altera_descriptor);
+	if (!(descriptor->extra)) {
+		free(descriptor);
+		return FAILURE;
+	}
+
+	altera_descriptor = descriptor->extra;
+	altera_param = param->extra;
+
+	descriptor->number = param->number;
+
+	altera_descriptor->type = altera_param->type;
+	altera_descriptor->device_id = altera_param->device_id;
+	altera_descriptor->base_address = altera_param->base_address;
 
 	*desc = descriptor;
 
@@ -76,7 +93,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 
 /**
  * @brief Free the resources allocated by gpio_get().
- * @param desc - The SPI descriptor.
+ * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_remove(struct gpio_desc *desc)
@@ -117,15 +134,25 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 	uint32_t pdata;
 	uint32_t pmask;
 
+	struct altera_gpio_desc *altera_desc;
+	altera_desc = desc->extra;
+
 	if (desc->number < 32)
 		return FAILURE;
 
-	ppos = desc->number - 32;
-	pmask = 0x1 << ppos;
+	switch(altera_desc->type) {
+	case NIOS_II_GPIO:
+		ppos = desc->number - 32;
+		pmask = 0x1 << ppos;
 
-	pdata = IORD_32DIRECT(GPIO_BASEADDR, 0x0);
-	IOWR_32DIRECT(GPIO_BASEADDR,
-		      0x0, ((pdata & ~pmask) | (value << ppos)));
+		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
+		IOWR_32DIRECT(altera_desc->base_address,
+			      0x0, ((pdata & ~pmask) | (value << ppos)));
+
+		break;
+	default:
+		return FAILURE;
+	}
 
 	return SUCCESS;
 }

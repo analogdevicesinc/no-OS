@@ -142,7 +142,7 @@ struct ad5766_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_reset;
+	struct gpio_desc		*gpio_reset;
 	/* Device Settings */
 	enum ad5766_state	daisy_chain_en;
 };
@@ -151,7 +151,7 @@ struct ad5766_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_reset;
+	struct gpio_init_param	gpio_reset;
 	/* Device Settings */
 	enum ad5766_state	daisy_chain_en;
 	enum ad5766_clr		clr;

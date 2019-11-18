@@ -63,14 +63,14 @@ struct ad7980_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc	*gpio_cs;
+	struct gpio_desc	*gpio_cs;
 };
 
 struct ad7980_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_cs;
+	struct gpio_init_param	gpio_cs;
 };
 
 /******************************************************************************/

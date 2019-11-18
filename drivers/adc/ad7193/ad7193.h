@@ -183,8 +183,8 @@ struct ad7193_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc	*gpio_cs;
-	gpio_desc	*gpio_miso;
+	struct gpio_desc	*gpio_cs;
+	struct gpio_desc	*gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
 	uint8_t		current_gain;
@@ -194,8 +194,8 @@ struct ad7193_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_cs;
-	int8_t		gpio_miso;
+	struct gpio_init_param	gpio_cs;
+	struct gpio_init_param	gpio_miso;
 	/* Device Settings */
 	uint8_t		current_polarity;
 	uint8_t		current_gain;

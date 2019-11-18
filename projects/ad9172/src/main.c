@@ -51,10 +51,11 @@
 #include "inttypes.h"
 #include "error.h"
 #include <xparameters.h>
-#include "xilinx_platform_drivers.h"
+#include "app_config.h"
 #include "spi.h"
 #include "spi_extra.h"
-#include "app_config.h"
+#include "gpio.h"
+#include "gpio_extra.h"
 
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
@@ -68,8 +69,9 @@ int main(void)
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID, 
-		.flags = 0};
+		.device_id = SPI_DEVICE_ID,
+		.flags = 0
+	};
 
 	struct spi_init_param hmc7044_spi_param = {
 		.max_speed_hz = 10000000,
@@ -133,10 +135,28 @@ int main(void)
 		.extra = &xil_spi_param
 	};
 
+	struct xil_gpio_init_param xilinx_gpio_init_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
 	struct ad9172_init_param ad9172_param = {
 		.spi_init = &ad9172_spi_param,	/* spi_init_param */
-		.gpio_txen0 = 54 + 22,
-		.gpio_txen1 = 54 + 23,
+		.gpio_reset = {
+			.number = 54 + 0,
+			.extra = &xilinx_gpio_init_param
+		},
+		.gpio_txen0 = {
+			.number = 54 + 22,
+			.extra = &xilinx_gpio_init_param
+		},
+		.gpio_txen1 = {
+			.number = 54 + 23,
+			.extra = &xilinx_gpio_init_param
+		},
 		.dac_rate_khz = 11796480,		/* or sample rate */
 		.dac_clkin_Hz = 368640000,		/* DAC_CLK, output 2 of HMC 7044 */
 		.jesd_link_mode = 4,

@@ -23,6 +23,7 @@ struct adi_hal {
 	struct spi_desc		*spi_adrv_desc;
 	uint32_t			log_level;
 	void 				*extra_spi;
+	void 				*extra_gpio;
 };
 
 /**

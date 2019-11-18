@@ -116,10 +116,10 @@ struct ad9833_dev {
 	/* SPI */
 	spi_desc			*spi_desc;
 	/* GPIO */
-	gpio_desc			*gpio_psel;
-	gpio_desc			*gpio_fsel;
-	gpio_desc			*gpio_reset;
-	gpio_desc			*gpio_sleep;
+	struct gpio_desc		*gpio_psel;
+	struct gpio_desc		*gpio_fsel;
+	struct gpio_desc		*gpio_reset;
+	struct gpio_desc		*gpio_sleep;
 	/* Device Settings */
 	enum ad9833_type		act_device;
 	uint8_t				prog_method;
@@ -131,10 +131,10 @@ struct ad9833_init_param {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* GPIO */
-	int8_t				gpio_psel;
-	int8_t				gpio_fsel;
-	int8_t				gpio_reset;
-	int8_t				gpio_sleep;
+	struct gpio_init_param		gpio_psel;
+	struct gpio_init_param		gpio_fsel;
+	struct gpio_init_param		gpio_reset;
+	struct gpio_init_param		gpio_sleep;
 	/* Device Settings */
 	enum ad9833_type		act_device;
 };
