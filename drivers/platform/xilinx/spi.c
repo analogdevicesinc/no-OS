@@ -42,9 +42,18 @@
 /******************************************************************************/
 
 #include <stdlib.h>
+
+#include <xparameters.h>
+#ifdef XPAR_XSPI_NUM_INSTANCES
+#include <xspi.h>
+#endif
+#ifdef XPAR_XSPIPS_NUM_INSTANCES
+#include <xspips.h>
+#endif
+
 #include "error.h"
 #include "spi.h"
-#include "xilinx_platform_drivers.h"
+#include "spi_extra.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -59,75 +68,116 @@
 int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
-	spi_desc *descriptor;
-	xil_spi_desc *xil_descriptor;
-	xil_spi_init_param *xil_param;
-	int32_t ret;
+	int32_t				ret;
+	struct spi_desc			*sdesc;
+	struct xil_spi_desc		*xdesc;
+	struct xil_spi_init_param	*xinit;
 
-	descriptor = calloc(1, sizeof *descriptor);
-	if (!descriptor)
-		return FAILURE;
-
-	descriptor->extra = calloc(1, sizeof *xil_descriptor);
-	if (!(descriptor->extra)) {
-		free(descriptor);
+	sdesc = (struct spi_desc *)malloc(sizeof(*sdesc));
+	xdesc = (struct xil_spi_desc *)malloc(sizeof(*xdesc));
+	if(!sdesc || !xdesc) {
+		free(sdesc);
+		free(xdesc);
 		return FAILURE;
 	}
 
-	xil_descriptor = descriptor->extra;
-	xil_param = param->extra;
+	sdesc->max_speed_hz = param->max_speed_hz;
+	sdesc->chip_select = param->chip_select;
+	sdesc->mode = param->mode;
+	xinit = param->extra;
 
-	descriptor->mode = param->mode;
-	descriptor->chip_select = param->chip_select;
-	xil_descriptor->flags = xil_param->flags;
+	xdesc->type = xinit->type;
+	xdesc->flags = xinit->flags;
+	sdesc->extra = xdesc;
 
-#ifdef _XPARAMETERS_PS_H_
-	xil_descriptor->config = XSpiPs_LookupConfig(xil_param->id);
-	if (xil_descriptor->config == NULL)
+	switch (xinit->type) {
+	case SPI_PL:
+#ifdef XSPI_H
+		xdesc->instance = (XSpi*)malloc(sizeof(XSpi));
+		if(!xdesc->instance)
+			goto pl_error;
+
+		xdesc->config = XSpi_LookupConfig(xinit->device_id);
+		if(xdesc->config == NULL)
+			goto pl_error;
+
+		ret = XSpi_CfgInitialize(xdesc->instance,
+					 xdesc->config,
+					 ((XSpi_Config*)xdesc->config)
+					 ->BaseAddress);
+		if(ret != SUCCESS)
+			goto pl_error;
+
+		ret = XSpi_Initialize(xdesc->instance, xinit->device_id);
+		if (ret != 0)
+			goto pl_error;
+
+		ret = XSpi_SetOptions(xdesc->instance,
+				      XSP_MASTER_OPTION |
+				      ((sdesc->mode & SPI_CPOL) ?
+				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+				      ((sdesc->mode & SPI_CPHA) ?
+				       XSP_CLK_PHASE_1_OPTION : 0));
+		if (ret != 0)
+			goto pl_error;
+
+		ret = XSpi_Start(xdesc->instance);
+		if (ret != 0)
+			goto pl_error;
+
+		XSpi_IntrGlobalDisable((XSpi *)(xdesc->instance));
+
+		break;
+pl_error:
+		free(xdesc->instance);
+#endif
 		goto error;
+	case SPI_PS:
+#ifdef XSPIPS_H
+		xdesc->instance = (XSpiPs*)malloc(sizeof(XSpiPs));
+		if(!xdesc->instance)
+			goto ps_error;
 
-	ret = XSpiPs_CfgInitialize(&xil_descriptor->instance,
-				   xil_descriptor->config, xil_descriptor->config->BaseAddress);
-	if (ret != 0)
+		xdesc->config = XSpiPs_LookupConfig(xinit->device_id);
+		if(xdesc->config == NULL)
+			goto ps_error;
+
+		ret = XSpiPs_CfgInitialize(xdesc->instance,
+					   xdesc->config,
+					   ((XSpiPs_Config*)xdesc->config)
+					   ->BaseAddress);
+		if(ret != SUCCESS)
+			goto ps_error;
+
+		ret = XSpiPs_SetClkPrescaler(xdesc->instance,
+					     XSPIPS_CLK_PRESCALE_64);
+		if(ret != SUCCESS)
+			goto ps_error;
+
+		break;
+ps_error:
+		free(xdesc->instance);
+#endif
 		goto error;
+	case SPI_ENGINE:
+#ifdef SPI_ENGINE_H
+		//TODO: Implement SPI engine feature
 
-	XSpiPs_SetOptions(&xil_descriptor->instance,
-			  XSPIPS_MASTER_OPTION |
-			  ((xil_descriptor->flags & SPI_CS_DECODE) ?
-			   XSPIPS_DECODE_SSELECT_OPTION : 0) |
-			  XSPIPS_FORCE_SSELECT_OPTION |
-			  ((descriptor->mode & SPI_CPOL) ?
-			   XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			  ((descriptor->mode & SPI_CPHA) ?
-			   XSPIPS_CLK_PHASE_1_OPTION : 0));
-
-	XSpiPs_SetClkPrescaler(&xil_descriptor->instance,
-			       XSPIPS_CLK_PRESCALE_64);
-
-	XSpiPs_SetSlaveSelect(&xil_descriptor->instance, 0xf);
-#else
-	ret = XSpi_Initialize(&xil_descriptor->instance, xil_param->id);
-	if (ret != 0)
-		goto error;
-
-	XSpi_SetOptions(&xil_descriptor->instance,
-			XSP_MASTER_OPTION |
-			((descriptor->mode & SPI_CPOL) ?
-			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-			((descriptor->mode & SPI_CPHA) ?
-			 XSP_CLK_PHASE_1_OPTION : 0));
-
-	XSpi_Start(&xil_descriptor->instance);
-
-	XSpi_IntrGlobalDisable(&xil_descriptor->instance);
+		break;
 #endif
 
-	*desc = descriptor;
+	default:
+		goto error;
+		break;
+	}
+
+	*desc = sdesc;
 
 	return SUCCESS;
 
 error:
-	free(descriptor);
+	free(sdesc);
+	free(xdesc);
 
 	return FAILURE;
 }
@@ -139,9 +189,38 @@ error:
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
+	int32_t			ret;
+	struct xil_spi_desc	*xdesc;
+
+	xdesc = desc->extra;
+
+	switch (xdesc->type) {
+	case SPI_PL:
+#ifdef XSPI_H
+		ret = XSpi_Stop((XSpi *)(xdesc->instance));
+		if(ret != SUCCESS)
+			goto error;
+#endif
+		break;
+	case SPI_PS:
+#ifdef XSPIPS_H
+
+#endif
+		break;
+	case SPI_ENGINE:
+#ifdef SPI_ENGINE_H
+
+#endif
+		/* Intended fallthrough */
+error:
+	default:
+		return FAILURE;
+		break;
 	}
+
+	free(xdesc->instance);
+	free(desc->extra);
+	free(desc);
 
 	return SUCCESS;
 }
@@ -158,37 +237,72 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint8_t bytes_number)
 {
-	xil_spi_desc *xil_desc;
-	xil_desc = desc->extra;
+	int32_t			ret;
+	struct xil_spi_desc	*xdesc;
 
-#ifdef _XPARAMETERS_PS_H_
-	XSpiPs_SetOptions(&xil_desc->instance,
-			  XSPIPS_MASTER_OPTION |
-			  ((xil_desc->flags & SPI_CS_DECODE) ?
-			   XSPIPS_DECODE_SSELECT_OPTION : 0) |
-			  XSPIPS_FORCE_SSELECT_OPTION |
-			  ((desc->mode & SPI_CPOL) ?
-			   XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
-			  ((desc->mode & SPI_CPHA) ?
-			   XSPIPS_CLK_PHASE_1_OPTION : 0));
+	xdesc = desc->extra;
 
-	XSpiPs_SetSlaveSelect(&xil_desc->instance,
-			      desc->chip_select);
-	XSpiPs_PolledTransfer(&xil_desc->instance,
-			      data, data, bytes_number);
-#else
-	XSpi_SetOptions(&xil_desc->instance,
-			XSP_MASTER_OPTION |
-			((desc->mode & SPI_CPOL) ?
-			 XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-			((desc->mode & SPI_CPHA) ?
-			 XSP_CLK_PHASE_1_OPTION : 0));
+	switch (xdesc->type) {
+	case SPI_PL:
+#ifdef XSPI_H
+		ret = XSpi_SetOptions(xdesc->instance,
+				      XSP_MASTER_OPTION |
+				      ((desc->mode & SPI_CPOL) ?
+				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+				      ((desc->mode & SPI_CPHA) ?
+				       XSP_CLK_PHASE_1_OPTION : 0));
+		if (ret != SUCCESS)
+			goto error;
 
-	XSpi_SetSlaveSelect(&xil_desc->instance,
-			    0x01 << desc->chip_select);
+		ret = XSpi_SetSlaveSelect(xdesc->instance,
+					  0x01 << desc->chip_select);
+		if (ret != SUCCESS)
+			goto error;
 
-	XSpi_Transfer(&xil_desc->instance,
-		      data, data, bytes_number);
+		ret = XSpi_Transfer(xdesc->instance,
+				    data,
+				    data,
+				    bytes_number);
+		if (ret != SUCCESS)
+			goto error;
 #endif
+		break;
+	case SPI_PS:
+#ifdef XSPIPS_H
+		ret = XSpiPs_SetOptions(xdesc->instance,
+					XSPIPS_MASTER_OPTION |
+					((xdesc->flags & SPI_CS_DECODE) ?
+					 XSPIPS_DECODE_SSELECT_OPTION : 0) |
+					XSPIPS_FORCE_SSELECT_OPTION |
+					((desc->mode & SPI_CPOL) ?
+					 XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
+					((desc->mode & SPI_CPHA) ?
+					 XSPIPS_CLK_PHASE_1_OPTION : 0));
+		if (ret != SUCCESS)
+			goto error;
+
+		ret = XSpiPs_SetSlaveSelect(xdesc->instance,
+					    desc->chip_select);
+		if (ret != SUCCESS)
+			goto error;
+		ret = XSpiPs_PolledTransfer(xdesc->instance,
+					    data,
+					    data,
+					    bytes_number);
+		if (ret != SUCCESS)
+			goto error;
+#endif
+		break;
+	case SPI_ENGINE:
+#ifdef SPI_ENGINE_H
+
+#endif
+		/* Intended fallthrough */
+error:
+	default:
+		return FAILURE;
+		break;
+	}
+
 	return SUCCESS;
 }

@@ -62,14 +62,28 @@ int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
 	spi_desc *descriptor;
+	struct altera_spi_desc *altera_descriptor;
+	struct altera_spi_init_param *altera_param;
 
 	descriptor = malloc(sizeof(*descriptor));
 	if (!descriptor)
 		return FAILURE;
 
-	descriptor->chip_select = param->chip_select;
+	descriptor->extra = calloc(1, sizeof *altera_descriptor);
+	if (!(descriptor->extra)) {
+		free(descriptor);
+		return FAILURE;
+	}
 
+	altera_descriptor = descriptor->extra;
+	altera_param = param->extra;
+
+	descriptor->chip_select = param->chip_select;
 	descriptor->mode = param->mode;
+
+	altera_descriptor->type = altera_param->type;
+	altera_descriptor->device_id = altera_param->device_id;
+	altera_descriptor->base_address = altera_param->base_address;
 
 	*desc = descriptor;
 
@@ -103,30 +117,40 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t bytes_number)
 {
 	uint32_t i;
+	struct altera_spi_desc *altera_desc;
 
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_CONTROL_REG * 4),
-		      ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4),
-		      (0x1 << (desc->chip_select)));
-	for (i = 0; i < bytes_number; i++) {
-		while ((IORD_32DIRECT(SPI_BASEADDR,
-				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
-			ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0x00) {}
-		IOWR_32DIRECT(SPI_BASEADDR,
-			      (ALTERA_AVALON_SPI_TXDATA_REG * 4),
-			      *(data + i));
-		while ((IORD_32DIRECT(SPI_BASEADDR,
-				      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
-			ALTERA_AVALON_SPI_STATUS_RRDY_MSK) == 0x00) {}
-		*(data + i) = IORD_32DIRECT(SPI_BASEADDR,
-					    (ALTERA_AVALON_SPI_RXDATA_REG * 4));
+	altera_desc = desc->extra;
+
+	switch(altera_desc->type) {
+	case NIOS_II_SPI:
+		IOWR_32DIRECT(altera_desc->base_address,
+			      (ALTERA_AVALON_SPI_CONTROL_REG * 4),
+			      ALTERA_AVALON_SPI_CONTROL_SSO_MSK);
+		IOWR_32DIRECT(altera_desc->base_address,
+			      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4),
+			      (0x1 << (desc->chip_select)));
+		for (i = 0; i < bytes_number; i++) {
+			while ((IORD_32DIRECT(altera_desc->base_address,
+					      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
+				ALTERA_AVALON_SPI_STATUS_TRDY_MSK) == 0x00) {}
+			IOWR_32DIRECT(altera_desc->base_address,
+				      (ALTERA_AVALON_SPI_TXDATA_REG * 4),
+				      *(data + i));
+			while ((IORD_32DIRECT(altera_desc->base_address,
+					      (ALTERA_AVALON_SPI_STATUS_REG * 4)) &
+				ALTERA_AVALON_SPI_STATUS_RRDY_MSK) == 0x00) {}
+			*(data + i) = IORD_32DIRECT(altera_desc->base_address,
+						    (ALTERA_AVALON_SPI_RXDATA_REG * 4));
+		}
+		IOWR_32DIRECT(altera_desc->base_address,
+			      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4), 0x000);
+		IOWR_32DIRECT(altera_desc->base_address,
+			      (ALTERA_AVALON_SPI_CONTROL_REG * 4), 0x000);
+
+		break;
+	default:
+		return FAILURE;
 	}
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_SLAVE_SEL_REG * 4), 0x000);
-	IOWR_32DIRECT(SPI_BASEADDR,
-		      (ALTERA_AVALON_SPI_CONTROL_REG * 4), 0x000);
 
 	return SUCCESS;
 }

@@ -53,13 +53,23 @@
 #include "axi_dmac.h"
 #include "parameters.h"
 #include "xil_printf.h"
+#include <xparameters.h>
 #include "xilinx_platform_drivers.h"
+#include "spi.h"
+#include "spi_extra.h"
 #include "error.h"
 #include "delay.h"
 
 int main(void)
 {
-	struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
+	struct xil_spi_init_param xil_spi_param = {	
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+		.device_id = SPI_DEVICE_ID, 
+		.flags = 0};
 
 	struct spi_init_param hmc7044_spi_param = {
 		.max_speed_hz = 10000000,

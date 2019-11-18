@@ -17,12 +17,14 @@
 #include <stdlib.h>
 #include "common.h"
 #include "spi.h"
+#include "spi_extra.h"
 #include "gpio.h"
 #include "delay.h"
 
 #include "parameters.h"
 
 #ifndef ALTERA_PLATFORM
+#include <xparameters.h>
 #include "xilinx_platform_drivers.h"
 #else
 #include "altera_platform_drivers.h"
@@ -45,15 +47,27 @@ int32_t platform_init(void)
 	status = gpio_get(&gpio_ad9528_resetb, AD9528_RESET_B);
 	status = gpio_get(&gpio_ad9528_sysref_req, AD9528_SYSREF_REQ);
 
+#ifndef ALTERA_PLATFORM
+	struct xil_spi_init_param xilinx_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+		.device_id = SPI_DEVICE_ID,
+		.flags = SPI_CS_DECODE
+	};
+	spi_param.extra = &xilinx_spi_param;
+#else
+	struct altera_spi_init_param altera_spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = NIOS_II_SPI,
+		.base_address = SPI_BASEADDR
+	};
+	spi_param.extra = &altera_spi_param;
+#endif
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = AD9371_CS;
-#ifndef ALTERA_PLATFORM
-	struct xil_spi_init_param xil_param = {.id = SPI_DEVICE_ID, .flags = SPI_CS_DECODE};
-	spi_param.extra = &xil_param;
-#else
-	struct altera_spi_init_param altera_param = {.id = SPI_DEVICE_ID};
-	spi_param.extra = &altera_param;
-#endif
 	status |= spi_init(&spi_ad_desc, &spi_param);
 
 	return status;
