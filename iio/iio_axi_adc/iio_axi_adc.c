@@ -100,7 +100,7 @@ ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
  * @buf:	Where value is stored.
  * @len:	Maximum length of value to be stored in buf.
  * @channel:	Channel properties.
- * Return: :Length of chars written in buf, or negative value on failure.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)

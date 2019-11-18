@@ -53,23 +53,41 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * Calibration modes.
+ */
 static const char * const ad9361_calib_mode[] =
 {"auto", "manual", "tx_quad", "rf_dc_offs", "rssi_gain_step"};
 
+/**
+ * Receive channel port selection.
+ */
 static const char * const ad9361_rf_rx_port[] = {
 	"A_BALANCED", "B_BALANCED", "C_BALANCED",
 	"A_N", "A_P", "B_N", "B_P", "C_N", "C_P", "TX_MONITOR1",
 	"TX_MONITOR2", "TX_MONITOR1_2"
 };
 
+/**
+ * Transmit channel port selection.
+ */
 static const char * const ad9361_rf_tx_port[] =
 {"A", "B"};
 
+/**
+ * Gain control modes.
+ */
 static const char * const ad9361_agc_modes[] =
 {"manual", "fast_attack", "slow_attack", "hybrid"};
 
+/**
+ * State machine modes.
+ */
 extern const char *ad9361_ensm_states[12];
 
+/**
+ * AD9361 device xml, describes its channels and attributes.
+ */
 static const char * const  ad9361_phy_xml =
 	"<device id=\"ad9361-phy\" name=\"ad9361-phy\" >"
 	"<channel id=\"altvoltage1\" name=\"TX_LO\" type=\"output\" >"
@@ -394,12 +412,12 @@ static const char * const  ad9361_phy_xml =
 /******************************************************************************/
 
 /**
- * @brief get_cf_calibphase.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_cf_calibphase().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_port_select(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -419,12 +437,12 @@ static ssize_t get_rf_port_select(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_hardwaregain.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_hardwaregain().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_hardwaregain(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
@@ -462,12 +480,12 @@ static ssize_t get_hardwaregain(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rssi.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rssi().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rssi(void *device, char *buf, size_t len,
 			const struct iio_ch_info *channel)
@@ -492,12 +510,12 @@ static ssize_t get_rssi(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_hardwaregain_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_hardwaregain_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -515,12 +533,12 @@ static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_sampling_frequency_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_sampling_frequency_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency_available(void *device, char *buf,
 		size_t len,
@@ -556,12 +574,12 @@ static ssize_t get_sampling_frequency_available(void *device, char *buf,
 }
 
 /**
- * @brief get_rf_port_select_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rf_port_select_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_port_select_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -587,12 +605,12 @@ static ssize_t get_rf_port_select_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_filter_fir_en.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_filter_fir_en().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_filter_fir_en(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -612,12 +630,12 @@ static ssize_t get_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_sampling_frequency.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_sampling_frequency().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
@@ -633,12 +651,12 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rf_bandwidth_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rf_bandwidth_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_bandwidth_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -651,12 +669,12 @@ static ssize_t get_rf_bandwidth_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rf_bandwidth.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rf_bandwidth().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_bandwidth(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
@@ -670,12 +688,12 @@ static ssize_t get_rf_bandwidth(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_gain_control_mode.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_gain_control_mode().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_control_mode(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -686,12 +704,12 @@ static ssize_t get_gain_control_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rf_dc_offset_tracking_en.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rf_dc_offset_tracking_en().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -707,12 +725,12 @@ static ssize_t get_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_quadrature_tracking_en.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_quadrature_tracking_en().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_quadrature_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -728,12 +746,12 @@ static ssize_t get_quadrature_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_gain_control_mode_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_gain_control_mode_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_control_mode_available(void *device, char *buf,
 		size_t len,
@@ -747,12 +765,12 @@ static ssize_t get_gain_control_mode_available(void *device, char *buf,
 }
 
 /**
- * @brief get_bb_dc_offset_tracking_en.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_bb_dc_offset_tracking_en().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -768,12 +786,12 @@ static ssize_t get_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_frequency_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_frequency_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_frequency_available(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel)
@@ -783,12 +801,12 @@ static ssize_t get_frequency_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_fastlock_save.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_fastlock_save().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_save(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -813,12 +831,12 @@ static ssize_t get_fastlock_save(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_powerdown.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_powerdown().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_powerdown(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -832,12 +850,12 @@ static ssize_t get_powerdown(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_fastlock_load.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_fastlock_load().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -849,12 +867,12 @@ static ssize_t get_fastlock_load(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_fastlock_store.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_fastlock_store().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_store(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -866,12 +884,12 @@ static ssize_t get_fastlock_store(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_frequency.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_frequency().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_frequency(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -886,12 +904,12 @@ static ssize_t get_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_external.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_external().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_external(void *device, char *buf, size_t len,
 			    const struct iio_ch_info *channel)
@@ -905,12 +923,12 @@ static ssize_t get_external(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_fastlock_recall.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_fastlock_recall().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
 				   const struct iio_ch_info *channel)
@@ -922,12 +940,12 @@ static ssize_t get_fastlock_recall(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_temp0_input.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_temp0_input().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_temp0_input(void *device, char *buf, size_t len,
 			       const struct iio_ch_info *channel)
@@ -942,12 +960,12 @@ static ssize_t get_temp0_input(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_voltage_filter_fir_en.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_voltage_filter_fir_en().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -967,12 +985,12 @@ static ssize_t get_voltage_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_hardwaregain_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_hardwaregain_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_hardwaregain_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -984,12 +1002,12 @@ static ssize_t set_hardwaregain_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_hardwaregain.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_hardwaregain().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
@@ -1026,12 +1044,12 @@ static ssize_t set_hardwaregain(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rssi.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rssi().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rssi(void *device, char *buf, size_t len,
 			const struct iio_ch_info *channel)
@@ -1043,12 +1061,12 @@ static ssize_t set_rssi(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rf_port_select.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rf_port_select().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -1086,12 +1104,12 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_gain_control_mode.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_gain_control_mode().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -1122,12 +1140,12 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rf_port_select_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rf_port_select_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rf_port_select_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1139,12 +1157,12 @@ static ssize_t set_rf_port_select_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rf_bandwidth.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rf_bandwidth().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
@@ -1173,12 +1191,12 @@ static ssize_t set_rf_bandwidth(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rf_dc_offset_tracking_en.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rf_dc_offset_tracking_en().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1199,12 +1217,12 @@ static ssize_t set_rf_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_sampling_frequency_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_sampling_frequency_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_sampling_frequency_available(void *device, char *buf,
 		size_t len,
@@ -1217,12 +1235,12 @@ static ssize_t set_sampling_frequency_available(void *device, char *buf,
 }
 
 /**
- * @brief set_quadrature_tracking_en.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_quadrature_tracking_en().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_quadrature_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1243,12 +1261,12 @@ static ssize_t set_quadrature_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_sampling_frequency.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_sampling_frequency().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
@@ -1264,12 +1282,12 @@ static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_gain_control_mode_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_gain_control_mode_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_gain_control_mode_available(void *device, char *buf,
 		size_t len,
@@ -1301,12 +1319,12 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf,
 }
 
 /**
- * @brief set_filter_fir_en.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_filter_fir_en().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1331,12 +1349,12 @@ static ssize_t set_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_rf_bandwidth_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_rf_bandwidth_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_rf_bandwidth_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1348,12 +1366,12 @@ static ssize_t set_rf_bandwidth_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_bb_dc_offset_tracking_en.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_bb_dc_offset_tracking_en().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1374,12 +1392,12 @@ static ssize_t set_bb_dc_offset_tracking_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_frequency_available.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_frequency_available().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_frequency_available(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel)
@@ -1391,12 +1409,12 @@ static ssize_t set_frequency_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_fastlock_save.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_fastlock_save().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_fastlock_save(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1410,12 +1428,12 @@ static ssize_t set_fastlock_save(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_powerdown.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_powerdown().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_powerdown(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -1439,12 +1457,12 @@ static ssize_t set_powerdown(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_fastlock_load.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_fastlock_load().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_fastlock_load(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1481,12 +1499,12 @@ static ssize_t set_fastlock_load(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_fastlock_store.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_fastlock_store().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_fastlock_store(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -1498,12 +1516,12 @@ static ssize_t set_fastlock_store(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_frequency.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_frequency().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_frequency(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -1531,12 +1549,12 @@ static ssize_t set_frequency(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_external.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_external().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_external(void *device, char *buf, size_t len,
 			    const struct iio_ch_info *channel)
@@ -1556,12 +1574,12 @@ static ssize_t set_external(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_fastlock_recall.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_fastlock_recall().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
 				   const struct iio_ch_info *channel)
@@ -1577,12 +1595,12 @@ static ssize_t set_fastlock_recall(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_voltage_filter_fir_en.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_voltage_filter_fir_en().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1602,12 +1620,12 @@ static ssize_t set_voltage_filter_fir_en(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_dcxo_tune_coarse.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_dcxo_tune_coarse().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel)
@@ -1621,12 +1639,12 @@ static ssize_t get_dcxo_tune_coarse(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rx_path_rates.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rx_path_rates().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1644,12 +1662,12 @@ static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_trx_rate_governor.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_trx_rate_governor().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_trx_rate_governor(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -1665,12 +1683,12 @@ static ssize_t get_trx_rate_governor(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_calib_mode_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_calib_mode_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calib_mode_available(void *device, char *buf, size_t len,
 					const struct iio_ch_info *channel)
@@ -1681,12 +1699,12 @@ static ssize_t get_calib_mode_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_xo_correction_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_xo_correction_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_xo_correction_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1695,12 +1713,12 @@ static ssize_t get_xo_correction_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_gain_table_config.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_gain_table_config().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_gain_table_config(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -1709,12 +1727,12 @@ static ssize_t get_gain_table_config(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_dcxo_tune_fine.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_dcxo_tune_fine().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -1728,12 +1746,12 @@ static ssize_t get_dcxo_tune_fine(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_dcxo_tune_fine_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_dcxo_tune_fine_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
@@ -1745,12 +1763,12 @@ static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_ensm_mode_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_ensm_mode_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
 				       const struct iio_ch_info *channel)
@@ -1763,12 +1781,12 @@ static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_multichip_sync.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_multichip_sync().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_multichip_sync(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -1777,12 +1795,12 @@ static ssize_t get_multichip_sync(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_rssi_gain_step_error.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_rssi_gain_step_error().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_rssi_gain_step_error(void *device, char *buf, size_t len,
 					const struct iio_ch_info *channel)
@@ -1791,12 +1809,12 @@ static ssize_t get_rssi_gain_step_error(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_dcxo_tune_coarse_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_dcxo_tune_coarse_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf,
 		size_t len,
@@ -1809,12 +1827,12 @@ static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf,
 }
 
 /**
- * @brief get_tx_path_rates.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_tx_path_rates().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1831,12 +1849,12 @@ static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_trx_rate_governor_available.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_trx_rate_governor_available().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_trx_rate_governor_available(void *device, char *buf,
 		size_t len,
@@ -1846,12 +1864,12 @@ static ssize_t get_trx_rate_governor_available(void *device, char *buf,
 }
 
 /**
- * @brief get_xo_correction.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_xo_correction().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_xo_correction(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
@@ -1860,12 +1878,12 @@ static ssize_t get_xo_correction(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_ensm_mode.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_ensm_mode().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -1883,12 +1901,12 @@ static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_filter_fir_config.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_filter_fir_config().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_filter_fir_config(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -1901,12 +1919,12 @@ static ssize_t get_filter_fir_config(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief get_calib_mode.
- * @param *device - Physical instance of a ad9361_rf_phy device.
- * @param *buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param *channel - Channel properties.
- * @return length of chars written in buf, or negative value on failure.
+ * get_calib_mode().
+ * @device:	Physical instance of a iio_axi_adc device.
+ * @buf:	Where value is stored.
+ * @len:	Maximum length of value to be stored in buf.
+ * @channel:	Channel properties.
+ * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calib_mode(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -1922,12 +1940,12 @@ static ssize_t get_calib_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_trx_rate_governor.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_trx_rate_governor().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -1947,12 +1965,12 @@ static ssize_t set_trx_rate_governor(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_dcxo_tune_coarse.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_dcxo_tune_coarse().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_dcxo_tune_coarse(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel)
@@ -1968,12 +1986,12 @@ static ssize_t set_dcxo_tune_coarse(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_dcxo_tune_fine.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_dcxo_tune_fine().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_dcxo_tune_fine(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -1989,12 +2007,12 @@ static ssize_t set_dcxo_tune_fine(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_calib_mode.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_calib_mode().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calib_mode(void *device, char *buf, size_t len,
 			      const struct iio_ch_info *channel)
@@ -2028,12 +2046,12 @@ static ssize_t set_calib_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_ensm_mode.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_ensm_mode().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
@@ -2075,12 +2093,12 @@ static ssize_t set_ensm_mode(void *device, char *buf, size_t len,
 }
 
 /**
- * @brief set_multichip_sync.
- * @param *device - Physical instance of a iio_axi_adc device.
- * @param *buf - Value to be written to attribute.
- * @param len - Length of the data in "buf".
- * @param *channel - Channel properties.
- * @return number of bytes written  to attribute, or negative value on failure.
+ * set_multichip_sync().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_multichip_sync(void *device, char *buf, size_t len,
 				  const struct iio_ch_info *channel)
@@ -2095,12 +2113,12 @@ extern int32_t ad9361_parse_fir(struct ad9361_rf_phy *phy,
 				char *data, uint32_t size);
 
 /**
- * @brief set_filter_fir_config.
- * @param *device instance.
- * @param *buf value to be written to attribute.
- * @param len of the value.
- * @param *channel channel properties.
- * @return length of chars written to attribute, or negative value on failure.
+ * set_filter_fir_config().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_filter_fir_config(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
@@ -2526,10 +2544,10 @@ static struct iio_channel *iio_ad9361_channels[] = {
 };
 
 /**
- * @brief Get an ad9361 xml.
- * @param **xml - Xml containing description of a device.
- * @param *iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * iio_ad9361_get_xml() - Get xml corresponding to an "ad9361" device.
+ * @xml:	Xml containing description of a device.
+ * @iio_dev:	Structure describing a device, channels and attributes.
+ * Return: SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 {
@@ -2543,9 +2561,10 @@ ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 }
 
 /**
- * Create structure describing a device, channels and attributes.
- * @param *device - Device name.
- * @return iio_device or NULL, in case of failure.
+ * iio_ad9361_create_device() - Create structure describing a device, channels
+ * and attributes.
+ * @device:	Device name.
+ * Return: iio_device or NULL, in case of failure.
  */
 struct iio_device *iio_ad9361_create_device(const char *device_name)
 {

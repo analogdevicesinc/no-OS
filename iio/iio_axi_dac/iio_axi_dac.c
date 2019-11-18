@@ -49,7 +49,7 @@
 #include "iio_axi_dac.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
-#include "platform_drivers.h"
+#include "error.h"
 #include "xml.h"
 #include "util.h"
 
