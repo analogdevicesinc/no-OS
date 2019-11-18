@@ -1,6 +1,5 @@
 /***************************************************************************//**
- *   @file   altera_platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
+ *   @file   i2c_extra.h
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,20 +36,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef ALTERA_PLATFORM_DRIVERS_H_
-#define ALTERA_PLATFORM_DRIVERS_H_
+#ifndef I2C_EXTRA_H_
+#define I2C_EXTRA_H_
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum gpio_type {
-	ALTERA_GPIO
-} gpio_type;
+enum i2c_type {
+	NIOS_II_I2C
+} i2c_type;
 
-typedef struct altera_gpio_desc {
-	enum gpio_type	type;
-	uint32_t		id;
-} altera_gpio_desc;
+struct altera_i2c_init_param {
+	enum i2c_type	type;
+	uint32_t	id;
+} altera_i2c_init_param;
 
-#endif /* ALTERA_PLATFORM_DRIVERS_H_ */
+struct altera_i2c_desc {
+	enum i2c_type	type;
+	uint32_t	id;
+} altera_i2c_desc;
+
+#endif /* I2C_EXTRA_H_ */
