@@ -1,7 +1,7 @@
 /*******************************************************************************
  *   @file   spi_extra.h
  *   @brief  Header containing extra types used in the spi driver.
- *   @author scuciurean (sergiu.cuciurean@analog.com) 
+ *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -55,26 +55,23 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum spi_type {
-	XILINX_SPI
-} spi_type;
+enum xil_spi_type {
+	SPI_PL,
+	SPI_PS,
+	SPI_ENGINE
+} xil_spi_type;
 
 typedef struct xil_spi_init_param {
-	enum spi_type	type;
-	uint32_t	id;
-	uint32_t	flags;
+	enum xil_spi_type	type;
+	uint32_t		flags;
+	uint32_t		device_id;
 } xil_spi_init_param;
 
 typedef struct xil_spi_desc {
-	enum spi_type	type;
-	uint32_t		id;
+	enum xil_spi_type	type;
 	uint32_t		flags;
-#ifdef _XPARAMETERS_PS_H_
-	XSpiPs_Config	*config;
-	XSpiPs			instance;
-#else
-	XSpi			instance;
-#endif
+	void			*config;
+	void			*instance;
 } xil_spi_desc;
 
 #endif // SPI_EXTRA_H_

@@ -46,12 +46,9 @@
 
 #include <xparameters.h>
 #ifdef _XPARAMETERS_PS_H_
-#include <xspips.h>
 #include <xgpiops.h>
 #include <xil_exception.h>
-#include "spi_extra.h"
 #else
-#include <xspi.h>
 #include <xgpio.h>
 #endif
 

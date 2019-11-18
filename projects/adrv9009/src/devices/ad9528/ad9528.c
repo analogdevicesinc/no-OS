@@ -231,8 +231,8 @@ adiHalErr_t AD9528_initDeviceDataStruct(ad9528Device_t *device,
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = CLK_CS;
 
-	if(device->extra)
-		spi_param.extra=device->extra;
+	if(device->extra_spi)
+		spi_param.extra=device->extra_spi;
 
 	status |= spi_init(&device->spi_desc, &spi_param);
 
