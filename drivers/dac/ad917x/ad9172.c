@@ -319,9 +319,9 @@ int32_t ad9172_init(ad9172_dev **device,
 		goto error_2;
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, init_param->gpio_reset);
-	ret |= gpio_get(&dev->gpio_txen0, init_param->gpio_txen0);
-	ret |= gpio_get(&dev->gpio_txen1, init_param->gpio_txen1);
+	ret |= gpio_get(&dev->gpio_reset, &init_param->gpio_reset);
+	ret |= gpio_get(&dev->gpio_txen0, &init_param->gpio_txen0);
+	ret |= gpio_get(&dev->gpio_txen1, &init_param->gpio_txen1);
 
 	ret |= gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
 	ret |= gpio_direction_output(dev->gpio_txen0, GPIO_HIGH);

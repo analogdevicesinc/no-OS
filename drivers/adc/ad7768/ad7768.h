@@ -190,13 +190,13 @@ typedef enum {
 
 typedef struct {
 	spi_desc			*spi_desc;
-	gpio_desc			*gpio_reset;
-	uint8_t				gpio_reset_value;
-	gpio_desc			*gpio_mode0;
-	gpio_desc			*gpio_mode1;
-	gpio_desc			*gpio_mode2;
-	gpio_desc			*gpio_mode3;
-	uint8_t				pin_spi_input_value;
+	struct gpio_desc	*gpio_reset;
+	uint8_t			gpio_reset_value;
+	struct gpio_desc	*gpio_mode0;
+	struct gpio_desc	*gpio_mode1;
+	struct gpio_desc	*gpio_mode2;
+	struct gpio_desc	*gpio_mode3;
+	uint8_t			pin_spi_input_value;
 	ad7768_pin_spi_ctrl	pin_spi_ctrl;
 	ad7768_sleep_mode	sleep_mode;
 	ad7768_power_mode	power_mode;
@@ -214,12 +214,12 @@ typedef struct {
 	/* SPI */
 	spi_init_param			spi_init;
 	/* GPIO */
-	int8_t				gpio_reset;
+	struct gpio_init_param		gpio_reset;
 	uint8_t				gpio_reset_value;
-	int8_t				gpio_mode0;
-	int8_t				gpio_mode1;
-	int8_t				gpio_mode2;
-	int8_t				gpio_mode3;
+	struct gpio_init_param		gpio_mode0;
+	struct gpio_init_param		gpio_mode1;
+	struct gpio_init_param		gpio_mode2;
+	struct gpio_init_param		gpio_mode3;
 	/* Configuration */
 	uint8_t				pin_spi_input_value;
 	ad7768_sleep_mode	sleep_mode;

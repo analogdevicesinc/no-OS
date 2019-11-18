@@ -45,6 +45,11 @@
 #include <xparameters.h>
 
 #define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
+#ifdef PLATFORM_ZYNQMP
+#define GPIO_DEVICE_ID				XPAR_PSU_GPIO_0_DEVICE_ID
+#else
+#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
+#endif
 #define SPI_HMC7044_CS				0x00
 #define SPI_AD9172_CS				0x01
 

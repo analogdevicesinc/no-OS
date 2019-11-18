@@ -91,16 +91,16 @@ struct ad5421_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_ldac;
-	gpio_desc		*gpio_faultin;
+	struct gpio_desc	*gpio_ldac;
+	struct gpio_desc	*gpio_faultin;
 };
 
 struct ad5421_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_ldac;
-	int8_t		gpio_faultin;
+	struct gpio_init_param	gpio_ldac;
+	struct gpio_init_param	gpio_faultin;
 };
 
 /*****************************************************************************/

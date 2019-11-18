@@ -348,10 +348,10 @@ struct adf4106_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_le;
-	gpio_desc		*gpio_ce;
-	gpio_desc		*gpio_le2;
-	gpio_desc		*gpio_ce2;
+	struct gpio_desc	*gpio_le;
+	struct gpio_desc	*gpio_ce;
+	struct gpio_desc	*gpio_le2;
+	struct gpio_desc	*gpio_ce2;
 	/* Device Settings */
 	struct adf4106_chip_info chip_info;
 	struct adf4106_settings_t adf4106_st;
@@ -367,10 +367,10 @@ struct adf4106_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_le;
-	int8_t		gpio_ce;
-	int8_t		gpio_le2;
-	int8_t		gpio_ce2;
+	struct gpio_init_param		gpio_le;
+	struct gpio_init_param		gpio_ce;
+	struct gpio_init_param		gpio_le2;
+	struct gpio_init_param		gpio_ce2;
 	/* Device Settings */
 	enum adf4106_type_t this_device;
 	enum adf4106_init_t init_method;

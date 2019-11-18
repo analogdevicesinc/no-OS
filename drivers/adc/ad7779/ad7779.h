@@ -243,16 +243,16 @@ typedef struct {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_reset;
-	gpio_desc		*gpio_mode0;
-	gpio_desc		*gpio_mode1;
-	gpio_desc		*gpio_mode2;
-	gpio_desc		*gpio_mode3;
-	gpio_desc		*gpio_dclk0;
-	gpio_desc		*gpio_dclk1;
-	gpio_desc		*gpio_dclk2;
-	gpio_desc		*gpio_sync_in;
-	gpio_desc		*gpio_convst_sar;
+	struct gpio_desc	*gpio_reset;
+	struct gpio_desc	*gpio_mode0;
+	struct gpio_desc	*gpio_mode1;
+	struct gpio_desc	*gpio_mode2;
+	struct gpio_desc	*gpio_mode3;
+	struct gpio_desc	*gpio_dclk0;
+	struct gpio_desc	*gpio_dclk1;
+	struct gpio_desc	*gpio_dclk2;
+	struct gpio_desc	*gpio_sync_in;
+	struct gpio_desc	*gpio_convst_sar;
 	/* Device Settings */
 	ad7779_ctrl_mode	ctrl_mode;
 	ad7779_state		spi_crc_en;
@@ -278,16 +278,16 @@ typedef struct {
 	/* SPI */
 	spi_init_param		spi_init;
 	/* GPIO */
-	int8_t			gpio_reset;
-	int8_t			gpio_mode0;
-	int8_t			gpio_mode1;
-	int8_t			gpio_mode2;
-	int8_t			gpio_mode3;
-	int8_t			gpio_dclk0;
-	int8_t			gpio_dclk1;
-	int8_t			gpio_dclk2;
-	int8_t			gpio_sync_in;
-	int8_t			gpio_convst_sar;
+	struct gpio_init_param	gpio_reset;
+	struct gpio_init_param	gpio_mode0;
+	struct gpio_init_param	gpio_mode1;
+	struct gpio_init_param	gpio_mode2;
+	struct gpio_init_param	gpio_mode3;
+	struct gpio_init_param	gpio_dclk0;
+	struct gpio_init_param	gpio_dclk1;
+	struct gpio_init_param	gpio_dclk2;
+	struct gpio_init_param	gpio_sync_in;
+	struct gpio_init_param	gpio_convst_sar;
 	/* Device Settings */
 	ad7779_ctrl_mode	ctrl_mode;
 	ad7779_state		spi_crc_en;

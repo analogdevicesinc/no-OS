@@ -54,22 +54,24 @@
 #include "parameters.h"
 #include "xil_printf.h"
 #include <xparameters.h>
-#include "xilinx_platform_drivers.h"
-#include "spi.h"
-#include "spi_extra.h"
 #include "error.h"
 #include "delay.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "gpio.h"
+#include "gpio_extra.h"
 
 int main(void)
 {
-	struct xil_spi_init_param xil_spi_param = {	
+	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = SPI_DEVICE_ID, 
-		.flags = 0};
+		.device_id = SPI_DEVICE_ID,
+		.flags = 0
+	};
 
 	struct spi_init_param hmc7044_spi_param = {
 		.max_speed_hz = 10000000,
@@ -258,12 +260,24 @@ int main(void)
 		.flags = 0,
 	};
 
+	struct xil_gpio_init_param xilinx_gpio_init_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
+
 	struct ad9208_init_param ad9208_0_param = {
 		.spi_init = &ad9208_0_spi_param,
-		.gpio_powerdown = 54 + 34, /* adc0_pwdn */
+		.gpio_powerdown = {
+			.number = 54 + 34, /* adc0_pwdn */
+			.extra = &xilinx_gpio_init_param
+		},
 		.sampling_frequency_hz = 3000000000,
 		.input_div = 1,
-		.gpio_powerdown = false,
+		.powerdown_pin_en = false,
 		.powerdown_mode = AD9208_POWERDOWN, /* Full Powerdown Mode */
 		/* duty cycle stabilizer enable */
 		.duty_cycle_stabilizer_en = true,
@@ -300,10 +314,13 @@ int main(void)
 
 	struct ad9208_init_param ad9208_1_param = {
 		.spi_init = &ad9208_1_spi_param,
-		.gpio_powerdown = 54 + 33, /* adc1_pwdn */
+		.gpio_powerdown = {
+			.number = 54 + 33, /* adc1_pwdn */
+			.extra = &xilinx_gpio_init_param
+		},
 		.sampling_frequency_hz = 3000000000,
 		.input_div = 1,
-		.gpio_powerdown = false,
+		.powerdown_pin_en = false,
 		.powerdown_mode = AD9208_POWERDOWN, /* Full Powerdown Mode */
 		.duty_cycle_stabilizer_en = true,
 		/* duty cycle stabilizer enable */

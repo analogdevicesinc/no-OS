@@ -396,7 +396,7 @@ int32_t ad9208_initialize(ad9208_dev **device, ad9208_init_param *init_param)
 		goto error;
 
 	/* GPIO */
-	ret = gpio_get(&dev->gpio_powerdown, init_param->gpio_powerdown);
+	ret = gpio_get(&dev->gpio_powerdown, &init_param->gpio_powerdown);
 	if (ret < 0)
 		goto error;
 

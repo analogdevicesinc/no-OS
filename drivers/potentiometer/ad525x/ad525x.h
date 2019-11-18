@@ -176,10 +176,10 @@ struct ad525x_dev {
 	/* SPI */
 	spi_desc	*spi_desc;
 	/* GPIO */
-	gpio_desc	*gpio_reset;
-	gpio_desc	*gpio_shutdown;
-	gpio_desc	*gpio_ready;
-	gpio_desc	*gpio_wpbf;
+	struct gpio_desc	*gpio_reset;
+	struct gpio_desc	*gpio_shutdown;
+	struct gpio_desc	*gpio_ready;
+	struct gpio_desc	*gpio_wpbf;
 	/* Device Settings */
 	enum ad525_x_type_t	this_device;
 };
@@ -190,10 +190,10 @@ struct ad525x_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_reset;
-	int8_t		gpio_shutdown;
-	int8_t		gpio_ready;
-	int8_t		gpio_wpbf;
+	struct gpio_init_param	gpio_reset;
+	struct gpio_init_param	gpio_shutdown;
+	struct gpio_init_param	gpio_ready;
+	struct gpio_init_param	gpio_wpbf;
 	/* Device Settings */
 	enum ad525_x_type_t	this_device;
 };

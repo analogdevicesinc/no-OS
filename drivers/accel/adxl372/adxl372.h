@@ -371,8 +371,8 @@ struct adxl372_dev {
 	/* I2C */
 	i2c_desc			*i2c_desc;
 	/* GPIO */
-	gpio_desc			*gpio_int1;
-	gpio_desc			*gpio_int2;
+	struct gpio_desc		*gpio_int1;
+	struct gpio_desc		*gpio_int2;
 	/* Device Settings */
 	adxl372_reg_read_func		reg_read;
 	adxl372_reg_write_func		reg_write;
@@ -392,8 +392,8 @@ struct adxl372_init_param {
 	/* I2C */
 	i2c_init_param			i2c_init;
 	/* GPIO */
-	int8_t				gpio_int1;
-	int8_t				gpio_int2;
+	struct gpio_init_param			gpio_int1;
+	struct gpio_init_param			gpio_int2;
 	/* Device Settings */
 	enum adxl372_bandwidth			bw;
 	enum adxl372_odr			odr;

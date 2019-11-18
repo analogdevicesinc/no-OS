@@ -80,7 +80,7 @@ struct ad74xx_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_cs;
+	struct gpio_desc	*gpio_cs;
 	/* Device Settings */
 	int8_t			device_bits_number;
 	enum ad74xx_type	part_number;
@@ -90,7 +90,7 @@ struct ad74xx_init_param {
 	/* SPI */
 	spi_init_param		spi_init;
 	/* GPIO */
-	uint8_t			gpio_cs;
+	struct gpio_init_param	gpio_cs;
 	/* Device Settings */
 	int8_t			device_bits_number;
 	enum ad74xx_type	part_number;

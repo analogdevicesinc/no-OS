@@ -331,10 +331,10 @@ struct adf4153_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_le;
-	gpio_desc		*gpio_ce;
-	gpio_desc		*gpio_le2;
-	gpio_desc		*gpio_ce2;
+	struct gpio_desc	*gpio_le;
+	struct gpio_desc	*gpio_ce;
+	struct gpio_desc	*gpio_le2;
+	struct gpio_desc	*gpio_ce2;
 	/* Device Settings */
 	struct adf4153_settings_t adf4153_st;
 	/* RF input frequency limits */
@@ -359,10 +359,10 @@ struct adf4153_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_le;
-	int8_t		gpio_ce;
-	int8_t		gpio_le2;
-	int8_t		gpio_ce2;
+	struct gpio_init_param	gpio_le;
+	struct gpio_init_param	gpio_ce;
+	struct gpio_init_param	gpio_le2;
+	struct gpio_init_param	gpio_ce2;
 	/* Device Settings */
 	struct adf4153_settings_t adf4153_st;
 };

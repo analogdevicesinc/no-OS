@@ -152,8 +152,8 @@ struct ad5629r_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_ldac;
-	gpio_desc		*gpio_clr;
+	struct gpio_desc	*gpio_ldac;
+	struct gpio_desc	*gpio_clr;
 	/* Device Settings */
 	enum ad5629r_type		act_device;
 };
@@ -164,8 +164,8 @@ struct ad5629r_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_ldac;
-	int8_t		gpio_clr;
+	struct gpio_init_param	gpio_ldac;
+	struct gpio_init_param	gpio_clr;
 	/* Device Settings */
 	enum ad5629r_type	act_device;
 };

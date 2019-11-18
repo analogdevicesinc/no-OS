@@ -93,7 +93,7 @@ typedef struct ad9208_dev {
 	/* SPI */
 	spi_desc *spi_desc;
 	/* GPIO */
-	gpio_desc *gpio_powerdown;
+	struct gpio_desc *gpio_powerdown;
 	struct ad9208_state *st;
 } ad9208_dev;
 
@@ -133,7 +133,7 @@ typedef struct ad9208_init_param {
 	/* SPI */
 	spi_init_param *spi_init;
 	/* GPIO */
-	int8_t gpio_powerdown;
+	struct gpio_init_param gpio_powerdown;
 	uint64_t sampling_frequency_hz;
 	uint32_t input_div; /* input clock divider ratio */
 	bool powerdown_pin_en;

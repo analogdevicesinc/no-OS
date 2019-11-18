@@ -1,7 +1,7 @@
-/***************************************************************************//**
- *   @file   altera_platform_drivers.h
- *   @brief  Header file of Altera Platform Drivers.
- *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
+/*******************************************************************************
+ *   @file   gpio_extra.h
+ *   @brief  Header containing extra types used in the gpio driver
+ *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -37,20 +37,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef ALTERA_PLATFORM_DRIVERS_H_
-#define ALTERA_PLATFORM_DRIVERS_H_
+#ifndef GPIO_EXTRA_H_
+#define GPIO_EXTRA_H_
+
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include <stdint.h>
+#include <stdbool.h>
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum gpio_type {
-	ALTERA_GPIO
-} gpio_type;
+typedef enum xil_gpio_type {
+	GPIO_PL,
+	GPIO_PS
+} xil_gpio_type;
 
-typedef struct altera_gpio_desc {
-	enum gpio_type	type;
-	uint32_t		id;
-} altera_gpio_desc;
+typedef struct xil_gpio_init_param {
+	enum xil_gpio_type	type;
+	uint32_t		device_id;
+} xil_gpio_init_param;
 
-#endif /* ALTERA_PLATFORM_DRIVERS_H_ */
+typedef struct xil_gpio_desc {
+	enum xil_gpio_type	type;
+	void			*config;
+	void			*instance;
+} xil_gpio_desc;
+
+#endif

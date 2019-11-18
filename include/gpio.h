@@ -59,6 +59,11 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+typedef struct gpio_init_param {
+	uint8_t		number;
+	void		*extra;
+} gpio_init_param;
+
 typedef struct gpio_desc {
 	uint8_t		number;
 	void		*extra;
@@ -70,7 +75,7 @@ typedef struct gpio_desc {
 
 /* Obtain the GPIO decriptor. */
 int32_t gpio_get(struct gpio_desc **desc,
-		 uint8_t gpio_number);
+		 const struct gpio_init_param *param);
 
 /* Free the resources allocated by gpio_get() */
 int32_t gpio_remove(struct gpio_desc *desc);

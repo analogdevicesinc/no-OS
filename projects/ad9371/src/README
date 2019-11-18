@@ -2,7 +2,6 @@
 # Additional required source files:
 
 #ifdef ALTERA_PLATFORM
-	cp ../../../drivers/platform/altera/altera_platform_drivers.h devices/adi_hal/
 	cp ../../../include/axi_io.h devices/adi_hal/
 	cp ../../../include/error.h devices/adi_hal/
 	cp ../../../include/spi.h devices/adi_hal/
@@ -12,6 +11,7 @@
 	cp ../../../drivers/platform/altera/spi.c devices/adi_hal/
 	cp ../../../drivers/platform/altera/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/altera/gpio.c devices/adi_hal/
+	cp ../../../drivers/platform/altera/gpio_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/altera/delay.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.h devices/adi_hal/
@@ -40,10 +40,10 @@
 	cp ../../../include/gpio.h devices/adi_hal/
 	cp ../../../include/delay.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
-	cp ../../../drivers/platform/xilinx/xilinx_platform_drivers.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
+	cp ../../../drivers/platform/altera/gpio_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/delay.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.h devices/adi_hal/

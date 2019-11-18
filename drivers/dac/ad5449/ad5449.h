@@ -77,8 +77,8 @@ struct ad5449_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_ldac;
-	gpio_desc		*gpio_clr;
+	struct gpio_desc	*gpio_ldac;
+	struct gpio_desc	*gpio_clr;
 	/* Device Settings */
 	enum ad5449_type_t		act_device;
 	uint16_t		control_reg;
@@ -88,8 +88,8 @@ struct ad5449_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_ldac;
-	int8_t		gpio_clr;
+	struct gpio_init_param	gpio_ldac;
+	struct gpio_init_param	gpio_clr;
 	/* Device Settings */
 	enum ad5449_type_t	act_device;
 };

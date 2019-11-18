@@ -1,6 +1,5 @@
 /***************************************************************************//**
- *   @file   xilinx_platform_drivers.h
- *   @brief  Header file of Xilinx Platform Drivers.
+ *   @file   gpio_extra.h
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,63 +36,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef XILINX_PLATFORM_DRIVERS_H_
-#define XILINX_PLATFORM_DRIVERS_H_
-
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
-#include <xparameters.h>
-#ifdef _XPARAMETERS_PS_H_
-#include <xgpiops.h>
-#include <xil_exception.h>
-#else
-#include <xgpio.h>
-#endif
-
-#ifdef XIIC_H
-#include <xiic.h>
-#endif
+#ifndef GPIO_EXTRA_H_
+#define GPIO_EXTRA_H_
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-typedef enum i2c_type {
-	XILINX_I2C
-} i2c_type;
-
-typedef struct xil_i2c_init_param {
-	enum i2c_type	type;
-	uint32_t	id;
-} xil_i2c_init_param;
-
-typedef struct xil_i2c_desc {
-	enum i2c_type	type;
-	uint32_t	id;
-#ifdef XIIC_H
-	XIic_Config *config;
-	XIic instance;
-#else
-#endif
-} xil_i2c_desc;
-
-typedef enum gpio_type {
-	XILINX_GPIO
+enum gpio_type {
+	NIOS_II_GPIO
 } gpio_type;
 
-typedef struct xil_gpio_desc {
+struct altera_gpio_init_param {
 	enum gpio_type	type;
-	uint32_t		id;
-#ifdef _XPARAMETERS_PS_H_
-	XGpioPs_Config	*config;
-	XGpioPs			instance;
-#else
-	XGpio			instance;
-#endif
-} xil_gpio_desc;
+	uint32_t	device_id;
+	uint32_t	base_address;
+} altera_gpio_init_param;
 
-#endif // XILINX_PLATFORM_DRIVERS_H_
+struct altera_gpio_desc {
+	enum gpio_type	type;
+	uint32_t		device_id;
+	uint32_t base_address;
+} altera_gpio_desc;
 
-
+#endif /* GPIO_EXTRA_H_ */

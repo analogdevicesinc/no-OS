@@ -68,9 +68,9 @@ struct ad5791_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_reset;
-	gpio_desc		*gpio_clr;
-	gpio_desc		*gpio_ldac;
+	struct gpio_desc	*gpio_reset;
+	struct gpio_desc	*gpio_clr;
+	struct gpio_desc	*gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
 };
@@ -79,9 +79,9 @@ struct ad5791_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_reset;
-	int8_t		gpio_clr;
-	int8_t		gpio_ldac;
+	struct gpio_init_param		gpio_reset;
+	struct gpio_init_param		gpio_clr;
+	struct gpio_init_param		gpio_ldac;
 	/* Device Settings */
 	enum ad5791_type act_device;
 };

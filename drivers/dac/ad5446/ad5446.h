@@ -99,8 +99,8 @@ struct ad5446_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
 	/* GPIO */
-	gpio_desc		*gpio_ladc;
-	gpio_desc		*gpio_clrout;
+	struct gpio_desc	*gpio_ladc;
+	struct gpio_desc	*gpio_clrout;
 	/* Device Settings */
 	enum ad5446_type_t act_device;
 };
@@ -109,8 +109,8 @@ struct ad5446_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	int8_t		gpio_ladc;
-	int8_t		gpio_clrout;
+	struct gpio_init_param	gpio_ladc;
+	struct gpio_init_param	gpio_clrout;
 	/* Device Settings */
 	enum ad5446_type_t act_device;
 };

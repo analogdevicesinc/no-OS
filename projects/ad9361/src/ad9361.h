@@ -42,6 +42,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include "gpio.h"
 #include "common.h"
 
 /******************************************************************************/
@@ -3191,11 +3192,11 @@ struct ad9361_phy_platform_data {
 	struct gpo_control	gpo_ctrl;
 	struct tx_monitor_control txmon_ctrl;
 
-	int32_t 			gpio_resetb;
+	struct gpio_init_param 		gpio_resetb;
 	/*  MCS SYNC */
-	int32_t 			gpio_sync;
-	int32_t				gpio_cal_sw1;
-	int32_t				gpio_cal_sw2;
+	struct gpio_init_param 		gpio_sync;
+	struct gpio_init_param		gpio_cal_sw1;
+	struct gpio_init_param		gpio_cal_sw2;
 };
 
 struct rf_rx_gain {
