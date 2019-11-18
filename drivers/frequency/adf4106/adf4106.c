@@ -52,8 +52,8 @@
 #define DATA_OFFSET_LSB8    0
 #define ADDRESS_MASK        3
 
-#define FREQ_2_4_GHZ        2400000000
-#define FREQ_5_2_GHZ        5200000000
+#define FREQ_2_4_GHZ        2400000000u
+#define FREQ_5_2_GHZ        5200000000u
 
 /******************************************************************************/
 /************************** Constants Definitions *****************************/

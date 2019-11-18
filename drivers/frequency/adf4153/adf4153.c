@@ -86,7 +86,7 @@ int8_t adf4153_init(struct adf4153_dev **device,
 	dev->adf4153_rfin_max_frq = 250000000;  // 250 Mhz
 	dev->adf4153_pfd_max_frq  = 32000000;   // 32 Mhz
 	dev->adf4153_vco_min_frq  = 500000000;  // 500 Mhz
-	dev->adf4153_vco_max_frq  = 4000000000; // 4 Ghz
+	dev->adf4153_vco_max_frq  = 4000000000u; // 4 Ghz
 	dev->adf4153_mod_max      = 4095;       // the MOD is stored in 12 bits
 	dev->r0 = 0;
 	dev->r1 = 0;
