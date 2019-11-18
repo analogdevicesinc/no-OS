@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "error.h"
 #include "i2c.h"
-#include "altera_platform_drivers.h"
+#include "i2c_extra.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -63,7 +63,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	if (((altera_i2c_init_param *)param->extra)->type) {
+	if (((struct altera_i2c_init_param *)param->extra)->type) {
 		// Unused variable - fix compiler warning
 	}
 
