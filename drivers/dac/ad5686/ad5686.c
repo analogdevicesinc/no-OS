@@ -509,8 +509,8 @@ uint16_t ad5686_read_back_register(struct ad5686_dev *dev,
 						      0);
 		read_back_data >>= offset;
 	} else {
-		i2c_write(dev->i2c_desc, &address, 1, NO_STOP_BIT);
-		i2c_read(dev->i2c_desc, rb_data_i2c, 2, STOP_BIT);
+		i2c_write(dev->i2c_desc, &address, 1, 0);
+		i2c_read(dev->i2c_desc, rb_data_i2c, 2, 1);
 		read_back_data = (rb_data_i2c[1] << 8) | rb_data_i2c[0];
 	}
 
