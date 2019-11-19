@@ -197,9 +197,9 @@ struct ad5686_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
 	/* GPIO */
-	gpio_desc	gpio_reset;
-	gpio_desc	gpio_ldac;
-	gpio_desc	gpio_gain;
+	uint8_t		gpio_reset;
+	uint8_t		gpio_ldac;
+	uint8_t		gpio_gain;
 	/* Device Settings */
 	enum ad5686_type	act_device;
 };
