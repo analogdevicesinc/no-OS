@@ -72,7 +72,7 @@ ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_axi_dac,
 	(*iio_axi_dac)->dac = init->dac;
 	(*iio_axi_dac)->dmac = init->dmac;
 	(*iio_axi_dac)->dac_ddr_base = init->dac_ddr_base;
-	(*iio_axi_dac)->dcache_flush = init->dcache_flush;
+	(*iio_axi_dac)->dcache_flush_range = init->dcache_flush_range;
 
 	return SUCCESS;
 }
@@ -556,6 +556,9 @@ ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst, size_t bytes_count,
 	struct iio_axi_dac *iio_dac = iio_inst;
 	ssize_t ret;
 
+	if(iio_dac->dcache_flush_range)
+		iio_dac->dcache_flush_range(iio_dac->dac_ddr_base, bytes_count);
+
 	iio_dac->dmac->flags = DMA_CYCLIC;
 	ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
 				bytes_count);
@@ -595,9 +598,6 @@ ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 			       bytes_count);
 	if(ret < 0)
 		return ret;
-
-	if(iio_dac->dcache_flush)
-		iio_dac->dcache_flush();
 
 	return bytes_count;
 }

@@ -406,7 +406,7 @@ struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
 
 struct uart_desc *uart_device;
-
+#ifdef USE_LIBIIO
 ssize_t iio_uart_write(const char *buf, size_t len)
 {
 	return uart_write(uart_device, (const uint8_t *)buf, len);
@@ -416,6 +416,7 @@ ssize_t iio_uart_read(char *buf, size_t len)
 {
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
+#endif // USE_LIBIIO
 
 /***************************************************************************//**
  * @brief main
@@ -622,7 +623,7 @@ int main(void)
 		.dac = ad9361_phy->tx_dac,
 		.dmac = ad9361_phy->tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
-		.dcache_flush = Xil_DCacheFlush,
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 	struct iio_axi_dac *iio_axi_dac_inst;
 
