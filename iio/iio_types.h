@@ -103,10 +103,13 @@ struct iio_interface_init_par {
 };
 
 struct iio_server_ops {
+	ssize_t (*read_line)(char *buf, size_t len, uint32_t *instance_id);
 	/* Read from from a peripheral device (UART, USB, NETWORK) */
-	ssize_t (*read)(char *buf, size_t len);
+	ssize_t (*read)(char *buf, size_t len, uint32_t *instance_id);
 	/* Write to a peripheral device (UART, USB, NETWORK) */
-	ssize_t (*write)(const char *buf, size_t len);
+	ssize_t (*write)(const char *buf, size_t len, uint32_t instance_id);
+	ssize_t (*close_instance)(uint32_t instance_id);
+
 };
 
 #endif /* IIO_TYPES_H_ */

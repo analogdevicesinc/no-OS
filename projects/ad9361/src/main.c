@@ -62,6 +62,9 @@
 #include "uart.h"
 #include "uart_extra.h"
 #endif // UART_INTERFACE
+#ifdef TCPIP_INTERFACE
+#include "network.h"
+#endif // TCPIP_INTERFACE
 #include "tinyiiod.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
@@ -405,17 +408,20 @@ struct xil_spi_init_param xil_spi_param = {.id = SPI_DEVICE_ID, .flags = 0};
 struct spi_init_param spi_param = {.mode = SPI_MODE_1, .chip_select = SPI_CS};
 
 
-struct uart_desc *uart_device;
+
 #ifdef USE_LIBIIO
-ssize_t iio_uart_write(const char *buf, size_t len)
+#ifdef UART_INTERFACE
+struct uart_desc *uart_device;
+ssize_t iio_uart_write(const char *buf, size_t len, uint32_t instance_id)
 {
 	return uart_write(uart_device, (const uint8_t *)buf, len);
 }
 
-ssize_t iio_uart_read(char *buf, size_t len)
+ssize_t iio_uart_read(char *buf, size_t len, uint32_t *instance_id)
 {
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
+#endif // UART_INTERFACE
 #endif // USE_LIBIIO
 
 /***************************************************************************//**
@@ -627,9 +633,13 @@ int main(void)
 	};
 	struct iio_axi_dac *iio_axi_dac_inst;
 
+
+#ifdef UART_INTERFACE
 	struct iio_server_ops uart_iio_server_ops = {
 		.read = iio_uart_read,
 		.write = iio_uart_write,
+		.close_instance = NULL,
+		.read_line = NULL,
 	};
 
 	struct xil_irq_init_param xil_irq_init_par = {
@@ -654,6 +664,21 @@ int main(void)
 		.extra = &xil_uart_init_par,
 	};
 
+	ret = iio_init(&iiod, &uart_iio_server_ops);
+#endif // UART_INTERFACE
+#ifdef TCPIP_INTERFACE
+	struct iio_server_ops network_iio_server_ops = {
+		.read = network_read,
+		.write = network_write_data,
+		.close_instance = network_close_instance,
+		.read_line = network_read_line,
+	};
+
+	ret = iio_init(&iiod, &network_iio_server_ops);
+#endif // NETWORK_INTERFACE
+	if(ret < 0)
+		return ret;
+
 	ret = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
 	if(ret < 0)
 		return ret;
@@ -667,10 +692,6 @@ int main(void)
 		return ret;
 
 	ret = iio_axi_dac_init(&iio_axi_dac_inst, &iio_axi_dac_init_par);
-	if(ret < 0)
-		return ret;
-
-	ret = iio_init(&iiod, &uart_iio_server_ops);
 	if(ret < 0)
 		return ret;
 
@@ -720,11 +741,12 @@ int main(void)
 	if(ret < 0)
 		return ret;
 
+
+#ifdef UART_INTERFACE
 	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(ret < 0)
 		return ret;
 	xil_uart_init_par.irq_desc = irq_desc;
-#ifdef UART_INTERFACE
 	ret = uart_init(&uart_device, &uart_init_par);
 	if(ret < 0)
 		return ret;
@@ -737,6 +759,17 @@ int main(void)
 			return ret;
 	}
 #endif // UART_INTERFACE
+
+#ifdef TCPIP_INTERFACE
+	ret = network_init();
+	if(ret < 0)
+		printf("network_init() error: %"PRIi32"\n", ret);
+	while(1) {
+		network_keep_alive();
+		tinyiiod_read_command(iiod);
+	}
+#endif // TCPIP_INTERFACE
+
 #endif // USE_LIBIIO
 
 	printf("Done.\n");
