@@ -122,6 +122,25 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo)
 	return ADIHAL_OK;
 }
 
+adiHalErr_t ADIHAL_sysrefReq(void *devHalInfo, sysrefReqMode_t mode)
+{
+	struct adi_hal *devHalData = (struct adi_hal *)devHalInfo;
+
+	if (mode == SYSREF_CONT_ON)
+		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
+	else if (mode == SYSREF_CONT_OFF)
+		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
+	else if (mode == SYSREF_PULSE) {
+		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 1);
+		mdelay(1);
+		gpio_direction_output(devHalData->gpio_adrv_sysref_req, 0);
+	} else
+		return ADIHAL_ERR;
+
+	return ADIHAL_OK;
+
+}
+
 adiHalErr_t ADIHAL_spiWriteByte(void *devHalInfo,
 				uint16_t addr, uint8_t data)
 {

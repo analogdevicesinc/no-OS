@@ -46,7 +46,6 @@
 #include "talise_arm_binary.h"
 #include "talise_stream_binary.h"
 #include "app_config.h"
-#include "app_sysref_req.h"
 
 /**********************************************************/
 /**********************************************************/
@@ -57,7 +56,6 @@
 int main(void)
 {
 	adiHalErr_t ad9528Error;
-	struct gpio_desc *gpio_sysref_req;
 
 	ad9528Device_t clockAD9528_ = {
 		NULL,
@@ -352,12 +350,6 @@ int main(void)
 	 * System Clock should provide a device clock and SYSREF signal
 	 * to the Talise device.
 	 **/
-
-	if(SUCCESS != gpio_get(&gpio_sysref_req, ADRV_SYSREF_REQ)) {
-		printf("error: gpio_get() failed for pin %d\n", ADRV_SYSREF_REQ);
-		goto error_0;
-	}
-
 	/* Init the AD9528 data structure */
 	ad9528Error = AD9528_initDeviceDataStruct(clockAD9528_device,
 			clockAD9528_device->pll1Settings->vcxo_Frequency_Hz,
@@ -589,7 +581,7 @@ int main(void)
 	}
 
 	/*< user code - Request minimum 3 SYSREF pulses from Clock Device - > */
-	sysrefReq(gpio_sysref_req, SYSREF_PULSE);
+	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_PULSE);
 
 	/*******************/
 	/**** Verify MCS ***/
@@ -759,7 +751,7 @@ int main(void)
 
 	/*** < User Sends SYSREF Here > ***/
 
-	sysrefReq(gpio_sysref_req, SYSREF_CONT_ON);
+	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
 
 	mdelay(100);
 
@@ -768,7 +760,7 @@ int main(void)
 
 	mdelay(100);
 
-	sysrefReq(gpio_sysref_req, SYSREF_CONT_OFF);
+	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_OFF);
 
 	mdelay(100);
 
@@ -833,7 +825,7 @@ int main(void)
 		goto error_10;
 	}
 
-	sysrefReq(gpio_sysref_req, SYSREF_CONT_ON);
+	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
 
 	axi_jesd204_rx_watchdog(rx_jesd);
 	axi_jesd204_rx_watchdog(rx_os_jesd);
@@ -914,9 +906,6 @@ int main(void)
 	axi_clkgen_remove(rx_clkgen);
 #endif
 	AD9528_remove(clockAD9528_device);
-	gpio_remove(gpio_sysref_req);
-
-
 	printf("Bye\n");
 
 	return SUCCESS;
@@ -955,7 +944,6 @@ error_2:
 #endif
 error_1:
 	AD9528_remove(clockAD9528_device);
-	gpio_remove(gpio_sysref_req);
 error_0:
 	return FAILURE;
 }

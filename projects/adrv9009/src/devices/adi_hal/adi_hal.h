@@ -55,6 +55,12 @@ typedef enum {
 
 } adiLogLevel_t;
 
+typedef enum {
+	SYSREF_CONT_ON,		/*!< Turn on continuous SYSREF request */
+	SYSREF_CONT_OFF,	/*!< Turn off continuous SYSREF request */
+	SYSREF_PULSE,		/*!< SYSREF request in N-shot mode */
+} sysrefReqMode_t;
+
 /*========================================
  * Prototypes
  *=======================================*/
@@ -213,6 +219,26 @@ adiHalErr_t ADIHAL_setTimeout(void *devHalInfo, uint32_t halTimeout_ms);
  */
 adiHalErr_t ADIHAL_resetHw(void *devHalInfo);
 
+/**
+ * \brief Performs a SYSREF request to the clock generation device.
+ *
+ * \param devHalInfo Pointer to Platform HAL defined structure containing
+ *        hardware settings describing the device of interest and required
+ *        hardware references to toggle SYSREF pin of the ADI device.
+ *
+ * \pre This function may be called at any time to issue a SYSREF request
+ *  after the required GPIO drivers and resources are opened by the
+ * ADIHAL_openHw function call and not after ADIHAL_closeHW.
+ *
+ *
+ * <B>Dependencies</B>
+ * --Application and Platform Specific modules defined by devHalInfo
+ *
+ *
+ * \retval ADIHAL_OK if function completed successfully.
+ * \retval ADIHAL_ERROR if wrong mode is provided.
+ */
+adiHalErr_t ADIHAL_sysrefReq(void *devHalInfo, sysrefReqMode_t mode);
 
 /**
  * \brief Performs a Single SPI write to an ADI Device
