@@ -2,18 +2,15 @@ language: c
 
 sudo: required
 
-matrix:
-  include:
-    - os: linux
-      env: BUILD_TYPE=astyle
-    - os: linux
-      env: BUILD_TYPE=cppcheck
-    - os: linux
-      env: BUILD_TYPE=ad9361_generic
-    - os: linux
-      env: BUILD_TYPE=ad9361_linux
-    - os: linux
-      env: BUILD_TYPE=drivers
+os: linux
+
+env:
+  matrix:
+    - BUILD_TYPE=astyle
+    - BUILD_TYPE=cppcheck
+    - BUILD_TYPE=ad9361_generic
+    - BUILD_TYPE=ad9361_linux
+    - BUILD_TYPE=drivers
 
 script:
   - ./ci/travis/run_build.sh
