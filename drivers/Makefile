@@ -1,5 +1,7 @@
 CC = arm-none-eabi-gcc
 
+SKIPDIR = -path ./platform -prune -o
+
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \
 	 -I./dac/ad917x/ad917x_api/ \
@@ -9,7 +11,7 @@ INCLUDES = -I../include/ \
 
 CFLAGS = -c -Wall -Wformat=0 $(INCLUDES)
 
-SUBDIRS = $(shell find . -path ./platform -prune -o -name '*.c')
+SUBDIRS = $(shell find . $(SKIPDIR) -name '*.c')
 
 all:
 	$(CC) $(CFLAGS) $(SUBDIRS)
