@@ -2,5 +2,4 @@
 set -e
 
 sudo apt-get update
-sudo apt-get install libmatio-dev cppcheck 
-
+sudo apt-get install libmatio-dev

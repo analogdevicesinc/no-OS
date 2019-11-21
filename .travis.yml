@@ -7,7 +7,7 @@ matrix:
     - os: linux
       env: BUILD_TYPE=astyle
     - os: linux
-      compiler: gcc
+      env: BUILD_TYPE=cppcheck
     - os: linux
       compiler: clang
 
