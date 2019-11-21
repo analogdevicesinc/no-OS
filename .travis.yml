@@ -12,6 +12,8 @@ matrix:
       env: BUILD_TYPE=ad9361_generic
     - os: linux
       env: BUILD_TYPE=ad9361_linux
+    - os: linux
+      env: BUILD_TYPE=drivers
 
 script:
   - ./ci/travis/run_build.sh

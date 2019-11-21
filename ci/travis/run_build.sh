@@ -28,4 +28,9 @@ build_ad9361_linux() {
     make -C ./ad9361/sw -f Makefile.linux
 }
 
+build_drivers() {
+    sudo apt-get install gcc-arm-none-eabi libnewlib-arm-none-eabi
+    make -C ./drivers -f Makefile
+}
+
 build_${BUILD_TYPE:-default}
