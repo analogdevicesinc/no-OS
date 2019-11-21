@@ -72,9 +72,9 @@ int8_t ad7280a_init(struct ad7280a_dev **device,
 		return -1;
 
 	/* GPIO */
-	status = gpio_get(&dev->gpio_pd, init_param.gpio_pd);
-	status |= gpio_get(&dev->gpio_cnvst, init_param.gpio_cnvst);
-	status |= gpio_get(&dev->gpio_alert, init_param.gpio_alert);
+	status = gpio_get(&dev->gpio_pd, &init_param.gpio_pd);
+	status |= gpio_get(&dev->gpio_cnvst, &init_param.gpio_cnvst);
+	status |= gpio_get(&dev->gpio_alert, &init_param.gpio_alert);
 
 	AD7280A_PD_OUT;
 	AD7280A_PD_HIGH;

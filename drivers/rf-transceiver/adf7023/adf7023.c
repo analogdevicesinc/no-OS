@@ -108,8 +108,8 @@ int32_t adf7023_init(struct adf7023_dev **device,
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_cs, init_param.gpio_cs);
-	ret |= gpio_get(&dev->gpio_miso, init_param.gpio_miso);
+	ret |= gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
+	ret |= gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
 
 	dev->adf7023_bbram_current = adf7023_bbram_default;
 

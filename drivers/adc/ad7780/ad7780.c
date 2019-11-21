@@ -72,10 +72,10 @@ int8_t ad7780_init(struct ad7780_dev **device,
 	if (!dev)
 		return -1;
 
-	init_status = gpio_get(&dev->gpio_pdrst, init_param.gpio_pdrst);
-	init_status = gpio_get(&dev->gpio_miso, init_param.gpio_miso);
-	init_status = gpio_get(&dev->gpio_filter, init_param.gpio_filter);
-	init_status = gpio_get(&dev->gpio_gain, init_param.gpio_gain);
+	init_status = gpio_get(&dev->gpio_pdrst, &init_param.gpio_pdrst);
+	init_status = gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
+	init_status = gpio_get(&dev->gpio_filter, &init_param.gpio_filter);
+	init_status = gpio_get(&dev->gpio_gain, &init_param.gpio_gain);
 
 	if (dev->gpio_miso)
 		init_status = gpio_direction_input(dev->gpio_miso);

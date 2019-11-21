@@ -108,8 +108,8 @@ int8_t ad5629r_init(struct ad5629r_dev **device,
 		status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 	}
 
-	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
-	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
 
 	AD5629R_LDAC_OUT;
 	AD5629R_LDAC_LOW;

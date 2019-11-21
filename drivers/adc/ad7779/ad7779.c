@@ -1259,25 +1259,25 @@ int32_t ad7779_init(ad7779_dev **device,
 
 	/* GPIO */
 	ret |= gpio_get(&dev->gpio_reset,
-			init_param.gpio_reset);
+			&init_param.gpio_reset);
 	ret |= gpio_get(&dev->gpio_mode0,
-			init_param.gpio_mode0);
+			&init_param.gpio_mode0);
 	ret |= gpio_get(&dev->gpio_mode1,
-			init_param.gpio_mode1);
+			&init_param.gpio_mode1);
 	ret |= gpio_get(&dev->gpio_mode2,
-			init_param.gpio_mode2);
+			&init_param.gpio_mode2);
 	ret |= gpio_get(&dev->gpio_mode3,
-			init_param.gpio_mode3);
+			&init_param.gpio_mode3);
 	ret |= gpio_get(&dev->gpio_dclk0,
-			init_param.gpio_dclk0);
+			&init_param.gpio_dclk0);
 	ret |= gpio_get(&dev->gpio_dclk1,
-			init_param.gpio_dclk1);
+			&init_param.gpio_dclk1);
 	ret |= gpio_get(&dev->gpio_dclk2,
-			init_param.gpio_dclk2);
+			&init_param.gpio_dclk2);
 	ret |= gpio_get(&dev->gpio_sync_in,
-			init_param.gpio_sync_in);
+			&init_param.gpio_sync_in);
 	ret |= gpio_get(&dev->gpio_convst_sar,
-			init_param.gpio_convst_sar);
+			&init_param.gpio_convst_sar);
 
 	ret |= gpio_direction_output(dev->gpio_reset,
 				     GPIO_LOW);

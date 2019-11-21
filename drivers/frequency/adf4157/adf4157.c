@@ -67,8 +67,8 @@ int8_t adf4157_init(struct adf4157_dev **device,
 		return -1;
 
 	/* Setup GPIO pads */
-	status = gpio_get(&dev->gpio_le, init_param.gpio_le);
-	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
+	status = gpio_get(&dev->gpio_le, &init_param.gpio_le);
+	status |= gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
 
 	/* Setup Control GPIO Pins */
 	ADF4157_LE_OUT;

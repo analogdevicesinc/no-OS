@@ -125,8 +125,8 @@ int8_t ad5449_init(struct ad5449_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
-	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
 
 	/* Set GPIO pins. */
 	AD5449_LDAC_OUT;

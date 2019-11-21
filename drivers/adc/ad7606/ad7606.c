@@ -173,34 +173,34 @@ int32_t ad7606_request_gpios(struct ad7606_dev *dev,
 {
 	int32_t ret;
 
-	ret = gpio_get(&dev->gpio_reset, init_param->gpio_reset);
+	ret = gpio_get(&dev->gpio_reset, &init_param->gpio_reset);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_get(&dev->gpio_convst, init_param->gpio_convst);
+	ret = gpio_get(&dev->gpio_convst, &init_param->gpio_convst);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_get(&dev->gpio_busy, init_param->gpio_busy);
+	ret = gpio_get(&dev->gpio_busy, &init_param->gpio_busy);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_get(&dev->gpio_range, init_param->gpio_range);
+	ret = gpio_get(&dev->gpio_range, &init_param->gpio_range);
 	if (ret < 0)
 		return ret;
 
 	if (!ad7606_chip_info_tbl[dev->device_id].has_oversampling)
 		return 0;
 
-	ret = gpio_get(&dev->gpio_range, init_param->gpio_os0);
+	ret = gpio_get(&dev->gpio_range, &init_param->gpio_os0);
 	if (ret < 0)
 		return ret;
 
-	ret = gpio_get(&dev->gpio_range, init_param->gpio_os1);
+	ret = gpio_get(&dev->gpio_range, &init_param->gpio_os1);
 	if (ret < 0)
 		return ret;
 
-	return gpio_get(&dev->gpio_range, init_param->gpio_os2);
+	return gpio_get(&dev->gpio_range, &init_param->gpio_os2);
 }
 
 int32_t ad7606_set_os_ratio(struct ad7606_dev *dev,
