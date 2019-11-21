@@ -7,7 +7,7 @@ INCLUDES = -I../include/ \
 	 -I./adc/ad9208/ad9208_api \
 	 -I./axi_core/axi_adc_core
 
-CFLAGS = -c -Wall $(INCLUDES)
+CFLAGS = -c -Wall -Wformat=0 $(INCLUDES)
 
 SUBDIRS = $(shell find . -path ./platform -prune -o -name '*.c')
 
