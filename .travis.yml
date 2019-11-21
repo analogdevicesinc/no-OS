@@ -10,14 +10,9 @@ matrix:
       compiler: gcc
     - os: linux
       compiler: clang
-    - os: osx
-      compiler: gcc
-    - os: osx
-      compiler: clang
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./ci/travis/before_install_darwin ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./ci/travis/before_install_linux ; fi
+  - ./ci/travis/before_install_linux
 
 script:
   - ./ci/travis/run_build.sh
