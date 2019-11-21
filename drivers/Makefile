@@ -1,6 +1,7 @@
 CC = arm-none-eabi-gcc
 
-SKIPDIR = -path ./platform -prune -o
+SKIPDIR = -path ./platform -prune -o \
+	-path ./axi_core -prune -o
 
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \
