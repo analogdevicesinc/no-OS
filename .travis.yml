@@ -13,8 +13,5 @@ matrix:
     - os: linux
       env: BUILD_TYPE=ad9361_linux
 
-before_install:
-  - ./ci/travis/before_install_linux
-
 script:
   - ./ci/travis/run_build.sh

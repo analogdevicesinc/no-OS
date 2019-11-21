@@ -2,6 +2,8 @@
 
 set -e
 
+sudo apt-get update
+
 . ./ci/travis/lib.sh
 
 build_default() {
