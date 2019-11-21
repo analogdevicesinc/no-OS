@@ -533,7 +533,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
 	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
 
 	/* GPIO */
-	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 
 	ret |= gpio_direction_output(dev->gpio_reset, GPIO_LOW);
 	mdelay(10);

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad7768.c
+ *   @file
  *   @brief  Implementation of AD7768 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -637,13 +637,13 @@ int32_t ad7768_setup(ad7768_dev **device,
 	dev->pin_spi_ctrl = dev->pin_spi_input_value ?
 			    AD7768_SPI_CTRL : AD7768_PIN_CTRL;
 
-	ret |= gpio_get(&dev->gpio_reset, init_param.gpio_reset);
+	ret |= gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
 	dev->gpio_reset_value = init_param.gpio_reset_value;
 
-	ret |= gpio_get(&dev->gpio_mode0, init_param.gpio_mode0);
-	ret |= gpio_get(&dev->gpio_mode1, init_param.gpio_mode1);
-	ret |= gpio_get(&dev->gpio_mode2, init_param.gpio_mode2);
-	ret |= gpio_get(&dev->gpio_mode3, init_param.gpio_mode3);
+	ret |= gpio_get(&dev->gpio_mode0, &init_param.gpio_mode0);
+	ret |= gpio_get(&dev->gpio_mode1, &init_param.gpio_mode1);
+	ret |= gpio_get(&dev->gpio_mode2, &init_param.gpio_mode2);
+	ret |= gpio_get(&dev->gpio_mode3, &init_param.gpio_mode3);
 
 	if (dev->gpio_reset)
 		ret |= gpio_direction_output(dev->gpio_reset, dev->gpio_reset_value);

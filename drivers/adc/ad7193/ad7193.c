@@ -79,8 +79,8 @@ int8_t ad7193_init(struct ad7193_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_cs, init_param.gpio_cs);
-	status |= gpio_get(&dev->gpio_miso, init_param.gpio_miso);
+	status |= gpio_get(&dev->gpio_cs, &init_param.gpio_cs);
+	status |= gpio_get(&dev->gpio_miso, &init_param.gpio_miso);
 
 	if (dev->gpio_cs)
 		status |= gpio_direction_output(dev->gpio_cs,

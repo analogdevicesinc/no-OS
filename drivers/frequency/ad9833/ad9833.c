@@ -97,13 +97,13 @@ int8_t ad9833_init(struct ad9833_dev **device,
 
 	/* Setup GPIO pads. */
 	status |= gpio_get(&dev->gpio_psel,
-			   init_param.gpio_psel);
+			   &init_param.gpio_psel);
 	status |= gpio_get(&dev->gpio_fsel,
-			   init_param.gpio_fsel);
+			   &init_param.gpio_fsel);
 	status |= gpio_get(&dev->gpio_reset,
-			   init_param.gpio_reset);
+			   &init_param.gpio_reset);
 	status |= gpio_get(&dev->gpio_sleep,
-			   init_param.gpio_sleep);
+			   &init_param.gpio_sleep);
 
 	AD9834_PSEL_OUT;
 	AD9834_PSEL_LOW;

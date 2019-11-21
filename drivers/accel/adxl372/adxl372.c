@@ -737,12 +737,12 @@ int32_t adxl372_init(struct adxl372_dev **device,
 	}
 	/* GPIO */
 	ret = gpio_get(&dev->gpio_int1,
-		       init_param.gpio_int1);
+		       &init_param.gpio_int1);
 	if (ret < 0)
 		goto error;
 
 	ret |= gpio_get(&dev->gpio_int2,
-			init_param.gpio_int2);
+			&init_param.gpio_int2);
 	if (ret < 0)
 		goto error;
 

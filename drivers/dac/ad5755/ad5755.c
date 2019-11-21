@@ -76,10 +76,10 @@ int8_t ad5755_init(struct ad5755_dev **device,
 	dev->this_device = init_param.this_device;
 
 	/* GPIO */
-	status = gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
-	status |= gpio_get(&dev->gpio_rst, init_param.gpio_rst);
-	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
-	status |= gpio_get(&dev->gpio_poc, init_param.gpio_poc);
+	status = gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	status |= gpio_get(&dev->gpio_rst, &init_param.gpio_rst);
+	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_poc, &init_param.gpio_poc);
 
 	/* GPIO configuration. */
 	AD5755_LDAC_OUT;

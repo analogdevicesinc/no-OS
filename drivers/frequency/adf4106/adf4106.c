@@ -118,10 +118,10 @@ int8_t adf4106_init(struct adf4106_dev **device,
 	status = spi_init(&dev->spi_desc, &init_param.spi_init);
 
 	/* GPIO */
-	status |= gpio_get(&dev->gpio_le, init_param.gpio_le);
-	status |= gpio_get(&dev->gpio_ce, init_param.gpio_ce);
-	status |= gpio_get(&dev->gpio_le2, init_param.gpio_le2);
-	status |= gpio_get(&dev->gpio_ce2, init_param.gpio_ce2);
+	status |= gpio_get(&dev->gpio_le, &init_param.gpio_le);
+	status |= gpio_get(&dev->gpio_ce, &init_param.gpio_ce);
+	status |= gpio_get(&dev->gpio_le2, &init_param.gpio_le2);
+	status |= gpio_get(&dev->gpio_ce2, &init_param.gpio_ce2);
 
 	/* Bring CE high to put device to power up */
 	ADF4106_CE_OUT;

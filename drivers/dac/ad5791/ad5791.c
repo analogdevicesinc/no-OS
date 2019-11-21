@@ -89,9 +89,9 @@ int32_t ad5791_init(struct ad5791_dev **device,
 	dev->act_device = init_param.act_device;
 
 	/* GPIO */
-	status = gpio_get(&dev->gpio_reset, init_param.gpio_reset);
-	status |= gpio_get(&dev->gpio_clr, init_param.gpio_clr);
-	status |= gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
+	status = gpio_get(&dev->gpio_reset, &init_param.gpio_reset);
+	status |= gpio_get(&dev->gpio_clr, &init_param.gpio_clr);
+	status |= gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
 
 	AD5791_RESET_OUT;
 	AD5791_RESET_HIGH;

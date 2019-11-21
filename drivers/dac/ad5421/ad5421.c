@@ -77,8 +77,8 @@ int32_t ad5421_init(struct ad5421_dev **device,
 	if (!dev)
 		return -1;
 
-	gpio_get(&dev->gpio_ldac, init_param.gpio_ldac);
-	gpio_get(&dev->gpio_faultin, init_param.gpio_faultin);
+	gpio_get(&dev->gpio_ldac, &init_param.gpio_ldac);
+	gpio_get(&dev->gpio_faultin, &init_param.gpio_faultin);
 
 	/* Setup the SPI interface. */
 	spi_init(&dev->spi_desc, &init_param.spi_init);
