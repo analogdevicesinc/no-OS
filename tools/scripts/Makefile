@@ -154,7 +154,7 @@ define copy_srcs
 endef
 
 .DEFAULT_GOAL := all
-all: 	xilinx
+all: xilinx
 
 compile: $(EXEC)
 
@@ -186,7 +186,7 @@ clean:
 eval-hardware:
 # If the hardware file is not specified, start searching for one
 # Check for .hdf files inside the project directory		
-ifndef $(HARDWARE)
+ifndef HARDWARE
 	$(eval HARDWARE = $(shell					\
 	if [ -z $(HARDWARE) ]; then					\
 		echo $(shell find $(PROJECT) -name "*.hdf") ;	\
@@ -226,10 +226,8 @@ prepare-project:
 	fi;
 	@$(MAKE) -s compile
 
-xilinx:	xil-pre-cleanup eval-hardware pre-build xil-prepare-project
-	$(call copy_srcs,xilinx)
+xilinx: eval-hardware pre-build xil-prepare-project copy-srcs
 	@$(MAKE) -s compile
-	$(MUTE)rm -rf $(BUILD_DIR)/SDK.log
 	$(call print,Done \n)
 
 xil-extract-hdf-info:
@@ -261,5 +259,6 @@ xil-prepare-project: xil-extract-hdf-info xil-update-hdf-info
 		sed -i "s/_HEAP_SIZE : 0x800/_HEAP_SIZE : 0x100000/g"	\
 		$(BUILD_DIR)/app/src/lscript.ld;			\
 	fi;
+	$(MUTE)rm -rf $(BUILD_DIR)/SDK.log
 
 re: clean all
