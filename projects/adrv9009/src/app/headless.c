@@ -47,6 +47,44 @@
 #include "talise_stream_binary.h"
 #include "app_config.h"
 
+#ifdef IIO_EXAMPLE
+#include "irq.h"
+#include "irq_extra.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
+#include "iio.h"
+#include "uart.h"
+#include "uart_extra.h"
+#include "tinyiiod.h"
+
+/**
+ * Uart device.
+ */
+struct uart_desc *uart_device;
+
+/**
+ * iio_uart_write() - Write data to UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to write.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+ssize_t iio_uart_write(const char *buf, size_t len)
+{
+	return uart_write(uart_device, (const uint8_t *)buf, len);
+}
+
+/**
+ * iio_uart_read() - Read data from UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to read.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+ssize_t iio_uart_read(char *buf, size_t len)
+{
+	return uart_read(uart_device, (uint8_t *)buf, len);
+}
+#endif // IIO_EXAMPLE
+
 /**********************************************************/
 /**********************************************************/
 /********** Talise Data Structure Initializations ********/
@@ -869,6 +907,197 @@ int main(void)
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
 #endif
+
+#ifdef IIO_EXAMPLE
+	/**
+	 * iio devices
+	 */
+	struct iio_device *iio_axi_adc_device, *iio_axi_dac_device;
+
+	/**
+	 * Transmit DMA initial configuration.
+	 */
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_CYCLIC,
+	};
+
+	/**
+	 * Pointer to transmit DMA instance.
+	 */
+	struct axi_dmac *tx_dmac;
+
+	/**
+	 * Initial configuration for "iio_axi_adc_inst".
+	 */
+	struct iio_axi_adc_init_par iio_axi_adc_init_par = {
+		.adc = rx_adc,
+		.dmac = rx_dmac,
+		.adc_ddr_base = DDR_MEM_BASEADDR,
+		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+	};
+
+	/**
+	 * Pointer to iio_axi_adc instance.
+	 */
+	struct iio_axi_adc *iio_axi_adc_inst;
+
+	/**
+	 * Initial configuration for "iio_axi_dac_inst".
+	 */
+	struct iio_axi_dac_init_par iio_axi_dac_init_par = {
+		.dac = tx_dac,
+		.dmac = tx_dmac,
+		.dac_ddr_base = DDR_MEM_BASEADDR + 0xA000000,
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
+	};
+
+	/**
+	 * Pointer to iio_axi_dac instance.
+	 */
+	struct iio_axi_dac *iio_axi_dac_inst;
+
+	/**
+	 * UART interface ops, to read/write data.
+	 */
+	struct iio_server_ops uart_iio_server_ops = {
+		.read = iio_uart_read,
+		.write = iio_uart_write,
+	};
+
+	/**
+	 * Xilinx platform dependent initialization for IRQ.
+	 */
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PS,
+	};
+
+	/**
+	 * IRQ initial configuration.
+	 */
+	struct irq_init_param irq_init_param = {
+		.irq_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
+	};
+
+	/**
+	 * IRQ instance.
+	 */
+	struct irq_desc *irq_desc;
+
+	/**
+	 * Xilinx platform dependent initialization for UART.
+	 */
+	struct xil_uart_init_param xil_uart_init_par;
+
+	/**
+	 * Initialization for UART.
+	 */
+	struct uart_init_par uart_init_par;
+
+	/**
+	 * iio ADC interface init parameters.
+	 */
+	struct iio_interface_init_par iio_axi_adc_intf_par;
+
+	/**
+	 * iio DAC interface init parameters.
+	 */
+	struct iio_interface_init_par iio_axi_dac_intf_par;
+
+	/**
+	 * Pointer to tinyiiod instance.
+	 */
+	struct tinyiiod *iiod;
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(status < 0)
+		return status;
+
+	xil_uart_init_par = (struct xil_uart_init_param) {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+	};
+
+	uart_init_par = (struct uart_init_par) {
+		.baud_rate = 921600,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
+	status = iio_axi_adc_init(&iio_axi_adc_inst, &iio_axi_adc_init_par);
+	if(status < 0)
+		return status;
+
+	status = iio_axi_dac_init(&iio_axi_dac_inst, &iio_axi_dac_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_adc_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name,
+			     iio_axi_adc_inst->adc->num_channels);
+	if (!iio_axi_adc_device)
+		return FAILURE;
+
+	iio_axi_adc_intf_par = (struct iio_interface_init_par) {
+		.dev_name = iio_axi_adc_inst->adc->name,
+		.dev_instance = iio_axi_adc_inst,
+		.iio_device = iio_axi_adc_device,
+		.get_xml = iio_axi_adc_get_xml,
+		.transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem,
+		.transfer_mem_to_dev = NULL,
+		.read_data = iio_axi_adc_read_dev,
+		.write_data = NULL,
+	};
+
+	iio_axi_dac_device = iio_axi_dac_create_device(iio_axi_dac_inst->dac->name,
+			     iio_axi_dac_inst->dac->num_channels);
+	if (!iio_axi_dac_device)
+		return FAILURE;
+
+	iio_axi_dac_intf_par = (struct iio_interface_init_par) {
+		.dev_name = iio_axi_dac_inst->dac->name,
+		.dev_instance = iio_axi_dac_inst,
+		.iio_device = iio_axi_dac_device,
+		.get_xml = iio_axi_dac_get_xml,
+		.transfer_dev_to_mem = NULL,
+		.transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev,
+		.read_data = NULL,
+		.write_data = iio_axi_dac_write_dev,
+	};
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
+		return status;
+
+	status = iio_init(&iiod, &uart_iio_server_ops);
+	if(status < 0)
+		return status;
+
+	status = iio_register(&iio_axi_adc_intf_par);
+	if(status < 0)
+		return status;
+
+	status = iio_register(&iio_axi_dac_intf_par);
+	if(status < 0)
+		return status;
+
+	status = uart_init(&uart_device, &uart_init_par);
+	if(status < 0)
+		return status;
+
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
+
+	while(1) {
+		status = tinyiiod_read_command(iiod);
+		if(status < 0)
+			return status;
+	}
+#endif // IIO_EXAMPLE
 
 	/***********************************************
 	* Shutdown Procedure *
