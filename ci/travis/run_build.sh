@@ -6,10 +6,6 @@ sudo apt-get update
 
 . ./ci/travis/lib.sh
 
-build_default() {
-    . ./ci/travis/build_projects.sh
-}
-
 build_astyle() {
     . ./ci/travis/astyle.sh
 }
@@ -33,4 +29,4 @@ build_drivers() {
     make -C ./drivers -f Makefile
 }
 
-build_${BUILD_TYPE:-default}
+build_${BUILD_TYPE}
