@@ -43,7 +43,7 @@
 	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
-	cp ../../../drivers/platform/altera/gpio_extra.h devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/gpio_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/delay.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.c devices/adi_hal/
 	cp ../../../drivers/axi_core/axi_adc_core/axi_adc_core.h devices/adi_hal/
