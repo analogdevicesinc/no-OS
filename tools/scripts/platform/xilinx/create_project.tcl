@@ -1,5 +1,5 @@
 if { $argc != 3 } {
-	puts "Invalid arguments"
+	puts "create_project: Invalid arguments"
 	exit
 }
 # Set the workspace
