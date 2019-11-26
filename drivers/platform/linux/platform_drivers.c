@@ -249,7 +249,7 @@ int32_t spi_remove(spi_desc *desc)
  */
 int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t *data,
-			   uint8_t bytes_number)
+			   uint16_t bytes_number)
 {
 	struct spi_ioc_transfer transfer = {
 		.tx_buf = (unsigned long)data,
