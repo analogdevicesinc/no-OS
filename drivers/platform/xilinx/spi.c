@@ -235,7 +235,7 @@ error:
 
 int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
-			   uint8_t bytes_number)
+			   uint16_t bytes_number)
 {
 	int32_t			ret;
 	struct xil_spi_desc	*xdesc;

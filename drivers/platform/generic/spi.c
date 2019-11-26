@@ -90,7 +90,7 @@ int32_t spi_remove(struct spi_desc *desc)
  */
 int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
-			   uint8_t bytes_number)
+			   uint16_t bytes_number)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
