@@ -8,7 +8,8 @@ INCLUDES = -I../include/ \
 	 -I./dac/ad917x/ad917x_api/ \
 	 -I../projects/ad9361/src/ \
 	 -I./adc/ad9208/ad9208_api \
-	 -I./axi_core/axi_adc_core
+	 -I./axi_core/axi_adc_core \
+	 -I../projects/adrv9009/src/devices/adi_hal
 
 CFLAGS = -c -Wall -Wformat=0 $(INCLUDES)
 
