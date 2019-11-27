@@ -43,7 +43,7 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-struct uart_init_par {
+struct uart_init_param {
 	uint8_t	device_id;
 	uint32_t 	baud_rate;
 	void 		*extra;
@@ -67,7 +67,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number);
 
 /* Initialize the UART communication peripheral. */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par);
+int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param);
 
 /* Free the resources allocated by uart_init(). */
 int32_t uart_remove(struct uart_desc *desc);
