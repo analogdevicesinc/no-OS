@@ -100,16 +100,16 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
- * @param init_param - The structure that contains the UART parameters.
+ * @param param - The structure that contains the UART parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
+int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
 
-	if (par) {
+	if (param) {
 		// Unused variable - fix compiler warning
 	}
 

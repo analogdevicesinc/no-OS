@@ -276,10 +276,10 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
- * @param init_param - The structure that contains the UART parameters.
+ * @param param - The structure that contains the UART parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
+int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
 	int32_t status;
 	struct uart_desc *descriptor;
@@ -295,9 +295,9 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_par *par)
 		goto error_free_descriptor;
 
 	descriptor->extra = xil_uart_desc;
-	descriptor->baud_rate = par->baud_rate;
-	descriptor->device_id = par->device_id;
-	xil_uart_init_param = par->extra;
+	descriptor->baud_rate = param->baud_rate;
+	descriptor->device_id = param->device_id;
+	xil_uart_init_param = param->extra;
 	xil_uart_desc = descriptor->extra;
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
 	xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
