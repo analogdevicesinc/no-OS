@@ -291,6 +291,9 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 					    bytes_number);
 		if (ret != SUCCESS)
 			goto error;
+		ret = XSpiPs_SetSlaveSelect(xdesc->instance, SPI_DEASSERT_CURRENT_SS);
+		if (ret != SUCCESS)
+			goto error;
 #endif
 		break;
 	case SPI_ENGINE:
