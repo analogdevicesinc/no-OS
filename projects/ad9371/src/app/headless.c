@@ -880,6 +880,9 @@ int main(void)
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
 				 DDR_MEM_BASEADDR + 0xA000000);
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheFlush();
+#endif
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR + 0xA000000,
 			  sizeof(sine_lut_iq) * 2);
