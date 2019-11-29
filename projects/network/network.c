@@ -383,13 +383,10 @@ void network_close(struct network_instance *es)
 *******************************************************************************/
 ssize_t network_close_instance(uint32_t instance_id)
 {
-	struct network_instance *instance;
+	struct network_instance *instance, *tmp;
 	err_t err = 0;
 	uint8_t freed;
 
-//#ifdef DEBUG_NETWORK
-//	printf("removing cleint instance: %"PRIi32"\n", instance_id);
-//#endif
 	/* cppcheck-suppress uninitvar ; cppcheck reports this as a false positive */
 	HASH_FIND_INT( instances, &instance_id, instance);
 	if(instance == NULL)
@@ -406,7 +403,12 @@ ssize_t network_close_instance(uint32_t instance_id)
 	}
 
 #ifdef DEBUG_NETWORK
-	printf("removed client inst %"PRIi32" done\n", instance_id);
+	printf("Removed client instance: %"PRIi32" ", instance_id);
+	printf("Active instances: ");
+	HASH_ITER(hh, instances, instance, tmp) {
+		printf("%"PRIi32" ,", instance->instance_id);
+	}
+	printf("\n");
 #endif
 
 	return err;
