@@ -65,7 +65,6 @@ struct network_instance {
 	/* pbuf (chain) to recycle */
 	struct pbuf *p;
 	UT_hash_handle hh;         /* makes this structure hashable */
-	u8_t close_instance;
 };
 
 static struct network_instance *instances = NULL;
@@ -165,13 +164,6 @@ err_t network_recv(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
 {
 	struct network_instance *es = (struct network_instance *)arg;
 
-	if (p == NULL) {
-		es->state = ES_CLOSING;
-		if (es->p == NULL)
-			network_close_instance(es->instance_id);
-		return ERR_OK;
-	}
-
 	if (es->p == NULL) {
 		es->p = p;
 	}
@@ -248,8 +240,6 @@ static int32_t read_byte(char *buf, uint32_t *instance_id)
 
 	lwip_keep_alive();
 
-
-
 	int32_t ret = -ENOENT;
 	if (0xFFFFAAAA == *instance_id)
 	{
@@ -266,9 +256,6 @@ static int32_t read_byte(char *buf, uint32_t *instance_id)
 	}
 	if (instance == NULL)
 		return -ENOENT;
-
-	if (instance->state == ES_CLOSING)
-		network_close_instance(*instance_id);
 
 //	SYS_ARCH_PROTECT(level);
 	if (instance->p) {
