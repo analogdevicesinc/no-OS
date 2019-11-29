@@ -960,6 +960,23 @@ static ssize_t get_temp0_input(void *device, char *buf, size_t len,
 }
 
 /**
+ * set_temp0_input().
+ * @device:	Physical instance of a iio_axi_dac device.
+ * @buf:	Value to be written to attribute.
+ * @len:	Length of the data in "buf".
+ * @channel:	Channel properties.
+ * Return: Number of bytes written to device, or negative value on failure.
+ */
+static ssize_t set_temp0_input(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
+/**
  * get_voltage_filter_fir_en().
  * @device:	Physical instance of a iio_axi_adc device.
  * @buf:	Where value is stored.
@@ -1661,6 +1678,15 @@ static ssize_t get_rx_path_rates(void *device, char *buf, size_t len,
 		       clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
 
+static ssize_t set_rx_path_rates(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_trx_rate_governor().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1698,6 +1724,15 @@ static ssize_t get_calib_mode_available(void *device, char *buf, size_t len,
 				 ad9361_calib_mode[3], ad9361_calib_mode[4]);
 }
 
+static ssize_t set_calib_mode_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_xo_correction_available().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1712,6 +1747,15 @@ static ssize_t get_xo_correction_available(void *device, char *buf, size_t len,
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
 }
 
+static ssize_t set_xo_correction_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_gain_table_config().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1724,6 +1768,15 @@ static ssize_t get_gain_table_config(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
+}
+
+static ssize_t set_gain_table_config(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -1762,6 +1815,15 @@ static ssize_t get_dcxo_tune_fine_available(void *device, char *buf, size_t len,
 		       ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 8191]");
 }
 
+static ssize_t set_dcxo_tune_fine_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_ensm_mode_available().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1778,6 +1840,15 @@ static ssize_t get_ensm_mode_available(void *device, char *buf, size_t len,
 	return (ssize_t) sprintf(buf, "%s", ad9361_phy->pdata->fdd ?
 				 "sleep wait alert fdd pinctrl pinctrl_fdd_indep" :
 				 "sleep wait alert rx tx pinctrl");
+}
+
+static ssize_t set_ensm_mode_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -1808,6 +1879,15 @@ static ssize_t get_rssi_gain_step_error(void *device, char *buf, size_t len,
 	return (ssize_t) sprintf(buf, "%d", 0);  /* dummy */
 }
 
+static ssize_t set_rssi_gain_step_error(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_dcxo_tune_coarse_available().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1824,6 +1904,15 @@ static ssize_t get_dcxo_tune_coarse_available(void *device, char *buf,
 
 	return (ssize_t) sprintf(buf, "%s",
 				 ad9361_phy->pdata->use_extclk ? "[0 0 0]" : "[0 1 63]");
+}
+
+static ssize_t set_dcxo_tune_coarse_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
 }
 
 /**
@@ -1848,6 +1937,15 @@ static ssize_t get_tx_path_rates(void *device, char *buf, size_t len,
 		       clk[0], clk[1], clk[2], clk[3], clk[4], clk[5]);
 }
 
+static ssize_t set_tx_path_rates(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_trx_rate_governor_available().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1863,6 +1961,15 @@ static ssize_t get_trx_rate_governor_available(void *device, char *buf,
 	return sprintf(buf, "%s", "nominal highest_osr");
 }
 
+static ssize_t set_trx_rate_governor_available(void *device, char *buf, size_t len,
+		const struct iio_ch_info *channel)
+{
+	/* This function doesn't have an equivalent function in ad9361,
+	 * and it should be implemented there first */
+
+	return -ENOENT;
+}
+
 /**
  * get_xo_correction().
  * @device:	Physical instance of a iio_axi_adc device.
@@ -1872,6 +1979,12 @@ static ssize_t get_trx_rate_governor_available(void *device, char *buf,
  * Return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_xo_correction(void *device, char *buf, size_t len,
+				 const struct iio_ch_info *channel)
+{
+	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
+}
+
+static ssize_t set_xo_correction(void *device, char *buf, size_t len,
 				 const struct iio_ch_info *channel)
 {
 	return (ssize_t) sprintf(buf, "%d", 0); /* dummy */
@@ -2324,7 +2437,7 @@ struct iio_attribute *out_attributes[] = {
 static struct iio_attribute iio_attr_temp0_input = {
 	.name = "input",
 	.show = get_temp0_input,
-	.store = NULL,
+	.store = set_temp0_input,
 };
 
 struct iio_attribute *temp0_attributes[] = {
@@ -2341,7 +2454,7 @@ static struct iio_attribute iio_attr_dcxo_tune_coarse = {
 static struct iio_attribute iio_attr_rx_path_rates = {
 	.name = "rx_path_rates",
 	.show = get_rx_path_rates,
-	.store = NULL,
+	.store = set_rx_path_rates,
 };
 
 static struct iio_attribute iio_attr_trx_rate_governor = {
@@ -2353,19 +2466,19 @@ static struct iio_attribute iio_attr_trx_rate_governor = {
 static struct iio_attribute iio_attr_calib_mode_available = {
 	.name = "calib_mode_available",
 	.show = get_calib_mode_available,
-	.store = NULL,
+	.store = set_calib_mode_available,
 };
 
 static struct iio_attribute iio_attr_xo_correction_available = {
 	.name = "xo_correction_available",
 	.show = get_xo_correction_available,
-	.store = NULL,
+	.store = set_xo_correction_available,
 };
 
 static struct iio_attribute iio_attr_gain_table_config = {
 	.name = "gain_table_config",
 	.show = get_gain_table_config,
-	.store = NULL,
+	.store = set_gain_table_config,
 };
 
 static struct iio_attribute iio_attr_dcxo_tune_fine = {
@@ -2377,13 +2490,13 @@ static struct iio_attribute iio_attr_dcxo_tune_fine = {
 static struct iio_attribute iio_attr_dcxo_tune_fine_available = {
 	.name = "dcxo_tune_fine_available",
 	.show = get_dcxo_tune_fine_available,
-	.store = NULL,
+	.store = set_dcxo_tune_fine_available,
 };
 
 static struct iio_attribute iio_attr_ensm_mode_available = {
 	.name = "ensm_mode_available",
 	.show = get_ensm_mode_available,
-	.store = NULL,
+	.store = set_ensm_mode_available,
 };
 
 static struct iio_attribute iio_attr_multichip_sync = {
@@ -2395,31 +2508,31 @@ static struct iio_attribute iio_attr_multichip_sync = {
 static struct iio_attribute iio_attr_rssi_gain_step_error = {
 	.name = "rssi_gain_step_error",
 	.show = get_rssi_gain_step_error,
-	.store = NULL,
+	.store = set_rssi_gain_step_error,
 };
 
 static struct iio_attribute iio_attr_dcxo_tune_coarse_available = {
 	.name = "dcxo_tune_coarse_available",
 	.show = get_dcxo_tune_coarse_available,
-	.store = NULL,
+	.store = set_dcxo_tune_coarse_available,
 };
 
 static struct iio_attribute iio_attr_tx_path_rates = {
 	.name = "tx_path_rates",
 	.show = get_tx_path_rates,
-	.store = NULL,
+	.store = set_tx_path_rates,
 };
 
 static struct iio_attribute iio_attr_trx_rate_governor_available = {
 	.name = "trx_rate_governor_available",
 	.show = get_trx_rate_governor_available,
-	.store = NULL,
+	.store = set_trx_rate_governor_available,
 };
 
 static struct iio_attribute iio_attr_xo_correction = {
 	.name = "xo_correction",
 	.show = get_xo_correction,
-	.store = NULL,
+	.store = set_xo_correction,
 };
 
 static struct iio_attribute iio_attr_ensm_mode = {
