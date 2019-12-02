@@ -18,6 +18,7 @@ SRCS := $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/src/app/app_clocking.c					\
 	$(PROJECT)/src/app/app_jesd.c						\
 	$(PROJECT)/src/app/app_transceiver.c				\
+	$(PROJECT)/src/app/app_talise.c						\
 	$(PROJECT)/src/devices/ad9528/ad9528.c				\
 	$(PROJECT)/src/devices/adi_hal/no_os_hal.c			\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.c			\
@@ -50,6 +51,7 @@ INCS :=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/app/app_clocking.h						\
 	$(PROJECT)/src/app/app_jesd.h						\
 	$(PROJECT)/src/app/app_transceiver.h				\
+	$(PROJECT)/src/app/app_talise.h						\
 	$(PROJECT)/src/devices/ad9528/ad9528.h				\
 	$(PROJECT)/src/devices/ad9528/t_ad9528.h			\
 	$(PROJECT)/src/devices/adi_hal/adi_hal.h			\
