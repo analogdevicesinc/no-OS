@@ -1,5 +1,5 @@
 if { $argc != 1 } {
-	puts "Invalid arguments"
+	puts "read_hdf: Invalid arguments"
 	exit
 }
 # Open the design
