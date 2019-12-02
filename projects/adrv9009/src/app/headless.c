@@ -46,6 +46,7 @@
 #include "app_config.h"
 #include "app_clocking.h"
 #include "app_jesd.h"
+#include "app_transceiver.h"
 
 /**********************************************************/
 /**********************************************************/
@@ -68,66 +69,6 @@ int main(void)
 						       hweight8(talInit.jesd204Settings.framerB.serializerLanesEnabled));
 	uint32_t rx_os_div40_rate_hz = rx_os_lane_rate_khz * (1000 / 40);
 
-#ifdef ALTERA_PLATFORM
-	struct adxcvr_init rx_adxcvr_init = {
-		"rx_adxcvr",
-		RX_XCVR_BASEADDR,
-		{RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, 0, 0},
-		0,
-		rx_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-	struct adxcvr_init tx_adxcvr_init = {
-		"tx_adxcvr",
-		TX_XCVR_BASEADDR,
-		{TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
-		TX_PLL_BASEADDR,
-		tx_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-	struct adxcvr_init rx_os_adxcvr_init = {
-		"rx_os_adxcvr",
-		RX_OS_XCVR_BASEADDR,
-		{RX_OS_ADXCFG_0_BASEADDR, RX_OS_ADXCFG_1_BASEADDR, 0, 0},
-		0,
-		rx_os_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-#else
-	struct adxcvr_init rx_adxcvr_init = {
-		"rx_adxcvr",
-		RX_XCVR_BASEADDR,
-		0,
-		3,
-		1,
-		1,
-		rx_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-	struct adxcvr_init tx_adxcvr_init = {
-		"tx_adxcvr",
-		TX_XCVR_BASEADDR,
-		3,
-		3,
-		0,
-		0,
-		tx_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-	struct adxcvr_init rx_os_adxcvr_init = {
-		"rx_os_adxcvr",
-		RX_OS_XCVR_BASEADDR,
-		0,
-		3,
-		1,
-		1,
-		rx_os_lane_rate_khz,
-		talInit.clocks.deviceClock_kHz,
-	};
-#endif
-	struct adxcvr *rx_adxcvr;
-	struct adxcvr *tx_adxcvr;
-	struct adxcvr *rx_os_adxcvr;
 	struct axi_adc_init rx_adc_init = {
 		"rx_adc",
 		RX_CORE_BASEADDR,
@@ -232,42 +173,14 @@ int main(void)
 
 	/*** < Insert User BBIC JESD204B Initialization Code Here > ***/
 	jesd_init(rx_div40_rate_hz,
-			  tx_div40_rate_hz,
-			  rx_os_div40_rate_hz);
+		  tx_div40_rate_hz,
+		  rx_os_div40_rate_hz);
 
-	/* Initialize ADXCR */
-	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
-		goto error_0;
-	}
-	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
-		goto error_8;
-	}
-	status = adxcvr_init(&rx_os_adxcvr, &rx_os_adxcvr_init);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", rx_os_adxcvr_init.name);
-		goto error_9;
-	}
-#ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(rx_adxcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
-		goto error_10;
-	}
-	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
-		goto error_10;
-	}
-	status = adxcvr_clk_enable(rx_os_adxcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
-		goto error_10;
-	}
-#endif
+	fpga_xcvr_init(rx_lane_rate_khz,
+		       tx_lane_rate_khz,
+		       rx_os_lane_rate_khz,
+		       talInit.clocks.deviceClock_kHz);
+
 	/*******************************/
 	/**** Talise Initialization ***/
 	/*******************************/
@@ -277,7 +190,7 @@ int main(void)
 	if(talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 		printf("error: TALISE_openHw() failed\n");
-		goto error_10;
+		goto error_0;
 	}
 
 	/* Toggle RESETB pin on Talise device */
@@ -573,7 +486,7 @@ int main(void)
 	if (talAction != TALACT_NO_ACTION) {
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 		printf("error: TALISE_setRxTxEnable() failed\n");
-		goto error_10;
+		goto error_0;
 	}
 
 	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
@@ -636,9 +549,7 @@ int main(void)
 		/*** < User: decide what to do based on Talise recovery action returned > ***/
 	}
 
-	adxcvr_remove(rx_os_adxcvr);
-	adxcvr_remove(tx_adxcvr);
-	adxcvr_remove(rx_adxcvr);
+	fpga_xcvr_deinit();
 	jesd_deinit();
 	clocking_deinit();
 	printf("Bye\n");
@@ -647,12 +558,6 @@ int main(void)
 
 error_11:
 	TALISE_closeHw(&talDev);
-error_10:
-	adxcvr_remove(rx_os_adxcvr);
-error_9:
-	adxcvr_remove(tx_adxcvr);
-error_8:
-	adxcvr_remove(rx_adxcvr);
 error_0:
 	return FAILURE;
 }
