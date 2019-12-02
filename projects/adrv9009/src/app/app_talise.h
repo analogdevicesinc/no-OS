@@ -46,6 +46,6 @@
 adiHalErr_t talise_setup(taliseDevice_t * const talDev,
 			 taliseInit_t * const talInit);
 
-void talise_deinit(taliseDevice_t * const pd);
+void talise_shutdown(taliseDevice_t * const pd);
 
 #endif /* __APP_TALISE_H */

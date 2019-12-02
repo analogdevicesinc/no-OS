@@ -26,7 +26,6 @@
 #include "xil_cache.h"
 #endif
 #include "talise.h"
-#include "talise_config_ad9528.h"
 #include "talise_config.h"
 #include "app_config.h"
 #include "app_clocking.h"

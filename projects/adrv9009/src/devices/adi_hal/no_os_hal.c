@@ -163,7 +163,7 @@ adiHalErr_t ADIHAL_spiWriteBytes(void *devHalInfo,
 				 uint16_t *addr, uint8_t *data, uint32_t count)
 {
 	adiHalErr_t errVal;
-	int32_t i;
+	uint32_t i;
 
 	for (i = 0; i < count; i++) {
 		errVal = ADIHAL_spiWriteByte(devHalInfo, addr[i], data[i]);
@@ -199,7 +199,7 @@ adiHalErr_t ADIHAL_spiReadBytes(void *devHalInfo,
 				uint16_t *addr, uint8_t *readdata, uint32_t count)
 {
 	adiHalErr_t errVal;
-	int32_t i;
+	uint32_t i;
 
 	for (i = 0; i < count; i++) {
 		errVal = ADIHAL_spiReadByte(devHalInfo, addr[i], &readdata[i]);
@@ -217,7 +217,7 @@ adiHalErr_t ADIHAL_spiWriteField(void *devHalInfo,
 	uint8_t readVal;
 
 	errVal = ADIHAL_spiReadByte(devHalInfo, addr, &readVal);
-	if (errVal < 0)
+	if (errVal != ADIHAL_OK)
 		return errVal;
 
 	readVal = (readVal & ~mask) | ((fieldVal << startBit) & mask);
@@ -232,7 +232,7 @@ adiHalErr_t ADIHAL_spiReadField(void *devHalInfo,
 	uint8_t readVal;
 
 	errVal = ADIHAL_spiReadByte(devHalInfo, addr, &readVal);
-	if (errVal < 0)
+	if (errVal != ADIHAL_OK)
 		return errVal;
 
 	*fieldVal = ((readVal & mask) >> startBit);
