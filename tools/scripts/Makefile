@@ -73,6 +73,7 @@ CFLAGS = -Wall 								\
 	 -Wempty-body 							\
 	 -Wignored-qualifiers 						\
 	 -Wmissing-parameter-type					\
+	 -Wno-format  							\
 	 -Wold-style-declaration					\
 	 -Woverride-init 						\
 	 -Wsign-compare							\
@@ -181,6 +182,55 @@ LIBS =	-Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 else
 ifeq (altera,$(strip $(PLATFORM)))
 
+# Define the platform compiler switch
+CFLAGS += -D ALTERA_PLATFORM
+
+LSCRIPT := $(BUILD_DIR)/bsp/linker.x
+
+LIBRARY_DIRS := $(BUILD_DIR)/bsp
+
+CC := nios2-elf-gcc 
+
+LD := nios2-elf-g++
+
+CFLAGS += -xc								\
+	  -pipe								\
+	  -mno-hw-div							\
+	  -mhw-mul							\
+	  -mno-hw-mulx							\
+	  -mgpopt=global						\
+	  -D__hal__							\
+	  -DALT_NO_INSTRUCTION_EMULATION 				\
+	  -DALTERA_TRIPLE_SPEED_MAC 					\
+	  -DALT_SINGLE_THREADED 					\
+	  -DALTERA_AUTONEG_TIMEOUT_THRESHOLD=2500 			\
+	  -DALTERA_CHECKLINK_TIMEOUT_THRESHOLD=10000 			\
+	  -DALTERA_NOMDIO_TIMEOUT_THRESHOLD=1000000  			\
+	  -DALTERA							\
+	  -DNIOS_II
+
+LDFLAGS += -msys-crt0='$(BUILD_DIR)/bsp//obj/HAL/src/crt0.o'		\
+	   -msys-lib=hal_bsp 						\
+	   -DALTERA							\
+	   -DNIOS_II							\
+	   -mno-hw-div							\
+	   -mhw-mul							\
+	   -mno-hw-mulx							\
+	   -mgpopt=global						\
+	   -Wl,-Map=sw.map
+	   
+STAMP +=   --thread_model hal						\
+	   --cpu_name sys_cpu						\
+	   --qsys true							\
+	   --simulation_enabled false					\
+	   --id 182193580						\
+	   --sidp 0x101814e8						\
+	   --timestamp 1520874786					\
+	   --stderr_dev sys_uart					\
+	   --stdin_dev sys_uart						\
+	   --stdout_dev sys_uart					\
+	   --sopc_system_name system_bd					\
+	   --sopcinfo $(HARDWARE)
 endif
 endif
 
@@ -220,7 +270,7 @@ bsp:
 		$(eval export ARCH:= $(shell cat $(TEMP_DIR)/arch.txt))	\
 		$(MAKE) -s xilinx-bsp;					\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
-		;							\
+		$(MAKE) -s altera-bsp;					\
 	else								\
 		$(call print_err,Can't generate the bsp\n);		\
 		exit 1;							\
@@ -232,7 +282,10 @@ compile:
 	if [ "$(PLATFORM)" = "xilinx" ]; then	\
 		echo "-I $(BUILD_DIR)/bsp/$(ARCH)/include";\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
-		;							\
+		echo "-I $(BUILD_DIR)/bsp/HAL/inc/sys			\
+		      -I $(BUILD_DIR)/bsp/drivers/inc			\
+		      -I $(BUILD_DIR)/bsp/HAL/inc			\
+		      -I $(BUILD_DIR)/bsp";				\
 	fi;))
 	$(MAKE) -s $(EXEC)
 
@@ -290,11 +343,20 @@ endif
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
 		$(MAKE) -s xilinx-read-hdf;				\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
-		;							\
+		echo nios2 > $(TEMP_DIR)/arch.txt;			\
 	elif [ "$(PLATFORM)" = "none" ]; then				\
 		$(call print_err,Platform not found\n)			\
 		exit 1;							\
 	fi;
+
+.SILENT:altera-bsp
+altera-bsp:
+	nios2-bsp hal $(BUILD_DIR)/bsp $(HARDWARE) --cpu-name sys_cpu $(NULL)
+	$(MAKE) -C $(BUILD_DIR)/bsp $(NULL)
+
+.SILENT:altera-elf
+altera-elf:
+	nios2-elf-insert $(BUILD_DIR)/$(EXEC).elf $(STAMP)
 
 .SILENT:pre-build		
 pre-build:
@@ -306,7 +368,8 @@ post-build:
 		rm -rf \.Xil;						\
 		rm -rf \.metadata;					\
 	else								\
-		;							\
+		$(MAKE) -s altera-elf;					\
+		mv -f sw.map $(TEMP_DIR);				\
 	fi;
 
 xilinx:	xil-pre-cleanup eval-hardware pre-build xilinx-bsp
