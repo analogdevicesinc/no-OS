@@ -87,6 +87,8 @@
 #define AXI_DAC_DDS_INCR(x)				(((x) & 0xFFFF) << 0)
 #define AXI_DAC_TO_DDS_INCR(x)			(((x) >> 0) & 0xFFFF)
 
+#define DAC_REG_DATA_PATTERN(c)			(0x0410 + (c) * 0x40)
+
 #define AXI_DAC_REG_DATA_SELECT(c)		(0x0418 + (c) * 0x40)
 #define AXI_DAC_DATA_SELECT(x)			(((x) & 0xF) << 0)
 #define AXI_DAC_TO_DATA_SELECT(x)		(((x) >> 0) & 0xF)
@@ -824,7 +826,6 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	uint32_t reg_data;
 	uint32_t freq;
 	uint32_t ratio;
-	uint8_t ch;
 
 	dac = (struct axi_dac *)malloc(sizeof(*dac));
 	if (!dac)
@@ -833,6 +834,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	dac->name = init->name;
 	dac->base = init->base;
 	dac->num_channels = init->num_channels;
+	dac->channels = init->channels;
 
 	axi_dac_write(dac, AXI_DAC_REG_RSTN, 0);
 	axi_dac_write(dac, AXI_DAC_REG_RSTN,
@@ -853,16 +855,8 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 	dac->clock_hz = freq * ratio;
 	dac->clock_hz = (dac->clock_hz * 390625) >> 8;
 
-	for (ch = 0; ch < dac->num_channels; ch++) {
-		axi_dac_dds_set_frequency(dac, ((ch*2)+0), 3*1000*1000);
-		axi_dac_dds_set_frequency(dac, ((ch*2)+1), 3*1000*1000);
-		axi_dac_dds_set_phase(dac, ((ch*2)+0), (ch % 2) ? 0 : 90000);
-		axi_dac_dds_set_phase(dac, ((ch*2)+1), (ch % 2) ? 0 : 90000);
-		axi_dac_dds_set_scale(dac, ((ch*2)+0), 50*1000);
-		axi_dac_dds_set_scale(dac, ((ch*2)+1), 50*1000);
-		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((ch*2)+0), 0);
-		axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((ch*2)+1), 0);
-	}
+	axi_dac_data_setup(dac);
+
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
 	printf("%s: Successfully initialized (%"PRIu64" Hz)\n",
@@ -875,6 +869,46 @@ error:
 	free(dac);
 
 	return FAILURE;
+}
+
+int32_t axi_dac_data_setup(struct axi_dac *dac)
+{
+	struct axi_dac_channel *chan;
+	uint32_t i;
+
+	if(dac->channels) {
+		for (i = 0; i < dac->num_channels; i++) {
+			chan = &dac->channels[i];
+			if (chan->sel == AXI_DAC_DATA_SEL_DDS) {
+				axi_dac_dds_set_frequency(dac, ((i*2)+0), chan->dds_frequency_0);
+				axi_dac_dds_set_phase(dac, ((i*2)+0), chan->dds_phase_0);
+				axi_dac_dds_set_scale(dac, ((i*2)+0), chan->dds_scale_0);
+				if (chan->dds_dual_tone == 0) {
+					axi_dac_dds_set_frequency(dac, ((i*2)+1), chan->dds_frequency_0);
+					axi_dac_dds_set_phase(dac, ((i*2)+1), chan->dds_phase_0);
+					axi_dac_dds_set_scale(dac, ((i*2)+1), chan->dds_scale_0);
+				} else {
+					axi_dac_dds_set_frequency(dac, ((i*2)+1), chan->dds_frequency_1);
+					axi_dac_dds_set_phase(dac, ((i*2)+1), chan->dds_phase_1);
+					axi_dac_dds_set_scale(dac, ((i*2)+1), chan->dds_scale_1);
+				}
+			}
+			axi_dac_write(dac, DAC_REG_DATA_PATTERN(i), chan->pat_data);
+			axi_dac_datasel(dac, i, chan->sel);
+		}
+	} else {
+		for (i = 0; i < dac->num_channels; i++) {
+			axi_dac_dds_set_frequency(dac, ((i*2)+0), 3*1000*1000);
+			axi_dac_dds_set_frequency(dac, ((i*2)+1), 3*1000*1000);
+			axi_dac_dds_set_phase(dac, ((i*2)+0), (i % 2) ? 0 : 90000);
+			axi_dac_dds_set_phase(dac, ((i*2)+1), (i % 2) ? 0 : 90000);
+			axi_dac_dds_set_scale(dac, ((i*2)+0), 50*1000);
+			axi_dac_dds_set_scale(dac, ((i*2)+1), 50*1000);
+			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i*2)+0), 0);
+			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i*2)+1), 0);
+		}
+	}
+	return SUCCESS;
 }
 
 /***************************************************************************//**
