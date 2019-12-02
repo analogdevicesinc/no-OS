@@ -45,6 +45,7 @@
 #include "talise_stream_binary.h"
 #include "app_config.h"
 #include "app_clocking.h"
+#include "app_jesd.h"
 
 /**********************************************************/
 /**********************************************************/
@@ -67,42 +68,6 @@ int main(void)
 						       hweight8(talInit.jesd204Settings.framerB.serializerLanesEnabled));
 	uint32_t rx_os_div40_rate_hz = rx_os_lane_rate_khz * (1000 / 40);
 
-	struct jesd204_rx_init rx_jesd_init = {
-		"rx_jesd",
-		RX_JESD_BASEADDR,
-		4,
-		32,
-		1,
-		rx_div40_rate_hz / 1000,
-		rx_lane_rate_khz
-	};
-	struct jesd204_tx_init tx_jesd_init = {
-		"tx_jesd",
-		TX_JESD_BASEADDR,
-		2,
-		32,
-		4,
-		14,
-		16,
-		true,
-		2,
-		1,
-		tx_div40_rate_hz / 1000,
-		tx_lane_rate_khz
-	};
-
-	struct jesd204_rx_init rx_os_jesd_init = {
-		"rx_os_jesd",
-		RX_OS_JESD_BASEADDR,
-		2,
-		32,
-		1,
-		rx_os_div40_rate_hz / 1000,
-		rx_os_lane_rate_khz,
-	};
-	struct axi_jesd204_rx *rx_jesd;
-	struct axi_jesd204_tx *tx_jesd;
-	struct axi_jesd204_rx *rx_os_jesd;
 #ifdef ALTERA_PLATFORM
 	struct adxcvr_init rx_adxcvr_init = {
 		"rx_adxcvr",
@@ -266,29 +231,15 @@ int main(void)
 	clocking_init(rx_div40_rate_hz, tx_div40_rate_hz, rx_os_div40_rate_hz);
 
 	/*** < Insert User BBIC JESD204B Initialization Code Here > ***/
-
-	/* Initialize JESD */
-	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
-		goto error_5;
-	}
-	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
-		goto error_6;
-	}
-	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_os_jesd_init.name);
-		goto error_7;
-	}
+	jesd_init(rx_div40_rate_hz,
+			  tx_div40_rate_hz,
+			  rx_os_div40_rate_hz);
 
 	/* Initialize ADXCR */
 	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
 	if (status != SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
-		goto error_7;
+		goto error_0;
 	}
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (status != SUCCESS) {
@@ -339,7 +290,7 @@ int main(void)
 
 	mdelay(100);
 
-	axi_jesd204_tx_lane_clk_enable(tx_jesd);
+	app_axi_jesd204_tx_lane_clk_enable();
 
 	/* TALISE_initialize() loads the Talise device data structure
 	 * settings for the Rx/Tx/ORx profiles, FIR filters, digital
@@ -556,8 +507,7 @@ int main(void)
 
 	mdelay(100);
 
-	axi_jesd204_rx_lane_clk_enable(rx_jesd);
-	axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
+	app_axi_jesd204_rx_lane_clk_enable();
 
 	mdelay(100);
 
@@ -628,15 +578,10 @@ int main(void)
 
 	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
 
-	axi_jesd204_rx_watchdog(rx_jesd);
-	axi_jesd204_rx_watchdog(rx_os_jesd);
-
+	jesd_rx_watchdog();
 
 	/* Print JESD status */
-	axi_jesd204_rx_status_read(rx_jesd);
-
-	axi_jesd204_tx_status_read(tx_jesd);
-	axi_jesd204_rx_status_read(rx_os_jesd);
+	jesd_status();
 
 	/* Initialize the DAC DDS */
 	axi_dac_init(&tx_dac, &tx_dac_init);
@@ -694,9 +639,7 @@ int main(void)
 	adxcvr_remove(rx_os_adxcvr);
 	adxcvr_remove(tx_adxcvr);
 	adxcvr_remove(rx_adxcvr);
-	axi_jesd204_rx_remove(rx_os_jesd);
-	axi_jesd204_tx_remove(tx_jesd);
-	axi_jesd204_rx_remove(rx_jesd);
+	jesd_deinit();
 	clocking_deinit();
 	printf("Bye\n");
 
@@ -710,12 +653,6 @@ error_9:
 	adxcvr_remove(tx_adxcvr);
 error_8:
 	adxcvr_remove(rx_adxcvr);
-error_7:
-	axi_jesd204_rx_remove(rx_os_jesd);
-error_6:
-	axi_jesd204_tx_remove(tx_jesd);
-error_5:
-	axi_jesd204_rx_remove(rx_jesd);
 error_0:
 	return FAILURE;
 }
