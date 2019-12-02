@@ -203,8 +203,6 @@ int main(void)
 
 	mdelay(100);
 
-	app_axi_jesd204_tx_lane_clk_enable();
-
 	/* TALISE_initialize() loads the Talise device data structure
 	 * settings for the Rx/Tx/ORx profiles, FIR filters, digital
 	 * filter enables, calibrates the CLKPLL, loads the user provided Rx
@@ -417,10 +415,6 @@ int main(void)
 	/*** < User Sends SYSREF Here > ***/
 
 	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
-
-	mdelay(100);
-
-	app_axi_jesd204_rx_lane_clk_enable();
 
 	mdelay(100);
 

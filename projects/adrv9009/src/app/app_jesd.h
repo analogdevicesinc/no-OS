@@ -50,8 +50,4 @@ void jesd_deinit(void);
 void jesd_status(void);
 void jesd_rx_watchdog(void);
 
-// TODO: remove these if calling them from headless can be avoided.
-void app_axi_jesd204_tx_lane_clk_enable(void);
-void app_axi_jesd204_rx_lane_clk_enable(void);
-
 #endif /* __APP_JESD_H */
