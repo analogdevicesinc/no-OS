@@ -171,7 +171,8 @@ int main(void)
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
-		4
+		4,
+		NULL
 	};
 
 #ifdef DAC_DMA_EXAMPLE

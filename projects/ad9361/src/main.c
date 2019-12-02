@@ -106,7 +106,8 @@ struct axi_adc_init rx_adc_init = {
 struct axi_dac_init tx_dac_init = {
 	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
-	4
+	4,
+	NULL
 };
 struct axi_dmac_init rx_dmac_init = {
 	"rx_dmac",
