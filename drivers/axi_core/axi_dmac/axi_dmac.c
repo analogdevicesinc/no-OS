@@ -125,7 +125,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	/* Wait until the transfer with the ID transfer_id is completed. */
 	do {
 		axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
-	} while((reg_val & (1 << transfer_id)) != (1 << transfer_id));
+	} while((reg_val & (1u << transfer_id)) != (1u << transfer_id));
 
 	return SUCCESS;
 }
