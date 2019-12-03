@@ -70,7 +70,7 @@ adiHalErr_t  AD9528_spiWriteField(ad9528Device_t *device,
 	uint8_t readVal;
 
 	errVal = AD9528_spiReadByte(device, addr, &readVal);
-	if (errVal < 0)
+	if (errVal != ADIHAL_OK)
 		return errVal;
 
 	readVal = (readVal & ~mask) | ((fieldVal << startBit) & mask);

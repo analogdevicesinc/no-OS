@@ -15,20 +15,24 @@
 #PROFILE = tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
 PROFILE = tx_bw400_ir491p52_rx_bw200_or245p76_orx_bw400_or491p52_dc245p76
 SRCS := $(PROJECT)/src/app/headless.c					\
+	$(PROJECT)/src/app/app_clocking.c					\
+	$(PROJECT)/src/app/app_jesd.c						\
+	$(PROJECT)/src/app/app_transceiver.c				\
+	$(PROJECT)/src/app/app_talise.c						\
 	$(PROJECT)/src/devices/ad9528/ad9528.c				\
 	$(PROJECT)/src/devices/adi_hal/no_os_hal.c			\
-	$(PROJECT)/src/devices/talise/talise_agc.c			\
-	$(PROJECT)/src/devices/talise/talise_arm.c			\
-	$(PROJECT)/src/devices/talise/talise.c				\
-	$(PROJECT)/src/devices/talise/talise_cals.c			\
-	$(PROJECT)/src/devices/talise/talise_error.c			\
-	$(PROJECT)/src/devices/talise/talise_gpio.c			\
-	$(PROJECT)/src/devices/talise/talise_hal.c			\
-	$(PROJECT)/src/devices/talise/talise_jesd204.c			\
-	$(PROJECT)/src/devices/talise/talise_radioctrl.c		\
-	$(PROJECT)/src/devices/talise/talise_rx.c			\
-	$(PROJECT)/src/devices/talise/talise_tx.c			\
-	$(PROJECT)/src/devices/talise/talise_user.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise.c				\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_cals.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_error.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_gpio.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_hal.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_jesd204.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_radioctrl.c		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_rx.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_tx.c			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_user.c			\
 	$(PROJECT)/profiles/$(PROFILE)/talise_config.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
@@ -44,38 +48,42 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\
+	$(PROJECT)/src/app/app_clocking.h						\
+	$(PROJECT)/src/app/app_jesd.h						\
+	$(PROJECT)/src/app/app_transceiver.h				\
+	$(PROJECT)/src/app/app_talise.h						\
 	$(PROJECT)/src/devices/ad9528/ad9528.h				\
 	$(PROJECT)/src/devices/ad9528/t_ad9528.h			\
 	$(PROJECT)/src/devices/adi_hal/adi_hal.h			\
 	$(PROJECT)/src/devices/adi_hal/common.h				\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			\
-	$(PROJECT)/src/devices/talise/talise_agc.h			\
-	$(PROJECT)/src/devices/talise/talise_agc_types.h		\
-	$(PROJECT)/src/devices/talise/talise_arm.h			\
-	$(PROJECT)/src/devices/talise/talise_arm_macros.h		\
-	$(PROJECT)/src/devices/talise/talise_arm_types.h		\
-	$(PROJECT)/src/devices/talise/talise_cals.h			\
-	$(PROJECT)/src/devices/talise/talise_cals_types.h		\
-	$(PROJECT)/src/devices/talise/talise_error.h			\
-	$(PROJECT)/src/devices/talise/talise_error_types.h		\
-	$(PROJECT)/src/devices/talise/talise_gpio.h			\
-	$(PROJECT)/src/devices/talise/talise_gpio_types.h		\
-	$(PROJECT)/src/devices/talise/talise.h				\
-	$(PROJECT)/src/devices/talise/talise_hal.h			\
-	$(PROJECT)/src/devices/talise/talise_jesd204.h			\
-	$(PROJECT)/src/devices/talise/talise_jesd204_types.h		\
-	$(PROJECT)/src/devices/talise/talise_radioctrl.h		\
-	$(PROJECT)/src/devices/talise/talise_radioctrl_types.h		\
-	$(PROJECT)/src/devices/talise/talise_reg_addr_macros.h		\
-	$(PROJECT)/src/devices/talise/talise_rx.h			\
-	$(PROJECT)/src/devices/talise/talise_rx_types.h			\
-	$(PROJECT)/src/devices/talise/talise_tx.h			\
-	$(PROJECT)/src/devices/talise/talise_tx_types.h			\
-	$(PROJECT)/src/devices/talise/talise_types.h			\
-	$(PROJECT)/src/devices/talise/talise_user.h			\
-	$(PROJECT)/src/devices/talise/talise_version.h			\
-	$(PROJECT)/src/firmware/talise_arm_binary.h			\
-	$(PROJECT)/src/firmware/talise_stream_binary.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_agc_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_arm_macros.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_arm_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_cals.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_cals_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_error.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_error_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_gpio.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_gpio_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise.h				\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_hal.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_jesd204.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_jesd204_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_radioctrl.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_radioctrl_types.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_reg_addr_macros.h		\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_rx.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_rx_types.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_tx.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_tx_types.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_types.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_user.h			\
+	$(DRIVERS)/rf-transceiver/talise/api/talise_version.h			\
+	$(DRIVERS)/rf-transceiver/talise/firmware/talise_arm_binary.h			\
+	$(DRIVERS)/rf-transceiver/talise/firmware/talise_stream_binary.h			\
 	$(PROJECT)/profiles/$(PROFILE)/talise_config_ad9528.h		\
 	$(PROJECT)/profiles/$(PROFILE)/talise_config.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
