@@ -66,7 +66,7 @@
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t _gpio_init(struct gpio_desc *desc,
-		   struct gpio_init_param *init_param)
+		   const struct gpio_init_param *init_param)
 {
 	int32_t				ret;
 	struct xil_gpio_desc		*xdesc;
@@ -193,9 +193,10 @@ int32_t gpio_remove(struct gpio_desc *desc)
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
 	struct xil_gpio_desc	*extra;
+#ifdef XGPIO_H
 	uint32_t channel = 1;
 	uint32_t config	 = 0;
-
+#endif
 	extra = desc->extra;
 
 	switch (extra->type) {
@@ -245,10 +246,11 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
+#ifdef XGPIO_H
 	uint8_t pin = desc->number;
 	uint8_t channel;
 	uint32_t reg_val;
-
+#endif
 	extra = desc->extra;
 
 	switch (extra->type) {
@@ -332,10 +334,11 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
+#ifdef XGPIO_H
 	uint8_t pin = desc->number;
 	uint8_t channel;
 	uint32_t reg_val;
-
+#endif
 	extra = desc->extra;
 
 	switch (extra->type) {
