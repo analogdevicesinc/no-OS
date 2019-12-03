@@ -368,12 +368,12 @@ void axi_clkgen_calc_params(struct axi_clkgen *axi_clkgen,
 			dout = DIV_ROUND_CLOSEST(fvco, fout);
 			dout = clamp(dout, 1, 128);
 			f = fvco / dout;
-			if (abs(f - fout) < abs(best_f - fout)) {
+			if (abs(f - (int32_t)fout) < abs(best_f - (int32_t)fout)) {
 				best_f = f;
 				*best_d = d;
 				*best_m = m;
 				*best_dout = dout;
-				if (best_f == fout)
+				if (best_f == (int32_t)fout)
 					return;
 			}
 		}
