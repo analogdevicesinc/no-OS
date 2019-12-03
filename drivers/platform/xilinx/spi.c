@@ -189,7 +189,9 @@ error:
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
-	int32_t			ret;
+#ifdef XSPI_H
+	int32_t				ret;
+#endif
 	struct xil_spi_desc	*xdesc;
 
 	xdesc = desc->extra;
@@ -212,7 +214,9 @@ int32_t spi_remove(struct spi_desc *desc)
 
 #endif
 		/* Intended fallthrough */
+#ifdef XSPI_H
 error:
+#endif
 	default:
 		return FAILURE;
 		break;
