@@ -230,8 +230,8 @@ int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
 
 		ret = xilinx_xcvr_write_out_div(&xcvr->xlx_xcvr,
 						ADXCVR_DRP_PORT_CHANNEL(i),
-						xcvr->tx_enable ? -1 : out_div,
-						xcvr->tx_enable ? out_div : -1);
+						xcvr->tx_enable ? -1 : (int32_t)out_div,
+						xcvr->tx_enable ? (int32_t)out_div : -1);
 		if (ret < 0)
 			return ret;
 
@@ -329,7 +329,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 {
 	struct adxcvr *xcvr;
 	uint32_t synth_conf, xcvr_type;
-	int32_t i;
+	uint32_t i;
 
 	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
 	if (!xcvr)
