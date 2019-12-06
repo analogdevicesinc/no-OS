@@ -33,6 +33,42 @@
 #include "app_transceiver.h"
 #include "app_talise.h"
 
+#ifdef IIO_EXAMPLE
+
+#include "iio_app.h"
+#include "iio_axi_adc_app.h"
+#include "iio_axi_dac_app.h"
+#include "irq.h"
+#include "irq_extra.h"
+#include "uart.h"
+#include "uart_extra.h"
+
+static struct uart_desc *uart_desc;
+
+/**
+ * iio_uart_write() - Write data to UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to write.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+static ssize_t iio_uart_write(const char *buf, size_t len)
+{
+	return uart_write(uart_desc, (const uint8_t *)buf, len);
+}
+
+/**
+ * iio_uart_read() - Read data from UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to read.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+static ssize_t iio_uart_read(char *buf, size_t len)
+{
+	return uart_read(uart_desc, (uint8_t *)buf, len);
+}
+
+#endif // IIO_EXAMPLE
+
 /**********************************************************/
 /**********************************************************/
 /********** Talise Data Structure Initializations ********/
@@ -186,6 +222,151 @@ int main(void)
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
 #endif
+
+#ifdef IIO_EXAMPLE
+
+	/**
+	 * Transmit DMA initial configuration.
+	 */
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_CYCLIC,
+	};
+
+	/**
+	 * Pointer to transmit DMA instance.
+	 */
+	struct axi_dmac *tx_dmac;
+
+	/**
+	 * iio application configurations.
+	 */
+	struct iio_app_init_param iio_app_init_par;
+
+	/**
+	 * iio axi adc application configurations.
+	 */
+	struct iio_axi_adc_app_init_param iio_axi_adc_app_init_par;
+
+	/**
+	 * iio axi dac application configurations.
+	 */
+	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
+
+	/**
+	 * UART server read/write callbacks.
+	 */
+	struct iio_server_ops uart_iio_server_ops;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_app_desc *iio_app_desc;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_axi_adc_app_desc *iio_axi_adc_app_desc;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_axi_dac_app_desc *iio_axi_dac_app_desc;
+
+	/**
+	 * Xilinx platform dependent initialization for IRQ.
+	 */
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PS,
+	};
+
+	/**
+	 * IRQ initial configuration.
+	 */
+	struct irq_init_param irq_init_param = {
+		.irq_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
+	};
+
+	/**
+	 * IRQ instance.
+	 */
+	struct irq_desc *irq_desc;
+
+	/**
+	 * Xilinx platform dependent initialization for UART.
+	 */
+	struct xil_uart_init_param xil_uart_init_par;
+
+	/**
+	 * Initialization for UART.
+	 */
+	struct uart_init_par uart_init_par;
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(status < 0)
+		return status;
+
+	xil_uart_init_par = (struct xil_uart_init_param) {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+	};
+
+	uart_init_par = (struct uart_init_par) {
+		.baud_rate = 921600,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
+	status = uart_init(&uart_desc, &uart_init_par);
+	if(status < 0)
+		return FAILURE;
+
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
+		return status;
+
+	uart_iio_server_ops = (struct iio_server_ops) {
+		.read = iio_uart_read,
+		.write = iio_uart_write,
+	};
+
+	iio_app_init_par = (struct iio_app_init_param) {
+		.iio_server_ops = &uart_iio_server_ops,
+	};
+
+	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_adc_app_init_par = (struct iio_axi_adc_app_init_param) {
+		.rx_adc = rx_adc,
+		.rx_dmac = rx_dmac,
+	};
+
+	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_dac_app_init_par = (struct iio_axi_dac_app_init_param) {
+		.tx_dac = tx_dac,
+		.tx_dmac = tx_dmac,
+	};
+
+	status = iio_axi_dac_app_init(&iio_axi_dac_app_desc, &iio_axi_dac_app_init_par);
+	if(status < 0)
+		return status;
+
+	return iio_app(iio_app_desc);
+
+#endif // IIO_EXAMPLE
 
 	talise_shutdown(&talDev);
 
