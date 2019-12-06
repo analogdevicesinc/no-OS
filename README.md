@@ -1,6 +1,7 @@
 
 # no-OS
 
+[![Build Status](https://travis-ci.org/analogdevicesinc/no-OS.svg?branch=master)](https://travis-ci.org/analogdevicesinc/no-OS) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8b54ad19266248f786280925a5967965)](https://www.codacy.com/manual/antoniumiclaus/no-OS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=analogdevicesinc/no-OS&amp;utm_campaign=Badge_Grade)
 
 [Analog Devices Inc.](http://www.analog.com/en/index.html) Software drivers for systems without OS.
 
