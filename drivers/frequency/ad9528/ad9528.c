@@ -296,12 +296,12 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
 	init_param->pdata->osc_in_cmos_neg_inp_en = 0;
 	init_param->pdata->pll1_feedback_div = 1;
 	init_param->pdata->pll1_feedback_src_vcxo = 1;
-	init_param->pdata->pll1_charge_pump_current_n_a = 5000;
+	init_param->pdata->pll1_charge_pump_current_nA = 5000;
 	init_param->pdata->pll1_bypass_en = 0;
-	init_param->pdata->pll2_charge_pump_current_n_a = 805000;
+	init_param->pdata->pll2_charge_pump_current_nA = 805000;
 	init_param->pdata->pll2_freq_doubler_en = 0;
 	init_param->pdata->pll2_r1_div = 1;
-	init_param->pdata->pll2_vco_diff_m1 = 1;
+	init_param->pdata->pll2_vco_div_m1 = 1;
 	init_param->pdata->pll2_ndiv_a_cnt = 1;
 	init_param->pdata->pll2_ndiv_b_cnt = 1;
 	init_param->pdata->pll2_n2_div = 1;
@@ -344,10 +344,12 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	uint32_t vco_freq;
 	uint32_t vco_ctrl;
 	uint32_t sysref_ctrl;
+	uint32_t stat_en_mask = 0;
 	uint32_t reg_data;
 	int32_t ret;
 	uint32_t i;
 	struct ad9528_dev *dev;
+	struct ad9528_state *st;
 
 	dev = (struct ad9528_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -415,7 +417,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 				 AD_IFE(pll1_bypass_en,
 					AD9528_PLL1_CHARGE_PUMP_TRISTATE,
 					AD9528_PLL1_CHARGE_PUMP_CURRENT_nA(dev->pdata->
-							pll1_charge_pump_current_n_a) |
+							pll1_charge_pump_current_nA) |
 					AD9528_PLL1_CHARGE_PUMP_MODE_NORMAL |
 					AD9528_PLL1_CHARGE_PUMP_AUTO_TRISTATE_DIS));
 	if (ret < 0)
@@ -457,10 +459,29 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	 * PLL2 Setup
 	 */
 
+	if (dev->pdata->pll2_bypass_en) {
+		ret = ad9528_write(dev, AD9528_PLL2_CTRL,
+				   AD9528_PLL2_CHARGE_PUMP_MODE_TRISTATE);
+		if (ret < 0)
+			return ret;
+
+		ret = ad9528_write(dev, AD9528_SYSREF_RESAMPLE_CTRL, 0x1);
+		if (ret < 0)
+			return ret;
+
+		dev->pdata->sysref_src = SYSREF_SRC_EXTERNAL;
+
+		dev->ad9528_st.vco_out_freq[AD9528_VCO] = dev->pdata->vcxo_freq;
+		dev->ad9528_st.vco_out_freq[AD9528_VCXO] = dev->pdata->vcxo_freq;
+		dev->ad9528_st.vco_out_freq[AD9528_SYSREF] = dev->pdata->vcxo_freq;
+
+		goto pll2_bypassed;
+	}
+
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_CHARGE_PUMP,
 				 AD9528_PLL2_CHARGE_PUMP_CURRENT_nA(dev->pdata->
-						 pll2_charge_pump_current_n_a));
+						 pll2_charge_pump_current_nA));
 	if (ret < 0)
 		return ret;
 
@@ -498,16 +519,16 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_VCO_DIVIDER,
 				 AD9528_PLL2_VCO_DIV_M1(dev->pdata->
-						 pll2_vco_diff_m1) |
-				 AD_IFE(pll2_vco_diff_m1,
+						 pll2_vco_div_m1) |
+				 AD_IFE(pll2_vco_div_m1,
 					0,
 					AD9528_PLL2_VCO_DIV_M1_PWR_DOWN_EN));
 	if (ret < 0)
 		return ret;
 
-	if (dev->pdata->pll2_vco_diff_m1)
+	if (dev->pdata->pll2_vco_div_m1)
 		dev->ad9528_st.vco_out_freq[AD9528_VCO] =
-			vco_freq / dev->pdata->pll2_vco_diff_m1;
+			vco_freq / dev->pdata->pll2_vco_div_m1;
 	else
 		dev->ad9528_st.vco_out_freq[AD9528_VCO] = vco_freq;
 
@@ -535,7 +556,7 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	if (ret < 0)
 		return ret;
 
-
+pll2_bypassed:
 	for (i = 0; i < dev->pdata->num_channels; i++) {
 		chan = &dev->pdata->channels[i];
 
@@ -586,7 +607,9 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PD_EN,
-				 AD9528_PD_BIAS);
+				 AD9528_PD_BIAS |
+				 AD_IF(pll1_bypass_en, AD9528_PD_PLL1) |
+				 AD_IF(pll2_bypass_en, AD9528_PD_PLL2));
 	if (ret < 0)
 		return ret;
 
@@ -594,22 +617,24 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	if (ret < 0)
 		return ret;
 
-	ret = ad9528_spi_write_n(dev,
-				 AD9528_PLL2_VCO_CTRL,
-				 vco_ctrl | AD9528_PLL2_VCO_CALIBRATE);
-	if (ret < 0)
-		return ret;
+	if (!dev->pdata->pll2_bypass_en) {
+		ret = ad9528_spi_write_n(dev,
+					 AD9528_PLL2_VCO_CTRL,
+					 vco_ctrl | AD9528_PLL2_VCO_CALIBRATE);
+		if (ret < 0)
+			return ret;
 
-	ret = ad9528_io_update(dev);
-	if (ret < 0)
-		return ret;
+		ret = ad9528_io_update(dev);
+		if (ret < 0)
+			return ret;
 
-	ret = ad9528_poll(dev,
-			  AD9528_READBACK,
-			  AD9528_IS_CALIBRATING,
-			  0);
-	if (ret < 0)
-		return ret;
+		ret = ad9528_poll(dev,
+				  AD9528_READBACK,
+				  AD9528_IS_CALIBRATING,
+				  0);
+		if (ret < 0)
+			return ret;
+	}
 
 	sysref_ctrl |= AD9528_SYSREF_PATTERN_REQ;
 	ret = ad9528_spi_write_n(dev,
@@ -617,6 +642,31 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 				 sysref_ctrl);
 	if (ret < 0)
 		return ret;
+
+	if (dev->pdata->stat0_pin_func_sel != 0xFF) {
+		ret = ad9528_spi_write_n(dev, AD9528_STAT_MON0,
+					 dev->pdata->stat0_pin_func_sel);
+		if (ret < 0)
+			return ret;
+
+		stat_en_mask |= AD9528_STAT0_PIN_EN;
+	}
+
+	if (dev->pdata->stat1_pin_func_sel != 0xFF) {
+		ret = ad9528_spi_write_n(dev, AD9528_STAT_MON1,
+					 dev->pdata->stat1_pin_func_sel);
+		if (ret < 0)
+			return ret;
+
+		stat_en_mask |= AD9528_STAT1_PIN_EN;
+	}
+
+	if (stat_en_mask) {
+		ret = ad9528_spi_write_n(dev, AD9528_STAT_PIN_EN,
+					 stat_en_mask);
+		if (ret < 0)
+			return ret;
+	}
 
 	ret = ad9528_io_update(dev);
 	if (ret < 0)

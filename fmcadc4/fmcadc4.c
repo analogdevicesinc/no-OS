@@ -163,22 +163,25 @@ int main(void)
 	ad9528_param.pdata->refb_r_div = 1;
 	ad9528_param.pdata->pll1_feedback_div = 8;
 	ad9528_param.pdata->pll1_feedback_src_vcxo = 1;
-	ad9528_param.pdata->pll1_charge_pump_current_n_a = 10000;
+	ad9528_param.pdata->pll1_charge_pump_current_nA = 10000;
 	ad9528_param.pdata->pll1_bypass_en = 0;
 
 	/* Reference */
 	ad9528_param.pdata->ref_mode = REF_MODE_STAY_ON_REFB;
 	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
 	ad9528_param.pdata->sysref_k_div = 20;
+	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
+	ad9528_param.pdata->sysref_req_en = true;
 
 	/* PLL2 Setting */
-	ad9528_param.pdata->pll2_charge_pump_current_n_a = 806000;
+	ad9528_param.pdata->pll2_charge_pump_current_nA = 806000;
 	ad9528_param.pdata->pll2_ndiv_a_cnt = 0; // VCO CAL feedback divider
 	ad9528_param.pdata->pll2_ndiv_b_cnt = 25; // VCO CAL feedback divider
 	ad9528_param.pdata->pll2_freq_doubler_en = 0;
 	ad9528_param.pdata->pll2_r1_div = 2;
 	ad9528_param.pdata->pll2_n2_div = 25;
-	ad9528_param.pdata->pll2_vco_diff_m1 = 4; /* 3..5 */
+	ad9528_param.pdata->pll2_vco_div_m1 = 4; /* 3..5 */
 
 	/* Loop Filter PLL2 */
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
@@ -186,11 +189,15 @@ int main(void)
 	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
 	ad9528_param.pdata->rzero_bypass_en = 0;
 
+	/* Status pin function selection */
+	ad9528_param.pdata->stat0_pin_func_sel = 0xFF; /* No funtion */
+	ad9528_param.pdata->stat1_pin_func_sel = 0xFF; /* No function */
+
 #ifdef MODE_1_24G
 	ad9528_param.pll2_ndiv_a_cnt = 1;
 	ad9528_param.pll2_ndiv_b_cnt = 23;
 	ad9528_param.pll2_n2_div = 31;
-	ad9528_param.pll2_vco_diff_m1 = 3;
+	ad9528_param.pll2_vco_div_m1 = 3;
 #endif
 
 	// adc 0 settings
