@@ -203,16 +203,22 @@ int main(void)
 	ad9528_param.pdata->spi3wire = 1;
 	ad9528_param.pdata->vcxo_freq = 100000000;
 	ad9528_param.pdata->osc_in_diff_en = 1;
-	ad9528_param.pdata->pll2_charge_pump_current_n_a = 35000;
-	ad9528_param.pdata->pll2_vco_diff_m1 = 3;
+	ad9528_param.pdata->pll2_charge_pump_current_nA = 35000;
+	ad9528_param.pdata->pll2_vco_div_m1 = 3;
 	ad9528_param.pdata->pll2_r1_div = 3;
 	ad9528_param.pdata->pll2_ndiv_a_cnt = 3;
 	ad9528_param.pdata->pll2_ndiv_b_cnt = 27;
 	ad9528_param.pdata->pll2_n2_div = 37;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
 	ad9528_param.pdata->sysref_k_div = 128;
+	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
+	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
+	ad9528_param.pdata->sysref_req_en = true;
 	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
 	ad9528_param.pdata->rzero = RZERO_1850_OHM;
 	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
+	ad9528_param.pdata->stat0_pin_func_sel = 0xFF; /* No function */
+	ad9528_param.pdata->stat1_pin_func_sel = 0xFF; /* No function */
 
 	// dac settings
 	xcvr_getconfig(&ad9152_xcvr);

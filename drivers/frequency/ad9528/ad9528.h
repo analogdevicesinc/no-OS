@@ -43,6 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
+#include <stdbool.h>
 #include "delay.h"
 #include "spi.h"
 
@@ -86,12 +87,17 @@
 #define AD9528_CHANNEL_SYNC			AD9528_1B(0x32A)
 #define AD9528_CHANNEL_SYNC_IGNORE		AD9528_2B(0x32B)
 
+#define AD9528_SYSREF_RESAMPLE_CTRL		AD9528_2B(0x32D)
+
 #define AD9528_SYSREF_K_DIVIDER			AD9528_2B(0x400)
 #define AD9528_SYSREF_CTRL			AD9528_2B(0x402)
 
 #define AD9528_PD_EN				AD9528_1B(0x500)
 #define AD9528_CHANNEL_PD_EN			AD9528_2B(0x501)
 
+#define AD9528_STAT_MON0			AD9528_1B(0x505)
+#define AD9528_STAT_MON1			AD9528_1B(0x506)
+#define AD9528_STAT_PIN_EN			AD9528_1B(0x507)
 #define AD9528_READBACK				AD9528_2B(0x508)
 
 /* AD9528_SERIAL_PORT_CONFIG */
@@ -232,6 +238,11 @@
 #define AD9528_PLL2_LOCKED		(1 << 1)
 #define AD9528_PLL1_LOCKED		(1 << 0)
 
+/* AD9528_STAT_PIN_EN */
+#define AD9528_STAT0_PIN_EN		(1 << 2)
+#define AD9528_STAT1_PIN_EN		(1 << 3)
+#define AD9528_STAT0_DIV_EN		(1 << 1)
+#define AD9528_STAT1_DIV_EN		(1 << 0)
 
 #define AD9528_NUM_CHAN			14
 
@@ -267,6 +278,20 @@
 #define SYSREF_PATTERN_CONTINUOUS	1
 #define SYSREF_PATTERN_PRBS		2
 #define SYSREF_PATTERN_STOP		3
+
+/* Sysref NSHOT Mode
+ * Use for adi,sysref-nshot-mode */
+#define SYSREF_NSHOT_1_PULSE           1
+#define SYSREF_NSHOT_2_PULSES          2
+#define SYSREF_NSHOT_4_PULSES          3
+#define SYSREF_NSHOT_6_PULSES          4
+#define SYSREF_NSHOT_8_PULSES          5
+
+/* Sysref Trigger Mode
+ * Use for adi,sysref-request-trigger-mode */
+#define SYSREF_LEVEL_HIGH              0
+#define SYSREF_EDGE_RISING             2
+#define SYSREF_EDGE_FALLING            3
 
 /* Rpole2 resistor */
 #define RPOLE2_900_OHM	0
@@ -344,20 +369,27 @@ struct ad9528_channel_spec {
  * pll1_bypass_en: Bypass PLL1 - Single loop mode
  * ref_mode: Reference selection mode.
  * sysref_src: SYSREF pattern generator clock source
+ * sysref_pattern_mode: SYSREF pattern mode
  * sysref_k_div: SYSREF pattern generator K divider
+ * sysref_nshot_mode: SYSREF pattern NSHOT mode
+ * sysref_req_trigger_mode: SYSREF request trigger mode
+ * sysref_req_en: SYSREF request pin mode enable (default SPI mode)
  * pll2_charge_pump_current_nA: Magnitude of PLL2 charge pump current (nA).
  * pll2_ndiv_a_cnt: PLL2 Feedback N-divider, A Counter, range 0..4.
  * pll2_ndiv_b_cnt: PLL2 Feedback N-divider, B Counter, range 0..63.
  * pll2_freq_doubler_en: PLL2 frequency doubler enable.
  * pll2_r1_div: PLL2 R1 divider, range 1..31.
  * pll2_n2_div: PLL2 N2 divider, range 1..256.
- * pll2_vco_diff_m1: VCO1 divider, range 3..5.
+ * pll2_vco_div_m1: VCO1 divider, range 3..5.
+ * pll2_bypass_en: Bypass PLL2.
  * rpole2: PLL2 loop filter Rpole resistor value.
  * rzero: PLL2 loop filter Rzero resistor value.
  * cpole1: PLL2 loop filter Cpole capacitor value.
  * rzero_bypass_en: PLL2 loop filter Rzero bypass enable.
  * num_channels: Array size of struct ad9528_channel_spec.
  * channels: Pointer to channel array.
+ * stat0_pin_sel: Status Monitor Pin 0 function selection.
+ * stat1_pin_sel: Status Monitor Pin 1 function selection.
  */
 struct ad9528_platform_data {
 	uint32_t vcxo_freq;
@@ -385,22 +417,27 @@ struct ad9528_platform_data {
 	uint16_t refb_r_div;
 	uint16_t pll1_feedback_div;
 	uint8_t	 pll1_feedback_src_vcxo;
-	uint16_t pll1_charge_pump_current_n_a;
+	uint16_t pll1_charge_pump_current_nA;
 	uint8_t	 pll1_bypass_en;
 
 	/* Reference */
 	uint8_t	 ref_mode;
 	uint8_t	 sysref_src;
+	uint8_t  sysref_pattern_mode;
 	uint16_t sysref_k_div;
+	uint8_t  sysref_nshot_mode;
+	uint8_t  sysref_req_trigger_mode;
+	bool	 sysref_req_en;
 
 	/* PLL2 Setting */
-	uint32_t pll2_charge_pump_current_n_a;
+	uint32_t pll2_charge_pump_current_nA;
 	uint8_t	 pll2_ndiv_a_cnt;
 	uint8_t	 pll2_ndiv_b_cnt;
 	uint8_t	 pll2_freq_doubler_en;
 	uint8_t	 pll2_r1_div;
 	uint8_t	 pll2_n2_div;
-	uint8_t	 pll2_vco_diff_m1; /* 3..5 */
+	uint8_t	 pll2_vco_div_m1; /* 3..5 */
+	bool	 pll2_bypass_en;
 
 	/* Loop Filter PLL2 */
 	uint8_t	rpole2;
@@ -411,6 +448,9 @@ struct ad9528_platform_data {
 	/* Output Channel Configuration */
 	uint32_t			   num_channels;
 	struct ad9528_channel_spec *channels;
+
+	uint8_t  stat0_pin_func_sel;
+	uint8_t  stat1_pin_func_sel;
 };
 
 enum {
@@ -428,6 +468,7 @@ enum {
 enum {
 	AD9528_VCO,
 	AD9528_VCXO,
+	AD9528_SYSREF,
 	AD9528_NUM_CLK_SRC,
 };
 
