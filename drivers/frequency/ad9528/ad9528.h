@@ -46,6 +46,7 @@
 #include <stdbool.h>
 #include "delay.h"
 #include "spi.h"
+#include "gpio.h"
 
 /******************************************************************************/
 /****************************** AD9528 ****************************************/
@@ -179,6 +180,8 @@
 #define AD9528_PLL2_N2_DIV(x)			((((x) - 1) & 0xFF) << 0)
 
 /* AD9528_CHANNEL_OUTPUT */
+#define AD9528_CLK_DIST_DIV_MIN	1
+#define AD9528_CLK_DIST_DIV_MAX 256
 #define AD9528_CLK_DIST_DIV(x)			((((x) - 1) & 0xFF) << 16)
 #define AD9528_CLK_DIST_DIV_REV(x)		((((x) >> 16) & 0xFF) + 1)
 #define AD9528_CLK_DIST_DRIVER_MODE(x)		(((x) & 0x3) << 13)
@@ -202,6 +205,8 @@
 
 /* AD9528_SYSREF_K_DIVIDER */
 #define AD9528_SYSREF_K_DIV(x)			(((x) & 0xFFFF) << 0)
+#define AD9528_SYSREF_K_DIV_MIN                 (0u)
+#define AD9528_SYSREF_K_DIV_MAX                 (65535u)
 
 /* AD9528_SYSREF_CTRL */
 #define AD9528_SYSREF_SOURCE(x)			(((x) & 0x3) << 14)
@@ -479,6 +484,8 @@ struct ad9528_state {
 struct ad9528_dev {
 	/* SPI */
 	spi_desc *spi_desc;
+	/* GPIO */
+	gpio_desc *gpio_resetb;
 	/* Device Settings */
 	struct ad9528_state ad9528_st;
 	struct ad9528_platform_data *pdata;
@@ -487,6 +494,8 @@ struct ad9528_dev {
 struct ad9528_init_param {
 	/* SPI */
 	spi_init_param spi_init;
+	/* GPIO */
+	gpio_init_param gpio_resetb;
 	/* Device Settings */
 	struct ad9528_platform_data *pdata;
 };
@@ -494,7 +503,6 @@ struct ad9528_init_param {
 /* Helpers to avoid excess line breaks */
 #define AD_IFE(_pde, _a, _b) ((dev->pdata->_pde) ? _a : _b)
 #define AD_IF(_pde, _a) AD_IFE(_pde, _a, 0)
-#define ARRAY_SIZE(ar) (sizeof(ar)/sizeof(ar[0]))
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -521,6 +529,11 @@ int32_t ad9528_poll(struct ad9528_dev *dev,
 		    uint32_t data);
 int32_t ad9528_io_update(struct ad9528_dev *dev);
 int32_t ad9528_sync(struct ad9528_dev *dev);
+uint32_t ad9528_clk_round_rate(struct ad9528_dev *dev, uint32_t chan,
+			       uint32_t rate);
+int32_t ad9528_clk_set_rate(struct ad9528_dev *dev, uint32_t chan,
+			    uint32_t rate);
+int32_t ad9528_reset(struct ad9528_dev *dev);
 int32_t ad9528_remove(struct ad9528_dev *dev);
 
 #endif // __AD9528_H__
