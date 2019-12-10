@@ -42,7 +42,24 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include "util.h"
 #include "ad9528.h"
+
+static bool ad9528_pll2_valid_calib_div(unsigned int div)
+{
+	if (div < 16 || div > 255)
+		return false;
+
+	switch (div) {
+	case 18:
+	case 19:
+	case 23:
+	case 27:
+		return false;
+	}
+
+	return true;
+}
 
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
@@ -342,14 +359,14 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	uint32_t active_mask = 0;
 	uint32_t ignoresync_mask = 0;
 	uint32_t vco_freq;
-	uint32_t vco_ctrl;
+	uint32_t vco_ctrl = 0;
 	uint32_t sysref_ctrl;
 	uint32_t stat_en_mask = 0;
 	uint32_t reg_data;
 	int32_t ret;
 	uint32_t i;
+	uint32_t pll2_ndiv, pll2_ndiv_a_cnt, pll2_ndiv_b_cnt;
 	struct ad9528_dev *dev;
-	struct ad9528_state *st;
 
 	dev = (struct ad9528_dev *)malloc(sizeof(*dev));
 	if (!dev)
@@ -357,10 +374,17 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 
 	dev->pdata = init_param.pdata;
 
+	/* GPIO */
+	ret = gpio_get(&dev->gpio_resetb, &init_param.gpio_resetb);
+	if (ret < 0)
+		return ret;
+
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		return ret;
+
+	ad9528_reset(dev);
 
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_SERIAL_PORT_CONFIG,
@@ -460,12 +484,12 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	 */
 
 	if (dev->pdata->pll2_bypass_en) {
-		ret = ad9528_write(dev, AD9528_PLL2_CTRL,
-				   AD9528_PLL2_CHARGE_PUMP_MODE_TRISTATE);
+		ret = ad9528_spi_write_n(dev, AD9528_PLL2_CTRL,
+					 AD9528_PLL2_CHARGE_PUMP_MODE_TRISTATE);
 		if (ret < 0)
 			return ret;
 
-		ret = ad9528_write(dev, AD9528_SYSREF_RESAMPLE_CTRL, 0x1);
+		ret = ad9528_spi_write_n(dev, AD9528_SYSREF_RESAMPLE_CTRL, 0x1);
 		if (ret < 0)
 			return ret;
 
@@ -478,6 +502,15 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		goto pll2_bypassed;
 	}
 
+	pll2_ndiv = dev->pdata->pll2_vco_div_m1 * dev->pdata->pll2_n2_div;
+	if (!ad9528_pll2_valid_calib_div(pll2_ndiv)) {
+		printf("Feedback calibration divider value (%u) out of range\n", pll2_ndiv);
+		return -1;
+	}
+
+	pll2_ndiv_a_cnt = pll2_ndiv % 4;
+	pll2_ndiv_b_cnt = pll2_ndiv / 4;
+
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_CHARGE_PUMP,
 				 AD9528_PLL2_CHARGE_PUMP_CURRENT_nA(dev->pdata->
@@ -487,10 +520,8 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_PLL2_FEEDBACK_DIVIDER_AB,
-				 AD9528_PLL2_FB_NDIV_A_CNT(dev->pdata->
-						 pll2_ndiv_a_cnt) |
-				 AD9528_PLL2_FB_NDIV_B_CNT(dev->pdata->
-						 pll2_ndiv_b_cnt));
+				 AD9528_PLL2_FB_NDIV_A_CNT(pll2_ndiv_a_cnt) |
+				 AD9528_PLL2_FB_NDIV_B_CNT(pll2_ndiv_b_cnt));
 	if (ret < 0)
 		return ret;
 
@@ -502,11 +533,9 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	if (ret < 0)
 		return ret;
 
-	vco_freq = (dev->pdata->vcxo_freq *
-		    (dev->pdata->pll2_freq_doubler_en ? 2 : 1) /
-		    dev->pdata->pll2_r1_div) * AD9528_PLL2_FB_NDIV(dev->pdata->
-				    pll2_ndiv_a_cnt,
-				    dev->pdata->pll2_ndiv_b_cnt);
+	vco_freq = div_u64((uint64_t)dev->pdata->vcxo_freq *
+			   (dev->pdata->pll2_freq_doubler_en ? 2 : 1) * pll2_ndiv,
+			   dev->pdata->pll2_r1_div);
 
 	vco_ctrl = AD_IF(pll2_freq_doubler_en || dev->pdata->pll2_r1_div != 1,
 			 AD9528_PLL2_DOUBLER_R1_EN);
@@ -697,4 +726,193 @@ int32_t ad9528_remove(struct ad9528_dev *dev)
 	free(dev);
 
 	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Calculate the output channel divider.
+ *
+ * @param rate - The desired rate.
+ * @param parent_rate - The parent rate.
+ *
+ * @return The output divider.
+ *******************************************************************************/
+uint32_t ad9528_calc_out_div(uint32_t rate,
+			     uint32_t parent_rate)
+{
+	uint32_t div;
+
+	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+
+	div = clamp_t(unsigned int,
+		      div,
+		      AD9528_CLK_DIST_DIV_MIN,
+		      AD9528_CLK_DIST_DIV_MAX);
+
+	return div;
+}
+
+/***************************************************************************//**
+ * @brief Calculate closest possible rate.
+ *
+ * @param chan - The output channel.
+ * @param rate - The desired rate.
+ *
+ * @return The closest possible rate of desired rate.
+ *******************************************************************************/
+uint32_t ad9528_clk_round_rate(struct ad9528_dev *dev, uint32_t chan,
+			       uint32_t rate)
+{
+	uint32_t div;
+	uint32_t signal_source;
+	uint32_t freq;
+
+	if (chan >= dev->pdata->num_channels)
+		return -1;
+
+	signal_source = dev->pdata->channels[chan].signal_source;
+
+	if (signal_source == AD9528_VCO) {
+		freq = dev->ad9528_st.vco_out_freq[signal_source];
+		div = ad9528_calc_out_div(rate, freq);
+	} else if (signal_source == AD9528_SYSREF) {
+		freq = dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2;
+		div = DIV_ROUND_CLOSEST(freq, rate);
+		div = clamp_t(unsigned int,
+			      div,
+			      AD9528_SYSREF_K_DIV_MIN,
+			      AD9528_SYSREF_K_DIV_MAX);
+	} else {
+		// oops, it seems channels were misconfigured.
+		return 0;
+	}
+
+	return DIV_ROUND_CLOSEST(freq, div);
+}
+
+/***************************************************************************//**
+ * @brief Set channel rate.
+ *
+ * @param dev - is a pointer to the ad9528_dev data structure.
+ * @param chan - Channel number.
+ * @param rate - Channel rate in Hz.
+ *
+ * @return 0 in case of success, negative error code otherwise.
+ *******************************************************************************/
+int32_t ad9528_clk_set_rate(struct ad9528_dev *dev, uint32_t chan,
+			    uint32_t rate)
+{
+	uint32_t div;
+	int32_t ret;
+	uint32_t reg;
+	uint32_t signal_source;
+
+	if (chan >= dev->pdata->num_channels)
+		return -1;
+
+	signal_source = dev->pdata->channels[chan].signal_source;
+
+	// if the channel has VCO as source then operate on the channel divider
+	if (signal_source == AD9528_VCO) {
+		div = ad9528_calc_out_div(rate, dev->ad9528_st.vco_out_freq[signal_source]);
+		dev->pdata->channels[chan].channel_divider = div;
+
+		// make a copy of the channel control register.
+		ret = ad9528_spi_read_n(dev,
+					AD9528_CHANNEL_OUTPUT(chan),
+					&reg);
+
+		if (ret < 0)
+			return ret;
+
+		// set the divide ratio bits.
+		uint32_t divmask = AD9528_CLK_DIST_DIV(0xFF + 1);
+
+		// clear those bits in the channel register copy.
+		reg &= ~divmask;
+
+		// apply the new channel divider to the register copy.
+		reg |= AD9528_CLK_DIST_DIV(dev->pdata->channels[chan].channel_divider);
+
+		// apply the new channel divider to hardware.
+		ret = ad9528_spi_write_n(dev,
+					 AD9528_CHANNEL_OUTPUT(dev->pdata->channels[chan].channel_num),
+					 reg);
+		if (ret < 0)
+			return ret;
+	}
+	// if the channel has SYSREF as source then operate on the sysref K divider
+	// note that this affects all other SYSREF sourced channels
+	else if (signal_source == AD9528_SYSREF) {
+		// SYSREF Generator is sourced from VCXO with a fixed divider of 2 and a K divider
+		div = DIV_ROUND_CLOSEST(dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2, rate);
+
+		div = clamp_t(unsigned int,
+			      div,
+			      AD9528_SYSREF_K_DIV_MIN,
+			      AD9528_SYSREF_K_DIV_MAX);
+
+		// apply the new K divider to hardware.
+		reg = div;
+		ret = ad9528_spi_write_n(dev,
+					 AD9528_SYSREF_K_DIVIDER,
+					 reg);
+
+		if(ret < 0)
+			return ret;
+		else {
+			dev->pdata->sysref_k_div = div;
+			dev->ad9528_st.vco_out_freq[AD9528_SYSREF] =
+				dev->ad9528_st.vco_out_freq[AD9528_VCXO] / 2 / div;
+		}
+	} else {
+		// oops, it seems channels were misconfigured.
+		return -2;
+	}
+
+	ret = ad9528_io_update(dev);
+	if (ret < 0)
+		return ret;
+
+	return ret;
+}
+
+/***************************************************************************//**
+ * @brief Performs a hard reset on the AD9528.
+ *
+ * @param dev is a pointer to the ad9528_dev data structure.
+ *
+ * @return Returns 0 for success, negative value for failure.
+ *******************************************************************************/
+int32_t ad9528_reset(struct ad9528_dev *dev)
+{
+	int32_t s;
+
+	if(!dev)
+		return -1;
+
+	s = gpio_direction_output(dev->gpio_resetb, 0);
+	if(s < 0)
+		return s;
+
+	mdelay(100);
+
+	s = gpio_direction_output(dev->gpio_resetb, 1);
+	if(s < 0)
+		return s;
+
+	mdelay(100);
+
+	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG, 0x81);
+	if(s < 0)
+		return s;
+
+	mdelay(100);
+
+	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG_B, 0x00);
+	if(s < 0)
+		return s;
+
+	mdelay(100);
+
+	return 0;
 }
