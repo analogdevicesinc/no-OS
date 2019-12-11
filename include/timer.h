@@ -84,10 +84,10 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter);
 int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val);
 
 /* Get the timer clock frequency. */
-int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *count_clk);
+int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz);
 
-/* Set the timer clock frequency or source. */
-int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t new_clk_opt);
+/* Set the timer clock frequency. */
+int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz);
 
 #endif /* SRC_TIMER_H_ */
 
