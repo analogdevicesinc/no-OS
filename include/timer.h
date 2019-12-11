@@ -52,11 +52,13 @@
 
 struct timer_desc {
 	uint32_t freq_hz;
+	uint32_t load_value;
 	void *extra;
 };
 
 struct timer_init_param {
 	uint32_t freq_hz;
+	uint32_t load_value;
 	void *extra;
 };
 
