@@ -1,0 +1,30 @@
+/** 
+
+\mainpage
+
+\tableofcontents
+
+\section license License
+
+No-OS has been developed and is released under the terms of the GNU Lesser General Public License, version 2. 
+This open-source license allows anyone to use the library for proprietary or open-source, commercial or non-commercial
+applications. This choice was motivated by the fact that Analog Devices is a company that principally sells hardware, 
+and this library provides the clients with a better and easier way of using this hardware.
+
+\section software Software
+
+The majority of ADI's products are peripherals to a non-ADI digital engine (FPGA, microprocessor, or microcontroller). 
+While there is major work underway on FPGAs (Xilinx and Intel/Altera) and microprocessors (running an operating system
+like Linux), the efforts on microcontrollers are fragmented due to the diverse nature of the microcontroller market. 
+The goal of these projects (microcontroller/no-OS) is to be able to provide reference projects for lower end processors, 
+which can't run Linux or aren't running a specific operating system, to help customers using FPGA/microcontrollers with ADI parts.
+
+\section drivers Drivers
+
+A list of available drivers can be found here: \ref drivers_page "Drivers"
+
+\section projects Projects
+
+A list of available projects can be found here: \ref projects_page "Projects"
+
+*/
