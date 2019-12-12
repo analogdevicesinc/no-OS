@@ -226,6 +226,8 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo);
  *        hardware settings describing the device of interest and required
  *        hardware references to toggle SYSREF pin of the ADI device.
  *
+ * \param mode SYSREF request mode.
+ *
  * \pre This function may be called at any time to issue a SYSREF request
  *  after the required GPIO drivers and resources are opened by the
  * ADIHAL_openHw function call and not after ADIHAL_closeHW.
