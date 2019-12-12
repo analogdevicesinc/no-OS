@@ -45,11 +45,19 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct irq_init_param
+ * @brief Structure holding the parameters for Interrupt Request.
+ */
 struct irq_init_param {
-	uint32_t	irq_id;
-	void		*extra;
+	uint32_t	irq_id; ///< Interrupt Request ID.
+	void		*extra; ///< IRQ extra parameters (device specific)
 };
 
+/**
+ * @struct irq_desc
+ * @brief Structure for Interrupt Request descriptor.
+ */
 struct irq_desc {
 	uint32_t	irq_id;
 	void		*extra;

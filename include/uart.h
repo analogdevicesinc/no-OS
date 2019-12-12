@@ -43,16 +43,20 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct uart_init_param
+ * @brief Structure holding the parameters for UART initialization
+ */
 struct uart_init_param {
-	uint8_t	device_id;
-	uint32_t 	baud_rate;
-	void 		*extra;
+	uint8_t	device_id; ///< UART Device ID
+	uint32_t 	baud_rate; ///< UART Baud Rate
+	void 		*extra; ///< UART extra parameters (device specific)
 };
 
 struct uart_desc {
-	uint8_t 	device_id;
-	uint32_t 	baud_rate;
-	void 		*extra;
+	uint8_t 	device_id; ///< UART Device ID
+	uint32_t 	baud_rate; ///< UART Baud Rate
+	void 		*extra; ///< UART extra parameters (device specific)
 };
 
 /******************************************************************************/

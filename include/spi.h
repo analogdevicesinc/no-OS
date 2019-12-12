@@ -56,25 +56,37 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum spi_mode
+ * @brief SPI configuration for clock phase and polarity
+ */
 typedef enum spi_mode {
-	SPI_MODE_0 = (0 | 0),
-	SPI_MODE_1 = (0 | SPI_CPHA),
-	SPI_MODE_2 = (SPI_CPOL | 0),
-	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
+	SPI_MODE_0 = (0 | 0), ///< Data on rising, shift out on falling
+	SPI_MODE_1 = (0 | SPI_CPHA), ///< Data on falling, shift out on rising
+	SPI_MODE_2 = (SPI_CPOL | 0), ///< Data on falling, shift out on rising
+	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA) ///< Data on rising, shift out on falling
 } spi_mode;
 
+/**
+ * @struct spi_init_param
+ * @brief Structure holding the parameters for SPI initialization
+ */
 typedef struct spi_init_param {
-	uint32_t	max_speed_hz;
-	uint8_t		chip_select;
-	enum spi_mode	mode;
-	void		*extra;
+	uint32_t	max_speed_hz; ///< SPI maximum transfer speed
+	uint8_t		chip_select; ///< SPI chip select
+	enum spi_mode	mode; ///< SPI mode
+	void		*extra; ///< SPI extra parameters (device specific)
 } spi_init_param;
 
+/**
+ * @struct spi_desc
+ * @brief Structure holding SPI descriptor
+ */
 typedef struct spi_desc {
-	uint32_t	max_speed_hz;
-	uint8_t		chip_select;
-	enum spi_mode	mode;
-	void		*extra;
+	uint32_t	max_speed_hz; ///< SPI maximum transfer speed
+	uint8_t		chip_select; ///< SPI chip select
+	enum spi_mode	mode; ///< SPI mode
+	void		*extra; ///< SPI extra parameters (device specific)
 } spi_desc;
 
 /******************************************************************************/

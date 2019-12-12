@@ -59,14 +59,22 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct gpio_init_param
+ * @brief Structure holding the parameters for GPIO initialization.
+ */
 typedef struct gpio_init_param {
-	uint8_t		number;
-	void		*extra;
+	uint8_t		number; ///< GPIO number
+	void		*extra; ///< GPIO extra parameters (device specific)
 } gpio_init_param;
 
+/**
+ * @struct gpio_desc
+ * @brief Structure holding the GPIO descriptor.
+ */
 typedef struct gpio_desc {
-	uint8_t		number;
-	void		*extra;
+	uint8_t		number; ///< GPIO number
+	void		*extra; ///< GPIO extra parameters (device specific)
 } gpio_desc;
 
 /******************************************************************************/
