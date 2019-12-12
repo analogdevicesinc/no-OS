@@ -5,12 +5,19 @@ sudo: required
 os: linux
 
 env:
+  global:
+    secure: "e2aIzAsFnISWA+43i6tF/hS3l6k4eI/k7/5ZBzrpcPxT2R/PqVL1AcDndBQFLFVAX9lACnMBIEhK8jxvK2VGNwACp/gLG4RNyB5oE+HQqcUY1ntdjVmAAVzDKzG23mPlXIQzGFeZ861BuiO4GSqEBsd2c0Nm7jXf2rSuHizkId8="
   matrix:
     - BUILD_TYPE=astyle
     - BUILD_TYPE=cppcheck
     - BUILD_TYPE=ad9361_generic
     - BUILD_TYPE=ad9361_linux
     - BUILD_TYPE=drivers
+    - BUILD_TYPE=doxygen
+
+before_install:
+  - export DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p ${DEPS_DIR}
 
 script:
   - ./ci/travis/run_build.sh
