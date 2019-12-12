@@ -99,7 +99,7 @@ int main(void)
 	uint8_t deframerStatus;
 	uint32_t trackingCalMask = TRACK_ORX1_QEC | TRACK_ORX2_QEC | TRACK_RX1_QEC |
 				   TRACK_RX2_QEC | TRACK_TX1_QEC | TRACK_TX2_QEC;
-	uint32_t status;
+	int32_t status;
 	int32_t ret;
 #ifdef ALTERA_PLATFORM
 	struct altera_a10_fpll_init rx_device_clk_pll_init = {
