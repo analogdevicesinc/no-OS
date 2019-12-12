@@ -29,4 +29,30 @@ build_drivers() {
     make -C ./drivers -f Makefile
 }
 
+build_doxygen() {
+    sudo apt-get install -y graphviz
+    # Install a recent version of doxygen
+	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.13/doxygen-1.8.13.src.tar.gz/"
+	cd ${DEPS_DIR}
+	[ -d "doxygen" ] || {
+		mkdir doxygen && wget --quiet -O - ${DOXYGEN_URL} | tar --strip-components=1 -xz -C doxygen
+	}
+
+    # Install Doxygen
+    cd doxygen
+    mkdir -p build && cd build
+    cmake ..
+    make -j${NUM_JOBS}
+    sudo make install
+    cd ../..
+
+    # Build Documentation
+    cd ${TRAVIS_BUILD_DIR}/doc
+    mkdir -p build && cd build
+    cmake ..
+    cd ../..
+
+    ./ci/travis/doxygen.sh
+}
+
 build_${BUILD_TYPE}
