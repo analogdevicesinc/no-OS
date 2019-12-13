@@ -2,9 +2,9 @@
 #                             EXPORTED VARIABLES                               
 #------------------------------------------------------------------------------
 # Exported variables used by subshells
-export PROCESSOR_CORE 
 export HARDWARE
 export PLATFORM
+export ARCH
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
@@ -92,13 +92,12 @@ CFLAGS = -Wall 								\
 #------------------------------------------------------------------------------
 #                            COMMON LINKER FLAGS                               
 #------------------------------------------------------------------------------
-LDFLAGS = -Wl,-T							\
-	  -Wl,$(BUILD_DIR)/app/src/lscript.ld -L $(LIBRARY_DIR)
+LDFLAGS = -T $(LSCRIPT)							\
+	  -L $(LIBRARY_DIRS)
 
-################|--------------------------------------------------------------
-################|                   Zynq                                       
-################|--------------------------------------------------------------
-ifeq (ps7_cortexa9_0,$(strip $(PROCESSOR_CORE)))
+#------------------------------------------------------------------------------
+#                             PLATFORM HANDLING                                
+#------------------------------------------------------------------------------
 
 ########|----------------------------------------------------------------------
 ########|                           XILINX                                     
@@ -110,13 +109,13 @@ CFLAGS += -D XILINX_PLATFORM
 # Xilinx's generated linker script path
 LSCRIPT := $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
-LIBRARY_DIRS := $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/lib
+LIBRARY_DIRS := $(BUILD_DIR)/bsp/$(ARCH)/lib
 # Xilinx's bsp include path
-EXTRA_INCS := -I $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/include
+EXTRA_INCS := -I $(BUILD_DIR)/bsp/$(ARCH)/include
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
-ifeq (ps7_cortexa9_0,$(strip $(PROCESSOR_CORE)))
+ifeq (ps7_cortexa9_0,$(strip $(ARCH)))
 
 CC := arm-none-eabi-gcc
 
@@ -132,22 +131,20 @@ LDFLAGS += -specs=$(BUILD_DIR)/app/src/Xilinx.spec 			\
 	   -mcpu=cortex-a9						\
 	   -Wl,-build-id=none
 endif
-
 ################|--------------------------------------------------------------
 ################|                   ZynqMP                                     
 ################|--------------------------------------------------------------
-ifeq (psu_cortexa53_0,$(strip $(PROCESSOR_CORE)))
+ifeq (psu_cortexa53_0,$(strip $(ARCH)))
 
 CC := aarch64-none-elf-gcc
 
 LD := $(CC)
 
 endif
-
 ################|--------------------------------------------------------------
 ################|                  Microblaze                                  
 ################|--------------------------------------------------------------
-ifeq (sys_mb,$(strip $(PROCESSOR_CORE)))
+ifeq (sys_mb,$(strip $(ARCH)))
 
 CC := microblaze-xilinx-elf-gcc
 
@@ -220,7 +217,7 @@ all: pre-build eval-hardware bsp
 .SILENT:bsp
 bsp: 
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
-		$(eval export PROCESSOR_CORE:= $(shell cat $(TEMP_DIR)/arch.txt))	\
+		$(eval export ARCH:= $(shell cat $(TEMP_DIR)/arch.txt))	\
 		$(MAKE) -s xilinx-bsp;					\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
 		;							\
@@ -233,7 +230,7 @@ bsp:
 compile: 
 	$(eval export EXTRA_INCS:= $(shell \
 	if [ "$(PLATFORM)" = "xilinx" ]; then	\
-		echo "-I $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/include";\
+		echo "-I $(BUILD_DIR)/bsp/$(ARCH)/include";\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
 		;							\
 	fi;))
@@ -329,12 +326,12 @@ xilinx-bsp:
 	@ if [ ! -d "$(BUILD_DIR)/bsp" ];then				\
 	$(call print,Building hardware specification and bsp \n);	\
 	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl		\
-		$(SDK_WORKSPACE) $(HARDWARE) $(PROCESSOR_CORE) $(NULL);		\
+		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);		\
 	mv $(TEMP_DIR)/system_top.bit $(BUILD_DIR);			\
 	fi;
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
-	@ if [ "$(PROCESSOR_CORE)" = "sys_mb" ]; then				\
+	@ if [ "$(ARCH)" = "sys_mb" ]; then				\
 		sed -i "s/_HEAP_SIZE : 0x800/_HEAP_SIZE : 0x100000/g"	\
 		$(BUILD_DIR)/app/src/lscript.ld;			\
 	fi;
