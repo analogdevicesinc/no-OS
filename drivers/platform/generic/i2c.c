@@ -50,7 +50,7 @@
 /**
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
- * @param init_param - The structure that contains the I2C parameters.
+ * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
