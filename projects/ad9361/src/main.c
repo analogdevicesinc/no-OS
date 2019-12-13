@@ -43,7 +43,7 @@
 #include <inttypes.h>
 #include "config.h"
 #include "ad9361_api.h"
-#include "ad9361_parameters.h"
+#include "parameters.h"
 #include "spi.h"
 #include "spi_extra.h"
 #include "gpio.h"
