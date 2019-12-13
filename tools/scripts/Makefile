@@ -377,10 +377,24 @@ post-build:
 		mv -f sw.map $(TEMP_DIR);				\
 	fi;
 
-xilinx:	xil-pre-cleanup eval-hardware pre-build xilinx-bsp
-	$(call copy_srcs,xilinx)
-	@$(MAKE) -s compile
-	rm -rf $(BUILD_DIR)/SDK.log
+# Upload the bitstream and elf file to the board
+.SILENT:run
+run: eval-hardware
+	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
+		xsdb $(SCRIPTS_DIR)/upload.tcl				\
+			$(shell cat $(TEMP_DIR)/arch.txt) 		\
+			$(BUILD_DIR)/hw/system_top.bit			\
+			$(BUILD_DIR)/$(EXEC).elf			\
+			$(BUILD_DIR)/hw	;				\
+	elif [ "$(PLATFORM)" = "altera" ];then				\
+		nios2-configure-sof *.sof;				\
+		nios2-download -r -g $(BUILD_DIR)/$(EXEC).elf;		\
+		nios2-terminal;						\
+	elif [ "$(PLATFORM)" = "none" ]; then				\
+		$(call print_err,Platform not found\n)			\
+		exit 1;							\
+	fi;
+
 
 # Extract the architecture from the hdf file
 .SILENT:xilinx-read-hdf
