@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   util.h
- *   @brief  Header file of Util driver.
+ *   @file   ad9361_util.h
+ *   @brief  AD9361 Header file of Util driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.

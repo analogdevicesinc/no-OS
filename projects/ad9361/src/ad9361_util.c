@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   util.c
- *   @brief  Implementation of Util Driver.
+ *   @file   ad9361_util.c
+ *   @brief  AD9361 Implementation of Util Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
