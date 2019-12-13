@@ -81,10 +81,6 @@ CFLAGS = -Wall 								\
 	 -Wuninitialized						\
 	 -Wunused-but-set-parameter					\
 	 -Wno-unused-parameter						\
-	 -fdata-sections						\
-	 -ffunction-sections 						\
-	 -O2 								\
-	 -g3								\
 	 -MMD 								\
 	 -MP								\
 	 -lm						
@@ -106,7 +102,11 @@ LDFLAGS = -T $(LSCRIPT)							\
 ifeq (xilinx,$(strip $(PLATFORM)))
 
 # Define the platform compiler switch
-CFLAGS += -D XILINX_PLATFORM
+CFLAGS += -D XILINX_PLATFORM						\
+	 -fdata-sections						\
+	 -ffunction-sections 						\
+	 -O2								\
+	 -g3
 # Xilinx's generated linker script path
 LSCRIPT := $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
@@ -195,6 +195,8 @@ LD := nios2-elf-g++
 
 CFLAGS += -xc								\
 	  -pipe								\
+	  -O3								\
+	  -g								\
 	  -mno-hw-div							\
 	  -mhw-mul							\
 	  -mno-hw-mulx							\
@@ -217,8 +219,10 @@ LDFLAGS += -msys-crt0='$(BUILD_DIR)/bsp//obj/HAL/src/crt0.o'		\
 	   -mhw-mul							\
 	   -mno-hw-mulx							\
 	   -mgpopt=global						\
+	   -lm								\
+	   -msys-lib=m							\
 	   -Wl,-Map=sw.map
-	   
+
 STAMP +=   --thread_model hal						\
 	   --cpu_name sys_cpu						\
 	   --qsys true							\
@@ -266,6 +270,7 @@ all: pre-build eval-hardware bsp
 
 .SILENT:bsp
 bsp: 
+	$(call print,Platform : \e[33m$(PLATFORM)\e[39m\n)
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
 		$(eval export ARCH:= $(shell cat $(TEMP_DIR)/arch.txt))	\
 		$(MAKE) -s xilinx-bsp;					\
@@ -289,6 +294,7 @@ compile:
 	fi;))
 	$(MAKE) -s $(EXEC)
 
+.SILENT:create-build-dirs
 create-build-dirs:
 	mkdir -p $(BUILD_DIR)/app
 	mkdir -p $(BUILD_DIR)/app/src
@@ -310,7 +316,7 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 # If the hardware file is not specified, start searching for one
-# Check for .hdf files inside the project directory	
+# Check for .hdf files inside the project directory
 .SILENT:eval-hardware
 eval-hardware:	
 ifndef HARDWARE
@@ -339,7 +345,6 @@ endif
 	else								\
 		echo none;						\
 	fi;))
-	$(call print,Platform : \e[33m$(PLATFORM)\e[39m\n)
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
 		$(MAKE) -s xilinx-read-hdf;				\
 	elif [ "$(PLATFORM)" = "altera" ];then				\
@@ -358,7 +363,7 @@ altera-bsp:
 altera-elf:
 	nios2-elf-insert $(BUILD_DIR)/$(EXEC).elf $(STAMP)
 
-.SILENT:pre-build		
+.SILENT:pre-build
 pre-build:
 	@$(MAKE) -s create-build-dirs
 
@@ -390,7 +395,6 @@ xilinx-bsp:
 	$(call print,Building hardware specification and bsp \n);	\
 	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl		\
 		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);		\
-	mv $(TEMP_DIR)/system_top.bit $(BUILD_DIR);			\
 	fi;
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
