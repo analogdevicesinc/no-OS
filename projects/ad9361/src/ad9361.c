@@ -3442,7 +3442,7 @@ static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 * 11 TX_MON1 & TX_MON2
 * @param phy The AD9361 state structure.
 * @param rx_inputs RX input option identifier
-* @param is_out 
+* @param is_out
 * @param txb TX output option identifier
 * @return 0 in case of success, negative error code otherwise.
 */
