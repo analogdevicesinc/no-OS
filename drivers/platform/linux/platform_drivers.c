@@ -57,7 +57,7 @@
 /**
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
- * @param init_param - The structure that contains the I2C parameters.
+ * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(i2c_desc **desc,
@@ -178,7 +178,7 @@ int32_t i2c_read(i2c_desc *desc,
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
- * @param init_param - The structure that contains the SPI parameters.
+ * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(spi_desc **desc, const spi_init_param *param)

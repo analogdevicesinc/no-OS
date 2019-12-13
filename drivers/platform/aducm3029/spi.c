@@ -99,7 +99,7 @@ static void free_desc_mem(struct spi_desc *desc)
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
- * @param init_param - The structure that contains the SPI parameters.
+ * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
