@@ -67,7 +67,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		      uint32_t rx_os_div40_rate_hz)
 {
 	int32_t status;
-	uint32_t rx_lane_rate_khz = rx_div40_rate_hz * 40 / 1000;
+	uint32_t rx_lane_rate_khz = rx_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_jesd_init = {
 		"rx_jesd",
 		RX_JESD_BASEADDR,
@@ -77,7 +77,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		rx_div40_rate_hz / 1000,
 		rx_lane_rate_khz
 	};
-	uint32_t tx_lane_rate_khz = tx_div40_rate_hz * 40 / 1000;
+	uint32_t tx_lane_rate_khz = tx_div40_rate_hz / 1000 * 40;
 	struct jesd204_tx_init tx_jesd_init = {
 		"tx_jesd",
 		TX_JESD_BASEADDR,
@@ -92,7 +92,7 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		tx_div40_rate_hz / 1000,
 		tx_lane_rate_khz
 	};
-	uint32_t rx_os_lane_rate_khz = rx_os_div40_rate_hz * 40 / 1000;
+	uint32_t rx_os_lane_rate_khz = rx_os_div40_rate_hz / 1000 * 40;
 	struct jesd204_rx_init rx_os_jesd_init = {
 		"rx_os_jesd",
 		RX_OS_JESD_BASEADDR,
