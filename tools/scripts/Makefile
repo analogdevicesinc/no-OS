@@ -17,8 +17,8 @@ PROJECTS_DIR 	  = $(NO-OS)/projects
 SDK_WORKSPACE	  = $(PROJECT)/build
 BUILD_DIR	  = $(PROJECT)/build
 OBJECTS_DIR	  = $(BUILD_DIR)/obj
+TEMP_DIR	  = $(BUILD_DIR)/tmp
 SCRIPTS_PATH 	  = $(SCRIPTS_DIR)/platform/$(PLATFORM)
-LIBRARY_DIR 	  = $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/lib
 PLATFORM_DRIVERS  = $(DRIVERS)/platform/LOCAL_PLATFORM
 PROJECT 	  = $(PROJECTS_DIR)/$(TARGET)
 
@@ -48,10 +48,10 @@ endif
 EXEC = release
 TIMESTAMP = $(shell date +"%T")
 define print
-	@printf "\\e[32m[$(TIMESTAMP)]\\e[39m $(1)"
+	printf "\\e[32m[$(TIMESTAMP)]\\e[39m $(1)"
 endef
 define print_err
-	@printf "\\e[32m[$(TIMESTAMP)]\\e[31m $(1)"
+	printf "\\e[32m[$(TIMESTAMP)]\\e[31m $(1)"
 endef
 
 #------------------------------------------------------------------------------
@@ -59,8 +59,10 @@ endef
 #------------------------------------------------------------------------------
 CC ?= gcc
 
-# Xilinx platform handling
-ifeq (xilinx,$(strip $(PLATFORM)))
+#------------------------------------------------------------------------------
+#                              DEFAULT LINKER                                  
+#------------------------------------------------------------------------------
+LD ?= $(CC)
 
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
@@ -101,10 +103,24 @@ ifeq (ps7_cortexa9_0,$(strip $(PROCESSOR_CORE)))
 ########|----------------------------------------------------------------------
 ########|                           XILINX                                     
 ########|----------------------------------------------------------------------
+ifeq (xilinx,$(strip $(PLATFORM)))
+
+# Define the platform compiler switch
+CFLAGS += -D XILINX_PLATFORM
+# Xilinx's generated linker script path
+LSCRIPT := $(BUILD_DIR)/app/src/lscript.ld
+# Xilinx's generate bsp library path
+LIBRARY_DIRS := $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/lib
+# Xilinx's bsp include path
+EXTRA_INCS := -I $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/include
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
+ifeq (ps7_cortexa9_0,$(strip $(PROCESSOR_CORE)))
+
 CC := arm-none-eabi-gcc
+
+LD := $(CC)
 
 CFLAGS += -mcpu=cortex-a9 						\
 	  -mfpu=vfpv3 							\
@@ -124,6 +140,8 @@ ifeq (psu_cortexa53_0,$(strip $(PROCESSOR_CORE)))
 
 CC := aarch64-none-elf-gcc
 
+LD := $(CC)
+
 endif
 
 ################|--------------------------------------------------------------
@@ -132,6 +150,8 @@ endif
 ifeq (sys_mb,$(strip $(PROCESSOR_CORE)))
 
 CC := microblaze-xilinx-elf-gcc
+
+LD := $(CC)
 
 CFLAGS += -mcpu=cortex-a9 						\
 	  -DXILINX -DMICROBLAZE						\
@@ -161,81 +181,101 @@ endif
 # Common xilinx libs
 LIBS =	-Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
+else
+ifeq (altera,$(strip $(PLATFORM)))
+
+endif
 endif
 
 # Add the common include paths
-INC_PATHS = $(foreach x, $(INCS), $(addprefix -I ,$(dir $(x))))
-LIB_PATHS = $(foreach x, $(LIBRARY_DIR), $(addprefix -L ,$(x)))
-EXTRA_INCS =
+INC_PATHS :=-I $(BUILD_DIR)/app/src
+LIB_PATHS = $(foreach x, $(LIBRARY_DIRS), $(addprefix -L ,$(x)))
 
 OBJS = $(SRCS:.c=.o)
 
 # Compile all the source files
 %.o : %.c
-	$(call print, [CC] $(notdir $<) \n)
-	$(MUTE)$(CC) $(CFLAGS) $(INC_PATHS) $(EXTRA_INCS)		\
+	@$(call print,[CC] $(notdir $<) \n)
+	$(CC) $(CFLAGS)	$(INC_PATHS) $(EXTRA_INCS)			\
 	-c $(addprefix $(BUILD_DIR)/app/src/,$(notdir $<))		\
 	-o $(addprefix $(OBJECTS_DIR)/,$(notdir $@))
 
 # Link the resulted object files
-$(EXEC): check-srcs $(subst LOCAL_PLATFORM,xilinx,$(OBJS))		\
-		$(BUILD_DIR)/app/src/lscript.ld
-	$(call print, [LD] $(shell ls $(OBJECTS_DIR)) \n)
-	$(MUTE)$(CC) $(LDFLAGS) $(LIB_PATHS) 				\
+$(EXEC): $(subst LOCAL_PLATFORM,xilinx,$(OBJS))				\
+		$(LSCRIPT)
+	$(call print,[LD] $(shell ls $(OBJECTS_DIR)) \n)
+	$(MUTE)$(LD) $(LDFLAGS) $(LIB_PATHS) 				\
 	$(OBJECTS_DIR)/*.o						\
 	$(LIBS) -o $(BUILD_DIR)/$(EXEC).elf
 
-# Copy the source files from the no-Os repo to the local project
-define copy_srcs
-	$(MUTE)cp -r $(subst LOCAL_PLATFORM,$(1),$(SRCS))		\
-		$(BUILD_DIR)/app/src/
-	$(MUTE)cp -r $(subst LOCAL_PLATFORM,$(1),$(INCS))		\
-		$(BUILD_DIR)/app/src/
-endef
-
 .DEFAULT_GOAL := all
-all: xilinx
 
-compile: $(EXEC)
+.SILENT:all
+all: pre-build eval-hardware bsp 
+	$(MAKE) -s copy-srcs
+	$(MAKE) -s compile
+	$(MAKE) -s post-build
+	$(call print,Done \n)
 
-create-obj-dir:
-	$(MUTE)mkdir -p $(OBJECTS_DIR)
+.SILENT:bsp
+bsp: 
+	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
+		$(eval export PROCESSOR_CORE:= $(shell cat $(TEMP_DIR)/arch.txt))	\
+		$(MAKE) -s xilinx-bsp;					\
+	elif [ "$(PLATFORM)" = "altera" ];then				\
+		;							\
+	else								\
+		$(call print_err,Can't generate the bsp\n);		\
+		exit 1;							\
+	fi;
+
+.SILENT:compile	
+compile: 
+	$(eval export EXTRA_INCS:= $(shell \
+	if [ "$(PLATFORM)" = "xilinx" ]; then	\
+		echo "-I $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/include";\
+	elif [ "$(PLATFORM)" = "altera" ];then				\
+		;							\
+	fi;))
+	$(MAKE) -s $(EXEC)
+
+create-build-dirs:
+	mkdir -p $(BUILD_DIR)/app
+	mkdir -p $(BUILD_DIR)/app/src
+	mkdir -p $(OBJECTS_DIR)
+	mkdir -p $(TEMP_DIR)
 	
-create-build-dir:
-	$(MUTE)mkdir -p $(BUILD_DIR)
 
+# Copy the source files from the no-Os repo to the local project
+.SILENT:copy-srcs
 copy-srcs:
-	$(call copy_srcs,$(PLATFORM))
+	cp -r $(subst LOCAL_PLATFORM,$(PLATFORM),$(SRCS))	\
+		$(BUILD_DIR)/app/src/
+	cp -r $(subst LOCAL_PLATFORM,$(PLATFORM),$(INCS))	\
+		$(BUILD_DIR)/app/src/
 
-check-srcs:
-ifeq (xilinx,$(strip $(PLATFORM)))
-# Replace the target sources (the default ones are the repository files) with
-# the local project sources
-	$(eval SRCS :=$(shell find $(BUILD_DIR)/app/src/ -name '*.c'))
-	$(eval EXTRA_INCS :=-I $(BUILD_DIR)/bsp/$(PROCESSOR_CORE)/include)
-	$(eval INC_PATHS :=-I $(BUILD_DIR)/app/src)
-endif
-
+.SILENT:clean
 clean:
-
 	$(call print,Cleaning build workspace \n)
-	$(MUTE)rm -rf temp
-	$(MUTE)rm -rf $(BUILD_DIR)
-	@$(MAKE) -s xil-pre-cleanup
+	rm -rf $(BUILD_DIR)
 
-eval-hardware:
 # If the hardware file is not specified, start searching for one
-# Check for .hdf files inside the project directory		
+# Check for .hdf files inside the project directory	
+.SILENT:eval-hardware
+eval-hardware:	
 ifndef HARDWARE
 	$(eval HARDWARE = $(shell					\
 	if [ -z $(HARDWARE) ]; then					\
-		echo $(shell find $(PROJECT) -name "*.hdf") ;	\
+		echo $(shell find $(PROJECT) -maxdepth 1		\
+			-name "*.hdf") ;				\
 	fi;))
 	$(eval HARDWARE = $(shell					\
 	if [ -z $(HARDWARE) ]; then					\
-		echo $(shell find $(PROJECT) -name "*.sopcinfo") ;	\
+		echo $(shell find $(PROJECT) -maxdepth 1		\
+			-name "*.sopcinfo") ;				\
 	else								\
-		echo $(shell find $(PROJECT) -name "*.hdf") ;	\
+		echo $(shell find $(PROJECT) -maxdepth 1		\
+			-name "*.hdf") ;				\
 	fi;))
 endif
 # Assign the platform based on the hardware file extension
@@ -243,59 +283,58 @@ endif
 	$(eval PLATFORM:= $(shell \
 	if [ "$(findstring hdf,$(notdir $(HARDWARE)))" = "hdf" ]; then	\
 		echo xilinx;						\
-	elif [ "$(findstring sopcinfo,$(notdir $(HARDWARE)))" = "sopcinfo" ]; then\
+	elif [ "$(findstring sopcinfo,$(notdir $(HARDWARE)))" 		\
+		= "sopcinfo" ]; then					\
 		echo altera;						\
 	else								\
 		echo none;						\
 	fi;))
-	@ if [ "$(PLATFORM)" = "none" ]; then				\
-		echo \\e[32m[$(TIMESTAMP)]\\e[31m Platform not found\\e[39m;\
+	$(call print,Platform : \e[33m$(PLATFORM)\e[39m\n)
+	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
+		$(MAKE) -s xilinx-read-hdf;				\
+	elif [ "$(PLATFORM)" = "altera" ];then				\
+		;							\
+	elif [ "$(PLATFORM)" = "none" ]; then				\
+		$(call print_err,Platform not found\n)			\
 		exit 1;							\
 	fi;
-	$(call print,Found platform : \e[33m$(PLATFORM)\e[39m\n)
 
+.SILENT:pre-build		
 pre-build:
-	@$(MAKE) -s xil-pre-cleanup
-	@$(MAKE) -s create-build-dir
-	@$(MAKE) -s create-obj-dir
+	@$(MAKE) -s create-build-dirs
 
-prepare-project:
+.SILENT:post-build
+post-build:
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
-		$(MAKE) -s xil-prepare-project	;			\
-		$(MAKE) -s copy-srcs ;					\
+		rm -rf \.Xil;						\
+		rm -rf \.metadata;					\
+	else								\
+		;							\
 	fi;
+
+xilinx:	xil-pre-cleanup eval-hardware pre-build xilinx-bsp
+	$(call copy_srcs,xilinx)
 	@$(MAKE) -s compile
+	rm -rf $(BUILD_DIR)/SDK.log
 
-xilinx: eval-hardware pre-build xil-prepare-project copy-srcs
-	@$(MAKE) -s compile
-	$(call print,Done \n)
+# Extract the architecture from the hdf file
+.SILENT:xilinx-read-hdf
+xilinx-read-hdf:
+	cp $(HARDWARE) $(TEMP_DIR)
+	xsct $(SCRIPTS_PATH)/read_hdf.tcl $(NULL)			\
+		$(TEMP_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE))
 
-xil-extract-hdf-info:
-	$(MUTE)mkdir -p temp
-	$(MUTE)cp $(HARDWARE) temp
-	$(MUTE)rm -rf arch.txt
-# Extract the processor name from the hdf file
-	$(MUTE)xsct $(SCRIPTS_PATH)/read_hdf.tcl $(NULL)		\
-		temp/$(notdir $(HARDWARE))
-
-xil-update-hdf-info:
-	$(eval PROCESSOR_CORE:= $(shell cat arch.txt))
-	$(MUTE)rm -rf arch.txt
-
-xil-pre-cleanup:
-	$(MUTE)rm -rf \.Xil
-	$(MUTE)rm -rf \.metadata
-
-xil-prepare-project: xil-extract-hdf-info xil-update-hdf-info
-	$(call print,Building hardware specification and bsp \n)
-# Create the local sdk project
-	$(MUTE)xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl	\
-	$(SDK_WORKSPACE) $(HARDWARE) $(PROCESSOR_CORE) $(NULL)
-	$(MUTE)mv $(PROJECT)/temp/system_top.bit $(BUILD_DIR)
-	$(MUTE)rm -rf temp
-	# Update in the linker script the heap size for microlbaze from 0x800 to 
-	# 0x100000 
-	@ if [ "$(PROCESSOR_CORE)" = "sys_mb" ]; then			\
+.SILENT:xilinx-bsp
+xilinx-bsp:
+	@ if [ ! -d "$(BUILD_DIR)/bsp" ];then				\
+	$(call print,Building hardware specification and bsp \n);	\
+	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl		\
+		$(SDK_WORKSPACE) $(HARDWARE) $(PROCESSOR_CORE) $(NULL);		\
+	mv $(TEMP_DIR)/system_top.bit $(BUILD_DIR);			\
+	fi;
+# Update the linker script the heap size for microlbaze from 0x800 to 
+# 0x100000 
+	@ if [ "$(PROCESSOR_CORE)" = "sys_mb" ]; then				\
 		sed -i "s/_HEAP_SIZE : 0x800/_HEAP_SIZE : 0x100000/g"	\
 		$(BUILD_DIR)/app/src/lscript.ld;			\
 	fi;
