@@ -622,6 +622,7 @@ ADI_ERR AD9528_waitForPllLock(ad9528Device_t *device)
  * - device->spiSettings
  *
  * \param device is structure pointer to AD9528 clock device structure
+ * \param status PLL status 
  *
  * \return Returns enum ADI_ERR, 0=pass, >0 = fail
  ***********************************************************************************/

@@ -180,7 +180,7 @@ void TRANSMITTER_HardwareInit(void)
 /***************************************************************************//**
  * @brief Sets the transmitter power mode.
  *
- * @param Mode - transmitter power mode.
+ * @param pwrmode - transmitter power mode.
  *
  * @return Returns ATVERR_OK.
 *******************************************************************************/

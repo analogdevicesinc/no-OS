@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.c
+ *   @file   parameters.h
  *   @brief  Platform dependent parameters.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
