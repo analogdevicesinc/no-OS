@@ -214,6 +214,7 @@ int32_t ad5592r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
  * Initialize AD5593r device.
  *
  * @param dev - The device structure.
+ * @param init_param - The initial parameters of the device.
  * @return 0 in case of success, negative error code otherwise
  */
 int32_t ad5592r_init(struct ad5592r_dev *dev,

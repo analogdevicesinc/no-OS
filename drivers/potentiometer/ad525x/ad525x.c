@@ -96,8 +96,8 @@ static const struct ad525x_chip_info chip_info[] = {
 /**************************************************************************//**
  * @brief Initialize SPI and Initial Values for AD5172 Board.
  *
- * @param + device     - The device structure.
- *        + init_param - The structure that contains the device initial
+ * @param device     - The device structure.
+ * @param init_param - The structure that contains the device initial
  * 		         parameters.
  *
  * @return success
@@ -146,7 +146,7 @@ int8_t ad525x_init(struct ad525x_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad525x_init().
  *
- * @param + dev - The device structure.
+ * @param dev - The device structure.
  *
  * @return ret - The result of the remove procedure.
 *******************************************************************************/
@@ -179,8 +179,8 @@ int32_t ad525x_remove(struct ad525x_dev *dev)
 /**************************************************************************//**
  * @brief Read data from the EEMEM
  *
- * @param + dev     - The device structure.
- *        + address - desired address of the EEMEM memory
+ * @param dev     - The device structure.
+ * @param address - desired address of the EEMEM memory
  *
  *
  * @return success
@@ -235,9 +235,9 @@ uint16_t ad525x_read_mem(struct ad525x_dev *dev,
 /*****SPI_*********************************************************************//**
  * @brief Write data to EEMEM.
  *
- * @param + dev     - The device structure.
- *        + address - desired address of the EEMEM memory
- *        + data    - the data which will be written to the memory
+ * @param dev     - The device structure.
+ * @param address - desired address of the EEMEM memory
+ * @param data    - the data which will be written to the memory
  *
  * @return success
 ******************************************************************************/
@@ -280,8 +280,8 @@ void ad525x_write_mem(struct ad525x_dev *dev,
 /**************************************************************************//**
  * @brief Read data from the RDAC register
  *
- * @param + dev     - The device structure.
- *        + address - desired address of the RDAC registers
+ * @param dev     - The device structure.
+ * @param address - desired address of the RDAC registers
  *
  *
  * @return success
@@ -343,9 +343,9 @@ uint16_t ad525x_read_rdac(struct ad525x_dev *dev,
 /**************************************************************************//**
  * @brief Write data to RDAC register.
  *
- * @param + dev     - The device structure.
- *        + address - desired address of the RDAC register
- *        + data    - the data which will be written to the RDAC register
+ * @param dev     - The device structure.
+ * @param address - desired address of the RDAC register
+ * @param data    - the data which will be written to the RDAC register
  *
  * @return success
 ******************************************************************************/
@@ -389,10 +389,10 @@ void ad525x_write_rdac(struct ad525x_dev *dev,
 /**************************************************************************//**
  * @brief Write quick commands to the device.
  *
- * @param + dev     - The device structure.
- *        + command - desired command, the functionality of a command it may
+ * @param dev     - The device structure.
+ * @param command - desired command, the functionality of a command it may
  *                    vary at diffrent devices
- *
+ * @param address - Address to be written
  * @return success
 ******************************************************************************/
 void ad525x_write_command(struct ad525x_dev *dev,

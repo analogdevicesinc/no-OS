@@ -95,7 +95,6 @@ int32_t ad4110_spi_int_reg_write_msk(struct ad4110_dev *dev,
  * Set the mode of the ADC.
  *
  * @param dev       - The device structure.
- * @param data_size - The size of the data buffer.
  * @param mode      - The ADC mode
  *		      Accepted values: AD4110_CONTINOUS_CONV_MODE
  *				       AD4110_SINGLE_CONV_MODE
