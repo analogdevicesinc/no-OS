@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   irq.c
+ *   @file   xilinx/irq.c
  *   @brief  Implementation of Xilinx IRQ Generic Driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

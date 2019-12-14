@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   uart.c
+ *   @file   generic/uart.c
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

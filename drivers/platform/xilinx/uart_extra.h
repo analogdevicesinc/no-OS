@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   uart_extra.h
+ *   @file   xilinx/uart_extra.h
  *   @brief  Header containing types used in the uart driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

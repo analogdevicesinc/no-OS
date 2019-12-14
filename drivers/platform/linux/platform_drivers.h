@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
+ *   @file   linux/platform_drivers.h
  *   @brief  Header file of Linux Userspace Platform Drivers.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

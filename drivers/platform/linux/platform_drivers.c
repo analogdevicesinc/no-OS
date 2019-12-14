@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   platform_drivers.c
+ *   @file   linux/platform_drivers.c
  *   @brief  Implementation of Linux Userspace Platform Drivers.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

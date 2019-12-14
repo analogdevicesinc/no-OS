@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   axi_io.c
+ *   @file   altera/axi_io.c
  *   @brief  Implementation of Altera AXI IO .
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   spi_extra.h
+ *   @file   xilinx/spi_extra.h
  *   @brief  Header containing extra types used in the spi driver.
  *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************

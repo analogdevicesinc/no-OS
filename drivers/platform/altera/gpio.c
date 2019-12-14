@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   gpio.c
+ *   @file   altera/gpio.c
  *   @brief  Implementation of Altera GPIO Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   i2c_extra.h
+ *   @file   altera/i2c_extra.h
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

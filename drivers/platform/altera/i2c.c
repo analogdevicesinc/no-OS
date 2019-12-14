@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   i2c.c
+ *   @file   altera/i2c.c
  *   @brief  Implementation of Altera I2C Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

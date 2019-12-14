@@ -1,5 +1,5 @@
 /**
- * \file api_errors.h
+ * \file ad9208_api/api_errors.h
  *
  * \brief API error codes header file.
  *

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   i2c.c
+ *   @file   xilinx/i2c.c
  *   @brief  Implementation of Xilinx I2C Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
