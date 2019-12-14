@@ -644,7 +644,7 @@ int32_t ad9250_output_format(struct ad9250_dev *dev,
  * @brief Sets (1) or clears (0) the reset short PN sequence bit(PN9).
  *
  * @param dev - The device structure.
- * @param en  - Enable option.
+ * @param rst  - Enable option.
  *	       Example: 1 - The PN sequence is held in reset;
  *			0 - The PN sequence resumes from the seed value(0x92).
  *
@@ -676,9 +676,9 @@ int32_t ad9250_reset_pn9(struct ad9250_dev *dev,
  * @brief Sets (1) or clears (0) the reset long PN sequence bit(PN23).
  *
  * @param dev - The device structure.
- * @param en  - Enable option.
- *	       Example: 1 - The PN sequence is held in reset;
- *			0 - The PN sequence resumes from the seed value(0x3AFF).
+ * @param rst - Enable option.
+ *	       		Example: 1 - The PN sequence is held in reset;
+ *				0 - The PN sequence resumes from the seed value(0x3AFF).
  *
  * @return Returns negative error code or the set PN23 status.
  *******************************************************************************/
@@ -762,7 +762,7 @@ int32_t ad9250_bist_enable(struct ad9250_dev *dev,
  * @brief Resets the Build-In-Self-Test.
  *
  * @param dev    - The device structure.
- * @param enable - reset option.
+ * @param reset - reset option.
  *
  * @return Returns negative error code or the state of the reset bit.
  *******************************************************************************/

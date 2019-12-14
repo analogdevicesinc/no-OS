@@ -292,7 +292,7 @@ int32_t ad7768_set_mclk_div(ad7768_dev *dev,
 /**
  * Get the MCLK divider.
  * @param dev - The device structure.
- * @param mode - The MCLK divider.
+ * @param clk_div - The MCLK divider.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad7768_get_mclk_div(ad7768_dev *dev,

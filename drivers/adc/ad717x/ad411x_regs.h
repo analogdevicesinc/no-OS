@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   ad4111_regs.h
+*   @file   ad411x_regs.h
 *   @brief  ad4111 Registers Definitions.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************

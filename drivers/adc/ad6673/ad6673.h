@@ -254,29 +254,30 @@
 /*****************************************************************************/
 
 /**
- * struct ad6673_platform_data - Platform specific information.
+ * @struct ad6673_platform_data
+ * @brief Platform specific information.
  *
- * @extrn_pdwnmode: External PDWN mode.
+ * extrn_pdwnmode: External PDWN mode.
  *                 0 = PDWN is full power down
  *                 1 = PDWN puts device in standby
- * @en_clk_dcs: Clock duty cycle stabilizer enable.
+ * en_clk_dcs: Clock duty cycle stabilizer enable.
  *            0 = disable
  *            1 = enable
- * @clk_selection: Clock selection.
+ * clk_selection: Clock selection.
  *                0 = Nyquist clock
  *                2 = RF clock divide by 4
  *                3 = clock off
- * @clk_div_ratio: Clock divider ratio relative to the encode clock.
+ * clk_div_ratio: Clock divider ratio relative to the encode clock.
  *               0x00 = divide by 1
  *               0x01 = divide by 2
  *               ...
  *               0x07 = divide by 8
- * @clk_div_phase: Clock divide phase relative to the encode clock.
+ * clk_div_phase: Clock divide phase relative to the encode clock.
  *               0x0 = 0 input clock cycles delayed
  *               0x1 = 1 input clock cycles delayed
  *               ...
  *               0x7 = 7 input clock cycles delayed
- * @adc_vref: Main reference full-scale VREF adjustment.
+ * adc_vref: Main reference full-scale VREF adjustment.
  *           0x0f = internal 2.087 V p-p
  *           ...
  *           0x01 = internal 1.772 V p-p
@@ -284,10 +285,10 @@
  *           0x1F = internal 1.727 V p-p
  *           ...
  *           0x10 = internal 1.383 V p-p
- * @pll_low_encode: PLL low encode.
+ * pll_low_encode: PLL low encode.
  *                0 = for lane speeds > 2 Gbps
  *                1 = for lane speeds < 2 Gbps
- * @name: Device name.
+ * name: Device name.
  */
 struct ad6673_platform_data {
 	/* Power configuration */
@@ -306,76 +307,77 @@ struct ad6673_platform_data {
 };
 
 /**
- * struct ad6673_jesd204b_cfg - JESD204B interface configuration.
+ * @struct ad6673_jesd204b_cfg
+ * @brief JESD204B interface configuration.
  *
- * @jtx_in_standby: JTX in standby.
+ * jtx_in_standby: JTX in standby.
  *                0 = 204B core is unaffected in standby
  *                1 = 204B core is powered down except for PLL during standby
- * @cml_level: JESD204B CML differential output drive level adjustment.
+ * cml_level: JESD204B CML differential output drive level adjustment.
  *            0 = 81% of nominal (that is, 238 mV)
  *            1 = 89% of nominal (that is, 262 mV)
  *            2 = 98% of nominal (that is, 286 mV)
  *            3 = nominal [default] (that is, 293 mV)
  *            6 = 126% of nominal (that is, 368 mV)
- * @quick_cfg_option: Quick configuration register.
+ * quick_cfg_option: Quick configuration register.
  *                  0x11 = M = 1, L = 1; one converter, one lane
  *                  0x12 = M = 1, L = 2; one converter, two lanes
  *                  0x21 = M = 2, L = 1; two converters, one lane
  *                  0x22 = M = 2, L = 2; two converters, two lanes
- * @subclass: JESD204B subclass.
+ * subclass: JESD204B subclass.
  *            0 = Subclass 0
  *            1 = Subclass 1
- * @ctrl_bits_no: Number of control bits (CS).
+ * ctrl_bits_no: Number of control bits (CS).
  *              0 = no control bits(CS = 0)
  *              1 = 1 control bit  (CS = 1)
  *              2 = 2 control bits (CS = 2)
- * @ctrl_bits_assign: JTX CS bits assignment.
+ * ctrl_bits_assign: JTX CS bits assignment.
  *                  0 = {overrange||underrange, valid}
  *                  1 = {overrange||underrange}
  *                  2 = {overrange||underrange, blank}
  *                  3 = {blank, valid}
  *                  4 = {blank, blank}
  *         All others = {overrange||underrange, valid}
- * @tail_bits_mode: Tail bits: If CS bits are not enabled.
+ * tail_bits_mode: Tail bits: If CS bits are not enabled.
  *                0 = extra bits are 0
  *                1 = extra bits are 9-bit PN
- * @did: JESD204B device identification value: DID[7:0]
- * @bid: JESD204B bank identification value : BID[3:0]
- * @lid0: JESD204B lane0 identification value: LID[4:0]
- * @lid1: JESD204B lane1 identification value: LID[4:0]
- * @k: JESD204B number of frames per multiframe (K); set value of K per JESD204B
+ * did: JESD204B device identification value: DID[7:0]
+ * bid: JESD204B bank identification value : BID[3:0]
+ * lid0: JESD204B lane0 identification value: LID[4:0]
+ * lid1: JESD204B lane1 identification value: LID[4:0]
+ * k: JESD204B number of frames per multiframe (K); set value of K per JESD204B
  *     specifications, but also must be a multiple of 4 octets.
- * @scrambling: JESD204B scrambling (SCR).
+ * scrambling: JESD204B scrambling (SCR).
  *              0 = disabled
  *              1 = enabled
- * @ilas_mode: Initial lane alignment sequence (ILAS) mode.
+ * ilas_mode: Initial lane alignment sequence (ILAS) mode.
  *            1 = ILAS normal mode enabled
  *            3 = ILAS always on, test mode
- * @en_ilas_test: JESD204B test sample.
+ * en_ilas_test: JESD204B test sample.
  *              0 = disabled
  *              1 = enabled
- * @invert_logic_bits: Invert logic of JESD204B bits.
+ * invert_logic_bits: Invert logic of JESD204B bits.
  *                   0 = non-invert
  *                   1 = invert
- * @en_sys_ref: SYSREF+- enable.
+ * en_sys_ref: SYSREF+- enable.
  *            0 = disabled
  *            1 = enabled
- * @en_sync_in_b: Enable SYNCINB+- buffer.
+ * en_sync_in_b: Enable SYNCINB+- buffer.
  *             0 = buffer disabled
  *             1 = buffer enabled
- * @sys_ref_mode: SYSREF+- mode.
+ * sys_ref_mode: SYSREF+- mode.
  *              0 = continuous reset clock dividers
  *              1 = sync on next SYSREF+- rising edge only
- * @align_sync_in_b: Options for interpreting single on SYNCINB+-.
+ * align_sync_in_b: Options for interpreting single on SYNCINB+-.
  *                0 = normal mode
  *                1 = realign lanes on every active SYNCINB+-
- * @align_sys_ref: Options for interpreting single on SYSREF+-.
+ * align_sys_ref: Options for interpreting single on SYSREF+-.
  *               0 = normal mode;
  *               1 = realign lanes on every active SYSREF+-
- * @lane0_assign: Option to remap converter and lane assignments.
+ * lane0_assign: Option to remap converter and lane assignments.
  *               0 = assign Logical Lane 0 to Physical Lane A [default]
  *               1 = assign Logical Lane 0 to Physical Lane B
- * @lane1_assign: Option to remap converter and lane assignments.
+ * lane1_assign: Option to remap converter and lane assignments.
  *               0 = assign Logical Lane 1 to Physical Lane A
  *               1 = assign Logical Lane 1 to Physical Lane B [default]
  */
@@ -410,23 +412,24 @@ struct ad6673_jesd204b_cfg {
 };
 
 /**
- * struct ad6673_fast_detect_cfg - Fast Detect module configuration.
+ * @struct ad6673_fast_detect_cfg
+ * @brief Fast Detect module configuration.
  *
- * @en_fd: Enable fast detect output.
+ * en_fd: Enable fast detect output.
  *        0 = disable
  *        1 = enable
- * @pin_function: Pin function.
+ * pin_function: Pin function.
  *               0 = fast detect
  *               1 = overrange
- * @force_pins: Force FDA/FDB pins
+ * force_pins: Force FDA/FDB pins
  *             0 = normal function
  *             1 = force to value
- * @pin_force_value: Force value of FDA/FDB pins.
+ * pin_force_value: Force value of FDA/FDB pins.
  *                 0 = output on FD pins will be 0
  *                 1 = output on FD pins will be 1
- * @fd_upper_tresh: Fast Detect Upper Threshold[14:0].
- * @fd_lower_tresh: Fast Detect Lower Threshold[14:0].
- * @df_dwell_time: Fast Detect Dwell Time[15:0].
+ * fd_upper_tresh: Fast Detect Upper Threshold[14:0].
+ * fd_lower_tresh: Fast Detect Lower Threshold[14:0].
+ * df_dwell_time: Fast Detect Dwell Time[15:0].
  */
 struct ad6673_fast_detect_cfg {
 	int8_t  en_fd;

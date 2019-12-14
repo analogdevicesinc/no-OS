@@ -188,8 +188,8 @@ void ad7091r_power_up(struct ad7091r_dev *dev)
 /***************************************************************************//**
  * @brief Converts a 12-bit raw sample to volts.
  *
- * @param rawSample - 12-bit data sample.
- * @param vRef      - The value of the voltage reference used by the device.
+ * @param raw_sample - 12-bit data sample.
+ * @param v_ref     - The value of the voltage reference used by the device.
  *
  * @return voltage  - The result of the conversion expressed as volts.
 *******************************************************************************/

@@ -274,7 +274,7 @@ int32_t ad9467_test_mode(struct ad9467_dev *dev,
  * @brief Sets (1) or clears (0) the reset short PN sequence bit(PN9).
  *
  * @param dev      - The device structure.
- * @param en       - Enable option.
+ * @param rst      - Reset option.
  *                   Example: 1 - The PN sequence is held in reset;
  *                            0 - The PN sequence resumes from the seed
  *                                value(0x92).
@@ -313,7 +313,7 @@ int32_t ad9467_reset_pn9(struct ad9467_dev *dev,
  * @brief Sets (1) or clears (0) the reset long PN sequence bit(PN23).
  *
  * @param dev      - The device structure.
- * @param en       - Enable option.
+ * @param rst      - Reset option.
  *                   Example: 1 - The PN sequence is held in reset;
  *                            0 - The PN sequence resumes from the seed
  *                                value(0x3AFF).
@@ -576,7 +576,7 @@ int32_t ad9467_output_format(struct ad9467_dev *dev,
  * @brief Determines LVDS output properties.
  *
  * @param dev      - The device structure.
- * @param lvds_ajd - Coarse LVDS adjust.
+ * @param lvds_adj - Coarse LVDS adjust.
  *                   Example: 0 - 3.0  mA output current level(default);
  *                            1 - 1.71 mA output current level.
  * @param ret_stat - Return parameter of the set LVDS adjust state.

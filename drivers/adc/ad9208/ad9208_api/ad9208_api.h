@@ -162,10 +162,10 @@ int ad9208_reset(ad9208_handle_t *h, uint8_t hw_reset);
  *
  *
  * \param h        Pointer to the AD9208 device reference handle.
- * \param enable   Powerdown pin enable/disable.
- *				   1 - Powerdown pin controls powerdown status
- *				   0 - Powerdown pin disable. Does not effect powerdown Status.
- * \param pdn_mode Powerdown mode that Powerdown pin status, if enabled, shall control.
+ * \param pin_enable Powerdown pin enable/disable.
+ *				   		1 - Powerdown pin controls powerdown status
+ *				   		0 - Powerdown pin disable. Does not effect powerdown Status.
+ * \param pin_mode Powerdown mode that Powerdown pin status, if enabled, shall control.
  *				   Valid options are
  *				   AD9208_STANDBY  -Pin status will control AD9208 Standby Status
  *				   AD9208_POWERDOWN -Pin status will control AD9208 Powerdown Status
@@ -296,7 +296,7 @@ int ad9208_adc_get_channel_select(ad9208_handle_t *h, uint8_t *ch);
  * To set the target channel.
  *
  * \param h         Pointer to the AD9208 device reference handle.
- * \param pdn_mode  Desired Powerdown mode
+ * \param mode  	Desired Powerdown mode
  *
  *
  * \retval API_ERROR_OK API Completed Successfully
@@ -488,7 +488,7 @@ int ad9208_adc_set_data_format(ad9208_handle_t *h,
  * This affects updates to FTW, POW, MAW & MBW and programmable filter configuration.
  *
  * \param h       Pointer to the AD9208 device reference handle.
- * \param enable  Enable Synchronized update
+ * \param en 	  Enable Synchronized update
  *                0- Synchronized Update Mode Disabled. Instantaneous update
  *                1- Synchronized Update Mode Enabled.
  *
@@ -554,7 +554,7 @@ int ad9208_adc_set_ddc_dcm(ad9208_handle_t *h, uint8_t ddc_ch, uint8_t dcm);
  *
  * \param h       Pointer to the AD9208 device reference handle.
  * \param ddc_ch  DDC Channel on which to enable the NCO. Range 0-3.
- * \param nco_mode  Desired NCO mode for target DDC Channel.
+ * \param mode  Desired NCO mode for target DDC Channel.
  *
  * \retval API_ERROR_OK API Completed Successfully
  * \retval API_ERROR_INVALID_HANDLE_PTR   Invalid reference handle
