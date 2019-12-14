@@ -390,7 +390,7 @@ uint32_t adf4106_read_latch(struct adf4106_dev *dev,
  *        greater than PFD frequency.
  *
  * @param dev      - The device structure.
- * @param rCounter - R counter value.
+ * @param r_counter - R counter value.
  *
  * @return rCounter - modified R counter value.
 *******************************************************************************/

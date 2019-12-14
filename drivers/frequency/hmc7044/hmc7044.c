@@ -310,6 +310,7 @@ uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
 
 /**
  * Calculate closest possible rate
+ * @param dev - The device structure
  * @param rate - The desired rate.
  * @param parent_rate - The parent rate.
  * @return The closest possible rate of desired rate.

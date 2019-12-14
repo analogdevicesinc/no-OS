@@ -303,19 +303,20 @@ enum ref_sel_mode {
 };
 
 /**
- * struct ad9523_channel_spec - Output channel configuration
+ * @struct ad9523_channel_spec
+ * @brief Output channel configuration
  *
- * @channel_num: Output channel number.
- * @divider_output_invert_en: Invert the polarity of the output clock.
- * @sync_ignore_en: Ignore chip-level SYNC signal.
- * @low_power_mode_en: Reduce power used in the differential output modes.
- * @use_alt_clock_src: Channel divider uses alternative clk source.
- * @output_dis: Disables, powers down the entire channel.
- * @driver_mode: Output driver mode (logic level family).
- * @divider_phase: Divider initial phase after a SYNC. Range 0..63
+ * channel_num: Output channel number.
+ * divider_output_invert_en: Invert the polarity of the output clock.
+ * sync_ignore_en: Ignore chip-level SYNC signal.
+ * low_power_mode_en: Reduce power used in the differential output modes.
+ * use_alt_clock_src: Channel divider uses alternative clk source.
+ * output_dis: Disables, powers down the entire channel.
+ * driver_mode: Output driver mode (logic level family).
+ * divider_phase: Divider initial phase after a SYNC. Range 0..63
  LSB = 1/2 of a period of the divider input clock.
- * @channel_divider: 10-bit channel divider.
- * @extended_name: Optional descriptive channel name.
+ * channel_divider: 10-bit channel divider.
+ * extended_name: Optional descriptive channel name.
  */
 
 struct ad9523_channel_spec {
@@ -370,40 +371,41 @@ enum cpole1_capacitor {
 };
 
 /**
- * struct ad9523_platform_data - platform specific information
+ * @struct ad9523_platform_data
+ * @brief platform specific information
  *
- * @vcxo_freq: External VCXO frequency in Hz
- * @refa_diff_rcv_en: REFA differential/single-ended input selection.
- * @refb_diff_rcv_en: REFB differential/single-ended input selection.
- * @zd_in_diff_en: Zero Delay differential/single-ended input selection.
- * @osc_in_diff_en: OSC differential/ single-ended input selection.
- * @refa_cmos_neg_inp_en: REFA single-ended neg./pos. input enable.
- * @refb_cmos_neg_inp_en: REFB single-ended neg./pos. input enable.
- * @zd_in_cmos_neg_inp_en: Zero Delay single-ended neg./pos. input enable.
- * @osc_in_cmos_neg_inp_en: OSC single-ended neg./pos. input enable.
- * @refa_r_div: PLL1 10-bit REFA R divider.
- * @refb_r_div: PLL1 10-bit REFB R divider.
- * @pll1_feedback_div: PLL1 10-bit Feedback N divider.
- * @pll1_charge_pump_current_nA: Magnitude of PLL1 charge pump current (nA).
- * @zero_delay_mode_internal_en: Internal, external Zero Delay mode selection.
- * @osc_in_feedback_en: PLL1 feedback path, local feedback from
- *			the OSC_IN receiver or zero delay mode
- * @pll1_loop_filter_rzero: PLL1 Loop Filter Zero Resistor selection.
- * @ref_mode: Reference selection mode.
- * @pll2_charge_pump_current_nA: Magnitude of PLL2 charge pump current (nA).
- * @pll2_ndiv_a_cnt: PLL2 Feedback N-divider, A Counter, range 0..4.
- * @pll2_ndiv_b_cnt: PLL2 Feedback N-divider, B Counter, range 0..63.
- * @pll2_freq_doubler_en: PLL2 frequency doubler enable.
- * @pll2_r2_div: PLL2 R2 divider, range 0..31.
- * @pll2_vco_diff_m1: VCO1 divider, range 3..5.
- * @pll2_vco_diff_m2: VCO2 divider, range 3..5.
- * @rpole2: PLL2 loop filter Rpole resistor value.
- * @rzero: PLL2 loop filter Rzero resistor value.
- * @cpole1: PLL2 loop filter Cpole capacitor value.
- * @rzero_bypass_en: PLL2 loop filter Rzero bypass enable.
- * @num_channels: Array size of struct ad9523_channel_spec.
- * @channels: Pointer to channel array.
- * @name: Optional alternative iio device name.
+ * vcxo_freq: External VCXO frequency in Hz
+ * refa_diff_rcv_en: REFA differential/single-ended input selection.
+ * refb_diff_rcv_en: REFB differential/single-ended input selection.
+ * zd_in_diff_en: Zero Delay differential/single-ended input selection.
+ * osc_in_diff_en: OSC differential/ single-ended input selection.
+ * refa_cmos_neg_inp_en: REFA single-ended neg./pos. input enable.
+ * refb_cmos_neg_inp_en: REFB single-ended neg./pos. input enable.
+ * zd_in_cmos_neg_inp_en: Zero Delay single-ended neg./pos. input enable.
+ * osc_in_cmos_neg_inp_en: OSC single-ended neg./pos. input enable.
+ * refa_r_div: PLL1 10-bit REFA R divider.
+ * refb_r_div: PLL1 10-bit REFB R divider.
+ * pll1_feedback_div: PLL1 10-bit Feedback N divider.
+ * pll1_charge_pump_current_nA: Magnitude of PLL1 charge pump current (nA).
+ * zero_delay_mode_internal_en: Internal, external Zero Delay mode selection.
+ * osc_in_feedback_en: PLL1 feedback path, local feedback from
+ *		the OSC_IN receiver or zero delay mode
+ * pll1_loop_filter_rzero: PLL1 Loop Filter Zero Resistor selection.
+ * ref_mode: Reference selection mode.
+ * pll2_charge_pump_current_nA: Magnitude of PLL2 charge pump current (nA).
+ * pll2_ndiv_a_cnt: PLL2 Feedback N-divider, A Counter, range 0..4.
+ * pll2_ndiv_b_cnt: PLL2 Feedback N-divider, B Counter, range 0..63.
+ * pll2_freq_doubler_en: PLL2 frequency doubler enable.
+ * pll2_r2_div: PLL2 R2 divider, range 0..31.
+ * pll2_vco_diff_m1: VCO1 divider, range 3..5.
+ * pll2_vco_diff_m2: VCO2 divider, range 3..5.
+ * rpole2: PLL2 loop filter Rpole resistor value.
+ * rzero: PLL2 loop filter Rzero resistor value.
+ * cpole1: PLL2 loop filter Cpole capacitor value.
+ * rzero_bypass_en: PLL2 loop filter Rzero bypass enable.
+ * num_channels: Array size of struct ad9523_channel_spec.
+ * channels: Pointer to channel array.
+ * name: Optional alternative iio device name.
  */
 
 struct ad9523_platform_data {

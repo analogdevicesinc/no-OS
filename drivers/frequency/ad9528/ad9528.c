@@ -47,6 +47,7 @@
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
+ * @param dev - The device structure.
  * @param reg_addr - The address of the register to read
  * @param reg_data - The register's value.
  *
@@ -76,6 +77,7 @@ int32_t ad9528_spi_read(struct ad9528_dev *dev,
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
  *
+ * @param dev - The device structure.
  * @param reg_addr - The address of the register to write
  * @param reg_data - The value to write to the register.
  *
@@ -103,6 +105,7 @@ int32_t ad9528_spi_write(struct ad9528_dev *dev,
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
+ * @param dev - The device structure.
  * @param reg_addr - The address of the register to read - address[31:16]
  *  holds the number of bytes to read (a round about method)-- it is also
  *  limited to 4 bytes max (to fill in a 32 bit integer type).
@@ -138,6 +141,7 @@ int32_t ad9528_spi_read_n(struct ad9528_dev *dev,
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
  *
+ * @param dev - The device structure.
  * @param reg_addr - The address of the register to write - address[31:16]
  *  holds the number of bytes to write (a round about method)-- it is also
  *  limited to 4 bytes max (to fill in a 32 bit integer type).
@@ -171,6 +175,7 @@ int32_t ad9528_spi_write_n(struct ad9528_dev *dev,
 /***************************************************************************//**
  * @brief Poll register.
  *
+ * @param dev - The device structure.
  * @param reg_addr - The address of the register.
  * @param mask - The mask that is applied.
  * @param data - The expected data.
@@ -203,6 +208,8 @@ int32_t ad9528_poll(struct ad9528_dev *dev,
 /***************************************************************************//**
  * @brief Updates the AD9528 configuration
  *
+ * @param dev - The device structure.
+
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
 int32_t ad9528_io_update(struct ad9528_dev *dev)
@@ -214,6 +221,8 @@ int32_t ad9528_io_update(struct ad9528_dev *dev)
 
 /***************************************************************************//**
  * @brief Updates the AD9528 configuration.
+ *
+ * @param dev - The device structure.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -261,6 +270,8 @@ int32_t ad9528_sync(struct ad9528_dev *dev)
 
 /***************************************************************************//**
  * @brief Initializes the AD9528.
+ *
+ * @param init_param - The structure containing the device initial parameters.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -318,6 +329,9 @@ int32_t ad9528_init(struct ad9528_init_param *init_param)
 
 /***************************************************************************//**
  * @brief Initializes the AD9528.
+ *
+ * @param device - The device structure.
+ * @param init_param - The structure containing the device initial parameters.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
