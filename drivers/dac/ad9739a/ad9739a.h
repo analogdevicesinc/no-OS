@@ -222,11 +222,10 @@ struct ad9739a_dev {
 };
 
 /**
- * struct ad9739a_platform_data - Platform specific information.
- *
- * @common_mode_voltage_dacclk_p: magnitude of the offset for the DACCLK_P.
- * @common_mode_voltage_dacclk_n: magnitude of the offset for the DACCLK_N.
-
+ * @struct ad9739a_platform_data
+ * @brief Platform specific information.
+ * common_mode_voltage_dacclk_p: magnitude of the offset for the DACCLK_P.
+ * common_mode_voltage_dacclk_n: magnitude of the offset for the DACCLK_N.
  */
 struct ad9739a_init_param {
 	/* SPI */

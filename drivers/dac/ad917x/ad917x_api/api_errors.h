@@ -26,7 +26,7 @@
 
 /** No Error */
 #define API_ERROR_OK 0
-/** Wrong value assigned to the \ref ad9172_handle_t.sdo */
+/** Wrong value assigned to the ref ad9172_handle_t.sdo */
 #define API_ERROR_SPI_SDO (-EINVAL)
 /** Handler pointer is invalid */
 #define API_ERROR_INVALID_HANDLE_PTR (-EINVAL)

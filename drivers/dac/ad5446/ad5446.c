@@ -232,8 +232,9 @@ void ad5446_set_register(struct ad5446_dev *dev,
  * @brief Sets the output voltage.
  *
  * @param dev        - The device structure.
- * @param outVoltage - The voltage value in volts
+ * @param voltage - The voltage value in volts
  * @param vref       - The voltage reference used by the device in volts.
+ * @param vout_type - Voltage output type: unipolar/unipolar_inv/bipolar
  *
  * @return Actual voltage that the device can output.
 *******************************************************************************/
