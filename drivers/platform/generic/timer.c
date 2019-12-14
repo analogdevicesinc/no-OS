@@ -49,7 +49,7 @@
 /******************************************************************************/
 
 /**
- * @breif Initialize hardware timer and the handler structure associated with
+ * @brief Initialize hardware timer and the handler structure associated with
  *        it.
  * @param [out] desc - Pointer to the reference of the device handler.
  * @param [in] param - Initialization structure.

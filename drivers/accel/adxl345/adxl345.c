@@ -364,21 +364,21 @@ void adxl345_set_tap_detection(struct adxl345_dev *dev,
 /***************************************************************************//**
  * @brief Enables/disables the activity detection.
  *
- * @param dev       - The device structure.
- * @param actOnOff  - Enables/disables the activity detection.
+ * @param dev        - The device structure.
+ * @param act_on_off - Enables/disables the activity detection.
  *                    Example: 0x0 - disables the activity detection.
  *                             0x1 - enables the activity detection.
- * @param actAxes   - Axes which participate in detecting activity.
+ * @param act_axes   - Axes which participate in detecting activity.
  *                    Example: 0x0 - disables axes participation.
  *                             ADXL345_ACT_X_EN - enables x-axis participation.
  *                             ADXL345_ACT_Y_EN - enables y-axis participation.
  *                             ADXL345_ACT_Z_EN - enables z-axis participation.
- * @param actAcDc   - Selects dc-coupled or ac-coupled operation.
+ * @param act_ac_dc  - Selects dc-coupled or ac-coupled operation.
  *                    Example: 0x0 - dc-coupled operation.
  *                             ADXL345_ACT_ACDC - ac-coupled operation.
- * @param actThresh - Threshold value for detecting activity. The scale factor
+ * @param act_thresh - Threshold value for detecting activity. The scale factor
                       is 62.5 mg/LSB.
- * @patam actInt    - Interrupts pin.
+ * @param act_int    - Interrupts pin.
  *                    Example: 0x0 - activity interrupts on INT1 pin.
  *                             ADXL345_ACTIVITY - activity interrupts on INT2
  *                                                pin.
@@ -446,7 +446,7 @@ void adxl345_set_activity_detection(struct adxl345_dev *dev,
  * @param inact_thresh - Threshold value for detecting inactivity. The scale
                          factor is 62.5 mg/LSB.
  * @param inact_time   - Inactivity time. The scale factor is 1 sec/LSB.
- * @patam inact_int    - Interrupts pin.
+ * @param inact_int    - Interrupts pin.
  *		         Example: 0x0 - inactivity interrupts on INT1 pin.
  *				  ADXL345_INACTIVITY - inactivity interrupts on
  *						       INT2 pin.

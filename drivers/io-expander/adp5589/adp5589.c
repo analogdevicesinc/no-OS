@@ -369,6 +369,8 @@ uint8_t adp5589_key_decode(uint8_t reg,
  * @brief Locks the ADP5589 and requests Password for unlock.
  *
  * @param dev        - The device structure.
+ * @param first_event - First event occured.
+ * @param second_event - Second event occured.
  * @param pmod_port  - J1 or J2 connector of PmodIOXP
  *			Example: PMOD_IOXP_J1 - J1 connector.
  *				 PMOD_IOXP_J2 - J2 connector.
