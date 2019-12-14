@@ -49,18 +49,48 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum i2c_transfer_mode
+ * @brief I2C transfer mode configuration
+ * @var i2c_transfer_mode::i2c_general_call
+ * Address every device connected
+ * @var i2c_transfer_mode::i2c_repeated_start
+ * Send multiple start conditions
+ * @var i2c_transfer_mode::i2c_10_bit_transfer
+ * Use 10-bit address scheme
+ */
 typedef enum i2c_transfer_mode {
 	i2c_general_call =	0x01,
 	i2c_repeated_start =	0x02,
 	i2c_10_bit_transfer =	0x04
 } i2c_transfer_mode;
 
+/**
+ * @struct i2c_init_param
+ * @brief Structure holding the parameters for I2C initialization.
+ * @var i2c_init_param::max_speed_hz
+ * I2C maximum transfer speed supported
+ * @var i2c_init_param::slave_address
+ * Slave address
+ * @var i2c_init_param::extra
+ * I2C extra parameters (device specific parameters)
+ */
 typedef struct i2c_init_param {
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;
 	void		*extra;
 } i2c_init_param;
 
+/**
+ * @struct i2c_desc
+ * @brief Structure holding I2C descriptor
+ * @var i2c_desc::max_speed_hz
+ * I2C maximum transfer speed supported
+ * @var i2c_desc::slave_address
+ * Slave address
+ * @var i2c_desc::extra
+ * I2C extra parameters (device specific parameters)
+ */
 typedef struct i2c_desc {
 	uint32_t	max_speed_hz;
 	uint8_t		slave_address;

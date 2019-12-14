@@ -50,11 +50,33 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct xml_attribute
+ * @brief Structure holding the parameters for XML attribute
+ * @var xml_attribute::name
+ * XML attribute name
+ * @var xml_attribute::value
+ * XML attribute value
+ */
 struct xml_attribute {
 	char *name;
 	char *value;
 };
 
+/**
+ * @struct xml_node
+ * @brief Structure holding the parameters for XML node
+ * @var xml_node::name
+ * XML node name
+ * @var xml_node::attributes
+ * Node's attributes
+ * @var xml_node::attr_cnt
+ * Number of attributes
+ * @var xml_node::children
+ * XML children nodes
+ * @var xml_node::children_cnt
+ * Number of children
+ */
 struct xml_node {
 	char *name;
 	struct xml_attribute **attributes;
@@ -63,6 +85,14 @@ struct xml_node {
 	uint16_t children_cnt;
 };
 
+/**
+ * @struct xml_document
+ * @brief Structure holding the parameters for XML document
+ * @var xml_document::buff
+ * XML Document buffer
+ * @var xml_document::index
+ * Buffer length
+ */
 struct xml_document {
 	char *buff;
 	uint32_t index;
