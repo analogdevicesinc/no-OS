@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /**
- * \file ad917x.h
+ * \file AD917x.h
  *
  * \brief AD917X API interface header file
  *
@@ -352,7 +352,7 @@ int32_t ad917x_set_clkout_config(ad917x_handle_t *h, uint8_t l_div);
  *
  * \param h              Pointer to the AD917X device reference handle.
  * \param dac_clk_freq_hz   Desired DAC Clk Frequency in Hz. See description for range.
- * \param dac_clk_en    Enable for internal DAC Clock generation.
+ * \param dac_pll_en    Enable for internal DAC Clock generation.
  *                       If set, ref_clk_freq_khz must be set with
  *                       value of reference clock applied by the system.
  *                       0 - Do not generate DAC CLK internally.
@@ -411,7 +411,7 @@ int32_t ad917x_jesd_config_datapath(ad917x_handle_t *h, uint8_t dual_en,
  *
  *
  *
- * * \retval API_ERROR_OK API Completed Successfully
+ * \retval API_ERROR_OK API Completed Successfully
  * \retval API_ERROR_INVALID_HANDLE_PTR Invalid reference handle.
  * \retval API_ERROR_INVALID_XFER_PTR SPI Access Failed
  * \retval API_ERROR_INVALID_PARAM    Invalid Parameter

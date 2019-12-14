@@ -178,8 +178,8 @@ int32_t ad5449_remove(struct ad5449_dev *dev)
  * @brief Write to input register and read from output register via SPI.
  *
  * @param   dev      - The device structure.
- *          command  - command control bits.
- *          data     - data to be written in input register.
+ * @param   command  - command control bits.
+ * @param   data     - data to be written in input register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
@@ -217,10 +217,10 @@ uint16_t ad5449_set_input_shift_reg(struct ad5449_dev *dev,
  * @brief Loads and updates the selected DAC with a given value.
  *
  * @param   dev       - The device structure.
- *          channel   - the chosen channel to write to.
+ * @param   channel   - the chosen channel to write to.
  *                      Example: AD5449_CH_A = 0;
  *                               AD5449_CH_B = 1.
- *          dac_value - desired value to be written in register.
+ * @param   dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
@@ -243,10 +243,10 @@ void ad5449_load_update_channel(struct ad5449_dev *dev,
  * @brief Load selected DAC input register with a given value.
  *
  * @param   dev       - The device structure.
- *          channel   - the chosen channel to write to.
+ * @param   channel   - the chosen channel to write to.
  *                      Example: AD5449_CH_A = 0;
  *                               AD5449_CH_B = 1.
- *          dac_value - desired value to be written in register.
+ * @param   dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
@@ -269,11 +269,11 @@ void ad5449_load_channel(struct ad5449_dev *dev,
  * @brief Read from the selected DAC register.
  *
  * @param   dev      - The device structure.
- *          channel  - the chosen channel to read from.
+ * @param   channel  - the chosen channel to read from.
  *                      Example: AD5449_CH_A = 0;
  *                               AD5449_CH_B = 1.
  *
- * @return  dacValue - value read from the register.
+ * @return  dac_value - value read from the register.
 ******************************************************************************/
 uint16_t ad5449_readback_channel(struct ad5449_dev *dev,
 				 uint8_t channel)
@@ -320,7 +320,7 @@ void ad5449_update_all(struct ad5449_dev *dev)
  *        just with devices with two channels
  *
  * @param dev       - The device structure.
- *        dac_value - desired value to be written in register.
+ * @param dac_value - desired value to be written in register.
  *
  * @return None.
 ******************************************************************************/
@@ -339,7 +339,7 @@ void ad5449_load_all(struct ad5449_dev *dev,
  *        signal
  *
  * @param  dev  - The device structure.
- *         type - target scale when making a clear command
+ * @param  type - target scale when making a clear command
  *                Example: ZERO_SCALE = zero scale.
  *                         MIDSCALE   = midscale.
  *
@@ -379,7 +379,7 @@ void ad5449_clear_scale_setup(struct ad5449_dev *dev,
  * @brief Enable/disable the Daisy-Chain mode
  *
  * @param  dev  - The device structure.
- *         type - target scale when making a clear command
+ * @param  value - target scale when making a clear command
  *                Example: ZERO_SCALE = zero scale.
  *                         MIDSCALE   = midscale.
  *
@@ -417,7 +417,7 @@ void ad5449_daisy_chain_setup(struct ad5449_dev *dev,
  * by the devices : AD5415, AD5429, AD5439, AD5449
  *
  * @param  dev          - The device structure.
- *         control_bits - target scale when making a clear command
+ * @param  control_bits - target scale when making a clear command
  *                Example: AD5449_SDO_FULL = Full SDO driver.
  *                         AD5449_SDO_WEAK = Weak SDO driver.
  *                         AD5449_SDO_OPEN_DRAIN = SDO configured as open drain
@@ -446,7 +446,7 @@ void ad5449_sdocontrol(struct ad5449_dev *dev,
  * @brief Set up the active clock edge of the SPI interface
  *
  * @param  dev   - The device structure.
- *         value - target scale when making a clear command
+ * @param  value - target scale when making a clear command
  *                Example: AD5449_CLOCK_NEGEDGE = Falling edge. (Default)
  *                         AD5449_CLOCK_POSEDGE = Rising edge.
  *
