@@ -250,46 +250,47 @@
 /*****************************************************************************/
 
 /**
-*   struct ADF4106_settings_t - store the value of all the latch and the input
+*   @struct ADF4106_settings_t
+*   @brief store the value of all the latch and the input
 *                               reference frequency
 *
 *                               N Divider Register
-*   @frac_value  - these 12 bits control what is loaded as the FRAC value into
+*   frac_value  - these 12 bits control what is loaded as the FRAC value into
 *                 the fractional interpolator.
-*   @int_value   - these nine bits control what is loaded as the INT value, this
+*   int_value   - these nine bits control what is loaded as the INT value, this
 *                 is used to determine the overall division factor
-*   @fastlock   - when set to logic high fast-lock is enabled
+*   fastlock   - when set to logic high fast-lock is enabled
 *
 *                               R Divider Register
-*   @mod_value   - set the fractional modulus, this is the ratio of the PFD
+*   mod_value   - set the fractional modulus, this is the ratio of the PFD
 *                 frequency to the channel step resolution on the RF output
-*   @r_counter   - the r counter allows the input reference frequency to
+*   r_counter   - the r counter allows the input reference frequency to
 *                 be divided down to produce the reference clock to phase
 *                 frequency detector
-*   @prescaler  - the dual-modulus prescaler, along with the INT, FRAC and MOD
+*   prescaler  - the dual-modulus prescaler, along with the INT, FRAC and MOD
 *                 counters, determines the overall division ratio from the RFin
 *                 to PFD input
-*   @muxout     - the on chip multiplexer selection bits
-*   @load_control - when set to logic high the value being programmed in the
+*   muxout     - the on chip multiplexer selection bits
+*   load_control - when set to logic high the value being programmed in the
 *                  modulus is not loaded into the modulus. Instead, it sets the
 *                  resync delay of the Sigma-Delta.
 *
 *                                 Control Register
-*   @counter_reset - resets the R and N counters
-*   @cp_three_state - puts the charge pump into three-state mode when programmed
+*   counter_reset - resets the R and N counters
+*   cp_three_state - puts the charge pump into three-state mode when programmed
 *                   to 1
-*   @power_down  - activate power down mode
-*   @ldp        - lock detect precision
-*   @pd_polarity - phase detector polarity
-*   @cp_current  - Charge Pump Current settings, this should be set to the charge
+*   power_down  - activate power down mode
+*   ldp        - lock detect precision
+*   pd_polarity - phase detector polarity
+*   cp_current  - Charge Pump Current settings, this should be set to the charge
 *                 pump current that the loop filter is designed with
-*   @ref_doubler - REFin Doubler, when the doubler is enabled, both the rising
+*   ref_doubler - REFin Doubler, when the doubler is enabled, both the rising
 *                 and falling edges of REFin become active edges at the PFD input
-*   @resync     - define the time between two resync, if it is zero, than
+*   resync     - define the time between two resync, if it is zero, than
 *                 the phase resync feature is disabled
 *
 *                              Noise and Spur register
-*   @noise_spur  - allows the user to optimize a design either for improved
+*   noise_spur  - allows the user to optimize a design either for improved
 *                 spurious performance or for improved phase noise performance
 */
 

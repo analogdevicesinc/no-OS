@@ -223,7 +223,7 @@ int32_t ad9517_write(struct ad9517_dev *dev,
 *
 * @param dev      - The device structure.
 * @param reg_addr - The address of the register to be read.
-* @param reg_val  - Pointer to the value to be read from the register.
+* @param reg_value - Pointer to the value to be read from the register.
 *
 * @return Returns the read data or negative error code.
 *******************************************************************************/

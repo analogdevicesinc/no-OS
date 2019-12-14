@@ -52,9 +52,11 @@
 /***************************************************************************//**
  * @brief Reads the value of the selected register.
  *
- * @param registerAddress - The address of the register to read.
- *
- * @return registerValue - The register's value or negative error code.
+ * @param dev - The device structure.
+ * @param reg_addr - The address of the register to read.
+ * @param reg_data - Pointer to the read value.
+
+ * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 int32_t ad9523_spi_read(struct ad9523_dev *dev,
 			uint32_t reg_addr,
@@ -84,8 +86,9 @@ int32_t ad9523_spi_read(struct ad9523_dev *dev,
 /***************************************************************************//**
  * @brief Writes a value to the selected register.
  *
- * @param registerAddress - The address of the register to write to.
- * @param registerValue - The value to write to the register.
+ * @param dev - The device structure.
+ * @param reg_addr - The address of the register to write to.
+ * @param reg_data - The value to write to the register.
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
@@ -114,6 +117,8 @@ int32_t ad9523_spi_write(struct ad9523_dev *dev,
 /***************************************************************************//**
  * @brief Updates the AD9523 configuration
  *
+ * @param dev - The device structure.
+ *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 int32_t ad9523_io_update(struct ad9523_dev *dev)
@@ -126,6 +131,7 @@ int32_t ad9523_io_update(struct ad9523_dev *dev)
 /***************************************************************************//**
  * @brief Sets the clock provider for selected channel.
  *
+ * @param dev - The device structure.
  * @param ch - Selected channel.
  * @param out - Selected clock provider.
  *
@@ -239,6 +245,8 @@ int32_t ad9523_calibrate(struct ad9523_dev *dev)
 /***************************************************************************//**
  * @brief Updates the AD9523 configuration.
  *
+ * @param dev - The device structure.
+ *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 
@@ -295,6 +303,8 @@ int32_t ad9523_status(struct ad9523_dev *dev)
 /***************************************************************************//**
  * @brief Updates the AD9523 configuration.
  *
+ * @param dev - The device structure.
+ *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/
 int32_t ad9523_sync(struct ad9523_dev *dev)
@@ -332,6 +342,8 @@ int32_t ad9523_sync(struct ad9523_dev *dev)
 
 /***************************************************************************//**
  * @brief Initialize the AD9523 data structure with the default register values.
+ *
+ * @param init_param - The device initial parameters.
  *
  * @return Always return 0.
  *******************************************************************************/
@@ -404,6 +416,9 @@ int32_t ad9523_init(struct ad9523_init_param *init_param)
 
 /***************************************************************************//**
  * @brief Setup the AD9523 device.
+ *
+ * @param device - The device structure.
+ * @param init_param - The structure holding the device initial parameters.
  *
  * @return Returns 0 in case of success or negative error code.
  *******************************************************************************/

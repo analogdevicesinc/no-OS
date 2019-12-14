@@ -258,35 +258,36 @@
 /*****************************************************************************/
 
 /**
-*   struct ADF4106_settings_t - store the value of all the latch and the input
+*   @struct ADF4106_settings_t
+*   @brief store the value of all the latch and the input
 *                               reference frequency
-*   @refIn - the input reference frequency
+*   refIn - the input reference frequency
 *                               Reference Latch
-*   @ref_counter - the initial value of the 14 bit Reference Counter register
-*   @anti_backlash_width - the width of the anti-backlash pulse, this pulse
+*   ref_counter - the initial value of the 14 bit Reference Counter register
+*   anti_backlash_width - the width of the anti-backlash pulse, this pulse
 *       ensures that no dead zone is in the PFD transfer function and minimizes
 *       phase noise and reference spurs.
-*   @test_mode_bits - Should be set to zero for Normal operation
-*   @lock_detect_precision - determines the number of consecutive cycles of phase
+*   test_mode_bits - Should be set to zero for Normal operation
+*   lock_detect_precision - determines the number of consecutive cycles of phase
 *        delay, that must occur before lock detect is set
 *                               N Latch
-*   @a_n_counter - a 6 bits counter is supported at ADF4106
-*   @b_n_counter - a 13 bits counter
-*   @cp_gain - determines which charge pump current settings is used
+*   a_n_counter - a 6 bits counter is supported at ADF4106
+*   b_n_counter - a 13 bits counter
+*   cp_gain - determines which charge pump current settings is used
 *                        Function/Initialization Latch
-*   @counter_reset - resets the R and N counters
-*   @power_down1 - activate power down mode
-*   @muxout_control - the type of the MUXOUT output
-*   @phase_detector_pol - the polarity of the Phase Detector
-*   @cp_type - the type of the Charge Pump output
-*   @fast_lock_mode - set the desired Fast Lock Mode
-*   @timer_counter_control - how long will be the secondary charge pump current
+*   counter_reset - resets the R and N counters
+*   power_down1 - activate power down mode
+*   muxout_control - the type of the MUXOUT output
+*   phase_detector_pol - the polarity of the Phase Detector
+*   cp_type - the type of the Charge Pump output
+*   fast_lock_mode - set the desired Fast Lock Mode
+*   timer_counter_control - how long will be the secondary charge pump current
 *       active, before reverting to the primary current
-*   @current_setting1 - is used when the RF output is stable and the system is
+*   current_setting1 - is used when the RF output is stable and the system is
 *       in static state
-*   @current_setting2 - is meant to be used when the system is dynamic and in a
+*   current_setting2 - is meant to be used when the system is dynamic and in a
 *       state of change (i.e., when a new output frequency is programmed)
-*   @power_down2 - define the type of the power down: asynchronous or
+*   power_down2 - define the type of the power down: asynchronous or
 */
 
 struct adf4106_settings_t {
