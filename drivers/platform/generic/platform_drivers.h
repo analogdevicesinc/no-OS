@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   platform_drivers.h
+ *   @file   generic/platform_drivers.h
  *   @brief  Header file of Generic Platform Drivers.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

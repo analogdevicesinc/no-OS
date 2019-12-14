@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /**
- * \file api_errors.h
+ * \file ad917x_api/api_errors.h
  *
  * \brief API error codes header file.
  *

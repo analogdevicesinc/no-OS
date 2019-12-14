@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.c
+ *   @file   altera/spi.c
  *   @brief  Implementation of Altera SPI Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

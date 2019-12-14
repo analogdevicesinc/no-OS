@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   axi_io.c
+ *   @file   xilinx/axi_io.c
  *   @brief  Implementation of Xilinx AXI IO.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

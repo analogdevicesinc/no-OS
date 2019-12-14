@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.h
+ *   @file   aducm3029/spi_extra.h
  *   @author MChindri (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

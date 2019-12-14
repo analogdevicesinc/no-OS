@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   gpio.c
+ *   @file   xilinx/gpio.c
  *   @brief  Implementation of Xilinx GPIO Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /**
- * \file api_def.h
+ * \file ad917x_api/api_def.h
  *
  * \brief API definitions header file.
  *

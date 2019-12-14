@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   delay.c
+ *   @file   altera/delay.c
  *   @brief  Implementation of Altera Delay Functions.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
