@@ -1,7 +1,7 @@
 /***************************************************************************//**
 *   @file    ad7124.c
 *   @brief   AD7124 implementation file.
-*   @devices AD7124-4, AD7124-8
+*   	     Devices: AD7124-4, AD7124-8
 *
 ********************************************************************************
 * Copyright 2015-2019(c) Analog Devices, Inc.
@@ -217,7 +217,7 @@ int32_t ad7124_read_register(struct ad7124_dev *dev,
  *        the write operation will be executed without checking the device state.
  *
  * @param dev - The handler of the instance of the driver.
- * @param reg - Register structure holding info about the register to be written
+ * @param p_reg - Register structure holding info about the register to be written
  *
  * @return Returns 0 for success or negative error code.
 *******************************************************************************/

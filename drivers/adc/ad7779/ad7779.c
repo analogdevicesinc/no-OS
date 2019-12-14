@@ -532,8 +532,8 @@ int32_t ad7779_get_gain(ad7779_dev *dev,
 /**
  * Set the decimation rate.
  * @param dev - The device structure.
- * @param integer_val - The integer value.
- * @param decimal_val - The decimal value.
+ * @param int_val - The integer value.
+ * @param dec_val - The decimal value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_set_dec_rate(ad7779_dev *dev,
@@ -590,8 +590,8 @@ int32_t ad7779_set_dec_rate(ad7779_dev *dev,
 /**
  * Get the decimation rate.
  * @param dev - The device structure.
- * @param integer_val - The integer value.
- * @param decimal_val - The decimal value.
+ * @param int_val - The integer value.
+ * @param dec_val - The decimal value.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_dec_rate(ad7779_dev *dev,
@@ -643,7 +643,7 @@ int32_t ad7779_get_power_mode(ad7779_dev *dev,
 /**
  * Set the reference type.
  * @param dev - The device structure.
- * @param pwr_mode - The reference type.
+ * @param ref_type - The reference type.
  *		     Accepted values: AD7779_EXT_REF
  *				      AD7779_INT_REF
  * @return SUCCESS in case of success, negative error code otherwise.
@@ -665,7 +665,7 @@ int32_t ad7779_set_reference_type(ad7779_dev *dev,
 /**
  * Get the reference type.
  * @param dev - The device structure.
- * @param pwr_mode - The reference type.
+ * @param ref_type - The reference type.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad7779_get_reference_type(ad7779_dev *dev,

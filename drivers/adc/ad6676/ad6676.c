@@ -625,7 +625,7 @@ int32_t ad6676_set_attenuation(struct ad6676_dev *dev,
 /***************************************************************************//**
  * @brief Initialize the device.
  *
- * @param dev        - The device structure.
+ * @param device     - The device structure.
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
