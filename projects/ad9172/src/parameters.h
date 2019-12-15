@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.h
+ *   @file   ad9172/src/parameters.h
  *   @brief  Parameters Definitions.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************

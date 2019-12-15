@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   headless.c
+ *   @file   ad9371/src/app/headless.c
  *   @brief  Implementation of Main Function.
 ********************************************************************************
  * Copyright 2017(c) Analog Devices, Inc.

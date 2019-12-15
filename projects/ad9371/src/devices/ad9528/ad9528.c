@@ -1,5 +1,5 @@
 /**
- * \file ad9528.c
+ * \file ad9371/src/devices/ad9528/ad9528.c
  * \brief Contains source code for configuring and initializing AD9528 clock device
  */
 

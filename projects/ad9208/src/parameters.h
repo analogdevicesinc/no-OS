@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.h
+ *   @file   ad9208/src/parameters.h
  *   @brief  Parameters Definitions.
  *   @author Stefan Popa (stefan.popa@analog.com)
 ********************************************************************************

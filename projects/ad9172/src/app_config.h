@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   app_config.h
+ *   @file   ad9172/src/app_config.h
  *   @brief  Config file for AD9172 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   main.c
+ *   @file   ad9208/src/main.c
  *   @brief  Implementation of Main Function.
  *   @author Stefan Popa (stefan.popa@analog.com)
 ********************************************************************************

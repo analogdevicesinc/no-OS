@@ -1,5 +1,5 @@
 /**
- * \file myk.h
+ * \file ad9371/src/app/myk.h
  *
  * \brief Contains structure definitions for myk_init.c
  *

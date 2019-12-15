@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   app_config.h
+ *   @file   adrv9009/src/app/app_config.h
  *   @brief  Config file for ADRV9009 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
