@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   main.c
+ *   @file   ad9172/src/main.c
  *   @brief  Implementation of Main Function.
  *   @author Cristian Pop (cristianpop@analog.com)
 ********************************************************************************

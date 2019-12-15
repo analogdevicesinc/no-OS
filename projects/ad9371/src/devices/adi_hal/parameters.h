@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.h
+ *   @file   ad9371/src/devices/adi_hal/parameters.h
  *   @brief  Platform dependent parameters.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /**
- * \file myk.h
+ * \file ad9371/profiles/tx_bw100_orx_bw100_rx_bw100/myk.h
  *
  * \brief Contains structure definitions for myk_init.c
  *

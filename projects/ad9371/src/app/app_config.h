@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   app_config.h
+ *   @file   ad9371/src/app/app_config.h
  *   @brief  Config file for AD9371 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

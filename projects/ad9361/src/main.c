@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   main.c
+ *   @file   ad9361/src/main.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

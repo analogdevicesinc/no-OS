@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   common.h
+ *   @file   ad9361/src/common.h
  *   @brief  Header file of Common Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /**
- * \file ad9528.h
+ * \file ad9371/src/devices/ad9528/ad9528.h
  * \brief Contains function declarations and ad9528Device_t structure typedef for ad9528.c
  */
 

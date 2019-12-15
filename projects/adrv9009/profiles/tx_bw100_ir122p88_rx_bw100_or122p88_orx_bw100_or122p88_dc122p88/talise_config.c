@@ -1,5 +1,5 @@
 /**
- * \file talise_config.c
+ * \file adrv9009/profiles/tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88/talise_config.c
  * \brief Contains Talise configuration settings for the Talise API
  *
  * Copyright 2015-2017 Analog Devices Inc.

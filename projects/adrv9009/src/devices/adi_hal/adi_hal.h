@@ -1,5 +1,5 @@
 /**
- * \file adi_hal.h
+ * \file adrv9009/src/devices/adi_hal/adi_hal.h
  * \brief Contains Talise ADI HAL function prototypes type definitions for adi_hal.c
  *
  * Copyright 2015-2017 Analog Devices Inc.

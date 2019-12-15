@@ -1,5 +1,5 @@
 /**
- * \file common.h
+ * \file ad9371/src/devices/adi_hal/common.h
  * \brief Contains type definitions and prototype declarations for common.c
  */
 
