@@ -58,7 +58,7 @@ extern char inbyte(void);
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
 #define HDMI_CALL_INTERVAL_MS	10			/* Interval between two         */
-											/* iterations of the main loop  */
+/* iterations of the main loop  */
 #define DBG_MSG                 xil_printf
 
 /******************************************************************************/
@@ -77,7 +77,7 @@ static BOOL     LastEnable;
 *******************************************************************************/
 void APP_EnableDriver (BOOL Enable)
 {
-    DriverEnable = Enable;
+	DriverEnable = Enable;
 }
 
 /***************************************************************************//**
@@ -87,12 +87,11 @@ void APP_EnableDriver (BOOL Enable)
 *******************************************************************************/
 static BOOL APP_DriverEnabled (void)
 {
-    if ((DriverEnable && HAL_GetMBSwitchState()) != LastEnable)
-    {
-        LastEnable = DriverEnable && HAL_GetMBSwitchState();
-        DBG_MSG ("APP: Driver %s\n\r", LastEnable? "Enabled": "Disabled");
-    }
-    return (LastEnable);
+	if ((DriverEnable && HAL_GetMBSwitchState()) != LastEnable) {
+		LastEnable = DriverEnable && HAL_GetMBSwitchState();
+		DBG_MSG ("APP: Driver %s\n\r", LastEnable? "Enabled": "Disabled");
+	}
+	return (LastEnable);
 }
 
 /***************************************************************************//**
@@ -107,7 +106,8 @@ static void APP_PrintRevisions (void)
 	ADIAPI_TxGetChipRevision(&TxRev);
 
 	DBG_MSG("\n\r********************************************************************\r\n");
-	DBG_MSG("  ADI HDMI Trasmitter Application Ver R%d.%d.%d\n\r", MajorRev, MinorRev, RcRev);
+	DBG_MSG("  ADI HDMI Trasmitter Application Ver R%d.%d.%d\n\r", MajorRev,
+		MinorRev, RcRev);
 	DBG_MSG("  HDMI-TX:  ADV7511 Rev 0x%x\r\n", TxRev);
 	DBG_MSG("  Created:  %s At %s\n\r", __DATE__, __TIME__);
 	DBG_MSG("********************************************************************\r\n\n\r");
@@ -123,18 +123,13 @@ static void APP_ChangeResolution (void)
 	char *resolutions[7] = {"640x480", "800x600", "1024x768", "1280x720", "1360x768", "1600x900", "1920x1080"};
 	char receivedChar    = 0;
 
-	if(XUartPs_IsReceiveData(UART_BASEADDR))
-	{
+	if(XUartPs_IsReceiveData(UART_BASEADDR)) {
 		receivedChar = inbyte();
-		if((receivedChar >= 0x30) && (receivedChar <= 0x36))
-		{
+		if((receivedChar >= 0x30) && (receivedChar <= 0x36)) {
 			SetVideoResolution(receivedChar - 0x30);
 			DBG_MSG("Resolution was changed to %s \r\n", resolutions[receivedChar - 0x30]);
-		}
-		else
-		{
-			if((receivedChar != 0x0A) && (receivedChar != 0x0D))
-			{
+		} else {
+			if((receivedChar != 0x0A) && (receivedChar != 0x0D)) {
 				SetVideoResolution(RESOLUTION_640x480);
 				DBG_MSG("Resolution was changed to %s \r\n", resolutions[0]);
 			}
@@ -161,15 +156,17 @@ int main()
 	Xil_DCacheEnable();
 
 #ifdef XPAR_AXI_IIC_0_BASEADDR
-	HAL_PlatformInit(XPAR_AXI_IIC_0_BASEADDR,	/* Perform any required platform init */
-					 XPAR_SCUTIMER_DEVICE_ID,	/* including hardware reset to HDMI devices */
-					 XPAR_SCUGIC_SINGLE_DEVICE_ID,
-					 XPAR_SCUTIMER_INTR);
+	HAL_PlatformInit(
+		XPAR_AXI_IIC_0_BASEADDR,	/* Perform any required platform init */
+		XPAR_SCUTIMER_DEVICE_ID,	/* including hardware reset to HDMI devices */
+		XPAR_SCUGIC_SINGLE_DEVICE_ID,
+		XPAR_SCUTIMER_INTR);
 #else
-	HAL_PlatformInit(XPAR_AXI_IIC_MAIN_BASEADDR,	/* Perform any required platform init */
-					 XPAR_SCUTIMER_DEVICE_ID,	/* including hardware reset to HDMI devices */
-					 XPAR_SCUGIC_SINGLE_DEVICE_ID,
-					 XPAR_SCUTIMER_INTR);
+	HAL_PlatformInit(
+		XPAR_AXI_IIC_MAIN_BASEADDR,	/* Perform any required platform init */
+		XPAR_SCUTIMER_DEVICE_ID,	/* including hardware reset to HDMI devices */
+		XPAR_SCUGIC_SINGLE_DEVICE_ID,
+		XPAR_SCUTIMER_INTR);
 #endif
 
 	Xil_ExceptionEnable();
@@ -189,13 +186,10 @@ int main()
 
 	StartCount = HAL_GetCurrentMsCount();
 
-	while(1)
-	{
-		if (ATV_GetElapsedMs (StartCount, NULL) >= HDMI_CALL_INTERVAL_MS)
-		{
+	while(1) {
+		if (ATV_GetElapsedMs (StartCount, NULL) >= HDMI_CALL_INTERVAL_MS) {
 			StartCount = HAL_GetCurrentMsCount();
-			if (APP_DriverEnabled())
-			{
+			if (APP_DriverEnabled()) {
 				ADIAPI_TransmitterMain();
 			}
 		}

@@ -44,28 +44,27 @@
 /******************************************************************************/
 /************************** Types Declarations ********************************/
 /******************************************************************************/
-typedef struct
-{
-    UCHAR   DeepColor;
-    UINT16  SpaOffset;
-    BOOL    CsumErr;
-    UINT16  SvdOffset;
-}EDID_INFO;
+typedef struct {
+	UCHAR   DeepColor;
+	UINT16  SpaOffset;
+	BOOL    CsumErr;
+	UINT16  SvdOffset;
+} EDID_INFO;
 
-typedef struct
-{
-    UCHAR   Format;
-    UCHAR   SampleRate;
-    UCHAR   MaxChannels;
-    UINT16  Bit;
-}EDID_AUDIO_INFO;
+typedef struct {
+	UCHAR   Format;
+	UCHAR   SampleRate;
+	UCHAR   MaxChannels;
+	UINT16  Bit;
+} EDID_AUDIO_INFO;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 void    ADIAPI_MwEdidEnableDebugMsg (BOOL Enable);
 UCHAR   ADIAPI_MwEdidParse (UCHAR *EdidPtr, UINT16 *SpaOffset, UCHAR SegNum);
-UCHAR   ADIAPI_MwEdidParseSilent (UCHAR *EdidPtr, UINT16 *SpaOffset, UCHAR SegNum);
+UCHAR   ADIAPI_MwEdidParseSilent (UCHAR *EdidPtr, UINT16 *SpaOffset,
+				  UCHAR SegNum);
 void    ADIAPI_MwEdidGetInfo (EDID_INFO *InfoPtr);
 void    ADIAPI_MwEdidGetAudioInfo (EDID_AUDIO_INFO *AudioInfoPtr);
 

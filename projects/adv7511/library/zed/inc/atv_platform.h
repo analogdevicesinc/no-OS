@@ -57,35 +57,32 @@
 #define HAL_IsHPDOn(a)              FALSE
 #define HAL_5VDetected(a)           FALSE
 
-enum
-{
-    OUTPUT_CHAN_AUTO=0,
-    OUTPUT_CHAN_AVO1,
-    OUTPUT_CHAN_AVO2,
-    OUTPUT_CHAN_DAC,
-    OUTPUT_CHAN_ENC
+enum {
+	OUTPUT_CHAN_AUTO=0,
+	OUTPUT_CHAN_AVO1,
+	OUTPUT_CHAN_AVO2,
+	OUTPUT_CHAN_DAC,
+	OUTPUT_CHAN_ENC
 };
 
-enum
-{
-    STATUS_LED1=1,
-    STATUS_LED2,
-    STATUS_LED3,
-    STATUS_LED4,
-    STATUS_LED5,
-    STATUS_LED6
+enum {
+	STATUS_LED1=1,
+	STATUS_LED2,
+	STATUS_LED3,
+	STATUS_LED4,
+	STATUS_LED5,
+	STATUS_LED6
 };
 
-enum
-{
-    INT1_RX=0,
-    INT2_RX,
-    INT3_RX,
-    INT1_TX,    
-    INT2_TX,
-    INT1_MUX,
-    INT2_MUX,
-    INT3_MUX
+enum {
+	INT1_RX=0,
+	INT2_RX,
+	INT3_RX,
+	INT1_TX,
+	INT2_TX,
+	INT1_MUX,
+	INT2_MUX,
+	INT3_MUX
 };
 
 /******************************************************************************/
@@ -93,14 +90,20 @@ enum
 /******************************************************************************/
 UCHAR   HAL_I2CReadByte (UCHAR Dev, UCHAR Reg, UCHAR *Data);
 UCHAR   HAL_I2CWriteByte (UCHAR Dev, UCHAR Reg, UCHAR Data);
-UINT16  HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NumberBytes);
-UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data, UINT16 NumberBytes);
-UINT16  HAL_I2C16ReadBlock8 (UCHAR Dev, UINT16 Reg, UCHAR* Data, UINT16 NumberBytes);
-UINT16  HAL_I2C16WriteBlock8 (UCHAR Dev, UINT16 Reg, UCHAR* Data, UINT16 NumberBytes);
-UINT16  HAL_I2C16ReadBlock16 (UCHAR Dev, UINT16 Reg, UINT16* Data, UINT16 NumberWords);
-UINT16  HAL_I2C16WriteBlock16 (UCHAR Dev, UINT16 Reg, UINT16* Data, UINT16 NumberWords);
-UINT16  HAL_I2CGenericAccess (UCHAR Addr, UINT16 WriteCount, UCHAR *WriteBuf, 
-                              UINT16 ReadCount, UCHAR *ReadBuf);
+UINT16  HAL_I2CReadBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
+			  UINT16 NumberBytes);
+UINT16  HAL_I2CWriteBlock (UCHAR Dev, UCHAR Reg, UCHAR *Data,
+			   UINT16 NumberBytes);
+UINT16  HAL_I2C16ReadBlock8 (UCHAR Dev, UINT16 Reg, UCHAR* Data,
+			     UINT16 NumberBytes);
+UINT16  HAL_I2C16WriteBlock8 (UCHAR Dev, UINT16 Reg, UCHAR* Data,
+			      UINT16 NumberBytes);
+UINT16  HAL_I2C16ReadBlock16 (UCHAR Dev, UINT16 Reg, UINT16* Data,
+			      UINT16 NumberWords);
+UINT16  HAL_I2C16WriteBlock16 (UCHAR Dev, UINT16 Reg, UINT16* Data,
+			       UINT16 NumberWords);
+UINT16  HAL_I2CGenericAccess (UCHAR Addr, UINT16 WriteCount, UCHAR *WriteBuf,
+			      UINT16 ReadCount, UCHAR *ReadBuf);
 void HAL_I2C_LogInit(void);
 void HAL_I2C_LogStop(void);
 void HAL_I2C_GetLogInfo(UINT32*, UINT16*);
@@ -118,9 +121,9 @@ BOOL    HAL_RxInt1Pending (void);
 BOOL    HAL_RxInt2Pending (void);
 BOOL    HAL_TxIntPending (void);
 void HAL_PlatformInit(UINT32 i2cBaseAddr,
-					  UINT32 timerDevId,
-					  UINT32 timerIntCtrlDevId,
-					  UINT32 timerIntId);;
+		      UINT32 timerDevId,
+		      UINT32 timerIntCtrlDevId,
+		      UINT32 timerIntId);;
 UINT16  HAL_GetHwRevision (void);
 char   *HAL_GetPlatformName (void);
 UCHAR   HAL_GetRxBoardRevision (void);

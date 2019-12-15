@@ -68,93 +68,92 @@
 /******************************************************************************/
 /************************** Types Declarations ********************************/
 /******************************************************************************/
-typedef enum
-{
-    ATVERR_OK=0,
-    ATVERR_FALSE=0,
-    ATVERR_TRUE=1,
-    ATVERR_INV_PARM,
-    ATVERR_NOT_AVAILABLE,
-    ATVERR_FAILED
+typedef enum {
+	ATVERR_OK=0,
+	ATVERR_FALSE=0,
+	ATVERR_TRUE=1,
+	ATVERR_INV_PARM,
+	ATVERR_NOT_AVAILABLE,
+	ATVERR_FAILED
 } ATV_ERR;
 
-typedef struct
-{
-    UCHAR   StrgId;
-    char    *Strg;
+typedef struct {
+	UCHAR   StrgId;
+	char    *Strg;
 } STRG_TABLE;
 
-typedef struct
-{
-    UINT32  StartTime;      /* Will be set to 0 when threshold expires */
-    UINT16  Threshold;      /* Timeout in ms from StartTime */
-    BOOL    TimedOut;       /* Will be set to TRUE when timeout expires */
+typedef struct {
+	UINT32  StartTime;      /* Will be set to 0 when threshold expires */
+	UINT16  Threshold;      /* Timeout in ms from StartTime */
+	BOOL    TimedOut;       /* Will be set to TRUE when timeout expires */
 } TIMEOUT_TABLE;
 
-typedef struct
-{
-    UCHAR   RegAddr;        /* Register address */
-    UCHAR   Mask;           /* Mask for the bits in RegAddr */
-    UCHAR   LShift;         /* Absolute left shift (in 2's complement) of */
-                            /* field bits in RegAddr */
-    UCHAR   Reserved;
+typedef struct {
+	UCHAR   RegAddr;        /* Register address */
+	UCHAR   Mask;           /* Mask for the bits in RegAddr */
+	UCHAR   LShift;         /* Absolute left shift (in 2's complement) of */
+	/* field bits in RegAddr */
+	UCHAR   Reserved;
 } I2C_FIELD_INFO;
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 UCHAR   ATV_I2CReadField8   (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-                             UCHAR BitPos);
+			     UCHAR BitPos);
 void    ATV_I2CWriteField8  (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-                             UCHAR BitPos,  UCHAR FieldVal);
+			     UCHAR BitPos,  UCHAR FieldVal);
 void   ATV_I2CWriteOField8  (UCHAR DevAddr, UCHAR RegAddr, UCHAR Mask,
-                             UCHAR BitPos, UCHAR *CurrVal, UCHAR FieldVal);
+			     UCHAR BitPos, UCHAR *CurrVal, UCHAR FieldVal);
 UINT32  ATV_I2CReadField32  (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-                             UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+			     UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
 UINT32  ATV_I2CReadFragField32 (UCHAR DevAddr, UCHAR *AddrTbl, UCHAR MsbMask,
-                                UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
+				UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
 UINT32  ATV_I2CReadField32LE   (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-                                UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
+				UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
 UINT32  ATV_I2CReadFragField32LE (UCHAR DevAddr, UCHAR *AddrTbl, UCHAR MsbMask,
-                                  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
+				  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan);
 void    ATV_I2CWriteField32      (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-                                  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
-                                  UINT32 Val);
+				  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
+				  UINT32 Val);
 void    ATV_I2CWriteField32LE    (UCHAR DevAddr, UCHAR RegAddr, UCHAR MsbMask,
-                                  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
-                                  UINT32 Val);
+				  UCHAR LsbMask, UCHAR LsbPos,  UCHAR FldSpan,
+				  UINT32 Val);
 void    ATV_I2CWriteFragField32  (UCHAR DevAddr, UCHAR *AddrTbl, UCHAR MsbMask,
-                                  UCHAR LsbMask, UCHAR LsbPos,   UCHAR FldSpan,
-                                  UINT32 Val);
+				  UCHAR LsbMask, UCHAR LsbPos,   UCHAR FldSpan,
+				  UINT32 Val);
 void    ATV_I2CWriteFragField32LE (UCHAR DevAddr, UCHAR *AddrTbl,
-                                   UCHAR MsbMask, UCHAR LsbMask,
-                                   UCHAR LsbPos,  UCHAR FldSpan, UINT32 Val);
+				   UCHAR MsbMask, UCHAR LsbMask,
+				   UCHAR LsbPos,  UCHAR FldSpan, UINT32 Val);
 UINT32  ATV_I2CReadRandField32  (UCHAR DevAddr, I2C_FIELD_INFO *FldInfo,
-                                 UCHAR FldSpan);
+				 UCHAR FldSpan);
 void    ATV_I2CWriteRandField32 (UCHAR DevAddr, I2C_FIELD_INFO *FldInfo,
-                                 UCHAR FldSpan, UINT32 Val);
+				 UCHAR FldSpan, UINT32 Val);
 UCHAR   ATV_I2C16ReadField8 (UCHAR DevAddr, UINT16 RegAddr, UCHAR Mask,
-                             UCHAR BitPos);
+			     UCHAR BitPos);
 void    ATV_I2C16WriteField8 (UCHAR DevAddr, UINT16 RegAddr, UCHAR Mask,
-                              UCHAR BitPos, UCHAR FieldVal);
+			      UCHAR BitPos, UCHAR FieldVal);
 void    ATV_I2C16WriteOField8 (UCHAR DevAddr, UINT16 RegAddr, UCHAR Mask,
-                               UCHAR BitPos, UCHAR *CurrVal, UCHAR FieldVal);
+			       UCHAR BitPos, UCHAR *CurrVal, UCHAR FieldVal);
 UINT32  ATV_I2C16ReadField32 (UCHAR DevAddr, UINT16 RegAddr, UCHAR MsbMask,
-                              UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+			      UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
 UINT32  ATV_I2C16ReadFragField32 (UCHAR DevAddr, UINT16 *AddrTbl, UCHAR MsbMask,
-                                  UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+				  UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
 UINT32  ATV_I2C16ReadField32LE (UCHAR DevAddr, UINT16 RegAddr, UCHAR MsbMask,
-                                UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
-UINT32  ATV_I2C16ReadFragField32LE (UCHAR DevAddr, UINT16 *AddrTbl, UCHAR MsbMask,
-                                    UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+				UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
+UINT32  ATV_I2C16ReadFragField32LE (UCHAR DevAddr, UINT16 *AddrTbl,
+				    UCHAR MsbMask,
+				    UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan);
 void    ATV_I2C16WriteField32 (UCHAR DevAddr, UINT16 RegAddr, UCHAR MsbMask,
-                               UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
+			       UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
 void    ATV_I2C16WriteField32LE (UCHAR DevAddr, UINT16 RegAddr, UCHAR MsbMask,
-                                 UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
-void    ATV_I2C16WriteFragField32 (UCHAR DevAddr, UINT16 *AddrTbl, UCHAR MsbMask,
-                                   UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
-void    ATV_I2C16WriteFragField32LE (UCHAR DevAddr, UINT16 *AddrTbl, UCHAR MsbMask,
-                                     UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
+				 UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
+void    ATV_I2C16WriteFragField32 (UCHAR DevAddr, UINT16 *AddrTbl,
+				   UCHAR MsbMask,
+				   UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
+void    ATV_I2C16WriteFragField32LE (UCHAR DevAddr, UINT16 *AddrTbl,
+				     UCHAR MsbMask,
+				     UCHAR LsbMask, UCHAR LsbPos, UCHAR FldSpan, UINT32 Val);
 UCHAR   ATV_Reg (UCHAR Dev, UCHAR Reg);
 void    ATV_DelaySec (UINT16 Counter);
 UINT32  ATV_GetElapsedMs (UINT32 StartCount, UINT32 *CurrMsCount);
@@ -167,6 +166,6 @@ char   *ATV_LookupStrgTable (STRG_TABLE *Table, UCHAR StrgId, UCHAR EndVal);
 void    ATV_PrintTime (char *Prefix, UCHAR Gran, char *Postfix);
 void    ATV_CheckTimeOut (TIMEOUT_TABLE *Table);
 ATV_ERR ATV_CecValidMsgSize (UCHAR *Table, UCHAR TableSize, UCHAR Opcode,
-                             UCHAR MsgSize, UCHAR *ExpMsgSize);
+			     UCHAR MsgSize, UCHAR *ExpMsgSize);
 
 #endif
