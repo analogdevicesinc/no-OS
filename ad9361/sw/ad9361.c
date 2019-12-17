@@ -2122,17 +2122,21 @@ static int32_t set_split_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 
 	rx_gain->fgt_lmt_index = rc;
 
-	ad9361_spi_writef(spi, idx_reg, RX_FULL_TBL_IDX_MASK, rx_gain->fgt_lmt_index);
-	ad9361_spi_writef(spi, idx_reg + 1, RX_LPF_IDX_MASK, rx_gain->lpf_gain);
-
+	rc = ad9361_spi_writef(spi, idx_reg, RX_FULL_TBL_IDX_MASK,
+			       rx_gain->fgt_lmt_index);
+	if (rc < 0)
+		goto out;
+	rc = ad9361_spi_writef(spi, idx_reg + 1, RX_LPF_IDX_MASK, rx_gain->lpf_gain);
+	if (rc < 0)
+		goto out;
 	if (phy->pdata->gain_ctrl.dig_gain_en) {
-		ad9361_spi_writef(spi, idx_reg + 2, RX_DIGITAL_IDX_MASK, rx_gain->digital_gain);
-
+		rc = ad9361_spi_writef(spi, idx_reg + 2, RX_DIGITAL_IDX_MASK,
+				       rx_gain->digital_gain);
 	} else if (rx_gain->digital_gain > 0) {
 		dev_err(dev, "Digital gain is disabled and cannot be set");
 	}
 out:
-	return 0;
+	return rc;
 }
 
 /**
