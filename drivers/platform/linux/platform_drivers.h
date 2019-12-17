@@ -134,13 +134,13 @@ int32_t i2c_remove(i2c_desc *desc);
 int32_t i2c_write(i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t stop_bit);
+		  uint8_t option);
 
 /* Read data from a slave device. */
 int32_t i2c_read(i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t stop_bit);
+		 uint8_t option);
 
 /* Initialize the SPI communication peripheral. */
 int32_t spi_init(spi_desc **desc,
