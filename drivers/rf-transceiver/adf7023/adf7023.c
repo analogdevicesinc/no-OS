@@ -334,7 +334,7 @@ void adf7023_transmit_packet(struct adf7023_dev *dev,
  * @brief Sets the channel frequency.
  *
  * @param dev    - The device structure.
- * @param chFreq - Channel frequency.
+ * @param ch_freq - Channel frequency.
  *
  * @return None.
 *******************************************************************************/
