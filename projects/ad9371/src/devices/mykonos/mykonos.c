@@ -7,7 +7,7 @@
  */
 
 /**
- * \mainpage Overview
+ * Overview
  *
  * This document is intended for use by software engineering professionals and
  * includes detailed information regarding the data types and function calls
@@ -17,7 +17,7 @@
  */
 
 /**
- * \page Use Suggested Use
+ *   Use Suggested Use
  * The purpose of this API library is to add abstraction for the low level
  * SPI control and calculations necessary to control the Mykonos family of transceiver devices
  *
@@ -26,7 +26,7 @@
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license, for more information see the "LICENSE.txt" file in this zip file.
 *

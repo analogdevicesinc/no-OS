@@ -6,7 +6,7 @@
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license, for more information see the "LICENSE.txt" file in this zip file.
 *
@@ -1029,7 +1029,7 @@ typedef struct{
 
 /**
  *  \brief Structure to configure DPD (Only valid for a DPD-enabled transceiver)
- *  \deprecated robustModeling member of this structure is no longer in use.
+ *  deprecated robustModeling member of this structure is no longer in use.
  *  This information is loaded into the ARM memory using the
  *  MYKONOS_configDpd() function before running the DPD init or tracking
  *  calibrations.  These values can only be changed when the ARM is in the
