@@ -295,6 +295,14 @@ int main(void)
 		4
 	};
 	struct axi_adc *rx_adc;
+
+	struct axi_adc_init rx_obs_adc_init = {
+		"rx_obs_adc",
+		RX_OS_CORE_BASEADDR,
+		2
+	};
+	struct axi_adc *rx_obs_adc;
+
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
@@ -302,6 +310,15 @@ int main(void)
 		0
 	};
 	struct axi_dmac *rx_dmac;
+
+	struct axi_dmac_init rx_obs_dmac_init = {
+		"rx_obs_dmac",
+		RX_OBS_DMA_BASEADDR,
+		DMA_DEV_TO_MEM,
+		0
+	};
+	struct axi_dmac *rx_obs_dmac;
+
 #ifdef DAC_DMA_EXAMPLE
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
@@ -911,6 +928,14 @@ int main(void)
 	/* Initialize the ADC core */
 	axi_adc_init(&rx_adc, &rx_adc_init);
 
+	if ((mykError = MYKONOS_setObsRxPathSource(&mykDevice,
+			OBS_RX1_SNIFFERLO)) != MYKONOS_ERR_OK) {
+		errorString = getMykonosErrorMessage(mykError);
+		goto error_11;
+	}
+
+	axi_adc_init(&rx_obs_adc, &rx_obs_adc_init);
+
 #ifdef DAC_DMA_EXAMPLE
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
@@ -926,6 +951,7 @@ int main(void)
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
+	axi_dmac_init(&rx_obs_dmac, &rx_obs_dmac_init);
 
 #ifdef IIO_EXAMPLE
 
