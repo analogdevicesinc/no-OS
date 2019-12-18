@@ -46,7 +46,6 @@
 #include "error.h"
 #include "iio.h"
 #include "iio_app.h"
-#include "parameters.h"
 
 /**
  * iio_app_init() - Application parameterization.
