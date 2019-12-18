@@ -981,6 +981,11 @@ int main(void)
 	struct iio_axi_adc_app_init_param iio_axi_adc_app_init_par;
 
 	/**
+	 * iio axi adc application configurations, for observation chain
+	 */
+	struct iio_axi_adc_app_init_param iio_axi_adc_obs_app_init_par;
+
+	/**
 	 * iio axi dac application configurations.
 	 */
 	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
@@ -999,6 +1004,11 @@ int main(void)
 	 * iio application instance descriptor.
 	 */
 	struct iio_axi_adc_app_desc *iio_axi_adc_app_desc;
+
+	/**
+	 * iio application instance descriptor, for observation chain
+	 */
+	struct iio_axi_adc_app_desc *iio_axi_adc_obs_app_desc;
 
 	/**
 	 * iio application instance descriptor.
@@ -1082,6 +1092,16 @@ int main(void)
 	};
 
 	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_adc_obs_app_init_par = (struct iio_axi_adc_app_init_param) {
+		.rx_adc = rx_obs_adc,
+		.rx_dmac = rx_obs_dmac,
+	};
+
+	status = iio_axi_adc_app_init(&iio_axi_adc_obs_app_desc,
+				      &iio_axi_adc_obs_app_init_par);
 	if(status < 0)
 		return status;
 
