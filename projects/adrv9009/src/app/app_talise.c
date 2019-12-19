@@ -65,6 +65,18 @@
 // header
 #include "app_talise.h"
 
+
+bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref)
+{
+	uint32_t div, mod;
+
+	div = lmfc / sysref;
+	mod = lmfc % sysref;
+
+	/* Ignore minor deviations that can be introduced by rounding. */
+	return mod <= div || mod >= sysref - div;
+}
+
 adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 {
 	uint32_t talAction = TALACT_NO_ACTION;

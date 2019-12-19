@@ -47,5 +47,6 @@ adiHalErr_t talise_setup(taliseDevice_t * const talDev,
 			 taliseInit_t * const talInit);
 
 void talise_shutdown(taliseDevice_t * const pd);
+bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref);
 
 #endif /* __APP_TALISE_H */

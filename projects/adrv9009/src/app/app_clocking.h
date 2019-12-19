@@ -42,10 +42,19 @@
 #include <stdint.h>
 #include "adi_hal.h"
 
+#define DEV_CLK	13
+#define FMC_CLK	1
+#define DEV_SYSREF 12
+#define FMC_SYSREF 3
+
 adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t tx_div40_rate_hz,
-			  uint32_t rx_os_div40_rate_hz);
+			  uint32_t rx_os_div40_rate_hz,
+			  uint32_t device_clock_khz,
+			  uint32_t lmfc_rate_hz);
 
 void clocking_deinit(void);
+
+extern struct ad9528_dev* ad9528_device;
 
 #endif /* __APP_CLOCKING_H */
