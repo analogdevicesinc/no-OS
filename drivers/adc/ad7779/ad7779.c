@@ -425,8 +425,8 @@ int32_t ad7779_set_state(ad7779_dev *dev,
 
 	ret = ad7779_spi_int_reg_write_mask(dev,
 					    AD7779_REG_CH_DISABLE,
-					    AD7779_CH_DISABLE(0x1),
-					    AD7779_CH_DISABLE(state));
+					    AD7779_CH_DISABLE(ch),
+					    state ? AD7779_CH_DISABLE(ch) : 0);
 	dev->state[ch] = state;
 
 	return ret;
@@ -704,7 +704,7 @@ int32_t ad7779_set_dclk_div(ad7779_dev *dev,
 				      ((div & 0x04) >> 2));
 	} else {
 		ret = ad7779_spi_int_reg_write_mask(dev,
-						    AD7779_REG_CH_DISABLE,
+						    AD7779_REG_DOUT_FORMAT,
 						    AD7779_DCLK_CLK_DIV(0x3),
 						    AD7779_DCLK_CLK_DIV(div));
 	}
