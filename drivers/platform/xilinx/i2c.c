@@ -62,11 +62,11 @@
 /**
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
- * @param init_param - The structure that contains the I2C parameters.
+ * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *init_param)
+		 const struct i2c_init_param *param)
 {
 	int32_t		ret;
 	i2c_desc	*idesc;
@@ -79,9 +79,9 @@ int32_t i2c_init(struct i2c_desc **desc,
 	if(!idesc || !xdesc)
 		goto error;
 
-	idesc->max_speed_hz = init_param->max_speed_hz;
-	idesc->slave_address = init_param->slave_address;
-	xinit = init_param->extra;
+	idesc->max_speed_hz = param->max_speed_hz;
+	idesc->slave_address = param->slave_address;
+	xinit = param->extra;
 
 	idesc->extra = xdesc;
 	xdesc->type = xinit->type;
@@ -109,7 +109,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 
 		ret = XIic_SetAddress(xdesc->instance,
 				      XII_ADDR_TO_SEND_TYPE,
-				      init_param->slave_address);
+				      param->slave_address);
 		if(ret != SUCCESS)
 			goto pl_error;
 
@@ -143,7 +143,7 @@ pl_error:
 		if(ret != SUCCESS)
 			goto ps_error;
 
-		XIicPs_SetSClk(xdesc->instance, init_param->max_speed_hz);
+		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
 
 		break;
 ps_error:

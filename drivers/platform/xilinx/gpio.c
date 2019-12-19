@@ -62,11 +62,11 @@
 /**
  * @brief Prepare the GPIO decriptor.
  * @param desc - The GPIO descriptor.
- * @param init_param - The structure that contains the GPIO parameters.
+ * @param param - The structure that contains the GPIO parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t _gpio_init(struct gpio_desc *desc,
-		   const struct gpio_init_param *init_param)
+		   const struct gpio_init_param *param)
 {
 	int32_t				ret;
 	struct xil_gpio_desc		*xdesc;
@@ -75,10 +75,10 @@ int32_t _gpio_init(struct gpio_desc *desc,
 	ret = FAILURE;
 
 	xdesc = desc->extra;
-	xinit = init_param->extra;
+	xinit = param->extra;
 
 	xdesc->type = xinit->type;
-	desc->number = init_param->number;
+	desc->number = param->number;
 
 	switch (xinit->type) {
 	case GPIO_PL:
@@ -137,11 +137,11 @@ error:
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
- * @param init_param - GPIO initialization parameters
+ * @param param - GPIO initialization parameters
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc,
-		 const struct gpio_init_param *init_param)
+		 const struct gpio_init_param *param)
 {
 	struct gpio_desc	*descriptor;
 	struct xil_gpio_desc	*extra;
@@ -154,7 +154,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 		return FAILURE;
 
 	descriptor->extra = extra;
-	ret = _gpio_init(descriptor, init_param);
+	ret = _gpio_init(descriptor, param);
 
 	if(ret != SUCCESS)
 		goto error;
