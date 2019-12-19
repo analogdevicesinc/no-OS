@@ -32,6 +32,7 @@
 #include "app_jesd.h"
 #include "app_transceiver.h"
 #include "app_talise.h"
+#include "ad9528.h"
 
 #ifdef IIO_EXAMPLE
 
@@ -77,6 +78,9 @@ static ssize_t iio_uart_read(char *buf, size_t len)
 
 int main(void)
 {
+	// compute the lane rate from profile settings
+	// lane_rate = input_rate * M * 20 / L
+	// 		where L and M are explained in taliseJesd204bFramerConfig_t comments
 	uint32_t rx_lane_rate_khz = talInit.rx.rxProfile.rxOutputRate_kHz *
 				    talInit.jesd204Settings.framerA.M * (20 /
 						    hweight8(talInit.jesd204Settings.framerA.serializerLanesEnabled));
@@ -89,6 +93,21 @@ int main(void)
 				       talInit.jesd204Settings.framerB.M * (20 /
 						       hweight8(talInit.jesd204Settings.framerB.serializerLanesEnabled));
 	uint32_t rx_os_div40_rate_hz = rx_os_lane_rate_khz * (1000 / 40);
+
+	// compute the local multiframe clock
+	// serializer:   lmfc_rate = (lane_rate * 100) / (K * F)
+	// deserializer: lmfc_rate = (lane_rate * 100) / (K * 2 * M / L)
+	// 		where K, F, L, M are explained in taliseJesd204bFramerConfig_t comments
+	uint32_t rx_lmfc_rate = (rx_lane_rate_khz * 100) /
+				(talInit.jesd204Settings.framerA.K * talInit.jesd204Settings.framerA.F);
+	uint32_t tx_lmfc_rate = (tx_lane_rate_khz * 100) /
+				(talInit.jesd204Settings.deframerA.K * 2 * talInit.jesd204Settings.deframerA.M /
+				 hweight8(talInit.jesd204Settings.deframerA.deserializerLanesEnabled));
+	uint32_t rx_os_lmfc_rate = (rx_os_lane_rate_khz * 100) /
+				   (talInit.jesd204Settings.framerB.K * talInit.jesd204Settings.framerB.F);
+
+	uint32_t lmfc_rate = min(rx_lmfc_rate, rx_os_lmfc_rate);
+	lmfc_rate = min(tx_lmfc_rate, lmfc_rate);
 
 	struct axi_adc_init rx_adc_init = {
 		"rx_adc",
@@ -169,7 +188,11 @@ int main(void)
 	/**********************************************************/
 	/**********************************************************/
 
-	clocking_init(rx_div40_rate_hz, tx_div40_rate_hz, rx_os_div40_rate_hz);
+	clocking_init(rx_div40_rate_hz,
+		      tx_div40_rate_hz,
+		      rx_os_div40_rate_hz,
+		      talInit.clocks.deviceClock_kHz,
+		      lmfc_rate);
 
 	/*** < Insert User BBIC JESD204B Initialization Code Here > ***/
 	jesd_init(rx_div40_rate_hz,

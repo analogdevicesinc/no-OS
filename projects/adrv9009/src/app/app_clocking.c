@@ -42,7 +42,6 @@
 #include <stdlib.h>
 
 // clock chips
-#include "talise_config_ad9528.h"
 #include "ad9528.h"
 
 // platform drivers
@@ -65,20 +64,14 @@
 #include "parameters.h"
 #include "adi_hal.h"
 
+// devices
+#include "ad9528.h"
+#include "app_talise.h"
+
 // header
 #include "app_clocking.h"
 
-ad9528Device_t clockAD9528_ = {
-	NULL,
-	NULL,
-	&clockSpiSettings,
-	&clockPll1Settings,
-	&clockPll2Settings,
-	&clockOutputSettings,
-	&clockSysrefSettings,
-	NULL,
-	NULL
-};
+struct ad9528_dev* ad9528_device;
 
 #ifdef ALTERA_PLATFORM
 struct altera_a10_fpll *rx_device_clk_pll;
@@ -92,11 +85,89 @@ struct axi_clkgen *rx_os_clkgen;
 
 adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t tx_div40_rate_hz,
-			  uint32_t rx_os_div40_rate_hz)
+			  uint32_t rx_os_div40_rate_hz,
+			  uint32_t device_clock_khz,
+			  uint32_t lmfc_rate_hz)
 {
-	adiHalErr_t ad9528Error;
 	int32_t status;
-	ad9528Device_t *clockAD9528_device = &clockAD9528_;
+	struct ad9528_channel_spec ad9528_channels[14];
+	struct ad9528_init_param ad9528_param;
+	struct ad9528_platform_data ad9528_pdata;
+	uint32_t dev_clk, fmc_clk;
+	uint32_t rate_dev = device_clock_khz * 1000;
+	uint32_t rate_fmc = device_clock_khz * 1000;
+	uint32_t n;
+	int ret;
+
+	// ad9528 defaults
+	ad9528_param.pdata = &ad9528_pdata;
+	ad9528_param.pdata->num_channels = 14;
+	ad9528_param.pdata->channels = &ad9528_channels[0];
+
+	status = ad9528_init(&ad9528_param);
+	if(status) {
+		printf("error: ad9528_init() failed with %d\n", status);
+		goto error_0;
+	}
+
+	// ad9528 channel defaults
+	for(unsigned int ch = 0; ch < ad9528_param.pdata->num_channels; ch++) {
+		ad9528_channels[ch].channel_num = ch;
+		ad9528_channels[ch].output_dis = 1;
+	}
+
+	// ad9528 channel specifics
+
+	// adrv9009 device clock
+	ad9528_channels[13].output_dis = 0;
+	ad9528_channels[13].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[13].divider_phase = 0;
+	ad9528_channels[13].signal_source = SOURCE_VCO;
+
+	// fpga device clock
+	ad9528_channels[1].output_dis = 0;
+	ad9528_channels[1].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[1].divider_phase = 0;
+	ad9528_channels[1].signal_source = SOURCE_VCO;
+
+	// adrv9009 sysref
+	ad9528_channels[12].output_dis = 0;
+	ad9528_channels[12].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[12].divider_phase = 0;
+	ad9528_channels[12].signal_source = SOURCE_SYSREF_VCO;
+
+	// fpga sysref
+	ad9528_channels[3].output_dis = 0;
+	ad9528_channels[3].driver_mode = DRIVER_MODE_LVDS;
+	ad9528_channels[3].divider_phase = 0;
+	ad9528_channels[3].signal_source = SOURCE_SYSREF_VCO;
+
+	// ad9528 settings
+	ad9528_param.pdata->spi3wire = 0;
+	ad9528_param.pdata->vcxo_freq = 122880000;
+	ad9528_param.pdata->refa_en = 1;
+	ad9528_param.pdata->refa_diff_rcv_en = 1;
+	ad9528_param.pdata->refa_r_div = 1;
+	ad9528_param.pdata->osc_in_cmos_neg_inp_en = 1;
+	ad9528_param.pdata->pll1_feedback_div = 4;
+	ad9528_param.pdata->pll1_feedback_src_vcxo = 0; /* VCO */
+	ad9528_param.pdata->pll1_charge_pump_current_nA = 5000;
+	ad9528_param.pdata->pll1_bypass_en = 0;
+	ad9528_param.pdata->pll2_vco_div_m1 = 3;
+	ad9528_param.pdata->pll2_n2_div = 10;
+	ad9528_param.pdata->pll2_r1_div = 1;
+	ad9528_param.pdata->pll2_charge_pump_current_nA = 805000;
+	ad9528_param.pdata->pll2_bypass_en = false;
+	ad9528_param.pdata->sysref_src = SYSREF_SRC_INTERNAL;
+	ad9528_param.pdata->sysref_pattern_mode = SYSREF_PATTERN_CONTINUOUS;
+	ad9528_param.pdata->sysref_req_en = true;
+	ad9528_param.pdata->sysref_nshot_mode = SYSREF_NSHOT_4_PULSES;
+	ad9528_param.pdata->sysref_req_trigger_mode = SYSREF_LEVEL_HIGH;
+	ad9528_param.pdata->rpole2 = RPOLE2_900_OHM;
+	ad9528_param.pdata->rzero = RZERO_1850_OHM;
+	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
+	ad9528_param.pdata->stat0_pin_func_sel = 0x1; /* PLL1 & PLL2 Locked */
+	ad9528_param.pdata->stat1_pin_func_sel = 0x7; /* REFA Correct */
 
 #ifdef ALTERA_PLATFORM
 	struct altera_spi_init_param ad9528_spi_param = {
@@ -104,27 +175,25 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.device_id = 0,
 		.base_address = SPI_BASEADDR
 	};
-	clockAD9528_.extra_spi = &ad9528_spi_param;
 	struct altera_gpio_init_param ad9528_gpio_param = {
 		.type = NIOS_II_GPIO,
 		.device_id = 0,
 		.base_address = GPIO_BASEADDR
 	};
-	clockAD9528_.extra_gpio = &ad9528_gpio_param;
 	struct altera_a10_fpll_init rx_device_clk_pll_init = {
 		"rx_device_clk_pll",
 		RX_A10_FPLL_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 	struct altera_a10_fpll_init tx_device_clk_pll_init = {
 		"tx_device_clk_pll",
 		TX_A10_FPLL_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 	struct altera_a10_fpll_init rx_os_device_clk_pll_init = {
 		"rx_os_device_clk_pll",
 		RX_OS_A10_FPLL_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 	struct altera_a10_fpll *rx_device_clk_pll;
 	struct altera_a10_fpll *tx_device_clk_pll;
@@ -138,7 +207,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 		.device_id = 0
 	};
-	clockAD9528_.extra_spi = &ad9528_spi_param;
 	struct xil_gpio_init_param ad9528_gpio_param = {
 #ifdef PLATFORM_MB
 		.type = GPIO_PL,
@@ -147,55 +215,95 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 		.device_id = GPIO_DEVICE_ID,
 	};
-	clockAD9528_.extra_gpio = &ad9528_gpio_param;
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 	struct axi_clkgen_init tx_clkgen_init = {
 		"tx_clkgen",
 		TX_CLKGEN_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 	struct axi_clkgen_init rx_os_clkgen_init = {
 		"rx_os_clkgen",
 		RX_OS_CLKGEN_BASEADDR,
-		clockAD9528_device->outputSettings->outFrequency_Hz[1]
+		device_clock_khz * 1000
 	};
 #endif
+
+	// ad9528 spi settings
+	struct spi_init_param ad9528_spi_init_param = {
+		.max_speed_hz = 10000000,
+		.mode = SPI_MODE_0,
+		.chip_select = CLK_CS,
+		.extra = &ad9528_spi_param
+	};
+
+	ad9528_param.spi_init = ad9528_spi_init_param;
+
+	struct gpio_init_param ad9528_gpio_init_param = {
+		.number = CLK_RESETB,
+		.extra = &ad9528_gpio_param
+	};
+
+	ad9528_param.gpio_resetb = ad9528_gpio_init_param;
 
 	/** < Insert User System Clock(s) Initialization Code Here >
 	* System Clock should provide a device clock and SYSREF signal
 	* to the Talise device.
 	**/
-	/* Init the AD9528 data structure */
-	ad9528Error = AD9528_initDeviceDataStruct(clockAD9528_device,
-			clockAD9528_device->pll1Settings->vcxo_Frequency_Hz,
-			clockAD9528_device->pll1Settings->refA_Frequency_Hz,
-			clockAD9528_device->outputSettings->outFrequency_Hz[1]);
-	if (ad9528Error != ADIHAL_OK) {
-		printf("error: AD9528_initDeviceDataStruct() failed\n");
-		goto error_0;
-	}
-
-	/* Perform a hard reset on the AD9528 DUT */
-	ad9528Error = AD9528_resetDevice(clockAD9528_device);
-	if (ad9528Error != ADIHAL_OK) {
-		printf("error: AD9528_resetDevice() failed\n");
+	status = ad9528_setup(&ad9528_device, ad9528_param);
+	if(status < 0) {
+		printf("error: ad9528_setup() failed with %d\n", status);
 		goto error_1;
 	}
 
-	/* Initialize the AD9528 by writing all SPI registers */
-	ad9528Error = AD9528_initialize(clockAD9528_device);
-	if (ad9528Error == ADIHAL_ERR) {
-		printf("error: AD9528_initialize() failed\n");
+	dev_clk = ad9528_clk_round_rate(ad9528_device, DEV_CLK,
+					device_clock_khz * 1000);
+
+	fmc_clk = ad9528_clk_round_rate(ad9528_device, FMC_CLK,
+					device_clock_khz * 1000);
+
+	if (dev_clk > 0 && fmc_clk > 0 && fmc_clk == dev_clk &&
+	    (dev_clk / 1000) == device_clock_khz) {
+		ad9528_clk_set_rate(ad9528_device, DEV_CLK, dev_clk);
+		ad9528_clk_set_rate(ad9528_device, FMC_CLK, fmc_clk);
+	} else {
+		printf("Requesting device clock %u failed got %u",
+		       device_clock_khz * 1000, dev_clk);
 		goto error_1;
 	}
 
-	if (ad9528Error == ADIHAL_WARNING)
-		printf("warning: AD9528_initialize() issues. "
-		       "Possible cause: REF_CLK not connected\n");
+	/* If the current rate is not OK, change it */
+	if (!(adrv9009_check_sysref_rate(lmfc_rate_hz, rate_dev) &&
+	      (rate_fmc == rate_dev))) {
+		/*
+		* Try to find a rate that integer divides the LMFC. Starting with a low
+		* rate is a good idea and then slowly go up in case the clock generator
+		* can't generate such slow rates.
+		*/
+		for (n = 64; n > 0; n--) {
+			rate_dev = ad9528_clk_round_rate(ad9528_device, DEV_SYSREF, lmfc_rate_hz / n);
+			if (adrv9009_check_sysref_rate(lmfc_rate_hz, rate_dev))
+				break;
+		}
+
+		if (n == 0) {
+			printf("Could not find suitable SYSREF rate for LMFC of %u\n", lmfc_rate_hz);
+			goto error_1;
+		}
+
+		ret = ad9528_clk_set_rate(ad9528_device, FMC_SYSREF, rate_fmc);
+		if (ret)
+			printf("Failed to set FMC SYSREF rate to %u Hz: %d\n",
+			       rate_fmc, ret);
+
+		ret = ad9528_clk_set_rate(ad9528_device, DEV_SYSREF, rate_dev);
+		if (ret)
+			printf("Failed to set DEV SYSREF rate to %u Hz: %d\n",
+			       rate_fmc, ret);
+	}
 
 #ifdef ALTERA_PLATFORM
 	/* Initialize A10 FPLLs */
@@ -304,7 +412,7 @@ error_2:
 	axi_clkgen_remove(rx_clkgen);
 #endif
 error_1:
-	AD9528_remove(&clockAD9528_);
+	ad9528_remove(ad9528_device);
 error_0:
 	return ADIHAL_ERR;
 }
@@ -320,5 +428,5 @@ void clocking_deinit(void)
 	axi_clkgen_remove(tx_clkgen);
 	axi_clkgen_remove(rx_clkgen);
 #endif
-	AD9528_remove(&clockAD9528_);
+	ad9528_remove(ad9528_device);
 }
