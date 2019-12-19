@@ -381,7 +381,7 @@ post-build:
 .SILENT:run
 run: eval-hardware
 	@ if [ "$(PLATFORM)" = "xilinx" ];then				\
-		xsdb $(SCRIPTS_DIR)/upload.tcl				\
+		xsdb $(SCRIPTS_PATH)/upload.tcl				\
 			$(shell cat $(TEMP_DIR)/arch.txt) 		\
 			$(BUILD_DIR)/hw/system_top.bit			\
 			$(BUILD_DIR)/$(EXEC).elf			\
