@@ -30,7 +30,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 INCS := $(PROJECT)/src/common.h						\
 	$(PROJECT)/src/config.h
 INCS += $(PROJECT)/src/ad9361.h						\
-	$(PROJECT)/src/ad9361_parameters.h				\
+	$(PROJECT)/src/parameters.h					\
 	$(PROJECT)/src/ad9361_util.h					\
 	$(PROJECT)/src/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
