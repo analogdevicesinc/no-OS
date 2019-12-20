@@ -44,7 +44,13 @@
 #include "stdlib.h"
 #include "stdbool.h"
 #include <string.h>
-#include "ad77681.h"
+#include "ad7768-1.h"
+
+/******************************************************************************/
+/********************************* Macros *************************************/
+/******************************************************************************/
+
+#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -109,12 +115,14 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 {
 	int32_t ret;
 	uint8_t buf[3];
-	uint8_t buf_len = (dev->crc_sel == AD77681_NO_CRC) ? 2 : 3;
+	uint8_t word_len = (dev->crc_sel == AD77681_NO_CRC) ? 16 : 24;
+
+	//spi_eng_set_transfer_length(dev->spi_desc,word_len);
 
 	buf[0] = AD77681_REG_READ(reg_addr);
 	buf[1] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, buf_len);
+	ret = spi_write_and_read(dev->spi_desc, buf, word_len / 8);
 	if (ret < 0)
 		return ret;
 
@@ -138,7 +146,7 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 
 	buf[0] = AD77681_REG_WRITE(reg_addr);
 	buf[1] = reg_data;
-
+	//spi_eng_set_transfer_length(dev->spi_desc,16);
 	return spi_write_and_read(dev->spi_desc, buf, ARRAY_SIZE(buf));
 }
 
@@ -181,10 +189,9 @@ int32_t ad77681_spi_write_mask(struct ad77681_dev *dev,
 	int32_t ret;
 
 	ret = ad77681_spi_reg_read(dev, reg_addr, reg_data);
-	ret = ad77681_spi_reg_read(dev, reg_addr, reg_data);
-	reg_data[1] &= ~mask;
-	reg_data[1] |= data;
-	ret |= ad77681_spi_reg_write(dev, reg_addr, reg_data[1]);
+	reg_data[0] &= ~mask;
+	reg_data[0] |= data;
+	ret |= ad77681_spi_reg_write(dev, reg_addr, reg_data[0]);
 
 	return ret;
 }
@@ -221,14 +228,24 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 {
 	uint8_t crc_calc_buf[4], buf[4], crc;
 	uint8_t rx_tx_buf_len = ad77681_get_rx_buf_len(dev) + 1;
-	int32_t ret;
+	int32_t ret = 0;
 
 	buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
 	buf[1] = 0x00;
 	buf[2] = 0x00;
 	buf[3] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, rx_tx_buf_len);
+
+	ad77681_spi_write_mask(dev,
+			       AD77681_REG_CONVERSION,
+			       AD77681_CONVERSION_MODE_MSK,
+			       AD77681_CONVERSION_MODE(AD77681_CONV_SINGLE));
+	//spi_eng_set_transfer_length(dev->spi_desc,32);
+	ret |= spi_write_and_read(dev->spi_desc, buf, rx_tx_buf_len);
+	ad77681_spi_write_mask(dev,
+			       AD77681_REG_CONVERSION,
+			       AD77681_CONVERSION_MODE_MSK,
+			       AD77681_CONVERSION_MODE(AD77681_CONV_CONTINUOUS));
 	if (ret < 0)
 		return ret;
 
@@ -251,9 +268,9 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
  * Set the power consumption mode of the ADC core.
  * @param dev - The device structure.
  * @param mode - The power mode.
- * 					Accepted values: AD77681_ECO
- *									 AD77681_MEDIAN
- *									 AD77681_FAST
+ * 	Accepted values: AD77681_ECO
+ *			 AD77681_MEDIAN
+ *			 AD77681_FAST
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
@@ -273,10 +290,10 @@ int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
  * Set the MCLK divider.
  * @param dev - The device structure.
  * @param clk_div - The MCLK divider.
- * 					Accepted values: AD77681_MCLK_DIV_16
- *									 AD77681_MCLK_DIV_8
- *									 AD77681_MCLK_DIV_4
- *									 AD77681_MCLK_DIV_2
+ * 	Accepted values: AD77681_MCLK_DIV_16
+ *			 AD77681_MCLK_DIV_8
+ *			 AD77681_MCLK_DIV_4
+ *			 AD77681_MCLK_DIV_2
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
@@ -296,18 +313,18 @@ int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
  * Conversion mode and source select
  * @param dev - The device structure.
  * @param conv_mode - Sets the conversion mode of the ADC
- * 					  Accepted values: AD77681_CONV_CONTINUOUS
- *									   AD77681_CONV_ONE_SHOT
- *									   AD77681_CONV_SINGLE
- *									   AD77681_CONV_PERIODIC
+ * 	Accepted values: AD77681_CONV_CONTINUOUS
+ *			 AD77681_CONV_ONE_SHOT
+ *			 AD77681_CONV_SINGLE
+ *			 AD77681_CONV_PERIODIC
  * @param diag_mux_sel - Selects which signal to route through diagnostic mux
- * 					  Accepted values: AD77681_TEMP_SENSOR
- *									   AD77681_AIN_SHORT
- *									   AD77681_POSITIVE_FS
- *									   AD77681_NEGATIVE_FS
+ * 	Accepted values: AD77681_TEMP_SENSOR
+ *			 AD77681_AIN_SHORT
+ *			 AD77681_POSITIVE_FS
+ *			 AD77681_NEGATIVE_FS
  * @param conv_diag_sel - Select the input for conversion as AIN or diagnostic mux
- * 					  Accepted values: true
- *									   false
+ * 	Accepted values: true
+ *			 false
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
@@ -341,8 +358,8 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
  * Set the Conversion Result Output Length.
  * @param dev - The device structure.
  * @param conv_len - The MCLK divider.
- * 					Accepted values: AD77681_CONV_24BIT
- *									 AD77681_CONV_16BIT
+ * 	Accepted values: AD77681_CONV_24BIT
+ *			 AD77681_CONV_16BIT
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_convlen(struct ad77681_dev *dev,
@@ -366,9 +383,9 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
  * Selects CRC method as XOR or 8-bit polynomial
  * @param dev - The device structure.
  * @param crc_sel - The CRC type.
- * 					Accepted values: AD77681_CRC
- *									 AD77681_XOR
- *									 AD77681_NO_CRC
+ * 	Accepted values: AD77681_CRC
+ *			 AD77681_XOR
+ *			 AD77681_NO_CRC
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
@@ -402,8 +419,8 @@ int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
  * Enables Status bits output
  * @param dev - The device structure.
  * @param status_bit - enable or disable status bit
- * 					Accepted values: true
- *									 false
+ * 	Accepted values: true
+ *			 false
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
@@ -449,7 +466,7 @@ int32_t ad77681_soft_reset(struct ad77681_dev *dev)
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
- * 					   parameters.
+ * 		       parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_setup(struct ad77681_dev **device,
@@ -472,8 +489,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->crc_sel = init_param.crc_sel;
 	dev->status_bit = init_param.status_bit;
 
-	spi_init(&dev->spi_desc, init_param.spi_eng_dev_init);
-
+	spi_init(&dev->spi_desc, init_param.spi_init_param);
 	ret |= ad77681_soft_reset(dev);
 	ret |= ad77681_set_power_mode(dev, dev->power_mode);
 	ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
