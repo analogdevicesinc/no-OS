@@ -688,8 +688,8 @@ int32_t ad9361_post_setup(struct ad9361_rf_phy *phy)
 	struct axiadc_converter *conv = phy->adc_conv;
 	struct axi_adc *rx_adc = phy->rx_adc;
 	int32_t rx2tx2 = phy->pdata->rx2tx2;
-	uint32_t tmp, num_chan, flags;
-	int32_t i, ret;
+	uint32_t tmp, num_chan, flags, i;
+	int32_t ret;
 
 	num_chan = ad9361_num_phy_chan(conv);
 
