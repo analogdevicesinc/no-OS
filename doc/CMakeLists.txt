@@ -19,6 +19,11 @@ set(DOCUMENTED_FILES
  ")
 
 configure_file(
+    DoxygenLayoutIn.xml
+    ${DOXY_WORKING_DIR}/DoxygenLayout.xml
+)
+
+configure_file(
     Doxyfile.in
     ${DOXY_WORKING_DIR}/Doxyfile.doxy
 )
