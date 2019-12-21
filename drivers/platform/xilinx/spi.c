@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.c
+ *   @file   xilinx/spi.c
  *   @brief  Implementation of Xilinx SPI Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
