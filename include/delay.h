@@ -1,5 +1,6 @@
 /***************************************************************************//**
  *   @file   delay.h
+ *   @brief  Header file of Delay functions
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

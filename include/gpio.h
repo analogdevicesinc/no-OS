@@ -1,5 +1,6 @@
 /***************************************************************************//**
  *   @file   gpio.h
+ *   @brief  Header file of GPIO Interface
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
