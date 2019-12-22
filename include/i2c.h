@@ -1,5 +1,6 @@
 /***************************************************************************//**
  *   @file   i2c.h
+ *   @brief  Header file of I2C Interface
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
