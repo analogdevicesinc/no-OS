@@ -49,9 +49,16 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct fifo_element
+ * @brief Structure holding the fifo element parameters.
+ */
 struct fifo_element {
+	/** next FIFO element */
 	struct fifo_element *next;
+	/** FIFO data pointer */
 	char *data;
+	/** FIFO length */
 	uint32_t len;
 };
 
