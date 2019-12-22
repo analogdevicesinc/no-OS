@@ -49,21 +49,42 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum i2c_transfer_mode
+ * @brief I2C transfer mode configuration
+ */
 typedef enum i2c_transfer_mode {
+	/** Address every device connected */
 	i2c_general_call =	0x01,
+	/** Send multiple start conditions */
 	i2c_repeated_start =	0x02,
+	/** Use 10-bit address scheme */
 	i2c_10_bit_transfer =	0x04
 } i2c_transfer_mode;
 
+/**
+ * @struct i2c_init_param
+ * @brief Structure holding the parameters for I2C initialization.
+ */
 typedef struct i2c_init_param {
+	/** I2C maximum transfer speed supported */
 	uint32_t	max_speed_hz;
+	/** Slave address */
 	uint8_t		slave_address;
+	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
 } i2c_init_param;
 
+/**
+ * @struct i2c_desc
+ * @brief Structure holding I2C descriptor
+ */
 typedef struct i2c_desc {
+	/** I2C maximum transfer speed supported */
 	uint32_t	max_speed_hz;
+	/** Slave address */
 	uint8_t		slave_address;
+	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
 } i2c_desc;
 

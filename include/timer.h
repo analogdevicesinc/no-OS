@@ -50,15 +50,29 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct timer_desc
+ * @brief Structure holding timer descriptor
+ */
 struct timer_desc {
+	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
+	/** counter start value */
 	uint32_t load_value;
+	/** timer extra parameters (device specific) */
 	void *extra;
 };
 
+/**
+ * @struct timer_init_param
+ * @brief  Structure holding the parameters for timer initialization
+ */
 struct timer_init_param {
+	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
+	/** counter start value */
 	uint32_t load_value;
+	/** timer extra parameters (device specific) */
 	void *extra;
 };
 

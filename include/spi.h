@@ -56,24 +56,48 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum spi_mode
+ * @brief SPI configuration for clock phase and polarity.
+ */
 typedef enum spi_mode {
+	/** Data on rising, shift out on falling */
 	SPI_MODE_0 = (0 | 0),
+	/** Data on falling, shift out on rising */
 	SPI_MODE_1 = (0 | SPI_CPHA),
+	/** Data on falling, shift out on rising */
 	SPI_MODE_2 = (SPI_CPOL | 0),
+	/** Data on rising, shift out on falling */
 	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
 } spi_mode;
 
+/**
+ * @struct spi_init_param
+ * @brief Structure holding the parameters for SPI initialization
+ */
 typedef struct spi_init_param {
+	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
+	/** SPI chip select */
 	uint8_t		chip_select;
+	/** SPI mode */
 	enum spi_mode	mode;
+	/**  SPI extra parameters (device specific) */
 	void		*extra;
 } spi_init_param;
 
+/**
+ * @struct spi_desc
+ * @brief Structure holding SPI descriptor.
+ */
 typedef struct spi_desc {
+	/** maximum transfer speed */
 	uint32_t	max_speed_hz;
+	/** SPI chip select */
 	uint8_t		chip_select;
+	/** SPI mode */
 	enum spi_mode	mode;
+	/**  SPI extra parameters (device specific) */
 	void		*extra;
 } spi_desc;
 
