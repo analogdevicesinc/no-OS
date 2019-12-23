@@ -51,19 +51,39 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum xil_gpio_type
+ * @brief Xilinx platform architecture sections
+ */
 typedef enum xil_gpio_type {
+	/** Programmable Logic */
 	GPIO_PL,
+	/** Processing System */
 	GPIO_PS
 } xil_gpio_type;
 
+/**
+ * @struct xil_gpio_init_param
+ * @brief Structure holding the initialization parameters for Xilinx platform
+ * specific GPIO parameters.
+ */
 typedef struct xil_gpio_init_param {
+	/** Xilinx architecture */
 	enum xil_gpio_type	type;
+	/** Device ID */
 	uint32_t		device_id;
 } xil_gpio_init_param;
 
+/**
+ * @struct xil_gpio_desc
+ * @brief Xilinx platform specific GPIO descriptor
+ */
 typedef struct xil_gpio_desc {
+	/** Xilinx architecture */
 	enum xil_gpio_type	type;
+	/** Xilinx GPIO configuration */
 	void			*config;
+	/** Xilinx GPIO Instance */
 	void			*instance;
 } xil_gpio_desc;
 

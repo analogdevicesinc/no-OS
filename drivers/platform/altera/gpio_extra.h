@@ -43,19 +43,39 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum gpio_type
+ * @brief Altera platform architecture types
+ */
 enum gpio_type {
+	/** Nios II architecture */
 	NIOS_II_GPIO
 } gpio_type;
 
+/**
+ * @struct altera_gpio_init_param
+ * @brief Structure holding the initialization parameters for Altera platform
+ * specific GPIO parameters.
+ */
 struct altera_gpio_init_param {
+	/** Altera architecture type */
 	enum gpio_type	type;
+	/** Device ID */
 	uint32_t	device_id;
+	/** GPIO base address */
 	uint32_t	base_address;
 } altera_gpio_init_param;
 
+/**
+ * @struct altera_gpio_desc
+ * @brief Altera platform specific GPIO descriptor
+ */
 struct altera_gpio_desc {
+	/** Altera architecture type */
 	enum gpio_type	type;
+	/** Device ID */
 	uint32_t		device_id;
+	/** GPIO base address */
 	uint32_t base_address;
 } altera_gpio_desc;
 

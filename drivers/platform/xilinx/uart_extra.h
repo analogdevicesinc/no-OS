@@ -54,26 +54,53 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum xil_uart_type
+ * @brief Xilinx platform architecture sections
+ */
 enum xil_uart_type {
+	/** Programmable Logic */
 	UART_PL,
+	/** Processing System */
 	UART_PS
 };
 
+/**
+ * @struct xil_uart_init_param
+ * @brief Structure holding the initialization parameters for Xilinx platform
+ * specific UART parameters.
+ */
 struct xil_uart_init_param {
+	/** Xilinx architecture */
 	enum xil_uart_type	type;
+	/** Interrupt Request ID */
 	uint32_t			irq_id;
+	/** Interrupt Request Descriptor */
 	struct irq_desc		*irq_desc;
 };
 
+/**
+ * @struct xil_uart_desc
+ * @brief Xilinx platform specific UART descriptor
+ */
 struct xil_uart_desc {
+	/** Xilinx architecture */
 	enum xil_uart_type	type;
+	/** Interrupt Request ID */
 	uint32_t			irq_id;
+	/** Interrupt Request Descriptor */
 	struct irq_desc		*irq_desc;
+	/** FIFO */
 	struct fifo_element	*fifo;
+	/** FIFO read offset */
 	uint32_t 			fifo_read_offset;
+	/** UART Buffer */
 	char 				buff[UART_BUFF_LENGTH];
+	/** Number of bytes received */
 	uint32_t 			bytes_received;
+	/** Total number of errors */
 	uint32_t 			total_error_count;
+	/** UART Instance */
 	void				*instance;
 };
 

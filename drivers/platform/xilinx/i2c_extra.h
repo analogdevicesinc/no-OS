@@ -50,19 +50,39 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum xil_i2c_type
+ * @brief Xilinx platform architecture sections
+ */
 enum xil_i2c_type {
+	/** Programmable Logic */
 	IIC_PL,
+	/** Processing System */
 	IIC_PS
 } xil_i2c_type;
 
+/**
+ * @struct xil_i2c_init
+ * @brief Structure holding the initialization parameters for Xilinx platform
+ * specific I2C parameters.
+ */
 typedef struct xil_i2c_init {
+	/** Xilinx architecture */
 	enum xil_i2c_type	type;
+	/** Device ID */
 	uint32_t		device_id;
 } xil_i2c_init;
 
+/**
+ * @struct xil_i2c_desc
+ * @brief Xilinx platform specific I2C descriptor
+ */
 typedef struct xil_i2c_desc {
+	/** Xilinx architecture */
 	enum xil_i2c_type	type;
+	/** Xilinx I2C configuration */
 	void			*config;
+	/** Xilinx I2C Instance */
 	void			*instance;
 } xil_i2c_desc;
 

@@ -43,19 +43,39 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum spi_type
+ * @brief Altera platform architecture types
+ */
 enum spi_type {
+	/** Nios II architecture */
 	NIOS_II_SPI
 } spi_type;
 
+/**
+ * @struct altera_spi_init_param
+ * @brief Structure holding the initialization parameters for Altera platform
+ * specific SPI parameters.
+ */
 struct altera_spi_init_param {
+	/** Altera architecture type */
 	enum spi_type	type;
+	/** Device ID */
 	uint32_t	device_id;
+	/** SPI base address */
 	uint32_t	base_address;
 } altera_spi_init_param;
 
+/**
+ * @struct altera_spi_desc
+ * @brief Altera platform specific SPI descriptor
+ */
 struct altera_spi_desc {
+	/** Altera architecture type */
 	enum spi_type	type;
+	/** Device ID */
 	uint32_t		device_id;
+	/** SPI base address */
 	uint32_t	base_address;
 } altera_spi_desc;
 

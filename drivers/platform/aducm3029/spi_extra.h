@@ -50,56 +50,63 @@
 /******************************************************************************/
 
 /**
- * enum spi_channel - Available SPI channels on the ADuCM3029
- * SPI0:				SPI0 channel.
- * SPI1:				SPI1 channel.
- * SPI2:				SPI2 channel.
+ * @enum spi_channel
+ * @brief Available SPI channels on the ADuCM3029
  */
 enum spi_channel {
+	/** SPI0 channel. */
 	SPI0,
+	/** SPI1 channel. */
 	SPI1,
+	/** SPI2 channel. */
 	SPI2
 };
 
 /**
- * enum master_mode - Available operations mode for a SPI channel
- * SLAVE:				Slave mode.
- * MASTER:				Master mode.
+ * @enum master_mode
+ * @brief Available operations mode for a SPI channel
  */
 enum master_mode {
+	/** Slave mode. */
 	SLAVE,
+	/** Master mode. */
 	MASTER
 };
 
 /**
- * struct aducm_spi_init_param - Configuration structure sent in the extra parameter from spi_init_param.
- * spi_channel:		Select the SPI channel
- * master_mode:		Select the operation mode
- * continuous_mode:	Enable or disable continuous mode
+ * @struct aducm_spi_init_param
+ * @brief Configuration structure sent in the extra parameter from
+ * spi_init_param.
  */
 struct aducm_spi_init_param {
+	/** Select the SPI channel */
 	enum spi_channel	spi_channel;
+	/** Select the operation mode */
 	enum master_mode	master_mode;
+	/** Enable or disable continuous mode */
 	bool				continuous_mode;
 };
 
 /**
- * struct aducm_spi_desc - SPI specific descriptor for the ADuCM3029. The structure is available in the
- * extra parameter from spi_desc. The dma and half_duplex parameters can be configurated before every call
- * to spi_read_write.
- * master_mode:		Select the operation mode
- * spi_channel:		Select the spi_channel
- * half_duplex:		If true, it enables half duplex mode. The default if false
- * dma:				Device name. If true, it enables DMA transfer. The default value is false
- * buffer:				RESERVED
- * spi_handle:			Handle to identify the SPI device
+ * @struct aducm_spi_desc
+ * @brief SPI specific descriptor for the ADuCM3029. The structure is available
+ * in the extra parameter from spi_desc. The dma and half_duplex parameters can
+ * be configurated before every call to spi_read_write.
  */
 struct aducm_spi_desc {
+	/** Select the operation mode */
 	enum master_mode	master_mode;
+	/** Select the spi_channel */
 	enum spi_channel	spi_channel;
+	/** If true, it enables half duplex mode. The default if false */
 	bool					half_duplex;
+	/** Device name. If true, it enables DMA transfer.
+	 * Default value: false
+	 */
 	bool					dma;
+	/** RESERVED */
 	void					*buffer;
+	/** Handle to identify the SPI device */
 	ADI_SPI_HANDLE			spi_handle;
 };
 

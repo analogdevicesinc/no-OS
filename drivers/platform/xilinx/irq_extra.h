@@ -48,17 +48,35 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum xil_irq_type
+ * @brief Xilinx platform architecture sections
+ */
 enum xil_irq_type {
+	/** Programmable Logic */
 	IRQ_PL,
+	/** Processing System */
 	IRQ_PS
 };
 
+/**
+ * @struct xil_irq_init_param
+ * @brief Structure holding the initialization parameters for Xilinx platform
+ * specific IRQ parameters.
+ */
 struct xil_irq_init_param {
+	/** Xilinx architecture */
 	enum xil_irq_type	type;
 };
 
+/**
+ * @struct xil_irq_desc
+ * @brief Xilinx platform specific IRQ descriptor
+ */
 struct xil_irq_desc {
+	/** Xilinx architecture */
 	enum xil_irq_type	type;
+	/** Xilinx IRQ Instance */
 	void				*instance;
 };
 
