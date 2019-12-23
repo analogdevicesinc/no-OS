@@ -56,22 +56,45 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum xil_spi_type
+ * @brief Xilinx platform architecture sections
+ */
 enum xil_spi_type {
+	/** Programmable Logic */
 	SPI_PL,
+	/** Processing System */
 	SPI_PS,
+	/** SPI Engine */
 	SPI_ENGINE
 } xil_spi_type;
 
+/**
+ * @struct xil_spi_init_param
+ * @brief Structure holding the initialization parameters for Xilinx platform
+ * specific SPI parameters.
+ */
 typedef struct xil_spi_init_param {
+	/** Xilinx architecture */
 	enum xil_spi_type	type;
+	/** SPI flags */
 	uint32_t		flags;
+	/** Device ID */
 	uint32_t		device_id;
 } xil_spi_init_param;
 
+/**
+ * @struct xil_spi_desc
+ * @brief Xilinx platform specific SPI descriptor
+ */
 typedef struct xil_spi_desc {
+	/** Xilinx architecture */
 	enum xil_spi_type	type;
+	/** SPI flags */
 	uint32_t		flags;
+	/** SPI configuration */
 	void			*config;
+	/** SPI instance */
 	void			*instance;
 } xil_spi_desc;
 

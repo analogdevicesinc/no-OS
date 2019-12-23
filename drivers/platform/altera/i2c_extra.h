@@ -43,17 +43,35 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @enum i2c_type
+ * @brief Altera platform architecture types
+ */
 enum i2c_type {
+	/** Nios II architecture */
 	NIOS_II_I2C
 } i2c_type;
 
+/**
+ * @struct altera_i2c_init_param
+ * @brief Structure holding the initialization parameters for Altera
+ * platform specific I2C parameters.
+ */
 struct altera_i2c_init_param {
+	/** Altera architecture type */
 	enum i2c_type	type;
+	/** Device ID */
 	uint32_t	id;
 } altera_i2c_init_param;
 
+/**
+ * @struct altera_i2c_desc
+ * @brief Altera platform specific I2C descriptor
+ */
 struct altera_i2c_desc {
+	/** Altera architecture type */
 	enum i2c_type	type;
+	/** Device ID */
 	uint32_t	id;
 } altera_i2c_desc;
 
