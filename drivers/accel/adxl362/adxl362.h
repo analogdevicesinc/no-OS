@@ -195,15 +195,24 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @struct adxl362_dev
+ * @brief ADXL362 Device structure.
+ */
 struct adxl362_dev {
-	/* SPI */
+	/** SPI Descriptor */
 	spi_desc	*spi_desc;
-	/* Device Settings */
+	/** Measurement Range: */
 	uint8_t		selected_range;
 };
 
+/**
+ * @struct adxl362_init_param
+ * @brief Structure holding the parameters for ADXL362 device initialization.
+ */
 struct adxl362_init_param {
-	/* SPI */
+	/** SPI Initialization structure. */
 	spi_init_param	spi_init;
 };
 

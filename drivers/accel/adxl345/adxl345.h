@@ -180,25 +180,37 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct adxl345_dev
+ * @brief ADXL345 Device structure.
+ */
 struct adxl345_dev {
-	/* I2C */
+	/** I2C Descriptor */
 	i2c_desc	*i2c_desc;
-	/* SPI */
+	/** SPI Descriptor */
 	spi_desc	*spi_desc;
-	/* Device Settings */
+	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */
 	uint8_t		communication_type;
+	/** Measurement range */
 	uint8_t		selected_range;
+	/** Enable/Disable Full Resolution */
 	uint8_t		full_resolution_set;
 };
 
+/**
+ * @struct adxl345_init_param
+ * @brief Structure holding the parameters for ADXL345 device initialization.
+ */
 struct adxl345_init_param {
-	/* I2C */
+	/** I2C Initialization structure. */
 	i2c_init_param	i2c_init;
-	/* SPI */
+	/** SPI Initialization structure. */
 	spi_init_param	spi_init;
-	/* Device Settings */
+	/** Device Communication type: ADXL345_SPI_COMM, ADXL345_I2C_COMM */
 	uint8_t		communication_type;
+	/** Measurement range */
 	uint8_t		selected_range;
+	/** Enable/Disable Full Resolution */
 	uint8_t		full_resolution_set;
 };
 
