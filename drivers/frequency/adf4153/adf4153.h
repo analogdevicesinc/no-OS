@@ -250,48 +250,9 @@
 /*****************************************************************************/
 
 /**
-*   @struct ADF4106_settings_t
+*   @struct adf41053_settings_t
 *   @brief store the value of all the latch and the input
 *                               reference frequency
-*
-*                               N Divider Register
-*   frac_value  - these 12 bits control what is loaded as the FRAC value into
-*                 the fractional interpolator.
-*   int_value   - these nine bits control what is loaded as the INT value, this
-*                 is used to determine the overall division factor
-*   fastlock   - when set to logic high fast-lock is enabled
-*
-*                               R Divider Register
-*   mod_value   - set the fractional modulus, this is the ratio of the PFD
-*                 frequency to the channel step resolution on the RF output
-*   r_counter   - the r counter allows the input reference frequency to
-*                 be divided down to produce the reference clock to phase
-*                 frequency detector
-*   prescaler  - the dual-modulus prescaler, along with the INT, FRAC and MOD
-*                 counters, determines the overall division ratio from the RFin
-*                 to PFD input
-*   muxout     - the on chip multiplexer selection bits
-*   load_control - when set to logic high the value being programmed in the
-*                  modulus is not loaded into the modulus. Instead, it sets the
-*                  resync delay of the Sigma-Delta.
-*
-*                                 Control Register
-*   counter_reset - resets the R and N counters
-*   cp_three_state - puts the charge pump into three-state mode when programmed
-*                   to 1
-*   power_down  - activate power down mode
-*   ldp        - lock detect precision
-*   pd_polarity - phase detector polarity
-*   cp_current  - Charge Pump Current settings, this should be set to the charge
-*                 pump current that the loop filter is designed with
-*   ref_doubler - REFin Doubler, when the doubler is enabled, both the rising
-*                 and falling edges of REFin become active edges at the PFD input
-*   resync     - define the time between two resync, if it is zero, than
-*                 the phase resync feature is disabled
-*
-*                              Noise and Spur register
-*   noise_spur  - allows the user to optimize a design either for improved
-*                 spurious performance or for improved phase noise performance
 */
 
 struct adf4153_settings_t {
@@ -302,28 +263,70 @@ struct adf4153_settings_t {
 	uint32_t channel_spacing;
 
 	/* N Divider */
+	/** these 12 bits control what is loaded as the FRAC value into
+	 * the fractional interpolator.
+	 */
 	uint16_t frac_value : 12;
+	/** these nine bits control what is loaded as the INT value, this
+	 * is used to determine the overall division factor.
+	 */
 	uint16_t int_value : 9;
+	/** when set to logic high fast-lock is enabled */
 	uint8_t fastlock : 1;
 
 	/* R Divider */
+	/** set the fractional modulus, this is the ratio of the PFD
+	 * frequency to the channel step resolution on the RF output
+	 */
 	uint16_t mod_value : 12;
+	/** the r counter allows the input reference frequency to
+	* be divided down to produce the reference clock to phase
+	* frequency detector
+	*/
 	uint8_t r_counter : 4;
+	/** the dual-modulus prescaler, along with the INT, FRAC and MOD
+	 * counters, determines the overall division ratio from the RFin
+	 * to PFD input
+	 */
 	uint8_t prescaler : 1;
+	/** the on chip multiplexer selection bits */
 	uint8_t muxout : 3;
+	/** when set to logic high the value being programmed in the
+	 * modulus is not loaded into the modulus. Instead, it sets the
+	 * resync delay of the Sigma-Delta.
+	 */
 	uint8_t load_control : 1;
 
 	/* Control Register */
+	/** resets the R and N counters */
 	uint8_t counter_reset : 1;
+	/** puts the charge pump into three-state mode when programmed
+	 * to 1
+	 */
 	uint8_t cp_three_state : 1;
+	/** activate power down mode */
 	uint8_t power_down : 1;
+	/** lock detect precision */
 	uint8_t ldp : 1;
+	/** phase detector polarity */
 	uint8_t pd_polarity : 1;
+	/** Charge Pump Current settings, this should be set to the charge
+	 * pump current that the loop filter is designed with
+	 */
 	uint8_t cp_current : 4;
+	/** REFin Doubler, when the doubler is enabled, both the rising
+	 * and falling edges of REFin become active edges at the PFD input
+	 */
 	uint8_t ref_doubler : 1;
+	/** define the time between two resync, if it is zero, than
+	 * the phase resync feature is disabled
+	 */
 	uint8_t resync : 4;
 
 	/* Noise and Spur register */
+	/** allows the user to optimize a design either for improved
+	 * spurious performance or for improved phase noise performance
+	 */
 	uint8_t noise_spur : 5;
 
 };

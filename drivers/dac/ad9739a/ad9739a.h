@@ -222,17 +222,17 @@ struct ad9739a_dev {
 };
 
 /**
- * @struct ad9739a_platform_data
- * @brief Platform specific information.
- * common_mode_voltage_dacclk_p: magnitude of the offset for the DACCLK_P.
- * common_mode_voltage_dacclk_n: magnitude of the offset for the DACCLK_N.
+ * @struct ad9739a_init_param
+ * @brief Driver Initialization parameters.
  */
 struct ad9739a_init_param {
-	/* SPI */
+	/** SPI Initialization parameters */
 	spi_init_param	spi_init;
-	/* Device settings */
+	/** magnitude of the offset for the DACCLK_P. */
 	uint8_t		common_mode_voltage_dacclk_p;
+	/** magnitude of the offset for the DACCLK_N. */
 	uint8_t		common_mode_voltage_dacclk_n;
+	/** Full-scale current. */
 	float		full_scale_current;
 };
 

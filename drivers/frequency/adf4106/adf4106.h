@@ -258,68 +258,69 @@
 /*****************************************************************************/
 
 /**
-*   @struct ADF4106_settings_t
+*   @struct adf4106_settings_t
 *   @brief store the value of all the latch and the input
 *                               reference frequency
-*   refIn - the input reference frequency
-*                               Reference Latch
-*   ref_counter - the initial value of the 14 bit Reference Counter register
-*   anti_backlash_width - the width of the anti-backlash pulse, this pulse
-*       ensures that no dead zone is in the PFD transfer function and minimizes
-*       phase noise and reference spurs.
-*   test_mode_bits - Should be set to zero for Normal operation
-*   lock_detect_precision - determines the number of consecutive cycles of phase
-*        delay, that must occur before lock detect is set
-*                               N Latch
-*   a_n_counter - a 6 bits counter is supported at ADF4106
-*   b_n_counter - a 13 bits counter
-*   cp_gain - determines which charge pump current settings is used
-*                        Function/Initialization Latch
-*   counter_reset - resets the R and N counters
-*   power_down1 - activate power down mode
-*   muxout_control - the type of the MUXOUT output
-*   phase_detector_pol - the polarity of the Phase Detector
-*   cp_type - the type of the Charge Pump output
-*   fast_lock_mode - set the desired Fast Lock Mode
-*   timer_counter_control - how long will be the secondary charge pump current
-*       active, before reverting to the primary current
-*   current_setting1 - is used when the RF output is stable and the system is
-*       in static state
-*   current_setting2 - is meant to be used when the system is dynamic and in a
-*       state of change (i.e., when a new output frequency is programmed)
-*   power_down2 - define the type of the power down: asynchronous or
 */
 
 struct adf4106_settings_t {
 
-	/* Reference Input Frequency*/
+	/** Reference Input Frequency */
 	uint32_t ref_in;
 
-	/* PFD max frequency */
+	/** PFD max frequency */
 	uint32_t pfd_max;
 
-	/* Reference latch */
+	/** The initial value of the 14 bit Reference Counter register */
 	uint16_t ref_counter : 14;
+	/** The width of the anti-backlash pulse, this pulse
+	 * ensures that no dead zone is in the PFD transfer function and minimizes
+	 * phase noise and reference spurs.
+	 */
 	uint8_t anti_backlash_width : 2;
+	/** Should be set to zero for Normal operation */
 	uint8_t test_mode_bits : 1;
+	/** determines the number of consecutive cycles of phase
+	 * delay, that must occur before lock detect is set
+	 */
 	uint8_t lock_detect_precision : 1;
 
 	/* N Latch */
+	/** a 6 bits counter is supported at ADF4106 */
 	uint8_t a_n_counter : 6;
+	/** a 13 bits counter */
 	uint16_t b_n_counter : 13;
+	/** determines which charge pump current settings is used */
 	uint8_t cp_gain : 1;
 
 	/* Functional/Initialization latch */
+	/** resets the R and N counters */
 	uint8_t counter_reset : 1;
+	/** activate power down mode */
 	uint8_t power_down1 : 1;
+	/** the type of the MUXOUT output */
 	uint8_t muxout_control : 3;
+	/** the polarity of the Phase Detector */
 	uint8_t phase_detector_pol : 1;
+	/** the type of the Charge Pump output */
 	uint8_t cp_type : 1;
+	/** set the desired Fast Lock Mode */
 	uint8_t fast_lock_mode : 2;
+	/** how long will be the secondary charge pump current
+	 * active, before reverting to the primary current
+	 */
 	uint8_t timer_counter_control : 4;
+	/** is used when the RF output is stable and the system is
+	 * in static state
+	 */
 	uint8_t current_setting1 : 3;
+	/** is meant to be used when the system is dynamic and in a
+	 * state of change (i.e., when a new output frequency is programmed)
+	 */
 	uint8_t current_setting2 : 3;
+	/** define the type of the power down */
 	uint8_t power_down2 : 1;
+	/** the value of the prescaler */
 	uint8_t prescaler_value : 2;
 
 };
