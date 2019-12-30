@@ -246,187 +246,235 @@
 /**
  * @struct ad9250_platform_data
  * @brief Platform specific information.
- * extrn_pdwnmode: External PDWN mode.
- *		   0 = PDWN is full power down
- *		   1 = PDWN puts device in standby
- * en_clk_dcs: Clock duty cycle stabilizer enable.
- *	      0 = disable
- *	      1 = enable
- * clk_selection: Clock selection.
- *		  0 = Nyquist clock
- *		  2 = RF clock divide by 4
- *		  3 = clock off
- * clk_div_ratio: Clock divider ratio relative to the encode clock.
- *		 0x00 = divide by 1
- *		 0x01 = divide by 2
- *		 ...
- *		 0x07 = divide by 8
- * clk_div_phase: Clock divide phase relative to the encode clock.
- *		 0x0 = 0 input clock cycles delayed
- *		 0x1 = 1 input clock cycles delayed
- *		 ...
- *		 0x7 = 7 input clock cycles delayed
- * adc_vref: Main reference full-scale VREF adjustment.
- *	     0x0f = internal 2.087 V p-p
- *	     ...
- *	     0x01 = internal 1.772 V p-p
- *	     0x00 = internal 1.75 V p-p [default]
- *	     0x1F = internal 1.727 V p-p
- *	     ...
- *	     0x10 = internal 1.383 V p-p
- * pll_low_encode: PLL low encode.
- *		  0 = for lane speeds > 2 Gbps
- *		  1 = for lane speeds < 2 Gbps
- * name: Device name.
  */
 struct ad9250_platform_data {
-	/* Power configuration */
+	/**
+	 * External PDWN mode.
+	 * 0 = PDWN is full power down
+	 * 1 = PDWN puts device in standby
+	 */
 	int8_t extrn_pdwnmode;
-	/* Global clock */
+	/**
+	 * Clock duty cycle stabilizer enable.
+	 * 0 = disable
+	 * 1 = enable
+	 */
 	int8_t en_clk_dcs;
+	/**
+	 * Clock selection.
+	 * 0 = Nyquist clock
+	 * 2 = RF clock divide by 4
+	 * 3 = clock off
+	 */
 	int8_t clk_selection;
+	/**
+	 * Clock divider ratio relative to the encode clock.
+	 * 0x00 = divide by 1
+	 * 0x01 = divide by 2
+	 * ...
+	 * 0x07 = divide by 8
+	 */
 	int8_t clk_div_ratio;
+	/**
+	 * Clock divide phase relative to the encode clock.
+	 * 0x0 = 0 input clock cycles delayed
+	 * 0x1 = 1 input clock cycles delayed
+	 * ...
+	 * 0x7 = 7 input clock cycles delayed
+	 */
 	int8_t clk_div_phase;
-	/* ADC Vref */
+	/**
+	 * Main reference full-scale VREF adjustment.
+	 * 0x0f = internal 2.087 V p-p
+	 * ...
+	 * 0x01 = internal 1.772 V p-p
+	 * 0x00 = internal 1.75 V p-p [default]
+	 * 0x1F = internal 1.727 V p-p
+	 * ...
+	 * 0x10 = internal 1.383 V p-p
+	 */
 	int8_t adc_vref;
-	/* PLL */
+	/**
+	 * PLL low encode.
+	 * 0 = for lane speeds > 2 Gbps
+	 * 1 = for lane speeds < 2 Gbps
+	 */
 	int8_t pll_low_encode;
-	/* Device name */
+	/** Device name */
 	int8_t	name[16];
 };
 
 /**
  * @struct ad9250_jesd204b_cfg
  * @brief JESD204B interface configuration.
- *
- * jtx_in_standby: JTX in standby.
- *		  0 = 204B core is unaffected in standby
- *		  1 = 204B core is powered down except for PLL during standby
- * cml_level: JESD204B CML differential output drive level adjustment.
- *	      0 = 81% of nominal (that is, 238 mV)
- *	      1 = 89% of nominal (that is, 262 mV)
- *	      2 = 98% of nominal (that is, 286 mV)
- *	      3 = nominal [default] (that is, 293 mV)
- *	      6 = 126% of nominal (that is, 368 mV)
- * quick_cfg_option: Quick configuration register.
- *		    0x11 = M = 1, L = 1; one converter, one lane
- *		    0x12 = M = 1, L = 2; one converter, two lanes
- *		    0x21 = M = 2, L = 1; two converters, one lane
- *		    0x22 = M = 2, L = 2; two converters, two lanes
- * subclass: JESD204B subclass.
- *	      0 = Subclass 0
- *	      1 = Subclass 1
- * ctrl_bits_no: Number of control bits (CS).
- *		0 = no control bits(CS = 0)
- *		1 = 1 control bit  (CS = 1)
- *		2 = 2 control bits (CS = 2)
- * ctrl_bits_assign: JTX CS bits assignment.
- *		    0 = {overrange||underrange, valid}
- *		    1 = {overrange||underrange}
- *		    2 = {overrange||underrange, blank}
- *		    3 = {blank, valid}
- *		    4 = {blank, blank}
- *	   All others = {overrange||underrange, valid}
- * tail_bits_mode: Tail bits: If CS bits are not enabled.
- *		  0 = extra bits are 0
- *		  1 = extra bits are 9-bit PN
- * did: JESD204B device identification value: DID[7:0]
- * bid: JESD204B bank identification value : BID[3:0]
- * lid0: JESD204B lane0 identification value: LID[4:0]
- * lid1: JESD204B lane1 identification value: LID[4:0]
- * k: JESD204B number of frames per multiframe (K); set value of K per JESD204B
- *     specifications, but also must be a multiple of 4 octets.
- * scrambling: JESD204B scrambling (SCR).
- *		0 = disabled
- *		1 = enabled
- * ilas_mode: Initial lane alignment sequence (ILAS) mode.
- *	      1 = ILAS normal mode enabled
- *	      3 = ILAS always on, test mode
- * en_ilas_test: JESD204B test sample.
- *		0 = disabled
- *		1 = enabled
- * invert_logic_bits: Invert logic of JESD204B bits.
- *		     0 = non-invert
- *		     1 = invert
- * en_sys_ref: SYSREF+- enable.
- *	      0 = disabled
- *	      1 = enabled
- * en_sync_in_b: Enable SYNCINB+- buffer.
- *	       0 = buffer disabled
- *	       1 = buffer enabled
- * sys_ref_mode: SYSREF+- mode.
- *		0 = continuous reset clock dividers
- *		1 = sync on next SYSREF+- rising edge only
- * align_sync_in_b: Options for interpreting single on SYNCINB+-.
- *		  0 = normal mode
- *		  1 = realign lanes on every active SYNCINB+-
- * align_sys_ref: Options for interpreting single on SYSREF+-.
- *		 0 = normal mode;
- *		 1 = realign lanes on every active SYSREF+-
- * lane0_assign: Option to remap converter and lane assignments.
- *		 0 = assign Logical Lane 0 to Physical Lane A [default]
- *		 1 = assign Logical Lane 0 to Physical Lane B
- * lane1_assign: Option to remap converter and lane assignments.
-*		0 = assign Logical Lane 1 to Physical Lane A
-*		1 = assign Logical Lane 1 to Physical Lane B [default]
-*/
+ */
 struct ad9250_jesd204b_cfg {
-	/* Power configuration */
+	/**
+	 * JTX in standby.
+	 * 0 = 204B core is unaffected in standby
+	 * 1 = 204B core is powered down except for PLL during standby
+	 */
 	int8_t jtx_in_standby;
-	/* Output drive adjustment */
+	/**
+	 * JESD204B CML differential output drive level adjustment.
+	 * 0 = 81% of nominal (that is, 238 mV)
+	 * 1 = 89% of nominal (that is, 262 mV)
+	 * 2 = 98% of nominal (that is, 286 mV)
+	 * 3 = nominal [default] (that is, 293 mV)
+	 * 6 = 126% of nominal (that is, 368 mV)
+	 */
 	int8_t cml_level;
-	/* Quick configuration */
+	/**
+	 * Quick configuration register.
+	 * 0x11 = M = 1, L = 1; one converter, one lane
+	 * 0x12 = M = 1, L = 2; one converter, two lanes
+	 * 0x21 = M = 2, L = 1; two converters, one lane
+	 * 0x22 = M = 2, L = 2; two converters, two lanes
+	 */
 	int8_t quick_cfg_option;
-	/* Detailed Options */
+	/**
+	 * JESD204B subclass.
+	 * 0 = Subclass 0
+	 * 1 = Subclass 1
+	 */
 	int8_t subclass;
+	/**
+	 * Number of control bits (CS).
+	 * 0 = no control bits(CS = 0)
+	 * 1 = 1 control bit  (CS = 1)
+	 * 2 = 2 control bits (CS = 2)
+	 */
 	int8_t ctrl_bits_no;
+	/**
+	 * JTX CS bits assignment.
+	 * 0 = {overrange||underrange, valid}
+	 * 1 = {overrange||underrange}
+	 * 2 = {overrange||underrange, blank}
+	 * 3 = {blank, valid}
+	 * 4 = {blank, blank}
+	 * All others = {overrange||underrange, valid}
+	 */
 	int8_t ctrl_bits_assign;
+	/**
+	 * Tail bits: If CS bits are not enabled.
+	 * 0 = extra bits are 0
+	 * 1 = extra bits are 9-bit PN
+	 */
 	int8_t tail_bits_mode;
+	/** JESD204B device identification value: DID[7:0] */
 	int8_t did;
+	/** JESD204B bank identification value : BID[3:0] */
 	int8_t bid;
+	/** JESD204B lane0 identification value: LID[4:0] */
 	int8_t lid0;
+	/** JESD204B lane1 identification value: LID[4:0] */
 	int8_t lid1;
+	/**
+	 * JESD204B number of frames per multiframe (K); set value of K per JESD204B
+	 * specifications, but also must be a multiple of 4 octets.
+	 */
 	int8_t k;
+	/**
+	 * JESD204B scrambling (SCR).
+	 * 0 = disabled
+	 * 1 = enabled
+	 */
 	int8_t scrambling;
+	/**
+	 * Initial lane alignment sequence (ILAS) mode.
+	 * 1 = ILAS normal mode enabled
+	 * 3 = ILAS always on, test mode
+	 */
 	int8_t ilas_mode;
+	/**
+	 * JESD204B test sample.
+	 * 0 = disabled
+	 * 1 = enabled
+	 */
 	int8_t en_ilas_test;
+	/**
+	 * Invert logic of JESD204B bits.
+	 * 0 = non-invert
+	 * 1 = invert
+	 */
 	int8_t invert_logic_bits;
+	/**
+	 * SYSREF+- enable.
+	 * 0 = disabled
+	 * 1 = enabled
+	 */
 	int8_t en_sys_ref;
+	/**
+	 * Enable SYNCINB+- buffer.
+	 * 0 = buffer disabled
+	 * 1 = buffer enabled
+	 */
 	int8_t en_sync_in_b;
+	/**
+	 * SYSREF+- mode.
+	 * 0 = continuous reset clock dividers
+	 * 1 = sync on next SYSREF+- rising edge only
+	 */
 	int8_t sys_ref_mode;
+	/**
+	 * Options for interpreting single on SYNCINB+-.
+	 * 0 = normal mode
+	 * 1 = realign lanes on every active SYNCINB+-
+	 */
 	int8_t align_sync_in_b;
+	/**
+	 * Options for interpreting single on SYSREF+-.
+	 * 0 = normal mode;
+	 * 1 = realign lanes on every active SYSREF+-
+	 */
 	int8_t align_sys_ref;
+	/**
+	 * Option to remap converter and lane assignments.
+	 * 0 = assign Logical Lane 0 to Physical Lane A [default]
+	 * 1 = assign Logical Lane 0 to Physical Lane B
+	 */
 	int8_t lane0_assign;
+	/* Option to remap converter and lane assignments.
+	 * 0 = assign Logical Lane 1 to Physical Lane A
+	 * 1 = assign Logical Lane 1 to Physical Lane B [default]
+	*/
 	int8_t lane1_assign;
 };
 
 /**
  * @struct ad9250_fast_detect_cfg
  * @brief  Fast Detect module configuration.
- *
- * en_fd: Enable fast detect output.
- *	  0 = disable
- *	  1 = enable
- * pin_function: Pin function.
- *		 0 = fast detect
- *		 1 = overrange
- * force_pins: Force FDA/FDB pins
- *	       0 = normal function
- *	       1 = force to value
- * pin_force_value: Force value of FDA/FDB pins.
- *		   0 = output on FD pins will be 0
- *		   1 = output on FD pins will be 1
- * fd_upper_tresh: Fast Detect Upper Threshold[14:0].
- * fd_lower_tresh: Fast Detect Lower Threshold[14:0].
- * df_dwell_time: Fast Detect Dwell Time[15:0].
  */
 struct ad9250_fast_detect_cfg {
+	/**
+	 * Enable fast detect output.
+	 * 0 = disable
+	 * 1 = enable
+	 */
 	int8_t	en_fd;
+	/**
+	 * Pin function.
+	 * 0 = fast detect
+	 * 1 = overrange
+	 */
 	int8_t	pin_function;
+	/**
+	 * Force FDA/FDB pins
+	 * 0 = normal function
+	 * 1 = force to value
+	 */
 	int8_t	force_pins;
+	/**
+	 * Force value of FDA/FDB pins.
+	 * 0 = output on FD pins will be 0
+	 * 1 = output on FD pins will be 1
+	 */
 	int8_t	pin_force_value;
+	/** Fast Detect Upper Threshold[14:0]. */
 	int16_t fd_upper_tresh;
+	/** Fast Detect Lower Threshold[14:0]. */
 	int16_t fd_lower_tresh;
+	/** Fast Detect Dwell Time[15:0]. */
 	int16_t df_dwell_time;
 };
 
