@@ -72,7 +72,7 @@ struct xil_uart_desc {
 	struct fifo_element	*fifo;
 	uint32_t 			fifo_read_offset;
 	char 				buff[UART_BUFF_LENGTH];
-	uint32_t 			bytes_reveived;
+	uint32_t 			bytes_received;
 	uint32_t 			total_error_count;
 	void				*instance;
 };

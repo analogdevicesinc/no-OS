@@ -60,15 +60,15 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	struct irq_desc	*irq_desc = xil_uart_desc->irq_desc;
 
-	if (xil_uart_desc->bytes_reveived > 0) {
+	if (xil_uart_desc->bytes_received > 0) {
 		ret = irq_source_disable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
 		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff,
-				  xil_uart_desc->bytes_reveived);
+				  xil_uart_desc->bytes_received);
 		if (ret < 0)
 			return ret;
-		xil_uart_desc->bytes_reveived = 0;
+		xil_uart_desc->bytes_received = 0;
 		switch(xil_uart_desc->type) {
 		case UART_PS:
 #ifdef XUARTPS_H
@@ -196,7 +196,7 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 		 * timeout just indicates the data stopped for configured character time
 		 */
 		case XUARTPS_EVENT_RECV_TOUT:
-			xil_uart_desc->bytes_reveived = data_len;
+			xil_uart_desc->bytes_received = data_len;
 			break;
 		/*
 		 * Data was received with an error, keep the data but determine
