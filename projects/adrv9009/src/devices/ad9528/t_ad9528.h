@@ -1,10 +1,10 @@
 /**
- * \file t_ad9528.h
+ * \file adrv9009/src/devices/ad9528/t_ad9528.h
  * \brief Contains enum and structure data types for all AD9528 function calls
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license.
 *

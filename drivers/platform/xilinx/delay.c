@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   delay.c
+ *   @file   xilinx/delay.c
  *   @brief  Implementation of Xilinx Delay Functions.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************

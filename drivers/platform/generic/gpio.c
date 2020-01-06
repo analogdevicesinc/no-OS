@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   gpio.c
+ *   @file   generic/gpio.c
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.

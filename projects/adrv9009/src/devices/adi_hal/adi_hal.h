@@ -1,5 +1,5 @@
 /**
- * \file adi_hal.h
+ * \file adrv9009/src/devices/adi_hal/adi_hal.h
  * \brief Contains Talise ADI HAL function prototypes type definitions for adi_hal.c
  *
  * Copyright 2015-2017 Analog Devices Inc.
@@ -225,6 +225,8 @@ adiHalErr_t ADIHAL_resetHw(void *devHalInfo);
  * \param devHalInfo Pointer to Platform HAL defined structure containing
  *        hardware settings describing the device of interest and required
  *        hardware references to toggle SYSREF pin of the ADI device.
+ *
+ * \param mode SYSREF request mode.
  *
  * \pre This function may be called at any time to issue a SYSREF request
  *  after the required GPIO drivers and resources are opened by the

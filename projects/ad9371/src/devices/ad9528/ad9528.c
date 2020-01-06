@@ -1,10 +1,10 @@
 /**
- * \file ad9528.c
+ * \file ad9371/src/devices/ad9528/ad9528.c
  * \brief Contains source code for configuring and initializing AD9528 clock device
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license, for more information see the "LICENSE.txt" file in this zip file.
 *
@@ -622,6 +622,7 @@ ADI_ERR AD9528_waitForPllLock(ad9528Device_t *device)
  * - device->spiSettings
  *
  * \param device is structure pointer to AD9528 clock device structure
+ * \param status PLL status 
  *
  * \return Returns enum ADI_ERR, 0=pass, >0 = fail
  ***********************************************************************************/

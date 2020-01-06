@@ -48,6 +48,7 @@
 /***************************************************************************//**
  * @brief Writes 4 bytes of data to ADF4350.
  *
+ * @param dev - The device structure.
  * @param data - Data value to write.
  *
  * @return Returns 0 in case of success or negative error code..
@@ -68,7 +69,7 @@ int32_t adf4350_write(adf4350_dev *dev,
 /***************************************************************************//**
  * @brief Updates the registers values.
  *
- * @param st - The selected structure.
+ * @param dev - The device structure.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -101,7 +102,7 @@ int32_t adf4350_sync_config(adf4350_dev *dev)
  * @brief Increases the R counter value until the ADF4350_MAX_FREQ_PFD is
  *        greater than PFD frequency.
  *
- * @param st    - The selected structure.
+ * @param dev - The device structure.
  * @param r_cnt - Initial r_cnt value.
  *
  * @return Returns 0 in case of success or negative error code.
@@ -139,7 +140,7 @@ uint32_t gcd(uint32_t x, uint32_t y)
 /***************************************************************************//**
  * @brief Sets the ADF4350 frequency.
  *
- * @param st   - The selected structure.
+ * @param dev - The device structure.
  * @param freq - The desired frequency value.
  *
  * @return calculatedFrequency - The actual frequency value that was set.
@@ -269,8 +270,8 @@ int64_t adf4350_set_freq(adf4350_dev *dev,
 /***************************************************************************//**
  * @brief Initializes the ADF4350.
  *
- * @param spiBaseAddr - SPI peripheral AXI base address.
- * @param ssNo        - Slave select line on which the slave is connected.
+ * @param device - The device structure.
+ * @param init_param - The structure containing the device initial parameters.
  *
  * @return Returns 0 in case of success or negative error code.
 *******************************************************************************/
@@ -363,6 +364,7 @@ int32_t adf4350_setup(adf4350_dev **device,
 /***************************************************************************//**
  * @brief Stores PLL 0 frequency in Hz.
  *
+ * @param dev - The device structure.
  * @param Hz - The selected frequency.
  *
  * @return Returns the selected frequency.
@@ -376,6 +378,7 @@ int64_t adf4350_out_altvoltage0_frequency(adf4350_dev *dev,
 /***************************************************************************//**
  * @brief Stores PLL 0 frequency resolution/channel spacing in Hz.
  *
+ * @param dev - The device structure.
  * @param Hz - The selected frequency.
  *
  * @return Returns the selected frequency.
@@ -393,6 +396,7 @@ int32_t adf4350_out_altvoltage0_frequency_resolution(adf4350_dev *dev,
 /***************************************************************************//**
  * @brief Sets PLL 0 REFin frequency in Hz.
  *
+ * @param dev - The device structure.
  * @param Hz - The selected frequency.
  *
  * @return Returns the selected frequency.
@@ -410,6 +414,7 @@ int64_t adf4350_out_altvoltage0_refin_frequency(adf4350_dev *dev,
 /***************************************************************************//**
  * @brief Powers down the PLL.
  *
+ * @param dev - The device structure.
  * @param pwd - Power option.
  *				Example: 0 - Power up the PLL.
  *						 1 - Power down the PLL.

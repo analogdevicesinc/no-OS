@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   i2c_extra.h
+ *   @file   xilinx/i2c_extra.h
  *   @brief  Header containing types used in the i2c driver.
  *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************

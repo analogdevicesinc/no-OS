@@ -6,7 +6,7 @@
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license, for more information see the "LICENSE.txt" file in this zip file.
 *

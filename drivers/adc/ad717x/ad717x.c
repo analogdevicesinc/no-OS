@@ -1,7 +1,7 @@
 /***************************************************************************//**
 *   @file    AD717X.c
 *   @brief   AD717X implementation file.
-*   @devices AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2
+*   	     Devices: AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2
 *            AD7177-2
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
@@ -84,7 +84,7 @@ ad717x_st_reg *AD717X_GetReg(ad717x_dev *device,
 * @brief Reads the value of the specified register.
 *
 * @param device - The handler of the instance of the driver.
-* @addr - The address of the register to be read. The value will be stored
+* @param addr - The address of the register to be read. The value will be stored
 *         inside the register structure that holds info about this register.
 *
 * @return Returns 0 for success or negative error code.

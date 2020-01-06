@@ -146,6 +146,7 @@ void ad799x_get_conversion_result(struct ad799x_dev *dev,
 /***************************************************************************//**
  * @brief Converts a raw sample to volts.
  *
+ * @param dev		 - The device structure.
  * @param raw_sample - The data sample.
  * @param v_ref      - The value of the voltage reference used by the device.
  *

@@ -98,7 +98,7 @@ int32_t ad5761r_write(struct ad5761r_dev *dev,
  *					  CMD_RD_DAC_REG
  *					  CMD_RD_CTRL_REG
  *					  CMD_SW_FULL_RESET
- * @param - The received data.
+ * @param reg_data - The received data.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_read(struct ad5761r_dev *dev,
@@ -241,6 +241,7 @@ int32_t ad5761r_set_output_range(struct ad5761r_dev *dev,
 /**
  * Get the output_range.
  * @param dev - The device structure.
+ * @param out_range - The output range values.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad5761r_get_output_range(struct ad5761r_dev *dev,
@@ -439,7 +440,7 @@ int32_t ad5761r_get_overrange_en_dis(struct ad5761r_dev *dev,
  * Get the short-circuit condition.
  * Note: The condition is reset at every control register write.
  * @param dev - The device structure.
- * @param en_dis - The status of the short-circuit condition (detected,
+ * @param sc - The status of the short-circuit condition (detected,
  *		   not detected).
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -459,7 +460,7 @@ int32_t ad5761r_get_short_circuit_condition(struct ad5761r_dev *dev,
  * Get the brownout condition.
  * Note: The condition is reset at every control register write.
  * @param dev - The device structure.
- * @param en_dis - The status of the brownout condition (detected,
+ * @param bo - The status of the brownout condition (detected,
  *		   not detected).
  * @return 0 in case of success, negative error code otherwise.
  */

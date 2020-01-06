@@ -127,7 +127,7 @@ int32_t ad9739a_reset(struct ad9739a_dev *dev)
  * @brief Powers down LVDS interface and TxDAC.
  *
  * @param dev       - The device structure.
- * @param pwrConfig - Selects the modules to be powered-down.
+ * @param pwr_config - Selects the modules to be powered-down.
  * 		      Example:
  * 			AD9739A_POWER_DOWN_LVDS_DRVR_PD |
  * 			AD9739A_POWER_DOWN_LVDS_RCVR_PD

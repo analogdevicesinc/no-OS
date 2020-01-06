@@ -276,6 +276,7 @@ int32_t ad5770r_channel_config(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param output_mode - The structure that contains the channel output
  *			parameters.
+ * @param channel - The channel number.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_output_mode(struct ad5770r_dev *dev,
@@ -295,8 +296,8 @@ int32_t ad5770r_set_output_mode(struct ad5770r_dev *dev,
 /**
  * Set reference configuration.
  * @param dev - The device structure.
- * @param output_mode - The structure that contains the channel output
- *			parameters.
+ * @param external_reference - Enable external reference.
+ * @param reference_selector - The reference to be selected.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_reference(struct ad5770r_dev *dev,
@@ -362,6 +363,7 @@ int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param output_filter - The structure that contains the channel output
  *			filter resistor values.
+ * @param channel - The channel number.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_output_filter(struct ad5770r_dev *dev,
@@ -583,8 +585,7 @@ int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
 /**
  * Get status value.
  * @param dev - The device structure.
- * @param mon_setup - The structure that contains the monitor setup
- *		values.
+ * @param status - The status of the device.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_get_status(struct ad5770r_dev *dev,

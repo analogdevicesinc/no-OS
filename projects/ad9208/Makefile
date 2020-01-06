@@ -1,2 +1,6 @@
 TARGET := ad9208
-include ../../tools/scripts/Makefile
+ifeq ($(OS), Windows_NT)
+include ../../tools/scripts/windows.mk
+else
+include ../../tools/scripts/linux.mk
+endif

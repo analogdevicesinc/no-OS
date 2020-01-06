@@ -1,5 +1,5 @@
 /**
- * \file talise_config.h
+ * \file adrv9009/profiles/tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88/talise_config.h
  * \brief Talise configuration external declarations
  *
  * \brief Contains structure definitions for tal_config.c

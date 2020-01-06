@@ -1,5 +1,5 @@
 /*******************************************************************************
- *   @file   gpio_extra.h
+ *   @file   xilinx/gpio_extra.h
  *   @brief  Header containing extra types used in the gpio driver
  *   @author scuciurean (sergiu.cuciurean@analog.com)
 ********************************************************************************

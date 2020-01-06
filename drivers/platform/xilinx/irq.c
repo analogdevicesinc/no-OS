@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   irq.c
+ *   @file   xilinx/irq.c
  *   @brief  Implementation of Xilinx IRQ Generic Driver.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -60,7 +60,7 @@
 /**
  * @brief Initialize the IRQ interrupts.
  * @param desc - The IRQ descriptor.
- * @param init_param - The structure that contains the IRQ parameters.
+ * @param param - The structure that contains the IRQ parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t irq_ctrl_init(struct irq_desc **desc,

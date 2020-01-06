@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   i2c.c
+ *   @file   altera/i2c.c
  *   @brief  Implementation of Altera I2C Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -53,7 +53,7 @@
 /**
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
- * @param init_param - The structure that contains the I2C parameters.
+ * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
@@ -89,7 +89,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
  * @param desc - The I2C descriptor.
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param stop_bit - Stop condition control.
+ * @param option - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
@@ -97,7 +97,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t stop_bit)
+		  uint8_t option)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -111,7 +111,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	if (stop_bit) {
+	if (option) {
 		// Unused variable - fix compiler warning
 	}
 
@@ -123,7 +123,7 @@ int32_t i2c_write(struct i2c_desc *desc,
  * @param desc - The I2C descriptor.
  * @param data - Buffer that will store the received data.
  * @param bytes_number - Number of bytes to read.
- * @param stop_bit - Stop condition control.
+ * @param option - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
@@ -131,7 +131,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t stop_bit)
+		 uint8_t option)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
@@ -145,7 +145,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	if (stop_bit) {
+	if (option) {
 		// Unused variable - fix compiler warning
 	}
 

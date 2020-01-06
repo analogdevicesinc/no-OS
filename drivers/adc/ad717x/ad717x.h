@@ -1,7 +1,7 @@
 /**************************************************************************//**
 *   @file    AD717X.h
 *   @brief   AD717X header file.
-*   @devices AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2,
+*   	     Devices: AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2,
 *            AD7177-2, AD4111
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)

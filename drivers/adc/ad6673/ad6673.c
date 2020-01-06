@@ -393,7 +393,6 @@ int32_t ad6673_set_bits_to_reg(struct ad6673_dev *dev,
 /***************************************************************************//**
  * @brief Checks if the register is shadowed.
  *
- * @param dev             - The device structure.
  * @param register_address - The address of the register to be checked.
  *
  * @return Returns the index of the shadow register or 0 if the register is not
@@ -645,7 +644,7 @@ int32_t ad6673_output_format(struct ad6673_dev *dev,
  * @brief Sets (1) or clears (0) the reset short PN sequence bit(PN9).
  *
  * @param dev - The device structure.
- * @param en  - Enable option.
+ * @param rst - Reset option.
  *             Example: 1 - The PN sequence is held in reset;
  *                      0 - The PN sequence resumes from the seed value(0x92).
  *
@@ -677,7 +676,7 @@ int32_t ad6673_reset_pn9(struct ad6673_dev *dev,
  * @brief Sets (1) or clears (0) the reset long PN sequence bit(PN23).
  *
  * @param dev - The device structure.
- * @param en  - Enable option.
+ * @param rst - Reset option.
  *             Example: 1 - The PN sequence is held in reset;
  *                      0 - The PN sequence resumes from the seed value(0x3AFF).
  *
@@ -762,7 +761,7 @@ int32_t ad6673_bist_enable(struct ad6673_dev *dev,
  * @brief Resets the Build-In-Self-Test.
  *
  * @param dev    - The device structure.
- * @param enable - reset option.
+ * @param reset  - reset option.
  *
  * @return Returns negative error code or the state of the reset bit.
 *******************************************************************************/
@@ -1086,8 +1085,8 @@ int32_t ad6673_jesd204b_select_test_injection_point(struct ad6673_dev *dev,
 /***************************************************************************//**
  * @brief Selects a JESD204B test mode.
  *
- * @param dev      - The device structure.
- * @param testMode - mode option.
+ * @param dev       - The device structure.
+ * @param test_mode - mode option.
  *                   Example: 0 - test mode disabled
  *                            1 - alternating checker board
  *                            2 - 1/0 word toggle

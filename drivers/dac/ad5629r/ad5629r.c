@@ -80,11 +80,9 @@ static const struct ad5629r_chip_info chip_info[] = {
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
  *
- * @param devAddr - AD5629R device address.
- *                  Example: AD5629R_I2C_ADDR_0 - A0_Pin=High;
- *                           AD5629R_I2C_ADDR_1 - A0_Pin=NC;
- *                           AD5629R_I2C_ADDR_2 - A0_Pin=Low.
- *        device  - supported devices.
+ * @param device -  AD5629R device structue.
+ *
+ * @param init_param - Device initial parameters.
  *                  Example: AD5629R, AD5669R, AD5668, AD5648, AD5628.
  * @return status - Result of the initialization procedure.
  *                  Example:  0 - if initialization was successful;
@@ -152,9 +150,9 @@ int32_t ad5629r_remove(struct ad5629r_dev *dev)
  * @brief Write to input register and read from output register via SPI.
  *
  * @param   dev      - The device structure.
- *          function - command control bits;
- *          dacN     - address of selected DAC;
- *          data     - data to be written in register.
+ * @param   function - command control bits;
+ * @param   dac_n    - address of selected DAC;
+ * @param   data     - data to be written in register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
@@ -194,9 +192,9 @@ void ad5629r_set_ctrl(struct ad5629r_dev *dev,
  * @brief Write to input register and read from output register via SPI.
  *
  * @param   dev      - The device structure.
- *          function - command control bits.
- *          dacN     - address of selected DAC;
- *          dacValue - data to be written in input register.
+ * @param   function - command control bits.
+ * @param   dac_n    - address of selected DAC;
+ * @param   dac_value - data to be written in input register.
  *
  * @return  readBack - value read from register.
 ******************************************************************************/
@@ -237,8 +235,8 @@ void ad5629r_set_input_reg(struct ad5629r_dev *dev,
  * @brief Writes a value to Input Register N of selected DAC channel.
  *
  * @param dev      - The device structure.
- *        dacValue - Value to be written in register;
- *        dacN     - Address of selected DAC.
+ * @param dac_value - Value to be written in register;
+ * @param dac_n     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
@@ -256,7 +254,7 @@ void ad5629r_write_reg_n(struct ad5629r_dev *dev,
  * @brief Updates selected DAC register.
  *
  * @param dev  - The device structure.
- *        dacN - Address of selected DAC.
+ * @param dac_n - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
@@ -274,8 +272,8 @@ void ad5629r_update_dac_n(struct ad5629r_dev *dev,
  *        updates all.
  *
  * @param dev      - The device structure.
- *        dacValue - Value to be written in register;
- *        dacN     - Address of selected DAC.
+ * @param dac_value - Value to be written in register;
+ * @param dac_n     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
@@ -294,8 +292,8 @@ void ad5629r_write_reg_nupdate_all(struct ad5629r_dev *dev,
  *        channel.
  *
  * @param dev      - The device structure.
- *        dacValue - Value to be written in register;
- *        dacN     - Address of selected DAC.
+ * @param dac_value - Value to be written in register;
+ * @param dac_n     - Address of selected DAC.
  *
  * @return none.
 *******************************************************************************/
@@ -313,12 +311,12 @@ void ad5629r_write_reg_nupdate_n(struct ad5629r_dev *dev,
  * @brief Sets the power mode for one or more selected DAC channels.
  *
  * @param dev    - The device structure.
- *        dacSel - a byte where each bit is corresponding to a DAC; when a bit is
+ * @param dac_sel - a byte where each bit is corresponding to a DAC; when a bit is
  *                 set to 1, the corresponding DAC is selected.
  *                 Example: DAC_A_SEL - the selected DAC is DAC A;
  *                          DAC_D_SEL | DAC_F_SEL | DAC_H_SEL - the selected DACs
  *                          are: DAC D, DAC F and DAC H.
- *        mode   - the desired power mode to be set.
+ * @param mode   - the desired power mode to be set.
  *                 Example: PWR_NORMAL      - normal operation;
  *                          PWR_1K_TO_GND   - 1KOhm to GND;
  *                          PWR_100K_TO_GND - 100KOhms to GND;
@@ -344,7 +342,7 @@ void ad5629r_set_power_mode(struct ad5629r_dev *dev,
  * @brief Loads the Clear Code Register with a certain value.
  *
  * @param dev        - The device structure.
- *        clearValue - the value to be set in all DAC registers after a clear
+ * @param clear_value - the value to be set in all DAC registers after a clear
  *                     operation.
  *                     Example: CLR_TO_ZEROSCALE - clears to 0x0;
  *                              CLR_TO_MIDSCALE  - clears to 0x8000;
@@ -370,7 +368,7 @@ void ad5629r_load_clear_code_reg(struct ad5629r_dev *dev,
  * @brief Loads the LDAC register with a certain value.
  *
  * @param dev    - The device structure.
- *        dacSel - a byte where each bit is corresponding to a DAC; when a bit is
+ * @param dac_sel - a byte where each bit is corresponding to a DAC; when a bit is
  *                 set to 1, the corresponding DAC is selected to override LDAC
  *                 pin.
  *                 Example: DAC_A_SEL - the selected DAC to override the LDAC pin
@@ -412,7 +410,7 @@ void ad5629r_reset(struct ad5629r_dev *dev)
  * @brief Turns on/off the internal reference.
  *
  * @param dev    - The device structure.
- *        status - the status of internal reference.
+ * @param status - the status of internal reference.
  *                 Example: REF_ON  - the reference is on;
  *                          REF_OFF - the reference is off.
  *

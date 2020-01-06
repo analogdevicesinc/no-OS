@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   parameters.c
+ *   @file   ad9371/src/devices/adi_hal/parameters.h
  *   @brief  Platform dependent parameters.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -63,6 +63,8 @@
 #define SPI_BASEADDR			SYS_SPI_BASE
 
 #define DDR_MEM_BASEADDR		SYS_DDR3_CNTRL_ARCH_BASE
+#define ADC_DDR_BASEADDR		SYS_DDR3_CNTRL_ARCH_BASE + 0x800000
+#define DAC_DDR_BASEADDR		SYS_DDR3_CNTRL_ARCH_BASE + 0xA000000
 
 #define RX_A10_FPLL_BASEADDR	AD9371_RX_JESD204_LINK_PLL_RECONFIG_BASE
 #define TX_A10_FPLL_BASEADDR	AD9371_TX_JESD204_LINK_PLL_RECONFIG_BASE
@@ -139,9 +141,17 @@
 #define RX_OS_CORE_BASEADDR		XPAR_RX_OS_AD9371_TPL_CORE_TPL_CORE_BASEADDR
 #endif
 
+#define RX_OBS_DMA_BASEADDR		XPAR_AXI_AD9371_RX_OS_DMA_BASEADDR
 #define RX_DMA_BASEADDR			XPAR_AXI_AD9371_RX_DMA_BASEADDR
 #define TX_DMA_BASEADDR			XPAR_AXI_AD9371_TX_DMA_BASEADDR
 #endif
+
+#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
+#define DAC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0xA000000
+
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
 
 #define AD9528_CS				1
 #define AD9371_CS				2

@@ -324,6 +324,7 @@ int32_t ad5686_remove(struct ad5686_dev *dev)
  *
  * @param dev     - The device structure.
  * @param command - Command control bits.
+ * @param address - The address bits.
  * @param data    - Data to be written in input register.
  *
  * @return  read_back_data - value read from register.
@@ -572,8 +573,8 @@ void ad5686_power_mode(struct ad5686_dev *dev,
 /**************************************************************************//**
  * @brief Set hardware LDAC mask register
  *
- * @param dev       - The device structure.
- * @param ldac_mask - In case of which channel ignore transitions on the LDAC
+ * @param dev     - The device structure.
+ * @param channel - In case of which channel ignore transitions on the LDAC
  *                    pin.
  *                    Accepted values:	AD5686_CH_0
  *					AD5686_CH_1
@@ -591,6 +592,7 @@ void ad5686_power_mode(struct ad5686_dev *dev,
  *					AD5686_CH_13
  *					AD5686_CH_14
  *					AD5686_CH_15
+ * @param enable - Enable/disable channel.
  * @return None.
 ******************************************************************************/
 void ad5686_ldac_mask(struct ad5686_dev *dev,

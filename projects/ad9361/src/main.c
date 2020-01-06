@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   main.c
+ *   @file   ad9361/src/main.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
@@ -43,7 +43,7 @@
 #include <inttypes.h>
 #include "config.h"
 #include "ad9361_api.h"
-#include "ad9361_parameters.h"
+#include "parameters.h"
 #include "spi.h"
 #include "spi_extra.h"
 #include "gpio.h"
@@ -56,17 +56,55 @@
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
+#include "error.h"
+
+#ifdef IIO_EXAMPLE
+
+#include "iio_app.h"
+#include "iio_axi_adc_app.h"
+#include "iio_axi_dac_app.h"
+#include "iio_ad9361.h"
+#include "irq.h"
+#include "irq_extra.h"
+#include "uart.h"
+#include "uart_extra.h"
+
+static struct uart_desc *uart_desc;
+
+/**
+ * iio_uart_write() - Write data to UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to write.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+static ssize_t iio_uart_write(const char *buf, size_t len)
+{
+	return uart_write(uart_desc, (const uint8_t *)buf, len);
+}
+
+/**
+ * iio_uart_read() - Read data from UART device wrapper.
+ * @buf - Pointer to buffer containing data.
+ * @len - Number of bytes to read.
+ * @Return: SUCCESS in case of success, FAILURE otherwise.
+ */
+static ssize_t iio_uart_read(char *buf, size_t len)
+{
+	return uart_read(uart_desc, (uint8_t *)buf, len);
+}
+
+#endif // IIO_EXAMPLE
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct axi_adc_init rx_adc_init = {
-	"rx_adc",
+	"cf-ad9361-lpc",
 	RX_CORE_BASEADDR,
 	4
 };
 struct axi_dac_init tx_dac_init = {
-	"tx_dac",
+	"cf-ad9361-dds-core-lpc",
 	TX_CORE_BASEADDR,
 	4
 };
@@ -615,6 +653,166 @@ int main(void)
 #endif
 #endif
 #endif
+
+#ifdef IIO_EXAMPLE
+
+	/**
+	 * Transmit DMA initial configuration.
+	 */
+	struct axi_dmac_init tx_dmac_init = {
+		.name = "tx_dmac",
+		.base = DAC_DDR_BASEADDR,
+		.direction = DMA_MEM_TO_DEV,
+		.flags = DMA_CYCLIC,
+	};
+
+	/**
+	 * Pointer to transmit DMA instance.
+	 */
+	struct axi_dmac *tx_dmac;
+
+	/**
+	 * iio application configurations.
+	 */
+	struct iio_app_init_param iio_app_init_par;
+
+	/**
+	 * iio axi adc application configurations.
+	 */
+	struct iio_axi_adc_app_init_param iio_axi_adc_app_init_par;
+
+	/**
+	 * iio axi dac application configurations.
+	 */
+	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
+
+	/**
+	 * UART server read/write callbacks.
+	 */
+	struct iio_server_ops uart_iio_server_ops;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_app_desc *iio_app_desc;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_axi_adc_app_desc *iio_axi_adc_app_desc;
+
+	/**
+	 * iio application instance descriptor.
+	 */
+	struct iio_axi_dac_app_desc *iio_axi_dac_app_desc;
+
+	/**
+	 * Xilinx platform dependent initialization for IRQ.
+	 */
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PS,
+	};
+
+	/**
+	 * IRQ initial configuration.
+	 */
+	struct irq_init_param irq_init_param = {
+		.irq_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
+	};
+
+	/**
+	 * IRQ instance.
+	 */
+	struct irq_desc *irq_desc;
+
+	/**
+	 * Xilinx platform dependent initialization for UART.
+	 */
+	struct xil_uart_init_param xil_uart_init_par;
+
+	/**
+	 * Initialization for UART.
+	 */
+	struct uart_init_param uart_init_par;
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(status < 0)
+		return status;
+
+	xil_uart_init_par = (struct xil_uart_init_param) {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+	};
+
+	uart_init_par = (struct uart_init_param) {
+		.baud_rate = 921600,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+
+	status = uart_init(&uart_desc, &uart_init_par);
+	if(status < 0)
+		return FAILURE;
+
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
+		return status;
+
+	uart_iio_server_ops = (struct iio_server_ops) {
+		.read = iio_uart_read,
+		.write = iio_uart_write,
+	};
+
+	iio_app_init_par = (struct iio_app_init_param) {
+		.iio_server_ops = &uart_iio_server_ops,
+	};
+
+	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_adc_app_init_par = (struct iio_axi_adc_app_init_param) {
+		.rx_adc = ad9361_phy->rx_adc,
+		.rx_dmac = ad9361_phy->rx_dmac,
+	};
+
+	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
+	if(status < 0)
+		return status;
+
+	iio_axi_dac_app_init_par = (struct iio_axi_dac_app_init_param) {
+		.tx_dac = ad9361_phy->tx_dac,
+		.tx_dmac = ad9361_phy->tx_dmac,
+	};
+
+	status = iio_axi_dac_app_init(&iio_axi_dac_app_desc, &iio_axi_dac_app_init_par);
+	if(status < 0)
+		return status;
+
+	const char dev_name[] = "ad9361-phy";
+	struct iio_interface_init_par iio_ad9361_intf_par = {
+		.dev_name = dev_name,
+		.dev_instance = ad9361_phy,
+		.iio_device = iio_ad9361_create_device(dev_name),
+		.get_xml = iio_ad9361_get_xml,
+		.transfer_dev_to_mem = NULL,
+		.transfer_mem_to_dev = NULL,
+		.read_data = NULL,
+		.write_data = NULL,
+	};
+	status = iio_register(&iio_ad9361_intf_par);
+	if(status < 0)
+		return status;
+
+	return iio_app(iio_app_desc);
+
+#endif // IIO_EXAMPLE
 
 	printf("Done.\n");
 

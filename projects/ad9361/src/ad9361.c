@@ -823,6 +823,7 @@ int32_t ad9361_validate_rfpll(struct ad9361_rf_phy *phy, uint64_t freq)
 /**
  * Find optimal value.
  * @param field
+ * @param size
  * @param ret_start
  * @return The optimal delay in case of success, negative error code otherwise.
  */
@@ -858,7 +859,7 @@ int32_t ad9361_find_opt(uint8_t *field, uint32_t size, uint32_t *ret_start)
 /**
  * Select the channel mapping in 1rx1tx mode.
  * @param phy The AD9361 state structure.
- * @param map Map
+ * @param tx Enable TX
  * @param channel Channel
  * @return The channel number.
  */
@@ -930,7 +931,7 @@ int32_t ad9361_en_dis_tx(struct ad9361_rf_phy *phy, uint32_t tx_if,
 /**
  * Enable/disable the desired RX channel.
  * @param phy The AD9361 state structure.
- * @param tx_if The desired channel number [1, 2].
+ * @param rx_if The desired channel number [1, 2].
  * @param enable Enable/disable option.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -2188,7 +2189,7 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 /**
  * Set the gain control mode.
  * @param phy The AD9361 state structure.
- * @param rf_gain_ctrl A rf_gain_ctrl struct that contains the the desired
+ * @param gain_ctrl A rf_gain_ctrl struct that contains the the desired
  *        channel information and the gain control mode.
  * @return 0 in case of success, negative error code otherwise.
  */
@@ -3441,6 +3442,7 @@ static int32_t ad9361_txmon_control(struct ad9361_rf_phy *phy,
 * 11 TX_MON1 & TX_MON2
 * @param phy The AD9361 state structure.
 * @param rx_inputs RX input option identifier
+* @param is_out
 * @param txb TX output option identifier
 * @return 0 in case of success, negative error code otherwise.
 */
@@ -6248,7 +6250,7 @@ static int32_t ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 
 /**
  * Recalculate the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param parent_rate The parent clock rate.
  * @return The clock rate.
  */
@@ -6265,9 +6267,9 @@ uint32_t ad9361_clk_factor_recalc_rate(struct refclk_scale *clk_priv,
 
 /**
  * Calculate the closest possible clock rate that can be set.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
+ * @param prate The parent clock rate.
  * @return The closest possible clock rate that can be set.
  */
 int32_t ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv,
@@ -6299,7 +6301,7 @@ int32_t ad9361_clk_factor_round_rate(struct refclk_scale *clk_priv,
 
 /**
  * Set the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
  * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
@@ -6331,7 +6333,7 @@ int32_t ad9361_clk_factor_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
  */
 /**
  * Recalculate the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param parent_rate The parent clock rate.
  * @return The clock rate.
  */
@@ -6357,9 +6359,9 @@ uint32_t ad9361_bbpll_recalc_rate(struct refclk_scale *clk_priv,
 
 /**
  * Calculate the closest possible clock rate that can be set.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
+ * @param prate The parent clock rate.
  * @return The closest possible clock rate that can be set.
  */
 int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
@@ -6397,7 +6399,7 @@ int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 /**
  * Set the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
  * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
@@ -6534,7 +6536,7 @@ static int32_t ad9361_calc_rfpll_int_divder(struct ad9361_rf_phy *phy,
 
 /**
  * Recalculate the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param parent_rate The parent clock rate.
  * @return The clock rate.
  */
@@ -6589,9 +6591,9 @@ uint32_t ad9361_rfpll_int_recalc_rate(struct refclk_scale *clk_priv,
 
 /**
  * Calculate the closest possible clock rate that can be set.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
+ * @param prate The parent clock rate.
  * @return The closest possible clock rate that can be set.
  */
 int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv,
@@ -6617,7 +6619,7 @@ int32_t ad9361_rfpll_int_round_rate(struct refclk_scale *clk_priv,
 
 /**
  * Set the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
  * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
@@ -6737,8 +6739,7 @@ int32_t ad9361_rfpll_int_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 
 /**
  * Recalculate the clock rate.
- * @param refclk_scale The refclk_scale structure.
- * @param parent_rate The parent clock rate.
+ * @param clk_priv The refclk_scale structure.
  * @return The clock rate.
  */
 uint32_t ad9361_rfpll_dummy_recalc_rate(struct refclk_scale *clk_priv)
@@ -6750,9 +6751,8 @@ uint32_t ad9361_rfpll_dummy_recalc_rate(struct refclk_scale *clk_priv)
 
 /**
  * Set the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rfpll_dummy_set_rate(struct refclk_scale *clk_priv,
@@ -6767,8 +6767,7 @@ int32_t ad9361_rfpll_dummy_set_rate(struct refclk_scale *clk_priv,
 
 /**
  * Recalculate the clock rate.
- * @param refclk_scale The refclk_scale structure.
- * @param parent_rate The parent clock rate.
+ * @param clk_priv The refclk_scale structure.
  * @return The clock rate.
  */
 uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv)
@@ -6809,9 +6808,8 @@ uint32_t ad9361_rfpll_recalc_rate(struct refclk_scale *clk_priv)
 
 /**
  * Calculate the closest possible clock rate that can be set.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
  * @return The closest possible clock rate that can be set.
  */
 int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate)
@@ -6852,9 +6850,8 @@ int32_t ad9361_rfpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate)
 
 /**
  * Set the clock rate.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param rate The clock rate.
- * @param parent_rate The parent clock rate.
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
@@ -6910,7 +6907,7 @@ int32_t ad9361_rfpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate)
 
 /**
  * Set clock mux parent.
- * @param refclk_scale The refclk_scale structure.
+ * @param clk_priv The refclk_scale structure.
  * @param index Index - Enable (1), disable (0) ext lo.
  * @return 0 in case of success, negative error code otherwise.
  */

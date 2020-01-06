@@ -275,33 +275,34 @@
 /************************** Types Declarations *******************************/
 /*****************************************************************************/
 /**
- * struct AD5755_InitialSettings - Stores the settings that will be written to
+ * @struct AD5755_InitialSettings
+ * @brief Stores the settings that will be written to
  *        the device when the "AD5755_Init" functions is called.
  *
- * @pin_ad0state: Reflects the logic state of the external pin AD0. Range 0..1
- * @pin_ad1state: Reflects the logic state of the external pin AD1. Range 0..1
- * @enable_packet_error_check: Enables/Disables the Packet Error Checking that is
+ * pin_ad0state: Reflects the logic state of the external pin AD0. Range 0..1
+ * pin_ad1state: Reflects the logic state of the external pin AD1. Range 0..1
+ * enable_packet_error_check: Enables/Disables the Packet Error Checking that is
  *                          used during all SPI transfers. Range 0..1
- * @poc_bit: Power-On Condition. Determines the state of the voltage output
+ * poc_bit: Power-On Condition. Determines the state of the voltage output
  *          channels during normal operation.
  *          0 - The output goes to the value set by the POC hardware pin when
  *              the voltage output is not enabled;
  *          1 - The output goes to the opposite value of the POC hardware pin
  *              if the voltage output is not enabled.
- * @stat_readbit: Enables/Disables status readback during a write. Range 0..1
- * @sht_cc_lim_bit: Programmable short-circuit limit on the VOUT_x pin in the event
+ * stat_readbit: Enables/Disables status readback during a write. Range 0..1
+ * sht_cc_lim_bit: Programmable short-circuit limit on the VOUT_x pin in the event
  *               of a short-circuit condition: 0 - 16 mA
  *                                             1 - 8 mA
- * @rset_bits: Selects an internal or external current sense resistor for the
+ * rset_bits: Selects an internal or external current sense resistor for the
  *            selected DAC channel: 0 - selects the external resistor
  *                                  1 - selects the internal resistor
- * @ovrng_bits: Enables 20% overrange on voltage output channel only. Range 0..1
- * @dc_dc_comp_bit: Selects between an internal and external compensation resistor
+ * ovrng_bits: Enables 20% overrange on voltage output channel only. Range 0..1
+ * dc_dc_comp_bit: Selects between an internal and external compensation resistor
  *               for the dc-to-dc converter. Range 0..1
- * @dc_dc_phase_bit: User programmable dc-to-dc converter phase (between channels).
+ * dc_dc_phase_bit: User programmable dc-to-dc converter phase (between channels).
  *                Range 0..3
- * @dc_dc_freq_bit: DC-to-dc switching frequency. Range 0..2
- * @dc_dc_max_vbit: Maximum allowed VBOOST_x voltage supplied by the dc-to-dc
+ * dc_dc_freq_bit: DC-to-dc switching frequency. Range 0..2
+ * dc_dc_max_vbit: Maximum allowed VBOOST_x voltage supplied by the dc-to-dc
  *               converter. Range 0..3
  *
  */

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   cf_hdmi.c
+ *   @file   kc705/cf_hdmi.c
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -59,8 +59,7 @@
 #define CLAMP(val, min, max)	(val < min ? min : (val > max ? max :val))
 #define ABS(x)					(x < 0 ? -x : x)
 
-static const unsigned long clkgen_filter_table[] =
-{
+static const unsigned long clkgen_filter_table[] = {
 	0x01001990, 0x01001190, 0x01009890, 0x01001890,
 	0x01008890, 0x01009090, 0x01009090, 0x01009090,
 	0x01009090, 0x01000890, 0x01000890, 0x01000890,
@@ -75,8 +74,7 @@ static const unsigned long clkgen_filter_table[] =
 	0x08001090, 0x08001090, 0x08001090
 };
 
-static const unsigned long clkgen_lock_table[] =
-{
+static const unsigned long clkgen_lock_table[] = {
 	0x060603e8, 0x060603e8, 0x080803e8, 0x0b0b03e8,
 	0x0e0e03e8, 0x111103e8, 0x131303e8, 0x161603e8,
 	0x191903e8, 0x1c1c03e8, 0x1f1f0384, 0x1f1f0339,
@@ -88,8 +86,7 @@ static const unsigned long clkgen_lock_table[] =
 	0x1f1f012c, 0x1f1f0113, 0x1f1f0113, 0x1f1f0113
 };
 
-enum detailedTimingElement
-{
+enum detailedTimingElement {
 	PIXEL_CLOCK,
 	H_ACTIVE_TIME,
 	H_BLANKING_TIME,
@@ -101,8 +98,7 @@ enum detailedTimingElement
 	V_SYNC_WIDTH_PULSE
 };
 
-static const unsigned long detailedTiming[7][9] =
-{
+static const unsigned long detailedTiming[7][9] = {
 	{25180000, 640, 144, 16, 96, 480, 29, 10, 2},
 	{40000000, 800, 256, 40, 128, 600, 28, 1, 4},
 	{65000000, 1024, 320, 136, 24, 768, 38, 3, 6},
@@ -116,7 +112,7 @@ static const unsigned long detailedTiming[7][9] =
  * @brief DDRVideoWr.
 *******************************************************************************/
 void DDRVideoWr(unsigned short horizontalActiveTime,
-				unsigned short verticalActiveTime)
+		unsigned short verticalActiveTime)
 {
 	unsigned long  pixel      = 0;
 	unsigned long  backup     = 0;
@@ -124,28 +120,21 @@ void DDRVideoWr(unsigned short horizontalActiveTime,
 	unsigned long  index      = 0;
 	unsigned char  repetition = 0;
 
-	while(line < verticalActiveTime)
-	{
-		for(index = 0; index < IMG_LENGTH; index++)
-		{
-			for (repetition = 0; repetition < ((IMG_DATA[index]>>24) & 0xff); repetition++)
-			{
+	while(line < verticalActiveTime) {
+		for(index = 0; index < IMG_LENGTH; index++) {
+			for (repetition = 0; repetition < ((IMG_DATA[index]>>24) & 0xff);
+			     repetition++) {
 				backup = pixel;
-				while((pixel - line*horizontalActiveTime) < horizontalActiveTime)
-				{
+				while((pixel - line*horizontalActiveTime) < horizontalActiveTime) {
 					Xil_Out32((VIDEO_BASEADDR+(pixel*4)), (IMG_DATA[index] & 0xffffff));
 					pixel += 640;
 				}
 				pixel = backup;
-				if((pixel - line*horizontalActiveTime) < 639)
-				{
+				if((pixel - line*horizontalActiveTime) < 639) {
 					pixel++;
-				}
-				else
-				{
+				} else {
 					line++;
-					if(line == verticalActiveTime)
-					{
+					if(line == verticalActiveTime) {
 						Xil_DCacheFlush();
 						return;
 					}
@@ -167,20 +156,20 @@ void DDRAudioWr(void)
 	u32 sincr = 0;
 
 	sincr = (65536*2)/AUDIO_LENGTH;
-	for (n = 0; n < 32; n++)
-	{
+	for (n = 0; n < 32; n++) {
 		Xil_Out32((AUDIO_BASEADDR+(n*4)), 0x00); // init descriptors
 	}
 	Xil_Out32((AUDIO_BASEADDR+0x00), (AUDIO_BASEADDR + 0x40)); // next descriptor
 	Xil_Out32((AUDIO_BASEADDR+0x08), (AUDIO_BASEADDR + 0x80)); // start address
 	Xil_Out32((AUDIO_BASEADDR+0x40), (AUDIO_BASEADDR + 0x00)); // next descriptor
 	Xil_Out32((AUDIO_BASEADDR+0x48), (AUDIO_BASEADDR + 0x80)); // start address
-	Xil_Out32((AUDIO_BASEADDR+0x18), (0x8000000 | (AUDIO_LENGTH*8))); // no. of bytes
-	Xil_Out32((AUDIO_BASEADDR+0x58), (0x4000000 | (AUDIO_LENGTH*8))); // no. of bytes
+	Xil_Out32((AUDIO_BASEADDR+0x18),
+		  (0x8000000 | (AUDIO_LENGTH*8))); // no. of bytes
+	Xil_Out32((AUDIO_BASEADDR+0x58),
+		  (0x4000000 | (AUDIO_LENGTH*8))); // no. of bytes
 	Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
 	Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
-	for (n = 0; n < AUDIO_LENGTH; n++)
-	{
+	for (n = 0; n < AUDIO_LENGTH; n++) {
 		Xil_Out32((AUDIO_BASEADDR+0x80+(n*4)), ((scnt << 16) | scnt));
 		scnt = (n > (AUDIO_LENGTH/2)) ? (scnt-sincr) : (scnt+sincr);
 	}
@@ -191,13 +180,13 @@ void DDRAudioWr(void)
  * @brief InitHdmiVideoPcore.
 *******************************************************************************/
 void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
-						unsigned short horizontalBlankingTime,
-						unsigned short horizontalSyncOffset,
-						unsigned short horizontalSyncPulseWidth,
-						unsigned short verticalActiveTime,
-						unsigned short verticalBlankingTime,
-						unsigned short verticalSyncOffset,
-						unsigned short verticalSyncPulseWidth)
+			unsigned short horizontalBlankingTime,
+			unsigned short horizontalSyncOffset,
+			unsigned short horizontalSyncPulseWidth,
+			unsigned short verticalActiveTime,
+			unsigned short verticalBlankingTime,
+			unsigned short verticalSyncOffset,
+			unsigned short verticalSyncPulseWidth)
 {
 	unsigned short horizontalCount	   = 0;
 	unsigned short verticalCount	   = 0;
@@ -211,56 +200,56 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 	DDRVideoWr(horizontalActiveTime, verticalActiveTime);
 
 	horizontalCount = horizontalActiveTime +
-					  horizontalBlankingTime;
+			  horizontalBlankingTime;
 	verticalCount = verticalActiveTime +
-					verticalBlankingTime;
+			verticalBlankingTime;
 	horizontalBackPorch = horizontalBlankingTime -
-						  horizontalSyncOffset -
-						  horizontalSyncPulseWidth;
+			      horizontalSyncOffset -
+			      horizontalSyncPulseWidth;
 	verticalBackPorch = verticalBlankingTime -
-						verticalSyncOffset -
-						verticalSyncPulseWidth;
+			    verticalSyncOffset -
+			    verticalSyncPulseWidth;
 	horizontalDeMin = horizontalSyncPulseWidth +
-					  horizontalBackPorch;
+			  horizontalBackPorch;
 	horizontalDeMax = horizontalDeMin +
-					  horizontalActiveTime;
+			  horizontalActiveTime;
 	verticalDeMin = verticalSyncPulseWidth +
-					verticalBackPorch;
+			verticalBackPorch;
 	verticalDeMax = verticalDeMin +
-					verticalActiveTime;
+			verticalActiveTime;
 
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING1),
-			  ((horizontalActiveTime << 16) | horizontalCount));
+		  ((horizontalActiveTime << 16) | horizontalCount));
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING2),
-			  horizontalSyncPulseWidth);
+		  horizontalSyncPulseWidth);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_HTIMING3),
-			  ((horizontalDeMax << 16) | horizontalDeMin));
+		  ((horizontalDeMax << 16) | horizontalDeMin));
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING1),
-			  ((verticalActiveTime << 16) | verticalCount));
+		  ((verticalActiveTime << 16) | verticalCount));
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING2),
-			  verticalSyncPulseWidth);
+		  verticalSyncPulseWidth);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_VTIMING3),
-			  ((verticalDeMax << 16) | verticalDeMin));
+		  ((verticalDeMax << 16) | verticalDeMin));
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_RESET), 0x1);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x0);
 	Xil_Out32((CFV_BASEADDR + AXI_HDMI_REG_SOURCE_SEL), 0x1);
 
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
-			  0x0); // reset DMAC
+		  0x0); // reset DMAC
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
-			  DMAC_CTRL_ENABLE); // enable DMAC
+		  DMAC_CTRL_ENABLE); // enable DMAC
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_FLAGS,
-			  DMAC_FLAGS_CYCLIC | DMAC_FLAGS_TLAST); // enable circular mode
+		  DMAC_FLAGS_CYCLIC | DMAC_FLAGS_TLAST); // enable circular mode
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_SRC_ADDRESS,
-			  VIDEO_BASEADDR); // start address
+		  VIDEO_BASEADDR); // start address
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_X_LENGTH,
-			  ((horizontalActiveTime*4)-1)); // h size
+		  ((horizontalActiveTime*4)-1)); // h size
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_SRC_STRIDE,
-			  (horizontalActiveTime*4)); // h offset
+		  (horizontalActiveTime*4)); // h offset
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_Y_LENGTH,
-			  (verticalActiveTime-1)); // v size
+		  (verticalActiveTime-1)); // v size
 	Xil_Out32(VDMA_BASEADDR + DMAC_REG_START_TRANSFER,
-			  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
+		  0x1); // submit transfer	Xil_Out32(VDMA_BASEADDR + DMAC_REG_CTRL,
 
 }
 
@@ -271,13 +260,13 @@ void SetVideoResolution(unsigned char resolution)
 {
 	CLKGEN_SetRate(detailedTiming[resolution][PIXEL_CLOCK], 200000000);
 	InitHdmiVideoPcore(detailedTiming[resolution][H_ACTIVE_TIME],
-					   detailedTiming[resolution][H_BLANKING_TIME],
-					   detailedTiming[resolution][H_SYNC_OFFSET],
-					   detailedTiming[resolution][H_SYNC_WIDTH_PULSE],
-					   detailedTiming[resolution][V_ACTIVE_TIME],
-					   detailedTiming[resolution][V_BLANKING_TIME],
-					   detailedTiming[resolution][V_SYNC_OFFSET],
-					   detailedTiming[resolution][V_SYNC_WIDTH_PULSE]);
+			   detailedTiming[resolution][H_BLANKING_TIME],
+			   detailedTiming[resolution][H_SYNC_OFFSET],
+			   detailedTiming[resolution][H_SYNC_WIDTH_PULSE],
+			   detailedTiming[resolution][V_ACTIVE_TIME],
+			   detailedTiming[resolution][V_BLANKING_TIME],
+			   detailedTiming[resolution][V_SYNC_OFFSET],
+			   detailedTiming[resolution][V_SYNC_WIDTH_PULSE]);
 }
 
 /***************************************************************************//**
@@ -288,7 +277,8 @@ void InitHdmiAudioPcore(void)
 	DDRAudioWr();
 
 	Xil_Out32((CFA_BASEADDR + 0x04), 0x040); // sample frequency
-	Xil_Out32((CFA_BASEADDR + 0x00), 0xc03); // clock ratio, data enable & signal enable
+	Xil_Out32((CFA_BASEADDR + 0x00),
+		  0xc03); // clock ratio, data enable & signal enable
 }
 
 /***************************************************************************//**
@@ -296,14 +286,14 @@ void InitHdmiAudioPcore(void)
 *******************************************************************************/
 void AudioClick(void)
 {
-    /* Generating audio clicks. */
-    Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
-    Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
-    Xil_DCacheFlush();
-    Xil_Out32((ADMA_BASEADDR + 0x00), 0); // clear dma operations
-    Xil_Out32((ADMA_BASEADDR + 0x08), AUDIO_BASEADDR); // head descr.
+	/* Generating audio clicks. */
+	Xil_Out32((AUDIO_BASEADDR+0x1c), 0x00); // status
+	Xil_Out32((AUDIO_BASEADDR+0x5c), 0x00); // status
+	Xil_DCacheFlush();
+	Xil_Out32((ADMA_BASEADDR + 0x00), 0); // clear dma operations
+	Xil_Out32((ADMA_BASEADDR + 0x08), AUDIO_BASEADDR); // head descr.
 	Xil_Out32((ADMA_BASEADDR + 0x00), 1); // enable dma operations
-    Xil_Out32((ADMA_BASEADDR + 0x10), (AUDIO_BASEADDR+0x40)); // tail descr.
+	Xil_Out32((ADMA_BASEADDR + 0x10), (AUDIO_BASEADDR+0x40)); // tail descr.
 }
 
 /***************************************************************************//**
@@ -311,8 +301,7 @@ void AudioClick(void)
 *******************************************************************************/
 static unsigned long CLKGEN_LookupFilter(unsigned long m)
 {
-	if (m < 47)
-	{
+	if (m < 47) {
 		return clkgen_filter_table[m];
 	}
 	return 0x08008090;
@@ -323,8 +312,7 @@ static unsigned long CLKGEN_LookupFilter(unsigned long m)
 *******************************************************************************/
 static unsigned long CLKGEN_LookupLock(unsigned long m)
 {
-	if (m < 36)
-	{
+	if (m < 36) {
 		return clkgen_lock_table[m];
 	}
 	return 0x1f1f00fa;
@@ -334,10 +322,10 @@ static unsigned long CLKGEN_LookupLock(unsigned long m)
  * @brief CLKGEN_CalcParams.
 *******************************************************************************/
 void CLKGEN_CalcParams(unsigned long fin,
-					   unsigned long fout,
-					   unsigned long *best_d,
-					   unsigned long *best_m,
-					   unsigned long *best_dout)
+		       unsigned long fout,
+		       unsigned long *best_d,
+		       unsigned long *best_m,
+		       unsigned long *best_dout)
 {
 	const unsigned long fpfd_min = 10000;
 	const unsigned long fpfd_max = 300000;
@@ -370,26 +358,22 @@ void CLKGEN_CalcParams(unsigned long fin,
 	m_min = MAX(DIV_ROUND_UP(fvco_min, fin) * d_min, 1);
 	m_max = MIN(fvco_max * d_max / fin, 64);
 
-	for(m = m_min; m <= m_max; m++)
-	{
+	for(m = m_min; m <= m_max; m++) {
 		_d_min = MAX(d_min, DIV_ROUND_UP(fin * m, fvco_max));
 		_d_max = MIN(d_max, fin * m / fvco_min);
 
-		for (d = _d_min; d <= _d_max; d++)
-		{
+		for (d = _d_min; d <= _d_max; d++) {
 			fvco = fin * m / d;
 
 			dout = DIV_ROUND_CLOSEST(fvco, fout);
 			dout = CLAMP(dout, 1, 128);
 			f = fvco / dout;
-			if (ABS(f - fout) < ABS(best_f - fout))
-			{
+			if (ABS(f - fout) < ABS(best_f - fout)) {
 				best_f = f;
 				*best_d = d;
 				*best_m = m;
 				*best_dout = dout;
-				if (best_f == fout)
-				{
+				if (best_f == fout) {
 					return;
 				}
 			}
@@ -401,17 +385,14 @@ void CLKGEN_CalcParams(unsigned long fin,
  * @brief CLKGEN_CalcClkParams.
 *******************************************************************************/
 void CLKGEN_CalcClkParams(unsigned long divider,
-						  unsigned long *low,
-						  unsigned long *high,
-						  unsigned long *edge,
-						  unsigned long *nocount)
+			  unsigned long *low,
+			  unsigned long *high,
+			  unsigned long *edge,
+			  unsigned long *nocount)
 {
-	if (divider == 1)
-	{
+	if (divider == 1) {
 		*nocount = 1;
-	}
-	else
-	{
+	} else {
 		*nocount = 0;
 	}
 	*high = divider / 2;
@@ -423,7 +404,7 @@ void CLKGEN_CalcClkParams(unsigned long divider,
  * @brief CLKGEN_Write.
 *******************************************************************************/
 void CLKGEN_Write(unsigned long reg,
-				  unsigned long val)
+		  unsigned long val)
 {
 	Xil_Out32(CF_CLKGEN_BASEADDR + reg, val);
 }
@@ -432,7 +413,7 @@ void CLKGEN_Write(unsigned long reg,
  * @brief CLKGEN_Read.
 *******************************************************************************/
 static void CLKGEN_Read(unsigned long reg,
-						unsigned long *val)
+			unsigned long *val)
 {
 	*val = Xil_In32(CF_CLKGEN_BASEADDR + reg);
 }
@@ -441,7 +422,7 @@ static void CLKGEN_Read(unsigned long reg,
  * @brief CLKGEN_MMCMRead.
 *******************************************************************************/
 static void CLKGEN_MMCMRead(unsigned long reg,
-							unsigned long *val)
+			    unsigned long *val)
 {
 	unsigned long timeout = 1000000;
 	unsigned long reg_val;
@@ -474,8 +455,8 @@ static void CLKGEN_MMCMRead(unsigned long reg,
  * @brief CLKGEN_MMCMWrite.
 *******************************************************************************/
 void CLKGEN_MMCMWrite(unsigned long reg,
-					  unsigned long val,
-					  unsigned long mask)
+		      unsigned long val,
+		      unsigned long mask)
 {
 	unsigned long timeout = 1000000;
 	unsigned long reg_val;
@@ -506,19 +487,19 @@ void CLKGEN_MMCMWrite(unsigned long reg,
 *******************************************************************************/
 static void CLKGEN_MMCMEnable(char enable)
 {
-        unsigned long val = AXI_CLKGEN_V2_RESET_ENABLE;
+	unsigned long val = AXI_CLKGEN_V2_RESET_ENABLE;
 
-        if (enable)
-                val |= AXI_CLKGEN_V2_RESET_MMCM_ENABLE;
+	if (enable)
+		val |= AXI_CLKGEN_V2_RESET_MMCM_ENABLE;
 
-        CLKGEN_Write(AXI_CLKGEN_V2_REG_RESET, val);
+	CLKGEN_Write(AXI_CLKGEN_V2_REG_RESET, val);
 }
 
 /***************************************************************************//**
  * @brief CLKGEN_SetRate.
 *******************************************************************************/
 int CLKGEN_SetRate(unsigned long rate,
-				   unsigned long parent_rate)
+		   unsigned long parent_rate)
 {
 	unsigned long d		  = 0;
 	unsigned long m		  = 0;
@@ -530,15 +511,13 @@ int CLKGEN_SetRate(unsigned long rate,
 	unsigned long filter  = 0;
 	unsigned long lock	  = 0;
 
-	if (parent_rate == 0 || rate == 0)
-	{
+	if (parent_rate == 0 || rate == 0) {
 		return 0;
 	}
 
 	CLKGEN_CalcParams(parent_rate, rate, &d, &m, &dout);
 
-	if (d == 0 || dout == 0 || m == 0)
-	{
+	if (d == 0 || dout == 0 || m == 0) {
 		return 0;
 	}
 
@@ -553,7 +532,8 @@ int CLKGEN_SetRate(unsigned long rate,
 
 
 	CLKGEN_CalcClkParams(d, &low, &high, &edge, &nocount);
-	CLKGEN_MMCMWrite(MMCM_REG_CLK_DIV, (edge << 13) | (nocount << 12) | (high << 6) | low, 0x3fff);
+	CLKGEN_MMCMWrite(MMCM_REG_CLK_DIV,
+			 (edge << 13) | (nocount << 12) | (high << 6) | low, 0x3fff);
 
 	CLKGEN_CalcClkParams(m, &low, &high, &edge, &nocount);
 	CLKGEN_MMCMWrite(MMCM_REG_CLK_FB1, (high << 6) | low, 0xefff);
@@ -591,8 +571,7 @@ unsigned long CLKGEN_GetRate(unsigned long parent_rate)
 	tmp = (unsigned long long)(parent_rate / d) * m;
 	tmp = tmp / dout;
 
-	if (tmp > 0xffffffff)
-	{
+	if (tmp > 0xffffffff) {
 		return 0xffffffff;
 	}
 

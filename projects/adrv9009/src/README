@@ -31,6 +31,45 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_rx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_hal.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_user.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm_macros.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_hal.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_reg_addr_macros.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_user.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_version.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/firmware/talise_arm_binary.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/firmware/talise_stream_binary.h devices/adi_hal/
 	cp ../../../util/util.c devices/adi_hal/
 	cp ../../../include/util.h devices/adi_hal/
 #else
@@ -61,6 +100,45 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_hal.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_user.c devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_agc_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm_macros.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_arm_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_cals_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_error_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_gpio_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_hal.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_jesd204_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_radioctrl_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_reg_addr_macros.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_rx_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_tx_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_types.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_user.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/api/talise_version.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/firmware/talise_arm_binary.h devices/adi_hal/
+	cp ../../../drivers/rf-transceiver/talise/firmware/talise_stream_binary.h devices/adi_hal/
 	cp ../../../util/util.c devices/adi_hal/
 	cp ../../../include/util.h devices/adi_hal/
 #endif

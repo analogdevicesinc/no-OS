@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   spi.c
+ *   @file   altera/spi.c
  *   @brief  Implementation of Altera SPI Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -55,7 +55,7 @@
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
- * @param init_param - The structure that contains the SPI parameters.
+ * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,

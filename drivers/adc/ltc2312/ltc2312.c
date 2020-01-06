@@ -194,6 +194,7 @@ int32_t ltc2312_read(struct ltc2312_dev *dev, uint16_t *ptr_adc_code)
 /**
  * Calculates the LTC2312 input voltage given the binary data and LSB weight.
  *
+ * @param [in]  dev 		 - The device structure.
  * @param [in]  adc_code - Raw ADC code.
  * @param [in]  vref	 - The reference voltage of the ADC.
  * @param [out] voltage	 - Voltage value calculated.

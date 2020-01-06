@@ -1,10 +1,10 @@
 /**
- * \file ad9528.c
+ * \file adrv9009/src/devices/ad9528/ad9528.c
  * \brief Contains source code for configuring and initializing AD9528 clock device
  */
 
 /**
-* \page Disclaimer Legal Disclaimer
+* Legal Disclaimer
 * Copyright 2015-2017 Analog Devices Inc.
 * Released under the AD9371 API license.
 *

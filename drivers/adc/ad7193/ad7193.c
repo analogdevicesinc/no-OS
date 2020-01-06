@@ -392,6 +392,7 @@ uint32_t ad7193_single_conversion(struct ad7193_dev *dev)
  * @brief Returns the average of several conversion results.
  *
  * @param dev - The device structure.
+ * @param sample_number - the number of samples
  *
  * @return samplesAverage - The average of the conversion results.
 *******************************************************************************/
