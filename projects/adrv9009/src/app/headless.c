@@ -305,7 +305,7 @@ int main(void)
 	/**
 	 * Initialization for UART.
 	 */
-	struct uart_init_par uart_init_param;
+	struct uart_init_param uart_init_par;
 
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
