@@ -42,6 +42,7 @@
 
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
+//#define ZU11EG
 
 //#define DAC_DMA_EXAMPLE
 
