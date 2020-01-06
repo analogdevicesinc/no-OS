@@ -57,7 +57,9 @@
 #include "clk_altera_a10_fpll.h"
 #else
 #include "xil_cache.h"
+#if !defined(ZU11EG)
 #include "clk_axi_clkgen.h"
+#endif
 #endif
 
 // hal
@@ -77,7 +79,7 @@ struct ad9528_dev* ad9528_device;
 struct altera_a10_fpll *rx_device_clk_pll;
 struct altera_a10_fpll *tx_device_clk_pll;
 struct altera_a10_fpll *rx_os_device_clk_pll;
-#else
+#elif !defined(ZU11EG)
 struct axi_clkgen *rx_clkgen;
 struct axi_clkgen *tx_clkgen;
 struct axi_clkgen *rx_os_clkgen;
@@ -215,6 +217,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 		.device_id = GPIO_DEVICE_ID,
 	};
+#if !defined(ZU11EG)
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -231,6 +234,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		device_clock_khz * 1000
 	};
 #endif
+#endif
 
 	// ad9528 spi settings
 	struct spi_init_param ad9528_spi_init_param = {
@@ -243,7 +247,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.spi_init = ad9528_spi_init_param;
 
 	struct gpio_init_param ad9528_gpio_init_param = {
-		.number = CLK_RESETB,
+		.number = CLK_RESETB_GPIO,
 		.extra = &ad9528_gpio_param
 	};
 
@@ -357,6 +361,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	}
 	altera_a10_fpll_enable(rx_os_device_clk_pll);
 #else
+#if !defined(ZU11EG)
 	/* Initialize CLKGEN */
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
 	if (status != SUCCESS) {
@@ -390,25 +395,34 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		goto error_4;
 	}
 #endif
+#endif
 
 	return ADIHAL_OK;
 
+#if !defined(ZU11EG)
 error_4:
+#endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
-#else
+#elif !defined(ZU11EG)
 	axi_clkgen_remove(rx_os_clkgen);
 #endif
+
+#if !defined(ZU11EG)
 error_3:
+#endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(tx_device_clk_pll);
-#else
+#elif !defined(ZU11EG)
 	axi_clkgen_remove(tx_clkgen);
 #endif
+
+#if !defined(ZU11EG)
 error_2:
+#endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(rx_device_clk_pll);
-#else
+#elif !defined(ZU11EG)
 	axi_clkgen_remove(rx_clkgen);
 #endif
 error_1:
@@ -423,7 +437,7 @@ void clocking_deinit(void)
 	altera_a10_fpll_remove(rx_device_clk_pll);
 	altera_a10_fpll_remove(tx_device_clk_pll);
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
-#else
+#elif !defined(ZU11EG)
 	axi_clkgen_remove(rx_os_clkgen);
 	axi_clkgen_remove(tx_clkgen);
 	axi_clkgen_remove(rx_clkgen);
