@@ -1,0 +1,10 @@
+530,538d529
+<         if (count > 1)
+<         {
+<           warn_doc_error(g_memberDef->getDefFileName(),
+<                          g_memberDef->getDefLine(),
+<                          "argument '" + aName +
+<                          "' from the argument list of " +
+<                          QCString(g_memberDef->qualifiedName()) +
+<                          " has multiple @param documentation sections");
+<         }
