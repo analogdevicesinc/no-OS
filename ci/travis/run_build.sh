@@ -32,7 +32,7 @@ build_drivers() {
 build_doxygen() {
     sudo apt-get install -y graphviz
     # Install a recent version of doxygen
-	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.13/doxygen-1.8.13.src.tar.gz/"
+	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
 	cd ${DEPS_DIR}
 	[ -d "doxygen" ] || {
 		mkdir doxygen && wget --quiet -O - ${DOXYGEN_URL} | tar --strip-components=1 -xz -C doxygen
@@ -40,6 +40,7 @@ build_doxygen() {
 
     # Install Doxygen
     cd doxygen
+    patch ./src/docparser.cpp < ${TRAVIS_BUILD_DIR}/ci/travis/patch_doxy.patch
     mkdir -p build && cd build
     cmake ..
     make -j${NUM_JOBS}
