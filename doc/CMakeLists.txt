@@ -17,6 +17,25 @@ set(DOCUMENTED_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/drivers_page.dox \\
     ${CMAKE_CURRENT_SOURCE_DIR}/license_page.dox \\
     ${CMAKE_CURRENT_SOURCE_DIR}/mainpage.dox \\
+    ${SOURCES_DIR}/include \\
+    ${SOURCES_DIR}/drivers/accel \\
+    ${SOURCES_DIR}/drivers/adc \\
+    ${SOURCES_DIR}/drivers/adc-dac  \\
+    ${SOURCES_DIR}/drivers/afe \\
+    ${SOURCES_DIR}/drivers/axi_core \\
+    ${SOURCES_DIR}/drivers/cdc \\
+    ${SOURCES_DIR}/drivers/dac \\
+    ${SOURCES_DIR}/drivers/frequency \\
+    ${SOURCES_DIR}/drivers/gyro \\
+    ${SOURCES_DIR}/drivers/impedance-analyzer \\
+    ${SOURCES_DIR}/drivers/io-expander \\
+    ${SOURCES_DIR}/drivers/mux \\
+    ${SOURCES_DIR}/drivers/platform \\
+    ${SOURCES_DIR}/drivers/potentiometer \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/adf7023 \\
+    ${SOURCES_DIR}/drivers/sd-card \\
+    ${SOURCES_DIR}/drivers/temperature \\
+    ${SOURCES_DIR}/projects \\
  ")
 
 configure_file(
