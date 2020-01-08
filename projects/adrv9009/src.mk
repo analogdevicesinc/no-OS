@@ -21,6 +21,7 @@ SRCS := $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/src/app/app_talise.c						\
 	$(DRIVERS)/frequency/ad9528/ad9528.c				\
 	$(PROJECT)/src/devices/adi_hal/no_os_hal.c			\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c					\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.c			\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.c			\
 	$(DRIVERS)/rf-transceiver/talise/api/talise.c				\
@@ -75,6 +76,7 @@ INCS :=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/adi_hal.h			\
 	$(PROJECT)/src/devices/adi_hal/common.h				\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.h					\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc.h			\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_agc_types.h		\
 	$(DRIVERS)/rf-transceiver/talise/api/talise_arm.h			\

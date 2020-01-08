@@ -78,6 +78,8 @@ static ssize_t iio_uart_read(char *buf, size_t len)
 
 int main(void)
 {
+	adiHalErr_t err;
+
 	// compute the lane rate from profile settings
 	// lane_rate = input_rate * M * 20 / L
 	// 		where L and M are explained in taliseJesd204bFramerConfig_t comments
@@ -189,23 +191,30 @@ int main(void)
 	/**********************************************************/
 	/**********************************************************/
 
-	clocking_init(rx_div40_rate_hz,
-		      tx_div40_rate_hz,
-		      rx_os_div40_rate_hz,
-		      talInit.clocks.deviceClock_kHz,
-		      lmfc_rate);
+	err = clocking_init(rx_div40_rate_hz,
+			    tx_div40_rate_hz,
+			    rx_os_div40_rate_hz,
+			    talInit.clocks.deviceClock_kHz,
+			    lmfc_rate);
+	if (err != ADIHAL_OK)
+		goto error_0;
 
-	/*** < Insert User BBIC JESD204B Initialization Code Here > ***/
-	jesd_init(rx_div40_rate_hz,
-		  tx_div40_rate_hz,
-		  rx_os_div40_rate_hz);
+	err = jesd_init(rx_div40_rate_hz,
+			tx_div40_rate_hz,
+			rx_os_div40_rate_hz);
+	if (err != ADIHAL_OK)
+		goto error_1;
 
-	fpga_xcvr_init(rx_lane_rate_khz,
-		       tx_lane_rate_khz,
-		       rx_os_lane_rate_khz,
-		       talInit.clocks.deviceClock_kHz);
+	err = fpga_xcvr_init(rx_lane_rate_khz,
+			     tx_lane_rate_khz,
+			     rx_os_lane_rate_khz,
+			     talInit.clocks.deviceClock_kHz);
+	if (err != ADIHAL_OK)
+		goto error_2;
 
-	talise_setup(&talDev, &talInit);
+	err = talise_setup(&talDev, &talInit);
+	if (err != ADIHAL_OK)
+		goto error_3;
 
 	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
 
@@ -399,11 +408,13 @@ int main(void)
 #endif // IIO_EXAMPLE
 
 	talise_shutdown(&talDev);
-
+error_3:
 	fpga_xcvr_deinit();
+error_2:
 	jesd_deinit();
+error_1:
 	clocking_deinit();
+error_0:
 	printf("Bye\n");
-
 	return SUCCESS;
 }

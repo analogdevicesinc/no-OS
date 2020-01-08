@@ -42,10 +42,23 @@
 #include <stdint.h>
 #include "adi_hal.h"
 
+#if defined(ZU11EG)
+#define DEV_REFCLK_A		0
+#define DEV_SYSREF_A		1
+#define DEV_REFCLK_B		2
+#define DEV_SYSREF_B		3
+#define JESD_REFCLK_TX_OBS_AB	4
+#define JESD_REFCLK_RX_AB	5
+#define CORE_CLK_TX_OBS_AB	6
+#define CORE_CLK_RX_AB		7
+#define FPGA_SYSREF_TX_OBS_AB	8
+#define FPGA_SYSREF_RX_AB	9
+#else
 #define DEV_CLK	13
 #define FMC_CLK	1
 #define DEV_SYSREF 12
 #define FMC_SYSREF 3
+#endif
 
 adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t tx_div40_rate_hz,
