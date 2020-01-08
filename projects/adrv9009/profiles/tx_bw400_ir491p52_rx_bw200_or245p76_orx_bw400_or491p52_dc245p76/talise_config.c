@@ -72,7 +72,7 @@ taliseDevice_t talDevice = {
 	 * Talise API does not use the devHalInfo member */
 	.devHalInfo = &talDevHalInfo,
 #else
-	.devHalInfo = NULL,     /*/** < Insert Customer Platform HAL State Container here>*/
+	.devHalInfo = NULL,     /* < Insert Customer Platform HAL State Container here>*/
 #endif
 	/* devStateInfo is maintained internal to the Talise API, just create the memory */
 	.devStateInfo = {0}
