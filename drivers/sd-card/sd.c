@@ -399,7 +399,7 @@ static int32_t read_multiple_blocks(struct sd_desc *sd_desc,
  * This operation returns only when the read is complete
  * @param sd_desc	- Instance of the SD card
  * @param data		- Where data will be read
- * @param addr		- Address in memory from where data will be read
+ * @param address	- Address in memory from where data will be read
  * @param len		- Length in bytes of data to be read
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
@@ -450,7 +450,7 @@ int32_t sd_read(struct sd_desc *sd_desc,
  * This operation returns only when the write is complete
  * @param sd_desc	- Instance of the SD card
  * @param data		- Data to write
- * @param addr		- Address in memory where data will be written
+ * @param address	- Address in memory where data will be written
  * @param len		- Length of data in bytes
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
@@ -616,7 +616,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 
 /**
  * Remove the initialize instance of SD card.
- * @param sd_desc	- Instance of the SD card
+ * @param desc	- Instance of the SD card
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t sd_remove(struct sd_desc *desc)
