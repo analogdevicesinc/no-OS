@@ -41,12 +41,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "app_config.h"
+
 // clock chips
+#if defined(ZU11EG)
+#include "hmc7044.h"
+#else
 #include "ad9528.h"
+#endif
 
 // platform drivers
 #include "spi.h"
 #include "spi_extra.h"
+#include "gpio.h"
 #include "gpio_extra.h"
 #include "error.h"
 #include "delay.h"
@@ -67,13 +74,16 @@
 #include "adi_hal.h"
 
 // devices
-#include "ad9528.h"
 #include "app_talise.h"
 
 // header
 #include "app_clocking.h"
 
-struct ad9528_dev* ad9528_device;
+#if defined(ZU11EG)
+struct hmc7044_dev* clkchip_device;
+#else
+struct ad9528_dev* clkchip_device;
+#endif
 
 #ifdef ALTERA_PLATFORM
 struct altera_a10_fpll *rx_device_clk_pll;
@@ -92,14 +102,100 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t lmfc_rate_hz)
 {
 	int32_t status;
-	struct ad9528_channel_spec ad9528_channels[14];
-	struct ad9528_init_param ad9528_param;
-	struct ad9528_platform_data ad9528_pdata;
 	uint32_t dev_clk, fmc_clk;
 	uint32_t rate_dev = device_clock_khz * 1000;
 	uint32_t rate_fmc = device_clock_khz * 1000;
 	uint32_t n;
 	int ret;
+
+#if defined(ZU11EG)
+	struct hmc7044_chan_spec chan_spec[10] = {
+		/* DEV_REFCLK_A */
+		{
+			.disable = 0, .num = 0, .divider = 12, .driver_mode = 2,
+			.coarse_delay = 15
+		},
+		/* DEV_SYSREF_A */
+		{
+			.disable = 0, .num = 1, .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true,
+			.driver_impedance = 1
+		},
+		/* DEV_REFCLK_B */
+		{
+			.disable = 0, .num = 2,  .divider = 12, .driver_mode = 2,
+			.coarse_delay = 15
+		},
+		/* DEV_SYSREF_B */
+		{
+			.disable = 0, .num = 3,  .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true,
+			.driver_impedance = 1
+		},
+		/* JESD_REFCLK_TX_OBS_AB */
+		{
+			.disable = 0, .num = 4,  .divider = 12, .driver_mode = 1
+		},
+		/* JESD_REFCLK_RX_AB */
+		{
+			.disable = 0, .num = 5,  .divider = 12, .driver_mode = 1
+		},
+		/* CORE_CLK_TX_OBS_AB */
+		{
+			.disable = 0, .num = 6, .divider = 24, .driver_mode = 0,
+			.driver_impedance = 1
+		},
+		/* CORE_CLK_RX_AB */
+		{
+			.disable = 0, .num = 7, .divider = 12, .driver_mode = 0,
+			.driver_impedance = 1
+		},
+		/* FPGA_SYSREF_TX_OBS_AB */
+		{
+			.disable = 0, .num = 8, .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true
+		},
+		/* FPGA_SYSREF_RX_AB */
+		{
+			.disable = 0, .num = 9, .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true
+		}
+	};
+
+	struct hmc7044_init_param hmc7044_param = {
+		.spi_init = NULL,
+		.clkin_freq = {122880000, 122880000, 0, 0},
+		.vcxo_freq = 122880000,
+		.pll2_freq = 2949120000,
+		.pll1_loop_bw = 200,
+		.sysref_timer_div = 3840,
+		.in_buf_mode = {0x09, 0x09, 0x00, 0x00, 0x15},
+		.gpi_ctrl = {0x00, 0x00, 0x00, 0x11},
+		.gpo_ctrl = {0x1f, 0x2b, 0x00, 0x00},
+		.num_channels = 10,
+		.pll1_ref_prio_ctrl = 0xE5,
+		.sync_pin_mode = 0x1,
+		.high_performance_mode_clock_dist_en = true,
+		.high_performance_mode_pll_vco_en = true,
+		.pulse_gen_mode = 0x0,
+		.channels = chan_spec
+	};
+#else
+	struct ad9528_channel_spec ad9528_channels[14];
+	struct ad9528_init_param ad9528_param;
+	struct ad9528_platform_data ad9528_pdata;
 
 	// ad9528 defaults
 	ad9528_param.pdata = &ad9528_pdata;
@@ -170,6 +266,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.pdata->cpole1 = CPOLE1_16_PF;
 	ad9528_param.pdata->stat0_pin_func_sel = 0x1; /* PLL1 & PLL2 Locked */
 	ad9528_param.pdata->stat1_pin_func_sel = 0x7; /* REFA Correct */
+#endif
 
 #ifdef ALTERA_PLATFORM
 	struct altera_spi_init_param ad9528_spi_param = {
@@ -201,7 +298,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	struct altera_a10_fpll *tx_device_clk_pll;
 	struct altera_a10_fpll *rx_os_device_clk_pll;
 #else
-	struct xil_spi_init_param ad9528_spi_param = {
+	struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 		.type = SPI_PL,
 #else
@@ -209,7 +306,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 		.device_id = 0
 	};
-	struct xil_gpio_init_param ad9528_gpio_param = {
+#if !defined(ZU11EG)
+	struct xil_gpio_init_param xil_gpio_param = {
 #ifdef PLATFORM_MB
 		.type = GPIO_PL,
 #else
@@ -217,7 +315,6 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 		.device_id = GPIO_DEVICE_ID,
 	};
-#if !defined(ZU11EG)
 	struct axi_clkgen_init rx_clkgen_init = {
 		"rx_clkgen",
 		RX_CLKGEN_BASEADDR,
@@ -236,45 +333,70 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 #endif
 
-	// ad9528 spi settings
-	struct spi_init_param ad9528_spi_init_param = {
+	// clock chip spi settings
+	struct spi_init_param clkchip_spi_init_param = {
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CLK_CS,
-		.extra = &ad9528_spi_param
+		.extra = &xil_spi_param
 	};
 
-	ad9528_param.spi_init = ad9528_spi_init_param;
+#if defined(ZU11EG)
+	hmc7044_param.spi_init = &clkchip_spi_init_param;
+#else
+	ad9528_param.spi_init = clkchip_spi_init_param;
+#endif
 
-	struct gpio_init_param ad9528_gpio_init_param = {
+#if defined(ZU11EG)
+	// reset pin not needed, hmc7044_init performs a soft reset over SPI.
+#else
+	struct gpio_init_param clkchip_gpio_init_param = {
 		.number = CLK_RESETB_GPIO,
-		.extra = &ad9528_gpio_param
+		.extra = &xil_gpio_param
 	};
-
-	ad9528_param.gpio_resetb = ad9528_gpio_init_param;
+	ad9528_param.gpio_resetb = clkchip_gpio_init_param;
+#endif
 
 	/** < Insert User System Clock(s) Initialization Code Here >
 	* System Clock should provide a device clock and SYSREF signal
 	* to the Talise device.
 	**/
-	status = ad9528_setup(&ad9528_device, ad9528_param);
+#if defined(ZU11EG)
+	status = hmc7044_init(&clkchip_device, &hmc7044_param);
+	if (status != SUCCESS) {
+		printf("hmc7044_init() error: %d\n", status);
+		goto error_1;
+	}
+	dev_clk = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
+					 clkchip_device->pll2_freq);
+	fmc_clk = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
+					 clkchip_device->pll2_freq);
+#else
+	status = ad9528_setup(&clkchip_device, ad9528_param);
 	if(status < 0) {
 		printf("error: ad9528_setup() failed with %d\n", status);
 		goto error_1;
 	}
 
-	dev_clk = ad9528_clk_round_rate(ad9528_device, DEV_CLK,
+	dev_clk = ad9528_clk_round_rate(clkchip_device, DEV_CLK,
 					device_clock_khz * 1000);
 
-	fmc_clk = ad9528_clk_round_rate(ad9528_device, FMC_CLK,
+	fmc_clk = ad9528_clk_round_rate(clkchip_device, FMC_CLK,
 					device_clock_khz * 1000);
-
+#endif
 	if (dev_clk > 0 && fmc_clk > 0 && fmc_clk == dev_clk &&
 	    (dev_clk / 1000) == device_clock_khz) {
-		ad9528_clk_set_rate(ad9528_device, DEV_CLK, dev_clk);
-		ad9528_clk_set_rate(ad9528_device, FMC_CLK, fmc_clk);
+#if defined(ZU11EG)
+		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_A, dev_clk);
+		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_B, dev_clk);
+		hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, fmc_clk);
+		hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_RX_AB, fmc_clk);
+#else
+		ad9528_clk_set_rate(clkchip_device, DEV_CLK, dev_clk);
+		ad9528_clk_set_rate(clkchip_device, FMC_CLK, fmc_clk);
+#endif
 	} else {
-		printf("Requesting device clock %u failed got %u",
+		printf("Requesting device clock %u failed got %u\n",
 		       device_clock_khz * 1000, dev_clk);
 		goto error_1;
 	}
@@ -288,7 +410,12 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		* can't generate such slow rates.
 		*/
 		for (n = 64; n > 0; n--) {
-			rate_dev = ad9528_clk_round_rate(ad9528_device, DEV_SYSREF, lmfc_rate_hz / n);
+#if defined(ZU11EG)
+			rate_dev = hmc7044_clk_round_rate(clkchip_device, lmfc_rate_hz / n,
+							  clkchip_device->pll2_freq);
+#else
+			rate_dev = ad9528_clk_round_rate(clkchip_device, DEV_SYSREF, lmfc_rate_hz / n);
+#endif
 			if (adrv9009_check_sysref_rate(lmfc_rate_hz, rate_dev))
 				break;
 		}
@@ -298,15 +425,37 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			goto error_1;
 		}
 
-		ret = ad9528_clk_set_rate(ad9528_device, FMC_SYSREF, rate_fmc);
+#if defined(ZU11EG)
+		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, rate_fmc);
+		if (ret)
+			printf("Failed to set JESD_REFCLK_TX_OBS_AB rate to %u Hz: %d\n",
+			       rate_fmc, ret);
+		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_RX_AB, rate_fmc);
+		if (ret)
+			printf("Failed to set JESD_REFCLK_RX_AB rate to %u Hz: %d\n",
+			       rate_fmc, ret);
+#else
+		ret = ad9528_clk_set_rate(clkchip_device, FMC_SYSREF, rate_fmc);
 		if (ret)
 			printf("Failed to set FMC SYSREF rate to %u Hz: %d\n",
 			       rate_fmc, ret);
+#endif
 
-		ret = ad9528_clk_set_rate(ad9528_device, DEV_SYSREF, rate_dev);
+#if defined(ZU11EG)
+		ret = hmc7044_clk_set_rate(clkchip_device, DEV_SYSREF_A, rate_dev);
+		if (ret)
+			printf("Failed to set DEV SYSREF A rate to %u Hz: %d\n",
+			       rate_dev, ret);
+		ret = hmc7044_clk_set_rate(clkchip_device, DEV_SYSREF_B, rate_dev);
+		if (ret)
+			printf("Failed to set DEV SYSREF B rate to %u Hz: %d\n",
+			       rate_dev, ret);
+#else
+		ret = ad9528_clk_set_rate(clkchip_device, DEV_SYSREF, rate_dev);
 		if (ret)
 			printf("Failed to set DEV SYSREF rate to %u Hz: %d\n",
 			       rate_fmc, ret);
+#endif
 	}
 
 #ifdef ALTERA_PLATFORM
@@ -426,8 +575,12 @@ error_2:
 	axi_clkgen_remove(rx_clkgen);
 #endif
 error_1:
-	ad9528_remove(ad9528_device);
+#if defined(ZU11EG)
+	hmc7044_remove(clkchip_device);
+#else
+	ad9528_remove(clkchip_device);
 error_0:
+#endif
 	return ADIHAL_ERR;
 }
 
@@ -442,5 +595,10 @@ void clocking_deinit(void)
 	axi_clkgen_remove(tx_clkgen);
 	axi_clkgen_remove(rx_clkgen);
 #endif
-	ad9528_remove(ad9528_device);
+
+#if defined(ZU11EG)
+	hmc7044_remove(clkchip_device);
+#else
+	ad9528_remove(clkchip_device);
+#endif
 }
