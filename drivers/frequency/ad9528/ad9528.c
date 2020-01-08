@@ -754,6 +754,7 @@ uint32_t ad9528_calc_out_div(uint32_t rate,
 /***************************************************************************//**
  * @brief Calculate closest possible rate.
  *
+ * @param dev - is a pointer to the ad9528_dev data structure.
  * @param chan - The output channel.
  * @param rate - The desired rate.
  *
