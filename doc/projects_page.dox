@@ -1,7 +1,21 @@
 /** 
 
-\page projects_page Projects_page
+\page projects_page Projects Page
 
 \tableofcontents
+
+The following list contains code documentation for ADI no-OS projects:
+
+- \link_to_subdir{/projects/ad9172 "AD9172"}
+
+- \link_to_subdir{/projects/ad9208 "AD9208"}
+
+- \link_to_subdir{/projects/ad9361 "AD9361"}
+
+- \link_to_subdir{/projects/ad9371 "AD9371"}
+
+- \link_to_subdir{/projects/adrv9009 "ADRV9009"}
+
+- \link_to_subdir{/projects/adv7511 "ADV7511"}
 
 */
