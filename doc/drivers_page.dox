@@ -4,4 +4,125 @@
 
 \tableofcontents
 
+The following sections contain code documentation for ADI no-OS drivers.
+
+\section accelerometer Accelerometers
+
+- \link_to_subdir{/drivers/accel/adxl345 "ADXL345"}: 3-Axis, ±2 g/±4 g/±8 g/±16 g Digital Accelerometer
+- \link_to_subdir{/drivers/accel/adxl362 "ADXL362"}: Micropower, 3-Axis, ±2g/±4g/±8g Digital Output MEMS Accelerometer
+- \link_to_subdir{/drivers/accel/adxl372 "ADXL372"}: Micropower, 3-Axis, ±200 g Digital Output, MEMS 
+
+\section adcdac ADC/DAC
+
+- \link_to_subdir{/drivers/adc-dac/ad5592r "AD5592r"}: 8-Channel, 12-Bit, Configurable ADC/DAC with On-Chip Reference, SPI Interface
+
+\section adc ADC
+
+- \link_to_subdir{/drivers/adc/ad6673 "AD6673"}: 80 MHz Bandwidth, Dual IF Receiver
+- \link_to_subdir{/drivers/adc/ad6676 "AD6676"}: Wideband IF Receiver Subsystem
+- \link_to_subdir{/drivers/adc/ad7091r "AD7091R"}: 1 MSPS, Ultralow Power, 12-Bit ADC in 10-Lead LFCSP and MSOP
+- \link_to_subdir{/drivers/adc/ad7124 "AD7124"}: 4/8-Channel, Low Noise, Low Power, 24-Bit, Sigma-Delta ADC with PGA and Reference
+- \link_to_subdir{/drivers/adc/ad717x "AD717X"}: Driver for AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2, AD7177-2   
+- \link_to_subdir{/drivers/adc/ad7193 "AD7193"}: 4-Channel, 4.8 kHz, Ultralow Noise, 24-Bit Sigma-Delta ADC with PGA
+- \link_to_subdir{/drivers/adc/ad7280a "AD7280a"}: Lithium Ion Battery Monitoring System
+- \link_to_subdir{/drivers/adc/ad74xx "AD74xx"}: Driver for AD7466, AD7467, AD7468, AD7475, AD7476, AD7476A, AD7477, AD7477A, AD7478, AD7478A, AD7495
+- \link_to_subdir{/drivers/adc/ad7606 "AD7606"}: 8-/6-/4-Channel DAS with 16-Bit, Bipolar Input, Simultaneous Sampling ADC
+- \link_to_subdir{/drivers/adc/ad7768 "AD7768"}: 8-/4-Channel, 24-Bit, Simultaneous Sampling ADCs with Power Scaling, 110.8 kHz BW
+- \link_to_subdir{/drivers/adc/ad7779 "AD7779"}: 8-Channel, 24-Bit,Simultaneous Sampling ADC
+- \link_to_subdir{/drivers/adc/ad7780 "AD7780"}: 24-Bit, Pin-Programmable, Ultralow Power Sigma-Delta ADC
+- \link_to_subdir{/drivers/adc/ad7980 "AD7980"}: 16-Bit, 1 MSPS, PulSAR ADC in MSOP/LFCSP
+- \link_to_subdir{/drivers/adc/ad799x "AD799x"}: Drivers for AD7991, AD7995, AD7999
+- \link_to_subdir{/drivers/adc/ad9208 "AD9208"}: 14-Bit, 3 GSPS, JESD204B,Dual Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9250 "AD9250"}: 14-Bit, 170 MSPS/250 MSPS, JESD204B, Dual Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9265 "AD9265"}: 16-Bit, 125 MSPS/105 MSPS/80 MSPS, 1.8 V Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9434 "AD9434"}: 12-Bit, 370 MSPS/500 MSPS, 1.8 V Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9467 "AD9467"}: 16-Bit, 200 MSPS/250 MSPS Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9625 "AD9625"}: 12-Bit, 2.6 GSPS/2.5 GSPS/2.0 GSPS, 1.3 V/2.5 V Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ad9680 "AD9680"}: 14-Bit, 1.25 GSPS/1 GSPS/820 MSPS/500 MSPSJESD204B, Dual Analog-to-Digital Converter
+- \link_to_subdir{/drivers/adc/ltc2312 "LTC2312"}: 12-Bit, 500ksps Serial  Sampling ADC in TSOT
+
+\section afe Analog Front End
+
+- \link_to_subdir{/drivers/afe/ad4110 "AD4110"}: Universal Input Analog Front End with 24-Bit ADC for Industrial Process Control Systems
+
+\section axicore AXI Core
+
+- \link_to_subdir{/drivers/axi_core "AXI Core"}: Implementation for AXI Core Drivers
+
+\section cdc Capacitance Converters
+
+- \link_to_subdir{/drivers/cdc/ad7156 "AD7156"}: Ultralow Power, 1.8 V, 3 mm × 3 mm, 2-Channel Capacitance Converter 
+
+\section dac DAC
+
+- \link_to_subdir{/drivers/dac/ad5421 "AD5421"}: 16-Bit, Serial Input, Loop-Powered, 4 mA to 20 mA DAC
+- \link_to_subdir{/drivers/dac/ad5446 "AD5446"}: 12-/14-Bit High Bandwidth Multiplying DACs with Serial Interface
+- \link_to_subdir{/drivers/dac/ad5449 "AD5449"}: Dual 8-/10-/12-Bit, High Bandwidth, Multiplying DACs with Serial Interface
+- \link_to_subdir{/drivers/dac/ad5628 "AD5628"}: Octal, 12-/14-/16-Bit, SPI Voltage Output denseDAC with 5 ppm/°C, On-Chip Reference
+- \link_to_subdir{/drivers/dac/ad5629r "AD5629R"}: Octal, 12-/16-Bit, I2C, denseDACs with 5 ppm/°C On-Chip Reference
+- \link_to_subdir{/drivers/dac/ad5686 "AD5686"}: Quad, 16-/12-Bit nanoDAC+with SPI Interface
+- \link_to_subdir{/drivers/dac/ad5755 "AD5755"}: Quad Channel, 16-Bit, Serial Input, 4 mA to 20 mA and Voltage Output DAC,Dynamic Power Control, HART Connectivity
+- \link_to_subdir{/drivers/dac/ad5761r "AD5761R"}: Multiple Range, 16-/12-Bit, Bipolar/Unipolar Voltage Output DACs with 2 ppm/°C Reference
+- \link_to_subdir{/drivers/dac/ad5766 "AD5766"}: 16-Channel, 16-Bit/12-BitVoltage Output denseDACs
+- \link_to_subdir{/drivers/dac/ad5770r "AD5770R"}: 6-Channel, 14-Bit, Current Output DAC with On-Chip Reference, SPI Interface
+- \link_to_subdir{/drivers/dac/ad5791 "AD5791"}: 1 ppm 20-Bit, ±1 LSB INL, Voltage Output DAC
+- \link_to_subdir{/drivers/dac/ad7303 "AD7303"}: +2.7 V to +5.5 V, Serial Input, Dual Voltage Output 8-Bit DAC
+- \link_to_subdir{/drivers/dac/ad9144 "AD9144"}: Quad, 16-Bit, 2.8 GSPS, TxDAC+ Digital-to-Analog Converter
+- \link_to_subdir{/drivers/dac/ad9152 "AD9152"}: Dual, 16-Bit, 2.25 GSPS, TxDAC+ Digital-to-Analog Converter
+- \link_to_subdir{/drivers/dac/ad917x "AD9172"}: Dual, 16-Bit, 12.6 GSPS RF DAC with Channelizers
+- \link_to_subdir{/drivers/dac/ad9739a "AD9739A"}: 11-/14-Bit, 2.5 GSPS, RF Digital-to-Analog Converters
+
+\section frequency Frequency
+
+- \link_to_subdir{/drivers/frequency/ad9517 "AD9157"}: 12-Output Clock Generator
+- \link_to_subdir{/drivers/frequency/ad9523 "AD9523"}: Jitter Cleaner and Clock Generator with14 Differential or 29 LVCMOS Outputs
+- \link_to_subdir{/drivers/frequency/ad9833 "AD9833"}: Low Power, 12.65 mW, 2.3 V to 5.5 V, Programmable Waveform Generator
+- \link_to_subdir{/drivers/frequency/adf4106 "ADF4106"}: PLL Frequency Synthesizer
+- \link_to_subdir{/drivers/frequency/adf4153 "ADF4153"}: Fractional-N Frequency Synthesizer
+- \link_to_subdir{/drivers/frequency/adf4156 "ADF4156"}: 6.2GHz Fractional-N Frequency Synthesizer
+- \link_to_subdir{/drivers/frequency/adf4350 "ADF4350"}: Wideband Synthesizer with Integrated VCO
+- \link_to_subdir{/drivers/frequency/hmc7044 "HMC7044"}: High Performance, 3.2 GHz, 14-Output Jitter Attenuator with JESD204B
+
+\section gyro Gyroscope
+
+- \link_to_subdir{/drivers/gyro/adxrs453 "ADXRS453"}: High Performance, Digital Output Gyroscope
+
+\section impedance-analyzer Impedance Converter / Network Analyzer
+
+- \link_to_subdir{/drivers/impedance-analyzer/ad5933 "AD5933"}: 1 MSPS, 12-Bit Impedance Converter, Network Analyzer
+
+\section io-expander I/O Expansion
+
+- \link_to_subdir{/drivers/io-expander/adp5589 "ADP5589"}: Keypad Decoder and I/O Expansion
+
+\section mux Muxes
+
+- \link_to_subdir{/drivers/mux/adgs1408 "ADGS1408"}: SPI Interface, 4 Ω RON, ±15 V/+12 V/±5 V, 1.8 V Logic Control, 8:1/Dual 4:1 Muxes
+- \link_to_subdir{/drivers/mux/adgs5412 "ADGS5412"}: SPI Interface, 4× SPST Switches, 9.8 Ω RON, ±20 V/+36 V, Mux Configurable 
+
+\section platform Platform Drivers
+
+- \link_to_subdir{/drivers/platform/aducm3029 "ADuCM3029"} Platform Drivers
+- \link_to_subdir{/drivers/platform/altera "Altera"} Platform Drivers
+- \link_to_subdir{/drivers/platform/generic "Generic"} Platform Drivers
+- \link_to_subdir{/drivers/platform/linux "Linux"} Platform Drivers
+- \link_to_subdir{/drivers/platform/xilinx "Xilinx"} Platform Drivers
+
+\section potentiometer Potentiometers
+
+- \link_to_subdir{/drivers/potentiometer/ad5110 "AD5110"}: Single-Channel, 128-/64-/32-Position, I2C, ±8% Resistor Tolerance, Nonvolatile Digital Potentiometer
+- \link_to_subdir{/drivers/potentiometer/ad525x "AD525x"}: Drivers for AD5232, AD5235, ADN2850, AD5252, AD5251, AD5254, AD5253
+
+\section rf-transceiver RF Transceivers
+
+- \link_to_subdir{/drivers/rf-transceiver/adf7023 "ADF7023"}: High Performance, Low Power, ISM Band FSK/GFSK/OOK/MSK/GMSK Transceiver IC
+
+\section sd-card SD Card
+
+- \link_to_subdir{/drivers/sd-card "SD Card"} interface over SPI
+
+\section temperature Temperature
+
+- \link_to_subdir{/drivers/temperature/adt7420 "ADT7420"}: ±0.25°C Accurate, 16-Bit Digital I2C Temperature Sensor
+
 */
