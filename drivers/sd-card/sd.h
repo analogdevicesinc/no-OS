@@ -73,38 +73,41 @@
 /******************************************************************************/
 
 /**
- * struct sd_init_param - Configuration structure sent in the function sd_init
- * @spi_desc		- Descriptor of an initialized SPI channel
+ * @struct sd_init_param
+ * @brief Configuration structure sent in the function sd_init
  */
 struct sd_init_param {
+	/** Descriptor of an initialized SPI channel */
 	struct spi_desc *spi_desc;
 };
 
 /**
- * struct sd_desc - Structure that stores data about the SD card configurations
- * @spi_desc		- Descriptor of an initialized SPI channel
- * @memory_size		- Memory size of the SD card in bytes
- * @high_capacity	- 1 if SD card is HC or XC, 0 otherwise
- * @buff		- Buffer used for the driver implementation
+ * @struct sd_desc
+ * @brief Structure that stores data about the SD card configurations
  */
 struct sd_desc {
+	/** Descriptor of an initialized SPI channel */
 	struct spi_desc *spi_desc;
+	/** Memory size of the SD card in bytes */
 	uint64_t	memory_size;
+	/** 1 if SD card is HC or XC, 0 otherwise */
 	uint8_t		high_capacity;
+	/** Buffer used for the driver implementation */
 	uint8_t		buff[18];
 };
 
 /**
- * struct cmd_desc - Contains the elements needed to build a command
- * @cmd			- Command code
- * @arg			- Argument for the command
- * @response 		- Response with the size response_len will be written here
- * @response_len	- Expected length for the response
+ * @struct cmd_desc
+ * @brief Contains the elements needed to build a command
  */
 struct cmd_desc {
+	/** Command code */
 	uint8_t		cmd;
+	/** Argument for the command */
 	uint32_t	arg;
+	/** Response with the size response_len will be written here */
 	uint8_t		response[MAX_RESPONSE_LEN];
+	/** Expected length for the response */
 	uint32_t	response_len;
 };
 
