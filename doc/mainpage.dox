@@ -33,6 +33,10 @@ like Linux), the efforts on microcontrollers are fragmented due to the diverse n
 The goal of these projects (microcontroller/no-OS) is to be able to provide reference projects for lower end processors, 
 which can't run Linux or aren't running a specific operating system, to help customers using FPGA/microcontrollers with ADI parts.
 
+\section include Includes
+
+Generic header files from no-OS repository: \link_to_subdir{/include "Include"}
+
 \section drivers Drivers
 
 A list of available drivers can be found here: \ref drivers_page "Drivers"
