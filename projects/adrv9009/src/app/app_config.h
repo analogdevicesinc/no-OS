@@ -45,4 +45,6 @@
 
 //#define DAC_DMA_EXAMPLE
 
+//#define IIO_EXAMPLE
+
 #endif /* APP_CONFIG_H_ */
