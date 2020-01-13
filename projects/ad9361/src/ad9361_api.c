@@ -47,7 +47,7 @@
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
 #include "util.h"
-#include "config.h"
+#include "app_config.h"
 #include <string.h>
 
 #define ADI_REG_VERSION			0x0000

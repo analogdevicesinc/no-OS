@@ -51,11 +51,11 @@
 #include "delay.h"
 #include "ad9361_util.h"
 #include "util.h"
-#include "config.h"
+#include "app_config.h"
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
 
-/* Used for static code size optimization: please see config.h */
+/* Used for static code size optimization: please see app_config.h */
 const bool has_split_gt = HAVE_SPLIT_GAIN_TABLE;
 const bool have_tdd_tables = HAVE_TDD_SYNTH_TABLE;
 

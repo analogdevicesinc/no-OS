@@ -44,7 +44,7 @@
 #include <string.h>
 #include "ad9361.h"
 #include "delay.h"
-#include "config.h"
+#include "app_config.h"
 #include "ad9361_util.h"
 #include "util.h"
 #include "axi_adc_core.h"

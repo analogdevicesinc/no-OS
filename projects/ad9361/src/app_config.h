@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   config.h
+ *   @file   app_config.h
  *   @brief  Config file of AD9361/API Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
