@@ -28,7 +28,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS := $(PROJECT)/src/common.h						\
-	$(PROJECT)/src/config.h
+	$(PROJECT)/src/app_config.h
 INCS += $(PROJECT)/src/ad9361.h						\
 	$(PROJECT)/src/parameters.h					\
 	$(PROJECT)/src/ad9361_util.h					\

@@ -48,7 +48,7 @@
 #include <stdlib.h>
 #include "ad9361.h"
 #include "common.h"
-#include "config.h"
+#include "app_config.h"
 
 
 /******************************************************************************/

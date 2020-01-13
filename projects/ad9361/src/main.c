@@ -41,7 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <inttypes.h>
-#include "config.h"
+#include "app_config.h"
 #include "ad9361_api.h"
 #include "parameters.h"
 #include "spi.h"
