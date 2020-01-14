@@ -47,6 +47,9 @@ build_doxygen() {
     sudo make install
     cd ../..
 
+    #Generate *.dox files for drivers and projects
+    ${TRAVIS_BUILD_DIR}/ci/travis/gen_dox.sh
+
     # Build Documentation
     cd ${TRAVIS_BUILD_DIR}/doc
     mkdir -p build && cd build
