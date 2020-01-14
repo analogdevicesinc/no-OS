@@ -31,6 +31,7 @@ set(DOCUMENTED_FILES
     ${SOURCES_DIR}/drivers/io-expander \\
     ${SOURCES_DIR}/drivers/mux \\
     ${SOURCES_DIR}/drivers/platform \\
+    ${SOURCES_DIR}/drivers/photo-electronic \\
     ${SOURCES_DIR}/drivers/potentiometer \\
     ${SOURCES_DIR}/drivers/rf-transceiver/adf7023 \\
     ${SOURCES_DIR}/drivers/sd-card \\
