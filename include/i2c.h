@@ -55,12 +55,16 @@
  * @brief I2C transfer mode configuration
  */
 typedef enum i2c_transfer_mode {
+	/** Transfer with STOP condition and with 7-bit address scheme */
+	I2C_NORMAL_TRANSFER = 0x00,
 	/** Address every device connected */
-	i2c_general_call =	0x01,
+	I2C_GENERAL_CALL = 0x01,
 	/** Send multiple start conditions */
-	i2c_repeated_start =	0x02,
+	I2C_REPEATED_START = 0x02,
 	/** Use 10-bit address scheme */
-	i2c_10_bit_transfer =	0x04
+	I2C_10_BIT_TRANSFER = 0x04,
+	/** Use Slave monitor mode */
+	I2C_SLAVE_MONITOR = 0x08
 } i2c_transfer_mode;
 
 /**
@@ -104,12 +108,12 @@ int32_t i2c_remove(struct i2c_desc *desc);
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t option);
+		  enum i2c_transfer_mode transfer_mode);
 
 /* Read data from a slave device. */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t option);
+		 enum i2c_transfer_mode transfer_mode);
 
 #endif // I2C_H_

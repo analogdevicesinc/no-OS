@@ -108,15 +108,13 @@ int32_t i2c_remove(i2c_desc *desc)
  * @param desc - The I2C descriptor.
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param option - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
+ * @param transfer_mode - Transfer mode type
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_write(i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t option)
+		  enum i2c_transfer_mode transfer_mode)
 {
 	int ret;
 
@@ -132,7 +130,7 @@ int32_t i2c_write(i2c_desc *desc,
 		return FAILURE;
 	}
 
-	if (option) {
+	if (transfer_mode) {
 		// Unused variable - fix compiler warning
 	}
 
@@ -144,15 +142,13 @@ int32_t i2c_write(i2c_desc *desc,
  * @param desc - The I2C descriptor.
  * @param data - Buffer that will store the received data.
  * @param bytes_number - Number of bytes to read.
- * @param option - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
+ * @param transfer_mode - Transfer mode type
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_read(i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t option)
+		 enum i2c_transfer_mode transfer_mode)
 {
 	int ret;
 
@@ -168,7 +164,7 @@ int32_t i2c_read(i2c_desc *desc,
 		return FAILURE;
 	}
 
-	if (option) {
+	if (transfer_mode) {
 		// Unused variable - fix compiler warning
 	}
 

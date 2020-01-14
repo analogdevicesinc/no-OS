@@ -213,15 +213,13 @@ error:
  * @param desc - The I2C descriptor.
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param option - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
+ * @param transfer_mode - Transfer mode type
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t option)
+		  enum i2c_transfer_mode transfer_mode)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -235,15 +233,21 @@ int32_t i2c_write(struct i2c_desc *desc,
 			  desc->slave_address,
 			  data,
 			  bytes_number,
-			  option ? XIIC_REPEATED_START : XIIC_STOP);
+			  (transfer_mode & I2C_REPEATED_START) ?
+			  XIIC_REPEATED_START :	XIIC_STOP);
 		break;
 #endif
 		goto error;
 	case IIC_PS:
 #ifdef XIICPS_H
-
-		ret = XIicPs_SetOptions(xdesc->instance,
-					option);
+		uint8_t options =
+			((transfer_mode & I2C_10_BIT_TRANSFER) ?
+			 XIICPS_10_BIT_ADDR_OPTION : XIICPS_7_BIT_ADDR_OPTION) |
+			((transfer_mode & I2C_REPEATED_START) ?
+			 XIICPS_REP_START_OPTION : 0) |
+			((transfer_mode & I2C_SLAVE_MONITOR) ?
+			 XIICPS_SLAVE_MON_OPTION : 0);
+		ret = XIicPs_SetOptions(xdesc->instance, options);
 		if(ret != SUCCESS)
 			goto error;
 
@@ -272,15 +276,13 @@ error:
  * @param desc - The I2C descriptor.
  * @param data - Buffer that will store the received data.
  * @param bytes_number - Number of bytes to read.
- * @param option - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
- *                            1 - A stop condition will be generated.
+ * @param transfer_mode - Transfer mode type
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t option)
+		 enum i2c_transfer_mode transfer_mode)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -294,7 +296,8 @@ int32_t i2c_read(struct i2c_desc *desc,
 				desc->slave_address,
 				data,
 				bytes_number,
-				option ? XIIC_REPEATED_START : XIIC_STOP);
+				(transfer_mode & I2C_REPEATED_START) ?
+				XIIC_REPEATED_START : XIIC_STOP);
 		if(ret != SUCCESS)
 			goto error;
 
@@ -303,9 +306,14 @@ int32_t i2c_read(struct i2c_desc *desc,
 		goto error;
 	case IIC_PS:
 #ifdef XIICPS_H
-
-		ret = XIicPs_SetOptions(xdesc->instance,
-					option);
+		uint8_t options =
+			((transfer_mode & I2C_10_BIT_TRANSFER) ?
+			 XIICPS_10_BIT_ADDR_OPTION : XIICPS_7_BIT_ADDR_OPTION) |
+			((transfer_mode & I2C_REPEATED_START) ?
+			 XIICPS_REP_START_OPTION : 0) |
+			((transfer_mode & I2C_SLAVE_MONITOR) ?
+			 XIICPS_SLAVE_MON_OPTION : 0);
+		ret = XIicPs_SetOptions(xdesc->instance, options);
 		if(ret != SUCCESS)
 			goto error;
 
