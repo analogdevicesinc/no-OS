@@ -84,12 +84,20 @@
 #define HMC7044_REG_EN_CTRL_1		0x0004
 #define HMC7044_SEVEN_PAIRS(x)		((x) & 0x7f)
 
+#define HMC7044_REG_GLOB_MODE		0x0005
+#define HMC7044_REF_PATH_EN(x)		((x) & 0xf)
+#define HMC7044_RFSYNC_EN		BIT(4)
+#define HMC7044_VCOIN_MODE_EN		BIT(5)
+#define HMC7044_SYNC_PIN_MODE(x)	(((x) & 0x3) << 6)
+
 /* PLL1 */
 #define HMC7044_REG_CLKIN0_BUF_CTRL	0x000A
 #define HMC7044_REG_CLKIN1_BUF_CTRL	0x000B
 #define HMC7044_REG_CLKIN2_BUF_CTRL	0x000C
 #define HMC7044_REG_CLKIN3_BUF_CTRL	0x000D
 #define HMC7044_REG_OSCIN_BUF_CTRL	0x000E
+
+#define HMC7044_REG_PLL1_REF_PRIO_CTRL	0x0014
 
 #define HMC7044_HIGH_Z_EN		BIT(4)
 #define HMC7044_LVPECL_EN		BIT(3)
@@ -160,6 +168,19 @@
 #define HMC7044_REG_SYSREF_TIMER_MSB	0x005D
 #define HMC7044_SYSREF_TIMER_MSB(x)	(((x) & 0xf00) >> 8)
 
+/* Status and Alarm readback */
+#define HMC7044_REG_ALARM_READBACK	0x007D
+#define HMC7044_REG_PLL1_STATUS		0x0082
+
+#define HMC7044_PLL1_FSM_STATE(x)	((x) & 0x7)
+#define HMC7044_PLL1_ACTIVE_CLKIN(x)	(((x) >> 3) & 0x3)
+
+#define HMC7044_PLL2_LOCK_DETECT(x)	((x) & 0x1)
+#define HMC7044_SYSREF_SYNC_STAT(x)	((x) & 0x2)
+#define HMC7044_CLK_OUT_PH_STATUS(x)	((x) & 0x4)
+#define HMC7044_PLL1_PLL2_LOCK_STAT(x)	((x) & 0x8)
+#define HMC7044_SYNC_REQ_STATUS(x)	((x) & 0x10)
+
 /* Other Controls */
 #define HMC7044_REG_CLK_OUT_DRV_LOW_PW	0x009F
 #define HMC7044_REG_CLK_OUT_DRV_HIGH_PW	0x00A0
@@ -188,6 +209,9 @@
 
 #define HMC7044_REG_CH_OUT_CRTL_8(ch)	(0x00D0 + 0xA * (ch))
 #define HMC7044_DRIVER_MODE(x)		(((x) & 0x3) << 3)
+#define HMC7044_DRIVER_Z_MODE(x)	(((x) & 0x3) << 0)
+#define HMC7044_DYN_DRIVER_EN		BIT(5)
+#define HMC7044_FORCE_MUTE_EN		BIT(7)
 
 #define HMC7044_NUM_CHAN	14
 
@@ -370,16 +394,22 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	uint32_t pfd1_freq;
 	uint32_t vco_limit;
 	uint32_t n2[2], r2[2];
-	uint32_t i;
+	uint32_t i, ref_en = 0;
 
 	vcxo_freq = dev->vcxo_freq / 1000;
 	pll2_freq = dev->pll2_freq / 1000;
 
 	lcm_freq = vcxo_freq;
 	for (i = 0; i < ARRAY_SIZE(clkin_freq); i++) {
-		clkin_freq[i] = dev->clkin_freq[i] / 1000;
-		if (clkin_freq[i])
+		if (dev->clkin_freq_ccf[i])
+			clkin_freq[i] = dev->clkin_freq_ccf[i] / 1000;
+		else
+			clkin_freq[i] = dev->clkin_freq[i] / 1000;
+
+		if (clkin_freq[i]) {
 			lcm_freq = greatest_common_divisor(clkin_freq[i], lcm_freq);
+			ref_en |= BIT(i);
+		}
 	}
 
 	while (lcm_freq > HMC7044_RECOMM_LCM_MAX)
@@ -408,6 +438,8 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		n1 *= 2;
 		r1 *= 2;
 	}
+
+	dev->pll1_pfd = pfd1_freq;
 
 	if (pll2_freq < HMC7044_LOW_VCO_MIN  ||
 	    pll2_freq > HMC7044_HIGH_VCO_MAX)
@@ -451,12 +483,22 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, 0);
 	mdelay(10);
 
+	/* Disable all channels */
+	for (i = 0; i < HMC7044_NUM_CHAN; i++)
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(i), 0);
+
 	/* Load the configuration updates (provided by Analog Devices) */
 	hmc7044_write(dev, HMC7044_REG_CLK_OUT_DRV_LOW_PW, 0x4d);
 	hmc7044_write(dev, HMC7044_REG_CLK_OUT_DRV_HIGH_PW, 0xdf);
 	hmc7044_write(dev, HMC7044_REG_PLL1_DELAY, 0x06);
 	hmc7044_write(dev, HMC7044_REG_PLL1_HOLDOVER, 0x06);
 	hmc7044_write(dev, HMC7044_REG_VTUNE_PRESET, 0x04);
+
+	hmc7044_write(dev, HMC7044_REG_GLOB_MODE,
+		      HMC7044_SYNC_PIN_MODE(dev->sync_pin_mode) |
+		      (dev->clkin0_rfsync_en ? HMC7044_RFSYNC_EN : 0) |
+		      (dev->clkin1_vcoin_en ? HMC7044_VCOIN_MODE_EN : 0) |
+		      HMC7044_REF_PATH_EN(ref_en));
 
 	/* Program PLL2 */
 
@@ -507,6 +549,9 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	hmc7044_write(dev, HMC7044_REG_PLL1_N_MSB,
 		      HMC7044_N2_MSB(n1));
 
+	hmc7044_write(dev, HMC7044_REG_PLL1_REF_PRIO_CTRL,
+		      dev->pll1_ref_prio_ctrl);
+
 	/* Program the SYSREF timer */
 
 	/* Set the divide ratio */
@@ -550,6 +595,25 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 		if (chan->num >= HMC7044_NUM_CHAN || chan->disable)
 			continue;
 
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
+			      HMC7044_DIV_LSB(chan->divider));
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
+			      HMC7044_DIV_MSB(chan->divider));
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_8(chan->num),
+			      HMC7044_DRIVER_MODE(chan->driver_mode) |
+			      HMC7044_DRIVER_Z_MODE(chan->driver_impedance) |
+			      (chan->dynamic_driver_enable ?
+			       HMC7044_DYN_DRIVER_EN : 0) |
+			      (chan->force_mute_enable ?
+			       HMC7044_FORCE_MUTE_EN : 0));
+
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_3(chan->num),
+			      chan->fine_delay & 0x1F);
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_4(chan->num),
+			      chan->coarse_delay & 0x1F);
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_7(chan->num),
+			      chan->out_mux_mode & 0x3);
+
 		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
 			      (chan->start_up_mode_dynamic_enable ?
 			       HMC7044_START_UP_MODE_DYN_EN : 0) |
@@ -557,13 +621,6 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 			      (chan->high_performance_mode_dis ?
 			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
 			      HMC7044_CH_EN);
-
-		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
-			      HMC7044_DIV_LSB(chan->divider));
-		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
-			      HMC7044_DIV_MSB(chan->divider));
-		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_8(chan->num),
-			      HMC7044_DRIVER_MODE(chan->driver_mode));
 	}
 	mdelay(10);
 
@@ -571,7 +628,11 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
 		      HMC7044_RESTART_DIV_FSM);
 	mdelay(1);
-	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0, 0);
+	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+		      (dev->high_performance_mode_clock_dist_en ?
+		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0) |
+		      (dev->high_performance_mode_pll_vco_en ?
+		       HMC7044_HIGH_PERF_PLL_VCO : 0));
 	mdelay(1);
 
 	return SUCCESS;
@@ -604,11 +665,25 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	dev->clkin_freq[2] = init_param->clkin_freq[2];
 	dev->clkin_freq[3] = init_param->clkin_freq[3];
 
+	dev->clkin_freq_ccf[0] = init_param->clkin_freq_ccf[0];
+	dev->clkin_freq_ccf[1] = init_param->clkin_freq_ccf[1];
+	dev->clkin_freq_ccf[2] = init_param->clkin_freq_ccf[2];
+	dev->clkin_freq_ccf[3] = init_param->clkin_freq_ccf[3];
+
 	dev->vcxo_freq = init_param->vcxo_freq;
+	dev->pll1_pfd = init_param->pll1_pfd;
 	dev->pll2_freq = init_param->pll2_freq;
 	dev->pll1_loop_bw = init_param->pll1_loop_bw;
 
 	dev->sysref_timer_div = init_param->sysref_timer_div;
+	dev->pll1_ref_prio_ctrl = init_param->pll1_ref_prio_ctrl;
+	dev->clkin0_rfsync_en = init_param->clkin0_rfsync_en;
+	dev->clkin1_vcoin_en = init_param->clkin1_vcoin_en;
+	dev->high_performance_mode_clock_dist_en =
+		init_param->high_performance_mode_clock_dist_en;
+	dev->high_performance_mode_pll_vco_en =
+		init_param->high_performance_mode_pll_vco_en;
+	dev->sync_pin_mode = init_param->sync_pin_mode;
 	dev->pulse_gen_mode = init_param->pulse_gen_mode;
 
 	dev->in_buf_mode[0] = init_param->in_buf_mode[0];
@@ -641,8 +716,20 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 			init_param->channels[i].high_performance_mode_dis;
 		dev->channels[i].start_up_mode_dynamic_enable =
 			init_param->channels[i].start_up_mode_dynamic_enable;
+		dev->channels[i].dynamic_driver_enable =
+			init_param->channels[i].dynamic_driver_enable;
 		dev->channels[i].output_control0_rb4_enable =
 			init_param->channels[i].output_control0_rb4_enable;
+		dev->channels[i].force_mute_enable =
+			init_param->channels[i].force_mute_enable;
+		dev->channels[i].driver_impedance =
+			init_param->channels[i].driver_impedance;
+		dev->channels[i].coarse_delay =
+			init_param->channels[i].coarse_delay;
+		dev->channels[i].fine_delay =
+			init_param->channels[i].fine_delay;
+		dev->channels[i].out_mux_mode =
+			init_param->channels[i].out_mux_mode;
 	}
 
 	*device = dev;
