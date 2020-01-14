@@ -53,20 +53,34 @@
 struct hmc7044_chan_spec {
 	unsigned int	num;
 	bool		disable;
-	bool			high_performance_mode_dis;
-	bool			start_up_mode_dynamic_enable;
-	bool			output_control0_rb4_enable;
+	bool		high_performance_mode_dis;
+	bool		start_up_mode_dynamic_enable;
+	bool		dynamic_driver_enable;
+	bool		output_control0_rb4_enable;
+	bool		force_mute_enable;
 	unsigned int	divider;
 	unsigned int	driver_mode;
+	unsigned int	driver_impedance;
+	unsigned int	coarse_delay;
+	unsigned int	fine_delay;
+	unsigned int	out_mux_mode;
 };
 
 struct hmc7044_dev {
 	spi_desc	*spi_desc;
 	uint32_t	clkin_freq[4];
+	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
+	uint32_t	pll1_pfd;
 	uint32_t	pll2_freq;
 	uint32_t	pll1_loop_bw;
 	uint32_t	sysref_timer_div;
+	unsigned int	pll1_ref_prio_ctrl;
+	bool		clkin0_rfsync_en;
+	bool		clkin1_vcoin_en;
+	bool		high_performance_mode_clock_dist_en;
+	bool		high_performance_mode_pll_vco_en;
+	unsigned int	sync_pin_mode;
 	uint32_t	pulse_gen_mode;
 	uint32_t	in_buf_mode[5];
 	uint32_t	gpi_ctrl[4];
@@ -78,10 +92,18 @@ struct hmc7044_dev {
 struct hmc7044_init_param {
 	spi_init_param	*spi_init;
 	uint32_t	clkin_freq[4];
+	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
+	uint32_t	pll1_pfd;
 	uint32_t	pll2_freq;
 	uint32_t	pll1_loop_bw;
 	uint32_t	sysref_timer_div;
+	unsigned int	pll1_ref_prio_ctrl;
+	bool		clkin0_rfsync_en;
+	bool		clkin1_vcoin_en;
+	bool		high_performance_mode_clock_dist_en;
+	bool		high_performance_mode_pll_vco_en;
+	unsigned int	sync_pin_mode;
 	uint32_t	pulse_gen_mode;
 	uint32_t	in_buf_mode[5];
 	uint32_t	gpi_ctrl[4];
