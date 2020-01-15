@@ -221,9 +221,13 @@ int main(void)
 	axi_adc_init(&rx_adc, &rx_adc_init);
 
 #ifdef DAC_DMA_EXAMPLE
-	gpio_init_plddrbypass.extra = &ad9528_gpio_param;
+	gpio_init_plddrbypass.extra = &hal_gpio_param;
 	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS;
-	gpio_get(&gpio_plddrbypass, gpio_init_plddrbypass);
+	int32_t s = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
+	if (s) {
+		printf("gpio_get() failed with status %d", s);
+		return s;
+	}
 	gpio_direction_output(gpio_plddrbypass, 1);
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
