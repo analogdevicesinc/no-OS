@@ -432,6 +432,9 @@ xilinx-bsp:
 	@ if [ "$(ARCH)" = "sys_mb" ]; then				\
 		sed -i "s/_HEAP_SIZE : 0x800/_HEAP_SIZE : 0x100000/g"	\
 		$(BUILD_DIR)/app/src/lscript.ld;			\
+	else								\
+		sed -i "s/_HEAP_SIZE : 0x2000/_HEAP_SIZE : 0x100000/g"	\
+		$(BUILD_DIR)/app/src/lscript.ld;			\
 	fi;
 	$(MUTE)rm -rf $(BUILD_DIR)/SDK.log
 
