@@ -5,6 +5,10 @@
 export HARDWARE
 export PLATFORM
 export ARCH
+export CFLAGS
+export LDFLAGS
+export CC
+export LD
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
@@ -12,6 +16,7 @@ export ARCH
 NO-OS 		  = $(CURDIR)/../..
 DRIVERS 	  = $(NO-OS)/drivers
 INCLUDE 	  = $(NO-OS)/include
+LIBRARIES	  = $(NO-OS)/libraries
 SCRIPTS_DIR	  = $(NO-OS)/tools/scripts
 PROJECTS_DIR 	  = $(NO-OS)/projects
 SDK_WORKSPACE	  = $(PROJECT)/build
@@ -86,11 +91,16 @@ CFLAGS = -Wall 								\
 	 -lm						
 	#-Werror
 
+ifeq (y,$(strip $(TINYIIOD)))
+CFLAGS += -D IIO_EXAMPLE
+CFLAGS += -D _USE_STD_INT_TYPES
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON LINKER FLAGS                               
 #------------------------------------------------------------------------------
 LDFLAGS = -T $(LSCRIPT)							\
-	  -L $(LIBRARY_DIRS)
+	  $(LIBS)
 
 #------------------------------------------------------------------------------
 #                             PLATFORM HANDLING                                
@@ -110,7 +120,7 @@ CFLAGS += -D XILINX_PLATFORM						\
 # Xilinx's generated linker script path
 LSCRIPT := $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
-LIBRARY_DIRS := $(BUILD_DIR)/bsp/$(ARCH)/lib
+LIBS := -L $(BUILD_DIR)/bsp/$(ARCH)/lib
 # Xilinx's bsp include path
 EXTRA_INCS := -I $(BUILD_DIR)/bsp/$(ARCH)/include
 ################|--------------------------------------------------------------
@@ -177,7 +187,7 @@ LDFLAGS += -Xlinker --defsym=_HEAP_SIZE=0x100000 			\
 endif
 
 # Common xilinx libs
-LIBS =	-Wl,--start-group,-lxil,-lgcc,-lc,--end-group
+LIBS +=	-Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
 else
 ifeq (altera,$(strip $(PLATFORM)))
@@ -187,7 +197,7 @@ CFLAGS += -D ALTERA_PLATFORM
 
 LSCRIPT := $(BUILD_DIR)/bsp/linker.x
 
-LIBRARY_DIRS := $(BUILD_DIR)/bsp
+LIBS := -L $(BUILD_DIR)/bsp
 
 CC := nios2-elf-gcc 
 
@@ -240,7 +250,6 @@ endif
 
 # Add the common include paths
 INC_PATHS :=-I $(BUILD_DIR)/app/src
-LIB_PATHS = $(foreach x, $(LIBRARY_DIRS), $(addprefix -L ,$(x)))
 
 OBJS = $(SRCS:.c=.o)
 
@@ -292,6 +301,7 @@ compile:
 		      -I $(BUILD_DIR)/bsp/HAL/inc			\
 		      -I $(BUILD_DIR)/bsp";				\
 	fi;))
+	$(MAKE) -s libs
 	$(MAKE) -s $(EXEC)
 
 .SILENT:create-build-dirs
@@ -362,6 +372,13 @@ altera-bsp:
 .SILENT:altera-elf
 altera-elf:
 	nios2-elf-insert $(BUILD_DIR)/$(EXEC).elf $(STAMP)
+
+.SILENT:libs
+libs:
+ifeq (y,$(strip $(TINYIIOD)))
+	@$(MAKE) -C $(LIBRARIES)/libtinyiiod re
+LIBS += -L $(LIBRARIES)/libtinyiiod/build -ltinyiiod
+endif
 
 .SILENT:pre-build
 pre-build:
