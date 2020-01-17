@@ -37,6 +37,10 @@ which can't run Linux or aren't running a specific operating system, to help cus
 
 Generic header files from no-OS repository: \link_to_subdir{/include "Include"}
 
+\section iio IIO
+
+IIO interfaces and application documentation available at : \link_to_subdir{/iio "IIO"}
+
 \section drivers Drivers
 
 A list of available drivers can be found here: \ref drivers_page "Drivers"
