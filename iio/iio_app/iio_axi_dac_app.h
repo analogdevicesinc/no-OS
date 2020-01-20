@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_basic_app.h
- *   @brief  Header file of iio_basic_app.
+ *   @file   iio_axi_dac_app.h
+ *   @brief  Header file of iio_axi_dac_app.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -53,20 +53,22 @@
 /******************************************************************************/
 
 /**
- * struct iio_basic_app_desc - Application desciptor.
- * @iio_axi_dac_inst - iio DAC device handle.
+ * @struct iio_basic_app_desc
+ * @brief Application desciptor.
  */
 struct iio_axi_dac_app_desc {
+	/** iio DAC device handle */
 	struct iio_axi_dac *iio_axi_dac_inst;
 };
 
 /**
- * struct iio_basic_app_init_param - Application configuration.
- * @tx_dac - DAC device.
- * @tx_dmac - Transmit DMA device.
+ * @struct iio_basic_app_init_param
+ * @brief Application configuration.
  */
 struct iio_axi_dac_app_init_param {
+	/** DAC device */
 	struct axi_dac *tx_dac;
+	/** Transmit DMA device */
 	struct axi_dmac *tx_dmac;
 };
 

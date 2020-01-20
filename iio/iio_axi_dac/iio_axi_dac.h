@@ -52,32 +52,32 @@
 /******************************************************************************/
 
 /**
- * struct iio_axi_dac_init_par - Initialization parameters for "iio_axi_dac".
- * @dac:		Pointer to "axi_dac" instance.
- * @dac:		Pointer to "axi_dmac" instance.
- * @dac_ddr_base:	Address used by DMA, for sending data to device.
- * @dcache_flush_range:	Function pointer to flush the data cache for the given
- * 			address range.
+ * @struct iio_axi_dac_init_par
+ * @brief Initialization parameters for "iio_axi_dac".
  */
 struct iio_axi_dac_init_par {
+	/** Pointer to "axi_dac" instance */
 	struct axi_dac *dac;
+	/** Pointer to "axi_dmac" instance */
 	struct axi_dmac *dmac;
+	/** Address used by DMA, for sending data to device */
 	uint32_t dac_ddr_base;
+	/** Function pointer to flush the data cache for the given address range */
 	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /**
- * struct iio_axi_dac - Structure with references to DAC and DMA cores.
- * @dac:		Pointer to "axi_dac" instance.
- * @dac:		Pointer to "axi_dmac" instance.
- * @dac_ddr_base:	Address used by DMA, for sending data to device.
- * @dcache_flush_range:	Function pointer to flush the data cache for the given
- * 			address range.
+ * @struct iio_axi_dac
+ * @brief Structure with references to DAC and DMA cores.
  */
 struct iio_axi_dac {
+	/** Pointer to "axi_dac" instance */
 	struct axi_dac *dac;
+	/** Pointer to "axi_dmac" instance. */
 	struct axi_dmac *dmac;
+	/** Address used by DMA, for sending data to device */
 	uint32_t dac_ddr_base;
+	/** Function pointer to flush the data cache for the given address range */
 	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
 };
 

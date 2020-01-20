@@ -53,20 +53,22 @@
 /******************************************************************************/
 
 /**
- * struct iio_axi_adc_desc - Application desciptor.
- * @iio_axi_dac_inst - iio DAC device handle.
+ * @struct iio_axi_adc_desc
+ * @brief Application desciptor.
  */
 struct iio_axi_adc_app_desc {
+	/** iio DAC device handle */
 	struct iio_axi_adc *iio_axi_adc_inst;
 };
 
 /**
- * struct iio_axi_adc_init_param - Application configuration.
- * @rx_adc - ADC device.
- * @rx_dmac - Receive DMA device.
+ * @struct iio_axi_adc_init_param
+ * @brief Application configuration.
  */
 struct iio_axi_adc_app_init_param {
+	/** ADC device */
 	struct axi_adc *rx_adc;
+	/** Receive DMA device */
 	struct axi_dmac *rx_dmac;
 };
 

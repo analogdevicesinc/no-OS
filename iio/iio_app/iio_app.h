@@ -51,20 +51,22 @@
 /******************************************************************************/
 
 /**
- * struct iio_app_desc - Application desciptor.
- * @iio_server_ops - read./write function callbacks.
- * @iiod - iiod handle.
+ * @struct iio_app_desc
+ * @brief Application desciptor.
  */
 struct iio_app_desc {
+	/** read./write function callbacks */
 	struct iio_server_ops *iio_server_ops;
+	/** iiod handle */
 	struct tinyiiod *iiod;
 };
 
 /**
- * struct iio_app_init_param - Application initial configuration.
- * @iio_server_ops - read./write function callbacks.
+ * @struct iio_app_init_param
+ * @brief Application initial configuration.
  */
 struct iio_app_init_param {
+	/** read./write function callbacks */
 	struct iio_server_ops *iio_server_ops;
 };
 

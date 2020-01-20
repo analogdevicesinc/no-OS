@@ -75,7 +75,7 @@ int32_t iio_generic_app_init(struct iio_generic_app_desc **desc,
 }
 
 /**
- * @biref Release resources.
+ * @brief Release resources.
  * @param desc - Application descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
