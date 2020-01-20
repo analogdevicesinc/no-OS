@@ -104,9 +104,10 @@
 #endif
 
 #if defined(ZU11EG) // ZU11EG
-#define CLK_CS				2
-#define ADRV_CS				0
-#define ADRV_B_CS			1
+#define ADRV_CS				0 // Talise A 
+#define ADRV_B_CS			1 // Talise B
+#define CLK_CS				2 // Clock chip placed on the som
+#define CAR_CLK_CS			3 // Clock chip placed on the carrier
 
 // Transceiver A
 #define TRX_A_RESETB_GPIO		130
