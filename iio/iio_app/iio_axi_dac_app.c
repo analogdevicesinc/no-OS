@@ -54,11 +54,11 @@
 /******************************************************************************/
 
 /**
- * iio_axi_dac_init() - Application for reading/writing and parameterization of
+ * @brief Application for reading/writing and parameterization of
  * axi_dac device.
- * @desc - Application descriptor.
- * @param - Application configuration structure.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @param desc - Application descriptor.
+ * @param param - Application configuration structure.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 			     struct iio_axi_dac_app_init_param *param)
@@ -116,9 +116,9 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 }
 
 /**
- * iio_axi_dac_app_remove() - Release resources.
- * @desc - Application descriptor.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @brief Release resources.
+ * @param desc - Application descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc)
 {

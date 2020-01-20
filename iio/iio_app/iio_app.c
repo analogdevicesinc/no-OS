@@ -48,10 +48,10 @@
 #include "iio_app.h"
 
 /**
- * iio_app_init() - Application parameterization.
- * @desc - Application descriptor.
- * @param - Application initial configuration structure.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @brief Application parameterization.
+ * @param desc - Application descriptor.
+ * @param param - Application initial configuration structure.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_app_init(struct iio_app_desc **desc,
 		     struct iio_app_init_param *param)
@@ -76,9 +76,9 @@ int32_t iio_app_init(struct iio_app_desc **desc,
 }
 
 /**
- * iio_app_remove() - Release resources.
- * @desc - Application descriptor.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @brief Release resources.
+ * @param desc - Application descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_app_remove(struct iio_app_desc *desc)
 {
@@ -97,9 +97,9 @@ int32_t iio_app_remove(struct iio_app_desc *desc)
 }
 
 /**
- * iio_app() - iio application, reads commands and executes them.
- * @desc - Application descriptor.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @brief iio application, reads commands and executes them.
+ * @param desc - Application descriptor.
+ * @return: SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_app(struct iio_app_desc *desc)
 {
