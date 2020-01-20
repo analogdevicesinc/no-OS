@@ -81,6 +81,7 @@
 
 #if defined(ZU11EG)
 struct hmc7044_dev* clkchip_device;
+struct hmc7044_dev * car_clkchip_device;
 #else
 struct ad9528_dev* clkchip_device;
 #endif
@@ -191,6 +192,37 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.high_performance_mode_pll_vco_en = true,
 		.pulse_gen_mode = 0x0,
 		.channels = chan_spec
+	};
+
+	struct hmc7044_chan_spec car_chan_spec[2] = {
+		/* REFCLK_OUT2 */
+		{
+			.disable = 0, .num = 2, .divider = 24, .driver_mode = 1,
+		},
+		/* SYNC_OUT1 */
+		{
+			.disable = 0, .num = 5, .divider = 3840, .driver_mode = 3,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.driver_impedance = 3
+		},
+	};
+
+	struct hmc7044_init_param hmc7044_car_param = {
+		.spi_init = NULL,
+		.clkin_freq = {122880000, 122880000, 0, 19200000},
+		.vcxo_freq = 122880000,
+		.pll2_freq = 2949120000,
+		.pll1_loop_bw = 200,
+		.sysref_timer_div = 3840,
+		.in_buf_mode = {0x07, 0x07, 0x00, 0x11, 0x15},
+		.gpi_ctrl = {0x00, 0x00, 0x00, 0x11},
+		.gpo_ctrl = {0x1f, 0x2b, 0x00, 0x00},
+		.num_channels = 2,
+		.pll1_ref_prio_ctrl = 0xB1,
+		.sync_pin_mode = 0x1,
+		.pulse_gen_mode = 0x1,
+		.channels = car_chan_spec
 	};
 #else
 	struct ad9528_channel_spec ad9528_channels[14];
@@ -304,7 +336,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #else
 		.type = SPI_PS,
 #endif
-		.device_id = 0
+		.device_id = 0,
+		.flags = SPI_CS_DECODE
 	};
 #if !defined(ZU11EG)
 	struct xil_gpio_init_param xil_gpio_param = {
@@ -342,6 +375,15 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	};
 
 #if defined(ZU11EG)
+	// clock chip spi settings
+	struct spi_init_param car_clkchip_spi_init_param = {
+		.max_speed_hz = 10000000,
+		.mode = SPI_MODE_0,
+		.chip_select = CAR_CLK_CS,
+		.extra = &xil_spi_param
+	};
+	hmc7044_car_param.spi_init = &car_clkchip_spi_init_param;
+
 	hmc7044_param.spi_init = &clkchip_spi_init_param;
 #else
 	ad9528_param.spi_init = clkchip_spi_init_param;
@@ -362,6 +404,11 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	* to the Talise device.
 	**/
 #if defined(ZU11EG)
+	status = hmc7044_init(&car_clkchip_device, &hmc7044_car_param);
+	if (status != SUCCESS) {
+		printf("hmc7044_init() error: %d\n", status);
+		goto error_1;
+	}
 	status = hmc7044_init(&clkchip_device, &hmc7044_param);
 	if (status != SUCCESS) {
 		printf("hmc7044_init() error: %d\n", status);
