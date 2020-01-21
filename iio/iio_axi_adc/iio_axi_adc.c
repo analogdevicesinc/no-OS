@@ -666,7 +666,7 @@ ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			j++;
 		}
 
-		if (current_ch < iio_adc->adc->num_channels - 1)
+		if (current_ch + 1 < iio_adc->adc->num_channels)
 			current_ch++;
 		else
 			current_ch = 0;
