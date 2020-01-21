@@ -581,7 +581,7 @@ static ssize_t get_rf_port_select_available(void *device, char *buf, size_t len,
 		const struct iio_ch_info *channel)
 {
 	ssize_t bytes_no, ret;
-	int16_t i;
+	uint16_t i;
 
 	if (channel->ch_out) {
 		return (ssize_t) sprintf(buf, "%s %s",
@@ -1078,7 +1078,7 @@ static ssize_t set_rf_port_select(void *device, char *buf, size_t len,
 		if (i >= sizeof(ad9361_rf_tx_port) / sizeof(ad9361_rf_tx_port[0]))
 			return -EINVAL;
 		ret = ad9361_set_tx_rf_port_output(ad9361_phy, i);
-		return ret < 0 ? ret : len;
+		return (ret < 0) ? ret : (ssize_t)len;
 	} else {
 		for (i = 0; i < sizeof(ad9361_rf_rx_port) / sizeof(ad9361_rf_rx_port[0]); i++) {
 			if (!strcmp(ad9361_rf_rx_port[i], buf))
@@ -1109,7 +1109,7 @@ static ssize_t set_gain_control_mode(void *device, char *buf, size_t len,
 	struct ad9361_rf_phy *ad9361_phy = (struct ad9361_rf_phy *)device;
 	struct rf_gain_ctrl gc = {0};
 	uint32_t mode;
-	int32_t i;
+	uint32_t i;
 	ssize_t ret;
 
 	for (i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
@@ -1293,7 +1293,7 @@ static ssize_t set_gain_control_mode_available(void *device, char *buf,
 	struct rf_gain_ctrl gc = {0};
 	uint32_t mode;
 	ssize_t ret;
-	int32_t i;
+	uint16_t i;
 
 	for (i = 0; i < sizeof(ad9361_agc_modes) / sizeof(ad9361_agc_modes[0]); i++) {
 		if (!strcmp(ad9361_agc_modes[i], buf))
@@ -1895,7 +1895,7 @@ static ssize_t get_ensm_mode(void *device, char *buf, size_t len,
 
 	if (ret < 0)
 		return ret;
-	if (ret >= ARRAY_SIZE(ad9361_ensm_states) ||
+	if ((size_t)ret >= ARRAY_SIZE(ad9361_ensm_states) ||
 	    ad9361_ensm_states[ret] == NULL)
 		return -EIO;
 
