@@ -27,6 +27,19 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
+ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c					\
+	$(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/iio/iio.c						\
+	$(NO-OS)/iio/iio_ad9361/iio_ad9361.c				\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c				\
+	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/iio/iio_app/iio_axi_adc_app.c				\
+	$(NO-OS)/iio/iio_app/iio_axi_dac_app.c
+endif
 INCS := $(PROJECT)/src/common.h						\
 	$(PROJECT)/src/app_config.h
 INCS += $(PROJECT)/src/ad9361.h						\
@@ -49,3 +62,21 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(INCLUDE)/xml.h						\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/irq.h						\
+	$(INCLUDE)/uart.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/uart_extra.h				\
+	$(NO-OS)/iio/iio.h						\
+	$(NO-OS)/iio/iio_types.h					\
+	$(NO-OS)/iio/iio_ad9361/iio_ad9361.h				\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h				\
+	$(NO-OS)/iio/iio_app/iio_app.h					\
+	$(NO-OS)/iio/iio_app/iio_axi_adc_app.h				\
+	$(NO-OS)/iio/iio_app/iio_axi_dac_app.h				\
+	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
+	$(NO-OS)/libraries/libtinyiiod/compat.h
+endif
