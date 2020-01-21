@@ -46,6 +46,12 @@
 #endif
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define WRITE_SIZE 255
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -150,16 +156,18 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-	size_t total_sent;
+	size_t bytes_sent, offset = 0, len;
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
-		total_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)data,
-					  bytes_number);
-		while (XUartPs_IsSending(xil_uart_desc->instance));
-		if (total_sent < bytes_number)
-			return FAILURE;
+		while (offset < bytes_number) {
+			len = ((bytes_number - offset) < WRITE_SIZE) ? (bytes_number - offset) :
+			      WRITE_SIZE;
+			bytes_sent = XUartPs_Send(xil_uart_desc->instance, (u8*)(data + offset),
+						  len);
+			offset += bytes_sent;
+		}
 
 		break;
 #endif // XUARTPS_H
