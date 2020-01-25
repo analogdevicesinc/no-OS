@@ -97,22 +97,22 @@ typedef struct {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad7616_core_read(adc_core core,
-						 uint32_t reg_addr,
-						 uint32_t *reg_data);
+			 uint32_t reg_addr,
+			 uint32_t *reg_data);
 int32_t ad7616_core_write(adc_core core,
-						  uint32_t reg_addr,
-						  uint32_t reg_data);
+			  uint32_t reg_addr,
+			  uint32_t reg_data);
 int32_t ad7616_dma_read(adc_core core,
-						uint32_t reg_addr,
-						uint32_t *reg_data);
+			uint32_t reg_addr,
+			uint32_t *reg_data);
 int32_t ad7616_dma_write(adc_core core,
-						 uint32_t reg_addr,
-						 uint32_t reg_data);
+			 uint32_t reg_addr,
+			 uint32_t reg_data);
 int32_t ad7616_core_setup(adc_core core);
 int32_t ad7616_capture_serial(adc_core core,
-							  uint32_t no_of_samples,
-							  uint32_t start_address);
+			      uint32_t no_of_samples,
+			      uint32_t start_address);
 int32_t ad7616_capture_parallel(adc_core core,
-								uint32_t no_of_samples,
-								uint32_t start_address);
+				uint32_t no_of_samples,
+				uint32_t start_address);
 #endif
