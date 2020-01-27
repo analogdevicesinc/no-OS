@@ -43,6 +43,15 @@
 #include "talise_types.h"
 #include "adi_hal.h"
 
+enum taliseDeviceId {
+	TALISE_A = 0u,
+#if defined(ZU11EG)
+	TALISE_B,
+#endif
+
+	TALISE_DEVICE_ID_MAX
+};
+
 adiHalErr_t talise_setup(taliseDevice_t * const talDev,
 			 taliseInit_t * const talInit);
 

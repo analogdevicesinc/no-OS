@@ -21,9 +21,11 @@ struct adi_hal {
 	struct gpio_desc	*gpio_adrv_resetb;
 	struct gpio_desc	*gpio_adrv_sysref_req;
 	struct spi_desc		*spi_adrv_desc;
-	uint32_t			log_level;
-	void 				*extra_spi;
-	void 				*extra_gpio;
+	uint32_t		log_level;
+	void 			*extra_spi;
+	uint8_t			spi_adrv_csn;
+	void 			*extra_gpio;
+	uint8_t			gpio_adrv_resetb_num;
 };
 
 /**

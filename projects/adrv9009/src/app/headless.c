@@ -143,7 +143,6 @@ int main(void)
 	struct gpio_init_param gpio_init_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
 #endif
-	struct adi_hal hal;
 #ifndef ALTERA_PLATFORM
 	xil_spi_init_param hal_spi_param = {
 #ifdef PLATFORM_MB
@@ -162,7 +161,6 @@ int main(void)
 #endif
 		.device_id = GPIO_DEVICE_ID
 	};
-	hal.extra_gpio= &hal_gpio_param;
 #else
 	struct altera_spi_init_param hal_spi_param = {
 		.type = NIOS_II_SPI,
@@ -177,11 +175,20 @@ int main(void)
 
 	hal.extra_gpio = &hal_gpio_param;
 #endif
-	hal.extra_spi = &hal_spi_param;
-	taliseDevice_t talDev = {
-		.devHalInfo = &hal,
-		.devStateInfo = {0}
-	};
+	int t;
+	struct adi_hal hal[TALISE_DEVICE_ID_MAX];
+	taliseDevice_t tal[TALISE_DEVICE_ID_MAX];
+	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+		hal[t].extra_gpio= &hal_gpio_param;
+		hal[t].extra_spi = &hal_spi_param;
+		tal[t].devHalInfo = (void *) &hal[t];
+	}
+	hal[TALISE_A].gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
+	hal[TALISE_A].spi_adrv_csn = ADRV_CS;
+#if defined(ZU11EG)
+	hal[TALISE_B].gpio_adrv_resetb_num = TRX_B_RESETB_GPIO;
+	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
+#endif
 
 	printf("Hello\n");
 
@@ -212,11 +219,13 @@ int main(void)
 	if (err != ADIHAL_OK)
 		goto error_2;
 
-	err = talise_setup(&talDev, &talInit);
-	if (err != ADIHAL_OK)
-		goto error_3;
+	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+		err = talise_setup(&tal[t], &talInit);
+		if (err != ADIHAL_OK)
+			goto error_3;
+	}
 
-	ADIHAL_sysrefReq(talDev.devHalInfo, SYSREF_CONT_ON);
+	ADIHAL_sysrefReq(tal[TALISE_A].devHalInfo, SYSREF_CONT_ON);
 
 	jesd_rx_watchdog();
 
@@ -407,7 +416,9 @@ int main(void)
 
 #endif // IIO_EXAMPLE
 
-	talise_shutdown(&talDev);
+	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+		talise_shutdown(&tal[t]);
+	}
 error_3:
 	fpga_xcvr_deinit();
 error_2:
