@@ -65,7 +65,7 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	struct gpio_init_param gpio_adrv_sysref_req_param;
 	int32_t status = 0;
 
-	gpio_adrv_resetb_param.number = TRX_A_RESETB_GPIO;
+	gpio_adrv_resetb_param.number = dev_hal_data->gpio_adrv_resetb_num;
 	gpio_adrv_sysref_req_param.number = SYSREF_REQ_GPIO;
 
 	if (dev_hal_data->extra_gpio) {
@@ -76,7 +76,7 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	status = gpio_get(&dev_hal_data->gpio_adrv_resetb, &gpio_adrv_resetb_param);
 
 	spi_param.mode = SPI_MODE_0;
-	spi_param.chip_select = ADRV_CS;
+	spi_param.chip_select = dev_hal_data->spi_adrv_csn;
 	if (dev_hal_data->extra_spi)
 		spi_param.extra = dev_hal_data->extra_spi;
 
