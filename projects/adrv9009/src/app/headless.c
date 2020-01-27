@@ -231,7 +231,7 @@ int main(void)
 
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
-	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS;
+	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
 	int32_t s = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
 	if (s) {
 		printf("gpio_get() failed with status %d", s);
