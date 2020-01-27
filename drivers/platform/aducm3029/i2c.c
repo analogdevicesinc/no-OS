@@ -172,7 +172,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
  * @param desc - Descriptor of the I2C device
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param option - Stop condition control.
+ * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
@@ -180,7 +180,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t option)
+		  uint8_t stop_bit)
 {
 	if (!desc)
 		return FAILURE;
@@ -198,7 +198,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 		return SUCCESS;
 	}
 
-	trans->bRepeatStart = (option == 1) ? 0 : 1;
+	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
 	trans->pPrologue = 0;
 	trans->nPrologueSize = 0;
 	trans->pData = data;
@@ -215,7 +215,7 @@ int32_t i2c_write(struct i2c_desc *desc,
  * @param desc - Descriptor of the I2C device
  * @param data - Buffer that stores the transmission data.
  * @param bytes_number - Number of bytes to write.
- * @param option - Stop condition control.
+ * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
@@ -223,7 +223,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t option)
+		 uint8_t stop_bit)
 {
 	if (!desc)
 		return FAILURE;
@@ -234,7 +234,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 	if (SUCCESS != set_transmission_configuration(desc))
 		return FAILURE;
 
-	trans->bRepeatStart = (option == 1) ? 0 : 1;
+	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
 	trans->pPrologue = 0;
 	trans->nPrologueSize = 0;
 	trans->pData = data;
