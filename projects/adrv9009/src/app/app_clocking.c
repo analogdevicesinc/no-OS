@@ -337,7 +337,9 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.type = SPI_PS,
 #endif
 		.device_id = 0,
+#if defined(ZU11EG)
 		.flags = SPI_CS_DECODE
+#endif
 	};
 #if !defined(ZU11EG)
 	struct xil_gpio_init_param xil_gpio_param = {
