@@ -51,19 +51,6 @@
 /******************************************************************************/
 
 /**
- * @enum i2c_transfer_mode
- * @brief I2C transfer mode configuration
- */
-typedef enum i2c_transfer_mode {
-	/** Address every device connected */
-	i2c_general_call =	0x01,
-	/** Send multiple start conditions */
-	i2c_repeated_start =	0x02,
-	/** Use 10-bit address scheme */
-	i2c_10_bit_transfer =	0x04
-} i2c_transfer_mode;
-
-/**
  * @struct i2c_init_param
  * @brief Structure holding the parameters for I2C initialization.
  */
@@ -104,12 +91,12 @@ int32_t i2c_remove(struct i2c_desc *desc);
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
 		  uint8_t bytes_number,
-		  uint8_t option);
+		  uint8_t stop_bit);
 
 /* Read data from a slave device. */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
 		 uint8_t bytes_number,
-		 uint8_t option);
+		 uint8_t stop_bit);
 
 #endif // I2C_H_
