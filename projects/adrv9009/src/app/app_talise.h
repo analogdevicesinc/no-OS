@@ -52,6 +52,10 @@ enum taliseDeviceId {
 	TALISE_DEVICE_ID_MAX
 };
 
+#define TALISE_NUM_SUBCHANNELS		2 /* I - in-phase and Q - quadrature channels */
+#define TALISE_NUM_CHAIN_CHANNELS	2 /* channels per RX/TX chain */
+#define TALISE_NUM_CHANNELS		(TALISE_DEVICE_ID_MAX * TALISE_NUM_CHAIN_CHANNELS * TALISE_NUM_SUBCHANNELS)
+
 adiHalErr_t talise_setup(taliseDevice_t * const talDev,
 			 taliseInit_t * const talInit);
 

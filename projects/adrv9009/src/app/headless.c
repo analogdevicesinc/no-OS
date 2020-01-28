@@ -114,13 +114,13 @@ int main(void)
 	struct axi_adc_init rx_adc_init = {
 		"rx_adc",
 		RX_CORE_BASEADDR,
-		4
+		TALISE_NUM_CHANNELS
 	};
 	struct axi_adc *rx_adc;
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
-		4,
+		TALISE_NUM_CHANNELS,
 		NULL
 	};
 	struct axi_dac *tx_dac;
@@ -264,9 +264,10 @@ int main(void)
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,
-			  16384 * 8);
+			  16384 * TALISE_NUM_CHANNELS * (talInit.jesd204Settings.framerA.Np / 8));
 #ifndef ALTERA_PLATFORM
-	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000, 16384 * 8);
+	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000,
+				  16384 * TALISE_NUM_CHANNELS * (talInit.jesd204Settings.framerA.Np / 8));
 #endif
 
 #ifdef IIO_EXAMPLE
