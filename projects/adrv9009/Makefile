@@ -1,5 +1,5 @@
 TARGET := adrv9009
-TINYIIOD = n
+TINYIIOD ?= n
 ifeq ($(OS), Windows_NT)
 include ../../tools/scripts/windows.mk
 else
