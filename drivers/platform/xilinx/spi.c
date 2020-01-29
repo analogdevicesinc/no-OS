@@ -150,7 +150,7 @@ pl_error:
 			goto ps_error;
 
 		ret = XSpiPs_SetClkPrescaler(xdesc->instance,
-					     XSPIPS_CLK_PRESCALE_64);
+					     XSPIPS_CLK_PRESCALE_4);
 		if(ret != SUCCESS)
 			goto ps_error;
 
