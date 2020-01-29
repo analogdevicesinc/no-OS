@@ -588,6 +588,7 @@ int main(void)
 	tx_dac_init.base = AD9361_TX_1_BASEADDR;
 
 	spi_param.chip_select = default_init_param.id_no;
+	spi_param.max_speed_hz = 2000000u;
 
 	status = spi_init(&default_init_param.spi, &spi_param);
 	if (status != SUCCESS) {

@@ -274,6 +274,9 @@ int main(void)
 	ad9523_spi_param.cpol = 0;
 	ad9144_spi_param.cpol = 0;
 	ad9680_spi_param.cpol = 0;
+	ad9523_spi_param.max_speed_hz = 2000000u;
+	ad9144_spi_param.max_speed_hz = 2000000u;
+	ad9680_spi_param.max_speed_hz = 2000000u;
 
 	struct ad9523_channel_spec	ad9523_channels[8];
 	struct ad9523_platform_data	ad9523_pdata;

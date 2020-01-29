@@ -78,6 +78,7 @@ int main(void)
 	// SPI configuration
 
 	ad9526_spi_param.chip_select = SPI_CHIP_SELECT(0);
+	ad9526_spi_param.max_speed_hz = 2000000u;
 	ad9526_spi_param.cpha = 0;
 	ad9526_spi_param.cpol = 0;
 	ad9526_spi_param.type = ZYNQ_PS7_SPI;

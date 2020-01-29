@@ -95,6 +95,7 @@ int32_t platform_init(void)
 
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = AD9371_CS;
+	spi_param.max_speed_hz = 2000000u;
 
 	status |= spi_init(&spi_ad_desc, &spi_param);
 
