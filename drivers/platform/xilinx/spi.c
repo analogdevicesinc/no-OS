@@ -72,6 +72,11 @@ int32_t spi_init(struct spi_desc **desc,
 	struct spi_desc			*sdesc;
 	struct xil_spi_desc		*xdesc;
 	struct xil_spi_init_param	*xinit;
+	const uint32_t			input_clock = 100000000;
+	const uint32_t			prescaler_default = XSPIPS_CLK_PRESCALE_64;
+	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
+	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
+	uint32_t			prescaler = 0u;
 
 	sdesc = (struct spi_desc *)malloc(sizeof(*sdesc));
 	xdesc = (struct xil_spi_desc *)malloc(sizeof(*xdesc));
@@ -149,8 +154,37 @@ pl_error:
 		if(ret != SUCCESS)
 			goto ps_error;
 
-		ret = XSpiPs_SetClkPrescaler(xdesc->instance,
-					     XSPIPS_CLK_PRESCALE_64);
+		if (sdesc->max_speed_hz != 0u) {
+			uint32_t div = input_clock / sdesc->max_speed_hz;
+			uint32_t rem = input_clock % sdesc->max_speed_hz;
+
+			// find the power of two just higher than div and
+			// store the exponent in prescaler
+			while(div) {
+				prescaler += 1;
+				div >>= 1u;
+			}
+
+			// this exponent - 1 is needed because of the way
+			// xilinx stores it into registers
+			if (prescaler)
+				prescaler -= 1;
+
+			// this exponent - 1 is needed when initial div was
+			// precisely a power of two
+			if (!rem && prescaler)
+				prescaler -= 1;
+
+			if (prescaler < prescaler_min)
+				prescaler = prescaler_min;
+
+			if (prescaler > prescaler_max)
+				prescaler = prescaler_max;
+		} else
+			prescaler = prescaler_default;
+
+		ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
+
 		if(ret != SUCCESS)
 			goto ps_error;
 
