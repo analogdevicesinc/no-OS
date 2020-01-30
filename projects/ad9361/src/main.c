@@ -63,7 +63,7 @@
 #include "iio_app.h"
 #include "iio_axi_adc_app.h"
 #include "iio_axi_dac_app.h"
-#include "iio_ad9361.h"
+#include "iio_ad9361_app.h"
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
@@ -689,6 +689,11 @@ int main(void)
 	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
 
 	/**
+	 * iio ad9361 app configurations.
+	 */
+	struct iio_ad9361_app_init_param iio_ad9361_app_init_param;
+
+	/**
 	 * UART server read/write callbacks.
 	 */
 	struct iio_server_ops uart_iio_server_ops;
@@ -707,6 +712,11 @@ int main(void)
 	 * iio application instance descriptor.
 	 */
 	struct iio_axi_dac_app_desc *iio_axi_dac_app_desc;
+
+	/**
+	 * iio ad9361 application instance descriptor.
+	 */
+	struct iio_ad9361_app_desc *iio_ad9361_app_desc;
 
 	/**
 	 * Xilinx platform dependent initialization for IRQ.
@@ -797,18 +807,11 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	const char dev_name[] = "ad9361-phy";
-	struct iio_interface_init_par iio_ad9361_intf_par = {
-		.dev_name = dev_name,
-		.dev_instance = ad9361_phy,
-		.iio_device = iio_ad9361_create_device(dev_name),
-		.get_xml = iio_ad9361_get_xml,
-		.transfer_dev_to_mem = NULL,
-		.transfer_mem_to_dev = NULL,
-		.read_data = NULL,
-		.write_data = NULL,
+	iio_ad9361_app_init_param = (struct iio_ad9361_app_init_param) {
+		.ad9361_phy = ad9361_phy,
 	};
-	status = iio_register(&iio_ad9361_intf_par);
+
+	status = iio_ad9361_app_init(&iio_ad9361_app_desc, &iio_ad9361_app_init_param);
 	if(status < 0)
 		return status;
 
