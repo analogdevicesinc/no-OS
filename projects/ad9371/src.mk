@@ -51,8 +51,6 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c				\
 	$(NO-OS)/iio/iio_app/iio_app.c					\
 	$(NO-OS)/iio/iio_app/iio_axi_adc_app.c				\
 	$(NO-OS)/iio/iio_app/iio_axi_dac_app.c
@@ -104,8 +102,6 @@ INCS += $(INCLUDE)/xml.h						\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(NO-OS)/iio/iio.h						\
 	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h				\
 	$(NO-OS)/iio/iio_app/iio_app.h					\
 	$(NO-OS)/iio/iio_app/iio_axi_adc_app.h				\
 	$(NO-OS)/iio/iio_app/iio_axi_dac_app.h				\

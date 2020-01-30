@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad9361.c
- *   @brief  Implementation of iio_ad9361
+ *   @file   iio_ad9361_app.c
+ *   @brief  Implementation of iio_ad9361_app
  *   This module is a wrapper over "ad9361_api", and it is used by "iio".
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -45,13 +45,19 @@
 #include <inttypes.h>
 #include <string.h>
 #include <errno.h>
-#include "iio_ad9361.h"
+#include "error.h"
+#include "iio_ad9361_app.h"
 #include "ad9361_api.h"
 #include "util.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * Device name.
+ */
+static const char dev_name[] = "ad9361-phy";
 
 /**
  * Calibration modes.
@@ -2579,7 +2585,7 @@ static struct iio_channel *iio_ad9361_channels[] = {
  * @param iio_dev - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
+static ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 {
 	*xml = calloc(1, strlen(ad9361_phy_xml) + 1);
 	if (!(*xml))
@@ -2595,7 +2601,7 @@ ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
  * @param device_name - Device name.
  * @return iio_device or NULL, in case of failure
  */
-struct iio_device *iio_ad9361_create_device(const char *device_name)
+static struct iio_device *iio_ad9361_create_device(const char *device_name)
 {
 	struct iio_device *iio_ad9361_device;
 
@@ -2607,4 +2613,61 @@ struct iio_device *iio_ad9361_create_device(const char *device_name)
 	iio_ad9361_device->attributes = global_attributes;
 
 	return iio_ad9361_device;
+}
+
+/**
+ * @brief Application init for reading/writing and parameterization of a
+ * generic device.
+ * @param desc - Application descriptor.
+ * @param init - Application configuration structure.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
+			    struct iio_ad9361_app_init_param *init)
+{
+	int32_t status;
+
+	struct iio_interface_init_par iio_ad9361_intf_par = {
+		.dev_name = dev_name,
+		.dev_instance = init->ad9361_phy,
+		.iio_device = iio_ad9361_create_device(dev_name),
+		.get_xml = iio_ad9361_get_xml,
+		.transfer_dev_to_mem = NULL,
+		.transfer_mem_to_dev = NULL,
+		.read_data = NULL,
+		.write_data = NULL,
+	};
+
+	status = iio_register(&iio_ad9361_intf_par);
+	if(status < 0)
+		return FAILURE;
+
+	*desc = calloc(1, sizeof(struct iio_ad9361_app_desc));
+	if (!(*desc))
+		return FAILURE;
+
+	(*desc)->dev_name = dev_name;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Release resources.
+ * @param desc - Application descriptor.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t iio_ad9361_app_remove(struct iio_ad9361_app_desc *desc)
+{
+	int32_t status;
+
+	if (!desc)
+		return FAILURE;
+
+	status = iio_unregister(desc->dev_name);
+	if(status < 0)
+		return FAILURE;
+
+	free(desc);
+
+	return SUCCESS;
 }
