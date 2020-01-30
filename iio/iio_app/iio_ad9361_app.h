@@ -46,18 +46,38 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "iio.h"
+#include "iio_types.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct iio_ad9361_app_init_param
+ * @brief Application configuration.
+ */
+struct iio_ad9361_app_init_param {
+	/** ad9361 device instance pointer */
+	struct ad9361_rf_phy *ad9361_phy;
+};
+
+/**
+ * @struct iio_ad9361_app_desc
+ * @brief Structure holding application descriptor.
+ */
+struct iio_ad9361_app_desc {
+	/** device name */
+	const char *dev_name;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Create iio_device. */
-struct iio_device *iio_ad9361_create_device(const char *device_name);
-/* Get an xml describing ad9361 device */
-ssize_t iio_ad9361_get_xml(char** xml, struct iio_device *iio_dev);
+/* Init ad9361_app_init application. */
+int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
+			    struct iio_ad9361_app_init_param *init);
+/* Free the resources allocated by iio_ad9361_app_init(). */
+int32_t iio_ad9361_app_remove(struct iio_ad9361_app_desc *desc);
 
 #endif /* IIO_AD9361_H_ */
