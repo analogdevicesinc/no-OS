@@ -345,7 +345,7 @@ int32_t axi_dac_read(struct axi_dac *dac,
 {
 	axi_io_read(dac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -357,7 +357,7 @@ int32_t axi_dac_write(struct axi_dac *dac,
 {
 	axi_io_write(dac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -377,7 +377,7 @@ int32_t axi_dac_set_datasel(struct axi_dac *dac,
 
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -399,7 +399,7 @@ int32_t axi_dac_dds_set_frequency(struct axi_dac *dac,
 	axi_dac_write(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), reg);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -421,7 +421,7 @@ int32_t axi_dac_dds_get_frequency(struct axi_dac *dac,
 	do_div(&val64, 0xFFFF);
 	*freq = val64;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -443,7 +443,7 @@ int32_t axi_dac_dds_set_phase(struct axi_dac *dac,
 	axi_dac_write(dac, AXI_DAC_REG_DDS_INIT_INCR(chan), reg);
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -466,7 +466,7 @@ int32_t axi_dac_dds_get_phase(struct axi_dac *dac,
 	do_div(&val64, 0x10000);
 	*phase = val64;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -494,7 +494,7 @@ int32_t axi_dac_dds_set_scale(struct axi_dac *dac,
 		      AXI_DAC_DDS_SCALE(scale_reg));
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -519,7 +519,7 @@ int32_t axi_dac_dds_get_scale(struct axi_dac *dac,
 	scale_reg = ((uint64_t)scale_reg * 1000000) / 0x4000;
 	*scale_micro_units = (int32_t)scale_reg * sign;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -612,7 +612,7 @@ int32_t axi_dac_dds_set_calib_phase_scale(struct axi_dac *dac,
 	axi_dac_write(dac, AXI_DAC_REG_CHAN_CNTRL_8(chan), reg);
 	axi_dac_write(dac, AXI_DAC_REG_CHAN_CNTRL_6(chan), AXI_DAC_IQCOR_ENB);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -636,7 +636,7 @@ int32_t axi_dac_dds_get_calib_phase_scale(struct axi_dac *dac,
 
 	axi_dac_dds_from_signed_mag_fmt(reg, val, val2);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -780,7 +780,7 @@ int32_t axi_dac_set_buff(struct axi_dac *dac,
 		axi_io_write(address, index * 2, data_i | data_q);
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -812,7 +812,7 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	}
 	axi_dac_write(dac, AXI_DAC_REG_SYNC_CONTROL, AXI_DAC_SYNC);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 
@@ -829,7 +829,7 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	dac = (struct axi_dac *)malloc(sizeof(*dac));
 	if (!dac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dac->name = init->name;
 	dac->base = init->base;
@@ -864,11 +864,11 @@ int32_t axi_dac_init(struct axi_dac **dac_core,
 
 	*dac_core = dac;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 error:
 	free(dac);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 int32_t axi_dac_data_setup(struct axi_dac *dac)
@@ -908,7 +908,7 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
 			axi_dac_write(dac, AXI_DAC_REG_DATA_SELECT((i*2)+1), 0);
 		}
 	}
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -918,5 +918,5 @@ int32_t axi_dac_remove(struct axi_dac *dac)
 {
 	free(dac);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

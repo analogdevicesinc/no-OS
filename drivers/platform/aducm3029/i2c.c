@@ -76,7 +76,7 @@ static uint8_t last_address = 0;
 /**
  * @brief Configure slave address and bitrate if needed
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 static uint32_t set_transmission_configuration(struct i2c_desc *desc)
 {
@@ -85,18 +85,18 @@ static uint32_t set_transmission_configuration(struct i2c_desc *desc)
 	if (desc->max_speed_hz != last_bitrate) {
 		i2c_ret = adi_i2c_SetBitRate(i2c_handler, desc->max_speed_hz);
 		if (i2c_ret != ADI_I2C_SUCCESS)
-			return FAILURE;
+			return NO_OS_FAILURE;
 		last_bitrate = desc->max_speed_hz;
 	}
 	if (desc->slave_address != last_address) {
 		i2c_ret = adi_i2c_SetSlaveAddress(i2c_handler,
 						  desc->slave_address);
 		if (i2c_ret != ADI_I2C_SUCCESS)
-			return FAILURE;
+			return NO_OS_FAILURE;
 		last_address = desc->slave_address;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -108,17 +108,17 @@ static uint32_t set_transmission_configuration(struct i2c_desc *desc)
  * functions.
  * @param param - Parameter used to configure the I2C device. The extra field
  * it is not used and must be set to NULL.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
 {
 	if (!desc || !param)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	*desc = calloc(1, sizeof(**desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (nb_created_desc == 0) {
 		if (ADI_I2C_SUCCESS != adi_i2c_Open(0, adi_i2c_buffer,
@@ -126,7 +126,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 						    &i2c_handler)) {
 			free(*desc);
 			*desc = NULL;
-			return FAILURE;
+			return NO_OS_FAILURE;
 		}
 		/* Driving strength must be enabled for I2C pins */
 		if (ADI_GPIO_SUCCESS != adi_gpio_DriveStrengthEnable(
@@ -136,7 +136,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 			*desc = NULL;
 			adi_i2c_Close(i2c_handler);
 			i2c_handler = NULL;
-			return FAILURE;
+			return NO_OS_FAILURE;
 		}
 	}
 
@@ -145,18 +145,18 @@ int32_t i2c_init(struct i2c_desc **desc,
 	(*desc)->extra = NULL;
 	nb_created_desc++;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by \ref i2c_init
  * @param desc - Descriptor of the I2C device
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	nb_created_desc--;
 	if (nb_created_desc == 0) {
 		adi_i2c_Close(i2c_handler);
@@ -164,7 +164,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 	}
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -175,7 +175,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
@@ -183,19 +183,19 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t stop_bit)
 {
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
 
-	if (SUCCESS != set_transmission_configuration(desc))
-		return FAILURE;
+	if (NO_OS_SUCCESS != set_transmission_configuration(desc))
+		return NO_OS_FAILURE;
 
 	if (desc->slave_address == 0) { //General call
 		if (ADI_I2C_SUCCESS != adi_i2c_IssueGeneralCall(i2c_handler,
 				data, bytes_number, &errors))
-			return FAILURE;
-		return SUCCESS;
+			return NO_OS_FAILURE;
+		return NO_OS_SUCCESS;
 	}
 
 	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
@@ -205,9 +205,9 @@ int32_t i2c_write(struct i2c_desc *desc,
 	trans->nDataSize = bytes_number;
 	trans->bReadNotWrite = 0;
 	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -218,7 +218,7 @@ int32_t i2c_write(struct i2c_desc *desc,
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
@@ -226,13 +226,13 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t stop_bit)
 {
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ADI_I2C_TRANSACTION trans[1];
 	uint32_t errors;
 
-	if (SUCCESS != set_transmission_configuration(desc))
-		return FAILURE;
+	if (NO_OS_SUCCESS != set_transmission_configuration(desc))
+		return NO_OS_FAILURE;
 
 	trans->bRepeatStart = (stop_bit == 1) ? 0 : 1;
 	trans->pPrologue = 0;
@@ -241,7 +241,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 	trans->nDataSize = bytes_number;
 	trans->bReadNotWrite = 1;
 	if (ADI_I2C_SUCCESS != adi_i2c_ReadWrite(i2c_handler, trans, &errors))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

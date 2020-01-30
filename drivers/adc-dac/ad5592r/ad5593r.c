@@ -70,7 +70,7 @@ int32_t ad5593r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 	uint8_t data[3];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[0] = AD5593R_MODE_DAC_WRITE | chan;
 	data[1] = (value >> 8) & 0xF ;
@@ -95,7 +95,7 @@ int32_t ad5593r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	uint16_t temp;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	temp = BIT(chan);
 
@@ -135,7 +135,7 @@ int32_t ad5593r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 	uint8_t data[3];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[0] = AD5593R_MODE_CONF | reg;
 	data[1] = value >> 8;
@@ -159,7 +159,7 @@ int32_t ad5593r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
 	uint8_t data[2];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[0] = AD5593R_MODE_REG_READBACK | reg;
 
@@ -189,7 +189,7 @@ int32_t ad5593r_gpio_read(struct ad5592r_dev *dev, uint8_t *value)
 	uint8_t data[2];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[0] = AD5593R_MODE_GPIO_READBACK;
 	ret = i2c_write(dev->i2c, data, 1, 0);
@@ -219,7 +219,7 @@ int32_t ad5593r_init(struct ad5592r_dev *dev,
 	uint16_t temp_reg_val;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5592r_software_reset(dev);
 	if (ret < 0)

@@ -68,42 +68,42 @@ static uint8_t nb_gpio = 0;
  * @brief Obtain the GPIO descriptor from the number specified in param
  * @param desc - Pointer to a structure were the descriptor will be stored.
  * @param param - Parameter describing the GPIO to be initialized
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc, const struct gpio_init_param *param)
 {
 	if (!desc || !param)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc) = calloc(1, sizeof(**desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc)->number = param->number;
 	/* If this is the first GPIO initialize GPIO controller */
 	if (nb_gpio == 0)
-		if (SUCCESS != adi_gpio_Init(mem_gpio_handler,
+		if (NO_OS_SUCCESS != adi_gpio_Init(mem_gpio_handler,
 					     ADI_GPIO_MEMORY_SIZE)) {
 			free(*desc);
 			*desc = NULL;
-			return FAILURE;
+			return NO_OS_FAILURE;
 		}
 
 	/* Increment number of GPIOs */
 	nb_gpio++;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The GPIO descriptor.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_remove(struct gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	free(desc);
 	/* Decrement number of GPIOs */
@@ -112,24 +112,24 @@ int32_t gpio_remove(struct gpio_desc *desc)
 	if (nb_gpio == 0)
 		return adi_gpio_UnInit();
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO
  * @param desc - The GPIO descriptor.
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	/* Enable input driver */
 	if (ADI_GPIO_SUCCESS != adi_gpio_InputEnable(PORT(desc->number),
 			PIN(desc->number), true))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -137,20 +137,20 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  * the specified value
  * @param desc - The GPIO descriptor.
  * @param value - The value. \ref GPIO_HIGH or \ref GPIO_LOW
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* Enable output driver */
 	ret = adi_gpio_OutputEnable(PORT(desc->number), PIN(desc->number),
 				    true);
 	if (ret != ADI_GPIO_SUCCESS)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* Initialize pin with a value */
 	if (value == 1)
@@ -158,9 +158,9 @@ int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
 	else
 		ret = adi_gpio_SetLow(PORT(desc->number), PIN(desc->number));
 	if (ret != ADI_GPIO_SUCCESS)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -168,47 +168,47 @@ int32_t gpio_direction_output(struct gpio_desc *desc, uint8_t value)
  * @param desc - The GPIO descriptor.
  * @param direction - Variable where to store the direction. Will be set to \ref
  * GPIO_OUT or \ref GPIO_IN
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 {
 	uint16_t pins;
 
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (ADI_GPIO_SUCCESS != adi_gpio_GetOutputEnable(PORT(desc->number),
 			&pins))
-		return FAILURE;
+		return NO_OS_FAILURE;
 	if (pins & PIN(desc->number))
 		*direction = GPIO_OUT;
 	else
 		*direction = GPIO_IN;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
  * @param value - The value: GPIO_HIGH or GPIO_LOW
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 {
 	ADI_GPIO_RESULT ret;
 
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (value == GPIO_LOW)
 		ret = adi_gpio_SetLow(PORT(desc->number), PIN(desc->number));
 	else
 		ret = adi_gpio_SetHigh(PORT(desc->number), PIN(desc->number));
 	if (ret != ADI_GPIO_SUCCESS)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -216,19 +216,19 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
  * @param desc - The GPIO descriptor.
  * @param value - Variable where to store the direction. Will be set to \ref
  * GPIO_HIGH or \ref GPIO_LOW
- * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ * @return \ref NO_OS_SUCCESS in case of success, \ref NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
 	uint16_t pins;
 
 	if (!desc || !nb_gpio)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (ADI_GPIO_SUCCESS != adi_gpio_GetData(PORT(desc->number),
 			PIN(desc->number), &pins))
-		return FAILURE;
+		return NO_OS_FAILURE;
 	*value = !!pins;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

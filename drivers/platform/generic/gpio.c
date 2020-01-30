@@ -51,7 +51,7 @@
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param gpio_number - The number of the GPIO.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc,
 		 uint8_t gpio_number)
@@ -64,13 +64,13 @@ int32_t gpio_get(struct gpio_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_remove(struct gpio_desc *desc)
 {
@@ -78,13 +78,13 @@ int32_t gpio_remove(struct gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
@@ -92,7 +92,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -101,7 +101,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
@@ -114,7 +114,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -123,7 +123,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
  * @param direction - The direction.
  *                    Example: GPIO_OUT
  *                             GPIO_IN
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction)
@@ -136,7 +136,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -145,7 +145,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
@@ -158,7 +158,7 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -167,7 +167,7 @@ int32_t gpio_set_value(struct gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
@@ -180,5 +180,5 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

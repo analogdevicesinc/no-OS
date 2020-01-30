@@ -2577,7 +2577,7 @@ static struct iio_channel *iio_ad9361_channels[] = {
  * @brief Get xml corresponding to an "ad9361" device.
  * @param xml - Xml containing description of a device.
  * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 {
@@ -2587,7 +2587,7 @@ ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
 
 	memcpy(*xml, ad9361_phy_xml, strlen(ad9361_phy_xml));
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**

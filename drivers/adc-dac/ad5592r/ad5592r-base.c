@@ -80,7 +80,7 @@ int32_t ad5592r_gpio_get(struct ad5592r_dev *dev, uint8_t offset)
 	uint8_t val;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (dev->gpio_out & BIT(offset))
 		val = dev->gpio_val;
@@ -103,7 +103,7 @@ int32_t ad5592r_gpio_get(struct ad5592r_dev *dev, uint8_t offset)
 int32_t ad5592r_gpio_set(struct ad5592r_dev *dev, uint8_t offset, int32_t value)
 {
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (value)
 		dev->gpio_val |= BIT(offset);
@@ -126,7 +126,7 @@ int32_t ad5592r_gpio_direction_input(struct ad5592r_dev *dev, uint8_t offset)
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dev->gpio_out &= ~BIT(offset);
 	dev->gpio_in |= BIT(offset);
@@ -154,7 +154,7 @@ int32_t ad5592r_gpio_direction_output(struct ad5592r_dev *dev,
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (value)
 		dev->gpio_val |= BIT(offset);
@@ -190,7 +190,7 @@ int32_t ad5592r_software_reset(struct ad5592r_dev *dev)
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* Writing this magic value resets the device */
 	ret = ad5592r_base_reg_write(dev, AD5592R_REG_RESET, 0xdac);
@@ -214,7 +214,7 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 	uint16_t read_back;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	for (i = 0; i < dev->num_channels; i++) {
 		switch (dev->channel_modes[i]) {
@@ -297,7 +297,7 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 	/* Verify that we can read back at least one register */
 	ret = ad5592r_base_reg_read(dev, AD5592R_REG_ADC_EN, &read_back);
 	if (!ret && (read_back & 0xff) != adc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return ret;
 }
@@ -313,7 +313,7 @@ int32_t ad5592r_reset_channel_modes(struct ad5592r_dev *dev)
 	uint32_t i;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	for (i = 0; i < sizeof(dev->channel_modes); i++)
 		dev->channel_modes[i] = CH_MODE_UNUSED;

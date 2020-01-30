@@ -58,7 +58,7 @@ int32_t axi_adc_read(struct axi_adc *adc,
 {
 	axi_io_read(adc->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -70,7 +70,7 @@ int32_t axi_adc_write(struct axi_adc *adc,
 {
 	axi_io_write(adc->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -87,7 +87,7 @@ int32_t axi_adc_set_pnsel(struct axi_adc *adc,
 	reg_data |= AXI_ADC_ADC_PN_SEL(sel);
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_3(chan), reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -105,7 +105,7 @@ int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
 	*sampling_freq = freq * ratio;
 	*sampling_freq = ((*sampling_freq) * 390625) >> 8;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -147,7 +147,7 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 		}
 		break;
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	llval = (uint64_t)val2 * 0x4000UL + (1000000UL / 2);
@@ -166,7 +166,7 @@ int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
 
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_2(chan), tmp);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -209,7 +209,7 @@ int32_t axi_adc_get_calib_phase_scale(struct axi_adc *adc,
 	else
 		*val2 = llval;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -272,7 +272,7 @@ int32_t axi_adc_set_calib_bias(struct axi_adc *adc,
 
 	axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL_1(chan), tmp);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -288,7 +288,7 @@ int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
 	axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL_1(chan), &tmp);
 	*val = (uint16_t)AXI_ADC_TO_DCFILT_OFFSET(tmp);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -305,7 +305,7 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	adc = (struct axi_adc *)malloc(sizeof(*adc));
 	if (!adc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	adc->name = init->name;
 	adc->base = init->base;
@@ -338,11 +338,11 @@ int32_t axi_adc_init(struct axi_adc **adc_core,
 
 	*adc_core = adc;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 error:
 	free(adc);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /***************************************************************************//**
@@ -352,5 +352,5 @@ int32_t axi_adc_remove(struct axi_adc *adc)
 {
 	free(adc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

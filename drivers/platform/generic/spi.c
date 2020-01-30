@@ -51,7 +51,7 @@
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
@@ -64,13 +64,13 @@ int32_t spi_init(struct spi_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
@@ -78,7 +78,7 @@ int32_t spi_remove(struct spi_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -86,7 +86,7 @@ int32_t spi_remove(struct spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
@@ -104,5 +104,5 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

@@ -179,7 +179,7 @@ error:
 /***************************************************************************//**
  * @brief Free the resources allocated by ad400x_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad400x_remove(struct ad400x_dev *dev)
 {

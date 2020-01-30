@@ -140,7 +140,7 @@ int32_t adf7023_init(struct adf7023_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by adf7023_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adf7023_remove(struct adf7023_dev *dev)
 {

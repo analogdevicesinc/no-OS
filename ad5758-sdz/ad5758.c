@@ -99,7 +99,7 @@ static int32_t ad5758_spi_reg_read(struct ad5758_dev *dev,
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 4);
 	if (ret < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	buf[0] = AD5758_REG_WRITE(AD5758_REG_NOP);
 	buf[1] = 0x00;
@@ -112,17 +112,17 @@ static int32_t ad5758_spi_reg_read(struct ad5758_dev *dev,
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 4);
 	if (ret < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if ((dev->crc_en) &&
 	    (ad5758_compute_crc8(buf, 3) != buf[3])) {
 		printf("%s: CRC Error.\n", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	*reg_data = (buf[1] << 8) | buf[2];
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -192,12 +192,12 @@ int32_t ad5758_set_crc(struct ad5758_dev *dev, uint8_t crc_en)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	dev->crc_en = crc_en;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -217,7 +217,7 @@ int32_t ad5758_wait_for_refresh_cycle(struct ad5758_dev *dev)
 				    &reg_data);
 	} while (reg_data & AD5758_DIG_DIAG_RESULTS_CAL_MEM_UNREFRESHED_MSK);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -236,12 +236,12 @@ int32_t ad5758_soft_reset(struct ad5758_dev *dev)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/* Wait 100 us */
 	usleep(100);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -259,7 +259,7 @@ int32_t ad5758_calib_mem_refresh(struct ad5758_dev *dev)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/* Wait to allow time for the internal calibrations to complete */
 	return ad5758_wait_for_refresh_cycle(dev);
@@ -300,7 +300,7 @@ int32_t ad5758_set_dc_dc_conv_mode(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/*
 	 * Poll the BUSY_3WI bit in the DCDC_CONFIG2 register until it is 0.
@@ -312,7 +312,7 @@ int32_t ad5758_set_dc_dc_conv_mode(struct ad5758_dev *dev,
 
 	dev->dc_dc_mode = mode;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -340,7 +340,7 @@ int32_t ad5758_set_dc_dc_ilimit(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/*
 	 * Poll the BUSY_3WI bit in the DCDC_CONFIG2 register until it is 0.
@@ -350,7 +350,7 @@ int32_t ad5758_set_dc_dc_ilimit(struct ad5758_dev *dev,
 		ad5758_spi_reg_read(dev, AD5758_REG_DCDC_CONFIG2, &reg_data);
 	} while (reg_data & AD5758_DCDC_CONFIG2_BUSY_3WI_MSK);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -372,7 +372,7 @@ int32_t ad5758_internal_buffers_en(struct ad5758_dev *dev, uint8_t enable)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/* Wait to allow time for the internal calibrations to complete */
 	return ad5758_wait_for_refresh_cycle(dev);
@@ -406,7 +406,7 @@ int32_t ad5758_set_out_range(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	/* Modifying the RANGE bits in the DAC_CONFIG register also initiates
@@ -459,7 +459,7 @@ int32_t ad5758_slew_rate_config(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	/* Wait to allow time for the internal calibrations to complete */
 	return ad5758_wait_for_refresh_cycle(dev);
@@ -481,10 +481,10 @@ int32_t ad5758_dac_input_write(struct ad5758_dev *dev, uint16_t code)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -506,11 +506,11 @@ int32_t ad5758_dac_output_en(struct ad5758_dev *dev, uint8_t enable)
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 	mdelay(1);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -545,10 +545,10 @@ int32_t ad5758_clear_dig_diag_flag(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -585,10 +585,10 @@ int32_t ad5758_set_clkout_config(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -627,10 +627,10 @@ int32_t ad5758_select_adc_ip(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -648,7 +648,7 @@ int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 	if ((num_of_channels == 0) || (num_of_channels > 8)) {
 		printf("%s: Invalid number if channels\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	num_of_channels -= 1;
@@ -658,10 +658,10 @@ int32_t ad5758_select_adc_depth(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -706,10 +706,10 @@ int32_t ad5758_set_adc_channel_input(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -740,10 +740,10 @@ int32_t ad5758_set_adc_mode(struct ad5758_dev *dev,
 	if (ret < 0) {
 		printf("%s: Failed.\n", __func__);
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -762,7 +762,7 @@ int32_t ad5758_init(struct ad5758_dev **device,
 
 	dev = (struct ad5758_dev *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* GPIO */
 	ret = gpio_get(&dev->reset_n, init_param.reset_n);

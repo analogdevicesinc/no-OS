@@ -55,7 +55,7 @@
 /*****************************************************************************/
 
 #define NULL        ((void *)0)
-#define SUCCESS      0
+#define NO_OS_SUCCESS      0
 #define ERROR       -1
 
 /* ADC core base address */
@@ -119,7 +119,7 @@ int main(void)
 
     // setup the AXI DMA
     Status = AxiDmaSetup(&AxiDma);
-    if(Status != SUCCESS)
+    if(Status != NO_OS_SUCCESS)
     {
         xil_printf("AXI DMA setup failed!\r\n");
         return ERROR;
@@ -137,7 +137,7 @@ int main(void)
 
     // start data acquisition
     Status = AD7091_GetData(numberOfSample);
-    if(Status != SUCCESS)
+    if(Status != NO_OS_SUCCESS)
     {
         xil_printf("Overflow occurred\r\n");
     }
@@ -148,7 +148,7 @@ int main(void)
 
     xil_printf("Data was saved to Acquisition.csv file!\r\n");
 
-    return SUCCESS;
+    return NO_OS_SUCCESS;
 }
 
 /**************************************************************************//**
@@ -157,7 +157,7 @@ int main(void)
 *
 * @param    AxiDmaInstPtr is the pointer to the instance of the DMA engine.
 *
-* @return   SUCCESS if the setup is successful, ERROR otherwise.
+* @return   NO_OS_SUCCESS if the setup is successful, ERROR otherwise.
 *
 ******************************************************************************/
 static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
@@ -183,7 +183,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
 
     /* Initialize DMA engine */
     Status = XAxiDma_CfgInitialize(AxiDmaInstPtr, Config);
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("Initialization failed %d\r\n", Status);
         return ERROR;
     }
@@ -210,7 +210,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
                 RX_BD_SPACE_BASE,
                 XAXIDMA_BD_MINIMUM_ALIGNMENT, BdCount);
 
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("RX create BD ring failed %d\r\n", Status);
         return ERROR;
     }
@@ -221,7 +221,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
     XAxiDma_BdClear(&BdTemplate);
 
     Status = XAxiDma_BdRingClone(RxRingPtr, &BdTemplate);
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("RX clone BD failed %d\r\n", Status);
         return ERROR;
     }
@@ -231,7 +231,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
     FreeBdCount = XAxiDma_BdRingGetFreeCnt(RxRingPtr);
 
     Status = XAxiDma_BdRingAlloc(RxRingPtr, FreeBdCount, &BdPtr);
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("RX alloc BD failed %d\r\n", Status);
         return ERROR;
     }
@@ -241,7 +241,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
     for (Index = 0; Index < FreeBdCount; Index++) {
         Status = XAxiDma_BdSetBufAddr(BdCurPtr, RxBufferPtr);
 
-        if (Status != SUCCESS) {
+        if (Status != NO_OS_SUCCESS) {
             xil_printf("Set buffer addr %x on BD %x failed %d\r\n",
                 (unsigned int)RxBufferPtr,
                 (unsigned int)BdCurPtr, Status);
@@ -250,7 +250,7 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
 
         Status = XAxiDma_BdSetLength(BdCurPtr, MAX_PKT_LEN,
                 RxRingPtr->MaxTransferLen);
-        if (Status != SUCCESS) {
+        if (Status != NO_OS_SUCCESS) {
             xil_printf("Rx set length %d on BD %x failed %d\r\n",
                 MAX_PKT_LEN, (unsigned int)BdCurPtr, Status);
             return ERROR;
@@ -272,17 +272,17 @@ static int AxiDmaSetup(XAxiDma * AxiDmaInstPtr)
 
     Status = XAxiDma_BdRingToHw(RxRingPtr, FreeBdCount,
                         BdPtr);
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("RX submit hw failed %d\r\n", Status);
         return ERROR;
     }
 
     /* Start RX DMA channel */
     Status = XAxiDma_BdRingStart(RxRingPtr);
-    if (Status != SUCCESS) {
+    if (Status != NO_OS_SUCCESS) {
         xil_printf("RX start hw failed %d\r\n", Status);
         return ERROR;
     }
 
-    return SUCCESS;
+    return NO_OS_SUCCESS;
 }

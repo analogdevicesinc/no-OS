@@ -44,11 +44,7 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifndef SUCCESS
-#define SUCCESS		0
-#endif
-#ifndef FAILURE
-#define FAILURE		-1
-#endif
+#define NO_OS_SUCCESS		0
+#define NO_OS_FAILURE		-1
 
 #endif // ERROR_H_

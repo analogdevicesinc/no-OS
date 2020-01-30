@@ -188,7 +188,7 @@ int32_t ad9680_setup(struct ad9680_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9680_remove(struct ad9680_dev *dev)
 {

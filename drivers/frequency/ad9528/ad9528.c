@@ -715,7 +715,7 @@ pll2_bypassed:
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9528_remove(struct ad9528_dev *dev)
 {

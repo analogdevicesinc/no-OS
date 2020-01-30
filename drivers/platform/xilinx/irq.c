@@ -61,7 +61,7 @@
  * @brief Initialize the IRQ interrupts.
  * @param desc - The IRQ descriptor.
  * @param param - The structure that contains the IRQ parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_ctrl_init(struct irq_desc **desc,
 		      const struct irq_init_param *param)
@@ -73,11 +73,11 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 
 	descriptor = (struct irq_desc *)calloc(1, sizeof *descriptor);
 	if(!descriptor)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	xil_dev = (struct xil_irq_desc *)calloc(1, sizeof *xil_dev);
 	if(!xil_dev) {
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	Xil_ExceptionInit();
@@ -99,7 +99,7 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 
 		status = XScuGic_CfgInitialize(xil_dev->instance, config,
 					       ((XScuGic_Config *)config)->CpuBaseAddress);
-		if (status != SUCCESS)
+		if (status != NO_OS_SUCCESS)
 			goto ps_error;
 
 		Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT,
@@ -118,11 +118,11 @@ ps_error:
 			goto error;
 
 		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_id);
-		if(status != SUCCESS)
+		if(status != NO_OS_SUCCESS)
 			goto pl_error;
 
 		status = XIntc_Start(xil_dev->instance, XIN_REAL_MODE);
-		if(status != SUCCESS)
+		if(status != NO_OS_SUCCESS)
 			goto pl_error;
 
 		break;
@@ -138,44 +138,44 @@ pl_error:
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 
 error:
 	free(xil_dev);
 	free(descriptor);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Enable global interrupts.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_global_enable(struct irq_desc *desc)
 {
 	/* Enable interrupts */
 	Xil_ExceptionEnable();
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Disable global interrupts.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_global_disable(struct irq_desc *desc)
 {
 	/* Disable interrupts */
 	Xil_ExceptionDisable();
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Enable specific interrupt.
  * @param desc - The IRQ descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 {
@@ -194,17 +194,17 @@ int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 		break;
 	default:
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Disable specific interrupt.
  * @param desc - The IRQ descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 {
@@ -223,10 +223,10 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 		break;
 	default:
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -235,7 +235,7 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier.
  * @param irq_handler - The IRQ handler.
  * @param dev_instance - device instance.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance)
@@ -259,14 +259,14 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 		break;
 	}
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Unregisters a generic IRQ handling function.
  * @param desc - The IRQ descriptor.
  * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 {
@@ -285,16 +285,16 @@ int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 		break;
 	default:
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by irq_ctrl_init().
  * @param desc - The IRQ descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t irq_ctrl_remove(struct irq_desc *desc)
 {
@@ -303,5 +303,5 @@ int32_t irq_ctrl_remove(struct irq_desc *desc)
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

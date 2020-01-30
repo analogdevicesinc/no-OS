@@ -286,7 +286,7 @@ int32_t altera_a10_fpll_calc_params(uint32_t fref,
 		}
 	}
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
@@ -302,7 +302,7 @@ int32_t altera_a10_fpll_round_rate(struct altera_a10_fpll *fpll,
 	altera_a10_fpll_calc_params(fpll->parent_rate, rate, &n, &m, &c0, &fvco);
 
 	if (n == 0 || m == 0 || c0 == 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	tmp = (uint64_t)fpll->parent_rate * m;
 	tmp = DIV_ROUND_CLOSEST_ULL(tmp, c0 * n * 2);
@@ -350,7 +350,7 @@ int32_t altera_a10_fpll_set_rate(struct altera_a10_fpll *fpll, uint32_t rate)
 	altera_a10_fpll_calc_params(fpll->parent_rate, rate, &n, &m, &c0, &fvco);
 
 	if (n == 0 || m == 0 || c0 == 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	lfr = altera_a10_fpll_lookup_lf_resistance(fvco, m);
 	cpc = altera_a10_fpll_lookup_cp_current(fvco, m);
@@ -472,7 +472,7 @@ int32_t altera_a10_fpll_init(struct altera_a10_fpll **a10_fpll,
 
 	fpll = (struct altera_a10_fpll *)malloc(sizeof(*fpll));
 	if (!fpll)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	fpll->base = init->base;
 	fpll->name = init->name;
@@ -480,7 +480,7 @@ int32_t altera_a10_fpll_init(struct altera_a10_fpll **a10_fpll,
 
 	*a10_fpll = fpll;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -490,5 +490,5 @@ int32_t altera_a10_fpll_remove(struct altera_a10_fpll *fpll)
 {
 	free(fpll);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

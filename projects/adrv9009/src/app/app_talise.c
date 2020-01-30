@@ -407,7 +407,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 error_11:
 	TALISE_closeHw(pd);
 error_0:
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 void talise_shutdown(taliseDevice_t * const pd)

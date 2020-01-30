@@ -63,7 +63,7 @@
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
@@ -100,17 +100,17 @@ int32_t i2c_init(struct i2c_desc **desc,
 					 xdesc->config,
 					 ((XIic_Config*)xdesc->config)
 					 ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto pl_error;
 
 		ret = XIic_Start(xdesc->instance);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto pl_error;
 
 		ret = XIic_SetAddress(xdesc->instance,
 				      XII_ADDR_TO_SEND_TYPE,
 				      param->slave_address);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto pl_error;
 
 		ret = XIic_SelfTest(xdesc->instance);
@@ -140,7 +140,7 @@ pl_error:
 					   xdesc->config,
 					   ((XIicPs_Config*)xdesc->config)
 					   ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto ps_error;
 
 		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
@@ -158,19 +158,19 @@ ps_error:
 
 	*desc = idesc;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 
 error:
 	free(idesc);
 	free(xdesc);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Free the resources allocated by i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
@@ -184,7 +184,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 #ifdef XIIC_H
 		ret = XIic_Stop(((XIic *)xdesc->instance));
 
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 		break;
 #endif
@@ -197,7 +197,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 error:
 	default:
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
@@ -205,7 +205,7 @@ error:
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -216,7 +216,7 @@ error:
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
@@ -244,14 +244,14 @@ int32_t i2c_write(struct i2c_desc *desc,
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIIC_REPEATED_START);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 
 		XIicPs_MasterSend(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 
 		break;
@@ -260,11 +260,11 @@ int32_t i2c_write(struct i2c_desc *desc,
 error:
 	default:
 
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -275,7 +275,7 @@ error:
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
@@ -295,7 +295,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 				data,
 				bytes_number,
 				stop_bit ? XIIC_STOP : XIIC_REPEATED_START);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 
 		break;
@@ -306,14 +306,14 @@ int32_t i2c_read(struct i2c_desc *desc,
 
 		ret = XIicPs_SetOptions(xdesc->instance,
 					stop_bit ? 0 : XIIC_REPEATED_START);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 
 		XIicPs_MasterRecv(xdesc->instance,
 				  data,
 				  bytes_number,
 				  desc->slave_address);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 
 		break;
@@ -321,10 +321,10 @@ int32_t i2c_read(struct i2c_desc *desc,
 		/* Intended fallthrough */
 error:
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 		break;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

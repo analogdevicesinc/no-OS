@@ -193,49 +193,49 @@ int main(void)
 	int32_t status;
 
 	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("hmc7044_init() error: %"PRIi32"\n", status);
 		goto error_1;
 	}
 
 	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
 		goto error_2;
 	}
 
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
 		goto error_3;
 	}
 
 	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
 		goto error_3;
 	}
 
 	status = axi_jesd204_tx_lane_clk_enable(tx_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n", tx_jesd->name);
 		goto error_3;
 	}
 
 	status = ad9172_init(&ad9172_device, &ad9172_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("ad9172_init() error: %"PRIi32"\n", status);
 		goto error_4;
 	}
 
 	status = axi_jesd204_tx_status_read(tx_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
 		goto error_4;
 	}
 
 	status = axi_dac_init(&tx_dac, &tx_dac_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("axi_dac_init() error: %"PRIi32"\n", status);
 		goto error_5;
 	}

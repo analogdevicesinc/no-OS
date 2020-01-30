@@ -58,7 +58,7 @@
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_init(i2c_desc **desc,
 		 const i2c_init_param *param)
@@ -67,26 +67,26 @@ int32_t i2c_init(i2c_desc **desc,
 
 	descriptor = (i2c_desc *)malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	descriptor->slave_address = param->slave_address;
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_remove(i2c_desc *desc)
 {
@@ -95,12 +95,12 @@ int32_t i2c_remove(i2c_desc *desc)
 	ret = close(desc->fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -111,7 +111,7 @@ int32_t i2c_remove(i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_write(i2c_desc *desc,
 		  uint8_t *data,
@@ -123,20 +123,20 @@ int32_t i2c_write(i2c_desc *desc,
 	ret = ioctl(desc->fd, I2C_SLAVE, desc->slave_address);
 	if (ret < 0) {
 		printf("%s: Can't select device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = write(desc->fd, data, bytes_number);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if (stop_bit) {
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -147,7 +147,7 @@ int32_t i2c_write(i2c_desc *desc,
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_read(i2c_desc *desc,
 		 uint8_t *data,
@@ -159,27 +159,27 @@ int32_t i2c_read(i2c_desc *desc,
 	ret = ioctl(desc->fd, I2C_SLAVE, desc->slave_address);
 	if (ret < 0) {
 		printf("%s: Can't select device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = read(desc->fd, data, bytes_number);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if (stop_bit) {
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 {
@@ -188,13 +188,13 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 
 	descriptor = (spi_desc *)malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	descriptor->fd = open(param->pathname, O_RDWR);
 	if (descriptor->fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MODE,
@@ -203,7 +203,7 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 		printf("%s: Can't set mode\n\r", __func__);
 		close(descriptor->fd);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = ioctl(descriptor->fd, SPI_IOC_WR_MAX_SPEED_HZ,
@@ -212,18 +212,18 @@ int32_t spi_init(spi_desc **desc, const spi_init_param *param)
 		printf("%s: Can't set speed\n\r", __func__);
 		close(descriptor->fd);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_remove(spi_desc *desc)
 {
@@ -232,12 +232,12 @@ int32_t spi_remove(spi_desc *desc)
 	ret = close(desc->fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -245,7 +245,7 @@ int32_t spi_remove(spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t *data,
@@ -261,17 +261,17 @@ int32_t spi_write_and_read(spi_desc *desc,
 	ret = ioctl(desc->fd, SPI_IOC_MESSAGE(1), &transfer);
 	if (ret == 1) {
 		printf("%s: Can't send spi message\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param gpio_number - The number of the GPIO.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get(gpio_desc **desc,
 		 uint8_t gpio_number)
@@ -284,7 +284,7 @@ int32_t gpio_get(gpio_desc **desc,
 
 	descriptor = (gpio_desc *)malloc(sizeof(*descriptor));
 	if (!descriptor)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	descriptor->number = gpio_number;
 
@@ -292,7 +292,7 @@ int32_t gpio_get(gpio_desc **desc,
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	len = sprintf(buf, "%d", gpio_number);
@@ -301,25 +301,25 @@ int32_t gpio_get(gpio_desc **desc,
 		printf("%s: Can't write to file\n\r", __func__);
 		close(fd);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
 		free(descriptor);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	*desc = descriptor;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_remove(gpio_desc *desc)
 {
@@ -331,31 +331,31 @@ int32_t gpio_remove(gpio_desc *desc)
 	fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	len = sprintf(buf, "%d", desc->number);
 	ret = write(fd, buf, len);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_input(gpio_desc *desc)
 {
@@ -367,22 +367,22 @@ int32_t gpio_direction_input(gpio_desc *desc)
 	fd = open(buf, O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = write(fd, "in", 3);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -391,7 +391,7 @@ int32_t gpio_direction_input(gpio_desc *desc)
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_output(gpio_desc *desc,
 			      uint8_t value)
@@ -404,28 +404,28 @@ int32_t gpio_direction_output(gpio_desc *desc,
 	fd = open(buf, O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = write(fd, "out", 4);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = gpio_set_value(desc, value);
-	if (ret != SUCCESS) {
+	if (ret != NO_OS_SUCCESS) {
 		printf("%s: Can't set value\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -434,7 +434,7 @@ int32_t gpio_direction_output(gpio_desc *desc,
  * @param direction - The direction.
  *                    Example: GPIO_OUT
  *                             GPIO_IN
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_direction(gpio_desc *desc,
 			   uint8_t *direction)
@@ -448,13 +448,13 @@ int32_t gpio_get_direction(gpio_desc *desc,
 	fd = open(buf, O_RDONLY);
 	if (fd < 0) {
 		printf("%s: Can't open file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = read(fd, &data, 1);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if(data == 'o')
@@ -465,10 +465,10 @@ int32_t gpio_get_direction(gpio_desc *desc,
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -477,7 +477,7 @@ int32_t gpio_get_direction(gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_set_value(gpio_desc *desc,
 		       uint8_t value)
@@ -490,7 +490,7 @@ int32_t gpio_set_value(gpio_desc *desc,
 	fd = open(buf, O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if (value)
@@ -499,16 +499,16 @@ int32_t gpio_set_value(gpio_desc *desc,
 		ret = write(fd, "0", 2);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -517,7 +517,7 @@ int32_t gpio_set_value(gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_value(gpio_desc *desc,
 		       uint8_t *value)
@@ -531,13 +531,13 @@ int32_t gpio_get_value(gpio_desc *desc,
 	fd = open(buf, O_RDONLY);
 	if (fd < 0) {
 		printf("%s: Can't open file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ret = read(fd, &data, 1);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if(data == '0')
@@ -548,10 +548,10 @@ int32_t gpio_get_value(gpio_desc *desc,
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**

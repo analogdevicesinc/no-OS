@@ -134,7 +134,7 @@ int8_t adp5589_init(struct adp5589_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adp5589_remove(struct adp5589_dev *dev)
 {

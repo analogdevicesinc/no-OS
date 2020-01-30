@@ -492,7 +492,7 @@ int32_t AD717X_Init(ad717x_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by AD717X_Init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t AD717X_remove(ad717x_dev *dev)
 {

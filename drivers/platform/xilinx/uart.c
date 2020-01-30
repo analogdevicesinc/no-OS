@@ -58,7 +58,7 @@
 /**
  * @brief Save received data into fifo.
  * @param desc - Instance descriptor containing a fifo element.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static int32_t uart_fifo_insert(struct uart_desc *desc)
 {
@@ -86,7 +86,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 
 			break;
 		default:
-			return FAILURE;
+			return NO_OS_FAILURE;
 			break;
 		}
 		ret = irq_source_enable(irq_desc, xil_uart_desc->irq_id);
@@ -94,14 +94,14 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 			return ret;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Read byte from fifo.
  * @param desc - Instance descriptor containing a fifo element
  * @param data - read value.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
@@ -123,7 +123,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 		xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -131,7 +131,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
@@ -150,7 +150,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
@@ -175,11 +175,11 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 
 		break;
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -240,7 +240,7 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 /**
  * @brief UART interrupt init.
  * @param desc - Instance of UART containing a pointer to handler.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static int32_t uart_irq_init(struct uart_desc *descriptor)
 {
@@ -272,7 +272,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 
 		break;
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
@@ -280,14 +280,14 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 	if (status < 0)
 		return status;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
@@ -299,7 +299,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	descriptor = calloc(1, sizeof(struct uart_desc));
 	if (!descriptor)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	xil_uart_desc = calloc(1, sizeof(struct xil_uart_desc));
 	if (!xil_uart_desc)
 		goto error_free_descriptor;
@@ -368,7 +368,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		break;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 
 error_free_instance:
 	free(xil_uart_desc->instance);
@@ -377,13 +377,13 @@ error_free_xil_uart_desc:
 error_free_descriptor:
 	free(descriptor);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Free the resources allocated by uart_init().
  * @param desc - The UART descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_remove(struct uart_desc *desc)
 {
@@ -392,7 +392,7 @@ int32_t uart_remove(struct uart_desc *desc)
 	free(xil_uart_desc);
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**

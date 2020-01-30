@@ -132,7 +132,7 @@ int32_t spi_eng_dma_read(spi_desc *desc,
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 #ifdef DUAL_SPI
 int32_t spi_eng_write_and_read(spi_eng_desc *desc,

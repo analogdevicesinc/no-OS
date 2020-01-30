@@ -54,7 +54,7 @@
  * generic device.
  * @param desc - Application descriptor.
  * @param init - Application configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_generic_app_init(struct iio_generic_app_desc **desc,
 			     struct iio_interface_init_par *init)
@@ -63,34 +63,34 @@ int32_t iio_generic_app_init(struct iio_generic_app_desc **desc,
 
 	status = iio_register(init);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	*desc = calloc(1, sizeof(struct iio_generic_app_desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc)->dev_name = init->dev_name;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Application descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_generic_app_remove(struct iio_generic_app_desc *desc)
 {
 	int32_t status;
 
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = iio_unregister(desc->dev_name);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

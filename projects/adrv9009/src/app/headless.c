@@ -50,7 +50,7 @@ static struct uart_desc *uart_desc;
  * iio_uart_write() - Write data to UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_write(const char *buf, size_t len)
 {
@@ -61,7 +61,7 @@ static ssize_t iio_uart_write(const char *buf, size_t len)
  * iio_uart_read() - Read data from UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_read(char *buf, size_t len)
 {
@@ -372,7 +372,7 @@ int main(void)
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
@@ -428,5 +428,5 @@ error_1:
 	clocking_deinit();
 error_0:
 	printf("Bye\n");
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

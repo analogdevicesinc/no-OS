@@ -63,7 +63,7 @@ uint32_t ad_pow2(uint32_t number)
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param gpio_number - The number of the GPIO.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get(gpio_desc **desc,
 		 gpio_init_param param)
@@ -88,7 +88,7 @@ int32_t gpio_get(gpio_desc **desc,
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_remove(gpio_desc *desc)
 {
@@ -103,7 +103,7 @@ int32_t gpio_remove(gpio_desc *desc)
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_set_value(gpio_desc *desc,
 		       uint8_t value)

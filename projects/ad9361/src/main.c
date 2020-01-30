@@ -75,7 +75,7 @@ static struct uart_desc *uart_desc;
  * iio_uart_write() - Write data to UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_write(const char *buf, size_t len)
 {
@@ -86,7 +86,7 @@ static ssize_t iio_uart_write(const char *buf, size_t len)
  * iio_uart_read() - Read data from UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_read(char *buf, size_t len)
 {
@@ -493,7 +493,7 @@ int main(void)
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN;
 	status = gpio_get(&default_init_param.gpio_desc_resetb,
 			  &default_init_param.gpio_resetb);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -501,7 +501,7 @@ int main(void)
 	default_init_param.gpio_sync.number = GPIO_SYNC_PIN;
 	status = gpio_get(&default_init_param.gpio_desc_sync,
 			  &default_init_param.gpio_sync);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -520,7 +520,7 @@ int main(void)
 	gpio_init.number = GPIO_DEVICE_ID;
 	status = gpio_get(&default_init_param.gpio_desc_device_id,
 			  &gpio_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -528,7 +528,7 @@ int main(void)
 	gpio_direction_output(default_init_param.gpio_desc_resetb, 0);
 
 	status = spi_init(&default_init_param.spi, &spi_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("spi_init() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -561,7 +561,7 @@ int main(void)
 #endif
 	status = gpio_get(&default_init_param.gpio_desc_sync,
 			  &default_init_param.gpio_sync);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -578,7 +578,7 @@ int main(void)
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
 	status = gpio_get(&default_init_param.gpio_desc_resetb,
 			  &default_init_param.gpio_resetb);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("gpio_get() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -591,7 +591,7 @@ int main(void)
 	spi_param.max_speed_hz = 2000000u;
 
 	status = spi_init(&default_init_param.spi, &spi_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("spi_init() error: %"PRIi32"\n", status);
 		return status;
 	}
@@ -756,7 +756,7 @@ int main(void)
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
@@ -826,14 +826,14 @@ int main(void)
 		if (ad9361_phy->pdata->ensm_pin_ctrl) {
 			gpio_init.number = GPIO_ENABLE_PIN;
 			status = gpio_get(&gpio_enable_pin, gpio_init);
-			if (status != SUCCESS) {
+			if (status != NO_OS_SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}
 			gpio_direction_output(gpio_enable_pin, 1);
 			gpio_init.number = GPIO_TXNRX_PIN;
 			status = gpio_get(&gpio_txnrx_pin, gpio_init);
-			if (status != SUCCESS) {
+			if (status != NO_OS_SUCCESS) {
 				printf("gpio_get() error: %"PRIi32"\n", status);
 				return status;
 			}

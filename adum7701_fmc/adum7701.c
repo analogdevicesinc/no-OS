@@ -89,7 +89,7 @@ int32_t adum7701_init(struct adum7701_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by adum7701_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t adum7701_remove(struct adum7701_dev *dev)
 {

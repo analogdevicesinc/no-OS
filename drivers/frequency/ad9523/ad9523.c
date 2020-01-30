@@ -723,7 +723,7 @@ int32_t ad9523_setup(struct ad9523_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9523_remove(struct ad9523_dev *dev)
 {

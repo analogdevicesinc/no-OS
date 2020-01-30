@@ -65,7 +65,7 @@ int32_t timer_init(struct timer_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -79,7 +79,7 @@ int32_t timer_remove(struct timer_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -122,7 +122,7 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -141,7 +141,7 @@ int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -160,7 +160,7 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -179,6 +179,6 @@ int32_t timer_count_clk_set(struct timer_desc *desc, uint32_t freq_hz)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 

@@ -201,7 +201,7 @@ int spi_write_then_read(struct spi_device *spi,
 		rxbuf[byte - n_tx] = buffer[byte];
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**

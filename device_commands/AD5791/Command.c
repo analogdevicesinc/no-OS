@@ -299,7 +299,7 @@ char DoDeviceInit(void)
         DisplayCmdList();
         registerValue = (AD5791_GetRegisterValue(AD5791_REG_DAC) &
                         ~(AD5791_ADDR_REG(-1))) >> offset;
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

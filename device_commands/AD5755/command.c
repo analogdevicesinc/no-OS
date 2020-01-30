@@ -322,7 +322,7 @@ char DoDeviceInit(void)
     {
         CONSOLE_Print("Device OK\r\n");
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {
@@ -1233,7 +1233,7 @@ void EvaluateStatus(double* param, char paramNo)
             break;
         }
     }
-    if(crcError == SUCCESS)
+    if(crcError == NO_OS_SUCCESS)
     {
         /* Read back the status register */
         status = (unsigned short)AD5755_GetRegisterValue(AD5755_RD_STATUS_REG);

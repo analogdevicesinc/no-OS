@@ -53,8 +53,8 @@
 
 #define mdelay(msecs)	usleep(1000 * msecs)
 
-#define SUCCESS		0
-#define FAILURE		-1
+#define NO_OS_SUCCESS		0
+#define NO_OS_FAILURE		-1
 
 #define	SPI_CPHA	0x01
 #define	SPI_CPOL	0x02

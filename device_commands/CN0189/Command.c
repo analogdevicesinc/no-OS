@@ -197,7 +197,7 @@ char DoDeviceInit(void)
         dataY[0] = ad7887_CTRL_REF | ad7887_CTRL_SIN_DUAL | ad7887_CTRL_CH |
                    ad7887_CTRL_PM0;
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

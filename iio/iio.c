@@ -128,7 +128,7 @@ static struct iio_interfaces *iio_interfaces = NULL;
 static int32_t iio_get_channel_number(const char *ch)
 {
 	char *p = (char*)ch;
-	int32_t ch_num = FAILURE;
+	int32_t ch_num = NO_OS_FAILURE;
 
 	while (*p) {
 		if (isdigit(*p))
@@ -227,10 +227,10 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
 	uint32_t *pattr_length;
 
 	if (!attributes)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (!buf)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	while (attributes[i]) {
 		attr_length = attributes[i]->show(device, local_buf, len, channel);
@@ -265,10 +265,10 @@ static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
 	int16_t attr_length;
 
 	if (!attributes)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (!buf)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	while (attributes[i]) {
 		attr_length = bswap_constant_32((uint32_t)(buf + j));
@@ -413,7 +413,7 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 	struct element_info el_info;
 
 	if (!iio_supported_dev(device))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	el_info.device_name = device;
 	el_info.channel_name = "";	/* there is no channel here */
@@ -421,7 +421,7 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 
 	iio_device = iio_get_interface(device, iio_interfaces);
 	if (!iio_device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->iio, 0);
 }
@@ -451,7 +451,7 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 
 	iio_interface = iio_get_interface(device, iio_interfaces);
 	if (!iio_interface)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iio_interface->iio, 1);
 }
@@ -473,7 +473,7 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 	struct iio_interface *iio_interface;
 
 	if (!iio_supported_dev(device))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	el_info.device_name = device;
 	el_info.channel_name = channel;
@@ -482,7 +482,7 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 
 	iio_interface = iio_get_interface(device, iio_interfaces);
 	if (!device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->iio, 0);
 }
@@ -523,7 +523,7 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
  * @param device - String containing device name.
  * @param sample_size - Sample size.
  * @param mask - Channels to be opened.
- * @return SUCCESS, negative value in case of failure.
+ * @return NO_OS_SUCCESS, negative value in case of failure.
  */
 static int32_t iio_open_dev(const char *device, size_t sample_size,
 			    uint32_t mask)
@@ -542,31 +542,31 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 
 	iface->ch_mask = mask;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Close device.
  * @param device - String containing device name.
- * @return SUCCESS, negative value in case of failure.
+ * @return NO_OS_SUCCESS, negative value in case of failure.
  */
 static int32_t iio_close_dev(const char *device)
 {
 	struct iio_interface *iface;
 
 	if (!iio_supported_dev(device))
-		return FAILURE;
+		return NO_OS_FAILURE;
 	iface = iio_get_interface(device, iio_interfaces);
 	iface->ch_mask = 0;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Get device mask, this specifies the channels that are used.
  * @param device - String containing device name.
  * @param mask - Channels that are opened.
- * @return SUCCESS, negative value in case of failure.
+ * @return NO_OS_SUCCESS, negative value in case of failure.
  */
 static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
@@ -578,7 +578,7 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 	iface = iio_get_interface(device, iio_interfaces);
 	*mask = iface->ch_mask;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -663,7 +663,7 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 /**
  * @brief Get a merged xml containing all devices.
  * @param outxml - Generated xml.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 static ssize_t iio_get_xml(char **outxml)
 {
@@ -696,11 +696,11 @@ static ssize_t iio_get_xml(char **outxml)
 	char header_end[] = "</context>";
 
 	if (!outxml)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	xml = (char *)calloc(1, strlen(header) + 1);
 	if (!xml)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	strcpy(xml, header);
 	for (i = 0; i < iio_interfaces->num_interfaces; i++) {
@@ -728,18 +728,18 @@ static ssize_t iio_get_xml(char **outxml)
 
 	*outxml = xml;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 error:
 	free(xml);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Register interface.
  * @param init_par - Structure containing physical device instance and device
  * 		descriptor.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_register(struct iio_interface_init_par *init_par)
 {
@@ -782,13 +782,13 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 
 	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = iio_interface;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Unregister interface.
  * @param device_name String containing device name.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_unregister(const char *device_name)
 {
@@ -798,18 +798,18 @@ ssize_t iio_unregister(const char *device_name)
 	int16_t i, deleted = 0;
 
 	if (!iio_interface)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	interfaces = (struct iio_interfaces *)calloc(1, sizeof(struct iio_interfaces));
 	if (!interfaces)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	interfaces->interfaces = (struct iio_interface **)calloc(
 					 iio_interfaces->num_interfaces - 1,
 					 sizeof(struct iio_interface*));
 	if (!interfaces->interfaces) {
 		free(interfaces);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	for(i = 0; i < iio_interfaces->num_interfaces; i++) {
@@ -825,7 +825,7 @@ ssize_t iio_unregister(const char *device_name)
 	free(iio_interfaces);
 	iio_interfaces = interfaces;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -834,7 +834,7 @@ ssize_t iio_unregister(const char *device_name)
  * @param iiod - Structure containing new tinyiiod instance.
  * @param iio_server_ops - Structure containing read/write ops (Ex: read/write to
  * 			UART).
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 {
@@ -842,7 +842,7 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 				   sizeof(struct tinyiiod_ops));
 
 	if (!ops)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* device operations */
 	ops->read_attr = iio_read_attr;
@@ -865,16 +865,16 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 	*iiod = tinyiiod_create(ops);
 	if (!(*iiod)) {
 		free(ops);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	} else {
-		return SUCCESS;
+		return NO_OS_SUCCESS;
 	}
 }
 
 /**
  * @brief Free the resources allocated by "iio_init()".
  * @param iiod: Structure containing tinyiiod instance.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_remove(struct tinyiiod *iiod)
 {
@@ -886,5 +886,5 @@ ssize_t iio_remove(struct tinyiiod *iiod)
 	free(iio_interfaces);
 	tinyiiod_destroy(iiod);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

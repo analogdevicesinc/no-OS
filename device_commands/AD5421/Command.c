@@ -219,7 +219,7 @@ char DoDeviceInit(void)
         offsetReg = AD5421_GetOffset();
         gainReg   = AD5421_GetGain();
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

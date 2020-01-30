@@ -58,7 +58,7 @@
  * @param offset - Address offset.
  * @param read - Location where read data will be stored.
  * @param write - Data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 				 uint32_t *write)
@@ -66,7 +66,7 @@ static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	char buf[32];
 	int ret;
 	int uio_fd;
-	int32_t status = SUCCESS;
+	int32_t status = NO_OS_SUCCESS;
 	void *uio_addr;
 
 	sprintf(buf, "/dev/uio%"PRIu32"", base);
@@ -74,7 +74,7 @@ static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	uio_fd = open(buf, O_RDWR);
 	if (uio_fd < 0) {
 		printf("%s: Can't open %s\n\r", __func__, buf);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	uio_addr = mmap(NULL,
@@ -85,7 +85,7 @@ static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 			0);
 	if (uio_addr == MAP_FAILED) {
 		printf("%s: mmap() failed\n\r", __func__);
-		status = FAILURE;
+		status = NO_OS_FAILURE;
 		goto close;
 	}
 
@@ -97,14 +97,14 @@ static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 	ret = munmap(uio_addr, offset + sizeof(*read));
 	if (ret < 0) {
 		printf("%s: munmap() failed\n\r", __func__);
-		status = FAILURE;
+		status = NO_OS_FAILURE;
 	}
 
 close:
 	ret = close(uio_fd);
 	if (ret < 0) {
 		printf("%s: Can't close %s\n\r", __func__, buf);
-		status = FAILURE;
+		status = NO_OS_FAILURE;
 	}
 
 	return status;
@@ -115,7 +115,7 @@ close:
  * @param base - UIO index (/dev/uioX).
  * @param offset - Address offset.
  * @param data - Location where read data will be stored.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
@@ -127,7 +127,7 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param base - UIO index (/dev/uioX).
  * @param offset - Address offset.
  * @param data - Data to be written.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {

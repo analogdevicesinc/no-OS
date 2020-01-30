@@ -231,7 +231,7 @@ char DoDeviceInit(void)
         AD5750_FAULT_IN;
         CONSOLE_Print("Device OK\r\n");
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

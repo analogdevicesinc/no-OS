@@ -54,7 +54,7 @@
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
@@ -67,13 +67,13 @@ int32_t i2c_init(struct i2c_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
@@ -81,7 +81,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -92,7 +92,7 @@ int32_t i2c_remove(struct i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t *data,
@@ -115,7 +115,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -126,7 +126,7 @@ int32_t i2c_write(struct i2c_desc *desc,
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t *data,
@@ -149,5 +149,5 @@ int32_t i2c_read(struct i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

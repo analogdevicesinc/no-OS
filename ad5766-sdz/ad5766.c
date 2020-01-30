@@ -54,7 +54,7 @@
  * @param dev - The device structure.
  * @param cmd - The command.
  * @param data - The data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_spi_cmd_write(ad5766_dev *dev,
 							 uint8_t cmd,
@@ -77,7 +77,7 @@ int32_t ad5766_spi_cmd_write(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param dac - The dac address.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
 								ad5766_dac dac,
@@ -89,7 +89,7 @@ int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
 	if (dev->daisy_chain_en == AD5766_ENABLE) {
 		printf("%s: This feature is not available in Daisy-Chain mode.\n",
 			__func__);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ad5766_spi_cmd_write(dev, AD5766_CMD_READBACK_REG(dac), 0x0000);
@@ -106,7 +106,7 @@ int32_t ad5766_spi_readback_reg(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param setting - The setting.
  *					Accepted values: AD5766_LDAC(x) | AD5766_LDAC(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_sw_ldac(ad5766_dev *dev,
 						   uint16_t setting)
@@ -131,7 +131,7 @@ int32_t ad5766_set_sw_ldac(ad5766_dev *dev,
  *								  AD5766_M_16V_TO_P_10V
  *								  AD5766_M_5V_TO_P_6V
  *								  AD5766_M_10V_TO_P_10V
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_clr_span(ad5766_dev *dev,
 							ad5766_clr clr,
@@ -146,7 +146,7 @@ int32_t ad5766_set_clr_span(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param setting - The setting.
  *					Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_pwr_dac(ad5766_dev *dev,
 						   uint16_t setting)
@@ -160,7 +160,7 @@ int32_t ad5766_set_pwr_dac(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param setting - The setting.
  *					Accepted values: AD5766_PWDN(x) | AD5766_PWDN(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_pwr_dither(ad5766_dev *dev,
 							  uint16_t setting)
@@ -174,7 +174,7 @@ int32_t ad5766_set_pwr_dither(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param setting - The setting.
  *					Accepted values: AD5766_N0(x) | AD5766_N1(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dither_signal(ad5766_dev *dev,
 								 uint32_t setting)
@@ -194,7 +194,7 @@ int32_t ad5766_set_dither_signal(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param setting - The setting.
  *					Accepted values: AD5766_INV_D(x) | AD5766_INV_D(y) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_inv_dither(ad5766_dev *dev,
 							  uint16_t setting)
@@ -209,7 +209,7 @@ int32_t ad5766_set_inv_dither(ad5766_dev *dev,
  * @param setting - The setting.
  *					Accepted values: AD5766_75(x) | AD5766_50(y) |
  *									 AD5766_25(z) | ...
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dither_scale(ad5766_dev *dev,
 								uint32_t setting)
@@ -227,7 +227,7 @@ int32_t ad5766_set_dither_scale(ad5766_dev *dev,
 /**
  * Do a software reset.
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_do_soft_reset(ad5766_dev *dev)
 {
@@ -240,7 +240,7 @@ int32_t ad5766_do_soft_reset(ad5766_dev *dev)
  * @param dev - The device structure.
  * @param dac - The selected channel.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_in_reg(ad5766_dev *dev,
 						  ad5766_dac dac,
@@ -255,7 +255,7 @@ int32_t ad5766_set_in_reg(ad5766_dev *dev,
  * @param dev - The device structure.
  * @param dac - The selected channel.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dac_reg(ad5766_dev *dev,
 							  ad5766_dac dac,
@@ -269,7 +269,7 @@ int32_t ad5766_set_dac_reg(ad5766_dev *dev,
  * Set the DAC register for all channels.
  * @param dev - The device structure.
  * @param data - The register data.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_set_dac_reg_all(ad5766_dev *dev,
 							   ad5766_dac dac,
@@ -284,7 +284,7 @@ int32_t ad5766_set_dac_reg_all(ad5766_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 					   parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5766_setup(ad5766_dev **device,
 					 ad5766_init_param init_param)

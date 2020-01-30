@@ -196,7 +196,7 @@ int32_t ad713x_set_out_data_frame(ad713x_dev *dev,
 		i++;
 	}
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
@@ -370,7 +370,7 @@ int32_t ad713x_init(ad713x_dev **device,
 /***************************************************************************//**
  * @brief Free the resources allocated by ad713x_init().
  * @param dev - The device structure.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad713x_remove(ad713x_dev *dev)
 {

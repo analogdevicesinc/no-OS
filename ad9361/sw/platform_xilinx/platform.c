@@ -118,7 +118,7 @@ int32_t spi_init(uint32_t device_id,
 	XSpi_IntrGlobalDisable(&spi_instance);
 	XSpi_SetSlaveSelect(&spi_instance, 1);
 #endif
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -159,7 +159,7 @@ int32_t spi_read(struct spi_device *spi,
 	Xil_Out32((spi_instance.BaseAddr + 0x60), 0x180);
 #endif
 #endif
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -183,7 +183,7 @@ int spi_write_then_read(struct spi_device *spi,
 		rxbuf[byte - n_tx] = buffer[byte];
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**

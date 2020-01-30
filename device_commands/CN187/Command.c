@@ -143,7 +143,7 @@ char DoDeviceInit(void)
         AD7266_CNTL_LOW;
         CONSOLE_Print("Device OK\r\n");
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

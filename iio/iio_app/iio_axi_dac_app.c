@@ -58,7 +58,7 @@
  * axi_dac device.
  * @param desc - Application descriptor.
  * @param param - Application configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 			     struct iio_axi_dac_app_init_param *param)
@@ -70,10 +70,10 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 	int32_t status;
 
 	if (!param)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (!param->tx_dac || !param->tx_dmac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_par) {
 		.dac = param->tx_dac,
@@ -84,12 +84,12 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 
 	status = iio_axi_dac_init(&iio_axi_dac_inst, &iio_axi_dac_init_par);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_dac_device = iio_axi_dac_create_device(iio_axi_dac_inst->dac->name,
 			     iio_axi_dac_inst->dac->num_channels);
 	if (!iio_axi_dac_device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_dac_intf_par = (struct iio_interface_init_par) {
 		.dev_name = iio_axi_dac_inst->dac->name,
@@ -108,24 +108,24 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 
 	*desc = calloc(1, sizeof(struct iio_axi_dac_app_desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc)->iio_axi_dac_inst = iio_axi_dac_inst;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Application descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc)
 {
 	int32_t status;
 
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = iio_unregister(desc->iio_axi_dac_inst->dac->name);
 	if(status < 0)
@@ -133,5 +133,5 @@ int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

@@ -72,7 +72,7 @@ uint8_t ad4110_compute_xor(uint8_t *data,
  * @param data     - The register data.
  * @param mask     - The mask.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_spi_int_reg_write_msk(struct ad4110_dev *dev,
 				     uint8_t reg_map,
@@ -103,7 +103,7 @@ int32_t ad4110_spi_int_reg_write_msk(struct ad4110_dev *dev,
  *				       AD4110_SYS_OFFSET_CAL
  *				       AD4110_SYS_GAIN_CAL
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode)
 {
@@ -145,7 +145,7 @@ int32_t ad4110_set_adc_mode(struct ad4110_dev *dev, enum ad4110_adc_mode mode)
  * 				  AD4110_GAIN_16
  * 				  AD4110_GAIN_24
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
 {
@@ -174,7 +174,7 @@ int32_t ad4110_set_gain(struct ad4110_dev *dev, enum ad4110_gain gain)
  * 				  AD4110_RTD_3W_MODE
  * 				  AD4110_RTD_4W_MODE
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
 {
@@ -319,7 +319,7 @@ int32_t ad4110_set_op_mode(struct ad4110_dev *dev, enum ad4110_op_mode mode)
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_spi_do_soft_reset(struct ad4110_dev *dev)
 {
@@ -378,7 +378,7 @@ uint8_t ad4110_get_data_size(struct ad4110_dev *dev,
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
 				 uint8_t reg_map,
@@ -435,7 +435,7 @@ int32_t ad4110_spi_int_reg_write(struct ad4110_dev *dev,
  * @param reg_addr - The register address.
  * @param reg_data - The register data.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 				uint8_t reg_map,
@@ -495,7 +495,7 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 		crc = ad4110_compute_crc8(&buf[0], data_size);
 		if (crc != buf[buf_size - 1]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = NO_OS_FAILURE;
 		}
 	} else if ((dev->adc_crc_en == AD4110_ADC_XOR_CRC) &&
 		   (reg_map == A4110_ADC)) {
@@ -503,7 +503,7 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
 		crc = ad4110_compute_xor(&buf[0], data_size);
 		if (crc != buf[buf_size - 1]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = FAILURE;
+			ret = NO_OS_FAILURE;
 		}
 	}
 
@@ -517,7 +517,7 @@ int32_t ad4110_spi_int_reg_read(struct ad4110_dev *dev,
  * @param init_param - The structure that contains the device initial
  * 		       parameters.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_setup(struct ad4110_dev **device,
 		     struct ad4110_init_param init_param)
@@ -599,7 +599,7 @@ int32_t ad4110_setup(struct ad4110_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad4110_remove(struct ad4110_dev *dev)
 {

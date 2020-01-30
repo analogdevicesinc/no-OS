@@ -365,19 +365,19 @@ int main(void)
 	uint32_t size;
 
 	status = hmc7044_init(&hmc7044_device, &hmc7044_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("hmc7044_init() error: %"PRIi32"\n", status);
 		return status;
 	}
 
 	status = ad9208_initialize(&ad9208_0_device, &ad9208_0_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("ad9208_0_init() error: %"PRIi32"\n", status);
 		goto error_1;
 	}
 
 	status = ad9208_remove(ad9208_0_device);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("ad9208_remove() error: %"PRIi32"\n", status);
 		goto error_1;
 	}
@@ -385,47 +385,47 @@ int main(void)
 	mdelay(100);
 
 	status = ad9208_initialize(&ad9208_1_device, &ad9208_1_param);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("ad9208_1_init() error: %"PRIi32"\n", status);
 		goto error_1;
 	}
 
 	status = ad9208_remove(ad9208_1_device);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("ad9208_remove() error: %"PRIi32"\n", status);
 		goto error_1;
 	}
 
 	status = adxcvr_init(&rx_0_adxcvr, &rx_0_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: adxcvr_init() failed\n",
 			   rx_0_adxcvr_init.name);
 		goto error_1;
 	}
 
 	status = adxcvr_clk_enable(rx_0_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: adxcvr_clk_enable() failed\n",
 			   rx_0_adxcvr->name);
 		goto error_2;
 	}
 
 	status = axi_jesd204_rx_init(&rx_0_jesd, &rx_0_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: axi_jesd204_rx_init() failed\n",
 			   rx_0_jesd_init.name);
 		goto error_3;
 	}
 
 	status = axi_jesd204_rx_lane_clk_enable(rx_0_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: axi_jesd204_rx_lane_clk_enable() err\n",
 			   rx_0_jesd->name);
 		goto error_4;
 	}
 
 	status = axi_jesd204_rx_status_read(rx_0_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n",
 			   status);
 		goto error_5;
@@ -433,41 +433,41 @@ int main(void)
 
 	/* Initialize the ADC core */
 	status = axi_adc_init(&rx_0_adc, &rx_0_adc_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("axi_adc_init() error: %"PRIi32"\n", status);
 		goto error_5;
 	}
 
 	status = adxcvr_init(&rx_1_adxcvr, &rx_1_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: adxcvr_init() failed\n",
 			   rx_1_adxcvr_init.name);
 		goto error_6;
 	}
 
 	status = adxcvr_clk_enable(rx_1_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: adxcvr_clk_enable() failed\n",
 			   rx_1_adxcvr->name);
 		goto error_7;
 	}
 
 	status = axi_jesd204_rx_init(&rx_1_jesd, &rx_1_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: axi_jesd204_rx_init() failed\n",
 			   rx_1_jesd_init.name);
 		goto error_8;
 	}
 
 	status = axi_jesd204_rx_lane_clk_enable(rx_1_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("error: %s: axi_jesd204_rx_lane_clk_enable() err\n",
 			   rx_1_jesd->name);
 		goto error_9;
 	}
 
 	status = axi_jesd204_rx_status_read(rx_1_jesd);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n",
 			   status);
 		goto error_10;
@@ -475,14 +475,14 @@ int main(void)
 
 	/* Initialize the ADC core */
 	status = axi_adc_init(&rx_1_adc, &rx_1_adc_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("axi_adc_init() error: %"PRIi32"\n", status);
 		goto error_10;
 	}
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
 	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		xil_printf("axi_dmac_init() error: %"PRIi32"\n", status);
 		goto error_11;
 	}
@@ -490,7 +490,7 @@ int main(void)
 	size = (rx_1_adc->num_channels + rx_0_adc->num_channels) * sizeof(uint16_t);
 	status = axi_dmac_transfer(rx_dmac,
 				   DDR_MEM_BASEADDR + 0x800000, 16384 * size);
-	if (status != SUCCESS)
+	if (status != NO_OS_SUCCESS)
 		xil_printf("axi_dmac_transfer() error: %"PRIi32"\n", status);
 
 error_11:

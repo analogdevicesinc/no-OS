@@ -58,7 +58,7 @@
  * axi_adc device.
  * @param  desc - Application descriptor.
  * @param init - Application configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 			     struct iio_axi_adc_app_init_param *init)
@@ -71,10 +71,10 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 	int32_t status;
 
 	if (!init)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (!init->rx_adc || !init->rx_dmac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_par) {
 		.adc = init->rx_adc,
@@ -86,12 +86,12 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 
 	status = iio_axi_adc_init(&iio_axi_adc_inst, &iio_axi_adc_init_par);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_adc_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name,
 			     iio_axi_adc_inst->adc->num_channels);
 	if (!iio_axi_adc_device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_axi_adc_intf_par = (struct iio_interface_init_par) {
 		.dev_name = iio_axi_adc_inst->adc->name,
@@ -110,24 +110,24 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 
 	*desc = calloc(1, sizeof(struct iio_axi_adc_app_desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc)->iio_axi_adc_inst = iio_axi_adc_inst;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Application descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_axi_adc_app_remove(struct iio_axi_adc_app_desc *desc)
 {
 	int32_t status;
 
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = iio_unregister(desc->iio_axi_adc_inst->adc->name);
 	if(status < 0)
@@ -135,5 +135,5 @@ int32_t iio_axi_adc_app_remove(struct iio_axi_adc_app_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

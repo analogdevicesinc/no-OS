@@ -51,7 +51,7 @@
  * @brief Application parameterization.
  * @param desc - Application descriptor.
  * @param param - Application initial configuration structure.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_app_init(struct iio_app_desc **desc,
 		     struct iio_app_init_param *param)
@@ -60,7 +60,7 @@ int32_t iio_app_init(struct iio_app_desc **desc,
 	int32_t status;
 
 	if (!param)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = iio_init(&iiod, param->iio_server_ops);
 	if(status < 0)
@@ -68,24 +68,24 @@ int32_t iio_app_init(struct iio_app_desc **desc,
 
 	*desc = calloc(1, sizeof(struct iio_app_desc));
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	(*desc)->iiod = iiod;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Release resources.
  * @param desc - Application descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_app_remove(struct iio_app_desc *desc)
 {
 	int32_t status;
 
 	if (!desc)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = iio_remove(desc->iiod);
 	if(status < 0)
@@ -93,13 +93,13 @@ int32_t iio_app_remove(struct iio_app_desc *desc)
 
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief iio application, reads commands and executes them.
  * @param desc - Application descriptor.
- * @return: SUCCESS in case of success, FAILURE otherwise.
+ * @return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t iio_app(struct iio_app_desc *desc)
 {

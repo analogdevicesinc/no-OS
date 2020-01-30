@@ -81,7 +81,7 @@ static struct uart_desc *uart_desc;
  * iio_uart_write() - Write data to UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_write(const char *buf, size_t len)
 {
@@ -92,7 +92,7 @@ static ssize_t iio_uart_write(const char *buf, size_t len)
  * iio_uart_read() - Read data from UART device wrapper.
  * @buf - Pointer to buffer containing data.
  * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
+ * @Return: NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 static ssize_t iio_uart_read(char *buf, size_t len)
 {
@@ -338,7 +338,7 @@ int main(void)
 	printf("Please wait...\n");
 
 	ret = platform_init();
-	if (ret != SUCCESS) {
+	if (ret != NO_OS_SUCCESS) {
 		printf("error: platform_init() failed\n");
 		goto error_0;
 	}
@@ -374,21 +374,21 @@ int main(void)
 	/* Initialize A10 FPLLs */
 	status = altera_a10_fpll_init(&rx_device_clk_pll,
 				      &rx_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       rx_os_device_clk_pll_init.name);
 		goto error_1;
 	}
 	status = altera_a10_fpll_init(&tx_device_clk_pll,
 				      &tx_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       rx_os_device_clk_pll_init.name);
 		goto error_2;
 	}
 	status = altera_a10_fpll_init(&rx_os_device_clk_pll,
 				      &rx_os_device_clk_pll_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
 		       rx_os_device_clk_pll_init.name);
 		goto error_3;
@@ -397,7 +397,7 @@ int main(void)
 	altera_a10_fpll_disable(rx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(rx_device_clk_pll,
 					  rx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       rx_device_clk_pll->name);
 		goto error_4;
@@ -406,7 +406,7 @@ int main(void)
 	altera_a10_fpll_disable(tx_device_clk_pll);
 	status = altera_a10_fpll_set_rate(tx_device_clk_pll,
 					  tx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       tx_device_clk_pll->name);
 		goto error_4;
@@ -415,7 +415,7 @@ int main(void)
 	altera_a10_fpll_disable(rx_os_device_clk_pll);
 	status = altera_a10_fpll_set_rate(rx_os_device_clk_pll,
 					  rx_os_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       rx_os_device_clk_pll->name);
 		goto error_4;
@@ -424,33 +424,33 @@ int main(void)
 #else
 	/* Initialize CLKGEN */
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_init() failed\n", rx_clkgen_init.name);
 		goto error_1;
 	}
 	status = axi_clkgen_init(&tx_clkgen, &tx_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_init() failed\n", tx_clkgen_init.name);
 		goto error_2;
 	}
 	status = axi_clkgen_init(&rx_os_clkgen, &rx_os_clkgen_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen_init.name);
 		goto error_3;
 	}
 
 	status = axi_clkgen_set_rate(rx_clkgen, rx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_clkgen->name);
 		goto error_4;
 	}
 	status = axi_clkgen_set_rate(tx_clkgen, tx_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", tx_clkgen->name);
 		goto error_4;
 	}
 	status = axi_clkgen_set_rate(rx_os_clkgen, rx_os_div40_rate_hz);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_clkgen_set_rate() failed\n", rx_os_clkgen->name);
 		goto error_4;
 	}
@@ -458,34 +458,34 @@ int main(void)
 
 	/* Initialize JESDs */
 	status = axi_jesd204_rx_init(&rx_jesd, &rx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_4;
 	}
 	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_5;
 	}
 	status = axi_jesd204_rx_init(&rx_os_jesd, &rx_os_jesd_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: axi_jesd204_rx_init() failed\n", rx_jesd_init.name);
 		goto error_6;
 	}
 
 	/* Initialize ADXCVRs */
 	status = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", rx_adxcvr_init.name);
 		goto error_7;
 	}
 	status = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", tx_adxcvr_init.name);
 		goto error_8;
 	}
 	status = adxcvr_init(&rx_os_adxcvr, &rx_os_adxcvr_init);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_init() failed\n", rx_os_adxcvr_init.name);
 		goto error_9;
 	}
@@ -800,7 +800,7 @@ int main(void)
 
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(tx_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", tx_adxcvr->name);
 		goto error_10;
 	}
@@ -827,7 +827,7 @@ int main(void)
 
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(rx_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_adxcvr->name);
 		goto error_10;
 	}
@@ -835,7 +835,7 @@ int main(void)
 	axi_jesd204_rx_lane_clk_enable(rx_jesd);
 #ifndef ALTERA_PLATFORM
 	status = adxcvr_clk_enable(rx_os_adxcvr);
-	if (status != SUCCESS) {
+	if (status != NO_OS_SUCCESS) {
 		printf("error: %s: adxcvr_clk_enable() failed\n", rx_os_adxcvr->name);
 		goto error_10;
 	}
@@ -1064,7 +1064,7 @@ int main(void)
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if(status < 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
@@ -1167,5 +1167,5 @@ error_2:
 error_1:
 	platform_remove();
 error_0:
-	return FAILURE;
+	return NO_OS_FAILURE;
 }

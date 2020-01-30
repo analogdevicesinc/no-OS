@@ -61,32 +61,32 @@
  * @brief Init and create iio_axi_dac.
  * @param iio_axi_dac - Pointer to iio_axi_dac.
  * @param init - Init parameters.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_dac_init(struct iio_axi_dac **iio_axi_dac,
 			 struct iio_axi_dac_init_par *init)
 {
 	*iio_axi_dac = calloc(1, sizeof(struct iio_axi_dac));
 	if (!(*iio_axi_dac))
-		return FAILURE;
+		return NO_OS_FAILURE;
 	(*iio_axi_dac)->dac = init->dac;
 	(*iio_axi_dac)->dmac = init->dmac;
 	(*iio_axi_dac)->dac_ddr_base = init->dac_ddr_base;
 	(*iio_axi_dac)->dcache_flush_range = init->dcache_flush_range;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by iio_axi_dac_init().
  * @param iio_axi_dac - Pointer to iio_axi_adc.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_dac_remove(struct iio_axi_dac *iio_axi_dac)
 {
 	free(iio_axi_dac);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -618,7 +618,7 @@ enum ch_type {
  * @param device - Node to populate with channels.
  * @param ch_no - Number of channels to be added to "device" element.
  * @param ch_t - Channel type.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 static ssize_t iio_axi_dac_channel_xml(struct xml_node *device, uint8_t ch_no,
 				       enum ch_type ch_t)
@@ -718,14 +718,14 @@ static ssize_t iio_axi_dac_channel_xml(struct xml_node *device, uint8_t ch_no,
 			return ret;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Get an axi_dac xml.
  * @param xml - Xml containing description of a device.
  * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_dac_get_xml(char** xml, struct iio_device *iio_dev)
 {
@@ -773,14 +773,14 @@ error:
 /**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_dac_delete_device(struct iio_device *iio_device)
 {
 	uint16_t i = 0;
 
 	if(!iio_device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if(iio_device->channels) {
 		while (iio_device->channels[i]) {
@@ -795,7 +795,7 @@ ssize_t iio_axi_dac_delete_device(struct iio_device *iio_device)
 	if(iio_device)
 		free(iio_device);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**

@@ -541,7 +541,7 @@ int32_t ad7124_setup(struct ad7124_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7124_remove(struct ad7124_dev *dev)
 {

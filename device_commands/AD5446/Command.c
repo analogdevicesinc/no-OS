@@ -317,7 +317,7 @@ char DoDeviceInit(void)
         CONSOLE_Print("Device OK\r\n");
         CONSOLE_Print("Slave device ID: %s\r\n", AD5446_SLAVE_ID);
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

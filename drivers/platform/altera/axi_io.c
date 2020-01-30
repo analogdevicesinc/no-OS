@@ -54,13 +54,13 @@
  * @param base - Base address
  * @param offset - Address offset
  * @param data - variable where returned data is stored
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
 	*data = IORD_32DIRECT(base, offset);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -68,12 +68,12 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  * @param base - Base address
  * @param offset - Address offset
  * @param data - data to be written
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
 	IOWR_32DIRECT(base, offset, data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 

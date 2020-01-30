@@ -119,7 +119,7 @@ int32_t ad5421_init(struct ad5421_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad5421_remove(struct ad5421_dev *dev)
 {

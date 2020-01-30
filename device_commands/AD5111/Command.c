@@ -182,7 +182,7 @@ char DoDeviceInit(void)
     {
         CONSOLE_Print("AD5111 OK\r\n");
         DisplayCmdList();
-        return SUCCESS;
+        return NO_OS_SUCCESS;
     }
     else
     {

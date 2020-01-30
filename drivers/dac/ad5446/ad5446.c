@@ -181,7 +181,7 @@ int8_t ad5446_init(struct ad5446_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad5446_remove(struct ad5446_dev *dev)
 {

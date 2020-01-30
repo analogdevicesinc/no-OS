@@ -100,7 +100,7 @@ static void free_desc_mem(struct spi_desc *desc)
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
@@ -111,16 +111,16 @@ int32_t spi_init(struct spi_desc **desc,
 
 
 	if (!desc || !param || !(param->extra))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* Verify if the SPI is already activated */
 	adicup_init_param = param->extra;
 	if (active_spi & (1 << adicup_init_param->spi_channel))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	*desc = alloc_data_mem();
 	if (!(*desc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 	(*desc)->chip_select = param->chip_select;
 	(*desc)->max_speed_hz = param->max_speed_hz;
 	(*desc)->mode = param->mode;
@@ -161,30 +161,30 @@ int32_t spi_init(struct spi_desc **desc,
 	/* SPI configured. Set it as activated */
 	active_spi |= (1 << adicup_init_param->spi_channel);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 failure:
 	free_desc_mem(*desc);
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Free the resources allocated by spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
 	struct aducm_spi_desc *adicup_desc;
 
 	if (desc == NULL)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	adicup_desc = desc->extra;
 	if (ADI_SPI_SUCCESS != adi_spi_Close(adicup_desc->spi_handle))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	active_spi &= ~(1<<(adicup_desc->spi_channel));
 	free_desc_mem(desc);
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -192,7 +192,7 @@ int32_t spi_remove(struct spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
@@ -203,7 +203,7 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	ADI_SPI_TRANSCEIVER	spi_trans;
 
 	if (bytes_number == 0)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	spi_trans.TransmitterBytes = bytes_number;
 	spi_trans.pTransmitter = data;
@@ -219,12 +219,12 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 	if (adicup_desc->master_mode == MASTER) {
 		spi_ret = adi_spi_MasterReadWrite(adicup_desc->spi_handle, &spi_trans);
 		if (spi_ret != ADI_SPI_SUCCESS)
-			return FAILURE;
+			return NO_OS_FAILURE;
 	} else {
 		spi_ret = adi_spi_SlaveReadWrite(adicup_desc->spi_handle, &spi_trans);
 		if (spi_ret != ADI_SPI_SUCCESS)
-			return FAILURE;
+			return NO_OS_FAILURE;
 	}
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 

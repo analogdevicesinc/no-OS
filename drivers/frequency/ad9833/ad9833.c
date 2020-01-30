@@ -146,7 +146,7 @@ int8_t ad9833_init(struct ad9833_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9833_remove(struct ad9833_dev *dev)
 {
@@ -180,7 +180,7 @@ void ad9833_tx_spi(struct ad9833_dev *dev,
 
 	tx_buffer[0] = (uint8_t) ((value & 0x00ff00) >> 8); // data to be sent
 	tx_buffer[1] = (uint8_t) (value & 0x0000ff);        // in 8 bit packets
-	if (spi_write_and_read(dev->spi_desc, tx_buffer, 2) != SUCCESS) {
+	if (spi_write_and_read(dev->spi_desc, tx_buffer, 2) != NO_OS_SUCCESS) {
 		/* Initialize board. */
 		spi_data |= AD9833_CTRLRESET;
 		ad9833_tx_spi(dev,

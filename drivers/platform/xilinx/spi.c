@@ -63,7 +63,7 @@
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
@@ -83,7 +83,7 @@ int32_t spi_init(struct spi_desc **desc,
 	if(!sdesc || !xdesc) {
 		free(sdesc);
 		free(xdesc);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	sdesc->max_speed_hz = param->max_speed_hz;
@@ -110,7 +110,7 @@ int32_t spi_init(struct spi_desc **desc,
 					 xdesc->config,
 					 ((XSpi_Config*)xdesc->config)
 					 ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto pl_error;
 
 		ret = XSpi_Initialize(xdesc->instance, xinit->device_id);
@@ -151,7 +151,7 @@ pl_error:
 					   xdesc->config,
 					   ((XSpiPs_Config*)xdesc->config)
 					   ->BaseAddress);
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto ps_error;
 
 		if (sdesc->max_speed_hz != 0u) {
@@ -185,7 +185,7 @@ pl_error:
 
 		ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
 
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto ps_error;
 
 		break;
@@ -207,19 +207,19 @@ ps_error:
 
 	*desc = sdesc;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 
 error:
 	free(sdesc);
 	free(xdesc);
 
-	return FAILURE;
+	return NO_OS_FAILURE;
 }
 
 /**
  * @brief Free the resources allocated by spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
@@ -234,7 +234,7 @@ int32_t spi_remove(struct spi_desc *desc)
 	case SPI_PL:
 #ifdef XSPI_H
 		ret = XSpi_Stop((XSpi *)(xdesc->instance));
-		if(ret != SUCCESS)
+		if(ret != NO_OS_SUCCESS)
 			goto error;
 #endif
 		break;
@@ -252,7 +252,7 @@ int32_t spi_remove(struct spi_desc *desc)
 error:
 #endif
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
@@ -260,7 +260,7 @@ error:
 	free(desc->extra);
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -268,7 +268,7 @@ error:
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 
 int32_t spi_write_and_read(struct spi_desc *desc,
@@ -289,19 +289,19 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
 				      ((desc->mode & SPI_CPHA) ?
 				       XSP_CLK_PHASE_1_OPTION : 0));
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 
 		ret = XSpi_SetSlaveSelect(xdesc->instance,
 					  0x01 << desc->chip_select);
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 
 		ret = XSpi_Transfer(xdesc->instance,
 				    data,
 				    data,
 				    bytes_number);
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 #endif
 		break;
@@ -316,21 +316,21 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 					 XSPIPS_CLK_ACTIVE_LOW_OPTION : 0) |
 					((desc->mode & SPI_CPHA) ?
 					 XSPIPS_CLK_PHASE_1_OPTION : 0));
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 
 		ret = XSpiPs_SetSlaveSelect(xdesc->instance,
 					    desc->chip_select);
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 		ret = XSpiPs_PolledTransfer(xdesc->instance,
 					    data,
 					    data,
 					    bytes_number);
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 		ret = XSpiPs_SetSlaveSelect(xdesc->instance, SPI_DEASSERT_CURRENT_SS);
-		if (ret != SUCCESS)
+		if (ret != NO_OS_SUCCESS)
 			goto error;
 #endif
 		break;
@@ -341,9 +341,9 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 		/* Intended fallthrough */
 error:
 	default:
-		return FAILURE;
+		return NO_OS_FAILURE;
 		break;
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

@@ -58,7 +58,7 @@ XSpiPs_Config  *m_spi_config;
  * @brief Initialize the I2C communication peripheral.
  * @param desc - The I2C descriptor.
  * @param init_param - The structure that contains the I2C parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_init(i2c_desc **desc,
 		 const i2c_init_param *param)
@@ -71,13 +71,13 @@ int32_t i2c_init(i2c_desc **desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by i2c_init().
  * @param desc - The I2C descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_remove(i2c_desc *desc)
 {
@@ -85,7 +85,7 @@ int32_t i2c_remove(i2c_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -96,7 +96,7 @@ int32_t i2c_remove(i2c_desc *desc)
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_write(i2c_desc *desc,
 		  uint8_t *data,
@@ -119,7 +119,7 @@ int32_t i2c_write(i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -130,7 +130,7 @@ int32_t i2c_write(i2c_desc *desc,
  * @param stop_bit - Stop condition control.
  *                   Example: 0 - A stop condition will not be generated;
  *                            1 - A stop condition will be generated.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t i2c_read(i2c_desc *desc,
 		 uint8_t *data,
@@ -153,14 +153,14 @@ int32_t i2c_read(i2c_desc *desc,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Initialize the SPI communication peripheral.
  * @param desc - The SPI descriptor.
  * @param init_param - The structure that contains the SPI parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_init(spi_desc **desc,
 		 const spi_init_param *param)
@@ -169,7 +169,7 @@ int32_t spi_init(spi_desc **desc,
 
 	dev = (spi_desc *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dev->type = param->type;
 	dev->id = 0;
@@ -199,7 +199,7 @@ int32_t spi_init(spi_desc **desc,
 #endif
 	default:
 		free(dev);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	dev->chip_select = param->chip_select;
@@ -211,31 +211,31 @@ int32_t spi_init(spi_desc **desc,
 
 	if (m_spi_config == NULL) {
 		free(dev);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	if (XSpiPs_CfgInitialize(&m_spi, m_spi_config,
 				 m_spi_config->BaseAddress) != 0) {
 		free(dev);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 #endif
 
 	*desc = dev;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by spi_init().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_remove(spi_desc *desc)
 {
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -243,7 +243,7 @@ int32_t spi_remove(spi_desc *desc)
  * @param desc - The SPI descriptor.
  * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write/read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t spi_write_and_read(spi_desc *desc,
 			   uint8_t *data,
@@ -304,14 +304,14 @@ int32_t spi_write_and_read(spi_desc *desc,
 
 #endif
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
  * @param gpio_number - The number of the GPIO.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get(gpio_desc **desc,
 		 uint8_t gpio_number)
@@ -319,11 +319,11 @@ int32_t gpio_get(gpio_desc **desc,
 	gpio_desc *dev;
 
 	if (gpio_number < 32)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dev = (gpio_desc *)malloc(sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dev->number = gpio_number;
 	dev->id 	= 0;
@@ -343,25 +343,25 @@ int32_t gpio_get(gpio_desc **desc,
 
 	*desc = dev;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The SPI descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_remove(gpio_desc *desc)
 {
 	free(desc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Enable the input direction of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_input(gpio_desc *desc)
 {
@@ -378,7 +378,7 @@ int32_t gpio_direction_input(gpio_desc *desc)
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_direction_output(gpio_desc *desc,
 			      uint8_t value)
@@ -400,7 +400,7 @@ int32_t gpio_direction_output(gpio_desc *desc,
  * @param direction - The direction.
  *                    Example: GPIO_OUT
  *                             GPIO_IN
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_direction(gpio_desc *desc,
 			   uint8_t *direction)
@@ -422,7 +422,7 @@ int32_t gpio_get_direction(gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_set_value(gpio_desc *desc,
 		       uint8_t value)
@@ -492,7 +492,7 @@ int32_t gpio_set_value(gpio_desc *desc,
  * @param value - The value.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t gpio_get_value(gpio_desc *desc,
 		       uint8_t *value)

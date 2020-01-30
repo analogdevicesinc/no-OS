@@ -86,7 +86,7 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	status |= gpio_get(&dev_hal_data->gpio_adrv_sysref_req,
 			   &gpio_adrv_sysref_req_param);
 
-	if (status != SUCCESS)
+	if (status != NO_OS_SUCCESS)
 		return ADIHAL_ERR;
 	else
 		return ADIHAL_OK;
@@ -103,7 +103,7 @@ adiHalErr_t ADIHAL_closeHw(void *devHalInfo)
 
 	status |= spi_remove(dev_hal_data->spi_adrv_desc);
 
-	if (status != SUCCESS)
+	if (status != NO_OS_SUCCESS)
 		return ADIHAL_ERR;
 	else
 		return ADIHAL_OK;
@@ -154,7 +154,7 @@ adiHalErr_t ADIHAL_spiWriteByte(void *devHalInfo,
 	buf[2] = data;
 	status = spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
 
-	if (status != SUCCESS)
+	if (status != NO_OS_SUCCESS)
 		return ADIHAL_SPI_FAIL;
 	else
 		return ADIHAL_OK;
@@ -190,7 +190,7 @@ adiHalErr_t ADIHAL_spiReadByte(void *devHalInfo,
 	status = spi_write_and_read(devHalData->spi_adrv_desc, buf, 3);
 	*readdata = buf[2];
 
-	if (status != SUCCESS)
+	if (status != NO_OS_SUCCESS)
 		return ADIHAL_SPI_FAIL;
 	else
 		return ADIHAL_OK;

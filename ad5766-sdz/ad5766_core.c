@@ -176,7 +176,7 @@ int32_t ad5766_core_setup(ad5766_core **ad_core,
 
 	core = (ad5766_core *)malloc(sizeof(*core));
 	if (!core)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	core->core_baseaddr = init_param.core_baseaddr;
 	core->dma_baseaddr = init_param.dma_baseaddr;
@@ -187,7 +187,7 @@ int32_t ad5766_core_setup(ad5766_core **ad_core,
 	rate_reg = ref_clk_hz / core->rate_hz;
 	if (rate_reg > 0xFFFF){
 		free(core);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	ad5766_core_write(core, 0x00001100, 0x00020);	// DAC0
@@ -291,5 +291,5 @@ int32_t ad5766_core_setup(ad5766_core **ad_core,
 
 	*ad_core = core;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

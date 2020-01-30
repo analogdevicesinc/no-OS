@@ -61,7 +61,7 @@
  * @brief Init and create iio_axi_adc.
  * @param iio_axi_adc - Pointer to iio_axi_adc.
  * @param init - Init parameters.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 			 struct iio_axi_adc_init_par *init)
@@ -70,7 +70,7 @@ ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 				      sizeof(struct iio_axi_adc));
 
 	if (!(iio_adc))
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_adc->adc = init->adc;
 	iio_adc->dmac = init->dmac;
@@ -79,19 +79,19 @@ ssize_t iio_axi_adc_init(struct iio_axi_adc **iio_axi_adc,
 
 	*iio_axi_adc = iio_adc;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by iio_axi_adc_init().
  * @param iio_axi_adc - Pointer to iio_axi_adc.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_remove(struct iio_axi_adc *iio_axi_adc)
 {
 	free(iio_axi_adc);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -402,7 +402,7 @@ static struct iio_attribute *iio_voltage_attributes[] = {
  * @brief Get xml corresponding to an "axi_adc" device.
  * @param xml - Xml containing description of a device.
  * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
 {
@@ -416,9 +416,9 @@ ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
 	uint16_t i;
 
 	if (!xml)
-		return FAILURE;
+		return NO_OS_FAILURE;
 	if (!iio_dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = xml_create_node(&device, "device");
 	if (ret < 0)
@@ -518,14 +518,14 @@ error:
 /**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @return NO_OS_SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
 {
 	uint16_t i = 0;
 
 	if (!iio_device)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (iio_device->channels) {
 		while (iio_device->channels[i]) {
@@ -540,7 +540,7 @@ ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
 	if (iio_device)
 		free(iio_device);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -612,7 +612,7 @@ ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
 	ssize_t ret, bytes;
 
 	if (!iio_inst)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_adc = (struct iio_axi_adc *)iio_inst;
 	bytes = (bytes_count * iio_adc->adc->num_channels) / hweight8(ch_mask);
@@ -651,10 +651,10 @@ ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 	size_t samples;
 
 	if (!iio_inst)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	if (!pbuf)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	iio_adc = (struct iio_axi_adc *)iio_inst;
 	pbuf16 = (uint16_t*)pbuf;

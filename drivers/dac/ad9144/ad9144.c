@@ -552,7 +552,7 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad9144_remove(struct ad9144_dev *dev)
 {

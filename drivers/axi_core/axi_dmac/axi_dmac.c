@@ -56,7 +56,7 @@ int32_t axi_dmac_read(struct axi_dmac *dmac,
 {
 	axi_io_read(dmac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -68,7 +68,7 @@ int32_t axi_dmac_write(struct axi_dmac *dmac,
 {
 	axi_io_write(dmac->base, reg_addr, reg_data);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -99,7 +99,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 		axi_dmac_write(dmac, AXI_DMAC_REG_SRC_STRIDE, 0x0);
 		break;
 	default:
-		return FAILURE; // Other directions are not supported yet
+		return NO_OS_FAILURE; // Other directions are not supported yet
 	}
 	axi_dmac_write(dmac, AXI_DMAC_REG_X_LENGTH, size - 1);
 	axi_dmac_write(dmac, AXI_DMAC_REG_Y_LENGTH, 0x0);
@@ -109,7 +109,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	axi_dmac_write(dmac, AXI_DMAC_REG_START_TRANSFER, 0x1);
 
 	if (dmac->flags & DMA_CYCLIC)
-		return SUCCESS;
+		return NO_OS_SUCCESS;
 
 	/* Wait until the new transfer is queued. */
 	do {
@@ -127,7 +127,7 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 		axi_dmac_read(dmac, AXI_DMAC_REG_TRANSFER_DONE, &reg_val);
 	} while((reg_val & (1u << transfer_id)) != (1u << transfer_id));
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -140,7 +140,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	dmac = (struct axi_dmac *)malloc(sizeof(*dmac));
 	if (!dmac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dmac->name = init->name;
 	dmac->base = init->base;
@@ -149,7 +149,7 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 
 	*dmac_core = dmac;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /***************************************************************************//**
@@ -158,9 +158,9 @@ int32_t axi_dmac_init(struct axi_dmac **dmac_core,
 int32_t axi_dmac_remove(struct axi_dmac *dmac)
 {
 	if(!dmac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	free(dmac);
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

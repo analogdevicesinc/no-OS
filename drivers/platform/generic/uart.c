@@ -53,7 +53,7 @@
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 {
@@ -69,7 +69,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -77,7 +77,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number)
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
@@ -94,14 +94,14 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
@@ -113,13 +113,13 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
  * @brief Free the resources allocated by uart_init().
  * @param desc - The UART descriptor.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return NO_OS_SUCCESS in case of success, NO_OS_FAILURE otherwise.
  */
 int32_t uart_remove(struct uart_desc *desc)
 {
@@ -127,7 +127,7 @@ int32_t uart_remove(struct uart_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -141,5 +141,5 @@ uint32_t uart_get_errors(struct uart_desc *desc)
 		// Unused variable - fix compiler warning
 	}
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }

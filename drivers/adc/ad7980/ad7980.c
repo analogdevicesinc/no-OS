@@ -87,7 +87,7 @@ int8_t ad7980_init(struct ad7980_dev **device,
  *
  * @param dev - The device structure.
  *
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
 *******************************************************************************/
 int32_t ad7980_remove(struct ad7980_dev *dev)
 {

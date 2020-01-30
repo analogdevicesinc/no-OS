@@ -65,7 +65,7 @@ int32_t ad5770r_spi_reg_read(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev | !reg_data)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	buf[0] = AD5770R_REG_READ(reg_addr);
 	buf[1] = 0x00;
@@ -98,7 +98,7 @@ int32_t ad5770r_spi_reg_read_multiple(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !reg_data)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	buf = (uint8_t*)calloc(count + 1, sizeof(uint8_t));
 
@@ -130,7 +130,7 @@ int32_t ad5770r_spi_reg_write(struct ad5770r_dev *dev,
 	uint8_t buf[2];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	buf[0] = AD5770R_REG_WRITE(reg_addr);
 	buf[1] = reg_data;
@@ -156,7 +156,7 @@ int32_t ad5770r_spi_reg_write_multiple(struct ad5770r_dev *dev,
 	uint8_t *data;
 
 	if (!dev | !reg_data)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data = (uint8_t*)calloc(count + 1, sizeof(uint8_t));
 
@@ -186,7 +186,7 @@ int32_t ad5770r_spi_write_mask(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_read(dev, reg_addr, &reg_data);
 	reg_data &= ~mask;
@@ -201,7 +201,7 @@ int32_t ad5770r_spi_write_mask(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param spi_settings - The structure that contains the device spi
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_device_spi(struct ad5770r_dev *dev,
 			       const struct ad5770r_device_spi_settings *spi_settings)
@@ -209,7 +209,7 @@ int32_t ad5770r_set_device_spi(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !spi_settings)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_write_mask(dev,
 				     AD5770R_INTERFACE_CONFIG_A,
@@ -235,7 +235,7 @@ int32_t ad5770r_set_device_spi(struct ad5770r_dev *dev,
 	dev->dev_spi_settings.stream_mode_length =
 		spi_settings->stream_mode_length;
 
-	return SUCCESS;
+	return NO_OS_SUCCESS;
 }
 
 /**
@@ -243,7 +243,7 @@ int32_t ad5770r_set_device_spi(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param channel_config - The structure that contains the channel
  *			configuration.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_channel_config(struct ad5770r_dev *dev,
 			       const struct ad5770r_channel_switches *channel_config)
@@ -251,7 +251,7 @@ int32_t ad5770r_channel_config(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !channel_config)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_CHANNEL_CONFIG,
@@ -277,7 +277,7 @@ int32_t ad5770r_channel_config(struct ad5770r_dev *dev,
  * @param output_mode - The structure that contains the channel output
  *			parameters.
  * @param channel - The channel number.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_output_mode(struct ad5770r_dev *dev,
 				const struct ad5770r_output_range *output_mode,
@@ -285,7 +285,7 @@ int32_t ad5770r_set_output_mode(struct ad5770r_dev *dev,
 {
 
 	if (!dev || !output_mode)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return ad5770r_spi_reg_write(dev,
 				     AD5770R_OUTPUT_RANGE_CH0 + channel,
@@ -298,7 +298,7 @@ int32_t ad5770r_set_output_mode(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param external_reference - Enable external reference.
  * @param reference_selector - The reference to be selected.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_reference(struct ad5770r_dev *dev,
 			      bool external_reference,
@@ -307,7 +307,7 @@ int32_t ad5770r_set_reference(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_REFERENCE,
@@ -328,7 +328,7 @@ int32_t ad5770r_set_reference(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param alarm_config - Pointer to the array that contains the alarms
  *			that will be enabled.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
 			  const struct ad5770r_alarm_cfg *const alarm_config)
@@ -336,7 +336,7 @@ int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !alarm_config)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_ALARM_CONFIG,
@@ -364,14 +364,14 @@ int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
  * @param output_filter - The structure that contains the channel output
  *			filter resistor values.
  * @param channel - The channel number.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_output_filter(struct ad5770r_dev *dev,
 				  enum ad5770r_output_filter_resistor output_filter,
 				  enum ad5770r_channels channel)
 {
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	return ad5770r_spi_reg_write(dev,
 				     AD5770R_OUTPUT_FILTER_CH0 + channel,
@@ -382,7 +382,7 @@ int32_t ad5770r_set_output_filter(struct ad5770r_dev *dev,
  * Set the hardware ldac configuration.
  * @param dev - The device structure.
  * @param mask_hw_ldac - The array contains HW LDAC channel masks.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_hw_ladc(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *mask_hw_ldac)
@@ -390,7 +390,7 @@ int32_t ad5770r_set_hw_ladc(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !mask_hw_ldac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_HW_LDAC,
@@ -414,7 +414,7 @@ int32_t ad5770r_set_hw_ladc(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param dac_value - value that will be set in the register.
  * @param channel - the selected channel.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 			      uint16_t dac_value, enum ad5770r_channels channel)
@@ -422,7 +422,7 @@ int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 	uint8_t data[2];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[1] = (uint8_t)AD5770R_CH_DAC_DATA_LSB(dac_value);
 	data[0] = (uint8_t)((dac_value & 0x3FC0) >> 6);
@@ -437,7 +437,7 @@ int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param dac_input - value that will be set in the register.
  * @param channel - the selected channel.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
 			      uint16_t dac_input, enum ad5770r_channels channel)
@@ -445,7 +445,7 @@ int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
 	uint8_t data[2];
 
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[1] = (uint8_t)AD5770R_CH_DAC_DATA_LSB(dac_input);
 	data[0] = (uint8_t)((dac_input & 0x3FC0) >> 6);
@@ -460,7 +460,7 @@ int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
  * Set page mask for dac value and input.
  * @param dev - The device structure.
  * @param page_mask - The structure contains the page mask values.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_page_mask(struct ad5770r_dev *dev,
 			      const struct ad5770r_dac_page_mask *page_mask)
@@ -469,7 +469,7 @@ int32_t ad5770r_set_page_mask(struct ad5770r_dev *dev,
 	uint8_t data[2];
 
 	if (!dev || !page_mask)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	data[1] = (uint8_t)AD5770R_CH_DAC_DATA_LSB(page_mask->dac_data_page_mask);
 	data[0] = (uint8_t)((page_mask->dac_data_page_mask & 0x3FC0) >> 6);
@@ -493,7 +493,7 @@ int32_t ad5770r_set_page_mask(struct ad5770r_dev *dev,
  * Set channel select.
  * @param dev - The device structure.
  * @param mask_channel_sel - The array contains channel selection options.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_mask_channel(struct ad5770r_dev *dev,
 				 const struct ad5770r_channel_switches *mask_channel_sel)
@@ -501,7 +501,7 @@ int32_t ad5770r_set_mask_channel(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !mask_channel_sel)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_CH_SELECT,
@@ -524,7 +524,7 @@ int32_t ad5770r_set_mask_channel(struct ad5770r_dev *dev,
  * Set software LDAC.
  * @param dev - The device structure.
  * @param sw_ldac - The array contains channel selection options.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *sw_ldac)
@@ -532,7 +532,7 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !sw_ldac)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_SW_LDAC,
@@ -555,7 +555,7 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
  * Set the enabled channels.
  * @param dev - The device structure.
  * @param channel_enable - The array contains channels enabled.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
 			       const struct ad5770r_channel_switches *channel_enable)
@@ -563,7 +563,7 @@ int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !channel_enable)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_CH_ENABLE,
@@ -586,7 +586,7 @@ int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
  * Get status value.
  * @param dev - The device structure.
  * @param status - The status of the device.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_get_status(struct ad5770r_dev *dev,
 			   uint8_t *status)
@@ -601,7 +601,7 @@ int32_t ad5770r_get_status(struct ad5770r_dev *dev,
  * @param dev - The device structure.
  * @param mon_setup - The structure that contains the monitor setup
  *		values.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
 				  const struct ad5770r_monitor_setup *mon_setup)
@@ -609,7 +609,7 @@ int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
 	int32_t ret;
 
 	if (!dev || !mon_setup)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	ret = ad5770r_spi_reg_write(dev,
 				    AD5770R_MONITOR_SETUP,
@@ -631,7 +631,7 @@ int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  *		       parameters.
- * @return SUCCESS in case of success, negative error code otherwise.
+ * @return NO_OS_SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_init(struct ad5770r_dev **device,
 		     const struct ad5770r_init_param *init_param)
@@ -642,11 +642,11 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	enum ad5770r_channels i;
 
 	if (!device || !init_param)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	dev = (struct ad5770r_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILURE;
+		return NO_OS_FAILURE;
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
@@ -658,7 +658,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 	if (product_id_l != 0x04 || product_id_h != 0x40) {
 		printf("failed to read id (0x%X : 0x%X)\n", product_id_l,
 		       product_id_h);
-		return FAILURE;
+		return NO_OS_FAILURE;
 	}
 
 	/* Device settings */
