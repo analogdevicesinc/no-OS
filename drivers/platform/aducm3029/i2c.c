@@ -42,6 +42,7 @@
 /******************************************************************************/
 
 #include "i2c.h"
+#include "error.h"
 #include <stdlib.h>
 #include <drivers/i2c/adi_i2c.h>
 #include <drivers/gpio/adi_gpio.h>
