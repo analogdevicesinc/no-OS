@@ -91,6 +91,37 @@ int32_t axi_adc_set_pnsel(struct axi_adc *adc,
 }
 
 /***************************************************************************//**
+ * @brief axi_adc_pn_mon
+*******************************************************************************/
+int32_t axi_adc_pn_mon(struct axi_adc *adc,
+		       enum axi_adc_pn_sel sel, uint32_t delay_ms)
+{
+	uint8_t	ch;
+	uint32_t reg_data;
+
+	for (ch = 0; ch < adc->num_channels; ch++) {
+		axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL(ch), &reg_data);
+		reg_data |= AXI_ADC_ENABLE;
+		axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), reg_data);
+		axi_adc_set_pnsel(adc, ch, sel);
+	}
+	mdelay(1);
+
+	for (ch = 0; ch < adc->num_channels; ch++) {
+		axi_adc_write(adc, AXI_ADC_REG_CHAN_STATUS(ch), 0xff);
+	}
+	mdelay(delay_ms);
+
+	for (ch = 0; ch < adc->num_channels; ch++) {
+		axi_adc_read(adc, AXI_ADC_REG_CHAN_STATUS(ch), &reg_data);
+		if (reg_data != 0)
+			return FAILURE;
+	}
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
  * @brief axi_adc_get_sampling_freq
 *******************************************************************************/
 int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
