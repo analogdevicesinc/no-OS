@@ -64,7 +64,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 {
 	int32_t ret;
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-	struct irq_desc	*irq_desc = xil_uart_desc->irq_desc;
+	struct irq_ctrl_desc *irq_desc = xil_uart_desc->irq_desc;
 
 	if (xil_uart_desc->bytes_received > 0) {
 		ret = irq_source_disable(irq_desc, xil_uart_desc->irq_id);

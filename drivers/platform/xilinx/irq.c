@@ -59,19 +59,19 @@
 
 /**
  * @brief Initialize the IRQ interrupts.
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ controller descriptor.
  * @param param - The structure that contains the IRQ parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_init(struct irq_desc **desc,
+int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 		      const struct irq_init_param *param)
 {
 	int32_t status;
-	struct irq_desc *descriptor;
+	struct irq_ctrl_desc *descriptor;
 	struct xil_irq_desc *xil_dev;
 	void *config;
 
-	descriptor = (struct irq_desc *)calloc(1, sizeof *descriptor);
+	descriptor = (struct irq_ctrl_desc *)calloc(1, sizeof *descriptor);
 	if(!descriptor)
 		return FAILURE;
 	xil_dev = (struct xil_irq_desc *)calloc(1, sizeof *xil_dev);
@@ -82,7 +82,7 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 
 	Xil_ExceptionInit();
 
-	descriptor->irq_id = param->irq_id;
+	descriptor->irq_ctrl_id = param->irq_ctrl_id;
 	descriptor->extra = xil_dev;
 	xil_dev->type = ((struct xil_irq_init_param *)param->extra)->type;
 
@@ -93,7 +93,7 @@ int32_t irq_ctrl_init(struct irq_desc **desc,
 		if(!xil_dev->instance)
 			goto error;
 
-		config = XScuGic_LookupConfig(descriptor->irq_id);
+		config = XScuGic_LookupConfig(descriptor->irq_ctrl_id);
 		if(!config)
 			goto ps_error;
 
@@ -151,7 +151,7 @@ error:
  * @brief Enable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_enable(struct irq_desc *desc)
+int32_t irq_global_enable(struct irq_ctrl_desc *desc)
 {
 	/* Enable interrupts */
 	Xil_ExceptionEnable();
@@ -163,7 +163,7 @@ int32_t irq_global_enable(struct irq_desc *desc)
  * @brief Disable global interrupts.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_global_disable(struct irq_desc *desc)
+int32_t irq_global_disable(struct irq_ctrl_desc *desc)
 {
 	/* Disable interrupts */
 	Xil_ExceptionDisable();
@@ -173,11 +173,11 @@ int32_t irq_global_disable(struct irq_desc *desc)
 
 /**
  * @brief Enable specific interrupt.
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
+int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -202,11 +202,11 @@ int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id)
 
 /**
  * @brief Disable specific interrupt.
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
+int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -231,13 +231,13 @@ int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id)
 
 /**
  * @brief Registers a generic IRQ handling function.
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @param irq_handler - The IRQ handler.
  * @param dev_instance - device instance.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
+int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
@@ -264,11 +264,11 @@ int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
 
 /**
  * @brief Unregisters a generic IRQ handling function.
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
+int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -293,10 +293,10 @@ int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id)
 
 /**
  * @brief Free the resources allocated by irq_ctrl_init().
- * @param desc - The IRQ descriptor.
+ * @param desc - The IRQ control descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_ctrl_remove(struct irq_desc *desc)
+int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 	free(xil_dev->instance);
