@@ -55,6 +55,8 @@
  * @brief Structure holding timer descriptor
  */
 struct timer_desc {
+	/** timer ID */
+	uint16_t id;
 	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
 	/** counter start value */
@@ -68,6 +70,8 @@ struct timer_desc {
  * @brief  Structure holding the parameters for timer initialization
  */
 struct timer_init_param {
+	/** timer ID */
+	uint16_t id;
 	/** timer count frequency (Hz) */
 	uint32_t freq_hz;
 	/** counter start value */
