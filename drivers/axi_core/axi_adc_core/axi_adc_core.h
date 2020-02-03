@@ -148,6 +148,9 @@ int32_t axi_adc_write(struct axi_adc *adc,
 int32_t axi_adc_set_pnsel(struct axi_adc *adc,
 			  uint32_t chan,
 			  enum axi_adc_pn_sel sel);
+int32_t axi_adc_pn_mon(struct axi_adc *adc,
+		       enum axi_adc_pn_sel sel,
+		       uint32_t delay_ms);
 int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
 				  uint32_t chan,
 				  uint64_t *sampling_freq);
