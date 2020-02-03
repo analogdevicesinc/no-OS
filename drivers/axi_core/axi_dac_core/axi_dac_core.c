@@ -894,7 +894,7 @@ int32_t axi_dac_data_setup(struct axi_dac *dac)
 				}
 			}
 			axi_dac_write(dac, DAC_REG_DATA_PATTERN(i), chan->pat_data);
-			axi_dac_datasel(dac, i, chan->sel);
+			axi_dac_set_datasel(dac, i, chan->sel);
 		}
 	} else {
 		for (i = 0; i < dac->num_channels; i++) {
