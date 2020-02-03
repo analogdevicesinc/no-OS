@@ -1027,14 +1027,14 @@ int main(void)
 	 * IRQ initial configuration.
 	 */
 	struct irq_init_param irq_init_param = {
-		.irq_id = INTC_DEVICE_ID,
+		.irq_ctrl_id = INTC_DEVICE_ID,
 		.extra = &xil_irq_init_par,
 	};
 
 	/**
 	 * IRQ instance.
 	 */
-	struct irq_desc *irq_desc;
+	struct irq_ctrl_desc *irq_desc;
 
 	/**
 	 * Xilinx platform dependent initialization for UART.

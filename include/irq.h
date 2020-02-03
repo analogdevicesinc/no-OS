@@ -55,8 +55,8 @@
  * @brief Structure holding the initial parameters for Interrupt Request.
  */
 struct irq_init_param {
-	/** Interrupt Request ID. */
-	uint32_t	irq_id;
+	/** Interrupt request controller ID. */
+	uint32_t	irq_ctrl_id;
 	/** IRQ extra parameters (device specific) */
 	void		*extra;
 };
@@ -65,9 +65,9 @@ struct irq_init_param {
  * @struct irq_desc
  * @brief Structure for Interrupt Request descriptor.
  */
-struct irq_desc {
-	/** Interrupt Request ID. */
-	uint32_t	irq_id;
+struct irq_ctrl_desc {
+	/** Interrupt request controller ID. */
+	uint32_t	irq_ctrl_id;
 	/** IRQ extra parameters (device specific) */
 	void		*extra;
 };
@@ -77,29 +77,36 @@ struct irq_desc {
 /******************************************************************************/
 
 /* Initialize a interrupt controller peripheral. */
-int32_t irq_ctrl_init(struct irq_desc **desc,
+int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 		      const struct irq_init_param *param);
 
 /* Free the resources allocated by irq_ctrl_init(). */
-int32_t irq_ctrl_remove(struct irq_desc *desc);
+int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc);
 
-/* Registers a generic IRQ handling function */
-int32_t irq_register(struct irq_desc *desc, uint32_t irq_id,
+/**
+ * @brief Registers a IRQ handling function to irq controller.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @param irq_handler - The IRQ handler.
+ * @param dev_instance - device instance.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance);
 
 /* Unregisters a generic IRQ handling function */
-int32_t irq_unregister(struct irq_desc *desc, uint32_t irq_id);
+int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Global interrupt enable */
-int32_t irq_global_enable(struct irq_desc *desc);
+int32_t irq_global_enable(struct irq_ctrl_desc *desc);
 
 /* Global interrupt disable */
-int32_t irq_global_disable(struct irq_desc *desc);
+int32_t irq_global_disable(struct irq_ctrl_desc *desc);
 
 /* Enable specific interrupt */
-int32_t irq_source_enable(struct irq_desc *desc, uint32_t irq_id);
+int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Disable specific interrupt */
-int32_t irq_source_disable(struct irq_desc *desc, uint32_t irq_id);
+int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 #endif // IRQ_H_
