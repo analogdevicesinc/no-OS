@@ -69,6 +69,8 @@ struct iio_axi_dac_app_init_param {
 	struct axi_dac *tx_dac;
 	/** Transmit DMA device */
 	struct axi_dmac *tx_dmac;
+	/** Address used by DMA, for sending data to device */
+	uint32_t dac_ddr_base;
 	/** Function pointer to flush the data cache for the given address range */
 	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
 };

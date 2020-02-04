@@ -46,7 +46,6 @@
 #include "error.h"
 #include "iio.h"
 #include "iio_axi_adc_app.h"
-#include "parameters.h"
 #include "xml.h"
 
 /******************************************************************************/
@@ -679,7 +678,7 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 
 	iio_axi_adc_inst->adc = init->rx_adc;
 	iio_axi_adc_inst->dmac = init->rx_dmac;
-	iio_axi_adc_inst->adc_ddr_base = ADC_DDR_BASEADDR;
+	iio_axi_adc_inst->adc_ddr_base = init->adc_ddr_base;
 	iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
 
 	iio_axi_adc_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name,
