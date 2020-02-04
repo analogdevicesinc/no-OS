@@ -398,6 +398,8 @@ int main(void)
 	iio_axi_adc_app_init_par = (struct iio_axi_adc_app_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
 	};
 
 	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
