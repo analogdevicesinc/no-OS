@@ -69,6 +69,8 @@ struct iio_axi_adc_app_init_param {
 	struct axi_adc *rx_adc;
 	/** Receive DMA device */
 	struct axi_dmac *rx_dmac;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /******************************************************************************/
