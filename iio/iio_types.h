@@ -50,29 +50,57 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct iio_ch_info
+ * @brief Structure holding channel attributess.
+ */
 struct iio_ch_info {
+	/** Channel number */
 	int16_t ch_num;
+	/** Channel type: input/output */
 	bool ch_out;
 };
 
+/**
+ * @struct iio_attribute
+ * @brief Structure holding pointers to show and store functions.
+ */
 struct iio_attribute {
+	/** Attribute name */
 	const char *name;
+	/** Show function pointer */
 	ssize_t (*show)(void *device, char *buf, size_t len,
 			const struct iio_ch_info *channel);
+	/** Store function pointer */
 	ssize_t (*store)(void *device, char *buf, size_t len,
 			 const struct iio_ch_info *channel);
 };
 
+/**
+ * @struct iio_channel
+ * @brief Structure holding attributes of a channel.
+ */
 struct iio_channel {
+	/** channel name */
 	char *name;
+	/** list of attributes */
 	struct iio_attribute **attributes;
+	/** if true, the channel is an output channel */
 	bool ch_out;
 };
 
+/**
+ * @struct iio_device
+ * @brief Structure holding channels and attributes of a device.
+ */
 struct iio_device {
+	/** Device name */
 	const char *name;
+	/** Device number of channels */
 	uint16_t num_ch;
+	/** List of channels */
 	struct iio_channel **channels;
+	/** List of attributes */
 	struct iio_attribute **attributes;
 };
 
