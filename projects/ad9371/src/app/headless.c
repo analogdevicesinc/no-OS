@@ -1113,6 +1113,7 @@ int main(void)
 	iio_axi_dac_app_init_par = (struct iio_axi_dac_app_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 
 	status = iio_axi_dac_app_init(&iio_axi_dac_app_desc, &iio_axi_dac_app_init_par);

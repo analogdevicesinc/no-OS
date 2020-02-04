@@ -47,7 +47,6 @@
 #include "iio.h"
 #include "iio_axi_dac_app.h"
 #include "parameters.h"
-#include "xil_cache.h"
 #include "xml.h"
 
 /******************************************************************************/
@@ -879,8 +878,7 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 	iio_axi_dac_inst->dac = param->tx_dac;
 	iio_axi_dac_inst->dmac = param->tx_dmac;
 	iio_axi_dac_inst->dac_ddr_base = DAC_DDR_BASEADDR;
-	iio_axi_dac_inst->dcache_flush_range = (void (*)(uint32_t,
-						uint32_t))Xil_DCacheFlushRange;
+	iio_axi_dac_inst->dcache_flush_range = param->dcache_flush_range;
 
 	iio_axi_dac_device = iio_axi_dac_create_device(iio_axi_dac_inst->dac->name,
 			     iio_axi_dac_inst->dac->num_channels);
