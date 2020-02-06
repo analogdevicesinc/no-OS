@@ -83,7 +83,7 @@ generate_projects_page () {
 The following list contains code documentation for ADI no-OS projects:
 
 "
-	#dd header
+	#add header
 	append_to_dox "${HEADER}" projects_page.dox
 
 	#add introduction
