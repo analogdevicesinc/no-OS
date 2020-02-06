@@ -616,16 +616,16 @@ int main(void)
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
-	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
-	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
+	axi_dac_init(&ad9361_phy_b->tx_dac, ad9361_phy_b->tx_dac_init);
+	axi_dac_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
 	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	axi_dac_set_sine_lut(ad9361_phy->tx_dac, DAC_DDR_BASEADDR);
 #else
 #ifdef FMCOMMS5
-	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
-	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
+	axi_dac_init(&ad9361_phy_b->tx_dac, ad9361_phy_b->tx_dac_init);
+	axi_dac_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
 	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
 	axi_dac_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
