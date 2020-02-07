@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_axi_dac_app.c
- *   @brief  Implementation of iio_axi_dac_app.
- *   This application instantiates iio_axi_adc and iio_axi_dac devices, for
+ *   @file   iio_axi_dac.c
+ *   @brief  Implementation of iio_axi_dac.
+ *   Instantiates iio_axi_adc and iio_axi_dac devices, for
  *   reading/writing and parameterization.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -45,7 +45,7 @@
 
 #include "error.h"
 #include "iio.h"
-#include "iio_axi_dac_app.h"
+#include "iio_axi_dac.h"
 #include "xml.h"
 
 /******************************************************************************/
@@ -850,14 +850,14 @@ error:
 }
 
 /**
- * @brief Application for reading/writing and parameterization of
+ * @brief Registers a iio_axi_dac for reading/writing and parameterization of
  * axi_dac device.
- * @param desc - Application descriptor.
- * @param param - Application configuration structure.
+ * @param desc - iio descriptor.
+ * @param param - iio configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
-			     struct iio_axi_dac_app_init_param *param)
+int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
+			 struct iio_axi_dac_init_param *param)
 {
 	struct iio_interface *iio_interface;
 	struct iio_device *iio_axi_dac_device;
@@ -903,7 +903,7 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 	if(status < 0)
 		goto error_free_iio_axi_dac_delete_dev;
 
-	*desc = calloc(1, sizeof(struct iio_axi_dac_app_desc));
+	*desc = calloc(1, sizeof(struct iio_axi_dac_desc));
 	if (!(*desc))
 		goto error_iio_unregister;
 
@@ -923,10 +923,10 @@ error_free_iio_axi_dac_inst:
 
 /**
  * @brief Release resources.
- * @param desc - Application descriptor.
+ * @param desc - iio descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc)
+int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc)
 {
 	int32_t status;
 

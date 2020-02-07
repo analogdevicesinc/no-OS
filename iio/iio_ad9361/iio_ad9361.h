@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   iio_ad9361_app.h
+*   @file   iio_ad9361.h
 *   @brief  Header file of iio_ad9361
 *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -53,19 +53,19 @@
 /******************************************************************************/
 
 /**
- * @struct iio_ad9361_app_init_param
- * @brief Application configuration.
+ * @struct iio_ad9361_init_param
+ * @brief Configuration structure.
  */
-struct iio_ad9361_app_init_param {
+struct iio_ad9361_init_param {
 	/** ad9361 device instance pointer */
 	struct ad9361_rf_phy *ad9361_phy;
 };
 
 /**
- * @struct iio_ad9361_app_desc
- * @brief Structure holding application descriptor.
+ * @struct iio_ad9361_desc
+ * @brief Structure holding iio descriptor.
  */
-struct iio_ad9361_app_desc {
+struct iio_ad9361_desc {
 	/** device name */
 	struct iio_interface *iio_interface;
 };
@@ -74,10 +74,10 @@ struct iio_ad9361_app_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Init ad9361_app_init application. */
-int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
-			    struct iio_ad9361_app_init_param *init);
-/* Free the resources allocated by iio_ad9361_app_init(). */
-int32_t iio_ad9361_app_remove(struct iio_ad9361_app_desc *desc);
+/* Init ad9361 iio. */
+int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
+			struct iio_ad9361_init_param *init);
+/* Free the resources allocated by iio_ad9361_init(). */
+int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc);
 
 #endif /* IIO_AD9361_H_ */

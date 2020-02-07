@@ -45,8 +45,8 @@ SRCS += $(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/iio/iio.c						\
 	$(NO-OS)/iio/iio_app/iio_app.c					\
-	$(NO-OS)/iio/iio_app/iio_axi_adc_app.c				\
-	$(NO-OS)/iio/iio_app/iio_axi_dac_app.c                          \
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c                          \
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
@@ -136,8 +136,8 @@ INCS +=	$(INCLUDE)/xml.h						\
 	$(NO-OS)/iio/iio.h						\
 	$(NO-OS)/iio/iio_types.h					\
 	$(NO-OS)/iio/iio_app/iio_app.h					\
-	$(NO-OS)/iio/iio_app/iio_axi_adc_app.h				\
-	$(NO-OS)/iio/iio_app/iio_axi_dac_app.h				\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h				\
 	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
 	$(NO-OS)/libraries/libtinyiiod/compat.h
 endif
