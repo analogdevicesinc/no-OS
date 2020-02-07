@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_axi_dac_app.h
- *   @brief  Header file of iio_axi_dac_app.
+ *   @file   iio_axi_adc.h
+ *   @brief  Header file of iio_axi_adc.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
@@ -37,14 +37,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_AXI_DAC_APP_H_
-#define IIO_AXI_DAC_APP_H_
+#ifndef IIO_AXI_ADC_H_
+#define IIO_AXI_ADC_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "axi_dac_core.h"
+#include "axi_adc_core.h"
 #include "axi_dmac.h"
 
 /******************************************************************************/
@@ -52,37 +52,37 @@
 /******************************************************************************/
 
 /**
- * @struct iio_basic_app_desc
- * @brief Application desciptor.
+ * @struct iio_axi_adc_desc
+ * @brief iio desciptor.
  */
-struct iio_axi_dac_app_desc {
-	/** iio DAC device handle */
+struct iio_axi_adc_desc {
+	/** Structure containing physical device instance and device descriptor */
 	struct iio_interface *iio_interface;
 };
 
 /**
- * @struct iio_basic_app_init_param
- * @brief Application configuration.
+ * @struct iio_axi_adc_init_param
+ * @brief iio configuration.
  */
-struct iio_axi_dac_app_init_param {
-	/** DAC device */
-	struct axi_dac *tx_dac;
-	/** Transmit DMA device */
-	struct axi_dmac *tx_dmac;
-	/** Address used by DMA, for sending data to device */
-	uint32_t dac_ddr_base;
-	/** Function pointer to flush the data cache for the given address range */
-	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
+struct iio_axi_adc_init_param {
+	/** ADC device */
+	struct axi_adc *rx_adc;
+	/** Receive DMA device */
+	struct axi_dmac *rx_dmac;
+	/** Address used by DMA, for receiving data from device */
+	uint32_t adc_ddr_base;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Init application. */
-int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
-			     struct iio_axi_dac_app_init_param *param);
-/* Free the resources allocated by iio_axi_dac_app_init(). */
-int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc);
+/* Init iio. */
+int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
+			 struct iio_axi_adc_init_param *param);
+/* Free the resources allocated by iio_axi_adc_init(). */
+int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc);
 
-#endif // IIO_AXI_DAC_APP_H_
+#endif // IIO_AXI_ADC_H_

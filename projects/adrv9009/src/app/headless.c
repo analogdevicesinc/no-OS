@@ -37,8 +37,8 @@
 #ifdef IIO_EXAMPLE
 
 #include "iio_app.h"
-#include "iio_axi_adc_app.h"
-#include "iio_axi_dac_app.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
@@ -295,14 +295,14 @@ int main(void)
 	struct iio_app_init_param iio_app_init_par;
 
 	/**
-	 * iio axi adc application configurations.
+	 * iio axi adc configurations.
 	 */
-	struct iio_axi_adc_app_init_param iio_axi_adc_app_init_par;
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 
 	/**
-	 * iio axi dac application configurations.
+	 * iio axi dac configurations.
 	 */
-	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 
 	/**
 	 * UART server read/write callbacks.
@@ -315,14 +315,14 @@ int main(void)
 	struct iio_app_desc *iio_app_desc;
 
 	/**
-	 * iio application instance descriptor.
+	 * iio instance descriptor.
 	 */
-	struct iio_axi_adc_app_desc *iio_axi_adc_app_desc;
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
 
 	/**
-	 * iio application instance descriptor.
+	 * iio instance descriptor.
 	 */
-	struct iio_axi_dac_app_desc *iio_axi_dac_app_desc;
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
 
 	/**
 	 * Xilinx platform dependent initialization for IRQ.
@@ -395,7 +395,7 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	iio_axi_adc_app_init_par = (struct iio_axi_adc_app_init_param) {
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
@@ -403,18 +403,18 @@ int main(void)
 						     uint32_t))Xil_DCacheInvalidateRange
 	};
 
-	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if(status < 0)
 		return status;
 
-	iio_axi_dac_app_init_par = (struct iio_axi_dac_app_init_param) {
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 
-	status = iio_axi_dac_app_init(&iio_axi_dac_app_desc, &iio_axi_dac_app_init_par);
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if(status < 0)
 		return status;
 
