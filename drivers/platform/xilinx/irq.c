@@ -229,6 +229,24 @@ int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	return SUCCESS;
 }
 
+status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
+				(Xil_ExceptionHandler) XUartPs_InterruptHandler, xil_uart_desc->instance);
+if (status < 0)
+	return status;
+XUartPs_SetHandler(xil_uart_desc->instance, uart_irq_handler, xil_uart_desc);
+
+//Maybe this can be generic
+void internal_uart_Handler(void *CallBackRef, u32 Event,
+				  u32 EventData){
+		struct xil_irq_desc *xil_dev = desc->extra;
+		struct xil_param *parma = xil_dev->params[UART_ID]
+		
+		xil_dev->parmas[UART_ID].Event = Event;
+		xil_dev->parmas[UART_ID].EventData = EventData;
+		xil_dev->irq_handler[UART_ID](xil_dev->context[UART_ID],
+										&(xil_dev->parmas[UART_ID]));
+}
+
 /**
  * @brief Registers a generic IRQ handling function.
  * @param desc - The IRQ controller descriptor.
@@ -238,15 +256,27 @@ int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *dev_instance)
+		     void (*irq_handler)(void *context, void *extra),
+			 void *context, void *config);
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
 	switch(xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
-		return XScuGic_Connect(xil_dev->instance, irq_id, irq_handler,
-				       dev_instance);
+		struct xili_config *xili_conf = config;
+		if (irq_id == UART_ID)
+		{
+		XScuGic_Connect(xil_dev->instance, irq_id, (Xil_ExceptionHandler) XUartPs_Handler,
+				       xili_conf->instance);
+		//or
+		XScuGic_Connect(xil_dev->instance, irq_id, xili_conf->irq_specific_handler,
+				       xili_conf->instance);
+
+		xil_dev->irq_handler[irq_id] = irq_handler;
+		xil_dev->context[irq_id] = context;
+		XUartPs_SetHandler(xili_conf->instance, internal_uart_Handler, xil_dev);
+		}
 #endif
 		break;
 	case IRQ_PL:
