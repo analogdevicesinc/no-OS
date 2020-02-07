@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_ad9361_app.c
- *   @brief  Implementation of iio_ad9361_app
+ *   @file   iio_ad9361.c
+ *   @brief  Implementation of iio_ad9361
  *   This module is a wrapper over "ad9361_api", and it is used by "iio".
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -46,7 +46,7 @@
 #include <string.h>
 #include <errno.h>
 #include "error.h"
-#include "iio_ad9361_app.h"
+#include "iio_ad9361.h"
 #include "ad9361_api.h"
 #include "util.h"
 
@@ -2616,14 +2616,14 @@ static struct iio_device *iio_ad9361_create_device(const char *device_name)
 }
 
 /**
- * @brief Application init for reading/writing and parameterization of a
- * generic device.
- * @param desc - Application descriptor.
- * @param init - Application configuration structure.
+ * @brief Init for reading/writing and parameterization of a
+ * ad9361 device.
+ * @param desc - Descriptor.
+ * @param init - Configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
-			    struct iio_ad9361_app_init_param *init)
+int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
+			struct iio_ad9361_init_param *init)
 {
 	int32_t status;
 
@@ -2642,7 +2642,7 @@ int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
 	if(status < 0)
 		return FAILURE;
 
-	*desc = calloc(1, sizeof(struct iio_ad9361_app_desc));
+	*desc = calloc(1, sizeof(struct iio_ad9361_desc));
 	if (!(*desc))
 		return FAILURE;
 
@@ -2653,10 +2653,10 @@ int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
 
 /**
  * @brief Release resources.
- * @param desc - Application descriptor.
+ * @param desc - Descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_ad9361_app_remove(struct iio_ad9361_app_desc *desc)
+int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc)
 {
 	int32_t status;
 

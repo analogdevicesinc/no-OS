@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   iio_axi_adc_app.c
- *   @brief  Implementation of iio_axi_adc_app.
- *   This application instantiates iio_axi_adc and iio_axi_dac devices, for
+ *   @file   iio_axi_adc.c
+ *   @brief  Implementation of iio_axi_adc.
+ *   This instantiates iio_axi_adc and iio_axi_dac devices, for
  *   reading/writing and parameterization.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -45,7 +45,7 @@
 
 #include "error.h"
 #include "iio.h"
-#include "iio_axi_adc_app.h"
+#include "iio_axi_adc.h"
 #include "xml.h"
 
 /******************************************************************************/
@@ -651,14 +651,14 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Application for reading/writing and parameterization of
+ * @brief Registers a iio_axi_adc for reading/writing and parameterization of
  * axi_adc device.
- * @param  desc - Application descriptor.
- * @param init - Application configuration structure.
+ * @param  desc - Descriptor.
+ * @param init - Configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
-			     struct iio_axi_adc_app_init_param *init)
+int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
+			 struct iio_axi_adc_init_param *init)
 {
 	struct iio_interface_init_par iio_axi_adc_intf_par;
 	struct iio_device *iio_axi_adc_device;
@@ -701,7 +701,7 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 	if(status < 0)
 		goto error_free_iio_axi_adc_inst;
 
-	*desc = calloc(1, sizeof(struct iio_axi_adc_app_desc));
+	*desc = calloc(1, sizeof(struct iio_axi_adc_desc));
 	if (!(*desc))
 		goto error_free_unregister;
 
@@ -719,10 +719,10 @@ error_free_iio_axi_adc_inst:
 
 /**
  * @brief Release resources.
- * @param desc - Application descriptor.
+ * @param desc - Descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_axi_adc_app_remove(struct iio_axi_adc_app_desc *desc)
+int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc)
 {
 	int32_t status;
 

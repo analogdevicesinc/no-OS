@@ -61,9 +61,9 @@
 #ifdef IIO_EXAMPLE
 
 #include "iio_app.h"
-#include "iio_axi_adc_app.h"
-#include "iio_axi_dac_app.h"
-#include "iio_ad9361_app.h"
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
+#include "iio_ad9361.h"
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
@@ -680,19 +680,19 @@ int main(void)
 	struct iio_app_init_param iio_app_init_par;
 
 	/**
-	 * iio axi adc application configurations.
+	 * iio axi adc configurations.
 	 */
-	struct iio_axi_adc_app_init_param iio_axi_adc_app_init_par;
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 
 	/**
-	 * iio axi dac application configurations.
+	 * iio axi dac configurations.
 	 */
-	struct iio_axi_dac_app_init_param iio_axi_dac_app_init_par;
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 
 	/**
-	 * iio ad9361 app configurations.
+	 * iio ad9361 configurations.
 	 */
-	struct iio_ad9361_app_init_param iio_ad9361_app_init_param;
+	struct iio_ad9361_init_param iio_ad9361_init_param;
 
 	/**
 	 * UART server read/write callbacks.
@@ -705,19 +705,19 @@ int main(void)
 	struct iio_app_desc *iio_app_desc;
 
 	/**
-	 * iio application instance descriptor.
+	 * iio instance descriptor.
 	 */
-	struct iio_axi_adc_app_desc *iio_axi_adc_app_desc;
+	struct iio_axi_adc_desc *iio_axi_adc_desc;
 
 	/**
-	 * iio application instance descriptor.
+	 * iio instance descriptor.
 	 */
-	struct iio_axi_dac_app_desc *iio_axi_dac_app_desc;
+	struct iio_axi_dac_desc *iio_axi_dac_desc;
 
 	/**
-	 * iio ad9361 application instance descriptor.
+	 * iio ad9361 instance descriptor.
 	 */
-	struct iio_ad9361_app_desc *iio_ad9361_app_desc;
+	struct iio_ad9361_desc *iio_ad9361_desc;
 
 	/**
 	 * Xilinx platform dependent initialization for IRQ.
@@ -790,7 +790,7 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	iio_axi_adc_app_init_par = (struct iio_axi_adc_app_init_param) {
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9361_phy->rx_adc,
 		.rx_dmac = ad9361_phy->rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
@@ -798,27 +798,27 @@ int main(void)
 						     uint32_t))Xil_DCacheInvalidateRange
 	};
 
-	status = iio_axi_adc_app_init(&iio_axi_adc_app_desc, &iio_axi_adc_app_init_par);
+	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if(status < 0)
 		return status;
 
-	iio_axi_dac_app_init_par = (struct iio_axi_dac_app_init_param) {
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
 		.tx_dmac = ad9361_phy->tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 
-	status = iio_axi_dac_app_init(&iio_axi_dac_app_desc, &iio_axi_dac_app_init_par);
-	if(status < 0)
+	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
+	if (status < 0)
 		return status;
 
-	iio_ad9361_app_init_param = (struct iio_ad9361_app_init_param) {
+	iio_ad9361_init_param = (struct iio_ad9361_init_param) {
 		.ad9361_phy = ad9361_phy,
 	};
 
-	status = iio_ad9361_app_init(&iio_ad9361_app_desc, &iio_ad9361_app_init_param);
-	if(status < 0)
+	status = iio_ad9361_init(&iio_ad9361_desc, &iio_ad9361_init_param);
+	if (status < 0)
 		return status;
 
 	return iio_app(iio_app_desc);
