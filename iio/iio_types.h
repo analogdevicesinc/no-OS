@@ -105,33 +105,6 @@ struct iio_device {
 };
 
 /**
- * @struct iio_interface_init_par
- * @brief iio interface init parameters
- */
-struct iio_interface_init_par {
-	/** device name */
-	const char *dev_name;
-	/**  physical instance of a device */
-	void *dev_instance;
-	/** device descriptor(describes channels and attributes) */
-	struct iio_device *iio_device;
-	/** Generate device xml */
-	ssize_t (*get_xml)(char** xml, struct iio_device *iio_dev);
-	/** transfer data from ADC into RAM */
-	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem" */
-	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			     size_t bytes_count, uint32_t ch_mask);
-	/** Transfer data from RAM to DAC */
-	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
-	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			      size_t bytes_count, uint32_t ch_mask);
-};
-
-/**
  * @struct iio_server_ops
  * @brief iio interface for server read/write operations
  */

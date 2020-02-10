@@ -67,7 +67,7 @@ struct iio_ad9361_app_init_param {
  */
 struct iio_ad9361_app_desc {
 	/** device name */
-	const char *dev_name;
+	struct iio_interface *iio_interface;
 };
 
 /******************************************************************************/

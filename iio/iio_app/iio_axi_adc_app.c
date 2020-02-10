@@ -660,7 +660,7 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 			     struct iio_axi_adc_app_init_param *init)
 {
-	struct iio_interface_init_par iio_axi_adc_intf_par;
+	struct iio_interface *iio_interface;
 	struct iio_device *iio_axi_adc_device;
 	struct iio_axi_adc *iio_axi_adc_inst;
 
@@ -686,10 +686,14 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 	if (!iio_axi_adc_device)
 		goto error_free_iio_axi_adc_inst;
 
-	iio_axi_adc_intf_par = (struct iio_interface_init_par) {
-		.dev_name = iio_axi_adc_inst->adc->name,
+	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
+	if (!iio_interface)
+		goto error_free_iio_axi_adc_delete_dev;
+
+	*iio_interface = (struct iio_interface) {
+		.name = iio_axi_adc_inst->adc->name,
 		.dev_instance = iio_axi_adc_inst,
-		.iio_device = iio_axi_adc_device,
+		.iio = iio_axi_adc_device,
 		.get_xml = iio_axi_adc_get_xml,
 		.transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem,
 		.transfer_mem_to_dev = NULL,
@@ -697,20 +701,22 @@ int32_t iio_axi_adc_app_init(struct iio_axi_adc_app_desc **desc,
 		.write_data = NULL,
 	};
 
-	status = iio_register(&iio_axi_adc_intf_par);
-	if(status < 0)
-		goto error_free_iio_axi_adc_inst;
+	status = iio_register(iio_interface);
+	if (status < 0)
+		goto error_free_iio_axi_adc_delete_dev;
 
 	*desc = calloc(1, sizeof(struct iio_axi_adc_app_desc));
 	if (!(*desc))
-		goto error_free_unregister;
+		goto error_iio_unregister;
 
-	(*desc)->iio_axi_adc_inst = iio_axi_adc_inst;
+	(*desc)->iio_interface = iio_interface;
 
 	return SUCCESS;
 
-error_free_unregister:
-	iio_unregister(iio_axi_adc_inst->adc->name);
+error_iio_unregister:
+	iio_unregister(iio_interface);
+error_free_iio_axi_adc_delete_dev:
+	iio_axi_adc_delete_device(iio_axi_adc_device);
 error_free_iio_axi_adc_inst:
 	free(iio_axi_adc_inst);
 
@@ -729,10 +735,16 @@ int32_t iio_axi_adc_app_remove(struct iio_axi_adc_app_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->iio_axi_adc_inst->adc->name);
-	if(status < 0)
-		return status;
+	status = iio_unregister(desc->iio_interface);
+	if (status < 0)
+		return FAILURE;
 
+	status = iio_axi_adc_delete_device(desc->iio_interface->iio);
+	if (status < 0)
+		return FAILURE;
+
+	free(desc->iio_interface->dev_instance);
+	free(desc->iio_interface);
 	free(desc);
 
 	return SUCCESS;

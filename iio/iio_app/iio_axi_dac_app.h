@@ -57,7 +57,7 @@
  */
 struct iio_axi_dac_app_desc {
 	/** iio DAC device handle */
-	struct iio_axi_dac *iio_axi_dac_inst;
+	struct iio_interface *iio_interface;
 };
 
 /**
