@@ -54,10 +54,173 @@
 #include "error.h"
 #include "spi.h"
 #include "spi_extra.h"
+#ifdef XPAR_SPI_ADC_AXI_REGMAP_BASEADDR
+#include "spi_engine.h"
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+/**
+ * @brief Initialize the hardware SPI peripherial
+ *
+ * @param xdesc Platform specific SPI descriptor
+ * @param xinit Platform specific SPI init param
+ * @return int32_t FAILURE if the device couldn't be found or configured
+ */
+static int32_t spi_init_pl(struct spi_desc *desc,
+			   const struct spi_init_param *param)
+{
+#ifdef XSPI_H
+	int32_t				ret;
+	struct xil_spi_desc 		*xdesc;
+	struct xil_spi_init_param	*xinit;
+
+	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
+	if(!xdesc) {
+		free(xdesc);
+		return FAILURE;
+	}
+
+	desc->extra = xdesc;
+	xinit = param->extra;
+	xdesc->type = xinit->type;
+	xdesc->flags = xinit->flags;
+
+	xdesc->instance = (XSpi*)malloc(sizeof(XSpi));
+	if(!xdesc->instance)
+		goto pl_error;
+
+	xdesc->config = XSpi_LookupConfig(xinit->device_id);
+	if(xdesc->config == NULL)
+		goto pl_error;
+
+	ret = XSpi_CfgInitialize(xdesc->instance,
+				 xdesc->config,
+				 ((XSpi_Config*)xdesc->config)
+				 ->BaseAddress);
+	if(ret != SUCCESS)
+		goto pl_error;
+
+	ret = XSpi_Initialize(xdesc->instance, xinit->device_id);
+	if (ret != SUCCESS)
+		goto pl_error;
+
+	ret = XSpi_SetOptions(xdesc->instance,
+			      XSP_MASTER_OPTION |
+			      ((sdesc->mode & SPI_CPOL) ?
+			       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
+			      ((sdesc->mode & SPI_CPHA) ?
+			       XSP_CLK_PHASE_1_OPTION : 0));
+	if (ret != SUCCESS)
+		goto pl_error;
+
+	ret = XSpi_Start(xdesc->instance);
+	if (ret != SUCCESS)
+		goto pl_error;
+
+	XSpi_IntrGlobalDisable((XSpi *)(xdesc->instance));
+
+	return SUCCESS;
+
+pl_error:
+	free(xdesc->instance);
+	free(xdesc);
+#endif
+	return FAILURE;
+}
+
+/**
+ * @brief Initialize the hardware SPI peripherial
+ *
+ * @param xdesc Platform specific SPI descriptor
+ * @param xinit Platform specific SPI init param
+ * @return int32_t FAILURE if the device couldn't be found or configured
+ */
+static int32_t spi_init_ps(struct spi_desc *desc,
+			   const struct spi_init_param *param)
+{
+#ifdef XSPIPS_H
+	int32_t				ret;
+	struct xil_spi_desc 		*xdesc;
+	struct xil_spi_init_param	*xinit;
+	const uint32_t			input_clock = 100000000;
+#ifdef XSPIPS_H
+	const uint32_t			prescaler_default = XSPIPS_CLK_PRESCALE_64;
+	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
+	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
+#endif
+	uint32_t			prescaler = 0u;
+
+	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
+	if(!xdesc) {
+		free(xdesc);
+		return FAILURE;
+	}
+
+	desc->extra = xdesc;
+	xinit = param->extra;
+	xdesc->type = xinit->type;
+	xdesc->flags = xinit->flags;
+
+	xdesc->instance = (XSpiPs*)malloc(sizeof(XSpiPs));
+	if(!xdesc->instance)
+		goto ps_error;
+
+	xdesc->config = XSpiPs_LookupConfig(xinit->device_id);
+	if(xdesc->config == NULL)
+		goto ps_error;
+
+	ret = XSpiPs_CfgInitialize(xdesc->instance,
+				   xdesc->config,
+				   ((XSpiPs_Config*)xdesc->config)
+				   ->BaseAddress);
+	if(ret != SUCCESS)
+		goto ps_error;
+
+	if (desc->max_speed_hz != 0u) {
+		uint32_t div = input_clock / desc->max_speed_hz;
+		uint32_t rem = input_clock % desc->max_speed_hz;
+
+		// find the power of two just higher than div and
+		// store the exponent in prescaler
+		while(div) {
+			prescaler += 1;
+			div >>= 1u;
+		}
+
+		// this exponent - 1 is needed because of the way
+		// xilinx stores it into registers
+		if (prescaler)
+			prescaler -= 1;
+
+		// this exponent - 1 is needed when initial div was
+		// precisely a power of two
+		if (!rem && prescaler)
+			prescaler -= 1;
+
+		if (prescaler < prescaler_min)
+			prescaler = prescaler_min;
+
+		if (prescaler > prescaler_max)
+			prescaler = prescaler_max;
+	} else
+		prescaler = prescaler_default;
+
+	ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
+
+	if(ret != SUCCESS)
+		goto ps_error;
+
+	return SUCCESS;
+
+ps_error:
+	free(xdesc->instance);
+	free(xdesc);
+#endif
+	return FAILURE;
+}
 
 /**
  * @brief Initialize the SPI communication peripheral.
@@ -69,153 +232,59 @@ int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
 	int32_t				ret;
-	struct spi_desc			*sdesc;
-	struct xil_spi_desc		*xdesc;
-	struct xil_spi_init_param	*xinit;
-	const uint32_t			input_clock = 100000000;
-#ifdef XSPIPS_H
-	const uint32_t			prescaler_default = XSPIPS_CLK_PRESCALE_64;
-	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
-	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
-#endif
-	uint32_t			prescaler = 0u;
+	enum xil_spi_type		*spi_type;
 
-	sdesc = (struct spi_desc *)malloc(sizeof(*sdesc));
-	xdesc = (struct xil_spi_desc *)malloc(sizeof(*xdesc));
-	if(!sdesc || !xdesc) {
-		free(sdesc);
-		free(xdesc);
+	if (!param) {
 		return FAILURE;
 	}
 
-	sdesc->max_speed_hz = param->max_speed_hz;
-	sdesc->chip_select = param->chip_select;
-	sdesc->mode = param->mode;
-	xinit = param->extra;
+	*desc = malloc(sizeof(**desc));
+	if(! *desc) {
+		free(*desc);
+		return FAILURE;
+	}
 
-	xdesc->type = xinit->type;
-	xdesc->flags = xinit->flags;
-	sdesc->extra = xdesc;
+	/* Get only the first member of the sctructure
+	 * Both structures (spi_engine_init_param and spi_init_param)
+	 * have the fisrt member enum xil_spi_type so in this case
+	 * we can read the first member without casting the pointer to
+	 * a certain structure type.
+	*/
+	spi_type = param->extra;
 
-	switch (xinit->type) {
+	if(!spi_type)
+		goto init_error;
+
+	(*desc)->max_speed_hz = param->max_speed_hz;
+	(*desc)->mode = param->mode;
+	(*desc)->chip_select = param->chip_select;
+
+	switch (*spi_type) {
 	case SPI_PL:
-#ifdef XSPI_H
-		xdesc->instance = (XSpi*)malloc(sizeof(XSpi));
-		if(!xdesc->instance)
-			goto pl_error;
-
-		xdesc->config = XSpi_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
-			goto pl_error;
-
-		ret = XSpi_CfgInitialize(xdesc->instance,
-					 xdesc->config,
-					 ((XSpi_Config*)xdesc->config)
-					 ->BaseAddress);
-		if(ret != SUCCESS)
-			goto pl_error;
-
-		ret = XSpi_Initialize(xdesc->instance, xinit->device_id);
-		if (ret != 0)
-			goto pl_error;
-
-		ret = XSpi_SetOptions(xdesc->instance,
-				      XSP_MASTER_OPTION |
-				      ((sdesc->mode & SPI_CPOL) ?
-				       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-				      ((sdesc->mode & SPI_CPHA) ?
-				       XSP_CLK_PHASE_1_OPTION : 0));
-		if (ret != 0)
-			goto pl_error;
-
-		ret = XSpi_Start(xdesc->instance);
-		if (ret != 0)
-			goto pl_error;
-
-		XSpi_IntrGlobalDisable((XSpi *)(xdesc->instance));
-
+		ret = spi_init_pl(*desc, param);
 		break;
-pl_error:
-		free(xdesc->instance);
-#endif
-		goto error;
 	case SPI_PS:
-#ifdef XSPIPS_H
-		xdesc->instance = (XSpiPs*)malloc(sizeof(XSpiPs));
-		if(!xdesc->instance)
-			goto ps_error;
-
-		xdesc->config = XSpiPs_LookupConfig(xinit->device_id);
-		if(xdesc->config == NULL)
-			goto ps_error;
-
-		ret = XSpiPs_CfgInitialize(xdesc->instance,
-					   xdesc->config,
-					   ((XSpiPs_Config*)xdesc->config)
-					   ->BaseAddress);
-		if(ret != SUCCESS)
-			goto ps_error;
-
-		if (sdesc->max_speed_hz != 0u) {
-			uint32_t div = input_clock / sdesc->max_speed_hz;
-			uint32_t rem = input_clock % sdesc->max_speed_hz;
-
-			// find the power of two just higher than div and
-			// store the exponent in prescaler
-			while(div) {
-				prescaler += 1;
-				div >>= 1u;
-			}
-
-			// this exponent - 1 is needed because of the way
-			// xilinx stores it into registers
-			if (prescaler)
-				prescaler -= 1;
-
-			// this exponent - 1 is needed when initial div was
-			// precisely a power of two
-			if (!rem && prescaler)
-				prescaler -= 1;
-
-			if (prescaler < prescaler_min)
-				prescaler = prescaler_min;
-
-			if (prescaler > prescaler_max)
-				prescaler = prescaler_max;
-		} else
-			prescaler = prescaler_default;
-
-		ret = XSpiPs_SetClkPrescaler(xdesc->instance, prescaler);
-
-		if(ret != SUCCESS)
-			goto ps_error;
-
+		ret = spi_init_ps(*desc, param);
 		break;
-ps_error:
-		free(xdesc->instance);
-#endif
-		goto error;
 	case SPI_ENGINE:
 #ifdef SPI_ENGINE_H
-		//TODO: Implement SPI engine feature
-
+		ret = spi_engine_init(*desc, param);
 		break;
 #endif
 
 	default:
-		goto error;
+		goto init_error;
 		break;
 	}
 
-	*desc = sdesc;
+	if (ret != SUCCESS) {
+init_error:
+		free(*desc);
 
-	return SUCCESS;
+		return FAILURE;
+	}
 
-error:
-	free(sdesc);
-	free(xdesc);
-
-	return FAILURE;
+	return ret;
 }
 
 /**
@@ -228,13 +297,28 @@ int32_t spi_remove(struct spi_desc *desc)
 #ifdef XSPI_H
 	int32_t				ret;
 #endif
-	struct xil_spi_desc	*xdesc;
+	struct xil_spi_desc	*xdesc = NULL;
+	enum xil_spi_type	*spi_type;
 
-	xdesc = desc->extra;
+	/* Get only the first member of the sctructure
+	 * Both structures (spi_engine_init_param and spi_init_param)
+	 * have the fisrt member enum xil_spi_type so in this case
+	 * we can read the first member without casting the pointer to
+	 * a certain structure type.
+	*/
+	spi_type = desc->extra;
 
-	switch (xdesc->type) {
+	if(!spi_type)
+		return FAILURE;
+
+	switch (*spi_type ) {
 	case SPI_PL:
 #ifdef XSPI_H
+		xdesc = desc->extra;
+
+		if(!xdesc)
+			return FAILURE;
+
 		ret = XSpi_Stop((XSpi *)(xdesc->instance));
 		if(ret != SUCCESS)
 			goto error;
@@ -242,12 +326,15 @@ int32_t spi_remove(struct spi_desc *desc)
 		break;
 	case SPI_PS:
 #ifdef XSPIPS_H
+		xdesc = desc->extra;
 
+		if(!xdesc)
+			return FAILURE;
 #endif
 		break;
 	case SPI_ENGINE:
 #ifdef SPI_ENGINE_H
-
+		spi_engine_remove(desc);
 #endif
 		/* Intended fallthrough */
 #ifdef XSPI_H
@@ -258,7 +345,8 @@ error:
 		break;
 	}
 
-	free(xdesc->instance);
+	if(xdesc)
+		free(xdesc->instance);
 	free(desc->extra);
 	free(desc);
 
@@ -279,10 +367,25 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 {
 	int32_t			ret;
 	struct xil_spi_desc	*xdesc;
+	enum xil_spi_type	*spi_type;
 
-	xdesc = desc->extra;
+	ret = FAILURE;
 
-	switch (xdesc->type) {
+	/* Get only the first member of the sctructure
+	 * Both structures (spi_engine_init_param and spi_init_param)
+	 * have the fisrt member enum xil_spi_type so in this case
+	 * we can read the first member without casting the pointer to
+	 * a certain structure type.
+	*/
+	spi_type = desc->extra;
+
+	if(!spi_type)
+		return FAILURE;
+
+	if (*spi_type != SPI_ENGINE)
+		xdesc = desc->extra;
+
+	switch (*spi_type) {
 	case SPI_PL:
 #ifdef XSPI_H
 		ret = XSpi_SetOptions(xdesc->instance,
@@ -338,14 +441,14 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 		break;
 	case SPI_ENGINE:
 #ifdef SPI_ENGINE_H
-
+		ret = spi_engine_write_and_read(desc, data, bytes_number);
 #endif
-		/* Intended fallthrough */
+		break;
 error:
 	default:
 		return FAILURE;
 		break;
 	}
 
-	return SUCCESS;
+	return ret;
 }
