@@ -859,7 +859,7 @@ error:
 int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 			     struct iio_axi_dac_app_init_param *param)
 {
-	struct iio_interface_init_par iio_axi_dac_intf_par;
+	struct iio_interface *iio_interface;
 	struct iio_device *iio_axi_dac_device;
 	struct iio_axi_dac *iio_axi_dac_inst;
 	int32_t status;
@@ -884,10 +884,14 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 	if (!iio_axi_dac_device)
 		goto error_free_iio_axi_dac_inst;
 
-	iio_axi_dac_intf_par = (struct iio_interface_init_par) {
-		.dev_name = iio_axi_dac_inst->dac->name,
+	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
+	if (!iio_interface)
+		goto error_free_iio_axi_dac_delete_dev;
+
+	*iio_interface = (struct iio_interface) {
+		.name = iio_axi_dac_inst->dac->name,
 		.dev_instance = iio_axi_dac_inst,
-		.iio_device = iio_axi_dac_device,
+		.iio = iio_axi_dac_device,
 		.get_xml = iio_axi_dac_get_xml,
 		.transfer_dev_to_mem = NULL,
 		.transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev,
@@ -895,20 +899,22 @@ int32_t iio_axi_dac_app_init(struct iio_axi_dac_app_desc **desc,
 		.write_data = iio_axi_dac_write_dev,
 	};
 
-	status = iio_register(&iio_axi_dac_intf_par);
+	status = iio_register(iio_interface);
 	if(status < 0)
-		goto error_free_iio_axi_dac_inst;
+		goto error_free_iio_axi_dac_delete_dev;
 
 	*desc = calloc(1, sizeof(struct iio_axi_dac_app_desc));
 	if (!(*desc))
-		goto error_free_unregister;
+		goto error_iio_unregister;
 
-	(*desc)->iio_axi_dac_inst = iio_axi_dac_inst;
+	(*desc)->iio_interface = iio_interface;
 
 	return SUCCESS;
 
-error_free_unregister:
-	iio_unregister(iio_axi_dac_inst->dac->name);
+error_iio_unregister:
+	iio_unregister(iio_interface);
+error_free_iio_axi_dac_delete_dev:
+	iio_axi_dac_delete_device(iio_axi_dac_device);
 error_free_iio_axi_dac_inst:
 	free(iio_axi_dac_inst);
 
@@ -927,10 +933,16 @@ int32_t iio_axi_dac_app_remove(struct iio_axi_dac_app_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->iio_axi_dac_inst->dac->name);
-	if(status < 0)
-		return status;
+	status = iio_unregister(desc->iio_interface);
+	if (status < 0)
+		return FAILURE;
 
+	status = iio_axi_dac_delete_device(desc->iio_interface->iio);
+	if (status < 0)
+		return FAILURE;
+
+	free(desc->iio_interface->dev_instance);
+	free(desc->iio_interface);
 	free(desc);
 
 	return SUCCESS;

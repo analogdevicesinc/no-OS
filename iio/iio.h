@@ -51,6 +51,36 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+/**
+ * @struct iio_interface
+ * @brief Links a physical device instance "void *dev_instance"
+ * with a "iio_device *iio" that describes capabilities of the device.
+ */
+struct iio_interface {
+	/** Device name */
+	const char *name;
+	/** Opened channels */
+	uint32_t ch_mask;
+	/** Physical instance of a device */
+	void *dev_instance;
+	/** Device descriptor(describes channels and attributes) */
+	struct iio_device *iio;
+	/** Generate device xml */
+	ssize_t (*get_xml)(char **xml, struct iio_device *iio);
+	/** Transfer data from device into RAM */
+	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
+	/** Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem" */
+	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
+			     size_t bytes_count, uint32_t ch_mask);
+	/** Transfer data from RAM to device */
+	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
+				       uint32_t ch_mask);
+	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
+	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
+			      size_t bytes_count, uint32_t ch_mask);
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -61,8 +91,8 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
 /* Free the resources allocated by iio_init(). */
 ssize_t iio_remove(struct tinyiiod *iiod);
 /* Register interface. */
-ssize_t iio_register(struct iio_interface_init_par *init_par);
+ssize_t iio_register(struct iio_interface *iio_interface);
 /* Unregister interface. */
-ssize_t iio_unregister(const char *device_name);
+ssize_t iio_unregister(struct iio_interface *iio_interface);
 
 #endif /* IIO_H_ */

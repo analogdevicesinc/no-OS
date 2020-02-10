@@ -2616,6 +2616,21 @@ static struct iio_device *iio_ad9361_create_device(const char *device_name)
 }
 
 /**
+ * @brief Delete iio_device.
+ * @param iio_device - Structure describing a device, channels and attributes.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+static ssize_t iio_ad9361_delete_device(struct iio_device *iio_device)
+{
+	if (!iio_device)
+		return FAILURE;
+
+	free(iio_device);
+
+	return SUCCESS;
+}
+
+/**
  * @brief Application init for reading/writing and parameterization of a
  * generic device.
  * @param desc - Application descriptor.
@@ -2626,11 +2641,16 @@ int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
 			    struct iio_ad9361_app_init_param *init)
 {
 	int32_t status;
+	struct iio_interface *iio_interface;
 
-	struct iio_interface_init_par iio_ad9361_intf_par = {
-		.dev_name = dev_name,
+	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
+	if (!iio_interface)
+		return -ENOMEM;
+
+	*iio_interface = (struct iio_interface) {
+		.name = dev_name,
 		.dev_instance = init->ad9361_phy,
-		.iio_device = iio_ad9361_create_device(dev_name),
+		.iio = iio_ad9361_create_device(dev_name),
 		.get_xml = iio_ad9361_get_xml,
 		.transfer_dev_to_mem = NULL,
 		.transfer_mem_to_dev = NULL,
@@ -2638,17 +2658,24 @@ int32_t iio_ad9361_app_init(struct iio_ad9361_app_desc **desc,
 		.write_data = NULL,
 	};
 
-	status = iio_register(&iio_ad9361_intf_par);
-	if(status < 0)
-		return FAILURE;
+	status = iio_register(iio_interface);
+	if (status < 0)
+		goto error_free_iio_interface;
 
 	*desc = calloc(1, sizeof(struct iio_ad9361_app_desc));
 	if (!(*desc))
-		return FAILURE;
+		goto error_unregister;
 
-	(*desc)->dev_name = dev_name;
+	(*desc)->iio_interface = iio_interface;
 
 	return SUCCESS;
+
+error_unregister:
+	iio_unregister(iio_interface);
+error_free_iio_interface:
+	free(iio_interface);
+
+	return FAILURE;
 }
 
 /**
@@ -2663,10 +2690,15 @@ int32_t iio_ad9361_app_remove(struct iio_ad9361_app_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->dev_name);
-	if(status < 0)
+	status = iio_unregister(desc->iio_interface);
+	if (status < 0)
 		return FAILURE;
 
+	status = iio_ad9361_delete_device(desc->iio_interface->iio);
+	if (status < 0)
+		return FAILURE;
+
+	free(desc->iio_interface);
 	free(desc);
 
 	return SUCCESS;

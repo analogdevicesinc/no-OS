@@ -56,8 +56,8 @@
  * @brief Application desciptor.
  */
 struct iio_axi_adc_app_desc {
-	/** iio DAC device handle */
-	struct iio_axi_adc *iio_axi_adc_inst;
+	/** Structure containing physical device instance and device descriptor */
+	struct iio_interface *iio_interface;
 };
 
 /**

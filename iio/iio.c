@@ -55,36 +55,6 @@
 /******************************************************************************/
 
 /**
- * @struct iio_interface
- * @brief Links a physical device instance "void *dev_instance"
- * with a "iio_device *iio" that describes capabilities of the device.
- */
-struct iio_interface {
-	/** Device name */
-	const char *name;
-	/** Opened channels */
-	uint32_t ch_mask;
-	/** Physical instance of a device */
-	void *dev_instance;
-	/** Device descriptor(describes channels and attributes) */
-	struct iio_device *iio;
-	/** Generate device xml */
-	ssize_t (*get_xml)(char **xml, struct iio_device *iio);
-	/** Transfer data from device into RAM */
-	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem" */
-	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			     size_t bytes_count, uint32_t ch_mask);
-	/** Transfer data from RAM to device */
-	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
-	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			      size_t bytes_count, uint32_t ch_mask);
-};
-
-/**
  * @struct iio_interfaces
  * @brief Structure containing all interfaces.
  */
@@ -737,13 +707,13 @@ error:
 
 /**
  * @brief Register interface.
- * @param init_par - Structure containing physical device instance and device
- * 		descriptor.
+ * @param iio_interface - Structure containing physical device instance and
+ * device descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_register(struct iio_interface_init_par *init_par)
+ssize_t iio_register(struct iio_interface *iio_interface)
 {
-	struct iio_interface *iio_interface;
+
 	struct iio_interface **temp_interfaces;
 
 	if (!(iio_interfaces)) {
@@ -767,18 +737,6 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 		}
 		iio_interfaces->interfaces = temp_interfaces;
 	}
-	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
-	if (!iio_interface)
-		return -ENOMEM;
-
-	iio_interface->dev_instance = init_par->dev_instance;
-	iio_interface->name = init_par->dev_name;
-	iio_interface->iio = init_par->iio_device;
-	iio_interface->get_xml = init_par->get_xml;
-	iio_interface->transfer_dev_to_mem = init_par->transfer_dev_to_mem;
-	iio_interface->transfer_mem_to_dev = init_par->transfer_mem_to_dev;
-	iio_interface->read_data = init_par->read_data;
-	iio_interface->write_data = init_par->write_data;
 
 	iio_interfaces->interfaces[iio_interfaces->num_interfaces - 1] = iio_interface;
 
@@ -787,18 +745,14 @@ ssize_t iio_register(struct iio_interface_init_par *init_par)
 
 /**
  * @brief Unregister interface.
- * @param device_name String containing device name.
+ * @param iio_interface - Structure containing physical device instance and
+ * device descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_unregister(const char *device_name)
+ssize_t iio_unregister(struct iio_interface *iio_interface)
 {
-	struct iio_interface *iio_interface = iio_get_interface(device_name,
-					      iio_interfaces);
 	struct iio_interfaces *interfaces;
 	int16_t i, deleted = 0;
-
-	if (!iio_interface)
-		return FAILURE;
 
 	interfaces = (struct iio_interfaces *)calloc(1, sizeof(struct iio_interfaces));
 	if (!interfaces)
@@ -813,8 +767,8 @@ ssize_t iio_unregister(const char *device_name)
 	}
 
 	for(i = 0; i < iio_interfaces->num_interfaces; i++) {
-		if (!strcmp(device_name, iio_interfaces->interfaces[i]->name)) {
-			free(iio_interfaces->interfaces[i]);
+		if (!strcmp(iio_interface->name, iio_interfaces->interfaces[i]->name)) {
+			iio_interface = iio_interfaces->interfaces[i];
 			deleted = 1;
 			continue;
 		}
@@ -823,9 +777,8 @@ ssize_t iio_unregister(const char *device_name)
 
 	interfaces->num_interfaces = iio_interfaces->num_interfaces - 1;
 	free(iio_interfaces);
-	iio_interfaces = interfaces;
 
-	return SUCCESS;
+	return deleted ? SUCCESS : FAILURE;
 }
 
 /**
