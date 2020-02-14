@@ -154,9 +154,6 @@ int main(void)
 	ad9528_spi_param.cpol = 0;
 	ad9152_spi_param.cpol = 0;
 	ad9680_spi_param.cpol = 0;
-	ad9528_spi_param.max_speed_hz = 2000000u;
-	ad9152_spi_param.max_speed_hz = 2000000u;
-	ad9680_spi_param.max_speed_hz = 2000000u;
 
 	ad9528_param.spi_init = ad9528_spi_param;
 	ad9152_param.spi_init = ad9152_spi_param;
