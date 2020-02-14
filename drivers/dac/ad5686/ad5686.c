@@ -103,6 +103,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.communication = SPI,
 		.channel_addr = ad5676_channel_addr,
 	},
+	[ID_AD5673R] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = I2C,
+		.channel_addr = ad5679_channel_addr,
+	},
 	[ID_AD5674R] = {
 		.resolution = 12,
 		.register_map = AD5686_REG_MAP,
@@ -126,6 +132,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.register_map = AD5686_REG_MAP,
 		.communication = SPI,
 		.channel_addr = ad5676_channel_addr,
+	},
+	[ID_AD5677R] = {
+		.resolution = 16,
+		.register_map = AD5686_REG_MAP,
+		.communication = I2C,
+		.channel_addr = ad5679_channel_addr,
 	},
 	[ID_AD5679R] = {
 		.resolution = 16,
