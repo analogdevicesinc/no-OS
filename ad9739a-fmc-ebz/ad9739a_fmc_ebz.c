@@ -108,7 +108,6 @@ int main(void)
 	spi_param.chip_select = SPI_CHIP_SELECT(1);
 	spi_param.cpha = 0;
 	spi_param.cpol = 0;
-	spi_param.max_speed_hz = 2000000u;
 
 	/* SPI */
 	init_param.spi_init = spi_param;
