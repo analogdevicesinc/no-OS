@@ -31,6 +31,8 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_rx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
+	cp ../../../drivers/frequency/ad9528/ad9528.h devices/adi_hal/
+	cp ../../../drivers/frequency/ad9528/ad9528.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise.c devices/adi_hal/
@@ -100,6 +102,8 @@
 	cp ../../../drivers/axi_core/jesd204/axi_jesd204_tx.h devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.c devices/adi_hal/
 	cp ../../../drivers/axi_core/jesd204/xilinx_transceiver.h devices/adi_hal/
+	cp ../../../drivers/frequency/ad9528/ad9528.h devices/adi_hal/
+	cp ../../../drivers/frequency/ad9528/ad9528.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise_agc.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise_arm.c devices/adi_hal/
 	cp ../../../drivers/rf-transceiver/talise/api/talise.c devices/adi_hal/
