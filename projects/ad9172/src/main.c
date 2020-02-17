@@ -200,7 +200,7 @@ int main(void)
 
 	status = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", tx_jesd_init.name);
+		printf("error: %s: axi_jesd204_tx_init() failed\n", tx_jesd_init.name);
 		goto error_2;
 	}
 
