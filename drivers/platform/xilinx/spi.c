@@ -73,9 +73,11 @@ int32_t spi_init(struct spi_desc **desc,
 	struct xil_spi_desc		*xdesc;
 	struct xil_spi_init_param	*xinit;
 	const uint32_t			input_clock = 100000000;
+#ifdef XSPIPS_H
 	const uint32_t			prescaler_default = XSPIPS_CLK_PRESCALE_64;
 	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
 	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
+#endif
 	uint32_t			prescaler = 0u;
 
 	sdesc = (struct spi_desc *)malloc(sizeof(*sdesc));
