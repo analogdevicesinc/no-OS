@@ -54,10 +54,8 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD77681_DMA_1_BASEADDR				XPAR_AXI_AD77681_DMA_1_BASEADDR
-#define AD77681_DMA_2_BASEADDR				XPAR_AXI_AD77681_DMA_2_BASEADDR
-#define AD77681_SPI1_ENGINE_BASEADDR		XPAR_SPI_ADC1_AXI_1_BASEADDR
-#define AD77681_SPI2_ENGINE_BASEADDR		XPAR_SPI_ADC2_AXI_2_BASEADDR
+#define AD77681_DMA_1_BASEADDR				XPAR_AXI_AD77681_DMA_BASEADDR
+#define AD77681_SPI1_ENGINE_BASEADDR		XPAR_SPI_ADC_AXI_REGMAP_BASEADDR
 #define AD77681_SPI_CS						0
 
 #define GPIO_DEVICE_ID						XPAR_PS7_GPIO_0_DEVICE_ID
@@ -70,14 +68,6 @@
 #define GPIO_0_SYNC_IN						GPIO_OFFSET + 2 // 34
 #define GPIO_0_SYNC_OUT						GPIO_OFFSET + 1 // 33
 #define GPIO_0_RESET						GPIO_OFFSET + 0 // 32
-
-#define GPIO_1_0							GPIO_OFFSET + 22 // 54
-#define GPIO_1_1							GPIO_OFFSET + 21 // 53
-#define GPIO_1_2							GPIO_OFFSET + 20 // 52
-#define GPIO_1_3							GPIO_OFFSET + 19 // 51
-#define GPIO_1_SYNC_IN						GPIO_OFFSET + 18 // 50
-#define GPIO_1_SYNC_OUT						GPIO_OFFSET + 17 // 49
-#define GPIO_1_RESET						GPIO_OFFSET + 16 // 48
 
 uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_BYTES_W(2), TRANSFER_BYTES_R(4), CS_ASSERT};
 
