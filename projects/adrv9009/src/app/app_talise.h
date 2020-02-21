@@ -45,7 +45,7 @@
 
 enum taliseDeviceId {
 	TALISE_A = 0u,
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	TALISE_B,
 #endif
 

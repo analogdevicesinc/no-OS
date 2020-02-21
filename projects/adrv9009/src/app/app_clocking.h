@@ -42,17 +42,24 @@
 #include <stdint.h>
 #include "adi_hal.h"
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 #define DEV_REFCLK_A		0
 #define DEV_SYSREF_A		1
 #define DEV_REFCLK_B		2
 #define DEV_SYSREF_B		3
 #define JESD_REFCLK_TX_OBS_AB	4
 #define JESD_REFCLK_RX_AB	5
+#if defined(ZU11EG)
 #define CORE_CLK_TX_OBS_AB	6
 #define CORE_CLK_RX_AB		7
 #define FPGA_SYSREF_TX_OBS_AB	8
 #define FPGA_SYSREF_RX_AB	9
+#elif defined(FMCOMMS8_ZCU102)
+#define FPGA_SYSREF_TX_OBS_AB	6
+#define FPGA_SYSREF_RX_AB	7
+#define CORE_CLK_TX_OBS_AB	8
+#define CORE_CLK_RX_AB		9
+#endif
 #else
 #define DEV_CLK	13
 #define FMC_CLK	1

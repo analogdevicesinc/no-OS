@@ -44,7 +44,7 @@
 #include "app_config.h"
 
 // clock chips
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 #include "hmc7044.h"
 #else
 #include "ad9528.h"
@@ -64,7 +64,7 @@
 #include "clk_altera_a10_fpll.h"
 #else
 #include "xil_cache.h"
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 #include "clk_axi_clkgen.h"
 #endif
 #endif
@@ -79,7 +79,7 @@
 // header
 #include "app_clocking.h"
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 struct hmc7044_dev* clkchip_device;
 struct hmc7044_dev * car_clkchip_device;
 #else
@@ -90,7 +90,7 @@ struct ad9528_dev* clkchip_device;
 struct altera_a10_fpll *rx_device_clk_pll;
 struct altera_a10_fpll *tx_device_clk_pll;
 struct altera_a10_fpll *rx_os_device_clk_pll;
-#elif !defined(ZU11EG)
+#elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 struct axi_clkgen *rx_clkgen;
 struct axi_clkgen *tx_clkgen;
 struct axi_clkgen *rx_os_clkgen;
@@ -109,7 +109,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	uint32_t n;
 	int ret;
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	struct hmc7044_chan_spec chan_spec[10] = {
 		/* DEV_REFCLK_A */
 		{
@@ -147,6 +147,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		{
 			.disable = 0, .num = 5,  .divider = 12, .driver_mode = 1
 		},
+#if defined(ZU11EG)
 		/* CORE_CLK_TX_OBS_AB */
 		{
 			.disable = 0, .num = 6, .divider = 24, .driver_mode = 0,
@@ -173,6 +174,34 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.output_control0_rb4_enable = true,
 			.force_mute_enable = true
 		}
+#elif defined(FMCOMMS8_ZCU102)
+		/* FPGA_SYSREF_TX_OBS_AB */
+		{
+			.disable = 0, .num = 6, .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true
+		},
+		/* FPGA_SYSREF_RX_AB */
+		{
+			.disable = 0, .num = 7, .divider = 3840, .driver_mode = 1,
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.output_control0_rb4_enable = true,
+			.force_mute_enable = true
+		},
+		/* CORE_CLK_TX_OBS_AB */
+		{
+			.disable = 0, .num = 8, .divider = 24, .driver_mode = 0,
+			.driver_impedance = 1
+		},
+		/* CORE_CLK_RX_AB */
+		{
+			.disable = 0, .num = 9, .divider = 12, .driver_mode = 0,
+			.driver_impedance = 1
+		}
+#endif
 	};
 
 	struct hmc7044_init_param hmc7044_param = {
@@ -205,7 +234,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			.start_up_mode_dynamic_enable = true,
 			.high_performance_mode_dis = true,
 			.driver_impedance = 3
-		},
+		}
 	};
 
 	struct hmc7044_init_param hmc7044_car_param = {
@@ -337,11 +366,11 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.type = SPI_PS,
 #endif
 		.device_id = 0,
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		.flags = SPI_CS_DECODE
 #endif
 	};
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	struct xil_gpio_init_param xil_gpio_param = {
 #ifdef PLATFORM_MB
 		.type = GPIO_PL,
@@ -376,7 +405,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.extra = &xil_spi_param
 	};
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	// clock chip spi settings
 	struct spi_init_param car_clkchip_spi_init_param = {
 		.max_speed_hz = 10000000,
@@ -391,7 +420,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	ad9528_param.spi_init = clkchip_spi_init_param;
 #endif
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	// reset pin not needed, hmc7044_init performs a soft reset over SPI.
 #else
 	struct gpio_init_param clkchip_gpio_init_param = {
@@ -405,7 +434,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	* System Clock should provide a device clock and SYSREF signal
 	* to the Talise device.
 	**/
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	status = hmc7044_init(&car_clkchip_device, &hmc7044_car_param);
 	if (status != SUCCESS) {
 		printf("hmc7044_init() error: %d\n", status);
@@ -435,7 +464,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #endif
 	if (dev_clk > 0 && fmc_clk > 0 && fmc_clk == dev_clk &&
 	    (dev_clk / 1000) == device_clock_khz) {
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_A, dev_clk);
 		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_B, dev_clk);
 		hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, fmc_clk);
@@ -459,7 +488,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		* can't generate such slow rates.
 		*/
 		for (n = 64; n > 0; n--) {
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 			rate_dev = hmc7044_clk_round_rate(clkchip_device, lmfc_rate_hz / n,
 							  clkchip_device->pll2_freq);
 #else
@@ -474,7 +503,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			goto error_1;
 		}
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, rate_fmc);
 		if (ret)
 			printf("Failed to set JESD_REFCLK_TX_OBS_AB rate to %u Hz: %d\n",
@@ -490,7 +519,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			       rate_fmc, ret);
 #endif
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 		ret = hmc7044_clk_set_rate(clkchip_device, DEV_SYSREF_A, rate_dev);
 		if (ret)
 			printf("Failed to set DEV SYSREF A rate to %u Hz: %d\n",
@@ -559,7 +588,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	}
 	altera_a10_fpll_enable(rx_os_device_clk_pll);
 #else
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	/* Initialize CLKGEN */
 	status = axi_clkgen_init(&rx_clkgen, &rx_clkgen_init);
 	if (status != SUCCESS) {
@@ -597,34 +626,34 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 
 	return ADIHAL_OK;
 
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 error_4:
 #endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
-#elif !defined(ZU11EG)
+#elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	axi_clkgen_remove(rx_os_clkgen);
 #endif
 
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 error_3:
 #endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(tx_device_clk_pll);
-#elif !defined(ZU11EG)
+#elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	axi_clkgen_remove(tx_clkgen);
 #endif
 
-#if !defined(ZU11EG)
+#if !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 error_2:
 #endif
 #ifdef ALTERA_PLATFORM
 	altera_a10_fpll_remove(rx_device_clk_pll);
-#elif !defined(ZU11EG)
+#elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	axi_clkgen_remove(rx_clkgen);
 #endif
 error_1:
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	hmc7044_remove(clkchip_device);
 #else
 	ad9528_remove(clkchip_device);
@@ -639,13 +668,13 @@ void clocking_deinit(void)
 	altera_a10_fpll_remove(rx_device_clk_pll);
 	altera_a10_fpll_remove(tx_device_clk_pll);
 	altera_a10_fpll_remove(rx_os_device_clk_pll);
-#elif !defined(ZU11EG)
+#elif !defined(ZU11EG) && !defined(FMCOMMS8_ZCU102)
 	axi_clkgen_remove(rx_os_clkgen);
 	axi_clkgen_remove(tx_clkgen);
 	axi_clkgen_remove(rx_clkgen);
 #endif
 
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	hmc7044_remove(clkchip_device);
 #else
 	ad9528_remove(clkchip_device);
