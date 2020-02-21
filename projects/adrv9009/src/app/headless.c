@@ -185,7 +185,7 @@ int main(void)
 	}
 	hal[TALISE_A].gpio_adrv_resetb_num = TRX_A_RESETB_GPIO;
 	hal[TALISE_A].spi_adrv_csn = ADRV_CS;
-#if defined(ZU11EG)
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
 	hal[TALISE_B].gpio_adrv_resetb_num = TRX_B_RESETB_GPIO;
 	hal[TALISE_B].spi_adrv_csn = ADRV_B_CS;
 #endif

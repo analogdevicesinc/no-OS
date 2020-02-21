@@ -43,6 +43,7 @@
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
 //#define ZU11EG
+//#define FMCOMMS8_ZCU102
 
 //#define DAC_DMA_EXAMPLE
 
