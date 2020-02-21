@@ -91,7 +91,7 @@ static struct fifo_element *fifo_get_last(struct fifo_element *p_fifo)
 
 /**
  * @brief Insert element to fifo, in the last position.
- * @param pfifo - Pointer to fifo.
+ * @param p_fifo - Pointer to fifo.
  * @param buff - Data to be saved in fifo.
  * @param len - Length of the data.
  * @return SUCCESS in case of success, FAILURE otherwise
@@ -119,7 +119,7 @@ int32_t fifo_insert(struct fifo_element **p_fifo, char *buff, uint32_t len)
 
 /**
  * @brief Remove fifo head
- * @param pfifo - Pointer to fifo.
+ * @param p_fifo - Pointer to fifo.
  * @return next element in fifo if exists, NULL otherwise.
  */
 struct fifo_element * fifo_remove(struct fifo_element *p_fifo)
