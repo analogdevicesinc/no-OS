@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   config.h
- *   @brief  Config file of AD9361/API Driver.
+ *   @file   projects/fmcdaq2/src/app/app_config.h
+ *   @brief  Config file for DAQ2 project.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,40 +38,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
-// #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
-// #define DEBUG		 /* For Debug purposes only */
 
-/******************************************************************************/
-/****************************** Carrier Vendors *******************************/
-/******************************************************************************/
-// #define XILINX
-// #define ALTERA
+//#define XILINX_PLATFORM
+//#define ALTERA_PLATFORM
 
-/******************************************************************************/
-/********************************* CPU Arch ***********************************/
-/******************************************************************************/
-/*Xilinx*/
-// #define ZYNQ /* Requires a family definition (below)*/
-	//#define ZYNQ_PS7
-	//#define ZYNQ_PSU
-// #define MICROBLAZE
+//#define DAC_DMA_EXAMPLE
 
-/*Altera*/
-// #define SOC
-// #define NIOS_II
-
-/******************************************************************************/
-/********************************* Warn User **********************************/
-/******************************************************************************/
-
-#if !defined(XILINX) && !defined(ALTERA)
-	printf("\nWARNING no vendor defined in config.h (for carrier)\n");
-#endif
-
-#if !defined(MICROBLAZE) && !defined(NIOS_II) && !defined(SOC) && !defined(ZYNQ)
-	printf("\nWARNING CPU arch defined in config.h\n");
-#endif
-#endif
+#endif /* APP_CONFIG_H_ */

@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   ad_fmcdaq2_ebz.c
+ *   @file   projects/fmcdaq2/src/app/fmcdaq2.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
  *******************************************************************************
- * Copyright 2014-2016(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -41,52 +42,38 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "platform_drivers.h"
+#include <stdio.h>
+#include <inttypes.h>
+#include "app_config.h"
+#include "parameters.h"
+#ifndef ALTERA_PLATFORM
+#include <xparameters.h>
+#include <xil_printf.h>
+#include <xil_cache.h>
+#include "axi_adxcvr.h"
+#else
+#include "clk_altera_a10_fpll.h"
+#include "altera_adxcvr.h"
+#endif
+#include "spi.h"
+#include "gpio.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#include "delay.h"
+#include "error.h"
 #include "ad9144.h"
 #include "ad9523.h"
 #include "ad9680.h"
-#include "adc_core.h"
-#include "dac_core.h"
-#include "dmac_core.h"
-#include "dac_buffer.h"
-#include "xcvr_core.h"
-#include "jesd_core.h"
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
+#include "axi_dmac.h"
+#include "axi_jesd204_tx.h"
+#include "axi_jesd204_rx.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-#define GPIO_TRIG		43
-#define GPIO_ADC_PD		42
-#define GPIO_DAC_TXEN		41
-#define GPIO_DAC_RESET		40
-#define GPIO_CLKD_SYNC		38
-#define GPIO_ADC_FDB		36
-#define GPIO_ADC_FDA		35
-#define GPIO_DAC_IRQ		34
-#define GPIO_CLKD_STATUS_1	33
-#define GPIO_CLKD_STATUS_0	32
-
-#define DMA_BUFFER		 0
-
-enum ad9523_channels {
-	DAC_DEVICE_CLK,
-	DAC_DEVICE_SYSREF,
-	DAC_FPGA_CLK,
-	DAC_FPGA_SYSREF,
-	ADC_DEVICE_CLK,
-	ADC_DEVICE_SYSREF,
-	ADC_FPGA_CLK,
-	ADC_FPGA_SYSREF,
-};
-
-/***************************************************************************//**
- * @brief main
- ******************************************************************************/
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
-		     xcvr_core *p_ad9144_xcvr,
+		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
-		     xcvr_core *p_ad9680_xcvr,
+		     struct adxcvr_init *ad9680_xcvr_param,
 		     struct ad9523_platform_data *p_ad9523_param)
 {
 
@@ -100,7 +87,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 	printf ("\t5 - ADC 1000 MSPS; DAC 2000 MSPS (2x interpolation)\n");
 	printf ("choose an option [default 1]:\n");
 
-	mode = ad_uart_read();
+	mode = getc(stdin);
 
 	switch (mode) {
 	case '5':
@@ -132,22 +119,28 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		channel_divider = 128;
 		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 		channel_divider = 128;
-		p_ad9144_xcvr->reconfig_bypass = 0;
 		p_ad9144_param->lane_rate_kbps = 6000000;
-		p_ad9144_xcvr->lane_rate_kbps = 6000000;
-		p_ad9144_xcvr->ref_rate_khz = 300000;
-		p_ad9680_xcvr->reconfig_bypass = 0;
+		ad9144_xcvr_param->lane_rate_khz = 6000000;
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->ref_rate_khz = 300000;
+#else
+		ad9144_xcvr_param->parent_rate_khz = 300000;
+#endif
 		p_ad9680_param->lane_rate_kbps = 6000000;
-		p_ad9680_xcvr->lane_rate_kbps = 6000000;
-		p_ad9680_xcvr->ref_rate_khz = 300000;
-#ifdef XILINX
-		p_ad9144_xcvr->dev.lpm_enable = 0;
-		p_ad9144_xcvr->dev.cpll_enable = 1;
-		p_ad9144_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lane_rate_khz = 6000000;
+#ifndef ALTERA_PLATFORM
+		ad9680_xcvr_param->ref_rate_khz = 300000;
+#else
+		ad9680_xcvr_param->parent_rate_khz = 300000;
+#endif
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->lpm_enable = 0;
+		ad9144_xcvr_param->cpll_enable = 1;
+		ad9144_xcvr_param->out_clk_sel = 4;
 
-		p_ad9680_xcvr->dev.lpm_enable = 1;
-		p_ad9680_xcvr->dev.cpll_enable = 1;
-		p_ad9680_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lpm_enable = 1;
+		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
 	case '3':
@@ -169,22 +162,28 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		channel_divider = 256;
 		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 		channel_divider = 256;
-		p_ad9144_xcvr->reconfig_bypass = 0;
 		p_ad9144_param->lane_rate_kbps = 5000000;
-		p_ad9144_xcvr->lane_rate_kbps = 5000000;
-		p_ad9144_xcvr->ref_rate_khz = 250000;
-		p_ad9680_xcvr->reconfig_bypass = 0;
+		ad9144_xcvr_param->lane_rate_khz = 5000000;
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->ref_rate_khz = 250000;
+#else
+		ad9144_xcvr_param->parent_rate_khz = 250000;
+#endif
 		p_ad9680_param->lane_rate_kbps = 5000000;
-		p_ad9680_xcvr->lane_rate_kbps = 5000000;
-		p_ad9680_xcvr->ref_rate_khz = 250000;
-#ifdef XILINX
-		p_ad9144_xcvr->dev.lpm_enable = 1;
-		p_ad9144_xcvr->dev.cpll_enable = 1;
-		p_ad9144_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lane_rate_khz = 5000000;
+#ifndef ALTERA_PLATFORM
+		ad9680_xcvr_param->ref_rate_khz = 250000;
+#else
+		ad9680_xcvr_param->parent_rate_khz = 250000;
+#endif
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->lpm_enable = 1;
+		ad9144_xcvr_param->cpll_enable = 1;
+		ad9144_xcvr_param->out_clk_sel = 4;
 
-		p_ad9680_xcvr->dev.lpm_enable = 1;
-		p_ad9680_xcvr->dev.cpll_enable = 1;
-		p_ad9680_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lpm_enable = 1;
+		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
 	case '2':
@@ -206,77 +205,142 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		channel_divider = 256;
 		(&p_ad9523_param->channels[ADC_FPGA_SYSREF])->
 		channel_divider = 256;
-		p_ad9144_xcvr->reconfig_bypass = 0;
 		p_ad9144_param->lane_rate_kbps = 10000000;
-		p_ad9144_xcvr->lane_rate_kbps = 10000000;
-		p_ad9144_xcvr->ref_rate_khz = 500000;
-		p_ad9680_xcvr->reconfig_bypass = 0;
+		ad9144_xcvr_param->lane_rate_khz = 10000000;
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->ref_rate_khz = 500000;
+#else
+		ad9144_xcvr_param->parent_rate_khz = 500000;
+#endif
 		p_ad9680_param->lane_rate_kbps = 5000000;
-		p_ad9680_xcvr->lane_rate_kbps = 5000000;
-		p_ad9680_xcvr->ref_rate_khz = 250000;
-#ifdef XILINX
-		p_ad9144_xcvr->dev.lpm_enable = 0;
-		p_ad9144_xcvr->dev.cpll_enable = 0;
-		p_ad9144_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lane_rate_khz = 5000000;
+#ifndef ALTERA_PLATFORM
+		ad9680_xcvr_param->ref_rate_khz = 500000;
+#else
+		ad9680_xcvr_param->parent_rate_khz = 500000;
+#endif
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->lpm_enable = 0;
+		ad9144_xcvr_param->cpll_enable = 0;
+		ad9144_xcvr_param->out_clk_sel = 4;
 
-		p_ad9680_xcvr->dev.lpm_enable = 1;
-		p_ad9680_xcvr->dev.cpll_enable = 1;
-		p_ad9680_xcvr->dev.out_clk_sel = 4;
+		ad9680_xcvr_param->lpm_enable = 1;
+		ad9680_xcvr_param->cpll_enable = 1;
+		ad9680_xcvr_param->out_clk_sel = 4;
 #endif
 		break;
 	default:
 		printf ("1 - ADC 1000 MSPS; DAC 1000 MSPS\n");
-		p_ad9144_xcvr->ref_rate_khz = 500000;
-		p_ad9680_xcvr->ref_rate_khz = 500000;
+#ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->ref_rate_khz = 500000;
+		ad9680_xcvr_param->ref_rate_khz = 500000;
+#else
+		ad9144_xcvr_param->parent_rate_khz = 500000;
+		ad9680_xcvr_param->parent_rate_khz = 500000;
+#endif
 		break;
 	}
 
 	return(0);
 }
 
-/***************************************************************************//**
- * @brief main
- ******************************************************************************/
 int main(void)
 {
-	int n;
+	int32_t status;
 
-	spi_init_param	ad9523_spi_param;
-	spi_init_param	ad9144_spi_param;
-	spi_init_param	ad9680_spi_param;
+	/* Initialize SPI structures */
+	struct spi_init_param ad9523_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0
+	};
 
-#ifdef ALTERA
-	ad9523_spi_param.type = NIOS_II_SPI;
-	ad9144_spi_param.type = NIOS_II_SPI;
-	ad9680_spi_param.type = NIOS_II_SPI;
+	struct spi_init_param ad9144_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 1,
+		.mode = SPI_MODE_0
+	};
+	struct spi_init_param ad9680_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 2,
+		.mode = SPI_MODE_0
+	};
+
+#ifndef ALTERA_PLATFORM
+	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
 #endif
-#ifdef ZYNQ_PS7
-	ad9523_spi_param.type = ZYNQ_PS7_SPI;
-	ad9144_spi_param.type = ZYNQ_PS7_SPI;
-	ad9680_spi_param.type = ZYNQ_PS7_SPI;
+		.device_id = SPI_DEVICE_ID
+	};
+	ad9523_spi_param.extra = &xil_spi_param;
+	ad9144_spi_param.extra = &xil_spi_param;
+	ad9680_spi_param.extra = &xil_spi_param;
+#else
+	struct altera_spi_init_param altera_spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = NIOS_II_SPI,
+		.base_address = SYS_SPI_BASE
+	};
+	ad9523_spi_param.extra = &altera_spi_param;
+	ad9144_spi_param.extra = &altera_spi_param;
+	ad9680_spi_param.extra = &altera_spi_param;
 #endif
-#ifdef ZYNQ_PSU
-	ad9523_spi_param.type = ZYNQ_PSU_SPI;
-	ad9144_spi_param.type = ZYNQ_PSU_SPI;
-	ad9680_spi_param.type = ZYNQ_PSU_SPI;
+
+	/* Initialize GPIO structures */
+	struct gpio_init_param clkd_sync_param = {
+		.number = GPIO_CLKD_SYNC
+	};
+	struct gpio_init_param dac_reset_param = {
+		.number = GPIO_DAC_RESET
+	};
+	struct gpio_init_param dac_txen_param = {
+		.number = GPIO_DAC_TXEN
+	};
+	struct gpio_init_param adc_pd_param = {
+		.number = GPIO_ADC_PD
+	};
+
+#ifndef ALTERA_PLATFORM
+	struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
 #endif
-#ifdef MICROBLAZE
-	ad9523_spi_param.type = MICROBLAZE_SPI;
-	ad9144_spi_param.type = MICROBLAZE_SPI;
-	ad9680_spi_param.type = MICROBLAZE_SPI;
+		.device_id = GPIO_DEVICE_ID
+	};
+	clkd_sync_param.extra = &xil_gpio_param;
+	dac_reset_param.extra = &xil_gpio_param;
+	dac_txen_param.extra = &xil_gpio_param;
+	adc_pd_param.extra = &xil_gpio_param;
+#else
+	struct altera_gpio_init_param altera_gpio_param = {
+		.base_address = GPIO_BASEADDR,
+		.type = NIOS_II_GPIO,
+		.device_id = GPIO_DEVICE_ID
+	};
+	clkd_sync_param.extra = &altera_gpio_param;
+	dac_reset_param.extra = &altera_gpio_param;
+	dac_txen_param.extra = &altera_gpio_param;
+	adc_pd_param.extra = &altera_gpio_param;
 #endif
-	ad9523_spi_param.chip_select = SPI_CHIP_SELECT(0);
-	ad9144_spi_param.chip_select = SPI_CHIP_SELECT(1);
-	ad9680_spi_param.chip_select = SPI_CHIP_SELECT(2);
-	ad9523_spi_param.cpha = 0;
-	ad9144_spi_param.cpha = 0;
-	ad9680_spi_param.cpha = 0;
-	ad9523_spi_param.cpol = 0;
-	ad9144_spi_param.cpol = 0;
-	ad9680_spi_param.cpol = 0;
+
+	gpio_desc *clkd_sync;
+	gpio_desc *dac_reset;
+	gpio_desc *dac_txen;
+	gpio_desc *adc_pd;
+
+	/* setup the device structures */
+	struct ad9523_dev *ad9523_device;
+	struct ad9144_dev *ad9144_device;
+	struct ad9680_dev *ad9680_device;
 
 	struct ad9523_channel_spec	ad9523_channels[8];
 	struct ad9523_platform_data	ad9523_pdata;
+
 	struct ad9523_init_param	ad9523_param;
 	struct ad9144_init_param	ad9144_param;
 	struct ad9680_init_param	ad9680_param;
@@ -285,83 +349,145 @@ int main(void)
 	ad9144_param.spi_init = ad9144_spi_param;
 	ad9680_param.spi_init = ad9680_spi_param;
 
-	struct ad9523_dev *ad9523_device;
-	struct ad9144_dev *ad9144_device;
-	struct ad9680_dev *ad9680_device;
+#ifndef ALTERA_PLATFORM
+	struct adxcvr_init ad9144_xcvr_param = {
+		.name = "ad9144_xcvr",
+		.base = XPAR_AXI_AD9144_XCVR_BASEADDR,
+		.sys_clk_sel = 3,
+		.out_clk_sel = 4,
+		.lpm_enable = 1,
+		.cpll_enable = 0,
+		.ref_rate_khz = 500000,
+		.lane_rate_khz = 10000000,
+	};
+	struct adxcvr_init ad9680_xcvr_param = {
+		.name = "ad9680_xcvr",
+		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
+		.sys_clk_sel = 0,
+		.out_clk_sel = 4,
+		.lpm_enable = 1,
+		.cpll_enable = 1,
+		.ref_rate_khz = 500000,
+		.lane_rate_khz = 10000000
+	};
 
-	dac_core		ad9144_core;
-	dac_channel		ad9144_channels[2];
-	jesd_core		ad9144_jesd;
-	dmac_core		ad9144_dma;
-	xcvr_core		ad9144_xcvr;
-	adc_core		ad9680_core;
-	jesd_core		ad9680_jesd;
-	xcvr_core		ad9680_xcvr;
-	dmac_core               ad9680_dma;
-	dmac_xfer               rx_xfer;
-	dmac_xfer               tx_xfer;
+#else
+	struct altera_a10_fpll_init ad9680_device_clk_pll_param = {
+		.name = "ad9680_device_clk_pll",
+		.base = RX_A10_FPLL_BASEADDR,
+		.parent_rate = 500000 * 1000
+	};
+	struct altera_a10_fpll_init ad9144_device_clk_pll_param = {
+		.name = "ad9144_device_clk_pll",
+		.base = TX_A10_FPLL_BASEADDR,
+		.parent_rate = 500000 * 1000
+	};
 
-//******************************************************************************
-// setup the base addresses
-//******************************************************************************
+	struct altera_a10_fpll *ad9680_device_clk_pll;
+	struct altera_a10_fpll *ad9144_device_clk_pll;
 
-#ifdef XILINX
-	ad9144_xcvr.base_address = XPAR_AXI_AD9144_XCVR_BASEADDR;
-	ad9144_core.base_address = XPAR_AXI_AD9144_CORE_BASEADDR;
-	ad9144_jesd.base_address = XPAR_AXI_AD9144_JESD_TX_AXI_BASEADDR;
-	ad9144_dma.base_address = XPAR_AXI_AD9144_DMA_BASEADDR;
-	ad9680_xcvr.base_address = XPAR_AXI_AD9680_XCVR_BASEADDR;
-	ad9680_core.base_address = XPAR_AXI_AD9680_CORE_BASEADDR;
-	ad9680_jesd.base_address = XPAR_AXI_AD9680_JESD_RX_AXI_BASEADDR;
-	ad9680_dma.base_address = XPAR_AXI_AD9680_DMA_BASEADDR;
+	struct adxcvr_init ad9144_xcvr_param = {
+		.name = "ad9144_xcvr",
+		.base = TX_XCVR_BASEADDR,
+		.adxcfg_base = {TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
+		.atx_pll_base = TX_PLL_BASEADDR,
+		.lane_rate_khz = 10000000,
+		.parent_rate_khz = 500000,
+	};
+	struct adxcvr_init ad9680_xcvr_param = {
+		.name = "ad9680_xcvr",
+		.base = RX_XCVR_BASEADDR,
+		.adxcfg_base = {RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, RX_ADXCFG_2_BASEADDR, RX_ADXCFG_3_BASEADDR},
+		.atx_pll_base = RX_PLL_BASEADDR,
+		.parent_rate_khz = 500000,
+		.lane_rate_khz = 10000000
+	};
 #endif
 
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-	tx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x900000;
+	struct adxcvr	*ad9144_xcvr;
+	struct adxcvr	*ad9680_xcvr;
+
+	/* JESD initialization */
+	struct jesd204_tx_init ad9144_jesd_param = {
+		.name = "ad9144_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.converters_per_device = 2,
+		.converter_resolution = 16,
+		.bits_per_sample = 16,
+		.high_density = false,
+		.control_bits_per_sample = 0,
+		.subclass = 1,
+		.device_clk_khz = 10000000/40,
+		.lane_clk_khz = 10000000
+	};
+
+	struct jesd204_rx_init  ad9680_jesd_param = {
+		.name = "ad9680_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = 10000000/40,
+		.lane_clk_khz = 10000000
+	};
+
+	struct axi_jesd204_tx *ad9144_jesd;
+	struct axi_jesd204_rx *ad9680_jesd;
+
+	/* ADC Core */
+	struct axi_adc_init ad9680_core_param = {
+		.name = "ad9680_adc",
+		.base = RX_CORE_BASEADDR,
+		.num_channels = 2
+	};
+	struct axi_adc	*ad9680_core;
+
+	/* DAC (AD9144) channels configuration */
+	struct axi_dac_channel	ad9144_channels[2];
+	ad9144_channels[0].dds_dual_tone = 0;
+	ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
+	ad9144_channels[0].dds_phase_0 = 0;
+	ad9144_channels[0].dds_scale_0 = 500000;
+	ad9144_channels[0].pat_data = 0xb1b0a1a0;
+	ad9144_channels[1].dds_dual_tone = 0;
+	ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
+	ad9144_channels[1].dds_phase_0 = 0;
+	ad9144_channels[1].dds_scale_0 = 500000;
+	ad9144_channels[1].pat_data = 0xd1d0c1c0;
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
+
+	/* DAC Core */
+	struct axi_dac_init ad9144_core_param = {
+		.name = "ad9144_dac",
+		.base =	TX_CORE_BASEADDR,
+		.num_channels = 2,
+		.channels = &ad9144_channels[0]
+	};
+	struct axi_dac	*ad9144_core;
+
+#ifdef DAC_DMA_EXAMPLE
+	struct axi_dmac_init ad9144_dmac_param = {
+		.name = "tx_dmac",
+		.base = TX_DMA_BASEADDR
+		.direction = DMA_MEM_TO_DEV,
+		.flags = 0
+	};
+	struct axi_dmac		*ad9144_dmac;
+	extern const uint32_t sine_lut_iq[1024];
 #endif
 
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-	tx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000;
-#endif
+	struct axi_dmac_init ad9680_dmac_param = {
+		.name = "ad9680_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad9680_dmac;
 
-#ifdef ALTERA
-	ad9144_xcvr.base_address =
-		AD9144_JESD204_LINK_MANAGEMENT_BASE;
-	ad9144_xcvr.dev.link_pll.base_address =
-		AD9144_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9144_xcvr.dev.atx_pll.base_address =
-		AD9144_JESD204_LANE_PLL_RECONFIG_BASE;
-	ad9144_core.base_address =
-		AXI_AD9144_CORE_BASE;
-	ad9680_xcvr.base_address =
-		AD9680_JESD204_LINK_MANAGEMENT_BASE;
-	ad9680_xcvr.dev.link_pll.base_address =
-		AD9680_JESD204_LINK_PLL_RECONFIG_BASE;
-	ad9680_core.base_address =
-		AXI_AD9680_CORE_BASE;
-	ad9144_jesd.base_address =
-		AD9144_JESD204_LINK_RECONFIG_BASE;
-	ad9680_jesd.base_address =
-		AD9680_JESD204_LINK_RECONFIG_BASE;
-
-	ad9144_xcvr.dev.channel_pll[0].type = cmu_tx_type;
-	ad9680_xcvr.dev.channel_pll[0].type = cmu_cdr_type;
-	ad9144_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S0_BASE;
-	ad9680_xcvr.dev.channel_pll[0].base_address = AVL_ADXCFG_0_RCFG_S1_BASE;
-
-	ad9680_dma.base_address = AXI_AD9680_DMA_BASE;
-	ad9144_dma.base_address = AXI_AD9144_DMA_BASE;
-	rx_xfer.start_address =  0x800000;
-	tx_xfer.start_address =  0x900000;
-
-#endif
-
-//******************************************************************************
-// clock distribution device (AD9523) configuration
-//******************************************************************************
-
+	/* clock distribution device (AD9523) configuration */
 	ad9523_pdata.num_channels = 8;
 	ad9523_pdata.channels = &ad9523_channels[0];
 	ad9523_param.pdata = &ad9523_pdata;
@@ -405,39 +531,7 @@ int main(void)
 	ad9523_pdata.rzero = 7;
 	ad9523_pdata.cpole1 = 2;
 
-	ad9144_xcvr.ref_rate_khz = 500000;
-	ad9680_xcvr.ref_rate_khz = 500000;
-
-//******************************************************************************
-// DAC (AD9144) and the transmit path (AXI_ADXCVR,
-//	JESD204, AXI_AD9144, TX DMAC) configuration
-//******************************************************************************
-
-	xcvr_getconfig(&ad9144_xcvr);
-	ad9144_xcvr.reconfig_bypass = 1;
-#ifdef XILINX
-	ad9144_xcvr.dev.cpll_enable = 0;
-#endif
-	ad9144_xcvr.lane_rate_kbps = 10000000;
-
-	ad9144_jesd.rx_tx_n = 0;
-	ad9144_jesd.scramble_enable = 1;
-	ad9144_jesd.octets_per_frame = 1;
-	ad9144_jesd.frames_per_multiframe = 32;
-	ad9144_jesd.subclass_mode = 1;
-
-	ad9144_channels[0].dds_dual_tone = 0;
-	ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
-	ad9144_channels[0].dds_phase_0 = 0;
-	ad9144_channels[0].dds_scale_0 = 500000;
-	ad9144_channels[0].pat_data = 0xb1b0a1a0;
-	ad9144_channels[1].dds_dual_tone = 0;
-	ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
-	ad9144_channels[1].dds_phase_0 = 0;
-	ad9144_channels[1].dds_scale_0 = 500000;
-	ad9144_channels[1].pat_data = 0xd1d0c1c0;
-	ad9144_channels[0].sel = DAC_SRC_DDS;
-	ad9144_channels[1].sel = DAC_SRC_DDS;
+	ad9680_param.lane_rate_kbps = 10000000;
 
 	ad9144_param.lane_rate_kbps = 10000000;
 	ad9144_param.spi3wire = 1;
@@ -446,12 +540,8 @@ int main(void)
 	ad9144_param.jesd204_subclass = 1;
 	ad9144_param.jesd204_scrambling = 1;
 	ad9144_param.jesd204_mode = 4;
-	for(n=0; n<ARRAY_SIZE(ad9144_param.jesd204_lane_xbar); n++)
+	for(uint32_t n=0; n<ARRAY_SIZE(ad9144_param.jesd204_lane_xbar); n++)
 		ad9144_param.jesd204_lane_xbar[n] = n;
-
-	ad9144_core.no_of_channels = 2;
-	ad9144_core.resolution = 16;
-	ad9144_core.channels = &ad9144_channels[0];
 
 	ad9144_param.stpl_samples[0][0] =
 		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
@@ -470,82 +560,41 @@ int main(void)
 	ad9144_param.stpl_samples[1][3] =
 		(ad9144_channels[1].pat_data >> 16) & 0xffff;
 
-//******************************************************************************
-// ADC (AD9680) and the receive path ( AXI_ADXCVR,
-//	JESD204, AXI_AD9680, TX DMAC) configuration
-//******************************************************************************
-
-	ad9680_param.lane_rate_kbps = 10000000;
-
-	xcvr_getconfig(&ad9680_xcvr);
-	ad9680_xcvr.reconfig_bypass = 1;
-#ifdef XILINX
-	ad9680_xcvr.dev.cpll_enable = 0;
-#endif
-	ad9680_xcvr.rx_tx_n = 1;
-	ad9680_xcvr.lane_rate_kbps = ad9680_param.lane_rate_kbps;
-
-	ad9680_jesd.scramble_enable = 1;
-	ad9680_jesd.octets_per_frame = 1;
-	ad9680_jesd.frames_per_multiframe = 32;
-	ad9680_jesd.subclass_mode = 1;
-
-	ad9680_core.no_of_channels = 2;
-	ad9680_core.resolution = 14;
-
-//******************************************************************************
-// configure the receiver DMA
-//******************************************************************************
-
-	ad9680_dma.type = DMAC_RX;
-	ad9680_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-
-	ad9144_dma.type = DMAC_TX;
-	ad9144_dma.transfer = &tx_xfer;
-	ad9144_dma.flags = DMAC_FLAGS_TLAST;
-	tx_xfer.id = 0;
-	tx_xfer.no_of_samples = dac_buffer_load(ad9144_core, tx_xfer.start_address);
-
-	// change the default JESD configurations, if required
+	/* change the default JESD configurations, if required */
 	fmcdaq2_reconfig(&ad9144_param,
-			 &ad9144_xcvr,
+			 &ad9144_xcvr_param,
 			 &ad9680_param,
-			 &ad9680_xcvr,
+			 &ad9680_xcvr_param,
 			 ad9523_param.pdata);
 
-//******************************************************************************
-// bring up the system
-//******************************************************************************
+	/* Reconfigure the default JESD configurations */
+	ad9680_jesd_param.device_clk_khz =  ad9680_xcvr_param.lane_rate_khz / 40;
+	ad9680_jesd_param.lane_clk_khz = ad9680_xcvr_param.lane_rate_khz;
+	ad9144_jesd_param.device_clk_khz =  ad9144_xcvr_param.lane_rate_khz / 40;
+	ad9144_jesd_param.lane_clk_khz = ad9144_xcvr_param.lane_rate_khz ;
 
-	// setup GPIOs
+	/* set GPIOs */
+	gpio_get(&clkd_sync, &clkd_sync_param);
+	gpio_get(&dac_reset, &dac_reset_param);
+	gpio_get(&dac_txen,  &dac_txen_param);
+	gpio_get(&adc_pd,    &adc_pd_param);
 
-	gpio_desc *clkd_sync;
-	gpio_desc *dac_reset;
-	gpio_desc *dac_txen;
-	gpio_desc *adc_pd;
-
-	gpio_get(&clkd_sync, GPIO_CLKD_SYNC);
-	gpio_get(&dac_reset, GPIO_DAC_RESET);
-	gpio_get(&dac_txen,  GPIO_DAC_TXEN);
-	gpio_get(&adc_pd,    GPIO_ADC_PD);
-
-	gpio_set_value(clkd_sync, 0);
-	gpio_set_value(dac_reset, 0);
-	gpio_set_value(dac_txen,  0);
-	gpio_set_value(adc_pd,    1);
+	gpio_direction_output(clkd_sync, 0);
+	gpio_direction_output(dac_reset, 0);
+	gpio_direction_output(dac_txen,  0);
+	gpio_direction_output(adc_pd,    1);
 	mdelay(5);
 
-	gpio_set_value(clkd_sync, 1);
-	gpio_set_value(dac_reset, 1);
-	gpio_set_value(dac_txen,  1);
-	gpio_set_value(adc_pd,    0);
+	gpio_direction_output(clkd_sync, 1);
+	gpio_direction_output(dac_reset, 1);
+	gpio_direction_output(dac_txen,  1);
+	gpio_direction_output(adc_pd,    0);
 
-	// setup clocks
-
-	ad9523_setup(&ad9523_device, &ad9523_param);
-
+	/* setup clocks */
+	status = ad9523_setup(&ad9523_device, &ad9523_param);
+	if (status != SUCCESS) {
+		printf("error: ad9680_setup() failed\n");
+	}
 	// Recommended DAC JESD204 link startup sequence
 	//   1. FPGA JESD204 Link Layer
 	//   2. FPGA JESD204 PHY Layer
@@ -559,112 +608,192 @@ int main(void)
 	// Both sequences are interleaved here so that the transceivers which might
 	// be shared between the DAC and ADC link are enabled at the same time.
 
+#ifdef ALTERA_PLATFORM
+	/* Initialize A10 FPLLs */
+	status = altera_a10_fpll_init(&ad9680_device_clk_pll,
+				      &ad9680_device_clk_pll_param);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       ad9680_device_clk_pll_param.name);
+	}
+	status = altera_a10_fpll_init(&ad9144_device_clk_pll,
+				      &ad9144_device_clk_pll_param);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       ad9144_device_clk_pll_param.name);
+	}
 
-	// ADC
-	ad9680_setup(&ad9680_device, &ad9680_param);
-
-	// DAC FPGA JESD204 link layer
-	jesd_setup(&ad9144_jesd);
-
-	// ADC and DAC FPGA JESD204 PHY layer
-#ifdef ALTERA
-	xcvr_setup(&ad9144_xcvr);
-	xcvr_setup(&ad9680_xcvr);
+	altera_a10_fpll_disable(ad9680_device_clk_pll);
+	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
+					  ad9680_jesd_param.device_clk_khz * 1000);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       ad9680_device_clk_pll->name);
+	}
+	altera_a10_fpll_enable(ad9680_device_clk_pll);
+	altera_a10_fpll_disable(ad9144_device_clk_pll);
+	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
+					  ad9144_jesd_param.device_clk_khz * 1000);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       ad9144_device_clk_pll->name);
+	}
+	altera_a10_fpll_enable(ad9144_device_clk_pll);
 #endif
-#ifdef XILINX
-	if (!ad9144_xcvr.dev.cpll_enable) {	// DAC_XCVR controls the QPLL reset
-		xcvr_setup(&ad9144_xcvr);
-		xcvr_setup(&ad9680_xcvr);
-	} else {				// ADC_XCVR controls the CPLL reset
-		xcvr_setup(&ad9680_xcvr);
-		xcvr_setup(&ad9144_xcvr);
+	status = ad9680_setup(&ad9680_device, &ad9680_param);
+	if (status != SUCCESS) {
+		printf("error: ad9680_setup() failed\n");
+	}
+	status = axi_jesd204_tx_init(&ad9144_jesd, &ad9144_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9144_jesd->name);
+	}
+
+	status = axi_jesd204_tx_lane_clk_enable(ad9144_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9144_jesd->name);
+	}
+
+	status = adxcvr_init(&ad9144_xcvr, &ad9144_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", ad9144_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(ad9144_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9144_xcvr->name);
 	}
 #endif
+	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(ad9680_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
+	}
+#endif
+	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
+	}
 
-	// ADC FPGA JESD204 link layer
-	jesd_setup(&ad9680_jesd);
+	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9144_jesd->name);
+	}
 
-	// DAC
-	ad9144_setup(&ad9144_device, &ad9144_param);
+	status = ad9144_setup(&ad9144_device, &ad9144_param);
+	if (status != SUCCESS) {
+		printf("error: ad9144_setup() failed\n");
+	}
+	status = axi_jesd204_rx_status_read(ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
 
-	// JESD core status
-	axi_jesd204_tx_status_read(&ad9144_jesd);
-	axi_jesd204_rx_status_read(&ad9680_jesd);
+	status = axi_jesd204_tx_status_read(ad9144_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+	}
 
-	// interface core set up
-	adc_setup(ad9680_core);
-	dac_setup(&ad9144_core);
+	status = axi_adc_init(&ad9680_core,  &ad9680_core_param);
+	if (status != SUCCESS) {
+		printf("axi_adc_init() error: %s\n", ad9680_core->name);
+	}
 
-	ad9144_status(ad9144_device);
+	status = axi_dac_init(&ad9144_core, &ad9144_core_param);
+	if (status != SUCCESS) {
+		printf("axi_dac_init() error: %s\n", ad9144_core->name);
+	}
 
-//******************************************************************************
-// transport path testing
-//******************************************************************************
+	status = ad9144_status(ad9144_device);
 
-	ad9144_channels[0].sel = DAC_SRC_SED;
-	ad9144_channels[1].sel = DAC_SRC_SED;
-	dac_data_setup(&ad9144_core);
+	/* transport path testing */
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_SED;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_SED;
+	axi_dac_data_setup(ad9144_core);
 	ad9144_short_pattern_test(ad9144_device, &ad9144_param);
 
 	// PN7 data path test
 
-	ad9144_channels[0].sel = DAC_SRC_PN23;
-	ad9144_channels[1].sel = DAC_SRC_PN23;
-	dac_data_setup(&ad9144_core);
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN23;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN23;
+	axi_dac_data_setup(ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS7;
 	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
 	// PN15 data path test
 
-	ad9144_channels[0].sel = DAC_SRC_PN31;
-	ad9144_channels[1].sel = DAC_SRC_PN31;
-	dac_data_setup(&ad9144_core);
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN31;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN31;
+	axi_dac_data_setup(ad9144_core);
 	ad9144_param.prbs_type = AD9144_PRBS15;
 	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
 
-//******************************************************************************
-// receive path testing
-//******************************************************************************
-
+	/* receive path testing */
 	ad9680_test(ad9680_device, AD9680_TEST_PN9);
-	if(adc_pn_mon(ad9680_core, ADC_PN9) == -1) {
+	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
 		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
 	};
 	ad9680_test(ad9680_device, AD9680_TEST_PN23);
-	if(adc_pn_mon(ad9680_core, ADC_PN23A) == -1) {
+	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
 		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
 	};
 
-	// default data
+	ad9680_test(ad9680_device, AD9680_TEST_OFF);
 
-#if DMA_BUFFER
-	ad9144_channels[0].sel = DAC_SRC_DMA;
-	ad9144_channels[1].sel = DAC_SRC_DMA;
-	dac_data_setup(&ad9144_core);
+	/* DAC DMA Example */
+#ifdef DAC_DMA_EXAMPLE
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
+	axi_dac_data_setup(ad9144_core);
 
-	if(!dmac_start_transaction(ad9144_dma)) {
-		printf("daq2: transmit data from memory\n");
-	};
+	Xil_DCacheFlush();
+
+	axi_dac_load_custom_data(ad9144_core, sine_lut_iq,
+				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
+
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheFlush();
+#endif
+
+	axi_dmac_init(&ad9144_dmac, &ad9144_dmac_param);
+
+	axi_dmac_transfer(ad9144_dmac, DAC_DDR_BASEADDR,
+			  sizeof(sine_lut_iq) * 4);
 #else
-	ad9144_channels[0].sel = DAC_SRC_DDS;
-	ad9144_channels[1].sel = DAC_SRC_DDS;
-	dac_data_setup(&ad9144_core);
+	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
+	axi_dac_data_setup(ad9144_core);
+#endif
+
+	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
+	axi_dmac_init(&ad9680_dmac, &ad9680_dmac_param);
+
+	axi_dmac_transfer(ad9680_dmac, ADC_DDR_BASEADDR,
+			  16384 * 2);
 
 	printf("daq2: setup and configuration is done\n");
-#endif
-//******************************************************************************
-// external loopback - capture data with DMA
-//******************************************************************************
 
-	ad9680_test(ad9680_device, AD9680_TEST_OFF);
-	if(!dmac_start_transaction(ad9680_dma)) {
-		printf("daq2: RX capture done.\n");
-	};
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
+#endif
 
 	/* Memory deallocation for devices and spi */
 	ad9144_remove(ad9144_device);
 	ad9523_remove(ad9523_device);
 	ad9680_remove(ad9680_device);
+
+	/* Memory deallocation for PHY and LINK layers */
+	adxcvr_remove(ad9144_xcvr);
+	adxcvr_remove(ad9680_xcvr);
+	axi_jesd204_tx_remove(ad9144_jesd);
+	axi_jesd204_rx_remove(ad9680_jesd);
 
 	/* Memory deallocation for gpios */
 	gpio_remove(clkd_sync);
@@ -672,5 +801,5 @@ int main(void)
 	gpio_remove(dac_txen);
 	gpio_remove(adc_pd);
 
-	return(0);
+	return SUCCESS;
 }
