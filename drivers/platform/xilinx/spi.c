@@ -109,9 +109,9 @@ static int32_t spi_init_pl(struct spi_desc *desc,
 
 	ret = XSpi_SetOptions(xdesc->instance,
 			      XSP_MASTER_OPTION |
-			      ((sdesc->mode & SPI_CPOL) ?
+			      ((desc->mode & SPI_CPOL) ?
 			       XSP_CLK_ACTIVE_LOW_OPTION : 0) |
-			      ((sdesc->mode & SPI_CPHA) ?
+			      ((desc->mode & SPI_CPHA) ?
 			       XSP_CLK_PHASE_1_OPTION : 0));
 	if (ret != SUCCESS)
 		goto pl_error;
