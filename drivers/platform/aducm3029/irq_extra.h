@@ -62,7 +62,7 @@
 /******************************************************************************/
 
 /**
- * @enum uart_irq_id
+ * @enum irq_id
  * @brief Interrupts IDs supported by the irq driver
  */
 enum irq_id {
