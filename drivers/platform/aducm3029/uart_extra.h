@@ -45,39 +45,13 @@
 /******************************************************************************/
 
 #include <drivers/uart/adi_uart.h>
-#include <drivers/pwr/adi_pwr.h>
 #include <stdint.h>
 #include "error.h"
+#include "irq.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-
-/**
- * @enum UART_EVENT
- * @brief Possible events for \ref UART_CALLBACK
- */
-enum UART_EVENT {
-	/** Write operation finalized */
-	WRITE_DONE,
-	/** Read operation finalized */
-	READ_DONE,
-	/** An error occurred */
-	ERROR
-};
-
-/**
- * @typedef UART_CALLBACK
- * @brief Signature of the function for
- * callback parameter from \ref aducm_uart_init_param
- */
-typedef void (*UART_CALLBACK) (
-	/** Parameter set by the user */
-	void		*app_param,
-	/** Event given by the driver */
-	enum UART_EVENT	event,
-	/** Processed buffer or error code */
-	uint8_t		*data);
 
 /**
  * @enum UART_ERROR
@@ -203,10 +177,6 @@ struct aducm_uart_init_param {
 	enum UART_STOPBITS	stop_bits;
 	/** Set the word length */
 	enum UART_WORDLEN	word_length;
-	/** Set a callback to be called when an operation is done (optional)*/
-	UART_CALLBACK		callback;
-	/** Set a parameter to be passed to the callback as app_param */
-	void			*param;
 };
 
 /**
@@ -220,9 +190,10 @@ struct aducm_uart_desc {
 	/** Stores the error occurred */
 	enum UART_ERROR	errors;
 	/** Set a callback to be called when an operation is done (optional) */
-	UART_CALLBACK	callback;
+	void		(*callback)(void *callback_ctx, uint32_t event,
+				    void *extra);
 	/** Set a parameter to be passed to the callback as app_param */
-	void		*param;
+	void		*callback_ctx;
 	/**
 	 * Buffer needed by the ADI UART driver to operate.
 	 * This buffer allocated and aligned at runtime to 32 bits
@@ -244,5 +215,14 @@ struct aducm_uart_desc {
 	 */
 	uint32_t	waiting_write_callback;
 };
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+
+int32_t uart_register_callback(struct uart_desc *desc,
+			       void (*callback)(void *callback_ctx,
+					       uint32_t event, void *extra),
+			       void *callback_ctx);
 
 #endif /* UART_H_ */

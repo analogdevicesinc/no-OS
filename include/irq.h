@@ -51,6 +51,19 @@
 /******************************************************************************/
 
 /**
+ * @enum irq_uart_event_e
+ * @brief Possible events for uart interrupt
+ */
+enum irq_uart_event_e {
+	/** Write operation finalized */
+	WRITE_DONE,
+	/** Read operation finalized */
+	READ_DONE,
+	/** An error occurred */
+	ERROR
+};
+
+/**
  * @struct irq_init_param
  * @brief Structure holding the initial parameters for Interrupt Request.
  */
@@ -72,6 +85,24 @@ struct irq_ctrl_desc {
 	void		*extra;
 };
 
+/**
+ * @struct callback_desc
+ * @brief Structure describing a callback to be registered
+ */
+struct callback_desc {
+	/**
+	 * Callback to be called when the event an event occurs
+	 *  @param callback_ctx - Same as \ref callback_desc.callback_ctx
+	 *  @param event - Event that generated the callback
+	 *  @param extra - Platform specific data
+	 */
+	void (*callback)(void *callback_ctx, uint32_t event, void *extra);
+	/** Parameter to be passed when the callback is called */
+	void *callback_ctx;
+	/** Platform specific configuration for a callback */
+	void *callback_config;
+};
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -83,30 +114,19 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 /* Free the resources allocated by irq_ctrl_init(). */
 int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc);
 
-/**
- * @brief Registers a IRQ handling function to irq controller.
- * @param desc - The IRQ controller descriptor.
- * @param irq_id - Interrupt identifier.
- * @param irq_handler - The IRQ handler.
- * @param dev_instance - device instance.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *dev_instance);
+/* Register a callback to handle the irq events */
+int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+			      struct callback_desc *callback_desc);
+/* Enable specific interrupt */
+int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
-/* Unregisters a generic IRQ handling function */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
+/* Disable specific interrupt */
+int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Global interrupt enable */
 int32_t irq_global_enable(struct irq_ctrl_desc *desc);
 
 /* Global interrupt disable */
 int32_t irq_global_disable(struct irq_ctrl_desc *desc);
-
-/* Enable specific interrupt */
-int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
-
-/* Disable specific interrupt */
-int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 #endif // IRQ_H_
