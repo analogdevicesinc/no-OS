@@ -376,14 +376,14 @@ int main(void)
 				      &rx_device_clk_pll_init);
 	if (status != SUCCESS) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
-		       rx_os_device_clk_pll_init.name);
+		       rx_device_clk_pll_init.name);
 		goto error_1;
 	}
 	status = altera_a10_fpll_init(&tx_device_clk_pll,
 				      &tx_device_clk_pll_init);
 	if (status != SUCCESS) {
 		printf("error: %s: altera_a10_fpll_init() failed\n",
-		       rx_os_device_clk_pll_init.name);
+		       tx_device_clk_pll_init.name);
 		goto error_2;
 	}
 	status = altera_a10_fpll_init(&rx_os_device_clk_pll,
