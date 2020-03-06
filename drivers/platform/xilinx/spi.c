@@ -182,6 +182,7 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 	if (desc->max_speed_hz != 0u) {
 		uint32_t div = input_clock / desc->max_speed_hz;
 		uint32_t rem = input_clock % desc->max_speed_hz;
+		uint32_t po2 = !(div & (div - 1)) && !rem;
 
 		// find the power of two just higher than div and
 		// store the exponent in prescaler
@@ -197,7 +198,7 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 
 		// this exponent - 1 is needed when initial div was
 		// precisely a power of two
-		if (!rem && prescaler)
+		if (prescaler && po2)
 			prescaler -= 1;
 
 		if (prescaler < prescaler_min)
