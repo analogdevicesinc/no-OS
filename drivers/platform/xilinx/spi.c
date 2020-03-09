@@ -58,6 +58,12 @@
 #include "spi_engine.h"
 #endif
 
+#if defined(PLATFORM_ZYNQ)
+#define SPI_CLK_FREQ_HZ(dev)    (XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#elif defined(PLATFORM_ZYNQMP)
+#define SPI_CLK_FREQ_HZ(dev)    (XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#endif
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -145,13 +151,11 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 	int32_t				ret;
 	struct xil_spi_desc 		*xdesc;
 	struct xil_spi_init_param	*xinit;
-	const uint32_t			input_clock = 100000000;
-#ifdef XSPIPS_H
 	const uint32_t			prescaler_default = XSPIPS_CLK_PRESCALE_64;
 	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
 	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
-#endif
 	uint32_t			prescaler = 0u;
+	uint32_t			input_clock;
 
 	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
 	if(!xdesc) {
@@ -178,6 +182,17 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 				   ->BaseAddress);
 	if(ret != SUCCESS)
 		goto ps_error;
+
+	switch (xinit->device_id) {
+	case 0:
+		input_clock = SPI_CLK_FREQ_HZ(0);
+		break;
+	case 1:
+		input_clock = SPI_CLK_FREQ_HZ(1);
+		break;
+	default:
+		goto ps_error;
+	};
 
 	if (desc->max_speed_hz != 0u) {
 		uint32_t div = input_clock / desc->max_speed_hz;
