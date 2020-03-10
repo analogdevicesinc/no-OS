@@ -59,9 +59,13 @@
 #endif
 
 #if defined(PLATFORM_ZYNQ)
-#define SPI_CLK_FREQ_HZ(dev)    (XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
 #elif defined(PLATFORM_ZYNQMP)
-#define SPI_CLK_FREQ_HZ(dev)    (XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_CLK_FREQ_HZ(dev)	(XPAR_PSU_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
+#define SPI_NUM_INSTANCES	XPAR_XSPIPS_NUM_INSTANCES
+#else
+#define SPI_NUM_INSTANCES	0
 #endif
 
 /******************************************************************************/
@@ -184,12 +188,16 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 		goto ps_error;
 
 	switch (xinit->device_id) {
+#if (SPI_NUM_INSTANCES >= 1)
 	case 0:
 		input_clock = SPI_CLK_FREQ_HZ(0);
 		break;
+#endif
+#if (SPI_NUM_INSTANCES >= 2)
 	case 1:
 		input_clock = SPI_CLK_FREQ_HZ(1);
 		break;
+#endif
 	default:
 		goto ps_error;
 	};
