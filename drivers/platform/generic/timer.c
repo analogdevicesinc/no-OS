@@ -1,5 +1,5 @@
 /***************************************************************************//**
-*   @file   timer.c
+*   @file   generic/timer.c
 *   @brief  Timer control module source.
 *   @author Andrei Drimbarean (andrei.drimbarean@analog.com)
 ********************************************************************************

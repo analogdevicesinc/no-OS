@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   uart_extra.h
+ *   @file   aducm3029/uart_extra.h
  *   @brief  Header file of UART driver for ADuCM302x
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
