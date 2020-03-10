@@ -1,6 +1,7 @@
 /***************************************************************************//**
  *   @file   aducm3029/spi.c
- *   @author MChindri (mihail.chindris@analog.com)
+ *   @brief  Implementation of SPI driver for ADuCM302x
+ *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -44,56 +45,63 @@
 #include "spi.h"
 #include "error.h"
 #include <stdlib.h>
+#include "util.h"
+
+#define	NB_SPI_DEVICES	3
+#define	MAX_CS_NUMBER	3
 
 /******************************************************************************/
 /*****************************  Variables   **********************************/
 /******************************************************************************/
 
-static uint8_t	active_spi = 0; //Stores the active SPIs
+/** Structure storing the device info */
+static struct aducm_device_desc	*devices[NB_SPI_DEVICES];
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/**
- * @brief Allocates the memory needed for the descriptor
- * @return A address to the allocated memory, NULL if the allocation fails.
- */
-static struct spi_desc *alloc_data_mem(void)
+static int32_t config_device(struct aducm_device_desc *dev,
+			     struct spi_desc *desc,
+			     bool init)
 {
-	struct spi_desc		*desc;
-	struct aducm_spi_desc	*adicup_desc;
+	struct aducm_spi_desc *aducm_desc = desc->extra;
 
-	desc = calloc(1, sizeof(struct spi_desc));
-	if (!desc)
-		return NULL;
-
-	adicup_desc = calloc(1, sizeof(struct aducm_spi_desc));
-	if (!adicup_desc) {
-		free(desc);
-		return NULL;
+	if (init || desc->max_speed_hz != dev->bitrate) {
+		if (ADI_SPI_SUCCESS != adi_spi_SetBitrate(dev->spi_handle,
+				desc->max_speed_hz))
+			return FAILURE;
+		if (init) {
+			if (ADI_SPI_SUCCESS != adi_spi_GetBitrate(
+				    dev->spi_handle,
+				    &dev->bitrate))
+				return FAILURE;
+			desc->max_speed_hz = dev->bitrate;
+		}
 	}
-	desc->extra = adicup_desc;
-
-	adicup_desc->buffer = calloc(1, ADI_SPI_MEMORY_SIZE);
-	if (NULL == adicup_desc->buffer) {
-		free(adicup_desc);
-		free(desc);
-		return NULL;
+	if (init || desc->chip_select != dev->cs) {
+		adi_spi_SetChipSelect(dev->spi_handle, desc->chip_select);
+		dev->cs = desc->chip_select;
+	}
+	if (init || desc->mode != dev->mode) {
+		adi_spi_SetClockPhase(dev->spi_handle, desc->mode & SPI_CPHA);
+		adi_spi_SetClockPolarity(dev->spi_handle,
+					 desc->mode & SPI_CPOL);
+		dev->mode = desc->mode;
+	}
+	if (init || aducm_desc->aducm_conf.master_mode != dev->master_mode) {
+		adi_spi_SetMasterMode(dev->spi_handle,
+				      aducm_desc->aducm_conf.master_mode);
+		dev->master_mode = aducm_desc->aducm_conf.master_mode;
+	}
+	if (init || aducm_desc->aducm_conf.continuous_mode
+	    != dev->continuous_mode) {
+		adi_spi_SetContinuousMode(dev->spi_handle,
+					  aducm_desc->aducm_conf.continuous_mode);
+		dev->continuous_mode = aducm_desc->aducm_conf.continuous_mode;
 	}
 
-	return desc;
-}
-
-/**
- * @brief Deallocates the memory needed for the descriptor
- * @param desc - Descriptor to be deallocated
- */
-static void free_desc_mem(struct spi_desc *desc)
-{
-	free(((struct aducm_spi_desc*)(desc->extra))->buffer);
-	free(desc->extra);
-	free(desc);
+	return SUCCESS;
 }
 
 /**
@@ -105,65 +113,64 @@ static void free_desc_mem(struct spi_desc *desc)
 int32_t spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
-	ADI_SPI_RESULT			spi_ret;
-	struct aducm_spi_desc		*adicup_desc;
-	struct aducm_spi_init_param	*adicup_init_param;
+	struct spi_desc			*spi_desc;
+	struct aducm_spi_desc		*aducm_desc;
+	struct aducm_spi_init_param	*config;
+	struct aducm_device_desc	*dev;
 
-
+	/* Initial checks */
 	if (!desc || !param || !(param->extra))
 		return FAILURE;
 
-	/* Verify if the SPI is already activated */
-	adicup_init_param = param->extra;
-	if (active_spi & (1 << adicup_init_param->spi_channel))
+	config = param->extra;
+	if (config->spi_channel >= NB_SPI_DEVICES ||
+	    param->chip_select > MAX_CS_NUMBER)
 		return FAILURE;
 
-	*desc = alloc_data_mem();
-	if (!(*desc))
+	/* Memory allocation */
+	spi_desc = (struct spi_desc *)calloc(1, sizeof(*spi_desc));
+	if (!spi_desc)
 		return FAILURE;
-	(*desc)->chip_select = param->chip_select;
-	(*desc)->max_speed_hz = param->max_speed_hz;
-	(*desc)->mode = param->mode;
-	adicup_desc = (*desc)->extra;
-	adicup_desc->spi_channel = adicup_init_param->spi_channel;
-	adicup_desc->master_mode = adicup_init_param->master_mode;
-	adicup_desc->dma = false;
-	adicup_desc->half_duplex = false;
+	aducm_desc = (struct aducm_spi_desc *)calloc(1, sizeof(*aducm_desc));
+	if (!aducm_desc) {
+		free(spi_desc);
+		return FAILURE;
+	}
 
-	/* Configure the SPI with user parameters*/
-	spi_ret = adi_spi_Open(adicup_init_param->spi_channel,adicup_desc->buffer,
-			       ADI_SPI_MEMORY_SIZE, &adicup_desc->spi_handle);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetBitrate(adicup_desc->spi_handle, param->max_speed_hz);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetChipSelect(adicup_desc->spi_handle, param->chip_select);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetClockPhase(adicup_desc->spi_handle,
-					param->mode & SPI_CPHA);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetClockPolarity(adicup_desc->spi_handle,
-					   param->mode & SPI_CPOL);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetMasterMode(adicup_desc->spi_handle,
-					adicup_init_param->master_mode);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
-	spi_ret = adi_spi_SetContinuousMode(adicup_desc->spi_handle,
-					    adicup_init_param->continuous_mode);
-	if (spi_ret != ADI_SPI_SUCCESS)
-		goto failure;
+	/* Initialize descriptor */
+	aducm_desc->aducm_conf = *config;
+	spi_desc->extra = aducm_desc;
+	spi_desc->chip_select = (1 << param->chip_select);
+	spi_desc->max_speed_hz = param->max_speed_hz;
+	spi_desc->mode = param->mode;
 
-	/* SPI configured. Set it as activated */
-	active_spi |= (1 << adicup_init_param->spi_channel);
+	dev = devices[config->spi_channel];
+	/* If device not initialized initialize it */
+	if (!dev) {
+		dev = (struct aducm_device_desc *)calloc(1, sizeof(*dev));
+		if (!dev) {
+			free(spi_desc);
+			free(aducm_desc);
+			return FAILURE;
+		}
+		if (ADI_SPI_SUCCESS != adi_spi_Open(config->spi_channel,
+						    dev->buffer,
+						    ADI_SPI_MEMORY_SIZE,
+						    &dev->spi_handle))
+			goto failure;
+		if (SUCCESS != config_device(dev, spi_desc, true))
+			goto failure;
+		devices[config->spi_channel] = dev;
+	}
+	dev->ref_instances++;
+	aducm_desc->dev = dev;
+	*desc = spi_desc;
 
 	return SUCCESS;
 failure:
-	free_desc_mem(*desc);
+	free(dev);
+	free(spi_desc);
+	free(aducm_desc);
 	return FAILURE;
 }
 
@@ -174,16 +181,25 @@ failure:
  */
 int32_t spi_remove(struct spi_desc *desc)
 {
-	struct aducm_spi_desc *adicup_desc;
+	struct aducm_spi_desc *aducm_desc;
 
-	if (desc == NULL)
-		return FAILURE;
-	adicup_desc = desc->extra;
-	if (ADI_SPI_SUCCESS != adi_spi_Close(adicup_desc->spi_handle))
+	if (!desc || !desc->extra)
 		return FAILURE;
 
-	active_spi &= ~(1<<(adicup_desc->spi_channel));
-	free_desc_mem(desc);
+	aducm_desc = desc->extra;
+	if (!aducm_desc->dev)
+		return FAILURE;
+
+	if (aducm_desc->dev->ref_instances == 1) {
+		if (ADI_SPI_SUCCESS != adi_spi_Close(
+			    aducm_desc->dev->spi_handle))
+			return FAILURE;
+		free(aducm_desc->dev);
+		devices[aducm_desc->aducm_conf.spi_channel] = NULL;
+	}
+	free(aducm_desc);
+	free(desc);
+
 	return SUCCESS;
 }
 
@@ -198,33 +214,56 @@ int32_t spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint16_t bytes_number)
 {
-	struct aducm_spi_desc	*adicup_desc = desc->extra;
-	ADI_SPI_RESULT		spi_ret;
-	ADI_SPI_TRANSCEIVER	spi_trans;
+	struct aducm_spi_desc		*aducm_desc;
+	ADI_SPI_TRANSCEIVER		spi_trans;
+	uint16_t			n;
+
+	if (!desc)
+		return FAILURE;
+
+	aducm_desc = desc->extra;
+	if (!aducm_desc->dev)
+		return FAILURE;
+
+	if (SUCCESS != config_device(aducm_desc->dev, desc, false))
+		return FAILURE;
 
 	if (bytes_number == 0)
 		return FAILURE;
 
-	spi_trans.TransmitterBytes = bytes_number;
-	spi_trans.pTransmitter = data;
 	spi_trans.nTxIncrement = 1;
-
-	spi_trans.ReceiverBytes = bytes_number;
-	spi_trans.pReceiver = data;
 	spi_trans.nRxIncrement = 1;
+	spi_trans.bDMA = aducm_desc->aducm_conf.dma;
+	spi_trans.bRD_CTL = aducm_desc->aducm_conf.half_duplex;
 
-	spi_trans.bDMA = adicup_desc->dma;
-	spi_trans.bRD_CTL = adicup_desc->half_duplex;
+	while (bytes_number) {
+		if (aducm_desc->aducm_conf.dma)
+			/* Maximum 2048 bytes over dma */
+			n = max(2048, bytes_number);
+		else
+			n = bytes_number;
 
-	if (adicup_desc->master_mode == MASTER) {
-		spi_ret = adi_spi_MasterReadWrite(adicup_desc->spi_handle, &spi_trans);
-		if (spi_ret != ADI_SPI_SUCCESS)
-			return FAILURE;
-	} else {
-		spi_ret = adi_spi_SlaveReadWrite(adicup_desc->spi_handle, &spi_trans);
-		if (spi_ret != ADI_SPI_SUCCESS)
-			return FAILURE;
+		spi_trans.TransmitterBytes = n;
+		spi_trans.pTransmitter = data;
+		spi_trans.ReceiverBytes = n;
+		spi_trans.pReceiver = data;
+
+		if (aducm_desc->aducm_conf.master_mode == MASTER) {
+			if (ADI_SPI_SUCCESS != adi_spi_MasterReadWrite(
+				    aducm_desc->dev->spi_handle,
+				    &spi_trans))
+				return FAILURE;
+		} else {
+			if (ADI_SPI_SUCCESS != adi_spi_SlaveReadWrite(
+				    aducm_desc->dev->spi_handle,
+				    &spi_trans))
+				return FAILURE;
+		}
+
+		data += n;
+		bytes_number -= n;
 	}
+
 	return SUCCESS;
 }
 
