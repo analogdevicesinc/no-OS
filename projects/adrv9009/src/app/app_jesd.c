@@ -58,9 +58,9 @@
 // header
 #include "app_jesd.h"
 
-static struct axi_jesd204_rx *rx_jesd = NULL;
-static struct axi_jesd204_tx *tx_jesd = NULL;
-static struct axi_jesd204_rx *rx_os_jesd = NULL;
+struct axi_jesd204_rx *rx_jesd = NULL;
+struct axi_jesd204_tx *tx_jesd = NULL;
+struct axi_jesd204_rx *rx_os_jesd = NULL;
 
 adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		      uint32_t tx_div40_rate_hz,

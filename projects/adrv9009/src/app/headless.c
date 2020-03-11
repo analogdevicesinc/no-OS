@@ -224,7 +224,16 @@ int main(void)
 		if (err != ADIHAL_OK)
 			goto error_3;
 	}
-
+#if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+	
+	for(int i=0; i < 12; i++) {
+		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
+			err = talise_multi_chip_sync(&tal[t], i);
+			if (err != ADIHAL_OK)
+				goto error_3;
+		}
+	}
+#endif
 	ADIHAL_sysrefReq(tal[TALISE_A].devHalInfo, SYSREF_CONT_ON);
 
 	jesd_rx_watchdog();
