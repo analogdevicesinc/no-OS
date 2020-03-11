@@ -61,6 +61,17 @@ static struct aducm_device_desc	*devices[NB_SPI_DEVICES];
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+/**
+ * @brief Update hardware device if needed.
+ *
+ * Check if the current state of the SPI device match with the setting of the
+ * the current instance. If not, the settings for the SPI device will be
+ * changed.
+ * @param dev - SPI instance
+ * @param desc - SPI device descriptor
+ * @param init - True if it is the first configuration of the SPI device.
+ * @return
+ */
 static int32_t config_device(struct aducm_device_desc *dev,
 			     struct spi_desc *desc,
 			     bool init)
