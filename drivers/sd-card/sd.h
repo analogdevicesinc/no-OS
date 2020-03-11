@@ -1,13 +1,10 @@
 /***************************************************************************//**
 *   @file   sd.h
 *   @brief  Header file for SD card interface over SPI.
-*   This interface supports byte read and write operations for SD cards that
-*   that meet the following conditions:
-*   	- Version 2.00 or later
-*   	- High capacity or extended capacity (SDHX or SDXC)
-*   	- Supply voltage of 3.3V
 *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
+* @copyright
+*
 * Copyright 2019(c) Analog Devices, Inc.
 *
 * All rights reserved.
@@ -40,7 +37,17 @@
 * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+********************************************************************************
+*
+* @section details Library description
+* This interface supports byte read and write operations for SD cards that
+* that meet the following conditions:
+*   	- Version 2.00 or later
+*   	- High capacity or extended capacity (SDHX or SDXC)
+*   	- Supply voltage of 3.3V
+*
 *******************************************************************************/
+
 #ifndef __SD_H__
 #define __SD_H__
 
@@ -52,7 +59,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "spi.h"
-#include "error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -87,7 +93,7 @@ struct sd_init_param {
  */
 struct sd_desc {
 	/** Descriptor of an initialized SPI channel */
-	struct spi_desc *spi_desc;
+	struct spi_desc	*spi_desc;
 	/** Memory size of the SD card in bytes */
 	uint64_t	memory_size;
 	/** 1 if SD card is HC or XC, 0 otherwise */
