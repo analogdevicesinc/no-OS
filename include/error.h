@@ -51,4 +51,6 @@
 #define FAILURE		-1
 #endif
 
+#define IS_ERR_VALUE(x)	((x) < 0)
+
 #endif // ERROR_H_
