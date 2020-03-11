@@ -514,23 +514,23 @@ int32_t sd_write(struct sd_desc *sd_desc, uint8_t *data, uint64_t address,
  */
 int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 {
+	struct sd_desc		*local_desc;
+	struct cmd_desc		cmd_desc;
+	uint32_t		i;
+
 	/* Allocate data and initialize sd_desc with param */
 	if (!sd_desc || !param)
 		return FAILURE;
-	*sd_desc = calloc(1, sizeof(struct sd_desc));
-	if (!(*sd_desc))
-		return FAILURE;
-	(*sd_desc)->spi_desc = param->spi_desc;
 
-	struct sd_desc	*local_desc;
-	struct cmd_desc	cmd_desc;
-	uint32_t		i;
+	local_desc = calloc(1, sizeof(*local_desc));
+	if (!local_desc)
+		return FAILURE;
+	local_desc->spi_desc = param->spi_desc;
 
 	/* Synchronize SD card frequency: Send 10 dummy bytes*/
-	local_desc = *sd_desc;
 	memset(local_desc->buff, 0xFF, 10);
 	if (SUCCESS != spi_write_and_read(local_desc->spi_desc, local_desc->buff, 10))
-		return FAILURE;
+		goto failure;
 
 	/* Change from SD mode to SPI mode */
 	cmd_desc.cmd = CMD(0);
@@ -544,7 +544,7 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 			break;
 		if (++i == CMD0_RETRY_NUMBER) {
 			DEBUG_MSG("Failed to enter SPI_MODE\n");
-			return FAILURE;
+			goto failure;
 		}
 	}
 
@@ -553,11 +553,11 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.arg = CMD8_ARG;
 	cmd_desc.response_len = R3_LEN;
 	if (SUCCESS != send_command(local_desc, &cmd_desc))
-		return FAILURE;
+		goto failure;
 	if (!(cmd_desc.response[0] == R1_IDLE_STATE &&
 	      cmd_desc.response[3] == 0x1u && cmd_desc.response[4] == 0xAAu)) {
 		DEBUG_MSG("SD card is lower than V2.0 or not supported voltage\n");
-		return FAILURE;
+		goto failure;
 	}
 
 	/* For enabling CRC send CMD 59 here (CRC not implemented)*/
@@ -579,11 +579,11 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.arg = STUFF_ARG;
 	cmd_desc.response_len = R3_LEN;
 	if (SUCCESS != send_command(local_desc, &cmd_desc))
-		return FAILURE;
+		goto failure;
 	if (!(cmd_desc.response[0] == R1_READY_STATE
 	      && (cmd_desc.response[1] & (BIT_CCS >> 24)))) {
 		DEBUG_MSG("Only SDHX and SDXC supported\n");
-		return FAILURE;
+		goto failure;
 	}
 
 	/* Read CSD register to get memory size */
@@ -591,17 +591,17 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 	cmd_desc.arg = STUFF_ARG;
 	cmd_desc.response_len = R1_LEN;
 	if (SUCCESS != send_command(local_desc, &cmd_desc))
-		return FAILURE;
+		goto failure;
 	if (SUCCESS != wait_for_response(local_desc, cmd_desc.response))
-		return FAILURE;
+		goto failure;
 	if (cmd_desc.response[0] != START_1_BLOCK_TOKEN) {
 		DEBUG_MSG("Failed to read CSD register\n");
-		return FAILURE;
+		goto failure;
 	}
 	memset(local_desc->buff, 0xFF, CSD_LEN);
 	if (SUCCESS != spi_write_and_read(local_desc->spi_desc,
 					  local_desc->buff, CSD_LEN))
-		return FAILURE;
+		goto failure;
 
 	/* Get c_size from CSD */
 	uint32_t c_size = ((local_desc->buff[7] & ((1u<<5) -1)) << 16) |
@@ -609,7 +609,13 @@ int32_t sd_init(struct sd_desc **sd_desc, const struct sd_init_param *param)
 			  local_desc->buff[9];
 	local_desc->memory_size = ((uint64_t)c_size + 1) *
 				  ((uint64_t)DATA_BLOCK_LEN << 10u);
+
+	*sd_desc = local_desc;
+
 	return SUCCESS;
+failure:
+	free(local_desc);
+	return FAILURE;
 }
 
 /**
@@ -621,6 +627,7 @@ int32_t sd_remove(struct sd_desc *desc)
 {
 	if (desc == NULL)
 		return FAILURE;
+
 	free(desc);
 	return SUCCESS;
 }
