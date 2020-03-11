@@ -44,6 +44,7 @@
 /******************************************************************************/
 
 #include "sd.h"
+#include "delay.h"
 #include "error.h"
 
 /******************************************************************************/
@@ -57,7 +58,7 @@
 #define ACMD(x)				(CMD(x) | BIT_APPLICATION_CMD)
 
 #define CMD0_RETRY_NUMBER		(5u)
-#define WAIT_RESP_TIMEOUT		(0x1FFFFFFu)
+#define WAIT_RESP_TIMEOUT		(1000u) //1000ms
 
 #define R1_READY_STATE			(0x00u)
 #define R1_IDLE_STATE			(0x01u)
@@ -98,16 +99,23 @@
  */
 static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
 {
-	uint32_t timeout = WAIT_RESP_TIMEOUT; //TODO implemented with timer
-	*data_out = 0xFF;
-	while (*data_out == 0xFF) {
-		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, data_out, 1))
-			return FAILURE;
-		if (timeout-- == 0)
-			return FAILURE;
-	}
+	uint32_t	not_timeout;
+	int32_t		ret;
 
-	return SUCCESS;
+	ret = FAILURE;
+	not_timeout = WAIT_RESP_TIMEOUT;
+	do {
+		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc,
+						  data_out, 1))
+			break;
+		if (*data_out != 0xFF) {
+			ret = SUCCESS;
+			break;
+		}
+		mdelay(1);
+	} while (not_timeout--);
+
+	return ret;
 }
 
 /**
@@ -117,19 +125,24 @@ static int32_t wait_for_response(struct sd_desc *sd_desc, uint8_t *data_out)
  */
 static int32_t wait_until_not_busy(struct sd_desc *sd_desc)
 {
-	uint8_t	data;
-	uint32_t timeout = WAIT_RESP_TIMEOUT;
+	uint32_t	not_timeout;
+	int32_t		ret;
+	uint8_t		data;
 
-	data = 0x00;
-	while (data == 0x00) {
+	ret = FAILURE;
+	not_timeout = WAIT_RESP_TIMEOUT;
+	do {
 		data = 0xFF;
 		if (SUCCESS != spi_write_and_read(sd_desc->spi_desc, &data, 1))
-			return FAILURE;
-		if (timeout-- == 0)
-			return FAILURE;
-	}
+			break;
+		if (data != 0x00) {
+			ret = SUCCESS;
+			break;
+		}
+		mdelay(1);
+	} while (not_timeout--);
 
-	return SUCCESS;
+	return ret;
 }
 
 /**
