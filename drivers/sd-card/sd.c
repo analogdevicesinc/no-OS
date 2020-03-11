@@ -1,13 +1,10 @@
 /***************************************************************************//**
 *   @file   sd.c
 *   @brief  Implementation of SD card interface over SPI.
-*   This interface supports byte read and write operations for SD cards that
-*   that meet the following conditions:
-*   	- Version 2.00 or later
-*   	- High capacity or extended capacity (SDHX or SDXC)
-*   	- Supply voltage of 3.3V
 *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
+* @copyright
+*
 * Copyright 2019(c) Analog Devices, Inc.
 *
 * All rights reserved.
@@ -47,6 +44,7 @@
 /******************************************************************************/
 
 #include "sd.h"
+#include "error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
