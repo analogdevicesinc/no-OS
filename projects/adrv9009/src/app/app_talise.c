@@ -57,6 +57,11 @@
 #include "talise_error.h"
 #include "talise_arm_binary.h"
 #include "talise_stream_binary.h"
+#include "talise_reg_addr_macros.h"
+
+// jesd
+#include "axi_jesd204_rx.h"
+#include "axi_jesd204_tx.h"
 
 // hal
 #include "parameters.h"
@@ -64,6 +69,7 @@
 
 // header
 #include "app_talise.h"
+#include "app_jesd.h"
 
 
 bool adrv9009_check_sysref_rate(uint32_t lmfc, uint32_t sysref)
@@ -409,6 +415,235 @@ error_11:
 	TALISE_closeHw(pd);
 error_0:
 	return FAILURE;
+}
+
+int talise_multi_chip_sync(taliseDevice_t * pd, int step)
+{
+	uint8_t mcsStatus = 0;
+	uint16_t deframerStatus = 0;
+	uint8_t framerStatus = 0;
+	int ret = 0;
+
+	switch (step) {
+	case 0:
+		TALISE_radioOff(pd);
+		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
+
+		axi_jesd204_rx_lane_clk_disable(rx_os_jesd);
+		axi_jesd204_rx_lane_clk_disable(rx_jesd);
+		axi_jesd204_tx_lane_clk_disable(tx_jesd);
+		break;
+	case 1:
+		/*******************************************************/
+		/**** Perform MultiChip Sync (MCS) on Talise Device ***/
+		/*******************************************************/
+		ret = TALISE_enableMultichipSync(pd, 1, &mcsStatus);
+		if (ret != TALACT_NO_ACTION) {
+			printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+			ret = FAILURE;
+		}
+		break;
+	case 2:
+		/*< user code - Request minimum 3 SYSREF pulses from Clock Device - > */
+		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_PULSE);
+		break;
+	case 3:
+		ret = TALISE_enableMultichipSync(pd, 0, &mcsStatus);
+		if ((mcsStatus & 0x0B) != 0x0B) {
+			printf("%s:%d Unexpected MCS sync status (0x%X)\n",
+				__func__, __LINE__, mcsStatus);
+			ret = FAILURE;
+		}
+		break;
+	case 4:
+		TALISE_enableMultichipRfLOPhaseSync(pd, 1);
+		break;
+	case 5:
+		/*< user code - Request minimum 4 SYSREF pulses from Clock Device - > */
+		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_PULSE);
+		break;
+	case 6:
+		TALISE_enableMultichipRfLOPhaseSync(pd, 0);
+		break;
+	case 7:
+		/*< user code - Request minimum 4 SYSREF pulses from Clock Device - > */
+		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
+		break;
+	case 8:
+		/***************************************************/
+		/**** Enable Talise JESD204B Framer ***/
+		/***************************************************/
+
+		if (talInit.jesd204Settings.framerA.M) {
+			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			/*************************************************/
+			/**** Enable SYSREF to Talise JESD204B Framer ***/
+			/*************************************************/
+			/*** < User: Make sure SYSREF is stopped/disabled > ***/
+
+			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+		}
+
+		/***************************************************/
+		/**** Enable Talise JESD204B Framer ***/
+		/***************************************************/
+
+		if (talInit.jesd204Settings.framerB.M) {
+			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_B, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			/*************************************************/
+			/**** Enable SYSREF to Talise JESD204B Framer ***/
+			/*************************************************/
+			/*** < User: Make sure SYSREF is stopped/disabled > ***/
+
+			ret = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_B, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+		}
+		/***************************************************/
+		/**** Enable  Talise JESD204B Deframer ***/
+		/***************************************************/
+		if (talInit.jesd204Settings.deframerA.M) {
+			ret = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			ret = TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 0);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			ret |= TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			/***************************************************/
+			/**** Enable SYSREF to Talise JESD204B Deframer ***/
+			/***************************************************/
+			ret = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 1);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+		}
+		break;
+	case 9:
+		axi_jesd204_tx_lane_clk_enable(tx_jesd);
+
+		/* RESET CDR */
+		uint8_t phy_ctrl;
+		ret = ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, &phy_ctrl);
+		if(ret)
+			break;
+		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl & ~BIT(7));
+		if(ret)
+			break;
+		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl);
+		if(ret)
+			break;
+
+		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
+		axi_jesd204_rx_lane_clk_enable(rx_jesd);
+
+		break;
+	case 10:
+		/*** < User Sends SYSREF Here > ***/
+		ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
+		break;
+	case 11:
+		/**************************************/
+		/**** Check Talise Deframer Status ***/
+		/**************************************/
+		if (talInit.jesd204Settings.deframerA.M) {
+			ret = TALISE_readDeframerStatus(pd, TAL_DEFRAMER_A,
+							&deframerStatus);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			if ((deframerStatus & 0xF7) != 0x86)
+				printf("TAL_DEFRAMER_A deframerStatus 0x%X\n", deframerStatus);
+		}
+
+		/************************************/
+		/**** Check Talise Framer Status ***/
+		/************************************/
+		if (talInit.jesd204Settings.framerA.M) {
+			ret = TALISE_readFramerStatus(pd, TAL_FRAMER_A, &framerStatus);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			if ((framerStatus & 0x07) != 0x05)
+				printf("TAL_FRAMER_A framerStatus 0x%X\n", framerStatus);
+		}
+		/************************************/
+		/**** Check Talise Framer Status ***/
+		/************************************/
+		if (talInit.jesd204Settings.framerB.M) {
+			ret = TALISE_readFramerStatus(pd, TAL_FRAMER_B, &framerStatus);
+			if (ret != TALACT_NO_ACTION) {
+				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
+				ret = FAILURE;
+			}
+
+			if ((framerStatus & 0x07) != 0x05)
+				printf("TAL_FRAMER_B framerStatus 0x%X\n", framerStatus);
+		}
+
+		TALISE_radioOn(pd);
+		break;
+	default:
+		ret = FAILURE;
+	};
+
+	return ret;
 }
 
 void talise_shutdown(taliseDevice_t * const pd)
