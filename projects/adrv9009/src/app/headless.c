@@ -225,7 +225,7 @@ int main(void)
 			goto error_3;
 	}
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-	
+	printf("Performing multi-chip synchronization...\n");
 	for(int i=0; i < 12; i++) {
 		for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
 			err = talise_multi_chip_sync(&tal[t], i);
