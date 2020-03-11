@@ -127,8 +127,6 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 		goto error_11;
 	}
 
-	mdelay(100);
-
 	/* TALISE_initialize() loads the Talise device data structure
 	 * settings for the Rx/Tx/ORx profiles, FIR filters, digital
 	 * filter enables, calibrates the CLKPLL, loads the user provided Rx
@@ -247,6 +245,7 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	}
 
 	/*** < wait 200ms for PLLs to lock - user code here > ***/
+	mdelay(200);
 
 	talAction = TALISE_getPllsLockStatus(pd, &pllLockStatus);
 	if ((pllLockStatus & 0x07) != 0x07) {
@@ -284,65 +283,106 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	/***************************************************/
 	/**** Enable  Talise JESD204B Framer ***/
 	/***************************************************/
+	if (pi->jesd204Settings.framerA.M) {
+		talAction = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 0);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableFramerLink() failed\n");
+			goto error_11;
+		}
 
-	talAction = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 0);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableFramerLink() failed\n");
-		goto error_11;
+		talAction |= TALISE_enableFramerLink(pd, TAL_FRAMER_A, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableFramerLink() failed\n");
+			goto error_11;
+		}
+
+		/*************************************************/
+		/**** Enable SYSREF to Talise JESD204B Framer ***/
+		/*************************************************/
+		/*** < User: Make sure SYSREF is stopped/disabled > ***/
+
+		talAction = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableSysrefToFramer() failed\n");
+			goto error_11;
+		}
 	}
 
-	talAction |= TALISE_enableFramerLink(pd, TAL_FRAMER_A, 1);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableFramerLink() failed\n");
-		goto error_11;
-	}
+	/***************************************************/
+	/**** Enable  Talise JESD204B Framer ***/
+	/***************************************************/
+	if (pi->jesd204Settings.framerB.M) {
+		talAction = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 0);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableFramerLink() failed\n");
+			goto error_11;
+		}
 
-	/*************************************************/
-	/**** Enable SYSREF to Talise JESD204B Framer ***/
-	/*************************************************/
-	/*** < User: Make sure SYSREF is stopped/disabled > ***/
+		talAction |= TALISE_enableFramerLink(pd, TAL_FRAMER_B, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableFramerLink() failed\n");
+			goto error_11;
+		}
 
-	talAction = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_A, 1);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableSysrefToFramer() failed\n");
-		goto error_11;
+		/*************************************************/
+		/**** Enable SYSREF to Talise JESD204B Framer ***/
+		/*************************************************/
+		/*** < User: Make sure SYSREF is stopped/disabled > ***/
+
+		talAction = TALISE_enableSysrefToFramer(pd, TAL_FRAMER_B, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			printf("error: TALISE_enableSysrefToFramer() failed\n");
+			goto error_11;
+		}
 	}
 
 	/***************************************************/
 	/**** Enable  Talise JESD204B Deframer ***/
 	/***************************************************/
+	if (pi->jesd204Settings.deframerA.M) {
+		talAction = TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 0);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_enableDeframerLink() failed\n");
+			goto error_11;
+		}
 
-	talAction = TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 0);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableDeframerLink() failed\n");
-		goto error_11;
-	}
-
-	talAction |= TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 1);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableDeframerLink() failed\n");
-		goto error_11;
-	}
-	/***************************************************/
-	/**** Enable SYSREF to Talise JESD204B Deframer ***/
-	/***************************************************/
-	talAction = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 1);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_enableDeframerLink() failed\n");
-		goto error_11;
+		talAction |= TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_enableDeframerLink() failed\n");
+			goto error_11;
+		}
+		/***************************************************/
+		/**** Enable SYSREF to Talise JESD204B Deframer ***/
+		/***************************************************/
+		talAction = TALISE_enableSysrefToDeframer(pd, TAL_DEFRAMER_A, 1);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_enableDeframerLink() failed\n");
+			goto error_11;
+		}
 	}
 
 	/*** < User Sends SYSREF Here > ***/
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_ON);
 
-	mdelay(100);
+	if(talInit.rx.rxChannels != TAL_RXOFF)
+		axi_jesd204_rx_lane_clk_enable(rx_jesd);
+
+	if(talInit.obsRx.obsRxChannelsEnable != TAL_RXOFF)
+		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
+
+	if(talInit.tx.txChannels != TAL_RXOFF) {
+		axi_jesd204_tx_lane_clk_enable(tx_jesd);
+
+		/* RESET CDR */
+		uint8_t phy_ctrl;
+		ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, &phy_ctrl);
+		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl & ~BIT(7));
+		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl);
+	}
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
 
@@ -353,28 +393,48 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 	/**************************************/
 	/**** Check Talise Deframer Status ***/
 	/**************************************/
-	talAction = TALISE_readDeframerStatus(pd, TAL_DEFRAMER_A, &deframerStatus);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_readDeframerStatus() failed\n");
-		goto error_11;
-	}
+	if (pi->jesd204Settings.deframerA.M) {
+		talAction = TALISE_readDeframerStatus(pd, TAL_DEFRAMER_A, &deframerStatus);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_readDeframerStatus() failed\n");
+			goto error_11;
+		}
 
-	if ((deframerStatus & 0xF7) != 0x86)
-		printf("warning: TAL_DEFRAMER_A status 0x%X\n", deframerStatus);
+		if ((deframerStatus & 0xF7) != 0x86)
+			printf("warning: TAL_DEFRAMER_A status 0x%X\n", deframerStatus);
+	}
 
 	/************************************/
 	/**** Check Talise Framer Status ***/
 	/************************************/
-	talAction = TALISE_readFramerStatus(pd, TAL_FRAMER_A, &framerStatus);
-	if (talAction != TALACT_NO_ACTION) {
-		/*** < User: decide what to do based on Talise recovery action returned > ***/
-		printf("error: TALISE_readFramerStatus() failed\n");
-		goto error_11;
+	if (pi->jesd204Settings.framerA.M) {
+		talAction = TALISE_readFramerStatus(pd, TAL_FRAMER_A, &framerStatus);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_readFramerStatus() failed\n");
+			goto error_11;
+		}
+
+		if ((framerStatus & 0x07) != 0x05) {
+			printf("warning: TAL_FRAMER_A status 0x%X\n", framerStatus);
+		}
 	}
 
-	if ((framerStatus & 0x07) != 0x05) {
-		printf("warning: TAL_FRAMER_A status 0x%X\n", framerStatus);
+	/************************************/
+	/**** Check Talise Framer Status ***/
+	/************************************/
+	if (pi->jesd204Settings.framerB.M) {
+		talAction = TALISE_readFramerStatus(pd, TAL_FRAMER_B, &framerStatus);
+		if (talAction != TALACT_NO_ACTION) {
+			/*** < User: decide what to do based on Talise recovery action returned > ***/
+			printf("error: TALISE_readFramerStatus() failed\n");
+			goto error_11;
+		}
+
+		if ((framerStatus & 0x07) != 0x05) {
+			printf("warning: TAL_FRAMER_B status 0x%X\n", framerStatus);
+		}
 	}
 
 	/*** < User: When links have been verified, proceed > ***/
@@ -479,17 +539,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
+
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			/*************************************************/
@@ -501,6 +565,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 		}
 
@@ -513,18 +578,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			ret = TALISE_enableFramerLink(pd, TAL_FRAMER_B, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			/*************************************************/
@@ -536,6 +604,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 		}
 		/***************************************************/
@@ -546,18 +615,21 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			ret = TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 0);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			ret |= TALISE_enableDeframerLink(pd, TAL_DEFRAMER_A, 1);
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			/***************************************************/
@@ -567,6 +639,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 		}
@@ -577,13 +650,13 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		/* RESET CDR */
 		uint8_t phy_ctrl;
 		ret = ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, &phy_ctrl);
-		if(ret)
+		if (ret)
 			break;
 		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl & ~BIT(7));
-		if(ret)
+		if (ret)
 			break;
 		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl);
-		if(ret)
+		if (ret)
 			break;
 
 		axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
@@ -604,6 +677,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			if ((deframerStatus & 0xF7) != 0x86)
@@ -618,6 +692,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			if ((framerStatus & 0x07) != 0x05)
@@ -631,6 +706,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 			if (ret != TALACT_NO_ACTION) {
 				printf("%s:%d (ret %d)\n", __func__, __LINE__, ret);
 				ret = FAILURE;
+				break;
 			}
 
 			if ((framerStatus & 0x07) != 0x05)

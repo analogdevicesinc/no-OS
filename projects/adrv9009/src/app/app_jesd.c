@@ -120,10 +120,6 @@ adiHalErr_t jesd_init(uint32_t rx_div40_rate_hz,
 		goto error_7;
 	}
 
-	axi_jesd204_tx_lane_clk_enable(tx_jesd);
-	axi_jesd204_rx_lane_clk_enable(rx_jesd);
-	axi_jesd204_rx_lane_clk_enable(rx_os_jesd);
-
 	return ADIHAL_OK;
 
 error_7:
