@@ -199,8 +199,8 @@ int32_t altera_a10_atx_pll_round_rate(struct adxcvr *xcvr,
 	if (n == 0 || m == 0 || l == 0)
 		return -1;
 
-	tmp = xcvr->parent_rate_khz * m;
-	tmp = DIV_ROUND_CLOSEST_ULL(tmp, l * n / 4);
+	tmp = xcvr->parent_rate_khz * m * 4;
+	tmp = DIV_ROUND_CLOSEST_ULL(tmp, l * n);
 
 	return min_t(uint64_t, tmp, LONG_MAX);
 }
