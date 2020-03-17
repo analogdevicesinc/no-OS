@@ -80,6 +80,8 @@ typedef struct xil_i2c_init {
 typedef struct xil_i2c_desc {
 	/** Xilinx architecture */
 	enum xil_i2c_type	type;
+	/** Device ID */
+	uint32_t		device_id;
 	/** Xilinx I2C configuration */
 	void			*config;
 	/** Xilinx I2C Instance */
