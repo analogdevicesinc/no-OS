@@ -3,7 +3,7 @@
 *   @brief  Implementation of AD5686 Driver.
 *   @author Istvan Csomortani (istvan.csomortani@analog.com)
 *******************************************************************************
-* Copyright 2013(c) Analog Devices, Inc.
+* Copyright 2013, 2020(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -51,6 +51,11 @@
 /*****************************************************************************/
 static const uint32_t ad5683_channel_addr [] = {
 	[AD5686_CH_0] = 0,
+};
+
+static const uint32_t ad5689_channel_addr[] = {
+	[AD5686_CH_0] = 1,
+	[AD5686_CH_1] = 8,
 };
 
 static const uint32_t ad5686_channel_addr[] = {
@@ -109,6 +114,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.communication = I2C,
 		.channel_addr = ad5679_channel_addr,
 	},
+	[ID_AD5674] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5679_channel_addr,
+	},
 	[ID_AD5674R] = {
 		.resolution = 12,
 		.register_map = AD5686_REG_MAP,
@@ -137,6 +148,12 @@ static const struct ad5686_chip_info chip_info[] = {
 		.resolution = 16,
 		.register_map = AD5686_REG_MAP,
 		.communication = I2C,
+		.channel_addr = ad5679_channel_addr,
+	},
+	[ID_AD5679] = {
+		.resolution = 16,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
 		.channel_addr = ad5679_channel_addr,
 	},
 	[ID_AD5679R] = {
@@ -168,6 +185,36 @@ static const struct ad5686_chip_info chip_info[] = {
 		.register_map = AD5686_REG_MAP,
 		.communication = SPI,
 		.channel_addr = ad5686_channel_addr,
+	},
+	[ID_AD5687] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5689_channel_addr,
+	},
+	[ID_AD5687R] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5689_channel_addr,
+	},
+	[ID_AD5689] = {
+		.resolution = 16,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5689_channel_addr,
+	},
+	[ID_AD5689R] = {
+		.resolution = 16,
+		.register_map = AD5686_REG_MAP,
+		.communication = SPI,
+		.channel_addr = ad5689_channel_addr,
+	},
+	[ID_AD5697R] = {
+		.resolution = 12,
+		.register_map = AD5686_REG_MAP,
+		.communication = I2C,
+		.channel_addr = ad5689_channel_addr,
 	},
 	[ID_AD5694] = {
 		.resolution = 12,

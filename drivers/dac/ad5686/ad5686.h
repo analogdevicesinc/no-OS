@@ -5,7 +5,7 @@
 *
 *   @author Istvan Csomortani (istvan.csomortani@analog.com)
 ********************************************************************************
-* Copyright 2013(c) Analog Devices, Inc.
+* Copyright 2013, 2020(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -122,16 +122,23 @@ enum ad5686_type {
 	ID_AD5671R,
 	ID_AD5672R,
 	ID_AD5673R,
+	ID_AD5674,
 	ID_AD5674R,
 	ID_AD5675R,
 	ID_AD5676,
 	ID_AD5676R,
 	ID_AD5677R,
+	ID_AD5679,
 	ID_AD5679R,
 	ID_AD5686,
 	ID_AD5684R,
 	ID_AD5685R,
 	ID_AD5686R,
+	ID_AD5687,
+	ID_AD5687R,
+	ID_AD5689,
+	ID_AD5689R,
+	ID_AD5697R,
 	ID_AD5694,
 	ID_AD5694R,
 	ID_AD5695R,
