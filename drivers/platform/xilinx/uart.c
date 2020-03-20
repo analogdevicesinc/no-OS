@@ -67,7 +67,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 	struct irq_ctrl_desc *irq_desc = xil_uart_desc->irq_desc;
 
 	if (xil_uart_desc->bytes_received > 0) {
-		ret = irq_source_disable(irq_desc, xil_uart_desc->irq_id);
+		ret = irq_disable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
 		ret = fifo_insert(&xil_uart_desc->fifo, xil_uart_desc->buff,
@@ -89,7 +89,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 			return FAILURE;
 			break;
 		}
-		ret = irq_source_enable(irq_desc, xil_uart_desc->irq_id);
+		ret = irq_enable(irq_desc, xil_uart_desc->irq_id);
 		if (ret < 0)
 			return ret;
 	}
@@ -276,7 +276,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 		break;
 	}
 
-	status = irq_source_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
+	status = irq_enable(xil_uart_desc->irq_desc, xil_uart_desc->irq_id);
 	if (status < 0)
 		return status;
 

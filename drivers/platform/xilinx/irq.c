@@ -177,7 +177,7 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
@@ -206,7 +206,7 @@ int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Interrupt identifier.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
