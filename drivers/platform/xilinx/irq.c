@@ -230,29 +230,30 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 }
 
 /**
- * @brief Registers a generic IRQ handling function.
+ * @brief Register a callback to handle the irq events.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
- * @param irq_handler - The IRQ handler.
- * @param dev_instance - device instance.
+ * @param callback_desc - Callback descriptor
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *dev_instance)
+int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+			      struct callback_desc *callback_desc);
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
 	switch(xil_dev->type) {
 	case IRQ_PS:
 #ifdef XSCUGIC_H
-		return XScuGic_Connect(xil_dev->instance, irq_id, irq_handler,
-				       dev_instance);
+		return XScuGic_Connect(xil_dev->instance, irq_id,
+				       callback_desc->callback,
+				       callback_desc->callback_ctx);
 #endif
 		break;
 	case IRQ_PL:
 #ifdef XINTC_H
-		return XIntc_Connect(xil_dev->instance, irq_id, irq_handler,
-				     dev_instance);
+		return XIntc_Connect(xil_dev->instance, irq_id,
+				     callback_desc->callback,
+				     callback_desc->callback_ctx);
 #endif
 		break;
 	default:

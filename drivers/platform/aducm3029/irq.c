@@ -154,24 +154,22 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @brief Register IRQ handling function for the specified <em>irq_id</em>.
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
- * @param irq_handler - Generic function to be registered. Will be called using
- * as parameter the interrupt ID.
- * @param dev_instance - Specify the trigger condition for the interrupt. To be
- * one of the values from \ref irq_mode.
+ * @param callback_desc - Callback descriptor
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *dev_instance)
+int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+			      struct callback_desc *callback_desc)
 {
 	struct aducm_irq_desc *aducm_desc;
 
-	if (!desc || !desc->extra || !initialized || !irq_handler ||
+	if (!desc || !desc->extra || !initialized || !callback_desc ||
 	    irq_id >= NB_EXT_INTERRUPTS)
 		return FAILURE;
 
 	aducm_desc = desc->extra;
-	aducm_desc->irq_handler[irq_id] = irq_handler;
-	aducm_desc->mode[irq_id] = (enum irq_mode)dev_instance;
+	aducm_desc->irq_handler[irq_id] = callback_desc->callback;
+	aducm_desc->mode[irq_id] =
+		(enum irq_mode)callback_desc->callback_config;
 
 	return SUCCESS;
 }
