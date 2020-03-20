@@ -374,18 +374,18 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 
 	dev->pdata = init_param.pdata;
 
-	/* GPIO */
-	ret = gpio_get(&dev->gpio_resetb, &init_param.gpio_resetb);
-	if (ret < 0)
-		return ret;
-
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		return ret;
 
-	ad9528_reset(dev);
-
+	/* GPIO */
+	if(init_param.hw_reset_en) {
+		ret = gpio_get(&dev->gpio_resetb, &init_param.gpio_resetb);
+		if (ret < 0)
+			return ret;
+		ad9528_reset(dev);
+	}
 	ret = ad9528_spi_write_n(dev,
 				 AD9528_SERIAL_PORT_CONFIG,
 				 AD9528_SER_CONF_SOFT_RESET |
