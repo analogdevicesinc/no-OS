@@ -93,20 +93,18 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc);
  */
 int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		     void (*irq_handler)(void *data), void *dev_instance);
+/* Enable specific interrupt */
+int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Unregisters a generic IRQ handling function */
 int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
+/* Disable specific interrupt */
+int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 /* Global interrupt enable */
 int32_t irq_global_enable(struct irq_ctrl_desc *desc);
 
 /* Global interrupt disable */
 int32_t irq_global_disable(struct irq_ctrl_desc *desc);
-
-/* Enable specific interrupt */
-int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
-
-/* Disable specific interrupt */
-int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
 #endif // IRQ_H_

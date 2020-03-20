@@ -194,7 +194,7 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 }
 
 /**
- * @brief Enable all previously enabled interrupts by \ref irq_source_enable().
+ * @brief Enable all previously enabled interrupts by \ref irq_enable().
  * @param desc - Interrupt controller descriptor.
  * @return \ref SUCCESS
  */
@@ -246,7 +246,7 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  * @param irq_id - Id of the interrupt
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_desc *aducm_desc;
 
@@ -270,7 +270,7 @@ int32_t irq_source_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @param irq_id - Id of the interrupt
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_source_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
+int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_desc *aducm_desc;
 
