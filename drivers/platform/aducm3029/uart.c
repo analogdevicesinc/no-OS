@@ -45,6 +45,10 @@
 #include "uart_extra.h"
 #include <stdlib.h>
 
+#ifndef min
+#define min(x, y) (((x) > (y)) ? (y) : (x))
+#endif
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -166,26 +170,58 @@ static void free_desc_mem(struct uart_desc *desc)
  */
 static void uart_callback(void *desc, uint32_t event, void *buff)
 {
-	struct aducm_uart_desc *extra = ((struct uart_desc *)desc)->extra;
+	struct aducm_uart_desc	*extra = desc;
+	uint32_t		len;
 
 	switch(event) {
+	/* Read done */
 	case ADI_UART_EVENT_RX_BUFFER_PROCESSED:
-		extra->waiting_read_callback--;
-		extra->callback(extra->param, READ_DONE, buff);
+		if (extra->read_desc.pending) {
+			len = min(extra->read_desc.pending, MAX_BYTES);
+			extra->read_desc.pending -= len;
+			adi_uart_SubmitRxBuffer(
+				(ADI_UART_HANDLE const)extra->uart_handler,
+				(void *const)extra->read_desc.buff,
+				(uint32_t const)len,
+				len > 4 ? true : false);
+			extra->read_desc.buff += len;
+		} else {
+			extra->read_desc.is_nonblocking = false;
+			//TODO Remove comment when irq support is done.
+			//if (extra->callback)
+			//	extra->callback(extra->callback_ctx, READ_DONE,
+			//						NULL);
+		}
 		break;
+	/* Write done */
 	case ADI_UART_EVENT_TX_BUFFER_PROCESSED:
-		extra->waiting_write_callback--;
-		extra->callback(extra->param, WRITE_DONE, buff);
+		if (extra->write_desc.pending) {
+			len = min(extra->write_desc.pending, MAX_BYTES);
+			extra->write_desc.pending -= len;
+			adi_uart_SubmitTxBuffer(
+				(ADI_UART_HANDLE const)extra->uart_handler,
+				(void *const)extra->write_desc.buff,
+				(uint32_t const)len,
+				len > 4 ? true : false);
+			extra->write_desc.buff += len;
+		} else {
+			extra->write_desc.is_nonblocking = false;
+			//TODO Remove comment when irq support is done.
+			//if (extra->callback)
+			//	extra->callback(extra->callback_ctx, WRITE_DONE,
+			//						NULL);
+		}
 		break;
 	default:
 		extra->errors |= (uint32_t)buff;
-		extra->callback(extra->param, ERROR, buff);
+		//if (extra->callback)
+		//	extra->callback(extra->callback_ctx, ERROR, buff);
 		break;
 	}
 }
 
 /**
- * @brief Calls the low level read functions depending on the mode
+ * @brief Read data from UART. Blocking function
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer where data will be read
  * @param bytes_number:	Number of bytes to be read. Between 1 and 1024
@@ -202,30 +238,22 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 
 	extra = desc->extra;
 	if (bytes_number == 0 || bytes_number > MAX_BYTES) {
+		// TODO loop to write more than 1024 bytes
 		errors = BAD_INPUT_PARAMETERS;
 		goto failure;
 	}
 
-	if (!extra->callback) { //Blocking mode
-		if (ADI_UART_SUCCESS != adi_uart_Read(
-			    (ADI_UART_HANDLE const)extra->uart_handler,
-			    (void *const)data,
-			    (uint32_t const)bytes_number,
-			    bytes_number > 4 ? true : false,
-			    &errors))
-			goto failure;
-	} else { //Callback mode
-		if (extra->waiting_read_callback) {
-			errors = WAITING_FOR_CALLBACK;
-			goto failure;
-		}
-		extra->waiting_read_callback++;
-		adi_uart_SubmitRxBuffer(
-			(ADI_UART_HANDLE const)extra->uart_handler,
-			(void *const)data,
-			(uint32_t const)bytes_number,
-			bytes_number > 4 ? true : false);
-	}
+	/* Wait until a previously uart_read_nonblocking ends */
+	while (extra->read_desc.is_nonblocking)
+		;
+
+	if (ADI_UART_SUCCESS != adi_uart_Read(
+		    (ADI_UART_HANDLE const)extra->uart_handler,
+		    (void *const)data,
+		    (uint32_t const)bytes_number,
+		    bytes_number > 4 ? true : false,
+		    &errors))
+		goto failure;
 
 	return SUCCESS;
 failure:
@@ -234,52 +262,115 @@ failure:
 }
 
 /**
- * @brief Calls the low level write functions depending on the mode
+ * @brief Write data to UART. Blocking function
  * @param desc:	Descriptor of the UART device
  * @param data:	Buffer with the data to be written
- * @param bytes_number:	Number of bytes to be written. Between 1 and 1024
+ * @param bytes_number:	Number of bytes to be written.  Between 1 and 1024
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
-	uint32_t errors;
-	struct aducm_uart_desc *extra;
+	struct aducm_uart_desc	*extra;
+	uint32_t		errors;
 
-	if (!desc || !data)
+	if (!desc || !data || !bytes_number || bytes_number > 1024)
 		return FAILURE;
 
-	extra = desc->extra;
-	if (bytes_number == 0 || bytes_number > MAX_BYTES) {
-		errors = BAD_INPUT_PARAMETERS;
-		goto failure;
-	}
+	/* TODO: Add support for more than 1024 bytes */
 
-	if (!extra->callback) { //Blocking mode
-		if (ADI_UART_SUCCESS != adi_uart_Write(
-			    (ADI_UART_HANDLE const)extra->uart_handler,
-			    (void *const)data,
-			    (uint32_t const)bytes_number,
-			    bytes_number > 4 ? true : false,
-			    &errors))
-			goto failure;
-	} else { //Callback mode
-		if (extra->waiting_write_callback) {
-			errors = WAITING_FOR_CALLBACK;
-			goto failure;
-		}
-		extra->waiting_write_callback++;
-		adi_uart_SubmitTxBuffer(
-			(ADI_UART_HANDLE const)extra->uart_handler,
-			(void *const)data,
-			(uint32_t const)bytes_number,
-			bytes_number > 4 ? true : false);
-	}
+	extra = desc->extra;
+	/* Wait until a previously uart_write_nonblocking ends */
+	while (extra->write_desc.is_nonblocking)
+		;
+
+	if (ADI_UART_SUCCESS != adi_uart_Write(
+		    (ADI_UART_HANDLE const)extra->uart_handler,
+		    (void *const)data,
+		    (uint32_t const)bytes_number,
+		    bytes_number > 4 ? true : false,
+		    &errors))
+		goto failure;
 
 	return SUCCESS;
+
 failure:
 	extra->errors |= errors;
 	return FAILURE;
+}
+
+/**
+ * @brief Submit reading buffer to the UART driver.
+ *
+ * Buffer is used until bytes_number bytes are read.
+ * @param desc:	Descriptor of the UART device
+ * @param data:	Buffer where data will be read
+ * @param bytes_number:	Number of bytes to be read.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number)
+{
+	struct aducm_uart_desc	*extra;
+	uint32_t		to_read;
+
+	if (!desc || !data || !bytes_number)
+		return FAILURE;
+	extra = desc->extra;
+
+	/* Driver can not submit an other buffer when there is already one */
+	if (extra->read_desc.is_nonblocking)
+		return FAILURE;
+	extra->read_desc.is_nonblocking = true;
+
+	to_read = min(bytes_number, MAX_BYTES);
+	extra->read_desc.pending = bytes_number - to_read;
+	extra->read_desc.buff = data + to_read;
+	/* The following submits until bytes_number are don in the interrupt. */
+	adi_uart_SubmitRxBuffer(
+		(ADI_UART_HANDLE const)extra->uart_handler,
+		(void *const)data,
+		(uint32_t const)to_read,
+		to_read > 4 ? true : false);
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Submit writting buffer to the UART driver.
+ *
+ * Data from the buffer is sent over the UART, the function returns immediately.
+ * @param desc:	Descriptor of the UART device
+ * @param data:	Buffer where data will be written
+ * @param bytes_number:	Number of bytes to be written.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
+			       uint32_t bytes_number)
+{
+	struct aducm_uart_desc	*extra;
+	uint32_t		to_write;
+
+	if (!desc || !data || !bytes_number)
+		return FAILURE;
+	extra = desc->extra;
+
+	/* Driver can not submit an other buffer when there is already one */
+	if (extra->write_desc.is_nonblocking)
+		return FAILURE;
+	extra->write_desc.is_nonblocking = true;
+
+	to_write = min(bytes_number, MAX_BYTES);
+	extra->write_desc.pending = bytes_number - to_write;
+	extra->write_desc.buff = (uint8_t *)data + to_write;
+	/* The following submits until bytes_number are don in the interrupt. */
+	adi_uart_SubmitTxBuffer(
+		(ADI_UART_HANDLE const)extra->uart_handler,
+		(void *const)data,
+		(uint32_t const)to_write,
+		to_write > 4 ? true : false);
+
+	return SUCCESS;
 }
 
 /**
@@ -288,17 +379,6 @@ failure:
  * To configure the UART, the user must set the extra parameter from param with
  * a pointer to the configured platform specific structure
  * \ref aducm_uart_init_param .\n
- * The driver have to operating modes:
- * - __Callback mode__: The read/write functions will return immediately and
- * the user callback will be called when the buffer is processed.
- * - __Blocking mode__: The read/write functions will only return when the
- * buffer is processed.
- * .
- * If the callback parameter is set, the driver will work on __callback mode__.
- * If callback is NULL, then it will work in __blocking mode__.\n
- * The __callback mode__ it is not recommended to use, except for "even-driven"
- * peripherals. For more information refer to ADuCM302x DFP Device Driver Users
- * Guide.\n
  * @param desc:  Descriptor of the UART device used in the call of the drivers
  * functions
  * @param param: Descriptor used to configure the UART device
@@ -324,10 +404,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 
 	(*desc)->baud_rate = param->baud_rate;
 	(*desc)->device_id = param->device_id;
-	aducm_desc->callback = aducm_init_param->callback;
-	aducm_desc->param = aducm_init_param->param;
-	aducm_desc->waiting_read_callback = 0;
-	aducm_desc->waiting_write_callback = 0;
+	/* aducm_desc->read_desc and aducm_desc->write_desc are 0 already */
 
 	uart_ret = adi_uart_Open(param->device_id, ADI_UART_DIR_BIDIRECTION,
 				 aducm_desc->adi_uart_buffer,
@@ -360,11 +437,9 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
 
-	/* Register callback */
-	if (aducm_desc->callback)
-		adi_uart_RegisterCallback(aducm_desc->uart_handler,
-					  uart_callback,
-					  (*desc));
+	adi_uart_RegisterCallback(aducm_desc->uart_handler,
+				  uart_callback, aducm_desc);
+
 	return SUCCESS;
 failure:
 	free_desc_mem(*desc);
@@ -399,9 +474,14 @@ int32_t uart_remove(struct uart_desc *desc)
  */
 uint32_t uart_get_errors(struct uart_desc *desc)
 {
-	struct aducm_uart_desc *extra = desc->extra;
+	struct aducm_uart_desc *extra;
+
+	if (!desc)
+		return FAILURE;
+	extra = desc->extra;
 	uint32_t ret = extra->errors;
 	extra->errors = 0;
 
 	return ret;
 }
+
