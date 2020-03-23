@@ -98,6 +98,60 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 }
 
 /**
+ * @brief Submit reading buffer to the UART driver.
+ *
+ * Buffer is used until bytes_number bytes are read.
+ * @param desc:	Descriptor of the UART device
+ * @param data:	Buffer where data will be read
+ * @param bytes_number:	Number of bytes to be read.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Submit writting buffer to the UART driver.
+ *
+ * Data from the buffer is sent over the UART, the function returns imediatly.
+ * @param desc:	Descriptor of the UART device
+ * @param data:	Buffer where data will be written
+ * @param bytes_number:	Number of bytes to be written.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
+			       uint32_t bytes_number)
+{
+	if (desc) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (data) {
+		// Unused variable - fix compiler warning
+	}
+
+	if (bytes_number) {
+		// Unused variable - fix compiler warning
+	}
+
+	return SUCCESS;
+}
+
+/**
  * @brief Initialize the UART communication peripheral.
  * @param desc - The UART descriptor.
  * @param param - The structure that contains the UART parameters.
