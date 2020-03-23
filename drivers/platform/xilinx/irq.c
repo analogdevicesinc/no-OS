@@ -230,6 +230,35 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 }
 
 /**
+ * @brief Unregisters a generic IRQ handling function.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+static int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
+{
+	struct xil_irq_desc *xil_dev = desc->extra;
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		XScuGic_Disconnect(xil_dev->instance, irq_id);
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		XIntc_Disconnect(xil_dev->instance, irq_id);
+#endif
+		break;
+	default:
+
+		return FAILURE;
+	}
+
+	return SUCCESS;
+}
+
+/**
  * @brief Register a callback to handle the irq events.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
@@ -240,6 +269,9 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 			      struct callback_desc *callback_desc);
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
+
+	if (!callback_desc)
+		return irq_unregister(desc, irq_id);
 
 	switch(xil_dev->type) {
 	case IRQ_PS:
@@ -261,35 +293,6 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 	}
 
 	return FAILURE;
-}
-
-/**
- * @brief Unregisters a generic IRQ handling function.
- * @param desc - The IRQ controller descriptor.
- * @param irq_id - Interrupt identifier.
- * @return SUCCESS in case of success, FAILURE otherwise.
- */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
-{
-	struct xil_irq_desc *xil_dev = desc->extra;
-
-	switch(xil_dev->type) {
-	case IRQ_PS:
-#ifdef XSCUGIC_H
-		XScuGic_Disconnect(xil_dev->instance, irq_id);
-#endif
-		break;
-	case IRQ_PL:
-#ifdef XINTC_H
-		XIntc_Disconnect(xil_dev->instance, irq_id);
-#endif
-		break;
-	default:
-
-		return FAILURE;
-	}
-
-	return SUCCESS;
 }
 
 /**

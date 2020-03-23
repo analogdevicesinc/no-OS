@@ -392,6 +392,7 @@ error_free_descriptor:
 int32_t uart_remove(struct uart_desc *desc)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
+	//TODO Unregister callback
 	free(xil_uart_desc->instance);
 	free(xil_uart_desc);
 	free(desc);

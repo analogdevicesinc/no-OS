@@ -107,8 +107,6 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 /* Enable specific interrupt */
 int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
-/* Unregisters a generic IRQ handling function */
-int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id);
 /* Disable specific interrupt */
 int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id);
 
