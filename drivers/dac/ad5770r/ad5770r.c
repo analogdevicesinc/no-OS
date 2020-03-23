@@ -552,37 +552,6 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 }
 
 /**
- * Set the enabled channels.
- * @param dev - The device structure.
- * @param channel_enable - The array contains channels enabled.
- * @return SUCCESS in case of success, negative error code otherwise.
- */
-int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
-			       const struct ad5770r_channel_switches *channel_enable)
-{
-	int32_t ret;
-
-	if (!dev || !channel_enable)
-		return FAILURE;
-
-	ret = ad5770r_spi_reg_write(dev,
-				    AD5770R_CH_ENABLE,
-				    AD5770R_CH_ENABLE_SET(channel_enable->en0, AD5770R_CH0) |
-				    AD5770R_CH_ENABLE_SET(channel_enable->en1, AD5770R_CH1) |
-				    AD5770R_CH_ENABLE_SET(channel_enable->en2, AD5770R_CH2) |
-				    AD5770R_CH_ENABLE_SET(channel_enable->en3, AD5770R_CH3) |
-				    AD5770R_CH_ENABLE_SET(channel_enable->en4, AD5770R_CH4) |
-				    AD5770R_CH_ENABLE_SET(channel_enable->en5, AD5770R_CH5));
-
-	if (ret)
-		return ret;
-
-	dev->channel_enable = *channel_enable;
-
-	return ret;
-}
-
-/**
  * Get status value.
  * @param dev - The device structure.
  * @param status - The status of the device.
@@ -667,8 +636,6 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 
 	ret |= ad5770r_channel_config(dev,
 				      &init_param->channel_config);
-	ret |= ad5770r_set_channel_en(dev,
-				      &init_param->channel_enable);
 
 	ret |= ad5770r_set_reference(dev,
 				     init_param->external_reference,

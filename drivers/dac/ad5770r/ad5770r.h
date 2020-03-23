@@ -125,7 +125,6 @@
 #define AD5770R_CH4_INPUT_MSB		0x41
 #define AD5770R_CH5_INPUT_LSB		0x42
 #define AD5770R_CH5_INPUT_MSB		0x43
-#define AD5770R_CH_ENABLE		0x44
 
 /* AD5770R_INTERFACE_CONFIG_A */
 #define AD5770R_INTERFACE_CONFIG_A_SW_RESET_MSK			BIT(7) | BIT(0)
@@ -220,8 +219,6 @@
 /* AD5770R_SW_LDAC */
 #define AD5770R_SW_LDAC_CH(x, channel)				(((x) & 0x1) << (channel))
 
-/* AD5770R_CH_ENABLE */
-#define AD5770R_CH_ENABLE_SET(x, channel)			(((x) & 0x1) << (channel))
 
 #define AD5770R_REG_READ(x)					(((x) & 0x7F) | 0x80)
 #define AD5770R_REG_WRITE(x)					((x) & 0x7F)
@@ -316,7 +313,6 @@ struct ad5770r_dev {
 	struct ad5770r_channel_switches		mask_channel_sel;
 	struct ad5770r_channel_switches		sw_ldac;
 	uint16_t				input_value[6];
-	struct ad5770r_channel_switches		channel_enable;
 };
 
 struct ad5770r_init_param {
@@ -339,7 +335,6 @@ struct ad5770r_init_param {
 	struct ad5770r_channel_switches		mask_channel_sel;
 	struct ad5770r_channel_switches		sw_ldac;
 	uint16_t				input_value[6];
-	struct ad5770r_channel_switches		channel_enable;
 };
 
 /******************************************************************************/
@@ -390,8 +385,6 @@ int32_t ad5770r_set_mask_channel(struct ad5770r_dev *dev,
 				 const struct ad5770r_channel_switches *mask_channel_sel);
 int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *sw_ldac);
-int32_t ad5770r_set_channel_en(struct ad5770r_dev *dev,
-			       const struct ad5770r_channel_switches *channel_enable);
 int32_t ad5770r_get_status(struct ad5770r_dev *dev,
 			   uint8_t *status);
 int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
