@@ -83,9 +83,9 @@ static inline void i5g_ad9625_setup(struct s_i5g *st, int sel, int band)
 /* Device SPI status - SYSREF received and violations we need */
 
 static inline int i5g_ad9625_status(struct s_i5g *st,
-									int sel,
-									int band,
-									int status)
+				    int sel,
+				    int band,
+				    int status)
 {
 
 	int data;
@@ -157,16 +157,16 @@ static int i5g_intlv(struct s_i5g *st)
 	data = i5g_spi_read(st, st->ad9625_cs_0, I5G_AD9625_ID_ADDR);
 	if (data != I5G_AD9625_ID_DATA) {
 		printf("unsupported device (%x) at (%d)!\n",
-			   data,
-			   (int)st->ad9625_cs_0);
+		       data,
+		       (int)st->ad9625_cs_0);
 		return(0);
 	}
 
 	data = i5g_spi_read(st, st->ad9625_cs_1, I5G_AD9625_ID_ADDR);
 	if (data != I5G_AD9625_ID_DATA) {
 		printf("unsupported device (%x) at (%d)!\n",
-			   data,
-			   (int)st->ad9625_cs_1);
+		       data,
+		       (int)st->ad9625_cs_1);
 		return(0);
 	}
 
@@ -242,12 +242,12 @@ static int i5g_intlv(struct s_i5g *st)
 		 * experimenting, walk this through and print the bands
 		 * */
 		if ((i5g_status_check(status_1) == 0) &&
-			(i5g_status_check(status_2) == 0)) {
+		    (i5g_status_check(status_2) == 0)) {
 			st->sysref_delay = delay;
 			printf("sysref synchronization @%d, status(%02x, %02x)!\n",
-				   delay,
-				   status_1,
-				   status_2);
+			       delay,
+			       status_1,
+			       status_2);
 			break;
 		}
 	}
@@ -263,7 +263,7 @@ static int i5g_intlv(struct s_i5g *st)
 	data = i5g_read(st, I5G_SYNC_STATUS_ADDR);
 	if (data == I5G_SYNC_OOS) {
 		printf("resync failed, may need to reset the transceiver chain (%x)!\n",
-			   data);
+		       data);
 	}
 #if 1
 	/* Release indirect access (this overrides the default access) */
@@ -370,7 +370,7 @@ static int i5g_calibrate(struct s_i5g *st)
 }
 
 int32_t i5g_setup(struct s_i5g **descriptor,
-			  	  struct s_i5g_init init_param)
+		  struct s_i5g_init init_param)
 {
 	struct s_i5g *st;
 	int32_t data;
