@@ -51,6 +51,19 @@
 /******************************************************************************/
 
 /**
+ * @enum irq_uart_event_e
+ * @brief Possible events for uart interrupt
+ */
+enum irq_uart_event_e {
+	/** Write operation finalized */
+	WRITE_DONE,
+	/** Read operation finalized */
+	READ_DONE,
+	/** An error occurred */
+	ERROR
+};
+
+/**
  * @struct irq_init_param
  * @brief Structure holding the initial parameters for Interrupt Request.
  */
