@@ -188,10 +188,9 @@ static void uart_callback(void *desc, uint32_t event, void *buff)
 			extra->read_desc.buff += len;
 		} else {
 			extra->read_desc.is_nonblocking = false;
-			//TODO Remove comment when irq support is done.
-			//if (extra->callback)
-			//	extra->callback(extra->callback_ctx, READ_DONE,
-			//						NULL);
+			if (extra->callback_enabled)
+				extra->callback(extra->callback_ctx, READ_DONE,
+						NULL);
 		}
 		break;
 	/* Write done */
@@ -207,16 +206,15 @@ static void uart_callback(void *desc, uint32_t event, void *buff)
 			extra->write_desc.buff += len;
 		} else {
 			extra->write_desc.is_nonblocking = false;
-			//TODO Remove comment when irq support is done.
-			//if (extra->callback)
-			//	extra->callback(extra->callback_ctx, WRITE_DONE,
-			//						NULL);
+			if (extra->callback_enabled)
+				extra->callback(extra->callback_ctx, WRITE_DONE,
+						NULL);
 		}
 		break;
 	default:
 		extra->errors |= (uint32_t)buff;
-		//if (extra->callback)
-		//	extra->callback(extra->callback_ctx, ERROR, buff);
+		if (extra->callback_enabled)
+			extra->callback(extra->callback_ctx, ERROR, buff);
 		break;
 	}
 }
@@ -485,4 +483,3 @@ uint32_t uart_get_errors(struct uart_desc *desc)
 
 	return ret;
 }
-

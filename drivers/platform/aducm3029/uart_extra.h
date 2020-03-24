@@ -207,6 +207,8 @@ struct aducm_uart_desc {
 				    void *extra);
 	/** Set a parameter to be passed to the callback as app_param */
 	void		*callback_ctx;
+	/** Set if callback is enabled */
+	bool		callback_enabled;
 	/**
 	 * Buffer needed by the ADI UART driver to operate.
 	 * This buffer allocated and aligned at runtime to 32 bits
@@ -222,10 +224,5 @@ struct aducm_uart_desc {
 	/** Status of a read operation */
 	struct op_desc	read_desc;
 };
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-
 
 #endif /* UART_H_ */
