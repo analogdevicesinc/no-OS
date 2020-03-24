@@ -566,6 +566,20 @@ int32_t ad5770r_get_status(struct ad5770r_dev *dev,
 };
 
 /**
+ * Get interface status value.
+ * @param dev - The device structure.
+ * @param status - The INTERFACE STATUS A register value.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+int32_t ad5770r_get_interface_status(struct ad5770r_dev *dev,
+				     uint8_t *status)
+{
+	return ad5770r_spi_reg_read(dev,
+				    AD5770R_INTERFACE_STATUS_A,
+				    status);
+};
+
+/**
  * Set the channel monitor configuration.
  * @param dev - The device structure.
  * @param mon_setup - The structure that contains the monitor setup
