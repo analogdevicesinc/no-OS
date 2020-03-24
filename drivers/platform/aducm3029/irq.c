@@ -86,7 +86,7 @@ static uint32_t		initialized;
  */
 static void internal_callback(void *aducm_desc, uint32_t event, void *arg)
 {
-	struct aducm_irq_desc *desc = aducm_desc;
+	struct aducm_irq_ctrl_desc *desc = aducm_desc;
 
 	(void)arg;
 
@@ -104,7 +104,7 @@ static void internal_callback(void *aducm_desc, uint32_t event, void *arg)
 int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 		      const struct irq_init_param *param)
 {
-	struct aducm_irq_desc		*aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 
 	if (!desc || !param || initialized)
 		return FAILURE;
@@ -112,7 +112,8 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 	*desc = (struct irq_ctrl_desc *)calloc(1, sizeof(**desc));
 	if (!*desc)
 		return FAILURE;
-	aducm_desc = (struct aducm_irq_desc *)calloc(1, sizeof(*aducm_desc));
+	aducm_desc = (struct aducm_irq_ctrl_desc *)
+		     calloc(1, sizeof(*aducm_desc));
 	if (!aducm_desc) {
 		free(*desc);
 		*desc = NULL;
@@ -160,7 +161,7 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
 int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 			      struct callback_desc *callback_desc)
 {
-	struct aducm_irq_desc *aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_EXT_INTERRUPTS)
@@ -184,7 +185,7 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
  */
 int32_t irq_global_enable(struct irq_ctrl_desc *desc)
 {
-	struct aducm_irq_desc *aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
 		return FAILURE;
 
@@ -203,7 +204,7 @@ int32_t irq_global_enable(struct irq_ctrl_desc *desc)
  */
 int32_t irq_global_disable(struct irq_ctrl_desc *desc)
 {
-	struct aducm_irq_desc *aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 	if (!desc || !desc->extra || !initialized)
 		return FAILURE;
 
@@ -232,7 +233,7 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
  */
 int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	struct aducm_irq_desc *aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_EXT_INTERRUPTS)
@@ -256,7 +257,7 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  */
 int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
-	struct aducm_irq_desc *aducm_desc;
+	struct aducm_irq_ctrl_desc *aducm_desc;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_EXT_INTERRUPTS)

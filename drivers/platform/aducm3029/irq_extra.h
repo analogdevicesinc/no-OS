@@ -78,7 +78,7 @@ enum irq_mode {
  * @struct aducm_irq_desc
  * @brief Stores specific platform parameters
  */
-struct aducm_irq_desc {
+struct aducm_irq_ctrl_desc {
 	/** Callback that will be called when the interrupt occurs*/
 	void 			(*irq_handler[NB_EXT_INTERRUPTS])(void *irq_id);
 	/** Trigger condition for the external interrupt */
