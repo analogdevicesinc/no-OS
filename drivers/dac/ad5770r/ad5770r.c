@@ -3,7 +3,7 @@
  *   @brief  Implementation of ad5770r Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -384,7 +384,7 @@ int32_t ad5770r_set_output_filter(struct ad5770r_dev *dev,
  * @param mask_hw_ldac - The array contains HW LDAC channel masks.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-int32_t ad5770r_set_hw_ladc(struct ad5770r_dev *dev,
+int32_t ad5770r_set_hw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *mask_hw_ldac)
 {
 	int32_t ret;
@@ -642,7 +642,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 				     init_param->reference_selector);
 	ret |= ad5770r_set_alarm(dev, &init_param->alarm_config);
 
-	ret |= ad5770r_set_hw_ladc(dev,
+	ret |= ad5770r_set_hw_ldac(dev,
 				   &init_param->mask_hw_ldac);
 
 	for( i = AD5770R_CH0; i <=  AD5770R_CH5; i++) {

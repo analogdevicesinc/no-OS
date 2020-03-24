@@ -3,7 +3,7 @@
  *   @brief  Header file for AD5770R Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -373,7 +373,7 @@ int32_t ad5770r_set_alarm(struct ad5770r_dev *dev,
 int32_t ad5770r_set_output_filter(struct ad5770r_dev *dev,
 				  enum ad5770r_output_filter_resistor output_filter,
 				  enum ad5770r_channels channel);
-int32_t ad5770r_set_hw_ladc(struct ad5770r_dev *dev,
+int32_t ad5770r_set_hw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *mask_hw_ldac);
 int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 			      uint16_t dac_value, enum ad5770r_channels channel);
