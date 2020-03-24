@@ -393,5 +393,6 @@ int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
 				  const struct ad5770r_monitor_setup *mon_setup);
 int32_t ad5770r_init(struct ad5770r_dev **device,
 		     const struct ad5770r_init_param *init_param);
+int32_t ad5770r_remove(struct ad5770r_dev *dev);
 
 #endif /* AD5770R_H_ */
