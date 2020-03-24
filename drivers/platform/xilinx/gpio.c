@@ -382,12 +382,36 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	if (!desc)
+		return FAILURE;
 
-	if (value) {
-		// Unused variable - fix compiler warning
+	struct xil_gpio_desc	*extra;
+	uint8_t pin = desc->number;
+
+#ifdef XGPIO_H
+	uint8_t channel;
+#endif
+	extra = desc->extra;
+
+	switch (extra->type) {
+	case GPIO_PL:
+#ifdef XGPIO_H
+		if (pin >= 32) {
+			channel = 2;
+			pin -= 32;
+		} else
+			channel = 1;
+		*value = (XGpio_DiscreteRead(extra->instance, channel) >> pin) & 0x01;
+#endif
+		break;
+	case GPIO_PS:
+#ifdef XGPIOPS_H
+		*value = XGpioPs_ReadPin(extra->instance, pin);
+#endif
+		break;
+	default:
+		return FAILURE;
+		break;
 	}
 
 	return SUCCESS;
