@@ -387,6 +387,8 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *sw_ldac);
 int32_t ad5770r_get_status(struct ad5770r_dev *dev,
 			   uint8_t *status);
+int32_t ad5770r_get_interface_status(struct ad5770r_dev *dev,
+				     uint8_t *status);
 int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
 				  const struct ad5770r_monitor_setup *mon_setup);
 int32_t ad5770r_init(struct ad5770r_dev **device,
