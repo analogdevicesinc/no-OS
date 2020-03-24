@@ -111,7 +111,7 @@ struct s_i5g_init {
 /******************************************************************************/
 /* Initializes core descriptor with the devices */
 int32_t i5g_setup(struct s_i5g **descriptor,
-				  struct s_i5g_init init_param);
+		  struct s_i5g_init init_param);
 
 /* Free the resources allocated by i5g_setup() */
 int32_t i5g_remove(struct s_i5g *desc);
