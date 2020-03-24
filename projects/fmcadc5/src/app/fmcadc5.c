@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   ad_fmcadc5_ebz.c
+ *   @file   fmcadc5.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author AntoniuMiclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2014(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,106 +41,166 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_drivers.h"
+
+#include <stdio.h>
+#include <inttypes.h>
+#include "parameters.h"
+#include <xparameters.h>
+#include <xil_printf.h>
+#include <xil_cache.h>
+#include "axi_adxcvr.h"
+#include "spi.h"
+#include "gpio.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#include "delay.h"
+#include "error.h"
 #include "ad9625.h"
-#include "adc_core.h"
-#include "xcvr_core.h"
-#include "jesd_core.h"
-#include "dmac_core.h"
+#include "axi_adc_core.h"
+#include "axi_dmac.h"
+#include "axi_jesd204_rx.h"
 #include "i5g.h"
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define GPIO_JESD204_SYSREF	32
-#define GPIO_RST_0			34
-#define GPIO_PWDN_0			35
-#define GPIO_RST_1			38
-#define GPIO_PWDN_1			39
-#define GPIO_IRQ_0			40
-#define GPIO_FD_0			41
-#define GPIO_IRQ_1			42
-#define GPIO_FD_1			43
-#define GPIO_PWR_GOOD		44
-#define GPIO_SYSREF_DELAY	56
-
-#define SYSREF_DELAY_BITS	5
 
 int main(void)
 {
-	uint8_t pwr_good = 0;
-	uint32_t rstatus = 0;
+	int32_t status;
+	uint8_t pwr_good;
 
-	struct ad9625_dev		 *ad9625_0_device;
-	struct ad9625_dev		 *ad9625_1_device;
-	struct ad9625_init_param ad9625_0_param;
-	struct ad9625_init_param ad9625_1_param;
-	struct s_i5g			 *i5g_core;
-	struct s_i5g_init		 i5g_init_param;
-	adc_core				 ad9625_0_core;
-	adc_core				 ad9625_1_core;
-	jesd_core				 ad9625_0_jesd;
-	jesd_core				 ad9625_1_jesd;
-	xcvr_core				 ad9625_0_xcvr;
-	xcvr_core				 ad9625_1_xcvr;
-	dmac_core				 ad9625_dma;
-	dmac_xfer				 rx_xfer;
-	gpio_desc				 *gpio_rst_0;
-	gpio_desc				 *gpio_pwdn_0;
-	gpio_desc				 *gpio_rst_1;
-	gpio_desc				 *gpio_pwdn_1;
-	gpio_desc				 *gpio_pwr_good;
+	// SPI configuration
+	struct spi_init_param ad9625_0_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0
+	};
 
-	/* Device initialization parameters */
-	ad9625_0_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
-	ad9625_0_param.spi_init.cpha = 0;
-	ad9625_0_param.spi_init.cpol = 0;
-	ad9625_0_param.spi_init.type = MICROBLAZE_SPI;
-	ad9625_1_param.spi_init.chip_select = SPI_CHIP_SELECT(1);
-	ad9625_1_param.spi_init.cpha = 0;
-	ad9625_1_param.spi_init.cpol = 0;
-	ad9625_1_param.spi_init.type = MICROBLAZE_SPI;
+	struct spi_init_param ad9625_1_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 1,
+		.mode = SPI_MODE_0
+	};
 
-	/* Base addresses */
-	ad9625_0_xcvr.base_address = XPAR_AXI_AD9625_0_XCVR_BASEADDR;
-	ad9625_0_jesd.base_address = XPAR_AXI_AD9625_0_JESD_RX_AXI_BASEADDR;
-	ad9625_0_core.base_address = XPAR_AXI_AD9625_0_CORE_BASEADDR;
+	struct xil_spi_init_param xil_spi_param = {
+		.type = SPI_PL,
+		.device_id = SPI_DEVICE_ID
+	};
+	ad9625_0_spi_param.extra = &xil_spi_param;
+	ad9625_1_spi_param.extra = &xil_spi_param;
 
-	ad9625_1_xcvr.base_address = XPAR_AXI_AD9625_1_XCVR_BASEADDR;
-	ad9625_1_jesd.base_address = XPAR_AXI_AD9625_1_JESD_RX_AXI_BASEADDR;
-	ad9625_1_core.base_address = XPAR_AXI_AD9625_1_CORE_BASEADDR;
+	// GPIO configuration
+	struct gpio_init_param gpio_sysref_param = {
+		.number = GPIO_JESD204_SYSREF
+	};
+	struct gpio_init_param gpio_rst_0_param = {
+		.number = GPIO_RST_0
+	};
+	struct gpio_init_param gpio_rst_1_param = {
+		.number = GPIO_RST_1
+	};
+	struct gpio_init_param gpio_pwdn_0_param = {
+		.number = GPIO_PWDN_0
+	};
+	struct gpio_init_param gpio_pwdn_1_param = {
+		.number = GPIO_PWDN_1
+	};
+	struct gpio_init_param gpio_pwr_good_param = {
+		.number = GPIO_PWR_GOOD
+	};
 
-	ad9625_dma.base_address = XPAR_AXI_AD9625_DMA_BASEADDR;
+	struct xil_gpio_init_param xil_gpio_param = {
+		.type = GPIO_PL,
+		.device_id = GPIO_DEVICE_ID
+	};
+	gpio_sysref_param.extra = &xil_gpio_param;
+	gpio_rst_0_param.extra = &xil_gpio_param;
+	gpio_rst_1_param.extra = &xil_gpio_param;
+	gpio_pwdn_0_param.extra = &xil_gpio_param;
+	gpio_pwdn_1_param.extra = &xil_gpio_param;
+	gpio_pwr_good_param.extra = &xil_gpio_param;
 
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
+	gpio_desc *gpio_sysref;
+	gpio_desc *gpio_rst_0;
+	gpio_desc *gpio_rst_1;
+	gpio_desc *gpio_pwdn_0;
+	gpio_desc *gpio_pwdn_1;
+	gpio_desc *gpio_pwr_good;
 
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
+	struct adxcvr_init ad9625_0_xcvr_param = {
+		.name = "ad9152_0_xcvr",
+		.base = XPAR_AXI_AD9625_0_XCVR_BASEADDR,
+		.sys_clk_sel = 0,
+		.out_clk_sel = 2,
+		.lpm_enable = 1,
+		.cpll_enable = 1,
+		.ref_rate_khz = 625000,
+		.lane_rate_khz = 6250000,
+	};
+	struct adxcvr	*ad9625_0_xcvr;
 
-	gpio_get(&gpio_rst_0, GPIO_RST_0);
-	gpio_get(&gpio_pwdn_0, GPIO_PWDN_0);
-	gpio_get(&gpio_rst_1, GPIO_RST_1);
-	gpio_get(&gpio_pwdn_1, GPIO_PWDN_1);
-	gpio_get(&gpio_pwr_good, GPIO_PWR_GOOD);
+	struct adxcvr_init ad9625_1_xcvr_param = {
+		.name = "ad9152_1_xcvr",
+		.base = XPAR_AXI_AD9625_1_XCVR_BASEADDR,
+		.sys_clk_sel = 0,
+		.out_clk_sel = 2,
+		.lpm_enable = 1,
+		.cpll_enable = 1,
+		.ref_rate_khz = 625000,
+		.lane_rate_khz = 6250000,
+	};
+	struct adxcvr	*ad9625_1_xcvr;
 
-	gpio_set_value(gpio_rst_0, 0); /* Reset active low */
-	gpio_set_value(gpio_pwdn_0, 0); /* Power down active high */
-	gpio_set_value(gpio_rst_1, 0); /* Reset active low */
-	gpio_set_value(gpio_pwdn_1, 0); /* Power down active high */
+	struct jesd204_rx_init  ad9625_0_jesd_param = {
+		.name = "ad9625_0_jesd",
+		.base = RX_0_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = 6250000 / 40,
+		.lane_clk_khz = 6250000
+	};
+	struct axi_jesd204_rx *ad9625_0_jesd;
 
-	gpio_get_value(gpio_pwr_good, &pwr_good);
-	if (!pwr_good) {
-		xil_printf("Error: GPIO Power Good NOT set.\n\r");
-		return -1;
-	}
-	gpio_set_value(gpio_rst_0, 1);
-	gpio_set_value(gpio_rst_1, 1);
-	mdelay(100);
+	struct jesd204_rx_init  ad9625_1_jesd_param = {
+		.name = "ad9625_1_jesd",
+		.base = RX_1_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = 6250000 / 40,
+		.lane_clk_khz = 6250000
+	};
+	struct axi_jesd204_rx *ad9625_1_jesd;
 
-	/* ADC and receive path configuration */
+	struct axi_adc_init ad9625_0_core_param = {
+		.name = "ad9625_0_adc",
+		.base = RX_0_CORE_BASEADDR,
+		.num_channels = 1
+	};
+	struct axi_adc	*ad9625_0_core;
+
+	struct axi_adc_init ad9625_1_core_param = {
+		.name = "ad9625_1_adc",
+		.base = RX_1_CORE_BASEADDR,
+		.num_channels = 1
+	};
+	struct axi_adc	*ad9625_1_core;
+
+	struct axi_dmac_init ad9625_dmac_param = {
+		.name = "ad9625_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad9625_dmac;
+
+	struct ad9625_init_param	ad9625_0_param;
+	struct ad9625_init_param	ad9625_1_param;
+	ad9625_0_param.spi_init = ad9625_0_spi_param;
+	ad9625_1_param.spi_init = ad9625_1_spi_param;
+
+	struct ad9625_dev		*ad9625_0_device;
+	struct ad9625_dev		*ad9625_1_device;
+
+	// ADC configuration
 	ad9625_0_param.lane_rate_kbps = 6250000;
 	ad9625_0_param.test_samples[0] = 0x5A5;
 	ad9625_0_param.test_samples[1] = 0x1E1;
@@ -152,115 +213,152 @@ int main(void)
 	ad9625_1_param.test_samples[2] = 0x777;
 	ad9625_1_param.test_samples[3] = 0x444;
 
-	xcvr_getconfig(&ad9625_0_xcvr);
-	ad9625_0_xcvr.reconfig_bypass = 1;
-	ad9625_0_xcvr.lane_rate_kbps = ad9625_0_param.lane_rate_kbps;
-	ad9625_0_xcvr.ref_rate_khz = 625000;
+	// setup GPIOs
+	gpio_get(&gpio_sysref,  &gpio_sysref_param);
+	gpio_get(&gpio_rst_0,  &gpio_rst_0_param);
+	gpio_get(&gpio_rst_1,  &gpio_rst_1_param);
+	gpio_get(&gpio_pwdn_0,  &gpio_pwdn_0_param);
+	gpio_get(&gpio_pwdn_1,  &gpio_pwdn_1_param);
+	gpio_get(&gpio_pwr_good,  &gpio_pwr_good_param);
 
-	xcvr_getconfig(&ad9625_1_xcvr);
-	ad9625_1_xcvr.reconfig_bypass = 1;
-	ad9625_1_xcvr.lane_rate_kbps = ad9625_1_param.lane_rate_kbps;
-	ad9625_1_xcvr.ref_rate_khz = 625000;
+	gpio_direction_output(gpio_rst_0,  0);
+	gpio_direction_output(gpio_rst_1,  0);
+	gpio_direction_output(gpio_pwdn_0,  0);
+	gpio_direction_output(gpio_pwdn_1,  0);
+	mdelay(10);
 
-	ad9625_0_jesd.scramble_enable = 1;
-	ad9625_0_jesd.octets_per_frame = 1;
-	ad9625_0_jesd.frames_per_multiframe = 32;
-	ad9625_0_jesd.subclass_mode = 1;
-	ad9625_0_jesd.sysref_type = INTERN;
-	ad9625_0_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
+	gpio_get_value(gpio_pwr_good, &pwr_good);
+	if (!pwr_good) {
+		xil_printf("Error: GPIO Power Good NOT set.\n\r");
+		return FAILURE;
+	}
 
-	ad9625_1_jesd.scramble_enable = 1;
-	ad9625_1_jesd.octets_per_frame = 1;
-	ad9625_1_jesd.frames_per_multiframe = 32;
-	ad9625_1_jesd.subclass_mode = 1;
-	ad9625_1_jesd.sysref_type = INTERN;
-	ad9625_1_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
+	gpio_direction_output(gpio_rst_0,  1);
+	gpio_direction_output(gpio_rst_1,  1);
+	gpio_direction_output(gpio_sysref,  1);
+	mdelay(100);
 
-	ad9625_0_core.no_of_channels = 1;
-	ad9625_0_core.resolution = 12;
+	// set up the device
+	status = ad9625_setup(&ad9625_0_device, ad9625_0_param);
+	if (status != SUCCESS) {
+		printf("error: ad9625_0_setup() failed\n");
+	}
 
-	ad9625_1_core.no_of_channels = 1;
-	ad9625_1_core.resolution = 12;
+	status = ad9625_setup(&ad9625_1_device, ad9625_1_param);
+	if (status != SUCCESS) {
+		printf("error: ad9625_1_setup() failed\n");
+	}
 
-	ad9625_dma.type = DMAC_RX;
-	ad9625_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
+	struct s_i5g_init i5g_init_param = {
+		.ad9625_0_device = ad9625_0_device,
+		.ad9625_1_device = ad9625_1_device,
+		.ad9625_cs_0 = 0,
+		.ad9625_cs_1 = 1,
+		.regs = XPAR_AXI_FMCADC5_SYNC_BASEADDR,
+	};
+	struct s_i5g *i5g_core;
 
-	/* Set up the device */
-	ad9625_setup(&ad9625_0_device, ad9625_0_param);
-	ad9625_setup(&ad9625_1_device, ad9625_1_param);
+	// setup JESD core
+	status = axi_jesd204_rx_init(&ad9625_0_jesd, &ad9625_0_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9625_0_jesd->name);
+	}
+	status = axi_jesd204_rx_lane_clk_enable(ad9625_0_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9625_0_jesd->name);
+	}
 
-	i5g_init_param.ad9625_0_device = ad9625_0_device;
-	i5g_init_param.ad9625_1_device = ad9625_1_device;
-	i5g_init_param.ad9625_cs_0 = 1;
-	i5g_init_param.ad9625_cs_1 = 2;
-	i5g_init_param.regs = XPAR_AXI_FMCADC5_SYNC_BASEADDR;
-	i5g_init_param.sysref_delay = 0;
+	status = axi_jesd204_rx_init(&ad9625_1_jesd, &ad9625_1_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9625_1_jesd->name);
+	}
+	status = axi_jesd204_rx_lane_clk_enable(ad9625_1_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad9625_1_jesd->name);
+	}
 
-	/* Set up the JESD core */
-	jesd_setup(&ad9625_0_jesd);
-	jesd_setup(&ad9625_1_jesd);
+	// set up the XCVRs
+	status = adxcvr_init(&ad9625_0_xcvr, &ad9625_0_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", ad9625_0_xcvr->name);
+	}
+	status = adxcvr_clk_enable(ad9625_0_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9625_0_xcvr->name);
+	}
 
-	/* Set up the XCVRs */
-	xcvr_setup(&ad9625_0_xcvr);
-	xcvr_setup(&ad9625_1_xcvr);
+	status = adxcvr_init(&ad9625_1_xcvr, &ad9625_1_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", ad9625_1_xcvr->name);
+	}
+	status = adxcvr_clk_enable(ad9625_1_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", ad9625_1_xcvr->name);
+	}
 
-	/* Interface core setup */
-	adc_setup(ad9625_0_core);
-	adc_setup(ad9625_1_core);
+	// interface core setup
+	status = axi_adc_init(&ad9625_0_core,  &ad9625_0_core_param);
+	if (status != SUCCESS) {
+		printf("axi_adc_init() error: %s\n", ad9625_0_core->name);
+	}
+	status = axi_adc_init(&ad9625_1_core,  &ad9625_1_core_param);
+	if (status != SUCCESS) {
+		printf("axi_adc_init() error: %s\n", ad9625_1_core->name);
+	}
 
-	/* JESD core status */
-	axi_jesd204_rx_status_read(&ad9625_0_jesd);
-	axi_jesd204_rx_status_read(&ad9625_1_jesd);
+	// JESD core status
+	status = axi_jesd204_rx_status_read(ad9625_0_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
+	status = axi_jesd204_rx_status_read(ad9625_1_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
 
 	i5g_setup(&i5g_core, i5g_init_param);
 
-	/* JESD core status */
-	axi_jesd204_rx_status_read(&ad9625_0_jesd);
-	axi_jesd204_rx_status_read(&ad9625_1_jesd);
+	status = axi_jesd204_rx_status_read(ad9625_0_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
+	status = axi_jesd204_rx_status_read(ad9625_1_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
 
-	/* PRBS test */
+	// PRBS test
 	ad9625_test(ad9625_0_device, AD9625_TEST_PNLONG);
-	rstatus = adc_pn_mon(ad9625_0_core, ADC_PN23);
-	printf("PNLONG 0 : %d\n", (int)rstatus);
+	if(axi_adc_pn_mon(ad9625_0_core, AXI_ADC_PN23, 10) == -1) {
+		printf("%s PN23 sequence mismatch at ad9625_0!\n", __func__);
+	};
 	ad9625_test(ad9625_1_device, AD9625_TEST_PNLONG);
-	rstatus = adc_pn_mon(ad9625_1_core, ADC_PN23);
-	printf("PNLONG 1 : %d\n", (int)rstatus);
-
-	/* Set up ramp output */
-	ad9625_test(ad9625_0_device, AD9625_TEST_RAMP);
-	ad9625_test(ad9625_1_device, AD9625_TEST_RAMP);
-
-	/* Test the captured data */
-	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_0_core, 2, 1024, rx_xfer.start_address);
-	};
-	if(!dmac_start_transaction(ad9625_dma)) {
-		adc_ramp_test(ad9625_1_core, 2, 1024, rx_xfer.start_address);
+	if(axi_adc_pn_mon(ad9625_1_core, AXI_ADC_PN23, 10) == -1) {
+		printf("%s PN23 sequence mismatch at ad9625_1!\n", __func__);
 	};
 
-	/* Set up normal output */
+	// capture data with DMA
 	ad9625_test(ad9625_0_device, AD9625_TEST_OFF);
 	ad9625_test(ad9625_1_device, AD9625_TEST_OFF);
 
-	/* Capture data with DMA */
-	if(!dmac_start_transaction(ad9625_dma)) {
-		ad_printf("%s RX capture done!\n", __func__);
-	};
+	axi_dmac_init(&ad9625_dmac, &ad9625_dmac_param);
+
+	axi_dmac_transfer(ad9625_dmac, ADC_DDR_BASEADDR,
+			  16384 * 2);
+
+	printf("adc5: setup and configuration is done\n");
 
 	ad9625_remove(ad9625_0_device);
 	ad9625_remove(ad9625_1_device);
 
+	gpio_remove(gpio_sysref);
 	gpio_remove(gpio_rst_0);
-	gpio_remove(gpio_pwdn_0);
 	gpio_remove(gpio_rst_1);
+	gpio_remove(gpio_pwdn_0);
 	gpio_remove(gpio_pwdn_1);
 	gpio_remove(gpio_pwr_good);
 
-	i5g_remove(i5g_core);
-
-	printf("Done\n");
-
-	return 0;
+	return(0);
 }
