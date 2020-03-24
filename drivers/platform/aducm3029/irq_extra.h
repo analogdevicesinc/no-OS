@@ -75,10 +75,10 @@ enum irq_mode {
 };
 
 /**
- * @struct aducm_irq_desc
+ * @struct aducm_irq_ctrl_desc
  * @brief Stores specific platform parameters
  */
-struct aducm_irq_desc {
+struct aducm_irq_ctrl_desc {
 	/** Structure where user callback are stored */
 	struct callback_desc	callbacks[NB_EXT_INTERRUPTS];
 	/** Memory needed by the ADI IRQ driver */
