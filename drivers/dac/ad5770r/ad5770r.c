@@ -420,6 +420,7 @@ int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 			      uint16_t dac_value, enum ad5770r_channels channel)
 {
 	uint8_t data[2];
+	int32_t ret;
 
 	if (!dev)
 		return FAILURE;
@@ -427,9 +428,17 @@ int32_t ad5770r_set_dac_value(struct ad5770r_dev *dev,
 	data[1] = (uint8_t)AD5770R_CH_DAC_DATA_LSB(dac_value);
 	data[0] = (uint8_t)((dac_value & 0x3FC0) >> 6);
 
-	return ad5770r_spi_reg_write_multiple(dev,
-					      AD5770R_CH0_DAC_MSB + 2 * channel,
-					      data, sizeof(data));
+	ret = ad5770r_spi_reg_write_multiple(dev,
+					     AD5770R_CH0_DAC_MSB + 2 * channel,
+					     data, sizeof(data));
+
+	if (ret)
+		return ret;
+
+	dev->dac_value[channel] = dac_value;
+	dev->input_value[channel] = dac_value;
+
+	return ret;
 };
 
 /**
@@ -443,6 +452,7 @@ int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
 			      uint16_t dac_input, enum ad5770r_channels channel)
 {
 	uint8_t data[2];
+	int32_t ret;
 
 	if (!dev)
 		return FAILURE;
@@ -450,10 +460,15 @@ int32_t ad5770r_set_dac_input(struct ad5770r_dev *dev,
 	data[1] = (uint8_t)AD5770R_CH_DAC_DATA_LSB(dac_input);
 	data[0] = (uint8_t)((dac_input & 0x3FC0) >> 6);
 
-	return ad5770r_spi_reg_write_multiple(dev,
-					      AD5770R_CH0_INPUT_MSB + 2 * channel,
-					      data, sizeof(data));
+	ret = ad5770r_spi_reg_write_multiple(dev,
+					     AD5770R_CH0_INPUT_MSB + 2 * channel,
+					     data, sizeof(data));
+	if (ret)
+		return ret;
 
+	dev->input_value[channel] = dac_input;
+
+	return ret;
 };
 
 /**
@@ -530,23 +545,31 @@ int32_t ad5770r_set_sw_ldac(struct ad5770r_dev *dev,
 			    const struct ad5770r_channel_switches *sw_ldac)
 {
 	int32_t ret;
+	uint8_t sw_ldac_value;
+	uint8_t  i;
 
 	if (!dev || !sw_ldac)
 		return FAILURE;
 
-	ret = ad5770r_spi_reg_write(dev,
-				    AD5770R_SW_LDAC,
-				    AD5770R_SW_LDAC_CH(sw_ldac->en0, AD5770R_CH0) |
-				    AD5770R_SW_LDAC_CH(sw_ldac->en1, AD5770R_CH1) |
-				    AD5770R_SW_LDAC_CH(sw_ldac->en2, AD5770R_CH2) |
-				    AD5770R_SW_LDAC_CH(sw_ldac->en3, AD5770R_CH3) |
-				    AD5770R_SW_LDAC_CH(sw_ldac->en4, AD5770R_CH4) |
-				    AD5770R_SW_LDAC_CH(sw_ldac->en5, AD5770R_CH5));
+	sw_ldac_value = AD5770R_SW_LDAC_CH(sw_ldac->en0, AD5770R_CH0) |
+			AD5770R_SW_LDAC_CH(sw_ldac->en1, AD5770R_CH1) |
+			AD5770R_SW_LDAC_CH(sw_ldac->en2, AD5770R_CH2) |
+			AD5770R_SW_LDAC_CH(sw_ldac->en3, AD5770R_CH3) |
+			AD5770R_SW_LDAC_CH(sw_ldac->en4, AD5770R_CH4) |
+			AD5770R_SW_LDAC_CH(sw_ldac->en5, AD5770R_CH5);
+
+	ret = ad5770r_spi_reg_write(dev, AD5770R_SW_LDAC, sw_ldac_value);
 
 	if (ret)
 		return ret;
 
 	dev->sw_ldac = *sw_ldac;
+
+	for (i = 0; i <= AD5770R_CH5; i++) {
+		if ((sw_ldac_value >> i) & BIT(0)) {
+			dev->dac_value[i] = dev->input_value[i];
+		}
+	}
 
 	return ret;
 }
