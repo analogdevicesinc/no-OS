@@ -98,7 +98,7 @@ static int32_t spi_init_pl(struct spi_desc *desc,
 	xdesc->type = xinit->type;
 	xdesc->flags = xinit->flags;
 
-	xdesc->instance = (XSpi*)malloc(sizeof(XSpi));
+	xdesc->instance = (XSpi*)calloc(1, sizeof(XSpi));
 	if(!xdesc->instance)
 		goto pl_error;
 
