@@ -247,12 +247,16 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 	int32_t status;
 	uint32_t uart_irq_mask;
 	struct xil_uart_desc *xil_uart_desc = descriptor->extra;
+	struct callback_desc callback_desc;
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
-		status = irq_register(xil_uart_desc->irq_desc, xil_uart_desc->irq_id,
-				      (Xil_ExceptionHandler) XUartPs_InterruptHandler, xil_uart_desc->instance);
+		callback_desc.callback = XUartPs_InterruptHandler;
+		callback_desc.ctx = xil_uart_desc->instance;
+		status = irq_register_callback(xil_uart_desc->irq_desc,
+					       xil_uart_desc->irq_id,
+					       &callback_desc);
 		if (status < 0)
 			return status;
 		XUartPs_SetHandler(xil_uart_desc->instance, uart_irq_handler, xil_uart_desc);

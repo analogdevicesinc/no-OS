@@ -86,12 +86,14 @@ static uint32_t		initialized;
  */
 static void internal_callback(void *aducm_desc, uint32_t event, void *arg)
 {
-	struct aducm_irq_desc *desc = aducm_desc;
+	struct callback_desc	*desc;
 
 	(void)arg;
-
-	if (event < NB_EXT_INTERRUPTS && desc->irq_handler[event])
-		desc->irq_handler[event]((void *)event);
+	if (event >= NB_EXT_INTERRUPTS)
+		return ;
+	desc = &((struct aducm_irq_desc *)aducm_desc)->callbacks[event];
+	if (desc->callback)
+		desc->callback(desc->ctx, event, arg);
 }
 
 /**
@@ -154,24 +156,18 @@ int32_t irq_ctrl_remove(struct irq_ctrl_desc *desc)
  * @brief Register IRQ handling function for the specified <em>irq_id</em>.
  * @param desc - Interrupt controller descriptor.
  * @param irq_id - Id of the interrupt
- * @param irq_handler - Generic function to be registered. Will be called using
- * as parameter the interrupt ID.
- * @param dev_instance - Specify the trigger condition for the interrupt. To be
- * one of the values from \ref irq_mode.
+ * @param callback_desc - Callback descriptor
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-int32_t irq_register(struct irq_ctrl_desc *desc, uint32_t irq_id,
-		     void (*irq_handler)(void *data), void *dev_instance)
+int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
+			      struct callback_desc *callback_desc)
 {
-	struct aducm_irq_desc *aducm_desc;
-
-	if (!desc || !desc->extra || !initialized || !irq_handler ||
+	if (!desc || !desc->extra || !initialized || !callback_desc ||
 	    irq_id >= NB_EXT_INTERRUPTS)
 		return FAILURE;
 
-	aducm_desc = desc->extra;
-	aducm_desc->irq_handler[irq_id] = irq_handler;
-	aducm_desc->mode[irq_id] = (enum irq_mode)dev_instance;
+	((struct aducm_irq_desc *)desc->extra)->callbacks[irq_id] =
+		*callback_desc;
 
 	return SUCCESS;
 }
@@ -188,7 +184,7 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	    irq_id >= NB_EXT_INTERRUPTS)
 		return FAILURE;
 
-	((struct aducm_irq_desc *)desc->extra)->irq_handler[irq_id] = NULL;
+	((struct aducm_irq_desc *)desc->extra)->callbacks[irq_id].callback = 0;
 
 	return SUCCESS;
 }
@@ -254,11 +250,11 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	    irq_id >= NB_EXT_INTERRUPTS)
 		return FAILURE;
 	aducm_desc = desc->extra;
-	if (aducm_desc->irq_handler[irq_id] == NULL)
+	if (aducm_desc->callbacks[irq_id].callback == NULL)
 		return FAILURE;
 
-	adi_xint_EnableIRQ(id_map_event[irq_id],
-			   (ADI_XINT_IRQ_MODE)aducm_desc->mode[irq_id]);
+	adi_xint_EnableIRQ(id_map_event[irq_id], (ADI_XINT_IRQ_MODE)
+			   aducm_desc->callbacks[irq_id].config);
 	aducm_desc->enabled |= (1u << irq_id);
 
 	return SUCCESS;

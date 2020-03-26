@@ -79,10 +79,8 @@ enum irq_mode {
  * @brief Stores specific platform parameters
  */
 struct aducm_irq_desc {
-	/** Callback that will be called when the interrupt occurs*/
-	void 			(*irq_handler[NB_EXT_INTERRUPTS])(void *irq_id);
-	/** Trigger condition for the external interrupt */
-	enum irq_mode		mode[NB_EXT_INTERRUPTS];
+	/** Structure where user callback are stored */
+	struct callback_desc	callbacks[NB_EXT_INTERRUPTS];
 	/** Memory needed by the ADI IRQ driver */
 	uint8_t			irq_memory[ADI_XINT_MEMORY_SIZE];
 	/** Stores the enabled interrupts */
