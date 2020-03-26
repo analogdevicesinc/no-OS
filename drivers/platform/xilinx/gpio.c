@@ -311,12 +311,36 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	if (!desc)
+		return FAILURE;
 
-	if (direction) {
-		// Unused variable - fix compiler warning
+	struct xil_gpio_desc	*extra;
+	uint8_t pin = desc->number;
+
+#ifdef XGPIO_H
+	uint8_t channel;
+#endif
+	extra = desc->extra;
+
+	switch (extra->type) {
+	case GPIO_PL:
+#ifdef XGPIO_H
+		if (pin >= 32) {
+			channel = 2;
+			pin -= 32;
+		} else
+			channel = 1;
+		*direction = (XGpio_GetDataDirection(extra->instance,channel) >> pin) & 0x01;
+#endif
+		break;
+	case GPIO_PS:
+#ifdef XGPIOPS_H
+		*direction = XGpioPs_getDirectionPin(extra->instance, pin);
+#endif
+		break;
+	default:
+		return FAILURE;
+		break;
 	}
 
 	return SUCCESS;
