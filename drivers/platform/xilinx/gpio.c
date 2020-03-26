@@ -210,7 +210,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 
 		config = XGpio_GetDataDirection((XGpio *)extra->instance,
 						channel);
-		config &= ~(1 << desc->number);
+		config |= (1 << desc->number);
 		XGpio_SetDataDirection((XGpio *)extra->instance,
 				       channel,
 				       config);
@@ -221,9 +221,6 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 		XGpioPs_SetDirectionPin(extra->instance,
 					desc->number,
 					GPIO_IN);
-		XGpioPs_SetOutputEnablePin(extra->instance,
-					   desc->number,
-					   GPIO_OUT);
 #endif
 		break;
 	default:
