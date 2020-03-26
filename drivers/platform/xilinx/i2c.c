@@ -54,47 +54,31 @@
 #include "error.h"
 #include "i2c.h"
 #include "i2c_extra.h"
+#include "list.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/** Table of existing BSP driver handlers */
-#ifdef XPAR_XIIC_NUM_INSTANCES
+static struct list_desc *pl_list = NULL;
+static struct iterator  *pl_it = NULL;
+static struct list_desc *ps_list = NULL;
+static struct iterator  *ps_it = NULL;
+
 /**
- * @struct pl_table_item
- * @brief Table item for PL I2C cores already started.
+ * @struct inst_table_item
+ * @brief Table item for I2C cores already started.
  */
-struct pl_table_item {
+struct inst_table_item {
 	/** Instance the BSP driver uses for this core. */
-	XIic *instance;
+	void *instance;
 	/** Core ID in BSP. */
 	uint32_t device_id;
 	/** Number of ADI driver instances running on this core. */
 	uint32_t inst_no;
 };
-/** Dynamically allocated table for PL I2C BSP driver instances. */
-static struct pl_table_item *pl_table = NULL;
-/** Number of PL I2C BSP driver instances. */
-static uint32_t pl_core_no = 0;
-#endif
+
 #ifdef XPAR_XIICPS_NUM_INSTANCES
-/**
- * @struct ps_table_item
- * @brief Table item for PS I2C cores already started.
- */
-struct ps_table_item {
-	/** Instance the BSP driver uses for this core. */
-	XIicPs *instance;
-	/** Core ID in BSP. */
-	uint32_t device_id;
-	/** Number of ADI driver instances running on this core. */
-	uint32_t inst_no;
-};
-/** Dynamically allocated table for PS I2C BSP driver instances. */
-static struct ps_table_item *ps_table = NULL;
-/** Number of PS I2C BSP driver instances. */
-static uint32_t ps_core_no = 0;
 /** Save the current state of the bitrate to not change it each time */
 static uint32_t ps_last_bitrate = 0;
 #endif
@@ -103,40 +87,19 @@ static uint32_t ps_last_bitrate = 0;
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-#ifdef XPAR_XIIC_NUM_INSTANCES
 /**
- * @brief Find instance in the PL table using the core ID.
- * @param id - ID of the wanted core.
- * @return \ref PL table index of wanted core, \ref -1 if core not found.
+ * @brief Compare two I2C cores by ID.
+ * @param el1 - First I2C core to compare.
+ * @param el2 - Second I2C core to compare.
+ * @return \ref 0 if the two cores have the same ID,
+ *         \ref difference between the first and the second IDs otherwise.
  */
-static int32_t pl_inst_tab_find(uint32_t id)
+static int32_t i2c_cmp(void *el1, void *el2)
 {
-	int32_t i = 0;
+	struct inst_table_item *sel1 = el1, *sel2 = el2;
 
-	for (i = 0; i < pl_core_no; i++)
-		if (pl_table[i].device_id == id)
-			return (int32_t)i;
-
-	return -1;
+	return (sel1->device_id - sel2->device_id);
 }
-#endif
-#ifdef XPAR_XIICPS_NUM_INSTANCES
-/**
- * @brief Find instance in the PS table using the core ID.
- * @param id - ID of the wanted core.
- * @return \ref PS table index of wanted core, \ref -1 if core not found.
- */
-static int32_t ps_inst_tab_find(uint32_t id)
-{
-	int32_t i = 0;
-
-	for (i = 0; i < ps_core_no; i++)
-		if (ps_table[i].device_id == id)
-			return (int32_t)i;
-
-	return -1;
-}
-#endif
 
 /**
  * @brief Configure slave address and bitrate if needed
@@ -186,7 +149,6 @@ int32_t i2c_init(struct i2c_desc **desc,
 	i2c_desc	*idesc;
 	xil_i2c_desc	*xdesc;
 	xil_i2c_init	*xinit;
-	int32_t tab_inst;
 
 	idesc = (struct i2c_desc *)malloc(sizeof(*idesc));
 	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
@@ -205,11 +167,20 @@ int32_t i2c_init(struct i2c_desc **desc,
 	case IIC_PL:
 #ifdef XIIC_H
 		; /** Intentional empty statement */
-		struct pl_table_item *tab_check_pl;
-		tab_inst = pl_inst_tab_find(xinit->device_id);
-		if (tab_inst != -1) {
-			xdesc->instance = pl_table[tab_inst].instance;
-			pl_table[tab_inst].inst_no++;
+		struct inst_table_item tab_check_pl;
+		struct inst_table_item *temp_el_pl;
+
+		if (!pl_list)
+			list_init(&pl_list, LIST_DEFAULT, i2c_cmp);
+		if (!pl_it)
+			iterator_init(&pl_it, pl_list, true);
+
+		tab_check_pl.device_id = xdesc->device_id;
+
+		if (!IS_ERR_VALUE(list_read_find(pl_list, (void **)&temp_el_pl,
+						 &tab_check_pl))) {
+			xdesc->instance = temp_el_pl->instance;
+			temp_el_pl->inst_no++;
 			break;
 		}
 
@@ -246,19 +217,11 @@ int32_t i2c_init(struct i2c_desc **desc,
 		if(ret < 0)
 			goto pl_error;
 
-		if (!pl_table) {
-			pl_table = (struct pl_table_item*)calloc(1, sizeof(*pl_table));
-		} else {
-			tab_check_pl = (struct pl_table_item*)realloc(pl_table,
-					(pl_core_no + 1) * sizeof(*pl_table));
-			if (!tab_check_pl)
-				goto pl_error;
-			pl_table = tab_check_pl;
-		}
-		pl_table[pl_core_no].device_id = xinit->device_id;
-		pl_table[pl_core_no].instance = xdesc->instance;
-		pl_table[pl_core_no].inst_no = 1;
-		pl_core_no++;
+		temp_el_pl = (struct inst_table_item*)calloc(1, sizeof(*temp_el_pl));
+		temp_el_pl->device_id = xinit->device_id;
+		temp_el_pl->inst_no = 1;
+		temp_el_pl->instance = xdesc->instance;
+		pl_list->push(pl_list, temp_el_pl);
 
 		break;
 pl_error:
@@ -268,11 +231,20 @@ pl_error:
 	case IIC_PS:
 #ifdef XIICPS_H
 		; /** Intentional empty statement */
-		struct ps_table_item *tab_check_ps;
-		tab_inst = ps_inst_tab_find(xinit->device_id);
-		if (tab_inst != -1) {
-			xdesc->instance = ps_table[tab_inst].instance;
-			ps_table[tab_inst].inst_no++;
+		struct inst_table_item tab_check_ps;
+		struct inst_table_item *temp_el_ps;
+
+		if (!pl_list)
+			list_init(&ps_list, LIST_DEFAULT, i2c_cmp);
+		if (!pl_it)
+			iterator_init(&ps_it, ps_list, true);
+
+		tab_check_ps.device_id = xdesc->device_id;
+
+		if (!IS_ERR_VALUE(list_read_find(ps_list, (void **)&temp_el_ps,
+						 &tab_check_ps))) {
+			xdesc->instance = temp_el_ps->instance;
+			temp_el_ps->inst_no++;
 			break;
 		}
 
@@ -293,19 +265,11 @@ pl_error:
 
 		XIicPs_SetSClk(xdesc->instance, param->max_speed_hz);
 
-		if (!ps_table) {
-			ps_table = (struct ps_table_item*)calloc(1, sizeof(*ps_table));
-		} else {
-			tab_check_ps = (struct ps_table_item*)realloc(ps_table,
-					(ps_core_no + 1) * sizeof(*ps_table));
-			if (!tab_check_ps)
-				goto pl_error;
-			ps_table = tab_check_ps;
-		}
-		ps_table[ps_core_no].device_id = xinit->device_id;
-		ps_table[ps_core_no].instance = xdesc->instance;
-		ps_table[ps_core_no].inst_no = 1;
-		ps_core_no++;
+		temp_el_ps = (struct inst_table_item*)calloc(1, sizeof(*temp_el_ps));
+		temp_el_ps->device_id = xinit->device_id;
+		temp_el_ps->inst_no = 1;
+		temp_el_ps->instance = xdesc->instance;
+		ps_list->push(ps_list, temp_el_ps);
 
 		break;
 ps_error:
@@ -338,7 +302,6 @@ int32_t i2c_remove(struct i2c_desc *desc)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
-	int32_t tab_inst;
 
 	xdesc = desc->extra;
 
@@ -346,62 +309,45 @@ int32_t i2c_remove(struct i2c_desc *desc)
 	case IIC_PL:
 #ifdef XIIC_H
 		; /** Intentional empty statement */
-		struct pl_table_item *tab_check_pl;
-		tab_inst = pl_inst_tab_find(xdesc->device_id);
-		pl_table[tab_inst].inst_no--;
-		if (pl_table[tab_inst].inst_no != 0)
+		struct inst_table_item tab_check_pl;
+		struct inst_table_item *temp_el_pl;
+		tab_check_pl.device_id = xdesc->device_id;
+		ret = iterator_find(pl_it, &tab_check_pl);
+		if (ret != SUCCESS)
+			goto error;
+		iterator_read(pl_it, (void **)&temp_el_pl);
+		temp_el_pl->inst_no--;
+		if (temp_el_pl->inst_no != 0)
 			break;
 
 		ret = XIic_Stop(((XIic *)xdesc->instance));
 
 		if(ret != SUCCESS)
 			goto error;
-		if (pl_table[tab_inst].inst_no == 0) {
-			free(xdesc->instance);
-			tab_check_pl = (struct pl_table_item *)calloc((pl_core_no - 1),
-					sizeof(*tab_check_pl));
-			if (!tab_check_pl)
-				return FAILURE;
-			for (uint32_t i = 0; i < pl_core_no; i++) {
-				if (i < tab_inst)
-					memcpy(&tab_check_pl[i], &pl_table[i], sizeof(*pl_table));
-				else
-					memcpy(&tab_check_pl[i], &pl_table[(i + 1)],
-					       sizeof(*pl_table));
-			}
-			free(pl_table);
-			pl_table = tab_check_pl;
-			pl_core_no--;
-		}
+
+		/** Remove list element */
+		iterator_get(pl_it, (void **)&temp_el_pl);
+		free(temp_el_pl);
 		break;
 #endif
 		goto error;
 	case IIC_PS:
 #ifdef XIICPS_H
 		; /** Intentional empty statement */
-		struct ps_table_item *tab_check_ps;
-		tab_inst = ps_inst_tab_find(xdesc->device_id);
-		ps_table[tab_inst].inst_no--;
-		if (ps_table[tab_inst].inst_no != 0)
+		struct inst_table_item tab_check_ps;
+		struct inst_table_item *temp_el_ps;
+		tab_check_ps.device_id = xdesc->device_id;
+		ret = iterator_find(ps_it, &tab_check_ps);
+		if (ret != SUCCESS)
+			goto error;
+		iterator_read(ps_it, (void **)&temp_el_ps);
+		temp_el_ps->inst_no--;
+		if (temp_el_ps->inst_no != 0)
 			break;
 
-		if (ps_table[tab_inst].inst_no == 0) {
-			free(xdesc->instance);
-			tab_check_ps = (struct ps_table_item *)calloc((ps_core_no - 1),
-					sizeof(*tab_check_ps));
-			if (!tab_check_ps)
-				return FAILURE;
-			for (uint32_t i = 0; i < ps_core_no; i++) {
-				if (i < tab_inst)
-					memcpy(&tab_check_ps[i], &ps_table[i], sizeof(*ps_table));
-				else
-					memcpy(&tab_check_ps[i], &ps_table[(i + 1)],
-					       sizeof(*ps_table));
-			}
-			free(ps_table);
-			ps_table = tab_check_ps;
-			ps_core_no--;
-		}
+		/** Remove list element */
+		iterator_get(ps_it, (void **)&temp_el_ps);
+		free(temp_el_ps);
 		break;
 #endif
 		/* Intended fallthrough */
