@@ -227,7 +227,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 #endif
 		break;
 	default:
-		return FALSE;
+		return FAILURE;
 		break;
 	}
 
@@ -293,7 +293,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 #endif
 		break;
 	default:
-		return FALSE;
+		return FAILURE;
 		break;
 	}
 
@@ -388,7 +388,7 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 #endif
 		break;
 	default:
-		return FALSE;
+		return FAILURE;
 		break;
 	}
 
