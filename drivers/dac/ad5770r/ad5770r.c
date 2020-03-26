@@ -719,7 +719,7 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 
 /**
  * Delete and remove the device.
- * @param device - The device structure.
+ * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad5770r_remove(struct ad5770r_dev *dev)
