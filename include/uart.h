@@ -79,12 +79,20 @@ struct uart_desc {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-/* Read data to UART. */
+/* Read data from UART. Blocking function */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data, uint32_t bytes_number);
 
-/* Write data to UART. */
+/* Write data to UART. Blocking function */
 int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number);
+
+/* Read data from UART. Non blocking function */
+int32_t uart_read_nonblocking(struct uart_desc *desc, uint8_t *data,
+			      uint32_t bytes_number);
+
+/* Write data to UART. Non blocking function*/
+int32_t uart_write_nonblocking(struct uart_desc *desc, const uint8_t *data,
+			       uint32_t bytes_number);
 
 /* Initialize the UART communication peripheral. */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param);
