@@ -99,7 +99,8 @@ int32_t gpio_get(struct gpio_desc **desc,
 int32_t gpio_remove(struct gpio_desc *desc)
 {
 	if (desc) {
-		// Unused variable - fix compiler warning
+		free(desc->extra);
+		free(desc);
 	}
 
 	return SUCCESS;
@@ -130,31 +131,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
-	uint32_t ppos;
-	uint32_t pdata;
-	uint32_t pmask;
-
-	struct altera_gpio_desc *altera_desc;
-	altera_desc = desc->extra;
-
-	if (desc->number < 32)
-		return FAILURE;
-
-	switch(altera_desc->type) {
-	case NIOS_II_GPIO:
-		ppos = desc->number - 32;
-		pmask = 0x1 << ppos;
-
-		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
-		IOWR_32DIRECT(altera_desc->base_address,
-			      0x0, ((pdata & ~pmask) | (value << ppos)));
-
-		break;
-	default:
-		return FAILURE;
-	}
-
-	return SUCCESS;
+	return gpio_set_value(desc, value);
 }
 
 /**
@@ -190,15 +167,34 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
+	if(!desc)
+		return FAILURE;
+
+	uint32_t ppos;
+	uint32_t pdata;
+	uint32_t pmask;
+
+	struct altera_gpio_desc *altera_desc;
+	altera_desc = desc->extra;
+
+	if (desc->number < 32)
+		return FAILURE;
+
+	switch(altera_desc->type) {
+	case NIOS_II_GPIO:
+		ppos = desc->number - 32;
+		pmask = 0x1 << ppos;
+
+		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
+		IOWR_32DIRECT(altera_desc->base_address,
+			      0x0, ((pdata & ~pmask) | (value << ppos)));
+
+		break;
+	default:
+		return FAILURE;
 	}
 
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
-
-	return 0;
+	return SUCCESS;
 }
 
 /**
@@ -212,13 +208,29 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
+	if(!desc)
+		return FAILURE;
+
+	uint32_t ppos;
+	uint32_t pdata;
+
+	struct altera_gpio_desc *altera_desc;
+	altera_desc = desc->extra;
+
+	if (desc->number < 32)
+		return FAILURE;
+
+	switch(altera_desc->type) {
+	case NIOS_II_GPIO:
+		ppos = desc->number - 32;
+
+		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
+		*value = (pdata >> ppos) & 0x01;
+
+		break;
+	default:
+		return FAILURE;
 	}
 
-	if (value) {
-		// Unused variable - fix compiler warning
-	}
-
-	return 0;
+	return SUCCESS;
 }
