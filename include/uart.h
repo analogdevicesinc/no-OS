@@ -71,6 +71,11 @@ struct uart_desc {
 	uint8_t 	device_id;
 	/** UART Baud Rate */
 	uint32_t 	baud_rate;
+	/** Callback to be called when an operation is done (optional) */
+	void		(*callback)(void *callback_ctx, uint32_t event,
+				    void *extra);
+	/** Parameter to be passed to the callback as app_param */
+	void		*callback_ctx;
 	/** UART extra parameters (device specific) */
 	void 		*extra;
 };
