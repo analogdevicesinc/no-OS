@@ -41,13 +41,11 @@
 /************************* Include Files **************************************/
 /******************************************************************************/
 
-#include "uart.h"
-#include "uart_extra.h"
 #include <stdlib.h>
-
-#ifndef min
-#define min(x, y) (((x) > (y)) ? (y) : (x))
-#endif
+#include "uart.h"
+#include "irq.h"
+#include "uart_extra.h"
+#include "util.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -168,9 +166,10 @@ static void free_desc_mem(struct uart_desc *desc)
  * @param event:	Event ID from ADI_UART_EVENT
  * @param buff:		Pointer to the handled buffer or to an error code
  */
-static void uart_callback(void *desc, uint32_t event, void *buff)
+static void uart_callback(void *ctx, uint32_t event, void *buff)
 {
-	struct aducm_uart_desc	*extra = desc;
+	struct uart_desc	*desc = ctx;
+	struct aducm_uart_desc	*extra = desc->extra;
 	uint32_t		len;
 
 	switch(event) {
@@ -187,10 +186,9 @@ static void uart_callback(void *desc, uint32_t event, void *buff)
 			extra->read_desc.buff += len;
 		} else {
 			extra->read_desc.is_nonblocking = false;
-			//TODO Remove comment when irq support is done.
-			//if (extra->callback)
-			//	extra->callback(extra->callback_ctx, READ_DONE,
-			//						NULL);
+			if (extra->callback_enabled)
+				desc->callback(desc->callback_ctx, READ_DONE,
+					       NULL);
 		}
 		break;
 	/* Write done */
@@ -206,16 +204,15 @@ static void uart_callback(void *desc, uint32_t event, void *buff)
 			extra->write_desc.buff += len;
 		} else {
 			extra->write_desc.is_nonblocking = false;
-			//TODO Remove comment when irq support is done.
-			//if (extra->callback)
-			//	extra->callback(extra->callback_ctx, WRITE_DONE,
-			//						NULL);
+			if (extra->callback_enabled)
+				desc->callback(desc->callback_ctx, WRITE_DONE,
+					       NULL);
 		}
 		break;
 	default:
 		extra->errors |= (uint32_t)buff;
-		//if (extra->callback)
-		//	extra->callback(extra->callback_ctx, ERROR, buff);
+		if (extra->callback_enabled)
+			desc->callback(desc->callback_ctx, ERROR, buff);
 		break;
 	}
 }
@@ -437,8 +434,8 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	if (uart_ret != ADI_UART_SUCCESS)
 		goto failure;
 
-	adi_uart_RegisterCallback(aducm_desc->uart_handler,
-				  uart_callback, aducm_desc);
+	adi_uart_RegisterCallback(aducm_desc->uart_handler, uart_callback,
+				  *desc);
 
 	return SUCCESS;
 failure:

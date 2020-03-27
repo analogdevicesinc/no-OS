@@ -45,17 +45,36 @@
 /******************************************************************************/
 
 #include <drivers/xint/adi_xint.h>
+#include <stdbool.h>
+#include "irq.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-/** Number of available external interrupts */
-#define NB_EXT_INTERRUPTS	4u
+/** Number of available interrupts */
+#define NB_INTERRUPTS		5u
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+/**
+ * @enum irq_id
+ * @brief Interrupts IDs supported by the irq driver
+ */
+enum irq_id {
+	/** External interrupt 0, on GPIO 15 */
+	ADUCM_EXTERNAL_INT0_ID,
+	/** External interrupt 0, on GPIO 16 */
+	ADUCM_EXTERNAL_INT1_ID,
+	/** External interrupt 0, on GPIO 13 */
+	ADUCM_EXTERNAL_INT2_ID,
+	/** External interrupt 0, on GPIO 33 */
+	ADUCM_EXTERNAL_INT3_ID,
+	/** UART interrupt ID*/
+	ADUCM_UART_INT_ID
+};
 
 /**
  * @enum irq_mode
@@ -75,12 +94,25 @@ enum irq_mode {
 };
 
 /**
+ * @union irq_config
+ * @brief Configuration for the callback
+ */
+union irq_config {
+	/** UART descriptor */
+	struct uart_desc	*uart_conf;
+	/** Trigger condition for the external interrupt */
+	enum irq_mode		xint_conf;
+};
+
+/**
  * @struct aducm_irq_ctrl_desc
  * @brief Stores specific platform parameters
  */
 struct aducm_irq_ctrl_desc {
-	/** Structure where user callback are stored */
-	struct callback_desc	callbacks[NB_EXT_INTERRUPTS];
+	/** Configuration for each interrupt */
+	union irq_config	conf[NB_INTERRUPTS];
+	/** Store if a callback has been configured */
+	bool			callback_configured[NB_INTERRUPTS];
 	/** Memory needed by the ADI IRQ driver */
 	uint8_t			irq_memory[ADI_XINT_MEMORY_SIZE];
 	/** Stores the enabled interrupts */

@@ -201,6 +201,8 @@ struct aducm_uart_desc {
 	ADI_UART_HANDLE	uart_handler;
 	/** Stores the error occurred */
 	enum UART_ERROR	errors;
+	/** Set if callback is enabled */
+	bool		callback_enabled;
 	/**
 	 * Buffer needed by the ADI UART driver to operate.
 	 * This buffer allocated and aligned at runtime to 32 bits
