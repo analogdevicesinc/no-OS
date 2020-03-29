@@ -332,7 +332,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 		break;
 	case GPIO_PS:
 #ifdef XGPIOPS_H
-		*direction = XGpioPs_getDirectionPin(extra->instance, pin);
+		*direction = XGpioPs_GetDirectionPin(extra->instance, pin);
 #endif
 		break;
 	default:
