@@ -321,8 +321,8 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
  * @param rate - Channel rate.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
-				 uint32_t *rate)
+int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
+				uint32_t *rate)
 {
 	if (chan > dev->num_channels)
 		return FAILURE;
@@ -336,15 +336,17 @@ uint32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
  * Calculate closest possible rate
  * @param dev - The device structure
  * @param rate - The desired rate.
- * @param parent_rate - The parent rate.
- * @return The closest possible rate of desired rate.
+ * @param rounded_rate - The closest possible rate of desired rate.
+ * @return SUCCESS in case of success, negative error code otherwise.
  */
-uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
-				uint32_t parent_rate)
+int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
+			       uint32_t *rounded_rate)
 {
-	uint32_t div = hmc7044_calc_out_div(rate, parent_rate);
+	uint32_t div = hmc7044_calc_out_div(rate, dev->pll2_freq);
 
-	return DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+	*rounded_rate = DIV_ROUND_CLOSEST(dev->pll2_freq, div);
+
+	return SUCCESS;
 }
 
 /**
@@ -354,8 +356,8 @@ uint32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
  * @param rate - Channel rate.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
-uint32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
-			      uint32_t rate)
+int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
+			     uint32_t rate)
 {
 	uint32_t div;
 	int32_t ret;

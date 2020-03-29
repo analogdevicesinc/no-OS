@@ -445,10 +445,18 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		printf("hmc7044_init() error: %d\n", status);
 		goto error_1;
 	}
-	dev_clk = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
-					 clkchip_device->pll2_freq);
-	fmc_clk = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
-					 clkchip_device->pll2_freq);
+	status = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
+					&dev_clk);
+	if (status != SUCCESS) {
+		printf("hmc7044_clk_round_rate() error: %d\n", status);
+		goto error_1;
+	}
+	status = hmc7044_clk_round_rate(clkchip_device, device_clock_khz * 1000,
+					&fmc_clk);
+	if (status != SUCCESS) {
+		printf("hmc7044_clk_round_rate() error: %d\n", status);
+		goto error_1;
+	}
 #else
 	status = ad9528_setup(&clkchip_device, ad9528_param);
 	if(status < 0) {
@@ -465,10 +473,26 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	if (dev_clk > 0 && fmc_clk > 0 && fmc_clk == dev_clk &&
 	    (dev_clk / 1000) == device_clock_khz) {
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_A, dev_clk);
-		hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_B, dev_clk);
-		hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, fmc_clk);
-		hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_RX_AB, fmc_clk);
+		ret = hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_A, dev_clk);
+		if (ret != SUCCESS) {
+			printf("hmc7044_clk_set_rate() error: %d\n", status);
+			goto error_1;
+		}
+		ret = hmc7044_clk_set_rate(clkchip_device, DEV_REFCLK_B, dev_clk);
+		if (ret != SUCCESS) {
+			printf("hmc7044_clk_set_rate() error: %d\n", status);
+			goto error_1;
+		}
+		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_TX_OBS_AB, fmc_clk);
+		if (ret != SUCCESS) {
+			printf("hmc7044_clk_set_rate() error: %d\n", status);
+			goto error_1;
+		}
+		ret = hmc7044_clk_set_rate(clkchip_device, JESD_REFCLK_RX_AB, fmc_clk);
+		if (ret != SUCCESS) {
+			printf("hmc7044_clk_set_rate() error: %d\n", status);
+			goto error_1;
+		}
 #else
 		ad9528_clk_set_rate(clkchip_device, DEV_CLK, dev_clk);
 		ad9528_clk_set_rate(clkchip_device, FMC_CLK, fmc_clk);

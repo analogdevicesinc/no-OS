@@ -55,7 +55,7 @@
 int32_t clk_enable(struct clk * clk)
 {
 	if (clk->hw->dev_clk_enable)
-		return clk->hw->dev_clk_enable(clk->hw->dev, clk->hw_chan_no);
+		return clk->hw->dev_clk_enable(clk->hw->dev);
 	else
 		return FAILURE;
 }
@@ -68,7 +68,7 @@ int32_t clk_enable(struct clk * clk)
 int32_t clk_disable(struct clk * clk)
 {
 	if (clk->hw->dev_clk_disable)
-		return clk->hw->dev_clk_disable(clk->hw->dev, clk->hw_chan_no);
+		return clk->hw->dev_clk_disable(clk->hw->dev);
 	else
 		return FAILURE;
 }
@@ -84,7 +84,8 @@ int32_t clk_recalc_rate(struct clk *clk,
 {
 	if (clk->hw->dev_clk_recalc_rate)
 		return clk->hw->dev_clk_recalc_rate(clk->hw->dev,
-						    clk->hw_chan_no, rate);
+						    clk->hw_ch_num,
+						    rate);
 	else
 		return FAILURE;
 }
@@ -102,7 +103,9 @@ int32_t clk_round_rate(struct clk *clk,
 {
 	if (clk->hw->dev_clk_round_rate)
 		return clk->hw->dev_clk_round_rate(clk->hw->dev,
-						   clk->hw_chan_no, rate, rounded_rate);
+						   clk->hw_ch_num,
+						   rate,
+						   rounded_rate);
 	else
 		return FAILURE;
 }
@@ -118,7 +121,8 @@ int32_t clk_set_rate(struct clk *clk,
 {
 	if (clk->hw->dev_clk_set_rate)
 		return clk->hw->dev_clk_set_rate(clk->hw->dev,
-						 clk->hw_chan_no, rate);
+						 clk->hw_ch_num,
+						 rate);
 	else
 		return FAILURE;
 }
