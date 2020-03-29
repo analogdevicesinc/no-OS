@@ -58,7 +58,7 @@ struct clk_hw {
 
 struct clk {
 	struct clk_hw	*hw;
-	uint32_t	hw_chan_no;
+	uint32_t	hw_ch_num;
 	const char	*name;
 };
 
