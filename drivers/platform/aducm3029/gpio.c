@@ -221,14 +221,26 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 int32_t gpio_get_value(struct gpio_desc *desc, uint8_t *value)
 {
 	uint16_t pins;
+	uint16_t port;
 
 	if (!desc || !nb_gpio)
 		return FAILURE;
 
-	if (ADI_GPIO_SUCCESS != adi_gpio_GetData(PORT(desc->number),
-			PIN(desc->number), &pins))
+	if (ADI_GPIO_SUCCESS != adi_gpio_GetOutputEnable(PORT(desc->number),
+			&port))
 		return FAILURE;
-	*value = !!pins;
+
+	if (port & PIN(desc->number)) {
+		if (ADI_GPIO_SUCCESS != adi_gpio_GetOutputData(
+			    PORT(desc->number), &port))
+			return FAILURE;
+		*value = !!(port & PIN(desc->number));
+	} else {
+		if (ADI_GPIO_SUCCESS != adi_gpio_GetData(PORT(desc->number),
+				PIN(desc->number), &pins))
+			return FAILURE;
+		*value = !!pins;
+	}
 
 	return SUCCESS;
 }
