@@ -53,7 +53,11 @@
 /******************************************************************************/
 
 /** Number of available interrupts */
-#define NB_INTERRUPTS		5u
+#define NB_INTERRUPTS		6u
+
+/** RTC interrupt defines */
+#define RTC_COUNT_INT		ADI_RTC_COUNT_INT
+#define RTC_COUNT_ROLLOVER_INT	ADI_RTC_COUNT_ROLLOVER_INT
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -73,7 +77,9 @@ enum irq_id {
 	/** External interrupt 0, on GPIO 33 */
 	ADUCM_EXTERNAL_INT3_ID,
 	/** UART interrupt ID*/
-	ADUCM_UART_INT_ID
+	ADUCM_UART_INT_ID,
+	/** RTC interrupt ID*/
+	ADUCM_RTC_INT_ID
 };
 
 /**
@@ -94,6 +100,17 @@ enum irq_mode {
 };
 
 /**
+ * @struct rtc_irq_config
+ * @brief RTC interrupt configuration routine.
+ */
+struct rtc_irq_config {
+	/** RTC driver handler */
+	struct rtc_desc *rtc_handler;
+	/** Active interrupts OR'ed together */
+	uint32_t active_interrupts;
+};
+
+/**
  * @union irq_config
  * @brief Configuration for the callback
  */
@@ -102,6 +119,8 @@ union irq_config {
 	struct uart_desc	*uart_conf;
 	/** Trigger condition for the external interrupt */
 	enum irq_mode		xint_conf;
+	/** RTC interrupt config */
+	struct rtc_irq_config	*rtc_conf;
 };
 
 /**
