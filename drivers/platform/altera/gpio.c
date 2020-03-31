@@ -92,6 +92,23 @@ int32_t gpio_get(struct gpio_desc **desc,
 }
 
 /**
+ * @brief Get the value of an optional GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param param - GPIO Initialization parameters.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_get_optional(struct gpio_desc **desc,
+			  const struct gpio_init_param *param)
+{
+	if(param == NULL) {
+		*desc = NULL;
+		return SUCCESS;
+	}
+
+	return gpio_get(desc, param);
+}
+
+/**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
