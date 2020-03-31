@@ -65,11 +65,11 @@
  * @brief Initialize hardware timer and the handler structure associated with
  *        it.
  * @param [out] desc - Pointer to the reference of the device handler.
- * @param [in] init_param - Initialization structure.
+ * @param [in] param - Initialization structure.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise
  */
 int32_t timer_init(struct timer_desc **desc,
-		   struct timer_init_param *init_param)
+		   struct timer_init_param *param)
 {
 	int32_t ret;
 	struct timer_desc *dev;
