@@ -90,6 +90,10 @@ typedef struct gpio_desc {
 int32_t gpio_get(struct gpio_desc **desc,
 		 const struct gpio_init_param *param);
 
+/* Obtain optional GPIO descriptor. */
+int32_t gpio_get_optional(struct gpio_desc **desc,
+			  const struct gpio_init_param *param);
+
 /* Free the resources allocated by gpio_get() */
 int32_t gpio_remove(struct gpio_desc *desc);
 
