@@ -173,6 +173,18 @@ int32_t timer_remove(struct timer_desc *desc)
 	return SUCCESS;
 }
 
+static inline uint64_t get_current_time(struct timer_desc *desc)
+{
+	uint16_t		count_us = 0;
+
+	if (desc->freq_hz > FREQ_1KHZ) {
+		adi_tmr_GetCurrentCount(timer_id, &count_us);
+		return g_count * 1000u + MHZ26_TO_US(count_us);
+	} else {
+		return g_count;
+	}
+}
+
 /**
  * @brief Enable counting in the timer instance.
  *
@@ -184,7 +196,6 @@ int32_t timer_remove(struct timer_desc *desc)
 int32_t timer_start(struct timer_desc *desc)
 {
 	struct aducm_timer_desc *tmr_desc;
-	uint16_t		count_us = 0;
 
 	if (!desc)
 		return FAILURE;
@@ -194,13 +205,7 @@ int32_t timer_start(struct timer_desc *desc)
 		return FAILURE;
 	if (nb_enables == 0)
 		while (ADI_TMR_DEVICE_BUSY == adi_tmr_Enable(timer_id, true));
-	if (desc->freq_hz > FREQ_1KHZ) {
-		adi_tmr_GetCurrentCount(timer_id, &count_us);
-		tmr_desc->old_time = g_count * 1000u +
-				     MHZ26_TO_US(count_us);
-	} else {
-		tmr_desc->old_time = g_count;
-	}
+	tmr_desc->old_time = get_current_time(desc);
 	tmr_desc->started = true;
 	nb_enables++;
 
@@ -297,9 +302,13 @@ int32_t timer_counter_get(struct timer_desc *desc, uint32_t *counter)
  */
 int32_t timer_counter_set(struct timer_desc *desc, uint32_t new_val)
 {
-	if (!desc || ((struct aducm_timer_desc*)desc->extra)->started)
+	struct aducm_timer_desc	*tmr_desc;
+
+	if (!desc || !desc->extra)
 		return FAILURE;
 
+	tmr_desc = (struct aducm_timer_desc *)desc->extra;
+	tmr_desc->old_time = get_current_time(desc);
 	desc->load_value = new_val;
 
 	return SUCCESS;
