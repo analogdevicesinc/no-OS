@@ -427,8 +427,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		.number = CLK_RESETB_GPIO,
 		.extra = &xil_gpio_param
 	};
-	ad9528_param.gpio_resetb = clkchip_gpio_init_param;
-	ad9528_param.hw_reset_en = true;
+	ad9528_param.gpio_resetb = &clkchip_gpio_init_param;
 #endif
 
 	/** < Insert User System Clock(s) Initialization Code Here >

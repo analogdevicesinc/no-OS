@@ -491,8 +491,7 @@ struct ad9528_init_param {
 	/* SPI */
 	spi_init_param spi_init;
 	/* GPIO */
-	bool hw_reset_en;
-	gpio_init_param gpio_resetb;
+	gpio_init_param *gpio_resetb;
 	/* Device Settings */
 	struct ad9528_platform_data *pdata;
 };
