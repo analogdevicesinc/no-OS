@@ -380,8 +380,8 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 		return ret;
 
 	/* GPIO */
-	if(init_param.hw_reset_en) {
-		ret = gpio_get(&dev->gpio_resetb, &init_param.gpio_resetb);
+	if(init_param.gpio_resetb) {
+		ret = gpio_get(&dev->gpio_resetb, init_param.gpio_resetb);
 		if (ret < 0)
 			return ret;
 		ad9528_reset(dev);

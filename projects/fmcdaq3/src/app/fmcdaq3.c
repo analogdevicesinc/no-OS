@@ -297,7 +297,7 @@ int main(void)
 	struct axi_dmac *ad9680_dmac;
 
 	// ad9528 defaults
-	ad9528_param.hw_reset_en = false;
+	ad9528_param.gpio_resetb = NULL;
 	ad9528_param.pdata = &ad9528_pdata;
 	ad9528_param.pdata->num_channels = 8;
 	ad9528_param.pdata->channels = &ad9528_channels[0];
