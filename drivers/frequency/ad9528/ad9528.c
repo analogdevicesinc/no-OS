@@ -387,14 +387,6 @@ int32_t ad9528_setup(struct ad9528_dev **device,
 	ad9528_reset(dev);
 
 	ret = ad9528_spi_write_n(dev,
-				 AD9528_SERIAL_PORT_CONFIG,
-				 AD9528_SER_CONF_SOFT_RESET |
-				 (dev->pdata->spi3wire ? 0 :
-				  AD9528_SER_CONF_SDO_ACTIVE));
-	if (ret < 0)
-		return ret;
-
-	ret = ad9528_spi_write_n(dev,
 				 AD9528_SERIAL_PORT_CONFIG_B,
 				 AD9528_SER_CONF_READ_BUFFERED);
 	if (ret < 0)
@@ -904,8 +896,12 @@ int32_t ad9528_reset(struct ad9528_dev *dev)
 		mdelay(100);
 	}
 
-	s = ad9528_spi_write_n(dev, AD9528_SERIAL_PORT_CONFIG, 0x81);
-	if(s < 0)
+	s = ad9528_spi_write_n(dev,
+			       AD9528_SERIAL_PORT_CONFIG,
+			       AD9528_SER_CONF_SOFT_RESET |
+			       (dev->pdata->spi3wire ? 0 :
+				AD9528_SER_CONF_SDO_ACTIVE));
+	if (s < 0)
 		return s;
 
 	mdelay(100);
