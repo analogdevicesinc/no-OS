@@ -76,10 +76,10 @@ int32_t timer_init(struct timer_desc **desc,
 	struct xil_timer_desc *xdesc;
 	struct xil_timer_init_param *xinit;
 
-	if (!desc || !init_param)
+	if (!desc || !param)
 		return FAILURE;
 
-	xinit = init_param->extra;
+	xinit = param->extra;
 
 	dev = (struct timer_desc *)calloc(1, sizeof(*dev));
 	if(!dev)
@@ -88,9 +88,9 @@ int32_t timer_init(struct timer_desc **desc,
 	if(!xdesc)
 		goto error_desc;
 
-	dev->id = init_param->id;
-	dev->freq_hz = init_param->freq_hz;
-	dev->load_value = init_param->load_value;
+	dev->id = param->id;
+	dev->freq_hz = param->freq_hz;
+	dev->load_value = param->load_value;
 	dev->extra = xdesc;
 	xdesc->active_tmr = xinit->active_tmr;
 	xdesc->type = xinit->type;
