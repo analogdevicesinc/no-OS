@@ -84,6 +84,14 @@ uint32_t find_last_set_bit(uint32_t word)
 }
 
 /**
+ * Get a field specified by a mask from a word.
+ */
+uint32_t field_get(uint32_t mask, uint32_t word)
+{
+	return (word & mask) >> find_first_set_bit(mask);
+}
+
+/**
  * Log base 2 of the given number.
  */
 int32_t log_base_2(uint32_t x)
