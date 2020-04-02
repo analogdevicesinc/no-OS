@@ -44,6 +44,7 @@
 /******************************************************************************/
 #include <stdint.h>
 #include <stdbool.h>
+#include "axi_jesd204.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -74,6 +75,7 @@ struct axi_jesd204_tx {
 	struct jesd204_tx_config config;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
+	enum jesd204_encoder encoder;
 };
 
 struct jesd204_tx_init {

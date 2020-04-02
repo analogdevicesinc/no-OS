@@ -146,6 +146,7 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	uint32_t sysref_config;
 	uint32_t link_config0;
 	uint32_t lmfc_rate;
+	const char *status;
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_LINK_STATE, &link_disabled);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_LINK_STATUS, &link_status);
@@ -172,21 +173,35 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	       clock_rate / 1000, clock_rate % 1000);
 
 	if (!link_disabled) {
+		status = link_status & 0x10 ?
+			 "\tSYNC~: deasserted\n" : "SYNC~: asserted\n";
+
 		clock_rate = jesd->lane_clk_khz;
-		link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
-		lmfc_rate = clock_rate / (10 * ((link_config0 & 0xFF) + 1));
+		if (jesd->encoder == JESD204_ENCODER_64B66B) {
+			link_rate = DIV_ROUND_CLOSEST(clock_rate, 66);
+			lmfc_rate = (clock_rate * 8) /
+				    (66 * ((link_config0 & 0xFF) + 1));
+		} else {
+			link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
+			lmfc_rate = clock_rate /
+				    (10 * ((link_config0 & 0xFF) + 1));
+		}
 		printf("\tLane rate: %"PRIu32".%.3"PRIu32" MHz\n"
-		       "\tLane rate / 40: %"PRIu32".%.3"PRIu32" MHz\n"
-		       "LMFC rate: %"PRIu32".%.3"PRIu32" MHz\n",
+		       "\tLane rate / %d: %"PRIu32".%.3"PRIu32" MHz\n"
+		       "\t%s rate: %"PRIu32".%.3"PRIu32" MHz\n",
 		       clock_rate / 1000, clock_rate % 1000,
+		       (jesd->encoder == JESD204_ENCODER_8B10B) ? 40 : 66,
 		       link_rate / 1000, link_rate % 1000,
+		       (jesd->encoder == JESD204_ENCODER_8B10B) ? "LMFC" :
+		       "LEMC",
 		       lmfc_rate / 1000, lmfc_rate % 1000);
 
-		printf("\tSYNC~: %s\n"
+		printf("%s"
 		       "\tLink status: %s\n"
 		       "\tSYSREF captured: %s\n"
 		       "\tSYSREF alignment error: %s\n",
-		       (link_status & 0x10) ? "deasserted" : "asserted",
+		       jesd->encoder == JESD204_ENCODER_64B66B ? "" :
+		       status,
 		       axi_jesd204_tx_link_status_label[link_status & 0x3],
 		       (sysref_config & JESD204_TX_REG_SYSREF_CONF_SYSREF_DISABLE) ?
 		       "disabled" : (sysref_status & 1) ? "Yes" : "No",
@@ -285,6 +300,13 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 
 	multiframe_align = 1 << jesd->data_path_width;
 
+	if (jesd->encoder == JESD204_ENCODER_64B66B &&
+	    (octets_per_multiframe % 256) != 0) {
+		printf("%s: octets_per_frame * frames_per_multiframe must be a multiple of 256",
+		       jesd->name);
+		return FAILURE;
+	}
+
 	if (octets_per_multiframe % multiframe_align != 0) {
 		printf("%s: octets_per_frame * frames_per_multiframe must be a "
 		       "multiple of %"PRIu32"\n", jesd->name, multiframe_align);
@@ -301,7 +323,8 @@ int32_t axi_jesd204_tx_apply_config(struct axi_jesd204_tx *jesd,
 	axi_jesd204_tx_write(jesd, JESD204_TX_REG_CONF0, val);
 
 	for (lane = 0; lane < jesd->num_lanes; lane++)
-		axi_jesd204_tx_set_lane_ilas(jesd, config, lane);
+		if (jesd->encoder == JESD204_ENCODER_8B10B)
+			axi_jesd204_tx_set_lane_ilas(jesd, config, lane);
 
 	return SUCCESS;
 }
@@ -313,6 +336,7 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 			    const struct jesd204_tx_init *init)
 {
 	struct axi_jesd204_tx *jesd;
+	uint32_t synth_1;
 	uint32_t magic;
 	uint32_t version;
 	uint32_t status;
@@ -348,6 +372,13 @@ int32_t axi_jesd204_tx_init(struct axi_jesd204_tx **jesd204,
 			    &jesd->num_lanes);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_CONF_DATA_PATH_WIDTH,
 			    &jesd->data_path_width);
+	axi_jesd204_tx_read(jesd, JESD204_REG_SYNTH_REG_1,
+			    &synth_1);
+	jesd->encoder = JESD204_ENCODER_GET(synth_1);
+	if (jesd->encoder == JESD204_ENCODER_UNKNOWN)
+		jesd->encoder = JESD204_ENCODER_8B10B;
+	else if (jesd->encoder >= JESD204_ENCODER_MAX)
+		goto err;
 
 	jesd->config.device_id = 0;
 	jesd->config.bank_id = 0;

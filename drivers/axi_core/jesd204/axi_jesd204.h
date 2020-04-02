@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   axi_jesd204_rx.h
- *   @brief  Driver for the Analog Devices AXI-JESD204-RX peripheral.
+ *   @file   axi_jesd204.h
+ *   @brief  Driver for the Analog Devices AXI-JESD204 peripheral.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,60 +36,27 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef AXI_JESD204_RX_H_
-#define AXI_JESD204_RX_H_
+#ifndef AXI_JESD204_H_
+#define AXI_JESD204_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdint.h>
-#include <stdbool.h>
-#include "axi_jesd204.h"
+#include "util.h"
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
+/*********************** Macros and Types Declarations ************************/
 /******************************************************************************/
-struct jesd204_rx_config {
-	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
-	uint8_t subclass_version;
+#define JESD204_REG_SYNTH_REG_1		0x18
+#define JESD204_ENCODER_MASK		GENMASK(9, 8)
+#define JESD204_ENCODER_GET(x)		field_get(JESD204_ENCODER_MASK, x)
+
+/* JESD204C Supported encoding scheme */
+enum jesd204_encoder {
+	JESD204_ENCODER_UNKNOWN,
+	JESD204_ENCODER_8B10B,
+	JESD204_ENCODER_64B66B,
+	JESD204_ENCODER_MAX,
 };
 
-struct axi_jesd204_rx {
-	const char *name;
-	uint32_t base;
-	uint32_t version;
-	uint32_t num_lanes;
-	uint32_t data_path_width;
-	struct jesd204_rx_config config;
-	uint32_t device_clk_khz;
-	uint32_t lane_clk_khz;
-	enum jesd204_encoder encoder;
-};
-
-struct jesd204_rx_init {
-	const char *name;
-	uint32_t base;
-	uint8_t octets_per_frame;
-	uint8_t frames_per_multiframe;
-	uint8_t subclass;
-	uint32_t device_clk_khz;
-	uint32_t lane_clk_khz;
-};
-
-/******************************************************************************/
-/************************ Functions Declarations ******************************/
-/******************************************************************************/
-int32_t axi_jesd204_rx_lane_clk_enable(struct axi_jesd204_rx *jesd);
-int32_t axi_jesd204_rx_lane_clk_disable(struct axi_jesd204_rx *jesd);
-uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd);
-int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd,
-				     uint32_t lane);
-int32_t axi_jesd204_rx_watchdog(struct axi_jesd204_rx *jesd);
-int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
-			    const struct jesd204_rx_init *init);
-int32_t axi_jesd204_rx_remove(struct axi_jesd204_rx *jesd);
-int32_t axi_jesd204_rx_lane_clk_set_rate(struct axi_jesd204_rx *jesd,
-		uint32_t chan,
-		uint32_t rate);
 #endif
