@@ -144,12 +144,15 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	uint32_t clock_rate;
 	uint32_t link_rate;
 	uint32_t sysref_config;
+	uint32_t link_config0;
+	uint32_t lmfc_rate;
 
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_LINK_STATE, &link_disabled);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_LINK_STATUS, &link_status);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_SYSREF_STATUS, &sysref_status);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_LINK_CLK_RATIO, &clock_ratio);
 	axi_jesd204_tx_read(jesd, JESD204_TX_REG_SYSREF_CONF, &sysref_config);
+	axi_jesd204_tx_read(jesd, JESD204_TX_REG_CONF0, &link_config0);
 
 	printf("%s status:\n", jesd->name);
 
@@ -171,10 +174,13 @@ uint32_t axi_jesd204_tx_status_read(struct axi_jesd204_tx *jesd)
 	if (!link_disabled) {
 		clock_rate = jesd->lane_clk_khz;
 		link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
+		lmfc_rate = clock_rate / (10 * ((link_config0 & 0xFF) + 1));
 		printf("\tLane rate: %"PRIu32".%.3"PRIu32" MHz\n"
-		       "\tLane rate / 40: %"PRIu32".%.3"PRIu32" MHz\n",
+		       "\tLane rate / 40: %"PRIu32".%.3"PRIu32" MHz\n"
+		       "LMFC rate: %"PRIu32".%.3"PRIu32" MHz\n",
 		       clock_rate / 1000, clock_rate % 1000,
-		       link_rate / 1000, link_rate % 1000);
+		       link_rate / 1000, link_rate % 1000,
+		       lmfc_rate / 1000, lmfc_rate % 1000);
 
 		printf("\tSYNC~: %s\n"
 		       "\tLink status: %s\n"
