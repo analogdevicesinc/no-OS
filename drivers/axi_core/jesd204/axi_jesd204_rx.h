@@ -54,6 +54,14 @@ struct jesd204_rx_config {
 	uint8_t subclass_version;
 };
 
+/* JESD204 Supported encoding scheme */
+enum jesd204_rx_encoder {
+	JESD204_RX_ENCODER_UNKNOWN,
+	JESD204_RX_ENCODER_8B10B,
+	JESD204_RX_ENCODER_64B66B,
+	JESD204_RX_ENCODER_MAX,
+};
+
 struct axi_jesd204_rx {
 	const char *name;
 	uint32_t base;
@@ -63,6 +71,7 @@ struct axi_jesd204_rx {
 	struct jesd204_rx_config config;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
+	enum jesd204_rx_encoder encoder;
 };
 
 struct jesd204_rx_init {
