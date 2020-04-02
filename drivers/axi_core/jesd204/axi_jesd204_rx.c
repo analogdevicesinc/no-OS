@@ -58,6 +58,10 @@
 #define JESD204_RX_REG_SYNTH_NUM_LANES			0x10
 #define JESD204_RX_REG_SYNTH_DATA_PATH_WIDTH	0x14
 
+#define JESD204_RX_REG_SYNTH_REG_1		0x18
+#define JESD204_RX_ENCODER_MASK			GENMASK(9, 8)
+#define JESD204_RX_ENCODER_GET(x)	field_get(JESD204_RX_ENCODER_MASK, x)
+
 #define JESD204_RX_REG_LINK_DISABLE		0xc0
 #define JESD204_RX_REG_LINK_STATE		0xc4
 #define JESD204_RX_REG_LINK_CLK_RATIO	0xc8
@@ -75,6 +79,9 @@
 #define JESD204_RX_REG_LINK_STATUS		0x280
 
 #define JESD204_RX_REG_LANE_STATUS(x)	(((x) * 32) + 0x300)
+#define JESD204_EMB_STATE_MASK		GENMASK(10, 8)
+#define JESD204_EMB_STATE_GET(x) \
+			field_get(JESD204_EMB_STATE_MASK, x)
 #define JESD204_RX_REG_LANE_LATENCY(x)	(((x) * 32) + 0x304)
 #define JESD204_RX_REG_LANE_ERRORS(x)	(((x) * 32) + 0x308)
 #define JESD204_RX_REG_ILAS(x, y)		(((x) * 32 + (y) * 4) + 0x310)
@@ -89,6 +96,12 @@
 #define PCORE_VERSION_MINOR(x)		(((x) >> 8) & 0xff)
 #define PCORE_VERSION_PATCH(x)		((x) & 0xff)
 
+enum {
+	JESD204_EMB_STATE_INIT = 1,
+	JESD204_EMB_STATE_HUNT,
+	JESD204_EMB_STATE_LOCK = 4
+};
+
 const char *axi_jesd204_rx_link_status_label[] = {
 	"RESET",
 	"WAIT FOR PHY",
@@ -101,6 +114,24 @@ const char *axi_jesd204_rx_lane_status_label[] = {
 	"CHECK",
 	"DATA",
 	"UNKNOWN",
+};
+
+const char *axi_jesd204_rx_link_status_64b66b_l[] = {
+	"RESET",
+	"WAIT_BS",
+	"BLOCK_SYNC",
+	"DATA",
+};
+
+const char *axi_jesd204_rx_emb_state_label[] = {
+	"INVALID",
+	"EMB_INIT",
+	"EMB_HUNT",
+	"INVALID",
+	"EMB_LOCK",
+	"INVALID",
+	"INVALID",
+	"INVALID",
 };
 
 /******************************************************************************/
@@ -162,6 +193,7 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 	uint32_t sysref_config;
 	uint32_t link_config0;
 	uint32_t lmfc_rate;
+	const char *l_status;
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATE, &link_disabled);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LINK_STATUS, &link_status);
@@ -188,20 +220,34 @@ uint32_t axi_jesd204_rx_status_read(struct axi_jesd204_rx *jesd)
 	       clock_rate / 1000, clock_rate % 1000);
 
 	if (!link_disabled) {
+		l_status = (jesd->encoder == JESD204_RX_ENCODER_8B10B) ?
+			   axi_jesd204_rx_link_status_label[link_status & 0x3] :
+			   axi_jesd204_rx_link_status_64b66b_l[link_status & 0x3];
+
 		clock_rate = jesd->lane_clk_khz;
-		link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
-		lmfc_rate = clock_rate / (10 * ((link_config0 & 0xFF) + 1));
+		if (jesd->encoder == JESD204_RX_ENCODER_64B66B) {
+			link_rate = DIV_ROUND_CLOSEST(clock_rate, 66);
+			lmfc_rate = (clock_rate * 8) /
+				    (66 * ((link_config0 & 0xFF) + 1));
+		} else {
+			link_rate = DIV_ROUND_CLOSEST(clock_rate, 40);
+			lmfc_rate = clock_rate /
+				    (10 * ((link_config0 & 0xFF) + 1));
+		}
 		printf("\tLane rate: %"PRIu32".%.3"PRIu32" MHz\n"
-		       "\tLane rate / 40: %"PRIu32".%.3"PRIu32" MHz\n"
-		       "\tLMFC rate: %"PRIu32".%.3"PRIu32" MHz\n",
+		       "\tLane rate / %d: %"PRIu32".%.3"PRIu32" MHz\n"
+		       "\t%s rate: %"PRIu32".%.3"PRIu32" MHz\n",
 		       clock_rate / 1000, clock_rate % 1000,
+		       (jesd->encoder == JESD204_RX_ENCODER_8B10B) ? 40 : 66,
 		       link_rate / 1000, link_rate % 1000,
+		       (jesd->encoder == JESD204_RX_ENCODER_8B10B) ? "LMFC" :
+		       "LEMC",
 		       lmfc_rate / 1000, lmfc_rate % 1000);
 
 		printf("\tLink status: %s\n"
 		       "\tSYSREF captured: %s\n"
 		       "\tSYSREF alignment error: %s\n",
-		       axi_jesd204_rx_link_status_label[link_status & 0x3],
+		       l_status,
 		       (sysref_config & JESD204_RX_REG_SYSREF_CONF_SYSREF_DISABLE) ?
 		       "disabled" : (sysref_status & 1) ? "Yes" : "No",
 		       (sysref_config & JESD204_RX_REG_SYSREF_CONF_SYSREF_DISABLE) ?
@@ -224,24 +270,17 @@ int32_t axi_jesd204_rx_get_lane_errors(struct axi_jesd204_rx *jesd,
 }
 
 /**
- * @brief axi_jesd204_rx_laneinfo_read
+ * @brief axi_jesd204_rx_laneinfo_8b10b_read
  */
-int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
+static int32_t axi_jesd204_rx_laneinfo_8b10b_read(struct axi_jesd204_rx *jesd,
+		uint32_t lane,
+		uint32_t lane_status)
 {
-	uint32_t lane_status;
-	uint32_t errors;
 	uint32_t octets_per_multiframe;
 	uint32_t lane_latency;
 	uint32_t val[4];
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_STATUS(lane), &lane_status);
-
-	printf("%s lane %"PRIu32" status:\n", jesd->name, lane);
-
-	if (PCORE_VERSION_MINOR(jesd->version) >= 2) {
-		axi_jesd204_rx_get_lane_errors(jesd, lane, &errors);
-		printf("Errors: %"PRIu32"\n", errors);
-	}
 
 	printf("\tCGS state: %s\n",
 	       axi_jesd204_rx_lane_status_label[lane_status & 0x3]);
@@ -312,6 +351,48 @@ int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
 }
 
 /**
+ * @brief axi_jesd204_rx_laneinfo_64b66b_read
+ */
+static int32_t axi_jesd204_rx_laneinfo_64b66b_read(struct axi_jesd204_rx *jesd,
+		uint32_t lane,
+		uint32_t lane_status)
+{
+	uint8_t extend_multiblock;
+
+	extend_multiblock = JESD204_EMB_STATE_GET(lane_status);
+
+	printf("\tState of Extended multiblock alignment: %s\n",
+	       axi_jesd204_rx_emb_state_label[extend_multiblock]);
+
+	return SUCCESS;
+}
+
+/**
+ * @brief axi_jesd204_rx_laneinfo_read
+ */
+int32_t axi_jesd204_rx_laneinfo_read(struct axi_jesd204_rx *jesd, uint32_t lane)
+{
+	uint32_t lane_status;
+	uint32_t errors;
+
+	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_STATUS(lane), &lane_status);
+
+	printf("%s lane %"PRIu32" status:\n", jesd->name, lane);
+
+	if (PCORE_VERSION_MINOR(jesd->version) >= 2) {
+		axi_jesd204_rx_get_lane_errors(jesd, lane, &errors);
+		printf("Errors: %"PRIu32"\n", errors);
+	}
+
+	if (jesd->encoder == JESD204_RX_ENCODER_8B10B)
+		axi_jesd204_rx_laneinfo_8b10b_read(jesd, lane, lane_status);
+	else if (jesd->encoder == JESD204_RX_ENCODER_64B66B)
+		axi_jesd204_rx_laneinfo_64b66b_read(jesd, lane, lane_status);
+
+	return SUCCESS;
+}
+
+/**
  * @brief axi_jesd204_rx_check_lane_status
  */
 bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
@@ -322,12 +403,22 @@ bool axi_jesd204_rx_check_lane_status(struct axi_jesd204_rx *jesd,
 	char error_str[sizeof(" (4294967295 errors)")];
 
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_STATUS(lane), &status);
-	status &= 0x3;
-	if (status != 0x0)
-		return false;
 
-	axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_ERRORS(lane), &errors);
-	snprintf(error_str, sizeof(error_str), " (%"PRIu32" errors)", errors);
+	if (jesd->encoder == JESD204_RX_ENCODER_8B10B) {
+		status &= 0x3;
+		if (status != 0x0)
+			return false;
+	} else {
+		status = JESD204_EMB_STATE_GET(status);
+		if (status > JESD204_EMB_STATE_INIT &&
+		    status <= JESD204_EMB_STATE_LOCK)
+			return false;
+	}
+
+	if (PCORE_VERSION_MINOR(jesd->version) >= 2) {
+		axi_jesd204_rx_read(jesd, JESD204_RX_REG_LANE_ERRORS(lane), &errors);
+		snprintf(error_str, sizeof(error_str), " (%"PRIu32" errors)", errors);
+	}
 
 	printf("%s: Lane %"PRIu32" desynced%s, restarting link\n",
 	       jesd->name, lane, error_str);
@@ -379,6 +470,13 @@ int32_t axi_jesd204_rx_apply_config(struct axi_jesd204_rx *jesd,
 
 	multiframe_align = 1 << jesd->data_path_width;
 
+	if (jesd->encoder == JESD204_RX_ENCODER_64B66B &&
+	    (octets_per_multiframe % 256) != 0) {
+		printf("%s: octets_per_frame * frames_per_multiframe must be a multiple of 256",
+		       jesd->name);
+		return FAILURE;
+	}
+
 	if (octets_per_multiframe % multiframe_align != 0) {
 		printf("%s: octets_per_frame * frames_per_multiframe must be a "
 		       "multiple of %"PRIu32"\n", jesd->name, multiframe_align);
@@ -407,6 +505,7 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 			    const struct jesd204_rx_init *init)
 {
 	struct axi_jesd204_rx *jesd;
+	uint32_t synth_1;
 	uint32_t magic;
 	uint32_t status;
 
@@ -441,6 +540,14 @@ int32_t axi_jesd204_rx_init(struct axi_jesd204_rx **jesd204,
 			    &jesd->num_lanes);
 	axi_jesd204_rx_read(jesd, JESD204_RX_REG_SYNTH_DATA_PATH_WIDTH,
 			    &jesd->data_path_width);
+	axi_jesd204_rx_read(jesd, JESD204_RX_REG_SYNTH_REG_1,
+			    &synth_1);
+	jesd->encoder = JESD204_RX_ENCODER_GET(synth_1);
+
+	if (jesd->encoder == JESD204_RX_ENCODER_UNKNOWN)
+		jesd->encoder = JESD204_RX_ENCODER_8B10B;
+	else if (jesd->encoder >= JESD204_RX_ENCODER_MAX)
+		goto err;
 
 	jesd->config.octets_per_frame = init->octets_per_frame;
 	jesd->config.frames_per_multiframe = init->frames_per_multiframe;

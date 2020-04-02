@@ -66,6 +66,14 @@ struct jesd204_tx_config {
 	bool high_density;
 };
 
+/* JESD204 Supported encoding scheme */
+enum jesd204_tx_encoder {
+	JESD204_TX_ENCODER_UNKNOWN,
+	JESD204_TX_ENCODER_8B10B,
+	JESD204_TX_ENCODER_64B66B,
+	JESD204_TX_ENCODER_MAX,
+};
+
 struct axi_jesd204_tx {
 	const char *name;
 	uint32_t base;
@@ -74,6 +82,7 @@ struct axi_jesd204_tx {
 	struct jesd204_tx_config config;
 	uint32_t device_clk_khz;
 	uint32_t lane_clk_khz;
+	enum jesd204_tx_encoder encoder;
 };
 
 struct jesd204_tx_init {
