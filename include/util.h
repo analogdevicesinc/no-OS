@@ -107,6 +107,8 @@
 uint32_t find_first_set_bit(uint32_t word);
 /* Find last set bit in word. */
 uint32_t find_last_set_bit(uint32_t word);
+/* Get a field specified by a mask from a word. */
+uint32_t field_get(uint32_t mask, uint32_t word);
 /* Log base 2 of the given number. */
 int32_t log_base_2(uint32_t x);
 /* Find greatest common divisor of the given two numbers. */
