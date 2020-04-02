@@ -1,0 +1,110 @@
+/*!
+ * @brief     SPI Register Definition Header File, automatically generated file at 1/20/2020 6:24:26 AM.
+ *
+ * @copyright copyright(c) 2018 - Analog Devices Inc.All Rights Reserved.
+ *            This software is proprietary to Analog Devices, Inc. and its
+ *            licensor. By using this software you agree to the terms of the
+ *            associated analog devices software license agreement.
+ */
+
+/*!
+ * @addtogroup __AD9081_BF__
+ * @{
+ */
+#ifndef __ADI_AD9081_BF_JTX_QBF_AD9081_H__
+#define __ADI_AD9081_BF_JTX_QBF_AD9081_H__
+
+/*============= I N C L U D E S ============*/
+#include "adi_ad9081_config.h"
+
+/*============= D E F I N E S ==============*/
+#define REG_JTX_C2R_EN_ADDR 0x00000700
+#define BF_JTX_MODE_C2R_EN_INFO 0x00000100
+#define BF_JTX_MODE_C2R_EN(val) (val & 0x00000001)
+#define BF_JTX_MODE_C2R_EN_GET(val) (val & 0x00000001)
+
+#define REG_PLL_STATUS_ADDR 0x00000701
+#define BF_JTX_PLL_LOCKED_INFO 0x00000107
+#define BF_JTX_PLL_LOCKED(val) ((val & 0x00000001) << 0x00000007)
+#define BF_JTX_PLL_LOCKED_GET(val) ((val >> 0x00000007) & 0x00000001)
+
+#define REG_JTX_QUICK_CFG_ADDR 0x00000702
+#define BF_JTX_MODE_INFO 0x00000600
+#define BF_JTX_MODE(val) (val & 0x0000003F)
+#define BF_JTX_MODE_GET(val) (val & 0x0000003F)
+#define BF_JTX_MODE_S_SEL_INFO 0x00000206
+#define BF_JTX_MODE_S_SEL(val) ((val & 0x00000003) << 0x00000006)
+#define BF_JTX_MODE_S_SEL_GET(val) ((val >> 0x00000006) & 0x00000003)
+
+#define REG_JTX_LINK_CTRL1_ADDR 0x00000703
+#define BF_JTX_LINK_PD_INFO 0x00000100
+#define BF_JTX_LINK_PD(val) (val & 0x00000001)
+#define BF_JTX_LINK_PD_GET(val) (val & 0x00000001)
+
+#define REG_JTX_SER_CLK_INVERT_ADDR 0x00000706
+#define BF_JTX_SER_CLK_INVERT_INFO 0x00000100
+#define BF_JTX_SER_CLK_INVERT(val) (val & 0x00000001)
+#define BF_JTX_SER_CLK_INVERT_GET(val) (val & 0x00000001)
+#define BF_LOOPBACK_JTX_LINK_CLK_INVERT_INFO 0x00000104
+#define BF_LOOPBACK_JTX_LINK_CLK_INVERT(val) ((val & 0x00000001) << 0x00000004)
+#define BF_LOOPBACK_JTX_LINK_CLK_INVERT_GET(val)                               \
+	((val >> 0x00000004) & 0x00000001)
+#define BF_LOOPBACK_JTX_LANE_CLK_INVERT_INFO 0x00000105
+#define BF_LOOPBACK_JTX_LANE_CLK_INVERT(val) ((val & 0x00000001) << 0x00000005)
+#define BF_LOOPBACK_JTX_LANE_CLK_INVERT_GET(val)                               \
+	((val >> 0x00000005) & 0x00000001)
+#define BF_LOOPBACK_JTX_CONV_CLK_INVERT_INFO 0x00000106
+#define BF_LOOPBACK_JTX_CONV_CLK_INVERT(val) ((val & 0x00000001) << 0x00000006)
+#define BF_LOOPBACK_JTX_CONV_CLK_INVERT_GET(val)                               \
+	((val >> 0x00000006) & 0x00000001)
+
+#define REG_JTX_PDWN_CTRL_ADDR 0x00000708
+#define BF_STDBY_CHIP_INFO 0x00000101
+#define BF_STDBY_CHIP(val) ((val & 0x00000001) << 0x00000001)
+#define BF_STDBY_CHIP_GET(val) ((val >> 0x00000001) & 0x00000001)
+
+#define REG_RESET_CTRL_REG_ADDR 0x0000070A
+#define BF_FORCE_JTX_DIGITAL_RESET_ON_RSTEN_FORCE_EN_INFO 0x00000100
+#define BF_FORCE_JTX_DIGITAL_RESET_ON_RSTEN_FORCE_EN(val) (val & 0x00000001)
+#define BF_FORCE_JTX_DIGITAL_RESET_ON_RSTEN_FORCE_EN_GET(val) (val & 0x00000001)
+
+#define REG_SER_PARITY_RESET_EN1_ADDR 0x0000070B
+#define BF_SER_PARITY_RESET_EN_INFO 0x00000800
+#define BF_SER_PARITY_RESET_EN(val) (val & 0x000000FF)
+#define BF_SER_PARITY_RESET_EN_GET(val) (val & 0x000000FF)
+
+#define REG_FORCE_LINK_RESET_REG_ADDR 0x00000710
+#define BF_FORCE_LINK_RESET_INFO 0x00000100
+#define BF_FORCE_LINK_RESET(val) (val & 0x00000001)
+#define BF_FORCE_LINK_RESET_GET(val) (val & 0x00000001)
+#define BF_FORCE_LINK_DIGITAL_RESET_INFO 0x00000104
+#define BF_FORCE_LINK_DIGITAL_RESET(val) ((val & 0x00000001) << 0x00000004)
+#define BF_FORCE_LINK_DIGITAL_RESET_GET(val) ((val >> 0x00000004) & 0x00000001)
+
+#define REG_QC_MODE_STATUS_ADDR 0x00000711
+#define BF_JTX_INVALID_MODE_INFO 0x00000100
+#define BF_JTX_INVALID_MODE(val) (val & 0x00000001)
+#define BF_JTX_INVALID_MODE_GET(val) (val & 0x00000001)
+
+#define REG_K_EMB_QC_OVERRIDE_ADDR 0x00000712
+#define BF_JTX_K_EMB_QC_OVERRIDE_INFO 0x00000100
+#define BF_JTX_K_EMB_QC_OVERRIDE(val) (val & 0x00000001)
+#define BF_JTX_K_EMB_QC_OVERRIDE_GET(val) (val & 0x00000001)
+
+#define REG_PHASE_ESTABLISH_STATUS_ADDR 0x00000713
+#define BF_JTX_PHASE_ESTABLISHED_INFO 0x00000100
+#define BF_JTX_PHASE_ESTABLISHED(val) (val & 0x00000001)
+#define BF_JTX_PHASE_ESTABLISHED_GET(val) (val & 0x00000001)
+
+#define REG_PHASE_ESTABLISH_DATA_GATING_ADDR 0x00000716
+#define BF_JTX_PHASE_ESTABLISHED_DATA_GATING_EN_INFO 0x00000100
+#define BF_JTX_PHASE_ESTABLISHED_DATA_GATING_EN(val) (val & 0x00000001)
+#define BF_JTX_PHASE_ESTABLISHED_DATA_GATING_EN_GET(val) (val & 0x00000001)
+
+#define REG_PLL_REF_CLK_DIV1_REG_ADDR 0x00000717
+#define BF_DIVM_LCPLL_RC_RX_INFO 0x00000200
+#define BF_DIVM_LCPLL_RC_RX(val) (val & 0x00000003)
+#define BF_DIVM_LCPLL_RC_RX_GET(val) (val & 0x00000003)
+
+#endif /* __ADI_AD9081_BF_JTX_QBF_AD9081_H__ */
+/*! @} */
