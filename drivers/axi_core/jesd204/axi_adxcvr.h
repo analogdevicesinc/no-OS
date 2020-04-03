@@ -91,4 +91,7 @@ int32_t adxcvr_clk_disable(struct adxcvr *xcvr);
 int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		    const struct adxcvr_init *init);
 int32_t adxcvr_remove(struct adxcvr *xcvr);
+int32_t adxcvr_clk_set_rate(struct adxcvr *xcvr,
+			    uint32_t rate,
+			    uint32_t parent_rate);
 #endif
