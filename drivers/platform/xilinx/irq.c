@@ -245,14 +245,14 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 	case IRQ_PS:
 #ifdef XSCUGIC_H
 		return XScuGic_Connect(xil_dev->instance, irq_id,
-				       callback_desc->callback,
+				       (Xil_InterruptHandler) callback_desc->callback,
 				       callback_desc->ctx);
 #endif
 		break;
 	case IRQ_PL:
 #ifdef XINTC_H
 		return XIntc_Connect(xil_dev->instance, irq_id,
-				     callback_desc->callback,
+				     (XInterruptHandler) callback_desc->callback,
 				     callback_desc->ctx);
 #endif
 		break;
