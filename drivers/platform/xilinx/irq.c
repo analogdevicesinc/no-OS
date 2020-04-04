@@ -117,7 +117,7 @@ ps_error:
 		if(!xil_dev->instance)
 			goto error;
 
-		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_id);
+		status = XIntc_Initialize(xil_dev->instance, descriptor->irq_ctrl_id);
 		if(status != SUCCESS)
 			goto pl_error;
 
@@ -237,7 +237,7 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
-			      struct callback_desc *callback_desc);
+			      struct callback_desc *callback_desc)
 {
 	struct xil_irq_desc *xil_dev = desc->extra;
 
