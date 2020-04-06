@@ -211,6 +211,8 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 		break;
 	default:
 		extra->errors |= (uint32_t)buff;
+		extra->read_desc.is_nonblocking = false;
+		extra->write_desc.is_nonblocking = false;
 		if (extra->callback_enabled)
 			desc->callback(desc->callback_ctx, ERROR, buff);
 		break;
