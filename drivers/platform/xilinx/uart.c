@@ -44,6 +44,9 @@
 #include <xil_exception.h>
 #include <xuartps.h>
 #endif
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+#include <xuartlite.h>
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -105,25 +108,37 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
  */
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
-#ifdef XUARTPS_H
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	int32_t ret;
 
-	while (xil_uart_desc->fifo == NULL) {
-		/* nothing in fifo, wait until something is received */
-		ret = uart_fifo_insert(desc);
-		if (ret < 0)
-			return ret;
-	}
+	switch(xil_uart_desc->type) {
+	case UART_PS:
+#ifdef XUARTPS_H
+		while (xil_uart_desc->fifo == NULL) {
+			/* nothing in fifo, wait until something is received */
+			ret = uart_fifo_insert(desc);
+			if (ret < 0)
+				return ret;
+		}
 
-	*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
-	xil_uart_desc->fifo_read_offset++;
+		*data = xil_uart_desc->fifo->data[xil_uart_desc->fifo_read_offset];
+		xil_uart_desc->fifo_read_offset++;
 
-	if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
-		xil_uart_desc->fifo_read_offset = 0;
-		xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
-	}
+		if (xil_uart_desc->fifo->len - xil_uart_desc->fifo_read_offset <= 0) {
+			xil_uart_desc->fifo_read_offset = 0;
+			xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
+		}
 #endif // XUARTPS_H
+		break;
+	case UART_PL:
+#ifdef XUARTLITE_H
+		while (!XUartLite_Recv(xil_uart_desc->instance, data, 1));
+#endif // XUARTLITE_H
+		break;
+	default:
+		break;
+	}
+
 	return SUCCESS;
 }
 
@@ -157,9 +172,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-#ifdef XUARTPS_H
 	size_t bytes_sent, offset = 0, len;
-#endif // XUARTPS_H
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
@@ -171,11 +184,18 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 						  len);
 			offset += bytes_sent;
 		}
-
 		break;
 #endif // XUARTPS_H
 	case UART_PL:
-
+#ifdef XUARTLITE_H
+		while (offset < bytes_number) {
+			len = ((bytes_number - offset) < WRITE_SIZE) ? (bytes_number - offset) :
+			      WRITE_SIZE;
+			bytes_sent = XUartLite_Send(xil_uart_desc->instance, (u8*)(data + offset),
+						    len);
+			offset += bytes_sent;
+		}
+#endif // XUARTLITE_H
 		break;
 	default:
 		return FAILURE;
@@ -303,8 +323,11 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	struct xil_uart_desc *xil_uart_desc;
 #ifdef XUARTPS_H
 	XUartPs_Config *config;
-	int32_t status;
 #endif // XUARTPS_H
+#ifdef XUARTLITE_H
+	XUartLite_Config *config;
+#endif // XUARTLITE_H
+	int32_t status;
 
 	descriptor = calloc(1, sizeof(struct uart_desc));
 	if (!descriptor)
@@ -320,16 +343,14 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	xil_uart_desc = descriptor->extra;
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
 	xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
-#ifdef XUARTPS_H
-	xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
-#endif // XUARTPS_H
 	xil_uart_desc->type = xil_uart_init_param->type;
-	if (!(xil_uart_desc->instance))
-		goto error_free_xil_uart_desc;
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
 #ifdef XUARTPS_H
+		xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
+		if (!(xil_uart_desc->instance))
+			goto error_free_xil_uart_desc;
 		/*
 		 * Initialize the UART driver so that it's ready to use
 		 * Look up the configuration in the config table, then initialize it.
@@ -372,10 +393,28 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 		break;
 #endif // XUARTPS_H
 	case UART_PL:
-		goto error_free_instance;
+#ifdef XUARTLITE_H
+		xil_uart_desc->instance = calloc(1, sizeof(XUartLite));
+		if (!(xil_uart_desc->instance))
+			goto error_free_xil_uart_desc;
+
+		config = XUartLite_LookupConfig(descriptor->device_id);
+		if (!config)
+			goto error_free_instance;
+
+		status = XUartLite_CfgInitialize(xil_uart_desc->instance, config,
+						 config->RegBaseAddr);
+		if (status != XST_SUCCESS)
+			goto error_free_instance;
+
+		/* Discard old data */
+		while (XUartLite_Recv(xil_uart_desc->instance, (uint8_t *)&status, 1));
+
+		*desc = descriptor;
+#endif // XUARTLITE_H
 		break;
 	default:
-		goto error_free_instance;
+		goto error_free_xil_uart_desc;
 		break;
 	}
 
