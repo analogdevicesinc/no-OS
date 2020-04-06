@@ -37,10 +37,10 @@
 #include <stdlib.h>
 #include "error.h"
 #include "fifo.h"
-#include "irq.h"
 #include "uart.h"
 #include "uart_extra.h"
 #ifdef XPAR_XUARTPS_NUM_INSTANCES
+#include "irq.h"
 #include <xil_exception.h>
 #include <xuartps.h>
 #endif
@@ -55,6 +55,7 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#ifdef XUARTPS_H
 /**
  * @brief Save received data into fifo.
  * @param desc - Instance descriptor containing a fifo element.
@@ -77,11 +78,9 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 		xil_uart_desc->bytes_received = 0;
 		switch(xil_uart_desc->type) {
 		case UART_PS:
-#ifdef XUARTPS_H
 			XUartPs_Recv(xil_uart_desc->instance, (u8*)(xil_uart_desc->buff),
 				     UART_BUFF_LENGTH);
 			break;
-#endif // XUARTPS_H
 		case UART_PL:
 
 			break;
@@ -96,6 +95,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 
 	return SUCCESS;
 }
+#endif // XUARTPS_H
 
 /**
  * @brief Read byte from fifo.
@@ -105,6 +105,7 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
  */
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
+#ifdef XUARTPS_H
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
 	int32_t ret;
 
@@ -122,7 +123,7 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 		xil_uart_desc->fifo_read_offset = 0;
 		xil_uart_desc->fifo = fifo_remove(xil_uart_desc->fifo);
 	}
-
+#endif // XUARTPS_H
 	return SUCCESS;
 }
 
@@ -156,7 +157,9 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
+#ifdef XUARTPS_H
 	size_t bytes_sent, offset = 0, len;
+#endif // XUARTPS_H
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
@@ -182,6 +185,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 	return SUCCESS;
 }
 
+#ifdef XUARTPS_H
 /**
  * @brief UART interrupt handler.
  * @param call_back_ref - Instance of UART.
@@ -195,7 +199,6 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
-#ifdef XUARTPS_H
 		switch(event) {
 		/* All of the data has been received */
 		case XUARTPS_EVENT_RECV_DATA:
@@ -228,7 +231,6 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 			break;
 		}
 		break;
-#endif // XUARTPS_H
 	case UART_PL:
 
 		break;
@@ -236,7 +238,9 @@ static void uart_irq_handler(void *call_back_ref, uint32_t event,
 		break;
 	}
 }
+#endif // XUARTPS_H
 
+#ifdef XUARTPS_H
 /**
  * @brief UART interrupt init.
  * @param desc - Instance of UART containing a pointer to handler.
@@ -251,7 +255,6 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
-#ifdef XUARTPS_H
 		callback_desc.callback = XUartPs_InterruptHandler;
 		callback_desc.ctx = xil_uart_desc->instance;
 		status = irq_register_callback(xil_uart_desc->irq_desc,
@@ -271,7 +274,6 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 		XUartPs_SetInterruptMask(xil_uart_desc->instance, uart_irq_mask);
 
 		break;
-#endif // XUARTPS_H
 	case UART_PL:
 
 		break;
@@ -286,6 +288,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 
 	return SUCCESS;
 }
+#endif // XUARTPS_H
 
 /**
  * @brief Initialize the UART communication peripheral.
@@ -295,11 +298,13 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
  */
 int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 {
-	int32_t status;
 	struct uart_desc *descriptor;
-	XUartPs_Config *config;
 	struct xil_uart_init_param *xil_uart_init_param;
 	struct xil_uart_desc *xil_uart_desc;
+#ifdef XUARTPS_H
+	XUartPs_Config *config;
+	int32_t status;
+#endif // XUARTPS_H
 
 	descriptor = calloc(1, sizeof(struct uart_desc));
 	if (!descriptor)
@@ -315,7 +320,9 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	xil_uart_desc = descriptor->extra;
 	xil_uart_desc->irq_id = xil_uart_init_param->irq_id;
 	xil_uart_desc->irq_desc = xil_uart_init_param->irq_desc;
+#ifdef XUARTPS_H
 	xil_uart_desc->instance = calloc(1, sizeof(XUartPs));
+#endif // XUARTPS_H
 	xil_uart_desc->type = xil_uart_init_param->type;
 	if (!(xil_uart_desc->instance))
 		goto error_free_xil_uart_desc;
