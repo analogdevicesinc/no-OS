@@ -70,7 +70,6 @@ static const char demo_xml_output[] =
 	"<channel id=\"altvoltage3\" name=\"TX1_Q_F2\" type=\"output\" >"
 	"<scan-element index=\"3\" format=\"le:S12/16&gt;&gt;0\" />"
 	"</channel>"
-	"<buffer-attribute name=\"data_available\" />"
 	"</device>"
 	;
 
@@ -89,7 +88,6 @@ static const char demo_xml_input[] =
 	"<scan-element index=\"3\" format=\"le:S12/16&gt;&gt;0\" />"
 	"<attribute name=\"demo_channel_attr\" filename=\"in_demo_attr\" />"
 	"</channel>"
-	"<buffer-attribute name=\"data_available\" />"
 	"<attribute name=\"demo_global_attr\" filename=\"in_demo_attr\" />"
 	"</device>"
 	;
