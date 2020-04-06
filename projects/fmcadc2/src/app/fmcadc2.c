@@ -99,7 +99,7 @@ int main(void)
 
 	struct adxcvr_init ad9625_xcvr_param = {
 		.name = "ad9152_xcvr",
-		.base = XPAR_AXI_AD9625_XCVR_BASEADDR,
+		.base = RX_XCVR_BASEADDR,
 		.sys_clk_sel = 0,
 		.out_clk_sel = 2,
 		.lpm_enable = 0,
