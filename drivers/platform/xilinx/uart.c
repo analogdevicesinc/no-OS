@@ -46,6 +46,7 @@
 #endif
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 #include <xuartlite.h>
+#include <xuartlite_l.h>
 #endif
 
 /******************************************************************************/
@@ -109,7 +110,12 @@ static int32_t uart_fifo_insert(struct uart_desc *desc)
 static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
+#ifdef XUARTLITE_H
+	XUartLite *instance = xil_uart_desc->instance;
+#endif
+#ifdef XUARTPS_H
 	int32_t ret;
+#endif
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
@@ -132,7 +138,9 @@ static int32_t uart_read_byte(struct uart_desc *desc, uint8_t *data)
 		break;
 	case UART_PL:
 #ifdef XUARTLITE_H
-		while (!XUartLite_Recv(xil_uart_desc->instance, data, 1));
+		while (!(Xil_In32(instance->RegBaseAddress + XUL_STATUS_REG_OFFSET) &
+			 XUL_SR_RX_FIFO_VALID_DATA));
+		*data = Xil_In32(instance->RegBaseAddress + XUL_RX_FIFO_OFFSET);
 #endif // XUARTLITE_H
 		break;
 	default:
@@ -172,7 +180,13 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		   uint32_t bytes_number)
 {
 	struct xil_uart_desc *xil_uart_desc = desc->extra;
-	size_t bytes_sent, offset = 0, len;
+#ifdef XUARTLITE_H
+	XUartLite *instance = xil_uart_desc->instance;
+#endif
+#ifdef XUARTPS_H
+	size_t bytes_sent, len;
+#endif
+	uint32_t offset = 0;
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
@@ -189,12 +203,13 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 	case UART_PL:
 #ifdef XUARTLITE_H
 		while (offset < bytes_number) {
-			len = ((bytes_number - offset) < WRITE_SIZE) ? (bytes_number - offset) :
-			      WRITE_SIZE;
-			bytes_sent = XUartLite_Send(xil_uart_desc->instance, (u8*)(data + offset),
-						    len);
-			offset += bytes_sent;
+			while ((Xil_In32(instance->RegBaseAddress + XUL_STATUS_REG_OFFSET) &
+				XUL_SR_TX_FIFO_FULL));
+			Xil_Out32(instance->RegBaseAddress + XUL_TX_FIFO_OFFSET, data[offset]);
+			offset++;
 		}
+		while (!(Xil_In32(instance->RegBaseAddress + XUL_STATUS_REG_OFFSET) &
+			 XUL_SR_TX_FIFO_EMPTY));
 #endif // XUARTLITE_H
 		break;
 	default:
