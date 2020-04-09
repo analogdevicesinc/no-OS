@@ -20,7 +20,7 @@ if {$arch == "ps7_cortexa9_0"} {
 } elseif {$arch == "psu_cortexa53_0"} {
 	targets -set -filter {name =~ "PSU"}
 } elseif {$arch == "sys_mb"} {
-	targets -set -filter {name =~ "xc7*" || name =~ "xck*" }
+	targets -set -filter {name =~ "xc7*" || name =~ "xck*" || name =~ "xcv*"}
 }
 fpga -file "[file normalize $bitstream]"
 
@@ -40,7 +40,7 @@ if {$arch == "ps7_cortexa9_0"} {
 	mwr 0xffff0000 0x14000000
 	mwr 0xFD1A0104 0x380E
 } elseif {$arch == "sys_mb"} {
-	targets -set -filter {name =~ "xc7*" || name =~ "xck*" }
+	targets -set -filter {name =~ "xc7*" || name =~ "xck*" || name =~ "xcv*"}
 }
 
 # Upload the elf file
