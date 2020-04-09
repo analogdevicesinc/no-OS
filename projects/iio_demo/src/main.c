@@ -128,7 +128,11 @@ int main(void)
 	struct xil_uart_init_param xil_uart_init_par;
 
 	xil_irq_init_par = (struct xil_irq_init_param ) {
+#ifdef XPAR_INTC_SINGLE_DEVICE_ID
+		.type = IRQ_PL,
+#else
 		.type = IRQ_PS,
+#endif
 	};
 #endif // XILINX_PLATFORM
 
@@ -145,7 +149,11 @@ int main(void)
 
 #ifdef XILINX_PLATFORM
 	xil_uart_init_par = (struct xil_uart_init_param) {
+#ifdef XPAR_XUARTLITE_NUM_INSTANCES
+		.type = UART_PL,
+#else
 		.type = UART_PS,
+#endif
 		.irq_id = UART_IRQ_ID,
 		.irq_desc = irq_desc,
 	};
