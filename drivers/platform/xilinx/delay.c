@@ -55,7 +55,11 @@
  */
 void udelay(uint32_t usecs)
 {
+#ifdef _XPARAMETERS_PS_H_
 	usleep(usecs);
+#else
+	usleep(usecs / 20);	// FIXME
+#endif
 }
 
 /**
