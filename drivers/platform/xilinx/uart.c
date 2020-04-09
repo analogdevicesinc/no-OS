@@ -36,11 +36,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "error.h"
-#include "fifo.h"
 #include "uart.h"
 #include "uart_extra.h"
 #ifdef XPAR_XUARTPS_NUM_INSTANCES
 #include "irq.h"
+#include "fifo.h"
 #include <xil_exception.h>
 #include <xuartps.h>
 #endif
