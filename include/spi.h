@@ -72,6 +72,11 @@ typedef enum spi_mode {
 	SPI_MODE_3 = (SPI_CPOL | SPI_CPHA)
 } spi_mode;
 
+struct spi_dev {
+	int32_t (*spi_dev_init)();
+	int32_t (*spi_dev_write_and_read)();
+	int32_t (*spi_dev_remove)();
+};
 /**
  * @struct spi_init_param
  * @brief Structure holding the parameters for SPI initialization
@@ -83,6 +88,7 @@ typedef struct spi_init_param {
 	uint8_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
+	struct spi_dev dev;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
 } spi_init_param;
@@ -98,9 +104,11 @@ typedef struct spi_desc {
 	uint8_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
+	struct spi_dev *dev;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
 } spi_desc;
+
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

@@ -252,7 +252,7 @@ ps_error:
  * @param param - The structure that contains the SPI parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_init(struct spi_desc **desc,
+int32_t xil_spi_init(struct spi_desc **desc,
 		 const struct spi_init_param *param)
 {
 	int32_t				ret;
@@ -316,7 +316,7 @@ init_error:
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t spi_remove(struct spi_desc *desc)
+int32_t xil_spi_remove(struct spi_desc *desc)
 {
 #ifdef XSPI_H
 	int32_t				ret;
@@ -385,7 +385,7 @@ error:
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 
-int32_t spi_write_and_read(struct spi_desc *desc,
+int32_t xil_spi_write_and_read(struct spi_desc *desc,
 			   uint8_t *data,
 			   uint16_t bytes_number)
 {

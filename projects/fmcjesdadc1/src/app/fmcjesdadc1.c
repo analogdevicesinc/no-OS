@@ -68,17 +68,24 @@ int main(void)
 
 	int32_t status;
 
+	struct spi_dev spi_dev = {
+		.spi_dev_init = &xil_spi_init,
+		.spi_dev_remove = &xil_spi_remove,
+		.spi_dev_write_and_read = &xil_spi_write_and_read
+	};
 	// SPI configuration
 	struct spi_init_param ad9250_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
-		.mode = SPI_MODE_0
+		.mode = SPI_MODE_0,
+		.dev = spi_dev
 	};
 
 	struct spi_init_param ad9517_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
-		.mode = SPI_MODE_0
+		.mode = SPI_MODE_0,
+		.dev = spi_dev
 	};
 
 	struct xil_spi_init_param xil_spi_param = {
