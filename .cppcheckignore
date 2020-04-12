@@ -11,3 +11,5 @@
 //
 // Another alternative is using inline suppressions. Please see Cppcheck manual
 // for further information: https://cppcheck.sourceforge.net/manual.pdf 
+
+*:drivers/adc/ad9081/api/*

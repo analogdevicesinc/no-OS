@@ -1017,7 +1017,7 @@ error_1:
 
 /**
  * Remove the device - release resources.
- * @param device - The device structure.
+ * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t ad9081_remove(struct ad9081_phy *dev)
