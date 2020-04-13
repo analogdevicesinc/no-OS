@@ -3834,10 +3834,10 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device)
 				    BF_SYSREF_MODE_ONESHOT_INFO,
 				    1); /* not paged */
 	AD9081_ERROR_RETURN(err);
-	if (err = adi_ad9081_hal_bf_wait_to_clear(
-		    device, REG_SYSREF_MODE_ADDR,
-		    BF_SYSREF_MODE_ONESHOT_INFO), /* not paged */
-	    err != API_CMS_ERROR_OK) {
+	err = adi_ad9081_hal_bf_wait_to_clear(device, REG_SYSREF_MODE_ADDR,
+					      BF_SYSREF_MODE_ONESHOT_INFO);
+					      /* not paged */
+	if (err != API_CMS_ERROR_OK) {
 		AD9081_LOG_ERR("sysref_mode_oneshot bit never cleared.");
 	}
 	err = adi_ad9081_hal_bf_get(device, REG_SYSREF_MODE_ADDR,
