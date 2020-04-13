@@ -194,8 +194,8 @@ typedef enum {
 } ad7768_dclk_div;
 
 typedef enum {
-	AD7779_HIGH_RES,
 	AD7779_LOW_PWR,
+	AD7779_HIGH_RES,
 } ad7779_pwr_mode;
 
 typedef enum {

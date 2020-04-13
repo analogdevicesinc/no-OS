@@ -1348,7 +1348,7 @@ int32_t ad7779_init(ad7779_dev **device,
 
 	dev->pwr_mode = init_param.pwr_mode;
 	if (dev->ctrl_mode == AD7779_SPI_CTRL)
-		ret |= ad7779_set_reference_type(dev, dev->ref_type);
+		ret |= ad7779_set_power_mode(dev, dev->pwr_mode);
 
 	if (dev->ctrl_mode == AD7779_PIN_CTRL) {
 		ret |= ad7779_do_update_mode_pins(dev);
