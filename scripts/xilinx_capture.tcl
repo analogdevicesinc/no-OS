@@ -15,7 +15,7 @@ set storage_bits  [lindex $argv 4]   ;# for 8-16bit rezolution data is stored on
 connect
 
 if {$m_type == "ZYNQ_PSU"} {
-  targets -set -filter {name =~ "ARM*#0*"}
+  targets -set -filter {name =~ "*A53*#0*"}
 }
 
 if {$m_type == "ZYNQ_PS7"} {
