@@ -110,6 +110,12 @@
 uint32_t find_first_set_bit(uint32_t word);
 /* Find last set bit in word. */
 uint32_t find_last_set_bit(uint32_t word);
+/* Locate the closest element in an array. */
+uint32_t find_closest(int32_t val,
+		      const int32_t *array,
+		      uint32_t size);
+/* Shift the value and apply the specified mask. */
+uint32_t field_prep(uint32_t mask, uint32_t val);
 /* Get a field specified by a mask from a word. */
 uint32_t field_get(uint32_t mask, uint32_t word);
 /* Log base 2 of the given number. */
