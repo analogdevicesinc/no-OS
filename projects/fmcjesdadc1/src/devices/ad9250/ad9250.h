@@ -40,6 +40,12 @@
 #define AD9250_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include "spi.h"
+
+/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD9250_REG_CHIP_PORT_CONF				0x00
@@ -96,15 +102,15 @@ struct ad9250_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9250_spi_read(struct ad9250_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data);
+			uint16_t reg_addr,
+			uint8_t *reg_data);
 int32_t ad9250_spi_write(struct ad9250_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data);
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
 int32_t ad9250_setup(struct ad9250_dev **device,
-					 struct ad9250_init_param init_param);
+		     struct ad9250_init_param init_param);
 int32_t ad9250_test(struct ad9250_dev *dev,
-					uint32_t test_mode);
+		    uint32_t test_mode);
 int32_t ad9250_remove(struct ad9250_dev *dev);
 
 #endif

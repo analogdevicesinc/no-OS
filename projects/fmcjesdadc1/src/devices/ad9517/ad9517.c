@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
+#include "delay.h"
 #include "ad9517.h"
 
 /******************************************************************************/
@@ -110,7 +110,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	/* Setup SPI descriptor */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if(ret < 0) {
-		ad_printf("Error spi_init()\n");
+		printf("Error spi_init()\n");
 		return ret;
 	}
 
