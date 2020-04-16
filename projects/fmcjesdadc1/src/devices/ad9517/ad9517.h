@@ -40,6 +40,12 @@
 #define AD9517_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+
+#include "spi.h"
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
@@ -57,15 +63,15 @@ struct ad9517_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 int32_t ad9517_setup(struct ad9517_dev **device,
-					 struct ad9517_init_param init_param);
+		     struct ad9517_init_param init_param);
 
 int32_t ad9517_spi_read(struct ad9517_dev *dev,
-						uint16_t reg_addr,
-						uint8_t *reg_data);
+			uint16_t reg_addr,
+			uint8_t *reg_data);
 
 int32_t ad9517_spi_write(struct ad9517_dev *dev,
-						 uint16_t reg_addr,
-						 uint8_t reg_data);
+			 uint16_t reg_addr,
+			 uint8_t reg_data);
 
 int32_t ad9517_remove(struct ad9517_dev *dev);
 

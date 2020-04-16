@@ -43,8 +43,8 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "platform_drivers.h"
 #include "ad9250.h"
+#include "delay.h"
 
 /***************************************************************************//**
 * @brief ad9250_spi_read
@@ -106,7 +106,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 	/* Setup SPI descriptor */
 	ret = spi_init(&dev->spi_dev, &init_param.spi_init);
 	if(ret < 0) {
-		ad_printf("Error spi_init()\n");
+		printf("Error spi_init()\n");
 		return ret;
 	}
 
