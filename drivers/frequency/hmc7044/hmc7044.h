@@ -80,6 +80,7 @@ struct hmc7044_dev {
 	bool		clkin1_vcoin_en;
 	bool		high_performance_mode_clock_dist_en;
 	bool		high_performance_mode_pll_vco_en;
+	bool		rf_reseeder_en;
 	unsigned int	sync_pin_mode;
 	uint32_t	pulse_gen_mode;
 	uint32_t	in_buf_mode[5];
@@ -103,6 +104,7 @@ struct hmc7044_init_param {
 	bool		clkin1_vcoin_en;
 	bool		high_performance_mode_clock_dist_en;
 	bool		high_performance_mode_pll_vco_en;
+	bool		rf_reseeder_disable;
 	unsigned int	sync_pin_mode;
 	uint32_t	pulse_gen_mode;
 	uint32_t	in_buf_mode[5];

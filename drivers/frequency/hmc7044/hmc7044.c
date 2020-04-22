@@ -506,7 +506,7 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 
 	/* Select the VCO range */
 	hmc7044_write(dev, HMC7044_REG_EN_CTRL_0,
-		      HMC7044_RF_RESEEDER_EN |
+		      (dev->rf_reseeder_en ? HMC7044_RF_RESEEDER_EN : 0) |
 		      HMC7044_VCO_SEL(high_vco_en ?
 				      HMC7044_VCO_HIGH :
 				      HMC7044_VCO_LOW) |
@@ -685,6 +685,7 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 		init_param->high_performance_mode_clock_dist_en;
 	dev->high_performance_mode_pll_vco_en =
 		init_param->high_performance_mode_pll_vco_en;
+	dev->rf_reseeder_en = !init_param->rf_reseeder_disable;
 	dev->sync_pin_mode = init_param->sync_pin_mode;
 	dev->pulse_gen_mode = init_param->pulse_gen_mode;
 
