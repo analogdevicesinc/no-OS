@@ -702,15 +702,15 @@ struct ad713x_init_param {
 	/** SPI layer initialization structure. */
 	struct spi_init_param spi_init_prm;
 	/** MODE GPIO initialization structure. */
-	struct gpio_init_param gpio_mode;
+	struct gpio_init_param *gpio_mode;
 	/** DCLKMODE GPIO initialization structure. */
-	struct gpio_init_param gpio_dclkmode;
+	struct gpio_init_param *gpio_dclkmode;
 	/** DCLKIO GPIO initialization structure. */
-	struct gpio_init_param gpio_dclkio;
+	struct gpio_init_param *gpio_dclkio;
 	/** RESET GPIO initialization structure. */
-	struct gpio_init_param gpio_resetn;
+	struct gpio_init_param *gpio_resetn;
 	/** PDN GPIO initialization structure. */
-	struct gpio_init_param gpio_pnd;
+	struct gpio_init_param *gpio_pnd;
 	/** MODE GPIO starting value */
 	bool mode_master_nslave;
 	/** DCLKMODE GPIO starting value */
