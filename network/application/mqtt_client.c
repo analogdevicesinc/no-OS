@@ -112,7 +112,7 @@ int32_t mqtt_init(struct mqtt_desc **desc,
 	if (!ldesc)
 		return FAILURE;
 
-	ret = mqtt_timer_init(param->extra_timer_init_param);
+	ret = mqtt_timer_init(param->timer_id, param->extra_timer_init_param);
 	if (IS_ERR_VALUE(ret)) {
 		free(ldesc);
 		return FAILURE;
