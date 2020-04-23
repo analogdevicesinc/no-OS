@@ -137,6 +137,9 @@ uint32_t greatest_common_divisor(uint32_t a,
 	uint32_t div;
 	uint32_t common_div = 1;
 
+	if ((a == 0) || (b == 0))
+		return max(a, b);
+
 	for (div = 1; (div <= a) && (div <= b); div++)
 		if (!(a % div) && !(b % div))
 			common_div = div;
