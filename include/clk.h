@@ -74,15 +74,15 @@ int32_t clk_disable(struct clk * clk);
 
 /* Get the current frequency of the clock. */
 int32_t clk_recalc_rate(struct clk *clk,
-			uint32_t *rate);
+			uint64_t *rate);
 
 /* Round the desired frequency to a rate that the clock can actually output. */
 int32_t clk_round_rate(struct clk *clk,
-		       uint32_t rate,
-		       uint32_t *rounded_rate);
+		       uint64_t rate,
+		       uint64_t *rounded_rate);
 
 /* Change the frequency of the clock. */
 int32_t clk_set_rate(struct clk *clk,
-		     uint32_t rate);
+		     uint64_t rate);
 
 #endif // CLK_H_

@@ -80,7 +80,7 @@ int32_t clk_disable(struct clk * clk)
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t clk_recalc_rate(struct clk *clk,
-			uint32_t *rate)
+			uint64_t *rate)
 {
 	if (clk->hw->dev_clk_recalc_rate)
 		return clk->hw->dev_clk_recalc_rate(clk->hw->dev,
@@ -98,8 +98,8 @@ int32_t clk_recalc_rate(struct clk *clk,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t clk_round_rate(struct clk *clk,
-		       uint32_t rate,
-		       uint32_t *rounded_rate)
+		       uint64_t rate,
+		       uint64_t *rounded_rate)
 {
 	if (clk->hw->dev_clk_round_rate)
 		return clk->hw->dev_clk_round_rate(clk->hw->dev,
@@ -117,7 +117,7 @@ int32_t clk_round_rate(struct clk *clk,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t clk_set_rate(struct clk *clk,
-		     uint32_t rate)
+		     uint64_t rate)
 {
 	if (clk->hw->dev_clk_set_rate)
 		return clk->hw->dev_clk_set_rate(clk->hw->dev,
