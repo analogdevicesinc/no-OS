@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   hmc7044.c
- *   @brief  Implementation of HMC7044 Driver.
+ *   @brief  Implementation of HMC7044, HMC7043 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018-2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
+#include <stdio.h>
 #include "error.h"
 #include "util.h"
 #include "hmc7044.h"
@@ -167,6 +168,10 @@
 
 #define HMC7044_REG_SYSREF_TIMER_MSB	0x005D
 #define HMC7044_SYSREF_TIMER_MSB(x)	(((x) & 0xf00) >> 8)
+
+#define HMC7044_CLK_INPUT_CTRL		0x0064
+#define HMC7044_LOW_FREQ_INPUT_MODE	BIT(0)
+#define HMC7044_DIV_2_INPUT_MODE	BIT(1)
 
 /* Status and Alarm readback */
 #define HMC7044_REG_ALARM_READBACK	0x007D
@@ -641,6 +646,122 @@ static int32_t hmc7044_setup(struct hmc7044_dev *dev)
 }
 
 /**
+ * Setup the device.
+ * @param dev - The device structure.
+ * @return SUCCESS in case of success, negative error code otherwise.
+ */
+static int32_t hmc7043_setup(struct hmc7044_dev *dev)
+{
+	struct hmc7044_chan_spec *chan;
+	uint32_t i;
+
+	if (dev->clkin_freq_ccf[0])
+		dev->pll2_freq = dev->clkin_freq_ccf[0];
+	else
+		dev->pll2_freq  = dev->clkin_freq[0];
+
+	if (!dev->pll2_freq) {
+		printf("%s: Failed to get valid parent rate\n", __func__);
+		return FAILURE;
+	}
+
+	/* Resets all registers to default values */
+	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, HMC7044_SOFT_RESET);
+	mdelay(10);
+	hmc7044_write(dev, HMC7044_REG_SOFT_RESET, 0);
+	mdelay(10);
+
+	/* Load the configuration updates (provided by Analog Devices) */
+	hmc7044_write(dev, HMC7044_REG_CLK_OUT_DRV_LOW_PW, 0x4d);
+	hmc7044_write(dev, HMC7044_REG_CLK_OUT_DRV_HIGH_PW, 0xdf);
+
+	/* Disable all channels */
+	for (i = 0; i < HMC7044_NUM_CHAN; i++)
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(i), 0);
+
+	if (dev->pll2_freq < 1000000000U)
+		hmc7044_write(dev, HMC7044_CLK_INPUT_CTRL,
+			      HMC7044_LOW_FREQ_INPUT_MODE);
+
+	hmc7044_write(dev, HMC7044_REG_EN_CTRL_0,
+		      (dev->rf_reseeder_en ? HMC7044_RF_RESEEDER_EN : 0) |
+		      HMC7044_SYSREF_TIMER_EN);
+
+	/* Program the SYSREF timer */
+
+	/* Set the divide ratio */
+	hmc7044_write(dev, HMC7044_REG_SYSREF_TIMER_LSB,
+		      HMC7044_SYSREF_TIMER_LSB(dev->sysref_timer_div));
+	hmc7044_write(dev, HMC7044_REG_SYSREF_TIMER_MSB,
+		      HMC7044_SYSREF_TIMER_MSB(dev->sysref_timer_div));
+
+	/* Set the pulse generator mode configuration */
+	hmc7044_write(dev, HMC7044_REG_PULSE_GEN,
+		      HMC7044_PULSE_GEN_MODE(dev->pulse_gen_mode));
+
+	/* Enable the input buffers */
+	hmc7044_write(dev, HMC7044_REG_CLKIN0_BUF_CTRL,
+		      dev->in_buf_mode[0]);
+	hmc7044_write(dev, HMC7044_REG_CLKIN1_BUF_CTRL,
+		      dev->in_buf_mode[1]);
+
+	/* Set GPIOs */
+	hmc7044_write(dev, HMC7044_REG_GPI_CTRL(0),
+		      dev->gpi_ctrl[0]);
+
+	hmc7044_write(dev, HMC7044_REG_GPO_CTRL(0),
+		      dev->gpo_ctrl[0]);
+
+	/* Program the output channels */
+	for (i = 0; i < dev->num_channels; i++) {
+		chan = &dev->channels[i];
+
+		if (chan->num >= HMC7044_NUM_CHAN || chan->disable)
+			continue;
+
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_1(chan->num),
+			      HMC7044_DIV_LSB(chan->divider));
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_2(chan->num),
+			      HMC7044_DIV_MSB(chan->divider));
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_8(chan->num),
+			      HMC7044_DRIVER_MODE(chan->driver_mode) |
+			      HMC7044_DRIVER_Z_MODE(chan->driver_impedance) |
+			      (chan->dynamic_driver_enable ?
+			       HMC7044_DYN_DRIVER_EN : 0) |
+			      (chan->force_mute_enable ?
+			       HMC7044_FORCE_MUTE_EN : 0));
+
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_3(chan->num),
+			      chan->fine_delay & 0x1F);
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_4(chan->num),
+			      chan->coarse_delay & 0x1F);
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_7(chan->num),
+			      chan->out_mux_mode & 0x3);
+
+		hmc7044_write(dev, HMC7044_REG_CH_OUT_CRTL_0(chan->num),
+			      (chan->start_up_mode_dynamic_enable ?
+			       HMC7044_START_UP_MODE_DYN_EN : 0) |
+			      (chan->output_control0_rb4_enable ? BIT(4) : 0) |
+			      (chan->high_performance_mode_dis ?
+			       0 : HMC7044_HI_PERF_MODE) | HMC7044_SYNC_EN |
+			      HMC7044_CH_EN);
+	}
+	mdelay(10);
+
+
+	/* Do a restart to reset the system and initiate calibration */
+	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+		      HMC7044_RESTART_DIV_FSM);
+	mdelay(1);
+	hmc7044_write(dev, HMC7044_REG_REQ_MODE_0,
+		      (dev->high_performance_mode_clock_dist_en ?
+		       HMC7044_HIGH_PERF_DISTRIB_PATH : 0));
+	mdelay(1);
+
+	return SUCCESS;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -661,6 +782,8 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
+
+	dev->is_hmc7043 = init_param->is_hmc7043;
 
 	dev->clkin_freq[0] = init_param->clkin_freq[0];
 	dev->clkin_freq[1] = init_param->clkin_freq[1];
@@ -737,7 +860,10 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 
 	*device = dev;
 
-	return hmc7044_setup(dev);
+	if (!dev->is_hmc7043)
+		return hmc7044_setup(dev);
+	else
+		return hmc7043_setup(dev);
 }
 
 /**
