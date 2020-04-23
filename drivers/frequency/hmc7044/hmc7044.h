@@ -1,9 +1,9 @@
 /***************************************************************************//**
  *   @file   hmc7044.h
- *   @brief  Header file of HMC7044 Driver.
+ *   @brief  Header file of HMC7044, HMC7043 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018-2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -68,6 +68,7 @@ struct hmc7044_chan_spec {
 
 struct hmc7044_dev {
 	spi_desc	*spi_desc;
+	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
@@ -92,6 +93,7 @@ struct hmc7044_dev {
 
 struct hmc7044_init_param {
 	spi_init_param	*spi_init;
+	bool		is_hmc7043;
 	uint32_t	clkin_freq[4];
 	uint32_t	clkin_freq_ccf[4];
 	uint32_t	vcxo_freq;
