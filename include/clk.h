@@ -47,19 +47,24 @@
 /******************************************************************************/
 /************************* Structure Declarations *****************************/
 /******************************************************************************/
-struct clk_hw {
-	void	*dev;
-	int32_t (*dev_clk_enable)();
-	int32_t (*dev_clk_disable)();
-	int32_t (*dev_clk_recalc_rate)();
-	int32_t (*dev_clk_set_rate)();
-	int32_t (*dev_clk_round_rate)();
-};
+
+struct clk_hw;
 
 struct clk {
 	struct clk_hw	*hw;
 	uint32_t	hw_ch_num;
 	const char	*name;
+	void 		*dev;
+};
+
+struct clk_hw {
+	struct clk *clk;
+	int32_t (*dev_clk_enable)(struct clk *clk);
+	int32_t (*dev_clk_disable)(struct clk *clk);
+	int32_t (*dev_clk_recalc_rate)(struct clk *clk, uint64_t *rate);
+	int32_t (*dev_clk_set_rate)(struct clk *clk, uint64_t rate,
+				uint64_t *rounded_rate);
+	int32_t (*dev_clk_round_rate)(struct clk *clk, uint64_t rate);
 };
 
 /******************************************************************************/
