@@ -78,6 +78,9 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	spi_param.max_speed_hz = 25000000;
 	spi_param.mode = SPI_MODE_0;
 	spi_param.chip_select = dev_hal_data->spi_adrv_csn;
+#ifndef ALTERA_PLATFORM
+	spi_param.platform_ops = &xil_platform_ops;
+#endif
 	if (dev_hal_data->extra_spi)
 		spi_param.extra = dev_hal_data->extra_spi;
 
