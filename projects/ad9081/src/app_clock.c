@@ -87,6 +87,7 @@ int32_t app_clock_init(struct clk clk[NUM_APP_CLKS])
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
 		.chip_select = CLK_CS,
+		.platform_ops = &xil_platform_ops,
 		.extra = &xil_spi_param
 	};
 

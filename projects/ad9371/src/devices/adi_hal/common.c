@@ -69,6 +69,7 @@ int32_t platform_init(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	spi_param.extra = &xilinx_spi_param;
+	spi_param.platform_ops = &xil_platform_ops;
 	gpio_ad9371_resetb_param.extra = &xilinx_gpio_param;
 	gpio_ad9528_resetb_param.extra = &xilinx_gpio_param;
 	gpio_ad9528_sysref_param.extra = &xilinx_gpio_param;

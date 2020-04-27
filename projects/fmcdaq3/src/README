@@ -45,6 +45,7 @@
 	cp ../../../include/spi.h devices/adi_hal/
 	cp ../../../include/gpio.h devices/adi_hal/
 	cp ../../../include/delay.h devices/adi_hal/
+	cp ../../../drivers/spi/spi.c devices/adi_hal/
 	cp ../../../drivers/frequency/ad9528/ad9528.h devices/adi_hal/
 	cp ../../../drivers/frequency/ad9528/ad9528.c devices/adi_hal/
 	cp ../../../drivers/adc/ad9680/ad9680.h devices/adi_hal/
@@ -52,7 +53,7 @@
 	cp ../../../drivers/dac/ad9152/ad9152.h devices/adi_hal/
 	cp ../../../drivers/dac/ad9152/ad9152.c devices/adi_hal/		
 	cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
-	cp ../../../drivers/platform/xilinx/spi.c devices/adi_hal/
+	cp ../../../drivers/platform/xilinx/xilinx_spi.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/spi_extra.h devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
 	cp ../../../drivers/platform/xilinx/gpio_extra.h devices/adi_hal/
