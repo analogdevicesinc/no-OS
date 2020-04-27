@@ -27,10 +27,11 @@ SRCS := $(PROJECT)/src/app.c						\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c			\
 	$(DRIVERS)/axi_core/jesd204/jesd204_clk.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
+	$(DRIVERS)/spi/spi.c						\
 	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
+	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(NO-OS)/util/clk.c						\
 	$(NO-OS)/util/util.c
 ifeq (y,$(strip $(QUAD_MXFE)))

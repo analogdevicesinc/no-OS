@@ -70,13 +70,15 @@ int main(void)
 	struct spi_init_param ad9625_0_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
-		.mode = SPI_MODE_0
+		.mode = SPI_MODE_0,
+		.platform_ops = &xil_platform_ops
 	};
 
 	struct spi_init_param ad9625_1_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 1,
-		.mode = SPI_MODE_0
+		.mode = SPI_MODE_0,
+		.platform_ops = &xil_platform_ops,
 	};
 
 	struct xil_spi_init_param xil_spi_param = {

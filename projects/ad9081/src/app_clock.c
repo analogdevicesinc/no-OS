@@ -93,6 +93,7 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 #else
 		.chip_select = CLK_CS,
 #endif
+		.platform_ops = &xil_platform_ops,
 		.extra = &xil_spi_param
 	};
 

@@ -478,6 +478,7 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 	spi_param.extra = &xil_spi_param;
+	spi_param.platform_ops = &xil_platform_ops;
 #endif
 	struct gpio_init_param 	gpio_init;
 	gpio_init.extra = &xil_gpio_param;
