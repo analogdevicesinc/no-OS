@@ -85,6 +85,7 @@ int32_t platform_init(void)
 		.type = NIOS_II_GPIO,
 		.base_address = GPIO_BASEADDR
 	};
+	spi_param.platform_ops = &altera_platform_ops;
 	spi_param.extra = &altera_spi_param;
 	gpio_ad9371_resetb_param.extra = &altera_gpio_param;
 	gpio_ad9528_resetb_param.extra = &altera_gpio_param;
