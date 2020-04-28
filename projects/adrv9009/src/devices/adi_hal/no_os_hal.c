@@ -80,6 +80,8 @@ adiHalErr_t ADIHAL_openHw(void *devHalInfo, uint32_t halTimeout_ms)
 	spi_param.chip_select = dev_hal_data->spi_adrv_csn;
 #ifndef ALTERA_PLATFORM
 	spi_param.platform_ops = &xil_platform_ops;
+#else
+	spi_param.platform_ops = &altera_platform_ops;
 #endif
 	if (dev_hal_data->extra_spi)
 		spi_param.extra = dev_hal_data->extra_spi;

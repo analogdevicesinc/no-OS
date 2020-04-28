@@ -61,10 +61,10 @@ else
 SRCS += $(DRIVERS)/axi_core/clk_altera_a10_fpll/clk_altera_a10_fpll.c	\
 	$(DRIVERS)/axi_core/jesd204/altera_a10_atx_pll.c		\
 	$(DRIVERS)/axi_core/jesd204/altera_a10_cdr_pll.c		\
-	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.c
+	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.c			\
+	$(PLATFORM_DRIVERS)/altera_spi.c
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\
