@@ -19,11 +19,13 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
+	$(DRIVERS)/io-expander/demux_spi/demux_spi.c			\
+	$(DRIVERS)/spi/spi.c						\
 	$(PROJECT)/src/devices/ad9250/ad9250.c				\
 	$(PROJECT)/src/devices/ad9517/ad9517.c
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
+	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\
@@ -34,6 +36,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.h			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.h			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h		\
+	$(DRIVERS)/io-expander/demux_spi/demux_spi.h			\
 	$(PROJECT)/src/devices/ad9250/ad9250.h				\
 	$(PROJECT)/src/devices/ad9517/ad9517.h				
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
