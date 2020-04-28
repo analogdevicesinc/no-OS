@@ -137,11 +137,11 @@ error:
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
- * @param gpio_number - The number of the GPIO.
+ * @param param - The GPIO initialization structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc,
-		 const struct gpio_init_param *init_param)
+		 const struct gpio_init_param *param)
 {
 	struct gpio_desc	*descriptor;
 	struct xil_gpio_desc	*extra;
@@ -154,7 +154,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 		return FAILURE;
 
 	descriptor->extra = extra;
-	ret = _gpio_init(descriptor, init_param);
+	ret = _gpio_init(descriptor, param);
 
 	if(ret != SUCCESS)
 		goto error;
