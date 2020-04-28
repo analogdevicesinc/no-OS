@@ -25,11 +25,12 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/spi/spi.c						\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS +=	$(PLATFORM_DRIVERS)/xilinx_spi.c
+else
+SRCS +=	$(PLATFORM_DRIVERS)/altera_spi.c
 endif
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\

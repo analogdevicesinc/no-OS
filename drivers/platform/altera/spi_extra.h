@@ -79,4 +79,18 @@ struct altera_spi_desc {
 	uint32_t	base_address;
 } altera_spi_desc;
 
+/**
+ * @brief Altera specific SPI platform ops structure
+ */
+extern const struct spi_platform_ops altera_platform_ops;
+
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+int32_t altera_spi_init(struct spi_desc **desc,
+			const struct spi_init_param *param);
+int32_t altera_spi_remove(struct spi_desc *desc);
+int32_t altera_spi_write_and_read(struct spi_desc *desc, uint8_t *data,
+				  uint16_t bytes_number);
+
 #endif /* SPI_EXTRA_H_ */
