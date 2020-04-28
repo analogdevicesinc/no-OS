@@ -59,6 +59,7 @@
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "axi_jesd204_rx.h"
+#include "demux_spi.h"
 
 /***************************************************************************//**
 * @brief main
@@ -67,20 +68,33 @@ int main(void)
 {
 
 	int32_t status;
-
 	// SPI configuration
-	struct spi_init_param ad9250_spi_param = {
+	struct spi_init_param demux_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
 		.platform_ops = &xil_platform_ops
 	};
 
-	struct spi_init_param ad9517_spi_param = {
+	struct spi_init_param ad9250_0_spi_param = {
 		.max_speed_hz = 2000000u,
 		.chip_select = 0,
 		.mode = SPI_MODE_0,
-		.platform_ops = &xil_platform_ops
+		.platform_ops = &demux_spi_platform_ops
+	};
+
+	struct spi_init_param ad9250_1_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 1,
+		.mode = SPI_MODE_0,
+		.platform_ops = &demux_spi_platform_ops
+	};
+
+	struct spi_init_param ad9517_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 4,
+		.mode = SPI_MODE_0,
+		.platform_ops = &demux_spi_platform_ops
 	};
 
 	struct xil_spi_init_param xil_spi_param = {
@@ -91,8 +105,11 @@ int main(void)
 #endif
 		.device_id = SPI_DEVICE_ID
 	};
-	ad9250_spi_param.extra = &xil_spi_param;
-	ad9517_spi_param.extra = &xil_spi_param;
+
+	demux_spi_param.extra = &xil_spi_param;
+	ad9250_0_spi_param.extra = &demux_spi_param;
+	ad9250_1_spi_param.extra = &demux_spi_param;
+	ad9517_spi_param.extra = &demux_spi_param;
 
 	struct gpio_init_param gpio_sysref_param = {
 		.number = GPIO_JESD204_SYSREF
@@ -172,8 +189,8 @@ int main(void)
 
 	// SPI configuration
 	ad9517_param.spi_init = ad9517_spi_param;
-	ad9250_0_param.spi_init = ad9250_spi_param;
-	ad9250_1_param.spi_init = ad9250_spi_param;
+	ad9250_0_param.spi_init = ad9250_0_spi_param;
+	ad9250_1_param.spi_init = ad9250_1_spi_param;
 
 	ad9250_0_param.id_no = 0x0;
 	ad9250_1_param.id_no = 0x1;
