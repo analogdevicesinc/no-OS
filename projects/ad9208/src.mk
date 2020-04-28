@@ -10,7 +10,8 @@
 ################################################################################
 
 SRCS := $(PROJECT)/src/main.c
-SRCS += $(DRIVERS)/frequency/hmc7044/hmc7044.c				\
+SRCS += $(DRIVERS)/spi/spi.c						\
+	$(DRIVERS)/frequency/hmc7044/hmc7044.c				\
 	$(DRIVERS)/adc/ad9208/ad9208.c 					\
 	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_adc_api.c 		\
 	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_api.c 			\
@@ -26,7 +27,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
+	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS := $(PROJECT)/src/parameters.h

@@ -39,7 +39,8 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c			\
-	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c
+	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c			\
+	$(DRIVERS)/spi/spi.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
@@ -54,15 +55,16 @@ SRCS +=	$(NO-OS)/util/util.c
 ifeq (xilinx,$(strip $(PLATFORM)))
 SRCS += $(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
+	$(PLATFORM_DRIVERS)/xilinx_spi.c				
 else
 SRCS += $(DRIVERS)/axi_core/clk_altera_a10_fpll/clk_altera_a10_fpll.c	\
 	$(DRIVERS)/axi_core/jesd204/altera_a10_atx_pll.c		\
 	$(DRIVERS)/axi_core/jesd204/altera_a10_cdr_pll.c		\
-	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.c
+	$(DRIVERS)/axi_core/jesd204/altera_adxcvr.c			\
+	$(PLATFORM_DRIVERS)/altera_spi.c				
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\

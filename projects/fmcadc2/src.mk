@@ -20,9 +20,10 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_rx.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
 	$(DRIVERS)/adc/ad9625/ad9625.c					\
+	$(DRIVERS)/spi/spi.c						\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/spi.c					\
+	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\
