@@ -1,3 +1,6 @@
 [submodule "libraries/libtinyiiod"]
 	path = libraries/libtinyiiod
 	url = https://github.com/analogdevicesinc/libtinyiiod
+[submodule "libraries/mbedtls"]
+	path = libraries/mbedtls
+	url = https://github.com/ARMmbed/mbedtls
