@@ -96,6 +96,13 @@ CFLAGS += -D IIO_EXAMPLE
 CFLAGS += -D _USE_STD_INT_TYPES
 endif
 
+ifeq (y,$(strip $(MBEDTLS)))
+#Specify configuration file to build mbedtls
+CFLAGS += -I $(NO-OS)/network/transport -D MBEDTLS_CONFIG_FILE='"noos_mbedtls_config.h"'
+#Add mbedtls include directory to inlcude path
+INCLUDE += $(NO-OS)/libraries/mbedtls/include
+endif
+
 #------------------------------------------------------------------------------
 #                            COMMON LINKER FLAGS                               
 #------------------------------------------------------------------------------
@@ -324,6 +331,9 @@ copy-srcs:
 clean:
 	$(call print,Cleaning build workspace \n)
 	rm -rf $(BUILD_DIR)
+	# Clean mbedtls only if submodule exists
+	( ! test -f $(LIBRARIES)/mbedtls/Makefile ) || \
+	$(MAKE) -C $(LIBRARIES)/mbedtls clean
 
 # If the hardware file is not specified, start searching for one
 # Check for .hdf files inside the project directory
@@ -377,7 +387,15 @@ altera-elf:
 libs:
 ifeq (y,$(strip $(TINYIIOD)))
 	@$(MAKE) -C $(LIBRARIES)/libtinyiiod re
+endif
+ifeq (y,$(strip $(MBEDTLS)))
+	@$(MAKE) -C $(LIBRARIES)/mbedtls lib
+endif
+ifeq (y,$(strip $(TINYIIOD)))
 LIBS += -L $(LIBRARIES)/libtinyiiod/build -ltinyiiod
+endif
+ifeq (y,$(strip $(MBEDTLS)))
+LIBS += -L $(LIBRARIES)/mbedtls/library -lmbedtls -lmbedx509 -lmbedcrypto
 endif
 
 .SILENT:pre-build
