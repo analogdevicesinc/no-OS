@@ -526,7 +526,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 int32_t ad9250_remove(struct ad9250_dev *dev);
 /*! Reads the value of the selected register. */
 int32_t ad9250_read(struct ad9250_dev *dev,
-		    int32_t register_address);
+		    int32_t register_address, uint8_t *register_data);
 /*! Writes a value to the selected register. */
 int32_t ad9250_write(struct ad9250_dev *dev,
 		     int32_t register_address,

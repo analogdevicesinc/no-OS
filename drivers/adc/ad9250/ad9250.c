@@ -207,11 +207,12 @@ int32_t ad9250_remove(struct ad9250_dev *dev)
  *
  * @param dev              - The device structure.
  * @param register_address - The address of the register to read.
+ * @param register_data    - The register value
  *
- * @return reg_value  - The register's value or negative error code.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_read(struct ad9250_dev *dev,
-		    int32_t register_address)
+		    int32_t register_address, uint8_t *register_data)
 {
 	uint32_t reg_address = 0;
 	uint8_t buffer [ 3 ]   = {0, 0, 0};
@@ -228,14 +229,15 @@ int32_t ad9250_read(struct ad9250_dev *dev,
 					 buffer,
 					 3);
 		if(ret != SUCCESS) {
-			return ret;
+			return FAILURE;
 		}
 		reg_address--;
 		reg_value <<= 8;
 		reg_value |= buffer[2];
+		*register_data = reg_value;
 	}
 
-	return reg_value;
+	return ret;
 }
 
 /***************************************************************************//**
@@ -279,7 +281,7 @@ int32_t ad9250_write(struct ad9250_dev *dev,
 		reg_address--;
 	}
 
-	return (ret - 1);
+	return ret;
 }
 
 /***************************************************************************//**
@@ -296,6 +298,7 @@ int32_t ad9250_transfer(struct ad9250_dev *dev)
 	int32_t timeout = 0xFFFF;
 	int32_t ret = 0;
 	int8_t sw_bit = 0;
+	uint8_t data;
 
 	ret = ad9250_write(dev,
 			   AD9250_REG_DEVICE_UPDATE,
@@ -305,11 +308,11 @@ int32_t ad9250_transfer(struct ad9250_dev *dev)
 	}
 	do {
 		ret = ad9250_read(dev,
-				  AD9250_REG_DEVICE_UPDATE);
+				  AD9250_REG_DEVICE_UPDATE, &data);
 		if(ret != SUCCESS) {
-			return ret;
+			return FAILURE;
 		}
-		sw_bit = ret & AD9250_REG_DEVICE_UPDATE;
+		sw_bit = data & AD9250_REG_DEVICE_UPDATE;
 		timeout--;
 	} while((sw_bit == 1) && (timeout != 0));
 
@@ -327,6 +330,7 @@ int32_t ad9250_soft_reset(struct ad9250_dev *dev)
 {
 	int32_t timeout = 0xFFFF;
 	int32_t ret = 0;
+	uint8_t data;
 
 	/* Software reset to default SPI values. */
 	ret = ad9250_write(dev,
@@ -337,14 +341,15 @@ int32_t ad9250_soft_reset(struct ad9250_dev *dev)
 	}
 	do {
 		ret = ad9250_read(dev,
-				  AD9250_REG_SPI_CFG);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		timeout--;
-	} while(((ret & AD9250_SPI_CFG_SOFT_RST) != 0) && (timeout != 0));
+				  AD9250_REG_SPI_CFG, &data);
 
-	return ret;
+		if(ret != SUCCESS)
+			return FAILURE;
+
+		timeout--;
+	} while(((data & AD9250_SPI_CFG_SOFT_RST) != 0) && (timeout != 0));
+
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -364,31 +369,27 @@ int32_t ad9250_set_bits_to_reg(struct ad9250_dev *dev,
 			       uint8_t  mask)
 {
 	uint8_t reg_value = 0;
+	uint32_t sr_cnt = 0;
 	int32_t ret = 0;
 
 	/* Read from the shadow register instead of the on-chip register when
 	   shadowed register is discovered. */
-	ret = ad9250_is_shadow_register(register_address);
-	if(ret > 0) {
-		reg_value = dev->shadow_regs[ret];
-	} else {
-		ret = ad9250_read(dev,
-				  register_address);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		reg_value = ret;
-	}
+	sr_cnt = ad9250_is_shadow_register(register_address);
+	if (sr_cnt > 0)
+		reg_value = dev->shadow_regs[sr_cnt];
+	else
+		ret = ad9250_read(dev, register_address, &reg_value);
+
 	reg_value &= (~mask);
 	reg_value |= bits_value;
-	ret = ad9250_write(dev,
-			   register_address,
-			   reg_value);
+	ret |= ad9250_write(dev,
+			    register_address,
+			    reg_value);
 	if(ret != SUCCESS) {
-		return ret;
+		return FAILURE;
 	}
 
-	return 0;
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -413,28 +414,18 @@ int32_t ad9250_is_shadow_register(int32_t register_address)
  *			    01 � power-down;
  *			    10 - standby.
  *
- * @return Returns negative error code or the set power mode.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_chip_pwr_mode(struct ad9250_dev *dev,
 			     int32_t mode)
 {
-	uint32_t ret = 0;
-
-	if((mode >= 0) && (mode < 3)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_PDWN,
-					     AD9250_PDWN_CHIP(mode),
-					     AD9250_PDWN_CHIP(0x3));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_PDWN);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_PDWN_CHIP(0x3)) >> 0;
-	}
-
-	return ret;
+	if((mode >= 0) && (mode < 3))
+		return (ad9250_set_bits_to_reg(dev,
+					       AD9250_REG_PDWN,
+					       AD9250_PDWN_CHIP(mode),
+					       AD9250_PDWN_CHIP(0x3)));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -446,27 +437,17 @@ int32_t ad9250_chip_pwr_mode(struct ad9250_dev *dev,
  *			    2 - channel B
  *			    3 - channel A and channel B
  *
- * @return Returns negative error code or the selected channel.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_select_channel_for_config(struct ad9250_dev *dev,
 		int32_t channel)
 {
-	int32_t ret = 0;
-
-	if((channel > 0) && (channel <= 3)) {
-		ret = ad9250_write(dev,
-				   AD9250_REG_CH_INDEX,
-				   channel);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_CH_INDEX);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return ret & (AD9250_CH_INDEX_ADC_A | AD9250_CH_INDEX_ADC_B);
-	}
-
-	return ret;
+	if((channel > 0) && (channel <= 3))
+		return (ad9250_write(dev,
+				     AD9250_REG_CH_INDEX,
+				     channel));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -486,28 +467,18 @@ int32_t ad9250_select_channel_for_config(struct ad9250_dev *dev,
  *		    9 to 14 -> unused
  *			 15 -> ramp output
  *
- * @return Returns the set test mode or negative error code.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_test_mode(struct ad9250_dev *dev,
 			 int32_t mode)
 {
-	int32_t ret = 0;
-
-	if((mode >= 0) && (mode < 16)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_TEST,
-					     AD9250_TEST_OUTPUT_TEST(mode),
-					     AD9250_TEST_OUTPUT_TEST(0xF));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_TEST_OUTPUT_TEST(0xF)) >> 0;
-	}
-
-	return ret;
+	if((mode >= 0) && (mode < 16))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_TEST,
+					      AD9250_TEST_OUTPUT_TEST(mode),
+					      AD9250_TEST_OUTPUT_TEST(0xF));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -516,23 +487,17 @@ int32_t ad9250_test_mode(struct ad9250_dev *dev,
  * @param dev - The device structure.
  * @param adj - The offset adjust value in LSBs from +31 to -32.
  *
- * @return Returns negative error code or the set offset adjustment.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_offset_adj(struct ad9250_dev *dev,
 			  int32_t adj)
 {
-	int32_t ret = 0;
-
-	if((adj >= -32) && (adj <= 31)) {
-		ret = ad9250_write(dev,
-				   AD9250_REG_OFFSET,
-				   AD9250_REG_OFFSET_ADJUST(adj));
-	} else {
-		return (ad9250_read(dev,
-				    AD9250_REG_OFFSET));
-	}
-
-	return ret;
+	if((adj >= -32) && (adj <= 31))
+		return ad9250_write(dev,
+				    AD9250_REG_OFFSET,
+				    AD9250_REG_OFFSET_ADJUST(adj));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -546,28 +511,18 @@ int32_t ad9250_offset_adj(struct ad9250_dev *dev,
  *		 Example: 1 - Disables the data output;
  *			  0 - Enables the data output(default).
  *
- * @return  Returns negative error code or the output disable state.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_output_disable(struct ad9250_dev *dev,
 			      int32_t en)
 {
-	uint32_t ret = 0;
-
-	if((en == 0) || (en == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_OUT_MODE,
-					     en * AD9250_OUT_MODE_DISABLE,
-					     AD9250_OUT_MODE_DISABLE);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_OUT_MODE_DISABLE) != 0;
-	}
-
-	return ret;
+	if((en == 0) || (en == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_OUT_MODE,
+					      en * AD9250_OUT_MODE_DISABLE,
+					      AD9250_OUT_MODE_DISABLE);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -581,28 +536,18 @@ int32_t ad9250_output_disable(struct ad9250_dev *dev,
  *		     Example: 1 - Activates the inverted output mode;
  *			      0 - Activates the normal output mode(default).
  *
- * @return Returns negative error code or the set output mode.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_output_invert(struct ad9250_dev *dev,
 			     int32_t invert)
 {
-	uint32_t ret = 0;
-
-	if( (invert == 0) || (invert == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_OUT_MODE,
-					     invert * AD9250_OUT_MODE_INVERT_DATA,
-					     AD9250_OUT_MODE_INVERT_DATA);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_OUT_MODE_INVERT_DATA) != 0;
-	}
-
-	return ret;
+	if( (invert == 0) || (invert == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_OUT_MODE,
+					      invert * AD9250_OUT_MODE_INVERT_DATA,
+					      AD9250_OUT_MODE_INVERT_DATA);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -616,28 +561,18 @@ int32_t ad9250_output_invert(struct ad9250_dev *dev,
  *		     Example: 0 � offset binary(default);
  *			      1 � two's complement;
  *
- * @return Returns negative error code or the set output format.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_output_format(struct ad9250_dev *dev,
 			     int32_t format)
 {
-	uint32_t ret = 0;
-
-	if( (format == 0) || (format == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_OUT_MODE,
-					     AD9250_OUT_MODE_DATA_FORMAT(format),
-					     AD9250_OUT_MODE_DATA_FORMAT(1));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_OUT_MODE_DATA_FORMAT(1)) >> 0;
-	}
-
-	return ret;
+	if( (format == 0) || (format == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_OUT_MODE,
+					      AD9250_OUT_MODE_DATA_FORMAT(format),
+					      AD9250_OUT_MODE_DATA_FORMAT(1));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -648,28 +583,18 @@ int32_t ad9250_output_format(struct ad9250_dev *dev,
  *	       Example: 1 - The PN sequence is held in reset;
  *			0 - The PN sequence resumes from the seed value(0x92).
  *
- * @return Returns negative error code or the set PN9 status.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_reset_pn9(struct ad9250_dev *dev,
 			 int32_t rst)
 {
-	int32_t ret = 0;
-
-	if((rst == 0) || (rst == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_TEST,
-					     rst * AD9250_TEST_RST_PN_SHOR,
-					     AD9250_TEST_RST_PN_SHOR);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_TEST_RST_PN_SHOR) != 0;
-	}
-
-	return ret;
+	if((rst == 0) || (rst == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_TEST,
+					      rst * AD9250_TEST_RST_PN_SHOR,
+					      AD9250_TEST_RST_PN_SHOR);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -680,28 +605,18 @@ int32_t ad9250_reset_pn9(struct ad9250_dev *dev,
  *	       		Example: 1 - The PN sequence is held in reset;
  *				0 - The PN sequence resumes from the seed value(0x3AFF).
  *
- * @return Returns negative error code or the set PN23 status.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_reset_pn23(struct ad9250_dev *dev,
 			  int32_t rst)
 {
-	int32_t ret = 0;
-
-	if((rst == 0) || (rst == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_TEST,
-					     rst * AD9250_TEST_RST_PN_LONG,
-					     AD9250_TEST_RST_PN_LONG);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_TEST_RST_PN_LONG) != 0;
-	}
-
-	return ret;
+	if((rst == 0) || (rst == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_TEST,
+					      rst * AD9250_TEST_RST_PN_LONG,
+					      AD9250_TEST_RST_PN_LONG);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -711,21 +626,18 @@ int32_t ad9250_reset_pn23(struct ad9250_dev *dev,
  * @param pattern_no    - Selects the patterns to be configured. Range 1..4.
  * @param user_pattern  - Users's pattern.
  *
- * @return Returns negative error code or the selected user pattern.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_set_user_pattern(struct ad9250_dev *dev,
 				int32_t pattern_no,
 				int32_t user_pattern)
 {
-	int32_t pattern_address = 0;;
-	int32_t ret = 0;
+	int32_t pattern_address = 0;
 
 	pattern_address = AD9250_REG_USER_TEST1 + (2 * pattern_no);
-	ret = ad9250_write(dev,
-			   pattern_address,
-			   user_pattern);
-
-	return ret;
+	return ad9250_write(dev,
+			    pattern_address,
+			    user_pattern);
 }
 
 /***************************************************************************//**
@@ -734,28 +646,18 @@ int32_t ad9250_set_user_pattern(struct ad9250_dev *dev,
  * @param dev    - The device structure.
  * @param enable - enable option.
  *
- * @return Returns negative error code or the state of the enable bit.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_bist_enable(struct ad9250_dev *dev,
 			   int32_t enable)
 {
-	int32_t ret = 0;
-
-	if((enable == 0) || (enable == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_BIST,
-					     enable * AD9250_BIST_ENABLE,
-					     AD9250_BIST_ENABLE);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_BIST);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_BIST_ENABLE) >> 0;
-	}
-
-	return ret;
+	if((enable == 0) || (enable == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_BIST,
+					      enable * AD9250_BIST_ENABLE,
+					      AD9250_BIST_ENABLE);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -764,28 +666,18 @@ int32_t ad9250_bist_enable(struct ad9250_dev *dev,
  * @param dev    - The device structure.
  * @param reset - reset option.
  *
- * @return Returns negative error code or the state of the reset bit.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_bist_reset(struct ad9250_dev *dev,
 			  int32_t reset)
 {
-	int32_t ret = 0;
-
-	if((reset == 0) || (reset == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_BIST,
-					     reset * AD9250_BIST_RESET,
-					     AD9250_BIST_RESET);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_BIST);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_BIST_RESET) >> 2;
-	}
-
-	return ret;
+	if((reset == 0) || (reset == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_BIST,
+					      reset * AD9250_BIST_RESET,
+					      AD9250_BIST_RESET);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -796,14 +688,13 @@ int32_t ad9250_bist_reset(struct ad9250_dev *dev,
  *		     Range: Ceil(17/F) to 32,
  *			    where F - is the number of octets per frame.
  *
- * @return Returns negative error code or actual number of frames that can be set.
+  * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_jesd204b_set_frames(struct ad9250_dev *dev,
 				   int32_t k_frames)
 {
 	int32_t k_reg_val = k_frames;
 	int32_t mod4 = 0;
-	int32_t ret = 0;
 
 	if(k_frames >=0 && k_frames <= 32) {
 		mod4 = k_frames % 4;
@@ -814,18 +705,11 @@ int32_t ad9250_jesd204b_set_frames(struct ad9250_dev *dev,
 				k_reg_val += 4 - mod4;
 			}
 		}
-		ret = ad9250_write(dev,
-				   AD9250_REG_204B_PARAM_K,
-				   k_reg_val - 1);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return k_reg_val;
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_204B_PARAM_K);
-		return ret;
-	}
+		return ad9250_write(dev,
+				    AD9250_REG_204B_PARAM_K,
+				    k_reg_val - 1);
+	} else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1025,28 +909,18 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
  *			    01 � power-down;
  *			    10 - standby.
  *
- * @return Returns negative error code or the set power mode.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_jesd204b_pwr_mode(struct ad9250_dev *dev,
 				 int32_t mode)
 {
-	uint32_t ret = 0;
-
-	if((mode >= 0) && (mode < 3)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_PDWN,
-					     AD9250_PDWN_JESD204B(mode),
-					     AD9250_PDWN_JESD204B(0x3));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_PDWN);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_PDWN_JESD204B(0x3)) >> 2;
-	}
-
-	return ret;
+	if((mode >= 0) && (mode < 3))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_PDWN,
+					      AD9250_PDWN_JESD204B(mode),
+					      AD9250_PDWN_JESD204B(0x3));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1059,28 +933,18 @@ int32_t ad9250_jesd204b_pwr_mode(struct ad9250_dev *dev,
  *			  1 - a 10-bit data is inserted at 8B/10B ENCODER output
  *			  2 - a 8-bit at scrambler input
  *
- * @return Returns negative error code or the status of the data injection point bit.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_jesd204b_select_test_injection_point(struct ad9250_dev *dev,
 		int32_t inj_point)
 {
-	int32_t ret = 0;
-
-	if((inj_point == 1) || (inj_point == 2)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_204B_CTRL3,
-					     AD9250_204B_CTRL3_TEST_DATA_INJ_PT(inj_point),
-					     AD9250_204B_CTRL3_TEST_DATA_INJ_PT(-1));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_204B_CTRL3);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret &  AD9250_204B_CTRL3_TEST_DATA_INJ_PT(-1)) >> 4;
-	}
-
-	return ret;
+	if((inj_point == 1) || (inj_point == 2))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_204B_CTRL3,
+					      AD9250_204B_CTRL3_TEST_DATA_INJ_PT(inj_point),
+					      AD9250_204B_CTRL3_TEST_DATA_INJ_PT(-1));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1100,28 +964,18 @@ int32_t ad9250_jesd204b_select_test_injection_point(struct ad9250_dev *dev,
  *			     12 - PN7 sequence
  *			     13 - PN15 sequence
  *
- * @return Returns the set test mode or negative error code.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_jesd204b_test_mode(struct ad9250_dev *dev,
 				  int32_t test_mode)
 {
-	int32_t ret = 0;
-
-	if((test_mode >= 0) && (test_mode < 14)) {
-		ad9250_set_bits_to_reg(dev,
-				       AD9250_REG_204B_CTRL3,
-				       AD9250_204B_CTRL3_JESD_TEST_MODE(test_mode),
-				       AD9250_204B_CTRL3_JESD_TEST_MODE(-1));
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_204B_CTRL3);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret &  AD9250_204B_CTRL3_JESD_TEST_MODE(-1)) >> 0;
-	}
-
-	return ret;
+	if((test_mode >= 0) && (test_mode < 14))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_204B_CTRL3,
+					      AD9250_204B_CTRL3_JESD_TEST_MODE(test_mode),
+					      AD9250_204B_CTRL3_JESD_TEST_MODE(-1));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1132,28 +986,18 @@ int32_t ad9250_jesd204b_test_mode(struct ad9250_dev *dev,
  *		     Example: 1 - Activates the inverted mode
  *			      0 - Activates the normal mode
  *
- * @return Returns negative error code or the set mode.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_jesd204b_invert_logic(struct ad9250_dev *dev,
 				     int32_t invert)
 {
-	uint32_t ret = 0;
-
-	if( (invert == 0) || (invert == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_204B_CTRL2,
-					     invert * AD9250_204B_CTRL2_INVERT_JESD_BITS,
-					     AD9250_204B_CTRL2_INVERT_JESD_BITS);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_204B_CTRL2);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_204B_CTRL2_INVERT_JESD_BITS) != 0;
-	}
-
-	return ret;
+	if( (invert == 0) || (invert == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_204B_CTRL2,
+					      invert * AD9250_204B_CTRL2_INVERT_JESD_BITS,
+					      AD9250_204B_CTRL2_INVERT_JESD_BITS);
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1208,28 +1052,19 @@ int32_t ad9250_fast_detect_setup(struct ad9250_dev *dev)
  *		   Example: 0 - correction off
  *			    1 - correction on
  *
- * @return Returns negative error code or the status of the enable bit.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_dcc_enable(struct ad9250_dev *dev,
 			  int32_t enable)
 {
-	int32_t ret = 0;
+	if((enable == 0) || (enable == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_DCC_CTRL,
+					      AD9250_DCC_CTRL_DCC_EN * enable,
+					      AD9250_DCC_CTRL_DCC_EN);
+	else
+		return FAILURE;
 
-	if((enable == 0) || (enable == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_DCC_CTRL,
-					     AD9250_DCC_CTRL_DCC_EN * enable,
-					     AD9250_DCC_CTRL_DCC_EN);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_DCC_CTRL_DCC_EN) >> 0;
-	}
-
-	return ret;
 }
 
 /***************************************************************************//**
@@ -1242,28 +1077,18 @@ int32_t ad9250_dcc_enable(struct ad9250_dev *dev,
  *			...
  *			13 - 0.29 Hz at Sample Rate of 245.76 MSPS
  *
- * @return Returns negative error code or the state of the bandwidth bits.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_dcc_bandwidth(struct ad9250_dev *dev,
 			     int32_t bw)
 {
-	int32_t ret = 0;
-
-	if((bw >= 0) && (bw <= 13)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_DCC_CTRL,
-					     AD9250_DCC_CTRL_DCC_BW(bw),
-					     AD9250_DCC_CTRL_DCC_BW(-1));
-	} else {
-		ad9250_read(dev,
-			    AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_DCC_CTRL_DCC_BW(-1)) >> 2;
-	}
-
-	return ret;
+	if((bw >= 0) && (bw <= 13))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_DCC_CTRL,
+					      AD9250_DCC_CTRL_DCC_BW(bw),
+					      AD9250_DCC_CTRL_DCC_BW(-1));
+	else
+		return FAILURE;
 }
 
 /***************************************************************************//**
@@ -1274,26 +1099,16 @@ int32_t ad9250_dcc_bandwidth(struct ad9250_dev *dev,
  *		   Example: 0 - calculates the correction value
  *			    1 - freezes the DC correction at its current state
  *
- * @return Returns negative error code or the status of the freeze bit.
+ * @return Returns negative error code or 0 in case of success.
  *******************************************************************************/
 int32_t ad9250_dcc_freeze(struct ad9250_dev *dev,
 			  int32_t freeze)
 {
-	int32_t ret = 0;
-
-	if((freeze == 0) || (freeze == 1)) {
-		ret = ad9250_set_bits_to_reg(dev,
-					     AD9250_REG_DCC_CTRL,
-					     AD9250_DCC_CTRL_FREEZE_DCC * freeze,
-					     AD9250_DCC_CTRL_FREEZE_DCC);
-	} else {
-		ret = ad9250_read(dev,
-				  AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
-			return ret;
-		}
-		return (ret & AD9250_DCC_CTRL_FREEZE_DCC) >> 6;
-	}
-
-	return ret;
+	if((freeze == 0) || (freeze == 1))
+		return ad9250_set_bits_to_reg(dev,
+					      AD9250_REG_DCC_CTRL,
+					      AD9250_DCC_CTRL_FREEZE_DCC * freeze,
+					      AD9250_DCC_CTRL_FREEZE_DCC);
+	else
+		return FAILURE;
 }
