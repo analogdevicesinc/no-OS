@@ -433,7 +433,7 @@ void ad9081_work_func(struct ad9081_phy *phy)
 static int32_t ad9081_setup(struct ad9081_phy *phy)
 {
 	uint64_t tx_lane_rate_kbps;
-	uint32_t dev_frequency_hz;
+	uint64_t dev_frequency_hz;
 	uint8_t txfe_pll_stat;
 	int32_t i;
 	int32_t ret;
