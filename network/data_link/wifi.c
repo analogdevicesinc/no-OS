@@ -59,7 +59,7 @@
 /******************************************************************************/
 
 /* Structure storing data used by a socket */
-struct socket_desc {
+struct wifi_sock {
 	/* Buffer submitted to the at parser */
 	uint8_t			*buff;
 	/* Socket type */
@@ -71,7 +71,7 @@ struct socket_desc {
 /* Wifi descriptor */
 struct wifi_desc {
 	/* Sockets */
-	struct socket_desc		sockets[MAX_CONNECTIONS];
+	struct wifi_sock		sockets[MAX_CONNECTIONS];
 	/* Reference to the AT parser */
 	struct at_desc			*at;
 	/* Network interface */
@@ -271,7 +271,7 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 				enum socket_protocol proto)
 {
 	uint32_t		i;
-	struct socket_desc	*sock;
+	struct wifi_sock	*sock;
 
 	if (!desc || !sock_id)
 		return FAILURE;
