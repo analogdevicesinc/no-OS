@@ -73,7 +73,7 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	struct gpio_init_param	gpio_phy_resetb = {
-		.number = 55,
+		.number = PHY_RESET,
 		.extra = &xil_gpio_param
 	};
 	struct xil_spi_init_param xil_spi_param = {
