@@ -23,10 +23,9 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/frequency/ad9523/ad9523.c				\
 	$(DRIVERS)/adc/ad9680/ad9680.c					\
 	$(DRIVERS)/dac/ad9144/ad9144.c					\
-	$(DRIVERS)/spi/spi.c						\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
+	$(PLATFORM_DRIVERS)/spi.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS :=	$(PROJECT)/src/app/app_config.h					\
