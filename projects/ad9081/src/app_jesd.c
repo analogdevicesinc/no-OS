@@ -48,6 +48,7 @@
 #include "error.h"
 #include "app_parameters.h"
 #include "app_jesd.h"
+#include "app_config.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -84,14 +85,14 @@ int32_t app_jesd_init(struct clk clk[2],
 	struct jesd204_tx_init tx_jesd_init = {
 		.name = "tx_jesd",
 		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = 4,
-		.frames_per_multiframe = 32,
-		.converters_per_device = 8,
-		.converter_resolution = 16,
-		.bits_per_sample = 16,
-		.high_density = false,
-		.control_bits_per_sample = 0,
-		.subclass = 1,
+		.octets_per_frame = AD9081_TX_JESD_F,
+		.frames_per_multiframe = AD9081_TX_JESD_K,
+		.converters_per_device = AD9081_TX_JESD_M,
+		.converter_resolution = AD9081_TX_JESD_N,
+		.bits_per_sample = AD9081_TX_JESD_NP,
+		.high_density = AD9081_TX_JESD_HD,
+		.control_bits_per_sample = AD9081_TX_JESD_CS,
+		.subclass = AD9081_TX_JESD_SUBCLASS,
 		.device_clk_khz = tx_device_clk_khz,
 		.lane_clk_khz = tx_lane_clk_khz
 	};
@@ -99,9 +100,9 @@ int32_t app_jesd_init(struct clk clk[2],
 	struct jesd204_rx_init rx_jesd_init = {
 		.name = "rx_jesd",
 		.base = RX_JESD_BASEADDR,
-		.octets_per_frame = 4,
-		.frames_per_multiframe = 32,
-		.subclass = 1,
+		.octets_per_frame = AD9081_RX_JESD_F,
+		.frames_per_multiframe = AD9081_RX_JESD_K,
+		.subclass = AD9081_RX_JESD_SUBCLASS,
 		.device_clk_khz = rx_device_clk_khz,
 		.lane_clk_khz = rx_lane_clk_khz
 	};

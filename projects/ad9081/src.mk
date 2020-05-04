@@ -44,6 +44,7 @@ SRCS += $(PROJECT)/src/app_iio.c					\
 endif
 INCS :=	$(PROJECT)/src/app_clock.h					\
 	$(PROJECT)/src/app_jesd.h					\
+	$(PROJECT)/src/app_config.h					\
 	$(PROJECT)/src/app_parameters.h					\
 	$(DRIVERS)/adc/ad9081/ad9081.h					\
 	$(DRIVERS)/adc/ad9081/api/adi_ad9081_bf_ad9081.h		\

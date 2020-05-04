@@ -56,6 +56,7 @@
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 #include "app_parameters.h"
+#include "app_config.h"
 
 #ifdef IIO_SUPPORT
 #include "app_iio.h"
@@ -88,39 +89,39 @@ int main(void)
 	};
 	struct link_init_param jesd_tx_link = {
 		.device_id = 0,
-		.octets_per_frame = 4,
-		.frames_per_multiframe = 32,
-		.samples_per_converter_per_frame = 1,
-		.high_density = 1,
-		.converter_resolution = 16,
-		.bits_per_sample = 16,
-		.converters_per_device = 8,
-		.control_bits_per_sample = 0,
-		.lanes_per_device = 4,
-		.subclass = 1,
-		.link_mode = 9,
+		.octets_per_frame = AD9081_TX_JESD_F,
+		.frames_per_multiframe = AD9081_TX_JESD_K,
+		.samples_per_converter_per_frame = AD9081_TX_JESD_S,
+		.high_density = AD9081_TX_JESD_HD,
+		.converter_resolution = AD9081_TX_JESD_N,
+		.bits_per_sample = AD9081_TX_JESD_NP,
+		.converters_per_device = AD9081_TX_JESD_M,
+		.control_bits_per_sample = AD9081_TX_JESD_CS,
+		.lanes_per_device = AD9081_TX_JESD_L,
+		.subclass = AD9081_TX_JESD_SUBCLASS,
+		.link_mode = AD9081_TX_JESD_MODE,
 		.dual_link = 0,
-		.version = 1,
-		.logical_lane_mapping = {0, 2, 7, 7, 1, 7, 7, 3},
+		.version = AD9081_TX_JESD_VERSION,
+		.logical_lane_mapping = AD9081_TX_LOGICAL_LANE_MAPPING,
 		.tpl_phase_adjust = 12
 	};
 	struct link_init_param jesd_rx_link = {
 		.device_id = 0,
-		.octets_per_frame = 4,
-		.frames_per_multiframe = 32,
-		.samples_per_converter_per_frame = 1,
-		.high_density = 1,
-		.converter_resolution = 16,
-		.bits_per_sample = 16,
-		.converters_per_device = 8,
-		.control_bits_per_sample = 0,
-		.lanes_per_device = 4,
-		.subclass = 1,
-		.link_mode = 10,
+		.octets_per_frame = AD9081_RX_JESD_F,
+		.frames_per_multiframe = AD9081_RX_JESD_K,
+		.samples_per_converter_per_frame = AD9081_RX_JESD_S,
+		.high_density = AD9081_RX_JESD_HD,
+		.converter_resolution = AD9081_RX_JESD_N,
+		.bits_per_sample = AD9081_RX_JESD_NP,
+		.converters_per_device = AD9081_RX_JESD_M,
+		.control_bits_per_sample = AD9081_RX_JESD_CS,
+		.lanes_per_device = AD9081_RX_JESD_L,
+		.subclass = AD9081_RX_JESD_SUBCLASS,
+		.link_mode = AD9081_RX_JESD_MODE,
 		.dual_link = 0,
-		.version = 1,
-		.logical_lane_mapping = {2, 0, 7, 7, 7, 7, 3, 1},
-		.link_converter_select = {0, 1, 2, 3, 8, 9, 10, 11, 0, 0, 0, 0, 0, 0, 0, 0},
+		.version = AD9081_RX_JESD_VERSION,
+		.logical_lane_mapping = AD9081_RX_LOGICAL_LANE_MAPPING,
+		.link_converter_select = AD9081_RX_LINK_CONVERTER_SELECT,
 	};
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
@@ -133,29 +134,29 @@ int main(void)
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
 		/* TX */
-		.dac_frequency_hz = 12000000000,
+		.dac_frequency_hz = AD9081_DAC_FREQUENCY,
 		/* The 4 DAC Main Datapaths */
-		.tx_main_interpolation = 6,
-		.tx_main_nco_frequency_shift_hz = {1000000000, 1100000000, 1200000000, 1300000000},
-		.tx_dac_channel_crossbar_select = {0x1, 0x2, 0x4, 0x8},
+		.tx_main_interpolation = AD9081_TX_MAIN_INTERPOLATION,
+		.tx_main_nco_frequency_shift_hz = AD9081_TX_MAIN_NCO_SHIFT,
+		.tx_dac_channel_crossbar_select = AD9081_TX_DAC_CHAN_CROSSBAR,
 		/* The 8 DAC Channelizers */
-		.tx_channel_interpolation = 8,
-		.tx_channel_nco_frequency_shift_hz = {0, 0, 0, 0, 0, 0, 0, 0},
-		.tx_channel_gain = {2048, 2048, 2048, 2048, 0, 0, 0, 0},
+		.tx_channel_interpolation = AD9081_TX_CHAN_INTERPOLATION,
+		.tx_channel_nco_frequency_shift_hz = AD9081_TX_CHAN_NCO_SHIFT,
+		.tx_channel_gain = AD9081_TX_CHAN_GAIN,
 		.jesd_tx_link = &jesd_tx_link,
 		/* RX */
-		.adc_frequency_hz = 4000000000,
-		.nyquist_zone = 0,
+		.adc_frequency_hz = AD9081_ADC_FREQUENCY,
+		.nyquist_zone = AD9081_ADC_NYQUIST_ZONE,
 		/* The 4 ADC Main Datapaths */
-		.rx_main_nco_frequency_shift_hz = {400000000, -400000000, 100000000, 100000000},
-		.rx_main_decimation = {4, 4, 4, 4},
+		.rx_main_nco_frequency_shift_hz = AD9081_RX_MAIN_NCO_SHIFT,
+		.rx_main_decimation = AD9081_RX_MAIN_DECIMATION,
 		.rx_main_complex_to_real_enable = {0, 0, 0, 0},
-		.rx_main_enable = {1, 1, 1, 1},
+		.rx_main_enable = AD9081_RX_MAIN_ENABLE,
 		/* The 8 ADC Channelizers */
-		.rx_channel_nco_frequency_shift_hz = {0, 0, 0, 0, 0, 0, 0, 0},
-		.rx_channel_decimation = {4, 4, 0, 0, 4, 4, 0, 0},
+		.rx_channel_nco_frequency_shift_hz = AD9081_RX_CHAN_NCO_SHIFT,
+		.rx_channel_decimation = AD9081_RX_CHAN_DECIMATION,
 		.rx_channel_complex_to_real_enable = {0, 0, 0, 0, 0, 0, 0, 0},
-		.rx_channel_enable = {1, 1, 0, 0, 1, 1, 0, 0},
+		.rx_channel_enable = AD9081_RX_CHAN_ENABLE,
 		.jesd_rx_link[0] = &jesd_rx_link,
 		.jesd_rx_link[1] = NULL,
 	};
