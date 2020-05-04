@@ -44,18 +44,56 @@
 
 #include <stdlib.h>
 #include "error.h"
-#include "tcp_socket.h"
+#include "util.h"
+#include "socket.h"
+#include "socket_interface.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/* Socket descriptor */
+/**
+ * @struct tcp_socket_desc
+ * @brief TCP Socket descriptor
+ */
 struct tcp_socket_desc {
-	/* Id of the opened socket */
+	/** Id of the opened socket to be passed to the network interface */
 	uint32_t			id;
-	/* Reference to the network interface */
+	/** Reference to the network interface */
 	struct network_interface	*net;
+};
+
+/******************************************************************************/
+/**************************** Function prototypes *****************************/
+/******************************************************************************/
+
+static int32_t tcp_socket_init(struct tcp_socket_desc **desc,
+			       struct network_interface *net,
+			       struct tcp_socket_init_param *param);
+static int32_t tcp_socket_remove(struct tcp_socket_desc *desc);
+static int32_t tcp_socket_connect(struct tcp_socket_desc *desc,
+				  struct socket_address *addr);
+static int32_t tcp_socket_disconnect(struct tcp_socket_desc *desc);
+static int32_t tcp_socket_send(struct tcp_socket_desc *desc, const void *data,
+			       uint32_t len);
+static int32_t tcp_socket_recv(struct tcp_socket_desc *desc, void *data,
+			       uint32_t len);
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+/* Interface to used by generic socket.c */
+const struct socket_interface tcp_socket_interface = {
+	.protocol = PROTOCOL_TCP,
+	.init = (int32_t (*)())tcp_socket_init,
+	.remove = (int32_t (*)())tcp_socket_remove,
+	.connect = (int32_t (*)())tcp_socket_connect,
+	.disconnect = (int32_t (*)())tcp_socket_disconnect,
+	.send = (int32_t (*)())tcp_socket_send,
+	.recv = (int32_t (*)())tcp_socket_recv,
+	.sendto = NULL,
+	.recvfrom = NULL
 };
 
 /******************************************************************************/
@@ -70,20 +108,23 @@ struct tcp_socket_desc {
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t socket_init(struct tcp_socket_desc **desc,
-		    struct tcp_socket_init_param *param)
+static int32_t tcp_socket_init(struct tcp_socket_desc **desc,
+			       struct network_interface *net,
+			       struct tcp_socket_init_param *param)
 {
 	struct tcp_socket_desc	*ldesc;
 	int32_t			ret;
 
-	if (!desc || !param)
+	UNUSED_PARAM(param);
+
+	if (!desc)
 		return FAILURE;
 
 	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
 	if (!ldesc)
 		return FAILURE;
 
-	ldesc->net = param->net;
+	ldesc->net = net;
 
 	ret = ldesc->net->socket_open(ldesc->net->net, &ldesc->id,
 				      PROTOCOL_TCP);
@@ -103,7 +144,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t socket_remove(struct tcp_socket_desc *desc)
+static int32_t tcp_socket_remove(struct tcp_socket_desc *desc)
 {
 	int32_t ret;
 
@@ -119,8 +160,8 @@ int32_t socket_remove(struct tcp_socket_desc *desc)
 }
 
 /** @brief See \ref network_interface.socket_connect */
-int32_t socket_connect(struct tcp_socket_desc *desc,
-		       struct socket_address *addr)
+static int32_t tcp_socket_connect(struct tcp_socket_desc *desc,
+				  struct socket_address *addr)
 {
 	if (!desc || !addr)
 		return FAILURE;
@@ -129,7 +170,7 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 }
 
 /** @brief See \ref network_interface.socket_disconnect */
-int32_t socket_disconnect(struct tcp_socket_desc *desc)
+static int32_t tcp_socket_disconnect(struct tcp_socket_desc *desc)
 {
 	if (!desc)
 		return FAILURE;
@@ -138,8 +179,8 @@ int32_t socket_disconnect(struct tcp_socket_desc *desc)
 }
 
 /** @brief See \ref network_interface.socket_send */
-int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
-		    uint32_t len)
+static int32_t tcp_socket_send(struct tcp_socket_desc *desc, const void *data,
+			       uint32_t len)
 {
 
 	if (!desc)
@@ -149,7 +190,8 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 }
 
 /** @brief See \ref network_interface.socket_recv */
-int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len)
+static int32_t tcp_socket_recv(struct tcp_socket_desc *desc, void *data,
+			       uint32_t len)
 {
 	if (!desc)
 		return FAILURE;
