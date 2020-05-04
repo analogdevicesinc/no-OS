@@ -111,7 +111,7 @@
 /******************************************************************************/
 
 #include <stdbool.h>
-#include "tcp_socket.h"
+#include "socket.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -212,7 +212,7 @@ struct mqtt_init_param {
 	 * Reference to a socket. The connection must be established before
 	 * calling any MQTT client functions.
 	 */
-	struct tcp_socket_desc	*sock;
+	struct socket_desc	*sock;
 	/** Id of the hardware timer to be used by the mqtt files */
 	uint32_t		timer_id;
 	/** Platform specific parameter to initialize a \ref timer_desc */
