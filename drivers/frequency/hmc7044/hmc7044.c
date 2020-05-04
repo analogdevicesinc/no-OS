@@ -327,7 +327,7 @@ uint32_t hmc7044_calc_out_div(uint32_t rate,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
-				uint32_t *rate)
+				uint64_t *rate)
 {
 	if (chan > dev->num_channels)
 		return FAILURE;
@@ -345,7 +345,7 @@ int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
-			       uint32_t *rounded_rate)
+			       uint64_t *rounded_rate)
 {
 	uint32_t div = hmc7044_calc_out_div(rate, dev->pll2_freq);
 
@@ -362,7 +362,7 @@ int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
  * @return SUCCESS in case of success, negative error code otherwise.
  */
 int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
-			     uint32_t rate)
+			     uint64_t rate)
 {
 	uint32_t div;
 	int32_t ret;

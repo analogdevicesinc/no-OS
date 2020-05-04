@@ -126,10 +126,10 @@ int32_t hmc7044_init(struct hmc7044_dev **device,
 int32_t hmc7044_remove(struct hmc7044_dev *device);
 int32_t hmc7044_read(struct hmc7044_dev *dev, uint16_t reg, uint8_t *val);
 int32_t hmc7044_clk_recalc_rate(struct hmc7044_dev *dev, uint32_t chan,
-				uint32_t *rate);
+				uint64_t *rate);
 int32_t hmc7044_clk_round_rate(struct hmc7044_dev *dev, uint32_t rate,
-			       uint32_t *rounded_rate);
+			       uint64_t *rounded_rate);
 int32_t hmc7044_clk_set_rate(struct hmc7044_dev *dev, uint32_t chan,
-			     uint32_t rate);
+			     uint64_t rate);
 
 #endif // HMC7044_H_
