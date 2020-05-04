@@ -808,13 +808,13 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 		return ret;
 	}
 	ret = ad9250_write(dev,
-			   AD9250_REG_204B_LID_CFG1,
+			   AD9250_REG_204B_LID_CFG0,
 			   dev->ad9250_st.p_jesd204b->lid0);
 	if(ret != SUCCESS) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
-			   AD9250_REG_204B_LID_CFG2,
+			   AD9250_REG_204B_LID_CFG1,
 			   dev->ad9250_st.p_jesd204b->lid1);
 	if(ret != SUCCESS) {
 		return ret;
