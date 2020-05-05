@@ -44,23 +44,14 @@
 /******************************************************************************/
 #include <stdint.h>
 #include "clk.h"
-
-enum app_clocks {
-	DEV_REFCLK,
-	DEV_SYSREF,
-	CORE_CLK_TX,
-	CORE_CLK_RX,
-	FPGA_REFCLK,
-	FPGA_SYSREF,
-	NUM_APP_CLKS
-};
+#include "app_config.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Application clocks initialization. */
-int32_t app_clock_init(struct clk clk[NUM_APP_CLKS]);
+int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT]);
 
 /* Application clocks remove. */
 int32_t app_clock_remove(void);
