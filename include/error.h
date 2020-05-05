@@ -53,4 +53,6 @@
 
 #define IS_ERR_VALUE(x)	((x) < 0)
 
+#define	EAGAIN		11
+
 #endif // ERROR_H_
