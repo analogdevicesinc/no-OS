@@ -33,6 +33,9 @@ SRCS := $(PROJECT)/src/app.c						\
 	$(PLATFORM_DRIVERS)/spi.c					\
 	$(NO-OS)/util/clk.c						\
 	$(NO-OS)/util/util.c
+ifeq (y,$(strip $(QUAD_MXFE)))
+SRCS += $(DRIVERS)/frequency/adf4371/adf4371.c
+endif
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app_iio.c					\
 	$(PLATFORM_DRIVERS)/uart.c					\
@@ -83,6 +86,9 @@ INCS :=	$(PROJECT)/src/app_clock.h					\
 	$(INCLUDE)/gpio.h						\
 	$(INCLUDE)/spi.h						\
 	$(INCLUDE)/util.h
+ifeq (y,$(strip $(QUAD_MXFE)))
+INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
+endif
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(PROJECT)/src/app_iio.h					\
 	$(INCLUDE)/uart.h						\
