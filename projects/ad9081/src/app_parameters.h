@@ -45,9 +45,23 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define PHY_CS	0
-#define CLK_CS	1
 
+#ifdef QUAD_MXFE
+#define ADF4371_CS	0
+#define HMC7043_CS	4
+
+#define PHY_RESET		41
+
+#define ADRF5020_CTRL_GPIO	34
+#define AD9081_GPIO_0_MUX	44
+
+#define GPIO_2_DEVICE_ID	XPAR_AXI_GPIO_2_DEVICE_ID
+#define SPI_2_DEVICE_ID		XPAR_AXI_SPI_2_DEVICE_ID
+
+#else
+#define CLK_CS	1
 #define PHY_RESET	55
+#endif
 
 #define GPIO_DEVICE_ID		XPAR_AXI_GPIO_DEVICE_ID
 #define SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID

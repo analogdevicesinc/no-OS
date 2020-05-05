@@ -43,6 +43,11 @@
 #include "spi.h"
 #include "spi_extra.h"
 #include "hmc7044.h"
+#ifdef QUAD_MXFE
+#include "adf4371.h"
+#include "gpio.h"
+#include "gpio_extra.h"
+#endif
 #include "error.h"
 #include "app_parameters.h"
 #include "app_clock.h"
@@ -53,6 +58,12 @@
 struct hmc7044_dev* hmc7044_dev;
 
 struct clk_hw hmc7044_hw;
+
+#ifdef QUAD_MXFE
+struct adf4371_dev* adf4371_dev[MULTIDEVICE_INSTANCE_COUNT];
+
+struct clk_hw adf4371_hw[MULTIDEVICE_INSTANCE_COUNT];
+#endif
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -67,17 +78,118 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 
 	struct xil_spi_init_param xil_spi_param = {
 		.type = SPI_PL,
-		.device_id = 0,
+#ifdef QUAD_MXFE
+		.device_id = SPI_2_DEVICE_ID,
+#else
+		.device_id = SPI_DEVICE_ID,
+#endif
 	};
 
 	struct spi_init_param clkchip_spi_init_param = {
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_0,
+#ifdef QUAD_MXFE
+		.chip_select = HMC7043_CS,
+#else
 		.chip_select = CLK_CS,
+#endif
 		.extra = &xil_spi_param
 	};
 
-	struct hmc7044_chan_spec chan_spec[6] = {
+#ifdef QUAD_MXFE
+	struct hmc7044_chan_spec chan_spec[] = {
+		{
+			.num = 0,				// FPGA_REFCLK
+			.divider = 1,				// 500 MHz
+			.driver_mode = 2,			// LVDS
+		}, {
+			.num = 1,				// SYSREF_MXFE0
+			.divider = 256,				// 1.953125 MHz
+			.driver_mode = 2,			// LVDS
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.coarse_delay = 0,
+			.fine_delay = 24,
+			.out_mux_mode = 1,
+		}, {
+			.num = 3,				// SYSREF_MXFE1
+			.divider = 256,				// 1.953125 MHz
+			.driver_mode = 2,			// LVDS
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.coarse_delay = 1,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}, {
+			.num = 5,				// SYSREF_MXFE2
+			.divider = 256,				// 1.953125 MHz
+			.driver_mode = 2,			// LVDS
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.coarse_delay = 0,
+			.fine_delay = 16,
+			.out_mux_mode = 1,
+		}, {
+			.num = 7,				// SYSREF_MXFE3
+			.divider = 256,				// 1.953125 MHz
+			.driver_mode = 2,			// LVDS
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}, {
+			.num = 8,				// CORE_LINK_CLK
+			.divider = 2,				// 250 MHz
+			.driver_mode = 2,			// LVDS
+		}, {
+			.num = 9,				// SYSREF_FPGA
+			.divider = 256,				// 1.953125 MHz
+			.driver_mode = 2,			// LVDS
+			.start_up_mode_dynamic_enable = true,
+			.high_performance_mode_dis = true,
+			.coarse_delay = 0,
+			.fine_delay = 0,
+			.out_mux_mode = 0,
+		}
+	};
+
+	struct hmc7044_init_param hmc7044_param = {
+		.spi_init = &clkchip_spi_init_param,
+		.is_hmc7043 = true,
+		.clkin_freq = {500000000, 0, 0, 0},
+		.sysref_timer_div = 1024,
+		.pulse_gen_mode = 7,
+		.rf_reseeder_disable = true,
+		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x00},
+		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
+		.gpo_ctrl = {0x37, 0x00, 0x00, 0x00},
+		.num_channels = sizeof(chan_spec) /
+		sizeof(struct hmc7044_chan_spec),
+		.channels = chan_spec
+	};
+
+	struct xil_gpio_init_param xil_gpio_param = {
+		.type = GPIO_PL,
+		.device_id = GPIO_DEVICE_ID
+	};
+	struct gpio_init_param gpio_adrf5020_ctrl = {
+		.number = ADRF5020_CTRL_GPIO,
+		.extra = &xil_gpio_param
+	};
+	gpio_desc *adrf5020_ctrl;
+	int32_t i;
+
+	ret = gpio_get(&adrf5020_ctrl, &gpio_adrf5020_ctrl);
+	if (ret)
+		return ret;
+
+	ret = gpio_set_value(adrf5020_ctrl, 1);
+	if (ret)
+		return ret;
+
+#else
+	struct hmc7044_chan_spec chan_spec[] = {
 		{
 			.num = 2,		// DEV_REFCLK
 			.divider = 12,		// 250 MHz
@@ -115,7 +227,8 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x15},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 		.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
-		.num_channels = 6,
+		.num_channels = sizeof(chan_spec) /
+		sizeof(struct hmc7044_chan_spec),
 		.pll1_ref_prio_ctrl = 0xe4,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = false,
@@ -123,11 +236,45 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 		.pulse_gen_mode = 0x0,
 		.channels = chan_spec
 	};
+#endif
 
 	ret = hmc7044_init(&hmc7044_dev, &hmc7044_param);
 	if (ret)
 		return ret;
 
+#ifdef QUAD_MXFE
+	struct adf4371_chan_spec adf_chan_spec[1] = {
+		{
+			.num = 2,
+			.power_up_frequency = 12000000000,
+		}
+	};
+
+	struct adf4371_init_param adf4371_param = {
+		.spi_init = &clkchip_spi_init_param,
+		.spi_3wire_enable = true,
+		.clkin_frequency = 500000000,
+		.muxout_select = 1,
+		.num_channels = 1,
+		.channels = adf_chan_spec
+	};
+
+	for (i = 0; i < MULTIDEVICE_INSTANCE_COUNT; i++) {
+		clkchip_spi_init_param.chip_select = ADF4371_CS + i;
+		ret = adf4371_init(&adf4371_dev[i], &adf4371_param);
+		if (ret)
+			return ret;
+
+		adf4371_hw[i].dev = adf4371_dev[i];
+		adf4371_hw[i].dev_clk_recalc_rate = adf4371_clk_recalc_rate;
+		adf4371_hw[i].dev_clk_round_rate = adf4371_clk_round_rate;
+		adf4371_hw[i].dev_clk_set_rate = adf4371_clk_set_rate;
+
+		dev_refclk[i].hw = &adf4371_hw[i];
+		dev_refclk[i].hw_ch_num = 2;
+		dev_refclk[i].name = "dev_refclk";
+	}
+#else
 	hmc7044_hw.dev = hmc7044_dev;
 	hmc7044_hw.dev_clk_recalc_rate = hmc7044_clk_recalc_rate;
 	hmc7044_hw.dev_clk_round_rate = hmc7044_clk_round_rate;
@@ -136,6 +283,7 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 	dev_refclk[0].hw = &hmc7044_hw;
 	dev_refclk[0].hw_ch_num = 0;
 	dev_refclk[0].name = "dev_refclk";
+#endif
 
 	return SUCCESS;
 }

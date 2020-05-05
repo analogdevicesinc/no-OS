@@ -130,7 +130,11 @@ int main(void)
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
 		.multidevice_instance_count = 1,
+#ifdef QUAD_MXFE
+		.jesd_sync_pins_01_swap_enable = true,
+#else
 		.jesd_sync_pins_01_swap_enable = false,
+#endif
 		.lmfc_delay_dac_clk_cycles = 0,
 		.nco_sync_ms_extra_lmfc_num = 0,
 		/* TX */
@@ -191,6 +195,26 @@ int main(void)
 	int32_t i;
 
 	printf("Hello\n");
+
+#ifdef QUAD_MXFE
+	struct xil_gpio_init_param  xil_gpio_param_2 = {
+		.type = GPIO_PL,
+		.device_id = GPIO_2_DEVICE_ID
+	};
+	struct gpio_init_param	ad9081_gpio0_mux_init = {
+		.number = AD9081_GPIO_0_MUX,
+		.extra = &xil_gpio_param_2
+	};
+	gpio_desc *ad9081_gpio0_mux;
+
+	status = gpio_get(&ad9081_gpio0_mux, &ad9081_gpio0_mux_init);
+	if (status)
+		return status;
+
+	status = gpio_set_value(ad9081_gpio0_mux, 1);
+	if (status)
+		return status;
+#endif
 
 	status = app_clock_init(app_clk);
 	if (status != SUCCESS)
