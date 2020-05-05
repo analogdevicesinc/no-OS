@@ -47,6 +47,7 @@
 #include "error.h"
 #include "util.h"
 #include "delay.h"
+#include "error.h"
 
 /******************************************************************************/
 /**************************** Global Variables ********************************/
@@ -152,16 +153,24 @@ int mqtt_noos_read(Network* net, unsigned char* buff, int len, int timeout)
 	uint32_t	sent;
 	int32_t		rc;
 
+	if (!len)
+		return 0;
+
 	sent = 0;
-	while (timeout--) {
-		rc = socket_recv(net->sock, (void *)buff, (uint32_t)len);
-		if (IS_ERR_VALUE(rc))
-			return rc;
-		sent += rc;
-		if (sent >= len)
-			return sent;
+	do {
+ 		rc = socket_recv(net->sock, (void *)(buff + sent),
+				(uint32_t)(len - sent));
+ 		if (rc != -EAGAIN) { //If data available or error
+ 			if (IS_ERR_VALUE(rc))
+ 				return rc;
+				 
+ 			sent += rc;
+ 			if (sent >= len)
+ 				return sent;
+ 		}
+
 		mdelay(1);
-	}
+	} while (--timeout);
 
 	/* 0 bytes have been read */
 	return 0;
