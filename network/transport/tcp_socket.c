@@ -100,14 +100,7 @@ const struct socket_interface tcp_socket_interface = {
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/**
- * @brief Allocate resources and initializes the socket descriptor
- * @param desc - Address where to store the socket descriptor
- * @param param - Initializing data
- * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
- */
+/* Init socket */
 static int32_t tcp_socket_init(struct tcp_socket_desc **desc,
 			       struct network_interface *net,
 			       struct tcp_socket_init_param *param)
@@ -137,13 +130,7 @@ static int32_t tcp_socket_init(struct tcp_socket_desc **desc,
 	return SUCCESS;
 }
 
-/**
- * @brief Deallocate resources from the socket descriptor
- * @param desc - Socket descriptor
- * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
- */
+/* Socket remove */
 static int32_t tcp_socket_remove(struct tcp_socket_desc *desc)
 {
 	int32_t ret;
@@ -159,7 +146,7 @@ static int32_t tcp_socket_remove(struct tcp_socket_desc *desc)
 	return SUCCESS;
 }
 
-/** @brief See \ref network_interface.socket_connect */
+/* Socket connect */
 static int32_t tcp_socket_connect(struct tcp_socket_desc *desc,
 				  struct socket_address *addr)
 {
@@ -169,7 +156,7 @@ static int32_t tcp_socket_connect(struct tcp_socket_desc *desc,
 	return desc->net->socket_connect(desc->net->net, desc->id, addr);
 }
 
-/** @brief See \ref network_interface.socket_disconnect */
+/* Socket disconnect */
 static int32_t tcp_socket_disconnect(struct tcp_socket_desc *desc)
 {
 	if (!desc)
@@ -178,7 +165,7 @@ static int32_t tcp_socket_disconnect(struct tcp_socket_desc *desc)
 	return desc->net->socket_disconnect(desc->net->net, desc->id);
 }
 
-/** @brief See \ref network_interface.socket_send */
+/* TCP Socket send */
 static int32_t tcp_socket_send(struct tcp_socket_desc *desc, const void *data,
 			       uint32_t len)
 {
@@ -189,7 +176,7 @@ static int32_t tcp_socket_send(struct tcp_socket_desc *desc, const void *data,
 	return desc->net->socket_send(desc->net->net, desc->id, data, len);
 }
 
-/** @brief See \ref network_interface.socket_recv */
+/* TCP Socket recv */
 static int32_t tcp_socket_recv(struct tcp_socket_desc *desc, void *data,
 			       uint32_t len)
 {
