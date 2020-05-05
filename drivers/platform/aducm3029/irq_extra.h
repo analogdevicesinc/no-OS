@@ -53,7 +53,7 @@
 /******************************************************************************/
 
 /** Number of available interrupts */
-#define NB_INTERRUPTS		6u
+#define NB_INTERRUPTS		8u
 
 /** RTC interrupt defines */
 #define RTC_COUNT_INT		ADI_RTC_COUNT_INT
@@ -79,7 +79,11 @@ enum irq_id {
 	/** UART interrupt ID*/
 	ADUCM_UART_INT_ID,
 	/** RTC interrupt ID*/
-	ADUCM_RTC_INT_ID
+	ADUCM_RTC_INT_ID,
+	/** GPIO group A interrupt ID*/
+	ADUCM_GPIO_A_INT_ID,
+	/** GPIO group B interrupt ID*/
+	ADUCM_GPIO_B_INT_ID
 };
 
 /**
@@ -111,6 +115,28 @@ struct rtc_irq_config {
 };
 
 /**
+ * @enum gpio_irq_mode
+ * @brief Interrupt conditions for GPIO group interrupts
+ */
+enum gpio_irq_mode {
+	/** Falling edge */
+	GPIO_GROUP_NEGATIVE_EDGE,
+	/** Rising edge */
+	GPIO_GROUP_POSITIVE_EDGE
+};
+
+/**
+ * @struct gpio_irq_config
+ * @brief GPIO group interrupt configuration routine.
+ */
+struct gpio_irq_config {
+	/** GPIO driver handler */
+	struct gpio_desc	*gpio_handler;
+	/** Interrupt condition */
+	enum gpio_irq_mode	mode;
+};
+
+/**
  * @union irq_config
  * @brief Configuration for the callback
  */
@@ -121,6 +147,8 @@ union irq_config {
 	enum irq_mode		xint_conf;
 	/** RTC interrupt config */
 	struct rtc_irq_config	*rtc_conf;
+	/** GPIO interrupt config */
+	struct gpio_irq_config	*gpio_conf;
 };
 
 /**

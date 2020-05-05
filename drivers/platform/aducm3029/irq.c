@@ -49,6 +49,9 @@
 #include "uart_extra.h"
 #include "rtc.h"
 #include "rtc_extra.h"
+#include "gpio.h"
+#include <drivers/gpio/adi_gpio.h>
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -69,8 +72,9 @@ static const uint32_t id_map_event[NB_INTERRUPTS] = {
 	ADI_XINT_EVENT_INT1,	//ID ADUCM_EXTERNAL_INT1
 	ADI_XINT_EVENT_INT2,	//ID ADUCM_EXTERNAL_INT2
 	ADI_XINT_EVENT_INT3,	//ID ADUCM_EXTERNAL_INT3
-	UART_EVT_IRQn		//UART IRQ
-
+	UART_EVT_IRQn,		//UART IRQ
+	SYS_GPIO_INTA_IRQn,	//GPIO_INTA_IRQ_ENABLE
+	SYS_GPIO_INTB_IRQn	//GPIO_INTB_IRQ_ENABLE
 };
 
 /******************************************************************************/
@@ -164,6 +168,9 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 	struct uart_desc		*uart_desc;
 	struct rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
+	struct gpio_desc		*gpio_desc;
+	uint16_t			gpio_pin;
+	uint8_t				gpio_port;
 
 	if (!desc || !desc->extra || !initialized ||  irq_id >= NB_INTERRUPTS)
 		return FAILURE;
@@ -201,9 +208,36 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 			return FAILURE;
 		rtc_extra = rtc_desc->extra;
 		adi_rtc_RegisterCallback(rtc_extra->instance,
-					 callback_desc->callback, callback_desc->ctx);
+					 callback_desc->callback,
+					 callback_desc->ctx);
 		break;
-
+	case ADUCM_GPIO_A_INT_ID:
+	/** Intentional fall-through */
+	case ADUCM_GPIO_B_INT_ID:
+		;
+		int8_t id = (irq_id == ADUCM_GPIO_A_INT_ID) ?
+			    ADI_GPIO_INTA_IRQ :
+			    ADI_GPIO_INTB_IRQ;
+		aducm_desc->conf[irq_id].gpio_conf =
+			(struct gpio_irq_config *)callback_desc->config;
+		gpio_desc = aducm_desc->conf[irq_id].gpio_conf->gpio_handler;
+		if (!gpio_desc)
+			return FAILURE;
+		/** Either register a new callback and add the GPIO to the
+		 *  interrupt group, or just add the GPIO to the interrupt group
+		 *  if no new callback is mentioned. */
+		if (callback_desc->callback)
+			adi_gpio_RegisterCallback(id, callback_desc->callback,
+						  callback_desc->ctx);
+		gpio_port = (gpio_desc->number >> 4) & 0xF;
+		adi_gpio_GetGroupInterruptPins(gpio_port, id, &gpio_pin);
+		gpio_pin |= BIT((gpio_desc->number & 0xF));
+		adi_gpio_SetGroupInterruptPins(gpio_port, id, gpio_pin);
+		adi_gpio_GetGroupInterruptPolarity(gpio_port, &gpio_pin);
+		gpio_pin &= ~BIT((gpio_desc->number & 0xF));
+		gpio_pin |= BIT(aducm_desc->conf[irq_id].gpio_conf->mode);
+		adi_gpio_SetGroupInterruptPolarity(gpio_port, gpio_pin);
+		break;
 	default:
 		return FAILURE;
 	}
@@ -224,6 +258,8 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	struct uart_desc		*uart_desc;
 	struct rtc_desc			*rtc_desc;
 	struct aducm_rtc_desc		*rtc_extra;
+	struct gpio_desc		*gpio_desc;
+	uint8_t i;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
@@ -253,6 +289,22 @@ int32_t irq_unregister(struct irq_ctrl_desc *desc, uint32_t irq_id)
 			rtc_extra = rtc_desc->extra;
 			adi_rtc_RegisterCallback(rtc_extra->instance, NULL,
 						 NULL);
+		}
+		break;
+	case ADUCM_GPIO_A_INT_ID:
+	/** Intentional fall-through */
+	case ADUCM_GPIO_B_INT_ID:
+		;
+		int8_t id = (irq_id == ADUCM_GPIO_A_INT_ID) ?
+			    ADI_GPIO_INTA_IRQ :
+			    ADI_GPIO_INTB_IRQ;
+		if (aducm_desc->conf[irq_id].gpio_conf) {
+			gpio_desc = aducm_desc->conf[irq_id].gpio_conf->gpio_handler;
+			if (!gpio_desc)
+				return FAILURE;
+			adi_gpio_RegisterCallback(id, NULL, NULL);
+			for (i = ADI_GPIO_PORT0; i < ADI_GPIO_NUM_PORTS; i++)
+				adi_gpio_SetGroupInterruptPins(i, id, 0);
 		}
 		break;
 	default:
@@ -285,6 +337,10 @@ int32_t irq_global_enable(struct irq_ctrl_desc *desc)
 		irq_enable(desc, ADUCM_UART_INT_ID);
 	if (aducm_desc->enabled & (1u << ADUCM_RTC_INT_ID))
 		irq_enable(desc, ADUCM_RTC_INT_ID);
+	if (aducm_desc->enabled & (1u << ADUCM_GPIO_A_INT_ID))
+		irq_enable(desc, ADUCM_GPIO_A_INT_ID);
+	if (aducm_desc->enabled & (1u << ADUCM_GPIO_B_INT_ID))
+		irq_enable(desc, ADUCM_GPIO_B_INT_ID);
 
 	return SUCCESS;
 }
@@ -308,6 +364,10 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
 		irq_disable(desc, ADUCM_UART_INT_ID);
 	if (aducm_desc->enabled & (1u << ADUCM_RTC_INT_ID))
 		irq_disable(desc, ADUCM_RTC_INT_ID);
+	if (aducm_desc->enabled & (1u << ADUCM_GPIO_A_INT_ID))
+		irq_disable(desc, ADUCM_GPIO_A_INT_ID);
+	if (aducm_desc->enabled & (1u << ADUCM_GPIO_B_INT_ID))
+		irq_disable(desc, ADUCM_GPIO_B_INT_ID);
 
 	return SUCCESS;
 }
@@ -332,6 +392,7 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct aducm_uart_desc		*uart_desc;
 	struct aducm_rtc_desc		*rtc_desc;
+	int8_t 				id;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
@@ -354,6 +415,11 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 		adi_rtc_EnableInterrupts(rtc_desc->instance,
 					 aducm_desc->conf[irq_id].rtc_conf->active_interrupts,
 					 true);
+	} else if ((irq_id == ADUCM_GPIO_A_INT_ID) ||
+		   (irq_id == ADUCM_GPIO_B_INT_ID)) {
+		id = (irq_id == ADUCM_GPIO_A_INT_ID) ? SYS_GPIO_INTA_IRQn :
+		     SYS_GPIO_INTB_IRQn;
+		NVIC_EnableIRQ(id);
 	}
 	aducm_desc->enabled |= (1u << irq_id);
 
@@ -371,6 +437,7 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	struct aducm_irq_ctrl_desc	*aducm_desc;
 	struct aducm_uart_desc		*uart_desc;
 	struct aducm_rtc_desc		*rtc_desc;
+	int8_t				id;
 
 	if (!desc || !desc->extra || !initialized ||
 	    irq_id >= NB_INTERRUPTS)
@@ -389,6 +456,11 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 		adi_rtc_EnableInterrupts(rtc_desc->instance,
 					 aducm_desc->conf[irq_id].rtc_conf->active_interrupts,
 					 false);
+	} else if ((irq_id == ADUCM_GPIO_A_INT_ID) ||
+		   (irq_id == ADUCM_GPIO_B_INT_ID)) {
+		id = (irq_id == ADUCM_GPIO_A_INT_ID) ? SYS_GPIO_INTA_IRQn :
+		     SYS_GPIO_INTB_IRQn;
+		NVIC_DisableIRQ(id);
 	}
 	aducm_desc->enabled &= ~(1u << irq_id);
 
