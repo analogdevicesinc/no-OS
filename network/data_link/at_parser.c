@@ -53,6 +53,7 @@
 #include "uart.h"
 #include "irq.h"
 #include "util.h"
+#include "error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -988,6 +989,9 @@ end:
 		desc->errors = 0;
 		return -ret;
 	}
+
+	if (to_read == 0)
+		return -EAGAIN;
 
 	return to_read;
 }
