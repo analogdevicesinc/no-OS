@@ -67,7 +67,7 @@ extern struct axi_jesd204_tx *tx_jesd;
 
 int main(void)
 {
-	struct clk app_clk[NUM_APP_CLKS];
+	struct clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
 	struct clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
 		.type = GPIO_PL,
@@ -126,7 +126,7 @@ int main(void)
 	struct ad9081_init_param phy_param = {
 		.gpio_reset = &gpio_phy_resetb,
 		.spi_init = &phy_spi_init_param,
-		.dev_clk = &app_clk[DEV_REFCLK],
+		.dev_clk = &app_clk[0],
 		.jesd_tx_clk = &jesd_clk[1],
 		.jesd_rx_clk = &jesd_clk[0],
 		.multidevice_instance_count = 1,
@@ -186,8 +186,9 @@ int main(void)
 		DMA_CYCLIC
 	};
 	struct axi_dmac *tx_dmac;
-	struct ad9081_phy* phy;
+	struct ad9081_phy* phy[MULTIDEVICE_INSTANCE_COUNT];
 	int32_t status;
+	int32_t i;
 
 	printf("Hello\n");
 
@@ -200,20 +201,30 @@ int main(void)
 	if (status != SUCCESS)
 		printf("app_jesd_init() error: %" PRId32 "\n", status);
 
-	status = ad9081_init(&phy, &phy_param);
-	if (status != SUCCESS)
-		printf("ad9081_init() error: %" PRId32 "\n", status);
+	rx_adc_init.num_channels = 0;
+	tx_dac_init.num_channels = 0;
+
+	for (i = 0; i < MULTIDEVICE_INSTANCE_COUNT; i++) {
+		gpio_phy_resetb.number = PHY_RESET + i;
+		phy_spi_init_param.chip_select = PHY_CS + i;
+		phy_param.dev_clk = &app_clk[i];
+		jesd_rx_link.device_id = i;
+
+		status = ad9081_init(&phy[i], &phy_param);
+		if (status != SUCCESS)
+			printf("ad9081_init() error: %" PRId32 "\n", status);
+
+		rx_adc_init.num_channels += phy[i]->jesd_rx_link[0].jesd_param.jesd_m +
+					    phy[i]->jesd_rx_link[1].jesd_param.jesd_m;
+
+		tx_dac_init.num_channels += phy[i]->jesd_tx_link.jesd_param.jesd_m *
+					    (phy[i]->jesd_tx_link.jesd_param.jesd_duallink > 0 ? 2 : 1);
+	}
 
 	axi_jesd204_rx_watchdog(rx_jesd);
 
 	axi_jesd204_tx_status_read(tx_jesd);
 	axi_jesd204_rx_status_read(rx_jesd);
-
-	rx_adc_init.num_channels = phy->jesd_rx_link[0].jesd_param.jesd_m +
-				   phy->jesd_rx_link[1].jesd_param.jesd_m;;
-
-	tx_dac_init.num_channels = phy->jesd_tx_link.jesd_param.jesd_m *
-				   (phy->jesd_tx_link.jesd_param.jesd_duallink > 0 ? 2 : 1);;
 
 	axi_dac_init(&tx_dac, &tx_dac_init);
 	axi_adc_init(&rx_adc, &rx_adc_init);

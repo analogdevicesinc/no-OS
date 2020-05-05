@@ -48,18 +48,6 @@
 #include "app_clock.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-const char *app_clocks_names[] = {
-	"dev_refclk",
-	"dev_sysref",
-	"core_clk_tx",
-	"core_clk_rx",
-	"fpga_refclk",
-	"fpga_sysref"
-};
-
-/******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 struct hmc7044_dev* hmc7044_dev;
@@ -73,9 +61,8 @@ struct clk_hw hmc7044_hw;
  * @brief Application clock setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t app_clock_init(struct clk clk[NUM_APP_CLKS])
+int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 {
-	uint32_t i;
 	int32_t ret;
 
 	struct xil_spi_init_param xil_spi_param = {
@@ -90,7 +77,7 @@ int32_t app_clock_init(struct clk clk[NUM_APP_CLKS])
 		.extra = &xil_spi_param
 	};
 
-	struct hmc7044_chan_spec chan_spec[8] = {
+	struct hmc7044_chan_spec chan_spec[6] = {
 		{
 			.num = 2,		// DEV_REFCLK
 			.divider = 12,		// 250 MHz
@@ -128,7 +115,7 @@ int32_t app_clock_init(struct clk clk[NUM_APP_CLKS])
 		.in_buf_mode = {0x07, 0x07, 0x00, 0x00, 0x15},
 		.gpi_ctrl = {0x00, 0x00, 0x00, 0x00},
 		.gpo_ctrl = {0x37, 0x33, 0x00, 0x00},
-		.num_channels = NUM_APP_CLKS,
+		.num_channels = 6,
 		.pll1_ref_prio_ctrl = 0xe4,
 		.sync_pin_mode = 0x1,
 		.high_performance_mode_clock_dist_en = false,
@@ -146,11 +133,9 @@ int32_t app_clock_init(struct clk clk[NUM_APP_CLKS])
 	hmc7044_hw.dev_clk_round_rate = hmc7044_clk_round_rate;
 	hmc7044_hw.dev_clk_set_rate = hmc7044_clk_set_rate;
 
-	for (i = 0; i < NUM_APP_CLKS; i++) {
-		clk[i].hw = &hmc7044_hw;
-		clk[i].hw_ch_num = i;
-		clk[i].name = app_clocks_names[i];
-	}
+	dev_refclk[0].hw = &hmc7044_hw;
+	dev_refclk[0].hw_ch_num = 0;
+	dev_refclk[0].name = "dev_refclk";
 
 	return SUCCESS;
 }
