@@ -105,7 +105,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 
 	/* Initializes the SPI peripheral */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -117,14 +117,14 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 	ret = ad9250_write(dev,
 			   AD9250_REG_SPI_CFG,
 			   AD9250_SPI_CFG_SOFT_RST);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_set_bits_to_reg(dev,
 				     AD9250_REG_PDWN,
 				     dev->ad9250_st.pdata->extrn_pdwnmode * AD9250_PDWN_EXTERN,
 				     AD9250_PDWN_EXTERN);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -132,7 +132,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 			   AD9250_REG_CLOCK,
 			   dev->ad9250_st.pdata->en_clk_dcs * AD9250_CLOCK_DUTY_CYCLE |
 			   AD9250_CLOCK_SELECTION(dev->ad9250_st.pdata->clk_selection));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -140,39 +140,39 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 			   AD9250_REG_CLOCK_DIV,
 			   AD9250_CLOCK_DIV_RATIO(dev->ad9250_st.pdata->clk_div_ratio) |
 			   AD9250_CLOCK_DIV_PHASE(dev->ad9250_st.pdata->clk_div_phase));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
 	ret = ad9250_write(dev,
 			   AD9250_REG_VREF,
 			   AD9250_VREF_FS_ADJUST(dev->ad9250_st.pdata->adc_vref));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
 	ret = ad9250_write(dev,
 			   AD9250_REG_PLL_ENCODE,
 			   AD9250_PLL_ENCODE(dev->ad9250_st.pdata->pll_low_encode));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
 	/* Synchronously update registers. */
 	ret = ad9250_transfer(dev);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
 	/* Configure the JESD204B interface. */
 	ret = ad9250_jesd204b_setup(dev);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
 	/* Configure the Fast-detect circuit. */
 	ret = ad9250_fast_detect_setup(dev);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -227,7 +227,7 @@ int32_t ad9250_read(struct ad9250_dev *dev,
 		ret = spi_write_and_read(dev->spi_desc,
 					 buffer,
 					 3);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		reg_address--;
@@ -273,13 +273,13 @@ int32_t ad9250_write(struct ad9250_dev *dev,
 		ret = spi_write_and_read(dev->spi_desc,
 					 tx_buffer,
 					 3);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		reg_address--;
 	}
 
-	return (ret - 1);
+	return ret;
 }
 
 /***************************************************************************//**
@@ -300,13 +300,13 @@ int32_t ad9250_transfer(struct ad9250_dev *dev)
 	ret = ad9250_write(dev,
 			   AD9250_REG_DEVICE_UPDATE,
 			   AD9250_DEVICE_UPDATE_SW);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	do {
 		ret = ad9250_read(dev,
 				  AD9250_REG_DEVICE_UPDATE);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		sw_bit = ret & AD9250_REG_DEVICE_UPDATE;
@@ -332,13 +332,13 @@ int32_t ad9250_soft_reset(struct ad9250_dev *dev)
 	ret = ad9250_write(dev,
 			   AD9250_REG_SPI_CFG,
 			   AD9250_SPI_CFG_SOFT_RST);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	do {
 		ret = ad9250_read(dev,
 				  AD9250_REG_SPI_CFG);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		timeout--;
@@ -374,7 +374,7 @@ int32_t ad9250_set_bits_to_reg(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  register_address);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		reg_value = ret;
@@ -384,7 +384,7 @@ int32_t ad9250_set_bits_to_reg(struct ad9250_dev *dev,
 	ret = ad9250_write(dev,
 			   register_address,
 			   reg_value);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -428,7 +428,7 @@ int32_t ad9250_chip_pwr_mode(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_PDWN);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_PDWN_CHIP(0x3)) >> 0;
@@ -460,7 +460,7 @@ int32_t ad9250_select_channel_for_config(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_CH_INDEX);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return ret & (AD9250_CH_INDEX_ADC_A | AD9250_CH_INDEX_ADC_B);
@@ -501,7 +501,7 @@ int32_t ad9250_test_mode(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_TEST_OUTPUT_TEST(0xF)) >> 0;
@@ -561,7 +561,7 @@ int32_t ad9250_output_disable(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_OUT_MODE_DISABLE) != 0;
@@ -596,7 +596,7 @@ int32_t ad9250_output_invert(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_OUT_MODE_INVERT_DATA) != 0;
@@ -631,7 +631,7 @@ int32_t ad9250_output_format(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_OUT_MODE);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_OUT_MODE_DATA_FORMAT(1)) >> 0;
@@ -663,7 +663,7 @@ int32_t ad9250_reset_pn9(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_TEST_RST_PN_SHOR) != 0;
@@ -695,7 +695,7 @@ int32_t ad9250_reset_pn23(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_TEST);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_TEST_RST_PN_LONG) != 0;
@@ -749,7 +749,7 @@ int32_t ad9250_bist_enable(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_BIST);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_BIST_ENABLE) >> 0;
@@ -779,7 +779,7 @@ int32_t ad9250_bist_reset(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_BIST);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_BIST_RESET) >> 2;
@@ -817,7 +817,7 @@ int32_t ad9250_jesd204b_set_frames(struct ad9250_dev *dev,
 		ret = ad9250_write(dev,
 				   AD9250_REG_204B_PARAM_K,
 				   k_reg_val - 1);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return k_reg_val;
@@ -846,14 +846,14 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_CTRL1,
 				     AD9250_204B_CTRL1_POWER_DOWN,
 				     AD9250_204B_CTRL1_POWER_DOWN);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Select quick configuration option */
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_QUICK_CFG,
 			   AD9250_204B_QUICK_CFG(dev->ad9250_st.p_jesd204b->quick_cfg_option));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Configure detailed options */
@@ -861,7 +861,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 	ret = ad9250_write(dev,
 			   AD9250_REG_CML,
 			   AD9250_CML_DIFF_OUT_LEVEL(dev->ad9250_st.p_jesd204b->cml_level));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Select the behavioral of the 204B core when in standby. */
@@ -869,7 +869,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_PDWN,
 				     dev->ad9250_st.p_jesd204b->jtx_in_standby * AD9250_PDWN_JTX,
 				     AD9250_PDWN_JTX);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -878,7 +878,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_PARAM_NP,
 				     AD9250_204B_PARAM_NP_JESD_SUBCLASS(dev->ad9250_st.p_jesd204b->subclass),
 				     AD9250_204B_PARAM_NP_JESD_SUBCLASS(-1));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Configure the tail bits and control bits. */
@@ -886,19 +886,19 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_PARAM_CS_N,
 				     AD9250_204B_PARAM_CS_N_NR_CTRL_BITS(dev->ad9250_st.p_jesd204b->ctrl_bits_no),
 				     AD9250_204B_PARAM_CS_N_NR_CTRL_BITS(-1));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_set_bits_to_reg(dev,
 				     AD9250_REG_OUT_MODE,
 				     AD9250_OUT_MODE_JTX_BIT_ASSIGN(dev->ad9250_st.p_jesd204b->ctrl_bits_assign),
 				     AD9250_OUT_MODE_JTX_BIT_ASSIGN(-1));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* A transfer operation is needed because AD9250_REG_OUT_MODE is a shadowed register. */
 	ret = ad9250_transfer(dev);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	if(dev->ad9250_st.p_jesd204b->ctrl_bits_no == 0) {
@@ -906,7 +906,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 					     AD9250_REG_204B_CTRL1,
 					     AD9250_204B_CTRL1_TAIL_BITS * dev->ad9250_st.p_jesd204b->tail_bits_mode,
 					     AD9250_204B_CTRL1_TAIL_BITS);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 	}
@@ -914,31 +914,31 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_DID_CFG,
 			   dev->ad9250_st.p_jesd204b->did);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_BID_CFG,
 			   dev->ad9250_st.p_jesd204b->bid);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_LID_CFG1,
 			   dev->ad9250_st.p_jesd204b->lid0);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_LID_CFG2,
 			   dev->ad9250_st.p_jesd204b->lid1);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Set number of frames per multiframe, K */
 	ret = ad9250_jesd204b_set_frames(dev,
 					 dev->ad9250_st.p_jesd204b->k);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Scramble, SCR. */
@@ -946,7 +946,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_PARAM_SCR_L,
 				     AD9250_204B_PARAM_SCR_L_SCRAMBLING * dev->ad9250_st.p_jesd204b->scrambling,
 				     AD9250_204B_PARAM_SCR_L_SCRAMBLING);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Select lane synchronization options */
@@ -954,14 +954,14 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_CTRL1,
 				     AD9250_204B_CTRL1_ILAS_MODE(dev->ad9250_st.p_jesd204b->ilas_mode),
 				     AD9250_204B_CTRL1_ILAS_MODE(-1));
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_set_bits_to_reg(dev,
 				     AD9250_REG_204B_CTRL1,
 				     dev->ad9250_st.p_jesd204b->en_ilas_test * AD9250_204B_CTRL1_TEST_SAMPLE_EN,
 				     AD9250_204B_CTRL1_TEST_SAMPLE_EN);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -969,7 +969,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 	/* Set polarity of serial output data */
 	ret = ad9250_jesd204b_invert_logic(dev,
 					   dev->ad9250_st.p_jesd204b->invert_logic_bits);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Options for interpreting single on SYSREF+- and SYNCINB+- */
@@ -981,12 +981,12 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 			   dev->ad9250_st.p_jesd204b->align_sys_ref * AD9250_SYS_CTRL_REALIGN_ON_SYSREF |
 			   dev->ad9250_st.p_jesd204b->align_sync_in_b *
 			   AD9250_SYS_CTRL_REALIGN_ON_SYNCINB);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* A transfer operation is needed, because AD9250_REG_SYS_CTRL is a shadowed register. */
 	ret = ad9250_transfer(dev);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Option to remap converter and lane assignments */
@@ -994,14 +994,14 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 			   AD9250_REG_204B_LANE_ASSGN1,
 			   AD9250_204B_LANE_ASSGN1(dev->ad9250_st.p_jesd204b->lane0_assign) |
 			   0x02);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_204B_LANE_ASSGN2,
 			   AD9250_204B_LANE_ASSGN2(dev->ad9250_st.p_jesd204b->lane1_assign) |
 			   0x30);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	/* Re-enable lane(s) */
@@ -1009,7 +1009,7 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 				     AD9250_REG_204B_CTRL1,
 				     0,
 				     AD9250_204B_CTRL1_POWER_DOWN);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -1040,7 +1040,7 @@ int32_t ad9250_jesd204b_pwr_mode(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_PDWN);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_PDWN_JESD204B(0x3)) >> 2;
@@ -1074,7 +1074,7 @@ int32_t ad9250_jesd204b_select_test_injection_point(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_204B_CTRL3);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret &  AD9250_204B_CTRL3_TEST_DATA_INJ_PT(-1)) >> 4;
@@ -1115,7 +1115,7 @@ int32_t ad9250_jesd204b_test_mode(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_204B_CTRL3);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret &  AD9250_204B_CTRL3_JESD_TEST_MODE(-1)) >> 0;
@@ -1147,7 +1147,7 @@ int32_t ad9250_jesd204b_invert_logic(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_204B_CTRL2);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_204B_CTRL2_INVERT_JESD_BITS) != 0;
@@ -1175,25 +1175,25 @@ int32_t ad9250_fast_detect_setup(struct ad9250_dev *dev)
 			   AD9250_FAST_DETECT_FORCE_FDA_FDB_VAL * dev->ad9250_st.p_fd->pin_force_value |
 			   AD9250_FAST_DETECT_FORCE_FDA_FDB_PIN * dev->ad9250_st.p_fd->force_pins |
 			   AD9250_FAST_DETECT_PIN_FCT * dev->ad9250_st.p_fd->pin_function );
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_FD_UPPER_THD,
 			   dev->ad9250_st.p_fd->fd_upper_tresh);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_FD_LOWER_THD,
 			   dev->ad9250_st.p_fd->fd_lower_tresh);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 	ret = ad9250_write(dev,
 			   AD9250_REG_FD_DWELL_TIME,
 			   dev->ad9250_st.p_fd->df_dwell_time);
-	if(ret != SUCCESS) {
+	if(ret == FAILURE) {
 		return ret;
 	}
 
@@ -1223,7 +1223,7 @@ int32_t ad9250_dcc_enable(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_DCC_CTRL_DCC_EN) >> 0;
@@ -1255,9 +1255,9 @@ int32_t ad9250_dcc_bandwidth(struct ad9250_dev *dev,
 					     AD9250_DCC_CTRL_DCC_BW(bw),
 					     AD9250_DCC_CTRL_DCC_BW(-1));
 	} else {
-		ad9250_read(dev,
-			    AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
+		ret = ad9250_read(dev,
+				  AD9250_REG_DCC_CTRL);
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_DCC_CTRL_DCC_BW(-1)) >> 2;
@@ -1289,7 +1289,7 @@ int32_t ad9250_dcc_freeze(struct ad9250_dev *dev,
 	} else {
 		ret = ad9250_read(dev,
 				  AD9250_REG_DCC_CTRL);
-		if(ret != SUCCESS) {
+		if(ret == FAILURE) {
 			return ret;
 		}
 		return (ret & AD9250_DCC_CTRL_FREEZE_DCC) >> 6;
