@@ -58,16 +58,15 @@ int32_t ad9517_spi_read(struct ad9517_dev *dev,
 			uint16_t reg_addr,
 			uint8_t *reg_data)
 {
-	uint8_t buf[4];
+	uint8_t buf[3];
 	int32_t ret;
 
-	buf[0] = 0x84;
-	buf[1] = 0x80 | (reg_addr >> 8);
-	buf[2] = reg_addr & 0xFF;
-	buf[3] = 0x00;
+	buf[0] = 0x80 | (reg_addr >> 8);
+	buf[1] = reg_addr & 0xFF;
+	buf[2] = 0x00;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 4);
-	*reg_data = buf[3];
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
+	*reg_data = buf[2];
 
 	return ret;
 }
@@ -79,15 +78,14 @@ int32_t ad9517_spi_write(struct ad9517_dev *dev,
 			 uint16_t reg_addr,
 			 uint8_t reg_data)
 {
-	uint8_t buf[4];
+	uint8_t buf[3];
 	int32_t ret;
 
-	buf[0] = 0x84;
-	buf[1] = reg_addr >> 8;
-	buf[2] = reg_addr & 0xFF;
-	buf[3] = reg_data;
+	buf[0] = reg_addr >> 8;
+	buf[1] = reg_addr & 0xFF;
+	buf[2] = reg_data;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 4);
+	ret = spi_write_and_read(dev->spi_desc, buf, 3);
 
 	return ret;
 }
