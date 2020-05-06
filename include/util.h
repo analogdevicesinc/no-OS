@@ -75,7 +75,7 @@
 	(type)clamp((type)(val), (type)(min_val), (type)(max_val))
 
 #define abs(x) \
-	((x) < 0 ? (-x) : (x))
+	((x) < 0 ? (-(x)) : (x))
 
 #define swap(x, y) \
 	{typeof(x) _tmp_ = (x); (x) = (y); (y) = _tmp_;}
