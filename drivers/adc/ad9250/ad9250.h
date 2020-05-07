@@ -513,6 +513,8 @@ struct ad9250_dev {
 struct ad9250_init_param {
 	/* SPI */
 	spi_init_param	spi_init;
+	/* Device Settings */
+	struct ad9250_state ad9250_st_init;
 };
 
 /******************************************************************************/
