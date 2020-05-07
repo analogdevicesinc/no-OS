@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad9250.h"
-#include "ad9250_cfg.h"
 #include "error.h"
 
 /*****************************************************************************/
@@ -113,7 +112,7 @@ int32_t ad9250_setup(struct ad9250_dev **device,
 	ad9250_soft_reset(dev);
 
 	/* Configure the AD9250 device. */
-	dev->ad9250_st.pdata = &ad9250_pdata_lpc;
+	dev->ad9250_st = init_param.ad9250_st_init;
 	ret = ad9250_write(dev,
 			   AD9250_REG_SPI_CFG,
 			   AD9250_SPI_CFG_SOFT_RST);
@@ -839,8 +838,6 @@ int32_t ad9250_jesd204b_setup(struct ad9250_dev *dev)
 {
 	int32_t ret = 0;
 
-	dev->ad9250_st.p_jesd204b = &ad9250_jesd204b_interface;
-
 	/* Disable lanes before changing configuration */
 	ret = ad9250_set_bits_to_reg(dev,
 				     AD9250_REG_204B_CTRL1,
@@ -1166,8 +1163,6 @@ int32_t ad9250_jesd204b_invert_logic(struct ad9250_dev *dev,
 int32_t ad9250_fast_detect_setup(struct ad9250_dev *dev)
 {
 	int32_t ret = 0;
-
-	dev->ad9250_st.p_fd = &ad9250_fast_detect;
 
 	ret = ad9250_write(dev,
 			   AD9250_REG_FAST_DETECT,
