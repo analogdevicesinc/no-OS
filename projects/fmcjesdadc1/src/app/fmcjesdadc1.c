@@ -180,6 +180,79 @@ int main(void)
 	};
 	struct axi_dmac *ad9250_1_dmac;
 
+	struct ad9250_platform_data ad9250_pdata_lpc = {
+		.extrn_pdwnmode = 0,
+		.en_clk_dcs = 1,
+		.clk_selection = 0,
+		.clk_div_ratio = 0,
+		.clk_div_phase = 0,
+		.adc_vref = 15,
+		.pll_low_encode = 0,
+		.name = "ad9250-lpc"
+	};
+
+	struct ad9250_jesd204b_cfg ad9250_0_jesd204b_interface = {
+		.jtx_in_standby = 0,
+		.cml_level = 3,
+		.quick_cfg_option = 0x22,
+		.subclass = 1,
+		.ctrl_bits_no = 0,
+		.ctrl_bits_assign = 0,
+		.tail_bits_mode = 0,
+		.did = 0xF0,
+		.bid = 0x00,
+		.lid0 = 0x00,
+		.lid1 = 0x01,
+		.k = 32,
+		.scrambling = 1,
+		.ilas_mode = 1,
+		.invert_logic_bits = 0,
+		.en_ilas_test = 0,
+		.en_sys_ref = 1,
+		.en_sync_in_b = 1,
+		.sys_ref_mode = 0,
+		.align_sync_in_b = 1,
+		.align_sys_ref = 0,
+		.lane0_assign = 0,
+		.lane1_assign = 1,
+	};
+
+	struct ad9250_jesd204b_cfg ad9250_1_jesd204b_interface = {
+		.jtx_in_standby = 0,
+		.cml_level = 3,
+		.quick_cfg_option = 0x22,
+		.subclass = 1,
+		.ctrl_bits_no = 0,
+		.ctrl_bits_assign = 0,
+		.tail_bits_mode = 0,
+		.did  = 0xF0,
+		.bid = 0x00,
+		.lid0 = 0x02,
+		.lid1 = 0x03,
+		.k = 32,
+		.scrambling = 1,
+		.ilas_mode = 1,
+		.invert_logic_bits = 0,
+		.en_ilas_test = 0,
+		.en_sys_ref = 1,
+		.en_sync_in_b = 1,
+		.sys_ref_mode = 0,
+		.align_sync_in_b = 1,
+		.align_sys_ref = 0,
+		.lane0_assign = 0,
+		.lane1_assign = 1,
+	};
+
+	struct ad9250_fast_detect_cfg ad9250_fast_detect = {
+		.en_fd = 0,
+		.pin_function = 0,
+		.force_pins = 0,
+		.pin_force_value = 0,
+		.fd_upper_tresh = 0,
+		.fd_lower_tresh = 0,
+		.df_dwell_time = 0,
+	};
+
 	struct ad9250_dev		*ad9250_0_device;
 	struct ad9250_dev		*ad9250_1_device;
 	struct ad9517_dev		*ad9517_device;
@@ -187,17 +260,18 @@ int main(void)
 	struct ad9250_init_param	ad9250_1_param;
 	struct ad9517_init_param	ad9517_param;
 
+	ad9250_0_param.ad9250_st_init.pdata = &ad9250_pdata_lpc;
+	ad9250_0_param.ad9250_st_init.p_jesd204b = &ad9250_0_jesd204b_interface;
+	ad9250_0_param.ad9250_st_init.p_fd = &ad9250_fast_detect;
+
+	ad9250_1_param.ad9250_st_init.pdata = &ad9250_pdata_lpc;
+	ad9250_1_param.ad9250_st_init.p_jesd204b = &ad9250_1_jesd204b_interface;
+	ad9250_1_param.ad9250_st_init.p_fd = &ad9250_fast_detect;
+
 	// SPI configuration
 	ad9517_param.spi_init = ad9517_spi_param;
 	ad9250_0_param.spi_init = ad9250_0_spi_param;
 	ad9250_1_param.spi_init = ad9250_1_spi_param;
-
-	ad9250_0_param.id_no = 0x0;
-	ad9250_1_param.id_no = 0x1;
-
-	// ADC and receive path configuration
-	ad9250_0_param.lane_rate_kbps = 4915200;
-	ad9250_1_param.lane_rate_kbps = 4915200;
 
 	// setup GPIOs
 	gpio_get(&gpio_sysref,  &gpio_sysref_param);
@@ -256,19 +330,27 @@ int main(void)
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 
+	//ADC output_format
+	ad9250_output_format(ad9250_0_device, 0);
+	ad9250_output_format(ad9250_1_device, 0);
+
 	// PRBS test
-	ad9250_test(ad9250_0_device, AD9250_TEST_PNLONG);
+	ad9250_test_mode(ad9250_0_device, 5);
+	ad9250_transfer(ad9250_0_device);
 	if(axi_adc_pn_mon(ad9250_0_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
 	};
-	ad9250_test(ad9250_1_device, AD9250_TEST_PNLONG);
+	ad9250_test_mode(ad9250_1_device, 5);
+	ad9250_transfer(ad9250_1_device);
 	if(axi_adc_pn_mon(ad9250_1_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
 	};
 
 	// set up ramp output
-	ad9250_test(ad9250_0_device, AD9250_TEST_RAMP);
-	ad9250_test(ad9250_1_device, AD9250_TEST_RAMP);
+	ad9250_test_mode(ad9250_0_device, 15);
+	ad9250_transfer(ad9250_0_device);
+	ad9250_test_mode(ad9250_1_device, 15);
+	ad9250_transfer(ad9250_1_device);
 
 	// test the captured data
 	axi_dmac_init(&ad9250_0_dmac, &ad9250_0_dmac_param);
@@ -278,8 +360,10 @@ int main(void)
 	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
 
 	// set up normal output
-	ad9250_test(ad9250_0_device, AD9250_TEST_OFF);
-	ad9250_test(ad9250_1_device, AD9250_TEST_OFF);
+	ad9250_test_mode(ad9250_0_device, 0);
+	ad9250_transfer(ad9250_0_device);
+	ad9250_test_mode(ad9250_1_device, 0);
+	ad9250_transfer(ad9250_1_device);
 
 	// capture data with DMA
 	axi_dmac_transfer(ad9250_0_dmac, ADC_0_DDR_BASEADDR, 16384 * 2);
