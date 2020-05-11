@@ -61,6 +61,13 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	int8_t		    reg_value = 0;
 	struct ad9517_dev   *dev;
 
+	static uint16_t lvepcl_out_ch[4] = {
+		AD9517_REG_LVPECL_OUT0,
+		AD9517_REG_LVPECL_OUT1,
+		AD9517_REG_LVPECL_OUT2,
+		AD9517_REG_LVPECL_OUT3
+	};
+
 	dev = (struct ad9517_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
@@ -115,7 +122,8 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	/* Update the device with user settings for the LVPECL output
 	 * channels. */
 	for(index = 0; index < 4; index++) {
-		reg_address = AD9517_REG_LVPECL_OUT0 + index;
+		reg_address = lvepcl_out_ch[index];
+
 		reg_value = dev->
 			    ad9517_st.lvpecl_channels[index].out_invert_en *
 			    AD9517_OUT_LVPECL_INVERT |
