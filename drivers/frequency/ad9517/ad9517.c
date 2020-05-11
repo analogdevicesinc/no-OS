@@ -42,7 +42,6 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include "ad9517.h"
-#include "ad9517_cfg.h"
 
 /***************************************************************************//**
  * @brief Initializes the AD9517.
@@ -67,10 +66,6 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 		return -1;
 
 	dev->ad9517_st = init_param.ad9517_st;
-
-	dev->ad9517_st.pdata = &ad9517_pdata_lpc;
-	dev->ad9517_st.lvpecl_channels = &ad9517_lvpecl_channels[0];
-	dev->ad9517_st.lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
 
 	/* Initializes the SPI peripheral */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
