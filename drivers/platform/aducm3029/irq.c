@@ -330,7 +330,6 @@ int32_t irq_global_disable(struct irq_ctrl_desc *desc)
 int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
-	struct aducm_uart_desc		*uart_desc;
 	struct aducm_rtc_desc		*rtc_desc;
 
 	if (!desc || !desc->extra || !initialized ||
@@ -344,10 +343,8 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	if (irq_id < NB_EXT_INTERRUPTS) {
 		adi_xint_EnableIRQ(id_map_event[irq_id],
 				   aducm_desc->conf[irq_id].xint_conf);
-	} else if ((irq_id == ADUCM_UART_INT_ID) &&
-		   aducm_desc->conf[irq_id].uart_conf) {
-		uart_desc = aducm_desc->conf[irq_id].uart_conf->extra;
-		uart_desc->callback_enabled = true;
+	} else if (irq_id == ADUCM_UART_INT_ID) {
+		NVIC_EnableIRQ(UART_EVT_IRQn);
 	} else if ((irq_id == ADUCM_RTC_INT_ID) &&
 		   aducm_desc->conf[irq_id].rtc_conf) {
 		rtc_desc = aducm_desc->conf[irq_id].rtc_conf->rtc_handler->extra;
@@ -369,7 +366,6 @@ int32_t irq_enable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 {
 	struct aducm_irq_ctrl_desc	*aducm_desc;
-	struct aducm_uart_desc		*uart_desc;
 	struct aducm_rtc_desc		*rtc_desc;
 
 	if (!desc || !desc->extra || !initialized ||
@@ -379,10 +375,8 @@ int32_t irq_disable(struct irq_ctrl_desc *desc, uint32_t irq_id)
 	aducm_desc = desc->extra;
 	if (irq_id < NB_EXT_INTERRUPTS) {
 		adi_xint_DisableIRQ(id_map_event[irq_id]);
-	} else if ((irq_id == ADUCM_UART_INT_ID) &&
-		   aducm_desc->conf[irq_id].uart_conf) {
-		uart_desc = aducm_desc->conf[irq_id].uart_conf->extra;
-		uart_desc->callback_enabled = false;
+	} else if (irq_id == ADUCM_UART_INT_ID) {
+		NVIC_DisableIRQ(UART_EVT_IRQn);
 	} else if ((irq_id == ADUCM_RTC_INT_ID) &&
 		   aducm_desc->conf[irq_id].rtc_conf) {
 		rtc_desc = aducm_desc->conf[irq_id].rtc_conf->rtc_handler->extra;
