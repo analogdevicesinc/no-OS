@@ -44,7 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <drivers/uart/adi_uart.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include "error.h"
 
@@ -176,47 +176,6 @@ struct aducm_uart_init_param {
 	enum UART_STOPBITS	stop_bits;
 	/** Set the word length */
 	enum UART_WORDLEN	word_length;
-};
-
-/**
- * @struct op_desc
- * @brief It stores the state of a operation
- */
-struct op_desc {
-	/** Is set when an write nonblocking operation is executing */
-	bool		is_nonblocking;
-	/** Current buffer*/
-	uint8_t		*buff;
-	/** Number of bytes pending to process */
-	uint32_t	pending;
-};
-
-/**
- * @struct aducm_uart_desc
- * @brief Stores specific parameter needed by the UART driver for internal
- * operations
- */
-struct aducm_uart_desc {
-	/** Handle needed by low level functions */
-	ADI_UART_HANDLE	uart_handler;
-	/** Stores the error occurred */
-	enum UART_ERROR	errors;
-	/** Set if callback is enabled */
-	bool		callback_enabled;
-	/**
-	 * Buffer needed by the ADI UART driver to operate.
-	 * This buffer allocated and aligned at runtime to 32 bits
-	 */
-	uint8_t		*adi_uart_buffer;
-	/**
-	 * Stores the offset used to align adi_uart_buffer.
-	 * Needed to deallocate \ref adi_uart_buffer
-	 */
-	uint32_t	adi_uart_buffer_offset;
-	/** Status of a write operation */
-	struct op_desc	write_desc;
-	/** Status of a read operation */
-	struct op_desc	read_desc;
 };
 
 #endif /* UART_H_ */
