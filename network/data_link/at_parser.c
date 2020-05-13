@@ -504,7 +504,7 @@ static int32_t wait_for_response(struct at_desc *desc)
 			}
 		}
 		mdelay(1);
-	} while (timeout--);
+	} while (--timeout);
 
 end:
 	if (timeout) //If a response arrived clean the result
@@ -939,7 +939,7 @@ int32_t at_read_buffer(struct at_desc *desc, uint32_t conn_id, uint8_t *buff,
 
 	cb = &desc->conn[conn_id].cbuff;
 
-	if (is_blocking)
+	if (!is_blocking)
 		to_read = min(to_read, cb->count);
 	if (to_read == 0)
 		goto end;
