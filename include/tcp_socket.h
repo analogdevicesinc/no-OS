@@ -59,11 +59,34 @@
 struct tcp_socket_desc;
 
 /**
+ * @struct stcp_socket_init_param
+ * @brief Parameter to initialize a TCP Socket
+ */
+struct secure_init_param {
+	/** Certificate authority certificate */
+	char			*ca_cert;
+	/** Server name */
+	char			*hostname;
+	/** Client certificate */
+	char			*client_cert;
+	/** Client key */
+	char			*client_key;
+	/** Init param for true random number generator */
+	struct trng_init_param	*trng_init_param;
+};
+
+/**
  * @struct tcp_socket_init_param
  * @brief Parameter to initialize a TCP Socket
  */
 struct tcp_socket_init_param {
+	/** Reference to the network interface */
 	struct network_interface	*net;
+	/**
+	 * Reference to \ref secure_init_param if a TCP socket over TLS should
+	 * be used. NULL if just raw connection is needed.
+	 */
+	struct secure_init_param	*secure_init_param;
 };
 
 /******************************************************************************/
