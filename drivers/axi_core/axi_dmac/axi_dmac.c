@@ -80,6 +80,9 @@ int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 	uint32_t transfer_id;
 	uint32_t reg_val;
 
+	if (size == 0)
+		return SUCCESS; /* nothing to do */
+
 	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, 0x0);
 	axi_dmac_write(dmac, AXI_DMAC_REG_CTRL, AXI_DMAC_CTRL_ENABLE);
 
