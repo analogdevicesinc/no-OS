@@ -153,10 +153,25 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 			return ret;
 	}
 	/* Check if VCO is selected as input. */
-	if(dev->ad9517_st.pdata->vco_clk_sel)
+	if(dev->ad9517_st.pdata->vco_clk_sel) {
 		/* Sets the VCO frequency. */
 		ad9517_vco_frequency(dev,
 				     dev->ad9517_st.pdata->int_vco_freq);
+
+		/* Activate PLL */
+		reg_value = AD9517_PLL_POWER_DOWN(0x0) |
+			    AD9517_CP_MODE (0x3) |
+			    AD9517_CP_CURRENT (0x7) |
+			    0 * AD9517_PFD_POLARITY;
+		ret = ad9517_write(dev, AD9517_REG_PFD_CHARGE_PUMP, reg_value);
+		if(ret < 0)
+			return ret;
+
+		/* Start VCO Calibration */
+		ret = ad9517_write(dev, AD9517_REG_PLL_CTRL_3, AD9517_VCO_CAL_NOW);
+		if(ret < 0)
+			return ret;
+	}
 
 	*device = dev;
 
