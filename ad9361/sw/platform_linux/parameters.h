@@ -72,10 +72,10 @@
 #define TX_DMA_UIO_ADDR			"/sys/class/uio/uio2/maps/map0/addr"
 #define TX_BUFF_MEM_SIZE		"/sys/class/uio/uio2/maps/map1/size"
 #define TX_BUFF_MEM_ADDR		"/sys/class/uio/uio2/maps/map1/addr"
-#define SPIDEV_DEV			"/dev/spidev32766.0"
+#define SPIDEV_DEV			"/dev/spidev0.0"
 #define AD9361_B_UIO_DEV		"/dev/uio3"
 #define AD9361_B_UIO_SIZE		"/sys/class/uio/uio3/maps/map0/size"
 #define AD9361_B_UIO_ADDR		"/sys/class/uio/uio3/maps/map0/addr"
-#define SPIDEV_B_DEV			"/dev/spidev32766.1"
+#define SPIDEV_B_DEV			"/dev/spidev0.1"
 
 #endif // __PARAMETERS_H__
