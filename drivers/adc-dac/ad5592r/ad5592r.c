@@ -91,23 +91,29 @@ int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 }
 
 /**
- * Read ADC channel.
+ * Read ADC.
  *
  * @param dev - The device structure.
- * @param chan - The channel number.
- * @param value - ADC value
+ * @param chans - The ADC channels to be readback
+ * @param values - ADC value array
  * @return 0 in case of success, negative error code otherwise
  */
-int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
-			 uint16_t *value)
+int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint16_t chans,
+			 uint16_t *values)
 {
 	int32_t ret;
+	uint8_t i, num_chans = 0;
 
 	if (!dev)
 		return FAILURE;
 
-	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) |
-			      BIT(chan));
+	for (i = 0; i <= dev->num_channels; i++) {
+		if (chans & AD5592R_REG_ADC_SEQ_INCL(i)) {
+			num_chans++;
+		}
+	}
+
+	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) | chans);
 
 	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
 				 sizeof(dev->spi_msg));
@@ -122,12 +128,12 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 	if (ret < 0)
 		return ret;
 
-	ret = ad5592r_spi_wnop_r16(dev, &dev->spi_msg);
-	if (ret < 0)
-		return ret;
-
-	*value = dev->spi_msg;
-
+	for (i = 0; i < num_chans; i++) {
+		ret = ad5592r_spi_wnop_r16(dev, &dev->spi_msg);
+		if (ret < 0)
+			return ret;
+		values[i] = dev->spi_msg;
+	}
 	return 0;
 }
 
