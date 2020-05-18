@@ -499,11 +499,12 @@ int32_t uart_remove(struct uart_desc *desc)
 
 	if (desc == NULL || desc->extra == NULL)
 		return FAILURE;
-	aducm_desc = desc->extra;
 
+	initialized[desc->device_id] = 0;
+
+	aducm_desc = desc->extra;
 	adi_uart_Close(aducm_desc->uart_handler);
 	free_desc_mem(desc);
-	initialized[desc->device_id] = 0;
 
 	return SUCCESS;
 }
