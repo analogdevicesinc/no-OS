@@ -135,6 +135,7 @@ int32_t ad5593r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 int32_t ad5593r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 			  uint16_t value)
 {
+	int32_t ret;
 	uint8_t data[3];
 
 	if (!dev)
@@ -144,7 +145,13 @@ int32_t ad5593r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 	data[1] = value >> 8;
 	data[2] = value;
 
-	return i2c_write(dev->i2c, data,sizeof(data), STOP_BIT);
+	ret = i2c_write(dev->i2c, data,sizeof(data), STOP_BIT);
+
+	if (reg == AD5592R_REG_RESET && ret < 0) {
+		return SUCCESS;
+	}
+
+	return ret;
 }
 
 /**
