@@ -331,25 +331,25 @@ int main(void)
 	}
 
 	//ADC output_format
-	ad9250_output_format(ad9250_0_device, 0);
-	ad9250_output_format(ad9250_1_device, 0);
+	ad9250_output_format(ad9250_0_device, AD9250_OUT_OFFSET_BINARY);
+	ad9250_output_format(ad9250_1_device, AD9250_OUT_OFFSET_BINARY);
 
 	// PRBS test
-	ad9250_test_mode(ad9250_0_device, 5);
+	ad9250_test_mode(ad9250_0_device, AD9250_TEST_PNLONG);
 	ad9250_transfer(ad9250_0_device);
 	if(axi_adc_pn_mon(ad9250_0_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s ad9250_0 - PN23 sequence mismatch!\n", __func__);
 	};
-	ad9250_test_mode(ad9250_1_device, 5);
+	ad9250_test_mode(ad9250_1_device, AD9250_TEST_PNLONG);
 	ad9250_transfer(ad9250_1_device);
 	if(axi_adc_pn_mon(ad9250_1_core, AXI_ADC_PN23, 10) == -1) {
 		printf("%s ad9250_1 - PN23 sequence mismatch!\n", __func__);
 	};
 
 	// set up ramp output
-	ad9250_test_mode(ad9250_0_device, 15);
+	ad9250_test_mode(ad9250_0_device, AD9250_TEST_RAMP);
 	ad9250_transfer(ad9250_0_device);
-	ad9250_test_mode(ad9250_1_device, 15);
+	ad9250_test_mode(ad9250_1_device, AD9250_TEST_RAMP);
 	ad9250_transfer(ad9250_1_device);
 
 	// test the captured data
@@ -360,9 +360,9 @@ int main(void)
 	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
 
 	// set up normal output
-	ad9250_test_mode(ad9250_0_device, 0);
+	ad9250_test_mode(ad9250_0_device, AD9250_TEST_OFF);
 	ad9250_transfer(ad9250_0_device);
-	ad9250_test_mode(ad9250_1_device, 0);
+	ad9250_test_mode(ad9250_1_device, AD9250_TEST_OFF);
 	ad9250_transfer(ad9250_1_device);
 
 	// capture data with DMA
