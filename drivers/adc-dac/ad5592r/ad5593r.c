@@ -231,6 +231,8 @@ int32_t ad5593r_init(struct ad5592r_dev *dev,
 	if (!dev)
 		return FAILURE;
 
+	dev->ops = &ad5593r_rw_ops;
+
 	ret = ad5592r_software_reset(dev);
 	if (ret < 0)
 		return ret;
