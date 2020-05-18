@@ -81,13 +81,14 @@ enum ad5592r_registers {
 #define AD5592R_REG_CTRL_ADC_RANGE	BIT(5)
 #define AD5592R_REG_CTRL_DAC_RANGE	BIT(4)
 
+#define AD5592R_REG_ADC_SEQ_INCL(x)		BIT(x)
 struct ad5592r_dev;
 
 struct ad5592r_rw_ops {
 	int32_t (*write_dac)(struct ad5592r_dev *dev, uint8_t chan,
 			     uint16_t value);
-	int32_t (*read_adc)(struct ad5592r_dev *dev, uint8_t chan,
-			    uint16_t *value);
+	int32_t (*read_adc)(struct ad5592r_dev *dev, uint16_t chans,
+			    uint16_t *values);
 	int32_t (*reg_write)(struct ad5592r_dev *dev, uint8_t reg,
 			     uint16_t value);
 	int32_t (*reg_read)(struct ad5592r_dev *dev, uint8_t reg,

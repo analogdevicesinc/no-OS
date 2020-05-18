@@ -3,7 +3,7 @@
  *   @brief  Header file of AD5592R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -51,8 +51,8 @@
 
 int32_t ad5592r_write_dac(struct ad5592r_dev *dev, uint8_t chan,
 			  uint16_t value);
-int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
-			 uint16_t *value);
+int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint16_t chans,
+			 uint16_t *values);
 int32_t ad5592r_reg_write(struct ad5592r_dev *dev, uint8_t reg,
 			  uint16_t value);
 int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg,
