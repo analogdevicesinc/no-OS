@@ -51,7 +51,8 @@
 #define CH_MODE_ADC			1
 #define CH_MODE_DAC			2
 #define CH_MODE_DAC_AND_ADC		3
-#define CH_MODE_GPIO			8
+#define CH_MODE_GPI			4
+#define CH_MODE_GPO			5
 
 #define CH_OFFSTATE_PULLDOWN		0
 #define CH_OFFSTATE_OUT_LOW		1
