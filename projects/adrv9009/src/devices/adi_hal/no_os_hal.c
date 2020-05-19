@@ -44,6 +44,7 @@
 #include "adi_hal.h"
 #include "parameters.h"
 #include "spi.h"
+#include "spi_extra.h"
 #include "gpio.h"
 #include "error.h"
 #include "delay.h"
