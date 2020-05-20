@@ -330,6 +330,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	struct adxcvr *xcvr;
 	uint32_t synth_conf, xcvr_type;
 	uint32_t i;
+	int32_t ret;
 
 	xcvr = (struct adxcvr *)malloc(sizeof(*xcvr));
 	if (!xcvr)
@@ -407,8 +408,11 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		}
 	}
 
-	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz)
-		adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
+	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz) {
+		ret = adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
+		if (ret)
+			return ret;
+	}
 
 	*ad_xcvr = xcvr;
 
