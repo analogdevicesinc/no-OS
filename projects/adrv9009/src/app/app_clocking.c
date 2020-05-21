@@ -103,9 +103,9 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 			  uint32_t lmfc_rate_hz)
 {
 	int32_t status;
-	uint32_t dev_clk, fmc_clk;
-	uint32_t rate_dev = device_clock_khz * 1000;
-	uint32_t rate_fmc = device_clock_khz * 1000;
+	uint64_t dev_clk, fmc_clk;
+	uint64_t rate_dev = device_clock_khz * 1000;
+	uint64_t rate_fmc = device_clock_khz * 1000;
 	uint32_t n;
 	int ret;
 
@@ -519,8 +519,8 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		*/
 		for (n = 64; n > 0; n--) {
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
-			rate_dev = hmc7044_clk_round_rate(clkchip_device, lmfc_rate_hz / n,
-							  clkchip_device->pll2_freq);
+			hmc7044_clk_round_rate(clkchip_device, lmfc_rate_hz / n,
+					       &rate_dev);
 #else
 			rate_dev = ad9528_clk_round_rate(clkchip_device, DEV_SYSREF, lmfc_rate_hz / n);
 #endif
