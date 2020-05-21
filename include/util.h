@@ -85,11 +85,11 @@
 
 #define BITS_PER_LONG 32
 
-#define GENMASK(h, l) ({ 										\
-		uint32_t t = (~0UL);									\
-		t = t << (BITS_PER_LONG - (h - l + 1));					\
-		t = t >> (BITS_PER_LONG - (h + 1));						\
-		t;														\
+#define GENMASK(h, l) ({ 					\
+		uint32_t t = (uint32_t)(~0UL);			\
+		t = t << (BITS_PER_LONG - (h - l + 1));		\
+		t = t >> (BITS_PER_LONG - (h + 1));		\
+		t;						\
 })
 
 #define bswap_constant_32(x) \
