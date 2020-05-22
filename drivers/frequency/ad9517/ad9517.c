@@ -585,6 +585,15 @@ int64_t ad9517_frequency(struct ad9517_dev *dev,
 					reg_address = AD9517_REG_DIVIDER_1_0;
 				} else {
 					reg_address = AD9517_REG_DIVIDER_0_0;
+
+					ret = ad9517_read(dev, AD9517_REG_DIVIDER_0_1, &reg_value);
+					if (ret < 0)
+						return ret;
+
+					reg_value &= ~AD9517_DIVIDER_BYPASS;
+					ret = ad9517_write(dev, AD9517_REG_DIVIDER_0_1, reg_value);
+					if (ret < 0)
+						return ret;
 				}
 				/* The duty cycle closest to 50% is selected. */
 				reg_value =
