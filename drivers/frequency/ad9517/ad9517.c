@@ -58,7 +58,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 	int32_t		    ret = 0;
 	int8_t		    index = 0;
 	uint16_t	    reg_address = 0;
-	int8_t		    reg_value = 0;
+	uint32_t	    reg_value = 0;
 	struct ad9517_dev   *dev;
 
 	static uint16_t lvepcl_out_ch[4] = {
