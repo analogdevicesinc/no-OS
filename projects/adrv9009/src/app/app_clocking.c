@@ -110,6 +110,24 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 	int ret;
 
 #if defined(ZU11EG) || defined(FMCOMMS8_ZCU102)
+	struct hmc7044_init_param hmc7044_param = {
+		.spi_init = NULL,
+		.clkin_freq = {122880000, 122880000, 0, 0},
+		.vcxo_freq = 122880000,
+		.pll2_freq = 2949120000,
+		.pll1_loop_bw = 200,
+		.sysref_timer_div = 3840,
+		.in_buf_mode = {0x09, 0x09, 0x00, 0x00, 0x15},
+		.gpi_ctrl = {0x00, 0x00, 0x00, 0x11},
+		.gpo_ctrl = {0x1f, 0x2b, 0x00, 0x00},
+		.num_channels = 10,
+		.pll1_ref_prio_ctrl = 0xE5,
+		.sync_pin_mode = 0x1,
+		.high_performance_mode_clock_dist_en = true,
+		.high_performance_mode_pll_vco_en = true,
+		.pulse_gen_mode = 0x0,
+	};
+
 	struct hmc7044_chan_spec chan_spec[10] = {
 		/* DEV_REFCLK_A */
 		{
@@ -150,12 +168,16 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 #if defined(ZU11EG)
 		/* CORE_CLK_TX_OBS_AB */
 		{
-			.disable = 0, .num = 6, .divider = 24, .driver_mode = 0,
+			.disable = 0, .num = 6,
+			.divider = hmc7044_param.pll2_freq / tx_div40_rate_hz,
+			.driver_mode = 0,
 			.driver_impedance = 1
 		},
 		/* CORE_CLK_RX_AB */
 		{
-			.disable = 0, .num = 7, .divider = 12, .driver_mode = 0,
+			.disable = 0, .num = 7,
+			.divider = hmc7044_param.pll2_freq / rx_div40_rate_hz,
+			.driver_mode = 0,
 			.driver_impedance = 1
 		},
 		/* FPGA_SYSREF_TX_OBS_AB */
@@ -203,25 +225,7 @@ adiHalErr_t clocking_init(uint32_t rx_div40_rate_hz,
 		}
 #endif
 	};
-
-	struct hmc7044_init_param hmc7044_param = {
-		.spi_init = NULL,
-		.clkin_freq = {122880000, 122880000, 0, 0},
-		.vcxo_freq = 122880000,
-		.pll2_freq = 2949120000,
-		.pll1_loop_bw = 200,
-		.sysref_timer_div = 3840,
-		.in_buf_mode = {0x09, 0x09, 0x00, 0x00, 0x15},
-		.gpi_ctrl = {0x00, 0x00, 0x00, 0x11},
-		.gpo_ctrl = {0x1f, 0x2b, 0x00, 0x00},
-		.num_channels = 10,
-		.pll1_ref_prio_ctrl = 0xE5,
-		.sync_pin_mode = 0x1,
-		.high_performance_mode_clock_dist_en = true,
-		.high_performance_mode_pll_vco_en = true,
-		.pulse_gen_mode = 0x0,
-		.channels = chan_spec
-	};
+	hmc7044_param.channels = chan_spec;
 
 	struct hmc7044_chan_spec car_chan_spec[2] = {
 		/* REFCLK_OUT2 */
