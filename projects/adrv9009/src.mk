@@ -9,10 +9,18 @@
 #									       #
 ################################################################################
 
-# Uncomment to select the profile
+# zc706 + adrv9009-w/pcbz compatible profiles:
+#	tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88
+#
+# adrv2crr-fmc + adrv9009-zu11eg compatible profiles:
+# zcu102 + fmcomms8 compatible profiles:
+#	tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88
+#	tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
+#	tx_bw400_ir491p52_rx_bw200_or245p76_orx_bw400_or491p52_dc245p76
 
-#PROFILE = tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88
-PROFILE = tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
+# Uncomment to select the profile:
+PROFILE = tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88
+#PROFILE = tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
 #PROFILE = tx_bw400_ir491p52_rx_bw200_or245p76_orx_bw400_or491p52_dc245p76
 SRCS := $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/src/app/app_clocking.c					\

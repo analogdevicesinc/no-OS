@@ -40,10 +40,14 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
+// Uncomment if using adrv2crr-fmc + adrv9009-zu11eg:
 //#define ZU11EG
+
+// Uncomment if using zcu102 + fmcomms8:
 //#define FMCOMMS8_ZCU102
+
+// Provided ZU11EG or FMCOMMS8_ZCU102 were not defined, this project builds
+// by default for zc706 + adrv9009-w/pcbz.
 
 //#define DAC_DMA_EXAMPLE
 
