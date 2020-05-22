@@ -171,7 +171,27 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 			return ret;
 
 		/* Start VCO Calibration */
-		ret = ad9517_write(dev, AD9517_REG_PLL_CTRL_3, AD9517_VCO_CAL_NOW);
+		ret = ad9517_read(dev, AD9517_REG_PLL_CTRL_3, &reg_value);
+		if(ret < 0)
+			return ret;
+
+		reg_value &= ~AD9517_VCO_CAL_NOW;
+
+		ret = ad9517_write(dev, AD9517_REG_PLL_CTRL_3, reg_value);
+		if(ret < 0)
+			return ret;
+
+		ret = ad9517_update(dev);
+		if(ret < 0)
+			return ret;
+
+		reg_value |= AD9517_VCO_CAL_NOW;
+
+		ret = ad9517_write(dev, AD9517_REG_PLL_CTRL_3, reg_value);
+		if(ret < 0)
+			return ret;
+
+		ret = ad9517_update(dev);
 		if(ret < 0)
 			return ret;
 	}
