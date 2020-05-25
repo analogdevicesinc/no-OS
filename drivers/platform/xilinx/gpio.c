@@ -344,7 +344,8 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 			pin -= 32;
 		} else
 			channel = 1;
-		*direction = (XGpio_GetDataDirection(extra->instance,channel) >> pin) & 0x01;
+		*direction = ((XGpio_GetDataDirection(extra->instance,
+						      channel) >> pin) & 0x1) ^ 0x1;
 #endif
 		break;
 	case GPIO_PS:
