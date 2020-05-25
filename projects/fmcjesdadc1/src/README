@@ -8,6 +8,8 @@ cp ../../../include/gpio.h devices/adi_hal/
 cp ../../../include/delay.h devices/adi_hal/
 cp ../../../drivers/adc/ad9250/ad9250.h devices/adi_hal/
 cp ../../../drivers/adc/ad9250/ad9250.c devices/adi_hal/
+cp ../../../drivers/frequency/ad9517/ad9517.h devices/adi_hal/
+cp ../../../drivers/frequency/ad9517/ad9517.c devices/adi_hal/
 cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
 cp ../../../drivers/spi/spi.c devices/adi_hal/
 cp ../../../drivers/io-expander/demux_spi.h devices/adi_hal/

@@ -22,7 +22,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.c			\
 	$(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad9250/ad9250.c					\
-	$(PROJECT)/src/devices/ad9517/ad9517.c
+	$(DRIVERS)/frequency/ad9517/ad9517.c
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
@@ -38,7 +38,7 @@ INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h		\
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.h			\
 	$(DRIVERS)/adc/ad9250/ad9250.h					\
-	$(PROJECT)/src/devices/ad9517/ad9517.h				
+	$(DRIVERS)/frequency/ad9517/ad9517.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
 	$(PLATFORM_DRIVERS)/gpio_extra.h
 INCS +=	$(INCLUDE)/axi_io.h						\
