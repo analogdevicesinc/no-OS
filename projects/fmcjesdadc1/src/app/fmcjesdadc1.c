@@ -68,6 +68,8 @@ int main(void)
 {
 
 	int32_t status;
+	uint32_t reg_value;
+
 	// SPI configuration
 	struct spi_init_param demux_spi_param = {
 		.max_speed_hz = 2000000u,
@@ -180,6 +182,85 @@ int main(void)
 	};
 	struct axi_dmac *ad9250_1_dmac;
 
+	struct ad9517_platform_data ad9517_pdata_lpc = {
+		/* PLL Reference */
+		.ref_1_freq = 30720000,
+		.ref_2_freq = 0,
+		.diff_ref_en = 0,
+		.ref_1_power_on = 1,
+		.ref_2_power_on = 0,
+		.ref_sel_pin_en = 0,
+		.ref_sel_pin = 1,
+		.ref_2_en = 0,
+		.ext_clk_freq = 0,
+		.int_vco_freq = 2500000000,
+		.vco_clk_sel = 1,
+		.power_down_vco_clk = 0,
+		.name = "ad9517-lpc"
+	};
+
+	struct ad9517_lvpecl_channel_spec ad9517_lvpecl_channels[] = {
+		{
+			.channel_num = 0,
+			.out_invert_en = 0,
+			.out_diff_voltage = LVPECL_780mV,
+			.name = "CH0"
+		},
+		{
+			.channel_num = 1,
+			.out_invert_en = 0,
+			.out_diff_voltage = LVPECL_780mV,
+			.name = "CH1"
+		},
+		{
+			.channel_num = 2,
+			.out_invert_en = 0,
+			.out_diff_voltage = LVPECL_780mV,
+			.name = "CH2"
+		},
+		{
+			.channel_num = 3,
+			.out_invert_en = 0,
+			.out_diff_voltage = LVPECL_780mV,
+			.name = "CH3"
+		}
+	};
+
+	struct ad9517_lvds_cmos_channel_spec ad9517_lvds_cmos_channels[] = {
+		{
+			.channel_num = 4,
+			.out_invert = 0,
+			.logic_level = LVDS,
+			.cmos_b_en = 0,
+			.out_lvds_current = LVDS_3_5mA,
+			.name = "CH4"
+		},
+		{
+			.channel_num = 5,
+			.out_invert = 0,
+			.logic_level = LVDS,
+			.cmos_b_en = 0,
+			.out_lvds_current = LVDS_3_5mA,
+			.name = "CH5"
+		},
+		{
+			.channel_num = 6,
+			.out_invert = 0,
+			.logic_level = LVDS,
+			.cmos_b_en = 0,
+			.out_lvds_current = LVDS_3_5mA,
+			.name = "CH6"
+		},
+		{
+			.channel_num = 7,
+			.out_invert = 0,
+			.logic_level = LVDS,
+			.cmos_b_en = 0,
+			.out_lvds_current = LVDS_3_5mA,
+			.name = "CH7"
+		}
+	};
+
 	struct ad9250_platform_data ad9250_pdata_lpc = {
 		.extrn_pdwnmode = 0,
 		.en_clk_dcs = 1,
@@ -260,6 +341,11 @@ int main(void)
 	struct ad9250_init_param	ad9250_1_param;
 	struct ad9517_init_param	ad9517_param;
 
+	ad9517_param.ad9517_type = AD9517_1;
+	ad9517_param.ad9517_st.pdata = &ad9517_pdata_lpc;
+	ad9517_param.ad9517_st.lvpecl_channels = &ad9517_lvpecl_channels[0];
+	ad9517_param.ad9517_st.lvds_cmos_channels = &ad9517_lvds_cmos_channels[0];
+
 	ad9250_0_param.ad9250_st_init.pdata = &ad9250_pdata_lpc;
 	ad9250_0_param.ad9250_st_init.p_jesd204b = &ad9250_0_jesd204b_interface;
 	ad9250_0_param.ad9250_st_init.p_fd = &ad9250_fast_detect;
@@ -280,8 +366,109 @@ int main(void)
 
 	// set up clock generator
 	status = ad9517_setup(&ad9517_device, ad9517_param);
-	if(status < 0)
+	if(status < 0) {
 		printf("Error ad9517_setup()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 0 power mode on */
+	status = ad9517_power_mode(ad9517_device, 0, 0);
+	if(status < 0) {
+		printf("Error channel 0 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+	/* Set the channel 0 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 0, 250000000);
+	if(status < 0) {
+		printf("Error channel 0 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 1 power mode on */
+	status = ad9517_power_mode(ad9517_device, 1, 0);
+	if(status < 0) {
+		printf("Error channel 1 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 1 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 1, 250000000);
+	if(status < 0) {
+		printf("Error channel 1 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 4 power mode on */
+	status = ad9517_power_mode(ad9517_device, 4, 0);
+	if(status < 0) {
+		printf("Error channel 4 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 4 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 4, 250000000);
+	if(status < 0) {
+		printf("Error channel 4 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 5 power mode on */
+	status = ad9517_power_mode(ad9517_device, 5, 0);
+	if(status < 0) {
+		printf("Error channel 5 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 5 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 5, 250000000);
+	if(status < 0) {
+		printf("Error channel 5 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 6 power mode on */
+	status = ad9517_power_mode(ad9517_device, 6, 0);
+	if(status < 0) {
+		printf("Error channel 6 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 6 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 6, 250000000);
+	if(status < 0) {
+		printf("Error channel 6 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 7 power mode on */
+	status = ad9517_power_mode(ad9517_device, 7, 0);
+	if(status < 0) {
+		printf("Error channel 7 ad9517_power_mode()\n");
+		return FAILURE;
+	}
+
+	/* Set the channel 7 frequency to 250Mhz */
+	status = ad9517_frequency(ad9517_device, 7, 250000000);
+	if(status < 0) {
+		printf("Error channel 7 ad9517_frequency()\n");
+		return FAILURE;
+	}
+
+	status = ad9517_update(ad9517_device);
+	if(status < 0) {
+		printf("Error ad9517_update()\n");
+		return FAILURE;
+	}
+
+	status = ad9517_read(ad9517_device, AD9517_REG_PLL_READBACK, &reg_value);
+	if (status < 0) {
+		printf("Error ad9517_read()!\n");
+		return FAILURE;
+	} else if (!(reg_value & AD9517_DIGITAL_LOCK_DETECT)) {
+		printf("AD9517 PLL not locked!\n");
+		return FAILURE;
+	}
+	printf("AD9517 PLL locked.\n");
 
 	// set up the devices
 	status= ad9250_setup(&ad9250_0_device, ad9250_0_param);
