@@ -295,8 +295,14 @@
 /* AD9517_REG_UPDATE_ALL_REGS Definition */
 #define AD9517_UPDATE_ALL_REGS			(1 << 0)
 
-#define AD9517_MIN_VCO_FREQ			1450000000
-#define AD9517_MAX_VCO_FREQ			3000000000
+#define AD9517_1_MIN_VCO_FREQ			2300000000
+#define AD9517_1_MAX_VCO_FREQ			2650000000
+#define AD9517_2_MIN_VCO_FREQ			2050000000
+#define AD9517_2_MAX_VCO_FREQ			2330000000
+#define AD9517_3_MIN_VCO_FREQ			1750000000
+#define AD9517_3_MAX_VCO_FREQ			2250000000
+#define AD9517_4_MIN_VCO_FREQ			1450000000
+#define AD9517_4_MAX_VCO_FREQ			1800000000
 #define AD9517_MAX_PFD_FREQ			100000000
 #define AD9517_MAX_PRESCLAER_OUT_FREQ		300000000
 
@@ -335,6 +341,13 @@ struct ad9517_lvpecl_channel_spec {
 	uint8_t out_invert_en;	  // Invert the polarity of the output clock.
 	uint8_t out_diff_voltage; // LVPECL output differential voltage.
 	uint8_t name[16];	  // Optional descriptive channel name.
+};
+
+enum ad9517_type {
+	AD9517_1,
+	AD9517_2,
+	AD9517_3,
+	AD9517_4
 };
 
 enum out_diff_voltage_options {
@@ -383,6 +396,7 @@ struct ad9517_dev {
 	spi_desc	    *spi_desc;
 	/* Device Settings */
 	struct ad9517_state ad9517_st;
+	enum ad9517_type	ad9517_type;
 };
 
 struct ad9517_init_param {
@@ -390,6 +404,7 @@ struct ad9517_init_param {
 	spi_init_param	    spi_init;
 	/* Device Settings */
 	struct ad9517_state ad9517_st;
+	enum ad9517_type	ad9517_type;
 };
 
 /******************************************************************************/
