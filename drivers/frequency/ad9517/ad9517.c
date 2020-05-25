@@ -73,6 +73,7 @@ int32_t ad9517_setup(struct ad9517_dev **device,
 		return -1;
 
 	dev->ad9517_st = init_param.ad9517_st;
+	dev->ad9517_type = init_param.ad9517_type;
 
 	/* Initializes the SPI peripheral */
 	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
@@ -332,9 +333,30 @@ int64_t ad9517_vco_frequency(struct ad9517_dev *dev,
 	uint8_t prescaler = 0;
 	uint32_t reg_value = 0;
 
-	if((frequency < AD9517_MIN_VCO_FREQ) ||
-	    (frequency > AD9517_MAX_VCO_FREQ))
+	switch(dev->ad9517_type) {
+	case AD9517_1:
+		if((frequency < AD9517_1_MIN_VCO_FREQ) ||
+		    (frequency > AD9517_1_MAX_VCO_FREQ))
+			return -1;
+		break;
+	case AD9517_2:
+		if((frequency < AD9517_2_MIN_VCO_FREQ) ||
+		    (frequency > AD9517_2_MAX_VCO_FREQ))
+			return -1;
+		break;
+	case AD9517_3:
+		if((frequency < AD9517_3_MIN_VCO_FREQ) ||
+		    (frequency > AD9517_3_MAX_VCO_FREQ))
+			return -1;
+		break;
+	case AD9517_4:
+		if((frequency < AD9517_4_MIN_VCO_FREQ) ||
+		    (frequency > AD9517_4_MAX_VCO_FREQ))
+			return -1;
+		break;
+	default:
 		return -1;
+	}
 	if(dev->ad9517_st.pdata->ref_sel_pin_en)
 		/* Reference selection is made using REF_SEL pin. */
 		ref_freq = dev->ad9517_st.pdata->ref_sel_pin ?
