@@ -526,6 +526,7 @@ int32_t ad713x_init(struct ad713x_dev **device,
 		dev->spi_desc->extra = init_param->spi_common_dev->extra;
 		dev->spi_desc->max_speed_hz = init_param->spi_init_prm.max_speed_hz;
 		dev->spi_desc->mode = init_param->spi_init_prm.mode;
+		dev->spi_desc->platform_ops = init_param->spi_init_prm.platform_ops;
 	}
 
 	ret = ad713x_init_gpio(dev, init_param);
