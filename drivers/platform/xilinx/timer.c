@@ -53,8 +53,6 @@
 
 #if defined(_XPARAMETERS_PS_H_)
 #define CORE_PRIVATE_TIMER_CLOCK (XPAR_CPU_CORTEXA9_CORE_CLOCK_FREQ_HZ / 2)
-#elif defined(XTMRCTR_H)
-#define MB_AXI_TIMER_CLOCK XPAR_AXI_TIMER_CLOCK_FREQ_HZ
 #endif
 
 /******************************************************************************/
@@ -364,7 +362,7 @@ int32_t timer_count_clk_get(struct timer_desc *desc, uint32_t *freq_hz)
 		return FAILURE;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
-		*freq_hz = MB_AXI_TIMER_CLOCK;
+		*freq_hz = ((XTmrCtr_Config *)xdesc->config)->SysClockFreqHz;
 		break;
 #endif
 		return FAILURE;
