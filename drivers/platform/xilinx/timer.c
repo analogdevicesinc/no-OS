@@ -116,14 +116,27 @@ int32_t timer_init(struct timer_desc **desc,
 		goto error_xdesc;
 	case TIMER_PL:
 #ifdef XTMRCTR_H
-		ret = XTmrCtr_Initialize(xdesc->instance, dev->id);
-		if(ret != 0)
+		xdesc->instance = (XTmrCtr *)calloc(1, sizeof(XTmrCtr));
+		if (!xdesc->instance)
+			return FAILURE;
+
+		xdesc->config = XTmrCtr_LookupConfig(dev->id);
+		if (!xdesc->config) {
+			free(xdesc->instance);
 			goto error_desc;
+		}
+		XTmrCtr_CfgInitialize(xdesc->instance, xdesc->config,
+				      ((XTmrCtr_Config *)xdesc->config)->BaseAddress);
+		ret = XTmrCtr_InitHw(xdesc->instance);
+		if (ret != SUCCESS) {
+			free(xdesc->instance);
+			goto error_desc;
+		}
+		dev->freq_hz = ((XTmrCtr_Config *)xdesc->config)->SysClockFreqHz;
+
 		ret = XTmrCtr_SelfTest(xdesc->instance, dev->id);
 		if(ret != 0)
 			goto error_desc;
-		tmr_options = XTC_DOWN_COUNT_OPTION | XTC_INT_MODE_OPTION;
-		tmr_options |= dev->auto_reload ? XTC_AUTO_RELOAD_OPTION : 0;
 		XTmrCtr_SetOptions(xdesc->instance, xdesc->active_tmr,
 				   XTC_DOWN_COUNT_OPTION | XTC_INT_MODE_OPTION |
 				   XTC_AUTO_RELOAD_OPTION);
