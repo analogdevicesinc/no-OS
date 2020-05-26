@@ -50,7 +50,7 @@
 #include <xparameters.h>
 #include <math.h>
 #include "xil_printf.h"
-#include "spi_engine_offload.h"
+#include "spi_engine.h"
 #include "ad713x.h"
 #include "spi.h"
 #include "spi_extra.h"
@@ -128,15 +128,15 @@ int main()
 	struct ad713x_dev *ad713x_dev_2;
 	struct ad713x_init_param ad713x_init_param_1;
 	struct ad713x_init_param ad713x_init_param_2;
-	struct xil_spi_init_param spi_ps_extra;
-	struct spi_desc *spi_eng_desc;
 	uint32_t *offload_data;
-	struct spi_eng_msg *msg;
 	uint32_t i;
-	uint32_t spi_eng_msg_cmds[2];
 	int32_t ret;
-	struct spi_init_param spi_eng_inits;
-	struct spi_init_param_extra extra_param;
+	struct spi_engine_offload_init_param spi_engine_offload_init_param;
+	struct spi_engine_offload_message spi_engine_offload_message;
+	uint32_t spi_eng_msg_cmds[2];
+	static struct xil_spi_init_param spi_engine_init_params = {
+		.type = SPI_PS,
+	};
 	struct xil_gpio_init_param gpio_extra_param;
 	struct gpio_init_param ad7134_1_dclkio = {
 		.number = GPIO_DCLKIO_1,
@@ -178,23 +178,21 @@ int main()
 		.number = GPIO_RESETN_2,
 		.extra = &gpio_extra_param
 	};
+	struct spi_desc *spi_eng_desc;
+	struct spi_engine_init_param spi_eng_init_param  = {
+		.type = SPI_ENGINE,
+		.spi_engine_baseaddr = AD7134_SPI_ENGINE_BASEADDR,
+		.cs_delay = 0,
+		.data_width = 32,
+	};
+	const struct spi_init_param spi_eng_init_prm  = {
+		.chip_select = AD7134_1_SPI_CS,
+		.max_speed_hz = 10000000,
+		.mode = SPI_MODE_3,
+		.platform_ops = &xil_platform_ops,
+		.extra = (void*)&spi_eng_init_param,
 
-	spi_eng_inits.chip_select = AD7134_1_SPI_CS;
-	spi_eng_inits.max_speed_hz = 100000000UL;
-	spi_eng_inits.mode = SPI_MODE_1;
-	extra_param.cs_delay = 0;
-	extra_param.spi_baseaddr = AD7134_SPI_ENGINE_BASEADDR;
-	extra_param.spi_clk_hz = 25000000;
-	extra_param.spi_clk_hz_reg_access = 25000000;
-	extra_param.spi_offload_rx_dma_baseaddr = AD7134_DMA_BASEADDR;
-	extra_param.spi_offload_rx_support_en = 1;
-	extra_param.spi_offload_tx_dma_baseaddr = AD7134_DMA_BASEADDR;
-	extra_param.spi_offload_tx_support_en = 1;
-	spi_eng_inits.extra = &extra_param;
-
-	spi_ps_extra.flags = 0;
-	spi_ps_extra.device_id = SPI_DEVICE_ID;
-	spi_ps_extra.type = SPI_PS;
+	};
 
 	gpio_extra_param.device_id = GPIO_DEVICE_ID;
 	gpio_extra_param.type = GPIO_PS;
@@ -216,7 +214,8 @@ int main()
 	ad713x_init_param_1.spi_init_prm.chip_select = AD7134_1_SPI_CS;
 	ad713x_init_param_1.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_1.spi_init_prm.mode = SPI_MODE_3;
-	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_ps_extra;
+	ad713x_init_param_1.spi_init_prm.platform_ops = &xil_platform_ops;
+	ad713x_init_param_1.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_1.spi_common_dev = 0;
 
 	ad713x_init_param_2.adc_data_len = ADC_24_BIT_DATA;
@@ -236,11 +235,12 @@ int main()
 	ad713x_init_param_2.spi_init_prm.chip_select = AD7134_2_SPI_CS;
 	ad713x_init_param_2.spi_init_prm.max_speed_hz = 10000000;
 	ad713x_init_param_2.spi_init_prm.mode = SPI_MODE_3;
-	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_ps_extra;
+	ad713x_init_param_2.spi_init_prm.platform_ops = &xil_platform_ops;
+	ad713x_init_param_2.spi_init_prm.extra = (void *)&spi_engine_init_params;
 	ad713x_init_param_2.spi_common_dev = 0;
 
 	spi_eng_msg_cmds[0] = SLEEP(100);
-	spi_eng_msg_cmds[1] = TRANSFER_BYTES_R(1);
+	spi_eng_msg_cmds[1] = READ(1);
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -255,26 +255,22 @@ int main()
 		return FAILURE;
 	mdelay(1000);
 
-	ret = spi_eng_offload_init(&spi_eng_desc, &spi_eng_inits);
+	spi_engine_offload_init_param.rx_dma_baseaddr = AD7134_DMA_BASEADDR;
+	spi_engine_offload_init_param.offload_config = OFFLOAD_RX_EN;
+
+	ret = spi_init(&spi_eng_desc, &spi_eng_init_prm);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	/** For this example, only offload is supported */
-	msg = calloc(1, sizeof(*msg));
-	if (!msg)
+	ret = spi_engine_offload_init(spi_eng_desc, &spi_engine_offload_init_param);
+	if (ret != SUCCESS)
 		return FAILURE;
 
-	spi_eng_set_transfer_length(spi_eng_desc, 32);
-
-	msg->spi_msg_cmds = malloc(sizeof(spi_eng_msg_cmds));
-	if (!msg->spi_msg_cmds)
-		goto error_msg;
-	msg->spi_msg_cmds = spi_eng_msg_cmds;
-	msg->msg_cmd_len = ARRAY_SIZE(spi_eng_msg_cmds);
-	msg->rx_buf_addr = 0x800000;
-	msg->tx_buf_addr = 0xA000000;
-	msg->rx_buf = calloc((AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO),
-			     sizeof(uint32_t));
+	spi_engine_offload_message.commands = spi_eng_msg_cmds;
+	spi_engine_offload_message.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	spi_engine_offload_message.commands_data = NULL;
+	spi_engine_offload_message.rx_addr = 0x800000;
+	spi_engine_offload_message.tx_addr = 0xA000000;
 
 #ifdef USE_LIBIIO
 	struct iio_ad713x *iio_ad713x;
@@ -310,7 +306,7 @@ int main()
 		.name = dev_name,
 		.num_channels = 8,
 		.spi_eng_desc = spi_eng_desc,
-		.msg = msg,
+		.spi_engine_offload_message = &spi_engine_offload_message,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 
@@ -349,17 +345,10 @@ int main()
 
 #endif /* USE_LIBIIO */
 
-	if (!msg->rx_buf)
-		goto error_msg_cmd;
-
-	ret = spi_eng_offload_load_msg(spi_eng_desc, msg);
+	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
+					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));
 	if (ret != SUCCESS)
-		goto error_rx_buff;
-	ret = spi_eng_transfer_multiple_msgs(spi_eng_desc,
-					     (AD7134_FMC_CH_NO *
-					      AD7134_FMC_SAMPLE_NO));
-	if (ret != SUCCESS)
-		goto error_rx_buff;
+		return ret;
 
 	mdelay(1000);
 
@@ -369,8 +358,8 @@ int main()
 	float data;
 	uint8_t j;
 
-	offload_data = (uint32_t*)((struct spi_desc_extra *)spi_eng_desc->extra)->
-		       rx_dma_startaddr;
+	offload_data = (uint32_t*)spi_engine_offload_message.rx_addr;
+
 	for(i = 0; i < AD7134_FMC_SAMPLE_NO; i++) {
 		j = 0;
 		while(j < 8) {
@@ -389,13 +378,6 @@ int main()
 		}
 		offload_data += j; /* go to the next address in memory */
 	}
-
-error_rx_buff:
-	free(msg->rx_buf);
-error_msg_cmd:
-	free(msg->spi_msg_cmds);
-error_msg:
-	free(msg);
 
 	ad713x_remove(ad713x_dev_1);
 	ad713x_remove(ad713x_dev_2);

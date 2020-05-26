@@ -50,8 +50,7 @@
 #include "util.h"
 #include "iio.h"
 #include "iio_ad713x.h"
-#include "spi_engine_core.h"
-#include "spi_engine_offload.h"
+#include "spi_engine.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -141,16 +140,14 @@ ssize_t iio_ad713x_transfer_dev_to_mem(void *iio_inst, size_t bytes_count,
 	iio_713x_inst = (struct iio_ad713x *)iio_inst;
 	bytes = (bytes_count * iio_713x_inst->num_channels);
 
-	ret = spi_eng_offload_load_msg(iio_713x_inst->spi_eng_desc, iio_713x_inst->msg);
-	if (ret < 0)
-		return ret;
-
-	ret = spi_eng_transfer_multiple_msgs(iio_713x_inst->spi_eng_desc, bytes);
+	ret = spi_engine_offload_transfer(iio_713x_inst->spi_eng_desc,
+					  *(iio_713x_inst->spi_engine_offload_message), bytes);
 	if (ret < 0)
 		return ret;
 
 	if (iio_713x_inst->dcache_invalidate_range)
-		iio_713x_inst->dcache_invalidate_range(iio_713x_inst->msg->rx_buf_addr, bytes);
+		iio_713x_inst->dcache_invalidate_range(
+			iio_713x_inst->spi_engine_offload_message->tx_addr, bytes);
 
 	return bytes_count;
 }
@@ -172,7 +169,7 @@ ssize_t iio_ad713x_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			    size_t bytes_count, uint32_t ch_mask)
 {
 	struct iio_ad713x *iio_713x_inst;
-	uint32_t i, j = 0, current_ch = 0;
+	uint32_t i, j = 0, current_ch = 0, offload_data;
 	uint16_t *pbuf16;
 	size_t samples;
 
@@ -188,7 +185,12 @@ ssize_t iio_ad713x_read_dev(void *iio_inst, char *pbuf, size_t offset,
 
 	for (i = 0; i < samples; i++) {
 		if (ch_mask & BIT(current_ch)) {
-			pbuf16[j] = *(uint16_t*)(iio_713x_inst->msg->rx_buf_addr + offset + i * 2);
+			offload_data = *(uint32_t*)(iio_713x_inst->spi_engine_offload_message->rx_addr +
+						    offset + i * 4);
+			offload_data <<= 1;
+			offload_data &= 0xffffff00;
+			offload_data >>= 8;
+			pbuf16[j] = offload_data;
 			j++;
 		}
 
@@ -239,7 +241,7 @@ int32_t iio_ad713x_init(struct iio_ad713x **desc,
 
 	iio_ad713x->num_channels = param->num_channels;
 	iio_ad713x->spi_eng_desc = param->spi_eng_desc;
-	iio_ad713x->msg = param->msg;
+	iio_ad713x->spi_engine_offload_message = param->spi_engine_offload_message;
 	iio_ad713x->dcache_invalidate_range = param->dcache_invalidate_range;
 
 	iio_device = iio_ad713x_create_device(param->name, iio_ad713x->num_channels);
