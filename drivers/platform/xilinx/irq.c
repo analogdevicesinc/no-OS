@@ -52,6 +52,9 @@
 #ifdef XPAR_XINTC_NUM_INSTANCES
 #include <xintc.h>
 #endif
+#ifdef XPAR_XTMRCTR_NUM_INSTANCES
+#include <xtmrctr.h>
+#endif
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -251,6 +254,19 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 		break;
 	case IRQ_PL:
 #ifdef XINTC_H
+		if (irq_id == XPAR_AXI_INTC_AXI_TIMER_INTERRUPT_INTR) {
+			int32_t ret;
+
+			ret = XIntc_Connect(xil_dev->instance, irq_id,
+					    XTmrCtr_InterruptHandler, callback_desc->config);
+			if (IS_ERR_VALUE(ret))
+				return FAILURE;
+			XTmrCtr_SetHandler(callback_desc->config,
+					   (XTmrCtr_Handler)callback_desc->callback,
+					   callback_desc->ctx);
+
+			return SUCCESS;
+		}
 		return XIntc_Connect(xil_dev->instance, irq_id,
 				     (XInterruptHandler) callback_desc->callback,
 				     callback_desc->ctx);
