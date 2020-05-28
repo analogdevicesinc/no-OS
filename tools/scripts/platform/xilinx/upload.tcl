@@ -12,6 +12,10 @@ if {$arch == "ps7_cortexa9_0"} {
 	targets -set -filter {name =~ "APU*"}
 	stop
 	rst
+} elseif {$arch == "psu_cortexa53_0"} {
+	targets -set -filter {name =~ "APU*"}
+	stop
+	rst -system
 }
 
 # Write the bitstream
@@ -31,14 +35,17 @@ if {$arch == "ps7_cortexa9_0"} {
 	ps7_init
 	ps7_post_config
 } elseif {$arch == "psu_cortexa53_0"} {
-	targets -set -filter {name =~ "APU*"}
+	# Configure PSU
+	targets -set -nocase -filter {name =~ "PSU"}
 	source "[file normalize $hw_path/psu_init.tcl]"
 	psu_init
 	psu_post_config
-	psu_ps_pl_isolation_removal
 	psu_ps_pl_reset_config
+	psu_ps_pl_isolation_removal
+	# write bootloop and release A53-0 reset
 	mwr 0xffff0000 0x14000000
 	mwr 0xFD1A0104 0x380E
+	targets -set -filter {name =~ "Cortex-A53 #0"}
 } elseif {$arch == "sys_mb"} {
 	targets -set -filter {name =~ "xc7*" || name =~ "xck*" || name =~ "xcv*"}
 }
