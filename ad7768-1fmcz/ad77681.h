@@ -94,6 +94,13 @@
 #define AD77681_INTERFACE_RDY_EN(x)				(((x) & 0x1) << 3)
 #define AD77681_INTERFACE_CONT_READ_MSK			(0x1 << 0)
 #define AD77681_INTERFACE_CONT_READ_EN(x)		(((x) & 0x1) << 0)
+#define AD77681_REG_COEFF_CONTROL				0x32
+#define AD77681_REG_COEFF_DATA					0x33
+#define AD77681_REG_ACCESS_KEY					0x34
+
+/* AD77681_REG_SCRATCH_PAD*/
+#define AD77681_SCRATCHPAD_MSK					(0xFF << 0)
+#define AD77681_SCRATCHPAD(x)					(((x) & 0xFF) << 0)
 
 /* AD77681_REG_POWER_CLOCK */
 #define AD77681_POWER_CLK_PWRMODE_MSK			0x3
@@ -119,10 +126,10 @@
 #define AD77681_ANALOG_REF_BUF_POS(x)			(((x) & 0x3) << 6)
 #define AD77681_ANALOG_REF_BUF_NEG_MSK			(0x3 << 4)
 #define AD77681_ANALOG_REF_BUF_NEG(x)			(((x) & 0x3) << 4)
-#define AD77681_ANALOG_REF_BUF_POS_OFF_MSK		(0x1 << 1)
-#define AD77681_ANALOG_REF_BUF_POS_OFF(x)		(((x) & 0x1) << 1)
-#define AD77681_ANALOG_REF_BUF_NEG_OFF_MSK		(0x1 << 0)
-#define AD77681_ANALOG_REF_BUF_NEG_OFF(x)		(((x) & 0x1) << 0)
+#define AD77681_ANALOG_AIN_BUF_POS_OFF_MSK		(0x1 << 1)
+#define AD77681_ANALOG_AIN_BUF_POS_OFF(x)		(((x) & 0x1) << 1)
+#define AD77681_ANALOG_AIN_BUF_NEG_OFF_MSK		(0x1 << 0)
+#define AD77681_ANALOG_AIN_BUF_NEG_OFF(x)		(((x) & 0x1) << 0)
 
 /* AD77681_REG_ANALOG2 */
 #define AD77681_ANALOG2_VCM_MSK					(0x7 << 0)
@@ -150,6 +157,7 @@
 
 /* AD77681_REG_SYNC_RESET */
 #define AD77681_SYNC_RST_SPI_STARTB_MSK			(0x1 << 7)
+#define AD77681_SYNC_RST_SPI_STARTB(x)			(((x) & 0x1) << 7)
 #define AD77681_SYNC_RST_SYNCOUT_EDGE_MSK		(0x1 << 6)
 #define AD77681_SYNC_RST_SYNCOUT_EDGE(x)		(((x) & 0x1) << 6)
 #define AD77681_SYNC_RST_GPIO_START_EN_MSK		(0x1 << 3)
@@ -166,6 +174,8 @@
 #define AD77681_GPIO_CNTRL_GPIO1_OD_EN(x)		(((x) & 0x1) << 5)
 #define AD77681_GPIO_CNTRL_GPIO0_OD_EN_MSK		(0x1 << 4)
 #define AD77681_GPIO_CNTRL_GPIO0_OD_EN(x)		(((x) & 0x1) << 4)
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN_MSK	(0x7 << 4)
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN(x)	(((x) & 0x7) << 4) 
 #define AD77681_GPIO_CNTRL_GPIO3_OP_EN_MSK		(0x1 << 3)
 #define AD77681_GPIO_CNTRL_GPIO3_OP_EN(x)		(((x) & 0x1) << 3)
 #define AD77681_GPIO_CNTRL_GPIO2_OP_EN_MSK		(0x1 << 2)
@@ -174,6 +184,8 @@
 #define AD77681_GPIO_CNTRL_GPIO1_OP_EN(x)		(((x) & 0x1) << 1)
 #define AD77681_GPIO_CNTRL_GPIO0_OP_EN_MSK		(0x1 << 0)
 #define AD77681_GPIO_CNTRL_GPIO0_OP_EN(x)		(((x) & 0x1) << 0)
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN_MSK	(0xF << 0)
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN(x)	(((x) & 0xF) << 0) 
 
 /* AD77681_REG_GPIO_WRITE */
 #define AD77681_GPIO_WRITE_3_MSK				(0x1 << 3)
@@ -184,12 +196,15 @@
 #define AD77681_GPIO_WRITE_1(x)					(((x) & 0x1) << 1)
 #define AD77681_GPIO_WRITE_0_MSK				(0x1 << 0)
 #define AD77681_GPIO_WRITE_0(x)					(((x) & 0x1) << 0)
+#define AD77681_GPIO_WRITE_ALL_MSK				(0xF << 0)
+#define AD77681_GPIO_WRITE_ALL(x)				(((x) & 0xF)
 
 /* AD77681_REG_GPIO_READ */
 #define AD77681_GPIO_READ_3_MSK					(0x1 << 3)
 #define AD77681_GPIO_READ_2_MSK					(0x1 << 2)
 #define AD77681_GPIO_READ_1_MSK					(0x1 << 1)
 #define AD77681_GPIO_READ_0_MSK					(0x1 << 0)
+#define AD77681_GPIO_READ_ALL_MSK				(0xF << 0)
 
 /* AD77681_REG_OFFSET_HI */
 #define AD77681_OFFSET_HI_MSK					(0xFF << 0)
@@ -253,15 +268,81 @@
 #define AD77681_MASTER_DIG_ERROR_MSK			(0x1 << 5)
 #define AD77681_MASTER_DIG_ERR_EXT_CLK_MSK		(0x1 << 4)
 #define AD77681_MASTER_FILT_SAT_MSK				(0x1 << 3)
-#define AD77681_MASTER_FILT_NOT_SAT_MSK			(0x1 << 2)
+#define AD77681_MASTER_FILT_NOT_SET_MSK			(0x1 << 2)
 #define AD77681_MASTER_SPI_ERROR_MSK			(0x1 << 1)
 #define AD77681_MASTER_POR_FLAG_MSK				(0x1 << 0)
+
+/* AD77681_REG_SPI_DIAG_STATUS */
+#define AD77681_SPI_IGNORE_ERROR_MSK			(0x1 << 4)
+#define AD77681_SPI_IGNORE_ERROR_CLR(x)			(((x) & 0x1) << 4)
+#define AD77681_SPI_CLK_CNT_ERROR_MSK			(0x1 << 3)
+#define AD77681_SPI_READ_ERROR_MSK				(0x1 << 2)
+#define AD77681_SPI_READ_ERROR_CLR(x)			(((x) & 0x1) << 2)
+#define AD77681_SPI_WRITE_ERROR_MSK				(0x1 << 1)
+#define AD77681_SPI_WRITE_ERROR_CLR(x)			(((x) & 0x1) << 1)
+#define AD77681_SPI_CRC_ERROR_MSK				(0x1 << 0)
+#define AD77681_SPI_CRC_ERROR_CLR(x)			(((x) & 0x1) << 0)
+
+/* AD77681_REG_ADC_DIAG_STATUS */
+#define AD77681_ADC_DLDO_PSM_ERROR_MSK			(0x1 << 5)
+#define AD77681_ADC_ALDO_PSM_ERROR_MSK			(0x1 << 4)
+#define AD77681_ADC_REF_DET_ERROR_MSK           (0x1 << 3)
+#define AD77681_ADC_FILT_SAT_MSK				(0x1 << 2)
+#define AD77681_ADC_FILT_NOT_SET_MSK			(0x1 << 1)
+#define AD77681_ADC_DIG_ERR_EXT_CLK_MSK			(0x1 << 0)
+
+/* AD77681_REG_DIG_DIAG_STATUS */
+#define AD77681_DIG_MEMMAP_CRC_ERROR_MSK		(0x1 << 4)
+#define AD77681_DIG_RAM_CRC_ERROR_MSK			(0x1 << 3)
+#define AD77681_DIG_FUS_CRC_ERROR_MSK			(0x1 << 2)
+
+/* AD77681_REG_MCLK_COUNTER */
+#define AD77681_MCLK_COUNTER_MSK				(0xFF << 0)
+#define	AD77681_MCLK_COUNTER(x)					(((x) & 0xFF) << 0)
+
+/* AD77681_REG_COEFF_CONTROL */
+#define AD77681_COEF_CONTROL_COEFFACCESSEN_MSK	(0x1 << 7)
+#define AD77681_COEF_CONTROL_COEFFACCESSEN(x)	(((x) & 0x1) << 7)
+#define AD77681_COEF_CONTROL_COEFFWRITEEN_MSK	(0x1 << 6)
+#define AD77681_COEF_CONTROL_COEFFWRITEEN(x)	(((x) & 0x1) << 6)
+#define AD77681_COEF_CONTROL_COEFFADDR_MSK		(0x3F << 5)
+#define AD77681_COEF_CONTROL_COEFFADDR(x)		(((x) & 0x3F) << 5)
+
+/* AD77681_REG_COEFF_DATA */
+#define AD77681_COEFF_DATA_USERCOEFFEN_MSK		(0x1 << 23)
+#define	AD77681_COEFF_DATA_USERCOEFFEN(x)		(((x) & 0x1) << 23)
+#define AD77681_COEFF_DATA_COEFFDATA_MSK		(0x7FFFFF << 22)
+#define	AD77681_COEFF_DATA_COEFFDATA(x)			(((x) & 0x7FFFFF) << 22)
+
+/* AD77681_REG_ACCESS_KEY */
+#define AD77681_ACCESS_KEY_MSK					(0xFF << 0)
+#define	AD77681_ACCESS_KEY(x)					(((x) & 0xFF) << 0)
+#define AD77681_ACCESS_KEY_CHECK_MSK			(0x1 << 0)
 
 #define AD77681_REG_READ(x)						( (1 << 6) | (x & 0xFF) )		// Read from register x
 #define AD77681_REG_WRITE(x)					( (~(1 << 6)) & (x & 0xFF) )  	// Write to register x
 
 /* 8-bits wide checksum generated using the polynomial */
 #define AD77681_CRC8_POLY	0x07 // x^8 + x^2 + x^1 + x^0
+
+/* Initial CRC for continuous read mode */
+#define INITIAL_CRC_CRC8						0x03
+#define INITIAL_CRC_XOR							0x6C
+#define INITIAL_CRC								0x00
+
+#define CRC_DEBUG
+
+/* AD7768-1 */
+/* A special key for exit the contiuous read mode, taken from the AD7768-1 datasheet */
+#define EXIT_CONT_READ							0x6C
+/* Bit resolution of the AD7768-1 */
+#define AD7768_N_BITS							24
+/* Full scale of the AD7768-1 = 2^24 = 16777216 */
+#define AD7768_FULL_SCALE						(1 << AD7768_N_BITS)
+/* Half scale of the AD7768-1 = 2^23 = 8388608 */
+#define AD7768_HALF_SCALE						(1 << (AD7768_N_BITS - 1))
+
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -283,7 +364,8 @@ enum ad77681_conv_mode {
 	AD77681_CONV_CONTINUOUS = 0,
 	AD77681_CONV_ONE_SHOT = 1,
 	AD77681_CONV_SINGLE = 2,
-	AD77681_CONV_PERIODIC = 3
+	AD77681_CONV_PERIODIC = 3,
+	AD77681_CONV_STANDBY = 4
 };
 
 enum ad77681_conv_len {
@@ -307,6 +389,139 @@ enum ad77681_crc_sel {
 	AD77681_CRC,
 	AD77681_XOR,
 	AD77681_NO_CRC
+};
+
+/* Filter tye FIR, SINC3, SINC5 */
+enum ad77681_filter_type { 							
+	AD77681_SINC5			= 0,
+	AD77681_SINC5_DECx8		= 1,
+	AD77681_SINC5_DECx16	= 2,
+	AD77681_SINC3			= 3,
+	AD77681_FIR				= 4
+};
+
+/* Dectimation ratios for SINC5 and FIR */
+enum ad77681_sinc5_fir_decimate {					
+	AD77681_SINC5_FIR_DECx32	= 0,
+	AD77681_SINC5_FIR_DECx64	= 1,
+	AD77681_SINC5_FIR_DECx128	= 2,
+	AD77681_SINC5_FIR_DECx256	= 3,
+	AD77681_SINC5_FIR_DECx512	= 4,
+	AD77681_SINC5_FIR_DECx1024	= 5
+};
+
+/* Sleep / Power up */
+enum ad77681_sleep_wake {							
+	AD77681_SLEEP   = 1,
+	AD77681_WAKE = 0	
+};
+
+/* Reset option */
+enum ad7761_reset_option {
+	AD77681_SOFT_RESET,
+	AD77681_HARD_RESET	
+};
+/* AIN- precharge */
+enum ad77681_AINn_precharge {						
+	AD77681_AINn_ENABLED   = 0,
+	AD77681_AINn_DISABLED  = 1
+};
+
+/* AIN+ precharge */
+enum ad77681_AINp_precharge {						
+	AD77681_AINp_ENABLED  = 0,
+	AD77681_AINp_DISABLED = 1
+};
+
+/* REF- buffer */
+enum ad77681_REFn_buffer {							
+	AD77681_BUFn_ENABLED        = 0,
+	AD77681_BUFn_DISABLED       = 1,
+	AD77681_BUFn_FULL_BUFFER_ON = 2
+};
+
+/* REF+ buffer */
+enum ad77681_REFp_buffer {							
+	AD77681_BUFp_ENABLED        = 0,
+	AD77681_BUFp_DISABLED       = 1,
+	AD77681_BUFp_FULL_BUFFER_ON = 2
+};
+
+/* VCM output voltage */
+enum ad77681_VCM_out {								
+	AD77681_VCM_HALF_VCC	= 0,
+	AD77681_VCM_2_5V		= 1,
+	AD77681_VCM_2_05V   	= 2,
+	AD77681_VCM_1_9V		= 3,
+	AD77681_VCM_1_65V		= 4,
+	AD77681_VCM_1_1V		= 5,
+	AD77681_VCM_0_9V		= 6,
+	AD77681_VCM_OFF  		= 7
+};
+
+/* Global GPIO enable/disable */
+enum ad77681_gobal_gpio_enable
+{
+	AD77681_GLOBAL_GPIO_ENABLE		= 1,
+	AD77681_GLOBAL_GPIO_DISABLE		= 0
+};
+
+/* ADCs GPIO numbering */
+enum ad77681_gpios									
+{
+	AD77681_GPIO0					= 0,
+	AD77681_GPIO1					= 1,
+	AD77681_GPIO2					= 2,
+	AD77681_GPIO3					= 3,
+	AD77681_ALL_GPIOS				= 4
+};
+
+enum ad77681_gpio_output_type
+{
+	AD77681_GPIO_STRONG_DRIVER		= 0,
+	AD77681_GPIO_OPEN_DRAIN			= 1
+};
+
+/* Continuous ADC read */
+enum ad77681_continuous_read						
+{
+	AD77681_CONTINUOUS_READ_ENABLE = 1,
+	AD77681_CONTINUOUS_READ_DISABLE = 0,
+};
+
+/* ADC data structure */
+struct adc_data										
+{
+	bool		finish;
+	uint16_t	count;
+	uint16_t	samples;
+	uint32_t	raw_data[4096];
+};
+/* ADC status registers structure */
+struct ad77681_status_registers						
+{
+	bool							master_error;
+	bool							adc_error;
+	bool							dig_error;
+	bool							adc_err_ext_clk_qual;
+	bool							adc_filt_saturated;
+	bool							adc_filt_not_settled;
+	bool							spi_error;
+	bool							por_flag;
+	bool							spi_ignore;
+	bool							spi_clock_count;
+	bool							spi_read_error;
+	bool							spi_write_error;
+	bool							spi_crc_error;
+	bool							dldo_psm_error;
+	bool							aldo_psm_error;
+	bool                            ref_det_error;
+	bool                            filt_sat_error;
+	bool                            filt_not_set_error;
+	bool                            ext_clk_qual_error;
+	bool							memoy_map_crc_error;
+	bool							ram_crc_error;
+	bool							fuse_crc_error;
 };
 
 struct ad77681_dev {
