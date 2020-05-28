@@ -3,7 +3,7 @@
  *   @brief  Implementation of AD5592R Base Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -232,7 +232,6 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 			break;
 
 		case CH_MODE_GPIO:
-			dev->gpio_map |= BIT(i);
 			dev->gpio_in |= BIT(i); /* Default to input */
 			break;
 
