@@ -216,6 +216,9 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 	if (!dev)
 		return FAILURE;
 
+	dev->gpio_in = 0;
+	dev->gpio_out = 0;
+
 	for (i = 0; i < dev->num_channels; i++) {
 		switch (dev->channel_modes[i]) {
 		case CH_MODE_DAC:
@@ -231,8 +234,12 @@ int32_t ad5592r_set_channel_modes(struct ad5592r_dev *dev)
 			adc |= BIT(i);
 			break;
 
-		case CH_MODE_GPIO:
-			dev->gpio_in |= BIT(i); /* Default to input */
+		case CH_MODE_GPI:
+			dev->gpio_in |= BIT(i);
+			break;
+
+		case CH_MODE_GPO:
+			dev->gpio_out |= BIT(i);
 			break;
 
 		case CH_MODE_UNUSED:
