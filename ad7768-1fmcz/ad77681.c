@@ -58,7 +58,7 @@
  */
 uint8_t ad77681_compute_crc8(uint8_t *data,
 			     uint8_t data_size,
-				 uint8_t init_val)
+			     uint8_t init_val)
 {
 	uint8_t i;
 	uint8_t crc = init_val;
@@ -86,7 +86,7 @@ uint8_t ad77681_compute_crc8(uint8_t *data,
  */
 uint8_t ad77681_compute_xor(uint8_t *data,
 			    uint8_t data_size,
-				uint8_t init_val)
+			    uint8_t init_val)
 {
 	uint8_t crc = init_val;
 	uint8_t buf[3];
@@ -124,23 +124,22 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 		return ret;
 
 	/* XOR or CRC checksum for read transactions */
-	if (dev->crc_sel != AD77681_NO_CRC)							
-	{
+	if (dev->crc_sel != AD77681_NO_CRC) {
 		crc_buf[0] = AD77681_REG_READ(reg_addr);
 		crc_buf[1] = buf[1];
-		
+
 		if (dev->crc_sel == AD77681_XOR)
 			/* INITIAL_CRC is 0, when ADC is not in continuous-read mode */
-			crc = ad77681_compute_xor(crc_buf, 2, INITIAL_CRC);	
+			crc = ad77681_compute_xor(crc_buf, 2, INITIAL_CRC);
 		else if(dev->crc_sel == AD77681_CRC)
 			/* INITIAL_CRC is 0, when ADC is not in continuous-read mode */
 			crc = ad77681_compute_crc8(crc_buf, 2, INITIAL_CRC);
-		
+
 		/* In buf[2] is CRC from the ADC */
-		if (crc != buf[2])										
+		if (crc != buf[2])
 			ret = FAILURE;
 	}
-	
+
 	memcpy(reg_data, buf, ARRAY_SIZE(buf));
 
 	return ret;
@@ -159,13 +158,13 @@ int32_t ad77681_spi_reg_write(struct ad77681_dev *dev,
 {
 	uint8_t buf[3];
 	/* Buffer length in case of checksum usage */
-	uint8_t buf_len = (dev->crc_sel == AD77681_NO_CRC) ? 2 : 3; 							
+	uint8_t buf_len = (dev->crc_sel == AD77681_NO_CRC) ? 2 : 3;
 
 	buf[0] = AD77681_REG_WRITE(reg_addr);
 	buf[1] = reg_data;
-	
+
 	/* CRC only for read transactions, CRC and XOR for write transactions*/
-	if (dev->crc_sel != AD77681_NO_CRC)														
+	if (dev->crc_sel != AD77681_NO_CRC)
 		buf[2] = ad77681_compute_crc8(buf, 2, INITIAL_CRC);
 
 	return spi_write_and_read(dev->spi_desc, buf, buf_len);
@@ -210,7 +209,6 @@ int32_t ad77681_spi_write_mask(struct ad77681_dev *dev,
 	int32_t ret;
 
 	ret = ad77681_spi_reg_read(dev, reg_addr, reg_data);
-	ret = ad77681_spi_reg_read(dev, reg_addr, reg_data);
 	reg_data[1] &= ~mask;
 	reg_data[1] |= data;
 	ret |= ad77681_spi_reg_write(dev, reg_addr, reg_data[1]);
@@ -248,16 +246,29 @@ uint8_t ad77681_get_rx_buf_len(struct ad77681_dev *dev)
 int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 				  uint8_t *adc_data)
 {
-	uint8_t crc_calc_buf[4], buf[4], crc;
-	uint8_t rx_tx_buf_len = ad77681_get_rx_buf_len(dev) + 1;
+	uint8_t crc_calc_buf[4], buf[6], crc, frames_8byte = 0;
 	int32_t ret;
+
+	if (dev->conv_len == AD77681_CONV_24BIT)
+		frames_8byte += 3;
+	else
+		frames_8byte += 2;
+
+	if (dev->crc_sel != AD77681_NO_CRC)
+		frames_8byte++;
+
+	if (dev->status_bit)
+		frames_8byte++;
 
 	buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
 	buf[1] = 0x00;
 	buf[2] = 0x00;
 	buf[3] = 0x00;
+	buf[4] = 0x00;	/* added 2 more array places for max data length read */
+	buf[5] = 0x00;	/* register address + 3 bytes of data (24bit format) + CRC + Status bit */
 
-	ret = spi_write_and_read(dev->spi_desc, buf, rx_tx_buf_len);
+
+	ret = spi_write_and_read(dev->spi_desc, buf, frames_8byte + 1);
 	if (ret < 0)
 		return ret;
 
@@ -266,14 +277,14 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 		crc = ad77681_compute_crc8(crc_calc_buf, 4, INITIAL_CRC);
 		if (crc != buf[3]) {
 			printf("%s: CRC Error.\n", __func__);
-			ret = -1;
+			ret = FAILURE;
 		}
 	}
 
 	/* Fill the adc_data buffer */
 	memcpy(adc_data, buf, ARRAY_SIZE(buf));
 
-	return 0;
+	return ret;
 }
 
 /**
