@@ -3,7 +3,7 @@
  *   @brief  Header file of AD5592R Base Driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -108,7 +108,6 @@ struct ad5592r_dev {
 	uint16_t cached_gp_ctrl;
 	uint8_t channel_modes[8];
 	uint8_t channel_offstate[8];
-	uint8_t gpio_map;
 	uint8_t gpio_out;
 	uint8_t gpio_in;
 	uint8_t gpio_val;
