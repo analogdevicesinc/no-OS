@@ -556,9 +556,11 @@ struct ad77681_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 uint8_t ad77681_compute_crc8(uint8_t *data,
-			     uint8_t data_size);
+			    uint8_t data_size,
+				uint8_t init_val);
 uint8_t ad77681_compute_xor(uint8_t *data,
-			    uint8_t data_size);
+			    uint8_t data_size,
+				uint8_t init_val);
 int32_t ad77681_setup(struct ad77681_dev **device,
 		      struct ad77681_init_param init_param);
 int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
