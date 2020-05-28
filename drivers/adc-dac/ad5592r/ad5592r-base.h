@@ -43,9 +43,8 @@
 #include "delay.h"
 #include "spi.h"
 #include "i2c.h"
+#include "util.h"
 #include <stdbool.h>
-
-#define BIT(n) (1<<(n))
 
 #define CH_MODE_UNUSED			0
 #define CH_MODE_ADC			1
@@ -88,6 +87,8 @@ struct ad5592r_rw_ops {
 			     uint16_t value);
 	int32_t (*read_adc)(struct ad5592r_dev *dev, uint8_t chan,
 			    uint16_t *value);
+	int32_t(*multi_read_adc)(struct ad5592r_dev *dev,
+				 uint16_t chans, uint16_t *value);
 	int32_t (*reg_write)(struct ad5592r_dev *dev, uint8_t reg,
 			     uint16_t value);
 	int32_t (*reg_read)(struct ad5592r_dev *dev, uint8_t reg,
