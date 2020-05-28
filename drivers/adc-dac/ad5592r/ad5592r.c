@@ -3,7 +3,7 @@
  *   @brief  Implementation of AD5592R driver.
  *   @author Mircea Caprioru (mircea.caprioru@analog.com)
 ********************************************************************************
- * Copyright 2018(c) Analog Devices, Inc.
+ * Copyright 2018, 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -166,7 +166,7 @@ int32_t ad5592r_reg_read(struct ad5592r_dev *dev, uint8_t reg, uint16_t *value)
 		return FAILURE;
 
 	dev->spi_msg = swab16((AD5592R_REG_LDAC << 11) |
-			      AD5592R_LDAC_READBACK_EN | (reg << 2));
+			      AD5592R_LDAC_READBACK_EN | (reg << 2) | dev->ldac_mode);
 
 	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
 				 sizeof(dev->spi_msg));

@@ -112,6 +112,7 @@ struct ad5592r_dev {
 	uint8_t gpio_out;
 	uint8_t gpio_in;
 	uint8_t gpio_val;
+	uint8_t ldac_mode;
 };
 
 int32_t ad5592r_base_reg_write(struct ad5592r_dev *dev, uint8_t reg,
