@@ -43,6 +43,7 @@
 const struct ad5592r_rw_ops ad5592r_rw_ops = {
 	.write_dac = ad5592r_write_dac,
 	.read_adc = ad5592r_read_adc,
+	.multi_read_adc = ad5592r_multi_read_adc,
 	.reg_write = ad5592r_reg_write,
 	.reg_read = ad5592r_reg_read,
 	.gpio_read = ad5592r_gpio_read,
@@ -127,6 +128,51 @@ int32_t ad5592r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 		return ret;
 
 	*value = dev->spi_msg;
+
+	return 0;
+}
+
+/**
+ * Read Multiple ADC Channels.
+ *
+ * @param dev - The device structure.
+ * @param chans - The ADC channels to be readback
+ * @param values - ADC value array
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5592r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
+			       uint16_t *values)
+{
+	int32_t ret;
+	uint8_t samples;
+	uint8_t i;
+
+	if (!dev)
+		return FAILURE;
+
+	samples = hweight8(chans);
+
+	dev->spi_msg = swab16((uint16_t)(AD5592R_REG_ADC_SEQ << 11) | chans);
+
+	ret = spi_write_and_read(dev->spi, (uint8_t *)&dev->spi_msg,
+				 sizeof(dev->spi_msg));
+	if (ret < 0)
+		return ret;
+
+	/*
+	 * Invalid data:
+	 * See Figure 40. Single-Channel ADC Conversion Sequence
+	 */
+	ret = ad5592r_spi_wnop_r16(dev, &dev->spi_msg);
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < samples; i++) {
+		ret = ad5592r_spi_wnop_r16(dev, &dev->spi_msg);
+		if (ret < 0)
+			return ret;
+		values[i] = dev->spi_msg;
+	}
 
 	return 0;
 }

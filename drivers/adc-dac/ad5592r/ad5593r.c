@@ -50,10 +50,12 @@
 
 #define STOP_BIT	1
 #define RESTART_BIT	0
+#define AD5593R_ADC_VALUES_BUFF_SIZE	    18
 
 const struct ad5592r_rw_ops ad5593r_rw_ops = {
 	.write_dac = ad5593r_write_dac,
 	.read_adc = ad5593r_read_adc,
+	.multi_read_adc= ad5593r_multi_read_adc,
 	.reg_write = ad5593r_reg_write,
 	.reg_read = ad5593r_reg_read,
 	.gpio_read = ad5593r_gpio_read,
@@ -120,6 +122,50 @@ int32_t ad5593r_read_adc(struct ad5592r_dev *dev, uint8_t chan,
 		return ret;
 
 	*value = (uint16_t)((data[0] & 0x0F) << 8) + data[1];
+
+	return 0;
+}
+
+/**
+ * Read Multiple ADC Channels.
+ *
+ * @param dev - The device structure.
+ * @param chans - The ADC channels to be readback
+ * @param values - ADC value array
+ * @return 0 in case of success, negative error code otherwise
+ */
+int32_t ad5593r_multi_read_adc(struct ad5592r_dev *dev, uint16_t chans,
+			       uint16_t *values)
+{
+	uint8_t data[AD5593R_ADC_VALUES_BUFF_SIZE], i;
+	int32_t ret;
+	uint8_t samples;
+
+	if (!dev)
+		return FAILURE;
+
+	samples = hweight8(chans);
+
+	data[0] = AD5593R_MODE_CONF | AD5592R_REG_ADC_SEQ;
+	data[1] = chans >> 8;
+	data[2] = chans & 0xFF;
+
+	ret = i2c_write(dev->i2c, data, 3, STOP_BIT);
+	if (ret < 0)
+		return ret;
+
+	data[0] = AD5593R_MODE_ADC_READBACK;
+	ret = i2c_write(dev->i2c, data, 1, RESTART_BIT);
+	if (ret < 0)
+		return ret;
+
+	ret = i2c_read(dev->i2c, data, (2 * samples), STOP_BIT);
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < samples; i++) {
+		values[i] = ((uint16_t)(((data[2 * i] & 0xFF) << 8) + data[(2 * i) + 1]));
+	}
 
 	return 0;
 }
