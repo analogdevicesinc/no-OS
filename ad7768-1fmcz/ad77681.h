@@ -175,7 +175,7 @@
 #define AD77681_GPIO_CNTRL_GPIO0_OD_EN_MSK		(0x1 << 4)
 #define AD77681_GPIO_CNTRL_GPIO0_OD_EN(x)		(((x) & 0x1) << 4)
 #define AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN_MSK	(0x7 << 4)
-#define AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN(x)	(((x) & 0x7) << 4) 
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN(x)	(((x) & 0x7) << 4)
 #define AD77681_GPIO_CNTRL_GPIO3_OP_EN_MSK		(0x1 << 3)
 #define AD77681_GPIO_CNTRL_GPIO3_OP_EN(x)		(((x) & 0x1) << 3)
 #define AD77681_GPIO_CNTRL_GPIO2_OP_EN_MSK		(0x1 << 2)
@@ -185,7 +185,7 @@
 #define AD77681_GPIO_CNTRL_GPIO0_OP_EN_MSK		(0x1 << 0)
 #define AD77681_GPIO_CNTRL_GPIO0_OP_EN(x)		(((x) & 0x1) << 0)
 #define AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN_MSK	(0xF << 0)
-#define AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN(x)	(((x) & 0xF) << 0) 
+#define AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN(x)	(((x) & 0xF) << 0)
 
 /* AD77681_REG_GPIO_WRITE */
 #define AD77681_GPIO_WRITE_3_MSK				(0x1 << 3)
@@ -392,7 +392,7 @@ enum ad77681_crc_sel {
 };
 
 /* Filter tye FIR, SINC3, SINC5 */
-enum ad77681_filter_type { 							
+enum ad77681_filter_type {
 	AD77681_SINC5			= 0,
 	AD77681_SINC5_DECx8		= 1,
 	AD77681_SINC5_DECx16	= 2,
@@ -401,7 +401,7 @@ enum ad77681_filter_type {
 };
 
 /* Dectimation ratios for SINC5 and FIR */
-enum ad77681_sinc5_fir_decimate {					
+enum ad77681_sinc5_fir_decimate {
 	AD77681_SINC5_FIR_DECx32	= 0,
 	AD77681_SINC5_FIR_DECx64	= 1,
 	AD77681_SINC5_FIR_DECx128	= 2,
@@ -411,44 +411,44 @@ enum ad77681_sinc5_fir_decimate {
 };
 
 /* Sleep / Power up */
-enum ad77681_sleep_wake {							
+enum ad77681_sleep_wake {
 	AD77681_SLEEP   = 1,
-	AD77681_WAKE = 0	
+	AD77681_WAKE = 0
 };
 
 /* Reset option */
 enum ad7761_reset_option {
 	AD77681_SOFT_RESET,
-	AD77681_HARD_RESET	
+	AD77681_HARD_RESET
 };
 /* AIN- precharge */
-enum ad77681_AINn_precharge {						
+enum ad77681_AINn_precharge {
 	AD77681_AINn_ENABLED   = 0,
 	AD77681_AINn_DISABLED  = 1
 };
 
 /* AIN+ precharge */
-enum ad77681_AINp_precharge {						
+enum ad77681_AINp_precharge {
 	AD77681_AINp_ENABLED  = 0,
 	AD77681_AINp_DISABLED = 1
 };
 
 /* REF- buffer */
-enum ad77681_REFn_buffer {							
+enum ad77681_REFn_buffer {
 	AD77681_BUFn_ENABLED        = 0,
 	AD77681_BUFn_DISABLED       = 1,
 	AD77681_BUFn_FULL_BUFFER_ON = 2
 };
 
 /* REF+ buffer */
-enum ad77681_REFp_buffer {							
+enum ad77681_REFp_buffer {
 	AD77681_BUFp_ENABLED        = 0,
 	AD77681_BUFp_DISABLED       = 1,
 	AD77681_BUFp_FULL_BUFFER_ON = 2
 };
 
 /* VCM output voltage */
-enum ad77681_VCM_out {								
+enum ad77681_VCM_out {
 	AD77681_VCM_HALF_VCC	= 0,
 	AD77681_VCM_2_5V		= 1,
 	AD77681_VCM_2_05V   	= 2,
@@ -460,15 +460,13 @@ enum ad77681_VCM_out {
 };
 
 /* Global GPIO enable/disable */
-enum ad77681_gobal_gpio_enable
-{
+enum ad77681_gobal_gpio_enable {
 	AD77681_GLOBAL_GPIO_ENABLE		= 1,
 	AD77681_GLOBAL_GPIO_DISABLE		= 0
 };
 
 /* ADCs GPIO numbering */
-enum ad77681_gpios									
-{
+enum ad77681_gpios {
 	AD77681_GPIO0					= 0,
 	AD77681_GPIO1					= 1,
 	AD77681_GPIO2					= 2,
@@ -476,30 +474,26 @@ enum ad77681_gpios
 	AD77681_ALL_GPIOS				= 4
 };
 
-enum ad77681_gpio_output_type
-{
+enum ad77681_gpio_output_type {
 	AD77681_GPIO_STRONG_DRIVER		= 0,
 	AD77681_GPIO_OPEN_DRAIN			= 1
 };
 
 /* Continuous ADC read */
-enum ad77681_continuous_read						
-{
+enum ad77681_continuous_read {
 	AD77681_CONTINUOUS_READ_ENABLE = 1,
 	AD77681_CONTINUOUS_READ_DISABLE = 0,
 };
 
 /* ADC data structure */
-struct adc_data										
-{
+struct adc_data {
 	bool		finish;
 	uint16_t	count;
 	uint16_t	samples;
 	uint32_t	raw_data[4096];
 };
 /* ADC status registers structure */
-struct ad77681_status_registers						
-{
+struct ad77681_status_registers {
 	bool							master_error;
 	bool							adc_error;
 	bool							dig_error;
@@ -556,11 +550,11 @@ struct ad77681_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 uint8_t ad77681_compute_crc8(uint8_t *data,
-			    uint8_t data_size,
-				uint8_t init_val);
+			     uint8_t data_size,
+			     uint8_t init_val);
 uint8_t ad77681_compute_xor(uint8_t *data,
 			    uint8_t data_size,
-				uint8_t init_val);
+			    uint8_t init_val);
 int32_t ad77681_setup(struct ad77681_dev **device,
 		      struct ad77681_init_param init_param);
 int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
