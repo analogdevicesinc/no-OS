@@ -92,7 +92,7 @@ static uint8_t heap[__HEAP_SIZE]   __attribute__ ((aligned(8), used, section(".h
 /* Cortex-M3 Processor Exceptions */
 void Reset_Handler               (void) __attribute__ ((weak, alias("Reset_Handler_C")));
 void NMI_Handler                 (void) __attribute__ ((weak, alias("Default_Handler")));
-void HardFault_Handler           (void) __attribute__ ((weak, alias("Default_Handler")));
+void HardFault_Handler           (void) __attribute__ ((weak, alias("HardFault_Handler_C")));
 void MemManage_Handler           (void) __attribute__ ((weak, alias("Default_Handler")));
 void BusFault_Handler            (void) __attribute__ ((weak, alias("Default_Handler")));
 void UsageFault_Handler          (void) __attribute__ ((weak, alias("Default_Handler")));
@@ -360,4 +360,17 @@ void Reset_Handler_C(void) {
 void Default_Handler(void) {
 
 	while(1);
+}
+
+/*
+ * If this is defined. When reseting the target, the program will
+ * restart and can be followed on the debugger.
+ * If it is a realease build. Will be called the default handler
+ */
+void HardFault_Handler_C(void) {
+#ifdef _DEBUG
+	printf("HardFault\n");
+#else
+	Default_Handler();
+#endif
 }
