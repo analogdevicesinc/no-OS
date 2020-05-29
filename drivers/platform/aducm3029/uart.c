@@ -271,15 +271,16 @@ static void uart_callback(void *ctx, uint32_t event, void *buff)
 int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 		  uint32_t bytes_number)
 {
-	uint32_t errors;
-	struct aducm_uart_desc *extra;
+	struct aducm_uart_desc	*extra;
+	uint32_t		errors;
+	uint32_t		to_read;
+	uint32_t		idx;
 
 	if (!desc || !data)
 		return FAILURE;
 
 	extra = desc->extra;
-	if (bytes_number == 0 || bytes_number > MAX_BYTES) {
-		// TODO loop to write more than 1024 bytes
+	if (bytes_number == 0) {
 		errors = BAD_INPUT_PARAMETERS;
 		goto failure;
 	}
@@ -288,14 +289,19 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 	while (extra->read_desc.is_nonblocking)
 		;
 
-	if (ADI_UART_SUCCESS != adi_uart_Read(
-		    (ADI_UART_HANDLE const)extra->uart_handler,
-		    (void *const)data,
-		    (uint32_t const)bytes_number,
-		    bytes_number > 4 ? true : false,
-		    &errors))
-		goto failure;
-
+	idx = 0;
+	while (bytes_number) {
+		to_read = min(bytes_number, MAX_BYTES);
+		if (ADI_UART_SUCCESS != adi_uart_Read(
+			    (ADI_UART_HANDLE const)extra->uart_handler,
+			    (void *const)(data + idx),
+			    (uint32_t const)to_read,
+			    bytes_number > 4 ? true : false,
+			    &errors))
+			goto failure;
+		bytes_number -= to_read;
+		idx += to_read;
+	}
 	return SUCCESS;
 failure:
 	extra->errors |= errors;
@@ -314,8 +320,10 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 {
 	struct aducm_uart_desc	*extra;
 	uint32_t		errors;
+	uint32_t		to_write;
+	uint32_t		idx;
 
-	if (!desc || !data || !bytes_number || bytes_number > 1024)
+	if (!desc || !data || !bytes_number)
 		return FAILURE;
 
 	/* TODO: Add support for more than 1024 bytes */
@@ -325,13 +333,19 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 	while (extra->write_desc.is_nonblocking)
 		;
 
-	if (ADI_UART_SUCCESS != adi_uart_Write(
-		    (ADI_UART_HANDLE const)extra->uart_handler,
-		    (void *const)data,
-		    (uint32_t const)bytes_number,
-		    bytes_number > 4 ? true : false,
-		    &errors))
-		goto failure;
+	idx = 0;
+	while (bytes_number) {
+		to_write = min(bytes_number, MAX_BYTES);
+		if (ADI_UART_SUCCESS != adi_uart_Write(
+			    (ADI_UART_HANDLE const)extra->uart_handler,
+			    (void *const)(data + idx),
+			    (uint32_t const)to_write,
+			    bytes_number > 4 ? true : false,
+			    &errors))
+			goto failure;
+		bytes_number -= to_write;
+		idx += to_write;
+	}
 
 	return SUCCESS;
 
