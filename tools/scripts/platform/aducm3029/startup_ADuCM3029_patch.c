@@ -41,10 +41,6 @@
 extern uint32_t __etext;
 extern uint32_t __data_start__;
 extern uint32_t __data_end__;
-extern uint32_t __copy_table_start__;
-extern uint32_t __copy_table_end__;
-extern uint32_t __zero_table_start__;
-extern uint32_t __zero_table_end__;
 extern uint32_t __bss_start__;
 extern uint32_t __bss_end__;
 extern uint32_t __StackTop;
