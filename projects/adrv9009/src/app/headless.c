@@ -136,7 +136,7 @@ int main(void)
 		"tx_dmac",
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
-		DMA_CYCLIC,
+		0,
 	};
 	struct axi_dmac *tx_dmac;
 	struct gpio_desc *gpio_plddrbypass;
@@ -255,7 +255,7 @@ int main(void)
 		printf("gpio_get() failed with status %d", s);
 		return s;
 	}
-	gpio_direction_output(gpio_plddrbypass, 1);
+	gpio_direction_output(gpio_plddrbypass, 0);
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
 				 DDR_MEM_BASEADDR + 0xA000000);
