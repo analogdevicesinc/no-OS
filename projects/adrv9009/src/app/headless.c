@@ -79,6 +79,7 @@ static ssize_t iio_uart_read(char *buf, size_t len)
 int main(void)
 {
 	adiHalErr_t err;
+	int status;
 
 	// compute the lane rate from profile settings
 	// lane_rate = input_rate * M * 20 / L
@@ -117,6 +118,7 @@ int main(void)
 		TALISE_NUM_CHANNELS
 	};
 	struct axi_adc *rx_adc;
+
 	struct axi_dac_init tx_dac_init = {
 		"tx_dac",
 		TX_CORE_BASEADDR,
@@ -124,6 +126,7 @@ int main(void)
 		NULL
 	};
 	struct axi_dac *tx_dac;
+
 	struct axi_dmac_init rx_dmac_init = {
 		"rx_dmac",
 		RX_DMA_BASEADDR,
@@ -131,14 +134,20 @@ int main(void)
 		0
 	};
 	struct axi_dmac *rx_dmac;
-#ifdef DAC_DMA_EXAMPLE
+
 	struct axi_dmac_init tx_dmac_init = {
 		"tx_dmac",
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
+#ifdef IIO_EXAMPLE
+		DMA_CYCLIC,
+#else
 		0,
+#endif
 	};
 	struct axi_dmac *tx_dmac;
+
+#ifdef DAC_DMA_EXAMPLE
 	struct gpio_desc *gpio_plddrbypass;
 	struct gpio_init_param gpio_init_plddrbypass;
 	extern const uint32_t sine_lut_iq[1024];
@@ -241,63 +250,66 @@ int main(void)
 	/* Print JESD status */
 	jesd_status();
 
-	/* Initialize the DAC DDS */
-	axi_dac_init(&tx_dac, &tx_dac_init);
+	/* Initialize the DAC core */
+	status = axi_dac_init(&tx_dac, &tx_dac_init);
+	if (status) {
+		printf("axi_dac_init() failed with status %d\n", status);
+		goto error_3;
+	}
 
 	/* Initialize the ADC core */
-	axi_adc_init(&rx_adc, &rx_adc_init);
+	status = axi_adc_init(&rx_adc, &rx_adc_init);
+	if (status) {
+		printf("axi_adc_init() failed with status %d\n", status);
+		goto error_3;
+	}
 
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
 	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
-	int32_t s = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
-	if (s) {
-		printf("gpio_get() failed with status %d", s);
-		return s;
+	status = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
+	if (status) {
+		printf("gpio_get() failed with status %d", status);
+		goto error_3;
 	}
 	gpio_direction_output(gpio_plddrbypass, 0);
+
 	axi_dac_load_custom_data(tx_dac, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq),
-				 DDR_MEM_BASEADDR + 0xA000000);
+				 DAC_DDR_BASEADDR);
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
 #endif
-	axi_dmac_init(&tx_dmac, &tx_dmac_init);
-	axi_dmac_transfer(tx_dmac, DDR_MEM_BASEADDR + 0xA000000,
-			  sizeof(sine_lut_iq) * 2);
-#endif
+
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if (status) {
+		printf("axi_dmac_init() tx init error: %d\n", status);
+		goto error_3;
+	}
+
+	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
+	if (status) {
+		printf("axi_dmac_init() rx init error: %d\n", status);
+		goto error_3;
+	}
+
+	axi_dmac_transfer(tx_dmac, DAC_DDR_BASEADDR, sizeof(sine_lut_iq));
 
 	mdelay(1000);
 
-	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
-	axi_dmac_init(&rx_dmac, &rx_dmac_init);
+	/* Transfer 16384 samples from ADC to MEM */
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,
-			  16384 * TALISE_NUM_CHANNELS * (talInit.jesd204Settings.framerA.Np / 8));
+			  16384 * TALISE_NUM_CHANNELS *
+			  DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
 #ifndef ALTERA_PLATFORM
-	Xil_DCacheInvalidateRange(XPAR_DDR_MEM_BASEADDR + 0x800000,
-				  16384 * TALISE_NUM_CHANNELS * (talInit.jesd204Settings.framerA.Np / 8));
+	Xil_DCacheInvalidateRange(DDR_MEM_BASEADDR + 0x800000,
+				  16384 * TALISE_NUM_CHANNELS *
+				  DIV_ROUND_UP(talInit.jesd204Settings.framerA.Np, 8));
+#endif
 #endif
 
 #ifdef IIO_EXAMPLE
-
-	int32_t status;
-
-	/**
-	 * Transmit DMA initial configuration.
-	 */
-	struct axi_dmac_init tx_dmac_init = {
-		"tx_dmac",
-		TX_DMA_BASEADDR,
-		DMA_MEM_TO_DEV,
-		DMA_CYCLIC,
-	};
-
-	/**
-	 * Pointer to transmit DMA instance.
-	 */
-	struct axi_dmac *tx_dmac;
-
 	/**
 	 * iio application configurations.
 	 */
@@ -381,13 +393,17 @@ int main(void)
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if(status < 0)
-		return FAILURE;
+		return status;
 
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
 
 	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
+	if(status < 0)
+		return status;
+
+	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if(status < 0)
 		return status;
 
