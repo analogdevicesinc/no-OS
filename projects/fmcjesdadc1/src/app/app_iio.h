@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -36,44 +36,21 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "iio_axi_adc.h"
 
-#include "app_config.h"
-#include "xparameters.h"
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#ifdef PLATFORM_MB
-#define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
-#define GPIO_DEVICE_ID				XPAR_GPIO_0_DEVICE_ID
-#define UART_DEVICE_ID				XPAR_AXI_UART_DEVICE_ID
+/* @brief Application IIO setup. */
+int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
+			struct iio_axi_adc_init_param *adc_1_init);
 
-#define GPIO_OFFSET				0
-
-#define ADC_0_DDR_BASEADDR			(XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000)
-#define ADC_1_DDR_BASEADDR			(XPAR_AXI_DDR_CNTRL_BASEADDR + 0x900000)
-#else
-#define SPI_DEVICE_ID				XPAR_XSPIPS_0_DEVICE_ID
-#define GPIO_DEVICE_ID				XPAR_XGPIOPS_0_DEVICE_ID
-
-#ifdef PLATFORM_ZYNQ
-#define GPIO_OFFSET				54
 #endif
-
-#define ADC_0_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR + 0x800000)
-#define ADC_1_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR + 0x900000)
-#endif
-
-#define RX_0_CORE_BASEADDR			XPAR_AXI_AD9250_0_CORE_BASEADDR
-#define RX_1_CORE_BASEADDR			XPAR_AXI_AD9250_1_CORE_BASEADDR
-
-#define RX_DMA_0_BASEADDR			XPAR_AXI_AD9250_0_DMA_BASEADDR
-#define RX_DMA_1_BASEADDR			XPAR_AXI_AD9250_1_DMA_BASEADDR
-
-#define RX_JESD_BASEADDR			XPAR_AXI_AD9250_JESD_RX_AXI_BASEADDR
-
-#define RX_XCVR_BASEADDR			XPAR_AXI_AD9250_XCVR_BASEADDR
-
-#define GPIO_JESD204_SYSREF			(GPIO_OFFSET + 32)
-
-#endif /* _PARAMETERS_H_ */
