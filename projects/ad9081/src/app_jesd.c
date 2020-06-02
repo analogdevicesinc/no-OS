@@ -108,6 +108,7 @@ int32_t app_jesd_init(struct clk clk[2],
 		.lane_clk_khz = rx_lane_clk_khz
 	};
 
+#ifdef TX_XCVR_BASEADDR
 	struct adxcvr_init tx_adxcvr_init = {
 		"tx_adxcvr",
 		TX_XCVR_BASEADDR,
@@ -118,7 +119,9 @@ int32_t app_jesd_init(struct clk clk[2],
 		tx_lane_clk_khz,
 		reference_clk_khz,
 	};
+#endif
 
+#ifdef RX_XCVR_BASEADDR
 	struct adxcvr_init rx_adxcvr_init = {
 		.name = "rx_adxcvr",
 		.base = RX_XCVR_BASEADDR,
@@ -129,13 +132,18 @@ int32_t app_jesd_init(struct clk clk[2],
 		.lane_rate_khz = rx_lane_clk_khz,
 		.ref_rate_khz = reference_clk_khz,
 	};
+#endif
 
+#ifdef TX_XCVR_BASEADDR
 	ret = adxcvr_init(&tx_adxcvr, &tx_adxcvr_init);
 	if (ret)
 		return ret;
+#endif
+#ifdef RX_XCVR_BASEADDR
 	ret = adxcvr_init(&rx_adxcvr, &rx_adxcvr_init);
 	if (ret)
 		return ret;
+#endif
 
 	ret = axi_jesd204_tx_init(&tx_jesd, &tx_jesd_init);
 	if (ret)
@@ -144,9 +152,13 @@ int32_t app_jesd_init(struct clk clk[2],
 	if (ret)
 		return ret;
 
+#ifdef RX_XCVR_BASEADDR
 	rx_jesd_clk.xcvr = rx_adxcvr;
+#endif
 	rx_jesd_clk.jesd_rx = rx_jesd;
+#ifdef TX_XCVR_BASEADDR
 	tx_jesd_clk.xcvr = tx_adxcvr;
+#endif
 	tx_jesd_clk.jesd_tx = tx_jesd;
 
 	jesd_rx_hw.dev = &rx_jesd_clk;
