@@ -40,17 +40,18 @@
 #ifndef APP_CONFIG_H_
 #define APP_CONFIG_H_
 
-// Uncomment if using adrv2crr-fmc + adrv9009-zu11eg:
-//#define ZU11EG
+/* Uncomment if using adrv2crr-fmc + adrv9009-zu11eg: */
+// #define ZU11EG
 
-// Uncomment if using zcu102 + fmcomms8:
-//#define FMCOMMS8_ZCU102
+/* Uncomment if using zcu102 + fmcomms8: */
+// #define FMCOMMS8_ZCU102
 
-// Provided ZU11EG or FMCOMMS8_ZCU102 were not defined, this project builds
-// by default for zc706 + adrv9009-w/pcbz.
+/* Provided ZU11EG or FMCOMMS8_ZCU102 were not defined, this project builds
+ * by default for zc706 + adrv9009-w/pcbz.
+ */
 
-//#define DAC_DMA_EXAMPLE
-
-//#define IIO_EXAMPLE
+/* To build a specific example, uncomment one (only one) of the lines below: */
+// #define DAC_DMA_EXAMPLE
+// #define IIO_EXAMPLE
 
 #endif /* APP_CONFIG_H_ */
