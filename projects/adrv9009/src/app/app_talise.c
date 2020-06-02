@@ -379,9 +379,12 @@ adiHalErr_t talise_setup(taliseDevice_t * const pd, taliseInit_t * const pi)
 
 		/* RESET CDR */
 		uint8_t phy_ctrl;
-		ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, &phy_ctrl);
-		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl & ~BIT(7));
-		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl);
+		ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+				   &phy_ctrl);
+		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+				    phy_ctrl & ~BIT(7));
+		ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+				    phy_ctrl);
 	}
 
 	ADIHAL_sysrefReq(pd->devHalInfo, SYSREF_CONT_OFF);
@@ -511,7 +514,7 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 		ret = TALISE_enableMultichipSync(pd, 0, &mcsStatus);
 		if ((mcsStatus & 0x0B) != 0x0B) {
 			printf("%s:%d Unexpected MCS sync status (0x%X)\n",
-				__func__, __LINE__, mcsStatus);
+			       __func__, __LINE__, mcsStatus);
 			ret = FAILURE;
 		}
 		break;
@@ -649,13 +652,16 @@ int talise_multi_chip_sync(taliseDevice_t * pd, int step)
 
 		/* RESET CDR */
 		uint8_t phy_ctrl;
-		ret = ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, &phy_ctrl);
+		ret = ADIHAL_spiReadByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+					 &phy_ctrl);
 		if (ret)
 			break;
-		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl & ~BIT(7));
+		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+					  phy_ctrl & ~BIT(7));
 		if (ret)
 			break;
-		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1, phy_ctrl);
+		ret = ADIHAL_spiWriteByte(pd->devHalInfo, TALISE_ADDR_DES_PHY_GENERAL_CTL_1,
+					  phy_ctrl);
 		if (ret)
 			break;
 
