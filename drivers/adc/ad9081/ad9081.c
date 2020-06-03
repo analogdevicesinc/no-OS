@@ -653,6 +653,8 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
 		adi_ad9081_hal_reg_set(&phy->ad9081,
 				       REG_GENERAL_JRX_CTRL_ADDR, 0x80);
+		/* Differential mode */
+		adi_ad9081_dac_gpio_as_sync1_out_set(&phy->ad9081, 1);
 		adi_ad9081_jesd_tx_sync_mode_set(&phy->ad9081,
 						 AD9081_LINK_0, 1);
 		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
