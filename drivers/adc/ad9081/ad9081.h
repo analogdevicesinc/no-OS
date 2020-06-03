@@ -175,4 +175,6 @@ int32_t ad9081_init(struct ad9081_phy **device,
 		    const struct ad9081_init_param *init_param);
 /* Remove the device. */
 int32_t ad9081_remove(struct ad9081_phy *device);
+/* Work function. */
+void ad9081_work_func(struct ad9081_phy *phy);
 #endif
