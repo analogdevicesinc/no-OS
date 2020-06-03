@@ -60,8 +60,6 @@
 #include "util.h"
 #include "error.h"
 
-#define USE_LIBIIO
-
 #ifdef USE_LIBIIO
 #include "irq.h"
 #include "irq_extra.h"
