@@ -61,7 +61,7 @@ struct iio_ad713x_init_par {
 	/** Number of channels */
 	uint8_t	num_channels;
 	/** Spi engine message descriptor */
-	struct spi_eng_msg *msg;
+	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Spi engine descriptor */
 	struct spi_desc *spi_eng_desc;
 	/** Invalidate the Data cache for the given address range */
@@ -72,7 +72,7 @@ struct iio_ad713x {
 	/** Number of channels */
 	uint8_t	num_channels;
 	/** Spi engine message descriptor */
-	struct spi_eng_msg *msg;
+	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Spi engine descriptor */
 	struct spi_desc *spi_eng_desc;
 	/** Invalidate the Data cache for the given address range */
