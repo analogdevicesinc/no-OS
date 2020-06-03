@@ -666,6 +666,15 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 			return ret;
 	}
 
+	if (phy->jesd_tx_link.jesd_param.jesd_jesdv == 2) {
+		/* FIXME */
+		ret = adi_ad9081_hal_bf_set(&phy->ad9081, REG_JRX_TPL_1_ADDR,
+					    BF_JRX_TPL_BUF_PROTECT_EN_INFO,
+					    0);
+		if (ret != 0)
+			return ret;
+	}
+
 	ret = adi_ad9081_jesd_rx_link_enable_set(&phy->ad9081,
 			(phy->jesd_tx_link.jesd_param.jesd_duallink > 0) ?
 			AD9081_LINK_ALL : AD9081_LINK_0, 1);
