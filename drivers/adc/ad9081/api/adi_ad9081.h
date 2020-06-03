@@ -28,6 +28,9 @@
 #define AD9081_REF_CLK_FREQ_HZ_MIN 100000000ULL
 #define AD9081_REF_CLK_FREQ_HZ_MAX 2000000000ULL
 
+#define AD9081_JESD_SER_COUNT 8
+#define AD9081_JESD_DESER_COUNT 8
+
 /*!
  * @brief Enumerates Chip Output Resolution
  */
@@ -425,6 +428,14 @@ typedef enum {
 } adi_ad9081_test_mode_e;
 
 /*!
+ * @brief Enumerates DESER CTLE Settings
+ */
+typedef enum {
+	IL_GREATER_THAN_10DB = 0, /*!< CTLE settings with > 10dB */
+	IL_LESS_THAN_10DB = 1 /*!< CTLE settings with < 10dB */
+} adi_ad9081_il_settings_e;
+
+/*!
  * @brief Enumerates Reset Operation
  */
 typedef enum {
@@ -435,12 +446,13 @@ typedef enum {
 } adi_ad9081_reset_e;
 
 /*!
- * @brief Enumerates Eye Monitor Operation
+ * @brief Enumerates JESD Deserilizer Operation
  */
 typedef enum {
-	AD9081_HALF_RATE = 0, /*!< Half rate operation */
-	AD9081_QUART_RATE = 1 /*!< Quarter rate operation */
-} adi_ad9081_spo_mode_e;
+	AD9081_FULL_RATE = 0, /*!< Full rate operation */
+	AD9081_HALF_RATE = 1, /*!< Half rate operation */
+	AD9081_QUART_RATE = 2 /*!< Quarter rate operation */
+} adi_ad9081_deser_mode_e;
 
 /*!
  * @brief JESD PRBS Test Result Structure
@@ -458,6 +470,53 @@ typedef struct {
 	uint8_t left_spo; /*!< Left good SPO */
 	uint8_t right_spo; /*!< Right good SPO */
 } adi_ad9081_spo_t;
+
+/*!
+ * @brief Enumerates JESD Serializer Swing Settings
+ */
+typedef enum {
+	AD9081_SER_SWING_1000 = 0, /*!< 1000 mV Swing */
+	AD9081_SER_SWING_850 = 1, /*!< 850 mV Swing */
+	AD9081_SER_SWING_750 = 2, /*!< 750 mV Swing */
+	AD9081_SER_SWING_500 = 3 /*!< 500 mV Swing */
+} adi_ad9081_ser_swing_e;
+
+/*!
+ * @brief Enumerates JESD Serializer Pre-Emphasis Settings
+ */
+typedef enum {
+	AD9081_SER_PRE_EMP_0DB = 0, /*!< 0 db Pre-Emphasis */
+	AD9081_SER_PRE_EMP_3DB = 1, /*!< 3 db Pre-Emphasis */
+	AD9081_SER_PRE_EMP_6DB = 2 /*!< 6 db Pre-Emphasis */
+} adi_ad9081_ser_pre_emp_e;
+
+/*!
+ * @brief Enumerates JESD Serializer Post-Emphasis Settings
+ */
+typedef enum {
+	AD9081_SER_POST_EMP_0DB = 0, /*!< 0 db Post-Emphasis */
+	AD9081_SER_POST_EMP_3DB = 1, /*!< 3 db Post-Emphasis */
+	AD9081_SER_POST_EMP_6DB = 2, /*!< 6 db Post-Emphasis */
+	AD9081_SER_POST_EMP_9DB = 3, /*!< 9 db Post-Emphasis */
+	AD9081_SER_POST_EMP_12DB = 4 /*!< 12 db Post-Emphasis */
+} adi_ad9081_ser_post_emp_e;
+
+/*!
+ * @brief Per lane JESD Serializer Settings
+ */
+typedef struct {
+	adi_ad9081_ser_swing_e swing_setting;
+	adi_ad9081_ser_pre_emp_e pre_emp_setting;
+	adi_ad9081_ser_post_emp_e post_emp_setting;
+} adi_ad9081_indv_ser_settings_t;
+
+/*!
+ * @brief Full JESD Serializer Settings Structure
+ */
+typedef struct {
+	adi_ad9081_indv_ser_settings_t indv_ser_lane_settings[8];
+	uint8_t tx_invert_mask;
+} adi_ad9081_ser_settings_t;
 
 /*!
  * @brief JESD TX Virtual Converter Select
@@ -536,6 +595,8 @@ extern "C" {
 
 /**
  * @brief  Open hardware platform
+ *         Just call user callback for function pointer 'hw_open'. Please note this is optional if user
+ *         configure hardware platform by themselves.
  *
  * @param  device Pointer to the device structure
  *
@@ -546,6 +607,8 @@ int32_t adi_ad9081_device_hw_open(adi_ad9081_device_t *device);
 
 /**
  * @brief  Close hardware platform
+ *         Just call user callback for function pointer 'hw_close'. Please note this is optional if user
+ *         close hardware platform by themselves.
  *
  * @param  device Pointer to the device structure
  *
@@ -556,6 +619,8 @@ int32_t adi_ad9081_device_hw_close(adi_ad9081_device_t *device);
 
 /**
  * @brief  Initialize ad9081 device
+ *         This API will configure device SPI working mode, and check power supplies status. Must be called
+ *         after platform SPI master is already initialized and adi_ad9081_device_reset() is called.
  *
  * @param  device Pointer to the device structure
  *
@@ -565,7 +630,8 @@ int32_t adi_ad9081_device_hw_close(adi_ad9081_device_t *device);
 int32_t adi_ad9081_device_init(adi_ad9081_device_t *device);
 
 /**
- * @brief  De-initialize device.
+ * @brief  De-initialize device
+ *		   This API will do hard then soft reset.
  *
  * @param  device Pointer to the device structure
  *
@@ -575,12 +641,14 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device);
 int32_t adi_ad9081_device_deinit(adi_ad9081_device_t *device);
 
 /**
- * @brief  Configure ad9081 direct loopback mode (ADC sample rate must be same as DAC sample rate)
+ * @brief  Configure ad9081 direct loopback mode
+ *         Note ADC sample rate must be same as DAC sample rate to get this loopback mode working.
+ *         Should be called after adi_ad9081_device_init().
  *
  * @param  device  Pointer to the device structure
- * @param  mode    bit[0]: set 1 to enable ana loop back feature
- *                 bit[1]: set 1 to enable direct adc data to dac
- *                         set 0 to control adc data overflow before loop back to dac
+ * @param  mode    bit[0]: 1 to enable ana loop back feature
+ *                 bit[1]: 1 to enable direct adc data to dac
+ *                         0 to control adc data overflow before looping back to dac
  * @param  mapping bit[1:0]: controls which ADC map to DAC0, 0: ADC0, 1: ADC1
  *                 bit[3:2]: controls which ADC map to DAC1, 0: ADC0, 1: ADC1
  *                 bit[5:4]: controls which ADC map to DAC2, 0: ADC0, 1: ADC1
@@ -594,6 +662,7 @@ int32_t adi_ad9081_device_direct_loopback_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Perform SPI interface configuration
+ *         This API will be called by adi_ad9081_device_init().
  *
  * @param  device Pointer to the device structure
  *
@@ -616,8 +685,7 @@ int32_t adi_ad9081_device_spi_register_set(adi_ad9081_device_t *device,
 					   uint16_t addr, uint8_t data);
 
 /**
- * @brief  Perform SPI register read access to device
- *
+ * @brief  Perform SPI register read access from device
  *
  * @param  device   Pointer to the device structure
  * @param  addr     SPI address from which the value of data parameter shall be read,
@@ -646,8 +714,7 @@ int32_t adi_ad9081_device_cbusjrx_register_set(adi_ad9081_device_t *device,
 					       uint8_t lane);
 
 /**
- * @brief  Perform SPI read access to device JRX cbus registers
- *
+ * @brief  Perform SPI read access from device JRX cbus registers
  *
  * @param  device   Pointer to the device structure
  * @param  addr     SPI address from which the value of data parameter shall be read,
@@ -678,8 +745,7 @@ int32_t adi_ad9081_device_cbusjtx_register_set(adi_ad9081_device_t *device,
 					       uint8_t lane);
 
 /**
- * @brief  Perform SPI read access to device JTX cbus registers
- *
+ * @brief  Perform SPI read access from device JTX cbus registers
  *
  * @param  device   Pointer to the device structure
  * @param  addr     SPI address from which the value of data parameter shall be read,
@@ -708,8 +774,7 @@ int32_t adi_ad9081_device_cbuspll_register_set(adi_ad9081_device_t *device,
 					       uint8_t addr, uint8_t data);
 
 /**
- * @brief  Perform SPI read access to device PLL cbus registers
- *
+ * @brief  Perform SPI read access from device PLL cbus registers
  *
  * @param  device   Pointer to the device structure
  * @param  addr     SPI address from which the value of data parameter shall be read,
@@ -729,6 +794,8 @@ int32_t adi_ad9081_device_cbuspll_register_get(adi_ad9081_device_t *device,
  *         via the SPI register (soft).
  *         Resetting all SPI registers to default and triggering the required
  *         initialization sequence.
+ *         adi_ad9081_device_reset() will be called if operation is AD9081_SOFT_RESET_AND_INIT or
+ *         AD9081_HARD_RESET_AND_INIT.
  *
  * @param  device    Pointer to the device structure
  * @param  operation A parameter to indicate reset operation. @see adi_ad9081_reset_e
@@ -745,9 +812,10 @@ int32_t adi_ad9081_device_reset(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get pll lock status
+ *         This API will be called by adi_ad9081_device_clk_config_set().
  *
  * @param  device     Pointer to the device structure
- * @param  status     Pointer to pll lock fast (bit1) and slow status (bit0)
+ * @param  status     Pointer to pll lock fast (bit1) and slow (bit0) status
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -757,6 +825,7 @@ int32_t adi_ad9081_device_clk_pll_lock_status_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the clock circuitry based on the desired clocks frequencies
+ *         This API should be called after adi_ad9081_device_init().
  *
  * @param  device     Pointer to the device structure
  * @param  dac_clk_hz Desired dac clock frequency
@@ -774,6 +843,7 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  power up/down analog clock receiver
+ *         This API will be called by adi_ad9081_device_clk_config_set().
  *
  * @param  device   Pointer to the device structure
  * @param  enable   Enable clock receiver
@@ -786,11 +856,11 @@ int32_t adi_ad9081_device_aclk_receiver_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get chip identification data
- *         Read-back product type, identification and revision data
+ *         Read-back product type, identification and revision data. Should be called after
+ *         adi_ad9081_device_clk_config_set().
  *
- * @param  device   Pointer to the device structure.
- * @param  chip_id  Pointer to a variable of type adi_cms_chip_id_t to
- *                  which the product data read-back from chip shall be stored.
+ * @param  device   Pointer to the device structure
+ * @param  chip_id  @see adi_cms_chip_id_t
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -815,6 +885,7 @@ int32_t adi_ad9081_device_api_revision_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get Firmware revision
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device    Pointer to the device structure.
  * @param  rev       Pointer to variable to store the firmware revision
@@ -827,6 +898,7 @@ int32_t adi_ad9081_device_firmware_revision_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get Firmware patch revision
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device    Pointer to the device structure.
  * @param  rev       Pointer to variable to store the firmware patch revision
@@ -840,6 +912,7 @@ adi_ad9081_device_firmware_patch_revision_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get Laminate ID
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device    Pointer to the device structure.
  * @param  id        Pointer to silicon laminate id.
@@ -852,6 +925,7 @@ int32_t adi_ad9081_device_laminate_id_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get DIE ID
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device    Pointer to the device structure.
  * @param  id        Pointer to silicon DIE id.
@@ -863,6 +937,7 @@ int32_t adi_ad9081_device_die_id_get(adi_ad9081_device_t *device, uint8_t *id);
 
 /**
  * @brief  Startup Tx
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device         Pointer to the device structure
  * @param  main_interp    Main interpolator
@@ -883,6 +958,7 @@ int32_t adi_ad9081_device_startup_tx(adi_ad9081_device_t *device,
 
 /**
  * @brief  Startup Tx As NCO Test Mode
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device         Pointer to the device structure
  * @param  main_interp    Main interpolator
@@ -903,6 +979,7 @@ adi_ad9081_device_startup_nco_test(adi_ad9081_device_t *device,
 
 /**
  * @brief  Startup Rx
+ *         This API will be called after adi_ad9081_device_clk_config_set().
  *
  * @param  device         Pointer to the device structure
  * @param  cddcs          Coarse DDC selection
@@ -977,6 +1054,7 @@ int32_t adi_ad9081_dac_power_up_set(adi_ad9081_device_t *device, uint8_t dacs,
 
 /**
  * @brief  Enable test tone generation
+ *         This API will be called by adi_ad9081_device_startup_nco_test().
  *
  * @param  device   Pointer to the device structure
  * @param  channels Channel mask
@@ -990,6 +1068,7 @@ int32_t adi_ad9081_dac_dc_test_tone_en_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  DC test tone amplitude setting
+ *         This API will be called by adi_ad9081_device_startup_nco_test().
  *
  * @param  device   Pointer to the device structure
  * @param  channels Channel mask
@@ -1004,6 +1083,7 @@ int32_t adi_ad9081_dac_dc_test_tone_offset_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable test tone generation
+ *         This API will be called by adi_ad9081_device_startup_nco_test().
  *
  * @param  device   Pointer to the device structure
  * @param  dacs     DAC mask
@@ -1018,6 +1098,7 @@ int32_t adi_ad9081_dac_duc_main_dc_test_tone_en_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  DC test tone amplitude setting
+ *         This API will be called by adi_ad9081_device_startup_nco_test().
  *
  * @param  device   Pointer to the device structure
  * @param  dacs     DAC mask
@@ -1032,6 +1113,7 @@ adi_ad9081_dac_duc_main_dc_test_tone_offset_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set DAC working mode
+ *         Call after adi_ad9081_device_startup_tx()
  *
  * @param  device   Pointer to the device structure
  * @param  groups   Mode switch groups, @see adi_ad9081_dac_mode_switch_group_select_e
@@ -1047,6 +1129,7 @@ adi_ad9081_dac_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set DAC complex modulation enable
+ *         Call after adi_ad9081_device_startup_tx()
  *
  * @param  device   Pointer to the device structure
  * @param  groups   Mode switch groups, @see adi_ad9081_dac_mode_switch_group_select_e
@@ -1061,6 +1144,7 @@ int32_t adi_ad9081_dac_complex_modulation_enable_set(
 
 /**
  * @brief  Set Fine DUC gain
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device   Pointer to the device structure
  * @param  channels Channel mask
@@ -1074,6 +1158,7 @@ int32_t adi_ad9081_dac_duc_nco_gain_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Fine DUC gain
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device   Pointer to the device structure
  * @param  gains    Channel gain values (0~4095)
@@ -1086,6 +1171,7 @@ int32_t adi_ad9081_dac_duc_nco_gains_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Fine DUC Skew
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device   Pointer to the device structure
  * @param  channels Channel mask
@@ -1128,6 +1214,7 @@ int32_t adi_ad9081_dac_duc_nco_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable phase offset for the NCOs on the DAC and Channels
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device           Pointer to the device structure
  * @param  dacs             DAC mask
@@ -1146,6 +1233,7 @@ int32_t adi_ad9081_dac_duc_nco_phase_offset_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO's FTW
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device      Pointer to the device structure
  * @param  dacs        DAC mask, like AD9081_DAC_0, ...
@@ -1164,6 +1252,7 @@ int32_t adi_ad9081_dac_duc_nco_ftw_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO Shift Freq
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device       Pointer to the device structure
  * @param  dacs         DAC mask, like AD9081_DAC_0, ...
@@ -1178,6 +1267,7 @@ int32_t adi_ad9081_dac_duc_nco_set(adi_ad9081_device_t *device, uint8_t dacs,
 
 /**
  * @brief  Configure Main NCO's FFH FTW
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  dacs       DAC mask, like AD9081_DAC_0, ...
@@ -1194,6 +1284,7 @@ int32_t adi_ad9081_dac_duc_main_nco_hopf_ftw_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure Main NCO's FFH mode
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device    Pointer to the device structure
  * @param  dacs      DAC mask, like AD9081_DAC_0, ...
@@ -1208,6 +1299,7 @@ int32_t adi_ad9081_dac_duc_main_nco_hopf_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Select Which Main NCO's Hopping Frequency to use
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  dacs       DAC mask, like AD9081_DAC_0, ...
@@ -1222,6 +1314,7 @@ int32_t adi_ad9081_dac_duc_main_nco_hopf_select_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable/Disable GPIO No-Glitch Option
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  dacs       DAC mask, like AD9081_DAC_0, ...
@@ -1237,6 +1330,7 @@ int32_t adi_ad9081_dac_duc_main_nco_hopf_gpio_no_glitch_en_set(
 
 /**
  * @brief  Enable/Disable Main NCO's Hopping Frequency Selection Coming From GPIOs
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  enable     0 or 1, disable or enable frequency hopping tuning word selection from gpio.
@@ -1302,6 +1396,7 @@ int32_t adi_ad9081_dac_gpio_as_tx_en_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the Digital Up Conversion Channels
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device      Pointer to the device structure
  * @param  main_interp Main interpolation
@@ -1460,6 +1555,7 @@ int32_t adi_ad9081_dac_rotation_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Main DAC to Channel Xbar
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  dacs       Target DAC Channel Output
@@ -1473,6 +1569,7 @@ int32_t adi_ad9081_dac_xbar_set(adi_ad9081_device_t *device, uint8_t dacs,
 
 /**
  * @brief  Enalbe DAC Interrupts Request
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  enable     Enable or disable interrupts
@@ -1556,6 +1653,7 @@ int32_t adi_ad9081_dac_nco_set(adi_ad9081_device_t *device, uint8_t dacs,
 
 /**
  * @brief  Set DAC Data Scrabmling
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device  Pointer to the device structure
  * @param  dacs    Target DAC Channel to enable data output
@@ -1596,6 +1694,7 @@ int32_t adi_ad9081_dac_spi_as_tx_en_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Enable on DAC outputs
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device  Pointer to the device structure
  * @param  dacs    Target DAC Channel to enable data output
@@ -1640,6 +1739,7 @@ int32_t adi_ad9081_dac_duc_main_dsa_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set full scale current of DAC outputs
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device  Pointer to the device structure
  * @param  dacs    Target DAC Channel to enable data output
@@ -1774,6 +1874,7 @@ int32_t adi_ad9081_dac_nco_sync_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable DAC Core SPI Reg Access
+ *         Called by adi_ad9081_device_clk_config_set().
  *
  * @param  device  Pointer to the device structure
  * @param  enable  Desired enable status
@@ -1783,19 +1884,6 @@ int32_t adi_ad9081_dac_nco_sync_set(adi_ad9081_device_t *device,
  */
 int32_t adi_ad9081_dac_spi_enable_set(adi_ad9081_device_t *device,
 				      uint8_t enable);
-
-/**
- * @brief  Power up or Power down ADCs
- *
- * @param  device   Pointer to the device structure
- * @param  adcs     Target ADC to power up
- * @param  enable   Enable setting for adc power.
- *
- * @return API_CMS_ERROR_OK                     API Completed Successfully
- * @return <0                                   Failed. @see adi_cms_error_e for details.
- */
-int32_t adi_ad9081_adc_power_up_set(adi_ad9081_device_t *device, uint8_t adcs,
-				    uint8_t enable);
 
 /**
  * @brief  Reset rx digital datapath
@@ -1823,6 +1911,7 @@ int32_t adi_ad9081_adc_clk_freq_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure adc to cddc cross-bar
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device           Pointer to the device structure
  * @param  adc_cddc_xbar    Configure ADC to Coarse DDC Crossbar, @see adi_ad9081_adc_adc_to_cddc_xbar_e
@@ -1835,6 +1924,7 @@ int32_t adi_ad9081_adc_adc2cddc_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the rx data path cross-bar
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device           Pointer to the device structure
  * @param  cddc_fddc_xbar   Coarse to Fine DDC Crossbar, @see adi_ad9081_adc_cddc_to_fddc0_xbar_e, ...
@@ -1855,6 +1945,7 @@ int32_t adi_ad9081_adc_cddc2fddc_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the rx data path cross-bar
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device           Pointer to the device structure
  * @param  adc_cddc_xbar    ADC to Coarse DDC Crossbar, @see adi_ad9081_adc_adc_to_cddc_xbar_e
@@ -1903,6 +1994,7 @@ int32_t adi_ad9081_adc_xbar_find_cddc(adi_ad9081_device_t *device, uint8_t fddc,
 
 /**
  * @brief  Configure the chip decimation ratio
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  links    JESD links selection, @see adi_ad9081_jesd_link_select_e
@@ -1969,6 +2061,7 @@ int32_t adi_ad9081_adc_ddc_coarse_sync_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure Coarse DDC Decimation
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  cddcs    Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -1983,6 +2076,7 @@ int32_t adi_ad9081_adc_ddc_coarse_dcm_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure Coarse DDC C2R (complex to real) Enable
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  cddcs    Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -1996,6 +2090,7 @@ int32_t adi_ad9081_adc_ddc_coarse_c2r_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure Coarse DDC Gain Value
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  cddcs    Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -2009,6 +2104,7 @@ int32_t adi_ad9081_adc_ddc_coarse_gain_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO frequency for the coarse DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device        Pointer to the device structure
  * @param  cddcs         Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -2022,6 +2118,7 @@ int32_t adi_ad9081_adc_ddc_coarse_nco_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO frequency and modulus for the coarse DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  cddcs      Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -2070,10 +2167,11 @@ adi_ad9081_adc_ddc_coarse_nco_phase_offset_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO mode for the coarse DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  cddcs      Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
- * @param  nco_mode   NCO mode selection
+ * @param  nco_mode   NCO mode selection, @see adi_ad9081_adc_nco_mode_e
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -2085,6 +2183,7 @@ adi_ad9081_adc_ddc_coarse_nco_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable NCO for the coarse DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  cddcs      Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -2183,6 +2282,7 @@ int32_t adi_ad9081_adc_ddc_fine_sync_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the fine DDC decimation setting
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  fddcs    Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2197,6 +2297,7 @@ int32_t adi_ad9081_adc_ddc_fine_dcm_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the fine DDC complex to real
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  fddcs    Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2210,6 +2311,7 @@ int32_t adi_ad9081_adc_ddc_fine_c2r_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO frequency and modulus for the fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  fddcs      Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2223,6 +2325,7 @@ int32_t adi_ad9081_adc_ddc_fine_overall_dcm_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the fine DDC gain block
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device   Pointer to the device structure
  * @param  fddcs    Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2236,6 +2339,7 @@ int32_t adi_ad9081_adc_ddc_fine_gain_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO frequency for fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device        Pointer to the device structure
  * @param  fddcs         Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2249,6 +2353,7 @@ int32_t adi_ad9081_adc_ddc_fine_nco_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO frequency and modulus for fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  fddcs      Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2266,6 +2371,7 @@ int32_t adi_ad9081_adc_ddc_fine_nco_ftw_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Get NCO frequency and modulus for the fine DDC
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  fddc       Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2297,6 +2403,7 @@ adi_ad9081_adc_ddc_fine_nco_phase_offset_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure NCO mode for the fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  fddcs      Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2311,6 +2418,7 @@ adi_ad9081_adc_ddc_fine_nco_mode_set(adi_ad9081_device_t *device, uint8_t fddcs,
 
 /**
  * @brief  Enable NCO for the fine DDCs
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  fddcs      Fine DDCs selection, @see adi_ad9081_adc_fine_ddc_select_e
@@ -2372,6 +2480,7 @@ int32_t adi_ad9081_adc_ddc_fine_nco_channel_update_index_set(
 
 /**
  * @brief  Configure Basic Rx Path
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device       Pointer to the device structure
  * @param  cddcs        Coarse DDCs selection, @see adi_ad9081_adc_coarse_ddc_select_e
@@ -2610,6 +2719,7 @@ int32_t adi_ad9081_adc_rxen1_sel_set(adi_ad9081_device_t *device, uint8_t cddcs,
 
 /**
  * @brief  Set ADC Nyquist Zone
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device         Pointer to the device structure
  * @param  zone           AD9081_ADC_NYQUIST_ZONE_ODD / AD9081_ADC_NYQUIST_ZONE_EVEN
@@ -2622,6 +2732,7 @@ int32_t adi_ad9081_adc_nyquist_zone_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set ADC User Pattern of Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device         Pointer to the device structure
  * @param  i_pattern      I user pattern
@@ -2636,6 +2747,7 @@ int32_t adi_ad9081_adc_test_mode_usr_pattern_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set ADC Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device         Pointer to the device structure
  * @param  i_mode         I test mode, @see adi_ad9081_test_mode_e
@@ -2736,6 +2848,22 @@ int32_t adi_ad9081_adc_pfir_q_mode_set(adi_ad9081_device_t *device,
 				       adi_ad9081_adc_pfir_q_mode_e q_mode);
 
 /**
+ * @brief  Set PFIR Mode
+ *
+ * @param  device         Pointer to the device structure
+ * @param  ctl_pages      PFIR control pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  i_mode         PFIR i-mode @see adi_ad9081_adc_pfir_i_mode_e
+ * @param  q_mode         PFIR q-mode @see adi_ad9081_adc_pfir_q_mode_e
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_pfir_mode_set(adi_ad9081_device_t *device,
+				     adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+				     adi_ad9081_adc_pfir_i_mode_e i_mode,
+				     adi_ad9081_adc_pfir_q_mode_e q_mode);
+
+/**
  * @brief  Set PFIR I Gain
  *
  * @param  device         Pointer to the device structure
@@ -2766,6 +2894,26 @@ int32_t adi_ad9081_adc_pfir_q_gain_set(adi_ad9081_device_t *device,
 				       adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
 				       adi_ad9081_adc_pfir_gain_e qx_gain,
 				       adi_ad9081_adc_pfir_gain_e qy_gain);
+
+/**
+ * @brief  Set PFIR I Gain
+ *
+ * @param  device         Pointer to the device structure
+ * @param  ctl_pages      PFIR control pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  ix_gain        PFIR Ix gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  iy_gain        PFIR Iy gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  qx_gain        PFIR Qx gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  qy_gain        PFIR Qy gain @see adi_ad9081_adc_pfir_gain_e
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_pfir_gain_set(adi_ad9081_device_t *device,
+				     adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+				     adi_ad9081_adc_pfir_gain_e ix_gain,
+				     adi_ad9081_adc_pfir_gain_e iy_gain,
+				     adi_ad9081_adc_pfir_gain_e qx_gain,
+				     adi_ad9081_adc_pfir_gain_e qy_gain);
 
 /**
  * @brief  Set PFIR Delay for Half Complex Mode
@@ -2917,6 +3065,37 @@ int32_t
 adi_ad9081_adc_pfir_coeffs_set(adi_ad9081_device_t *device,
 			       adi_ad9081_adc_pfir_coeff_page_e coeff_pages,
 			       uint16_t *coeffs);
+
+/**
+ * @brief  Set PFIR
+ *
+ * @param  device         Pointer to the device structure
+ * @param  ctl_pages      PFIR control pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  coeff_pages    PFIR coefficient pages @see adi_ad9081_adc_pfir_ctl_page_e
+ * @param  i_mode         PFIR i-mode @see adi_ad9081_adc_pfir_i_mode_e
+ * @param  q_mode         PFIR q-mode @see adi_ad9081_adc_pfir_q_mode_e
+ * @param  ix_gain        PFIR Ix gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  iy_gain        PFIR Iy gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  qx_gain        PFIR Qx gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  qy_gain        PFIR Qy gain @see adi_ad9081_adc_pfir_gain_e
+ * @param  coeff_load_sel Load selection
+ *                            bit 0: real_i load,       bit 1: real_q load
+ *                            bit 2: real_cross_i load, bit 3: real_cross_q load
+ *                            bit 4: complex load
+ * @param  coeffs         Coefficient value array pointer
+ * @param  coeffs_num     Coefficient value array(coeffs) size
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_pfir_config_set(
+	adi_ad9081_device_t *device, adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+	adi_ad9081_adc_pfir_coeff_page_e coeff_pages,
+	adi_ad9081_adc_pfir_i_mode_e i_mode,
+	adi_ad9081_adc_pfir_q_mode_e q_mode, adi_ad9081_adc_pfir_gain_e ix_gain,
+	adi_ad9081_adc_pfir_gain_e iy_gain, adi_ad9081_adc_pfir_gain_e qx_gain,
+	adi_ad9081_adc_pfir_gain_e qy_gain, uint8_t coeff_load_sel,
+	uint16_t *coeffs, uint8_t coeffs_num);
 
 /**
  * @brief  Set Fine DDC Samples Status Selection
@@ -3520,6 +3699,7 @@ int32_t adi_ad9081_jesd_rx_link_select_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable the descrambler
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -3534,6 +3714,7 @@ int32_t adi_ad9081_jesd_rx_descrambler_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable data invert on a particular lane for Rx
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link
@@ -3550,6 +3731,7 @@ int32_t adi_ad9081_jesd_rx_lane_invert_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Rx lane cross bar between physical lane and logic lane
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link
@@ -3566,6 +3748,7 @@ int32_t adi_ad9081_jesd_rx_lane_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Rx lanes cross bar between physical lane and logic lane
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link
@@ -3580,6 +3763,7 @@ int32_t adi_ad9081_jesd_rx_lanes_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Rx Synca Mode
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  mode            0: CMOS, 1: LVDS
@@ -3592,6 +3776,7 @@ int32_t adi_ad9081_jesd_rx_synca_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Rx Syncb Mode
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  mode            0: CMOS, 1: LVDS
@@ -3604,6 +3789,7 @@ int32_t adi_ad9081_jesd_rx_syncb_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Synca Driver Power Down
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  powerdown       1 to power down
@@ -3617,6 +3803,7 @@ adi_ad9081_jesd_rx_synca_driver_powerdown_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set Syncb Driver Power Down
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device          Pointer to the device structure
  * @param  powerdown       1 to power down
@@ -3630,6 +3817,7 @@ adi_ad9081_jesd_rx_syncb_driver_powerdown_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the Rx link settings
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -3644,6 +3832,7 @@ int32_t adi_ad9081_jesd_rx_link_config_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable the JESD link for Rx
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -3658,6 +3847,7 @@ int32_t adi_ad9081_jesd_rx_link_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  JRX link bring up (setting up JESD PLL, etc.)
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -3671,31 +3861,8 @@ int32_t adi_ad9081_jesd_rx_bring_up(adi_ad9081_device_t *device,
 				    uint8_t lanes);
 
 /**
- * @brief  Set JRX sysref enable
- *
- * @param  device     Pointer to the device structure
- * @param  enable     1:Enable, 0:Disable
- *
- * @return API_CMS_ERROR_OK                     API Completed Successfully
- * @return <0                                   Failed. @see adi_cms_error_e for details.
- */
-int32_t adi_ad9081_jesd_rx_sysref_enable_set(adi_ad9081_device_t *device,
-					     uint8_t enable);
-
-/**
- * @brief  Set JRX sysref input mode
- *
- * @param  device     Pointer to the device structure
- * @param  input_mode 0:AC couple, 1:DC couple
- *
- * @return API_CMS_ERROR_OK                     API Completed Successfully
- * @return <0                                   Failed. @see adi_cms_error_e for details.
- */
-int32_t adi_ad9081_jesd_rx_sysref_input_mode_set(adi_ad9081_device_t *device,
-						 uint8_t input_mode);
-
-/**
  * @brief  Set LMFC delay
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device Pointer to the device structure
  * @param  links  Target link
@@ -3710,6 +3877,7 @@ int32_t adi_ad9081_jesd_rx_lmfc_delay_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set JRX SYNC# signal mode
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -3724,6 +3892,7 @@ int32_t adi_ad9081_jesd_rx_sync_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set rx_run_cal_mask
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device        Pointer to the device structure
  * @param  mask          Value for rx_run_cal_mask, bit0 -> lane0, ...
@@ -3736,6 +3905,7 @@ int32_t adi_ad9081_jesd_rx_run_cal_mask_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set rx_boost_mask
+ *         Call after adi_ad9081_device_startup_tx().
  *
  * @param  device        Pointer to the device structure
  * @param  mask          Value for rx_boost_mask, bit0 -> lane0, ...
@@ -3748,13 +3918,16 @@ int32_t adi_ad9081_jesd_rx_boost_mask_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Calibrate 204C for JRX
+ *         Call after adi_ad9081_device_startup_tx() and JESD TX is transmitting data.
  *
  * @param  device        Pointer to the device structure
+ * @param  run_bg_cals   Run background calibration or not
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
  */
-int32_t adi_ad9081_jesd_rx_calibrate_204c(adi_ad9081_device_t *device);
+int32_t adi_ad9081_jesd_rx_calibrate_204c(adi_ad9081_device_t *device,
+					  uint8_t run_bg_cals);
 
 /**
  * @brief  Read jesd jrx link configuration status
@@ -3912,6 +4085,20 @@ int32_t adi_ad9081_jesd_rx_204c_sh_irq_clr(adi_ad9081_device_t *device,
 					   adi_ad9081_jesd_link_select_e links);
 
 /**
+ * @brief  Set JESD RX CTLE
+ *         Call after adi_ad9081_device_startup_tx().
+ *
+ * @param  device      Pointer to the device structure
+ * @param  lanes       Lane mask to apply passed il settings to.
+ * @param  il_settings CTLE setting, @see adi_il_settings_e
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_jesd_rx_ctle_set(adi_ad9081_device_t *device, uint8_t lanes,
+				    adi_ad9081_il_settings_e il_settings);
+
+/**
  * @brief  Select jesd tx link
  *
  * @param  device     Pointer to the device structure
@@ -3925,10 +4112,11 @@ int32_t adi_ad9081_jesd_tx_link_select_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the Tx link settings
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link select
- * @param  jesd_param l,f,k,m,s,n,np,hd,scr,did,bid
+ * @param  jesd_param @see adi_cms_jesd_param_t, pass array with 2 elements for dual link
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -3939,6 +4127,7 @@ int32_t adi_ad9081_jesd_tx_link_config_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable the scrambler
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link select
@@ -3953,6 +4142,7 @@ int32_t adi_ad9081_jesd_tx_scrambler_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Startup serializer
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  lanes      Active lanes
@@ -3965,6 +4155,7 @@ int32_t adi_ad9081_jesd_tx_startup_ser(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable 'force_power_down' on a particular lane for Tx
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  physical_lane   Physical lane index (0~7)
@@ -3979,6 +4170,7 @@ int32_t adi_ad9081_jesd_tx_lane_force_pd_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or disable data invert on a particular lane for Tx
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -3995,6 +4187,7 @@ int32_t adi_ad9081_jesd_tx_lane_invert_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Tx lane cross bar between physical lane and logical lane
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4011,6 +4204,7 @@ int32_t adi_ad9081_jesd_tx_lane_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the JESD Tx lanes cross bar between physical lane and logical lane
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4025,6 +4219,7 @@ int32_t adi_ad9081_jesd_tx_lanes_xbar_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Select virtual converter
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4040,6 +4235,7 @@ int32_t adi_ad9081_jesd_tx_conv_sel_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Select converter control bit function
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4057,6 +4253,7 @@ int32_t adi_ad9081_jesd_tx_ctrl_bit_sel_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Select output data format
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4071,6 +4268,7 @@ int32_t adi_ad9081_jesd_tx_format_sel_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure chip output resolution
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4099,6 +4297,7 @@ int32_t adi_ad9081_jesd_tx_fractional_delay_converter_selection_set(
 
 /**
  * @brief  Configure cross bar between coarse DDC and fine DDC
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4117,6 +4316,7 @@ int32_t adi_ad9081_jesd_tx_fbw_sel_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable virtual converter test mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4131,6 +4331,7 @@ int32_t adi_ad9081_jesd_tx_conv_test_mode_enable_set(
 
 /**
  * @brief  Configure the lid for each lane
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4146,6 +4347,7 @@ int32_t adi_ad9081_jesd_tx_lid_cfg_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Configure the lid for all lanes
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device          Pointer to the device structure
  * @param  links           Target link select
@@ -4160,6 +4362,7 @@ int32_t adi_ad9081_jesd_tx_lids_cfg_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Force JESD Tx links reset
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  reset      1:reset, 0:not reset
@@ -4172,6 +4375,7 @@ int32_t adi_ad9081_jesd_tx_link_reset(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable/Disable jtx synca onchip termination
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  enable     1:Enable, 0:Disable
@@ -4184,6 +4388,7 @@ int32_t adi_ad9081_jesd_tx_synca_onchip_term_enable(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable/Disable jtx syncb onchip termination
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  enable     1:Enable, 0:Disable
@@ -4196,6 +4401,7 @@ int32_t adi_ad9081_jesd_tx_syncb_onchip_term_enable(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable or Disable jtx link
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link select
@@ -4210,6 +4416,7 @@ int32_t adi_ad9081_jesd_tx_link_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Bring up jtx link
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device        Pointer to the device structure
  * @param  links         Target link select
@@ -4245,6 +4452,7 @@ int32_t adi_ad9081_jesd_tx_link_status_get(adi_ad9081_device_t *device,
 
 /**
  * @brief  Set JTX SYNC# signal mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device     Pointer to the device structure
  * @param  links      Target link
@@ -4259,6 +4467,7 @@ int32_t adi_ad9081_jesd_tx_sync_mode_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Start onshot sync
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param  device       Pointer to the device structure
  *
@@ -4269,6 +4478,7 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device);
 
 /**
  * @brief  Run PRBS Test for JESD Receiver
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param prbs_pattern   PRBS pattern identifier,
@@ -4300,6 +4510,7 @@ int32_t adi_ad9081_jesd_rx_phy_prbs_test_result_get(
 
 /**
  * @brief  Disable PHY PRBS Test
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  *
@@ -4311,6 +4522,7 @@ adi_ad9081_jesd_rx_phy_prbs_test_disable_set(adi_ad9081_device_t *device);
 
 /**
  * @brief  Run Sample PRBS Test for JESD Receiver
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param prbs_pattern   PRBS pattern identifier, @see adi_cms_jesd_prbs_pattern_e
@@ -4341,7 +4553,31 @@ int32_t adi_ad9081_jesd_rx_sample_prbs_test_result_get(
 	uint32_t *error_count_i, uint32_t *error_count_q);
 
 /**
+ * @brief  Run SPO Sweep for JESD Receiver
+ *         Call after adi_ad9081_device_startup_rx().
+ *
+ * @param device         Pointer to the device reference handle.
+ * @param lane           Lane index, 0 ~ 7
+ * @param prbs_pattern   PRBS pattern identifier,
+ *                       R0: PRBS7, PRBS15, PRBS31
+ *                       R1: PRBS7, PRBS9, PRBS15, PRBS31
+ * @param deser_mode     AD9081_HALF_RATE, AD9081_QUART_RATE
+ * @param prbs_delay_sec Seconds for PRBS test duration time
+ * @param left_spo       Good left SPO
+ * @param right_spo      Good right SPO
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_jesd_rx_spo_sweep(adi_ad9081_device_t *device, uint8_t lane,
+				     adi_cms_jesd_prbs_pattern_e prbs_pattern,
+				     adi_ad9081_deser_mode_e deser_mode,
+				     uint32_t prbs_delay_sec, uint8_t *left_spo,
+				     uint8_t *right_spo);
+
+/**
  * @brief  Run Checker Board (10101010, 10101010) Test for JESD Transmitter
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link
@@ -4356,6 +4592,7 @@ int32_t adi_ad9081_jesd_tx_checker_board_test(
 
 /**
  * @brief  Run Word Toggle Test (11111111, 00000000) for JESD Transmitter
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link
@@ -4370,6 +4607,7 @@ int32_t adi_ad9081_jesd_tx_word_toggle_test(
 
 /**
  * @brief  Run Ramp Pattern (00000100, 00000101) Test for JESD Transmitter
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link
@@ -4385,6 +4623,7 @@ adi_ad9081_jesd_tx_ramp_test(adi_ad9081_device_t *device,
 
 /**
  * @brief  Run Repeated User Pattern (uuuuuuuu, uuuuuuuu) Test for JESD Transmitter
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link
@@ -4400,6 +4639,7 @@ int32_t adi_ad9081_jesd_tx_repeat_user_data_test(
 
 /**
  * @brief  Run PRBS Test for JESD Transmitter (phy has prbs data)
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link, @see adi_ad9081_jesd_link_select_e
@@ -4416,6 +4656,7 @@ adi_ad9081_jesd_tx_phy_prbs_test(adi_ad9081_device_t *device,
 
 /**
  * @brief  Run PRBS Test for JESD Transmitter (sample data has prbs data)
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle.
  * @param links          Target link, @see adi_ad9081_jesd_link_select_e
@@ -4431,6 +4672,7 @@ int32_t adi_ad9081_jesd_tx_sample_data_prbs_test(
 
 /**
  * @brief  Enable ILAS Test Mode (Repeated ILAS)
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle
  * @param links          Target link
@@ -4445,6 +4687,7 @@ int32_t adi_ad9081_jesd_tx_ilas_test_mode_enable_set(
 
 /**
  * @brief  Enable Continuous D21.5 Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle
  * @param links          Target link
@@ -4460,6 +4703,7 @@ int32_t adi_ad9081_jesd_tx_continuous_d215_enable_set(
 
 /**
  * @brief  Enable RPAT Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle
  * @param links          Target link
@@ -4475,6 +4719,7 @@ int32_t adi_ad9081_jesd_tx_rpat_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable JSPAT Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle
  * @param links          Target link
@@ -4490,6 +4735,7 @@ int32_t adi_ad9081_jesd_tx_jspat_enable_set(adi_ad9081_device_t *device,
 
 /**
  * @brief  Enable JTSPAT Test Mode
+ *         Call after adi_ad9081_device_startup_rx().
  *
  * @param device         Pointer to the device reference handle
  * @param links          Target link
@@ -4505,6 +4751,42 @@ adi_ad9081_jesd_tx_jtspat_enable_set(adi_ad9081_device_t *device,
 				     uint8_t lane_id, uint8_t enable);
 
 /**
+ * @brief  Set sysref enable
+ *
+ * @param  device     Pointer to the device structure
+ * @param  enable     1:Enable, 0:Disable
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_jesd_sysref_enable_set(adi_ad9081_device_t *device,
+					  uint8_t enable);
+
+/**
+ * @brief  Set sysref capture enable
+ *
+ * @param  device     Pointer to the device structure
+ * @param  enable     1:Enable, 0:Disable
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_jesd_sysref_spi_enable_set(adi_ad9081_device_t *device,
+					      uint8_t enable);
+
+/**
+ * @brief  Set sysref input mode
+ *
+ * @param  device     Pointer to the device structure
+ * @param  input_mode 0:AC couple, 1:DC couple
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_jesd_sysref_input_mode_set(adi_ad9081_device_t *device,
+					      uint8_t input_mode);
+
+/**
  * @brief  Set loop back mode
  *
  * @param device         Pointer to the device reference handle.
@@ -4517,26 +4799,6 @@ adi_ad9081_jesd_tx_jtspat_enable_set(adi_ad9081_device_t *device,
  */
 int32_t adi_ad9081_jesd_loopback_mode_set(adi_ad9081_device_t *device,
 					  uint8_t mode);
-
-/**
- * @brief  Run SPO Test for JESD Receiver
- *
- * @param device         Pointer to the device reference handle.
- * @param lane           Lane index, 0 ~ 7
- * @param prbs_pattern   PRBS pattern identifier,
- *                       R0: PRBS7, PRBS15, PRBS31
- *                       R1: PRBS7, PRBS9, PRBS15, PRBS31
- * @param spo_mode       AD9081_HALF_RATE, AD9081_QUART_RATE
- * @param spo            Golden left and right SPO
- * @param time_sec       Seconds for PRBS test duration time
- *
- * @return API_CMS_ERROR_OK                     API Completed Successfully
- * @return <0                                   Failed. @see adi_cms_error_e for details.
- */
-int32_t adi_ad9081_jesd_rx_spo_test(adi_ad9081_device_t *device, uint8_t lane,
-				    adi_cms_jesd_prbs_pattern_e prbs_pattern,
-				    adi_ad9081_spo_mode_e spo_mode,
-				    adi_ad9081_spo_t *spo, uint32_t time_sec);
 
 #ifdef __cplusplus
 }

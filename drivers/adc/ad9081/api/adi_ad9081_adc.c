@@ -2294,6 +2294,23 @@ int32_t adi_ad9081_adc_pfir_q_mode_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
+int32_t adi_ad9081_adc_pfir_mode_set(adi_ad9081_device_t *device,
+				     adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+				     adi_ad9081_adc_pfir_i_mode_e i_mode,
+				     adi_ad9081_adc_pfir_q_mode_e q_mode)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_adc_pfir_i_mode_set(device, ctl_pages, i_mode);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_q_mode_set(device, ctl_pages, q_mode);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
 int32_t adi_ad9081_adc_pfir_i_gain_set(adi_ad9081_device_t *device,
 				       adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
 				       adi_ad9081_adc_pfir_gain_e ix_gain,
@@ -2342,6 +2359,27 @@ int32_t adi_ad9081_adc_pfir_q_gain_set(adi_ad9081_device_t *device,
 			AD9081_ERROR_RETURN(err);
 		}
 	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_adc_pfir_gain_set(adi_ad9081_device_t *device,
+				     adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+				     adi_ad9081_adc_pfir_gain_e ix_gain,
+				     adi_ad9081_adc_pfir_gain_e iy_gain,
+				     adi_ad9081_adc_pfir_gain_e qx_gain,
+				     adi_ad9081_adc_pfir_gain_e qy_gain)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_adc_pfir_i_gain_set(device, ctl_pages, ix_gain,
+					     iy_gain);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_q_gain_set(device, ctl_pages, qx_gain,
+					     qy_gain);
+	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
 }
@@ -2537,6 +2575,36 @@ int32_t adi_ad9081_adc_pfir_rd_coeff_page_sel_set(
 	return API_CMS_ERROR_OK;
 }
 
+int32_t adi_ad9081_adc_pfir_coeff_validate(adi_ad9081_device_t *device,
+					   uint8_t ntaps, uint16_t coeffs[192])
+{
+	int32_t i, first_16b_idx, last_16b_idx, first_12b_idx, last_12b_idx;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	/* find first and last 16bit coeff */
+	first_16b_idx = 192;
+	last_16b_idx = 0;
+	for (i = 0; i < 192; i++) {
+		if ((coeffs[i] >> 12) > 0) {
+			first_16b_idx = first_16b_idx > i ? i : first_16b_idx;
+			last_16b_idx = last_16b_idx < i ? i : last_16b_idx;
+		}
+	}
+
+	/* find first and last 12bit coeff */
+	first_12b_idx = 192;
+	last_12b_idx = 0;
+	for (i = 0; i < 192; i++) {
+		if ((coeffs[i] >> 7) > 0) {
+			first_12b_idx = first_12b_idx > i ? i : first_12b_idx;
+			last_12b_idx = last_12b_idx < i ? i : last_12b_idx;
+		}
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
 int32_t
 adi_ad9081_adc_pfir_coeff_set(adi_ad9081_device_t *device,
 			      adi_ad9081_adc_pfir_coeff_page_e coeff_pages,
@@ -2575,6 +2643,48 @@ adi_ad9081_adc_pfir_coeffs_set(adi_ad9081_device_t *device,
 					     coeffs[j] >> 8);
 		AD9081_ERROR_RETURN(err);
 	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_adc_pfir_config_set(
+	adi_ad9081_device_t *device, adi_ad9081_adc_pfir_ctl_page_e ctl_pages,
+	adi_ad9081_adc_pfir_coeff_page_e coeff_pages,
+	adi_ad9081_adc_pfir_i_mode_e i_mode,
+	adi_ad9081_adc_pfir_q_mode_e q_mode, adi_ad9081_adc_pfir_gain_e ix_gain,
+	adi_ad9081_adc_pfir_gain_e iy_gain, adi_ad9081_adc_pfir_gain_e qx_gain,
+	adi_ad9081_adc_pfir_gain_e qy_gain, uint8_t coeff_load_sel,
+	uint16_t *coeffs, uint8_t coeffs_num)
+{
+	int32_t err, i;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_adc_pfir_i_mode_set(device, ctl_pages, i_mode);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_q_mode_set(device, ctl_pages, q_mode);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_i_gain_set(device, ctl_pages, ix_gain,
+					     iy_gain);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_q_gain_set(device, ctl_pages, qx_gain,
+					     qy_gain);
+	AD9081_ERROR_RETURN(err);
+
+	adi_ad9081_adc_pfir_coeff_load_sel_set(device, ctl_pages,
+					       coeff_load_sel);
+	for (i = 0; i < coeffs_num; i++) {
+		err = adi_ad9081_adc_pfir_coeff_set(device, coeff_pages, i,
+						    coeffs[i]);
+		AD9081_ERROR_RETURN(err);
+	}
+	err = adi_ad9081_adc_pfir_coeff_load_sel_set(device, ctl_pages, 0);
+	AD9081_ERROR_RETURN(err);
+
+	err = adi_ad9081_adc_pfir_coeff_xfer_set(device, ctl_pages, 1);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_adc_pfir_coeff_xfer_set(device, ctl_pages, 0);
+	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
 }
