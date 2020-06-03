@@ -194,7 +194,7 @@ ssize_t iio_ad713x_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			j++;
 		}
 
-		if (current_ch < iio_713x_inst->num_channels - 1)
+		if (current_ch < (uint8_t)(iio_713x_inst->num_channels - 1))
 			current_ch++;
 		else
 			current_ch = 0;
