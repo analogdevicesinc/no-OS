@@ -151,6 +151,8 @@ int32_t adi_ad9081_dac_data_xor_set(adi_ad9081_device_t *device, uint8_t dacs,
 int32_t adi_ad9081_adc_select_set(adi_ad9081_device_t *device, uint8_t adcs);
 int32_t adi_ad9081_adc_core_setup(adi_ad9081_device_t *device,
 				  uint8_t adc_cores);
+int32_t adi_ad9081_adc_power_up_set(adi_ad9081_device_t *device, uint8_t adcs,
+				    uint8_t enable);
 uint8_t
 adi_ad9081_adc_ddc_coarse_dcm_decode(adi_ad9081_adc_coarse_ddc_dcm_e cddc_dcm);
 uint8_t
@@ -199,12 +201,21 @@ int32_t adi_ad9081_adc_ddc_fine_chip_xfer_set(adi_ad9081_device_t *device,
 int32_t adi_ad9081_jesd_tx_conv_mask_set(adi_ad9081_device_t *device,
 					 adi_ad9081_jesd_link_select_e links,
 					 uint8_t conv_index, uint8_t val);
+int32_t adi_ad9081_jesd_tx_link_conv_sel_set(
+	adi_ad9081_device_t *device, adi_ad9081_jesd_link_select_e links,
+	adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2], uint8_t jesd_m[2]);
 int32_t adi_ad9081_jesd_tx_pll_status_get(adi_ad9081_device_t *device,
 					  uint8_t *pll_locked);
+int32_t adi_ad9081_jesd_rx_startup_des(adi_ad9081_device_t *device,
+				       adi_ad9081_deser_mode_e deser_mode);
 int32_t adi_ad9081_jesd_pll_lock_status_get(adi_ad9081_device_t *device,
 					    uint8_t *locked);
-int32_t adi_ad9081_jesd_rx_startup_des(adi_ad9081_device_t *device,
-				       uint8_t deser_rate_config);
+uint16_t adi_ad9081_jesd_find_dformat_out_nc(
+	adi_ad9081_jtx_conv_sel_t const *jesd_conv_sel, uint8_t jesd_m);
+uint8_t
+adi_ad9081_jesd_determine_common_nc(adi_ad9081_jesd_link_select_e links,
+				    adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2],
+				    uint8_t jesd_m[2]);
 
 #ifdef __cplusplus
 }

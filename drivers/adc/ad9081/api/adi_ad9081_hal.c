@@ -437,7 +437,7 @@ int32_t adi_ad9081_hal_cbusjrx_reg_get(adi_ad9081_device_t *device,
 	if (API_CMS_ERROR_OK !=
 	    adi_ad9081_hal_reg_set(device, 0x409, 1 << lane))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_get(device, 0x40a, data))
 		return API_CMS_ERROR_SPI_XFER;
@@ -455,18 +455,16 @@ int32_t adi_ad9081_hal_cbusjrx_reg_set(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x408, data))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x407, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x407, lane))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x407, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
-		return API_CMS_ERROR_DELAY_US;
 
 	return API_CMS_ERROR_OK;
 }
@@ -484,7 +482,7 @@ int32_t adi_ad9081_hal_cbusjtx_reg_get(adi_ad9081_device_t *device,
 	if (API_CMS_ERROR_OK !=
 	    adi_ad9081_hal_reg_set(device, 0x794, 1 << lane))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_get(device, 0x796, data))
 		return API_CMS_ERROR_SPI_XFER;
@@ -502,18 +500,16 @@ int32_t adi_ad9081_hal_cbusjtx_reg_set(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x793, data))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x791, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x791, lane))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x791, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
-		return API_CMS_ERROR_DELAY_US;
 
 	return API_CMS_ERROR_OK;
 }
@@ -527,7 +523,7 @@ int32_t adi_ad9081_hal_cbuspll_reg_get(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x72E, 0x01))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_get(device, 0x742, data))
 		return API_CMS_ERROR_SPI_XFER;
@@ -545,7 +541,7 @@ int32_t adi_ad9081_hal_cbuspll_reg_set(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x741, data))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
+	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 500))
 		return API_CMS_ERROR_DELAY_US;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x72F, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
@@ -553,8 +549,6 @@ int32_t adi_ad9081_hal_cbuspll_reg_set(adi_ad9081_device_t *device,
 		return API_CMS_ERROR_SPI_XFER;
 	if (API_CMS_ERROR_OK != adi_ad9081_hal_reg_set(device, 0x72F, 0x00))
 		return API_CMS_ERROR_SPI_XFER;
-	if (API_CMS_ERROR_OK != adi_ad9081_hal_delay_us(device, 100000))
-		return API_CMS_ERROR_DELAY_US;
 
 	return API_CMS_ERROR_OK;
 }
@@ -724,7 +718,6 @@ int32_t adi_ad9081_hal_calc_rx_nco_ftw(adi_ad9081_device_t *device,
 		b = nco_shift -
 		    (a * adc_freq); /* b = fmod(nco_shift, adc_freq) */
 		adi_ad9081_hal_mult_128(281474976710656ull, b, &hi, &lo);
-		adi_ad9081_hal_add_128(hi, lo, 0, adc_freq - 1, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
 	} else {
 #ifdef __KERNEL__
@@ -734,7 +727,6 @@ int32_t adi_ad9081_hal_calc_rx_nco_ftw(adi_ad9081_device_t *device,
 #endif
 		b = -nco_shift - (a * adc_freq);
 		adi_ad9081_hal_mult_128(281474976710656ull, b, &hi, &lo);
-		adi_ad9081_hal_add_128(hi, lo, 0, adc_freq - 1, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, adc_freq, &hi, ftw);
 		*ftw = 281474976710656ull - *ftw;
 	}

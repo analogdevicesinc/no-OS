@@ -17,7 +17,7 @@
 #include "adi_ad9081_hal.h"
 
 /*============= D A T A ====================*/
-static uint8_t ad9081_api_revision[3] = { 1, 0, 0 };
+static uint8_t ad9081_api_revision[3] = { 1, 0, 3 };
 
 /*============= C O D E ====================*/
 int32_t adi_ad9081_device_boot_pre_clock(adi_ad9081_device_t *device)
@@ -241,10 +241,10 @@ int32_t adi_ad9081_device_clk_pll_div_set(adi_ad9081_device_t *device,
 
 	/* change defaults */
 	err = adi_ad9081_hal_bf_set(device, REG_SLOWV_COMP_HIGHL_REG_0_ADDR,
-				    BF_D_SLOWV_COMP_HIGHL_INFO, 0x57F);
+				    BF_D_SLOWV_COMP_HIGHL_INFO, 0x3FC);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_FASTV_COMP_HIGHL_REG_0_ADDR,
-				    BF_D_FASTV_COMP_HIGHL_INFO, 0x2FF);
+				    BF_D_FASTV_COMP_HIGHL_INFO, 0x2CE);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_hal_bf_set(device, REG_BIAS_REG_1_ADDR,
 				    BF_D_BIAS_POLY_TRIM_INFO, 0x1F);
@@ -341,7 +341,7 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 	AD9081_LOG_FUNC();
 
 	/* calculate pll div */
-	if ((dac_clk_hz >= 5800000000ULL) && (dac_clk_hz < 12600000000ULL)) {
+	if ((dac_clk_hz >= 5800000000ULL) && (dac_clk_hz < 14000000000ULL)) {
 		pll_div = 1;
 	} else if ((dac_clk_hz >= 3000000000ULL) &&
 		   (dac_clk_hz < 5800000000ULL)) {
@@ -380,6 +380,10 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 	pfd_clk_hz = ref_clk_hz / ref_div;
 	total_feedback = (uint8_t)(vco_clk_hz / pfd_clk_hz);
 #endif
+	if ((uint64_t)(pfd_clk_hz * total_feedback) != vco_clk_hz) {
+		AD9081_LOG_ERR("Cannot find any settings to lock device PLL.");
+		return API_CMS_ERROR_INVALID_PARAM;
+	}
 	for (i = 0; i < 4; i++) {
 		if ((total_feedback % n_div_vals[i]) == 0) {
 			n_div = n_div_vals[i];
@@ -387,6 +391,11 @@ int32_t adi_ad9081_device_clk_pll_startup(adi_ad9081_device_t *device,
 			if ((m_div == 1) && (ref_clk_hz > 80000000ULL)) {
 				ref_div = 2;
 				m_div = 2;
+			}
+			if ((m_div > 50) && (n_div_vals[i] == 11)) {
+				AD9081_LOG_ERR(
+					"Cannot find any settings to lock device PLL.");
+				return API_CMS_ERROR_INVALID_PARAM;
 			}
 			break;
 		}
@@ -861,7 +870,7 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device)
 	err = adi_ad9081_hal_log_write(
 		device, ADI_CMS_LOG_MSG, "api v%d.%d.%d commit %s for ad%x ",
 		ad9081_api_revision[0], ad9081_api_revision[1],
-		ad9081_api_revision[2], "74e60ae", AD9081_ID);
+		ad9081_api_revision[2], "459600c", AD9081_ID);
 	AD9081_ERROR_RETURN(err);
 
 	/* get host cpu endian mode */
@@ -1095,7 +1104,7 @@ int32_t adi_ad9081_device_die_id_get(adi_ad9081_device_t *device, uint8_t *id)
 	AD9081_LOG_FUNC();
 	AD9081_NULL_POINTER_RETURN(id);
 
-	/* [6:0]: 1/2/3 - R1, 4 - R1R */
+	/* [6:0]: 1/2/3 - R1, 4 - R1R, 5/6/7 - R2 */
 	return adi_ad9081_hal_reg_get(device, 0x1e0e, (uint8_t *)id);
 }
 
@@ -1176,7 +1185,7 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 					       chan_interp);
 	AD9081_ERROR_RETURN(err);
 
-	/* configure jrx links */
+	/* configure jrx links for normal mode */
 	if (enable_nco_test == 0) {
 		links = (jesd_param->jesd_duallink > 0) ? AD9081_LINK_ALL :
 							  AD9081_LINK_0;
@@ -1185,7 +1194,7 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_jesd_rx_bring_up(device, links, 0xff);
 		AD9081_ERROR_RETURN(err);
-		err = adi_ad9081_jesd_rx_sysref_enable_set(
+		err = adi_ad9081_jesd_sysref_enable_set(
 			device, jesd_param->jesd_subclass > 0 ? 1 : 0);
 		AD9081_ERROR_RETURN(err);
 	}
@@ -1335,19 +1344,9 @@ int32_t adi_ad9081_device_startup_rx(adi_ad9081_device_t *device, uint8_t cddcs,
 {
 	int32_t err;
 	uint8_t links;
+	uint8_t jesd_m[2] = { jesd_param[0].jesd_m, jesd_param[1].jesd_m };
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
-
-	/* disable adc clock before setting up adc.
-     * changing adc dividers while clock is on glitches digital clocks and causes
-     * unwanted phase mis-alignment in data path
-     */
-	err = adi_ad9081_adc_clk_enable_set(device, 0);
-	AD9081_ERROR_RETURN(err);
-
-	/* power up adc */
-	err = adi_ad9081_adc_power_up_set(device, AD9081_ADC_ALL, 1);
-	AD9081_ERROR_RETURN(err);
 
 	/* configure coarse and fine ddc */
 	err = adi_ad9081_adc_config(device, cddcs, fddcs, cddc_shift,
@@ -1358,21 +1357,12 @@ int32_t adi_ad9081_device_startup_rx(adi_ad9081_device_t *device, uint8_t cddcs,
 	/* configure jtx links */
 	links = jesd_param[0].jesd_duallink > 0 ? AD9081_LINK_ALL :
 						  AD9081_LINK_0;
-	if ((links & AD9081_LINK_0) > 0) {
-		err = adi_ad9081_jesd_tx_link_config_set(device, AD9081_LINK_0,
-							 &jesd_param[0]);
-		AD9081_ERROR_RETURN(err);
-	}
-	if ((links & AD9081_LINK_1) > 0) {
-		err = adi_ad9081_jesd_tx_link_config_set(device, AD9081_LINK_1,
-							 &jesd_param[1]);
-		AD9081_ERROR_RETURN(err);
-	}
-	err = adi_ad9081_jesd_tx_bring_up(device, links, 0xff, jesd_conv_sel);
+	err = adi_ad9081_jesd_tx_link_conv_sel_set(device, links, jesd_conv_sel,
+						   jesd_m);
 	AD9081_ERROR_RETURN(err);
-
-	/* enable adc clock after adc setup and synchronize */
-	err = adi_ad9081_adc_clk_enable_set(device, 1);
+	err = adi_ad9081_jesd_tx_link_config_set(device, links, &jesd_param[0]);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_jesd_tx_bring_up(device, links, 0xff, jesd_conv_sel);
 	AD9081_ERROR_RETURN(err);
 
 	/* one shot sync */
