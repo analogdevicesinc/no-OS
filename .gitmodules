@@ -4,3 +4,6 @@
 [submodule "libraries/mbedtls"]
 	path = libraries/mbedtls
 	url = https://github.com/ARMmbed/mbedtls
+[submodule "libraries/mqtt/paho.mqtt.embedded-c"]
+	path = libraries/mqtt/paho.mqtt.embedded-c
+	url = https://github.com/eclipse/paho.mqtt.embedded-c
