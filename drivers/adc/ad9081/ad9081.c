@@ -85,6 +85,16 @@ static int32_t ad9081_nco_sync_master_slave(struct ad9081_phy *phy,
 	adi_ad9081_dac_nco_sync_reset_via_sysref_set(&phy->ad9081, 0);
 	adi_ad9081_dac_nco_sync_reset_via_sysref_set(&phy->ad9081, 1);
 
+	adi_ad9081_adc_ddc_coarse_sync_enable_set(&phy->ad9081,
+			AD9081_ADC_CDDC_ALL, 0);
+	adi_ad9081_adc_ddc_coarse_sync_enable_set(&phy->ad9081,
+			AD9081_ADC_CDDC_ALL, 1);
+
+	adi_ad9081_adc_ddc_fine_sync_enable_set(&phy->ad9081,
+						AD9081_ADC_FDDC_ALL, 0);
+	adi_ad9081_adc_ddc_fine_sync_enable_set(&phy->ad9081,
+						AD9081_ADC_FDDC_ALL, 1);
+
 	if (master)
 		return adi_ad9081_dac_nco_master_slave_trigger_set(
 			       &phy->ad9081); /* REG 0xBC */
