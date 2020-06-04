@@ -60,7 +60,7 @@
 #include "util.h"
 #include "error.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
@@ -69,7 +69,7 @@
 #include "iio_ad713x.h"
 #include "iio.h"
 #include "iio_app.h"
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -103,7 +103,7 @@
 #define AD7134_FMC_CH_NO		8
 #define AD7134_FMC_SAMPLE_NO		1024
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 #define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
 #define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
@@ -118,7 +118,7 @@ ssize_t iio_uart_read(char *buf, size_t len)
 {
 	return uart_read(uart_device, (uint8_t *)buf, len);
 }
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 
 int main()
 {
@@ -270,7 +270,7 @@ int main()
 	spi_engine_offload_message.rx_addr = 0x800000;
 	spi_engine_offload_message.tx_addr = 0xA000000;
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 	struct iio_ad713x *iio_ad713x;
 	struct iio_server_ops uart_iio_server_ops;
 	struct iio_app_init_param iio_app_init_par;
@@ -341,7 +341,7 @@ int main()
 
 	return iio_app(iio_app_desc);
 
-#endif /* IIO_EXAMPLE */
+#endif /* IIO_SUPPORT */
 
 	ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
 					  (AD7134_FMC_CH_NO * AD7134_FMC_SAMPLE_NO));

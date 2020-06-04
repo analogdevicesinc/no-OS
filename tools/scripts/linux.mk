@@ -92,7 +92,7 @@ CFLAGS = -Wall 								\
 	#-Werror
 
 ifeq (y,$(strip $(TINYIIOD)))
-CFLAGS += -D IIO_EXAMPLE
+CFLAGS += -D IIO_SUPPORT
 CFLAGS += -D _USE_STD_INT_TYPES
 endif
 

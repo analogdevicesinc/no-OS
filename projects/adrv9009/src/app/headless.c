@@ -34,7 +34,7 @@
 #include "app_talise.h"
 #include "ad9528.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 
 #include "iio_app.h"
 #include "iio_axi_adc.h"
@@ -68,7 +68,7 @@ static ssize_t iio_uart_read(char *buf, size_t len)
 	return uart_read(uart_desc, (uint8_t *)buf, len);
 }
 
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 
 /**********************************************************/
 /**********************************************************/
@@ -139,7 +139,7 @@ int main(void)
 		"tx_dmac",
 		TX_DMA_BASEADDR,
 		DMA_MEM_TO_DEV,
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 		DMA_CYCLIC,
 #else
 		0,
@@ -309,7 +309,7 @@ int main(void)
 #endif
 #endif
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 	/**
 	 * iio application configurations.
 	 */
@@ -445,7 +445,7 @@ int main(void)
 
 	return iio_app(iio_app_desc);
 
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 
 	for (t = TALISE_A; t < TALISE_DEVICE_ID_MAX; t++) {
 		talise_shutdown(&tal[t]);

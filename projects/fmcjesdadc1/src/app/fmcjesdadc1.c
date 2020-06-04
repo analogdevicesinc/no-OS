@@ -61,7 +61,7 @@
 #include "axi_jesd204_rx.h"
 #include "demux_spi.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 #include "app_iio.h"
 #endif
 
@@ -560,7 +560,7 @@ int main(void)
 	axi_dmac_transfer(ad9250_0_dmac, ADC_0_DDR_BASEADDR, 16384 * 2);
 	axi_dmac_transfer(ad9250_1_dmac, ADC_1_DDR_BASEADDR, 16384 * 2);
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 	printf("The board accepts libiio clients connections through the serial backend.\n");
 
 	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
