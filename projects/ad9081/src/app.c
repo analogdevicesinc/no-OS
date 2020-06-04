@@ -58,7 +58,7 @@
 #include "app_parameters.h"
 #include "app_config.h"
 
-#ifdef IIO_SUPPORT
+#ifdef IIO_EXAMPLE
 #include "app_iio.h"
 #endif
 
@@ -257,7 +257,7 @@ int main(void)
 	axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 
-#ifdef IIO_SUPPORT
+#ifdef IIO_EXAMPLE
 	printf("The board accepts libiio clients connections through the serial backend.\n");
 
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
