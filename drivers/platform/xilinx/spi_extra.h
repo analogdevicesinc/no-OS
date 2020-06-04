@@ -100,7 +100,12 @@ typedef struct xil_spi_desc {
 } xil_spi_desc;
 
 /**
- * @brief Xilinx platform specific SPI platform ops structure
+ * @brief SPI engine platform ops structure
+ */
+extern const struct spi_platform_ops spi_eng_platform_ops;
+
+/**
+ * @brief Xilinx specific SPI platform ops structure
  */
 extern const struct spi_platform_ops xil_platform_ops;
 
