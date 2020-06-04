@@ -187,7 +187,7 @@ int main()
 		.chip_select = AD7134_1_SPI_CS,
 		.max_speed_hz = 10000000,
 		.mode = SPI_MODE_3,
-		.platform_ops = &xil_platform_ops,
+		.platform_ops = &spi_eng_platform_ops,
 		.extra = (void*)&spi_eng_init_param,
 
 	};
@@ -386,4 +386,3 @@ int main()
 
 	return 0;
 }
-

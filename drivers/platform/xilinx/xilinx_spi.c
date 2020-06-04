@@ -54,9 +54,6 @@
 #include "error.h"
 #include "spi.h"
 #include "spi_extra.h"
-#ifdef XPAR_SPI_ADC_AXI_REGMAP_BASEADDR
-#include "spi_engine.h"
-#endif
 
 #if defined(PLATFORM_ZYNQ)
 #define SPI_CLK_FREQ_HZ(dev)	(XPAR_PS7_SPI_ ## dev ## _SPI_CLK_FREQ_HZ)
@@ -278,12 +275,6 @@ int32_t xil_spi_init(struct spi_desc **desc,
 		return FAILURE;
 	}
 
-	/* Get only the first member of the sctructure
-	 * Both structures (spi_engine_init_param and spi_init_param)
-	 * have the fisrt member enum xil_spi_type so in this case
-	 * we can read the first member without casting the pointer to
-	 * a certain structure type.
-	*/
 	spi_type = param->extra;
 
 	if(!spi_type)
@@ -300,11 +291,6 @@ int32_t xil_spi_init(struct spi_desc **desc,
 	case SPI_PS:
 		ret = spi_init_ps(*desc, param);
 		break;
-	case SPI_ENGINE:
-#ifdef SPI_ENGINE_H
-		ret = spi_engine_init(*desc, param);
-		break;
-#endif
 
 	default:
 		goto init_error;
@@ -334,12 +320,6 @@ int32_t xil_spi_remove(struct spi_desc *desc)
 	struct xil_spi_desc	*xdesc = NULL;
 	enum xil_spi_type	*spi_type;
 
-	/* Get only the first member of the sctructure
-	 * Both structures (spi_engine_init_param and spi_init_param)
-	 * have the fisrt member enum xil_spi_type so in this case
-	 * we can read the first member without casting the pointer to
-	 * a certain structure type.
-	*/
 	spi_type = desc->extra;
 
 	if(!spi_type)
@@ -366,10 +346,7 @@ int32_t xil_spi_remove(struct spi_desc *desc)
 			return FAILURE;
 #endif
 		break;
-	case SPI_ENGINE:
-#ifdef SPI_ENGINE_H
-		spi_engine_remove(desc);
-#endif
+
 		/* Intended fallthrough */
 #ifdef XSPI_H
 error:
@@ -404,19 +381,12 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 
 	ret = FAILURE;
 
-	/* Get only the first member of the sctructure
-	 * Both structures (spi_engine_init_param and spi_init_param)
-	 * have the fisrt member enum xil_spi_type so in this case
-	 * we can read the first member without casting the pointer to
-	 * a certain structure type.
-	*/
 	spi_type = desc->extra;
 
 	if(!spi_type)
 		return FAILURE;
 
-	if (*spi_type != SPI_ENGINE)
-		xdesc = desc->extra;
+	xdesc = desc->extra;
 
 	switch (*spi_type) {
 	case SPI_PL:
@@ -470,11 +440,6 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 		ret = XSpiPs_SetSlaveSelect(xdesc->instance, SPI_DEASSERT_CURRENT_SS);
 		if (ret != SUCCESS)
 			goto error;
-#endif
-		break;
-	case SPI_ENGINE:
-#ifdef SPI_ENGINE_H
-		ret = spi_engine_write_and_read(desc, data, bytes_number);
 #endif
 		break;
 error:
