@@ -65,7 +65,7 @@
 #include "axi_dmac.h"
 #include "app_config.h"
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 
 #include "iio_app.h"
 #include "iio_axi_adc.h"
@@ -99,7 +99,7 @@ static ssize_t iio_uart_read(char *buf, size_t len)
 	return uart_read(uart_desc, (uint8_t *)buf, len);
 }
 
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
@@ -954,7 +954,7 @@ int main(void)
 	axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	axi_dmac_init(&rx_obs_dmac, &rx_obs_dmac_init);
 
-#ifdef IIO_EXAMPLE
+#ifdef IIO_SUPPORT
 
 	/**
 	 * Transmit DMA initial configuration.
@@ -1125,7 +1125,7 @@ int main(void)
 
 	return iio_app(iio_app_desc);
 
-#endif // IIO_EXAMPLE
+#endif // IIO_SUPPORT
 
 	axi_dmac_transfer(rx_dmac,
 			  DDR_MEM_BASEADDR + 0x800000,

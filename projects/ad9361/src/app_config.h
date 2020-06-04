@@ -57,9 +57,9 @@
 //#define AXI_ADC_NOT_PRESENT
 //#define TDD_SWITCH_STATE_EXAMPLE
 
-//#define IIO_EXAMPLE
+//#define IIO_SUPPORT
 
-#ifndef IIO_EXAMPLE
+#ifndef IIO_SUPPORT
 #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
 //#define HAVE_DEBUG_MESSAGES /* For Debug purposes only */
 #endif // USE_LIBIIO
