@@ -195,9 +195,28 @@ $(FATFS_LIB):
 
 endif
 
+#	MQTT
+MQTT_DIR = $(NO-OS)/libraries/mqtt
+#If mqtt is found in SRC_DIRS
+ifneq ($(if $(findstring $(MQTT_DIR), $(SRC_DIRS)), 1),)
+#Remove fatfs from srcdirs because it is a library
+SRC_DIRS := $(filter-out $(MQTT_DIR), $(SRC_DIRS))
+
+MQTT_LIB	= $(MQTT_DIR)/libmqtt_client.a
+
+LIBS_DIRS	+= "$(MQTT_DIR)"
+LIBS		+= $(notdir $(MQTT_LIB))
+INCLUDE_DIRS	+= $(MQTT_DIR)
+
+CLEAN_MQTT	= $(MAKE) -C $(MQTT_DIR) clean
+$(MQTT_LIB):
+	$(MAKE) -C $(MQTT_DIR)
+
+endif
+
 LIB_FLAGS = $(addprefix -l,$(subst lib,,$(basename $(LIBS))))
 LIB_DIR_FLAGS = $(addprefix -L,$(LIBS_DIRS))
-LIB_TARGETS = $(MBEDTLS_TARGETS) $(FATFS_LIB)
+LIB_TARGETS = $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB)
 
 #------------------------------------------------------------------------------
 #                           UTIL FUNCTIONS                              
@@ -357,6 +376,7 @@ PHONY += clean_libs
 clean_libs:
 	-$(CLEAN_MBEDTLS)
 	-$(CLEAN_FATFS)
+	-$(CLEAN_MQTT)
 
 # Remove workspace data and project directory
 PHONY += clean_all
