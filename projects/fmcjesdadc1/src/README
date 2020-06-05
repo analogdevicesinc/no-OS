@@ -12,8 +12,8 @@ cp ../../../drivers/frequency/ad9517/ad9517.h devices/adi_hal/
 cp ../../../drivers/frequency/ad9517/ad9517.c devices/adi_hal/
 cp ../../../drivers/platform/xilinx/axi_io.c devices/adi_hal/
 cp ../../../drivers/spi/spi.c devices/adi_hal/
-cp ../../../drivers/io-expander/demux_spi.h devices/adi_hal/
-cp ../../../drivers/io-expander/demux_spi.c devices/adi_hal/
+cp ../../../drivers/io-expander/demux_spi/demux_spi.h devices/adi_hal/
+cp ../../../drivers/io-expander/demux_spi/demux_spi.c devices/adi_hal/
 cp ../../../drivers/platform/xilinx/xilinx_spi.c devices/adi_hal/
 cp ../../../drivers/platform/xilinx/spi_extra.h devices/adi_hal/
 cp ../../../drivers/platform/xilinx/gpio.c devices/adi_hal/
