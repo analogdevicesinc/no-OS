@@ -277,10 +277,7 @@ CFLAGS	+=	-O2				\
 LINKER_FILE	=$(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
 LDFLAGS		= -T$(LINKER_FILE)\
-		 -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm\
-		 $(LIB_DIR_FLAGS) $(LIB_FLAGS)
-		 
-
+		 -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm
 
 CC = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
@@ -329,7 +326,7 @@ $(BUILD_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 
 $(BINARY): $(LIB_TARGETS) $(OBJS)
 	@echo CC LDFLAGS OBJS INCS_FLAGS -o $(BINARY)
-	$(CC) $(LDFLAGS) -o $(BINARY) $(OBJS)
+	$(CC) $(LDFLAGS) $(LIB_DIR_FLAGS) -o $(BINARY) $(OBJS) $(LIB_FLAGS)
 
 $(HEX): $(BINARY)
 	arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
