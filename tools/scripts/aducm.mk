@@ -420,7 +420,7 @@ PHONY += project
 project: $(PROJECT_BUILD)/.project.target
 
 #Create new project with platform driver and utils source folders linked
-$(PROJECT_BUILD)/.project.target:
+$(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-command projectcreate \
 		-data $(WORKSPACE) \
