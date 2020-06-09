@@ -31,7 +31,13 @@ LIBRARY = libmqtt_client.a
 
 .PHONEY = all clean
 
+ifeq ($(wildcard $(PAHO_DIR)/README.md),)
+all:
+	git submodule update --init --remote -- $(PAHO_DIR)
+	$(MAKE) $(LIBRARY)
+else
 all: $(LIBRARY)
+endif
 
 $(LIBRARY): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
