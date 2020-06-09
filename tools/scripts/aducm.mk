@@ -166,11 +166,13 @@ MBEDTLS_TARGETS	= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
 ifeq ($(wildcard $(MBEDTLS_PATH)/LICENSE),)
 MBED_TLS_INIT = git submodule update --init --remote -- $(MBEDTLS_PATH)
 endif
-#Executed only once if one of the libs needs update
 
-$(MBEDTLS_LIB_DIR)/libmbedcrypto.a:
 #Workaround for cleaning because mbedtls clean don't work on windows enviroment
 CLEAN_MBEDTLS	= $(call remove_fun,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_TARGETS))
+
+#Executed only once if one of the libs needs update
+$(MBEDTLS_LIB_DIR)/libmbedcrypto.a: $(MBED_TLS_CONFIG_FILE)
+	-$(CLEAN_MBEDTLS)
 	$(MAKE) -C $(MBEDTLS_LIB_DIR)
 
 $(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
