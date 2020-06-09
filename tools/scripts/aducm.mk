@@ -266,6 +266,7 @@ SRCS += $(PROJECT_PIN_MUX)
 SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
 SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
 SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
+ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
 INCLUDE_DIRS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
 INCLUDE_DIRS += $(PROJECT_BUILD)/RTE
 INCLUDE_DIRS += $(PROJECT_BUILD)/system
@@ -279,6 +280,9 @@ $(SRCS) += $(PIN_MUX)
 
 REL_SRCS = $(foreach file, $(SRCS), $(BUILD_DIR)/$(call get_relative_path,$(file)))
 OBJS = $(REL_SRCS:.c=.o)
+
+REL_ASM_SRCS = $(foreach file, $(ASM_SRCS), $(BUILD_DIR)/$(call get_relative_path,$(file)))
+ASM_OBJS = $(REL_ASM_SRCS:.S=.o)
 
 #------------------------------------------------------------------------------
 #                           COMPILING DATA                              
@@ -294,11 +298,14 @@ GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
 GENERIC_RELEASE_FLAGS = -DNDEBUG 
 C_RELEASE_FLAGS = -O2
 
+ASFLAGS	+= $(GENERIC_FLAGS) -x assembler-with-cpp 
 CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
 
 CFLAGS	+= $(GENERIC_RELEASE_FLAGS) $(C_RELEASE_FLAGS)
+ASFLAGS += $(GENERIC_RELEASE_FLAGS)
 
 #CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
+#ASFLAGS += $(GENERIC_DEBUG_FLAGS)
 
 LINKER_FILE	=$(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
@@ -306,6 +313,7 @@ LDFLAGS		= -T$(LINKER_FILE)\
 		 -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm
 
 CC = arm-none-eabi-gcc
+AS = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 
 #------------------------------------------------------------------------------
@@ -350,9 +358,13 @@ $(BUILD_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@echo CC -c $(notdir $<) -o $(notdir $@)
 	@$(CC) $(CFLAGS) $< -o $@
 
-$(BINARY): $(LIB_TARGETS) $(OBJS)
+$(BUILD_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
+	@echo AS -c $(notdir $<) -o $(notdir $@)
+	@$(AS) $(ASFLAGS) $< -o $@
+
+$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS)
 	@echo CC LDFLAGS OBJS INCS_FLAGS -o $(BINARY)
-	$(CC) $(LDFLAGS) $(LIB_DIR_FLAGS) -o $(BINARY) $(OBJS) $(LIB_FLAGS)
+	$(CC) $(LDFLAGS) $(LIB_DIR_FLAGS) -o $(BINARY) $(OBJS) $(ASM_OBJS) $(LIB_FLAGS) 
 
 $(HEX): $(BINARY)
 	arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
