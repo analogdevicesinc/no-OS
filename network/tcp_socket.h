@@ -63,14 +63,6 @@ struct tcp_socket_desc;
  * @brief Parameter to initialize a TCP Socket
  */
 struct secure_init_param {
-	/** Certificate authority certificate */
-	char			*ca_cert;
-	/** Server name */
-	char			*hostname;
-	/** Client certificate */
-	char			*client_cert;
-	/** Client key */
-	char			*client_key;
 	/** Init param for true random number generator */
 	struct trng_init_param	*trng_init_param;
 };

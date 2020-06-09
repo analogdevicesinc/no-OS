@@ -59,16 +59,12 @@
  */
 struct secure_socket_desc {
 	/** True random number generator reference */
-	struct trng_desc		*trng;
+	struct trng_desc	*trng;
 	/* Mbed structures */
-	/** Certification authority certificate */
-	mbedtls_x509_crt		ca_cert;
-	/** Client certificate */
-	mbedtls_x509_crt		client_cert;
 	/** SSL configuration structure */
-	mbedtls_ssl_config		conf;
+	mbedtls_ssl_config	conf;
 	/** Mbedtls tls context */
-	mbedtls_ssl_context		ssl;
+	mbedtls_ssl_context	ssl;
 };
 
 /* Socket descriptor */
@@ -108,8 +104,6 @@ static int tls_net_send(struct tcp_socket_desc *sock, unsigned char *buff,
 /* Remove secure descriptor*/
 static void stcp_socket_remove(struct secure_socket_desc *desc)
 {
-	mbedtls_x509_crt_free(&desc->ca_cert);
-	mbedtls_x509_crt_free(&desc->client_cert);
 	mbedtls_ssl_config_free(&desc->conf);
 	if (desc->trng)
 		trng_remove(desc->trng);
@@ -125,7 +119,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	struct secure_socket_desc	*ldesc;
 	int32_t				ret;
 
-	if (!desc || !param || !param->ca_cert)
+	if (!desc || !param)
 		return FAILURE;
 
 	ldesc = (typeof(ldesc))calloc(1, sizeof(*ldesc));
@@ -133,8 +127,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		return FAILURE;
 
 	/* Initialize structures */
-	mbedtls_x509_crt_init(&ldesc->ca_cert);
-	mbedtls_x509_crt_init(&ldesc->client_cert);
 	mbedtls_ssl_config_init(&ldesc->conf);
 
 	ret = trng_init(&ldesc->trng, param->trng_init_param);
@@ -154,27 +146,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	/* Certificate validation is set as mandatory */
 	mbedtls_ssl_conf_authmode(&ldesc->conf, MBEDTLS_SSL_VERIFY_NONE);
 
-	/* Decode the root certificate */
-	ret = mbedtls_x509_crt_parse(&ldesc->ca_cert,
-				     (const unsigned char *)param->ca_cert,
-				     strlen(param->ca_cert) + 1);
-	if (IS_ERR_VALUE(ret))
-		goto exit;
-	/* Set issuer certificate authority. NULL for revoked certificates */
-	mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->ca_cert, NULL);
-
-	/* Decode client certificate */
-	if (param->client_cert) {
-		ret = mbedtls_x509_crt_parse(&ldesc->client_cert,
-					     (const unsigned char *)
-					     param->client_cert,
-					     strlen(param->client_cert) + 1);
-		if (IS_ERR_VALUE(ret))
-			goto exit;
-		/* Set own certificate */
-		mbedtls_ssl_conf_own_cert(&ldesc->conf, &ldesc->client_cert,
-					  NULL);
-	}
 
 	/* Config Random number generator */
 	mbedtls_ssl_conf_rng(&ldesc->conf,
@@ -186,12 +157,6 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	ret = mbedtls_ssl_setup(&ldesc->ssl, &ldesc->conf);
 	if (IS_ERR_VALUE(ret))
 		goto exit;
-
-	if (param->hostname) {
-		ret = mbedtls_ssl_set_hostname(&ldesc->ssl, param->hostname);
-		if (IS_ERR_VALUE(ret))
-			goto exit;
-	}
 
 	/* Set socket callbacks */
 	mbedtls_ssl_set_bio(&ldesc->ssl, sock,
