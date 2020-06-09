@@ -357,6 +357,9 @@ run: all
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 		-c "program  $(BINARY) verify reset exit"
 
+PHONY += libs
+libs: $(LIB_TARGETS)
+
 # Remove project binaries
 PHONY += clean
 clean:
