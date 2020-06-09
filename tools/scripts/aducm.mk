@@ -286,19 +286,19 @@ OBJS = $(REL_SRCS:.c=.o)
 
 INCS_FLAGS += $(addprefix -I,$(INCLUDE_DIRS))
 
-CFLAGS	+=	-O2				\
-		-ffunction-sections		\
-		-fdata-sections			\
-		-DCORE0				\
-		-DNDEBUG			\
-		-D_RTE_				\
-		-D__ADUCM3029__			\
-		-D__SILICON_REVISION__=0xffff	\
-		-Wall				\
-		-c -mcpu=cortex-m3		\
-		-mthumb				\
-		$(INCS_FLAGS)		
-#		-Werror
+GENERIC_FLAGS = -c -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb \
+		$(INCS_FLAGS)
+
+GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
+
+GENERIC_RELEASE_FLAGS = -DNDEBUG 
+C_RELEASE_FLAGS = -O2
+
+CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
+
+CFLAGS	+= $(GENERIC_RELEASE_FLAGS) $(C_RELEASE_FLAGS)
+
+#CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
 
 LINKER_FILE	=$(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
@@ -348,7 +348,7 @@ $(BUILD_DIR)%/.:
 .SECONDEXPANSION:
 $(BUILD_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@echo CC -c $(notdir $<) -o $(notdir $@)
-	@$(CC) -c $(CFLAGS) $< -o $@
+	@$(CC) $(CFLAGS) $< -o $@
 
 $(BINARY): $(LIB_TARGETS) $(OBJS)
 	@echo CC LDFLAGS OBJS INCS_FLAGS -o $(BINARY)
