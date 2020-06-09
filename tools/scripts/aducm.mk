@@ -147,25 +147,29 @@ include src.mk
 #If network dir is included, mbedtls will be used
 ifneq ($(if $(findstring $(NO-OS)/network, $(SRC_DIRS)), 1),)
 
-MBEDTLS_LIB_NAMES = libmbedcrypto.a libmbedtls.a libmbedx509.a
-MBEDTLS_LIB_DIR = $(NO-OS)/libraries/mbedtls/library
+MBEDTLS_PATH		= $(NO-OS)/libraries/mbedtls
+MBEDTLS_LIB_DIR		= $(MBEDTLS_PATH)/library
+MBEDTLS_LIB_NAMES	= libmbedtls.a libmbedx509.a  libmbedcrypto.a
 
 LIBS_DIRS	+= "$(MBEDTLS_LIB_DIR)"
 LIBS		+= $(MBEDTLS_LIB_NAMES)
-INCLUDE_DIRS 	+= $(NO-OS)/libraries/mbedtls/include
+INCLUDE_DIRS 	+= $(MBEDTLS_PATH)/include
 
-CFLAGS 		+= -I $(NO-OS)/network/transport \
-			-DMBEDTLS_CONFIG_FILE=\"noos_mbedtls_config.h\"
+MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
+
+#Add to CFAGS the config file name and the directory where it is located
+CFLAGS 		+= -I$(dir $(MBED_TLS_CONFIG_FILE)) \
+			-DMBEDTLS_CONFIG_FILE=\"$(notdir $(MBED_TLS_CONFIG_FILE))\"
 
 MBEDTLS_TARGETS	= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
 
-ifeq ($(wildcard $(NO-OS)/libraries/mbedtls/LICENSE),)
-MBED_TLS_INIT = git submodule update --init --remote -- $(NO-OS)/libraries/mbedtls
+ifeq ($(wildcard $(MBEDTLS_PATH)/LICENSE),)
+MBED_TLS_INIT = git submodule update --init --remote -- $(MBEDTLS_PATH)
 endif
 #Executed only once if one of the libs needs update
 
 $(MBEDTLS_LIB_DIR)/libmbedcrypto.a:
-	$(MAKE) -C $(NO-OS)/libraries/mbedtls lib
+	$(MAKE) -C $(MBEDTLS_LIB_DIR)
 
 $(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
 
