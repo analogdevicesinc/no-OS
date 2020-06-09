@@ -23,7 +23,7 @@ ifeq ($(OS), Windows_NT)
 SHELL=cmd
 copy_fun = copy /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
 copy_folder = xcopy /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
-remove_fun = del /S /Q "$(subst /,\,$1)"
+remove_fun = del /S /Q $(subst /,\,$1)
 remove_dir = rd /S /Q "$(subst /,\,$1)"
 mk_dir = md "$(subst /,\,$1)"
 #cces works to but has no console output
@@ -169,13 +169,14 @@ endif
 #Executed only once if one of the libs needs update
 
 $(MBEDTLS_LIB_DIR)/libmbedcrypto.a:
+#Workaround for cleaning because mbedtls clean don't work on windows enviroment
+CLEAN_MBEDTLS	= $(call remove_fun,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_TARGETS))
 	$(MAKE) -C $(MBEDTLS_LIB_DIR)
 
 $(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
 
 $(MBEDTLS_LIB_DIR)/libmbedtls.a: $(MBEDTLS_LIB_DIR)/libmbedx509.a
 
-CLEAN_MBEDTLS	= $(MAKE) -C $(NO-OS)/libraries/mbedtls clean
 
 endif
 
