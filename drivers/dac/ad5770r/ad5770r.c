@@ -632,6 +632,34 @@ int32_t ad5770r_set_monitor_setup(struct ad5770r_dev *dev,
 };
 
 /**
+ * @brief Deallocate memory for the GPIOs assigned.
+ * @param dev - Device driver handler.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+static int32_t ad5770r_remove_gpio(struct ad5770r_dev *dev)
+{
+	int32_t ret;
+
+	if (dev->gpio_alarm_n) {
+		ret = gpio_remove(dev->gpio_alarm_n);
+		if(IS_ERR_VALUE(ret))
+			return FAILURE;
+	}
+	if (dev->gpio_ldac_n) {
+		ret = gpio_remove(dev->gpio_ldac_n);
+		if(IS_ERR_VALUE(ret))
+			return FAILURE;
+	}
+	if (dev->gpio_reset_n) {
+		ret = gpio_remove(dev->gpio_reset_n);
+		if(IS_ERR_VALUE(ret))
+			return FAILURE;
+	}
+
+	return SUCCESS;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -655,6 +683,34 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, &init_param->spi_init);
+	if (IS_ERR_VALUE(ret))
+		goto error_dev;
+
+	/* GPIO */
+	ret = gpio_get_optional(&dev->gpio_alarm_n, init_param->gpio_alarm_n);
+	if (IS_ERR_VALUE(ret))
+		goto error_spi;
+	ret = gpio_get_optional(&dev->gpio_ldac_n, init_param->gpio_ldac_n);
+	if (IS_ERR_VALUE(ret))
+		goto error_gpio;
+	ret = gpio_get_optional(&dev->gpio_reset_n, init_param->gpio_reset_n);
+	if (IS_ERR_VALUE(ret))
+		goto error_gpio;
+	if (dev->gpio_alarm_n) {
+		ret = gpio_direction_input(dev->gpio_alarm_n);
+		if (IS_ERR_VALUE(ret))
+			goto error_gpio;
+	}
+	if (dev->gpio_ldac_n) {
+		ret = gpio_direction_output(dev->gpio_ldac_n, GPIO_HIGH);
+		if (IS_ERR_VALUE(ret))
+			goto error_gpio;
+	}
+	if (dev->gpio_reset_n) {
+		ret = gpio_direction_output(dev->gpio_reset_n, GPIO_HIGH);
+		if (IS_ERR_VALUE(ret))
+			goto error_gpio;
+	}
 
 	/* Query device presence */
 	ad5770r_spi_reg_read(dev, AD5770R_PRODUCT_ID_L, &product_id_l);
@@ -714,6 +770,15 @@ int32_t ad5770r_init(struct ad5770r_dev **device,
 		printf("ad5770r initialization error (%d)\n", ret);
 
 	return ret;
+
+error_gpio:
+	ad5770r_remove_gpio(dev);
+error_spi:
+	spi_remove(dev->spi_desc);
+error_dev:
+	free(dev);
+
+	return FAILURE;
 }
 
 /**
@@ -729,6 +794,10 @@ int32_t ad5770r_remove(struct ad5770r_dev *dev)
 		return FAILURE;
 
 	ret = spi_remove(dev->spi_desc);
+
+	ret = ad5770r_remove_gpio(dev);
+	if (IS_ERR_VALUE(ret))
+		return FAILURE;
 
 	free(dev);
 
