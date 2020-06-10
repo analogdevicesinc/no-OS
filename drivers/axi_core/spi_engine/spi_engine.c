@@ -56,15 +56,6 @@ significant delays */
 #include "error.h"
 #include "spi_engine.h"
 
-/**
- * @brief Spi engine platform specific SPI platform ops structure
- */
-const struct spi_platform_ops spi_eng_platform_ops = {
-	.spi_ops_init = &spi_engine_init,
-	.spi_ops_write_and_read = &spi_engine_write_and_read,
-	.spi_ops_remove = &spi_engine_remove
-};
-
 /******************************************************************************/
 /***************************** Static variables *******************************/
 /******************************************************************************/
@@ -602,7 +593,7 @@ static int32_t spi_engine_transfer_message(struct spi_desc *desc,
  * @return int32_t - SUCCESS if the transfer finished
  *		   - FAILURE if the memory allocation failed
  */
-int32_t spi_engine_init(struct spi_desc **desc,
+int32_t spi_engine_init(struct spi_desc *desc,
 			const struct spi_init_param *param)
 {
 	uint32_t			data_width;
@@ -610,15 +601,8 @@ int32_t spi_engine_init(struct spi_desc **desc,
 	struct spi_engine_desc		*eng_desc;
 	struct spi_engine_init_param	*spi_engine_init;
 
-	if (!param) {
+	if (!desc)
 		return FAILURE;
-	}
-
-	*desc = malloc(sizeof(**desc));
-	if(! *desc) {
-		free(*desc);
-		return FAILURE;
-	}
 
 	eng_desc = (struct spi_engine_desc*)malloc(sizeof(*eng_desc));
 
@@ -627,10 +611,10 @@ int32_t spi_engine_init(struct spi_desc **desc,
 
 	spi_engine_init = param->extra;
 
-	(*desc)->max_speed_hz = param->max_speed_hz;
-	(*desc)->chip_select = param->chip_select;
-	(*desc)->mode = param->mode;
-	(*desc)->extra = eng_desc;
+	desc->max_speed_hz = param->max_speed_hz;
+	desc->chip_select = param->chip_select;
+	desc->mode = param->mode;
+	desc->extra = eng_desc;
 
 	eng_desc->offload_config = OFFLOAD_DISABLED;
 	eng_desc->spi_engine_baseaddr = spi_engine_init->spi_engine_baseaddr;
@@ -648,7 +632,7 @@ int32_t spi_engine_init(struct spi_desc **desc,
 	spi_engine_read(eng_desc, SPI_ENGINE_REG_DATA_WIDTH, &data_width);
 	eng_desc->max_data_width = data_width;
 
-	spi_engine_set_transfer_width(*desc, spi_engine_init->data_width);
+	spi_engine_set_transfer_width(desc, spi_engine_init->data_width);
 
 	/* Get current data width */
 	spi_engine_read(eng_desc, SPI_ENGINE_REG_VERSION, &spi_engine_version);
@@ -672,7 +656,7 @@ int32_t spi_engine_init(struct spi_desc **desc,
  */
 int32_t spi_engine_write_and_read(struct spi_desc *desc,
 				  uint8_t *data,
-				  uint16_t bytes_number)
+				  uint8_t bytes_number)
 {
 	uint8_t 		i;
 	uint8_t 		word_len;
