@@ -61,6 +61,8 @@ struct secure_socket_desc {
 	/** True random number generator reference */
 	struct trng_desc	*trng;
 	/* Mbed structures */
+	/** CA certificate */
+	mbedtls_x509_crt	cacert;
 	/** SSL configuration structure */
 	mbedtls_ssl_config	conf;
 	/** Mbedtls tls context */
@@ -104,6 +106,7 @@ static int tls_net_send(struct tcp_socket_desc *sock, unsigned char *buff,
 /* Remove secure descriptor*/
 static void stcp_socket_remove(struct secure_socket_desc *desc)
 {
+	mbedtls_x509_crt_free( &desc->cacert );
 	mbedtls_ssl_config_free(&desc->conf);
 	if (desc->trng)
 		trng_remove(desc->trng);
@@ -128,6 +131,7 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 
 	/* Initialize structures */
 	mbedtls_ssl_config_init(&ldesc->conf);
+	mbedtls_x509_crt_init(&ldesc->cacert);
 
 	ret = trng_init(&ldesc->trng, param->trng_init_param);
 	if (IS_ERR_VALUE(ret)) {
@@ -143,9 +147,22 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	if (IS_ERR_VALUE(ret))
 		goto exit;
 
-	/* Certificate validation is set as mandatory */
-	mbedtls_ssl_conf_authmode(&ldesc->conf, MBEDTLS_SSL_VERIFY_NONE);
+	if (param->ca_cert) {
+		ret = mbedtls_x509_crt_parse( &ldesc->cacert,
+					      (const unsigned char *)param->ca_cert,
+					      (size_t)param->ca_cert_len);
+		if (ret < 0)
+			goto exit;
 
+		mbedtls_ssl_conf_ca_chain(&ldesc->conf, &ldesc->cacert, NULL );
+		/* Verify server identity */
+		mbedtls_ssl_conf_authmode(&ldesc->conf,
+					  MBEDTLS_SSL_VERIFY_REQUIRED);
+	} else {
+		/* Do not verify server identity */
+		mbedtls_ssl_conf_authmode(&ldesc->conf,
+					  MBEDTLS_SSL_VERIFY_NONE);
+	}
 
 	/* Config Random number generator */
 	mbedtls_ssl_conf_rng(&ldesc->conf,
