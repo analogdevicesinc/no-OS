@@ -11,7 +11,8 @@
 
 # Uncomment to select the profile
 
-SRCS := $(PROJECT)/src/app/fmcadc2.c					
+SRCS := $(PROJECT)/src/app/fmcadc2.c					\
+	$(PROJECT)/src/app/app_iio.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
@@ -26,7 +27,17 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
+ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/iio/iio.c						\
+	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
+	$(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c
+endif
 INCS :=	$(PROJECT)/src/app/app_config.h					\
+	$(PROJECT)/src/app/app_iio.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
@@ -43,3 +54,17 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS +=	$(INCLUDE)/xml.h						\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/irq.h						\
+	$(INCLUDE)/uart.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/uart_extra.h                                \
+	$(NO-OS)/iio/iio.h						\
+	$(NO-OS)/iio/iio_types.h					\
+	$(NO-OS)/iio/iio_app/iio_app.h					\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
+	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
+	$(NO-OS)/libraries/libtinyiiod/compat.h
+endif
