@@ -14,7 +14,6 @@
 SRCS := $(PROJECT)/src/app/fmcadc2.c					\
 	$(PROJECT)/src/app/app_iio.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
-	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
