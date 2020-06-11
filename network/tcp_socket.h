@@ -69,6 +69,8 @@ struct secure_init_param {
 	  * Certificate authority certificate.
 	  * If set, server identity will be verified, otherwise not.
 	  * ca_cert should be given in binary(der) format.
+	  * If ENABLE_PEM_CERT is not defined, the ca_cert memory should not be
+	  * modified.
 	  */
 	uint8_t			*ca_cert;
 	/** Ca_cert length */
@@ -76,6 +78,8 @@ struct secure_init_param {
 	/**
 	 * Client certificate.
 	 * Must be set if server requires it, otherwise it can be NULL
+	 * If ENABLE_PEM_CERT is not defined, the cli_cert memory should not be
+	 * modified.
 	 */
 	uint8_t			*cli_cert;
 	/** cli_cert length */
