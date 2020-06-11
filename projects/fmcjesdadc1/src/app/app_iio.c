@@ -47,11 +47,18 @@
 #include "iio_app.h"
 #include "parameters.h"
 #include "app_iio.h"
+#ifndef PLATFORM_MB
+#include "irq.h"
+#include "irq_extra.h"
+#endif
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
 static struct uart_desc *uart_desc;
+#ifndef PLATFORM_MB
+static struct irq_ctrl_desc *irq_desc;
+#endif
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -87,7 +94,13 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 			struct iio_axi_adc_init_param *adc_1_init)
 {
 	struct xil_uart_init_param xil_uart_init_par = {
+#ifdef PLATFORM_MB
 		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+#endif
 	};
 	struct uart_init_param uart_init_par = {
 		.baud_rate = 115200,
@@ -106,9 +119,30 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 	struct iio_axi_adc_desc *iio_axi_adc_1_desc;
 	int32_t status;
 
+#ifndef PLATFORM_MB
+	struct xil_irq_init_param xil_irq_init_param = {
+		.type = IRQ_PS,
+	};
+
+	struct irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_param,
+	};
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(status < 0)
+		return status;
+#endif
+
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
 		return status;
+
+#ifndef PLATFORM_MB
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
+#endif
 
 	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
 	if (status < 0)
