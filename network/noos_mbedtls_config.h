@@ -92,6 +92,13 @@
  */
 #define MAX_CONTENT_LEN 2500
 
+/*
+ * ENABLE_MEMORY_OPTIMIZATIONS should be defined in the case memory
+ * is not enough. This could happen is using both a secure connection with
+ * server an client verification.
+ */
+#define ENABLE_MEMORY_OPTIMIZATIONS
+
 /******************************************************************************/
 /********************* Minimal tls client requirements ************************/
 /******************************************************************************/
@@ -139,6 +146,13 @@
 
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #endif /* ENABLE_TLS1_2 */
+
+#ifdef ENABLE_MEMORY_OPTIMIZATIONS
+
+#define MBEDTLS_AES_ROM_TABLES
+#define MBEDTLS_ECP_WINDOW_SIZE 2
+
+#endif /* ENABLE_MEMORY_OPTIMIZATIONS */
 
 #ifdef ENABLE_PEM_CERT
 
