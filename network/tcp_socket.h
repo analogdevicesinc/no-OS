@@ -107,6 +107,12 @@ struct tcp_socket_init_param {
 	struct network_interface	*net;
 #ifndef DISABLE_SECURE_SOCKET
 	/**
+	 *  Max buffer size for incoming data.
+	 *  If set to 0, default value will be used (CONNECTION_BUFFER_SIZE)
+	 *  from tcp_socket.c
+	 */
+	uint32_t			max_buff_size;
+	/**
 	 * Reference to \ref secure_init_param if a TCP socket over TLS should
 	 * be used. NULL if just raw connection is needed.
 	 */

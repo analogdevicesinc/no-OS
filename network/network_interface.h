@@ -91,7 +91,7 @@ struct network_interface {
 	 *  - \ref FAILURE : Otherwise
 	 */
 	int32_t (*socket_open)(void *net, uint32_t *sock_id,
-			       enum socket_protocol proto);
+			       enum socket_protocol proto, uint32_t buff_size);
 	/**
 	 * @brief Close the socket.
 	 * @param net - Network interface
