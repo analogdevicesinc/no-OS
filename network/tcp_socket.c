@@ -48,6 +48,7 @@
 #include "util.h"
 #include "trng.h"
 #include "mbedtls/ssl.h"
+#include "noos_mbedtls_config.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -156,7 +157,11 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		goto exit;
 
 	if (param->ca_cert) {
+#ifdef ENABLE_PEM_CERT
 		ret = mbedtls_x509_crt_parse( &ldesc->cacert,
+#else
+		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->cacert,
+#endif /* ENABLE_PEM_CERT */
 					      (const unsigned char *)param->ca_cert,
 					      (size_t)param->ca_cert_len);
 		if (ret < 0)
@@ -177,7 +182,11 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 			ret = -EINVAL;
 			goto exit;
 		}
+#ifdef ENABLE_PEM_CERT
 		ret = mbedtls_x509_crt_parse( &ldesc->clicert,
+#else
+		ret = mbedtls_x509_crt_parse_der_nocopy(&ldesc->clicert,
+#endif /* ENABLE_PEM_CERT */
 					      (const unsigned char *)param->cli_cert,
 					      (size_t)param->cli_cert_len);
 		if (IS_ERR_VALUE(ret))
