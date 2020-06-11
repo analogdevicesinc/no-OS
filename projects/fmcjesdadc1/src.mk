@@ -16,7 +16,6 @@ ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app/app_iio.c
 endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
-	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
 	$(DRIVERS)/axi_core/jesd204/axi_adxcvr.c			\
@@ -25,7 +24,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/io-expander/demux_spi/demux_spi.c			\
 	$(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad9250/ad9250.c					\
-	$(DRIVERS)/frequency/ad9517/ad9517.c
+	$(DRIVERS)/frequency/ad9517/ad9517.c				\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
