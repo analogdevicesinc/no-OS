@@ -63,6 +63,10 @@ struct secure_socket_desc {
 	/* Mbed structures */
 	/** CA certificate */
 	mbedtls_x509_crt	cacert;
+	/** Client certificate */
+	mbedtls_x509_crt	clicert;
+	/** Client private key */
+	mbedtls_pk_context	pkey;
 	/** SSL configuration structure */
 	mbedtls_ssl_config	conf;
 	/** Mbedtls tls context */
@@ -106,7 +110,9 @@ static int tls_net_send(struct tcp_socket_desc *sock, unsigned char *buff,
 /* Remove secure descriptor*/
 static void stcp_socket_remove(struct secure_socket_desc *desc)
 {
-	mbedtls_x509_crt_free( &desc->cacert );
+	mbedtls_pk_free(&desc->pkey);
+	mbedtls_x509_crt_free(&desc->clicert);
+	mbedtls_x509_crt_free(&desc->cacert);
 	mbedtls_ssl_config_free(&desc->conf);
 	if (desc->trng)
 		trng_remove(desc->trng);
@@ -132,6 +138,8 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 	/* Initialize structures */
 	mbedtls_ssl_config_init(&ldesc->conf);
 	mbedtls_x509_crt_init(&ldesc->cacert);
+	mbedtls_x509_crt_init(&ldesc->clicert);
+	mbedtls_pk_init(&ldesc->pkey);
 
 	ret = trng_init(&ldesc->trng, param->trng_init_param);
 	if (IS_ERR_VALUE(ret)) {
@@ -162,6 +170,28 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 		/* Do not verify server identity */
 		mbedtls_ssl_conf_authmode(&ldesc->conf,
 					  MBEDTLS_SSL_VERIFY_NONE);
+	}
+
+	if (param->cli_cert) {
+		if (!param->cli_pk) {
+			ret = -EINVAL;
+			goto exit;
+		}
+		ret = mbedtls_x509_crt_parse( &ldesc->clicert,
+					      (const unsigned char *)param->cli_cert,
+					      (size_t)param->cli_cert_len);
+		if (IS_ERR_VALUE(ret))
+			goto exit;
+		ret = mbedtls_pk_parse_key(&ldesc->pkey,
+					   (const unsigned char *)param->cli_pk,
+					   param->cli_pk_len, NULL, 0 );
+		if (IS_ERR_VALUE(ret))
+			goto exit;
+
+		ret = mbedtls_ssl_conf_own_cert(&ldesc->conf, &ldesc->clicert,
+						&ldesc->pkey);
+		if (IS_ERR_VALUE(ret))
+			goto exit;
 	}
 
 	/* Config Random number generator */

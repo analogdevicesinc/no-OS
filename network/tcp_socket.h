@@ -73,6 +73,17 @@ struct secure_init_param {
 	uint8_t			*ca_cert;
 	/** Ca_cert length */
 	uint32_t		ca_cert_len;
+	/**
+	 * Client certificate.
+	 * Must be set if server requires it, otherwise it can be NULL
+	 */
+	uint8_t			*cli_cert;
+	/** cli_cert length */
+	uint32_t		cli_cert_len;
+	/** Client certificate private key. Can't be NULL if cli_cert is set */
+	uint8_t			*cli_pk;
+	/** cli_pk length */
+	uint32_t		cli_pk_len;
 };
 
 /**
