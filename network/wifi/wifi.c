@@ -49,12 +49,6 @@
 #include "util.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-#define CONNECTION_BUFFER_SIZE 2500
-
-/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
@@ -84,7 +78,7 @@ struct wifi_desc {
 
 
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
-				enum socket_protocol proto);
+				enum socket_protocol proto, uint32_t buff_size);
 static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id);
 static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
 				   struct socket_address *addr);
@@ -268,7 +262,7 @@ int32_t wifi_get_network_interface(struct wifi_desc *desc,
 
 /** @brief See \ref network_interface.socket_open */
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
-				enum socket_protocol proto)
+				enum socket_protocol proto, uint32_t buff_size)
 {
 	uint32_t		i;
 	struct socket_desc	*sock;
@@ -286,12 +280,12 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 		return FAILURE; //All the available connections are used
 
 	sock->type = proto;
-	sock->buff = (uint8_t *)malloc(CONNECTION_BUFFER_SIZE);
+	sock->buff = (uint8_t *)malloc(buff_size);
 	if (!sock->buff)
 		return FAILURE;
 
 	*sock_id = i;
-	at_submit_buffer(desc->at, i, sock->buff, CONNECTION_BUFFER_SIZE);
+	at_submit_buffer(desc->at, i, sock->buff, buff_size);
 
 	return SUCCESS;
 }
