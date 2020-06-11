@@ -78,6 +78,13 @@
 //#define ENABLE_ECP_DP_SECP384R1_ENABLED
 
 /*
+ * Parse certificates in PEM format.
+ * If not defined, only DER format can be used.
+ * On ADuCM3029 DER is recommended due to memmory limitations
+ */
+//#define ENABLE_PEM_CERT
+
+/*
  * Maximum length (in bytes) of incoming and outgoing plaintext fragments.
  * If not defined, default of 16kb will be used.
  * 2000 is a eoungh to do the tls handshake and is no to much
@@ -132,6 +139,13 @@
 
 #endif /* Chipers that use ENABLE_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
 #endif /* ENABLE_TLS1_2 */
+
+#ifdef ENABLE_PEM_CERT
+
+#define MBEDTLS_BASE64_C
+#define MBEDTLS_PEM_PARSE_C
+
+#endif /* ENABLE_PEM_CERT */
 
 /******************************************************************************/
 /**************** Solve dependencies needed by modules ************************/
