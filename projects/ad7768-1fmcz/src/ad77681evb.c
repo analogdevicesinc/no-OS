@@ -1,5 +1,5 @@
 /***************************************************************************//**
-* @file ad77681_evb.c
+* @file ad77681evb.c
 * @brief Implementation of Main Function.
 * @author SPopa (stefan.popa@analog.com)
 ********************************************************************************
@@ -50,10 +50,14 @@
 #include "xil_printf.h"
 #include "ad77681.h"
 #include "spi_engine.h"
+#include "delay.h"
+#include "error.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+#define AD77681_EVB_SAMPLE_NO				8
 #define AD77681_DMA_1_BASEADDR				XPAR_AXI_AD77681_DMA_BASEADDR
 #define AD77681_SPI1_ENGINE_BASEADDR		XPAR_SPI_ADC_AXI_REGMAP_BASEADDR
 #define AD77681_SPI_CS						0
@@ -69,23 +73,23 @@
 #define GPIO_0_SYNC_OUT						GPIO_OFFSET + 1 // 33
 #define GPIO_0_RESET						GPIO_OFFSET + 0 // 32
 
-uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, CS_DEASSERT, TRANSFER_BYTES_W(2), TRANSFER_BYTES_R(4), CS_ASSERT};
+uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE(2), READ(4), CS_HIGH};
+
+struct spi_engine_init_param spi_eng_init_param  = {
+	.type = SPI_ENGINE,
+	.spi_engine_baseaddr = AD77681_SPI1_ENGINE_BASEADDR,
+	.cs_delay = 0,
+	.data_width = 32,
+};
 
 struct ad77681_init_param ADC_default_init_param = {
 	/* SPI */
 	{
-		AD77681_SPI1_ENGINE_BASEADDR,	// adc_baseaddr
-		AD77681_SPI_CS,			// chip_select
-		1,				// cs_delay
-		SPI_ENGINE_CONFIG_CPOL |
-		SPI_ENGINE_CONFIG_CPHA,		// spi_config
-		1000000,			// spi_clk_hz
-		1000000,			// spi_clk_hz_reg_access
-		100000000,			// ref_clk_hz
-		1,				// spi_offload_rx_support_en
-		AD77681_DMA_1_BASEADDR,		// spi_offload_rx_dma_baseaddr
-		1,				// spi_offload_tx_support_en
-		AD77681_DMA_1_BASEADDR,		// spi_offload_tx_dma_baseaddr
+		.chip_select = AD77681_SPI_CS,
+		.max_speed_hz = 1000000,
+		.mode = SPI_MODE_3,
+		.platform_ops = &spi_eng_platform_ops,
+		.extra = (void*)&spi_eng_init_param,
 	},
 	/* Configuration */
 	AD77681_FAST,				// power_mode
@@ -98,25 +102,19 @@ struct ad77681_init_param ADC_default_init_param = {
 	0 							// status_bit
 };
 
-/**
- * @brief Generate miliseconds delay.
- * @param msecs - Delay in miliseconds.
- * @return None.
- */
-void mdelay(uint32_t msecs)
-{
-	usleep(msecs * 1000);
-}
-
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
 
 int main()
 {
 	struct ad77681_dev	*adc_dev;
-	spi_eng_msg 		*msg;
 	uint8_t			adc_data[5];
 	uint8_t 		*data;
 	uint32_t 		i;
+	int32_t ret;
+	uint8_t commands_data[2] = {AD77681_REG_READ(AD77681_REG_ADC_DATA), 0};
+	struct spi_engine_offload_init_param spi_engine_offload_init_param;
+	struct spi_engine_offload_message spi_engine_offload_message;
+	struct spi_desc *spi_eng_desc;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -133,31 +131,31 @@ int main()
 			printf("\r\n");
 			mdelay(1000);
 		}
-	} else { // offload example
-		msg = (spi_eng_msg *)malloc(sizeof(*msg));
-		if (!msg)
-			return -1;
+	} else {
+		ret = spi_engine_offload_init(spi_eng_desc, &spi_engine_offload_init_param);
+		if (ret != SUCCESS)
+			return FAILURE;
 
-		msg->spi_msg_cmds = malloc(sizeof(spi_msg_cmds));
-		msg->spi_msg_cmds = spi_msg_cmds;
-		msg->rx_buf_addr = 0x800000;
-		msg->tx_buf_addr = 0xA000000;
-		msg->msg_cmd_len = sizeof(spi_msg_cmds) / sizeof(uint32_t);
-		msg->tx_buf[0] = AD77681_REG_READ(AD77681_REG_ADC_DATA);
-		msg->tx_buf[1] = 0x00;
+		spi_engine_offload_message.commands = spi_msg_cmds;
+		spi_engine_offload_message.no_commands = ARRAY_SIZE(spi_msg_cmds);
+		spi_engine_offload_message.commands_data = commands_data;
+		spi_engine_offload_message.rx_addr = 0x800000;
+		spi_engine_offload_message.tx_addr = 0xA000000;
 
-		spi_eng_offload_load_msg(adc_dev->spi_desc, msg);
-		spi_eng_transfer_multiple_msgs(adc_dev->spi_desc, 8);
+		ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
+						  AD77681_EVB_SAMPLE_NO);
+		if (ret != SUCCESS)
+			return ret;
 
-		data = (uint8_t*)adc_dev->spi_desc->rx_dma_startaddr;
+		mdelay(1000);
 
-		mdelay(10000);
+		Xil_DCacheInvalidateRange(spi_engine_offload_message.rx_addr,
+					  AD77681_EVB_SAMPLE_NO * 4);
 
-		for(i = 0; i < adc_dev->spi_desc->rx_length; i++) {
+		for (i = 0; i < AD77681_EVB_SAMPLE_NO * 4 ; i++) {
 			printf("%x\r\n", *data);
 			data += sizeof(uint8_t);
 		}
-		free(msg);
 	}
 
 	printf("Bye\n");

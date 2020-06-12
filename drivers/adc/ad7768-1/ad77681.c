@@ -45,6 +45,7 @@
 #include "stdbool.h"
 #include <string.h>
 #include "ad77681.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -512,7 +513,9 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->crc_sel = init_param.crc_sel;
 	dev->status_bit = init_param.status_bit;
 
-	spi_init(&dev->spi_desc, init_param.spi_eng_dev_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
+	if (ret < 0)
+		return ret;
 
 	ret |= ad77681_soft_reset(dev);
 	ret |= ad77681_set_power_mode(dev, dev->power_mode);
