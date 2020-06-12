@@ -1,6 +1,5 @@
 
 #include "xil_io.h"
-#include "platform_drivers.h"
 #include "ad9625.h"
 #include "i5g.h"
 
