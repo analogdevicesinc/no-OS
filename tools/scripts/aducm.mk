@@ -144,6 +144,7 @@ include src.mk
 #------------------------------------------------------------------------------
 
 #	MBEDTLS
+ifneq (y,$(strip $(DISABLE_SECURE_SOCKET)))
 #If network dir is included, mbedtls will be used
 ifneq ($(if $(findstring $(NO-OS)/network, $(SRC_DIRS)), 1),)
 
@@ -180,6 +181,7 @@ $(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
 $(MBEDTLS_LIB_DIR)/libmbedtls.a: $(MBEDTLS_LIB_DIR)/libmbedx509.a
 
 
+endif
 endif
 
 #	FATFS
@@ -306,6 +308,10 @@ ASFLAGS += $(GENERIC_RELEASE_FLAGS)
 
 #CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
 #ASFLAGS += $(GENERIC_DEBUG_FLAGS)
+
+ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
+CLFAGS += -DDISABLE_SECURE_SOCKET
+endif
 
 LINKER_FILE	=$(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
@@ -442,6 +448,10 @@ build_project: project $(LIB_TARGETS)
 		-project $(PROJECT_NAME) \
 		-build Release
 
+ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
+DEFINE_FLAGS += -append-switch compiler -D=DISABLE_SECURE_SOCKET
+endif
+
 #Flags for each include directory
 INCLUDE_FLAGS = $(foreach dir, $(INCLUDE_DIRS),\
 		-append-switch compiler -I=$(dir))
@@ -456,6 +466,7 @@ update_project: $(PROJECT_BUILD)/.project.target
 		-project $(PROJECT_NAME) \
 		$(INCLUDE_FLAGS) \
 		$(SRC_FLAGS) \
+		$(DEFINE_FLAGS) \
 		-append-switch linker additionaloption="$(LIB_FLAGS) $(LIB_DIR_FLAGS)"
 
 PHONY += project

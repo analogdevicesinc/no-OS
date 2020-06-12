@@ -47,13 +47,17 @@
 #include "tcp_socket.h"
 #include "util.h"
 #include "trng.h"
+
+#ifndef DISABLE_SECURE_SOCKET
 #include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
+#endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+#ifndef DISABLE_SECURE_SOCKET
 /**
  * @struct secure_socket_desc
  * @brief Fields used by secure socket
@@ -73,6 +77,7 @@ struct secure_socket_desc {
 	/** Mbedtls tls context */
 	mbedtls_ssl_context	ssl;
 };
+#endif /* DISABLE_SECURE_SOCKET */
 
 /* Socket descriptor */
 struct tcp_socket_desc {
@@ -80,14 +85,17 @@ struct tcp_socket_desc {
 	uint32_t			id;
 	/* Reference to the network interface */
 	struct network_interface	*net;
+#ifndef DISABLE_SECURE_SOCKET
 	/* Reference to secure descriptor */
 	struct secure_socket_desc	*secure;
+#endif /* DISABLE_SECURE_SOCKET */
 };
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#ifndef DISABLE_SECURE_SOCKET
 /* Wrapper over socket_recv */
 static int tls_net_recv(struct tcp_socket_desc *sock, unsigned char *buff,
 			size_t len)
@@ -228,6 +236,7 @@ exit:
 
 	return ret;
 }
+#endif /* DISABLE_SECURE_SOCKET */
 
 /**
  * @brief Allocate resources and initializes the socket descriptor
@@ -259,6 +268,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 		return ret;
 	}
 
+#ifndef DISABLE_SECURE_SOCKET
 	if (!param->secure_init_param)
 		ldesc->secure = NULL;
 	else
@@ -269,6 +279,7 @@ int32_t socket_init(struct tcp_socket_desc **desc,
 		free(ldesc);
 		return ret;
 	}
+#endif /* DISABLE_SECURE_SOCKET */
 
 	*desc = ldesc;
 
@@ -288,8 +299,12 @@ int32_t socket_remove(struct tcp_socket_desc *desc)
 
 	if (!desc)
 		return FAILURE;
+
+#ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
 		stcp_socket_remove(desc->secure);
+#endif /* DISABLE_SECURE_SOCKET */
+
 	ret = desc->net->socket_close(desc->net->net, desc->id);
 	if (IS_ERR_VALUE(ret))
 		return ret;
@@ -312,6 +327,7 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
+#ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure) {
 		do {
 			ret = mbedtls_ssl_handshake(&desc->secure->ssl);
@@ -319,6 +335,7 @@ int32_t socket_connect(struct tcp_socket_desc *desc,
 		if (IS_ERR_VALUE(ret))
 			return ret;
 	}
+#endif /* DISABLE_SECURE_SOCKET */
 
 	return SUCCESS;
 }
@@ -329,8 +346,10 @@ int32_t socket_disconnect(struct tcp_socket_desc *desc)
 	if (!desc)
 		return FAILURE;
 
+#ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
 		mbedtls_ssl_close_notify(&desc->secure->ssl);
+#endif /* DISABLE_SECURE_SOCKET */
 
 	return desc->net->socket_disconnect(desc->net->net, desc->id);
 }
@@ -343,11 +362,13 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 	if (!desc)
 		return FAILURE;
 
+#ifndef DISABLE_SECURE_SOCKET
 	if (desc->secure)
 		return mbedtls_ssl_write(&desc->secure->ssl, data, len);
-	else
-		return desc->net->socket_send(desc->net->net, desc->id,
-					      data, len);
+#endif /* DISABLE_SECURE_SOCKET */
+
+	return desc->net->socket_send(desc->net->net, desc->id,
+				      data, len);
 }
 
 /** @brief See \ref network_interface.socket_recv */
@@ -358,13 +379,16 @@ int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len)
 	if (!desc)
 		return FAILURE;
 
-	if (!desc->secure)
-		return desc->net->socket_recv(desc->net->net, desc->id, data,
-					      len);
+#ifndef DISABLE_SECURE_SOCKET
+	if (desc->secure) {
+		ret = mbedtls_ssl_read(&desc->secure->ssl, data, len);
+		if (ret == MBEDTLS_ERR_SSL_WANT_READ)
+			return -EAGAIN;
 
-	ret = mbedtls_ssl_read(&desc->secure->ssl, data, len);
-	if (ret == MBEDTLS_ERR_SSL_WANT_READ)
-		return -EAGAIN;
+		return ret;
+	}
+#endif /* DISABLE_SECURE_SOCKET */
 
-	return ret;
+	return desc->net->socket_recv(desc->net->net, desc->id, data,
+				      len);
 }

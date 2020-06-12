@@ -52,12 +52,18 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+//#define DISABLE_SECURE_SOCKET
+#ifdef DISABLE_SECURE_SOCKET
+#warning "TCP socket communication is not secured"
+#endif
+
 /**
  * @struct tcp_socket_desc
  * @brief TCP Socket descriptor
  */
 struct tcp_socket_desc;
 
+#ifndef DISABLE_SECURE_SOCKET
 /**
  * @struct stcp_socket_init_param
  * @brief Parameter to initialize a TCP Socket
@@ -90,6 +96,8 @@ struct secure_init_param {
 	uint32_t		cli_pk_len;
 };
 
+#endif /* DISABLE_SECURE_SOCKET */
+
 /**
  * @struct tcp_socket_init_param
  * @brief Parameter to initialize a TCP Socket
@@ -97,11 +105,13 @@ struct secure_init_param {
 struct tcp_socket_init_param {
 	/** Reference to the network interface */
 	struct network_interface	*net;
+#ifndef DISABLE_SECURE_SOCKET
 	/**
 	 * Reference to \ref secure_init_param if a TCP socket over TLS should
 	 * be used. NULL if just raw connection is needed.
 	 */
 	struct secure_init_param	*secure_init_param;
+#endif /* DISABLE_SECURE_SOCKET */
 };
 
 /******************************************************************************/
