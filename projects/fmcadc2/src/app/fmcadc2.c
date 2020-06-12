@@ -215,8 +215,10 @@ int main(void)
 		.rx_adc = ad9625_core,
 		.rx_dmac = ad9625_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
+#ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
+#endif
 	};
 
 	return iio_server_init(&iio_axi_adc_init_par);
