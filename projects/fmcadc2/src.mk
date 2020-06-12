@@ -11,8 +11,10 @@
 
 # Uncomment to select the profile
 
-SRCS := $(PROJECT)/src/app/fmcadc2.c					\
-	$(PROJECT)/src/app/app_iio.c
+SRCS := $(PROJECT)/src/app/fmcadc2.c
+ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(PROJECT)/src/app/app_iio.c
+endif
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
@@ -36,8 +38,10 @@ SRCS += $(NO-OS)/util/xml.c						\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
 INCS :=	$(PROJECT)/src/app/app_config.h					\
-	$(PROJECT)/src/app/app_iio.h					\
-	$(PROJECT)/src/devices/adi_hal/parameters.h			
+	$(PROJECT)/src/devices/adi_hal/parameters.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS +=	$(PROJECT)/src/app/app_iio.h
+endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h		\
