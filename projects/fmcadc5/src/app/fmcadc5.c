@@ -61,6 +61,10 @@
 #include "axi_jesd204_rx.h"
 #include "i5g.h"
 
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
+
 int main(void)
 {
 	int32_t status;
@@ -349,6 +353,26 @@ int main(void)
 
 	axi_dmac_transfer(ad9625_dmac, ADC_DDR_BASEADDR,
 			  16384 * 2);
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
+	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9625_0_core,
+		.rx_dmac = ad9625_dmac,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
+	};
+	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
+	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9625_1_core,
+		.rx_dmac = ad9625_dmac,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
+	};
+
+	return iio_server_init(&iio_axi_adc_0_init_par, &iio_axi_adc_1_init_par);
+
+#endif
 
 	printf("adc5: setup and configuration is done\n");
 
