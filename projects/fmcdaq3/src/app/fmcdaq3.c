@@ -70,6 +70,10 @@
 #include "axi_jesd204_tx.h"
 #include "axi_jesd204_rx.h"
 
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
+
 /***************************************************************************//**
  * @brief main
  ******************************************************************************/
@@ -537,6 +541,44 @@ int main(void)
 
 	axi_dmac_transfer(ad9680_dmac, ADC_DDR_BASEADDR,
 			  16384 * 2);
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct axi_dmac_init ad9152_dmac_param = {
+		.name = "ad9152_dmac",
+		.base = TX_DMA_BASEADDR,
+		.direction = DMA_MEM_TO_DEV,
+		.flags = DMA_CYCLIC
+	};
+
+	struct axi_dmac *ad9152_dmac;
+
+	axi_dmac_init(&ad9152_dmac, &ad9152_dmac_param);
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9680_core,
+		.rx_dmac = ad9680_dmac,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
+#ifndef PLATFORM_MB
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+#endif
+	};
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = ad9152_core,
+		.tx_dmac = ad9152_dmac,
+		.dac_ddr_base = DAC_DDR_BASEADDR,
+#ifndef PLATFORM_MB
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
+#endif
+	};
+
+	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
+
+#endif
 
 	printf("daq3: setup and configuration is done\n");
 
