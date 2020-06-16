@@ -1,4 +1,5 @@
 TARGET := fmcdaq2
+TINYIIOD ?= n
 ifeq ($(OS), Windows_NT)
 include ../../tools/scripts/windows.mk
 else

@@ -1,7 +1,6 @@
 /***************************************************************************//**
- *   @file   projects/fmcdaq2/src/app/app_config.h
- *   @brief  Config file for DAQ2 project.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -37,15 +36,22 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
-#ifndef APP_CONFIG_H_
-#define APP_CONFIG_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "iio_axi_adc.h"
+#include "iio_axi_dac.h"
 
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-//#define XILINX_PLATFORM
-//#define ALTERA_PLATFORM
+/* @brief Application IIO setup. */
+int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
+			struct iio_axi_dac_init_param *dac_init);
 
-//#define DAC_DMA_EXAMPLE
-//#define IIO_SUPPORT
-
-#endif /* APP_CONFIG_H_ */
+#endif
