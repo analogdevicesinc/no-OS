@@ -275,11 +275,11 @@ int main(void)
 #endif
 		.device_id = SPI_DEVICE_ID
 	};
-	ad9523.platform_ops = &xil_platform_ops;
+	ad9523_spi_param.platform_ops = &xil_platform_ops;
 	ad9523_spi_param.extra = &xil_spi_param;
-	ad9144.platform_ops = &xil_platform_ops;
+	ad9144_spi_param.platform_ops = &xil_platform_ops;
 	ad9144_spi_param.extra = &xil_spi_param;
-	ad9680.platform_ops = &xil_platform_ops;
+	ad9680_spi_param.platform_ops = &xil_platform_ops;
 	ad9680_spi_param.extra = &xil_spi_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {
@@ -287,11 +287,11 @@ int main(void)
 		.type = NIOS_II_SPI,
 		.base_address = SYS_SPI_BASE
 	};
-	ad9523.platform_ops = &altera_platform_ops;
+	ad9523_spi_param.platform_ops = &altera_platform_ops;
 	ad9523_spi_param.extra = &altera_spi_param;
-	ad9144.platform_ops = &altera_platform_ops;
+	ad9144_spi_param.platform_ops = &altera_platform_ops;
 	ad9144_spi_param.extra = &altera_spi_param;
-	ad9680.platform_ops = &altera_platform_ops;
+	ad9680_spi_param.platform_ops = &altera_platform_ops;
 	ad9680_spi_param.extra = &altera_spi_param;
 #endif
 
