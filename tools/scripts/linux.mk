@@ -91,9 +91,15 @@ CFLAGS = -Wall 								\
 	 -lm						
 	#-Werror
 
+LIB_TINYIIOD_PATH = ""
+LIB_TINYIIOD = ""
+TINYIIOD_STD_TYPES = ""
 ifeq (y,$(strip $(TINYIIOD)))
 CFLAGS += -D IIO_SUPPORT
-CFLAGS += -D _USE_STD_INT_TYPES
+LIB_TINYIIOD_PATH = $(LIBRARIES)/libtinyiiod/build
+LIB_TINYIIOD = tinyiiod
+TINYIIOD_STD_TYPES = _USE_STD_INT_TYPES
+CFLAGS += -D $(TINYIIOD_STD_TYPES)
 endif
 
 ifeq (y,$(strip $(MBEDTLS)))
@@ -392,7 +398,7 @@ ifeq (y,$(strip $(MBEDTLS)))
 	@$(MAKE) -C $(LIBRARIES)/mbedtls lib
 endif
 ifeq (y,$(strip $(TINYIIOD)))
-LIBS += -L $(LIBRARIES)/libtinyiiod/build -ltinyiiod
+LIBS += -L $(LIB_TINYIIOD_PATH) -l$(LIB_TINYIIOD)
 endif
 ifeq (y,$(strip $(MBEDTLS)))
 LIBS += -L $(LIBRARIES)/mbedtls/library -lmbedtls -lmbedx509 -lmbedcrypto
@@ -443,7 +449,9 @@ xilinx-bsp:
 	@ if [ ! -d "$(BUILD_DIR)/bsp" ];then				\
 	$(call print,Building hardware specification and bsp \n);	\
 	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl		\
-		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);		\
+		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
+		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
+		$(TINYIIOD_STD_TYPES) $(NULL);				\
 	fi;
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
