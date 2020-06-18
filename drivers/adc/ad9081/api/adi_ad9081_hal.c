@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __AD9081_HAL__
+ * @addtogroup AD9081_HAL_API
  * @{
  */
 
@@ -773,6 +773,276 @@ int32_t adi_ad9081_hal_calc_tx_nco_ftw32(adi_ad9081_device_t *device,
 		adi_ad9081_hal_mult_128(4294967296ull, -nco_shift, &hi, &lo);
 		adi_ad9081_hal_div_128(hi, lo, 0, dac_freq, &hi, ftw);
 		*ftw = 4294967296ull - *ftw;
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_hal_2bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint8_t value_size_bytes)
+{
+	uint32_t info[2] = { info0, info1 };
+	uint8_t *value[2] = { value0, value1 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 2);
+}
+
+int32_t adi_ad9081_hal_3bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint8_t value_size_bytes)
+{
+	uint32_t info[3] = { info0, info1, info2 };
+	uint8_t *value[3] = { value0, value1, value2 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 3);
+}
+
+int32_t adi_ad9081_hal_4bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3,
+			       uint8_t value_size_bytes)
+{
+	uint32_t info[4] = { info0, info1, info2, info3 };
+	uint8_t *value[4] = { value0, value1, value2, value3 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 4);
+}
+
+int32_t adi_ad9081_hal_5bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint8_t value_size_bytes)
+{
+	uint32_t info[5] = { info0, info1, info2, info3, info4 };
+	uint8_t *value[5] = { value0, value1, value2, value3, value4 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 5);
+}
+
+int32_t adi_ad9081_hal_6bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint8_t value_size_bytes)
+{
+	uint32_t info[6] = { info0, info1, info2, info3, info4, info5 };
+	uint8_t *value[6] = { value0, value1, value2, value3, value4, value5 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 6);
+}
+
+int32_t adi_ad9081_hal_7bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint32_t info6, uint8_t *value6,
+			       uint8_t value_size_bytes)
+{
+	uint32_t info[7] = { info0, info1, info2, info3, info4, info5, info6 };
+	uint8_t *value[7] = { value0, value1, value2, value3,
+			      value4, value5, value6 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 7);
+}
+
+int32_t adi_ad9081_hal_8bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint32_t info6, uint8_t *value6, uint32_t info7,
+			       uint8_t *value7, uint8_t value_size_bytes)
+{
+	uint32_t info[8] = { info0, info1, info2, info3,
+			     info4, info5, info6, info7 };
+	uint8_t *value[8] = { value0, value1, value2, value3,
+			      value4, value5, value6, value7 };
+	return adi_ad9081_hal_multi_bf_get(device, reg, info, value,
+					   value_size_bytes, 8);
+}
+
+int32_t adi_ad9081_hal_2bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1)
+{
+	uint32_t info[2] = { info0, info1 };
+	uint64_t value[2] = { value0, value1 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 2);
+}
+
+int32_t adi_ad9081_hal_3bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2)
+{
+	uint32_t info[3] = { info0, info1, info2 };
+	uint64_t value[3] = { value0, value1, value2 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 3);
+}
+
+int32_t adi_ad9081_hal_4bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3)
+{
+	uint32_t info[4] = { info0, info1, info2, info3 };
+	uint64_t value[4] = { value0, value1, value2, value3 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 4);
+}
+
+int32_t adi_ad9081_hal_5bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4)
+{
+	uint32_t info[5] = { info0, info1, info2, info3, info4 };
+	uint64_t value[5] = { value0, value1, value2, value3, value4 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 5);
+}
+
+int32_t adi_ad9081_hal_6bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5, uint64_t value5)
+{
+	uint32_t info[6] = { info0, info1, info2, info3, info4, info5 };
+	uint64_t value[6] = { value0, value1, value2, value3, value4, value5 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 6);
+}
+
+int32_t adi_ad9081_hal_7bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5, uint64_t value5,
+			       uint32_t info6, uint64_t value6)
+{
+	uint32_t info[7] = { info0, info1, info2, info3, info4, info5, info6 };
+	uint64_t value[7] = { value0, value1, value2, value3,
+			      value4, value5, value6 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 7);
+}
+
+int32_t adi_ad9081_hal_8bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5, uint64_t value5,
+			       uint32_t info6, uint64_t value6, uint32_t info7,
+			       uint64_t value7)
+{
+	uint32_t info[8] = { info0, info1, info2, info3,
+			     info4, info5, info6, info7 };
+	uint64_t value[8] = { value0, value1, value2, value3,
+			      value4, value5, value6, value7 };
+	return adi_ad9081_hal_multi_bf_set(device, reg, info, value, 8);
+}
+
+int32_t adi_ad9081_hal_multi_bf_get(adi_ad9081_device_t *device, uint32_t reg,
+				    uint32_t *info, uint8_t **value,
+				    uint8_t value_size_bytes, uint8_t num_bfs)
+{
+	int32_t err;
+	uint32_t mask = 0;
+	uint8_t data8 = 0, offset = 0, width = 0;
+	uint8_t i = 0, reg_bytes = 0, reg_read_reqd = 1;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_NULL_POINTER_RETURN(info);
+	AD9081_NULL_POINTER_RETURN(value);
+	AD9081_INVALID_PARAM_RETURN(reg >= 0x4000);
+
+	if (num_bfs == 1) {
+		/* Use the standard non multi bit field */
+		return adi_ad9081_hal_bf_get(device, reg, *info, *value,
+					     value_size_bytes);
+	}
+
+	/* Extract the mulit bit-fields from a single reg, or use standard method for more complex situations. */
+	for (i = 0; i < num_bfs; i++) {
+		offset = (uint8_t)(*(info + i) >> 0);
+		width = (uint8_t)(*(info + i) >> 8);
+		reg_bytes = ((width + offset) >> 3) +
+			    (((width + offset) & 7) == 0 ? 0 : 1);
+
+		if ((reg_bytes == 1) && (value_size_bytes == 1)) {
+			if (reg_read_reqd == 1) {
+				reg_read_reqd = 0;
+				err = adi_ad9081_hal_reg_get(device, reg,
+							     &data8);
+				AD9081_ERROR_RETURN(err);
+			}
+			mask = (1 << width) - 1;
+			**(value + i) = (data8 >> offset) & mask;
+		} else {
+			/* Use non-multi bf get */
+			AD9081_LOG_WARN(
+				"Multi bit-field get doesn't support cross register access. Will use standard, but incurs extra SPI reads.");
+			err = adi_ad9081_hal_bf_get(device, reg, *(info + i),
+						    *(value + i),
+						    value_size_bytes);
+			AD9081_ERROR_RETURN(err);
+		}
+	}
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_hal_multi_bf_set(adi_ad9081_device_t *device, uint32_t reg,
+				    uint32_t *info, uint64_t *value,
+				    uint8_t num_bfs)
+{
+	int32_t err;
+	uint32_t mask = 0;
+	uint8_t data8 = 0, offset = 0, width = 0;
+	uint8_t i = 0, reg_bytes = 0, reg_read_reqd = 1;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_NULL_POINTER_RETURN(info);
+	AD9081_NULL_POINTER_RETURN(value);
+	AD9081_INVALID_PARAM_RETURN(reg >= 0x4000);
+
+	if (num_bfs == 1) {
+		/* Use the standard non multi bit field */
+		return adi_ad9081_hal_bf_set(device, reg, *info, *value);
+	}
+
+	/* Write the bit fields */
+	for (i = 0; i < num_bfs; i++) {
+		offset = (uint8_t)(*(info + i) >> 0);
+		width = (uint8_t)(*(info + i) >> 8);
+		reg_bytes = ((width + offset) >> 3) +
+			    (((width + offset) & 7) == 0 ? 0 : 1);
+
+		if (reg_bytes == 1) {
+			if ((reg_read_reqd == 1) &&
+			    ((offset > 0) || ((offset + width) < 8))) {
+				reg_read_reqd = 0;
+				err = adi_ad9081_hal_reg_get(device, reg,
+							     &data8);
+				AD9081_ERROR_RETURN(err);
+			}
+			mask = (1 << width) - 1;
+			data8 = data8 & (~(mask << offset));
+			data8 = data8 | ((*(value + i) & mask) << offset);
+		} else {
+			/* Use non-multi bf set */
+			AD9081_LOG_WARN(
+				"multi bit-field set doesn't support cross register bit-fields. Using standard set. Adds");
+			err = adi_ad9081_hal_bf_set(device, reg, *(info + i),
+						    *(value + i));
+			AD9081_ERROR_RETURN(err);
+		}
+	}
+
+	if (reg_read_reqd == 0) {
+		err = adi_ad9081_hal_reg_set(device, reg, data8);
+		AD9081_ERROR_RETURN(err);
 	}
 
 	return API_CMS_ERROR_OK;

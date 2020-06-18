@@ -9,7 +9,7 @@
  */
 
 /*!
- * @addtogroup __ADI_API_COMMON__
+ * @addtogroup ADI_API_COMMON
  * @{
  */
 #ifndef __ADI_CMS_API_COMMON_H__

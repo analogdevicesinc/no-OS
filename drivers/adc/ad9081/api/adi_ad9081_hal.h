@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __AD9081_HAL__
+ * @addtogroup AD9081_HAL_API
  * @{
  */
 #ifndef __AD9081_HAL_H__
@@ -39,6 +39,87 @@ int32_t adi_ad9081_hal_bf_get(adi_ad9081_device_t *device, uint32_t reg,
 			      uint8_t value_size_bytes);
 int32_t adi_ad9081_hal_bf_set(adi_ad9081_device_t *device, uint32_t reg,
 			      uint32_t info, uint64_t value);
+
+int32_t adi_ad9081_hal_2bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_3bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_4bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3,
+			       uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_5bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_6bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_7bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint32_t info6, uint8_t *value6,
+			       uint8_t value_size_bytes);
+int32_t adi_ad9081_hal_8bf_get(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint8_t *value0, uint32_t info1,
+			       uint8_t *value1, uint32_t info2, uint8_t *value2,
+			       uint32_t info3, uint8_t *value3, uint32_t info4,
+			       uint8_t *value4, uint32_t info5, uint8_t *value5,
+			       uint32_t info6, uint8_t *value6, uint32_t info7,
+			       uint8_t *value7, uint8_t value_size_bytes);
+
+int32_t adi_ad9081_hal_2bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1);
+int32_t adi_ad9081_hal_3bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2,
+			       uint64_t value2);
+int32_t adi_ad9081_hal_4bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3);
+int32_t adi_ad9081_hal_5bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4);
+int32_t adi_ad9081_hal_6bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5,
+			       uint64_t value5);
+int32_t adi_ad9081_hal_7bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5, uint64_t value5,
+			       uint32_t info6, uint64_t value6);
+int32_t adi_ad9081_hal_8bf_set(adi_ad9081_device_t *device, uint32_t reg,
+			       uint32_t info0, uint64_t value0, uint32_t info1,
+			       uint64_t value1, uint32_t info2, uint64_t value2,
+			       uint32_t info3, uint64_t value3, uint32_t info4,
+			       uint64_t value4, uint32_t info5, uint64_t value5,
+			       uint32_t info6, uint64_t value6, uint32_t info7,
+			       uint64_t value7);
+
+int32_t adi_ad9081_hal_multi_bf_get(adi_ad9081_device_t *device, uint32_t reg,
+				    uint32_t *info, uint8_t **value,
+				    uint8_t value_size_bytes, uint8_t num_bfs);
+int32_t adi_ad9081_hal_multi_bf_set(adi_ad9081_device_t *device, uint32_t reg,
+				    uint32_t *info, uint64_t *value,
+				    uint8_t num_bfs);
 
 int32_t adi_ad9081_hal_reg_get(adi_ad9081_device_t *device, uint32_t reg,
 			       uint8_t *data);

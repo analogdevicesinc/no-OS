@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __AD9081_ADC_API__
+ * @addtogroup AD9081_ADC_API
  * @{
  */
 
@@ -2215,13 +2215,10 @@ adi_ad9081_adc_pfir_din_select_set(adi_ad9081_device_t *device,
 			err = adi_ad9081_adc_pfir_ctl_page_set(device,
 							       (1 << i));
 			AD9081_ERROR_RETURN(err);
-			err = adi_ad9081_hal_bf_set(
+			err = adi_ad9081_hal_2bf_set(
 				device, 0x0b12, 0x0200,
-				i_sel); /* PFILT_DIN_I_SEL */
-			AD9081_ERROR_RETURN(err);
-			err = adi_ad9081_hal_bf_set(
-				device, 0x0b12, 0x0202,
-				q_sel); /* PFILT_DIN_Q_SEL */
+				i_sel, /* PFILT_DIN_I_SEL */
+				0x0202, q_sel); /* PFILT_DIN_Q_SEL */
 			AD9081_ERROR_RETURN(err);
 		}
 	}
@@ -2579,14 +2576,39 @@ int32_t adi_ad9081_adc_pfir_coeff_validate(adi_ad9081_device_t *device,
 					   uint8_t ntaps, uint16_t coeffs[192])
 {
 	int32_t i, first_16b_idx, last_16b_idx, first_12b_idx, last_12b_idx;
+	int16_t coeff;
+	uint16_t abs_coeff;
+	uint8_t ntaps_index;
+	uint8_t coeff_num[][3] = {
+		/* 16bit, 12bit, 7bit */
+		{ 48, 48, 96 }, /* 192 taps */
+		{ 24, 24, 48 }, /* 96  taps */
+		{ 16, 16, 32 }, /* 64  taps */
+		{ 12, 12, 24 } /* 48  taps */
+	};
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
+	/* get ntaps index */
+	if (ntaps == 192)
+		ntaps_index = 0;
+	else if (ntaps == 96)
+		ntaps_index = 1;
+	else if (ntaps == 64)
+		ntaps_index = 2;
+	else if (ntaps == 48)
+		ntaps_index = 3;
+	else
+		return API_CMS_ERROR_INVALID_PARAM;
+
 	/* find first and last 16bit coeff */
 	first_16b_idx = 192;
-	last_16b_idx = 0;
+	last_16b_idx = -1;
 	for (i = 0; i < 192; i++) {
-		if ((coeffs[i] >> 12) > 0) {
+		coeff = (int16_t)coeffs[i];
+		abs_coeff =
+			(coeff > 0) ? (uint16_t)(coeff) : (uint16_t)(-coeff);
+		if ((abs_coeff & 0xf800) > 0) {
 			first_16b_idx = first_16b_idx > i ? i : first_16b_idx;
 			last_16b_idx = last_16b_idx < i ? i : last_16b_idx;
 		}
@@ -2594,15 +2616,47 @@ int32_t adi_ad9081_adc_pfir_coeff_validate(adi_ad9081_device_t *device,
 
 	/* find first and last 12bit coeff */
 	first_12b_idx = 192;
-	last_12b_idx = 0;
+	last_12b_idx = -1;
 	for (i = 0; i < 192; i++) {
-		if ((coeffs[i] >> 7) > 0) {
+		coeff = (int16_t)coeffs[i];
+		abs_coeff =
+			(coeff > 0) ? (uint16_t)(coeff) : (uint16_t)(-coeff);
+		if (((abs_coeff & 0xf800) == 0) && ((abs_coeff & 0x0fc0) > 0)) {
 			first_12b_idx = first_12b_idx > i ? i : first_12b_idx;
 			last_12b_idx = last_12b_idx < i ? i : last_12b_idx;
 		}
 	}
 
-	return API_CMS_ERROR_OK;
+	/* validate coeffs */
+	if ((first_16b_idx == 192) || (last_16b_idx == -1) ||
+	    (first_16b_idx >= last_16b_idx))
+		return API_CMS_ERROR_ERROR;
+	if ((first_12b_idx == 192) || (last_12b_idx == -1) ||
+	    (first_12b_idx >= last_12b_idx))
+		return API_CMS_ERROR_ERROR;
+
+	/* validate 16bits coeffs number */
+	if ((last_16b_idx - first_16b_idx + 1) > coeff_num[ntaps_index][0])
+		return API_CMS_ERROR_ERROR;
+
+	/* ...12/12/12/.../12/16/16/16... */
+	if (((last_12b_idx + 1) == first_16b_idx) &&
+	    ((last_12b_idx - first_12b_idx + 1) <= coeff_num[ntaps_index][1]))
+		return API_CMS_ERROR_OK;
+
+	/* ...16/16/16/.../16/12/12/12... */
+	if (((last_16b_idx + 1) == first_12b_idx) &&
+	    ((last_12b_idx - first_12b_idx + 1) <= coeff_num[ntaps_index][1]))
+		return API_CMS_ERROR_OK;
+
+	/* ...12/12/16/.../16/12/12/12... */
+	if (((first_12b_idx < first_16b_idx) &&
+	     (last_16b_idx < last_12b_idx)) &&
+	    ((last_12b_idx - first_12b_idx + 1) <=
+	     (coeff_num[ntaps_index][0] + coeff_num[ntaps_index][1])))
+		return API_CMS_ERROR_OK;
+
+	return API_CMS_ERROR_ERROR;
 }
 
 int32_t

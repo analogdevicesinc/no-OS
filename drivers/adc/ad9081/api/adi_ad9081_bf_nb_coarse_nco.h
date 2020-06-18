@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __AD9081_BF__
+ * @addtogroup AD9081_BF
  * @{
  */
 #ifndef __ADI_AD9081_BF_NB_COARSE_NCO_H__
