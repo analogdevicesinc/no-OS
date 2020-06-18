@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __ADI_AD9081_CONFIG_H__
+ * @addtogroup ADI_AD9081_INTERNAL_CONFIG
  * @{
  */
 #ifndef __ADI_AD9081_CONFIG_H__

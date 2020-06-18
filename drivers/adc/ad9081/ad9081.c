@@ -530,7 +530,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	ret = adi_ad9081_device_clk_config_set(
 		      &phy->ad9081, phy->dac_frequency_hz, phy->adc_frequency_hz,
-		      dev_frequency_hz, dev_frequency_hz != phy->dac_frequency_hz);
+		      dev_frequency_hz);
 	if (ret != 0)
 		return ret;
 
@@ -649,7 +649,10 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	if (ret != 0 || !dcm)
 		return ret;
 
-	if (phy->config_sync_01_swapped) {
+	if (phy->config_sync_01_swapped &&
+			phy->jesd_tx_link.jesd_param.jesd_jesdv != 2) {
+		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
+			BF_SYNCB_RX_MODE_RC_INFO, 1); /* not paged */
 		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
 		adi_ad9081_hal_reg_set(&phy->ad9081,
 				       REG_GENERAL_JRX_CTRL_ADDR, 0x80);
@@ -675,7 +678,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	if ((phy->jesd_tx_link.jesd_param.jesd_jesdv == 2) &&
 	    (tx_lane_rate_kbps > 16230000UL)) {
-		ret = adi_ad9081_jesd_rx_calibrate_204c(&phy->ad9081, 0);
+		ret = adi_ad9081_jesd_rx_calibrate_204c(&phy->ad9081, 1, 0, 0);
 		if (ret < 0)
 			return ret;
 	}
@@ -982,7 +985,6 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	adi_cms_chip_id_t chip_id;
 	struct ad9081_phy *phy;
 	uint8_t api_rev[3];
-	uint32_t fw_rev[2];
 	int32_t ret;
 
 	phy = (struct ad9081_phy *)calloc(1, sizeof(*phy));
@@ -1044,12 +1046,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	adi_ad9081_device_api_revision_get(&phy->ad9081, &api_rev[0],
 					   &api_rev[1], &api_rev[2]);
 
-	adi_ad9081_device_firmware_revision_get(&phy->ad9081, &fw_rev[0]);
-	adi_ad9081_device_firmware_patch_revision_get(&phy->ad9081, &fw_rev[1]);
-
-	printf("AD9081 Rev. %u Grade %u Firmware %"PRId32".%"PRId32" (API %u.%u.%u) probed\n",
-	       chip_id.dev_revision,
-	       chip_id.prod_grade, fw_rev[0], fw_rev[1],
+	printf("AD9081 Rev. %u Grade %u (API %u.%u.%u) probed\n",
+	       chip_id.dev_revision, chip_id.prod_grade,
 	       api_rev[0], api_rev[1], api_rev[2]);
 
 	*dev = phy;

@@ -8,7 +8,7 @@
  */
 
 /*!
- * @addtogroup __AD9081_DEVICE_API__
+ * @addtogroup AD9081_DEVICE_API
  * @{
  */
 
@@ -17,7 +17,7 @@
 #include "adi_ad9081_hal.h"
 
 /*============= D A T A ====================*/
-static uint8_t ad9081_api_revision[3] = { 1, 0, 3 };
+static uint8_t ad9081_api_revision[3] = { 1, 0, 4 };
 
 /*============= C O D E ====================*/
 int32_t adi_ad9081_device_boot_pre_clock(adi_ad9081_device_t *device)
@@ -99,7 +99,6 @@ int32_t adi_ad9081_device_boot_post_clock(adi_ad9081_device_t *device)
 {
 	int32_t err;
 	uint8_t i, boot_done, core_status, clk_switch_done;
-	uint32_t rev = 0;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
@@ -185,12 +184,6 @@ int32_t adi_ad9081_device_boot_post_clock(adi_ad9081_device_t *device)
 	if (clk_switch_done == 0x0)
 		AD9081_LOG_ERR("Clock switch not done");
 
-	/* log firmware revision */
-	err = adi_ad9081_device_firmware_revision_get(device, &rev);
-	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_device_firmware_patch_revision_get(device, &rev);
-	AD9081_ERROR_RETURN(err);
-
 	return API_CMS_ERROR_OK;
 }
 
@@ -255,12 +248,11 @@ int32_t adi_ad9081_device_clk_pll_div_set(adi_ad9081_device_t *device,
 	err = adi_ad9081_hal_bf_set(device, REG_CHARGEPUMP_REG_0_ADDR,
 				    BF_D_CP_CURRENT_INFO, 0x13);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_hal_bf_set(device, REG_VCM_CONTROL_REG_ADDR,
-				    BF_D_VCM_F_CONTROL_INFO, 0x0C);
+	err = adi_ad9081_hal_2bf_set(device, REG_VCM_CONTROL_REG_ADDR,
+				     BF_D_VCM_F_CONTROL_INFO, 0x0C,
+				     BF_D_VCM_C_CONTROL_INFO, 0x00);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_hal_bf_set(device, REG_VCM_CONTROL_REG_ADDR,
-				    BF_D_VCM_C_CONTROL_INFO, 0x00);
-	AD9081_ERROR_RETURN(err);
+
 	err = adi_ad9081_hal_bf_set(device, REG_INPUT_MISC_REG_ADDR,
 				    BF_D_PFD_DELAY_INFO, 0x01);
 	AD9081_ERROR_RETURN(err);
@@ -523,10 +515,11 @@ int32_t adi_ad9081_device_clk_up_div_set(adi_ad9081_device_t *device,
 int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 					 uint64_t dac_clk_hz,
 					 uint64_t adc_clk_hz,
-					 uint64_t ref_clk_hz, uint8_t pll_en)
+					 uint64_t ref_clk_hz)
 {
 	int32_t err;
 	uint8_t adc_clk_div;
+	uint8_t pll_en = ref_clk_hz >= AD9081_DAC_CLK_FREQ_HZ_MIN ? 0 : 1;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 	if (pll_en > 0) {
@@ -612,10 +605,6 @@ int32_t adi_ad9081_device_clk_config_set(adi_ad9081_device_t *device,
 	err = adi_ad9081_adc_clk_enable_set(device, 1);
 	AD9081_ERROR_RETURN(err);
 
-	/* enable adc clock out */
-	adi_ad9081_adc_clk_out_enable_set(device, 1);
-	AD9081_ERROR_RETURN(err);
-
 	return API_CMS_ERROR_OK;
 }
 
@@ -629,6 +618,20 @@ int32_t adi_ad9081_device_aclk_receiver_enable_set(adi_ad9081_device_t *device,
 
 	err = adi_ad9081_hal_bf_set(device, REG_ACLK_CTRL_ADDR,
 				    BF_ACLK_POWERDOWN_INFO, !enable);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
+int32_t adi_ad9081_device_main_auto_clk_gen_enable(adi_ad9081_device_t *device,
+						   uint8_t enable)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_bf_set(device, REG_MAIN_AUTO_CLK_GATING_ADDR,
+				    0x00000400, enable);
 	AD9081_ERROR_RETURN(err);
 
 	return API_CMS_ERROR_OK;
@@ -670,92 +673,45 @@ int32_t adi_ad9081_device_hw_close(adi_ad9081_device_t *device)
 int32_t adi_ad9081_device_power_status_check(adi_ad9081_device_t *device)
 {
 	int32_t err;
-	uint8_t reg8, power_on;
+	uint8_t regs8[6], power_on;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
 	/* check power status */
 	power_on = 1;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_AVDD_DAC23_MON2_INFO, &reg8, 1);
+	err = adi_ad9081_hal_6bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
+				     BF_AVDD_DAC23_MON2_INFO, &regs8[0],
+				     BF_AVDD_DAC01_MON2_INFO, &regs8[1],
+				     BF_DVDD_DAC23_MON1_INFO, &regs8[2],
+				     BF_DVDD_DAC01_MON1_INFO, &regs8[3],
+				     BF_DAVDD_DAC23_MON1_INFO, &regs8[4],
+				     BF_DAVDD_DAC01_MON1_INFO, &regs8[5], 1);
 	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_AVDD_DAC01_MON2_INFO, &reg8, 1);
+	power_on &= (regs8[0] & regs8[1] & regs8[2] & regs8[3] & regs8[4] &
+		     regs8[5]);
+	err = adi_ad9081_hal_4bf_get(device, REG_CLOCK_SUPPLY_MONITOR_ADDR,
+				     BF_DACPLLVDD_MON2_INFO, &regs8[0],
+				     BF_LS_CLOCK_MON1_INFO, &regs8[1],
+				     BF_HS_CLOCK_MON1_INFO, &regs8[2],
+				     BF_REF_UP_CLOCK_MON1_INFO, &regs8[3], 1);
 	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_DVDD_DAC23_MON1_INFO, &reg8, 1);
+	power_on &= (regs8[0] & regs8[1] & regs8[2] & regs8[3]);
+	err = adi_ad9081_hal_5bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
+				     BF_ADC0_CLK_MON1_INFO, &regs8[0],
+				     BF_ADC0_CORE_MON1_INFO, &regs8[1],
+				     BF_ADC0_BUF_MON1_INFO, &regs8[2],
+				     BF_ADC0_REFADC_MON1_INFO, &regs8[3],
+				     BF_ADC0_REF_MON2_INFO, &regs8[4], 1);
 	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_DVDD_DAC01_MON1_INFO, &reg8, 1);
+	power_on &= (regs8[0] & regs8[1] & regs8[2] & regs8[3] & regs8[4]);
+	err = adi_ad9081_hal_5bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
+				     BF_ADC1_CLK_MON1_INFO, &regs8[0],
+				     BF_ADC1_CORE_MON1_INFO, &regs8[1],
+				     BF_ADC1_BUF_MON1_INFO, &regs8[2],
+				     BF_ADC1_REFADC_MON1_INFO, &regs8[3],
+				     BF_ADC1_REF_MON2_INFO, &regs8[4], 1);
 	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_DAVDD_DAC23_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_DAC_SUPPLY_MONITOR_ADDR,
-				    BF_DAVDD_DAC01_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_CLOCK_SUPPLY_MONITOR_ADDR,
-				    BF_DACPLLVDD_MON2_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_CLOCK_SUPPLY_MONITOR_ADDR,
-				    BF_LS_CLOCK_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_CLOCK_SUPPLY_MONITOR_ADDR,
-				    BF_HS_CLOCK_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_CLOCK_SUPPLY_MONITOR_ADDR,
-				    BF_REF_UP_CLOCK_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
-				    BF_ADC0_CLK_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
-				    BF_ADC0_CORE_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
-				    BF_ADC0_BUF_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
-				    BF_ADC0_REFADC_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC0_SUPPLY_MONITOR_ADDR,
-				    BF_ADC0_REF_MON2_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
-				    BF_ADC1_CLK_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
-				    BF_ADC1_CORE_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
-				    BF_ADC1_BUF_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
-				    BF_ADC1_REFADC_MON1_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
-	err = adi_ad9081_hal_bf_get(device, REG_ADC1_SUPPLY_MONITOR_ADDR,
-				    BF_ADC1_REF_MON2_INFO, &reg8, 1);
-	AD9081_ERROR_RETURN(err);
-	power_on &= reg8;
+	power_on &= (regs8[0] & regs8[1] & regs8[2] & regs8[3] & regs8[4]);
 	if (power_on == 0) {
 		err = adi_ad9081_hal_log_write(
 			device, ADI_CMS_LOG_ERR,
@@ -870,7 +826,7 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device)
 	err = adi_ad9081_hal_log_write(
 		device, ADI_CMS_LOG_MSG, "api v%d.%d.%d commit %s for ad%x ",
 		ad9081_api_revision[0], ad9081_api_revision[1],
-		ad9081_api_revision[2], "459600c", AD9081_ID);
+		ad9081_api_revision[2], "6fd1a1f", AD9081_ID);
 	AD9081_ERROR_RETURN(err);
 
 	/* get host cpu endian mode */
@@ -1041,49 +997,6 @@ int32_t adi_ad9081_device_api_revision_get(adi_ad9081_device_t *device,
 	*rev_major = ad9081_api_revision[0];
 	*rev_minor = ad9081_api_revision[1];
 	*rev_rc = ad9081_api_revision[2];
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t adi_ad9081_device_firmware_revision_get(adi_ad9081_device_t *device,
-						uint32_t *rev)
-{
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-	AD9081_NULL_POINTER_RETURN(rev);
-
-	if (device->dev_info.dev_rev == 1) { /* r1 */
-		return adi_ad9081_hal_reg_get(device, 0x01001578,
-					      (uint8_t *)rev);
-	}
-	if (device->dev_info.dev_rev == 2) { /* r1r */
-		return adi_ad9081_hal_reg_get(device, 0x2126, (uint8_t *)rev);
-	}
-	if (device->dev_info.dev_rev == 3) { /* r2 */
-		return adi_ad9081_hal_reg_get(device, 0x2130, (uint8_t *)rev);
-	}
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t
-adi_ad9081_device_firmware_patch_revision_get(adi_ad9081_device_t *device,
-					      uint32_t *rev)
-{
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-	AD9081_NULL_POINTER_RETURN(rev);
-
-	if (device->dev_info.dev_rev == 1) { /* r1 */
-		return adi_ad9081_hal_reg_get(device, 0x0100156c,
-					      (uint8_t *)rev);
-	}
-	if (device->dev_info.dev_rev == 2) { /* r1r */
-		return adi_ad9081_hal_reg_get(device, 0x2127, (uint8_t *)rev);
-	}
-	if (device->dev_info.dev_rev == 3) { /* r2 */
-		return adi_ad9081_hal_reg_get(device, 0x2131, (uint8_t *)rev);
-	}
 
 	return API_CMS_ERROR_OK;
 }
@@ -1361,8 +1274,6 @@ int32_t adi_ad9081_device_startup_rx(adi_ad9081_device_t *device, uint8_t cddcs,
 						   jesd_m);
 	AD9081_ERROR_RETURN(err);
 	err = adi_ad9081_jesd_tx_link_config_set(device, links, &jesd_param[0]);
-	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_jesd_tx_bring_up(device, links, 0xff, jesd_conv_sel);
 	AD9081_ERROR_RETURN(err);
 
 	/* one shot sync */
