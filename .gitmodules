@@ -7,3 +7,6 @@
 [submodule "libraries/mqtt/paho.mqtt.embedded-c"]
 	path = libraries/mqtt/paho.mqtt.embedded-c
 	url = https://github.com/eclipse/paho.mqtt.embedded-c
+[submodule "libraries/iio/libtinyiiod"]
+	path = libraries/iio/libtinyiiod
+	url = https://github.com/analogdevicesinc/libtinyiiod
