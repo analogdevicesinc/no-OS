@@ -107,8 +107,8 @@ struct tcp_socket_init_param {
 	struct network_interface	*net;
 	/**
 	 *  Max buffer size for incoming data.
-	 *  If set to 0, default value will be used (CONNECTION_BUFFER_SIZE)
-	 *  from tcp_socket.c
+	 *  If set to 0, default value will be used:
+	 *  DEFAULT_CONNECTION_BUFFER_SIZE from tcp_socket.c
 	 */
 	uint32_t			max_buff_size;
 #ifndef DISABLE_SECURE_SOCKET
