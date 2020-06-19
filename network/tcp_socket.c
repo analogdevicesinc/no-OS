@@ -51,6 +51,7 @@
 #ifndef DISABLE_SECURE_SOCKET
 #include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
+#endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
