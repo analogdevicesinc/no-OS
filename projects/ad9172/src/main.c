@@ -51,6 +51,7 @@
 #include "inttypes.h"
 #include "error.h"
 #include <xparameters.h>
+#include <xil_cache.h>
 #include "app_config.h"
 #include "spi.h"
 #include "spi_extra.h"
@@ -60,6 +61,10 @@
 #ifdef DAC_DMA_EXAMPLE
 #include "axi_dmac.h"
 #endif /* DAC_DMA_EXAMPLE */
+
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
 
 int main(void)
 {
@@ -282,6 +287,30 @@ int main(void)
 
 	axi_dac_set_datasel(tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif /* DAC_DMA_EXAMPLE */
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct axi_dmac_init tx_dmac_init = {
+		"tx_dmac",
+		TX_DMA_BASEADDR,
+		DMA_MEM_TO_DEV,
+		DMA_LAST,
+	};
+	struct axi_dmac *tx_dmac;
+
+	axi_dmac_init(&tx_dmac, &tx_dmac_init);
+
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = tx_dac,
+		.tx_dmac = tx_dmac,
+		.dac_ddr_base = DDR_MEM_BASEADDR,
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
+	};
+
+	return iio_server_init(&iio_axi_dac_init_par);
+#endif
 
 	printf("Bye\n");
 
