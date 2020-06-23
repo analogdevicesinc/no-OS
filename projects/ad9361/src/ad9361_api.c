@@ -100,7 +100,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->gpio_desc_sync= init_param->gpio_desc_sync;
 	phy->tx_dac_init = init_param->tx_dac_init;
 	phy->rx_adc_init= init_param->rx_adc_init;
-	phy->tx_dac_init= init_param->tx_dac_init;
 	phy->clk_refin = (struct clk *)zmalloc(sizeof(*phy->clk_refin));
 	if (!phy->clk_refin) {
 		return -ENOMEM;
