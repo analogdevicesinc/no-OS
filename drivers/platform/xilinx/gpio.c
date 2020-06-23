@@ -101,8 +101,6 @@ int32_t _gpio_init(struct gpio_desc *desc,
 		break;
 pl_error:
 		free(xdesc->instance);
-
-		break;
 #endif
 		goto error;
 	case GPIO_PS:
