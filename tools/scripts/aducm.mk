@@ -223,9 +223,35 @@ $(MQTT_LIB):
 
 endif
 
+#	IIO
+IIO_DIR = $(NO-OS)/libraries/iio
+#If iio is found in SRC_DIRS
+ifneq ($(if $(findstring $(IIO_DIR), $(SRC_DIRS)), 1),)
+#Remove iio from srcdirs because it is a library
+SRC_DIRS := $(filter-out $(IIO_DIR), $(SRC_DIRS))
+
+IIO_LIB		= $(IIO_DIR)/libiio.a
+
+LIBS_DIRS	+= "$(IIO_DIR)"
+LIBS		+= $(notdir $(IIO_DIR))
+INCLUDE_DIRS	+= $(IIO_DIR)
+
+### This shouldn't be needed when all iio changes have been made
+#This iio.h shuldn't include libtinyiiod.h
+INCLUDE_DIRS	+= $(IIO_DIR)/libtinyiiod
+CFLAGS		+= -D_USE_STD_INT_TYPES
+
+###
+
+CLEAN_IIO	= $(MAKE) -C $(IIO_DIR) clean
+$(IIO_LIB):
+	$(MAKE) -C $(IIO_DIR)
+
+endif
+
 LIB_FLAGS = $(addprefix -l,$(subst lib,,$(basename $(LIBS))))
 LIB_DIR_FLAGS = $(addprefix -L,$(LIBS_DIRS))
-LIB_TARGETS = $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB)
+LIB_TARGETS = $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB) $(IIO_LIB)
 
 #------------------------------------------------------------------------------
 #                           UTIL FUNCTIONS                              
@@ -409,6 +435,7 @@ clean_libs:
 	-$(CLEAN_MBEDTLS)
 	-$(CLEAN_FATFS)
 	-$(CLEAN_MQTT)
+	-$(CLEAN_IIO)
 
 # Remove workspace data and project directory
 PHONY += clean_all
