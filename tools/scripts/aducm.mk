@@ -137,10 +137,8 @@ endif
 #                           MAKEFILE SOURCES                              
 #------------------------------------------------------------------------------
 
-#If src.mk exist include it
-ifneq ($(wildcard src.mk,)
-include src.mk
-endif
+#Extra SRC_DIRS beside Platform drivers, includes and noos/utils should be added
+#in project Makefile
 
 #Complete SRC_DIRS with NOOS path
 SRC_DIRS := $(addprefix  $(NO-OS)/,$(SRC_DIRS))
