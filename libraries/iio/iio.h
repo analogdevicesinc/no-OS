@@ -81,18 +81,24 @@ struct iio_interface {
 			      size_t bytes_count, uint32_t ch_mask);
 };
 
+struct iio_desc;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
 /* Set communication ops and read/write ops that will be called from
  * "libtinyiiod". */
-ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *comm_ops);
+ssize_t iio_init(struct iio_desc **desc, struct iio_server_ops *comm_ops);
 /* Free the resources allocated by iio_init(). */
-ssize_t iio_remove(struct tinyiiod *iiod);
+ssize_t iio_remove(struct iio_desc *desc);
+/* Execut an iio step. */
+ssize_t iio_step(struct iio_desc *desc);
 /* Register interface. */
-ssize_t iio_register(struct iio_interface *iio_interface);
+ssize_t iio_register(struct iio_desc *desc,
+		     struct iio_interface *iio_interface);
 /* Unregister interface. */
-ssize_t iio_unregister(struct iio_interface *iio_interface);
+ssize_t iio_unregister(struct iio_desc *desc,
+		       struct iio_interface *iio_interface);
 
 #endif /* IIO_H_ */
