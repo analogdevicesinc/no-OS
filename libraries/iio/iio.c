@@ -80,6 +80,11 @@ struct element_info {
 	bool ch_out;
 };
 
+struct iio_desc {
+	struct tinyiiod			*iiod;
+	struct tinyiiod_ops		*iiod_ops;
+};
+
 /**
  * iio_read_attr(), iio_write_attr() functions, they need to know about iio_interfaces
  */
@@ -706,12 +711,23 @@ error:
 }
 
 /**
+ * @brief Execute an iio step
+ * @param desc - IIo descriptor
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+ssize_t iio_step(struct iio_desc *desc)
+{
+	return tinyiiod_read_command(desc->iiod);
+}
+
+
+/**
  * @brief Register interface.
  * @param iio_interface - Structure containing physical device instance and
  * device descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_register(struct iio_interface *iio_interface)
+ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 {
 
 	struct iio_interface **temp_interfaces;
@@ -749,7 +765,8 @@ ssize_t iio_register(struct iio_interface *iio_interface)
  * device descriptor.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_unregister(struct iio_interface *iio_interface)
+ssize_t iio_unregister(struct iio_desc *desc,
+		       struct iio_interface *iio_interface)
 {
 	struct iio_interfaces *interfaces;
 	int16_t i, deleted = 0;
@@ -789,13 +806,19 @@ ssize_t iio_unregister(struct iio_interface *iio_interface)
  * 			UART).
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
+ssize_t iio_init(struct iio_desc **desc, struct iio_server_ops *iio_server_ops)
 {
+	struct iio_desc *ldesc;
 	struct tinyiiod_ops *ops = (struct tinyiiod_ops *)calloc(1,
 				   sizeof(struct tinyiiod_ops));
 
 	if (!ops)
 		return FAILURE;
+
+	ldesc = (struct iio_desc *)calloc(1, sizeof(*ldesc));
+	if (!ldesc)
+		goto free_ops;
+	ldesc->iiod_ops = ops;
 
 	/* device operations */
 	ops->read_attr = iio_read_attr;
@@ -815,13 +838,20 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
 	ops->write = iio_server_ops->write;
 	ops->get_xml = iio_get_xml;
 
-	*iiod = tinyiiod_create(ops);
-	if (!(*iiod)) {
-		free(ops);
-		return FAILURE;
-	} else {
-		return SUCCESS;
-	}
+	ldesc->iiod = tinyiiod_create(ops);
+	if (!(ldesc->iiod))
+		goto free_desc;
+
+	*desc = ldesc;
+
+	return SUCCESS;
+
+free_desc:
+	free(desc);
+free_ops:
+	free(ops);
+
+	return FAILURE;
 }
 
 /**
@@ -829,7 +859,7 @@ ssize_t iio_init(struct tinyiiod **iiod, struct iio_server_ops *iio_server_ops)
  * @param iiod: Structure containing tinyiiod instance.
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_remove(struct tinyiiod *iiod)
+ssize_t iio_remove(struct iio_desc *desc)
 {
 	uint8_t i;
 
@@ -837,7 +867,9 @@ ssize_t iio_remove(struct tinyiiod *iiod)
 		free(iio_interfaces->interfaces[i]);
 
 	free(iio_interfaces);
-	tinyiiod_destroy(iiod);
+	tinyiiod_destroy(desc->iiod);
+	//This should be done here but first should be removed from tinyiiod_destroy
+	//free(desc->iiod_ops);
 
 	return SUCCESS;
 }

@@ -58,7 +58,7 @@ struct iio_app_desc {
 	/** read./write function callbacks */
 	struct iio_server_ops *iio_server_ops;
 	/** iiod handle */
-	struct tinyiiod *iiod;
+	struct iio_desc		*iio;
 };
 
 /**
