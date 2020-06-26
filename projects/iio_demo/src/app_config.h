@@ -41,5 +41,6 @@
 
 //#define XILINX_PLATFORM
 //#define ALTERA_PLATFORM
+//#define ADUCM_PLATFORM
 
 #endif

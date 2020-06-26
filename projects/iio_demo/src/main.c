@@ -57,6 +57,22 @@
 #include <xil_cache.h>
 #endif // XILINX_PLATFORM
 
+#ifdef ADUCM_PLATFORM
+
+#include <sys/platform.h>
+#include "adi_initialize.h"
+#include <drivers/pwr/adi_pwr.h>
+
+#define MAX_SIZE_BASE_ADDR		3000
+
+static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
+
+#define DAC_DDR_BASEADDR	((uint32_t)out_buff)
+#define ADC_DDR_BASEADDR	((uint32_t)in_buff)
+
+#endif
+
 static struct uart_desc *uart_desc;
 
 /**
@@ -79,6 +95,22 @@ static ssize_t iio_uart_write(const char *buf, size_t len)
 static ssize_t iio_uart_read(char *buf, size_t len)
 {
 	return uart_read(uart_desc, (uint8_t *)buf, len);
+}
+
+int32_t platform_init()
+{
+#ifdef ADUCM_PLATFORM
+	if (ADI_PWR_SUCCESS != adi_pwr_Init())
+		return FAILURE;
+
+	if (ADI_PWR_SUCCESS != adi_pwr_SetClockDivider(ADI_CLOCK_HCLK, 1u))
+		return FAILURE;
+
+	if (ADI_PWR_SUCCESS != adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1u))
+		return FAILURE;
+	adi_initComponents();
+#endif
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -120,6 +152,11 @@ int main(void)
 	/* IRQ instance. */
 	struct irq_ctrl_desc *irq_desc;
 
+
+	status = platform_init();
+	if (IS_ERR_VALUE(status))
+		return status;
+
 #ifdef XILINX_PLATFORM
 	/* Xilinx platform dependent initialization for IRQ. */
 	struct xil_irq_init_param platfomr_irq_init_par;
@@ -132,6 +169,11 @@ int main(void)
 #endif
 	};
 #endif // XILINX_PLATFORM
+
+#ifdef ADUCM_PLATFORM
+	/* Dummy value for Aducm platform dependent initialization for IRQ. */
+	int32_t platfomr_irq_init_par = 0;
+#endif //ADUCM_PLATFORM
 
 	irq_init_param = (struct irq_init_param ) {
 		.irq_ctrl_id = INTC_DEVICE_ID,
@@ -157,9 +199,18 @@ int main(void)
 	};
 #endif // XILINX_PLATFORM
 
+#ifdef ADUCM_PLATFORM
+
+	/* Aducm platform dependent initialization for UART. */
+	struct aducm_uart_init_param platform_uart_init_par = {
+		.parity = UART_NO_PARITY,
+		.stop_bits = UART_ONE_STOPBIT,
+		.word_length = UART_WORDLEN_8BITS
+	};
+#endif // ADUCM_PLATFORM
 	uart_init_par = (struct uart_init_param) {
-		.baud_rate = 921600,
 		.device_id = UART_DEVICE_ID,
+		.baud_rate = UART_BAUDRATE,
 		.extra = &platform_uart_init_par
 	};
 
