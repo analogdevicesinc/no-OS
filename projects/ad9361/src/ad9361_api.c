@@ -90,10 +90,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		return -ENOMEM;
 	}
 
-	phy->spi = zmalloc(sizeof(*phy->spi));
-	if (!phy->spi) {
-		return -ENOMEM;
-	}
 	phy->spi = init_param->spi;
 	phy->gpio_desc_device_id = init_param->gpio_desc_device_id;
 	phy->gpio_desc_resetb = init_param->gpio_desc_resetb;
@@ -563,7 +559,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	return 0;
 
 out:
-	free(phy->spi);
 #ifndef AXI_ADC_NOT_PRESENT
 	free(phy->adc_conv);
 	free(phy->adc_state);
