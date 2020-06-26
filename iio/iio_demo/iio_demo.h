@@ -62,6 +62,8 @@ struct iio_demo_device {
 	uint8_t num_channels;
 	/** Address used by for reading/writing data to device */
 	uint32_t ddr_base_addr;
+	/** Size of memory to read/write data */
+	uint32_t ddr_base_size;
 };
 
 /**
@@ -84,6 +86,8 @@ struct iio_demo_init_param {
 	uint8_t num_channels;
 	/** Address used by for reading/writing data to device */
 	uint32_t ddr_base_addr;
+	/** Size of memory to read/write data */
+	uint32_t ddr_base_size;
 };
 
 /******************************************************************************/
