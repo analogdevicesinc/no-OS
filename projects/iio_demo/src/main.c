@@ -41,11 +41,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#ifdef XILINX_PLATFORM
-#include <xparameters.h>
-#include <xil_cache.h>
-#include <xil_cache.h>
-#endif // XILINX_PLATFORM
 #include "app_config.h"
 #include "parameters.h"
 #include "error.h"
@@ -56,6 +51,11 @@
 #include "uart.h"
 #include "uart_extra.h"
 
+#ifdef XILINX_PLATFORM
+#include <xparameters.h>
+#include <xil_cache.h>
+#include <xil_cache.h>
+#endif // XILINX_PLATFORM
 
 static struct uart_desc *uart_desc;
 
