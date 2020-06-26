@@ -193,6 +193,7 @@ int main(void)
 		.name = demo_device_output,
 		.num_channels = 4,
 		.ddr_base_addr = DAC_DDR_BASEADDR,
+		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 
 	status = iio_demo_init(&iio_demo_out_desc, &iio_demo_out_init_par);
@@ -203,6 +204,7 @@ int main(void)
 		.name = demo_device_input,
 		.num_channels = 4,
 		.ddr_base_addr = DAC_DDR_BASEADDR,
+		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 
 	status = iio_demo_init(&iio_demo_in_desc, &iio_demo_in_init_par);

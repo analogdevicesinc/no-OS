@@ -297,9 +297,11 @@ static ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
 	demo_device = (struct iio_demo_device *)iio_inst;
 	addr = demo_device->ddr_base_addr + offset;
 	for(index = 0; index < bytes_count; index += 2) {
-		uint32_t *local_addr = (uint32_t *)(addr + index * 2);
+		uint32_t *local_addr = (uint32_t *)(addr +
+						    (index * 2) % demo_device->ddr_base_size);
 		*local_addr = (buf16[index + 1] << 16) | buf16[index];
 	}
+
 
 	return bytes_count;
 }
@@ -342,7 +344,8 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 
 		if (ch_mask & BIT(current_ch)) {
 			pbuf16[j] = *(uint16_t*)(demo_device->ddr_base_addr +
-						 offset + i * 2);
+						 (offset + i * 2) % demo_device->ddr_base_size);
+
 			j++;
 		}
 
@@ -404,6 +407,7 @@ int32_t iio_demo_init(struct iio_demo_desc **desc,
 	iio_demo_device_inst->name = init->name;
 	iio_demo_device_inst->num_channels = init->num_channels;
 	iio_demo_device_inst->ddr_base_addr = init->ddr_base_addr;
+	iio_demo_device_inst->ddr_base_size = init->ddr_base_size;
 
 	iio_device = iio_demo_create_device(init->name,
 					    iio_demo_device_inst->num_channels);
