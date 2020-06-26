@@ -124,9 +124,6 @@ int main(void)
 	/* Xilinx platform dependent initialization for IRQ. */
 	struct xil_irq_init_param platfomr_irq_init_par;
 
-	/* Xilinx platform dependent initialization for UART. */
-	struct xil_uart_init_param platform_uart_init_par;
-
 	platfomr_irq_init_par = (struct xil_irq_init_param ) {
 #ifdef XPAR_INTC_SINGLE_DEVICE_ID
 		.type = IRQ_PL,
@@ -138,9 +135,7 @@ int main(void)
 
 	irq_init_param = (struct irq_init_param ) {
 		.irq_ctrl_id = INTC_DEVICE_ID,
-#ifdef XILINX_PLATFORM
-		.extra = &platfomr_irq_init_par,
-#endif // XILINX_PLATFORM
+		.extra = &platfomr_irq_init_par
 	};
 
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
@@ -148,6 +143,9 @@ int main(void)
 		return status;
 
 #ifdef XILINX_PLATFORM
+	/* Xilinx platform dependent initialization for UART. */
+	struct xil_uart_init_param platform_uart_init_par;
+
 	platform_uart_init_par = (struct xil_uart_init_param) {
 #ifdef XPAR_XUARTLITE_NUM_INSTANCES
 		.type = UART_PL,
@@ -162,9 +160,7 @@ int main(void)
 	uart_init_par = (struct uart_init_param) {
 		.baud_rate = 921600,
 		.device_id = UART_DEVICE_ID,
-#ifdef XILINX_PLATFORM
-		.extra = &platform_uart_init_par,
-#endif // XILINX_PLATFORM
+		.extra = &platform_uart_init_par
 	};
 
 	status = uart_init(&uart_desc, &uart_init_par);
