@@ -107,6 +107,10 @@ CFLAGS = -Wall 								\
 	 -lm						
 	#-Werror
 
+LIB_TINYIIOD_PATH = ""
+LIB_TINYIIOD = ""
+TINYIIOD_STD_TYPES = ""
+
 #------------------------------------------------------------------------------
 #                            COMMON LINKER FLAGS                               
 #------------------------------------------------------------------------------
@@ -469,7 +473,10 @@ xilinx-replace-heap:
 .SILENT:xilinx-bsp
 xilinx-bsp:
 	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl \
-		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);
+		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 		\
+		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)		\
+		$(TINYIIOD_STD_TYPES) $(NULL);
+
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
 	$(shell \
