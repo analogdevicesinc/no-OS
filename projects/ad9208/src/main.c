@@ -64,11 +64,7 @@
 int main(void)
 {
 	struct xil_spi_init_param xil_spi_param = {
-#ifdef PLATFORM_MB
 		.type = SPI_PL,
-#else
-		.type = SPI_PS,
-#endif
 		.device_id = SPI_DEVICE_ID,
 		.flags = 0
 	};
@@ -264,11 +260,7 @@ int main(void)
 	};
 
 	struct xil_gpio_init_param xilinx_gpio_init_param = {
-#ifdef PLATFORM_MB
 		.type = GPIO_PL,
-#else
-		.type = GPIO_PS,
-#endif
 		.device_id = GPIO_DEVICE_ID
 	};
 
