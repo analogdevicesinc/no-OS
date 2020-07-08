@@ -2,7 +2,7 @@
 *   @file    AD717X.h
 *   @brief   AD717X header file.
 *   	     Devices: AD7172-2, AD7172-4, AD7173-8, AD7175-2, AD7175-8, AD7176-2,
-*            AD7177-2, AD4111
+*            AD7177-2, AD4111, AD4112, AD4114, AD4115
 *   @author  acozma (andrei.cozma@analog.com)
 *            dnechita (dan.nechita@analog.com)
 *******************************************************************************
@@ -212,7 +212,7 @@ typedef struct {
 #define AD717X_GPIOCON_REG_PDSW        (1 << 14)
 #define AD717X_GPIOCON_REG_OP_EN2_3    (1 << 13)
 
-/* GPIO Configuration Register additional bits for AD4111, AD4112 */
+/* GPIO Configuration Register additional bits for AD4111, AD4112, AD4114, AD4115 */
 #define AD4111_GPIOCON_REG_OP_EN0_1    (1 << 13)
 #define AD4111_GPIOCON_REG_DATA1       (1 << 7)
 #define AD4111_GPIOCON_REG_DATA0       (1 << 6)
