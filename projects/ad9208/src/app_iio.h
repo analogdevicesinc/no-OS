@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   ad9208/src/parameters.h
- *   @brief  Parameters Definitions.
- *   @author Stefan Popa (stefan.popa@analog.com)
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,34 +36,21 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __PARAMETERS_H__
-#define __PARAMETERS_H__
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <xparameters.h>
+#include <stdint.h>
+#include "iio_axi_adc.h"
 
-#define SPI_HMC7044_CS		0x00
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#define SPI_0_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
-#define SPI_AD9208_0_CS		0x01
-#define RX_0_JESD_BASEADDR 	XPAR_AXI_AD9208_0_JESD_RX_AXI_BASEADDR
-#define RX_0_XCVR_BASEADDR 	XPAR_AXI_AD9208_0_XCVR_BASEADDR
-#define RX_0_CORE_BASEADDR	XPAR_RX_AD9208_0_TPL_CORE_TPL_CORE_BASEADDR
+/* @brief Application IIO setup. */
+int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
+			struct iio_axi_adc_init_param *adc_1_init);
 
-#define SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID
-#define SPI_AD9208_CS		0x02
-
-#define GPIO_DEVICE_ID		XPAR_GPIO_0_DEVICE_ID
-
-#define UART_DEVICE_ID          XPAR_AXI_UART_DEVICE_ID
-
-#define RX_1_JESD_BASEADDR 	XPAR_AXI_AD9208_1_JESD_RX_AXI_BASEADDR
-#define RX_1_XCVR_BASEADDR 	XPAR_AXI_AD9208_1_XCVR_BASEADDR
-#define RX_1_CORE_BASEADDR	XPAR_RX_AD9208_1_TPL_CORE_TPL_CORE_BASEADDR
-
-#define RX_DMA_BASEADDR		XPAR_AXI_AD9208_DMA_BASEADDR
-#define DDR_MEM_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR
-
-#endif /* __PARAMETERS_H__ */
+#endif
