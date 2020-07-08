@@ -61,6 +61,10 @@
 #include "gpio.h"
 #include "gpio_extra.h"
 
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
+
 int main(void)
 {
 	struct xil_spi_init_param xil_spi_param = {
@@ -487,6 +491,26 @@ int main(void)
 				   DDR_MEM_BASEADDR + 0x800000, 16384 * size);
 	if (status != SUCCESS)
 		xil_printf("axi_dmac_transfer() error: %"PRIi32"\n", status);
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_0_init_par;
+	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = rx_0_adc,
+		.rx_dmac = rx_dmac,
+		.adc_ddr_base = DDR_MEM_BASEADDR + 0x800000,
+	};
+	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
+	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = rx_1_adc,
+		.rx_dmac = rx_dmac,
+		.adc_ddr_base = DDR_MEM_BASEADDR + 0x800000,
+	};
+
+	return iio_server_init(&iio_axi_adc_0_init_par, &iio_axi_adc_1_init_par);
+
+#endif
 
 error_11:
 	axi_adc_remove(rx_1_adc);

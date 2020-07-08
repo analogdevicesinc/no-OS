@@ -1,4 +1,5 @@
 TARGET := ad9208
+TINYIIOD ?= n
 ifeq ($(OS), Windows_NT)
 include ../../tools/scripts/windows.mk
 else

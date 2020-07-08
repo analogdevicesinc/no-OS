@@ -10,6 +10,9 @@
 ################################################################################
 
 SRCS := $(PROJECT)/src/main.c
+ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(PROJECT)/src/app_iio.c
+endif
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c				\
 	$(DRIVERS)/adc/ad9208/ad9208.c 					\
@@ -30,7 +33,19 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
+ifeq (y,$(strip $(TINYIIOD)))
+SRCS += $(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/iio/iio.c						\
+	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
+	$(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c
+endif
 INCS := $(PROJECT)/src/parameters.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS +=	$(PROJECT)/src/app_iio.h
+endif
 INCS += $(DRIVERS)/frequency/hmc7044/hmc7044.h				\
 	$(DRIVERS)/adc/ad9208/ad9208.h					\
 	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_api.h			\
@@ -52,3 +67,17 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/util.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(INCLUDE)/xml.h						\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/irq.h						\
+	$(INCLUDE)/uart.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/uart_extra.h                                \
+	$(NO-OS)/iio/iio.h						\
+	$(NO-OS)/iio/iio_types.h					\
+	$(NO-OS)/iio/iio_app/iio_app.h					\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
+	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
+	$(NO-OS)/libraries/libtinyiiod/compat.h
+endif
