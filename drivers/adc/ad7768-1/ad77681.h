@@ -137,11 +137,11 @@
 
 /* AD77681_REG_DIGITAL_FILTER */
 #define AD77681_DIGI_FILTER_60HZ_REJ_EN_MSK		(0x1 << 7)
-#define AD77681_DIGI_FILTER_60HZ_REJ_EN(X)		(((x) & 0x1) << 7)
+#define AD77681_DIGI_FILTER_60HZ_REJ_EN(x)		(((x) & 0x1) << 7)
 #define AD77681_DIGI_FILTER_FILTER_MSK			(0x7 << 4)
-#define AD77681_DIGI_FILTER_FILTER(X)			(((x) & 0x7) << 4)
+#define AD77681_DIGI_FILTER_FILTER(x)			(((x) & 0x7) << 4)
 #define AD77681_DIGI_FILTER_DEC_RATE_MSK		(0x7 << 0)
-#define AD77681_DIGI_FILTER_DEC_RATE(X)			(((x) & 0x7) << 0)
+#define AD77681_DIGI_FILTER_DEC_RATE(x)			(((x) & 0x7) << 0)
 
 /* AD77681_REG_SINC3_DEC_RATE_MSB */
 #define AD77681_SINC3_DEC_RATE_MSB_MSK			(0x0F << 0)
@@ -197,7 +197,7 @@
 #define AD77681_GPIO_WRITE_0_MSK				(0x1 << 0)
 #define AD77681_GPIO_WRITE_0(x)					(((x) & 0x1) << 0)
 #define AD77681_GPIO_WRITE_ALL_MSK				(0xF << 0)
-#define AD77681_GPIO_WRITE_ALL(x)				(((x) & 0xF)
+#define AD77681_GPIO_WRITE_ALL(x)				(((x) & 0xF))
 
 /* AD77681_REG_GPIO_READ */
 #define AD77681_GPIO_READ_3_MSK					(0x1 << 3)
@@ -343,6 +343,9 @@
 #define AD7768_HALF_SCALE						(1 << (AD7768_N_BITS - 1))
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+
+#define ENABLE		1
+#define DISABLE		0
 
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -530,6 +533,18 @@ struct ad77681_dev {
 	enum ad77681_conv_len		conv_len;
 	enum ad77681_crc_sel 		crc_sel;
 	uint8_t					status_bit;
+	enum ad77681_VCM_out            VCM_out;
+	enum ad77681_AINn_precharge     AINn;
+	enum ad77681_AINp_precharge     AINp;
+	enum ad77681_REFn_buffer        REFn;
+	enum ad77681_REFp_buffer        REFp;
+	enum ad77681_filter_type        filter;
+	enum ad77681_sinc5_fir_decimate decimate;
+	uint16_t                        sinc3_osr;
+	uint16_t                        vref;               /* Reference voltage*/
+	uint16_t                        mclk;               /* Mater clock*/
+	uint32_t                        sample_rate;        /* Sample rate*/
+	uint8_t                         data_frame_16bit;   /* SPI 16bit frames*/
 };
 
 struct ad77681_init_param {
@@ -544,6 +559,18 @@ struct ad77681_init_param {
 	enum ad77681_conv_len		conv_len;
 	enum ad77681_crc_sel 		crc_sel;
 	uint8_t					status_bit;
+	enum ad77681_VCM_out            VCM_out;
+	enum ad77681_AINn_precharge     AINn;
+	enum ad77681_AINp_precharge     AINp;
+	enum ad77681_REFn_buffer        REFn;
+	enum ad77681_REFp_buffer        REFp;
+	enum ad77681_filter_type        filter;
+	enum ad77681_sinc5_fir_decimate decimate;
+	uint16_t                        sinc3_osr;
+	uint16_t                        vref;
+	uint16_t                        mclk;
+	uint32_t                        sample_rate;
+	uint8_t                         data_frame_16bit;
 };
 
 /******************************************************************************/
