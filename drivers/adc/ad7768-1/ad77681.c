@@ -239,6 +239,35 @@ uint8_t ad77681_get_rx_buf_len(struct ad77681_dev *dev)
 }
 
 /**
+ * Helper function to get the number of SPI 16bit frames for INTERRUPT ADC DATA READ
+ * @param dev - The device structure.
+ * @return frame_16bit - the number of 16 bit SPI frames
+ */
+uint8_t ad77681_get_frame_16bit(struct ad77681_dev *dev)
+{
+	/* number of 8bit frames */
+	uint8_t frame_bytes, frame_16bit;
+	if (dev->conv_len == AD77681_CONV_24BIT)
+		frame_bytes = 3;
+	else
+		frame_bytes = 2;
+	if (dev->crc_sel != AD77681_NO_CRC)
+		frame_bytes++;
+	if (dev->status_bit)
+		frame_bytes++;
+
+	/* Conversion from number of 8bit frames to number of 16bit frames */
+	if (frame_bytes %2)
+		frame_16bit = (frame_bytes / 2) + 1;
+	else
+		frame_16bit = frame_bytes / 2;
+
+	dev->data_frame_16bit = frame_16bit;
+
+	return frame_16bit;
+}
+
+/**
  * Read conversion result from device.
  * @param dev - The device structure.
  * @param adc_data - The conversion result data
@@ -389,15 +418,17 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
 int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 			    enum ad77681_conv_len conv_len)
 {
-	int32_t ret = 0;
+	int32_t ret;
 
-	ret |= 	ad77681_spi_write_mask(dev,
-				       AD77681_REG_INTERFACE_FORMAT,
-				       AD77681_INTERFACE_CONVLEN_MSK,
-				       AD77681_INTERFACE_CONVLEN(conv_len));
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_INTERFACE_FORMAT,
+				     AD77681_INTERFACE_CONVLEN_MSK,
+				     AD77681_INTERFACE_CONVLEN(conv_len));
 
-
-	dev->conv_len = conv_len;
+	if (ret == SUCCESS) {
+		dev->conv_len = conv_len;
+		ad77681_get_frame_16bit(dev);
+	}
 
 	return ret;
 }
@@ -415,26 +446,29 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
 			    enum ad77681_crc_sel crc_sel)
 {
-	int32_t ret = 0;
+	int32_t ret;
 
 	if (crc_sel == AD77681_NO_CRC) {
-		ret |= 	ad77681_spi_write_mask(dev,
-					       AD77681_REG_INTERFACE_FORMAT,
-					       AD77681_INTERFACE_CRC_EN_MSK,
-					       AD77681_INTERFACE_CRC_EN(0));
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_INTERFACE_FORMAT,
+					     AD77681_INTERFACE_CRC_EN_MSK,
+					     AD77681_INTERFACE_CRC_EN(0));
 	} else {
-		ret |= 	ad77681_spi_write_mask(dev,
-					       AD77681_REG_INTERFACE_FORMAT,
-					       AD77681_INTERFACE_CRC_EN_MSK,
-					       AD77681_INTERFACE_CRC_EN(1));
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_INTERFACE_FORMAT,
+					     AD77681_INTERFACE_CRC_EN_MSK,
+					     AD77681_INTERFACE_CRC_EN(1));
 
-		ret |= 	ad77681_spi_write_mask(dev,
-					       AD77681_REG_INTERFACE_FORMAT,
-					       AD77681_INTERFACE_CRC_TYPE_MSK,
-					       AD77681_INTERFACE_CRC_TYPE(crc_sel));
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_INTERFACE_FORMAT,
+					      AD77681_INTERFACE_CRC_TYPE_MSK,
+					      AD77681_INTERFACE_CRC_TYPE(crc_sel));
 	}
 
-	dev->crc_sel = crc_sel;
+	if (ret == SUCCESS) {
+		dev->crc_sel = crc_sel;
+		ad77681_get_frame_16bit(dev);
+	}
 
 	return ret;
 }
@@ -450,15 +484,18 @@ int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
 int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
 			       bool status_bit)
 {
-	int32_t ret = 0;
+	int32_t ret;
 
 	// Set status bit
-	ret |= 	ad77681_spi_write_mask(dev,
+	ret = 	ad77681_spi_write_mask(dev,
 				       AD77681_REG_INTERFACE_FORMAT,
 				       AD77681_INTERFACE_STATUS_EN_MSK,
 				       AD77681_INTERFACE_STATUS_EN(status_bit));
 
-	dev->status_bit = status_bit;
+	if (ret == SUCCESS) {
+		dev->status_bit = status_bit;
+		ad77681_get_frame_16bit(dev);
+	}
 
 	return ret;
 }
