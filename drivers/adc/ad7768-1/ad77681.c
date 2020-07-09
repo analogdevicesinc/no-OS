@@ -329,12 +329,15 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
 			       enum ad77681_power_mode mode)
 {
-	int32_t ret = 0;
+	int32_t ret;
 
-	ret |= ad77681_spi_write_mask(dev,
-				      AD77681_REG_POWER_CLOCK,
-				      AD77681_POWER_CLK_PWRMODE_MSK,
-				      AD77681_POWER_CLK_PWRMODE(mode));
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_POWER_CLOCK,
+				     AD77681_POWER_CLK_PWRMODE_MSK,
+				     AD77681_POWER_CLK_PWRMODE(mode));
+
+	if (ret == SUCCESS)
+		dev->power_mode = mode;
 
 	return ret;
 }
@@ -352,14 +355,17 @@ int32_t ad77681_set_power_mode(struct ad77681_dev *dev,
 int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
 			     enum ad77681_mclk_div clk_div)
 {
-	ad77681_spi_write_mask(dev,
-			       AD77681_REG_POWER_CLOCK,
-			       AD77681_POWER_CLK_MCLK_DIV_MSK,
-			       AD77681_POWER_CLK_MCLK_DIV(clk_div));
+	int32_t ret;
 
-	dev->mclk_div = clk_div;
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_POWER_CLOCK,
+				     AD77681_POWER_CLK_MCLK_DIV_MSK,
+				     AD77681_POWER_CLK_MCLK_DIV(clk_div));
 
-	return 0;
+	if (ret == SUCCESS)
+		dev->mclk_div = clk_div;
+
+	return ret;
 }
 
 /**
@@ -385,26 +391,30 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
 			      enum ad77681_conv_diag_mux diag_mux_sel,
 			      bool conv_diag_sel)
 {
-	ad77681_spi_write_mask(dev,
-			       AD77681_REG_CONVERSION,
-			       AD77681_CONVERSION_MODE_MSK,
-			       AD77681_CONVERSION_MODE(conv_mode));
+	int32_t ret;
 
-	ad77681_spi_write_mask(dev,
-			       AD77681_REG_CONVERSION,
-			       AD77681_CONVERSION_DIAG_MUX_MSK,
-			       AD77681_CONVERSION_DIAG_MUX_SEL(diag_mux_sel));
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_CONVERSION,
+				     AD77681_CONVERSION_MODE_MSK,
+				     AD77681_CONVERSION_MODE(conv_mode));
 
-	ad77681_spi_write_mask(dev,
-			       AD77681_REG_CONVERSION,
-			       AD77681_CONVERSION_DIAG_SEL_MSK,
-			       AD77681_CONVERSION_DIAG_SEL(conv_diag_sel));
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_CONVERSION,
+				      AD77681_CONVERSION_DIAG_MUX_MSK,
+				      AD77681_CONVERSION_DIAG_MUX_SEL(diag_mux_sel));
 
-	dev->conv_mode = conv_mode;
-	dev->diag_mux_sel = diag_mux_sel;
-	dev->conv_diag_sel = conv_diag_sel;
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_CONVERSION,
+				      AD77681_CONVERSION_DIAG_SEL_MSK,
+				      AD77681_CONVERSION_DIAG_SEL(conv_diag_sel));
 
-	return 0;
+	if (ret == SUCCESS) {
+		dev->conv_mode = conv_mode;
+		dev->diag_mux_sel = diag_mux_sel;
+		dev->conv_diag_sel = conv_diag_sel;
+	}
+
+	return ret;
 }
 
 /**
