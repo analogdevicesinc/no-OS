@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   crc.h
- *   @brief  Generic header file for all CRC computation algorithms.
+ *   @file   crc16.h
+ *   @brief  Header file of CRC-16 computation.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -36,10 +36,19 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC_H
-#define __CRC_H
+#ifndef __CRC16_H
+#define __CRC16_H
 
-#include "crc8.h"
-#include "crc16.h"
+#include <stdint.h>
+#include <stddef.h>
 
-#endif // __CRC_H
+#define CRC16_TABLE_SIZE 256
+
+#define DECLARE_CRC16_TABLE(_table) \
+	static uint16_t _table[CRC16_TABLE_SIZE]
+
+void crc16_populate_msb(uint16_t * table, const uint16_t polynomial);
+uint16_t crc16(const uint16_t * table, const uint8_t *pdata, size_t nbytes,
+	       uint16_t crc);
+
+#endif // __CRC16_H
