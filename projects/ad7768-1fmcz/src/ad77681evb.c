@@ -100,6 +100,16 @@ struct ad77681_init_param ADC_default_init_param = {
 	AD77681_CONV_16BIT,			// conv_len
 	AD77681_CRC, 				// crc_sel
 	0 							// status_bit
+	AD77681_VCM_HALF_VCC,		/* VCM setup*/
+	AD77681_AINn_ENABLED,		/* AIN- precharge buffer*/
+	AD77681_AINp_ENABLED,		/* AIN+ precharge buffer*/
+	AD77681_BUFn_ENABLED,		/* REF- buffer*/
+	AD77681_BUFp_ENABLED,		/* REF+ buffer*/
+	AD77681_FIR,			/* FIR Filter*/
+	AD77681_SINC5_FIR_DECx32,	/* Decimate by 32*/
+	0,				/* OS ratio of SINC3*/
+	4096,				/* Reference voltage*/
+	16384,				/* MCLK in kHz*/
 };
 
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
@@ -107,6 +117,7 @@ struct ad77681_init_param ADC_default_init_param = {
 int main()
 {
 	struct ad77681_dev	*adc_dev;
+	struct ad77681_status_registers *adc_status;
 	uint8_t			adc_data[5];
 	uint8_t 		*data;
 	uint32_t 		i;
@@ -119,7 +130,7 @@ int main()
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
-	ad77681_setup(&adc_dev, ADC_default_init_param);
+	ad77681_setup(&adc_dev, ADC_default_init_param, &adc_status);
 
 	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
 		while(1) {
