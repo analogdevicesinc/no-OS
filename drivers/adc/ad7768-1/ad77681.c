@@ -1616,16 +1616,26 @@ int32_t ad77681_status(struct ad77681_dev *dev,
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
  * 					   parameters.
+ * @param status - The structure that will contains the ADC status
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad77681_setup(struct ad77681_dev **device,
-		      struct ad77681_init_param init_param)
+		      struct ad77681_init_param init_param,
+		      struct ad77681_status_registers **status)
 {
 	struct ad77681_dev *dev;
-	int32_t ret = 0;
+	struct ad77681_status_registers *stat;
+	int32_t ret;
+	uint8_t scratchpad_check = 0xAD;
 
 	dev = (struct ad77681_dev *)malloc(sizeof(*dev));
 	if (!dev) {
+		return -1;
+	}
+
+	stat = (struct ad77681_status_registers *)malloc(sizeof(*stat));
+	if (!stat) {
+		free(dev);
 		return -1;
 	}
 
@@ -1637,23 +1647,63 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->conv_len = init_param.conv_len;
 	dev->crc_sel = init_param.crc_sel;
 	dev->status_bit = init_param.status_bit;
+	dev->VCM_out = init_param.VCM_out;
+	dev->AINn = init_param.AINn;
+	dev->AINp = init_param.AINp;
+	dev->REFn = init_param.REFn;
+	dev->REFp = init_param.REFp;
+	dev->filter = init_param.filter;
+	dev->decimate = init_param.decimate;
+	dev->sinc3_osr = init_param.sinc3_osr;
+	dev->vref = init_param.vref;
+	dev->mclk = init_param.mclk;
+	dev->sample_rate = init_param.sample_rate;
+	dev->data_frame_16bit = init_param.data_frame_16bit;
 
 	ret = spi_init(&dev->spi_desc, &init_param.spi_eng_dev_init);
-	if (ret < 0)
+	if (ret < 0) {
+		free(dev);
+		free(stat);
 		return ret;
+	}
 
 	ret |= ad77681_soft_reset(dev);
-	ret |= ad77681_set_power_mode(dev, dev->power_mode);
-	ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
-	ret |= ad77681_set_conv_mode(dev,
-				     dev->conv_mode,
-				     dev->diag_mux_sel,
-				     dev->conv_diag_sel);
-	ret |= ad77681_set_convlen(dev, dev->conv_len);
-	ret |= ad77681_set_status_bit(dev, dev->status_bit);
-	ret |= ad77681_set_crc_sel(dev, dev->crc_sel);
 
-	*device = dev;
+	/* Check physical connection using scratchpad*/
+	if (ad77681_scratchpad(dev, &scratchpad_check) == FAILURE) {
+		scratchpad_check = 0xAD;/* If failure, second try */
+		ret |= (ad77681_scratchpad(dev, &scratchpad_check));
+
+		if(ret == FAILURE) {
+			free(dev);
+			free(stat);
+			return ret;
+		}
+
+	} else {
+		ret |= ad77681_set_power_mode(dev, dev->power_mode);
+		ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
+		ret |= ad77681_set_conv_mode(dev,
+					     dev->conv_mode,
+					     dev->diag_mux_sel,
+					     dev->conv_diag_sel);
+		ret |= ad77681_set_convlen(dev, dev->conv_len);
+		ret |= ad77681_set_status_bit(dev, dev->status_bit);
+		ret |= ad77681_set_crc_sel(dev, dev->crc_sel);
+		ret |= ad77681_set_VCM_output(dev, dev->VCM_out);
+		ret |= ad77681_set_AINn_buffer(dev, dev->AINn);
+		ret |= ad77681_set_AINp_buffer(dev, dev->AINp);
+		ret |= ad77681_set_REFn_buffer(dev, dev->REFn);
+		ret |= ad77681_set_REFp_buffer(dev, dev->REFp);
+		ret |= ad77681_set_filter_type(dev, dev->decimate, dev->filter, dev->sinc3_osr);
+		ret |= ad77681_error_flags_enabe(dev);
+		ret |= ad77681_clear_error_flags(dev);
+		ret |= ad77681_status(dev, stat);
+		ad77681_get_frame_16bit(dev);
+		ad77681_update_sample_rate(dev);
+		*status = stat;
+		*device = dev;
+	}
 
 	if (!ret)
 		printf("ad77681 successfully initialized\n");
