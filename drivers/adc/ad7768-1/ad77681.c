@@ -318,6 +318,273 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 }
 
 /**
+ * This function uses continuous read mode, which has to be enabled in advance
+ * Read conversion result from device using GPIO DRDY interrupt in 16bit frames
+ * Firtst 24bits or 16bits of data	dev->conv_length   followed by
+ * 8bits of status bit, if enabled	dev->sataus_bit    followed by
+ * 8bits of CRC, if enabled		dev->crc_sel
+ * @param dev - The device structure.
+ * @param measured_data - structure carying ADC measurement info
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_spi_read_interrupt_adc_data(struct ad77681_dev *dev,
+		struct adc_data *measured_data)
+{
+	int32_t ret;
+	uint16_t buf[3];
+	/* 16bit buffers*/
+	buf[0] = 0;
+	buf[1] = 0;
+	buf[2] = 0;
+
+	ret = spi_read_cont_data(dev->spi_desc, buf, dev->data_frame_16bit);
+
+	if (ret < 0)
+		return ret;
+
+	/* 24bit format*/
+	if (dev->conv_len == AD77681_CONV_24BIT)
+		/* Cuts first 8 bits from buf[1] and paste it after 16bits of buf[0]*/
+		measured_data->raw_data[measured_data->count] = (buf[0] << 8 | buf[1] >> 8);
+	/* 16bit format */
+	else
+		measured_data->raw_data[measured_data->count] = (buf[0] << 8);
+
+	/* If status bit or CRC is enabled, handle it */
+	if (dev->status_bit || (dev->crc_sel != AD77681_NO_CRC))
+		ret |= ad77681_CRC_status_handling(dev, buf);
+
+	return ret;
+}
+
+/**
+ * CRC and status bit handling after each readout form the ADC
+ * @param dev - The device structure.
+ * @param *data_buffer - 16-bit buffer readed from the ADC containing the CRC,
+ * data and the stattus bit.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
+				    uint16_t *data_buffer)
+{
+	int32_t ret = 0;
+	uint8_t status_byte = 0, checksum = 0, checksum_byte = 0, checksum_buf[5],
+		checksum_length = 0, i;
+	char print_buf[50];
+
+	/* Status bit handling */
+	if (dev->status_bit) {
+		/* 24bit ADC data + 8bit of status = 2 16bit frames */
+		if (dev->conv_len == AD77681_CONV_24BIT)
+			status_byte = data_buffer[1] & 0xFF;
+		/* 16bit ADC data + 8bit of status = 2 16bit frames */
+		else
+			status_byte = data_buffer[1] >> 8;
+	}
+
+	/* Checksum bit handling */
+	if (dev->crc_sel != AD77681_NO_CRC) {
+		if ((dev->status_bit == true) & (dev->conv_len == AD77681_CONV_24BIT)) {
+			/* 24bit ADC data + 8bit of status + 8bit of CRC = 3 16bit frames */
+			checksum_byte = data_buffer[2] >> 8;
+			checksum_length = 4;
+		} else if ((dev->status_bit == true) & (dev->conv_len == AD77681_CONV_16BIT)) {
+			/* 16bit ADC data + 8bit of status + 8bit of CRC = 2 16bit frames */
+			checksum_byte = data_buffer[1] & 0xFF;
+			checksum_length = 3;
+		} else if ((dev->status_bit == false) & (dev->conv_len == AD77681_CONV_24BIT)) {
+			/* 24bit ADC data + 8bit of CRC = 2 16bit frames */
+			checksum_byte = data_buffer[1] & 0xFF;
+			checksum_length = 3;
+		} else if ((dev->status_bit == false) & (dev->conv_len == AD77681_CONV_16BIT)) {
+			/* 16bit ADC data + 8bit of CRC = 2 16bit frames */
+			checksum_byte = data_buffer[1] >> 8;
+			checksum_length = 2;
+		}
+
+		for (i = 0; i < checksum_length; i++) {
+			if (i % 2)
+				checksum_buf[i] = data_buffer[i / 2] & 0xFF;
+			else
+				checksum_buf[i] = data_buffer[i / 2] >> 8;
+		}
+
+		if (dev->crc_sel == AD77681_CRC)
+			checksum = ad77681_compute_crc8(checksum_buf, checksum_length,
+							INITIAL_CRC_CRC8);
+		else if (dev->crc_sel == AD77681_XOR)
+			checksum = ad77681_compute_xor(checksum_buf, checksum_length, INITIAL_CRC_XOR);
+
+		if (checksum != checksum_byte)
+			ret = FAILURE;
+
+#ifdef CRC_DEBUG
+
+		char ok[3] = { 'O', 'K' }, fault[6] = { 'F', 'A', 'U', 'L', 'T' };
+		sprintf(print_buf, "\n%x\t%x\t%x\tCRC %s", checksum_byte, checksum, status_byte,
+			((ret == FAILURE) ? (fault) : (ok)));
+		printf(print_buf);
+
+#endif /* CRC_DEBUG */
+	}
+
+	return ret;
+}
+
+/**
+ * Conversion from measured data to voltage
+ * @param dev - The device structure.
+ * @param raw_code - ADC raw code measurements
+ * @param voltage - Converted ADC code to voltage
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
+				int32_t *raw_code,
+				double *voltage)
+{
+	int32_t converted_data;
+
+	if (*raw_code & 0x800000)
+		converted_data = (int32_t)((0xFF << 24) | *raw_code);
+	else
+		converted_data = (int32_t)((0x00 << 24) | *raw_code);
+
+	/* ((2*Vref)*code)/2^24	*/
+	*voltage = (double)(((2.0 * (((double)(dev->vref)) / 1000.0)) /
+			     AD7768_FULL_SCALE) * converted_data);
+
+	return SUCCESS;
+}
+
+/**
+ * Update ADCs sample rate depending on MCLK, MCLK_DIV and filter settings
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
+{
+	uint32_t sample_rate;
+	uint8_t mclk_div;
+	uint16_t osr;
+
+	/* Finding out MCLK divider */
+	switch (dev->mclk_div) {
+	case AD77681_MCLK_DIV_16:
+		mclk_div = 16;
+		break;
+	case AD77681_MCLK_DIV_8:
+		mclk_div = 8;
+		break;
+	case AD77681_MCLK_DIV_4:
+		mclk_div = 4;
+		break;
+	case AD77681_MCLK_DIV_2:
+		mclk_div = 2;
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	/* Finding out decimation ratio */
+	switch (dev->filter) {
+	case (AD77681_SINC5 | AD77681_FIR):
+		/* Decimation ratio of FIR or SINC5 (x32 to x1024) */
+		switch (dev->decimate) {
+		case AD77681_SINC5_FIR_DECx32:
+			osr = 32;
+			break;
+		case AD77681_SINC5_FIR_DECx64:
+			osr = 64;
+			break;
+		case AD77681_SINC5_FIR_DECx128:
+			osr = 128;
+			break;
+		case AD77681_SINC5_FIR_DECx256:
+			osr = 256;
+			break;
+		case AD77681_SINC5_FIR_DECx512:
+			osr = 512;
+			break;
+		case AD77681_SINC5_FIR_DECx1024:
+			osr = 1024;
+			break;
+		default:
+			return FAILURE;
+			break;
+		}
+		break;
+	/* Decimation ratio of SINC5 x8 */
+	case AD77681_SINC5_DECx8:
+		osr = 8;
+		break;
+	/* Decimation ratio of SINC5 x16 */
+	case AD77681_SINC5_DECx16:
+		osr = 16;
+		break;
+	/* Decimation ratio of SINC3 */
+	case AD77681_SINC3:
+		osr = (dev->sinc3_osr + 1) * 32;
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	/* Sample rate to Hz */
+	dev->sample_rate = (dev->mclk / (osr*mclk_div)) * 1000;
+
+	return SUCCESS;
+}
+
+/**
+ * Get SINC3 filter oversampling ratio register value based on user's inserted
+ * output data rate ODR
+ * @param dev - The device structure.
+ * @param sinc3_dec_reg - Returned closest value of SINC3 register
+ * @param sinc3_odr - Desired output data rage
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
+			  uint16_t *sinc3_dec_reg,
+			  float sinc3_odr)
+{
+	uint8_t mclk_div;
+	float	odr;
+
+	if (sinc3_odr < 0)
+		return FAILURE;
+
+	switch (dev->mclk_div) {
+	case AD77681_MCLK_DIV_16:
+		mclk_div = 16;
+		break;
+	case AD77681_MCLK_DIV_8:
+		mclk_div = 8;
+		break;
+	case AD77681_MCLK_DIV_4:
+		mclk_div = 4;
+		break;
+	case AD77681_MCLK_DIV_2:
+		mclk_div = 2;
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	odr = ((float)(dev->mclk * 1000.0) / (sinc3_odr * (float)(32 * mclk_div))) - 1;
+
+	/* Sinc3 oversamplig register has 13 bits, biggest value = 8192 */
+	if (odr < 8193)
+		*sinc3_dec_reg = (uint16_t)(odr);
+	else
+		return FAILURE;
+
+	return SUCCESS;
+}
+
+/**
  * Set the power consumption mode of the ADC core.
  * @param dev - The device structure.
  * @param mode - The power mode.
@@ -364,6 +631,294 @@ int32_t ad77681_set_mclk_div(struct ad77681_dev *dev,
 
 	if (ret == SUCCESS)
 		dev->mclk_div = clk_div;
+
+	return ret;
+}
+
+/**
+ * Set the VCM output.
+ * @param dev - The device structure.
+ * @param VCM_out - The VCM output voltage.
+ * 			Accepted values: AD77681_VCM_HALF_VCC
+ *					 AD77681_VCM_2_5V
+ *	  				 AD77681_VCM_2_05V
+ *					 AD77681_VCM_1_9V
+ *					 AD77681_VCM_1_65V
+ *					 AD77681_VCM_1_1V
+ *					 AD77681_VCM_0_9V
+ *					 AD77681_VCM_OFF
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_VCM_output(struct ad77681_dev *dev,
+			       enum ad77681_VCM_out VCM_out)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ANALOG2,
+				     AD77681_ANALOG2_VCM_MSK,
+				     AD77681_ANALOG2_VCM(VCM_out));
+
+	if (ret == SUCCESS)
+		dev->VCM_out = VCM_out;
+
+	return ret;
+}
+
+/**
+ * Set the AIN- precharge buffer.
+ * @param dev - The device structure.
+ * @param AINn - The negative analog input precharge buffer selector
+ * 		 Accepted values: AD77681_AINn_ENABLED
+ *				  AD77681_AINn_DISABLED
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_AINn_buffer(struct ad77681_dev *dev,
+				enum ad77681_AINn_precharge AINn)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ANALOG,
+				     AD77681_ANALOG_AIN_BUF_NEG_OFF_MSK,
+				     AD77681_ANALOG_AIN_BUF_NEG_OFF(AINn));
+
+	if (ret == SUCCESS)
+		dev->AINn = AINn;
+
+	return ret;
+}
+
+/**
+ * Set the AIN+ precharge buffer.
+ * @param dev - The device structure.
+ * @param AINp - The positive analog input precharge buffer selector
+ * 		 Accepted values: AD77681_AINp_ENABLED
+ *				  AD77681_AINp_DISABLED
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_AINp_buffer(struct ad77681_dev *dev,
+				enum ad77681_AINp_precharge AINp)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ANALOG,
+				     AD77681_ANALOG_AIN_BUF_POS_OFF_MSK,
+				     AD77681_ANALOG_AIN_BUF_POS_OFF(AINp));
+
+	if (ret == SUCCESS)
+		dev->AINp = AINp;
+
+	return ret;
+}
+
+/**
+ * Set the REF- reference buffer
+ * @param dev - The device structure.
+ * @param REFn - The negative reference buffer selector
+ * 		 Accepted values: AD77681_BUFn_DISABLED
+ *				  AD77681_BUFn_ENABLED
+ *				  AD77681_BUFn_FULL_BUFFER_ON
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_REFn_buffer(struct ad77681_dev *dev,
+				enum ad77681_REFn_buffer REFn)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ANALOG,
+				     AD77681_ANALOG_REF_BUF_NEG_MSK,
+				     AD77681_ANALOG_REF_BUF_NEG(REFn));
+
+	if (ret == SUCCESS)
+		dev->REFn = REFn;
+
+	return ret;
+}
+
+/**
+ * Set the REF+ reference buffer
+ * @param dev -  The device structure.
+ * @param REFp - The positive reference buffer selector
+ * 		 Accepted values: AD77681_BUFp_DISABLED
+ *				  AD77681_BUFp_ENABLED
+ *				  AD77681_BUFp_FULL_BUFFER_ON
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_REFp_buffer(struct ad77681_dev *dev,
+				enum ad77681_REFp_buffer REFp)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ANALOG,
+				     AD77681_ANALOG_REF_BUF_POS_MSK,
+				     AD77681_ANALOG_REF_BUF_POS(REFp));
+
+	if (ret == SUCCESS)
+		dev->REFp = REFp;
+	else
+		return FAILURE;
+
+	return ret;
+}
+
+/**
+ * Set filter type and decimation ratio
+ * @param dev -	The device structure.
+ * @param decimate - Decimation ratio of filter
+ *			Accepted values: AD77681_SINC5_FIR_DECx32
+ *					 AD77681_SINC5_FIR_DECx64
+ *					 AD77681_SINC5_FIR_DECx128
+ *					 AD77681_SINC5_FIR_DECx256
+ *					 AD77681_SINC5_FIR_DECx512
+ *					 AD77681_SINC5_FIR_DECx1024
+ * @param filter - Select filter type
+ *			Accepted values: AD77681_SINC5
+ *					 AD77681_SINC5_DECx8
+ *					 AD77681_SINC5_DECx16
+ *					 AD77681_SINC3
+ *					 AD77681_FIR
+ * @param sinc3_osr - Select decimation ratio for SINC3 filter separately as
+ *			integer from 0 to 8192.
+ *			See the AD7768-1 datasheet for more info
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_filter_type(struct ad77681_dev *dev,
+				enum ad77681_sinc5_fir_decimate decimate,
+				enum ad77681_filter_type filter,
+				uint16_t sinc3_osr)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_reg_write(dev, AD77681_REG_DIGITAL_FILTER, 0x00);
+
+	/* SINC5 for OSR 8x and 16x*/
+	if ((filter == AD77681_SINC5_DECx8) || (filter == AD77681_SINC5_DECx16)) {
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_DIGITAL_FILTER,
+					      AD77681_DIGI_FILTER_FILTER_MSK,
+					      AD77681_DIGI_FILTER_FILTER(filter));
+		/* SINC5 and FIR for osr 32x to 1024x */
+	} else if ((filter == AD77681_SINC5) || (filter == AD77681_FIR)) {
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_DIGITAL_FILTER,
+					      AD77681_DIGI_FILTER_FILTER_MSK,
+					      AD77681_DIGI_FILTER_FILTER(filter));
+
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_DIGITAL_FILTER,
+					      AD77681_DIGI_FILTER_DEC_RATE_MSK,
+					      AD77681_DIGI_FILTER_DEC_RATE(decimate));
+		/* SINC3*/
+	} else {
+		uint8_t sinc3_LSB = 0, sinc3_MSB = 0;
+
+		sinc3_MSB = sinc3_osr >> 8;
+		sinc3_LSB = sinc3_osr & 0x00FF;
+
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_DIGITAL_FILTER,
+					      AD77681_DIGI_FILTER_FILTER_MSK,
+					      AD77681_DIGI_FILTER_FILTER(filter));
+
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_SINC3_DEC_RATE_MSB,
+					      AD77681_SINC3_DEC_RATE_MSB_MSK,
+					      AD77681_SINC3_DEC_RATE_MSB(sinc3_MSB));
+
+		ret |= ad77681_spi_write_mask(dev,
+					      AD77681_REG_SINC3_DEC_RATE_LSB,
+					      AD77681_SINC3_DEC_RATE_LSB_MSK,
+					      AD77681_SINC3_DEC_RATE_LSB(sinc3_LSB));
+	}
+
+	if ( ret == SUCCESS) {
+		dev->decimate = decimate;
+		dev->filter = filter;
+		/* Sync pulse after each filter change */
+		ret |= ad77681_initiate_sync(dev);
+	}
+
+	return ret;
+}
+
+/**
+ * Enable 50/60 Hz rejection
+ * @param dev -	The device structure.
+ * @param enable - The positive reference buffer selector
+ * 		   Accepted values: true
+ *				    false
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_50HZ_rejection(struct ad77681_dev *dev,
+				   uint8_t enable)
+{
+	int32_t ret;
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_DIGITAL_FILTER,
+				     AD77681_DIGI_FILTER_60HZ_REJ_EN_MSK,
+				     AD77681_DIGI_FILTER_60HZ_REJ_EN(enable));
+
+	return ret;
+}
+
+/**
+ * Set the REF- reference buffer
+ * @param dev - The device structure.
+ * @param continuous_enable - Continous read enable
+ * 		 Accepted values: AD77681_CONTINUOUS_READ_ENABLE
+ *				  AD77681_CONTINUOUS_READ_DISABLE
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_set_continuos_read(struct ad77681_dev *dev,
+				   enum ad77681_continuous_read continuous_enable)
+{
+	int32_t ret;
+
+	if (continuous_enable) {
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_INTERFACE_FORMAT,
+					     AD77681_INTERFACE_CONT_READ_MSK,
+					     AD77681_INTERFACE_CONT_READ_EN(continuous_enable));
+	} else {
+		/* To exit the continuous read mode, a key 0x6C must be
+		written into the device over the SPI*/
+		uint8_t end_key = EXIT_CONT_READ;
+		ret = spi_write_and_read(dev->spi_desc, &end_key, 1);
+	}
+
+	return ret;
+}
+
+/**
+ * Power down / power up the device
+ * @param dev -	The device structure.
+ * @param sleep_wake - Power down, or power up the ADC
+ * 			Accepted values: AD77681_SLEEP
+ *					 AD77681_WAKE
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_power_down(struct ad77681_dev *dev,
+			   enum ad77681_sleep_wake sleep_wake)
+{
+	int32_t ret;
+
+	if (sleep_wake == AD77681_SLEEP) {
+		ret = ad77681_spi_reg_write(dev, AD77681_REG_POWER_CLOCK,
+					    AD77681_POWER_CLK_POWER_DOWN);
+	} else {
+		/* Wake up the ADC over SPI, by sending a wake-up sequence:
+		1 followed by 63 zeroes and CS hold low*/
+		uint8_t wake_sequence[8] = { 0 };
+		/* Insert '1' to the beginning of the wake_sequence*/
+		wake_sequence[0] = 0x80;
+		ret = spi_write_and_read(dev->spi_desc, wake_sequence,
+					 ARRAY_SIZE(wake_sequence));
+	}
 
 	return ret;
 }
@@ -529,6 +1084,529 @@ int32_t ad77681_soft_reset(struct ad77681_dev *dev)
 				       AD77681_REG_SYNC_RESET,
 				       AD77681_SYNC_RST_SPI_RESET_MSK,
 				       AD77681_SYNC_RST_SPI_RESET(0x2));
+
+	return ret;
+}
+
+/**
+ * Initiate a SYNC_OUT pulse over spi
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_initiate_sync(struct ad77681_dev *dev)
+{
+	return ad77681_spi_write_mask(dev,
+				      AD77681_REG_SYNC_RESET,
+				      AD77681_SYNC_RST_SPI_STARTB_MSK,
+				      AD77681_SYNC_RST_SPI_STARTB(0));
+}
+
+/**
+ * Write to offset registers
+ * @param dev 			The device structure.
+ * @param value			The desired value of the whole 24-bit offset register
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_apply_offset(struct ad77681_dev *dev,
+			     uint32_t value)
+{
+	int32_t ret;
+	uint8_t offset_HI = 0, offset_MID = 0, offset_LO = 0;
+
+	offset_HI = (value & 0x00FF0000) >> 16;
+	offset_MID = (value & 0x0000FF00) >> 8;
+	offset_LO = (value & 0x000000FF);
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_OFFSET_HI,
+				     AD77681_OFFSET_HI_MSK,
+				     AD77681_OFFSET_HI(offset_HI));
+
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_OFFSET_MID,
+				      AD77681_OFFSET_MID_MSK,
+				      AD77681_OFFSET_MID(offset_MID));
+
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_OFFSET_LO,
+				      AD77681_OFFSET_LO_MSK,
+				      AD77681_OFFSET_LO(offset_LO));
+
+	return ret;
+}
+
+/**
+ * Write to gain registers
+ * @param dev - The device structure.
+ * @param value - The desired value of the whole 24-bit gain register
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_apply_gain(struct ad77681_dev *dev,
+			   uint32_t value)
+{
+	int32_t ret;
+	uint8_t gain_HI = 0, gain_MID = 0, gain_LO = 0;
+
+	gain_HI = (value & 0x00FF0000) >> 16;
+	gain_MID = (value & 0x0000FF00) >> 8;
+	gain_LO = (value & 0x000000FF);
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_GAIN_HI,
+				     AD77681_GAIN_HI_MSK,
+				     AD77681_GAIN_HI(gain_HI));
+
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_GAIN_MID,
+				      AD77681_GAIN_MID_MSK,
+				      AD77681_GAIN_MID(gain_MID));
+
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_GAIN_LO,
+				      AD77681_GAIN_LOW_MSK,
+				      AD77681_GAIN_LOW(gain_LO));
+
+	return ret;
+}
+
+/**
+ * Read value from GPIOs present in AD7768-1 separately, or all GPIOS at once.
+ * @param dev - The device structure.
+ * @param value	- Readed value.
+ * @param gpio_number - Number of GPIO, the value will be written into
+ *			Accepted values: AD77681_GPIO0
+ *					 AD77681_GPIO1
+ *					 AD77681_GPIO2
+ *					 AD77681_GPIO3
+ *					 AD77681_ALL_GPIOS
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_gpio_read(struct ad77681_dev *dev,
+			  uint8_t *value,
+			  enum ad77681_gpios gpio_number)
+{
+	int32_t ret;
+
+	switch (gpio_number) {
+	case AD77681_GPIO0:	/* Read to GPIO0 */
+		ret = ad77681_spi_read_mask(dev,
+					    AD77681_REG_GPIO_READ,
+					    AD77681_GPIO_READ_0_MSK,
+					    value);
+		break;
+	case AD77681_GPIO1:	/* Read to GPIO1 */
+		ret = ad77681_spi_read_mask(dev,
+					    AD77681_REG_GPIO_READ,
+					    AD77681_GPIO_READ_1_MSK,
+					    value);
+		break;
+	case AD77681_GPIO2:	/* Read to GPIO2 */
+		ret = ad77681_spi_read_mask(dev,
+					    AD77681_REG_GPIO_READ,
+					    AD77681_GPIO_READ_2_MSK,
+					    value);
+		break;
+	case AD77681_GPIO3:	/* Read to GPIO3 */
+		ret = ad77681_spi_read_mask(dev,
+					    AD77681_REG_GPIO_READ,
+					    AD77681_GPIO_READ_3_MSK,
+					    value);
+		break;
+	case AD77681_ALL_GPIOS: /* Read to all GPIOs */
+		ret = ad77681_spi_read_mask(dev,
+					    AD77681_REG_GPIO_READ,
+					    AD77681_GPIO_READ_ALL_MSK,
+					    value);
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	return ret;
+}
+
+/**
+ * Write value to GPIOs present in AD7768-1 separately, or all GPIOS at once.
+ * @param dev - The device structure.
+ * @param value - Value to be written into GPIO
+ *		  Accepted values: GPIO_HIGH
+ *				   GPIO_LOW
+ *				   4-bit value for all gpios
+ * @param gpio_number - Number of GPIO, the value will be written into
+ *			Accepted values: AD77681_GPIO0
+ *					 AD77681_GPIO1
+ *					 AD77681_GPIO2
+ *					 AD77681_GPIO3
+ *					 AD77681_ALL_GPIOS
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_gpio_write(struct ad77681_dev *dev,
+			   uint8_t value,
+			   enum ad77681_gpios gpio_number)
+{
+	int32_t ret;
+
+	switch (gpio_number) {
+	case AD77681_GPIO0:	/* Write to GPIO0 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_WRITE,
+					     AD77681_GPIO_WRITE_0_MSK,
+					     AD77681_GPIO_WRITE_0(value));
+		break;
+	case AD77681_GPIO1:	/* Write to GPIO1 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_WRITE,
+					     AD77681_GPIO_WRITE_1_MSK,
+					     AD77681_GPIO_WRITE_1(value));
+		break;
+	case AD77681_GPIO2: /* Write to GPIO2 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_WRITE,
+					     AD77681_GPIO_WRITE_2_MSK,
+					     AD77681_GPIO_WRITE_2(value));
+		break;
+	case AD77681_GPIO3: /* Write to GPIO3 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_WRITE,
+					     AD77681_GPIO_WRITE_3_MSK,
+					     AD77681_GPIO_WRITE_3(value));
+		break;
+	case AD77681_ALL_GPIOS: /* Write to all GPIOs */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_WRITE,
+					     AD77681_GPIO_WRITE_ALL_MSK,
+					     AD77681_GPIO_WRITE_ALL(value));
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	return ret;
+}
+
+/**
+ * Set AD7768-1s GPIO as input or output.
+ * @param dev - The device structure.
+ * @param direction - Direction of the GPIO
+ *			Accepted values: GPIO_INPUT
+ *					 GPIO_OUTPUT
+ *					 4-bit value for all gpios
+ * @param gpio_number - Number of GPIO, which will be affected
+ *			Accepted values: AD77681_GPIO0
+ *					 AD77681_GPIO1
+ *					 AD77681_GPIO2
+ *					 AD77681_GPIO3
+ *					 AD77681_ALL_GPIOS
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_gpio_inout(struct ad77681_dev *dev,
+			   uint8_t direction,
+			   enum ad77681_gpios gpio_number)
+{
+	int32_t ret;
+
+	switch (gpio_number) {
+	case AD77681_GPIO0:	/* Set direction of GPIO0 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO0_OP_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO0_OP_EN(direction));
+		break;
+	case AD77681_GPIO1:	/* Set direction of GPIO1 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO1_OP_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO1_OP_EN(direction));
+		break;
+	case AD77681_GPIO2:	/* Set direction of GPIO2 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO2_OP_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO2_OP_EN(direction));
+		break;
+	case AD77681_GPIO3:	/* Set direction of GPIO3 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO3_OP_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO3_OP_EN(direction));
+		break;
+	case AD77681_ALL_GPIOS:	/* Set direction of all GPIOs */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN_MSK,
+					     AD77681_GPIO_CNTRL_ALL_GPIOS_OP_EN(direction));
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	return ret;
+}
+
+/**
+ * Enable global GPIO bit.
+ * This bit must be set high to change GPIO settings.
+ * @param dev - The device structure.
+ * @param gpio_enable - Enable or diable the global GPIO pin
+ *			Accepted values: AD77681_GLOBAL_GPIO_ENABLE
+ *					 AD77681_GLOBAL_GPIO_DISABLE
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_global_gpio(struct ad77681_dev *dev,
+			    enum ad77681_gobal_gpio_enable gpio_enable)
+{
+	return ad77681_spi_write_mask(dev,
+				      AD77681_REG_GPIO_CONTROL,
+				      AD77681_GPIO_CNTRL_UGPIO_EN_MSK,
+				      AD77681_GPIO_CNTRL_UGPIO_EN(gpio_enable));
+}
+
+/**
+ * Read and write from ADC scratchpad register to check SPI Communication in
+ * the very beginning, during inicialization.
+ * @param dev - The device structure.
+ * @param sequence - The sequence which will be written into scratchpad and the
+ * 		      readed sequence will be returned
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_scratchpad(struct ad77681_dev *dev,
+			   uint8_t *sequence)
+{
+	int32_t ret;
+	const uint8_t check = *sequence;/* Save the original sequence */
+	uint8_t ret_sequence = 0;/* Return sequence */
+
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_SCRATCH_PAD,
+				     AD77681_SCRATCHPAD_MSK,
+				     AD77681_SCRATCHPAD(check));
+
+	ret |= ad77681_spi_read_mask(dev,
+				     AD77681_REG_SCRATCH_PAD,
+				     AD77681_SCRATCHPAD_MSK,
+				     &ret_sequence);
+
+	if (check != ret_sequence)/* Compare original an returned sequence */
+		return FAILURE;
+
+	return ret;
+}
+
+/**
+ * Set AD7768-1s GPIO output type between strong driver and open drain.
+ * GPIO3 can not be accessed!
+ * @param dev - The device structure.
+ * @param gpio_number - AD7768-1s GPIO to be affected (Only GPIO0, GPIO1 and GPIO2)
+ *			Accepted values: AD77681_GPIO0
+ *					 AD77681_GPIO1
+ *					 AD77681_GPIO2
+ *					 AD77681_ALL_GPIOS
+ *
+ * @param output_type - Output type of the GPIO
+ *			Accepted values: AD77681_GPIO_STRONG_DRIVER
+ *					 AD77681_GPIO_OPEN_DRAIN
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_gpio_open_drain(struct ad77681_dev *dev,
+				enum ad77681_gpios gpio_number,
+				enum ad77681_gpio_output_type output_type)
+{
+	int32_t ret;
+
+	switch (gpio_number) {
+	case AD77681_GPIO0: /* Set ouptut type of GPIO0 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO0_OD_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO0_OD_EN(output_type));
+		break;
+	case AD77681_GPIO1: /* Set ouptut type of GPIO1 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO1_OD_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO1_OD_EN(output_type));
+		break;
+	case AD77681_GPIO2: /* Set ouptut type of GPIO2 */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_GPIO2_OD_EN_MSK,
+					     AD77681_GPIO_CNTRL_GPIO2_OD_EN(output_type));
+		break;
+	case AD77681_ALL_GPIOS: /* Set ouptut type of all GPIOs */
+		ret = ad77681_spi_write_mask(dev,
+					     AD77681_REG_GPIO_CONTROL,
+					     AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN_MSK,
+					     AD77681_GPIO_CNTRL_ALL_GPIOS_OD_EN(output_type));
+		break;
+	default:
+		return FAILURE;
+		break;
+	}
+
+	return ret;
+}
+
+/**
+ * Clear all error flags at once
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_clear_error_flags(struct ad77681_dev *dev)
+{
+	int32_t ret;
+
+	/* SPI ignore error CLEAR */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_SPI_DIAG_STATUS,
+				     AD77681_SPI_IGNORE_ERROR_MSK,
+				     AD77681_SPI_IGNORE_ERROR_CLR(ENABLE));
+	/* SPI read error CLEAR */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_STATUS,
+				      AD77681_SPI_READ_ERROR_MSK,
+				      AD77681_SPI_READ_ERROR_CLR(ENABLE));
+	/* SPI write error CLEAR */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_STATUS,
+				      AD77681_SPI_WRITE_ERROR_MSK,
+				      AD77681_SPI_WRITE_ERROR_CLR(ENABLE));
+	/* SPI CRC error CLEAR */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_STATUS,
+				      AD77681_SPI_CRC_ERROR_MSK,
+				      AD77681_SPI_CRC_ERROR_CLR(ENABLE));
+
+	return ret;
+}
+
+/**
+ * Enabling error flags. All error flags enabled by default
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_error_flags_enabe(struct ad77681_dev *dev)
+{
+	int32_t ret;
+
+	/* SPI ERRORS ENABLE */
+	/* SPI ignore error enable */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_SPI_DIAG_ENABLE,
+				     AD77681_SPI_DIAG_ERR_SPI_IGNORE_MSK,
+				     AD77681_SPI_DIAG_ERR_SPI_IGNORE(ENABLE));
+	/*  SPI Clock count error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_ENABLE,
+				      AD77681_SPI_DIAG_ERR_SPI_CLK_CNT_MSK,
+				      AD77681_SPI_DIAG_ERR_SPI_CLK_CNT(ENABLE));
+	/* SPI Read error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_ENABLE,
+				      AD77681_SPI_DIAG_ERR_SPI_RD_MSK,
+				      AD77681_SPI_DIAG_ERR_SPI_RD(ENABLE));
+	/* SPI Write error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_SPI_DIAG_ENABLE,
+				      AD77681_SPI_DIAG_ERR_SPI_WR_MSK,
+				      AD77681_SPI_DIAG_ERR_SPI_WR(ENABLE));
+
+	/* ADC DIAG ERRORS ENABLE */
+	/* DLDO PSM error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_ADC_DIAG_ENABLE,
+				      AD77681_ADC_DIAG_ERR_DLDO_PSM_MSK,
+				      AD77681_ADC_DIAG_ERR_DLDO_PSM(ENABLE));
+	/* ALDO PSM error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_ADC_DIAG_ENABLE,
+				      AD77681_ADC_DIAG_ERR_ALDO_PSM_MSK,
+				      AD77681_ADC_DIAG_ERR_ALDO_PSM(ENABLE));
+	/* Filter saturated error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_ADC_DIAG_ENABLE,
+				      AD77681_ADC_DIAG_ERR_FILT_SAT_MSK,
+				      AD77681_ADC_DIAG_ERR_FILT_SAT(ENABLE));
+	/* Filter not settled error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_ADC_DIAG_ENABLE,
+				      AD77681_ADC_DIAG_ERR_FILT_NOT_SET_MSK,
+				      AD77681_ADC_DIAG_ERR_FILT_NOT_SET(ENABLE));
+	/* External clock check error enable */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_ADC_DIAG_ENABLE,
+				      AD77681_ADC_DIAG_ERR_EXT_CLK_QUAL_MSK,
+				      AD77681_ADC_DIAG_ERR_EXT_CLK_QUAL(ENABLE));
+
+	/* DIG DIAG ENABLE */
+	/* Memory map CRC error enabled */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_DIG_DIAG_ENABLE,
+				      AD77681_DIG_DIAG_ERR_MEMMAP_CRC_MSK,
+				      AD77681_DIG_DIAG_ERR_MEMMAP_CRC(ENABLE));
+	/* RAM CRC error enabled */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_DIG_DIAG_ENABLE,
+				      AD77681_DIG_DIAG_ERR_RAM_CRC_MSK,
+				      AD77681_DIG_DIAG_ERR_RAM_CRC(ENABLE));
+	/* FUSE CRC error enabled */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_DIG_DIAG_ENABLE,
+				      AD77681_DIG_DIAG_ERR_FUSE_CRC_MSK,
+				      AD77681_DIG_DIAG_ERR_FUSE_CRC(ENABLE));
+	/* Enable MCLK Counter */
+	ret |= ad77681_spi_write_mask(dev,
+				      AD77681_REG_DIG_DIAG_ENABLE,
+				      AD77681_DIG_DIAG_FREQ_COUNT_EN_MSK,
+				      AD77681_DIG_DIAG_FREQ_COUNT_EN(ENABLE));
+
+	return ret;
+}
+
+/**
+ * Read from all ADC status registers
+ * @param dev - The device structure.
+ * @param status - Structure with all satuts bits
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_status(struct ad77681_dev *dev,
+		       struct ad77681_status_registers *status)
+{
+	int32_t ret;
+	uint8_t buf[3];
+
+	/* Master status register */
+	ret = ad77681_spi_reg_read(dev, AD77681_REG_MASTER_STATUS,buf);
+	status->master_error = buf[1] & AD77681_MASTER_ERROR_MSK;
+	status->adc_error = buf[1] & AD77681_MASTER_ADC_ERROR_MSK;
+	status->dig_error = buf[1] & AD77681_MASTER_DIG_ERROR_MSK;
+	status->adc_err_ext_clk_qual = buf[1] & AD77681_MASTER_DIG_ERR_EXT_CLK_MSK;
+	status->adc_filt_saturated = buf[1] & AD77681_MASTER_FILT_SAT_MSK;
+	status->adc_filt_not_settled = buf[1] & AD77681_MASTER_FILT_NOT_SET_MSK;
+	status->spi_error = buf[1] & AD77681_MASTER_SPI_ERROR_MSK;
+	status->por_flag = buf[1] & AD77681_MASTER_POR_FLAG_MSK;
+	/* SPI diag status register */
+	ret |= ad77681_spi_reg_read(dev, AD77681_REG_SPI_DIAG_STATUS, buf);
+	status->spi_ignore = buf[1] & AD77681_SPI_IGNORE_ERROR_MSK;
+	status->spi_clock_count = buf[1] & AD77681_SPI_CLK_CNT_ERROR_MSK;
+	status->spi_read_error = buf[1] & AD77681_SPI_READ_ERROR_MSK;
+	status->spi_write_error = buf[1] & AD77681_SPI_WRITE_ERROR_MSK;
+	status->spi_crc_error = buf[1] & AD77681_SPI_CRC_ERROR_MSK;
+	/* ADC diag status register */
+	ret |= ad77681_spi_reg_read(dev, AD77681_REG_ADC_DIAG_STATUS,buf);
+	status->dldo_psm_error = buf[1] & AD77681_ADC_DLDO_PSM_ERROR_MSK;
+	status->aldo_psm_error = buf[1] & AD77681_ADC_ALDO_PSM_ERROR_MSK;
+	status->ref_det_error = buf[1] & AD77681_ADC_REF_DET_ERROR_MSK;
+	status->filt_sat_error = buf[1] & AD77681_ADC_FILT_SAT_MSK;
+	status->filt_not_set_error = buf[1] & AD77681_ADC_FILT_NOT_SET_MSK;
+	status->ext_clk_qual_error = buf[1] & AD77681_ADC_DIG_ERR_EXT_CLK_MSK;
+	/* DIG diag status register */
+	ret |= ad77681_spi_reg_read(dev, AD77681_REG_DIG_DIAG_STATUS,buf);
+	status->memoy_map_crc_error = buf[1] & AD77681_DIG_MEMMAP_CRC_ERROR_MSK;
+	status->ram_crc_error = buf[1] & AD77681_DIG_RAM_CRC_ERROR_MSK;
+	status->fuse_crc_error = buf[1] & AD77681_DIG_FUS_CRC_ERROR_MSK;
 
 	return ret;
 }

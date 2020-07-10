@@ -611,4 +611,64 @@ int32_t ad77681_set_conv_mode(struct ad77681_dev *dev,
 int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 			    enum ad77681_conv_len conv_len);
 int32_t ad77681_soft_reset(struct ad77681_dev *dev);
+int32_t ad77681_initiate_sync(struct ad77681_dev *dev);
+int32_t ad77681_gpio_read(struct ad77681_dev *dev,
+			  uint8_t *value,
+			  enum ad77681_gpios gpio_number);
+int32_t ad77681_apply_offset(struct ad77681_dev *dev,
+			     uint32_t value);
+int32_t ad77681_apply_gain(struct ad77681_dev *dev,
+			   uint32_t value);
+int32_t ad77681_set_crc_sel(struct ad77681_dev *dev,
+			    enum ad77681_crc_sel crc_sel);
+int32_t ad77681_gpio_open_drain(struct ad77681_dev *dev,
+				enum ad77681_gpios gpio_number,
+				enum ad77681_gpio_output_type output_type);
+int32_t ad77681_set_continuos_read(struct ad77681_dev *dev,
+				   enum ad77681_continuous_read continuous_enable);
+int32_t ad77681_clear_error_flags(struct ad77681_dev *dev);
+int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
+				int32_t *raw_code,
+				double *voltage);
+int32_t ad77681_spi_read_interrupt_adc_data(struct ad77681_dev *dev,
+		struct adc_data *measured_data);
+int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
+				    uint16_t *data_buffer);
+int32_t ad77681_set_AINn_buffer(struct ad77681_dev *dev,
+				enum ad77681_AINn_precharge AINn);
+int32_t ad77681_set_AINp_buffer(struct ad77681_dev *dev,
+				enum ad77681_AINp_precharge AINp);
+int32_t ad77681_set_REFn_buffer(struct ad77681_dev *dev,
+				enum ad77681_REFn_buffer REFn);
+int32_t ad77681_set_REFp_buffer(struct ad77681_dev *dev,
+				enum ad77681_REFp_buffer REFp);
+int32_t ad77681_set_filter_type(struct ad77681_dev *dev,
+				enum ad77681_sinc5_fir_decimate decimate,
+				enum ad77681_filter_type filter,
+				uint16_t sinc3_osr);
+int32_t ad77681_set_50HZ_rejection(struct ad77681_dev *dev,
+				   uint8_t enable);
+int32_t ad77681_power_down(struct ad77681_dev *dev,
+			   enum ad77681_sleep_wake sleep_wake);
+int32_t ad77681_set_status_bit(struct ad77681_dev *dev,
+			       bool status_bit);
+int32_t ad77681_set_VCM_output(struct ad77681_dev *dev,
+			       enum ad77681_VCM_out VCM_out);
+int32_t ad77681_gpio_write(struct ad77681_dev *dev,
+			   uint8_t value,
+			   enum ad77681_gpios gpio_number);
+int32_t ad77681_gpio_inout(struct ad77681_dev *dev,
+			   uint8_t direction,
+			   enum ad77681_gpios gpio_number);
+int32_t ad77681_global_gpio(struct ad77681_dev *devices,
+			    enum ad77681_gobal_gpio_enable gpio_enable);
+int32_t ad77681_scratchpad(struct ad77681_dev *dev,
+			   uint8_t *sequence);
+int32_t ad77681_error_flags_enabe(struct ad77681_dev *dev);
+int32_t ad77681_update_sample_rate(struct ad77681_dev *dev);
+int32_t ad77681_SINC3_ODR(struct ad77681_dev *dev,
+			  uint16_t *sinc3_dec_reg,
+			  float sinc3_odr);
+int32_t ad77681_status(struct ad77681_dev *dev,
+		       struct ad77681_status_registers *status);
 #endif /* SRC_AD77681_H_ */
