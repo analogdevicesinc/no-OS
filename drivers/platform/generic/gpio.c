@@ -50,17 +50,17 @@
 /**
  * @brief Obtain the GPIO decriptor.
  * @param desc - The GPIO descriptor.
- * @param gpio_number - The number of the GPIO.
+ * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_get(struct gpio_desc **desc,
-		 uint8_t gpio_number)
+		 const struct gpio_init_param *param)
 {
 	if (desc) {
 		// Unused variable - fix compiler warning
 	}
 
-	if (gpio_number) {
+	if (param) {
 		// Unused variable - fix compiler warning
 	}
 
