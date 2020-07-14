@@ -44,7 +44,7 @@
 #include "app_config.h"
 #include "parameters.h"
 #include "error.h"
-#include "iio_app.h"
+#include "iio.h"
 #include "iio_demo.h"
 #include "irq.h"
 #include "irq_extra.h"
@@ -73,30 +73,6 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #endif
 
-static struct uart_desc *uart_desc;
-
-/**
- * iio_uart_write() - Write data to UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_write(const char *buf, size_t len)
-{
-	return uart_write(uart_desc, (const uint8_t *)buf, len);
-}
-
-/**
- * iio_uart_read() - Read data from UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_read(char *buf, size_t len)
-{
-	return uart_read(uart_desc, (uint8_t *)buf, len);
-}
-
 int32_t platform_init()
 {
 #ifdef ADUCM_PLATFORM
@@ -122,17 +98,14 @@ int main(void)
 	char demo_device_output[] = "demo_device_output";
 	char demo_device_input[] = "demo_device_input";
 
-	/* iio application configurations. */
-	struct iio_app_init_param iio_app_init_par;
-
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_in_init_par;
 
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_out_init_par;
 
-	/* iio application instance descriptor. */
-	struct iio_app_desc *iio_app_desc;
+	/* iio descriptor. */
+	struct iio_desc  *iio_desc;
 
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_in_desc;
@@ -140,8 +113,8 @@ int main(void)
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_out_desc;
 
-	/* UART server read/write callbacks. */
-	struct iio_server_ops uart_iio_server_ops;
+	/* iio init param */
+	struct iio_init_param iio_init_param;
 
 	/* Initialization for UART. */
 	struct uart_init_param uart_init_par;
@@ -214,27 +187,16 @@ int main(void)
 		.extra = &platform_uart_init_par
 	};
 
-	status = uart_init(&uart_desc, &uart_init_par);
-	if(status < 0)
-		return FAILURE;
-
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
 
-	uart_iio_server_ops = (struct iio_server_ops) {
-		.read = iio_uart_read,
-		.write = iio_uart_write,
-	};
+	iio_init_param.phy_type = USE_UART;
+	iio_init_param.phy_init_param = &uart_init_par;
 
-	iio_app_init_par = (struct iio_app_init_param) {
-		.iio_server_ops = &uart_iio_server_ops,
-	};
-
-	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
 		return status;
-
 
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
 		.name = demo_device_output,
@@ -258,5 +220,9 @@ int main(void)
 	if (status < 0)
 		return status;
 
-	return iio_app(iio_app_desc);
+	do {
+		status = iio_step(iio_desc);
+	} while (!IS_ERR_VALUE(status));
+
+	return status;
 }

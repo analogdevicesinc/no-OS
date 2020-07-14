@@ -49,6 +49,7 @@
 #include "util.h"
 #include "error.h"
 #include "errno.h"
+#include "uart.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -81,18 +82,40 @@ struct element_info {
 };
 
 struct iio_desc {
-	struct tinyiiod			*iiod;
-	struct tinyiiod_ops		*iiod_ops;
+	struct tinyiiod		*iiod;
+	struct tinyiiod_ops	*iiod_ops;
+	enum pysical_link_type	phy_type;
+	void			*phy_desc;
 };
 
 /**
  * iio_read_attr(), iio_write_attr() functions, they need to know about iio_interfaces
  */
-static struct iio_interfaces *iio_interfaces = NULL;
+static struct iio_interfaces	*iio_interfaces = NULL;
+static struct iio_desc		*g_desc;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+static ssize_t iio_phy_read(char *buf, size_t len)
+{
+	if (g_desc->phy_type == USE_UART)
+		return (ssize_t)uart_read((struct uart_desc *)g_desc->phy_desc,
+					  (uint8_t *)buf, (size_t)len);
+
+	return -EINVAL;
+}
+
+/** Write to a peripheral device (UART, USB, NETWORK) */
+static ssize_t iio_phy_write(const char *buf, size_t len)
+{
+	if (g_desc->phy_type == USE_UART)
+		return (ssize_t)uart_write((struct uart_desc *)g_desc->phy_desc,
+					   (uint8_t *)buf, (size_t)len);
+
+	return -EINVAL;
+}
 
 /**
  * @brief Get channel number.
@@ -806,12 +829,17 @@ ssize_t iio_unregister(struct iio_desc *desc,
  * 			UART).
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_init(struct iio_desc **desc, struct iio_server_ops *iio_server_ops)
+ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 {
-	struct iio_desc *ldesc;
-	struct tinyiiod_ops *ops = (struct tinyiiod_ops *)calloc(1,
-				   sizeof(struct tinyiiod_ops));
+	int32_t			ret;
+	struct iio_desc		*ldesc;
+	struct tinyiiod_ops	*ops;
 
+	if (!init_param)
+		return -EINVAL;
+
+	ops = (struct tinyiiod_ops *)calloc(1,
+					    sizeof(struct tinyiiod_ops));
 	if (!ops)
 		return FAILURE;
 
@@ -834,20 +862,34 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_server_ops *iio_server_ops)
 	ops->close = iio_close_dev;
 	ops->get_mask = iio_get_mask;
 
-	ops->read = iio_server_ops->read;
-	ops->write = iio_server_ops->write;
+	ops->read = iio_phy_read;
+	ops->write = iio_phy_write;
+
+	ldesc->phy_type = init_param->phy_type;
+	if (init_param->phy_type == USE_UART) {
+		ret = uart_init((struct uart_desc **)&ldesc->phy_desc,
+				init_param->phy_init_param);
+		if (IS_ERR_VALUE(ret))
+			goto free_desc;
+	} else {
+		goto free_desc;
+	}
 	ops->get_xml = iio_get_xml;
 
 	ldesc->iiod = tinyiiod_create(ops);
 	if (!(ldesc->iiod))
-		goto free_desc;
+		goto free_pylink;
 
 	*desc = ldesc;
+	g_desc = ldesc;
 
 	return SUCCESS;
 
+free_pylink:
+	if (ldesc->phy_type == USE_UART)
+		uart_remove(ldesc->phy_desc);
 free_desc:
-	free(desc);
+	free(ldesc);
 free_ops:
 	free(ops);
 
