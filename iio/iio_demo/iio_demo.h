@@ -71,6 +71,7 @@ struct iio_demo_device {
  * @brief Desciptor.
  */
 struct iio_demo_desc {
+	struct iio_desc *iio_desc;
 	/** Structure containing physical device instance and device descriptor */
 	struct iio_interface *iio_interface;
 };
@@ -80,6 +81,7 @@ struct iio_demo_desc {
  * @brief iio demo configuration.
  */
 struct iio_demo_init_param {
+	struct iio_desc *iio_desc;
 	/** Device name */
 	const char *name;
 	/** Number of channels */
