@@ -61,22 +61,12 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 {
 	int32_t ret;
 	uint8_t buf[2];
-	uint32_t spi_clk_hz_tmp = (uint32_t) -1;
 
 	buf[0] = AD400X_READ_COMMAND;
 	buf[1] = 0xFF;
 
-	// register access runs at a lower clock rate (~2MHz)
-	if (dev->spi_desc->spi_clk_hz > dev->spi_desc->spi_clk_hz_reg_access) {
-		spi_clk_hz_tmp = dev->spi_desc->spi_clk_hz;
-		dev->spi_desc->spi_clk_hz = dev->spi_desc->spi_clk_hz_reg_access;
-	}
-
 	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = buf[1];
-
-	if (spi_clk_hz_tmp != (uint32_t) -1)
-		dev->spi_desc->spi_clk_hz = spi_clk_hz_tmp;
 
 	return ret;
 }
@@ -92,18 +82,11 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 {
 	int32_t ret;
 	uint8_t buf[2];
-	uint32_t spi_clk_hz_tmp;
-
-	// register access runs at a lower clock rate (~2MHz)
-	spi_clk_hz_tmp = dev->spi_desc->spi_clk_hz;
-	dev->spi_desc->spi_clk_hz = 2000000;
 
 	buf[0] = AD400X_WRITE_COMMAND;
 	buf[1] = reg_data | AD400X_RESERVED_MSK;
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-
-	dev->spi_desc->spi_clk_hz = spi_clk_hz_tmp;
 
 	return ret;
 }
@@ -120,8 +103,7 @@ int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
 	uint32_t buf = 0;
 	int32_t ret;
 
-	spi_set_transfer_length(dev->spi_desc, dev->spi_desc->max_data_width);
-	ret = spi_write_and_read(dev->spi_desc, &buf, 4);
+	ret = spi_write_and_read(dev->spi_desc, (uint8_t *)&buf, 4);
 
 	*adc_data = buf & 0xFFFFF;
 
@@ -146,19 +128,14 @@ int32_t ad400x_init(struct ad400x_dev **device,
 	if (!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
 	if (ret < 0)
 		goto error;
 
 	dev->dev_id = init_param.dev_id;
-	dev->spi_desc->cs_delay = init_param.spi_init.cs_delay;
 
-	dev->spi_desc->max_data_width = init_param.num_bits;
-
-	spi_set_transfer_length(dev->spi_desc, 16);
 	ad400x_spi_reg_read(dev, &data);
 
-	spi_set_transfer_length(dev->spi_desc, dev->spi_desc->max_data_width);
 	data = AD400X_TURBO_MODE(init_param.turbo_mode) |
 	       AD400X_HIGH_Z_MODE(init_param.high_z_mode) |
 	       AD400X_SPAN_COMPRESSION(init_param.span_compression) |
