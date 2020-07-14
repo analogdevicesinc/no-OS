@@ -105,15 +105,4 @@ struct iio_device {
 	struct iio_attribute **attributes;
 };
 
-/**
- * @struct iio_server_ops
- * @brief iio interface for server read/write operations
- */
-struct iio_server_ops {
-	/** Read from from a peripheral device (UART, USB, NETWORK) */
-	ssize_t (*read)(char *buf, size_t len);
-	/** Write to a peripheral device (UART, USB, NETWORK) */
-	ssize_t (*write)(const char *buf, size_t len);
-};
-
 #endif /* IIO_TYPES_H_ */

@@ -44,7 +44,6 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include "tinyiiod.h"
 #include "iio_types.h"
 
 /******************************************************************************/
@@ -81,7 +80,21 @@ struct iio_interface {
 			      size_t bytes_count, uint32_t ch_mask);
 };
 
+enum pysical_link_type {
+	USE_UART,
+	USE_NETWORK
+};
+
 struct iio_desc;
+
+struct iio_init_param {
+	enum pysical_link_type	phy_type;
+	/*
+	 * struct uart_init_parma *init_param or
+	 * when implemented: struct tcp_socket_init_param *tcp_socket_init_param
+	 */
+	void			*phy_init_param;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -89,7 +102,7 @@ struct iio_desc;
 
 /* Set communication ops and read/write ops that will be called from
  * "libtinyiiod". */
-ssize_t iio_init(struct iio_desc **desc, struct iio_server_ops *comm_ops);
+ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param);
 /* Free the resources allocated by iio_init(). */
 ssize_t iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
