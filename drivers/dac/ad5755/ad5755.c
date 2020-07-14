@@ -523,7 +523,6 @@ void ad5755_set_channel_range(struct ad5755_dev *dev,
 				  AD5755_DREG_WR_DAC,
 				  channel,
 				  output_code);
-	mdelay(200);
 	/* Enable the output of the channel. */
 	new_dac_ctrl_reg |= AD5755_DAC_OUTEN;
 	ad5755_set_control_registers(dev,
