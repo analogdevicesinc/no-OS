@@ -107,14 +107,16 @@ struct iio_channel {
  * @brief Structure holding channels and attributes of a device.
  */
 struct iio_device {
-	/** Device name */
-	const char *name;
 	/** Device number of channels */
 	uint16_t num_ch;
 	/** List of channels */
 	struct iio_channel **channels;
-	/** List of attributes */
+	/** List of device attributes */
 	struct iio_attribute **attributes;
+	/** List of debug attributes */
+	struct iio_attribute **debug_attributes;
+	/** List of buffer attributes */
+	struct iio_attribute **buffer_attributes;
 };
 
 #endif /* IIO_TYPES_H_ */

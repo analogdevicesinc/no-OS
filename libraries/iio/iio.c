@@ -55,6 +55,30 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+static char header[] =
+	"<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+	"<!DOCTYPE context ["
+	"<!ELEMENT context (device | context-attribute)*>"
+	"<!ELEMENT context-attribute EMPTY>"
+	"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
+	"<!ELEMENT channel (scan-element?, attribute*)>"
+	"<!ELEMENT attribute EMPTY>"
+	"<!ELEMENT scan-element EMPTY>"
+	"<!ELEMENT debug-attribute EMPTY>"
+	"<!ELEMENT buffer-attribute EMPTY>"
+	"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
+	"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
+	"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
+	"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
+	"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
+	"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
+	"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
+	"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
+	"]>"
+	"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
+	"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
+static char header_end[] = "</context>";
+
 /**
  * @struct element_info
  * @brief Structure informations about a specific parameter.
@@ -76,6 +100,10 @@ struct iio_desc {
 	enum pysical_link_type	phy_type;
 	void			*phy_desc;
 	struct list_desc	*interfaces_list;
+	char			*xml_desc;
+	uint32_t		xml_size;
+	uint32_t		xml_size_to_last_dev;
+	uint32_t		dev_count;
 };
 
 static struct iio_desc			*g_desc;
@@ -650,86 +678,12 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
  */
 static ssize_t iio_get_xml(char **outxml)
 {
-	char *xml, *tmp_xml, *tmp_xml2;
-	struct	iterator		*list_it = NULL;
-	struct	iio_interface	*iio_interface;
-	uint32_t length;
-	ssize_t ret;
-
-	char header[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-			"<!DOCTYPE context ["
-			"<!ELEMENT context (device | context-attribute)*>"
-			"<!ELEMENT context-attribute EMPTY>"
-			"<!ELEMENT device (channel | attribute | debug-attribute | buffer-attribute)*>"
-			"<!ELEMENT channel (scan-element?, attribute*)>"
-			"<!ELEMENT attribute EMPTY>"
-			"<!ELEMENT scan-element EMPTY>"
-			"<!ELEMENT debug-attribute EMPTY>"
-			"<!ELEMENT buffer-attribute EMPTY>"
-			"<!ATTLIST context name CDATA #REQUIRED description CDATA #IMPLIED>"
-			"<!ATTLIST context-attribute name CDATA #REQUIRED value CDATA #REQUIRED>"
-			"<!ATTLIST device id CDATA #REQUIRED name CDATA #IMPLIED>"
-			"<!ATTLIST channel id CDATA #REQUIRED type (input|output) #REQUIRED name CDATA #IMPLIED>"
-			"<!ATTLIST scan-element index CDATA #REQUIRED format CDATA #REQUIRED scale CDATA #IMPLIED>"
-			"<!ATTLIST attribute name CDATA #REQUIRED filename CDATA #IMPLIED>"
-			"<!ATTLIST debug-attribute name CDATA #REQUIRED>"
-			"<!ATTLIST buffer-attribute name CDATA #REQUIRED>"
-			"]>"
-			"<context name=\"xml\" description=\"no-OS analog 1.1.0-g0000000 #1 Tue Nov 26 09:52:32 IST 2019 armv7l\" >"
-			"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
-	char header_end[] = "</context>";
-
 	if (!outxml)
 		return FAILURE;
 
-	xml = (char *)calloc(1, strlen(header) + 1);
-	if (!xml)
-		return FAILURE;
+	*outxml = g_desc->xml_desc;
 
-	strcpy(xml, header);
-	ret = iterator_init(&list_it, g_desc->interfaces_list, true);
-	if (IS_ERR_VALUE(ret))
-		goto error;
-
-	do {
-		ret = iterator_read(list_it, (void **)&iio_interface);
-		if (IS_ERR_VALUE(ret))
-			goto error;
-
-		ret = iio_interface->get_xml(&tmp_xml, iio_interface->iio);
-		if (ret < 0)
-			goto error;
-
-		length = strlen(xml);
-		tmp_xml2 = (char *)realloc(xml, strlen(xml) + strlen(tmp_xml) + 1);
-		if (!tmp_xml2)
-			goto error;
-
-		xml = tmp_xml2;
-		strcpy((xml + length), tmp_xml);
-
-		ret = iterator_move(list_it, 1);
-	} while (!IS_ERR_VALUE(ret));
-
-	iterator_remove(list_it);
-
-	length = strlen(xml);
-	tmp_xml = (char *)realloc(xml, strlen(xml) + strlen(header_end) + 1);
-	if (!tmp_xml)
-		goto error;
-
-	xml = tmp_xml;
-	strcpy((xml + length), header_end);
-
-	*outxml = xml;
-
-	return SUCCESS;
-error:
-	if (list_it)
-		iterator_remove(list_it);
-	free(xml);
-
-	return FAILURE;
+	return g_desc->xml_size;
 }
 
 /**
@@ -742,6 +696,103 @@ ssize_t iio_step(struct iio_desc *desc)
 	return tinyiiod_read_command(desc->iiod);
 }
 
+/* Get string for channel id from channel type */
+static char *get_channel_id(enum iio_chan_type type)
+{
+	switch (type) {
+	case IIO_VOLTAGE:
+		return "voltage";
+	case IIO_CURRENT:
+		return "current";
+	case IIO_ALTVOLTAGE:
+		return "altvoltage";
+	}
+
+	return "";
+}
+
+/*
+ * Generate an xml describing a device and write it to buff.
+ * Will return the size of the xml.
+ * If buff_size is 0, no data will be written to buff, but size will be returned
+ */
+static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
+					int32_t id, char *buff,
+					uint32_t buff_size)
+{
+	struct iio_channel	*ch;
+	struct iio_attribute	*attr;
+	char			ch_id[50];
+	int32_t			i;
+	int32_t			j;
+	int32_t			k;
+	int32_t			n;
+
+	if (buff_size == -1)
+		n = 0;
+	else
+		n = buff_size;
+
+	if (buff == NULL)
+		/* Set dummy value for buff. It is used only for counting */
+		buff = ch_id;
+
+	i = 0;
+	i += snprintf(buff, max(n - i, 0),
+		      "<device id=\"device%d\" name=\"%s\">", id, name);
+
+	/* Write channels */
+	if (device->channels)
+		for (j = 0; device->channels[j]; j++) {
+			ch = device->channels[j];
+			sprintf(ch_id, "%s%d", get_channel_id(ch->ch_type), j);
+			i += snprintf(buff + i, max(n - i, 0),
+				      "<channel id=\"%s\" name=\"%s\""
+				      " type=\"%s\" >",
+				      ch_id, ch->name,
+				      ch->ch_out ? "output" : "input");
+
+			/* Write channel attributes */
+			if (ch->attributes)
+				for (k = 0; ch->attributes[k]; k++) {
+					attr = ch->attributes[k];
+					i += snprintf(buff + i, max(n - i, 0),
+						      "<attribute name=\"%s\""
+						      " filename=\"%s_%s_%s_%s\" />",
+						      attr->name,
+						      ch->ch_out ? "out" : "in",
+						      ch_id, ch->name,
+						      attr->name);
+				}
+
+			i += snprintf(buff + i, max(n - i, 0), "</channel>");
+		}
+
+	/* Write device attributes */
+	if (device->attributes)
+		for (j = 0; device->attributes[j]; j++)
+			i += snprintf(buff + i, max(n - i, 0),
+				      "<attribute name=\"%s\" />",
+				      device->attributes[j]->name);
+
+	/* Write debug attributes */
+	if (device->debug_attributes)
+		for (j = 0; device->debug_attributes[j]; j++)
+			i += snprintf(buff + i, max(n - i, 0),
+				      "<debug-attribute name=\"%s\" />",
+				      device->debug_attributes[j]->name);
+
+	/* Write buffer attributes */
+	if (device->buffer_attributes)
+		for (j = 0; device->buffer_attributes[j]; j++)
+			i += snprintf(buff + i, max(n - i, 0),
+				      "<buffer-attribute name=\"%s\" />",
+				      device->buffer_attributes[j]->name);
+
+	i += snprintf(buff + i, max(n - i, 0), "</device>");
+
+	return i;
+}
 
 /**
  * @brief Register interface.
@@ -751,7 +802,39 @@ ssize_t iio_step(struct iio_desc *desc)
  */
 ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 {
-	return desc->interfaces_list->push(desc->interfaces_list, iio_interface);
+	int32_t ret;
+	int32_t	n;
+	int32_t	new_size;
+	char	*aux;
+
+	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	/* Get number of bytes needed for the xml of the new device */
+	n = iio_generate_device_xml(iio_interface->iio, iio_interface->name,
+				    desc->dev_count, NULL, -1);
+
+	new_size = desc->xml_size + n;
+	aux = realloc(desc->xml_desc, new_size);
+	if (!aux)
+		return -ENOMEM;
+
+	desc->xml_desc = aux;
+	/* Print the new device xml at the end of the xml */
+	iio_generate_device_xml(iio_interface->iio, iio_interface->name,
+				desc->dev_count,
+				desc->xml_desc + desc->xml_size_to_last_dev,
+				new_size - desc->xml_size_to_last_dev);
+
+	desc->xml_size_to_last_dev += n;
+	desc->xml_size += n;
+	/* Copy end header at the end */
+	strcat(desc->xml_desc, header_end);
+
+	desc->dev_count++;
+
+	return SUCCESS;
 }
 
 /**
@@ -764,10 +847,32 @@ ssize_t iio_unregister(struct iio_desc *desc,
 		       struct iio_interface *iio_interface)
 {
 	struct iio_interface	*to_remove_interface;
+	int32_t			ret;
+	int32_t			n;
+	char			*aux;
 
 	/* Get if the item is found, get will remove it from the list */
-	return list_get_find(desc->interfaces_list, (void **)&to_remove_interface,
-			     iio_interface);
+	ret = list_get_find(desc->interfaces_list,
+			    (void **)&to_remove_interface, iio_interface);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	/* Get number of bytes needed for the xml of the device */
+	n = iio_generate_device_xml(to_remove_interface->iio,
+				    to_remove_interface->name,
+				    desc->dev_count, NULL, -1);
+
+	/* Overwritte the deleted device */
+	aux = desc->xml_desc + desc->xml_size_to_last_dev - n;
+	strcpy(aux, aux + n);
+
+	/* Decrease the xml size */
+	desc->xml_size -= n;
+	desc->xml_size_to_last_dev -= n;
+
+	desc->dev_count--;
+
+	return SUCCESS;
 }
 
 static int32_t iio_cmp_interfaces(struct iio_interface *a,
@@ -820,12 +925,21 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	ops->read = iio_phy_read;
 	ops->write = iio_phy_write;
 
+	ldesc->xml_size = sizeof(header) + sizeof(header_end);
+	ldesc->xml_desc = (char *)malloc(ldesc->xml_size);
+	if (!ldesc->xml_desc)
+		goto free_desc;
+
+	strcpy(ldesc->xml_desc, header);
+	strcat(ldesc->xml_desc, header_end);
+	ldesc->xml_size_to_last_dev = sizeof(header) - 1;
+
 	ldesc->phy_type = init_param->phy_type;
 	if (init_param->phy_type == USE_UART) {
 		ret = uart_init((struct uart_desc **)&ldesc->phy_desc,
 				init_param->phy_init_param);
 		if (IS_ERR_VALUE(ret))
-			goto free_desc;
+			goto free_xml;
 	} else {
 		goto free_desc;
 	}
@@ -850,6 +964,8 @@ free_list:
 free_pylink:
 	if (ldesc->phy_type == USE_UART)
 		uart_remove(ldesc->phy_desc);
+free_xml:
+	free(ldesc->xml_desc);
 free_desc:
 	free(ldesc);
 free_ops:

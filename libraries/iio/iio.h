@@ -64,8 +64,6 @@ struct iio_interface {
 	void *dev_instance;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device *iio;
-	/** Generate device xml */
-	ssize_t (*get_xml)(char **xml, struct iio_device *iio);
 	/** Transfer data from device into RAM */
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
 				       uint32_t ch_mask);
