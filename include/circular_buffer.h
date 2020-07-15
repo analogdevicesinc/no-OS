@@ -62,16 +62,12 @@ struct circular_buffer;
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-int32_t cb_init(struct circular_buffer **desc,
-		uint32_t nb_elements, uint32_t element_size);
-
+int32_t cb_init(struct circular_buffer **desc, uint32_t size);
 int32_t cb_remove(struct circular_buffer *desc);
-
-int32_t cb_size(struct circular_buffer *desc, uint32_t *nb_elements);
+int32_t cb_size(struct circular_buffer *desc, uint32_t *size);
 
 int32_t cb_write(struct circular_buffer *desc, const void *data,
 		 uint32_t nb_elements);
-
 int32_t cb_read(struct circular_buffer *desc, void *data, uint32_t nb_elements);
 
 #endif
