@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   circular_buffer.h
+ *   @file   circular_buffer.c
  *   @brief  Circular buffer implementation
  *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
@@ -54,22 +54,33 @@
 /******************************************************************************/
 
 /**
+ * @struct cb_ptr
+ * @brief Circular buffer pointer
+ */
+struct cb_ptr {
+	/** Index of data in the buffer */
+	uint32_t	idx;
+	/** Counts the number of times idx exceeds the liniar buffer */
+	uint32_t	spin_count;
+	/** Set if async transaction is active */
+	bool		async_started;
+	/** Number of bytes to update after an async transaction is finished */
+	uint32_t	async_size;
+};
+
+/**
  * @struct circular_buffer
  * @brief Circular buffer descriptor
  */
 struct circular_buffer {
 	/** Size of the buffer in bytes */
 	uint32_t	size;
-	/** Number of user elements in the buffer */
-	uint32_t	nb_elem;
-	/** Size of an user element */
-	uint32_t	elem_size;
-	/** Address to the buffer */
+	/** Address of the buffer */
 	int8_t		*buff;
-	/** Pointer to reading location */
-	int8_t		*read_ptr;
-	/** Pointer to writing location */
-	int8_t		*write_ptr;
+	/** Write pointer */
+	struct cb_ptr	write;
+	/** Read pointer */
+	struct cb_ptr	read;
 };
 
 /******************************************************************************/
@@ -78,43 +89,38 @@ struct circular_buffer {
 
 /**
  * @brief Create circular buffer structure
+ *
+ * @note Circular buffer implementation is thread safe for one write
+ * and one reader.
+ * If multiple writer or multiple readers access the circular buffer then
+ * function that updates the structure should be called inside a critical
+ * critical section.
+ *
  * @param desc - Where to store the circular buffer reference
- * @param nb_elements - Number of elements for the buffer
- * @param element_size - Size of an element in the buffer
+ * @param buff_size - Buffer size
  * @return
  *  - \ref SUCCESS : On success
  *  - \ref FAILURE : Otherwise
  */
-int32_t cb_init(struct circular_buffer **desc, uint32_t nb_elements,
-		uint32_t element_size)
+int32_t cb_init(struct circular_buffer **desc, uint32_t buff_size)
 {
 	struct circular_buffer	*ldesc;
-	uint32_t		size;
 
-	if (!desc || !element_size || !nb_elements)
-		return FAILURE;
-
-	size = nb_elements * element_size;
-	if (size < nb_elements || size < element_size)
-		return FAILURE; //Integer overflow
+	if (!desc || !buff_size)
+		return -EINVAL;
 
 	ldesc = (struct circular_buffer*)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
-
-	ldesc->buff = calloc(nb_elements, element_size);
-	if (!ldesc->buff) {
-		free(ldesc);
-		return FAILURE;
-	}
-
-	ldesc->size = size;
-	ldesc->elem_size = element_size;
-	ldesc->nb_elem = 0;
-	ldesc->read_ptr = ldesc->buff;
-	ldesc->write_ptr = ldesc->buff;
+		return -ENOMEM;
 
 	*desc = ldesc;
+
+	ldesc->size = buff_size;
+	ldesc->buff = calloc(1, buff_size);
+	if (!ldesc->buff) {
+		free(ldesc);
+		return -ENOMEM;
+	}
 
 	return SUCCESS;
 }
@@ -141,105 +147,195 @@ int32_t cb_remove(struct circular_buffer *desc)
 /**
  * @brief Get the number of elements in the buffer
  * @param desc - Circular buffer reference
- * @param nb_elements - Where to store the number of elements
+ * @param size - Where to store size of data available to read
  * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : Otherwise
+ *  - \ref SUCCESS   - No errors
+ *  - -EINVAL   - Wrong parameters used
+ *  - -EOVERRUN - A buffer overrun occurred
  */
-int32_t cb_size(struct circular_buffer *desc, uint32_t *nb_elements)
+int32_t cb_size(struct circular_buffer *desc, uint32_t *size)
 {
-	if (!desc)
-		return FAILURE;
+	uint32_t nb_spins;
 
-	*nb_elements =  desc->nb_elem;
+	if (!desc || !size)
+		return -EINVAL;
+
+	if (desc->write.spin_count > desc->read.spin_count)
+		nb_spins = desc->write.spin_count - desc->read.spin_count;
+	else
+		/* Integer overflow on desc->write.spin_count */
+		nb_spins = UINT32_MAX - desc->read.spin_count +
+			   desc->write.spin_count + 1;
+
+	if (nb_spins > 0)
+		*size = desc->size + desc->write.idx - desc->read.idx;
+	else
+		*size = desc->write.idx - desc->read.idx;
+
+	if (*size > desc->size) {
+		*size = desc->size;
+		return -EOVERRUN;
+	}
 
 	return SUCCESS;
 }
 
-/**
- * @brief Write data to the buffer
- * @param desc - Circular buffer reference
- * @param data - Buffer from where data is copied to the circular buffer
- * @param nb_elements - Number of elements to be copied
- * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : If overflow, if nb_elements == 0 or if desc is NULL
+/*
+ * Functionality described at cb_prepare_async_write/read having the is_read
+ * parameter to specifiy if it is a read or write operation
  */
-int32_t cb_write(struct circular_buffer *desc, const void *data,
-		 uint32_t nb_elements)
+static int32_t cb_prepare_async_operation(struct circular_buffer *desc,
+		uint32_t requested_size,
+		void **buff,
+		uint32_t *raw_size_available,
+		bool is_read)
 {
-	uint32_t	to_write;
-	uint32_t	written;
-	uint32_t	writting;
-	int32_t		ret;
+	struct cb_ptr	*ptr;
+	uint32_t	available_size;
+	uint32_t	ret;
 
-	if (!desc || !nb_elements)
-		return FAILURE;
+	if (!desc || !buff || !raw_size_available)
+		return -EINVAL;
 
 	ret = SUCCESS;
+	/* Select if read or write index will be updated */
+	ptr = is_read ? &desc->read : &desc->write;
 
-	to_write = nb_elements * desc->elem_size;
-	/* Check for overflow */
-	if (to_write + (desc->nb_elem * desc->elem_size) > desc->size) {
-		/* Set the buffer as full */
-		desc->nb_elem = desc->size / desc->elem_size;
-		ret = FAILURE;
-	} else {
-		desc->nb_elem += nb_elements;
+	/* Only one transaction type possible at a single time */
+	if (ptr->async_started)
+		return -EBUSY;
+
+	if (is_read) {
+		ret = cb_size(desc, &available_size);
+		if (ret == -EOVERRUN) {
+			/* Update read index */
+			desc->read.spin_count = desc->write.spin_count - 1;
+			desc->read.idx = desc->write.idx;
+		}
+
+		/* We can only read available data */
+		requested_size = min(requested_size, available_size);
+		if (!requested_size)
+			return -EAGAIN;
 	}
 
-	written = 0;
-	while (to_write) {
-		/* Write to maximum the end of the buffer */
-		writting = min(to_write,
-			       /* Size until the end of the buffer */
-			       desc->size - (desc->write_ptr - desc->buff));
-		memcpy(desc->write_ptr, (uint8_t *)data + written, writting);
-		written += writting;
-		desc->write_ptr += writting;
-		if (desc->write_ptr - desc->buff == desc->size)
-			desc->write_ptr = desc->buff;
-		to_write -= writting;
-	}
+	/* Size to end of buffer */
+	ptr->async_size = min(requested_size, desc->size - ptr->idx);
+
+	*raw_size_available = ptr->async_size;
+
+	/* Convert index to address in the buffer */
+	*buff = (void *)(desc->buff + ptr->idx);
+
+	ptr->async_started = true;
 
 	return ret;
 }
 
-/**
- * @brief Read data from the buffer
- * @param desc - Circular buffer reference
- * @param data - Buffer where to data is copied from the circular buffer
- * @param nb_elements - Number of elements to be copied
- * @return
- *  - \ref SUCCESS : On success
- *  - \ref FAILURE : If not enaught data available in the buffer
+/*
+ * Functionality described at cb_end_async_write/read having the is_read
+ * parameter to specifiy if it is a read or write operation
  */
-int32_t cb_read(struct circular_buffer *desc, void *data,
-		uint32_t nb_elements)
+static int32_t cb_end_async_operation(struct circular_buffer *desc,
+				      bool is_read)
 {
-	uint32_t	to_read_size;
-	uint32_t	size_to_end;
+	struct cb_ptr	*ptr;
+	uint32_t	new_val;
 
-	if (!desc || !nb_elements)
+
+	if (!desc)
+		return -EINVAL;
+
+	/* Select if read or write index will be updated */
+	ptr = is_read ? &desc->read : &desc->write;
+
+	/* Transaction not started */
+	if (!ptr->async_started)
 		return FAILURE;
 
-	/* Check for overflow */
-	if (nb_elements > desc->nb_elem)
-		return FAILURE;
-	desc->nb_elem -= nb_elements;
-
-	to_read_size = nb_elements * desc->elem_size;
-	size_to_end = desc->size - (desc->read_ptr - desc->buff);
-	if (to_read_size > size_to_end) {
-		memcpy(data, desc->read_ptr, size_to_end);
-		to_read_size -= size_to_end;
-		memcpy((int8_t *)data + size_to_end, desc->buff, to_read_size);
-		desc->read_ptr = desc->buff + to_read_size;
-	} else {
-		memcpy(data, desc->read_ptr, to_read_size);
-		desc->read_ptr += to_read_size;
+	/* Update pointer value */
+	new_val = ptr->idx + ptr->async_size;
+	if (new_val >= desc->size) {
+		ptr->spin_count++;
+		new_val %= desc->size;
 	}
+	ptr->idx = new_val;
+	ptr->async_size = 0;
+	ptr->async_started = false;
 
 	return SUCCESS;
 }
 
+/*
+ * Functionality described at cb_write/read having the is_read
+ * parameter to specifiy if it is a read or write operation
+ */
+static int32_t cb_operation(struct circular_buffer *desc,
+			    void *data, uint32_t size,
+			    bool is_read)
+{
+	uint8_t		*buff;
+	uint32_t	available_size;
+	int32_t		ret;
+	uint32_t	i;
+	bool		sticky_overrun;
+
+	if (!desc || !data || !size)
+		return -EINVAL;
+
+	sticky_overrun = 0;
+	i = 0;
+	while (i < size) {
+		do {
+			ret = cb_prepare_async_operation(desc, size - i,
+							 (void **)&buff,
+							 &available_size,
+							 is_read);
+		} while (ret == -EBUSY || ret == -EAGAIN);
+		if (ret == -EOVERRUN)
+			sticky_overrun = true;
+
+		if (is_read)
+			memcpy((uint8_t *)data + i, buff, available_size);
+		else
+			memcpy(buff, (uint8_t *)data + i, available_size);
+
+		cb_end_async_operation(desc, is_read);
+
+		i += available_size;
+	}
+
+	if (sticky_overrun)
+		return -EOVERRUN;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Write data to the buffer (Blocking)
+ * @param desc - Circular buffer reference
+ * @param data - Buffer from where data is copied to the circular buffer
+ * @param size - Size to write
+ * @return
+ *  - \ref SUCCESS - No errors
+ *  - -EINVAL      - Wrong parameters used
+ */
+int32_t cb_write(struct circular_buffer *desc, const void *data, uint32_t size)
+{
+	return cb_operation(desc, (void *)data, size, 0);
+}
+
+/**
+ * @brief Read data from the buffer (Blocking)
+ * @param desc - Circular buffer reference
+ * @param data - Buffer where to data is copied from the circular buffer
+ * @param size - Size to read
+ * @return
+ *  - \ref SUCCESS   - No errors
+ *  - -EINVAL   - Wrong parameters used
+ *  - -EOVERRUN - An overrun occurred and some data have been overwritten
+ */
+int32_t cb_read(struct circular_buffer *desc, void *data, uint32_t size)
+{
+	return cb_operation(desc, data, size, 1);
+}
