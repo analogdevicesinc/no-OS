@@ -52,6 +52,16 @@
 /******************************************************************************/
 
 /**
+ * @struct iio_chan_type
+ * @brief IIO channel types
+ */
+enum iio_chan_type {
+	IIO_VOLTAGE,
+	IIO_CURRENT,
+	IIO_ALTVOLTAGE
+};
+
+/**
  * @struct iio_ch_info
  * @brief Structure holding channel attributess.
  */
@@ -84,6 +94,8 @@ struct iio_attribute {
 struct iio_channel {
 	/** channel name */
 	char *name;
+	/** Chanel type */
+	enum iio_chan_type ch_type;
 	/** list of attributes */
 	struct iio_attribute **attributes;
 	/** if true, the channel is an output channel */
