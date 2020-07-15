@@ -57,42 +57,6 @@
 static uint32_t demo_channel_attr = 0;
 static uint32_t demo_global_attr = 0;
 
-static const char demo_xml_output[] =
-	"<device id=\"demo_device_output\" name=\"demo_device_output\" >"
-	"<channel id=\"altvoltage0\" name=\"TX1_I_F1\" type=\"output\" >"
-	"<scan-element index=\"0\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"altvoltage1\" name=\"TX1_I_F2\" type=\"output\" >"
-	"<scan-element index=\"1\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"altvoltage2\" name=\"TX1_Q_F1\" type=\"output\" >"
-	"<scan-element index=\"2\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"altvoltage3\" name=\"TX1_Q_F2\" type=\"output\" >"
-	"<scan-element index=\"3\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"</device>"
-	;
-
-static const char demo_xml_input[] =
-	"<device id=\"demo_device_input\" name=\"demo_device_input\" >"
-	"<channel id=\"voltage0\" type=\"input\" >"
-	"<scan-element index=\"0\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"voltage1\" type=\"input\" >"
-	"<scan-element index=\"1\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"voltage2\" type=\"input\" >"
-	"<scan-element index=\"2\" format=\"le:S12/16&gt;&gt;0\" />"
-	"</channel>"
-	"<channel id=\"voltage3\" type=\"input\" >"
-	"<scan-element index=\"3\" format=\"le:S12/16&gt;&gt;0\" />"
-	"<attribute name=\"demo_channel_attr\" filename=\"in_demo_attr\" />"
-	"</channel>"
-	"<attribute name=\"demo_global_attr\" filename=\"in_demo_attr\" />"
-	"</device>"
-	;
-
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -205,7 +169,6 @@ static struct iio_device *iio_demo_create_device(const char *device_name,
 	if (!iio_device)
 		return NULL;
 
-	iio_device->name = device_name;
 	iio_device->num_ch = num_ch;
 	iio_device->attributes = iio_demo_global_attributes;
 	iio_device->channels = iio_demo_channels;
@@ -360,32 +323,6 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Get xml corresponding to device.
- * @param xml - Xml containing description of a device.
- * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static ssize_t iio_demo_get_xml(char** xml, struct iio_device *iio_dev)
-{
-	const char *dev_xml;
-
-	if (strstr(demo_xml_input, iio_dev->name))
-		dev_xml = demo_xml_input;
-	else if (strstr(demo_xml_output, iio_dev->name))
-		dev_xml = demo_xml_output;
-	else
-		return FAILURE;
-
-	*xml = (char*)calloc(1, strlen(dev_xml) + 1);
-	if (!(*xml))
-		return FAILURE;
-
-	memcpy(*xml, dev_xml, strlen(dev_xml));
-
-	return SUCCESS;
-}
-
-/**
  * @brief iio demo init function, registers a demo .
  * @param desc - Descriptor.
  * @param init - Configuration structure.
@@ -424,7 +361,6 @@ int32_t iio_demo_init(struct iio_demo_desc **desc,
 		.name = init->name,
 		.dev_instance = iio_demo_device_inst,
 		.iio = iio_device,
-		.get_xml = iio_demo_get_xml,
 		.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
 		.read_data = iio_demo_read_dev,
 		.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
