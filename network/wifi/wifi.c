@@ -164,6 +164,11 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (IS_ERR_VALUE(result))
 		goto at_err;
 
+	par.in.wifi_mode = CLIENT;
+	result = at_run_cmd(ldesc->at, AT_SET_OPERATION_MODE, AT_SET_OP, &par);
+	if (IS_ERR_VALUE(result))
+		goto at_err;
+
 	par.in.conn_type = MULTIPLE_CONNECTION;
 	result = at_run_cmd(ldesc->at, AT_SET_CONNECTION_TYPE, AT_SET_OP, &par);
 	if (IS_ERR_VALUE(result))
