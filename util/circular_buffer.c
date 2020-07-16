@@ -312,6 +312,77 @@ static int32_t cb_operation(struct circular_buffer *desc,
 }
 
 /**
+ * @brief Prepare asynchronous write
+ *
+ * Get the inside raw buffer to be used in DMA transactions.
+ *
+ * @param desc - Circular buffer reference
+ * @param size_to_write - Number of bytes needed to write to the buffer.
+ * @param write_buff - Address where to store the buffer where to write to.
+ * @param size_avilable - min(size_to_write, size until end of allocated buffer)
+ * @return
+ *  - \ref SUCCESS   - No errors
+ *  - -EINVAL   - Wrong parameters used
+ *  - -EBUSY    - Asynchronous transaction already started
+ */
+int32_t cb_prepare_async_write(struct circular_buffer *desc,
+			       uint32_t size_to_write,
+			       void **write_buff,
+			       uint32_t *size_avilable)
+{
+	return cb_prepare_async_operation(desc, size_to_write, write_buff,
+					  size_avilable, 0);
+}
+
+/**
+ * @brief Prepare asynchronous read
+ *
+ * Get the inside raw buffer to be used in DMA transactions.
+ *
+ * @param desc - Circular buffer reference
+ * @param size_to_read - Number of bytes needed to write to the buffer.
+ * @param read_buff - Address where to store the buffer where data will be read.
+ * @param size_avilable - min(size_to_read, size until end of allocated buffer)
+ * @return
+ *  - \ref SUCCESS   - No errors
+ *  - -EAGAIN   - No data available at this moment
+ *  - -EINVAL   - Wrong parameters used
+ *  - -EBUSY    - Asynchronous transaction already started
+ *  - -EOVERRUN - An overrun occurred and some data have been overwritten
+ */
+int32_t cb_prepare_async_read(struct circular_buffer *desc,
+			      uint32_t size_to_read,
+			      void **read_buff,
+			      uint32_t *size_avilable)
+{
+	return cb_prepare_async_operation(desc, size_to_read, read_buff,
+					  size_avilable, 1);
+}
+
+/**
+ * \defgroup end_async_group End Ashyncronous functions
+ * @brief End asynchronous transaction
+ *
+ * @param desc - Circular buffer reference
+ * @return
+ *  - \ref SUCCESS   - No errors
+ *  - \ref FAILURE   - Asynchronous transaction not started
+ *  - -EINVAL        - Wrong parameters used
+ * @{
+ */
+int32_t cb_end_async_write(struct circular_buffer *desc)
+{
+	return cb_end_async_operation(desc, 0);
+}
+
+int32_t cb_end_async_read(struct circular_buffer *desc)
+{
+
+	return cb_end_async_operation(desc, 1);
+}
+/** @} */
+
+/**
  * @brief Write data to the buffer (Blocking)
  * @param desc - Circular buffer reference
  * @param data - Buffer from where data is copied to the circular buffer
