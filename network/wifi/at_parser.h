@@ -91,13 +91,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "at_params.h"
+#include "circular_buffer.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
 /** @brief Maximum number of connection the ESP8266 module can handle */
-#define MAX_CONNECTIONS	4
+#define MAX_CONNECTIONS				4
+/** @brief Maximum data to send on a chipsend command */
+#define MAX_CIPSEND_DATA			2048
+
 /* Remove comment when implementing parsing result */
 //#define PARSE_RESULT
 /** @brief An overrun occurred in the current buffer connection */
@@ -286,6 +290,15 @@ union in_param {
 };
 
 /**
+ * @enum at_event
+ * @brief Event to be passed to the callback
+ */
+enum at_event {
+	AT_NEW_CONNECTION,
+	AT_CLOSED_CONNECTION
+};
+
+/**
  * @union in_out_param
  * @brief Parameter used to send and receive data from a command
  */
@@ -299,11 +312,23 @@ union in_out_param {
  * @brief Parameter to initialize parser
  */
 struct at_init_param {
-	/* Should be initialized outside in order to fil uart_irq_conf */
+	/* Should be initialized outside in order to fill uart_irq_conf */
 	struct uart_desc	*uart_desc;
 	struct irq_ctrl_desc	*irq_desc;
 	uint32_t		uart_irq_id;
 	void			*uart_irq_conf;
+	/* Context that will be passed to the callback */
+	void			*callback_ctx;
+	/*
+	 * Will be called when a new connection is created or deleted.
+	 * When an AT_NEW_CONNECTION event is received, user can save in cb a
+	 * circular buffer where to write data received from the connection.
+	 * If *cb is set to NULL data will not be saved
+	 */
+	void			(*connection_callback)(void *ctx,
+			enum at_event event,
+			uint32_t conn_id,
+			struct circular_buffer **cb);
 };
 
 /**
@@ -324,14 +349,6 @@ int32_t at_remove(struct at_desc *desc);
 /* Execute an AT command */
 int32_t at_run_cmd(struct at_desc *desc, enum at_cmd cmd, enum cmd_operation op,
 		   union in_out_param *param);
-
-/* Submit a buffer to a connection for the incoming data */
-int32_t at_submit_buffer(struct at_desc *desc, uint32_t conn_id,
-			 uint8_t *buff, uint32_t size);
-/* Read data received from a connection */
-int32_t at_read_buffer(struct at_desc *desc, uint32_t conn_id, uint8_t *buff,
-		       int32_t to_read, bool is_blocking);
-
 /* Convert null terminated string to at_buff */
 int32_t str_to_at(struct at_buff *dest, const uint8_t *src);
 /* Convert at_buff to null terminated string */

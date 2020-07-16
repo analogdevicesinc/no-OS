@@ -49,17 +49,34 @@
 #include "util.h"
 
 /******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define INVALID_ID	0xffffffff
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
 /* Structure storing data used by a socket */
 struct socket_desc {
-	/* Buffer submitted to the at parser */
-	uint8_t			*buff;
+	/* Buffer given to at_parser */
+	struct circular_buffer	*cb;
+	/* Circular buffer size */
+	uint32_t		cb_size;
 	/* Socket type */
 	enum socket_protocol	type;
-	/* True if a socket connect was called on this id */
-	bool			connected;
+	/* Connection id */
+	uint32_t		conn_id;
+	/* States of a socket structure */
+	enum {
+		/* The socket structure is unused */
+		SOCKET_UNUSED,
+		/* Socket structure have been initialized */
+		SOCKET_DISCONNECTED,
+		/* Socket connected to a server or to a client */
+		SOCKET_CONNECTED
+	}			state;
 };
 
 /* Wifi descriptor */
@@ -70,6 +87,8 @@ struct wifi_desc {
 	struct at_desc			*at;
 	/* Network interface */
 	struct network_interface	interface;
+	/* Will be used in callback */
+	int32_t				conn_id_to_sock_id[MAX_CONNECTIONS];
 };
 
 /******************************************************************************/
@@ -94,13 +113,71 @@ static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
 				    void *data, uint32_t size,
 				    struct socket_address *from);
 
+/* Returns the index of a socket in SOCKET_UNUSED state */
+static inline int32_t _wifi_get_unused_socket(struct wifi_desc *desc,
+		uint32_t *idx)
+{
+	uint32_t i;
+
+	for (i = 0; i < MAX_CONNECTIONS; i++)
+		if (desc->sockets[i].state == SOCKET_UNUSED) {
+			desc->sockets[i].state = SOCKET_DISCONNECTED;
+			*idx = i;
+
+			return SUCCESS;
+		}
+
+	/* All the available connections are used */
+	return -EMLINK;
+}
+
+/* Marks the socket at the index id as SOCKET_UNUSED */
+static inline void _wifi_release_socket(struct wifi_desc *desc, uint32_t id)
+{
+	desc->sockets[id].state = SOCKET_UNUSED;
+}
+
+/* Set the socket connection ID with an ID that is not used yet */
+static inline uint32_t _wifi_get_unused_conn(struct wifi_desc *desc,
+		uint32_t sock_id)
+{
+	uint32_t i;
+
+	for (i = 0; i < MAX_CONNECTIONS; i++)
+		if (desc->conn_id_to_sock_id[i] == INVALID_ID) {
+			desc->conn_id_to_sock_id[i] = sock_id;
+			desc->sockets[sock_id].conn_id = i;
+
+			return SUCCESS;
+		}
+
+	return -EMLINK;
+}
+
+/* Unset the socket connection ID and mark it as available */
+static inline void _wifi_release_conn(struct wifi_desc *desc,
+				      uint32_t sock_id)
+{
+	uint32_t conn_id;
+
+	conn_id = desc->sockets[sock_id].conn_id;
+	if (conn_id != INVALID_ID) {
+		/*
+		 * Connection can be released both from callback or
+		 * stop_connection command, and it shouldn't be released twice
+		 */
+		desc->sockets[sock_id].conn_id = INVALID_ID;
+		desc->conn_id_to_sock_id[conn_id] = INVALID_ID;
+	}
+}
+
 /* Connect internal functions to the network interface */
 static void wifi_init_interface(struct wifi_desc *desc)
 {
-
 	desc->interface.net = desc;
 	desc->interface.socket_open =
-		(int32_t (*)(void *, uint32_t *, enum socket_protocol))
+		(int32_t (*)(void *, uint32_t *, enum socket_protocol,
+			     uint32_t))
 		wifi_socket_open;
 	desc->interface.socket_close =
 		(int32_t (*)(void *, uint32_t))
@@ -127,6 +204,29 @@ static void wifi_init_interface(struct wifi_desc *desc)
 		wifi_socket_recvfrom;
 }
 
+/* Callback to be submmited to the at_parser to get notification when a
+connection is created or closed */
+static void _wifi_connection_callback(void *ctx, enum at_event event,
+				      uint32_t conn_id,
+				      struct circular_buffer **cb)
+{
+	struct wifi_desc	*desc = ctx;
+	int32_t			sock_id;
+
+	sock_id = desc->conn_id_to_sock_id[conn_id];
+	if (event == AT_NEW_CONNECTION) {
+		if (sock_id != INVALID_ID)
+			*cb = desc->sockets[sock_id].cb;
+		else
+			*cb = NULL;
+	} else if (event == AT_CLOSED_CONNECTION) {
+		if (sock_id != INVALID_ID) {
+			desc->sockets[sock_id].state = SOCKET_DISCONNECTED;
+			_wifi_release_conn(desc, sock_id);
+		}
+	}
+}
+
 /**
  * @brief Allocate resources and initializes a wifi descriptor
  * @param desc - Address where to store the wifi descriptor
@@ -149,10 +249,15 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (!ldesc)
 		return FAILURE;
 
+	memset(ldesc->conn_id_to_sock_id, (int8_t)INVALID_ID,
+	       sizeof(ldesc->conn_id_to_sock_id));
+
 	at_param.irq_desc = param->irq_desc;
 	at_param.uart_desc = param->uart_desc;
 	at_param.uart_irq_conf = param->uart_irq_conf;
 	at_param.uart_irq_id = param->uart_irq_id;
+	at_param.connection_callback = _wifi_connection_callback;
+	at_param.callback_ctx = ldesc;
 
 	result = at_init(&ldesc->at, &at_param);
 	if (IS_ERR_VALUE(result))
@@ -301,28 +406,26 @@ int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size)
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 				enum socket_protocol proto, uint32_t buff_size)
 {
-	uint32_t		i;
-	struct socket_desc	*sock;
+	uint32_t	id;
+	int32_t		ret;
 
 	if (!desc || !sock_id)
 		return FAILURE;
 
-	sock = NULL;
-	for (i = 0; i < MAX_CONNECTIONS; i++)
-		if (!desc->sockets[i].buff) {
-			sock = &desc->sockets[i];
-			break;
-		}
-	if (!sock)
-		return FAILURE; //All the available connections are used
+	ret = _wifi_get_unused_socket(desc, &id);
+	if (IS_ERR_VALUE(ret))
+		return ret;
 
-	sock->type = proto;
-	sock->buff = (uint8_t *)malloc(buff_size);
-	if (!sock->buff)
-		return FAILURE;
+	ret = cb_init(&desc->sockets[id].cb, buff_size);
+	if (IS_ERR_VALUE(ret)) {
+		_wifi_release_socket(desc, id);
+		return ret;
+	}
 
-	*sock_id = i;
-	at_submit_buffer(desc->at, i, sock->buff, buff_size);
+	desc->sockets[id].type = proto;
+	desc->sockets[id].cb_size = buff_size;
+
+	*sock_id = id;
 
 	return SUCCESS;
 }
@@ -330,20 +433,23 @@ static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 /** @brief See \ref network_interface.socket_close */
 static int32_t wifi_socket_close(struct wifi_desc *desc, uint32_t sock_id)
 {
-	int32_t ret;
+	struct socket_desc	*sock;
+	int32_t			ret;
 
 	if (!desc || sock_id >= MAX_CONNECTIONS)
 		return FAILURE;
 
-	if (!desc->sockets[sock_id].buff)
+	sock = &desc->sockets[sock_id];
+	if (sock->state == SOCKET_UNUSED)
 		return SUCCESS;
 
 	ret = wifi_socket_disconnect(desc, sock_id);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	free(desc->sockets[sock_id].buff);
-	desc->sockets[sock_id].buff = NULL;
+	_wifi_release_socket(desc, sock_id);
+	cb_remove(sock->cb);
+	sock->cb = NULL;
 
 	return SUCCESS;
 }
@@ -354,23 +460,34 @@ static int32_t wifi_socket_connect(struct wifi_desc *desc, uint32_t sock_id,
 {
 	union in_out_param	param;
 	uint32_t		ret;
+	struct socket_desc	*sock;
 
 	if (!desc || !addr || sock_id >= MAX_CONNECTIONS)
 		return FAILURE;
 
-	if (!desc->sockets[sock_id].buff)
-		return FAILURE;
+	sock = &desc->sockets[sock_id];
+	if (sock->state == SOCKET_UNUSED)
+		return -ENOENT;
 
-	str_to_at(&param.in.connection.addr, (uint8_t *)addr->addr);
-	param.in.connection.port = addr->port;
-	param.in.connection.id = sock_id;
-	param.in.connection.soket_type = desc->sockets[sock_id].type;
+	if (sock->state == SOCKET_CONNECTED)
+		return -EISCONN;
 
-	ret = at_run_cmd(desc->at, AT_START_CONNECTION, AT_SET_OP, &param);
+	ret = _wifi_get_unused_conn(desc, sock_id);
 	if (IS_ERR_VALUE(ret))
 		return ret;
 
-	desc->sockets[sock_id].connected = true;
+	str_to_at(&param.in.connection.addr, (uint8_t *)addr->addr);
+	param.in.connection.port = addr->port;
+	param.in.connection.id = sock->conn_id;
+	param.in.connection.soket_type = sock->type;
+
+	ret = at_run_cmd(desc->at, AT_START_CONNECTION, AT_SET_OP, &param);
+	if (IS_ERR_VALUE(ret)) {
+		_wifi_release_conn(desc, sock_id);
+		return ret;
+	}
+
+	sock->state = SOCKET_CONNECTED;
 
 	return SUCCESS;
 }
@@ -380,19 +497,27 @@ static int32_t wifi_socket_disconnect(struct wifi_desc *desc, uint32_t sock_id)
 {
 	union in_out_param	param;
 	uint32_t		ret;
+	struct socket_desc	*sock;
 
 	if (!desc || sock_id >= MAX_CONNECTIONS)
 		return FAILURE;
 
-	if (!desc->sockets[sock_id].buff)
-		return FAILURE;
+	sock = &desc->sockets[sock_id];
+	if (sock->state == SOCKET_UNUSED)
+		return -ENOENT;
 
-	param.in.conn_id = sock_id;
-	ret = at_run_cmd(desc->at, AT_STOP_CONNECTION, AT_SET_OP, &param);
+	if (sock->state == SOCKET_DISCONNECTED)
+		/* A socket can be disconnected by the peer */
+		return SUCCESS;
+
+	param.in.conn_id = sock->conn_id;
+	ret = at_run_cmd(desc->at, AT_STOP_CONNECTION, AT_SET_OP,
+			 &param);
 	if (IS_ERR_VALUE(ret))
 		return ret;
+	_wifi_release_conn(desc, sock_id);
 
-	desc->sockets[sock_id].connected = false;
+	sock->state = SOCKET_DISCONNECTED;
 
 	return SUCCESS;
 }
@@ -403,21 +528,29 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 {
 	union in_out_param	param;
 	uint32_t		ret;
+	struct socket_desc	*sock;
+	uint32_t		to_send;
+	uint32_t		i;
 
 	if (!desc || sock_id >= MAX_CONNECTIONS)
-		return FAILURE;
+		return -EINVAL;
 
-	if (!desc->sockets[sock_id].buff)
-		return FAILURE;
+	sock = &desc->sockets[sock_id];
+	if (sock->state != SOCKET_CONNECTED)
+		return -ENOTCONN;
 
-	param.in.send_data.id = sock_id;
-	param.in.send_data.data.buff = (uint8_t *)data;
-	param.in.send_data.data.len = size;
-	ret = at_run_cmd(desc->at, AT_SEND, AT_SET_OP, &param);
-	if (IS_ERR_VALUE(ret))
-		return ret;
+	i = 0;
+	do {
+		to_send = min(size - i, MAX_CIPSEND_DATA);
+		param.in.send_data.id = sock->conn_id;
+		param.in.send_data.data.buff = ((uint8_t *)data) + i;
+		param.in.send_data.data.len = to_send;
+		ret = at_run_cmd(desc->at, AT_SEND, AT_SET_OP, &param);
+		if (IS_ERR_VALUE(ret))
+			return ret;
 
-	desc->sockets[sock_id].connected = true;
+		i += to_send;
+	} while (i < size);
 
 	return (int32_t)size;
 }
@@ -426,13 +559,28 @@ static int32_t wifi_socket_send(struct wifi_desc *desc, uint32_t sock_id,
 static int32_t wifi_socket_recv(struct wifi_desc *desc, uint32_t sock_id,
 				void *data, uint32_t size)
 {
+	struct socket_desc	*sock;
+	uint32_t		available_size;
+	int32_t			ret;
+
 	if (!desc || sock_id >= MAX_CONNECTIONS || !size)
-		return FAILURE;
+		return -EINVAL;
 
-	if (!desc->sockets[sock_id].buff)
-		return FAILURE;
+	/* TODO read data even if disconnected ? */
+	sock = &desc->sockets[sock_id];
+	if (sock->state != SOCKET_CONNECTED)
+		return -ENOTCONN;
 
-	return at_read_buffer(desc->at, sock_id, data, size, false);
+	cb_size(sock->cb, &available_size);
+	if (available_size == 0)
+		return -EAGAIN;
+
+	size = min(available_size, size);
+	ret = cb_read(sock->cb, data, size);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	return size;
 }
 
 /** @brief See \ref network_interface.socket_sendto */
