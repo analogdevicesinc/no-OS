@@ -53,6 +53,12 @@
 #define FAILURE		-1
 #endif
 
+/*
+ * Last error from errno.h is __ELASTERROR 2000 . After it, can be declared
+ * user errors
+ */
+#define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
+
 #define IS_ERR_VALUE(x)	((x) < 0)
 
 #endif // ERROR_H_
