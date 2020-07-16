@@ -200,7 +200,7 @@ enum adapter_type {
 	/** Default type is LIST_STACK */
 	LIST_DEFAULT,
 	/**
-	 * Functions for a LIFO list (Last-in first-out). Elements are inserted
+	 * Functions for a FIFO list (First-in first-out). Elements are inserted
 	 * in one end and extracted from the other end.
 	 *  - \e Push: Insert element
 	 *  - \e Pop: Get next element (Read and remove)
@@ -210,7 +210,7 @@ enum adapter_type {
 	 */
 	LIST_QUEUE,
 	/**
-	 * Functions for a FIFO list (First-in first-out). Elements are inserted
+	 * Functions for a LIFO list (Last-in first-out). Elements are inserted
 	 * and extracted only from the same end.
 	 *  - \e Push: Insert element
 	 *  - \e Pop: Get top element (Read and remove)
