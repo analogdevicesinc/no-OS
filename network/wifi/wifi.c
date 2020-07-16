@@ -260,6 +260,38 @@ int32_t wifi_get_network_interface(struct wifi_desc *desc,
 	return SUCCESS;
 }
 
+/**
+ * @brief Get ip
+ * @param desc - Wifi descriptor
+ * @param ip_buff - Buffer where to copy the null terminated ip string
+ * @param buff_size - Size of the buffer
+ * @return
+ *  - \ref SUCCESS : On success
+ *  - \ref -EINVAL : For invalid parameters
+ *  - \ref -ENOMEM : If buffer is too small
+ */
+int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size)
+{
+	int32_t			ret;
+	union in_out_param	result;
+	uint8_t			*buff;
+
+	if (!desc || !ip_buff)
+		return -EINVAL;
+
+	ret = at_run_cmd(desc->at, AT_GET_IP, AT_EXECUTE_OP, &result);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	at_to_str(&buff, &result.out.result);
+	if (strlen((char *)buff) + 1 > buff_size)
+		return (-ENOMEM);
+
+	strcpy(ip_buff, (char *)buff);
+
+	return SUCCESS;
+}
+
 /** @brief See \ref network_interface.socket_open */
 static int32_t wifi_socket_open(struct wifi_desc *desc, uint32_t *sock_id,
 				enum socket_protocol proto, uint32_t buff_size)
