@@ -814,6 +814,7 @@ static int32_t parse_result(struct at_desc *desc, enum at_cmd cmd,
 
 	result->result.buff = desc->buffers.app_result_buff;
 	memcpy(result->result.buff, desc->result.buff, desc->result.len);
+	result->result.len = desc->result.len;
 	desc->result.len = 0;
 
 	return SUCCESS;

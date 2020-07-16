@@ -91,5 +91,7 @@ int32_t wifi_disconnect(struct wifi_desc *desc);
 /* Wifi get network interface */
 int32_t wifi_get_network_interface(struct wifi_desc *desc,
 				   struct network_interface **net);
+/* Wifi get ip interface */
+int32_t wifi_get_ip(struct wifi_desc *desc, char *ip_buff, uint32_t buff_size);
 
 #endif
