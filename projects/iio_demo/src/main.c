@@ -213,7 +213,7 @@ int main(void)
 	iio_demo_in_init_par = (struct iio_demo_init_param) {
 		.name = demo_device_input,
 		.num_channels = 4,
-		.ddr_base_addr = DAC_DDR_BASEADDR,
+		.ddr_base_addr = ADC_DDR_BASEADDR,
 		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 
