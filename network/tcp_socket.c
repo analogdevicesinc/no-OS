@@ -398,12 +398,12 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 /** @brief See \ref network_interface.socket_recv */
 int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len)
 {
-	int32_t ret;
-
 	if (!desc)
 		return FAILURE;
 
 #ifndef DISABLE_SECURE_SOCKET
+	int32_t ret;
+
 	if (desc->secure) {
 		ret = mbedtls_ssl_read(&desc->secure->ssl, data, len);
 		if (ret == MBEDTLS_ERR_SSL_WANT_READ)
