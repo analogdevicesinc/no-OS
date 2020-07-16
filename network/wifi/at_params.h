@@ -186,8 +186,8 @@ enum connection_type {
 struct cipserver_param {
 	/** Command for open or close the server*/
 	enum {
-		CLOSE_SOCKET,
-		OPEN_SOCKET
+		DELETE_SERVER,
+		CREATE_SERVER
 	}		action;
 	/** Port */
 	uint16_t	port;
