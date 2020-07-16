@@ -707,9 +707,13 @@ static void concat_cmd_param(struct at_desc *desc, enum at_cmd cmd,
 			   (int32_t)param->conn_type);
 		break;
 	case AT_SET_SERVER:
-		set_params(&desc->cmd, PUI8("dd"),
-			   (int32_t)param->server.action,
-			   (int32_t)param->server.port);
+		if (param->server.action == CREATE_SERVER)
+			set_params(&desc->cmd, PUI8("dd"),
+				   (int32_t)param->server.action,
+				   (int32_t)param->server.port);
+		else
+			set_params(&desc->cmd, PUI8("d"),
+				   (int32_t)param->server.action);
 		break;
 	case AT_SET_TRANSPORT_MODE:
 		set_params(&desc->cmd, PUI8("d"),
