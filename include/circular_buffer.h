@@ -70,4 +70,16 @@ int32_t cb_write(struct circular_buffer *desc, const void *data,
 		 uint32_t nb_elements);
 int32_t cb_read(struct circular_buffer *desc, void *data, uint32_t nb_elements);
 
+int32_t cb_prepare_async_write(struct circular_buffer *desc,
+			       uint32_t raw_size_to_write,
+			       void **write_buff,
+			       uint32_t *raw_size_avilable);
+int32_t cb_end_async_write(struct circular_buffer *desc);
+
+int32_t cb_prepare_async_read(struct circular_buffer *desc,
+			      uint32_t raw_size_to_read,
+			      void **read_buff,
+			      uint32_t *raw_size_avilable);
+int32_t cb_end_async_read(struct circular_buffer *desc);
+
 #endif
