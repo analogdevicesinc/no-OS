@@ -56,13 +56,13 @@
 int32_t iio_app_init(struct iio_app_desc **desc,
 		     struct iio_app_init_param *param)
 {
-	struct iio_desc *iio;
+	struct tinyiiod *iiod;
 	int32_t status;
 
 	if (!param)
 		return FAILURE;
 
-	status = iio_init(&iio, param->iio_server_ops);
+	status = iio_init(&iiod, param->iio_server_ops);
 	if(status < 0)
 		return status;
 
@@ -70,7 +70,7 @@ int32_t iio_app_init(struct iio_app_desc **desc,
 	if (!(*desc))
 		return FAILURE;
 
-	(*desc)->iio = iio;
+	(*desc)->iiod = iiod;
 
 	return SUCCESS;
 }
@@ -87,7 +87,7 @@ int32_t iio_app_remove(struct iio_app_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_remove(desc->iio);
+	status = iio_remove(desc->iiod);
 	if(status < 0)
 		return status;
 
@@ -106,7 +106,7 @@ int32_t iio_app(struct iio_app_desc *desc)
 	int32_t status;
 
 	while(1) {
-		status = iio_step(desc->iio);
+		status = tinyiiod_read_command(desc->iiod);
 		if(status < 0)
 			return status;
 	}
