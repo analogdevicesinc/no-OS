@@ -2,6 +2,7 @@
  *   @file   iio.h
  *   @brief  Header file of iio
  *   @author Cristian Pop (cristian.pop@analog.com)
+ *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -50,22 +51,6 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-/**
- * @struct iio_interface
- * @brief Links a physical device instance "void *dev_instance"
- * with a "iio_device *iio" that describes capabilities of the device.
- */
-struct iio_interface {
-	/** Device name */
-	const char		*name;
-	/** Opened channels */
-	uint32_t		ch_mask;
-	/** Physical instance of a device */
-	void			*dev_instance;
-	/** Device descriptor(describes channels and attributes) */
-	struct iio_device	*dev_descriptor;
-};
-
 enum pysical_link_type {
 	USE_UART,
 	USE_NETWORK
@@ -94,10 +79,9 @@ ssize_t iio_remove(struct iio_desc *desc);
 /* Execut an iio step. */
 ssize_t iio_step(struct iio_desc *desc);
 /* Register interface. */
-ssize_t iio_register(struct iio_desc *desc,
-		     struct iio_interface *iio_interface);
+ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
+		     char *name, void *dev_instance);
 /* Unregister interface. */
-ssize_t iio_unregister(struct iio_desc *desc,
-		       struct iio_interface *iio_interface);
+ssize_t iio_unregister(struct iio_desc *desc, char *name);
 
 #endif /* IIO_H_ */
