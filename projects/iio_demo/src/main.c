@@ -105,12 +105,6 @@ int main(void)
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_out_init_par;
 
-	/* iio demo interface */
-	struct iio_interface iio_demo_out_interface;
-
-	/* iio demo interface */
-	struct iio_interface iio_demo_in_interface;
-
 	/* iio descriptor. */
 	struct iio_desc  *iio_desc;
 
@@ -226,21 +220,13 @@ int main(void)
 	if (status < 0)
 		return status;
 
-	iio_demo_in_interface = (struct iio_interface) {
-		.name = demo_device_input,
-		.dev_instance = iio_demo_in_desc,
-		.dev_descriptor = &iio_demo_dev_in_descriptor
-	};
-	status = iio_register(iio_desc, &iio_demo_in_interface);
+	status = iio_register(iio_desc, &iio_demo_dev_in_descriptor,
+			      demo_device_input, iio_demo_in_desc);
 	if (status < 0)
 		return status;
 
-	iio_demo_out_interface = (struct iio_interface) {
-		.name = demo_device_output,
-		.dev_instance = iio_demo_out_desc,
-		.dev_descriptor = &iio_demo_dev_out_descriptor
-	};
-	status = iio_register(iio_desc, &iio_demo_out_interface);
+	status = iio_register(iio_desc, &iio_demo_dev_out_descriptor,
+			      demo_device_output, iio_demo_out_desc);
 	if (status < 0)
 		return status;
 

@@ -4,6 +4,7 @@
  *   This module implements read/write ops, required by libtinyiiod and further
  *   calls show/store functions, corresponding to device/channel/attribute.
  *   @author Cristian Pop (cristian.pop@analog.com)
+ *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2019(c) Analog Devices, Inc.
  *
@@ -44,6 +45,7 @@
 /******************************************************************************/
 
 #include "iio.h"
+#include "iio_types.h"
 #include "ctype.h"
 #include "tinyiiod.h"
 #include "util.h"
@@ -92,6 +94,22 @@ struct element_info {
 	const char *attribute_name;
 	/** If set, is an output channel */
 	bool ch_out;
+};
+
+/**
+ * @struct iio_interface
+ * @brief Links a physical device instance "void *dev_instance"
+ * with a "iio_device *iio" that describes capabilities of the device.
+ */
+struct iio_interface {
+	/** Device name */
+	const char		*name;
+	/** Opened channels */
+	uint32_t		ch_mask;
+	/** Physical instance of a device */
+	void			*dev_instance;
+	/** Device descriptor(describes channels and attributes) */
+	struct iio_device	*dev_descriptor;
 };
 
 struct iio_desc {
@@ -783,20 +801,28 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 /**
  * @brief Register interface.
- * @param iio_interface - Structure containing physical device instance and
- * device descriptor.
+ * @param desc - iio descriptor
+ * @param dev_descriptor - Device descriptor
+ * @param name - Name to identify the registered device
+ * @param dev_instance - Opened instance of the device
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
+ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
+		     char *name, void *dev_instance)
 {
+	struct iio_interface	*iio_interface;
 	int32_t ret;
 	int32_t	n;
 	int32_t	new_size;
 	char	*aux;
 
-	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
-	if (IS_ERR_VALUE(ret))
-		return ret;
+	iio_interface = (struct iio_interface *)calloc(1,
+			sizeof(*iio_interface));
+	if (!iio_interface)
+		return -ENOMEM;
+	iio_interface->dev_instance = dev_instance;
+	iio_interface->name = name;
+	iio_interface->dev_descriptor = dev_descriptor;
 
 	/* Get number of bytes needed for the xml of the new device */
 	n = iio_generate_device_xml(iio_interface->dev_descriptor, iio_interface->name,
@@ -804,8 +830,17 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 
 	new_size = desc->xml_size + n;
 	aux = realloc(desc->xml_desc, new_size);
-	if (!aux)
+	if (!aux) {
+		free(iio_interface);
 		return -ENOMEM;
+	}
+
+	ret = desc->interfaces_list->push(desc->interfaces_list, iio_interface);
+	if (IS_ERR_VALUE(ret)) {
+		free(iio_interface);
+		free(aux);
+		return ret;
+	}
 
 	desc->xml_desc = aux;
 	/* Print the new device xml at the end of the xml */
@@ -826,23 +861,24 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 
 /**
  * @brief Unregister interface.
- * @param iio_interface - Structure containing physical device instance and
- * device descriptor.
+ * @param name - Name of the registered device
  * @return SUCCESS in case of success or negative value otherwise.
  */
-ssize_t iio_unregister(struct iio_desc *desc,
-		       struct iio_interface *iio_interface)
+ssize_t iio_unregister(struct iio_desc *desc, char *name)
 {
 	struct iio_interface	*to_remove_interface;
+	struct iio_interface	search_interface;
 	int32_t			ret;
 	int32_t			n;
 	char			*aux;
 
 	/* Get if the item is found, get will remove it from the list */
+	search_interface.name = name;
 	ret = list_get_find(desc->interfaces_list,
-			    (void **)&to_remove_interface, iio_interface);
+			    (void **)&to_remove_interface, &search_interface);
 	if (IS_ERR_VALUE(ret))
 		return ret;
+	free(to_remove_interface);
 
 	/* Get number of bytes needed for the xml of the device */
 	n = iio_generate_device_xml(to_remove_interface->dev_descriptor,
@@ -966,10 +1002,22 @@ free_ops:
  */
 ssize_t iio_remove(struct iio_desc *desc)
 {
+	struct iio_interface	*iio_interface;
+
+	while (SUCCESS == list_get_first(desc->interfaces_list,
+					 (void **)&iio_interface))
+		free(iio_interface);
 	list_remove(desc->interfaces_list);
+
+	free(desc->iiod_ops);
 	tinyiiod_destroy(desc->iiod);
-	//This should be done here but first should be removed from tinyiiod_destroy
-	//free(desc->iiod_ops);
+
+	free(desc->xml_desc);
+
+	if (desc->phy_type == USE_UART)
+		uart_remove(desc->phy_desc);
+
+	free(desc);
 
 	return SUCCESS;
 }
