@@ -41,11 +41,12 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include "demo_dev.h"
+#include "iio_demo_dev.h"
 #include "app_config.h"
 #include "parameters.h"
 #include "error.h"
 #include "iio.h"
-#include "iio_demo.h"
 #include "irq.h"
 #include "irq_extra.h"
 #include "uart.h"
@@ -103,6 +104,12 @@ int main(void)
 
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_out_init_par;
+
+	/* iio demo interface */
+	struct iio_interface iio_demo_out_interface;
+
+	/* iio demo interface */
+	struct iio_interface iio_demo_in_interface;
 
 	/* iio descriptor. */
 	struct iio_desc  *iio_desc;
@@ -199,26 +206,37 @@ int main(void)
 		return status;
 
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
-		.name = demo_device_output,
-		.num_channels = 4,
 		.ddr_base_addr = DAC_DDR_BASEADDR,
 		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
-
-	iio_demo_out_init_par.iio_desc = iio_desc;
-	status = iio_demo_init(&iio_demo_out_desc, &iio_demo_out_init_par);
+	status = iio_demo_dev_init(&iio_demo_out_desc, &iio_demo_out_init_par);
 	if (status < 0)
 		return status;
 
 	iio_demo_in_init_par = (struct iio_demo_init_param) {
-		.name = demo_device_input,
-		.num_channels = 4,
 		.ddr_base_addr = ADC_DDR_BASEADDR,
 		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 
-	iio_demo_in_init_par.iio_desc = iio_desc;
-	status = iio_demo_init(&iio_demo_in_desc, &iio_demo_in_init_par);
+	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
+	if (status < 0)
+		return status;
+
+	iio_demo_in_interface = (struct iio_interface) {
+		.name = demo_device_input,
+		.dev_instance = iio_demo_in_desc,
+		.dev_descriptor = &iio_demo_dev_descriptor
+	};
+	status = iio_register(iio_desc, &iio_demo_in_interface);
+	if (status < 0)
+		return status;
+
+	iio_demo_out_interface = (struct iio_interface) {
+		.name = demo_device_output,
+		.dev_instance = iio_demo_out_desc,
+		.dev_descriptor = &iio_demo_dev_descriptor
+	};
+	status = iio_register(iio_desc, &iio_demo_out_interface);
 	if (status < 0)
 		return status;
 
