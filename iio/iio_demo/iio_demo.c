@@ -364,7 +364,7 @@ int32_t iio_demo_init(struct iio_demo_desc **desc,
 	*iio_interface = (struct iio_interface) {
 		.name = init->name,
 		.dev_instance = iio_demo_device_inst,
-		.iio = iio_device
+		.dev_descriptor = iio_device
 	};
 
 	status = iio_register(init->iio_desc, iio_interface);
@@ -399,7 +399,7 @@ int32_t iio_demo_remove(struct iio_demo_desc *desc)
 	if(status < 0)
 		return FAILURE;
 
-	status = iio_demo_delete_device(desc->iio_interface->iio);
+	status = iio_demo_delete_device(desc->iio_interface->dev_descriptor);
 	if (status < 0)
 		return FAILURE;
 
