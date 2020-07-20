@@ -57,13 +57,13 @@
  */
 struct iio_interface {
 	/** Device name */
-	const char *name;
+	const char		*name;
 	/** Opened channels */
-	uint32_t ch_mask;
+	uint32_t		ch_mask;
 	/** Physical instance of a device */
-	void *dev_instance;
+	void			*dev_instance;
 	/** Device descriptor(describes channels and attributes) */
-	struct iio_device	*iio;
+	struct iio_device	*dev_descriptor;
 };
 
 enum pysical_link_type {

@@ -434,7 +434,7 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 	if (!iio_device)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->iio, 0);
+	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->dev_descriptor, 0);
 }
 
 /**
@@ -464,7 +464,8 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 	if (!iio_interface)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iio_interface->iio, 1);
+	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
+				   iio_interface->dev_descriptor, 1);
 }
 
 /**
@@ -495,7 +496,8 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 	if (!device)
 		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->iio, 0);
+	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->dev_descriptor,
+				   0);
 }
 
 /**
@@ -526,7 +528,8 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 	if (!iio_interface)
 		return -ENOENT;
 
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len, iio_interface->iio, 1);
+	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
+				   iio_interface->dev_descriptor, 1);
 }
 
 /**
@@ -546,7 +549,7 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 		return -ENODEV;
 
 	iface = iio_get_interface(device);
-	ch_mask = 0xFFFFFFFF >> (32 - iface->iio->num_ch);
+	ch_mask = 0xFFFFFFFF >> (32 - iface->dev_descriptor->num_ch);
 
 	if (mask & ~ch_mask)
 		return -ENOENT;
@@ -602,8 +605,8 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->iio->transfer_dev_to_mem)
-		return iio_interface->iio->transfer_dev_to_mem(
+	if (iio_interface->dev_descriptor->transfer_dev_to_mem)
+		return iio_interface->dev_descriptor->transfer_dev_to_mem(
 			       iio_interface->dev_instance,
 			       bytes_count, iio_interface->ch_mask);
 
@@ -626,8 +629,8 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->iio->read_data)
-		return iio_interface->iio->read_data(
+	if (iio_interface->dev_descriptor->read_data)
+		return iio_interface->dev_descriptor->read_data(
 			       iio_interface->dev_instance,
 			       pbuf, offset,
 			       bytes_count, iio_interface->ch_mask);
@@ -645,8 +648,8 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->iio->transfer_mem_to_dev)
-		return iio_interface->iio->transfer_mem_to_dev(
+	if (iio_interface->dev_descriptor->transfer_mem_to_dev)
+		return iio_interface->dev_descriptor->transfer_mem_to_dev(
 			       iio_interface->dev_instance,
 			       bytes_count, iio_interface->ch_mask);
 
@@ -668,8 +671,8 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-	if(iio_interface->iio->write_data)
-		return iio_interface->iio->write_data(
+	if(iio_interface->dev_descriptor->write_data)
+		return iio_interface->dev_descriptor->write_data(
 			       iio_interface->dev_instance,
 			       (char*)buf, offset, bytes_count,
 			       iio_interface->ch_mask);
@@ -818,7 +821,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 		return ret;
 
 	/* Get number of bytes needed for the xml of the new device */
-	n = iio_generate_device_xml(iio_interface->iio, iio_interface->name,
+	n = iio_generate_device_xml(iio_interface->dev_descriptor, iio_interface->name,
 				    desc->dev_count, NULL, -1);
 
 	new_size = desc->xml_size + n;
@@ -828,7 +831,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_interface *iio_interface)
 
 	desc->xml_desc = aux;
 	/* Print the new device xml at the end of the xml */
-	iio_generate_device_xml(iio_interface->iio, iio_interface->name,
+	iio_generate_device_xml(iio_interface->dev_descriptor, iio_interface->name,
 				desc->dev_count,
 				desc->xml_desc + desc->xml_size_to_last_dev,
 				new_size - desc->xml_size_to_last_dev);
@@ -864,7 +867,7 @@ ssize_t iio_unregister(struct iio_desc *desc,
 		return ret;
 
 	/* Get number of bytes needed for the xml of the device */
-	n = iio_generate_device_xml(to_remove_interface->iio,
+	n = iio_generate_device_xml(to_remove_interface->dev_descriptor,
 				    to_remove_interface->name,
 				    desc->dev_count, NULL, -1);
 
