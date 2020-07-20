@@ -602,9 +602,10 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->transfer_dev_to_mem)
-		return iio_interface->transfer_dev_to_mem(iio_interface->dev_instance,
-				bytes_count, iio_interface->ch_mask);
+	if (iio_interface->iio->transfer_dev_to_mem)
+		return iio_interface->iio->transfer_dev_to_mem(
+			       iio_interface->dev_instance,
+			       bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }
@@ -625,9 +626,11 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->read_data)
-		return iio_interface->read_data(iio_interface->dev_instance, pbuf, offset,
-						bytes_count, iio_interface->ch_mask);
+	if (iio_interface->iio->read_data)
+		return iio_interface->iio->read_data(
+			       iio_interface->dev_instance,
+			       pbuf, offset,
+			       bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }
@@ -642,9 +645,10 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
 
-	if (iio_interface->transfer_mem_to_dev)
-		return iio_interface->transfer_mem_to_dev(iio_interface->dev_instance,
-				bytes_count, iio_interface->ch_mask);
+	if (iio_interface->iio->transfer_mem_to_dev)
+		return iio_interface->iio->transfer_mem_to_dev(
+			       iio_interface->dev_instance,
+			       bytes_count, iio_interface->ch_mask);
 
 	return -ENOENT;
 }
@@ -664,9 +668,11 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 			     size_t offset, size_t bytes_count)
 {
 	struct iio_interface *iio_interface = iio_get_interface(device);
-	if(iio_interface->write_data)
-		return iio_interface->write_data(iio_interface->dev_instance, (char*)buf,
-						 offset, bytes_count, iio_interface->ch_mask);
+	if(iio_interface->iio->write_data)
+		return iio_interface->iio->write_data(
+			       iio_interface->dev_instance,
+			       (char*)buf, offset, bytes_count,
+			       iio_interface->ch_mask);
 
 	return -ENOENT;
 }
