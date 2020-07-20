@@ -155,28 +155,6 @@ static struct iio_attribute *iio_demo_global_attributes[] = {
 };
 
 /**
- * @brief Create structure describing a device, channels and attributes.
- * @param device_name - Device name.
- * @param num_ch - Number of channels that the device has.
- * @return iio_device or NULL, in case of failure.
- */
-static struct iio_device *iio_demo_create_device(const char *device_name,
-		uint16_t num_ch)
-{
-	struct iio_device *iio_device;
-
-	iio_device = (struct iio_device *)calloc(1, sizeof(*iio_device));
-	if (!iio_device)
-		return NULL;
-
-	iio_device->num_ch = num_ch;
-	iio_device->attributes = iio_demo_global_attributes;
-	iio_device->channels = iio_demo_channels;
-
-	return iio_device;
-}
-
-/**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
@@ -323,6 +301,32 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
+ * @brief Create structure describing a device, channels and attributes.
+ * @param device_name - Device name.
+ * @param num_ch - Number of channels that the device has.
+ * @return iio_device or NULL, in case of failure.
+ */
+static struct iio_device *iio_demo_create_device(const char *device_name,
+		uint16_t num_ch)
+{
+	struct iio_device *iio_device;
+
+	iio_device = (struct iio_device *)calloc(1, sizeof(*iio_device));
+	if (!iio_device)
+		return NULL;
+
+	iio_device->num_ch = num_ch;
+	iio_device->attributes = iio_demo_global_attributes;
+	iio_device->channels = iio_demo_channels;
+	iio_device->transfer_dev_to_mem = iio_demo_transfer_dev_to_mem;
+	iio_device->read_data = iio_demo_read_dev;
+	iio_device->transfer_mem_to_dev = iio_demo_transfer_mem_to_dev;
+	iio_device->write_data = iio_demo_write_dev;
+
+	return iio_device;
+}
+
+/**
  * @brief iio demo init function, registers a demo .
  * @param desc - Descriptor.
  * @param init - Configuration structure.
@@ -360,11 +364,7 @@ int32_t iio_demo_init(struct iio_demo_desc **desc,
 	*iio_interface = (struct iio_interface) {
 		.name = init->name,
 		.dev_instance = iio_demo_device_inst,
-		.iio = iio_device,
-		.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
-		.read_data = iio_demo_read_dev,
-		.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
-		.write_data = iio_demo_write_dev,
+		.iio = iio_device
 	};
 
 	status = iio_register(init->iio_desc, iio_interface);

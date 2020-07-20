@@ -63,19 +63,7 @@ struct iio_interface {
 	/** Physical instance of a device */
 	void *dev_instance;
 	/** Device descriptor(describes channels and attributes) */
-	struct iio_device *iio;
-	/** Transfer data from device into RAM */
-	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Read data from RAM to pbuf. It should be called after "transfer_dev_to_mem" */
-	ssize_t (*read_data)(void *dev_instance, char *pbuf, size_t offset,
-			     size_t bytes_count, uint32_t ch_mask);
-	/** Transfer data from RAM to device */
-	ssize_t (*transfer_mem_to_dev)(void *dev_instance, size_t bytes_count,
-				       uint32_t ch_mask);
-	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
-	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
-			      size_t bytes_count, uint32_t ch_mask);
+	struct iio_device	*iio;
 };
 
 enum pysical_link_type {
