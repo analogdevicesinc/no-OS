@@ -488,7 +488,7 @@ int main(void)
 
 	size = (rx_1_adc->num_channels + rx_0_adc->num_channels) * sizeof(uint16_t);
 	status = axi_dmac_transfer(rx_dmac,
-				   DDR_MEM_BASEADDR + 0x800000, 16384 * size);
+				   ADC_DDR_BASEADDR, 16384 * size);
 	if (status != SUCCESS)
 		xil_printf("axi_dmac_transfer() error: %"PRIi32"\n", status);
 
@@ -499,13 +499,13 @@ int main(void)
 	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_0_adc,
 		.rx_dmac = rx_dmac,
-		.adc_ddr_base = DDR_MEM_BASEADDR + 0x800000,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
 	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
 	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_1_adc,
 		.rx_dmac = rx_dmac,
-		.adc_ddr_base = DDR_MEM_BASEADDR + 0x800000,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
 
 	return iio_server_init(&iio_axi_adc_0_init_par, &iio_axi_adc_1_init_par);
