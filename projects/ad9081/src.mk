@@ -32,6 +32,7 @@ SRCS += $(PROJECT)/src/app.c						\
 	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c					\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
+	$(PLATFORM_DRIVERS)/timer.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(NO-OS)/util/clk.c						\
 	$(NO-OS)/util/util.c
@@ -83,12 +84,14 @@ INCS +=	$(PROJECT)/src/app_clock.h					\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.h		\
 	$(PLATFORM_DRIVERS)/gpio_extra.h				\
 	$(PLATFORM_DRIVERS)/spi_extra.h					\
+	$(PLATFORM_DRIVERS)/timer_extra.h				\
 	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/clk.h						\
 	$(INCLUDE)/delay.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/gpio.h						\
 	$(INCLUDE)/spi.h						\
+	$(INCLUDE)/timer.h						\
 	$(INCLUDE)/util.h
 ifeq (y,$(strip $(QUAD_MXFE)))
 INCS += $(DRIVERS)/frequency/adf4371/adf4371.h
