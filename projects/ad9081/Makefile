@@ -1,5 +1,5 @@
 TARGET := ad9081
-TINYIIOD = y
+TINYIIOD = n
 QUAD_MXFE = n
 ifeq ($(OS), Windows_NT)
 include ../../tools/scripts/windows.mk
