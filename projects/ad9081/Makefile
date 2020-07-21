@@ -1,4 +1,4 @@
-TINYIIOD = y
+TINYIIOD = n
 QUAD_MXFE = n
 
 include ../../tools/scripts/generic_variables.mk
