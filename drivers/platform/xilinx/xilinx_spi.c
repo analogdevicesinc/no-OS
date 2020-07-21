@@ -69,14 +69,101 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#include "util.h"
+
+int32_t xil_reg_spi_init(struct spi_desc **desc,
+	const struct spi_init_param *param)
+{
+	uint32_t baseaddr = XPAR_AXI_SPI_BASEADDR;
+	uint32_t ctrl_reg;
+
+	*desc = malloc(sizeof(**desc));
+	if(! *desc) {
+		free(*desc);
+		return FAILURE;
+	}
+
+	(*desc)->max_speed_hz = param->max_speed_hz;
+	(*desc)->mode = param->mode;
+	(*desc)->chip_select = param->chip_select;
+
+	ctrl_reg = XSP_CR_TRANS_INHIBIT_MASK | XSP_CR_MANUAL_SS_MASK |
+		XSP_CR_RXFIFO_RESET_MASK | XSP_CR_TXFIFO_RESET_MASK |
+		((param->mode & SPI_CPHA) ? XSP_CR_CLK_PHASE_MASK : 0) |
+		((param->mode & SPI_CPOL) ? XSP_CR_CLK_POLARITY_MASK : 0) |
+		XSP_CR_MASTER_MODE_MASK | XSP_CR_ENABLE_MASK;
+
+	Xil_Out32(baseaddr + XSP_CR_OFFSET, ctrl_reg);
+
+	Xil_Out32(XPAR_AXI_SPI_BASEADDR + XSP_SSR_OFFSET, 0xffffffff);
+
+	return SUCCESS;
+}
+
+int32_t xil_reg_spi_remove(struct spi_desc *desc)
+{
+	free(desc);
+
+	return SUCCESS;
+}
+
+int32_t xil_reg_spi_write_and_read(struct spi_desc *desc,
+	uint8_t *data,
+	uint16_t bytes_number)
+{
+	uint32_t baseaddr = XPAR_AXI_SPI_BASEADDR;
+	uint32_t ctrl_reg;
+	uint16_t remaining_tx_bytes = bytes_number;
+	uint16_t received_rx_bytes = 0;
+
+	ctrl_reg = XSP_CR_MANUAL_SS_MASK |
+		((desc->mode & SPI_CPHA) ? XSP_CR_CLK_PHASE_MASK : 0) |
+		((desc->mode & SPI_CPOL) ? XSP_CR_CLK_POLARITY_MASK : 0) |
+		XSP_CR_MASTER_MODE_MASK | XSP_CR_ENABLE_MASK;
+
+	Xil_Out32(XPAR_AXI_SPI_BASEADDR + XSP_SSR_OFFSET, ~BIT(desc->chip_select));
+
+	while (remaining_tx_bytes) {
+		Xil_Out32(baseaddr + XSP_CR_OFFSET,
+			ctrl_reg | XSP_CR_TRANS_INHIBIT_MASK);
+
+		while (((Xil_In32(XPAR_AXI_SPI_BASEADDR + XSP_SR_OFFSET) &
+			XSP_SR_TX_FULL_MASK) == 0) && remaining_tx_bytes) {
+			Xil_Out32(XPAR_AXI_SPI_BASEADDR + XSP_DTR_OFFSET,
+				data[bytes_number - remaining_tx_bytes]);
+			remaining_tx_bytes--;
+		}
+
+		Xil_Out32(XPAR_AXI_SPI_BASEADDR + XSP_CR_OFFSET, ctrl_reg);
+
+		while ((Xil_In32(XPAR_AXI_SPI_BASEADDR + XSP_SR_OFFSET) &
+				XSP_SR_TX_EMPTY_MASK) == 0x0);
+
+		while (received_rx_bytes < bytes_number) {
+			data[received_rx_bytes] =
+				Xil_In32(XPAR_AXI_SPI_BASEADDR + XSP_DRR_OFFSET);
+			received_rx_bytes++;
+		}
+	}
+
+	Xil_Out32(XPAR_AXI_SPI_BASEADDR + XSP_SSR_OFFSET, 0xffffffff);
+
+	return SUCCESS;
+}
 
 /**
  * @brief Xilinx platform specific SPI platform ops structure
  */
 const struct spi_platform_ops xil_platform_ops = {
+#if 0
 	.spi_ops_init = &xil_spi_init,
 	.spi_ops_write_and_read = &xil_spi_write_and_read,
 	.spi_ops_remove = &xil_spi_remove
+#else
+	.spi_ops_init = &xil_reg_spi_init,
+	.spi_ops_write_and_read = &xil_reg_spi_write_and_read,
+	.spi_ops_remove = &xil_reg_spi_remove
+#endif
 };
 
 /**
