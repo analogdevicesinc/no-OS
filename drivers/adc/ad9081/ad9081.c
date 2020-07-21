@@ -948,6 +948,20 @@ int32_t ad9081_parse_jesd_link_init_param(struct ad9081_jesd_link *link,
 	return SUCCESS;
 }
 
+uint8_t ad9081_get_main_adc_mask(struct ad9081_phy *phy, int32_t scan_index)
+{
+	uint8_t mask = 0;
+	uint32_t fddc_num;
+
+	if (scan_index < 0)
+		return 0;
+
+	fddc_num = phy->jesd_rx_link[0].link_converter_select[scan_index] / 2;
+	adi_ad9081_adc_xbar_find_cddc(&phy->ad9081, BIT(fddc_num), &mask);
+
+	return mask;
+}
+
 int32_t ad9081_parse_init_param(struct ad9081_phy *phy,
 				const struct ad9081_init_param *init_param)
 {
