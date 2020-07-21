@@ -55,11 +55,7 @@
  */
 void udelay(uint32_t usecs)
 {
-#ifdef _XPARAMETERS_PS_H_
 	usleep(usecs);
-#else
-	usleep(usecs / 20);	// FIXME
-#endif
 }
 
 /**
@@ -69,9 +65,5 @@ void udelay(uint32_t usecs)
  */
 void mdelay(uint32_t msecs)
 {
-#ifdef _XPARAMETERS_PS_H_
 	usleep(msecs * 1000);
-#else
-	usleep(msecs * 50);	// FIXME
-#endif
 }
