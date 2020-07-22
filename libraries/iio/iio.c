@@ -879,8 +879,6 @@ ssize_t iio_unregister(struct iio_desc *desc,
 	desc->xml_size -= n;
 	desc->xml_size_to_last_dev -= n;
 
-	desc->dev_count--;
-
 	return SUCCESS;
 }
 
