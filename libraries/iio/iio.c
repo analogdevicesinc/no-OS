@@ -102,6 +102,8 @@ struct element_info {
  * with a "iio_device *iio" that describes capabilities of the device.
  */
 struct iio_interface {
+	/** Will be: device[0...n] n beeing the count of registerd devices */
+	const char		dev_id[10];
 	/** Device name */
 	const char		*name;
 	/** Opened channels */
@@ -229,7 +231,7 @@ static struct iio_interface *iio_get_interface(const char *device_name)
 	struct iio_interface	cmp_val;
 	int32_t					ret;
 
-	cmp_val.name = device_name;
+	strcpy(cmp_val.dev_id, device_name);
 
 	ret = list_read_find(g_desc->interfaces_list,
 			     (void **)&interface, &cmp_val);
@@ -844,11 +846,12 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 
 	desc->xml_desc = aux;
 	/* Print the new device xml at the end of the xml */
-	iio_generate_device_xml(iio_interface->dev_descriptor, iio_interface->name,
+	iio_generate_device_xml(iio_interface->dev_descriptor,
+				iio_interface->name,
 				desc->dev_count,
 				desc->xml_desc + desc->xml_size_to_last_dev,
 				new_size - desc->xml_size_to_last_dev);
-
+	sprintf((char *)iio_interface->dev_id, "device%d", (int)desc->dev_count);
 	desc->xml_size_to_last_dev += n;
 	desc->xml_size += n;
 	/* Copy end header at the end */
@@ -899,7 +902,7 @@ ssize_t iio_unregister(struct iio_desc *desc, char *name)
 static int32_t iio_cmp_interfaces(struct iio_interface *a,
 				  struct iio_interface *b)
 {
-	return strcmp(a->name, b->name);
+	return strcmp(a->dev_id, b->dev_id);
 }
 
 /**
