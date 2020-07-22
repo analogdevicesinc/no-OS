@@ -172,6 +172,26 @@ static int32_t iio_get_channel_number(const char *ch)
 	return ch_num;
 }
 
+/* Get string for channel id from channel type */
+static char *get_channel_id(enum iio_chan_type type)
+{
+	switch (type) {
+	case IIO_VOLTAGE:
+		return "voltage";
+	case IIO_CURRENT:
+		return "current";
+	case IIO_ALTVOLTAGE:
+		return "altvoltage";
+	}
+
+	return "";
+}
+
+static inline void _print_ch_id(char *buff, enum iio_chan_type type, int32_t id)
+{
+	sprintf(buff, "%s%d", get_channel_id(type), (int)id);
+}
+
 /**
  * @brief Get channel ID from a list of channels.
  * @param channel - Channel name.
@@ -183,12 +203,14 @@ static int16_t iio_get_channel_id(const char *channel,
 				  struct iio_channel **channels, bool ch_out)
 {
 	int16_t i = 0;
+	char	ch_id[20];
 
 	if (!(*channels))
 		return -EINVAL;
 
 	while (channels[i]) {
-		if (!strcmp(channel, channels[i]->name) && (channels[i]->ch_out == ch_out))
+		_print_ch_id(ch_id, channels[i]->ch_type, i);
+		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
 			return i;
 		i++;
 	}
@@ -703,21 +725,6 @@ ssize_t iio_step(struct iio_desc *desc)
 	return tinyiiod_read_command(desc->iiod);
 }
 
-/* Get string for channel id from channel type */
-static char *get_channel_id(enum iio_chan_type type)
-{
-	switch (type) {
-	case IIO_VOLTAGE:
-		return "voltage";
-	case IIO_CURRENT:
-		return "current";
-	case IIO_ALTVOLTAGE:
-		return "altvoltage";
-	}
-
-	return "";
-}
-
 /*
  * Generate an xml describing a device and write it to buff.
  * Will return the size of the xml.
@@ -752,7 +759,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	if (device->channels)
 		for (j = 0; device->channels[j]; j++) {
 			ch = device->channels[j];
-			sprintf(ch_id, "%s%d", get_channel_id(ch->ch_type), j);
+			_print_ch_id(ch_id, ch->ch_type, j);
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<channel id=\"%s\" name=\"%s\""
 				      " type=\"%s\" >",
