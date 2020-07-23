@@ -89,13 +89,34 @@ struct iio_attribute {
 
 /**
  * @struct iio_channel
+ * @brief Struct describing the scan type
+ */
+struct scan_type {
+	/** 's' or 'u' to specify signed or unsigned */
+	char			sign;
+	/** Number of valid bits of data */
+	uint8_t 		realbits;
+	/** Realbits + padding */
+	uint8_t			storagebits;
+	/** Shift right by this before masking out realbits. */
+	uint8_t			shift;
+	/** True if big endian, false if little endian */
+	bool			is_big_endian;
+};
+
+/**
+ * @struct iio_channel
  * @brief Structure holding attributes of a channel.
  */
 struct iio_channel {
 	/** channel name */
-	char *name;
+	char			*name;
 	/** Chanel type */
-	enum iio_chan_type ch_type;
+	enum iio_chan_type	ch_type;
+	/** Index to give ordering in scans when read  from a buffer. */
+	int			scan_index;
+	/** */
+	struct scan_type	scan_type;
 	/** list of attributes */
 	struct iio_attribute **attributes;
 	/** if true, the channel is an output channel */

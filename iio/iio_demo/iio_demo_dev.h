@@ -62,12 +62,28 @@ static struct iio_attribute *demo_channel_attributes[] = {
 
 static struct iio_channel iio_demo_channel_voltage0_in = {
 	.name = "input_channel",
+	.scan_index = 0,
+	.scan_type = {
+		.sign = 's',
+		.realbits = 12,
+		.storagebits = 16,
+		.shift = 0,
+		.is_big_endian = false
+	},
 	.attributes = demo_channel_attributes,
 	.ch_out = false,
 };
 
 static struct iio_channel iio_demo_channel_voltage0_out = {
 	.name = "output_channel",
+	.scan_index = 0,
+	.scan_type = {
+		.sign = 's',
+		.realbits = 12,
+		.storagebits = 16,
+		.shift = 0,
+		.is_big_endian = false
+	},
 	.attributes = demo_channel_attributes,
 	.ch_out = true,
 };
