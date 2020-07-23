@@ -142,7 +142,7 @@ CFLAGS += -D XILINX_PLATFORM						\
 # Xilinx's generated linker script path
 LSCRIPT := $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
-LIBS := -L $(BUILD_DIR)/bsp/$(ARCH)/lib
+LIBS += -L $(BUILD_DIR)/bsp/$(ARCH)/lib
 # Xilinx's bsp include path
 EXTRA_INCS := -I $(BUILD_DIR)/bsp/$(ARCH)/include
 ################|--------------------------------------------------------------
@@ -219,7 +219,7 @@ CFLAGS += -D ALTERA_PLATFORM
 
 LSCRIPT := $(BUILD_DIR)/bsp/linker.x
 
-LIBS := -L $(BUILD_DIR)/bsp
+LIBS += -L $(BUILD_DIR)/bsp
 
 CC := nios2-elf-gcc 
 
@@ -271,7 +271,7 @@ endif
 endif
 
 # Add the common include paths
-INC_PATHS :=-I $(BUILD_DIR)/app/src
+INC_PATHS +=-I $(BUILD_DIR)/app/src
 
 OBJS = $(SRCS:.c=.o)
 
@@ -350,6 +350,10 @@ clean:
 	( ! test -f $(LIBRARIES)/mbedtls/Makefile ) || \
 	$(MAKE) -C $(LIBRARIES)/mbedtls clean
 
+.SILENT:clean_libs
+clean_libs:
+	-$(CLEAN_IIO)
+
 # If the hardware file is not specified, start searching for one
 # Check for .hdf files inside the project directory
 .SILENT:eval-hardware
@@ -399,7 +403,7 @@ altera-elf:
 	nios2-elf-insert $(BUILD_DIR)/$(EXEC).elf $(STAMP)
 
 .SILENT:libs
-libs:
+libs: $(LIB_TARGETS)
 ifeq (y,$(strip $(TINYIIOD)))
 	@$(MAKE) -C $(LIBRARIES)/libtinyiiod re
 endif
