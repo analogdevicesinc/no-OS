@@ -613,6 +613,9 @@ int32_t ad77681_set_convlen(struct ad77681_dev *dev,
 			    enum ad77681_conv_len conv_len);
 int32_t ad77681_soft_reset(struct ad77681_dev *dev);
 int32_t ad77681_initiate_sync(struct ad77681_dev *dev);
+int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
+				    const float *coeffs,
+				    uint8_t num_coeffs);
 int32_t ad77681_gpio_read(struct ad77681_dev *dev,
 			  uint8_t *value,
 			  enum ad77681_gpios gpio_number);

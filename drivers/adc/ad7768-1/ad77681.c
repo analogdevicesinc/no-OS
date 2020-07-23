@@ -46,6 +46,7 @@
 #include <string.h>
 #include "ad77681.h"
 #include "error.h"
+#include "delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -1166,6 +1167,173 @@ int32_t ad77681_apply_gain(struct ad77681_dev *dev,
 				      AD77681_REG_GAIN_LO,
 				      AD77681_GAIN_LOW_MSK,
 				      AD77681_GAIN_LOW(gain_LO));
+
+	return ret;
+}
+
+/**
+ * Upload sequence for Programmamble FIR filter
+ * @param dev - The device structure.
+ * @param coeffs - Pointer to the desired filter coefficients array to be written
+ * @param num_coeffs - Count of active filter coeffs
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad77681_programmable_filter(struct ad77681_dev *dev,
+				    const float *coeffs,
+				    uint8_t num_coeffs)
+{
+	uint8_t coeffs_buf[4], coeffs_index, check_back = 0, i, address;
+	uint32_t twait;
+	int32_t twos_complement, ret;
+	const uint8_t coeff_reg_length = 56;
+
+	/* Specific keys in the upload sequence */
+	const uint8_t key1 = 0xAC, key2 = 0x45, key3 = 0x55;
+	/* Scaling factor for all coefficients 2^22 */
+	const float coeff_scale_factor = (1 << 22);
+	/* Wait time in uS necessary to access the COEFF_CONTROL and */
+	/* COEFF_DATA registers. Twait = 512/MCLK */
+	twait = (uint32_t)(((512.0) / ((float)(dev->mclk))) * 1000.0) + 1;
+
+	/* Set Filter to FIR */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_DIGITAL_FILTER,
+				     AD77681_DIGI_FILTER_FILTER_MSK,
+				     AD77681_DIGI_FILTER_FILTER(AD77681_FIR));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Write the first access key to the ACCESS_KEY register */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ACCESS_KEY,
+				     AD77681_ACCESS_KEY_MSK,
+				     AD77681_ACCESS_KEY(key1));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Write the second access key to the ACCESS_KEY register */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ACCESS_KEY,
+				     AD77681_ACCESS_KEY_MSK,
+				     AD77681_ACCESS_KEY(key2));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Read the the ACCESS_KEY register bit 0, the key bit */
+	ret = ad77681_spi_read_mask(dev,
+				    AD77681_REG_ACCESS_KEY,
+				    AD77681_ACCESS_KEY_CHECK_MSK,
+				    &check_back);
+
+	/* Checks ret and key bit, return FAILURE in case key bit not equal to 1 */
+	if ((ret < 0) || (check_back != 1))
+		return FAILURE;
+
+	/* Set the initial adress to 0 and enable the  write and coefficient access bits */
+	address = AD77681_COEF_CONTROL_COEFFACCESSEN_MSK
+		  | AD77681_COEF_CONTROL_COEFFWRITEEN_MSK;
+
+	/* The COEFF_DATA register has to be filled with 56 coeffs.*/
+	/* In case the number of active filter coefficient is less */
+	/* than 56, zeros will be padded before the desired coeff. */
+	for (i = 0; i < coeff_reg_length; i++) {
+		/* Set the coeff address */
+		ret = ad77681_spi_reg_write(dev,
+					    AD77681_REG_COEFF_CONTROL,
+					    address);
+
+		/* Check return value before proceeding */
+		if (ret < 0)
+			return ret;
+
+		/* Wait for Twait uSeconds*/
+		udelay(twait);
+
+		/* Padding of zeros before the desired coef in case the coef count in less than 56 */
+		if((num_coeffs + i) < coeff_reg_length) {
+			/* wirte zeroes to COEFF_DATA, in case of less coeffs than 56*/
+			coeffs_buf[0] = AD77681_REG_WRITE(AD77681_REG_COEFF_DATA);
+			coeffs_buf[1] = 0;
+			coeffs_buf[2] = 0;
+			coeffs_buf[3] = 0;
+		} else {/* Writting of desired filter coefficients */
+			/* Computes the index of coefficients to be uploaded */
+			coeffs_index = (num_coeffs + i) - coeff_reg_length;
+			/* Scaling the coefficient value and converting it to 2's complement */
+			twos_complement = (int32_t)(coeffs[coeffs_index] * coeff_scale_factor);
+
+			/* Write coefficients to COEFF_DATA */
+			coeffs_buf[0] = AD77681_REG_WRITE(AD77681_REG_COEFF_DATA);
+			coeffs_buf[1] = (twos_complement & 0xFF0000) >> 16;
+			coeffs_buf[2] = (twos_complement & 0x00FF00) >> 8;
+			coeffs_buf[3] = (twos_complement & 0x0000FF);
+		}
+
+		ret = spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
+
+		/* Check return value before proceeding */
+		if (ret < 0)
+			return ret;
+
+		/* Increment the address*/
+		address++;
+		/* Wait for Twait uSeconds*/
+		udelay(twait);
+	}
+
+	/* Disable coefficient write */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_COEFF_CONTROL,
+				     AD77681_COEF_CONTROL_COEFFWRITEEN_MSK,
+				     AD77681_COEF_CONTROL_COEFFWRITEEN(0x00));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	udelay(twait);
+
+	/* Disable coefficient access */
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_COEFF_CONTROL,
+				     AD77681_COEF_CONTROL_COEFFACCESSEN_MSK,
+				     AD77681_COEF_CONTROL_COEFFACCESSEN(0x00));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Toggle the synchronization pulse and to begin reading data */
+	/* Write 0x800000 to COEFF_DATA */
+	coeffs_buf[0] = AD77681_REG_WRITE(AD77681_REG_COEFF_DATA);
+	coeffs_buf[1] = 0x80;
+	coeffs_buf[2] = 0x00;
+	coeffs_buf[3] = 0x00;
+
+	ret = spi_write_and_read(dev->spi_desc, coeffs_buf, 4);
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Exit filter upload by wirting specific access key 0x55*/
+	ret = ad77681_spi_write_mask(dev,
+				     AD77681_REG_ACCESS_KEY,
+				     AD77681_ACCESS_KEY_MSK,
+				     AD77681_ACCESS_KEY(key3));
+
+	/* Check return value before proceeding */
+	if (ret < 0)
+		return ret;
+
+	/* Send synchronization pulse */
+	ad77681_initiate_sync(dev);
 
 	return ret;
 }
