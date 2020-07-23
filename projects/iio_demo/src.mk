@@ -1,15 +1,16 @@
-################################################################################
-#									       #
-#     Shared variables:							       #
-#	- PROJECT							       #
-#	- DRIVERS							       #
-#	- INCLUDE							       #
-#	- PLATFORM_DRIVERS						       #
-#	- NO-OS								       #
-#									       #
-################################################################################
+#See No-OS/tool/scripts/src_model.mk for variable description
 
-SRCS := $(PROJECT)/src/main.c
+SRC_DIRS += $(PROJECT)/src
+SRC_DIRS += $(NO-OS)/iio/iio_demo
+
+SRC_DIRS += $(NO-OS)/network
+SRCS	 += $(NO-OS)/util/circular_buffer.c
+SRCS	 += $(PLATFORM_DRIVERS)/delay.c
+SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+
+DISABLE_SECURE_SOCKET=y
+
+LIBRARIES += iio
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
@@ -17,12 +18,6 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
-	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_app/iio_app.c					\
-	$(NO-OS)/iio/iio_demo/iio_demo.c
-
-INCS += $(PROJECT)/src/app_config.h					\
-	$(PROJECT)/src/parameters.h
 
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
@@ -32,10 +27,4 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
-	$(PLATFORM_DRIVERS)/uart_extra.h				\
-	$(NO-OS)/iio/iio.h						\
-	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_app/iio_app.h					\
-	$(NO-OS)/iio/iio_demo/iio_demo.h				\
-	$(NO-OS)/libraries/libtinyiiod/compat.h				\
-	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h
+	$(PLATFORM_DRIVERS)/uart_extra.h				
