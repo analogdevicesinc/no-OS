@@ -60,6 +60,10 @@ struct iio_demo_device {
 	const char *name;
 	/** Number of channels */
 	uint8_t num_channels;
+	/** Demo global device attribute */
+	uint32_t dev_global_attr;
+	/** Demo device channel attribute */
+	uint32_t dev_ch_attr;
 	/** Address used by for reading/writing data to device */
 	uint32_t ddr_base_addr;
 	/** Size of memory to read/write data */
@@ -86,6 +90,10 @@ struct iio_demo_init_param {
 	const char *name;
 	/** Number of channels */
 	uint8_t num_channels;
+	/** Demo global device attribute */
+	uint32_t dev_global_attr;
+	/** Demo device channel attribute */
+	uint32_t dev_ch_attr;
 	/** Address used by for reading/writing data to device */
 	uint32_t ddr_base_addr;
 	/** Size of memory to read/write data */

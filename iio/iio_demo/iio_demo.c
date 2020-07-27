@@ -51,13 +51,6 @@
 #include "iio.h"
 
 /******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-static uint32_t demo_channel_attr = 0;
-static uint32_t demo_global_attr = 0;
-
-/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -72,7 +65,9 @@ static uint32_t demo_global_attr = 0;
 static ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
 {
-	return snprintf(buf, len, "%"PRIu32"", demo_channel_attr);
+	struct iio_demo_device *desc = device;
+
+	return snprintf(buf, len, "%"PRIu32"", desc->dev_ch_attr);
 }
 
 /**
@@ -86,7 +81,8 @@ static ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
 static ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
 				     const struct iio_ch_info *channel)
 {
-	demo_channel_attr = srt_to_uint32(buf);
+	struct iio_demo_device *desc = device;
+	desc->dev_ch_attr = srt_to_uint32(buf);
 
 	return len;
 }
@@ -102,7 +98,8 @@ static ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
 static ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel)
 {
-	return snprintf(buf, len, "%"PRIu32"", demo_global_attr);
+	struct iio_demo_device *desc = device;
+	return snprintf(buf, len, "%"PRIu32"", desc->dev_global_attr);
 }
 
 /**
@@ -116,7 +113,8 @@ static ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
 static ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
 				    const struct iio_ch_info *channel)
 {
-	demo_global_attr = srt_to_uint32(buf);
+	struct iio_demo_device *desc = device;
+	desc->dev_global_attr = srt_to_uint32(buf);
 
 	return len;
 }
@@ -345,6 +343,10 @@ int32_t iio_demo_init(struct iio_demo_desc **desc,
 				       sizeof(*iio_demo_device_inst));
 	if (!iio_demo_device_inst)
 		return FAILURE;
+
+
+	iio_demo_device_inst->dev_global_attr = init->dev_global_attr;
+	iio_demo_device_inst->dev_ch_attr = init->dev_ch_attr;
 
 	iio_demo_device_inst->name = init->name;
 	iio_demo_device_inst->num_channels = init->num_channels;
