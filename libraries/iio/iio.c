@@ -81,19 +81,12 @@ static char header[] =
 	"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
 static char header_end[] = "</context>";
 
-/**
- * @struct element_info
- * @brief Structure informations about a specific parameter.
- */
-struct element_info {
-	/** Device name */
-	const char *device_name;
-	/** Channel name */
-	const char *channel_name;
-	/** Attribute name */
-	const char *attribute_name;
-	/** If set, is an output channel */
-	bool ch_out;
+/* Parameters used in show and store functions */
+struct attr_fun_params {
+	void			*dev_instance;
+	char			*buf;
+	size_t			len;
+	struct iio_ch_info	*ch_info;
 };
 
 /**
@@ -199,46 +192,20 @@ static inline void _print_ch_id(char *buff, enum iio_chan_type type, int32_t id)
  * @param ch_out - If "true" is output channel, if "false" is input channel.
  * @return Channel ID, or negative value if attribute is not found.
  */
-static int16_t iio_get_channel_id(const char *channel,
-				  struct iio_channel **channels, bool ch_out)
+static inline struct iio_channel *iio_get_channel(const char *channel,
+		struct iio_channel **channels, bool ch_out)
 {
 	int16_t i = 0;
 	char	ch_id[20];
 
-	if (!(*channels))
-		return -EINVAL;
-
 	while (channels[i]) {
 		_print_ch_id(ch_id, channels[i]->ch_type, i);
 		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
-			return i;
+			return channels[i];
 		i++;
 	}
 
-	return -ENOENT;
-}
-
-/**
- * @brief Get attribute ID from a list of attributes.
- * @param attr - Attribute name.
- * @param attributes - List of attributes.
- * @return - Attribute ID, or negative value if attribute is not found.
- */
-static int16_t iio_get_attribute_id(const char *attr,
-				    struct iio_attribute **attributes)
-{
-	int16_t i = 0;
-
-	if (!(*attributes))
-		return -EINVAL;
-
-	while (attributes[i]) {
-		if (!strcmp(attr, attributes[i]->name))
-			return i;
-		i++;
-	}
-
-	return -ENOENT;
+	return NULL;
 }
 
 /**
@@ -272,27 +239,22 @@ static struct iio_interface *iio_get_interface(const char *device_name)
  * @param attributes - List of attributes to be read.
  * @return Number of bytes read or negative value in case of error.
  */
-static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
-				 const struct iio_ch_info *channel, struct iio_attribute **attributes)
+static ssize_t iio_read_all_attr(struct attr_fun_params *params,
+				 struct iio_attribute **attributes)
 {
 	int16_t i = 0, j = 0;
 	char local_buf[256];
 	ssize_t attr_length;
 	uint32_t *pattr_length;
 
-	if (!attributes)
-		return FAILURE;
-
-	if (!buf)
-		return FAILURE;
-
 	while (attributes[i]) {
-		attr_length = attributes[i]->show(device, local_buf, len, channel);
-		pattr_length = (uint32_t *)(buf + j);
+		attr_length = attributes[i]->show(params->dev_instance,
+						  local_buf, params->len, params->ch_info);
+		pattr_length = (uint32_t *)(params->buf + j);
 		*pattr_length = bswap_constant_32(attr_length);
 		j += 4;
 		if (attr_length >= 0) {
-			sprintf(buf + j, "%s", local_buf);
+			sprintf(params->buf + j, "%s", local_buf);
 			if (attr_length & 0x3) /* multiple of 4 */
 				attr_length = ((attr_length >> 2) + 1) << 2;
 			j += attr_length;
@@ -312,132 +274,55 @@ static ssize_t iio_read_all_attr(void *device, char *buf, size_t len,
  * @param attributes - List of attributes to be written.
  * @return Number of written bytes or negative value in case of error.
  */
-static ssize_t iio_write_all_attr(void *device, char *buf, size_t len,
-				  const struct iio_ch_info *channel, struct iio_attribute **attributes)
+static ssize_t iio_write_all_attr(struct attr_fun_params *params,
+				  struct iio_attribute **attributes)
 {
 	int16_t i = 0, j = 0;
 	int16_t attr_length;
 
-	if (!attributes)
-		return FAILURE;
-
-	if (!buf)
-		return FAILURE;
-
 	while (attributes[i]) {
-		attr_length = bswap_constant_32((uint32_t)(buf + j));
+		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
 		j += 4;
-		attributes[i]->store(device, (buf + j), attr_length, channel);
+		attributes[i]->store(params->dev_instance, (params->buf + j),
+				     attr_length, params->ch_info);
 		j += attr_length;
 		if (j & 0x3)
 			j = ((j >> 2) + 1) << 2;
 		i++;
 	}
 
-	return len;
-}
-
-/**
- * @brief Read/write channel attribute.
- * @param el_info - Structure describing element to be written.
- * @param buf - Read/write value.
- * @param len - Length of data in "buf" parameter.
- * @param channel - Structure describing channel attributes.
- * @param is_write -If it has value "1", writes attribute, otherwise reads
- * 		attribute.
- * @return Length of chars written/read or negative value in case of error.
- */
-static ssize_t iio_rd_wr_channel_attribute(struct element_info *el_info,
-		char *buf, size_t len,
-		struct iio_channel *channel, bool is_write)
-{
-	int16_t attribute_id;
-	struct iio_interface *iface = iio_get_interface(el_info->device_name);
-	const struct iio_ch_info channel_info = {
-		iio_get_channel_number(el_info->channel_name),
-		el_info->ch_out
-	};
-
-	if (!strcmp(el_info->attribute_name, "")) {
-		/* read / write all channel attributes */
-		if (is_write)
-			return iio_write_all_attr(iface->dev_instance, buf, len, &channel_info,
-						  channel->attributes);
-		else
-			return iio_read_all_attr(iface->dev_instance, buf, len, &channel_info,
-						 channel->attributes);
-	} else {
-		/* read / write single channel attribute, if attribute found */
-		attribute_id = iio_get_attribute_id(el_info->attribute_name,
-						    channel->attributes);
-		if (attribute_id >= 0) {
-			if (is_write)
-				return channel->attributes[attribute_id]->store(iface->dev_instance,
-						(char*)buf, len, &channel_info);
-			else
-				return channel->attributes[attribute_id]->show(iface->dev_instance, (char*)buf,
-						len, &channel_info);
-		}
-	}
-
-	return -ENOENT;
+	return params->len;
 }
 
 /**
  * @brief Read/write attribute.
- * @param el_info - Structure describing element to be written.
- * @param buf - Read/write value.
- * @param len - Length of data in "buf" parameter.
- * @param iio_device - Physical instance of a device.
+ * @param params - Structure describing parameters for store and show functions
+ * @param attributes - Array of attributes.
+ * @param attr_name - Attribute name to be modified
  * @param is_write -If it has value "1", writes attribute, otherwise reads
  * 		attribute.
  * @return Length of chars written/read or negative value in case of error.
  */
-static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
-				   size_t len,
-				   struct iio_device *iio_device, bool is_write)
+static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
+				   struct iio_attribute **attributes,
+				   char *attr_name,
+				   bool is_write)
 {
-	int16_t channel_id;
-	int16_t attribute_id;
-	struct iio_interface *iface;
+	struct iio_attribute *attr;
 
-	if (!iio_device)
+	/* Search attribute */
+	for (attr = attributes[0]; attr; attr++)
+		if (!strcmp(attr_name, attr->name))
+			break;
+	if (!attr)
 		return -ENOENT;
 
-	if (!strcmp(el_info->channel_name, "")) {
-		/* it is attribute of a device */
-		iface = iio_get_interface(el_info->device_name);
-
-		if (!strcmp(el_info->attribute_name, "")) {
-			/* read / write all device attributes */
-			if (is_write)
-				return iio_write_all_attr(iface->dev_instance, buf, len, NULL,
-							  iio_device->attributes);
-			else
-				return iio_read_all_attr(iface->dev_instance, buf, len, NULL,
-							 iio_device->attributes);
-		} else {
-			/* read / write single device attribute, if attribute found */
-			attribute_id = iio_get_attribute_id(el_info->attribute_name,
-							    iio_device->attributes);
-			if (attribute_id < 0)
-				return -ENOENT;
-			if (is_write)
-				return iio_device->attributes[attribute_id]->store(iface->dev_instance,
-						(char*)buf, len, NULL);
-			else
-				return iio_device->attributes[attribute_id]->show(iface->dev_instance,
-						(char*)buf, len, NULL);
-		}
-	} else {
-		/* it is attribute of a channel */
-		channel_id = iio_get_channel_id(el_info->channel_name, iio_device->channels,
-						el_info->ch_out);
-		return iio_rd_wr_channel_attribute(el_info, buf, len,
-						   iio_device->channels[channel_id], is_write);
-	}
-
-	return -ENOENT;
+	if (is_write)
+		return attr->store(params->dev_instance, params->buf,
+				   params->len, params->ch_info);
+	else
+		return attr->show(params->dev_instance, params->buf,
+				  params->len, params->ch_info);
 }
 
 /**
@@ -449,21 +334,27 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
  * @param debug - Read raw value if set.
  * @return Number of bytes read.
  */
-static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
+static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 			     size_t len, bool debug)
 {
-	struct iio_interface *iio_device;
-	struct element_info el_info;
+	struct iio_interface	*dev;
+	struct attr_fun_params	params;
 
-	iio_device = iio_get_interface(device);
-	if (!iio_device)
+	dev = iio_get_interface(device_id);
+	if (!dev)
 		return FAILURE;
 
-	el_info.device_name = device;
-	el_info.channel_name = "";	/* there is no channel here */
-	el_info.attribute_name = attr;
-
-	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->dev_descriptor, 0);
+	params.buf = buf;
+	params.len = len;
+	params.dev_instance = dev->dev_instance;
+	params.ch_info = NULL;
+	if (!strcmp(attr, ""))
+		return iio_read_all_attr(&params,
+					 dev->dev_descriptor->attributes);
+	else
+		return iio_rd_wr_attribute(&params,
+					   dev->dev_descriptor->attributes,
+					   attr, 0);
 }
 
 /**
@@ -475,28 +366,33 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
  * @param debug - Write raw value if set.
  * @return Number of written bytes.
  */
-static ssize_t iio_write_attr(const char *device, const char *attr,
+static ssize_t iio_write_attr(const char *device_id, const char *attr,
 			      const char *buf,
 			      size_t len, bool debug)
 {
-	struct element_info el_info;
-	struct iio_interface *iio_interface;
+	struct iio_interface	*dev;
+	struct attr_fun_params	params;
 
-	iio_interface = iio_get_interface(device);
-	if (!iio_interface)
+	dev = iio_get_interface(device_id);
+	if (!dev)
 		return -ENODEV;
 
-	el_info.device_name = device;
-	el_info.channel_name = "";	/* there is no channel here */
-	el_info.attribute_name = attr;
-
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
-				   iio_interface->dev_descriptor, 1);
+	params.buf = (char *)buf;
+	params.len = len;
+	params.dev_instance = dev->dev_instance;
+	params.ch_info = NULL;
+	if (!strcmp(attr, ""))
+		return iio_write_all_attr(&params,
+					  dev->dev_descriptor->attributes);
+	else
+		return iio_rd_wr_attribute(&params,
+					   dev->dev_descriptor->attributes,
+					   attr, 1);
 }
 
 /**
  * @brief Read channel attribute.
- * @param device - String containing device name.
+ * @param device_name - String containing device name.
  * @param channel - String containing channel name.
  * @param ch_out -Channel type input/output.
  * @param attr - String containing attribute name.
@@ -504,23 +400,35 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
  * @param len - Maximum length of value to be stored in buf.
  * @return - Number of bytes read.
  */
-static ssize_t iio_ch_read_attr(const char *device, const char *channel,
+static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 				bool ch_out, const char *attr, char *buf, size_t len)
 {
-	struct element_info el_info;
-	struct iio_interface *iio_interface;
+	struct iio_interface	*dev;
+	struct iio_ch_info	ch_info;
+	struct iio_channel	*ch;
+	struct attr_fun_params	params;
 
-	iio_interface = iio_get_interface(device);
-	if (!iio_interface)
+	dev = iio_get_interface(device_id);
+	if (!dev)
 		return FAILURE;
 
-	el_info.device_name = device;
-	el_info.channel_name = channel;
-	el_info.attribute_name = attr;
-	el_info.ch_out = ch_out;
+	ch_info.ch_out = ch_out;
+	ch_info.ch_num = iio_get_channel_number(channel);
+	if (ch_info.ch_num == FAILURE)
+		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->dev_descriptor,
-				   0);
+	ch = iio_get_channel(channel, dev->dev_descriptor->channels, ch_out);
+	if (!ch)
+		return -ENOENT;
+
+	params.buf = buf;
+	params.len = len;
+	params.dev_instance = dev->dev_instance;
+	params.ch_info = &ch_info;
+	if (!strcmp(attr, ""))
+		return iio_read_all_attr(&params, ch->attributes);
+	else
+		return iio_rd_wr_attribute(&params, ch->attributes, attr, 0);
 }
 
 /**
@@ -533,23 +441,35 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
  * @param len - Length of data in "buf" parameter.
  * @return Number of written bytes.
  */
-static ssize_t iio_ch_write_attr(const char *device, const char *channel,
+static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 				 bool ch_out, const char *attr, const char *buf, size_t len)
 {
-	struct element_info el_info;
-	struct iio_interface *iio_interface;
+	struct iio_interface	*dev;
+	struct iio_ch_info	ch_info;
+	struct iio_channel	*ch;
+	struct attr_fun_params	params;
 
-	iio_interface = iio_get_interface(device);
-	if (!iio_interface)
+	dev = iio_get_interface(device_id);
+	if (!dev)
 		return -ENOENT;
 
-	el_info.device_name = device;
-	el_info.channel_name = channel;
-	el_info.attribute_name = attr;
-	el_info.ch_out = ch_out;
+	ch_info.ch_out = ch_out;
+	ch_info.ch_num = iio_get_channel_number(channel);
+	if (ch_info.ch_num == FAILURE)
+		return FAILURE;
 
-	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
-				   iio_interface->dev_descriptor, 1);
+	ch = iio_get_channel(channel, dev->dev_descriptor->channels, ch_out);
+	if (!ch)
+		return -ENOENT;
+
+	params.buf = (char *)buf;
+	params.len = len;
+	params.dev_instance = dev->dev_instance;
+	params.ch_info = &ch_info;
+	if (!strcmp(attr, ""))
+		return iio_write_all_attr(&params, ch->attributes);
+	else
+		return iio_rd_wr_attribute(&params, ch->attributes, attr, 1);
 }
 
 /**
