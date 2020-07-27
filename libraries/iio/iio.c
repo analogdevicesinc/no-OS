@@ -399,16 +399,6 @@ static ssize_t iio_rd_wr_attribute(struct element_info *el_info, char *buf,
 }
 
 /**
- * @brief Check if device is supported.
- * @param device - Device name.
- * @return TRUE if device is supported, FALSE otherwise.
- */
-static bool iio_supported_dev(const char *device)
-{
-	return (NULL != iio_get_interface(device));
-}
-
-/**
  * @brief Read global attribute of a device.
  * @param device - String containing device name.
  * @param attr - String containing attribute name.
@@ -423,16 +413,13 @@ static ssize_t iio_read_attr(const char *device, const char *attr, char *buf,
 	struct iio_interface *iio_device;
 	struct element_info el_info;
 
-	if (!iio_supported_dev(device))
+	iio_device = iio_get_interface(device);
+	if (!iio_device)
 		return FAILURE;
 
 	el_info.device_name = device;
 	el_info.channel_name = "";	/* there is no channel here */
 	el_info.attribute_name = attr;
-
-	iio_device = iio_get_interface(device);
-	if (!iio_device)
-		return FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, buf, len, iio_device->dev_descriptor, 0);
 }
@@ -453,16 +440,13 @@ static ssize_t iio_write_attr(const char *device, const char *attr,
 	struct element_info el_info;
 	struct iio_interface *iio_interface;
 
-	if (!iio_supported_dev(device))
+	iio_interface = iio_get_interface(device);
+	if (!iio_interface)
 		return -ENODEV;
 
 	el_info.device_name = device;
 	el_info.channel_name = "";	/* there is no channel here */
 	el_info.attribute_name = attr;
-
-	iio_interface = iio_get_interface(device);
-	if (!iio_interface)
-		return FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
 				   iio_interface->dev_descriptor, 1);
@@ -484,17 +468,14 @@ static ssize_t iio_ch_read_attr(const char *device, const char *channel,
 	struct element_info el_info;
 	struct iio_interface *iio_interface;
 
-	if (!iio_supported_dev(device))
+	iio_interface = iio_get_interface(device);
+	if (!iio_interface)
 		return FAILURE;
 
 	el_info.device_name = device;
 	el_info.channel_name = channel;
 	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
-
-	iio_interface = iio_get_interface(device);
-	if (!device)
-		return FAILURE;
 
 	return iio_rd_wr_attribute(&el_info, buf, len, iio_interface->dev_descriptor,
 				   0);
@@ -516,17 +497,14 @@ static ssize_t iio_ch_write_attr(const char *device, const char *channel,
 	struct element_info el_info;
 	struct iio_interface *iio_interface;
 
-	if (!iio_supported_dev(device))
-		return -ENODEV;
+	iio_interface = iio_get_interface(device);
+	if (!iio_interface)
+		return -ENOENT;
 
 	el_info.device_name = device;
 	el_info.channel_name = channel;
 	el_info.attribute_name = attr;
 	el_info.ch_out = ch_out;
-	iio_interface = iio_get_interface(device);
-
-	if (!iio_interface)
-		return -ENOENT;
 
 	return iio_rd_wr_attribute(&el_info, (char*)buf, len,
 				   iio_interface->dev_descriptor, 1);
@@ -545,10 +523,10 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 	struct iio_interface *iface;
 	uint32_t ch_mask;
 
-	if (!iio_supported_dev(device))
+	iface = iio_get_interface(device);
+	if (!iface)
 		return -ENODEV;
 
-	iface = iio_get_interface(device);
 	ch_mask = 0xFFFFFFFF >> (32 - iface->dev_descriptor->num_ch);
 
 	if (mask & ~ch_mask)
@@ -568,9 +546,9 @@ static int32_t iio_close_dev(const char *device)
 {
 	struct iio_interface *iface;
 
-	if (!iio_supported_dev(device))
-		return FAILURE;
 	iface = iio_get_interface(device);
+	if (!iface)
+		return FAILURE;
 	iface->ch_mask = 0;
 
 	return SUCCESS;
@@ -586,10 +564,10 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 {
 	struct iio_interface *iface;
 
-	if (!iio_supported_dev(device))
+	iface = iio_get_interface(device);
+	if (!iface)
 		return -ENODEV;
 
-	iface = iio_get_interface(device);
 	*mask = iface->ch_mask;
 
 	return SUCCESS;
