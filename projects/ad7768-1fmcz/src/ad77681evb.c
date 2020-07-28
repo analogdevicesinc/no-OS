@@ -61,6 +61,7 @@
 #define AD77681_DMA_1_BASEADDR				XPAR_AXI_AD77681_DMA_BASEADDR
 #define AD77681_SPI1_ENGINE_BASEADDR		XPAR_SPI_ADC_AXI_REGMAP_BASEADDR
 #define AD77681_SPI_CS						0
+#define AD77681_SPI_ENG_REF_CLK_FREQ_HZ		XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 
 #define GPIO_DEVICE_ID						XPAR_PS7_GPIO_0_DEVICE_ID
 #define GPIO_OFFSET							32
@@ -80,6 +81,7 @@ struct spi_engine_init_param spi_eng_init_param  = {
 	.spi_engine_baseaddr = AD77681_SPI1_ENGINE_BASEADDR,
 	.cs_delay = 0,
 	.data_width = 32,
+	.ref_clk_hz = AD77681_SPI_ENG_REF_CLK_FREQ_HZ,
 };
 
 struct ad77681_init_param ADC_default_init_param = {

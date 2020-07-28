@@ -86,6 +86,8 @@ and will be used inside the function call */
  * @brief  Structure containing the init parameters needed by the SPI engine
  */
 struct spi_engine_init_param {
+	/** SPI engine reference clock */
+	uint32_t	ref_clk_hz;
 	/** Type of implementation */
 	enum xil_spi_type	type;
 	/** Base address where the HDL core is situated */
@@ -102,6 +104,8 @@ struct spi_engine_init_param {
  * @brief  Structure representing an SPI engine device
  */
 struct spi_engine_desc {
+	/** SPI engine reference clock */
+	uint32_t	ref_clk_hz;
 	/** Type of implementation */
 	enum xil_spi_type	type;
 	/** Pointer to a DMAC used in transmission */
@@ -193,5 +197,13 @@ int32_t spi_engine_offload_init(struct spi_desc *desc,
 int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 				    struct spi_engine_offload_message msg,
 				    uint32_t no_samples);
+
+/* Set SPI transfer width */
+int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
+				      uint8_t data_wdith);
+
+/* Set SPI transfer speed */
+void spi_engine_set_speed(struct spi_desc *desc,
+			  uint32_t speed_hz);
 
 #endif // SPI_ENGINE_H
