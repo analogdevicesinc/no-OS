@@ -141,7 +141,8 @@ int32_t ad77681_spi_reg_read(struct ad77681_dev *dev,
 			ret = FAILURE;
 	}
 
-	memcpy(reg_data, buf, ARRAY_SIZE(buf));
+	reg_data[0] = AD77681_REG_READ(reg_addr);
+	memcpy(reg_data + 1, buf, ARRAY_SIZE(buf) - 1);
 
 	return ret;
 }
