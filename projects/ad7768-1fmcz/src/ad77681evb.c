@@ -123,9 +123,12 @@ int main()
 	uint32_t 		i;
 	int32_t ret;
 	uint8_t commands_data[2] = {AD77681_REG_READ(AD77681_REG_ADC_DATA), 0};
-	struct spi_engine_offload_init_param spi_engine_offload_init_param;
+	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
+		.offload_config = (OFFLOAD_RX_EN | OFFLOAD_TX_EN),
+		.rx_dma_baseaddr = AD77681_DMA_1_BASEADDR,
+		.tx_dma_baseaddr = AD77681_DMA_1_BASEADDR
+	};
 	struct spi_engine_offload_message spi_engine_offload_message;
-	struct spi_desc *spi_eng_desc;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
@@ -143,7 +146,8 @@ int main()
 			mdelay(1000);
 		}
 	} else {
-		ret = spi_engine_offload_init(spi_eng_desc, &spi_engine_offload_init_param);
+		ret = spi_engine_offload_init(adc_dev->spi_desc,
+					      &spi_engine_offload_init_param);
 		if (ret != SUCCESS)
 			return FAILURE;
 
@@ -153,7 +157,7 @@ int main()
 		spi_engine_offload_message.rx_addr = 0x800000;
 		spi_engine_offload_message.tx_addr = 0xA000000;
 
-		ret = spi_engine_offload_transfer(spi_eng_desc, spi_engine_offload_message,
+		ret = spi_engine_offload_transfer(adc_dev->spi_desc, spi_engine_offload_message,
 						  AD77681_EVB_SAMPLE_NO);
 		if (ret != SUCCESS)
 			return ret;
