@@ -759,8 +759,6 @@ int32_t spi_engine_offload_init(struct spi_desc *desc,
 			return FAILURE;
 	}
 
-	spi_engine_set_transfer_width(desc,32);
-
 	return SUCCESS;
 }
 
