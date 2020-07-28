@@ -125,8 +125,8 @@ static int32_t spi_engine_read(struct spi_engine_desc *desc,
  * 		- 24
  * 		- 32
  */
-static int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
-		uint8_t data_wdith)
+int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
+				      uint8_t data_wdith)
 {
 	struct spi_engine_desc	*desc_extra;
 
@@ -138,6 +138,23 @@ static int32_t spi_engine_set_transfer_width(struct spi_desc *desc,
 		desc_extra->data_width = data_wdith;
 
 	return SUCCESS;
+}
+
+/**
+ * @brief Set SPI engine clock frequency
+ *
+ * @param desc Decriptor containing SPI Engine's parameters
+ * @param speed_hz SPI engine transfer speed
+ */
+void spi_engine_set_speed(struct spi_desc *desc,
+			  uint32_t speed_hz)
+{
+	struct spi_engine_desc	*desc_extra;
+
+	desc_extra = desc->extra;
+
+	desc_extra->clk_div =  desc_extra->ref_clk_hz /
+			       (2 * speed_hz) - 1;
 }
 
 /**
@@ -636,7 +653,8 @@ int32_t spi_engine_init(struct spi_desc **desc,
 	eng_desc->spi_engine_baseaddr = spi_engine_init->spi_engine_baseaddr;
 	eng_desc->type = spi_engine_init->type;
 	eng_desc->cs_delay = spi_engine_init->cs_delay;
-	eng_desc->clk_div =  SPI_ENGINE_AXI_SPEED_HZ /
+	eng_desc->ref_clk_hz = spi_engine_init->ref_clk_hz;
+	eng_desc->clk_div =  eng_desc->ref_clk_hz /
 			     (2 * param->max_speed_hz) - 1;
 
 	/* Perform a reset */
