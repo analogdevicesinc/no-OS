@@ -145,4 +145,14 @@ int32_t socket_send(struct tcp_socket_desc *desc, const void *data,
 /* Socket recv */
 int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len);
 
+/* Socket bind */
+int32_t socket_bind(struct tcp_socket_desc *desc, uint16_t port);
+
+/* Socket listen */
+int32_t socket_listen(struct tcp_socket_desc *desc, uint32_t back_log);
+
+/* Socket accept */
+int32_t socket_accept(struct tcp_socket_desc *desc,
+		      struct tcp_socket_desc **new_client);
+
 #endif

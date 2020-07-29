@@ -416,3 +416,53 @@ int32_t socket_recv(struct tcp_socket_desc *desc, void *data, uint32_t len)
 	return desc->net->socket_recv(desc->net->net, desc->id, data,
 				      len);
 }
+
+/** @brief See \ref network_interface.socket_bind */
+int32_t socket_bind(struct tcp_socket_desc *desc, uint16_t port)
+{
+#ifndef DISABLE_SECURE_SOCKET
+	if (desc->secure)
+		return -ENOSYS;
+#endif
+
+	return desc->net->socket_bind(desc->net->net, desc->id, port);
+}
+
+/** @brief See \ref network_interface.socket_listen */
+int32_t socket_listen(struct tcp_socket_desc *desc, uint32_t back_log)
+{
+#ifndef DISABLE_SECURE_SOCKET
+	if (desc->secure)
+		return -ENOSYS;
+#endif
+
+	return desc->net->socket_listen(desc->net->net, desc->id, back_log);
+}
+
+/** @brief See \ref network_interface.socket_accept */
+int32_t socket_accept(struct tcp_socket_desc *desc,
+		      struct tcp_socket_desc **new_client)
+{
+	uint32_t		new_cli_id;
+	int32_t			ret;
+
+#ifndef DISABLE_SECURE_SOCKET
+	if (desc->secure)
+		return -ENOSYS;
+#endif
+
+	ret = desc->net->socket_accept(desc->net->net, desc->id, &new_cli_id);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	*new_client = (typeof(*new_client))calloc(1, sizeof(**new_client));
+	if (!*new_client) {
+		desc->net->socket_close(desc->net->net, desc->id);
+		return -ENOMEM;
+	}
+	(*new_client)->net = desc->net;
+	(*new_client)->id = new_cli_id;
+
+	return SUCCESS;
+}
+
