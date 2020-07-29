@@ -95,7 +95,7 @@ static int32_t wifi_socket_recvfrom(struct wifi_desc *desc, uint32_t sock_id,
 				    struct socket_address *from);
 
 /* Connect internal functions to the network interface */
-static void wifi_init_intarface(struct wifi_desc *desc)
+static void wifi_init_interface(struct wifi_desc *desc)
 {
 
 	desc->interface.net = desc;
@@ -158,7 +158,7 @@ int32_t wifi_init(struct wifi_desc **desc, struct wifi_init_param *param)
 	if (IS_ERR_VALUE(result))
 		goto ldesc_err;
 
-	wifi_init_intarface(ldesc);
+	wifi_init_interface(ldesc);
 
 	result = at_run_cmd(ldesc->at, AT_RESET, AT_EXECUTE_OP, NULL);
 	if (IS_ERR_VALUE(result))
