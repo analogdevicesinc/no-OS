@@ -176,6 +176,48 @@ struct network_interface {
 	int32_t (*socket_recvfrom)(void *net, uint32_t sock_id,
 				   void *data, uint32_t size,
 				   struct socket_address *from);
+	/**
+	 * @brief Bind a specific port to a socket.
+	 *
+	 * Only one tcp_socket can be used to bind a port.
+	 * @param net - Network interface
+	 * @param sock_id - Socket id
+	 * @param port - Port to bind
+	 * @return
+	 *  - \ref SUCCESS : On success
+	 *  - \ref Negative error code on failure
+	 */
+	int32_t (*socket_bind)(void *net, uint32_t sock_id, uint16_t port);
+
+	/**
+	 * @brief Start listening for incoming connections.
+	 *
+	 * Should be call after bind is done.
+	 * @param net - Network interface
+	 * @param sock_id - Socket id
+	 * @param back_log - Number of connections in the socket's listen queue
+	 * @return
+	 *  - \ref SUCCESS : On success
+	 *  - \ref Negative error code on failure
+	 */
+	int32_t (*socket_listen)(void *net, uint32_t sock_id,
+				 uint32_t back_log);
+
+	/**
+	 * @brief Accepts a connection on a socket.
+	 *
+	 * The server socket must be bound and set to listen for connections.
+	 * Will block until a new connection arrives
+	 * @param net - Network interface
+	 * @param sock_id - Socket id
+	 * @param client_socket_id - Address where to store the id of the new
+	 * connection.
+	 * @return
+	 *  - \ref SUCCESS : On success
+	 *  - \ref Negative error code on failure
+	 */
+	int32_t (*socket_accept)(void *net, uint32_t sock_id,
+				 uint32_t *client_socket_id);
 };
 
 #endif
