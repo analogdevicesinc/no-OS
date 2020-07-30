@@ -99,7 +99,7 @@ struct ad77681_init_param ADC_default_init_param = {
 	false,						// conv_diag_sel
 	AD77681_CONV_16BIT,			// conv_len
 	AD77681_CRC, 				// crc_sel
-	0 							// status_bit
+	0, 							// status_bit
 	AD77681_VCM_HALF_VCC,		/* VCM setup*/
 	AD77681_AINn_ENABLED,		/* AIN- precharge buffer*/
 	AD77681_AINp_ENABLED,		/* AIN+ precharge buffer*/
