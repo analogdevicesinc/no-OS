@@ -1,7 +1,8 @@
 /***************************************************************************//**
- *   @file   iio_demo.c
+ *   @file   demo_dev.c
  *   @brief  Implementation of iio_demo.c.
  *   @author Cristian Pop (cristian.pop@analog.com)
+ *   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -44,11 +45,9 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include <string.h>
-#include "iio_demo.h"
+#include "demo_dev.h"
 #include "error.h"
-#include "xml.h"
 #include "util.h"
-#include "iio.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -62,10 +61,10 @@
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
-				     const struct iio_ch_info *channel)
+ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
+			      const struct iio_ch_info *channel)
 {
-	struct iio_demo_device *desc = device;
+	struct iio_demo_desc *desc = device;
 
 	return snprintf(buf, len, "%"PRIu32"", desc->dev_ch_attr);
 }
@@ -78,10 +77,10 @@ static ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
-				     const struct iio_ch_info *channel)
+ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
+			      const struct iio_ch_info *channel)
 {
-	struct iio_demo_device *desc = device;
+	struct iio_demo_desc *desc = device;
 	desc->dev_ch_attr = srt_to_uint32(buf);
 
 	return len;
@@ -95,10 +94,10 @@ static ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return Length of chars written in buf, or negative value on failure.
  */
-static ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
-				    const struct iio_ch_info *channel)
+ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
+			     const struct iio_ch_info *channel)
 {
-	struct iio_demo_device *desc = device;
+	struct iio_demo_desc *desc = device;
 	return snprintf(buf, len, "%"PRIu32"", desc->dev_global_attr);
 }
 
@@ -110,59 +109,13 @@ static ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
  * @param channel - Channel properties.
  * @return: Number of bytes written to device, or negative value on failure.
  */
-static ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
-				    const struct iio_ch_info *channel)
+ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
+			     const struct iio_ch_info *channel)
 {
-	struct iio_demo_device *desc = device;
+	struct iio_demo_desc *desc = device;
 	desc->dev_global_attr = srt_to_uint32(buf);
 
 	return len;
-}
-
-static struct iio_attribute iio_attr_demo_channel = {
-	.name = "demo_channel_attr",
-	.show = get_demo_channel_attr,
-	.store = set_demo_channel_attr,
-};
-
-static struct iio_attribute iio_attr_demo_global = {
-	.name = "demo_global_attr",
-	.show = get_demo_global_attr,
-	.store = set_demo_global_attr,
-};
-
-static struct iio_attribute *demo_channel_attributes[] = {
-	&iio_attr_demo_channel,
-	NULL,
-};
-
-static struct iio_channel iio_demo_channel_voltage0_in = {
-	.name = "voltage3",
-	.attributes = demo_channel_attributes,
-	.ch_out = false,
-};
-
-static struct iio_channel *iio_demo_channels[] = {
-	&iio_demo_channel_voltage0_in,
-	NULL,
-};
-
-static struct iio_attribute *iio_demo_global_attributes[] = {
-	&iio_attr_demo_global,
-	NULL,
-};
-
-/**
- * @brief Delete iio_device.
- * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static ssize_t iio_demo_delete_device(struct iio_device *iio_device)
-{
-	if(iio_device)
-		free(iio_device);
-
-	return SUCCESS;
 }
 
 /**
@@ -172,9 +125,9 @@ static ssize_t iio_demo_delete_device(struct iio_device *iio_device)
  * @param ch_mask - Opened channels mask.
  * @return Number of bytes transfered, or negative value in case of failure.
  */
-static ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
-		size_t bytes_count,
-		uint32_t ch_mask)
+ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
+				     size_t bytes_count,
+				     uint32_t ch_mask)
 {
 	struct iio_demo_device *demo_device;
 	demo_device = (struct iio_demo_device *)iio_inst;
@@ -191,9 +144,9 @@ static ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
  * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
-static ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
-		size_t bytes_count,
-		uint32_t ch_mask)
+ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
+				     size_t bytes_count,
+				     uint32_t ch_mask)
 {
 	struct iio_demo_device *demo_device;
 	demo_device = (struct iio_demo_device *)iio_inst;
@@ -220,10 +173,10 @@ static ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
  * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
-static ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
-				  size_t offset,  size_t bytes_count, uint32_t ch_mask)
+ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
+			   size_t offset,  size_t bytes_count, uint32_t ch_mask)
 {
-	struct iio_demo_device *demo_device;
+	struct iio_demo_desc *demo_device;
 	uint32_t index, addr;
 	uint16_t *buf16;
 
@@ -234,7 +187,7 @@ static ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
 		return FAILURE;
 
 	buf16 = (uint16_t *)buf;
-	demo_device = (struct iio_demo_device *)iio_inst;
+	demo_device = (struct iio_demo_desc *)iio_inst;
 	addr = demo_device->ddr_base_addr + offset;
 	for(index = 0; index < bytes_count; index += 2) {
 		uint32_t *local_addr = (uint32_t *)(addr +
@@ -259,10 +212,10 @@ static ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
  * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
  */
-static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
-				 size_t bytes_count, uint32_t ch_mask)
+ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
+			  size_t bytes_count, uint32_t ch_mask)
 {
-	struct iio_demo_device *demo_device;
+	struct iio_demo_desc *demo_device;
 	uint32_t i, j = 0, current_ch = 0;
 	uint16_t *pbuf16;
 	size_t samples;
@@ -273,12 +226,12 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 	if (!pbuf)
 		return FAILURE;
 
-	demo_device = (struct iio_demo_device *)iio_inst;
+	demo_device = (struct iio_demo_desc*)iio_inst;
 	pbuf16 = (uint16_t*)pbuf;
-	samples = (bytes_count * demo_device->num_channels) / hweight8(
+	samples = (bytes_count * DEMO_NUM_CHANNELS) / hweight8(
 			  ch_mask);
 	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
-	offset = (offset * demo_device->num_channels) / hweight8(ch_mask);
+	offset = (offset * DEMO_NUM_CHANNELS) / hweight8(ch_mask);
 
 	for (i = 0; i < samples; i++) {
 
@@ -289,7 +242,7 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 			j++;
 		}
 
-		if (current_ch + 1 < demo_device->num_channels)
+		if (current_ch + 1 < DEMO_NUM_CHANNELS)
 			current_ch++;
 		else
 			current_ch = 0;
@@ -299,90 +252,28 @@ static ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Create structure describing a device, channels and attributes.
- * @param device_name - Device name.
- * @param num_ch - Number of channels that the device has.
- * @return iio_device or NULL, in case of failure.
- */
-static struct iio_device *iio_demo_create_device(const char *device_name,
-		uint16_t num_ch)
-{
-	struct iio_device *iio_device;
-
-	iio_device = (struct iio_device *)calloc(1, sizeof(*iio_device));
-	if (!iio_device)
-		return NULL;
-
-	iio_device->num_ch = num_ch;
-	iio_device->attributes = iio_demo_global_attributes;
-	iio_device->channels = iio_demo_channels;
-	iio_device->transfer_dev_to_mem = iio_demo_transfer_dev_to_mem;
-	iio_device->read_data = iio_demo_read_dev;
-	iio_device->transfer_mem_to_dev = iio_demo_transfer_mem_to_dev;
-	iio_device->write_data = iio_demo_write_dev;
-
-	return iio_device;
-}
-
-/**
  * @brief iio demo init function, registers a demo .
  * @param desc - Descriptor.
  * @param init - Configuration structure.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_demo_init(struct iio_demo_desc **desc,
-		      struct iio_demo_init_param *init)
+int32_t iio_demo_dev_init(struct iio_demo_desc **desc,
+			  struct iio_demo_init_param *init)
 {
-	struct iio_interface *iio_interface;
-	struct iio_device * iio_device;
-	int32_t status;
-	struct iio_demo_device *iio_demo_device_inst;
+	struct iio_demo_desc *ldesc;
 
-	iio_demo_device_inst = (struct iio_demo_device *)calloc(
-				       1,
-				       sizeof(*iio_demo_device_inst));
-	if (!iio_demo_device_inst)
+	ldesc = (struct iio_demo_desc*)calloc(1, sizeof(*ldesc));
+	if (!ldesc)
 		return FAILURE;
 
+	ldesc->dev_global_attr = init->dev_global_attr;
+	ldesc->dev_ch_attr = init->dev_ch_attr;
+	ldesc->ddr_base_addr = init->ddr_base_addr;
+	ldesc->ddr_base_size = init->ddr_base_size;
 
-	iio_demo_device_inst->dev_global_attr = init->dev_global_attr;
-	iio_demo_device_inst->dev_ch_attr = init->dev_ch_attr;
-
-	iio_demo_device_inst->name = init->name;
-	iio_demo_device_inst->num_channels = init->num_channels;
-	iio_demo_device_inst->ddr_base_addr = init->ddr_base_addr;
-	iio_demo_device_inst->ddr_base_size = init->ddr_base_size;
-
-	iio_device = iio_demo_create_device(init->name,
-					    iio_demo_device_inst->num_channels);
-	if (!iio_device)
-		goto error_free_iio_demo_inst;
-
-	iio_interface = (struct iio_interface *)calloc(1,
-			sizeof(*iio_interface));
-	if (!iio_interface)
-		goto error_free_iio_demo_delete_dev;
-
-	*iio_interface = (struct iio_interface) {
-		.name = init->name,
-		.dev_instance = iio_demo_device_inst,
-		.dev_descriptor = iio_device
-	};
-
-	status = iio_register(init->iio_desc, iio_interface);
-	if (status < 0)
-		goto error_free_iio_interface;
+	*desc = ldesc;
 
 	return SUCCESS;
-
-error_free_iio_interface:
-	free(iio_interface);
-error_free_iio_demo_delete_dev:
-	iio_demo_delete_device(iio_device);
-error_free_iio_demo_inst:
-	free(iio_demo_device_inst);
-
-	return FAILURE;
 }
 
 /**
@@ -390,23 +281,11 @@ error_free_iio_demo_inst:
  * @param desc - Descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_demo_remove(struct iio_demo_desc *desc)
+int32_t iio_demo_dev_remove(struct iio_demo_desc *desc)
 {
-	int32_t status;
-
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->iio_desc, desc->iio_interface);
-	if(status < 0)
-		return FAILURE;
-
-	status = iio_demo_delete_device(desc->iio_interface->dev_descriptor);
-	if (status < 0)
-		return FAILURE;
-
-	free(desc->iio_interface->dev_instance);
-	free(desc->iio_interface);
 	free(desc);
 
 	return SUCCESS;
