@@ -46,6 +46,7 @@
 #include <string.h>
 #include "ad77681.h"
 #include "error.h"
+#include "delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -1669,6 +1670,8 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	}
 
 	ret |= ad77681_soft_reset(dev);
+
+	udelay(200);
 
 	/* Check physical connection using scratchpad*/
 	if (ad77681_scratchpad(dev, &scratchpad_check) == FAILURE) {
