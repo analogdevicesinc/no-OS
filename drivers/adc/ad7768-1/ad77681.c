@@ -1838,6 +1838,8 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 
 	ret |= ad77681_soft_reset(dev);
 
+	udelay(200);
+
 	/* Check physical connection using scratchpad*/
 	if (ad77681_scratchpad(dev, &scratchpad_check) == FAILURE) {
 		scratchpad_check = 0xAD;/* If failure, second try */
