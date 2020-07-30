@@ -1,7 +1,8 @@
 /***************************************************************************//**
-*   @file   iio_demo.h
+*   @file   demo_dev.h
 *   @brief  Header file of iio_demo
 *   @author Cristian Pop (cristian.pop@analog.com)
+*   @author Mihail Chindris (mihail.chindris@analog.com)
 ********************************************************************************
 * Copyright 2019(c) Analog Devices, Inc.
 *
@@ -51,15 +52,13 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
+#define DEMO_NUM_CHANNELS	4
+
 /**
- * @struct iio_demo_device
- * @brief This is a dummy device, independent of hardware.
+ * @struct iio_demo_desc
+ * @brief Desciptor.
  */
-struct iio_demo_device {
-	/** Device name */
-	const char *name;
-	/** Number of channels */
-	uint8_t num_channels;
+struct iio_demo_desc {
 	/** Demo global device attribute */
 	uint32_t dev_global_attr;
 	/** Demo device channel attribute */
@@ -71,25 +70,10 @@ struct iio_demo_device {
 };
 
 /**
- * @struct iio_demo_desc
- * @brief Desciptor.
- */
-struct iio_demo_desc {
-	struct iio_desc *iio_desc;
-	/** Structure containing physical device instance and device descriptor */
-	struct iio_interface *iio_interface;
-};
-
-/**
  * @struct iio_demo_init_param
  * @brief iio demo configuration.
  */
 struct iio_demo_init_param {
-	struct iio_desc *iio_desc;
-	/** Device name */
-	const char *name;
-	/** Number of channels */
-	uint8_t num_channels;
 	/** Demo global device attribute */
 	uint32_t dev_global_attr;
 	/** Demo device channel attribute */
@@ -104,10 +88,29 @@ struct iio_demo_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
+			      const struct iio_ch_info *channel);
+ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
+			      const struct iio_ch_info *channel);
+ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
+			     const struct iio_ch_info *channel);
+ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
+			     const struct iio_ch_info *channel);
+ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
+				     size_t bytes_count,
+				     uint32_t ch_mask);
+ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
+				     size_t bytes_count,
+				     uint32_t ch_mask);
+ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
+			   size_t offset,  size_t bytes_count, uint32_t ch_mask);
+ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
+			  size_t bytes_count, uint32_t ch_mask);
+
 /* Init function. */
-int32_t iio_demo_init(struct iio_demo_desc **desc,
-		      struct iio_demo_init_param *param);
+int32_t iio_demo_dev_init(struct iio_demo_desc **desc,
+			  struct iio_demo_init_param *param);
 /* Free the resources allocated by iio_demo_init(). */
-int32_t iio_demo_remove(struct iio_demo_desc *desc);
+int32_t iio_demo_dev_remove(struct iio_demo_desc *desc);
 
 #endif /* IIO_DEMO_H_ */
