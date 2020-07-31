@@ -103,11 +103,22 @@ static struct iio_attribute *iio_demo_global_attributes[] = {
 	NULL,
 };
 
+static struct iio_attribute iio_attr_debug = {
+	.name = "direct_reg_access",
+	.show = get_demo_reg_attr,
+	.store = set_demo_reg_attr,
+};
+
+static struct iio_attribute *iio_demo_debug_attributes[] = {
+	&iio_attr_debug,
+	NULL,
+};
+
 static struct iio_device iio_demo_dev_in_descriptor = {
 	.num_ch = DEMO_NUM_CHANNELS,
 	.channels = iio_demo_channels_in,
 	.attributes = iio_demo_global_attributes,
-	.debug_attributes = NULL,
+	.debug_attributes = iio_demo_debug_attributes,
 	.buffer_attributes = NULL,
 	.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
 	.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
@@ -115,12 +126,11 @@ static struct iio_device iio_demo_dev_in_descriptor = {
 	.write_data = iio_demo_write_dev
 };
 
-
 static struct iio_device iio_demo_dev_out_descriptor = {
 	.num_ch = DEMO_NUM_CHANNELS,
 	.channels = iio_demo_channels_out,
 	.attributes = iio_demo_global_attributes,
-	.debug_attributes = NULL,
+	.debug_attributes = iio_demo_debug_attributes,
 	.buffer_attributes = NULL,
 	.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
 	.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
