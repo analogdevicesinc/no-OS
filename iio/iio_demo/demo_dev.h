@@ -53,12 +53,17 @@
 /******************************************************************************/
 
 #define DEMO_NUM_CHANNELS	4
+#define MAX_REG_ADDR		10
 
 /**
  * @struct iio_demo_desc
  * @brief Desciptor.
  */
 struct iio_demo_desc {
+	/** Dummy registers of device for testing direct_reg_access attribute */
+	uint32_t dummy_regs[MAX_REG_ADDR];
+	/** Active reg	 */
+	uint32_t active_reg_addr;
 	/** Demo global device attribute */
 	uint32_t dev_global_attr;
 	/** Demo device channel attribute */
@@ -96,6 +101,12 @@ ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel);
 ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel);
+
+ssize_t get_demo_reg_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel);
+ssize_t set_demo_reg_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel);
+
 ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
 				     size_t bytes_count,
 				     uint32_t ch_mask);
