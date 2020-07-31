@@ -339,6 +339,7 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
+	struct iio_attribute	**attributes;
 
 	dev = iio_get_interface(device_id);
 	if (!dev)
@@ -348,13 +349,15 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
-	if (!strcmp(attr, ""))
-		return iio_read_all_attr(&params,
-					 dev->dev_descriptor->attributes);
+	if (debug)
+		attributes = dev->dev_descriptor->debug_attributes;
 	else
-		return iio_rd_wr_attribute(&params,
-					   dev->dev_descriptor->attributes,
-					   attr, 0);
+		attributes = dev->dev_descriptor->attributes;
+
+	if (!strcmp(attr, ""))
+		return iio_read_all_attr(&params, attributes);
+	else
+		return iio_rd_wr_attribute(&params,attributes, attr, 0);
 }
 
 /**
@@ -372,6 +375,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
+	struct iio_attribute	**attributes;
 
 	dev = iio_get_interface(device_id);
 	if (!dev)
@@ -381,13 +385,15 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
-	if (!strcmp(attr, ""))
-		return iio_write_all_attr(&params,
-					  dev->dev_descriptor->attributes);
+	if (debug)
+		attributes = dev->dev_descriptor->debug_attributes;
 	else
-		return iio_rd_wr_attribute(&params,
-					   dev->dev_descriptor->attributes,
-					   attr, 1);
+		attributes = dev->dev_descriptor->attributes;
+
+	if (!strcmp(attr, ""))
+		return iio_write_all_attr(&params, attributes);
+	else
+		return iio_rd_wr_attribute(&params, attributes, attr, 1);
 }
 
 /**
