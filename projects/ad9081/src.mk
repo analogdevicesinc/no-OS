@@ -40,6 +40,8 @@ endif
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app_iio.c					\
 	$(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c					\
+	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/iio/iio.c						\
 	$(NO-OS)/iio/iio_app/iio_app.c					\
@@ -93,7 +95,10 @@ endif
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(PROJECT)/src/app_iio.h					\
 	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/irq.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
+	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/xml.h						\
 	$(NO-OS)/iio/iio.h						\
 	$(NO-OS)/iio/iio_types.h					\

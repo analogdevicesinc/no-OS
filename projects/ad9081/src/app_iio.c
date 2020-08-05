@@ -47,6 +47,10 @@
 #include "iio_app.h"
 #include "app_parameters.h"
 #include "app_iio.h"
+#ifndef PLATFORM_MB
+#include "irq.h"
+#include "irq_extra.h"
+#endif
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
@@ -87,7 +91,12 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 			struct iio_axi_dac_init_param *dac_init)
 {
 	struct xil_uart_init_param xil_uart_init_par = {
+#ifdef PLATFORM_MB
 		.type = UART_PL,
+#else
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+#endif
 	};
 	struct uart_init_param uart_init_par = {
 		.baud_rate = 115200,
