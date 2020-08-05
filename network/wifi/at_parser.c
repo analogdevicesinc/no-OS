@@ -381,7 +381,7 @@ static inline void start_conn_read(struct at_desc *desc, bool is_new_message)
 		 * to set a cbuff for the connection where data will be written.
 		 */
 		desc->connection_callback(desc->callback_ctx,
-					  AT_START_CONNECTION,
+					  AT_NEW_CONNECTION,
 					  desc->current_conn,
 					  &conn->cbuff);
 		if (conn->cbuff)
