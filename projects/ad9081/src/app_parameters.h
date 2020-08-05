@@ -44,28 +44,48 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define PHY_CS	0
+#ifdef XPS_BOARD_ZCU102
+#define GPIO_OFFSET		78
+#else
+#define GPIO_OFFSET		0
+#endif
+
+#define PHY_CS			0
 
 #ifdef QUAD_MXFE
-#define ADF4371_CS	0
-#define HMC7043_CS	4
+#define ADF4371_CS		0
+#define HMC7043_CS		4
 
-#define PHY_RESET		41
+#define PHY_RESET		(GPIO_OFFSET + 41)
 
-#define ADRF5020_CTRL_GPIO	34
-#define AD9081_GPIO_0_MUX	44
+#define ADRF5020_CTRL_GPIO	(GPIO_OFFSET + 34)
+#define AD9081_GPIO_0_MUX	(GPIO_OFFSET + 44)
 
 #define GPIO_2_DEVICE_ID	XPAR_AXI_GPIO_2_DEVICE_ID
 #define SPI_2_DEVICE_ID		XPAR_AXI_SPI_2_DEVICE_ID
 
 #else
-#define CLK_CS	1
-#define PHY_RESET	55
+#define PHY_RESET		(GPIO_OFFSET + 55)
 #endif
 
+#if defined(PLATFORM_MB)
 #define GPIO_DEVICE_ID		XPAR_AXI_GPIO_DEVICE_ID
-#define SPI_DEVICE_ID		XPAR_AXI_SPI_DEVICE_ID
+#define PHY_SPI_DEVICE_ID	XPAR_AXI_SPI_DEVICE_ID
+#define CLK_SPI_DEVICE_ID	XPAR_AXI_SPI_DEVICE_ID
 #define UART_DEVICE_ID		XPAR_AXI_UART_DEVICE_ID
+#define DDR_CNTRL_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR
+#define CLK_CS			1
+#elif defined(PLATFORM_ZYNQMP)
+#define GPIO_DEVICE_ID		XPAR_PSU_GPIO_0_DEVICE_ID
+#define PHY_SPI_DEVICE_ID	XPAR_PSU_SPI_0_DEVICE_ID
+#define CLK_SPI_DEVICE_ID	XPAR_PSU_SPI_1_DEVICE_ID
+#define UART_DEVICE_ID		XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID		XPAR_XUARTPS_0_INTR
+#define DDR_CNTRL_BASEADDR	XPAR_PSU_DDRC_0_BASEADDR
+#define CLK_CS			0
+#else
+#error Unsupported platform.
+#endif
 
 #define RX_JESD_BASEADDR	XPAR_AXI_MXFE_RX_JESD_RX_AXI_BASEADDR
 #define TX_JESD_BASEADDR	XPAR_AXI_MXFE_TX_JESD_TX_AXI_BASEADDR
@@ -91,7 +111,7 @@
 #define RX_DMA_BASEADDR		XPAR_AXI_MXFE_RX_DMA_BASEADDR
 #define TX_DMA_BASEADDR		XPAR_AXI_MXFE_TX_DMA_BASEADDR
 
-#define ADC_DDR_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000
-#define DAC_DDR_BASEADDR	XPAR_AXI_DDR_CNTRL_BASEADDR + 0xA000000
+#define ADC_DDR_BASEADDR	(DDR_CNTRL_BASEADDR + 0x800000)
+#define DAC_DDR_BASEADDR	(DDR_CNTRL_BASEADDR + 0xA000000)
 
 #endif

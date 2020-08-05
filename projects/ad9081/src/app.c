@@ -70,7 +70,11 @@ int main(void)
 	struct clk app_clk[MULTIDEVICE_INSTANCE_COUNT];
 	struct clk jesd_clk[2];
 	struct xil_gpio_init_param  xil_gpio_param = {
+#ifdef PLATFORM_MB
 		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
 		.device_id = GPIO_DEVICE_ID
 	};
 	struct gpio_init_param	gpio_phy_resetb = {
@@ -78,8 +82,12 @@ int main(void)
 		.extra = &xil_gpio_param
 	};
 	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
 		.type = SPI_PL,
-		.device_id = SPI_DEVICE_ID,
+#else
+		.type = SPI_PS,
+#endif
+		.device_id = PHY_SPI_DEVICE_ID,
 	};
 	struct spi_init_param phy_spi_init_param = {
 		.max_speed_hz = 1000000,
@@ -199,7 +207,11 @@ int main(void)
 
 #ifdef QUAD_MXFE
 	struct xil_gpio_init_param  xil_gpio_param_2 = {
+#ifdef PLATFORM_MB
 		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
 		.device_id = GPIO_2_DEVICE_ID
 	};
 	struct gpio_init_param	ad9081_gpio0_mux_init = {
