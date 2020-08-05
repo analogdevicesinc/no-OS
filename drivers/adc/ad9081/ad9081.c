@@ -483,6 +483,7 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	uint64_t status64;
 	uint64_t sample_rate;
 	uint64_t rx_lane_rate_kbps;
+	uint32_t timeout;
 
 	clk_recalc_rate(phy->dev_clk, &dev_frequency_hz);
 
@@ -650,9 +651,9 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 		return ret;
 
 	if (phy->config_sync_01_swapped &&
-			phy->jesd_tx_link.jesd_param.jesd_jesdv != 2) {
+	    phy->jesd_tx_link.jesd_param.jesd_jesdv != 2) {
 		adi_ad9081_hal_bf_set(&phy->ad9081, REG_SYNCB_CTRL_ADDR,
-			BF_SYNCB_RX_MODE_RC_INFO, 1); /* not paged */
+				      BF_SYNCB_RX_MODE_RC_INFO, 1); /* not paged */
 		adi_ad9081_jesd_rx_syncb_driver_powerdown_set(&phy->ad9081, 0);
 		adi_ad9081_hal_reg_set(&phy->ad9081,
 				       REG_GENERAL_JRX_CTRL_ADDR, 0x80);
@@ -707,9 +708,18 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 	mdelay(10);
 
 	if (phy->jesd_rx_clk) {
-		mdelay(10);
-		ret = clk_enable(phy->jesd_rx_clk);
-		if (ret < 0) {
+		timeout = 2000;
+		while(timeout) {
+			ret = clk_enable(phy->jesd_rx_clk);
+			if (ret) {
+				mdelay(100);
+				timeout -= 100;
+				continue;
+			}
+			break;
+		}
+
+		if (ret || !timeout) {
 			printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
 			return ret;
 		}
@@ -717,8 +727,18 @@ static int32_t ad9081_setup(struct ad9081_phy *phy)
 
 	if (phy->jesd_tx_clk &&
 	    (phy->jesd_tx_link.jesd_param.jesd_jesdv == 1)) {
-		ret = clk_enable(phy->jesd_tx_clk);
-		if (ret < 0) {
+		timeout = 2000;
+		while(timeout) {
+			ret = clk_enable(phy->jesd_tx_clk);
+			if (ret) {
+				mdelay(100);
+				timeout -= 100;
+				continue;
+			}
+			break;
+		}
+
+		if (ret || !timeout) {
 			printf("Failed to enable JESD204 link: %"PRId32"\n", ret);
 			return ret;
 		}
