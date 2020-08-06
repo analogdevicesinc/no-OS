@@ -52,6 +52,11 @@
 #include "uart.h"
 #include "uart_extra.h"
 
+#ifdef USE_TCP_SOCKET
+#include "wifi.h"
+#include "tcp_socket.h"
+#endif
+
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -126,6 +131,12 @@ int main(void)
 	/* IRQ instance. */
 	struct irq_ctrl_desc *irq_desc;
 
+#ifdef USE_TCP_SOCKET
+	struct tcp_socket_init_param	socket_param;
+	struct wifi_init_param		wifi_param;
+	struct wifi_desc		*wifi;
+	struct uart_desc		*uart_desc;
+#endif
 
 	status = platform_init();
 	if (IS_ERR_VALUE(status))
@@ -192,8 +203,40 @@ int main(void)
 	if (status < 0)
 		return status;
 
+#ifdef USE_TCP_SOCKET
+	status = uart_init(&uart_desc, &uart_init_par);
+	if (status < 0)
+		return status;
+
+	wifi_param.irq_desc = irq_desc;
+	wifi_param.uart_desc = uart_desc;
+#ifdef ADUCM_PLATFORM
+	wifi_param.uart_irq_conf = uart_desc;
+#endif //ADUCM_PLATFORM
+	wifi_param.uart_irq_id = UART_IRQ_ID;
+
+	status = wifi_init(&wifi, &wifi_param);
+	if (status < 0)
+		return status;
+
+	status = wifi_connect(wifi, WIFI_SSID, WIFI_PWD);
+	if (status < 0)
+		return status;
+
+	char buff[100];
+	wifi_get_ip(wifi, buff, 100);
+	printf("Tinyiiod ip is: %s\n", buff);
+
+	wifi_get_network_interface(wifi, &socket_param.net);
+	socket_param.max_buff_size = 0;
+
+	iio_init_param.phy_type = USE_NETWORK;
+	iio_init_param.tcp_socket_init_param = &socket_param;
+
+#else //USE_TCP_SOCKET
 	iio_init_param.phy_type = USE_UART;
-	iio_init_param.phy_init_param = &uart_init_par;
+	iio_init_param.uart_init_param = &uart_init_par;
+#endif //USE_TCP_SOCKET
 
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
@@ -232,7 +275,7 @@ int main(void)
 
 	do {
 		status = iio_step(iio_desc);
-	} while (!IS_ERR_VALUE(status));
+	} while (true);
 
 	return status;
 }
