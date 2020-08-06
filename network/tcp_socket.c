@@ -49,13 +49,68 @@
 #include "trng.h"
 
 #ifndef DISABLE_SECURE_SOCKET
-#include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
+#include "mbedtls/ssl.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
+#ifdef _DEBUG
+
+#include <stdio.h>
+
+#define DEBUG_NONE		0
+#define DEBUG_ERRROR		1
+#define DEBUG_STATE_CHANGE	2
+#define DEBUG_INFO		3
+#define DEBUG_VERBOSE		4
+
+#define DEBUG_LEVEL		DEBUG_ERRROR
+
+#define DBG_BUFF_SIZE		1000
+#define DBG_PRINT_LIMIT		(DBG_BUFF_SIZE - 200)
+
+char		dbg_buff[DBG_BUFF_SIZE];
+int32_t	dbg_idx;
+
+#undef IS_ERR_VALUE
+#define IS_ERR_VALUE(x)	((x) < 0 ?\
+				dbg_flush(x), ((x) < 0):\
+				((x) < 0))
+
+void dbg_flush(int32_t err)
+{
+	printf("ERROR:%d\n", err);
+	printf("%s", dbg_buff);
+	dbg_idx = 0;
+}
+
+//#define CURRENT_PATH "C:/Users/mchindri/Desktop/no-OS/libraries/mbedtls/library/"
+#define CURRENT_PATH ""
+
+void dbg_print(void *ctx, int dbg_lvl, const char *file, int line,
+		 const char *message)
+{
+	char ch_lvl;
+	switch (dbg_lvl)
+	{
+	case DEBUG_ERRROR:		ch_lvl = 'E';break;
+	case DEBUG_STATE_CHANGE:	ch_lvl = 'C';break;
+	case DEBUG_INFO:		ch_lvl = 'I';break;
+	case DEBUG_VERBOSE:		ch_lvl = 'V';break;
+	};
+	char short_file[20];
+	sscanf(file, CURRENT_PATH "%s", short_file);
+
+	dbg_idx += sprintf(dbg_buff + dbg_idx, "%c:%d %s -- %s",
+			ch_lvl, line, short_file, message);
+	if (dbg_idx > DBG_PRINT_LIMIT)
+		dbg_flush(0);
+}
+
+#endif
 
 #ifdef DISABLE_SECURE_SOCKET
 
@@ -181,6 +236,10 @@ static int32_t stcp_socket_init(struct secure_socket_desc **desc,
 					  MBEDTLS_SSL_PRESET_DEFAULT);
 	if (IS_ERR_VALUE(ret))
 		goto exit;
+#ifdef _DEBUG
+	mbedtls_debug_set_threshold(DEBUG_LEVEL);
+	mbedtls_ssl_conf_dbg(&ldesc->conf, dbg_print, NULL);
+#endif
 
 	if (param->ca_cert) {
 #ifdef ENABLE_PEM_CERT
