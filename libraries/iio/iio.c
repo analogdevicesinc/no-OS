@@ -50,8 +50,18 @@
 #include "tinyiiod.h"
 #include "util.h"
 #include "list.h"
+#include "delay.h"
 #include "error.h"
 #include "uart.h"
+#include "tcp_socket.h"
+#include "circular_buffer.h"
+
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
+
+#define IIOD_PORT		30431
+#define MAX_SOCKET_TO_HANDLE	4
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -117,6 +127,13 @@ struct iio_desc {
 	uint32_t		xml_size;
 	uint32_t		xml_size_to_last_dev;
 	uint32_t		dev_count;
+	struct uart_desc	*uart_desc;
+	/* FIFO for socket descriptors */
+	struct circular_buffer	*sockets;
+	/* Client socket active during an iio_step */
+	struct tcp_socket_desc	*current_sock;
+	/* Instance of server socket */
+	struct tcp_socket_desc	*server;
 };
 
 static struct iio_desc			*g_desc;
@@ -125,11 +142,109 @@ static struct iio_desc			*g_desc;
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+static inline int32_t _pop_sock(struct iio_desc *desc,
+				struct tcp_socket_desc **sock)
+{
+	return cb_read(desc->sockets, sock, sizeof(*sock));
+}
+
+static inline int32_t _push_sock(struct iio_desc *desc,
+				 struct tcp_socket_desc *sock)
+{
+	return cb_write(desc->sockets, &sock, sizeof(sock));
+}
+
+static inline int32_t _nb_active_sockets(struct iio_desc *desc)
+{
+	uint32_t size;
+
+	cb_size(desc->sockets, &size);
+
+	return size / sizeof(struct tcp_socket_desc *);
+}
+
+/* Blocking until new socket available.
+ * Will iterate through a list of sockets */
+static int32_t _get_next_socket(struct iio_desc *desc)
+{
+	struct tcp_socket_desc	*sock;
+	int32_t			ret;
+	uint32_t		nb_active_sockets;
+
+	/* Get all new waiting sockets.
+	 * If none is available, wait until first connection */
+	do {
+		ret = socket_accept(desc->server, &sock);
+		if (ret == -EAGAIN) {
+			nb_active_sockets = _nb_active_sockets(desc);
+			if (nb_active_sockets == 0) {
+				/* Wait until a connection exists */
+				mdelay(1);
+				continue;
+			} else {
+				break;
+			}
+		} else if (IS_ERR_VALUE(ret)) {
+			return ret;
+		}
+		/* Add socket to queue */
+		ret = _push_sock(desc, sock);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	} while (true);
+
+	ret = _pop_sock(desc, &desc->current_sock);
+	if (IS_ERR_VALUE(ret)) {
+		desc->current_sock = NULL;
+		return ret;
+	}
+
+	return SUCCESS;
+}
+
+static int32_t network_read(const void *data, uint32_t len)
+{
+	uint32_t	i;
+	int32_t		ret;
+
+	if ((int32_t)g_desc->current_sock == -1)
+		return -1;
+
+	if (g_desc->current_sock == NULL) {
+		ret = _get_next_socket(g_desc);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	}
+
+	i = 0;
+	do {
+		ret = socket_recv(g_desc->current_sock,
+				  (void *)((uint8_t *)data + i), len - i);
+		if (IS_ERR_VALUE(ret)) {
+			*(int8_t *)data = '*';
+			break;
+		}
+
+		i += ret;
+	} while (i < len);
+
+	if (ret == -ENOTCONN) {
+		/* A socket connection is disconnected, so we release
+		 * the resources and don't add it again in the list */
+		socket_remove(g_desc->current_sock);
+		g_desc->current_sock = (void *)-1;
+	}
+
+	return i;
+}
+
 static ssize_t iio_phy_read(char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_read((struct uart_desc *)g_desc->phy_desc,
-					  (uint8_t *)buf, (size_t)len);
+		return (ssize_t)uart_read(g_desc->uart_desc, (uint8_t *)buf,
+					  (size_t)len);
+	else
+		return network_read((void *)buf, (uint32_t)len);
 
 	return -EINVAL;
 }
@@ -138,8 +253,10 @@ static ssize_t iio_phy_read(char *buf, size_t len)
 static ssize_t iio_phy_write(const char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
-		return (ssize_t)uart_write((struct uart_desc *)g_desc->phy_desc,
+		return (ssize_t)uart_write(g_desc->uart_desc,
 					   (uint8_t *)buf, (size_t)len);
+	else
+		return socket_send(g_desc->current_sock, buf, len);
 
 	return -EINVAL;
 }
@@ -648,6 +765,16 @@ static ssize_t iio_get_xml(char **outxml)
  */
 ssize_t iio_step(struct iio_desc *desc)
 {
+	int32_t ret;
+
+	if (desc->current_sock != NULL && (int32_t)desc->current_sock != -1) {
+		ret = _push_sock(desc, desc->current_sock);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	}
+
+	desc->current_sock = NULL;
+
 	return tinyiiod_read_command(desc->iiod);
 }
 
@@ -865,8 +992,7 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 	if (!init_param)
 		return -EINVAL;
 
-	ops = (struct tinyiiod_ops *)calloc(1,
-					    sizeof(struct tinyiiod_ops));
+	ops = (struct tinyiiod_ops *)calloc(1, sizeof(struct tinyiiod_ops));
 	if (!ops)
 		return FAILURE;
 
@@ -903,13 +1029,32 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 
 	ldesc->phy_type = init_param->phy_type;
 	if (init_param->phy_type == USE_UART) {
-		ret = uart_init((struct uart_desc **)&ldesc->phy_desc,
-				init_param->phy_init_param);
+		ret = uart_init((struct uart_desc **)&ldesc->uart_desc,
+				init_param->uart_init_param);
 		if (IS_ERR_VALUE(ret))
-			goto free_xml;
+			goto free_desc;
+	} else if (init_param->phy_type == USE_NETWORK) {
+		ret = socket_init(&ldesc->server,
+				  init_param->tcp_socket_init_param);
+		if (IS_ERR_VALUE(ret))
+			goto free_desc;
+		ret = socket_bind(ldesc->server, IIOD_PORT);
+		if (IS_ERR_VALUE(ret))
+			goto free_pylink;
+		ret = socket_listen(ldesc->server, 0);
+		if (IS_ERR_VALUE(ret))
+			goto free_pylink;
+		ret = cb_init(&ldesc->sockets, sizeof(struct tcp_socket_desc *)
+			      * MAX_SOCKET_TO_HANDLE);
+		if (IS_ERR_VALUE(ret))
+			goto free_pylink;
 	} else {
 		goto free_desc;
 	}
+
+	ops->read = iio_phy_read;
+	ops->write = iio_phy_write;
+
 	ops->get_xml = iio_get_xml;
 
 	ret = list_init(&ldesc->interfaces_list, LIST_PRIORITY_LIST,
@@ -930,9 +1075,12 @@ free_list:
 	list_remove(ldesc->interfaces_list);
 free_pylink:
 	if (ldesc->phy_type == USE_UART)
-		uart_remove(ldesc->phy_desc);
-free_xml:
-	free(ldesc->xml_desc);
+		uart_remove(ldesc->uart_desc);
+	else {
+		socket_remove(ldesc->server);
+		if (ldesc->sockets)
+			cb_remove(ldesc->sockets);
+	}
 free_desc:
 	free(ldesc);
 free_ops:
