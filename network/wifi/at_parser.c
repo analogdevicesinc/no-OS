@@ -809,9 +809,8 @@ static int32_t handle_special(struct at_desc *desc, enum at_cmd cmd)
 		desc->result.len = 0;
 		if (SUCCESS != stop_echo(desc))
 			return FAILURE;
-		if (SUCCESS != at_run_cmd(desc, AT_DISCONNECT_NETWORK,
-					  AT_EXECUTE_OP, NULL))
-			return FAILURE;
+		at_run_cmd(desc, AT_DISCONNECT_NETWORK, AT_EXECUTE_OP, NULL);
+
 		break;
 	case AT_DEEP_SLEEP:
 		/* TODO : Implement when needed if possible */
