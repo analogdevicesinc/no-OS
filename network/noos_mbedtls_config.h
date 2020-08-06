@@ -38,8 +38,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef MBEDTLS_CONFIG_H
-#define MBEDTLS_CONFIG_H
+#ifndef NOOS_MBEDTLS_CONFIG_H
+#define NOOS_MBEDTLS_CONFIG_H
 
 /******************************************************************************/
 /***************************** User configuration *****************************/
@@ -238,4 +238,4 @@
 /* Check if the configuration is ok */
 #include "mbedtls/check_config.h"
 
-#endif /* MBEDTLS_CONFIG_H */
+#endif /* NOOS_MBEDTLS_CONFIG_H */
