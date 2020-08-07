@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <xil_cache.h>
 #include <xparameters.h>
+#include <inttypes.h>
 #include "xil_printf.h"
 #include "spi_engine.h"
 #include "ad400x.h"
@@ -101,7 +102,7 @@ int main()
 			data = *offload_data & GENMASK(ad400x_device_resol[dev_id], 0);
 			if (data > 524287)
 				data = data - 1048576;
-			printf("ADC%d: %d\n", i, data);
+			printf("ADC%"PRIi32": %"PRIi32" \n", i, data);
 			offload_data += 1;
 		}
 	}
