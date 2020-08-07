@@ -61,6 +61,8 @@ enum ad400x_supported_dev_ids {
 	ID_AD4020,
 };
 
+extern const uint16_t ad400x_device_resol[];
+
 struct ad400x_dev {
 	/* SPI */
 	spi_desc *spi_desc;
