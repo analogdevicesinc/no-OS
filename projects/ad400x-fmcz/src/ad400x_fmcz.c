@@ -98,7 +98,7 @@ int main()
 		offload_data = (uint32_t *)msg.rx_addr;
 
 		for(i = 0; i < AD400x_EVB_SAMPLE_NO; i++) {
-			data = *offload_data & 0xFFFFF;
+			data = *offload_data & GENMASK(ad400x_device_resol[dev_id], 0);
 			if (data > 524287)
 				data = data - 1048576;
 			printf("ADC%d: %d\n", i, data);
