@@ -144,9 +144,9 @@ int main(void)
 
 #ifdef XILINX_PLATFORM
 	/* Xilinx platform dependent initialization for IRQ. */
-	struct xil_irq_init_param platfomr_irq_init_par;
+	struct xil_irq_init_param platform_irq_init_par;
 
-	platfomr_irq_init_par = (struct xil_irq_init_param ) {
+	platform_irq_init_par = (struct xil_irq_init_param ) {
 #ifdef XPAR_INTC_SINGLE_DEVICE_ID
 		.type = IRQ_PL,
 #else
@@ -157,12 +157,12 @@ int main(void)
 
 #ifdef ADUCM_PLATFORM
 	/* Dummy value for Aducm platform dependent initialization for IRQ. */
-	int32_t platfomr_irq_init_par = 0;
+	int32_t platform_irq_init_par = 0;
 #endif //ADUCM_PLATFORM
 
 	irq_init_param = (struct irq_init_param ) {
 		.irq_ctrl_id = INTC_DEVICE_ID,
-		.extra = &platfomr_irq_init_par
+		.extra = &platform_irq_init_par
 	};
 
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
