@@ -64,6 +64,8 @@ enum ad400x_supported_dev_ids {
 struct ad400x_dev {
 	/* SPI */
 	spi_desc *spi_desc;
+	/* Register access speed */
+	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
 };
@@ -71,9 +73,10 @@ struct ad400x_dev {
 struct ad400x_init_param {
 	/* SPI */
 	spi_init_param spi_init;
+	/* Register access speed */
+	uint32_t reg_access_speed;
 	/* Device Settings */
 	enum ad400x_supported_dev_ids dev_id;
-	uint8_t num_bits;
 	bool turbo_mode;
 	bool high_z_mode;
 	bool span_compression;
@@ -85,7 +88,7 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 			     uint8_t reg_data);
 int32_t ad400x_init(struct ad400x_dev **device,
-		    struct ad400x_init_param init_param);
+		    struct ad400x_init_param *init_param);
 int32_t ad400x_remove(struct ad400x_dev *dev);
 
 #endif /* SRC_AD400X_H_ */
