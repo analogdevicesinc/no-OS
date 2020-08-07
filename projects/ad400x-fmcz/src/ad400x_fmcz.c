@@ -22,27 +22,6 @@
 
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	1
 
-struct spi_engine_init_param spi_eng_init_param  = {
-	.ref_clk_hz = AD400x_SPI_ENG_REF_CLK_FREQ_HZ,
-	.type = SPI_ENGINE,
-	.spi_engine_baseaddr = AD400X_SPI_ENGINE_BASEADDR,
-	.cs_delay = 2,
-	.data_width = 20,
-};
-
-struct ad400x_init_param ad400x_init_param = {
-	.spi_init = {
-		.chip_select = AD400x_SPI_CS,
-		.max_speed_hz = 80000000,
-		.mode = SPI_MODE_0,
-		.platform_ops = &spi_eng_platform_ops,
-		.extra = (void*)&spi_eng_init_param,
-	},
-	.reg_access_speed = 1000000,
-	ID_AD4020, /* dev_id */
-	1,0,0,0,
-};
-
 int main()
 {
 	struct ad400x_dev *dev;
@@ -53,10 +32,29 @@ int main()
 		.rx_dma_baseaddr = AD400X_DMA_BASEADDR,
 	};
 	struct spi_engine_offload_message msg;
-
 	uint8_t commands_data[2] = {0xFF, 0xFF};
-	int32_t ret, data;
-	uint32_t i;
+	int32_t ret, data, i;
+	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
+	struct spi_engine_init_param spi_eng_init_param  = {
+		.ref_clk_hz = AD400x_SPI_ENG_REF_CLK_FREQ_HZ,
+		.type = SPI_ENGINE,
+		.spi_engine_baseaddr = AD400X_SPI_ENGINE_BASEADDR,
+		.cs_delay = 2,
+		.data_width = ad400x_device_resol[dev_id],
+	};
+
+	struct ad400x_init_param ad400x_init_param = {
+		.spi_init = {
+			.chip_select = AD400x_SPI_CS,
+			.max_speed_hz = 83333333,
+			.mode = SPI_MODE_0,
+			.platform_ops = &spi_eng_platform_ops,
+			.extra = (void*)&spi_eng_init_param,
+		},
+		.reg_access_speed = 1000000,
+		dev_id, /* dev_id */
+		1,0,0,0,
+	};
 
 	print("Test\n\r");
 
