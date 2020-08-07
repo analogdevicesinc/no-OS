@@ -92,5 +92,8 @@ int32_t ad400x_spi_reg_write(struct ad400x_dev *dev,
 int32_t ad400x_init(struct ad400x_dev **device,
 		    struct ad400x_init_param *init_param);
 int32_t ad400x_remove(struct ad400x_dev *dev);
+/* Execute a single conversion */
+int32_t ad400x_spi_single_conversion(struct ad400x_dev *dev,
+				     uint32_t *adc_data);
 
 #endif /* SRC_AD400X_H_ */
