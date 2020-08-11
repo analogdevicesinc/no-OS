@@ -30,9 +30,12 @@ PROJECT 	  = $(PROJECTS_DIR)/$(TARGET)
 #------------------------------------------------------------------------------
 #                             MAKEFILE INCLUDES                                
 #------------------------------------------------------------------------------
+
+ifndef SRCS
 # Uncomment this line to include a custom config
 #include $(SCRIPTS_DIR)/config.mk
 include $(PROJECTS_DIR)/$(TARGET)/src.mk
+endif
 
 #------------------------------------------------------------------------------
 #                               VERBOSE LEVEL                                  
