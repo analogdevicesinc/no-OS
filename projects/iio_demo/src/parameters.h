@@ -72,9 +72,6 @@
 
 #else // _XPARAMETERS_PS_H_
 
-/* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
-#define MAX_SIZE_BASE_ADDR	10000
-
 #ifdef XPAR_DDR3_SDRAM_S_AXI_BASEADDR
 #define ADC_DDR_BASEADDR	(XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0x800000)
 #define DAC_DDR_BASEADDR	(XPAR_DDR3_SDRAM_S_AXI_BASEADDR + 0xA000000)
@@ -86,9 +83,11 @@
 #define UART_DEVICE_ID	XPAR_AXI_UART_DEVICE_ID
 #define INTC_DEVICE_ID	XPAR_INTC_SINGLE_DEVICE_ID
 #define UART_IRQ_ID		XPAR_AXI_INTC_AXI_UART_INTERRUPT_INTR
-#define UART_BAUDRATE	921600
-
 #endif // _XPARAMETERS_PS_H_
+
+/* 400 * 8 * 2 = 6400‬ Default number of samples requested on a capture */
+#define MAX_SIZE_BASE_ADDR	10000
+#define UART_BAUDRATE	921600
 
 #endif // XILINX_PLATFORM
 
