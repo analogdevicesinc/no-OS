@@ -14,6 +14,7 @@ SRCS := $(PROJECT)/src/main.c
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
 	$(NO-OS)/iio/iio.c						\
@@ -27,6 +28,7 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
