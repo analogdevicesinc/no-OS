@@ -290,6 +290,9 @@ SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 INCS_FLAGS += -I"$(ADUCM_DFP)/Include"
 INCS_FLAGS += -I"$(CMSIS_CORE)/Include"
 
+PIN_MUX = $(PROJECT)/pinmux_config.c
+PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
+
 SRCS += $(PROJECT_PIN_MUX)
 SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
 SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
@@ -301,10 +304,6 @@ INCLUDE_DIRS += $(PROJECT_BUILD)/system
 
 #ALL directories containing a .h file
 INCLUDE_DIRS += $(sort $(foreach dir, $(INCS),$(dir $(dir))))
-
-PIN_MUX = $(PROJECT)/pinmux_config.c
-PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
-$(SRCS) += $(PIN_MUX)
 
 REL_SRCS = $(foreach file, $(SRCS), $(BUILD_DIR)/$(call get_relative_path,$(file)))
 OBJS = $(REL_SRCS:.c=.o)
