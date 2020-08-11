@@ -136,8 +136,10 @@ enum ad7606_device_id {
 	ID_AD7606_8,
 	/** 8-Channel DAS with 16-Bit, 800 kSPS, Bipolar Input, Simultaneous Sampling ADC */
 	ID_AD7606B,
+	/** 8-Channel DAS with 16-Bit, 1 MSPS, Bipolar Input, Simultaneous Sampling ADC */
+	ID_AD7606C_16,
 	/** 8-Channel DAS with 18-Bit, 1 MSPS, Bipolar Input, Simultaneous Sampling ADC */
-	ID_AD7606C,
+	ID_AD7606C_18,
 	/** 8-Channel DAS with 18-Bit, Bipolar, Simultaneous Sampling ADC */
 	ID_AD7608,
 	/** 8-Channel Differential DAS with 18-Bit, Bipolar, Simultaneous Sampling ADC */

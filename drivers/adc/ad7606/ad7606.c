@@ -156,7 +156,19 @@ static const struct ad7606_chip_info ad7606_chip_info_tbl[] = {
 		.sw_range_table = ad7606b_range_table,
 		.sw_range_table_sz = ARRAY_SIZE(ad7606b_range_table),
 	},
-	[ID_AD7606C] = {
+	[ID_AD7606C_16] = {
+		.num_channels = 8,
+		.bits = 16,
+		.max_dout_lines = AD7606_8_DOUT,
+		.has_oversampling = true,
+		.has_registers = true,
+		.device_id = 0x3,
+		.hw_range_table = ad7606_range_table,
+		.hw_range_table_sz = ARRAY_SIZE(ad7606_range_table),
+		.sw_range_table = ad7606c_range_table,
+		.sw_range_table_sz = ARRAY_SIZE(ad7606c_range_table),
+	},
+	[ID_AD7606C_18] = {
 		.num_channels = 8,
 		.bits = 18,
 		.max_dout_lines = AD7606_8_DOUT,
