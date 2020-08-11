@@ -326,6 +326,8 @@ GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
 GENERIC_RELEASE_FLAGS = -DNDEBUG 
 C_RELEASE_FLAGS = -O2
 
+CFLAGS += -DADUCM_PLATFORM
+
 ASFLAGS	+= $(GENERIC_FLAGS) -x assembler-with-cpp 
 CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
 
