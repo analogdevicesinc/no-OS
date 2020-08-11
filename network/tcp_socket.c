@@ -46,11 +46,11 @@
 #include "error.h"
 #include "tcp_socket.h"
 #include "util.h"
-#include "trng.h"
 
 #ifndef DISABLE_SECURE_SOCKET
 #include "mbedtls/ssl.h"
 #include "noos_mbedtls_config.h"
+#include "trng.h"
 #endif /* DISABLE_SECURE_SOCKET */
 
 /******************************************************************************/
