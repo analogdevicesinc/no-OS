@@ -28,7 +28,7 @@ remove_dir = rd /S /Q "$(subst /,\,$1)"
 mk_dir = md "$(subst /,\,$1)"
 #cces works to but has no console output
 CCES = ccesc
-CCES_HOME ?= $(wildcard C:/Analog\ Devices/CrossCore*)
+CCES_HOME ?= $(wildcard C:/Analog\ Devices/CrossCore\ Embedded\ Studio*)
 ifeq ($(CCES_HOME),)
 $(error $(ENDL)$(ENDL)CCES_HOME not found at c:/Analog Devices/[CrossCore...]\
 		$(ENDL)$(ENDL)\
