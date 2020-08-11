@@ -81,10 +81,10 @@ endif
 
 #SHARED to use in src.mk
 PLATFORM		= aducm3029
-PROJECT			= $(realpath .)
-DRIVERS			= $(NO-OS)/drivers
-INCLUDE			= $(NO-OS)/include
-PLATFORM_DRIVERS	= $(NO-OS)/drivers/platform/$(PLATFORM)
+PROJECT			?= $(realpath .)
+DRIVERS			?= $(NO-OS)/drivers
+INCLUDE			?= $(NO-OS)/include
+PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 
 #USED IN MAKEFILE
 PROJECT_NAME		= $(notdir $(PROJECT))
