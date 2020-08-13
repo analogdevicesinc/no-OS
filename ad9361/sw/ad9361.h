@@ -3084,6 +3084,8 @@ struct auxadc_control {
 };
 
 struct gpo_control {
+	uint32_t gpo_manual_mode_enable_mask;
+	bool gpo_manual_mode_en;
 	bool gpo0_inactive_state_high_en;
 	bool gpo1_inactive_state_high_en;
 	bool gpo2_inactive_state_high_en;

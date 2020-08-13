@@ -4223,6 +4223,7 @@ static int32_t ad9361_gpo_setup(struct ad9361_rf_phy *phy,
 					    (ctrl->gpo3_slave_tx_en << 3)));
 
 	ad9361_spi_write(spi, REG_GPO_FORCE_AND_INIT,
+			 GPO_MANUAL_CTRL(ctrl->gpo_manual_mode_enable_mask) |
 			 GPO_INIT_STATE(ctrl->gpo0_inactive_state_high_en |
 					(ctrl->gpo1_inactive_state_high_en << 1) |
 					(ctrl->gpo2_inactive_state_high_en << 2) |
@@ -4236,6 +4237,12 @@ static int32_t ad9361_gpo_setup(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_GPO2_TX_DELAY, ctrl->gpo2_tx_delay_us);
 	ad9361_spi_write(spi, REG_GPO3_RX_DELAY, ctrl->gpo3_rx_delay_us);
 	ad9361_spi_write(spi, REG_GPO3_TX_DELAY, ctrl->gpo3_tx_delay_us);
+
+	/*
+	 * GPO manual mode conflicts with automatic ENSM slave and eLNA mode
+	 */
+	ad9361_spi_writef(phy->spi, REG_EXTERNAL_LNA_CTRL, GPO_MANUAL_SELECT,
+			  ctrl->gpo_manual_mode_en);
 
 	return 0;
 }

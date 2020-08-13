@@ -242,6 +242,8 @@ typedef struct {
 	uint8_t		lvds_invert1_control;	/* adi,lvds-invert1-control */
 	uint8_t		lvds_invert2_control;	/* adi,lvds-invert2-control */
 	/* GPO Control */
+	uint8_t		gpo_manual_mode_enable;			/* adi,gpo-manual-mode-enable */
+	uint32_t	gpo_manual_mode_enable_mask;	/* adi,gpo-manual-mode-enable-mask */
 	uint8_t		gpo0_inactive_state_high_enable;	/* adi,gpo0-inactive-state-high-enable */
 	uint8_t		gpo1_inactive_state_high_enable;	/* adi,gpo1-inactive-state-high-enable */
 	uint8_t		gpo2_inactive_state_high_enable;	/* adi,gpo2-inactive-state-high-enable */

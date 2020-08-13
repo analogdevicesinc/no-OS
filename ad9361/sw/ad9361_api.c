@@ -436,6 +436,10 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->pdata->rx1rx2_phase_inversion_en = init_param->rx1rx2_phase_inversion_en;
 
 	/* GPO Control */
+	phy->pdata->gpo_ctrl.gpo_manual_mode_en =
+		init_param->gpo_manual_mode_enable;
+	phy->pdata->gpo_ctrl.gpo_manual_mode_enable_mask =
+		init_param->gpo_manual_mode_enable_mask;
 	phy->pdata->gpo_ctrl.gpo0_inactive_state_high_en =
 		init_param->gpo0_inactive_state_high_enable;
 	phy->pdata->gpo_ctrl.gpo1_inactive_state_high_en =
