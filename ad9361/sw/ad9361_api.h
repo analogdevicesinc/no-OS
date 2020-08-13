@@ -110,6 +110,7 @@ typedef struct {
 	uint16_t	gc_lmt_overload_low_thresh;	/* adi,gc-lmt-overload-low-thresh */
 	uint8_t		gc_low_power_thresh;	/* adi,gc-low-power-thresh */
 	uint8_t		gc_max_dig_gain;	/* adi,gc-max-dig-gain */
+	uint8_t		gc_use_rx_fir_out_for_dec_pwr_meas_enable;	/* adi,gc-use-rx-fir-out-for-dec-pwr-meas-enable */
 	/* Gain MGC Control */
 	uint8_t		mgc_dec_gain_step;	/* adi,mgc-dec-gain-step */
 	uint8_t		mgc_inc_gain_step;	/* adi,mgc-inc-gain-step */

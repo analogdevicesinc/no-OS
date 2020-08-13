@@ -3781,7 +3781,8 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			 0x00); // Tx Symbol Gain Control
 
 	ad9361_spi_writef(spi, REG_DEC_POWER_MEASURE_DURATION_0,
-			  USE_HB1_OUT_FOR_DEC_PWR_MEAS, 1); // Power Measurement Duration
+			  USE_HB1_OUT_FOR_DEC_PWR_MEAS,
+			  !ctrl->use_rx_fir_out_for_dec_pwr_meas); // USE HB1 or FIR output for power measurements
 
 	ad9361_spi_writef(spi, REG_DEC_POWER_MEASURE_DURATION_0,
 			  ENABLE_DEC_PWR_MEAS, 1); // Power Measurement Duration

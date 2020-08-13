@@ -136,6 +136,7 @@ AD9361_InitParam default_init_param = {
 	704,	//gc_lmt_overload_low_thresh *** adi,gc-lmt-overload-low-thresh
 	24,		//gc_low_power_thresh *** adi,gc-low-power-thresh
 	15,		//gc_max_dig_gain *** adi,gc-max-dig-gain
+	0,		//gc_use_rx_fir_out_for_dec_pwr_meas_enable *** adi,gc-use-rx-fir-out-for-dec-pwr-meas-enable
 	/* Gain MGC Control */
 	2,		//mgc_dec_gain_step *** adi,mgc-dec-gain-step
 	2,		//mgc_inc_gain_step *** adi,mgc-inc-gain-step
