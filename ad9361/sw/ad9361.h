@@ -3001,7 +3001,7 @@ struct gain_control {
 	enum f_agc_target_gain_index_type
 	f_agc_rst_gla_if_en_agc_pulled_high_mode; /* 0x0FB, 0x111 */
 	uint8_t f_agc_power_measurement_duration_in_state5; /* 0x109, 0x10a RX samples 0..524288*/
-
+	uint8_t f_agc_large_overload_inc_steps; /* 0x106 [D6:D4] 0..7 */
 };
 
 struct auxdac_control {
