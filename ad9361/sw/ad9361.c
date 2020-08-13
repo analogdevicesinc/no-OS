@@ -5774,6 +5774,7 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 {
 	struct spi_device *spi = phy->spi;
 	uint32_t val, offs = 0, fir_conf = 0, fir_enable = 0;
+	int32_t ret;
 
 	dev_dbg(&phy->spi->dev, "%s: TAPS %"PRIu32", gain %"PRId32", dest %d",
 		__func__, ntaps, gain_dB, dest);
@@ -5831,6 +5832,8 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 	fir_conf &= ~FIR_START_CLK;
 	ad9361_spi_write(spi, REG_TX_FILTER_CONF + offs, fir_conf);
 
+	ret = ad9361_verify_fir_filter_coef(phy, dest, ntaps, coef);
+
 	if (dest & FIR_IS_RX)
 		ad9361_spi_writef(phy->spi, REG_RX_ENABLE_FILTER_CTRL,
 				  RX_FIR_ENABLE_DECIMATION(~0), fir_enable);
@@ -5840,7 +5843,7 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 
 	ad9361_ensm_restore_prev_state(phy);
 
-	return ad9361_verify_fir_filter_coef(phy, dest, ntaps, coef);
+	return ret;
 }
 
 /**
