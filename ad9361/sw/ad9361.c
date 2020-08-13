@@ -4517,8 +4517,14 @@ out:
  * @return 0 in case of success, negative error code otherwise.
  */
 static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
-		uint32_t *rx_path_clks)
+		uint32_t *rx_path_clks, uint32_t *tx_path_clks)
 {
+	static const uint32_t max_rx_rates[] = {MAX_BBPLL_FREQ, MAX_ADC_CLK,
+						MAX_RX_HB3, MAX_RX_HB2, MAX_RX_HB1, MAX_BASEBAND_RATE
+					       };
+	static const uint32_t max_tx_rates[] = {MAX_BBPLL_FREQ, MAX_DAC_CLK,
+						MAX_TX_HB3, MAX_TX_HB2, MAX_TX_HB1, MAX_BASEBAND_RATE
+					       };
 	uint32_t i;
 	uint32_t data_clk;
 
@@ -4528,12 +4534,30 @@ static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 
 	/* CMOS Mode */
 	if (!(phy->pdata->port_ctrl.pp_conf[2] & LVDS_MODE) &&
-	    (data_clk > 61440000UL)) {
+	    (data_clk > MAX_BASEBAND_RATE)) {
 		dev_err(&phy->spi->dev,
 			"%s: Failed CMOS MODE DATA_CLK > 61.44MSPS", __func__);
 		return -EINVAL;
 	}
 
+	/* Validate MAX PLL, ADC, DAC and HB filter rates */
+	for (i = 0; i < ARRAY_SIZE(max_rx_rates); i++) {
+		if (rx_path_clks[i] > max_rx_rates[i]) {
+			dev_err(&phy->spi->dev,
+				"%s: Failed RX max rate check (%"PRIu32" > %"PRIu32")",
+				__func__, rx_path_clks[i], max_rx_rates[i]);
+			return -EINVAL;
+		}
+
+		if (tx_path_clks[i] > max_tx_rates[i]) {
+			dev_err(&phy->spi->dev,
+				"%s: Failed TX max rate check (%"PRIu32" > %"PRIu32")",
+				__func__, tx_path_clks[i], max_tx_rates[i]);
+			return -EINVAL;
+		}
+	}
+
+	/* Validate that DATA_CLK exist within the clock chain */
 	for (i = 1; i <= 3; i++) {
 		if ((rx_path_clks[ADC_FREQ] / diff_abs(i, data_clk)) < 4)
 			return 0;
@@ -4580,7 +4604,7 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 		tx_path_clks[R2_FREQ], tx_path_clks[R1_FREQ],
 		tx_path_clks[CLKRF_FREQ], tx_path_clks[RX_SAMPL_FREQ]);
 
-	ret = ad9361_validate_trx_clock_chain(phy, rx_path_clks);
+	ret = ad9361_validate_trx_clock_chain(phy, rx_path_clks, tx_path_clks);
 	if (ret < 0)
 		return ret;
 
@@ -4719,7 +4743,7 @@ int32_t ad9361_calculate_rf_clock_chain(struct ad9361_rf_phy *phy,
 		__func__, tx_sample_rate, tx_intdec, rx_intdec,
 		rate_gov ? "Nominal" : "Highest OSR");
 
-	if (tx_sample_rate > 61440000UL)
+	if (tx_sample_rate > MAX_BASEBAND_RATE)
 		return -EINVAL;
 
 	clktf = tx_sample_rate * tx_intdec;

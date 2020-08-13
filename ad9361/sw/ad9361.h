@@ -2835,6 +2835,17 @@
 #define MAX_ADC_CLK			640000000UL /* 640 MHz */
 #define MAX_DAC_CLK			(MAX_ADC_CLK / 2)
 
+/* Associated with outputs of stage */
+#define MAX_RX_HB1			245760000UL
+#define MAX_RX_HB2			320000000UL
+#define MAX_RX_HB3			640000000UL
+/* Associated with inputs of stage */
+#define MAX_TX_HB1			160000000UL
+#define MAX_TX_HB2			320000000UL
+#define MAX_TX_HB3			320000000UL
+
+#define MAX_BASEBAND_RATE		61440000UL
+
 #define MAX_MBYTE_SPI			8
 
 #define RFPLL_MODULUS			8388593UL
