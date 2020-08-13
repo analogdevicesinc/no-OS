@@ -4468,13 +4468,23 @@ int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 
 	if (!phy->pdata->fdd && !pinctrl && !phy->pdata->tdd_use_dual_synth &&
 	    (ensm_state == ENSM_STATE_TX || ensm_state == ENSM_STATE_RX)) {
+		uint32_t reg, check;
+
+		if (ensm_state == ENSM_STATE_TX) {
+			reg = REG_TX_CP_OVERRANGE_VCO_LOCK;
+			check = !(phy->cached_synth_pd[0] &
+				  TX_SYNTH_VCO_POWER_DOWN);
+		} else {
+			reg = REG_RX_CP_OVERRANGE_VCO_LOCK;
+			check = !(phy->cached_synth_pd[1] &
+				  RX_SYNTH_VCO_POWER_DOWN);
+		}
+
 		ad9361_spi_writef(phy->spi, REG_ENSM_CONFIG_2,
 				  TXNRX_SPI_CTRL, ensm_state == ENSM_STATE_TX);
 
-		ad9361_check_cal_done(phy, (ensm_state == ENSM_STATE_TX) ?
-				      REG_TX_CP_OVERRANGE_VCO_LOCK :
-				      REG_RX_CP_OVERRANGE_VCO_LOCK,
-				      VCO_LOCK, 1);
+		if (check)
+			ad9361_check_cal_done(phy, reg, VCO_LOCK, 1);
 	}
 
 	rc = ad9361_spi_write(spi, REG_ENSM_CONFIG_1, val);
