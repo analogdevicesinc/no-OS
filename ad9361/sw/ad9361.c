@@ -5384,6 +5384,9 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 	}
 
+	ad9361_spi_write(spi, REG_FRACT_BB_FREQ_WORD_2, 0x12);
+	ad9361_spi_write(spi, REG_FRACT_BB_FREQ_WORD_3, 0x34);
+
 	if (!pd->rx2tx2) {
 		pd->rx1tx1_mode_use_tx_num =
 			clamp_t(uint32_t, pd->rx1tx1_mode_use_tx_num, TX_1, TX_2);
