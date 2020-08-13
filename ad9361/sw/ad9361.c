@@ -5329,6 +5329,14 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 		}
 	}
 
+	ret = ad9361_auxdac_setup(phy, &pd->auxdac_ctrl);
+	if (ret < 0)
+		return ret;
+
+	ret = ad9361_gpo_setup(phy, &pd->gpo_ctrl);
+	if (ret < 0)
+		return ret;
+
 	if (pd->port_ctrl.pp_conf[2] & FDD_RX_RATE_2TX_RATE)
 		phy->rx_eq_2tx = true;
 
@@ -5398,20 +5406,12 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 	if (ret < 0)
 		return ret;
 
-	ret = ad9361_auxdac_setup(phy, &pd->auxdac_ctrl);
-	if (ret < 0)
-		return ret;
-
 	bbpll_freq = clk_get_rate(phy, phy->ref_clk_scale[BBPLL_CLK]);
 	ret = ad9361_auxadc_setup(phy, &pd->auxadc_ctrl, bbpll_freq);
 	if (ret < 0)
 		return ret;
 
 	ret = ad9361_ctrl_outs_setup(phy, &pd->ctrl_outs_ctrl);
-	if (ret < 0)
-		return ret;
-
-	ret = ad9361_gpo_setup(phy, &pd->gpo_ctrl);
 	if (ret < 0)
 		return ret;
 
