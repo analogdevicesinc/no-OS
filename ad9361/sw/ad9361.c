@@ -5372,11 +5372,6 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 		return ret;
 	}
 
-	ret = ad9361_set_trx_clock_chain(phy, pd->rx_path_clks,
-					 pd->tx_path_clks);
-	if (ret < 0)
-		return ret;
-
 	ret = clk_prepare_enable(phy->clks[BB_REFCLK]);
 	if (ret < 0) {
 		dev_err(dev, "Failed to enable BB ref clock rate (%"PRId32")",
@@ -5386,6 +5381,11 @@ int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 
 	ad9361_spi_write(spi, REG_FRACT_BB_FREQ_WORD_2, 0x12);
 	ad9361_spi_write(spi, REG_FRACT_BB_FREQ_WORD_3, 0x34);
+
+	ret = ad9361_set_trx_clock_chain(phy, pd->rx_path_clks,
+					 pd->tx_path_clks);
+	if (ret < 0)
+		return ret;
 
 	if (!pd->rx2tx2) {
 		pd->rx1tx1_mode_use_tx_num =
