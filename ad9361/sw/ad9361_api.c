@@ -220,6 +220,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		init_param->gc_lmt_overload_low_thresh;
 	phy->pdata->gain_ctrl.low_power_thresh = init_param->gc_low_power_thresh;
 	phy->pdata->gain_ctrl.max_dig_gain = init_param->gc_max_dig_gain;
+	phy->pdata->gain_ctrl.use_rx_fir_out_for_dec_pwr_meas =
+		init_param->gc_use_rx_fir_out_for_dec_pwr_meas_enable;
 
 	/* Gain MGC Control */
 	phy->pdata->gain_ctrl.mgc_dec_gain_step = init_param->mgc_dec_gain_step;
