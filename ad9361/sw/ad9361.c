@@ -4559,7 +4559,7 @@ static int32_t ad9361_validate_trx_clock_chain(struct ad9361_rf_phy *phy,
 
 	/* Validate that DATA_CLK exist within the clock chain */
 	for (i = 1; i <= 3; i++) {
-		if ((rx_path_clks[ADC_FREQ] / diff_abs(i, data_clk)) < 4)
+		if (diff_abs(rx_path_clks[ADC_FREQ] / i, data_clk) < 4)
 			return 0;
 	}
 
