@@ -902,9 +902,9 @@ uint32_t ad9361_validate_rf_bw(struct ad9361_rf_phy *phy, uint32_t bw)
 {
 	switch (phy->dev_sel) {
 	case ID_AD9363A:
-		return clamp_t(uint32_t, bw, 0, 20000000UL);
+		return clamp_t(uint32_t, bw, 200000UL, 20000000UL);
 	default:
-		return clamp_t(uint32_t, bw, 0, 56000000UL);
+		return clamp_t(uint32_t, bw, 200000UL, 56000000UL);
 	}
 }
 
