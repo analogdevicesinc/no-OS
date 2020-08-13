@@ -118,7 +118,7 @@ typedef struct {
 	uint8_t		mgc_split_table_ctrl_inp_gain_mode;	/* adi,mgc-split-table-ctrl-inp-gain-mode */
 	/* Gain AGC Control */
 	uint8_t		agc_adc_large_overload_exceed_counter;	/* adi,agc-adc-large-overload-exceed-counter */
-	uint8_t		agc_adc_large_overload_inc_steps;	/* adi,agc-adc-large-overload-inc-steps */
+	uint8_t		agc_adc_large_overload_inc_steps;	/* adi,agc-adc-large-overload-inc-steps - Name is misleading should be dec-steps*/
 	uint8_t		agc_adc_lmt_small_overload_prevent_gain_inc_enable;	/* adi,agc-adc-lmt-small-overload-prevent-gain-inc-enable */
 	uint8_t		agc_adc_small_overload_exceed_counter;	/* adi,agc-adc-small-overload-exceed-counter */
 	uint8_t		agc_dig_gain_step_size;	/* adi,agc-dig-gain-step-size */
@@ -170,6 +170,7 @@ typedef struct {
 	uint8_t		fagc_rst_gla_en_agc_pulled_high_en;	/* adi,fagc-rst-gla-en-agc-pulled-high-enable */
 	uint32_t	fagc_rst_gla_if_en_agc_pulled_high_mode;	/* adi,fagc-rst-gla-if-en-agc-pulled-high-mode */
 	uint32_t	fagc_power_measurement_duration_in_state5;	/* adi,fagc-power-measurement-duration-in-state5 */
+	uint32_t	fagc_large_overload_inc_steps;	/* adi,fagc-adc-large-overload-inc-steps - Name is misleading should be dec-steps */
 	/* RSSI Control */
 	uint32_t	rssi_delay;	/* adi,rssi-delay */
 	uint32_t	rssi_duration;	/* adi,rssi-duration */

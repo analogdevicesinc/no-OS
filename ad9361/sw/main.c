@@ -196,6 +196,7 @@ AD9361_InitParam default_init_param = {
 	0,		//fagc_rst_gla_en_agc_pulled_high_en ***  adi,fagc-rst-gla-en-agc-pulled-high-enable
 	0,		//fagc_rst_gla_if_en_agc_pulled_high_mode ***  adi,fagc-rst-gla-if-en-agc-pulled-high-mode
 	64,		//fagc_power_measurement_duration_in_state5 ***  adi,fagc-power-measurement-duration-in-state5
+	2,		//fagc_large_overload_inc_steps *** adi,fagc-adc-large-overload-inc-steps
 	/* RSSI Control */
 	1,		//rssi_delay *** adi,rssi-delay
 	1000,	//rssi_duration *** adi,rssi-duration

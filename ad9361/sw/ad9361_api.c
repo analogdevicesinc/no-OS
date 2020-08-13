@@ -328,6 +328,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 		init_param->fagc_rst_gla_if_en_agc_pulled_high_mode;
 	phy->pdata->gain_ctrl.f_agc_power_measurement_duration_in_state5 =
 		init_param->fagc_power_measurement_duration_in_state5;
+	phy->pdata->gain_ctrl.f_agc_large_overload_inc_steps =
+		init_param->fagc_large_overload_inc_steps;
 
 	/* RSSI Control */
 	phy->pdata->rssi_ctrl.rssi_delay = init_param->rssi_delay;
