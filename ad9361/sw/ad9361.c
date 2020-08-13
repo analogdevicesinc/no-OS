@@ -3474,6 +3474,9 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 	dev_dbg(&phy->spi->dev, "%s : coarse %"PRIu32" fine %"PRIu32,
 		__func__, coarse, fine);
 
+	if (phy->pdata->use_extclk)
+		return -ENODEV;
+
 	ad9361_spi_write(phy->spi, REG_DCXO_COARSE_TUNE,
 			 DCXO_TUNE_COARSE(coarse));
 	ad9361_spi_write(phy->spi, REG_DCXO_FINE_TUNE_LOW,
