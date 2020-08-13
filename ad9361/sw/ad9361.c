@@ -4613,6 +4613,8 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 	if (ret < 0)
 		return ret;
 
+	phy->current_rx_path_clks[BBPLL_FREQ] = rx_path_clks[BBPLL_FREQ];
+
 	for (i = ADC_CLK, j = DAC_CLK, n = ADC_FREQ;
 	     i <= RX_SAMPL_CLK; i++, j++, n++) {
 		ret = clk_set_rate(phy, phy->ref_clk_scale[i], rx_path_clks[n]);
@@ -4621,12 +4623,14 @@ int32_t ad9361_set_trx_clock_chain(struct ad9361_rf_phy *phy,
 				ret);
 			return ret;
 		}
+		phy->current_rx_path_clks[n] = rx_path_clks[n];
 		ret = clk_set_rate(phy, phy->ref_clk_scale[j], tx_path_clks[n]);
 		if (ret < 0) {
 			dev_err(dev, "Failed to set BB ref clock rate (%"PRId32")",
 				ret);
 			return ret;
 		}
+		phy->current_tx_path_clks[n] = tx_path_clks[n];
 	}
 
 	/*
