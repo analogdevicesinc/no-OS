@@ -272,6 +272,8 @@ AD9361_InitParam default_init_param = {
 	0xFF,	//lvds_invert1_control *** adi,lvds-invert1-control
 	0x0F,	//lvds_invert2_control *** adi,lvds-invert2-control
 	/* GPO Control */
+	0,		//gpo_manual_mode_enable *** adi,gpo-manual-mode-enable
+	0,		//gpo_manual_mode_enable_mask *** adi,gpo-manual-mode-enable-mask
 	0,		//gpo0_inactive_state_high_enable *** adi,gpo0-inactive-state-high-enable
 	0,		//gpo1_inactive_state_high_enable *** adi,gpo1-inactive-state-high-enable
 	0,		//gpo2_inactive_state_high_enable *** adi,gpo2-inactive-state-high-enable
