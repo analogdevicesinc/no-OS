@@ -5255,6 +5255,7 @@ void ad9361_clear_state(struct ad9361_rf_phy *phy)
 	phy->prev_ensm_state = 0;
 	phy->curr_ensm_state = 0;
 	phy->auto_cal_en = false;
+	phy->manual_tx_quad_cal_en = false;
 	phy->last_tx_quad_cal_freq = 0;
 	phy->flags = 0;
 	phy->current_rx_bw_Hz = 0;
@@ -5674,9 +5675,11 @@ int32_t ad9361_update_rf_bandwidth(struct ad9361_rf_phy *phy,
 	phy->current_rx_bw_Hz = rf_rx_bw;
 	phy->current_tx_bw_Hz = rf_tx_bw;
 
-	ret = ad9361_tx_quad_calib(phy, rf_rx_bw / 2, rf_tx_bw / 2, -1);
-	if (ret < 0)
-		return ret;
+	if (phy->manual_tx_quad_cal_en == false) {
+		ret = ad9361_tx_quad_calib(phy, rf_rx_bw / 2, rf_tx_bw / 2, -1);
+		if (ret < 0)
+			return ret;
+	}
 
 	ret = ad9361_tracking_control(phy, phy->bbdc_track_en,
 				      phy->rfdc_track_en, phy->quad_track_en);
