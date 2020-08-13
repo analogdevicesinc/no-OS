@@ -3720,18 +3720,6 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_AGC_CONFIG_3,
 			 reg); // Incr Step Size, ADC Overrange Size
 
-	if (has_split_gt && phy->pdata->split_gt) {
-		reg = SIZE_SPLIT_TABLE - 1;
-	} else {
-		reg = SIZE_FULL_TABLE - 1;
-	}
-	ad9361_spi_write(spi, REG_MAX_LMT_FULL_GAIN,
-			 reg); // Max Full/LMT Gain Table Index
-	ad9361_spi_write(spi, REG_RX1_MANUAL_LMT_FULL_GAIN,
-			 reg); // Rx1 Full/LMT Gain Index
-	ad9361_spi_write(spi, REG_RX2_MANUAL_LMT_FULL_GAIN,
-			 reg); // Rx2 Full/LMT Gain Index
-
 	ctrl->mgc_dec_gain_step = clamp_t(uint8_t, ctrl->mgc_dec_gain_step, 1U, 8U);
 	reg = MANUAL_CTRL_IN_DECR_GAIN_STP_SIZE(ctrl->mgc_dec_gain_step - 1);
 	ad9361_spi_write(spi, REG_PEAK_WAIT_TIME,
