@@ -582,6 +582,26 @@ out:
 }
 
 /**
+ * Free the allocated resources.
+ * @param phy The AD9361 current state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_remove(struct ad9361_rf_phy *phy)
+{
+	ad9361_unregister_clocks(phy);
+	free(phy->spi);
+#ifndef AXI_ADC_NOT_PRESENT
+	free(phy->adc_conv);
+	free(phy->adc_state);
+#endif
+	free(phy->clk_refin);
+	free(phy->pdata);
+	free(phy);
+
+	return 0;
+}
+
+/**
  * Set the Enable State Machine (ENSM) mode.
  * @param phy The AD9361 current state structure.
  * @param mode The ENSM mode.
