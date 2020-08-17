@@ -7237,15 +7237,6 @@ int32_t register_clocks(struct ad9361_rf_phy *phy)
 {
 	uint32_t flags = CLK_GET_RATE_NOCACHE;
 
-	phy->clk_data.clks = (struct clk **)malloc(sizeof(*phy->clk_data.clks) *
-			     NUM_AD9361_CLKS);
-	if (!phy->clk_data.clks) {
-		dev_err(&phy->spi->dev, "could not allocate memory");
-		return -ENOMEM;
-	}
-
-	phy->clk_data.clk_num = NUM_AD9361_CLKS;
-
 	/* Scaled Reference Clocks */
 	phy->clks[TX_REFCLK] = ad9361_clk_register(phy,
 			       "tx_refclk", "ad9361_ext_refclk",

@@ -3349,7 +3349,6 @@ struct ad9361_rf_phy {
 	struct clk 		*clk_refin;
 	struct clk 		*clks[NUM_AD9361_CLKS];
 	struct refclk_scale *ref_clk_scale[NUM_AD9361_CLKS];
-	struct clk_onecell_data	clk_data;
 	uint32_t (*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
 	int32_t (*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv,
 					       uint32_t rate);
