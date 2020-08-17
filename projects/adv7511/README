@@ -1,0 +1,5 @@
+The ADV7511 project works using the API library found at https://www.analog.com/media/en/dsp-hardware-software/software-modules/ADV7511_API_Library.exe
+
+To build the project copy the "TX" folder from the "Src" folder in the
+library installation folder before calling the "make" command.
+
