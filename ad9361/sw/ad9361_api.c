@@ -539,7 +539,7 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->ad9361_rfpll_ext_round_rate = init_param->ad9361_rfpll_ext_round_rate;
 	phy->ad9361_rfpll_ext_set_rate = init_param->ad9361_rfpll_ext_set_rate;
 
-	ret = register_clocks(phy);
+	ret = ad9361_register_clocks(phy);
 	if (ret < 0)
 		goto out;
 
