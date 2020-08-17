@@ -550,13 +550,13 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	ret = ad9361_setup(phy);
 	if (ret < 0)
-		goto out;
+		goto out_clk;
 
 #ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
 	ret = axiadc_post_setup(phy);
 	if (ret < 0)
-		goto out;
+		goto out_clk;
 #endif
 
 	printf("%s : AD936x Rev %d successfully initialized\n", __func__, (int)rev);
@@ -565,6 +565,8 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	return 0;
 
+out_clk:
+	ad9361_unregister_clocks(phy);
 out:
 	free(phy->spi);
 #ifndef AXI_ADC_NOT_PRESENT
