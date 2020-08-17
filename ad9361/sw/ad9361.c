@@ -7344,6 +7344,23 @@ int32_t ad9361_register_clocks(struct ad9361_rf_phy *phy)
 }
 
 /**
+ * Unregister all the system clocks.
+ * @param phy The AD9361 state structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad9361_unregister_clocks(struct ad9361_rf_phy *phy)
+{
+	int32_t i;
+
+	for (i = 0; i < NUM_AD9361_CLKS; i++) {
+		free(phy->clks[i]);
+		free(phy->ref_clk_scale[i]);
+	}
+
+	return 0;
+}
+
+/**
  * Perform an RSSI gain step calibration.
  * Note: Before running the function, provide a single tone within the channel
  *    bandwidth and monitor the received data. Adjust the tone amplitude until
