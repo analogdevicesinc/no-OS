@@ -643,6 +643,11 @@ int main(void)
 	}
 #endif
 
+	ad9361_remove(ad9361_phy);
+#ifdef FMCOMMS5
+	ad9361_remove(ad9361_phy_b);
+#endif
+
 #ifdef XILINX_PLATFORM
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
