@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   zed/transmitter.c
+ *   @file   transmitter.c
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -43,14 +43,13 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <string.h>
-#include "atv_types.h"
-#include "atv_platform.h"
-#include "atv_common.h"
 #include "transmitter.h"
 #include "tx_lib.h"
-#include "edid.h"
 #include "cf_hdmi.h"
 #include "xil_io.h"
+#include "wrapper.h"
+#include "edid.h"
+#include "app_config.h"
 
 /*****************************************************************************/
 /******************* Macros and Constants Definitions ************************/
@@ -77,8 +76,19 @@
 static UINT32					HouseKeepingDelay;
 static TRANSMITTER_OPER_MODE	LastDetMode;
 static UINT32					ModeChngCount;
+static struct axi_clkgen		*clk_gen;
 TRANSMITTER_OPER_PARAMS			TransmitterParm;
 UCHAR							MuteState;
+
+/**
+ * @brief Link the transmitter clk_gen handler to the application one.
+ * @param [in] clk_gen_handle - Pointer to the clk_axi_clkgen handle.
+ * @return void
+ */
+void transmitter_link_clkgen(struct axi_clkgen *clk_gen_handle)
+{
+	clk_gen = clk_gen_handle;
+}
 
 /***************************************************************************//**
  * @brief Initializes the transmitter.
@@ -91,8 +101,17 @@ ATV_ERR ADIAPI_TransmitterInit(void)
 	TransmitterParm.Changed				= TRUE;
 	TransmitterParm.Mode				= MODE_NONE;
 	TransmitterParm.ReqOutputMode		= OUT_MODE_HDMI;
+#if defined(PLATFORM_KC705) || defined(PLATFORM_ZC702) || \
+	defined(PLATFORM_ZED)
 	TransmitterParm.InPixelBitsPerColor = 8;
 	TransmitterParm.InPixelFormat 		= SDR_422_SEP_SYNC;
+#elif defined(PLATFORM_VC707)
+	TransmitterParm.InPixelBitsPerColor = 12;
+	TransmitterParm.InPixelFormat 		= SDR_444_SEP_SYNC;
+#elif defined(PLATFORM_AC701) || defined(PLATFORM_ZC706)
+	TransmitterParm.InPixelBitsPerColor = 8;
+	TransmitterParm.InPixelFormat 		= SDR_444_SEP_SYNC;
+#endif
 	TransmitterParm.InPixelStyle 		= 2;
 	TransmitterParm.InPixelAlignment 	= ALIGN_RIGHT;
 	TransmitterParm.OutPixelEncFormat 	= OUT_ENC_RGB_444;
@@ -128,9 +147,6 @@ void TRANSMITTER_SoftwareInit(void)
 *******************************************************************************/
 void TRANSMITTER_HardwareInit(void)
 {
-	/* Enable TX HPD line. */
-	HAL_EnableTxHPD(TRUE);
-
 	/* Initialize HDMI TX chip. */
 	ADIAPI_TxInit(TRUE);
 
@@ -365,7 +381,7 @@ ATV_ERR ADIAPI_TransmitterSetMuteState(void)
  *
  * @return Returns 0.
 *******************************************************************************/
-UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, UCHAR *BufPtr)
+UINT16 TRANSMITTER_Notification (TX_EVENT Ev, UINT16 Count, void *BufPtr)
 {
 	switch (Ev) {
 	/* HPD changed */
@@ -408,8 +424,8 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 {
 	UCHAR  		   EdidData[256];
 	UINT16 		   SpaOffset;
-	EDID_STRUCT    *Edid;
-	STD_TIMING     *TDesc;
+	struct edid_struct    *Edid;
+	struct std_timing     *TDesc;
 	unsigned short horizontalActiveTime     = 0;
 	unsigned short verticalActiveTime       = 0;
 	unsigned short horizontalBlankingTime   = 0;
@@ -443,29 +459,29 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 			TRANSMITTER_DBG_MSG("DVI device.\n\r");
 			ADIAPI_TxSetOutputMode(OUT_MODE_DVI);
 		}
-		Edid = (EDID_STRUCT *)EdidData;
-		TDesc = (STD_TIMING *)(Edid->DetailedTiming);
+		Edid = (struct edid_struct *)EdidData;
+		TDesc = (struct std_timing *)(Edid->detailed_timing);
 
-		pixelClk = (TDesc->PixelClk[1] << 8) | TDesc->PixelClk[0];
+		pixelClk = (TDesc->pixel_clk[1] << 8) | TDesc->pixel_clk[0];
 		pixelClk = pixelClk * 10000;
-		CLKGEN_SetRate(pixelClk, 200000000);
+		axi_clkgen_set_rate(clk_gen, pixelClk);
 
-		horizontalActiveTime = ((TDesc->HActBlnk44 & 0xf0) << 4) |
-				       TDesc->HActive;
-		verticalActiveTime = ((TDesc->VActBlnk44 & 0xf0) << 4) |
-				     TDesc->VActive;
-		horizontalBlankingTime = ((TDesc->HActBlnk44 & 0x0f) << 8) |
-					 TDesc->HBlanking;
-		verticalBlankingTime = ((TDesc->VActBlnk44 & 0x0f) << 8) |
-				       TDesc->VBlanking;
-		horizontalSyncPulseWidth = ((TDesc->HVOffsPulse & 0x30) << 4) |
-					   TDesc->HSyncWidth;
-		verticalSyncPulseWidth = ((TDesc->HVOffsPulse & 0x03) << 4) |
-					 (TDesc->VOffsPulse & 0x0f);
-		horizontalSyncOffset = ((TDesc->HVOffsPulse & 0xC0) << 2) |
-				       TDesc->HSyncOffs;
-		verticalSyncOffset = ((TDesc->HVOffsPulse & 0x0C) << 2) |
-				     ((TDesc->VOffsPulse & 0xf0) >> 4);
+		horizontalActiveTime = ((TDesc->h_act_blnk44 & 0xf0) << 4) |
+				       TDesc->h_active;
+		verticalActiveTime = ((TDesc->v_act_blnk44 & 0xf0) << 4) |
+				     TDesc->v_active;
+		horizontalBlankingTime = ((TDesc->h_act_blnk44 & 0x0f) << 8) |
+					 TDesc->h_blanking;
+		verticalBlankingTime = ((TDesc->v_act_blnk44 & 0x0f) << 8) |
+				       TDesc->v_blanking;
+		horizontalSyncPulseWidth = ((TDesc->hv_offs_pulse & 0x30) << 4) |
+					   TDesc->h_sync_width;
+		verticalSyncPulseWidth = ((TDesc->hv_offs_pulse & 0x03) << 4) |
+					 (TDesc->v_offs_pulse & 0x0f);
+		horizontalSyncOffset = ((TDesc->hv_offs_pulse & 0xC0) << 2) |
+				       TDesc->h_sync_offs;
+		verticalSyncOffset = ((TDesc->hv_offs_pulse & 0x0C) << 2) |
+				     ((TDesc->v_offs_pulse & 0xf0) >> 4);
 		InitHdmiVideoPcore(horizontalActiveTime,
 				   horizontalBlankingTime,
 				   horizontalSyncOffset,
@@ -475,7 +491,7 @@ void TRANSMITTER_NewEdidSegment(UINT16 SegmentNum, UCHAR *SegPtr)
 				   verticalSyncOffset,
 				   verticalSyncPulseWidth);
 
-		ADIAPI_MwEdidEnableDebugMsg(TRUE);
-		ADIAPI_MwEdidParse(EdidData, &SpaOffset, SegmentNum);
+		ADIAPI_mw_edid_enable_debug_msg(TRUE);
+		ADIAPI_mw_edid_parse(EdidData, &SpaOffset, SegmentNum);
 	}
 }
