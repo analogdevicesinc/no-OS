@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   zed/cf_hdmi.h
+ *   @file   cf_hdmi.h
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
  *
@@ -45,34 +45,75 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "xparameters.h"
+#include "app_config.h"
+#include "clk_axi_clkgen.h"
 
 /******************************************************************************/
 /************************** Macros Definitions ********************************/
 /******************************************************************************/
-#ifdef XPAR_AXI_CLKGEN_0_BASEADDR
-#define CF_CLKGEN_BASEADDR  XPAR_AXI_CLKGEN_0_BASEADDR
-#else
-#define CF_CLKGEN_BASEADDR  XPAR_AXI_HDMI_CLKGEN_BASEADDR
-#endif
 #ifdef XPAR_AXI_HDMI_TX_0_BASEADDR
 #define CFV_BASEADDR        XPAR_AXI_HDMI_TX_0_BASEADDR
 #else
-#define CFV_BASEADDR        XPAR_AXI_HDMI_CORE_BASEADDR
+#define CFV_BASEADDR		XPAR_AXI_HDMI_CORE_BASEADDR
 #endif
 #ifdef XPAR_AXI_SPDIF_TX_0_BASEADDR
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_0_BASEADDR
 #else
 #define CFA_BASEADDR        XPAR_AXI_SPDIF_TX_CORE_BASEADDR
 #endif
+
+#if defined(PLATFORM_KC705) || defined(PLATFORM_AC701) || \
+	defined(PLATFORM_VC707)
+#ifdef XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+#define DDR_BASEADDR        XPAR_DDR3_SDRAM_S_AXI_BASEADDR
+#else
+#define DDR_BASEADDR		XPAR_AXI_DDR_CNTRL_BASEADDR
+#endif
+#elif defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
+		defined(PLATFORM_ZED)
 #define DDR_BASEADDR        XPAR_DDR_MEM_BASEADDR
+#endif
+
+#if defined(PLATFORM_KC705) || defined(PLATFORM_AC701) || \
+	defined(PLATFORM_VC707)
+#ifdef XPAR_RS232_UART_1_BASEADDR
+#define UART_BASEADDR       XPAR_RS232_UART_1_BASEADDR
+#else
+#define UART_BASEADDR       XPAR_AXI_UART_BASEADDR
+#endif
+#elif defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
+		defined(PLATFORM_ZED)
 #define UART_BASEADDR       XPS_UART1_BASEADDR
+#endif
+
 #ifdef XPAR_AXI_VDMA_0_BASEADDR
 #define VDMA_BASEADDR       XPAR_AXI_VDMA_0_BASEADDR
 #else
 #define VDMA_BASEADDR       XPAR_AXI_HDMI_DMA_BASEADDR
 #endif
+
+#ifdef XPAR_AXI_DMA_0_BASEADDR
+#define ADMA_BASEADDR       XPAR_AXI_DMA_0_BASEADDR
+#else
+#if defined(PLATFORM_AC701) || defined(PLATFORM_VC707)
+#define ADMA_BASEADDR       XPAR_AXIDMA_1_BASEADDR
+#elif defined(PLATFORM_KC705)
+#define ADMA_BASEADDR       XPAR_AXIDMA_0_BASEADDR
+#endif
+#endif
+#if defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
+		defined(PLATFORM_ZED)
 #define ADMA_DEVICE_ID		XPAR_XDMAPS_1_DEVICE_ID
+#endif
+
+#if defined(PLATFORM_KC705) || defined(PLATFORM_AC701) || \
+	defined(PLATFORM_VC707)
+#define IIC_BASEADDR        XPAR_AXI_IIC_0_BASEADDR
+#elif defined(PLATFORM_ZC702) || defined(PLATFORM_ZC706) || \
+		defined(PLATFORM_ZED)
 #define IIC_BASEADDR        XPS_I2C0_BASEADDR
+#endif
+
 #define VIDEO_BASEADDR		DDR_BASEADDR + 0x2000000
 #define AUDIO_BASEADDR		DDR_BASEADDR + 0x1000000
 #define A_SAMPLE_FREQ       48000
@@ -144,11 +185,8 @@ void InitHdmiVideoPcore(unsigned short horizontalActiveTime,
 			unsigned short verticalBlankingTime,
 			unsigned short verticalSyncOffset,
 			unsigned short verticalSyncPulseWidth);
-void SetVideoResolution(unsigned char resolution);
+void SetVideoResolution(struct axi_clkgen *clkgen, unsigned char resolution);
 void InitHdmiAudioPcore(void);
 void AudioClick(void);
-int CLKGEN_SetRate(unsigned long rate,
-		   unsigned long parent_rate);
-unsigned long CLKGEN_GetRate(unsigned long parent_rate);
 
 #endif /* CF_HDMI_H_ */
