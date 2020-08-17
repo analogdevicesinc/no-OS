@@ -7233,7 +7233,7 @@ static struct clk *ad9361_clk_register(struct ad9361_rf_phy *phy,
  * @param phy The AD9361 state structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t register_clocks(struct ad9361_rf_phy *phy)
+int32_t ad9361_register_clocks(struct ad9361_rf_phy *phy)
 {
 	uint32_t flags = CLK_GET_RATE_NOCACHE;
 
