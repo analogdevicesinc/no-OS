@@ -5,6 +5,8 @@
 export CFLAGS
 export CC
 export AR
+#Needed by iio library
+export NO-OS
 
 #------------------------------------------------------------------------------
 #                     PLATFORM SPECIFIC INITIALIZATION                               

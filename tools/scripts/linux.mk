@@ -9,6 +9,8 @@ export CFLAGS
 export LDFLAGS
 export CC
 export LD
+#Needed by iio library
+export NO-OS
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
