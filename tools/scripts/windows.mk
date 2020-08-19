@@ -88,7 +88,7 @@ LD ?= $(CC)
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
-CFLAGS = -Wall 								\
+CFLAGS += -Wall								\
 	 -Wmissing-field-initializers					\
 	 -Wclobbered 							\
 	 -Wempty-body 							\
