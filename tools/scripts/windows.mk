@@ -6,6 +6,8 @@ export HARDWARE
 export PLATFORM
 export ARCH
 export CC
+#Needed by iio library
+export NO-OS
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              

@@ -32,7 +32,8 @@ SRCS = iio.c $(TINYIIOD_DIR)/parser.c $(TINYIIOD_DIR)/tinyiiod.c
 OBJS = $(SRCS:.c=.o)
 
 CFLAGS += $(IIO_DEFS) \
-	  -I"$(TINYIIOD_DIR)"
+	  -I"$(TINYIIOD_DIR)"\
+	  -I"$(NO-OS)/include"
 
 .PHONEY = all clean
 
