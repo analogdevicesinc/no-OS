@@ -208,7 +208,9 @@ int32_t gpio_get_direction(struct gpio_desc *desc, uint8_t *direction)
 /**
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @param value - The value: GPIO_HIGH or GPIO_LOW
+ * @param value - The value: GPIO_HIGH, GPIO_LOW or GPIO_HIGH_Z
+ *                Choosing GPIO_HIGH_Z will deactivate the input and output
+ *                buffers.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
 int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
@@ -218,10 +220,26 @@ int32_t gpio_set_value(struct gpio_desc *desc, uint8_t value)
 	if (!desc || !nb_gpio)
 		return FAILURE;
 
-	if (value == GPIO_LOW)
+	switch (value) {
+	case GPIO_LOW:
 		ret = adi_gpio_SetLow(PORT(desc->number), PIN(desc->number));
-	else
+		break;
+	case GPIO_HIGH:
 		ret = adi_gpio_SetHigh(PORT(desc->number), PIN(desc->number));
+		break;
+	case GPIO_HIGH_Z:
+		ret = adi_gpio_OutputEnable(PORT(desc->number),
+					    PIN(desc->number), false);
+		if (ret != ADI_GPIO_SUCCESS)
+			return FAILURE;
+
+		ret = adi_gpio_InputEnable(PORT(desc->number),
+					   PIN(desc->number), false);
+		break;
+	default:
+		ret = adi_gpio_SetHigh(PORT(desc->number), PIN(desc->number));
+		break;
+	}
 	if (ret != ADI_GPIO_SUCCESS)
 		return FAILURE;
 
