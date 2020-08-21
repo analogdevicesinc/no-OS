@@ -525,10 +525,10 @@ int32_t ad9144_dac_calibrate(struct ad9144_dev *dev)
 	dac_mask = (1 << dev->num_converters) - 1;
 
 	/*
-	 * DAC calibration sequence as per table 86 AD9144 datasheet Rev B.
+	 * DAC calibration sequence as per table 86 AD9144 datasheet Rev C.
 	 */
 	ad9144_spi_write(dev, REG_CAL_CLKDIV, 0x38);	// set calibration clock to 1m
-	ad9144_spi_write(dev, REG_CAL_INIT, 0xa6);	// use isb reference of 38 to set cal
+	ad9144_spi_write(dev, REG_CAL_INIT, 0xa2);	// use isb reference of 38 to set cal
 	ad9144_spi_write(dev, REG_CAL_INDX, dac_mask);	// select all active DACs
 	ad9144_spi_write(dev, REG_CAL_CTRL, 0x01);	// single cal enable
 	ad9144_spi_write(dev, REG_CAL_CTRL, 0x03);	// single cal start
