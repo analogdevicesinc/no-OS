@@ -272,11 +272,11 @@ int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 
 /*
  * PLL fixed register writes according to table 17 of the
- * AD9144 datasheet Rev. B.
+ * AD9144 datasheet Rev. C.
  */
 static const struct ad9144_reg_seq ad9144_pll_fixed_writes[] = {
 	{ 0x87, 0x62 },
-	{ 0x88, 0xc0 },
+	{ 0x88, 0xc9 },
 	{ 0x89, 0x0e },
 	{ 0x8a, 0x12 },
 	{ 0x8d, 0x7b },
