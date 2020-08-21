@@ -234,7 +234,7 @@ int32_t ad9144_setup_jesd204_link(struct ad9144_dev *dev,
 	val |= 0x20; /* JESD204 version B */
 	ad9144_spi_write(dev, REG_ILS_S, val);
 
-	val = link_mode->F == 0 ? 0x80 : 0x00;
+	val = link_mode->F == 1 ? 0x80 : 0x00;
 	ad9144_spi_write(dev, REG_ILS_HD_CF, val);
 
 	ad9144_spi_write(dev, REG_LANEDESKEW, lane_mask);
