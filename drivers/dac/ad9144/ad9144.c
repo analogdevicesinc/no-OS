@@ -48,12 +48,12 @@ struct ad9144_jesd204_link_mode {
 	uint8_t id;
 	uint8_t M;
 	uint8_t L;
-	uint8_t F;
 	uint8_t S;
+	uint8_t F;
 };
 
 static const struct ad9144_jesd204_link_mode ad9144_jesd204_link_modes[] = {
-	/* ID, M, L, F, S */
+	/* ID, M, L, S, F */
 	{  0, 4, 8, 1, 1 },
 	{  1, 4, 8, 2, 2 },
 	{  2, 4, 4, 1, 2 },
