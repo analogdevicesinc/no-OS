@@ -361,9 +361,10 @@ static int32_t ad9081_multichip_sync(struct ad9081_phy *phy, int step)
 		if (ret != 0)
 			return ret;
 
-		ad9081_jesd_rx_link_status_print(phy);
+		ret = ad9081_jesd_rx_link_status_print(phy);
+		if (ret < 0)
+			ad9081_work_func(phy);
 		//schedule_delayed_work(&phy->dwork, msecs_to_jiffies(1000));	TODO
-		ad9081_work_func(phy);
 		break;
 	case 4:
 		/* JESD OneShot Sync */
