@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   config.h
- *   @brief  Config file of AD9361/API Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   ad9467/src/devices/adi_hal/parameters.h
+ *   @brief  Parameters Definitions.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,41 +36,21 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#include "app_config.h"
+#include "xparameters.h"
 
-// #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
-// #define DEBUG		 /* For Debug purposes only */
-
-/******************************************************************************/
-/****************************** Carrier Vendors *******************************/
-/******************************************************************************/
-// #define XILINX
-// #define ALTERA
-
-/******************************************************************************/
-/********************************* CPU Arch ***********************************/
-/******************************************************************************/
-/*Xilinx*/
-// #define ZYNQ /* Requires a family definition (below)*/
-	// #define ZYNQ_PS7
-	//#define ZYNQ_PSU
-// #define MICROBLAZE
-
-/*Altera*/
-// #define SOC
-// #define NIOS_II
-
-/******************************************************************************/
-/********************************* Warn User **********************************/
-/******************************************************************************/
-
-#if !defined(XILINX) && !defined(ALTERA)
-	printf("\nWARNING no vendor defined in config.h (for carrier)\n");
+#ifdef PLATFORM_MB
+#define SPI_DEVICE_ID 				XPAR_AXI_SPI_DEVICE_ID
+#define ADC_DDR_BASEADDR			(XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000)
+#else
+#define SPI_DEVICE_ID 				XPAR_XSPIPS_0_DEVICE_ID
+#define ADC_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR  + 0x800000)
 #endif
 
-#if !defined(MICROBLAZE) && !defined(NIOS_II) && !defined(SOC) && !defined(ZYNQ)
-	printf("\nWARNING CPU arch defined in config.h\n");
-#endif
-#endif
+#define RX_CORE_BASEADDR 			XPAR_AXI_AD9467_BASEADDR
+#define RX_DMA_BASEADDR  			XPAR_AXI_AD9467_DMA_BASEADDR
+
+#endif /* SRC_PARAMETERS_H_ */
