@@ -267,11 +267,11 @@ escape_spaces = $(subst $(SPACE),\$(SPACE),$1)
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
 # $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
-get_relative_path = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PLATFORM_TOOLS)%,aducm3029%,$(patsubst $(PROJECT)%,srcs%,$1)))
+get_relative_path = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PLATFORM_TOOLS)%,aducm3029%,$(patsubst $(PROJECT)%,srcs%,$(patsubst $(DFP_DRIVERS)%,dfp_drivers%,$1))))
 
 # Transforme relative path to full path in order to find the needed .c files
 # Reverse of get_relative_path
-get_full_path = $(patsubst noos%,$(NO-OS)%,$(patsubst aducm3029%,$(PLATFORM_TOOLS)%,$(patsubst srcs%,$(PROJECT)%,$1)))
+get_full_path = $(patsubst noos%,$(NO-OS)%,$(patsubst aducm3029%,$(PLATFORM_TOOLS)%,$(patsubst srcs%,$(PROJECT)%,$(patsubst dfp_drivers%,$(DFP_DRIVERS)%,$1))))
 
 # recursive wildcard: Same as wildcard but search in subdirectories too
 _rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call _rwildcard,$d/,$2))
