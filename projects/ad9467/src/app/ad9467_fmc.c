@@ -1,8 +1,9 @@
 /***************************************************************************//**
- *   @file   Main.c
+ *   @file   ad9467_fmc.c
  *   @brief  Implementation of the program's main function.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2012(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -43,14 +44,23 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdio.h>
-#include "platform_drivers.h"
 #include "xil_cache.h"
 #include "xparameters.h"
-#include "adc_core.h"
-#include "dmac_core.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "delay.h"
+#include "error.h"
+
+#include "axi_adc_core.h"
+#include "axi_dmac.h"
+#include "axi_io.h"
 #include "ad9467.h"
 #include "ad9517.h"
+#include "parameters.h"
 
+/******************************************************************************/
+/********************** Macros and Constants Definitions **********************/
+/******************************************************************************/
 /* ADC registers */
 #define CF_REG_DELAY_CTRL			0x60
 #define CF_REG_DELAY_STATUS			0x20
@@ -61,13 +71,13 @@
 #define CF_DATA_MONITOR_PN_SYNC		(1 << 1) // (Write 1 to clear)
 #define CF_DATA_MONITOR_PN_OVER_RNG	(1 << 0) // (Write 1 to clear)
 
-typedef enum typeOutputModes {
+enum type_output_modes {
 	OFFSET_BINARY = 0,
 	TWOS_COMPLEMENT,
 	GRAY_CODE,
-} typeOutputModes;
+} type_output_modes;
 
-typedef enum typeTestModes {
+enum type_test_modes {
 	TEST_DISABLE = 0,
 	MIDSCALE,
 	POS_FULLSCALE,
@@ -76,72 +86,86 @@ typedef enum typeTestModes {
 	PN_23_SEQUENCE,
 	PN_9_SEQUENCE,
 	ONE_ZERO_TOGGLE
-} typeTestModes;
+} type_test_modes;
 
-void adc_test(adc_core adc,
-	      dmac_core dma,
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
+void adc_test(struct axi_adc *adc,
+	      struct axi_dmac *dma,
 	      struct ad9467_dev *dev,
 	      uint32_t mode,
 	      uint32_t format);
-void DisplayTestMode(uint32_t mode, uint32_t format);
+
+void display_test_mode(uint32_t mode, uint32_t format);
 
 /***************************************************************************//**
  * @brief Main function.
  *
- * @return 0.
+ * @return SUCCESS in case of success, FAILURE otherwise.
 *******************************************************************************/
 int main()
 {
-	struct ad9467_dev *ad9467_device;
-	struct ad9517_dev *ad9517_device;
-	struct ad9467_init_param ad9467_init;
-	struct ad9517_init_param ad9517_init;
-	adc_core ad9467_core;
-	dmac_core ad9467_dma;
-	dmac_xfer rx_xfer;
+
 	uint32_t mode;
 	uint8_t ret_val;
-	uint32_t ret_val_32;
+	uint32_t ret_val_32 = 0;
 	int32_t status;
-	uint32_t i;
+	uint8_t i;
 
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
 
-	/* base addresses */
-	ad9467_core.base_address = XPAR_AXI_AD9467_BASEADDR;
-	ad9467_dma.base_address = XPAR_AXI_AD9467_DMA_BASEADDR;
+	// SPI configuration
+	struct spi_init_param ad9467_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 0,
+		.platform_ops = &xil_platform_ops,
+		.mode = SPI_MODE_0
+	};
 
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
+	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
 #endif
+		.device_id = SPI_DEVICE_ID
+	};
+	ad9467_spi_param.extra = &xil_spi_param;
 
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
+	struct spi_init_param ad9517_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 1,
+		.platform_ops = &xil_platform_ops,
+		.mode = SPI_MODE_0
+	};
+	ad9517_spi_param.extra = &xil_spi_param;
 
-	ad9467_core.no_of_channels = 1;
-	ad9467_core.resolution = 16;
-	ad9467_dma.transfer = &rx_xfer;
-	ad9467_dma.type = DMAC_RX;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 8192;
+	struct ad9467_init_param ad9467_init = {
+		.spi_init = ad9467_spi_param
+	};
+	struct ad9467_dev *ad9467_device;
 
-#ifdef ZYNQ
-	ad9467_init.spi_init.type = ZYNQ_PS7_SPI;
-	ad9517_init.spi_init.type = ZYNQ_PS7_SPI;
-#endif
+	struct ad9517_init_param ad9517_init = {
+		.spi_init = ad9517_spi_param
+	};
+	struct ad9517_dev *ad9517_device;
 
-#ifdef MICROBLAZE
-	ad9467_init.spi_init.type = MICROBLAZE_SPI;
-	ad9517_init.spi_init.type = MICROBLAZE_SPI;
-#endif
-	ad9467_init.spi_init.chip_select = SPI_CHIP_SELECT(0);
-	ad9467_init.spi_init.cpha = 0;
-	ad9467_init.spi_init.cpol = 0;
-	ad9517_init.spi_init.chip_select = SPI_CHIP_SELECT(1);
-	ad9517_init.spi_init.cpha = 0;
-	ad9517_init.spi_init.cpol = 0;
+	struct axi_adc_init ad9467_core_param = {
+		.name = "ad9467_core",
+		.num_channels = 1,
+		.base = RX_CORE_BASEADDR
+	};
+	struct axi_adc *ad9467_core;
+
+	struct axi_dmac_init ad9467_dmac_param = {
+		.name = "ad9625_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad9467_dmac;
 
 	/* AD9467 Setup. */
 	ad9467_setup(&ad9467_device, ad9467_init);
@@ -167,8 +191,17 @@ int main()
 	printf("  AD9517 CHIP ID: 0x%02x", ret_val_32);
 	printf("\n\r*****************************************************\r\n");
 
-	/* AD9467 test. */
-	adc_setup(ad9467_core);
+	status = axi_adc_init(&ad9467_core,  &ad9467_core_param);
+	if (status != SUCCESS) {
+		printf("axi_adc_init() error: %s\n", ad9467_core->name);
+		return FAILURE;
+	}
+
+	status = axi_dmac_init(&ad9467_dmac, &ad9467_dmac_param);
+	if (status != SUCCESS) {
+		printf("axi_dmac_init() error: %s\n", ad9467_dmac->name);
+		return FAILURE;
+	}
 
 	// setup device
 	ad9467_write(ad9467_device, AD9467_REG_TEST_IO, 0x05); // pn23
@@ -178,15 +211,16 @@ int main()
 	ad9467_read(ad9467_device, AD9467_REG_OUT_PHASE, &ret_val);
 	printf("AD9467[0x016]: %02x\n\r", ret_val);
 	// setup adc core
-	adc_write(ad9467_core, ADC_REG_CNTRL, 0x2);
-	for(i = 0; i < ad9467_core.no_of_channels; i++) {
-		adc_write(ad9467_core, ADC_REG_CHAN_CNTRL(i), 0x03);
-	}
-	adc_write(ad9467_core, ADC_REG_DELAY_CNTRL, 0x0);
-	adc_write(ad9467_core, ADC_REG_DELAY_CNTRL, 0x20F1F);
+
+	axi_adc_write(ad9467_core, AXI_ADC_REG_CNTRL, 0x2);
+	for(i = 0; i < ad9467_core->num_channels; i++)
+		axi_adc_write(ad9467_core, AXI_ADC_REG_CHAN_CNTRL(i), 0x03);
+
+	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x0);
+	axi_adc_write(ad9467_core, AXI_ADC_REG_DELAY_CNTRL, 0x20F1F);
 
 	mdelay(10);
-	if (adc_delay_calibrate(ad9467_core, 8, 1)) {
+	if (axi_adc_delay_calibrate(ad9467_core, 8, 1)) {
 		ad9467_read(ad9467_device, 0x16, &ret_val);
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
 		ad9467_write(ad9467_device, AD9467_REG_OUT_PHASE, 0x80);
@@ -195,7 +229,7 @@ int main()
 		ad9467_read(ad9467_device, 0x16, &ret_val);
 		printf("AD9467[0x016]: %02x\n\r", ret_val);
 		mdelay(10);
-		if (adc_delay_calibrate(ad9467_core, 16, 1)) {
+		if (axi_adc_delay_calibrate(ad9467_core, 16, 1)) {
 			printf("adc_setup: can not set a zero error delay!\n\r");
 		}
 	}
@@ -203,9 +237,9 @@ int main()
 	/* Data pattern checks */
 	for (mode = MIDSCALE; mode <= ONE_ZERO_TOGGLE; mode++) {
 		/* Data format is offset binary */
-		adc_test(ad9467_core, ad9467_dma, ad9467_device, mode, OFFSET_BINARY);
+		adc_test(ad9467_core, ad9467_dmac, ad9467_device, mode, OFFSET_BINARY);
 		/* Data format is twos complement */
-		adc_test(ad9467_core, ad9467_dma, ad9467_device, mode, TWOS_COMPLEMENT);
+		adc_test(ad9467_core, ad9467_dmac, ad9467_device, mode, TWOS_COMPLEMENT);
 	}
 	printf("Testing done.\n\r");
 	/* AD9467 Setup for data acquisition */
@@ -222,21 +256,22 @@ int main()
 
 	printf("Start capturing data...\n\r");
 
-	dmac_start_transaction(ad9467_dma);
+	axi_dmac_transfer(ad9467_dmac, ADC_DDR_BASEADDR,
+			  16384 * 2);
 
 	printf("Done.\n\r");
 
 	ad9467_remove(ad9467_device);
 	ad9517_remove(ad9517_device);
 
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
+	Xil_DCacheEnable();
+	Xil_ICacheEnable();
 
-	return 0;
+	return SUCCESS;
 }
 
-void adc_test(adc_core adc,
-	      dmac_core dma,
+void adc_test(struct axi_adc *adc,
+	      struct axi_dmac *dmac,
 	      struct ad9467_dev *dev,
 	      uint32_t mode,
 	      uint32_t format)
@@ -250,27 +285,30 @@ void adc_test(adc_core adc,
 	ad9467_output_format(dev, format, &read);
 	ad9467_test_mode(dev, mode, &read);
 	ad9467_transfer(dev);
-	dmac_start_transaction(dma);
-	DisplayTestMode(mode, format);
+	axi_dmac_transfer(dmac, ADC_DDR_BASEADDR,
+			  16384);
+
+	display_test_mode(mode, format);
 	if ((mode == PN_23_SEQUENCE) || (mode == PN_9_SEQUENCE)) {
 		if (format == TWOS_COMPLEMENT) {
 			printf("          Test skipped\r\n");
 			return;
 		}
 
-		adc_set_pnsel(adc, 0, ((mode == PN_23_SEQUENCE) ? ADC_PN23A : ADC_PN9));
+		axi_adc_set_pnsel(adc, 0,
+				  ((mode == PN_23_SEQUENCE) ? AXI_ADC_PN23A : AXI_ADC_PN9));
 		mdelay(10);
-		adc_write(adc,
-			  CF_REG_DATA_MONITOR,
-			  CF_DATA_MONITOR_PN_ERR |
-			  CF_DATA_MONITOR_PN_SYNC |
-			  CF_DATA_MONITOR_PN_OVER_RNG); // write ones to clear bits
+		axi_adc_write(adc,
+			      CF_REG_DATA_MONITOR,
+			      CF_DATA_MONITOR_PN_ERR |
+			      CF_DATA_MONITOR_PN_SYNC |
+			      CF_DATA_MONITOR_PN_OVER_RNG); // write ones to clear bits
 		mdelay(100);
-		adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
+		axi_adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
 		if ((rdata & (CF_DATA_MONITOR_PN_ERR |
 			      CF_DATA_MONITOR_PN_SYNC |
 			      CF_DATA_MONITOR_PN_OVER_RNG)) != 0) {
-			adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
+			axi_adc_read(adc, CF_REG_DATA_MONITOR, &rdata);
 			printf("  ERROR: PN status(%04x).\n\r", rdata);
 		} else {
 			printf("          Test passed\r\n");
@@ -279,7 +317,7 @@ void adc_test(adc_core adc,
 	}
 
 	for (n = 0; n < 32; n++) {
-		rdata = Xil_In32(dma.transfer->start_address+(n*4));
+		axi_io_read(ADC_DDR_BASEADDR, n*4, &rdata);
 		if ((mode == MIDSCALE) && (format == OFFSET_BINARY))
 			edata = 0x80008000;
 		if ((mode == POS_FULLSCALE) && (format == OFFSET_BINARY))
@@ -310,55 +348,55 @@ void adc_test(adc_core adc,
 	}
 }
 
-void DisplayTestMode(uint32_t mode, uint32_t format)
+void display_test_mode(uint32_t mode, uint32_t format)
 {
-	char *sMode;
-	char *sFormat;
+	char *s_mode;
+	char *s_format;
 
 	switch(format) {
 	case OFFSET_BINARY:
-		sFormat = "OFFSET BINARY";
+		s_format = "OFFSET BINARY";
 		break;
 	case TWOS_COMPLEMENT:
-		sFormat = "TWOS_COMPLEMENT";
+		s_format = "TWOS_COMPLEMENT";
 		break;
 	case GRAY_CODE:
-		sFormat = "GRAY_CODE";
+		s_format = "GRAY_CODE";
 		break;
 	default:
-		sFormat = "";
+		s_format = "";
 		break;
 	}
 	switch(mode) {
 	case TEST_DISABLE:
-		sMode = "TEST_DISABLE BINARY";
+		s_mode = "TEST_DISABLE BINARY";
 		break;
 	case MIDSCALE:
-		sMode = "MIDSCALE";
+		s_mode = "MIDSCALE";
 		break;
 	case POS_FULLSCALE:
-		sMode = "POS_FULLSCALE";
+		s_mode = "POS_FULLSCALE";
 		break;
 	case NEG_FULLSCALE:
-		sMode = "NEG_FULLSCALE BINARY";
+		s_mode = "NEG_FULLSCALE BINARY";
 		break;
 	case CHECKERBOARD:
-		sMode = "CHECKERBOARD";
+		s_mode = "CHECKERBOARD";
 		break;
 	case PN_23_SEQUENCE:
-		sMode = "PN_23_SEQUENCE";
+		s_mode = "PN_23_SEQUENCE";
 		break;
 	case PN_9_SEQUENCE:
-		sMode = "PN_9_SEQUENCE";
+		s_mode = "PN_9_SEQUENCE";
 		break;
 	case ONE_ZERO_TOGGLE:
-		sMode = "ONE_ZERO_TOGGLE";
+		s_mode = "ONE_ZERO_TOGGLE";
 		break;
 	default:
-		sMode = "";
+		s_mode = "";
 		break;
 	}
 	printf("ADC Test: mode - %s\r\n          format - %s\n\r",
-	       sMode,
-	       sFormat);
+	       s_mode,
+	       s_format);
 }
