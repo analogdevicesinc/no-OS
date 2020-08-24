@@ -71,6 +71,14 @@
 #define AXI_ADC_MUX_OVER_RANGE		BIT(1)
 #define AXI_ADC_STATUS			BIT(0)
 
+#define AXI_ADC_REG_DELAY_CNTRL	0x0060
+#define ADC_DELAY_SEL			BIT(17)
+#define ADC_DELAY_RWN			BIT(16)
+#define ADC_DELAY_ADDRESS(x) 		(((x) & 0xFF) << 8)
+#define ADC_TO_DELAY_ADDRESS(x) 	(((x) >> 8) & 0xFF)
+#define ADC_DELAY_WDATA(x)		(((x) & 0x1F) << 0)
+#define ADC_TO_DELAY_WDATA(x)		(((x) >> 0) & 0x1F)
+
 #define AXI_ADC_REG_CHAN_CNTRL(c)	(0x0400 + (c) * 0x40)
 #define AXI_ADC_PN_SEL			BIT(10)
 #define AXI_ADC_IQCOR_ENB		BIT(9)
@@ -157,6 +165,12 @@ int32_t axi_adc_get_sampling_freq(struct axi_adc *adc,
 void axi_adc_idelay_set(struct axi_adc *adc,
 			uint32_t lane,
 			uint32_t val);
+int32_t axi_adc_delay_set(struct axi_adc *adc,
+			  uint32_t no_of_lanes,
+			  uint32_t delay);
+int32_t axi_adc_delay_calibrate(struct axi_adc *core,
+				uint32_t no_of_lanes,
+				enum axi_adc_pn_sel sel);
 int32_t axi_adc_set_calib_phase(struct axi_adc *adc,
 				uint32_t chan,
 				int32_t val,

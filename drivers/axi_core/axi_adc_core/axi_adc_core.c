@@ -151,6 +151,118 @@ void axi_adc_idelay_set(struct axi_adc *adc,
 }
 
 /***************************************************************************//**
+ * @brief axi_adc_delay_set
+*******************************************************************************/
+int32_t axi_adc_delay_set(struct axi_adc *adc,
+			  uint32_t no_of_lanes,
+			  uint32_t delay)
+{
+	uint32_t i;
+	uint32_t rdata;
+	uint32_t pcore_version;
+
+	axi_adc_read(adc, 0x0, &pcore_version);
+	pcore_version >>= 16;
+	if (pcore_version < 9) {
+		printf(" pcore_version is : %d\n\r", pcore_version);
+		printf(" DRIVER DOES NOT SUPPORT PCORE VERSIONS OLDER THAN 10 !");
+		return FAILURE;
+	} else {
+		for (i = 0; i < no_of_lanes; i++) {
+			axi_adc_idelay_set(adc, i, delay);
+			axi_adc_read(adc, AXI_ADC_REG_DELAY(i), &rdata);
+			if (rdata != delay) {
+				printf("adc_delay_1: sel(%2d), rcv(%04x), exp(%04x)\n\r",
+				       i, rdata, delay);
+			}
+		}
+	}
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief axi_adc_delay_calibrate
+*******************************************************************************/
+int32_t axi_adc_delay_calibrate(struct axi_adc *adc,
+				uint32_t no_of_lanes,
+				enum axi_adc_pn_sel sel)
+{
+	uint8_t err_field[32] = {0};
+	uint16_t valid_range[5] = {0};
+	uint16_t invalid_range[5] = {0};
+	uint16_t delay = 0;
+	uint16_t start_valid_delay = 32;
+	uint16_t start_invalid_delay = 32;
+	uint8_t interval = 0;
+	uint8_t max_interval = 0;
+	uint8_t max_valid_range = 0;
+	uint8_t cnt_valid[5] = {0};
+	uint8_t cnt_invalid = 0;
+	uint8_t val = 0;
+	uint8_t max_val = 32;
+
+	for (delay = 0; delay < 32; delay++) {
+		axi_adc_delay_set(adc, no_of_lanes, delay);
+		mdelay(20);
+		if (axi_adc_pn_mon(adc, sel, 100) == 0) {
+			err_field[delay] = 0;
+			start_valid_delay = start_valid_delay == 32 ?
+					    delay : start_valid_delay;
+		} else {
+			err_field[delay] = 1;
+		}
+	}
+	if (start_valid_delay > 31) {
+		printf("%s FAILED.\n", __func__);
+		axi_adc_delay_set(adc, no_of_lanes, 0);
+		return FAILURE;
+	}
+
+	start_valid_delay = 32;
+	start_invalid_delay = 32;
+	for (val = 0; val < max_val; val++) {
+		if (err_field[val] == 0) {
+			if (start_valid_delay == 32) {
+				start_valid_delay = val;
+			}
+			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+				start_valid_delay = 32;
+				start_invalid_delay = 32;
+			}
+			cnt_valid[interval]++;
+		}
+		if((err_field[val] == 1) || (val == max_val - 1)) {
+			if (start_invalid_delay == 32) {
+				start_invalid_delay = val;
+			}
+			if (start_valid_delay != 32 && start_invalid_delay != 32 ) {
+				valid_range[interval] = start_valid_delay;
+				invalid_range[interval] = start_invalid_delay;
+				start_valid_delay = 32;
+				start_invalid_delay = 32;
+				interval++;
+			}
+			cnt_invalid++;
+		}
+	}
+
+	for (val = 0; val < 5; val++) {
+		if (cnt_valid[val] > max_valid_range) {
+			max_valid_range = cnt_valid[val];
+			max_interval = val;
+		}
+	}
+
+	delay = (valid_range[max_interval] + invalid_range[max_interval] - 1) / 2;
+
+	printf("adc_delay: setting zero error delay (%d)\n\r", delay);
+	axi_adc_delay_set(adc, no_of_lanes, delay);
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
  * @brief axi_adc_set_calib_phase_scale
 *******************************************************************************/
 int32_t axi_adc_set_calib_phase_scale(struct axi_adc *adc,
