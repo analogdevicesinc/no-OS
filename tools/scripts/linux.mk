@@ -9,13 +9,17 @@ export CFLAGS
 export LDFLAGS
 export CC
 export LD
-#Needed by iio library
-export NO-OS
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
+
 NO-OS 		  ?= $(CURDIR)/../..
+#Needed by iio library
+#Should be exported after attribution. Otherwise, is set as null and the
+#the attribution will not work
+export NO-OS
+
 DRIVERS 	  ?= $(NO-OS)/drivers
 INCLUDE 	  ?= $(NO-OS)/include
 LIBRARIES	  ?= $(NO-OS)/libraries

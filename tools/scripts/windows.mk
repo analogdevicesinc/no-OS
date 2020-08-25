@@ -6,13 +6,15 @@ export HARDWARE
 export PLATFORM
 export ARCH
 export CC
-#Needed by iio library
-export NO-OS
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
 NO-OS 		  = $(subst /c/,C:/,$(CURDIR)/../..)
+#Needed by iio library
+#Should be exported after attribution. Otherwise, is set as null and the
+#the attribution will not work
+export NO-OS
 DRIVERS 	  = $(NO-OS)/drivers
 INCLUDE 	  = $(NO-OS)/include
 SCRIPTS_DIR	  = $(NO-OS)/tools/scripts
