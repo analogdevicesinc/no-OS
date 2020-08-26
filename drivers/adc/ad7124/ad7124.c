@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "ad7124.h"
+#include "delay.h"
 
 /* Error codes */
 #define INVALID_VAL -1 /* Invalid argument */
@@ -489,7 +490,7 @@ void ad7124_update_dev_spi_settings(struct ad7124_dev *dev)
  * @return Returns 0 for success or negative error code.
 *******************************************************************************/
 int32_t ad7124_setup(struct ad7124_dev **device,
-		     struct ad7124_init_param init_param)
+		     struct ad7124_init_param *init_param)
 {
 	int32_t ret;
 	enum ad7124_registers reg_nr;
@@ -499,11 +500,11 @@ int32_t ad7124_setup(struct ad7124_dev **device,
 	if (!dev)
 		return INVALID_VAL;
 
-	dev->regs = init_param.regs;
-	dev->spi_rdy_poll_cnt = init_param.spi_rdy_poll_cnt;
+	dev->regs = init_param->regs;
+	dev->spi_rdy_poll_cnt = init_param->spi_rdy_poll_cnt;
 
 	/* Initialize the SPI communication. */
-	ret = spi_init(&dev->spi_desc, &init_param.spi_init);
+	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret < 0)
 		return ret;
 
