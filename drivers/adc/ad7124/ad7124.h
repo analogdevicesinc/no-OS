@@ -355,7 +355,7 @@ struct ad7124_dev {
 
 struct ad7124_init_param {
 	/* SPI */
-	spi_init_param		spi_init;
+	spi_init_param		*spi_init;
 	/* Device Settings */
 	struct ad7124_st_reg	*regs;
 	int16_t spi_rdy_poll_cnt;
@@ -419,7 +419,7 @@ void ad7124_update_dev_spi_settings(struct ad7124_dev *dev);
 
 /*! Initializes the AD7124. */
 int32_t ad7124_setup(struct ad7124_dev **device,
-		     struct ad7124_init_param init_param);
+		     struct ad7124_init_param *init_param);
 /*! Free the resources allocated by AD7124_Setup(). */
 int32_t ad7124_remove(struct ad7124_dev *dev);
 
