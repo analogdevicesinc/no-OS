@@ -161,7 +161,7 @@ struct spi_engine_offload_message {
 	/** Length of the SPI engine commands buffer */
 	uint32_t no_commands;
 	/** Pointer of the data that will be sent over spi */
-	uint8_t *commands_data;
+	uint32_t *commands_data;
 	/** The address where the data that will be transmitted is situated */
 	uint32_t tx_addr;
 	/** The address where the data that will be received is situated */
