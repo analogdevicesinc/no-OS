@@ -812,7 +812,7 @@ int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 	if (!transfer.cmds)
 		return FAILURE;
 
-	transfer.tx_buf = (uint32_t *)msg.commands_data;
+	transfer.tx_buf = msg.commands_data;
 
 	/* Load the commands into the message */
 	transfer.cmds->next = NULL;
