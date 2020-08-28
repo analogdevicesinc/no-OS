@@ -804,6 +804,9 @@ int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 	     (eng_desc->offload_config & OFFLOAD_RX_EN)))
 		return FAILURE;
 
+	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_RESET(0), 1);
+	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_RESET(0), 0);
+
 	eng_desc->offload_tx_len = 0;
 	eng_desc->offload_rx_len = 0;
 
