@@ -53,9 +53,6 @@
 #define GPIO_OUT	0x01
 #define GPIO_IN		0x00
 
-#define GPIO_HIGH	0x01
-#define GPIO_LOW	0x00
-
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -81,6 +78,19 @@ typedef struct gpio_desc {
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
 } gpio_desc;
+
+/**
+ * @enum gpio_values
+ * @brief Enum that holds the possible output states of a GPIO.
+ */
+enum gpio_values {
+	/** GPIO logic low */
+	GPIO_LOW,
+	/** GPIO logic high */
+	GPIO_HIGH,
+	/** GPIO high impedance */
+	GPIO_HIGH_Z
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

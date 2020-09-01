@@ -159,9 +159,10 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 /**
  * @brief Set the value of the specified GPIO.
  * @param desc - The GPIO descriptor.
- * @param value - The value.
+ * @param value - The value taken from the enum gpio_values members.
  *                Example: GPIO_HIGH
  *                         GPIO_LOW
+ *                         GPIO_HIGH_Z
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t gpio_set_value(struct gpio_desc *desc,
