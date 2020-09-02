@@ -129,6 +129,6 @@ int32_t pwm_set_polarity(struct pwm_desc *desc,
 
 /* Set polarity of PWM generator device */
 int32_t pwm_get_polarity(struct pwm_desc *desc,
-			 enum pwm_polarity polarity);
+			 enum pwm_polarity *polarity);
 
 #endif
