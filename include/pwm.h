@@ -112,7 +112,7 @@ int32_t pwm_set_period(struct pwm_desc *desc,
 		       uint32_t period_ns);
 
 /* Get period of PWM generator device */
-int32_t pwmg_get_period(struct pwm_desc *desc,
+int32_t pwm_get_period(struct pwm_desc *desc,
 			uint32_t *period_ns);
 
 /* Set duty cycle of PWM generator device */
