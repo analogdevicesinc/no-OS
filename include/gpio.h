@@ -66,7 +66,7 @@
  */
 typedef struct gpio_init_param {
 	/** GPIO number */
-	uint8_t		number;
+	uint32_t	number;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
 } gpio_init_param;
@@ -77,7 +77,7 @@ typedef struct gpio_init_param {
  */
 typedef struct gpio_desc {
 	/** GPIO number */
-	uint8_t		number;
+	uint32_t	number;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
 } gpio_desc;
