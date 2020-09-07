@@ -491,6 +491,7 @@ build_project: project $(LIB_TARGETS)
 ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
 DEFINE_FLAGS += -append-switch compiler -D=DISABLE_SECURE_SOCKET
 endif
+DEFINE_FLAGS += -append-switch compiler -D=ADUCM_PLATFORM
 
 #Flags for each include directory
 INCLUDE_FLAGS = $(foreach dir, $(INCLUDE_DIRS),\
