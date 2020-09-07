@@ -284,6 +284,10 @@ _rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call _rwildcard,$d/,
 #                             DFP DEPENDENCIES                          
 #------------------------------------------------------------------------------
 
+
+#Get all src files that are not in SRC_DRIS
+FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS))
+
 #DFP Files
 DFP_FILES = $(call _rwildcard,$(DFP_DRIVERS),*.c)
 #Not for aducm3029
@@ -494,6 +498,9 @@ INCLUDE_FLAGS = $(foreach dir, $(INCLUDE_DIRS),\
 #Flags for each linked resource
 SRC_FLAGS = $(foreach dir,$(SRC_DIRS),\
 		-link $(dir) $(call get_relative_path,$(dir)))
+
+SRC_FLAGS += $(foreach file,$(FILES_OUT_OF_DIRS),\
+		-link $(file) $(call get_relative_path,$(file)))
 
 PHONY += update_project
 update_project: $(PROJECT_BUILD)/.project.target
