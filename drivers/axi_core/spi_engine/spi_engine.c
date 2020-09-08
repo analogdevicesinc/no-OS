@@ -50,6 +50,7 @@ significant delays */
 #include <stdio.h>
 #include <stdlib.h>
 #include <sleep.h>
+#include <inttypes.h>
 
 #include "axi_dmac.h"
 #include "axi_io.h"
@@ -671,7 +672,7 @@ int32_t spi_engine_init(struct spi_desc **desc,
 	/* Get current data width */
 	spi_engine_read(eng_desc, SPI_ENGINE_REG_VERSION, &spi_engine_version);
 
-	printf("Spi engine v%u.%u.%u succesfully initialized.",
+	printf("Spi engine v%"PRIu32".%"PRIu32".%"PRIu32" succesfully initialized.\n",
 	       (spi_engine_version >> 16),
 	       ((spi_engine_version >> 8) & 0xFF),
 	       (spi_engine_version & 0xFF));
