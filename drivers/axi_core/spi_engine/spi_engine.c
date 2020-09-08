@@ -702,6 +702,13 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 
 	desc_extra = desc->extra;
 
+	/* If we want to access SPI interface and SPI engine offload module was
+	 * activated, we need to disable it
+	 * This is set in spi_engine_offload_init() */
+	desc_extra->offload_config = OFFLOAD_DISABLED;
+	/* This is set in spi_engine_offload_transfer() */
+	spi_engine_write(desc_extra, SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0);
+
 	words_number = spi_get_words_number(desc_extra, bytes_number);
 
 	msg.cmds = (spi_engine_cmd_queue*)malloc(sizeof(*msg.cmds));
