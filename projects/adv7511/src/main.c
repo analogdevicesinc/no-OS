@@ -202,7 +202,7 @@ static int32_t app_set_i2c_mux(struct i2c_desc *adv7511_i2c)
 	const uint8_t byte_transfer_no = 1, stop_bit = 1;
 	struct i2c_desc *i2c_mux;
 	struct i2c_init_param i2c_mux_init;
-	struct xil_i2c_init i2c_mux_init_extra;
+	struct xil_i2c_init_param i2c_mux_init_extra;
 
 	i2c_mux_init_extra.device_id = XPAR_AXI_IIC_MAIN_DEVICE_ID;
 	i2c_mux_init_extra.type = IIC_PL;
@@ -328,7 +328,7 @@ int main()
 	uint32_t start_count;
 	struct i2c_desc *adv7511_i2c;
 	struct i2c_init_param adv7511_i2c_init;
-	struct xil_i2c_init adv7511_extra_i2c_init;
+	struct xil_i2c_init_param adv7511_extra_i2c_init;
 	struct timer_desc *timer_inst_ptr;
 	struct timer_init_param timer_init;
 	struct xil_timer_init_param xil_timer_init;
