@@ -51,6 +51,21 @@
 #include <sys/ioctl.h>
 
 /******************************************************************************/
+/*************************** Types Declarations *******************************/
+/******************************************************************************/
+
+/**
+ * @struct linux_gpio_desc
+ * @brief Linux platform specific GPIO descriptor
+ */
+struct linux_gpio_desc {
+	/** /sys/class/gpio/gpio"number"/direction file descriptor */
+	int direction_fd;
+	/** /sys/class/gpio/gpio"number"/value file descriptor */
+	int value_fd;
+};
+
+/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
@@ -63,23 +78,28 @@
 int32_t gpio_get(struct gpio_desc **desc,
 		 const struct gpio_init_param *param)
 {
-	gpio_desc *descriptor;
+	struct linux_gpio_desc *linux_desc;
+	struct gpio_desc *descriptor;
 	char path[64];
 	int fd;
 	int len;
 	int ret;
 
-	descriptor = (gpio_desc *)malloc(sizeof(*descriptor));
+	descriptor = calloc(1, sizeof(*descriptor));
 	if (!descriptor)
 		return FAILURE;
 
+	linux_desc = calloc(1, sizeof(*linux_desc));
+	if (!linux_desc)
+		goto free_desc;
+
+	descriptor->extra = linux_desc;
 	descriptor->number = param->number;
 
 	fd = open("/sys/class/gpio/export", O_WRONLY);
 	if (fd < 0) {
 		printf("%s: Can't open device\n\r", __func__);
-		free(descriptor);
-		return FAILURE;
+		goto free_linux_desc;
 	}
 
 	len = sprintf(path, "%d", descriptor->number);
@@ -87,20 +107,41 @@ int32_t gpio_get(struct gpio_desc **desc,
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
 		close(fd);
-		free(descriptor);
-		return FAILURE;
+		goto free_linux_desc;
 	}
 
 	ret = close(fd);
 	if (ret < 0) {
 		printf("%s: Can't close device\n\r", __func__);
-		free(descriptor);
-		return FAILURE;
+		goto free_linux_desc;
+	}
+
+	sprintf(path, "/sys/class/gpio/gpio%d/direction", descriptor->number);
+	linux_desc->direction_fd = open(path, O_WRONLY);
+	if (linux_desc->direction_fd < 0) {
+		printf("%s: Can't open %s\n\r", __func__, path);
+		goto free_linux_desc;
+	}
+
+	sprintf(path, "/sys/class/gpio/gpio%d/value", descriptor->number);
+	linux_desc->value_fd = open(path, O_WRONLY);
+	if (linux_desc->value_fd < 0) {
+		printf("%s: Can't open %s\n\r", __func__, path);
+		goto close_dir;
 	}
 
 	*desc = descriptor;
 
 	return SUCCESS;
+
+close_dir:
+	close(linux_desc->direction_fd);
+free_linux_desc:
+	free(linux_desc);
+free_desc:
+	free(descriptor);
+
+	return FAILURE;
 }
 
 /**
@@ -124,10 +165,25 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  */
 int32_t gpio_remove(struct gpio_desc *desc)
 {
+	struct linux_gpio_desc *linux_desc;
 	char path[64];
 	int fd;
 	int len;
 	int ret;
+
+	linux_desc = desc->extra;
+
+	ret = close(linux_desc->direction_fd);
+	if (ret < 0) {
+		printf("%s: Can't close device\n\r", __func__);
+		return FAILURE;
+	}
+
+	ret = close(linux_desc->value_fd);
+	if (ret < 0) {
+		printf("%s: Can't close device\n\r", __func__);
+		return FAILURE;
+	}
 
 	fd = open("/sys/class/gpio/unexport", O_WRONLY);
 	if (fd < 0) {
@@ -165,29 +221,17 @@ int32_t gpio_remove(struct gpio_desc *desc)
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
-	char path[64];
-	int fd;
+	struct linux_gpio_desc *linux_desc;
 	int ret;
 
-	sprintf(path, "/sys/class/gpio/gpio%d/value", desc->number);
-	fd = open(path, O_WRONLY);
-	if (fd < 0) {
-		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
-	}
+	linux_desc = desc->extra;
 
 	if (value)
-		ret = write(fd, "1", 2);
+		ret = write(linux_desc->value_fd, "1", 2);
 	else
-		ret = write(fd, "0", 2);
+		ret = write(linux_desc->value_fd, "0", 2);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
-	}
-
-	ret = close(fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
 		return FAILURE;
 	}
 
@@ -205,19 +249,13 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
-	char path[64];
+	struct linux_gpio_desc *linux_desc;
 	char data;
-	int fd;
 	int ret;
 
-	sprintf(path, "/sys/class/gpio/gpio%d/value", desc->number);
-	fd = open(path, O_RDONLY);
-	if (fd < 0) {
-		printf("%s: Can't open file\n\r", __func__);
-		return FAILURE;
-	}
+	linux_desc = desc->extra;
 
-	ret = read(fd, &data, 1);
+	ret = read(linux_desc->value_fd, &data, 1);
 	if (ret < 0) {
 		printf("%s: Can't read from file\n\r", __func__);
 		return FAILURE;
@@ -227,12 +265,6 @@ int32_t gpio_get_value(struct gpio_desc *desc,
 		*value = GPIO_LOW;
 	else
 		*value = GPIO_HIGH;
-
-	ret = close(fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
-		return FAILURE;
-	}
 
 	return SUCCESS;
 }
@@ -244,26 +276,14 @@ int32_t gpio_get_value(struct gpio_desc *desc,
  */
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
-	char path[64];
-	int fd;
+	struct linux_gpio_desc *linux_desc;
 	int ret;
 
-	sprintf(path, "/sys/class/gpio/gpio%d/direction", desc->number);
-	fd = open(path, O_WRONLY);
-	if (fd < 0) {
-		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
-	}
+	linux_desc = desc->extra;
 
-	ret = write(fd, "in", 3);
+	ret = write(linux_desc->direction_fd, "in", 3);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
-	}
-
-	ret = close(fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
 		return FAILURE;
 	}
 
@@ -281,26 +301,14 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
-	char path[64];
-	int fd;
+	struct linux_gpio_desc *linux_desc;
 	int ret;
 
-	sprintf(path, "/sys/class/gpio/gpio%d/direction", desc->number);
-	fd = open(path, O_WRONLY);
-	if (fd < 0) {
-		printf("%s: Can't open device\n\r", __func__);
-		return FAILURE;
-	}
+	linux_desc = desc->extra;
 
-	ret = write(fd, "out", 4);
+	ret = write(linux_desc->direction_fd, "out", 4);
 	if (ret < 0) {
 		printf("%s: Can't write to file\n\r", __func__);
-		return FAILURE;
-	}
-
-	ret = close(fd);
-	if (ret < 0) {
-		printf("%s: Can't close device\n\r", __func__);
 		return FAILURE;
 	}
 
