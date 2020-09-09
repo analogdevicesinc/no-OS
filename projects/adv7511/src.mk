@@ -34,7 +34,7 @@ SRCS +=$(PROJECT)/TX/HAL/COMMON/tx_hal.c	\
 	$(PROJECT)/TX/LIB/tx_isr.c	\
 	$(PROJECT)/TX/LIB/tx_lib.c	\
 	$(PROJECT)/TX/LIB/tx_multi.c
-INCS :=	$(PROJECT)/src/config.h					\
+INCS :=	$(PROJECT)/src/app_config.h					\
 	$(PROJECT)/src/cf_hdmi.h			\
 	$(PROJECT)/src/cf_hdmi_demo.h	\
 	$(PROJECT)/src/edid.h	\
@@ -42,7 +42,7 @@ INCS :=	$(PROJECT)/src/config.h					\
 	$(PROJECT)/src/transmitter_defs.h	\
 	$(PROJECT)/src/wrapper.h
 INCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h	\
-	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h	\
+	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h
 INCS +=	$(PLATFORM_DRIVERS)/spi_extra.h					\
 	$(PLATFORM_DRIVERS)/gpio_extra.h	\
 	$(PLATFORM_DRIVERS)/i2c_extra.h	\
