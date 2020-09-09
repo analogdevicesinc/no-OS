@@ -51,6 +51,13 @@
 /******************************************************************************/
 
 /**
+ * @struct i2c_platform_ops
+ * @brief Structure holding I2C function pointers that point to the platform
+ * specific function
+ */
+struct i2c_platform_ops ;
+
+/**
  * @struct i2c_init_param
  * @brief Structure holding the parameters for I2C initialization.
  */
@@ -59,6 +66,8 @@ typedef struct i2c_init_param {
 	uint32_t	max_speed_hz;
 	/** Slave address */
 	uint8_t		slave_address;
+	/** I2C platform specific functions */
+	const struct i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
 } i2c_init_param;
@@ -72,9 +81,27 @@ typedef struct i2c_desc {
 	uint32_t	max_speed_hz;
 	/** Slave address */
 	uint8_t		slave_address;
+	/** I2C platform specific functions */
+	const struct i2c_platform_ops *platform_ops;
 	/** I2C extra parameters (device specific parameters) */
 	void		*extra;
 } i2c_desc;
+
+/**
+ * @struct i2c_platform_ops
+ * @brief Structure holding i2c function pointers that point to the platform
+ * specific function
+ */
+struct i2c_platform_ops {
+	/** i2c initialization function pointer */
+	int32_t (*i2c_ops_init)(struct i2c_desc **, const struct i2c_init_param *);
+	/** i2c write function pointer */
+	int32_t (*i2c_ops_write)(struct i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	/** i2c write function pointer */
+	int32_t (*i2c_ops_read)(struct i2c_desc *, uint8_t *, uint8_t, uint8_t);
+	/** i2c remove function pointer */
+	int32_t (*i2c_ops_remove)(struct i2c_desc *);
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/

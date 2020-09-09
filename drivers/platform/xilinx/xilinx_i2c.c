@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   xilinx/i2c.c
+ *   @file   xilinx/xilinx_i2c.c
  *   @brief  Implementation of Xilinx I2C Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -83,6 +83,16 @@ struct inst_table_item {
 static uint32_t ps_last_bitrate = 0;
 #endif
 
+/**
+ * @brief Xilinx platform specific I2C platform ops structure
+ */
+const struct i2c_platform_ops xil_i2c_platform_ops = {
+	.i2c_ops_init = &xil_i2c_init,
+	.i2c_ops_write = &xil_i2c_write,
+	.i2c_ops_read = &xil_i2c_read,
+	.i2c_ops_remove = &xil_i2c_remove
+};
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -94,7 +104,7 @@ static uint32_t ps_last_bitrate = 0;
  * @return \ref 0 if the two cores have the same ID,
  *         \ref difference between the first and the second IDs otherwise.
  */
-static int32_t i2c_cmp(void *el1, void *el2)
+static int32_t xil_i2c_cmp(void *el1, void *el2)
 {
 	struct inst_table_item *sel1 = el1, *sel2 = el2;
 
@@ -106,7 +116,7 @@ static int32_t i2c_cmp(void *el1, void *el2)
  * @param desc - Descriptor of the I2C device
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
-static int32_t i2c_set_transmission_config(struct i2c_desc *desc)
+static int32_t xil_i2c_set_transmission_config(struct i2c_desc *desc)
 {
 	struct xil_i2c_desc *xil_i2c_desc = desc->extra;
 	int32_t ret;
@@ -142,13 +152,13 @@ static int32_t i2c_set_transmission_config(struct i2c_desc *desc)
  * @param param - The structure that contains the I2C parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_init(struct i2c_desc **desc,
-		 const struct i2c_init_param *param)
+int32_t xil_i2c_init(struct i2c_desc **desc,
+		     const struct i2c_init_param *param)
 {
 	int32_t		ret;
 	i2c_desc	*idesc;
 	xil_i2c_desc	*xdesc;
-	xil_i2c_init	*xinit;
+	xil_i2c_init_param	*xinit;
 
 	idesc = (struct i2c_desc *)malloc(sizeof(*idesc));
 	xdesc = (struct xil_i2c_desc *)malloc(sizeof(*xdesc));
@@ -171,7 +181,7 @@ int32_t i2c_init(struct i2c_desc **desc,
 		struct inst_table_item *temp_el_pl;
 
 		if (!pl_list)
-			list_init(&pl_list, LIST_DEFAULT, i2c_cmp);
+			list_init(&pl_list, LIST_DEFAULT, xil_i2c_cmp);
 		if (!pl_it)
 			iterator_init(&pl_it, pl_list, true);
 
@@ -235,7 +245,7 @@ pl_error:
 		struct inst_table_item *temp_el_ps;
 
 		if (!pl_list)
-			list_init(&ps_list, LIST_DEFAULT, i2c_cmp);
+			list_init(&ps_list, LIST_DEFAULT, xil_i2c_cmp);
 		if (!pl_it)
 			iterator_init(&ps_it, ps_list, true);
 
@@ -298,7 +308,7 @@ error:
  * @param desc - The I2C descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_remove(struct i2c_desc *desc)
+int32_t xil_i2c_remove(struct i2c_desc *desc)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -374,10 +384,10 @@ error:
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_write(struct i2c_desc *desc,
-		  uint8_t *data,
-		  uint8_t bytes_number,
-		  uint8_t stop_bit)
+int32_t xil_i2c_write(struct i2c_desc *desc,
+		      uint8_t *data,
+		      uint8_t bytes_number,
+		      uint8_t stop_bit)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -387,7 +397,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 	switch (xdesc->type) {
 	case IIC_PL:
 #ifdef XIIC_H
-		ret = i2c_set_transmission_config(desc);
+		ret = xil_i2c_set_transmission_config(desc);
 		if (ret != SUCCESS)
 			return FAILURE;
 
@@ -401,7 +411,7 @@ int32_t i2c_write(struct i2c_desc *desc,
 		goto error;
 	case IIC_PS:
 #ifdef XIICPS_H
-		ret = i2c_set_transmission_config(desc);
+		ret = xil_i2c_set_transmission_config(desc);
 		if (ret != SUCCESS)
 			return FAILURE;
 
@@ -440,10 +450,10 @@ error:
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t i2c_read(struct i2c_desc *desc,
-		 uint8_t *data,
-		 uint8_t bytes_number,
-		 uint8_t stop_bit)
+int32_t xil_i2c_read(struct i2c_desc *desc,
+		     uint8_t *data,
+		     uint8_t bytes_number,
+		     uint8_t stop_bit)
 {
 	xil_i2c_desc	*xdesc;
 	int32_t		ret;
@@ -453,7 +463,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 	switch (xdesc->type) {
 	case IIC_PL:
 #ifdef XIIC_H
-		ret = i2c_set_transmission_config(desc);
+		ret = xil_i2c_set_transmission_config(desc);
 		if (ret != SUCCESS)
 			return FAILURE;
 
@@ -470,7 +480,7 @@ int32_t i2c_read(struct i2c_desc *desc,
 		goto error;
 	case IIC_PS:
 #ifdef XIICPS_H
-		ret = i2c_set_transmission_config(desc);
+		ret = xil_i2c_set_transmission_config(desc);
 		if (ret != SUCCESS)
 			return FAILURE;
 

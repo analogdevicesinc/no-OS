@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/i2c.c
- *   @brief  Implementation of Altera I2C Generic Driver.
+ *   @file   i2c.c
+ *   @brief  Implementation of the I2C Interface
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,18 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
+#include <inttypes.h>
+#include "i2c.h"
 #include <stdlib.h>
 #include "error.h"
-#include "i2c.h"
-#include "i2c_extra.h"
-
-/******************************************************************************/
-/************************ Functions Definitions *******************************/
-/******************************************************************************/
 
 /**
  * @brief Initialize the I2C communication peripheral.
@@ -59,13 +51,13 @@
 int32_t i2c_init(struct i2c_desc **desc,
 		 const struct i2c_init_param *param)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
+	if (!param)
+		return FAILURE;
 
-	if (((struct altera_i2c_init_param *)param->extra)->type) {
-		// Unused variable - fix compiler warning
-	}
+	if ((param->platform_ops->i2c_ops_init(desc, param)))
+		return FAILURE;
+
+	(*desc)->platform_ops = param->platform_ops;
 
 	return SUCCESS;
 }
@@ -77,20 +69,16 @@ int32_t i2c_init(struct i2c_desc **desc,
  */
 int32_t i2c_remove(struct i2c_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->i2c_ops_remove(desc);
 }
 
 /**
- * @brief Write data to a slave device.
+ * @brief I2C Write data to slave device.
  * @param desc - The I2C descriptor.
- * @param data - Buffer that stores the transmission data.
+ * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to write.
- * @param stop_bit - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
+ * @param stop_bit - Stop conditional control.
+ *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
@@ -99,32 +87,17 @@ int32_t i2c_write(struct i2c_desc *desc,
 		  uint8_t bytes_number,
 		  uint8_t stop_bit)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->i2c_ops_write(desc, data, bytes_number,
+			stop_bit);
 }
 
 /**
- * @brief Read data from a slave device.
- * @param desc - The I2C descriptor.
- * @param data - Buffer that will store the received data.
+ * @brief I2C Read data from slave device.
+ * @param desc - The i2c descriptor.
+ * @param data - The buffer with the transmitted/received data.
  * @param bytes_number - Number of bytes to read.
- * @param stop_bit - Stop condition control.
- *                   Example: 0 - A stop condition will not be generated;
+ * @param stop_bit - Stop conditional control.
+ *                   Example: 0 - A stop condition will not be generated.
  *                            1 - A stop condition will be generated.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
@@ -133,21 +106,6 @@ int32_t i2c_read(struct i2c_desc *desc,
 		 uint8_t bytes_number,
 		 uint8_t stop_bit)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (data) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (bytes_number) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (stop_bit) {
-		// Unused variable - fix compiler warning
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->i2c_ops_read(desc, data, bytes_number,
+						stop_bit);
 }
