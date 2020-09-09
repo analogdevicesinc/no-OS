@@ -66,12 +66,12 @@ enum xil_i2c_type {
  * @brief Structure holding the initialization parameters for Xilinx platform
  * specific I2C parameters.
  */
-typedef struct xil_i2c_init {
+typedef struct xil_i2c_init_param {
 	/** Xilinx architecture */
 	enum xil_i2c_type	type;
 	/** Device ID */
 	uint32_t		device_id;
-} xil_i2c_init;
+} xil_i2c_init_param;
 
 /**
  * @struct xil_i2c_desc
