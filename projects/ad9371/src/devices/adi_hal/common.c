@@ -70,8 +70,11 @@ int32_t platform_init(void)
 	};
 	spi_param.extra = &xilinx_spi_param;
 	spi_param.platform_ops = &xil_platform_ops;
+	gpio_ad9371_resetb_param.platform_ops = &xil_gpio_platform_ops;
 	gpio_ad9371_resetb_param.extra = &xilinx_gpio_param;
+	gpio_ad9528_resetb_param.platform_ops = &xil_gpio_platform_ops;
 	gpio_ad9528_resetb_param.extra = &xilinx_gpio_param;
+	gpio_ad9528_sysref_param.platform_ops = &xil_gpio_platform_ops;
 	gpio_ad9528_sysref_param.extra = &xilinx_gpio_param;
 #else
 	struct altera_spi_init_param altera_spi_param = {
@@ -87,8 +90,11 @@ int32_t platform_init(void)
 	};
 	spi_param.platform_ops = &altera_platform_ops;
 	spi_param.extra = &altera_spi_param;
+	gpio_ad9371_resetb_param.platform_ops = &altera_gpio_platform_ops;
 	gpio_ad9371_resetb_param.extra = &altera_gpio_param;
+	gpio_ad9528_resetb_param.platform_ops = &altera_gpio_platform_ops;
 	gpio_ad9528_resetb_param.extra = &altera_gpio_param;
+	gpio_ad9528_sysref_param.platform_ops = &altera_gpio_platform_ops;
 	gpio_ad9528_sysref_param.extra = &altera_gpio_param;
 #endif
 	status = gpio_get(&gpio_ad9371_resetb, &gpio_ad9371_resetb_param);

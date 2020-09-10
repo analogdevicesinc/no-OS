@@ -118,7 +118,8 @@ int main(void)
 	ad9517_spi_param.extra = &demux_spi_param;
 
 	struct gpio_init_param gpio_sysref_param = {
-		.number = GPIO_JESD204_SYSREF
+		.number = GPIO_JESD204_SYSREF,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 
 	struct xil_gpio_init_param xil_gpio_param = {

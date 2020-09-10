@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   altera/gpio.c
- *   @brief  Implementation of Altera GPIO Generic Driver.
+ *   @file   gpio.c
+ *   @brief  Implementation of the GPIO Interface
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2019(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,16 +37,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-/******************************************************************************/
-/***************************** Include Files **********************************/
-/******************************************************************************/
-
-#include <stdlib.h>
-#include <altera_avalon_spi_regs.h>
+#include <inttypes.h>
 #include "gpio.h"
-#include "gpio_extra.h"
+#include <stdlib.h>
 #include "error.h"
-#include "parameters.h"
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -61,32 +55,13 @@
 int32_t gpio_get(struct gpio_desc **desc,
 		 const struct gpio_init_param *param)
 {
-
-	struct gpio_desc *descriptor;
-	struct altera_gpio_desc *altera_descriptor;
-	struct altera_gpio_init_param *altera_param;
-
-	descriptor = calloc(1, sizeof(*descriptor));
-
-	if (!descriptor)
+	if (!param)
 		return FAILURE;
 
-	descriptor->extra = calloc(1, sizeof *altera_descriptor);
-	if (!(descriptor->extra)) {
-		free(descriptor);
+	if ((param->platform_ops->gpio_ops_get(desc, param)))
 		return FAILURE;
-	}
 
-	altera_descriptor = descriptor->extra;
-	altera_param = param->extra;
-
-	descriptor->number = param->number;
-
-	altera_descriptor->type = altera_param->type;
-	altera_descriptor->device_id = altera_param->device_id;
-	altera_descriptor->base_address = altera_param->base_address;
-
-	*desc = descriptor;
+	(*desc)->platform_ops = param->platform_ops;
 
 	return SUCCESS;
 }
@@ -100,14 +75,16 @@ int32_t gpio_get(struct gpio_desc **desc,
 int32_t gpio_get_optional(struct gpio_desc **desc,
 			  const struct gpio_init_param *param)
 {
-	if(param == NULL) {
-		*desc = NULL;
-		return SUCCESS;
-	}
+	if (!param)
+		return FAILURE;
 
-	return gpio_get(desc, param);
+	if ((param->platform_ops->gpio_ops_get_optional(desc, param)))
+		return FAILURE;
+
+	(*desc)->platform_ops = param->platform_ops;
+
+	return SUCCESS;
 }
-
 /**
  * @brief Free the resources allocated by gpio_get().
  * @param desc - The GPIO descriptor.
@@ -115,12 +92,7 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  */
 int32_t gpio_remove(struct gpio_desc *desc)
 {
-	if (desc) {
-		free(desc->extra);
-		free(desc);
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->gpio_ops_remove(desc);
 }
 
 /**
@@ -130,11 +102,7 @@ int32_t gpio_remove(struct gpio_desc *desc)
  */
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	return 0;
+	return desc->platform_ops->gpio_ops_direction_input(desc);
 }
 
 /**
@@ -148,7 +116,7 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
-	return gpio_set_value(desc, value);
+	return desc->platform_ops->gpio_ops_direction_output(desc, value);
 }
 
 /**
@@ -162,15 +130,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction)
 {
-	if (desc) {
-		// Unused variable - fix compiler warning
-	}
-
-	if (direction) {
-		// Unused variable - fix compiler warning
-	}
-
-	return 0;
+	return desc->platform_ops->gpio_ops_get_direction(desc, direction);
 }
 
 /**
@@ -184,34 +144,7 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
-	if(!desc)
-		return FAILURE;
-
-	uint32_t ppos;
-	uint32_t pdata;
-	uint32_t pmask;
-
-	struct altera_gpio_desc *altera_desc;
-	altera_desc = desc->extra;
-
-	if (desc->number < 32)
-		return FAILURE;
-
-	switch(altera_desc->type) {
-	case NIOS_II_GPIO:
-		ppos = desc->number - 32;
-		pmask = 0x1 << ppos;
-
-		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
-		IOWR_32DIRECT(altera_desc->base_address,
-			      0x0, ((pdata & ~pmask) | (value << ppos)));
-
-		break;
-	default:
-		return FAILURE;
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->gpio_ops_set_value(desc, value);
 }
 
 /**
@@ -225,29 +158,5 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
-	if(!desc)
-		return FAILURE;
-
-	uint32_t ppos;
-	uint32_t pdata;
-
-	struct altera_gpio_desc *altera_desc;
-	altera_desc = desc->extra;
-
-	if (desc->number < 32)
-		return FAILURE;
-
-	switch(altera_desc->type) {
-	case NIOS_II_GPIO:
-		ppos = desc->number - 32;
-
-		pdata = IORD_32DIRECT(altera_desc->base_address, 0x0);
-		*value = (pdata >> ppos) & 0x01;
-
-		break;
-	default:
-		return FAILURE;
-	}
-
-	return SUCCESS;
+	return desc->platform_ops->gpio_ops_get_value(desc, value);
 }

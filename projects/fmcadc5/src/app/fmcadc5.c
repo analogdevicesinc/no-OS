@@ -94,22 +94,28 @@ int main(void)
 
 	// GPIO configuration
 	struct gpio_init_param gpio_sysref_param = {
-		.number = GPIO_JESD204_SYSREF
+		.number = GPIO_JESD204_SYSREF,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param gpio_rst_0_param = {
-		.number = GPIO_RST_0
+		.number = GPIO_RST_0,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param gpio_rst_1_param = {
-		.number = GPIO_RST_1
+		.number = GPIO_RST_1,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param gpio_pwdn_0_param = {
-		.number = GPIO_PWDN_0
+		.number = GPIO_PWDN_0,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param gpio_pwdn_1_param = {
-		.number = GPIO_PWDN_1
+		.number = GPIO_PWDN_1,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param gpio_pwr_good_param = {
-		.number = GPIO_PWR_GOOD
+		.number = GPIO_PWR_GOOD,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 
 	struct xil_gpio_init_param xil_gpio_param = {

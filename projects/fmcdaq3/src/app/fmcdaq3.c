@@ -132,7 +132,7 @@ int main(void)
 
 	/* Initialize GPIO structures */
 	struct gpio_init_param dac_txen_param = {
-		.number = GPIO_DAC_TXEN
+		.number = GPIO_DAC_TXEN,
 	};
 
 	struct gpio_init_param adc_pd_param = {
@@ -149,7 +149,9 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	dac_txen_param.extra = &xil_gpio_param;
+	dac_txen_param.platform_ops = &xil_gpio_platform_ops;
 	adc_pd_param.extra = &xil_gpio_param;
+	adc_pd_param.platform_ops = &xil_gpio_platform_ops;
 #else
 	struct altera_gpio_init_param altera_gpio_param = {
 		.base_address = GPIO_BASEADDR,
@@ -157,7 +159,9 @@ int main(void)
 		.device_id = GPIO_DEVICE_ID
 	};
 	dac_txen_param.extra = &altera_gpio_param;
+	dac_txen_param.platform_ops = &altera_gpio_platform_ops;
 	adc_pd_param.extra = &altera_gpio_param;
+	adc_pd_param.platform_ops = &altera_gpio_platform_ops;
 #endif
 
 	gpio_desc *dac_txen;

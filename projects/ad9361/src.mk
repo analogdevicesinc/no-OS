@@ -23,14 +23,16 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/jesd204/axi_jesd204_tx.c			\
 	$(DRIVERS)/axi_core/jesd204/xilinx_transceiver.c		\
 	$(DRIVERS)/spi/spi.c						\
+	$(DRIVERS)/gpio/gpio.c						\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (xilinx,$(strip $(PLATFORM)))
-SRCS +=	$(PLATFORM_DRIVERS)/xilinx_spi.c
+SRCS +=	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c
 else
-SRCS +=	$(PLATFORM_DRIVERS)/altera_spi.c
+SRCS +=	$(PLATFORM_DRIVERS)/altera_spi.c				\
+	$(PLATFORM_DRIVERS)/altera_gpio.c
 endif
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
