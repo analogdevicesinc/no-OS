@@ -301,16 +301,20 @@ int main(void)
 
 	/* Initialize GPIO structures */
 	struct gpio_init_param clkd_sync_param = {
-		.number = GPIO_CLKD_SYNC
+		.number = GPIO_CLKD_SYNC,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param dac_reset_param = {
-		.number = GPIO_DAC_RESET
+		.number = GPIO_DAC_RESET,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param dac_txen_param = {
-		.number = GPIO_DAC_TXEN
+		.number = GPIO_DAC_TXEN,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 	struct gpio_init_param adc_pd_param = {
-		.number = GPIO_ADC_PD
+		.number = GPIO_ADC_PD,
+		.platform_ops = &xil_gpio_platform_ops
 	};
 
 #ifndef ALTERA_PLATFORM

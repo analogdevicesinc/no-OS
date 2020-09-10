@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   xilinx/gpio.c
+ *   @file   xilinx/xilinx_gpio.c
  *   @brief  Implementation of Xilinx GPIO Generic Driver.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
@@ -54,6 +54,20 @@
 #include "error.h"
 #include "gpio.h"
 #include "gpio_extra.h"
+
+/**
+ * @brief Xilinx platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops xil_gpio_platform_ops = {
+	.gpio_ops_get = &xil_gpio_get,
+	.gpio_ops_get_optional = &xil_gpio_get_optional,
+	.gpio_ops_remove = &xil_gpio_remove,
+	.gpio_ops_direction_input = &xil_gpio_direction_input,
+	.gpio_ops_direction_output = &xil_gpio_direction_output,
+	.gpio_ops_get_direction = &xil_gpio_get_direction,
+	.gpio_ops_set_value = &xil_gpio_set_value,
+	.gpio_ops_get_value = &xil_gpio_get_value,
+};
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -138,8 +152,8 @@ error:
  * @param param - GPIO initialization parameters
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get(struct gpio_desc **desc,
-		 const struct gpio_init_param *param)
+int32_t xil_gpio_get(struct gpio_desc **desc,
+		     const struct gpio_init_param *param)
 {
 	struct gpio_desc	*descriptor;
 	struct xil_gpio_desc	*extra;
@@ -173,8 +187,8 @@ error:
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_optional(struct gpio_desc **desc,
-			  const struct gpio_init_param *param)
+int32_t xil_gpio_get_optional(struct gpio_desc **desc,
+			      const struct gpio_init_param *param)
 {
 	if(param == NULL) {
 		*desc = NULL;
@@ -186,10 +200,10 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
 
 /**
  * @brief Free the resources allocated by gpio_get().
- * @param desc - The SPI descriptor.
+ * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_remove(struct gpio_desc *desc)
+int32_t xil_gpio_remove(struct gpio_desc *desc)
 {
 	if (desc != NULL) {
 		free(((xil_gpio_desc *)(desc->extra))->instance);
@@ -205,7 +219,7 @@ int32_t gpio_remove(struct gpio_desc *desc)
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_input(struct gpio_desc *desc)
+int32_t xil_gpio_direction_input(struct gpio_desc *desc)
 {
 	struct xil_gpio_desc	*extra;
 #ifdef XGPIO_H
@@ -254,8 +268,8 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_output(struct gpio_desc *desc,
-			      uint8_t value)
+int32_t xil_gpio_direction_output(struct gpio_desc *desc,
+				  uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
 #ifdef XGPIO_H
@@ -320,8 +334,8 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
  *                             GPIO_IN
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_direction(struct gpio_desc *desc,
-			   uint8_t *direction)
+int32_t xil_gpio_get_direction(struct gpio_desc *desc,
+			       uint8_t *direction)
 {
 	if (!desc)
 		return FAILURE;
@@ -367,8 +381,8 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_set_value(struct gpio_desc *desc,
-		       uint8_t value)
+int32_t xil_gpio_set_value(struct gpio_desc *desc,
+			   uint8_t value)
 {
 	struct xil_gpio_desc	*extra;
 #ifdef XGPIO_H
@@ -416,8 +430,8 @@ int32_t gpio_set_value(struct gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_value(struct gpio_desc *desc,
-		       uint8_t *value)
+int32_t xil_gpio_get_value(struct gpio_desc *desc,
+			   uint8_t *value)
 {
 	if (!desc)
 		return FAILURE;

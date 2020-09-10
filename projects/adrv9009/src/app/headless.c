@@ -266,6 +266,11 @@ int main(void)
 
 #ifdef DAC_DMA_EXAMPLE
 	gpio_init_plddrbypass.extra = &hal_gpio_param;
+#ifndef ALTERA_PLATFORM
+	gpio_init_plddrbypass.platform_ops = &xil_gpio_platform_ops;
+#else
+	gpio_init_plddrbypass.platform_ops = &altera_gpio_platform_ops;
+#endif
 	gpio_init_plddrbypass.number = DAC_FIFO_BYPASS_GPIO;
 	status = gpio_get(&gpio_plddrbypass, &gpio_init_plddrbypass);
 	if (status) {

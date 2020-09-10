@@ -58,12 +58,21 @@
 /******************************************************************************/
 
 /**
+ * @struct gpio_platform_ops
+ * @brief Structure holding gpio function pointers that point to the platform
+ * specific function
+ */
+struct gpio_platform_ops ;
+
+/**
  * @struct gpio_init_param
  * @brief Structure holding the parameters for GPIO initialization.
  */
 typedef struct gpio_init_param {
 	/** GPIO number */
 	uint32_t	number;
+	/** GPIO platform specific functions */
+	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
 } gpio_init_param;
@@ -75,6 +84,8 @@ typedef struct gpio_init_param {
 typedef struct gpio_desc {
 	/** GPIO number */
 	uint32_t	number;
+	/** GPIO platform specific functions */
+	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
 	void		*extra;
 } gpio_desc;
@@ -90,6 +101,31 @@ enum gpio_values {
 	GPIO_HIGH,
 	/** GPIO high impedance */
 	GPIO_HIGH_Z
+};
+
+/**
+ * @struct gpio_platform_ops
+ * @brief Structure holding gpio function pointers that point to the platform
+ * specific function
+ */
+struct gpio_platform_ops {
+	/** gpio initialization function pointer */
+	int32_t (*gpio_ops_get)(struct gpio_desc **, const struct gpio_init_param *);
+	/** gpio optional descriptor function pointer */
+	int32_t (*gpio_ops_get_optional)(struct gpio_desc **,
+					 const struct gpio_init_param *);
+	/** gpio remove function pointer */
+	int32_t (*gpio_ops_remove)(struct gpio_desc *);
+	/** gpio direction input function pointer */
+	int32_t (*gpio_ops_direction_input)(struct gpio_desc *);
+	/** gpio direction output function pointer */
+	int32_t (*gpio_ops_direction_output)(struct gpio_desc *, uint8_t);
+	/** gpio get direction function pointer */
+	int32_t (*gpio_ops_get_direction)(struct gpio_desc *, uint8_t *);
+	/** gpio set value function pointer */
+	int32_t (*gpio_ops_set_value)(struct gpio_desc *, uint8_t);
+	/** gpio get value function pointer */
+	int32_t (*gpio_ops_get_value)(struct gpio_desc *, uint8_t *);
 };
 
 /******************************************************************************/

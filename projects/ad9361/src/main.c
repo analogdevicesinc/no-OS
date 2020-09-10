@@ -364,21 +364,25 @@ AD9361_InitParam default_init_param = {
 	/* GPIO definitions */
 	{
 		.number = -1,
+		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
 	},		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
 	{
 		.number = -1,
+		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
 	},		//gpio_sync *** sync-gpios
 
 	{
 		.number = -1,
+		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
 	},		//gpio_cal_sw1 *** cal-sw1-gpios
 
 	{
 		.number = -1,
+		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
 	/* External LO clocks */
@@ -483,6 +487,7 @@ int main(void)
 	spi_param.platform_ops = &altera_platform_ops;
 #endif
 	struct gpio_init_param 	gpio_init;
+	gpio_init.platform_ops = &xil_gpio_platform_ops;
 	gpio_init.extra = &xil_gpio_param;
 
 #ifdef ALTERA_PLATFORM

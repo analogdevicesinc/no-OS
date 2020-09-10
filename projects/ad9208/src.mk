@@ -14,6 +14,7 @@ ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app_iio.c
 endif
 SRCS += $(DRIVERS)/spi/spi.c						\
+	$(DRIVERS)/gpio/gpio.c						\
 	$(DRIVERS)/frequency/hmc7044/hmc7044.c				\
 	$(DRIVERS)/adc/ad9208/ad9208.c 					\
 	$(DRIVERS)/adc/ad9208/ad9208_api/ad9208_adc_api.c 		\
@@ -31,7 +32,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
-	$(PLATFORM_DRIVERS)/gpio.c					\
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/xml.c						\
