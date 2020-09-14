@@ -478,7 +478,10 @@ static int32_t ad6676_jesd_setup(struct ad6676_dev *dev,
 	ret |= ad6676_spi_write(dev, AD6676_BID, 0x05); // bank id
 	ret |= ad6676_spi_write(dev, AD6676_L, (init_param->n_lanes - 1) |
 				(init_param->scrambling_en ? SCR : 0)); // scrambling, 2 lanes
-	ret |= ad6676_spi_write(dev, AD6676_F, 0x01); // 2 bytes/frame
+	if (init_param->n_lanes == 2)
+		ret |= ad6676_spi_write(dev, AD6676_F, 0x01); // 2 bytes/frame
+	else
+		ret |= ad6676_spi_write(dev, AD6676_F, 0x03); // 4 bytes/frame
 	ret |= ad6676_spi_write(dev, AD6676_K, init_param->
 				frames_per_multiframe - 1);
 	ret |= ad6676_spi_write(dev, AD6676_M, 0x01); // 2 converters
