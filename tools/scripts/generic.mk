@@ -50,14 +50,14 @@ INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 
 ifeq (aducm3029,$(strip $(PLATFORM)))
 #Aducm3029 makefile
-include ../../tools/scripts/aducm.mk
+include $(NO-OS)/tools/scripts/aducm.mk
 
 else
 #Xilnx and altera makefiles
 ifeq ($(OS), Windows_NT)
-include ../../tools/scripts/windows.mk
+include $(NO-OS)/tools/scripts/windows.mk
 else
-include ../../tools/scripts/linux.mk
+include $(NO-OS)/tools/scripts/linux.mk
 endif #($(OS), Windows_NT)
 
 endif #(aducm3029,$(strip $(PLATFORM)))
