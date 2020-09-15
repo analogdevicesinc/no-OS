@@ -37,3 +37,10 @@ include ../../tools/scripts/linux.mk
 endif #($(OS), Windows_NT)
 
 endif #(aducm3029,$(strip $(PLATFORM)))
+
+list:
+ifeq ($(OS), Windows_NT)
+	@echo $(subst $(space),,$(sort $(SRCS) $(INCS)))
+else
+	@echo $(sort $(SRCS) $(INCS)) | tr ' ' '\n'
+endif
