@@ -11,6 +11,7 @@
 
 SRCS := $(PROJECT)/src/ad469x_fmcz.c
 SRCS += $(DRIVERS)/spi/spi.c						\
+	$(DRIVERS)/gpio/gpio.c						\
 	$(DRIVERS)/adc/ad469x/ad469x.c					\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
@@ -18,7 +19,7 @@ SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.c			\
 	$(NO-OS)/util/util.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
-	$(PLATFORM_DRIVERS)/gpio.c					\
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
 INCS += $(PROJECT)/src/parameters.h
