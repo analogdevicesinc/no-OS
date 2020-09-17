@@ -103,6 +103,7 @@ int main()
 
 	struct gpio_init_param ad469x_resetn = {
 		.number = GPIO_RESETN_1,
+		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &gpio_extra_param
 	};
 
