@@ -33,7 +33,7 @@ int main()
 		.rx_dma_baseaddr = AD400X_DMA_BASEADDR,
 	};
 	struct spi_engine_offload_message msg;
-	uint8_t commands_data[2] = {0xFF, 0xFF};
+	uint32_t commands_data[2] = {0xFF, 0xFF};
 	int32_t ret, data, i;
 	enum ad400x_supported_dev_ids dev_id = ID_AD4020;
 	struct spi_engine_init_param spi_eng_init_param  = {
