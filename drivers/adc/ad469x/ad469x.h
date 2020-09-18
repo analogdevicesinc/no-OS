@@ -79,6 +79,7 @@
 #define AD469x_REG_GP_MODE		0x027
 #define AD469x_REG_GPIO_STATE		0x028
 #define AD469x_REG_TEMP_CTRL		0x029
+#define AD469x_REG_AS_SLOT(x)		((x & 0x7F) | 0x100)
 
 /* 5-bit SDI Conversion Mode Commands */
 #define AD469x_CMD_REG_CONFIG_MODE		(0x0A << 3)
@@ -103,6 +104,18 @@
 #define AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK	(0x7f << 0)
 #define AD469x_SEQ_CTRL_NUM_SLOTS_AS(x)		((x & 0x7f) << 0)
 
+/* AD469x_REG_TEMP_CTRL */
+#define AD469x_REG_TEMP_CTRL_TEMP_EN_MASK	(0x01 << 0)
+#define AD469x_REG_TEMP_CTRL_TEMP_EN(x)		((x & 0x01) << 0)
+
+/* AD469x_REG_AS_SLOT */
+#define AD469x_REG_AS_SLOT_INX(x)		((x & 0x0f) << 0)
+
+/* AD469x_REG_IF_CONFIG_C */
+#define AD469x_REG_IF_CONFIG_C_MB_STRICT_MASK	(0x01 << 5)
+#define AD469x_REG_IF_CONFIG_C_MB_STRICT(x)	((x & 0x01) << 5)
+
+#define AD469x_CHANNEL(x)			(BIT(x) & 0xFFFF)
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -238,9 +251,33 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 			 uint32_t *buf,
 			 uint16_t samples);
 
+/* Read from device when converter has the channel sequencer activated */
+int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
+			     uint32_t *buf,
+			     uint16_t samples);
+
 /* Set channel sequence */
 int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 				    enum ad469x_channel_sequencing seq);
+
+/* Configure standard sequencer enabled channels */
+int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev,
+			       uint16_t ch_mask);
+
+/* Configure advanced sequencer number of slots */
+int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
+		uint8_t num_slots);
+
+/* Advanced sequencer, assign channel to a slot */
+int32_t ad469x_adv_sequence_set_slot(struct ad469x_dev *dev,
+				     uint8_t slot,
+				     uint8_t channel);
+
+/* Enable temperature read at the end of the sequence, for standard and */
+int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev);
+
+/* Disable temperature read at the end of the sequence, for standard and */
+int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev);
 
 /* Enter conversion mode */
 int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev);

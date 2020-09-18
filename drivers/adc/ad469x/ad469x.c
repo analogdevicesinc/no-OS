@@ -324,6 +324,89 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 }
 
 /**
+ * @brief Configure advanced sequencer number of slots
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] num_slots - Number of slots, max value = 0x7f
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
+		uint8_t num_slots)
+{
+	return ad469x_spi_reg_write(dev,
+				    AD469x_REG_SEQ_CTRL,
+				    AD469x_SEQ_CTRL_NUM_SLOTS_AS(num_slots));
+}
+
+/**
+ * @brief Advanced sequencer, assign channel to a slot
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] slot - Slot number [0x00, 0x7f]
+ * @param [in] channel - Assigned channel [0x00, 0x0f].
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_adv_sequence_set_slot(struct ad469x_dev *dev,
+				     uint8_t slot,
+				     uint8_t channel)
+{
+	return ad469x_spi_reg_write(dev,
+				    AD469x_REG_AS_SLOT(slot),
+				    AD469x_REG_AS_SLOT_INX(channel));
+}
+
+/**
+ * @brief Configure standard sequencer channels
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] ch_mask - Extra channels to activate.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
+{
+	int32_t ret;
+
+	ret = ad469x_spi_reg_write(dev,
+				   AD469x_REG_STD_SEQ_CONFIG,
+				   0x0f & ch_mask);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_spi_reg_write(dev,
+				   AD469x_REG_STD_SEQ_CONFIG + 1,
+				   ch_mask >> 8);
+	if (ret != SUCCESS)
+		return ret;
+
+	return ret;
+}
+
+/**
+ * @brief Enable temperature read at the end of the sequence, for standard and
+ * advanced sequencer
+ * @param [in] dev - ad469x_dev device handler.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
+{
+	return ad469x_spi_write_mask(dev,
+				     AD469x_REG_TEMP_CTRL,
+				     AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
+				     AD469x_REG_TEMP_CTRL_TEMP_EN(1));
+}
+
+/**
+ * @brief Disable temperature read at the end of the sequence, for standard and
+ * advanced sequencer
+ * @param [in] dev - ad469x_dev device handler.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev)
+{
+	return ad469x_spi_write_mask(dev,
+				     AD469x_REG_TEMP_CTRL,
+				     AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
+				     AD469x_REG_TEMP_CTRL_TEMP_EN(0));
+}
+
+/**
  * @brief Configure converter busy indicator to the output of the specified port
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] gp_sel - Port.
@@ -407,6 +490,21 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 		return ret;
 
 	return SUCCESS;
+}
+
+/**
+ * @brief Read from device when converter has the channel sequencer activated.
+ *        Enter register mode to read/write registers
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [out] buf - data buffer.
+ * @param [in] samples - sample number.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
+			     uint32_t *buf,
+			     uint16_t samples)
+{
+	return ad469x_read_data(dev, 0, buf, samples);
 }
 
 /**
