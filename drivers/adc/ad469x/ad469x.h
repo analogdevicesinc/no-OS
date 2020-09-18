@@ -133,6 +133,15 @@ enum ad469x_busy_gp_sel {
 };
 
 /**
+  * @enum ad469x_reg_access
+  * @brief Register access modes
+  */
+enum ad469x_reg_access {
+	AD469x_BYTE_ACCESS,
+	AD469x_WORD_ACCESS,
+};
+
+/**
   * @enum ad469x_supported_dev_ids
   * @brief Supported devices
   */

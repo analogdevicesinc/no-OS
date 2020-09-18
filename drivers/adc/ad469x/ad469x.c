@@ -181,6 +181,21 @@ int32_t ad469x_spi_write_mask(struct ad469x_dev *dev,
 }
 
 /**
+ * @brief Configure register access mode
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] access - Access mode
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_set_reg_access_mode(struct ad469x_dev *dev,
+				   enum ad469x_reg_access access)
+{
+	return ad469x_spi_write_mask(dev,
+				     AD469x_REG_IF_CONFIG_C,
+				     AD469x_REG_IF_CONFIG_C_MB_STRICT_MASK,
+				     AD469x_REG_IF_CONFIG_C_MB_STRICT(access));
+}
+
+/**
  * @brief Initialize GPIO driver handlers for the GPIOs in the system.
  *        ad469x_init() helper function.
  * @param [out] dev - ad469x_dev device handler.
@@ -497,6 +512,10 @@ int32_t ad469x_init(struct ad469x_dev **device,
 		goto error_spi;
 
 	if (data != AD469x_TEST_DATA)
+		goto error_spi;
+
+	ret = ad469x_set_reg_access_mode(dev, AD469x_BYTE_ACCESS);
+	if (ret != SUCCESS)
 		goto error_spi;
 
 	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
