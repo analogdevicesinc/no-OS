@@ -134,6 +134,14 @@ int main()
 	if (ret < 0)
 		return ret;
 
+	ret = ad469x_set_channel_sequence(dev, AD469x_single_cycle);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_enter_conversion_mode(dev);
+	if (ret != SUCCESS)
+		return ret;
+
 	while (1) {
 		ch = j % 2;
 		j++;

@@ -503,14 +503,6 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	if (ret != SUCCESS)
 		goto error_spi;
 
-	ret = ad469x_set_channel_sequence(dev, AD469x_single_cycle);
-	if (ret != SUCCESS)
-		goto error_spi;
-
-	ret = ad469x_enter_conversion_mode(dev);
-	if (ret != SUCCESS)
-		goto error_spi;
-
 	ret = pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
 	if (ret != SUCCESS)
 		goto error_spi;
