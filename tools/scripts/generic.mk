@@ -14,6 +14,8 @@ endif
 
 ifneq ($(if $(findstring iio, $(LIBRARIES)), 1),)
 
+CFLAGS += -DIIO_SUPPORT
+
 IIO_DIR		= $(NO-OS)/libraries/iio
 IIO_LIB		= $(IIO_DIR)/libiio.a
 
