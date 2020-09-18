@@ -302,7 +302,7 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 		bytes_number -= to_read;
 		idx += to_read;
 	}
-	return SUCCESS;
+	return to_read;
 failure:
 	extra->errors |= errors;
 	return FAILURE;
@@ -346,8 +346,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
 		bytes_number -= to_write;
 		idx += to_write;
 	}
-
-	return SUCCESS;
+	return to_write;
 
 failure:
 	extra->errors |= errors;
