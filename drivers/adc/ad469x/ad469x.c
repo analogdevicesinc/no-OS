@@ -214,7 +214,7 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 }
 
 /**
- * @brief Set channel sequesnce.
+ * @brief Set channel sequence.
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] seq - Channel sequence.
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
