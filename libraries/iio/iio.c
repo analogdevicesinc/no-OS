@@ -53,8 +53,11 @@
 #include "delay.h"
 #include "error.h"
 #include "uart.h"
+
+#ifdef ENABLE_IIO_NETWORK
 #include "tcp_socket.h"
 #include "circular_buffer.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -128,12 +131,14 @@ struct iio_desc {
 	uint32_t		xml_size_to_last_dev;
 	uint32_t		dev_count;
 	struct uart_desc	*uart_desc;
+#ifdef ENABLE_IIO_NETWORK
 	/* FIFO for socket descriptors */
 	struct circular_buffer	*sockets;
 	/* Client socket active during an iio_step */
 	struct tcp_socket_desc	*current_sock;
 	/* Instance of server socket */
 	struct tcp_socket_desc	*server;
+#endif
 };
 
 static struct iio_desc			*g_desc;
@@ -141,6 +146,8 @@ static struct iio_desc			*g_desc;
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
+
+#ifdef ENABLE_IIO_NETWORK
 
 static inline int32_t _pop_sock(struct iio_desc *desc,
 				struct tcp_socket_desc **sock)
@@ -237,14 +244,17 @@ static int32_t network_read(const void *data, uint32_t len)
 
 	return i;
 }
+#endif
 
 static ssize_t iio_phy_read(char *buf, size_t len)
 {
 	if (g_desc->phy_type == USE_UART)
 		return (ssize_t)uart_read(g_desc->uart_desc, (uint8_t *)buf,
 					  (size_t)len);
+#ifdef ENABLE_IIO_NETWORK
 	else
 		return network_read((void *)buf, (uint32_t)len);
+#endif
 
 	return -EINVAL;
 }
@@ -255,8 +265,10 @@ static ssize_t iio_phy_write(const char *buf, size_t len)
 	if (g_desc->phy_type == USE_UART)
 		return (ssize_t)uart_write(g_desc->uart_desc,
 					   (uint8_t *)buf, (size_t)len);
+#ifdef ENABLE_IIO_NETWORK
 	else
 		return socket_send(g_desc->current_sock, buf, len);
+#endif
 
 	return -EINVAL;
 }
@@ -767,14 +779,17 @@ ssize_t iio_step(struct iio_desc *desc)
 {
 	int32_t ret;
 
-	if (desc->current_sock != NULL && (int32_t)desc->current_sock != -1) {
-		ret = _push_sock(desc, desc->current_sock);
-		if (IS_ERR_VALUE(ret))
-			return ret;
+#ifdef ENABLE_IIO_NETWORK
+	if (desc->phy_type == USE_NETWORK) {
+		if (desc->current_sock != NULL &&
+		    (int32_t)desc->current_sock != -1) {
+			ret = _push_sock(desc, desc->current_sock);
+			if (IS_ERR_VALUE(ret))
+				return ret;
+		}
+		desc->current_sock = NULL;
 	}
-
-	desc->current_sock = NULL;
-
+#endif
 	return tinyiiod_read_command(desc->iiod);
 }
 
@@ -1033,7 +1048,9 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 				init_param->uart_init_param);
 		if (IS_ERR_VALUE(ret))
 			goto free_desc;
-	} else if (init_param->phy_type == USE_NETWORK) {
+	}
+#ifdef ENABLE_IIO_NETWORK
+	else if (init_param->phy_type == USE_NETWORK) {
 		ret = socket_init(&ldesc->server,
 				  init_param->tcp_socket_init_param);
 		if (IS_ERR_VALUE(ret))
@@ -1048,7 +1065,9 @@ ssize_t iio_init(struct iio_desc **desc, struct iio_init_param *init_param)
 			      * MAX_SOCKET_TO_HANDLE);
 		if (IS_ERR_VALUE(ret))
 			goto free_pylink;
-	} else {
+	}
+#endif
+	else {
 		goto free_desc;
 	}
 
@@ -1076,11 +1095,13 @@ free_list:
 free_pylink:
 	if (ldesc->phy_type == USE_UART)
 		uart_remove(ldesc->uart_desc);
+#ifdef ENABLE_IIO_NETWORK
 	else {
 		socket_remove(ldesc->server);
 		if (ldesc->sockets)
 			cb_remove(ldesc->sockets);
 	}
+#endif
 free_desc:
 	free(ldesc);
 free_ops:
@@ -1108,8 +1129,15 @@ ssize_t iio_remove(struct iio_desc *desc)
 
 	free(desc->xml_desc);
 
-	if (desc->phy_type == USE_UART)
+	if (desc->phy_type == USE_UART) {
 		uart_remove(desc->phy_desc);
+	}
+#ifdef ENABLE_IIO_NETWORK
+	else {
+		socket_remove(desc->server);
+		cb_remove(desc->sockets);
+	}
+#endif
 
 	free(desc);
 
