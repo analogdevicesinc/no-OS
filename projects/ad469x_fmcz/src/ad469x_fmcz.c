@@ -134,6 +134,57 @@ int main()
 	if (ret < 0)
 		return ret;
 
+#ifdef ADVANCED_SEQ
+	ret = ad469x_adv_sequence_set_num_slots(dev, 3);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_adv_sequence_set_slot(dev, 0, 0);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_adv_sequence_set_slot(dev, 1, 1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_sequence_enable_temp(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_set_channel_sequence(dev, AD469x_advanced_seq);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_enter_conversion_mode(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	while (1) {
+		ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
+			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
+		}
+	}
+#elif STANDARD_SEQ
+	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_set_channel_sequence(dev, AD469x_standard_seq);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_enter_conversion_mode(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	while (1) {
+		ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
+			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
+		}
+	}
+#else
 	ret = ad469x_set_channel_sequence(dev, AD469x_single_cycle);
 	if (ret != SUCCESS)
 		return ret;
@@ -150,6 +201,7 @@ int main()
 			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
 		}
 	}
+#endif
 
 	printf("Success\n\r");
 }
