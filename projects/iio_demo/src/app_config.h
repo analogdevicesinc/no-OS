@@ -43,6 +43,8 @@
 //#define ALTERA_PLATFORM
 //#define ADUCM_PLATFORM
 
-//#define USE_TCP_SOCKET
+#ifdef ENABLE_IIO_NETWORK
+#define USE_TCP_SOCKET
+#endif
 
 #endif

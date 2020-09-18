@@ -3,12 +3,16 @@
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(NO-OS)/iio/iio_demo
 
+# Uncomment to add files to use iio with network backend
+ENABLE_IIO_NETWORK = y
+ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
+DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/delay.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+endif
 
-DISABLE_SECURE_SOCKET=y
 
 LIBRARIES += iio
 
