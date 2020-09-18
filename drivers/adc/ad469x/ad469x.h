@@ -229,6 +229,16 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 			 uint32_t *buf,
 			 uint16_t samples);
 
+/* Set channel sequence */
+int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
+				    enum ad469x_channel_sequencing seq);
+
+/* Enter conversion mode */
+int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev);
+
+/* Exit conversion mode */
+int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev);
+
 /* Initialize the device. */
 int32_t ad469x_init(struct ad469x_dev **device,
 		    struct ad469x_init_param *init_param);
