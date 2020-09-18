@@ -8,6 +8,10 @@ rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2
 #                          COMMON INITIALIZATION
 #------------------------------------------------------------------------------
 
+ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
+CFLAGS += -DENABLE_IIO_NETWORK
+endif
+
 ifneq ($(if $(findstring iio, $(LIBRARIES)), 1),)
 
 IIO_DIR		= $(NO-OS)/libraries/iio

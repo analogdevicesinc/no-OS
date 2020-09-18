@@ -28,3 +28,5 @@ IGNORE_FILES += $(PLATFORM_DRIVERS)/irq.c
 # LIBRARIES += mbedtls
 LIBRARIES += iio
 
+# If the variable is set to y then iio network backend will be enabled
+ENABLE_IIO_NETWORK = y
