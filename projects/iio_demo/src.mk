@@ -3,8 +3,11 @@
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(NO-OS)/iio/iio_demo
 
-# Uncomment to add files to use iio with network backend
+# For the moment there is support only for aducm for iio with network backend
+ifeq (aducm3029,$(strip $(PLATFORM)))
 ENABLE_IIO_NETWORK = y
+endif
+
 ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 DISABLE_SECURE_SOCKET ?= y
 SRC_DIRS += $(NO-OS)/network
