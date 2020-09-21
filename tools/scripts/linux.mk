@@ -450,6 +450,12 @@ run: eval-hardware
 	fi;
 
 
+
+include_path_cmd=xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app include-path $1";
+
+INC_PATHS_WITHOUT_I = $(subst -I,,$(INC_PATHS))
+ADD_INCLUDE_PATHS=$(foreach dir, $(INC_PATHS_WITHOUT_I), $(call include_path_cmd,$(dir)))
+
 # Extract the architecture from the hdf file
 .SILENT:xilinx-read-hdf
 xilinx-read-hdf:
@@ -465,7 +471,9 @@ xilinx-bsp:
 		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
 		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
 		$(TINYIIOD_STD_TYPES) $(NULL);				\
-	fi;
+	fi;								\
+	$(ADD_INCLUDE_PATHS)
+
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
 	@ if [ "$(ARCH)" = "sys_mb" ]; then				\
