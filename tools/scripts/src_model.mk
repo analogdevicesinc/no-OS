@@ -20,7 +20,7 @@ INCS += $(PROJECT)/src/main.h
 SRC_DIRS += $(PLATFORM_DRIVERS)
 
 # Add to IGNORE_FILES files to be ignored from build
-IGNORE_FILES += $(PLATFORM_DRIVERS)/irq.c
+IGNORED_FILES += $(PLATFORM_DRIVERS)/irq.c
 
 # Add to LIBRARIES the libraries that need to be linked in the build
 # LIBRARIES += mqtt
