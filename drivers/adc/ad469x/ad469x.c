@@ -529,8 +529,12 @@ int32_t ad469x_read_data(struct ad469x_dev *dev,
 		WRITE_READ(1),
 		CS_HIGH
 	};
-
-	commands_data[0] = AD469x_CMD_CONFIG_CH_SEL(channel) << 8;
+	if (channel < AD469x_CHANNEL_NO)
+		commands_data[0] = AD469x_CMD_CONFIG_CH_SEL(channel) << 8;
+	else if (channel == AD469x_CHANNEL_TEMP)
+		commands_data[0] = AD469x_CMD_SEL_TEMP_SNSOR_CH << 8;
+	else
+		return FAILURE;
 
 	pwm_enable(dev->trigger_pwm_desc);
 
