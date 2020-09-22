@@ -165,7 +165,7 @@ int main()
 			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
 		}
 	}
-#elif STANDARD_SEQ
+#elif defined(STANDARD_SEQ)
 	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
 	if (ret != SUCCESS)
 		return ret;
