@@ -60,37 +60,11 @@ static struct uart_desc *uart_desc;
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
-/******************************************************************************/
-/************************** Functions Implementation **************************/
-/******************************************************************************/
-
-/**
- * iio_server_write() - Write data to UART.
- * @buf - Data to be written.
- * @len - Number of bytes to be written.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_server_write(const char *buf, size_t len)
-{
-	return uart_write(uart_desc, (const uint8_t *)buf, len);
-}
-
-/**
- * iio_server_read() - Read data from UART.
- * @buf - Storing data location.
- * @len - Number of bytes to be read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_server_read(char *buf, size_t len)
-{
-	return uart_read(uart_desc, (uint8_t *)buf, len);
-}
-
 /**
  * @brief Application IIO setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
+int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
 {
 	int32_t status;
 
@@ -133,6 +107,12 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 	};
 	struct iio_app_desc *iio_app_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
+	struct iio_device *dev_desc;
+	struct iio_desc *iio;
+	struct iio_init_param iio_init = {
+		.phy_type = USE_UART,
+		.uart_init_param = &uart_init_par
+	};
 
 	status = uart_init(&uart_desc, &uart_init_par);
 	if (status < 0)
@@ -144,13 +124,20 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 		return status;
 #endif
 
-	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
-	if (status < 0)
-		return status;
-
 	status = iio_axi_adc_init(&iio_axi_adc_desc, adc_init);
 	if (status < 0)
 		return status;
 
-	return iio_app(iio_app_desc);
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &dev_desc);
+	
+	status = iio_init(&iio, &iio_init);
+	if (status < 0)
+		return status;
+	
+	status = iio_register(iio, dev_desc, "awesome_name", iio_axi_adc_desc);
+	if (status < 0)
+		return status;
+
+	while (true)
+		iio_step(iio);
 }

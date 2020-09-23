@@ -49,23 +49,12 @@
 #include "xml.h"
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
-/******************************************************************************/
-
-struct iio_axi_adc {
-	struct axi_adc *adc;
-	struct axi_dmac *dmac;
-	uint32_t adc_ddr_base;
-	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
-};
-
-/******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
 /**
  * @brief get_cf_calibphase().
- * @param device - Physical instance of a iio_axi_adc device.
+ * @param device - Physical instance of a iio_axi_adc_desc device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
@@ -76,7 +65,7 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	ssize_t ret = axi_adc_get_calib_phase(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
@@ -92,7 +81,7 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_calibbias().
- * @param device - Physical instance of a iio_axi_adc device.
+ * @param device - Physical instance of a iio_axi_adc_desc device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
@@ -103,7 +92,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 {
 	int32_t val;
 	ssize_t ret;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 
 	ret = axi_adc_get_calib_bias(iio_adc->adc,
 				     channel->ch_num,
@@ -117,7 +106,7 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_calibscale().
- * @param device - Physical instance of a iio_axi_adc device.
+ * @param device - Physical instance of a iio_axi_adc_desc device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
@@ -128,7 +117,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 {
 	int32_t val, val2;
 	int32_t i = 0;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	ssize_t ret = axi_adc_get_calib_scale(iio_adc->adc, channel->ch_num, &val,
 					      &val2);
 	if (ret < 0)
@@ -148,7 +137,7 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_samples_pps().
- * @param device - Physical instance of a iio_axi_adc device.
+ * @param device - Physical instance of a iio_axi_adc_desc device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
@@ -165,7 +154,7 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
 
 /**
  * @brief get_cf_sampling_frequency().
- * @param device - Physical instance of a iio_axi_adc device.
+ * @param device - Physical instance of a iio_axi_adc_desc device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
@@ -175,7 +164,7 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	ssize_t ret = axi_adc_get_sampling_freq(iio_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
 	if (ret < 0)
@@ -199,7 +188,7 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
 	float calib = strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib * 1000000) % 1000000;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 
 	ret = axi_adc_set_calib_phase(iio_adc->adc, channel->ch_num, val, val2);
 	if (ret < 0)
@@ -220,7 +209,7 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel)
 {
 	int32_t val = str_to_int32(buf);
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	ssize_t ret;
 
 	ret = axi_adc_set_calib_bias(iio_adc->adc,
@@ -247,7 +236,7 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
 	int32_t val2 = (int32_t)(calib* 1000000) % 1000000;
-	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
+	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
 	ssize_t ret = axi_adc_set_calib_scale(iio_adc->adc, channel->ch_num, val,
 					      val2);
 	if (ret < 0)
@@ -368,208 +357,8 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 };
 
 /**
- * @brief Get xml corresponding to an "axi_adc" device.
- * @param xml - Xml containing description of a device.
- * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static ssize_t iio_axi_adc_get_xml(char** xml, struct iio_device *iio_dev)
-{
-	struct xml_document *document = NULL;
-	struct xml_node *attribute = NULL;
-	struct xml_attribute *att = NULL;
-	struct xml_node *channel = NULL;
-	struct xml_node *device = NULL;
-	char buff[256];
-	ssize_t ret;
-	uint16_t i;
-
-	if (!xml)
-		return FAILURE;
-	if (!iio_dev)
-		return FAILURE;
-
-	ret = xml_create_node(&device, "device");
-	if (ret < 0)
-		goto error;
-	ret = xml_create_attribute(&att, "id", iio_dev->name);
-	if (ret < 0)
-		goto error;
-	ret = xml_add_attribute(device, att);
-	if (ret < 0)
-		goto error;
-	ret = xml_create_attribute(&att, "name", iio_dev->name);
-	if (ret < 0)
-		goto error;
-	ret = xml_add_attribute(device, att);
-	if (ret < 0)
-		goto error;
-
-	for (i = 0; i < iio_dev->num_ch; i++) {
-		ret = xml_create_node(&channel, "channel");
-		if (ret < 0)
-			goto error;
-		ret = xml_create_attribute(&att, "id", iio_dev->channels[i]->name);
-		if (ret < 0)
-			goto error;
-		ret = xml_add_attribute(channel, att);
-		if (ret < 0)
-			goto error;
-		ret = xml_create_attribute(&att, "type", "input");
-		if (ret < 0)
-			goto error;
-		ret = xml_add_attribute(channel, att);
-		if (ret < 0)
-			goto error;
-
-		ret = xml_create_node(&attribute, "scan-element");
-		if (ret < 0)
-			goto error;
-		sprintf(buff, "%d", i);
-		ret = xml_create_attribute(&att, "index", buff);
-		if (ret < 0)
-			goto error;
-		ret = xml_add_attribute(attribute, att);
-		if (ret < 0)
-			goto error;
-		ret = xml_create_attribute(&att, "format", "le:S16/16&gt;&gt;0");
-		if (ret < 0)
-			goto error;
-		ret = xml_add_attribute(attribute, att);
-		if (ret < 0)
-			goto error;
-		ret = xml_add_node(channel, attribute);
-		if (ret < 0)
-			goto error;
-
-		for (uint8_t j = 0; iio_voltage_attributes[j] != NULL; j++) {
-			ret = xml_create_node(&attribute, "attribute");
-			if (ret < 0)
-				goto error;
-			ret = xml_create_attribute(&att, "name",
-						   iio_voltage_attributes[j]->name);
-			if (ret < 0)
-				goto error;
-			ret = xml_add_attribute(attribute, att);
-			if (ret < 0)
-				goto error;
-			sprintf(buff, "in_voltage%d_%s", i, iio_voltage_attributes[j]->name);
-			ret = xml_create_attribute(&att, "filename", buff);
-			if (ret < 0)
-				goto error;
-			ret = xml_add_attribute(attribute, att);
-			if (ret < 0)
-				goto error;
-			ret = xml_add_node(channel, attribute);
-			if (ret < 0)
-				goto error;
-		}
-		ret = xml_add_node(device, channel);
-		if (ret < 0)
-			goto error;
-	}
-
-	ret = xml_create_document(&document, device);
-	if (ret < 0) {
-		if (document)
-			xml_delete_document(document);
-		goto error;
-	}
-	*xml = document->buff;
-
-error:
-	if (device)
-		xml_delete_node(device);
-
-	return ret;
-}
-
-/**
- * @brief Delete iio_device.
- * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static ssize_t iio_axi_adc_delete_device(struct iio_device *iio_device)
-{
-	uint16_t i = 0;
-
-	if (!iio_device)
-		return FAILURE;
-
-	if (iio_device->channels) {
-		while (iio_device->channels[i]) {
-			if (iio_device->channels[i]->name)
-				free(iio_device->channels[i]->name);
-			if (iio_device->channels[i])
-				free(iio_device->channels[i]);
-			i++;
-		}
-		free(iio_device->channels);
-	}
-	if (iio_device)
-		free(iio_device);
-
-	return SUCCESS;
-}
-
-/**
- * @brief Create structure describing a device, channels
- * and attributes.
- * @param device_name - Device name.
- * @param num_ch - Number of channels that the device has.
- * @return iio_device or NULL, in case of failure.
- */
-static struct iio_device *iio_axi_adc_create_device(const char *device_name,
-		uint16_t num_ch)
-{
-	struct iio_device *iio_device;
-	const uint8_t num_ch_digits = 3;
-	char ch_voltage[] = "voltage";
-	uint16_t i, len;
-	ssize_t ret;
-
-	if (!device_name)
-		return NULL;
-
-	iio_device = (struct iio_device *)calloc(1, sizeof(struct iio_device));
-	if (!iio_device)
-		return NULL;
-
-	iio_device->name = device_name;
-	iio_device->num_ch = num_ch;
-	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(num_ch + 1, sizeof(struct iio_channel *));
-	if (!iio_device->channels)
-		goto error;
-
-	for (i = 0; i < num_ch; i++) {
-		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
-		if (!iio_device->channels[i])
-			goto error;
-		len = strlen(ch_voltage) + num_ch_digits + 1;
-		iio_device->channels[i]->name = calloc(1, len);
-		if (!iio_device->channels[i]->name)
-			goto error;
-		ret = sprintf(iio_device->channels[i]->name, "%s%d", ch_voltage, i);
-		if (ret < 0)
-			goto error;
-		iio_device->channels[i]->attributes = iio_voltage_attributes;
-		iio_device->channels[i]->ch_out = false;
-	}
-
-	iio_device->channels[i] = NULL;
-
-	return iio_device;
-
-error:
-	iio_axi_adc_delete_device(iio_device);
-
-	return NULL;
-}
-
-/**
  * @brief Transfer data from device into RAM.
- * @param iio_inst - Physical instance of a iio_axi_adc device.
+ * @param iio_inst - Physical instance of a iio_axi_adc_desc device.
  * @param bytes_count - Number of bytes to transfer.
  * @param ch_mask - Opened channels mask.
  * @return bytes_count or negative value in case of error.
@@ -578,13 +367,13 @@ static ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst,
 		size_t bytes_count,
 		uint32_t ch_mask)
 {
-	struct iio_axi_adc *iio_adc;
+	struct iio_axi_adc_desc *iio_adc;
 	ssize_t ret, bytes;
 
 	if (!iio_inst)
 		return FAILURE;
 
-	iio_adc = (struct iio_axi_adc *)iio_inst;
+	iio_adc = (struct iio_axi_adc_desc *)iio_inst;
 	bytes = (bytes_count * iio_adc->adc->num_channels) / hweight8(ch_mask);
 
 	iio_adc->dmac->flags = 0;
@@ -605,7 +394,7 @@ static ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst,
  * This function is probably called multiple times by libtinyiiod after a
  * "iio_axi_adc_transfer_dev_to_mem" call, since we can only read "bytes_count"
  * bytes at a time.
- * @param iio_inst - Physical instance of a iio_axi_adc device.
+ * @param iio_inst - Physical instance of a iio_axi_adc_desc device.
  * @param pbuf - Buffer where value is stored.
  * @param offset - Offset to the remaining data after reading n chunks.
  * @param bytes_count - Number of bytes to read.
@@ -615,7 +404,7 @@ static ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst,
 static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 				    size_t bytes_count, uint32_t ch_mask)
 {
-	struct iio_axi_adc *iio_adc;
+	struct iio_axi_adc_desc *iio_adc;
 	uint32_t i, j = 0, current_ch = 0;
 	uint16_t *pbuf16;
 	size_t samples;
@@ -626,7 +415,7 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 	if (!pbuf)
 		return FAILURE;
 
-	iio_adc = (struct iio_axi_adc *)iio_inst;
+	iio_adc = (struct iio_axi_adc_desc *)iio_inst;
 	pbuf16 = (uint16_t*)pbuf;
 	samples = (bytes_count * iio_adc->adc->num_channels) / hweight8(
 			  ch_mask);
@@ -651,7 +440,99 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Registers a iio_axi_adc for reading/writing and parameterization of
+ * @brief Create structure describing a device, channels
+ * and attributes.
+ * @param device_name - Device name.
+ * @param num_ch - Number of channels that the device has.
+ * @return iio_device or NULL, in case of failure.
+ */
+static int32_t iio_axi_adc_create_device_descriptor(
+		struct axi_adc *adc, struct iio_device *iio_device)
+{
+	static struct iio_channel default_channel = {
+		.ch_type = IIO_VOLTAGE,
+		.scan_type =  (struct scan_type) {
+			.sign = 's',
+			.realbits = 16,
+			.storagebits = 16,
+			.shift = 0,
+			.is_big_endian = false
+		},
+		.attributes = iio_voltage_attributes,
+		.ch_out = false,
+	};
+	int32_t i;
+	int32_t ret;
+
+	iio_device->num_ch = adc->num_channels;
+	iio_device->attributes = NULL; /* no device attribute */
+	iio_device->channels = calloc(iio_device->num_ch + 1,
+					sizeof(struct iio_channel *));
+	if (!iio_device->channels)
+		goto error;
+
+	for (i = 0; i < iio_device->num_ch; i++) {
+		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
+		if (!iio_device->channels[i])
+			goto error;
+		iio_device->channels[i]->name = calloc(1, 5);
+		if (!iio_device->channels[i]->name)
+			goto error;
+		*(iio_device->channels[i]) = default_channel;
+		iio_device->channels[i]->scan_index = i;
+		ret = sprintf(iio_device->channels[i]->name, "CH%d", i);
+		if (ret < 0)
+			goto error;
+	}
+	iio_device->channels[i] = NULL;
+
+	iio_device->transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem;
+	iio_device->transfer_mem_to_dev = NULL;
+	iio_device->read_data = iio_axi_adc_read_dev;
+	iio_device->write_data = NULL;
+
+error:
+	iio_axi_adc_delete_device_descriptor(iio_device);
+
+	return NULL;
+}
+
+/**
+ * @brief Delete iio_device.
+ * @param iio_device - Structure describing a device, channels and attributes.
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+static ssize_t iio_axi_adc_delete_device_descriptor(
+		struct iio_device *iio_device)
+{
+	uint16_t i = 0;
+
+	if (!iio_device)
+		return FAILURE;
+
+	if (iio_device->channels) {
+		while (iio_device->channels[i]) {
+			if (iio_device->channels[i]->name)
+				free(iio_device->channels[i]->name);
+			if (iio_device->channels[i])
+				free(iio_device->channels[i]);
+			i++;
+		}
+		free(iio_device->channels);
+	}
+
+	return SUCCESS;
+}
+
+
+void iio_axi_adc_get_dev_descriptor(struct iio_axi_adc_desc *desc,
+				struct iio_device **dev_descriptor)
+{
+	*dev_descriptor = desc->dev_descriptor;
+}
+
+/**
+ * @brief Registers a iio_axi_adc_desc for reading/writing and parameterization of
  * axi_adc device.
  * @param  desc - Descriptor.
  * @param init - Configuration structure.
@@ -660,9 +541,7 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 			 struct iio_axi_adc_init_param *init)
 {
-	struct iio_interface *iio_interface;
-	struct iio_device *iio_axi_adc_device;
-	struct iio_axi_adc *iio_axi_adc_inst;
+	struct iio_axi_adc_desc *iio_axi_adc_inst;
 
 	int32_t status;
 
@@ -672,7 +551,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	if (!init->rx_adc || !init->rx_dmac)
 		return FAILURE;
 
-	iio_axi_adc_inst = (struct iio_axi_adc *)calloc(1, sizeof(struct iio_axi_adc));
+	iio_axi_adc_inst = (struct iio_axi_adc_desc *)calloc(1, sizeof(struct iio_axi_adc_desc));
 	if (!iio_axi_adc_inst)
 		return FAILURE;
 
@@ -681,46 +560,16 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	iio_axi_adc_inst->adc_ddr_base = init->adc_ddr_base;
 	iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
 
-	iio_axi_adc_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name,
-			     iio_axi_adc_inst->adc->num_channels);
-	if (!iio_axi_adc_device)
-		goto error_free_iio_axi_adc_inst;
+	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst->adc,
+		&iio_axi_adc_inst->dev_descriptor);
+	if (IS_ERR_VALUE(status)) {
+		free(iio_axi_adc_inst);
+		return status;
+	}
 
-	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
-	if (!iio_interface)
-		goto error_free_iio_axi_adc_delete_dev;
-
-	*iio_interface = (struct iio_interface) {
-		.name = iio_axi_adc_inst->adc->name,
-		.dev_instance = iio_axi_adc_inst,
-		.iio = iio_axi_adc_device,
-		.get_xml = iio_axi_adc_get_xml,
-		.transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem,
-		.transfer_mem_to_dev = NULL,
-		.read_data = iio_axi_adc_read_dev,
-		.write_data = NULL,
-	};
-
-	status = iio_register(iio_interface);
-	if (status < 0)
-		goto error_free_iio_axi_adc_delete_dev;
-
-	*desc = calloc(1, sizeof(struct iio_axi_adc_desc));
-	if (!(*desc))
-		goto error_iio_unregister;
-
-	(*desc)->iio_interface = iio_interface;
+	*desc = iio_axi_adc_inst;
 
 	return SUCCESS;
-
-error_iio_unregister:
-	iio_unregister(iio_interface);
-error_free_iio_axi_adc_delete_dev:
-	iio_axi_adc_delete_device(iio_axi_adc_device);
-error_free_iio_axi_adc_inst:
-	free(iio_axi_adc_inst);
-
-	return FAILURE;
 }
 
 /**
@@ -735,16 +584,7 @@ int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->iio_interface);
-	if (status < 0)
-		return FAILURE;
-
-	status = iio_axi_adc_delete_device(desc->iio_interface->iio);
-	if (status < 0)
-		return FAILURE;
-
-	free(desc->iio_interface->dev_instance);
-	free(desc->iio_interface);
+	iio_axi_adc_delete_device_descriptor(desc->dev_descriptor);
 	free(desc);
 
 	return SUCCESS;

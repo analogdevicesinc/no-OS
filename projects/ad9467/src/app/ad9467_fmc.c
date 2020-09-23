@@ -58,6 +58,7 @@
 #include "ad9517.h"
 #include "parameters.h"
 
+#define IIO_SUPPORT
 #ifdef IIO_SUPPORT
 #include "app_iio.h"
 #endif
@@ -277,7 +278,7 @@ int main()
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par);
+	return iio_app_start(&iio_axi_adc_init_par);
 #endif
 
 	printf("Done.\n\r");

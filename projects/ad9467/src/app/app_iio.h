@@ -50,6 +50,6 @@
 /******************************************************************************/
 
 /* @brief Application IIO setup. */
-int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init);
+int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init);
 
 #endif

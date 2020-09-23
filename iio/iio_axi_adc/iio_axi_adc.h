@@ -53,11 +53,14 @@
 
 /**
  * @struct iio_axi_adc_desc
- * @brief iio desciptor.
+ * @brief iio_axi_adc_descriptor
  */
 struct iio_axi_adc_desc {
-	/** Structure containing physical device instance and device descriptor */
-	struct iio_interface *iio_interface;
+	struct axi_adc *adc;
+	struct axi_dmac *dmac;
+	uint32_t adc_ddr_base;
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	struct iio_device dev_descriptor;
 };
 
 /**
@@ -82,6 +85,10 @@ struct iio_axi_adc_init_param {
 /* Init iio. */
 int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 			 struct iio_axi_adc_init_param *param);
+
+void iio_axi_adc_get_dev_descriptor(struct iio_axi_adc_desc *desc,
+				struct iio_device **dev_descriptor);
+
 /* Free the resources allocated by iio_axi_adc_init(). */
 int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc);
 
