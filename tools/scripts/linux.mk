@@ -134,7 +134,7 @@ LDFLAGS = -T $(LSCRIPT)							\
 ifeq (xilinx,$(strip $(PLATFORM)))
 
 # Define the platform compiler switch
-CFLAGS += -D XILINX_PLATFORM						\
+CFLAGS += -DXILINX_PLATFORM						\
 	 -fdata-sections						\
 	 -ffunction-sections 						\
 	 -O2								\
@@ -452,9 +452,13 @@ run: eval-hardware
 
 
 include_path_cmd=xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app include-path $1";
+compiler_define_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app define-compiler-symbols $1";
 
 INC_PATHS_WITHOUT_I = $(subst -I,,$(INC_PATHS))
 ADD_INCLUDE_PATHS=$(foreach dir, $(INC_PATHS_WITHOUT_I), $(call include_path_cmd,$(dir)))
+
+FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
+ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), $(call compiler_define_cmd,$(flag)))
 
 # Extract the architecture from the hdf file
 .SILENT:xilinx-read-hdf
@@ -471,8 +475,9 @@ xilinx-bsp:
 		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
 		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
 		$(TINYIIOD_STD_TYPES) $(NULL);				\
-	fi;								\
+	fi;
 	$(ADD_INCLUDE_PATHS)
+	$(ADD_COMPILER_DEFINES)
 
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
