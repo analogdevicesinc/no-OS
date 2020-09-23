@@ -453,12 +453,19 @@ run: eval-hardware
 
 include_path_cmd=xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app include-path $1";
 compiler_define_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app define-compiler-symbols $1";
+lib_serach_path_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app library-search-path $1";
+add_library_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app libraries $1";
 
 INC_PATHS_WITHOUT_I = $(subst -I,,$(INC_PATHS))
 ADD_INCLUDE_PATHS=$(foreach dir, $(INC_PATHS_WITHOUT_I), $(call include_path_cmd,$(dir)))
 
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), $(call compiler_define_cmd,$(flag)))
+
+ADD_LIBRARIES = $(foreach lib, $(LIBRARIES), $(call add_library_cmd,$(lib)))
+
+LIBRARIES_PATH_WITHOUT_L = $(subst -L,,$(LIB_PATHS))
+ADD_LIBRARIES_PATH = $(foreach path, $(LIBRARIES_PATH_WITHOUT_L), $(call lib_serach_path_cmd,$(path)))
 
 # Extract the architecture from the hdf file
 .SILENT:xilinx-read-hdf
@@ -478,6 +485,8 @@ xilinx-bsp:
 	fi;
 	$(ADD_INCLUDE_PATHS)
 	$(ADD_COMPILER_DEFINES)
+	$(ADD_LIBRARIES_PATH)
+	$(ADD_LIBRARIES)
 
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
