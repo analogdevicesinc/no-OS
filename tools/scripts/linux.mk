@@ -482,11 +482,11 @@ xilinx-bsp:
 		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
 		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
 		$(TINYIIOD_STD_TYPES) $(NULL);				\
+	$(ADD_INCLUDE_PATHS)						\
+	$(ADD_COMPILER_DEFINES)						\
+	$(ADD_LIBRARIES_PATH)						\
+	$(ADD_LIBRARIES)						\
 	fi;
-	$(ADD_INCLUDE_PATHS)
-	$(ADD_COMPILER_DEFINES)
-	$(ADD_LIBRARIES_PATH)
-	$(ADD_LIBRARIES)
 
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
