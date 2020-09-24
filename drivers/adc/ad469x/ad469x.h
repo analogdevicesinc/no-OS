@@ -37,8 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef SRC_AD400X_H_
-#define SRC_AD400X_H_
+#ifndef SRC_AD469X_H_
+#define SRC_AD469X_H_
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -295,4 +295,4 @@ int32_t ad469x_init(struct ad469x_dev **device,
 /* Remove the device and release resources. */
 int32_t ad469x_remove(struct ad469x_dev *dev);
 
-#endif /* SRC_AD400X_H_ */
+#endif /* SRC_AD469X_H_ */
