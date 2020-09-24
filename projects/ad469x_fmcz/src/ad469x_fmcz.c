@@ -60,7 +60,7 @@
 
 int main()
 {
-	uint32_t buf[AD469x_EVB_SAMPLE_NO];
+	uint32_t buf[AD469x_EVB_SAMPLE_NO] __attribute__ ((aligned));
 	struct ad469x_dev *dev;
 	uint32_t ch, i, j = 0;
 	int32_t ret;
