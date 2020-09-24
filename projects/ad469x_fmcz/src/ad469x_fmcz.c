@@ -160,7 +160,10 @@ int main()
 		return ret;
 
 	while (1) {
-		ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
+		ret = ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
+		if (ret != SUCCESS)
+			return ret;
+
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
 			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
 		}
@@ -179,7 +182,10 @@ int main()
 		return ret;
 
 	while (1) {
-		ad469x_seq_read_data(dev, buf, AD469x_EVB_SAMPLE_NO);
+		ret = ad469x_seq_read_data(dev, &buf[0], AD469x_EVB_SAMPLE_NO);
+		if (ret != SUCCESS)
+			return ret;
+
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
 			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
 		}
@@ -196,7 +202,10 @@ int main()
 	while (1) {
 		ch = j % 2;
 		j++;
-		ad469x_read_data(dev, ch, buf, AD469x_EVB_SAMPLE_NO);
+		ret = ad469x_read_data(dev, ch, buf, AD469x_EVB_SAMPLE_NO);
+		if (ret != SUCCESS)
+			return ret;
+
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
 			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
 		}
