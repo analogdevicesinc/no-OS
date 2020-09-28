@@ -46,6 +46,7 @@
 #include "spi.h"
 #include "spi_extra.h"
 #include "gpio.h"
+#include "gpio_extra.h"
 #include "error.h"
 #include "delay.h"
 
