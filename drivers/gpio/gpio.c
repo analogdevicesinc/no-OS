@@ -75,8 +75,10 @@ int32_t gpio_get(struct gpio_desc **desc,
 int32_t gpio_get_optional(struct gpio_desc **desc,
 			  const struct gpio_init_param *param)
 {
-	if (!param)
-		return FAILURE;
+	if (!param) {
+		*desc = NULL;
+		return SUCCESS;
+	}
 
 	if ((param->platform_ops->gpio_ops_get_optional(desc, param)))
 		return FAILURE;
