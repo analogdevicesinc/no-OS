@@ -138,7 +138,9 @@ enum axi_adc_pn_sel {
 	AXI_ADC_PN23 = 6,
 	AXI_ADC_PN31 = 7,
 	AXI_ADC_PN_CUSTOM = 9,
-	AXI_ADC_PN_END = 10,
+	AXI_ADC_PN_RAMP_NIBBLE = 10,
+	AXI_ADC_PN_RAMP_16 = 11,
+	AXI_ADC_PN_END = 12,
 };
 
 /******************************************************************************/
