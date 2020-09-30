@@ -365,9 +365,16 @@ int32_t ad469x_adv_sequence_set_slot(struct ad469x_dev *dev,
 				     uint8_t slot,
 				     uint8_t channel)
 {
-	return ad469x_spi_reg_write(dev,
-				    AD469x_REG_AS_SLOT(slot),
-				    AD469x_REG_AS_SLOT_INX(channel));
+	int32_t ret;
+	ret = ad469x_spi_reg_write(dev,
+				   AD469x_REG_AS_SLOT(slot),
+				   AD469x_REG_AS_SLOT_INX(channel));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->ch_slots[slot] = channel;
+
+	return SUCCESS;
 }
 
 /**
@@ -622,6 +629,8 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->dev_id = init_param->dev_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 	dev->num_slots = 0;
+	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
+
 	ret = ad469x_spi_reg_write(dev, AD469x_REG_SCRATCH_PAD, AD469x_TEST_DATA);
 	if (ret != SUCCESS)
 		goto error_spi;

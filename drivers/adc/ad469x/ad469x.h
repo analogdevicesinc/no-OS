@@ -117,6 +117,7 @@
 
 #define AD469x_CHANNEL(x)			(BIT(x) & 0xFFFF)
 #define AD469x_CHANNEL_NO			16
+#define AD469x_SLOTS_NO				0x80
 #define AD469x_CHANNEL_TEMP			16
 
 /******************************************************************************/
@@ -221,6 +222,8 @@ struct ad469x_dev {
 	struct gpio_desc	*gpio_resetn;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/** Channel slots for advanced sequencer */
+	uint8_t ch_slots[AD469x_SLOTS_NO];
 	/** Number of active channel slots, for advanced sequencer */
 	uint8_t num_slots;
 };
