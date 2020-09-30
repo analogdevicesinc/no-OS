@@ -79,6 +79,7 @@
 #define AD469x_REG_GP_MODE		0x027
 #define AD469x_REG_GPIO_STATE		0x028
 #define AD469x_REG_TEMP_CTRL		0x029
+#define AD469x_REG_CONFIG_IN(x)		((x & 0x0F) | 0x30)
 #define AD469x_REG_AS_SLOT(x)		((x & 0x7F) | 0x100)
 
 /* 5-bit SDI Conversion Mode Commands */
@@ -114,6 +115,18 @@
 /* AD469x_REG_IF_CONFIG_C */
 #define AD469x_REG_IF_CONFIG_C_MB_STRICT_MASK	(0x01 << 5)
 #define AD469x_REG_IF_CONFIG_C_MB_STRICT(x)	((x & 0x01) << 5)
+
+/* AD469x_REG_CONFIG_INn */
+#define AD469x_REG_CONFIG_IN_OSR_MASK		(0x03 << 0)
+#define AD469x_REG_CONFIG_IN_OSR(x)		((x & 0x03) << 0)
+#define AD469x_REG_CONFIG_IN_HIZ_EN_MASK	(0x01 << 3)
+#define AD469x_REG_CONFIG_IN_HIZ_EN(x)		((x & 0x01) << 3)
+#define AD469x_REG_CONFIG_IN_PAIR_MASK		(0x03 << 4)
+#define AD469x_REG_CONFIG_IN_PAIR(x)		((x & 0x03) << 4)
+#define AD469x_REG_CONFIG_IN_MODE_MASK		(0x01 << 6)
+#define AD469x_REG_CONFIG_IN_MODE(x)		((x & 0x01) << 6)
+#define AD469x_REG_CONFIG_IN_TD_EN_MASK		(0x01 << 7)
+#define AD469x_REG_CONFIG_IN_TD_EN(x)		((x & 0x01) << 7)
 
 #define AD469x_CHANNEL(x)			(BIT(x) & 0xFFFF)
 #define AD469x_CHANNEL_NO			16
@@ -166,6 +179,17 @@ enum ad469x_supported_dev_ids {
 	ID_AD4695,
 	ID_AD4696,
 	ID_AD4697,
+};
+
+/**
+  * @enum ad469x_osr_ratios
+  * @brief Supported oversampling ratios
+  */
+enum ad469x_osr_ratios {
+	AD469x_OSR_1,
+	AD469x_OSR_4,
+	AD469x_OSR_16,
+	AD469x_OSR_64
 };
 
 /**
@@ -224,6 +248,9 @@ struct ad469x_dev {
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Current channel sequence */
 	enum ad469x_channel_sequencing ch_sequence;
+	/** OSR resolution corresponding to each channel, when advanced
+	 * sequencer is selected. */
+	enum ad469x_osr_ratios adv_seq_osr_resol[AD469x_CHANNEL_NO];
 	/** Channel slots for advanced sequencer */
 	uint8_t ch_slots[AD469x_SLOTS_NO];
 	/** Temperature enabled for standard and advanced sequencer if set. */
@@ -290,6 +317,14 @@ int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev);
 
 /* Disable temperature read at the end of the sequence, for standard and */
 int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev);
+
+/* Configure over sampling ratio in advanced sequencer mode */
+int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
+			   enum ad469x_osr_ratios ratio);
+
+/* Configure over sampling ratio in standard sequencer mode */
+int32_t ad469x_std_seq_osr(struct ad469x_dev *dev,
+			   enum ad469x_osr_ratios ratio);
 
 /* Enter conversion mode */
 int32_t ad469x_enter_conversion_mode(struct ad469x_dev *dev);
