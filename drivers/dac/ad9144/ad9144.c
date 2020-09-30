@@ -42,7 +42,9 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "ad9144.h"
+#include "error.h"
 
 struct ad9144_jesd204_link_mode {
 	uint8_t id;
@@ -359,6 +361,74 @@ static int32_t ad9144_pll_setup(struct ad9144_dev *dev,
 	ret = ad9144_spi_check_status(dev, REG_DACPLLSTATUS, 0x22, 0x22);
 	if (ret == -1)
 		printf("%s : DAC PLL NOT locked!.\n", __func__);
+
+	return ret;
+}
+
+int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
+		       int16_t phase)
+{
+	uint32_t modulation_type, phase_offset;
+	bool sel_sideband = false;
+	uint8_t i, reg;
+	uint64_t ftw;
+	int32_t ret;
+
+	if (phase > abs(180))
+		return FAILURE;
+	if (f_carrier_khz < 0) {
+		f_carrier_khz *= -1;
+		sel_sideband = true;
+	}
+
+	if (f_carrier_khz >= dev->sample_rate_khz / 2) {
+		/* No modulation */
+		modulation_type = MODULATION_TYPE(0);
+	} else if (dev->sample_rate_khz == f_carrier_khz * 4) {
+		/* Coarse − f DAC /4 */
+		modulation_type = MODULATION_TYPE(2);
+	} else if (dev->sample_rate_khz == f_carrier_khz * 8) {
+		/* Coarse − f DAC /8 */
+		modulation_type = MODULATION_TYPE(3);
+	} else {
+		/* NCO Fine Modulation */
+		modulation_type = MODULATION_TYPE(1);
+	}
+	ret = ad9144_spi_read(dev, REG_DATAPATH_CTRL, &reg);
+	if (ret != SUCCESS)
+		return ret;
+	reg = (reg & ~MODULATION_TYPE_MASK) | modulation_type;
+	if (sel_sideband)
+		reg |= SEL_SIDEBAND;
+	else
+		reg &= ~SEL_SIDEBAND;
+
+	ret = ad9144_spi_write(dev, REG_DATAPATH_CTRL, reg);
+	if (ret != SUCCESS)
+		return ret;
+
+	ftw = ((1ULL << 48) / dev->sample_rate_khz * f_carrier_khz);
+	for (i = 0; i < 6; i++) {
+		ret = ad9144_spi_write(dev, REG_FTW0 + i,
+				       (ftw >> (8 * i)) & 0xFF);
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	phase_offset = (phase/180) * (1 << 15);
+	ret = ad9144_spi_write(dev, REG_NCO_PHASE_OFFSET0, phase_offset & 0xFF);
+	if (ret != SUCCESS)
+		return ret;
+	ret = ad9144_spi_write(dev, REG_NCO_PHASE_OFFSET1, (phase_offset >> 8) &
+			       0xFF);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (modulation_type  == MODULATION_TYPE(1)) {
+		ret = ad9144_spi_write(dev, REG_NCO_FTW_UPDATE, FTW_UPDATE_REQ);
+		if (ret != SUCCESS)
+			return ret;
+	}
 
 	return ret;
 }
