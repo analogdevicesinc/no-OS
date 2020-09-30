@@ -797,6 +797,7 @@
 #define SEL_SIDEBAND				(1 << 1) /* 1 = Select upper or lower sideband from modulation result */
 #define I_TO_Q					(1 << 0) /* 1 = send I datapath into Q DAC */
 #define MODULATION_TYPE(x)			(((x) & 0x3) << 2) /* selects type of modulation operation */
+#define MODULATION_TYPE_MASK			(0x03 << 2)
 
 /*
  *	REG_INTERP_MODE
@@ -1426,5 +1427,8 @@ int32_t ad9144_datapath_prbs_test(struct ad9144_dev *dev,
 				  const struct ad9144_init_param *init_param);
 
 int32_t ad9144_dac_calibrate(struct ad9144_dev *dev);
+
+int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
+		       int16_t phase);
 
 #endif
