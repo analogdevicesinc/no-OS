@@ -460,6 +460,10 @@ int32_t ad9144_setup(struct ad9144_dev **device,
 		serdes_plldiv = 0x04;
 	}
 
+	dev->sample_rate_khz = init_param->lane_rate_kbps / 40 *
+			       dev->num_lanes * 2 /
+			       dev->num_converters;
+
 	ad9144_spi_write(dev, REG_DEV_CONFIG_9, 0xb7);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_10, 0x87);		// jesd termination
 	ad9144_spi_write(dev, REG_DEV_CONFIG_11, 0xb7);		// jesd termination

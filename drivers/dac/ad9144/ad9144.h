@@ -1368,6 +1368,7 @@ struct ad9144_dev {
 	/* SPI */
 	spi_desc *spi_desc;
 
+	uint32_t sample_rate_khz;
 	uint8_t num_converters;
 	uint8_t num_lanes;
 };
