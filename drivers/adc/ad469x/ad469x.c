@@ -40,6 +40,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <string.h>
 #include "stdio.h"
 #include "stdlib.h"
 #include "ad469x.h"
@@ -51,6 +52,16 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD469x_TEST_DATA 0xEA
+
+/**
+ * @brief Device resolution
+ */
+const uint8_t ad469x_device_resol[] = {
+	[AD469x_OSR_1] = 16,
+	[AD469x_OSR_4] = 17,
+	[AD469x_OSR_16] = 18,
+	[AD469x_OSR_64] = 19
+};
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -229,6 +240,90 @@ static int32_t ad469x_init_gpio(struct ad469x_dev *dev,
 }
 
 /**
+ * @brief Configure over sampling ratio in advanced sequencer mode
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] ch - Channel to configure.
+ * @param [in] ratio - OSR ratio.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_adv_seq_osr(struct ad469x_dev *dev, uint16_t ch,
+			   enum ad469x_osr_ratios ratio)
+{
+	int32_t ret;
+
+	if (dev->ch_sequence == AD469x_single_cycle ||
+	    dev->ch_sequence == AD469x_two_cycle)
+		return FAILURE;
+
+	if (ch >= AD469x_CHANNEL_NO)
+		return FAILURE;
+
+	ret = ad469x_spi_write_mask(dev,
+				    AD469x_REG_CONFIG_IN(ch),
+				    AD469x_REG_CONFIG_IN_OSR_MASK,
+				    AD469x_REG_CONFIG_IN_OSR(ratio));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->adv_seq_osr_resol[ch] = ad469x_device_resol[ratio];
+	/* Set storage to maximum data width */
+	dev->capture_data_width = ad469x_device_resol[AD469x_OSR_64];
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Configure over sampling ratio to 1 in single and two cycle modes.
+ * @param [in] dev - ad469x_dev device handler.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+static int32_t ad469x_seq_osr_clear(struct ad469x_dev *dev)
+{
+	int32_t ret;
+	uint8_t i = 0;
+
+	for (i = 0; i < AD469x_CHANNEL_NO; i++) {
+		ret = ad469x_spi_write_mask(dev,
+					    AD469x_REG_CONFIG_IN(i),
+					    AD469x_REG_CONFIG_IN_OSR_MASK,
+					    AD469x_REG_CONFIG_IN_OSR(AD469x_OSR_1));
+		if (ret != SUCCESS)
+			return ret;
+		dev->adv_seq_osr_resol[i] = ad469x_device_resol[AD469x_OSR_1];
+	}
+	/* Set storage to minimum data width */
+	dev->capture_data_width = ad469x_device_resol[AD469x_OSR_1];
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Configure over sampling ratio in standard sequencer mode
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] ratio - OSR ratio.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad469x_std_seq_osr(struct ad469x_dev *dev, enum ad469x_osr_ratios ratio)
+{
+	int ret;
+
+	if (dev->ch_sequence == AD469x_single_cycle ||
+	    dev->ch_sequence == AD469x_two_cycle)
+		return FAILURE;
+
+	ret = ad469x_spi_write_mask(dev,
+				    AD469x_REG_CONFIG_IN(0),
+				    AD469x_REG_CONFIG_IN_OSR_MASK,
+				    AD469x_REG_CONFIG_IN_OSR(ratio));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->capture_data_width = ad469x_device_resol[ratio];
+
+	return ret;
+}
+
+/**
  * @brief Set channel sequence.
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] seq - Channel sequence.
@@ -261,6 +356,10 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
 		if (ret != SUCCESS)
 			return ret;
+
+		ret = ad469x_seq_osr_clear(dev);
+		if (ret != SUCCESS)
+			return ret;
 		dev->num_slots = 0;
 
 		break;
@@ -284,6 +383,10 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_REG_SETUP,
 					    AD469x_SETUP_CYC_CTRL_MASK,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(1));
+		if (ret != SUCCESS)
+			return ret;
+
+		ret = ad469x_seq_osr_clear(dev);
 		if (ret != SUCCESS)
 			return ret;
 		dev->num_slots = 0;
@@ -528,6 +631,31 @@ int32_t ad469x_exit_conversion_mode(struct ad469x_dev *dev)
 }
 
 /**
+ * @brief Advanced sequencer, get util data bits in a sample
+ * @param [in] dev - ad469x_dev device handler.
+ * @param [in] cur_sample - Current sample number
+ * @param [in] sample - Sample data
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
+		uint16_t cur_sample, uint32_t *sample)
+{
+	uint8_t cur_slot, cur_ch;
+
+	cur_slot = cur_sample % (dev->num_slots + dev->temp_enabled);
+	cur_ch = dev->ch_slots[cur_slot];
+
+	/* Temperature channel sample */
+	if (dev->temp_enabled && cur_slot == dev->num_slots)
+		return SUCCESS;
+
+	*sample = (*sample) >> (dev->capture_data_width -
+				dev->adv_seq_osr_resol[cur_ch]);
+
+	return SUCCESS;
+}
+
+/**
  * @brief Read from device when converter has the channel sequencer activated.
  *        Enter register mode to read/write registers
  * @param [in] dev - ad469x_dev device handler.
@@ -539,7 +667,23 @@ int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 			     uint32_t *buf,
 			     uint16_t samples)
 {
-	return ad469x_read_data(dev, 0, buf, samples);
+	int32_t ret;
+	uint16_t i;
+
+	ret = ad469x_read_data(dev, 0, buf, samples);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (dev->ch_sequence != AD469x_advanced_seq)
+		return SUCCESS;
+
+	for (i = 0; i < samples; i++) {
+		ret = ad469x_adv_seq_osr_get_util_data(dev, i, &buf[i]);
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	return SUCCESS;
 }
 
 /**
@@ -660,6 +804,10 @@ int32_t ad469x_init(struct ad469x_dev **device,
 		goto error_spi;
 
 	ret = ad469x_set_busy(dev, AD469x_busy_gp0);
+	if (ret != SUCCESS)
+		goto error_spi;
+
+	ret = ad469x_seq_osr_clear(dev);
 	if (ret != SUCCESS)
 		goto error_spi;
 
