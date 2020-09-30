@@ -309,13 +309,6 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		if (ret != SUCCESS)
 			return ret;
 
-		ret = ad469x_spi_write_mask(dev,
-					    AD469x_REG_SEQ_CTRL,
-					    AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK,
-					    AD469x_SEQ_CTRL_NUM_SLOTS_AS(1));
-		if (ret != SUCCESS)
-			return ret;
-
 		break;
 
 	default:
