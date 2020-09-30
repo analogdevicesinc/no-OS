@@ -324,7 +324,8 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 }
 
 /**
- * @brief Configure advanced sequencer number of slots
+ * @brief Configure advanced sequencer number of slots, temp channel not
+ * included
  * @param [in] dev - ad469x_dev device handler.
  * @param [in] num_slots - Number of slots, max value = 0x7f
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.

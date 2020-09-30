@@ -135,7 +135,7 @@ int main()
 		return ret;
 
 #ifdef ADVANCED_SEQ
-	ret = ad469x_adv_sequence_set_num_slots(dev, 3);
+	ret = ad469x_adv_sequence_set_num_slots(dev, 2);
 	if (ret != SUCCESS)
 		return ret;
 
