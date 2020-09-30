@@ -221,6 +221,8 @@ struct ad469x_dev {
 	struct gpio_desc	*gpio_resetn;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/** Number of active channel slots, for advanced sequencer */
+	uint8_t num_slots;
 };
 
 /******************************************************************************/

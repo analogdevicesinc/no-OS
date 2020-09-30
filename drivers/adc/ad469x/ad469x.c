@@ -261,6 +261,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(0));
 		if (ret != SUCCESS)
 			return ret;
+		dev->num_slots = 0;
 
 		break;
 
@@ -285,6 +286,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_SETUP_CYC_CTRL_SINGLE(1));
 		if (ret != SUCCESS)
 			return ret;
+		dev->num_slots = 0;
 
 		break;
 
@@ -295,6 +297,7 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(1));
 		if (ret != SUCCESS)
 			return ret;
+		dev->num_slots = 0;
 
 		break;
 
@@ -333,15 +336,22 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 int32_t ad469x_adv_sequence_set_num_slots(struct ad469x_dev *dev,
 		uint8_t num_slots)
 {
+	int32_t ret;
 	uint8_t write_num_slots = 0;
 
 	if (num_slots)
 		write_num_slots = num_slots - 1;
 
-	return ad469x_spi_write_mask(dev,
+	ret = ad469x_spi_write_mask(dev,
 				    AD469x_REG_SEQ_CTRL,
 				    AD469x_SEQ_CTRL_NUM_SLOTS_AS_MASK,
 				    AD469x_SEQ_CTRL_NUM_SLOTS_AS(write_num_slots));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->num_slots = num_slots;
+
+	return SUCCESS;
 }
 
 /**
@@ -611,7 +621,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->capture_data_width = init_param->capture_data_width;
 	dev->dev_id = init_param->dev_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
-
+	dev->num_slots = 0;
 	ret = ad469x_spi_reg_write(dev, AD469x_REG_SCRATCH_PAD, AD469x_TEST_DATA);
 	if (ret != SUCCESS)
 		goto error_spi;
