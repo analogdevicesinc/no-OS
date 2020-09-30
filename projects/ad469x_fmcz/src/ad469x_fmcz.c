@@ -147,6 +147,14 @@ int main()
 	if (ret != SUCCESS)
 		return ret;
 
+	ret = ad469x_adv_seq_osr(dev, 0, AD469x_OSR_4);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_adv_seq_osr(dev, 1, AD469x_OSR_16);
+	if (ret != SUCCESS)
+		return ret;
+
 	ret = ad469x_sequence_enable_temp(dev);
 	if (ret != SUCCESS)
 		return ret;
@@ -174,6 +182,10 @@ int main()
 		return ret;
 
 	ret = ad469x_set_channel_sequence(dev, AD469x_standard_seq);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_std_seq_osr(dev, AD469x_OSR_4);
 	if (ret != SUCCESS)
 		return ret;
 
