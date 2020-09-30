@@ -130,6 +130,9 @@ int main()
 		(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
+
 	ret = ad469x_init(&dev, &ad469x_init_param);
 	if (ret < 0)
 		return ret;
