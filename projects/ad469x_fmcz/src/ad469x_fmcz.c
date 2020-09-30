@@ -164,9 +164,9 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
-			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
-		}
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i += 3)
+			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1:%"PRIu32", temp: %"PRIu32"\n",
+			       i, buf[i], buf[i + 1], buf[i + 2]);
 	}
 #elif defined(STANDARD_SEQ)
 	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
@@ -186,9 +186,9 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
-			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
-		}
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i += 2)
+			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1: %"PRIu32" \n", i, buf[i],
+			       buf[i + 1]);
 	}
 #else
 	ret = ad469x_set_channel_sequence(dev, AD469x_single_cycle);
@@ -203,12 +203,12 @@ int main()
 		ch = j % 2;
 		j++;
 		ret = ad469x_read_data(dev, ch, buf, AD469x_EVB_SAMPLE_NO);
+		printf("ch: %"PRIu32"\n", ch);
 		if (ret != SUCCESS)
 			return ret;
 
-		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++) {
-			printf("ADC %"PRIu32": %"PRIu32" \n", i, buf[i]);
-		}
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i++)
+			printf("ADC sample %"PRIu32" %"PRIu32" \n", i, buf[i]);
 	}
 #endif
 
