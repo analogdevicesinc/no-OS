@@ -323,6 +323,8 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		break;
 	}
 
+	dev->ch_sequence = seq;
+
 	return ret;
 }
 
@@ -628,6 +630,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->capture_data_width = init_param->capture_data_width;
 	dev->dev_id = init_param->dev_id;
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->ch_sequence = AD469x_standard_seq;
 	dev->num_slots = 0;
 	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
 
