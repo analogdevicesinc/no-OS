@@ -412,10 +412,18 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
  */
 int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
 {
-	return ad469x_spi_write_mask(dev,
-				     AD469x_REG_TEMP_CTRL,
-				     AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
-				     AD469x_REG_TEMP_CTRL_TEMP_EN(1));
+	int32_t ret;
+
+	ret = ad469x_spi_write_mask(dev,
+				    AD469x_REG_TEMP_CTRL,
+				    AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
+				    AD469x_REG_TEMP_CTRL_TEMP_EN(1));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->temp_enabled = true;
+
+	return ret;
 }
 
 /**
@@ -426,10 +434,18 @@ int32_t ad469x_sequence_enable_temp(struct ad469x_dev *dev)
  */
 int32_t ad469x_sequence_disable_temp(struct ad469x_dev *dev)
 {
-	return ad469x_spi_write_mask(dev,
-				     AD469x_REG_TEMP_CTRL,
-				     AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
-				     AD469x_REG_TEMP_CTRL_TEMP_EN(0));
+	int32_t ret;
+
+	ret = ad469x_spi_write_mask(dev,
+				    AD469x_REG_TEMP_CTRL,
+				    AD469x_REG_TEMP_CTRL_TEMP_EN_MASK,
+				    AD469x_REG_TEMP_CTRL_TEMP_EN(0));
+	if (ret != SUCCESS)
+		return ret;
+
+	dev->temp_enabled = false;
+
+	return ret;
 }
 
 /**
@@ -632,6 +648,7 @@ int32_t ad469x_init(struct ad469x_dev **device,
 	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 	dev->ch_sequence = AD469x_standard_seq;
 	dev->num_slots = 0;
+	dev->temp_enabled = false;
 	memset(dev->ch_slots, 0, sizeof(dev->ch_slots));
 
 	ret = ad469x_spi_reg_write(dev, AD469x_REG_SCRATCH_PAD, AD469x_TEST_DATA);

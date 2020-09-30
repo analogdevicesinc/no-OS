@@ -226,6 +226,8 @@ struct ad469x_dev {
 	enum ad469x_channel_sequencing ch_sequence;
 	/** Channel slots for advanced sequencer */
 	uint8_t ch_slots[AD469x_SLOTS_NO];
+	/** Temperature enabled for standard and advanced sequencer if set. */
+	bool temp_enabled;
 	/** Number of active channel slots, for advanced sequencer */
 	uint8_t num_slots;
 };
