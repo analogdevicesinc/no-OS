@@ -109,6 +109,8 @@ LIB_TINYIIOD_PATH = $(LIBRARIES)/libtinyiiod/build
 LIB_TINYIIOD = tinyiiod
 TINYIIOD_STD_TYPES = _USE_STD_INT_TYPES
 CFLAGS += -D $(TINYIIOD_STD_TYPES)
+EXTRA_LIBS += $(LIB_TINYIIOD)
+EXTRA_LIBS_PATHS += $(LIB_TINYIIOD_PATH)
 endif
 
 ifeq (y,$(strip $(MBEDTLS)))
@@ -462,10 +464,9 @@ ADD_INCLUDE_PATHS=$(foreach dir, $(INC_PATHS_WITHOUT_I), $(call include_path_cmd
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), $(call compiler_define_cmd,$(flag)))
 
-ADD_LIBRARIES = $(foreach lib, $(LIBRARIES), $(call add_library_cmd,$(lib)))
+ADD_LIBRARIES = $(foreach lib, $(EXTRA_LIBS), $(call add_library_cmd,$(lib)))
 
-LIBRARIES_PATH_WITHOUT_L = $(subst -L,,$(LIB_PATHS))
-ADD_LIBRARIES_PATH = $(foreach path, $(LIBRARIES_PATH_WITHOUT_L), $(call lib_serach_path_cmd,$(path)))
+ADD_LIBRARIES_PATH = $(foreach path, $(EXTRA_LIBS_PATHS), $(call lib_serach_path_cmd,$(path)))
 
 # Extract the architecture from the hdf file
 .SILENT:xilinx-read-hdf
