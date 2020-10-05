@@ -63,6 +63,17 @@
 #include "adi_adrv9001_arm.h"
 #include "adi_adrv9001_radio.h"
 
+int get_sampling_frequency(struct axi_adc *dev, uint32_t chan,
+			   uint64_t *sampling_freq_hz)
+{
+	if (!dev || !sampling_freq_hz)
+		return -EINVAL;
+
+	*sampling_freq_hz =
+		adrv9002_init_get()->rx.rxChannelCfg[chan].profile.rxOutputRate_Hz;
+	return SUCCESS;
+}
+
 int main(void)
 {
 	int ret;
@@ -181,6 +192,7 @@ int main(void)
 		printf("axi_dac_init() failed with status %d\n", ret);
 		goto error;
 	}
+	phy.tx1_dac->clock_hz = adrv9002_init_get()->tx.txProfile[0].txInputRate_Hz;
 #ifndef ADRV9002_RX2TX2
 	ret = axi_adc_init(&phy.rx2_adc, &rx2_adc_init);
 	if (ret) {
@@ -193,6 +205,7 @@ int main(void)
 		printf("axi_dac_init() failed with status %d\n", ret);
 		goto error;
 	}
+	phy.tx2_dac->clock_hz = adrv9002_init_get()->tx.txProfile[1].txInputRate_Hz;
 #endif
 
 	/* Post AXI DAC/ADC setup, digital interface tuning */
@@ -295,6 +308,7 @@ int main(void)
 		.rx_dmac = phy.rx1_dmac,
 		.adc_ddr_base = ADC1_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+		.get_sampling_frequency = get_sampling_frequency,
 	};
 
 	struct iio_axi_dac_init_param iio_axi_dac1_init_par = {
@@ -309,6 +323,7 @@ int main(void)
 		.rx_dmac = phy.rx2_dmac,
 		.adc_ddr_base = ADC2_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
+		.get_sampling_frequency = get_sampling_frequency,
 	};
 
 	struct iio_axi_dac_init_param iio_axi_dac2_init_par = {
