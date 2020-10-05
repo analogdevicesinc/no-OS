@@ -149,7 +149,7 @@ int32_t ad469x_spi_read_mask(struct ad469x_dev *dev,
 	if (ret != SUCCESS)
 		return ret;
 
-	*data = (reg_data[1] & mask);
+	*data = (reg_data[0] & mask);
 
 	return ret;
 }
