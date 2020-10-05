@@ -57,6 +57,8 @@ struct iio_axi_adc {
 	struct axi_dmac *dmac;
 	uint32_t adc_ddr_base;
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	int (*get_sampling_frequency)(struct axi_adc *dev, uint32_t chan,
+				      uint64_t *sampling_freq_hz);
 };
 
 /******************************************************************************/
@@ -175,8 +177,14 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
 				      const struct iio_ch_info *channel)
 {
 	uint64_t sampling_freq_hz;
+	ssize_t ret;
 	struct iio_axi_adc *iio_adc = (struct iio_axi_adc *)device;
-	ssize_t ret = axi_adc_get_sampling_freq(iio_adc->adc, channel->ch_num,
+
+	if (iio_adc->get_sampling_frequency)
+		ret = iio_adc->get_sampling_frequency(iio_adc->adc, channel->ch_num,
+						      &sampling_freq_hz);
+	else
+		ret = axi_adc_get_sampling_freq(iio_adc->adc, channel->ch_num,
 						&sampling_freq_hz);
 	if (ret < 0)
 		return ret;
@@ -680,6 +688,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	iio_axi_adc_inst->dmac = init->rx_dmac;
 	iio_axi_adc_inst->adc_ddr_base = init->adc_ddr_base;
 	iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
+	iio_axi_adc_inst->get_sampling_frequency = init->get_sampling_frequency;
 
 	iio_axi_adc_device = iio_axi_adc_create_device(iio_axi_adc_inst->adc->name,
 			     iio_axi_adc_inst->adc->num_channels);
