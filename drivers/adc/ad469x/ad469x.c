@@ -639,7 +639,7 @@ error_gpio:
 error_clkgen:
 	axi_clkgen_remove(dev->clkgen);
 error_dev:
-	ad469x_remove(dev);
+	free(dev);
 
 	return FAILURE;
 }
