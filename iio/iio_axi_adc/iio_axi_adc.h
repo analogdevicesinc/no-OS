@@ -73,6 +73,9 @@ struct iio_axi_adc_init_param {
 	uint32_t adc_ddr_base;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/** Custom sampling frequency getter */
+	int (*get_sampling_frequency)(struct axi_adc *dev, uint32_t chan,
+				      uint64_t *sampling_freq_hz);
 };
 
 /******************************************************************************/
