@@ -43,6 +43,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <inttypes.h>
+#include <stdlib.h>
 #include "error.h"
 #include "iio.h"
 #include "iio_axi_adc.h"
@@ -440,64 +442,6 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
- * @brief Create structure describing a device, channels
- * and attributes.
- * @param device_name - Device name.
- * @param num_ch - Number of channels that the device has.
- * @return iio_device or NULL, in case of failure.
- */
-static int32_t iio_axi_adc_create_device_descriptor(
-		struct axi_adc *adc, struct iio_device *iio_device)
-{
-	static struct iio_channel default_channel = {
-		.ch_type = IIO_VOLTAGE,
-		.scan_type =  (struct scan_type) {
-			.sign = 's',
-			.realbits = 16,
-			.storagebits = 16,
-			.shift = 0,
-			.is_big_endian = false
-		},
-		.attributes = iio_voltage_attributes,
-		.ch_out = false,
-	};
-	int32_t i;
-	int32_t ret;
-
-	iio_device->num_ch = adc->num_channels;
-	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(iio_device->num_ch + 1,
-					sizeof(struct iio_channel *));
-	if (!iio_device->channels)
-		goto error;
-
-	for (i = 0; i < iio_device->num_ch; i++) {
-		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
-		if (!iio_device->channels[i])
-			goto error;
-		iio_device->channels[i]->name = calloc(1, 5);
-		if (!iio_device->channels[i]->name)
-			goto error;
-		*(iio_device->channels[i]) = default_channel;
-		iio_device->channels[i]->scan_index = i;
-		ret = sprintf(iio_device->channels[i]->name, "CH%d", i);
-		if (ret < 0)
-			goto error;
-	}
-	iio_device->channels[i] = NULL;
-
-	iio_device->transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem;
-	iio_device->transfer_mem_to_dev = NULL;
-	iio_device->read_data = iio_axi_adc_read_dev;
-	iio_device->write_data = NULL;
-
-error:
-	iio_axi_adc_delete_device_descriptor(iio_device);
-
-	return NULL;
-}
-
-/**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
@@ -524,11 +468,70 @@ static ssize_t iio_axi_adc_delete_device_descriptor(
 	return SUCCESS;
 }
 
+/**
+ * @brief Create structure describing a device, channels
+ * and attributes.
+ * @param device_name - Device name.
+ * @param num_ch - Number of channels that the device has.
+ * @return iio_device or NULL, in case of failure.
+ */
+static int32_t iio_axi_adc_create_device_descriptor(
+		struct axi_adc *adc, struct iio_device *iio_device)
+{
+	static struct iio_channel default_channel = {
+		.ch_type = IIO_VOLTAGE,
+		.scan_type =  (struct scan_type) {
+			.sign = 's',
+			.realbits = 16,
+			.storagebits = 16,
+			.shift = 0,
+			.is_big_endian = false
+		},
+		.attributes = iio_voltage_attributes,
+		.ch_out = false,
+		.offset = 0,
+	};
+	int32_t i;
+	int32_t ret;
+
+	iio_device->num_ch = adc->num_channels;
+	iio_device->attributes = NULL; /* no device attribute */
+	iio_device->channels = calloc(iio_device->num_ch + 1,
+					sizeof(struct iio_channel *));
+	if (!iio_device->channels)
+		goto error;
+
+	for (i = 0; i < iio_device->num_ch; i++) {
+		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
+		if (!iio_device->channels[i])
+			goto error;
+		*(iio_device->channels[i]) = default_channel;
+		iio_device->channels[i]->name = calloc(5, 1);
+		if (!iio_device->channels[i]->name)
+			goto error;
+		iio_device->channels[i]->scan_index = i;
+		ret = sprintf(iio_device->channels[i]->name, "CH%d", i);
+		if (ret < 0)
+			goto error;
+	}
+	iio_device->channels[i] = NULL;
+
+	iio_device->transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem;
+	iio_device->transfer_mem_to_dev = NULL;
+	iio_device->read_data = iio_axi_adc_read_dev;
+	iio_device->write_data = NULL;
+
+	return SUCCESS;
+error:
+	iio_axi_adc_delete_device_descriptor(iio_device);
+
+	return FAILURE;
+}
 
 void iio_axi_adc_get_dev_descriptor(struct iio_axi_adc_desc *desc,
 				struct iio_device **dev_descriptor)
 {
-	*dev_descriptor = desc->dev_descriptor;
+	*dev_descriptor = &desc->dev_descriptor;
 }
 
 /**
@@ -584,7 +587,10 @@ int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	iio_axi_adc_delete_device_descriptor(desc->dev_descriptor);
+	status = iio_axi_adc_delete_device_descriptor(&desc->dev_descriptor);
+	if (status < 0)
+		return status;
+
 	free(desc);
 
 	return SUCCESS;
