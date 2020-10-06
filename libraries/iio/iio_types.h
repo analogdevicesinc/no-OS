@@ -121,6 +121,12 @@ struct iio_channel {
 	struct iio_attribute **attributes;
 	/** if true, the channel is an output channel */
 	bool ch_out;
+	/** channel offset
+	 * Ex:
+	 * offset 0, ch[0, 1]: voltage0, voltage1
+	 * offset 2, ch[2, 5]: altvoltage0, altvoltage1, altvoltage2, altvoltage3
+	 * */
+	int32_t offset;
 };
 
 /**

@@ -328,7 +328,7 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 	char	ch_id[20];
 
 	while (channels[i]) {
-		_print_ch_id(ch_id, channels[i]->ch_type, i);
+		_print_ch_id(ch_id, channels[i]->ch_type, i - channels[i]->offset);
 		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
 			return channels[i];
 		i++;
@@ -831,7 +831,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	if (device->channels)
 		for (j = 0; device->channels[j]; j++) {
 			ch = device->channels[j];
-			_print_ch_id(ch_id, ch->ch_type, j);
+			_print_ch_id(ch_id, ch->ch_type, j - ch->offset);
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<channel id=\"%s\" name=\"%s\""
 				      " type=\"%s\" >",
