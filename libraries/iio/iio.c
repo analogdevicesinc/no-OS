@@ -437,21 +437,25 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
 				   char *attr_name,
 				   bool is_write)
 {
-	struct iio_attribute *attr;
+	int16_t i = 0;
 
 	/* Search attribute */
-	for (attr = attributes[0]; attr; attr++)
-		if (!strcmp(attr_name, attr->name))
+	while (attributes[i])
+	{
+		if (!strcmp(attr_name, attributes[i]->name))
 			break;
-	if (!attr)
+		i++;
+	}
+
+	if (!attributes[i])
 		return -ENOENT;
 
 	if (is_write)
-		return attr->store(params->dev_instance, params->buf,
-				   params->len, params->ch_info);
+		return attributes[i]->store(params->dev_instance, params->buf,
+				   	    params->len, params->ch_info);
 	else
-		return attr->show(params->dev_instance, params->buf,
-				  params->len, params->ch_info);
+		return attributes[i]->show(params->dev_instance, params->buf,
+				  	   params->len, params->ch_info);
 }
 
 /**
