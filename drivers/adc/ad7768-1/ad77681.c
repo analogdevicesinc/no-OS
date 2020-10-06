@@ -465,7 +465,6 @@ int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
  */
 int32_t ad77681_update_sample_rate(struct ad77681_dev *dev)
 {
-	uint32_t sample_rate;
 	uint8_t mclk_div;
 	uint16_t osr;
 
