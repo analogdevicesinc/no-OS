@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include "iio_types.h"
 #include "axi_dac_core.h"
 #include "axi_dmac.h"
 
@@ -56,8 +57,11 @@
  * @brief Application desciptor.
  */
 struct iio_axi_dac_desc {
-	/** iio DAC device handle */
-	struct iio_interface *iio_interface;
+	struct axi_dac *dac;
+	struct axi_dmac *dmac;
+	uint32_t dac_ddr_base;
+	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
+	struct iio_device dev_descriptor;
 };
 
 /**
@@ -82,6 +86,8 @@ struct iio_axi_dac_init_param {
 /* Init application. */
 int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 			 struct iio_axi_dac_init_param *param);
+void iio_axi_dac_get_dev_descriptor(struct iio_axi_dac_desc *desc,
+				    struct iio_device **dev_descriptor);
 /* Free the resources allocated by iio_axi_dac_init(). */
 int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc);
 
