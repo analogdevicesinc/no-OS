@@ -3,28 +3,19 @@
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(NO-OS)/iio/iio_demo
 
-# For the moment there is support only for aducm for iio with network backend
-ifeq (aducm3029,$(strip $(PLATFORM)))
-ENABLE_IIO_NETWORK = y
-endif
-
-ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
-DISABLE_SECURE_SOCKET ?= y
-SRC_DIRS += $(NO-OS)/network
-SRCS	 += $(NO-OS)/util/circular_buffer.c
-SRCS	 += $(PLATFORM_DRIVERS)/delay.c
-SRCS	 += $(PLATFORM_DRIVERS)/timer.c
-endif
-
-
 LIBRARIES += iio
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
+	$(PLATFORM_DRIVERS)/axi_io.c					\
+	$(PLATFORM_DRIVERS)/delay.c					\
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
+	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c						\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c
 
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
@@ -33,5 +24,10 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
+	$(INCLUDE)/axi_io.h						\
+	$(INCLUDE)/delay.h						\
+	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
+	$(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
-	$(PLATFORM_DRIVERS)/uart_extra.h				
+	$(PLATFORM_DRIVERS)/uart_extra.h				\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h

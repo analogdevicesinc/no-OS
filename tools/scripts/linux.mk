@@ -104,13 +104,20 @@ LIB_TINYIIOD_PATH = ""
 LIB_TINYIIOD = ""
 TINYIIOD_STD_TYPES = ""
 ifeq (y,$(strip $(TINYIIOD)))
-CFLAGS += -D IIO_SUPPORT
-LIB_TINYIIOD_PATH = $(LIBRARIES)/libtinyiiod/build
-LIB_TINYIIOD = tinyiiod
-TINYIIOD_STD_TYPES = _USE_STD_INT_TYPES
-CFLAGS += -D $(TINYIIOD_STD_TYPES)
-EXTRA_LIBS += $(LIB_TINYIIOD)
-EXTRA_LIBS_PATHS += $(LIB_TINYIIOD_PATH)
+
+
+
+LIB_TINYIIOD_PATH = ""
+LIB_TINYIIOD = ""
+TINYIIOD_STD_TYPES = ""
+
+# CFLAGS += -D IIO_SUPPORT
+# LIB_TINYIIOD_PATH = $(LIBRARIES)/libtinyiiod/build
+# LIB_TINYIIOD = tinyiiod
+# TINYIIOD_STD_TYPES = _USE_STD_INT_TYPES
+# CFLAGS += -D $(TINYIIOD_STD_TYPES)
+# EXTRA_LIBS += $(LIB_TINYIIOD)
+# EXTRA_LIBS_PATHS += $(LIB_TINYIIOD_PATH)
 endif
 
 ifeq (y,$(strip $(MBEDTLS)))
@@ -406,15 +413,15 @@ altera-elf:
 
 .SILENT:libs
 libs: $(LIB_TARGETS)
-ifeq (y,$(strip $(TINYIIOD)))
-	@$(MAKE) -C $(LIBRARIES)/libtinyiiod re
-endif
+# ifeq (y,$(strip $(TINYIIOD)))
+	# @$(MAKE) -C $(LIBRARIES)/libtinyiiod re
+# endif
 ifeq (y,$(strip $(MBEDTLS)))
 	@$(MAKE) -C $(LIBRARIES)/mbedtls lib
 endif
-ifeq (y,$(strip $(TINYIIOD)))
-LIBS += -L $(LIB_TINYIIOD_PATH) -l$(LIB_TINYIIOD)
-endif
+# ifeq (y,$(strip $(TINYIIOD)))
+# LIBS += -L $(LIB_TINYIIOD_PATH) -l$(LIB_TINYIIOD)
+# endif
 ifeq (y,$(strip $(MBEDTLS)))
 LIBS += -L $(LIBRARIES)/mbedtls/library -lmbedtls -lmbedx509 -lmbedcrypto
 endif
