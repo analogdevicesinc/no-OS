@@ -58,7 +58,9 @@
 enum iio_chan_type {
 	IIO_VOLTAGE,
 	IIO_CURRENT,
-	IIO_ALTVOLTAGE
+	IIO_ALTVOLTAGE,
+	/* All new types must be added before this field */
+	IIO_LAST_TYPE
 };
 
 /**
@@ -121,6 +123,8 @@ struct iio_channel {
 	struct iio_attribute **attributes;
 	/** if true, the channel is an output channel */
 	bool ch_out;
+	/** Reserved. Id offset */
+	int32_t reserved;
 };
 
 /**
