@@ -51,8 +51,8 @@ The following sections contain code documentation for ADI no-OS drivers.
 			do
 				if [[ -d "${part}" ]]
 				then
-					#exclude talise driver
-					if [[ ${part} != *"talise"* ]]
+					#exclude drivers that don't have homogenous directories and files structure
+					if [[ ${part} != *"talise"* && ${part} != *"navassa"* ]]
 					then
 						#add link to driver
 						append_to_dox "- \link_to_subdir{/drivers/$(basename -- ${drv_type})/$(basename -- ${part}) \"$(basename -- ${part^^})\"}" drivers_page.dox
