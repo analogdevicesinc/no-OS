@@ -130,6 +130,7 @@ struct iio_desc {
 	uint32_t		xml_size;
 	uint32_t		xml_size_to_last_dev;
 	uint32_t		dev_count;
+	int32_t			id_offsets[IIO_LAST_TYPE];
 	struct uart_desc	*uart_desc;
 #ifdef ENABLE_IIO_NETWORK
 	/* FIFO for socket descriptors */
@@ -328,7 +329,8 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 	char	ch_id[20];
 
 	while (channels[i]) {
-		_print_ch_id(ch_id, channels[i]->ch_type, i);
+		_print_ch_id(ch_id, channels[i]->ch_type,
+			     channels[i]->reserved);
 		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
 			return channels[i];
 		i++;
@@ -822,6 +824,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		/* Set dummy value for buff. It is used only for counting */
 		buff = ch_id;
 
+	memset(g_desc->id_offsets, 0, sizeof(g_desc->id_offsets));
+
 	i = 0;
 	i += snprintf(buff, max(n - i, 0),
 		      "<device id=\"device%d\" name=\"%s\">", id, name);
@@ -830,7 +834,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	if (device->channels)
 		for (j = 0; device->channels[j]; j++) {
 			ch = device->channels[j];
-			_print_ch_id(ch_id, ch->ch_type, j);
+			ch->reserved = g_desc->id_offsets[ch->ch_type]++;
+			_print_ch_id(ch_id, ch->ch_type, ch->reserved);
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<channel id=\"%s\" name=\"%s\""
 				      " type=\"%s\" >",
