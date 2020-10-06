@@ -13,3 +13,6 @@
 // for further information: https://cppcheck.sourceforge.net/manual.pdf 
 
 *:drivers/adc/ad9081/api/*
+*:drivers/rf-transceiver/navassa/common/*
+*:drivers/rf-transceiver/navassa/devices/*
+*:drivers/rf-transceiver/navassa/third_party/*

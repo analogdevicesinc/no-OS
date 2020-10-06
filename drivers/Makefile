@@ -1,7 +1,8 @@
 CC = arm-none-eabi-gcc
 
 SKIPDIR = -path ./platform -prune -o \
-	-path ./axi_core -prune -o
+	-path ./axi_core -prune -o \
+	-path ./rf-transceiver/navassa -prune -o
 
 INCLUDES = -I../include/ \
 	 -I../projects/drivers/util/ \

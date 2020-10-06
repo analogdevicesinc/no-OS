@@ -6,3 +6,6 @@ projects/ad9371/src/devices/ad9528/
 projects/ad9371/src/devices/mykonos/
 libraries/fatfs/
 network/application/MQTT_eclipse_paho/
+drivers/rf-transceiver/navassa/common/
+drivers/rf-transceiver/navassa/devices/
+drivers/rf-transceiver/navassa/third_party/

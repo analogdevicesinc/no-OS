@@ -25,6 +25,7 @@ set(DOCUMENTED_FILES
 
 set(EXCLUDE_FILES
     "${SOURCES_DIR}/drivers/rf-transceiver/talise \\
+    ${SOURCES_DIR}/drivers/rf-transceiver/navassa \\
     ${SOURCES_DIR}/drivers/adc/ad9081/api \\
 ")
 
