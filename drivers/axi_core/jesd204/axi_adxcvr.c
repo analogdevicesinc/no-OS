@@ -411,7 +411,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 	if (xcvr->lane_rate_khz && xcvr->ref_rate_khz) {
 		ret = adxcvr_clk_set_rate(xcvr, xcvr->lane_rate_khz, xcvr->ref_rate_khz);
 		if (ret)
-			return ret;
+			goto err;
 	}
 
 	*ad_xcvr = xcvr;
