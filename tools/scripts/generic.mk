@@ -12,6 +12,8 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 CFLAGS += -DENABLE_IIO_NETWORK
 endif
 
+EXTRA_LIBS := $(LIBRARIES)
+
 ifneq ($(if $(findstring iio, $(LIBRARIES)), 1),)
 
 CFLAGS += -DIIO_SUPPORT
@@ -33,6 +35,8 @@ INC_PATHS += -I"$(IIO_DIR)"
 LIB_PATHS += -L"$(IIO_DIR)"
 LIBS += -liio
 endif
+
+EXTRA_LIBS_PATHS += $(IIO_DIR)
 
 endif
 
