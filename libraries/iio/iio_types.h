@@ -118,7 +118,7 @@ struct iio_channel {
 	/** Index to give ordering in scans when read  from a buffer. */
 	int			scan_index;
 	/** */
-	struct scan_type	scan_type;
+	struct scan_type	*scan_type;
 	/** list of attributes */
 	struct iio_attribute **attributes;
 	/** if true, the channel is an output channel */
