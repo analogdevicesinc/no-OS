@@ -451,10 +451,10 @@ run: eval-hardware
 
 
 
-include_path_cmd=xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app include-path $1";
-compiler_define_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app define-compiler-symbols $1";
-lib_serach_path_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app library-search-path $1";
-add_library_cmd= xsct -eval "setws $(SDK_WORKSPACE); sdk configapp -app app libraries $1";
+include_path_cmd= sdk configapp -app app include-path $1;
+compiler_define_cmd= sdk configapp -app app define-compiler-symbols $1;
+lib_serach_path_cmd= sdk configapp -app app library-search-path $1;
+add_library_cmd= sdk configapp -app app libraries $1;
 
 INC_PATHS_WITHOUT_I = $(subst -I,,$(INC_PATHS))
 ADD_INCLUDE_PATHS=$(foreach dir, $(INC_PATHS_WITHOUT_I), $(call include_path_cmd,$(dir)))
@@ -481,10 +481,12 @@ xilinx-bsp:
 		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
 		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
 		$(TINYIIOD_STD_TYPES) $(NULL);				\
+	xsct -eval "setws $(SDK_WORKSPACE);         \
 	$(ADD_INCLUDE_PATHS)						\
 	$(ADD_COMPILER_DEFINES)						\
 	$(ADD_LIBRARIES_PATH)						\
 	$(ADD_LIBRARIES)						\
+	"$(NULL);\
 	fi;
 
 # Update the linker script the heap size for microlbaze from 0x800 to 
