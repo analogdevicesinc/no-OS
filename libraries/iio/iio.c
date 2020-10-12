@@ -310,9 +310,19 @@ static char *get_channel_id(enum iio_chan_type type)
 	return "";
 }
 
-static inline void _print_ch_id(char *buff, enum iio_chan_type type, int32_t id)
+static const char * const iio_modifier_names[] = {
+	[IIO_MOD_X] = "x",
+	[IIO_MOD_Y] = "y",
+	[IIO_MOD_Z] = "z",
+};
+
+static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 {
-	sprintf(buff, "%s%d", get_channel_id(type), (int)id);
+	if (ch->modified)
+		sprintf(buff, "%s_%s", get_channel_id(ch->ch_type),
+			iio_modifier_names[ch->mod_type]);
+	else
+		sprintf(buff, "%s%d", get_channel_id(ch->ch_type), ch->reserved);
 }
 
 /**
@@ -329,8 +339,7 @@ static inline struct iio_channel *iio_get_channel(const char *channel,
 	char	ch_id[20];
 
 	while (channels[i]) {
-		_print_ch_id(ch_id, channels[i]->ch_type,
-			     channels[i]->reserved);
+		_print_ch_id(ch_id, channels[i]);
 		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
 			return channels[i];
 		i++;
@@ -835,7 +844,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 		for (j = 0; device->channels[j]; j++) {
 			ch = device->channels[j];
 			ch->reserved = g_desc->id_offsets[ch->ch_type]++;
-			_print_ch_id(ch_id, ch->ch_type, ch->reserved);
+			_print_ch_id(ch_id, ch);
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<channel id=\"%s\" name=\"%s\""
 				      " type=\"%s\" >",

@@ -63,6 +63,12 @@ enum iio_chan_type {
 	IIO_LAST_TYPE
 };
 
+enum iio_modifier_type {
+	IIO_MOD_X,
+	IIO_MOD_Y,
+	IIO_MOD_Z,
+};
+
 /**
  * @struct iio_ch_info
  * @brief Structure holding channel attributess.
@@ -115,6 +121,10 @@ struct iio_channel {
 	char			*name;
 	/** Chanel type */
 	enum iio_chan_type	ch_type;
+	/** If set, mod_type will be used instead of index for channel name */
+	bool			modified;
+	/** Modified Type of the channel */
+	enum iio_modifier_type	mod_type;
 	/** Index to give ordering in scans when read  from a buffer. */
 	int			scan_index;
 	/** */
