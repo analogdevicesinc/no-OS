@@ -11,4 +11,10 @@ build
 dfp_drivers
 aducm_project
 aducm_build
+.vscode
 
+*.a
+*.o
+*.d
+*.hex
+*.hdf
