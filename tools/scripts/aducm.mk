@@ -144,94 +144,6 @@ include src.mk
 endif
 
 #------------------------------------------------------------------------------
-#                     SETTING LIBRARIES IF NEEDED                              
-#------------------------------------------------------------------------------
-
-#	MBEDTLS
-ifneq (y,$(strip $(DISABLE_SECURE_SOCKET)))
-#If network dir is included, mbedtls will be used
-ifneq ($(if $(findstring $(NO-OS)/network, $(SRC_DIRS)), 1),)
-
-MBEDTLS_PATH		= $(NO-OS)/libraries/mbedtls
-MBEDTLS_LIB_DIR		= $(MBEDTLS_PATH)/library
-MBEDTLS_LIB_NAMES	= libmbedtls.a libmbedx509.a  libmbedcrypto.a
-
-LIBS_DIRS	+= "$(MBEDTLS_LIB_DIR)"
-LIBS		+= $(MBEDTLS_LIB_NAMES)
-INCLUDE_DIRS 	+= $(MBEDTLS_PATH)/include
-
-MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
-
-#Add to CFAGS the config file name and the directory where it is located
-CFLAGS 		+= -I$(dir $(MBED_TLS_CONFIG_FILE)) \
-			-DMBEDTLS_CONFIG_FILE=\"$(notdir $(MBED_TLS_CONFIG_FILE))\"
-
-MBEDTLS_TARGETS	= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
-
-ifeq ($(wildcard $(MBEDTLS_PATH)/LICENSE),)
-MBED_TLS_INIT = git submodule update --init --remote -- $(MBEDTLS_PATH)
-endif
-
-#Workaround for cleaning because mbedtls clean don't work on windows enviroment
-CLEAN_MBEDTLS	= $(call remove_fun,$(MBEDTLS_LIB_DIR)/*.o $(MBEDTLS_TARGETS))
-
-#Executed only once if one of the libs needs update
-$(MBEDTLS_LIB_DIR)/libmbedcrypto.a: $(MBED_TLS_CONFIG_FILE)
-	-$(CLEAN_MBEDTLS)
-	$(MAKE) -C $(MBEDTLS_LIB_DIR)
-
-$(MBEDTLS_LIB_DIR)/libmbedx509.a: $(MBEDTLS_LIB_DIR)/libmbedcrypto.a
-
-$(MBEDTLS_LIB_DIR)/libmbedtls.a: $(MBEDTLS_LIB_DIR)/libmbedx509.a
-
-
-endif
-endif
-
-#	FATFS
-#If fatfs is found in SRC_DIRS
-ifneq ($(if $(findstring $(NO-OS)/libraries/fatfs, $(SRC_DIRS)), 1),)
-#Remove fatfs from srcdirs because it is a library
-SRC_DIRS := $(filter-out $(NO-OS)/libraries/fatfs, $(SRC_DIRS))
-
-FATFS_LIB	= $(NO-OS)/libraries/fatfs/libfatfs.a
-
-LIBS_DIRS	+= "$(dir $(FATFS_LIB))"
-LIBS		+= $(notdir $(FATFS_LIB))
-INCLUDE_DIRS	+= $(NO-OS)/libraries/fatfs/source
-
-CFLAGS		+= -I$(DRIVERS)/sd-card -I$(INCLUDE)
-
-CLEAN_FATFS	= $(MAKE) -C $(NO-OS)/libraries/fatfs clean
-$(FATFS_LIB):
-	$(MAKE) -C $(NO-OS)/libraries/fatfs
-
-endif
-
-#	MQTT
-MQTT_DIR = $(NO-OS)/libraries/mqtt
-#If mqtt is found in SRC_DIRS
-ifneq ($(if $(findstring $(MQTT_DIR), $(SRC_DIRS)), 1),)
-#Remove fatfs from srcdirs because it is a library
-SRC_DIRS := $(filter-out $(MQTT_DIR), $(SRC_DIRS))
-
-MQTT_LIB	= $(MQTT_DIR)/libmqtt_client.a
-
-LIBS_DIRS	+= "$(MQTT_DIR)"
-LIBS		+= $(notdir $(MQTT_LIB))
-INCLUDE_DIRS	+= $(MQTT_DIR)
-
-CLEAN_MQTT	= $(MAKE) -C $(MQTT_DIR) clean
-$(MQTT_LIB):
-	$(MAKE) -C $(MQTT_DIR)
-
-endif
-
-LIB_FLAGS = $(addprefix -l,$(subst lib,,$(basename $(LIBS))))
-LIB_DIR_FLAGS = $(addprefix -L,$(LIBS_DIRS))
-LIB_TARGETS += $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB)
-
-#------------------------------------------------------------------------------
 #                           UTIL FUNCTIONS                              
 #------------------------------------------------------------------------------
 
@@ -391,9 +303,6 @@ run: all
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 		-c "program  $(BINARY) verify reset exit"
 
-PHONY += libs
-libs: $(LIB_TARGETS)
-
 # Remove project binaries
 PHONY += clean
 clean:
@@ -408,13 +317,6 @@ re: clean
 PHONY += ra
 ra: clean_all
 	@$(MAKE) all
-
-PHONY += clean_libs
-clean_libs:
-	-$(CLEAN_MBEDTLS)
-	-$(CLEAN_FATFS)
-	-$(CLEAN_MQTT)
-	-$(CLEAN_IIO)
 
 # Remove workspace data and project directory
 PHONY += clean_all
