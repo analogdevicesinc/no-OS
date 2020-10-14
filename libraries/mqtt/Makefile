@@ -27,7 +27,7 @@ CFLAGS += -DMQTTCLIENT_PLATFORM_HEADER="mqtt_noos_support.h" \
 		-I"$(PAHO_PACKET_DIR)" \
 		-I"$(MQTT_DIR)"
 
-LIBRARY = libmqtt_client.a
+LIBRARY = libmqtt.a
 
 .PHONEY = all clean
 
