@@ -128,11 +128,9 @@ struct iio_channel {
 	/** */
 	struct scan_type	*scan_type;
 	/** list of attributes */
-	struct iio_attribute **attributes;
+	struct iio_attribute	**attributes;
 	/** if true, the channel is an output channel */
-	bool ch_out;
-	/** Reserved. Id offset */
-	int32_t reserved;
+	bool			ch_out;
 	/** Set if channel has a modifier. Use channel2 property to
 	 *  select the modifier to use.*/
 	bool			modified;
