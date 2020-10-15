@@ -117,6 +117,12 @@ struct iio_channel {
 	char			*name;
 	/** Chanel type */
 	enum iio_chan_type	ch_type;
+	/** Channel number when the same channel type */
+	int 			channel;
+	/** If modified is set, this provides the modifier. E.g. IIO_MOD_X
+	 *  for angular rate when applied to channel2 will make make the
+	 *  IIO_ANGL_VEL have anglvel_x which corresponds to the x-axis. */
+	int 			channel2;
 	/** Index to give ordering in scans when read  from a buffer. */
 	int			scan_index;
 	/** */
@@ -127,6 +133,12 @@ struct iio_channel {
 	bool ch_out;
 	/** Reserved. Id offset */
 	int32_t reserved;
+	/** Set if channel has a modifier. Use channel2 property to
+	 *  select the modifier to use.*/
+	bool			modified;
+	/** Specify if channel has a numerical index. If not set, channel
+	 *  number will be suppressed. */
+	bool			indexed;
 };
 
 /**
