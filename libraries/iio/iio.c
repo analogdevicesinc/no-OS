@@ -94,6 +94,11 @@ static char header[] =
 	"<context-attribute name=\"no-OS\" value=\"1.1.0-g0000000\" />";
 static char header_end[] = "</context>";
 
+static const char * const iio_modifier_names[] = {
+	[IIO_MOD_X] = "x",
+	[IIO_MOD_Y] = "y",
+};
+
 /* Parameters used in show and store functions */
 struct attr_fun_params {
 	void			*dev_instance;
@@ -315,10 +320,16 @@ static char *get_channel_id(enum iio_chan_type type)
 
 static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 {
-	if(ch->indexed) {
-		sprintf(buff, "%s%d", get_channel_id(ch->ch_type), (int)ch->channel);
+	if(ch->modified) {
+		sprintf(buff, "%s_%s", get_channel_id(ch->ch_type),
+			iio_modifier_names[ch->channel2]);
 	} else {
-		sprintf(buff, "%s", get_channel_id(ch->ch_type));
+		if(ch->indexed) {
+			sprintf(buff, "%s%d", get_channel_id(ch->ch_type),
+				(int)ch->channel);
+		} else {
+			sprintf(buff, "%s", get_channel_id(ch->ch_type));
+		}
 	}
 }
 
