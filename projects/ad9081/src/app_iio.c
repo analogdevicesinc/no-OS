@@ -44,7 +44,7 @@
 #include "error.h"
 #include "uart.h"
 #include "uart_extra.h"
-#include "iio_app.h"
+#include "iio.h"
 #include "app_parameters.h"
 #include "app_iio.h"
 #ifndef PLATFORM_MB
@@ -53,35 +53,8 @@
 #endif
 
 /******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-static struct uart_desc *uart_desc;
-
-/******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
-
-/**
- * iio_server_write() - Write data to UART.
- * @buf - Data to be written.
- * @len - Number of bytes to be written.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_server_write(const char *buf, size_t len)
-{
-	return uart_write(uart_desc, (const uint8_t *)buf, len);
-}
-
-/**
- * iio_server_read() - Read data from UART.
- * @buf - Storing data location.
- * @len - Number of bytes to be read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_server_read(char *buf, size_t len)
-{
-	return uart_read(uart_desc, (uint8_t *)buf, len);
-}
 
 /**
  * @brief Application IIO setup.
@@ -103,23 +76,17 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 		.device_id = UART_DEVICE_ID,
 		.extra = &xil_uart_init_par,
 	};
-	struct iio_server_ops uart_iio_server_ops = {
-		.read = iio_server_read,
-		.write = iio_server_write,
-	};
-	struct iio_app_init_param iio_app_init_par = {
-		.iio_server_ops = &uart_iio_server_ops,
-	};
-	struct iio_app_desc *iio_app_desc;
+
+	struct iio_init_param iio_init_par;
+	struct iio_desc *iio_app_desc;
 	struct iio_axi_adc_desc *iio_axi_adc_desc;
 	struct iio_axi_dac_desc *iio_axi_dac_desc;
+	struct iio_device *adc_dev_desc, *dac_dev_desc;
 	int32_t status;
 
-	status = uart_init(&uart_desc, &uart_init_par);
-	if (status < 0)
-		return status;
-
-	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	iio_init_par.phy_type = USE_UART;
+	iio_init_par.uart_init_param = &uart_init_par;
+	status = iio_init(&iio_app_desc, &iio_init_par);
 	if (status < 0)
 		return status;
 
@@ -127,9 +94,28 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 	if (status < 0)
 		return status;
 
-	status = iio_axi_dac_init(&iio_axi_dac_desc, dac_init);
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	status = iio_register(iio_app_desc, adc_dev_desc, "axi_adc",
+			      iio_axi_adc_desc);
 	if (status < 0)
 		return status;
 
-	return iio_app(iio_app_desc);
+
+	status = iio_axi_dac_init(&iio_axi_dac_desc, dac_init);
+	if (status < 0)
+		return status;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+	status = iio_register(iio_app_desc, dac_dev_desc, "axi_dac",
+			      iio_axi_dac_desc);
+	if (status < 0)
+		return status;
+
+	do {
+		status = iio_step(iio_app_desc);
+		if (status < 0)
+			return status;
+
+	} while (true);
+
+	return SUCCESS;
 }

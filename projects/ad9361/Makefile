@@ -1,7 +1,6 @@
-TARGET := ad9361
 TINYIIOD ?= n
-ifeq ($(OS), Windows_NT)
-include ../../tools/scripts/windows.mk
-else
-include ../../tools/scripts/linux.mk
-endif
+include ../../tools/scripts/generic_variables.mk
+
+include src.mk
+
+include ../../tools/scripts/generic.mk

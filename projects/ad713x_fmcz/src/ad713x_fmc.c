@@ -65,10 +65,8 @@
 #include "irq_extra.h"
 #include "uart.h"
 #include "uart_extra.h"
-#include "tinyiiod.h"
 #include "iio_ad713x.h"
 #include "iio.h"
-#include "iio_app.h"
 #endif // IIO_SUPPORT
 
 /******************************************************************************/
@@ -108,17 +106,6 @@
 #define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
 #define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
 #define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-struct uart_desc *uart_device;
-ssize_t iio_uart_write(const char *buf, size_t len)
-{
-	return uart_write(uart_device, (const uint8_t *)buf, len);
-}
-
-ssize_t iio_uart_read(char *buf, size_t len)
-{
-	return uart_read(uart_device, (uint8_t *)buf, len);
-}
 #endif // IIO_SUPPORT
 
 int main()
@@ -284,8 +271,11 @@ int main()
 
 #ifdef IIO_SUPPORT
 	struct iio_ad713x *iio_ad713x;
-	struct iio_server_ops uart_iio_server_ops;
-	struct iio_app_init_param iio_app_init_par;
+	struct iio_init_param iio_init_par;
+	/**
+	 * iio devices corresponding to every device.
+	 */
+	struct iio_device *ad713x_dev_desc;
 
 	struct xil_irq_init_param xil_irq_init_par = {
 		.type = IRQ_PS,
@@ -304,36 +294,33 @@ int main()
 		.irq_desc = irq_desc,
 	};
 
-	struct iio_app_desc *iio_app_desc;
+	struct iio_desc *iio_app_desc;
 
 	struct uart_init_param uart_init_par = {
 		.baud_rate = 115200,
 		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
 	};
 
-	char dev_name[] = "adc";
 	struct iio_ad713x_init_par iio_ad713x_init_par = {
-		.name = dev_name,
 		.num_channels = 8,
 		.spi_eng_desc = spi_eng_desc,
 		.spi_engine_offload_message = &spi_engine_offload_message,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 	};
 
+	iio_init_par.phy_type = USE_UART;
+	iio_init_par.uart_init_param = &uart_init_par;
+	ret = iio_init(&iio_app_desc, &iio_init_par);
+	if (ret < 0)
+		return ret;
+
 	ret = iio_ad713x_init(&iio_ad713x, &iio_ad713x_init_par);
 	if(ret < 0)
 		return ret;
 
-	uart_iio_server_ops = (struct iio_server_ops) {
-		.read = iio_uart_read,
-		.write = iio_uart_write,
-	};
-
-	iio_app_init_par = (struct iio_app_init_param) {
-		.iio_server_ops = &uart_iio_server_ops,
-	};
-
-	ret = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	iio_ad713x_get_dev_descriptor(iio_ad713x, &ad713x_dev_desc);
+	ret = iio_register(iio_app_desc, ad713x_dev_desc, "adc", iio_ad713x);
 	if (ret < 0)
 		return ret;
 
@@ -341,17 +328,13 @@ int main()
 	if(ret < 0)
 		return ret;
 
-	xil_uart_init_par.irq_desc = irq_desc;
-	uart_init_par.extra = &xil_uart_init_par;
-	ret = uart_init(&uart_device, &uart_init_par);
-	if(ret < 0)
-		return ret;
-
 	ret = irq_global_enable(irq_desc);
 	if (ret < 0)
 		return ret;
 
-	return iio_app(iio_app_desc);
+	do {
+		ret = iio_step(iio_app_desc);
+	} while (true);
 
 #endif /* IIO_SUPPORT */
 

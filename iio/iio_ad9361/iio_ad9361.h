@@ -66,8 +66,8 @@ struct iio_ad9361_init_param {
  * @brief Structure holding iio descriptor.
  */
 struct iio_ad9361_desc {
-	/** device name */
-	struct iio_interface *iio_interface;
+	/** iio device descriptor */
+	struct iio_device dev_descriptor;
 };
 
 /******************************************************************************/
@@ -77,6 +77,9 @@ struct iio_ad9361_desc {
 /* Init ad9361 iio. */
 int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 			struct iio_ad9361_init_param *init);
+/* Get desciptor. */
+void iio_ad9361_get_dev_descriptor(struct iio_ad9361_desc *desc,
+				   struct iio_device **dev_descriptor);
 /* Free the resources allocated by iio_ad9361_init(). */
 int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc);
 

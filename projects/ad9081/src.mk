@@ -39,13 +39,13 @@ ifeq (y,$(strip $(QUAD_MXFE)))
 SRCS += $(DRIVERS)/frequency/adf4371/adf4371.c
 endif
 ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
 SRCS += $(PROJECT)/src/app_iio.c					\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
+	$(NO-OS)/util/list.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/xml.c						\
-	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_app/iio_app.c					\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 endif
@@ -101,11 +101,7 @@ INCS += $(PROJECT)/src/app_iio.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/xml.h						\
-	$(NO-OS)/iio/iio.h						\
-	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_app/iio_app.h					\
+	$(INCLUDE)/list.h						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h				\
-	$(NO-OS)/libraries/libtinyiiod/compat.h				\
-	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
 endif

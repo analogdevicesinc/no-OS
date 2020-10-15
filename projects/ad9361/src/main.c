@@ -60,7 +60,6 @@
 
 #ifdef IIO_SUPPORT
 
-#include "iio_app.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_ad9361.h"
@@ -69,30 +68,6 @@
 #include "uart.h"
 #include "uart_extra.h"
 #include "xil_cache.h"
-
-static struct uart_desc *uart_desc;
-
-/**
- * iio_uart_write() - Write data to UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to write.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_write(const char *buf, size_t len)
-{
-	return uart_write(uart_desc, (const uint8_t *)buf, len);
-}
-
-/**
- * iio_uart_read() - Read data from UART device wrapper.
- * @buf - Pointer to buffer containing data.
- * @len - Number of bytes to read.
- * @Return: SUCCESS in case of success, FAILURE otherwise.
- */
-static ssize_t iio_uart_read(char *buf, size_t len)
-{
-	return uart_read(uart_desc, (uint8_t *)buf, len);
-}
 
 #endif // IIO_SUPPORT
 
@@ -685,7 +660,7 @@ int main(void)
 	/**
 	 * iio application configurations.
 	 */
-	struct iio_app_init_param iio_app_init_par;
+	struct iio_init_param iio_init_par;
 
 	/**
 	 * iio axi adc configurations.
@@ -702,15 +677,11 @@ int main(void)
 	 */
 	struct iio_ad9361_init_param iio_ad9361_init_param;
 
-	/**
-	 * UART server read/write callbacks.
-	 */
-	struct iio_server_ops uart_iio_server_ops;
 
 	/**
 	 * iio application instance descriptor.
 	 */
-	struct iio_app_desc *iio_app_desc;
+	struct iio_desc *iio_app_desc;
 
 	/**
 	 * iio instance descriptor.
@@ -743,6 +714,11 @@ int main(void)
 	};
 
 	/**
+	 * iio devices corresponding to every device.
+	 */
+	struct iio_device *adc_dev_desc, *dac_dev_desc, *ad9361_dev_desc;
+
+	/**
 	 * IRQ instance.
 	 */
 	struct irq_ctrl_desc *irq_desc;
@@ -773,10 +749,6 @@ int main(void)
 		.extra = &xil_uart_init_par,
 	};
 
-	status = uart_init(&uart_desc, &uart_init_par);
-	if(status < 0)
-		return FAILURE;
-
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
@@ -785,16 +757,9 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	uart_iio_server_ops = (struct iio_server_ops) {
-		.read = iio_uart_read,
-		.write = iio_uart_write,
-	};
-
-	iio_app_init_par = (struct iio_app_init_param) {
-		.iio_server_ops = &uart_iio_server_ops,
-	};
-
-	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	iio_init_par.phy_type = USE_UART;
+	iio_init_par.uart_init_param = &uart_init_par;
+	status = iio_init(&iio_app_desc, &iio_init_par);
 	if(status < 0)
 		return status;
 
@@ -809,6 +774,11 @@ int main(void)
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if(status < 0)
 		return status;
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	status = iio_register(iio_app_desc, adc_dev_desc, "cf-ad9361-lpc",
+			      iio_axi_adc_desc);
+	if (status < 0)
+		return status;
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
@@ -820,6 +790,11 @@ int main(void)
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if (status < 0)
 		return status;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+	status = iio_register(iio_app_desc, dac_dev_desc, "cf-ad9361-dds-core-lpc",
+			      iio_axi_dac_desc);
+	if (status < 0)
+		return status;
 
 	iio_ad9361_init_param = (struct iio_ad9361_init_param) {
 		.ad9361_phy = ad9361_phy,
@@ -828,8 +803,14 @@ int main(void)
 	status = iio_ad9361_init(&iio_ad9361_desc, &iio_ad9361_init_param);
 	if (status < 0)
 		return status;
+	iio_ad9361_get_dev_descriptor(iio_ad9361_desc, &ad9361_dev_desc);
+	status = iio_register(iio_app_desc, ad9361_dev_desc, "ad9361-phy", ad9361_phy);
+	if (status < 0)
+		return status;
 
-	return iio_app(iio_app_desc);
+	do {
+		status = iio_step(iio_app_desc);
+	} while (true);
 
 #endif // IIO_SUPPORT
 

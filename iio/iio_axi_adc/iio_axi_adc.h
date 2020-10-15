@@ -44,6 +44,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include "iio_types.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 
@@ -53,11 +54,22 @@
 
 /**
  * @struct iio_axi_adc_desc
- * @brief iio desciptor.
+ * @brief iio_axi_adc_descriptor
  */
 struct iio_axi_adc_desc {
-	/** Structure containing physical device instance and device descriptor */
-	struct iio_interface *iio_interface;
+	/** ADC device */
+	struct axi_adc *adc;
+	/** dma device */
+	struct axi_dmac *dmac;
+	/** ADC base address */
+	uint32_t adc_ddr_base;
+	/** Invalidate cache memory function pointer */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+	/** Custom implementation for get sampling frequency */
+	int (*get_sampling_frequency)(struct axi_adc *dev, uint32_t chan,
+				      uint64_t *sampling_freq_hz);
+	/** iio device descriptor */
+	struct iio_device dev_descriptor;
 };
 
 /**
@@ -85,6 +97,11 @@ struct iio_axi_adc_init_param {
 /* Init iio. */
 int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 			 struct iio_axi_adc_init_param *param);
+
+/** Get device descriptor. */
+void iio_axi_adc_get_dev_descriptor(struct iio_axi_adc_desc *desc,
+				    struct iio_device **dev_descriptor);
+
 /* Free the resources allocated by iio_axi_adc_init(). */
 int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc);
 
