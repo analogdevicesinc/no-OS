@@ -100,17 +100,6 @@ CFLAGS += -Wall								\
 	 -lm						
 	#-Werror
 
-LIB_TINYIIOD_PATH = ""
-LIB_TINYIIOD = ""
-TINYIIOD_STD_TYPES = ""
-ifeq (y,$(strip $(TINYIIOD)))
-CFLAGS += -D IIO_SUPPORT
-LIB_TINYIIOD_PATH = $(LIBRARIES)/libtinyiiod/build
-LIB_TINYIIOD = tinyiiod
-TINYIIOD_STD_TYPES = _USE_STD_INT_TYPES
-CFLAGS += -D $(TINYIIOD_STD_TYPES)
-endif
-
 ifeq (y,$(strip $(MBEDTLS)))
 #Specify configuration file to build mbedtls
 CFLAGS += -I $(NO-OS)/network/transport -D MBEDTLS_CONFIG_FILE='"noos_mbedtls_config.h"'
@@ -404,14 +393,8 @@ altera-elf:
 
 .SILENT:libs
 libs: $(LIB_TARGETS)
-ifeq (y,$(strip $(TINYIIOD)))
-	@$(MAKE) -C $(LIBRARIES)/libtinyiiod re
-endif
 ifeq (y,$(strip $(MBEDTLS)))
 	@$(MAKE) -C $(LIBRARIES)/mbedtls lib
-endif
-ifeq (y,$(strip $(TINYIIOD)))
-LIBS += -L $(LIB_TINYIIOD_PATH) -l$(LIB_TINYIIOD)
 endif
 ifeq (y,$(strip $(MBEDTLS)))
 LIBS += -L $(LIBRARIES)/mbedtls/library -lmbedtls -lmbedx509 -lmbedcrypto
@@ -478,9 +461,7 @@ xilinx-bsp:
 	@ if [ ! -d "$(BUILD_DIR)/bsp" ];then				\
 	$(call print,Building hardware specification and bsp \n);	\
 	xsdk -batch -source $(SCRIPTS_PATH)/create_project.tcl		\
-		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 			\
-		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)			\
-		$(TINYIIOD_STD_TYPES) $(NULL);				\
+		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);		\
 	xsct -eval "setws $(SDK_WORKSPACE);         \
 	$(ADD_INCLUDE_PATHS)						\
 	$(ADD_COMPILER_DEFINES)						\
