@@ -59,6 +59,8 @@ enum iio_chan_type {
 	IIO_VOLTAGE,
 	IIO_CURRENT,
 	IIO_ALTVOLTAGE,
+	IIO_ANGL_VEL,
+	IIO_TEMP,
 	/* All new types must be added before this field */
 	IIO_LAST_TYPE
 };

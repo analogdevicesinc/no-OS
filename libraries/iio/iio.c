@@ -305,6 +305,10 @@ static char *get_channel_id(enum iio_chan_type type)
 		return "current";
 	case IIO_ALTVOLTAGE:
 		return "altvoltage";
+	case IIO_ANGL_VEL:
+		return "anglvel";
+	case IIO_TEMP:
+		return "temp";
 	}
 
 	return "";
