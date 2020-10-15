@@ -21,13 +21,13 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_ad713x/iio_ad713x.c				\
-	$(NO-OS)/iio/iio_app/iio_app.c
+	$(NO-OS)/util/list.c						\
+	$(NO-OS)/iio/iio_ad713x/iio_ad713x.c
 endif
 INCS += $(DRIVERS)/adc/ad713x/ad713x.h					\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
@@ -48,10 +48,6 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 ifeq (y,$(strip $(TINYIIOD)))
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
-	$(NO-OS)/iio/iio.h						\
-	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_ad713x/iio_ad713x.h				\
-	$(NO-OS)/iio/iio_app/iio_app.h					\
-	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
-	$(NO-OS)/libraries/libtinyiiod/compat.h
+	$(INCLUDE)/list.h						\
+	$(NO-OS)/iio/iio_ad713x/iio_ad713x.h
 endif

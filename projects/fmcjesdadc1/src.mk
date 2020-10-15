@@ -32,10 +32,10 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/delay.c
 ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
 SRCS += $(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
@@ -67,12 +67,8 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(NO-OS)/iio/iio.h						\
-	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_app/iio_app.h					\
-	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h				\
-	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
-	$(NO-OS)/libraries/libtinyiiod/compat.h
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h
 endif

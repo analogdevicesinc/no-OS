@@ -11,6 +11,7 @@
 
 SRCS := $(PROJECT)/src/main.c
 ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
 SRCS += $(PROJECT)/src/app_iio.c
 endif
 SRCS += $(DRIVERS)/spi/spi.c						\
@@ -36,8 +37,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
-	$(NO-OS)/iio/iio.c						\
-	$(NO-OS)/iio/iio_app/iio_app.c					\
+	$(NO-OS)/util/list.c						\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c				\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
@@ -73,12 +73,8 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/list.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h                                \
-	$(NO-OS)/iio/iio.h						\
-	$(NO-OS)/iio/iio_types.h					\
-	$(NO-OS)/iio/iio_app/iio_app.h					\
-	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h				\
-	$(NO-OS)/libraries/libtinyiiod/tinyiiod.h			\
-	$(NO-OS)/libraries/libtinyiiod/compat.h
+	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.h
 endif

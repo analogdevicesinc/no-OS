@@ -55,11 +55,6 @@
 /******************************************************************************/
 
 /**
- * Device name.
- */
-static const char dev_name[] = "ad9361-phy";
-
-/**
  * Calibration modes.
  */
 static const char * const ad9361_calib_mode[] =
@@ -90,328 +85,6 @@ static const char * const ad9361_agc_modes[] =
  * State machine modes.
  */
 extern const char *ad9361_ensm_states[12];
-
-/**
- * AD9361 device xml, describes its channels and attributes.
- */
-static const char * const  ad9361_phy_xml =
-	"<device id=\"ad9361-phy\" name=\"ad9361-phy\" >"
-	"<channel id=\"altvoltage1\" name=\"TX_LO\" type=\"output\" >"
-	"<attribute name=\"frequency_available\" filename=\"out_altvoltage1_TX_LO_frequency_available\" />"
-	"<attribute name=\"fastlock_save\" filename=\"out_altvoltage1_TX_LO_fastlock_save\" />"
-	"<attribute name=\"powerdown\" filename=\"out_altvoltage1_TX_LO_powerdown\" />"
-	"<attribute name=\"fastlock_load\" filename=\"out_altvoltage1_TX_LO_fastlock_load\" />"
-	"<attribute name=\"fastlock_store\" filename=\"out_altvoltage1_TX_LO_fastlock_store\" />"
-	"<attribute name=\"frequency\" filename=\"out_altvoltage1_TX_LO_frequency\" />"
-	"<attribute name=\"external\" filename=\"out_altvoltage1_TX_LO_external\" />"
-	"<attribute name=\"fastlock_recall\" filename=\"out_altvoltage1_TX_LO_fastlock_recall\" />"
-	"</channel>"
-	"<channel id=\"voltage1\" type=\"output\" >"
-	"<attribute name=\"rf_port_select\" filename=\"out_voltage1_rf_port_select\" />"
-	"<attribute name=\"hardwaregain\" filename=\"out_voltage1_hardwaregain\" />"
-	"<attribute name=\"rssi\" filename=\"out_voltage1_rssi\" />"
-	"<attribute name=\"hardwaregain_available\" filename=\"out_voltage1_hardwaregain_available\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"out_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"out_voltage_rf_port_select_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"out_voltage_filter_fir_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"out_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"out_voltage_rf_bandwidth\" />"
-	"</channel>"
-	"<channel id=\"voltage0\" type=\"input\" >"
-	"<attribute name=\"hardwaregain_available\" filename=\"in_voltage0_hardwaregain_available\" />"
-	"<attribute name=\"hardwaregain\" filename=\"in_voltage0_hardwaregain\" />"
-	"<attribute name=\"rssi\" filename=\"in_voltage0_rssi\" />"
-	"<attribute name=\"rf_port_select\" filename=\"in_voltage0_rf_port_select\" />"
-	"<attribute name=\"gain_control_mode\" filename=\"in_voltage0_gain_control_mode\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"in_voltage_rf_port_select_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"in_voltage_rf_bandwidth\" />"
-	"<attribute name=\"rf_dc_offset_tracking_en\" filename=\"in_voltage_rf_dc_offset_tracking_en\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"in_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"quadrature_tracking_en\" filename=\"in_voltage_quadrature_tracking_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"in_voltage_sampling_frequency\" />"
-	"<attribute name=\"gain_control_mode_available\" filename=\"in_voltage_gain_control_mode_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"in_voltage_filter_fir_en\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"in_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"bb_dc_offset_tracking_en\" filename=\"in_voltage_bb_dc_offset_tracking_en\" />"
-	"</channel>"
-	"<channel id=\"voltage1\" type=\"input\" >"
-	"<attribute name=\"hardwaregain_available\" filename=\"in_voltage1_hardwaregain_available\" />"
-	"<attribute name=\"hardwaregain\" filename=\"in_voltage1_hardwaregain\" />"
-	"<attribute name=\"rssi\" filename=\"in_voltage1_rssi\" />"
-	"<attribute name=\"rf_port_select\" filename=\"in_voltage1_rf_port_select\" />"
-	"<attribute name=\"gain_control_mode\" filename=\"in_voltage1_gain_control_mode\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"in_voltage_rf_port_select_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"in_voltage_rf_bandwidth\" />"
-	"<attribute name=\"rf_dc_offset_tracking_en\" filename=\"in_voltage_rf_dc_offset_tracking_en\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"in_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"quadrature_tracking_en\" filename=\"in_voltage_quadrature_tracking_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"in_voltage_sampling_frequency\" />"
-	"<attribute name=\"gain_control_mode_available\" filename=\"in_voltage_gain_control_mode_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"in_voltage_filter_fir_en\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"in_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"bb_dc_offset_tracking_en\" filename=\"in_voltage_bb_dc_offset_tracking_en\" />"
-	"</channel>"
-	"<channel id=\"voltage3\" type=\"output\" >"
-	"<attribute name=\"scale\" filename=\"out_voltage3_scale\" />"
-	"<attribute name=\"raw\" filename=\"out_voltage3_raw\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"out_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"out_voltage_rf_port_select_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"out_voltage_filter_fir_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"out_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"out_voltage_rf_bandwidth\" />"
-	"</channel>"
-	"<channel id=\"altvoltage0\" name=\"RX_LO\" type=\"output\" >"
-	"<attribute name=\"frequency_available\" filename=\"out_altvoltage0_RX_LO_frequency_available\" />"
-	"<attribute name=\"fastlock_save\" filename=\"out_altvoltage0_RX_LO_fastlock_save\" />"
-	"<attribute name=\"powerdown\" filename=\"out_altvoltage0_RX_LO_powerdown\" />"
-	"<attribute name=\"fastlock_load\" filename=\"out_altvoltage0_RX_LO_fastlock_load\" />"
-	"<attribute name=\"fastlock_store\" filename=\"out_altvoltage0_RX_LO_fastlock_store\" />"
-	"<attribute name=\"frequency\" filename=\"out_altvoltage0_RX_LO_frequency\" />"
-	"<attribute name=\"external\" filename=\"out_altvoltage0_RX_LO_external\" />"
-	"<attribute name=\"fastlock_recall\" filename=\"out_altvoltage0_RX_LO_fastlock_recall\" />"
-	"</channel>"
-	"<channel id=\"voltage2\" type=\"output\" >"
-	"<attribute name=\"raw\" filename=\"out_voltage2_raw\" />"
-	"<attribute name=\"scale\" filename=\"out_voltage2_scale\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"out_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"out_voltage_rf_port_select_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"out_voltage_filter_fir_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"out_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"out_voltage_rf_bandwidth\" />"
-	"</channel>"
-	"<channel id=\"temp0\" type=\"input\" >"
-	"<attribute name=\"input\" filename=\"in_temp0_input\" />"
-	"</channel>"
-	"<channel id=\"voltage0\" type=\"output\" >"
-	"<attribute name=\"rf_port_select\" filename=\"out_voltage0_rf_port_select\" />"
-	"<attribute name=\"hardwaregain\" filename=\"out_voltage0_hardwaregain\" />"
-	"<attribute name=\"rssi\" filename=\"out_voltage0_rssi\" />"
-	"<attribute name=\"hardwaregain_available\" filename=\"out_voltage0_hardwaregain_available\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"out_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"out_voltage_rf_port_select_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"out_voltage_filter_fir_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"out_voltage_sampling_frequency\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"out_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"out_voltage_rf_bandwidth\" />"
-	"</channel>"
-	"<channel id=\"voltage2\" type=\"input\" >"
-	"<attribute name=\"offset\" filename=\"in_voltage2_offset\" />"
-	"<attribute name=\"scale\" filename=\"in_voltage2_scale\" />"
-	"<attribute name=\"raw\" filename=\"in_voltage2_raw\" />"
-	"<attribute name=\"rf_port_select_available\" filename=\"in_voltage_rf_port_select_available\" />"
-	"<attribute name=\"rf_bandwidth\" filename=\"in_voltage_rf_bandwidth\" />"
-	"<attribute name=\"rf_dc_offset_tracking_en\" filename=\"in_voltage_rf_dc_offset_tracking_en\" />"
-	"<attribute name=\"sampling_frequency_available\" filename=\"in_voltage_sampling_frequency_available\" />"
-	"<attribute name=\"quadrature_tracking_en\" filename=\"in_voltage_quadrature_tracking_en\" />"
-	"<attribute name=\"sampling_frequency\" filename=\"in_voltage_sampling_frequency\" />"
-	"<attribute name=\"gain_control_mode_available\" filename=\"in_voltage_gain_control_mode_available\" />"
-	"<attribute name=\"filter_fir_en\" filename=\"in_voltage_filter_fir_en\" />"
-	"<attribute name=\"rf_bandwidth_available\" filename=\"in_voltage_rf_bandwidth_available\" />"
-	"<attribute name=\"bb_dc_offset_tracking_en\" filename=\"in_voltage_bb_dc_offset_tracking_en\" />"
-	"</channel>"
-	"<channel id=\"out\" type=\"input\" >"
-	"<attribute name=\"voltage_filter_fir_en\" filename=\"in_out_voltage_filter_fir_en\" />"
-	"</channel>"
-	"<attribute name=\"dcxo_tune_coarse\" />"
-	"<attribute name=\"rx_path_rates\" />"
-	"<attribute name=\"trx_rate_governor\" />"
-	"<attribute name=\"calib_mode_available\" />"
-	"<attribute name=\"xo_correction_available\" />"
-	"<attribute name=\"gain_table_config\" />"
-	"<attribute name=\"dcxo_tune_fine\" />"
-	"<attribute name=\"dcxo_tune_fine_available\" />"
-	"<attribute name=\"ensm_mode_available\" />"
-	"<attribute name=\"multichip_sync\" />"
-	"<attribute name=\"rssi_gain_step_error\" />"
-	"<attribute name=\"dcxo_tune_coarse_available\" />"
-	"<attribute name=\"tx_path_rates\" />"
-	"<attribute name=\"trx_rate_governor_available\" />"
-	"<attribute name=\"xo_correction\" />"
-	"<attribute name=\"ensm_mode\" />"
-	"<attribute name=\"filter_fir_config\" />"
-	"<attribute name=\"calib_mode\" />"
-	"<debug-attribute name=\"digital_tune\" />"
-	"<debug-attribute name=\"calibration_switch_control\" />"
-	"<debug-attribute name=\"multichip_sync\" />"
-	"<debug-attribute name=\"gaininfo_rx2\" />"
-	"<debug-attribute name=\"gaininfo_rx1\" />"
-	"<debug-attribute name=\"bist_timing_analysis\" />"
-	"<debug-attribute name=\"bist_tone\" />"
-	"<debug-attribute name=\"bist_prbs\" />"
-	"<debug-attribute name=\"loopback\" />"
-	"<debug-attribute name=\"initialize\" />"
-	"<debug-attribute name=\"adi,txmon-2-lo-cm\" />"
-	"<debug-attribute name=\"adi,txmon-1-lo-cm\" />"
-	"<debug-attribute name=\"adi,txmon-2-front-end-gain\" />"
-	"<debug-attribute name=\"adi,txmon-1-front-end-gain\" />"
-	"<debug-attribute name=\"adi,txmon-duration\" />"
-	"<debug-attribute name=\"adi,txmon-delay\" />"
-	"<debug-attribute name=\"adi,txmon-one-shot-mode-enable\" />"
-	"<debug-attribute name=\"adi,txmon-dc-tracking-enable\" />"
-	"<debug-attribute name=\"adi,txmon-high-gain\" />"
-	"<debug-attribute name=\"adi,txmon-low-gain\" />"
-	"<debug-attribute name=\"adi,txmon-low-high-thresh\" />"
-	"<debug-attribute name=\"adi,gpo3-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo3-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo2-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo2-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo1-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo1-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo0-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo0-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,gpo3-slave-tx-enable\" />"
-	"<debug-attribute name=\"adi,gpo3-slave-rx-enable\" />"
-	"<debug-attribute name=\"adi,gpo2-slave-tx-enable\" />"
-	"<debug-attribute name=\"adi,gpo2-slave-rx-enable\" />"
-	"<debug-attribute name=\"adi,gpo1-slave-tx-enable\" />"
-	"<debug-attribute name=\"adi,gpo1-slave-rx-enable\" />"
-	"<debug-attribute name=\"adi,gpo0-slave-tx-enable\" />"
-	"<debug-attribute name=\"adi,gpo0-slave-rx-enable\" />"
-	"<debug-attribute name=\"adi,gpo3-inactive-state-high-enable\" />"
-	"<debug-attribute name=\"adi,gpo2-inactive-state-high-enable\" />"
-	"<debug-attribute name=\"adi,gpo1-inactive-state-high-enable\" />"
-	"<debug-attribute name=\"adi,gpo0-inactive-state-high-enable\" />"
-	"<debug-attribute name=\"adi,gpo-manual-mode-enable-mask\" />"
-	"<debug-attribute name=\"adi,gpo-manual-mode-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac2-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,aux-dac2-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,aux-dac2-active-in-alert-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac2-active-in-tx-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac2-active-in-rx-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac2-default-value-mV\" />"
-	"<debug-attribute name=\"adi,aux-dac1-tx-delay-us\" />"
-	"<debug-attribute name=\"adi,aux-dac1-rx-delay-us\" />"
-	"<debug-attribute name=\"adi,aux-dac1-active-in-alert-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac1-active-in-tx-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac1-active-in-rx-enable\" />"
-	"<debug-attribute name=\"adi,aux-dac1-default-value-mV\" />"
-	"<debug-attribute name=\"adi,aux-dac-manual-mode-enable\" />"
-	"<debug-attribute name=\"adi,aux-adc-decimation\" />"
-	"<debug-attribute name=\"adi,aux-adc-rate\" />"
-	"<debug-attribute name=\"adi,temp-sense-decimation\" />"
-	"<debug-attribute name=\"adi,temp-sense-periodic-measurement-enable\" />"
-	"<debug-attribute name=\"adi,temp-sense-offset-signed\" />"
-	"<debug-attribute name=\"adi,temp-sense-measurement-interval-ms\" />"
-	"<debug-attribute name=\"adi,elna-gaintable-all-index-enable\" />"
-	"<debug-attribute name=\"adi,elna-rx2-gpo1-control-enable\" />"
-	"<debug-attribute name=\"adi,elna-rx1-gpo0-control-enable\" />"
-	"<debug-attribute name=\"adi,elna-bypass-loss-mdB\" />"
-	"<debug-attribute name=\"adi,elna-gain-mdB\" />"
-	"<debug-attribute name=\"adi,elna-settling-delay-ns\" />"
-	"<debug-attribute name=\"adi,ctrl-outs-enable-mask\" />"
-	"<debug-attribute name=\"adi,ctrl-outs-index\" />"
-	"<debug-attribute name=\"adi,rssi-duration\" />"
-	"<debug-attribute name=\"adi,rssi-wait\" />"
-	"<debug-attribute name=\"adi,rssi-delay\" />"
-	"<debug-attribute name=\"adi,rssi-unit-is-rx-samples-enable\" />"
-	"<debug-attribute name=\"adi,rssi-restart-mode\" />"
-	"<debug-attribute name=\"adi,fagc-adc-large-overload-inc-steps\" />"
-	"<debug-attribute name=\"adi,fagc-power-measurement-duration-in-state5\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-if-en-agc-pulled-high-mode\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-en-agc-pulled-high-enable\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-large-lmt-overload-enable\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-large-adc-overload-enable\" />"
-	"<debug-attribute name=\"adi,fagc-energy-lost-stronger-sig-gain-lock-exit-cnt\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-engergy-lost-sig-thresh-below-ll\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-engergy-lost-goto-optim-gain-enable\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-engergy-lost-sig-thresh-exceeded-enable\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-stronger-sig-thresh-above-ll\" />"
-	"<debug-attribute name=\"adi,fagc-optimized-gain-offset\" />"
-	"<debug-attribute name=\"adi,fagc-rst-gla-stronger-sig-thresh-exceeded-enable\" />"
-	"<debug-attribute name=\"adi,fagc-use-last-lock-level-for-set-gain-enable\" />"
-	"<debug-attribute name=\"adi,fagc-gain-index-type-after-exit-rx-mode\" />"
-	"<debug-attribute name=\"adi,fagc-gain-increase-after-gain-lock-enable\" />"
-	"<debug-attribute name=\"adi,fagc-final-overrange-count\" />"
-	"<debug-attribute name=\"adi,fagc-lmt-final-settling-steps\" />"
-	"<debug-attribute name=\"adi,fagc-lpf-final-settling-steps\" />"
-	"<debug-attribute name=\"adi,fagc-lock-level-gain-increase-upper-limit\" />"
-	"<debug-attribute name=\"adi,fagc-lock-level-lmt-gain-increase-enable\" />"
-	"<debug-attribute name=\"adi,fagc-lp-thresh-increment-steps\" />"
-	"<debug-attribute name=\"adi,fagc-lp-thresh-increment-time\" />"
-	"<debug-attribute name=\"adi,fagc-allow-agc-gain-increase-enable\" />"
-	"<debug-attribute name=\"adi,fagc-state-wait-time-ns\" />"
-	"<debug-attribute name=\"adi,fagc-dec-pow-measurement-duration\" />"
-	"<debug-attribute name=\"adi,agc-immed-gain-change-if-large-lmt-overload-enable\" />"
-	"<debug-attribute name=\"adi,agc-immed-gain-change-if-large-adc-overload-enable\" />"
-	"<debug-attribute name=\"adi,agc-gain-update-interval-us\" />"
-	"<debug-attribute name=\"adi,agc-sync-for-gain-counter-enable\" />"
-	"<debug-attribute name=\"adi,agc-dig-gain-step-size\" />"
-	"<debug-attribute name=\"adi,agc-dig-saturation-exceed-counter\" />"
-	"<debug-attribute name=\"adi,agc-lmt-overload-large-inc-steps\" />"
-	"<debug-attribute name=\"adi,agc-lmt-overload-small-exceed-counter\" />"
-	"<debug-attribute name=\"adi,agc-lmt-overload-large-exceed-counter\" />"
-	"<debug-attribute name=\"adi,agc-adc-lmt-small-overload-prevent-gain-inc-enable\" />"
-	"<debug-attribute name=\"adi,agc-adc-large-overload-inc-steps\" />"
-	"<debug-attribute name=\"adi,agc-adc-large-overload-exceed-counter\" />"
-	"<debug-attribute name=\"adi,agc-adc-small-overload-exceed-counter\" />"
-	"<debug-attribute name=\"adi,agc-outer-thresh-low-inc-steps\" />"
-	"<debug-attribute name=\"adi,agc-outer-thresh-low\" />"
-	"<debug-attribute name=\"adi,agc-inner-thresh-low-inc-steps\" />"
-	"<debug-attribute name=\"adi,agc-inner-thresh-low\" />"
-	"<debug-attribute name=\"adi,agc-inner-thresh-high-dec-steps\" />"
-	"<debug-attribute name=\"adi,agc-inner-thresh-high\" />"
-	"<debug-attribute name=\"adi,agc-outer-thresh-high-dec-steps\" />"
-	"<debug-attribute name=\"adi,agc-outer-thresh-high\" />"
-	"<debug-attribute name=\"adi,agc-attack-delay-extra-margin-us\" />"
-	"<debug-attribute name=\"adi,mgc-split-table-ctrl-inp-gain-mode\" />"
-	"<debug-attribute name=\"adi,mgc-dec-gain-step\" />"
-	"<debug-attribute name=\"adi,mgc-inc-gain-step\" />"
-	"<debug-attribute name=\"adi,mgc-rx2-ctrl-inp-enable\" />"
-	"<debug-attribute name=\"adi,mgc-rx1-ctrl-inp-enable\" />"
-	"<debug-attribute name=\"adi,gc-use-rx-fir-out-for-dec-pwr-meas-enable\" />"
-	"<debug-attribute name=\"adi,gc-max-dig-gain\" />"
-	"<debug-attribute name=\"adi,gc-dig-gain-enable\" />"
-	"<debug-attribute name=\"adi,gc-low-power-thresh\" />"
-	"<debug-attribute name=\"adi,gc-dec-pow-measurement-duration\" />"
-	"<debug-attribute name=\"adi,gc-lmt-overload-low-thresh\" />"
-	"<debug-attribute name=\"adi,gc-lmt-overload-high-thresh\" />"
-	"<debug-attribute name=\"adi,gc-adc-large-overload-thresh\" />"
-	"<debug-attribute name=\"adi,gc-adc-small-overload-thresh\" />"
-	"<debug-attribute name=\"adi,gc-adc-ovr-sample-size\" />"
-	"<debug-attribute name=\"adi,gc-rx2-mode\" />"
-	"<debug-attribute name=\"adi,gc-rx1-mode\" />"
-	"<debug-attribute name=\"adi,update-tx-gain-in-alert-enable\" />"
-	"<debug-attribute name=\"adi,tx-attenuation-mdB\" />"
-	"<debug-attribute name=\"adi,rf-tx-bandwidth-hz\" />"
-	"<debug-attribute name=\"adi,rf-rx-bandwidth-hz\" />"
-	"<debug-attribute name=\"adi,qec-tracking-slow-mode-enable\" />"
-	"<debug-attribute name=\"adi,dc-offset-count-low-range\" />"
-	"<debug-attribute name=\"adi,dc-offset-count-high-range\" />"
-	"<debug-attribute name=\"adi,dc-offset-attenuation-low-range\" />"
-	"<debug-attribute name=\"adi,dc-offset-attenuation-high-range\" />"
-	"<debug-attribute name=\"adi,dc-offset-tracking-update-event-mask\" />"
-	"<debug-attribute name=\"adi,clk-output-mode-select\" />"
-	"<debug-attribute name=\"adi,external-rx-lo-enable\" />"
-	"<debug-attribute name=\"adi,external-tx-lo-enable\" />"
-	"<debug-attribute name=\"adi,xo-disable-use-ext-refclk-enable\" />"
-	"<debug-attribute name=\"adi,trx-synthesizer-target-fref-overwrite-hz\" />"
-	"<debug-attribute name=\"adi,rx1-rx2-phase-inversion-enable\" />"
-	"<debug-attribute name=\"adi,tx-rf-port-input-select-lock-enable\" />"
-	"<debug-attribute name=\"adi,rx-rf-port-input-select-lock-enable\" />"
-	"<debug-attribute name=\"adi,tx-rf-port-input-select\" />"
-	"<debug-attribute name=\"adi,rx-rf-port-input-select\" />"
-	"<debug-attribute name=\"adi,split-gain-table-mode-enable\" />"
-	"<debug-attribute name=\"adi,1rx-1tx-mode-use-tx-num\" />"
-	"<debug-attribute name=\"adi,1rx-1tx-mode-use-rx-num\" />"
-	"<debug-attribute name=\"adi,2rx-2tx-mode-enable\" />"
-	"<debug-attribute name=\"adi,digital-interface-tune-fir-disable\" />"
-	"<debug-attribute name=\"adi,digital-interface-tune-skip-mode\" />"
-	"<debug-attribute name=\"adi,tx-fastlock-pincontrol-enable\" />"
-	"<debug-attribute name=\"adi,rx-fastlock-pincontrol-enable\" />"
-	"<debug-attribute name=\"adi,rx-fastlock-delay-ns\" />"
-	"<debug-attribute name=\"adi,tx-fastlock-delay-ns\" />"
-	"<debug-attribute name=\"adi,tdd-skip-vco-cal-enable\" />"
-	"<debug-attribute name=\"adi,tdd-use-dual-synth-mode-enable\" />"
-	"<debug-attribute name=\"adi,debug-mode-enable\" />"
-	"<debug-attribute name=\"adi,ensm-enable-txnrx-control-enable\" />"
-	"<debug-attribute name=\"adi,ensm-enable-pin-pulse-mode-enable\" />"
-	"<debug-attribute name=\"adi,frequency-division-duplex-independent-mode-enable\" />"
-	"<debug-attribute name=\"adi,frequency-division-duplex-mode-enable\" />"
-	"<debug-attribute name=\"direct_reg_access\" />"
-	"</device>";
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -2502,66 +2175,77 @@ static struct iio_channel iio_channel_voltage0_in = {
 	.name = "voltage0",
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage1_in = {
 	.name = "voltage1",
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage2_in = {
 	.name = "voltage2",
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage0_out = {
 	.name = "voltage0",
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage1_out = {
 	.name = "voltage1",
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage2_out = {
 	.name = "voltage2",
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_voltage3_out = {
 	.name = "voltage3",
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_altvoltage0 = {
 	.name = "altvoltage0",
 	.attributes = altvoltage_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_altvoltage1 = {
 	.name = "altvoltage1",
 	.attributes = altvoltage_attributes,
 	.ch_out = true,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_temp0 = {
 	.name = "temp0",
 	.attributes = temp0_attributes,
 	.ch_out = false,
+	.scan_type = NULL,
 };
 
 static struct iio_channel iio_channel_out = {
 	.name = "out",
 	.attributes = out_attributes,
 	.ch_out = false,
+	.scan_type = NULL,
 };
 
 static struct iio_channel *iio_ad9361_channels[] = {
@@ -2580,54 +2264,14 @@ static struct iio_channel *iio_ad9361_channels[] = {
 };
 
 /**
- * @brief Get xml corresponding to an "ad9361" device.
- * @param xml - Xml containing description of a device.
- * @param iio_dev - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
+ * @brief Get iio device descriptor.
+ * @param desc - Descriptor.
+ * @param dev_descriptor - iio device descriptor.
  */
-static ssize_t iio_ad9361_get_xml(char **xml, struct iio_device *iio_dev)
+void iio_ad9361_get_dev_descriptor(struct iio_ad9361_desc *desc,
+				   struct iio_device **dev_descriptor)
 {
-	*xml = calloc(1, strlen(ad9361_phy_xml) + 1);
-	if (!(*xml))
-		return -ENOMEM;
-
-	memcpy(*xml, ad9361_phy_xml, strlen(ad9361_phy_xml));
-
-	return SUCCESS;
-}
-
-/**
- * @brief Create structure describing a device, channels and attributes.
- * @param device_name - Device name.
- * @return iio_device or NULL, in case of failure
- */
-static struct iio_device *iio_ad9361_create_device(const char *device_name)
-{
-	struct iio_device *iio_ad9361_device;
-
-	iio_ad9361_device = calloc(1, sizeof(struct iio_device));
-	if (!iio_ad9361_device)
-		return NULL;
-	iio_ad9361_device->name = device_name;
-	iio_ad9361_device->channels = iio_ad9361_channels;
-	iio_ad9361_device->attributes = global_attributes;
-
-	return iio_ad9361_device;
-}
-
-/**
- * @brief Delete iio_device.
- * @param iio_device - Structure describing a device, channels and attributes.
- * @return SUCCESS in case of success or negative value otherwise.
- */
-static ssize_t iio_ad9361_delete_device(struct iio_device *iio_device)
-{
-	if (!iio_device)
-		return FAILURE;
-
-	free(iio_device);
-
-	return SUCCESS;
+	*dev_descriptor = &desc->dev_descriptor;
 }
 
 /**
@@ -2640,42 +2284,26 @@ static ssize_t iio_ad9361_delete_device(struct iio_device *iio_device)
 int32_t iio_ad9361_init(struct iio_ad9361_desc **desc,
 			struct iio_ad9361_init_param *init)
 {
-	int32_t status;
-	struct iio_interface *iio_interface;
+	struct iio_ad9361_desc *iio_ad9361_inst;
 
-	iio_interface = (struct iio_interface *)calloc(1, sizeof(struct iio_interface));
-	if (!iio_interface)
-		return -ENOMEM;
+	iio_ad9361_inst = (struct iio_ad9361_desc *)calloc(1,
+			  sizeof(struct iio_ad9361_desc));
+	if (!iio_ad9361_inst)
+		return FAILURE;
 
-	*iio_interface = (struct iio_interface) {
-		.name = dev_name,
-		.dev_instance = init->ad9361_phy,
-		.iio = iio_ad9361_create_device(dev_name),
-		.get_xml = iio_ad9361_get_xml,
-		.transfer_dev_to_mem = NULL,
-		.transfer_mem_to_dev = NULL,
-		.read_data = NULL,
-		.write_data = NULL,
-	};
-
-	status = iio_register(iio_interface);
-	if (status < 0)
-		goto error_free_iio_interface;
-
-	*desc = calloc(1, sizeof(struct iio_ad9361_desc));
-	if (!(*desc))
-		goto error_unregister;
-
-	(*desc)->iio_interface = iio_interface;
+	iio_ad9361_inst->dev_descriptor.num_ch = sizeof(iio_ad9361_channels) / sizeof(
+				iio_ad9361_channels[0]);
+	iio_ad9361_inst->dev_descriptor.channels = iio_ad9361_channels;
+	iio_ad9361_inst->dev_descriptor.attributes = global_attributes;
+	iio_ad9361_inst->dev_descriptor.debug_attributes = NULL;
+	iio_ad9361_inst->dev_descriptor.buffer_attributes = NULL;
+	iio_ad9361_inst->dev_descriptor.transfer_dev_to_mem = NULL;
+	iio_ad9361_inst->dev_descriptor.transfer_mem_to_dev = NULL;
+	iio_ad9361_inst->dev_descriptor.read_data = NULL;
+	iio_ad9361_inst->dev_descriptor.write_data = NULL;
+	*desc = iio_ad9361_inst;
 
 	return SUCCESS;
-
-error_unregister:
-	iio_unregister(iio_interface);
-error_free_iio_interface:
-	free(iio_interface);
-
-	return FAILURE;
 }
 
 /**
@@ -2685,20 +2313,9 @@ error_free_iio_interface:
  */
 int32_t iio_ad9361_remove(struct iio_ad9361_desc *desc)
 {
-	int32_t status;
-
 	if (!desc)
 		return FAILURE;
 
-	status = iio_unregister(desc->iio_interface);
-	if (status < 0)
-		return FAILURE;
-
-	status = iio_ad9361_delete_device(desc->iio_interface->iio);
-	if (status < 0)
-		return FAILURE;
-
-	free(desc->iio_interface);
 	free(desc);
 
 	return SUCCESS;

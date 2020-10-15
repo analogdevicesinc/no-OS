@@ -1,14 +1,12 @@
-TARGET := ad9081
 TINYIIOD = y
 QUAD_MXFE = n
-ifeq ($(OS), Windows_NT)
-include ../../tools/scripts/windows.mk
-else
-include ../../tools/scripts/linux.mk
-endif
-ifeq (y,$(strip $(TINYIIOD)))
-	CFLAGS += -D IIO_SUPPORT
-endif
+
+include ../../tools/scripts/generic_variables.mk
+
+include src.mk
+
+include ../../tools/scripts/generic.mk
+
 ifeq (y,$(strip $(QUAD_MXFE)))
 	CFLAGS += -D QUAD_MXFE
 endif

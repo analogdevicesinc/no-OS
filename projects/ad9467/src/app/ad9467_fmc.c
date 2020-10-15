@@ -277,7 +277,7 @@ int main()
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par);
+	return iio_app_start(&iio_axi_adc_init_par);
 #endif
 
 	printf("Done.\n\r");

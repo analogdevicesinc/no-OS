@@ -36,7 +36,7 @@
 
 #ifdef IIO_SUPPORT
 
-#include "iio_app.h"
+#include "iio.h"
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "irq.h"
@@ -318,7 +318,7 @@ int main(void)
 	/**
 	 * iio application configurations.
 	 */
-	struct iio_app_init_param iio_app_init_par;
+	struct iio_init_param iio_init_par;
 
 	/**
 	 * iio axi adc configurations.
@@ -331,14 +331,9 @@ int main(void)
 	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 
 	/**
-	 * UART server read/write callbacks.
+	 * iio instance descriptor.
 	 */
-	struct iio_server_ops uart_iio_server_ops;
-
-	/**
-	 * iio application instance descriptor.
-	 */
-	struct iio_app_desc *iio_app_desc;
+	struct iio_desc *iio_desc;
 
 	/**
 	 * iio instance descriptor.
@@ -380,6 +375,8 @@ int main(void)
 	 */
 	struct uart_init_param uart_init_par;
 
+	struct iio_device *adc_dev_desc, *dac_dev_desc;
+
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
 		return status;
@@ -412,16 +409,7 @@ int main(void)
 	if(status < 0)
 		return status;
 
-	uart_iio_server_ops = (struct iio_server_ops) {
-		.read = iio_uart_read,
-		.write = iio_uart_write,
-	};
-
-	iio_app_init_par = (struct iio_app_init_param) {
-		.iio_server_ops = &uart_iio_server_ops,
-	};
-
-	status = iio_app_init(&iio_app_desc, &iio_app_init_par);
+	status = iio_init(&iio_desc, &iio_init_par);
 	if(status < 0)
 		return status;
 
@@ -434,7 +422,12 @@ int main(void)
 	};
 
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
-	if(status < 0)
+	if (status < 0)
+		return status;
+	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
+	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
+			      iio_axi_adc_desc);
+	if (status < 0)
 		return status;
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
@@ -447,8 +440,19 @@ int main(void)
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if(status < 0)
 		return status;
+	if(status < 0)
+		return status;
+	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
+	status = iio_register(iio_desc, dac_dev_desc, "axi_dac",
+			      iio_axi_dac_desc);
 
-	return iio_app(iio_app_desc);
+	do {
+		status = iio_step(iio_desc);
+		if (status < 0)
+			return status;
+	} while (true);
+
+	return SUCCESS;
 
 #endif // IIO_SUPPORT
 

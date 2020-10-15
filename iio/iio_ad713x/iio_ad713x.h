@@ -56,29 +56,25 @@
  * @brief iio_ad713x configuration.
  */
 struct iio_ad713x_init_par {
-	/** Device name */
-	char *name;
 	/** Number of channels */
 	uint8_t	num_channels;
-	/** Spi engine message descriptor */
-	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Spi engine descriptor */
 	struct spi_desc *spi_eng_desc;
+	/** Spi engine message descriptor */
+	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 };
 
 struct iio_ad713x {
-	/** Number of channels */
-	uint8_t	num_channels;
-	/** Spi engine message descriptor */
-	struct spi_engine_offload_message *spi_engine_offload_message;
+	/** iio device descriptor */
+	struct iio_device dev_descriptor;
 	/** Spi engine descriptor */
 	struct spi_desc *spi_eng_desc;
+	/** Spi engine message descriptor */
+	struct spi_engine_offload_message *spi_engine_offload_message;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
-	/** iio interface */
-	struct iio_interface *iio_interface;
 };
 
 /******************************************************************************/
@@ -88,7 +84,9 @@ struct iio_ad713x {
 /* Init function. */
 int32_t iio_ad713x_init(struct iio_ad713x **desc,
 			struct iio_ad713x_init_par *param);
-
+/* Get desciptor. */
+void iio_ad713x_get_dev_descriptor(struct iio_ad713x *desc,
+				   struct iio_device **dev_descriptor);
 /* Free the resources allocated by iio_demo_init(). */
 int32_t iio_ad713x_remove(struct iio_ad713x *desc);
 
