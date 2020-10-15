@@ -66,6 +66,17 @@ enum iio_chan_type {
 };
 
 /**
+ * @struct iio_modifier
+ * @brief IIO channel modifier
+ */
+enum iio_modifier {
+	IIO_NO_MOD,
+	IIO_MOD_X,
+	IIO_MOD_Y,
+	IIO_MOD_Z,
+};
+
+/**
  * @struct iio_ch_info
  * @brief Structure holding channel attributess.
  */
