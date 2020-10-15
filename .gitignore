@@ -1,3 +1,8 @@
+*.vscode
+*.d
+*.o
+*.a
+*.hdf
 .metadata
 SDK.log
 bsp
