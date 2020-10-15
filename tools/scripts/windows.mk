@@ -480,9 +480,7 @@ xilinx-replace-heap:
 .SILENT:xilinx-bsp
 xilinx-bsp:
 	xsdk.bat -batch -source $(SCRIPTS_PATH)/create_project.tcl \
-		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) 		\
-		$(LIB_TINYIIOD_PATH) $(LIB_TINYIIOD)		\
-		$(TINYIIOD_STD_TYPES) $(NULL);
+		$(SDK_WORKSPACE) $(HARDWARE) $(ARCH) $(NULL);
 
 # Update the linker script the heap size for microlbaze from 0x800 to 
 # 0x100000 
