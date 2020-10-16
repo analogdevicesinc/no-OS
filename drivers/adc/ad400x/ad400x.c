@@ -80,7 +80,7 @@ int32_t ad400x_spi_reg_read(struct ad400x_dev *dev,
 	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-	*reg_data = buf[0];
+	*reg_data = buf[1];
 
 	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
 

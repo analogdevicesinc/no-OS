@@ -736,11 +736,10 @@ int32_t spi_engine_write_and_read(struct spi_desc *desc,
 
 	ret = spi_engine_transfer_message(desc, &msg);
 
-	/* Skip the first byte ( dummy read byte ) */
-	for (i = 1; i < bytes_number; i++)
-		data[i - 1] = msg.rx_buf[(i) / word_len] >>
-			      (desc_extra->data_width -
-			       ((i) % word_len + 1) * 8);
+	for (i = 0; i < bytes_number; i++)
+		data[i] = msg.rx_buf[(i) / word_len] >>
+			  (desc_extra->data_width -
+			   ((i) % word_len + 1) * 8);
 
 	spi_engine_queue_free(&msg.cmds);
 	free(msg.tx_buf);
