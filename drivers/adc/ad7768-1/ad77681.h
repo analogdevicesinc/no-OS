@@ -634,8 +634,6 @@ int32_t ad77681_clear_error_flags(struct ad77681_dev *dev);
 int32_t ad77681_data_to_voltage(struct ad77681_dev *dev,
 				int32_t *raw_code,
 				double *voltage);
-int32_t ad77681_spi_read_interrupt_adc_data(struct ad77681_dev *dev,
-		struct adc_data *measured_data);
 int32_t ad77681_CRC_status_handling(struct ad77681_dev *dev,
 				    uint16_t *data_buffer);
 int32_t ad77681_set_AINn_buffer(struct ad77681_dev *dev,
