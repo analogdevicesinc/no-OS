@@ -42,8 +42,42 @@
 /******************************************************************************/
 #include "stdio.h"
 #include "stdlib.h"
-#include "platform_drivers.h"
 #include "adaq7980.h"
+#include "error.h"
+#include "delay.h"
+
+/**
+ * @brief Read from device.
+ *        Enter register mode to read/write registers
+ * @param [in] dev - adaq7980_dev device handler.
+ * @param [out] buf - data buffer.
+ * @param [in] samples - sample number.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad7980_read_data(struct adaq7980_dev *dev,
+			 uint16_t *buf,
+			 uint16_t samples)
+{
+	struct spi_engine_offload_message msg;
+	uint32_t spi_eng_msg_cmds[3] = {CS_LOW, WRITE_READ(2), CS_HIGH};
+	uint32_t commands_data[2] = {0xFF, 0xFF};
+	int32_t ret;
+
+	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = (uint32_t)buf;
+	msg.commands_data = commands_data;
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
+	if (ret != SUCCESS)
+		return ret;
+
+	return SUCCESS;
+}
 
 /**
  * Initialize the device.
@@ -52,37 +86,52 @@
  * 					   parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t adaq7980_setup(adaq7980_dev **device,
-					 adaq7980_init_param init_param)
+int32_t adaq7980_setup(struct adaq7980_dev **device,
+		       struct adaq7980_init_param *init_param)
 {
-	adaq7980_dev *dev;
-	int32_t ret = 0;
+	struct adaq7980_dev *dev;
+	int32_t ret;
 
-	dev = (adaq7980_dev *)malloc(sizeof(*dev));
-	if (!dev) {
-		return -1;
+	dev = (struct adaq7980_dev *)malloc(sizeof(*dev));
+	if (!dev)
+		return FAILURE;
+
+	ret = gpio_get_optional(&dev->gpio_pd_ldo, init_param->gpio_pd_ldo);
+	if (ret != SUCCESS)
+		goto error_dev;
+
+	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	if (ret != SUCCESS)
+		goto error_dev;
+
+	if (init_param->gpio_pd_ldo) {
+		ret = gpio_direction_output(dev->gpio_pd_ldo, GPIO_LOW);
+		if (ret != SUCCESS)
+			goto error_dev;
+
+		mdelay(10);
+		ret = gpio_set_value(dev->gpio_pd_ldo, GPIO_HIGH);
+		if (ret != SUCCESS)
+			goto error_dev;
+
+		mdelay(10);
 	}
+	ret = pwm_init(&dev->trigger_pwm_desc, init_param->trigger_pwm_init);
+	if (ret != SUCCESS)
+		goto error_spi;
 
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
+	pwm_enable(dev->trigger_pwm_desc);
 
-	dev->gpio_dev.device_id = init_param.gpio_device_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
-
-	dev->gpio_pd_ldo = init_param.gpio_pd_ldo;
-	ret |= gpio_set_direction(&dev->gpio_dev, dev->gpio_pd_ldo, GPIO_OUT);
-	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_pd_ldo, GPIO_LOW);
-	mdelay(10);
-	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_pd_ldo, GPIO_HIGH);
-	mdelay(10);
+	dev->offload_init_param = init_param->offload_init_param;
 
 	*device = dev;
 
-	if (!ret)
-		printf("adaq7980 successfully initialized\n");
+	return SUCCESS;
 
-	return ret;
+error_spi:
+	spi_remove(dev->spi_desc);
+error_dev:
+	free(dev);
+
+	return FAILURE;
 }

@@ -40,37 +40,55 @@
 #define ADAQ7980_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "spi_engine.h"
+#include "pwm.h"
+#include "gpio.h"
+
+/******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-
-typedef struct {
+/**
+ * @struct adaq7980_init_param
+ * @brief Structure containing the init parameters needed by the adaq7980 device
+ */
+struct adaq7980_init_param {
 	/* SPI */
-	spi_device			spi_dev;
-	/* GPIO */
-	gpio_device			gpio_dev;
-	int8_t				gpio_pd_ldo;
-	int8_t				gpio_ref_pd;
-	int8_t				gpio_rbuf_pd;
-} adaq7980_dev;
+	spi_init_param		*spi_init;
+	/* SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/* PWM generator init structure */
+	struct pwm_init_param	*trigger_pwm_init;
+	/** Power down GPIO initialization structure. */
+	struct gpio_init_param	*gpio_pd_ldo;
+};
 
-typedef struct {
-	/* SPI */
-	uint8_t				spi_chip_select;
-	spi_mode			spi_mode;
-	spi_type			spi_type;
-	uint32_t			spi_device_id;
-	/* GPIO */
-	gpio_type			gpio_type;
-	uint32_t			gpio_device_id;
-	int8_t				gpio_pd_ldo;
-	int8_t				gpio_ref_pd;
-	int8_t				gpio_rbuf_pd;
-} adaq7980_init_param;
+/**
+ * @struct adaq7980_dev
+ * @brief  Structure representing an adaq7980 device
+ */
+struct adaq7980_dev {
+	/* SPI descriptor */
+	spi_desc		*spi_desc;
+	/* Trigger conversion PWM generator descriptor */
+	struct pwm_desc		*trigger_pwm_desc;
+	/* SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
+	/** Power down GPIO handler. */
+	struct gpio_desc	*gpio_pd_ldo;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t adaq7980_setup(adaq7980_dev **device,
-					 adaq7980_init_param init_param);
+/* Initialize the device. */
+int32_t adaq7980_setup(struct adaq7980_dev **device,
+		       struct adaq7980_init_param *init_param);
+
+/* Read data from device */
+int32_t ad7980_read_data(struct adaq7980_dev *dev,
+			 uint16_t *buf,
+			 uint16_t samples);
 
 #endif
