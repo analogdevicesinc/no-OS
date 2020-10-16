@@ -41,118 +41,105 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdbool.h>
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <xil_cache.h>
-#include <xparameters.h>
-#include "platform_drivers.h"
+#include "parameters.h"
 #include "adaq7980.h"
-#include "spi_engine.h"
+#include "pwm.h"
+#include "axi_pwm_extra.h"
+#include "gpio.h"
+#include "gpio_extra.h"
+#include "error.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
+#define ADAQ7980_EVB_SAMPLE_NO 1000
 
-#define ADAQ7980_DMA_BASEADDR			XPAR_AXI_ADAQ7980_DMA_BASEADDR
-#define ADAQ7980_SPI_ENGINE_BASEADDR	XPAR_SPI_AXI_BASEADDR
-#define SPI_ADAQ7980_CS					0
-#define GPIO_DEVICE_ID					XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET						32 + 54
-#define GPIO_0							GPIO_OFFSET + 0
-#define GPIO_1							GPIO_OFFSET + 1
-#define GPIO_2							GPIO_OFFSET + 2
-#define GPIO_3							GPIO_OFFSET + 3
-#define GPIO_4							GPIO_OFFSET + 4
-#define GPIO_5							GPIO_OFFSET + 5
-#define GPIO_6							GPIO_OFFSET + 6
-#define GPIO_7							GPIO_OFFSET + 7
-#define GPIO_REF_PUB					GPIO_OFFSET + 8
-#define GPIO_RBUF_PUB					GPIO_OFFSET + 9
-#define ADC_DDR_BASEADDR				XPAR_DDR_MEM_BASEADDR + 0x800000
-
-/******************************************************************************/
-/************************ Variables Definitions *******************************/
-/******************************************************************************/
-
-adaq7980_init_param default_init_param = {
-	/* SPI */
-	SPI_ADAQ7980_CS,	// spi_chip_select
-	SPI_MODE_2,			// spi_mode
-	SPI_ENGINE,			// spi_type
-	-1,					// spi_device_id
-	/* GPIO */
-	PS7_GPIO,			// gpio_type
-	GPIO_DEVICE_ID,		// gpio_device_id
-	GPIO_0,				// gpio_ld_ldo
-	GPIO_REF_PUB,		// gpio_ref_pd
-	GPIO_RBUF_PUB,		// gpio_rbuf_pd
-};
-
-uint32_t spi_msg_cmds[6] = {CS_DEASSERT, CS_ASSERT, SLEEP(5000), CS_DEASSERT, TRANSFER_R(4), CS_ASSERT};
-
-spi_init_param spi_default_init_param = {
-		ADAQ7980_SPI_ENGINE_BASEADDR,	// adc_baseaddr
-		0,								// chip_select
-		SPI_ENGINE_CONFIG_CPHA,			// spi_config
-		1000000,						// spi_clk_hz
-		100000000,						// ref_clk_hz
-		1,								// spi_offload_rx_support_en
-		ADAQ7980_DMA_BASEADDR,			// spi_offload_rx_dma_baseaddr
-		0,								// spi_offload_tx_support_en
-		ADAQ7980_DMA_BASEADDR,			// spi_offload_tx_dma_baseaddr
-};
-
-#define SPI_ENGINE_OFFLOAD_EXAMPLE	0
-
-/***************************************************************************//**
- * @brief main
- *******************************************************************************/
-int main(void)
+int main()
 {
-	adaq7980_dev	*dev;
-	spi_dev			*spi_dev;
-	spi_msg 		*msg;
-	uint8_t			*data;
-	uint32_t		i;
+	uint16_t buf[ADAQ7980_EVB_SAMPLE_NO] __attribute__ ((aligned));
+	struct adaq7980_dev *dev;
+	int32_t ret, i;
 
-	Xil_ICacheEnable();
-	Xil_DCacheEnable();
+	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
+		.offload_config = OFFLOAD_RX_EN,
+		.rx_dma_baseaddr = ADAQ7980_DMA_BASEADDR,
+	};
 
-	adaq7980_setup(&dev, default_init_param);
-	spi_eng_setup(&spi_dev, spi_default_init_param);
+	struct spi_engine_init_param spi_eng_init_param  = {
+		.ref_clk_hz = 100000000,
+		.type = SPI_ENGINE,
+		.spi_engine_baseaddr = ADAQ7980_SPI_ENGINE_BASEADDR,
+		.cs_delay = 0,
+		.data_width = 16,
+	};
 
-	msg = (spi_msg *)malloc(sizeof(*msg));
-	if (!msg)
-		return -1;
+	struct axi_pwm_init_param axi_pwm_init = {
+		.base_addr = AXI_PWMGEN_BASEADDR,
+		.ref_clock_Hz = 100000000,
+	};
 
-	msg->rx_buf_addr = 0x10000000;
-	msg->spi_msg_cmds = spi_msg_cmds;
-	msg->msg_cmd_len = sizeof(spi_msg_cmds) / sizeof(uint32_t);
+	struct pwm_init_param trigger_pwm_init = {
+		.period_ns = 10000,		/* 100Khz */
+		.duty_cycle_ns = 10,
+		.polarity = PWM_POLARITY_HIGH,
+		.extra = &axi_pwm_init,
+	};
 
-	if (SPI_ENGINE_OFFLOAD_EXAMPLE == 0) {
+	struct xil_gpio_init_param gpio_extra_param = {
+		.device_id = GPIO_DEVICE_ID,
+		.type = GPIO_PS,
+	};
 
-		while(1){
-			spi_eng_transfer_message(spi_dev, msg);
-			mdelay(1000);
-		}
+	struct gpio_init_param adaq7980_pd_ldo = {
+		.number = GPIO_0,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &gpio_extra_param
+	};
+	struct gpio_init_param adaq7980_ref_pd= {
+		.number = GPIO_REF_PUB,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &gpio_extra_param
+	};
+	struct gpio_init_param adaq7980_rbuf_pd = {
+		.number = GPIO_RBUF_PUB,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &gpio_extra_param
+	};
 
-	} else {
-		spi_eng_offload_load_msg(spi_dev, msg);
-		spi_eng_transfer_multiple_msgs(spi_dev, 8);
+	struct spi_init_param spi_init = {
+		.chip_select = SPI_ADAQ7980_CS,
+		.max_speed_hz = 10000000,
+		.mode = SPI_MODE_2,
+		.platform_ops = &spi_eng_platform_ops,
+		.extra = (void*)&spi_eng_init_param,
+	};
 
-        data = (uint8_t*)spi_dev->rx_dma_startaddr;
-
-        for(i = 0; i < spi_dev->rx_length; i++) {
-    		printf("%x\r\n", *data);
-    		data += sizeof(uint8_t);
-        }
-	}
-
-	printf("Bye\n");
+	struct adaq7980_init_param adaq7980_init_param = {
+		.spi_init = &spi_init,
+		.offload_init_param = &spi_engine_offload_init_param,
+		.trigger_pwm_init = &trigger_pwm_init,
+		.gpio_pd_ldo = &adaq7980_pd_ldo,
+	};
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
 
-	return 0;
+	ret = adaq7980_setup(&dev, &adaq7980_init_param);
+	if (ret < 0)
+		return FAILURE;
+
+	while(1) {
+		ret = ad7980_read_data(dev, buf, ADAQ7980_EVB_SAMPLE_NO);
+		if (ret < 0)
+			return FAILURE;
+
+		for (i = 0; i < ADAQ7980_EVB_SAMPLE_NO; i++)
+			printf("ADC sample %"PRIu32" %"PRIu16" \n", i, buf[i]);
+	}
+
+	printf("Success\n\r");
+
+	return SUCCESS;
 }
