@@ -92,7 +92,7 @@ int32_t ad469x_spi_reg_read(struct ad469x_dev *dev,
 	buf[2] = 0xFF;
 
 	ret = spi_write_and_read(dev->spi_desc, buf, 3);
-	*reg_data = buf[1];
+	*reg_data = buf[2];
 
 	ret = spi_engine_set_transfer_width(dev->spi_desc,
 					    dev->capture_data_width);
