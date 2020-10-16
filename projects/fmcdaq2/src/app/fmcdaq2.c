@@ -485,7 +485,7 @@ int main(void)
 #ifdef DAC_DMA_EXAMPLE
 	struct axi_dmac_init ad9144_dmac_param = {
 		.name = "tx_dmac",
-		.base = TX_DMA_BASEADDR
+		.base = TX_DMA_BASEADDR,
 		.direction = DMA_MEM_TO_DEV,
 		.flags = 0
 	};
