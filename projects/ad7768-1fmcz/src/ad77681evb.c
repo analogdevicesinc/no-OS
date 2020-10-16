@@ -47,6 +47,7 @@
 #include <stdlib.h>
 #include <xil_cache.h>
 #include <xparameters.h>
+#include "clk_axi_clkgen.h"
 #include "xil_printf.h"
 #include "ad77681.h"
 #include "spi_engine.h"
@@ -116,10 +117,17 @@ struct ad77681_init_param ADC_default_init_param = {
 
 #define SPI_ENGINE_OFFLOAD_EXAMPLE	0
 
+struct axi_clkgen_init clkgen_init = {
+	.name = "rx_clkgen",
+	.base = XPAR_SPI_CLKGEN_BASEADDR,
+	.parent_rate = 100000000,
+};
+
 int main()
 {
 	struct ad77681_dev	*adc_dev;
 	struct ad77681_status_registers *adc_status;
+	struct axi_clkgen *clkgen;
 	uint8_t			adc_data[5];
 	uint8_t 		*data;
 	uint32_t 		i;
@@ -134,6 +142,17 @@ int main()
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
+
+	ret = axi_clkgen_init(&clkgen, &clkgen_init);
+	if (ret != SUCCESS) {
+		printf("error: axi_clkgen_init() failed\n");
+		return FAILURE;
+	}
+
+	ret = axi_clkgen_set_rate(clkgen, 80000000);
+	if (ret != SUCCESS) {
+		return FAILURE;
+	}
 
 	ad77681_setup(&adc_dev, ADC_default_init_param, &adc_status);
 
