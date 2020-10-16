@@ -320,46 +320,6 @@ int32_t ad77681_spi_read_adc_data(struct ad77681_dev *dev,
 }
 
 /**
- * This function uses continuous read mode, which has to be enabled in advance
- * Read conversion result from device using GPIO DRDY interrupt in 16bit frames
- * Firtst 24bits or 16bits of data	dev->conv_length   followed by
- * 8bits of status bit, if enabled	dev->sataus_bit    followed by
- * 8bits of CRC, if enabled		dev->crc_sel
- * @param dev - The device structure.
- * @param measured_data - structure carying ADC measurement info
- * @return 0 in case of success, negative error code otherwise.
- */
-int32_t ad77681_spi_read_interrupt_adc_data(struct ad77681_dev *dev,
-		struct adc_data *measured_data)
-{
-	int32_t ret;
-	uint16_t buf[3];
-	/* 16bit buffers*/
-	buf[0] = 0;
-	buf[1] = 0;
-	buf[2] = 0;
-
-	ret = spi_read_cont_data(dev->spi_desc, buf, dev->data_frame_16bit);
-
-	if (ret < 0)
-		return ret;
-
-	/* 24bit format*/
-	if (dev->conv_len == AD77681_CONV_24BIT)
-		/* Cuts first 8 bits from buf[1] and paste it after 16bits of buf[0]*/
-		measured_data->raw_data[measured_data->count] = (buf[0] << 8 | buf[1] >> 8);
-	/* 16bit format */
-	else
-		measured_data->raw_data[measured_data->count] = (buf[0] << 8);
-
-	/* If status bit or CRC is enabled, handle it */
-	if (dev->status_bit || (dev->crc_sel != AD77681_NO_CRC))
-		ret |= ad77681_CRC_status_handling(dev, buf);
-
-	return ret;
-}
-
-/**
  * CRC and status bit handling after each readout form the ADC
  * @param dev - The device structure.
  * @param *data_buffer - 16-bit buffer readed from the ADC containing the CRC,
