@@ -140,6 +140,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 #ifndef ALTERA_PLATFORM
 		ad9144_xcvr_param->lpm_enable = 0;
 		ad9144_xcvr_param->cpll_enable = 1;
+		ad9144_xcvr_param->sys_clk_sel = 0;
 		ad9144_xcvr_param->out_clk_sel = 4;
 
 		ad9680_xcvr_param->lpm_enable = 1;
@@ -181,6 +182,7 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		ad9680_xcvr_param->parent_rate_khz = 250000;
 #endif
 #ifndef ALTERA_PLATFORM
+		ad9144_xcvr_param->sys_clk_sel = 0;
 		ad9144_xcvr_param->lpm_enable = 1;
 		ad9144_xcvr_param->cpll_enable = 1;
 		ad9144_xcvr_param->out_clk_sel = 4;
