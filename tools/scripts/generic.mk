@@ -12,35 +12,7 @@ ifeq (y,$(strip $(ENABLE_IIO_NETWORK)))
 CFLAGS += -DENABLE_IIO_NETWORK
 endif
 
-EXTRA_LIBS := $(LIBRARIES)
-
-ifneq ($(if $(findstring iio, $(LIBRARIES)), 1),)
-
-CFLAGS += -DIIO_SUPPORT
-
-IIO_DIR		= $(NO-OS)/libraries/iio
-IIO_LIB		= $(IIO_DIR)/libiio.a
-
-#Make and clean rules for iio
-CLEAN_IIO	= $(MAKE) -C $(IIO_DIR) clean
-$(IIO_LIB):
-	$(MAKE) -C $(IIO_DIR)
-
-ifeq (aducm3029,$(strip $(PLATFORM)))
-LIBS_DIRS	+= "$(IIO_DIR)"
-LIBS		+= $(notdir $(IIO_DIR))
-INCLUDE_DIRS	+= $(IIO_DIR)
-else
-INC_PATHS += -I"$(IIO_DIR)"
-LIB_PATHS += -L"$(IIO_DIR)"
-LIBS += -liio
-endif
-
-EXTRA_LIBS_PATHS += $(IIO_DIR)
-
-endif
-
-LIB_TARGETS += $(IIO_LIB)
+include $(NO-OS)/tools/scripts/libraries.mk
 
 # Get all .c and .h files from SRC_DIRS
 SRCS     += $(foreach dir, $(SRC_DIRS), $(call rwildcard, $(dir),*.c))
