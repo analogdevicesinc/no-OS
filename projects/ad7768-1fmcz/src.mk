@@ -19,6 +19,7 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
+INCS += $(PROJECT)/src/parameters.h
 INCS += $(DRIVERS)/adc/ad7768-1/ad77681.h				\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
 	$(DRIVERS)/axi_core/spi_engine/spi_engine.h			\
