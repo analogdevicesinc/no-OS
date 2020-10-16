@@ -74,7 +74,7 @@
 #define GPIO_0_SYNC_OUT						GPIO_OFFSET + 1 // 33
 #define GPIO_0_RESET						GPIO_OFFSET + 0 // 32
 
-uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE(2), READ(4), CS_HIGH};
+uint32_t spi_msg_cmds[6] = {CS_LOW, CS_HIGH, CS_LOW, WRITE_READ(1), CS_HIGH};
 
 struct spi_engine_init_param spi_eng_init_param  = {
 	.type = SPI_ENGINE,
@@ -124,7 +124,7 @@ int main()
 	uint8_t 		*data;
 	uint32_t 		i;
 	int32_t ret;
-	uint8_t commands_data[2] = {AD77681_REG_READ(AD77681_REG_ADC_DATA), 0};
+	uint8_t commands_data[4] = {0, 0, 0, AD77681_REG_READ(AD77681_REG_ADC_DATA)};
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = (OFFLOAD_RX_EN | OFFLOAD_TX_EN),
 		.rx_dma_baseaddr = AD77681_DMA_1_BASEADDR,
