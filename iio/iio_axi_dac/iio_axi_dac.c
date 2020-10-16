@@ -671,7 +671,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 			goto error;
 
 		iio_device->channels[i]->scan_index = i;
-		ret = sprintf(iio_device->channels[i]->name, "altvoltage"%PRIi32"",
+		ret = sprintf(iio_device->channels[i]->name, "altvoltage%"PRIi32"",
 			      i - voltage_ch_no);
 		if (ret < 0)
 			goto error;
