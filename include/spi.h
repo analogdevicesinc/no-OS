@@ -73,6 +73,17 @@ typedef enum spi_mode {
 } spi_mode;
 
 /**
+ * @enum spi_bit_order
+ * @brief SPI configuration for bit order (MSB/LSB).
+ */
+typedef enum spi_bit_order {
+	/** Most-significant bit (MSB) first */
+	SPI_BIT_ORDER_MSB_FIRST = 0,
+	/** Least-significant bit (LSB) first */
+	SPI_BIT_ORDER_LSB_FIRST = 1,
+} spi_bit_order;
+
+/**
  * @struct spi_platform_ops
  * @brief Structure holding SPI function pointers that point to the platform
  * specific function
@@ -90,6 +101,8 @@ typedef struct spi_init_param {
 	uint8_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
+	/** SPI bit order */
+	enum spi_bit_order	bit_order;
 	const struct spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
@@ -106,6 +119,8 @@ typedef struct spi_desc {
 	uint8_t		chip_select;
 	/** SPI mode */
 	enum spi_mode	mode;
+	/** SPI bit order */
+	enum spi_bit_order	bit_order;
 	const struct spi_platform_ops *platform_ops;
 	/**  SPI extra parameters (device specific) */
 	void		*extra;
