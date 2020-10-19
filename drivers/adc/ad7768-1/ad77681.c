@@ -1813,7 +1813,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	dev->conv_mode = init_param.conv_mode;
 	dev->diag_mux_sel = init_param.diag_mux_sel;
 	dev->conv_len = init_param.conv_len;
-	dev->crc_sel = init_param.crc_sel;
+	dev->crc_sel = AD77681_NO_CRC;
 	dev->status_bit = init_param.status_bit;
 	dev->VCM_out = init_param.VCM_out;
 	dev->AINn = init_param.AINn;
@@ -1859,7 +1859,7 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 					     dev->conv_diag_sel);
 		ret |= ad77681_set_convlen(dev, dev->conv_len);
 		ret |= ad77681_set_status_bit(dev, dev->status_bit);
-		ret |= ad77681_set_crc_sel(dev, dev->crc_sel);
+		ret |= ad77681_set_crc_sel(dev, init_param.crc_sel);
 		ret |= ad77681_set_VCM_output(dev, dev->VCM_out);
 		ret |= ad77681_set_AINn_buffer(dev, dev->AINn);
 		ret |= ad77681_set_AINp_buffer(dev, dev->AINp);
