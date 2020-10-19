@@ -282,6 +282,7 @@ int32_t xil_spi_init(struct spi_desc **desc,
 
 	(*desc)->max_speed_hz = param->max_speed_hz;
 	(*desc)->mode = param->mode;
+	(*desc)->bit_order = param->bit_order;
 	(*desc)->chip_select = param->chip_select;
 
 	switch (*spi_type) {
@@ -376,6 +377,9 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 			       uint16_t bytes_number)
 {
 	int32_t			ret;
+#ifdef XSPI_H
+	uint32_t		ctrl_reg;
+#endif
 	struct xil_spi_desc	*xdesc;
 	enum xil_spi_type	*spi_type;
 
@@ -399,6 +403,13 @@ int32_t xil_spi_write_and_read(struct spi_desc *desc,
 				       XSP_CLK_PHASE_1_OPTION : 0));
 		if (ret != SUCCESS)
 			goto error;
+
+		ctrl_reg = XSpi_GetControlReg(((XSpi*)xdesc->instance));
+		if (desc->bit_order == SPI_BIT_ORDER_LSB_FIRST)
+			ctrl_reg |= XSP_CR_LSB_MSB_FIRST_MASK;
+		else
+			ctrl_reg &= ~ XSP_CR_LSB_MSB_FIRST_MASK;
+		XSpi_SetControlReg(((XSpi*)xdesc->instance), ctrl_reg);
 
 		ret = XSpi_SetSlaveSelect(xdesc->instance,
 					  0x01 << desc->chip_select);
