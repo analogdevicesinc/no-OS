@@ -858,15 +858,27 @@ static int32_t ad9081_spi_xfer(void *user_data, uint8_t *in_data,
 
 	bytes_number = (size_bytes & 0xFF);
 
-	for (i = 0; i < bytes_number; i++)
-		data[i] =  in_data[i];
+	if (phy->ad9081.hal_info.msb == SPI_MSB_FIRST) {
+		for (i = 0; i < bytes_number; i++)
+			data[i] =  in_data[i];
+	} else {
+		data[0] = in_data[1];
+		data[1] = in_data[0];
+		for (i = 2; i < bytes_number; i++)
+			data[i] =  in_data[bytes_number - i + 1];
+	}
 
 	ret = spi_write_and_read(phy->spi_desc, data, bytes_number);
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	for (i = 0; i < bytes_number; i++)
-		out_data[i] =  data[i];
+	if (phy->ad9081.hal_info.msb == SPI_MSB_FIRST) {
+		for (i = 0; i < bytes_number; i++)
+			out_data[i] =  data[i];
+	} else {
+		for (i = 2; i < bytes_number; i++)
+			out_data[i] =  data[bytes_number - i + 1];
+	}
 
 	return SUCCESS;
 }
@@ -1030,7 +1042,8 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.delay_us = ad9081_udelay;
 	phy->ad9081.hal_info.reset_pin_ctrl = ad9081_reset_pin_ctrl;
 	phy->ad9081.hal_info.sdo = SPI_SDO;
-	phy->ad9081.hal_info.msb = SPI_MSB_FIRST;
+	phy->ad9081.hal_info.msb = (phy->spi_desc->bit_order ==
+			SPI_BIT_ORDER_MSB_FIRST) ? SPI_MSB_FIRST : SPI_MSB_LAST;
 	phy->ad9081.hal_info.addr_inc = SPI_ADDR_INC_AUTO;
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
