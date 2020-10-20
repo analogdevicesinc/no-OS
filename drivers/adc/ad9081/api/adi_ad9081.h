@@ -31,6 +31,9 @@
 #define AD9081_JESD_SER_COUNT 8
 #define AD9081_JESD_DESER_COUNT 8
 
+#define AD9081_USE_FLOATING_TYPE 0
+#define AD9081_USE_SPI_BURST_MODE 0
+
 /*!
  * @brief Enumerates Chip Output Resolution
  */
@@ -417,8 +420,8 @@ typedef enum {
 	AD9081_TMODE_NEG_FULL = 0x3, /*!< Negative Full-Scale, 0x8000 */
 	AD9081_TMODE_ALT_CHECKER =
 		0x4, /*!< Alternating Checker Board, 0x5555-0xAAAA */
-	AD9081_TMODE_PN9 = 0x5, /*!< PN9 Sequence */
-	AD9081_TMODE_PN23 = 0x6, /*!< PN23 Sequence */
+	AD9081_TMODE_PN9 = 0x6, /*!< PN9 Sequence */
+	AD9081_TMODE_PN23 = 0x5, /*!< PN23 Sequence */
 	AD9081_TMODE_1_0_TOGG = 0x7, /*!< 1/0 Word Toggle, 0x0000-0xFFFF */
 	AD9081_TMODE_USER_PAT = 0x8, /*!< User Pattern Test Mode */
 	AD9081_TMODE_PN7 = 0x9, /*!< PN7 Sequence */
@@ -508,14 +511,15 @@ typedef struct {
 	adi_ad9081_ser_swing_e swing_setting;
 	adi_ad9081_ser_pre_emp_e pre_emp_setting;
 	adi_ad9081_ser_post_emp_e post_emp_setting;
-} adi_ad9081_indv_ser_settings_t;
+} adi_ad9081_ser_lane_settings_t;
 
 /*!
  * @brief Full JESD Serializer Settings Structure
  */
 typedef struct {
-	adi_ad9081_indv_ser_settings_t indv_ser_lane_settings[8];
-	uint8_t tx_invert_mask;
+	adi_ad9081_ser_lane_settings_t lane_settings[8];
+	uint8_t invert_mask;
+	uint8_t lane_mapping[2][8];
 } adi_ad9081_ser_settings_t;
 
 /*!
@@ -525,18 +529,20 @@ typedef struct {
 	uint8_t boost_mask;
 	uint8_t invert_mask;
 	uint8_t ctle_filter[8];
-} adi_ad9081_deser_settings_t;
+	uint8_t lane_mapping[2][8];
+} adi_ad9081_des_settings_t;
 
 /*!
  * @brief Full JESD SERDES Settings Structure
  */
 typedef struct {
-	adi_ad9081_ser_settings_t ser_settings;
-	adi_ad9081_deser_settings_t deser_settings;
+	adi_ad9081_ser_settings_t ser_settings; /*! Jesd Tx Serializer Settings */
+	adi_ad9081_des_settings_t
+		des_settings; /*! Jesd Rx Deserializer Settings */
 } adi_ad9081_serdes_settings_t;
 
 /*!
- * @brief JESD TX Virtual Converter Select
+ * @brief JTX Virtual Converter Selection Structure
  */
 typedef struct {
 	uint8_t virtual_converter0_index; /*! Index for JTX virtual converter0  */
@@ -558,19 +564,17 @@ typedef struct {
 } adi_ad9081_jtx_conv_sel_t;
 
 /*!
- * @brief Device Structure
+ * @brief Device Hardware Abstract Layer Structure
  */
 typedef struct {
-	void *user_data;
+	void *user_data; /*!< Pointer to connect customer data related to this device */
+
 	adi_cms_spi_sdo_config_e
 		sdo; /*!< SPI interface 3/4 wire mode configuration */
 	adi_cms_spi_msb_config_e
 		msb; /*!< SPI interface MSB/LSB bit order configuration */
 	adi_cms_spi_addr_inc_e
 		addr_inc; /*!< SPI interface address increment configuration */
-	adi_cms_signal_type_e syncoutb; /*!< Desired type for syncout# signal */
-	adi_cms_signal_coupling_e
-		sysref; /*!< Desired input coupling for sysref signal */
 
 	adi_spi_xfer_t
 		spi_xfer; /*!< Function pointer to hal spi access function */
@@ -603,6 +607,7 @@ typedef struct {
 typedef struct {
 	adi_ad9081_hal_t hal_info;
 	adi_ad9081_info_t dev_info;
+	adi_ad9081_serdes_settings_t serdes_info;
 } adi_ad9081_device_t;
 
 /*============= E X P O R T S ==============*/
@@ -676,6 +681,23 @@ int32_t adi_ad9081_device_deinit(adi_ad9081_device_t *device);
  */
 int32_t adi_ad9081_device_direct_loopback_set(adi_ad9081_device_t *device,
 					      uint8_t mode, uint8_t mapping);
+
+/**
+ * @brief  Calculate FTW word and modulus value
+ *
+ * @param  device    Pointer to the device structure
+ * @param  freq      ADC or DAC freq (need to divide coarse decimation or main interpolation for find ddc or channel)
+ * @param  nco_shift NCO value in Hz
+ * @param  ftw       Calculated FTW value in 48bits
+ * @param  a         Numerator value in 48bits
+ * @param  b         Dominator value in 48bits
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_calc_nco_ftw(adi_ad9081_device_t *device,
+				       uint64_t freq, int64_t nco_shift,
+				       uint64_t *ftw, uint64_t *a, uint64_t *b);
 
 /**
  * @brief  Perform SPI interface configuration
@@ -1885,6 +1907,24 @@ adi_ad9081_dac_nco_master_slave_extra_lmfc_num_set(adi_ad9081_device_t *device,
  */
 int32_t
 adi_ad9081_dac_nco_master_slave_trigger_set(adi_ad9081_device_t *device);
+
+/**
+ * @brief  High level API for Master-Slave NCO Sync
+ *
+ * @param  device         Pointer to the device structure
+ * @param  is_master      1 for master, 0 for slave
+ * @param  trigger_src    0: sysref, 1: lmfc rising edge, 2: lmfc falling edge
+ * @param  gpio_index     0~5 to select GPIO0 ~ GPIO5
+ * @param  extra_lmfc_num Extra lmfc number in nco master-slave sync mode
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_dac_nco_master_slave_sync(adi_ad9081_device_t *device,
+					     uint8_t is_master,
+					     uint8_t trigger_src,
+					     uint8_t gpio_index,
+					     uint8_t extra_lmfc_num);
 
 /**
  * @brief  Enable DAC Core SPI Reg Access
@@ -3497,6 +3537,24 @@ int32_t adi_ad9081_adc_master_trig_enable_set(adi_ad9081_device_t *device,
 int32_t
 adi_ad9081_adc_loopback_master_trig_enable_set(adi_ad9081_device_t *device,
 					       uint8_t enable);
+
+/**
+ * @brief  High level API for Master-Slave NCO Sync
+ *
+ * @param  device         Pointer to the device structure
+ * @param  is_master      1 for master, 0 for slave
+ * @param  trigger_src    0: sysref, 1: lmfc rising edge, 2: lmfc falling edge
+ * @param  gpio_index     0~5 to select GPIO0 ~ GPIO5
+ * @param  extra_lmfc_num Extra lmfc number in nco master-slave sync mode
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_adc_nco_master_slave_sync(adi_ad9081_device_t *device,
+					     uint8_t is_master,
+					     uint8_t trigger_src,
+					     uint8_t gpio_index,
+					     uint8_t extra_lmfc_num);
 
 /**
  * @brief  Set Signal Monitor's Clock Enable

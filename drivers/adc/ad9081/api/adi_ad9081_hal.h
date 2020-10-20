@@ -156,12 +156,23 @@ int32_t adi_ad9081_hal_error_report(adi_ad9081_device_t *device,
 				    const char *func_name, uint32_t line_num,
 				    const char *var_name, const char *comment);
 
+int32_t adi_ad9081_hal_calc_nco_ftw(adi_ad9081_device_t *device, uint64_t freq,
+				    int64_t nco_shift, uint64_t *ftw,
+				    uint64_t *a, uint64_t *b);
+#if AD9081_USE_FLOATING_TYPE > 0
+int32_t adi_ad9081_hal_calc_nco_ftw_f(adi_ad9081_device_t *device, double freq,
+				      double nco_shift, uint64_t *ftw,
+				      uint64_t *a, uint64_t *b);
+#endif
 int32_t adi_ad9081_hal_calc_rx_nco_ftw(adi_ad9081_device_t *device,
 				       uint64_t adc_freq, int64_t nco_shift,
 				       uint64_t *ftw);
 int32_t adi_ad9081_hal_calc_tx_nco_ftw(adi_ad9081_device_t *device,
 				       uint64_t dac_freq, int64_t nco_shift,
 				       uint64_t *ftw);
+int32_t adi_ad9081_hal_calc_rx_nco_ftw32(adi_ad9081_device_t *device,
+					 uint64_t adc_freq, int64_t nco_shift,
+					 uint64_t *ftw);
 int32_t adi_ad9081_hal_calc_tx_nco_ftw32(adi_ad9081_device_t *device,
 					 uint64_t dac_freq, int64_t nco_shift,
 					 uint64_t *ftw);
