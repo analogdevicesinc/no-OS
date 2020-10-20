@@ -11,14 +11,8 @@
 PROJECT			?= $(realpath .)
 TARGET 			?= $(notdir $(realpath .))
 NO-OS			?= $(realpath ../..)
+WORKSPACE		?= $(PROJECT)/build
 
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
-
-ifeq (aducm3029,$(strip $(PLATFORM)))
-WORKSPACE		?= $(NO-OS)/projects
-else
-WORKSPACE		?= $(PROJECT)/build
-endif
-

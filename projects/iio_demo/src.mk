@@ -19,6 +19,8 @@ endif
 
 LIBRARIES += iio
 
+#BUILD_IIO_AS_SOURCES = y
+
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
 	$(NO-OS)/util/xml.c						\
@@ -33,5 +35,6 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
+	$(INCLUDE)/delay.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				
