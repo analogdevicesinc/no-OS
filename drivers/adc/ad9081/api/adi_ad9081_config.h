@@ -217,6 +217,12 @@ adi_ad9081_jesd_determine_common_nc(adi_ad9081_jesd_link_select_e links,
 				    adi_ad9081_jtx_conv_sel_t jesd_conv_sel[2],
 				    uint8_t jesd_m[2]);
 
+#if AD9081_USE_FLOATING_TYPE > 0
+int32_t adi_ad9081_hal_calc_nco_ftw_f(adi_ad9081_device_t *device, double freq,
+				      double nco_shift, uint64_t *ftw,
+				      uint64_t *a, uint64_t *b);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

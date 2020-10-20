@@ -17,7 +17,7 @@
 #include "adi_ad9081_hal.h"
 
 /*============= D A T A ====================*/
-static uint8_t ad9081_api_revision[3] = { 1, 0, 4 };
+static uint8_t ad9081_api_revision[3] = { 1, 0, 5 };
 
 /*============= C O D E ====================*/
 int32_t adi_ad9081_device_boot_pre_clock(adi_ad9081_device_t *device)
@@ -826,7 +826,7 @@ int32_t adi_ad9081_device_init(adi_ad9081_device_t *device)
 	err = adi_ad9081_hal_log_write(
 		device, ADI_CMS_LOG_MSG, "api v%d.%d.%d commit %s for ad%x ",
 		ad9081_api_revision[0], ad9081_api_revision[1],
-		ad9081_api_revision[2], "6fd1a1f", AD9081_ID);
+		ad9081_api_revision[2], "e56da5c", AD9081_ID);
 	AD9081_ERROR_RETURN(err);
 
 	/* get host cpu endian mode */
@@ -1055,6 +1055,20 @@ int32_t adi_ad9081_device_direct_loopback_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
+int32_t adi_ad9081_device_calc_nco_ftw(adi_ad9081_device_t *device,
+				       uint64_t freq, int64_t nco_shift,
+				       uint64_t *ftw, uint64_t *a, uint64_t *b)
+{
+	int32_t err;
+	AD9081_NULL_POINTER_RETURN(device);
+	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_calc_nco_ftw(device, freq, nco_shift, ftw, a, b);
+	AD9081_ERROR_RETURN(err);
+
+	return API_CMS_ERROR_OK;
+}
+
 int32_t adi_ad9081_device_startup_tx_or_nco_test(
 	adi_ad9081_device_t *device, uint8_t main_interp, uint8_t chan_interp,
 	uint8_t dac_chan[4], int64_t main_shift[4], int64_t chan_shift[8],
@@ -1062,6 +1076,7 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 {
 	int32_t err;
 	uint8_t i, links;
+	uint8_t used_dacs = 0;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 	AD9081_INVALID_PARAM_RETURN(device->dev_info.dac_freq_hz == 0);
@@ -1073,12 +1088,17 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 		AD9081_INVALID_PARAM_RETURN(jesd_param->jesd_jesdv > 2);
 	}
 
+	/* get used dacs */
+	for (i = 0; i < 4; i++) {
+		used_dacs |= dac_chan[i] > 0 ? (AD9081_DAC_0 << i) : 0;
+	}
+
 	/* enable tx */
 	err = adi_ad9081_dac_tx_enable_set(device, AD9081_DAC_ALL, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* power up dac */
-	err = adi_ad9081_dac_power_up_set(device, AD9081_DAC_ALL, 1);
+	err = adi_ad9081_dac_power_up_set(device, used_dacs, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* startup dac dll */
@@ -1090,7 +1110,7 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 	AD9081_ERROR_RETURN(err);
 
 	/* set default current */
-	err = adi_ad9081_dac_fsc_set(device, AD9081_DAC_ALL, 26000);
+	err = adi_ad9081_dac_fsc_set(device, used_dacs, 26000);
 	AD9081_ERROR_RETURN(err);
 
 	/* setup interpolation */
@@ -1139,20 +1159,19 @@ int32_t adi_ad9081_device_startup_tx_or_nco_test(
 	}
 
 	/* disable soft off/on for pa protection */
-	err = adi_ad9081_dac_soft_off_gain_enable_set(device, AD9081_DAC_ALL,
-						      0);
+	err = adi_ad9081_dac_soft_off_gain_enable_set(device, used_dacs, 0);
 	AD9081_ERROR_RETURN(err);
 
 	/* enable tx */
-	err = adi_ad9081_dac_tx_enable_set(device, AD9081_DAC_ALL, 1);
+	err = adi_ad9081_dac_tx_enable_set(device, used_dacs, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* set shuffle */
-	err = adi_ad9081_dac_shuffle_enable_set(device, AD9081_DAC_ALL, 1);
+	err = adi_ad9081_dac_shuffle_enable_set(device, used_dacs, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* set data xor */
-	err = adi_ad9081_dac_data_xor_set(device, AD9081_DAC_ALL, 1);
+	err = adi_ad9081_dac_data_xor_set(device, used_dacs, 1);
 	AD9081_ERROR_RETURN(err);
 
 	/* enable irq */
