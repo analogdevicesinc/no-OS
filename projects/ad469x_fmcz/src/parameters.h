@@ -47,10 +47,10 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD469x_DMA_BASEADDR             XPAR_AXI_AD4696_DMA_BASEADDR
-#define AD469x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD4696_AXI_REGMAP_BASEADDR
+#define AD469x_DMA_BASEADDR             XPAR_AXI_AD469X_DMA_BASEADDR
+#define AD469x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD469X_AXI_REGMAP_BASEADDR
 #define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
-#define AXI_PWMGEN_BASEADDR		XPAR_SPI_AD4696_TRIGGER_GEN_BASEADDR
+#define AXI_PWMGEN_BASEADDR		XPAR_AD469X_TRIGGER_GEN_BASEADDR
 #define AD469x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
 #define AD469x_SPI_CS                   0
 #define GPIO_OFFSET			54
