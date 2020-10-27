@@ -53,6 +53,15 @@
 #include "gpio_extra.h"
 #include "parameters.h"
 
+#ifdef IIO_SUPPORT
+#include "iio_buffer.h"
+#include "irq.h"
+#include "irq_extra.h"
+#include "uart.h"
+#include "uart_extra.h"
+#include "xil_cache.h"
+#endif // IIO_SUPPORT
+
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
@@ -64,7 +73,6 @@ int main()
 	struct ad469x_dev *dev;
 	uint32_t ch, i, j = 0;
 	int32_t ret;
-
 	struct spi_engine_offload_init_param spi_engine_offload_init_param = {
 		.offload_config = OFFLOAD_RX_EN,
 		.rx_dma_baseaddr = AD469x_DMA_BASEADDR,
@@ -136,6 +144,86 @@ int main()
 	ret = ad469x_init(&dev, &ad469x_init_param);
 	if (ret < 0)
 		return ret;
+
+#ifdef IIO_SUPPORT
+	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_set_channel_sequence(dev, AD469x_standard_seq);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_enter_conversion_mode(dev);
+	if (ret != SUCCESS)
+		return ret;
+
+	struct scan_type scan_type = {
+		.sign = 'u',
+		.realbits = 19,
+		.storagebits = 32,
+		.shift = 0,
+		.is_big_endian = false
+	};
+
+	struct iio_buffer_init_param iio_buffer_init_par = {
+		.num_channels = 2,
+		.scan_type = &scan_type,
+		.ddr_base = ADC_DDR_BASEADDR,
+		.dev_instance = dev,
+		.read_data = (int32_t (*)(void *, uint32_t *, uint16_t))ad469x_seq_read_data,
+	};
+	struct iio_desc *iio_app_desc;
+	struct iio_buffer_desc *iio_buffer_desc;
+	struct iio_device *buffer_dev_desc;
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PS,
+	};
+	struct irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
+	};
+	struct irq_ctrl_desc *irq_desc;
+	ret = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if (ret < 0)
+		return ret;
+	struct xil_uart_init_param xil_uart_init_par = {
+		.type = UART_PS,
+		.irq_id = UART_IRQ_ID,
+		.irq_desc = irq_desc,
+	};
+	struct uart_init_param uart_init_par = {
+		.baud_rate = 115200,
+		.device_id = UART_DEVICE_ID,
+		.extra = &xil_uart_init_par,
+	};
+	struct iio_init_param iio_init_par = {
+		.phy_type = USE_UART,
+		.uart_init_param = &uart_init_par,
+	};
+
+	ret = irq_global_enable(irq_desc);
+	if (ret < 0)
+		return ret;
+
+	ret = iio_init(&iio_app_desc, &iio_init_par);
+	if (ret < 0)
+		return ret;
+
+	ret = iio_buffer_init(&iio_buffer_desc, &iio_buffer_init_par);
+	if (ret < 0)
+		return ret;
+	iio_buffer_get_dev_descriptor(iio_buffer_desc, &buffer_dev_desc);
+	ret = iio_register(iio_app_desc, buffer_dev_desc, "adc",
+			   iio_buffer_desc);
+	if (ret < 0)
+		return ret;
+
+	do {
+		ret = iio_step(iio_app_desc);
+	} while (true);
+
+#endif // IIO_SUPPORT
 
 #ifdef ADVANCED_SEQ
 	ret = ad469x_adv_sequence_set_num_slots(dev, 2);
