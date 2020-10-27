@@ -45,6 +45,7 @@
 #include <stdint.h>
 #include "delay.h"
 #include "spi.h"
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -1355,12 +1356,6 @@
 #define AD9144_CHIP_ID				0x44
 #define AD9144_PRBS7				0x0
 #define AD9144_PRBS15				0x1
-
-/*
- *	GENERAL
- */
-#define ARRAY_SIZE(x)				(sizeof(x)/sizeof(x[0]))
-#define BIT(x)					(1UL << (x))
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
