@@ -3022,11 +3022,15 @@ static int32_t __ad9361_tx_quad_calib(struct ad9361_rf_phy *phy, uint32_t phase,
 	if (ret < 0)
 		return ret;
 
-	if (res)
+	if (res) {
 		*res = ad9361_spi_read(phy->spi,
 				       (phy->pdata->rx1tx1_mode_use_tx_num == 2) ?
 				       REG_QUAD_CAL_STATUS_TX2 : REG_QUAD_CAL_STATUS_TX1) &
 		       (TX1_LO_CONV | TX1_SSB_CONV);
+		if (phy->pdata->rx2tx2)
+			*res &= ad9361_spi_read(phy->spi, REG_QUAD_CAL_STATUS_TX2) &
+				(TX2_LO_CONV | TX2_SSB_CONV);
+	}
 
 	return 0;
 }
