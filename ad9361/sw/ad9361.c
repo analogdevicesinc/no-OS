@@ -1814,9 +1814,9 @@ static int32_t ad9361_get_split_table_gain(struct ad9361_rf_phy *phy,
 
 	rx_gain->tia_index = ad9361_spi_readf(spi, REG_GAIN_TABLE_READ_DATA2, TIA_GAIN);
 
-	rx_gain->lmt_gain = lna_table[ad9361_gt(phy)][rx_gain->lna_index] +
-			    mixer_table[ad9361_gt(phy)][rx_gain->mixer_index] +
-			    tia_table[rx_gain->tia_index];
+	rx_gain->lmt_gain = lna_table[ad9361_gt(phy) - RXGAIN_TBLS_END][rx_gain->lna_index] +
+			mixer_table[ad9361_gt(phy) - RXGAIN_TBLS_END][rx_gain->mixer_index] +
+			tia_table[rx_gain->tia_index];
 
 	ad9361_spi_write(spi, REG_GAIN_TABLE_ADDRESS, tbl_addr);
 
