@@ -3208,8 +3208,8 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 	ad9361_spi_write(spi, REG_QUAD_CAL_COUNT, 0xFF);
 	ad9361_spi_write(spi, REG_KEXP_1, KEXP_TX(1) | KEXP_TX_COMP(3) |
 			 KEXP_DC_I(3) | KEXP_DC_Q(3));
-	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH, 0x01);
-	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH_2, 0x01);
+	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH, 0x03);
+	ad9361_spi_write(spi, REG_MAG_FTEST_THRESH_2, 0x03);
 
 	if (phy->tx_quad_lpf_tia_match < 0) /* set in ad9361_load_gt() */
 		dev_err(dev, "failed to find suitable LPF TIA value in gain table\n");
