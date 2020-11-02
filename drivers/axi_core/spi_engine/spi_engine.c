@@ -89,9 +89,9 @@ static uint8_t _sync_id = 0x01;
  * @param reg_data Data that will be written
  * @return int32_t This function allways returns SUCCESS
  */
-static int32_t spi_engine_write(struct spi_engine_desc *desc,
-				uint32_t reg_addr,
-				uint32_t reg_data)
+int32_t spi_engine_write(struct spi_engine_desc *desc,
+			 uint32_t reg_addr,
+			 uint32_t reg_data)
 {
 	axi_io_write(desc->spi_engine_baseaddr, reg_addr, reg_data);
 
@@ -107,9 +107,9 @@ static int32_t spi_engine_write(struct spi_engine_desc *desc,
  * @param reg_data Pointer where the read that will be stored
  * @return int32_t This function allways returns SUCCESS
  */
-static int32_t spi_engine_read(struct spi_engine_desc *desc,
-			       uint32_t reg_addr,
-			       uint32_t *reg_data)
+int32_t spi_engine_read(struct spi_engine_desc *desc,
+			uint32_t reg_addr,
+			uint32_t *reg_data)
 {
 	axi_io_read(desc->spi_engine_baseaddr, reg_addr, reg_data);
 	return SUCCESS;
