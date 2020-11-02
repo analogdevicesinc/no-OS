@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   ad5766_core.h
- *   @brief  Header file of AD5766 Core Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   parameters.h
+ *   @brief  Parameters Definitions.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2016(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,32 +36,25 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef AD5766_CORE_H_
-#define AD5766_CORE_H_
+#ifndef __PARAMETERS_H__
+#define __PARAMETERS_H__
 
 /******************************************************************************/
-/*************************** Types Declarations *******************************/
+/***************************** Include Files **********************************/
 /******************************************************************************/
-typedef struct {
-	uint32_t core_baseaddr;
-	uint32_t dma_baseaddr;
-	uint32_t dma_source_addr;
-	uint32_t rate_hz;
-	uint32_t spi_clk_hz;
-} ad5766_core;
-
-typedef struct {
-	uint32_t core_baseaddr;
-	uint32_t dma_baseaddr;
-	uint32_t dma_source_addr;
-	uint32_t rate_hz;
-	uint32_t spi_clk_hz;
-} ad5766_core_init_param;
+#include <xparameters.h>
 
 /******************************************************************************/
-/************************ Functions Declarations ******************************/
+/********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-int32_t ad5766_core_setup(struct spi_engine_desc *eng_desc,
-			  ad5766_core **ad_core,
-			  ad5766_core_init_param init_param);
-#endif
+#define AD5766_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
+#define AD5766_DMA_BASEADDR		XPAR_AXI_AD5766_DAC_DMA_BASEADDR
+#define AD5766_CORE_BASEADDR		XPAR_SPI_AXI_AD5766_BASEADDR
+#define AD5766_SPI_ENGINE_BASEADDR	XPAR_SPI_AXI_BASEADDR
+#define AD5766_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0xA000000
+#define SPI_AD5766_CS			0
+#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define GPIO_OFFSET			54 + 32
+#define GPIO_RESET			GPIO_OFFSET + 0
+
+#endif /* __PARAMETERS_H__ */
