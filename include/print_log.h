@@ -104,7 +104,7 @@ fmt, __FILE__, __func__, __LINE__, ##args)
 #define pr_debug(fmt, args...) printf("DEBUG: %s:%s:%d(): " \
 fmt, __FILE__, __func__, __LINE__, ##args)
 #else
-#define pr_info(fmt, args...)
+#define pr_debug(fmt, args...)
 #endif
 
 #endif /* PRINT_LOG_H_ */
