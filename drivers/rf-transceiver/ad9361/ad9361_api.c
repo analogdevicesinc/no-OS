@@ -43,7 +43,7 @@
 #include "ad9361.h"
 #include "ad9361_api.h"
 #include "platform.h"
-#include "util.h"
+#include "ad9361_util.h"
 #include "config.h"
 #include <string.h>
 

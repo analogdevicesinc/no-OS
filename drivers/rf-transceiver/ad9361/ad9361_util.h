@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   util.h
- *   @brief  Header file of Util driver.
+ *   @file   ad9361_util.h
+ *   @brief  AD9361 Header file of Util driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2013(c) Analog Devices, Inc.
@@ -36,8 +36,8 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __NO_OS_PORT_H__
-#define __NO_OS_PORT_H__
+#ifndef __AD9361_UTIL_H__
+#define __AD9361_UTIL_H__
 
 /******************************************************************************/
 /***************************** Include Files **********************************/
@@ -48,23 +48,11 @@
 #include <stdlib.h>
 #include "ad9361.h"
 #include "common.h"
-#include "config.h"
-
+#include "app_config.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define SUCCESS									0
-#define ARRAY_SIZE(arr)							(sizeof(arr) / sizeof((arr)[0]))
-#define min(x, y)								(((x) < (y)) ? (x) : (y))
-#define min_t(type, x, y)						(type)min((type)(x), (type)(y))
-#define max(x, y)								(((x) > (y)) ? (x) : (y))
-#define max_t(type, x, y)						(type)max((type)(x), (type)(y))
-#define clamp(val, min_val, max_val)			(max(min((val), (max_val)), (min_val)))
-#define clamp_t(type, val, min_val, max_val)	(type)clamp((type)(val), (type)(min_val), (type)(max_val))
-#define DIV_ROUND_UP(x, y)						(((x) + (y) - 1) / (y))
-#define DIV_ROUND_CLOSEST(x, divisor)			(((x) + (divisor) / 2) / (divisor))
-#define BIT(x)									(1 << (x))
 #define CLK_IGNORE_UNUSED						BIT(3)
 #define CLK_GET_RATE_NOCACHE					BIT(6)
 
@@ -126,8 +114,6 @@ int32_t clk_set_rate(struct ad9361_rf_phy *phy,
 					 uint32_t rate);
 uint32_t int_sqrt(uint32_t x);
 int32_t ilog2(int32_t x);
-uint64_t do_div(uint64_t* n,
-				uint64_t base);
 uint32_t find_first_bit(uint32_t word);
 void * ERR_PTR(long error);
 void *zmalloc(size_t size);
