@@ -43,18 +43,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdint.h>
-
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define EIO			5	/* I/O error */
-#define EAGAIN		11	/* Try again */
-#define ENOMEM		12	/* Out of memory */
-#define EFAULT		14	/* Bad address */
-#define ENODEV		19	/* No such device */
-#define EINVAL		22	/* Invalid argument */
-#define EOPNOTSUPP	45	/* Operation not supported on transport endpoint */
-#define ETIMEDOUT	110	/* Connection timed out */
+#include "error.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/

@@ -42,12 +42,15 @@
 /******************************************************************************/
 #include "ad9361.h"
 #include "ad9361_api.h"
-#include "platform.h"
-#include "ad9361_util.h"
-#include "config.h"
+#include "delay.h"
+#include "spi.h"
+#include "util.h"
+#include "app_config.h"
 #include <string.h>
-
 #ifndef AXI_ADC_NOT_PRESENT
+#include "axi_adc_core.h"
+#include "axi_dac_core.h"
+
 /******************************************************************************/
 /************************ Constants Definitions *******************************/
 /******************************************************************************/
@@ -61,6 +64,8 @@ static struct axiadc_chip_info axiadc_chip_info_tbl[] = {
 		2
 	},
 };
+
+#define ADI_REG_VERSION			0x0000
 #endif
 
 extern struct gain_table_info ad9361_adi_gt_info[];
@@ -83,11 +88,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 
 	phy = (struct ad9361_rf_phy *)zmalloc(sizeof(*phy));
 	if (!phy) {
-		return -ENOMEM;
-	}
-
-	phy->spi = (struct spi_device *)zmalloc(sizeof(*phy->spi));
-	if (!phy->spi) {
 		return -ENOMEM;
 	}
 
@@ -117,7 +117,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->dev_sel = init_param->dev_sel;
 
 	/* Identification number */
-	phy->spi->id_no = init_param->id_no;
 	phy->id_no = init_param->id_no;
 
 	/* Reference Clock */
@@ -484,11 +483,16 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	phy->pdata->txmon_ctrl.tx2_mon_lo_cm = init_param->tx2_mon_lo_cm;
 
 	phy->pdata->debug_mode = true;
-	phy->pdata->gpio_resetb = init_param->gpio_resetb;
+
+	gpio_get(&phy->gpio_desc_resetb, &init_param->gpio_resetb);
 	/* Optional: next three GPIOs are used for MCS synchronization */
-	phy->pdata->gpio_sync = init_param->gpio_sync;
-	phy->pdata->gpio_cal_sw1 = init_param->gpio_cal_sw1;
-	phy->pdata->gpio_cal_sw2 = init_param->gpio_cal_sw2;
+	gpio_get_optional(&phy->gpio_desc_sync, &init_param->gpio_sync);
+	gpio_get_optional(&phy->gpio_desc_cal_sw1, &init_param->gpio_cal_sw1);
+	gpio_get_optional(&phy->gpio_desc_cal_sw2, &init_param->gpio_cal_sw2);
+
+	gpio_direction_output(phy->gpio_desc_resetb, 0);
+
+	spi_init(&phy->spi, &init_param->spi_param);
 
 	phy->pdata->port_ctrl.digital_io_ctrl = 0;
 	phy->pdata->port_ctrl.lvds_invert[0] = init_param->lvds_invert1_control;
@@ -543,18 +547,15 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 	if (ret < 0)
 		goto out;
 
-#ifndef AXI_ADC_NOT_PRESENT
-	axiadc_init(phy);
-	phy->adc_state->pcore_version = axiadc_read(phy->adc_state, ADI_REG_VERSION);
-#endif
-
 	ret = ad9361_setup(phy);
 	if (ret < 0)
 		goto out_clk;
 
 #ifndef AXI_ADC_NOT_PRESENT
+	axi_adc_init(&phy->rx_adc, init_param->rx_adc_init);
+	axi_adc_read(phy->rx_adc, ADI_REG_VERSION, &phy->adc_state->pcore_version);
 	/* platform specific wrapper to call ad9361_post_setup() */
-	ret = axiadc_post_setup(phy);
+	ret = ad9361_post_setup(phy);
 	if (ret < 0)
 		goto out_clk;
 #endif
@@ -568,7 +569,6 @@ int32_t ad9361_init (struct ad9361_rf_phy **ad9361_phy,
 out_clk:
 	ad9361_unregister_clocks(phy);
 out:
-	free(phy->spi);
 #ifndef AXI_ADC_NOT_PRESENT
 	free(phy->adc_conv);
 	free(phy->adc_state);
@@ -589,7 +589,11 @@ out:
 int32_t ad9361_remove(struct ad9361_rf_phy *phy)
 {
 	ad9361_unregister_clocks(phy);
-	free(phy->spi);
+	spi_remove(phy->spi);
+	gpio_remove(phy->gpio_desc_resetb);
+	gpio_remove(phy->gpio_desc_sync);
+	gpio_remove(phy->gpio_desc_cal_sw1);
+	gpio_remove(phy->gpio_desc_cal_sw2);
 #ifndef AXI_ADC_NOT_PRESENT
 	free(phy->adc_conv);
 	free(phy->adc_state);
@@ -1984,13 +1988,10 @@ int32_t ad9361_set_no_ch_mode(struct ad9361_rf_phy *phy, uint8_t no_ch_mode)
 	phy->clks[TX_RFPLL]->rate = ad9361_rfpll_recalc_rate(
 					    phy->ref_clk_scale[TX_RFPLL]);
 
-#ifndef AXI_ADC_NOT_PRESENT
-	axiadc_init(phy);
-#endif
 	ad9361_setup(phy);
 #ifndef AXI_ADC_NOT_PRESENT
 	/* platform specific wrapper to call ad9361_post_setup() */
-	axiadc_post_setup(phy);
+	ad9361_post_setup(phy);
 #endif
 
 	return 0;
