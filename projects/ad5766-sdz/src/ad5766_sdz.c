@@ -2,6 +2,7 @@
 * @file ad5766_sdz.c
 * @brief Implementation of Main Function.
 * @author DBogdan (dragos.bogdan@analog.com)
+* @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
 * Copyright 2016(c) Analog Devices, Inc.
 *
@@ -42,17 +43,18 @@
 /******************************************************************************/
 #include <xil_cache.h>
 #include <xparameters.h>
-#include "platform_drivers.h"
 #include "spi_engine.h"
 #include "ad5766_core.h"
 #include "ad5766.h"
+#include "parameters.h"
+#include "gpio.h"
+#include "gpio_extra.h"
+#include "error.h"
+#include "spi.h"
+#include "spi_extra.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define GPIO_DEVICE_ID		XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET			54 + 32
-#define GPIO_RESET			GPIO_OFFSET + 0
+#define LOG_LEVEL 6
+#include "print_log.h"
 
 /***************************************************************************//**
 * @brief main
@@ -62,41 +64,61 @@ int main(void)
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
- 	ad5766_init_param default_init_param = {
-		/* SPI */
-		0,					// spi_chip_select
-		SPI_MODE_1,			// spi_mode
-		SPI_ENGINE,			// spi_type
-		0,					// spi_device_id
-		/* GPIO */
-		PS7_GPIO,			// gpio_type
-		GPIO_DEVICE_ID,		// gpio_device_id
-		GPIO_RESET,			// gpio_reset
-		/* Device Settings */
-		AD5766_DISABLE,		// daisy_chain_en
-		AD5766_ZERO,		// clr
-		AD5766_M_10V_TO_P_10V,	// span
-		0,					// pwr_dac_setting
-		0,					// pwr_dither_setting
-		0,					// dither_signal_setting
-		0,					// inv_dither_setting
-		0,					// dither_scale_setting
+	struct spi_engine_init_param spi_eng_init_param  = {
+		.ref_clk_hz = 100000000,
+		.type = SPI_ENGINE,
+		.spi_engine_baseaddr = AD5766_SPI_ENGINE_BASEADDR,
+		.cs_delay = 0,
+		.data_width = 24,
 	};
+
+	struct xil_gpio_init_param gpio_extra_param = {
+		.device_id = GPIO_DEVICE_ID,
+		.type = GPIO_PS,
+	};
+
+	struct gpio_init_param ad5766_gpio_reset_param = {
+		.number = GPIO_RESET,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &gpio_extra_param
+	};
+
+	struct spi_init_param ad5766_spi_init = {
+		.chip_select = SPI_AD5766_CS,
+		.max_speed_hz = 50000000,
+		.mode = SPI_MODE_1,
+		.platform_ops = &spi_eng_platform_ops,
+		.extra = (void*)&spi_eng_init_param,
+	};
+
+	struct ad5766_init_param default_init_param = {
+		.spi_init = ad5766_spi_init,
+		.gpio_reset = ad5766_gpio_reset_param,
+		.daisy_chain_en = AD5766_DISABLE,
+		.clr = AD5766_ZERO,
+		.span = AD5766_M_10V_TO_P_10V,
+		.pwr_dac_setting = 0,
+		.pwr_dither_setting = 0,
+		.dither_signal_setting = 0,
+		.inv_dither_setting = 0,
+		.dither_scale_setting = 0
+	};
+	struct ad5766_dev *dev;
+
 	ad5766_core_init_param default_core_init_param = {
-		XPAR_SPI_AXI_AD5766_BASEADDR,		// core_baseaddr
-		XPAR_AXI_AD5766_DAC_DMA_BASEADDR,	// dma_baseaddr
-		XPAR_DDR_MEM_BASEADDR + 0xA000000,	// dma_source_addr
-		800000,								// rate_hz
-		50000000,							// spi_clk_hz
+		.core_baseaddr = AD5766_CORE_BASEADDR,
+		.dma_baseaddr = AD5766_DMA_BASEADDR,
+		.dma_source_addr = AD5766_DDR_BASEADDR,
+		.rate_hz = 800000,
+		.spi_clk_hz = 50000000,
 	};
-	ad5766_dev *dev;
 	ad5766_core *core;
 
-	ad5766_setup(&dev, default_init_param);
+	ad5766_init(&dev, default_init_param);
 
-	ad5766_core_setup(&core, default_core_init_param);
+	ad5766_core_setup(dev->spi_desc->extra, &core, default_core_init_param);
 
-	xil_printf("Done\n");
+	pr_info("Done\n");
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
