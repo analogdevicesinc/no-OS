@@ -43,6 +43,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include "ad9361_util.h"
+#include "gpio.h"
+#include "spi.h"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -277,17 +279,24 @@ typedef struct {
 	uint32_t	tx1_mon_lo_cm;	/* adi,txmon-1-lo-cm */
 	uint32_t	tx2_mon_lo_cm;	/* adi,txmon-2-lo-cm */
 	/* GPIO definitions */
-	int32_t		gpio_resetb;	/* reset-gpios */
+	struct gpio_init_param	gpio_resetb;	/* reset-gpios */
 	/* MCS Sync */
-	int32_t		gpio_sync;		/* sync-gpios */
-	int32_t		gpio_cal_sw1;	/* cal-sw1-gpios */
-	int32_t		gpio_cal_sw2;	/* cal-sw2-gpios */
+	struct gpio_init_param	gpio_sync;	/* sync-gpios */
+	struct gpio_init_param	gpio_cal_sw1;	/* cal-sw1-gpios */
+	struct gpio_init_param	gpio_cal_sw2;	/* cal-sw2-gpios */
+
+	struct spi_init_param	spi_param;
+
 	/* External LO clocks */
 	uint32_t	(*ad9361_rfpll_ext_recalc_rate)(struct refclk_scale *clk_priv);
 	int32_t		(*ad9361_rfpll_ext_round_rate)(struct refclk_scale *clk_priv,
 			uint32_t rate);
 	int32_t		(*ad9361_rfpll_ext_set_rate)(struct refclk_scale *clk_priv,
 			uint32_t rate);
+#ifndef AXI_ADC_NOT_PRESENT
+	struct axi_adc_init	*rx_adc_init;
+	struct axi_dac_init	*tx_dac_init;
+#endif
 } AD9361_InitParam;
 
 typedef struct {

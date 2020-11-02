@@ -46,15 +46,18 @@
 #include <string.h>
 #include <inttypes.h>
 #include "ad9361.h"
-#include "platform.h"
+#include "spi.h"
+#include "gpio.h"
+#include "delay.h"
 #include "ad9361_util.h"
-#include "config.h"
+#include "util.h"
+#include "app_config.h"
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
 
 #define NO_GAIN_TABLE		((uint32_t)-1)
 
-/* Used for static code size optimization: please see config.h */
+/* Used for static code size optimization: please see app_config.h */
 const bool has_split_gt = HAVE_SPLIT_GAIN_TABLE;
 const bool have_tdd_tables = HAVE_TDD_SYNTH_TABLE;
 
@@ -689,25 +692,29 @@ const char *ad9361_ensm_states[] = {
  * @param num The number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
+int32_t ad9361_spi_readm(struct spi_desc *spi, uint32_t reg,
 			 uint8_t *rbuf, uint32_t num)
 {
-	uint8_t buf[2];
-	int32_t ret;
+	int32_t ret = 0;
 	uint16_t cmd;
-
+	uint8_t *rbuffer;
 	if (num > MAX_MBYTE_SPI)
 		return -EINVAL;
 
 	cmd = AD_READ | AD_CNT(num) | AD_ADDR(reg);
-	buf[0] = cmd >> 8;
-	buf[1] = cmd & 0xFF;
+	rbuffer = malloc(num + 2);
+	if(!rbuffer)
+		return -ENOMEM;
+	rbuffer[0] = cmd >> 8;
+	rbuffer[1] = cmd & 0xFF;
+	ret = spi_write_and_read(spi, &rbuffer[0], 2 + num);
 
-	ret = spi_write_then_read(spi, &buf[0], 2, rbuf, num);
-	if (ret < 0) {
+	if (ret < 0)
 		dev_err(&spi->dev, "Read Error %"PRId32, ret);
-		return ret;
-	}
+	else
+		memcpy(rbuf, &rbuffer[2], num);
+
+	free(rbuffer);
 #ifdef _DEBUG
 	{
 		int32_t i;
@@ -717,7 +724,7 @@ int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
 	}
 #endif
 
-	return 0;
+	return ret;
 }
 
 /**
@@ -726,7 +733,7 @@ int32_t ad9361_spi_readm(struct spi_device *spi, uint32_t reg,
  * @param reg The register address.
  * @return The register value or negative error code in case of failure.
  */
-int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg)
+int32_t ad9361_spi_read(struct spi_desc *spi, uint32_t reg)
 {
 	uint8_t buf;
 	int32_t ret;
@@ -746,7 +753,7 @@ int32_t ad9361_spi_read(struct spi_device *spi, uint32_t reg)
  * @param offset The mask offset.
  * @return The bits value or negative error code in case of failure.
  */
-static int32_t __ad9361_spi_readf(struct spi_device *spi, uint32_t reg,
+static int32_t __ad9361_spi_readf(struct spi_desc *spi, uint32_t reg,
 				  uint32_t mask, uint32_t offset)
 {
 	uint8_t buf;
@@ -782,7 +789,7 @@ static int32_t __ad9361_spi_readf(struct spi_device *spi, uint32_t reg,
  * @param val The value of the register.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad9361_spi_write(struct spi_device *spi,
+int32_t ad9361_spi_write(struct spi_desc *spi,
 			 uint32_t reg, uint32_t val)
 {
 	uint8_t buf[3];
@@ -794,7 +801,7 @@ int32_t ad9361_spi_write(struct spi_device *spi,
 	buf[1] = cmd & 0xFF;
 	buf[2] = val;
 
-	ret = spi_write_then_read(spi, buf, 3, NULL, 0);
+	ret = spi_write_and_read(spi, buf, 3);
 	if (ret < 0) {
 		dev_err(&spi->dev, "Write Error %"PRId32, ret);
 		return ret;
@@ -816,7 +823,7 @@ int32_t ad9361_spi_write(struct spi_device *spi,
  * @param val The bits value.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t __ad9361_spi_writef(struct spi_device *spi, uint32_t reg,
+static int32_t __ad9361_spi_writef(struct spi_desc *spi, uint32_t reg,
 				   uint32_t mask, uint32_t offset, uint32_t val)
 {
 	uint8_t buf;
@@ -854,7 +861,7 @@ static int32_t __ad9361_spi_writef(struct spi_device *spi, uint32_t reg,
  * @param num The number of bytes to read.
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_spi_writem(struct spi_device *spi,
+static int32_t ad9361_spi_writem(struct spi_desc *spi,
 				 uint32_t reg, uint8_t *tbuf, uint32_t num)
 {
 	uint8_t buf[10];
@@ -875,7 +882,7 @@ static int32_t ad9361_spi_writem(struct spi_device *spi,
 	for (i = 0; i < num; i++)
 		buf[2 + i] =  tbuf[i];
 #endif
-	ret = spi_write_then_read(spi, buf, num + 2, NULL, 0);
+	ret = spi_write_and_read(spi, buf, num + 2);
 	if (ret < 0) {
 		dev_err(&spi->dev, "Write Error %"PRId32, ret);
 		return ret;
@@ -1000,10 +1007,10 @@ int32_t ad9361_1rx1tx_channel_map(struct ad9361_rf_phy *phy, bool tx,
  */
 int32_t ad9361_reset(struct ad9361_rf_phy *phy)
 {
-	if (gpio_is_valid(phy->pdata->gpio_resetb)) {
-		gpio_set_value(phy->pdata->gpio_resetb, 0);
+	if (phy->gpio_desc_resetb) {
+		gpio_set_value(phy->gpio_desc_resetb, 0);
 		mdelay(1);
-		gpio_set_value(phy->pdata->gpio_resetb, 1);
+		gpio_set_value(phy->gpio_desc_resetb, 1);
 		mdelay(1);
 		dev_dbg(&phy->spi->dev, "%s: by GPIO", __func__);
 		return 0;
@@ -1332,7 +1339,7 @@ static int32_t ad9361_gt_tableindex(struct ad9361_rf_phy *phy, uint64_t freq)
  * @param phy The AD9361 state structure.
  * @return The current gain table index or 0 if the table was not chosen.
  */
-static uint32_t ad9361_gt(struct ad9361_rf_phy *phy)
+uint32_t ad9361_gt(struct ad9361_rf_phy *phy)
 {
 	if (phy->current_table == NO_GAIN_TABLE) {
 		dev_err(&phy->spi->dev, "%s: ERROR", __func__);
@@ -1400,7 +1407,7 @@ static int find_table_index(struct ad9361_rf_phy *phy, int gain)
 static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 			      uint32_t dest)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint8_t (*tab)[3];
 	uint32_t band, index_max, i, lna, lpf_tia_mask, set_gain;
 	int32_t ret, rx1_gain, rx2_gain;
@@ -1409,7 +1416,7 @@ static int32_t ad9361_load_gt(struct ad9361_rf_phy *phy, uint64_t freq,
 
 	band = ad9361_gt_tableindex(phy, freq);
 
-	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64" (band %d)",
+	dev_dbg(&phy->spi->dev, "%s: frequency %"PRIu64" (band %"PRIu32")",
 		__func__, freq, band);
 
 	/* check if table is present */
@@ -1712,7 +1719,7 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 				     bool tx, uint64_t vco_freq,
 				     uint32_t ref_clk)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	const struct SynthLUT(*tab);
 	int32_t i = 0;
 	uint32_t range, offs = 0;
@@ -1797,7 +1804,7 @@ static int32_t ad9361_get_split_table_gain(struct ad9361_rf_phy *phy,
 		uint32_t idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, tbl_addr;
 	int32_t rc = 0;
 
@@ -1843,7 +1850,7 @@ static int32_t ad9361_get_full_table_gain(struct ad9361_rf_phy *phy,
 		uint32_t idx_reg,
 		struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val;
 
 	rx_gain->fgt_lmt_index = val = ad9361_spi_readf(spi, idx_reg,
@@ -1867,7 +1874,7 @@ static int32_t ad9361_get_full_table_gain(struct ad9361_rf_phy *phy,
 int32_t ad9361_get_rx_gain(struct ad9361_rf_phy *phy,
 			   uint32_t rx_id, struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, idx_reg;
 	uint8_t gain_ctl_shift, rx_enable_mask;
 	uint8_t fast_atk_shift;
@@ -1945,7 +1952,7 @@ uint8_t ad9361_ensm_get_state(struct ad9361_rf_phy *phy)
  */
 void ad9361_ensm_force_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint8_t dev_ensm_state;
 	int32_t rc, timeout = 10;
 	uint32_t val;
@@ -2025,7 +2032,7 @@ out:
  */
 void ad9361_ensm_restore_state(struct ad9361_rf_phy *phy, uint8_t ensm_state)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	int32_t rc;
 	uint32_t val;
 
@@ -2093,7 +2100,7 @@ void ad9361_ensm_restore_prev_state(struct ad9361_rf_phy *phy)
 static int32_t set_split_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 				    struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	int32_t rc = 0;
 
 	if ((rx_gain->fgt_lmt_index > MAX_LMT_INDEX) ||
@@ -2111,7 +2118,7 @@ static int32_t set_split_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 
 	rc = find_table_index(phy, rx_gain->gain_db);
 	if (rc < 0) {
-		dev_err(dev, "Invalid gain %d, supported range [%d - %d]\n",
+		dev_err(dev, "Invalid gain %"PRId32", supported range [%d - %d]\n",
 			rx_gain->gain_db, phy->gt_info[ad9361_gt(phy)].
 			abs_gain_tbl[0],
 			phy->gt_info[ad9361_gt(phy)].abs_gain_tbl
@@ -2148,7 +2155,7 @@ out:
 static int32_t set_full_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 				   struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	int rc = 0;
 
 	if (rx_gain->fgt_lmt_index != ((uint32_t)~0) ||
@@ -2159,7 +2166,7 @@ static int32_t set_full_table_gain(struct ad9361_rf_phy *phy, uint32_t idx_reg,
 
 	rc = find_table_index(phy, rx_gain->gain_db);
 	if (rc < 0) {
-		dev_err(dev, "Invalid gain %d, supported range [%d - %d]\n",
+		dev_err(dev, "Invalid gain %"PRId32", supported range [%d - %d]\n",
 			rx_gain->gain_db, phy->gt_info[ad9361_gt(phy)].
 			abs_gain_tbl[0],
 			phy->gt_info[ad9361_gt(phy)].abs_gain_tbl
@@ -2182,7 +2189,7 @@ out:
 int32_t ad9361_set_rx_gain(struct ad9361_rf_phy *phy,
 			   uint32_t rx_id, struct rf_rx_gain *rx_gain)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, idx_reg;
 	uint8_t gain_ctl_shift;
 	int32_t rc = 0;
@@ -2232,7 +2239,7 @@ out:
  */
 static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t clkrf;
 	uint32_t reg, delay_lna, settling_delay, dec_pow_meas_dur;
 	int32_t ret;
@@ -2336,7 +2343,7 @@ static int32_t ad9361_gc_update(struct ad9361_rf_phy *phy)
 int32_t ad9361_set_gain_ctrl_mode(struct ad9361_rf_phy *phy,
 				  struct rf_gain_ctrl *gain_ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	int32_t rc = 0;
 	uint32_t gain_ctl_shift, mode;
 	uint8_t val;
@@ -2410,7 +2417,7 @@ out:
  */
 int32_t ad9361_read_rssi(struct ad9361_rf_phy *phy, struct rf_rssi *rssi)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint8_t reg_val_buf[6];
 	int32_t rc;
 
@@ -2904,7 +2911,7 @@ static int32_t ad9361_bb_dc_offset_calib(struct ad9361_rf_phy *phy)
 static int32_t ad9361_rf_dc_offset_calib(struct ad9361_rf_phy *phy,
 		uint64_t rx_freq)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 
 	dev_dbg(&phy->spi->dev, "%s : rx_freq %"PRIu64,
 		__func__, rx_freq);
@@ -3097,7 +3104,7 @@ static int ad9361_tx_quad_calib(struct ad9361_rf_phy *phy,
 				uint32_t bw_rx, uint32_t bw_tx,
 				int32_t rx_phase)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t clktf, clkrf;
 	int32_t txnco_word, rxnco_word, txnco_freq, ret;
 	uint8_t __rx_phase = 0, reg_inv_bits = 0, val, decim;
@@ -3273,7 +3280,7 @@ out_restore:
 int32_t ad9361_tracking_control(struct ad9361_rf_phy *phy, bool bbdc_track,
 				bool rfdc_track, bool rxquad_track)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t qtrack = 0;
 
 	dev_dbg(&spi->dev, "%s : bbdc_track=%d, rfdc_track=%d, rxquad_track=%d",
@@ -3502,7 +3509,7 @@ int32_t ad9361_set_dcxo_tune(struct ad9361_rf_phy *phy,
 static int32_t ad9361_txmon_setup(struct ad9361_rf_phy *phy,
 				  struct tx_monitor_control *ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
@@ -3627,7 +3634,7 @@ int32_t ad9361_rf_port_setup(struct ad9361_rf_phy *phy, bool is_out,
  */
 static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	struct ad9361_phy_platform_data *pd = phy->pdata;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
@@ -3676,7 +3683,7 @@ static int32_t ad9361_pp_port_setup(struct ad9361_rf_phy *phy, bool restore_c3)
 static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 			       struct gain_control *ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t reg, tmp1, tmp2;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
@@ -4022,7 +4029,7 @@ static int32_t ad9361_gc_setup(struct ad9361_rf_phy *phy,
 static int32_t ad9361_auxdac_set(struct ad9361_rf_phy *phy, int32_t dac,
 				 int32_t val_mV)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, tmp;
 
 	dev_dbg(&phy->spi->dev, "%s DAC%"PRId32" = %"PRId32" mV", __func__, dac,
@@ -4093,7 +4100,7 @@ int32_t ad9361_auxdac_get(struct ad9361_rf_phy *phy, int32_t dac)
 static int32_t ad9361_auxdac_setup(struct ad9361_rf_phy *phy,
 				   struct auxdac_control *ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint8_t tmp;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
@@ -4132,7 +4139,7 @@ static int32_t ad9361_auxadc_setup(struct ad9361_rf_phy *phy,
 				   struct auxadc_control *ctrl,
 				   uint32_t bbpll_freq)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
@@ -4199,7 +4206,7 @@ int32_t ad9361_get_auxadc(struct ad9361_rf_phy *phy)
 static int32_t ad9361_ctrl_outs_setup(struct ad9361_rf_phy *phy,
 				      struct ctrl_outs_control *ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
@@ -4216,7 +4223,7 @@ static int32_t ad9361_ctrl_outs_setup(struct ad9361_rf_phy *phy,
 static int32_t ad9361_gpo_setup(struct ad9361_rf_phy *phy,
 				struct gpo_control *ctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 
 	dev_dbg(&phy->spi->dev, "%s", __func__);
 
@@ -4266,7 +4273,7 @@ static int32_t ad9361_rssi_setup(struct ad9361_rf_phy *phy,
 				 struct rssi_control *ctrl,
 				 bool is_update)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t total_weight, weight[4], total_dur = 0, temp;
 	uint8_t dur_buf[4] = { 0 };
 	int32_t val, ret, i, j = 0;
@@ -4386,7 +4393,7 @@ static int32_t ad9361_bb_clk_change_handler(struct ad9361_rf_phy *phy)
 int32_t ad9361_ensm_set_state(struct ad9361_rf_phy *phy, uint8_t ensm_state,
 			      bool pinctrl)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	int32_t rc = 0;
 	uint32_t val;
 	uint32_t tmp;
@@ -4890,7 +4897,7 @@ int32_t ad9361_set_ensm_mode(struct ad9361_rf_phy *phy, bool fdd, bool pinctrl)
  * @param word
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_fastlock_readval(struct spi_device *spi, bool tx,
+static int32_t ad9361_fastlock_readval(struct spi_desc *spi, bool tx,
 				       uint32_t profile, uint32_t word)
 {
 	uint32_t offs = 0;
@@ -4915,7 +4922,7 @@ static int32_t ad9361_fastlock_readval(struct spi_device *spi, bool tx,
  * @param last
  * @return 0 in case of success, negative error code otherwise.
  */
-static int32_t ad9361_fastlock_writeval(struct spi_device *spi, bool tx,
+static int32_t ad9361_fastlock_writeval(struct spi_desc *spi, bool tx,
 					uint32_t profile, uint32_t word, uint8_t val, bool last)
 {
 	uint32_t offs = 0;
@@ -4993,7 +5000,7 @@ int32_t ad9361_fastlock_load(struct ad9361_rf_phy *phy, bool tx,
 int32_t ad9361_fastlock_store(struct ad9361_rf_phy *phy, bool tx,
 			      uint32_t profile)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint8_t val[16];
 	uint32_t offs = 0, x, y;
 
@@ -5217,25 +5224,25 @@ int32_t ad9361_mcs(struct ad9361_rf_phy *phy, int32_t step)
 				  MCS_REFCLK_SCALE_EN, 1);
 		break;
 	case 2:
-		if(!gpio_is_valid(phy->pdata->gpio_sync))
+		if(!phy->gpio_desc_sync)
 			break;
 		/*
 		 * NOTE: This is not a regular GPIO -
 		 * HDL ensures Multi-chip Synchronization SYNC_IN Pulse Timing
 		 * relative to rising and falling edge of REF_CLK
 		 */
-		gpio_set_value(phy->pdata->gpio_sync, 1);
-		gpio_set_value(phy->pdata->gpio_sync, 0);
+		gpio_set_value(phy->gpio_desc_sync, 1);
+		gpio_set_value(phy->gpio_desc_sync, 0);
 		break;
 	case 3:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
 				  mcs_mask, MCS_BB_ENABLE | MCS_DIGITAL_CLK_ENABLE | MCS_RF_ENABLE);
 		break;
 	case 4:
-		if(!gpio_is_valid(phy->pdata->gpio_sync))
+		if(!phy->gpio_desc_sync)
 			break;
-		gpio_set_value(phy->pdata->gpio_sync, 1);
-		gpio_set_value(phy->pdata->gpio_sync, 0);
+		gpio_set_value(phy->gpio_desc_sync, 1);
+		gpio_set_value(phy->gpio_desc_sync, 0);
 		break;
 	case 5:
 		ad9361_spi_writef(phy->spi, REG_MULTICHIP_SYNC_AND_TX_MON_CTRL,
@@ -5313,7 +5320,7 @@ static uint32_t ad9361_ref_div_sel(uint32_t refin_Hz, uint32_t max)
 int32_t ad9361_setup(struct ad9361_rf_phy *phy)
 {
 	uint32_t refin_Hz, ref_freq, bbpll_freq;
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	struct ad9361_phy_platform_data *pd = phy->pdata;
 	int32_t ret;
 	uint32_t real_rx_bandwidth, real_tx_bandwidth;
@@ -5711,7 +5718,7 @@ static int32_t ad9361_verify_fir_filter_coef(struct ad9361_rf_phy *phy,
 		enum fir_dest dest,
 		uint32_t ntaps, short *coef)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, offs = 0, gain = 0, conf, sel, cnt;
 	int32_t ret = 0;
 
@@ -5780,7 +5787,7 @@ int32_t ad9361_load_fir_filter_coef(struct ad9361_rf_phy *phy,
 				    enum fir_dest dest, int32_t gain_dB,
 				    uint32_t ntaps, int16_t *coef)
 {
-	struct spi_device *spi = phy->spi;
+	struct spi_desc *spi = phy->spi;
 	uint32_t val, offs = 0, fir_conf = 0, fir_enable = 0;
 	int32_t ret;
 
@@ -6181,7 +6188,7 @@ static inline int32_t ad9361_set_muldiv(struct refclk_scale *priv, uint32_t mul,
  */
 static int32_t ad9361_get_clk_scaler(struct refclk_scale *clk_priv)
 {
-	struct spi_device *spi = clk_priv->spi;
+	struct spi_desc *spi = clk_priv->spi;
 	uint32_t tmp, tmp1;
 
 	switch (clk_priv->source) {
@@ -6304,7 +6311,7 @@ static int32_t ad9361_to_refclk_scaler(struct refclk_scale *clk_priv)
  */
 static int32_t ad9361_set_clk_scaler(struct refclk_scale *clk_priv, bool set)
 {
-	struct spi_device *spi = clk_priv->spi;
+	struct spi_desc *spi = clk_priv->spi;
 	uint32_t tmp;
 	int32_t ret;
 
@@ -6592,7 +6599,7 @@ int32_t ad9361_bbpll_round_rate(struct refclk_scale *clk_priv, uint32_t rate,
 int32_t ad9361_bbpll_set_rate(struct refclk_scale *clk_priv, uint32_t rate,
 			      uint32_t parent_rate)
 {
-	struct spi_device *spi = clk_priv->spi;
+	struct spi_desc *spi = clk_priv->spi;
 	uint64_t tmp;
 	uint32_t fract, integer;
 	int32_t icp_val;
