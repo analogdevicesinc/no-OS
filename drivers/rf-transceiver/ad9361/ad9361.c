@@ -47,7 +47,7 @@
 #include <inttypes.h>
 #include "ad9361.h"
 #include "platform.h"
-#include "util.h"
+#include "ad9361_util.h"
 #include "config.h"
 
 #define diff_abs(x, y) ((x) > (y) ? (x - y) : (y - x))
