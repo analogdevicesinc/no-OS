@@ -177,6 +177,15 @@ struct spi_engine_offload_message {
  */
 extern const struct spi_platform_ops xil_platform_ops;
 
+/* Write SPI Engine's axi registers */
+int32_t spi_engine_write(struct spi_engine_desc *desc,
+			 uint32_t reg_addr,
+			 uint32_t reg_data);
+
+/* Read SPI Engine's axi registers */
+int32_t spi_engine_read(struct spi_engine_desc *desc,
+			uint32_t reg_addr,
+			uint32_t *reg_data);
 /* Initialize the SPI engine device */
 int32_t spi_engine_init(struct spi_desc **desc,
 			const struct spi_init_param *param);
