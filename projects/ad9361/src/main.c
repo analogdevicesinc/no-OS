@@ -45,13 +45,17 @@
 #include "ad9361_api.h"
 #include "parameters.h"
 #include "spi.h"
-#include "spi_extra.h"
 #include "gpio.h"
-#include "gpio_extra.h"
 #include "delay.h"
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#endif
+#ifdef LINUX_PLATFORM
+#include "linux_spi.h"
+#include "linux_gpio.h"
 #endif
 #include "axi_adc_core.h"
 #include "axi_dac_core.h"
@@ -74,6 +78,7 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+#ifdef XILINX_PLATFORM
 struct xil_spi_init_param xil_spi_param = {
 #ifdef PLATFORM_MB
 	.type = SPI_PL,
@@ -83,6 +88,22 @@ struct xil_spi_init_param xil_spi_param = {
 	.device_id = SPI_DEVICE_ID,
 	.flags = 0
 };
+
+struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+	.type = GPIO_PL,
+#else
+	.type = GPIO_PS,
+#endif
+	.device_id = GPIO_DEVICE_ID
+};
+#endif
+
+#ifdef LINUX_PLATFORM
+struct linux_spi_init_param linux_spi_param = {
+	.device_id = 0
+};
+#endif
 
 struct axi_adc_init rx_adc_init = {
 	"cf-ad9361-lpc",
@@ -109,15 +130,6 @@ struct axi_dmac_init tx_dmac_init = {
 	0
 };
 struct axi_dmac *tx_dmac;
-
-struct xil_gpio_init_param xil_gpio_param = {
-#ifdef PLATFORM_MB
-	.type = GPIO_PL,
-#else
-	.type = GPIO_PS,
-#endif
-	.device_id = GPIO_DEVICE_ID
-};
 
 AD9361_InitParam default_init_param = {
 	/* Device selection */
@@ -355,33 +367,59 @@ AD9361_InitParam default_init_param = {
 	/* GPIO definitions */
 	{
 		.number = -1,
+#ifdef XILINX_PLATFORM
 		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
+#endif
+#ifdef LINUX_PLATFORM
+		.platform_ops = &linux_gpio_platform_ops
+#endif
 	},		//gpio_resetb *** reset-gpios
 	/* MCS Sync */
 	{
 		.number = -1,
+#ifdef XILINX_PLATFORM
 		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
+#endif
+#ifdef LINUX_PLATFORM
+		.platform_ops = &linux_gpio_platform_ops
+#endif
 	},		//gpio_sync *** sync-gpios
 
 	{
 		.number = -1,
+#ifdef XILINX_PLATFORM
 		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
+#endif
+#ifdef LINUX_PLATFORM
+		.platform_ops = &linux_gpio_platform_ops
+#endif
 	},		//gpio_cal_sw1 *** cal-sw1-gpios
 
 	{
 		.number = -1,
+#ifdef XILINX_PLATFORM
 		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
+#endif
+#ifdef LINUX_PLATFORM
+		.platform_ops = &linux_gpio_platform_ops
+#endif
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
 
 	{
 		.mode = SPI_MODE_1,
 		.chip_select = SPI_CS,
+#ifdef XILINX_PLATFORM
 		.extra = &xil_spi_param,
 		.platform_ops = &xil_platform_ops
+#endif
+#ifdef LINUX_PLATFORM
+		.extra = &linux_spi_param,
+		.platform_ops = &linux_spi_platform_ops
+#endif
 	},
 
 	/* External LO clocks */
@@ -463,11 +501,11 @@ int main(void)
 	Xil_DCacheEnable();
 	default_init_param.spi_param.extra = &xil_spi_param;
 	default_init_param.spi_param.platform_ops = &xil_platform_ops;
-#else
-	default_init_param.spi_param.platform_ops = &altera_platform_ops;
 #endif
 
 #ifdef ALTERA_PLATFORM
+	default_init_param.spi_param.platform_ops = &altera_platform_ops;
+
 	if (altera_bridge_init()) {
 		printf("Altera Bridge Init Error!\n");
 		return -1;
@@ -910,6 +948,11 @@ int main(void)
 			}
 		}
 	}
+#endif
+
+	ad9361_remove(ad9361_phy);
+#ifdef FMCOMMS5
+	ad9361_remove(ad9361_phy_b);
 #endif
 
 #ifdef XILINX_PLATFORM

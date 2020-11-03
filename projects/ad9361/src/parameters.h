@@ -39,6 +39,7 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
+#ifdef XILINX_PLATFORM
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
@@ -133,5 +134,17 @@
 
 #define RX_CORE_BASEADDR	AD9361_RX_0_BASEADDR
 #define TX_CORE_BASEADDR	AD9361_TX_0_BASEADDR
+#endif
+
+#ifdef LINUX_PLATFORM
+#define RX_CORE_BASEADDR			0
+#define TX_CORE_BASEADDR			1
+#define CF_AD9361_RX_DMA_BASEADDR	2
+#define CF_AD9361_TX_DMA_BASEADDR	3
+
+#define SPI_CS			0
+
+#define GPIO_RESET_PIN	1006
+#endif
 
 #endif // __PARAMETERS_H__
