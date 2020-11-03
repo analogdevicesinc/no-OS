@@ -320,3 +320,34 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Get the direction of the specified GPIO.
+ * @param desc - The GPIO descriptor.
+ * @param direction - The direction.
+ *                    Example: GPIO_OUT
+ *                             GPIO_IN
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t gpio_get_direction(struct gpio_desc *desc,
+			   uint8_t *direction)
+{
+	struct linux_gpio_desc *linux_desc;
+	char data;
+	int ret;
+
+	linux_desc = desc->extra;
+
+	ret = read(linux_desc->direction_fd, &data, 1);
+	if (ret < 0) {
+		printf("%s: Can't read from file\n\r", __func__);
+		return FAILURE;
+	}
+
+	if (data == 'o')
+		*direction = GPIO_OUT;
+	else
+		*direction = GPIO_IN;
+
+	return SUCCESS;
+}
