@@ -75,7 +75,7 @@ int32_t gpio_get(struct gpio_desc **desc,
 int32_t gpio_get_optional(struct gpio_desc **desc,
 			  const struct gpio_init_param *param)
 {
-	if (!param) {
+	if (!param || (param->number == -1)) {
 		*desc = NULL;
 		return SUCCESS;
 	}
