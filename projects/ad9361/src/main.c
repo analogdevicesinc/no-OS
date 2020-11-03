@@ -74,6 +74,16 @@
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
+struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+	.type = SPI_PL,
+#else
+	.type = SPI_PS,
+#endif
+	.device_id = SPI_DEVICE_ID,
+	.flags = 0
+};
+
 struct axi_adc_init rx_adc_init = {
 	"cf-ad9361-lpc",
 	RX_CORE_BASEADDR,
@@ -91,12 +101,14 @@ struct axi_dmac_init rx_dmac_init = {
 	DMA_DEV_TO_MEM,
 	0
 };
+struct axi_dmac *rx_dmac;
 struct axi_dmac_init tx_dmac_init = {
 	"tx_dmac",
 	CF_AD9361_TX_DMA_BASEADDR,
 	DMA_MEM_TO_DEV,
 	0
 };
+struct axi_dmac *tx_dmac;
 
 struct xil_gpio_init_param xil_gpio_param = {
 #ifdef PLATFORM_MB
@@ -170,6 +182,7 @@ AD9361_InitParam default_init_param = {
 	704,	//gc_lmt_overload_low_thresh *** adi,gc-lmt-overload-low-thresh
 	24,		//gc_low_power_thresh *** adi,gc-low-power-thresh
 	15,		//gc_max_dig_gain *** adi,gc-max-dig-gain
+	0,		//gc_use_rx_fir_out_for_dec_pwr_meas_enable *** adi,gc-use-rx-fir-out-for-dec-pwr-meas-enable
 	/* Gain MGC Control */
 	2,		//mgc_dec_gain_step *** adi,mgc-dec-gain-step
 	2,		//mgc_inc_gain_step *** adi,mgc-inc-gain-step
@@ -230,6 +243,7 @@ AD9361_InitParam default_init_param = {
 	0,		//fagc_rst_gla_en_agc_pulled_high_en ***  adi,fagc-rst-gla-en-agc-pulled-high-enable
 	0,		//fagc_rst_gla_if_en_agc_pulled_high_mode ***  adi,fagc-rst-gla-if-en-agc-pulled-high-mode
 	64,		//fagc_power_measurement_duration_in_state5 ***  adi,fagc-power-measurement-duration-in-state5
+	2,		//fagc_large_overload_inc_steps *** adi,fagc-adc-large-overload-inc-steps
 	/* RSSI Control */
 	1,		//rssi_delay *** adi,rssi-delay
 	1000,	//rssi_duration *** adi,rssi-duration
@@ -304,6 +318,8 @@ AD9361_InitParam default_init_param = {
 	0xFF,	//lvds_invert1_control *** adi,lvds-invert1-control
 	0x0F,	//lvds_invert2_control *** adi,lvds-invert2-control
 	/* GPO Control */
+	0,		//gpo_manual_mode_enable *** adi,gpo-manual-mode-enable
+	0,		//gpo_manual_mode_enable_mask *** adi,gpo-manual-mode-enable-mask
 	0,		//gpo0_inactive_state_high_enable *** adi,gpo0-inactive-state-high-enable
 	0,		//gpo1_inactive_state_high_enable *** adi,gpo1-inactive-state-high-enable
 	0,		//gpo2_inactive_state_high_enable *** adi,gpo2-inactive-state-high-enable
@@ -360,18 +376,22 @@ AD9361_InitParam default_init_param = {
 		.platform_ops = &xil_gpio_platform_ops,
 		.extra = &xil_gpio_param
 	},		//gpio_cal_sw2 *** cal-sw2-gpios
+
+	{
+		.mode = SPI_MODE_1,
+		.chip_select = SPI_CS,
+		.extra = &xil_spi_param,
+		.platform_ops = &xil_platform_ops
+	},
+
 	/* External LO clocks */
 	NULL,	//(*ad9361_rfpll_ext_recalc_rate)()
 	NULL,	//(*ad9361_rfpll_ext_round_rate)()
 	NULL,	//(*ad9361_rfpll_ext_set_rate)()
-	NULL,	//spi_desc *spi
-	NULL,	//gpio_desc *gpio_device_id
-	NULL,	//gpio_desc *gpio_resetb
-	NULL, 	//gpio_desc *gpio_desc_sync;
+#ifndef AXI_ADC_NOT_PRESENT
 	&rx_adc_init,	// *rx_adc_init
 	&tx_dac_init,   // *tx_dac_init
-	&rx_dmac_init,	// *rx_dmac_init
-	&tx_dmac_init,	// *tx_dmac_init
+#endif
 };
 
 AD9361_RXFIRConfig rx_fir_config = {	// BPF PASSBAND 3/20 fs to 1/4 fs
@@ -432,21 +452,6 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
-struct xil_spi_init_param xil_spi_param = {
-#ifdef PLATFORM_MB
-	.type = SPI_PL,
-#else
-	.type = SPI_PS,
-#endif
-	.device_id = SPI_DEVICE_ID,
-	.flags = 0
-};
-struct spi_init_param spi_param = {
-	.mode = SPI_MODE_1,
-	.chip_select = SPI_CS,
-	.extra = &xil_spi_param
-};
-
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -456,14 +461,11 @@ int main(void)
 #ifdef XILINX_PLATFORM
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
-	spi_param.extra = &xil_spi_param;
-	spi_param.platform_ops = &xil_platform_ops;
+	default_init_param.spi_param.extra = &xil_spi_param;
+	default_init_param.spi_param.platform_ops = &xil_platform_ops;
 #else
-	spi_param.platform_ops = &altera_platform_ops;
+	default_init_param.spi_param.platform_ops = &altera_platform_ops;
 #endif
-	struct gpio_init_param 	gpio_init;
-	gpio_init.platform_ops = &xil_gpio_platform_ops;
-	gpio_init.extra = &xil_gpio_param;
 
 #ifdef ALTERA_PLATFORM
 	if (altera_bridge_init()) {
@@ -475,20 +477,9 @@ int main(void)
 	// NOTE: The user has to choose the GPIO numbers according to desired
 	// carrier board.
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN;
-	status = gpio_get(&default_init_param.gpio_desc_resetb,
-			  &default_init_param.gpio_resetb);
-	if (status != SUCCESS) {
-		printf("gpio_get() error: %"PRIi32"\n", status);
-		return status;
-	}
+
 #ifdef FMCOMMS5
 	default_init_param.gpio_sync.number = GPIO_SYNC_PIN;
-	status = gpio_get(&default_init_param.gpio_desc_sync,
-			  &default_init_param.gpio_sync);
-	if (status != SUCCESS) {
-		printf("gpio_get() error: %"PRIi32"\n", status);
-		return status;
-	}
 	default_init_param.gpio_cal_sw1.number = GPIO_CAL_SW1_PIN;
 	default_init_param.gpio_cal_sw2.number = GPIO_CAL_SW2_PIN;
 	default_init_param.rx1rx2_phase_inversion_en = 1;
@@ -497,25 +488,6 @@ int main(void)
 	default_init_param.gpio_cal_sw1.number = -1;
 	default_init_param.gpio_cal_sw2.number = -1;
 #endif
-
-#ifdef LINUX_PLATFORM
-	gpio_init(default_init_param.gpio_resetb);
-#else
-	gpio_init.number = GPIO_DEVICE_ID;
-	status = gpio_get(&default_init_param.gpio_desc_device_id,
-			  &gpio_init);
-	if (status != SUCCESS) {
-		printf("gpio_get() error: %"PRIi32"\n", status);
-		return status;
-	}
-#endif
-	gpio_direction_output(default_init_param.gpio_desc_resetb, 0);
-
-	status = spi_init(&default_init_param.spi, &spi_param);
-	if (status != SUCCESS) {
-		printf("spi_init() error: %"PRIi32"\n", status);
-		return status;
-	}
 
 	if (AD9364_DEVICE)
 		default_init_param.dev_sel = ID_AD9364;
@@ -585,12 +557,12 @@ int main(void)
 	ad9361_set_tx_fir_config(ad9361_phy_b, tx_fir_config);
 	ad9361_set_rx_fir_config(ad9361_phy_b, rx_fir_config);
 #endif
-	status = axi_dmac_init(&ad9361_phy->tx_dmac, default_init_param.tx_dmac_init);
+	status = axi_dmac_init(&tx_dmac, &tx_dmac_init);
 	if (status < 0) {
 		printf("axi_dmac_init tx init error: %"PRIi32"\n", status);
 		return status;
 	}
-	status = axi_dmac_init(&ad9361_phy->rx_dmac, default_init_param.rx_dmac_init);
+	status = axi_dmac_init(&rx_dmac, &rx_dmac_init);
 	if (status < 0) {
 		printf("axi_dmac_init rx init error: %"PRIi32"\n", status);
 		return status;
@@ -610,7 +582,7 @@ int main(void)
 	axi_dac_init(&ad9361_phy_b->tx_dac, ad9361_phy_b->tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
-	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DDS);
 #endif
 #endif
@@ -651,11 +623,6 @@ int main(void)
 		.direction = DMA_MEM_TO_DEV,
 		.flags = DMA_CYCLIC,
 	};
-
-	/**
-	 * Pointer to transmit DMA instance.
-	 */
-	struct axi_dmac *tx_dmac;
 
 	/**
 	 * iio application configurations.
@@ -765,7 +732,7 @@ int main(void)
 
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9361_phy->rx_adc,
-		.rx_dmac = ad9361_phy->rx_dmac,
+		.rx_dmac = rx_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
@@ -782,7 +749,7 @@ int main(void)
 
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = ad9361_phy->tx_dac,
-		.tx_dmac = ad9361_phy->tx_dmac,
+		.tx_dmac = tx_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
