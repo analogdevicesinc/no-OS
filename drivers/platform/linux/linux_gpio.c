@@ -75,8 +75,8 @@ struct linux_gpio_desc {
  * @param param - GPIO initialization parameters
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get(struct gpio_desc **desc,
-		 const struct gpio_init_param *param)
+int32_t linux_gpio_get(struct gpio_desc **desc,
+		       const struct gpio_init_param *param)
 {
 	struct linux_gpio_desc *linux_desc;
 	struct gpio_desc *descriptor;
@@ -150,10 +150,10 @@ free_desc:
  * @param param - GPIO Initialization parameters.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_optional(struct gpio_desc **desc,
-			  const struct gpio_init_param *param)
+int32_t linux_gpio_get_optional(struct gpio_desc **desc,
+				const struct gpio_init_param *param)
 {
-	gpio_get(desc, param);
+	linux_gpio_get(desc, param);
 
 	return SUCCESS;
 }
@@ -163,7 +163,7 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  * @param desc - The SPI descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_remove(struct gpio_desc *desc)
+int32_t linux_gpio_remove(struct gpio_desc *desc)
 {
 	struct linux_gpio_desc *linux_desc;
 	char path[64];
@@ -218,8 +218,8 @@ int32_t gpio_remove(struct gpio_desc *desc)
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_set_value(struct gpio_desc *desc,
-		       uint8_t value)
+int32_t linux_gpio_set_value(struct gpio_desc *desc,
+			     uint8_t value)
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
@@ -246,8 +246,8 @@ int32_t gpio_set_value(struct gpio_desc *desc,
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_value(struct gpio_desc *desc,
-		       uint8_t *value)
+int32_t linux_gpio_get_value(struct gpio_desc *desc,
+			     uint8_t *value)
 {
 	struct linux_gpio_desc *linux_desc;
 	char data;
@@ -274,7 +274,7 @@ int32_t gpio_get_value(struct gpio_desc *desc,
  * @param desc - The GPIO descriptor.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_input(struct gpio_desc *desc)
+int32_t linux_gpio_direction_input(struct gpio_desc *desc)
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
@@ -298,8 +298,8 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
  *                         GPIO_LOW
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_direction_output(struct gpio_desc *desc,
-			      uint8_t value)
+int32_t linux_gpio_direction_output(struct gpio_desc *desc,
+				    uint8_t value)
 {
 	struct linux_gpio_desc *linux_desc;
 	int ret;
@@ -312,7 +312,7 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 		return FAILURE;
 	}
 
-	ret = gpio_set_value(desc, value);
+	ret = linux_gpio_set_value(desc, value);
 	if (ret != SUCCESS) {
 		printf("%s: Can't set value\n\r", __func__);
 		return FAILURE;
@@ -329,8 +329,8 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
  *                             GPIO_IN
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-int32_t gpio_get_direction(struct gpio_desc *desc,
-			   uint8_t *direction)
+int32_t linux_gpio_get_direction(struct gpio_desc *desc,
+				 uint8_t *direction)
 {
 	struct linux_gpio_desc *linux_desc;
 	char data;
@@ -351,3 +351,17 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 
 	return SUCCESS;
 }
+
+/**
+ * @brief Linux platform specific GPIO platform ops structure
+ */
+const struct gpio_platform_ops linux_gpio_platform_ops = {
+	.gpio_ops_get = &linux_gpio_get,
+	.gpio_ops_get_optional = &linux_gpio_get_optional,
+	.gpio_ops_remove = &linux_gpio_remove,
+	.gpio_ops_direction_input = &linux_gpio_direction_input,
+	.gpio_ops_direction_output = &linux_gpio_direction_output,
+	.gpio_ops_get_direction = &linux_gpio_get_direction,
+	.gpio_ops_set_value = &linux_gpio_set_value,
+	.gpio_ops_get_value = &linux_gpio_get_value,
+};
