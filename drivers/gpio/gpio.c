@@ -94,7 +94,10 @@ int32_t gpio_get_optional(struct gpio_desc **desc,
  */
 int32_t gpio_remove(struct gpio_desc *desc)
 {
-	return desc->platform_ops->gpio_ops_remove(desc);
+	if (desc)
+		return desc->platform_ops->gpio_ops_remove(desc);
+	else
+		return SUCCESS;
 }
 
 /**
@@ -104,7 +107,10 @@ int32_t gpio_remove(struct gpio_desc *desc)
  */
 int32_t gpio_direction_input(struct gpio_desc *desc)
 {
-	return desc->platform_ops->gpio_ops_direction_input(desc);
+	if (desc)
+		return desc->platform_ops->gpio_ops_direction_input(desc);
+	else
+		return SUCCESS;
 }
 
 /**
@@ -118,7 +124,11 @@ int32_t gpio_direction_input(struct gpio_desc *desc)
 int32_t gpio_direction_output(struct gpio_desc *desc,
 			      uint8_t value)
 {
-	return desc->platform_ops->gpio_ops_direction_output(desc, value);
+	if (desc)
+		return desc->platform_ops->
+			gpio_ops_direction_output(desc, value);
+	else
+		return SUCCESS;
 }
 
 /**
@@ -132,7 +142,11 @@ int32_t gpio_direction_output(struct gpio_desc *desc,
 int32_t gpio_get_direction(struct gpio_desc *desc,
 			   uint8_t *direction)
 {
-	return desc->platform_ops->gpio_ops_get_direction(desc, direction);
+	if (desc)
+		return desc->platform_ops->
+			gpio_ops_get_direction(desc, direction);
+	else
+		return SUCCESS;
 }
 
 /**
@@ -146,7 +160,10 @@ int32_t gpio_get_direction(struct gpio_desc *desc,
 int32_t gpio_set_value(struct gpio_desc *desc,
 		       uint8_t value)
 {
-	return desc->platform_ops->gpio_ops_set_value(desc, value);
+	if (desc)
+		return desc->platform_ops->gpio_ops_set_value(desc, value);
+	else
+		return SUCCESS;
 }
 
 /**
@@ -160,5 +177,8 @@ int32_t gpio_set_value(struct gpio_desc *desc,
 int32_t gpio_get_value(struct gpio_desc *desc,
 		       uint8_t *value)
 {
-	return desc->platform_ops->gpio_ops_get_value(desc, value);
+	if (desc)
+		return desc->platform_ops->gpio_ops_get_value(desc, value);
+	else
+		return SUCCESS;
 }
