@@ -205,10 +205,12 @@ static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
 		return (ssize_t) snprintf(buf, len, "[%"PRIi16", %"PRIi16", %"PRIi16"]", 0, 250,
 					  89750);
 	else
-		return (ssize_t) snprintf(buf, len, "[%"PRIi32", %"PRIi16", %"PRIi32"]",
-					  ad9361_phy->rx_gain[ad9361_phy->current_table].starting_gain_db,
-					  1,
-					  ad9361_phy->rx_gain[ad9361_phy->current_table].max_gain_db);
+		return (ssize_t) snprintf(buf, len, "[%"PRIi8", %"PRIi16", %"PRIi8"]",
+			ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
+			1,
+			ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+				abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+					max_index - 1]);
 }
 
 /**
