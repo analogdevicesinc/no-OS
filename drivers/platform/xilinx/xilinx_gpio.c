@@ -195,7 +195,7 @@ int32_t xil_gpio_get_optional(struct gpio_desc **desc,
 		return SUCCESS;
 	}
 
-	return gpio_get(desc, param);
+	return xil_gpio_get(desc, param);
 }
 
 /**
