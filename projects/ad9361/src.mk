@@ -10,10 +10,10 @@
 ################################################################################
 
 SRCS := $(PROJECT)/src/main.c
-SRCS += $(PROJECT)/src/ad9361_api.c					\
-	$(PROJECT)/src/ad9361.c						\
-	$(PROJECT)/src/ad9361_conv.c					\
-	$(PROJECT)/src/ad9361_util.c
+SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c			\
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361.c			\
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_conv.c			\
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_util.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.c			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
@@ -40,12 +40,12 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 endif
-INCS := $(PROJECT)/src/common.h						\
+INCS := $(DRIVERS)/rf-transceiver/ad9361/common.h			\
 	$(PROJECT)/src/app_config.h
-INCS += $(PROJECT)/src/ad9361.h						\
+INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h			\
 	$(PROJECT)/src/parameters.h					\
-	$(PROJECT)/src/ad9361_util.h					\
-	$(PROJECT)/src/ad9361_api.h
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_util.h			\
+	$(DRIVERS)/rf-transceiver/ad9361/ad9361_api.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h			\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h
