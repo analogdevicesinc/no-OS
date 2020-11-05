@@ -1,28 +1,26 @@
 
-EXEC = ad9361_linux
-PLATFORM = platform_linux
-SYMBOLS = -DLINUX_PLATFORM -DDMA_UIO
+EXEC			= ad9361_linux
+PLATFORM		= linux
+SYMBOLS			= -DLINUX_PLATFORM
+BUILD_DIR		= ./build_$(PLATFORM)
+PROJECT			= $(realpath ..)
+NO-OS			= $(realpath ../../..)
+INCLUDE			= $(NO-OS)/include
+DRIVERS 		= $(NO-OS)/drivers
+PLATFORM_DRIVERS	= $(NO-OS)/drivers/platform/$(PLATFORM)
 
-LIBS = -lmatio
-CFLAGS = -Wall -Werror -Wextra -I$(PLATFORM) $(SYMBOLS) -Os -ffunction-sections -fdata-sections
+include ../src.mk
 
-LIB_C_SOURCES := $(filter-out main.c, $(wildcard *.c)) $(wildcard $(PLATFORM)/*.c)
-LIB_SOURCES := $(patsubst %.c, %.o, $(LIB_C_SOURCES))
+all: copy $(EXEC)
 
-all: $(EXEC)
+copy:
+	mkdir -p $(BUILD_DIR)
+	cp -r $(SRCS) $(BUILD_DIR)
+	cp -r $(INCS) $(BUILD_DIR)
 
-lib_objects: $(LIB_C_SOURCES)
-	$(CC) $(CFLAGS) $(LIBS) -c $(LIB_C_SOURCES)
-
-libad9361.a: $(LIB_SOURCES)
-	$(AR) rvs libad9361.a $+
-
-$(EXEC): libad9361.a main.c
-	$(CC) $(CFLAGS) $(LIBS) main.c -lad9361 -Wl,--gc-sections -L. -o $@
+$(EXEC):
+	$(CC) -I$(BUILD_DIR) $(wildcard $(BUILD_DIR)/*.c) $(SYMBOLS) -o $@
 
 clean:
-	-rm -f *.o
-	-rm -f $(PLATFORM)/*.o
-	-rm -f $(EXEC)
-	-rm -f $(EXEC)
-	-rm -f libad9361.a
+	rm -rf $(BUILD_DIR)
+	rm -f $(EXEC)
