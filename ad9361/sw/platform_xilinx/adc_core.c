@@ -61,7 +61,11 @@
 /******************************************************************************/
 #ifdef ADC_DMA_IRQ_EXAMPLE
 #ifdef _XPARAMETERS_PS_H_
+#ifdef XPS_BOARD_ZCU102
+#define ADC_DMA_INT_ID			XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR + 32
+#else
 #define ADC_DMA_INT_ID			89
+#endif
 #elif defined _MICROBLAZE_INTERFACE_H_
 #define ADC_DMA_INT_ID			12
 #endif
@@ -219,7 +223,7 @@ int32_t adc_capture(uint32_t size, uint32_t start_address)
 	XScuGic			gic;
 	int32_t			status;
 
-	gic_config = XScuGic_LookupConfig(XPAR_PS7_SCUGIC_0_DEVICE_ID);
+	gic_config = XScuGic_LookupConfig(GIC_DEVICE_ID);
 	if(gic_config == NULL)
 		printf("XScuGic_LookupConfig Error\n");
 
