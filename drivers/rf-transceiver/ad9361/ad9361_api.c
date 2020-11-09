@@ -1398,7 +1398,7 @@ int32_t ad9361_set_tx_attenuation (struct ad9361_rf_phy *phy,
  * @return 0 in case of success, negative error code otherwise.
  */
 int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
-				   uint8_t ch, uint32_t *attenuation_db)
+				   uint8_t ch, uint32_t *attenuation_mdb)
 {
 	int32_t ret;
 
@@ -1408,7 +1408,7 @@ int32_t ad9361_get_tx_attenuation (struct ad9361_rf_phy *phy,
 
 	if(ret < 0)
 		return ret;
-	*attenuation_db = ret;
+	*attenuation_mdb = ret;
 
 	return 0;
 }
