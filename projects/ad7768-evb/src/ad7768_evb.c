@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad7768evb.c
+ *   @file   ad7768_evb.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
 ********************************************************************************
