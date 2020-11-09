@@ -1746,6 +1746,12 @@ static int32_t ad9361_rfpll_vco_init(struct ad9361_rf_phy *phy,
 				phy->current_tx_use_tdd_table = true;
 			else
 				phy->current_rx_use_tdd_table = true;
+		} else {
+			tab = &SynthLUT_FDD[range][0];
+			if (tx)
+				phy->current_tx_use_tdd_table = false;
+			else
+				phy->current_rx_use_tdd_table = false;
 		}
 	}
 
