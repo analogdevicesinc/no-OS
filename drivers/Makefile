@@ -11,6 +11,7 @@ INCLUDES = -I../include/ \
 	 -I./adc/ad9208/ad9208_api \
 	 -I./adc/ad9081/api \
 	 -I./axi_core/axi_adc_core \
+	 -I./axi_core/axi_dac_core \
 	 -I./axi_core/spi_engine \
 	 -I./axi_core/clk_axi_clkgen \
 	 -I./platform/xilinx \
