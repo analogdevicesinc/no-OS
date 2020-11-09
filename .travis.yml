@@ -10,8 +10,6 @@ env:
   matrix:
     - BUILD_TYPE=astyle
     - BUILD_TYPE=cppcheck
-    - BUILD_TYPE=ad9361_generic
-    - BUILD_TYPE=ad9361_linux
     - BUILD_TYPE=drivers
     - BUILD_TYPE=doxygen
 
