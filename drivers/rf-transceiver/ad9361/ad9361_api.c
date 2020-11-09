@@ -72,9 +72,9 @@ extern struct gain_table_info ad9361_adi_gt_info[];
 
 /**
  * Initialize the AD9361 part.
+ * @param ad9361_phy The AD9361 device structure.
  * @param init_param The structure that contains the AD9361 initial parameters.
- * @return A structure that contains the AD9361 current state in case of
- *         success, negative error code otherwise.
+ * @return 0 in case of success, negative error code otherwise.
  *
  * Note: This function will/may affect the data path.
  */
@@ -1010,7 +1010,7 @@ int32_t ad9361_set_rx_fir_config (struct ad9361_rf_phy *phy,
 /**
  * Get the RX FIR filter configuration.
  * @param phy The AD9361 current state structure.
- * @param tx_ch The selected RX channel (RX1, RX2).
+ * @param rx_ch The selected RX channel (RX1, RX2).
  * 				Accepted values:
  * 				 RX1 (0)
  * 				 RX2 (1)
@@ -1916,7 +1916,7 @@ int32_t ad9361_get_trx_path_clks(struct ad9361_rf_phy *phy,
  * @param phy The AD9361 state structure.
  * Note: This function also resets the device, some additional
  *       configurations might be necessary
- * @param ch_mode Number of channels mode (MODE_1x1, MODE_2x2).
+ * @param no_ch_mode Number of channels mode (MODE_1x1, MODE_2x2).
  * 				  Accepted values:
  * 				   MODE_1x1 (1)
  * 				   MODE_2x2 (2)
