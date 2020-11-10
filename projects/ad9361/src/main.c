@@ -653,16 +653,6 @@ int main(void)
 #ifdef IIO_SUPPORT
 
 	/**
-	 * Transmit DMA initial configuration.
-	 */
-	struct axi_dmac_init tx_dmac_init = {
-		.name = "tx_dmac",
-		.base = DAC_DDR_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC,
-	};
-
-	/**
 	 * iio application configurations.
 	 */
 	struct iio_init_param iio_init_par;
