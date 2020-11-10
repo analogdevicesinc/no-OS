@@ -110,16 +110,18 @@ static void tmr_callback(void *param, uint32_t tmr_event, void *arg)
  */
 int32_t timer_init(struct timer_desc **desc, struct timer_init_param *param)
 {
+	struct timer_desc *ldesc;
 	struct aducm_timer_desc *aducm_desc;
 	ADI_TMR_CONFIG		tmr_conf;
 
 	if (!desc || !param || param->freq_hz > FREQ_1MHZ)
 		return FAILURE;
 
-	if (!(*desc = calloc(1, sizeof(**desc))))
+	if (!(ldesc = calloc(1, sizeof(*ldesc))))
 		return FAILURE;
+
 	if (!(aducm_desc = calloc(1, sizeof(*aducm_desc)))) {
-		free(*desc);
+		free(ldesc);
 		*desc = NULL;
 		return FAILURE;
 	}
@@ -141,10 +143,12 @@ int32_t timer_init(struct timer_desc **desc, struct timer_init_param *param)
 	}
 
 	nb_instances++;
-	(*desc)->id = timer_id;
-	(*desc)->extra = aducm_desc;
-	(*desc)->freq_hz = param->freq_hz;
-	(*desc)->load_value = param->load_value;
+	ldesc->id = timer_id;
+	ldesc->extra = aducm_desc;
+	ldesc->freq_hz = param->freq_hz;
+	ldesc->load_value = param->load_value;
+
+	*desc = ldesc;
 
 	return SUCCESS;
 }
