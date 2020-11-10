@@ -166,7 +166,7 @@ static int32_t spi_init_ps(struct spi_desc *desc,
 	const uint32_t			prescaler_min = XSPIPS_CLK_PRESCALE_4;
 	const uint32_t			prescaler_max = XSPIPS_CLK_PRESCALE_256;
 	uint32_t			prescaler = 0u;
-	uint32_t			input_clock;
+	uint32_t			input_clock = 0u;
 
 	xdesc = (xil_spi_desc*)malloc(sizeof(xil_spi_desc));
 	if(!xdesc) {
