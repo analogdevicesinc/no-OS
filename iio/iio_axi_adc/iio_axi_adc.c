@@ -496,6 +496,7 @@ static int32_t iio_axi_adc_create_device_descriptor(
 		.scan_type =  &scan_type,
 		.attributes = iio_voltage_attributes,
 		.ch_out = false,
+		.indexed = true,
 	};
 	int32_t i;
 	int32_t ret;
@@ -511,6 +512,7 @@ static int32_t iio_axi_adc_create_device_descriptor(
 		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
 		if (!iio_device->channels[i])
 			goto error;
+		default_channel.channel = i;
 		*(iio_device->channels[i]) = default_channel;
 		iio_device->channels[i]->name = calloc(5, 1);
 		if (!iio_device->channels[i]->name)

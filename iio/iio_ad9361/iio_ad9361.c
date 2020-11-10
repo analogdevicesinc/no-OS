@@ -206,11 +206,11 @@ static ssize_t get_hardwaregain_available(void *device, char *buf, size_t len,
 					  89750);
 	else
 		return (ssize_t) snprintf(buf, len, "[%"PRIi8", %"PRIi16", %"PRIi8"]",
-			ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
-			1,
-			ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-				abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
-					max_index - 1]);
+					  ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].abs_gain_tbl[0],
+					  1,
+					  ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+					  abs_gain_tbl[ad9361_phy->gt_info[ad9361_gt(ad9361_phy)].
+						       max_index - 1]);
 }
 
 /**
@@ -2178,6 +2178,8 @@ static struct iio_channel iio_channel_voltage0_in = {
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 0,
 };
 
 static struct iio_channel iio_channel_voltage1_in = {
@@ -2185,6 +2187,8 @@ static struct iio_channel iio_channel_voltage1_in = {
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 1,
 };
 
 static struct iio_channel iio_channel_voltage2_in = {
@@ -2192,6 +2196,8 @@ static struct iio_channel iio_channel_voltage2_in = {
 	.attributes = voltage_input_attributes,
 	.ch_out = false,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 2,
 };
 
 static struct iio_channel iio_channel_voltage0_out = {
@@ -2199,6 +2205,8 @@ static struct iio_channel iio_channel_voltage0_out = {
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 0,
 };
 
 static struct iio_channel iio_channel_voltage1_out = {
@@ -2206,6 +2214,8 @@ static struct iio_channel iio_channel_voltage1_out = {
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 1,
 };
 
 static struct iio_channel iio_channel_voltage2_out = {
@@ -2213,6 +2223,8 @@ static struct iio_channel iio_channel_voltage2_out = {
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 2,
 };
 
 static struct iio_channel iio_channel_voltage3_out = {
@@ -2220,6 +2232,8 @@ static struct iio_channel iio_channel_voltage3_out = {
 	.attributes = voltage_output_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 3,
 };
 
 static struct iio_channel iio_channel_altvoltage0 = {
@@ -2227,6 +2241,8 @@ static struct iio_channel iio_channel_altvoltage0 = {
 	.attributes = altvoltage_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 0,
 };
 
 static struct iio_channel iio_channel_altvoltage1 = {
@@ -2234,6 +2250,8 @@ static struct iio_channel iio_channel_altvoltage1 = {
 	.attributes = altvoltage_attributes,
 	.ch_out = true,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 1,
 };
 
 static struct iio_channel iio_channel_temp0 = {
@@ -2241,6 +2259,8 @@ static struct iio_channel iio_channel_temp0 = {
 	.attributes = temp0_attributes,
 	.ch_out = false,
 	.scan_type = NULL,
+	.indexed = true,
+	.channel = 0,
 };
 
 static struct iio_channel iio_channel_out = {

@@ -623,6 +623,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		.scan_type = &scan_type,
 		.attributes = iio_voltage_attributes,
 		.ch_out = true,
+		.indexed = true,
 	};
 
 	static struct iio_channel default_altvoltage_channel = {
@@ -630,9 +631,10 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		.scan_type = &scan_type,
 		.attributes = iio_altvoltage_attributes,
 		.ch_out = true,
+		.indexed = true,
 	};
 
-	int32_t i, voltage_ch_no, altvoltage_ch_no;
+	int32_t i, altvoltage_ch, voltage_ch_no, altvoltage_ch_no;
 	int32_t ret;
 
 	voltage_ch_no = adc->num_channels;
@@ -648,6 +650,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
 		if (!iio_device->channels[i])
 			goto error;
+		default_voltage_channel.channel = i;
 		*(iio_device->channels[i]) = default_voltage_channel;
 
 		iio_device->channels[i]->name = calloc(5, 1);
@@ -664,15 +667,17 @@ static int32_t iio_axi_dac_create_device_descriptor(
 		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
 		if (!iio_device->channels[i])
 			goto error;
+		altvoltage_ch = i - voltage_ch_no;
+		default_altvoltage_channel.channel = altvoltage_ch;
 		*(iio_device->channels[i]) = default_altvoltage_channel;
 
 		iio_device->channels[i]->name = calloc(5, 1);
 		if (!iio_device->channels[i]->name)
 			goto error;
 
-		iio_device->channels[i]->scan_index = i;
+		iio_device->channels[i]->scan_index = altvoltage_ch;
 		ret = sprintf(iio_device->channels[i]->name, "altvoltage%"PRIi32"",
-			      i - voltage_ch_no);
+			      altvoltage_ch);
 		if (ret < 0)
 			goto error;
 	}
