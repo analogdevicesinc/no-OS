@@ -628,7 +628,7 @@ static int32_t iio_axi_dac_create_device_descriptor(
 
 	static struct iio_channel default_altvoltage_channel = {
 		.ch_type = IIO_ALTVOLTAGE,
-		.scan_type = &scan_type,
+		.scan_type = NULL,
 		.attributes = iio_altvoltage_attributes,
 		.ch_out = true,
 		.indexed = true,
