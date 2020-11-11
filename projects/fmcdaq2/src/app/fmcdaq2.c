@@ -74,6 +74,110 @@
 #include "app_iio.h"
 #endif
 
+struct fmcdaq2_dev {
+	struct gpio_desc *gpio_clkd_sync;
+	struct gpio_desc *gpio_dac_reset;
+	struct gpio_desc *gpio_dac_txen;
+	struct gpio_desc *gpio_adc_pd;
+}fmcdaq2;
+
+static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
+{
+	int status;
+
+	/* Initialize GPIO structures */
+	struct gpio_init_param gpio_clkd_sync_param = {
+		.number = GPIO_CLKD_SYNC,
+		.platform_ops = &xil_gpio_platform_ops
+	};
+	struct gpio_init_param gpio_dac_reset_param = {
+		.number = GPIO_DAC_RESET,
+		.platform_ops = &xil_gpio_platform_ops
+	};
+	struct gpio_init_param gpio_dac_txen_param = {
+		.number = GPIO_DAC_TXEN,
+		.platform_ops = &xil_gpio_platform_ops
+	};
+	struct gpio_init_param gpio_adc_pd_param = {
+		.number = GPIO_ADC_PD,
+		.platform_ops = &xil_gpio_platform_ops
+	};
+
+#ifndef ALTERA_PLATFORM
+	struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
+	gpio_clkd_sync_param.extra = &xil_gpio_param;
+	gpio_dac_reset_param.extra = &xil_gpio_param;
+	gpio_dac_txen_param.extra = &xil_gpio_param;
+	gpio_adc_pd_param.extra = &xil_gpio_param;
+#else
+	struct altera_gpio_init_param altera_gpio_param = {
+		.base_address = GPIO_BASEADDR,
+		.type = NIOS_II_GPIO,
+		.device_id = GPIO_DEVICE_ID
+	};
+	gpio_clkd_sync_param.extra = &altera_gpio_param;
+	gpio_dac_reset_param.extra = &altera_gpio_param;
+	gpio_dac_txen_param.extra = &altera_gpio_param;
+	gpio_adc_pd_param.extra = &altera_gpio_param;
+#endif
+
+	/* set GPIOs */
+	status = gpio_get(&dev->gpio_clkd_sync, &gpio_clkd_sync_param);
+	if (status < 0)
+		return status;
+
+	status = gpio_get(&dev->gpio_dac_reset, &gpio_dac_reset_param);
+	if (status < 0)
+		return status;
+
+	status = gpio_get(&dev->gpio_dac_txen, &gpio_dac_txen_param);
+	if (status < 0)
+		return status;
+
+	status = gpio_get(&dev->gpio_adc_pd, &gpio_adc_pd_param);
+	if (status < 0)
+		return status;
+
+	status = gpio_direction_output(dev->gpio_clkd_sync, GPIO_LOW);
+	if (status < 0)
+		return status;
+
+	status = gpio_direction_output(dev->gpio_dac_reset, GPIO_LOW);
+	if (status < 0)
+		return status;
+
+	status = gpio_direction_output(dev->gpio_dac_txen, GPIO_LOW);
+	if (status < 0)
+		return status;
+
+	status = gpio_direction_output(dev->gpio_adc_pd, GPIO_HIGH);
+	if (status < 0)
+		return status;
+
+	mdelay(5);
+
+	status = gpio_set_value(dev->gpio_clkd_sync, GPIO_HIGH);
+	if (status < 0)
+		return status;
+
+	status = gpio_set_value(dev->gpio_dac_reset, GPIO_HIGH);
+	if (status < 0)
+		return status;
+
+	status = gpio_set_value(dev->gpio_dac_txen, GPIO_HIGH);
+	if (status < 0)
+		return status;
+
+	return gpio_set_value(dev->gpio_adc_pd, GPIO_LOW);
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -254,6 +358,10 @@ int main(void)
 {
 	int32_t status;
 
+	status = fmcdaq2_gpio_init(&fmcdaq2);
+	if (status < 0)
+		return status;
+
 	/* Initialize SPI structures */
 	struct spi_init_param ad9523_spi_param = {
 		.max_speed_hz = 2000000u,
@@ -300,54 +408,6 @@ int main(void)
 	ad9680_spi_param.platform_ops = &altera_platform_ops;
 	ad9680_spi_param.extra = &altera_spi_param;
 #endif
-
-	/* Initialize GPIO structures */
-	struct gpio_init_param clkd_sync_param = {
-		.number = GPIO_CLKD_SYNC,
-		.platform_ops = &xil_gpio_platform_ops
-	};
-	struct gpio_init_param dac_reset_param = {
-		.number = GPIO_DAC_RESET,
-		.platform_ops = &xil_gpio_platform_ops
-	};
-	struct gpio_init_param dac_txen_param = {
-		.number = GPIO_DAC_TXEN,
-		.platform_ops = &xil_gpio_platform_ops
-	};
-	struct gpio_init_param adc_pd_param = {
-		.number = GPIO_ADC_PD,
-		.platform_ops = &xil_gpio_platform_ops
-	};
-
-#ifndef ALTERA_PLATFORM
-	struct xil_gpio_init_param xil_gpio_param = {
-#ifdef PLATFORM_MB
-		.type = GPIO_PL,
-#else
-		.type = GPIO_PS,
-#endif
-		.device_id = GPIO_DEVICE_ID
-	};
-	clkd_sync_param.extra = &xil_gpio_param;
-	dac_reset_param.extra = &xil_gpio_param;
-	dac_txen_param.extra = &xil_gpio_param;
-	adc_pd_param.extra = &xil_gpio_param;
-#else
-	struct altera_gpio_init_param altera_gpio_param = {
-		.base_address = GPIO_BASEADDR,
-		.type = NIOS_II_GPIO,
-		.device_id = GPIO_DEVICE_ID
-	};
-	clkd_sync_param.extra = &altera_gpio_param;
-	dac_reset_param.extra = &altera_gpio_param;
-	dac_txen_param.extra = &altera_gpio_param;
-	adc_pd_param.extra = &altera_gpio_param;
-#endif
-
-	gpio_desc *clkd_sync;
-	gpio_desc *dac_reset;
-	gpio_desc *dac_txen;
-	gpio_desc *adc_pd;
 
 	/* setup the device structures */
 	struct ad9523_dev *ad9523_device;
@@ -588,23 +648,6 @@ int main(void)
 	ad9680_jesd_param.lane_clk_khz = ad9680_xcvr_param.lane_rate_khz;
 	ad9144_jesd_param.device_clk_khz =  ad9144_xcvr_param.lane_rate_khz / 40;
 	ad9144_jesd_param.lane_clk_khz = ad9144_xcvr_param.lane_rate_khz ;
-
-	/* set GPIOs */
-	gpio_get(&clkd_sync, &clkd_sync_param);
-	gpio_get(&dac_reset, &dac_reset_param);
-	gpio_get(&dac_txen,  &dac_txen_param);
-	gpio_get(&adc_pd,    &adc_pd_param);
-
-	gpio_direction_output(clkd_sync, 0);
-	gpio_direction_output(dac_reset, 0);
-	gpio_direction_output(dac_txen,  0);
-	gpio_direction_output(adc_pd,    1);
-	mdelay(5);
-
-	gpio_direction_output(clkd_sync, 1);
-	gpio_direction_output(dac_reset, 1);
-	gpio_direction_output(dac_txen,  1);
-	gpio_direction_output(adc_pd,    0);
 
 	/* setup clocks */
 	status = ad9523_setup(&ad9523_device, &ad9523_param);
@@ -848,10 +891,10 @@ int main(void)
 	axi_jesd204_rx_remove(ad9680_jesd);
 
 	/* Memory deallocation for gpios */
-	gpio_remove(clkd_sync);
-	gpio_remove(dac_reset);
-	gpio_remove(dac_txen);
-	gpio_remove(adc_pd);
+	gpio_remove(fmcdaq2.gpio_clkd_sync);
+	gpio_remove(fmcdaq2.gpio_dac_reset);
+	gpio_remove(fmcdaq2.gpio_dac_txen);
+	gpio_remove(fmcdaq2.gpio_adc_pd);
 
 	return SUCCESS;
 }
