@@ -382,6 +382,59 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 	return SUCCESS;
 }
 
+static int fmcdaq2_altera_pll_setup()
+{
+#ifdef ALTERA_PLATFORM
+	int status;
+	struct altera_a10_fpll *ad9680_device_clk_pll;
+	struct altera_a10_fpll *ad9144_device_clk_pll;
+	struct altera_a10_fpll_init ad9680_device_clk_pll_param = {
+		.name = "ad9680_device_clk_pll",
+		.base = RX_A10_FPLL_BASEADDR,
+		.parent_rate = 500000 * 1000
+	};
+	struct altera_a10_fpll_init ad9144_device_clk_pll_param = {
+		.name = "ad9144_device_clk_pll",
+		.base = TX_A10_FPLL_BASEADDR,
+		.parent_rate = 500000 * 1000
+	};
+
+	/* Initialize A10 FPLLs */
+	status = altera_a10_fpll_init(&ad9680_device_clk_pll,
+				      &ad9680_device_clk_pll_param);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       ad9680_device_clk_pll_param.name);
+	}
+	status = altera_a10_fpll_init(&ad9144_device_clk_pll,
+				      &ad9144_device_clk_pll_param);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_init() failed\n",
+		       ad9144_device_clk_pll_param.name);
+	}
+
+	altera_a10_fpll_disable(ad9680_device_clk_pll);
+	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
+			ad9680_jesd_param.device_clk_khz * 1000);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       ad9680_device_clk_pll->name);
+	}
+	altera_a10_fpll_enable(ad9680_device_clk_pll);
+	altera_a10_fpll_disable(ad9144_device_clk_pll);
+	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
+			fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
+	if (status != SUCCESS) {
+		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
+		       ad9144_device_clk_pll->name);
+	}
+	altera_a10_fpll_enable(ad9144_device_clk_pll);
+
+	return status;
+#endif
+	return SUCCESS;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -583,21 +636,6 @@ int main(void)
 	struct ad9144_dev *ad9144_device;
 	struct ad9680_dev *ad9680_device;
 
-#ifdef ALTERA_PLATFORM
-	struct altera_a10_fpll_init ad9680_device_clk_pll_param = {
-		.name = "ad9680_device_clk_pll",
-		.base = RX_A10_FPLL_BASEADDR,
-		.parent_rate = 500000 * 1000
-	};
-	struct altera_a10_fpll_init ad9144_device_clk_pll_param = {
-		.name = "ad9144_device_clk_pll",
-		.base = TX_A10_FPLL_BASEADDR,
-		.parent_rate = 500000 * 1000
-	};
-
-	struct altera_a10_fpll *ad9680_device_clk_pll;
-	struct altera_a10_fpll *ad9144_device_clk_pll;
-#endif
 
 	/* ADC Core */
 	struct axi_adc_init ad9680_core_param = {
@@ -712,38 +750,10 @@ int main(void)
 	// Both sequences are interleaved here so that the transceivers which might
 	// be shared between the DAC and ADC link are enabled at the same time.
 
-#ifdef ALTERA_PLATFORM
-	/* Initialize A10 FPLLs */
-	status = altera_a10_fpll_init(&ad9680_device_clk_pll,
-				      &ad9680_device_clk_pll_param);
-	if (status != SUCCESS) {
-		printf("error: %s: altera_a10_fpll_init() failed\n",
-		       ad9680_device_clk_pll_param.name);
-	}
-	status = altera_a10_fpll_init(&ad9144_device_clk_pll,
-				      &ad9144_device_clk_pll_param);
-	if (status != SUCCESS) {
-		printf("error: %s: altera_a10_fpll_init() failed\n",
-		       ad9144_device_clk_pll_param.name);
-	}
+	status = fmcdaq2_altera_pll_setup();
+	if (status != SUCCESS)
+		return status;
 
-	altera_a10_fpll_disable(ad9680_device_clk_pll);
-	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
-					  ad9680_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
-		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
-		       ad9680_device_clk_pll->name);
-	}
-	altera_a10_fpll_enable(ad9680_device_clk_pll);
-	altera_a10_fpll_disable(ad9144_device_clk_pll);
-	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
-					  fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
-	if (status != SUCCESS) {
-		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
-		       ad9144_device_clk_pll->name);
-	}
-	altera_a10_fpll_enable(ad9144_device_clk_pll);
-#endif
 	status = ad9680_setup(&ad9680_device, &fmcdaq2_init.ad9680_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
