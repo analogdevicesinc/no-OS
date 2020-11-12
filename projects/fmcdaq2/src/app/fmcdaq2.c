@@ -75,6 +75,8 @@
 #endif
 
 struct fmcdaq2_dev {
+	struct ad9523_channel_spec ad9523_channels[8];
+
 	struct gpio_desc *gpio_clkd_sync;
 	struct gpio_desc *gpio_dac_reset;
 	struct gpio_desc *gpio_dac_txen;
@@ -241,6 +243,59 @@ static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
 	dev_init->ad9680_param.spi_init = ad9680_spi_param;
 
 	return SUCCESS;
+}
+
+static int fmcdaq2_clk_init(struct fmcdaq2_dev *dev,
+			    struct fmcdaq2_init_param *dev_init)
+{
+	static struct ad9523_platform_data ad9523_pdata;
+	int ret;
+
+	/* clock distribution device (AD9523) configuration */
+	ad9523_pdata.num_channels = 8;
+	ad9523_pdata.channels = &dev->ad9523_channels[0];
+	dev_init->ad9523_param.pdata = &ad9523_pdata;
+
+	ret = ad9523_init(&dev_init->ad9523_param);
+	if (ret < 0) {
+		printf("\nClock init failed");
+		return ret;
+	}
+
+	dev->ad9523_channels[DAC_DEVICE_CLK].channel_num = 1;
+	dev->ad9523_channels[DAC_DEVICE_CLK].channel_divider = 1;
+	dev->ad9523_channels[DAC_DEVICE_SYSREF].channel_num = 7;
+	dev->ad9523_channels[DAC_DEVICE_SYSREF].channel_divider = 128;
+	dev->ad9523_channels[DAC_FPGA_CLK].channel_num = 9;
+	dev->ad9523_channels[DAC_FPGA_CLK].channel_divider = 2;
+	dev->ad9523_channels[DAC_FPGA_SYSREF].channel_num = 8;
+	dev->ad9523_channels[DAC_FPGA_SYSREF].channel_divider = 128;
+
+	// adc device-clk-sysref, fpga-clk-sysref
+	dev->ad9523_channels[ADC_DEVICE_CLK].channel_num = 13;
+	dev->ad9523_channels[ADC_DEVICE_CLK].channel_divider = 1;
+	dev->ad9523_channels[ADC_DEVICE_SYSREF].channel_num = 6;
+	dev->ad9523_channels[ADC_DEVICE_SYSREF].channel_divider = 128;
+	dev->ad9523_channels[ADC_FPGA_CLK].channel_num = 4;
+	dev->ad9523_channels[ADC_FPGA_CLK].channel_divider = 2;
+	dev->ad9523_channels[ADC_FPGA_SYSREF].channel_num = 5;
+	dev->ad9523_channels[ADC_FPGA_SYSREF].channel_divider = 128;
+	// VCXO 125MHz
+	ad9523_pdata.vcxo_freq = 125000000;
+	ad9523_pdata.spi3wire = 1;
+	ad9523_pdata.osc_in_diff_en = 1;
+	ad9523_pdata.pll2_charge_pump_current_nA = 413000;
+	ad9523_pdata.pll2_freq_doubler_en = 0;
+	ad9523_pdata.pll2_r2_div = 1;
+	ad9523_pdata.pll2_ndiv_a_cnt = 0;
+	ad9523_pdata.pll2_ndiv_b_cnt = 6;
+	ad9523_pdata.pll2_vco_diff_m1 = 3;
+	ad9523_pdata.pll2_vco_diff_m2 = 0;
+	ad9523_pdata.rpole2 = 0;
+	ad9523_pdata.rzero = 7;
+	ad9523_pdata.cpole1 = 2;
+
+	return ret;
 }
 
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
@@ -431,13 +486,14 @@ int main(void)
 	if (status < 0)
 		return status;
 
+	status = fmcdaq2_clk_init(&fmcdaq2, &fmcdaq2_init);
+	if (status < 0)
+		return status;
+
 	/* setup the device structures */
 	struct ad9523_dev *ad9523_device;
 	struct ad9144_dev *ad9144_device;
 	struct ad9680_dev *ad9680_device;
-
-	struct ad9523_channel_spec	ad9523_channels[8];
-	struct ad9523_platform_data	ad9523_pdata;
 
 #ifndef ALTERA_PLATFORM
 	struct adxcvr_init ad9144_xcvr_param = {
@@ -576,50 +632,6 @@ int main(void)
 		.flags = 0
 	};
 	struct axi_dmac *ad9680_dmac;
-
-	/* clock distribution device (AD9523) configuration */
-	ad9523_pdata.num_channels = 8;
-	ad9523_pdata.channels = &ad9523_channels[0];
-	fmcdaq2_init.ad9523_param.pdata = &ad9523_pdata;
-	ad9523_init(&fmcdaq2_init.ad9523_param);
-
-	// dac device-clk-sysref, fpga-clk-sysref
-
-	ad9523_channels[DAC_DEVICE_CLK].channel_num = 1;
-	ad9523_channels[DAC_DEVICE_CLK].channel_divider = 1;
-	ad9523_channels[DAC_DEVICE_SYSREF].channel_num = 7;
-	ad9523_channels[DAC_DEVICE_SYSREF].channel_divider = 128;
-	ad9523_channels[DAC_FPGA_CLK].channel_num = 9;
-	ad9523_channels[DAC_FPGA_CLK].channel_divider = 2;
-	ad9523_channels[DAC_FPGA_SYSREF].channel_num = 8;
-	ad9523_channels[DAC_FPGA_SYSREF].channel_divider = 128;
-
-	// adc device-clk-sysref, fpga-clk-sysref
-
-	ad9523_channels[ADC_DEVICE_CLK].channel_num = 13;
-	ad9523_channels[ADC_DEVICE_CLK].channel_divider = 1;
-	ad9523_channels[ADC_DEVICE_SYSREF].channel_num = 6;
-	ad9523_channels[ADC_DEVICE_SYSREF].channel_divider = 128;
-	ad9523_channels[ADC_FPGA_CLK].channel_num = 4;
-	ad9523_channels[ADC_FPGA_CLK].channel_divider = 2;
-	ad9523_channels[ADC_FPGA_SYSREF].channel_num = 5;
-	ad9523_channels[ADC_FPGA_SYSREF].channel_divider = 128;
-
-	// VCXO 125MHz
-
-	ad9523_pdata.vcxo_freq = 125000000;
-	ad9523_pdata.spi3wire = 1;
-	ad9523_pdata.osc_in_diff_en = 1;
-	ad9523_pdata.pll2_charge_pump_current_nA = 413000;
-	ad9523_pdata.pll2_freq_doubler_en = 0;
-	ad9523_pdata.pll2_r2_div = 1;
-	ad9523_pdata.pll2_ndiv_a_cnt = 0;
-	ad9523_pdata.pll2_ndiv_b_cnt = 6;
-	ad9523_pdata.pll2_vco_diff_m1 = 3;
-	ad9523_pdata.pll2_vco_diff_m2 = 0;
-	ad9523_pdata.rpole2 = 0;
-	ad9523_pdata.rzero = 7;
-	ad9523_pdata.cpole1 = 2;
 
 	fmcdaq2_init.ad9680_param.lane_rate_kbps = 10000000;
 
