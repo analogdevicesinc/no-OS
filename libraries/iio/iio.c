@@ -845,9 +845,14 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			ch = device->channels[j];
 			_print_ch_id(ch_id, ch);
 			i += snprintf(buff + i, max(n - i, 0),
-				      "<channel id=\"%s\" name=\"%s\""
+				      "<channel id=\"%s\"",
+				      ch_id);
+			if(ch->name)
+				i += snprintf(buff + i, max(n - i, 0),
+					      " name=\"%s\"",
+					      ch->name);
+			i += snprintf(buff + i, max(n - i, 0),
 				      " type=\"%s\" >",
-				      ch_id, ch->name,
 				      ch->ch_out ? "output" : "input");
 
 			if (ch->scan_type)
