@@ -95,6 +95,9 @@ struct fmcdaq2_dev {
 	struct axi_adc	*ad9680_core;
 	struct axi_dac	*ad9144_core;
 	struct axi_dac_channel	ad9144_channels[2];
+
+	struct axi_dmac *ad9144_dmac;
+	struct axi_dmac *ad9680_dmac;
 }fmcdaq2;
 
 struct fmcdaq2_init_param {
@@ -111,6 +114,9 @@ struct fmcdaq2_init_param {
 	struct axi_adc_init ad9680_core_param;
 
 	struct axi_dac_init ad9144_core_param;
+
+	struct axi_dmac_init ad9144_dmac_param;
+	struct axi_dmac_init ad9680_dmac_param;
 }fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
@@ -554,6 +560,111 @@ static int fmcdaq2_test(struct fmcdaq2_dev *dev,
 	return SUCCESS;
 }
 
+static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
+			    struct fmcdaq2_init_param *dev_init)
+{
+	/* DAC (AD9144) channels configuration */
+	dev->ad9144_channels[0].dds_dual_tone = 0;
+	dev->ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
+	dev->ad9144_channels[0].dds_phase_0 = 0;
+	dev->ad9144_channels[0].dds_scale_0 = 500000;
+	dev->ad9144_channels[0].pat_data = 0xb1b0a1a0;
+	dev->ad9144_channels[1].dds_dual_tone = 0;
+	dev->ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
+	dev->ad9144_channels[1].dds_phase_0 = 0;
+	dev->ad9144_channels[1].dds_scale_0 = 500000;
+	dev->ad9144_channels[1].pat_data = 0xd1d0c1c0;
+	dev->ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	dev->ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
+
+	/* DAC Core */
+	dev_init->ad9144_core_param = (struct axi_dac_init) {
+		.name = "ad9144_dac",
+		.base =	TX_CORE_BASEADDR,
+		.num_channels = 2,
+		.channels = &dev->ad9144_channels[0]
+	};
+
+	dev_init->ad9144_param.spi3wire = 1;
+	dev_init->ad9144_param.interpolation = 1;
+	dev_init->ad9144_param.pll_enable = 0;
+	dev_init->ad9144_param.jesd204_subclass = 1;
+	dev_init->ad9144_param.jesd204_scrambling = 1;
+	dev_init->ad9144_param.jesd204_mode = 4;
+	for(uint32_t n=0;
+	    n < ARRAY_SIZE(dev_init->ad9144_param.jesd204_lane_xbar);
+	    n++)
+		dev_init->ad9144_param.jesd204_lane_xbar[n] = n;
+
+	dev_init->ad9144_param.stpl_samples[0][0] =
+		(dev->ad9144_channels[0].pat_data >> 0)  & 0xffff;
+	dev_init->ad9144_param.stpl_samples[0][1] =
+		(dev->ad9144_channels[0].pat_data >> 16) & 0xffff;
+	dev_init->ad9144_param.stpl_samples[0][2] =
+		(dev->ad9144_channels[0].pat_data >> 0)  & 0xffff;
+	dev_init->ad9144_param.stpl_samples[0][3] =
+		(dev->ad9144_channels[0].pat_data >> 16) & 0xffff;
+	dev_init->ad9144_param.stpl_samples[1][0] =
+		(dev->ad9144_channels[1].pat_data >> 0)  & 0xffff;
+	dev_init->ad9144_param.stpl_samples[1][1] =
+		(dev->ad9144_channels[1].pat_data >> 16) & 0xffff;
+	dev_init->ad9144_param.stpl_samples[1][2] =
+		(dev->ad9144_channels[1].pat_data >> 0)  & 0xffff;
+	dev_init->ad9144_param.stpl_samples[1][3] =
+		(dev->ad9144_channels[1].pat_data >> 16) & 0xffff;
+	dev_init->ad9144_jesd_param.device_clk_khz =
+		dev_init->ad9144_xcvr_param.lane_rate_khz / 40;
+	dev_init->ad9144_jesd_param.lane_clk_khz =
+	 	dev_init->ad9144_xcvr_param.lane_rate_khz ;
+
+	return SUCCESS;
+}
+
+static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
+			    struct fmcdaq2_init_param *dev_init)
+{
+#ifdef IIO_SUPPORT
+
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheDisable();
+	Xil_ICacheDisable();
+#endif
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	dev_init->ad9144_dmac_param = (struct axi_dmac_init ) {
+		.name = "ad9144_dmac",
+		.base = TX_DMA_BASEADDR,
+		.direction = DMA_MEM_TO_DEV,
+		.flags = DMA_CYCLIC
+	};
+	axi_dmac_init(&dev->ad9144_dmac, &dev_init->ad9144_dmac_param);
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = fmcdaq2.ad9680_core,
+		.rx_dmac = fmcdaq2.ad9680_dmac,
+		.adc_ddr_base = ADC_DDR_BASEADDR,
+#ifndef PLATFORM_MB
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+#endif
+	};
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = fmcdaq2.ad9144_core,
+		.tx_dmac = fmcdaq2.ad9144_dmac,
+		.dac_ddr_base = DAC_DDR_BASEADDR,
+#ifndef PLATFORM_MB
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
+#endif
+	};
+
+	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
+#endif
+
+	return SUCCESS;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -760,76 +871,16 @@ int main(void)
 		.num_channels = 2
 	};
 
-	/* DAC (AD9144) channels configuration */
-	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
-	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
-	fmcdaq2.ad9144_channels[0].dds_phase_0 = 0;
-	fmcdaq2.ad9144_channels[0].dds_scale_0 = 500000;
-	fmcdaq2.ad9144_channels[0].pat_data = 0xb1b0a1a0;
-	fmcdaq2.ad9144_channels[1].dds_dual_tone = 0;
-	fmcdaq2.ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
-	fmcdaq2.ad9144_channels[1].dds_phase_0 = 0;
-	fmcdaq2.ad9144_channels[1].dds_scale_0 = 500000;
-	fmcdaq2.ad9144_channels[1].pat_data = 0xd1d0c1c0;
-	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
-	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
-
-	/* DAC Core */
-	fmcdaq2_init.ad9144_core_param = (struct axi_dac_init) {
-		.name = "ad9144_dac",
-		.base =	TX_CORE_BASEADDR,
-		.num_channels = 2,
-		.channels = &fmcdaq2.ad9144_channels[0]
-	};
-
-#ifdef DAC_DMA_EXAMPLE
-	struct axi_dmac_init ad9144_dmac_param = {
-		.name = "tx_dmac",
-		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = 0
-	};
-	struct axi_dmac		*ad9144_dmac;
-	extern const uint32_t sine_lut_iq[1024];
-#endif
-
-	struct axi_dmac_init ad9680_dmac_param = {
+	fmcdaq2_init.ad9680_dmac_param = (struct axi_dmac_init) {
 		.name = "ad9680_dmac",
 		.base = RX_DMA_BASEADDR,
 		.direction = DMA_DEV_TO_MEM,
 		.flags = 0
 	};
-	struct axi_dmac *ad9680_dmac;
 
 	fmcdaq2_init.ad9680_param.lane_rate_kbps = 10000000;
 	fmcdaq2_init.ad9144_param.lane_rate_kbps = 10000000;
-	fmcdaq2_init.ad9144_param.spi3wire = 1;
-	fmcdaq2_init.ad9144_param.interpolation = 1;
-	fmcdaq2_init.ad9144_param.pll_enable = 0;
-	fmcdaq2_init.ad9144_param.jesd204_subclass = 1;
-	fmcdaq2_init.ad9144_param.jesd204_scrambling = 1;
-	fmcdaq2_init.ad9144_param.jesd204_mode = 4;
-	for(uint32_t n=0;
-	    n < ARRAY_SIZE(fmcdaq2_init.ad9144_param.jesd204_lane_xbar);
-	    n++)
-		fmcdaq2_init.ad9144_param.jesd204_lane_xbar[n] = n;
 
-	fmcdaq2_init.ad9144_param.stpl_samples[0][0] =
-		(fmcdaq2.ad9144_channels[0].pat_data >> 0)  & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[0][1] =
-		(fmcdaq2.ad9144_channels[0].pat_data >> 16) & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[0][2] =
-		(fmcdaq2.ad9144_channels[0].pat_data >> 0)  & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[0][3] =
-		(fmcdaq2.ad9144_channels[0].pat_data >> 16) & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[1][0] =
-		(fmcdaq2.ad9144_channels[1].pat_data >> 0)  & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[1][1] =
-		(fmcdaq2.ad9144_channels[1].pat_data >> 16) & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[1][2] =
-		(fmcdaq2.ad9144_channels[1].pat_data >> 0)  & 0xffff;
-	fmcdaq2_init.ad9144_param.stpl_samples[1][3] =
-		(fmcdaq2.ad9144_channels[1].pat_data >> 16) & 0xffff;
 
 	/* change the default JESD configurations, if required */
 	fmcdaq2_reconfig(&fmcdaq2_init.ad9144_param,
@@ -838,11 +889,14 @@ int main(void)
 			 &fmcdaq2_init.ad9680_xcvr_param,
 			 fmcdaq2_init.ad9523_param.pdata);
 
+	status = fmcdaq2_dac_init(&fmcdaq2, &fmcdaq2_init);
+	if (status < 0)
+		return status;
+
 	/* Reconfigure the default JESD configurations */
 	fmcdaq2_init.ad9680_jesd_param.device_clk_khz =  fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz / 40;
 	fmcdaq2_init.ad9680_jesd_param.lane_clk_khz = fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz;
-	fmcdaq2_init.ad9144_jesd_param.device_clk_khz =  fmcdaq2_init.ad9144_xcvr_param.lane_rate_khz / 40;
-	fmcdaq2_init.ad9144_jesd_param.lane_clk_khz = fmcdaq2_init.ad9144_xcvr_param.lane_rate_khz ;
+
 
 	/* setup clocks */
 	status = ad9523_setup(&fmcdaq2.ad9523_device, &fmcdaq2_init.ad9523_param);
@@ -895,6 +949,14 @@ int main(void)
 
 	/* DAC DMA Example */
 #ifdef DAC_DMA_EXAMPLE
+
+	fmcdaq2_init.ad9144_dmac_param = (struct axi_dmac_init) {
+		.name = "tx_dmac",
+		.base = TX_DMA_BASEADDR,
+		.direction = DMA_MEM_TO_DEV,
+		.flags = 0
+	};
+	extern const uint32_t sine_lut_iq[1024];
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
@@ -926,46 +988,9 @@ int main(void)
 
 	printf("daq2: setup and configuration is done\n");
 
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheDisable();
-	Xil_ICacheDisable();
-#endif
-
-#ifdef IIO_SUPPORT
-	printf("The board accepts libiio clients connections through the serial backend.\n");
-
-	struct axi_dmac_init ad9144_dmac_param = {
-		.name = "ad9144_dmac",
-		.base = TX_DMA_BASEADDR,
-		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
-	};
-	struct axi_dmac		*ad9144_dmac;
-	axi_dmac_init(&ad9144_dmac, &ad9144_dmac_param);
-
-	struct iio_axi_adc_init_param iio_axi_adc_init_par;
-	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = fmcdaq2.ad9680_core,
-		.rx_dmac = ad9680_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
-#ifndef PLATFORM_MB
-		.dcache_invalidate_range = (void (*)(uint32_t,
-						     uint32_t))Xil_DCacheInvalidateRange
-#endif
-	};
-	struct iio_axi_dac_init_param iio_axi_dac_init_par;
-	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
-		.tx_dac = fmcdaq2.ad9144_core,
-		.tx_dmac = ad9144_dmac,
-		.dac_ddr_base = DAC_DDR_BASEADDR,
-#ifndef PLATFORM_MB
-		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
-#endif
-	};
-
-	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
-
-#endif
+	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
+	if (status != SUCCESS)
+		return status;
 
 	/* Memory deallocation for devices and spi */
 	ad9144_remove(fmcdaq2.ad9144_device);
