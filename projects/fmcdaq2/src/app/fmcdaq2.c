@@ -184,6 +184,65 @@ static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 	return gpio_set_value(dev->gpio_adc_pd, GPIO_LOW);
 }
 
+static int fmcdaq2_spi_init(struct fmcdaq2_init_param *dev_init)
+{
+	/* Initialize SPI structures */
+	struct spi_init_param ad9523_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0
+	};
+	struct spi_init_param ad9144_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 1,
+		.mode = SPI_MODE_0
+	};
+	struct spi_init_param ad9680_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 2,
+		.mode = SPI_MODE_0
+	};
+
+#ifndef ALTERA_PLATFORM
+	static struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+		.device_id = SPI_DEVICE_ID
+	};
+	ad9523_spi_param.platform_ops = &xil_platform_ops;
+	ad9523_spi_param.extra = &xil_spi_param;
+
+	ad9144_spi_param.platform_ops = &xil_platform_ops;
+	ad9144_spi_param.extra = &xil_spi_param;
+
+	ad9680_spi_param.platform_ops = &xil_platform_ops;
+	ad9680_spi_param.extra = &xil_spi_param;
+#else
+	struct altera_spi_init_param altera_spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = NIOS_II_SPI,
+		.base_address = SYS_SPI_BASE
+	};
+	ad9523_spi_param.platform_ops = &altera_platform_ops;
+	ad9523_spi_param.extra = &altera_spi_param;
+
+	ad9144_spi_param.platform_ops = &altera_platform_ops;
+	ad9144_spi_param.extra = &altera_spi_param;
+
+	ad9680_spi_param.platform_ops = &altera_platform_ops;
+	ad9680_spi_param.extra = &altera_spi_param;
+#endif
+
+	dev_init->ad9523_param.spi_init = ad9523_spi_param;
+	dev_init->ad9144_param.spi_init = ad9144_spi_param;
+	dev_init->ad9680_param.spi_init = ad9680_spi_param;
+
+	return SUCCESS;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -368,52 +427,9 @@ int main(void)
 	if (status < 0)
 		return status;
 
-	/* Initialize SPI structures */
-	struct spi_init_param ad9523_spi_param = {
-		.max_speed_hz = 2000000u,
-		.chip_select = 0,
-		.mode = SPI_MODE_0
-	};
-
-	struct spi_init_param ad9144_spi_param = {
-		.max_speed_hz = 2000000u,
-		.chip_select = 1,
-		.mode = SPI_MODE_0
-	};
-	struct spi_init_param ad9680_spi_param = {
-		.max_speed_hz = 2000000u,
-		.chip_select = 2,
-		.mode = SPI_MODE_0
-	};
-
-#ifndef ALTERA_PLATFORM
-	struct xil_spi_init_param xil_spi_param = {
-#ifdef PLATFORM_MB
-		.type = SPI_PL,
-#else
-		.type = SPI_PS,
-#endif
-		.device_id = SPI_DEVICE_ID
-	};
-	ad9523_spi_param.platform_ops = &xil_platform_ops;
-	ad9523_spi_param.extra = &xil_spi_param;
-	ad9144_spi_param.platform_ops = &xil_platform_ops;
-	ad9144_spi_param.extra = &xil_spi_param;
-	ad9680_spi_param.platform_ops = &xil_platform_ops;
-	ad9680_spi_param.extra = &xil_spi_param;
-#else
-	struct altera_spi_init_param altera_spi_param = {
-		.device_id = SPI_DEVICE_ID,
-		.type = NIOS_II_SPI,
-		.base_address = SYS_SPI_BASE
-	};
-	ad9523_spi_param.platform_ops = &altera_platform_ops;
-	ad9523_spi_param.extra = &altera_spi_param;
-	ad9144_spi_param.platform_ops = &altera_platform_ops;
-	ad9144_spi_param.extra = &altera_spi_param;
-	ad9680_spi_param.platform_ops = &altera_platform_ops;
-	ad9680_spi_param.extra = &altera_spi_param;
-#endif
+	status = fmcdaq2_spi_init(&fmcdaq2_init);
+	if (status < 0)
+		return status;
 
 	/* setup the device structures */
 	struct ad9523_dev *ad9523_device;
@@ -422,10 +438,6 @@ int main(void)
 
 	struct ad9523_channel_spec	ad9523_channels[8];
 	struct ad9523_platform_data	ad9523_pdata;
-
-	fmcdaq2_init.ad9523_param.spi_init = ad9523_spi_param;
-	fmcdaq2_init.ad9144_param.spi_init = ad9144_spi_param;
-	fmcdaq2_init.ad9680_param.spi_init = ad9680_spi_param;
 
 #ifndef ALTERA_PLATFORM
 	struct adxcvr_init ad9144_xcvr_param = {
