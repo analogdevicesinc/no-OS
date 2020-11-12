@@ -75,6 +75,10 @@
 #endif
 
 struct fmcdaq2_dev {
+	struct ad9523_dev *ad9523_device;
+	struct ad9144_dev *ad9144_device;
+	struct ad9680_dev *ad9680_device;
+
 	struct ad9523_channel_spec ad9523_channels[8];
 
 	struct gpio_desc *gpio_clkd_sync;
@@ -87,6 +91,10 @@ struct fmcdaq2_dev {
 
 	struct axi_jesd204_tx *ad9144_jesd;
 	struct axi_jesd204_rx *ad9680_jesd;
+
+	struct axi_adc	*ad9680_core;
+	struct axi_dac	*ad9144_core;
+	struct axi_dac_channel	ad9144_channels[2];
 }fmcdaq2;
 
 struct fmcdaq2_init_param {
@@ -99,6 +107,10 @@ struct fmcdaq2_init_param {
 
 	struct jesd204_tx_init ad9144_jesd_param;
 	struct jesd204_rx_init ad9680_jesd_param;
+
+	struct axi_adc_init ad9680_core_param;
+
+	struct axi_dac_init ad9144_core_param;
 }fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
@@ -485,6 +497,63 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 	return status;
 }
 
+
+static int fmcdaq2_test(struct fmcdaq2_dev *dev,
+			struct fmcdaq2_init_param *dev_init)
+{
+	int status;
+
+	status = axi_jesd204_rx_status_read(dev->ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+	}
+
+	status = axi_jesd204_tx_status_read(dev->ad9144_jesd);
+	if (status != SUCCESS) {
+		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+	}
+
+	status = ad9144_status(dev->ad9144_device);
+	if (status == FAILURE)
+		return status;
+
+	/* transport path testing */
+	dev->ad9144_channels[0].sel = AXI_DAC_DATA_SEL_SED;
+	dev->ad9144_channels[1].sel = AXI_DAC_DATA_SEL_SED;
+	axi_dac_data_setup(dev->ad9144_core);
+	ad9144_short_pattern_test(dev->ad9144_device, &dev_init->ad9144_param);
+
+	// PN7 data path test
+
+	dev->ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN23;
+	dev->ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN23;
+	axi_dac_data_setup(dev->ad9144_core);
+	dev_init->ad9144_param.prbs_type = AD9144_PRBS7;
+	ad9144_datapath_prbs_test(dev->ad9144_device, &dev_init->ad9144_param);
+
+	// PN15 data path test
+
+	dev->ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN31;
+	dev->ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN31;
+	axi_dac_data_setup(dev->ad9144_core);
+	dev_init->ad9144_param.prbs_type = AD9144_PRBS15;
+	ad9144_datapath_prbs_test(dev->ad9144_device, &dev_init->ad9144_param);
+
+	/* receive path testing */
+	ad9680_test(dev->ad9680_device, AD9680_TEST_PN9);
+	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN9, 10) == -1) {
+		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
+	};
+	ad9680_test(dev->ad9680_device, AD9680_TEST_PN23);
+	if(axi_adc_pn_mon(dev->ad9680_core, AXI_ADC_PN23A, 10) == -1) {
+		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
+	};
+
+	ad9680_test(dev->ad9680_device, AD9680_TEST_OFF);
+
+	return SUCCESS;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -682,42 +751,36 @@ int main(void)
 		return status;;
 
 	/* setup the device structures */
-	struct ad9523_dev *ad9523_device;
-	struct ad9144_dev *ad9144_device;
-	struct ad9680_dev *ad9680_device;
 
 
 	/* ADC Core */
-	struct axi_adc_init ad9680_core_param = {
+	fmcdaq2_init.ad9680_core_param = (struct axi_adc_init) {
 		.name = "ad9680_adc",
 		.base = RX_CORE_BASEADDR,
 		.num_channels = 2
 	};
-	struct axi_adc	*ad9680_core;
 
 	/* DAC (AD9144) channels configuration */
-	struct axi_dac_channel	ad9144_channels[2];
-	ad9144_channels[0].dds_dual_tone = 0;
-	ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
-	ad9144_channels[0].dds_phase_0 = 0;
-	ad9144_channels[0].dds_scale_0 = 500000;
-	ad9144_channels[0].pat_data = 0xb1b0a1a0;
-	ad9144_channels[1].dds_dual_tone = 0;
-	ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
-	ad9144_channels[1].dds_phase_0 = 0;
-	ad9144_channels[1].dds_scale_0 = 500000;
-	ad9144_channels[1].pat_data = 0xd1d0c1c0;
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
+	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
+	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
+	fmcdaq2.ad9144_channels[0].dds_phase_0 = 0;
+	fmcdaq2.ad9144_channels[0].dds_scale_0 = 500000;
+	fmcdaq2.ad9144_channels[0].pat_data = 0xb1b0a1a0;
+	fmcdaq2.ad9144_channels[1].dds_dual_tone = 0;
+	fmcdaq2.ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
+	fmcdaq2.ad9144_channels[1].dds_phase_0 = 0;
+	fmcdaq2.ad9144_channels[1].dds_scale_0 = 500000;
+	fmcdaq2.ad9144_channels[1].pat_data = 0xd1d0c1c0;
+	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
 
 	/* DAC Core */
-	struct axi_dac_init ad9144_core_param = {
+	fmcdaq2_init.ad9144_core_param = (struct axi_dac_init) {
 		.name = "ad9144_dac",
 		.base =	TX_CORE_BASEADDR,
 		.num_channels = 2,
-		.channels = &ad9144_channels[0]
+		.channels = &fmcdaq2.ad9144_channels[0]
 	};
-	struct axi_dac	*ad9144_core;
 
 #ifdef DAC_DMA_EXAMPLE
 	struct axi_dmac_init ad9144_dmac_param = {
@@ -739,7 +802,6 @@ int main(void)
 	struct axi_dmac *ad9680_dmac;
 
 	fmcdaq2_init.ad9680_param.lane_rate_kbps = 10000000;
-
 	fmcdaq2_init.ad9144_param.lane_rate_kbps = 10000000;
 	fmcdaq2_init.ad9144_param.spi3wire = 1;
 	fmcdaq2_init.ad9144_param.interpolation = 1;
@@ -753,21 +815,21 @@ int main(void)
 		fmcdaq2_init.ad9144_param.jesd204_lane_xbar[n] = n;
 
 	fmcdaq2_init.ad9144_param.stpl_samples[0][0] =
-		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+		(fmcdaq2.ad9144_channels[0].pat_data >> 0)  & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[0][1] =
-		(ad9144_channels[0].pat_data >> 16) & 0xffff;
+		(fmcdaq2.ad9144_channels[0].pat_data >> 16) & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[0][2] =
-		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
+		(fmcdaq2.ad9144_channels[0].pat_data >> 0)  & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[0][3] =
-		(ad9144_channels[0].pat_data >> 16) & 0xffff;
+		(fmcdaq2.ad9144_channels[0].pat_data >> 16) & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[1][0] =
-		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+		(fmcdaq2.ad9144_channels[1].pat_data >> 0)  & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[1][1] =
-		(ad9144_channels[1].pat_data >> 16) & 0xffff;
+		(fmcdaq2.ad9144_channels[1].pat_data >> 16) & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[1][2] =
-		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
+		(fmcdaq2.ad9144_channels[1].pat_data >> 0)  & 0xffff;
 	fmcdaq2_init.ad9144_param.stpl_samples[1][3] =
-		(ad9144_channels[1].pat_data >> 16) & 0xffff;
+		(fmcdaq2.ad9144_channels[1].pat_data >> 16) & 0xffff;
 
 	/* change the default JESD configurations, if required */
 	fmcdaq2_reconfig(&fmcdaq2_init.ad9144_param,
@@ -783,7 +845,7 @@ int main(void)
 	fmcdaq2_init.ad9144_jesd_param.lane_clk_khz = fmcdaq2_init.ad9144_xcvr_param.lane_rate_khz ;
 
 	/* setup clocks */
-	status = ad9523_setup(&ad9523_device, &fmcdaq2_init.ad9523_param);
+	status = ad9523_setup(&fmcdaq2.ad9523_device, &fmcdaq2_init.ad9523_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -804,7 +866,7 @@ int main(void)
 	if (status != SUCCESS)
 		return status;
 
-	status = ad9680_setup(&ad9680_device, &fmcdaq2_init.ad9680_param);
+	status = ad9680_setup(&fmcdaq2.ad9680_device, &fmcdaq2_init.ad9680_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -813,95 +875,53 @@ int main(void)
 	if (status != SUCCESS)
 		return status;
 
-	status = ad9144_setup(&ad9144_device, &fmcdaq2_init.ad9144_param);
+	status = ad9144_setup(&fmcdaq2.ad9144_device, &fmcdaq2_init.ad9144_param);
 	if (status != SUCCESS) {
 		printf("error: ad9144_setup() failed\n");
 	}
-	status = axi_jesd204_rx_status_read(fmcdaq2.ad9680_jesd);
+
+	status = axi_adc_init(&fmcdaq2.ad9680_core,  &fmcdaq2_init.ad9680_core_param);
 	if (status != SUCCESS) {
-		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
+		printf("axi_adc_init() error: %s\n", fmcdaq2.ad9680_core->name);
 	}
 
-	status = axi_jesd204_tx_status_read(fmcdaq2.ad9144_jesd);
+	status = axi_dac_init(&fmcdaq2.ad9144_core, &fmcdaq2_init.ad9144_core_param);
 	if (status != SUCCESS) {
-		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
+		printf("axi_dac_init() error: %s\n", fmcdaq2.ad9144_core->name);
 	}
-
-	status = axi_adc_init(&ad9680_core,  &ad9680_core_param);
-	if (status != SUCCESS) {
-		printf("axi_adc_init() error: %s\n", ad9680_core->name);
-	}
-
-	status = axi_dac_init(&ad9144_core, &ad9144_core_param);
-	if (status != SUCCESS) {
-		printf("axi_dac_init() error: %s\n", ad9144_core->name);
-	}
-
-	status = ad9144_status(ad9144_device);
-
-	/* transport path testing */
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_SED;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_SED;
-	axi_dac_data_setup(ad9144_core);
-	ad9144_short_pattern_test(ad9144_device, &fmcdaq2_init.ad9144_param);
-
-	// PN7 data path test
-
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN23;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN23;
-	axi_dac_data_setup(ad9144_core);
-	fmcdaq2_init.ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(ad9144_device, &fmcdaq2_init.ad9144_param);
-
-	// PN15 data path test
-
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN31;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN31;
-	axi_dac_data_setup(ad9144_core);
-	fmcdaq2_init.ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(ad9144_device, &fmcdaq2_init.ad9144_param);
-
-	/* receive path testing */
-	ad9680_test(ad9680_device, AD9680_TEST_PN9);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN9, 10) == -1) {
-		printf("%s ad9680 - PN9 sequence mismatch!\n", __func__);
-	};
-	ad9680_test(ad9680_device, AD9680_TEST_PN23);
-	if(axi_adc_pn_mon(ad9680_core, AXI_ADC_PN23A, 10) == -1) {
-		printf("%s ad9680 - PN23 sequence mismatch!\n", __func__);
-	};
-
-	ad9680_test(ad9680_device, AD9680_TEST_OFF);
+	status = fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+	if (status != SUCCESS)
+		return status;
 
 	/* DAC DMA Example */
 #ifdef DAC_DMA_EXAMPLE
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
-	axi_dac_data_setup(ad9144_core);
+	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
+	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
+	axi_dac_data_setup(fmcdaq2.ad9144_core);
 
 	Xil_DCacheFlush();
 
-	axi_dac_load_custom_data(ad9144_core, sine_lut_iq,
+	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
 
 #ifndef ALTERA_PLATFORM
 	Xil_DCacheFlush();
 #endif
 
-	axi_dmac_init(&ad9144_dmac, &ad9144_dmac_param);
+	axi_dmac_init(fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
 
-	axi_dmac_transfer(ad9144_dmac, DAC_DDR_BASEADDR,
+	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
 			  sizeof(sine_lut_iq) * 4);
 #else
-	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
-	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
-	axi_dac_data_setup(ad9144_core);
+	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
+	axi_dac_data_setup(fmcdaq2.ad9144_core);
 #endif
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
-	axi_dmac_init(&ad9680_dmac, &ad9680_dmac_param);
+	axi_dmac_init(fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
 
-	axi_dmac_transfer(ad9680_dmac, ADC_DDR_BASEADDR,
+	axi_dmac_transfer(fmcdaq2.ad9680_dmac, ADC_DDR_BASEADDR,
 			  16384 * 2);
 
 	printf("daq2: setup and configuration is done\n");
@@ -925,7 +945,7 @@ int main(void)
 
 	struct iio_axi_adc_init_param iio_axi_adc_init_par;
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
-		.rx_adc = ad9680_core,
+		.rx_adc = fmcdaq2.ad9680_core,
 		.rx_dmac = ad9680_dmac,
 		.adc_ddr_base = ADC_DDR_BASEADDR,
 #ifndef PLATFORM_MB
@@ -935,7 +955,7 @@ int main(void)
 	};
 	struct iio_axi_dac_init_param iio_axi_dac_init_par;
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
-		.tx_dac = ad9144_core,
+		.tx_dac = fmcdaq2.ad9144_core,
 		.tx_dmac = ad9144_dmac,
 		.dac_ddr_base = DAC_DDR_BASEADDR,
 #ifndef PLATFORM_MB
@@ -948,9 +968,9 @@ int main(void)
 #endif
 
 	/* Memory deallocation for devices and spi */
-	ad9144_remove(ad9144_device);
-	ad9523_remove(ad9523_device);
-	ad9680_remove(ad9680_device);
+	ad9144_remove(fmcdaq2.ad9144_device);
+	ad9523_remove(fmcdaq2.ad9523_device);
+	ad9680_remove(fmcdaq2.ad9680_device);
 
 	/* Memory deallocation for PHY and LINK layers */
 	adxcvr_remove(fmcdaq2.ad9144_xcvr);
