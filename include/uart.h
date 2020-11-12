@@ -50,6 +50,49 @@
 /******************************************************************************/
 
 /**
+ * @enum uart_size
+ * @brief UART character size (number of data bits) options.
+ */
+enum uart_size {
+	/** 5 data bits */
+	UART_CS_5,
+	/** 6 data bits */
+	UART_CS_6,
+	/** 7 data bits */
+	UART_CS_7,
+	/** 8 data bits */
+	UART_CS_8
+} uart_size;
+
+/**
+ * @enum uart_parity
+ * @brief UART parity options.
+ */
+enum uart_parity {
+	/** no parity */
+	UART_PAR_NO,
+	/** mark parity */
+	UART_PAR_MARK,
+	/** space parity */
+	UART_PAR_SPACE,
+	/** odd parity */
+	UART_PAR_ODD,
+	/** even parity */
+	UART_PAR_EVEN
+} uart_parity;
+
+/**
+ * @enum uart_stop
+ * @brief UART number of stop bits options.
+ */
+enum uart_stop {
+	/** one stop bit */
+	UART_STOP_1,
+	/** two stop bits */
+	UART_STOP_2
+} uart_stop;
+
+/**
  * @struct uart_init_param
  * @brief Structure holding the parameters for UART initialization
  */
@@ -57,9 +100,15 @@ struct uart_init_param {
 	/** UART Device ID */
 	uint8_t	device_id;
 	/** UART Baud Rate */
-	uint32_t 	baud_rate;
+	uint32_t        baud_rate;
+	/** UART number of data bits */
+	enum uart_size		size;
+	/** UART parity */
+	enum uart_parity	parity;
+	/** UART number of stop bits */
+	enum uart_stop		stop;
 	/** UART extra parameters (device specific) */
-	void 		*extra;
+	void		*extra;
 };
 
 /**
