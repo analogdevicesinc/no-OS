@@ -435,6 +435,56 @@ static int fmcdaq2_altera_pll_setup()
 	return SUCCESS;
 }
 
+static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
+				     struct fmcdaq2_init_param *dev_init)
+{
+	int status;
+
+	status = axi_jesd204_tx_init(&dev->ad9144_jesd, &dev_init->ad9144_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", dev->ad9144_jesd->name);
+	}
+
+	status = axi_jesd204_tx_lane_clk_enable(dev->ad9144_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       dev->ad9144_jesd->name);
+	}
+
+	status = adxcvr_init(&dev->ad9144_xcvr, &dev_init->ad9144_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", dev->ad9144_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(dev->ad9144_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", dev->ad9144_xcvr->name);
+	}
+#endif
+	status = adxcvr_init(&dev->ad9680_xcvr, &dev_init->ad9680_xcvr_param);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_init() failed\n", dev->ad9680_xcvr->name);
+	}
+#ifndef ALTERA_PLATFORM
+	status = adxcvr_clk_enable(dev->ad9680_xcvr);
+	if (status != SUCCESS) {
+		printf("error: %s: adxcvr_clk_enable() failed\n", dev->ad9680_xcvr->name);
+	}
+#endif
+	status = axi_jesd204_rx_init(&dev->ad9680_jesd, &dev_init->ad9680_jesd_param);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_init() failed\n", dev->ad9680_jesd->name);
+	}
+
+	status = axi_jesd204_rx_lane_clk_enable(dev->ad9680_jesd);
+	if (status != SUCCESS) {
+		printf("error: %s: axi_jesd204_rx_lane_clk_enable() failed\n",
+		       dev->ad9680_jesd->name);
+	}
+
+	return status;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -758,47 +808,10 @@ int main(void)
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
-	status = axi_jesd204_tx_init(&fmcdaq2.ad9144_jesd, &fmcdaq2_init.ad9144_jesd_param);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", fmcdaq2.ad9144_jesd->name);
-	}
 
-	status = axi_jesd204_tx_lane_clk_enable(fmcdaq2.ad9144_jesd);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
-		       fmcdaq2.ad9144_jesd->name);
-	}
-
-	status = adxcvr_init(&fmcdaq2.ad9144_xcvr, &fmcdaq2_init.ad9144_xcvr_param);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", fmcdaq2.ad9144_xcvr->name);
-	}
-#ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(fmcdaq2.ad9144_xcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", fmcdaq2.ad9144_xcvr->name);
-	}
-#endif
-	status = adxcvr_init(&fmcdaq2.ad9680_xcvr, &fmcdaq2_init.ad9680_xcvr_param);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", fmcdaq2.ad9680_xcvr->name);
-	}
-#ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(fmcdaq2.ad9680_xcvr);
-	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", fmcdaq2.ad9680_xcvr->name);
-	}
-#endif
-	status = axi_jesd204_rx_init(&fmcdaq2.ad9680_jesd, &fmcdaq2_init.ad9680_jesd_param);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", fmcdaq2.ad9680_jesd->name);
-	}
-
-	status = axi_jesd204_rx_lane_clk_enable(fmcdaq2.ad9680_jesd);
-	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_lane_clk_enable() failed\n",
-		       fmcdaq2.ad9680_jesd->name);
-	}
+	status = fmcdaq2_trasnceiver_setup(&fmcdaq2, &fmcdaq2_init);
+	if (status != SUCCESS)
+		return status;
 
 	status = ad9144_setup(&ad9144_device, &fmcdaq2_init.ad9144_param);
 	if (status != SUCCESS) {
