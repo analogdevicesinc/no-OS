@@ -81,12 +81,24 @@ struct fmcdaq2_dev {
 	struct gpio_desc *gpio_dac_reset;
 	struct gpio_desc *gpio_dac_txen;
 	struct gpio_desc *gpio_adc_pd;
+
+	struct adxcvr *ad9144_xcvr;
+	struct adxcvr *ad9680_xcvr;
+
+	struct axi_jesd204_tx *ad9144_jesd;
+	struct axi_jesd204_rx *ad9680_jesd;
 }fmcdaq2;
 
 struct fmcdaq2_init_param {
-	struct ad9523_init_param	ad9523_param;
-	struct ad9144_init_param	ad9144_param;
-	struct ad9680_init_param	ad9680_param;
+	struct ad9523_init_param ad9523_param;
+	struct ad9144_init_param ad9144_param;
+	struct ad9680_init_param ad9680_param;
+
+	struct adxcvr_init ad9144_xcvr_param;
+	struct adxcvr_init ad9680_xcvr_param;
+
+	struct jesd204_tx_init ad9144_jesd_param;
+	struct jesd204_rx_init ad9680_jesd_param;
 }fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
@@ -298,6 +310,78 @@ static int fmcdaq2_clk_init(struct fmcdaq2_dev *dev,
 	return ret;
 }
 
+static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
+{
+#ifndef ALTERA_PLATFORM
+	dev_init->ad9144_xcvr_param = (struct adxcvr_init) {
+		.name = "ad9144_xcvr",
+		.base = XPAR_AXI_AD9144_XCVR_BASEADDR,
+		.sys_clk_sel = 3,
+		.out_clk_sel = 4,
+		.lpm_enable = 1,
+		.cpll_enable = 0,
+		.ref_rate_khz = 500000,
+		.lane_rate_khz = 10000000,
+	};
+	dev_init->ad9680_xcvr_param = (struct adxcvr_init) {
+		.name = "ad9680_xcvr",
+		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
+		.sys_clk_sel = 0,
+		.out_clk_sel = 4,
+		.lpm_enable = 1,
+		.cpll_enable = 1,
+		.ref_rate_khz = 500000,
+		.lane_rate_khz = 10000000
+	};
+#else
+	dev_init->ad9144_xcvr_param = (struct adxcvr_init) {
+		.name = "ad9144_xcvr",
+		.base = TX_XCVR_BASEADDR,
+		.adxcfg_base = { TX_ADXCFG_0_BASEADDR,
+				 TX_ADXCFG_1_BASEADDR,
+				 TX_ADXCFG_2_BASEADDR,
+				 TX_ADXCFG_3_BASEADDR},
+		.atx_pll_base = TX_PLL_BASEADDR,
+		.lane_rate_khz = 10000000,
+		.parent_rate_khz = 500000,
+	};
+	dev_init->ad9680_xcvr_param = (struct adxcvr_init) {
+		.name = "ad9680_xcvr",
+		.base = RX_XCVR_BASEADDR,
+		.adxcfg_base = {RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, RX_ADXCFG_2_BASEADDR, RX_ADXCFG_3_BASEADDR},
+		.atx_pll_base = RX_PLL_BASEADDR,
+		.parent_rate_khz = 500000,
+		.lane_rate_khz = 10000000
+	};
+#endif
+	/* JESD initialization */
+	dev_init->ad9144_jesd_param = (struct jesd204_tx_init) {
+		.name = "ad9144_jesd",
+		.base = TX_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.converters_per_device = 2,
+		.converter_resolution = 16,
+		.bits_per_sample = 16,
+		.high_density = false,
+		.control_bits_per_sample = 0,
+		.subclass = 1,
+		.device_clk_khz = 10000000/40,
+		.lane_clk_khz = 10000000
+	};
+	dev_init->ad9680_jesd_param = (struct jesd204_rx_init) {
+		.name = "ad9680_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 32,
+		.subclass = 1,
+		.device_clk_khz = 10000000/40,
+		.lane_clk_khz = 10000000
+	};
+
+	return SUCCESS;
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -490,34 +574,16 @@ int main(void)
 	if (status < 0)
 		return status;
 
+	status = fmcdaq2_jesd_init(&fmcdaq2_init);
+	if (status < 0)
+		return status;;
+
 	/* setup the device structures */
 	struct ad9523_dev *ad9523_device;
 	struct ad9144_dev *ad9144_device;
 	struct ad9680_dev *ad9680_device;
 
-#ifndef ALTERA_PLATFORM
-	struct adxcvr_init ad9144_xcvr_param = {
-		.name = "ad9144_xcvr",
-		.base = XPAR_AXI_AD9144_XCVR_BASEADDR,
-		.sys_clk_sel = 3,
-		.out_clk_sel = 4,
-		.lpm_enable = 1,
-		.cpll_enable = 0,
-		.ref_rate_khz = 500000,
-		.lane_rate_khz = 10000000,
-	};
-	struct adxcvr_init ad9680_xcvr_param = {
-		.name = "ad9680_xcvr",
-		.base = XPAR_AXI_AD9680_XCVR_BASEADDR,
-		.sys_clk_sel = 0,
-		.out_clk_sel = 4,
-		.lpm_enable = 1,
-		.cpll_enable = 1,
-		.ref_rate_khz = 500000,
-		.lane_rate_khz = 10000000
-	};
-
-#else
+#ifdef ALTERA_PLATFORM
 	struct altera_a10_fpll_init ad9680_device_clk_pll_param = {
 		.name = "ad9680_device_clk_pll",
 		.base = RX_A10_FPLL_BASEADDR,
@@ -531,56 +597,7 @@ int main(void)
 
 	struct altera_a10_fpll *ad9680_device_clk_pll;
 	struct altera_a10_fpll *ad9144_device_clk_pll;
-
-	struct adxcvr_init ad9144_xcvr_param = {
-		.name = "ad9144_xcvr",
-		.base = TX_XCVR_BASEADDR,
-		.adxcfg_base = {TX_ADXCFG_0_BASEADDR, TX_ADXCFG_1_BASEADDR, TX_ADXCFG_2_BASEADDR, TX_ADXCFG_3_BASEADDR},
-		.atx_pll_base = TX_PLL_BASEADDR,
-		.lane_rate_khz = 10000000,
-		.parent_rate_khz = 500000,
-	};
-	struct adxcvr_init ad9680_xcvr_param = {
-		.name = "ad9680_xcvr",
-		.base = RX_XCVR_BASEADDR,
-		.adxcfg_base = {RX_ADXCFG_0_BASEADDR, RX_ADXCFG_1_BASEADDR, RX_ADXCFG_2_BASEADDR, RX_ADXCFG_3_BASEADDR},
-		.atx_pll_base = RX_PLL_BASEADDR,
-		.parent_rate_khz = 500000,
-		.lane_rate_khz = 10000000
-	};
 #endif
-
-	struct adxcvr	*ad9144_xcvr;
-	struct adxcvr	*ad9680_xcvr;
-
-	/* JESD initialization */
-	struct jesd204_tx_init ad9144_jesd_param = {
-		.name = "ad9144_jesd",
-		.base = TX_JESD_BASEADDR,
-		.octets_per_frame = 1,
-		.frames_per_multiframe = 32,
-		.converters_per_device = 2,
-		.converter_resolution = 16,
-		.bits_per_sample = 16,
-		.high_density = false,
-		.control_bits_per_sample = 0,
-		.subclass = 1,
-		.device_clk_khz = 10000000/40,
-		.lane_clk_khz = 10000000
-	};
-
-	struct jesd204_rx_init  ad9680_jesd_param = {
-		.name = "ad9680_jesd",
-		.base = RX_JESD_BASEADDR,
-		.octets_per_frame = 1,
-		.frames_per_multiframe = 32,
-		.subclass = 1,
-		.device_clk_khz = 10000000/40,
-		.lane_clk_khz = 10000000
-	};
-
-	struct axi_jesd204_tx *ad9144_jesd;
-	struct axi_jesd204_rx *ad9680_jesd;
 
 	/* ADC Core */
 	struct axi_adc_init ad9680_core_param = {
@@ -666,16 +683,16 @@ int main(void)
 
 	/* change the default JESD configurations, if required */
 	fmcdaq2_reconfig(&fmcdaq2_init.ad9144_param,
-			 &ad9144_xcvr_param,
+			 &fmcdaq2_init.ad9144_xcvr_param,
 			 &fmcdaq2_init.ad9680_param,
-			 &ad9680_xcvr_param,
+			 &fmcdaq2_init.ad9680_xcvr_param,
 			 fmcdaq2_init.ad9523_param.pdata);
 
 	/* Reconfigure the default JESD configurations */
-	ad9680_jesd_param.device_clk_khz =  ad9680_xcvr_param.lane_rate_khz / 40;
-	ad9680_jesd_param.lane_clk_khz = ad9680_xcvr_param.lane_rate_khz;
-	ad9144_jesd_param.device_clk_khz =  ad9144_xcvr_param.lane_rate_khz / 40;
-	ad9144_jesd_param.lane_clk_khz = ad9144_xcvr_param.lane_rate_khz ;
+	fmcdaq2_init.ad9680_jesd_param.device_clk_khz =  fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz / 40;
+	fmcdaq2_init.ad9680_jesd_param.lane_clk_khz = fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz;
+	fmcdaq2_init.ad9144_jesd_param.device_clk_khz =  fmcdaq2_init.ad9144_xcvr_param.lane_rate_khz / 40;
+	fmcdaq2_init.ad9144_jesd_param.lane_clk_khz = fmcdaq2_init.ad9144_xcvr_param.lane_rate_khz ;
 
 	/* setup clocks */
 	status = ad9523_setup(&ad9523_device, &fmcdaq2_init.ad9523_param);
@@ -720,7 +737,7 @@ int main(void)
 	altera_a10_fpll_enable(ad9680_device_clk_pll);
 	altera_a10_fpll_disable(ad9144_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
-					  ad9144_jesd_param.device_clk_khz * 1000);
+					  fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
 	if (status != SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9144_device_clk_pll->name);
@@ -731,58 +748,58 @@ int main(void)
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
-	status = axi_jesd204_tx_init(&ad9144_jesd, &ad9144_jesd_param);
+	status = axi_jesd204_tx_init(&fmcdaq2.ad9144_jesd, &fmcdaq2_init.ad9144_jesd_param);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9144_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init() failed\n", fmcdaq2.ad9144_jesd->name);
 	}
 
-	status = axi_jesd204_tx_lane_clk_enable(ad9144_jesd);
+	status = axi_jesd204_tx_lane_clk_enable(fmcdaq2.ad9144_jesd);
 	if (status != SUCCESS) {
 		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
-		       ad9144_jesd->name);
+		       fmcdaq2.ad9144_jesd->name);
 	}
 
-	status = adxcvr_init(&ad9144_xcvr, &ad9144_xcvr_param);
+	status = adxcvr_init(&fmcdaq2.ad9144_xcvr, &fmcdaq2_init.ad9144_xcvr_param);
 	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", ad9144_xcvr->name);
+		printf("error: %s: adxcvr_init() failed\n", fmcdaq2.ad9144_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(ad9144_xcvr);
+	status = adxcvr_clk_enable(fmcdaq2.ad9144_xcvr);
 	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", ad9144_xcvr->name);
+		printf("error: %s: adxcvr_clk_enable() failed\n", fmcdaq2.ad9144_xcvr->name);
 	}
 #endif
-	status = adxcvr_init(&ad9680_xcvr, &ad9680_xcvr_param);
+	status = adxcvr_init(&fmcdaq2.ad9680_xcvr, &fmcdaq2_init.ad9680_xcvr_param);
 	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_init() failed\n", ad9680_xcvr->name);
+		printf("error: %s: adxcvr_init() failed\n", fmcdaq2.ad9680_xcvr->name);
 	}
 #ifndef ALTERA_PLATFORM
-	status = adxcvr_clk_enable(ad9680_xcvr);
+	status = adxcvr_clk_enable(fmcdaq2.ad9680_xcvr);
 	if (status != SUCCESS) {
-		printf("error: %s: adxcvr_clk_enable() failed\n", ad9680_xcvr->name);
+		printf("error: %s: adxcvr_clk_enable() failed\n", fmcdaq2.ad9680_xcvr->name);
 	}
 #endif
-	status = axi_jesd204_rx_init(&ad9680_jesd, &ad9680_jesd_param);
+	status = axi_jesd204_rx_init(&fmcdaq2.ad9680_jesd, &fmcdaq2_init.ad9680_jesd_param);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", ad9680_jesd->name);
+		printf("error: %s: axi_jesd204_rx_init() failed\n", fmcdaq2.ad9680_jesd->name);
 	}
 
-	status = axi_jesd204_rx_lane_clk_enable(ad9680_jesd);
+	status = axi_jesd204_rx_lane_clk_enable(fmcdaq2.ad9680_jesd);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
-		       ad9144_jesd->name);
+		printf("error: %s: axi_jesd204_rx_lane_clk_enable() failed\n",
+		       fmcdaq2.ad9680_jesd->name);
 	}
 
 	status = ad9144_setup(&ad9144_device, &fmcdaq2_init.ad9144_param);
 	if (status != SUCCESS) {
 		printf("error: ad9144_setup() failed\n");
 	}
-	status = axi_jesd204_rx_status_read(ad9680_jesd);
+	status = axi_jesd204_rx_status_read(fmcdaq2.ad9680_jesd);
 	if (status != SUCCESS) {
 		printf("axi_jesd204_rx_status_read() error: %"PRIi32"\n", status);
 	}
 
-	status = axi_jesd204_tx_status_read(ad9144_jesd);
+	status = axi_jesd204_tx_status_read(fmcdaq2.ad9144_jesd);
 	if (status != SUCCESS) {
 		printf("axi_jesd204_tx_status_read() error: %"PRIi32"\n", status);
 	}
@@ -913,10 +930,10 @@ int main(void)
 	ad9680_remove(ad9680_device);
 
 	/* Memory deallocation for PHY and LINK layers */
-	adxcvr_remove(ad9144_xcvr);
-	adxcvr_remove(ad9680_xcvr);
-	axi_jesd204_tx_remove(ad9144_jesd);
-	axi_jesd204_rx_remove(ad9680_jesd);
+	adxcvr_remove(fmcdaq2.ad9144_xcvr);
+	adxcvr_remove(fmcdaq2.ad9680_xcvr);
+	axi_jesd204_tx_remove(fmcdaq2.ad9144_jesd);
+	axi_jesd204_rx_remove(fmcdaq2.ad9680_jesd);
 
 	/* Memory deallocation for gpios */
 	gpio_remove(fmcdaq2.gpio_clkd_sync);
