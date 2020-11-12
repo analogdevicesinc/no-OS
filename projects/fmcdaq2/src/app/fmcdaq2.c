@@ -81,6 +81,12 @@ struct fmcdaq2_dev {
 	struct gpio_desc *gpio_adc_pd;
 }fmcdaq2;
 
+struct fmcdaq2_init_param {
+	struct ad9523_init_param	ad9523_param;
+	struct ad9144_init_param	ad9144_param;
+	struct ad9680_init_param	ad9680_param;
+}fmcdaq2_init;
+
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 {
 	int status;
@@ -417,13 +423,9 @@ int main(void)
 	struct ad9523_channel_spec	ad9523_channels[8];
 	struct ad9523_platform_data	ad9523_pdata;
 
-	struct ad9523_init_param	ad9523_param;
-	struct ad9144_init_param	ad9144_param;
-	struct ad9680_init_param	ad9680_param;
-
-	ad9523_param.spi_init = ad9523_spi_param;
-	ad9144_param.spi_init = ad9144_spi_param;
-	ad9680_param.spi_init = ad9680_spi_param;
+	fmcdaq2_init.ad9523_param.spi_init = ad9523_spi_param;
+	fmcdaq2_init.ad9144_param.spi_init = ad9144_spi_param;
+	fmcdaq2_init.ad9680_param.spi_init = ad9680_spi_param;
 
 #ifndef ALTERA_PLATFORM
 	struct adxcvr_init ad9144_xcvr_param = {
@@ -566,8 +568,8 @@ int main(void)
 	/* clock distribution device (AD9523) configuration */
 	ad9523_pdata.num_channels = 8;
 	ad9523_pdata.channels = &ad9523_channels[0];
-	ad9523_param.pdata = &ad9523_pdata;
-	ad9523_init(&ad9523_param);
+	fmcdaq2_init.ad9523_param.pdata = &ad9523_pdata;
+	ad9523_init(&fmcdaq2_init.ad9523_param);
 
 	// dac device-clk-sysref, fpga-clk-sysref
 
@@ -607,41 +609,43 @@ int main(void)
 	ad9523_pdata.rzero = 7;
 	ad9523_pdata.cpole1 = 2;
 
-	ad9680_param.lane_rate_kbps = 10000000;
+	fmcdaq2_init.ad9680_param.lane_rate_kbps = 10000000;
 
-	ad9144_param.lane_rate_kbps = 10000000;
-	ad9144_param.spi3wire = 1;
-	ad9144_param.interpolation = 1;
-	ad9144_param.pll_enable = 0;
-	ad9144_param.jesd204_subclass = 1;
-	ad9144_param.jesd204_scrambling = 1;
-	ad9144_param.jesd204_mode = 4;
-	for(uint32_t n=0; n<ARRAY_SIZE(ad9144_param.jesd204_lane_xbar); n++)
-		ad9144_param.jesd204_lane_xbar[n] = n;
+	fmcdaq2_init.ad9144_param.lane_rate_kbps = 10000000;
+	fmcdaq2_init.ad9144_param.spi3wire = 1;
+	fmcdaq2_init.ad9144_param.interpolation = 1;
+	fmcdaq2_init.ad9144_param.pll_enable = 0;
+	fmcdaq2_init.ad9144_param.jesd204_subclass = 1;
+	fmcdaq2_init.ad9144_param.jesd204_scrambling = 1;
+	fmcdaq2_init.ad9144_param.jesd204_mode = 4;
+	for(uint32_t n=0;
+	    n < ARRAY_SIZE(fmcdaq2_init.ad9144_param.jesd204_lane_xbar);
+	    n++)
+		fmcdaq2_init.ad9144_param.jesd204_lane_xbar[n] = n;
 
-	ad9144_param.stpl_samples[0][0] =
+	fmcdaq2_init.ad9144_param.stpl_samples[0][0] =
 		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
-	ad9144_param.stpl_samples[0][1] =
+	fmcdaq2_init.ad9144_param.stpl_samples[0][1] =
 		(ad9144_channels[0].pat_data >> 16) & 0xffff;
-	ad9144_param.stpl_samples[0][2] =
+	fmcdaq2_init.ad9144_param.stpl_samples[0][2] =
 		(ad9144_channels[0].pat_data >> 0)  & 0xffff;
-	ad9144_param.stpl_samples[0][3] =
+	fmcdaq2_init.ad9144_param.stpl_samples[0][3] =
 		(ad9144_channels[0].pat_data >> 16) & 0xffff;
-	ad9144_param.stpl_samples[1][0] =
+	fmcdaq2_init.ad9144_param.stpl_samples[1][0] =
 		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
-	ad9144_param.stpl_samples[1][1] =
+	fmcdaq2_init.ad9144_param.stpl_samples[1][1] =
 		(ad9144_channels[1].pat_data >> 16) & 0xffff;
-	ad9144_param.stpl_samples[1][2] =
+	fmcdaq2_init.ad9144_param.stpl_samples[1][2] =
 		(ad9144_channels[1].pat_data >> 0)  & 0xffff;
-	ad9144_param.stpl_samples[1][3] =
+	fmcdaq2_init.ad9144_param.stpl_samples[1][3] =
 		(ad9144_channels[1].pat_data >> 16) & 0xffff;
 
 	/* change the default JESD configurations, if required */
-	fmcdaq2_reconfig(&ad9144_param,
+	fmcdaq2_reconfig(&fmcdaq2_init.ad9144_param,
 			 &ad9144_xcvr_param,
-			 &ad9680_param,
+			 &fmcdaq2_init.ad9680_param,
 			 &ad9680_xcvr_param,
-			 ad9523_param.pdata);
+			 fmcdaq2_init.ad9523_param.pdata);
 
 	/* Reconfigure the default JESD configurations */
 	ad9680_jesd_param.device_clk_khz =  ad9680_xcvr_param.lane_rate_khz / 40;
@@ -650,7 +654,7 @@ int main(void)
 	ad9144_jesd_param.lane_clk_khz = ad9144_xcvr_param.lane_rate_khz ;
 
 	/* setup clocks */
-	status = ad9523_setup(&ad9523_device, &ad9523_param);
+	status = ad9523_setup(&ad9523_device, &fmcdaq2_init.ad9523_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -699,7 +703,7 @@ int main(void)
 	}
 	altera_a10_fpll_enable(ad9144_device_clk_pll);
 #endif
-	status = ad9680_setup(&ad9680_device, &ad9680_param);
+	status = ad9680_setup(&ad9680_device, &fmcdaq2_init.ad9680_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -745,7 +749,7 @@ int main(void)
 		       ad9144_jesd->name);
 	}
 
-	status = ad9144_setup(&ad9144_device, &ad9144_param);
+	status = ad9144_setup(&ad9144_device, &fmcdaq2_init.ad9144_param);
 	if (status != SUCCESS) {
 		printf("error: ad9144_setup() failed\n");
 	}
@@ -775,23 +779,23 @@ int main(void)
 	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_SED;
 	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_SED;
 	axi_dac_data_setup(ad9144_core);
-	ad9144_short_pattern_test(ad9144_device, &ad9144_param);
+	ad9144_short_pattern_test(ad9144_device, &fmcdaq2_init.ad9144_param);
 
 	// PN7 data path test
 
 	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN23;
 	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN23;
 	axi_dac_data_setup(ad9144_core);
-	ad9144_param.prbs_type = AD9144_PRBS7;
-	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
+	fmcdaq2_init.ad9144_param.prbs_type = AD9144_PRBS7;
+	ad9144_datapath_prbs_test(ad9144_device, &fmcdaq2_init.ad9144_param);
 
 	// PN15 data path test
 
 	ad9144_channels[0].sel = AXI_DAC_DATA_SEL_PN31;
 	ad9144_channels[1].sel = AXI_DAC_DATA_SEL_PN31;
 	axi_dac_data_setup(ad9144_core);
-	ad9144_param.prbs_type = AD9144_PRBS15;
-	ad9144_datapath_prbs_test(ad9144_device, &ad9144_param);
+	fmcdaq2_init.ad9144_param.prbs_type = AD9144_PRBS15;
+	ad9144_datapath_prbs_test(ad9144_device, &fmcdaq2_init.ad9144_param);
 
 	/* receive path testing */
 	ad9680_test(ad9680_device, AD9680_TEST_PN9);
