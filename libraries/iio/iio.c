@@ -278,27 +278,6 @@ static ssize_t iio_phy_write(const char *buf, size_t len)
 	return -EINVAL;
 }
 
-/**
- * @brief Get channel number.
- * @param ch - String containing channel name + channel number.
- * @return - Channel number. Ex: for "altvoltage0" return 0, for "voltage2"
- * return 2.
- */
-static int32_t iio_get_channel_number(const char *ch)
-{
-	char *p = (char*)ch;
-	int32_t ch_num = FAILURE;
-
-	while (*p) {
-		if (isdigit(*p))
-			ch_num = strtol(p, &p, 10);
-		else
-			p++;
-	}
-
-	return ch_num;
-}
-
 /* Get string for channel id from channel type */
 static char *get_channel_id(enum iio_chan_type type)
 {
