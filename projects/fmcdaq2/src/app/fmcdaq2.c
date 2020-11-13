@@ -978,7 +978,9 @@ int main(void)
 	};
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
-
+#ifdef USE_NCO
+	ad9144_set_nco(fmcdaq2.ad9144_device,62500,1);
+#endif
 	axi_dmac_init(&fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
