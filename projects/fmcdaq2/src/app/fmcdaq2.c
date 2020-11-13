@@ -893,7 +893,6 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		.name = "ad9680_dmac",
 		.base = RX_DMA_BASEADDR,
 		.direction = DMA_DEV_TO_MEM,
-		.flags = 0
 	};
 
 	dev_init->ad9680_param.lane_rate_kbps = 10000000;
@@ -965,55 +964,47 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	return fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
 }
 
-
 int main(void)
 {
+	unsigned int *data = (unsigned int *)ADC_DDR_BASEADDR;
 	int status;
 
 	status = fmcdaq2_setup(&fmcdaq2, &fmcdaq2_init);
 	if (status < 0)
 		return status;
 
+	axi_dmac_init(&fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
+
 	/* DAC DMA Example */
 #ifdef DAC_DMA_EXAMPLE
-
+	extern const uint32_t sine_lut_iq[1024];
 	fmcdaq2_init.ad9144_dmac_param = (struct axi_dmac_init) {
 		.name = "tx_dmac",
 		.base = TX_DMA_BASEADDR,
 		.direction = DMA_MEM_TO_DEV,
-		.flags = 0
+		.flags = DMA_CYCLIC
 	};
-	extern const uint32_t sine_lut_iq[1024];
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
-	axi_dac_data_setup(fmcdaq2.ad9144_core);
-
-	Xil_DCacheFlush();
-
-	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
-				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
-
-#ifndef ALTERA_PLATFORM
-	Xil_DCacheFlush();
-#endif
 
 	axi_dmac_init(&fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
-
+	axi_dac_data_setup(fmcdaq2.ad9144_core);
+	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
+				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
-			  sizeof(sine_lut_iq) * 4);
+		ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
 #else
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 #endif
-
-	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
-	axi_dmac_init(&fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
-
 	axi_dmac_transfer(fmcdaq2.ad9680_dmac, ADC_DDR_BASEADDR,
-			  16384 * 2);
-
-	printf("daq2: setup and configuration is done\n");
+			  1024 * sizeof(uint32_t));
+	printf("\ndaq2: setup and configuration is done\n");
+	printf("\n SAMPLE NO. |     CH1     |     CH 2     |");
+	for (unsigned int i = 0; i < 1024; i++)
+		printf("\n %4d       |    0x%04x   |    0x%04x    |",
+			i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
 
 	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
 	if (status != SUCCESS)
