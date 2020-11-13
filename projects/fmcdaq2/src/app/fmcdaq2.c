@@ -461,7 +461,7 @@ static int fmcdaq2_trasnceiver_setup(struct fmcdaq2_dev *dev,
 
 	status = axi_jesd204_tx_init(&dev->ad9144_jesd, &dev_init->ad9144_jesd_param);
 	if (status != SUCCESS) {
-		printf("error: %s: axi_jesd204_rx_init() failed\n", dev->ad9144_jesd->name);
+		printf("error: %s: axi_jesd204_tx_init() failed\n", dev->ad9144_jesd->name);
 	}
 
 	status = axi_jesd204_tx_lane_clk_enable(dev->ad9144_jesd);
@@ -913,7 +913,7 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 	/* setup clocks */
 	status = ad9523_setup(&dev->ad9523_device, &dev_init->ad9523_param);
 	if (status != SUCCESS) {
-		printf("error: ad9680_setup() failed\n");
+		printf("error: ad9523_setup() failed\n");
 	}
 	// Recommended DAC JESD204 link startup sequence
 	//   1. FPGA JESD204 Link Layer
