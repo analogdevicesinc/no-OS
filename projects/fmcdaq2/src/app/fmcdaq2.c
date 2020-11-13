@@ -665,6 +665,26 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	return SUCCESS;
 }
 
+static void fmcdaq2_remove(struct fmcdaq2_dev *dev)
+{
+	/* Memory deallocation for devices and spi */
+	ad9144_remove(dev->ad9144_device);
+	ad9523_remove(dev->ad9523_device);
+	ad9680_remove(dev->ad9680_device);
+
+	/* Memory deallocation for PHY and LINK layers */
+	adxcvr_remove(dev->ad9144_xcvr);
+	adxcvr_remove(dev->ad9680_xcvr);
+	axi_jesd204_tx_remove(dev->ad9144_jesd);
+	axi_jesd204_rx_remove(dev->ad9680_jesd);
+
+	/* Memory deallocation for gpios */
+	gpio_remove(dev->gpio_clkd_sync);
+	gpio_remove(dev->gpio_dac_reset);
+	gpio_remove(dev->gpio_dac_txen);
+	gpio_remove(dev->gpio_adc_pd);
+}
+
 int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 		     struct adxcvr_init *ad9144_xcvr_param,
 		     struct ad9680_init_param *p_ad9680_param,
@@ -992,22 +1012,7 @@ int main(void)
 	if (status != SUCCESS)
 		return status;
 
-	/* Memory deallocation for devices and spi */
-	ad9144_remove(fmcdaq2.ad9144_device);
-	ad9523_remove(fmcdaq2.ad9523_device);
-	ad9680_remove(fmcdaq2.ad9680_device);
-
-	/* Memory deallocation for PHY and LINK layers */
-	adxcvr_remove(fmcdaq2.ad9144_xcvr);
-	adxcvr_remove(fmcdaq2.ad9680_xcvr);
-	axi_jesd204_tx_remove(fmcdaq2.ad9144_jesd);
-	axi_jesd204_rx_remove(fmcdaq2.ad9680_jesd);
-
-	/* Memory deallocation for gpios */
-	gpio_remove(fmcdaq2.gpio_clkd_sync);
-	gpio_remove(fmcdaq2.gpio_dac_reset);
-	gpio_remove(fmcdaq2.gpio_dac_txen);
-	gpio_remove(fmcdaq2.gpio_adc_pd);
+	fmcdaq2_remove(&fmcdaq2);
 
 	return SUCCESS;
 }
