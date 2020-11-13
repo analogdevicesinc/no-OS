@@ -98,7 +98,7 @@ struct fmcdaq2_dev {
 
 	struct axi_dmac *ad9144_dmac;
 	struct axi_dmac *ad9680_dmac;
-}fmcdaq2;
+} fmcdaq2;
 
 struct fmcdaq2_init_param {
 	struct ad9523_init_param ad9523_param;
@@ -117,7 +117,7 @@ struct fmcdaq2_init_param {
 
 	struct axi_dmac_init ad9144_dmac_param;
 	struct axi_dmac_init ad9680_dmac_param;
-}fmcdaq2_init;
+} fmcdaq2_init;
 
 static int fmcdaq2_gpio_init(struct fmcdaq2_dev *dev)
 {
@@ -358,7 +358,8 @@ static int fmcdaq2_jesd_init(struct fmcdaq2_init_param *dev_init)
 		.adxcfg_base = { TX_ADXCFG_0_BASEADDR,
 				 TX_ADXCFG_1_BASEADDR,
 				 TX_ADXCFG_2_BASEADDR,
-				 TX_ADXCFG_3_BASEADDR},
+				 TX_ADXCFG_3_BASEADDR
+			       },
 		.atx_pll_base = TX_PLL_BASEADDR,
 		.lane_rate_khz = 10000000,
 		.parent_rate_khz = 500000,
@@ -433,7 +434,7 @@ static int fmcdaq2_altera_pll_setup()
 
 	altera_a10_fpll_disable(ad9680_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9680_device_clk_pll,
-			ad9680_jesd_param.device_clk_khz * 1000);
+					  ad9680_jesd_param.device_clk_khz * 1000);
 	if (status != SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9680_device_clk_pll->name);
@@ -441,7 +442,7 @@ static int fmcdaq2_altera_pll_setup()
 	altera_a10_fpll_enable(ad9680_device_clk_pll);
 	altera_a10_fpll_disable(ad9144_device_clk_pll);
 	status = altera_a10_fpll_set_rate(ad9144_device_clk_pll,
-			fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
+					  fmcdaq2_init.ad9144_jesd_param.device_clk_khz * 1000);
 	if (status != SUCCESS) {
 		printf("error: %s: altera_a10_fpll_set_rate() failed\n",
 		       ad9144_device_clk_pll->name);
@@ -607,7 +608,7 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 	dev_init->ad9144_jesd_param.device_clk_khz =
 		dev_init->ad9144_xcvr_param.lane_rate_khz / 40;
 	dev_init->ad9144_jesd_param.lane_clk_khz =
-	 	dev_init->ad9144_xcvr_param.lane_rate_khz ;
+		dev_init->ad9144_xcvr_param.lane_rate_khz ;
 
 	return SUCCESS;
 }
@@ -903,8 +904,10 @@ static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
 		return status;
 
 	/* Reconfigure the default JESD configurations */
-	dev_init->ad9680_jesd_param.device_clk_khz =  dev_init->ad9680_xcvr_param.lane_rate_khz / 40;
-	dev_init->ad9680_jesd_param.lane_clk_khz = dev_init->ad9680_xcvr_param.lane_rate_khz;
+	dev_init->ad9680_jesd_param.device_clk_khz =
+		dev_init->ad9680_xcvr_param.lane_rate_khz / 40;
+	dev_init->ad9680_jesd_param.lane_clk_khz =
+		dev_init->ad9680_xcvr_param.lane_rate_khz;
 
 
 	/* setup clocks */
@@ -986,7 +989,7 @@ int main(void)
 	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
-		ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
+			  ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
 #else
 	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
 	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
@@ -1006,7 +1009,7 @@ int main(void)
 	printf("\n SAMPLE NO. |     CH1     |     CH 2     |");
 	for (unsigned int i = 0; i < 1024; i++)
 		printf("\n %4d       |    0x%04x   |    0x%04x    |",
-			i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
+		       i, (*(data + i) & 0xFFFF), (*(data + i) >> 16));
 
 	status = fmcdaq2_iio_init(&fmcdaq2, &fmcdaq2_init);
 	if (status != SUCCESS)
