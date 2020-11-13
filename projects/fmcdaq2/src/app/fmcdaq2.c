@@ -861,65 +861,63 @@ int fmcdaq2_reconfig(struct ad9144_init_param *p_ad9144_param,
 	return(0);
 }
 
-int main(void)
+static int fmcdaq2_setup(struct fmcdaq2_dev *dev,
+			 struct fmcdaq2_init_param *dev_init)
 {
-	int32_t status;
+	int status;
 
-	status = fmcdaq2_gpio_init(&fmcdaq2);
+	status = fmcdaq2_gpio_init(dev);
 	if (status < 0)
 		return status;
 
-	status = fmcdaq2_spi_init(&fmcdaq2_init);
+	status = fmcdaq2_spi_init(dev_init);
 	if (status < 0)
 		return status;
 
-	status = fmcdaq2_clk_init(&fmcdaq2, &fmcdaq2_init);
+	status = fmcdaq2_clk_init(dev, dev_init);
 	if (status < 0)
 		return status;
 
-	status = fmcdaq2_jesd_init(&fmcdaq2_init);
+	status = fmcdaq2_jesd_init(dev_init);
 	if (status < 0)
-		return status;;
-
-	/* setup the device structures */
-
+		return status;
 
 	/* ADC Core */
-	fmcdaq2_init.ad9680_core_param = (struct axi_adc_init) {
+	dev_init->ad9680_core_param = (struct axi_adc_init) {
 		.name = "ad9680_adc",
 		.base = RX_CORE_BASEADDR,
 		.num_channels = 2
 	};
 
-	fmcdaq2_init.ad9680_dmac_param = (struct axi_dmac_init) {
+	dev_init->ad9680_dmac_param = (struct axi_dmac_init) {
 		.name = "ad9680_dmac",
 		.base = RX_DMA_BASEADDR,
 		.direction = DMA_DEV_TO_MEM,
 		.flags = 0
 	};
 
-	fmcdaq2_init.ad9680_param.lane_rate_kbps = 10000000;
-	fmcdaq2_init.ad9144_param.lane_rate_kbps = 10000000;
+	dev_init->ad9680_param.lane_rate_kbps = 10000000;
+	dev_init->ad9144_param.lane_rate_kbps = 10000000;
 
 
 	/* change the default JESD configurations, if required */
-	fmcdaq2_reconfig(&fmcdaq2_init.ad9144_param,
-			 &fmcdaq2_init.ad9144_xcvr_param,
-			 &fmcdaq2_init.ad9680_param,
-			 &fmcdaq2_init.ad9680_xcvr_param,
-			 fmcdaq2_init.ad9523_param.pdata);
+	fmcdaq2_reconfig(&dev_init->ad9144_param,
+			 &dev_init->ad9144_xcvr_param,
+			 &dev_init->ad9680_param,
+			 &dev_init->ad9680_xcvr_param,
+			 dev_init->ad9523_param.pdata);
 
 	status = fmcdaq2_dac_init(&fmcdaq2, &fmcdaq2_init);
 	if (status < 0)
 		return status;
 
 	/* Reconfigure the default JESD configurations */
-	fmcdaq2_init.ad9680_jesd_param.device_clk_khz =  fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz / 40;
-	fmcdaq2_init.ad9680_jesd_param.lane_clk_khz = fmcdaq2_init.ad9680_xcvr_param.lane_rate_khz;
+	dev_init->ad9680_jesd_param.device_clk_khz =  dev_init->ad9680_xcvr_param.lane_rate_khz / 40;
+	dev_init->ad9680_jesd_param.lane_clk_khz = dev_init->ad9680_xcvr_param.lane_rate_khz;
 
 
 	/* setup clocks */
-	status = ad9523_setup(&fmcdaq2.ad9523_device, &fmcdaq2_init.ad9523_param);
+	status = ad9523_setup(&dev->ad9523_device, &dev_init->ad9523_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -940,7 +938,7 @@ int main(void)
 	if (status != SUCCESS)
 		return status;
 
-	status = ad9680_setup(&fmcdaq2.ad9680_device, &fmcdaq2_init.ad9680_param);
+	status = ad9680_setup(&dev->ad9680_device, &dev_init->ad9680_param);
 	if (status != SUCCESS) {
 		printf("error: ad9680_setup() failed\n");
 	}
@@ -949,22 +947,31 @@ int main(void)
 	if (status != SUCCESS)
 		return status;
 
-	status = ad9144_setup(&fmcdaq2.ad9144_device, &fmcdaq2_init.ad9144_param);
+	status = ad9144_setup(&dev->ad9144_device, &dev_init->ad9144_param);
 	if (status != SUCCESS) {
 		printf("error: ad9144_setup() failed\n");
 	}
 
-	status = axi_adc_init(&fmcdaq2.ad9680_core,  &fmcdaq2_init.ad9680_core_param);
+	status = axi_adc_init(&dev->ad9680_core,  &dev_init->ad9680_core_param);
 	if (status != SUCCESS) {
-		printf("axi_adc_init() error: %s\n", fmcdaq2.ad9680_core->name);
+		printf("axi_adc_init() error: %s\n", dev->ad9680_core->name);
 	}
 
-	status = axi_dac_init(&fmcdaq2.ad9144_core, &fmcdaq2_init.ad9144_core_param);
+	status = axi_dac_init(&dev->ad9144_core, &dev_init->ad9144_core_param);
 	if (status != SUCCESS) {
-		printf("axi_dac_init() error: %s\n", fmcdaq2.ad9144_core->name);
+		printf("axi_dac_init() error: %s\n", dev->ad9144_core->name);
 	}
-	status = fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
-	if (status != SUCCESS)
+
+	return fmcdaq2_test(&fmcdaq2, &fmcdaq2_init);
+}
+
+
+int main(void)
+{
+	int status;
+
+	status = fmcdaq2_setup(&fmcdaq2, &fmcdaq2_init);
+	if (status < 0)
 		return status;
 
 	/* DAC DMA Example */
@@ -990,7 +997,7 @@ int main(void)
 	Xil_DCacheFlush();
 #endif
 
-	axi_dmac_init(fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
+	axi_dmac_init(&fmcdaq2.ad9144_dmac, &fmcdaq2_init.ad9144_dmac_param);
 
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
 			  sizeof(sine_lut_iq) * 4);
@@ -1001,7 +1008,7 @@ int main(void)
 #endif
 
 	/* Initialize the DMAC and transfer 16384 samples from ADC to MEM */
-	axi_dmac_init(fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
+	axi_dmac_init(&fmcdaq2.ad9680_dmac, &fmcdaq2_init.ad9680_dmac_param);
 
 	axi_dmac_transfer(fmcdaq2.ad9680_dmac, ADC_DDR_BASEADDR,
 			  16384 * 2);
