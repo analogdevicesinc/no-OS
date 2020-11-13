@@ -564,15 +564,7 @@ static int fmcdaq2_dac_init(struct fmcdaq2_dev *dev,
 			    struct fmcdaq2_init_param *dev_init)
 {
 	/* DAC (AD9144) channels configuration */
-	dev->ad9144_channels[0].dds_dual_tone = 0;
-	dev->ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
-	dev->ad9144_channels[0].dds_phase_0 = 0;
-	dev->ad9144_channels[0].dds_scale_0 = 500000;
 	dev->ad9144_channels[0].pat_data = 0xb1b0a1a0;
-	dev->ad9144_channels[1].dds_dual_tone = 0;
-	dev->ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
-	dev->ad9144_channels[1].dds_phase_0 = 0;
-	dev->ad9144_channels[1].dds_scale_0 = 500000;
 	dev->ad9144_channels[1].pat_data = 0xd1d0c1c0;
 	dev->ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
 	dev->ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
@@ -994,7 +986,15 @@ int main(void)
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
 		ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
 #else
+	fmcdaq2.ad9144_channels[0].dds_dual_tone = 0;
+	fmcdaq2.ad9144_channels[0].dds_frequency_0 = 33*1000*1000;
+	fmcdaq2.ad9144_channels[0].dds_phase_0 = 0;
+	fmcdaq2.ad9144_channels[0].dds_scale_0 = 500000;
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DDS;
+	fmcdaq2.ad9144_channels[1].dds_dual_tone = 0;
+	fmcdaq2.ad9144_channels[1].dds_frequency_0 = 11*1000*1000;
+	fmcdaq2.ad9144_channels[1].dds_phase_0 = 0;
+	fmcdaq2.ad9144_channels[1].dds_scale_0 = 500000;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DDS;
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 #endif
