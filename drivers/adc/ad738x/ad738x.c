@@ -2,8 +2,9 @@
  *   @file   ad738x.c
  *   @brief  Implementation of AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -45,6 +46,8 @@
 #include "stdbool.h"
 #include "spi_engine.h"
 #include "ad738x.h"
+#include "delay.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -56,7 +59,7 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_spi_reg_read(ad738x_dev *dev,
+int32_t ad738x_spi_reg_read(struct ad738x_dev *dev,
 			    uint8_t reg_addr,
 			    uint16_t *reg_data)
 {
@@ -79,19 +82,16 @@ int32_t ad738x_spi_reg_read(ad738x_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_spi_reg_write(ad738x_dev *dev,
+int32_t ad738x_spi_reg_write(struct ad738x_dev *dev,
 			     uint8_t reg_addr,
 			     uint16_t reg_data)
 {
 	uint8_t buf[2];
-	int32_t ret;
 
 	buf[0] = AD738X_REG_WRITE(reg_addr) | ((reg_data & 0xF00) >> 8);
 	buf[1] = reg_data & 0xFFF;
 
-	ret = spi_write_and_read(dev->spi_desc, buf, 2);
-
-	return ret;
+	return spi_write_and_read(dev->spi_desc, buf, 2);
 }
 
 /**
@@ -102,7 +102,7 @@ int32_t ad738x_spi_reg_write(ad738x_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_spi_write_mask(ad738x_dev *dev,
+int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t mask,
 			      uint16_t data)
@@ -124,7 +124,7 @@ int32_t ad738x_spi_write_mask(ad738x_dev *dev,
  * @param adc_data - The conversion result data
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
+int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 				     uint16_t *adc_data)
 {
 	uint8_t buf[4];
@@ -159,19 +159,13 @@ int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
  *									 ONE_WIRE_MODE
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
-				   ad738x_conv_mode mode)
+int32_t ad738x_set_conversion_mode(struct ad738x_dev *dev,
+				   enum ad738x_conv_mode mode)
 {
-	int32_t ret;
-
-	ret = ad738x_spi_write_mask(dev,
-				    AD738X_REG_CONFIG2,
-				    AD738X_CONFIG2_SDO2_MSK,
-				    AD738X_CONFIG2_SDO2(mode));
-
-	dev->conv_mode = mode;
-
-	return ret;
+	return ad738x_spi_write_mask(dev,
+				     AD738X_REG_CONFIG2,
+				     AD738X_CONFIG2_SDO2_MSK,
+				     AD738X_CONFIG2_SDO2(mode));
 }
 
 /**
@@ -182,18 +176,15 @@ int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
  * 									 HARD_RESET
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_reset(ad738x_dev *dev,
-		     ad738x_reset_type reset)
+int32_t ad738x_reset(struct ad738x_dev *dev,
+		     enum ad738x_reset_type reset)
 {
-	int32_t ret;
 	uint32_t val = ((reset == HARD_RESET) ? 0xFF : 0x3C);
 
-	ret = ad738x_spi_write_mask(dev,
-				    AD738X_REG_CONFIG2,
-				    AD738X_CONFIG2_RESET_MSK,
-				    AD738X_CONFIG2_RESET(val));
-
-	return ret;
+	return ad738x_spi_write_mask(dev,
+				     AD738X_REG_CONFIG2,
+				     AD738X_CONFIG2_RESET_MSK,
+				     AD738X_CONFIG2_RESET(val));
 }
 
 /**
@@ -213,10 +204,10 @@ int32_t ad738x_reset(ad738x_dev *dev,
  * 								 RES_18_BIT
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_oversampling_config(ad738x_dev *dev,
-				   ad738x_os_mode os_mode,
-				   ad738x_os_ratio os_ratio,
-				   ad738x_resolution res)
+int32_t ad738x_oversampling_config(struct ad738x_dev *dev,
+				   enum ad738x_os_mode os_mode,
+				   enum ad738x_os_ratio os_ratio,
+				   enum ad738x_resolution res)
 {
 	int32_t ret;
 	uint16_t reg_data;
@@ -250,17 +241,13 @@ int32_t ad738x_oversampling_config(ad738x_dev *dev,
  * 									 FULL_PWDM
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_power_down_mode(ad738x_dev *dev,
-			       ad738x_pwd_mode pmode)
+int32_t ad738x_power_down_mode(struct ad738x_dev *dev,
+			       enum ad738x_pwd_mode pmode)
 {
-	int32_t ret;
-
-	ret = ad738x_spi_write_mask(dev,
-				    AD738X_REG_CONFIG1,
-				    AD738X_CONFIG1_PMODE_MSK,
-				    AD738X_CONFIG1_PMODE(pmode));
-
-	return ret;
+	return ad738x_spi_write_mask(dev,
+				     AD738X_REG_CONFIG1,
+				     AD738X_CONFIG1_PMODE_MSK,
+				     AD738X_CONFIG1_PMODE(pmode));
 }
 
 /**
@@ -271,18 +258,55 @@ int32_t ad738x_power_down_mode(ad738x_dev *dev,
  * 									 EXT_REF
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_reference_sel(ad738x_dev *dev,
-			     ad738x_ref_sel ref_sel)
+int32_t ad738x_reference_sel(struct ad738x_dev *dev,
+			     enum ad738x_ref_sel ref_sel)
+{
+	return ad738x_spi_write_mask(dev,
+				     AD738X_REG_CONFIG1,
+				     AD738X_CONFIG1_REFSEL_MSK,
+				     AD738X_CONFIG1_REFSEL(ref_sel));
+}
+
+/**
+ * @brief Read from device.
+ *        Enter register mode to read/write registers
+ * @param dev - ad738x_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad738x_read_data(struct ad738x_dev *dev,
+			 uint32_t *buf,
+			 uint16_t samples)
 {
 	int32_t ret;
+	uint32_t commands_data[2] = {0, 0};
+	struct spi_engine_offload_message msg;
+	uint32_t spi_eng_msg_cmds[3] = {
+		CS_LOW,
+		WRITE_READ(2),
+		CS_HIGH,
+	};
 
-	ret = ad738x_spi_write_mask(dev,
-				    AD738X_REG_CONFIG1,
-				    AD738X_CONFIG1_REFSEL_MSK,
-				    AD738X_CONFIG1_REFSEL(ref_sel));
+	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	msg.commands_data = commands_data;
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = (uint32_t)buf;
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (dev->dcache_invalidate_range)
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
 
 	return ret;
 }
+
 
 /**
  * Initialize the device.
@@ -291,24 +315,29 @@ int32_t ad738x_reference_sel(ad738x_dev *dev,
  * 					   parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad738x_init(ad738x_dev **device,
-		    ad738x_init_param init_param)
+int32_t ad738x_init(struct ad738x_dev **device,
+		    struct ad738x_init_param *init_param)
 {
-	ad738x_dev *dev;
+	struct ad738x_dev *dev;
 	int32_t ret;
 
-	dev = (ad738x_dev *)malloc(sizeof(*dev));
+	dev = (struct ad738x_dev *)malloc(sizeof(*dev));
 	if (!dev)
 		return -1;
 
-	ret = spi_init(&dev->spi_desc, init_param.spi_init);
+	dev->offload_init_param = init_param->offload_init_param;
+	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
+	dev->conv_mode = init_param->conv_mode;
+	dev->ref_sel = init_param->ref_sel;
+
+	ret = spi_init(&dev->spi_desc, init_param->spi_param);
 
 	ret |= ad738x_reset(dev, HARD_RESET);
 	mdelay(1000);
 	/* 1-wire or 2-wire mode */
-	ret |= ad738x_set_conversion_mode(dev, init_param.conv_mode);
+	ret |= ad738x_set_conversion_mode(dev, dev->conv_mode);
 	/* Set internal or external reference */
-	ret |= ad738x_reference_sel(dev, init_param.ref_sel);
+	ret |= ad738x_reference_sel(dev, dev->ref_sel);
 
 	*device = dev;
 
@@ -318,13 +347,12 @@ int32_t ad738x_init(ad738x_dev **device,
 
 	return ret;
 }
-
-/***************************************************************************//**
+/**
  * @brief Free the resources allocated by ad738x_init().
  * @param dev - The device structure.
  * @return SUCCESS in case of success, negative error code otherwise.
-*******************************************************************************/
-int32_t ad738x_remove(ad738x_dev *dev)
+ */
+int32_t ad738x_remove(struct ad738x_dev *dev)
 {
 	int32_t ret;
 

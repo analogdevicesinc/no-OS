@@ -2,8 +2,9 @@
  *   @file   ad738x.h
  *   @brief  Header file for AD738x Driver.
  *   @author SPopa (stefan.popa@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2017(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -41,14 +42,13 @@
 #define SRC_AD738X_H_
 
 /******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include "util.h"
+
+/******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-/*
- * Create a contiguous bitmask starting at bit position @l and ending at
- * position @h.
- */
-#define GENMASK(h, l) \
-		(((~0UL) - (1UL << (l)) + 1) & (~0UL >> (31 - (h))))
 
 /*
  * AD738X registers definition
@@ -113,90 +113,113 @@
 /*****************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
-typedef enum {
+enum ad738x_conv_mode {
 	TWO_WIRE_MODE,
 	ONE_WIRE_MODE
-} ad738x_conv_mode;
+};
 
-typedef enum {
+enum ad738x_os_mode {
 	NORMAL_OS_MODE,
 	ROLLING_OS_MODE
-} ad738x_os_mode;
+};
 
-typedef enum {
+enum ad738x_os_ratio {
 	OSR_DISABLED,
 	OSR_X2,
 	OSR_X4,
 	OSR_X8,
 	OSR_X16,
 	OSR_X32,
-} ad738x_os_ratio;
+};
 
-typedef enum {
+enum ad738x_resolution {
 	RES_16_BIT,
 	RES_18_BIT
-} ad738x_resolution;
+};
 
-typedef enum {
+enum ad738x_reset_type {
 	SOFT_RESET,
 	HARD_RESET
-} ad738x_reset_type;
+};
 
-typedef enum {
+enum ad738x_pwd_mode {
 	NORMAL_PWDM,
 	FULL_PWDM
-} ad738x_pwd_mode;
+};
 
-typedef enum {
+enum ad738x_ref_sel {
 	INT_REF,
 	EXT_REF
-} ad738x_ref_sel;
+};
 
-typedef struct {
+struct ad738x_dev {
 	/* SPI */
 	spi_desc		*spi_desc;
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
 	/* Device Settings */
-	ad738x_conv_mode 	conv_mode;
-	ad738x_resolution 	resolution;
-} ad738x_dev;
+	enum ad738x_conv_mode 	conv_mode;
+	enum ad738x_ref_sel		ref_sel;
+	enum ad738x_resolution 	resolution;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+};
 
-typedef struct {
+struct ad738x_init_param {
 	/* SPI */
-	spi_init_param		spi_init;
+	spi_init_param		*spi_param;
+	/** SPI module offload init */
+	struct spi_engine_offload_init_param *offload_init_param;
 	/* Device Settings */
-	ad738x_conv_mode	conv_mode;
-	ad738x_ref_sel		ref_sel;
-} ad738x_init_param;
+	enum ad738x_conv_mode	conv_mode;
+	enum ad738x_ref_sel		ref_sel;
+	/** Invalidate the Data cache for the given address range */
+	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
-int32_t ad738x_init(ad738x_dev **device,
-		    ad738x_init_param init_param);
-int32_t ad738x_remove(ad738x_dev *dev);
-int32_t ad738x_spi_reg_read(ad738x_dev *dev,
+/** Initialize the device. */
+int32_t ad738x_init(struct ad738x_dev **device,
+		    struct ad738x_init_param *init_param);
+/** Free the resources allocated by ad738x_init(). */
+int32_t ad738x_remove(struct ad738x_dev *dev);
+/** Read from device. */
+int32_t ad738x_spi_reg_read(struct ad738x_dev *dev,
 			    uint8_t reg_addr,
 			    uint16_t *reg_data);
-int32_t ad738x_spi_reg_write(ad738x_dev *dev,
+/** Write to device. */
+int32_t ad738x_spi_reg_write(struct ad738x_dev *dev,
 			     uint8_t reg_addr,
 			     uint16_t reg_data);
-int32_t ad738x_spi_single_conversion(ad738x_dev *dev,
+/** Read conversion result from device. */
+int32_t ad738x_spi_single_conversion(struct ad738x_dev *dev,
 				     uint16_t *adc_data);
-int32_t ad738x_spi_write_mask(ad738x_dev *dev,
+/** SPI write to device using a mask. */
+int32_t ad738x_spi_write_mask(struct ad738x_dev *dev,
 			      uint8_t reg_addr,
 			      uint32_t mask,
 			      uint16_t data);
-int32_t ad738x_set_conversion_mode(ad738x_dev *dev,
-				   ad738x_conv_mode mode);
-int32_t ad738x_reset(ad738x_dev *dev,
-		     ad738x_reset_type reset);
-int32_t ad738x_oversampling_config(ad738x_dev *dev,
-				   ad738x_os_mode os_mode,
-				   ad738x_os_ratio os_ratio,
-				   ad738x_resolution res);
-int32_t ad738x_power_down_mode(ad738x_dev *dev,
-			       ad738x_pwd_mode pmode);
-int32_t ad738x_reference_sel(ad738x_dev *dev,
-			     ad738x_ref_sel ref_sel);
-void mdelay(uint32_t msecs);
+/** Conversion mode */
+int32_t ad738x_set_conversion_mode(struct ad738x_dev *dev,
+				   enum ad738x_conv_mode mode);
+/** Device reset over SPI. */
+int32_t ad738x_reset(struct ad738x_dev *dev,
+		     enum ad738x_reset_type reset);
+/** Set the oversampling mode and ratio. */
+int32_t ad738x_oversampling_config(struct ad738x_dev *dev,
+				   enum ad738x_os_mode os_mode,
+				   enum ad738x_os_ratio os_ratio,
+				   enum ad738x_resolution res);
+/** Device power down. */
+int32_t ad738x_power_down_mode(struct ad738x_dev *dev,
+			       enum ad738x_pwd_mode pmode);
+/** Enable internal or external reference. */
+int32_t ad738x_reference_sel(struct ad738x_dev *dev,
+			     enum ad738x_ref_sel ref_sel);
+/** Read data from device. */
+int32_t ad738x_read_data(struct ad738x_dev *dev,
+			 uint32_t *buf,
+			 uint16_t samples);
 #endif /* SRC_AD738X_H_ */
