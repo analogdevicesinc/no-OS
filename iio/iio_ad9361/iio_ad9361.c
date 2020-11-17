@@ -2180,6 +2180,7 @@ static struct iio_channel iio_channel_voltage0_in = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 0,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage1_in = {
@@ -2189,6 +2190,7 @@ static struct iio_channel iio_channel_voltage1_in = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 1,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage2_in = {
@@ -2198,6 +2200,7 @@ static struct iio_channel iio_channel_voltage2_in = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 2,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage0_out = {
@@ -2207,6 +2210,7 @@ static struct iio_channel iio_channel_voltage0_out = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 0,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage1_out = {
@@ -2216,6 +2220,7 @@ static struct iio_channel iio_channel_voltage1_out = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 1,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage2_out = {
@@ -2225,6 +2230,7 @@ static struct iio_channel iio_channel_voltage2_out = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 2,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_voltage3_out = {
@@ -2234,6 +2240,7 @@ static struct iio_channel iio_channel_voltage3_out = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 3,
+	.ch_type = IIO_VOLTAGE,
 };
 
 static struct iio_channel iio_channel_altvoltage0 = {
@@ -2243,6 +2250,7 @@ static struct iio_channel iio_channel_altvoltage0 = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 0,
+	.ch_type = IIO_ALTVOLTAGE,
 };
 
 static struct iio_channel iio_channel_altvoltage1 = {
@@ -2252,6 +2260,7 @@ static struct iio_channel iio_channel_altvoltage1 = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 1,
+	.ch_type = IIO_ALTVOLTAGE,
 };
 
 static struct iio_channel iio_channel_temp0 = {
@@ -2261,6 +2270,7 @@ static struct iio_channel iio_channel_temp0 = {
 	.scan_type = NULL,
 	.indexed = true,
 	.channel = 0,
+	.ch_type = IIO_TEMP,
 };
 
 static struct iio_channel iio_channel_out = {
