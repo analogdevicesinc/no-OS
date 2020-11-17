@@ -447,12 +447,19 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
 	if (!attributes[i])
 		return -ENOENT;
 
-	if (is_write)
+	if (is_write) {
+		if (!attributes[i]->store)
+			return -ENOENT;
+
 		return attributes[i]->store(params->dev_instance, params->buf,
 					    params->len, params->ch_info);
-	else
+	} else {
+		if (!attributes[i]->show)
+			return -ENOENT;
+
 		return attributes[i]->show(params->dev_instance, params->buf,
 					   params->len, params->ch_info);
+	}
 }
 
 /**
