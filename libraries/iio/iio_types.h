@@ -150,6 +150,11 @@ struct iio_channel {
 	bool			indexed;
 };
 
+struct iio_data_buffer {
+	uint32_t	size;
+	void		*buff;
+};
+
 /**
  * @struct iio_device
  * @brief Structure holding channels and attributes of a device.

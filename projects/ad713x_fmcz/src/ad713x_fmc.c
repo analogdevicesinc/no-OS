@@ -320,7 +320,8 @@ int main()
 		return ret;
 
 	iio_ad713x_get_dev_descriptor(iio_ad713x, &ad713x_dev_desc);
-	ret = iio_register(iio_app_desc, ad713x_dev_desc, "adc", iio_ad713x);
+	ret = iio_register(iio_app_desc, ad713x_dev_desc, "adc", iio_ad713x, NULL,
+			   NULL);
 	if (ret < 0)
 		return ret;
 
