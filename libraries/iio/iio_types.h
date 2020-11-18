@@ -182,6 +182,19 @@ struct iio_device {
 	/** Write data to RAM. It should be called before "transfer_mem_to_dev" */
 	ssize_t (*write_data)(void *dev_instance, char *pbuf, size_t offset,
 			      size_t bytes_count, uint32_t ch_mask);
+	/** Called before a transfer starts. The device should activate the
+	 * channels from the mask */
+	int32_t (*prepare_transfer)(void *dev, uint32_t mask);
+	/** Called after a tranfer ends */
+	int32_t (*end_transfer)(void *dev);
+	/* Numbers of bytes will be:
+	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
+	 */
+	int32_t	(*read_dev)(void *dev, void *buff, uint32_t nb_samples);
+	/* Numbers of bytes will be:
+	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
+	 */
+	int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
 };
 
 #endif /* IIO_TYPES_H_ */
