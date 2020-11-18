@@ -172,137 +172,77 @@ ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
 	return len;
 }
 
-/**
- * @brief Transfer data from RAM to device.
- * @param iio_inst - Physical instance of a iio_demo_dac device.
- * @param bytes_count - Number of bytes to transfer.
- * @param ch_mask - Opened channels mask.
- * @return Number of bytes transfered, or negative value in case of failure.
- */
-ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
-				     size_t bytes_count,
-				     uint32_t ch_mask)
+int32_t iio_demo_update_active_channels(void *dev, uint32_t mask)
 {
-	struct iio_demo_device *demo_device;
-	demo_device = (struct iio_demo_device *)iio_inst;
-	if (!demo_device)
-		return FAILURE;
+	struct iio_demo_desc *desc = dev;
 
-	return bytes_count;
+	desc->ch_mask = mask;
+	/* If a real device. Here needs to be selected the channels to be read*/
+
+	return SUCCESS;
 }
 
-/**
- * @brief Transfer data from device into RAM.
- * @param iio_inst - Physical instance of a device.
- * @param bytes_count - Number of bytes to transfer.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
-				     size_t bytes_count,
-				     uint32_t ch_mask)
+int32_t iio_demo_close_channels(void *dev)
 {
-	struct iio_demo_device *demo_device;
-	demo_device = (struct iio_demo_device *)iio_inst;
-	if (!demo_device)
-		return FAILURE;
+	struct iio_demo_desc *desc = dev;
 
-	/* In some cases a transfer is necessary before a "iio_demo_read_dev"
-	 * function is called. In this case an implementation should be provided
-	 * in this location. For an example check "iio_axi_adc" module, where
-	 * data is transfered from device to RAM memory by DMA.
-	 */
-	return bytes_count;
+	desc->ch_mask = 0;
+	/* If a real device.
+	 * If needed, previously selected channels can be closed */
+
+	return SUCCESS;
 }
 
-/**
- * @brief Write chunk of data into RAM.
- * This function is probably called multiple times by libtinyiiod before a
- * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes
- * at a time.
- * @param iio_inst - Physical instance of a iio_demo_dac device.
- * @param buf - Values to write.
- * @param offset - Offset in memory after the nth chunk of data.
- * @param bytes_count - Number of bytes to write.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
-			   size_t offset,  size_t bytes_count, uint32_t ch_mask)
+static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
+			    uint32_t *new_idx)
 {
-	struct iio_demo_desc *demo_device;
-	uint32_t index, addr;
-	uint16_t *buf16;
-
-	if (!iio_inst)
-		return FAILURE;
-
-	if (!buf)
-		return FAILURE;
-
-	buf16 = (uint16_t *)buf;
-	demo_device = (struct iio_demo_desc *)iio_inst;
-	addr = demo_device->ddr_base_addr + offset;
-	for(index = 0; index < bytes_count; index += 2) {
-		uint32_t *local_addr = (uint32_t *)(addr +
-						    (index * 2) % demo_device->ddr_base_size);
-		*local_addr = (buf16[index + 1] << 16) | buf16[index];
+	last_idx++;
+	ch_mask >>= last_idx;
+	if (!ch_mask) {
+		*new_idx = -1;
+		return 0;
 	}
+	while (!(ch_mask & 1)) {
+		last_idx++;
+		ch_mask >>= 1;
+	}
+	*new_idx = last_idx;
 
-
-	return bytes_count;
+	return 1;
 }
 
-/**
- * @brief Read chunk of data from RAM to pbuf.
- * Call "iio_demo_transfer_dev_to_mem" first.
- * This function is probably called multiple times by libtinyiiod after a
- * "iio_demo_transfer_dev_to_mem" call, since we can only read "bytes_count"
- * bytes at a time.
- * @param iio_inst - Physical instance of a device.
- * @param pbuf - Buffer where value is stored.
- * @param offset - Offset to the remaining data after reading n chunks.
- * @param bytes_count - Number of bytes to read.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
-			  size_t bytes_count, uint32_t ch_mask)
+int32_t	iio_demo_read_local_samples(void *dev, uint16_t *buff,
+				    uint32_t nb_samples)
 {
-	struct iio_demo_desc *demo_device;
-	uint32_t i, j = 0, current_ch = 0;
-	uint16_t *pbuf16;
-	size_t samples;
+	struct iio_demo_desc	*desc = dev;
+	uint32_t		ch_idx;
+	uint32_t		i;
+	uint32_t		k;
 
-	if (!iio_inst)
-		return FAILURE;
+	ch_idx = -1;
+	k = 0;
+	for (i = 0; i < nb_samples; i++)
+		while (get_next_ch_idx(desc->ch_mask, ch_idx, &ch_idx))
+			buff[k++] = local_ch[ch_idx][i % NB_LOCAL_SAMPLES];
 
-	if (!pbuf)
-		return FAILURE;
+	return nb_samples;
+}
 
-	demo_device = (struct iio_demo_desc*)iio_inst;
-	pbuf16 = (uint16_t*)pbuf;
-	samples = (bytes_count * DEMO_NUM_CHANNELS) / hweight8(
-			  ch_mask);
-	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
-	offset = (offset * DEMO_NUM_CHANNELS) / hweight8(ch_mask);
+int32_t	iio_demo_write_local_samples(void *dev, uint16_t *buff,
+				     uint32_t nb_samples)
+{
+	struct iio_demo_desc	*desc = dev;
+	uint32_t		ch_idx;
+	uint32_t		i;
+	uint32_t		k;
 
-	for (i = 0; i < samples; i++) {
+	ch_idx = -1;
+	k = 0;
+	for (i = 0; i < nb_samples; i++)
+		while (get_next_ch_idx(desc->ch_mask, ch_idx, &ch_idx))
+			local_ch[ch_idx][i % NB_LOCAL_SAMPLES] = buff[k++];
 
-		if (ch_mask & BIT(current_ch)) {
-			pbuf16[j] = *(uint16_t*)(demo_device->ddr_base_addr +
-						 (offset + i * 2) % demo_device->ddr_base_size);
-
-			j++;
-		}
-
-		if (current_ch + 1 < DEMO_NUM_CHANNELS)
-			current_ch++;
-		else
-			current_ch = 0;
-	}
-
-	return bytes_count;
+	return nb_samples;
 }
 
 /**
@@ -322,8 +262,7 @@ int32_t iio_demo_dev_init(struct iio_demo_desc **desc,
 
 	ldesc->dev_global_attr = init->dev_global_attr;
 	ldesc->dev_ch_attr = init->dev_ch_attr;
-	ldesc->ddr_base_addr = init->ddr_base_addr;
-	ldesc->ddr_base_size = init->ddr_base_size;
+	ldesc->ch_mask = 0;
 
 	*desc = ldesc;
 

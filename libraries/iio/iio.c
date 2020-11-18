@@ -654,7 +654,7 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 
 	if (iface->dev_descriptor->prepare_transfer)
 		return iface->dev_descriptor->prepare_transfer(
-				iface->dev_instance, mask);
+			       iface->dev_instance, mask);
 
 	return SUCCESS;
 }
@@ -721,7 +721,7 @@ static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
 		mask >>= 1;
 	}
 	bytes_per_sample = intf->dev_descriptor->channels[first_ch]
-	                     ->scan_type->storagebits / 8;
+			   ->scan_type->storagebits / 8;
 
 	return bytes / bytes_per_sample / nb_active_ch;
 }
@@ -751,8 +751,8 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 			return -ENOMEM;
 		samples = bytes_to_samples(iio_interface, bytes_count);
 		ret = iio_interface->dev_descriptor->read_dev(
-					iio_interface->dev_instance,
-					r_buff->buff, samples);
+			      iio_interface->dev_instance,
+			      r_buff->buff, samples);
 		return ret < 0 ? ret : bytes_count;
 	}
 
@@ -780,7 +780,7 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			       iio_interface->dev_instance,
 			       pbuf, offset,
 			       bytes_count, iio_interface->ch_mask);
-	
+
 	//else
 	struct iio_data_buffer *r_buff;
 
@@ -811,7 +811,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 		return iio_interface->dev_descriptor->transfer_mem_to_dev(
 			       iio_interface->dev_instance,
 			       bytes_count, iio_interface->ch_mask);
-	
+
 	//else
 	struct iio_data_buffer	*w_buff;
 	ssize_t			ret;
@@ -823,8 +823,8 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 			return -ENOMEM;
 		samples = bytes_to_samples(iio_interface, bytes_count);
 		ret = iio_interface->dev_descriptor->write_dev(
-					iio_interface->dev_instance,
-					w_buff->buff, samples);
+			      iio_interface->dev_instance,
+			      w_buff->buff, samples);
 		return ret < 0 ? ret : bytes_count;
 	}
 
