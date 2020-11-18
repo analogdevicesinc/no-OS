@@ -1075,7 +1075,7 @@ int main(void)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_app_desc, adc_dev_desc, "cf-ad9361-lpc",
-			      iio_axi_adc_desc);
+			      iio_axi_adc_desc, NULL, NULL);
 	if (status < 0)
 		return status;
 
@@ -1091,7 +1091,7 @@ int main(void)
 		return status;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_app_desc, dac_dev_desc, "cf-ad9361-dds-core-lpc",
-			      iio_axi_dac_desc);
+			      iio_axi_dac_desc, NULL, NULL);
 	if (status < 0)
 		return status;
 

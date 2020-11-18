@@ -121,7 +121,8 @@ int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
 	if (status < 0)
 		return status;
 
-	status = iio_register(iio, dev_desc, "awesome_name", iio_axi_adc_desc);
+	status = iio_register(iio, dev_desc, "awesome_name", iio_axi_adc_desc, NULL,
+			      NULL);
 	if (status < 0)
 		return status;
 

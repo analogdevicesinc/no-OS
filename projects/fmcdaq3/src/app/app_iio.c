@@ -125,7 +125,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 		return FAILURE;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
-			      iio_axi_adc_desc);
+			      iio_axi_adc_desc, NULL, NULL);
 	if (status < 0)
 		return status;
 
@@ -134,7 +134,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 		return FAILURE;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_desc, dac_dev_desc, "axi_dac",
-			      iio_axi_dac_desc);
+			      iio_axi_dac_desc, NULL, NULL);
 	if (status < 0)
 		return status;
 
