@@ -53,6 +53,7 @@
 #include "delay.h"
 #include "error.h"
 #include "uart.h"
+#include <inttypes.h>
 
 #ifdef ENABLE_IIO_NETWORK
 #include "tcp_socket.h"
@@ -114,7 +115,7 @@ struct attr_fun_params {
  */
 struct iio_interface {
 	/** Will be: device[0...n] n beeing the count of registerd devices */
-	const char		dev_id[10];
+	char			dev_id[10];
 	/** Device name */
 	const char		*name;
 	/** Opened channels */
@@ -292,6 +293,8 @@ static char *get_channel_id(enum iio_chan_type type)
 		return "anglvel";
 	case IIO_TEMP:
 		return "temp";
+	default:
+		return "";
 	}
 
 	return "";
@@ -465,7 +468,7 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
  * @return Number of bytes read.
  */
 static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
-			     size_t len, bool debug)
+			     size_t len, enum iio_attr_type type)
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
@@ -479,15 +482,22 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
-	if (debug)
+	switch (type) {
+	case IIO_ATTR_TYPE_DEBUG:
 		attributes = dev->dev_descriptor->debug_attributes;
-	else
+		break;
+	case IIO_ATTR_TYPE_DEVICE:
 		attributes = dev->dev_descriptor->attributes;
+		break;
+	case IIO_ATTR_TYPE_BUFFER:
+		attributes = dev->dev_descriptor->buffer_attributes;
+		break;
+	}
 
 	if (!strcmp(attr, ""))
 		return iio_read_all_attr(&params, attributes);
 	else
-		return iio_rd_wr_attribute(&params,attributes, attr, 0);
+		return iio_rd_wr_attribute(&params,attributes, (char *)attr, 0);
 }
 
 /**
@@ -501,7 +511,7 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
  */
 static ssize_t iio_write_attr(const char *device_id, const char *attr,
 			      const char *buf,
-			      size_t len, bool debug)
+			      size_t len, enum iio_attr_type type)
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
@@ -515,15 +525,22 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
-	if (debug)
+	switch (type) {
+	case IIO_ATTR_TYPE_DEBUG:
 		attributes = dev->dev_descriptor->debug_attributes;
-	else
+		break;
+	case IIO_ATTR_TYPE_DEVICE:
 		attributes = dev->dev_descriptor->attributes;
+		break;
+	case IIO_ATTR_TYPE_BUFFER:
+		attributes = dev->dev_descriptor->buffer_attributes;
+		break;
+	}
 
 	if (!strcmp(attr, ""))
 		return iio_write_all_attr(&params, attributes);
 	else
-		return iio_rd_wr_attribute(&params, attributes, attr, 1);
+		return iio_rd_wr_attribute(&params, attributes, (char *)attr, 1);
 }
 
 /**
@@ -561,7 +578,7 @@ static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 	if (!strcmp(attr, ""))
 		return iio_read_all_attr(&params, ch->attributes);
 	else
-		return iio_rd_wr_attribute(&params, ch->attributes, attr, 0);
+		return iio_rd_wr_attribute(&params, ch->attributes, (char *)attr, 0);
 }
 
 /**
@@ -599,7 +616,7 @@ static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 	if (!strcmp(attr, ""))
 		return iio_write_all_attr(&params, ch->attributes);
 	else
-		return iio_rd_wr_attribute(&params, ch->attributes, attr, 1);
+		return iio_rd_wr_attribute(&params, ch->attributes, (char *)attr, 1);
 }
 
 /**
@@ -772,9 +789,9 @@ static ssize_t iio_get_xml(char **outxml)
  */
 ssize_t iio_step(struct iio_desc *desc)
 {
+#ifdef ENABLE_IIO_NETWORK
 	int32_t ret;
 
-#ifdef ENABLE_IIO_NETWORK
 	if (desc->phy_type == USE_NETWORK) {
 		if (desc->current_sock != NULL &&
 		    (int32_t)desc->current_sock != -1) {
@@ -816,7 +833,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 	i = 0;
 	i += snprintf(buff, max(n - i, 0),
-		      "<device id=\"device%d\" name=\"%s\">", id, name);
+		      "<device id=\"device%"PRIi32"\" name=\"%s\">", id, name);
 
 	/* Write channels */
 	if (device->channels)
@@ -911,9 +928,12 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	iio_interface->dev_instance = dev_instance;
 	iio_interface->name = name;
 	iio_interface->dev_descriptor = dev_descriptor;
+	iio_interface->read_buffer = read_buff;
+	iio_interface->write_buffer = write_buff;
 
 	/* Get number of bytes needed for the xml of the new device */
-	n = iio_generate_device_xml(iio_interface->dev_descriptor, iio_interface->name,
+	n = iio_generate_device_xml(iio_interface->dev_descriptor,
+				    (char *)iio_interface->name,
 				    desc->dev_count, NULL, -1);
 
 	new_size = desc->xml_size + n;
@@ -933,7 +953,7 @@ ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
 	desc->xml_desc = aux;
 	/* Print the new device xml at the end of the xml */
 	iio_generate_device_xml(iio_interface->dev_descriptor,
-				iio_interface->name,
+				(char *)iio_interface->name,
 				desc->dev_count,
 				desc->xml_desc + desc->xml_size_to_last_dev,
 				new_size - desc->xml_size_to_last_dev);
@@ -971,7 +991,7 @@ ssize_t iio_unregister(struct iio_desc *desc, char *name)
 
 	/* Get number of bytes needed for the xml of the device */
 	n = iio_generate_device_xml(to_remove_interface->dev_descriptor,
-				    to_remove_interface->name,
+				    (char *)to_remove_interface->name,
 				    desc->dev_count, NULL, -1);
 
 	/* Overwritte the deleted device */
