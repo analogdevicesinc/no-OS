@@ -652,6 +652,10 @@ static int32_t iio_open_dev(const char *device, size_t sample_size,
 
 	iface->ch_mask = mask;
 
+	if (iface->dev_descriptor->prepare_transfer)
+		return iface->dev_descriptor->prepare_transfer(
+			       iface->dev_instance, mask);
+
 	return SUCCESS;
 }
 
@@ -667,7 +671,10 @@ static int32_t iio_close_dev(const char *device)
 	iface = iio_get_interface(device);
 	if (!iface)
 		return FAILURE;
+
 	iface->ch_mask = 0;
+	if (iface->dev_descriptor->end_transfer)
+		return iface->dev_descriptor->end_transfer(iface->dev_instance);
 
 	return SUCCESS;
 }
@@ -691,6 +698,34 @@ static int32_t iio_get_mask(const char *device, uint32_t *mask)
 	return SUCCESS;
 }
 
+static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
+{
+	uint32_t bytes_per_sample;
+	uint32_t first_ch;
+	bool	 first_ch_found;
+	uint32_t nb_active_ch;
+	uint32_t mask;
+
+	mask = intf->ch_mask;
+	first_ch = 0;
+	nb_active_ch = 0;
+	first_ch_found = false;
+	while (mask) {
+		if ((mask & 1)) {
+			if (!first_ch_found)
+				first_ch_found = true;
+			else
+				first_ch++;
+			nb_active_ch++;
+		}
+		mask >>= 1;
+	}
+	bytes_per_sample = intf->dev_descriptor->channels[first_ch]
+			   ->scan_type->storagebits / 8;
+
+	return bytes / bytes_per_sample / nb_active_ch;
+}
+
 /**
  * @brief Transfer data from device into RAM.
  * @param device - String containing device name.
@@ -705,6 +740,21 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 		return iio_interface->dev_descriptor->transfer_dev_to_mem(
 			       iio_interface->dev_instance,
 			       bytes_count, iio_interface->ch_mask);
+	//else
+	struct iio_data_buffer	*r_buff;
+	uint32_t		samples;
+	ssize_t			ret;
+
+	r_buff = iio_interface->read_buffer;
+	if (r_buff && iio_interface->dev_descriptor->read_dev) {
+		if (bytes_count > r_buff->size)
+			return -ENOMEM;
+		samples = bytes_to_samples(iio_interface, bytes_count);
+		ret = iio_interface->dev_descriptor->read_dev(
+			      iio_interface->dev_instance,
+			      r_buff->buff, samples);
+		return ret < 0 ? ret : bytes_count;
+	}
 
 	return -ENOENT;
 }
@@ -731,6 +781,19 @@ static ssize_t iio_read_dev(const char *device, char *pbuf, size_t offset,
 			       pbuf, offset,
 			       bytes_count, iio_interface->ch_mask);
 
+	//else
+	struct iio_data_buffer *r_buff;
+
+	r_buff = iio_interface->read_buffer;
+	if (r_buff) {
+		if (offset + bytes_count > r_buff->size)
+			return -ENOMEM;
+
+		memcpy(pbuf, r_buff->buff + offset, bytes_count);
+
+		return bytes_count;
+	}
+
 	return -ENOENT;
 }
 
@@ -748,6 +811,22 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 		return iio_interface->dev_descriptor->transfer_mem_to_dev(
 			       iio_interface->dev_instance,
 			       bytes_count, iio_interface->ch_mask);
+
+	//else
+	struct iio_data_buffer	*w_buff;
+	ssize_t			ret;
+	uint32_t		samples;
+
+	w_buff = iio_interface->write_buffer;
+	if (w_buff && iio_interface->dev_descriptor->write_dev) {
+		if (bytes_count > w_buff->size)
+			return -ENOMEM;
+		samples = bytes_to_samples(iio_interface, bytes_count);
+		ret = iio_interface->dev_descriptor->write_dev(
+			      iio_interface->dev_instance,
+			      w_buff->buff, samples);
+		return ret < 0 ? ret : bytes_count;
+	}
 
 	return -ENOENT;
 }
@@ -772,6 +851,17 @@ static ssize_t iio_write_dev(const char *device, const char *buf,
 			       iio_interface->dev_instance,
 			       (char*)buf, offset, bytes_count,
 			       iio_interface->ch_mask);
+
+	//else
+	struct iio_data_buffer	*w_buff;
+
+	w_buff = iio_interface->write_buffer;
+	if (w_buff) {
+		if (offset + bytes_count > w_buff->size)
+			return -ENOMEM;
+		memcpy(w_buff->buff + offset, buf, bytes_count);
+		return bytes_count;
+	}
 
 	return -ENOENT;
 }
