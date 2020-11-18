@@ -124,6 +124,8 @@ struct iio_interface {
 	void			*dev_instance;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
+	struct iio_data_buffer	*write_buffer;
+	struct iio_data_buffer	*read_buffer;
 };
 
 struct iio_desc {
@@ -920,7 +922,9 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
  * @return SUCCESS in case of success or negative value otherwise.
  */
 ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
-		     char *name, void *dev_instance)
+		     char *name, void *dev_instance,
+		     struct iio_data_buffer *read_buff,
+		     struct iio_data_buffer *write_buff)
 {
 	struct iio_interface	*iio_interface;
 	int32_t ret;
