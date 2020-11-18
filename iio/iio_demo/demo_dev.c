@@ -86,14 +86,14 @@ ssize_t set_demo_reg_attr(void *device, char *buf, size_t len,
 	uint32_t		addr;
 	uint32_t		value;
 
-	nb_filled = sscanf(buf, "0x%x 0x%x", &addr, &value);
+	nb_filled = sscanf(buf, "0x"PRIx32" 0x"PRIx32"", &addr, &value);
 	if (nb_filled == 2) {
 		/* Write register */
 		if (addr >= MAX_REG_ADDR)
 			return -EINVAL;
 		desc->dummy_regs[addr] = value;
 	} else {
-		nb_filled = sscanf(buf, "%u", &addr);
+		nb_filled = sscanf(buf, "%"PRIu32, &addr);
 		if (nb_filled == 1) {
 			if (addr >= MAX_REG_ADDR)
 				return -EINVAL;
@@ -318,7 +318,7 @@ int32_t iio_demo_dev_init(struct iio_demo_desc **desc,
 
 	ldesc = (struct iio_demo_desc*)calloc(1, sizeof(*ldesc));
 	if (!ldesc)
-		return FAILURE;
+		return -ENOMEM;
 
 	ldesc->dev_global_attr = init->dev_global_attr;
 	ldesc->dev_ch_attr = init->dev_ch_attr;
