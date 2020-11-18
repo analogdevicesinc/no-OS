@@ -19,11 +19,13 @@ SRCS := $(PROJECT)/src/main.c	\
 SRCS += $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
 	$(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c	\
 	$(DRIVERS)/i2c/i2c.c	\
+	$(DRIVERS)/gpio/gpio.c	\
+	$(DRIVERS)/spi/spi.c	\
 	$(NO-OS)/util/util.c	\
 	$(NO-OS)/util/list.c
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
-	$(PLATFORM_DRIVERS)/gpio.c					\
+	$(PLATFORM_DRIVERS)/xilinx_gpio.c					\
 	$(PLATFORM_DRIVERS)/delay.c		\
 	$(PLATFORM_DRIVERS)/xilinx_i2c.c	\
 	$(PLATFORM_DRIVERS)/irq.c	\
