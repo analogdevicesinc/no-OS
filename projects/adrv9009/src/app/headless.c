@@ -426,7 +426,7 @@ int main(void)
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
-			      iio_axi_adc_desc);
+			      iio_axi_adc_desc, NULL, NULL);
 	if (status < 0)
 		return status;
 
@@ -444,7 +444,7 @@ int main(void)
 		return status;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_desc, dac_dev_desc, "axi_dac",
-			      iio_axi_dac_desc);
+			      iio_axi_dac_desc, NULL, NULL);
 
 	do {
 		status = iio_step(iio_desc);

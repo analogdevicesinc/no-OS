@@ -87,7 +87,9 @@ ssize_t iio_remove(struct iio_desc *desc);
 ssize_t iio_step(struct iio_desc *desc);
 /* Register interface. */
 ssize_t iio_register(struct iio_desc *desc, struct iio_device *dev_descriptor,
-		     char *name, void *dev_instance);
+		     char *name, void *dev_instance,
+		     struct iio_data_buffer *read_buff,
+		     struct iio_data_buffer *write_buff);
 /* Unregister interface. */
 ssize_t iio_unregister(struct iio_desc *desc, char *name);
 

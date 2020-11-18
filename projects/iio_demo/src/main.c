@@ -263,14 +263,24 @@ int main(void)
 	if (status < 0)
 		return status;
 
+	struct iio_data_buffer rd_buf = {
+			.buff = (void *)ADC_DDR_BASEADDR,
+			.size = MAX_SIZE_BASE_ADDR
+	};
 	status = iio_register(iio_desc, &iio_demo_dev_in_descriptor,
-			      demo_device_input, iio_demo_in_desc);
 	if (status < 0)
+			      demo_device_input, iio_demo_in_desc,
+			      &rd_buf, NULL);
 		return status;
 
+	struct iio_data_buffer wr_buf = {
+			.buff = (void *)DAC_DDR_BASEADDR,
+			.size = MAX_SIZE_BASE_ADDR
+	};
 	status = iio_register(iio_desc, &iio_demo_dev_out_descriptor,
-			      demo_device_output, iio_demo_out_desc);
 	if (status < 0)
+			      demo_device_output, iio_demo_out_desc,
+			      NULL, &wr_buf);
 		return status;
 
 	do {
