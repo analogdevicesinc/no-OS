@@ -195,6 +195,11 @@ struct iio_device {
 	 * samples * (storage_size_of_first_active_ch / 8) * nb_active_channels
 	 */
 	int32_t	(*write_dev)(void *dev, void *buff, uint32_t nb_samples);
+	/** Direct register access. If readval == NULL -> writing to register
+	 * Else -> reading register to readval
+	 */
+	void (*direct_reg_acces)(void *dev, uint32_t reg, uint32_t writeval,
+				uint32_t *readval);	
 };
 
 #endif /* IIO_TYPES_H_ */

@@ -35,3 +35,19 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/error.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				
+
+SRCS += $(NO-OS)/libraries/iio/iio.c
+SRCS += $(NO-OS)/libraries/iio/libtinyiiod/parser.c
+SRCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.c
+
+INCS += $(NO-OS)/libraries/iio/iio.h
+INCS += $(NO-OS)/libraries/iio/iio_types.h
+INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.h
+INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod-private.h
+INCS += $(NO-OS)/libraries/iio/libtinyiiod/compat.h
+
+CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
+	   -DTINYIIOD_VERSION_MINOR=1		 \
+	   -DTINYIIOD_VERSION_GIT=0x42e29ad3 \
+	   -DIIOD_BUFFER_SIZE=0x1000		 \
+	   -D_USE_STD_INT_TYPES

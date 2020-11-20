@@ -47,14 +47,18 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
-#define AD469x_DMA_BASEADDR             XPAR_AXI_AD469X_DMA_BASEADDR
-#define AD469x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD469X_AXI_REGMAP_BASEADDR
-#define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
-#define AXI_PWMGEN_BASEADDR		XPAR_AD469X_TRIGGER_GEN_BASEADDR
-#define AD469x_SPI_ENG_REF_CLK_FREQ_HZ	XPAR_PS7_SPI_0_SPI_CLK_FREQ_HZ
+#define AD469x_DMA_BASEADDR             0
+#define AD469x_SPI_ENGINE_BASEADDR      0
+#define RX_CLKGEN_BASEADDR		0
+#define AXI_PWMGEN_BASEADDR		0
+#define AD469x_SPI_ENG_REF_CLK_FREQ_HZ	0
 #define AD469x_SPI_CS                   0
 #define GPIO_OFFSET			54
 #define GPIO_RESETN_1			GPIO_OFFSET + 32
-#define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
-
+#define GPIO_DEVICE_ID			0
+#define UART_DEVICE_ID			0
+#define UART_IRQ_ID			0
+#define INTC_DEVICE_ID			0
+#define ADC_DDR_BASEADDR		0 + 0x800000
+#define MAX_SIZE_BASE_ADDR		0x10000
 #endif /* __PARAMETERS_H__ */

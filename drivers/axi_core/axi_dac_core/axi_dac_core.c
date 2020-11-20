@@ -797,6 +797,26 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 	return SUCCESS;
 }
 
+int32_t axi_dac_update_active_channels(struct axi_dac *dac, uint32_t mask)
+{
+	uint32_t	i;
+	int32_t		ret;
+
+	if (mask == dac->mask)
+		return SUCCESS;
+
+	dac->mask = mask;
+	for (i = 0; i < dac->num_channels; i++) {
+		if (BIT(i) & mask)
+			ret = axi_dac_set_datasel(dac, i, AXI_DAC_DATA_SEL_DMA);
+		else
+			ret = axi_dac_set_datasel(dac, i, AXI_DAC_DATA_SEL_DDS);
+		if(ret < 0)
+			return ret;
+	}
+
+	return ret;
+}
 
 /***************************************************************************//**
  * @brief axi_dac_init

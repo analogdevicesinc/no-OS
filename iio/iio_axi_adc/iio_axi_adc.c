@@ -54,6 +54,8 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#define STORAGE_BITS 16
+
 /**
  * @brief get_cf_calibphase().
  * @param device - Physical instance of a iio_axi_adc_desc device.
@@ -364,25 +366,25 @@ static struct iio_attribute *iio_voltage_attributes[] = {
 	NULL,
 };
 
-/**
- * @brief Transfer data from device into RAM.
- * @param iio_inst - Physical instance of a iio_axi_adc_desc device.
- * @param bytes_count - Number of bytes to transfer.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-static ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst,
-		size_t bytes_count,
-		uint32_t ch_mask)
+int32_t iio_axi_prepare_transfer(void *dev, uint32_t mask)
+{
+	struct iio_axi_adc_desc *iio_adc = dev;
+
+	iio_adc->mask = mask;
+ 
+	return axi_adc_update_active_channels(dev, mask);
+}
+
+int32_t	iio_axi_read_dev(void *dev, void *buff, uint32_t nb_samples)
 {
 	struct iio_axi_adc_desc *iio_adc;
 	ssize_t ret, bytes;
 
-	if (!iio_inst)
+	if (!dev)
 		return FAILURE;
 
-	iio_adc = (struct iio_axi_adc_desc *)iio_inst;
-	bytes = (bytes_count * iio_adc->adc->num_channels) / hweight8(ch_mask);
+	iio_adc = (struct iio_axi_adc_desc *)dev;
+	bytes = nb_samples * hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
 
 	iio_adc->dmac->flags = 0;
 	ret = axi_dmac_transfer(iio_adc->dmac,
@@ -393,58 +395,7 @@ static ssize_t iio_axi_adc_transfer_dev_to_mem(void *iio_inst,
 	if (iio_adc->dcache_invalidate_range)
 		iio_adc->dcache_invalidate_range(iio_adc->adc_ddr_base, bytes);
 
-	return bytes_count;
-}
-
-/**
- * @brief Read chunk of data from RAM to pbuf.
- * Call "iio_axi_adc_transfer_dev_to_mem" first.
- * This function is probably called multiple times by libtinyiiod after a
- * "iio_axi_adc_transfer_dev_to_mem" call, since we can only read "bytes_count"
- * bytes at a time.
- * @param iio_inst - Physical instance of a iio_axi_adc_desc device.
- * @param pbuf - Buffer where value is stored.
- * @param offset - Offset to the remaining data after reading n chunks.
- * @param bytes_count - Number of bytes to read.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
-				    size_t bytes_count, uint32_t ch_mask)
-{
-	struct iio_axi_adc_desc *iio_adc;
-	uint32_t i, j = 0, current_ch = 0;
-	uint16_t *pbuf16;
-	size_t samples;
-
-	if (!iio_inst)
-		return FAILURE;
-
-	if (!pbuf)
-		return FAILURE;
-
-	iio_adc = (struct iio_axi_adc_desc *)iio_inst;
-	pbuf16 = (uint16_t*)pbuf;
-	samples = (bytes_count * iio_adc->adc->num_channels) / hweight8(
-			  ch_mask);
-
-	samples /= 2; /* because of uint16_t *pbuf16 = (uint16_t*)pbuf; */
-	offset = (offset * iio_adc->adc->num_channels) / hweight8(ch_mask);
-
-	for (i = 0; i < samples; i++) {
-
-		if (ch_mask & BIT(current_ch)) {
-			pbuf16[j] = *(uint16_t*)(iio_adc->adc_ddr_base + offset + i * 2);
-			j++;
-		}
-
-		if (current_ch + 1 < iio_adc->adc->num_channels)
-			current_ch++;
-		else
-			current_ch = 0;
-	}
-
-	return bytes_count;
+	return bytes;
 }
 
 /**
@@ -485,8 +436,8 @@ static int32_t iio_axi_adc_create_device_descriptor(
 {
 	static struct scan_type scan_type = {
 		.sign = 's',
-		.realbits = 16,
-		.storagebits = 16,
+		.realbits = STORAGE_BITS,
+		.storagebits = STORAGE_BITS,
 		.shift = 0,
 		.is_big_endian = false
 	};
@@ -523,9 +474,7 @@ static int32_t iio_axi_adc_create_device_descriptor(
 			goto error;
 	}
 	iio_device->channels[i] = NULL;
-
-	iio_device->transfer_dev_to_mem = iio_axi_adc_transfer_dev_to_mem;
-	iio_device->transfer_mem_to_dev = NULL;
+	iio_device->prepare_transfer = iio_axi_prepare_transfer;
 	iio_device->read_data = iio_axi_adc_read_dev;
 	iio_device->write_data = NULL;
 

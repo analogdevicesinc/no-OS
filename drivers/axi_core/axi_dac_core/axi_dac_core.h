@@ -53,6 +53,7 @@ struct axi_dac {
 	uint8_t	num_channels;
 	uint64_t clock_hz;
 	struct axi_dac_channel *channels; //dac channels manual configuration
+	uint32_t mask;
 };
 
 struct axi_dac_init {
@@ -137,5 +138,6 @@ int32_t axi_dac_load_custom_data(struct axi_dac *dac,
 				 uint32_t custom_tx_count,
 				 uint32_t address);
 int32_t axi_dac_data_setup(struct axi_dac *dac);
+int32_t axi_dac_update_active_channels(struct axi_dac *dac, uint32_t mask);
 
 #endif

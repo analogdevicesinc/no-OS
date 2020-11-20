@@ -46,18 +46,22 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
-#ifndef SUCCESS
 #define SUCCESS		0
-#endif
-#ifndef FAILURE
+
 #define FAILURE		-1
-#endif
 
 /*
  * Last error from errno.h is __ELASTERROR 2000 . After it, can be declared
  * user errors
  */
 #define EOVERRUN	(__ELASTERROR + 1) /* Circular buffer overrun */
+
+/*
+#define IS_ERR_VALUE(ret) ((ret) < 0 ?\
+		(1, printf("Errors: %d(-0x%x). Func: %s. Line: %d\n", ret, -ret,\
+				__func__, __LINE__)):\
+		(0))
+*/
 
 #define IS_ERR_VALUE(x)	((x) < 0)
 
