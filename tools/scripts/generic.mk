@@ -1,3 +1,7 @@
+#By default for the moment old makefiles will be used
+USE_OLD_MAKEFILE ?= y
+ifeq '$(strip $(USE_OLD_MAKEFILE))' 'y'
+
 #------------------------------------------------------------------------------
 #                              UTIL FUNCTIONS
 #------------------------------------------------------------------------------
@@ -50,3 +54,7 @@ ifeq ($(OS), Windows_NT)
 else
 	@echo $(sort $(SRCS) $(INCS)) | tr ' ' '\n'
 endif
+
+else
+#TODO new changes here
+endif #USE_OLD_MAKFILE
