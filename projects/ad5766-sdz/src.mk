@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad5766_sdz.c
+SRCS += $(PROJECT)/src/ad5766_sdz.c
 SRCS += $(PROJECT)/src/ad5766_core.c					\
 	$(DRIVERS)/dac/ad5766/ad5766.c					\
 	$(DRIVERS)/spi/spi.c						\

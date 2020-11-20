@@ -11,7 +11,7 @@
 
 # Uncomment to select the profile
 
-SRCS := $(PROJECT)/src/app/fmcadc5.c					\
+SRCS += $(PROJECT)/src/app/fmcadc5.c					\
 	$(PROJECT)/src/devices/i5g/i5g.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app/app_iio.c
@@ -39,7 +39,7 @@ SRCS += $(NO-OS)/util/xml.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
-INCS :=	$(PROJECT)/src/app/app_config.h					\
+INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			\
 	$(PROJECT)/src/devices/i5g/i5g.h
 ifeq (y,$(strip $(TINYIIOD)))

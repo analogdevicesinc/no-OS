@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad738x_fmc.c
+SRCS += $(PROJECT)/src/ad738x_fmc.c
 SRCS += $(DRIVERS)/adc/ad738x/ad738x.c					\
 	$(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\

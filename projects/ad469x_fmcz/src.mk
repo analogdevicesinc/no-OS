@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad469x_fmcz.c
+SRCS += $(PROJECT)/src/ad469x_fmcz.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c						\
 	$(DRIVERS)/adc/ad469x/ad469x.c					\

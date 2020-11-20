@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad713x_fmc.c
+SRCS += $(PROJECT)/src/ad713x_fmc.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c						\
 	$(DRIVERS)/adc/ad713x/ad713x.c					\

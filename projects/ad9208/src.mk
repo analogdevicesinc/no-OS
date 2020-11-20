@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/main.c
+SRCS += $(PROJECT)/src/main.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app_iio.c
 LIBRARIES += iio
@@ -43,7 +43,7 @@ SRCS += $(NO-OS)/util/xml.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
-INCS := $(PROJECT)/src/parameters.h
+INCS += $(PROJECT)/src/parameters.h
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(PROJECT)/src/app_iio.h
 endif
