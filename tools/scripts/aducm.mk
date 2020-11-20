@@ -1,33 +1,12 @@
-#------------------------------------------------------------------------------
-#                             EXPORTED VARIABLES                               
-#------------------------------------------------------------------------------
-# Used by nested Makefils (mbedtls, fatfs, iio)
-export CFLAGS
-export CC
-export AR
-#Needed by iio library
-export NO-OS
-
-#------------------------------------------------------------------------------
-#                     PLATFORM SPECIFIC INITIALIZATION                               
-#------------------------------------------------------------------------------
-
 # New line variable
 define ENDL
 
 
 endef
 
-# Initialize copy_fun and remove_fun
 # Initialize CCES_HOME to default, if directory not found show error
 #	WINDOWS
 ifeq ($(OS), Windows_NT)
-SHELL=cmd
-copy_fun = copy /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
-copy_folder = xcopy /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
-remove_fun = del /S /Q $(subst /,\,$1)
-remove_dir = rd /S /Q "$(subst /,\,$1)"
-mk_dir = md "$(subst /,\,$1)"
 #cces works to but has no console output
 CCES = ccesc
 CCES_HOME ?= $(wildcard C:/Analog\ Devices/CrossCore\ Embedded\ Studio*)
@@ -39,11 +18,6 @@ Ex: set CCES_HOME=c:\Analog Devices\[CrossCore...] Embedded Studio 2.8.0$(ENDL)$
 endif
 #	LINUX
 else
-copy_fun = cp $1 $2
-copy_folder = cp -r $1 $2
-remove_fun = rm -rf $1
-remove_dir = rm -rf $1
-mk_dir = mkdir -p $1
 
 CCES = cces
 CCES_HOME ?= $(wildcard /opt/analog/cces/*)
@@ -64,53 +38,15 @@ CCES_EXE = $(CCES_HOME)/Eclipse
 export PATH := $(CCES_EXE):$(OPENOCD_SCRIPTS):$(OPENOCD_BIN):$(COMPILER_BIN):$(PATH)
 
 #------------------------------------------------------------------------------
-#                           ENVIRONMENT VARIABLES                              
-#------------------------------------------------------------------------------
-
-#Set default NO-OS and WORKSPACE path if not set
-ADUCM_REPO_NO_OS_PATH	= $(wildcard $(realpath ../..)/no-OS)
-ifneq ($(ADUCM_REPO_NO_OS_PATH),)
-
-NO-OS			?= $(ADUCM_REPO_NO_OS_PATH)
-WORKSPACE		?= $(NO-OS)/../projects
-
-else
-
-NO-OS			?= $(realpath ../..)
-WORKSPACE		?= $(NO-OS)/projects
-
-endif
-
-#SHARED to use in src.mk
-PLATFORM		= aducm3029
-PROJECT			?= $(realpath .)
-DRIVERS			?= $(NO-OS)/drivers
-INCLUDE			?= $(NO-OS)/include
-PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
-
-#USED IN MAKEFILE
-PROJECT_NAME		= $(notdir $(PROJECT))
-BUILD_DIR		= aducm_build
-PROJECT_BUILD		= $(PROJECT)/aducm_project
-
-PLATFORM_TOOLS		= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-
-BINARY			= $(BUILD_DIR)/$(PROJECT_NAME)
-HEX			= $(PROJECT)/$(PROJECT_NAME).hex
-
-ifneq ($(words $(NO-OS)), 1)
-$(error $(ENDL)ERROR:$(ENDL)\
-Plese clone no-os in a path without spaces,$(ENDL)\
-otherwise the makefile will not work well.$(ENDL)\
-Current path is: $(NO-OS)$(ENDL))
-endif
-
-#------------------------------------------------------------------------------
 #                          FIX SPACES PROBLEM                              
 #------------------------------------------------------------------------------
 
-#If dfp have spaces, copy sources from dfp in platform_tools
+null :=
+SPACE := $(null) $(null)
+#This work for wildcards
+escape_spaces = $(subst $(SPACE),\$(SPACE),$1)
 
+#If dfp have spaces, copy sources from dfp in platform_tools
 ADUCM_DFP = $(wildcard \
 $(call escape_spaces,$(CCES_HOME))/ARM/packs/AnalogDevices/ADuCM302x_DFP/*)
 
@@ -132,54 +68,23 @@ DFP_DRIVERS = $(ADUCM_DFP)/Source/drivers
 endif
 
 #------------------------------------------------------------------------------
-#                           MAKEFILE SOURCES                              
-#------------------------------------------------------------------------------
-
-ifndef SRCS
-include src.mk
-endif
-
-#------------------------------------------------------------------------------
-#                           UTIL FUNCTIONS                              
-#------------------------------------------------------------------------------
-
-null :=
-SPACE := $(null) $(null)
-
-#This work for wildcards
-escape_spaces = $(subst $(SPACE),\$(SPACE),$1)
-
-# Transforme full path to relative path to be used in build
-# $(PROJECT)/something -> srcs/something
-# $(NO-OS)/something -> noos/something
-# $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
-get_relative_path = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PLATFORM_TOOLS)%,aducm3029%,$(patsubst $(PROJECT)%,srcs%,$(patsubst $(DFP_DRIVERS)%,dfp_drivers%,$1))))
-
-# Transforme relative path to full path in order to find the needed .c files
-# Reverse of get_relative_path
-get_full_path = $(patsubst noos%,$(NO-OS)%,$(patsubst aducm3029%,$(PLATFORM_TOOLS)%,$(patsubst srcs%,$(PROJECT)%,$(patsubst dfp_drivers%,$(DFP_DRIVERS)%,$1))))
-
-# recursive wildcard: Same as wildcard but search in subdirectories too
-_rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call _rwildcard,$d/,$2))
-
-#------------------------------------------------------------------------------
 #                             DFP DEPENDENCIES                          
 #------------------------------------------------------------------------------
-
 
 #Get all src files that are not in SRC_DRIS
 FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS))
 
+PROJECT_BUILD = $(BUILD_DIR)/$(PROJECT_NAME)
+
 #DFP Files
-DFP_FILES = $(call _rwildcard,$(DFP_DRIVERS),*.c)
+DFP_FILES = $(call rwildcard,$(DFP_DRIVERS),*.c)
 #Not for aducm3029
 DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/adi_rtc_data.c
 
 SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
-INCS_FLAGS += -I"$(ADUCM_DFP)/Include"
-INCS_FLAGS += -I"$(CMSIS_CORE)/Include"
-
+ADUCM_INCS += $(ADUCM_DFP)/Include
+ADUCM_INCS += $(CMSIS_CORE)/Include
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
@@ -188,27 +93,17 @@ SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
 SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
 SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
 ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
-INCLUDE_DIRS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
-INCLUDE_DIRS += $(PROJECT_BUILD)/RTE
-INCLUDE_DIRS += $(PROJECT_BUILD)/system
-
-#ALL directories containing a .h file
-INCLUDE_DIRS += $(sort $(foreach dir, $(INCS),$(dir $(dir))))
-
-REL_SRCS = $(foreach file, $(SRCS), $(BUILD_DIR)/$(call get_relative_path,$(file)))
-OBJS = $(REL_SRCS:.c=.o)
-
-REL_ASM_SRCS = $(foreach file, $(ASM_SRCS), $(BUILD_DIR)/$(call get_relative_path,$(file)))
-ASM_OBJS = $(REL_ASM_SRCS:.S=.o)
+ADUCM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
+ADUCM_INCS += $(PROJECT_BUILD)/RTE
+ADUCM_INCS += $(PROJECT_BUILD)/system
 
 #------------------------------------------------------------------------------
 #                           COMPILING DATA                              
 #------------------------------------------------------------------------------
 
-INCS_FLAGS += $(addprefix -I,$(INCLUDE_DIRS))
+GENERIC_FLAGS = -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb
 
-GENERIC_FLAGS = -c -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb \
-		$(INCS_FLAGS)
+GENERIC_FLAGS += $(addprefix -I,$(ADUCM_INCS))
 
 GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
 
@@ -226,34 +121,30 @@ ASFLAGS += $(GENERIC_RELEASE_FLAGS)
 #CFLAGS	+= $(GENERIC_DEBUG_FLAGS)
 #ASFLAGS += $(GENERIC_DEBUG_FLAGS)
 
-ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
-CFLAGS += -DDISABLE_SECURE_SOCKET
-endif
+LSCRIPT	= $(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
 
-LINKER_FILE	=$(PROJECT_BUILD)/RTE/Device/ADuCM3029/ADuCM3029.ld
-
-LDFLAGS		= -T$(LINKER_FILE)\
-		 -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm
+LDFLAGS	= -Wl,--gc-sections -mcpu=cortex-m3 -mthumb -lm
 
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 
+HEX = $(BINARY).hex
+
 #------------------------------------------------------------------------------
 #                                 RULES                              
 #------------------------------------------------------------------------------
 
-.DEFAULT_GOAL := all
+$(HEX): $(BINARY)
+	arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
 
-# Build project Release Configuration
-PHONY := all
-ifneq ($(wildcard $(PROJECT_BUILD)),)
+clean: clean_hex
+
+clean_hex:
+	-$(call remove_fun,$(HEX))
+
+ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(HEX) $(PIN_MUX)
-else
-all:
-	$(MBED_TLS_INIT)
-	@$(MAKE) project
-	@$(MAKE) $(HEX)
 endif
 
 #Used to update pinmux if updated on project
@@ -265,60 +156,12 @@ PHONY += install_dfp
 install_dfp:
 	$(call copy_folder,$(ADUCM_DFP)/Source/drivers/*,$(PLATFORM_TOOLS)/dfp_drivers/)
 
-#This is used to keep directory targets between makefile executions
-#More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
-#Also the last . is explained
-.PRECIOUS: $(BUILD_DIR)/. $(BUILD_DIR)%/.
-
-$(BUILD_DIR)/.:
-	-@$(call mk_dir,$@)
-
-$(BUILD_DIR)%/.:
-	-@$(call mk_dir,$@)
-
-.SECONDEXPANSION:
-$(BUILD_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
-	@echo CC -c $(notdir $<) -o $(notdir $@)
-	@$(CC) $(CFLAGS) $< -o $@
-
-$(BUILD_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
-	@echo AS -c $(notdir $<) -o $(notdir $@)
-	@$(AS) $(ASFLAGS) $< -o $@
-
-$(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS)
-	@echo CC LDFLAGS OBJS INCS_FLAGS -o $(BINARY)
-	$(CC) $(LDFLAGS) $(LIB_DIR_FLAGS) -o $(BINARY) $(OBJS) $(ASM_OBJS) $(LIB_FLAGS) 
-
-$(HEX): $(BINARY)
-	arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
-
 # Upload binary to target
-PHONY += run
-run: all
+PHONY += aducm3029_run
+aducm3029_run: all
 	openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 		-c "program  $(BINARY) verify reset exit"
-
-# Remove project binaries
-PHONY += clean
-clean:
-	-$(call remove_fun,$(HEX))
-	-$(call remove_dir,$(BUILD_DIR))
-
-# Rebuild porject. SHould we delete project and workspace or just a binary clean?
-PHONY += re
-re: clean
-	@$(MAKE) all
-
-PHONY += ra
-ra: clean_all
-	@$(MAKE) all
-
-# Remove workspace data and project directory
-PHONY += clean_all
-clean_all: clean
-	-$(call remove_fun,*.target)
-	-$(call remove_dir,$(PROJECT_BUILD))
 
 #------------------------------------------------------------------------------
 #                             PROJECT RULES                              
@@ -349,40 +192,38 @@ project_run: build_project
 	-c "resume" \
 	-c exit
 
-PHONY += build_project
-build_project: project $(LIB_TARGETS)
+PHONY += aducm3029_project_build
+aducm3029_project_build: aducm3029_project $(LIB_TARGETS)
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
 		-build Release
 
-ifeq (y,$(strip $(DISABLE_SECURE_SOCKET)))
-DEFINE_FLAGS += -append-switch compiler -D=DISABLE_SECURE_SOCKET
-endif
-DEFINE_FLAGS += -append-switch compiler -D=ADUCM_PLATFORM
+ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), \
+			-append-switch compiler -D=$(flag))
 
+escape_project_name = $(subst $(PROJECT_NAME),_$(PROJECT_NAME), $1)
 #Flags for each include directory
-INCLUDE_FLAGS = $(foreach dir, $(INCLUDE_DIRS),\
+INCLUDE_FLAGS = $(foreach dir, $(EXTRA_INC_PATHS),\
 		-append-switch compiler -I=$(dir))
 #Flags for each linked resource
-SRC_FLAGS = $(foreach dir,$(SRC_DIRS),\
-		-link $(dir) $(call get_relative_path,$(dir)))
+SRC_FLAGS = $(foreach dir,$(SRC_DIRS), -link $(dir)\
+			$(call escape_project_name, $(call get_relative_path,$(dir))))
 
-SRC_FLAGS += $(foreach file,$(FILES_OUT_OF_DIRS),\
-		-link $(file) $(call get_relative_path,$(file)))
+SRC_FLAGS += $(foreach file,$(FILES_OUT_OF_DIRS), -link $(file)\
+			 $(call escape_project_name, $(call get_relative_path,$(file))))
 
-PHONY += update_project
-update_project: $(PROJECT_BUILD)/.project.target
+PHONY += aducm3029_update_srcs
+aducm3029_update_srcs:
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
 		$(INCLUDE_FLAGS) \
 		$(SRC_FLAGS) \
-		$(DEFINE_FLAGS) \
-		-append-switch linker additionaloption="$(LIB_FLAGS) $(LIB_DIR_FLAGS)"
+		$(ADD_COMPILER_DEFINES) \
+		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)"
 
-PHONY += project
-project: $(PROJECT_BUILD)/.project.target
+aducm3029_project: $(PROJECT_BUILD)/.project.target
 
 #Create new project with platform driver and utils source folders linked
 $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
@@ -415,8 +256,9 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 #Remove default files from projectsrc
 	$(call remove_dir,$(PROJECT_BUILD)/src)
 	$(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX))
-	@echo "This shouldn't be removed or edited. It is used as make rule" > $@
-	@$(MAKE) update_project
+	$(MAKE) aducm3029_update_srcs
+	echo project created at $(PROJECT_BUILD)
+	$(call set_one_time_rule,$@)
 
 PHONY += clean_project
 clean_project:
