@@ -30,3 +30,7 @@ LIBRARIES += iio
 
 # If the variable is set to y then iio network backend will be enabled
 ENABLE_IIO_NETWORK = y
+
+# If the variable is set to y then iio sources will be added to the projects
+# instead of using the library. Will be easier to debug the library with this.
+BUILD_IIO_AS_SOURCES = y
