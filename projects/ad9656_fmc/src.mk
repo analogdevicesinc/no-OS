@@ -11,7 +11,7 @@
 
 # Uncomment to select the profile
 
-SRCS := $(PROJECT)/src/app/ad9656_fmc.c                                 \
+SRCS += $(PROJECT)/src/app/ad9656_fmc.c                                 \
 	$(PROJECT)/src/app/ad9508.c   					\
 	$(PROJECT)/src/app/ad9508.h					\
 	$(PROJECT)/src/app/ad9553.c					\
@@ -28,7 +28,7 @@ SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
         $(PLATFORM_DRIVERS)/xilinx_spi.c				\
         $(PLATFORM_DRIVERS)/delay.c
-INCS :=	$(PROJECT)/src/app/app_config.h					\
+INCS +=	$(PROJECT)/src/app/app_config.h					\
         $(PROJECT)/src/devices/adi_hal/parameters.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
         $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\

@@ -11,7 +11,7 @@
 
 # Uncomment to select the profile
 
-SRCS := $(PROJECT)/src/app/fmcjesdadc1.c
+SRCS += $(PROJECT)/src/app/fmcjesdadc1.c
 ifeq (y,$(strip $(TINYIIOD)))
 SRCS += $(PROJECT)/src/app/app_iio.c
 endif
@@ -40,7 +40,7 @@ SRCS += $(NO-OS)/util/xml.c						\
 	$(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 endif
-INCS :=	$(PROJECT)/src/app/app_config.h					\
+INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			
 ifeq (y,$(strip $(TINYIIOD)))
 INCS +=	$(PROJECT)/src/app/app_iio.h

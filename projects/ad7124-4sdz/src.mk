@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad7124-4sdz.c
+SRCS += $(PROJECT)/src/ad7124-4sdz.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad7124/ad7124.c					\
 	$(DRIVERS)/adc/ad7124/ad7124_regs.c				

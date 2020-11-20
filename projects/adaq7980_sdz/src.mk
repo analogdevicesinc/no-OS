@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/adaq7980_sdz.c
+SRCS += $(PROJECT)/src/adaq7980_sdz.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/gpio/gpio.c						\
 	$(DRIVERS)/adc/adaq7980/adaq7980.c				\

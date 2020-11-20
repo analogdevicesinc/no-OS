@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad400x_fmcz.c
+SRCS += $(PROJECT)/src/ad400x_fmcz.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad400x/ad400x.c					\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\

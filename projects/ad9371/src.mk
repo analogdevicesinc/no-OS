@@ -14,7 +14,7 @@
 #PROFILE =  tx_bw100_orx_bw100_rx_bw100
 #PROFILE = tx_bw100_orx_bw100_rx_bw40
 PROFILE = tx_bw200_orx_bw200_rx_bw100
-SRCS := $(PROJECT)/src/app/headless.c					\
+SRCS += $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/profiles/$(PROFILE)/myk_ad9528init.c			\
 	$(PROJECT)/profiles/$(PROFILE)/myk.c				\
 	$(PROJECT)/profiles/$(PROFILE)/myk.h				\
@@ -59,7 +59,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 endif
-INCS :=	$(PROJECT)/src/app/app_config.h					\
+INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/ad9528/ad9528.h				\
 	$(PROJECT)/src/devices/ad9528/t_ad9528.h			\
 	$(PROJECT)/src/devices/adi_hal/common.h				\
