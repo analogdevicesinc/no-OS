@@ -7,7 +7,7 @@ IIO_DIR						= $(NO-OS)/libraries/iio
 IIO_LIB						= $(IIO_DIR)/libiio.a
 EXTRA_LIBS					+= $(IIO_LIB)
 EXTRA_LIBS_PATHS			+= $(IIO_DIR)
-EXTRA_LIBS_INCLUDE_PATHS	+= $(IIO_DIR)
+EXTRA_INC_PATHS		+= $(IIO_DIR) 
 ifeq ($(wildcard $(IIO_DIR)/libtinyiiod/.git),)
 INIT_SUBMODULES				+= git submodule update --init --remote -- $(IIO_DIR)/libtinyiiod;
 endif
@@ -30,7 +30,7 @@ MBEDTLS_LIB_NAMES			= libmbedtls.a libmbedx509.a libmbedcrypto.a
 MBEDTLS_LIBS				= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
 EXTRA_LIBS					+= $(MBEDTLS_LIBS)
 EXTRA_LIBS_PATHS			+= $(MBEDTLS_LIB_DIR)
-EXTRA_LIBS_INCLUDE_PATHS	+= $(MBEDTLS_DIR)/include
+EXTRA_INC_PATHS		+= $(MBEDTLS_DIR)/include
 ifeq ($(wildcard $(MBEDTLS_DIR)/.git),)
 INIT_SUBMODULES				+= git submodule update --init --remote -- $(MBEDTLS_DIR);
 endif
@@ -58,7 +58,7 @@ FATFS_DIR					= $(NO-OS)/libraries/fatfs
 FATFS_LIB					= $(FATFS_DIR)/libfatfs.a
 EXTRA_LIBS					+= $(FATFS_LIB)
 EXTRA_LIBS_PATHS			+= $(FATFS_DIR)
-EXTRA_LIBS_INCLUDE_PATHS	+= $(FATFS_DIR)/source
+EXTRA_INC_PATHS	+= $(FATFS_DIR)/source
 
 # Rules
 CLEAN_FATFS	= $(MAKE) -C $(NO-OS)/libraries/fatfs clean
@@ -77,7 +77,7 @@ MQTT_DIR					= $(NO-OS)/libraries/mqtt
 MQTT_LIB					= $(MQTT_DIR)/libmqtt.a
 EXTRA_LIBS					+= $(MQTT_LIB)
 EXTRA_LIBS_PATHS			+= $(MQTT_DIR)
-EXTRA_LIBS_INCLUDE_PATHS	+= $(MQTT_DIR)
+EXTRA_INC_PATHS		+= $(MQTT_DIR)
 
 CLEAN_MQTT	= $(MAKE) -C $(MQTT_DIR) clean
 $(MQTT_LIB):
@@ -87,14 +87,14 @@ endif
 
 LIB_TARGETS			+= $(IIO_LIB) $(MBEDTLS_TARGETS) $(FATFS_LIB) $(MQTT_LIB)
 EXTRA_LIBS_NAMES	= $(subst lib,,$(basename $(notdir $(EXTRA_LIBS))))
-LIB_FLAGS			= $(addprefix -l,$(EXTRA_LIBS_NAMES))
-LIB_DIR_FLAGS		= $(addprefix -L,$(EXTRA_LIBS_PATHS))
-INCLUDE_DIRS		+= $(EXTRA_LIBS_INCLUDE_PATHS)
+LIB_FLAGS			+= $(addprefix -l,$(EXTRA_LIBS_NAMES))
+LIB_PATHS			+= $(addprefix -L,$(EXTRA_LIBS_PATHS))
 
+
+#TODO remove afeter changes are done
 #Convert variable to linux.mk naming
 ifneq (aducm3029,$(strip $(PLATFORM)))
-INC_PATHS += $(addprefix -I,$(INCLUDE_DIRS))
-LIB_PATHS += $(LIB_DIR_FLAGS)
+INC_PATHS += $(EXTRA_INC_PATHS)
 LIBS += $(LIB_FLAGS)
 endif
 
