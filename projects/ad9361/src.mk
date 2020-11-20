@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/main.c
+SRCS += $(PROJECT)/src/main.c
 SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361.c			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361_conv.c			\
@@ -39,7 +39,7 @@ SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 endif
-INCS := $(DRIVERS)/rf-transceiver/ad9361/common.h			\
+INCS += $(DRIVERS)/rf-transceiver/ad9361/common.h			\
 	$(PROJECT)/src/app_config.h
 INCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361.h			\
 	$(PROJECT)/src/parameters.h					\

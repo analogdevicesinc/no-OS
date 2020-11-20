@@ -22,7 +22,7 @@
 PROFILE = tx_bw100_ir122p88_rx_bw100_or122p88_orx_bw100_or122p88_dc122p88
 #PROFILE = tx_bw200_ir245p76_rx_bw200_or245p76_orx_bw200_or245p76_dc245p76
 #PROFILE = tx_bw400_ir491p52_rx_bw200_or245p76_orx_bw400_or491p52_dc245p76
-SRCS := $(PROJECT)/src/app/headless.c					\
+SRCS += $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/src/app/app_clocking.c					\
 	$(PROJECT)/src/app/app_jesd.c						\
 	$(PROJECT)/src/app/app_transceiver.c				\
@@ -77,7 +77,7 @@ SRCS += $(DRIVERS)/axi_core/clk_altera_a10_fpll/clk_altera_a10_fpll.c	\
 endif
 SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/delay.c
-INCS :=	$(PROJECT)/src/app/app_config.h					\
+INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/app/app_clocking.h						\
 	$(PROJECT)/src/app/app_jesd.h						\
 	$(PROJECT)/src/app/app_transceiver.h				\

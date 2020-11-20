@@ -9,7 +9,7 @@
 #									       #
 ################################################################################
 
-SRCS := $(PROJECT)/src/ad77681evb.c
+SRCS += $(PROJECT)/src/ad77681evb.c
 SRCS += $(DRIVERS)/spi/spi.c						\
 	$(DRIVERS)/adc/ad7768-1/ad77681.c				\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
