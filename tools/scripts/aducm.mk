@@ -120,14 +120,10 @@ $(call escape_spaces,$(CCES_HOME))/ARM/packs/ARM/CMSIS/*/CMSIS/Core)
 ifneq ($(words $(CCES_HOME)), 1)
 
 ifeq ($(wildcard $(PLATFORM_TOOLS)/dfp_drivers),)
-$(warning ERROR:$(ENDL)\
-CCES_HOME dir have spaces. To avoid this you can install CCES in a path without\
-spaces.$(ENDL)$(ENDL) Or you can copy the dfp into noos running:$(ENDL)$(ENDL)\
- make install_dfp$(ENDL))
-else
-DFP_DRIVERS = $(PLATFORM_TOOLS)/dfp_drivers
-
+#Create link to dfp to noos if it contains spaces (default on windows)
+DUMMY_VAR := $(shell $(call make_dir_link,$(CCES_HOME),$(PLATFORM_TOOLS)/dfp_drivers))
 endif
+DFP_DRIVERS = $(PLATFORM_TOOLS)/dfp_drivers
 
 else
 
