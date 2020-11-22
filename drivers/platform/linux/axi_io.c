@@ -1,6 +1,6 @@
 /***************************************************************************//**
  *   @file   linux/axi_io.c
- *   @brief  Implementation of AXI IO through UIO.
+ *   @brief  Implementation of AXI IO through UIO/devmem.
  *   @author Dragos Bogdan (dragos.bogdan@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -43,6 +43,7 @@
 #include <fcntl.h>
 #include <inttypes.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include "error.h"
@@ -60,8 +61,8 @@
  * @param write - Data to be written.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
-static int32_t axi_io_read_write(uint32_t base, uint32_t offset, uint32_t *read,
-				 uint32_t *write)
+static int32_t uio_read_write(uint32_t base, uint32_t offset, uint32_t *read,
+			      uint32_t *write)
 {
 	char buf[32];
 	int ret;
@@ -111,15 +112,65 @@ close:
 }
 
 /**
- * @brief AXI IO through UIO read function.
- * @param base - UIO index (/dev/uioX).
+ * @brief AXI IO through devmem read/write function.
+ * @param base - Base address.
+ * @param offset - Address offset.
+ * @param read - Location where read data will be stored.
+ * @param write - Data to be written.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+static int32_t devmem_read_write(uint32_t base, uint32_t offset, uint32_t *read,
+				 uint32_t *write)
+{
+	char command[64];
+	char answer[64];
+	FILE *stream;
+	int32_t ret;
+
+	if (write)
+		ret = snprintf(command, sizeof(command),
+			       "busybox devmem 0x%x w 0x%x", base + offset, *write);
+	else if (read)
+		ret = snprintf(command, sizeof(command),
+			       "busybox devmem 0x%x", base + offset);
+	else
+		return FAILURE;
+
+	if (ret < 0 || ret >= (int32_t) sizeof(command))
+		return FAILURE;
+
+	stream = popen(command, "r");
+	if (stream == NULL)
+		return FAILURE;
+
+	if (!(fgets(answer, sizeof(answer), stream))) {
+		ret = FAILURE;
+		goto close;
+	}
+
+	*read = strtol(answer, NULL, 0);
+
+	ret = SUCCESS;
+close:
+	pclose(stream);
+
+	return ret;
+}
+
+/**
+ * @brief AXI IO through UIO/devmem read function.
+ * @param base - UIO index (/dev/uioX)/base address.
  * @param offset - Address offset.
  * @param data - Location where read data will be stored.
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
 {
-	return axi_io_read_write(base, offset, data, NULL);
+#ifdef DEVMEM
+	return devmem_read_write(base, offset, data, NULL);
+#else
+	return uio_read_write(base, offset, data, NULL);
+#endif
 }
 
 /**
@@ -131,5 +182,9 @@ int32_t axi_io_read(uint32_t base, uint32_t offset, uint32_t *data)
  */
 int32_t axi_io_write(uint32_t base, uint32_t offset, uint32_t data)
 {
-	return axi_io_read_write(base, offset, NULL, &data);
+#ifdef DEVMEM
+	return devmem_read_write(base, offset, NULL, &data);
+#else
+	return uio_read_write(base, offset, NULL, &data);
+#endif
 }
