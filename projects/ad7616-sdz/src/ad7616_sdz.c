@@ -2,8 +2,9 @@
 * @file ad7616_sdz.c
 * @brief Implementation of Main Function.
 * @author DBogdan (dragos.bogdan@analog.com)
+* @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
-* Copyright 2016(c) Analog Devices, Inc.
+* Copyright 2020(c) Analog Devices, Inc.
 *
 * All rights reserved.
 *
@@ -46,57 +47,80 @@
 #include "spi_engine.h"
 #include <xil_cache.h>
 #include <xparameters.h>
-#include "platform_drivers.h"
-#include "ad7616_core.h"
+#include "error.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "gpio.h"
+#include "gpio_extra.h"
 #include "ad7616.h"
+#include "parameters.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-#define AD7616_CORE_BASEADDR		XPAR_AXI_AD7616_BASEADDR
-#define AD7616_DMA_BASEADDR			XPAR_AXI_AD7616_DMA_BASEADDR
-#define SPI_AD7616_CS				0
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET					32 + 54
-#define GPIO_ADC_CRCEN				GPIO_OFFSET + 0
-#define GPIO_ADC_CHSEL0				GPIO_OFFSET + 1
-#define GPIO_ADC_CHSEL1				GPIO_OFFSET + 2
-#define GPIO_ADC_CHSEL2				GPIO_OFFSET + 3
-#define GPIO_ADC_BURST				GPIO_OFFSET + 4
-#define GPIO_ADC_SEQEN				GPIO_OFFSET + 5
-#define GPIO_ADC_OS0				GPIO_OFFSET + 6
-#define GPIO_ADC_OS1				GPIO_OFFSET + 7
-#define GPIO_ADC_OS2				GPIO_OFFSET + 8
-#define GPIO_ADC_HW_RNGSEL0			GPIO_OFFSET + 9
-#define GPIO_ADC_HW_RNGSEL1			GPIO_OFFSET + 10
-#define GPIO_ADC_RESET_N			GPIO_OFFSET + 11
-#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
+#define LOG_LEVEL 6
+#include "print_log.h"
 
 /******************************************************************************/
 /************************ Variables Definitions *******************************/
 /******************************************************************************/
-ad7616_init_param default_init_param = {
-		/* SPI */
-		SPI_AD7616_CS,			// spi_chip_select
-		SPI_MODE_2,				// spi_mode
-		SPI_ENGINE,				// spi_type
-		-1,						// spi_device_id
-		/* GPIO */
-		PS7_GPIO,				// gpio_type
-		GPIO_DEVICE_ID,			// gpio_device_id
-		-1,						// gpio_hw_rngsel0
-		-1,						// gpio_hw_rngsel1
-		GPIO_ADC_RESET_N,		// gpio_reset
-		-1,						// gpio_os0
-		-1,						// gpio_os1
-		-1,						// gpio_os2
-		/* Device Settings */
-		AD7616_SW,				// mode
-		{AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
-		 AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V},	// va[8]
-		{AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
-		 AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V},	// vb[8]
-		AD7616_OSR_0,			// osr
+#define AD7616_SDZ_SAMPLE_NO 1000
+
+struct spi_engine_offload_init_param spi_engine_offload_init_param = {
+	.offload_config = OFFLOAD_RX_EN,
+	.rx_dma_baseaddr = AD7616_DMA_BASEADDR,
+};
+
+struct spi_engine_init_param spi_eng_init_param  = {
+	.ref_clk_hz = 100000000,
+	.type = SPI_ENGINE,
+	.spi_engine_baseaddr = AD7616_CORE_BASEADDR,
+	.cs_delay = 1,
+	.data_width = 8,
+};
+
+struct spi_init_param ad7616_spi_init = {
+	.chip_select = SPI_AD7616_CS,
+	.max_speed_hz = 50000000,
+	.mode = SPI_MODE_2,
+	.platform_ops = &spi_eng_platform_ops,
+	.extra = (void*)&spi_eng_init_param,
+};
+
+struct xil_gpio_init_param xil_gpio_param = {
+	.device_id = GPIO_DEVICE_ID,
+	.type = GPIO_PS,
+};
+struct gpio_init_param ad7616_gpio_reset = {
+	.number = GPIO_ADC_RESET_N,
+	.platform_ops = &xil_gpio_platform_ops,
+	.extra = &xil_gpio_param
+};
+
+struct ad7616_init_param init_param = {
+	/* SPI */
+	.spi_param = &ad7616_spi_init,
+	.offload_init_param = &spi_engine_offload_init_param,
+	.reg_access_speed = 1000000,
+	/* GPIO */
+	.gpio_hw_rngsel0_param = NULL,
+	.gpio_hw_rngsel1_param = NULL,
+	.gpio_os0_param = NULL,
+	.gpio_os1_param = NULL,
+	.gpio_os2_param = NULL,
+	.gpio_reset_param = &ad7616_gpio_reset,
+	/* AXI Core */
+	.core_baseaddr = AD7616_CORE_BASEADDR,
+	/* Device Settings */
+	.mode = AD7616_SW,
+	.va = {
+		AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
+		AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V
+	},
+	.vb = {
+		AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V,
+		AD7616_10V, AD7616_10V, AD7616_10V, AD7616_10V
+	},
+	.osr = AD7616_OSR_0,
+	.dcache_invalidate_range =
+	(void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 };
 
 /***************************************************************************//**
@@ -104,30 +128,22 @@ ad7616_init_param default_init_param = {
 *******************************************************************************/
 int main(void)
 {
-	ad7616_dev	*dev;
-	adc_core	core;
-	uint8_t		reg_addr;
-	uint16_t	reg_data;
+	struct ad7616_dev	*dev;
+	uint32_t* buf = XPAR_PS7_RAM_0_S_AXI_BASEADDR;
 
 	Xil_ICacheEnable();
 	Xil_DCacheEnable();
 
 	printf("AD7616 Reference Design.\n");
 
-	core.adc_baseaddr = AD7616_CORE_BASEADDR;
-	core.dmac_baseaddr = AD7616_DMA_BASEADDR;
-	core.no_of_channels = 2;
-	core.resolution = 16;
-	ad7616_core_setup(core);
+	ad7616_setup(&dev, &init_param);
 
-	ad7616_setup(&dev, &core, default_init_param);
-
-	if (dev->interface == AD7616_PARALLEL)
-		ad7616_capture_parallel(core, 16384, ADC_DDR_BASEADDR);
+	if(dev->interface == AD7616_PARALLEL)
+		ad7616_read_data_parallel(dev, buf, AD7616_SDZ_SAMPLE_NO);
 	else
-		ad7616_capture_serial(core, 16384, ADC_DDR_BASEADDR);
+		ad7616_read_data_serial(dev, buf, AD7616_SDZ_SAMPLE_NO);
 
-	printf("Capture done. Please run the capture.bat script.\n");
+	pr_info("Capture done. \n");
 
 	Xil_DCacheDisable();
 	Xil_ICacheDisable();
