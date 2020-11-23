@@ -9,6 +9,8 @@
 #									       #
 ################################################################################
 
+TINYIIOD=y
+
 SRCS += $(PROJECT)/src/main.c
 SRCS += $(DRIVERS)/rf-transceiver/ad9361/ad9361_api.c			\
 	$(DRIVERS)/rf-transceiver/ad9361/ad9361.c			\
