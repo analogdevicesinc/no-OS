@@ -70,7 +70,7 @@ struct gpio_platform_ops ;
  */
 typedef struct gpio_init_param {
 	/** GPIO number */
-	uint32_t	number;
+	int32_t		number;
 	/** GPIO platform specific functions */
 	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
@@ -83,7 +83,7 @@ typedef struct gpio_init_param {
  */
 typedef struct gpio_desc {
 	/** GPIO number */
-	uint32_t	number;
+	int32_t		number;
 	/** GPIO platform specific functions */
 	const struct gpio_platform_ops *platform_ops;
 	/** GPIO extra parameters (device specific) */
