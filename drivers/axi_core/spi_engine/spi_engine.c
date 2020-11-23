@@ -760,16 +760,22 @@ int32_t spi_engine_offload_init(struct spi_desc *desc,
 {
 	struct spi_engine_desc	*eng_desc;
 	struct axi_dmac_init	dmac_init;
+	uint32_t dma_flags;
 
 	eng_desc = desc->extra;
 
 	eng_desc->offload_config = param->offload_config;
 
+	if(!(param->dma_flags))
+		dma_flags = DMA_CYCLIC;
+	else
+		dma_flags = *(param->dma_flags);
+
 	if(param->offload_config & OFFLOAD_TX_EN) {
 		dmac_init.name = "DAC DMAC";
 		dmac_init.base = param->tx_dma_baseaddr;
 		dmac_init.direction = DMA_MEM_TO_DEV;
-		dmac_init.flags = DMA_CYCLIC;
+		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_tx_dma, &dmac_init);
 		if(!eng_desc->offload_tx_dma)
 			return FAILURE;
@@ -778,7 +784,7 @@ int32_t spi_engine_offload_init(struct spi_desc *desc,
 		dmac_init.name = "ADC DMAC";
 		dmac_init.base = param->rx_dma_baseaddr;
 		dmac_init.direction = DMA_DEV_TO_MEM;
-		dmac_init.flags = DMA_CYCLIC;
+		dmac_init.flags = dma_flags;
 		axi_dmac_init(&eng_desc->offload_rx_dma, &dmac_init);
 		if(!eng_desc->offload_rx_dma)
 			return FAILURE;
