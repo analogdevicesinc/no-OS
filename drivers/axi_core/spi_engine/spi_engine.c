@@ -519,6 +519,12 @@ static int32_t spi_engine_compile_message(struct spi_desc *desc,
 
 	desc_extra = desc->extra;
 
+	/* Configure the prescaler */
+	spi_engine_queue_append_cmd(&msg->cmds,
+				    SPI_ENGINE_CMD_CONFIG(
+					    SPI_ENGINE_CMD_REG_CLK_DIV,
+					    desc_extra->clk_div));
+
 	/* Set the data transfer length */
 	spi_engine_queue_append_cmd(&msg->cmds,
 				    SPI_ENGINE_CMD_CONFIG(
@@ -534,12 +540,6 @@ static int32_t spi_engine_compile_message(struct spi_desc *desc,
 				    SPI_ENGINE_CMD_CONFIG(
 					    SPI_ENGINE_CMD_REG_CONFIG,
 					    desc->mode));
-
-	/* Configure the prescaler */
-	spi_engine_queue_append_cmd(&msg->cmds,
-				    SPI_ENGINE_CMD_CONFIG(
-					    SPI_ENGINE_CMD_REG_CLK_DIV,
-					    desc_extra->clk_div));
 
 	/* Add a sync command to signal that the transfer has finished */
 	spi_engine_queue_add_cmd(&msg->cmds, SPI_ENGINE_CMD_SYNC(_sync_id));
