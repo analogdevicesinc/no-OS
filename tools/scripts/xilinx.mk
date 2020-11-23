@@ -140,10 +140,10 @@ $(BINARY): $(TEMP_DIR)/arch.txt
 
 PHONY += xilinx_run
 xilinx_run: all
-	xsdb $(PLATFORM_TOOLS)/upload.tcl
-		$(ARCH)
-		$(BUILD_DIR)/hw/system_top.bit
-		$(BINARY)
+	xsdb $(PLATFORM_TOOLS)/upload.tcl\
+		$(ARCH)\
+		$(BUILD_DIR)/hw/system_top.bit\
+		$(BINARY)\
 		$(BUILD_DIR)/hw
 
 PHONY += xilinx_update_srcs

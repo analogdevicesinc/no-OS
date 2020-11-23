@@ -19,6 +19,8 @@ CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 	   -DIIOD_BUFFER_SIZE=0x1000		 \
 	   -D_USE_STD_INT_TYPES
 
+CFLAGS += -DIIO_SUPPORT
+
 else
 # Generic part
 IIO_DIR						= $(NO-OS)/libraries/iio
