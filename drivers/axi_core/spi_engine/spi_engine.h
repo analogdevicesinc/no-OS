@@ -144,6 +144,8 @@ struct spi_engine_offload_init_param {
 	uint32_t	rx_dma_baseaddr;
 	/** Base address where the TX DMAC core is situated */
 	uint32_t	tx_dma_baseaddr;
+	/** DMAC flags - if not initialized, the default value is DMA_CYCLIC */
+	uint32_t	*dma_flags;
 	/** Offload's module transfer direction : TX, RX or both */
 	uint8_t		offload_config;
 };
