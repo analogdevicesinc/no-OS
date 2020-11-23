@@ -52,8 +52,12 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-#define DEMO_NUM_CHANNELS	4
+#define DEMO_NUM_CHANNELS	2
 #define MAX_REG_ADDR		10
+#define NB_LOCAL_SAMPLES	500
+
+/** Local channel for loopback */
+uint16_t local_ch[DEMO_NUM_CHANNELS][NB_LOCAL_SAMPLES];
 
 /**
  * @struct iio_demo_desc
@@ -68,10 +72,8 @@ struct iio_demo_desc {
 	uint32_t dev_global_attr;
 	/** Demo device channel attribute */
 	uint32_t dev_ch_attr;
-	/** Address used by for reading/writing data to device */
-	uint32_t ddr_base_addr;
-	/** Size of memory to read/write data */
-	uint32_t ddr_base_size;
+	/** Active channels */
+	uint32_t ch_mask;
 };
 
 /**
@@ -83,10 +85,6 @@ struct iio_demo_init_param {
 	uint32_t dev_global_attr;
 	/** Demo device channel attribute */
 	uint32_t dev_ch_attr;
-	/** Address used by for reading/writing data to device */
-	uint32_t ddr_base_addr;
-	/** Size of memory to read/write data */
-	uint32_t ddr_base_size;
 };
 
 /******************************************************************************/
@@ -107,16 +105,12 @@ ssize_t get_demo_reg_attr(void *device, char *buf, size_t len,
 ssize_t set_demo_reg_attr(void *device, char *buf, size_t len,
 			  const struct iio_ch_info *channel);
 
-ssize_t iio_demo_transfer_mem_to_dev(void *iio_inst,
-				     size_t bytes_count,
-				     uint32_t ch_mask);
-ssize_t iio_demo_transfer_dev_to_mem(void *iio_inst,
-				     size_t bytes_count,
-				     uint32_t ch_mask);
-ssize_t iio_demo_write_dev(void *iio_inst, char *buf,
-			   size_t offset,  size_t bytes_count, uint32_t ch_mask);
-ssize_t iio_demo_read_dev(void *iio_inst, char *pbuf, size_t offset,
-			  size_t bytes_count, uint32_t ch_mask);
+int32_t iio_demo_update_active_channels(void *dev, uint32_t mask);
+int32_t iio_demo_close_channels(void *dev);
+int32_t	iio_demo_read_local_samples(void *dev, uint16_t *buff,
+				    uint32_t samples);
+int32_t	iio_demo_write_local_samples(void *dev, uint16_t *buff,
+				     uint32_t samples);
 
 /* Init function. */
 int32_t iio_demo_dev_init(struct iio_demo_desc **desc,

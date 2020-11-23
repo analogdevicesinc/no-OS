@@ -62,23 +62,51 @@ static struct iio_attribute *demo_channel_attributes[] = {
 
 static struct scan_type scan_type = {
 	.sign = 's',
-	.realbits = 12,
+	.realbits = 16,
 	.storagebits = 16,
 	.shift = 0,
 	.is_big_endian = false
 };
 
 static struct iio_channel iio_demo_channel_voltage0_in = {
-	.name = "input_channel",
+	.name = "input_channel_0",
+	.ch_type = IIO_VOLTAGE,
+	.channel = 0,
 	.scan_index = 0,
+	.indexed = true,
+	.scan_type = &scan_type,
+	.attributes = demo_channel_attributes,
+	.ch_out = false,
+};
+
+static struct iio_channel iio_demo_channel_voltage1_in = {
+	.name = "input_channel_1",
+	.ch_type = IIO_VOLTAGE,
+	.channel = 1,
+	.scan_index = 1,
+	.indexed = true,
 	.scan_type = &scan_type,
 	.attributes = demo_channel_attributes,
 	.ch_out = false,
 };
 
 static struct iio_channel iio_demo_channel_voltage0_out = {
-	.name = "output_channel",
+	.name = "output_channel0",
+	.ch_type = IIO_VOLTAGE,
+	.channel = 0,
 	.scan_index = 0,
+	.indexed = true,
+	.scan_type = &scan_type,
+	.attributes = demo_channel_attributes,
+	.ch_out = true,
+};
+
+static struct iio_channel iio_demo_channel_voltage1_out = {
+	.name = "output_channel1",
+	.ch_type = IIO_VOLTAGE,
+	.channel = 1,
+	.scan_index = 1,
+	.indexed = true,
 	.scan_type = &scan_type,
 	.attributes = demo_channel_attributes,
 	.ch_out = true,
@@ -86,11 +114,13 @@ static struct iio_channel iio_demo_channel_voltage0_out = {
 
 static struct iio_channel *iio_demo_channels_in[] = {
 	&iio_demo_channel_voltage0_in,
+	&iio_demo_channel_voltage1_in,
 	NULL,
 };
 
 static struct iio_channel *iio_demo_channels_out[] = {
 	&iio_demo_channel_voltage0_out,
+	&iio_demo_channel_voltage1_out,
 	NULL,
 };
 
@@ -116,10 +146,9 @@ static struct iio_device iio_demo_dev_in_descriptor = {
 	.attributes = iio_demo_global_attributes,
 	.debug_attributes = iio_demo_debug_attributes,
 	.buffer_attributes = NULL,
-	.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
-	.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
-	.read_data = iio_demo_read_dev,
-	.write_data = iio_demo_write_dev
+	.prepare_transfer = iio_demo_update_active_channels,
+	.end_transfer = iio_demo_close_channels,
+	.read_dev = iio_demo_read_local_samples,
 };
 
 static struct iio_device iio_demo_dev_out_descriptor = {
@@ -128,10 +157,9 @@ static struct iio_device iio_demo_dev_out_descriptor = {
 	.attributes = iio_demo_global_attributes,
 	.debug_attributes = iio_demo_debug_attributes,
 	.buffer_attributes = NULL,
-	.transfer_dev_to_mem = iio_demo_transfer_dev_to_mem,
-	.transfer_mem_to_dev = iio_demo_transfer_mem_to_dev,
-	.read_data = iio_demo_read_dev,
-	.write_data = iio_demo_write_dev
+	.prepare_transfer = iio_demo_update_active_channels,
+	.end_transfer = iio_demo_close_channels,
+	.write_dev = iio_demo_write_local_samples
 };
 
 #endif /* IIO_DEMO_DEV */
