@@ -69,7 +69,8 @@
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
 
-#define MAX_SIZE_BASE_ADDR		3000
+#define MAX_SIZE_BASE_ADDR	(NB_LOCAL_SAMPLES * DEMO_NUM_CHANNELS *\
+					sizeof(uint16_t))
 
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
@@ -245,8 +246,6 @@ int main(void)
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
 		.dev_global_attr = 1100,
 		.dev_ch_attr = 1111,
-		.ddr_base_addr = DAC_DDR_BASEADDR,
-		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 	status = iio_demo_dev_init(&iio_demo_out_desc, &iio_demo_out_init_par);
 	if (status < 0)
@@ -255,32 +254,30 @@ int main(void)
 	iio_demo_in_init_par = (struct iio_demo_init_param) {
 		.dev_global_attr = 2200,
 		.dev_ch_attr = 2211,
-		.ddr_base_addr = ADC_DDR_BASEADDR,
-		.ddr_base_size = MAX_SIZE_BASE_ADDR
 	};
 
 	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
-	if (status < 0)
+	if (IS_ERR_VALUE(status))
 		return status;
 
 	struct iio_data_buffer rd_buf = {
-			.buff = (void *)ADC_DDR_BASEADDR,
-			.size = MAX_SIZE_BASE_ADDR
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
 	};
 	status = iio_register(iio_desc, &iio_demo_dev_in_descriptor,
-	if (status < 0)
 			      demo_device_input, iio_demo_in_desc,
 			      &rd_buf, NULL);
+	if (IS_ERR_VALUE(status))
 		return status;
 
 	struct iio_data_buffer wr_buf = {
-			.buff = (void *)DAC_DDR_BASEADDR,
-			.size = MAX_SIZE_BASE_ADDR
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
 	};
 	status = iio_register(iio_desc, &iio_demo_dev_out_descriptor,
-	if (status < 0)
 			      demo_device_output, iio_demo_out_desc,
 			      NULL, &wr_buf);
+	if (IS_ERR_VALUE(status))
 		return status;
 
 	do {
