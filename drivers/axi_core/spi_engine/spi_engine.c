@@ -841,6 +841,9 @@ int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 
 	spi_engine_transfer_message(desc, &transfer);
 
+	/* Start transfer */
+	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x0001);
+
 	word_length = spi_get_word_lenght(eng_desc);
 	if(eng_desc->offload_config & OFFLOAD_TX_EN) {
 		axi_dmac_transfer(eng_desc->offload_tx_dma,
@@ -857,9 +860,6 @@ int32_t spi_engine_offload_transfer(struct spi_desc *desc,
 	}
 
 	usleep(1000);
-
-	/* Start transfer */
-	spi_engine_write(eng_desc, SPI_ENGINE_REG_OFFLOAD_CTRL(0), 0x0001);
 
 	spi_engine_queue_free(&transfer.cmds);
 
