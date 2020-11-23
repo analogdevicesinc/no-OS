@@ -2,8 +2,9 @@
  *   @file   ad7616.c
  *   @brief  Implementation of AD7616 Driver.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2016(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -43,10 +44,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sleep.h>
-#include "platform_drivers.h"
-#include "ad7616_core.h"
+#include "spi_engine.h"
+#include "axi_dmac.h"
+#include "gpio.h"
 #include "ad7616.h"
+#include "error.h"
+#include "delay.h"
+#include "axi_io.h"
 
 /**
  * Read from device.
@@ -55,9 +59,9 @@
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_read(ad7616_dev *dev,
-					uint8_t reg_addr,
-					uint16_t *reg_data)
+int32_t ad7616_read(struct ad7616_dev *dev,
+		    uint8_t reg_addr,
+		    uint16_t *reg_data)
 {
 	if (dev->interface == AD7616_SERIAL)
 		return ad7616_spi_read(dev, reg_addr, reg_data);
@@ -72,9 +76,9 @@ int32_t ad7616_read(ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_write(ad7616_dev *dev,
-					 uint8_t reg_addr,
-					 uint16_t reg_data)
+int32_t ad7616_write(struct ad7616_dev *dev,
+		     uint8_t reg_addr,
+		     uint16_t reg_data)
 {
 	if (dev->interface == AD7616_SERIAL)
 		return ad7616_spi_write(dev, reg_addr, reg_data);
@@ -90,10 +94,10 @@ int32_t ad7616_write(ad7616_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_read_mask(ad7616_dev *dev,
-						 uint8_t reg_addr,
-						 uint16_t mask,
-						 uint16_t *data)
+int32_t ad7616_read_mask(struct ad7616_dev *dev,
+			 uint8_t reg_addr,
+			 uint16_t mask,
+			 uint16_t *data)
 {
 	uint16_t reg_data;
 	int32_t ret;
@@ -115,10 +119,10 @@ int32_t ad7616_read_mask(ad7616_dev *dev,
  * @param data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_write_mask(ad7616_dev *dev,
-						  uint8_t reg_addr,
-						  uint16_t mask,
-						  uint16_t data)
+int32_t ad7616_write_mask(struct ad7616_dev *dev,
+			  uint8_t reg_addr,
+			  uint16_t mask,
+			  uint16_t data)
 {
 	uint16_t reg_data;
 	int32_t ret;
@@ -144,20 +148,20 @@ int32_t ad7616_write_mask(ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_spi_read(ad7616_dev *dev,
-						uint8_t reg_addr,
-						uint16_t *reg_data)
+int32_t ad7616_spi_read(struct ad7616_dev *dev,
+			uint8_t reg_addr,
+			uint16_t *reg_data)
 {
 	uint8_t buf[2];
 	int32_t ret;
 
 	buf[0] = 0x00 | ((reg_addr & 0x3F) << 1);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 
 	buf[0] = 0x00 | ((reg_addr & 0x3F) << 1);
 	buf[1] = 0x00;
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 	*reg_data = ((buf[0] & 0x01) << 8) | buf[1];
 
 	return ret;
@@ -170,16 +174,16 @@ int32_t ad7616_spi_read(ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_spi_write(ad7616_dev *dev,
-						 uint8_t reg_addr,
-						 uint16_t reg_data)
+int32_t ad7616_spi_write(struct ad7616_dev *dev,
+			 uint8_t reg_addr,
+			 uint16_t reg_data)
 {
 	uint8_t buf[2];
 	int32_t ret;
 
 	buf[0] = 0x80 | ((reg_addr & 0x3F) << 1) | ((reg_data & 0x100) >> 8);
 	buf[1] = (reg_data & 0xFF);
-	ret = spi_write_and_read(&dev->spi_dev, buf, 2);
+	ret = spi_write_and_read(dev->spi_desc, buf, 2);
 
 	return ret;
 }
@@ -191,16 +195,16 @@ int32_t ad7616_spi_write(ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_par_read(ad7616_dev *dev,
-						uint8_t reg_addr,
-						uint16_t *reg_data)
+int32_t ad7616_par_read(struct ad7616_dev *dev,
+			uint8_t reg_addr,
+			uint16_t *reg_data)
 {
 	uint32_t read;
 
-	ad7616_core_write(*dev->core, AD7616_REG_UP_WRITE_DATA,
-			0x0000 | ((reg_addr & 0x3F) << 9));
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
+		     0x0000 | ((reg_addr & 0x3F) << 9));
 	usleep(50);
-	ad7616_core_read(*dev->core, AD7616_REG_UP_READ_DATA, &read);
+	axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
 	*reg_data = read & 0xFF;
 	mdelay(1);
 
@@ -214,12 +218,12 @@ int32_t ad7616_par_read(ad7616_dev *dev,
  * @param reg_data - The register data.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_par_write(ad7616_dev *dev,
-						 uint8_t reg_addr,
-						 uint16_t reg_data)
+int32_t ad7616_par_write(struct ad7616_dev *dev,
+			 uint8_t reg_addr,
+			 uint16_t reg_data)
 {
-	ad7616_core_write(*dev->core, AD7616_REG_UP_WRITE_DATA,
-			0x8000 | ((reg_addr & 0x3F) << 9) | (reg_data & 0xFF));
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
+		     0x8000 | ((reg_addr & 0x3F) << 9) | (reg_data & 0xFF));
 	mdelay(1);
 
 	return 0;
@@ -230,14 +234,14 @@ int32_t ad7616_par_write(ad7616_dev *dev,
  * @param dev - The device structure.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_reset(ad7616_dev *dev)
+int32_t ad7616_reset(struct ad7616_dev *dev)
 {
 	int32_t ret;
 
-	ret = gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_LOW);
+	ret = gpio_set_value(dev->gpio_reset, GPIO_LOW);
 	/* Low pulse width for a full reset should be at least 1200 ns */
 	mdelay(20);
-	ret |= gpio_set_value(&dev->gpio_dev, dev->gpio_reset, GPIO_HIGH);
+	ret |= gpio_set_value(dev->gpio_reset, GPIO_HIGH);
 	/* 15 ms are required to completely reconfigure the device */
 	mdelay(150);
 
@@ -270,9 +274,9 @@ int32_t ad7616_reset(ad7616_dev *dev)
  * 								   AD7616_10V
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_set_range(ad7616_dev *dev,
-						 ad7616_ch ch,
-						 ad7616_range range)
+int32_t ad7616_set_range(struct ad7616_dev *dev,
+			 enum ad7616_ch ch,
+			 enum ad7616_range range)
 {
 	uint8_t	reg_addr;
 	uint8_t	mask;
@@ -310,10 +314,8 @@ int32_t ad7616_set_range(ad7616_dev *dev,
 			dev->va[i] = range;
 			dev->vb[i] = range;
 		}
-		ret = gpio_set_value(&dev->gpio_dev,
-				dev->gpio_hw_rngsel0, ((range & 0x01) >> 0));
-		ret |= gpio_set_value(&dev->gpio_dev,
-				dev->gpio_hw_rngsel1, ((range & 0x02) >> 1));
+		ret = gpio_set_value(dev->gpio_hw_rngsel0, ((range & 0x01) >> 0));
+		ret |= gpio_set_value(dev->gpio_hw_rngsel1, ((range & 0x02) >> 1));
 	}
 
 	return ret;
@@ -327,8 +329,8 @@ int32_t ad7616_set_range(ad7616_dev *dev,
  * 								  AD7616_HW
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_set_mode(ad7616_dev *dev,
-						ad7616_mode mode)
+int32_t ad7616_set_mode(struct ad7616_dev *dev,
+			enum ad7616_mode mode)
 {
 	uint8_t i;
 	int32_t ret = 0;
@@ -356,24 +358,135 @@ int32_t ad7616_set_mode(ad7616_dev *dev,
  * 								 AD7616_OSR_128
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_set_oversampling_ratio(ad7616_dev *dev,
-									  ad7616_osr osr)
+int32_t ad7616_set_oversampling_ratio(struct ad7616_dev *dev,
+				      enum ad7616_osr osr)
 {
 	int32_t ret = 0;
 
 	if (dev->mode == AD7616_SW) {
 		ret = ad7616_write_mask(dev, AD7616_REG_CONFIG,
-				AD7616_OS(0x7), AD7616_OS(osr));
+					AD7616_OS(0x7), AD7616_OS(osr));
 	} else {
-		ret = gpio_set_value(&dev->gpio_dev,
-				dev->gpio_os0, ((osr & 0x01) >> 0));
-		ret |= gpio_set_value(&dev->gpio_dev,
-				dev->gpio_os1, ((osr & 0x02) >> 1));
-		ret |= gpio_set_value(&dev->gpio_dev,
-				dev->gpio_os2, ((osr & 0x04) >> 2));
+		ret = gpio_set_value(dev->gpio_os0, ((osr & 0x01) >> 0));
+		ret |= gpio_set_value(dev->gpio_os1, ((osr & 0x02) >> 1));
+		ret |= gpio_set_value(dev->gpio_os2, ((osr & 0x04) >> 2));
 	}
 
 	return ret;
+}
+
+/**
+ * @brief Read from device in serial mode.
+ *        Enter register mode to read/write registers
+ * @param dev - ad7616_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad7616_read_data_serial(struct ad7616_dev *dev,
+				uint32_t *buf,
+				uint32_t samples)
+{
+	int32_t ret;
+	uint32_t commands_data[1] = {0x00};
+	struct spi_engine_offload_message msg;
+	uint32_t spi_eng_msg_cmds[3] = {
+		CS_LOW,
+		READ(2),
+		CS_HIGH,
+	};
+
+	dev->spi_desc->mode = SPI_MODE_3;
+	spi_engine_set_speed(dev->spi_desc, dev->spi_desc->max_speed_hz);
+
+	ret = spi_engine_offload_init(dev->spi_desc, dev->offload_init_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	msg.commands_data = commands_data;
+	msg.commands = spi_eng_msg_cmds;
+	msg.no_commands = ARRAY_SIZE(spi_eng_msg_cmds);
+	msg.rx_addr = (uint32_t)buf;
+
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+
+	ret = spi_engine_offload_transfer(dev->spi_desc, msg, samples);
+	if (ret != SUCCESS)
+		return ret;
+
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+
+	if (dev->dcache_invalidate_range)
+		dev->dcache_invalidate_range(msg.rx_addr, samples * 2);
+
+	return ret;
+}
+
+/**
+ * @brief Read from device in parallel mode.
+ *        Enter register mode to read/write registers
+ * @param dev - ad7616_dev device handler.
+ * @param buf - data buffer.
+ * @param samples - sample number.
+ * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
+ */
+int32_t ad7616_read_data_parallel(struct ad7616_dev *dev,
+				  uint32_t *buf,
+				  uint32_t samples)
+{
+	int32_t ret;
+	struct axi_dmac			*dmac;
+	struct axi_dmac_init	dmac_init;
+
+	dmac_init.name = "ADC DMAC";
+	dmac_init.base = dev->offload_init_param->rx_dma_baseaddr;
+	dmac_init.flags = 0;
+	dmac_init.direction = DMA_DEV_TO_MEM;
+
+	axi_dmac_init(&dmac, &dmac_init);
+	if(!dmac)
+		return FAILURE;
+
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+
+	ret = axi_dmac_transfer(dmac, (uint32_t)&buf, samples);
+	if (ret != SUCCESS)
+		return ret;
+
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+
+	return SUCCESS;
+}
+
+/**
+ * Initialize the AXI_AD7616 IP core device.
+ * @param dev - The device structure.
+ * @return 0 in case of success, negative error code otherwise.
+ */
+int32_t ad7616_core_setup(struct ad7616_dev *dev)
+{
+	uint32_t type;
+
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, 0x00);
+	mdelay(10);
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CONV_RATE, 100);
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL,
+		     AD7616_CTRL_RESETN | AD7616_CTRL_CNVST_EN);
+	mdelay(10);
+	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_CTRL, AD7616_CTRL_RESETN);
+	mdelay(10);
+
+	axi_io_read(dev->core_baseaddr, AD7616_REG_UP_IF_TYPE, &type);
+
+	if (type)
+		dev->interface = AD7616_PARALLEL;
+	else
+		dev->interface = AD7616_SERIAL;
+
+	return SUCCESS;
 }
 
 /**
@@ -383,56 +496,84 @@ int32_t ad7616_set_oversampling_ratio(ad7616_dev *dev,
  * 					   parameters.
  * @return 0 in case of success, negative error code otherwise.
  */
-int32_t ad7616_setup(ad7616_dev **device,
-					 adc_core *core,
-					 ad7616_init_param init_param)
+int32_t ad7616_setup(struct ad7616_dev **device,
+		     struct ad7616_init_param *init_param)
 {
-	ad7616_dev *dev;
+	struct ad7616_dev *dev;
 	uint8_t i;
-	uint32_t if_type;
 	int32_t ret = 0;
 
-	dev = (ad7616_dev *)malloc(sizeof(*dev));
+	dev = (struct ad7616_dev *)malloc(sizeof(*dev));
 	if (!dev) {
-		return -1;
+		return FAILURE;
 	}
 
-	dev->core = core;
-	ad7616_core_read(*dev->core, AD7616_REG_UP_IF_TYPE, &if_type);
-	if (if_type)
-		dev->interface = AD7616_PARALLEL;
-	else
-		dev->interface = AD7616_SERIAL;
+	dev->core_baseaddr = init_param->core_baseaddr;
+	dev->offload_init_param = init_param->offload_init_param;
+	dev->reg_access_speed = init_param->reg_access_speed;
+	dev->dcache_invalidate_range = init_param->dcache_invalidate_range;
 
-	dev->spi_dev.chip_select = init_param.spi_chip_select;
-	dev->spi_dev.mode = init_param.spi_mode;
-	dev->spi_dev.device_id = init_param.spi_device_id;
-	dev->spi_dev.type = init_param.spi_type;
+	ad7616_core_setup(dev);
+
 	if (dev->interface == AD7616_SERIAL)
-		ret |= spi_init(&dev->spi_dev);
+		ret = spi_init(&dev->spi_desc, init_param->spi_param);
 
-	dev->gpio_dev.device_id = init_param.gpio_device_id;
-	dev->gpio_dev.type = init_param.gpio_type;
-	ret |= gpio_init(&dev->gpio_dev);
-
-	dev->gpio_reset = init_param.gpio_reset;
-	if (dev->gpio_reset >= 0) {
-		ret |= gpio_set_direction(&dev->gpio_dev,
-						dev->gpio_reset, GPIO_OUT);
-		ret |= gpio_set_value(&dev->gpio_dev,
-						dev->gpio_reset,
-						GPIO_HIGH);
+	if (ret != SUCCESS) {
+		free(dev);
+		return ret;
 	}
 
-	dev->mode = init_param.mode;
+	spi_engine_set_speed(dev->spi_desc, dev->reg_access_speed);
+
+	ret = gpio_get_optional(&dev->gpio_hw_rngsel0,
+				init_param->gpio_hw_rngsel0_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_get_optional(&dev->gpio_hw_rngsel1,
+				init_param->gpio_hw_rngsel1_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_get_optional(&dev->gpio_reset, init_param->gpio_reset_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_get_optional(&dev->gpio_os0, init_param->gpio_os0_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_get_optional(&dev->gpio_os1, init_param->gpio_os1_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_get_optional(&dev->gpio_os2, init_param->gpio_os2_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	if (dev->gpio_reset) {
+		ret = gpio_direction_output(dev->gpio_reset, GPIO_HIGH);
+		if (ret != SUCCESS)
+			return ret;
+
+		ret = ad7616_reset(dev);
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	dev->mode = init_param->mode;
 	for (i = 0; i <= AD7616_VA7; i++) {
-		dev->va[i] = init_param.va[i];
-		dev->vb[i] = init_param.vb[i];
+		dev->va[i] = init_param->va[i];
+		dev->vb[i] = init_param->vb[i];
 	}
-	ret |= ad7616_set_mode(dev, dev->mode);
+	ret = ad7616_set_mode(dev, dev->mode);
+	if (ret != SUCCESS)
+		return ret;
 
-	dev->osr = init_param.osr;
-	ret |= ad7616_set_oversampling_ratio(dev, dev->osr);
+	dev->osr = init_param->osr;
+	ret = ad7616_set_oversampling_ratio(dev, dev->osr);
+	if (ret != SUCCESS)
+		return ret;
 
 	*device = dev;
 
