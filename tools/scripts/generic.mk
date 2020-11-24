@@ -79,9 +79,10 @@ remove_fun = del /S /Q $(subst /,\,$1)
 remove_dir = rd /S /Q "$(subst /,\,$1)"
 mk_dir = md $(subst /,\,$1)
 read_file = type $(subst /,\,$1) 2> NUL
-make_dir_link = mklink /D "$(subst /,\,$2)" "$(subst /,\,$1)"
-make_link = mklink "$(subst /,\,$2)" "$(subst /,\,$1)"
+make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
+make_link = mklink /H "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 print_lines = $(foreach f,$1,@echo $f && ) @echo Done
+cmd_separator = &
 #	LINUX
 else
 copy_fun = cp $1 $2
@@ -91,8 +92,9 @@ remove_dir = rm -rf $1
 mk_dir = mkdir -p $1
 read_file = cat $1 2> /dev/null
 make_dir_link = ln -s $1 $2
-make_link = $(make_dir_link)
+make_link = ln -P $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
+cmd_separator = ;
 endif
 
 # recursive wildcard
@@ -203,6 +205,9 @@ ALL_IGNORED_FILES = $(foreach dir, $(IGNORED_FILES), $(call rwildcard, $(dir),*)
 # Remove ignored files
 SRCS     := $(filter-out $(ALL_IGNORED_FILES),$(SRCS))
 INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
+
+#Get all src files that are not in SRC_DRIS
+FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
 
 REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS)))
 OBJS = $(REL_SRCS:.c=.o)

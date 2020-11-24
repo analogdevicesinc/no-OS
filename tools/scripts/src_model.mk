@@ -34,3 +34,8 @@ ENABLE_IIO_NETWORK = y
 # If the variable is set to y then iio sources will be added to the projects
 # instead of using the library. Will be easier to debug the library with this.
 BUILD_IIO_AS_SOURCES = y
+
+# If set, link to noos srcs will be created for new project instead of copy them
+# to the project directory. This way modification to the files can be viewed on
+# git for example
+LINK_SRCS = y
