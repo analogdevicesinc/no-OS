@@ -22,6 +22,14 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
 	$(PLATFORM_DRIVERS)/xilinx_gpio.c				\
 	$(PLATFORM_DRIVERS)/xilinx_spi.c				\
 	$(PLATFORM_DRIVERS)/delay.c
+ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
+SRCS += $(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c					\
+	$(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/util/list.c						
+endif
 INCS += $(PROJECT)/src/parameters.h
 INCS += $(DRIVERS)/adc/ad469x/ad469x.h					\
 	$(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
@@ -42,3 +50,12 @@ INCS +=	$(INCLUDE)/axi_io.h						\
 	$(INCLUDE)/irq.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/util.h
+ifeq (y,$(strip $(TINYIIOD)))
+INCS += $(INCLUDE)/xml.h						\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/irq.h						\
+	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/list.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/uart_extra.h				
+endif
