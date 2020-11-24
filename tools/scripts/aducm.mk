@@ -71,9 +71,6 @@ endif
 #                             DFP DEPENDENCIES                          
 #------------------------------------------------------------------------------
 
-#Get all src files that are not in SRC_DRIS
-FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS))
-
 PROJECT_BUILD = $(BUILD_DIR)/$(PROJECT_NAME)
 
 #DFP Files

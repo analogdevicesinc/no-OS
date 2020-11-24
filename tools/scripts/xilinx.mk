@@ -149,7 +149,19 @@ xilinx_run: all
 PHONY += xilinx_update_srcs
 xilinx_update_srcs:
 ifeq 'y' '$(strip $(LINK_SRCS))'
-	echo TODO: Link file instead of copy them
+	$(foreach dir,$(SRC_DIRS),\
+		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))))\
+		$(cmd_separator)\
+		$(call make_dir_link,$(dir),\
+		$(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))) $(cmd_separator)) \
+		echo Dir links created
+	
+	$(foreach file,$(FILES_OUT_OF_DIRS),\
+		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(file))))\
+		$(cmd_separator)\
+		$(call make_link,$(file),\
+		$(BUILD_DIR)/app/src/$(call get_relative_path, $(file)))$(cmd_separator)) \
+		echo File links created
 else
 	$(foreach file,$(SRCS) $(INCS), $(call copy_fun,$(file),$(BUILD_DIR)/app/src) &&) \
 		echo Src files copied
