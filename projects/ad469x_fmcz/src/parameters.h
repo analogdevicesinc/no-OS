@@ -47,6 +47,7 @@
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
+
 #define AD469x_DMA_BASEADDR             XPAR_AXI_AD469X_DMA_BASEADDR
 #define AD469x_SPI_ENGINE_BASEADDR      XPAR_SPI_AD469X_AXI_REGMAP_BASEADDR
 #define RX_CLKGEN_BASEADDR		XPAR_SPI_CLKGEN_BASEADDR
@@ -56,5 +57,11 @@
 #define GPIO_OFFSET			54
 #define GPIO_RESETN_1			GPIO_OFFSET + 32
 #define GPIO_DEVICE_ID			XPAR_PS7_GPIO_0_DEVICE_ID
+#define UART_DEVICE_ID			XPAR_XUARTPS_0_DEVICE_ID
+#define UART_IRQ_ID			XPAR_XUARTPS_1_INTR
+#define INTC_DEVICE_ID			XPAR_SCUGIC_SINGLE_DEVICE_ID
+#define ADC_DDR_BASEADDR		XPAR_DDR_MEM_BASEADDR + 0x800000
+/* Maximum data to be read or write in a capture over iio */
+#define MAX_SIZE_BASE_ADDR		0x100000 //1MB
 
 #endif /* __PARAMETERS_H__ */
