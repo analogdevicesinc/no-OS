@@ -13,6 +13,7 @@ INCLUDES = -I../include/ \
 	 -I./axi_core/axi_adc_core \
 	 -I./axi_core/axi_dac_core \
 	 -I./axi_core/spi_engine \
+	 -I./axi_core/axi_dmac \
 	 -I./axi_core/clk_axi_clkgen \
 	 -I./platform/xilinx \
 	 -I../projects/adrv9009/src/devices/adi_hal
