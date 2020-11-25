@@ -47,6 +47,7 @@
 #include "spi_engine.h"
 #include "delay.h"
 #include "error.h"
+#include "util.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -360,7 +361,6 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		ret = ad469x_seq_osr_clear(dev);
 		if (ret != SUCCESS)
 			return ret;
-		dev->num_slots = 0;
 
 		break;
 
@@ -389,7 +389,6 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 		ret = ad469x_seq_osr_clear(dev);
 		if (ret != SUCCESS)
 			return ret;
-		dev->num_slots = 0;
 
 		break;
 
@@ -400,7 +399,6 @@ int32_t ad469x_set_channel_sequence(struct ad469x_dev *dev,
 					    AD469x_SEQ_CTRL_STD_SEQ_EN(1));
 		if (ret != SUCCESS)
 			return ret;
-		dev->num_slots = 0;
 
 		break;
 
@@ -496,6 +494,8 @@ int32_t ad469x_std_sequence_ch(struct ad469x_dev *dev, uint16_t ch_mask)
 				   ch_mask >> 8);
 	if (ret != SUCCESS)
 		return ret;
+
+	dev->num_slots = hweight8(ch_mask);
 
 	return ret;
 }
@@ -660,7 +660,10 @@ static int32_t ad469x_adv_seq_osr_get_util_data(struct ad469x_dev *dev,
  *        Enter register mode to read/write registers
  * @param [in] dev - ad469x_dev device handler.
  * @param [out] buf - data buffer.
- * @param [in] samples - sample number.
+ * @param [in] samples - Number of samples per channel. For example, if  with
+ * ad469x_std_sequence_ch 2 channel where activated, buf will be filled with
+ * 10 samples for each of them. If temp is enable, the there will be an other 10
+ * samples for temperature
  * @return \ref SUCCESS in case of success, \ref FAILURE otherwise.
  */
 int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
@@ -669,15 +672,17 @@ int32_t ad469x_seq_read_data(struct ad469x_dev *dev,
 {
 	int32_t ret;
 	uint16_t i;
+	uint32_t total_samples;
 
-	ret = ad469x_read_data(dev, 0, buf, samples);
+	total_samples = samples * (dev->num_slots + dev->temp_enabled);
+	ret = ad469x_read_data(dev, 0, buf, total_samples);
 	if (ret != SUCCESS)
 		return ret;
 
 	if (dev->ch_sequence != AD469x_advanced_seq)
 		return SUCCESS;
 
-	for (i = 0; i < samples; i++) {
+	for (i = 0; i < total_samples; i++) {
 		ret = ad469x_adv_seq_osr_get_util_data(dev, i, &buf[i]);
 		if (ret != SUCCESS)
 			return ret;
