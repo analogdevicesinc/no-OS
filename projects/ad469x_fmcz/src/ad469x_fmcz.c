@@ -57,10 +57,11 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 #define AD469x_EVB_SAMPLE_NO		1000
+#define TOTAL_CH					3
 
 int main()
 {
-	uint32_t buf[AD469x_EVB_SAMPLE_NO] __attribute__ ((aligned));
+	uint32_t buf[AD469x_EVB_SAMPLE_NO * TOTAL_CH] __attribute__ ((aligned));
 	struct ad469x_dev *dev;
 	uint32_t ch, i, j = 0;
 	int32_t ret;
@@ -175,12 +176,16 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i += 3)
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 3; i += 3)
 			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1:%"PRIu32", temp: %"PRIu32"\n",
 			       i, buf[i], buf[i + 1], buf[i + 2]);
 	}
 #elif defined(STANDARD_SEQ)
 	ret = ad469x_std_sequence_ch(dev, AD469x_CHANNEL(1) | AD469x_CHANNEL(0));
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = ad469x_sequence_disable_temp(dev);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -201,7 +206,7 @@ int main()
 		if (ret != SUCCESS)
 			return ret;
 
-		for (i = 0; i < AD469x_EVB_SAMPLE_NO; i += 2)
+		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 2; i += 2)
 			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1: %"PRIu32" \n", i, buf[i],
 			       buf[i + 1]);
 	}
