@@ -435,6 +435,32 @@ int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
 }
 
 /***************************************************************************//**
+ * @brief axi_adc_update_active_channels
+ *******************************************************************************/
+int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask)
+{
+	uint32_t ch;
+	uint32_t val;
+	uint32_t new_val;
+
+	if (mask == adc->mask)
+		return SUCCESS;
+
+	adc->mask = mask;
+	for (ch = 0; ch < adc->num_channels; ch++) {
+		axi_adc_read(adc, AXI_ADC_REG_CHAN_CNTRL(ch), &val);
+		new_val = val & (~AXI_ADC_ENABLE);
+		if (mask & 1)
+			new_val = val | AXI_ADC_ENABLE;
+		if (new_val != val)
+			axi_adc_write(adc, AXI_ADC_REG_CHAN_CNTRL(ch), new_val);
+		mask >>= 1;
+	}
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
  * @brief axi_adc_init
  *******************************************************************************/
 int32_t axi_adc_init(struct axi_adc **adc_core,

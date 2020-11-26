@@ -122,6 +122,7 @@ struct axi_adc {
 	uint32_t base;
 	uint8_t	num_channels;
 	uint64_t clock_hz;
+	uint32_t mask;
 };
 
 struct axi_adc_init {
@@ -197,4 +198,5 @@ int32_t axi_adc_get_calib_bias(struct axi_adc *adc,
 			       uint32_t chan,
 			       int32_t *val,
 			       int32_t *val2);
+int32_t axi_adc_update_active_channels(struct axi_adc *adc, uint32_t mask);
 #endif
