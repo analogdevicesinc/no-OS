@@ -177,7 +177,7 @@ int main()
 			return ret;
 
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 3; i += 3)
-			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1:%"PRIu32", temp: %"PRIu32"\n",
+			printf("ADC_sample:%"PRIu32",ch0:%"PRIu32",ch1:%"PRIu32",temp:%"PRIu32"\n",
 			       i, buf[i], buf[i + 1], buf[i + 2]);
 	}
 #elif defined(STANDARD_SEQ)
@@ -207,7 +207,7 @@ int main()
 			return ret;
 
 		for (i = 0; i < AD469x_EVB_SAMPLE_NO * 2; i += 2)
-			printf("ADC sample: %"PRIu32", ch0: %"PRIu32", ch1: %"PRIu32" \n", i, buf[i],
+			printf("ADC_sample:%"PRIu32",ch0:%"PRIu32",ch1:%"PRIu32"\n", i, buf[i],
 			       buf[i + 1]);
 	}
 #else
