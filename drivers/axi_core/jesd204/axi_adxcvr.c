@@ -362,6 +362,9 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 		case XILINX_XCVR_LEGACY_TYPE_S7_GTX2:
 			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_S7_GTX2;
 			break;
+		case XILINX_XCVR_LEGACY_TYPE_V7_GTH2:
+			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_V7_GTH2;
+			break;
 		case XILINX_XCVR_LEGACY_TYPE_US_GTH3:
 			xcvr->xlx_xcvr.type = XILINX_XCVR_TYPE_US_GTH3;
 			break;
@@ -379,6 +382,7 @@ int32_t adxcvr_init(struct adxcvr **ad_xcvr,
 
 	switch (xcvr->xlx_xcvr.type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:

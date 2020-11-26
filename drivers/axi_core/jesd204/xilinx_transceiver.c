@@ -312,6 +312,7 @@ int32_t xilinx_xcvr_configure_cdr(struct xilinx_xcvr *xcvr,
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_configure_cdr(xcvr, drp_port, lane_rate,
 						      out_div, lpm_enable);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -328,6 +329,7 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 		uint32_t drp_port, bool lpm)
 {
 	switch (xcvr->type) {
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -350,7 +352,8 @@ int32_t xilinx_xcvr_configure_lpm_dfe_mode(struct xilinx_xcvr *xcvr,
 static void xilinx_xcvr_setup_cpll_vco_range(struct xilinx_xcvr *xcvr,
 		uint32_t *vco_max)
 {
-	if  ((xcvr->type == XILINX_XCVR_TYPE_US_GTH3) |
+	if  ((xcvr->type == XILINX_XCVR_TYPE_V7_GTH2) |
+		 (xcvr->type == XILINX_XCVR_TYPE_US_GTH3) |
 	     (xcvr->type == XILINX_XCVR_TYPE_US_GTH4) |
 	     (xcvr->type == XILINX_XCVR_TYPE_US_GTY4)) {
 		if (xcvr->voltage < 850)
@@ -374,6 +377,7 @@ static void xilinx_xcvr_setup_qpll_vco_range(struct xilinx_xcvr *xcvr,
 		if ((xcvr->speed_grade / 10) == 2)
 			*vco1_max = 10312500;
 		break;
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -411,6 +415,7 @@ int32_t xilinx_xcvr_calc_cpll_config(struct xilinx_xcvr *xcvr,
 		vco_min = 1600000;
 		vco_max = 3300000;
 		break;
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -482,6 +487,7 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 		vco1_min = 9800000;
 		vco1_max = 12500000;
 		break;
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -641,6 +647,7 @@ int32_t xilinx_xcvr_cpll_read_config(struct xilinx_xcvr *xcvr,
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_cpll_read_config(xcvr, drp_port, conf);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -774,6 +781,7 @@ int32_t xilinx_xcvr_cpll_write_config(struct xilinx_xcvr *xcvr,
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_cpll_write_config(xcvr, drp_port, conf);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -932,6 +940,7 @@ int32_t xilinx_xcvr_qpll_read_config(struct xilinx_xcvr *xcvr,
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_qpll_read_config(xcvr, drp_port, conf);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -1079,6 +1088,7 @@ int32_t xilinx_xcvr_qpll_write_config(struct xilinx_xcvr *xcvr,
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_qpll_write_config(xcvr, drp_port, conf);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -1161,6 +1171,7 @@ int32_t xilinx_xcvr_read_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_read_out_div(xcvr, drp_port,
 						     rx_out_div, tx_out_div);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -1245,6 +1256,7 @@ int32_t xilinx_xcvr_write_out_div(struct xilinx_xcvr *xcvr, uint32_t drp_port,
 	case XILINX_XCVR_TYPE_S7_GTX2:
 		return xilinx_xcvr_gtx2_write_out_div(xcvr, drp_port,
 						      rx_out_div, tx_out_div);
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -1274,6 +1286,7 @@ int32_t xilinx_xcvr_write_rx_clk25_div(struct xilinx_xcvr *xcvr,
 		mask = RX_CLK25_DIV_MASK;
 		reg = RX_CLK25_DIV;
 		break;
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
@@ -1306,6 +1319,7 @@ int32_t xilinx_xcvr_write_tx_clk25_div(struct xilinx_xcvr *xcvr,
 		mask = TX_CLK25_DIV_MASK;
 		reg = TX_CLK25_DIV;
 		break;
+	case XILINX_XCVR_TYPE_V7_GTH2:
 	case XILINX_XCVR_TYPE_US_GTH3:
 	case XILINX_XCVR_TYPE_US_GTH4:
 	case XILINX_XCVR_TYPE_US_GTY4:
