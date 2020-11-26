@@ -1052,7 +1052,6 @@ int main(void)
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange,
 	};
@@ -1064,7 +1063,6 @@ int main(void)
 	iio_axi_adc_obs_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_obs_adc,
 		.rx_dmac = rx_obs_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange,
 	};

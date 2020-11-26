@@ -306,7 +306,6 @@ int main(void)
 	struct iio_axi_adc_init_param iio_axi_adc1_init_par = {
 		.rx_adc = phy.rx1_adc,
 		.rx_dmac = phy.rx1_dmac,
-		.adc_ddr_base = ADC1_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 		.get_sampling_frequency = get_sampling_frequency,
 	};
@@ -321,7 +320,6 @@ int main(void)
 	struct iio_axi_adc_init_param iio_axi_adc2_init_par = {
 		.rx_adc = phy.rx2_adc,
 		.rx_dmac = phy.rx2_dmac,
-		.adc_ddr_base = ADC2_DDR_BASEADDR,
 		.dcache_invalidate_range = (void (*)(uint32_t, uint32_t))Xil_DCacheInvalidateRange,
 		.get_sampling_frequency = get_sampling_frequency,
 	};

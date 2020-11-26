@@ -367,13 +367,11 @@ int main(void)
 	iio_axi_adc_0_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9625_0_core,
 		.rx_dmac = ad9625_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
 	struct iio_axi_adc_init_param iio_axi_adc_1_init_par;
 	iio_axi_adc_1_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = ad9625_1_core,
 		.rx_dmac = ad9625_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
 
 	return iio_server_init(&iio_axi_adc_0_init_par, &iio_axi_adc_1_init_par);

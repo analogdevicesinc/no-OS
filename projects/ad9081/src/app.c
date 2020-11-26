@@ -278,7 +278,6 @@ int main(void)
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = rx_adc,
 		.rx_dmac = rx_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 	};
 
 	struct iio_axi_dac_init_param iio_axi_dac_init_par;

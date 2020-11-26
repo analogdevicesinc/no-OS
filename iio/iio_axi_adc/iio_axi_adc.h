@@ -63,8 +63,6 @@ struct iio_axi_adc_desc {
 	uint32_t mask;
 	/** dma device */
 	struct axi_dmac *dmac;
-	/** ADC base address */
-	uint32_t adc_ddr_base;
 	/** Invalidate cache memory function pointer */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Custom implementation for get sampling frequency */
@@ -83,8 +81,6 @@ struct iio_axi_adc_init_param {
 	struct axi_adc *rx_adc;
 	/** Receive DMA device */
 	struct axi_dmac *rx_dmac;
-	/** Address used by DMA, for receiving data from device */
-	uint32_t adc_ddr_base;
 	/** Invalidate the Data cache for the given address range */
 	void (*dcache_invalidate_range)(uint32_t address, uint32_t bytes_count);
 	/** Custom sampling frequency getter */
