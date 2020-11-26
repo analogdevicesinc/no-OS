@@ -59,6 +59,11 @@
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
+struct iio_data_buffer g_read_buff = {
+	.buff = (void *)ADC_DDR_BASEADDR,
+	.size = 0xFFFFFFFF,
+};
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -127,7 +132,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init)
 
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
-			      iio_axi_adc_desc, NULL, NULL);
+			      iio_axi_adc_desc, &g_read_buff, NULL);
 	if (status < 0)
 		return status;
 

@@ -59,6 +59,11 @@
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
+struct iio_data_buffer g_read_buff = {
+	.buff = (void *)ADC_DDR_BASEADDR,
+	.size = 0xFFFFFFFF,
+};
+
 /**
  * @brief Application IIO setup.
  * @return SUCCESS in case of success, FAILURE otherwise.
@@ -121,8 +126,8 @@ int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init)
 	if (status < 0)
 		return status;
 
-	status = iio_register(iio, dev_desc, "awesome_name", iio_axi_adc_desc, NULL,
-			      NULL);
+	status = iio_register(iio, dev_desc, "awesome_name", iio_axi_adc_desc,
+			      &g_read_buff, NULL);
 	if (status < 0)
 		return status;
 
