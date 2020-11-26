@@ -424,9 +424,14 @@ int main(void)
 	status = iio_axi_adc_init(&iio_axi_adc_desc, &iio_axi_adc_init_par);
 	if (status < 0)
 		return status;
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc",
-			      iio_axi_adc_desc, NULL, NULL);
+			      iio_axi_adc_desc, &read_buff, NULL);
 	if (status < 0)
 		return status;
 

@@ -1073,9 +1073,14 @@ int main(void)
 				  &iio_axi_adc_obs_init_par);
 	if(status < 0)
 		return status;
+
+	struct iio_data_buffer read_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_desc, &adc_dev_desc);
 	status = iio_register(iio_app_desc, adc_dev_desc, "cf-ad9361-lpc",
-			      iio_axi_adc_desc, NULL, NULL);
+			      iio_axi_adc_desc, &read_buff, NULL);
 	if (status < 0)
 		return status;
 
