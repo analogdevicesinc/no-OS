@@ -450,6 +450,50 @@ static ssize_t iio_axi_adc_read_dev(void *iio_inst, char *pbuf, size_t offset,
 }
 
 /**
+ * @brief Update active channels
+ * @param dev - Instance of the iio_axi_adc
+ * @param mask - Mask with new channels to activate
+ * @return axi_adc_update_active_channels result.
+ */
+int32_t iio_axi_adc_prepare_transfer(void *dev, uint32_t mask)
+{
+	struct iio_axi_adc_desc *iio_adc = dev;
+
+	iio_adc->mask = mask;
+
+	return axi_adc_update_active_channels(iio_adc->adc, mask);
+}
+
+/**
+ * @brief Update active channels
+ * @param dev - Instance of the iio_axi_adc
+ * @param buff - Buffer where to read samples
+ * @param nb_samples - Number of samples
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
+{
+	struct iio_axi_adc_desc *iio_adc;
+	ssize_t ret, bytes;
+
+	if (!dev)
+		return FAILURE;
+
+	iio_adc = (struct iio_axi_adc_desc *)dev;
+	bytes = nb_samples * hweight8(iio_adc->mask) * (STORAGE_BITS / 8);
+
+	iio_adc->dmac->flags = 0;
+	ret = axi_dmac_transfer(iio_adc->dmac, (uint32_t)buff, bytes);
+	if (ret < 0)
+		return ret;
+
+	if (iio_adc->dcache_invalidate_range)
+		iio_adc->dcache_invalidate_range((uint32_t)buff, bytes);
+
+	return SUCCESS;
+}
+
+/**
  * @brief Delete iio_device.
  * @param iio_device - Structure describing a device, channels and attributes.
  * @return SUCCESS in case of success or negative value otherwise.
@@ -530,6 +574,8 @@ static int32_t iio_axi_adc_create_device_descriptor(
 	iio_device->transfer_mem_to_dev = NULL;
 	iio_device->read_data = iio_axi_adc_read_dev;
 	iio_device->write_data = NULL;
+	iio_device->prepare_transfer = iio_axi_adc_prepare_transfer;
+	iio_device->read_dev = iio_axi_adc_read_dev;
 
 	return SUCCESS;
 error:
