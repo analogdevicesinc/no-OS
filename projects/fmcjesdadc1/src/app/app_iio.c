@@ -59,6 +59,16 @@
 static struct irq_ctrl_desc *irq_desc;
 #endif
 
+struct iio_data_buffer g_read_buff0 = {
+	.buff = (void *)ADC_DDR_BASEADDR,
+	.size = 0xFFFFFFFF,
+};
+
+struct iio_data_buffer g_read_buff1 = {
+	.buff = (void *)ADC_DDR_BASEADDR,
+	.size = 0xFFFFFFFF,
+};
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -124,7 +134,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_0_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc_0",
-			      iio_axi_adc_0_desc, NULL, NULL);
+			      iio_axi_adc_0_desc, &g_read_buff0, NULL);
 	if (status < 0)
 		return status;
 
@@ -133,7 +143,7 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_0_init,
 		return status;
 	iio_axi_adc_get_dev_descriptor(iio_axi_adc_1_desc, &adc_dev_desc);
 	status = iio_register(iio_desc, adc_dev_desc, "axi_adc_1",
-			      iio_axi_adc_1_desc, NULL, NULL);
+			      iio_axi_adc_1_desc, &g_read_buff1, NULL);
 
 	do {
 		status = iio_step(iio_desc);
