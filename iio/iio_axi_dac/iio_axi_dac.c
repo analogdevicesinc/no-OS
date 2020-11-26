@@ -54,6 +54,8 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
+#define STORAGE_BITS 16
+
 /**
  * @brief get_dds_calibscale().
  * @param device - Physical instance of a iio_axi_dac_desc device.
@@ -612,8 +614,8 @@ static int32_t iio_axi_dac_create_device_descriptor(
 {
 	static struct scan_type scan_type = {
 		.sign = 's',
-		.realbits = 16,
-		.storagebits = 16,
+		.realbits = STORAGE_BITS,
+		.storagebits = STORAGE_BITS,
 		.shift = 0,
 		.is_big_endian = false
 	};
