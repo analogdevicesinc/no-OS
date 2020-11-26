@@ -636,7 +636,6 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
 		.rx_adc = fmcdaq2.ad9680_core,
 		.rx_dmac = fmcdaq2.ad9680_dmac,
-		.adc_ddr_base = ADC_DDR_BASEADDR,
 #ifndef PLATFORM_MB
 		.dcache_invalidate_range = (void (*)(uint32_t,
 						     uint32_t))Xil_DCacheInvalidateRange
