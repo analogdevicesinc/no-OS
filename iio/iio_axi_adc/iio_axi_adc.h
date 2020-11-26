@@ -59,6 +59,8 @@
 struct iio_axi_adc_desc {
 	/** ADC device */
 	struct axi_adc *adc;
+	/** ADC mask */
+	uint32_t mask;
 	/** dma device */
 	struct axi_dmac *dmac;
 	/** ADC base address */
