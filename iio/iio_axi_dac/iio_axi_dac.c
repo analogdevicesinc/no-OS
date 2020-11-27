@@ -571,6 +571,60 @@ static ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
 	return bytes_count;
 }
 
+/**
+ * @brief Update active channels
+ * @param dev - Instance of the iio_axi_dac
+ * @param mask - Mask with new channels to activate
+ * @return axi_dac_update_active_channels result.
+ */
+int32_t iio_axi_dac_prepare_transfer(void *dev, uint32_t mask)
+{
+	struct iio_axi_dac_desc *iio_dac = dev;
+	uint16_t i;
+	int32_t	ret;
+
+	iio_dac->mask = mask;
+
+	for (i = 0; i < iio_dac->dev_descriptor.num_ch; i++) {
+		if (BIT(i) & mask)
+			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DMA);
+		else
+			ret = axi_dac_set_datasel(iio_dac->dac, i, AXI_DAC_DATA_SEL_DDS);
+		if(ret < 0)
+			return ret;
+	}
+
+	iio_dac->mask = mask;
+
+	return SUCCESS;
+}
+
+/**
+ * @brief Update active channels
+ * @param dev - Instance of the iio_axi_dac
+ * @param buff - Buffer where to read samples
+ * @param nb_samples - Number of samples
+ * @return SUCCESS in case of success or negative value otherwise.
+ */
+int32_t iio_axi_dac_write_data(void *dev, void *buff, uint32_t nb_samples)
+{
+	struct iio_axi_dac_desc *iio_dac;
+	ssize_t bytes;
+
+	if (!dev)
+		return FAILURE;
+
+	iio_dac = (struct iio_axi_dac_desc *)dev;
+	bytes = nb_samples * hweight8(iio_dac->mask) * (STORAGE_BITS / 8);
+
+	if(iio_dac->dcache_flush_range)
+		iio_dac->dcache_flush_range((uint32_t)buff, bytes);
+
+	iio_dac->dmac->flags = DMA_CYCLIC;
+
+	return axi_dmac_transfer(iio_dac->dmac, (uint32_t)buff, bytes);
+}
+
 enum ch_type {
 	CH_VOLTGE,
 	CH_ALTVOLTGE,
@@ -689,6 +743,8 @@ static int32_t iio_axi_dac_create_device_descriptor(
 	iio_device->transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev;
 	iio_device->read_data = NULL;
 	iio_device->write_data = iio_axi_dac_write_dev;
+	iio_device->prepare_transfer = iio_axi_dac_prepare_transfer;
+	iio_device->write_dev = iio_axi_dac_write_data;
 
 	return SUCCESS;
 
