@@ -53,58 +53,26 @@
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
 
-/* Read a device register. The register address to read is set on
- * in desc->active_reg_addr in the function set_demo_reg_attr
- */
-ssize_t get_demo_reg_attr(void *device, char *buf, size_t len,
-			  const struct iio_ch_info *channel)
+int32_t iio_demo_reg_write(struct iio_demo_desc *desc, uint32_t reg,
+			   uint32_t writeval)
 {
-	struct iio_demo_desc	*desc = device;
-	uint32_t		value;
+	if (!desc || reg > MAX_REG_ADDR)
+		return -EINVAL;
 
-	value = desc->dummy_regs[desc->active_reg_addr];
+	desc->dummy_regs[reg] = writeval;
 
-	return snprintf(buf, len, "%"PRIu32"", value);
+	return SUCCESS;
 }
 
-/* Flow of reading and writing registers. This is how iio works for
- * direct_reg_access attribute:
- * Read register:
- * 	   //Reg_addr in decimal
- * 	   reg_addr = "10";
- * 	1. set_demo_reg_attr(dev, reg_addr, len, channel);
- * 	2. get_demo_reg_attr(dev, out_buf, out_len, channel);
- * Write register:
- * 	   sprintf(write_buf, "0x%x 0x%x", reg_addr, value);
- * 	1. set_demo_reg_attr(dev, write_buf, len, channel);
- */
-ssize_t set_demo_reg_attr(void *device, char *buf, size_t len,
-			  const struct iio_ch_info *channel)
+int32_t iio_demo_reg_read(struct iio_demo_desc *desc, uint32_t reg,
+			  uint32_t *readval)
 {
-	struct iio_demo_desc	*desc = device;
-	uint32_t		nb_filled;
-	uint32_t		addr;
-	uint32_t		value;
+	if (!desc || reg > MAX_REG_ADDR || !readval)
+		return -EINVAL;
 
-	nb_filled = sscanf(buf, "0x"PRIx32" 0x"PRIx32"", &addr, &value);
-	if (nb_filled == 2) {
-		/* Write register */
-		if (addr >= MAX_REG_ADDR)
-			return -EINVAL;
-		desc->dummy_regs[addr] = value;
-	} else {
-		nb_filled = sscanf(buf, "%"PRIu32, &addr);
-		if (nb_filled == 1) {
-			if (addr >= MAX_REG_ADDR)
-				return -EINVAL;
-			desc->active_reg_addr = addr;
-			return len;
-		} else {
-			return -EINVAL;
-		}
-	}
+	*readval = desc->dummy_regs[reg];
 
-	return len;
+	return SUCCESS;
 }
 
 /**

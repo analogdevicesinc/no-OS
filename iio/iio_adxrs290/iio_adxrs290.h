@@ -132,28 +132,19 @@ static struct iio_channel *adxrs290_iio_channels[] = {
 	NULL,
 };
 
-static struct iio_attribute adxrs290_iio_reg_attr = {
-	.name = "direct_reg_access",
-	.show = get_adxrs290_iio_reg,
-	.store = set_adxrs290_iio_reg,
-};
-
-static struct iio_attribute *adxrs290_iio_debug_attrs[] = {
-	&adxrs290_iio_reg_attr,
-	NULL,
-};
-
 //extern struct iio_device adxrs290_iio_descriptor ;
 struct iio_device adxrs290_iio_descriptor = {
 	.num_ch = 3,
 	.channels = adxrs290_iio_channels,
 	.attributes = NULL,
-	.debug_attributes = adxrs290_iio_debug_attrs,
+	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
 	.transfer_dev_to_mem = NULL,
 	.transfer_mem_to_dev = NULL,
 	.read_data = NULL,
-	.write_data = NULL
+	.write_data = NULL,
+	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
+	.debug_reg_write = (int32_t (*)())adxrs290_reg_write,
 };
 
 #endif

@@ -129,37 +129,30 @@ static struct iio_attribute *iio_demo_global_attributes[] = {
 	NULL,
 };
 
-static struct iio_attribute iio_attr_debug = {
-	.name = "direct_reg_access",
-	.show = get_demo_reg_attr,
-	.store = set_demo_reg_attr,
-};
-
-static struct iio_attribute *iio_demo_debug_attributes[] = {
-	&iio_attr_debug,
-	NULL,
-};
-
 static struct iio_device iio_demo_dev_in_descriptor = {
 	.num_ch = DEMO_NUM_CHANNELS,
 	.channels = iio_demo_channels_in,
 	.attributes = iio_demo_global_attributes,
-	.debug_attributes = iio_demo_debug_attributes,
+	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
 	.prepare_transfer = iio_demo_update_active_channels,
 	.end_transfer = iio_demo_close_channels,
-	.read_dev = iio_demo_read_local_samples,
+	.read_dev =  (int32_t (*)())iio_demo_read_local_samples,
+	.debug_reg_read = (int32_t (*)())iio_demo_reg_read,
+	.debug_reg_write = (int32_t (*)())iio_demo_reg_write,
 };
 
 static struct iio_device iio_demo_dev_out_descriptor = {
 	.num_ch = DEMO_NUM_CHANNELS,
 	.channels = iio_demo_channels_out,
 	.attributes = iio_demo_global_attributes,
-	.debug_attributes = iio_demo_debug_attributes,
+	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
 	.prepare_transfer = iio_demo_update_active_channels,
 	.end_transfer = iio_demo_close_channels,
-	.write_dev = iio_demo_write_local_samples
+	.write_dev = (int32_t (*)())iio_demo_write_local_samples,
+	.debug_reg_read = (int32_t (*)())iio_demo_reg_read,
+	.debug_reg_write = (int32_t (*)())iio_demo_reg_write,
 };
 
 #endif /* IIO_DEMO_DEV */
