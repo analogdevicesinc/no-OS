@@ -517,61 +517,6 @@ static struct iio_attribute *iio_altvoltage_attributes[] = {
 };
 
 /**
- * @brief Transfer data from RAM to device.
- * @param iio_inst - Physical instance of a iio_axi_dac_desc device.
- * @param bytes_count - Number of bytes to transfer.
- * @param ch_mask - Opened channels mask.
- * @return Number of bytes transfered, or negative value in case of failure.
- */
-static ssize_t iio_axi_dac_transfer_mem_to_dev(void *iio_inst,
-		size_t bytes_count,
-		uint32_t ch_mask)
-{
-	struct iio_axi_dac_desc *iio_dac = iio_inst;
-	ssize_t ret, i;
-
-	for (i = 0; i < iio_dac->dac->num_channels; i++) {
-		ret = axi_dac_set_datasel(iio_dac->dac, i,
-					  (BIT(i) & ch_mask) ? AXI_DAC_DATA_SEL_DMA : AXI_DAC_DATA_SEL_DDS);
-		if(ret < 0)
-			return ret;
-	}
-
-	if(iio_dac->dcache_flush_range)
-		iio_dac->dcache_flush_range(iio_dac->dac_ddr_base, bytes_count);
-
-	iio_dac->dmac->flags = DMA_CYCLIC;
-	ret = axi_dmac_transfer(iio_dac->dmac, iio_dac->dac_ddr_base,
-				bytes_count);
-	if(ret < 0)
-		return ret;
-
-	return bytes_count;
-}
-
-/**
- * @brief Write chunk of data into RAM.
- * This function is probably called multiple times by libtinyiiod before a
- * "iio_transfer_mem_to_dev" call, since we can only write "bytes_count" bytes
- * at a time.
- * @param iio_inst - Physical instance of a iio_axi_dac_desc device.
- * @param buf - Values to write.
- * @param offset - Offset in memory after the nth chunk of data.
- * @param bytes_count - Number of bytes to write.
- * @param ch_mask - Opened channels mask.
- * @return bytes_count or negative value in case of error.
- */
-static ssize_t iio_axi_dac_write_dev(void *iio_inst, char *buf,
-				     size_t offset,  size_t bytes_count, uint32_t ch_mask)
-{
-	struct iio_axi_dac_desc *iio_dac = iio_inst;
-
-	memcpy((void *)(iio_dac->dac_ddr_base + offset), buf, bytes_count);
-
-	return bytes_count;
-}
-
-/**
  * @brief Update active channels
  * @param dev - Instance of the iio_axi_dac
  * @param mask - Mask with new channels to activate
@@ -738,11 +683,6 @@ static int32_t iio_axi_dac_create_device_descriptor(
 			goto error;
 	}
 	iio_device->channels[i] = NULL;
-
-	iio_device->transfer_dev_to_mem = NULL;
-	iio_device->transfer_mem_to_dev = iio_axi_dac_transfer_mem_to_dev;
-	iio_device->read_data = NULL;
-	iio_device->write_data = iio_axi_dac_write_dev;
 	iio_device->prepare_transfer = iio_axi_dac_prepare_transfer;
 	iio_device->write_dev = iio_axi_dac_write_data;
 
@@ -793,7 +733,6 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 
 	iio_axi_dac_inst->dac = init->tx_dac;
 	iio_axi_dac_inst->dmac = init->tx_dmac;
-	iio_axi_dac_inst->dac_ddr_base = init->dac_ddr_base;
 	iio_axi_dac_inst->dcache_flush_range = init->dcache_flush_range;
 
 	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst->dac,
