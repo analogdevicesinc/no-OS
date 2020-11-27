@@ -66,6 +66,7 @@
 
 #define IIOD_PORT		30431
 #define MAX_SOCKET_TO_HANDLE	4
+#define REG_ACCESS_ATTRIBUTE	"direct_reg_access"
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -122,6 +123,8 @@ struct iio_interface {
 	uint32_t		ch_mask;
 	/** Physical instance of a device */
 	void			*dev_instance;
+	/** Used to read debug attributes */
+	uint32_t		active_reg_addr;
 	/** Device descriptor(describes channels and attributes) */
 	struct iio_device	*dev_descriptor;
 	struct iio_data_buffer	*write_buffer;
@@ -467,6 +470,65 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
 	}
 }
 
+/* Read a device register. The register address to read is set on
+ * in desc->active_reg_addr in the function set_demo_reg_attr
+ */
+static int32_t debug_reg_read(struct iio_interface *dev, char *buf, size_t len)
+{
+	uint32_t		value;
+	int32_t			ret;
+
+	/* Set to -1 for debug purposes. If the function don't modify the value,
+	 * then it can be easily seen the default value */
+	value = -1;
+	ret = dev->dev_descriptor->debug_reg_read(dev->dev_instance,
+			dev->active_reg_addr,
+			&value);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	return snprintf(buf, len, "%"PRIu32"", value);
+}
+
+/* Flow of reading and writing registers. This is how iio works for
+ * direct_reg_access attribute:
+ * Read register:
+ * 	   //Reg_addr in decimal
+ * 	   reg_addr = "10";
+ * 	1. debug_reg_write(dev, reg_addr, len);
+ * 	2. debug_reg_read(dev, out_buf, out_len);
+ * Write register:
+ * 	   sprintf(write_buf, "0x%x 0x%x", reg_addr, value);
+ * 	1. debug_reg_write(dev, write_buf,len);
+ */
+static int32_t debug_reg_write(struct iio_interface *dev, const char *buf,
+			       size_t len)
+{
+	uint32_t		nb_filled;
+	uint32_t		addr;
+	uint32_t		value;
+	int32_t			ret;
+
+	nb_filled = sscanf(buf, "0x%"PRIx32" 0x%"PRIx32"", &addr, &value);
+	if (nb_filled == 2) {
+		/* Write register */
+		ret = dev->dev_descriptor->debug_reg_write(dev->dev_instance,
+				addr, value);
+		if (IS_ERR_VALUE(ret))
+			return ret;
+	} else {
+		nb_filled = sscanf(buf, "%"PRIu32, &addr);
+		if (nb_filled == 1) {
+			dev->active_reg_addr = addr;
+			return len;
+		} else {
+			return -EINVAL;
+		}
+	}
+
+	return len;
+}
+
 /**
  * @brief Read global attribute of a device.
  * @param device - String containing device name.
@@ -493,6 +555,12 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 	params.ch_info = NULL;
 	switch (type) {
 	case IIO_ATTR_TYPE_DEBUG:
+		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
+			if (dev->dev_descriptor->debug_reg_read)
+				return debug_reg_read(dev, buf, len);
+			else
+				return -ENOENT;
+		}
 		attributes = dev->dev_descriptor->debug_attributes;
 		break;
 	case IIO_ATTR_TYPE_DEVICE:
@@ -536,6 +604,12 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 	params.ch_info = NULL;
 	switch (type) {
 	case IIO_ATTR_TYPE_DEBUG:
+		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
+			if (dev->dev_descriptor->debug_reg_write)
+				return debug_reg_write(dev, buf, len);
+			else
+				return -ENOENT;
+		}
 		attributes = dev->dev_descriptor->debug_attributes;
 		break;
 	case IIO_ATTR_TYPE_DEVICE:
@@ -990,6 +1064,9 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<debug-attribute name=\"%s\" />",
 				      device->debug_attributes[j]->name);
+	if (device->debug_reg_read || device->debug_reg_write)
+		i += snprintf(buff + i, max(n - i, 0),
+			      "<debug-attribute name=\""REG_ACCESS_ATTRIBUTE"\" />");
 
 	/* Write buffer attributes */
 	if (device->buffer_attributes)
