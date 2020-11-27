@@ -284,7 +284,6 @@ int main(void)
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
-		.dac_ddr_base = DAC_DDR_BASEADDR
 	};
 
 	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);

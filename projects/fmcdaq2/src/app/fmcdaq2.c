@@ -645,7 +645,6 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = fmcdaq2.ad9144_core,
 		.tx_dmac = fmcdaq2.ad9144_dmac,
-		.dac_ddr_base = DAC_DDR_BASEADDR,
 #ifndef PLATFORM_MB
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
 #endif
