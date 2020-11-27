@@ -60,6 +60,8 @@ struct iio_axi_dac_desc {
 	struct axi_dac *dac;
 	/** dma device */
 	struct axi_dmac *dmac;
+	/** ADC mask */
+	uint32_t mask;
 	/** DAC base address */
 	uint32_t dac_ddr_base;
 	/** flush contents of instruction and/or data cache */
