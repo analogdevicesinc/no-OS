@@ -83,44 +83,6 @@ static const int adxrs290_hpf_3db_freq_hz_table[][2] = {
 	[10] = {11, 300000},
 };
 
-ssize_t get_adxrs290_iio_reg(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
-{
-	uint8_t val;
-
-	adxrs290_reg_read((struct adxrs290_dev *)device, current_direct_reg, &val);
-
-	return snprintf(buf, len,  "%d", val);
-
-}
-
-ssize_t set_adxrs290_iio_reg(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
-{
-	unsigned int reg;
-	unsigned int val;
-	uint8_t param_size = sscanf(buf, "0x%x 0x%x", &reg, &val);
-
-	if (param_size == 2) {
-		if (reg > MAX_REG_ADDR)
-			return -EINVAL;
-		else
-			adxrs290_reg_write((struct adxrs290_dev *)device,
-					   reg & 0xFF, val & 0xFF);
-	} else {
-		param_size = sscanf(buf, "%u", &reg);
-		if (param_size == 1) {
-			if (reg > MAX_REG_ADDR)
-				return -EINVAL;
-
-			current_direct_reg = reg & 0xFF;
-		} else
-			return -EINVAL;
-	}
-
-	return len;
-}
-
 ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel)
 {

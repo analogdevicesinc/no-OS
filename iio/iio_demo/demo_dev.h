@@ -100,11 +100,10 @@ ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
 ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
 			     const struct iio_ch_info *channel);
 
-ssize_t get_demo_reg_attr(void *device, char *buf, size_t len,
-			  const struct iio_ch_info *channel);
-ssize_t set_demo_reg_attr(void *device, char *buf, size_t len,
-			  const struct iio_ch_info *channel);
-
+int32_t iio_demo_reg_read(struct iio_demo_desc *desc, uint32_t reg,
+			  uint32_t *readval);
+int32_t iio_demo_reg_write(struct iio_demo_desc *desc, uint32_t reg,
+			   uint32_t writeval);
 int32_t iio_demo_update_active_channels(void *dev, uint32_t mask);
 int32_t iio_demo_close_channels(void *dev);
 int32_t	iio_demo_read_local_samples(void *dev, uint16_t *buff,
