@@ -1085,7 +1085,6 @@ int main(void)
 	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
 		.tx_dac = tx_dac,
 		.tx_dmac = tx_dmac,
-		.dac_ddr_base = DAC_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 

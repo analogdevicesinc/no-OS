@@ -313,7 +313,6 @@ int main(void)
 	struct iio_axi_dac_init_param iio_axi_dac1_init_par = {
 		.tx_dac = phy.tx1_dac,
 		.tx_dmac = phy.tx1_dmac,
-		.dac_ddr_base = DAC1_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 #ifndef ADRV9002_RX2TX2
@@ -327,7 +326,6 @@ int main(void)
 	struct iio_axi_dac_init_param iio_axi_dac2_init_par = {
 		.tx_dac = phy.tx2_dac,
 		.tx_dmac = phy.tx2_dmac,
-		.dac_ddr_base = DAC2_DDR_BASEADDR,
 		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange,
 	};
 	ret = iio_server_init(&iio_axi_adc1_init_par,
