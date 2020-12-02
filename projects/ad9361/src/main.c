@@ -609,10 +609,10 @@ int main(void)
 #if defined XILINX_PLATFORM || defined LINUX_PLATFORM || defined ALTERA_PLATFORM
 #ifdef DAC_DMA_EXAMPLE
 #ifdef FMCOMMS5
-	axi_dac_init(&ad9361_phy_b->tx_dac, ad9361_phy_b->tx_dac_init);
+	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy_b->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 #endif
-	axi_dac_init(&ad9361_phy->tx_dac, ad9361_phy->tx_dac_init);
+	axi_dac_init(&ad9361_phy->tx_dac, &tx_dac_init);
 	axi_dac_set_datasel(ad9361_phy->tx_dac, -1, AXI_DAC_DATA_SEL_DMA);
 	axi_dac_set_sine_lut(ad9361_phy->tx_dac, DAC_DDR_BASEADDR);
 #else
@@ -638,7 +638,7 @@ int main(void)
 	// size of the capture and the start address must be alinged to the size
 	// of the cache line.
 	mdelay(1000);
-	axi_dmac_transfer(ad9361_phy->rx_dmac, ADC_DDR_BASEADDR, 16384 * 16);
+	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR, 16384 * 16);
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384 * 16);
