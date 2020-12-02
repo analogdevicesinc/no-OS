@@ -553,13 +553,6 @@ int main(void)
 #ifdef LINUX_PLATFORM
 	gpio_init(default_init_param.gpio_sync);
 #endif
-	status = gpio_get(&default_init_param.gpio_desc_sync,
-			  &default_init_param.gpio_sync);
-	if (status != SUCCESS) {
-		printf("gpio_get() error: %"PRIi32"\n", status);
-		return status;
-	}
-	gpio_direction_output(default_init_param.gpio_desc_sync, 1);
 	default_init_param.id_no = SPI_CS_2;
 	default_init_param.gpio_resetb.number = GPIO_RESET_PIN_2;
 #ifdef LINUX_PLATFORM
@@ -570,25 +563,9 @@ int main(void)
 	default_init_param.gpio_cal_sw2.number = -1;
 	default_init_param.rx_synthesizer_frequency_hz = 2300000000UL;
 	default_init_param.tx_synthesizer_frequency_hz = 2300000000UL;
-	status = gpio_get(&default_init_param.gpio_desc_resetb,
-			  &default_init_param.gpio_resetb);
-	if (status != SUCCESS) {
-		printf("gpio_get() error: %"PRIi32"\n", status);
-		return status;
-	}
-	gpio_direction_output(default_init_param.gpio_desc_resetb, 1);
 
 	rx_adc_init.base = AD9361_RX_1_BASEADDR;
 	tx_dac_init.base = AD9361_TX_1_BASEADDR;
-
-	spi_param.chip_select = default_init_param.id_no;
-	spi_param.max_speed_hz = 2000000u;
-
-	status = spi_init(&default_init_param.spi, &spi_param);
-	if (status != SUCCESS) {
-		printf("spi_init() error: %"PRIi32"\n", status);
-		return status;
-	}
 
 	ad9361_init(&ad9361_phy_b, &default_init_param);
 
