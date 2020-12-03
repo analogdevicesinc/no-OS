@@ -2,8 +2,9 @@
  *   @file   ad9434_fmc_500ebz.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,53 +41,113 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "adc_core.h"
-#include "dmac_core.h"
-#include "platform_drivers.h"
+#include "axi_adc_core.h"
+#include "axi_dmac.h"
 #include "ad9434.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "parameters.h"
+#include "error.h"
+
+#define LOG_LEVEL 6
+#include "print_log.h"
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	spi_device		ad9434_device;
-	adc_core		ad9434_core;
-	dmac_core		ad9434_dma;
-	dmac_xfer		rx_xfer;
-	uint8_t			nr_of_lanes = 12;
-	uint8_t			over_range_signal = 1;
-	ad_platform_init();
+	int32_t status;
+	uint8_t	nr_of_lanes = 12;
+	uint8_t	over_range_signal = 1;
 
-	ad9434_core.base_address = XPAR_AXI_AD9434_BASEADDR;
-	ad9434_core.no_of_channels = 1;
-	ad9434_core.resolution = 12;
-
-	ad9434_dma.base_address = XPAR_AXI_AD9434_DMA_BASEADDR;
-
-	ad_spi_init(&ad9434_device);
-	ad9434_device.chip_select = SPI_CHIP_SELECT(0);
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-	ad9434_dma.type = DMAC_RX;
-	ad9434_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-
-	ad9434_setup(&ad9434_device);
-
-	adc_setup(ad9434_core);
-
-	ad9434_testmode_set(&ad9434_device, TESTMODE_PN9_SEQ);
-	adc_delay_calibrate(ad9434_core, nr_of_lanes + over_range_signal, ADC_PN9);
-
-	ad9434_testmode_set(&ad9434_device, TESTMODE_OFF);
-	ad9434_outputmode_set(&ad9434_device, OUTPUT_MODE_TWOS_COMPLEMENT);
-	if(!dmac_start_transaction(ad9434_dma)) {
-		ad_printf("Capture done!\n");
+	/* Initialize SPI structures */
+	struct xil_spi_init_param xil_spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = SPI_PS,
 	};
 
-	ad_platform_close();
-	return 0;
+	struct spi_init_param ad9434_spi_param = {
+		.max_speed_hz = 10000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0,
+		.extra = &xil_spi_param,
+		.platform_ops = &xil_platform_ops,
+	};
+
+	/* ADC Core */
+	struct axi_adc_init ad9434_core_param = {
+		.name = "ad9434_core",
+		.num_channels = 1,
+		.base = RX_CORE_BASEADDR
+	};
+	struct axi_adc *ad9434_core;
+
+	/* AXI DMAC */
+	struct axi_dmac_init ad9434_dmac_param = {
+		.name = "ad9434_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad9434_dmac;
+
+	/* AD9434 */
+	struct ad9434_init_param ad9434_param = {
+		.spi_init = ad9434_spi_param
+	};
+	struct ad9434_dev *ad9434_device;
+
+	status = ad9434_setup(&ad9434_device, ad9434_param);
+	if (status != SUCCESS) {
+		pr_info("ad9434_setup() failed!\n");
+		return FAILURE;
+	}
+
+	status = axi_adc_init(&ad9434_core,  &ad9434_core_param);
+	if (status != SUCCESS) {
+		pr_info("axi_adc_init() error: %s\n", ad9434_core->name);
+		return FAILURE;
+	}
+
+	status = axi_dmac_init(&ad9434_dmac, &ad9434_dmac_param);
+	if (status != SUCCESS) {
+		pr_info("axi_dmac_init() error: %s\n", ad9434_dmac->name);
+		return FAILURE;
+	}
+
+	status = ad9434_testmode_set(ad9434_device, TESTMODE_PN9_SEQ);
+	if (status != SUCCESS) {
+		pr_info("ad9434_testmode_set() PN9_SEQ failed!");
+		return FAILURE;
+	}
+
+	status = axi_adc_delay_calibrate(ad9434_core, nr_of_lanes + over_range_signal,
+					 AXI_ADC_PN9);
+	if (status != SUCCESS) {
+		pr_info("axi_adc_delay_calibrate() failed!");
+		return FAILURE;
+	}
+
+	status = ad9434_testmode_set(ad9434_device, TESTMODE_OFF);
+	if (status != SUCCESS) {
+		pr_info("ad9434_testmode_set() TESTMODE_OFF failed!");
+		return FAILURE;
+	}
+
+	status = ad9434_outputmode_set(ad9434_device, OUTPUT_MODE_TWOS_COMPLEMENT);
+	if (status != SUCCESS) {
+		pr_info("ad9434_outputmode_set() OUTPUT_MODE_TWOS_COMPLEMENT failed!");
+		return FAILURE;
+	}
+
+	status = axi_dmac_transfer(ad9434_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+	if (status != SUCCESS) {
+		pr_info("axi_dmac_transfer() failed!");
+		return FAILURE;
+	}
+
+	pr_info("Capture done.\n");
+
+	return SUCCESS;
 }
