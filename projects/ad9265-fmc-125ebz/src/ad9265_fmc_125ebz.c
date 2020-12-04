@@ -1,9 +1,10 @@
 /***************************************************************************//**
- *   @file   ad9434_fmc_500ebz.c
+ *   @file   ad9265_fmc_125ebz.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,55 +41,100 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "adc_core.h"
-#include "dmac_core.h"
-#include "platform_drivers.h"
+#include "axi_adc_core.h"
+#include "axi_dmac.h"
 #include "ad9265.h"
+#include "spi.h"
+#include "spi_extra.h"
+#include "parameters.h"
+#include "error.h"
+
+#define LOG_LEVEL 6
+#include "print_log.h"
 
 /***************************************************************************//**
 * @brief main
 *******************************************************************************/
 int main(void)
 {
-	struct ad9265_dev		 *ad9265_device;
-	adc_core				 ad9265_core;
-	dmac_core				 ad9265_dma;
-	dmac_xfer				 rx_xfer;
-	struct ad9265_init_param ad9265_init_param;
+	int32_t status;
 
-	ad9265_init_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
-	ad9265_init_param.spi_init.cpha = 0;
-	ad9265_init_param.spi_init.cpol = 0;
-	ad9265_init_param.spi_init.type = ZYNQ_PS7_SPI;
-
-	/* base addresses */
-
-	ad9265_core.base_address = XPAR_AXI_AD9265_BASEADDR;
-	ad9265_dma.base_address = XPAR_AXI_AD9265_DMA_BASEADDR;
-
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-
-	ad9265_dma.type = DMAC_RX;
-	ad9265_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-
-	ad9265_core.no_of_channels = 1;
-	ad9265_core.resolution = 16;
-
-	adc_setup(ad9265_core);
-	ad9265_setup(&ad9265_device, ad9265_init_param, ad9265_core);
-	ad9265_testmode_set(ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
-
-	if(!dmac_start_transaction(ad9265_dma)){
-		ad_printf("ad9265: RX test capture done.\n");
+	/* Initialize SPI structures */
+	struct xil_spi_init_param xil_spi_param = {
+		.device_id = SPI_DEVICE_ID,
+		.type = SPI_PS,
 	};
 
-	ad9265_testmode_set(ad9265_device, TESTMODE_OFF);
+	struct spi_init_param ad9265_spi_param = {
+		.max_speed_hz = 10000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0,
+		.extra = &xil_spi_param,
+		.platform_ops = &xil_platform_ops,
+	};
 
-	ad_printf("Done\n");
+	/* ADC Core */
+	struct axi_adc_init ad9265_core_param = {
+		.name = "ad9265_core",
+		.num_channels = 1,
+		.base = RX_CORE_BASEADDR
+	};
+	struct axi_adc *ad9265_core;
+
+	/* AXI DMAC */
+	struct axi_dmac_init ad9265_dmac_param = {
+		.name = "ad9265_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad9265_dmac;
+
+	/* AD9265 */
+	struct ad9265_init_param ad9265_param = {
+		.spi_init = ad9265_spi_param
+	};
+	struct ad9265_dev *ad9265_device;
+
+	status = axi_adc_init(&ad9265_core,  &ad9265_core_param);
+	if (status != SUCCESS) {
+		pr_err("axi_adc_init() error: %s\n", ad9265_core->name);
+		return FAILURE;
+	}
+
+	status = axi_dmac_init(&ad9265_dmac, &ad9265_dmac_param);
+	if (status != SUCCESS) {
+		pr_err("axi_dmac_init() error: %s\n", ad9265_dmac->name);
+		return FAILURE;
+	}
+
+	status = ad9265_setup(&ad9265_device, ad9265_param, *ad9265_core);
+	if (status != SUCCESS) {
+		pr_err("ad9265_setup() failed!\n");
+		return FAILURE;
+	}
+
+	status = ad9265_testmode_set(ad9265_device, TESTMODE_ONE_ZERO_TOGGLE);
+	if (status != SUCCESS) {
+		pr_err("ad9265_testmode_set() TESTMODE_ONE_ZERO_TOGGLE failed!\n");
+		return FAILURE;
+	}
+
+	status = axi_dmac_transfer(ad9265_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+	if (status != SUCCESS) {
+		pr_err("axi_dmac_transfer() failed!\n");
+		return FAILURE;
+	}
+
+	pr_info("Capture done.\n");
+
+	status = ad9265_testmode_set(ad9265_device, TESTMODE_OFF);
+	if (status != SUCCESS) {
+		pr_err("ad9265_testmode_set() TESTMODE_OFF failed!\n");
+		return FAILURE;
+	}
+
+	pr_info("Done\n");
 
 	return 0;
 }
