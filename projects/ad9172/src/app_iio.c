@@ -55,6 +55,11 @@
 /******************************************************************************/
 static struct irq_ctrl_desc *irq_desc;
 
+static struct iio_data_buffer g_write_buff = {
+	.buff = (void *)DAC_DDR_BASEADDR,
+	.size = 0xFFFFFFFF,
+};
+
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
@@ -109,7 +114,7 @@ int32_t iio_server_init(struct iio_axi_dac_init_param *dac_init)
 		return FAILURE;
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_app_desc, dac_dev_desc, "axi_dac",
-			      iio_axi_dac_desc, NULL, NULL);
+			      iio_axi_dac_desc, NULL, &g_write_buff);
 	if (status < 0)
 		return status;
 

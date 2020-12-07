@@ -1092,9 +1092,13 @@ int main(void)
 	status = iio_axi_dac_init(&iio_axi_dac_desc, &iio_axi_dac_init_par);
 	if(status < 0)
 		return status;
+	struct iio_data_buffer write_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = 0xFFFFFFFF,
+	};
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_app_desc, dac_dev_desc, "cf-ad9361-dds-core-lpc",
-			      iio_axi_dac_desc, NULL, NULL);
+			      iio_axi_dac_desc, NULL, &write_buff);
 	if (status < 0)
 		return status;
 
