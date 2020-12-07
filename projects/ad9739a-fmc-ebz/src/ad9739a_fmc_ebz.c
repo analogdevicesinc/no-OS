@@ -43,13 +43,20 @@
 /******************************************************************************/
 
 #include <stdio.h>
+#include "xil_cache.h"
+#include "xparameters.h"
 #include "spi.h"
 #include "axi_dac_core.h"
+#include "axi_dmac.h"
 #include "ad9739a.h"
 #include "adf4350.h"
 #include "parameters.h"
 #include "spi_extra.h"
 #include "error.h"
+
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
 
 #define LOG_LEVEL 6
 #include "print_log.h"
@@ -162,6 +169,28 @@ int main(void)
 		return FAILURE;
 	}
 
+#ifdef IIO_SUPPORT
+	pr_info("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct axi_dmac_init ad9739a_dmac_param = {
+		.name = "ad9739a_dmac",
+		.base = TX_DMA_BASEADDR,
+		.direction = DMA_MEM_TO_DEV,
+		.flags = DMA_CYCLIC
+	};
+	struct axi_dmac *ad9739a_dmac;
+
+	axi_dmac_init(&ad9739a_dmac, &ad9739a_dmac_param);
+
+	struct iio_axi_dac_init_param iio_axi_dac_init_par;
+	iio_axi_dac_init_par = (struct iio_axi_dac_init_param) {
+		.tx_dac = ad9739a_core,
+		.tx_dmac = ad9739a_dmac,
+		.dcache_flush_range = (void (*)(uint32_t, uint32_t))Xil_DCacheFlushRange
+	};
+
+	return iio_app_start(&iio_axi_dac_init_par);
+#endif
 	pr_info("Done.\n");
 
 	return SUCCESS;
