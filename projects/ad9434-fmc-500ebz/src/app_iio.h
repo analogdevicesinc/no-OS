@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -36,18 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "iio_axi_adc.h"
 
-#include <xparameters.h>
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define RX_CORE_BASEADDR			XPAR_AXI_AD9434_BASEADDR
-#define RX_DMA_BASEADDR				XPAR_AXI_AD9434_DMA_BASEADDR
-#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				XPAR_XUARTPS_1_INTR
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
+/* @brief Application IIO setup. */
+int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init);
 
-#endif /* _PARAMETERS_H_ */
+#endif
