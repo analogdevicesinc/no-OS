@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   ad9434-fmc-500ebz/src/app_config.h
+ *   @brief  Config file for AD9434 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -37,17 +37,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+#ifndef APP_CONFIG_H_
+#define APP_CONFIG_H_
 
-#include <xparameters.h>
+//#define IIO_SUPPORT
 
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define RX_CORE_BASEADDR			XPAR_AXI_AD9434_BASEADDR
-#define RX_DMA_BASEADDR				XPAR_AXI_AD9434_DMA_BASEADDR
-#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				XPAR_XUARTPS_1_INTR
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-#endif /* _PARAMETERS_H_ */
+#endif /* APP_CONFIG_H_ */
