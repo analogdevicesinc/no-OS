@@ -41,6 +41,8 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include "xil_cache.h"
+#include "xparameters.h"
 #include "axi_adc_core.h"
 #include "axi_dmac.h"
 #include "ad9265.h"
@@ -48,6 +50,10 @@
 #include "spi_extra.h"
 #include "parameters.h"
 #include "error.h"
+
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
 
 #define LOG_LEVEL 6
 #include "print_log.h"
@@ -133,6 +139,20 @@ int main(void)
 		pr_err("ad9265_testmode_set() TESTMODE_OFF failed!\n");
 		return FAILURE;
 	}
+
+#ifdef IIO_SUPPORT
+	pr_info("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9265_core,
+		.rx_dmac = ad9265_dmac,
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+	};
+
+	return iio_app_start(&iio_axi_adc_init_par);
+#endif
 
 	pr_info("Done\n");
 
