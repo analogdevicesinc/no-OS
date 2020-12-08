@@ -99,7 +99,7 @@ int main()
 	};
 
 #ifdef SPI_ENGINE_OFFLOAD_EXAMPLE
-	uint32_t* buf = XPAR_PS7_RAM_0_S_AXI_BASEADDR;
+	uint32_t* buf = XPAR_PS7_DDR_0_S_AXI_BASEADDR;
 	uint32_t i;
 #endif
 
