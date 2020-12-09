@@ -26,14 +26,12 @@ IGNORED_FILES += $(PLATFORM_DRIVERS)/irq.c
 # LIBRARIES += mqtt
 # LIBRARIES += fatfs
 # LIBRARIES += mbedtls
-LIBRARIES += iio
+
+# If the variable is set iio support will be enabled
+TINYIIOD = y
 
 # If the variable is set to y then iio network backend will be enabled
 ENABLE_IIO_NETWORK = y
-
-# If the variable is set to y then iio sources will be added to the projects
-# instead of using the library. Will be easier to debug the library with this.
-BUILD_IIO_AS_SOURCES = y
 
 # If set, link to noos srcs will be created for new project instead of copy them
 # to the project directory. This way modification to the files can be viewed on

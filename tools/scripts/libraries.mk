@@ -1,41 +1,16 @@
 # File where libraries are handled
 
 #	IIO
-ifneq ($(if $(findstring iio, $(LIBRARIES)), 1),)
-ifeq (y,$(strip $(BUILD_IIO_AS_SOURCES)))
-SRCS += $(NO-OS)/libraries/iio/iio.c
-SRCS += $(NO-OS)/libraries/iio/libtinyiiod/parser.c
-SRCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.c
+ifeq (y,$(strip $(TINYIIOD)))
 
-INCS += $(NO-OS)/libraries/iio/iio.h
-INCS += $(NO-OS)/libraries/iio/iio_types.h
-INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod.h
-INCS += $(NO-OS)/libraries/iio/libtinyiiod/tinyiiod-private.h
-INCS += $(NO-OS)/libraries/iio/libtinyiiod/compat.h
+include ../../tools/scripts/iio_srcs.mk
 
 CFLAGS += -DTINYIIOD_VERSION_MAJOR=0	 \
 	   -DTINYIIOD_VERSION_MINOR=1		 \
-	   -DTINYIIOD_VERSION_GIT=0x42e29ad3 \
+	   -DTINYIIOD_VERSION_GIT=0x$(shell git -C $(NO-OS)/libraries/iio/libtinyiiod/ \
+	   				rev-parse --short HEAD) \
 	   -DIIOD_BUFFER_SIZE=0x1000		 \
 	   -D_USE_STD_INT_TYPES
-else
-# Generic part
-IIO_DIR						= $(NO-OS)/libraries/iio
-IIO_LIB						= $(IIO_DIR)/libiio.a
-EXTRA_LIBS					+= $(IIO_LIB)
-EXTRA_LIBS_PATHS			+= $(IIO_DIR)
-EXTRA_INC_PATHS		+= $(IIO_DIR) 
-ifeq ($(wildcard $(IIO_DIR)/libtinyiiod/.git),)
-INIT_SUBMODULES				+= git submodule update --init --remote -- $(IIO_DIR)/libtinyiiod;
-endif
-
-# Rules
-CLEAN_IIO	= $(MAKE) -C $(IIO_DIR) clean
-$(IIO_LIB):
-	$(MAKE) -C $(IIO_DIR)
-
-endif
-# Custom settings
 CFLAGS += -DIIO_SUPPORT
 endif
 
