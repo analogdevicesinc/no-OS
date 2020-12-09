@@ -82,6 +82,7 @@ read_file = type $(subst /,\,$1) 2> NUL
 make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 make_link = mklink /H "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 print_lines = $(foreach f,$1,@echo $f && ) @echo Done
+print_green = @echo [32m$1[0m
 cmd_separator = &
 #	LINUX
 else
@@ -94,6 +95,7 @@ read_file = cat $1 2> /dev/null
 make_dir_link = ln -s $1 $2
 make_link = ln -P $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
+print_green = @printf "\\e[32m$(1)\\e[39m\n"
 cmd_separator = ;
 endif
 
@@ -232,11 +234,13 @@ PHONY += all
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(BINARY)
+	$(call print_green, $(notdir $(BINARY)) is ready)
 else
 all:
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MAKE) project MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MAKE) $(BINARY)
+	$(call print_green, $(notdir $(BINARY)) is ready)
 endif
 
 #This is used to keep directory targets between makefile executions
