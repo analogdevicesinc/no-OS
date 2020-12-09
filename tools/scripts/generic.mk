@@ -224,6 +224,10 @@ CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS))
 #Will be used to add this flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 
+#Remove duplicates
+SRCS := $(sort $(SRCS))
+INCS := $(sort $(INCS))
+
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------
