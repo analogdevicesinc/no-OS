@@ -312,8 +312,13 @@ static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 			iio_modifier_names[ch->channel2]);
 	} else {
 		if(ch->indexed) {
-			sprintf(buff, "%s%d", get_channel_id(ch->ch_type),
-				(int)ch->channel);
+			if (ch->diferential)
+				sprintf(buff, "%s%d-%s%d", get_channel_id(ch->ch_type),
+					(int)ch->channel, get_channel_id(ch->ch_type),
+					(int)ch->channel2);
+			else
+				sprintf(buff, "%s%d", get_channel_id(ch->ch_type),
+					(int)ch->channel);
 		} else {
 			sprintf(buff, "%s", get_channel_id(ch->ch_type));
 		}

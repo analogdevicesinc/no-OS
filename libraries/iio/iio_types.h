@@ -148,6 +148,8 @@ struct iio_channel {
 	/** Specify if channel has a numerical index. If not set, channel
 	 *  number will be suppressed. */
 	bool			indexed;
+	/* Set if the channel is differential. */
+	bool			diferential;
 };
 
 struct iio_data_buffer {
