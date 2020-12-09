@@ -420,8 +420,8 @@ typedef enum {
 	AD9081_TMODE_NEG_FULL = 0x3, /*!< Negative Full-Scale, 0x8000 */
 	AD9081_TMODE_ALT_CHECKER =
 		0x4, /*!< Alternating Checker Board, 0x5555-0xAAAA */
-	AD9081_TMODE_PN9 = 0x6, /*!< PN9 Sequence */
 	AD9081_TMODE_PN23 = 0x5, /*!< PN23 Sequence */
+	AD9081_TMODE_PN9 = 0x6, /*!< PN9  Sequence */
 	AD9081_TMODE_1_0_TOGG = 0x7, /*!< 1/0 Word Toggle, 0x0000-0xFFFF */
 	AD9081_TMODE_USER_PAT = 0x8, /*!< User Pattern Test Mode */
 	AD9081_TMODE_PN7 = 0x9, /*!< PN7 Sequence */
@@ -957,6 +957,26 @@ int32_t adi_ad9081_device_laminate_id_get(adi_ad9081_device_t *device,
  * @return <0                                   Failed. @see adi_cms_error_e for details.
  */
 int32_t adi_ad9081_device_die_id_get(adi_ad9081_device_t *device, uint8_t *id);
+
+/**
+ * @brief  Do some pre-settings for nco sync.
+ *
+ * @param  device       Pointer to the device structure
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_nco_sync_pre(adi_ad9081_device_t *device);
+
+/**
+ * @brief  Do some post-settings for nco sync.
+ *
+ * @param  device       Pointer to the device structure
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_nco_sync_post(adi_ad9081_device_t *device);
 
 /**
  * @brief  Startup Tx
@@ -1790,7 +1810,7 @@ int32_t adi_ad9081_dac_sysref_phase_set(adi_ad9081_device_t *device,
  * @brief  Set SYSREF Sample Type
  *
  * @param  device       Pointer to the device structure
- * @param  sample_type  0 – sampled by reference clock then by high speed clock, 1 – sampled directly by high speed clock
+ * @param  sample_type  0 - sampled by reference clock then by high speed clock, 1 - sampled directly by high speed clock
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.

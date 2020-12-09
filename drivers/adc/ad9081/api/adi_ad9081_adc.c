@@ -2254,7 +2254,9 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 								 0);
 			AD9081_ERROR_RETURN(err);
 			err = adi_ad9081_adc_ddc_coarse_nco_mode_set(
-				device, cddc, AD9081_ADC_NCO_VIF);
+				device, cddc,
+				(cddc_shift[i] == 0) ? AD9081_ADC_NCO_ZIF :
+						       AD9081_ADC_NCO_VIF);
 			AD9081_ERROR_RETURN(err);
 			err = adi_ad9081_adc_ddc_coarse_nco_set(device, cddc,
 								cddc_shift[i]);
@@ -2275,7 +2277,9 @@ int32_t adi_ad9081_adc_config(adi_ad9081_device_t *device, uint8_t cddcs,
 			err = adi_ad9081_adc_ddc_fine_gain_set(device, fddc, 0);
 			AD9081_ERROR_RETURN(err);
 			err = adi_ad9081_adc_ddc_fine_nco_mode_set(
-				device, fddc, AD9081_ADC_NCO_VIF);
+				device, fddc,
+				(fddc_shift[i] == 0) ? AD9081_ADC_NCO_ZIF :
+						       AD9081_ADC_NCO_VIF);
 			AD9081_ERROR_RETURN(err);
 
 			j = (i < 4) ?
@@ -3573,6 +3577,10 @@ int32_t adi_ad9081_adc_nco_master_slave_sync(adi_ad9081_device_t *device,
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
 
+	err = adi_ad9081_hal_bf_set(device, REG_MAIN_AUTO_CLK_GATING_ADDR,
+				    0x00000400, 7);
+	AD9081_ERROR_RETURN(err);
+
 	err = adi_ad9081_adc_ddc_coarse_sync_enable_set(device,
 							AD9081_ADC_CDDC_ALL, 1);
 	AD9081_ERROR_RETURN(err);
@@ -3593,23 +3601,17 @@ int32_t adi_ad9081_adc_nco_master_slave_sync(adi_ad9081_device_t *device,
 		device, AD9081_ADC_FDDC_ALL, 0);
 	AD9081_ERROR_RETURN(err);
 
-	err = adi_ad9081_dac_nco_master_slave_mode_set(device,
-						       is_master > 0 ? 1 : 2);
+	err = adi_ad9081_device_nco_sync_mode_set(device,
+						  is_master > 0 ? 1 : 2);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_dac_nco_master_slave_trigger_source_set(device,
-								 trigger_src);
+	err = adi_ad9081_device_nco_sync_trigger_source_set(device,
+							    trigger_src);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_dac_nco_master_slave_gpio_set(device, gpio_index,
-						       is_master > 0 ? 1 : 0);
+	err = adi_ad9081_device_nco_sync_gpio_set(device, gpio_index,
+						  is_master > 0 ? 1 : 0);
 	AD9081_ERROR_RETURN(err);
-	err = adi_ad9081_dac_nco_master_slave_extra_lmfc_num_set(
-		device, extra_lmfc_num);
-	AD9081_ERROR_RETURN(err);
-
-	err = adi_ad9081_dac_nco_sync_reset_via_sysref_set(device, 0);
-	AD9081_ERROR_RETURN(err);
-
-	err = adi_ad9081_dac_nco_sync_reset_via_sysref_set(device, 1);
+	err = adi_ad9081_device_nco_sync_extra_lmfc_num_set(device,
+							    extra_lmfc_num);
 	AD9081_ERROR_RETURN(err);
 
 	err = adi_ad9081_adc_ddc_coarse_sync_next_set(device,
@@ -3625,8 +3627,13 @@ int32_t adi_ad9081_adc_nco_master_slave_sync(adi_ad9081_device_t *device,
 						    1);
 	AD9081_ERROR_RETURN(err);
 
+	err = adi_ad9081_device_nco_sync_reset_via_sysref_set(device, 0);
+	AD9081_ERROR_RETURN(err);
+	err = adi_ad9081_device_nco_sync_reset_via_sysref_set(device, 1);
+	AD9081_ERROR_RETURN(err);
+
 	if (is_master > 0) {
-		err = adi_ad9081_dac_nco_master_slave_trigger_set(device);
+		err = adi_ad9081_device_nco_sync_trigger_set(device);
 		AD9081_ERROR_RETURN(err);
 	}
 
