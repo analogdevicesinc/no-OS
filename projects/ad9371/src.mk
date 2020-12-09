@@ -17,7 +17,6 @@ PROFILE = tx_bw200_orx_bw200_rx_bw100
 SRCS += $(PROJECT)/src/app/headless.c					\
 	$(PROJECT)/profiles/$(PROFILE)/myk_ad9528init.c			\
 	$(PROJECT)/profiles/$(PROFILE)/myk.c				\
-	$(PROJECT)/profiles/$(PROFILE)/myk.h				\
 	$(PROJECT)/src/devices/ad9528/ad9528.c				\
 	$(PROJECT)/src/devices/adi_hal/common.c				\
 	$(PROJECT)/src/devices/mykonos/mykonos.c			\
@@ -64,6 +63,7 @@ INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/ad9528/t_ad9528.h			\
 	$(PROJECT)/src/devices/adi_hal/common.h				\
 	$(PROJECT)/src/devices/adi_hal/parameters.h			\
+	$(PROJECT)/profiles/$(PROFILE)/myk.h				\
 	$(PROJECT)/src/devices/mykonos/mykonos_debug/mykonos_dbgjesd.h	\
 	$(PROJECT)/src/devices/mykonos/mykonos_debug/t_mykonos_dbgjesd.h\
 	$(PROJECT)/src/devices/mykonos/mykonos_gpio.h			\
