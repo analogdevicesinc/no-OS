@@ -18,3 +18,5 @@ aducm_build
 *.d
 *.hex
 *.hdf
+*.sof
+*.sopcinfo
