@@ -2,6 +2,7 @@
 
 SRC_DIRS += $(PROJECT)/src
 SRC_DIRS += $(NO-OS)/iio/iio_demo
+SRC_DIRS += $(NO-OS)/iio/iio_app
 
 # For the moment there is support only for aducm for iio with network backend
 ifeq (aducm3029,$(strip $(PLATFORM)))
