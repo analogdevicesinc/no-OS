@@ -44,7 +44,7 @@
 //#define ADUCM_PLATFORM
 
 #ifdef ENABLE_IIO_NETWORK
-#define USE_TCP_SOCKET
+//#define USE_TCP_SOCKET
 #endif
 
 #endif
