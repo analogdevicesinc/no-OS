@@ -2,7 +2,6 @@
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
 
-OBJECTS_DIR	= $(BUILD_DIR)/obj
 TEMP_DIR	= $(BUILD_DIR)/tmp
 BINARY		= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
@@ -21,28 +20,6 @@ replace_heap = sed -i "s/_HEAP_SIZE : $1/_HEAP_SIZE : $2/g"	$3
 endif
 
 ARCH = $(shell $(call read_file, $(BUILD_DIR)/tmp/arch.txt))
-
-#------------------------------------------------------------------------------
-#                            COMMON COMPILER FLAGS                             
-#------------------------------------------------------------------------------
-CFLAGS += -Wall								\
-	 -Wmissing-field-initializers					\
-	 -Wclobbered 							\
-	 -Wempty-body 							\
-	 -Wignored-qualifiers 						\
-	 -Wmissing-parameter-type					\
-	 -Wno-format  							\
-	 -Wold-style-declaration					\
-	 -Woverride-init 						\
-	 -Wsign-compare							\
-	 -Wtype-limits							\
-	 -Wuninitialized						\
-	 -Wunused-but-set-parameter					\
-	 -Wno-unused-parameter						\
-	 -MMD 								\
-	 -MP								\
-	 -lm						
-	#-Werror
 
 # Define the platform compiler switch
 CFLAGS += -DXILINX_PLATFORM						\
