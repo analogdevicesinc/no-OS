@@ -39,6 +39,8 @@
 #ifndef SPI_EXTRA_H_
 #define SPI_EXTRA_H_
 
+#include "spi.h"
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -50,7 +52,7 @@
 enum spi_type {
 	/** Nios II architecture */
 	NIOS_II_SPI
-} spi_type;
+};
 
 /**
  * @struct altera_spi_init_param
@@ -64,7 +66,7 @@ struct altera_spi_init_param {
 	uint32_t	device_id;
 	/** SPI base address */
 	uint32_t	base_address;
-} altera_spi_init_param;
+};
 
 /**
  * @struct altera_spi_desc
@@ -77,7 +79,7 @@ struct altera_spi_desc {
 	uint32_t		device_id;
 	/** SPI base address */
 	uint32_t	base_address;
-} altera_spi_desc;
+};
 
 /**
  * @brief Altera specific SPI platform ops structure

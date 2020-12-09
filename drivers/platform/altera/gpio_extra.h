@@ -39,6 +39,8 @@
 #ifndef GPIO_EXTRA_H_
 #define GPIO_EXTRA_H_
 
+#include "gpio.h"
+
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -55,7 +57,7 @@ extern const struct gpio_platform_ops altera_gpio_platform_ops;
 enum gpio_type {
 	/** Nios II architecture */
 	NIOS_II_GPIO
-} gpio_type;
+};
 
 /**
  * @struct altera_gpio_init_param
@@ -69,7 +71,7 @@ struct altera_gpio_init_param {
 	uint32_t	device_id;
 	/** GPIO base address */
 	uint32_t	base_address;
-} altera_gpio_init_param;
+};
 
 /**
  * @struct altera_gpio_desc
@@ -82,7 +84,7 @@ struct altera_gpio_desc {
 	uint32_t		device_id;
 	/** GPIO base address */
 	uint32_t base_address;
-} altera_gpio_desc;
+};
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
