@@ -205,6 +205,8 @@ escape_project_name = $(subst $(PROJECT_NAME),_$(PROJECT_NAME), $1)
 #Flags for each include directory
 INCLUDE_FLAGS = $(foreach dir, $(EXTRA_INC_PATHS),\
 		-append-switch compiler -I=$(dir))
+		
+FILES_TO_LINK = $(filter-out $(ADUCM_SRCS), $(FILES_OUT_OF_DIRS))
 FILES_TO_COPY = $(call rwildcard, $(SRC_DIRS),*) $(FILES_TO_LINK) 
 #Flags for each linked resource
 SRC_FLAGS = $(foreach dir,$(SRC_DIRS), -link $(dir)\
@@ -215,10 +217,16 @@ SRC_FLAGS += $(foreach file,$(FILES_TO_LINK), -link $(file)\
 
 PHONY += aducm3029_update_srcs
 aducm3029_update_srcs:
+ifeq 'y' '$(strip $(LINK_SRCS))'
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
 		$(SRC_FLAGS)
+else
+	$(call mk_dir, $(BUILD_DIR)/$(PROJECT_NAME)/src)
+	$(foreach file, $(FILES_TO_COPY), $(call copy_fun,$(file),$(BUILD_DIR)/$(PROJECT_NAME)/src) &&) \
+		echo Src files copied
+endif
 
 aducm3029_project: $(PROJECT_BUILD)/.project.target
 
