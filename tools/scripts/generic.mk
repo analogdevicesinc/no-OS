@@ -183,6 +183,28 @@ endif
 $(info $(HARDWARE) found, building for $(PLATFORM))
 
 #------------------------------------------------------------------------------
+#                            COMMON COMPILER FLAGS                             
+#------------------------------------------------------------------------------
+CFLAGS += -Wall								\
+	 -Wmissing-field-initializers					\
+	 -Wclobbered 							\
+	 -Wempty-body 							\
+	 -Wignored-qualifiers 						\
+	 -Wmissing-parameter-type					\
+	 -Wno-format  							\
+	 -Wold-style-declaration					\
+	 -Woverride-init 						\
+	 -Wsign-compare							\
+	 -Wtype-limits							\
+	 -Wuninitialized						\
+	 -Wunused-but-set-parameter					\
+	 -Wno-unused-parameter						\
+	 -MMD 								\
+	 -MP								\
+	 -lm						
+	#-Werror
+
+#------------------------------------------------------------------------------
 #                          COMMON INITIALIZATION
 #------------------------------------------------------------------------------
 
