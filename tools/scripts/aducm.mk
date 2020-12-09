@@ -78,21 +78,23 @@ DFP_FILES = $(call rwildcard,$(DFP_DRIVERS),*.c)
 #Not for aducm3029
 DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/adi_rtc_data.c
 
-SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
+ADUCM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
 ADUCM_INCS += $(ADUCM_DFP)/Include
 ADUCM_INCS += $(CMSIS_CORE)/Include
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
-SRCS += $(PROJECT_PIN_MUX)
-SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
-SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
-SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
+ADUCM_SRCS += $(PROJECT_PIN_MUX)
+ADUCM_SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
+ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
+ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
 ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
 ADUCM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
 ADUCM_INCS += $(PROJECT_BUILD)/RTE
 ADUCM_INCS += $(PROJECT_BUILD)/system
+
+SRCS += $(ADUCM_SRCS)
 
 #------------------------------------------------------------------------------
 #                           COMPILING DATA                              
@@ -203,11 +205,12 @@ escape_project_name = $(subst $(PROJECT_NAME),_$(PROJECT_NAME), $1)
 #Flags for each include directory
 INCLUDE_FLAGS = $(foreach dir, $(EXTRA_INC_PATHS),\
 		-append-switch compiler -I=$(dir))
+FILES_TO_COPY = $(call rwildcard, $(SRC_DIRS),*) $(FILES_TO_LINK) 
 #Flags for each linked resource
 SRC_FLAGS = $(foreach dir,$(SRC_DIRS), -link $(dir)\
 			$(call escape_project_name, $(call get_relative_path,$(dir))))
 
-SRC_FLAGS += $(foreach file,$(FILES_OUT_OF_DIRS), -link $(file)\
+SRC_FLAGS += $(foreach file,$(FILES_TO_LINK), -link $(file)\
 			 $(call escape_project_name, $(call get_relative_path,$(file))))
 
 PHONY += aducm3029_update_srcs
@@ -215,10 +218,7 @@ aducm3029_update_srcs:
 	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
-		$(INCLUDE_FLAGS) \
-		$(SRC_FLAGS) \
-		$(ADD_COMPILER_DEFINES) \
-		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)"
+		$(SRC_FLAGS)
 
 aducm3029_project: $(PROJECT_BUILD)/.project.target
 
@@ -244,7 +244,11 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
  		-project $(PROJECT_NAME) \
  		-id com.analog.crosscore.ssldd.pinmux.component \
 		-version latest \
-		-regensrc
+		-regensrc \
+		$(INCLUDE_FLAGS) \
+		$(ADD_COMPILER_DEFINES) \
+		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)"
+
 #The default startup_ADuCM3029.c has compiling errors
 #TODO Replace with patch if team think is a better aproch to install a windows
 #program for patching	
