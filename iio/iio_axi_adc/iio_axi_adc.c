@@ -65,7 +65,8 @@
  * @return Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibphase(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
@@ -92,7 +93,8 @@ static ssize_t get_calibphase(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibbias(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
+			     const struct iio_ch_info *channel,
+			     intptr_t priv)
 {
 	int32_t val;
 	ssize_t ret;
@@ -117,7 +119,8 @@ static ssize_t get_calibbias(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_calibscale(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	int32_t val, val2;
 	int32_t i = 0;
@@ -148,7 +151,8 @@ static ssize_t get_calibscale(void *device, char *buf, size_t len,
  * @return: Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_samples_pps(void *device, char *buf, size_t len,
-			       const struct iio_ch_info *channel)
+			       const struct iio_ch_info *channel,
+			       intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */
@@ -165,7 +169,8 @@ static ssize_t get_samples_pps(void *device, char *buf, size_t len,
  * @return Length of chars written in buf, or negative value on failure.
  */
 static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
-				      const struct iio_ch_info *channel)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	uint64_t sampling_freq_hz;
 	ssize_t ret;
@@ -192,7 +197,8 @@ static ssize_t get_sampling_frequency(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibphase(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	ssize_t ret;
 	float calib = strtof(buf, NULL);
@@ -216,7 +222,8 @@ static ssize_t set_calibphase(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibbias(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
+			     const struct iio_ch_info *channel,
+			     intptr_t priv)
 {
 	int32_t val = str_to_int32(buf);
 	struct iio_axi_adc_desc *iio_adc = (struct iio_axi_adc_desc *)device;
@@ -241,7 +248,8 @@ static ssize_t set_calibbias(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_calibscale(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+			      const struct iio_ch_info *channel,
+			      intptr_t priv)
 {
 	float calib= strtof(buf, NULL);
 	int32_t val = (int32_t)calib;
@@ -264,7 +272,8 @@ static ssize_t set_calibscale(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_samples_pps(void *device, char *buf, size_t len,
-			       const struct iio_ch_info *channel)
+			       const struct iio_ch_info *channel,
+			       intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */
@@ -281,7 +290,8 @@ static ssize_t set_samples_pps(void *device, char *buf, size_t len,
  * @return Number of bytes written to device, or negative value on failure.
  */
 static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
-				      const struct iio_ch_info *channel)
+				      const struct iio_ch_info *channel,
+				      intptr_t priv)
 {
 	/* This function doesn't have an equivalent function in axi_adc_core,
 	 * and it should be implemented there first */

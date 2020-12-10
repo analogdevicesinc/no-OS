@@ -84,7 +84,8 @@ static const int adxrs290_hpf_3db_freq_hz_table[][2] = {
 };
 
 ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	int16_t data;
 
@@ -98,7 +99,8 @@ ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 
 
 ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
-				  const struct iio_ch_info *channel)
+				  const struct iio_ch_info *channel,
+				  intptr_t priv)
 {
 	if (channel->ch_num == ADXRS290_CHANNEL_TEMP)
 		// Temperature scale 1 LSB = 0.1 degree Celsius
@@ -109,7 +111,8 @@ ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,
 }
 
 ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	uint8_t index;
 	adxrs290_get_hpf((struct adxrs290_dev *)device, &index);
@@ -122,7 +125,8 @@ ssize_t get_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 }
 
 ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	float hpf = strtof(buf, NULL);
 	int32_t val = (int32_t)hpf;
@@ -142,7 +146,8 @@ ssize_t set_adxrs290_iio_ch_hpf(void *device, char *buf, size_t len,
 }
 
 ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	uint8_t index;
 
@@ -155,7 +160,8 @@ ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 }
 
 ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
-				const struct iio_ch_info *channel)
+				const struct iio_ch_info *channel,
+				intptr_t priv)
 {
 	float lpf = strtof(buf, NULL);
 	int32_t val = (int32_t)lpf;
