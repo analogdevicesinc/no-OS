@@ -558,6 +558,7 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
+	attributes = NULL;
 	switch (type) {
 	case IIO_ATTR_TYPE_DEBUG:
 		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
@@ -607,6 +608,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
 	params.ch_info = NULL;
+	attributes = NULL;
 	switch (type) {
 	case IIO_ATTR_TYPE_DEBUG:
 		if (strcmp(attr, REG_ACCESS_ATTRIBUTE) == 0) {
@@ -832,7 +834,7 @@ static ssize_t iio_transfer_dev_to_mem(const char *device, size_t bytes_count)
 		ret = iio_interface->dev_descriptor->read_dev(
 			      iio_interface->dev_instance,
 			      r_buff->buff, samples);
-		return ret < 0 ? ret : bytes_count;
+		return ret < 0 ? ret : (ssize_t)bytes_count;
 	}
 
 	return -ENOENT;
@@ -904,7 +906,7 @@ static ssize_t iio_transfer_mem_to_dev(const char *device, size_t bytes_count)
 		ret = iio_interface->dev_descriptor->write_dev(
 			      iio_interface->dev_instance,
 			      w_buff->buff, samples);
-		return ret < 0 ? ret : bytes_count;
+		return ret < 0 ? ret : (ssize_t)bytes_count;
 	}
 
 	return -ENOENT;
@@ -1000,7 +1002,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 	int32_t			k;
 	int32_t			n;
 
-	if (buff_size == -1)
+	if ((int32_t)buff_size == -1)
 		n = 0;
 	else
 		n = buff_size;
@@ -1179,7 +1181,7 @@ ssize_t iio_unregister(struct iio_desc *desc, char *name)
 
 	/* Overwritte the deleted device */
 	aux = desc->xml_desc + desc->xml_size_to_last_dev - n;
-	strcpy(aux, aux + n);
+	memmove(aux, aux + n, strlen(aux + n));
 
 	/* Decrease the xml size */
 	desc->xml_size -= n;
