@@ -289,81 +289,37 @@ static ssize_t set_sampling_frequency(void *device, char *buf, size_t len,
 	return -ENOENT;
 }
 
-/**
- * @struct iio_attr_calibphase
- * @brief Structure for "calibphase" attribute.
- */
-static struct iio_attribute iio_attr_calibphase = {
-	/** Attribute name */
-	.name = "calibphase",
-	/** Read attribute from device */
-	.show = get_calibphase,
-	/** Write attribute to device */
-	.store = set_calibphase,
-};
-
-/**
- * @struct iio_attr_calibbias
- * @brief Structure for "calibbias" attribute.
- */
-static struct iio_attribute iio_attr_calibbias = {
-	/** Attribute name */
-	.name = "calibbias",
-	/** Read attribute from device */
-	.show = get_calibbias,
-	/** Write attribute to device */
-	.store = set_calibbias,
-};
-
-/**
- * @struct iio_attr_calibscale
- * @brief Structure for "calibscale" attribute.
- */
-static struct iio_attribute iio_attr_calibscale = {
-	/** Attribute name */
-	.name = "calibscale",
-	/** Read attribute from device */
-	.show = get_calibscale,
-	/** Write attribute to device */
-	.store = set_calibscale,
-};
-
-/**
- * @struct iio_attr_samples_pps
- * @brief Structure for "samples_pps" attribute.
- */
-static struct iio_attribute iio_attr_samples_pps = {
-	/** Attribute name */
-	.name = "samples_pps",
-	/** Read attribute from device */
-	.show = get_samples_pps,
-	/** Write attribute to device */
-	.store = set_samples_pps,
-};
-
-/**
- * @struct iio_attr_sampling_frequency
- * @brief Structure for "sampling_frequency" attribute.
- */
-static struct iio_attribute iio_attr_sampling_frequency = {
-	/** Attribute name */
-	.name = "sampling_frequency",
-	/** Read attribute from device */
-	.show = get_sampling_frequency,
-	/** Write attribute to device */
-	.store = set_sampling_frequency,
-};
 
 /**
  * List containing attributes, corresponding to "voltage" channels.
  */
-static struct iio_attribute *iio_voltage_attributes[] = {
-	&iio_attr_calibphase,
-	&iio_attr_calibbias,
-	&iio_attr_calibscale,
-	&iio_attr_samples_pps,
-	&iio_attr_sampling_frequency,
-	NULL,
+static struct iio_attribute iio_voltage_attributes[] = {
+	{
+		.name = "calibphase",
+		.show = get_calibphase,
+		.store = set_calibphase,
+	},
+	{
+		.name = "calibbias",
+		.show = get_calibbias,
+		.store = set_calibbias,
+	},
+	{
+		.name = "calibscale",
+		.show = get_calibscale,
+		.store = set_calibscale,
+	},
+	{
+		.name = "samples_pps",
+		.show = get_samples_pps,
+		.store = set_samples_pps,
+	},
+	{
+		.name = "sampling_frequency",
+		.show = get_sampling_frequency,
+		.store = set_sampling_frequency,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
 /**

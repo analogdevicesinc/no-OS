@@ -380,16 +380,16 @@ static struct iio_interface *iio_get_interface(const char *device_name)
  * @return Number of bytes read or negative value in case of error.
  */
 static ssize_t iio_read_all_attr(struct attr_fun_params *params,
-				 struct iio_attribute **attributes)
+				 struct iio_attribute *attributes)
 {
 	int16_t i = 0, j = 0;
 	char local_buf[256];
 	ssize_t attr_length;
 	uint32_t *pattr_length;
 
-	while (attributes[i]) {
-		attr_length = attributes[i]->show(params->dev_instance,
-						  local_buf, params->len, params->ch_info);
+	while (attributes[i].name) {
+		attr_length = attributes[i].show(params->dev_instance,
+						 local_buf, params->len, params->ch_info);
 		pattr_length = (uint32_t *)(params->buf + j);
 		*pattr_length = bswap_constant_32(attr_length);
 		j += 4;
@@ -415,16 +415,16 @@ static ssize_t iio_read_all_attr(struct attr_fun_params *params,
  * @return Number of written bytes or negative value in case of error.
  */
 static ssize_t iio_write_all_attr(struct attr_fun_params *params,
-				  struct iio_attribute **attributes)
+				  struct iio_attribute *attributes)
 {
 	int16_t i = 0, j = 0;
 	int16_t attr_length;
 
-	while (attributes[i]) {
+	while (attributes[i].name) {
 		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
 		j += 4;
-		attributes[i]->store(params->dev_instance, (params->buf + j),
-				     attr_length, params->ch_info);
+		attributes[i].store(params->dev_instance, (params->buf + j),
+				    attr_length, params->ch_info);
 		j += attr_length;
 		if (j & 0x3)
 			j = ((j >> 2) + 1) << 2;
@@ -444,34 +444,33 @@ static ssize_t iio_write_all_attr(struct attr_fun_params *params,
  * @return Length of chars written/read or negative value in case of error.
  */
 static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
-				   struct iio_attribute **attributes,
+				   struct iio_attribute *attributes,
 				   char *attr_name,
 				   bool is_write)
 {
 	int16_t i = 0;
 
 	/* Search attribute */
-	while (attributes[i]) {
-		if (!strcmp(attr_name, attributes[i]->name))
+	while (attributes[i].name) {
+		if (!strcmp(attr_name, attributes[i].name))
 			break;
 		i++;
 	}
 
-	if (!attributes[i])
+	if (!attributes[i].name)
 		return -ENOENT;
 
 	if (is_write) {
-		if (!attributes[i]->store)
+		if (!attributes[i].store)
 			return -ENOENT;
 
-		return attributes[i]->store(params->dev_instance, params->buf,
-					    params->len, params->ch_info);
-	} else {
-		if (!attributes[i]->show)
-			return -ENOENT;
-
-		return attributes[i]->show(params->dev_instance, params->buf,
+		return attributes[i].store(params->dev_instance, params->buf,
 					   params->len, params->ch_info);
+	} else {
+		if (!attributes[i].show)
+			return -ENOENT;
+		return attributes[i].show(params->dev_instance, params->buf,
+					  params->len, params->ch_info);
 	}
 }
 
@@ -548,7 +547,7 @@ static ssize_t iio_read_attr(const char *device_id, const char *attr, char *buf,
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
-	struct iio_attribute	**attributes;
+	struct iio_attribute	*attributes;
 
 	dev = iio_get_interface(device_id);
 	if (!dev)
@@ -597,7 +596,7 @@ static ssize_t iio_write_attr(const char *device_id, const char *attr,
 {
 	struct iio_interface	*dev;
 	struct attr_fun_params	params;
-	struct iio_attribute	**attributes;
+	struct iio_attribute	*attributes;
 
 	dev = iio_get_interface(device_id);
 	if (!dev)
@@ -1042,8 +1041,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 			/* Write channel attributes */
 			if (ch->attributes)
-				for (k = 0; ch->attributes[k]; k++) {
-					attr = ch->attributes[k];
+				for (k = 0; ch->attributes[k].name; k++) {
+					attr = &ch->attributes[k];
 					i += snprintf(buff + i, max(n - i, 0),
 						      "<attribute name=\"%s\""
 						      " filename=\"%s_%s_%s_%s\" />",
@@ -1058,27 +1057,27 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 	/* Write device attributes */
 	if (device->attributes)
-		for (j = 0; device->attributes[j]; j++)
+		for (j = 0; device->attributes[j].name; j++)
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<attribute name=\"%s\" />",
-				      device->attributes[j]->name);
+				      device->attributes[j].name);
 
 	/* Write debug attributes */
 	if (device->debug_attributes)
-		for (j = 0; device->debug_attributes[j]; j++)
+		for (j = 0; device->debug_attributes[j].name; j++)
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<debug-attribute name=\"%s\" />",
-				      device->debug_attributes[j]->name);
+				      device->debug_attributes[j].name);
 	if (device->debug_reg_read || device->debug_reg_write)
 		i += snprintf(buff + i, max(n - i, 0),
 			      "<debug-attribute name=\""REG_ACCESS_ATTRIBUTE"\" />");
 
 	/* Write buffer attributes */
 	if (device->buffer_attributes)
-		for (j = 0; device->buffer_attributes[j]; j++)
+		for (j = 0; device->buffer_attributes[j].name; j++)
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<buffer-attribute name=\"%s\" />",
-				      device->buffer_attributes[j]->name);
+				      device->buffer_attributes[j].name);
 
 	i += snprintf(buff + i, max(n - i, 0), "</device>");
 
