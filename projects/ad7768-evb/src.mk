@@ -45,3 +45,23 @@ SRC_DIRS += $(DRIVERS)/gpio
 # LIBRARIES += fatfs
 # LIBRARIES += mbedtls
 # LIBRARIES += iio
+
+ifeq (y,$(strip $(TINYIIOD)))
+LIBRARIES += iio
+INCS +=	$(PROJECT)/src/app_iio.h					\
+	$(INCLUDE)/xml.h						\
+	$(INCLUDE)/fifo.h						\
+	$(INCLUDE)/irq.h						\
+	$(INCLUDE)/uart.h						\
+	$(INCLUDE)/list.h						\
+	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/uart_extra.h                                \
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.h
+SRCS += $(PROJECT)/src/app_iio.c					\
+	$(NO-OS)/util/xml.c						\
+	$(NO-OS)/util/fifo.c						\
+	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
+	$(NO-OS)/util/list.c						\
+	$(PLATFORM_DRIVERS)/uart.c					\
+	$(PLATFORM_DRIVERS)/irq.c
+endif
