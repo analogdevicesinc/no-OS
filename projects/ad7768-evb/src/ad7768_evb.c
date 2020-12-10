@@ -41,6 +41,7 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <xparameters.h>
+#include "xil_cache.h"
 #include "ad7768.h"
 #include "axi_dmac.h"
 #include "gpio.h"
@@ -51,6 +52,10 @@
 #include <xil_io.h>
 #include <stdio.h>
 #include "parameters.h"
+
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
 
 /***************************************************************************//**
 * @brief ad7768evb_clear_status
@@ -279,6 +284,20 @@ int main(void)
 			data_val -= 0x1000000;
 		printf("%8.5f ", ((float)data_val * 0.000000488));
 	}
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = axi_adc_core_desc,
+		.rx_dmac = dma_desc,
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+	};
+
+	return iio_app_start(&iio_axi_adc_init_par);
+#endif
 
 	return 0;
 }
