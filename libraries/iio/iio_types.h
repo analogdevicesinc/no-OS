@@ -87,6 +87,8 @@ struct iio_ch_info {
 	bool ch_out;
 };
 
+#define END_ATTRIBUTES_ARRAY {.name = NULL}
+
 /**
  * @struct iio_attribute
  * @brief Structure holding pointers to show and store functions.
@@ -138,8 +140,8 @@ struct iio_channel {
 	int			scan_index;
 	/** */
 	struct scan_type	*scan_type;
-	/** list of attributes */
-	struct iio_attribute	**attributes;
+	/** Array of attributes. Last one should have its name set to NULL */
+	struct iio_attribute	*attributes;
 	/** if true, the channel is an output channel */
 	bool			ch_out;
 	/** Set if channel has a modifier. Use channel2 property to
@@ -166,12 +168,12 @@ struct iio_device {
 	uint16_t num_ch;
 	/** List of channels */
 	struct iio_channel **channels;
-	/** List of device attributes */
-	struct iio_attribute **attributes;
-	/** List of debug attributes */
-	struct iio_attribute **debug_attributes;
-	/** List of buffer attributes */
-	struct iio_attribute **buffer_attributes;
+	/** Array of attributes. Last one should have its name set to NULL */
+	struct iio_attribute *attributes;
+	/** Array of attributes. Last one should have its name set to NULL */
+	struct iio_attribute *debug_attributes;
+	/** Array of attributes. Last one should have its name set to NULL */
+	struct iio_attribute *buffer_attributes;
 	/** Transfer data from device into RAM */
 	ssize_t (*transfer_dev_to_mem)(void *dev_instance, size_t bytes_count,
 				       uint32_t ch_mask);

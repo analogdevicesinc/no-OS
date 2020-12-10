@@ -1838,339 +1838,293 @@ static ssize_t set_filter_fir_config(void *device, char *buf, size_t len,
 	return len;
 }
 
-static struct iio_attribute iio_attr_rf_port_select = {
-	.name = "rf_port_select",
-	.show = get_rf_port_select,
-	.store = set_rf_port_select,
+struct iio_attribute voltage_output_attributes[] = {
+	{
+		.name = "rf_port_select",
+		.show = get_rf_port_select,
+		.store = set_rf_port_select,
+	},
+	{
+		.name = "hardwaregain",
+		.show = get_hardwaregain,
+		.store = set_hardwaregain,
+	},
+	{
+		.name = "rssi",
+		.show = get_rssi,
+		.store = set_rssi,
+	},
+	{
+		.name = "hardwaregain_available",
+		.show = get_hardwaregain_available,
+		.store = set_hardwaregain_available,
+	},
+	{
+		.name = "sampling_frequency_available",
+		.show = get_sampling_frequency_available,
+		.store = set_sampling_frequency_available,
+	},
+	{
+		.name = "rf_port_select_available",
+		.show = get_rf_port_select_available,
+		.store = set_rf_port_select_available,
+	},
+	{
+		.name = "filter_fir_en",
+		.show = get_filter_fir_en,
+		.store = set_filter_fir_en,
+	},
+	{
+		.name = "sampling_frequency",
+		.show = get_sampling_frequency,
+		.store = set_sampling_frequency,
+	},
+	{
+		.name = "rf_bandwidth_available",
+		.show = get_rf_bandwidth_available,
+		.store = set_rf_bandwidth_available,
+	},
+	{
+		.name = "rf_bandwidth",
+		.show = get_rf_bandwidth,
+		.store = set_rf_bandwidth,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute iio_attr_hardwaregain = {
-	.name = "hardwaregain",
-	.show = get_hardwaregain,
-	.store = set_hardwaregain,
+struct iio_attribute voltage_input_attributes[] = {
+	{
+		.name = "hardwaregain_available",
+		.show = get_hardwaregain_available,
+		.store = set_hardwaregain_available,
+	},
+	{
+		.name = "hardwaregain",
+		.show = get_hardwaregain,
+		.store = set_hardwaregain,
+	},
+	{
+		.name = "rssi",
+		.show = get_rssi,
+		.store = set_rssi,
+	},
+	{
+		.name = "rf_port_select",
+		.show = get_rf_port_select,
+		.store = set_rf_port_select,
+	},
+	{
+		.name = "gain_control_mode",
+		.show = get_gain_control_mode,
+		.store = set_gain_control_mode,
+	},
+	{
+		.name = "rf_port_select_available",
+		.show = get_rf_port_select_available,
+		.store = set_rf_port_select_available,
+	},
+	{
+		.name = "rf_bandwidth",
+		.show = get_rf_bandwidth,
+		.store = set_rf_bandwidth,
+	},
+	{
+		.name = "rf_dc_offset_tracking_en",
+		.show = get_rf_dc_offset_tracking_en,
+		.store = set_rf_dc_offset_tracking_en,
+	},
+	{
+		.name = "sampling_frequency_available",
+		.show = get_sampling_frequency_available,
+		.store = set_sampling_frequency_available,
+	},
+	{
+		.name = "quadrature_tracking_en",
+		.show = get_quadrature_tracking_en,
+		.store = set_quadrature_tracking_en,
+	},
+	{
+		.name = "sampling_frequency",
+		.show = get_sampling_frequency,
+		.store = set_sampling_frequency,
+	},
+	{
+		.name = "gain_control_mode_available",
+		.show = get_gain_control_mode_available,
+		.store = set_gain_control_mode_available,
+	},
+	{
+		.name = "filter_fir_en",
+		.show = get_filter_fir_en,
+		.store = set_filter_fir_en,
+	},
+	{
+		.name = "rf_bandwidth_available",
+		.show = get_rf_bandwidth_available,
+		.store = set_rf_bandwidth_available,
+	},
+	{
+		.name = "bb_dc_offset_tracking_en",
+		.show = get_bb_dc_offset_tracking_en,
+		.store = set_bb_dc_offset_tracking_en,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute iio_attr_rssi = {
-	.name = "rssi",
-	.show = get_rssi,
-	.store = set_rssi,
+struct iio_attribute altvoltage_attributes[] = {
+	{
+		.name = "frequency_available",
+		.show = get_frequency_available,
+		.store = set_frequency_available,
+	},
+	{
+		.name = "fastlock_save",
+		.show = get_fastlock_save,
+		.store = set_fastlock_save,
+	},
+	{
+		.name = "powerdown",
+		.show = get_powerdown,
+		.store = set_powerdown,
+	},
+	{
+		.name = "fastlock_load",
+		.show = get_fastlock_load,
+		.store = set_fastlock_load,
+	},
+	{
+		.name = "fastlock_store",
+		.show = get_fastlock_store,
+		.store = set_fastlock_store,
+	},
+	{
+		.name = "frequency",
+		.show = get_frequency,
+		.store = set_frequency,
+	},
+	{
+		.name = "external",
+		.show = get_external,
+		.store = set_external,
+	},
+	{
+		.name = "fastlock_recall",
+		.show = get_fastlock_recall,
+		.store = set_fastlock_recall,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute iio_attr_hardwaregain_available = {
-	.name = "hardwaregain_available",
-	.show = get_hardwaregain_available,
-	.store = set_hardwaregain_available,
+struct iio_attribute out_attributes[] = {
+	{
+		.name = "voltage_filter_fir_en",
+		.show = get_voltage_filter_fir_en,
+		.store = set_voltage_filter_fir_en,
+	},
+	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_attribute iio_attr_sampling_frequency_available = {
-	.name = "sampling_frequency_available",
-	.show = get_sampling_frequency_available,
-	.store = set_sampling_frequency_available,
+struct iio_attribute temp0_attributes[] = {
+	{
+		.name = "input",
+		.show = get_temp0_input,
+		.store = NULL,
+	},
+	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_attribute iio_attr_rf_port_select_available = {
-	.name = "rf_port_select_available",
-	.show = get_rf_port_select_available,
-	.store = set_rf_port_select_available,
-};
-
-static struct iio_attribute iio_attr_filter_fir_en = {
-	.name = "filter_fir_en",
-	.show = get_filter_fir_en,
-	.store = set_filter_fir_en,
-};
-
-static struct iio_attribute iio_attr_sampling_frequency = {
-	.name = "sampling_frequency",
-	.show = get_sampling_frequency,
-	.store = set_sampling_frequency,
-};
-
-static struct iio_attribute iio_attr_rf_bandwidth_available = {
-	.name = "rf_bandwidth_available",
-	.show = get_rf_bandwidth_available,
-	.store = set_rf_bandwidth_available,
-};
-
-static struct iio_attribute iio_attr_rf_bandwidth = {
-	.name = "rf_bandwidth",
-	.show = get_rf_bandwidth,
-	.store = set_rf_bandwidth,
-};
-
-static struct iio_attribute iio_attr_gain_control_mode = {
-	.name = "gain_control_mode",
-	.show = get_gain_control_mode,
-	.store = set_gain_control_mode,
-};
-
-static struct iio_attribute iio_attr_rf_dc_offset_tracking_en = {
-	.name = "rf_dc_offset_tracking_en",
-	.show = get_rf_dc_offset_tracking_en,
-	.store = set_rf_dc_offset_tracking_en,
-};
-
-static struct iio_attribute iio_attr_quadrature_tracking_en = {
-	.name = "quadrature_tracking_en",
-	.show = get_quadrature_tracking_en,
-	.store = set_quadrature_tracking_en,
-};
-
-static struct iio_attribute iio_attr_gain_control_mode_available = {
-	.name = "gain_control_mode_available",
-	.show = get_gain_control_mode_available,
-	.store = set_gain_control_mode_available,
-};
-
-static struct iio_attribute iio_attr_bb_dc_offset_tracking_en = {
-	.name = "bb_dc_offset_tracking_en",
-	.show = get_bb_dc_offset_tracking_en,
-	.store = set_bb_dc_offset_tracking_en,
-};
-
-struct iio_attribute *voltage_output_attributes[] = {
-	&iio_attr_rf_port_select,
-	&iio_attr_hardwaregain,
-	&iio_attr_rssi,
-	&iio_attr_hardwaregain_available,
-	&iio_attr_sampling_frequency_available,
-	&iio_attr_rf_port_select_available,
-	&iio_attr_filter_fir_en,
-	&iio_attr_sampling_frequency,
-	&iio_attr_rf_bandwidth_available,
-	&iio_attr_rf_bandwidth,
-	NULL,
-};
-
-struct iio_attribute *voltage_input_attributes[] = {
-	&iio_attr_hardwaregain_available,
-	&iio_attr_hardwaregain,
-	&iio_attr_rssi,
-	&iio_attr_rf_port_select,
-	&iio_attr_gain_control_mode,
-	&iio_attr_rf_port_select_available,
-	&iio_attr_rf_bandwidth,
-	&iio_attr_rf_dc_offset_tracking_en,
-	&iio_attr_sampling_frequency_available,
-	&iio_attr_quadrature_tracking_en,
-	&iio_attr_sampling_frequency,
-	&iio_attr_gain_control_mode_available,
-	&iio_attr_filter_fir_en,
-	&iio_attr_rf_bandwidth_available,
-	&iio_attr_bb_dc_offset_tracking_en,
-	NULL,
-};
-
-static struct iio_attribute iio_attr_frequency_available = {
-	.name = "frequency_available",
-	.show = get_frequency_available,
-	.store = set_frequency_available,
-};
-
-static struct iio_attribute iio_attr_fastlock_save = {
-	.name = "fastlock_save",
-	.show = get_fastlock_save,
-	.store = set_fastlock_save,
-};
-
-static struct iio_attribute iio_attr_powerdown = {
-	.name = "powerdown",
-	.show = get_powerdown,
-	.store = set_powerdown,
-};
-
-static struct iio_attribute iio_attr_fastlock_load = {
-	.name = "fastlock_load",
-	.show = get_fastlock_load,
-	.store = set_fastlock_load,
-};
-
-static struct iio_attribute iio_attr_fastlock_store = {
-	.name = "fastlock_store",
-	.show = get_fastlock_store,
-	.store = set_fastlock_store,
-};
-
-static struct iio_attribute iio_attr_frequency = {
-	.name = "frequency",
-	.show = get_frequency,
-	.store = set_frequency,
-};
-
-static struct iio_attribute iio_attr_external = {
-	.name = "external",
-	.show = get_external,
-	.store = set_external,
-};
-
-static struct iio_attribute iio_attr_fastlock_recall = {
-	.name = "fastlock_recall",
-	.show = get_fastlock_recall,
-	.store = set_fastlock_recall,
-};
-
-struct iio_attribute *altvoltage_attributes[] = {
-	&iio_attr_frequency_available,
-	&iio_attr_fastlock_save,
-	&iio_attr_powerdown,
-	&iio_attr_fastlock_load,
-	&iio_attr_fastlock_store,
-	&iio_attr_frequency,
-	&iio_attr_external,
-	&iio_attr_fastlock_recall,
-	NULL,
-};
-
-static struct iio_attribute iio_attr_voltage_filter_fir_en = {
-	.name = "voltage_filter_fir_en",
-	.show = get_voltage_filter_fir_en,
-	.store = set_voltage_filter_fir_en,
-};
-
-struct iio_attribute *out_attributes[] = {
-	&iio_attr_voltage_filter_fir_en,
-	NULL,
-};
-
-static struct iio_attribute iio_attr_temp0_input = {
-	.name = "input",
-	.show = get_temp0_input,
-	.store = NULL,
-};
-
-struct iio_attribute *temp0_attributes[] = {
-	&iio_attr_temp0_input,
-	NULL,
-};
-
-static struct iio_attribute iio_attr_dcxo_tune_coarse = {
-	.name = "dcxo_tune_coarse",
-	.show = get_dcxo_tune_coarse,
-	.store = set_dcxo_tune_coarse,
-};
-
-static struct iio_attribute iio_attr_rx_path_rates = {
-	.name = "rx_path_rates",
-	.show = get_rx_path_rates,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_trx_rate_governor = {
-	.name = "trx_rate_governor",
-	.show = get_trx_rate_governor,
-	.store = set_trx_rate_governor,
-};
-
-static struct iio_attribute iio_attr_calib_mode_available = {
-	.name = "calib_mode_available",
-	.show = get_calib_mode_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_xo_correction_available = {
-	.name = "xo_correction_available",
-	.show = get_xo_correction_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_gain_table_config = {
-	.name = "gain_table_config",
-	.show = get_gain_table_config,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_dcxo_tune_fine = {
-	.name = "dcxo_tune_fine",
-	.show = get_dcxo_tune_fine,
-	.store = set_dcxo_tune_fine,
-};
-
-static struct iio_attribute iio_attr_dcxo_tune_fine_available = {
-	.name = "dcxo_tune_fine_available",
-	.show = get_dcxo_tune_fine_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_ensm_mode_available = {
-	.name = "ensm_mode_available",
-	.show = get_ensm_mode_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_multichip_sync = {
-	.name = "multichip_sync",
-	.show = get_multichip_sync,
-	.store = set_multichip_sync,
-};
-
-static struct iio_attribute iio_attr_rssi_gain_step_error = {
-	.name = "rssi_gain_step_error",
-	.show = get_rssi_gain_step_error,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_dcxo_tune_coarse_available = {
-	.name = "dcxo_tune_coarse_available",
-	.show = get_dcxo_tune_coarse_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_tx_path_rates = {
-	.name = "tx_path_rates",
-	.show = get_tx_path_rates,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_trx_rate_governor_available = {
-	.name = "trx_rate_governor_available",
-	.show = get_trx_rate_governor_available,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_xo_correction = {
-	.name = "xo_correction",
-	.show = get_xo_correction,
-	.store = NULL,
-};
-
-static struct iio_attribute iio_attr_ensm_mode = {
-	.name = "ensm_mode",
-	.show = get_ensm_mode,
-	.store = set_ensm_mode,
-};
-
-static struct iio_attribute iio_attr_filter_fir_config = {
-	.name = "filter_fir_config",
-	.show = get_filter_fir_config,
-	.store = set_filter_fir_config,
-};
-
-static struct iio_attribute iio_attr_calib_mode = {
-	.name = "calib_mode",
-	.show = get_calib_mode,
-	.store = set_calib_mode,
-};
-
-static struct iio_attribute *global_attributes[] = {
-	&iio_attr_dcxo_tune_coarse,
-	&iio_attr_rx_path_rates,
-	&iio_attr_trx_rate_governor,
-	&iio_attr_calib_mode_available,
-	&iio_attr_xo_correction_available,
-	&iio_attr_gain_table_config,
-	&iio_attr_dcxo_tune_fine,
-	&iio_attr_dcxo_tune_fine_available,
-	&iio_attr_ensm_mode_available,
-	&iio_attr_multichip_sync,
-	&iio_attr_rssi_gain_step_error,
-	&iio_attr_dcxo_tune_coarse_available,
-	&iio_attr_tx_path_rates,
-	&iio_attr_trx_rate_governor_available,
-	&iio_attr_xo_correction,
-	&iio_attr_ensm_mode,
-	&iio_attr_filter_fir_config,
-	&iio_attr_calib_mode,
-	NULL,
+static struct iio_attribute global_attributes[] = {
+	{
+		.name = "dcxo_tune_coarse",
+		.show = get_dcxo_tune_coarse,
+		.store = set_dcxo_tune_coarse,
+	},
+	{
+		.name = "rx_path_rates",
+		.show = get_rx_path_rates,
+		.store = NULL,
+	},
+	{
+		.name = "trx_rate_governor",
+		.show = get_trx_rate_governor,
+		.store = set_trx_rate_governor,
+	},
+	{
+		.name = "calib_mode_available",
+		.show = get_calib_mode_available,
+		.store = NULL,
+	},
+	{
+		.name = "xo_correction_available",
+		.show = get_xo_correction_available,
+		.store = NULL,
+	},
+	{
+		.name = "gain_table_config",
+		.show = get_gain_table_config,
+		.store = NULL,
+	},
+	{
+		.name = "dcxo_tune_fine",
+		.show = get_dcxo_tune_fine,
+		.store = set_dcxo_tune_fine,
+	},
+	{
+		.name = "dcxo_tune_fine_available",
+		.show = get_dcxo_tune_fine_available,
+		.store = NULL,
+	},
+	{
+		.name = "ensm_mode_available",
+		.show = get_ensm_mode_available,
+		.store = NULL,
+	},
+	{
+		.name = "multichip_sync",
+		.show = get_multichip_sync,
+		.store = set_multichip_sync,
+	},
+	{
+		.name = "rssi_gain_step_error",
+		.show = get_rssi_gain_step_error,
+		.store = NULL,
+	},
+	{
+		.name = "dcxo_tune_coarse_available",
+		.show = get_dcxo_tune_coarse_available,
+		.store = NULL,
+	},
+	{
+		.name = "tx_path_rates",
+		.show = get_tx_path_rates,
+		.store = NULL,
+	},
+	{
+		.name = "trx_rate_governor_available",
+		.show = get_trx_rate_governor_available,
+		.store = NULL,
+	},
+	{
+		.name = "xo_correction",
+		.show = get_xo_correction,
+		.store = NULL,
+	},
+	{
+		.name = "ensm_mode",
+		.show = get_ensm_mode,
+		.store = set_ensm_mode,
+	},
+	{
+		.name = "filter_fir_config",
+		.show = get_filter_fir_config,
+		.store = set_filter_fir_config,
+	},
+	{
+		.name = "calib_mode",
+		.show = get_calib_mode,
+		.store = set_calib_mode,
+	},
+	END_ATTRIBUTES_ARRAY,
 };
 
 static struct iio_channel iio_channel_voltage0_in = {
