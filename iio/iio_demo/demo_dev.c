@@ -46,6 +46,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "demo_dev.h"
+#include "iio_demo_dev.h"
 #include "error.h"
 #include "util.h"
 
@@ -76,68 +77,61 @@ int32_t iio_demo_reg_read(struct iio_demo_desc *desc, uint32_t reg,
 }
 
 /**
- * @brief get_demo_channel_attr().
+ * @brief get_demo_attr().
  * @param device- Physical instance of a iio_demo_device.
  * @param buf - Where value is stored.
  * @param len - Maximum length of value to be stored in buf.
  * @param channel - Channel properties.
+ * @param priv - Attribute ID
  * @return Length of chars written in buf, or negative value on failure.
  */
-ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+ssize_t get_demo_attr(void *device, char *buf, size_t len,
+		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct iio_demo_desc *desc = device;
 
-	return snprintf(buf, len, "%"PRIu32"", desc->dev_ch_attr);
+	if (channel) {
+		if (priv == DEMO_CHANNEL_ATTR)
+			return snprintf(buf, len, "%"PRIu32"",
+					desc->dev_ch_attr);
+	} else {
+		if (priv == DEMO_GLOBAL_ATTR)
+			return snprintf(buf, len, "%"PRIu32"",
+					desc->dev_global_attr);
+	}
+
+	return -EINVAL;
 }
 
 /**
- * @brief set_demo_channel_attr().
+ * @brief set_demo_attr().
  * @param device - Physical instance of a iio_demo_device.
  * @param buf - Value to be written to attribute.
  * @param len -	Length of the data in "buf".
  * @param channel - Channel properties.
+ * @param priv - Attribute ID
  * @return: Number of bytes written to device, or negative value on failure.
  */
-ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel)
+ssize_t set_demo_attr(void *device, char *buf, size_t len,
+		      const struct iio_ch_info *channel, intptr_t priv)
 {
 	struct iio_demo_desc *desc = device;
-	desc->dev_ch_attr = srt_to_uint32(buf);
+	uint32_t val = srt_to_uint32(buf);
 
-	return len;
-}
+	if (channel) {
+		if (priv == DEMO_CHANNEL_ATTR) {
+			desc->dev_ch_attr = val;
+			return len;
+		}
+	} else {
+		if (priv == DEMO_GLOBAL_ATTR) {
+			desc->dev_global_attr = val;
+			return len;
+		}
+	}
 
-/**
- * @brief get_demo_global_attr().
- * @param device- Physical instance of a iio_demo_device.
- * @param buf - Where value is stored.
- * @param len - Maximum length of value to be stored in buf.
- * @param channel - Channel properties.
- * @return Length of chars written in buf, or negative value on failure.
- */
-ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
-{
-	struct iio_demo_desc *desc = device;
-	return snprintf(buf, len, "%"PRIu32"", desc->dev_global_attr);
-}
+	return -EINVAL;
 
-/**
- * @brief set_demo_global_attr().
- * @param device - Physical instance of a iio_demo_device.
- * @param buf - Value to be written to attribute.
- * @param len -	Length of the data in "buf".
- * @param channel - Channel properties.
- * @return: Number of bytes written to device, or negative value on failure.
- */
-ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel)
-{
-	struct iio_demo_desc *desc = device;
-	desc->dev_global_attr = srt_to_uint32(buf);
-
-	return len;
 }
 
 int32_t iio_demo_update_active_channels(void *dev, uint32_t mask)

@@ -91,14 +91,10 @@ struct iio_demo_init_param {
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
-ssize_t get_demo_channel_attr(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel);
-ssize_t set_demo_channel_attr(void *device, char *buf, size_t len,
-			      const struct iio_ch_info *channel);
-ssize_t get_demo_global_attr(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel);
-ssize_t set_demo_global_attr(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel);
+ssize_t get_demo_attr(void *device, char *buf, size_t len,
+		      const struct iio_ch_info *channel, intptr_t priv);
+ssize_t set_demo_attr(void *device, char *buf, size_t len,
+		      const struct iio_ch_info *channel, intptr_t priv);
 
 int32_t iio_demo_reg_read(struct iio_demo_desc *desc, uint32_t reg,
 			  uint32_t *readval);
