@@ -222,7 +222,7 @@ int main(void)
 		return status;
 
 	status = iio_register(iio_desc, &adxrs290_iio_descriptor,
-			      "adxrs290", adxrs290_device);
+			      "adxrs290", adxrs290_device, NULL, NULL);
 	if (status < 0)
 		return status;
 
