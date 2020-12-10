@@ -389,7 +389,9 @@ static ssize_t iio_read_all_attr(struct attr_fun_params *params,
 
 	while (attributes[i].name) {
 		attr_length = attributes[i].show(params->dev_instance,
-						 local_buf, params->len, params->ch_info);
+						 local_buf, params->len,
+						 params->ch_info,
+						 attributes[i].priv);
 		pattr_length = (uint32_t *)(params->buf + j);
 		*pattr_length = bswap_constant_32(attr_length);
 		j += 4;
@@ -424,7 +426,8 @@ static ssize_t iio_write_all_attr(struct attr_fun_params *params,
 		attr_length = bswap_constant_32((uint32_t)(params->buf + j));
 		j += 4;
 		attributes[i].store(params->dev_instance, (params->buf + j),
-				    attr_length, params->ch_info);
+				    attr_length, params->ch_info,
+				    attributes[i].priv);
 		j += attr_length;
 		if (j & 0x3)
 			j = ((j >> 2) + 1) << 2;
@@ -465,12 +468,14 @@ static ssize_t iio_rd_wr_attribute(struct attr_fun_params *params,
 			return -ENOENT;
 
 		return attributes[i].store(params->dev_instance, params->buf,
-					   params->len, params->ch_info);
+					   params->len, params->ch_info,
+					   attributes[i].priv);
 	} else {
 		if (!attributes[i].show)
 			return -ENOENT;
 		return attributes[i].show(params->dev_instance, params->buf,
-					  params->len, params->ch_info);
+					  params->len, params->ch_info,
+					  attributes[i].priv);
 	}
 }
 
