@@ -177,9 +177,9 @@ $(BUILD_DIR)/.bsp.target: $(TEMP_DIR)/arch.txt
 	echo $(UDPATE_TCL_CONTENT) > $(TEMP_DIR)/update_sdk.tcl
 	xsct $(TEMP_DIR)/update_sdk.tcl
 ifeq ($(strip $(ARCH)),sys_mb)
-	$(call replace_heap, 0x800, 0x100000, $(BUILD_DIR)/app/src/lscript.ld)
+	$(call replace_heap,0x800,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
 else
-	$(call replace_heap, 0x2000, 0x100000, $(BUILD_DIR)/app/src/lscript.ld)
+	$(call replace_heap,0x2000,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
 endif
 	$(MAKE) xilinx_update_srcs
 	$(call set_one_time_rule,$@)
