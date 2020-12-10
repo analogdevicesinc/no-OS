@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
@@ -36,42 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "iio_axi_adc.h"
 
-#include <xparameters.h>
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#define SPI_DEVICE_ID				XPAR_PS7_SPI_0_DEVICE_ID
-#define SPI_AD7768_CS				0
-#define GPIO_DEVICE_ID				XPAR_PS7_GPIO_0_DEVICE_ID
-#define GPIO_OFFSET					32 + 54
-#define AD7768_DMA_BASEADDR			XPAR_AD7768_DMA_BASEADDR
-#define ADC_DDR_BASEADDR			XPAR_DDR_MEM_BASEADDR + 0x800000
-#define AD7768_ADC_BASEADDR			XPAR_AXI_AD7768_ADC_BASEADDR
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				XPAR_XUARTPS_1_INTR
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-#define GPIO_RESET_N				GPIO_OFFSET + 8
-#define GPIO_START_N				GPIO_OFFSET + 9
-#define GPIO_SYNC_IN_N				GPIO_OFFSET + 10
-#define GPIO_SYNC_OUT_N				GPIO_OFFSET + 11
-#define GPIO_MODE_0_GPIO_0			GPIO_OFFSET + 16
-#define GPIO_MODE_1_GPIO_1			GPIO_OFFSET + 17
-#define GPIO_MODE_2_GPIO_2			GPIO_OFFSET + 18
-#define GPIO_MODE_3_GPIO_3			GPIO_OFFSET + 19
-#define GPIO_FILTER_GPIO_4			GPIO_OFFSET + 20
+/* @brief Application IIO setup. */
+int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init);
 
-/* HDL Control Interface */
-
-#define GPIO_UP_SSHOT				GPIO_OFFSET + 4
-#define GPIO_UP_FORMAT_1			GPIO_OFFSET + 3
-#define GPIO_UP_FORMAT_0			GPIO_OFFSET + 2
-#define GPIO_UP_CRC_ENABLE			GPIO_OFFSET + 1
-#define GPIO_UP_CRC_4_OR_16_N		GPIO_OFFSET + 0
-#define GPIO_STATUS_DEVICE_ID		XPAR_AD7768_GPIO_DEVICE_ID
-#define GPIO_STATUS_OFFSET			0
-#define UP_STATUS_CLR_OFFSET		GPIO_STATUS_OFFSET + 0
-#define UP_STATUS_OFFSET			GPIO_STATUS_OFFSET + 0
-
-#endif /* _PARAMETERS_H_ */
+#endif
