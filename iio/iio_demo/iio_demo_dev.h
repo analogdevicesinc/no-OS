@@ -43,21 +43,26 @@
 #include <stdlib.h>
 #include "demo_dev.h"
 
-static struct iio_attribute iio_attr_demo_channel = {
-	.name = "demo_channel_attr",
-	.show = get_demo_channel_attr,
-	.store = set_demo_channel_attr,
+enum iio_demo_attributes {
+	DEMO_CHANNEL_ATTR,
+	DEMO_GLOBAL_ATTR,
 };
 
-static struct iio_attribute iio_attr_demo_global = {
-	.name = "demo_global_attr",
-	.show = get_demo_global_attr,
-	.store = set_demo_global_attr,
+#define IIO_DEMO_ATTR(_name, _priv) {\
+	.name = _name,\
+	.priv = _priv,\
+	.show = get_demo_attr,\
+	.store = set_demo_attr\
+}
+
+static struct iio_attribute demo_channel_attributes[] = {
+	IIO_DEMO_ATTR("demo_channel_attr", DEMO_CHANNEL_ATTR),
+	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_attribute *demo_channel_attributes[] = {
-	&iio_attr_demo_channel,
-	NULL,
+static struct iio_attribute iio_demo_global_attributes[] = {
+	IIO_DEMO_ATTR("demo_global_attr", DEMO_GLOBAL_ATTR),
+	END_ATTRIBUTES_ARRAY,
 };
 
 static struct scan_type scan_type = {
@@ -121,11 +126,6 @@ static struct iio_channel *iio_demo_channels_in[] = {
 static struct iio_channel *iio_demo_channels_out[] = {
 	&iio_demo_channel_voltage0_out,
 	&iio_demo_channel_voltage1_out,
-	NULL,
-};
-
-static struct iio_attribute *iio_demo_global_attributes[] = {
-	&iio_attr_demo_global,
 	NULL,
 };
 
