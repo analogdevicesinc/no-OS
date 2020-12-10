@@ -96,12 +96,14 @@ struct iio_ch_info {
 struct iio_attribute {
 	/** Attribute name */
 	const char *name;
+	/** Attribute id */
+	intptr_t priv;
 	/** Show function pointer */
 	ssize_t (*show)(void *device, char *buf, size_t len,
-			const struct iio_ch_info *channel);
+			const struct iio_ch_info *channel, intptr_t priv);
 	/** Store function pointer */
 	ssize_t (*store)(void *device, char *buf, size_t len,
-			 const struct iio_ch_info *channel);
+			 const struct iio_ch_info *channel, intptr_t priv);
 };
 
 /**
