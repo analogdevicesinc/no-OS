@@ -290,7 +290,7 @@ static int32_t uart_irq_init(struct uart_desc *descriptor)
 
 	switch(xil_uart_desc->type) {
 	case UART_PS:
-		callback_desc.callback = XUartPs_InterruptHandler;
+		callback_desc.callback = (void (*)())XUartPs_InterruptHandler;
 		callback_desc.ctx = xil_uart_desc->instance;
 		status = irq_register_callback(xil_uart_desc->irq_desc,
 					       xil_uart_desc->irq_id,
