@@ -59,42 +59,43 @@ ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel);
 
-static struct iio_attribute adxrs290_iio_ch_attr_3db_hpf_freq_val = {
-	.name = "filter_high_pass_3db_frequency",
-	.show = get_adxrs290_iio_ch_hpf,
-	.store = set_adxrs290_iio_ch_hpf
+
+static struct iio_attribute adxrs290_iio_vel_attrs[] = {
+	{
+		.name = "filter_high_pass_3db_frequency",
+		.show = get_adxrs290_iio_ch_hpf,
+		.store = set_adxrs290_iio_ch_hpf
+	},
+	{
+		.name = "filter_low_pass_3db_frequency",
+		.show = get_adxrs290_iio_ch_lpf,
+		.store = set_adxrs290_iio_ch_lpf
+	},
+	{
+		.name = "raw",
+		.show = get_adxrs290_iio_ch_raw,
+		.store = NULL
+	},
+	{
+		.name = "scale",
+		.show = get_adxrs290_iio_ch_scale,
+		.store = NULL
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
-static struct iio_attribute adxrs290_iio_ch_attr_3db_lpf_freq_val = {
-	.name = "filter_low_pass_3db_frequency",
-	.show = get_adxrs290_iio_ch_lpf,
-	.store = set_adxrs290_iio_ch_lpf
-};
-
-static struct iio_attribute adxrs290_iio_ch_attr_raw = {
-	.name = "raw",
-	.show = get_adxrs290_iio_ch_raw,
-	.store = NULL
-};
-
-static struct iio_attribute adxrs290_iio_ch_attr_scale = {
-	.name = "scale",
-	.show = get_adxrs290_iio_ch_scale,
-	.store = NULL
-};
-
-static struct iio_attribute *adxrs290_iio_vel_attrs[] = {
-	&adxrs290_iio_ch_attr_3db_hpf_freq_val,
-	&adxrs290_iio_ch_attr_3db_lpf_freq_val,
-	&adxrs290_iio_ch_attr_raw,
-	&adxrs290_iio_ch_attr_scale,
-	NULL,
-};
-
-static struct iio_attribute *adxrs290_iio_temp_attrs[] = {
-	&adxrs290_iio_ch_attr_raw,
-	&adxrs290_iio_ch_attr_scale,
-	NULL,
+static struct iio_attribute adxrs290_iio_temp_attrs[] = {
+	{
+		.name = "raw",
+		.show = get_adxrs290_iio_ch_raw,
+		.store = NULL
+	},
+	{
+		.name = "scale",
+		.show = get_adxrs290_iio_ch_scale,
+		.store = NULL
+	},
+	END_ATTRIBUTES_ARRAY,
 };
 
 static struct iio_channel adxrs290_iio_channel_x = {

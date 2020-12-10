@@ -390,130 +390,57 @@ static ssize_t set_altvoltage_sampling_frequency(void *device, char *buf,
 }
 
 /**
- * @struct iio_attr_voltage_calibphase
- * @brief Structure for "calibphase" attribute.
- */
-static struct iio_attribute iio_attr_voltage_calibphase = {
-	/** Attribute name */
-	.name = "calibphase",
-	/** Read attribute from device */
-	.show = get_voltage_calibphase,
-	/** Write attribute to device */
-	.store = set_voltage_calibphase,
-};
-
-/**
- * @struct iio_attr_voltage_calibscale
- * @brief Structure for "calibscale" attribute.
- */
-static struct iio_attribute iio_attr_voltage_calibscale = {
-	/** Attribute name */
-	.name = "calibscale",
-	/** Read attribute from device */
-	.show = get_voltage_calibscale,
-	/** Write attribute to device */
-	.store = set_voltage_calibscale,
-
-};
-
-/**
- * @struct iio_attr_voltage_sampling_frequency
- * @brief Structure for "sampling_frequency" attribute.
- */
-static struct iio_attribute iio_attr_voltage_sampling_frequency = {
-	/** Attribute name */
-	.name = "sampling_frequency",
-	/** Read attribute from device */
-	.show = get_voltage_sampling_frequency,
-	/** Write attribute to device */
-	.store = set_voltage_sampling_frequency,
-};
-
-/**
- * @struct iio_attr_altvoltage_raw
- * @brief Structure for "raw" attribute.
- */
-static struct iio_attribute iio_attr_altvoltage_raw = {
-	/** Attribute name */
-	.name = "raw",
-	/** Read attribute from device */
-	.show = get_altvoltage_raw,
-	/** Write attribute to device */
-	.store = set_altvoltage_raw,
-};
-
-/**
- * @struct iio_attr_altvoltage_phase
- * @brief Structure for "phase" attribute.
- */
-static struct iio_attribute iio_attr_altvoltage_phase = {
-	/** Attribute name */
-	.name = "phase",
-	/** Read attribute from device */
-	.show = get_altvoltage_phase,
-	/** Write attribute to device */
-	.store = set_altvoltage_phase,
-};
-
-/**
- * @struct iio_attr_altvoltage_frequency
- * @brief Structure for "frequency" attribute.
- */
-static struct iio_attribute iio_attr_altvoltage_frequency = {
-	/** Attribute name */
-	.name = "frequency",
-	/** Read attribute from device */
-	.show = get_altvoltage_frequency,
-	/** Write attribute to device */
-	.store = set_altvoltage_frequency,
-};
-
-/**
- * @struct iio_attr_altvoltage_scale
- * @brief Structure for "scale" attribute.
- */
-static struct iio_attribute iio_attr_altvoltage_scale = {
-	/** Attribute name */
-	.name = "scale",
-	/** Read attribute from device */
-	.show = get_altvoltage_scale,
-	/** Write attribute to device */
-	.store = set_altvoltage_scale,
-};
-
-/**
- * @struct iio_attr_altvoltage_sampling_frequency
- * @brief Structure for "sampling_frequency" attribute.
- */
-static struct iio_attribute iio_attr_altvoltage_sampling_frequency = {
-	/** Attribute name */
-	.name = "sampling_frequency",
-	/** Read attribute from device */
-	.show = get_altvoltage_sampling_frequency,
-	/** Write attribute to device */
-	.store = set_altvoltage_sampling_frequency,
-};
-
-/**
  * List containing attributes, corresponding to "voltage" channels.
  */
-static struct iio_attribute *iio_voltage_attributes[] = {
-	&iio_attr_voltage_calibscale,
-	&iio_attr_voltage_calibphase,
-	&iio_attr_voltage_sampling_frequency,
-	NULL,
+static struct iio_attribute iio_voltage_attributes[] = {
+	{
+		.name = "calibscale",
+		.show = get_voltage_calibscale,
+		.store = set_voltage_calibscale,
+	},
+	{
+		.name = "calibphase",
+		.show = get_voltage_calibphase,
+		.store = set_voltage_calibphase,
+	},
+	{
+		.name = "sampling_frequency",
+		.show = get_voltage_sampling_frequency,
+		.store = set_voltage_sampling_frequency,
+	},
+	END_ATTRIBUTES_ARRAY
 };
 
 /**
  * List containing attributes, corresponding to "altvoltage" channels.
  */
-static struct iio_attribute *iio_altvoltage_attributes[] = {
-	&iio_attr_altvoltage_raw,
-	&iio_attr_altvoltage_phase,
-	&iio_attr_altvoltage_scale,
-	&iio_attr_altvoltage_frequency,
-	&iio_attr_altvoltage_sampling_frequency,
-	NULL,
+static struct iio_attribute iio_altvoltage_attributes[] = {
+	{
+		.name = "raw",
+		.show = get_altvoltage_raw,
+		.store = set_altvoltage_raw,
+	},
+	{
+		.name = "phase",
+		.show = get_altvoltage_phase,
+		.store = set_altvoltage_phase,
+	},
+	{
+		.name = "scale",
+		.show = get_altvoltage_scale,
+		.store = set_altvoltage_scale,
+	},
+	{
+		.name = "frequency",
+		.show = get_altvoltage_frequency,
+		.store = set_altvoltage_frequency,
+	},
+	{
+		.name = "sampling_frequency",
+		.show = get_altvoltage_sampling_frequency,
+		.store = set_altvoltage_sampling_frequency,
+	},
+	END_ATTRIBUTES_ARRAY,
 };
 
 /**
