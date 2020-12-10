@@ -28,6 +28,7 @@ INCS += $(INCLUDE)/list.h
 INCS += $(INCLUDE)/uart.h
 INCS += $(INCLUDE)/irq.h
 INCS += $(INCLUDE)/fifo.h
+INCS += $(PROJECT)/src/parameters.h
 
 # Add to SRC_DIRS directories to be used in the build. All .c and .h files from
 # the directory and subdirectories will be added to the build (recursively)
