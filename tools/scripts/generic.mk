@@ -73,6 +73,9 @@ export AR
 ifeq ($(OS), Windows_NT)
 SHELL=cmd
 ROOT_DRIVE = C:
+#Is slow to print timestamp in windows
+#TIMESTAMP = $(shell powershell Get-Date -Format "HH:mm.ss")
+TIMESTAMP = 00:00:00
 copy_fun = xcopy /F /Y /B "$(subst /,\,$1)" "$(subst /,\,$2)"
 copy_folder = xcopy /F /S /Y /C /I "$(subst /,\,$1)" "$(subst /,\,$2)"
 remove_fun = del /S /Q $(subst /,\,$1)
@@ -82,10 +85,11 @@ read_file = type $(subst /,\,$1) 2> NUL
 make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 make_link = mklink /H "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 print_lines = $(foreach f,$1,@echo $f && ) @echo Done
-print_green = @echo [32m$1[0m
+print = @echo [32m[$(TIMESTAMP)] -- $1[0m
 cmd_separator = &
 #	LINUX
 else
+TIMESTAMP = $(shell date +"%T")
 copy_fun = cp $1 $2
 copy_folder = cp -r $1 $2
 remove_fun = rm -rf $1
@@ -95,7 +99,7 @@ read_file = cat $1 2> /dev/null
 make_dir_link = ln -s $1 $2
 make_link = ln -P $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
-print_green = @printf "\\e[32m$(1)\\e[39m\n"
+print = @printf "\\e[32m[$(TIMESTAMP)] -- $1\\e[39m\n"
 cmd_separator = ;
 endif
 
@@ -122,8 +126,6 @@ else
 get_relative_path = $(RELATIVE_PATH)
 get_full_path = $(FULL_PATH)
 endif
-
-
 
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
@@ -260,13 +262,13 @@ PHONY += all
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(BINARY)
-	$(call print_green, $(notdir $(BINARY)) is ready)
+	$(call print,$(notdir $(BINARY)) is ready)
 else
 all:
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MAKE) project MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MAKE) $(BINARY)
-	$(call print_green, $(notdir $(BINARY)) is ready)
+	$(call print,$(notdir $(BINARY)) is ready)
 endif
 
 #This is used to keep directory targets between makefile executions
@@ -285,15 +287,15 @@ $(OBJECTS_DIR)%/.:
 # Build .c files into .o files.
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
-	@echo CC -c $(notdir $<) -o $(notdir $@)
+	@$(call print,[CC] $(notdir $<))
 	@$(CC) -c $(CFLAGS) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
-	@echo AS -c $(notdir $<) -o $(notdir $@)
+	@$(call print,[AS] $(notdir $<))
 	@$(AS) -c $(ASFLAGS) $< -o $@
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
-	@echo CC LDFLAGS -o $(BINARY)
+	@$(call print,[LD] $(notdir $(OBJS)) -o $(notdir $@))
 	@$(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
 			 $(ASM_OBJS) $(LIB_FLAGS) 
 
