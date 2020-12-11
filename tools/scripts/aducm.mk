@@ -135,7 +135,9 @@ HEX = $(BINARY).hex
 #------------------------------------------------------------------------------
 
 $(HEX): $(BINARY)
-	arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
+	@$(call print,[HEX] $(notdir $@))
+	@arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
+	@$(call print,$(notdir $@) is ready)
 
 clean: clean_hex
 
