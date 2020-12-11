@@ -233,12 +233,12 @@ int main(void)
 		return ret;
 
 	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_ENABLE,
-			default_init_param.crc_sel ? GPIO_HIGH : GPIO_LOW);
+				   default_init_param.crc_sel ? GPIO_HIGH : GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
 	ret = ad7768_if_gpio_setup(GPIO_UP_CRC_4_OR_16_N,
-			(default_init_param.crc_sel == AD7768_CRC_4) ? GPIO_HIGH : GPIO_LOW);
+				   (default_init_param.crc_sel == AD7768_CRC_4) ? GPIO_HIGH : GPIO_LOW);
 	if (ret != 0)
 		return ret;
 
