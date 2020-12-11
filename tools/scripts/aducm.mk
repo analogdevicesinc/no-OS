@@ -135,14 +135,15 @@ HEX = $(basename $(BINARY)).hex
 #------------------------------------------------------------------------------
 
 $(HEX): $(BINARY)
-	@$(call print,[HEX] $(notdir $@))
-	@arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
-	@$(call print,$(notdir $@) is ready)
+	$(MUTE) $(call print,[HEX] $(notdir $@))
+	$(MUTE) arm-none-eabi-objcopy -O ihex $(BINARY) $(HEX)
+	$(MUTE) $(call print,$(notdir $@) is ready)
 
 clean: clean_hex
 
 clean_hex:
-	-$(call remove_fun,$(HEX))
+	@$(call print,[Delete] $(HEX))
+	-$(MUTE) $(call remove_fun,$(HEX)) $(HIDE)
 
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: $(HEX) $(PIN_MUX)
@@ -151,18 +152,14 @@ endif
 #Used to update pinmux if updated on project
 $(PIN_MUX): $(PROJECT_PIN_MUX)
 	@echo UPDATEING PINMUX
-	$(call copy_fun,$(PROJECT_PIN_MUX),$(PIN_MUX))
-
-PHONY += install_dfp
-install_dfp:
-	$(call copy_folder,$(ADUCM_DFP)/Source/drivers/*,$(PLATFORM_TOOLS)/dfp_drivers/)
+	$(MUTE) $(call copy_fun,$(PROJECT_PIN_MUX),$(PIN_MUX)) $(HIDE)
 
 # Upload binary to target
 PHONY += aducm3029_run
 aducm3029_run: all
-	openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
+	$(MUTE) openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
-		-c "program  $(BINARY) verify reset exit"
+		-c "program  $(BINARY) verify reset exit" $(HIDE)
 
 #------------------------------------------------------------------------------
 #                             PROJECT RULES                              
@@ -176,7 +173,7 @@ PROJECT_BINARY = $(PROJECT_BUILD)/Release/$(PROJECT_NAME)
 #CCESS bug: https://labrea.ad.analog.com/browse/CCES-22274
 PHONY += project_run
 project_run: build_project
-	openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
+	$(MUTE) openocd -s "$(OPENOCD_SCRIPTS)" -f interface/cmsis-dap.cfg \
 		-s "$(ADUCM_DFP)/openocd/scripts" -f target/aducm3029.cfg \
 	-c init \
 	-c "program  $(PROJECT_BINARY) verify" \
@@ -191,14 +188,14 @@ project_run: build_project
 	-c "resume" \
 	-c "resume" \
 	-c "resume" \
-	-c exit
+	-c exit $(HIDE)
 
 PHONY += aducm3029_project_build
 aducm3029_project_build: aducm3029_project $(LIB_TARGETS)
-	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
+	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
-		-build Release
+		-build Release $(HIDE)
 
 ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), \
 			-append-switch compiler -D=$(flag))
@@ -220,21 +217,22 @@ SRC_FLAGS += $(foreach file,$(FILES_TO_LINK), -link $(file)\
 PHONY += aducm3029_update_srcs
 aducm3029_update_srcs:
 ifeq 'y' '$(strip $(LINK_SRCS))'
-	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
+	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_NAME) \
-		$(SRC_FLAGS)
+		$(SRC_FLAGS) $(HIDE)
 else
-	$(call mk_dir, $(BUILD_DIR)/$(PROJECT_NAME)/src)
-	$(foreach file, $(FILES_TO_COPY), $(call copy_fun,$(file),$(BUILD_DIR)/$(PROJECT_NAME)/src) &&) \
-		echo Src files copied
+	-$(MUTE) $(call mk_dir, $(BUILD_DIR)/$(PROJECT_NAME)/src) $(HIDE)
+	-$(MUTE) $(foreach file, $(FILES_TO_COPY), $(call copy_fun,$(file),$(BUILD_DIR)/$(PROJECT_NAME)/src) $(HIDE) &&) \
+		echo Nothing $(HIDE)
 endif
 
 aducm3029_project: $(PROJECT_BUILD)/.project.target
 
 #Create new project with platform driver and utils source folders linked
 $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
-	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
+	$(call print,Creating IDE project)
+	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-command projectcreate \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_BUILD) \
@@ -244,11 +242,12 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		-revision any \
 		-language C \
 		-config Release \
-		-remove-switch linker -specs=rdimon.specs
+		-remove-switch linker -specs=rdimon.specs $(HIDE)
+	$(call print, Configuring project)
 #Overwrite system.rteconfig file with one that enables all DFP feautres neede by noos
-	$(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD))
+	$(MUTE) $(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)) $(HIDE)
 #Adding pinmux plugin (Did not work to add it in the first command) and update project
-	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
+	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
  		-command addaddin \
  		-data $(WORKSPACE) \
  		-project $(PROJECT_NAME) \
@@ -257,23 +256,24 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		-regensrc \
 		$(INCLUDE_FLAGS) \
 		$(ADD_COMPILER_DEFINES) \
-		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)"
+		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)" \
+		$(HIDE)
 
 #The default startup_ADuCM3029.c has compiling errors
 #TODO Replace with patch if team think is a better aproch to install a windows
 #program for patching	
-	$(call copy_fun\
-	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c)
+	$(MUTE) $(call copy_fun\
+	,$(PLATFORM_TOOLS)/startup_ADuCM3029_patch.c,$(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c) $(HIDE)
 #Remove default files from projectsrc
-	$(call remove_dir,$(PROJECT_BUILD)/src)
-	$(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX))
-	$(MAKE) aducm3029_update_srcs
-	echo project created at $(PROJECT_BUILD)
-	$(call set_one_time_rule,$@)
+	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
+	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
+	$(MUTE) $(MAKE) aducm3029_update_srcs $(HIDE)
+	@$(call print, project created at $(PROJECT_BUILD)) $(HIDE)
+	$(MUTE) $(call set_one_time_rule,$@)
 
 PHONY += clean_project
 clean_project:
-	-$(call remove_dir,$(PROJECT_BUILD)/Release)
+	-$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/Release) $(HIDE)
 #OR	
 #	$(CCES) -nosplash -application com.analog.crosscore.headlesstools \
  		-data $(WORKSPACE) \
