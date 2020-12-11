@@ -128,7 +128,7 @@ CC = arm-none-eabi-gcc
 AS = arm-none-eabi-gcc
 AR = arm-none-eabi-ar
 
-HEX = $(BINARY).hex
+HEX = $(basename $(BINARY)).hex
 
 #------------------------------------------------------------------------------
 #                                 RULES                              
