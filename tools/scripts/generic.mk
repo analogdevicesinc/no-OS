@@ -315,6 +315,7 @@ PHONY += clean
 clean:
 	-$(call remove_fun,$(BINARY))
 	-$(call remove_fun,$(OBJS))
+	-$(call remove_fun,$(ASM_OBJS))
 
 # Remove workspace data and project directory
 PHONY += clean_all
