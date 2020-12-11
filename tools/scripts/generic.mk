@@ -85,8 +85,11 @@ read_file = type $(subst /,\,$1) 2> NUL
 make_dir_link = mklink /D "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 make_link = mklink /H "$(strip $(subst /,\,$2))" "$(strip $(subst /,\,$1))"
 print_lines = $(foreach f,$1,@echo $f && ) @echo Done
-print = @echo [32m[$(TIMESTAMP)] -- $1[0m
+green = [32m$1[0m
+print = @echo $(call green,[$(TIMESTAMP)]) $1
 cmd_separator = &
+HIDE_OUTPUT = > nul
+
 #	LINUX
 else
 TIMESTAMP = $(shell date +"%T")
@@ -99,8 +102,18 @@ read_file = cat $1 2> /dev/null
 make_dir_link = ln -s $1 $2
 make_link = ln -P $1 $2
 print_lines = @echo $1 | tr ' ' '\n'
-print = @printf "\\e[32m[$(TIMESTAMP)] -- $1\\e[39m\n"
+green = \\e[32m$1\\e[39m
+print = @printf "$(call green,[$(TIMESTAMP)]) $1\n"
 cmd_separator = ;
+HIDE_OUTPUT = > /dev/null
+endif
+
+VERBOSE ?= 0
+export VERBOSE
+
+ifeq ($(strip $(VERBOSE)),0)
+HIDE = $(HIDE_OUTPUT)
+MUTE = @
 endif
 
 # recursive wildcard
@@ -182,8 +195,6 @@ endif
 include $(NO-OS)/tools/scripts/aducm.mk
 endif
 
-$(info $(HARDWARE) found, building for $(PLATFORM))
-
 #------------------------------------------------------------------------------
 #                            COMMON COMPILER FLAGS                             
 #------------------------------------------------------------------------------
@@ -261,15 +272,19 @@ PHONY += all
 # If the build dir was created just build the binary.
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(BUILD_DIR)),)
-all: $(BINARY)
-	$(call print,$(notdir $(BINARY)) is ready)
+all: print_build_type $(BINARY)
+	$(call print,Done ($(notdir $(BINARY))))
 else
-all:
+all: print_build_type
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
-	$(MAKE) project MAKEFLAGS=$(MAKEOVERRIDES)
-	$(MAKE) $(BINARY)
-	$(call print,$(notdir $(BINARY)) is ready)
+	$(MUTE) $(MAKE) --no-print-directory project MAKEFLAGS=$(MAKEOVERRIDES)
+	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
+	$(call print,Done ($(notdir $(BINARY))))
 endif
+
+PHONY += print_build_type
+print_build_type:
+	$(call print,Building for $(call green,$(PLATFORM)) (using $(call green, $(HARDWARE))))
 
 #This is used to keep directory targets between makefile executions
 #More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
@@ -279,33 +294,40 @@ endif
 #Create directories for binary files. This is needed in order to know from which
 # .c it was build
 $(OBJECTS_DIR)/.:
-	-@$(call mk_dir,$@)
+	-@$(call mk_dir,$@) $(HIDE)
 
 $(OBJECTS_DIR)%/.:
-	-@$(call mk_dir,$@)
+	-@$(call mk_dir,$@) $(HIDE)
 
 # Build .c files into .o files.
 .SECONDEXPANSION:
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
-	@$(CC) -c $(CFLAGS) $< -o $@
+	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
 
 $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
 	@$(call print,[AS] $(notdir $<))
-	@$(AS) -c $(ASFLAGS) $< -o $@
+	$(MUTE) @$(AS) -c $(ASFLAGS) $< -o $@
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
 	@$(call print,[LD] $(notdir $(OBJS)) -o $(notdir $@))
-	@$(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
-			 $(ASM_OBJS) $(LIB_FLAGS) 
+	$(MUTE) @$(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
+			 $(ASM_OBJS) $(LIB_FLAGS)
 
 PHONY += run
 run: $(PLATFORM)_run
+	@$(call print, $(notdir $(BINARY)) uploaded to board)
 
 project: $(PLATFORM)_project
 
 PHONY += update_srcs
-update_srcs: $(PLATFORM)_update_srcs
+update_srcs:
+ifeq 'y' '$(strip $(LINK_SRCS))'
+	@$(call print,Linking srcs to created project)
+else
+	@$(call print,Copying srcs to created project)
+endif
+	$(MUTE) $(MAKE) --no-print-directory $(PLATFORM)_update_srcs
 
 # Build project using SDK
 project_build: $(PLATFORM)_project_build
@@ -313,14 +335,16 @@ project_build: $(PLATFORM)_project_build
 # Remove project binaries
 PHONY += clean
 clean:
-	-$(call remove_fun,$(BINARY))
-	-$(call remove_fun,$(OBJS))
-	-$(call remove_fun,$(ASM_OBJS))
+	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
+	-$(MUTE)$(call remove_fun,$(BINARY)) $(HIDE)
+	-$(MUTE)$(call remove_fun,$(OBJS)) $(HIDE)
+	-$(MUTE)$(call remove_fun,$(ASM_OBJS)) $(HIDE)
 
 # Remove workspace data and project directory
 PHONY += clean_all
 clean_all: clean_libs
-	-$(call remove_dir,$(BUILD_DIR))
+	@$(call print,[Delete] $(BUILD_DIR))
+	-$(MUTE)$(call remove_dir,$(BUILD_DIR)) $(HIDE)
 
 PHONY += ca
 ca: clean_all

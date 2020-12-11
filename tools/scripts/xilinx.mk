@@ -117,44 +117,42 @@ $(BINARY): $(TEMP_DIR)/arch.txt
 
 PHONY += xilinx_run
 xilinx_run: all
-	xsdb $(PLATFORM_TOOLS)/upload.tcl\
+	$(MUTE) xsdb $(PLATFORM_TOOLS)/upload.tcl\
 		$(ARCH)\
 		$(BUILD_DIR)/hw/system_top.bit\
 		$(BINARY)\
-		$(BUILD_DIR)/hw
+		$(BUILD_DIR)/hw $(HIDE)
 
 PHONY += xilinx_update_srcs
 xilinx_update_srcs:
 ifeq 'y' '$(strip $(LINK_SRCS))'
-	$(foreach dir,$(SRC_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))))\
+	$(MUTE) $(foreach dir,$(SRC_DIRS),\
+		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(dir)))) $(HIDE) \
 		$(cmd_separator)\
 		$(call make_dir_link,$(dir),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))) $(cmd_separator)) \
-		echo Dir links created
+		$(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))) $(HIDE) $(cmd_separator)) echo . $(HIDE)
 	
-	$(foreach file,$(FILES_OUT_OF_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(file))))\
+	$(MUTE) $(foreach file,$(FILES_OUT_OF_DIRS),\
+		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(file)))) $(HIDE) \
 		$(cmd_separator)\
 		$(call make_link,$(file),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(file)))$(cmd_separator)) \
-		echo File links created
+		$(BUILD_DIR)/app/src/$(call get_relative_path, $(file))) $(HIDE) $(cmd_separator)) echo . $(HIDE)
 else
-	$(foreach file,$(SRCS) $(INCS), $(call copy_fun,$(file),$(BUILD_DIR)/app/src) &&) \
-		echo Src files copied
+	$(MUTE) $(foreach file,$(SRCS) $(INCS), $(call copy_fun,$(file),$(BUILD_DIR)/app/src) $(HIDE) &&) echo . $(HIDE)
 endif
 
 #do copy of HARDWARE to tmp is needed?
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
-	$(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR))
-	$(call copy_fun,$(HARDWARE),$(TEMP_DIR))
-	xsct $(PLATFORM_TOOLS)/read_hdf.tcl $(TEMP_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE))
+	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
+	$(MUTE) $(call copy_fun,$(HARDWARE),$(TEMP_DIR)) $(HIDE)
+	$(call print,Evaluating hardware: $(HARDWARE))
+	$(MUTE) xsct $(PLATFORM_TOOLS)/read_hdf.tcl $(TEMP_DIR) $(TEMP_DIR)/$(notdir $(HARDWARE)) $(HIDE)
 
 xilinx_project: $(BUILD_DIR)/.bsp.target
 
 PHONY += xilinx_project_build
 xilinx_project_build: all
-	xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE)
+	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 
 ADD_INCLUDE_PATHS=$(foreach dir, $(EXTRA_INC_PATHS),\
@@ -172,19 +170,21 @@ else
 UDPATE_TCL_CONTENT = "setws $(WORKSPACE);$(ADD_INCLUDE_PATHS) $(ADD_COMPILER_DEFINES) $(ADD_LIBRARIES_PATH) $(ADD_LIBRARIES)"
 endif
 
-$(BUILD_DIR)/.bsp.target: $(TEMP_DIR)/arch.txt
-	xsdk -batch -source $(PLATFORM_TOOLS)/create_project.tcl $(WORKSPACE) $(HARDWARE) $(ARCH)
-	echo $(UDPATE_TCL_CONTENT) > $(TEMP_DIR)/update_sdk.tcl
-	xsct $(TEMP_DIR)/update_sdk.tcl
+$(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
+	$(call print,Creating IDE project)
+	$(MUTE) xsdk -batch -source $(PLATFORM_TOOLS)/create_project.tcl $(WORKSPACE) $(HARDWARE) $(ARCH) $(HIDE)
+	$(MUTE) echo $(UDPATE_TCL_CONTENT) > $(TEMP_DIR)/update_sdk.tcl
+	$(call print,Configuring project)
+	$(MUTE) xsct $(TEMP_DIR)/update_sdk.tcl $(HIDE)
 ifeq ($(strip $(ARCH)),sys_mb)
-	$(call replace_heap,0x800,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
+	$(MUTE)$(call replace_heap,0x800,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
 else
-	$(call replace_heap,0x2000,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
+	$(MUTE)$(call replace_heap,0x2000,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
 endif
-	$(MAKE) xilinx_update_srcs
-	$(call set_one_time_rule,$@)
+	$(MUTE) $(MAKE) --no-print-directory update_srcs
+	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
 
 clean_all: xilinx_clean_all
 
 xilinx_clean_all:
-	-$(call remove_dir,.Xil)
+	-$(MUTE) $(call remove_dir,.Xil) $(HIDE)
