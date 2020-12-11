@@ -145,7 +145,7 @@ BUILD_DIR		= $(PROJECT)/build
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS		= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
-BINARY			= $(BUILD_DIR)/$(PROJECT_NAME)_release
+BINARY			= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
 ifneq ($(words $(NO-OS)), 1)
 $(error $(ENDL)ERROR:$(ENDL)\
