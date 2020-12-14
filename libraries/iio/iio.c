@@ -328,20 +328,21 @@ static inline void _print_ch_id(char *buff, struct iio_channel *ch)
 /**
  * @brief Get channel ID from a list of channels.
  * @param channel - Channel name.
- * @param channels - List of channels.
+ * @param desc - Device descriptor
  * @param ch_out - If "true" is output channel, if "false" is input channel.
  * @return Channel ID, or negative value if attribute is not found.
  */
 static inline struct iio_channel *iio_get_channel(const char *channel,
-		struct iio_channel **channels, bool ch_out)
+		struct iio_device *desc, bool ch_out)
 {
 	int16_t i = 0;
 	char	ch_id[20];
 
-	while (channels[i]) {
-		_print_ch_id(ch_id, channels[i]);
-		if (!strcmp(channel, ch_id) && (channels[i]->ch_out == ch_out))
-			return channels[i];
+	while (i < desc->num_ch) {
+		_print_ch_id(ch_id, &desc->channels[i]);
+		if (!strcmp(channel, ch_id) &&
+		    (desc->channels[i].ch_out == ch_out))
+			return &desc->channels[i];
 		i++;
 	}
 
@@ -659,7 +660,7 @@ static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 	if (!dev)
 		return FAILURE;
 
-	ch = iio_get_channel(channel, dev->dev_descriptor->channels, ch_out);
+	ch = iio_get_channel(channel, dev->dev_descriptor, ch_out);
 	if (!ch)
 		return -ENOENT;
 
@@ -697,7 +698,7 @@ static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 	if (!dev)
 		return -ENOENT;
 
-	ch = iio_get_channel(channel, dev->dev_descriptor->channels, ch_out);
+	ch = iio_get_channel(channel, dev->dev_descriptor, ch_out);
 	if (!ch)
 		return -ENOENT;
 
@@ -806,7 +807,7 @@ static uint32_t bytes_to_samples(struct iio_interface *intf, uint32_t bytes)
 		mask >>= 1;
 	}
 	bytes_per_sample = intf->dev_descriptor->channels[first_ch]
-			   ->scan_type->storagebits / 8;
+			   .scan_type->storagebits / 8;
 
 	return bytes / bytes_per_sample / nb_active_ch;
 }
@@ -1021,8 +1022,8 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 
 	/* Write channels */
 	if (device->channels)
-		for (j = 0; device->channels[j]; j++) {
-			ch = device->channels[j];
+		for (j = 0; j < device->num_ch; j++) {
+			ch = &device->channels[j];
 			_print_ch_id(ch_id, ch);
 			i += snprintf(buff + i, max(n - i, 0),
 				      "<channel id=\"%s\"",

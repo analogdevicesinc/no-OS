@@ -524,22 +524,16 @@ enum ch_type {
  * @return SUCCESS in case of success or negative value otherwise.
  */
 static ssize_t iio_axi_dac_delete_device_descriptor(
-	struct iio_device *iio_device)
+	struct iio_axi_dac_desc *desc)
 {
-	uint16_t i = 0;
-
-	if (!iio_device)
+	if (!desc)
 		return FAILURE;
 
-	if (iio_device->channels) {
-		while (iio_device->channels[i]) {
-			if (iio_device->channels[i]->name)
-				free(iio_device->channels[i]->name);
-			free(iio_device->channels[i]);
-			i++;
-		}
-		free(iio_device->channels);
-	}
+	if (desc->dev_descriptor.channels)
+		free(desc->dev_descriptor.channels);
+
+	if (desc->ch_names)
+		free(desc->ch_names);
 
 	return SUCCESS;
 }
@@ -547,12 +541,12 @@ static ssize_t iio_axi_dac_delete_device_descriptor(
 /**
  * @brief Create structure describing a device, channels
  * and attributes.
- * @param adc - Axi adc.
+ * @param dac - Axi dac.
  * @param iio_device - iio device.
  * @return iio_device or NULL, in case of failure.
  */
 static int32_t iio_axi_dac_create_device_descriptor(
-	struct axi_dac *adc, struct iio_device *iio_device)
+	struct iio_axi_dac_desc *desc, struct iio_device *iio_device)
 {
 	static struct scan_type scan_type = {
 		.sign = 's',
@@ -581,58 +575,47 @@ static int32_t iio_axi_dac_create_device_descriptor(
 	int32_t i, altvoltage_ch, voltage_ch_no, altvoltage_ch_no;
 	int32_t ret;
 
-	voltage_ch_no = adc->num_channels;
-	altvoltage_ch_no = adc->num_channels * 2;
+	voltage_ch_no = desc->dac->num_channels;
+	altvoltage_ch_no = desc->dac->num_channels * 2;
 	iio_device->num_ch = voltage_ch_no + altvoltage_ch_no;
 	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(iio_device->num_ch + 1,
-				      sizeof(struct iio_channel *));
+	iio_device->channels = calloc(iio_device->num_ch,
+				      sizeof(struct iio_channel));
 	if (!iio_device->channels)
 		goto error;
 
+	desc->ch_names = calloc(iio_device->num_ch, sizeof(*desc->ch_names));
+	if (!desc->ch_names)
+		goto error;
+
 	for (i = 0; i < voltage_ch_no; i++) {
-		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
-		if (!iio_device->channels[i])
-			goto error;
 		default_voltage_channel.channel = i;
-		*(iio_device->channels[i]) = default_voltage_channel;
-
-		iio_device->channels[i]->name = calloc(5, 1);
-		if (!iio_device->channels[i]->name)
-			goto error;
-
-		iio_device->channels[i]->scan_index = i;
-		ret = sprintf(iio_device->channels[i]->name, "voltage%"PRIi32"", i);
+		iio_device->channels[i] = default_voltage_channel;
+		iio_device->channels[i].scan_index = i;
+		iio_device->channels[i].name = desc->ch_names[i];
+		ret = sprintf(iio_device->channels[i].name, "voltage%"PRIi32"", i);
 		if (ret < 0)
 			goto error;
 	}
 
 	for (i = voltage_ch_no; i < voltage_ch_no + altvoltage_ch_no; i++) {
-		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
-		if (!iio_device->channels[i])
-			goto error;
 		altvoltage_ch = i - voltage_ch_no;
 		default_altvoltage_channel.channel = altvoltage_ch;
-		*(iio_device->channels[i]) = default_altvoltage_channel;
-
-		iio_device->channels[i]->name = calloc(5, 1);
-		if (!iio_device->channels[i]->name)
-			goto error;
-
-		iio_device->channels[i]->scan_index = altvoltage_ch;
-		ret = sprintf(iio_device->channels[i]->name, "altvoltage%"PRIi32"",
+		iio_device->channels[i] = default_altvoltage_channel;
+		iio_device->channels[i].scan_index = altvoltage_ch;
+		iio_device->channels[i].name = desc->ch_names[i];
+		ret = sprintf(iio_device->channels[i].name, "altvoltage%"PRIi32"",
 			      altvoltage_ch);
 		if (ret < 0)
 			goto error;
 	}
-	iio_device->channels[i] = NULL;
 	iio_device->prepare_transfer = iio_axi_dac_prepare_transfer;
 	iio_device->write_dev = iio_axi_dac_write_data;
 
 	return SUCCESS;
 
 error:
-	iio_axi_dac_delete_device_descriptor(iio_device);
+	iio_axi_dac_delete_device_descriptor(desc);
 
 	return FAILURE;
 }
@@ -678,7 +661,7 @@ int32_t iio_axi_dac_init(struct iio_axi_dac_desc **desc,
 	iio_axi_dac_inst->dmac = init->tx_dmac;
 	iio_axi_dac_inst->dcache_flush_range = init->dcache_flush_range;
 
-	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst->dac,
+	status = iio_axi_dac_create_device_descriptor(iio_axi_dac_inst,
 			&iio_axi_dac_inst->dev_descriptor);
 	if (IS_ERR_VALUE(status)) {
 		free(iio_axi_dac_inst);
@@ -702,7 +685,7 @@ int32_t iio_axi_dac_remove(struct iio_axi_dac_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_axi_dac_delete_device_descriptor(&desc->dev_descriptor);
+	status = iio_axi_dac_delete_device_descriptor(desc);
 	if (status < 0)
 		return status;
 

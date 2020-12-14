@@ -382,22 +382,16 @@ int32_t	iio_axi_adc_read_dev(void *dev, void *buff, uint32_t nb_samples)
  * @return SUCCESS in case of success or negative value otherwise.
  */
 static ssize_t iio_axi_adc_delete_device_descriptor(
-	struct iio_device *iio_device)
+	struct iio_axi_adc_desc *desc)
 {
-	uint16_t i = 0;
-
-	if (!iio_device)
+	if (!desc)
 		return FAILURE;
 
-	if (iio_device->channels) {
-		while (iio_device->channels[i]) {
-			if (iio_device->channels[i]->name)
-				free(iio_device->channels[i]->name);
-			free(iio_device->channels[i]);
-			i++;
-		}
-		free(iio_device->channels);
-	}
+	if (desc->dev_descriptor.channels)
+		free(desc->dev_descriptor.channels);
+
+	if (desc->ch_names)
+		free(desc->ch_names);
 
 	return SUCCESS;
 }
@@ -410,7 +404,7 @@ static ssize_t iio_axi_adc_delete_device_descriptor(
  * @return iio_device or NULL, in case of failure.
  */
 static int32_t iio_axi_adc_create_device_descriptor(
-	struct axi_adc *adc, struct iio_device *iio_device)
+	struct iio_axi_adc_desc *desc, struct iio_device *iio_device)
 {
 	static struct scan_type scan_type = {
 		.sign = 's',
@@ -430,34 +424,33 @@ static int32_t iio_axi_adc_create_device_descriptor(
 	int32_t i;
 	int32_t ret;
 
-	iio_device->num_ch = adc->num_channels;
+	iio_device->num_ch = desc->adc->num_channels;
 	iio_device->attributes = NULL; /* no device attribute */
-	iio_device->channels = calloc(iio_device->num_ch + 1,
-				      sizeof(struct iio_channel *));
+	iio_device->channels = calloc(iio_device->num_ch,
+				      sizeof(struct iio_channel));
 	if (!iio_device->channels)
 		goto error;
 
+	desc->ch_names = calloc(iio_device->num_ch, sizeof(*desc->ch_names));
+	if (!desc->ch_names)
+		goto error;
+
 	for (i = 0; i < iio_device->num_ch; i++) {
-		iio_device->channels[i] = calloc(1, sizeof(struct iio_channel));
-		if (!iio_device->channels[i])
-			goto error;
 		default_channel.channel = i;
-		*(iio_device->channels[i]) = default_channel;
-		iio_device->channels[i]->name = calloc(5, 1);
-		if (!iio_device->channels[i]->name)
-			goto error;
-		iio_device->channels[i]->scan_index = i;
-		ret = sprintf(iio_device->channels[i]->name, "voltage%"PRIi32"", i);
+		iio_device->channels[i] = default_channel;
+		iio_device->channels[i].name = desc->ch_names[i];
+		iio_device->channels[i].scan_index = i;
+		ret = sprintf(iio_device->channels[i].name, "voltage%"PRIi32"", i);
 		if (ret < 0)
 			goto error;
 	}
-	iio_device->channels[i] = NULL;
+
 	iio_device->prepare_transfer = iio_axi_adc_prepare_transfer;
 	iio_device->read_dev = iio_axi_adc_read_dev;
 
 	return SUCCESS;
 error:
-	iio_axi_adc_delete_device_descriptor(iio_device);
+	iio_axi_adc_delete_device_descriptor(desc);
 
 	return FAILURE;
 }
@@ -504,7 +497,7 @@ int32_t iio_axi_adc_init(struct iio_axi_adc_desc **desc,
 	iio_axi_adc_inst->dcache_invalidate_range = init->dcache_invalidate_range;
 	iio_axi_adc_inst->get_sampling_frequency = init->get_sampling_frequency;
 
-	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst->adc,
+	status = iio_axi_adc_create_device_descriptor(iio_axi_adc_inst,
 			&iio_axi_adc_inst->dev_descriptor);
 	if (IS_ERR_VALUE(status)) {
 		free(iio_axi_adc_inst);
@@ -528,7 +521,7 @@ int32_t iio_axi_adc_remove(struct iio_axi_adc_desc *desc)
 	if (!desc)
 		return FAILURE;
 
-	status = iio_axi_adc_delete_device_descriptor(&desc->dev_descriptor);
+	status = iio_axi_adc_delete_device_descriptor(desc);
 	if (status < 0)
 		return status;
 
