@@ -2201,126 +2201,65 @@ static struct iio_attribute global_attributes[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_channel iio_channel_voltage0_in = {
-	.name = "voltage0",
-	.attributes = voltage_input_attributes,
-	.ch_out = false,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 0,
-	.ch_type = IIO_VOLTAGE,
-};
+#define AD9361_VOLTAGE_IN(_idx) {\
+	.name = "voltage" # _idx,\
+	.attributes = voltage_input_attributes,\
+	.ch_out = false,\
+	.scan_type = NULL,\
+	.indexed = true,\
+	.channel = _idx,\
+	.ch_type = IIO_VOLTAGE,\
+}
 
-static struct iio_channel iio_channel_voltage1_in = {
-	.name = "voltage1",
-	.attributes = voltage_input_attributes,
-	.ch_out = false,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 1,
-	.ch_type = IIO_VOLTAGE,
-};
+#define AD9361_VOLTAGE_OUT(_idx) {\
+	.name = "voltage" # _idx,\
+	.attributes = voltage_output_attributes,\
+	.ch_out = true,\
+	.scan_type = NULL,\
+	.indexed = true,\
+	.channel = _idx,\
+	.ch_type = IIO_VOLTAGE,\
+}
 
-static struct iio_channel iio_channel_voltage2_in = {
-	.name = "voltage2",
-	.attributes = voltage_input_attributes,
-	.ch_out = false,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 2,
-	.ch_type = IIO_VOLTAGE,
-};
+#define AD9361_ALTVOLTAGE_OUT(_idx) {\
+	.name = "altvoltage" # _idx,\
+	.attributes = altvoltage_attributes,\
+	.ch_out = true,\
+	.scan_type = NULL,\
+	.indexed = true,\
+	.channel = _idx,\
+	.ch_type = IIO_ALTVOLTAGE,\
+}
 
-static struct iio_channel iio_channel_voltage0_out = {
-	.name = "voltage0",
-	.attributes = voltage_output_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 0,
-	.ch_type = IIO_VOLTAGE,
-};
+#define AD9361_TEMP(_idx) {\
+	.name = "temp" # _idx,\
+	.attributes = temp0_attributes,\
+	.ch_out = false,\
+	.scan_type = NULL,\
+	.indexed = true,\
+	.channel = _idx,\
+	.ch_type = IIO_TEMP,\
+}
 
-static struct iio_channel iio_channel_voltage1_out = {
-	.name = "voltage1",
-	.attributes = voltage_output_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 1,
-	.ch_type = IIO_VOLTAGE,
-};
+#define AD9361_OUT() {\
+	.name = "out",\
+	.attributes = out_attributes,\
+	.ch_out = false,\
+	.scan_type = NULL,\
+}
 
-static struct iio_channel iio_channel_voltage2_out = {
-	.name = "voltage2",
-	.attributes = voltage_output_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 2,
-	.ch_type = IIO_VOLTAGE,
-};
-
-static struct iio_channel iio_channel_voltage3_out = {
-	.name = "voltage3",
-	.attributes = voltage_output_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 3,
-	.ch_type = IIO_VOLTAGE,
-};
-
-static struct iio_channel iio_channel_altvoltage0 = {
-	.name = "altvoltage0",
-	.attributes = altvoltage_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 0,
-	.ch_type = IIO_ALTVOLTAGE,
-};
-
-static struct iio_channel iio_channel_altvoltage1 = {
-	.name = "altvoltage1",
-	.attributes = altvoltage_attributes,
-	.ch_out = true,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 1,
-	.ch_type = IIO_ALTVOLTAGE,
-};
-
-static struct iio_channel iio_channel_temp0 = {
-	.name = "temp0",
-	.attributes = temp0_attributes,
-	.ch_out = false,
-	.scan_type = NULL,
-	.indexed = true,
-	.channel = 0,
-	.ch_type = IIO_TEMP,
-};
-
-static struct iio_channel iio_channel_out = {
-	.name = "out",
-	.attributes = out_attributes,
-	.ch_out = false,
-	.scan_type = NULL,
-};
-
-static struct iio_channel *iio_ad9361_channels[] = {
-	&iio_channel_voltage0_in,
-	&iio_channel_voltage1_in,
-	&iio_channel_voltage2_in,
-	&iio_channel_voltage0_out,
-	&iio_channel_voltage1_out,
-	&iio_channel_voltage2_out,
-	&iio_channel_voltage3_out,
-	&iio_channel_altvoltage0,
-	&iio_channel_altvoltage1,
-	&iio_channel_temp0,
-	&iio_channel_out,
-	NULL,
+static struct iio_channel iio_ad9361_channels[] = {
+	AD9361_VOLTAGE_IN(0),
+	AD9361_VOLTAGE_IN(1),
+	AD9361_VOLTAGE_IN(2),
+	AD9361_VOLTAGE_OUT(0),
+	AD9361_VOLTAGE_OUT(1),
+	AD9361_VOLTAGE_OUT(2),
+	AD9361_VOLTAGE_OUT(3),
+	AD9361_ALTVOLTAGE_OUT(0),
+	AD9361_ALTVOLTAGE_OUT(1),
+	AD9361_TEMP(0),
+	AD9361_OUT(),
 };
 
 /**

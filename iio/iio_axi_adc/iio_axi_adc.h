@@ -70,6 +70,8 @@ struct iio_axi_adc_desc {
 				      uint64_t *sampling_freq_hz);
 	/** iio device descriptor */
 	struct iio_device dev_descriptor;
+	/** Channel names */
+	char (*ch_names)[20];
 };
 
 /**

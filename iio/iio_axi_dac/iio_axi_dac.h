@@ -66,6 +66,8 @@ struct iio_axi_dac_desc {
 	void (*dcache_flush_range)(uint32_t address, uint32_t bytes_count);
 	/** iio device descriptor */
 	struct iio_device dev_descriptor;
+	/** Channel names */
+	char (*ch_names)[20];
 };
 
 /**
