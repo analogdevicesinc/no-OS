@@ -3,10 +3,13 @@
 # This variables will be set to their default value if not set by the user
 # It assumes that the makefile is invoked from No-OS/project/some_project
 
-# User must set PLATFORM variable between:
+# For these platforms, the user may optionally pass the PLATFORM variable:
 # PLATFORM = xilinx
 # PLATFORM = altera
 # PLATFORM = aducm3029
+
+# For these platforms, the user must set the PLATFORM variable:
+# PLATFORM = stm32
 
 ifeq '$(LOCAL_BUILD)' 'y'
 

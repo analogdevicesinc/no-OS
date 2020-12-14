@@ -35,18 +35,16 @@ INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 #------------------------------------------------------------------------------
 
 ifeq (aducm3029,$(strip $(PLATFORM)))
-#Aducm3029 makefile
-include $(NO-OS)/tools/scripts/aducm.mk
-
+	include $(NO-OS)/tools/scripts/aducm.mk
+else ifeq (stm32,$(strip $(PLATFORM)))
+	include $(NO-OS)/tools/scripts/stm32.mk
 else
-#Xilnx and altera makefiles
-ifeq ($(OS), Windows_NT)
-include $(NO-OS)/tools/scripts/windows.mk
-else
-include $(NO-OS)/tools/scripts/linux.mk
-endif #($(OS), Windows_NT)
-
-endif #(aducm3029,$(strip $(PLATFORM)))
+	ifeq ($(OS), Windows_NT)
+		include $(NO-OS)/tools/scripts/windows.mk
+	else
+		include $(NO-OS)/tools/scripts/linux.mk
+	endif
+endif
 
 list:
 ifeq ($(OS), Windows_NT)
@@ -153,11 +151,12 @@ INCLUDE			?= $(NO-OS)/include
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 
 #USED IN MAKEFILE
-PROJECT_NAME		= $(notdir $(PROJECT))
-BUILD_DIR		?= $(PROJECT)/build
+PROJECT_NAME	= $(notdir $(PROJECT))
+BUILD_DIR_NAME	?= build
+BUILD_DIR		?= $(PROJECT)/$(BUILD_DIR_NAME)
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
-PLATFORM_TOOLS		= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
+PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
 BINARY			= $(BUILD_DIR)/$(PROJECT_NAME).elf
 
 ifneq ($(words $(NO-OS)), 1)
@@ -193,6 +192,10 @@ ifeq '' '$(HARDWARE)'
 $(error 'No HARDWARE for aducm3029 found. Add pinmux_config.c file')
 endif
 include $(NO-OS)/tools/scripts/aducm.mk
+endif
+
+ifeq 'stm32' '$(PLATFORM)'
+include $(NO-OS)/tools/scripts/stm32.mk
 endif
 
 #------------------------------------------------------------------------------
@@ -250,7 +253,14 @@ REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS)))
 OBJS = $(REL_SRCS:.c=.o)
 
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
-ASM_OBJS = $(REL_ASM_SRCS:.S=.o)
+ASM_OBJS_s = $(REL_ASM_SRCS:.s=.o)
+ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_s))
+	ASM_OBJS += $(ASM_OBJS_s)
+endif
+ASM_OBJS_S = $(REL_ASM_SRCS:.S=.o)
+ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_S))
+	ASM_OBJS += $(ASM_OBJS_S)
+endif
 
 #Add to include all directories containing a .h file
 EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS),$(dir $(dir))))
@@ -273,18 +283,18 @@ PHONY += all
 # else the project will be build first. This will allow to run make with -j .
 ifneq ($(wildcard $(BUILD_DIR)),)
 all: print_build_type $(BINARY)
-	$(call print,Done ($(notdir $(BINARY))))
+	$(call print,Done ($(BUILD_DIR_NAME)/$(notdir $(BINARY))))
 else
 all: print_build_type
 #Remove -j flag for running project target. (It doesn't work on xilinx on this target)
 	$(MUTE) $(MAKE) --no-print-directory project MAKEFLAGS=$(MAKEOVERRIDES)
 	$(MUTE) $(MAKE) --no-print-directory $(BINARY)
-	$(call print,Done ($(notdir $(BINARY))))
+	$(call print,Done ($(BUILD_DIR_NAME)/$(notdir $(BINARY))))
 endif
 
 PHONY += print_build_type
 print_build_type:
-	$(call print,Building for $(call green,$(PLATFORM)) (using $(call green, $(HARDWARE))))
+	$(call print,Building for $(call green,$(PLATFORM)))
 
 #This is used to keep directory targets between makefile executions
 #More details: http://ismail.badawi.io/blog/2017/03/28/automatic-directory-creation-in-make/
@@ -305,13 +315,17 @@ $(OBJECTS_DIR)/%.o: $$(call get_full_path, %).c | $$(@D)/.
 	@$(call print,[CC] $(notdir $<))
 	$(MUTE) $(CC) -c $(CFLAGS) $< -o $@
 
-$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/.
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).s | $$(@D)/. 
 	@$(call print,[AS] $(notdir $<))
-	$(MUTE) @$(AS) -c $(ASFLAGS) $< -o $@
+	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
+
+$(OBJECTS_DIR)/%.o: $$(call get_full_path, %).S | $$(@D)/. 
+	@$(call print,[AS] $(notdir $<))
+	$(MUTE) $(AS) -c $(ASFLAGS) $< -o $@
 
 $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
-	@$(call print,[LD] $(notdir $(OBJS)) -o $(notdir $@))
-	$(MUTE) @$(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
+	@$(call print,[LD] $(notdir $(OBJS)))
+	$(MUTE) $(CC) -T$(LSCRIPT) $(LDFLAGS) $(LIB_PATHS) -o $(BINARY) $(OBJS) \
 			 $(ASM_OBJS) $(LIB_FLAGS)
 
 PHONY += run
@@ -332,7 +346,7 @@ endif
 # Build project using SDK
 project_build: $(PLATFORM)_project_build
 
-# Remove project binaries
+# Remove build artefacts
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
@@ -340,7 +354,7 @@ clean:
 	-$(MUTE)$(call remove_fun,$(OBJS)) $(HIDE)
 	-$(MUTE)$(call remove_fun,$(ASM_OBJS)) $(HIDE)
 
-# Remove workspace data and project directory
+# Remove the whole build directory
 PHONY += clean_all
 clean_all: clean_libs
 	@$(call print,[Delete] $(BUILD_DIR))
