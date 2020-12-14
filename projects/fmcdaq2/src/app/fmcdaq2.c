@@ -986,6 +986,9 @@ int main(void)
 	axi_dac_data_setup(fmcdaq2.ad9144_core);
 	axi_dac_load_custom_data(fmcdaq2.ad9144_core, sine_lut_iq,
 				 ARRAY_SIZE(sine_lut_iq), DAC_DDR_BASEADDR);
+#ifndef ALTERA_PLATFORM
+	Xil_DCacheFlush();
+#endif
 	axi_dmac_transfer(fmcdaq2.ad9144_dmac, DAC_DDR_BASEADDR,
 			  ARRAY_SIZE(sine_lut_iq) * sizeof(uint32_t));
 #else
