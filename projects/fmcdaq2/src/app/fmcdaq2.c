@@ -628,7 +628,7 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 		.name = "ad9144_dmac",
 		.base = TX_DMA_BASEADDR,
 		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
+		.flags = DMA_LAST
 	};
 	axi_dmac_init(&dev->ad9144_dmac, &dev_init->ad9144_dmac_param);
 
@@ -975,7 +975,7 @@ int main(void)
 		.name = "tx_dmac",
 		.base = TX_DMA_BASEADDR,
 		.direction = DMA_MEM_TO_DEV,
-		.flags = DMA_CYCLIC
+		.flags = DMA_LAST
 	};
 	fmcdaq2.ad9144_channels[0].sel = AXI_DAC_DATA_SEL_DMA;
 	fmcdaq2.ad9144_channels[1].sel = AXI_DAC_DATA_SEL_DMA;
