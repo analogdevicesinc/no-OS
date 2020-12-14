@@ -98,39 +98,32 @@ static struct iio_attribute adxrs290_iio_temp_attrs[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_channel adxrs290_iio_channel_x = {
-	.ch_type = IIO_ANGL_VEL,
-	.modified=1,
-	.channel2=IIO_MOD_X,
-	.scan_index = 0,
-	.scan_type = NULL,
-	.attributes = adxrs290_iio_vel_attrs,
-	.ch_out = false,
-};
-
-static struct iio_channel adxrs290_iio_channel_y = {
-	.ch_type = IIO_ANGL_VEL,
-	.modified=1,
-	.channel2=IIO_MOD_Y,
-	.scan_index = 1,
-	.scan_type = NULL,
-	.attributes = adxrs290_iio_vel_attrs,
-	.ch_out = false,
-};
-
-static struct iio_channel adxrs290_iio_channel_temp = {
-	.ch_type = IIO_TEMP,
-	.scan_index = 2,
-	.scan_type = NULL,
-	.attributes = adxrs290_iio_temp_attrs,
-	.ch_out = false,
-};
-
-static struct iio_channel *adxrs290_iio_channels[] = {
-	&adxrs290_iio_channel_x,
-	&adxrs290_iio_channel_y,
-	&adxrs290_iio_channel_temp,
-	NULL,
+static struct iio_channel adxrs290_iio_channels[] = {
+	{
+		.ch_type = IIO_ANGL_VEL,
+		.modified=1,
+		.channel2=IIO_MOD_X,
+		.scan_index = 0,
+		.scan_type = NULL,
+		.attributes = adxrs290_iio_vel_attrs,
+		.ch_out = false,
+	},
+	{
+		.ch_type = IIO_ANGL_VEL,
+		.modified=1,
+		.channel2=IIO_MOD_Y,
+		.scan_index = 1,
+		.scan_type = NULL,
+		.attributes = adxrs290_iio_vel_attrs,
+		.ch_out = false,
+	},
+	{
+		.ch_type = IIO_TEMP,
+		.scan_index = 2,
+		.scan_type = NULL,
+		.attributes = adxrs290_iio_temp_attrs,
+		.ch_out = false,
+	}
 };
 
 //extern struct iio_device adxrs290_iio_descriptor ;

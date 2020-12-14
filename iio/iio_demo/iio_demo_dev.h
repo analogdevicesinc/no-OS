@@ -73,60 +73,50 @@ static struct scan_type scan_type = {
 	.is_big_endian = false
 };
 
-static struct iio_channel iio_demo_channel_voltage0_in = {
-	.name = "input_channel_0",
-	.ch_type = IIO_VOLTAGE,
-	.channel = 0,
-	.scan_index = 0,
-	.indexed = true,
-	.scan_type = &scan_type,
-	.attributes = demo_channel_attributes,
-	.ch_out = false,
+static struct iio_channel iio_demo_channels_in[] = {
+	{
+		.name = "input_channel_0",
+		.ch_type = IIO_VOLTAGE,
+		.channel = 0,
+		.scan_index = 0,
+		.indexed = true,
+		.scan_type = &scan_type,
+		.attributes = demo_channel_attributes,
+		.ch_out = false,
+	},
+	{
+		.name = "input_channel_1",
+		.ch_type = IIO_VOLTAGE,
+		.channel = 1,
+		.scan_index = 1,
+		.indexed = true,
+		.scan_type = &scan_type,
+		.attributes = demo_channel_attributes,
+		.ch_out = false,
+	},
 };
 
-static struct iio_channel iio_demo_channel_voltage1_in = {
-	.name = "input_channel_1",
-	.ch_type = IIO_VOLTAGE,
-	.channel = 1,
-	.scan_index = 1,
-	.indexed = true,
-	.scan_type = &scan_type,
-	.attributes = demo_channel_attributes,
-	.ch_out = false,
-};
-
-static struct iio_channel iio_demo_channel_voltage0_out = {
-	.name = "output_channel0",
-	.ch_type = IIO_VOLTAGE,
-	.channel = 0,
-	.scan_index = 0,
-	.indexed = true,
-	.scan_type = &scan_type,
-	.attributes = demo_channel_attributes,
-	.ch_out = true,
-};
-
-static struct iio_channel iio_demo_channel_voltage1_out = {
-	.name = "output_channel1",
-	.ch_type = IIO_VOLTAGE,
-	.channel = 1,
-	.scan_index = 1,
-	.indexed = true,
-	.scan_type = &scan_type,
-	.attributes = demo_channel_attributes,
-	.ch_out = true,
-};
-
-static struct iio_channel *iio_demo_channels_in[] = {
-	&iio_demo_channel_voltage0_in,
-	&iio_demo_channel_voltage1_in,
-	NULL,
-};
-
-static struct iio_channel *iio_demo_channels_out[] = {
-	&iio_demo_channel_voltage0_out,
-	&iio_demo_channel_voltage1_out,
-	NULL,
+static struct iio_channel iio_demo_channels_out[] = {
+	{
+		.name = "output_channel0",
+		.ch_type = IIO_VOLTAGE,
+		.channel = 0,
+		.scan_index = 0,
+		.indexed = true,
+		.scan_type = &scan_type,
+		.attributes = demo_channel_attributes,
+		.ch_out = true,
+	},
+	{
+		.name = "output_channel1",
+		.ch_type = IIO_VOLTAGE,
+		.channel = 1,
+		.scan_index = 1,
+		.indexed = true,
+		.scan_type = &scan_type,
+		.attributes = demo_channel_attributes,
+		.ch_out = true,
+	},
 };
 
 static struct iio_device iio_demo_dev_in_descriptor = {
