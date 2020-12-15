@@ -41,6 +41,8 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
+#include <xparameters.h>
+#include "xil_cache.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "ad9656.h"
@@ -54,6 +56,10 @@
 #include "parameters.h"
 #include "error.h"
 #include "delay.h"
+
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -258,6 +264,20 @@ int main(void)
 	ad9656_user_input_test(ad9656_device, AD9656_TEST_OFF, user_input_test_pattern);
 
 	printf("ad9656: setup, configuration and test program is done\n");
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad9656_core,
+		.rx_dmac = ad9656_dmac,
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+	};
+
+	return iio_app_start(&iio_axi_adc_init_par);
+#endif
 
 	/* Memory deallocation for devices and spi */
 	ad9508_remove(ad9508_device);
