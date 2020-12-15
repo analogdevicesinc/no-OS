@@ -13,9 +13,7 @@
 
 SRCS += $(PROJECT)/src/app/ad9656_fmc.c                                 \
 	$(PROJECT)/src/app/ad9508.c   					\
-	$(PROJECT)/src/app/ad9508.h					\
-	$(PROJECT)/src/app/ad9553.c					\
-	$(PROJECT)/src/app/ad9553.h
+	$(PROJECT)/src/app/ad9553.c
 SRCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.c			\
         $(DRIVERS)/axi_core/axi_dmac/axi_dmac.c				\
         $(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.c		\
@@ -29,7 +27,9 @@ SRCS +=	$(PLATFORM_DRIVERS)/axi_io.c					\
         $(PLATFORM_DRIVERS)/xilinx_spi.c				\
         $(PLATFORM_DRIVERS)/delay.c
 INCS +=	$(PROJECT)/src/app/app_config.h					\
-        $(PROJECT)/src/devices/adi_hal/parameters.h
+        $(PROJECT)/src/devices/adi_hal/parameters.h                     \
+        $(PROJECT)/src/app/ad9508.h					\
+        $(PROJECT)/src/app/ad9553.h
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
         $(DRIVERS)/axi_core/axi_dmac/axi_dmac.h				\
         $(DRIVERS)/axi_core/clk_axi_clkgen/clk_axi_clkgen.h		\
