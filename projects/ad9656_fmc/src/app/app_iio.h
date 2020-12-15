@@ -1,7 +1,7 @@
 /***************************************************************************//**
- *   @file   parameters.h
- *   @brief  Platform dependent parameters.
- *   @author DHotolea (dan.hotoleanu@analog.com)
+ *   @file   app_iio.h
+ *   @brief  Application IIO setup.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
  * Copyright 2020(c) Analog Devices, Inc.
  *
@@ -36,22 +36,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
+#ifndef APP_IIO_H_
+#define APP_IIO_H_
 
-#ifndef _PARAMETERS_H_
-#define _PARAMETERS_H_
+/******************************************************************************/
+/***************************** Include Files **********************************/
+/******************************************************************************/
+#include <stdint.h>
+#include "iio_axi_adc.h"
 
-#include "xparameters.h"
+/******************************************************************************/
+/************************ Functions Declarations ******************************/
+/******************************************************************************/
 
-#define SPI_DEVICE_ID				XPAR_XSPIPS_0_DEVICE_ID
+/* @brief Application IIO setup. */
+int32_t iio_app_start(struct iio_axi_adc_init_param *adc_init);
 
-#define ADC_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR + 0x800000)
-
-#define RX_CORE_BASEADDR			XPAR_RX_AD9656_TPL_CORE_ADC_TPL_CORE_BASEADDR
-#define RX_DMA_BASEADDR				XPAR_AXI_AD9656_RX_DMA_BASEADDR
-#define RX_JESD_BASEADDR			XPAR_AXI_AD9656_RX_JESD_RX_AXI_BASEADDR
-#define RX_XCVR_BASEADDR			XPAR_AXI_AD9656_XCVR_BASEADDR
-#define UART_DEVICE_ID				XPAR_XUARTPS_0_DEVICE_ID
-#define UART_IRQ_ID				XPAR_XUARTPS_0_INTR
-#define INTC_DEVICE_ID				XPAR_SCUGIC_SINGLE_DEVICE_ID
-
-#endif /* _PARAMETERS_H_ */
+#endif
