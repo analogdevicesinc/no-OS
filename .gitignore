@@ -20,3 +20,5 @@ aducm_build
 *.hdf
 *.sof
 *.sopcinfo
+
+local_variables.mk
