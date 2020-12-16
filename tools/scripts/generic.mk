@@ -316,7 +316,7 @@ $(BINARY): $(LIB_TARGETS) $(OBJS) $(ASM_OBJS) $(LSCRIPT)
 
 PHONY += run
 run: $(PLATFORM)_run
-	@$(call print, $(notdir $(BINARY)) uploaded to board)
+	@$(call print,$(notdir $(BINARY)) uploaded to board)
 
 project: $(PLATFORM)_project
 
