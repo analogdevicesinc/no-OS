@@ -18,6 +18,29 @@ Code documentation is automatically generated using Doxygen tool, available at [
 
 ## Build
 
+Clone this repository:
+```
+git clone https://github.com/analogdevicesinc/no-OS
+```
+This repo is using different submodules, so depending of your needs you should initialize some of them:
+
+- **Tinyiiod**: To use projects which support iio
+```
+  git submodule update --init libraries/iio/libtinyiiod
+```
+- **STM32CubeF4**: To use projects for stm32 platforms
+```
+  git submodule update --init libraries/stm32/STM32CubeF4
+```
+- **Mqtt client**: To use projects that are using the mqtt client to connect to an mqtt borker
+```
+  git submodule update --init libraries/mqtt/paho.mqtt.embedded-c
+```
+- **MbedTLS**: To use the network layer with TLS integrated
+```
+  git submodule update --init libraries/mbedtls
+```
+
 Build guides for no-OS projects:
   * [Linux](https://github.com/analogdevicesinc/no-OS/wiki/Building-no-OS-on-Linux)
   * [Windows](https://github.com/analogdevicesinc/no-OS/wiki/Building-no-OS-on-Windows)

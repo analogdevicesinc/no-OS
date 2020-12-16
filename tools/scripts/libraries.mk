@@ -24,9 +24,6 @@ MBEDTLS_LIBS				= $(addprefix $(MBEDTLS_LIB_DIR)/,$(MBEDTLS_LIB_NAMES))
 EXTRA_LIBS					+= $(MBEDTLS_LIBS)
 EXTRA_LIBS_PATHS			+= $(MBEDTLS_LIB_DIR)
 EXTRA_INC_PATHS		+= $(MBEDTLS_DIR)/include
-ifeq ($(wildcard $(MBEDTLS_DIR)/.git),)
-INIT_SUBMODULES				+= git submodule update --init --remote -- $(MBEDTLS_DIR);
-endif
 
 #Rules
 MBED_TLS_CONFIG_FILE = $(NO-OS)/network/noos_mbedtls_config.h
@@ -93,14 +90,7 @@ endif
 
 # Build project Release Configuration
 PHONY := libs
-ifneq ($(INIT_SUBMODULES),)
-libs:
-	$(INIT_SUBMODULES)
-	@$(MAKE) libs
-else
 libs: $(LIB_TARGETS)
-	
-endif
 
 PHONY += clean_libs
 clean_libs:
