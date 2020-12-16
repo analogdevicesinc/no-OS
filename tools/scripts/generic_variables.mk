@@ -8,6 +8,12 @@
 # PLATFORM = altera
 # PLATFORM = aducm3029
 
+ifeq '$(LOCAL_BUILD)' 'y'
+
+include local_variables.mk
+
+else
+
 PROJECT			?= $(realpath .)
 TARGET 			?= $(notdir $(realpath .))
 NO-OS			?= $(realpath ../..)
@@ -16,6 +22,8 @@ WORKSPACE		?= $(PROJECT)/build
 INCLUDE			?= $(NO-OS)/include
 DRIVERS 		?= $(NO-OS)/drivers
 PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
+
+endif
 
 #------------------------------------------------------------------------------
 #                          EVALUATE PLATFORM
