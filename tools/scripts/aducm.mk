@@ -151,7 +151,7 @@ endif
 
 #Used to update pinmux if updated on project
 $(PIN_MUX): $(PROJECT_PIN_MUX)
-	@echo UPDATEING PINMUX
+	$(call print,Updating pinmux)
 	$(MUTE) $(call copy_fun,$(PROJECT_PIN_MUX),$(PIN_MUX)) $(HIDE)
 
 # Upload binary to target
@@ -243,7 +243,7 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		-language C \
 		-config Release \
 		-remove-switch linker -specs=rdimon.specs $(HIDE)
-	$(call print, Configuring project)
+	$(call print,Configuring project)
 #Overwrite system.rteconfig file with one that enables all DFP feautres neede by noos
 	$(MUTE) $(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)) $(HIDE)
 #Adding pinmux plugin (Did not work to add it in the first command) and update project
@@ -267,7 +267,7 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 #Remove default files from projectsrc
 	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
 	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
-	$(MUTE) $(MAKE) aducm3029_update_srcs $(HIDE)
+	$(MUTE) $(MAKE) --no-print-directory update_srcs
 	@$(call print, project created at $(PROJECT_BUILD)) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
