@@ -154,7 +154,7 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 
 #USED IN MAKEFILE
 PROJECT_NAME		= $(notdir $(PROJECT))
-BUILD_DIR		= $(PROJECT)/build
+BUILD_DIR		?= $(PROJECT)/build
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS		= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
