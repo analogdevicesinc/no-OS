@@ -57,7 +57,7 @@ ifneq ($(words $(CCES_HOME)), 1)
 
 ifeq ($(wildcard $(PLATFORM_TOOLS)/dfp_drivers),)
 #Create link to dfp to noos if it contains spaces (default on windows)
-DUMMY_VAR := $(shell $(call make_dir_link,$(CCES_HOME),$(PLATFORM_TOOLS)/dfp_drivers))
+DUMMY_VAR := $(shell $(call make_dir_link,$(ADUCM_DFP)/Source/drivers,$(PLATFORM_TOOLS)/dfp_drivers))
 endif
 DFP_DRIVERS = $(PLATFORM_TOOLS)/dfp_drivers
 
@@ -80,8 +80,8 @@ DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/ad
 
 ADUCM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
-ADUCM_INCS += $(ADUCM_DFP)/Include
-ADUCM_INCS += $(CMSIS_CORE)/Include
+GENERIC_FLAGS = -I"$(ADUCM_DFP)/Include"
+GENERIC_FLAGS += -I"$(CMSIS_CORE)/Include"
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
@@ -100,7 +100,7 @@ SRCS += $(ADUCM_SRCS)
 #                           COMPILING DATA                              
 #------------------------------------------------------------------------------
 
-GENERIC_FLAGS = -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb
+GENERIC_FLAGS += -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb
 
 GENERIC_FLAGS += $(addprefix -I,$(ADUCM_INCS))
 
