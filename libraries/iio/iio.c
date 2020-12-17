@@ -1039,7 +1039,7 @@ static uint32_t iio_generate_device_xml(struct iio_device *device, char *name,
 			if (ch->scan_type)
 				i += snprintf(buff + i, max(n - i, 0),
 					      "<scan-element index=\"%d\""
-					      " format=\"%s:%c%d/%d&gt;&gt;%d\" />",
+					      " format=\"%s:%c%d/%d>>%d\" />",
 					      ch->scan_index,
 					      ch->scan_type->is_big_endian ? "be" : "le",
 					      ch->scan_type->sign,
