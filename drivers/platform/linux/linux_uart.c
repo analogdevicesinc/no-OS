@@ -105,7 +105,7 @@ int32_t uart_init(struct uart_desc **desc, struct uart_init_param *param)
 	linux_init = param->extra;
 
 	ret = snprintf(path, sizeof(path), "/dev/%s", linux_init->device_id);
-	if (ret < 0 && ret >= sizeof(path)) {
+	if (ret < 0 || ret >= sizeof(path)) {
 		ret = -ENOMEM;
 		goto free_linux_desc;
 	}
