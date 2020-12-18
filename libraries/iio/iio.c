@@ -663,7 +663,7 @@ static ssize_t iio_ch_read_attr(const char *device_id, const char *channel,
 		return -ENOENT;
 
 	ch_info.ch_out = ch_out;
-	ch_info.ch_num = ch->scan_index;
+	ch_info.ch_num = ch->channel;
 	params.buf = buf;
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
@@ -701,7 +701,7 @@ static ssize_t iio_ch_write_attr(const char *device_id, const char *channel,
 		return -ENOENT;
 
 	ch_info.ch_out = ch_out;
-	ch_info.ch_num = ch->scan_index;
+	ch_info.ch_num = ch->channel;
 	params.buf = (char *)buf;
 	params.len = len;
 	params.dev_instance = dev->dev_instance;
