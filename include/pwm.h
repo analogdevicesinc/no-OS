@@ -64,6 +64,8 @@ enum pwm_polarity {
  * @brief  Structure containing the init parameters needed by the PWM generator
  */
 struct pwm_init_param {
+	/** Pwm id (Ex. Pin number, timer_id) */
+	uint32_t id;
 	/** PWM generator period */
 	uint32_t period_ns;
 	/** PWM generator duty cycle */
@@ -79,6 +81,8 @@ struct pwm_init_param {
  * @brief  Structure representing an PWM generator device
  */
 struct pwm_desc {
+	/** Pwm id */
+	uint32_t id;
 	/** PWM generator period */
 	uint32_t period_ns;
 	/** PWM generator duty cycle */
@@ -113,7 +117,7 @@ int32_t pwm_set_period(struct pwm_desc *desc,
 
 /* Get period of PWM generator device */
 int32_t pwm_get_period(struct pwm_desc *desc,
-			uint32_t *period_ns);
+		       uint32_t *period_ns);
 
 /* Set duty cycle of PWM generator device */
 int32_t pwm_set_duty_cycle(struct pwm_desc *desc,
