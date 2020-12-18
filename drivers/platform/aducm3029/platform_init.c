@@ -37,6 +37,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
+#include <sys/platform.h>
+#include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
 #include "error.h"
 
@@ -45,7 +47,7 @@
  *        divider.
  * @return 0 in case of success or error code otherwise.
  */
-int32_t pwr_setup(void)
+int32_t platform_init(void)
 {
 	int32_t ret;
 
@@ -55,5 +57,11 @@ int32_t pwr_setup(void)
 	ret = adi_pwr_SetClockDivider(ADI_CLOCK_HCLK,1);
 	if(ret != SUCCESS)
 		return FAILURE;
-	return adi_pwr_SetClockDivider(ADI_CLOCK_PCLK,1);
+	ret = adi_pwr_SetClockDivider(ADI_CLOCK_PCLK,1);
+	if(ret != SUCCESS)
+		return ret;
+
+	adi_initComponents();
+
+	return SUCCESS;
 }

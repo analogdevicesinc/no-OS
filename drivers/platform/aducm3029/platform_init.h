@@ -42,6 +42,6 @@
 
 /* Initialize the power controller and set the core and peripherals clock
  * divider. */
-int32_t pwr_setup();
+int32_t platform_init();
 
 #endif /* PLATFORM_INIT_H_ */
