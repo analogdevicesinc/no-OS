@@ -80,7 +80,7 @@ static const struct ad5629r_chip_info chip_info[] = {
 /***************************************************************************//**
  * @brief Initializes the communication with the device.
  *
- * @param device -  AD5629R device structue.
+ * @param device -  AD5629R device structure.
  *
  * @param init_param - Device initial parameters.
  *                  Example: AD5629R, AD5669R, AD5668, AD5648, AD5628.
