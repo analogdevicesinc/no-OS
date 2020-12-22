@@ -2,8 +2,9 @@
  *   @file   ad6676_ebz.c
  *   @brief  Implementation of Main Function.
  *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -40,29 +41,26 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include "platform_drivers.h"
+#include <stdio.h>
+#include <inttypes.h>
+#include "parameters.h"
+#include <xparameters.h>
+#include <xil_printf.h>
+#include <xil_cache.h>
+#include "spi.h"
+#include "gpio.h"
+#include "spi_extra.h"
+#include "gpio_extra.h"
+#include "delay.h"
+#include "error.h"
 #include "ad6676.h"
-#include "adc_core.h"
-#include "xcvr_core.h"
-#include "jesd_core.h"
-#include "dmac_core.h"
+#include "axi_adc_core.h"
+#include "axi_dmac.h"
+#include "axi_jesd204_rx.h"
+#include "axi_adxcvr.h"
 
-/******************************************************************************/
-/********************** Macros and Constants Definitions **********************/
-/******************************************************************************/
-
-#define GPIO_ADC_OEN			41
-#define GPIO_ADC_SELA			40
-#define GPIO_ADC_SELB			39
-#define GPIO_ADC_S0			38
-#define GPIO_ADC_S1			37
-#define GPIO_ADC_RESETB			36
-#define GPIO_ADC_AGC1			35
-#define GPIO_ADC_AGC2			34
-#define GPIO_ADC_AGC3			33
-#define GPIO_ADC_AGC4			32
-
-#define GPIO_JESD204_SYSREF		48
+#define LOG_LEVEL 6
+#include "print_log.h"
 
 /***************************************************************************//**
 * @brief ad6676_gpio_config
@@ -70,58 +68,171 @@
 
 int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 {
-	gpio_desc *gpio_adc_oen;
-	gpio_desc *gpio_adc_s0;
-	gpio_desc *gpio_adc_s1;
-	gpio_desc *gpio_adc_sela;
-	gpio_desc *gpio_adc_selb;
-	gpio_desc *gpio_adc_resetb;
-	gpio_desc *gpio_adc_agc1;
-	gpio_desc *gpio_adc_agc2;
+	int32_t ret;
 
-	gpio_get(&gpio_adc_oen, GPIO_ADC_OEN);
-	gpio_get(&gpio_adc_s0, GPIO_ADC_S0);
-	gpio_get(&gpio_adc_s1, GPIO_ADC_S1);
-	gpio_get(&gpio_adc_sela, GPIO_ADC_SELA);
-	gpio_get(&gpio_adc_selb, GPIO_ADC_SELB);
-	gpio_get(&gpio_adc_resetb, GPIO_ADC_RESETB);
-	gpio_get(&gpio_adc_agc1, GPIO_ADC_AGC1);
-	gpio_get(&gpio_adc_agc2, GPIO_ADC_AGC2);
+	struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
 
-	gpio_set_value(gpio_adc_oen, 0);
+	struct gpio_init_param gpio_adc_oen_param = {
+		.number = GPIO_ADC_OEN,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_oen;
+
+	struct gpio_init_param gpio_adc_s0_param = {
+		.number = GPIO_ADC_S0,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_s0;
+
+	struct gpio_init_param gpio_adc_s1_param = {
+		.number = GPIO_ADC_S1,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_s1;
+
+	struct gpio_init_param gpio_adc_sela_param = {
+		.number = GPIO_ADC_SELA,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_sela;
+
+	struct gpio_init_param gpio_adc_selb_param = {
+		.number = GPIO_ADC_SELB,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_selb;
+
+	struct gpio_init_param gpio_adc_resetb_param = {
+		.number = GPIO_ADC_RESETB,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_resetb;
+
+	struct gpio_init_param gpio_adc_agc1_param = {
+		.number = GPIO_ADC_AGC1,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_agc1;
+
+	struct gpio_init_param gpio_adc_agc2_param = {
+		.number = GPIO_ADC_AGC2,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_adc_agc2;
+
+	ret = gpio_get(&gpio_adc_oen, &gpio_adc_oen_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_s0, &gpio_adc_s0_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_s1, &gpio_adc_s1_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_sela, &gpio_adc_sela_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_selb, &gpio_adc_selb_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_resetb, &gpio_adc_resetb_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_agc1, &gpio_adc_agc1_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_get(&gpio_adc_agc2, &gpio_adc_agc2_param);
+	if(ret != SUCCESS)
+		return FAILURE;
+
+	ret = gpio_direction_output(gpio_adc_oen, 0);
+	if(ret != SUCCESS)
+		return FAILURE;
 
 	switch (init_param.decimation) {
 	case 12:
-		gpio_set_value(gpio_adc_s0, 1);
-		gpio_set_value(gpio_adc_s1, 1);
+		ret = gpio_direction_output(gpio_adc_s0, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_s1, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
 		break;
 	case 16:
-		gpio_set_value(gpio_adc_s0, 0);
-		gpio_set_value(gpio_adc_s1, 1);
+		ret = gpio_direction_output(gpio_adc_s0, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_s1, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
 		break;
 	case 24:
-		gpio_set_value(gpio_adc_s0, 0);
-		gpio_set_value(gpio_adc_s1, 1);
+		ret = gpio_direction_output(gpio_adc_s0, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_s1, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
 		break;
 	case 32:
-		gpio_set_value(gpio_adc_s0, 0);
-		gpio_set_value(gpio_adc_s1, 0);
+		ret = gpio_direction_output(gpio_adc_s0, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_s1, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
 		break;
 	default:
-		return -1;
+		return FAILURE;
 	}
 
 	if (init_param.use_extclk) {
-		gpio_set_value(gpio_adc_sela, 1);
-		gpio_set_value(gpio_adc_selb, 0);
+		ret = gpio_direction_output(gpio_adc_sela, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_selb, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
 	} else {
-		gpio_set_value(gpio_adc_sela, 0);
-		gpio_set_value(gpio_adc_selb, 1);
+		ret = gpio_direction_output(gpio_adc_sela, 0);
+		if(ret != SUCCESS)
+			return FAILURE;
+		ret = gpio_direction_output(gpio_adc_selb, 1);
+		if(ret != SUCCESS)
+			return FAILURE;
 	}
 
-	gpio_set_value(gpio_adc_resetb, 1);
-	gpio_set_value(gpio_adc_agc1, 0);
-	gpio_set_value(gpio_adc_agc2, 0);
+	ret = gpio_direction_output(gpio_adc_resetb, 1);
+	if(ret != SUCCESS)
+		return FAILURE;
+	ret = gpio_direction_output(gpio_adc_agc1, 0);
+	if(ret != SUCCESS)
+		return FAILURE;
+	ret = gpio_direction_output(gpio_adc_agc2, 0);
+	if(ret != SUCCESS)
+		return FAILURE;
 
 	gpio_remove(gpio_adc_oen);
 	gpio_remove(gpio_adc_s0);
@@ -132,7 +243,7 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 	gpio_remove(gpio_adc_agc1);
 	gpio_remove(gpio_adc_agc2);
 
-	return 0;
+	return SUCCESS;
 }
 
 /***************************************************************************//**
@@ -140,34 +251,83 @@ int32_t ad6676_gpio_config(struct ad6676_init_param init_param)
 *******************************************************************************/
 int main(void)
 {
-	adc_core		ad6676_core;
-	struct ad6676_init_param 	ad6676_param;
-	jesd_core		ad6676_jesd;
-	xcvr_core		ad6676_xcvr;
+	int32_t ret;
+
+	struct xil_gpio_init_param xil_gpio_param = {
+#ifdef PLATFORM_MB
+		.type = GPIO_PL,
+#else
+		.type = GPIO_PS,
+#endif
+		.device_id = GPIO_DEVICE_ID
+	};
+
+	struct gpio_init_param gpio_sysref_param = {
+		.number = GPIO_JESD204_SYSREF,
+		.platform_ops = &xil_gpio_platform_ops,
+		.extra = &xil_gpio_param
+	};
+	struct gpio_desc *gpio_sysref;
+
+	struct xil_spi_init_param xil_spi_param = {
+#ifdef PLATFORM_MB
+		.type = SPI_PL,
+#else
+		.type = SPI_PS,
+#endif
+		.device_id = SPI_DEVICE_ID
+	};
+
+	struct spi_init_param ad6676_spi_param = {
+		.max_speed_hz = 2000000u,
+		.chip_select = 0,
+		.mode = SPI_MODE_0,
+		.platform_ops = &xil_platform_ops,
+		.extra = &xil_spi_param
+	};
+
+	struct axi_adc_init ad6676_core_param = {
+		.name = "ad6676_adc",
+		.base = RX_CORE_BASEADDR,
+		.num_channels = 2
+	};
+	struct axi_adc *ad6676_core;
+
+	struct jesd204_rx_init  ad6676_jesd_param = {
+		.name = "ad6676_jesd",
+		.base = RX_JESD_BASEADDR,
+		.octets_per_frame = 1,
+		.frames_per_multiframe = 16,
+		.subclass = 1,
+		.device_clk_khz = 4000000 / 40,
+		.lane_clk_khz = 4000000
+	};
+	struct axi_jesd204_rx *ad6676_jesd;
+
+	struct adxcvr_init ad6676_xcvr_param = {
+		.name = "ad6676_xcvr",
+		.base = RX_XCVR_BASEADDR,
+		.sys_clk_sel = 0,
+		.out_clk_sel = 4,
+		.lpm_enable = 0,
+		.cpll_enable = 1,
+		.ref_rate_khz = 200000,
+		.lane_rate_khz = 4000000,
+	};
+	struct adxcvr *ad6676_xcvr;
+
+	struct axi_dmac_init ad6676_dmac_param = {
+		.name = "ad6676_dmac",
+		.base = RX_DMA_BASEADDR,
+		.direction = DMA_DEV_TO_MEM,
+		.flags = 0
+	};
+	struct axi_dmac *ad6676_dmac;
+
 	struct ad6676_dev		*ad6676_device;
-	dmac_core		ad6676_dma;
-	dmac_xfer		rx_xfer;
+	struct ad6676_init_param 	ad6676_param;
 
-	uint32_t		store_samples;
-
-	// base addresses
-
-	ad6676_param.spi_init.chip_select = SPI_CHIP_SELECT(0);
-	ad6676_param.spi_init.cpha = 0;
-	ad6676_param.spi_init.cpol = 0;
-#ifdef ZYNQ_PS7
-	ad6676_param.spi_init.type = ZYNQ_PS7_SPI;
-#endif
-#ifdef ZYNQ_PSU
-	ad6676_param.spi_init.type = ZYNQ_PSU_SPI;
-#endif
-#ifdef ALTERA
-	ad6676_param.spi_init.type = NIOS_II_SPI;
-#endif
-#ifdef MICROBLAZE
-	ad6676_param.spi_init.type = MICROBLAZE_SPI;
-#endif
-
+	ad6676_param.spi_init = ad6676_spi_param;
 	ad6676_param.ref_clk = 200000000UL; // reference clk Hz
 	ad6676_param.f_adc_hz = 3200000000UL; // adc frequency Hz
 	ad6676_param.f_if_hz = 250000000UL; // intermediate frequency Hz
@@ -191,91 +351,81 @@ int main(void)
 	ad6676_param.n_lanes = 2;
 	ad6676_param.frames_per_multiframe = 16;
 
-	// jesd_core settings
-
-	ad6676_jesd.rx_tx_n = 1;
-	ad6676_jesd.scramble_enable = 1;
-	ad6676_jesd.octets_per_frame = 1;
-	ad6676_jesd.frames_per_multiframe = 16;
-	ad6676_jesd.subclass_mode = 1;
-	ad6676_jesd.sysref_type = INTERN;
-	ad6676_jesd.sysref_gpio_pin = GPIO_JESD204_SYSREF;
-
-	// xcvr settings
-
-	ad6676_xcvr.dev.lpm_enable = 0;
-	ad6676_xcvr.dev.out_clk_sel = 4;
-	ad6676_xcvr.dev.sys_clk_sel = 0;
-	ad6676_xcvr.reconfig_bypass = 0;
-	ad6676_xcvr.lane_rate_kbps = 4000000;
-	ad6676_xcvr.ref_rate_khz = 200000;
-
-	// adc settings
-
-	ad6676_core.no_of_channels = 2;
-	ad6676_core.resolution = 16;
-
 	// receiver DMA configuration
+	ret = gpio_get(&gpio_sysref, &gpio_sysref_param);
+	if(ret != SUCCESS)
+		return FAILURE;
 
-#ifdef ZYNQ
-	rx_xfer.start_address = XPAR_DDR_MEM_BASEADDR + 0x800000;
-#endif
-#ifdef MICROBLAZE
-	rx_xfer.start_address = XPAR_AXI_DDR_CNTRL_BASEADDR + 0x800000;
-#endif
-	ad6676_dma.type = DMAC_RX;
-	ad6676_dma.transfer = &rx_xfer;
-	rx_xfer.id = 0;
-	rx_xfer.no_of_samples = 32768;
-#ifdef XILINX
-	ad6676_xcvr.base_address = XPAR_AXI_AD6676_XCVR_BASEADDR;
-	ad6676_jesd.base_address = XPAR_AXI_AD6676_JESD_RX_AXI_BASEADDR;
-	ad6676_dma.base_address = XPAR_AXI_AD6676_DMA_BASEADDR;
-	ad6676_core.base_address = XPAR_AXI_AD6676_CORE_BASEADDR;
-#endif
-	xcvr_getconfig(&ad6676_xcvr);
+	ret = gpio_direction_output(gpio_sysref, 1);
+	if(ret != SUCCESS)
+		return FAILURE;
 
 	// set up clock
-	ad6676_gpio_config(ad6676_param);
+	ret = ad6676_gpio_config(ad6676_param);
+	if(ret != SUCCESS)
+		return FAILURE;
 
 	// set up the device
-	ad6676_setup(&ad6676_device, ad6676_param);
+	ret = ad6676_setup(&ad6676_device, ad6676_param);
+	if(ret != SUCCESS)
+		return FAILURE;
 
-	// set up the XCVRs
-	xcvr_setup(&ad6676_xcvr);
+	// set up the XCVR core
+	ret = adxcvr_init(&ad6676_xcvr, &ad6676_xcvr_param);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: adxcvr_init() failed\n", ad6676_xcvr->name);
+	}
 
-	// set up the JESD core
-	jesd_setup(&ad6676_jesd);
+	ret = adxcvr_clk_enable(ad6676_xcvr);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: adxcvr_clk_enable() failed\n", ad6676_xcvr->name);
+	}
 
-	// generate SYSREF
-	jesd_sysref_control(&ad6676_jesd, 1);
+	// setup JESD core
+	ret = axi_jesd204_rx_init(&ad6676_jesd, &ad6676_jesd_param);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: axi_jesd204_rx_init() failed\n", ad6676_jesd->name);
+	}
+
+	ret = axi_jesd204_rx_lane_clk_enable(ad6676_jesd);
+	if (ret != SUCCESS) {
+		pr_err("error: %s: axi_jesd204_tx_lane_clk_enable() failed\n",
+		       ad6676_jesd->name);
+	}
+
+	ret = axi_adc_init(&ad6676_core,  &ad6676_core_param);
+	if (ret != SUCCESS) {
+		pr_err("axi_adc_init() error: %s\n", ad6676_core->name);
+	}
 
 	// JESD core status
-	axi_jesd204_rx_status_read(&ad6676_jesd);
-
-	// interface core setup
-	adc_setup(ad6676_core);
+	ret = axi_jesd204_rx_status_read(ad6676_jesd);
+	if (ret != SUCCESS) {
+		pr_err("axi_jesd204_rx_status_read() error: %"PRIi32"\n", ret);
+	}
 
 	// PRBS test
 	ad6676_test(ad6676_device, TESTGENMODE_PN9_SEQ);
-	adc_pn_mon(ad6676_core, ADC_PN9);
+	if(axi_adc_pn_mon(ad6676_core, AXI_ADC_PN9, 10) == -1) {
+		pr_err("%s ad6676 - PN23 sequence mismatch!\n", __func__);
+	};
 	ad6676_test(ad6676_device, TESTGENMODE_PN23_SEQ);
-	adc_pn_mon(ad6676_core, ADC_PN23A);
-
+	if(axi_adc_pn_mon(ad6676_core, AXI_ADC_PN23, 10) == -1) {
+		pr_err("%s ad6676 - PN23 sequence mismatch!\n", __func__);
+	};
 
 	// set up ramp output
 	ad6676_test(ad6676_device, TESTGENMODE_RAMP);
+
 	// test the captured data
-	if(!dmac_start_transaction(ad6676_dma)) {
-		store_samples = rx_xfer.no_of_samples/ad6676_core.no_of_channels;
-		adc_ramp_test(ad6676_core, 1, store_samples, rx_xfer.start_address);
-	};
+	axi_dmac_init(&ad6676_dmac, &ad6676_dmac_param);
+	axi_dmac_transfer(ad6676_dmac, ADC_DDR_BASEADDR, 16384 * 2);
 
 	// capture data with DMA
 	ad6676_test(ad6676_device, TESTGENMODE_OFF);
-	if(!dmac_start_transaction(ad6676_dma)) {
-		ad_printf("RX capture done!\n");
-	};
+	axi_dmac_transfer(ad6676_dmac, ADC_DDR_BASEADDR, 16384 * 2);
 
-	return 0;
+	pr_info("Done.");
+
+	return SUCCESS;
 }
