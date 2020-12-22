@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   config.h
- *   @brief  Config file of AD9361/API Driver.
- *   @author DBogdan (dragos.bogdan@analog.com)
+ *   @file   parameters.h
+ *   @brief  Platform dependent parameters.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2015(c) Analog Devices, Inc.
+ * Copyright 2020(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -37,40 +37,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef CONFIG_H_
-#define CONFIG_H_
+#ifndef _PARAMETERS_H_
+#define _PARAMETERS_H_
 
-// #define HAVE_VERBOSE_MESSAGES /* Recommended during development prints errors and warnings */
-// #define DEBUG		 /* For Debug purposes only */
+#include "app_config.h"
+#include "xparameters.h"
 
-/******************************************************************************/
-/****************************** Carrier Vendors *******************************/
-/******************************************************************************/
-// #define XILINX
-// #define ALTERA
+#ifdef PLATFORM_MB
+#define SPI_DEVICE_ID				XPAR_SPI_0_DEVICE_ID
+#define GPIO_DEVICE_ID				XPAR_GPIO_0_DEVICE_ID
 
-/******************************************************************************/
-/********************************* CPU Arch ***********************************/
-/******************************************************************************/
-/*Xilinx*/
-// #define ZYNQ /* Requires a family definition (below)*/
-	// #define ZYNQ_PS7
-	//#define ZYNQ_PSU
-// #define MICROBLAZE
+#define GPIO_OFFSET				0
 
-/*Altera*/
-// #define SOC
-// #define NIOS_II
+#define ADC_DDR_BASEADDR			(XPAR_AXI_DDR_CNTRL_BASEADDR  + 0x800000)
+#else
+#define SPI_DEVICE_ID				XPAR_XSPIPS_0_DEVICE_ID
+#define GPIO_DEVICE_ID				XPAR_XGPIOPS_0_DEVICE_ID
 
-/******************************************************************************/
-/********************************* Warn User **********************************/
-/******************************************************************************/
+#define GPIO_OFFSET				54
 
-#if !defined(XILINX) && !defined(ALTERA)
-	printf("\nWARNING no vendor defined in config.h (for carrier)\n");
+#define ADC_DDR_BASEADDR			(XPAR_DDR_MEM_BASEADDR + 0x800000)
 #endif
 
-#if !defined(MICROBLAZE) && !defined(NIOS_II) && !defined(SOC) && !defined(ZYNQ)
-	printf("\nWARNING CPU arch defined in config.h\n");
-#endif
-#endif
+#define RX_CORE_BASEADDR			XPAR_AXI_AD6676_CORE_BASEADDR
+#define RX_DMA_BASEADDR				XPAR_AXI_AD6676_DMA_BASEADDR
+#define RX_JESD_BASEADDR			XPAR_AXI_AD6676_JESD_RX_AXI_BASEADDR
+#define RX_XCVR_BASEADDR			XPAR_AXI_AD6676_XCVR_BASEADDR
+
+#define GPIO_ADC_OEN			(GPIO_OFFSET + 41)
+#define GPIO_ADC_SELA			(GPIO_OFFSET + 40)
+#define GPIO_ADC_SELB			(GPIO_OFFSET + 39)
+#define GPIO_ADC_S0				(GPIO_OFFSET + 38)
+#define GPIO_ADC_S1				(GPIO_OFFSET + 37)
+#define GPIO_ADC_RESETB			(GPIO_OFFSET + 36)
+#define GPIO_ADC_AGC1			(GPIO_OFFSET + 35)
+#define GPIO_ADC_AGC2			(GPIO_OFFSET + 34)
+#define GPIO_ADC_AGC3			(GPIO_OFFSET + 33)
+#define GPIO_ADC_AGC4			(GPIO_OFFSET + 32)
+
+#define GPIO_JESD204_SYSREF		(GPIO_OFFSET + 48)
+
+#endif /* _PARAMETERS_H_ */
