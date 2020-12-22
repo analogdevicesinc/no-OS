@@ -62,6 +62,10 @@
 #define LOG_LEVEL 6
 #include "print_log.h"
 
+#ifdef IIO_SUPPORT
+#include "app_iio.h"
+#endif
+
 /***************************************************************************//**
 * @brief ad6676_gpio_config
 *******************************************************************************/
@@ -424,6 +428,23 @@ int main(void)
 	// capture data with DMA
 	ad6676_test(ad6676_device, TESTGENMODE_OFF);
 	axi_dmac_transfer(ad6676_dmac, ADC_DDR_BASEADDR, 16384 * 2);
+
+#ifdef IIO_SUPPORT
+	printf("The board accepts libiio clients connections through the serial backend.\n");
+
+	struct iio_axi_adc_init_param iio_axi_adc_init_par;
+	iio_axi_adc_init_par = (struct iio_axi_adc_init_param) {
+		.rx_adc = ad6676_core,
+		.rx_dmac = ad6676_dmac,
+#ifndef PLATFORM_MB
+		.dcache_invalidate_range = (void (*)(uint32_t,
+						     uint32_t))Xil_DCacheInvalidateRange
+#endif
+	};
+
+	return iio_app_start(&iio_axi_adc_init_par);
+
+#endif
 
 	pr_info("Done.");
 
