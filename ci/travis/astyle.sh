@@ -4,8 +4,6 @@ set -e
 
 . ./ci/travis/lib.sh
 
-echo_red() { printf "\033[1;31m$*\033[m\n"; }
-
 ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
 
 COMMIT_RANGE="${COMMIT_RANGE}"
@@ -19,9 +17,17 @@ then
 	COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
 	if [ -z "$TRAVIS_PULL_REQUEST_SHA" ]
 	then
-		echo "Using only latest commit, since there is no Pull Request"
+		echo_green "Using only latest commit, since there is no Pull Request"
 		COMMIT_RANGE=HEAD~1
 	fi
+fi
+
+echo_green "Running astyle on commit range '$COMMIT_RANGE'"
+echo_green "Commits should be:"
+if ! git rev-parse $COMMIT_RANGE ; then
+	echo_red "Failed to parse commit range '$COMMIT_RANGE'"
+	echo_green "Using only latest commit"
+	COMMIT_RANGE=HEAD~1
 fi
 
 is_valid_file(){

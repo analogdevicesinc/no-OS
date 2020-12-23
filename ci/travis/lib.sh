@@ -43,6 +43,9 @@ ensure_command_exists() {
 
 ensure_command_exists sudo
 
+echo_red() { printf "\033[1;31m$*\033[m\n"; }
+echo_green() { printf "\033[1;32m$*\033[m\n"; }
+
 # Other scripts will download lib.sh [this script] and lib.sh will
 # in turn download the other scripts it needs.
 # This gives way more flexibility when changing things, as they propagate
