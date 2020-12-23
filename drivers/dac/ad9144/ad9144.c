@@ -381,13 +381,13 @@ int32_t ad9144_set_nco(struct ad9144_dev *dev, int32_t f_carrier_khz,
 		sel_sideband = true;
 	}
 
-	if (f_carrier_khz >= dev->sample_rate_khz / 2) {
+	if ((uint32_t) f_carrier_khz >= dev->sample_rate_khz / 2) {
 		/* No modulation */
 		modulation_type = MODULATION_TYPE(0);
-	} else if (dev->sample_rate_khz == f_carrier_khz * 4) {
+	} else if (dev->sample_rate_khz == (uint32_t) f_carrier_khz * 4) {
 		/* Coarse − f DAC /4 */
 		modulation_type = MODULATION_TYPE(2);
-	} else if (dev->sample_rate_khz == f_carrier_khz * 8) {
+	} else if (dev->sample_rate_khz == (uint32_t) f_carrier_khz * 8) {
 		/* Coarse − f DAC /8 */
 		modulation_type = MODULATION_TYPE(3);
 	} else {
