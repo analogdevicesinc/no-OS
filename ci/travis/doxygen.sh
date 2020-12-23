@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo_red() { printf "\033[1;31m$*\033[m\n"; }
-echo_green() { printf "\033[1;32m$*\033[m\n"; }
-
 ############################################################################
 # Check if the documentation will be generated w/o warnings or errors
 ############################################################################
@@ -28,6 +25,8 @@ fi
 if [ "$UPDATE_GH_DOCS" = "1" ]
 then
         MASTER_COMMIT=$(git rev-parse --short HEAD)
+
+	echo_green "Running Github docs update on commit '$MASTER_COMMIT'"
 
         pushd ${TOP_DIR}/doc
         git clone https://github.com/${REPO_SLUG} --depth 1 --branch=gh-pages doc/html &>/dev/null
