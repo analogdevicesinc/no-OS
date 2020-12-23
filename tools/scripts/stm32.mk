@@ -1,3 +1,10 @@
+ifndef STM32CUBE
+$(error STM32CUBE not found in shell environment.$(ENDL))
+endif
+
+PLATFORM_RELATIVE_PATH = $(patsubst $(STM32CUBE)%,stm32%,$1)
+PLATFORM_FULL_PATH = $(patsubst stm32%,$(STM32CUBE)%,$1)
+
 CFLAGS += -std=gnu11 \
 	-g3 \
 	-DUSE_HAL_DRIVER \
@@ -30,11 +37,10 @@ AR = arm-none-eabi-ar
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 ifneq '' '$(call rwildcard,src,stm32f4*)'
-SUBPLATFORM = stm32f4
-CFLAGS += -I$(NO-OS)/libraries/stm32/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc \
-	-I$(NO-OS)/libraries/stm32/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy \
-	-I$(NO-OS)/libraries/stm32/STM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Include \
-	-I$(NO-OS)/libraries/stm32/STM32CubeF4/Drivers/CMSIS/Include
+CFLAGS += -I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc \
+	-I$(STM32CUBE)/STM32CubeF4/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy \
+	-I$(STM32CUBE)/STM32CubeF4/Drivers/CMSIS/Device/ST/STM32F4xx/Include \
+	-I$(STM32CUBE)/STM32CubeF4/Drivers/CMSIS/Include
 TARGETCFG = target/stm32f4x.cfg
 else
 $(error Couldn't detect stm32 family.$(ENDL))

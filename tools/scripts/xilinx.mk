@@ -33,6 +33,10 @@ LSCRIPT		:= $(BUILD_DIR)/app/src/lscript.ld
 LIB_PATHS	+= -L$(BUILD_DIR)/bsp/$(ARCH)/lib
 # Xilinx's bsp include path
 CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
+
+PLATFORM_RELATIVE_PATH = $1
+PLATFORM_FULL_PATH = $1
+
 ################|--------------------------------------------------------------
 ################|                   Zynq                                       
 ################|--------------------------------------------------------------
