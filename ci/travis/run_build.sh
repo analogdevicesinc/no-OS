@@ -5,6 +5,7 @@ set -e
 sudo apt-get update
 
 TOP_DIR="$(pwd)"
+DEPS_DIR="${TOP_DIR}/deps"
 
 . ./ci/travis/lib.sh
 
@@ -25,6 +26,7 @@ build_doxygen() {
     sudo apt-get install -y graphviz
     # Install a recent version of doxygen
 	DOXYGEN_URL="https://sourceforge.net/projects/doxygen/files/rel-1.8.17/doxygen-1.8.17.src.tar.gz/"
+	mkdir -p "${DEPS_DIR}"
 	cd ${DEPS_DIR}
 	[ -d "doxygen" ] || {
 		mkdir doxygen && wget --quiet -O - ${DOXYGEN_URL} | tar --strip-components=1 -xz -C doxygen
