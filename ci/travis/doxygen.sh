@@ -6,7 +6,7 @@ echo_green() { printf "\033[1;32m$*\033[m\n"; }
 ############################################################################
 # Check if the documentation will be generated w/o warnings or errors
 ############################################################################
-pushd ${TRAVIS_BUILD_DIR}/doc
+pushd ${TOP_DIR}/doc
 (cd build && ! make doc 2>&1 | grep -E "warning:|error:") || {
         echo_red "Documentation incomplete or errors in the generation of it have occured!"
         exit 1
@@ -21,7 +21,7 @@ echo_green "Documentation was generated successfully!"
 ############################################################################
 if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]
 then
-        pushd ${TRAVIS_BUILD_DIR}/doc
+        pushd ${TOP_DIR}/doc
         git clone https://github.com/${TRAVIS_REPO_SLUG} --depth 1 --branch=gh-pages doc/html &>/dev/null
 
         pushd doc/html
