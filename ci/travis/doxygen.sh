@@ -21,7 +21,11 @@ echo_green "Documentation was generated successfully!"
 ############################################################################
 REPO_SLUG="${REPO_SLUG:-analogdevicesinc/no-OS}"
 
-if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]]
+if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]] ; then
+        UPDATE_GH_DOCS=1
+fi
+
+if [ "$UPDATE_GH_DOCS" = "1" ]
 then
         pushd ${TOP_DIR}/doc
         git clone https://github.com/${REPO_SLUG} --depth 1 --branch=gh-pages doc/html &>/dev/null
