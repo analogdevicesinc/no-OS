@@ -7,6 +7,3 @@
 [submodule "libraries/iio/libtinyiiod"]
 	path = libraries/iio/libtinyiiod
 	url = https://github.com/analogdevicesinc/libtinyiiod
-[submodule "libraries/stm32/STM32CubeF4"]
-	path = libraries/stm32/STM32CubeF4
-	url = https://github.com/STMicroelectronics/STM32CubeF4.git
