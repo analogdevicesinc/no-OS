@@ -4,7 +4,7 @@
 
 #Append string to specific *.dox file
 append_to_dox () {
-        echo "$1" >> ${TRAVIS_BUILD_DIR}/doc/$2
+        echo "$1" >> ${TOP_DIR}/doc/$2
 }
 
 #.dox file generic header 
@@ -16,7 +16,7 @@ FOOTER=" */"
 #Generate drivers_page.dox file
 generate_drivers_page () {
 
-	> ${TRAVIS_BUILD_DIR}/doc/drivers_page.dox
+	> ${TOP_DIR}/doc/drivers_page.dox
 
 #Page tag and introduction for drivers
 	INTRO_DRV="
@@ -33,7 +33,7 @@ The following sections contain code documentation for ADI no-OS drivers.
 	append_to_dox "${INTRO_DRV}" drivers_page.dox
 
 	#iterate driver types
-	for drv_type in ${TRAVIS_BUILD_DIR}/drivers/*
+	for drv_type in ${TOP_DIR}/drivers/*
 	do
 		#add drivers sections
 		if [[ -d "${drv_type}" ]]
@@ -72,7 +72,7 @@ The following sections contain code documentation for ADI no-OS drivers.
 #Generate projects_page.dox file
 generate_projects_page () {
 
-	> ${TRAVIS_BUILD_DIR}/doc/projects_page.dox
+	> ${TOP_DIR}/doc/projects_page.dox
 
 #Page tag and introduction for projects
 	INTRO_PRJ="
@@ -90,7 +90,7 @@ The following list contains code documentation for ADI no-OS projects:
 	append_to_dox "${INTRO_PRJ}" projects_page.dox
 
 	#iterate projects
-	for prj_type in ${TRAVIS_BUILD_DIR}/projects/*; do
+	for prj_type in ${TOP_DIR}/projects/*; do
 		if [[ -d "${prj_type}" ]]; then
 			#add link to project
 			append_to_dox "- \link_to_subdir{/projects/$(basename -- ${prj_type}) \"$(basename -- ${prj_type^^})\"}" projects_page.dox
