@@ -8,7 +8,12 @@ echo_red() { printf "\033[1;31m$*\033[m\n"; }
 
 ASTYLE_EXT_LIST="${ASTYLE_EXT_LIST} .c .h"
 
-COMMIT_RANGE="$1"
+COMMIT_RANGE="${COMMIT_RANGE}"
+if [ -z "$COMMIT_RANGE" ]  && [ -n "$TARGET_BRANCH" ]
+then
+	COMMIT_RANGE="${TARGET_BRANCH}.."
+fi
+
 if [ -z "$COMMIT_RANGE" ]
 then 
 	COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
