@@ -49,8 +49,7 @@ SRCS += $(PROJECT)/src/app_iio.c					\
 	$(NO-OS)/iio/iio_axi_adc/iio_axi_adc.c				\
 	$(NO-OS)/iio/iio_axi_dac/iio_axi_dac.c
 endif
-INCS +
-=	$(PROJECT)/src/app_clock.h					\
+INCS +=	$(PROJECT)/src/app_clock.h					\
 	$(PROJECT)/src/app_jesd.h					\
 	$(PROJECT)/src/app_config.h					\
 	$(PROJECT)/src/app_parameters.h					\
