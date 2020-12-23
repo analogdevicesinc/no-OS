@@ -27,6 +27,8 @@ fi
 
 if [ "$UPDATE_GH_DOCS" = "1" ]
 then
+        MASTER_COMMIT=$(git rev-parse --short HEAD)
+
         pushd ${TOP_DIR}/doc
         git clone https://github.com/${REPO_SLUG} --depth 1 --branch=gh-pages doc/html &>/dev/null
 
@@ -38,10 +40,10 @@ then
 
         pushd doc/html
         CURRENT_COMMIT=$(git log -1 --pretty=%B)
-        if [[ ${CURRENT_COMMIT:(-7)} != ${TRAVIS_COMMIT:0:7} ]]
+        if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
         then
                 git add --all .
-                git commit --allow-empty --amend -m "Update documentation to ${TRAVIS_COMMIT:0:7}"
+                git commit --allow-empty --amend -m "Update documentation to ${MASTER_COMMIT:0:7}"
                 git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages -f &>/dev/null
 
                 echo_green "Documetation updated!"
