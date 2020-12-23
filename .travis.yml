@@ -15,9 +15,5 @@ env:
     - BUILD_TYPE=drivers
     - BUILD_TYPE=doxygen
 
-before_install:
-  - export DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - mkdir -p ${DEPS_DIR}
-
 script:
   - ./ci/travis/run_build.sh
