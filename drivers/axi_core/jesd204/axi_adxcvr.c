@@ -43,7 +43,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <inttypes.h>
-#include <xil_io.h>
+#include "axi_io.h"
 #include "util.h"
 #include "error.h"
 #include "delay.h"
@@ -93,7 +93,7 @@ int32_t adxcvr_write(struct adxcvr *xcvr,
 		     uint32_t reg_addr,
 		     uint32_t reg_val)
 {
-	Xil_Out32((xcvr->base + reg_addr), reg_val);
+	axi_io_write(xcvr->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
@@ -105,7 +105,7 @@ int32_t adxcvr_read(struct adxcvr *xcvr,
 		    uint32_t reg_addr,
 		    uint32_t *reg_val)
 {
-	*reg_val = Xil_In32(xcvr->base + reg_addr);
+	axi_io_read(xcvr->base, reg_addr, reg_val);
 
 	return SUCCESS;
 }
