@@ -148,7 +148,8 @@ static int32_t devmem_read_write(uint32_t base, uint32_t offset, uint32_t *read,
 		goto close;
 	}
 
-	*read = strtol(answer, NULL, 0);
+	if (read)
+		*read = strtol(answer, NULL, 0);
 
 	ret = SUCCESS;
 close:
