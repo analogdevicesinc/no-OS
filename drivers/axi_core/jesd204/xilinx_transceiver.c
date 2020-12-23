@@ -466,12 +466,12 @@ int32_t xilinx_xcvr_calc_qpll_config(struct xilinx_xcvr *xcvr,
 	uint32_t vco0_max;
 	uint32_t vco1_min;
 	uint32_t vco1_max;
-	const u8 *N;
+	const uint8_t *N;
 
-	static const u8 N_gtx2[] = {16, 20, 32, 40, 64, 66, 80, 100, 0};
-	static const u8 N_gth34[] = {16, 20, 32, 40, 64, 66, 75, 80, 100,
-				     112, 120, 125, 150, 160, 0
-				    };
+	static const uint8_t N_gtx2[] = {16, 20, 32, 40, 64, 66, 80, 100, 0};
+	static const uint8_t N_gth34[] = {16, 20, 32, 40, 64, 66, 75, 80, 100,
+					  112, 120, 125, 150, 160, 0
+					 };
 
 	switch (xcvr->type) {
 	case XILINX_XCVR_TYPE_S7_GTX2:
