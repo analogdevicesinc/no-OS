@@ -124,11 +124,11 @@ set_one_time_rule = echo Target file. Do not delete > $1
 # $(PROJECT)/something -> srcs/something
 # $(NO-OS)/something -> noos/something
 # $(PLATFORM_TOOLS)/something -> aducm3029/something TODO test without these
-RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(TARGET)%,$1))
+RELATIVE_PATH = $(patsubst $(NO-OS)%,noos%,$(patsubst $(PROJECT)%,$(TARGET)%,$(PLATFORM_RELATIVE_PATH)))
 
 # Transforme relative path to full path in order to find the needed .c files
 # Reverse of get_relative_path
-FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(TARGET)%,$(PROJECT)%,$1))
+FULL_PATH = $(patsubst noos%,$(NO-OS)%,$(patsubst $(TARGET)%,$(PROJECT)%,$(PLATFORM_FULL_PATH)))
 
 ifeq ($(OS), Windows_NT)
 get_relative_path = $(patsubst $(ROOT_DRIVE)%,root%,$(RELATIVE_PATH))
