@@ -3,6 +3,8 @@
 # PLATFORM = altera
 # PLATFORM = aducm3029
 
+TINYIIOD=y
+
 include ../../tools/scripts/generic_variables.mk
 
 include src.mk
