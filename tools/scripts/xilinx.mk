@@ -31,8 +31,6 @@ CFLAGS += -DXILINX_PLATFORM						\
 LSCRIPT		:= $(BUILD_DIR)/app/src/lscript.ld
 # Xilinx's generate bsp library path
 LIB_PATHS	+= -L$(BUILD_DIR)/bsp/$(ARCH)/lib
-# Xilinx's bsp include path
-CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
 PLATFORM_RELATIVE_PATH = $1
 PLATFORM_FULL_PATH = $1
@@ -115,6 +113,8 @@ LIB_FLAGS += -Wl,--start-group,-lxil,-lgcc,-lc,--end-group
 
 # Add the common include paths
 CFLAGS += -I$(BUILD_DIR)/app/src
+# Xilinx's bsp include path
+CFLAGS		+= -I$(BUILD_DIR)/bsp/$(ARCH)/include
 
 #Add more dependencies to $(BINARY) rule.
 $(BINARY): $(TEMP_DIR)/arch.txt
