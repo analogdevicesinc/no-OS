@@ -30,10 +30,9 @@ jobs:
         imageName: 'ubuntu-latest'
         BUILD_TYPE: drivers
       doxygen:
-        runCondition: and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables.isMain, true))
         imageName: 'ubuntu-latest'
         BUILD_TYPE: doxygen
-        UPDATE_GH_DOCS: 1
+        UPDATE_GH_DOCS: 0
   pool:
     vmImage: $(imageName)
   steps:
