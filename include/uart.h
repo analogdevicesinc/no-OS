@@ -62,7 +62,7 @@ enum uart_size {
 	UART_CS_7,
 	/** 8 data bits */
 	UART_CS_8
-} uart_size;
+};
 
 /**
  * @enum uart_parity
@@ -79,7 +79,7 @@ enum uart_parity {
 	UART_PAR_ODD,
 	/** even parity */
 	UART_PAR_EVEN
-} uart_parity;
+};
 
 /**
  * @enum uart_stop
@@ -90,7 +90,7 @@ enum uart_stop {
 	UART_STOP_1,
 	/** two stop bits */
 	UART_STOP_2
-} uart_stop;
+};
 
 /**
  * @struct uart_init_param
