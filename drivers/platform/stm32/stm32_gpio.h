@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stm32/gpio_extra.h
+ *   @file   stm32/stm32_gpio.h
  *   @brief  Header file for stm32 gpio specifics.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

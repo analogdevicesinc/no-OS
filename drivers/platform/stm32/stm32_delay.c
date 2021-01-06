@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stm32/delay.c
+ *   @file   stm32/stm32_delay.c
  *   @brief  Implementation of stm32 delay functions.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************

@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   stm32/gpio.c
+ *   @file   stm32/stm32_gpio.c
  *   @brief  Implementation of stm32 gpio functionality.
  *   @author Darius Berghe (darius.berghe@analog.com)
 ********************************************************************************
