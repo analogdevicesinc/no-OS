@@ -42,7 +42,7 @@ build_doxygen() {
     cd ../..
 
     #Generate *.dox files for drivers and projects
-    ${TOP_DIR}/ci/travis/gen_dox.sh
+    . ${TOP_DIR}/ci/travis/gen_dox.sh
 
     # Build Documentation
     cd ${TOP_DIR}/doc
@@ -50,7 +50,7 @@ build_doxygen() {
     cmake ..
     cd ../..
 
-    ./ci/travis/doxygen.sh
+    . ./ci/travis/doxygen.sh
 }
 
 build_${BUILD_TYPE}
