@@ -24,6 +24,9 @@ fi
 
 if [ "$UPDATE_GH_DOCS" = "1" ]
 then
+        git config --global user.email "cse-ci-notifications@analog.com"
+        git config --global user.name "CSE-CI"
+
         MASTER_COMMIT=$(git rev-parse --short HEAD)
 
 	echo_green "Running Github docs update on commit '$MASTER_COMMIT'"
