@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   projects/ad6676_ebz/src/app_config.h
+ *   @file   projects/ad6676-ebz/src/app_config.h
  *   @brief  Config file for AD6676 project.
  *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
