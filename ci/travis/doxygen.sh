@@ -47,9 +47,9 @@ then
                 git add --all .
                 git commit --allow-empty --amend -m "Update documentation to ${MASTER_COMMIT:0:7}"
                 if [ -n "$GITHUB_DOC_TOKEN" ] ; then
-                        git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages -f &>/dev/null
+                        git push https://${GITHUB_DOC_TOKEN}@github.com/${REPO_SLUG} gh-pages -f
                 else
-                        git push origin gh-pages -f &>/dev/null
+                        git push origin gh-pages -f
                 fi
 
                 echo_green "Documetation updated!"
