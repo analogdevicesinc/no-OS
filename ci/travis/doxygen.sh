@@ -18,7 +18,7 @@ echo_green "Documentation was generated successfully!"
 ############################################################################
 REPO_SLUG="${REPO_SLUG:-analogdevicesinc/no-OS}"
 
-if [[ "${TRAVIS_PULL_REQUEST}" == "false" && "${TRAVIS_BRANCH}" == "master" ]] ; then
+if [[ -z "${SYSTEM_PULLREQUEST_PULLREQUESTNUMBER}" && "${BUILD_SOURCEBRANCH}" == *"master"* ]] ; then
         UPDATE_GH_DOCS=1
 fi
 
