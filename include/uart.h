@@ -61,7 +61,9 @@ enum uart_size {
 	/** 7 data bits */
 	UART_CS_7,
 	/** 8 data bits */
-	UART_CS_8
+	UART_CS_8,
+	/** 9 data bits */
+	UART_CS_9,
 };
 
 /**
