@@ -350,9 +350,7 @@ project_build: $(PLATFORM)_project_build
 PHONY += clean
 clean:
 	$(call print,[Delete] $(notdir $(OBJS) $(BINARY) $(ASM_OBJS)))
-	-$(MUTE)$(call remove_fun,$(BINARY)) $(HIDE)
-	-$(MUTE)$(call remove_fun,$(OBJS)) $(HIDE)
-	-$(MUTE)$(call remove_fun,$(ASM_OBJS)) $(HIDE)
+	-$(MUTE)$(call remove_fun,$(BINARY) $(OBJS) $(ASM_OBJS)) $(HIDE)
 
 # Remove the whole build directory
 PHONY += clean_all
