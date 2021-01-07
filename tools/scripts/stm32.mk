@@ -9,6 +9,7 @@ CFLAGS += -std=gnu11 \
 	-g3 \
 	-DUSE_HAL_DRIVER \
 	-DDEBUG \
+	-DSTM32_PLATFORM \
 	-O0 \
 	-ffunction-sections \
 	-fdata-sections \
