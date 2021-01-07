@@ -219,7 +219,7 @@ int32_t uart_write(struct uart_desc *desc, const uint8_t *data,
  * @param desc - Instance of UART.
  * @param data - Pointer to buffer containing data.
  * @param bytes_number - Number of bytes to read.
- * @return SUCCESS in case of success, FAILURE otherwise.
+ * @return positive number of received bytes in case of success, negative error code otherwise.
  */
 int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 		  uint32_t bytes_number)
@@ -240,5 +240,5 @@ int32_t uart_read(struct uart_desc *desc, uint8_t *data,
 	if (ret != HAL_OK)
 		return -EIO;
 
-	return 0;
+	return bytes_number;
 }
