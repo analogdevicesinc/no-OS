@@ -40,10 +40,15 @@
 #include "iio.h"
 #include "iio_app.h"
 #include "parameters.h"
+#include "uart.h"
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 #include "irq.h"
 #include "irq_extra.h"
-#include "uart.h"
 #include "uart_extra.h"
+#endif
+#if defined(STM32_PLATFORM)
+#include "stm32_uart.h"
+#endif
 
 #ifdef USE_TCP_SOCKET
 #include "wifi.h"
@@ -56,8 +61,10 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	struct iio_desc		*iio_desc;
 	struct iio_init_param	iio_init_param;
 	struct uart_init_param	uart_init_par;
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 	struct irq_init_param	irq_init_param;
 	struct irq_ctrl_desc	*irq_desc;
+#endif
 
 #ifdef USE_TCP_SOCKET
 	struct tcp_socket_init_param	socket_param;
@@ -84,6 +91,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	int32_t platform_irq_init_par = 0;
 #endif //ADUCM_PLATFORM
 
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 	irq_init_param = (struct irq_init_param ) {
 		.irq_ctrl_id = INTC_DEVICE_ID,
 		.extra = &platform_irq_init_par
@@ -92,6 +100,7 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 	status = irq_ctrl_init(&irq_desc, &irq_init_param);
 	if(status < 0)
 		return status;
+#endif
 
 #ifdef XILINX_PLATFORM
 	/* Xilinx platform dependent initialization for UART. */
@@ -109,23 +118,37 @@ int32_t iio_app_run(struct iio_app_device *devices, int32_t len)
 #endif // XILINX_PLATFORM
 
 #ifdef ADUCM_PLATFORM
-
 	/* Aducm platform dependent initialization for UART. */
 	struct aducm_uart_init_param platform_uart_init_par = {
+		/* TODO: cleanup, these can be set using generic uart_init_param. */
 		.parity = UART_NO_PARITY,
 		.stop_bits = UART_ONE_STOPBIT,
 		.word_length = UART_WORDLEN_8BITS
 	};
 #endif // ADUCM_PLATFORM
+
+#ifdef STM32_PLATFORM
+	/* stm32 platform dependent initialization for UART. */
+	struct stm32_uart_init_param platform_uart_init_par = {
+		.mode = UART_MODE_TX_RX,
+		.hw_flow_ctl = UART_HWCONTROL_NONE,
+		.over_sampling = UART_OVERSAMPLING_16,
+	};
+#endif
 	uart_init_par = (struct uart_init_param) {
 		.device_id = UART_DEVICE_ID,
 		.baud_rate = UART_BAUDRATE,
+		.size = UART_CS_8,
+		.parity = UART_PAR_NO,
+		.stop = UART_STOP_1,
 		.extra = &platform_uart_init_par
 	};
 
+#if defined(ADUCM_PLATFORM) || defined(XILINX_PLATFORM)
 	status = irq_global_enable(irq_desc);
 	if (status < 0)
 		return status;
+#endif
 
 #ifdef USE_TCP_SOCKET
 	status = uart_init(&uart_desc, &uart_init_par);

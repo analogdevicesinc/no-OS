@@ -56,9 +56,6 @@
 #define MAX_REG_ADDR		10
 #define NB_LOCAL_SAMPLES	500
 
-/** Local channel for loopback */
-uint16_t local_ch[DEMO_NUM_CHANNELS][NB_LOCAL_SAMPLES];
-
 /**
  * @struct iio_demo_desc
  * @brief Desciptor.
