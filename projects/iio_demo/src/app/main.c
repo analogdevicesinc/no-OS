@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   iio_demo/src/main.c
+ *   @file   iio_demo/src/app/main.c
  *   @brief  Implementation of Main Function.
  *   @author Cristian Pop (cristian.pop@analog.com)
 ********************************************************************************
@@ -45,7 +45,6 @@
 #include "iio_demo_dev.h"
 #include "app_config.h"
 #include "parameters.h"
-#include "error.h"
 #include "iio_app.h"
 
 #ifdef XILINX_PLATFORM
@@ -55,10 +54,18 @@
 #endif // XILINX_PLATFORM
 
 #ifdef ADUCM_PLATFORM
-
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include <drivers/pwr/adi_pwr.h>
+#endif
+
+#ifdef STM32_PLATFORM
+#include "stm32_hal.h"
+#endif
+
+#include "error.h"
+
+#if defined(ADUCM_PLATFORM) || defined(STM32_PLATFORM)
 
 #define MAX_SIZE_BASE_ADDR	(NB_LOCAL_SAMPLES * DEMO_NUM_CHANNELS *\
 					sizeof(uint16_t))
@@ -71,9 +78,58 @@ static uint8_t out_buff[MAX_SIZE_BASE_ADDR];
 
 #endif
 
+#ifdef STM32_PLATFORM
+void Error_Handler(void)
+{
+	/* User can add his own implementation to report the HAL error return state */
+	__disable_irq();
+	while (1) {
+	}
+}
+
+void SystemClock_Config(void)
+{
+	RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+	RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+	/** Configure the main internal regulator output voltage
+	*/
+	__HAL_RCC_PWR_CLK_ENABLE();
+	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
+	/** Initializes the RCC Oscillators according to the specified parameters
+	* in the RCC_OscInitTypeDef structure.
+	*/
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+	RCC_OscInitStruct.PLL.PLLM = 16;
+	RCC_OscInitStruct.PLL.PLLN = 336;
+	RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
+	RCC_OscInitStruct.PLL.PLLQ = 2;
+	RCC_OscInitStruct.PLL.PLLR = 2;
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+		Error_Handler();
+	}
+	/** Initializes the CPU, AHB and APB buses clocks
+	*/
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+				      |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+		Error_Handler();
+	}
+}
+#endif
+
 int32_t platform_init()
 {
-#ifdef ADUCM_PLATFORM
+#if defined(ADUCM_PLATFORM)
 	if (ADI_PWR_SUCCESS != adi_pwr_Init())
 		return FAILURE;
 
@@ -83,8 +139,11 @@ int32_t platform_init()
 	if (ADI_PWR_SUCCESS != adi_pwr_SetClockDivider(ADI_CLOCK_PCLK, 1u))
 		return FAILURE;
 	adi_initComponents();
+#elif defined(STM32_PLATFORM)
+	HAL_Init();
+	SystemClock_Config();
 #endif
-	return SUCCESS;
+	return 0;
 }
 
 /***************************************************************************//**
@@ -107,7 +166,7 @@ int main(void)
 	struct iio_demo_desc *iio_demo_out_desc;
 
 	status = platform_init();
-	if (IS_ERR_VALUE(status))
+	if (status != 0)
 		return status;
 
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
@@ -123,7 +182,7 @@ int main(void)
 		.dev_ch_attr = 2211,
 	};
 	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
-	if (IS_ERR_VALUE(status))
+	if (status != 0)
 		return status;
 
 	struct iio_data_buffer rd_buf = {
