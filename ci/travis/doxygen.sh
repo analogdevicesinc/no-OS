@@ -31,16 +31,16 @@ then
 
 	echo_green "Running Github docs update on commit '$MASTER_COMMIT'"
 
-        pushd ${TOP_DIR}/doc
-        git clone https://github.com/${REPO_SLUG} --depth 1 --branch=gh-pages doc/html &>/dev/null
+        git fetch --depth 1 origin +refs/heads/gh-pages:gh-pages
 
-        pushd doc/html
-        rm -rf ./*
-        popd
+        rm -rf ${DEPS_DIR}
 
-        cp -R build/doxygen_doc/html/* doc/html/
+        git checkout gh-pages
 
-        pushd doc/html
+        cp -R ${TOP_DIR}/doc/build/doxygen_doc/html/* ${TOP_DIR}
+
+        rm -rf ${TOP_DIR}/doc
+
         CURRENT_COMMIT=$(git log -1 --pretty=%B)
         if [[ ${CURRENT_COMMIT:(-7)} != ${MASTER_COMMIT:0:7} ]]
         then
@@ -56,7 +56,6 @@ then
         else
                 echo_green "Documentation already up to date!"
         fi
-        popd
 else
         echo_green "Documentation will be updated when this commit gets on master!"
 fi
