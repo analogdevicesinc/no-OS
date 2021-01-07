@@ -30,10 +30,6 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
 
-LEGACY_BUILD ?= n
-
-ifneq '$(strip $(LEGACY_BUILD))' 'y'
-
 HARDWARE ?= $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard pinmux_config.c)
 
 #If platform not set get it from HARDWARE file
@@ -51,6 +47,4 @@ $(error No HARDWARE found)
 endif
 endif
 endif
-endif
-
 endif
