@@ -650,7 +650,8 @@ static int fmcdaq2_iio_init(struct fmcdaq2_dev *dev,
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
+	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par,
+			       dev->ad9680_device, dev->ad9144_device);
 #endif
 
 	return SUCCESS;

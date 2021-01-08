@@ -46,7 +46,9 @@ endif
 INCS +=	$(PROJECT)/src/app/app_config.h					\
 	$(PROJECT)/src/devices/adi_hal/parameters.h
 ifeq (y,$(strip $(TINYIIOD)))
-INCS +=	$(PROJECT)/src/app/app_iio.h
+INCS +=	$(PROJECT)/src/app/app_iio.h					\
+	$(DRIVERS)/adc/ad9680/iio_ad9680.h				\
+	$(DRIVERS)/dac/ad9144/iio_ad9144.h
 endif
 INCS += $(DRIVERS)/axi_core/axi_adc_core/axi_adc_core.h			\
 	$(DRIVERS)/axi_core/axi_dac_core/axi_dac_core.h			\
