@@ -180,11 +180,8 @@ $(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
 	$(MUTE) echo $(UDPATE_TCL_CONTENT) > $(TEMP_DIR)/update_sdk.tcl
 	$(call print,Configuring project)
 	$(MUTE) xsct $(TEMP_DIR)/update_sdk.tcl $(HIDE)
-ifeq ($(strip $(ARCH)),sys_mb)
 	$(MUTE)$(call replace_heap,0x800,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
-else
 	$(MUTE)$(call replace_heap,0x2000,0x100000,$(BUILD_DIR)/app/src/lscript.ld)
-endif
 	$(MUTE) $(MAKE) --no-print-directory update_srcs
 	$(MUTE) $(call set_one_time_rule,$@) $(HIDE)
 
