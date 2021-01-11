@@ -47,6 +47,8 @@
 #include "iio.h"
 #include "parameters.h"
 #include "app_iio.h"
+#include "iio_ad9680.h"
+#include "iio_ad9152.h"
 #ifndef PLATFORM_MB
 #include "irq.h"
 #include "irq_extra.h"
@@ -78,7 +80,9 @@ static struct iio_data_buffer g_write_buff = {
  * @return SUCCESS in case of success, FAILURE otherwise.
  */
 int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
-			struct iio_axi_dac_init_param *dac_init)
+			struct iio_axi_dac_init_param *dac_init,
+			struct ad9680_dev *ad9680_device,
+			struct ad9152_dev *ad9152_device)
 {
 	struct xil_uart_init_param xil_uart_init_par = {
 #ifdef PLATFORM_MB
@@ -145,6 +149,16 @@ int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
 	iio_axi_dac_get_dev_descriptor(iio_axi_dac_desc, &dac_dev_desc);
 	status = iio_register(iio_desc, dac_dev_desc, "axi_dac",
 			      iio_axi_dac_desc, NULL, &g_write_buff);
+	if (status < 0)
+		return status;
+
+	status = iio_register(iio_desc, &ad9680_iio_descriptor, "ad9680_dev",
+			      ad9680_device, NULL, NULL);
+	if (status < 0)
+		return status;
+
+	status = iio_register(iio_desc, &ad9152_iio_descriptor, "ad9152_dev",
+			      ad9152_device, NULL, NULL);
 	if (status < 0)
 		return status;
 
