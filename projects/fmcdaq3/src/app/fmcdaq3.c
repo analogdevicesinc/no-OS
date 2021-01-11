@@ -638,7 +638,8 @@ int main(void)
 #endif
 	};
 
-	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par);
+	return iio_server_init(&iio_axi_adc_init_par, &iio_axi_dac_init_par,
+			       ad9680_device, ad9152_device);
 
 #endif
 
