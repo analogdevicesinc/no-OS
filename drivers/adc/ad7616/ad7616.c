@@ -203,7 +203,7 @@ int32_t ad7616_par_read(struct ad7616_dev *dev,
 
 	axi_io_write(dev->core_baseaddr, AD7616_REG_UP_WRITE_DATA,
 		     0x0000 | ((reg_addr & 0x3F) << 9));
-	usleep(50);
+	udelay(50);
 	axi_io_read(dev->core_baseaddr, AD7616_REG_UP_READ_DATA, &read);
 	*reg_data = read & 0xFF;
 	mdelay(1);
