@@ -45,6 +45,8 @@
 #include <stdint.h>
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
+#include "ad9680.h"
+#include "ad9144.h"
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
@@ -52,6 +54,8 @@
 
 /* @brief Application IIO setup. */
 int32_t iio_server_init(struct iio_axi_adc_init_param *adc_init,
-			struct iio_axi_dac_init_param *dac_init);
+			struct iio_axi_dac_init_param *dac_init,
+			struct ad9680_dev *ad9680_device,
+			struct ad9152_dev *ad9152_device);
 
 #endif
