@@ -67,6 +67,10 @@
 
 #define MAX_SIZE_BASE_ADDR		3000
 
+static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
+
+#define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
+
 #endif
 
 int32_t platform_init()
@@ -217,12 +221,17 @@ int main(void)
 	if (status < 0)
 		return status;
 
+	struct iio_data_buffer rd_buf = {
+		.buff = (void *)GYRO_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
+
 	status = iio_init(&iio_desc, &iio_init_param);
 	if(status < 0)
 		return status;
 
 	status = iio_register(iio_desc, &adxrs290_iio_descriptor,
-			      "adxrs290", adxrs290_device, NULL, NULL);
+			      "adxrs290", adxrs290_device, &rd_buf, NULL);
 	if (status < 0)
 		return status;
 
