@@ -488,9 +488,7 @@ static int32_t debug_reg_read(struct iio_interface *dev, char *buf, size_t len)
 	uint32_t		value;
 	int32_t			ret;
 
-	/* Set to -1 for debug purposes. If the function don't modify the value,
-	 * then it can be easily seen the default value */
-	value = -1;
+	value = 0;
 	ret = dev->dev_descriptor->debug_reg_read(dev->dev_instance,
 			dev->active_reg_addr,
 			&value);
