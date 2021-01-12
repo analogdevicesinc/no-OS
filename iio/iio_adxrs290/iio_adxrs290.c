@@ -190,9 +190,18 @@ int32_t adxrs290_read_samples(void *device, uint16_t *buff, uint32_t nb_samples)
 	uint32_t		offset;
 	int16_t			data[ADXRS290_CHANNEL_COUNT];
 	uint8_t			ch_cnt;
+	bool			rdy;
 
 	offset = 0;
 	for (i = 0; i < nb_samples; i++) {
+		/* Stop until data is available.
+		 * This will not block at first data since sync pin will
+		 * will always be high until read. */
+		while(true) {
+			adxrs290_get_data_ready(dev, &rdy);
+			if (rdy == true)
+				break;
+		}
 		adxrs290_get_burst_data(dev, data, &ch_cnt);
 		memcpy(&buff[offset], data, ch_cnt*sizeof(int16_t));
 		offset += ch_cnt;
