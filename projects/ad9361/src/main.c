@@ -47,6 +47,8 @@
 #include "spi.h"
 #include "gpio.h"
 #include "delay.h"
+#include "irq.h"
+#include "irq_extra.h"
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
 #include <xil_cache.h>
@@ -67,8 +69,6 @@
 #include "iio_axi_adc.h"
 #include "iio_axi_dac.h"
 #include "iio_ad9361.h"
-#include "irq.h"
-#include "irq_extra.h"
 #include "uart.h"
 #include "uart_extra.h"
 #include "xil_cache.h"
@@ -490,6 +490,7 @@ struct ad9361_rf_phy *ad9361_phy;
 struct ad9361_rf_phy *ad9361_phy_b;
 #endif
 
+
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -609,19 +610,90 @@ int main(void)
 
 #ifndef AXI_ADC_NOT_PRESENT
 #if (defined XILINX_PLATFORM || defined ALTERA_PLATFORM) && \
-	(defined ADC_DMA_EXAMPLE || defined ADC_DMA_IRQ_EXAMPLE)
+	(defined ADC_DMA_EXAMPLE)
+	uint32_t samples = 16384;
+#if (defined ADC_DMA_IRQ_EXAMPLE)
+	/**
+	 * Xilinx platform dependent initialization for IRQ.
+	 */
+	struct xil_irq_init_param xil_irq_init_par = {
+		.type = IRQ_PS,
+	};
+
+	/**
+	 * IRQ initial configuration.
+	 */
+	struct irq_init_param irq_init_param = {
+		.irq_ctrl_id = INTC_DEVICE_ID,
+		.extra = &xil_irq_init_par,
+	};
+
+	/**
+	 * IRQ instance.
+	 */
+	struct irq_ctrl_desc *irq_desc;
+
+	status = irq_ctrl_init(&irq_desc, &irq_init_param);
+	if(status < 0)
+		return status;
+
+	status = irq_global_enable(irq_desc);
+	if (status < 0)
+		return status;
+
+	struct callback_desc rx_dmac_callback = {
+		.ctx = rx_dmac,
+		.callback = axi_dmac_default_isr,
+		.config = NULL
+	};
+
+	status = irq_register_callback(irq_desc,
+				       XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, &rx_dmac_callback);
+	if(status < 0)
+		return status;
+
+	status = irq_trigger_level_set(irq_desc,
+				       XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR, IRQ_LEVEL_HIGH);
+	if(status < 0)
+		return status;
+
+	status = irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_ADC_DMA_IRQ_INTR);
+	if(status < 0)
+		return status;
+
+	samples = 2097150;
+#endif
 	// NOTE: To prevent unwanted data loss, it's recommended to invalidate
 	// cache after each adc_capture() call, keeping in mind that the
 	// size of the capture and the start address must be alinged to the size
 	// of the cache line.
 	mdelay(1000);
-	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR, 16384 * 16);
+
+#ifdef DAC_DMA_EXAMPLE
+	struct callback_desc tx_dmac_callback = {
+		.ctx = tx_dmac,
+		.callback = axi_dmac_default_isr,
+		.config = NULL
+	};
+
+	status = irq_register_callback(irq_desc,
+				       XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR, &tx_dmac_callback);
+	if(status < 0)
+		return status;
+
+	status = irq_enable(irq_desc, XPAR_FABRIC_AXI_AD9361_DAC_DMA_IRQ_INTR);
+	if(status < 0)
+		return status;
+
+	axi_dmac_transfer_nonblocking(tx_dmac, DAC_DDR_BASEADDR, samples * 16);
+#endif
+	axi_dmac_transfer(rx_dmac, ADC_DDR_BASEADDR, samples * 16);
 #ifdef XILINX_PLATFORM
 #ifdef FMCOMMS5
-	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, 16384 * 16);
+	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR, samples * 16);
 #else
 	Xil_DCacheInvalidateRange(ADC_DDR_BASEADDR,
-				  ad9361_phy->pdata->rx2tx2 ? 16384 * 8 : 16384 * 4);
+				  ad9361_phy->pdata->rx2tx2 ? samples * 8 : samples * 4);
 #endif
 #endif
 #endif
