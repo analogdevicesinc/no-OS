@@ -54,7 +54,9 @@ ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
 ssize_t get_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
-
+int32_t adxrs290_update_active_channels(void *dev, uint32_t mask);
+int32_t	adxrs290_read_samples(void *device, uint16_t *buff,
+			      uint32_t nb_samples);
 
 static struct iio_attribute adxrs290_iio_vel_attrs[] = {
 	{
@@ -94,13 +96,29 @@ static struct iio_attribute adxrs290_iio_temp_attrs[] = {
 	END_ATTRIBUTES_ARRAY,
 };
 
+static struct scan_type scan_type_gyro = {
+	.sign = 's',
+	.realbits = 16,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
+};
+
+static struct scan_type scan_type_temp = {
+	.sign = 's',
+	.realbits = 12,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
+};
+
 static struct iio_channel adxrs290_iio_channels[] = {
 	{
 		.ch_type = IIO_ANGL_VEL,
 		.modified=1,
 		.channel2=IIO_MOD_X,
 		.scan_index = 0,
-		.scan_type = NULL,
+		.scan_type = &scan_type_gyro,
 		.attributes = adxrs290_iio_vel_attrs,
 		.ch_out = false,
 	},
@@ -109,14 +127,14 @@ static struct iio_channel adxrs290_iio_channels[] = {
 		.modified=1,
 		.channel2=IIO_MOD_Y,
 		.scan_index = 1,
-		.scan_type = NULL,
+		.scan_type = &scan_type_gyro,
 		.attributes = adxrs290_iio_vel_attrs,
 		.ch_out = false,
 	},
 	{
 		.ch_type = IIO_TEMP,
 		.scan_index = 2,
-		.scan_type = NULL,
+		.scan_type = &scan_type_temp,
 		.attributes = adxrs290_iio_temp_attrs,
 		.ch_out = false,
 	}
@@ -129,10 +147,9 @@ struct iio_device adxrs290_iio_descriptor = {
 	.attributes = NULL,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.transfer_dev_to_mem = NULL,
-	.transfer_mem_to_dev = NULL,
-	.read_data = NULL,
-	.write_data = NULL,
+	.prepare_transfer = adxrs290_update_active_channels,
+	.end_transfer = NULL,
+	.read_dev = (int32_t (*)())adxrs290_read_samples,
 	.debug_reg_read = (int32_t (*)())adxrs290_reg_read,
 	.debug_reg_write = (int32_t (*)())adxrs290_reg_write,
 };
