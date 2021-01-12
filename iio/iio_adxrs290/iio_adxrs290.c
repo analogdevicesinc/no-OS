@@ -173,3 +173,30 @@ ssize_t set_adxrs290_iio_ch_lpf(void *device, char *buf, size_t len,
 
 	return FAILURE;
 }
+
+int32_t adxrs290_update_active_channels(void *device, uint32_t mask)
+{
+	struct adxrs290_dev *dev = device;
+
+	adxrs290_set_active_channels(dev, mask);
+
+	return SUCCESS;
+}
+
+int32_t adxrs290_read_samples(void *device, uint16_t *buff, uint32_t nb_samples)
+{
+	struct adxrs290_dev	*dev = device;
+	uint32_t		i;
+	uint32_t		offset;
+	int16_t			data[ADXRS290_CHANNEL_COUNT];
+	uint8_t			ch_cnt;
+
+	offset = 0;
+	for (i = 0; i < nb_samples; i++) {
+		adxrs290_get_burst_data(dev, data, &ch_cnt);
+		memcpy(&buff[offset], data, ch_cnt*sizeof(int16_t));
+		offset += ch_cnt;
+	}
+
+	return nb_samples;
+}
