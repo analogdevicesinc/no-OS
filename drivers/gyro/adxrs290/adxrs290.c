@@ -304,6 +304,29 @@ int32_t adxrs290_set_active_channels(struct adxrs290_dev *dev, uint32_t mask)
 }
 
 /**
+ * @brief Get the state of data ready.
+ * @param dev - Device handler.
+ * @param rdy - Pointer to state of data.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy)
+{
+	int32_t ret = SUCCESS;
+	uint8_t value;
+
+	ret = gpio_get_value(dev->gpio_sync, &value);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	if (value == GPIO_HIGH)
+		*rdy = true;
+	else
+		*rdy = false;
+
+	return ret;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -346,12 +369,29 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
 
+	// Set GPIO sync pin.
+	ret |= gpio_get(&dev->gpio_sync, &init_param->gpio_sync);
+	if (IS_ERR_VALUE(ret))
+		goto error_spi;
+
+	ret |= gpio_direction_input(dev->gpio_sync);
+	if (IS_ERR_VALUE(ret))
+		goto error_gpio;
+
+	// Set adxrs290 to output on sync pin.
+	ret |= adxrs290_reg_write(dev, ADXRS290_REG_DATA_READY, ADXRS290_DATA_RDY_OUT);
+	if (IS_ERR_VALUE(ret))
+		goto error_gpio;
+
 	// Enable all channels by default
-	dev->ch_mask = 0x07;
+	dev->ch_mask = ADXRS290_CHANNEL_MASK;
 
 	*device = dev;
 
 	return ret;
+
+error_gpio:
+	gpio_remove(dev->gpio_sync);
 
 error_spi:
 	spi_remove(dev->spi_desc);
@@ -370,6 +410,7 @@ error_dev:
 int32_t adxrs290_remove(struct adxrs290_dev *dev)
 {
 	spi_remove(dev->spi_desc);
+	gpio_remove(dev->gpio_sync);
 	free(dev);
 
 	return SUCCESS;
