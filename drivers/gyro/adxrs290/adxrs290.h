@@ -45,6 +45,7 @@
 /******************************************************************************/
 
 #include <stdbool.h>
+#include "gpio.h"
 #include "spi.h"
 #include "util.h"
 
@@ -161,13 +162,14 @@ enum adxrs290_hpf {
 struct adxrs290_init_param {
 	/** SPI Initialization structure. */
 	struct spi_init_param	spi_init;
+	/** GPIO */
+	struct gpio_init_param	gpio_sync;
 	/** Initial Mode */
-	enum adxrs290_mode mode;
+	enum adxrs290_mode	mode;
 	/** Initial lpf settings */
-	enum adxrs290_lpf lpf;
+	enum adxrs290_lpf	lpf;
 	/** Initial hpf settings */
-	enum adxrs290_hpf hpf;
-
+	enum adxrs290_hpf	hpf;
 };
 
 /**
@@ -177,6 +179,8 @@ struct adxrs290_init_param {
 struct adxrs290_dev {
 	/** SPI handler */
 	struct spi_desc		*spi_desc;
+	/** GPIO */
+	struct gpio_desc	*gpio_sync;
 	/** Active Channels */
 	uint8_t			ch_mask;
 };
@@ -221,6 +225,9 @@ int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
 
 /* Set the ADXRS290 active channels */
 int32_t adxrs290_set_active_channels(struct adxrs290_dev *dev, uint32_t mask);
+
+/* Get the data ready state */
+int32_t adxrs290_get_data_ready(struct adxrs290_dev *dev, bool *rdy);
 
 /* Init. the comm. peripheral and checks if the ADXRS290 part is present. */
 int32_t adxrs290_init(struct adxrs290_dev **device,
