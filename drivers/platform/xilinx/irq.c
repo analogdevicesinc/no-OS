@@ -280,6 +280,46 @@ int32_t irq_register_callback(struct irq_ctrl_desc *desc, uint32_t irq_id,
 }
 
 /**
+ * @brief Set interrupt trigger level.
+ * @param desc - The IRQ controller descriptor.
+ * @param irq_id - Interrupt identifier.
+ * @param trig - New trigger level for the interrupt.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t irq_trigger_level_set(struct irq_ctrl_desc *desc, uint32_t irq_id,
+			      enum irq_trig_level trig)
+{
+	struct xil_irq_desc *xil_dev = desc->extra;
+
+	switch(xil_dev->type) {
+	case IRQ_PS:
+#ifdef XSCUGIC_H
+		;
+		uint8_t priority, trigger;
+
+		XScuGic_GetPriorityTriggerType(xil_dev->instance, irq_id, &priority,
+					       &trigger);
+		trigger = trig;
+		XScuGic_SetPriorityTriggerType(xil_dev->instance, irq_id, priority,
+					       trigger);
+
+		return SUCCESS;
+#endif
+		break;
+	case IRQ_PL:
+#ifdef XINTC_H
+		/* Interrupt trigger determined in hardware. TODO: verify */
+		return SUCCESS;
+#endif
+		break;
+	default:
+		break;
+	}
+
+	return FAILURE;
+}
+
+/**
  * @brief Unregisters a generic IRQ handling function.
  * @param desc - The IRQ controller descriptor.
  * @param irq_id - Interrupt identifier.
