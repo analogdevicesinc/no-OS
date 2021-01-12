@@ -81,11 +81,20 @@ enum dma_flags {
 	DMA_LAST = 2
 };
 
+struct axi_dma_transfer {
+	uint32_t size;
+	uint32_t address;
+	uint32_t size_done;
+	volatile bool transfer_done;
+};
+
 struct axi_dmac {
 	const char *name;
 	uint32_t base;
 	enum dma_direction direction;
 	uint32_t flags;
+	uint32_t transfer_max_size;
+	volatile struct axi_dma_transfer big_transfer;
 };
 
 struct axi_dmac_init {
@@ -98,10 +107,14 @@ struct axi_dmac_init {
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
+void axi_dmac_default_isr(void *instance);
 int32_t axi_dmac_read(struct axi_dmac *dmac, uint32_t reg_addr,
 		      uint32_t *reg_data);
 int32_t axi_dmac_write(struct axi_dmac *dmac, uint32_t reg_addr,
 		       uint32_t reg_data);
+int32_t axi_dmac_transfer_nonblocking(struct axi_dmac *dmac,
+				      uint32_t address, uint32_t size);
+int32_t axi_dmac_is_transfer_ready(struct axi_dmac *dmac, bool *rdy);
 int32_t axi_dmac_transfer(struct axi_dmac *dmac,
 			  uint32_t address, uint32_t size);
 int32_t axi_dmac_init(struct axi_dmac **adc_core,
