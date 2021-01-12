@@ -376,9 +376,17 @@ struct ad7124_init_param {
 int32_t ad7124_read_register(struct ad7124_dev *dev,
 			     struct ad7124_st_reg* p_reg);
 
+/*! Wrap the read register function to give it a modern signature. */
+int32_t ad7124_read_register2(struct ad7124_dev *dev, uint32_t reg,
+			      uint32_t *readval);
+
 /*! Writes the value of the specified register. */
 int32_t ad7124_write_register(struct ad7124_dev *dev,
 			      struct ad7124_st_reg reg);
+
+/*! Wrap the write register function to give it a modern signature. */
+int32_t ad7124_write_register2(struct ad7124_dev *dev, uint32_t reg,
+			       uint32_t writeval);
 
 /*! Reads the value of the specified register without a device state check. */
 int32_t ad7124_no_check_read_register(struct ad7124_dev *dev,
