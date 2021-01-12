@@ -22,6 +22,7 @@ LIBRARIES += iio
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c					\
+	$(PLATFORM_DRIVERS)/gpio.c					\
 	$(PLATFORM_DRIVERS)/spi.c					\
 	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/list.c						\
@@ -35,6 +36,7 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
+	$(INCLUDE)/gpio.h						\
 	$(INCLUDE)/spi.h						\
 	$(PLATFORM_DRIVERS)/spi_extra.h					\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\

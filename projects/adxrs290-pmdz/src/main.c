@@ -70,6 +70,7 @@
 static uint8_t in_buff[MAX_SIZE_BASE_ADDR];
 
 #define GYRO_DDR_BASEADDR		((uint32_t)in_buff)
+#define GPIO_SYNC_PIN_NUM		0x10
 
 #endif
 
@@ -106,6 +107,9 @@ int main(void)
 
 	/* Initialization for UART. */
 	struct uart_init_param uart_init_par;
+
+	/* GPIO initial configuration. */
+	struct gpio_init_param	gpio_sync_init_param;
 
 	/* IRQ initial configuration. */
 	struct irq_init_param irq_init_param;
@@ -210,9 +214,16 @@ int main(void)
 		.platform_ops = NULL
 	};
 
+	/* Initialization for Sync pin GPIO. */
+	gpio_sync_init_param = (struct gpio_init_param) {
+		.number = GPIO_SYNC_PIN_NUM,
+		.extra = NULL
+	};
+
 	struct adxrs290_init_param adxrs290_param = {
 		.spi_init = init_param,
 		.mode = ADXRS290_MODE_MEASUREMENT,
+		.gpio_sync = gpio_sync_init_param,
 		.lpf = ADXRS290_LPF_480HZ,
 		.hpf = ADXRS290_HPF_ALL_PASS
 	};
