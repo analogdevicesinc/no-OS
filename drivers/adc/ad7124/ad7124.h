@@ -415,6 +415,9 @@ int32_t ad7124_wait_for_conv_ready(struct ad7124_dev *dev,
 int32_t ad7124_read_data(struct ad7124_dev *dev,
 			 int32_t* p_data);
 
+/*! Get the ID of the channel of the latest conversion. */
+int32_t ad7124_get_read_chan_id(struct ad7124_dev *dev, uint32_t *status);
+
 /*! Computes the CRC checksum for a data buffer. */
 uint8_t ad7124_compute_crc8(uint8_t* p_buf,
 			    uint8_t buf_size);
@@ -424,6 +427,20 @@ void ad7124_update_crcsetting(struct ad7124_dev *dev);
 
 /*! Updates the device SPI interface settings. */
 void ad7124_update_dev_spi_settings(struct ad7124_dev *dev);
+
+/*! Get the AD7124 reference clock. */
+int32_t ad7124_fclk_get(struct ad7124_dev *dev, float *f_clk);
+
+/*! Get the filter coefficient for the sample rate. */
+int32_t ad7124_fltcoff_get(struct ad7124_dev *dev, int16_t ch_no,
+			   uint16_t *flt_coff);
+
+/*! Calculate ODR of the device. */
+float ad7124_get_odr(struct ad7124_dev *dev, int16_t ch_no);
+
+/*! Set ODR of the device. */
+int32_t ad7124_set_odr(struct ad7124_dev *dev, float odr,
+		       int16_t ch_no);
 
 /*! Initializes the AD7124. */
 int32_t ad7124_setup(struct ad7124_dev **device,
