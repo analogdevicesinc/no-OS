@@ -29,6 +29,10 @@ set(EXCLUDE_FILES
     ${SOURCES_DIR}/drivers/adc/ad9081/api \\
 ")
 
+set(EXCLUDE_PATT
+    "*/hal/stm32/* \\
+")
+
 configure_file(
     DoxygenLayoutIn.xml
     ${DOXY_WORKING_DIR}/DoxygenLayout.xml
