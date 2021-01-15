@@ -250,6 +250,60 @@ int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp)
 }
 
 /**
+ * @brief Get the burst data.
+ * @param dev - Device handler.
+ * @param burst_data - Pointer to data value.
+ * @param ch_cnt - Number of active channels.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
+				uint8_t *ch_cnt)
+{
+	int32_t		ret = SUCCESS;
+	uint8_t		data_bytes = ADXRS290_CHANNEL_COUNT*2;
+	uint8_t		data[data_bytes + 1];
+	int16_t		result;
+	uint8_t		ch_idx;
+	uint8_t		i;
+
+	for (i = 0; i < data_bytes; i++)
+		data[i] = 0x80 | (ADXRS290_REG_DATAX0 + i);
+
+	data[data_bytes] = 0;
+
+	ret = spi_write_and_read(dev->spi_desc, data, data_bytes + 1);
+	if (IS_ERR_VALUE(ret))
+		return ret;
+
+	i = 1;
+	*ch_cnt = 0;
+	for (ch_idx = 0; ch_idx < ADXRS290_CHANNEL_COUNT; ch_idx++) {
+		result = (((int16_t)data[i+1]) << 8) | data[i];
+		i += 2;
+		if (ch_idx == ADXRS290_CHANNEL_TEMP)
+			result = (result << 4) >> 4;
+
+		if ((1 << ch_idx) & dev->ch_mask)
+			burst_data[(*ch_cnt)++] = result;
+	}
+
+	return ret;
+}
+
+/**
+ * @brief Set the ADXRS290 active channels.
+ * @param dev - Device handler.
+ * @param mask - Mask for active channels.
+ * @return SUCCESS in case of success, FAILURE otherwise.
+ */
+int32_t adxrs290_set_active_channels(struct adxrs290_dev *dev, uint32_t mask)
+{
+	dev->ch_mask = mask & ADXRS290_CHANNEL_MASK;
+
+	return SUCCESS;
+}
+
+/**
  * Initialize the device.
  * @param device - The device structure.
  * @param init_param - The structure that contains the device initial
@@ -291,6 +345,9 @@ int32_t adxrs290_init(struct adxrs290_dev **device,
 	ret |= adxrs290_set_hpf(dev, init_param->hpf);
 	if (IS_ERR_VALUE(ret))
 		goto error_spi;
+
+	// Enable all channels by default
+	dev->ch_mask = 0x07;
 
 	*device = dev;
 
