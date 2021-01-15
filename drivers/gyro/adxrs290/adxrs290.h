@@ -91,6 +91,8 @@
 #define ADXRS290_READ_REG(reg)	(ADXRS290_READ | (reg))
 
 #define ADXRS290_MAX_TRANSITION_TIME_MS 100
+#define ADXRS290_CHANNEL_COUNT			3
+#define ADXRS290_CHANNEL_MASK			0x07
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
@@ -174,7 +176,9 @@ struct adxrs290_init_param {
  */
 struct adxrs290_dev {
 	/** SPI handler */
-	struct spi_desc *spi_desc;
+	struct spi_desc		*spi_desc;
+	/** Active Channels */
+	uint8_t			ch_mask;
 };
 
 /******************************************************************************/
@@ -210,6 +214,13 @@ int32_t adxrs290_get_rate_data(struct adxrs290_dev *dev,
 
 /* Read Temperature data */
 int32_t adxrs290_get_temp_data(struct adxrs290_dev *dev, int16_t *temp);
+
+/* Get the burst data */
+int32_t adxrs290_get_burst_data(struct adxrs290_dev *dev, int16_t *burst_data,
+				uint8_t *ch_cnt);
+
+/* Set the ADXRS290 active channels */
+int32_t adxrs290_set_active_channels(struct adxrs290_dev *dev, uint32_t mask);
 
 /* Init. the comm. peripheral and checks if the ADXRS290 part is present. */
 int32_t adxrs290_init(struct adxrs290_dev **device,
