@@ -42,10 +42,6 @@
 
 #include "iio_types.h"
 
-ssize_t get_adxrs290_iio_reg(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel, intptr_t priv);
-ssize_t set_adxrs290_iio_reg(void *device, char *buf, size_t len,
-			     const struct iio_ch_info *channel, intptr_t priv);
 ssize_t get_adxrs290_iio_ch_raw(void *device, char *buf, size_t len,
 				const struct iio_ch_info *channel, intptr_t priv);
 ssize_t get_adxrs290_iio_ch_scale(void *device, char *buf, size_t len,

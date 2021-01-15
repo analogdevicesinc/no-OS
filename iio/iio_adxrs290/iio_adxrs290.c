@@ -45,11 +45,6 @@
 #include "util.h"
 #include "error.h"
 
-#define NUM_CHANNELS		3
-#define MAX_REG_ADDR		0x12
-
-volatile uint8_t current_direct_reg = 0;
-
 /*
  * Available cut-off frequencies of the low pass filter in Hz.
  * The integer part and fractional part are represented separately.
