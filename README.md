@@ -1,7 +1,6 @@
 
 # no-OS
-
-[![Build Status](https://travis-ci.org/analogdevicesinc/no-OS.svg?branch=master)](https://travis-ci.org/analogdevicesinc/no-OS) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9f57b0bbc3f6465ea211aa6c96afcb23)](https://www.codacy.com/gh/analogdevicesinc/no-OS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=analogdevicesinc/no-OS&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://dev.azure.com/AnalogDevices/OpenSource/_apis/build/status/analogdevicesinc.no-OS?branchName=master)](https://dev.azure.com/AnalogDevices/OpenSource/_build/latest?definitionId=13&branchName=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9f57b0bbc3f6465ea211aa6c96afcb23)](https://www.codacy.com/gh/analogdevicesinc/no-OS?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=analogdevicesinc/no-OS&amp;utm_campaign=Badge_Grade)
 
 [Analog Devices Inc.](http://www.analog.com/en/index.html) Software drivers for systems without OS.
 
