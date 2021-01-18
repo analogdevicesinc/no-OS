@@ -1,9 +1,9 @@
 /***************************************************************************//**
- *   @file   crc.h
- *   @brief  Generic header file for all CRC computation algorithms.
- *   @author Darius Berghe (darius.berghe@analog.com)
+ *   @file   crc24.h
+ *   @brief  Header file of CRC-24 computation.
+ *   @author Antoniu Miclaus (antoniu.miclaus@analog.com)
 ********************************************************************************
- * Copyright 2020(c) Analog Devices, Inc.
+ * Copyright 2021(c) Analog Devices, Inc.
  *
  * All rights reserved.
  *
@@ -36,11 +36,19 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
-#ifndef __CRC_H
-#define __CRC_H
+#ifndef __CRC24_H
+#define __CRC24_H
 
-#include "crc8.h"
-#include "crc16.h"
-#include "crc24.h"
+#include <stdint.h>
+#include <stddef.h>
 
-#endif // __CRC_H
+#define CRC24_TABLE_SIZE 256
+
+#define DECLARE_CRC24_TABLE(_table) \
+	static uint32_t _table[CRC24_TABLE_SIZE]
+
+void crc24_populate_msb(uint32_t * table, const uint32_t polynomial);
+uint32_t crc24(const uint32_t * table, const uint8_t *pdata, size_t nbytes,
+	       uint32_t crc);
+
+#endif // __CRC24_H
