@@ -145,8 +145,8 @@ int32_t stm32_spi_init(struct spi_desc **desc,
 	sdesc->hspi.Init.DataSize = SPI_DATASIZE_8BIT;
 	sdesc->hspi.Init.CLKPolarity = param->mode & SPI_CPOL ? SPI_POLARITY_HIGH :
 				       SPI_POLARITY_LOW;
-	sdesc->hspi.Init.CLKPhase = param->mode & SPI_CPHA ? SPI_PHASE_1EDGE :
-				    SPI_PHASE_2EDGE;
+	sdesc->hspi.Init.CLKPhase = param->mode & SPI_CPHA ? SPI_PHASE_2EDGE :
+				    SPI_PHASE_1EDGE;
 	sdesc->hspi.Init.NSS = SPI_NSS_SOFT;
 	sdesc->hspi.Init.BaudRatePrescaler = prescaler_reg << SPI_CR1_BR_Pos;
 	sdesc->hspi.Init.FirstBit = param->bit_order ? SPI_FIRSTBIT_LSB :
