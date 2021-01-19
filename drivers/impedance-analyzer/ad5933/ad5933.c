@@ -44,10 +44,15 @@
 #include "ad5933.h"
 #include <math.h>
 
+#ifndef M_PI
+#define M_PI 3.14159265359
+#endif
+
 /******************************************************************************/
 /************************** Constants Definitions *****************************/
 /******************************************************************************/
 const int32_t pow_2_27 = 134217728ul;      // 2 to the power of 27
+const double radToDeg180ovPi = 180 / M_PI;
 
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
@@ -217,6 +222,7 @@ void ad5933_set_system_clk(struct ad5933_dev *dev,
  *                Example: AD5933_RANGE_2000mVpp
  *                         AD5933_RANGE_200mVpp
  *                         AD5933_RANGE_400mVpp
+
  *                         AD5933_RANGE_1000mVpp
  * @param gain  - Gain option.
  *                Example: AD5933_GAIN_X5
@@ -421,17 +427,17 @@ double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
  *                       Example: AD5933_FUNCTION_INC_FREQ - Increment freq.;
  *                                AD5933_FUNCTION_REPEAT_FREQ - Repeat freq..
  *
- * @return impedance   - Calculated impedance.
+ * @return ad5933_impedance - Struct of calculated values.
 *******************************************************************************/
-double ad5933_calculate_impedance(struct ad5933_dev *dev,
-				  double gain_factor,
-				  uint8_t freq_function)
+ad5933_impedance ad5933_calculate_impedance(struct ad5933_dev *dev,
+		double gain_factor,
+		uint8_t freq_function)
 {
 	signed short real_data = 0;
 	signed short imag_data = 0;
 	double magnitude = 0;
-	double impedance = 0;
 	uint8_t status = 0;
+	ad5933_impedance result;
 
 	ad5933_set_register_value(dev,
 				  AD5933_REG_CONTROL_HB,
@@ -453,9 +459,10 @@ double ad5933_calculate_impedance(struct ad5933_dev *dev,
 					      2);
 	magnitude = sqrt((real_data * real_data) + (imag_data * imag_data));
 
-	impedance =  1 / (magnitude * gain_factor);
+	result.magnitude = magnitude;
+	result.phase	 = atan2(imag_data,real_data) * radToDeg180ovPi;
 
-	return impedance;
+	return result;
 }
 
 /***************************************************************************//**

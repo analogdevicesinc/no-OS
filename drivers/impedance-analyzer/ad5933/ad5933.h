@@ -143,6 +143,11 @@ struct ad5933_init_param {
 	uint16_t current_settling;
 };
 
+typedef struct ad5933_impedance {
+	double  		magnitude;
+	double 			phase;
+} ad5933_impedance;
+
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
@@ -196,9 +201,9 @@ double ad5933_calculate_gain_factor(struct ad5933_dev *dev,
 				    uint8_t freq_function);
 
 /*! Reads the real and the imaginary data and calculates the Impedance. */
-double ad5933_calculate_impedance(struct ad5933_dev *dev,
-				  double gain_factor,
-				  uint8_t freq_function);
+ad5933_impedance ad5933_calculate_impedance(struct ad5933_dev *dev,
+		double gain_factor,
+		uint8_t freq_function);
 
 void ad5933_set_settling_time(struct ad5933_dev *dev,
 			      uint8_t		mulitplier,
