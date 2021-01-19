@@ -81,6 +81,7 @@ int32_t ad5933_init(struct ad5933_dev **device,
 	dev->current_clock_source = init_param.current_clock_source;
 	dev->current_gain = init_param.current_gain;
 	dev->current_range = init_param.current_range;
+	dev->current_settling = init_param.current_settling;
 
 	status = i2c_init(&dev->i2c_desc, &init_param.i2c_init);
 
@@ -216,7 +217,6 @@ void ad5933_set_system_clk(struct ad5933_dev *dev,
  *                Example: AD5933_RANGE_2000mVpp
  *                         AD5933_RANGE_200mVpp
  *                         AD5933_RANGE_400mVpp
-
  *                         AD5933_RANGE_1000mVpp
  * @param gain  - Gain option.
  *                Example: AD5933_GAIN_X5
@@ -456,4 +456,34 @@ double ad5933_calculate_impedance(struct ad5933_dev *dev,
 	impedance =  1 / (magnitude * gain_factor);
 
 	return impedance;
+}
+
+/***************************************************************************//**
+ * @brief Selects the number of settling cycles of the device.
+ *
+ * @param dev		 - The device structure.
+ * @param cycles	 - 9-bit number of cycles to wait before triggering ADC
+ *
+ * @param multiplier - Multiply number of cycles by X1, X2 or X4
+ *                Example: AD5933_SETTLING_X1
+ *                         AD5933_SETTLING_X2
+ *                         AD5933_SETTLING_X4
+ *
+ * @return None.
+*******************************************************************************/
+void ad5933_set_settling_time(struct ad5933_dev *dev,
+			      uint8_t		multiplier,
+			      uint16_t		number_cycles)
+{
+
+
+	if ((multiplier != AD5933_SETTLING_X2) && (multiplier != AD5933_SETTLING_X4))
+		multiplier = AD5933_SETTLING_X1;
+
+	ad5933_set_register_value(dev,
+				  AD5933_REG_SETTLING_CYCLES,
+				  number_cycles | (multiplier << 9),
+				  2);
+	/* Store the last settings made. */
+	dev->current_settling = number_cycles;
 }
