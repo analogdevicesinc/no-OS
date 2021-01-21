@@ -30,6 +30,10 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 #                          EVALUATE PLATFORM
 #------------------------------------------------------------------------------
 
+# By default link noos sources into the build directory of the project.
+# This way all needed files will be in one place and they can be tracked on git
+LINK_SRCS ?= y
+
 HARDWARE ?= $(wildcard *.hdf) $(wildcard *.sopcinfo) $(wildcard pinmux_config.c)
 
 #If platform not set get it from HARDWARE file
