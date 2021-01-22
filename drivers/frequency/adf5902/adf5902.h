@@ -43,6 +43,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
+#include <stdin.h>
 #include "spi.h"
 
 /******************************************************************************/
@@ -62,11 +63,22 @@ struct adf5902_init_param {
 struct adf5902_dev {
 	/* SPI Descriptor */
 	spi_desc		*spi_desc;
-
 };
 
 /******************************************************************************/
 /************************ Functions Declarations ******************************/
 /******************************************************************************/
 
+/** ADF5902 SPI write */
+int32_t adf5902_write(struct adf5902_dev *device, uint32_t data);
+
+/** ADF5902 SPI Readback */
+int32_t adf5902_read(struct adf5902_dev *device, uint32_t *data);
+
+/** ADF5902 Initialization */
+int32_t adf5902_init(struct adf5902_dev **device,
+		     adf5902_init_param *init_param);
+
+/** ADF5902 Resources Deallocation */
+int32_t adf5902_remove(struct adf5902_dev *device);
 #endif /* SRC_ADF5902_H_ */

@@ -41,8 +41,99 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdio.h>
-#include <stdlib.h>
+#include <malloc.h>
+#include "adf5902.h"
+#include "error.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
 /******************************************************************************/
+
+/**
+ * @brief Writes 4 bytes of data to ADF5902.
+ * @param dev - The device structure.
+ * @param data - Data value to write.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t adf5902_write(struct adf5902_dev *device, uint32_t data)
+{
+	uint8_t buff[4];
+	uint8_t buff_size = 4;
+
+	buff[0] = data >> 24;
+	buff[1] = data >> 16;
+	buff[2] = data >> 8;
+	buff[3] = data;
+
+	return spi_write_and_read(dev->spi_desc, buff, buff_size);
+}
+
+/**
+ * @brief Readback data from ADF5902.
+ * @param dev - The device structure.
+ * @param data - Data to be read.
+ * @return Returns 0 in case of success or negative error code otherwise.
+ */
+int32_t adf5902_readback(struct adf5902_dev *device, uint32_t *data)
+{
+	int32_t ret;
+	uint32_t i;
+	uint8_t buff[4];
+	uint8_t buff_size = 4;
+
+	buff[0] = *data >> 24;
+	buff[1] = *data >> 16;
+	buff[2] = *data >> 8;
+	buff[3] = *data;
+
+	ret = spi_write_and_read(dev->spi_desc, buff, buff_size);
+	if (ret != SUCCESS)
+		return ret;
+
+	for (i = 0; i < buff_size; i++)
+		*data = (*data << 8) | buff[i];
+
+	return ret;
+}
+
+/**
+ * @brief Initializes the ADF5902.
+ * @param device - The device structure.
+ * @param init_param - The structure containing the device initial parameters.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int32_t adf5902_init(struct adf5902_dev **device,
+		     adf5902_init_param *init_param)
+{
+	int32_t ret;
+	struct adf5902_dev *dev;
+
+	dev = (struct adf5902_dev *)calloc(1, sizeof(*dev));
+	if (!dev)
+		return FAILUE;
+
+	/* SPI */
+	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	if (ret != SUCCESS)
+		return ret;
+
+	*device = dev;
+
+	return ret;
+}
+
+/**
+ * @brief Free resoulces allocated for ADF5902
+ * @param device - The device structure.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int32_t adf5902_remove(struct adf5902_dev *device)
+{
+	int32_t ret;
+
+	ret = spi_remove(device->spi_desc);
+
+	free(device);
+
+	return ret;
+}
