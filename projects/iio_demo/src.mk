@@ -27,12 +27,19 @@ SRC_DIRS += $(NO-OS)/network
 SRCS	 += $(NO-OS)/util/circular_buffer.c
 SRCS	 += $(PLATFORM_DRIVERS)/delay.c
 SRCS	 += $(PLATFORM_DRIVERS)/timer.c
+INCS	 += $(INCLUDE)/delay.h			\
+		$(INCLUDE)/timer.h		\
+		$(INCLUDE)/circular_buffer.h	\
+		$(PLATFORM_DRIVERS)/timer_extra.h\
+		$(PLATFORM_DRIVERS)/rtc_extra.h
 endif
 
 SRCS += $(PLATFORM_DRIVERS)/uart.c					\
 	$(PLATFORM_DRIVERS)/irq.c
 
 INCS += $(INCLUDE)/irq.h						\
+	$(INCLUDE)/rtc.h						\
+	$(INCLUDE)/gpio.h						\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h
 endif
