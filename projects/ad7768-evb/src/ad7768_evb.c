@@ -154,7 +154,8 @@ int main(void)
 	struct axi_dmac *dma_desc;
 	int32_t ret;
 	uint32_t data_size;
-	const uint32_t chan_no = 8, resolution = 24, sample_no = 1024;
+	const uint32_t chan_no = AD7768_CH_NO, resolution = AD7768_RESOLUTION,
+		       sample_no = 1024;
 	struct xil_spi_init_param xil_spi_initial = {
 		.device_id = SPI_DEVICE_ID,
 		.flags = 0,
@@ -203,7 +204,7 @@ int main(void)
 		},
 		.gpio_reset_value = GPIO_HIGH,
 		/* Configuration */
-		.pin_spi_input_value = GPIO_HIGH,
+		.pin_spi_input_value = AD7768_SPI_CTRL,
 		.sleep_mode = AD7768_ACTIVE,
 		.power_mode = AD7768_FAST,
 		.mclk_div = AD7768_MCLK_DIV_4,
@@ -215,9 +216,9 @@ int main(void)
 	struct axi_adc_init axi_adc_initial = {
 		.base = ADC_DDR_BASEADDR,
 		.name = "ad7768_axi_adc",
-		.num_channels = 8
+		.num_channels = chan_no
 	};
-	int32_t *data_ptr, i, data_val;
+	int32_t *data_ptr, i;
 
 	ret = ad7768_if_gpio_setup(GPIO_UP_SSHOT, GPIO_LOW);
 	if (ret != 0)
@@ -261,7 +262,8 @@ int main(void)
 	if (ret != SUCCESS)
 		return FAILURE;
 
-	data_size = (sample_no * chan_no * ((resolution + 8) / 8));
+	data_size = (sample_no * chan_no *
+		     ((resolution + AD7768_HEADER_SIZE) / BITS_IN_BYTE));
 
 	printf("Capture samples...\n");
 	ret = axi_dmac_transfer(dma_desc, ADC_DDR_BASEADDR, data_size);
@@ -275,14 +277,11 @@ int main(void)
 		printf("Interface OK\n");
 
 	printf("   CH0      CH1      CH2      CH3      CH4      CH5      CH6      CH7   ");
-	for (i = 0; i < 1024; i++) {
-		if ((i % 8) == 0)
+	for (i = 0; i < (sample_no * chan_no); i++) {
+		if ((i % chan_no) == 0)
 			printf("\n\r");
-		data_ptr = (int32_t *)(ADC_DDR_BASEADDR + (i * 4));
-		data_val = (*data_ptr) & 0xFFFFFF;
-		if (data_val > 0x7FFFFF)
-			data_val -= 0x1000000;
-		printf("%8.5f ", ((float)data_val * 0.000000488));
+		data_ptr = (int32_t *)(ADC_DDR_BASEADDR + (i * sizeof(uint32_t)));
+		printf("%8.5f ", ((float)(*data_ptr) * 0.000000488));
 	}
 
 #ifdef IIO_SUPPORT
