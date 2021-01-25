@@ -61,6 +61,9 @@
 #define GPIO_MODE_2_GPIO_2			GPIO_OFFSET + 18
 #define GPIO_MODE_3_GPIO_3			GPIO_OFFSET + 19
 #define GPIO_FILTER_GPIO_4			GPIO_OFFSET + 20
+#define AD7768_HEADER_SIZE			8
+#define BITS_IN_BYTE				8
+#define AD7768_EVB_REFERENCE_VOLT		4.096f
 
 /* HDL Control Interface */
 
