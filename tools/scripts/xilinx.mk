@@ -127,24 +127,6 @@ xilinx_run: all
 		$(BINARY)\
 		$(BUILD_DIR)/hw $(HIDE)
 
-PHONY += xilinx_update_srcs
-xilinx_update_srcs:
-ifeq 'y' '$(strip $(LINK_SRCS))'
-	$(MUTE) $(foreach dir,$(SRC_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(dir)))) $(HIDE) \
-		$(cmd_separator)\
-		$(call make_dir_link,$(dir),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))) $(HIDE) $(cmd_separator)) echo . $(HIDE)
-	
-	$(MUTE) $(foreach file,$(FILES_OUT_OF_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(file)))) $(HIDE) \
-		$(cmd_separator)\
-		$(call make_link,$(file),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(file))) $(HIDE) $(cmd_separator)) echo . $(HIDE)
-else
-	$(MUTE) $(foreach file,$(SRCS) $(INCS), $(call copy_fun,$(file),$(BUILD_DIR)/app/src) $(HIDE) &&) echo . $(HIDE)
-endif
-
 #do copy of HARDWARE to tmp is needed?
 $(TEMP_DIR)/arch.txt: $(HARDWARE)
 	$(MUTE) $(call mk_dir,$(BUILD_DIR)/app $(BUILD_DIR)/app/src $(OBJECTS_DIR) $(TEMP_DIR)) $(HIDE)
