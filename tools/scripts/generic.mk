@@ -207,7 +207,7 @@ endif
 
 #Add to include all directories containing a .h file
 EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS),$(dir $(dir))))
-CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS))
+CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS) $(PLATFORM_INCS))
 
 #Will be used to add this flags to sdk project
 FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
