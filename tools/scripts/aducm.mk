@@ -201,9 +201,9 @@ EXTRA_FLAGS = $(sort $(subst -D,,$(filter -D%, $(filter-out $(GENERIC_FLAGS),$(C
 ADD_COMPILER_DEFINES = $(foreach flag, $(EXTRA_FLAGS), \
 			-append-switch compiler -D=$(flag))
 
-#Flags for each include directory
-INCLUDE_FLAGS = $(foreach dir, $(EXTRA_INC_PATHS),\
-		-append-switch compiler -I=$(dir))
+RELATIVE_INCS=$(patsubst $(PROJECT_BUILD)/%,%,$(EXTRA_INC_PATHS))
+#Flags for each include directory using as reference the project directory
+INCLUDE_FLAGS = $(addprefix -append-switch compiler -I=$${ProjDirPath}/,$(RELATIVE_INCS))
 
 aducm3029_project: $(PROJECT_BUILD)/.project.target
 

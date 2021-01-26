@@ -309,6 +309,8 @@ update_srcs:
 		$(call file_fun,$(file),$(call relative_to_project,$(file))) $(HIDE)\
 		$(cmd_separator)) echo . $(HIDE)
 
+standalone:
+	$(MUTE) $(MAKE) --no-print-directory project LINK_SRCS=n MAKEFLAGS=$(MAKEOVERRIDES)
 
 # Build project using SDK
 project_build: $(PLATFORM)_project_build

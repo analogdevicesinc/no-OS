@@ -141,8 +141,8 @@ xilinx_project_build: all
 	$(MUTE) $(MUTE) xsct $(NO-OS)/tools/scripts/platform/xilinx/build_project.tcl $(WORKSPACE) $(HIDE)
 
 
-ADD_INCLUDE_PATHS=$(foreach dir, $(EXTRA_INC_PATHS),\
-		sdk configapp -app app include-path $(dir);)
+ADD_INCLUDE_PATHS=$(foreach dir, $(patsubst $(PROJECT_BUILD)/%,%,$(EXTRA_INC_PATHS)),\
+		sdk configapp -app app include-path $(addprefix \$${ProjDirPath}/,$(dir));)
 ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D),\
 		sdk configapp -app app define-compiler-symbols $(flag);)
 ADD_LIBRARIES = $(foreach lib, $(EXTRA_LIBS_NAMES), \
@@ -153,7 +153,7 @@ ADD_LIBRARIES_PATH = $(foreach path, $(EXTRA_LIBS_PATHS), \
 ifeq ($(OS), Windows_NT)
 UDPATE_TCL_CONTENT = setws $(WORKSPACE);$(ADD_INCLUDE_PATHS) $(ADD_COMPILER_DEFINES) $(ADD_LIBRARIES_PATH) $(ADD_LIBRARIES)
 else
-UDPATE_TCL_CONTENT = "setws $(WORKSPACE);$(ADD_INCLUDE_PATHS) $(ADD_COMPILER_DEFINES) $(ADD_LIBRARIES_PATH) $(ADD_LIBRARIES)"
+UDPATE_TCL_CONTENT = 'setws $(WORKSPACE);$(ADD_INCLUDE_PATHS) $(ADD_COMPILER_DEFINES) $(ADD_LIBRARIES_PATH) $(ADD_LIBRARIES)'
 endif
 
 $(BUILD_DIR)/.bsp.target: $(LIB_TARGETS) $(TEMP_DIR)/arch.txt
