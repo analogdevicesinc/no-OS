@@ -83,8 +83,8 @@ DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/ad
 
 ADUCM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
-GENERIC_FLAGS = -I"$(ADUCM_DFP)/Include"
-GENERIC_FLAGS += -I"$(CMSIS_CORE)/Include"
+PLATFORM_INCS = "$(ADUCM_DFP)/Include"
+PLATFORM_INCS += "$(CMSIS_CORE)/Include"
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
@@ -93,19 +93,17 @@ ADUCM_SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
 ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
 ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
 ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
-ADUCM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
-ADUCM_INCS += $(PROJECT_BUILD)/RTE
-ADUCM_INCS += $(PROJECT_BUILD)/system
 
 SRCS += $(ADUCM_SRCS)
+PLATFORM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
+PLATFORM_INCS += $(PROJECT_BUILD)/RTE
+PLATFORM_INCS += $(PROJECT_BUILD)/system
 
 #------------------------------------------------------------------------------
 #                           COMPILING DATA                              
 #------------------------------------------------------------------------------
 
 GENERIC_FLAGS += -DCORE0 -D_RTE_ -D__ADUCM3029__ -D__SILICON_REVISION__=0xffff -mcpu=cortex-m3 -mthumb
-
-GENERIC_FLAGS += $(addprefix -I,$(ADUCM_INCS))
 
 GENERIC_DEBUG_FLAGS = -g -gdwarf-2 -D_DEBUG
 
@@ -114,7 +112,7 @@ C_RELEASE_FLAGS = -O2
 
 CFLAGS += -DADUCM_PLATFORM
 
-ASFLAGS	+= $(GENERIC_FLAGS) -x assembler-with-cpp 
+ASFLAGS	+= $(GENERIC_FLAGS) $(addprefix -I,$(PLATFORM_INCS)) -x assembler-with-cpp 
 CFLAGS	+= $(GENERIC_FLAGS) -Wall -ffunction-sections -fdata-sections
 
 CFLAGS	+= $(GENERIC_RELEASE_FLAGS) $(C_RELEASE_FLAGS)
