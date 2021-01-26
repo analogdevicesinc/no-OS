@@ -81,20 +81,18 @@ DFP_FILES = $(call rwildcard,$(DFP_DRIVERS),*.c)
 #Not for aducm3029
 DFP_IGNORED_FILES += $(DFP_DRIVERS)/flash/adi_flash_data.c $(DFP_DRIVERS)/rtc/adi_rtc_data.c
 
-ADUCM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
+PLATFORM_SRCS += $(filter-out $(DFP_IGNORED_FILES), $(DFP_FILES))
 
 PLATFORM_INCS = "$(ADUCM_DFP)/Include"
 PLATFORM_INCS += "$(CMSIS_CORE)/Include"
 PIN_MUX = $(PROJECT)/pinmux_config.c
 PROJECT_PIN_MUX = $(PROJECT_BUILD)/system/pinmux/GeneratedSources/pinmux_config.c
 
-ADUCM_SRCS += $(PROJECT_PIN_MUX)
-ADUCM_SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
-ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
-ADUCM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
+PLATFORM_SRCS += $(PROJECT_PIN_MUX)
+PLATFORM_SRCS += $(PROJECT_BUILD)/system/adi_initialize.c
+PLATFORM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/startup_ADuCM3029.c
+PLATFORM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/system_ADuCM3029.c
 ASM_SRCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029/reset_ADuCM3029.S
-
-SRCS += $(ADUCM_SRCS)
 PLATFORM_INCS += $(PROJECT_BUILD)/RTE/Device/ADuCM3029
 PLATFORM_INCS += $(PROJECT_BUILD)/RTE
 PLATFORM_INCS += $(PROJECT_BUILD)/system
