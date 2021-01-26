@@ -74,7 +74,7 @@ endif
 #                             DFP DEPENDENCIES                          
 #------------------------------------------------------------------------------
 
-PROJECT_BUILD = $(BUILD_DIR)/$(PROJECT_NAME)
+CCES_PROJ_NAME = $(notdir $(PROJECT_BUILD))
 
 #DFP Files
 DFP_FILES = $(call rwildcard,$(DFP_DRIVERS),*.c)
@@ -193,10 +193,12 @@ PHONY += aducm3029_project_build
 aducm3029_project_build: aducm3029_project $(LIB_TARGETS)
 	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
 		-data $(WORKSPACE) \
-		-project $(PROJECT_NAME) \
+		-project $(CCES_PROJ_NAME) \
 		-build Release $(HIDE)
 
-ADD_COMPILER_DEFINES = $(foreach flag, $(FLAGS_WITHOUT_D), \
+
+EXTRA_FLAGS = $(sort $(subst -D,,$(filter -D%, $(filter-out $(GENERIC_FLAGS),$(CFLAGS)))))
+ADD_COMPILER_DEFINES = $(foreach flag, $(EXTRA_FLAGS), \
 			-append-switch compiler -D=$(flag))
 
 escape_project_name = $(subst $(PROJECT_NAME),_$(PROJECT_NAME), $1)
@@ -235,7 +237,7 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		-command projectcreate \
 		-data $(WORKSPACE) \
 		-project $(PROJECT_BUILD) \
-		-project-name $(PROJECT_NAME) \
+		-project-name $(CCES_PROJ_NAME) \
 		-processor ADuCM3029 \
 		-type Executable \
 		-revision any \
@@ -244,12 +246,12 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		-remove-switch linker -specs=rdimon.specs $(HIDE)
 	$(call print,Configuring project)
 #Overwrite system.rteconfig file with one that enables all DFP feautres neede by noos
-	$(MUTE) $(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)) $(HIDE)
+	$(MUTE) $(call copy_fun,$(PLATFORM_TOOLS)/system.rteconfig,$(PROJECT_BUILD)/system.rteconfig) $(HIDE)
 #Adding pinmux plugin (Did not work to add it in the first command) and update project
 	$(MUTE) $(CCES) -nosplash -application com.analog.crosscore.headlesstools \
  		-command addaddin \
  		-data $(WORKSPACE) \
- 		-project $(PROJECT_NAME) \
+ 		-project $(CCES_PROJ_NAME) \
  		-id com.analog.crosscore.ssldd.pinmux.component \
 		-version latest \
 		-regensrc \
@@ -257,7 +259,6 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 		$(ADD_COMPILER_DEFINES) \
 		-append-switch linker additionaloption="$(LIB_PATHS) $(LIB_FLAGS)" \
 		$(HIDE)
-
 #The default startup_ADuCM3029.c has compiling errors
 #TODO Replace with patch if team think is a better aproch to install a windows
 #program for patching	
@@ -267,7 +268,6 @@ $(PROJECT_BUILD)/.project.target: $(LIB_TARGETS)
 	$(MUTE) $(call remove_dir,$(PROJECT_BUILD)/src) $(HIDE)
 	$(MUTE) $(call copy_fun,$(PIN_MUX),$(PROJECT_PIN_MUX)) $(HIDE)
 	$(MUTE) $(MAKE) --no-print-directory update_srcs
-	@$(call print, project created at $(PROJECT_BUILD)) $(HIDE)
 	$(MUTE) $(call set_one_time_rule,$@)
 
 PHONY += clean_project
