@@ -50,12 +50,12 @@
 #include "tinyiiod.h"
 #include "util.h"
 #include "list.h"
-#include "delay.h"
 #include "error.h"
 #include "uart.h"
 #include <inttypes.h>
 
 #ifdef ENABLE_IIO_NETWORK
+#include "delay.h"
 #include "tcp_socket.h"
 #include "circular_buffer.h"
 #endif
