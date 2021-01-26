@@ -103,28 +103,6 @@ altera_run: all
 	$(WSL) nios2-download -r -g $(BINARY)
 	nios2-terminal
 
-PHONY += altera_update_srcs
-altera_update_srcs:
-ifeq 'y' '$(strip $(LINK_SRCS))'
-	$(call mk_dir,$(BUILD_DIR)/app/src)
-	$(foreach dir,$(SRC_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))))\
-		$(cmd_separator)\
-		$(call make_dir_link,$(dir),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(dir))) $(cmd_separator)) \
-		echo Dir links created
-	
-	$(foreach file,$(FILES_OUT_OF_DIRS),\
-		$(call mk_dir,$(dir $(BUILD_DIR)/app/src/$(call get_relative_path, $(file))))\
-		$(cmd_separator)\
-		$(call make_link,$(file),\
-		$(BUILD_DIR)/app/src/$(call get_relative_path, $(file)))$(cmd_separator)) \
-		echo File links created
-else
-	$(foreach file,$(SRCS) $(INCS), $(call copy_fun,$(file),$(BUILD_DIR)/app) &&) \
-		echo Src files copied
-endif
-
 altera_project: $(BUILD_DIR)/.bsp.target
 
 $(BUILD_DIR)/.bsp.target:
