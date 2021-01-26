@@ -83,6 +83,16 @@ endif
 
 relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
 
+ifeq 'y' '$(strip $(LINK_SRCS))'
+file_fun = $(make_link)
+folder_fun = $(make_dir_link)
+ACTION = Linking
+else
+file_fun = $(call copy_fun,$1,$(dir $2))
+folder_fun = $(copy_folder)
+ACTION = Copying
+endif
+
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
@@ -99,6 +109,7 @@ PLATFORM_DRIVERS	?= $(NO-OS)/drivers/platform/$(PLATFORM)
 PROJECT_NAME	= $(notdir $(PROJECT))
 BUILD_DIR_NAME	?= build
 BUILD_DIR		?= $(PROJECT)/$(BUILD_DIR_NAME)
+PROJECT_BUILD 		= $(BUILD_DIR)/app
 OBJECTS_DIR		= $(BUILD_DIR)/objs
 WORKSPACE		?= $(BUILD_DIR)
 PLATFORM_TOOLS	= $(NO-OS)/tools/scripts/platform/$(PLATFORM)
@@ -208,7 +219,7 @@ ifneq ($(REL_ASM_SRCS),$(ASM_OBJS_S))
 endif
 
 #Add to include all directories containing a .h file
-EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS),$(dir $(dir))))
+EXTRA_INC_PATHS += $(sort $(foreach dir, $(INCS_IN_BUILD),$(dir $(dir))))
 CFLAGS += $(addprefix -I,$(EXTRA_INC_PATHS) $(PLATFORM_INCS))
 
 #Will be used to add this flags to sdk project
@@ -218,8 +229,13 @@ FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 SRCS := $(sort $(SRCS))
 INCS := $(sort $(INCS))
 
+CREATED_DIRECTORIES += noos root $(PROJECT_NAME)
 SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
 INCS_IN_BUILD = $(call relative_to_project, $(INCS))
+DIRS_TO_CREATE = $(sort $(dir $(call relative_to_project, $(FILES_OUT_OF_DIRS) $(SRC_DIRS))))
+#Prefixes from get_relative_path 
+DIRS_TO_REMOVE = $(addprefix $(PROJECT_BUILD)/,$(CREATED_DIRECTORIES))
+
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------
@@ -283,12 +299,16 @@ project: $(PLATFORM)_project
 
 PHONY += update_srcs
 update_srcs:
-ifeq 'y' '$(strip $(LINK_SRCS))'
-	@$(call print,Linking srcs to created project)
-else
-	@$(call print,Copying srcs to created project)
-endif
-	$(MUTE) $(MAKE) --no-print-directory $(PLATFORM)_update_srcs
+	@$(call print, $(ACTION) srcs to created project)
+	-$(MUTE)$(call remove_dir,$(DIRS_TO_REMOVE)) $(HIDE)
+	$(MUTE) -$(call mk_dir,$(DIRS_TO_CREATE)) $(HIDE)
+	$(MUTE) $(foreach dir,$(sort $(SRC_DIRS)),\
+		$(call folder_fun,$(dir),$(call relative_to_project,$(dir))) $(HIDE)\
+		$(cmd_separator)) echo . $(HIDE)
+	$(MUTE) $(foreach file,$(sort $(FILES_OUT_OF_DIRS)),\
+		$(call file_fun,$(file),$(call relative_to_project,$(file))) $(HIDE)\
+		$(cmd_separator)) echo . $(HIDE)
+
 
 # Build project using SDK
 project_build: $(PLATFORM)_project_build

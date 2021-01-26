@@ -4,6 +4,7 @@ endif
 
 PLATFORM_RELATIVE_PATH = $(patsubst $(STM32CUBE)%,stm32%,$1)
 PLATFORM_FULL_PATH = $(patsubst stm32%,$(STM32CUBE)%,$1)
+CREATED_DIRECTORIES += stm32
 
 CFLAGS += -std=gnu11 \
 	-g3 \
@@ -99,4 +100,5 @@ debug: all openocd_paths $(BINARY).openocd $(BINARY).gdb
 		-c "init" &);
 	arm-none-eabi-gdb --command=$(BINARY).gdb
 
-stm32_project: ;
+stm32_project:
+	$(MUTE) $(MAKE) --no-print-directory update_srcs
