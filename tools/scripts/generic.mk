@@ -81,6 +81,8 @@ get_relative_path = $(RELATIVE_PATH)
 get_full_path = $(FULL_PATH)
 endif
 
+relative_to_project = $(addprefix $(PROJECT_BUILD)/,$(call get_relative_path,$1))
+
 #------------------------------------------------------------------------------
 #                           ENVIRONMENT VARIABLES                              
 #------------------------------------------------------------------------------
@@ -192,7 +194,7 @@ INCS     := $(filter-out $(ALL_IGNORED_FILES),$(INCS))
 #Get all src files that are not in SRC_DRIS
 FILES_OUT_OF_DIRS := $(filter-out $(call rwildcard, $(SRC_DIRS),*), $(SRCS) $(INCS)) 
 
-REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS)))
+REL_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(SRCS_IN_BUILD) $(PLATFORM_SRCS)))
 OBJS = $(REL_SRCS:.c=.o)
 
 REL_ASM_SRCS = $(addprefix $(OBJECTS_DIR)/,$(call get_relative_path,$(ASM_SRCS)))
@@ -216,6 +218,8 @@ FLAGS_WITHOUT_D = $(sort $(subst -D,,$(filter -D%, $(CFLAGS))))
 SRCS := $(sort $(SRCS))
 INCS := $(sort $(INCS))
 
+SRCS_IN_BUILD = $(call relative_to_project, $(SRCS))
+INCS_IN_BUILD = $(call relative_to_project, $(INCS))
 #------------------------------------------------------------------------------
 #                             Generic Goals                         
 #------------------------------------------------------------------------------
