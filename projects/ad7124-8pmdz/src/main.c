@@ -1,5 +1,5 @@
 /***************************************************************************//**
- *   @file   ad7124/src/main.c
+ *   @file   ad7124-8pmdz/src/main.c
  *   @brief  Implementation of Main Function.
  *   @author Drimbarean Andrei (andrei.drimbarean@analog.com)
 ********************************************************************************
