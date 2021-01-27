@@ -63,6 +63,8 @@ SRCS += $(PLATFORM_DRIVERS)/stm32_delay.c \
 ASM_SRCS = $(PROJECT)/src/startup/startup_stm32f446retx.s
 
 INCS += $(PROJECT)/src/hal/stm32/main.h \
+	$(INCLUDE)/delay.h \
+	$(PLATFORM_DRIVERS)/stm32_uart_stdio.h \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_hal_conf.h \
 	$(PROJECT)/src/hal/stm32/stm32f4xx_it.h \
 	$(PROJECT)/src/hal/stm32/stm32_hal.h \

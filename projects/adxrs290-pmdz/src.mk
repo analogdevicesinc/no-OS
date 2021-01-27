@@ -37,7 +37,9 @@ INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h						\
 	$(INCLUDE)/gpio.h						\
+	$(INCLUDE)/rtc.h						\
 	$(INCLUDE)/spi.h						\
 	$(PLATFORM_DRIVERS)/spi_extra.h					\
 	$(PLATFORM_DRIVERS)/irq_extra.h					\
+	$(PLATFORM_DRIVERS)/rtc_extra.h					\
 	$(PLATFORM_DRIVERS)/uart_extra.h				
