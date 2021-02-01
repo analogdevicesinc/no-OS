@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdio.h>
 #include <malloc.h>
+#include <math.h>
 #include "adf5902.h"
 #include "error.h"
 
@@ -51,7 +52,7 @@
 
 /**
  * @brief Writes 4 bytes of data to ADF5902.
- * @param dev - The device structure.
+ * @param device - The device structure.
  * @param data - Data value to write.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
@@ -65,12 +66,12 @@ int32_t adf5902_write(struct adf5902_dev *device, uint32_t data)
 	buff[2] = data >> 8;
 	buff[3] = data;
 
-	return spi_write_and_read(dev->spi_desc, buff, buff_size);
+	return spi_write_and_read(device->spi_desc, buff, buff_size);
 }
 
 /**
  * @brief Readback data from ADF5902.
- * @param dev - The device structure.
+ * @param device - The device structure.
  * @param data - Data to be read.
  * @return Returns 0 in case of success or negative error code otherwise.
  */
@@ -86,7 +87,7 @@ int32_t adf5902_readback(struct adf5902_dev *device, uint32_t *data)
 	buff[2] = *data >> 8;
 	buff[3] = *data;
 
-	ret = spi_write_and_read(dev->spi_desc, buff, buff_size);
+	ret = spi_write_and_read(device->spi_desc, buff, buff_size);
 	if (ret != SUCCESS)
 		return ret;
 
@@ -97,23 +98,95 @@ int32_t adf5902_readback(struct adf5902_dev *device, uint32_t *data)
 }
 
 /**
+ * @brief Sets the ADF4350 RF VCO frequency.
+ * @param device - The device structure.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int32_t adf5902_set_vco_freq(struct adf5902_dev *device)
+{
+
+	device->f_pfd = (device->ref_in * (1 + device->ref_doubler_en) /
+			 (device->ref_div_factor *(1 + device->ref_div2_en)));
+
+	if (device->f_pfd > ADF5902_MAX_FREQ_PFD)
+		return FAILURE;
+
+	device->int_div = (uint16_t)(device->rf_out / (device->f_pfd * 2));
+
+	if ((device->int_div > ADF5902_MAX_INT_MSB_WORD)
+	    || (device->int_div < ADF5902_MIN_INT_MSB_WORD))
+		return FAILURE;
+
+	device->frac_msb = (uint16_t)(((device->rf_out / (device->f_pfd * 2)) -
+				       device->int_div) * pow(2, 12));
+
+	if ((device->frac_msb > ADF5902_MAX_FRAC_MSB_WORD)
+	    || (device->frac_msb < ADF5902_MIN_FRAC_MSB_WORD))
+		return FAILURE;
+
+	device->frac_lsb = (uint16_t)(((((device->rf_out / (device->f_pfd * 2)) -
+					 device->int_div) * pow(2, 12)) -
+				       device->frac_msb) * pow(2, 13));
+
+	if ((device->frac_lsb > ADF5902_MAX_FRAC_LSB_WORD)
+	    || (device->frac_lsb < ADF5902_MIN_FRAC_LSB_WORD))
+		return FAILURE;
+
+	return SUCCESS;
+}
+
+/**
  * @brief Initializes the ADF5902.
  * @param device - The device structure.
  * @param init_param - The structure containing the device initial parameters.
  * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf5902_init(struct adf5902_dev **device,
-		     adf5902_init_param *init_param)
+		     struct adf5902_init_param *init_param)
 {
 	int32_t ret;
 	struct adf5902_dev *dev;
 
 	dev = (struct adf5902_dev *)calloc(1, sizeof(*dev));
 	if (!dev)
-		return FAILUE;
+		return FAILURE;
 
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
+	if (ret != SUCCESS)
+		return ret;
+
+	if ((init_param->rf_out > ADF5902_MAX_VCO_FREQ)
+	    || (init_param->rf_out < ADF5902_MIN_VCO_FREQ))
+		return FAILURE;
+
+	dev->rf_out = init_param->rf_out;
+
+	if ((init_param->ref_in > ADF5902_MAX_REFIN_FREQ)
+	    || (init_param->ref_in < ADF5902_MIN_REFIN_FREQ))
+		return FAILURE;
+
+	dev->ref_in = init_param->ref_in;
+
+	if ((init_param->ref_div_factor > ADF5902_MAX_R_DIVIDER)
+	    || (init_param->ref_div_factor < ADF5902_MIN_R_DIVIDER))
+		return FAILURE;
+
+	dev->ref_div_factor = init_param->ref_div_factor;
+
+	if ((init_param->ref_doubler_en != ADF5902_REF_DOUBLER_DISABLE)
+	    && (init_param->ref_doubler_en != ADF5902_REF_DOUBLER_ENABLE))
+		return FAILURE;
+
+	dev->ref_doubler_en = init_param->ref_doubler_en;
+
+	if ((init_param->ref_div2_en != ADF5902_R_DIV_2_DISABLE)
+	    && (init_param->ref_div2_en != ADF5902_R_DIV_2_ENABLE))
+		return FAILURE;
+
+	dev->ref_div2_en = init_param->ref_div2_en;
+
+	ret = adf5902_set_vco_freq(dev);
 	if (ret != SUCCESS)
 		return ret;
 

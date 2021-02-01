@@ -43,7 +43,7 @@
 /******************************************************************************/
 /***************************** Include Files **********************************/
 /******************************************************************************/
-#include <stdin.h>
+#include <stdint.h>
 #include "spi.h"
 
 /******************************************************************************/
@@ -203,11 +203,14 @@
 #define ADF5902_REG7_R_DIV_2(x)		(((x) & 0x1) << 11)
 #define ADF5902_REG7_CLK_DIV(x)		(((x) & 0xFFF) << 12)
 #define ADF5902_REG7_MASTER_RESET(x)	(((x) & 0x1) << 25)
-#define ADF5902_REG6_RESERVED		((0x0 << 26) & (0x1 << 24))
+#define ADF5902_REG7_RESERVED		((0x0 << 26) & (0x1 << 24))
 
 /* Register 7 Bit Definitions */
-#define ADF5902_MIN_R_DIVDER		0x01
-#define ADF5902_MAX_R_DIVIER		0x1F
+#define ADF5902_MIN_R_DIVIDER		0x01
+#define ADF5902_MAX_R_DIVIDER		0x1F
+
+#define ADF5902_R_DIV_2_DISABLE		0x0
+#define ADF5902_R_DIV_2_ENABLE		0x1
 
 #define ADF5902_REF_DOUBLER_DISABLE	0x0
 #define ADF5902_REF_DOUBLER_ENABLE	0x1
@@ -387,9 +390,12 @@
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
+
+
+
 struct adf5902_init_param {
 	/* SPI Initialization parameters */
-	spi_init_param		*spi_init;
+	struct spi_init_param	*spi_init;
 	/* Reference input frequency */
 	uint64_t		ref_in;
 	/* Output frequency of the internal VCO */
@@ -404,17 +410,30 @@ struct adf5902_init_param {
 
 struct adf5902_dev {
 	/* SPI Descriptor */
-	spi_desc		*spi_desc;
+	struct spi_desc		*spi_desc;
 	/* Reference input frequency*/
 	uint64_t		ref_in;
 	/* Output frequency of the internal VCO */
 	uint64_t		rf_out;
+	/* Phase Frequency Detector */
+	uint64_t		f_pfd;
 	/* Divide ration of the binary 5-bit reference counter */
 	uint8_t			ref_div_factor;
 	/* Reference doubler enable */
 	uint8_t			ref_doubler_en;
 	/* Reference divide by 2 bit */
 	uint8_t			ref_div2_en;
+	/* Register 5 Integer word */
+	uint16_t		int_div;
+	/* Register 5 MSB FRAC value */
+	uint16_t		frac_msb;
+	/* Register 5 LSB FRAC value */
+	uint16_t		frac_lsb;
+	/* ADF5902 Registers array */
+	uint32_t		regs[18];
+	/* Value to be stored in the registers */
+	uint32_t		val;
+
 };
 
 /******************************************************************************/
@@ -427,9 +446,12 @@ int32_t adf5902_write(struct adf5902_dev *device, uint32_t data);
 /** ADF5902 SPI Readback */
 int32_t adf5902_read(struct adf5902_dev *device, uint32_t *data);
 
+/** ADF5902 Set frequency */
+int32_t adf5902_set_vco_freq(struct adf5902_dev *device);
+
 /** ADF5902 Initialization */
 int32_t adf5902_init(struct adf5902_dev **device,
-		     adf5902_init_param *init_param);
+		     struct adf5902_init_param *init_param);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
