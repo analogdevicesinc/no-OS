@@ -18,3 +18,4 @@
 *:drivers/rf-transceiver/navassa/third_party/*
 *:libraries/fatfs/*
 *:libraries/mbedtls/*
+*:legacy/*
