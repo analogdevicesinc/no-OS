@@ -275,8 +275,16 @@ int32_t app_clock_init(struct clk dev_refclk[MULTIDEVICE_INSTANCE_COUNT])
 
 	struct hmc7044_init_param hmc7044_param = {
 		.spi_init = &clkchip_spi_init_param,
-		.clkin_freq = {122880000, 30720000, 0, 0},
-		.vcxo_freq = 122880000,
+		/*
+		* There are different versions of the AD9081-FMCA-EBZ & AD9082-FMCA-EBZ:
+		* VCXO = 122.880 MHz, XO = 122.880MHz (AD9081-FMC-EBZ & AD9082-FMC-EBZ)
+		* VCXO = 100.000 MHz, XO = 100.000MHz (AD9081-FMC-EBZ-A2 & AD9082-FMC-EBZ-A2)
+		* To determine the version, read the frequency printed on the VCXO.
+		*/
+		//.clkin_freq = {122880000, 30720000, 0, 0},
+		//.vcxo_freq = 122880000,
+		.clkin_freq = {100000000, 10000000, 0, 0},
+		.vcxo_freq = 100000000,
 		.pll2_freq = 3000000000,
 		.pll1_loop_bw = 200,
 		.sysref_timer_div = 1024,
