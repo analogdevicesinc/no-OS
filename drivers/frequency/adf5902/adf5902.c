@@ -45,6 +45,7 @@
 #include <math.h>
 #include "adf5902.h"
 #include "error.h"
+#include "delay.h"
 
 /******************************************************************************/
 /************************** Functions Implementation **************************/
@@ -186,9 +187,227 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->ref_div2_en = init_param->ref_div2_en;
 
+	if ((init_param->adc_avg > ADF5902_ADC_AVG_4) ||
+	    (init_param->adc_avg < ADF5902_ADC_AVG_1))
+		return FAILURE;
+
+	dev->adc_avg = init_param->adc_avg;
+
+	if ((init_param->tx_amp_cal_ref > ADF5902_TX_AMP_CAL_MAX_REF_CODE) ||
+	    (init_param->tx_amp_cal_ref < ADF5902_TX_AMP_CAL_MIN_REF_CODE))
+		return FAILURE;
+
+	dev->tx_amp_cal_ref = init_param->tx_amp_cal_ref;
+
+	/* Set device specific parameters for obtaining the VCO frequency */
 	ret = adf5902_set_vco_freq(dev);
 	if (ret != SUCCESS)
 		return ret;
+
+	/* Set frequency calibration divider value */
+	dev->freq_cal_div = (uint16_t)(dev->f_pfd / 100000);
+	/* f_PFD / 100kHz <= freq_cal_div */
+	if(dev->f_pfd % 100000)
+		dev->freq_cal_div += 1;
+
+	if(dev->freq_cal_div > ADF5902_MAX_FREQ_CAL_DIV ||
+	    dev->freq_cal_div < ADF5902_MIN_FREQ_CAL_DIV)
+		return FAILURE;
+
+	/* Set clock divider value */
+	dev->clk1_div = dev->f_pfd / 25000;
+
+	/* f_PFD/25kHz <= clk1_div */
+	if (dev->f_pfd % 25000)
+		dev->clk1_div += 1;
+
+	if (dev->clk1_div > ADF5902_MAX_CLK_DIVIDER ||
+	    dev->clk1_div < ADF5902_MIN_CLK_DIVIDER)
+		return FAILURE;
+
+	/* Set ADC clock divider value for 1MHz ADC clock */
+	dev->adc_clk_div = dev->f_pfd / 1000000;
+
+	if (dev->adc_clk_div > ADF5902_ADC_MAX_CLK_DIVIDER ||
+	    dev->adc_clk_div < ADF5902_ADC_MIN_CLK_DIVIDER)
+		return FAILURE;
+
+	/* Master Reset */
+	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
+			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_ENABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Reset Counters */
+	ret = adf5902_write(dev, ADF5902_REG11 | ADF5902_REG11_RESERVED |
+			    ADF5902_REG11_CNTR_RESET(ADF5902_CNTR_RESET_ENABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Enable Counters */
+	ret = adf5902_write(dev, ADF5902_REG11 | ADF5902_REG11_RESERVED |
+			    ADF5902_REG11_CNTR_RESET(ADF5902_CNTR_RESET_DISABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set clock divider mode to Ramp Divider */
+	ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
+			    ADF5902_REG13_CLK_DIV_MODE(ADF5902_RAMP_DIV));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Register 10 Reserved */
+	ret = adf5902_write(dev, ADF5902_REG10 | ADF5902_REG10_RESERVED);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* VCO Calibration Setup */
+	ret = adf5902_write(dev, ADF5902_REG9 | ADF5902_REG9_RESERVED_CALIB);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set VCO frequency calibration divider clock to 100kHz */
+	ret = adf5902_write(dev, ADF5902_REG8 | ADF5902_REG8_RESERVED |
+			    ADF5902_REG8_FREQ_CAL_DIV(dev->freq_cal_div));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Power up the device and LO */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_DOWN_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_DOWN_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_NORMAL_OP) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_NORMAL_OP) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	udelay(10);
+
+	/* Set Register 7 */
+	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
+			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
+			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
+			    ADF5902_REG7_R_DIV_2(dev->ref_div2_en) |
+			    ADF5902_REG7_CLK_DIV(dev->clk1_div) |
+			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set LSB FRAC */
+	ret = adf5902_write(dev, ADF5902_REG6 | ADF5902_REG6_RESERVED |
+			    ADF5902_REG6_FRAC_LSB_WORD(dev->frac_lsb));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set MSB FRAC and INT */
+	ret = adf5902_write(dev, ADF5902_REG5 | ADF5902_REG5_RESERVED |
+			    ADF5902_REG5_FRAC_MSB_WORD(dev->frac_msb) |
+			    ADF5902_REG5_INTEGER_WORD(dev->int_div));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set ATEST to high Impedance */
+	ret = adf5902_write(dev, ADF5902_REG4 | ADF5902_REG4_RESERVED |
+			    ADF5902_REG4_TEST_BUS(ADF5902_TEST_BUS_NONE));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set IO level to 3.3V, CAL_BUSY to MUXOUT */
+	ret = adf5902_write(dev, ADF5902_REG3 | ADF5902_REG3_RESERVED |
+			    ADF5902_REG3_READBACK_CTRL(ADF5902_REG_RB_NONE) |
+			    ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
+			    ADF5902_REG3_MUXOUT(ADF5902_MUXOUT_CAL_BUSY));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set ADC Clock to 1MHz */
+	ret = adf5902_write(dev, ADF5902_REG2 | ADF5902_REG2_RESERVED |
+			    ADF5902_REG2_ADC_CLK_DIV(dev->adc_clk_div) |
+			    ADF5902_REG2_ADC_AVG(dev->adc_avg) |
+			    ADF5902_REG2_ADC_START(ADF5902_ADC_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set Transmitter amplitude level */
+	ret = adf5902_write(dev, ADF5902_REG1 | ADF5902_REG1_RESERVED |
+			    ADF5902_REG1_TX_AMP_CAL_REF(dev->tx_amp_cal_ref));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Start VCO frequency calibration */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_DOWN_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_DOWN_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_FULL_CAL) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_NORMAL_OP) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	udelay(1200);
+
+	/* Tx1 on, Tx2 off, LO on */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_UP_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_DOWN_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_NORMAL_OP) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_NORMAL_OP) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Tx1 amplitude calibration */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_UP_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_DOWN_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_NORMAL_OP) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_AMP_CAL) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	udelay(500);
+
+	/* Tx1 of, Tx2 on, LO on */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_DOWN_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_UP_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_NORMAL_OP) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_NORMAL_OP) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Tx2 amplitude calibration */
+	ret = adf5902_write(dev, ADF5902_REG0 | ADF5902_REG0_RESERVED |
+			    ADF5902_REG0_PLO(ADF5902_POWER_UP_LO) |
+			    ADF5902_REG0_PTX1(ADF5902_POWER_DOWN_TX1) |
+			    ADF5902_REG0_PTX2(ADF5902_POWER_DOWN_TX2) |
+			    ADF5902_REG0_PADC(ADF5902_POWER_UP_ADC) |
+			    ADF5902_REG0_VCAL(ADF5902_VCO_NORMAL_OP) |
+			    ADF5902_REG0_PVCO(ADF5902_POWER_UP_VCO) |
+			    ADF5902_REG0_TX1C(ADF5902_TX1_NORMAL_OP) |
+			    ADF5902_REG0_TX2C(ADF5902_TX2_AMP_CAL));
+	if (ret != SUCCESS)
+		return ret;
+
+	udelay(500);
 
 	*device = dev;
 

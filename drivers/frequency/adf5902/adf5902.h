@@ -50,6 +50,26 @@
 /********************** Macros and Constants Definitions **********************/
 /******************************************************************************/
 
+/* Registers Control Bits */
+#define ADF5902_REG0			0x0
+#define ADF5902_REG1			0x1
+#define ADF5902_REG2			0x2
+#define ADF5902_REG3			0x3
+#define ADF5902_REG4			0x4
+#define ADF5902_REG5			0x5
+#define ADF5902_REG6			0x6
+#define ADF5902_REG7			0x7
+#define ADF5902_REG8			0x8
+#define ADF5902_REG9			0x9
+#define ADF5902_REG10			0xA
+#define ADF5902_REG11			0xB
+#define ADF5902_REG12			0xC
+#define ADF5902_REG13			0xD
+#define ADF5902_REG14			0xE
+#define ADF5902_REG15			0xF
+#define ADF5902_REG16			0x10
+#define ADF5902_REG17			0x11
+
 /* Register 0 Map */
 #define ADF5902_REG0_PLO(x)		(((x) & 0x1) << 5)
 #define ADF5902_REG0_PTX1(x)		(((x) & 0x1) << 6)
@@ -80,10 +100,10 @@
 #define ADF5902_POWER_DOWN_VCO		0x0
 #define ADF5902_POWER_UP_VCO		0x1
 
-#define ADF5902_TX1_CAL_NORMAL		0x0
+#define ADF5902_TX1_NORMAL_OP		0x0
 #define ADF5902_TX1_AMP_CAL		0x1
 
-#define ADF5902_TX2_CAL_NORMAL		0x0
+#define ADF5902_TX2_NORMAL_OP		0x0
 #define ADF5902_TX2_AMP_CAL		0x1
 
 /* Register 1 Map */
@@ -119,38 +139,39 @@
 #define ADF5902_REG3_RESERVED		(0x189 << 16)
 
 /* Register 3 Bit Definitions */
-#define ADF5902_REG0			0x1
-#define ADF5902_REG1			0x2
-#define ADF5902_REG2			0x3
-#define ADF5902_REG3			0x4
-#define ADF5902_REG4			0x5
-#define ADF5902_REG5			0x6
-#define ADF5902_REG6			0x7
-#define ADF5902_REG7			0x8
-#define ADF5902_REG8			0x9
-#define ADF5902_REG9			0xA
-#define ADF5902_REG10			0xB
-#define ADF5902_REG11			0xC
-#define ADF5902_REG12			0xD
-#define ADF5902_REG13_SEL_0		0xE
-#define ADF5902_REG14_SEL_0		0xF
-#define ADF5902_REG15_SEL_0		0x10
-#define ADF5902_REG16_SEL_0		0x11
-#define ADF5902_REG17			0x12
-#define ADF5902_ADC_READBACK		0x16
-#define ADF5902_FREQ_READBACK		0x1A
-#define ADF5902_REG13_SEL_1		0x33
-#define ADF5902_REG14_SEL_1		0x34
-#define ADF5902_REG15_SEL_1		0x35
-#define ADF5902_REG16_SEL_1		0x36
-#define ADF5902_REG13_SEL_2		0x37
-#define ADF5902_REG14_SEL_2		0x38
-#define ADF5902_REG15_SEL_2		0x39
-#define ADF5902_REG16_SEL_2		0x3A
-#define ADF5902_REG13_SEL_3		0x3B
-#define ADF5902_REG14_SEL_3		0x3C
-#define ADF5902_REG15_SEL_3		0x3D
-#define ADF5902_REG16_SEL_3		0x3F
+#define ADF5902_REG_RB_NONE		0x0
+#define ADF5902_REG0_RB			0x1
+#define ADF5902_REG1_RB			0x2
+#define ADF5902_REG2_RB			0x3
+#define ADF5902_REG3_RB			0x4
+#define ADF5902_REG4_RB			0x5
+#define ADF5902_REG5_RB			0x6
+#define ADF5902_REG6_RB			0x7
+#define ADF5902_REG7_RB			0x8
+#define ADF5902_REG8_RB			0x9
+#define ADF5902_REG9_RB			0xA
+#define ADF5902_REG10_RB		0xB
+#define ADF5902_REG11_RB		0xC
+#define ADF5902_REG12_RB		0xD
+#define ADF5902_REG13_SEL_0_RB		0xE
+#define ADF5902_REG14_SEL_0_RB		0xF
+#define ADF5902_REG15_SEL_0_RB		0x10
+#define ADF5902_REG16_SEL_0_RB		0x11
+#define ADF5902_REG17_RB		0x12
+#define ADF5902_ADC_RB			0x16
+#define ADF5902_FREQ_RB			0x1A
+#define ADF5902_REG13_SEL_1_RB		0x33
+#define ADF5902_REG14_SEL_1_RB		0x34
+#define ADF5902_REG15_SEL_1_RB		0x35
+#define ADF5902_REG16_SEL_1_RB		0x36
+#define ADF5902_REG13_SEL_2_RB		0x37
+#define ADF5902_REG14_SEL_2_RB		0x38
+#define ADF5902_REG15_SEL_2_RB		0x39
+#define ADF5902_REG16_SEL_2_RB		0x3A
+#define ADF5902_REG13_SEL_3_RB		0x3B
+#define ADF5902_REG14_SEL_3_RB		0x3C
+#define ADF5902_REG15_SEL_3_RB		0x3D
+#define ADF5902_REG16_SEL_3_RB		0x3F
 
 #define ADF5902_IO_LVL_1V8		0x0
 #define ADF5902_IO_LVL_3V3		0x1
@@ -406,6 +427,10 @@ struct adf5902_init_param {
 	uint8_t			ref_doubler_en;
 	/* Reference divide by 2 bit */
 	uint8_t			ref_div2_en;
+	/* ADC Average value */
+	uint8_t			adc_avg;
+	/* Transmitter Amplitude Calibration Reference Code */
+	uint8_t			tx_amp_cal_ref;
 };
 
 struct adf5902_dev {
@@ -429,6 +454,16 @@ struct adf5902_dev {
 	uint16_t		frac_msb;
 	/* Register 5 LSB FRAC value */
 	uint16_t		frac_lsb;
+	/* Frequency calibration divider value */
+	uint16_t		freq_cal_div;
+	/* Clock divider (CLK1) divider value */
+	uint16_t		clk1_div;
+	/* ADC Clock divider */
+	uint16_t		adc_clk_div;
+	/* ADC Average value */
+	uint8_t			adc_avg;
+	/* Transmitter Amplitude Calibration Reference Code */
+	uint8_t			tx_amp_cal_ref;
 	/* ADF5902 Registers array */
 	uint32_t		regs[18];
 	/* Value to be stored in the registers */
