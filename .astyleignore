@@ -9,3 +9,4 @@ network/application/MQTT_eclipse_paho/
 drivers/rf-transceiver/navassa/common/
 drivers/rf-transceiver/navassa/devices/
 drivers/rf-transceiver/navassa/third_party/
+legacy/
