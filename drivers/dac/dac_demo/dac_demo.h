@@ -50,7 +50,9 @@
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-#define MAX_REG_ADDR		16
+#define MAX_DAC_ADDR		16
+#define DEFAULT_LOCAL_SAMPLES 128
+#define TOTAL_DAC_CHANNELS 16
 
 /**
  * @struct iio_demo_dac_desc
@@ -58,7 +60,15 @@
  */
 struct dac_demo_desc {
 	/** Dummy registers of device for testing */
-	uint8_t reg[MAX_REG_ADDR];
+	uint8_t reg[MAX_DAC_ADDR];
+	/** Demo global device attribute */
+	uint32_t dac_global_attr;
+	/** Demo device channel attribute */
+	uint32_t dac_ch_attr[TOTAL_DAC_CHANNELS];
+	/** Active channel**/
+	uint32_t active_ch;
+	/** Array of buffers for each channel*/
+	uint16_t **loopback_buffers;
 };
 
 /**
@@ -66,6 +76,19 @@ struct dac_demo_desc {
  * @brief iio demo dac configuration.
  */
 struct dac_demo_init_param {
+	/** Demo global dac attribute */
+	uint32_t dev_global_attr;
+	/** Demo dac channel attribute */
+	uint32_t dev_ch_attr[TOTAL_DAC_CHANNELS];
+	/** Buffer for adc/dac communication*/
+	uint16_t **loopback_buffers;
+	/* initializing number of channels*/
+	uint32_t channel_no;
+};
+
+enum iio_dac_demo_attributes {
+	DAC_CHANNEL_ATTR,
+	DAC_GLOBAL_ATTR,
 };
 
 /******************************************************************************/
@@ -76,6 +99,18 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 		      struct dac_demo_init_param *param);
 
 int32_t dac_demo_remove(struct dac_demo_desc *desc);
+
+int32_t update_dac_channels(void *dev, int32_t mask);
+
+int32_t close_dac_channels(void* dev);
+
+int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples);
+
+ssize_t get_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t priv);
+
+ssize_t set_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t priv);
 
 int32_t dac_demo_reg_read(struct dac_demo_desc *desc, uint8_t reg_index,
 			  uint8_t *readval);

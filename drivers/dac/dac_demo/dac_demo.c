@@ -41,7 +41,10 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <inttypes.h>
+#include "iio_types.h"
 #include "dac_demo.h"
 #include "error.h"
 #include "util.h"
@@ -65,16 +68,20 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 	if(!adesc)
 		return -ENOMEM;
 
+	adesc->loopback_buffers = param->loopback_buffers;
+	adesc->active_ch = param->channel_no;
+	for(int i = 0; i < adesc->active_ch; i++)
+		adesc->dac_ch_attr[i] = param->dev_ch_attr[i];
+	adesc->dac_global_attr = param->dev_global_attr;
 	*desc = adesc;
-
 	return SUCCESS;
 }
 
-/***************************************************************************//**
+/****************************************************************************//**
  * @brief free allocated resources
  * @param desc - descriptor for the dac to be removed
  * @return SUCCESS in case of success, FAILURE otherwise.
-*******************************************************************************/
+******************************************************************************/
 int32_t dac_demo_remove(struct dac_demo_desc *desc)
 {
 	if(!desc)
@@ -86,6 +93,157 @@ int32_t dac_demo_remove(struct dac_demo_desc *desc)
 }
 
 /***************************************************************************//**
+ * @brief update number of active channels
+ * @param dev - physical instance of a dac device
+ * @param mask - the new number of active channels
+ * @return SUCCESS in case of success.
+*******************************************************************************/
+int32_t update_dac_channels(void *dev, int32_t mask)
+{
+	struct dac_demo_desc *desc;
+	if(!dev)
+		return -ENODEV;
+
+	desc = dev;
+
+	desc->active_ch = mask;
+
+	return SUCCESS;
+}
+
+/**********************************************************************//**
+ * @brief close all channels
+ * @param dev - physical instance of an adc device
+ * @return SUCCESS in case of success.
+**************************************************************************/
+int32_t close_dac_channels(void* dev)
+{
+	struct dac_demo_desc *desc;
+	if(!dev)
+		return -ENODEV;
+
+	desc = dev;
+
+	desc->active_ch = 0;
+
+	return SUCCESS;
+}
+
+/*********************************************************************//**
+ * @brief utility function for computing next upcoming channel
+ * @param ch_mask - active channels .
+ * @param last_idx -  previous index.
+ * @param new_idx - upcoming channel index, return param.
+ * @return 1 if there are more channels, 0 if done.
+**************************************************************************/
+static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
+			    uint32_t *new_idx)
+{
+	last_idx++;
+	ch_mask >>= last_idx;
+	if (!ch_mask) {
+		*new_idx = -1;
+		return 0;
+	}
+	while (!(ch_mask & 1)) {
+		last_idx++;
+		ch_mask >>= 1;
+	}
+	*new_idx = last_idx;
+
+	return 1;
+}
+
+/**********************************************************************//**
+ * @brief function for reading samples
+ * @param dev - physical instance of adc device
+ * @param buff - buffer for reading samples
+ * @param samples - number of samples to receive
+ * @return the number of samples.
+**************************************************************************/
+int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
+{
+	struct dac_demo_desc *desc;
+	uint32_t k = 0;
+	uint32_t ch = -1;
+
+	if(!dev)
+		return -ENODEV;
+
+	desc = dev;
+
+	for(int i = 0; i < samples; i++)
+		while (get_next_ch_idx(desc->active_ch, ch, &ch))
+			desc->loopback_buffers[ch][i % DEFAULT_LOCAL_SAMPLES] = buff[k++];
+
+	return samples;
+}
+
+/**
+ * @brief get attributes for dac.
+ * @param device- Physical instance of a iio_demo_device.
+ * @param buf - Where value is stored.
+ * @param len - Maximum length of value to be stored in buf.
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return Length of chars written in buf, or negative value on failure.
+ */
+ssize_t get_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct dac_demo_desc *desc;
+
+	if(!device)
+		return -ENODEV;
+
+	desc = device;
+
+	switch(attr_id) {
+	case DAC_GLOBAL_ATTR:
+		return snprintf(buf,len,"%"PRIu32"",desc->dac_global_attr);
+	case DAC_CHANNEL_ATTR:
+		return snprintf(buf,len,"%"PRIu32"",desc->dac_ch_attr[channel->ch_num]);
+	default:
+		return -EINVAL;
+	}
+
+	return -EINVAL;
+}
+
+/**
+ * @brief set attributes for dac.
+ * @param device - Physical instance of a iio_demo_device.
+ * @param buf - Value to be written to attribute.
+ * @param len -	Length of the data in "buf".
+ * @param channel - Channel properties.
+ * @param attr_id - Attribute ID
+ * @return: Number of bytes written to device, or negative value on failure.
+ */
+ssize_t set_dac_demo_attr(void *device, char *buf, size_t len,
+			  const struct iio_ch_info *channel, intptr_t attr_id)
+{
+	struct dac_demo_desc *desc;
+	uint32_t value = srt_to_uint32(buf);
+
+	if(!device)
+		return -ENODEV;
+
+	desc = device;
+
+	switch(attr_id) {
+	case DAC_GLOBAL_ATTR:
+		desc->dac_global_attr = value;
+		return len;
+	case DAC_CHANNEL_ATTR:
+		desc->dac_ch_attr[channel->ch_num] = value;
+		return len;
+	default:
+		return -EINVAL;
+	}
+
+	return -EINVAL;
+}
+/**********************************************************************//**
  * @brief read function for the dac demo driver
  * @param desc - descriptor for the dac
  * @param reg_index - the address at which we want to read
