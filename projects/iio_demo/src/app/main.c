@@ -46,6 +46,11 @@
 #include "app_config.h"
 #include "parameters.h"
 #include "iio_app.h"
+#include "adc_demo.h"
+#include "iio_adc_demo.h"
+#include "dac_demo.h"
+#include "iio_dac_demo.h"
+
 
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
@@ -146,6 +151,8 @@ int32_t platform_init()
 	return 0;
 }
 
+//uint16_t buf[2][1000];
+
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -159,11 +166,23 @@ int main(void)
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_out_init_par;
 
+	/* adc demo configurations. */
+	struct adc_demo_init_param adc_init_par;
+
+	/* dac demo configurations. */
+	struct dac_demo_init_param dac_init_par;
+
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_in_desc;
 
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_out_desc;
+
+	/* adc instance descriptor. */
+	struct adc_demo_desc *adc_desc;
+
+	/* dac instance descriptor. */
+	struct dac_demo_desc *dac_desc;
 
 	status = platform_init();
 	if (status != 0)
@@ -194,12 +213,49 @@ int main(void)
 		.size = MAX_SIZE_BASE_ADDR
 	};
 
+	struct iio_data_buffer buff = {
+			.buff = (void *)ADC_DDR_BASEADDR,
+			.size = MAX_SIZE_BASE_ADDR
+		};
+	
+	struct iio_data_buffer buff1 = {
+				.buff = (void *)DAC_DDR_BASEADDR,
+				.size = MAX_SIZE_BASE_ADDR
+			};
+
+	uint16_t** buf = (uint16_t**)malloc(10*sizeof(uint16_t*));
+
+	for(int i = 0; i < 500; i++)
+	{
+		buf[i] = (uint16_t*)malloc(800*sizeof(uint16_t));
+	}
+
+	adc_init_par.loopback = buf;
+	adc_init_par.channel_no = 2;
+	status = adc_demo_init(&adc_desc, &adc_init_par);
+	if (status != 0)
+		return status;
+
+
+	dac_init_par.loopback = buf;
+	dac_init_par.channel_no = 2;
+	status = dac_demo_init(&dac_desc, &dac_init_par);
+	if (status != 0)
+		return status;
+
+	struct iio_device iio_adc = ADC_DEMO_DEV(adc_desc->active_ch);
+	struct iio_device iio_dac = DAC_DEMO_DEV(dac_desc->active_ch);
+
 	struct iio_app_device devices[] = {
 		IIO_APP_DEVICE("demo_device_output", iio_demo_out_desc,
 			       &iio_demo_dev_out_descriptor,NULL, &wr_buf),
 		IIO_APP_DEVICE("demo_device_input", iio_demo_in_desc,
-			       &iio_demo_dev_in_descriptor,&rd_buf, NULL)
+			       &iio_demo_dev_in_descriptor,&rd_buf, NULL),
+		IIO_APP_DEVICE("adc_demo", adc_desc,
+			       &iio_adc,&buff, NULL),
+		IIO_APP_DEVICE("dac_demo", dac_desc,
+			       &iio_dac,NULL, &buff1)
 	};
 
-	return iio_app_run(devices, 2);
+	return iio_app_run(devices, 4);
 }

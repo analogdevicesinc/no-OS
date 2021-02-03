@@ -1,6 +1,6 @@
 /***************************************************************************//**
- *   @file   iio_adc_demo.h
- *   @brief  Header file of ADC Demo iio.
+ *   @file   iio_dac_demo.c
+ *   @brief  Source file of DAC Demo iio.
  *   @author RNechita (ramona.nechita@analog.com)
 ********************************************************************************
  * Copyright 2021(c) Analog Devices, Inc.
@@ -37,35 +37,24 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
-#ifndef IIO_DEMO_ADC
-#define IIO_DEMO_ADC
 
 #include <stdlib.h>
-#include "adc_demo.h"
+#include "iio_dac_demo.h"
+#include "iio_types.h"
 
-enum iio_adc_demo_attributes {
-	ADC_CHANNEL_ATTR,
-	ADC_GLOBAL_ATTR,
-};
+#include "system_ADuCM3029.h"
 
-#define ADC_DEMO_ATTR(_name, _priv) {\
-	.name = _name,\
-	.priv = _priv,\
-	.show = get_demo_attr,\
-	.store = set_demo_attr\
-}
-
-static struct iio_attribute adc_channel_attributes[] = {
-	ADC_DEMO_ATTR("adc_channel_attr", ADC_CHANNEL_ATTR),
+/*static struct iio_attribute dac_channel_attributes[] = {
+	DAC_DEMO_ATTR("dac_channel_attr", DAC_CHANNEL_ATTR),
 	END_ATTRIBUTES_ARRAY,
 };
 
-static struct iio_attribute adc_global_attributes[] = {
-	ADC_DEMO_ATTR("adc_global_attr", ADC_GLOBAL_ATTR),
+static struct iio_attribute dac_global_attributes[] = {
+	DAC_DEMO_ATTR("dac_global_attr", DAC_GLOBAL_ATTR),
 	END_ATTRIBUTES_ARRAY,
-};
+};*/
 
-static struct scan_type adc_scan_type = {
+static struct scan_type dac_scan_type = {
 	.sign = 's',
 	.realbits = 16,
 	.storagebits = 16,
@@ -73,30 +62,48 @@ static struct scan_type adc_scan_type = {
 	.is_big_endian = false
 };
 
-static struct iio_channel iio_adc_channels[] = {
-		{
-				.name = "adc_channel_0",
-				.ch_type = IIO_VOLTAGE,
-				.channel = 0,
-				.scan_index = 0,
-				.indexed = true,
-				.scan_type = &adc_scan_type,
-				.attributes = adc_channel_attributes,
-				.ch_out = false
-		}
-};
+struct iio_channel iio_dac_channels[MAX_NR_CHANNELS];
 
-struct iio_device adc_demo_iio_descriptor = {
-	.num_ch = 1,
-	.channels = iio_adc_channels,
-	.attributes = adc_global_attributes,
+/***************************************************************************//**
+ * @brief initialize the device number of channels with the number of channels in the init_param
+ * @param dev - physical instance of an dac device
+ * @param mask - unused, for compliance with prepare_transfer function format
+ * @return SUCCESS in case of success.
+*******************************************************************************/
+int32_t init_dac_channels(void* dev, uint32_t mask)
+{
+	struct dac_demo_desc *desc = dev;
+
+	for(int i = 0; i <desc->active_ch; i++)
+	{
+		char buff[15];
+		sprintf(buff,"dac_channel_%d",i);
+		struct iio_channel ch = {
+				.name = buff,
+				.ch_type = IIO_VOLTAGE,
+				.channel = i,
+				.scan_index = i,
+				.indexed = true,
+				.scan_type = &dac_scan_type,
+				.attributes = NULL,
+				.ch_out = true
+		};
+		iio_dac_channels[i] = ch;
+	}
+
+
+	return SUCCESS;
+}
+
+
+/*struct iio_device dac_demo_iio_descriptor = {
+	.channels = iio_dac_channels,
+	.attributes = NULL,
 	.debug_attributes = NULL,
 	.buffer_attributes = NULL,
-	.prepare_transfer = update_active_adc_channels,
-	.end_transfer = close_adc_channels,
-	.read_dev = (int32_t (*)())adc_read_samples,
-	.debug_reg_read = (int32_t (*)()) adc_demo_reg_read,
-	.debug_reg_write = (int32_t (*)()) adc_demo_reg_write
-};
-
-#endif /* IIO_DEMO_ADC */
+	.prepare_transfer = init_dac_channels,
+	.end_transfer = close_dac_channels,
+	.write_dev = (int32_t (*)())dac_write_samples,
+	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
+	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
+};*/

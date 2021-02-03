@@ -46,6 +46,8 @@
 #include "error.h"
 #include "util.h"
 
+#include "system_ADuCM3029.h"
+
 /******************************************************************************/
 /************************ Functions Definitions *******************************/
 /******************************************************************************/
@@ -65,6 +67,8 @@ int32_t dac_demo_init(struct dac_demo_desc **desc,
 	if(!adesc)
 		return -ENOMEM;
 
+	adesc->loopback = param->loopback;
+	adesc->active_ch = param->channel_no;
 	*desc = adesc;
 
 	return SUCCESS;
@@ -83,6 +87,79 @@ int32_t dac_demo_remove(struct dac_demo_desc *desc)
 	free(desc);
 
 	return SUCCESS;
+}
+
+
+int32_t dac_get_number_of_channels(void* dev)
+{
+	struct dac_demo_desc *desc = dev;
+
+	return desc->active_ch;
+}
+
+/***************************************************************************//**
+ * @brief update number of active channels
+ * @param dev - physical instance of a dac device
+ * @param mask - the new number of active channels
+ * @return SUCCESS in case of success.
+*******************************************************************************/
+int32_t update_active_dac_channels(void *dev, int32_t mask)
+{
+	struct dac_demo_desc *desc = dev;
+	desc->active_ch = mask;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief close all channels
+ * @param dev - physical instance of an adc device
+ * @return SUCCESS in case of success.
+*******************************************************************************/
+int32_t close_dac_channels(void* dev)
+{
+	struct dac_demo_desc *desc = dev;
+	desc->active_ch = 0;
+
+	return SUCCESS;
+}
+
+/***************************************************************************//**
+ * @brief utility function for computing next upcoming channel
+ * @param ch_mask - active channels .
+ * @param last_idx -  previous index.
+ * @param new_idx - upcoming channel index, return param.
+ * @return 1 if there are more channels, 0 if done.
+*******************************************************************************/
+static bool get_next_ch_idx(uint32_t ch_mask, uint32_t last_idx,
+			    uint32_t *new_idx)
+{
+	last_idx++;
+	ch_mask >>= last_idx;
+	if (!ch_mask) {
+		*new_idx = -1;
+		return 0;
+	}
+	while (!(ch_mask & 1)) {
+		last_idx++;
+		ch_mask >>= 1;
+	}
+	*new_idx = last_idx;
+
+	return 1;
+}
+
+int32_t dac_write_samples(void* dev, uint16_t* buff, uint32_t samples)
+{
+	struct dac_demo_desc *desc = dev;
+	uint32_t k = 0;
+	uint32_t ch = -1;
+
+	for(int i = 0; i < samples; i++)
+		while (get_next_ch_idx(desc->active_ch, ch, &ch))
+					desc->loopback[ch][i % DEFAULT_LOCAL_SAMPLES] = buff[k++];
+
+	return samples;
 }
 
 /***************************************************************************//**
