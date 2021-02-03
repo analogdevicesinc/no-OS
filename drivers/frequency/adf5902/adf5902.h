@@ -340,16 +340,8 @@
 #define ADF5902_MAX_DEV_WORD		0x7FFF
 #define ADF5902_MIN_DEV_WORD		0x8000
 
-#define ADF5902_DEV_OFFSET_0		0x0
-#define ADF5902_DEV_OFFSET_1		0x1
-#define ADF5902_DEV_OFFSET_2		0x2
-#define ADF5902_DEV_OFFSET_3		0x3
-#define ADF5902_DEV_OFFSET_4		0x4
-#define ADF5902_DEV_OFFSET_5		0x5
-#define ADF5902_DEV_OFFSET_6		0x6
-#define ADF5902_DEV_OFFSET_7		0x7
-#define ADF5902_DEV_OFFSET_8		0x8
-#define ADF5902_DEV_OFFSET_9		0x9
+#define ADF5902_MAX_DEV_OFFSET		0x9
+#define ADF5902_MIN_DEV_OFFSET		0x0
 
 #define ADF5902_DEV_SEL_0		0x0
 #define ADF5902_DEV_SEL_1		0x1
@@ -389,14 +381,13 @@
 #define ADF5902_RAMP_DEL_DISABLE	0x0
 #define ADF5902_RAMP_DEL_ENABLE		0x1
 
-#define ADF5902_TX_DATA_TRIGGER_DISABLE	0x0
-#define ADF5902_TX_DATA_TRIGGER_ENABLE	0x1
+#define ADF5902_TX_DATA_TRIG_DISABLE	0x0
+#define ADF5902_TX_DATA_TRIG_ENABLE	0x1
 
 #define ADF5902_DEL_SEL_0		0x0
 #define ADF5902_DEL_SEL_1		0x1
 #define ADF5902_DEL_SEL_2		0x2
 #define ADF5902_DEL_SEL_3		0x3
-
 
 /* Register 17 Map */
 #define ADF5902_REG17_RESERVED		(0x0 << 5)
@@ -407,12 +398,19 @@
 #define ADF5902_MIN_REFIN_FREQ		10000000
 #define ADF5902_MAX_REFIN_FREQ		260000000
 #define ADF5902_MAX_FREQ_PFD		110000000
+#define ADF5902_MAX_STEP_WORD_NO	4
+#define ADF5902_MAX_CLK_DIV_NO		4
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
 /******************************************************************************/
 
-
+struct freq_dev {
+	/* Deviation Word */
+	int16_t dev_word;
+	/* Deviation Offset */
+	uint8_t dev_offset;
+};
 
 struct adf5902_init_param {
 	/* SPI Initialization parameters */
@@ -431,6 +429,38 @@ struct adf5902_init_param {
 	uint8_t			adc_avg;
 	/* Transmitter Amplitude Calibration Reference Code */
 	uint8_t			tx_amp_cal_ref;
+	/* Delay start word */
+	uint16_t		ramp_delay_wd;
+	/* Ramp delay enable */
+	uint8_t			ramp_delay_en;
+	/* TX Data trigger */
+	uint8_t			tx_trig_en;
+	/* Delay select */
+	uint8_t			delay_sel;
+	/* Number of step words */
+	uint8_t			step_words_no;
+	/* Step words */
+	uint32_t		step_words[ADF5902_MAX_STEP_WORD_NO];
+	/* Number of deviaton parameters */
+	uint8_t			freq_dev_no;
+	/* Deviation Word and Offset structure */
+	struct freq_dev		*freq_dev;
+	/* Tx Data Ramp Clock */
+	uint8_t			tx_ramp_clk;
+	/* Tx Data Invert */
+	uint8_t			tx_data_invert;
+	/* 12-bit Clock Divider number */
+	uint8_t			clk2_div_no;
+	/* 12-bit Clock Divider */
+	uint16_t		clk2_div[ADF5902_MAX_CLK_DIV_NO];
+	/* LE Select */
+	uint8_t			le_sel;
+	/* Clock Divider Mode*/
+	uint8_t			clk_div_mode;
+	/* Charge Pump current */
+	uint8_t			cp_current;
+	/* Charge Pump tristate */
+	uint8_t			cp_tristate_en;
 };
 
 struct adf5902_dev {
@@ -464,11 +494,42 @@ struct adf5902_dev {
 	uint8_t			adc_avg;
 	/* Transmitter Amplitude Calibration Reference Code */
 	uint8_t			tx_amp_cal_ref;
+	/* Delay start word */
+	uint16_t		ramp_delay_wd;
+	/* Ramp delay enable */
+	uint8_t			ramp_delay_en;
+	/* TX Data trigger */
+	uint8_t			tx_trig_en;
+	/* Delay select */
+	uint8_t			delay_sel;
+	/* Number of step words */
+	uint8_t			step_words_no;
+	/* Step words */
+	uint32_t		*step_words;
+	/* Number of deviaton parameters */
+	uint8_t			freq_dev_no;
+	/* Deviation Word and Offset structure */
+	struct freq_dev		*freq_dev;
+	/* Tx Data Ramp Clock */
+	uint8_t			tx_ramp_clk;
+	/* Tx Data Invert */
+	uint8_t			tx_data_invert;
+	/* 12-bit Clock Divider number */
+	uint8_t			clk2_div_no;
+	/* 12-bit Clock Divider */
+	uint16_t		*clk2_div;
+	/* LE Select */
+	uint8_t			le_sel;
+	/* Clock Divider Mode*/
+	uint8_t			clk_div_mode;
+	/* Charge Pump current */
+	uint8_t			cp_current;
+	/* Charge Pump tristate */
+	uint8_t			cp_tristate_en;
 	/* ADF5902 Registers array */
 	uint32_t		regs[18];
 	/* Value to be stored in the registers */
 	uint32_t		val;
-
 };
 
 /******************************************************************************/
@@ -487,7 +548,10 @@ int32_t adf5902_set_vco_freq(struct adf5902_dev *device);
 /** ADF5902 Initialization */
 int32_t adf5902_init(struct adf5902_dev **device,
 		     struct adf5902_init_param *init_param);
+/** ADF5902 Recalibration Procedure */
+int32_t adf5902_recalibrate(struct adf5902_dev *dev);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
+
 #endif /* SRC_ADF5902_H_ */
