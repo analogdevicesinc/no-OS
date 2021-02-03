@@ -165,7 +165,8 @@ int32_t ad5791_set_register_value(struct ad5791_dev *dev,
 
 /*! Reads the value of a register. */
 int32_t ad5791_get_register_value(struct ad5791_dev *dev,
-				  uint8_t register_address);
+				  uint8_t register_address,
+				  uint32_t *value);
 
 /*! Sets the DAC output in one of the three states. */
 int32_t ad5791_dac_ouput_state(struct ad5791_dev *dev,
