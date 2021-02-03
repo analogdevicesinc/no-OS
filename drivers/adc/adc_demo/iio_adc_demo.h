@@ -42,10 +42,84 @@
 
 #include <stdlib.h>
 #include "adc_demo.h"
+#include "iio_types.h"
 
-struct iio_device adc_demo_iio_descriptor = {
-	.debug_reg_read = (int32_t (*)()) adc_demo_reg_read,
-	.debug_reg_write = (int32_t (*)()) adc_demo_reg_write
+#define DEFAULT_CHANNEL_NO 2
+#define ADC_CHANNEL_NO changeable_channel_number
+#define MAX_SAMPLES_PER_CHANNEL 800
+
+static int changeable_channel_number = 2;
+
+#define ADC_DEMO_ATTR(_name, _priv) {\
+	.name = _name,\
+	.priv = _priv,\
+	.show = get_adc_demo_attr,\
+	.store = set_adc_demo_attr \
+}
+
+static struct scan_type adc_scan_type = {
+	.sign = 's',
+	.realbits = 16,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
 };
+
+static struct iio_attribute adc_channel_attributes[] = {
+	ADC_DEMO_ATTR("adc_channel_attr", ADC_CHANNEL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+static struct iio_attribute iio_adc_global_attributes[] = {
+	ADC_DEMO_ATTR("adc_global_attr", ADC_GLOBAL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+#define IIO_DEMO_ADC_CHANNEL(_idx) {\
+	.name = "adc_in_ch",\
+	.ch_type = IIO_VOLTAGE,\
+	.channel = _idx,\
+	.scan_index = _idx,\
+	.indexed = true,\
+	.scan_type = &adc_scan_type,\
+	.attributes = adc_channel_attributes,\
+	.ch_out = false,\
+}
+
+static struct iio_channel iio_adc_channels[] = {
+	IIO_DEMO_ADC_CHANNEL(0),
+	IIO_DEMO_ADC_CHANNEL(1),
+#ifdef MODIFIED_CHANNEL_VALUE
+	IIO_DEMO_ADC_CHANNEL(2),
+	IIO_DEMO_ADC_CHANNEL(3),
+	IIO_DEMO_ADC_CHANNEL(4),
+	IIO_DEMO_ADC_CHANNEL(5),
+	IIO_DEMO_ADC_CHANNEL(6),
+	IIO_DEMO_ADC_CHANNEL(7),
+	IIO_DEMO_ADC_CHANNEL(8),
+	IIO_DEMO_ADC_CHANNEL(9),
+	IIO_DEMO_ADC_CHANNEL(10),
+	IIO_DEMO_ADC_CHANNEL(11),
+	IIO_DEMO_ADC_CHANNEL(12),
+	IIO_DEMO_ADC_CHANNEL(13),
+	IIO_DEMO_ADC_CHANNEL(14),
+	IIO_DEMO_ADC_CHANNEL(15),
+#endif
+};
+
+#define ADC_DEMO_DEV(_numch) {\
+	.num_ch = _numch, \
+	.channels = iio_adc_channels, \
+	.attributes = iio_adc_global_attributes,	\
+	.debug_attributes = NULL,	\
+	.buffer_attributes = NULL,	\
+	.prepare_transfer = update_adc_channels,	\
+	.end_transfer = close_adc_channels,	\
+	.read_dev = (int32_t (*)())adc_read_samples,	\
+	.debug_reg_read = (int32_t (*)()) adc_demo_reg_read,	\
+	.debug_reg_write = (int32_t (*)()) adc_demo_reg_write	\
+}
+
+//static struct iio_device adc_demo_iio_descriptor = ADC_DEMO_DEV(MODIFIED_CHANNEL_VALUE);
 
 #endif /* IIO_DEMO_ADC */
