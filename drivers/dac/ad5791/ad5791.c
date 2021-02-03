@@ -160,7 +160,7 @@ int32_t ad5791_set_register_value(struct ad5791_dev *dev,
 	status = spi_write_and_read(dev->spi_desc,
 				    write_command,
 				    3);
-	if(status != 3) {
+	if(status != 0) {
 		return -1;
 	}
 
@@ -177,21 +177,22 @@ int32_t ad5791_set_register_value(struct ad5791_dev *dev,
  *                          AD5791_REG_CTRL         - Control register
  *                          AD5791_REG_CLR_CODE     - Clearcode register
  *                          AD5791_CMD_WR_SOFT_CTRL - Software control register
+ * @param value - Pointer to the register data.
  *
  * @return dataRead        - The register's value or negative error code.
 *******************************************************************************/
 int32_t ad5791_get_register_value(struct ad5791_dev *dev,
-				  uint8_t register_address)
+				  uint8_t register_address,
+				  uint32_t *value)
 {
 	uint8_t register_word[3] = {0, 0, 0};
-	uint32_t data_read = 0x0;
 	int8_t status = 0;
 
 	register_word[0] = (AD5791_READ | AD5791_ADDR_REG(register_address)) >> 16;
 	status = spi_write_and_read(dev->spi_desc,
 				    register_word,
 				    3);
-	if(status != 3) {
+	if(status != 0) {
 		return -1;
 	}
 	register_word[0] = 0x00;
@@ -200,14 +201,14 @@ int32_t ad5791_get_register_value(struct ad5791_dev *dev,
 	status = spi_write_and_read(dev->spi_desc,
 				    register_word,
 				    3);
-	if(status != 3) {
+	if(status != 0) {
 		return -1;
 	}
-	data_read = ((int32_t)register_word[0] << 16) |
-		    ((int32_t)register_word[1] <<  8) |
-		    ((int32_t)register_word[2] <<  0);
+	*value = ((int32_t)register_word[0] << 16) |
+		 ((int32_t)register_word[1] <<  8) |
+		 ((int32_t)register_word[2] <<  0);
 
-	return data_read;
+	return status;
 }
 
 /***************************************************************************//**
@@ -227,14 +228,14 @@ int32_t ad5791_dac_ouput_state(struct ad5791_dev *dev,
 {
 	uint32_t old_ctrl = 0;
 	uint32_t new_ctrl = 0;
+	uint32_t val;
 	int32_t status = 0;
 
-	status = ad5791_get_register_value(dev,
-					   AD5791_REG_CTRL);
+	status = ad5791_get_register_value(dev, AD5791_REG_CTRL, &val);
 	if(status < 0) {
 		return status;
 	}
-	old_ctrl = status;
+	old_ctrl = val;
 	/* Clear DACTRI and OPGND bits. */
 	old_ctrl = old_ctrl & ~(AD5791_CTRL_DACTRI | AD5791_CTRL_OPGND);
 	/* Sets the new state provided by the user. */
@@ -319,16 +320,16 @@ int32_t ad5791_setup(struct ad5791_dev *dev,
 {
 	uint32_t old_ctrl = 0;
 	uint32_t new_ctrl = 0;
+	uint32_t val;
 	int32_t status = 0;
 
 	/* Reads the control register in order to save the options related to the
 	   DAC output state that may have been configured previously. */
-	status = ad5791_get_register_value(dev,
-					   AD5791_REG_CTRL);
+	status = ad5791_get_register_value(dev, AD5791_REG_CTRL, &val);
 	if(status < 0) {
 		return status;
 	}
-	old_ctrl = status;
+	old_ctrl = val;
 	/* Clear LINCOMP, SDODIS, BIN2SC and RBUF bits. */
 	old_ctrl = old_ctrl & ~(AD5791_CTRL_LINCOMP(-1) |
 				AD5791_CTRL_SDODIS |
