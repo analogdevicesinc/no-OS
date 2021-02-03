@@ -8,12 +8,23 @@ SRCS +=	$(NO-OS)/util/xml.c						\
 	$(NO-OS)/util/fifo.c						\
 	$(NO-OS)/util/util.c
 
+#drivers
+SRCS += $(DRIVERS)/adc/adc_demo/adc_demo.c				\
+		$(DRIVERS)/dac/dac_demo/dac_demo.c				\
+		$(DRIVERS)/dac/dac_demo/iio_dac_demo.c				\
+		$(DRIVERS)/adc/adc_demo/iio_adc_demo.c				\
+
 INCS += $(INCLUDE)/xml.h						\
 	$(INCLUDE)/fifo.h						\
 	$(INCLUDE)/uart.h						\
 	$(INCLUDE)/list.h						\
 	$(INCLUDE)/util.h						\
 	$(INCLUDE)/error.h
+
+INCS += $(DRIVERS)/adc/adc_demo/iio_adc_demo.h			\
+		$(DRIVERS)/dac/dac_demo/dac_demo.h		\
+		$(DRIVERS)/dac/dac_demo/iio_dac_demo.h			\
+		$(DRIVERS)/adc/adc_demo/adc_demo.h		\
 
 ifeq ($(PLATFORM),$(filter $(PLATFORM),xilinx aducm3029))
 # For the moment there is support only for aducm for iio with network backend
@@ -72,4 +83,3 @@ INCS += $(PROJECT)/src/hal/stm32/main.h \
 
 LSCRIPT = $(PROJECT)/src/linker/STM32F446RETX_FLASH.ld
 endif
-

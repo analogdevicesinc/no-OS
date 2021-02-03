@@ -42,10 +42,84 @@
 
 #include <stdlib.h>
 #include "dac_demo.h"
+#include "iio.h"
 
-struct iio_device dac_demo_iio_descriptor = {
-	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,
-	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write
+#define MAX_NR_CHANNELS 10
+#define MAX_NR_ATTRIBUTES 5
+#define DAC_CHANNEL_NO changeable_dac_number
+
+static int changeable_dac_number = 2;
+
+#define DAC_DEMO_ATTR(_name, _priv) {\
+	.name = _name,\
+	.priv = _priv,\
+	.show = get_dac_demo_attr,\
+	.store = set_dac_demo_attr\
+}
+
+#define IIO_DEMO_DAC_CHANNEL(_idx) {\
+	.name = "dac_out_ch",\
+	.ch_type = IIO_VOLTAGE,\
+	.channel = _idx,\
+	.scan_index = _idx,\
+	.indexed = true,\
+	.scan_type = &dac_scan_type,\
+	.attributes = dac_channel_attributes,\
+	.ch_out = true,\
+}
+
+#define DAC_DEMO_DEV(_numch) {\
+	.num_ch = _numch, \
+	.channels = iio_dac_channels, \
+	.attributes = dac_global_attributes,	\
+	.debug_attributes = NULL,	\
+	.buffer_attributes = NULL,	\
+	.prepare_transfer = update_dac_channels,	\
+	.end_transfer = close_dac_channels,	\
+	.read_dev = (int32_t (*)())dac_write_samples,	\
+	.debug_reg_read = (int32_t (*)()) dac_demo_reg_read,	\
+	.debug_reg_write = (int32_t (*)()) dac_demo_reg_write	\
+}
+
+static struct scan_type dac_scan_type = {
+	.sign = 's',
+	.realbits = 16,
+	.storagebits = 16,
+	.shift = 0,
+	.is_big_endian = false
 };
+
+static struct iio_attribute dac_channel_attributes[] = {
+	DAC_DEMO_ATTR("dac_channel_attr", DAC_CHANNEL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+static struct iio_attribute dac_global_attributes[] = {
+	DAC_DEMO_ATTR("dac_global_attr", DAC_GLOBAL_ATTR),
+	END_ATTRIBUTES_ARRAY,
+};
+
+static struct iio_channel iio_dac_channels[] = {
+	IIO_DEMO_DAC_CHANNEL(0),
+	IIO_DEMO_DAC_CHANNEL(1),
+	IIO_DEMO_DAC_CHANNEL(2),
+#ifdef DAC_CHANNEL_NO
+	IIO_DEMO_DAC_CHANNEL(3),
+	IIO_DEMO_DAC_CHANNEL(4),
+	IIO_DEMO_DAC_CHANNEL(5),
+	IIO_DEMO_DAC_CHANNEL(6),
+	IIO_DEMO_DAC_CHANNEL(7),
+	IIO_DEMO_DAC_CHANNEL(8),
+	IIO_DEMO_DAC_CHANNEL(9),
+	IIO_DEMO_DAC_CHANNEL(10),
+	IIO_DEMO_DAC_CHANNEL(11),
+	IIO_DEMO_DAC_CHANNEL(12),
+	IIO_DEMO_DAC_CHANNEL(13),
+	IIO_DEMO_DAC_CHANNEL(14),
+	IIO_DEMO_DAC_CHANNEL(15)
+#endif
+};
+
+//static struct iio_device dac_demo_iio_descriptor = DAC_DEMO_DEV(2);
 
 #endif /* IIO_DEMO_DAC */

@@ -46,6 +46,9 @@
 #include "app_config.h"
 #include "parameters.h"
 #include "iio_app.h"
+#include "iio_adc_demo.h"
+#include "iio_dac_demo.h"
+#include "util.h"
 
 #ifdef XILINX_PLATFORM
 #include <xparameters.h>
@@ -146,6 +149,8 @@ int32_t platform_init()
 	return 0;
 }
 
+uint16_t buf[DEFAULT_CHANNEL_NO][MAX_SAMPLES_PER_CHANNEL];
+
 /***************************************************************************//**
  * @brief main
 *******************************************************************************/
@@ -159,14 +164,26 @@ int main(void)
 	/* iio demo configurations. */
 	struct iio_demo_init_param iio_demo_out_init_par;
 
+	/* adc demo configurations. */
+	struct adc_demo_init_param adc_init_par;
+
+	/* dac demo configurations. */
+	struct dac_demo_init_param dac_init_par;
+
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_in_desc;
 
 	/* iio instance descriptor. */
 	struct iio_demo_desc *iio_demo_out_desc;
 
+	/* adc instance descriptor. */
+	struct adc_demo_desc *adc_desc;
+
+	/* dac instance descriptor. */
+	struct dac_demo_desc *dac_desc;
+
 	status = platform_init();
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 	iio_demo_out_init_par = (struct iio_demo_init_param) {
@@ -174,7 +191,7 @@ int main(void)
 		.dev_ch_attr = 1111,
 	};
 	status = iio_demo_dev_init(&iio_demo_out_desc, &iio_demo_out_init_par);
-	if (status < 0)
+	if (status < SUCCESS)
 		return status;
 
 	iio_demo_in_init_par = (struct iio_demo_init_param) {
@@ -182,7 +199,7 @@ int main(void)
 		.dev_ch_attr = 2211,
 	};
 	status = iio_demo_dev_init(&iio_demo_in_desc, &iio_demo_in_init_par);
-	if (status != 0)
+	if (status != SUCCESS)
 		return status;
 
 	struct iio_data_buffer rd_buf = {
@@ -194,12 +211,48 @@ int main(void)
 		.size = MAX_SIZE_BASE_ADDR
 	};
 
-	struct iio_app_device devices[] = {
-		IIO_APP_DEVICE("demo_device_output", iio_demo_out_desc,
-			       &iio_demo_dev_out_descriptor,NULL, &wr_buf),
-		IIO_APP_DEVICE("demo_device_input", iio_demo_in_desc,
-			       &iio_demo_dev_in_descriptor,&rd_buf, NULL)
+	struct iio_data_buffer adc_buff = {
+		.buff = (void *)ADC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
 	};
 
-	return iio_app_run(devices, 2);
+	struct iio_data_buffer dac_buff = {
+		.buff = (void *)DAC_DDR_BASEADDR,
+		.size = MAX_SIZE_BASE_ADDR
+	};
+
+	adc_init_par = (struct adc_demo_init_param) {
+		.loopback_buffers = NULL,
+		.channel_no = 2,
+		.dev_global_attr = 3333,
+		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
+	};
+	status = adc_demo_init(&adc_desc, &adc_init_par);
+	if (status != SUCCESS)
+		return status;
+
+	dac_init_par = (struct dac_demo_init_param) {
+		.loopback_buffers = NULL,
+		.channel_no = 2,
+		.dev_global_attr = 4444,
+		.dev_ch_attr = {1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1121,1122,1123,1124,1125,1126}
+	};
+	status = dac_demo_init(&dac_desc, &dac_init_par);
+	if (status != SUCCESS)
+		return status;
+	ADC_CHANNEL_NO = adc_desc->active_ch;
+	uint32_t adc_channels = ADC_CHANNEL_NO;
+	struct iio_device adc_demo_iio_descriptor = ADC_DEMO_DEV(adc_channels);
+	DAC_CHANNEL_NO = dac_desc->active_ch;
+	uint32_t dac_channels = DAC_CHANNEL_NO;
+	struct iio_device dac_demo_iio_descriptor = DAC_DEMO_DEV(dac_channels);
+
+	struct iio_app_device devices[] = {
+		IIO_APP_DEVICE("adc_demo", adc_desc,
+			       &adc_demo_iio_descriptor,&adc_buff, NULL),
+		IIO_APP_DEVICE("dac_demo", dac_desc,
+			       &dac_demo_iio_descriptor,NULL, &dac_buff)
+	};
+
+	return iio_app_run(devices, ARRAY_SIZE(devices));
 }
