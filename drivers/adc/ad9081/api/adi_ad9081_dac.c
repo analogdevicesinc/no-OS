@@ -1722,10 +1722,10 @@ int32_t adi_ad9081_dac_fsc_set(adi_ad9081_device_t *device, uint8_t dacs,
 	AD9081_LOG_FUNC();
 	if (uA > 40000)
 		AD9081_LOG_WARN(
-			"full-scale current beyond design recommendation (7.5mA - 40mA)");
-	if (uA < 7500)
+			"full-scale current beyond design recommendation (7mA - 40mA)");
+	if (uA < 7000)
 		AD9081_LOG_WARN(
-			"full-scale current beyond design recommendation (7.5mA - 40mA)");
+			"full-scale current beyond design recommendation (7mA - 40mA)");
 
 	for (i = 0; i < 4; i++) {
 		dac = dacs & (AD9081_DAC_0 << i);
@@ -1832,29 +1832,45 @@ int32_t
 adi_ad9081_dac_nco_sync_reset_via_sysref_set(adi_ad9081_device_t *device,
 					     uint8_t enable)
 {
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	err = adi_ad9081_hal_bf_set(device, 0x00000205, 0x00000102, enable);
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
+	return adi_ad9081_device_nco_sync_reset_via_sysref_set(device, enable);
 }
 
 int32_t adi_ad9081_dac_nco_sync_sysref_mode_set(adi_ad9081_device_t *device,
 						uint8_t mode)
 {
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
+	return adi_ad9081_device_nco_sync_sysref_mode_set(device, mode);
+}
 
-	/* 0: immediately by sysref, 1: by next lmfc rising edge, 2: by next lmfc falling edge */
-	err = adi_ad9081_hal_bf_set(device, REG_NCOSYNC_SYSREF_MODE_ADDR,
-				    BF_NCO_SYNC_SYSREF_MODE_INFO, mode);
-	AD9081_ERROR_RETURN(err);
+int32_t adi_ad9081_dac_nco_master_slave_mode_set(adi_ad9081_device_t *device,
+						 uint8_t mode)
+{
+	return adi_ad9081_device_nco_sync_mode_set(device, mode);
+}
 
-	return API_CMS_ERROR_OK;
+int32_t adi_ad9081_dac_nco_master_slave_gpio_set(adi_ad9081_device_t *device,
+						 uint8_t gpio_index,
+						 uint8_t output)
+{
+	return adi_ad9081_device_nco_sync_gpio_set(device, gpio_index, output);
+}
+
+int32_t
+adi_ad9081_dac_nco_master_slave_trigger_source_set(adi_ad9081_device_t *device,
+						   uint8_t source)
+{
+	return adi_ad9081_device_nco_sync_trigger_source_set(device, source);
+}
+
+int32_t
+adi_ad9081_dac_nco_master_slave_extra_lmfc_num_set(adi_ad9081_device_t *device,
+						   uint8_t num)
+{
+	return adi_ad9081_device_nco_sync_extra_lmfc_num_set(device, num);
+}
+
+int32_t adi_ad9081_dac_nco_master_slave_trigger_set(adi_ad9081_device_t *device)
+{
+	return adi_ad9081_device_nco_sync_trigger_set(device);
 }
 
 int32_t adi_ad9081_dac_nco_sync_set(adi_ad9081_device_t *device,
@@ -1891,93 +1907,6 @@ int32_t adi_ad9081_dac_nco_sync_set(adi_ad9081_device_t *device,
 	return API_CMS_ERROR_OK;
 }
 
-int32_t adi_ad9081_dac_nco_master_slave_mode_set(adi_ad9081_device_t *device,
-						 uint8_t mode)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	/* 0: disable, 1: master, 2: slave */
-	err = adi_ad9081_hal_bf_set(device, REG_NCOSYNC_MS_MODE_ADDR,
-				    BF_NCO_SYNC_MS_MODE_INFO, mode);
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t adi_ad9081_dac_nco_master_slave_gpio_set(adi_ad9081_device_t *device,
-						 uint8_t gpio_index,
-						 uint8_t output)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-	AD9081_INVALID_PARAM_RETURN(gpio_index > 5);
-
-	if ((gpio_index & 1) == 0) {
-		err = adi_ad9081_hal_bf_set(
-			device, REG_GPIO_CFG0_ADDR + (gpio_index >> 1), 0x0400,
-			(output > 0) ? 10 : 11);
-		AD9081_ERROR_RETURN(err);
-	} else {
-		err = adi_ad9081_hal_bf_set(
-			device, REG_GPIO_CFG0_ADDR + (gpio_index >> 1), 0x0404,
-			(output > 0) ? 10 : 11);
-		AD9081_ERROR_RETURN(err);
-	}
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t
-adi_ad9081_dac_nco_master_slave_trigger_source_set(adi_ad9081_device_t *device,
-						   uint8_t source)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	/* 0: sysref, 1: lmfc rising edge, 2: lmfc falling edge */
-	err = adi_ad9081_hal_bf_set(device, REG_NCOSYNC_MS_MODE_ADDR,
-				    BF_NCO_SYNC_MS_TRIG_SOURCE_INFO, source);
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t
-adi_ad9081_dac_nco_master_slave_extra_lmfc_num_set(adi_ad9081_device_t *device,
-						   uint8_t num)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	/* Set how many extra lmfc in NCO Master-Slave sync mode.
-     * Only valid when 'nco_sync_ms_mode'=1 & 'nco_sync_ms_trig_source'!=0.
-     */
-	err = adi_ad9081_hal_bf_set(device, REG_NCOSYNC_MS_MODE_ADDR,
-				    BF_NCO_SYNC_MS_EXTRA_LMFC_NUM_INFO, num);
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
-int32_t adi_ad9081_dac_nco_master_slave_trigger_set(adi_ad9081_device_t *device)
-{
-	int32_t err;
-	AD9081_NULL_POINTER_RETURN(device);
-	AD9081_LOG_FUNC();
-
-	err = adi_ad9081_hal_bf_set(device, REG_NCO_SYNC_MS_TRIG_ADDR,
-				    BF_NCO_SYNC_MS_TRIG_INFO,
-				    1); /* self cleared */
-	AD9081_ERROR_RETURN(err);
-
-	return API_CMS_ERROR_OK;
-}
-
 int32_t adi_ad9081_dac_nco_master_slave_sync(adi_ad9081_device_t *device,
 					     uint8_t is_master,
 					     uint8_t trigger_src,
@@ -1987,6 +1916,10 @@ int32_t adi_ad9081_dac_nco_master_slave_sync(adi_ad9081_device_t *device,
 	int32_t err;
 	AD9081_NULL_POINTER_RETURN(device);
 	AD9081_LOG_FUNC();
+
+	err = adi_ad9081_hal_bf_set(device, REG_MAIN_AUTO_CLK_GATING_ADDR,
+				    0x00000400, 7);
+	AD9081_ERROR_RETURN(err);
 
 	err = adi_ad9081_dac_nco_master_slave_mode_set(device,
 						       is_master > 0 ? 1 : 2);
@@ -2003,7 +1936,6 @@ int32_t adi_ad9081_dac_nco_master_slave_sync(adi_ad9081_device_t *device,
 
 	err = adi_ad9081_dac_nco_sync_reset_via_sysref_set(device, 0);
 	AD9081_ERROR_RETURN(err);
-
 	err = adi_ad9081_dac_nco_sync_reset_via_sysref_set(device, 1);
 	AD9081_ERROR_RETURN(err);
 

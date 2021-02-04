@@ -2,7 +2,7 @@
  * @brief     Common API definitions header file.
  *            This file contains all common API definitions.
  *
- * @copyright copyright(c) 2018 analog devices, inc. all rights reserved.
+ * @copyright copyright(c) 2020 analog devices, inc. all rights reserved.
  *            This software is proprietary to Analog Devices, Inc. and its
  *            licensor. By using this software you agree to the terms of the
  *            associated analog devices software license agreement.
@@ -303,7 +303,7 @@ typedef int32_t (*adi_log_write_s_t)(void *user_data, int32_t log_type,
 				     char *message);
 
 /**
- * @brief  Platform hardware initialization for the AD9164 Device
+ * @brief  Platform hardware initialization for the ADL5580 Device
  *         This function shall initialize all external hardware resources required by
  *         the ADI Device and API for correct functionality as per the
  *         target platform.
@@ -321,7 +321,7 @@ typedef int32_t (*adi_hw_open_t)(void *user_data);
 /**
  * @brief  Closes any platform hardware resources for device.
  *         This function shall close or shutdown all external hardware resources
- *         required by the AD9164 Device and API for correct functionality
+ *         required by the ADL5580 Device and API for correct functionality
  *         as per the target platform.
  *         For example initialization of SPI, GPIO resources, clocks etc.
  *         It should close and free any resources assigned in the hw_open_t function.
@@ -379,6 +379,40 @@ typedef int32_t (*adi_tx_en_pin_ctrl_t)(void *user_data, uint8_t enable);
  * @return Any non-zero value indicates an error
  */
 typedef int32_t (*adi_reset_pin_ctrl_t)(void *user_data, uint8_t enable);
+
+/**
+ * @brief   Control function for GPIO write.
+ *
+ * @param   user_data   A void pointer to a client defined structure containing
+ *                      any parameters/settings that may be required by the function
+ *                      to control the hardware for the ADI Device RESETB PIN.
+ * @param   gpio        A uint32_t GPIO index used for identification. See enum "adi_adl5580_gpio_e".
+ * @param   value       A uint32_t value indicating the desired high/low state for GPIO.
+ *                      A value of 1 indicates GPIO pin is set HIGH
+ *                      A value of 0 indicates GPIO pin is set LOW
+ *
+ * @return 0 for success
+ * @return Any non-zero value indicates an error
+ */
+typedef int32_t (*adi_gpio_write_t)(void *user_data, uint32_t gpio,
+				    uint32_t value);
+
+/**
+ * @brief   Control function for GPIO write.
+ *
+ * @param   user_data   A void pointer to a client defined structure containing
+ *                      any parameters/settings that may be required by the function
+ *                      to control the hardware for the ADI Device RESETB PIN.
+ * @param   gpio        A uint32_t GPIO index used for identification. See enum "adi_adl5580_gpio_e".
+ * @param   value       A uint32_t integer pointer indicating the readback state of GPIO.
+ *                      A value of 1 indicates GPIO pin is set HIGH
+ *                      A value of 0 indicates GPIO pin is set LOW
+ * @Note    Depending on the platform, reading a GPIO which is set as an OUTPUT may result in changing the GPIO state.
+ * @return 0 for success
+ * @return Any non-zero value indicates an error
+ */
+typedef int32_t (*adi_gpio_read_t)(void *user_data, uint32_t gpio,
+				   uint32_t *value);
 
 #endif /* __ADI_API_COMMON_H__ */
 /*! @} */

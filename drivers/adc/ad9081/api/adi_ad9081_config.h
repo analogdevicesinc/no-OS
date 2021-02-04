@@ -39,6 +39,8 @@
 #define __FUNCTION_NAME__ __FUNCTION__
 #endif
 
+#define AD9081_API_REV 0x00010007
+
 /* var error report */
 #define AD9081_MSG_REPORT(var, comment)                                        \
 	adi_ad9081_hal_error_report(device, ADI_CMS_LOG_MSG, API_CMS_ERROR_OK, \
@@ -132,6 +134,22 @@ int32_t adi_ad9081_device_reg8_access_check(adi_ad9081_device_t *device);
 int32_t adi_ad9081_device_reg32_access_check(adi_ad9081_device_t *device);
 int32_t adi_ad9081_device_boot_pre_clock(adi_ad9081_device_t *device);
 int32_t adi_ad9081_device_boot_post_clock(adi_ad9081_device_t *device);
+int32_t adi_ad9081_device_nco_sync_mode_set(adi_ad9081_device_t *device,
+					    uint8_t mode);
+int32_t
+adi_ad9081_device_nco_sync_trigger_source_set(adi_ad9081_device_t *device,
+					      uint8_t source);
+int32_t adi_ad9081_device_nco_sync_gpio_set(adi_ad9081_device_t *device,
+					    uint8_t gpio_index, uint8_t output);
+int32_t
+adi_ad9081_device_nco_sync_extra_lmfc_num_set(adi_ad9081_device_t *device,
+					      uint8_t num);
+int32_t adi_ad9081_device_nco_sync_sysref_mode_set(adi_ad9081_device_t *device,
+						   uint8_t mode);
+int32_t
+adi_ad9081_device_nco_sync_reset_via_sysref_set(adi_ad9081_device_t *device,
+						uint8_t enable);
+int32_t adi_ad9081_device_nco_sync_trigger_set(adi_ad9081_device_t *device);
 
 int32_t adi_ad9081_dac_d2a_dual_spi_enable_set(adi_ad9081_device_t *device,
 					       uint8_t duals, uint8_t enable);
@@ -149,6 +167,9 @@ int32_t adi_ad9081_dac_data_xor_set(adi_ad9081_device_t *device, uint8_t dacs,
 				    uint8_t enable);
 
 int32_t adi_ad9081_adc_select_set(adi_ad9081_device_t *device, uint8_t adcs);
+int32_t adi_ad9081_adc_core_analog_regs_enable_set(adi_ad9081_device_t *device,
+						   uint8_t adc_cores,
+						   uint8_t enable);
 int32_t adi_ad9081_adc_core_setup(adi_ad9081_device_t *device,
 				  uint8_t adc_cores);
 int32_t adi_ad9081_adc_power_up_set(adi_ad9081_device_t *device, uint8_t adcs,
