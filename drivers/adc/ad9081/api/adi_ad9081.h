@@ -25,6 +25,13 @@
 #define AD9081_DAC_CLK_FREQ_HZ_MAX 12600000000ULL
 #define AD9081_ADC_CLK_FREQ_HZ_MIN 1425000000ULL
 #define AD9081_ADC_CLK_FREQ_HZ_MAX 4200000000ULL
+#ifdef AD9209
+#define AD9081_ID 0x9209
+#define AD9081_DAC_CLK_FREQ_HZ_MIN 2850000000ULL
+#define AD9081_DAC_CLK_FREQ_HZ_MAX 12600000000ULL
+#define AD9081_ADC_CLK_FREQ_HZ_MIN 1425000000ULL
+#define AD9081_ADC_CLK_FREQ_HZ_MAX 6300000000ULL
+#endif
 #define AD9081_REF_CLK_FREQ_HZ_MIN 100000000ULL
 #define AD9081_REF_CLK_FREQ_HZ_MAX 2000000000ULL
 
@@ -420,8 +427,8 @@ typedef enum {
 	AD9081_TMODE_NEG_FULL = 0x3, /*!< Negative Full-Scale, 0x8000 */
 	AD9081_TMODE_ALT_CHECKER =
 		0x4, /*!< Alternating Checker Board, 0x5555-0xAAAA */
-	AD9081_TMODE_PN9 = 0x6, /*!< PN9 Sequence */
 	AD9081_TMODE_PN23 = 0x5, /*!< PN23 Sequence */
+	AD9081_TMODE_PN9 = 0x6, /*!< PN9  Sequence */
 	AD9081_TMODE_1_0_TOGG = 0x7, /*!< 1/0 Word Toggle, 0x0000-0xFFFF */
 	AD9081_TMODE_USER_PAT = 0x8, /*!< User Pattern Test Mode */
 	AD9081_TMODE_PN7 = 0x9, /*!< PN7 Sequence */
@@ -957,6 +964,26 @@ int32_t adi_ad9081_device_laminate_id_get(adi_ad9081_device_t *device,
  * @return <0                                   Failed. @see adi_cms_error_e for details.
  */
 int32_t adi_ad9081_device_die_id_get(adi_ad9081_device_t *device, uint8_t *id);
+
+/**
+ * @brief  Do some pre-settings for nco sync.
+ *
+ * @param  device       Pointer to the device structure
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_nco_sync_pre(adi_ad9081_device_t *device);
+
+/**
+ * @brief  Do some post-settings for nco sync.
+ *
+ * @param  device       Pointer to the device structure
+ *
+ * @return API_CMS_ERROR_OK                     API Completed Successfully
+ * @return <0                                   Failed. @see adi_cms_error_e for details.
+ */
+int32_t adi_ad9081_device_nco_sync_post(adi_ad9081_device_t *device);
 
 /**
  * @brief  Startup Tx
@@ -1790,7 +1817,7 @@ int32_t adi_ad9081_dac_sysref_phase_set(adi_ad9081_device_t *device,
  * @brief  Set SYSREF Sample Type
  *
  * @param  device       Pointer to the device structure
- * @param  sample_type  0 – sampled by reference clock then by high speed clock, 1 – sampled directly by high speed clock
+ * @param  sample_type  0 - sampled by reference clock then by high speed clock, 1 - sampled directly by high speed clock
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -3150,7 +3177,7 @@ adi_ad9081_adc_pfir_coeffs_set(adi_ad9081_device_t *device,
  *                            bit 2: real_cross_i load, bit 3: real_cross_q load
  *                            bit 4: complex load
  * @param  coeffs         Coefficient value array pointer
- * @param  coeffs_num     Coefficient value array(coeffs) size
+ * @param  coeffs_size    Coefficient value array(coeffs) size
  *
  * @return API_CMS_ERROR_OK                     API Completed Successfully
  * @return <0                                   Failed. @see adi_cms_error_e for details.
@@ -3162,7 +3189,7 @@ int32_t adi_ad9081_adc_pfir_config_set(
 	adi_ad9081_adc_pfir_q_mode_e q_mode, adi_ad9081_adc_pfir_gain_e ix_gain,
 	adi_ad9081_adc_pfir_gain_e iy_gain, adi_ad9081_adc_pfir_gain_e qx_gain,
 	adi_ad9081_adc_pfir_gain_e qy_gain, uint8_t coeff_load_sel,
-	uint16_t *coeffs, uint8_t coeffs_num);
+	uint16_t *coeffs, uint8_t coeffs_size);
 
 /**
  * @brief  Set Fine DDC Samples Status Selection

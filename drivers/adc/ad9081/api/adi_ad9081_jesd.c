@@ -639,7 +639,7 @@ int32_t adi_ad9081_jesd_rx_calibrate_204c(adi_ad9081_device_t *device,
 {
 	int32_t err;
 	uint8_t core_status, jrx_fw_major, jrx_fw_minor, rx_bg_cal_run;
-	uint16_t rx_set_state1_addr;
+	uint16_t rx_set_state1_addr, rx_set_state2_addr;
 	uint8_t rx_run_cal_mask =
 		0xFF; /* TODO: only set physical lanes in use to save time */
 	AD9081_NULL_POINTER_RETURN(device);
@@ -652,6 +652,9 @@ int32_t adi_ad9081_jesd_rx_calibrate_204c(adi_ad9081_device_t *device,
 	if (device->dev_info.dev_rev == 2 ||
 	    device->dev_info.dev_rev == 3) { /* r1r/r2 */
 		rx_set_state1_addr = 0x21c1;
+	}
+	if (device->dev_info.dev_rev == 3) { /* r2 */
+		rx_set_state2_addr = 0x21c2;
 	}
 
 	/* reset or start app task */
@@ -732,6 +735,13 @@ int32_t adi_ad9081_jesd_rx_calibrate_204c(adi_ad9081_device_t *device,
 		AD9081_ERROR_RETURN(err);
 		err = adi_ad9081_jesd_rx_boost_mask_set(device, boost_mask);
 		AD9081_ERROR_RETURN(err);
+
+		/* enable temperature calibartion */
+		if (device->dev_info.dev_rev == 3) { /* r2 */
+			err = adi_ad9081_hal_reg_set(device, rx_set_state2_addr,
+						     0x31);
+			AD9081_ERROR_RETURN(err);
+		}
 
 		/* start204CCal()@ad9081_tx_r1.py, run_bg_cal()@rx_firmware_base.py */
 		err = adi_ad9081_hal_bf_set(device, rx_set_state1_addr, 0x0104,
@@ -4086,6 +4096,7 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device)
 	err = adi_ad9081_hal_bf_set(device, REG_ROTATION_MODE_ADDR,
 				    BF_ROTATION_MODE_INFO, 1); /* not paged */
 	AD9081_ERROR_RETURN(err);
+
 	if (device->dev_info.dev_rev == 3) { /* r2 */
 		err = adi_ad9081_hal_bf_set(device, REG_ACLK_CTRL_ADDR,
 					    BF_PD_TXDIGCLK_INFO,
@@ -4095,6 +4106,7 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device)
 					    0x00000107, 0); /* not paged */
 		AD9081_ERROR_RETURN(err);
 	}
+
 	err = adi_ad9081_hal_bf_set(device, REG_SYSREF_MODE_ADDR,
 				    BF_SYSREF_MODE_ONESHOT_INFO,
 				    0); /* not paged */
@@ -4116,6 +4128,7 @@ int32_t adi_ad9081_jesd_oneshot_sync(adi_ad9081_device_t *device)
 	if (sync_done != 1) {
 		AD9081_LOG_ERR("oneshot sync not finished.");
 	}
+
 	if (device->dev_info.dev_rev == 3) { /* r2 */
 		err = adi_ad9081_hal_bf_set(device, REG_ADC_DIVIDER_CTRL_ADDR,
 					    0x00000107, 1); /* not paged */
