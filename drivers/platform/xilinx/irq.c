@@ -72,7 +72,9 @@ int32_t irq_ctrl_init(struct irq_ctrl_desc **desc,
 	int32_t status;
 	struct irq_ctrl_desc *descriptor;
 	struct xil_irq_desc *xil_dev;
+#ifdef XSCUGIC_H
 	void *config;
+#endif
 
 	descriptor = (struct irq_ctrl_desc *)calloc(1, sizeof *descriptor);
 	if(!descriptor)
