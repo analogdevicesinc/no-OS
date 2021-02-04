@@ -817,6 +817,60 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev)
 /**
  * @brief Free resoulces allocated for ADF5902
  * @param dev - The device structure.
+ * @param temp - The temperature value.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp)
+{
+	int32_t ret;
+	uint32_t reg_data;
+
+	/* Connect ATEST to ADC and Temperature sensor to ATEST */
+	ret = adf5902_write(dev, ADF5902_REG4 | ADF5902_REG4_RESERVED |
+			    ADF5902_REG4_TEST_BUS(ADF5902_TEMP_SENS_TO_ADC));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Start ADC Conversion */
+	ret = adf5902_write(dev, ADF5902_REG2 | ADF5902_REG2_RESERVED |
+			    ADF5902_REG2_ADC_CLK_DIV(dev->adc_clk_div) |
+			    ADF5902_REG2_ADC_AVG(dev->adc_avg) |
+			    ADF5902_REG2_ADC_START(ADF5902_START_ADC_CONV));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Read ADC Data */
+	reg_data = ADF5902_REG3 | ADF5902_REG3_RESERVED |
+		   ADF5902_REG3_READBACK_CTRL(ADF5902_ADC_RB) |
+		   ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
+		   ADF5902_REG3_MUXOUT(ADF5902_MUXOUT_RAMP_STATUS);
+
+	ret = adf5902_readback(dev, &reg_data);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set Register 4 to initial value */
+	ret = adf5902_write(dev, ADF5902_REG4 | ADF5902_REG4_RESERVED |
+			    ADF5902_REG4_TEST_BUS(ADF5902_RAMP_DOWN_TO_MUXOUT));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Set Register 2 to initial value */
+	ret = adf5902_write(dev, ADF5902_REG2 | ADF5902_REG2_RESERVED |
+			    ADF5902_REG2_ADC_CLK_DIV(dev->adc_clk_div) |
+			    ADF5902_REG2_ADC_AVG(dev->adc_avg) |
+			    ADF5902_REG2_ADC_START(ADF5902_ADC_NORMAL_OP));
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Compute temperature */
+	*temp = (((reg_data * ADF5902_VLSB) - ADF5902_VOFF) / ADF5902_VGAIN);
+
+	return ret;
+}
+/**
+ * @brief Free resoulces allocated for ADF5902
+ * @param dev - The device structure.
  * @return Returns 0 in case of success or negative error code.
  */
 int32_t adf5902_remove(struct adf5902_dev *dev)

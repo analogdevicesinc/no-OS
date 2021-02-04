@@ -400,6 +400,9 @@
 #define ADF5902_MAX_FREQ_PFD		110000000
 #define ADF5902_MAX_STEP_WORD_NO	4
 #define ADF5902_MAX_CLK_DIV_NO		4
+#define ADF5902_VLSB				0.00733f
+#define ADF5902_VOFF				0.699f
+#define ADF5902_VGAIN				0.0064f
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -550,6 +553,9 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		     struct adf5902_init_param *init_param);
 /** ADF5902 Recalibration Procedure */
 int32_t adf5902_recalibrate(struct adf5902_dev *dev);
+
+/** ADF5902 Read Temperature procedure */
+int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
