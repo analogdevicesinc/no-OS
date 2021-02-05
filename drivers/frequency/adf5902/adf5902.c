@@ -413,7 +413,8 @@ int32_t adf5902_init(struct adf5902_dev **device,
 	/* Set MSB FRAC and INT */
 	ret = adf5902_write(dev, ADF5902_REG5 | ADF5902_REG5_RESERVED |
 			    ADF5902_REG5_FRAC_MSB_WORD(dev->frac_msb) |
-			    ADF5902_REG5_INTEGER_WORD(dev->int_div));
+			    ADF5902_REG5_INTEGER_WORD(dev->int_div) |
+			    ADF5902_REG5_RAMP_ON(ADF5902_RAMP_ON_DISABLED));
 	if (ret != SUCCESS)
 		return ret;
 
@@ -790,7 +791,8 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev)
 	/* Set MSB FRAC and INT */
 	ret = adf5902_write(dev, ADF5902_REG5 | ADF5902_REG5_RESERVED |
 			    ADF5902_REG5_FRAC_MSB_WORD(dev->frac_msb) |
-			    ADF5902_REG5_INTEGER_WORD(dev->int_div));
+			    ADF5902_REG5_INTEGER_WORD(dev->int_div) |
+			    ADF5902_REG5_RAMP_ON(ADF5902_RAMP_ON_DISABLED));
 	if (ret != SUCCESS)
 		return ret;
 
@@ -868,6 +870,110 @@ int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp)
 
 	return ret;
 }
+
+/**
+ * @brief Measure output locked frequency
+ * @param dev - The device structure.
+ * @param freq - Measured frequency.
+ * @return Returns 0 in case of success or negative error code.
+ */
+int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float freq)
+{
+	int32_t ret;
+	uint32_t freq1, freq2, delay, clk_div, i;
+	uint64_t delta_freq;
+
+	clk_div = (dev->clk2_div[0] * pow(2, 12)) + dev->clk1_div;
+	/* Delay conversion to us */
+	delay = clk_div * 10000000 / dev->f_pfd;
+
+	/* Read ADC Data */
+	freq1 = ADF5902_REG3 | ADF5902_REG3_RESERVED |
+		ADF5902_REG3_READBACK_CTRL(ADF5902_FREQ_RB) |
+		ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
+		ADF5902_REG3_MUXOUT(ADF5902_MUXOUT_RAMP_STATUS);
+
+	ret = adf5902_readback(dev, &freq1);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
+			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
+			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
+			    ADF5902_REG7_R_DIV_2(dev->ref_div2_en) |
+			    ADF5902_REG7_CLK_DIV(1808) |
+			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	for (i = 0; i < dev->clk2_div_no; i++) {
+		ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
+				    ADF5902_REG13_CLK_DIV_2(10) |
+				    ADF5902_REG13_CLK_DIV_SEL(i) |
+				    ADF5902_REG13_CLK_DIV_MODE(dev->clk_div_mode) |
+				    ADF5902_REG13_LE_SEL(dev->le_sel));
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	/* Ramp Mode Disabled */
+	ret = adf5902_write(dev, ADF5902_REG5 | ADF5902_REG5_RESERVED |
+			    ADF5902_REG5_FRAC_MSB_WORD(dev->frac_msb) |
+			    ADF5902_REG5_INTEGER_WORD(dev->int_div) |
+			    ADF5902_REG5_RAMP_ON(ADF5902_RAMP_ON_DISABLED));
+
+	for (i = 0; i < dev->clk2_div_no; i++) {
+		ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
+				    ADF5902_REG13_CLK_DIV_2(10) |
+				    ADF5902_REG13_CLK_DIV_SEL(i) |
+				    ADF5902_REG13_CLK_DIV_MODE(ADF5902_FREQ_MEASURE) |
+				    ADF5902_REG13_LE_SEL(dev->le_sel));
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	udelay(delay);
+
+	freq2 = ADF5902_REG3 | ADF5902_REG3_RESERVED |
+		ADF5902_REG3_READBACK_CTRL(ADF5902_FREQ_RB) |
+		ADF5902_REG3_IO_LVL(ADF5902_IO_LVL_3V3) |
+		ADF5902_REG3_MUXOUT(ADF5902_MUXOUT_RAMP_STATUS);
+
+	ret = adf5902_readback(dev, &freq2);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = adf5902_write(dev, ADF5902_REG7 | ADF5902_REG7_RESERVED |
+			    ADF5902_REG7_R_DIVIDER(dev->ref_div_factor) |
+			    ADF5902_REG7_REF_DOUBLER(dev->ref_doubler_en) |
+			    ADF5902_REG7_R_DIV_2(dev->ref_div2_en) |
+			    ADF5902_REG7_CLK_DIV(dev->clk1_div) |
+			    ADF5902_REG7_MASTER_RESET(ADF5902_MASTER_RESET_DISABLE));
+	if (ret != SUCCESS)
+		return ret;
+
+	for (i = 0; i < dev->clk2_div_no; i++) {
+		ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
+				    ADF5902_REG13_CLK_DIV_2(dev->clk2_div[i]) |
+				    ADF5902_REG13_CLK_DIV_SEL(i) |
+				    ADF5902_REG13_CLK_DIV_MODE(dev->clk_div_mode) |
+				    ADF5902_REG13_LE_SEL(dev->le_sel));
+		if (ret != SUCCESS)
+			return ret;
+	}
+
+	if (freq1 < freq2)
+		delta_freq = (pow(2, 16) - freq1) + freq2;
+
+	if (freq1 > freq2)
+		delta_freq = (freq2 - freq1);
+
+	freq = ((float)delta_freq / clk_div) * dev->f_pfd * ((float)dev->rf_out /
+			(dev->f_pfd * 2)) * 2;
+
+	return ret;
+}
+
 /**
  * @brief Free resoulces allocated for ADF5902
  * @param dev - The device structure.

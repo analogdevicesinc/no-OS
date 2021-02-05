@@ -210,6 +210,9 @@
 #define ADF5902_MIN_INT_MSB_WORD	0x000
 #define ADF5902_MAX_INT_MSB_WORD	0xFFF
 
+#define ADF5902_RAMP_ON_DISABLED	0x0
+#define ADF5902_RAMP_ON_ENABLED		0x1
+
 /* Register 6 Map */
 #define ADF5902_REG6_FRAC_LSB_WORD(x)	(((x) & 0x1FFF) << 5)
 #define ADF5902_REG6_RESERVED		(0x0 << 18)
@@ -556,6 +559,9 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev);
 
 /** ADF5902 Read Temperature procedure */
 int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp);
+
+/* ADF5902 Measure Output locked frequency */
+int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float freq);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
