@@ -45,6 +45,7 @@
 /******************************************************************************/
 #include <stdint.h>
 #include "spi.h"
+#include "gpio.h"
 
 /******************************************************************************/
 /********************** Macros and Constants Definitions **********************/
@@ -341,7 +342,7 @@
 
 /* Register 14 Bit Definitions */
 #define ADF5902_MAX_DEV_WORD		0x7FFF
-#define ADF5902_MIN_DEV_WORD		0x8000
+#define ADF5902_MIN_DEV_WORD		(int16_t)0x8000
 
 #define ADF5902_MAX_DEV_OFFSET		0x9
 #define ADF5902_MIN_DEV_OFFSET		0x0
@@ -378,8 +379,8 @@
 #define ADF5902_REG16_DEL_SEL(x)	(((x) & 0x3) << 23)
 #define ADF5902_REG16_RESERVED		((0x0 << 17) & (0x0 << 21) & (0x1 << 25))
 
-#define ADF5902_MIN_DELAY_STARD_WRD	0x000
-#define ADF5902_MAX_DELAY_STARD_WRD	0xFFF
+#define ADF5902_MIN_DELAY_START_WRD	0x000
+#define ADF5902_MAX_DELAY_START_WRD	0xFFF
 
 #define ADF5902_RAMP_DEL_DISABLE	0x0
 #define ADF5902_RAMP_DEL_ENABLE		0x1
@@ -401,11 +402,14 @@
 #define ADF5902_MIN_REFIN_FREQ		10000000
 #define ADF5902_MAX_REFIN_FREQ		260000000
 #define ADF5902_MAX_FREQ_PFD		110000000
+#define ADF5902_MAX_FREQ_DEV_NO		4
 #define ADF5902_MAX_STEP_WORD_NO	4
-#define ADF5902_MAX_CLK_DIV_NO		4
+#define ADF5902_MAX_DELAY_WORD_NO	4
+#define ADF5902_MAX_CLK2_DIV_NO		4
 #define ADF5902_VLSB				0.00733f
 #define ADF5902_VOFF				0.699f
 #define ADF5902_VGAIN				0.0064f
+#define ADF5902_SPI_DUMMY_DATA		0x0
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -421,6 +425,8 @@ struct freq_dev {
 struct adf5902_init_param {
 	/* SPI Initialization parameters */
 	struct spi_init_param	*spi_init;
+	/* GPIO Chip Enable */
+	struct gpio_init_param	*gpio_ce_param;
 	/* Reference input frequency */
 	uint64_t		ref_in;
 	/* Output frequency of the internal VCO */
@@ -435,15 +441,15 @@ struct adf5902_init_param {
 	uint8_t			adc_avg;
 	/* Transmitter Amplitude Calibration Reference Code */
 	uint8_t			tx_amp_cal_ref;
-	/* Delay start word */
-	uint16_t		ramp_delay_wd;
 	/* Ramp delay enable */
 	uint8_t			ramp_delay_en;
 	/* TX Data trigger */
 	uint8_t			tx_trig_en;
-	/* Delay select */
-	uint8_t			delay_sel;
-	/* Number of step words */
+	/* Delay words number */
+	uint8_t			delay_words_no;
+	/* Delay Words */
+	uint16_t		delay_wd[ADF5902_MAX_DELAY_WORD_NO];
+	/* Step words number */
 	uint8_t			step_words_no;
 	/* Step words */
 	uint32_t		step_words[ADF5902_MAX_STEP_WORD_NO];
@@ -458,7 +464,7 @@ struct adf5902_init_param {
 	/* 12-bit Clock Divider number */
 	uint8_t			clk2_div_no;
 	/* 12-bit Clock Divider */
-	uint16_t		clk2_div[ADF5902_MAX_CLK_DIV_NO];
+	uint16_t		clk2_div[ADF5902_MAX_CLK2_DIV_NO];
 	/* LE Select */
 	uint8_t			le_sel;
 	/* Clock Divider Mode*/
@@ -472,6 +478,8 @@ struct adf5902_init_param {
 struct adf5902_dev {
 	/* SPI Descriptor */
 	struct spi_desc		*spi_desc;
+	/* GPIO Chip Enable */
+	struct gpio_desc	*gpio_ce;
 	/* Reference input frequency*/
 	uint64_t		ref_in;
 	/* Output frequency of the internal VCO */
@@ -500,14 +508,14 @@ struct adf5902_dev {
 	uint8_t			adc_avg;
 	/* Transmitter Amplitude Calibration Reference Code */
 	uint8_t			tx_amp_cal_ref;
-	/* Delay start word */
-	uint16_t		ramp_delay_wd;
 	/* Ramp delay enable */
 	uint8_t			ramp_delay_en;
 	/* TX Data trigger */
 	uint8_t			tx_trig_en;
-	/* Delay select */
-	uint8_t			delay_sel;
+	/* Delay words number */
+	uint8_t			delay_words_no;
+	/* Delay Words */
+	uint16_t		*delay_wd;
 	/* Number of step words */
 	uint8_t			step_words_no;
 	/* Step words */
@@ -554,6 +562,7 @@ int32_t adf5902_set_vco_freq(struct adf5902_dev *device);
 /** ADF5902 Initialization */
 int32_t adf5902_init(struct adf5902_dev **device,
 		     struct adf5902_init_param *init_param);
+
 /** ADF5902 Recalibration Procedure */
 int32_t adf5902_recalibrate(struct adf5902_dev *dev);
 

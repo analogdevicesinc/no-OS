@@ -88,6 +88,17 @@ int32_t adf5902_readback(struct adf5902_dev *dev, uint32_t *data)
 	buff[2] = *data >> 8;
 	buff[3] = *data;
 
+	/* Write command */
+	ret = spi_write_and_read(dev->spi_desc, buff, buff_size);
+	if (ret != SUCCESS)
+		return ret;
+
+	/* Send dummy value to get the data on DOUT */
+	buff[0] = ADF5902_SPI_DUMMY_DATA;
+	buff[1] = ADF5902_SPI_DUMMY_DATA;
+	buff[2] = ADF5902_SPI_DUMMY_DATA;
+	buff[3] = ADF5902_SPI_DUMMY_DATA;
+
 	ret = spi_write_and_read(dev->spi_desc, buff, buff_size);
 	if (ret != SUCCESS)
 		return ret;
@@ -153,6 +164,15 @@ int32_t adf5902_init(struct adf5902_dev **device,
 	if (!dev)
 		return FAILURE;
 
+	/* Chip Enable */
+	ret = gpio_get(&dev->gpio_ce, init_param->gpio_ce_param);
+	if (ret != SUCCESS)
+		return ret;
+
+	ret = gpio_direction_output(dev->gpio_ce, GPIO_HIGH);
+	if (ret != SUCCESS)
+		return ret;
+
 	/* SPI */
 	ret = spi_init(&dev->spi_desc, init_param->spi_init);
 	if (ret != SUCCESS)
@@ -201,11 +221,18 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->tx_amp_cal_ref = init_param->tx_amp_cal_ref;
 
-	if ((init_param->ramp_delay_wd > ADF5902_MAX_DELAY_STARD_WRD) ||
-	    (init_param->ramp_delay_wd < ADF5902_MIN_DELAY_STARD_WRD))
+	if ((init_param->delay_words_no > (ADF5902_DEL_SEL_3 + 1)) ||
+	    (init_param->delay_words_no < ADF5902_DEL_SEL_0))
 		return FAILURE;
 
-	dev->ramp_delay_wd = init_param->ramp_delay_wd;
+	dev->delay_words_no = init_param->delay_words_no;
+
+	for (i = 0; i < dev->delay_words_no; i++)
+		if ((init_param->delay_wd[i] > ADF5902_MAX_DELAY_START_WRD) ||
+		    (init_param->delay_wd[i] < ADF5902_MIN_DELAY_START_WRD))
+			return FAILURE;
+
+	dev->delay_wd = init_param->delay_wd;
 
 	if ((init_param->ramp_delay_en != ADF5902_RAMP_DEL_DISABLE)
 	    && (init_param->ramp_delay_en != ADF5902_RAMP_DEL_ENABLE))
@@ -219,13 +246,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->tx_trig_en = init_param->tx_trig_en;
 
-	if ((init_param->delay_sel > ADF5902_DEL_SEL_3) ||
-	    (init_param->delay_sel < ADF5902_DEL_SEL_0))
-		return FAILURE;
-
-	dev->delay_sel = init_param->delay_sel;
-
-	if ((init_param->step_words_no > ADF5902_STEP_SEL_3) ||
+	if ((init_param->step_words_no > (ADF5902_STEP_SEL_3 + 1)) ||
 	    (init_param->step_words_no < ADF5902_STEP_SEL_0))
 		return FAILURE;
 
@@ -238,7 +259,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->step_words = init_param->step_words;
 
-	if ((init_param->freq_dev_no > ADF5902_DEV_SEL_3) ||
+	if ((init_param->freq_dev_no > (ADF5902_DEV_SEL_3 + 1)) ||
 	    (init_param->freq_dev_no < ADF5902_DEV_SEL_0))
 		return FAILURE;
 
@@ -265,22 +286,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	dev->tx_data_invert = init_param->tx_data_invert;
 
-	if ((init_param->freq_dev_no > ADF5902_DEV_SEL_3) ||
-	    (init_param->freq_dev_no < ADF5902_DEV_SEL_0))
-		return FAILURE;
-
-	dev->freq_dev_no = init_param->freq_dev_no;
-
-	for (i = 0; i < dev->freq_dev_no; i++)
-		if((init_param->freq_dev[i].dev_word < ADF5902_MIN_DEV_WORD) ||
-		    (init_param->freq_dev[i].dev_word > ADF5902_MAX_DEV_WORD) ||
-		    (init_param->freq_dev[i].dev_offset < ADF5902_MIN_DEV_OFFSET) ||
-		    (init_param->freq_dev[i].dev_offset > ADF5902_MAX_DEV_OFFSET))
-			return FAILURE;
-
-	dev->freq_dev = init_param->freq_dev;
-
-	if ((init_param->clk2_div_no > ADF5902_CLK_DIV_SEL_3) ||
+	if ((init_param->clk2_div_no > (ADF5902_CLK_DIV_SEL_3 + 1)) ||
 	    (init_param->clk2_div_no < ADF5902_CLK_DIV_SEL_0))
 		return FAILURE;
 
@@ -359,7 +365,7 @@ int32_t adf5902_init(struct adf5902_dev **device,
 
 	/* Set clock divider mode to Ramp Divider */
 	ret = adf5902_write(dev, ADF5902_REG13 | ADF5902_REG13_RESERVED |
-			    ADF5902_REG13_CLK_DIV_MODE(ADF5902_RAMP_DIV));
+			    ADF5902_REG13_CLK_DIV_MODE(dev->clk_div_mode));
 	if (ret != SUCCESS)
 		return ret;
 
@@ -523,13 +529,15 @@ int32_t adf5902_init(struct adf5902_dev **device,
 		return ret;
 
 	/* Ramp delay register */
-	ret = adf5902_write(dev, ADF5902_REG16 | ADF5902_REG16_RESERVED |
-			    ADF5902_REG16_DEL_START_WORD(dev->ramp_delay_wd) |
-			    ADF5902_REG16_RAMP_DEL(dev->ramp_delay_en) |
-			    ADF5902_REG16_TX_DATA_TRIG(dev->tx_trig_en) |
-			    ADF5902_REG16_DEL_SEL(dev->delay_sel));
-	if (ret != SUCCESS)
-		return ret;
+	for (i = 0; i < dev->step_words_no; i++) {
+		ret = adf5902_write(dev, ADF5902_REG16 | ADF5902_REG16_RESERVED |
+				    ADF5902_REG16_DEL_START_WORD(dev->delay_wd[i]) |
+				    ADF5902_REG16_RAMP_DEL(dev->ramp_delay_en) |
+				    ADF5902_REG16_TX_DATA_TRIG(dev->tx_trig_en) |
+				    ADF5902_REG16_DEL_SEL(i));
+		if (ret != SUCCESS)
+			return ret;
+	}
 
 	/* Load Step Register */
 	for (i = 0; i < dev->step_words_no; i++) {
@@ -841,6 +849,9 @@ int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp)
 	if (ret != SUCCESS)
 		return ret;
 
+	/* Make sure ADC conversion is finished */
+	mdelay(10);
+
 	/* Read ADC Data */
 	reg_data = ADF5902_REG3 | ADF5902_REG3_RESERVED |
 		   ADF5902_REG3_READBACK_CTRL(ADF5902_ADC_RB) |
@@ -866,7 +877,7 @@ int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp)
 		return ret;
 
 	/* Compute temperature */
-	*temp = (((reg_data * ADF5902_VLSB) - ADF5902_VOFF) / ADF5902_VGAIN);
+	*temp = ((((uint8_t)reg_data * ADF5902_VLSB) - ADF5902_VOFF) / ADF5902_VGAIN);
 
 	return ret;
 }
