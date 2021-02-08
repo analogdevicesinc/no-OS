@@ -42,6 +42,7 @@
 /******************************************************************************/
 #include <stdlib.h>
 #include <inttypes.h>
+#include <cinttypes.h>
 #include "error.h"
 #include "adi_cms_api_common.h"
 #include "util.h"
