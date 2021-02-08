@@ -96,7 +96,7 @@ enum pin_type {
 };
 
 /* Enable in pin mux the needed type */
-static void set_pin(uint32_t id, enum pin_type type)
+static int32_t set_pin(uint32_t id, enum pin_type type)
 {
 	volatile uint32_t *port_addr;
 	uint32_t pin;
@@ -113,11 +113,15 @@ static void set_pin(uint32_t id, enum pin_type type)
 			val = 0;
 		break;
 	case PIN_TYPE_ADC:
+		if (id >= ADUCM3029_ADC_NUM_CH)
+			return FAILURE;
 		port_addr = pinmux_addrs[adc_muxs[id][0]];
 		pin = adc_muxs[id][1];
 		val = adc_muxs[id][2];
 		break;
 	case PIN_TYPE_TIMER:
+		if (id >= ADUCM3029_TIMERS_NUMS)
+			return FAILURE;
 		port_addr = pinmux_addrs[timers_muxs[id][0]];
 		pin = timers_muxs[id][1];
 		val = timers_muxs[id][2];
@@ -125,6 +129,8 @@ static void set_pin(uint32_t id, enum pin_type type)
 	}
 	*port_addr &= ~(0b11 << (pin * 2));
 	*port_addr |= val << (pin * 2);
+
+	return SUCCESS;
 }
 
 
