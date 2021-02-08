@@ -1803,40 +1803,38 @@ int32_t ad77681_setup(struct ad77681_dev **device,
 	if (ad77681_scratchpad(dev, &scratchpad_check) == FAILURE) {
 		scratchpad_check = 0xAD;/* If failure, second try */
 		ret |= (ad77681_scratchpad(dev, &scratchpad_check));
-
 		if(ret == FAILURE) {
 			free(dev);
 			free(stat);
 			return ret;
 		}
-
-	} else {
-		ret |= ad77681_set_power_mode(dev, dev->power_mode);
-		ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
-		ret |= ad77681_set_conv_mode(dev,
-					     dev->conv_mode,
-					     dev->diag_mux_sel,
-					     dev->conv_diag_sel);
-		ret |= ad77681_set_convlen(dev, dev->conv_len);
-		ret |= ad77681_set_status_bit(dev, dev->status_bit);
-		ret |= ad77681_set_crc_sel(dev, init_param.crc_sel);
-		ret |= ad77681_set_VCM_output(dev, dev->VCM_out);
-		ret |= ad77681_set_AINn_buffer(dev, dev->AINn);
-		ret |= ad77681_set_AINp_buffer(dev, dev->AINp);
-		ret |= ad77681_set_REFn_buffer(dev, dev->REFn);
-		ret |= ad77681_set_REFp_buffer(dev, dev->REFp);
-		ret |= ad77681_set_filter_type(dev, dev->decimate, dev->filter, dev->sinc3_osr);
-		ret |= ad77681_error_flags_enabe(dev);
-		ret |= ad77681_clear_error_flags(dev);
-		ret |= ad77681_status(dev, stat);
-		ad77681_get_frame_16bit(dev);
-		ad77681_update_sample_rate(dev);
-		*status = stat;
-		*device = dev;
 	}
+	ret |= ad77681_set_power_mode(dev, dev->power_mode);
+	ret |= ad77681_set_mclk_div(dev, dev->mclk_div);
+	ret |= ad77681_set_conv_mode(dev,
+				     dev->conv_mode,
+				     dev->diag_mux_sel,
+				     dev->conv_diag_sel);
+	ret |= ad77681_set_convlen(dev, dev->conv_len);
+	ret |= ad77681_set_status_bit(dev, dev->status_bit);
+	ret |= ad77681_set_crc_sel(dev, init_param.crc_sel);
+	ret |= ad77681_set_VCM_output(dev, dev->VCM_out);
+	ret |= ad77681_set_AINn_buffer(dev, dev->AINn);
+	ret |= ad77681_set_AINp_buffer(dev, dev->AINp);
+	ret |= ad77681_set_REFn_buffer(dev, dev->REFn);
+	ret |= ad77681_set_REFp_buffer(dev, dev->REFp);
+	ret |= ad77681_set_filter_type(dev, dev->decimate, dev->filter, dev->sinc3_osr);
+	ret |= ad77681_error_flags_enabe(dev);
+	ret |= ad77681_clear_error_flags(dev);
+	ret |= ad77681_status(dev, stat);
+	ad77681_get_frame_16bit(dev);
+	ad77681_update_sample_rate(dev);
+	*status = stat;
+	*device = dev;
 
 	if (!ret)
 		printf("ad77681 successfully initialized\n");
 
 	return ret;
 }
+
