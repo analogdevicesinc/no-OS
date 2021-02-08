@@ -41,13 +41,15 @@
 /***************************** Include Files **********************************/
 /******************************************************************************/
 #include <stdlib.h>
-#include <inttypes.h>
 #include "error.h"
 #include "adi_cms_api_common.h"
 #include "util.h"
 #include "delay.h"
 #include "adi_ad9081_hal.h"
 #include "ad9081.h"
+
+#define __STDC_FORMAT_MACROS
+#include <inttypes.h>
 
 #define CHIPID_AD9081	0x9081
 #define CHIPID_MASK	0xFFFF
@@ -1043,7 +1045,7 @@ int32_t ad9081_init(struct ad9081_phy **dev,
 	phy->ad9081.hal_info.reset_pin_ctrl = ad9081_reset_pin_ctrl;
 	phy->ad9081.hal_info.sdo = SPI_SDO;
 	phy->ad9081.hal_info.msb = (phy->spi_desc->bit_order ==
-			SPI_BIT_ORDER_MSB_FIRST) ? SPI_MSB_FIRST : SPI_MSB_LAST;
+				    SPI_BIT_ORDER_MSB_FIRST) ? SPI_MSB_FIRST : SPI_MSB_LAST;
 	phy->ad9081.hal_info.addr_inc = SPI_ADDR_INC_AUTO;
 	phy->ad9081.hal_info.spi_xfer = ad9081_spi_xfer;
 	phy->ad9081.hal_info.log_write = ad9081_log_write;
