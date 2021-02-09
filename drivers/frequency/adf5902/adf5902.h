@@ -182,7 +182,7 @@
 #define ADF5902_MUXOUT_LOGIC_LOW	0x2
 #define ADF5902_MUXOUT_R_DIV_OUT	0x3
 #define ADF5902_MUXOUT_N_DIV_OUT	0x4
-#define ADF5902_MUXOUT_CAL_BUSY		0x5
+#define ADF5902_MUXOUT_CAL_BUSY		0x7
 #define ADF5902_MUXOUT_R_DIV_OUT_2	0xB
 #define ADF5902_MUXOUT_N_DIV_OUT_2	0xC
 #define ADF5902_MUXOUT_RAMP_STATUS	0xF
@@ -228,7 +228,7 @@
 #define ADF5902_REG7_R_DIV_2(x)		(((x) & 0x1) << 11)
 #define ADF5902_REG7_CLK_DIV(x)		(((x) & 0xFFF) << 12)
 #define ADF5902_REG7_MASTER_RESET(x)	(((x) & 0x1) << 25)
-#define ADF5902_REG7_RESERVED		((0x0 << 26) & (0x1 << 24))
+#define ADF5902_REG7_RESERVED		((0x0 << 26) | (0x1 << 24))
 
 /* Register 7 Bit Definitions */
 #define ADF5902_MIN_R_DIVIDER		0x01
@@ -266,7 +266,7 @@
 #define ADF5902_REG11_RAMP_MODE(x)	(((x) & 0x3) << 7)
 #define ADF5902_REG11_SING_FULL_TRI(x)	(((x) & 0x1) << 9)
 #define ADF5902_REG11_SD_RESET(x)	(((x) & 0x1) << 11)
-#define ADF5902_REG11_RESERVED		((0x0 << 6) & (0x0 << 10) & (0x0 << 12))
+#define ADF5902_REG11_RESERVED		((0x0 << 6) | (0x0 << 10) | (0x0 << 12))
 
 /* Register 11 Bit Definitions */
 #define ADF5902_CNTR_RESET_DISABLE	0x0
@@ -286,7 +286,7 @@
 /* Register 12 Map */
 #define ADF5902_REG12_CP_TRISTATE(x)	(((x) & 0x1) << 15)
 #define ADF5902_REG12_CHARGE_PUMP(x)	(((x) & 0xF) << 17)
-#define ADF5902_REG12_RESERVED		((0x0 << 5) & (0x1 << 16) & (0x2 << 21))
+#define ADF5902_REG12_RESERVED		((0x0 << 5) | (0x1 << 16) | (0x2 << 21))
 
 /* Register 12 Bit Definition */
 #define ADF5902_CP_TRISTATE_DISABLE	0x0
@@ -377,7 +377,7 @@
 #define ADF5902_REG16_RAMP_DEL(x)	(((x) & 0x1) << 19)
 #define ADF5902_REG16_TX_DATA_TRIG(x)	(((x) & 0x1) << 20)
 #define ADF5902_REG16_DEL_SEL(x)	(((x) & 0x3) << 23)
-#define ADF5902_REG16_RESERVED		((0x0 << 17) & (0x0 << 21) & (0x1 << 25))
+#define ADF5902_REG16_RESERVED		((0x0 << 17) | (0x0 << 21) | (0x1 << 25))
 
 #define ADF5902_MIN_DELAY_START_WRD	0x000
 #define ADF5902_MAX_DELAY_START_WRD	0xFFF
@@ -410,6 +410,9 @@
 #define ADF5902_VOFF				0.699f
 #define ADF5902_VGAIN				0.0064f
 #define ADF5902_SPI_DUMMY_DATA		0x0
+#define ADF5902_FREQ_CAL_DIV_100KHZ	100000
+#define ADF5902_CLK1_DIV_25KHZ		25000
+#define ADF5902_ADC_CLK_DIV_1MHZ	1000000
 
 /******************************************************************************/
 /*************************** Types Declarations *******************************/
@@ -461,6 +464,8 @@ struct adf5902_init_param {
 	uint8_t			tx_ramp_clk;
 	/* Tx Data Invert */
 	uint8_t			tx_data_invert;
+	/* Clock divider (CLK1) divider value in Ramp mode */
+	uint16_t		clk1_div_ramp;
 	/* 12-bit Clock Divider number */
 	uint8_t			clk2_div_no;
 	/* 12-bit Clock Divider */
@@ -482,7 +487,7 @@ struct adf5902_dev {
 	struct gpio_desc	*gpio_ce;
 	/* Reference input frequency*/
 	uint64_t		ref_in;
-	/* Output frequency of the internal VCO */
+	/* Output frequency(Hz) of the internal VCO */
 	uint64_t		rf_out;
 	/* Phase Frequency Detector */
 	uint64_t		f_pfd;
@@ -502,6 +507,8 @@ struct adf5902_dev {
 	uint16_t		freq_cal_div;
 	/* Clock divider (CLK1) divider value */
 	uint16_t		clk1_div;
+	/* Clock divider (CLK1) divider value in Ramp mode */
+	uint16_t		clk1_div_ramp;
 	/* ADC Clock divider */
 	uint16_t		adc_clk_div;
 	/* ADC Average value */
@@ -540,10 +547,6 @@ struct adf5902_dev {
 	uint8_t			cp_current;
 	/* Charge Pump tristate */
 	uint8_t			cp_tristate_en;
-	/* ADF5902 Registers array */
-	uint32_t		regs[18];
-	/* Value to be stored in the registers */
-	uint32_t		val;
 };
 
 /******************************************************************************/
@@ -570,7 +573,7 @@ int32_t adf5902_recalibrate(struct adf5902_dev *dev);
 int32_t adf5902_read_temp(struct adf5902_dev *dev, float *temp);
 
 /* ADF5902 Measure Output locked frequency */
-int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float freq);
+int32_t adf5902f_compute_frequency(struct adf5902_dev *dev, float *freq);
 
 /** ADF5902 Resources Deallocation */
 int32_t adf5902_remove(struct adf5902_dev *device);
